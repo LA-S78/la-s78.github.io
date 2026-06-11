@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Rules | Last Asylum</title>
+    <title>Guides | Last Asylum</title>
     <style>
         /* [Reusing standard theme CSS] */
         :root {
@@ -116,17 +116,28 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 0.7rem; gap: 4px; text-decoration: none; }
         .nav-item.active { color: var(--accent-color); }
         .nav-icon { font-size: 1.2rem; }
-    
-        .blueprint-img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            margin-top: 10px;
-            display: block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        /* [Copy your shared CSS variables and layout classes from rules.html here] */
+        /* I have omitted the full CSS for brevity, but keep it identical to rules.html */
+
+        .guide-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
         }
 
+        .guide-card {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .guide-card .icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+        .guide-card span { font-size: 0.8rem; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -135,120 +146,36 @@
     
     <header class="lantern-header">
         <a href="index.html" class="header-side-btn">❮</a>
-        
         <div class="header-stack">
-            <img src="images/lantern.png" alt="Plague Lantern" class="lantern-img">
+            <img src="/images/lantern.png" alt="Plague Lantern" class="lantern-img">
             <h1 class="debossed-title">LAST ASYLUM</h1>
-            <div class="subtitle">Server Rules & Rotation</div>
+            <div class="subtitle">Tactical Guides</div>
         </div>
-        
         <div class="header-side-btn"></div>
     </header>
-        <nav class="anchor-nav">
-            <a href="#server-rules" class="anchor-link">SERVER RULES</a>
-            <a href="#capitol-rotation" class="anchor-link">ROTATION</a>
-            <a href="#capitol-rewards" class="anchor-link">REWARDS</a>
-        </nav>
+
     <main>
-<section id="server-rules">
-    <h2>Server Rules</h2>
-    
-    <div class="rule-card">
-        <h3>📜 1. Respect & Conduct</h3>
-        <ul>
-            <li><b>Zero Tolerance:</b> Bullying, racism, hate speech, harassment, or toxic behavior is strictly prohibited in World, Private, or Alliance chats.</li>
-            <li><b>Community Standard:</b> Treat all players with respect to maintain a healthy gaming environment.</li>
-            <li><b>Reporting:</b> You <b>must</b> provide screenshots/proof when reporting a violation to leadership.</li>
-        </ul>
-    </div>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search guides...">
 
-    <div class="rule-card">
-        <h3>🛡️ 2. NAP Protection Rules</h3>
-        <p>The following actions against <b>NAP Alliances</b> and their <b>Academies</b> are prohibited:</p>
-        <div style="background: rgba(180, 40, 40, 0.1); border: 1px solid #8b0000; padding: 10px; text-align: center; border-radius: 4px; color: #ff6b6b;">
-            🚫 No Attacking<br>
-            🚫 No Scouting
+        <h2>Categories</h2>
+        <div class="guide-grid">
+            <a href="guides/mechanics.html" class="guide-card">
+                <span class="icon">⚙️</span>
+                <span>Mechanics</span>
+            </a>
+            <a href="guides/builds.html" class="guide-card">
+                <span class="icon">⚔️</span>
+                <span>Hero Builds</span>
+            </a>
+            <a href="guides/farming.html" class="guide-card">
+                <span class="icon">🌾</span>
+                <span>Farming</span>
+            </a>
+            <a href="guides/war.html" class="guide-card">
+                <span class="icon">🔥</span>
+                <span>War Tactics</span>
+            </a>
         </div>
-    </div>
-
-    <div class="rule-card">
-        <h3>💎 3. Resource & Map Etiquette</h3>
-        <ul>
-            <li><b>Tile Safety:</b> Attacking resource tiles is strictly forbidden. Let players farm in peace.</li>
-        </ul>
-    </div>
-
-    <div class="rule-card">
-        <h3>🚛 4. Caravans & Black Ops</h3>
-        <p>Governed by a <b>Three-Strike System</b>:</p>
-        <ul>
-            <li><b>Strike 1 & 2:</b> Reported by R4s. Offender receives a formal warning.</li>
-            <li><b>Strike 3:</b> Results in a <b>Single Base Hit</b> penalty.</li>
-            <li><b>Conflict Resolution:</b> Victims may waive the strike report if an apology is accepted.</li>
-        </ul>
-    </div>
-
-    <div class="rule-card">
-        <h3>🤝 5. Member Poaching</h3>
-        <ul>
-            <li><b>Active Recruiting:</b> Messaging members of other NAP alliances to switch is prohibited.</li>
-            <li><b>Player Autonomy:</b> Players are free to leave and join alliances voluntarily.</li>
-            <li><b>Applications:</b> "Walk-in" applicants are allowed, provided no prior solicitation occurred.</li>
-        </ul>
-    </div>
-
-    <div class="rule-card">
-        <h3>📉 6. Other Alliances</h3>
-        <p><b>Fair Play:</b> Attacking smaller alliances because they are outside the NAP is forbidden.</p>
-    </div>
-    <div class="rule-card">
-        <h3 style="margin-top:20px;">🕊️ 7. Diplomacy & Conflict Resolution</h3>
-        <ol>
-            <li><b>Private Resolution:</b> Handle disputes privately between Alliance Leads/Diplomats first.</li>
-            <li><b>Escalation:</b> If unresolved, bring to <b>NAP Leadership</b>.</li>
-        </ol>
-        <blockquote style="border-left: 3px solid var(--accent-color); padding-left: 15px; font-style: italic; font-size: 0.85rem; color: var(--text-muted);">
-            ⚠️ Do not bring rule disputes, grievances, or drama into General or World Chat. Keep it to private channels.
-        </blockquote>
-    </div>
-
-    <div class="rule-card">
-        <h3>🎓 8. Academies</h3>
-        <ul>
-            <li><b>Designation:</b> Each NAP alliance may protect <b>one</b> academy.</li>
-            <li><b>Governance:</b> Academies entering the Top 10 do not receive voting rights while they maintain academy status.</li>
-        </ul>
-    </div>
-
-    <div class="rule-card">
-        <h3>⚠️ 9. General Rule Violations</h3>
-        <p><i>(Except #4)</i></p>
-        <ul>
-            <li><b>1st Offense:</b> Official Warning.</li>
-            <li><b>2nd Offense:</b> Removal from alliance or <b>NAP Blacklist</b>.</li>
-            <li><b>Blacklist Policy:</b> Prohibits joining any NAP-protected alliance.</li>
-        </ul>
-    </div>
-</section>
-
-
-        <section id="capitol-rotation">
-            <h2>Capitol Rotation</h2>
-            <div class="rule-card" style="border-left: 4px solid #B8975A;">
-                <p>To ascend to Top 4 status, the contender must surpass a current holder's Might for Alliance Duel Days 3-5 of Kingdom War Week 1.</p>
-                <small style="color: var(--text-muted);"><em>Note: Snapshots will be taken 10 minutes before reset.</em></small>
-            </div>
-
-            <img src="images/rotation.jpg" alt="Capitol Rotation Blueprint" class="blueprint-img">
-        </section>
-
-
-
-        <section id="capitol-rewards">
-            <h2>Capitol Rewards</h2>
-            <img src="images/rewards.jpg" alt="Capitol Rewards Details" class="blueprint-img">
-        </section>
-
     </main>
 
     <footer>
@@ -256,11 +183,11 @@
             <span class="nav-icon">🏠</span>
             <span>Home</span>
         </a>
-        <a href="rules.html" class="nav-item active">
+        <a href="rules.html" class="nav-item">
             <span class="nav-icon">⚖️</span>
             <span>Rules</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="#" class="nav-item active">
             <span class="nav-icon">📖</span>
             <span>Guides</span>
         </a>
