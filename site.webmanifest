@@ -1,0 +1,20 @@
+{
+  "name": "Last Asylum Compendium",
+  "short_name": "LA Hub",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#110d0b",
+  "theme_color": "#110d0b",
+  "icons": [
+    {
+      "src": "/images/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
