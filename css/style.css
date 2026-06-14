@@ -120,18 +120,53 @@ h2 {
 }
 
 .anchor-nav {
-    position: sticky; top: 130px; z-index: 15;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 5px; padding: 10px; background-color: #1a1512;
+    position: sticky; 
+    top: 110px; 
+    z-index: 15;
+    display: flex;
+    overflow-x: auto;
+    
+    /* Increased vertical padding here to push the buttons away from the bar edges */
+    padding: 20px 20px; 
+    
+    background-color: #1a1512;
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+    margin: 0 0 20px 0; 
+    
+    align-items: center;
+    gap: 12px; 
+    
+    /* Removed explicit height so the padding dictates the bar size */
+    scrollbar-width: none;
 }
+
 .anchor-link {
-    text-align: center; text-decoration: none; color: var(--text-main);
-    font-size: 0.7rem; font-weight: bold; padding: 8px 2px;
-    border: 1px solid var(--border-color); border-radius: 4px;
+    flex: 0 0 100px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    text-align: center; 
+    text-decoration: none; 
+    color: var(--text-main);
+    font-size: 0.8rem; 
+    font-weight: bold; 
+    
+    /* Added slightly more vertical room inside the buttons */
+    padding: 8px 10px; 
+    
+    border: 1px solid var(--border-color); 
+    border-radius: 6px; 
+    transition: background 0.2s ease, color 0.2s ease;
 }
-.anchor-link:active { background: var(--accent-color); color: #000; }
+
+.anchor-link:active {
+    background: var(--accent-color);
+    color: #000;
+    /* Optional: reduce scale slightly to mimic a "press" */
+    transform: scale(0.95);
+}
 
 .list-table { width: 100%; border-collapse: collapse; }
 .list-table td { padding: 8px 0; border-bottom: 1px solid #3d3128; font-size: 0.9rem; }
