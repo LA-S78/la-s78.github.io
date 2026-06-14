@@ -190,10 +190,7 @@ footer {
     border-top: 1px solid var(--border-color); 
     display: flex;
     justify-content: space-around; 
-    
-    /* FIX: Automatically adds the system navbar height if it overlaps */
-    padding: 10px 0 calc(20px + env(safe-area-inset-bottom, 0px)) 0;
-    
+    padding: 10px 0 20px 0; /* <-- Back to normal */
     z-index: 30; 
     flex-shrink: 0;
 }
@@ -224,4 +221,11 @@ footer {
 /* epilepsy safeguard, hopefully */
 @media (prefers-reduced-motion: reduce) {
     .dir-card { animation: none; box-shadow: none; filter: brightness(1); }
+}
+/* --- PWA / INSTALLED APP FIXES --- */
+@media (display-mode: standalone) {
+    footer {
+        /* Adds a static buffer ONLY when installed to clear the Android nav bar */
+        padding-bottom: 40px; 
+    }
 }
