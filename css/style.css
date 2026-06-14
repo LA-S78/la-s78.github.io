@@ -18,20 +18,12 @@ body {
     margin: 0; padding: 0; font-family: var(--font-body);
     background-color: #050403; color: var(--text-main);
     display: flex; justify-content: center;
-    
-    /* FIX 1: Lock the body to the viewport and kill native scrolling */
-    height: 100dvh; 
-    overflow: hidden; 
 }
 
 #mobile-container {
-    width: 100%; max-width: 400px; 
-    
-    /* FIX 2: Container inherits the locked height */
-    height: 100%; 
-    
+    width: 100%; max-width: 400px; height: 100dvh;
     background: radial-gradient(circle at center, #2b231e 0%, #110d0b 100%);
-    position: relative; box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+    position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0, 0, 0, 1);
     display: flex; flex-direction: column; scroll-behavior: smooth;
 }
 
@@ -195,12 +187,8 @@ h2 {
 footer {
     width: 100%; background-color: var(--nav-bg);
     border-top: 1px solid var(--border-color); display: flex;
-    justify-content: space-around; 
-    padding: 12px 0 16px 0; /* Standard, comfortable padding */
-    z-index: 30; flex-shrink: 0; 
-    
-    /* FIX 3: Force the footer to stay open so text never hides */
-    min-height: 60px; 
+    justify-content: space-around; padding: 10px 0 20px 0;
+    z-index: 30; flex-shrink: 0;
 }
 
 .nav-item {
