@@ -122,48 +122,64 @@ h2 {
 .anchor-nav {
     position: sticky; 
     top: 110px; 
-    z-index: 15;
-    display: flex;
+    z-index: 100; /* High z-index to stay on top */
+    
+    /* 1. Dimensions */
+    height: 40px; 
+    min-height: 40px; /* Force it to stay open */
+    
+    /* 2. Scrolling & Flex */
+    display: flex; 
     overflow-x: auto;
     
-    /* Increased vertical padding here to push the buttons away from the bar edges */
-    padding: 20px 20px; 
-    
+    /* 3. Styling */
     background-color: #1a1512;
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
     margin: 0 0 20px 0; 
-    
-    align-items: center;
-    gap: 12px; 
-    
-    /* Removed explicit height so the padding dictates the bar size */
     scrollbar-width: none;
 }
 
+.anchor-nav::-webkit-scrollbar { display: none; }
+
+.nav-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    
+    /* THE MAGIC: Margin Auto centers the wrapper 
+       inside the Flex container horizontally */
+    margin: auto; 
+    
+    /* Padding on sides only */
+    padding: 0 20px; 
+    
+    /* Ensure the wrapper is at least as wide as the nav */
+    min-width: min-content; 
+}
+
 .anchor-link {
-    flex: 0 0 100px; 
+    flex: 0 0 100px; /* Fixed width */
+    height: 25px;    /* Fixed height */
+    
     display: flex;
     align-items: center;
     justify-content: center;
     
-    text-align: center; 
     text-decoration: none; 
     color: var(--text-main);
     font-size: 0.8rem; 
     font-weight: bold; 
     
-    /* Added slightly more vertical room inside the buttons */
-    padding: 8px 10px; 
-    
     border: 1px solid var(--border-color); 
     border-radius: 6px; 
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.5s ease, color 0.5s ease;
 }
+
 
 .anchor-link:active {
     background: var(--accent-color);
-    color: #000;
+    color: #32cd32;
     /* Optional: reduce scale slightly to mimic a "press" */
     transform: scale(0.95);
 }
