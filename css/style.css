@@ -138,59 +138,18 @@ h2 {
     flex-shrink: 0; text-decoration: none; color: inherit; display: block;
 }
 
-/* --- 6. DIRECTORIES (Refined) --- */
+/* --- 6. DIRECTORIES (Restored) --- */
 .directories {
-    display: flex; 
-    flex-direction: column; 
-    gap: 15px;
+    display: flex; flex-direction: column; gap: 15px;
 }
 
 .dir-card {
-    background-color: var(--card-bg); 
-    padding: 15px; 
-    border-radius: 8px;
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    text-decoration: none; 
-    color: inherit; 
-    border: 1px solid var(--border-color);
+    background-color: var(--card-bg); padding: 15px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+    text-decoration: none; color: inherit; border: 1px solid var(--border-color);
     animation: lantern-flicker 6s infinite ease-in-out;
+    margin-bottom: 5px;
 }
-
-.dir-content { 
-    display: flex; 
-    flex-direction: column; /* Ensures Title stacks above Subtitle */
-}
-
-.dir-title { 
-    font-weight: bold; 
-    font-size: 1.1rem; 
-    margin-bottom: 6px; /* This creates the gap between Title and Subtitle */
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Adds space between the Icon and the Text */
-}
-
-/* Ensure icons inside titles are sized correctly */
-.dir-title .nav-icon-svg {
-    width: 18px;
-    height: 18px;
-    stroke: var(--accent-color);
-}
-
-.dir-sub { 
-    font-size: 0.75rem; 
-    color: var(--text-muted); 
-    margin-left: 26px; /* Aligns subtitle with the text of the title, not the icon */
-}
-
-.dir-arrow { 
-    color: var(--accent-color); 
-    font-weight: bold; 
-    font-size: 1.2rem;
-}
-
 
 /* --- 7. GUIDES & DIPLOMACY --- */
 .banner-container { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
@@ -226,10 +185,17 @@ h2 {
 
 /* --- 8. SHARED FOOTER & ICONS --- */
 footer {
-    width: 100%; background-color: var(--nav-bg);
-    border-top: 1px solid var(--border-color); display: flex;
-    justify-content: space-around; padding: 10px 0 20px 0;
-    z-index: 30; flex-shrink: 0;
+    width: 100%; 
+    background-color: var(--nav-bg);
+    border-top: 1px solid var(--border-color); 
+    display: flex;
+    justify-content: space-around; 
+    
+    /* FIX: Automatically adds the system navbar height if it overlaps */
+    padding: 10px 0 calc(20px + env(safe-area-inset-bottom, 0px)) 0;
+    
+    z-index: 30; 
+    flex-shrink: 0;
 }
 .nav-item {
     display: flex; flex-direction: column; align-items: center;
