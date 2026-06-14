@@ -254,3 +254,15 @@ footer {
 @media (prefers-reduced-motion: reduce) {
     .dir-card { animation: none; box-shadow: none; filter: brightness(1); }
 }
+/* --- PWA / INSTALLED APP FIX (attempt 2) --- */
+@media (display-mode: standalone) {
+    html, body {
+        height: 100vh; /* Locks the background layer */
+        overflow: hidden; /* Prevents the entire app frame from shifting */
+    }
+    
+    #mobile-container {
+        /* Bypasses the dvh navigation bug entirely */
+        height: 100vh; 
+    }
+}
