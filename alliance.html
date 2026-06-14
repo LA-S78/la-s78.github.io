@@ -70,13 +70,18 @@
             </div>
         </section>
 
-        <section id="nap-territory">
-            <h2>NAP Territory</h2>
-            <div class="rule-card">
-                <img src="/images/map.jpg" alt="NAP Territory Map" class="blueprint-img"
-                     onclick="document.getElementById('mapZoom').showModal()" style="cursor: pointer;">
-            </div>
-        </section>
+<section id="nap-territory">
+    <h2>NAP Territory</h2>
+    <div class="rule-card">
+        <img src="/images/map.jpg" alt="NAP Territory Map" class="blueprint-img"
+             onclick="document.getElementById('mapZoom').showModal()" style="cursor: pointer;">
+    </div>
+</section>
+
+<dialog id="mapZoom" onclick="this.close()">
+    <img src="/images/map.jpg" class="blueprint-img" style="max-width: 800px;">
+</dialog>
+
 
         <section id="blacklist">
             <h2>Blacklist</h2>
