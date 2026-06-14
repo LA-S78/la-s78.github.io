@@ -2,11 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Guides | Last Asylum</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" type="image/png" href="/images/favicon.png">
     <link rel="manifest" href="/site.webmanifest">
+    <style>
+    /* --- GUIDES SECTION ICONS --- */
+.guide-icon {
+    width: 32px; 
+    height: 32px; 
+    margin-bottom: 10px;
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto;
+    stroke: var(--accent-color); /* This applies your brass/gold theme globally */
+    transition: transform 0.2s ease;
+}
+/* --- STENCIL METHOD --- */
+.guide-icon-mask {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto 10px auto; /* Centered */
+    
+    /* 1. Define the color you want */
+    background-color: var(--accent-color);
+    
+    /* 2. Use your SVG as a stencil */
+    -webkit-mask-image: url('images/farming.svg');
+    mask-image: url('images/farming.svg');
+    
+    /* 3. Ensure it fits perfectly */
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    
+    transition: transform 0.2s ease;
+}
+
+/* Interactivity: Slight scale on hover */
+.guide-card:hover .guide-icon .guide-icon-mask {
+    transform: scale(1.15);
+}
+
+    </style>
 </head>
 <body>
 
@@ -24,26 +66,33 @@
 
     <main>
         <input type="text" id="searchInput" class="search-bar" placeholder="Search guides...">
-
-        <h2>Categories</h2>
         <div class="guide-grid">
-            <a href="/guides/mechanics.html" class="guide-card">
-                <span class="icon">⚙️</span>
-                <span>Mechanics</span>
-            </a>
-            <a href="/guides/builds.html" class="guide-card">
-                <span class="icon">⚔️</span>
-                <span>Hero Builds</span>
-            </a>
-            <a href="/guides/farming.html" class="guide-card">
-                <span class="icon">🌾</span>
-                <span>Farming</span>
-            </a>
-            <a href="/guides/war.html" class="guide-card">
-                <span class="icon">🔥</span>
-                <span>War Tactics</span>
-            </a>
-        </div>
+    <a href="/guides/mechanics.html" class="guide-card">
+        <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+        </svg>
+        <span>Mechanics</span>
+    </a>
+
+    <a href="/guides/builds.html" class="guide-card">
+        <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>Hero Builds</span>
+    </a>
+
+<a href="/guides/farming.html" class="guide-card">
+    <div class="guide-icon-mask"></div>
+    <span>Farming</span>
+</a>
+
+<a href="/guides/war.html" class="guide-card">
+    <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.5 9.5 22 2M15 15l2.5 2.5M17 17l4 4M2 22l11-11M22 2l-7 7M15 15l-4-4"/>
+    </svg>
+    <span>War Tactics</span>
+</a>
+    </div>
     </main>
 
     <footer>
