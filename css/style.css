@@ -274,20 +274,22 @@ footer {
     }
 }
 
-/* Zoom Modal Styling */
+/* Aggressive Reset for Zoom Modals */
 dialog {
-    border: none !important;      /* Forces removal of default browser border */
-    padding: 0 !important;        /* Forces removal of default browser padding */
-    background: transparent;
+    border: none !important;
+    outline: none !important;     /* Removes browser focus outline */
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;  /* Removes browser drop shadow */
     max-width: 95vw;
 }
 
 dialog::backdrop {
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.85) !important;
 }
 
 dialog[open] {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
