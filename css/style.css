@@ -87,10 +87,12 @@ body {
 main { 
     flex-grow: 1; 
     overflow-y: auto; 
+    /* Remove the 170px, use 20px for breathing room */
     padding: 20px 20px 40px 20px; 
+    padding-top: 20px; 
     -webkit-overflow-scrolling: touch; 
-    scroll-behavior: smooth;
 }
+
 
 .hero { text-align: center; margin-bottom: 30px; margin-top: 20px; }
 
@@ -122,64 +124,53 @@ h2 {
 .anchor-nav {
     position: sticky; 
     top: 110px; 
-    z-index: 100; /* High z-index to stay on top */
+    z-index: 100;
     
-    /* 1. Dimensions */
-    height: 40px; 
-    min-height: 40px; /* Force it to stay open */
+    /* Increase this height to add vertical spacing */
+    height: 150px; 
     
-    /* 2. Scrolling & Flex */
-    display: flex; 
-    overflow-x: auto;
-    
-    /* 3. Styling */
     background-color: #1a1512;
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
-    margin: 0 0 20px 0; 
+    overflow-x: auto;
     scrollbar-width: none;
+    margin: 0; 
 }
 
-.anchor-nav::-webkit-scrollbar { display: none; }
 
 .nav-wrapper {
+    /* This manages the centering */
     display: flex;
-    gap: 12px;
+    justify-content: center;
     align-items: center;
+    gap: 12px;
     
-    /* THE MAGIC: Margin Auto centers the wrapper 
-       inside the Flex container horizontally */
-    margin: auto; 
-    
-    /* Padding on sides only */
-    padding: 0 20px; 
-    
-    /* Ensure the wrapper is at least as wide as the nav */
+    /* This ensures it fills the 60px height and scrolls if wide */
+    height: 100%;
+    padding: 0 20px;
     min-width: min-content; 
 }
 
 .anchor-link {
-    flex: 0 0 100px; /* Fixed width */
-    height: 25px;    /* Fixed height */
-    
+    flex: 0 0 100px;
+    height: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     
     text-decoration: none; 
     color: var(--text-main);
-    font-size: 0.8rem; 
+    font-size: 0.75rem; 
     font-weight: bold; 
-    
     border: 1px solid var(--border-color); 
     border-radius: 6px; 
-    transition: background 0.5s ease, color 0.5s ease;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 
 .anchor-link:active {
     background: var(--accent-color);
-    color: #32cd32;
+    color: #000;
     /* Optional: reduce scale slightly to mimic a "press" */
     transform: scale(0.95);
 }
@@ -343,4 +334,8 @@ dialog[open] {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+}
+/* Ensures section headers aren't hidden behind the sticky nav */
+section {
+    scroll-margin-top: 20px; /* Header (110px) + Nav (60px) + a little buffer (10px) */
 }
