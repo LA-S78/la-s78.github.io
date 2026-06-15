@@ -168,10 +168,9 @@ h2 {
     -webkit-tap-highlight-color: transparent;
 }
 
-
-.anchor-link:active {
-    background: var(--accent-color);
-    color: #32cd32;
+.anchor-link.active {
+    background-color: var(--accent-color) !important;
+    color: #110d0b !important;
 }
 
 .list-table { width: 100%; border-collapse: collapse; }
