@@ -111,7 +111,7 @@ h2 {
 
 /* --- 5. CARDS & SECTIONS --- */
 .rule-card {
-    background-color: var(--card-bg); padding: 20px; border-radius: 8px;
+    background-color: var(--card-bg); padding: 20px 24px; border-radius: 8px;
     border-left: 4px solid var(--accent-color); margin-bottom: 20px;
 }
 
@@ -340,4 +340,3 @@ dialog[open] {
 section {
     scroll-margin-top: 10px; /* Header (110px) + Nav (60px) + a little buffer (10px) */
 }
-.list-table tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.03); }
