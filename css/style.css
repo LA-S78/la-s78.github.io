@@ -172,8 +172,6 @@ h2 {
 .anchor-link:active {
     background: var(--accent-color);
     color: #32cd32;
-    /* Optional: reduce scale slightly to mimic a "press" */
-    transform: scale(0.95);
 }
 
 .list-table { width: 100%; border-collapse: collapse; }
