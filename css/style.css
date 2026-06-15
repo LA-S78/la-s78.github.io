@@ -237,7 +237,9 @@ h2 {
 .blueprint-img {
     width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border-color);
     margin-top: 10px; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
 }
 
 .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
