@@ -1,7 +1,7 @@
 /* /js/main.js */
 const observerOptions = {
     root: null,
-    threshold: 0.2
+    threshold: 0.3
 };
 
 const observer = new IntersectionObserver((entries) => {
