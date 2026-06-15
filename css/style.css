@@ -259,7 +259,6 @@ h2 {
 .tip-box h4 { margin: 0 0 5px 0; color: var(--accent-color); text-transform: uppercase; font-size: 0.8rem; }
 .step-list { padding-left: 20px; }
 .step-list li { margin-bottom: 10px; }
-.content-img { width: 100%; border-radius: 4px; margin: 15px 0; border: 1px solid var(--border-color); }
 
 /* --- 8. SHARED FOOTER & ICONS --- */
 footer {
@@ -282,6 +281,29 @@ footer {
     width: 24px; height: 24px; stroke: var(--accent-color);
     transition: all 0.3s ease;
 }
+
+/* extra junk */
+
+.zoom-download-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--accent-color);
+    color: #110d0b;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.zoom-download-btn:active {
+    filter: brightness(1.2);
+}
+
+
 .hidden { display: none !important; }
 
 /* --- 9. ANIMATIONS & RESPONSIVE --- */
