@@ -177,6 +177,7 @@ h2 {
 }
 
 .list-table { width: 100%; border-collapse: collapse; }
+.list-table tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.03); }
 .list-table td { padding: 8px 0; border-bottom: 1px solid #3d3128; font-size: 0.9rem; }
 .sub-text { font-size: 0.7rem; color: var(--text-muted); }
 
