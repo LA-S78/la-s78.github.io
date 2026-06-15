@@ -127,7 +127,7 @@ h2 {
     z-index: 100;
     
     /* Increase this height to add vertical spacing */
-    height: 150px; 
+    min-height: 35px; 
     
     background-color: #1a1512;
     border-bottom: 1px solid var(--border-color);
@@ -170,7 +170,7 @@ h2 {
 
 .anchor-link:active {
     background: var(--accent-color);
-    color: #000;
+    color: #32cd32;
     /* Optional: reduce scale slightly to mimic a "press" */
     transform: scale(0.95);
 }
@@ -337,5 +337,5 @@ dialog[open] {
 }
 /* Ensures section headers aren't hidden behind the sticky nav */
 section {
-    scroll-margin-top: 20px; /* Header (110px) + Nav (60px) + a little buffer (10px) */
+    scroll-margin-top: 10px; /* Header (110px) + Nav (60px) + a little buffer (10px) */
 }
