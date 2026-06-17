@@ -1,0 +1,28 @@
+<h2 class="guide-title" id="explanation">1. Survival Battle Explanation</h2>
+<p>writeup</p>
+<h2 class="guide-title" id="schedule">2. Survival Battle Schedule</h2>
+<div class="schedule-container">
+    <table class="schedule-table">
+        <thead>
+            <tr>
+                <th>Time</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th><th>Day 5</th><th>Day 6</th><th>Day 7</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in site.data.survival_battle %}
+            <tr>
+                <td>{{ row.time }}</td>
+                <td>{{ row.d1 }}</td>
+                <td>{{ row.d2 }}</td>
+                <td>{{ row.d3 }}</td>
+                <td>{{ row.d4 }}</td>
+                <td>{{ row.d5 }}</td>
+                <td>{{ row.d6 }}</td>
+                <td>{{ row.d7 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<h2 class="guide-title" id="reference">3. Points Reference</h2>
+{% include points_reference.html %}
