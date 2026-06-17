@@ -403,6 +403,38 @@ footer {
     color: var(--accent-color);
 }
 
+/* Highlights the current time row */
+.schedule-table tr.active-row {
+    background-color: rgba(212, 175, 55, 0.15); /* Light gold tint */
+}
+
+/* Highlights the current day column */
+.schedule-table td.active-col, .schedule-table th.active-col {
+    background-color: rgba(212, 175, 55, 0.15); /* Matches row */
+    border: 2px solid #d4af37; /* Stronger border for the active cell */
+}
+
+/* The exact cell that is "Now" */
+.schedule-table td.active-row.active-col {
+    background-color: rgba(212, 175, 55, 0.3); /* Darker gold for intersection */
+    font-weight: bold;
+    color: #fff;
+}
+
+/* for broken links */
+.unavailable {
+    /* Blood Red palette */
+    background-color: #4a0404 !important; /* Deep, dark blood red */
+    color: #8b8b8b !important;            /* Muted grey text */
+    border: 1px solid #7a0000 !important;
+    
+    /* UX cues */
+    cursor: not-allowed;                  /* Shows a "no entry" icon on hover */
+    pointer-events: none;                 /* Completely disables clicking */
+    opacity: 0.7;                         /* Dulls it to show it's "inactive" */
+    text-decoration: line-through;        /* Optional: adds a "strike-through" look */
+}
+
 @media (min-width: 600px) { #mobile-container { max-width: 600px; } }
 @media (min-width: 900px) { #mobile-container { max-width: 800px; } }
 
