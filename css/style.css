@@ -21,7 +21,7 @@ html {
 
 body {
     /* Fallback for very old browsers */
-    background-image: url('/images/background.jpg');
+    background-image: url('/images/background.png');
     /* Modern browsers will use WebP */
     background-image: url('/images/background.webp');
     background-attachment: fixed;
