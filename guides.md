@@ -1,6 +1,7 @@
 ---
 layout: default
-title: Game Guides
+title: Guides
+subtitle: Game Guides
 active_nav: guides
 ---
 

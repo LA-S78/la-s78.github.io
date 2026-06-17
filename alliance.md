@@ -1,6 +1,7 @@
 ---
 layout: default
-title: Alliance & Diplomacy
+title: Alliance
+subtitle: Alliance & Diplomacy
 active_nav: alliance
 nav_links:
   - name: NAP ALLIANCES

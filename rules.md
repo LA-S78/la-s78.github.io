@@ -1,6 +1,7 @@
 ---
 layout: default
-title: Server Rules
+title: Rules
+subtitle: Server Rules & Rotation
 active_nav: rules
 nav_links:
   - name: SERVER RULES
