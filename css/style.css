@@ -322,6 +322,61 @@ footer {
     85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(76, 175, 80, 0.2); }
 }
 
+/* Duel Schedule Grid */
+.duel-schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.duel-day {
+    background: var(--card-bg); /* Use global card background */
+    border: 1px solid var(--border-color); /* Use global border color */
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.day-header {
+    border-bottom: 2px solid var(--accent-color);
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+}
+
+.day-header h3 {
+    margin: 0;
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.day-title {
+    font-size: 1.4rem;
+    color: var(--text-main); /* Use global text color */
+    font-weight: bold;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color); /* Use global border */
+    color: var(--text-muted); /* Use global muted text */
+}
+
+.task-list .warning {
+    color: #ff6b6b;
+    font-weight: bold;
+    border-left: 3px solid #ff6b6b;
+    padding-left: 10px;
+    margin: 10px 0;
+}
+
 @media (min-width: 600px) { #mobile-container { max-width: 600px; } }
 @media (min-width: 900px) { #mobile-container { max-width: 800px; } }
 
