@@ -1,0 +1,17 @@
+# Build artifacts
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# OS/System files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/
+.bundle/
+
+# Editor-specific files
+.vscode/
+.idea/
