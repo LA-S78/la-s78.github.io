@@ -6,7 +6,7 @@
     --card-bg: rgba(42, 34, 30, 0.85);
     --nav-bg: #110d0b;
     --text-main: #d9cbb8;
-    --text-muted: #a8a19b; /* Updated from #8a7b6e */
+    --text-muted: #a8a19b;
     --accent-color: #B8975A;
     --border-color: #3d3128;
     --font-headers: "Georgia", serif;
@@ -14,11 +14,22 @@
 }
 
 /* --- 2. GLOBAL STYLES --- */
+html {
+    /* Base font size for mobile - will be overridden in desktop media query */
+    font-size: 100%;
+}
+
 body {
+    /* Fallback for very old browsers */
+    background-image: url('/images/background.jpg');
+    /* Modern browsers will use WebP */
+    background-image: url('/images/background.webp');
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #050403;
     margin: 0; 
     padding: 0; 
     font-family: var(--font-body);
-    background-color: #050403; 
     color: var(--text-main);
     display: flex; 
     justify-content: center;
@@ -35,6 +46,8 @@ body {
     display: flex; 
     flex-direction: column; 
     scroll-behavior: smooth;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
 }
 
 /* --- 3. HEADER & NAV COMPONENTS --- */
@@ -96,12 +109,9 @@ body {
 main { 
     flex-grow: 1; 
     overflow-y: auto; 
-    /* Remove the 170px, use 20px for breathing room */
     padding: 20px 20px 40px 20px; 
-    padding-top: 20px; 
     -webkit-overflow-scrolling: touch; 
 }
-
 
 .hero { text-align: center; margin-bottom: 30px; margin-top: 20px; }
 
@@ -134,10 +144,7 @@ h2 {
     position: sticky; 
     top: 110px; 
     z-index: 100;
-    
-    /* Increase this height to add vertical spacing */
     min-height: 35px; 
-    
     background-color: #1a1512;
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
@@ -146,15 +153,11 @@ h2 {
     margin: 0; 
 }
 
-
 .nav-wrapper {
-    /* This manages the centering */
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 12px;
-    
-    /* This ensures it fills the 60px height and scrolls if wide */
     height: 100%;
     padding: 0 20px;
     min-width: min-content; 
@@ -166,7 +169,6 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    
     text-decoration: none; 
     color: var(--text-main);
     font-size: 0.75rem; 
@@ -289,7 +291,6 @@ footer {
 }
 
 /* extra junk */
-
 .zoom-download-btn {
     position: absolute;
     bottom: 20px;
@@ -309,20 +310,9 @@ footer {
     filter: brightness(1.2);
 }
 
-
 .hidden { display: none !important; }
 
-/* --- 9. ANIMATIONS & RESPONSIVE --- */
-@keyframes lantern-flicker {
-    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
-    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); }
-    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); }
-    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(76, 175, 80, 0.1); }
-    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(76, 175, 80, 0.25); }
-    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(76, 175, 80, 0.2); }
-}
-
-/* Duel Schedule Grid */
+/* --- DUEL SCHEDULE GRID --- */
 .duel-schedule-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -331,8 +321,8 @@ footer {
 }
 
 .duel-day {
-    background: var(--card-bg); /* Use global card background */
-    border: 1px solid var(--border-color); /* Use global border color */
+    background: var(--card-bg); 
+    border: 1px solid var(--border-color); 
     border-radius: 8px;
     padding: 20px;
 }
@@ -353,7 +343,7 @@ footer {
 
 .day-title {
     font-size: 1.4rem;
-    color: var(--text-main); /* Use global text color */
+    color: var(--text-main); 
     font-weight: bold;
 }
 
@@ -365,8 +355,8 @@ footer {
 
 .task-list li {
     padding: 8px 0;
-    border-bottom: 1px solid var(--border-color); /* Use global border */
-    color: var(--text-muted); /* Use global muted text */
+    border-bottom: 1px solid var(--border-color); 
+    color: var(--text-muted); 
 }
 
 .task-list .warning {
@@ -377,10 +367,10 @@ footer {
     margin: 10px 0;
 }
 
-/* Survival Battle Schedule Grid */
+/* --- SURVIVAL BATTLE SCHEDULE GRID --- */
 .schedule-container {
-    overflow-x: auto; /* Enables horizontal scroll on mobile */
-    -webkit-overflow-scrolling: touch; /* Makes scrolling smooth on iOS */
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
     margin: 20px 0;
 }
 
@@ -403,50 +393,108 @@ footer {
     color: var(--accent-color);
 }
 
-/* Highlights the current time row */
 .schedule-table tr.active-row {
-    background-color: rgba(212, 175, 55, 0.15); /* Light gold tint */
+    background-color: rgba(212, 175, 55, 0.15); 
 }
 
-/* Highlights the current day column */
 .schedule-table td.active-col, .schedule-table th.active-col {
-    background-color: rgba(212, 175, 55, 0.15); /* Matches row */
-    border: 2px solid #d4af37; /* Stronger border for the active cell */
+    background-color: rgba(212, 175, 55, 0.15); 
+    border: 2px solid #d4af37; 
 }
 
-/* The exact cell that is "Now" */
 .schedule-table td.active-row.active-col {
-    background-color: rgba(212, 175, 55, 0.3); /* Darker gold for intersection */
+    background-color: rgba(212, 175, 55, 0.3); 
     font-weight: bold;
     color: #fff;
 }
 
-/* for broken links */
+/* --- BROKEN/UNAVAILABLE LINKS --- */
 .unavailable {
-    /* Blood Red palette */
-    background-color: #4a0404 !important; /* Deep, dark blood red */
-    color: #8b8b8b !important;            /* Muted grey text */
+    background-color: #4a0404 !important; 
+    color: #8b8b8b !important;            
     border: 1px solid #7a0000 !important;
-    
-    /* UX cues */
-    cursor: not-allowed;                  /* Shows a "no entry" icon on hover */
-    pointer-events: none;                 /* Completely disables clicking */
-    opacity: 0.7;                         /* Dulls it to show it's "inactive" */
-    text-decoration: line-through;        /* Optional: adds a "strike-through" look */
+    cursor: not-allowed;                  
+    pointer-events: none;                 
+    opacity: 0.7;                         
+    text-decoration: line-through;        
 }
 
-@media (min-width: 600px) { #mobile-container { max-width: 600px; } }
-@media (min-width: 900px) { #mobile-container { max-width: 800px; } }
+/* Ensures section headers aren't hidden behind the sticky nav */
+section {
+    scroll-margin-top: 10px; 
+}
 
-/* epilepsy safeguard, hopefully */
+/* --- 9. ANIMATIONS & RESPONSIVE --- */
+@keyframes lantern-flicker {
+    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
+    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); }
+    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); }
+    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(76, 175, 80, 0.1); }
+    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(76, 175, 80, 0.25); }
+    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(76, 175, 80, 0.2); }
+}
+
+/* Tablet (Medium Screens) */
+@media (min-width: 600px) { 
+    #mobile-container { 
+        max-width: 650px; 
+    } 
+}
+
+/* Desktop: Wider and Zoomed In */
+@media (min-width: 1024px) { 
+    #mobile-container { 
+        max-width: 1200px; 
+    } 
+
+    html {
+        font-size: 115%; 
+    }
+
+    main {
+        padding: 40px; 
+    }
+
+    .lantern-img {
+        width: 115px; 
+    }
+
+    .header-stack {
+        height: 120px; 
+    }
+
+    .debossed-title {
+        margin-top: 60px; 
+    }
+
+    .anchor-nav {
+        min-height: 45px;
+    }
+
+    .anchor-link {
+        flex: 0 0 130px; 
+        height: 32px;    
+        font-size: 0.85rem; 
+    }
+.anchor-nav {
+        min-height: 45px;
+    }
+
+    .anchor-link {
+        flex: 0 0 150px; /* BUMP THIS NUMBER UP (was 130px) */
+        height: 32px;    
+        font-size: 0.85rem; 
+    }
+}
+
+/* epilepsy safeguard */
 @media (prefers-reduced-motion: reduce) {
     .dir-card { animation: none; box-shadow: none; filter: brightness(1); }
 }
 
-/* --- PWA / INSTALLED APP FIX (3rd attempt...) --- */
+/* --- PWA / INSTALLED APP FIX --- */
 @media (display-mode: standalone) {
     html, body {
-        /* Locks the foundational layer to the exact physical screen size */
         position: fixed; 
         top: 0; bottom: 0; left: 0; right: 0;
         width: 100%; height: 100%; 
@@ -454,7 +502,6 @@ footer {
     }
     
     #mobile-container {
-        /* Anchors the container directly to the locked body, ignoring vh/dvh */
         position: absolute; 
         top: 0; bottom: 0; left: 0; right: 0;
         margin: 0 auto; 
@@ -465,10 +512,10 @@ footer {
 /* Aggressive Reset for Zoom Modals */
 dialog {
     border: none !important;
-    outline: none !important;     /* Removes browser focus outline */
+    outline: none !important;     
     padding: 0 !important;
     background: transparent !important;
-    box-shadow: none !important;  /* Removes browser drop shadow */
+    box-shadow: none !important;  
     max-width: 95vw;
 }
 
@@ -480,8 +527,4 @@ dialog[open] {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-}
-/* Ensures section headers aren't hidden behind the sticky nav */
-section {
-    scroll-margin-top: 10px; /* Header (110px) + Nav (60px) + a little buffer (10px) */
 }
