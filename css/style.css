@@ -61,6 +61,7 @@ body {
     width: 40px; text-decoration: none; color: var(--accent-color);
     font-weight: bold; font-size: 1.2rem; display: flex;
     align-items: center; justify-content: center;
+    pointer-events: none;
 }
 
 .lantern-img {
