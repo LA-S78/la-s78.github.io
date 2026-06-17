@@ -58,10 +58,18 @@ body {
 }
 
 .header-side-btn {
-    width: 40px; text-decoration: none; color: var(--accent-color);
-    font-weight: bold; font-size: 1.2rem; display: flex;
-    align-items: center; justify-content: center;
-    pointer-events: none;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.header-side-btn a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .lantern-img {
