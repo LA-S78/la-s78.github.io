@@ -46,8 +46,6 @@ body {
     display: flex; 
     flex-direction: column; 
     scroll-behavior: smooth;
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
 }
 
 /* --- 3. HEADER & NAV COMPONENTS --- */
@@ -444,7 +442,7 @@ section {
 /* Desktop: Wider and Zoomed In */
 @media (min-width: 1024px) { 
     #mobile-container { 
-        max-width: 1200px; 
+        max-width: 1000px; 
     } 
 
     html {
@@ -481,7 +479,7 @@ section {
     }
 
     .anchor-link {
-        flex: 0 0 150px; /* BUMP THIS NUMBER UP (was 130px) */
+        flex: 0 0 150px;
         height: 32px;    
         font-size: 0.85rem; 
     }
