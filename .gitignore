@@ -1,0 +1,13 @@
+# Build artifacts
+_site/
+.jekyll-cache/
+.sass-cache/
+.jekyll-metadata
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Ruby/Bundler internals
+.bundle/
+vendor/
