@@ -391,13 +391,25 @@ footer {
     color: var(--accent-color);
 }
 
-/* --- SURVIVAL BATTLE PHASE COLORS --- */
+/* --- SHARED EVENT PHASE COLORS --- */
 /* Opacity set to 0.35 to stand out against the dark background */
-table.schedule-table td.phase-tech   { background-color: rgba(153, 102, 204, 0.35); } /* Purple */
-table.schedule-table td.phase-raven  { background-color: rgba(70, 140, 200, 0.35); }  /* Blue */
-table.schedule-table td.phase-heroes { background-color: rgba(200, 80, 80, 0.35); }   /* Red */
-table.schedule-table td.phase-build  { background-color: rgba(80, 180, 100, 0.35); }  /* Green */
-table.schedule-table td.phase-train  { background-color: rgba(210, 160, 60, 0.35); }  /* Yellow */
+.phase-tech   { background-color: rgba(153, 102, 204, 0.35) !important; } /* Purple */
+.phase-raven  { background-color: rgba(70, 140, 200, 0.35) !important; }  /* Blue */
+.phase-heroes { background-color: rgba(200, 80, 80, 0.35) !important; }   /* Red */
+.phase-build  { background-color: rgba(80, 180, 100, 0.35) !important; }  /* Green */
+.phase-train  { background-color: rgba(210, 160, 60, 0.35) !important; }  /* Yellow */
+
+/* --- TABLE UTILITIES --- */
+.table-spaced {
+    margin-top: 15px; 
+    margin-bottom: 30px;
+}
+
+.points-value {
+    color: var(--accent-color); 
+    text-align: right; 
+    font-weight: bold;
+}
 
 /* --- ACTIVE TIME HIGHLIGHT --- */
 /* Target strictly the exact cell (.active-col) inside the current time block (.active-row) */
