@@ -391,19 +391,22 @@ footer {
     color: var(--accent-color);
 }
 
-.schedule-table tr.active-row {
-    background-color: rgba(212, 175, 55, 0.15); 
-}
+/* --- SURVIVAL BATTLE PHASE COLORS --- */
+/* Opacity set to 0.35 to stand out against the dark background */
+table.schedule-table td.phase-tech   { background-color: rgba(153, 102, 204, 0.35); } /* Purple */
+table.schedule-table td.phase-raven  { background-color: rgba(70, 140, 200, 0.35); }  /* Blue */
+table.schedule-table td.phase-heroes { background-color: rgba(200, 80, 80, 0.35); }   /* Red */
+table.schedule-table td.phase-build  { background-color: rgba(80, 180, 100, 0.35); }  /* Green */
+table.schedule-table td.phase-train  { background-color: rgba(210, 160, 60, 0.35); }  /* Yellow */
 
-.schedule-table td.active-col, .schedule-table th.active-col {
-    background-color: rgba(212, 175, 55, 0.15); 
-    border: 2px solid #d4af37; 
-}
-
-.schedule-table td.active-row.active-col {
-    background-color: rgba(212, 175, 55, 0.3); 
-    font-weight: bold;
-    color: #fff;
+/* --- ACTIVE TIME HIGHLIGHT --- */
+/* Target strictly the exact cell (.active-col) inside the current time block (.active-row) */
+table.schedule-table tr.active-row td.active-col {
+    background-color: var(--accent-color) !important; /* Solid gold */
+    color: #110d0b !important; /* Dark text for readability */
+    font-weight: bold !important;
+    border: 2px solid #fff !important; /* Crisp white border to make it pop */
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3) !important; /* Slight inner glow */
 }
 
 /* --- BROKEN/UNAVAILABLE LINKS --- */
@@ -466,15 +469,6 @@ section {
     }
 
     .anchor-nav {
-        min-height: 45px;
-    }
-
-    .anchor-link {
-        flex: 0 0 130px; 
-        height: 32px;    
-        font-size: 0.85rem; 
-    }
-.anchor-nav {
         min-height: 45px;
     }
 

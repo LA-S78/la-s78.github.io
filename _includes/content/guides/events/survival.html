@@ -2,27 +2,31 @@
 <p>writeup</p>
 <h2 class="guide-title" id="schedule">2. Survival Battle Schedule</h2>
 <div class="schedule-container">
-    <table class="schedule-table">
-        <thead>
-            <tr>
-                <th>Time</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th><th>Day 5</th><th>Day 6</th><th>Day 7</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in site.data.survival_battle %}
-            <tr>
-                <td>{{ row.time }}</td>
-                <td>{{ row.d1 }}</td>
-                <td>{{ row.d2 }}</td>
-                <td>{{ row.d3 }}</td>
-                <td>{{ row.d4 }}</td>
-                <td>{{ row.d5 }}</td>
-                <td>{{ row.d6 }}</td>
-                <td>{{ row.d7 }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<table class="schedule-table">
+    <thead>
+        <tr>
+            <th>Time</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th><th>Day 5</th><th>Day 6</th><th>Day 7</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in site.data.survival_battle %}
+        <tr>
+            <td>{{ row.time }}</td>
+            <td class="{{ site.data.phase_colours[row.d1] }}">{{ row.d1 }}</td>
+            <td class="{{ site.data.phase_colours[row.d2] }}">{{ row.d2 }}</td>
+            <td class="{{ site.data.phase_colours[row.d3] }}">{{ row.d3 }}</td>
+            <td class="{{ site.data.phase_colours[row.d4] }}">{{ row.d4 }}</td>
+            <td class="{{ site.data.phase_colours[row.d5] }}">{{ row.d5 }}</td>
+            <td class="{{ site.data.phase_colours[row.d6] }}">{{ row.d6 }}</td>
+            <td class="{{ site.data.phase_colours[row.d7] }}">{{ row.d7 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    <div class="tip-box">
+        <h4>⚠️ Please Note</h4>
+        <p>The schedule's days are based on the Alliance Duel calendar, <strong>NOT</strong> the Survival Battle calendar.</p>
+    </div>
 </div>
 <h2 class="guide-title" id="reference">3. Points Reference</h2>
 {% include points_reference.html %}
