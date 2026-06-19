@@ -70,6 +70,6 @@ function highlightCurrentSurvivalBattle() {
 }
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("turbo:load", function() {
     highlightCurrentSurvivalBattle();
 });
