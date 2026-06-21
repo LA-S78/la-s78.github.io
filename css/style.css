@@ -532,3 +532,37 @@ dialog[open] {
     align-items: center !important;
     justify-content: center !important;
 }
+
+/* test refactor */
+/* Style all Markdown blockquotes as Last Asylum tip boxes */
+blockquote { 
+    background: rgba(184, 151, 90, 0.1); 
+    border: 1px solid var(--accent-color); 
+    padding: 15px; 
+    border-radius: 8px; 
+    margin: 20px 0; 
+}
+
+/* Style the headers inside the blockquote */
+blockquote h4 { 
+    margin: 0 0 5px 0; 
+    color: var(--accent-color); 
+    text-transform: uppercase; 
+    font-size: 0.8rem; 
+}
+
+/* Ensure the bullet points look clean */
+blockquote ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+blockquote li {
+    margin-bottom: 5px;
+}
+
+/* Jekyll/Markdown fix: remove extra padding from the final paragraph/list */
+blockquote p:last-child,
+blockquote ul:last-child {
+    margin-bottom: 0;
+}
