@@ -1,4 +1,4 @@
-## 1. Progression Strategy {#strategy}
+## 1. Progression Strategy 
 
 Racing to Sanctuary Level 30 is the primary goal for long-term account strength, but rushing without planning causes "bottlenecks."
 
@@ -8,19 +8,19 @@ Racing to Sanctuary Level 30 is the primary goal for long-term account strength,
 
 The progression shifts around Level 20. Before 20, progress is straightforward. After 20, you must prioritize the specific "Required Buildings" list, as these will become your primary time-sinks.
 
-## 2. Level Prerequisites Chart {#prereqs}
+## 2. Level Prerequisites Chart
 
 Use the chart below to plan your construction queue. This covers resource costs and specific structure requirements to prevent construction halts.
 
 (put chart here)
 
-## 3. Building Ceiling Goals {#goals}
+## 3. Building Ceiling Goals
 
 Once you reach these levels, you have satisfied all prerequisite requirements for Sanctuary 30. You can deprioritize these buildings and reallocate your resources toward troops and tech.
 
 (put max building levels here)
 
-## 4. Efficiency & Spending {#tips}
+## 4. Efficiency & Spending
 
 The transition from Level 25 to 30 represents the steepest climb in the game. To maintain momentum:
 
