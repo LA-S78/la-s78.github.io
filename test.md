@@ -6,11 +6,11 @@ description: A comprehensive guide to Kingdom Wars scoring and mechanics.
 active_nav: guides
 nav_links:
   - name: EXPLANATION
-    url: "#explanation"
+    url: "#1-event-explanation"
   - name: SCORING
-    url: "#scoring"
+    url: "#2-points-scoring"
   - name: STRATEGY
-    url: "#strategy"
+    url: "#3-strategic-focus"
 ---
 
 ## 1. Event Explanation
@@ -21,16 +21,7 @@ The winner of that week will earn invasion rights against their opponent's serve
 
 ## 2. Points Scoring
 
-<table class="list-table table-spaced">
-    <tbody>
-        {% for item in site.data.kingdom_points %}
-        <tr class="{{ item.category }}">
-            <td>{{ item.task }}</td>
-            <td class="points-value">{{ item.points }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% include points_table.html %}
 
 ## 3. Strategic Focus
 

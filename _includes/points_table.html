@@ -1,0 +1,10 @@
+<table class="list-table table-spaced">
+    <tbody>
+        {% for item in site.data.kingdom_points %}
+        <tr class="{{ item.category }}">
+            <td>{{ item.task }}</td>
+            <td class="points-value">{{ item.points }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
