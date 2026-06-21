@@ -1,4 +1,4 @@
-## Example markdown file.
+## Example markdown file
 
 "##"    = large title
 
