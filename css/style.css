@@ -120,14 +120,6 @@ main {
 }
 .search-bar:focus { outline: none; border-color: var(--accent-color); }
 
-/* testing something
-h2 {
-    font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
-    color: var(--text-muted); margin-bottom: 10px;
-    border-bottom: 1px solid var(--border-color); padding-bottom: 5px;
-}
-*/
-
 /* --- 5. CARDS & SECTIONS --- */
 .rule-card {
     background-color: var(--card-bg); padding: 20px 24px; border-radius: 8px;
@@ -144,28 +136,50 @@ h2 {
     position: sticky; 
     top: 110px; 
     z-index: 100;
-    min-height: 35px; 
+    min-height: 45px; /* Slightly taller for better touch targets */
     background-color: #1a1512;
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
     overflow-x: auto;
-    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hides scrollbar on Firefox */
     margin: 0; 
+}
+
+/* Hides the ugly default scrollbar on Chrome/Safari */
+.anchor-nav::-webkit-scrollbar {
+    display: none;
 }
 
 .nav-wrapper {
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 12px;
     height: 100%;
-    padding: 0 20px;
-    min-width: min-content; 
+    min-height: 45px;
+    padding: 0;
+    
+    /* CRITICAL FIXES */
+    width: max-content; /* Forces the wrapper to physically hold all items */
+    min-width: 100%;    /* Ensures it still spans the screen if there are only 2 links */
+    /* justify-content: center;  <-- REMOVED: This is what breaks flex scrolling */
+}
+
+/* THE "PHANTOM NODE" HACK */
+/* These act as bulletproof padding that iOS cannot ignore */
+.nav-wrapper::before {
+    content: "";
+    flex: 0 0 8px; /* Left edge gap */
+}
+
+.nav-wrapper::after {
+    content: "";
+    flex: 0 0 20px; /* Right edge gap - forces the browser to scroll past the final link */
 }
 
 .anchor-link {
     flex: 0 0 115px;
-    height: 25px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -177,6 +191,7 @@ h2 {
     border-radius: 6px; 
     transition: background 0.2s ease, color 0.2s ease;
     -webkit-tap-highlight-color: transparent;
+    margin: 0; /* Resets the previous Fix 1 margin attempt */
 }
 
 .anchor-link.active {
