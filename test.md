@@ -41,6 +41,20 @@ subtitle: Markdown Guide
         border-radius: 4px;
     }
 
+    /* 1. Hide buttons by default (Mobile-first) */
+    .view-panel button {
+        display: none;
+    }
+
+    /* 2. Show buttons only on desktop (when it becomes side-by-side) */
+    @media (min-width: 768px) {
+        .split-view { flex-direction: row; }
+        
+        .view-panel button {
+            display: inline-block;
+        }
+    }
+
     pre {
         background: rgba(0, 0, 0, 0.3);
         padding: 15px;
@@ -86,12 +100,7 @@ The progression shifts around Level 20. Before 20, progress is straightforward. 
 
 Use the chart below to plan your construction queue. This covers resource costs and specific structure requirements to prevent construction halts.
 
-| Sanctuary Lvl | Key Prerequisite Building | Purpose |
-| :--- | :--- | :--- |
-| **20-22** | Laboratory | Tech Speed |
-| **23-25** | Training Grounds | Troop Capacity |
-| **26-28** | Command Center | Rally/March Size |
-| **29-30** | Resource Silos | Storage Capacity |
+(put chart here)
 
 ## 3. Building Ceiling Goals
 
@@ -118,25 +127,37 @@ The transition from Level 25 to 30 represents the steepest climb in the game. To
     <div class="rendered-markdown">
       <h2>1. Progression Strategy</h2>
       <p>Racing to Sanctuary Level 30 is the primary goal for long-term account strength, but rushing without planning causes "bottlenecks."</p>
+
       <blockquote>
         <h4>⚠️ Priority Intel</h4>
-        <p><strong>Never start an upgrade without checking your prerequisites first.</strong></p>
+        <p><strong>Never start an upgrade without checking your prerequisites first.</strong> You don't want to save 2 days of resources only to realize you forgot to level up the Laboratory or Training Grounds.</p>
       </blockquote>
-      <p>The progression shifts around Level 20. After 20, you must prioritize the specific "Required Buildings" list.</p>
+
+      <p>The progression shifts around Level 20. Before 20, progress is straightforward. After 20, you must prioritize the specific "Required Buildings" list, as these will become your primary time-sinks.</p>
+
       <h2>2. Level Prerequisites Chart</h2>
-      <table>
-        <tr><th>Sanctuary Lvl</th><th>Prerequisite</th><th>Purpose</th></tr>
-        <tr><td>20-22</td><td>Laboratory</td><td>Tech Speed</td></tr>
-      </table>
+      <p>Use the chart below to plan your construction queue. This covers resource costs and specific structure requirements to prevent construction halts.</p>
+
+      <p>(put chart here)</p>
+
       <h2>3. Building Ceiling Goals</h2>
+      <p>Once you reach these levels, you have satisfied all prerequisite requirements for Sanctuary 30. You can deprioritize these buildings and reallocate your resources toward troops and tech.</p>
+
       <ul>
         <li><strong>Laboratory:</strong> Level 30</li>
         <li><strong>Training Grounds:</strong> Level 30</li>
+        <li><strong>Command Center:</strong> Level 30</li>
+        <li><strong>Wall:</strong> Level 30</li>
+        <li><strong>Warehouse:</strong> Level 25 (Efficiency Cap)</li>
+        <li><strong>Resource Buildings:</strong> Level 25 (Maintenance Cap)</li>
       </ul>
+
       <h2>4. Efficiency & Spending</h2>
+      <p>The transition from Level 25 to 30 represents the steepest climb in the game. To maintain momentum:</p>
       <ul>
-        <li><strong>Construction Speed:</strong> Max out in Laboratory.</li>
-        <li><strong>Titles:</strong> Use Minister of Construction.</li>
+        <li><strong>Construction Speed:</strong> Ensure your "Building Speed" research is maxed out in the Laboratory. This provides a compounding bonus that saves weeks of time by Level 30.</li>
+        <li><strong>Alignment:</strong> Align your major building upgrades with the "Alliance Duel" event whenever possible to gain points for your efforts.</li>
+        <li><strong>Titles:</strong> Make sure to utilise Minister of Construction or Chief of Affairs before starting construction. These buffs can dramatically reduce construction times.</li>
       </ul>
     </div>
   </div>
