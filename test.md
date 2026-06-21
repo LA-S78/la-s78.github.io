@@ -1,21 +1,3 @@
----
-layout: default
-title: Sanctuary Guide
-subtitle: Leveling Guide
-active_nav: guides
-nav_links:
-  - name: STRATEGY
-    url: "#strategy"
-  - name: CHART
-    url: "#prereqs"
-  - name: GOALS
-    url: "#goals"
-  - name: EFFICIENCY
-    url: "#tips"
-dialogs:
-  - dialogs/guides/strategy/sanctuary.html
----
-
 ## 1. Progression Strategy {#strategy}
 
 Racing to Sanctuary Level 30 is the primary goal for long-term account strength, but rushing without planning causes "bottlenecks."
@@ -30,13 +12,13 @@ The progression shifts around Level 20. Before 20, progress is straightforward. 
 
 Use the chart below to plan your construction queue. This covers resource costs and specific structure requirements to prevent construction halts.
 
-<img src="/images/guides/sanctuary-prereqs.jpg" alt="Sanctuary Level Prerequisites" class="blueprint-img" onclick="document.getElementById('sanctuary-prereqsZoom').showModal()" style="cursor: pointer;">
+(put chart here)
 
 ## 3. Building Ceiling Goals {#goals}
 
 Once you reach these levels, you have satisfied all prerequisite requirements for Sanctuary 30. You can deprioritize these buildings and reallocate your resources toward troops and tech.
 
-{% include sanctuary_goals.html %}
+(put max building levels here)
 
 ## 4. Efficiency & Spending {#tips}
 
