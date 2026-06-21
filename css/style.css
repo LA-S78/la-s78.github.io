@@ -120,11 +120,13 @@ main {
 }
 .search-bar:focus { outline: none; border-color: var(--accent-color); }
 
+/* testing something
 h2 {
     font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
     color: var(--text-muted); margin-bottom: 10px;
     border-bottom: 1px solid var(--border-color); padding-bottom: 5px;
 }
+*/
 
 /* --- 5. CARDS & SECTIONS --- */
 .rule-card {
@@ -538,14 +540,15 @@ dialog[open] {
 blockquote { 
     background: rgba(184, 151, 90, 0.1); 
     border: 1px solid var(--accent-color); 
-    padding: 15px; 
+    padding: 15px 15px 15px; 
     border-radius: 8px; 
-    margin: 20px 0; 
+    margin: 20px 0;
+    line-height: 1.4;
 }
 
 /* Style the headers inside the blockquote */
 blockquote h4 { 
-    margin: 0 0 5px 0; 
+    margin: 0 0 10px 0; 
     color: var(--accent-color); 
     text-transform: uppercase; 
     font-size: 0.8rem; 
@@ -566,3 +569,10 @@ blockquote p:last-child,
 blockquote ul:last-child {
     margin-bottom: 0;
 }
+
+h2 {
+    font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--accent-color); margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-color); padding-bottom: 5px;
+}
+p { padding: 0px 20px 0px 20px; line-height: 1.6; }
