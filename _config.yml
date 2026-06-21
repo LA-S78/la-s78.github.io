@@ -5,3 +5,7 @@ url: "https://la-s78.github.io"
 kramdown:
   input: GFM
   syntax_highlighter: rouge
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
