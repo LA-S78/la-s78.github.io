@@ -14,3 +14,9 @@ This site is built using Jekyll and optimized for deployment via GitHub Pages.
 
 * **`/guides/`**: Directory for all core strategy documentation.
 * **`markdown.md`**: Contains the custom `split-view` template for documenting formatting syntax.
+
+## Copyright & Licensing
+
+The underlying Jekyll code, HTML, CSS, and layout framework of this repository are licensed under the [MIT License](LICENSE).
+
+**All written strategy guides, gameplay metrics, visual blueprints, and lore located within the `/guides/` directory (or related content files) are Copyright © 2026. All Rights Reserved.** They may not be reproduced, distributed, or transmitted in any form without prior written permission.
