@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include structure/head.html %}
+
+<body>
+<div id="mobile-container">
+
+    {% include structure/header.html %}
+
+    {% if page.nav_links %}
+        {% include structure/anchor-nav.html %}
+    {% endif %}
+
+    <main>
+
+        {{ content }}
+        
+    </main>
+
+{% include structure/footer.html %}
+
+</div>
+
+{% if page.dialogs %}
+    {% for dialog in page.dialogs %}
+        {% include {{ dialog }} %}
+    {% endfor %}
+{% endif %}
+
+</body>
+</html>

@@ -1,31 +1,47 @@
 ---
 layout: default
-title: Kingdom War
-subtitle: Kingdom War
-description: A comprehensive guide to Kingdom Wars scoring and mechanics.
+title: Sanctuary Guide
+subtitle: Leveling Guide
 active_nav: guides
 nav_links:
-  - name: EXPLANATION
-    url: "#1-event-explanation"
-  - name: SCORING
-    url: "#2-points-scoring"
   - name: STRATEGY
-    url: "#3-strategic-focus"
+    url: "#strategy"
+  - name: CHART
+    url: "#prereqs"
+  - name: GOALS
+    url: "#goals"
+  - name: EFFICIENCY
+    url: "#tips"
+dialogs:
+  - dialogs/guides/strategy/sanctuary.html
 ---
 
-## 1. Event Explanation
+## 1. Progression Strategy {#strategy}
 
-Kingdom Wars is a three-week event between the servers in a cluster. During these weeks, you will be paired against another server and compete for points for the week.
+Racing to Sanctuary Level 30 is the primary goal for long-term account strength, but rushing without planning causes "bottlenecks."
 
-The winner of that week will earn invasion rights against their opponent's server to attempt and take their castle during the event on Saturday. The fight begins at **12:00 PM server time**, and continues until either side reaches 100% occupation.
+> #### ⚠️ Priority Intel
+> 
+> **Never start an upgrade without checking your prerequisites first.** You don't want to save 2 days of resources only to realize you forgot to level up the Laboratory or Training Grounds.
 
-## 2. Points Scoring
+The progression shifts around Level 20. Before 20, progress is straightforward. After 20, you must prioritize the specific "Required Buildings" list, as these will become your primary time-sinks.
 
-{% include points_table.html %}
+## 2. Level Prerequisites Chart {#prereqs}
 
-## 3. Strategic Focus
+Use the chart below to plan your construction queue. This covers resource costs and specific structure requirements to prevent construction halts.
 
-> #### ⚠️ Important Objectives
-> * It is critical that you use **all 10 chances** you have against the Demon King each day.
-> * **Only target caravans** from the server you are up against for that specific week.
-> * Save your items for the correct duel days listed in the Alliance Duel guide, and time up as much as you can of those days with your Survival Battles.
+<img src="/images/guides/sanctuary-prereqs.jpg" alt="Sanctuary Level Prerequisites" class="blueprint-img" onclick="document.getElementById('sanctuary-prereqsZoom').showModal()" style="cursor: pointer;">
+
+## 3. Building Ceiling Goals {#goals}
+
+Once you reach these levels, you have satisfied all prerequisite requirements for Sanctuary 30. You can deprioritize these buildings and reallocate your resources toward troops and tech.
+
+{% include sanctuary_goals.html %}
+
+## 4. Efficiency & Spending {#tips}
+
+The transition from Level 25 to 30 represents the steepest climb in the game. To maintain momentum:
+
+* **Construction Speed:** Ensure your "Building Speed" research is maxed out in the Laboratory. This provides a compounding bonus that saves weeks of time by Level 30.
+* **Alignment:** Align your major building upgrades with the "Alliance Duel" event whenever possible to gain points for your efforts.
+* **Titles:** Make sure to utilise Minister of Construction or Chief of Affairs before starting construction. These buffs can dramatically reduce construction times.

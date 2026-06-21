@@ -1,0 +1,35 @@
+<div class="rule-card">
+    <table class="list-table">
+        {% if include.type == "alliances" %}
+            {% for alliance in site.data.diplomacy.nap_alliances %}
+            <tr><td>{{ alliance }}</td></tr>
+            {% endfor %}
+
+        {% elsif include.type == "academies" %}
+            {% for academy in site.data.diplomacy.nap_academies %}
+            <tr>
+                <td>{{ academy.name }}<br><span class="sub-text">Academy of {{ academy.parent }}</span></td>
+            </tr>
+            {% endfor %}
+
+        {% elsif include.type == "ranks" %}
+            {% for alliance in site.data.diplomacy.nap_ranks %}
+            <tr>
+                <td style="width: 30px; color: var(--accent-color); font-weight: bold;">{{ forloop.index }}.</td>
+                <td>{{ alliance }}</td>
+            </tr>
+            {% endfor %}
+            
+        {% elsif include.type == "blacklist_players" %}
+            {% for player in site.data.diplomacy.blacklist_players %}
+            <tr><td>{{ player }}</td></tr>
+            {% endfor %}
+            
+        {% elsif include.type == "blacklist_alliances" %}
+            {% for alliance in site.data.diplomacy.blacklist_alliances %}
+            <tr><td>{{ alliance }}</td></tr>
+            {% endfor %}
+
+        {% endif %}
+    </table>
+</div>

@@ -1,0 +1,35 @@
+nap_alliances:
+  - WLO
+  - RÂVN
+  - MIA
+  - NAT1
+  - BOTS
+  - SVN
+  - HMDA
+  - HeKi
+
+nap_academies:
+  - name: Râvn
+    parent: RÂVN
+  - name: Ghst
+    parent: BOTS
+  - name: OXY
+    parent: MIA
+
+nap_ranks:
+  - WLO
+  - MIA
+  - RÂVN
+  - NAT1
+
+blacklist_players:
+  - Azreal
+  - Demara
+  - Kaitain
+  - DarkEnenra
+  - Roni
+  - Evolyn
+  - DeathCz
+
+blacklist_alliances:
+  - RÏP
