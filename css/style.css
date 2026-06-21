@@ -158,24 +158,13 @@ main {
     height: 100%;
     min-height: 45px;
     padding: 0;
-    
-    /* CRITICAL FIXES */
-    width: max-content; /* Forces the wrapper to physically hold all items */
-    min-width: 100%;    /* Ensures it still spans the screen if there are only 2 links */
-    /* justify-content: center;  <-- REMOVED: This is what breaks flex scrolling */
+    width: max-content; /* Strictly allows horizontal scrolling */
+    /* No centering logic here at all */
 }
 
-/* THE "PHANTOM NODE" HACK */
-/* These act as bulletproof padding that iOS cannot ignore */
-.nav-wrapper::before {
-    content: "";
-    flex: 0 0 8px; /* Left edge gap */
-}
-
-.nav-wrapper::after {
-    content: "";
-    flex: 0 0 20px; /* Right edge gap - forces the browser to scroll past the final link */
-}
+/* THE "PHANTOM NODE" HACK (For Mobile Only) */
+.nav-wrapper::before { content: ""; flex: 0 0 8px; }
+.nav-wrapper::after  { content: ""; flex: 0 0 20px; }
 
 .anchor-link {
     flex: 0 0 115px;
@@ -466,9 +455,9 @@ section {
 }
 
 /* Tablet (Medium Screens) */
-@media (min-width: 600px) { 
+@media (min-width: 1024px) { 
     #mobile-container { 
-        max-width: 650px; 
+        max-width: 1000px; 
     } 
 }
 
@@ -501,7 +490,15 @@ section {
     .anchor-nav {
         min-height: 45px;
     }
+    .nav-wrapper {
+        width: 100%;
+        justify-content: center;
+    }
 
+    .nav-wrapper::before, 
+    .nav-wrapper::after {
+        display: none;
+    }
     .anchor-link {
         flex: 0 0 150px;
         height: 32px;    
