@@ -72,3 +72,24 @@ document.addEventListener("turbo:load", function() {
         scrollObserver.observe(section);
     });
 });
+
+/**
+ * SEARCH ENGINE
+ * Filters elements with the class 'searchable-item'
+ */
+document.addEventListener("turbo:load", function() {
+    const searchInput = document.getElementById('searchInput');
+    
+    // Guard Clause: Only run if the search bar exists on this page
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase();
+        const items = document.querySelectorAll('.searchable-item');
+
+        items.forEach(item => {
+            // Toggle visibility based on whether the content matches the query
+            item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
+        });
+    });
+});
