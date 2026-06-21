@@ -1,4 +1,4 @@
-## Example markdown file
+## Markdown Usage
 
 "##"    = large title
 
@@ -10,7 +10,7 @@
 
 ">"     = text block/bubble
 
-Example:
+## Markdown Example
 
 <pre><code>
 ## 1. Progression Strategy 
