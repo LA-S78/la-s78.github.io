@@ -7,10 +7,9 @@ active_nav: home
 
 {% include structure/search_hero.html placeholder="Search directories, posts..." %}
 
-## Critical Intel (scrollable)
-
-{% include home_pinned.html %}
-
-## Directories
-
-{% include home_directories.html %}
+{% for section in site.home %}
+<section class="content-pane" id="{{ section.nav_id }}">
+  <h2>{{ section.title }}</h2>
+  {{ section.content }}
+</section>
+{% endfor %}

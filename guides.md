@@ -7,14 +7,9 @@ active_nav: guides
 
 {% include structure/search_hero.html placeholder="Search guides..." %}
 
-## Game Strategy
-
-{% include guide_grid.html category="strategy" %}
-
-## Game Events
-
-{% include guide_grid.html category="events" %}
-
-## Economy & Shops
-
-{% include guide_grid.html category="shops" %}
+{% for section in site.guides %}
+<section class="content-pane" id="{{ section.nav_id }}">
+  <h2>{{ section.title }}</h2>
+  {{ section.content }}
+</section>
+{% endfor %}

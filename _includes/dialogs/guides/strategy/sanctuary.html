@@ -1,9 +1,14 @@
 <dialog id="sanctuary-prereqsZoom" onclick="this.close()">
-    <a href="/images/guides/sanctuary-prereqs.jpg" 
-       download="sanctuary-prereqs.jpg" 
-       class="zoom-download-btn" 
-       onclick="event.stopPropagation()">
-       Download
-    </a>
-    <img src="/images/guides/sanctuary-prereqs.jpg" style="width: 100%; max-width: 800px; border: none; border-radius: 0;">
+    <!-- 1. The Image (Stripped of inline CSS) -->
+    <img src="/images/guides/sanctuary-prereqs.jpg" alt="Sanctuary Prerequisites">
+    
+    <!-- 2. The Button Wrapper -->
+    <div class="dialog-controls" onclick="event.stopPropagation()">
+        <a href="/images/guides/sanctuary-prereqs.jpg" 
+           download="sanctuary-prereqs.jpg" 
+           class="dialog-btn">
+           Download
+        </a>
+        <button onclick="document.getElementById('sanctuary-prereqsZoom').close()">Close</button>
+    </div>
 </dialog>

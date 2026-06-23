@@ -1,19 +1,25 @@
 <dialog id="rotationZoom" onclick="this.close()">
-    <a href="/images/rotation.jpg" 
-       download="LastAsylum-Rotation.jpg" 
-       class="zoom-download-btn" 
-       onclick="event.stopPropagation()">
-       Download
-    </a>  
-    <img src="/images/rotation.jpg" style="width: 100%; max-width: 800px; border: none; border-radius: 0;">
+    <img src="/images/rotation.jpg" alt="Capitol Rotation Blueprint">
+    
+    <div class="dialog-controls" onclick="event.stopPropagation()">
+        <a href="/images/rotation.jpg" 
+           download="LastAsylum-Rotation.jpg" 
+           class="dialog-btn">
+           Download
+        </a>  
+        <button onclick="document.getElementById('rotationZoom').close()">Close</button>
+    </div>
 </dialog>
 
 <dialog id="rewardsZoom" onclick="this.close()">
-    <a href="/images/rewards.jpg" 
-       download="LastAsylum-Rewards.jpg" 
-       class="zoom-download-btn" 
-       onclick="event.stopPropagation()">
-       Download
-    </a>  
-    <img src="/images/rewards.jpg" style="width: 100%; max-width: 800px; border: none; border-radius: 0;">
+    <img src="/images/rewards.jpg" alt="Capitol Rewards Details">
+    
+    <div class="dialog-controls" onclick="event.stopPropagation()">
+        <a href="/images/rewards.jpg" 
+           download="LastAsylum-Rewards.jpg" 
+           class="dialog-btn">
+           Download
+        </a>  
+        <button onclick="document.getElementById('rewardsZoom').close()">Close</button>
+    </div>
 </dialog>

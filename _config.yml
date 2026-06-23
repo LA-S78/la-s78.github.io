@@ -9,3 +9,13 @@ exclude:
   - README.md
   - Gemfile
   - Gemfile.lock
+collections_dir: "collections"
+collections:
+  home:
+    output: false
+  rules:
+    output: false
+  guides:
+    output: false
+  alliance:
+    output: false

@@ -8,22 +8,17 @@
     --text-main: #d9cbb8;
     --text-muted: #a8a19b;
     --accent-color: #B8975A;
+    --plague-color: #B8975A;
     --border-color: #3d3128;
     --font-headers: "Georgia", serif;
     --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* --- 2. GLOBAL STYLES --- */
-html {
-    /* Base font size for mobile - will be overridden in desktop media query */
-    font-size: 100%;
-}
+/* --- 2. GLOBAL & APP SHELL --- */
+html { font-size: 100%; }
 
 body {
-    /* Fallback for very old browsers */
-    background-image: url('/images/background.png');
-    /* Modern browsers will use WebP */
-    background-image: url('/images/background.webp');
+    background-image: url('/images/background.webp'), url('/images/background.png');
     background-attachment: fixed;
     background-size: cover;
     background-color: #050403;
@@ -35,30 +30,42 @@ body {
     justify-content: center;
 }
 
+/* The master wrapper from your default.html */
 #mobile-container {
     width: 100%; 
-    max-width: 400px; 
     height: 100dvh; 
-    background: radial-gradient(circle at center, #2b231e 0%, #110d0b 100%);
+    background: transparent; /* Let the body image show through the sides */
     position: relative; 
     overflow: hidden; 
-    box-shadow: 0 0 30px rgba(0, 0, 0, 1);
     display: flex; 
     flex-direction: column; 
     scroll-behavior: smooth;
 }
 
-/* --- 3. HEADER & NAV COMPONENTS --- */
+/* --- 3. JEKYLL INCLUDES (HEADER, NAV, FOOTER) --- */
 .lantern-header {
     position: sticky; top: 0;
-    background: radial-gradient(circle at center 40%, rgba(35, 120, 45, 0.25) 0%, rgba(20, 60, 25, 0.05) 40%, var(--nav-bg) 70%);
+    
+    /* THE BAKE-IN FIX:
+       Layer 1 (Top): The green lantern glow.
+       Layer 2 (Bottom): The warm brown spotlight that fades into the solid dark background. 
+       Because it fades to a solid color, the header is 100% opaque and hides the body image perfectly.
+    */
+    background: 
+        radial-gradient(circle 400px at center 40%, rgba(35, 120, 45, 0.3) 0%, transparent 100%),
+        radial-gradient(circle 500px at center 10%, #2b231e 0%, var(--nav-bg) 100%);
+        
     padding: 10px 20px; border-bottom: 2px solid var(--border-color);
     z-index: 20; display: flex; justify-content: space-between; align-items: center;
 }
 
 .lantern-header::after {
-    content: ''; position: absolute; bottom: -40px; left: 0;
-    width: 100%; height: 40px;
+    content: ''; position: absolute; bottom: -40px; 
+    
+    /* Clamps the green drop shadow to exactly match the 1000px middle pillar */
+    left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 1000px; height: 40px;
+    
     background: linear-gradient(to bottom, rgba(35, 120, 45, 0.15), transparent);
     pointer-events: none;
 }
@@ -68,20 +75,8 @@ body {
     align-items: center; justify-content: center; height: 100px;
 }
 
-.header-side-btn {
-    width: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.header-side-btn a {
-    text-decoration: none;
-    color: inherit;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
+.header-side-btn { width: 40px; display: flex; align-items: center; justify-content: flex-start; }
+.header-side-btn a { text-decoration: none; color: inherit; font-size: 24px; font-weight: bold; cursor: pointer; }
 
 .lantern-img {
     width: 85px; height: auto; position: absolute; z-index: 0;
@@ -91,10 +86,11 @@ body {
 }
 
 .debossed-title {
-    position: relative; z-index: 1; margin-top: 45px;
+    position: relative; z-index: 1; margin-top: 45px; margin-bottom: 0;
     font-family: var(--font-headers); font-size: 1.4rem; font-weight: bold;
     letter-spacing: 3px; text-transform: uppercase; color: var(--text-main);
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8), 0px 0px 5px rgba(76, 175, 80, 0.5);
+    border: none; padding-bottom: 0;
 }
 
 .subtitle {
@@ -103,348 +99,280 @@ body {
     letter-spacing: 1.5px; margin-top: 2px;
 }
 
-/* --- 4. MAIN CONTENT --- */
+.anchor-nav {
+    position: sticky; top: 0; z-index: 100; min-height: 45px; 
+    background-color: #1a1512; border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+    overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 0; 
+}
+.anchor-nav::-webkit-scrollbar { display: none; }
+
+.nav-wrapper {
+    display: flex; align-items: center; gap: 12px; height: 100%;
+    min-height: 45px; padding: 0; width: max-content; 
+}
+.nav-wrapper::before { content: ""; flex: 0 0 8px; }
+.nav-wrapper::after  { content: ""; flex: 0 0 20px; }
+
+.anchor-link {
+    flex: 0 0 115px; height: 28px; display: flex; align-items: center; justify-content: center;
+    text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: bold; 
+    border: 1px solid var(--border-color); border-radius: 6px; 
+    transition: background 0.2s ease, color 0.2s ease; margin: 0;
+}
+.anchor-link.active { background-color: var(--accent-color) !important; color: #110d0b !important; }
+
+footer {
+    width: 100%; background-color: var(--nav-bg); border-top: 1px solid var(--border-color); 
+    display: flex; justify-content: space-around; padding: 10px 0; z-index: 30; flex-shrink: 0; 
+}
+.nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 0.7rem; gap: 4px; text-decoration: none; border-bottom: none !important; }
+.nav-item.active { color: var(--accent-color); }
+.nav-icon-svg { width: 24px; height: 24px; stroke: var(--accent-color); transition: all 0.3s ease; }
+
+
+/* --- 4. MARKDOWN CONTENT (Inside <main>) --- */
 main { 
     flex-grow: 1; 
     overflow-y: auto; 
     padding: 20px 20px 40px 20px; 
     -webkit-overflow-scrolling: touch; 
+    line-height: 1.6;
+
+    max-width: 1000px; 
+    margin: 0 auto; 
+    width: 100%; 
+    box-sizing: border-box;
+    /* REMOVE the background and box-shadow from here if they are still there */
 }
 
+main h1, main h2, main h3, main h4 {
+    font-family: var(--font-headers);
+    color: var(--accent-color);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+main h1 { font-size: 1.6rem; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; }
+main h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+main p, main ul, main ol { margin-bottom: 1.2em; }
+
+main a { color: var(--accent-color); text-decoration: none; border-bottom: 1px dotted var(--accent-color); }
+main a:hover { filter: brightness(1.2); }
+
+/* Markdown Blockquotes as Tip Boxes */
+blockquote { 
+    background: rgba(184, 151, 90, 0.1); 
+    border-left: 4px solid var(--accent-color); 
+    padding: 15px 20px; 
+    border-radius: 0 8px 8px 0; 
+    margin: 20px 0;
+}
+blockquote h4 { margin: 0 0 10px 0; text-transform: uppercase; font-size: 0.9rem; }
+blockquote p:last-child, blockquote ul:last-child { margin-bottom: 0; }
+
+/* Markdown Code Blocks */
+pre, code { font-family: monospace; font-size: 0.85rem; color: var(--text-main); }
+pre { background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); overflow-x: auto; margin: 20px 0; }
+code { background: rgba(0, 0, 0, 0.3); padding: 2px 4px; border-radius: 4px; }
+
+/* Markdown Tables */
+table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
+th, td { padding: 10px; border: 1px solid #3d3734; text-align: left; }
+th { background: #2a2726; color: var(--accent-color); font-family: var(--font-headers); }
+tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.02); }
+
+main img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border-color); margin: 15px 0; }
+
+
+/* --- 5. HTML UTILITIES (For complex .md layouts) --- */
 .hero { text-align: center; margin-bottom: 30px; margin-top: 20px; }
-
-.search-bar {
-    width: 100%; padding: 12px; border-radius: 8px;
-    border: 1px solid var(--border-color); background-color: var(--card-bg);
-    color: var(--text-main); box-sizing: border-box; font-size: 1rem;
-}
+.search-bar { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--card-bg); color: var(--text-main); box-sizing: border-box; font-size: 1rem; }
 .search-bar:focus { outline: none; border-color: var(--accent-color); }
 
-/* --- 5. CARDS & SECTIONS --- */
-.rule-card {
-    background-color: var(--card-bg); padding: 20px 24px; border-radius: 8px;
-    border-left: 4px solid var(--accent-color); margin-bottom: 20px;
+/* --- INTERACTIVE IMAGES (Blueprints & Maps) --- */
+.blueprint-img {
+    max-width: 100%;       /* Ensures it never breaks out of the glass pane */
+    height: auto;
+    border-radius: 8px;    /* Matches your card styling */
+    border: 1px solid var(--border-color);
+    margin-top: 15px;      /* Gives it breathing room below titles */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    
+    /* Interaction */
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-.rule-card h3 {
-    margin: 0 0 10px 0; color: var(--text-main);
-    font-family: var(--font-headers); font-size: 1.1rem;
-    border-bottom: 1px solid var(--border-color); padding-bottom: 5px;
+/* Gives a slight zoom and brightens the border when hovered */
+.blueprint-img:hover {
+    transform: scale(1.02);
+    border-color: var(--accent-color);
 }
 
-.anchor-nav {
-    position: sticky; 
-    top: 110px; 
-    z-index: 100;
-    min-height: 45px; /* Slightly taller for better touch targets */
+/* --- MODAL DIALOGS (Image Zoom) --- */
+
+/* 1. The dark shadow behind the pop-up */
+dialog::backdrop {
+    background: rgba(10, 8, 7, 0.85); /* Very dark brown/black */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* 2. The pop-up box itself */
+/* 2. The pop-up box itself (Base Styling) */
+dialog {
     background-color: #1a1512;
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Hides scrollbar on Firefox */
-    margin: 0; 
+    border: 1px solid var(--accent-color);
+    border-radius: 12px;
+    padding: 20px;
+    color: var(--text-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+    
+    margin: auto; 
+    max-width: 95vw;
+    max-height: 90vh;
 }
 
-/* Hides the ugly default scrollbar on Chrome/Safari */
-.anchor-nav::-webkit-scrollbar {
-    display: none;
-}
-
-.nav-wrapper {
+/* Fix: ONLY apply the flex layout when the modal is triggered */
+dialog[open] {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    height: 100%;
-    min-height: 45px;
-    padding: 0;
-    width: max-content; /* Strictly allows horizontal scrolling */
-    /* No centering logic here at all */
+    gap: 15px;
 }
 
-/* THE "PHANTOM NODE" HACK (For Mobile Only) */
-.nav-wrapper::before { content: ""; flex: 0 0 8px; }
-.nav-wrapper::after  { content: ""; flex: 0 0 20px; }
+/* 3. The Image Inside */
+dialog img {
+    max-width: 100%;
+    max-height: 70vh; /* Keeps it from overflowing off-screen */
+    object-fit: contain;
+    border-radius: 4px;
+}
 
-.anchor-link {
-    flex: 0 0 115px;
-    height: 28px;
+/* --- DIALOG BUTTONS --- */
+dialog .dialog-controls {
     display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Styles both the Close button and the Download link */
+dialog button, 
+dialog a.dialog-btn {
+    background-color: rgba(20, 16, 14, 0.8);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none; /* Removes the underline if it's a link */
+    transition: all 0.2s ease;
+    
+    /* Centers text if it's an <a> tag */
+    display: inline-flex; 
     align-items: center;
     justify-content: center;
-    text-decoration: none; 
-    color: var(--text-main);
-    font-size: 0.75rem; 
-    font-weight: bold; 
-    border: 1px solid var(--border-color); 
-    border-radius: 6px; 
-    transition: background 0.2s ease, color 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
-    margin: 0; /* Resets the previous Fix 1 margin attempt */
 }
 
-.anchor-link.active {
-    background-color: var(--accent-color) !important;
-    color: #110d0b !important;
+/* The Hover Effect: Glows with your accent color */
+dialog button:hover, 
+dialog a.dialog-btn:hover {
+    background-color: var(--accent-color);
+    color: #1a1512; /* Dark text for contrast against the bright accent */
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(184, 151, 90, 0.4); /* Assuming your accent is that gold/bronze */
+    transform: translateY(-2px);
 }
 
+/* --- GUIDE GRIDS & EVENT PHASES --- */
+.guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+.guide-card { background-color: var(--card-bg); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid var(--border-color) !important; text-decoration: none; color: inherit; display: block; border-bottom: 1px solid var(--border-color) !important; }
+.guide-card .icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+
+.phase-tech   { background-color: rgba(153, 102, 204, 0.35) !important; }
+.phase-raven  { background-color: rgba(70, 140, 200, 0.35) !important; }
+.phase-heroes { background-color: rgba(200, 80, 80, 0.35) !important; }
+.phase-build  { background-color: rgba(80, 180, 100, 0.35) !important; }
+.phase-train  { background-color: rgba(210, 160, 60, 0.35) !important; }
+
+/* --- RULE CARDS & DATA TABLES --- */
+/* --- RULE CARDS & CONTENT BOXES --- */
+.rule-card {
+    background-color: var(--card-bg); 
+    padding: 20px 24px; 
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color); 
+    margin: 20px 0;
+    
+    /* Upgrades for floating over the background artwork */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Prevents standard Markdown text from blowing out the top/bottom padding */
+.rule-card > *:first-child { margin-top: 0; }
+.rule-card > *:last-child { margin-bottom: 0; }
+
+/* Allows you to use both H2 and H3 inside the card seamlessly */
+.rule-card h2, 
+.rule-card h3 {
+    color: var(--text-main); 
+    font-family: var(--font-headers); 
+    border-bottom: 1px solid var(--border-color); 
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
 .list-table { width: 100%; border-collapse: collapse; }
-.list-table tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.03); }
-.list-table td { padding: 8px 0; border-bottom: 1px solid #3d3128; font-size: 0.9rem; }
-.sub-text { font-size: 0.7rem; color: var(--text-muted); }
+.rule-card .list-table tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.03); }
+.rule-card .list-table td { padding: 10px 8px; border: none; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+.rule-card .list-table tr:last-child td { border-bottom: none; }
+.sub-text { font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px; }
+.rank-num { width: 30px; color: var(--accent-color); font-weight: bold; text-align: center; }
 
+/* --- INDEX: Pinned Cards (Horizontal Scroll) --- */
 .pinned-section {
     display: flex; overflow-x: auto; gap: 15px; margin-bottom: 30px;
     padding-bottom: 10px; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 .pinned-section::-webkit-scrollbar { display: none; }
+
 .pinned-card {
     min-width: 140px; background-color: var(--card-bg);
     padding: 15px; border-radius: 8px; border-top: 3px solid var(--accent-color);
-    flex-shrink: 0; text-decoration: none; color: inherit; display: block;
+    flex-shrink: 0; text-decoration: none; color: inherit; 
+    display: flex; flex-direction: column; align-items: center; gap: 8px; 
+    text-align: center; font-size: 0.85rem; font-weight: bold;
+    border-bottom: none !important; 
 }
+.pinned-card .nav-icon-svg { margin: 0; }
 
-/* --- 6. DIRECTORIES --- */
-.directories {
-    display: flex; flex-direction: column; gap: 15px;
-}
+/* --- INDEX: Directories (Vertical Cards) --- */
+.directories { display: flex; flex-direction: column; gap: 15px; }
 
 .dir-card {
     background-color: var(--card-bg); padding: 15px; border-radius: 8px;
     display: flex; align-items: center; justify-content: space-between;
-    text-decoration: none; color: inherit; border: 1px solid var(--border-color);
-    animation: lantern-flicker 6s infinite ease-in-out;
-    margin-bottom: 5px;
+    text-decoration: none; color: inherit; 
+    border: 1px solid var(--border-color) !important;
+    animation: lantern-flicker 6s infinite ease-in-out; margin-bottom: 5px;
 }
 
-.dir-content { 
-    display: flex; flex-direction: column; 
-}
+.dir-content { display: flex; flex-direction: column; }
+.dir-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.dir-title .nav-icon-svg { width: 18px; height: 18px; stroke: var(--accent-color); }
+.dir-sub { font-size: 0.75rem; color: var(--text-muted); margin-left: 26px; }
+.dir-arrow { color: var(--accent-color); font-weight: bold; font-size: 1.2rem; }
 
-.dir-title { 
-    font-weight: bold; font-size: 1.1rem; margin-bottom: 6px; 
-    display: flex; align-items: center; gap: 8px; 
-}
 
-.dir-title .nav-icon-svg {
-    width: 18px; height: 18px; stroke: var(--accent-color);
-}
-
-.dir-sub { 
-    font-size: 0.75rem; color: var(--text-muted); margin-left: 26px; 
-}
-
-.dir-arrow { 
-    color: var(--accent-color); font-weight: bold; font-size: 1.2rem;
-}
-
-/* --- 7. GUIDES & DIPLOMACY --- */
-.banner-container { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
-.war-banner { flex: 1; display: flex; flex-direction: column; align-items: center; }
-.banner-leather {
-    background-color: #2a221e; width: 100%; height: 100px;
-    clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 80% 100%, 60% 85%, 40% 100%, 20% 90%, 0% 100%);
-    display: flex; align-items: center; justify-content: center;
-}
-.stamp { font-family: var(--font-headers); font-weight: bold; font-size: 0.7rem; writing-mode: vertical-rl; color: var(--accent-color); }
-.blueprint-img {
-    width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border-color);
-    margin-top: 10px; display: block; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    user-select: none;
-}
-
-.guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-.guide-card {
-    background-color: var(--card-bg); padding: 15px; border-radius: 8px;
-    text-align: center; text-decoration: none; color: var(--text-main);
-    border: 1px solid var(--border-color);
-}
-.guide-card .icon { font-size: 2rem; display: block; margin-bottom: 10px; }
-.guide-card span { font-size: 0.8rem; font-weight: bold; }
-
-.guide-body { padding: 20px; line-height: 1.6; }
-.guide-title { color: var(--accent-color); margin-bottom: 5px; font-family: var(--font-headers); }
-.guide-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-.tip-box { background: rgba(184, 151, 90, 0.1); border: 1px solid var(--accent-color); padding: 15px; border-radius: 8px; margin: 20px 0; }
-.tip-box h4 { margin: 0 0 5px 0; color: var(--accent-color); text-transform: uppercase; font-size: 0.8rem; }
-.step-list { padding-left: 20px; }
-.step-list li { margin-bottom: 10px; }
-
-/* --- 8. SHARED FOOTER & ICONS --- */
-footer {
-    width: 100%; 
-    background-color: var(--nav-bg);
-    border-top: 1px solid var(--border-color); 
-    display: flex;
-    justify-content: space-around; 
-    padding: 10px 0 10px 0; 
-    z-index: 30; 
-    flex-shrink: 0; 
-}
-
-.nav-item {
-    display: flex; flex-direction: column; align-items: center;
-    color: var(--text-muted); font-size: 0.7rem; gap: 4px; text-decoration: none;
-}
-.nav-item.active { color: var(--accent-color); }
-.nav-icon-svg {
-    width: 24px; height: 24px; stroke: var(--accent-color);
-    transition: all 0.3s ease;
-}
-
-/* extra junk */
-.zoom-download-btn {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background-color: var(--accent-color);
-    color: #110d0b;
-    padding: 10px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: bold;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
-
-.zoom-download-btn:active {
-    filter: brightness(1.2);
-}
-
-.hidden { display: none !important; }
-
-/* --- DUEL SCHEDULE GRID --- */
-.duel-schedule-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px 0;
-    line-height: 1.6;
-}
-
-.duel-day {
-    background: var(--card-bg); 
-    border: 1px solid var(--border-color); 
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.day-header {
-    border-bottom: 2px solid var(--accent-color);
-    margin-bottom: 15px;
-    padding-bottom: 5px;
-}
-
-.day-header h3 {
-    margin: 0;
-    color: var(--accent-color);
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.day-title {
-    font-size: 1.4rem;
-    color: var(--text-main); 
-    font-weight: bold;
-}
-
-.task-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.task-list li {
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border-color); 
-    color: var(--text-muted); 
-}
-
-.task-list .warning {
-    color: #ff6b6b;
-    font-weight: bold;
-    border-left: 3px solid #ff6b6b;
-    padding-left: 10px;
-    margin: 10px 0;
-}
-
-/* --- SURVIVAL BATTLE SCHEDULE GRID --- */
-.schedule-container {
-    overflow-x: auto; 
-    -webkit-overflow-scrolling: touch; 
-    margin: 20px 0;
-}
-
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #1e1b1a;
-    color: #e0d8cc;
-    font-size: 0.85rem;
-}
-
-.schedule-table th, .schedule-table td {
-    padding: 10px;
-    border: 1px solid #3d3734;
-    text-align: center;
-}
-
-.schedule-table th {
-    background: #2a2726;
-    color: var(--accent-color);
-}
-
-/* --- SHARED EVENT PHASE COLORS --- */
-/* Opacity set to 0.35 to stand out against the dark background */
-.phase-tech   { background-color: rgba(153, 102, 204, 0.35) !important; } /* Purple */
-.phase-raven  { background-color: rgba(70, 140, 200, 0.35) !important; }  /* Blue */
-.phase-heroes { background-color: rgba(200, 80, 80, 0.35) !important; }   /* Red */
-.phase-build  { background-color: rgba(80, 180, 100, 0.35) !important; }  /* Green */
-.phase-train  { background-color: rgba(210, 160, 60, 0.35) !important; }  /* Yellow */
-
-/* --- TABLE UTILITIES --- */
-.table-spaced {
-    margin-top: 15px; 
-    margin-bottom: 30px;
-}
-
-.points-value {
-    color: var(--accent-color); 
-    text-align: right; 
-    font-weight: bold;
-}
-
-/* --- ACTIVE TIME HIGHLIGHT --- */
-/* Target strictly the exact cell (.active-col) inside the current time block (.active-row) */
-table.schedule-table tr.active-row td.active-col {
-    background-color: var(--accent-color) !important; /* Solid gold */
-    color: #110d0b !important; /* Dark text for readability */
-    font-weight: bold !important;
-    border: 2px solid #fff !important; /* Crisp white border to make it pop */
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3) !important; /* Slight inner glow */
-}
-
-/* --- BROKEN/UNAVAILABLE LINKS --- */
-.unavailable {
-    background-color: #4a0404 !important; 
-    color: #8b8b8b !important;            
-    border: 1px solid #7a0000 !important;
-    cursor: not-allowed;                  
-    pointer-events: none;                 
-    opacity: 0.7;                         
-    text-decoration: line-through;        
-}
-
-/* Ensures section headers aren't hidden behind the sticky nav */
-section {
-    scroll-margin-top: 10px; 
-}
-
-/* --- 9. ANIMATIONS & RESPONSIVE --- */
+/* --- 6. ANIMATIONS --- */
 @keyframes lantern-flicker {
     0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
     20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); }
@@ -454,153 +382,61 @@ section {
     85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(76, 175, 80, 0.2); }
 }
 
-/* Tablet (Medium Screens) */
-@media (min-width: 1024px) { 
-    #mobile-container { 
-        max-width: 1000px; 
-    } 
-}
-
-/* Desktop: Wider and Zoomed In */
-@media (min-width: 1024px) { 
-    #mobile-container { 
-        max-width: 1000px; 
-    } 
-
-    html {
-        font-size: 115%; 
-    }
-
-    main {
-        padding: 40px; 
-    }
-
-    .lantern-img {
-        width: 115px; 
-    }
-
-    .header-stack {
-        height: 120px; 
-    }
-
-    .debossed-title {
-        margin-top: 60px; 
-    }
-
-    .anchor-nav {
-        min-height: 45px;
-    }
-    .nav-wrapper {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .nav-wrapper::before, 
-    .nav-wrapper::after {
-        display: none;
-    }
-    .anchor-link {
-        flex: 0 0 150px;
-        height: 32px;    
-        font-size: 0.85rem; 
-    }
-}
-
-/* epilepsy safeguard */
 @media (prefers-reduced-motion: reduce) {
     .dir-card { animation: none; box-shadow: none; filter: brightness(1); }
 }
 
-/* --- PWA / INSTALLED APP FIX --- */
+
+/* --- 7. DESKTOP & RESPONSIVE CONSTRAINTS --- */
+@media (min-width: 1024px) { 
+    html { font-size: 115%; }
+
+    /* Let the shell span full screen so Header/Footer stretch */
+    #mobile-container { max-width: 100%; } 
+
+    /* Constrain only the markdown content area for readability */
+    main { max-width: 1000px; margin: 0 auto; width: 100%; padding: 40px; }
+
+    .lantern-img { width: 115px; }
+    .header-stack { height: 120px; }
+    .debossed-title { margin-top: 60px; }
+
+    .anchor-nav { min-height: 45px; }
+    .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
+    .nav-wrapper::before, .nav-wrapper::after { display: none; }
+    .anchor-link { flex: 0 0 150px; height: 32px; font-size: 0.85rem; }
+}
+
 @media (display-mode: standalone) {
-    html, body {
-        position: fixed; 
-        top: 0; bottom: 0; left: 0; right: 0;
-        width: 100%; height: 100%; 
-        overflow: hidden; 
-    }
+    html, body { position: fixed; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: 100%; overflow: hidden; }
+    #mobile-container { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: 0 auto; height: 100%; }
+}
+
+/* --- SECTION PANES (Major Content Blocks) --- */
+.content-pane {
+    background-color: rgba(20, 16, 14, 0.85); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     
-    #mobile-container {
-        position: absolute; 
-        top: 0; bottom: 0; left: 0; right: 0;
-        margin: 0 auto; 
-        height: 100%; 
-    }
-}
-
-/* Aggressive Reset for Zoom Modals */
-dialog {
-    border: none !important;
-    outline: none !important;     
-    padding: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;  
-    max-width: 95vw;
-}
-
-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.85) !important;
-}
-
-dialog[open] {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-/* test refactor */
-/* Style all Markdown blockquotes as Last Asylum tip boxes */
-blockquote { 
-    background: rgba(184, 151, 90, 0.1); 
-    border: 1px solid var(--accent-color); 
-    padding: 15px 15px 15px; 
-    border-radius: 8px; 
-    margin: 20px 0;
-    line-height: 1.4;
-}
-
-/* Style the headers inside the blockquote */
-blockquote h4 { 
-    margin: 0 0 10px 0; 
-    color: var(--accent-color); 
-    text-transform: uppercase; 
-    font-size: 0.8rem; 
-}
-
-/* Ensure the bullet points look clean */
-blockquote ul {
-    margin: 0;
-    padding-left: 20px;
-}
-
-blockquote li {
-    margin-bottom: 5px;
-}
-
-/* Jekyll/Markdown fix: remove extra padding from the final paragraph/list */
-blockquote p:last-child,
-blockquote ul:last-child {
-    margin-bottom: 0;
-}
-
-h2 {
-    font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
-    color: var(--accent-color); margin-bottom: 10px;
-    border-bottom: 1px solid var(--border-color); padding-bottom: 5px;
-}
-p { padding: 0px 20px 0px 20px; line-height: 1.6; }
-
-/* quick fix */
-pre {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 15px;
-    border-radius: 6px;
     border: 1px solid var(--border-color);
-    overflow-x: auto; /* This prevents the stretch */
-    white-space: pre-wrap; /* This ensures the text wraps to the next line */
-    word-wrap: break-word;
-    margin: 20px;
-    color: var(--text-main);
-    font-family: monospace;
-    font-size: 0.85rem;
+    border-radius: 12px;
+    padding: 30px 40px;
+    margin-bottom: 40px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    
+    /* Offsets the scroll anchor so the sticky header/nav doesn't cover the top of the pane */
+    scroll-margin-top: 170px; 
+}
+
+/* Prevent the first and last items from messing up the pane's padding */
+.content-pane > *:first-child { margin-top: 0; }
+.content-pane > *:last-child { margin-bottom: 0; }
+
+/* Styles the primary section header seamlessly inside the pane */
+.content-pane h2:first-child {
+    font-size: 1.4rem;
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
