@@ -1,8 +1,6 @@
 ---
 title: "Server Rules"
 nav_id: "server-rules"
-parent_guide: "rules"
-order: 1
 ---
 
 The following guidelines are mandatory to ensure fair play and server stability. 
