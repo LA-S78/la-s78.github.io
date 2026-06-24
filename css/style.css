@@ -43,7 +43,6 @@ body {
 }
 
 /* --- 3. JEKYLL INCLUDES (HEADER) --- */
-/* --- 3. JEKYLL INCLUDES (HEADER) --- */
 .lantern-header {
     position: sticky; top: 0; z-index: 20;
     padding: 10px 20px;
@@ -63,20 +62,25 @@ body {
     overflow: hidden; 
 }
 
+/* 1. Change fixed height to min-height for flexibility */
 .header-stack {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 20px;
-    height: 80px;
+    gap: 15px; /* Slightly reduced gap for mobile to prevent overflow */
+    min-height: 80px; /* Allows expansion, prevents squishing */
+    padding: 10px 0; /* Add vertical padding for breathing room */
 }
 
+/* 2. Make the lantern responsive for mobile */
 .lantern-img {
-    width: 115px; /* Restored your original size */
+    width: 90px; /* Default size for mobile */
     height: auto;
     flex-shrink: 0;
     
-    /* THE BLEND: Restored to work with the mask */
+/*    -webkit-mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
+    mask-image: radial-gradient(closest-side, black 50%, transparent 95%);*/
+    
     mix-blend-mode: screen; 
     filter: contrast(1.4) brightness(1.1) saturate(1.5);
 }
