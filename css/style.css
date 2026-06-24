@@ -599,11 +599,24 @@ dialog a.dialog-btn:hover {
 }
 
 /* --- ACTIVE TIME HIGHLIGHT --- */
-/* Target strictly the exact cell (.active-col) inside the current time block (.active-row) */
 table.schedule-table tr.active-row td.active-col {
-    background-color: var(--accent-color) !important; /* Solid gold */
-    color: #110d0b !important; /* Dark text for readability */
+    /* 1. We DO NOT declare a background-color here, preserving the phase color */
+
+    /* 2. Light up the existing phase color underneath */
+    filter: brightness(1.6) contrast(1.1) !important;
+    
+    /* 3. Make the text pure white with a dark drop-shadow for readability */
+    color: #ffffff !important;
     font-weight: bold !important;
-    border: 2px solid #fff !important; /* Crisp white border to make it pop */
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3) !important; /* Slight inner glow */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8) !important;
+
+    /* 4. Add a glowing gold border to match the theme */
+    border: 2px solid var(--accent-color) !important;
+    box-shadow: 
+        inset 0 0 15px rgba(184, 151, 90, 0.6), /* Inner gold glow */
+        0 0 10px rgba(184, 151, 90, 0.4) !important; /* Outer gold glow */
+
+    /* 5. Pops the cell up a layer so the glowing border overlaps adjacent cells */
+    position: relative; 
+    z-index: 2;
 }
