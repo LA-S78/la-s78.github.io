@@ -4,14 +4,13 @@
  * ----------------------------------------------------
  */
 
-// Global variable to track the observer across page transitions
 let scrollObserver = null;
 
-/**
- * Survival Battle Highlighting
- */
 function highlightCurrentSurvivalBattle() {
-    if (!document.querySelector('.schedule-table')) return;
+    const table = document.querySelector('.schedule-table');
+    if (!table) return; // Silent abort if not on the page
+
+    console.log("Survival Battle table found. Calculating server time...");
 
     const now = new Date();
     const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
@@ -24,67 +23,93 @@ function highlightCurrentSurvivalBattle() {
     const dayOfWeek = serverTime.getDay();
     const colIndex = (dayOfWeek === 0) ? 7 : dayOfWeek; 
     
-    const rows = document.querySelectorAll('.schedule-table tbody tr');
+    console.log(`Targeting Block: ${formattedBlock}, Day Column: ${colIndex}`);
+    
+    const rows = table.querySelectorAll('tbody tr');
+    let matchFound = false;
+
     rows.forEach(row => {
-        const timeCell = row.querySelector('td');
         const cells = row.querySelectorAll('td');
-        if (timeCell && timeCell.textContent.trim() === formattedBlock) {
+        const timeCell = cells[0]; // Safely grabs the very first cell
+
+        // We use .includes() instead of strict === to ignore hidden spaces/breaks
+        if (timeCell && timeCell.textContent.includes(formattedBlock)) {
+            matchFound = true;
             row.classList.add('active-row');
-            if (cells[colIndex]) cells[colIndex].classList.add('active-col');
+            if (cells[colIndex]) {
+                cells[colIndex].classList.add('active-col');
+            }
         } else {
             row.classList.remove('active-row');
             cells.forEach(cell => cell.classList.remove('active-col'));
         }
     });
+
+    if (!matchFound) {
+        console.warn(`Could not find a row containing the time: ${formattedBlock}`);
+    }
 }
 
-document.addEventListener("turbo:load", () => {
-  const sections = document.querySelectorAll('.content-pane');
-  const navLinks = document.querySelectorAll('.anchor-link');
+function initScrollObserver() {
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.anchor-link');
 
-  const observerOptions = {
-    root: null,
-    rootMargin: '-100px 0px -60% 0px',
-    threshold: 0
-  };
+    if (sections.length === 0 || navLinks.length === 0) return;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // Remove active class from all nav links
-        navLinks.forEach(link => link.classList.remove('active'));
-        
-        // Add active class to the link that matches the intersecting section's ID
-        const id = entry.target.getAttribute('id');
-        const activeLink = document.querySelector(`.anchor-link[href="#${id}"]`);
-        if (activeLink) {
-            activeLink.classList.add('active');
-        }
-      }
-    });
-  }, observerOptions);
+    // Disconnect old observer if it exists to prevent duplicate triggers
+    if (scrollObserver) scrollObserver.disconnect();
 
-  // Observe each section
-  sections.forEach(section => observer.observe(section));
-});
+    const observerOptions = {
+        root: null,
+        rootMargin: '-100px 0px -60% 0px',
+        threshold: 0
+    };
 
-/**
- * SEARCH ENGINE
- * Filters elements with the class 'searchable-item'
- */
-document.addEventListener("turbo:load", function() {
+    scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => link.classList.remove('active'));
+                const id = entry.target.getAttribute('id');
+                const activeLink = document.querySelector(`.anchor-link[href="#${id}"]`);
+                if (activeLink) activeLink.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => scrollObserver.observe(section));
+}
+
+function initSearchEngine() {
     const searchInput = document.getElementById('searchInput');
-    
-    // Guard Clause: Only run if the search bar exists on this page
     if (!searchInput) return;
 
-    searchInput.addEventListener('input', function(e) {
+    // Remove old listeners by cloning and replacing the node (prevents duplicate triggers)
+    const newSearchInput = searchInput.cloneNode(true);
+    searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+
+    newSearchInput.addEventListener('input', function(e) {
         const query = e.target.value.toLowerCase();
         const items = document.querySelectorAll('.searchable-item');
 
         items.forEach(item => {
-            // Toggle visibility based on whether the content matches the query
             item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
         });
     });
-});
+}
+
+/**
+ * MASTER INITIALIZER
+ * Runs all scripts cleanly. We use a named function so we can attach it
+ * safely to multiple load events without duplicate execution.
+ */
+function initCompendium() {
+    highlightCurrentSurvivalBattle();
+    initScrollObserver();
+    initSearchEngine();
+}
+
+// Turbo navigation event
+document.addEventListener("turbo:load", initCompendium);
+
+// Fallback for direct page loads where Turbo might bypass the first event
+document.addEventListener("DOMContentLoaded", initCompendium);
