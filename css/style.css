@@ -42,23 +42,43 @@ body {
     scroll-behavior: smooth;
 }
 
-/* --- 3. JEKYLL INCLUDES (HEADER, NAV, FOOTER) --- */
+/* --- 3. JEKYLL INCLUDES (HEADER) --- */
+/* --- 3. JEKYLL INCLUDES (HEADER) --- */
 .lantern-header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    overflow: visible; /* Allows the glow to bleed out */
+    position: sticky; top: 0; z-index: 20;
+    padding: 10px 20px;
+    border: none; 
+    background-color: var(--nav-bg); 
     
-    /* Re-applying the background here explicitly */
-    background: 
+    /* THE MIST: Centralized mist as you approved */
+    background:
         radial-gradient(circle 400px at center 40%, rgba(35, 120, 45, 0.3) 0%, transparent 100%),
         radial-gradient(circle 500px at center 10%, #2b231e 0%, var(--nav-bg) 100%);
+    background-repeat: no-repeat;
+    background-position: center;
     
-    padding: 10px 20px;
-    border-bottom: 2px solid var(--border-color);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    overflow: hidden; 
+}
+
+.header-stack {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    height: 80px;
+}
+
+.lantern-img {
+    width: 115px; /* Restored your original size */
+    height: auto;
+    flex-shrink: 0;
+    
+    /* THE BLEND: Restored to work with the mask */
+    mix-blend-mode: screen; 
+    filter: contrast(1.4) brightness(1.1) saturate(1.5);
 }
 
 .lantern-glow-bleed {
@@ -69,40 +89,54 @@ body {
     width: 100vw;
     height: 60px;
     
-    /* The bleed gradient */
-    background: linear-gradient(to bottom, rgba(35, 120, 45, 0.2), transparent);
+    /* Slightly toned down to match the old ::after pseudo-element */
+    background: linear-gradient(to bottom, rgba(35, 120, 45, 0.15), transparent);
     
     pointer-events: none;
-    z-index: -1; /* Pushed behind the header content so it doesn't block the lantern */
-}
-
-.header-stack {
-    position: relative; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; height: 100px;
+    z-index: -1; 
 }
 
 .header-side-btn { width: 40px; display: flex; align-items: center; justify-content: flex-start; }
 .header-side-btn a { text-decoration: none; color: inherit; font-size: 24px; font-weight: bold; cursor: pointer; }
 
-.lantern-img {
-    width: 85px; height: auto; position: absolute; z-index: 0;
-    mix-blend-mode: screen; filter: contrast(1.8) brightness(0.7);
-    -webkit-mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
-    mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
-}
-
 .debossed-title {
-    position: relative; z-index: 1; margin-top: 45px; margin-bottom: 0;
-    font-family: var(--font-headers); font-size: 1.4rem; font-weight: bold;
-    letter-spacing: 3px; text-transform: uppercase; color: var(--text-main);
-    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8), 0px 0px 5px rgba(76, 175, 80, 0.5);
-    border: none; padding-bottom: 0;
+    position: relative; 
+    z-index: 1; 
+    
+    /* SYNC FOR MOBILE: Proportional to the 115px lantern */
+    margin-top: 20px; 
+    font-size: 1.4rem; 
+    
+    margin-bottom: 0;
+    font-family: var(--font-headers); 
+    font-weight: bold;
+    letter-spacing: 3px; 
+    text-transform: uppercase; 
+    color: var(--text-main);
+    border: none; 
+    padding-bottom: 0;
+    text-shadow: 
+        -1px -1px 1px rgba(0, 0, 0, 0.9),       
+        1px 1px 1px rgba(255, 255, 255, 0.1),   
+        0px 0px 8px rgba(10, 8, 5, 1),          
+        0px 0px 20px rgba(10, 8, 5, 0.9);       
 }
 
 .subtitle {
-    position: relative; z-index: 1; font-family: var(--font-headers);
-    font-style: italic; font-size: 0.85rem; color: var(--accent-color);
-    letter-spacing: 1.5px; margin-top: 2px;
+    position: relative; 
+    z-index: 1; 
+    font-family: var(--font-headers);
+    text-align: center;
+    color: var(--accent-color);
+    letter-spacing: 1.5px; 
+    margin-top: 2px;
+    
+    /* THE UPGRADE: Same dense isolation technique to make the gold pop against the bright green */
+    text-shadow: 
+        -1px -1px 1px rgba(0, 0, 0, 0.9),       
+        1px 1px 1px rgba(255, 255, 255, 0.1),   
+        0px 0px 8px rgba(10, 8, 5, 1),          
+        0px 0px 20px rgba(10, 8, 5, 0.9); 
 }
 
 .anchor-nav {
@@ -193,8 +227,29 @@ main img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid 
 
 /* --- 5. HTML UTILITIES (For complex .md layouts) --- */
 .hero { text-align: center; margin-bottom: 30px; margin-top: 20px; }
-.search-bar { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--card-bg); color: var(--text-main); box-sizing: border-box; font-size: 1rem; }
-.search-bar:focus { outline: none; border-color: var(--accent-color); }
+/* Update your existing .search-bar class */
+.search-bar {
+    width: 100%;
+    max-width: 1000px; /* Align with your main content container */
+    margin: 0 auto 20px auto; /* Centered, with space below */
+    
+    padding: 15px 20px;
+    background-color: rgba(10, 8, 7, 0.6); /* Semi-transparent dark base */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    
+    color: var(--text-main);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus {
+    background-color: rgba(20, 16, 14, 0.9);
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 10px rgba(184, 151, 90, 0.2);
+}
 
 /* --- INTERACTIVE IMAGES (Blueprints & Maps) --- */
 .blueprint-img {
@@ -403,10 +458,13 @@ dialog a.dialog-btn:hover {
     /* Constrain only the markdown content area for readability */
     main { max-width: 1000px; margin: 0 auto; width: 100%; padding: 40px; }
 
-    .lantern-img { width: 115px; }
+    .lantern-img { width: 130px; }
     .header-stack { height: 120px; }
-    .debossed-title { margin-top: 60px; }
-
+    .debossed-title {
+        /* SYNC FOR DESKTOP: Your exact preferred settings */
+        margin-top: 30px; 
+        font-size: 1.8rem;
+    }
     .anchor-nav { min-height: 45px; }
     .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
     .nav-wrapper::before, .nav-wrapper::after { display: none; }

@@ -1,19 +1,10 @@
 <header class="lantern-header">
-    <!-- Keep your existing header content here -->
-    <div class="header-side-btn">
-        {% unless page.url == "/" %}
-            <a href="/">❮</a>
-        {% endunless %}
-    </div>
-    
     <div class="header-stack">
-        <img src="/images/lantern.png" alt="Plague Lantern" class="lantern-img">
-        <h1 class="debossed-title">LAST ASYLUM</h1>
-        <div class="subtitle">{{ page.subtitle }}</div>
+        <!-- The lantern and text group are naturally placed side-by-side -->
+        <img src="/images/lantern.png" class="lantern-img" alt="Lantern">
+        <div class="text-container">
+            <h1 class="debossed-title">LAST ASYLUM</h1>
+            <div class="subtitle">Survival Compendium</div>
+        </div>
     </div>
-    
-    <div class="header-side-btn"></div>
-
-    <!-- ADD THIS: The full-width bleed layer -->
-    <div class="lantern-glow-bleed"></div>
 </header>
