@@ -5,7 +5,6 @@ parent_guide: "rules"
 order: 1
 ---
 
-## Server Rules
 The following guidelines are mandatory to ensure fair play and server stability. 
 
 {% include rule_card.html title="📜 1. Respect & Conduct" content="
