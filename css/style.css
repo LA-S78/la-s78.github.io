@@ -440,3 +440,21 @@ dialog a.dialog-btn:hover {
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
+.anchor-link:target {
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+}
+.pane-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 30px 0;
+    text-align: center;
+    position: relative;
+}
+
+.pane-divider::after {
+    content: "◈"; /* A decorative symbol */
+    color: var(--accent-color);
+    padding: 0 15px;
+    position: relative;
+    top: -18px;
+}

@@ -17,5 +17,7 @@ collections:
     output: false
   guides:
     output: false
+  guide_panes:
+    output: false
   alliance:
     output: false

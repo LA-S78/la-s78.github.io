@@ -1,32 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+---
+layout: default
+---
 
-{% include structure/head.html %}
+{% assign article_panes = site.guide_panes | where: "parent_guide", page.guide_id | sort: 'order' %}
 
-<body>
-<div id="mobile-container">
 
-    {% include structure/header.html %}
-
-    {% if page.nav_links %}
-        {% include structure/anchor-nav.html %}
-    {% endif %}
-
-    <main>
-
-        {{ content }}
-        
-    </main>
-
-{% include structure/footer.html %}
-
-</div>
-
-{% if page.dialogs %}
-    {% for dialog in page.dialogs %}
-        {% include {{ dialog }} %}
-    {% endfor %}
-{% endif %}
-
-</body>
-</html>
+{% for pane in article_panes %}
+<section class="content-pane" id="{{ pane.nav_id }}">
+  <h2>{{ pane.title }}</h2>
+  {{ pane.content }}
+</section>
+{% endfor %}

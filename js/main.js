@@ -38,39 +38,34 @@ function highlightCurrentSurvivalBattle() {
     });
 }
 
-/**
- * Main Turbo-Load Initialization
- */
-document.addEventListener("turbo:load", function() {
-    // 1. Run Battle Highlight
-    highlightCurrentSurvivalBattle();
+document.addEventListener("turbo:load", () => {
+  const sections = document.querySelectorAll('.content-pane');
+  const navLinks = document.querySelectorAll('.anchor-link');
 
-    // 2. Kill the "Zombie Observer" (The fix you were missing)
-    if (scrollObserver) {
-        scrollObserver.disconnect();
-    }
+  const observerOptions = {
+    root: null,
+    rootMargin: '-100px 0px -60% 0px',
+    threshold: 0
+  };
 
-    // 3. Initialize fresh Observer
-    const observerOptions = {
-        root: null, 
-        rootMargin: '-200px 0px -50% 0px', 
-        threshold: 0
-    };
-
-    scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                document.querySelectorAll('.anchor-link').forEach(link => link.classList.remove('active'));
-                const activeLink = document.querySelector(`.anchor-link[href="#${entry.target.id}"]`);
-                if (activeLink) activeLink.classList.add('active');
-            }
-        });
-    }, observerOptions);
-
-    // 4. Observe elements
-    document.querySelectorAll('section, h2[id]').forEach(section => {
-        scrollObserver.observe(section);
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Remove active class from all nav links
+        navLinks.forEach(link => link.classList.remove('active'));
+        
+        // Add active class to the link that matches the intersecting section's ID
+        const id = entry.target.getAttribute('id');
+        const activeLink = document.querySelector(`.anchor-link[href="#${id}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+      }
     });
+  }, observerOptions);
+
+  // Observe each section
+  sections.forEach(section => observer.observe(section));
 });
 
 /**

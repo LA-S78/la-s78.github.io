@@ -1,21 +1,18 @@
 <section class="duel-schedule-grid">
+    {% assign days = "0,1,2,3,4,5,6" | split: "," %}
+    
+    {% for day in days %}
     <article class="duel-day">
-        <div class="day-header">
-            <h3>Day 0 | Sunday</h3>
-            <div class="day-title">Prep Day</div>
-        </div>
+        <!-- Day content remains exactly as you provided -->
+        {% if day == '0' %}
+        <div class="day-header"><h3>Day 0 | Sunday</h3><div class="day-title">Prep Day</div></div>
         <ul class="task-list">
             <li class="warning"><strong>Before Reset:</strong> Complete but DON'T collect Falcon Quests.</li>
             <li>Send lineups to Gather.</li>
             <li><strong>Save:</strong> Speedups, Recruit/Black Ops/Caravan Tickets, Raven Chests, Antitoxins, Hero Shards.</li>
         </ul>
-    </article>
-
-    <article class="duel-day">
-        <div class="day-header">
-            <h3>Day 1 | Monday</h3>
-            <div class="day-title">Enhance Raven</div>
-        </div>
+        {% elsif day == '1' %}
+        <div class="day-header"><h3>Day 1 | Monday</h3><div class="day-title">Enhance Raven</div></div>
         <ul class="task-list">
             <li>Collect Falcon Quests</li>
             <li>Gather from Resource Tiles</li>
@@ -23,13 +20,8 @@
             <li>Spend Stamina</li>
             <li>Use Antitoxin (If needed)</li>
         </ul>
-    </article>
-
-    <article class="duel-day">
-        <div class="day-header">
-            <h3>Day 2 | Tuesday</h3>
-            <div class="day-title">Territory Day</div>
-        </div>
+        {% elsif day == '2' %}
+        <div class="day-header"><h3>Day 2 | Tuesday</h3><div class="day-title">Territory Day</div></div>
         <ul class="task-list">
             <li>Complete Buildings</li>
             <li class="warning"><strong>DON'T</strong> collect Falcon Quests!</li>
@@ -37,13 +29,8 @@
             <li>Use UR Caravans & Black Ops Tickets</li>
             <li>Recruit Survivors</li>
         </ul>
-    </article>
-
-    <article class="duel-day">
-        <div class="day-header">
-            <h3>Day 3 | Wednesday</h3>
-            <div class="day-title">Tech Research</div>
-        </div>
+        {% elsif day == '3' %}
+        <div class="day-header"><h3>Day 3 | Wednesday</h3><div class="day-title">Tech Research</div></div>
         <ul class="task-list">
             <li>Collect Falcon Quests</li>
             <li>Complete Research</li>
@@ -51,39 +38,24 @@
             <li>Use Study Scrolls</li>
             <li>Open Raven Chests</li>
         </ul>
-    </article>
-
-    <article class="duel-day">
-        <div class="day-header">
-            <h3>Day 4 | Thursday</h3>
-            <div class="day-title">Enhance Heroes</div>
-        </div>
+        {% elsif day == '4' %}
+        <div class="day-header"><h3>Day 4 | Thursday</h3><div class="day-title">Enhance Heroes</div></div>
         <ul class="task-list">
             <li>Use Hero Omni Shards</li>
             <li>Use Skill Badges</li>
             <li class="warning"><strong>DON'T</strong> collect Falcon Quests!</li>
             <li>Recruit Heroes (Tickets)</li>
         </ul>
-    </article>
-
-    <article class="duel-day">
-        <div class="day-header">
-            <h3>Day 5 | Friday</h3>
-            <div class="day-title">War Preparation</div>
-        </div>
+        {% elsif day == '5' %}
+        <div class="day-header"><h3>Day 5 | Friday</h3><div class="day-title">War Preparation</div></div>
         <ul class="task-list">
             <li>Collect Falcon Quests</li>
             <li>Train Soldiers</li>
             <li>Spend Training Speedups</li>
             <li>Increase Building/Tech Might (Leftover speedups)</li>
         </ul>
-    </article>
-
-    <article class="duel-day" style="border: 1px solid #ff6b6b;">
-        <div class="day-header">
-            <h3>Day 6 | Saturday</h3>
-            <div class="day-title" style="color: #ff6b6b;">Raid the Enemy (KE)</div>
-        </div>
+        {% elsif day == '6' %}
+        <div class="day-header"><h3>Day 6 | Saturday</h3><div class="day-title" style="color: #ff6b6b;">Raid the Enemy (KE)</div></div>
         <ul class="task-list">
             <li>Defeat Enemy Soldiers</li>
             <li>Lose Soldiers</li>
@@ -91,5 +63,12 @@
             <li>Use leftover Caravan/Black Ops Tickets</li>
             <li class="warning"><strong>REMEMBER TO SHIELD UP!</strong></li>
         </ul>
+        {% endif %}
     </article>
+
+    <!-- The Divider: Only show if it's not the last day -->
+    {% unless forloop.last %}
+    <div class="pane-divider"></div>
+    {% endunless %}
+    {% endfor %}
 </section>
