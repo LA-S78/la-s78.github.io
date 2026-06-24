@@ -504,3 +504,14 @@ dialog a.dialog-btn:hover {
 .content-pane h2:first-child {
     border-bottom: 2px solid var(--border-color) !important;
 }
+
+/* --- BROKEN/UNAVAILABLE LINKS --- */
+.unavailable {
+    background-color: #4a0404 !important; 
+    color: #8b8b8b !important;            
+    border: 1px solid #7a0000 !important;
+    cursor: not-allowed;                  
+    pointer-events: none;                 
+    opacity: 0.7;                         
+    text-decoration: line-through;        
+}
