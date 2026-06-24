@@ -434,6 +434,11 @@ dialog a.dialog-btn:hover {
     scroll-margin-top: 170px; 
 }
 
+.content-pane:has(.rule-card) {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 /* Prevent the first and last items from messing up the pane's padding */
 .content-pane > *:first-child { margin-top: 0; }
 .content-pane > *:last-child { margin-bottom: 0; }
@@ -485,4 +490,17 @@ dialog a.dialog-btn:hover {
 
 .warning {
     color: #ff6b6b;
+}
+
+/* Kill ALL borders on headers inside panes and cards */
+.content-pane h2, 
+.content-pane h3,
+.rule-card h2, 
+.rule-card h3 {
+    border-bottom: none !important;
+}
+
+/* Only add a border where you specifically want it */
+.content-pane h2:first-child {
+    border-bottom: 2px solid var(--border-color) !important;
 }
