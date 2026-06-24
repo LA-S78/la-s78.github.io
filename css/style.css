@@ -44,30 +44,36 @@ body {
 
 /* --- 3. JEKYLL INCLUDES (HEADER, NAV, FOOTER) --- */
 .lantern-header {
-    position: sticky; top: 0;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    overflow: visible; /* Allows the glow to bleed out */
     
-    /* THE BAKE-IN FIX:
-       Layer 1 (Top): The green lantern glow.
-       Layer 2 (Bottom): The warm brown spotlight that fades into the solid dark background. 
-       Because it fades to a solid color, the header is 100% opaque and hides the body image perfectly.
-    */
+    /* Re-applying the background here explicitly */
     background: 
         radial-gradient(circle 400px at center 40%, rgba(35, 120, 45, 0.3) 0%, transparent 100%),
         radial-gradient(circle 500px at center 10%, #2b231e 0%, var(--nav-bg) 100%);
-        
-    padding: 10px 20px; border-bottom: 2px solid var(--border-color);
-    z-index: 20; display: flex; justify-content: space-between; align-items: center;
+    
+    padding: 10px 20px;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.lantern-header::after {
-    content: ''; position: absolute; bottom: -40px; 
+.lantern-glow-bleed {
+    position: absolute;
+    top: 100%; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 60px;
     
-    /* Clamps the green drop shadow to exactly match the 1000px middle pillar */
-    left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 1000px; height: 40px;
+    /* The bleed gradient */
+    background: linear-gradient(to bottom, rgba(35, 120, 45, 0.2), transparent);
     
-    background: linear-gradient(to bottom, rgba(35, 120, 45, 0.15), transparent);
     pointer-events: none;
+    z-index: -1; /* Pushed behind the header content so it doesn't block the lantern */
 }
 
 .header-stack {
