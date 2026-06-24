@@ -2,7 +2,7 @@ nap_alliances:
   - WLO
   - RÂVN
   - MIA
-  - NAT1
+  - PHNX
   - BOTS
   - SVN
   - HMDA
@@ -20,7 +20,7 @@ nap_ranks:
   - WLO
   - MIA
   - RÂVN
-  - NAT1
+  - PHNX
 
 blacklist_players:
   - Azreal
