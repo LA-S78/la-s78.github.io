@@ -113,3 +113,14 @@ document.addEventListener("turbo:load", initCompendium);
 
 // Fallback for direct page loads where Turbo might bypass the first event
 document.addEventListener("DOMContentLoaded", initCompendium);
+
+// Pinned Directory scrolling
+function scrollPinned(direction) {
+    const container = document.getElementById('pinnedContainer');
+    const scrollAmount = 300; 
+    if (direction === 'left') {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+}
