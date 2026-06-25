@@ -51,32 +51,42 @@ function highlightCurrentSurvivalBattle() {
 }
 
 function initScrollObserver() {
-    const sections = document.querySelectorAll('section');
+    const mainContainer = document.querySelector('main'); // Watch the correct scrolling container
+    const sections = document.querySelectorAll('.content-pane'); // Target your sections
     const navLinks = document.querySelectorAll('.anchor-link');
 
-    if (sections.length === 0 || navLinks.length === 0) return;
+    if (!mainContainer || sections.length === 0 || navLinks.length === 0) return;
 
-    // Disconnect old observer if it exists to prevent duplicate triggers
     if (scrollObserver) scrollObserver.disconnect();
 
     const observerOptions = {
-        root: null,
-        rootMargin: '-100px 0px -60% 0px',
+        root: mainContainer, // Explicitly use 'main' as the scroll container
+        rootMargin: '-50px 0px -50% 0px', // Adjusted for better trigger
         threshold: 0
     };
 
     scrollObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
+                // Remove active from all
                 navLinks.forEach(link => link.classList.remove('active'));
+                
+                // Add active to current
                 const id = entry.target.getAttribute('id');
-                const activeLink = document.querySelector(`.anchor-link[href="#${id}"]`);
+                const activeLink = document.querySelector(`.anchor-link[href$="#${id}"]`);
                 if (activeLink) activeLink.classList.add('active');
             }
         });
     }, observerOptions);
 
     sections.forEach(section => scrollObserver.observe(section));
+
+    // FIX: Manually activate the first link if the page loads at the top
+    // Check if the scroll position is at the very top (or near it)
+    if (mainContainer.scrollTop < 100) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        if (navLinks[0]) navLinks[0].classList.add('active');
+    }
 }
 
 function initSearchEngine() {

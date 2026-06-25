@@ -277,26 +277,7 @@ dialog button:hover, dialog a.dialog-btn:hover {
 .phase-build  { background-color: rgba(80, 180, 100, 0.35) !important; }
 .phase-train  { background-color: rgba(210, 160, 60, 0.35) !important; }
 
-.rule-card {
-    background-color: var(--card-bg); 
-    padding: 15px 15px !important; /* Base Mobile Padding */
-    margin: 15px 0 !important;      /* Base Mobile Margin */
-    border-radius: 8px;
-    border-left: 3px solid var(--accent-color); 
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-}
-.rule-card > *:first-child { margin-top: 0; }
-.rule-card > *:last-child { margin-bottom: 0; }
-.rule-card h2, .rule-card h3 {
-    color: var(--text-main); font-family: var(--font-headers); 
-    border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px;
-}
 .list-table { width: 100%; border-collapse: collapse; }
-.rule-card .list-table tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.03); }
-.rule-card .list-table td { padding: 10px 8px; border: none; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
-.rule-card .list-table tr:last-child td { border-bottom: none; }
 .sub-text { font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px; }
 .rank-num { width: 30px; color: var(--accent-color); font-weight: bold; text-align: center; }
 
@@ -348,10 +329,6 @@ dialog button:hover, dialog a.dialog-btn:hover {
     padding: 30px 40px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     scroll-margin-top: 170px; 
 }
-.content-pane:has(.rule-card) {
-    padding-left: 8px !important;  /* Base Mobile Padding */
-    padding-right: 8px !important;
-}
 .content-pane > *:first-child { margin-top: 0; }
 .content-pane > *:last-child { margin-bottom: 0; }
 .content-pane h2:first-child {
@@ -360,16 +337,32 @@ dialog button:hover, dialog a.dialog-btn:hover {
     padding-bottom: 10px; margin-bottom: 20px;
 }
 .anchor-link:target { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
-.pane-divider { grid-column: 1 / -1; display: block; width: 100%; height: 1px; background: rgba(255, 255, 255, 0.1); margin: 30px 0; position: relative; }
+.divider-wrapper {
+    display: contents; /* The wrapper vanishes, letting the divider span the grid */
+}
+
+/* Ensure the divider behaves correctly when it is a child of the grid */
+.pane-divider {
+    flex: 0 0 100%; 
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 10px 0; /* Adjusted for tighter fit */
+    position: relative;
+    display: block;
+}
+
+/* Keep your existing divider icon style */
 .pane-divider::after {
-    content: "◈"; background-color: var(--pane-bg-color); color: var(--accent-color);
-    display: block; width: 24px; height: 24px;
-    position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%);
-    text-align: center; font-size: 16px; line-height: 24px;
+    content: "◈";
+    color: var(--accent-color);
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0 10px;
 }
 
 .warning { color: #ff6b6b; }
-.content-pane h2, .content-pane h3, .rule-card h2, .rule-card h3 { border-bottom: none !important; }
+.content-pane h2, .content-pane h3 { border-bottom: none !important; }
 .content-pane h2:first-child { border-bottom: 2px solid var(--border-color) !important; }
 
 .unavailable {
@@ -377,8 +370,20 @@ dialog button:hover, dialog a.dialog-btn:hover {
     border: 1px solid #7a0000 !important; cursor: not-allowed; pointer-events: none; opacity: 0.7; text-decoration: line-through;        
 }
 
-.duel-schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px 0; line-height: 1.6; }
-.duel-day { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; }
+.duel-schedule-grid {
+    display: flex;
+    flex-wrap: wrap; /* Allows cards to drop to new rows */
+    gap: 20px; 
+    padding: 20px 0; 
+}
+.duel-day { 
+    flex: 1 1 350px; 
+    background: var(--card-bg); 
+    border: 1px solid var(--border-color); 
+    border-radius: 8px; 
+    padding: 20px; 
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
 .day-header { border-bottom: 2px solid var(--accent-color); margin-bottom: 15px; padding-bottom: 5px; }
 .day-header h3 { margin: 0; color: var(--accent-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
 .day-title { font-size: 1.4rem; color: var(--text-main); font-weight: bold; }
@@ -474,17 +479,14 @@ table.schedule-table tr.active-row td.active-col {
     .nav-wrapper::before, .nav-wrapper::after { display: none; }
     .anchor-link { flex: 0 0 150px; height: 32px; font-size: 0.85rem; }
 
-    .rule-card {
-        padding: 20px 24px !important; /* Restore Desktop Padding */
-        margin: 20px 0 !important;      /* Restore Desktop Margin */
-        border-left: 4px solid var(--accent-color); 
-    }
-    .content-pane:has(.rule-card) {
-        padding-left: 30px !important; /* Restore Desktop Padding */
-        padding-right: 30px !important;
-    }
-
     .scroll-btn { display: flex; align-items: center; justify-content: center; }
+
+    .duel-schedule-grid {
+        /* On desktop, allow them to grow larger. 
+           Changing 300px to 350px+ makes them feel less 'slim' */
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+    }
 }
 
 @media (display-mode: standalone) {
