@@ -43,9 +43,9 @@ body {
 
 /* --- 3. JEKYLL INCLUDES (HEADER) --- */
 .lantern-header {
-    /* MOBILE DEFAULT: 85px */
-    height: 85px !important;
-    min-height: 85px !important;
+    /* MOBILE DEFAULT: 90px */
+    height: 90px !important;
+    min-height: 90px !important;
     
     position: sticky; top: 0; z-index: 20;
     margin: 0 !important;
@@ -71,7 +71,7 @@ body {
     flex-direction: row;
     align-items: center;
     gap: 15px;
-    height: 85px; /* Sync with mobile header height */
+    height: 90px; /* Sync with mobile header height */
     margin: 0 !important;
 }
 
@@ -279,9 +279,12 @@ dialog button:hover, dialog a.dialog-btn:hover {
 
 .rule-card {
     background-color: var(--card-bg); 
-    padding: 20px 24px; border-radius: 8px;
-    border-left: 4px solid var(--accent-color); margin: 20px 0;
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    padding: 15px 15px !important; /* Base Mobile Padding */
+    margin: 15px 0 !important;      /* Base Mobile Margin */
+    border-radius: 8px;
+    border-left: 3px solid var(--accent-color); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 .rule-card > *:first-child { margin-top: 0; }
@@ -339,50 +342,16 @@ dialog button:hover, dialog a.dialog-btn:hover {
 .dir-sub { font-size: 0.75rem; color: var(--text-muted); margin-left: 26px; }
 .dir-arrow { color: var(--accent-color); font-weight: bold; font-size: 1.2rem; }
 
-/* --- 6. ANIMATIONS --- */
-@keyframes lantern-flicker {
-    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
-    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); }
-    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); }
-    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(76, 175, 80, 0.1); }
-    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(76, 175, 80, 0.25); }
-    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(76, 175, 80, 0.2); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .dir-card { animation: none; box-shadow: none; filter: brightness(1); }
-}
-
-/* --- 7. DESKTOP & RESPONSIVE CONSTRAINTS --- */
-@media (min-width: 1024px) { 
-    html { font-size: 115%; }
-    #mobile-container { max-width: 100%; } 
-    main { max-width: 1000px; margin: 0 auto; width: 100%; padding: 40px; }
-    
-    /* Desktop Overrides */
-    .lantern-header { height: 130px !important; min-height: 130px !important; }
-    .header-stack { height: 130px; }
-    .lantern-img { width: 130px; }
-    .debossed-title { margin-top: 30px; font-size: 1.8rem; }
-    
-    .anchor-nav { min-height: 45px; }
-    .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
-    .nav-wrapper::before, .nav-wrapper::after { display: none; }
-    .anchor-link { flex: 0 0 150px; height: 32px; font-size: 0.85rem; }
-}
-
-@media (display-mode: standalone) {
-    html, body { position: fixed; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: 100%; overflow: hidden; }
-    #mobile-container { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: 0 auto; height: 100%; }
-}
-
 .content-pane {
     background-color: rgba(20, 16, 14, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--border-color); border-radius: 12px;
     padding: 30px 40px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     scroll-margin-top: 170px; 
 }
-.content-pane:has(.rule-card) { padding-left: 10px; padding-right: 10px; }
+.content-pane:has(.rule-card) {
+    padding-left: 8px !important;  /* Base Mobile Padding */
+    padding-right: 8px !important;
+}
 .content-pane > *:first-child { margin-top: 0; }
 .content-pane > *:last-child { margin-bottom: 0; }
 .content-pane h2:first-child {
@@ -474,6 +443,51 @@ table.schedule-table tr.active-row td.active-col {
 .scroll-btn.left { left: -35px; }
 .scroll-btn.right { right: -35px; }
 
-@media (min-width: 768px) {
+/* --- 6. ANIMATIONS --- */
+@keyframes lantern-flicker {
+    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
+    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); }
+    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); }
+    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(76, 175, 80, 0.1); }
+    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(76, 175, 80, 0.25); }
+    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(76, 175, 80, 0.2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dir-card { animation: none; box-shadow: none; filter: brightness(1); }
+}
+
+/* --- 7. DESKTOP & RESPONSIVE CONSTRAINTS --- */
+@media (min-width: 768px) { 
+    html { font-size: 115%; }
+    #mobile-container { max-width: 100%; } 
+    main { max-width: 1000px; margin: 0 auto; width: 100%; padding: 40px; }
+    
+    /* Desktop Overrides */
+    .lantern-header { height: 130px !important; min-height: 130px !important; }
+    .header-stack { height: 130px; }
+    .lantern-img { width: 130px; }
+    .debossed-title { margin-top: 30px; font-size: 1.8rem; }
+    
+    .anchor-nav { min-height: 45px; }
+    .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
+    .nav-wrapper::before, .nav-wrapper::after { display: none; }
+    .anchor-link { flex: 0 0 150px; height: 32px; font-size: 0.85rem; }
+
+    .rule-card {
+        padding: 20px 24px !important; /* Restore Desktop Padding */
+        margin: 20px 0 !important;      /* Restore Desktop Margin */
+        border-left: 4px solid var(--accent-color); 
+    }
+    .content-pane:has(.rule-card) {
+        padding-left: 30px !important; /* Restore Desktop Padding */
+        padding-right: 30px !important;
+    }
+
     .scroll-btn { display: flex; align-items: center; justify-content: center; }
+}
+
+@media (display-mode: standalone) {
+    html, body { position: fixed; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: 100%; overflow: hidden; }
+    #mobile-container { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: 0 auto; height: 100%; }
 }
