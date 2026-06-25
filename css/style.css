@@ -43,9 +43,9 @@ body {
 
 /* --- 3. JEKYLL INCLUDES (HEADER) --- */
 .lantern-header {
-    /* FIXED HEIGHT: Ensures consistency across all pages */
-    height: 120px !important;
-    min-height: 120px !important;
+    /* MOBILE DEFAULT: 85px */
+    height: 85px !important;
+    min-height: 85px !important;
     
     position: sticky; top: 0; z-index: 20;
     margin: 0 !important;
@@ -54,7 +54,6 @@ body {
     border-bottom: 1px solid var(--border-color);
     background-color: var(--nav-bg); 
     
-    /* MIST: Static background */
     background:
         radial-gradient(circle 400px at center 40%, rgba(35, 120, 45, 0.3) 0%, transparent 100%),
         radial-gradient(circle 500px at center 10%, #2b231e 0%, var(--nav-bg) 100%);
@@ -64,7 +63,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: visible; /* Required for the glow bleed */
+    overflow: visible; 
 }
 
 .header-stack {
@@ -72,19 +71,14 @@ body {
     flex-direction: row;
     align-items: center;
     gap: 15px;
-    height: 120px; /* Sync with header */
+    height: 85px; /* Sync with mobile header height */
     margin: 0 !important;
 }
 
 .lantern-img {
-    width: 115px; /* Restored original size */
+    width: 90px;
     height: auto;
     flex-shrink: 0;
-    
-    /* MASK: Restored to working configuration */
-    -webkit-mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
-    mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
-    
     mix-blend-mode: screen; 
     filter: contrast(1.4) brightness(1.1) saturate(1.5);
 }
@@ -107,21 +101,16 @@ body {
 .debossed-title {
     position: relative; 
     z-index: 1; 
-    margin-top: 30px; 
-    font-size: 1.4rem; 
+    margin-top: 10px; /* Reduced for mobile */
+    font-size: 1.1rem; /* Slightly smaller for mobile */
     margin-bottom: 0;
     font-family: var(--font-headers); 
     font-weight: bold;
-    letter-spacing: 3px; 
+    letter-spacing: 2px; 
     text-transform: uppercase; 
     color: var(--text-main);
     border: none; 
-    padding-bottom: 0;
-    text-shadow: 
-        -1px -1px 1px rgba(0, 0, 0, 0.9),       
-        1px 1px 1px rgba(255, 255, 255, 0.1),   
-        0px 0px 8px rgba(10, 8, 5, 1),          
-        0px 0px 20px rgba(10, 8, 5, 0.9);       
+    text-shadow: 0 0 8px rgba(10, 8, 5, 1);
 }
 
 .subtitle {
@@ -132,11 +121,6 @@ body {
     color: var(--accent-color);
     letter-spacing: 1.5px; 
     margin-top: 2px;
-    text-shadow: 
-        -1px -1px 1px rgba(0, 0, 0, 0.9),       
-        1px 1px 1px rgba(255, 255, 255, 0.1),   
-        0px 0px 8px rgba(10, 8, 5, 1),          
-        0px 0px 20px rgba(10, 8, 5, 0.9); 
 }
 
 /* --- EQUALIZER: Normalizes gap between Header and Content --- */
@@ -179,7 +163,7 @@ footer {
 .nav-icon-svg { width: 24px; height: 24px; stroke: var(--accent-color); transition: all 0.3s ease; }
 
 
-/* --- 4. MARKDOWN CONTENT (Inside <main>) --- */
+/* --- 4. MARKDOWN CONTENT --- */
 main { 
     flex-grow: 1; 
     overflow-y: auto; 
@@ -360,9 +344,13 @@ dialog button:hover, dialog a.dialog-btn:hover {
     html { font-size: 115%; }
     #mobile-container { max-width: 100%; } 
     main { max-width: 1000px; margin: 0 auto; width: 100%; padding: 40px; }
+    
+    /* Desktop Overrides */
+    .lantern-header { height: 130px !important; min-height: 130px !important; }
+    .header-stack { height: 130px; }
     .lantern-img { width: 130px; }
-    .header-stack { height: 120px; }
     .debossed-title { margin-top: 30px; font-size: 1.8rem; }
+    
     .anchor-nav { min-height: 45px; }
     .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
     .nav-wrapper::before, .nav-wrapper::after { display: none; }
