@@ -1,0 +1,16 @@
+header:
+  title: "LAST ASYLUM"
+  subtitle: "Survival Compendium"
+
+search:
+  placeholder: "Search..."
+
+footer:
+  nav_home: "Home"
+  nav_rules: "Rules"
+  nav_guides: "Guides"
+  nav_alliance: "Alliance"
+  aria_home: "Go to Home page"
+  aria_rules: "Go to Server Rules page"
+  aria_guides: "Go to Guides page"
+  aria_alliance: "Go to Alliance and Diplomacy page"

@@ -21,3 +21,11 @@ collections:
     output: false
   alliance:
     output: false
+plugins:
+  - jekyll-polyglot
+languages: ["en", "es", "fr", "ru", "tr", "ua"]
+default_lang: "en"
+exclude_from_localization:
+  - images/
+  - css/
+  - js/

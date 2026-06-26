@@ -1,0 +1,16 @@
+header:
+  title: "ÚLTIMO ASILO"
+  subtitle: "Compendio de Supervivencia"
+
+search:
+  placeholder: "Buscar..."
+
+footer:
+  nav_home: "Inicio"
+  nav_rules: "Reglas"
+  nav_guides: "Guías"
+  nav_alliance: "Alianza"
+  aria_home: "Ir a la página de Inicio"
+  aria_rules: "Ir a la página de Reglas del Servidor"
+  aria_guides: "Ir a la página de Guías"
+  aria_alliance: "Ir a la página de Alianza y Diplomacia"
