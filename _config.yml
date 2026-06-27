@@ -25,3 +25,8 @@ collections:
     output: false
 languages: ["de", "en", "es", "fr", "ru", "tr", "uk", "it"]
 default_lang: "en"
+defaults:
+  - scope:
+      path: "guides"
+    values:
+      permalink: "/guides/:basename.html"
