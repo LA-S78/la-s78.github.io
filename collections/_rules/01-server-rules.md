@@ -3,9 +3,10 @@ title: "Server Rules"
 nav_id: "server-rules"
 ---
 
-{% assign strings = site.data[site.active_lang].content.rules_page %}
+{% assign p = site.data[site.active_lang].content.rules_page.server_rules %}
 
-{{ strings.intro }}
+<h1>{{ p.title }}</h1>
+<p>{{ p.text }}</p>
 
 <section class="duel-schedule-grid">
 {% assign active_rules = site.data[site.active_lang].rules %}

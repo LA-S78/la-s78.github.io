@@ -2,6 +2,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Dynamic Title/Description Routing -->
     {% assign ui_pages = site.data[site.active_lang].ui.pages %}
     {% if page.guide_id %}
         {% assign meta_title = ui_pages.guide_panes[page.guide_id].title %}
@@ -14,6 +15,7 @@
         {% assign meta_desc = page.description %}
     {% endif %}
 
+    <!-- Discord / Social Media Preview Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta property="og:site_name" content="{{ site.data[site.active_lang].ui.header.title }}">
     <meta property="og:title" content="{{ meta_title | default: site.title }}">
@@ -24,8 +26,8 @@
 
     <title>{{ meta_title | default: site.title }} | {{ site.title }}</title>
     
-    <link rel="stylesheet" href="/{{ site.active_lang }}/css/style.css?v={{ site.time | date: '%s' }}">
-    <link rel="icon" href="/{{ site.active_lang }}/images/favicon.png">
-    <script type="module" src="/{{ site.active_lang }}/js/turbo.js"></script>
-    <script src="/{{ site.active_lang }}/js/main.js?v={{ site.time | date: '%s' }}" defer></script>
+    <link rel="stylesheet" href="/css/style.css?v={{ site.time | date: '%s' }}">
+    <link rel="icon" href="/images/favicon.png">
+    <script type="module" src="/js/turbo.js"></script>
+    <script src="/js/main.js?v={{ site.time | date: '%s' }}" defer></script>
 </head>

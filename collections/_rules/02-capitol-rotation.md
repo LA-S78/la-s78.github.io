@@ -3,12 +3,17 @@ title: "Capitol Rotation"
 nav_id: "capitol-rotation"
 ---
 
-{% assign strings = site.data[site.active_lang].ui.rules_page %}
+{% assign p = site.data[site.active_lang].content.rules_page.rotation %}
 
-{{ strings.rotation_text }}
+<h1>{{ p.title }}</h1>
+<p>{{ p.text }}</p>
 
 <small style="color: var(--text-muted);">
-{{ strings.rotation_note }}
+  {{ p.note }}
 </small>
 
-<img src="/images/rotation.jpg" alt="Capitol Rotation Blueprint" class="blueprint-img" onclick="document.getElementById('rotationZoom').showModal()" style="cursor: pointer; margin-top: 20px;">
+<img src="/images/rotation.jpg" 
+     alt="{{ p.title }}" 
+     class="blueprint-img" 
+     onclick="document.getElementById('rotationZoom').showModal()" 
+     style="cursor: pointer; margin-top: 20px;">
