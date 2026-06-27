@@ -11,25 +11,24 @@
   </button>
   
 <ul class="dropdown-content">
-  
-  {% assign url_parts = page.url | split: "/" %}
-  {% assign current_url_lang = url_parts[1] %}
-  {% assign current_prefix = "/" | append: current_url_lang | append: "/" %}
-  {% assign bare_url = page.url | replace_first: current_prefix, "/" %}
-
   {% for lang in site.languages %}
     
-    {% assign target_url = "/" | append: lang | append: bare_url %}
-    {% assign final_url = target_url | replace: "//", "/" %}
+    {% if page.url contains "/guides/" %}
+      {% assign parts = page.url | split: '/' %}
+      {% capture new_url %}/{{ lang }}/guides/{{ parts.last }}/{% endcapture %}
+    {% else %}
+      {% assign parts = page.url | split: '/' %}
+      {% capture new_url %}/{{ lang }}/{{ parts.last }}/{% endcapture %}
+    {% endif %}
     
-<li>
-  <a href="{{ final_url }}" 
-     data-lang="{{ lang }}" 
-     data-turbo="false" 
-     data-turbo-action="reload">
-     {{ lang | upcase }}
-  </a>
-</li>
+    <li>
+      <a href="{{ new_url | replace: "//", "/" }}" 
+         data-lang="{{ lang }}" 
+         data-turbo="false" 
+         data-turbo-action="reload">
+         {{ lang | upcase }}
+      </a>
+    </li>
     
   {% endfor %}
 </ul>
