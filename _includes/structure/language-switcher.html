@@ -4,15 +4,12 @@
       <span class="lang-active">{{ lang | upcase }}</span>
     {% else %}
       {% comment %} 
-        Here is the magic: we replace the current language segment 
-        with the new language segment in the current page URL.
+        Since page.url is absolute (e.g., /guides/combat.html), 
+        we simply prepend the target language folder.
       {% endcomment %}
-      {% assign current_segment = '/' | append: site.active_lang | append: '/' %}
-      {% assign target_segment = '/' | append: lang | append: '/' %}
-      {% assign new_url = page.url | replace_first: current_segment, target_segment %}
+      {% assign target_path = '/' | append: lang | append: page.url %}
       
-      <a href="{{ new_url | relative_url }}" class="lang-link">{{ lang | upcase }}</a>
+      <a href="{{ target_path }}" class="lang-link">{{ lang | upcase }}</a>
     {% endif %}
   {% endfor %}
-  <p>Current Page URL: {{ page.url }}</p>
 </div>
