@@ -2,6 +2,7 @@
 layout: guides
 title: Survival Battle
 subtitle: Survival Battle
+permalink: /guides/events/survival.html
 active_nav: guides
 guide_id: "survival"
 nav_links:
