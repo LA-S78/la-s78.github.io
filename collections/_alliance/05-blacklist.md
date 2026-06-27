@@ -3,7 +3,7 @@ title: "Blacklist"
 nav_id: "blacklist"
 ---
 
-{% assign p = site.data[site.active_lang].content.alliance_page.nap_territory %}
+{% assign p = site.data[site.active_lang].content.alliance_page.nap_blacklist %}
 
 <h2>{{ p.title }}</h2>
 <p>{{ p.text }}</p>
