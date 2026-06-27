@@ -2,118 +2,122 @@ header:
   title: "LAST ASYLUM"
   subtitle: "Довідник із виживання"
 
-search:
-  placeholder: "Пошук..."
-
 footer:
   nav_home: "Головна"
   nav_rules: "Правила"
   nav_guides: "Гайди"
   nav_alliance: "Альянс"
-  aria_home: "Перейти на головну сторінку"
-  aria_rules: "Перейти на сторінку правил сервера"
-  aria_guides: "Перейти на сторінку гайдів"
-  aria_alliance: "Перейти на сторінку альянсу та дипломатії"
+  aria_home: "Перейти на Головну сторінку"
+  aria_rules: "Перейти на сторінку Правил сервера"
+  aria_guides: "Перейти на сторінку Гайдів"
+  aria_alliance: "Перейти на сторінку Альянсу та Дипломатії"
 
 guides:
-  heroes: "Герої та Сборки"
+  heroes: "Герої та Білди"
   combat: "Бій"
-  building: "Будівництво та Тех"
-  resources: "Управління ресурсами"
-  sanctuary: "Гайд по Укриттю"
-  duel: "Дуель альянсів"
+  building: "Будівлі та Технології"
+  resources: "Керування ресурсами"
+  sanctuary: "Гайд по Сховищу"
+  duel: "Дуель Альянсів"
   survival: "Битва за виживання"
-  kingdom: "Війна королівств"
-  canyon: "Захоплення каньйону"
-  cheese: "Сирна пастка"
-  thief: "Полювання на злодіїв"
-  pickaxe: "Дворфійська кирка"
-  crystal: "Кришталева долина"
-  alliance_shop: "Магазин альянсу"
-  honor_shop: "Магазин честі"
-  sanctuary_shop: "Магазин укриття"
-  campaign_shop: "Магазин кампанії"
-  premium_shop: "Преміум набори"
-  
+  kingdom: "Війна Королівств"
+  canyon: "Підкорення Каньйону"
+  cheese: "Сирна Пастка"
+  thief: "Полювання на Злодіїв"
+  pickaxe: "Гном'яче Кайло"
+  crystal: "Кришталева Долина"
+  alliance_shop: "Магазин Альянса"
+  honor_shop: "Магазин Честі"
+  sanctuary_shop: "Магазин Сховища"
+  campaign_shop: "Магазин Кампанії"
+  premium_shop: "Преміум і Набори самоцвітів"
+
 pages:
   home:
     title: "Головна"
-    subtitle: "Довідник виживання"
+    subtitle: "Довідник із виживання"
   rules:
     title: "Правила"
-    subtitle: "Правила сервера та ротація"
+    subtitle: "Правила сервера та Ротація"
   guides:
     title: "Гайди"
     subtitle: "Гайди по грі"
+    writers:
+      title: "Посібник для авторів"
+      subtitle: "Посібник для авторів"
   alliance:
     title: "Альянс"
-    subtitle: "Альянс та дипломатія"
+    subtitle: "Альянс та Дипломатія"
   guide_panes:
     heroes:
-      title: "Герої та збірки"
-      subtitle: "Герої та збірки"
+      title: "Герої та Білди"
+      subtitle: "Герої та Білди"
     combat:
       title: "Бій"
       subtitle: "Бій"
     building:
-      title: "Будівництво та тех."
-      subtitle: "Будівництво та тех."
+      title: "Будівлі та Технології"
+      subtitle: "Будівлі та Технології"
     resources:
       title: "Керування ресурсами"
       subtitle: "Керування ресурсами"
     sanctuary:
-      title: "Гайд по Святилищу"
-      subtitle: "Гайд по Святилищу"
+      title: "Гайд по Сховищу"
+      subtitle: "Гайд по Сховищу"
     duel:
-      title: "Дуель альянсів"
-      subtitle: "Дуель альянсів"
+      title: "Дуель Альянсів"
+      subtitle: "Дуель Альянсів"
     survival:
-      title: "Битва на виживання"
-      subtitle: "Битва на виживання"
+      title: "Битва за виживання"
+      subtitle: "Битва за виживання"
     kingdom:
-      title: "Війна королівств"
-      subtitle: "Війна королівств"
+      title: "Війна Королівств"
+      subtitle: "Війна Королівств"
     canyon:
-      title: "Захоплення каньйону"
-      subtitle: "Захоплення каньйону"
+      title: "Підкорення Каньйону"
+      subtitle: "Підкорення Каньйону"
     cheese:
-      title: "Cheese-пастка"
-      subtitle: "Cheese-пастка"
+      title: "Сирна Пастка"
+      subtitle: "Сирна Пастка"
     thief:
-      title: "Полювання на злодіїв"
-      subtitle: "Полювання на злодіїв"
+      title: "Полювання на Злодіїв"
+      subtitle: "Полювання на Злодіїв"
     pickaxe:
-      title: "Дворфійська кирка"
-      subtitle: "Дворфийська кирка"
+      title: "Гном'яче Кайло"
+      subtitle: "Гном'яче Кайло"
     crystal:
-      title: "Кристальна долина"
-      subtitle: "Кристальна долина"
+      title: "Кришталева Долина"
+      subtitle: "Кришталева Долина"
     alliance_shop:
-      title: "Магазин альянсу"
-      subtitle: "Магазин альянсу"
+      title: "Магазин Альянса"
+      subtitle: "Магазин Альянса"
     honor_shop:
-      title: "Магазин честі"
-      subtitle: "Магазин честі"
+      title: "Магазин Честі"
+      subtitle: "Магазин Честі"
     sanctuary_shop:
-      title: "Магазин святилища"
-      subtitle: "Магазин святилища"
+      title: "Магазин Сховища"
+      subtitle: "Магазин Сховища"
     campaign_shop:
-      title: "Магазин кампанії"
-      subtitle: "Магазин кампанії"
+      title: "Магазин Кампанії"
+      subtitle: "Магазин Кампанії"
     premium_shop:
-      title: "Преміум та набори"
-      subtitle: "Преміум та набори"
+      title: "Преміум і Набори самоцвітів"
+      subtitle: "Преміум і Набори самоцвітів"
 
 nav_anchors:
   server_rules: "Правила сервера"
   rotation: "Ротація"
   rewards: "Нагороди"
-  nap_alliances: "Альянси NAP"
-  nap_academies: "Академії NAP"
+  nap_alliances: "NAP Альянси"
+  nap_academies: "NAP Академії"
   nap_ranks: "Ранги NAP"
   nap_territory: "Територія NAP"
   blacklist: "Чорний список"
+  markdown_usage: "Використання"
+  markdown_example: "Приклад"
+  guide_submissions: "Відправлення"
 
 search:
   guides: "Пошук по гайдах..."
   home: "Пошук по каталогах, дописах..."
+  placeholder: "Пошук..."

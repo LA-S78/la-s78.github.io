@@ -2,18 +2,15 @@ header:
   title: "LAST ASYLUM"
   subtitle: "Überlebens-Kompendium"
 
-search:
-  placeholder: "Suche..."
-
 footer:
   nav_home: "Startseite"
   nav_rules: "Regeln"
-  nav_guides: "Anleitungen"
+  nav_guides: "Guides"
   nav_alliance: "Allianz"
-  aria_home: "Zur Startseite"
-  aria_rules: "Zu den Server-Regeln"
-  aria_guides: "Zu den Anleitungen"
-  aria_alliance: "Zu Allianz und Diplomatie"
+  aria_home: "Zur Startseite gehen"
+  aria_rules: "Zur Serverregeln-Seite gehen"
+  aria_guides: "Zur Guides-Seite gehen"
+  aria_alliance: "Zur Allianz- und Diplomatie-Seite gehen"
 
 guides:
   heroes: "Helden & Builds"
@@ -23,9 +20,9 @@ guides:
   sanctuary: "Sanktuarium-Guide"
   duel: "Allianz-Duell"
   survival: "Überlebenskampf"
-  kingdom: "Reichskrieg"
+  kingdom: "Königreichskrieg"
   canyon: "Canyon-Eroberung"
-  cheese: "Käsefalle"
+  cheese: "Cheese-Falle"
   thief: "Diebesjagd"
   pickaxe: "Zwergenspitzhacke"
   crystal: "Kristalltal"
@@ -33,7 +30,7 @@ guides:
   honor_shop: "Ehren-Shop"
   sanctuary_shop: "Sanktuarium-Shop"
   campaign_shop: "Kampagnen-Shop"
-  premium_shop: "Premium-Pakete"
+  premium_shop: "Premium- & Edelsteinpakete"
 
 pages:
   home:
@@ -41,10 +38,13 @@ pages:
     subtitle: "Überlebens-Kompendium"
   rules:
     title: "Regeln"
-    subtitle: "Server-Regeln & Rotation"
+    subtitle: "Serverregeln & Rotationen"
   guides:
     title: "Guides"
     subtitle: "Spiel-Guides"
+    writers:
+      title: "Autoren-Leitfaden"
+      subtitle: "Autoren-Leitfaden"
   alliance:
     title: "Allianz"
     subtitle: "Allianz & Diplomatie"
@@ -62,8 +62,8 @@ pages:
       title: "Ressourcen-Mgmt"
       subtitle: "Ressourcen-Mgmt"
     sanctuary:
-      title: "Zuflucht-Guide"
-      subtitle: "Zuflucht-Guide"
+      title: "Sanktuarium-Guide"
+      subtitle: "Sanktuarium-Guide"
     duel:
       title: "Allianz-Duell"
       subtitle: "Allianz-Duell"
@@ -95,25 +95,29 @@ pages:
       title: "Ehren-Shop"
       subtitle: "Ehren-Shop"
     sanctuary_shop:
-      title: "Zuflucht-Shop"
-      subtitle: "Zuflucht-Shop"
+      title: "Sanktuarium-Shop"
+      subtitle: "Sanktuarium-Shop"
     campaign_shop:
       title: "Kampagnen-Shop"
       subtitle: "Kampagnen-Shop"
     premium_shop:
-      title: "Premium & Edelstein-Pakete"
-      subtitle: "Premium & Edelstein-Pakete"
+      title: "Premium- & Edelsteinpakete"
+      subtitle: "Premium- & Edelsteinpakete"
 
 nav_anchors:
-  server_rules: "Server-Regeln"
+  server_rules: "Serverregeln"
   rotation: "Rotation"
   rewards: "Belohnungen"
   nap_alliances: "NAP-Allianzen"
   nap_academies: "NAP-Akademien"
   nap_ranks: "NAP-Ränge"
   nap_territory: "NAP-Gebiet"
-  blacklist: "Schwarze Liste"
+  blacklist: "Blacklist"
+  markdown_usage: "Nutzung"
+  markdown_example: "Beispiel"
+  guide_submissions: "Einreichungen"
 
 search:
   guides: "Guides durchsuchen..."
   home: "Verzeichnisse, Beiträge durchsuchen..."
+  placeholder: "Suchen..."

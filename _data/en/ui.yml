@@ -2,9 +2,6 @@ header:
   title: "LAST ASYLUM"
   subtitle: "Survival Compendium"
 
-search:
-  placeholder: "Search..."
-
 footer:
   nav_home: "Home"
   nav_rules: "Rules"
@@ -45,6 +42,9 @@ pages:
   guides:
     title: "Guides"
     subtitle: "Game Guides"
+    writers:
+      title: "Writer's Guide"
+      subtitle: "Writer's Guide"
   alliance:
     title: "Alliance"
     subtitle: "Alliance & Diplomacy"
@@ -113,7 +113,11 @@ nav_anchors:
   nap_ranks: "NAP Ranks"
   nap_territory: "NAP Territory"
   blacklist: "Blacklist"
+  markdown_usage: "Usage"
+  markdown_example: "Example"
+  guide_submissions: "Submissions"
 
 search:
   guides: "Search guides..."
   home: "Search directories, posts..."
+  placeholder: "Search..."

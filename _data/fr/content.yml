@@ -54,3 +54,57 @@ home_page:
     alliance:
       title: "Alliance & Diplomatie"
       sub: "Rangs, statut diplomatique & accords territoriaux"
+writers_page:
+  usage:
+    title: "Utilisation de Markdown"
+    text: |
+     * `##`    = Grand Titre
+     * `####`  = Petit Titre
+     * `**`    = Texte en Gras
+     * `*`     = Puce
+     * `>`     = Bloc de Texte/Bulle
+  example:
+    title: "Exemple Markdown"
+  submissions:
+    title: "Soumission de Guides"
+    text: "Les guides peuvent être rédigés en texte brut ou en markdown, soumettez-les à @JJosh sur le Discord S78."
+  splitview:
+    title_source: "Source Markdown"
+    title_rendered: "Résultat Rendu"
+    btn_expand: "Développer"
+    btn_collapse: "Réduire"
+    markdown_sample: |
+      ## 1. Stratégie de Progression 
+      
+      Se précipiter vers le Sanctuaire de Niveau 30 est l'objectif principal pour la puissance à long terme du compte, mais se précipiter sans planification crée des "goulots d'étranglement".
+      
+      > #### ⚠️ Info Prioritaire
+      > 
+      > **Ne commencez jamais une amélioration sans vérifier d'abord vos prérequis.** Vous ne voulez pas économiser 2 jours de ressources pour réaliser que vous avez oublié de mettre à niveau le Laboratoire ou les Terrains d'Entraînement.
+      
+      La progression change autour du Niveau 20. Avant 20, les progrès sont simples. Après 20, vous devez donner la priorité à la liste spécifique des "Bâtiments Requis", car ils deviendront vos principaux gouffres de temps.
+      
+      ## 2. Tableau des Prérequis de Niveau
+      
+      Utilisez le tableau ci-dessous pour planifier votre file d'attente de construction. Cela couvre les coûts en ressources et les exigences structurelles spécifiques pour éviter les arrêts de construction.
+      
+      (mettre le tableau ici)
+      
+      ## 3. Objectifs Plafonds des Bâtiments
+      
+      Une fois que vous atteignez ces niveaux, vous avez satisfait à toutes les exigences préalables pour le Sanctuaire 30. Vous pouvez réduire la priorité de ces bâtiments et réaffecter vos ressources vers les troupes et la technologie.
+      
+      * **Laboratoire :** Niveau 30
+      * **Terrains d'Entraînement :** Niveau 30
+      * **Centre de Commandement :** Niveau 30
+      * **Mur :** Niveau 30
+      * **Entrepôt :** Niveau 25 (Plafond d'Efficacité)
+      * **Bâtiments de Ressources :** Niveau 25 (Plafond de Maintenance)
+      
+      ## 4. Efficacité & Dépenses
+      
+      La transition du Niveau 25 au 30 représente la montée la plus raide du jeu. Pour maintenir l'élan :
+      
+      * **Vitesse de Construction :** Assurez-vous que votre recherche "Vitesse de Construction" est au maximum dans le Laboratoire. Cela offre un bonus composé qui fait gagner des semaines de temps vers le Niveau 30.
+      * **Alignement :** Alignez vos principales améliorations de bâtiments avec l'événement "Duel d'Alliances" chaque fois que possible pour gagner des points pour vos efforts.
+      * **Titres :** Assurez-vous d'utiliser le Ministre de la Construction ou le Chef des Affaires avant de commencer la construction. Ces bonus peuvent réduire considérablement les temps de construction.

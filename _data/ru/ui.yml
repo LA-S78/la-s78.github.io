@@ -1,119 +1,123 @@
 header:
   title: "LAST ASYLUM"
-  subtitle: "Справочник по выживанию"
-
-search:
-  placeholder: "Поиск..."
+  subtitle: "Сборник по выживанию"
 
 footer:
   nav_home: "Главная"
   nav_rules: "Правила"
   nav_guides: "Гайды"
   nav_alliance: "Альянс"
-  aria_home: "Перейти на главную страницу"
-  aria_rules: "Перейти на страницу правил сервера"
-  aria_guides: "Перейти на страницу гайдов"
-  aria_alliance: "Перейти на страницу альянса и дипломатии"
+  aria_home: "Перейти на Главную страницу"
+  aria_rules: "Перейти на страницу Правил сервера"
+  aria_guides: "Перейти на страницу Гайдов"
+  aria_alliance: "Перейти на страницу Альянса и Дипломатии"
 
 guides:
-  heroes: "Герои и Сборки"
-  combat: "Бой"
-  building: "Строительство и Тех"
+  heroes: "Герои и Билды"
+  combat: "Сражение"
+  building: "Здания и Технологии"
   resources: "Управление ресурсами"
   sanctuary: "Гайд по Убежищу"
-  duel: "Дуэль альянсов"
+  duel: "Дуэль Альянсов"
   survival: "Битва за выживание"
-  kingdom: "Война королевств"
-  canyon: "Захват каньона"
-  cheese: "Сырная ловушка"
-  thief: "Охота на воров"
-  pickaxe: "Дворфийская кирка"
-  crystal: "Хрустальная долина"
-  alliance_shop: "Магазин альянса"
-  honor_shop: "Магазин чести"
-  sanctuary_shop: "Магазин убежища"
-  campaign_shop: "Магазин кампании"
-  premium_shop: "Премиум наборы"
+  kingdom: "Война Королевств"
+  canyon: "Покорение Каньона"
+  cheese: "Сырная Ловушка"
+  thief: "Охота на Воров"
+  pickaxe: "Гномья Кирка"
+  crystal: "Кристальная Долина"
+  alliance_shop: "Магазин Альянса"
+  honor_shop: "Магазин Чести"
+  sanctuary_shop: "Магазин Убежища"
+  campaign_shop: "Магазин Кампании"
+  premium_shop: "Премиум и Наборы самоцветов"
 
 pages:
   home:
     title: "Главная"
-    subtitle: "Справочник выживания"
+    subtitle: "Сборник по выживанию"
   rules:
     title: "Правила"
-    subtitle: "Правила сервера и ротация"
+    subtitle: "Правила сервера и Ротация"
   guides:
     title: "Гайды"
     subtitle: "Гайды по игре"
+    writers:
+      title: "Руководство для авторов"
+      subtitle: "Руководство для авторов"
   alliance:
     title: "Альянс"
-    subtitle: "Альянс и дипломатия"
+    subtitle: "Альянс и Дипломатия"
   guide_panes:
     heroes:
-      title: "Герои и сборки"
-      subtitle: "Герои и сборки"
+      title: "Герои и Билды"
+      subtitle: "Герои и Билды"
     combat:
-      title: "Бой"
-      subtitle: "Бой"
+      title: "Сражение"
+      subtitle: "Сражение"
     building:
-      title: "Строительство и тех."
-      subtitle: "Строительство и тех."
+      title: "Здания и Технологии"
+      subtitle: "Здания и Технологии"
     resources:
       title: "Управление ресурсами"
       subtitle: "Управление ресурсами"
     sanctuary:
-      title: "Гайд по Святилищу"
-      subtitle: "Гайд по Святилищу"
+      title: "Гайд по Убежищу"
+      subtitle: "Гайд по Убежищу"
     duel:
-      title: "Дуэль альянсов"
-      subtitle: "Дуэль альянсов"
+      title: "Дуэль Альянсов"
+      subtitle: "Дуэль Альянсов"
     survival:
-      title: "Битва на выживание"
-      subtitle: "Битва на выживание"
+      title: "Битва за выживание"
+      subtitle: "Битва за выживание"
     kingdom:
-      title: "Война королевств"
-      subtitle: "Война королевств"
+      title: "Война Королевств"
+      subtitle: "Война Королевств"
     canyon:
-      title: "Захват каньона"
-      subtitle: "Захват каньона"
+      title: "Покорение Каньона"
+      subtitle: "Покорение Каньона"
     cheese:
-      title: "Cheese-ловушка"
-      subtitle: "Cheese-ловушка"
+      title: "Сырная Ловушка"
+      subtitle: "Сырная Ловушка"
     thief:
-      title: "Охота на воров"
-      subtitle: "Охота на воров"
+      title: "Охота на Воров"
+      subtitle: "Охота на Воров"
     pickaxe:
-      title: "Дворфийская кирка"
-      subtitle: "Дворфийская кирка"
+      title: "Гномья Кирка"
+      subtitle: "Гномья Кирка"
     crystal:
-      title: "Хрустальная долина"
-      subtitle: "Хрустальная долина"
+      title: "Кристальная Долина"
+      subtitle: "Кристальная Долина"
     alliance_shop:
-      title: "Магазин альянса"
-      subtitle: "Магазин альянса"
+      title: "Магазин Альянса"
+      subtitle: "Магазин Альянса"
     honor_shop:
-      title: "Магазин чести"
-      subtitle: "Магазин чести"
+      title: "Магазин Чести"
+      subtitle: "Магазин Чести"
     sanctuary_shop:
-      title: "Магазин святилища"
-      subtitle: "Магазин святилища"
+      title: "Магазин Убежища"
+      subtitle: "Магазин Убежища"
     campaign_shop:
-      title: "Магазин кампании"
-      subtitle: "Магазин кампании"
+      title: "Магазин Кампании"
+      subtitle: "Магазин Кампании"
     premium_shop:
-      title: "Премиум и наборы"
-      subtitle: "Премиум и наборы"
+      title: "Премиум и Наборы самоцветов"
+      subtitle: "Премиум и Наборы самоцветов"
 
 nav_anchors:
   server_rules: "Правила сервера"
   rotation: "Ротация"
   rewards: "Награды"
-  nap_alliances: "Альянсы NAP"
-  nap_academies: "Академии NAP"
+  nap_alliances: "NAP Альянсы"
+  nap_academies: "NAP Академии"
   nap_ranks: "Ранги NAP"
   nap_territory: "Территория NAP"
   blacklist: "Черный список"
+  markdown_usage: "Использование"
+  markdown_example: "Пример"
+  guide_submissions: "Отправка"
 
 search:
   guides: "Поиск по гайдам..."
   home: "Поиск по каталогам, постам..."
+  placeholder: "Поиск..."

@@ -2,17 +2,14 @@ header:
   title: "LAST ASYLUM"
   subtitle: "Compendio di Sopravvivenza"
 
-search:
-  placeholder: "Cerca..."
-
 footer:
   nav_home: "Home"
   nav_rules: "Regole"
-  nav_guides: "Guida"
+  nav_guides: "Guide"
   nav_alliance: "Alleanza"
   aria_home: "Vai alla pagina Home"
   aria_rules: "Vai alla pagina Regole del Server"
-  aria_guides: "Vai alla pagina Guida"
+  aria_guides: "Vai alla pagina Guide"
   aria_alliance: "Vai alla pagina Alleanza e Diplomazia"
 
 guides:
@@ -43,30 +40,69 @@ pages:
     title: "Regole"
     subtitle: "Regole del Server & Rotazione"
   guides:
-    title: "Guida"
+    title: "Guide"
     subtitle: "Guide di Gioco"
+    writers:
+      title: "Guida per gli Autori"
+      subtitle: "Guida per gli Autori"
   alliance:
     title: "Alleanza"
     subtitle: "Alleanza & Diplomazia"
   guide_panes:
-    heroes: { title: "Eroi & Build", subtitle: "Eroi & Build" }
-    combat: { title: "Combattimento", subtitle: "Combattimento" }
-    building: { title: "Edifici & Tech", subtitle: "Edifici & Tech" }
-    resources: { title: "Gestione Risorse", subtitle: "Gestione Risorse" }
-    sanctuary: { title: "Guida al Santuario", subtitle: "Guida al Santuario" }
-    duel: { title: "Duello tra Alleanze", subtitle: "Duello tra Alleanze" }
-    survival: { title: "Battaglia di Sopravvivenza", subtitle: "Battaglia di Sopravvivenza" }
-    kingdom: { title: "Guerra tra Regni", subtitle: "Guerra tra Regni" }
-    canyon: { title: "Conquista del Canyon", subtitle: "Conquista del Canyon" }
-    cheese: { title: "Trappola Cheese", subtitle: "Trappola Cheese" }
-    thief: { title: "Caccia al Ladro", subtitle: "Caccia al Ladro" }
-    pickaxe: { title: "Piccone Nanico", subtitle: "Piccone Nanico" }
-    crystal: { title: "Valle di Cristallo", subtitle: "Valle di Cristallo" }
-    alliance_shop: { title: "Negozio Alleanza", subtitle: "Negozio Alleanza" }
-    honor_shop: { title: "Negozio d'Onore", subtitle: "Negozio d'Onore" }
-    sanctuary_shop: { title: "Negozio Santuario", subtitle: "Negozio Santuario" }
-    campaign_shop: { title: "Negozio Campagna", subtitle: "Negozio Campagna" }
-    premium_shop: { title: "Pacchetti Premium & Gemme", subtitle: "Pacchetti Premium & Gemme" }
+    heroes:
+      title: "Eroi & Build"
+      subtitle: "Eroi & Build"
+    combat:
+      title: "Combattimento"
+      subtitle: "Combattimento"
+    building:
+      title: "Edifici & Tech"
+      subtitle: "Edifici & Tech"
+    resources:
+      title: "Gestione Risorse"
+      subtitle: "Gestione Risorse"
+    sanctuary:
+      title: "Guida al Santuario"
+      subtitle: "Guida al Santuario"
+    duel:
+      title: "Duello tra Alleanze"
+      subtitle: "Duello tra Alleanze"
+    survival:
+      title: "Battaglia di Sopravvivenza"
+      subtitle: "Battaglia di Sopravvivenza"
+    kingdom:
+      title: "Guerra tra Regni"
+      subtitle: "Guerra tra Regni"
+    canyon:
+      title: "Conquista del Canyon"
+      subtitle: "Conquista del Canyon"
+    cheese:
+      title: "Trappola Cheese"
+      subtitle: "Trappola Cheese"
+    thief:
+      title: "Caccia al Ladro"
+      subtitle: "Caccia al Ladro"
+    pickaxe:
+      title: "Piccone Nanico"
+      subtitle: "Piccone Nanico"
+    crystal:
+      title: "Valle di Cristallo"
+      subtitle: "Valle di Cristallo"
+    alliance_shop:
+      title: "Negozio Alleanza"
+      subtitle: "Negozio Alleanza"
+    honor_shop:
+      title: "Negozio d'Onore"
+      subtitle: "Negozio d'Onore"
+    sanctuary_shop:
+      title: "Negozio Santuario"
+      subtitle: "Negozio Santuario"
+    campaign_shop:
+      title: "Negozio Campagna"
+      subtitle: "Negozio Campagna"
+    premium_shop:
+      title: "Pacchetti Premium & Gemme"
+      subtitle: "Pacchetti Premium & Gemme"
 
 nav_anchors:
   server_rules: "Regole Server"
@@ -77,7 +113,11 @@ nav_anchors:
   nap_ranks: "Gradi NAP"
   nap_territory: "Territorio NAP"
   blacklist: "Lista Nera"
+  markdown_usage: "Utilizzo"
+  markdown_example: "Esempio"
+  guide_submissions: "Invii"
 
 search:
   guides: "Cerca nelle guide..."
   home: "Cerca in directory, post..."
+  placeholder: "Cerca..."

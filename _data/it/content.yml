@@ -54,3 +54,57 @@ home_page:
     alliance:
       title: "Alleanza & Diplomazia"
       sub: "Gradi, stato diplomatico & accordi territoriali"
+writers_page:
+  usage:
+    title: "Utilizzo di Markdown"
+    text: |
+     * `##`    = Titolo Grande
+     * `####`  = Titolo Piccolo
+     * `**`    = Testo in Grassetto
+     * `*`     = Punto Elenco
+     * `>`     = Blocco di Testo/Fumetto
+  example:
+    title: "Esempio Markdown"
+  submissions:
+    title: "Invio di Guide"
+    text: "Le guide possono essere scritte in testo normale o in markdown, inviale a @JJosh sul Discord del S78."
+  splitview:
+    title_source: "Sorgente Markdown"
+    title_rendered: "Risultato Renderizzato"
+    btn_expand: "Espandi"
+    btn_collapse: "Comprimi"
+    markdown_sample: |
+      ## 1. Strategia di Progressione 
+      
+      Raggiungere velocemente il Santuario Livello 30 è l'obiettivo principale per la forza a lungo termine dell'account, ma affrettarsi senza pianificare causa "colli di bottiglia".
+      
+      > #### ⚠️ Info Prioritarie
+      > 
+      > **Non iniziare mai un potenziamento senza prima controllare i requisiti.** Non vorrai risparmiare 2 giorni di risorse solo per capire che hai dimenticato di livellare il Laboratorio o i Campi di Addestramento.
+      
+      La progressione cambia intorno al Livello 20. Prima del 20, il progresso è semplice. Dopo il 20, devi dare la priorità alla lista specifica degli "Edifici Richiesti", in quanto questi diventeranno i tuoi principali dispendi di tempo.
+      
+      ## 2. Tabella dei Requisiti di Livello
+      
+      Usa la tabella sottostante per pianificare la tua coda di costruzione. Questa copre i costi delle risorse e i requisiti specifici della struttura per prevenire blocchi della costruzione.
+      
+      (inserisci tabella qui)
+      
+      ## 3. Obiettivi Massimi degli Edifici
+      
+      Una volta raggiunti questi livelli, hai soddisfatto tutti i requisiti per il Santuario 30. Puoi deprioritizzare questi edifici e riassegnare le tue risorse verso truppe e tecnologia.
+      
+      * **Laboratorio:** Livello 30
+      * **Campi di Addestramento:** Livello 30
+      * **Centro di Comando:** Livello 30
+      * **Muro:** Livello 30
+      * **Magazzino:** Livello 25 (Limite di Efficienza)
+      * **Edifici per Risorse:** Livello 25 (Limite di Manutenzione)
+      
+      ## 4. Efficienza & Spesa
+      
+      La transizione dal Livello 25 al 30 rappresenta la salita più ripida del gioco. Per mantenere lo slancio:
+      
+      * **Velocità di Costruzione:** Assicurati che la tua ricerca "Velocità di Costruzione" sia al massimo nel Laboratorio. Questo fornisce un bonus cumulativo che fa risparmiare settimane di tempo verso il Livello 30.
+      * **Allineamento:** Allinea i tuoi potenziamenti più importanti degli edifici con l'evento "Duello tra Alleanze" ogni volta che è possibile, per guadagnare punti per i tuoi sforzi.
+      * **Titoli:** Assicurati di utilizzare il Ministro della Costruzione o il Capo degli Affari prima di iniziare la costruzione. Questi buff possono ridurre drasticamente i tempi di costruzione.

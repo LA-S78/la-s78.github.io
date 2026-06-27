@@ -54,3 +54,57 @@ home_page:
     alliance:
       title: "Alianza y Diplomacia"
       sub: "Rangos, estado diplomático y acuerdos territoriales"
+writers_page:
+  usage:
+    title: "Uso de Markdown"
+    text: |
+     * `##`    = Título Grande
+     * `####`  = Título Pequeño
+     * `**`    = Texto en Negrita
+     * `*`     = Viñeta
+     * `>`     = Bloque de Texto/Burbuja
+  example:
+    title: "Ejemplo de Markdown"
+  submissions:
+    title: "Envío de Guías"
+    text: "Las guías pueden escribirse en texto sin formato o en markdown, envíalas a @JJosh en el Discord de S78."
+  splitview:
+    title_source: "Fuente Markdown"
+    title_rendered: "Resultado Renderizado"
+    btn_expand: "Expandir"
+    btn_collapse: "Contraer"
+    markdown_sample: |
+      ## 1. Estrategia de Progresión 
+      
+      Acelerar hacia el Santuario Nivel 30 es el objetivo principal para fortalecer la cuenta a largo plazo, pero apresurarse sin planificar causa "cuellos de botella".
+      
+      > #### ⚠️ Información de Prioridad
+      > 
+      > **Nunca inicies una mejora sin verificar primero tus requisitos.** No querrás ahorrar 2 días de recursos solo para darte cuenta de que olvidaste subir de nivel el Laboratorio o los Campos de Entrenamiento.
+      
+      La progresión cambia alrededor del Nivel 20. Antes del 20, el progreso es directo. Después del 20, debes priorizar la lista específica de "Edificios Requeridos", ya que estos se convertirán en tus principales consumidores de tiempo.
+      
+      ## 2. Tabla de Requisitos de Nivel
+      
+      Usa la tabla a continuación para planificar tu cola de construcción. Esto cubre los costos de recursos y los requisitos estructurales específicos para evitar interrupciones en la construcción.
+      
+      (poner tabla aquí)
+      
+      ## 3. Objetivos Máximos de Edificios
+      
+      Una vez que alcances estos niveles, habrás satisfecho todos los requisitos previos para el Santuario 30. Puedes despriorizar estos edificios y reasignar tus recursos hacia tropas y tecnología.
+      
+      * **Laboratorio:** Nivel 30
+      * **Campos de Entrenamiento:** Nivel 30
+      * **Centro de Mando:** Nivel 30
+      * **Muro:** Nivel 30
+      * **Almacén:** Nivel 25 (Límite de Eficiencia)
+      * **Edificios de Recursos:** Nivel 25 (Límite de Mantenimiento)
+      
+      ## 4. Eficiencia y Gasto
+      
+      La transición del Nivel 25 al 30 representa la subida más empinada del juego. Para mantener el impulso:
+      
+      * **Velocidad de Construcción:** Asegúrate de que tu investigación de "Velocidad de Construcción" esté al máximo en el Laboratorio. Esto proporciona una bonificación compuesta que ahorra semanas de tiempo hacia el Nivel 30.
+      * **Alineación:** Alinea tus mejoras de edificios importantes con el evento "Duelo de Alianzas" siempre que sea posible para ganar puntos por tus esfuerzos.
+      * **Títulos:** Asegúrate de utilizar al Ministro de Construcción o al Jefe de Asuntos antes de comenzar la construcción. Estos beneficios pueden reducir drásticamente los tiempos de construcción.

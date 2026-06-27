@@ -2,23 +2,20 @@ header:
   title: "LAST ASYLUM"
   subtitle: "Hayatta Kalma Rehberi"
 
-search:
-  placeholder: "Ara..."
-
 footer:
   nav_home: "Ana Sayfa"
   nav_rules: "Kurallar"
   nav_guides: "Rehberler"
   nav_alliance: "İttifak"
-  aria_home: "Ana sayfaya git"
+  aria_home: "Ana Sayfaya Git"
   aria_rules: "Sunucu Kuralları sayfasına git"
   aria_guides: "Rehberler sayfasına git"
   aria_alliance: "İttifak ve Diplomasi sayfasına git"
 
 guides:
-  heroes: "Kahramanlar ve Yapılar"
+  heroes: "Kahramanlar & Dizilimler"
   combat: "Savaş"
-  building: "İnşaat ve Teknoloji"
+  building: "Bina & Teknoloji"
   resources: "Kaynak Yönetimi"
   sanctuary: "Sığınak Rehberi"
   duel: "İttifak Düellosu"
@@ -33,31 +30,34 @@ guides:
   honor_shop: "Onur Mağazası"
   sanctuary_shop: "Sığınak Mağazası"
   campaign_shop: "Sefer Mağazası"
-  premium_shop: "Premium Paketler"
+  premium_shop: "Premium & Elmas Paketleri"
 
 pages:
   home:
     title: "Ana Sayfa"
-    subtitle: "Hayatta Kalma Kılavuzu"
+    subtitle: "Hayatta Kalma Rehberi"
   rules:
     title: "Kurallar"
-    subtitle: "Sunucu Kuralları ve Rotasyon"
+    subtitle: "Sunucu Kuralları & Rotasyon"
   guides:
     title: "Rehberler"
     subtitle: "Oyun Rehberleri"
+    writers:
+      title: "Yazar Rehberi"
+      subtitle: "Yazar Rehberi"
   alliance:
     title: "İttifak"
-    subtitle: "İttifak ve Diplomasi"
+    subtitle: "İttifak & Diplomasi"
   guide_panes:
     heroes:
-      title: "Kahramanlar ve Dizilimler"
-      subtitle: "Kahramanlar ve Dizilimler"
+      title: "Kahramanlar & Dizilimler"
+      subtitle: "Kahramanlar & Dizilimler"
     combat:
       title: "Savaş"
       subtitle: "Savaş"
     building:
-      title: "İnşaat ve Teknoloji"
-      subtitle: "İnşaat ve Teknoloji"
+      title: "Bina & Teknoloji"
+      subtitle: "Bina & Teknoloji"
     resources:
       title: "Kaynak Yönetimi"
       subtitle: "Kaynak Yönetimi"
@@ -98,11 +98,11 @@ pages:
       title: "Sığınak Mağazası"
       subtitle: "Sığınak Mağazası"
     campaign_shop:
-      title: "Kampanya Mağazası"
-      subtitle: "Kampanya Mağazası"
+      title: "Sefer Mağazası"
+      subtitle: "Sefer Mağazası"
     premium_shop:
-      title: "Premium ve Elmas Paketleri"
-      subtitle: "Premium ve Elmas Paketleri"
+      title: "Premium & Elmas Paketleri"
+      subtitle: "Premium & Elmas Paketleri"
 
 nav_anchors:
   server_rules: "Sunucu Kuralları"
@@ -113,7 +113,11 @@ nav_anchors:
   nap_ranks: "NAP Dereceleri"
   nap_territory: "NAP Bölgesi"
   blacklist: "Kara Liste"
+  markdown_usage: "Kullanım"
+  markdown_example: "Örnek"
+  guide_submissions: "Gönderimler"
 
 search:
   guides: "Rehberlerde ara..."
   home: "Dizinleri, gönderileri ara..."
+  placeholder: "Ara..."

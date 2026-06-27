@@ -2,9 +2,6 @@ header:
   title: "LAST ASYLUM"
   subtitle: "Compendio de Supervivencia"
 
-search:
-  placeholder: "Buscar..."
-
 footer:
   nav_home: "Inicio"
   nav_rules: "Reglas"
@@ -16,24 +13,24 @@ footer:
   aria_alliance: "Ir a la página de Alianza y Diplomacia"
 
 guides:
-  heroes: "Héroes y Construcciones"
+  heroes: "Héroes y Builds"
   combat: "Combate"
-  building: "Construcción y Tech"
+  building: "Edificios y Tech"
   resources: "Gestión de Recursos"
   sanctuary: "Guía del Santuario"
   duel: "Duelo de Alianzas"
   survival: "Batalla de Supervivencia"
-  kingdom: "Guerra del Reino"
+  kingdom: "Guerra de Reinos"
   canyon: "Conquista del Cañón"
   cheese: "Trampa de Queso"
   thief: "Caza de Ladrones"
-  pickaxe: "Pico de los Enanos"
+  pickaxe: "Pico Enano"
   crystal: "Valle de Cristal"
   alliance_shop: "Tienda de Alianza"
   honor_shop: "Tienda de Honor"
   sanctuary_shop: "Tienda del Santuario"
   campaign_shop: "Tienda de Campaña"
-  premium_shop: "Paquetes Premium"
+  premium_shop: "Paquetes Premium y Gemas"
 
 pages:
   home:
@@ -45,6 +42,9 @@ pages:
   guides:
     title: "Guías"
     subtitle: "Guías de Juego"
+    writers:
+      title: "Guía para Autores"
+      subtitle: "Guía para Autores"
   alliance:
     title: "Alianza"
     subtitle: "Alianza y Diplomacia"
@@ -71,14 +71,14 @@ pages:
       title: "Batalla de Supervivencia"
       subtitle: "Batalla de Supervivencia"
     kingdom:
-      title: "Guerra del Reino"
-      subtitle: "Guerra del Reino"
+      title: "Guerra de Reinos"
+      subtitle: "Guerra de Reinos"
     canyon:
       title: "Conquista del Cañón"
       subtitle: "Conquista del Cañón"
     cheese:
-      title: "Trampa Cheese"
-      subtitle: "Trampa Cheese"
+      title: "Trampa de Queso"
+      subtitle: "Trampa de Queso"
     thief:
       title: "Caza de Ladrones"
       subtitle: "Caza de Ladrones"
@@ -101,8 +101,8 @@ pages:
       title: "Tienda de Campaña"
       subtitle: "Tienda de Campaña"
     premium_shop:
-      title: "Packs Premium y Gemas"
-      subtitle: "Packs Premium y Gemas"
+      title: "Paquetes Premium y Gemas"
+      subtitle: "Paquetes Premium y Gemas"
 
 nav_anchors:
   server_rules: "Reglas del Servidor"
@@ -113,7 +113,11 @@ nav_anchors:
   nap_ranks: "Rangos NAP"
   nap_territory: "Territorio NAP"
   blacklist: "Lista Negra"
+  markdown_usage: "Uso"
+  markdown_example: "Ejemplo"
+  guide_submissions: "Envíos"
 
 search:
   guides: "Buscar guías..."
   home: "Buscar directorios, publicaciones..."
+  placeholder: "Buscar..."

@@ -2,38 +2,35 @@ header:
   title: "LAST ASYLUM"
   subtitle: "Compendium de Survie"
 
-search:
-  placeholder: "Rechercher..."
-
 footer:
   nav_home: "Accueil"
   nav_rules: "Règles"
   nav_guides: "Guides"
   nav_alliance: "Alliance"
-  aria_home: "Aller à la page d'accueil"
-  aria_rules: "Aller à la page des règles du serveur"
-  aria_guides: "Aller à la page des guides"
+  aria_home: "Aller à la page d'Accueil"
+  aria_rules: "Aller à la page des Règles du Serveur"
+  aria_guides: "Aller à la page des Guides"
   aria_alliance: "Aller à la page Alliance et Diplomatie"
 
 guides:
   heroes: "Héros & Builds"
   combat: "Combat"
-  building: "Construction & Tech"
+  building: "Bâtiments & Tech"
   resources: "Gestion des Ressources"
   sanctuary: "Guide du Sanctuaire"
   duel: "Duel d'Alliances"
   survival: "Bataille de Survie"
-  kingdom: "Guerre du Royaume"
+  kingdom: "Guerre des Royaumes"
   canyon: "Conquête du Canyon"
   cheese: "Piège à Fromage"
   thief: "Chasse aux Voleurs"
-  pickaxe: "Pioche des Nains"
+  pickaxe: "Pioche Naine"
   crystal: "Vallée de Cristal"
   alliance_shop: "Boutique d'Alliance"
   honor_shop: "Boutique d'Honneur"
   sanctuary_shop: "Boutique du Sanctuaire"
   campaign_shop: "Boutique de Campagne"
-  premium_shop: "Packs Premium"
+  premium_shop: "Packs Premium & Gemmes"
 
 pages:
   home:
@@ -41,10 +38,13 @@ pages:
     subtitle: "Compendium de Survie"
   rules:
     title: "Règles"
-    subtitle: "Règles du serveur & Rotation"
+    subtitle: "Règles du Serveur & Rotation"
   guides:
     title: "Guides"
-    subtitle: "Guides de jeu"
+    subtitle: "Guides de Jeu"
+    writers:
+      title: "Guide des Auteurs"
+      subtitle: "Guide des Auteurs"
   alliance:
     title: "Alliance"
     subtitle: "Alliance & Diplomatie"
@@ -59,32 +59,32 @@ pages:
       title: "Bâtiments & Tech"
       subtitle: "Bâtiments & Tech"
     resources:
-      title: "Gestion des ressources"
-      subtitle: "Gestion des ressources"
+      title: "Gestion des Ressources"
+      subtitle: "Gestion des Ressources"
     sanctuary:
       title: "Guide du Sanctuaire"
       subtitle: "Guide du Sanctuaire"
     duel:
-      title: "Duel d'Alliance"
-      subtitle: "Duel d'Alliance"
+      title: "Duel d'Alliances"
+      subtitle: "Duel d'Alliances"
     survival:
       title: "Bataille de Survie"
       subtitle: "Bataille de Survie"
     kingdom:
-      title: "Guerre du Royaume"
-      subtitle: "Guerre du Royaume"
+      title: "Guerre des Royaumes"
+      subtitle: "Guerre des Royaumes"
     canyon:
       title: "Conquête du Canyon"
       subtitle: "Conquête du Canyon"
     cheese:
-      title: "Piège Cheese"
-      subtitle: "Piège Cheese"
+      title: "Piège à Fromage"
+      subtitle: "Piège à Fromage"
     thief:
-      title: "Chasse aux voleurs"
-      subtitle: "Chasse aux voleurs"
+      title: "Chasse aux Voleurs"
+      subtitle: "Chasse aux Voleurs"
     pickaxe:
-      title: "Pioche des Nains"
-      subtitle: "Pioche des Nains"
+      title: "Pioche Naine"
+      subtitle: "Pioche Naine"
     crystal:
       title: "Vallée de Cristal"
       subtitle: "Vallée de Cristal"
@@ -105,15 +105,19 @@ pages:
       subtitle: "Packs Premium & Gemmes"
 
 nav_anchors:
-  server_rules: "Règles du serveur"
+  server_rules: "Règles du Serveur"
   rotation: "Rotation"
   rewards: "Récompenses"
   nap_alliances: "Alliances NAP"
   nap_academies: "Académies NAP"
   nap_ranks: "Rangs NAP"
   nap_territory: "Territoire NAP"
-  blacklist: "Liste noire"
+  blacklist: "Liste Noire"
+  markdown_usage: "Utilisation"
+  markdown_example: "Exemple"
+  guide_submissions: "Soumissions"
 
 search:
   guides: "Rechercher dans les guides..."
   home: "Rechercher dans les répertoires, posts..."
+  placeholder: "Rechercher..."

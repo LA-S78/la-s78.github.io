@@ -54,3 +54,57 @@ home_page:
     alliance:
       title: "Allianz & Diplomatie"
       sub: "Ränge, Diplomatie-Status & Gebietsabkommen"
+writers_page:
+  usage:
+    title: "Markdown-Nutzung"
+    text: |
+     * `##`    = Große Überschrift
+     * `####`  = Kleine Überschrift
+     * `**`    = Fetter Text
+     * `*`     = Aufzählungspunkt
+     * `>`     = Textblock/Sprechblase
+  example:
+    title: "Markdown-Beispiel"
+  submissions:
+    title: "Guide-Einreichungen"
+    text: "Guides können als Klartext oder in Markdown geschrieben und an @JJosh im S78 Discord gesendet werden."
+  splitview:
+    title_source: "Markdown-Quelle"
+    title_rendered: "Gerendertes Ergebnis"
+    btn_expand: "Erweitern"
+    btn_collapse: "Minimieren"
+    markdown_sample: |
+      ## 1. Fortschrittsstrategie 
+      
+      Ein schnelles Erreichen von Sanktuarium-Level 30 ist das Hauptziel für langfristige Account-Stärke, aber übereiltes Vorgehen ohne Planung führt zu "Engpässen".
+      
+      > #### ⚠️ Prioritäts-Info
+      > 
+      > **Starte niemals ein Upgrade, ohne vorher die Voraussetzungen zu prüfen.** Du möchtest keine 2 Tage Ressourcen sparen, nur um festzustellen, dass du vergessen hast, das Labor oder das Trainingsgelände aufzuwerten.
+      
+      Der Fortschritt ändert sich um Level 20. Vor 20 ist der Fortschritt unkompliziert. Nach 20 musst du die spezifische Liste der "Erforderlichen Gebäude" priorisieren, da diese zu deinen primären Zeitfressern werden.
+      
+      ## 2. Diagramm der Level-Voraussetzungen
+      
+      Nutze das folgende Diagramm, um deine Bau-Warteschlange zu planen. Dies deckt Ressourcenkosten und spezifische Strukturanforderungen ab, um Baustopps zu vermeiden.
+      
+      (Diagramm hier einfügen)
+      
+      ## 3. Gebäude-Ziele
+      
+      Sobald du diese Level erreicht hast, hast du alle Voraussetzungen für Sanktuarium 30 erfüllt. Du kannst diese Gebäude dann depriorisieren und deine Ressourcen in Truppen und Technologie investieren.
+      
+      * **Labor:** Level 30
+      * **Trainingsgelände:** Level 30
+      * **Kommandozentrale:** Level 30
+      * **Mauer:** Level 30
+      * **Lagerhaus:** Level 25 (Effizienz-Grenze)
+      * **Ressourcengebäude:** Level 25 (Wartungs-Grenze)
+      
+      ## 4. Effizienz & Ausgaben
+      
+      Der Übergang von Level 25 auf 30 ist der steilste Anstieg im Spiel. Um das Momentum aufrechtzuerhalten:
+      
+      * **Baugeschwindigkeit:** Stelle sicher, dass deine "Baugeschwindigkeit"-Forschung im Labor maximiert ist. Dies bietet einen kumulativen Bonus, der bis Level 30 Wochen an Zeit spart.
+      * **Ausrichtung:** Richte deine großen Gebäude-Upgrades wann immer möglich nach dem "Allianz-Duell"-Event aus, um Punkte für deine Bemühungen zu sammeln.
+      * **Titel:** Stelle sicher, dass du den Bauminister oder den Leiter für Angelegenheiten einsetzt, bevor du mit dem Bau beginnst. Diese Buffs können die Bauzeiten drastisch verkürzen.

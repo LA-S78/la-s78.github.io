@@ -54,3 +54,57 @@ home_page:
     alliance:
       title: "İttifak & Diplomasi"
       sub: "Dereceler, diplomasi durumu ve bölge anlaşmaları"
+writers_page:
+  usage:
+    title: "Markdown Kullanımı"
+    text: |
+     * `##`    = Büyük Başlık
+     * `####`  = Küçük Başlık
+     * `**`    = Kalın Metin
+     * `*`     = Madde İşareti
+     * `>`     = Metin Bloğu/Baloncuğu
+  example:
+    title: "Markdown Örneği"
+  submissions:
+    title: "Rehber Gönderimleri"
+    text: "Rehberler düz metin veya markdown formatında yazılabilir, S78 Discord'unda @JJosh'a gönderin."
+  splitview:
+    title_source: "Markdown Kaynağı"
+    title_rendered: "İşlenmiş Sonuç"
+    btn_expand: "Genişlet"
+    btn_collapse: "Daralt"
+    markdown_sample: |
+      ## 1. İlerleme Stratejisi 
+      
+      Sığınak Seviye 30'a ulaşmak, uzun vadeli hesap gücü için birincil hedeftir, ancak plan yapmadan acele etmek "darboğazlara" neden olur.
+      
+      > #### ⚠️ Öncelikli Bilgi
+      > 
+      > **Gereksinimlerinizi kontrol etmeden asla bir yükseltmeye başlamayın.** Laboratuvar veya Eğitim Alanlarını seviye atlatmayı unuttuğunuzu fark etmek için 2 günlük kaynak biriktirmek istemezsiniz.
+      
+      İlerleme Seviye 20 civarında değişir. 20'den önce ilerleme basittir. 20'den sonra, birincil zaman alıcılarınız haline gelecekleri için belirli "Gerekli Binalar" listesine öncelik vermelisiniz.
+      
+      ## 2. Seviye Gereksinim Tablosu
+      
+      İnşaat sıranızı planlamak için aşağıdaki tabloyu kullanın. Bu, inşaat duraklamalarını önlemek için kaynak maliyetlerini ve belirli yapı gereksinimlerini kapsar.
+      
+      (tabloyu buraya koyun)
+      
+      ## 3. Bina Tavan Hedefleri
+      
+      Bu seviyelere ulaştığınızda, Sığınak 30 için tüm ön koşulları karşılamış olursunuz. Bu binaların önceliğini düşürebilir ve kaynaklarınızı birliklere ve teknolojiye yönlendirebilirsiniz.
+      
+      * **Laboratuvar:** Seviye 30
+      * **Eğitim Alanları:** Seviye 30
+      * **Komuta Merkezi:** Seviye 30
+      * **Duvar:** Seviye 30
+      * **Depo:** Seviye 25 (Verimlilik Sınırı)
+      * **Kaynak Binaları:** Seviye 25 (Bakım Sınırı)
+      
+      ## 4. Verimlilik ve Harcama
+      
+      Seviye 25'ten 30'a geçiş oyundaki en dik tırmanışı temsil eder. İvmeyi korumak için:
+      
+      * **İnşaat Hızı:** Laboratuvarda "İnşaat Hızı" araştırmanızın en üst düzeye çıkarıldığından emin olun. Bu, Seviye 30'a kadar haftalarca zaman kazandıran bileşik bir bonus sağlar.
+      * **Hizalama:** Çabalarınız karşılığında puan kazanmak için büyük bina yükseltmelerinizi mümkün olduğunca "İttifak Düellosu" etkinliğiyle aynı hizaya getirin.
+      * **Unvanlar:** İnşaata başlamadan önce İnşaat Bakanı veya İşler Şefi'ni kullandığınızdan emin olun. Bu güçlendirmeler inşaat sürelerini önemli ölçüde azaltabilir.
