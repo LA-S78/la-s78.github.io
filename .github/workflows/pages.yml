@@ -18,7 +18,7 @@ jobs:
         with:
           ruby-version: '3.0'
           bundler-cache: true
-          bundler: '4.0.14'
+          bundler: '4.0.15'
 
       - name: Build Site
         run: bundle exec jekyll build --config _config.yml,_config_${{ matrix.lang }}.yml --destination _site/${{ matrix.lang }}
