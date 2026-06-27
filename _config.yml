@@ -23,7 +23,7 @@ collections:
     output: false
 plugins:
   - jekyll-polyglot
-languages: ["en", "es", "fr", "ru", "tr", "ua"]
+languages: ["de", "en", "es", "fr", "ru", "tr", "uk"]
 default_lang: "en"
 exclude_from_localization:
   - images/

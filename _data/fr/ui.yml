@@ -1,0 +1,36 @@
+header:
+  title: "LAST ASYLUM"
+  subtitle: "Compendium de Survie"
+
+search:
+  placeholder: "Rechercher..."
+
+footer:
+  nav_home: "Accueil"
+  nav_rules: "Règles"
+  nav_guides: "Guides"
+  nav_alliance: "Alliance"
+  aria_home: "Aller à la page d'accueil"
+  aria_rules: "Aller à la page des règles du serveur"
+  aria_guides: "Aller à la page des guides"
+  aria_alliance: "Aller à la page Alliance et Diplomatie"
+
+guides:
+  heroes: "Héros & Builds"
+  combat: "Combat"
+  building: "Construction & Tech"
+  resources: "Gestion des Ressources"
+  sanctuary: "Guide du Sanctuaire"
+  duel: "Duel d'Alliances"
+  survival: "Bataille de Survie"
+  kingdom: "Guerre du Royaume"
+  canyon: "Conquête du Canyon"
+  cheese: "Piège à Fromage"
+  thief: "Chasse aux Voleurs"
+  pickaxe: "Pioche des Nains"
+  crystal: "Vallée de Cristal"
+  alliance_shop: "Boutique d'Alliance"
+  honor_shop: "Boutique d'Honneur"
+  sanctuary_shop: "Boutique du Sanctuaire"
+  campaign_shop: "Boutique de Campagne"
+  premium_shop: "Packs Premium"

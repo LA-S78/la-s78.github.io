@@ -1,0 +1,36 @@
+header:
+  title: "LAST ASYLUM"
+  subtitle: "Справочник по выживанию"
+
+search:
+  placeholder: "Поиск..."
+
+footer:
+  nav_home: "Главная"
+  nav_rules: "Правила"
+  nav_guides: "Гайды"
+  nav_alliance: "Альянс"
+  aria_home: "Перейти на главную страницу"
+  aria_rules: "Перейти на страницу правил сервера"
+  aria_guides: "Перейти на страницу гайдов"
+  aria_alliance: "Перейти на страницу альянса и дипломатии"
+
+guides:
+  heroes: "Герои и Сборки"
+  combat: "Бой"
+  building: "Строительство и Тех"
+  resources: "Управление ресурсами"
+  sanctuary: "Гайд по Убежищу"
+  duel: "Дуэль альянсов"
+  survival: "Битва за выживание"
+  kingdom: "Война королевств"
+  canyon: "Захват каньона"
+  cheese: "Сырная ловушка"
+  thief: "Охота на воров"
+  pickaxe: "Дворфийская кирка"
+  crystal: "Хрустальная долина"
+  alliance_shop: "Магазин альянса"
+  honor_shop: "Магазин чести"
+  sanctuary_shop: "Магазин убежища"
+  campaign_shop: "Магазин кампании"
+  premium_shop: "Премиум наборы"

@@ -1,48 +1,48 @@
 - time: "00:00"
-  d1: "Enhance Heroes"
-  d2: "Build Territory"
-  d3: "Train Soldiers"
-  d4: "Tech Research"
-  d5: "Enhance Raven"
-  d6: "Enhance Heroes"
-  d7: "Build Territory"
+  d1: { text: "Enhance Heroes", key: "enhance_heroes" }
+  d2: { text: "Build Territory", key: "build_territory" }
+  d3: { text: "Train Soldiers", key: "train_soldiers" }
+  d4: { text: "Tech Research", key: "tech_research" }
+  d5: { text: "Enhance Raven", key: "enhance_raven" }
+  d6: { text: "Enhance Heroes", key: "enhance_heroes" }
+  d7: { text: "Build Territory", key: "build_territory" }
 - time: "04:00"
-  d1: "Build Territory"
-  d2: "Train Soldiers"
-  d3: "Tech Research"
-  d4: "Enhance Raven"
-  d5: "Enhance Heroes"
-  d6: "Build Territory"
-  d7: "Train Soldiers"
+  d1: { text: "Build Territory", key: "build_territory" }
+  d2: { text: "Train Soldiers", key: "train_soldiers" }
+  d3: { text: "Tech Research", key: "tech_research" }
+  d4: { text: "Enhance Raven", key: "enhance_raven" }
+  d5: { text: "Enhance Heroes", key: "enhance_heroes" }
+  d6: { text: "Build Territory", key: "build_territory" }
+  d7: { text: "Train Soldiers", key: "train_soldiers" }
 - time: "08:00"
-  d1: "Train Soldiers"
-  d2: "Tech Research"
-  d3: "Enhance Raven"
-  d4: "Enhance Heroes"
-  d5: "Build Territory"
-  d6: "Train Soldiers"
-  d7: "Tech Research"
+  d1: { text: "Train Soldiers", key: "train_soldiers" }
+  d2: { text: "Tech Research", key: "tech_research" }
+  d3: { text: "Enhance Raven", key: "enhance_raven" }
+  d4: { text: "Enhance Heroes", key: "enhance_heroes" }
+  d5: { text: "Build Territory", key: "build_territory" }
+  d6: { text: "Train Soldiers", key: "train_soldiers" }
+  d7: { text: "Tech Research", key: "tech_research" }
 - time: "12:00"
-  d1: "Tech Research"
-  d2: "Enhance Raven"
-  d3: "Enhance Heroes"
-  d4: "Build Territory"
-  d5: "Train Soldiers"
-  d6: "Tech Research"
-  d7: "Enhance Raven"
+  d1: { text: "Tech Research", key: "tech_research" }
+  d2: { text: "Enhance Raven", key: "enhance_raven" }
+  d3: { text: "Enhance Heroes", key: "enhance_heroes" }
+  d4: { text: "Build Territory", key: "build_territory" }
+  d5: { text: "Train Soldiers", key: "train_soldiers" }
+  d6: { text: "Tech Research", key: "tech_research" }
+  d7: { text: "Enhance Raven", key: "enhance_raven" }
 - time: "16:00"
-  d1: "Enhance Raven"
-  d2: "Enhance Heroes"
-  d3: "Build Territory"
-  d4: "Train Soldiers"
-  d5: "Tech Research"
-  d6: "Enhance Raven"
-  d7: "Enhance Heroes"
+  d1: { text: "Enhance Raven", key: "enhance_raven" }
+  d2: { text: "Enhance Heroes", key: "enhance_heroes" }
+  d3: { text: "Build Territory", key: "build_territory" }
+  d4: { text: "Train Soldiers", key: "train_soldiers" }
+  d5: { text: "Tech Research", key: "tech_research" }
+  d6: { text: "Enhance Raven", key: "enhance_raven" }
+  d7: { text: "Enhance Heroes", key: "enhance_heroes" }
 - time: "20:00"
-  d1: "Enhance Heroes"
-  d2: "Build Territory"
-  d3: "Train Soldiers"
-  d4: "Tech Research"
-  d5: "Enhance Raven"
-  d6: "Enhance Heroes"
-  d7: "Build Territory"
+  d1: { text: "Enhance Heroes", key: "enhance_heroes" }
+  d2: { text: "Build Territory", key: "build_territory" }
+  d3: { text: "Train Soldiers", key: "train_soldiers" }
+  d4: { text: "Tech Research", key: "tech_research" }
+  d5: { text: "Enhance Raven", key: "enhance_raven" }
+  d6: { text: "Enhance Heroes", key: "enhance_heroes" }
+  d7: { text: "Build Territory", key: "build_territory" }

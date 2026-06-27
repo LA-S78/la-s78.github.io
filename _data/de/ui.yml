@@ -1,0 +1,36 @@
+header:
+  title: "LAST ASYLUM"
+  subtitle: "Überlebens-Kompendium"
+
+search:
+  placeholder: "Suche..."
+
+footer:
+  nav_home: "Startseite"
+  nav_rules: "Regeln"
+  nav_guides: "Anleitungen"
+  nav_alliance: "Allianz"
+  aria_home: "Zur Startseite"
+  aria_rules: "Zu den Server-Regeln"
+  aria_guides: "Zu den Anleitungen"
+  aria_alliance: "Zu Allianz und Diplomatie"
+
+guides:
+  heroes: "Helden & Builds"
+  combat: "Kampf"
+  building: "Gebäude & Tech"
+  resources: "Ressourcen-Mgmt"
+  sanctuary: "Sanktuarium-Guide"
+  duel: "Allianz-Duell"
+  survival: "Überlebenskampf"
+  kingdom: "Reichskrieg"
+  canyon: "Canyon-Eroberung"
+  cheese: "Käsefalle"
+  thief: "Diebesjagd"
+  pickaxe: "Zwergenspitzhacke"
+  crystal: "Kristalltal"
+  alliance_shop: "Allianz-Shop"
+  honor_shop: "Ehren-Shop"
+  sanctuary_shop: "Sanktuarium-Shop"
+  campaign_shop: "Kampagnen-Shop"
+  premium_shop: "Premium-Pakete"

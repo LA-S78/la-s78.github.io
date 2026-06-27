@@ -1,5 +1,5 @@
 header:
-  title: "ÚLTIMO ASILO"
+  title: "LAST ASYLUM"
   subtitle: "Compendio de Supervivencia"
 
 search:
@@ -14,3 +14,23 @@ footer:
   aria_rules: "Ir a la página de Reglas del Servidor"
   aria_guides: "Ir a la página de Guías"
   aria_alliance: "Ir a la página de Alianza y Diplomacia"
+
+guides:
+  heroes: "Héroes y Construcciones"
+  combat: "Combate"
+  building: "Construcción y Tech"
+  resources: "Gestión de Recursos"
+  sanctuary: "Guía del Santuario"
+  duel: "Duelo de Alianzas"
+  survival: "Batalla de Supervivencia"
+  kingdom: "Guerra del Reino"
+  canyon: "Conquista del Cañón"
+  cheese: "Trampa de Queso"
+  thief: "Caza de Ladrones"
+  pickaxe: "Pico de los Enanos"
+  crystal: "Valle de Cristal"
+  alliance_shop: "Tienda de Alianza"
+  honor_shop: "Tienda de Honor"
+  sanctuary_shop: "Tienda del Santuario"
+  campaign_shop: "Tienda de Campaña"
+  premium_shop: "Paquetes Premium"

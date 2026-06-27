@@ -1,0 +1,36 @@
+header:
+  title: "LAST ASYLUM"
+  subtitle: "Hayatta Kalma Rehberi"
+
+search:
+  placeholder: "Ara..."
+
+footer:
+  nav_home: "Ana Sayfa"
+  nav_rules: "Kurallar"
+  nav_guides: "Rehberler"
+  nav_alliance: "İttifak"
+  aria_home: "Ana sayfaya git"
+  aria_rules: "Sunucu Kuralları sayfasına git"
+  aria_guides: "Rehberler sayfasına git"
+  aria_alliance: "İttifak ve Diplomasi sayfasına git"
+
+guides:
+  heroes: "Kahramanlar ve Yapılar"
+  combat: "Savaş"
+  building: "İnşaat ve Teknoloji"
+  resources: "Kaynak Yönetimi"
+  sanctuary: "Sığınak Rehberi"
+  duel: "İttifak Düellosu"
+  survival: "Hayatta Kalma Savaşı"
+  kingdom: "Krallık Savaşı"
+  canyon: "Kanyon Fethi"
+  cheese: "Peynir Tuzağı"
+  thief: "Hırsız Avı"
+  pickaxe: "Cüce Kazması"
+  crystal: "Kristal Vadisi"
+  alliance_shop: "İttifak Mağazası"
+  honor_shop: "Onur Mağazası"
+  sanctuary_shop: "Sığınak Mağazası"
+  campaign_shop: "Sefer Mağazası"
+  premium_shop: "Premium Paketler"

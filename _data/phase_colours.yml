@@ -1,0 +1,5 @@
+enhance_heroes: "phase-heroes"
+build_territory: "phase-build"
+train_soldiers: "phase-train"
+tech_research: "phase-tech"
+enhance_raven: "phase-raven"

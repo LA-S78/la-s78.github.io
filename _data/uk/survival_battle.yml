@@ -1,0 +1,48 @@
+- time: "00:00"
+  d1: { text: "Посилення героїв", key: "enhance_heroes" }
+  d2: { text: "Розвиток бази", key: "build_territory" }
+  d3: { text: "Тренування військ", key: "train_soldiers" }
+  d4: { text: "Технології", key: "tech_research" }
+  d5: { text: "Посилення Ворона", key: "enhance_raven" }
+  d6: { text: "Посилення героїв", key: "enhance_heroes" }
+  d7: { text: "Розвиток бази", key: "build_territory" }
+- time: "04:00"
+  d1: { text: "Розвиток бази", key: "build_territory" }
+  d2: { text: "Тренування військ", key: "train_soldiers" }
+  d3: { text: "Технології", key: "tech_research" }
+  d4: { text: "Посилення Ворона", key: "enhance_raven" }
+  d5: { text: "Посилення героїв", key: "enhance_heroes" }
+  d6: { text: "Розвиток бази", key: "build_territory" }
+  d7: { text: "Тренування військ", key: "train_soldiers" }
+- time: "08:00"
+  d1: { text: "Тренування військ", key: "train_soldiers" }
+  d2: { text: "Технології", key: "tech_research" }
+  d3: { text: "Посилення Ворона", key: "enhance_raven" }
+  d4: { text: "Посилення героїв", key: "enhance_heroes" }
+  d5: { text: "Розвиток бази", key: "build_territory" }
+  d6: { text: "Тренування військ", key: "train_soldiers" }
+  d7: { text: "Технології", key: "tech_research" }
+- time: "12:00"
+  d1: { text: "Технології", key: "tech_research" }
+  d2: { text: "Посилення Ворона", key: "enhance_raven" }
+  d3: { text: "Посилення героїв", key: "enhance_heroes" }
+  d4: { text: "Розвиток бази", key: "build_territory" }
+  d5: { text: "Тренування військ", key: "train_soldiers" }
+  d6: { text: "Технології", key: "tech_research" }
+  d7: { text: "Посилення Ворона", key: "enhance_raven" }
+- time: "16:00"
+  d1: { text: "Посилення Ворона", key: "enhance_raven" }
+  d2: { text: "Посилення героїв", key: "enhance_heroes" }
+  d3: { text: "Розвиток бази", key: "build_territory" }
+  d4: { text: "Тренування військ", key: "train_soldiers" }
+  d5: { text: "Технології", key: "tech_research" }
+  d6: { text: "Посилення Ворона", key: "enhance_raven" }
+  d7: { text: "Посилення героїв", key: "enhance_heroes" }
+- time: "20:00"
+  d1: { text: "Посилення героїв", key: "enhance_heroes" }
+  d2: { text: "Розвиток бази", key: "build_territory" }
+  d3: { text: "Тренування військ", key: "train_soldiers" }
+  d4: { text: "Технології", key: "tech_research" }
+  d5: { text: "Посилення Ворона", key: "enhance_raven" }
+  d6: { text: "Посилення героїв", key: "enhance_heroes" }
+  d7: { text: "Розвиток бази", key: "build_territory" }

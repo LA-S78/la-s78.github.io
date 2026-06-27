@@ -2,20 +2,21 @@
 <table class="schedule-table">
     <thead>
         <tr>
-            <th>Time</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th><th>Day 5</th><th>Day 6</th><th>Day 7</th>
+            <th>Time</th><th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th><th>D6</th><th>D7</th>
         </tr>
     </thead>
     <tbody>
-        {% for row in site.data.survival_battle %}
+        {% assign survival_data = site.data[site.active_lang].survival_battle %}
+        {% for row in survival_data %}
         <tr>
             <td>{{ row.time }}</td>
-            <td class="{{ site.data.phase_colours[row.d1] }}">{{ row.d1 }}</td>
-            <td class="{{ site.data.phase_colours[row.d2] }}">{{ row.d2 }}</td>
-            <td class="{{ site.data.phase_colours[row.d3] }}">{{ row.d3 }}</td>
-            <td class="{{ site.data.phase_colours[row.d4] }}">{{ row.d4 }}</td>
-            <td class="{{ site.data.phase_colours[row.d5] }}">{{ row.d5 }}</td>
-            <td class="{{ site.data.phase_colours[row.d6] }}">{{ row.d6 }}</td>
-            <td class="{{ site.data.phase_colours[row.d7] }}">{{ row.d7 }}</td>
+            <td class="{{ site.data.phase_colours[row.d1.key] }}">{{ row.d1.text }}</td>
+            <td class="{{ site.data.phase_colours[row.d2.key] }}">{{ row.d2.text }}</td>
+            <td class="{{ site.data.phase_colours[row.d3.key] }}">{{ row.d3.text }}</td>
+            <td class="{{ site.data.phase_colours[row.d4.key] }}">{{ row.d4.text }}</td>
+            <td class="{{ site.data.phase_colours[row.d5.key] }}">{{ row.d5.text }}</td>
+            <td class="{{ site.data.phase_colours[row.d6.key] }}">{{ row.d6.text }}</td>
+            <td class="{{ site.data.phase_colours[row.d7.key] }}">{{ row.d7.text }}</td>
         </tr>
         {% endfor %}
     </tbody>

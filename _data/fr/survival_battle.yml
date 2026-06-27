@@ -1,0 +1,48 @@
+- time: "00:00"
+  d1: { text: "Améliorer Héros", key: "enhance_heroes" }
+  d2: { text: "Développer Territoire", key: "build_territory" }
+  d3: { text: "Entraîner Soldats", key: "train_soldiers" }
+  d4: { text: "Recherche Tech", key: "tech_research" }
+  d5: { text: "Améliorer Corbeau", key: "enhance_raven" }
+  d6: { text: "Améliorer Héros", key: "enhance_heroes" }
+  d7: { text: "Développer Territoire", key: "build_territory" }
+- time: "04:00"
+  d1: { text: "Développer Territoire", key: "build_territory" }
+  d2: { text: "Entraîner Soldats", key: "train_soldiers" }
+  d3: { text: "Recherche Tech", key: "tech_research" }
+  d4: { text: "Améliorer Corbeau", key: "enhance_raven" }
+  d5: { text: "Améliorer Héros", key: "enhance_heroes" }
+  d6: { text: "Développer Territoire", key: "build_territory" }
+  d7: { text: "Entraîner Soldats", key: "train_soldiers" }
+- time: "08:00"
+  d1: { text: "Entraîner Soldats", key: "train_soldiers" }
+  d2: { text: "Recherche Tech", key: "tech_research" }
+  d3: { text: "Améliorer Corbeau", key: "enhance_raven" }
+  d4: { text: "Améliorer Héros", key: "enhance_heroes" }
+  d5: { text: "Développer Territoire", key: "build_territory" }
+  d6: { text: "Entraîner Soldats", key: "train_soldiers" }
+  d7: { text: "Recherche Tech", key: "tech_research" }
+- time: "12:00"
+  d1: { text: "Recherche Tech", key: "tech_research" }
+  d2: { text: "Améliorer Corbeau", key: "enhance_raven" }
+  d3: { text: "Améliorer Héros", key: "enhance_heroes" }
+  d4: { text: "Développer Territoire", key: "build_territory" }
+  d5: { text: "Entraîner Soldats", key: "train_soldiers" }
+  d6: { text: "Recherche Tech", key: "tech_research" }
+  d7: { text: "Améliorer Corbeau", key: "enhance_raven" }
+- time: "16:00"
+  d1: { text: "Améliorer Corbeau", key: "enhance_raven" }
+  d2: { text: "Améliorer Héros", key: "enhance_heroes" }
+  d3: { text: "Développer Territoire", key: "build_territory" }
+  d4: { text: "Entraîner Soldats", key: "train_soldiers" }
+  d5: { text: "Recherche Tech", key: "tech_research" }
+  d6: { text: "Améliorer Corbeau", key: "enhance_raven" }
+  d7: { text: "Améliorer Héros", key: "enhance_heroes" }
+- time: "20:00"
+  d1: { text: "Améliorer Héros", key: "enhance_heroes" }
+  d2: { text: "Développer Territoire", key: "build_territory" }
+  d3: { text: "Entraîner Soldats", key: "train_soldiers" }
+  d4: { text: "Recherche Tech", key: "tech_research" }
+  d5: { text: "Améliorer Corbeau", key: "enhance_raven" }
+  d6: { text: "Améliorer Héros", key: "enhance_heroes" }
+  d7: { text: "Développer Territoire", key: "build_territory" }

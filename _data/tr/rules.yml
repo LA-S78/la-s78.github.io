@@ -1,0 +1,27 @@
+- title: "📜 1. Saygı ve Davranış"
+  content: >
+    <p><strong>Sıfır Tolerans:</strong> Zorbalık, ırkçılık, nefret söylemi, taciz veya toksik davranış yasaktır.<br><strong>Topluluk Standardı:</strong> Tüm oyunculara saygı gösterin.<br><strong>Raporlama:</strong> Bir ihlali bildirirken <strong>mutlaka</strong> ekran görüntüsü/kanıt sağlamalısınız.</p>
+- title: "🛡️ 2. NAP Koruma Kuralları"
+  content: >
+    <p><strong>NAP İttifaklarına</strong> ve onların <strong>Academies</strong> birimlerine karşı aşağıdaki eylemler yasaktır:</p><div style='background: rgba(180, 40, 40, 0.1); border: 1px solid #8b0000; padding: 10px; text-align: center; border-radius: 4px; color: #ff6b6b; margin-top: 10px;'>🚫 Saldırı yasak<br>🚫 Casusluk yasak</div>
+- title: "💎 3. Kaynak ve Harita Görgü Kuralları"
+  content: >
+    <p><strong>Karo Güvenliği:</strong> Kaynak karolarına saldırmak kesinlikle yasaktır. Oyuncuların huzurla tarım yapmasına izin verin.</p>
+- title: "🚛 4. Caravans & Black Ops"
+  content: >
+    <p><strong>Üç İhtar Sistemi</strong> ile yönetilir:</p><p><strong>1. ve 2. İhtar:</strong> R4'ler tarafından bildirilir. İhlal eden resmi bir uyarı alır.<br><strong>3. İhtar:</strong> <strong>Tek Bir Üs Saldırısı</strong> cezası ile sonuçlanır.<br><strong>Çatışma Çözümü:</strong> Mağdurlar, özür kabul edilirse şikayetten vazgeçebilirler.</p>
+- title: "🤝 5. Üye Ayartma"
+  content: >
+    <p><strong>Aktif İşe Alım:</strong> Diğer NAP ittifaklarının üyelerine ittifak değiştirmeleri için mesaj atmak yasaktır.<br><strong>Oyuncu Özerkliği:</strong> Oyuncular istedikleri zaman ittifaktan ayrılıp başkasına katılmakta özgürdür.<br><strong>Başvurular:</strong> Önceden talep gelmediği sürece kendiliğinden gelen başvurular serbesttir.</p>
+- title: "📉 6. Diğer İttifaklar"
+  content: >
+    <p><strong>Adil Oyun:</strong> NAP dışında oldukları için daha küçük ittifaklara saldırmak yasaktır.</p>
+- title: "🕊️ 7. Diplomasi ve Çatışma Çözümü"
+  content: >
+    <p>1. <strong>Özel Çözüm:</strong> Anlaşmazlıkları önce İttifak Liderleri/Diplomatlar arasında özel olarak çözün.<br>2. <strong>Tırmandırma:</strong> Çözülmezse, <strong>NAP Yönetimine</strong> taşıyın.</p><blockquote>⚠️ Kural ihlallerini, şikayetleri veya dramayı Genel veya Dünya Sohbetine taşımayın. Özel kanallarda kalın.</blockquote>
+- title: "🎓 8. Academies"
+  content: >
+    <p><strong>Tanımlama:</strong> Her NAP ittifakı <strong>bir</strong> adet academy koruyabilir.<br><strong>Yönetim:</strong> İlk 10'a giren Academies, academy statülerini korudukları sürece oy hakkına sahip değildir.</p>
+- title: "⚠️ 9. Genel Kural İhlalleri"
+  content: >
+    <p><em>(4. madde hariç)</em></p><p><strong>1. İhlal:</strong> Resmi Uyarı.<br><strong>2. İhlal:</strong> İttifaktan atılma veya <strong>NAP Kara Listesi</strong>.<br><strong>Kara Liste Politikası:</strong> Herhangi bir NAP korumalı ittifaka katılmayı yasaklar.</p>
