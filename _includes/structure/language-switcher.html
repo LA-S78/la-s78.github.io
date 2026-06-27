@@ -13,20 +13,13 @@
 <ul class="dropdown-content">
   {% for lang in site.languages %}
     
-    <!-- 1. Define the current language prefix (e.g., "/en/") -->
     {% assign current_prefix = "/" | append: page.lang | append: "/" %}
-    
-    <!-- 2. Strip it from the URL if it exists, leaving just the raw route (e.g., "/guides/") -->
     {% assign bare_url = page.url | replace_first: current_prefix, "/" %}
-    
-    <!-- 3. Prepend the target language (e.g., "/de/guides/") -->
     {% assign target_url = "/" | append: lang | append: bare_url %}
-    
-    <!-- 4. Clean up any double slashes and output a strict root-relative link -->
     {% assign final_url = target_url | replace: "//", "/" %}
     
     <li>
-      <a href="{{ final_url }}">
+      <a href="{{ final_url }}" {% if lang == page.lang %}class="lang-active"{% endif %}>
         {{ lang | upcase }}
       </a>
     </li>

@@ -580,6 +580,13 @@ table.schedule-table tr.active-row td.active-col {
     text-align: center;
 }
 
+.dropdown-content li a.lang-active {
+    color: var(--accent-color);
+    font-weight: bold;
+    pointer-events: none; 
+    background-color: rgba(184, 151, 90, 0.05); 
+}
+
 .dropdown-content li a:hover {
     background-color: #3d3734;
 }
