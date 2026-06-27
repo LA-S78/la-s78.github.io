@@ -525,7 +525,24 @@ table.schedule-table tr.active-row td.active-col {
     .lantern-header { height: 130px !important; min-height: 130px !important; }
     .header-stack { height: 130px; }
     .lantern-img { width: 130px; }
-    .debossed-title { margin-top: 30px; font-size: 1.8rem; }
+    .debossed-title {
+    position: relative; 
+    z-index: 1; 
+    margin-top: 10px; 
+    font-size: 1.1rem; 
+    margin-bottom: 0;
+    font-family: var(--font-headers); 
+    font-weight: bold;
+    letter-spacing: 2px; 
+    text-transform: uppercase; 
+    color: var(--text-main);
+    border: none; 
+    text-shadow: 0 0 8px rgba(10, 8, 5, 1);
+    
+    /* --- Added to fix translation alignment --- */
+    text-align: center;
+    width: 100%;
+    }
     
     .anchor-nav { min-height: 45px; }
     .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
