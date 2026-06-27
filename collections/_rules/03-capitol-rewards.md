@@ -5,7 +5,7 @@ nav_id: "capitol-rewards"
 
 {% assign p = site.data[site.active_lang].content.rules_page.rewards %}
 
-<h1>{{ p.title }}</h1>
+<h2>{{ p.title }}</h2>
 
 <img src="/images/rewards.jpg" 
      alt="{{ p.title }}" 

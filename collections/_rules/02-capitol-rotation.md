@@ -5,7 +5,7 @@ nav_id: "capitol-rotation"
 
 {% assign p = site.data[site.active_lang].content.rules_page.rotation %}
 
-<h1>{{ p.title }}</h1>
+<h2>{{ p.title }}</h2>
 <p>{{ p.text }}</p>
 
 <small style="color: var(--text-muted);">

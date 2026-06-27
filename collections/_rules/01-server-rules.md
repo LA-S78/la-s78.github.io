@@ -5,7 +5,7 @@ nav_id: "server-rules"
 
 {% assign p = site.data[site.active_lang].content.rules_page.server_rules %}
 
-<h1>{{ p.title }}</h1>
+<h2>{{ p.title }}</h2>
 <p>{{ p.text }}</p>
 
 <section class="duel-schedule-grid">
