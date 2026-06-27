@@ -6,4 +6,4 @@ lang: "ru"
 order: 2
 ---
 
-{% include points_table.html %}
+{% include points_table.html lang=page.lang %}
