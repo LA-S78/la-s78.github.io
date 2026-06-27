@@ -13,23 +13,20 @@
 <ul class="dropdown-content">
   {% for lang in site.languages %}
     
-    <!-- 1. Strip the current language prefix to get the raw route (e.g., "/guides/") -->
+    <!-- 1. Define the current language prefix (e.g., "/en/") -->
     {% assign current_prefix = "/" | append: page.lang | append: "/" %}
+    
+    <!-- 2. Strip it from the URL if it exists, leaving just the raw route (e.g., "/guides/") -->
     {% assign bare_url = page.url | replace_first: current_prefix, "/" %}
     
-    <!-- 2. Build the new path. (Assuming English is your default root language) -->
-    {% if lang == site.default_lang or lang == "en" %}
-      {% assign target_path = bare_url %}
-    {% else %}
-      {% assign target_path = "/" | append: lang | append: bare_url %}
-    {% endif %}
+    <!-- 3. Prepend the target language (e.g., "/de/guides/") -->
+    {% assign target_url = "/" | append: lang | append: bare_url %}
     
-    <!-- 3. Clean up any accidental double slashes in the path -->
-    {% assign target_path = target_path | replace: "//", "/" %}
+    <!-- 4. Clean up any double slashes and output a strict root-relative link -->
+    {% assign final_url = target_url | replace: "//", "/" %}
     
-    <!-- 4. Force an ABSOLUTE URL to stop the plugin from hijacking the link -->
     <li>
-      <a href="{{ site.url }}{{ site.baseurl }}{{ target_path }}">
+      <a href="{{ final_url }}">
         {{ lang | upcase }}
       </a>
     </li>
