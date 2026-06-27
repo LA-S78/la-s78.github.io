@@ -512,9 +512,17 @@ table.schedule-table tr.active-row td.active-col {
 
 /* The Trigger Button */
 .lang-trigger {
-    background: transparent;
-    border: 1px solid #3d3734;
-    color: #D1C7AC;
+    /* 1. Darken the background slightly so the green border pops */
+    background: rgba(17, 13, 11, 0.85); 
+    
+    /* 2. The Border Light: Green on the bottom-left, fading to brown on the top-right */
+    border: 1px solid;
+    border-image: linear-gradient(to top right, rgba(55, 150, 65, 0.9) 0%, var(--border-color) 60%) 1;
+    
+    /* 3. Cast a faint green ambient glow back towards the lantern */
+    box-shadow: -3px 3px 8px rgba(35, 120, 45, 0.25);
+    
+    color: var(--text-main);
     padding: 5px 10px;
     cursor: pointer;
     font-size: 0.9rem;
@@ -531,18 +539,22 @@ table.schedule-table tr.active-row td.active-col {
     border: 1px solid #3d3734;
 }
 
+/* The Dropdown Content */
 .dropdown-content {
     display: none;
     position: absolute;
     right: 0;
     top: 100%;
     background-color: #1e1b1a;
-    border: 1px solid #3d3734;
-    z-index: 9999 !important; /* Force it to the top layer */
+    z-index: 9999 !important; 
     list-style: none;
     padding: 0;
     margin: 0;
     margin-top: 2px;
+    
+    /* Ensure the dropdown box also catches the stray light when opened */
+    border: 1px solid;
+    border-image: linear-gradient(to bottom right, rgba(55, 150, 65, 0.6) 0%, var(--border-color) 40%) 1;
 }
 
 .dropdown-content li a {
