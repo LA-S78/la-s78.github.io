@@ -7,9 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        lang: [en, de, es, fr, ru, tr, uk]
     steps:
       - uses: actions/checkout@v4
 
@@ -19,8 +16,13 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      - name: Build Site
-        run: bundle exec jekyll build --config _config.yml,_configs/_config_${{ matrix.lang }}.yml --destination _site/${{ matrix.lang }}
+      - name: Build All Languages
+        run: |
+          # Loop through your language codes
+          for lang in en de es fr ru tr uk; do
+            echo "Building $lang..."
+            bundle exec jekyll build --config _config.yml,_configs/_config_$lang.yml --destination _site/$lang
+          done
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
