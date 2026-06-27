@@ -1,0 +1,520 @@
+# Save this file as: _data/duel_schedule.yml
+en:
+  - day: 0
+    name: "Day 0 | Sunday"
+    title: "Prep Day"
+    tasks:
+      - text: "<strong>Before Reset:</strong> Complete but DON'T collect Falcon Quests."
+        warning: true
+      - text: "Send lineups to Gather."
+      - text: "<strong>Save:</strong> Speedups, Recruit/Black Ops/Caravan Tickets, Raven Chests, Antitoxins, Hero Shards."
+  - day: 1
+    name: "Day 1 | Monday"
+    title: "Enhance Raven"
+    tasks:
+      - text: "Collect Falcon Quests"
+      - text: "Gather from Resource Tiles"
+      - text: "Level up Raven (Consume Fruit/Essence)"
+      - text: "Spend Stamina"
+      - text: "Use Antitoxin (If needed)"
+  - day: 2
+    name: "Day 2 | Tuesday"
+    title: "Territory Day"
+    tasks:
+      - text: "Complete Buildings"
+      - text: "<strong>DON'T</strong> collect Falcon Quests!"
+        warning: true
+      - text: "Spend Construction Speedups"
+      - text: "Use UR Caravans & Black Ops Tickets"
+      - text: "Recruit Survivors"
+  - day: 3
+    name: "Day 3 | Wednesday"
+    title: "Tech Research"
+    tasks:
+      - text: "Collect Falcon Quests"
+      - text: "Complete Research"
+      - text: "Spend Research Speedups"
+      - text: "Use Study Scrolls"
+      - text: "Open Raven Chests"
+  - day: 4
+    name: "Day 4 | Thursday"
+    title: "Enhance Heroes"
+    tasks:
+      - text: "Use Hero Omni Shards"
+      - text: "Use Skill Badges"
+      - text: "<strong>DON'T</strong> collect Falcon Quests!"
+        warning: true
+      - text: "Recruit Heroes (Tickets)"
+  - day: 5
+    name: "Day 5 | Friday"
+    title: "War Preparation"
+    tasks:
+      - text: "Collect Falcon Quests"
+      - text: "Train Soldiers"
+      - text: "Spend Training Speedups"
+      - text: "Increase Building/Tech Might (Leftover speedups)"
+  - day: 6
+    name: "Day 6 | Saturday"
+    title: "Raid the Enemy (KE)"
+    tasks:
+      - text: "Defeat Enemy Soldiers"
+      - text: "Lose Soldiers"
+      - text: "Spend leftover Speedups"
+      - text: "Use leftover Caravan/Black Ops Tickets"
+      - text: "<strong>REMEMBER TO SHIELD UP!</strong>"
+        warning: true
+
+de:
+  - day: 0
+    name: "Tag 0 | Sonntag"
+    title: "Vorbereitungstag"
+    tasks:
+      - text: "<strong>Vor dem Reset:</strong> Erledige Falken-Quests, aber sammle sie NICHT ein."
+        warning: true
+      - text: "Sende Aufstellungen zum Sammeln."
+      - text: "<strong>Sparen:</strong> Beschleuniger, Rekrutierungs-/Black-Ops-/Karawanen-Tickets, Rabentruhen, Antitoxine, Heldendefragmente."
+  - day: 1
+    name: "Tag 1 | Montag"
+    title: "Rabe verbessern"
+    tasks:
+      - text: "Falken-Quests einsammeln"
+      - text: "Ressourcen sammeln"
+      - text: "Rabe aufleveln (Obst/Essenz verbrauchen)"
+      - text: "Ausdauer ausgeben"
+      - text: "Antitoxin verwenden (falls nötig)"
+  - day: 2
+    name: "Tag 2 | Dienstag"
+    title: "Gebietstag"
+    tasks:
+      - text: "Gebäude fertigstellen"
+      - text: "Falken-Quests NICHT einsammeln!"
+        warning: true
+      - text: "Bau-Beschleuniger verwenden"
+      - text: "UR-Karawanen & Black-Ops-Tickets nutzen"
+      - text: "Überlebende rekrutieren"
+  - day: 3
+    name: "Tag 3 | Mittwoch"
+    title: "Technologie-Forschung"
+    tasks:
+      - text: "Falken-Quests einsammeln"
+      - text: "Forschung abschließen"
+      - text: "Forschungs-Beschleuniger verwenden"
+      - text: "Studienrollen nutzen"
+      - text: "Rabentruhen öffnen"
+  - day: 4
+    name: "Tag 4 | Donnerstag"
+    title: "Helden verbessern"
+    tasks:
+      - text: "Helden-Omni-Fragmente verwenden"
+      - text: "Fertigkeitsabzeichen verwenden"
+      - text: "Falken-Quests NICHT einsammeln!"
+        warning: true
+      - text: "Helden rekrutieren (Tickets)"
+  - day: 5
+    name: "Tag 5 | Freitag"
+    title: "Kriegsvorbereitung"
+    tasks:
+      - text: "Falken-Quests einsammeln"
+      - text: "Soldaten ausbilden"
+      - text: "Ausbildungs-Beschleuniger verwenden"
+      - text: "Gebäude-/Technologie-Stärke erhöhen (übrige Beschleuniger)"
+  - day: 6
+    name: "Tag 6 | Samstag"
+    title: "Feind überfallen (KE)"
+    tasks:
+      - text: "Feindliche Soldaten besiegen"
+      - text: "Soldaten verlieren"
+      - text: "Übrige Beschleuniger verwenden"
+      - text: "Übrige Karawanen-/Black-Ops-Tickets nutzen"
+      - text: "<strong>SCHILD AKTIVIEREN!</strong>"
+        warning: true
+
+es:
+  - day: 0
+    name: "Día 0 | Domingo"
+    title: "Día de preparación"
+    tasks:
+      - text: "<strong>Antes del reinicio:</strong> Completa las misiones de Halcón pero NO las recojas."
+        warning: true
+      - text: "Envía formaciones a recolectar."
+      - text: "<strong>Ahorra:</strong> Aceleradores, tickets de reclutamiento/Black Ops/caravana, cofres de cuervo, antitoxinas, fragmentos de héroe."
+  - day: 1
+    name: "Día 1 | Lunes"
+    title: "Mejorar Cuervo"
+    tasks:
+      - text: "Recoger misiones de Halcón"
+      - text: "Recolectar en casillas de recursos"
+      - text: "Sube de nivel al Cuervo (consume fruta/esencia)"
+      - text: "Gasta energía"
+      - text: "Usa antitoxina (si es necesario)"
+  - day: 2
+    name: "Día 2 | Martes"
+    title: "Día de territorio"
+    tasks:
+      - text: "Completa edificios"
+      - text: "¡NO recojas misiones de Halcón!"
+        warning: true
+      - text: "Gasta aceleradores de construcción"
+      - text: "Usa caravanas UR y tickets de Black Ops"
+      - text: "Recluta sobrevivientes"
+  - day: 3
+    name: "Día 3 | Miércoles"
+    title: "Investigación tecnológica"
+    tasks:
+      - text: "Recoger misiones de Halcón"
+      - text: "Completa investigaciones"
+      - text: "Gasta aceleradores de investigación"
+      - text: "Usa pergaminos de estudio"
+      - text: "Abre cofres de cuervo"
+  - day: 4
+    name: "Día 4 | Jueves"
+    title: "Mejorar héroes"
+    tasks:
+      - text: "Usa omnifragmentos de héroe"
+      - text: "Usa insignias de habilidad"
+      - text: "¡NO recojas misiones de Halcón!"
+        warning: true
+      - text: "Recluta héroes (tickets)"
+  - day: 5
+    name: "Día 5 | Viernes"
+    title: "Preparación para la guerra"
+    tasks:
+      - text: "Recoger misiones de Halcón"
+      - text: "Entrena soldados"
+      - text: "Gasta aceleradores de entrenamiento"
+      - text: "Aumenta el poder de edificios/tecnología (aceleradores sobrantes)"
+  - day: 6
+    name: "Día 6 | Sábado"
+    title: "Incursión al enemigo (KE)"
+    tasks:
+      - text: "Derrota soldados enemigos"
+      - text: "Pierde soldados"
+      - text: "Gasta aceleradores sobrantes"
+      - text: "Usa tickets de caravana/Black Ops sobrantes"
+      - text: "<strong>¡RECUERDA ACTIVAR TU ESCUDO!</strong>"
+        warning: true
+
+fr:
+  - day: 0
+    name: "Jour 0 | Dimanche"
+    title: "Jour de préparation"
+    tasks:
+      - text: "<strong>Avant la réinitialisation :</strong> Complétez les quêtes de Faucon mais NE LES RÉCUPÉREZ PAS."
+        warning: true
+      - text: "Envoyez des files d'attente à la collecte."
+      - text: "<strong>Économisez :</strong> Accélérateurs, tickets de recrutement/Black Ops/caravane, coffres de corbeau, antitoxines, éclats de héros."
+  - day: 1
+    name: "Jour 1 | Lundi"
+    title: "Améliorer le Corbeau"
+    tasks:
+      - text: "Récupérez les quêtes de Faucon"
+      - text: "Collectez sur les tuiles de ressources"
+      - text: "Améliorez le Corbeau (consommez des fruits/essence)"
+      - text: "Dépensez l'endurance"
+      - text: "Utilisez l'antitoxine (si nécessaire)"
+  - day: 2
+    name: "Jour 2 | Mardi"
+    title: "Jour du territoire"
+    tasks:
+      - text: "Complétez les bâtiments"
+      - text: "NE RÉCUPÉREZ PAS les quêtes de Faucon !"
+        warning: true
+      - text: "Dépensez les accélérateurs de construction"
+      - text: "Utilisez les caravanes UR et tickets Black Ops"
+      - text: "Recrutez des survivants"
+  - day: 3
+    name: "Jour 3 | Mercredi"
+    title: "Recherche technologique"
+    tasks:
+      - text: "Récupérez les quêtes de Faucon"
+      - text: "Complétez les recherches"
+      - text: "Dépensez les accélérateurs de recherche"
+      - text: "Utilisez les parchemins d'étude"
+      - text: "Ouvrez les coffres de corbeau"
+  - day: 4
+    name: "Jour 4 | Jeudi"
+    title: "Améliorer les héros"
+    tasks:
+      - text: "Utilisez les éclats Omni de héros"
+      - text: "Utilisez les insignes de compétence"
+      - text: "NE RÉCUPÉREZ PAS les quêtes de Faucon !"
+        warning: true
+      - text: "Recrutez des héros (tickets)"
+  - day: 5
+    name: "Jour 5 | Vendredi"
+    title: "Préparation à la guerre"
+    tasks:
+      - text: "Récupérez les quêtes de Faucon"
+      - text: "Entraînez des soldats"
+      - text: "Dépensez les accélérateurs d'entraînement"
+      - text: "Augmentez la puissance des bâtiments/tech (accélérateurs restants)"
+  - day: 6
+    name: "Jour 6 | Samedi"
+    title: "Raid sur l'ennemi (KE)"
+    tasks:
+      - text: "Battez les soldats ennemis"
+      - text: "Perdez des soldats"
+      - text: "Dépensez les accélérateurs restants"
+      - text: "Utilisez les tickets caravane/Black Ops restants"
+      - text: "<strong>N'OUBLIEZ PAS D'ACTIVER VOTRE BOUCLIER !</strong>"
+        warning: true
+
+it:
+  - day: 0
+    name: "Giorno 0 | Domenica"
+    title: "Giorno di preparazione"
+    tasks:
+      - text: "<strong>Prima del reset:</strong> Completa le missioni del Falco ma NON riscuoterle."
+        warning: true
+      - text: "Invia formazioni a raccogliere."
+      - text: "<strong>Risparmia:</strong> Velocizzazioni, ticket reclutamento/Black Ops/carovana, forzieri del corvo, antitossine, frammenti eroe."
+  - day: 1
+    name: "Giorno 1 | Lunedì"
+    title: "Migliora il Corvo"
+    tasks:
+      - text: "Riscuoti le missioni del Falco"
+      - text: "Raccogli dalle caselle di risorse"
+      - text: "Fai salire di livello il Corvo (consuma frutti/essenza)"
+      - text: "Spendi energia"
+      - text: "Usa antitossina (se necessario)"
+  - day: 2
+    name: "Giorno 2 | Martedì"
+    title: "Giorno del territorio"
+    tasks:
+      - text: "Completa gli edifici"
+      - text: "NON riscuotere le missioni del Falco!"
+        warning: true
+      - text: "Spendi velocizzazioni di costruzione"
+      - text: "Usa carovane UR e ticket Black Ops"
+      - text: "Recluta sopravvissuti"
+  - day: 3
+    name: "Giorno 3 | Mercoledì"
+    title: "Ricerca tecnologica"
+    tasks:
+      - text: "Riscuoti le missioni del Falco"
+      - text: "Completa le ricerche"
+      - text: "Spendi velocizzazioni di ricerca"
+      - text: "Usa pergamene di studio"
+      - text: "Apri i forzieri del corvo"
+  - day: 4
+    name: "Giorno 4 | Giovedì"
+    title: "Migliora gli eroi"
+    tasks:
+      - text: "Usa frammenti Omni eroe"
+      - text: "Usa badge abilità"
+      - text: "NON riscuotere le missioni del Falco!"
+        warning: true
+      - text: "Recluta eroi (ticket)"
+  - day: 5
+    name: "Giorno 5 | Venerdì"
+    title: "Preparazione alla guerra"
+    tasks:
+      - text: "Riscuoti le missioni del Falco"
+      - text: "Addestra soldati"
+      - text: "Spendi velocizzazioni di addestramento"
+      - text: "Aumenta la potenza di edifici/tecnologia (velocizzazioni rimanenti)"
+  - day: 6
+    name: "Giorno 6 | Sabato"
+    title: "Raid al nemico (KE)"
+    tasks:
+      - text: "Sconfiggi i soldati nemici"
+      - text: "Perdi soldati"
+      - text: "Spendi le velocizzazioni rimanenti"
+      - text: "Usa i ticket carovana/Black Ops rimanenti"
+      - text: "<strong>RICORDATI DI ATTIVARE LO SCUDO!</strong>"
+        warning: true
+
+ru:
+  - day: 0
+    name: "День 0 | Воскресенье"
+    title: "День подготовки"
+    tasks:
+      - text: "<strong>До сброса:</strong> Выполните квесты Сокола, но НЕ собирайте их."
+        warning: true
+      - text: "Отправляйте отряды на сбор."
+      - text: "<strong>Копите:</strong> Ускорения, билеты найма/Black Ops/каравана, сундуки Ворона, антитоксины, осколки героев."
+  - day: 1
+    name: "День 1 | Понедельник"
+    title: "Улучшение Ворона"
+    tasks:
+      - text: "Соберите квесты Сокола"
+      - text: "Собирайте ресурсы с плиток"
+      - text: "Повысьте уровень Ворона (используйте плоды/эссенцию)"
+      - text: "Тратьте выносливость"
+      - text: "Используйте антитоксин (при необходимости)"
+  - day: 2
+    name: "День 2 | Вторник"
+    title: "День территории"
+    tasks:
+      - text: "Завершите строительство зданий"
+      - text: "НЕ собирайте квесты Сокола!"
+        warning: true
+      - text: "Тратьте ускорения строительства"
+      - text: "Используйте караваны UR и билеты Black Ops"
+      - text: "Нанимайте выживших"
+  - day: 3
+    name: "День 3 | Среда"
+    title: "Исследования"
+    tasks:
+      - text: "Соберите квесты Сокола"
+      - text: "Завершите исследования"
+      - text: "Тратьте ускорения исследований"
+      - text: "Используйте свитки обучения"
+      - text: "Открывайте сундуки Ворона"
+  - day: 4
+    name: "День 4 | Четверг"
+    title: "Улучшение героев"
+    tasks:
+      - text: "Используйте универсальные осколки героев"
+      - text: "Используйте значки навыков"
+      - text: "НЕ собирайте квесты Сокола!"
+        warning: true
+      - text: "Нанимайте героев (билеты)"
+  - day: 5
+    name: "День 5 | Пятница"
+    title: "Подготовка к войне"
+    tasks:
+      - text: "Соберите квесты Сокола"
+      - text: "Тренируйте солдат"
+      - text: "Тратьте ускорения тренировки"
+      - text: "Увеличивайте мощь зданий/технологий (оставшиеся ускорения)"
+  - day: 6
+    name: "День 6 | Суббота"
+    title: "Рейд на врага (KE)"
+    tasks:
+      - text: "Побеждайте вражеских солдат"
+      - text: "Теряйте солдат"
+      - text: "Тратьте оставшиеся ускорения"
+      - text: "Используйте оставшиеся билеты каравана/Black Ops"
+      - text: "<strong>НЕ ЗАБУДЬТЕ АКТИВИРОВАТЬ ЩИТ!</strong>"
+        warning: true
+
+tr:
+  - day: 0
+    name: "0. Gün | Pazar"
+    title: "Hazırlık Günü"
+    tasks:
+      - text: "<strong>Sıfırlamadan Önce:</strong> Şahin Görevlerini tamamlayın ama TOPLAMAYIN."
+        warning: true
+      - text: "Toplama için dizilimleri gönderin."
+      - text: "<strong>Biriktirin:</strong> Hızlandırmalar, İşe Alım/Black Ops/Kervan Biletleri, Kuzgun Sandıkları, Antitoksinler, Kahraman Parçaları."
+  - day: 1
+    name: "1. Gün | Pazartesi"
+    title: "Kuzgunu Geliştir"
+    tasks:
+      - text: "Şahin Görevlerini toplayın"
+      - text: "Kaynak fayanslarından toplayın"
+      - text: "Kuzgunu seviye atlatın (Meyve/Öz tüketin)"
+      - text: "Dayanıklılık harcayın"
+      - text: "Antitoksin kullanın (Gerekirse)"
+  - day: 2
+    name: "2. Gün | Salı"
+    title: "Bölge Günü"
+    tasks:
+      - text: "Binaları tamamlayın"
+      - text: "Şahin Görevlerini TOPLAMAYIN!"
+        warning: true
+      - text: "İnşaat hızlandırmaları harcayın"
+      - text: "UR Kervanları ve Black Ops Biletleri kullanın"
+      - text: "Hayatta kalanları işe alın"
+  - day: 3
+    name: "3. Gün | Çarşamba"
+    title: "Teknoloji Araştırması"
+    tasks:
+      - text: "Şahin Görevlerini toplayın"
+      - text: "Araştırmaları tamamlayın"
+      - text: "Araştırma hızlandırmaları harcayın"
+      - text: "Çalışma Parşömenleri kullanın"
+      - text: "Kuzgun Sandıkları açın"
+  - day: 4
+    name: "4. Gün | Perşembe"
+    title: "Kahramanları Geliştir"
+    tasks:
+      - text: "Kahraman Omni Parçaları kullanın"
+      - text: "Beceri Rozetleri kullanın"
+      - text: "Şahin Görevlerini TOPLAMAYIN!"
+        warning: true
+      - text: "Kahraman işe alın (Biletler)"
+  - day: 5
+    name: "5. Gün | Cuma"
+    title: "Savaş Hazırlığı"
+    tasks:
+      - text: "Şahin Görevlerini toplayın"
+      - text: "Asker eğitin"
+      - text: "Eğitim hızlandırmaları harcayın"
+      - text: "Bina/Teknoloji gücünü artırın (Kalan hızlandırmalar)"
+  - day: 6
+    name: "6. Gün | Cumartesi"
+    title: "Düşmana Baskın (KE)"
+    tasks:
+      - text: "Düşman askerlerini yenin"
+      - text: "Asker kaybedin"
+      - text: "Kalan hızlandırmaları harcayın"
+      - text: "Kalan Kervan/Black Ops Biletlerini kullanın"
+      - text: "<strong>KALKAN AÇMAYI UNUTMAYIN!</strong>"
+        warning: true
+
+uk:
+  - day: 0
+    name: "День 0 | Неділя"
+    title: "День підготовки"
+    tasks:
+      - text: "<strong>До скидання:</strong> Виконайте квести Сокола, але НЕ збирайте їх."
+        warning: true
+      - text: "Відправляйте загони на збір."
+      - text: "<strong>Копіть:</strong> Прискорення, квитки найму/Black Ops/каравану, скрині Ворона, антитоксини, уламки героїв."
+  - day: 1
+    name: "День 1 | Понеділок"
+    title: "Покращення Ворона"
+    tasks:
+      - text: "Зберіть квести Сокола"
+      - text: "Збирайте ресурси з плиток"
+      - text: "Підвищіть рівень Ворона (використовуйте плоди/есенцію)"
+      - text: "Витрачайте витривалість"
+      - text: "Використовуйте антитоксин (при потребі)"
+  - day: 2
+    name: "День 2 | Вівторок"
+    title: "День території"
+    tasks:
+      - text: "Завершіть будівництво споруд"
+      - text: "НЕ збирайте квести Сокола!"
+        warning: true
+      - text: "Витрачайте прискорення будівництва"
+      - text: "Використовуйте каравани UR та квитки Black Ops"
+      - text: "Наймайте вцілілих"
+  - day: 3
+    name: "День 3 | Середа"
+    title: "Дослідження технологій"
+    tasks:
+      - text: "Зберіть квести Сокола"
+      - text: "Завершіть дослідження"
+      - text: "Витрачайте прискорення досліджень"
+      - text: "Використовуйте сувої навчання"
+      - text: "Відкривайте скрині Ворона"
+  - day: 4
+    name: "День 4 | Четвер"
+    title: "Покращення героїв"
+    tasks:
+      - text: "Використовуйте універсальні уламки героїв"
+      - text: "Використовуйте значки навичок"
+      - text: "НЕ збирайте квести Сокола!"
+        warning: true
+      - text: "Наймайте героїв (квитки)"
+  - day: 5
+    name: "День 5 | П'ятниця"
+    title: "Підготовка до війни"
+    tasks:
+      - text: "Зберіть квести Сокола"
+      - text: "Тренуйте солдатів"
+      - text: "Витрачайте прискорення тренування"
+      - text: "Підвищуйте міць споруд/технологій (залишкові прискорення)"
+  - day: 6
+    name: "День 6 | Субота"
+    title: "Рейд на ворога (KE)"
+    tasks:
+      - text: "Перемагайте ворожих солдатів"
+      - text: "Втрачайте солдатів"
+      - text: "Витрачайте залишкові прискорення"
+      - text: "Використовуйте залишкові квитки каравану/Black Ops"
+      - text: "<strong>НЕ ЗАБУДЬТЕ АКТИВУВАТИ ЩИТ!</strong>"
+        warning: true
