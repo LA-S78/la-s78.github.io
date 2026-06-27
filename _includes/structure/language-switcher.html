@@ -13,11 +13,8 @@
 <ul class="dropdown-content">
   
   {% assign url_parts = page.url | split: "/" %}
-  
   {% assign current_url_lang = url_parts[1] %}
-  
   {% assign current_prefix = "/" | append: current_url_lang | append: "/" %}
-  
   {% assign bare_url = page.url | replace_first: current_prefix, "/" %}
 
   {% for lang in site.languages %}
@@ -26,9 +23,7 @@
     {% assign final_url = target_url | replace: "//", "/" %}
     
     <li>
-      <a href="{{ final_url }}" 
-         data-turbo="false"
-         {% if lang == current_url_lang %}class="lang-active"{% endif %}>
+      <a href="{{ final_url }}" data-lang="{{ lang }}" data-turbo="false">
         {{ lang | upcase }}
       </a>
     </li>

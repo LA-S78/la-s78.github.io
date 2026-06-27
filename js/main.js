@@ -139,3 +139,30 @@
     };
 
 })(); // End of Sandbox
+
+function highlightActiveLanguage() {
+    // 1. Grab the current URL path (e.g., "/de/guides/")
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    
+    // 2. The first folder is always the language. If empty, default to 'en'
+    const currentLang = pathParts.length > 0 ? pathParts[0] : "en"; 
+
+    // 3. Find all language links
+    const langLinks = document.querySelectorAll('.dropdown-content a');
+    
+    langLinks.forEach(link => {
+        // Reset all links
+        link.classList.remove('lang-active');
+        
+        // If the data-lang matches the URL, turn it gold
+        if (link.getAttribute('data-lang') === currentLang) {
+            link.classList.add('lang-active');
+        }
+    });
+}
+
+// Run on standard initial load
+document.addEventListener("DOMContentLoaded", highlightActiveLanguage);
+
+// Run every time Turbo.js swaps the page content
+document.addEventListener("turbo:load", highlightActiveLanguage);
