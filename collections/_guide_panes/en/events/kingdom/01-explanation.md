@@ -1,7 +1,8 @@
 ---
-title: "1. Event Explanation"
+title: "Event Explanation"
 nav_id: "explanation"
 parent_guide: "kingdom"
+lang: "en"
 order: 1
 ---
 

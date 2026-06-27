@@ -1,5 +1,5 @@
 ---
-title: "Überlebenskampf: Zeitplan"
+title: "Zeitplan für den Überlebenskampf"
 nav_id: "schedule"
 parent_guide: "survival"
 lang: "de"
@@ -10,4 +10,4 @@ order: 2
 
 > #### ⚠️ Bitte beachten
 > 
-> Die Tage des Zeitplans basieren auf dem Allianz-Duell-Kalender, **NICHT** auf dem Überlebenskampf-Kalender.
+> Die Tage des Zeitplans basieren auf dem Kalender des Allianz-Duells, **NICHT** auf dem Kalender des Überlebenskampfes.

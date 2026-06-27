@@ -1,10 +1,11 @@
 ---
-title: "1. Event Explanation"
+title: "Описание События"
 nav_id: "explanation"
 parent_guide: "kingdom"
+lang: "ru"
 order: 1
 ---
 
-Kingdom Wars is a three-week event between the servers in a cluster. During these weeks, you will be paired against another server and compete for points for the week.
+Война Королевств — это трехнедельное событие между серверами в кластере. В течение этих недель вы будете в паре с другим сервером и будете соревноваться за очки недели.
 
-The winner of that week will earn invasion rights against their opponent's server to attempt and take their castle during the event on Saturday. The fight begins at **12:00 PM server time**, and continues until either side reaches 100% occupation.
+Победитель этой недели получит право на вторжение на сервер противника, чтобы попытаться захватить его замок во время события в субботу. Бой начинается в **12:00 по времени сервера** и продолжается до тех пор, пока одна из сторон не достигнет 100% оккупации.

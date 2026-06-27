@@ -1,9 +1,9 @@
 ---
-title: "Битва за выживание: Объяснение"
+title: "Объяснение Битвы за Выживание"
 nav_id: "explanation"
 parent_guide: "survival"
 lang: "ru"
 order: 1
 ---
 
-writeup goes here...
+Текст будет здесь...

@@ -8,6 +8,6 @@ order: 2
 
 {% include survival_schedule.html %}
 
-> #### ⚠️ Nota bene
+> #### ⚠️ Nota Bene
 > 
-> I giorni del programma si basano sul calendario del Duello tra Alleanze, **NON** sul calendario della Battaglia di Sopravvivenza.
+> I giorni del programma si basano sul calendario del Duello dell'Alleanza, **NON** su quello della Battaglia di Sopravvivenza.

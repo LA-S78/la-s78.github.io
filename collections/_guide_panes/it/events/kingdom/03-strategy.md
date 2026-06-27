@@ -1,11 +1,12 @@
 ---
-title: "3. Strategic Focus"
+title: "Focus Strategico"
 nav_id: "objectives"
 parent_guide: "kingdom"
+lang: "it"
 order: 3
 ---
 
-> #### ⚠️ Important Objectives
-> * It is critical that you use **all 10 chances** you have against the Demon King each day.
-> * **Only target caravans** from the server you are up against for that specific week.
-> * Save your items for the correct duel days listed in the Alliance Duel guide, and time up as much as you can of those days with your Survival Battles.
+> #### ⚠️ Obiettivi Importanti
+> * È fondamentale utilizzare **tutte e 10 le possibilità** a disposizione contro il Re Demone ogni giorno.
+> * **Attaccate solo le carovane** del server contro cui gareggiate in quella settimana specifica.
+> * Conservate i vostri oggetti per i giorni di duello corretti elencati nella guida del Duello dell'Alleanza e sincronizzate il maggior numero possibile di quei giorni con le vostre Battaglie di Sopravvivenza.

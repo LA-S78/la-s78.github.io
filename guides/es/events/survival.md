@@ -1,15 +1,22 @@
 ---
 layout: guides
-title: Batalla de Supervivencia
-subtitle: Batalla de Supervivencia
+title: "Batalla de Supervivencia"
+subtitle: "Batalla de Supervivencia"
 active_nav: guides
 guide_id: "survival"
-lang: "es"
 nav_links:
-  - name: EXPLICACIÓN
+  - name_key: "survival_explanation"
     url: "#explanation"
-  - name: HORARIO
+  - name_key: "survival_schedule"
     url: "#schedule"
-  - name: REFERENCIA
+  - name_key: "survival_reference"
     url: "#reference"
 ---
+
+{% for pane in site.guide_panes %}
+  {% if pane.path contains 'survival/' and pane.lang == page.lang %}
+    <section class="content-pane" id="{{ pane.nav_id }}">
+      {{ pane.content }}
+    </section>
+  {% endif %}
+{% endfor %}

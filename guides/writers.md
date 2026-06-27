@@ -12,13 +12,14 @@ nav_links:
     url: "#submissions"
 ---
 
-{% assign writer_sections = site.guides | where_exp: "item", "item.relative_path contains 'writers/'" %}
+{% assign writer_sections = site.guide_index | where_exp: "item", "item.path contains 'writers/'" | sort: "path" %}
 
-{% assign writer_sections = writer_sections | sort: "relative_path" %}
-
+{% if writer_sections.size > 0 %}
 {% for section in writer_sections %}
-  {% comment %} 3. Added your section wrapper back so your nav_links (#usage) actually work! {% endcomment %}
-  <section class="content-pane" id="{{ section.nav_id }}">
-    {{ section.content }}
-  </section>
+<section class="content-pane" id="{{ section.nav_id }}">
+{{ section.content }}
+</section>
 {% endfor %}
+{% else %}
+<p>DEBUG: No writer sections found in site.guide_index.</p>
+{% endif %}

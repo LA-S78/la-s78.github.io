@@ -1,15 +1,22 @@
 ---
 layout: guides
-title: Überlebenskampf
-subtitle: Überlebenskampf
+title: "Überlebenskampf"
+subtitle: "Überlebenskampf"
 active_nav: guides
 guide_id: "survival"
-lang: "de"
 nav_links:
-  - name: ERKLÄRUNG
+  - name_key: "survival_explanation"
     url: "#explanation"
-  - name: ZEITPLAN
+  - name_key: "survival_schedule"
     url: "#schedule"
-  - name: REFERENZ
+  - name_key: "survival_reference"
     url: "#reference"
 ---
+
+{% for pane in site.guide_panes %}
+  {% if pane.path contains 'survival/' and pane.lang == page.lang %}
+    <section class="content-pane" id="{{ pane.nav_id }}">
+      {{ pane.content }}
+    </section>
+  {% endif %}
+{% endfor %}

@@ -1,10 +1,11 @@
 ---
-title: "2. Golden Rules"
+title: "Règles d'Or"
 nav_id: "rules"
 parent_guide: "duel"
+lang: "fr"
 order: 2
 ---
 
-> #### ⚠️ Compliance Alert
+> #### ⚠️ Alerte de Conformité
 > 
-> **The "Falcon" Rule:** Never collect your Falcon Quests outside of the designated days. This is the single largest cause of lost potential points during Alliance Duel.
+> **La Règle du "Faucon" :** Ne récupérez jamais vos Quêtes de Faucon en dehors des jours désignés. C'est la principale cause de perte de points potentiels pendant le Duel d'Alliance.

@@ -1,15 +1,22 @@
 ---
 layout: guides
-title: Битва за виживання
-subtitle: Битва за виживання
+title: "Битва за Виживання"
+subtitle: "Битва за Виживання"
 active_nav: guides
 guide_id: "survival"
-lang: "uk"
 nav_links:
-  - name: ПОЯСНЕННЯ
+  - name_key: "survival_explanation"
     url: "#explanation"
-  - name: РОЗКЛАД
+  - name_key: "survival_schedule"
     url: "#schedule"
-  - name: ДОВІДНИК
+  - name_key: "survival_reference"
     url: "#reference"
 ---
+
+{% for pane in site.guide_panes %}
+  {% if pane.path contains 'survival/' and pane.lang == page.lang %}
+    <section class="content-pane" id="{{ pane.nav_id }}">
+      {{ pane.content }}
+    </section>
+  {% endif %}
+{% endfor %}

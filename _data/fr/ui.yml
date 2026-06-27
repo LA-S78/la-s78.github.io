@@ -116,6 +116,23 @@ nav_anchors:
   markdown_usage: "Utilisation"
   markdown_example: "Exemple"
   guide_submissions: "Soumissions"
+  #guide pages
+  #survival battle
+  survival_explanation: "Explication"
+  survival_schedule: "Calendrier"
+  survival_reference: "Référence"
+  #kingdom war
+  kingdom_explanation: "Explication"
+  kingdom_scoring: "Scores"
+  kingdom_strategy: "Stratégie"
+  #alliance duel
+  duel_schedule: "Calendrier"
+  duel_rules: "Règles"
+  #sanctuary guide
+  sanctuary_strategy: "Stratégie"
+  sanctuary_chart: "Tableau"
+  sanctuary_goals: "Objectifs"
+  sanctuary_efficiency: "Efficacité"
 
 search:
   guides: "Rechercher dans les guides..."

@@ -1,10 +1,11 @@
 ---
-title: "2. Golden Rules"
+title: "Reglas de Oro"
 nav_id: "rules"
 parent_guide: "duel"
+lang: "es"
 order: 2
 ---
 
-> #### ⚠️ Compliance Alert
+> #### ⚠️ Alerta de Cumplimiento
 > 
-> **The "Falcon" Rule:** Never collect your Falcon Quests outside of the designated days. This is the single largest cause of lost potential points during Alliance Duel.
+> **La Regla del "Halcón":** Nunca recojas tus Misiones de Halcón fuera de los días designados. Esta es la mayor causa de pérdida de puntos potenciales durante el Duelo de Alianzas.

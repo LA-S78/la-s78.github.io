@@ -1,10 +1,11 @@
 ---
-title: "2. Golden Rules"
-nav_id: "rules"
+title: "Programma del Duello"
+nav_id: "schedule"
 parent_guide: "duel"
-order: 2
+lang: "it"
+order: 1 
 ---
 
-> #### ⚠️ Compliance Alert
-> 
-> **The "Falcon" Rule:** Never collect your Falcon Quests outside of the designated days. This is the single largest cause of lost potential points during Alliance Duel.
+Il Duello dell'Alleanza è il battito dell'attività del server. Usa il programma qui sotto per sincronizzare la spesa delle risorse e massimizzare le ricompense. **Nota:** I giorni sono fissi; assicurati che le tue attività siano allineate con la fase attuale.
+
+{% include duel_schedule.html lang=page.lang %}

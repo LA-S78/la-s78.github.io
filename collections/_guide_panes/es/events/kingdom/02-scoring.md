@@ -1,7 +1,8 @@
 ---
-title: "2. Points Scoring"
+title: "Puntuación"
 nav_id: "scoring"
 parent_guide: "kingdom"
+lang: "es"
 order: 2
 ---
 

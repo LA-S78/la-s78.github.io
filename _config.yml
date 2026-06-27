@@ -16,44 +16,12 @@ collections:
     output: false
   rules:
     output: false
-  guides:
+  guide_index:
     output: false
   guide_panes:
     output: false
+    directory: "_guide_panes"
   alliance:
     output: false
 languages: ["de", "en", "es", "fr", "ru", "tr", "uk", "it"]
 default_lang: "en"
-defaults:
-  - scope:
-      path: "_guide_panes/de"
-    values:
-      lang: "de"
-  - scope:
-      path: "_guide_panes/en"
-    values:
-      lang: "en"
-  - scope:
-      path: "_guide_panes/es"
-    values:
-      lang: "es"
-  - scope:
-      path: "_guide_panes/fr"
-    values:
-      lang: "fr"
-  - scope:
-      path: "_guide_panes/ru"
-    values:
-      lang: "ru"
-  - scope:
-      path: "_guide_panes/tr"
-    values:
-      lang: "tr"
-  - scope:
-      path: "_guide_panes/uk"
-    values:
-      lang: "uk"
-  - scope:
-      path: "_guide_panes/it"
-    values:
-      lang: "it"

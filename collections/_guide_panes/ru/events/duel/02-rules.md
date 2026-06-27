@@ -1,10 +1,11 @@
 ---
-title: "2. Golden Rules"
+title: "Золотые Правила"
 nav_id: "rules"
 parent_guide: "duel"
+lang: "ru"
 order: 2
 ---
 
-> #### ⚠️ Compliance Alert
+> #### ⚠️ Предупреждение о соблюдении
 > 
-> **The "Falcon" Rule:** Never collect your Falcon Quests outside of the designated days. This is the single largest cause of lost potential points during Alliance Duel.
+> **Правило "Сокола":** Никогда не собирайте квесты Сокола вне назначенных дней. Это самая главная причина потери потенциальных очков во время Дуэли Альянсов.

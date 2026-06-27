@@ -1,9 +1,9 @@
 ---
-title: "Битва за виживання: Пояснення"
+title: "Пояснення Битви за Виживання"
 nav_id: "explanation"
 parent_guide: "survival"
 lang: "uk"
 order: 1
 ---
 
-writeup goes here...
+Текст буде тут...

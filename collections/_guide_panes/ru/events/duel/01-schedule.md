@@ -1,10 +1,11 @@
 ---
-title: "1. Duel Schedule"
+title: "Расписание Дуэли"
 nav_id: "schedule"
 parent_guide: "duel"
-order: 1
+lang: "ru"
+order: 1 
 ---
 
-The Alliance Duel is the pulse of server activity. Use the schedule below to synchronize your resource spending and maximize rewards. **Note:** Days are fixed; ensure your tasks are aligned with the current phase.
+Дуэль Альянсов — это пульс активности сервера. Используйте расписание ниже, чтобы синхронизировать траты ресурсов и максимизировать награды. **Примечание:** Дни фиксированы; убедитесь, что ваши задачи соответствуют текущей фазе.
 
-{% include duel_schedule.html %}
+{% include duel_schedule.html lang=page.lang %}

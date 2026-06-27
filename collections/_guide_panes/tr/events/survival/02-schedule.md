@@ -10,4 +10,4 @@ order: 2
 
 > #### ⚠️ Lütfen Dikkat
 > 
-> Programdaki günler İttifak Düellosu takvimine dayanmaktadır, Hayatta Kalma Savaşı takvimine **DEĞİL**.
+> Programdaki günler Hayatta Kalma Savaşı takvimine **DEĞİL**, İttifak Düellosu takvimine dayanmaktadır.

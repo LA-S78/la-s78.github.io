@@ -1,10 +1,11 @@
 ---
-title: "1. Event Explanation"
+title: "Etkinlik Açıklaması"
 nav_id: "explanation"
 parent_guide: "kingdom"
+lang: "tr"
 order: 1
 ---
 
-Kingdom Wars is a three-week event between the servers in a cluster. During these weeks, you will be paired against another server and compete for points for the week.
+Krallık Savaşları, bir kümedeki sunucular arasında geçen üç haftalık bir etkinliktir. Bu haftalar boyunca başka bir sunucuyla eşleştirilecek ve haftanın puanları için rekabet edeceksiniz.
 
-The winner of that week will earn invasion rights against their opponent's server to attempt and take their castle during the event on Saturday. The fight begins at **12:00 PM server time**, and continues until either side reaches 100% occupation.
+O haftanın kazananı, cumartesi günkü etkinlik sırasında rakiplerinin kalesini ele geçirmeye çalışmak için karşı sunucuya işgal hakları kazanacaktır. Savaş, **sunucu saatiyle 12:00'de** başlar ve iki taraftan biri %100 işgale ulaşana kadar devam eder.

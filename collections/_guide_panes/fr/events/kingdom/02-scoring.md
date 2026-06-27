@@ -1,7 +1,8 @@
 ---
-title: "2. Points Scoring"
+title: "Attribution des Points"
 nav_id: "scoring"
 parent_guide: "kingdom"
+lang: "fr"
 order: 2
 ---
 

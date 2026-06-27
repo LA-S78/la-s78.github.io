@@ -2,6 +2,7 @@
 title: "Survival Battle Schedule"
 nav_id: "schedule"
 parent_guide: "survival"
+lang: "en"
 order: 2
 ---
 

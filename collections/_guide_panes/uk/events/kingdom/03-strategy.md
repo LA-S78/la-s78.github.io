@@ -1,11 +1,12 @@
 ---
-title: "3. Strategic Focus"
+title: "Стратегічний Фокус"
 nav_id: "objectives"
 parent_guide: "kingdom"
+lang: "uk"
 order: 3
 ---
 
-> #### ⚠️ Important Objectives
-> * It is critical that you use **all 10 chances** you have against the Demon King each day.
-> * **Only target caravans** from the server you are up against for that specific week.
-> * Save your items for the correct duel days listed in the Alliance Duel guide, and time up as much as you can of those days with your Survival Battles.
+> #### ⚠️ Важливі Цілі
+> * Вкрай важливо використовувати **всі 10 спроб** проти Короля Демонів кожного дня.
+> * **Атакуйте лише каравани** того сервера, проти якого ви боретеся в цей конкретний тиждень.
+> * Збережіть свої предмети для потрібних днів дуелей, зазначених у посібнику "Дуель Альянсів", і постарайтеся максимально поєднати ці дні з вашими Битвами за Виживання.

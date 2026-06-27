@@ -1,5 +1,5 @@
 ---
-title: "Справочник по очкам"
+title: "Справка по Очкам"
 nav_id: "reference"
 parent_guide: "survival"
 lang: "ru"

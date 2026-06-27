@@ -5,8 +5,16 @@ subtitle: "Alliance Duel"
 active_nav: guides
 guide_id: "duel"
 nav_links:
-  - name: SCHEDULE
+  - name_key: "duel_schedule"
     url: "#schedule"
-  - name: RULES
+  - name_key: "duel_rules"
     url: "#rules"
 ---
+
+{% for pane in site.guide_panes %}
+{% if pane.path contains 'duel/' and pane.lang == page.lang %}
+<section class="content-pane" id="{{ pane.nav_id }}">
+{{ pane.content }}
+</section>
+{% endif %}
+{% endfor %}

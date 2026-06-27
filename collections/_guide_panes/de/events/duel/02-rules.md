@@ -1,10 +1,11 @@
 ---
-title: "2. Golden Rules"
+title: "Goldene Regeln"
 nav_id: "rules"
 parent_guide: "duel"
+lang: "de"
 order: 2
 ---
 
-> #### ⚠️ Compliance Alert
+> #### ⚠️ Compliance-Warnung
 > 
-> **The "Falcon" Rule:** Never collect your Falcon Quests outside of the designated days. This is the single largest cause of lost potential points during Alliance Duel.
+> **Die "Falken"-Regel:** Sammle deine Falken-Quests niemals außerhalb der festgelegten Tage ein. Dies ist die häufigste Ursache für verlorene potenzielle Punkte während des Allianz-Duells.

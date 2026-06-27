@@ -1,7 +1,8 @@
 ---
-title: "3. Strategic Focus"
+title: "Strategic Focus"
 nav_id: "objectives"
 parent_guide: "kingdom"
+lang: "en"
 order: 3
 ---
 

@@ -1,10 +1,11 @@
 ---
-title: "2. Golden Rules"
+title: "Altın Kurallar"
 nav_id: "rules"
 parent_guide: "duel"
+lang: "tr"
 order: 2
 ---
 
-> #### ⚠️ Compliance Alert
+> #### ⚠️ Uyumluluk Uyarısı
 > 
-> **The "Falcon" Rule:** Never collect your Falcon Quests outside of the designated days. This is the single largest cause of lost potential points during Alliance Duel.
+> **"Şahin" Kuralı:** Şahin Görevlerinizi asla belirlenen günlerin dışında toplamayın. Bu, İttifak Düellosu sırasında kaybedilen potansiyel puanların en büyük nedenidir.

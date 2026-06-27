@@ -1,15 +1,22 @@
 ---
 layout: guides
-title: Битва за выживание
-subtitle: Битва за выживание
+title: "Битва за Выживание"
+subtitle: "Битва за Выживание"
 active_nav: guides
 guide_id: "survival"
-lang: "ru"
 nav_links:
-  - name: ОБЪЯСНЕНИЕ
+  - name_key: "survival_explanation"
     url: "#explanation"
-  - name: РАСПИСАНИЕ
+  - name_key: "survival_schedule"
     url: "#schedule"
-  - name: СПРАВОЧНИК
+  - name_key: "survival_reference"
     url: "#reference"
 ---
+
+{% for pane in site.guide_panes %}
+  {% if pane.path contains 'survival/' and pane.lang == page.lang %}
+    <section class="content-pane" id="{{ pane.nav_id }}">
+      {{ pane.content }}
+    </section>
+  {% endif %}
+{% endfor %}

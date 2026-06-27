@@ -1,11 +1,12 @@
 ---
-title: "3. Strategic Focus"
+title: "Stratejik Odak"
 nav_id: "objectives"
 parent_guide: "kingdom"
+lang: "tr"
 order: 3
 ---
 
-> #### ⚠️ Important Objectives
-> * It is critical that you use **all 10 chances** you have against the Demon King each day.
-> * **Only target caravans** from the server you are up against for that specific week.
-> * Save your items for the correct duel days listed in the Alliance Duel guide, and time up as much as you can of those days with your Survival Battles.
+> #### ⚠️ Önemli Hedefler
+> * Her gün İblis Kral'a karşı sahip olduğunuz **10 şansın tamamını** kullanmanız çok önemlidir.
+> * **Sadece** o hafta için karşı karşıya olduğunuz sunucunun **kervanlarını hedef alın**.
+> * Eşyalarınızı İttifak Düellosu rehberinde listelenen doğru düello günleri için saklayın ve bu günlerin olabildiğince çoğunu Hayatta Kalma Savaşlarınızla eşzamanlı hale getirin.

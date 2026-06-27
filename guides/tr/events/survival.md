@@ -1,15 +1,22 @@
 ---
 layout: guides
-title: Hayatta Kalma Savaşı
-subtitle: Hayatta Kalma Savaşı
+title: "Hayatta Kalma Savaşı"
+subtitle: "Hayatta Kalma Savaşı"
 active_nav: guides
 guide_id: "survival"
-lang: "tr"
 nav_links:
-  - name: AÇIKLAMA
+  - name_key: "survival_explanation"
     url: "#explanation"
-  - name: PROGRAM
+  - name_key: "survival_schedule"
     url: "#schedule"
-  - name: REFERANS
+  - name_key: "survival_reference"
     url: "#reference"
 ---
+
+{% for pane in site.guide_panes %}
+  {% if pane.path contains 'survival/' and pane.lang == page.lang %}
+    <section class="content-pane" id="{{ pane.nav_id }}">
+      {{ pane.content }}
+    </section>
+  {% endif %}
+{% endfor %}

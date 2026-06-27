@@ -1,15 +1,22 @@
 ---
 layout: guides
-title: Battaglia di Sopravvivenza
-subtitle: Battaglia di Sopravvivenza
+title: "Battaglia di Sopravvivenza"
+subtitle: "Battaglia di Sopravvivenza"
 active_nav: guides
 guide_id: "survival"
-lang: "it"
 nav_links:
-  - name: SPIEGAZIONE
+  - name_key: "survival_explanation"
     url: "#explanation"
-  - name: PROGRAMMA
+  - name_key: "survival_schedule"
     url: "#schedule"
-  - name: RIFERIMENTO
+  - name_key: "survival_reference"
     url: "#reference"
 ---
+
+{% for pane in site.guide_panes %}
+  {% if pane.path contains 'survival/' and pane.lang == page.lang %}
+    <section class="content-pane" id="{{ pane.nav_id }}">
+      {{ pane.content }}
+    </section>
+  {% endif %}
+{% endfor %}

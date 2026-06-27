@@ -1,7 +1,8 @@
 ---
-title: "2. Points Scoring"
+title: "Нарахування Очок"
 nav_id: "scoring"
 parent_guide: "kingdom"
+lang: "uk"
 order: 2
 ---
 

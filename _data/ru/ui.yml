@@ -116,6 +116,23 @@ nav_anchors:
   markdown_usage: "Использование"
   markdown_example: "Пример"
   guide_submissions: "Отправка"
+  #guide pages
+  #survival battle
+  survival_explanation: "Объяснение"
+  survival_schedule: "Расписание"
+  survival_reference: "Справка"
+  #kingdom war
+  kingdom_explanation: "Объяснение"
+  kingdom_scoring: "Очки"
+  kingdom_strategy: "Стратегия"
+  #alliance duel
+  duel_schedule: "Расписание"
+  duel_rules: "Правила"
+  #sanctuary guide
+  sanctuary_strategy: "Стратегия"
+  sanctuary_chart: "Таблица"
+  sanctuary_goals: "Цели"
+  sanctuary_efficiency: "Эффективность"
 
 search:
   guides: "Поиск по гайдам..."

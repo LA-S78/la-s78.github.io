@@ -1,10 +1,11 @@
 ---
-title: "1. Event Explanation"
+title: "Event-Erklärung"
 nav_id: "explanation"
 parent_guide: "kingdom"
+lang: "de"
 order: 1
 ---
 
-Kingdom Wars is a three-week event between the servers in a cluster. During these weeks, you will be paired against another server and compete for points for the week.
+Der Königreichskrieg ist ein dreiwöchiges Event zwischen den Servern in einem Cluster. Während dieser Wochen werdet ihr mit einem anderen Server zusammengebracht und tretet um Punkte für die Woche an.
 
-The winner of that week will earn invasion rights against their opponent's server to attempt and take their castle during the event on Saturday. The fight begins at **12:00 PM server time**, and continues until either side reaches 100% occupation.
+Der Gewinner dieser Woche erhält das Invasionsrecht gegen den Server des Gegners, um zu versuchen, dessen Burg während des Events am Samstag einzunehmen. Der Kampf beginnt um **12:00 Uhr Serverzeit** und dauert an, bis eine Seite 100% Besatzung erreicht.

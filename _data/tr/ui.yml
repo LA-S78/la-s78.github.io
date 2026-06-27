@@ -116,6 +116,23 @@ nav_anchors:
   markdown_usage: "Kullanım"
   markdown_example: "Örnek"
   guide_submissions: "Gönderimler"
+  #guide pages
+  #survival battle
+  survival_explanation: "Açıklama"
+  survival_schedule: "Program"
+  survival_reference: "Referans"
+  #kingdom war
+  kingdom_explanation: "Açıklama"
+  kingdom_scoring: "Puanlama"
+  kingdom_strategy: "Strateji"
+  #alliance duel
+  duel_schedule: "Program"
+  duel_rules: "Kurallar"
+  #sanctuary guide
+  sanctuary_strategy: "Strateji"
+  sanctuary_chart: "Tablo"
+  sanctuary_goals: "Hedefler"
+  sanctuary_efficiency: "Verimlilik"
 
 search:
   guides: "Rehberlerde ara..."

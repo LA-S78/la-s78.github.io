@@ -10,4 +10,4 @@ order: 2
 
 > #### ⚠️ Veuillez noter
 > 
-> Les jours du calendrier sont basés sur le calendrier du Duel d'Alliances, et **NON** sur celui de la Bataille de Survie.
+> Les jours du calendrier sont basés sur le calendrier du Duel d'Alliance, et **NON** sur celui de la Bataille de Survie.

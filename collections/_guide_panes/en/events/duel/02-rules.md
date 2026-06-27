@@ -1,7 +1,8 @@
 ---
-title: "2. Golden Rules"
+title: "Golden Rules"
 nav_id: "rules"
 parent_guide: "duel"
+lang: "en"
 order: 2
 ---
 
