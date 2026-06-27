@@ -1,6 +1,6 @@
 <div class="guide-grid">
     {% for item in site.data.guide_directory[include.category] %}
-    <a href="{{ item.url }}" 
+    <a href="/{{ site.active_lang | default: 'en' }}{{ item.url }}" 
        class="guide-card searchable-item {% if item.status == 'unavailable' %}unavailable{% endif %}" 
        {% if item.span %}style="grid-column: span {{ item.span }};"{% endif %}
        {% if item.tooltip %}title="{{ item.tooltip }}"{% endif %}>
