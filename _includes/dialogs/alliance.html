@@ -1,12 +1,11 @@
 <dialog id="mapZoom" onclick="this.close()">
-    <img src="/images/map.jpg" alt="NAP Territory Map">
+    <img src="/{{ site.active_lang }}/images/map.jpg" alt="NAP Territory Map">
     <div class="dialog-controls" onclick="event.stopPropagation()">
-        <a href="/images/map.jpg" 
+        <a href="/{{ site.active_lang }}/images/map.jpg" 
            download="LastAsylum-Map.jpg" 
            class="dialog-btn">
            Download
         </a>  
         <button onclick="document.getElementById('mapZoom').close()">Close</button>
-        
     </div>
 </dialog>
