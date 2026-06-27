@@ -22,11 +22,14 @@
     {% assign target_url = "/" | append: lang | append: bare_url %}
     {% assign final_url = target_url | replace: "//", "/" %}
     
-    <li>
-      <a href="{{ final_url }}" data-lang="{{ lang }}" data-turbo="false">
-        {{ lang | upcase }}
-      </a>
-    </li>
+<li>
+  <a href="{{ final_url }}" 
+     data-lang="{{ lang }}" 
+     data-turbo="false" 
+     data-turbo-action="reload">
+     {{ lang | upcase }}
+  </a>
+</li>
     
   {% endfor %}
 </ul>
