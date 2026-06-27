@@ -18,10 +18,19 @@ jobs:
           
       - name: Build All Languages
         run: |
+          # 1. Build each language into its own subdirectory
           for lang in en de es fr ru tr uk; do
             echo "Building $lang..."
             bundle exec jekyll build --config _config.yml,_configs/_config_$lang.yml --destination _site/$lang
           done
+          
+          # 2. Copy static assets to the root of _site/
+          # This makes them available at /images/, /css/, and /js/ for all languages
+          cp -r images _site/
+          cp -r css _site/
+          cp -r js _site/
+          
+          # 3. Copy the redirect file to the root
           cp redirect.html _site/index.html
 
       - name: Upload Pages Artifact
