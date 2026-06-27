@@ -24,10 +24,6 @@ collections:
     output: false
 languages: ["de", "en", "es", "fr", "ru", "tr", "uk"]
 default_lang: "en"
-exclude_from_localization:
-  - images/
-  - css/
-  - js/
 defaults:
   - scope:
       path: "_guide_panes/de"

@@ -4,11 +4,11 @@
       <span class="lang-active">{{ lang | upcase }}</span>
     {% else %}
       {% comment %} 
-        Since page.url is absolute (e.g., /guides/combat.html), 
-        we simply prepend the target language folder.
+        Standardized path logic: 
+        If page.url is '/', result is '/lang/'
+        If page.url is '/rules.html', result is '/lang/rules.html'
       {% endcomment %}
       {% assign target_path = '/' | append: lang | append: page.url %}
-      
       <a href="{{ target_path }}" class="lang-link">{{ lang | upcase }}</a>
     {% endif %}
   {% endfor %}
