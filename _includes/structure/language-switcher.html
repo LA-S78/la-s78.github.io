@@ -15,10 +15,10 @@
     
     {% if page.url contains "/guides/" %}
       {% assign parts = page.url | split: '/' %}
-      {% capture new_url %}/{{ lang }}/guides/{{ parts.last }}/{% endcapture %}
+      {% capture new_url %}/{{ lang }}/guides/{{ parts.last }}{% endcapture %}
     {% else %}
       {% assign parts = page.url | split: '/' %}
-      {% capture new_url %}/{{ lang }}/{{ parts.last }}/{% endcapture %}
+      {% capture new_url %}/{{ lang }}/{{ parts.last }}{% endcapture %}
     {% endif %}
     
     <li>
