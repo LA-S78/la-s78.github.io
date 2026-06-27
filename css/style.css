@@ -142,6 +142,14 @@ body {
     color: var(--accent-color);
     letter-spacing: 1.5px; 
     margin-top: 2px;
+    
+    /* --- Added for Localization --- */
+    font-size: clamp(0.75rem, 3vw, 1rem); /* Fluid sizing */
+    white-space: normal; /* Allows wrapping if absolutely necessary */
+    line-height: 1.4; /* Prevents stacked text from overlapping */
+    max-width: 90%; 
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* --- EQUALIZER: Normalizes gap between Header and Content --- */
@@ -168,7 +176,12 @@ body {
 .nav-wrapper::after  { content: ""; flex: 0 0 20px; }
 
 .anchor-link {
-    flex: 0 0 115px; height: 28px; display: flex; align-items: center; justify-content: center;
+    /* flex: 0 0 115px; <-- REMOVED hardcoded width */
+    padding: 0 16px; /* Dynamically sizes the button based on text length */
+    white-space: nowrap; /* Forces the word to stay on one line */
+    flex-shrink: 0; /* Prevents the browser from squishing the button */
+    
+    height: 28px; display: flex; align-items: center; justify-content: center;
     text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: bold; 
     border: 1px solid var(--border-color); border-radius: 6px; 
     transition: background 0.2s ease, color 0.2s ease; margin: 0;
@@ -517,7 +530,11 @@ table.schedule-table tr.active-row td.active-col {
     .anchor-nav { min-height: 45px; }
     .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
     .nav-wrapper::before, .nav-wrapper::after { display: none; }
-    .anchor-link { flex: 0 0 150px; height: 32px; font-size: 0.85rem; }
+    .anchor-link { 
+    height: 32px; 
+    font-size: 0.85rem; 
+    padding: 0 24px; /* Slightly wider padding for desktop */
+    }
 
     .scroll-btn { display: flex; align-items: center; justify-content: center; }
 
