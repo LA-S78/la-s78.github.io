@@ -1,12 +1,13 @@
 ---
-title: "2. Survival Battle Schedule"
+title: "Битва за выживание: Расписание"
 nav_id: "schedule"
 parent_guide: "survival"
+lang: "ru"
 order: 2
 ---
 
 {% include survival_schedule.html %}
 
-> #### ⚠️ Please Note
+> #### ⚠️ Обратите внимание
 > 
-> The schedule's days are based on the Alliance Duel calendar, **NOT** the Survival Battle calendar.
+> Дни в расписании основаны на календаре Дуэли Альянсов, а **НЕ** на календаре Битвы за выживание.

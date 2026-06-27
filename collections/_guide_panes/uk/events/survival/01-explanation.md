@@ -1,7 +1,8 @@
 ---
-title: "1. Survival Battle Explanation"
+title: "Битва за виживання: Пояснення"
 nav_id: "explanation"
 parent_guide: "survival"
+lang: "uk"
 order: 1
 ---
 

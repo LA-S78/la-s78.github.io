@@ -1,12 +1,13 @@
 ---
-title: "2. Survival Battle Schedule"
+title: "Überlebenskampf: Zeitplan"
 nav_id: "schedule"
 parent_guide: "survival"
+lang: "de"
 order: 2
 ---
 
 {% include survival_schedule.html %}
 
-> #### ⚠️ Please Note
+> #### ⚠️ Bitte beachten
 > 
-> The schedule's days are based on the Alliance Duel calendar, **NOT** the Survival Battle calendar.
+> Die Tage des Zeitplans basieren auf dem Allianz-Duell-Kalender, **NICHT** auf dem Überlebenskampf-Kalender.

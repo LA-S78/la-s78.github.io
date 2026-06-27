@@ -1,7 +1,8 @@
 ---
-title: "1. Survival Battle Explanation"
+title: "Explicación de la Batalla de Supervivencia"
 nav_id: "explanation"
 parent_guide: "survival"
+lang: "es"
 order: 1
 ---
 

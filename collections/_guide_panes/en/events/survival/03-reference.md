@@ -1,5 +1,5 @@
 ---
-title: "3. Points Reference"
+title: "Points Reference"
 nav_id: "reference"
 parent_guide: "survival"
 order: 3

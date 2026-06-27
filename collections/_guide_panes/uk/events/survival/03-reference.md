@@ -1,7 +1,8 @@
 ---
-title: "3. Points Reference"
+title: "Довідник з очок"
 nav_id: "reference"
 parent_guide: "survival"
+lang: "uk"
 order: 3
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "2. Survival Battle Schedule"
+title: "Survival Battle Schedule"
 nav_id: "schedule"
 parent_guide: "survival"
 order: 2

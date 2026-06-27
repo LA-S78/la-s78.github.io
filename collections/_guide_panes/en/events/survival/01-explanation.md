@@ -1,5 +1,5 @@
 ---
-title: "1. Survival Battle Explanation"
+title: "Survival Battle Explanation"
 nav_id: "explanation"
 parent_guide: "survival"
 order: 1

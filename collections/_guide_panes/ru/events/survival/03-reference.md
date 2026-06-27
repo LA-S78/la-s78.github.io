@@ -1,7 +1,8 @@
 ---
-title: "3. Points Reference"
+title: "Справочник по очкам"
 nav_id: "reference"
 parent_guide: "survival"
+lang: "ru"
 order: 3
 ---
 

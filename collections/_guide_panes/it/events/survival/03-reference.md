@@ -1,7 +1,8 @@
 ---
-title: "3. Points Reference"
+title: "Riferimento Punti"
 nav_id: "reference"
 parent_guide: "survival"
+lang: "it"
 order: 3
 ---
 
