@@ -3,7 +3,7 @@ title: "Server Rules"
 nav_id: "server-rules"
 ---
 
-{% assign strings = site.data[site.active_lang].ui.rules_page %}
+{% assign strings = site.data[site.active_lang].content.rules_page %}
 
 {{ strings.intro }}
 
