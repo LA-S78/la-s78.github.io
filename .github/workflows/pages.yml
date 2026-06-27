@@ -15,20 +15,14 @@ jobs:
         with:
           ruby-version: '3.2'
           bundler-cache: true
-
+          
       - name: Build All Languages
         run: |
-          mkdir -p _site
           for lang in en de es fr ru tr uk; do
             echo "Building $lang..."
             bundle exec jekyll build --config _config.yml,_configs/_config_$lang.yml --destination _site/$lang
           done
-          cp index.html _site/
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '_site/'
+          cp redirect.html _site/index.html
 
   deploy:
     needs: build
