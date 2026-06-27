@@ -3,6 +3,10 @@ title: "NAP Ranks"
 nav_id: "nap-ranks"
 ---
 
+{% assign p = site.data[site.active_lang].content.alliance_page.nap_alliances %}
+
+<h2>{{ p.title }}</h2>
+<p>{{ p.text }}</p>
 The current Top 4 alliance hierarchy within the NAP:
 
 <table class="list-table">

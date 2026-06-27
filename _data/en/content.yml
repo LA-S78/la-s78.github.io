@@ -1,10 +1,55 @@
 rules_page:
-    server_rules:
+  server_rules:
+    title: "Server Rules"
+    text: "The following guidelines are mandatory to ensure fair play and server stability."
+  rotation:
+    title: "Capitol Rotation"
+    text: "To ascend to Top 3 status, the contender must surpass a current holder's Might for Alliance Duel Days 3-5 of Kingdom War Week 1."
+    note: "*Note: Snapshots will be taken 10 minutes before reset.*"
+  rewards:
+    title: "Capitol Rewards"
+alliance_page:
+  nap_alliances:
+    title: "NAP Alliances"
+  nap_academies:
+    title: "NAP Academies"
+  nap_ranks:
+    title: "NAP Ranks"
+    text: "The current Top 4 alliance hierarchy within the NAP:"
+  nap_territory:
+    title: "NAP Territory"
+  blacklist:
+    title: "Blacklist"
+    text: "The following players are banned from NAP alliances and are kill-on-sight:"
+    text2: "The following alliances are kill-on-sight:"
+guides_page:
+  strategy:
+    title: "Game Strategy"
+  events:
+    title: "Game Events"
+  shops:
+    title: "Economy & Shops"
+  writers:
+    title: "Guide Authors"
+    text: "Guide authors are needed! Click "
+    text2: "here!"
+    link_url: "/guides/writers.html"
+home_page:
+  pinned:
+    title: "Critical Intel"
+    server_rules: "Server Rules"
+    capitol_rotation: "Capitol Rotation"
+    capitol_rewards: "Capitol Rewards"
+    nap_alliances: "NAP Alliances"
+    blacklist: "Blacklist"
+  directories:
+    title: "Directories"
+    rules:
       title: "Server Rules"
-      text: "The following guidelines are mandatory to ensure fair play and server stability."
-    rotation:
-      title: "Capitol Rotation"
-      text: "To ascend to Top 3 status, the contender must surpass a current holder's Might for Alliance Duel Days 3-5 of Kingdom War Week 1."
-      note: "*Note: Snapshots will be taken 10 minutes before reset.*"
-    rewards:
-      title: "Capitol Rewards"
+      sub: "Rules, routines, and punishments"
+    guides:
+      title: "Game Guides"
+      sub: "Mechanics, strategies, & builds"
+    alliance:
+      title: "Alliance & Diplomacy"
+      sub: "Ranks, diplomatic status, & territory agreements"

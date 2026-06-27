@@ -18,8 +18,7 @@ dialogs:
 ---
 
 {% for section in site.alliance %}
-<section class="content-pane" id="{{ section.nav_id }}">
-  <h2>{{ section.title }}</h2>
-  {{ section.content }}
-</section>
+  <section class="content-pane" id="{{ section.nav_id }}">
+      {{ section.content }}
+  </section>
 {% endfor %}

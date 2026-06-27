@@ -3,6 +3,10 @@ title: "Blacklist"
 nav_id: "blacklist"
 ---
 
+{% assign p = site.data[site.active_lang].content.alliance_page.nap_territory %}
+
+<h2>{{ p.title }}</h2>
+<p>{{ p.text }}</p>
 The following players are banned from NAP alliances and are kill-on-sight:
 
 <table class="list-table">
@@ -11,6 +15,7 @@ The following players are banned from NAP alliances and are kill-on-sight:
   {% endfor %}
 </table>
 
+<p>{{ p.text2 }}</p>
 The following alliances are kill-on-sight:
 
 <table class="list-table">
