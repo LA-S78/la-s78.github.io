@@ -10,5 +10,3 @@ nav_id: "authors"
   {{ p.text }}
   <a href="/{{ site.active_lang }}{{ p.link_url }}">{{ p.text2 }}</a>
 </p>
-
-Guide authors are needed! Click [here!](/guides/writers.html)
