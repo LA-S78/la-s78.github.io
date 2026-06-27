@@ -13,7 +13,6 @@ dialogs:
   - dialogs/rules.html
 ---
 
-
 {% for section in site.rules %}
   <section class="content-pane" id="{{ section.nav_id }}">
       <h2>{{ section.title }}</h2>

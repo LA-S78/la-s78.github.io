@@ -34,3 +34,82 @@ guides:
   sanctuary_shop: "Магазин укриття"
   campaign_shop: "Магазин кампанії"
   premium_shop: "Преміум набори"
+  
+pages:
+  home:
+    title: "Головна"
+    subtitle: "Довідник виживання"
+  rules:
+    title: "Правила"
+    subtitle: "Правила сервера та ротація"
+  guides:
+    title: "Гайди"
+    subtitle: "Гайди по грі"
+  alliance:
+    title: "Альянс"
+    subtitle: "Альянс та дипломатія"
+  guide_panes:
+    heroes:
+      title: "Герої та збірки"
+      subtitle: "Герої та збірки"
+    combat:
+      title: "Бій"
+      subtitle: "Бій"
+    building:
+      title: "Будівництво та тех."
+      subtitle: "Будівництво та тех."
+    resources:
+      title: "Керування ресурсами"
+      subtitle: "Керування ресурсами"
+    sanctuary:
+      title: "Гайд по Святилищу"
+      subtitle: "Гайд по Святилищу"
+    duel:
+      title: "Дуель альянсів"
+      subtitle: "Дуель альянсів"
+    survival:
+      title: "Битва на виживання"
+      subtitle: "Битва на виживання"
+    kingdom:
+      title: "Війна королівств"
+      subtitle: "Війна королівств"
+    canyon:
+      title: "Захоплення каньйону"
+      subtitle: "Захоплення каньйону"
+    cheese:
+      title: "Cheese-пастка"
+      subtitle: "Cheese-пастка"
+    thief:
+      title: "Полювання на злодіїв"
+      subtitle: "Полювання на злодіїв"
+    pickaxe:
+      title: "Дворфійська кирка"
+      subtitle: "Дворфийська кирка"
+    crystal:
+      title: "Кристальна долина"
+      subtitle: "Кристальна долина"
+    alliance_shop:
+      title: "Магазин альянсу"
+      subtitle: "Магазин альянсу"
+    honor_shop:
+      title: "Магазин честі"
+      subtitle: "Магазин честі"
+    sanctuary_shop:
+      title: "Магазин святилища"
+      subtitle: "Магазин святилища"
+    campaign_shop:
+      title: "Магазин кампанії"
+      subtitle: "Магазин кампанії"
+    premium_shop:
+      title: "Преміум та набори"
+      subtitle: "Преміум та набори"
+
+nav_anchors:
+  server_rules: "Правила сервера"
+  rotation: "Ротація"
+  rewards: "Нагороди"
+  nap_alliances: "Альянси NAP"
+  nap_academies: "Академії NAP"
+  nap_ranks: "Ранги NAP"
+  nap_territory: "Територія NAP"
+  blacklist: "Чорний список"

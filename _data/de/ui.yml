@@ -34,3 +34,82 @@ guides:
   sanctuary_shop: "Sanktuarium-Shop"
   campaign_shop: "Kampagnen-Shop"
   premium_shop: "Premium-Pakete"
+
+pages:
+  home:
+    title: "Startseite"
+    subtitle: "Überlebens-Kompendium"
+  rules:
+    title: "Regeln"
+    subtitle: "Server-Regeln & Rotation"
+  guides:
+    title: "Guides"
+    subtitle: "Spiel-Guides"
+  alliance:
+    title: "Allianz"
+    subtitle: "Allianz & Diplomatie"
+  guide_panes:
+    heroes:
+      title: "Helden & Builds"
+      subtitle: "Helden & Builds"
+    combat:
+      title: "Kampf"
+      subtitle: "Kampf"
+    building:
+      title: "Gebäude & Tech"
+      subtitle: "Gebäude & Tech"
+    resources:
+      title: "Ressourcen-Mgmt"
+      subtitle: "Ressourcen-Mgmt"
+    sanctuary:
+      title: "Zuflucht-Guide"
+      subtitle: "Zuflucht-Guide"
+    duel:
+      title: "Allianz-Duell"
+      subtitle: "Allianz-Duell"
+    survival:
+      title: "Überlebenskampf"
+      subtitle: "Überlebenskampf"
+    kingdom:
+      title: "Königreichskrieg"
+      subtitle: "Königreichskrieg"
+    canyon:
+      title: "Canyon-Eroberung"
+      subtitle: "Canyon-Eroberung"
+    cheese:
+      title: "Cheese-Falle"
+      subtitle: "Cheese-Falle"
+    thief:
+      title: "Diebesjagd"
+      subtitle: "Diebesjagd"
+    pickaxe:
+      title: "Zwergenspitzhacke"
+      subtitle: "Zwergenspitzhacke"
+    crystal:
+      title: "Kristalltal"
+      subtitle: "Kristalltal"
+    alliance_shop:
+      title: "Allianz-Shop"
+      subtitle: "Allianz-Shop"
+    honor_shop:
+      title: "Ehren-Shop"
+      subtitle: "Ehren-Shop"
+    sanctuary_shop:
+      title: "Zuflucht-Shop"
+      subtitle: "Zuflucht-Shop"
+    campaign_shop:
+      title: "Kampagnen-Shop"
+      subtitle: "Kampagnen-Shop"
+    premium_shop:
+      title: "Premium & Edelstein-Pakete"
+      subtitle: "Premium & Edelstein-Pakete"
+
+nav_anchors:
+  server_rules: "Server-Regeln"
+  rotation: "Rotation"
+  rewards: "Belohnungen"
+  nap_alliances: "NAP-Allianzen"
+  nap_academies: "NAP-Akademien"
+  nap_ranks: "NAP-Ränge"
+  nap_territory: "NAP-Gebiet"
+  blacklist: "Schwarze Liste"

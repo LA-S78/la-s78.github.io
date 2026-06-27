@@ -34,3 +34,82 @@ guides:
   sanctuary_shop: "Boutique du Sanctuaire"
   campaign_shop: "Boutique de Campagne"
   premium_shop: "Packs Premium"
+
+pages:
+  home:
+    title: "Accueil"
+    subtitle: "Compendium de Survie"
+  rules:
+    title: "Règles"
+    subtitle: "Règles du serveur & Rotation"
+  guides:
+    title: "Guides"
+    subtitle: "Guides de jeu"
+  alliance:
+    title: "Alliance"
+    subtitle: "Alliance & Diplomatie"
+  guide_panes:
+    heroes:
+      title: "Héros & Builds"
+      subtitle: "Héros & Builds"
+    combat:
+      title: "Combat"
+      subtitle: "Combat"
+    building:
+      title: "Bâtiments & Tech"
+      subtitle: "Bâtiments & Tech"
+    resources:
+      title: "Gestion des ressources"
+      subtitle: "Gestion des ressources"
+    sanctuary:
+      title: "Guide du Sanctuaire"
+      subtitle: "Guide du Sanctuaire"
+    duel:
+      title: "Duel d'Alliance"
+      subtitle: "Duel d'Alliance"
+    survival:
+      title: "Bataille de Survie"
+      subtitle: "Bataille de Survie"
+    kingdom:
+      title: "Guerre du Royaume"
+      subtitle: "Guerre du Royaume"
+    canyon:
+      title: "Conquête du Canyon"
+      subtitle: "Conquête du Canyon"
+    cheese:
+      title: "Piège Cheese"
+      subtitle: "Piège Cheese"
+    thief:
+      title: "Chasse aux voleurs"
+      subtitle: "Chasse aux voleurs"
+    pickaxe:
+      title: "Pioche des Nains"
+      subtitle: "Pioche des Nains"
+    crystal:
+      title: "Vallée de Cristal"
+      subtitle: "Vallée de Cristal"
+    alliance_shop:
+      title: "Boutique d'Alliance"
+      subtitle: "Boutique d'Alliance"
+    honor_shop:
+      title: "Boutique d'Honneur"
+      subtitle: "Boutique d'Honneur"
+    sanctuary_shop:
+      title: "Boutique du Sanctuaire"
+      subtitle: "Boutique du Sanctuaire"
+    campaign_shop:
+      title: "Boutique de Campagne"
+      subtitle: "Boutique de Campagne"
+    premium_shop:
+      title: "Packs Premium & Gemmes"
+      subtitle: "Packs Premium & Gemmes"
+
+nav_anchors:
+  server_rules: "Règles du serveur"
+  rotation: "Rotation"
+  rewards: "Récompenses"
+  nap_alliances: "Alliances NAP"
+  nap_academies: "Académies NAP"
+  nap_ranks: "Rangs NAP"
+  nap_territory: "Territoire NAP"
+  blacklist: "Liste noire"

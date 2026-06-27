@@ -34,3 +34,82 @@ guides:
   sanctuary_shop: "Sığınak Mağazası"
   campaign_shop: "Sefer Mağazası"
   premium_shop: "Premium Paketler"
+
+pages:
+  home:
+    title: "Ana Sayfa"
+    subtitle: "Hayatta Kalma Kılavuzu"
+  rules:
+    title: "Kurallar"
+    subtitle: "Sunucu Kuralları ve Rotasyon"
+  guides:
+    title: "Rehberler"
+    subtitle: "Oyun Rehberleri"
+  alliance:
+    title: "İttifak"
+    subtitle: "İttifak ve Diplomasi"
+  guide_panes:
+    heroes:
+      title: "Kahramanlar ve Dizilimler"
+      subtitle: "Kahramanlar ve Dizilimler"
+    combat:
+      title: "Savaş"
+      subtitle: "Savaş"
+    building:
+      title: "İnşaat ve Teknoloji"
+      subtitle: "İnşaat ve Teknoloji"
+    resources:
+      title: "Kaynak Yönetimi"
+      subtitle: "Kaynak Yönetimi"
+    sanctuary:
+      title: "Sığınak Rehberi"
+      subtitle: "Sığınak Rehberi"
+    duel:
+      title: "İttifak Düellosu"
+      subtitle: "İttifak Düellosu"
+    survival:
+      title: "Hayatta Kalma Savaşı"
+      subtitle: "Hayatta Kalma Savaşı"
+    kingdom:
+      title: "Krallık Savaşı"
+      subtitle: "Krallık Savaşı"
+    canyon:
+      title: "Kanyon Fethi"
+      subtitle: "Kanyon Fethi"
+    cheese:
+      title: "Peynir Tuzağı"
+      subtitle: "Peynir Tuzağı"
+    thief:
+      title: "Hırsız Avı"
+      subtitle: "Hırsız Avı"
+    pickaxe:
+      title: "Cüce Kazması"
+      subtitle: "Cüce Kazması"
+    crystal:
+      title: "Kristal Vadisi"
+      subtitle: "Kristal Vadisi"
+    alliance_shop:
+      title: "İttifak Mağazası"
+      subtitle: "İttifak Mağazası"
+    honor_shop:
+      title: "Onur Mağazası"
+      subtitle: "Onur Mağazası"
+    sanctuary_shop:
+      title: "Sığınak Mağazası"
+      subtitle: "Sığınak Mağazası"
+    campaign_shop:
+      title: "Kampanya Mağazası"
+      subtitle: "Kampanya Mağazası"
+    premium_shop:
+      title: "Premium ve Elmas Paketleri"
+      subtitle: "Premium ve Elmas Paketleri"
+
+nav_anchors:
+  server_rules: "Sunucu Kuralları"
+  rotation: "Rotasyon"
+  rewards: "Ödüller"
+  nap_alliances: "NAP İttifakları"
+  nap_academies: "NAP Akademileri"
+  nap_ranks: "NAP Dereceleri"
+  nap_territory: "NAP Bölgesi"
+  blacklist: "Kara Liste"

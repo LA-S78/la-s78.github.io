@@ -34,3 +34,82 @@ guides:
   sanctuary_shop: "Tienda del Santuario"
   campaign_shop: "Tienda de Campaña"
   premium_shop: "Paquetes Premium"
+
+pages:
+  home:
+    title: "Inicio"
+    subtitle: "Compendio de Supervivencia"
+  rules:
+    title: "Reglas"
+    subtitle: "Reglas del Servidor y Rotación"
+  guides:
+    title: "Guías"
+    subtitle: "Guías de Juego"
+  alliance:
+    title: "Alianza"
+    subtitle: "Alianza y Diplomacia"
+  guide_panes:
+    heroes:
+      title: "Héroes y Builds"
+      subtitle: "Héroes y Builds"
+    combat:
+      title: "Combate"
+      subtitle: "Combate"
+    building:
+      title: "Edificios y Tech"
+      subtitle: "Edificios y Tech"
+    resources:
+      title: "Gestión de Recursos"
+      subtitle: "Gestión de Recursos"
+    sanctuary:
+      title: "Guía del Santuario"
+      subtitle: "Guía del Santuario"
+    duel:
+      title: "Duelo de Alianzas"
+      subtitle: "Duelo de Alianzas"
+    survival:
+      title: "Batalla de Supervivencia"
+      subtitle: "Batalla de Supervivencia"
+    kingdom:
+      title: "Guerra del Reino"
+      subtitle: "Guerra del Reino"
+    canyon:
+      title: "Conquista del Cañón"
+      subtitle: "Conquista del Cañón"
+    cheese:
+      title: "Trampa Cheese"
+      subtitle: "Trampa Cheese"
+    thief:
+      title: "Caza de Ladrones"
+      subtitle: "Caza de Ladrones"
+    pickaxe:
+      title: "Pico Enano"
+      subtitle: "Pico Enano"
+    crystal:
+      title: "Valle de Cristal"
+      subtitle: "Valle de Cristal"
+    alliance_shop:
+      title: "Tienda de Alianza"
+      subtitle: "Tienda de Alianza"
+    honor_shop:
+      title: "Tienda de Honor"
+      subtitle: "Tienda de Honor"
+    sanctuary_shop:
+      title: "Tienda del Santuario"
+      subtitle: "Tienda del Santuario"
+    campaign_shop:
+      title: "Tienda de Campaña"
+      subtitle: "Tienda de Campaña"
+    premium_shop:
+      title: "Packs Premium y Gemas"
+      subtitle: "Packs Premium y Gemas"
+
+nav_anchors:
+  server_rules: "Reglas del Servidor"
+  rotation: "Rotación"
+  rewards: "Recompensas"
+  nap_alliances: "Alianzas NAP"
+  nap_academies: "Academias NAP"
+  nap_ranks: "Rangos NAP"
+  nap_territory: "Territorio NAP"
+  blacklist: "Lista Negra"
