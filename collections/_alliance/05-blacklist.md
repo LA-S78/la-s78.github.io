@@ -7,7 +7,6 @@ nav_id: "blacklist"
 
 <h2>{{ p.title }}</h2>
 <p>{{ p.text }}</p>
-The following players are banned from NAP alliances and are kill-on-sight:
 
 <table class="list-table">
   {% for player in site.data.diplomacy.blacklist_players %}
@@ -16,7 +15,6 @@ The following players are banned from NAP alliances and are kill-on-sight:
 </table>
 
 <p>{{ p.text2 }}</p>
-The following alliances are kill-on-sight:
 
 <table class="list-table">
   {% for alliance in site.data.diplomacy.blacklist_alliances %}

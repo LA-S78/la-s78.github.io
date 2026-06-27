@@ -12,7 +12,7 @@ nav_id: "nap-academies"
   <tr>
     <td>
       <strong>{{ academy.name }}</strong>
-      <span class="sub-text">{{ p.text }} {{ academy.parent }}</span>
+      <span class="sub-text">{{ p.text }}{{ academy.parent }}</span>
     </td>
   </tr>
   {% endfor %}

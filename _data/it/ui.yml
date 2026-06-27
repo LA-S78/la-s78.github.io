@@ -1,0 +1,79 @@
+header:
+  title: "LAST ASYLUM"
+  subtitle: "Compendio di Sopravvivenza"
+
+search:
+  placeholder: "Cerca..."
+
+footer:
+  nav_home: "Home"
+  nav_rules: "Regole"
+  nav_guides: "Guida"
+  nav_alliance: "Alleanza"
+  aria_home: "Vai alla pagina Home"
+  aria_rules: "Vai alla pagina Regole del Server"
+  aria_guides: "Vai alla pagina Guida"
+  aria_alliance: "Vai alla pagina Alleanza e Diplomazia"
+
+guides:
+  heroes: "Eroi & Build"
+  combat: "Combattimento"
+  building: "Edifici & Tech"
+  resources: "Gestione Risorse"
+  sanctuary: "Guida al Santuario"
+  duel: "Duello tra Alleanze"
+  survival: "Battaglia di Sopravvivenza"
+  kingdom: "Guerra tra Regni"
+  canyon: "Conquista del Canyon"
+  cheese: "Trappola Cheese"
+  thief: "Caccia al Ladro"
+  pickaxe: "Piccone Nanico"
+  crystal: "Valle di Cristallo"
+  alliance_shop: "Negozio Alleanza"
+  honor_shop: "Negozio d'Onore"
+  sanctuary_shop: "Negozio Santuario"
+  campaign_shop: "Negozio Campagna"
+  premium_shop: "Pacchetti Premium & Gemme"
+
+pages:
+  home:
+    title: "Home"
+    subtitle: "Compendio di Sopravvivenza"
+  rules:
+    title: "Regole"
+    subtitle: "Regole del Server & Rotazione"
+  guides:
+    title: "Guida"
+    subtitle: "Guide di Gioco"
+  alliance:
+    title: "Alleanza"
+    subtitle: "Alleanza & Diplomazia"
+  guide_panes:
+    heroes: { title: "Eroi & Build", subtitle: "Eroi & Build" }
+    combat: { title: "Combattimento", subtitle: "Combattimento" }
+    building: { title: "Edifici & Tech", subtitle: "Edifici & Tech" }
+    resources: { title: "Gestione Risorse", subtitle: "Gestione Risorse" }
+    sanctuary: { title: "Guida al Santuario", subtitle: "Guida al Santuario" }
+    duel: { title: "Duello tra Alleanze", subtitle: "Duello tra Alleanze" }
+    survival: { title: "Battaglia di Sopravvivenza", subtitle: "Battaglia di Sopravvivenza" }
+    kingdom: { title: "Guerra tra Regni", subtitle: "Guerra tra Regni" }
+    canyon: { title: "Conquista del Canyon", subtitle: "Conquista del Canyon" }
+    cheese: { title: "Trappola Cheese", subtitle: "Trappola Cheese" }
+    thief: { title: "Caccia al Ladro", subtitle: "Caccia al Ladro" }
+    pickaxe: { title: "Piccone Nanico", subtitle: "Piccone Nanico" }
+    crystal: { title: "Valle di Cristallo", subtitle: "Valle di Cristallo" }
+    alliance_shop: { title: "Negozio Alleanza", subtitle: "Negozio Alleanza" }
+    honor_shop: { title: "Negozio d'Onore", subtitle: "Negozio d'Onore" }
+    sanctuary_shop: { title: "Negozio Santuario", subtitle: "Negozio Santuario" }
+    campaign_shop: { title: "Negozio Campagna", subtitle: "Negozio Campagna" }
+    premium_shop: { title: "Pacchetti Premium & Gemme", subtitle: "Pacchetti Premium & Gemme" }
+
+nav_anchors:
+  server_rules: "Regole Server"
+  rotation: "Rotazione"
+  rewards: "Ricompense"
+  nap_alliances: "Alleanze NAP"
+  nap_academies: "Accademie NAP"
+  nap_ranks: "Gradi NAP"
+  nap_territory: "Territorio NAP"
+  blacklist: "Lista Nera"

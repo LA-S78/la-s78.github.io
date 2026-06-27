@@ -13,6 +13,7 @@ alliance_page:
     title: "NAP Alliances"
   nap_academies:
     title: "NAP Academies"
+    text: "Academy of "
   nap_ranks:
     title: "NAP Ranks"
     text: "The current Top 4 alliance hierarchy within the NAP:"

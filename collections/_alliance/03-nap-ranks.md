@@ -7,7 +7,6 @@ nav_id: "nap-ranks"
 
 <h2>{{ p.title }}</h2>
 <p>{{ p.text }}</p>
-The current Top 4 alliance hierarchy within the NAP:
 
 <table class="list-table">
   {% for alliance in site.data.diplomacy.nap_ranks %}

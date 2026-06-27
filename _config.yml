@@ -22,7 +22,7 @@ collections:
     output: false
   alliance:
     output: false
-languages: ["de", "en", "es", "fr", "ru", "tr", "uk"]
+languages: ["de", "en", "es", "fr", "ru", "tr", "uk", "it"]
 default_lang: "en"
 defaults:
   - scope:
@@ -53,3 +53,7 @@ defaults:
       path: "_guide_panes/uk"
     values:
       lang: "uk"
+  - scope:
+      path: "_guide_panes/it"
+    values:
+      lang: "it"

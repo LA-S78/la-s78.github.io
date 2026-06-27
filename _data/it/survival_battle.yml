@@ -1,0 +1,48 @@
+- time: "00:00"
+  d1: { text: "Migliora Eroi", key: "enhance_heroes" }
+  d2: { text: "Costruisci Territorio", key: "build_territory" }
+  d3: { text: "Addestra Soldati", key: "train_soldiers" }
+  d4: { text: "Ricerca Tech", key: "tech_research" }
+  d5: { text: "Migliora Raven", key: "enhance_raven" }
+  d6: { text: "Migliora Eroi", key: "enhance_heroes" }
+  d7: { text: "Costruisci Territorio", key: "build_territory" }
+- time: "04:00"
+  d1: { text: "Costruisci Territorio", key: "build_territory" }
+  d2: { text: "Addestra Soldati", key: "train_soldiers" }
+  d3: { text: "Ricerca Tech", key: "tech_research" }
+  d4: { text: "Migliora Raven", key: "enhance_raven" }
+  d5: { text: "Migliora Eroi", key: "enhance_heroes" }
+  d6: { text: "Costruisci Territorio", key: "build_territory" }
+  d7: { text: "Addestra Soldati", key: "train_soldiers" }
+- time: "08:00"
+  d1: { text: "Addestra Soldati", key: "train_soldiers" }
+  d2: { text: "Ricerca Tech", key: "tech_research" }
+  d3: { text: "Migliora Raven", key: "enhance_raven" }
+  d4: { text: "Migliora Eroi", key: "enhance_heroes" }
+  d5: { text: "Costruisci Territorio", key: "build_territory" }
+  d6: { text: "Addestra Soldati", key: "train_soldiers" }
+  d7: { text: "Ricerca Tech", key: "tech_research" }
+- time: "12:00"
+  d1: { text: "Ricerca Tech", key: "tech_research" }
+  d2: { text: "Migliora Raven", key: "enhance_raven" }
+  d3: { text: "Migliora Eroi", key: "enhance_heroes" }
+  d4: { text: "Costruisci Territorio", key: "build_territory" }
+  d5: { text: "Addestra Soldati", key: "train_soldiers" }
+  d6: { text: "Ricerca Tech", key: "tech_research" }
+  d7: { text: "Migliora Raven", key: "enhance_raven" }
+- time: "16:00"
+  d1: { text: "Migliora Raven", key: "enhance_raven" }
+  d2: { text: "Migliora Eroi", key: "enhance_heroes" }
+  d3: { text: "Costruisci Territorio", key: "build_territory" }
+  d4: { text: "Addestra Soldati", key: "train_soldiers" }
+  d5: { text: "Ricerca Tech", key: "tech_research" }
+  d6: { text: "Migliora Raven", key: "enhance_raven" }
+  d7: { text: "Migliora Eroi", key: "enhance_heroes" }
+- time: "20:00"
+  d1: { text: "Migliora Eroi", key: "enhance_heroes" }
+  d2: { text: "Costruisci Territorio", key: "build_territory" }
+  d3: { text: "Addestra Soldati", key: "train_soldiers" }
+  d4: { text: "Ricerca Tech", key: "tech_research" }
+  d5: { text: "Migliora Raven", key: "enhance_raven" }
+  d6: { text: "Migliora Eroi", key: "enhance_heroes" }
+  d7: { text: "Costruisci Territorio", key: "build_territory" }
