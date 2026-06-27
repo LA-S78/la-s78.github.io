@@ -30,4 +30,9 @@
     <link rel="icon" href="/images/favicon.png">
     <script type="module" src="/js/turbo.js"></script>
     <script src="/js/main.js?v={{ site.time | date: '%s' }}" defer></script>
+
+    {% if jekyll.environment == "development" %}
+      <script src="/js/dev-router.js" defer></script>
+    {% endif %}
+
 </head>
