@@ -24,6 +24,11 @@ jobs:
           done
           cp redirect.html _site/index.html
 
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site/'
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
