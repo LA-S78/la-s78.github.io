@@ -43,16 +43,18 @@ body {
 
 /* --- 3. JEKYLL INCLUDES (HEADER) --- */
 .lantern-header {
-    /* MOBILE DEFAULT: 90px */
     height: 90px !important;
     min-height: 90px !important;
-    
-    position: sticky; top: 0; z-index: 20;
+    position: sticky; top: 0;
     margin: 0 !important;
     padding: 0 20px !important;
     border: none; 
     border-bottom: 1px solid var(--border-color);
     background-color: var(--nav-bg); 
+    
+    /* ADDED/UPDATED STACKING RULES */
+    z-index: 200; 
+    overflow: visible !important;
     
     background:
         radial-gradient(circle 400px at center 40%, rgba(35, 120, 45, 0.3) 0%, transparent 100%),
@@ -63,7 +65,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: visible; 
 }
 
 .header-stack {
@@ -106,14 +107,21 @@ body {
 
 .lantern-glow-bleed {
     position: absolute;
-    top: 100%; 
-    left: 50%;
-    transform: translateX(-50%);
+    top: 100%; /* Pins it perfectly to the bottom edge of the header */
+    left: 0;
     width: 100vw;
-    height: 60px;
-    background: linear-gradient(to bottom, rgba(35, 120, 45, 0.15), transparent);
+    
+    /* The physical line - just 1px thick */
+    height: 1px; 
+    
+    /* Creates a concentrated light in the center that fades into the edges */
+    background: radial-gradient(ellipse at center, rgba(55, 150, 65, 0.8) 0%, transparent 60%);
+    
+    /* Casts a subtle, tight glow onto the top pixel of the nav bar */
+    box-shadow: 0 1px 4px rgba(35, 120, 45, 0.6);
+    
     pointer-events: none;
-    z-index: -1; 
+    z-index: 250; /* Ensures it sits neatly on top of the nav seam */
 }
 
 .header-side-btn { width: 40px; display: flex; align-items: center; justify-content: flex-start; }
@@ -495,6 +503,55 @@ table.schedule-table tr.active-row td.active-col {
 .scroll-btn.left { left: -35px; }
 .scroll-btn.right { right: -35px; }
 
+/* The Trigger Button */
+.lang-trigger {
+    background: transparent;
+    border: 1px solid #3d3734;
+    color: #D1C7AC;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* The Dropdown Content */
+.lang-dropdown {
+    position: relative;
+    z-index: 9999 !important; /* Ensure it overrides everything */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #1e1b1a;
+    border: 1px solid #3d3734;
+    z-index: 9999 !important; /* Force it to the top layer */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 2px;
+}
+
+.dropdown-content li a {
+    color: #D1C7AC;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.dropdown-content li a:hover {
+    background-color: #3d3734;
+}
+
+.lang-dropdown:hover .dropdown-content {
+    display: block;
+}
+
 /* --- 6. ANIMATIONS --- */
 @keyframes lantern-flicker {
     0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
@@ -523,6 +580,9 @@ table.schedule-table tr.active-row td.active-col {
     .lantern-header { height: 130px !important; min-height: 130px !important; }
     .header-stack { height: 130px; }
     .lantern-img { width: 130px; }
+    .lantern-glow-bleed {
+        top: 130px; 
+    }
     .debossed-title {
         margin-top: 30px; 
         font-size: 1.8rem; 

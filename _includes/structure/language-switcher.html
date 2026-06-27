@@ -1,15 +1,22 @@
-<div class="language-switcher">
-  {% for lang in site.languages %}
-    {% if lang == site.active_lang %}
-      <span class="lang-active">{{ lang | upcase }}</span>
-    {% else %}
-      {% comment %} 
-        Standardized path logic: 
-        If page.url is '/', result is '/lang/'
-        If page.url is '/rules.html', result is '/lang/rules.html'
-      {% endcomment %}
-      {% assign target_path = '/' | append: lang | append: page.url %}
-      <a href="{{ target_path }}" class="lang-link">{{ lang | upcase }}</a>
-    {% endif %}
-  {% endfor %}
+<div class="lang-dropdown">
+  <button class="lang-trigger">
+    <!-- Inline Compass/Globe SVG -->
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      <path d="M2 12h20"/>
+    </svg>
+    <span class="active-lang">{{ page.lang | upcase }}</span>
+    <span class="caret">▼</span>
+  </button>
+  
+  <ul class="dropdown-content">
+    {% for lang in site.languages %}
+      <li>
+        <a href="{{ page.url | replace: page.lang, lang }}">
+          {{ lang | upcase }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
 </div>

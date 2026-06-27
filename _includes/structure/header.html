@@ -12,6 +12,8 @@
             {% else %}
                 {% assign header_subtitle = site.data[site.active_lang].ui.header.subtitle %}
             {% endif %}
+
+               <div class="lantern-glow-bleed"></div>
             
             <div class="subtitle">{{ header_subtitle }}</div>
         </div>
@@ -19,5 +21,4 @@
         {% include structure/language-switcher.html %}
 
     </div>
-    <div class="lantern-glow-bleed"></div>
 </header>
