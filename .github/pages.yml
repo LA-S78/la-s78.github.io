@@ -1,10 +1,42 @@
+name: Build Multilingual Site
+
+on:
+  push:
+    branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        lang: [de, en, es, fr, ru, tr, uk]
+        lang: [en, de, es, fr, ru, tr, uk]
     steps:
       - uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+
       - name: Build Site
-        run: bundle exec jekyll build --config _config.yml,_configs/_config_${{ matrix.lang }}.yml --destination _site/${{ matrix.lang }}
+        run: bundle exec jekyll build --config _config.yml,_config_${{ matrix.lang }}.yml --destination _site/${{ matrix.lang }}
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: '_site/'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
