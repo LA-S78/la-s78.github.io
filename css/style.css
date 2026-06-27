@@ -75,6 +75,27 @@ body {
     margin: 0 !important;
 }
 
+.language-switcher {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.lang-link {
+    text-decoration: none;
+    color: #B8975A; /* Match your existing theme */
+    opacity: 0.7;
+}
+
+.lang-active {
+    font-weight: bold;
+    color: #fff;
+    pointer-events: none;
+}
+
 .lantern-img {
     width: 90px;
     height: auto;

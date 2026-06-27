@@ -1,0 +1,17 @@
+<div class="language-switcher">
+  {% for lang in site.languages %}
+    {% if lang == site.active_lang %}
+      <span class="lang-active">{{ lang | upcase }}</span>
+    {% else %}
+      {% comment %} 
+        Here is the magic: we replace the current language segment 
+        with the new language segment in the current page URL.
+      {% endcomment %}
+      {% assign current_segment = '/' | append: site.active_lang | append: '/' %}
+      {% assign target_segment = '/' | append: lang | append: '/' %}
+      {% assign new_url = page.url | replace_first: current_segment, target_segment %}
+      
+      <a href="{{ new_url | relative_url }}" class="lang-link">{{ lang | upcase }}</a>
+    {% endif %}
+  {% endfor %}
+</div>
