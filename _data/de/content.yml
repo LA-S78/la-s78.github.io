@@ -1,0 +1,56 @@
+rules_page:
+  server_rules:
+    title: "Serverregeln"
+    text: "Die folgenden Richtlinien sind obligatorisch, um Fairplay und Serverstabilität zu gewährleisten."
+  rotation:
+    title: "Kapitol-Rotation"
+    text: "Um den Top-3-Status zu erreichen, muss der Anwärter die Macht eines aktuellen Inhabers an den Duelltagen 3-5 der Kingdom War-Woche 1 übertreffen."
+    note: "*Hinweis: Macht-Snapshots werden 10 Minuten vor dem täglichen Reset gemacht.*"
+  rewards:
+    title: "Kapitol-Belohnungen"
+alliance_page:
+  nap_alliances:
+    title: "NAP-Allianzen"
+  nap_academies:
+    title: "NAP-Akademien"
+    text: "Akademie von "
+  nap_ranks:
+    title: "NAP-Ränge"
+    text: "Die aktuelle Top-4-Allianz-Hierarchie innerhalb des NAP:"
+  nap_territory:
+    title: "NAP-Gebiet"
+  blacklist:
+    title: "Blacklist"
+    text: "Die folgenden Spieler sind von NAP-Allianzen verbannt und dürfen angegriffen werden:"
+    text2: "Die folgenden Allianzen dürfen angegriffen werden:"
+guides_page:
+  strategy:
+    title: "Spielstrategie"
+  events:
+    title: "Spielereignisse"
+  shops:
+    title: "Wirtschaft & Shops"
+  writers:
+    title: "Guide-Autoren"
+    text: "Guide-Autoren werden gesucht! Klicke "
+    text2: "hier!"
+    link_url: "/guides/writers.html"
+home_page:
+  pinned:
+    title: "Wichtige Infos"
+    server_rules: "Serverregeln"
+    capitol_rotation: "Kapitol-Rotation"
+    capitol_rewards: "Kapitol-Belohnungen"
+    nap_alliances: "NAP-Allianzen"
+    blacklist: "Blacklist"
+  directories:
+    title: "Verzeichnisse"
+    rules:
+      title: "Serverregeln"
+      sub: "Regeln, Routinen und Strafen"
+    guides:
+      title: "Spiel-Guides"
+      sub: "Mechaniken, Strategien & Builds"
+    alliance:
+      title: "Allianz & Diplomatie"
+      sub: "Ränge, Diplomatie-Status & Gebietsabkommen"

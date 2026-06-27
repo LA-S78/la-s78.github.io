@@ -1,0 +1,56 @@
+rules_page:
+  server_rules:
+    title: "Regole del Server"
+    text: "Le seguenti linee guida sono obbligatorie per garantire il fair play e la stabilità del server."
+  rotation:
+    title: "Rotazione del Campidoglio"
+    text: "Per ascendere allo status di Top 3, il contendente deve superare la Potenza di un detentore attuale durante i giorni 3-5 del Duello tra Alleanze nella Settimana 1 della Guerra dei Regni."
+    note: "*Nota: Le istantanee della potenza vengono prese 10 minuti prima del ripristino giornaliero.*"
+  rewards:
+    title: "Ricompense del Campidoglio"
+alliance_page:
+  nap_alliances:
+    title: "Alleanze NAP"
+  nap_academies:
+    title: "Accademie NAP"
+    text: "Accademia di "
+  nap_ranks:
+    title: "Gradi NAP"
+    text: "L'attuale gerarchia delle 4 migliori alleanze all'interno del NAP:"
+  nap_territory:
+    title: "Territorio NAP"
+  blacklist:
+    title: "Lista Nera"
+    text: "I seguenti giocatori sono banditi dalle alleanze NAP e sono da attaccare a vista:"
+    text2: "Le seguenti alleanze sono da attaccare a vista:"
+guides_page:
+  strategy:
+    title: "Strategia di Gioco"
+  events:
+    title: "Eventi"
+  shops:
+    title: "Economia & Negozi"
+  writers:
+    title: "Autori di Guide"
+    text: "Si cercano autori di guide! Clicca "
+    text2: "qui!"
+    link_url: "/guides/writers.html"
+home_page:
+  pinned:
+    title: "Info Critiche"
+    server_rules: "Regole del Server"
+    capitol_rotation: "Rotazione del Campidoglio"
+    capitol_rewards: "Ricompense del Campidoglio"
+    nap_alliances: "Alleanze NAP"
+    blacklist: "Lista Nera"
+  directories:
+    title: "Directory"
+    rules:
+      title: "Regole del Server"
+      sub: "Regole, routine e punizioni"
+    guides:
+      title: "Guide di Gioco"
+      sub: "Meccaniche, strategie & build"
+    alliance:
+      title: "Alleanza & Diplomazia"
+      sub: "Gradi, stato diplomatico & accordi territoriali"

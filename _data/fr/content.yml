@@ -1,0 +1,56 @@
+rules_page:
+  server_rules:
+    title: "Règles du Serveur"
+    text: "Les directives suivantes sont obligatoires pour garantir le fair-play et la stabilité du serveur."
+  rotation:
+    title: "Rotation du Capitole"
+    text: "Pour atteindre le statut Top 3, le prétendant doit surpasser la Puissance d'un détenteur actuel lors des jours 3 à 5 du Duel d'Alliances de la Semaine 1 de la Guerre des Royaumes."
+    note: "*Note : Les captures de puissance sont prises 10 minutes avant la réinitialisation quotidienne.*"
+  rewards:
+    title: "Récompenses du Capitole"
+alliance_page:
+  nap_alliances:
+    title: "Alliances NAP"
+  nap_academies:
+    title: "Académies NAP"
+    text: "Académie de "
+  nap_ranks:
+    title: "Rangs NAP"
+    text: "La hiérarchie actuelle des 4 meilleures alliances au sein du NAP :"
+  nap_territory:
+    title: "Territoire NAP"
+  blacklist:
+    title: "Liste Noire"
+    text: "Les joueurs suivants sont bannis des alliances NAP et doivent être attaqués à vue :"
+    text2: "Les alliances suivantes doivent être attaquées à vue :"
+guides_page:
+  strategy:
+    title: "Stratégie de Jeu"
+  events:
+    title: "Événements"
+  shops:
+    title: "Économie & Boutiques"
+  writers:
+    title: "Auteurs de Guides"
+    text: "Nous recherchons des auteurs de guides ! Cliquez "
+    text2: "ici !"
+    link_url: "/guides/writers.html"
+home_page:
+  pinned:
+    title: "Infos Critiques"
+    server_rules: "Règles du Serveur"
+    capitol_rotation: "Rotation du Capitole"
+    capitol_rewards: "Récompenses du Capitole"
+    nap_alliances: "Alliances NAP"
+    blacklist: "Liste Noire"
+  directories:
+    title: "Répertoires"
+    rules:
+      title: "Règles du Serveur"
+      sub: "Règles, routines et punitions"
+    guides:
+      title: "Guides de Jeu"
+      sub: "Mécaniques, stratégies & builds"
+    alliance:
+      title: "Alliance & Diplomatie"
+      sub: "Rangs, statut diplomatique & accords territoriaux"

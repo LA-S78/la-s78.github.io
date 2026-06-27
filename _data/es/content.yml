@@ -1,0 +1,56 @@
+rules_page:
+  server_rules:
+    title: "Reglas del Servidor"
+    text: "Las siguientes pautas son obligatorias para garantizar el juego limpio y la estabilidad del servidor."
+  rotation:
+    title: "Rotación del Capitolio"
+    text: "Para ascender al estatus de Top 3, el contendiente debe superar el Poder de un titular actual durante los días 3-5 del Duelo de Alianzas en la Semana 1 de la Guerra de Reinos."
+    note: "*Nota: Las capturas de poder se toman 10 minutos antes del reinicio diario.*"
+  rewards:
+    title: "Recompensas del Capitolio"
+alliance_page:
+  nap_alliances:
+    title: "Alianzas NAP"
+  nap_academies:
+    title: "Academias NAP"
+    text: "Academia de "
+  nap_ranks:
+    title: "Rangos NAP"
+    text: "La jerarquía actual de las Top 4 alianzas dentro del NAP:"
+  nap_territory:
+    title: "Territorio NAP"
+  blacklist:
+    title: "Lista Negra"
+    text: "Los siguientes jugadores están prohibidos en las alianzas NAP y son objetivo de ataque:"
+    text2: "Las siguientes alianzas son objetivo de ataque:"
+guides_page:
+  strategy:
+    title: "Estrategia de Juego"
+  events:
+    title: "Eventos"
+  shops:
+    title: "Economía y Tiendas"
+  writers:
+    title: "Autores de Guías"
+    text: "¡Se necesitan autores de guías! Haz clic "
+    text2: "aquí!"
+    link_url: "/guides/writers.html"
+home_page:
+  pinned:
+    title: "Información Crítica"
+    server_rules: "Reglas del Servidor"
+    capitol_rotation: "Rotación del Capitolio"
+    capitol_rewards: "Recompensas del Capitolio"
+    nap_alliances: "Alianzas NAP"
+    blacklist: "Lista Negra"
+  directories:
+    title: "Directorios"
+    rules:
+      title: "Reglas del Servidor"
+      sub: "Reglas, rutinas y castigos"
+    guides:
+      title: "Guías de Juego"
+      sub: "Mecánicas, estrategias y builds"
+    alliance:
+      title: "Alianza y Diplomacia"
+      sub: "Rangos, estado diplomático y acuerdos territoriales"

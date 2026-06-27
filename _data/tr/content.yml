@@ -1,0 +1,56 @@
+rules_page:
+  server_rules:
+    title: "Sunucu Kuralları"
+    text: "Adil oyun ve sunucu istikrarını sağlamak için aşağıdaki kurallar zorunludur."
+  rotation:
+    title: "Kapitol Rotasyonu"
+    text: "İlk 3'e girmek için, aday Krallık Savaşı 1. Hafta, İttifak Düellosu 3-5. Günlerde mevcut tutucunun Gücünü aşmalıdır."
+    note: "*Not: Güç snapshot'ları günlük sıfırlamadan 10 dakika önce alınır.*"
+  rewards:
+    title: "Kapitol Ödülleri"
+alliance_page:
+  nap_alliances:
+    title: "NAP İttifakları"
+  nap_academies:
+    title: "NAP Akademileri"
+    text: "Akademisi: "
+  nap_ranks:
+    title: "NAP Dereceleri"
+    text: "NAP içindeki mevcut İlk 4 ittifak hiyerarşisi:"
+  nap_territory:
+    title: "NAP Bölgesi"
+  blacklist:
+    title: "Kara Liste"
+    text: "Aşağıdaki oyuncular NAP ittifaklarından yasaklıdır ve vur-öldür hedefidir:"
+    text2: "Aşağıdaki ittifaklar vur-öldür hedefidir:"
+guides_page:
+  strategy:
+    title: "Oyun Stratejisi"
+  events:
+    title: "Oyun Etkinlikleri"
+  shops:
+    title: "Ekonomi & Mağazalar"
+  writers:
+    title: "Rehber Yazarları"
+    text: "Rehber yazarları aranıyor! Tıkla "
+    text2: "buraya!"
+    link_url: "/guides/writers.html"
+home_page:
+  pinned:
+    title: "Kritik Bilgiler"
+    server_rules: "Sunucu Kuralları"
+    capitol_rotation: "Kapitol Rotasyonu"
+    capitol_rewards: "Kapitol Ödülleri"
+    nap_alliances: "NAP İttifakları"
+    blacklist: "Kara Liste"
+  directories:
+    title: "Dizinler"
+    rules:
+      title: "Sunucu Kuralları"
+      sub: "Kurallar, rutinler ve cezalar"
+    guides:
+      title: "Oyun Rehberleri"
+      sub: "Mekanikler, stratejiler ve dizilimler"
+    alliance:
+      title: "İttifak & Diplomasi"
+      sub: "Dereceler, diplomasi durumu ve bölge anlaşmaları"
