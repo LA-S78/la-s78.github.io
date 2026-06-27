@@ -17,7 +17,9 @@ jobs:
           bundler-cache: true
           
       - name: Build All Languages
-        JEKYLL_ENV: production  run: |
+        env:
+          JEKYLL_ENV: production
+        run: |
           # 1. Build each language into its own subdirectory
           for lang in en de es fr ru tr uk it; do
             echo "Building $lang..."
