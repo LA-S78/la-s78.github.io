@@ -3,7 +3,7 @@ layout: default
 page_key: "guides"
 subtitle: Game Guides
 active_nav: guides
-permalink: /guides/
+permalink: /guides/index.html
 ---
 
 {% include structure/search.html search_type="guides" %}
