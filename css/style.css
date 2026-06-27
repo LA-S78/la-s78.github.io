@@ -541,17 +541,19 @@ table.schedule-table tr.active-row td.active-col {
 
 /* The Dropdown Content */
 .dropdown-content {
-    /* 1. Smooth Fade (replaces display: none) */
     visibility: hidden;
     opacity: 0;
-    pointer-events: none; /* Prevents clicking when hidden */
-    
-    /* The Forgiveness Timer: Delays closing for 0.2s if the mouse slips */
+    pointer-events: none; 
     transition: opacity 0.2s ease, visibility 0s linear 0.2s;
     
     position: absolute;
     right: 0;
-    top: calc(100% + 2px); /* Replaces margin-top for better spacing */
+    top: calc(100% + 2px); 
+    
+    /* 1. THE FIX: Force exact width of the trigger button */
+    width: 100%; 
+    box-sizing: border-box; /* Ensures the borders don't make it 2px wider than the parent */
+    
     background-color: #1e1b1a;
     z-index: 9999 !important; 
     list-style: none;
@@ -562,21 +564,17 @@ table.schedule-table tr.active-row td.active-col {
     border-image: linear-gradient(to bottom right, rgba(55, 150, 65, 0.6) 0%, var(--border-color) 40%) 1;
 }
 
-/* 2. The Invisible Bridge */
-/* Creates a 15px hidden hit-area above the menu so the hover never breaks */
+/* The Invisible Bridge (Stays exactly the same) */
 .dropdown-content::before {
-    content: "";
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    width: 100%;
-    height: 15px; 
-    background: transparent;
+    content: ""; position: absolute; bottom: 100%; left: 0; width: 100%; height: 15px; background: transparent;
 }
 
 .dropdown-content li a {
-    color: #D1C7AC;
-    padding: 8px 12px;
+    color: var(--text-main);
+    
+    /* Changed horizontal padding to 0 so the text centers perfectly within the 100% width box */
+    padding: 8px 0; 
+    
     text-decoration: none;
     display: block;
     text-align: center;
