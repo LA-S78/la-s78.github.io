@@ -2,16 +2,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Dynamic Title/Description Routing -->
+    {% assign ui_pages = site.data[site.active_lang].ui.pages %}
+    {% if page.guide_id %}
+        {% assign meta_title = ui_pages.guide_panes[page.guide_id].title %}
+        {% assign meta_desc = ui_pages.guide_panes[page.guide_id].subtitle %}
+    {% elsif page.page_key %}
+        {% assign meta_title = ui_pages[page.page_key].title %}
+        {% assign meta_desc = ui_pages[page.page_key].subtitle %}
+    {% else %}
+        {% assign meta_title = page.title %}
+        {% assign meta_desc = page.description %}
+    {% endif %}
+
     <!-- Discord / Social Media Preview Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta property="og:site_name" content="{{ site.data[site.active_lang].ui.header.title }}">
-    <meta property="og:title" content="{{ page.title | default: site.title }}">
-    <meta property="og:description" content="{{ page.description | default: site.data[site.active_lang].ui.header.subtitle }}">
+    <meta property="og:title" content="{{ meta_title | default: site.title }}">
+    <meta property="og:description" content="{{ meta_desc | default: site.data[site.active_lang].ui.header.subtitle }}">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:image" content="{{ page.image | default: '/images/default-social-banner.png' | absolute_url }}">
     <meta name="theme-color" content="#B8975A">
 
-    <title>{{ page.title }} | {{ site.title }}</title>
+    <title>{{ meta_title | default: site.title }} | {{ site.title }}</title>
     
     <link rel="stylesheet" href="/css/style.css?v={{ site.time | date: '%s' }}">
     <link rel="icon" href="/images/favicon.png">

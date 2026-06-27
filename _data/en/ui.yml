@@ -34,3 +34,82 @@ guides:
   sanctuary_shop: "Sanctuary Shop"
   campaign_shop: "Campaign Shop"
   premium_shop: "Premium & Gem Packs"
+
+pages:
+  home:
+    title: "Home"
+    subtitle: "Survival Compendium"
+  rules:
+    title: "Rules"
+    subtitle: "Server Rules & Rotation"
+  guides:
+    title: "Guides"
+    subtitle: "Game Guides"
+  alliance:
+    title: "Alliance"
+    subtitle: "Alliance & Diplomacy"
+  guide_panes:
+    heroes:
+      title: "Heroes & Builds"
+      subtitle: "Heroes & Builds"
+    combat:
+      title: "Combat"
+      subtitle: "Combat"
+    building:
+      title: "Building & Tech"
+      subtitle: "Building & Tech"
+    resources:
+      title: "Resource Mgmt"
+      subtitle: "Resource Mgmt"
+    sanctuary:
+      title: "Sanctuary Guide"
+      subtitle: "Sanctuary Guide"
+    duel:
+      title: "Alliance Duel"
+      subtitle: "Alliance Duel"
+    survival:
+      title: "Survival Battle"
+      subtitle: "Survival Battle"
+    kingdom:
+      title: "Kingdom War"
+      subtitle: "Kingdom War"
+    canyon:
+      title: "Canyon Conquest"
+      subtitle: "Canyon Conquest"
+    cheese:
+      title: "Cheese Trap"
+      subtitle: "Cheese Trap"
+    thief:
+      title: "Thief Hunt"
+      subtitle: "Thief Hunt"
+    pickaxe:
+      title: "Dwarven Pickaxe"
+      subtitle: "Dwarven Pickaxe"
+    crystal:
+      title: "Crystal Valley"
+      subtitle: "Crystal Valley"
+    alliance_shop:
+      title: "Alliance Shop"
+      subtitle: "Alliance Shop"
+    honor_shop:
+      title: "Honor Shop"
+      subtitle: "Honor Shop"
+    sanctuary_shop:
+      title: "Sanctuary Shop"
+      subtitle: "Sanctuary Shop"
+    campaign_shop:
+      title: "Campaign Shop"
+      subtitle: "Campaign Shop"
+    premium_shop:
+      title: "Premium & Gem Packs"
+      subtitle: "Premium & Gem Packs"
+
+nav_anchors:
+  server_rules: "Server Rules"
+  rotation: "Rotation"
+  rewards: "Rewards"
+  nap_alliances: "NAP Alliances"
+  nap_academies: "NAP Academies"
+  nap_ranks: "NAP Ranks"
+  nap_territory: "NAP Territory"
+  blacklist: "Blacklist"

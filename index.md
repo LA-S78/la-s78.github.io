@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Home
+page_key: "home"
 subtitle: Survival Compendium
 active_nav: home
 ---

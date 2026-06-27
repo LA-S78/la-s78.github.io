@@ -29,3 +29,32 @@ exclude_from_localization:
   - images/
   - css/
   - js/
+defaults:
+  - scope:
+      path: "_guide_panes/de"
+    values:
+      lang: "de"
+  - scope:
+      path: "_guide_panes/en"
+    values:
+      lang: "en"
+  - scope:
+      path: "_guide_panes/es"
+    values:
+      lang: "es"
+  - scope:
+      path: "_guide_panes/fr"
+    values:
+      lang: "fr"
+  - scope:
+      path: "_guide_panes/ru"
+    values:
+      lang: "ru"
+  - scope:
+      path: "_guide_panes/tr"
+    values:
+      lang: "tr"
+  - scope:
+      path: "_guide_panes/uk"
+    values:
+      lang: "uk"

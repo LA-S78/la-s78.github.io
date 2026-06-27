@@ -1,7 +1,9 @@
 <nav class="anchor-nav">
     <div class="nav-wrapper">
         {% for link in page.nav_links %}
-            <a href="{{ link.url }}" class="anchor-link">{{ link.name }}</a>
+            <!-- Fetches translation from ui.yml using the key -->
+            {% assign label = site.data[site.active_lang].ui.nav_anchors[link.name_key] %}
+            <a href="{{ link.url }}" class="anchor-link">{{ label }}</a>
         {% endfor %}
     </div>
-</nav>
+</nav>a

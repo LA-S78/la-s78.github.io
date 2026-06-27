@@ -3,7 +3,9 @@ title: "Server Rules"
 nav_id: "server-rules"
 ---
 
-The following guidelines are mandatory to ensure fair play and server stability. 
+{% assign strings = site.data[site.active_lang].ui.rules_page %}
+
+{{ strings.intro }}
 
 <section class="duel-schedule-grid">
 {% assign active_rules = site.data[site.active_lang].rules %}

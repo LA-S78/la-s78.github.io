@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Guides
+page_key: "guides"
 subtitle: Game Guides
 active_nav: guides
 ---

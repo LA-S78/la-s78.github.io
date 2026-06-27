@@ -1,18 +1,17 @@
 ---
 layout: default
-title: Alliance
-subtitle: Alliance & Diplomacy
+page_key: "alliance"
 active_nav: alliance
 nav_links:
-  - name: NAP ALLIANCES
+  - name_key: "nap_alliances"
     url: "#nap-alliances"
-  - name: NAP ACADEMIES
+  - name_key: "nap_academies"
     url: "#nap-academies"
-  - name: NAP RANKS
+  - name_key: "nap_ranks"
     url: "#nap-ranks"
-  - name: NAP TERRITORY
+  - name_key: "nap_territory"
     url: "#nap-territory"
-  - name: BLACKLIST
+  - name_key: "blacklist"
     url: "#blacklist"
 dialogs:
   - dialogs/alliance.html

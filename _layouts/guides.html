@@ -2,8 +2,7 @@
 layout: default
 ---
 
-{% assign article_panes = site.guide_panes | where: "parent_guide", page.guide_id | sort: 'order' %}
-
+{% assign article_panes = site.guide_panes | where: "parent_guide", page.guide_id | where: "lang", site.active_lang | sort: 'order' %}
 
 {% for pane in article_panes %}
 <section class="content-pane" id="{{ pane.nav_id }}">

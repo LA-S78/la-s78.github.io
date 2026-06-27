@@ -1,0 +1,10 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lang: [de, en, es, fr, ru, tr, uk]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Site
+        run: bundle exec jekyll build --config _config.yml,_configs/_config_${{ matrix.lang }}.yml --destination _site/${{ matrix.lang }}
