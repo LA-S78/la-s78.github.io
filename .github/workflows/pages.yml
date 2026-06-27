@@ -20,7 +20,7 @@ jobs:
           bundler-cache: true
 
       - name: Build Site
-        run: bundle exec jekyll build --config _config.yml,_config_${{ matrix.lang }}.yml --destination _site/${{ matrix.lang }}
+        run: bundle exec jekyll build --config _config.yml,_configs/_config_${{ matrix.lang }}.yml --destination _site/${{ matrix.lang }}
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
