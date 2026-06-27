@@ -105,23 +105,30 @@ body {
     filter: contrast(1.4) brightness(1.1) saturate(1.5);
 }
 
+/* 1. The Diffused Bleed (Hidden beneath the nav bar) */
 .lantern-glow-bleed {
     position: absolute;
-    top: 100%; /* Pins it perfectly to the bottom edge of the header */
+    top: 100%; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(35, 120, 45, 0.15), transparent);
+    pointer-events: none;
+    z-index: 50; /* Stays beneath the nav bar (100) */
+}
+
+/* 2. The Sharp Edge Highlight (Sits on top of the nav bar's top border) */
+.lantern-edge-highlight {
+    position: absolute;
+    top: 100%; 
     left: 0;
     width: 100vw;
-    
-    /* The physical line - just 1px thick */
     height: 1px; 
-    
-    /* Creates a concentrated light in the center that fades into the edges */
     background: radial-gradient(ellipse at center, rgba(55, 150, 65, 0.8) 0%, transparent 60%);
-    
-    /* Casts a subtle, tight glow onto the top pixel of the nav bar */
     box-shadow: 0 1px 4px rgba(35, 120, 45, 0.6);
-    
     pointer-events: none;
-    z-index: 250; /* Ensures it sits neatly on top of the nav seam */
+    z-index: 150; /* Sits ON TOP of the nav bar (100) */
 }
 
 .header-side-btn { width: 40px; display: flex; align-items: center; justify-content: flex-start; }
