@@ -1,9 +1,8 @@
-{% assign current_lang = include.lang | default: site.active_lang | default: "en" %}
+{% assign current_lang = include.lang | default: "en" %}
 
 <table class="list-table table-spaced">
     <tbody>
-        {% comment %} Insert the language variable into the data path {% endcomment %}
-        {% for item in site.data[current_lang].kingdom_points %}
+        {% for item in site.data.kingdom_points[current_lang] %}
         <tr class="{{ item.category }}">
             <td>{{ item.task }}</td>
             <td class="points-value">{{ item.points }}</td>

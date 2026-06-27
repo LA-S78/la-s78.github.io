@@ -1,0 +1,135 @@
+en:
+  - title: "Tech Research"
+    points: ["1m Research Speedup: <b>+10</b>", "1 Tech Might: <b>+1</b>"]
+    note: "Buy a pack: +30"
+  - title: "Enhance Raven"
+    points: ["10 Raven Fruits: <b>+1</b>", "1 Stamina: <b>+100</b>"]
+    note: "Buy a pack: +30"
+  - title: "Enhance Heroes"
+    points: ["Recruit Heroes: <b>+400</b>", "1950 Antitoxins: <b>+1</b>"]
+    note: "Buy a pack: +30"
+  - title: "Build Territory"
+    points: ["1m Construction Speedup: <b>+10</b>", "1 Building Might: <b>+1</b>"]
+    note: "Buy a pack: +30"
+  - title: "Train Soldiers"
+    points: ["1m Training Speedup: <b>+10</b>", "Soldiers: <b>+5 to +31</b>"]
+    note: "Buy a pack: +30"
+
+de:
+  - title: "Tech-Forschung"
+    points: ["1m Forschungs-Beschleuniger: <b>+10</b>", "1 Tech-Stärke: <b>+1</b>"]
+    note: "Paket kaufen: +30"
+  - title: "Rabe verbessern"
+    points: ["10 Rabenfrüchte: <b>+1</b>", "1 Ausdauer: <b>+100</b>"]
+    note: "Paket kaufen: +30"
+  - title: "Helden verbessern"
+    points: ["Helden rekrutieren: <b>+400</b>", "1950 Antitoxine: <b>+1</b>"]
+    note: "Paket kaufen: +30"
+  - title: "Gebiet bauen"
+    points: ["1m Bau-Beschleuniger: <b>+10</b>", "1 Gebäude-Stärke: <b>+1</b>"]
+    note: "Paket kaufen: +30"
+  - title: "Soldaten ausbilden"
+    points: ["1m Ausbildungs-Beschl.: <b>+10</b>", "Soldaten: <b>+5 bis +31</b>"]
+    note: "Paket kaufen: +30"
+
+es:
+  - title: "Investigación tecnológica"
+    points: ["Acelerador de investigación 1m: <b>+10</b>", "1 Poder tecnológico: <b>+1</b>"]
+    note: "Comprar paquete: +30"
+  - title: "Mejorar Cuervo"
+    points: ["10 Frutas de cuervo: <b>+1</b>", "1 Energía: <b>+100</b>"]
+    note: "Comprar paquete: +30"
+  - title: "Mejorar héroes"
+    points: ["Reclutar héroes: <b>+400</b>", "1950 Antitoxinas: <b>+1</b>"]
+    note: "Comprar paquete: +30"
+  - title: "Construir territorio"
+    points: ["Acelerador de construcción 1m: <b>+10</b>", "1 Poder de edificio: <b>+1</b>"]
+    note: "Comprar paquete: +30"
+  - title: "Entrenar soldados"
+    points: ["Acelerador de entrenamiento 1m: <b>+10</b>", "Soldados: <b>+5 a +31</b>"]
+    note: "Comprar paquete: +30"
+
+fr:
+  - title: "Recherche technologique"
+    points: ["Accélérateur de recherche 1m : <b>+10</b>", "1 Puissance tech : <b>+1</b>"]
+    note: "Acheter un pack : +30"
+  - title: "Améliorer le Corbeau"
+    points: ["10 Fruits du corbeau : <b>+1</b>", "1 Endurance : <b>+100</b>"]
+    note: "Acheter un pack : +30"
+  - title: "Améliorer les héros"
+    points: ["Recruter des héros : <b>+400</b>", "1950 Antitoxines : <b>+1</b>"]
+    note: "Acheter un pack : +30"
+  - title: "Construire le territoire"
+    points: ["Accélérateur de construction 1m : <b>+10</b>", "1 Puissance bâtiment : <b>+1</b>"]
+    note: "Acheter un pack : +30"
+  - title: "Entraîner les soldats"
+    points: ["Accélérateur d'entraînement 1m : <b>+10</b>", "Soldats : <b>+5 à +31</b>"]
+    note: "Acheter un pack : +30"
+
+it:
+  - title: "Ricerca tecnologica"
+    points: ["Velocizzazione ricerca 1m: <b>+10</b>", "1 Potenza tech: <b>+1</b>"]
+    note: "Acquista pacchetto: +30"
+  - title: "Migliora il Corvo"
+    points: ["10 Frutti del corvo: <b>+1</b>", "1 Energia: <b>+100</b>"]
+    note: "Acquista pacchetto: +30"
+  - title: "Migliora gli eroi"
+    points: ["Recluta eroi: <b>+400</b>", "1950 Antitossine: <b>+1</b>"]
+    note: "Acquista pacchetto: +30"
+  - title: "Costruisci territorio"
+    points: ["Velocizzazione costruzione 1m: <b>+10</b>", "1 Potenza edificio: <b>+1</b>"]
+    note: "Acquista pacchetto: +30"
+  - title: "Addestra soldati"
+    points: ["Velocizzazione addestramento 1m: <b>+10</b>", "Soldati: <b>+5 a +31</b>"]
+    note: "Acquista pacchetto: +30"
+
+ru:
+  - title: "Исследования"
+    points: ["Ускорение исследований 1м: <b>+10</b>", "1 Мощь технологий: <b>+1</b>"]
+    note: "Купить набор: +30"
+  - title: "Улучшение Ворона"
+    points: ["10 Плодов Ворона: <b>+1</b>", "1 Выносливость: <b>+100</b>"]
+    note: "Купить набор: +30"
+  - title: "Улучшение героев"
+    points: ["Наем героев: <b>+400</b>", "1950 Антитоксинов: <b>+1</b>"]
+    note: "Купить набор: +30"
+  - title: "Строительство"
+    points: ["Ускорение строительства 1м: <b>+10</b>", "1 Мощь зданий: <b>+1</b>"]
+    note: "Купить набор: +30"
+  - title: "Тренировка солдат"
+    points: ["Ускорение тренировки 1м: <b>+10</b>", "Солдаты: <b>+5 до +31</b>"]
+    note: "Купить набор: +30"
+
+tr:
+  - title: "Teknoloji Araştırması"
+    points: ["1d Araştırma Hızlandırma: <b>+10</b>", "1 Teknoloji Gücü: <b>+1</b>"]
+    note: "Paket satın al: +30"
+  - title: "Kuzgunu Geliştir"
+    points: ["10 Kuzgun Meyvesi: <b>+1</b>", "1 Dayanıklılık: <b>+100</b>"]
+    note: "Paket satın al: +30"
+  - title: "Kahramanları Geliştir"
+    points: ["Kahraman İşe Al: <b>+400</b>", "1950 Antitoksin: <b>+1</b>"]
+    note: "Paket satın al: +30"
+  - title: "Bölge İnşa Et"
+    points: ["1d İnşaat Hızlandırma: <b>+10</b>", "1 Bina Gücü: <b>+1</b>"]
+    note: "Paket satın al: +30"
+  - title: "Asker Eğit"
+    points: ["1d Eğitim Hızlandırma: <b>+10</b>", "Askerler: <b>+5 ile +31</b>"]
+    note: "Paket satın al: +30"
+
+uk:
+  - title: "Дослідження технологій"
+    points: ["Прискорення дослідження 1хв: <b>+10</b>", "1 Міць технологій: <b>+1</b>"]
+    note: "Купити набір: +30"
+  - title: "Покращення Ворона"
+    points: ["10 Плодів Ворона: <b>+1</b>", "1 Витривалість: <b>+100</b>"]
+    note: "Купити набір: +30"
+  - title: "Покращення героїв"
+    points: ["Набір героїв: <b>+400</b>", "1950 Антитоксинів: <b>+1</b>"]
+    note: "Купити набір: +30"
+  - title: "Будівництво території"
+    points: ["Прискорення будівництва 1хв: <b>+10</b>", "1 Міць споруд: <b>+1</b>"]
+    note: "Купити набір: +30"
+  - title: "Тренування солдатів"
+    points: ["Прискорення тренування 1хв: <b>+10</b>", "Солдати: <b>+5 до +31</b>"]
+    note: "Купити набір: +30"

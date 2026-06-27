@@ -1,35 +1,16 @@
 <section class="points-reference">
     <div class="points-grid">
+        {% assign reference = site.data.points_reference[include.lang] %}
+        
+        {% for card in reference %}
         <div class="point-card">
-            <h4>Tech Research</h4>
-            <p>1m Research Speedup: <b>+10</b></p>
-            <p>1 Tech Might: <b>+1</b></p>
-            <small>Buy a pack: +30</small>
+            <h4>{{ card.title }}</h4>
+            {% for line in card.points %}
+            <p>{{ line }}</p>
+            {% endfor %}
+            <small>{{ card.note }}</small>
         </div>
-        <div class="point-card">
-            <h4>Enhance Raven</h4>
-            <p>10 Raven Fruits: <b>+1</b></p>
-            <p>1 Stamina: <b>+100</b></p>
-            <small>Buy a pack: +30</small>
-        </div>
-        <div class="point-card">
-            <h4>Enhance Heroes</h4>
-            <p>Recruit Heroes: <b>+400</b></p>
-            <p>1950 Antitoxins: <b>+1</b></p>
-            <small>Buy a pack: +30</small>
-        </div>
-        <div class="point-card">
-            <h4>Build Territory</h4>
-            <p>1m Construction Speedup: <b>+10</b></p>
-            <p>1 Building Might: <b>+1</b></p>
-            <small>Buy a pack: +30</small>
-        </div>
-        <div class="point-card">
-            <h4>Train Soldiers</h4>
-            <p>1m Training Speedup: <b>+10</b></p>
-            <p>Soldiers: <b>+5 to +31</b></p>
-            <small>Buy a pack: +30</small>
-        </div>
+        {% endfor %}
     </div>
 </section>
 

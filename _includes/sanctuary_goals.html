@@ -1,40 +1,16 @@
 <div class="rule-card">
     <table class="list-table">
-        <tr>
-            <td><b>Training Grounds / Research Lab</b></td>
-            <td>Lv 29</td>
-        </tr>
-        <tr>
-            <td><b>Alliance Hall</b></td>
-            <td>Lv 28</td>
-        </tr>
-        <tr>
-            <td><b>Barracks</b></td>
-            <td>Lv 27</td>
-        </tr>
-        <tr>
-            <td><b>Warrior Statue</b></td>
-            <td>Lv 25</td>
-        </tr>
-        <tr>
-            <td><b>Wall</b></td>
-            <td>Lv 23</td>
-        </tr>
-        <tr>
-            <td><b>Infirmary</b></td>
-            <td>Lv 22</td>
-        </tr>
-        <tr>
-            <td><b>Antitoxin Workshop</b></td>
-            <td>Lv 15</td>
-        </tr>
-        <tr>
-            <td><b>Farm / Lumber / Herb Garden</b></td>
-            <td>Lv 13</td>
-        </tr>
-        <tr>
-            <td><b>Lumber / Granary / Herb Storage</b></td>
-            <td>Lv 10</td>
-        </tr>
+        {% assign goals = site.data.sanctuary_goals[include.lang] %}
+        
+        {% if goals %}
+            {% for item in goals %}
+            <tr>
+                <td><b>{{ item.name }}</b></td>
+                <td>{{ item.level }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td colspan="2">Data missing for {{ include.lang }}</td></tr>
+        {% endif %}
     </table>
 </div>

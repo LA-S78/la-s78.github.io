@@ -6,4 +6,4 @@ lang: "de"
 order: 3
 ---
 
-{% include points_reference.html %}
+{% include points_reference.html lang=page.lang %}
