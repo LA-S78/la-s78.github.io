@@ -5,7 +5,7 @@ subtitle: Survival Compendium
 active_nav: home
 ---
 
-{% include structure/search_hero.html placeholder="Search directories, posts..." %}
+{% include structure/search.html search_type="home" %}
 
 {% for section in site.home %}
 <section class="content-pane" id="{{ section.nav_id }}">

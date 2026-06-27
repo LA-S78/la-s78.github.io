@@ -1,0 +1,12 @@
+<div class="search">
+    {% comment %} 
+      Define the placeholder based on the type passed in. 
+      You will need to add these keys to your ui.yml files.
+    {% endcomment %}
+    {% assign placeholder_text = site.data[site.active_lang].ui.search[include.search_type] %}
+    
+    <input type="text" 
+           id="searchInput" 
+           class="search-bar" 
+           placeholder="{{ placeholder_text }}">
+</div>

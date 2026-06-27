@@ -77,3 +77,7 @@ nav_anchors:
   nap_ranks: "Gradi NAP"
   nap_territory: "Territorio NAP"
   blacklist: "Lista Nera"
+
+search:
+  guides: "Cerca nelle guide..."
+  home: "Cerca in directory, post..."

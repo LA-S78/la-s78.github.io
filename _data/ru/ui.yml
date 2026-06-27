@@ -113,3 +113,7 @@ nav_anchors:
   nap_ranks: "Ранги NAP"
   nap_territory: "Территория NAP"
   blacklist: "Черный список"
+
+search:
+  guides: "Поиск по гайдам..."
+  home: "Поиск по каталогам, постам..."

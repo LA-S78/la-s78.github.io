@@ -113,3 +113,7 @@ nav_anchors:
   nap_ranks: "NAP-Ränge"
   nap_territory: "NAP-Gebiet"
   blacklist: "Schwarze Liste"
+
+search:
+  guides: "Guides durchsuchen..."
+  home: "Verzeichnisse, Beiträge durchsuchen..."
