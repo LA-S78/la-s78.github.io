@@ -527,6 +527,8 @@ table.schedule-table tr.active-row td.active-col {
 .lang-dropdown {
     position: relative;
     z-index: 9999 !important; /* Ensure it overrides everything */
+    background-color: #1e1b1a;
+    border: 1px solid #3d3734;
 }
 
 .dropdown-content {

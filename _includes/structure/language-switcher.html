@@ -12,14 +12,17 @@
   
   <ul class="dropdown-content">
   {% for lang in site.languages %}
-    {% capture old_path %}/{{ page.lang }}/{% endcapture %}
-    {% capture new_path %}/{{ lang }}/{% endcapture %}
+    
+    {% assign current_prefix = "/" | append: page.lang | append: "/" %}
+    {% assign raw_route = page.url | replace_first: current_prefix, "/" %}
+    {% assign new_url = "/" | append: lang | append: raw_route | replace: "//", "/" %}
     
     <li>
-      <a href="{{ page.url | replace_first: old_path, new_path }}">
+      <a href="{{ site.baseurl }}{{ new_url }}">
         {{ lang | upcase }}
       </a>
     </li>
+    
   {% endfor %}
   </ul>
 </div>
