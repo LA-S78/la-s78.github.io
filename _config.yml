@@ -21,8 +21,6 @@ collections:
     output: false
   alliance:
     output: false
-plugins:
-  - jekyll-polyglot
 languages: ["de", "en", "es", "fr", "ru", "tr", "uk"]
 default_lang: "en"
 exclude_from_localization:
