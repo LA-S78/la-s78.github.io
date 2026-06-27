@@ -4,6 +4,7 @@ title: "Heiligtums-Guide"
 subtitle: "Level-Guide"
 active_nav: guides
 guide_id: "sanctuary"
+lang: "de"
 nav_links:
   - name_key: "sanctuary_strategy"
     url: "#strategy"
