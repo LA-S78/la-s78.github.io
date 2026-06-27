@@ -596,8 +596,6 @@ table.schedule-table tr.active-row td.active-col {
     visibility: visible;
     opacity: 1;
     pointer-events: auto;
-    
-    /* Opens instantly, no delay */
     transition: opacity 0.3s ease, visibility 0s linear 0s; 
 }
 
