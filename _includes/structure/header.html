@@ -2,7 +2,7 @@
 <header class="lantern-header">
 
 <div class="dust-container">
-    {% for i in (1..40) %}
+    {% for i in (1..80) %}
         {% assign x = i | modulo: 13 | times: 7.5 %}
         {% assign y = i | modulo: 19 | times: 5 %}
         <div class="mote" style="--mote-y: {{ y }}%; --mote-x: {{ x }}%;"></div>
