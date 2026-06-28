@@ -85,8 +85,8 @@ body {
     );
     
     /* The Animations */
-    animation: lantern-pulse 5s infinite ease-in-out, 
-               lantern-jitter 8s infinite ease-in-out;
+    animation: lantern-pulse 8s infinite ease-in-out, 
+               lantern-flicker-smooth 4s infinite ease-in-out;
     will-change: opacity, transform, filter;
     transform: translateZ(0);
     backface-visibility: hidden;
@@ -652,11 +652,13 @@ table.schedule-table tr.active-row td.active-col {
     position: absolute;
     background: var(--accent-color);
     border-radius: 50%;
-    width: 4px; height: 4px;
+    width: 8px; height: 8px;
     box-shadow: 0 0 6px 2px rgba(184, 151, 90, 0.6);
     mix-blend-mode: screen;
     pointer-events: none;
-    animation: drift 10s infinite linear;
+    will-change: transform, opacity;
+    animation: drift 12s infinite linear;
+    z-index: 999 !important;
 }
 
 /* Individual delays for randomness */
@@ -683,24 +685,22 @@ table.schedule-table tr.active-row td.active-col {
 /* The slow, rhythmic "breathing" of the flame */
 @keyframes lantern-pulse {
     0%, 100% { 
-        opacity: 0.75; 
+        opacity: 0.7; 
         transform: scale(1); 
-        filter: brightness(1); 
+        filter: brightness(1) blur(2px); 
     }
     50% { 
         opacity: 0.85; 
-        transform: scale(1.005); /* Very subtle scale change */
-        filter: brightness(1.05); /* Gentle warmth */
+        transform: scale(1.005); 
+        filter: brightness(1.05) blur(3px); 
     }
 }
 
 /* The rapid, irregular "jitter" of the flame */
-@keyframes lantern-jitter {
-    0%, 100% { opacity: 0.85; filter: brightness(1); }
-    20%      { opacity: 0.8;  filter: brightness(0.98); } /* Less dimming */
-    40%      { opacity: 0.95; filter: brightness(1.15); } /* Peak brightness lowered from 1.25 */
-    60%      { opacity: 0.85; filter: brightness(1.02); }
-    80%      { opacity: 0.9;  filter: brightness(1); }
+@keyframes lantern-flicker-smooth {
+    0%, 100% { opacity: 0.8; filter: brightness(1) blur(2px); }
+    33%      { opacity: 0.85; filter: brightness(1.05) blur(2.5px); }
+    66%      { opacity: 0.75; filter: brightness(0.95) blur(2px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
