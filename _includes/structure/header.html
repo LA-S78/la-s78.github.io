@@ -1,4 +1,13 @@
+<div class="header-container">
 <header class="lantern-header">
+
+    <div class="dust-container">
+        <div class="dust-container">
+            {% for i in (1..20) %}
+                <div class="mote"></div>
+            {% endfor %}
+        </div>
+    </div>
     <div class="header-stack">
         <img src="/images/lantern.png" class="lantern-img" alt="Lantern">
         <div class="text-container">
@@ -20,4 +29,7 @@
         {% include structure/language-switcher.html %}
 
     </div>
+    <div class="lantern-flicker-layer"></div>
+    <div class="noise-overlay"></div>
 </header>
+</div>

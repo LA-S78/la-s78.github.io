@@ -55,16 +55,51 @@ body {
     /* ADDED/UPDATED STACKING RULES */
     z-index: 200; 
     overflow: visible !important;
+    position: relative; /* REQUIRED: Anchors the new flicker layer */
     
-    background:
-        radial-gradient(circle 400px at center 40%, rgba(35, 120, 45, 0.3) 0%, transparent 100%),
-        radial-gradient(circle 500px at center 10%, #2b231e 0%, var(--nav-bg) 100%);
+    /* CLEANED: Removed green gradient (moved to flicker layer) */
+    background: radial-gradient(circle 500px at center 10%, #2b231e 0%, var(--nav-bg) 100%);
     background-repeat: no-repeat;
     background-position: center;
     
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.lantern-flicker-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Let clicks pass through to nav items */
+    z-index: 0;           /* Sits behind the header content */
+    
+    /* The Green Glow */
+    background: radial-gradient(
+        circle 400px at center 40%, 
+        rgba(35, 120, 45, 0.4) 0%, 
+        rgba(35, 120, 45, 0.15) 50%, 
+        transparent 100%
+    );
+    
+    /* The Animations */
+    animation: lantern-pulse 5s infinite ease-in-out, 
+               lantern-jitter 8s infinite ease-in-out;
+    will-change: opacity, transform, filter;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.noise-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    /* This creates a subtle grain texture */
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAASuVbXAAAACHRSTlMA78f3L993v98w4V0AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAzSURBVDjLY2AYBaNgEAFiA0MDAyYxMTAwMGAwMDDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMAAADa8A0qN+i4pAAAAAElFTkSuQmCC");
+    opacity: 0.05; /* Very subtle grain */
 }
 
 .header-stack {
@@ -599,6 +634,42 @@ table.schedule-table tr.active-row td.active-col {
     transition: opacity 0.3s ease, visibility 0s linear 0s; 
 }
 
+/* Container: Same dimensions as the header, restricted by the glow mask */
+.dust-container {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1; /* Sits above the flicker layer, below the nav */
+    
+    /* THE MAGIC: Restricts visibility to the lantern's reach */
+    -webkit-mask-image: radial-gradient(circle 400px at center 40%, black 0%, transparent 80%);
+    mask-image: radial-gradient(circle 400px at center 40%, black 0%, transparent 80%);
+    animation: lantern-pulse 5s infinite ease-in-out;
+    
+}
+
+.mote {
+    position: absolute;
+    background: var(--accent-color);
+    border-radius: 50%;
+    width: 4px; height: 4px;
+    box-shadow: 0 0 6px 2px rgba(184, 151, 90, 0.6);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: drift 10s infinite linear;
+}
+
+/* Individual delays for randomness */
+.mote:nth-child(3n) { animation-duration: 8s; width: 2px; height: 2px; opacity: 0.4; }
+.mote:nth-child(5n) { animation-duration: 15s; width: 6px; height: 6px; opacity: 0.8; }
+.mote:nth-child(7n) { animation-duration: 12s; }
+
+@keyframes drift {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    50%  { opacity: 0.5; }
+    100% { transform: translateY(-50px) translateX(20px); opacity: 0; }
+}
+
 /* --- 6. ANIMATIONS --- */
 @keyframes lantern-flicker {
     0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
@@ -607,6 +678,29 @@ table.schedule-table tr.active-row td.active-col {
     50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(76, 175, 80, 0.1); }
     70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(76, 175, 80, 0.25); }
     85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(76, 175, 80, 0.2); }
+}
+
+/* The slow, rhythmic "breathing" of the flame */
+@keyframes lantern-pulse {
+    0%, 100% { 
+        opacity: 0.75; 
+        transform: scale(1); 
+        filter: brightness(1); 
+    }
+    50% { 
+        opacity: 0.85; 
+        transform: scale(1.005); /* Very subtle scale change */
+        filter: brightness(1.05); /* Gentle warmth */
+    }
+}
+
+/* The rapid, irregular "jitter" of the flame */
+@keyframes lantern-jitter {
+    0%, 100% { opacity: 0.85; filter: brightness(1); }
+    20%      { opacity: 0.8;  filter: brightness(0.98); } /* Less dimming */
+    40%      { opacity: 0.95; filter: brightness(1.15); } /* Peak brightness lowered from 1.25 */
+    60%      { opacity: 0.85; filter: brightness(1.02); }
+    80%      { opacity: 0.9;  filter: brightness(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -626,9 +720,13 @@ table.schedule-table tr.active-row td.active-col {
     /* Desktop Overrides */
     .lantern-header { height: 130px !important; min-height: 130px !important; }
     .header-stack { height: 130px; }
-    .lantern-img { width: 130px; }
+    .lantern-img { width: 130px; z-index: 9999 !important; }
     .lantern-glow-bleed {
         top: 130px; 
+    }
+    .lantern-flicker-layer {
+        /* Increase the circle radius from 400px to 700px (or your preference) */
+        background: radial-gradient(circle 700px at center 40%, rgba(35, 120, 45, 0.4) 0%, transparent 100%);
     }
     .debossed-title {
         margin-top: 30px; 
