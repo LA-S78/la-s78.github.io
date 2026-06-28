@@ -720,13 +720,9 @@ table.schedule-table tr.active-row td.active-col {
     /* Desktop Overrides */
     .lantern-header { height: 130px !important; min-height: 130px !important; }
     .header-stack { height: 130px; }
-    .lantern-img { width: 130px; z-index: 9999 !important; }
+    .lantern-img { width: 130px; }
     .lantern-glow-bleed {
         top: 130px; 
-    }
-    .lantern-flicker-layer {
-        /* Increase the circle radius from 400px to 700px (or your preference) */
-        background: radial-gradient(circle 700px at center 40%, rgba(35, 120, 45, 0.4) 0%, transparent 100%);
     }
     .debossed-title {
         margin-top: 30px; 
