@@ -661,6 +661,7 @@ table.schedule-table tr.active-row td.active-col {
     z-index: 999 !important;
     top: var(--mote-y, 0%);
     left: var(--mote-x, 0%);
+    transform: translate(-50%, -50%);
 }
 
 /* Individual delays for randomness */
