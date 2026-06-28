@@ -166,3 +166,26 @@ document.addEventListener("DOMContentLoaded", highlightActiveLanguage);
 
 // Run every time Turbo.js swaps the page content
 document.addEventListener("turbo:load", highlightActiveLanguage);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    // 1. Check for saved preference on page load
+    const savedTheme = localStorage.getItem('site-theme');
+    if (savedTheme === 'alt') {
+        body.classList.add('theme-alt');
+    }
+
+    // 2. Add click event listener
+    toggle.addEventListener('click', () => {
+        body.classList.toggle('theme-alt');
+
+        // 3. Save preference
+        if (body.classList.contains('theme-alt')) {
+            localStorage.setItem('site-theme', 'alt');
+        } else {
+            localStorage.removeItem('site-theme');
+        }
+    });
+});

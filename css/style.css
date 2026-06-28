@@ -10,8 +10,16 @@
     --accent-color: #B8975A;
     --plague-color: #B8975A;
     --border-color: #3d3128;
+    --regular-lantern: #4CAF50; 
+    --main-theme: 35 120 45;
+    --main-theme-bright: 55 150 65;
+    --alt-theme: 230 160 80;
+    --alt-theme-bright: 250 190 100;
+    --active-theme: var(--main-theme);
+    --active-theme-bright: var(--main-theme-bright);
     --font-headers: "Georgia", serif;
     --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --lantern-filter: contrast(1.3) brightness(1.0) saturate(1.2);
 }
 
 /* --- 2. GLOBAL & APP SHELL --- */
@@ -28,6 +36,12 @@ body {
     color: var(--text-main);
     display: flex; 
     justify-content: center;
+}
+
+body.theme-alt {
+  --active-theme: var(--alt-theme);
+  --active-theme-bright: var(--alt-theme-bright);
+  --lantern-filter: contrast(1.3) brightness(1.0) saturate(1.2) hue-rotate(270deg);
 }
 
 #mobile-container {
@@ -78,10 +92,10 @@ body {
     
     /* The Green Glow */
     background: radial-gradient(
-        circle 400px at center 40%, 
-        rgba(35, 120, 45, 0.4) 0%, 
-        rgba(35, 120, 45, 0.15) 50%, 
-        transparent 100%
+    circle 400px at center 40%, 
+    rgba(var(--active-theme) / 0.4) 0%, 
+    rgba(var(--active-theme) / 0.15) 50%, 
+    transparent 100%
     );
     
     /* The Animations */
@@ -90,6 +104,7 @@ body {
     will-change: opacity, transform, filter;
     transform: translateZ(0);
     backface-visibility: hidden;
+    transition: all 0.5s ease;
 }
 
 .noise-overlay {
@@ -137,7 +152,14 @@ body {
     height: auto;
     flex-shrink: 0;
     mix-blend-mode: screen; 
-    filter: contrast(1.4) brightness(1.1) saturate(1.5);
+    filter: var(--lantern-filter);
+    cursor: pointer;
+  
+    transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+.lantern-img:active {
+  transform: scale(0.95);
 }
 
 /* 1. The Diffused Bleed (Hidden beneath the nav bar) */
@@ -148,7 +170,7 @@ body {
     transform: translateX(-50%);
     width: 100vw;
     height: 60px;
-    background: linear-gradient(to bottom, rgba(35, 120, 45, 0.15), transparent);
+    background: linear-gradient(to bottom, rgba(var(--active-theme-bright) / 0.15), transparent);
     pointer-events: none;
     z-index: 50; /* Stays beneath the nav bar (100) */
 }
@@ -160,8 +182,8 @@ body {
     left: 0;
     width: 100vw;
     height: 1px; 
-    background: radial-gradient(ellipse at center, rgba(55, 150, 65, 0.8) 0%, transparent 60%);
-    box-shadow: 0 1px 4px rgba(35, 120, 45, 0.6);
+    background: radial-gradient(ellipse at center, rgba(var(--active-theme-bright) / 0.8) 0%, transparent 60%);
+    box-shadow: 0 1px 4px rgba(var(--active-theme) / 0.6);
     pointer-events: none;
     z-index: 150; /* Sits ON TOP of the nav bar (100) */
 }
@@ -552,10 +574,10 @@ table.schedule-table tr.active-row td.active-col {
     
     /* 2. The Border Light: Green on the bottom-left, fading to brown on the top-right */
     border: 1px solid;
-    border-image: linear-gradient(to top right, rgba(55, 150, 65, 0.9) 0%, var(--border-color) 60%) 1;
+    border-image: linear-gradient(to top right, rgba(var(--active-theme-bright) / 0.9) 0%, var(--border-color) 60%) 1;
     
     /* 3. Cast a faint green ambient glow back towards the lantern */
-    box-shadow: -3px 3px 8px rgba(35, 120, 45, 0.25);
+    box-shadow: -3px 3px 8px rgba(var(--active-theme) / 0.25);
     
     color: var(--text-main);
     padding: 5px 10px;
@@ -596,7 +618,7 @@ table.schedule-table tr.active-row td.active-col {
     margin: 0;
     
     border: 1px solid;
-    border-image: linear-gradient(to bottom right, rgba(55, 150, 65, 0.6) 0%, var(--border-color) 40%) 1;
+    border-image: linear-gradient(to bottom right, rgba(var(--active-theme-bright) / 0.6) 0%, var(--border-color) 40%) 1;
 }
 
 /* The Invisible Bridge (Stays exactly the same) */
@@ -680,12 +702,12 @@ table.schedule-table tr.active-row td.active-col {
 
 /* --- 6. ANIMATIONS --- */
 @keyframes lantern-flicker {
-    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(76, 175, 80, 0.2); }
-    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); }
-    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); }
-    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(76, 175, 80, 0.1); }
-    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(76, 175, 80, 0.25); }
-    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(76, 175, 80, 0.2); }
+    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(var(--active-theme) / 0.2); }
+    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(var(--active-theme) / 0.3); }
+    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(var(--active-theme) / 0.5); }
+    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(var(--active-theme) / 0.1); }
+    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(var(--active-theme) / 0.25); }
+    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(var(--active-theme) / 0.2); }
 }
 
 /* The slow, rhythmic "breathing" of the flame */
@@ -726,7 +748,22 @@ table.schedule-table tr.active-row td.active-col {
     /* Desktop Overrides */
     .lantern-header { height: 130px !important; min-height: 130px !important; }
     .header-stack { height: 130px; }
-    .lantern-img { width: 130px; }
+    .lantern-img {
+        width: 130px;
+        transition: filter 0.3s ease;
+    }
+    .lantern-img.blue-mode {
+        filter: hue-rotate(180deg); /* Shifts green to blue */
+    }
+    .lantern-img.red-mode {
+        filter: hue-rotate(270deg); /* Shifts green to purple/red */
+    }
+
+    .parchment-border {
+        border: 5px solid var(--accent-color);
+        transition: border-color 0.4s ease;
+    }
+
     .lantern-glow-bleed {
         top: 130px; 
     }
