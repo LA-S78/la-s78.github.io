@@ -2,9 +2,11 @@
 <header class="lantern-header">
 
 <div class="dust-container">
-    {% for i in (1..80) %}
-        {% assign x = i | modulo: 13 | times: 7.5 %}
-        {% assign y = i | modulo: 19 | times: 5 %}
+    {% for i in (1..60) %}
+        {% comment %} Using prime multipliers to scatter the points {% endcomment %}
+        {% assign x = i | times: 17 | modulo: 90 | plus: 5 %}
+        {% assign y = i | times: 23 | modulo: 80 | plus: 10 %}
+        
         <div class="mote" style="--mote-y: {{ y }}%; --mote-x: {{ x }}%;"></div>
     {% endfor %}
 </div>

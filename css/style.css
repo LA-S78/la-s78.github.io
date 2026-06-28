@@ -665,7 +665,7 @@ table.schedule-table tr.active-row td.active-col {
 
 /* Individual delays for randomness */
 .mote:nth-child(3n) { animation-duration: 8s; width: 2px; height: 2px; opacity: 0.4; }
-.mote:nth-child(5n) { animation-duration: 15s; width: 6px; height: 6px; opacity: 0.8; }
+.mote:nth-child(5n) { animation-duration: 15s; width: 6px; height: 6px; opacity: 0.6; }
 .mote:nth-child(7n) { animation-duration: 12s; }
 .mote:nth-child(n+21) {
     display: none;
@@ -762,6 +762,9 @@ table.schedule-table tr.active-row td.active-col {
         /* Expand the mask radius for wider headers */
         -webkit-mask-image: radial-gradient(circle 700px at center 40%, black 0%, transparent 80%);
         mask-image: radial-gradient(circle 700px at center 40%, black 0%, transparent 80%);
+    }
+    .mote:nth-child(n+21) {
+        display: block;
     }
 
 }
