@@ -2,9 +2,9 @@ nap_alliances:
   - WLO
   - RÂVN
   - MIA
-  - PHNX
   - BOTS
   - SVN
+  - PHNX
   - HMDA
   - HeKi
 
@@ -18,9 +18,9 @@ nap_academies:
 
 nap_ranks:
   - WLO
-  - MIA
   - RÂVN
-  - PHNX
+  - MIA
+  - BOTS
 
 blacklist_players:
   - Azreal
