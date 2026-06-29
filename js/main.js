@@ -94,18 +94,33 @@
         const body = document.body;
         if (!toggle) return;
 
-        // Restore saved preference
-        if (localStorage.getItem('site-theme') === 'alt') {
-            body.classList.add('theme-alt');
+        // 1. Define your available themes in a cycle array
+        const themes = ['default', 'sanctuary', 'miasma'];
+
+        // 2. Restore saved preference on load
+        const savedTheme = localStorage.getItem('site-theme') || 'default';
+        
+        // Ensure the saved theme is still valid before applying it
+        if (savedTheme !== 'default' && themes.includes(savedTheme)) {
+            body.setAttribute('data-theme', savedTheme);
         }
 
-        // Add listener (this will be freshly attached every turbo:load)
+        // 3. Cyclic Switcher Listener
         toggle.addEventListener('click', () => {
-            body.classList.toggle('theme-alt');
-            if (body.classList.contains('theme-alt')) {
-                localStorage.setItem('site-theme', 'alt');
-            } else {
+            // Read current state
+            const currentTheme = body.getAttribute('data-theme') || 'default';
+            
+            // Find the index of the next theme in the loop
+            let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+            const nextTheme = themes[nextIndex];
+
+            // Apply new state
+            if (nextTheme === 'default') {
+                body.removeAttribute('data-theme');
                 localStorage.removeItem('site-theme');
+            } else {
+                body.setAttribute('data-theme', nextTheme);
+                localStorage.setItem('site-theme', nextTheme);
             }
         });
     }

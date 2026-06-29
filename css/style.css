@@ -1,25 +1,39 @@
 /* --- LAST ASYLUM COMPENDIUM: MASTER STYLESHEET --- */
 
-/* --- 1. VARIABLES --- */
+/* --- 1. VARIABLES & THEMES --- */
+/* Core Variables & Default Theme (Plague) */
 :root {
+    /* Base UI Colors */
     --bg-color: #1a1512;
     --card-bg: rgba(42, 34, 30, 0.85);
     --nav-bg: #110d0b;
     --text-main: #d9cbb8;
     --text-muted: #a8a19b;
     --accent-color: #B8975A;
-    --plague-color: #B8975A;
     --border-color: #3d3128;
-    --regular-lantern: #4CAF50; 
-    --main-theme: 35 120 45;
-    --main-theme-bright: 55 150 65;
-    --alt-theme: 230 160 80;
-    --alt-theme-bright: 250 190 100;
-    --active-theme: var(--main-theme);
-    --active-theme-bright: var(--main-theme-bright);
+    
+    /* Typography */
     --font-headers: "Georgia", serif;
     --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    /* Default Theme: Plague (Green) */
+    --active-theme: 35 120 45;
+    --active-theme-bright: 55 150 65;
     --lantern-filter: contrast(1.3) brightness(1.0) saturate(1.2);
+}
+
+/* Theme 2: Sanctuary (Orange) */
+body[data-theme="sanctuary"] {
+    --active-theme: 230 160 80;
+    --active-theme-bright: 250 190 100;
+    --lantern-filter: contrast(1.3) brightness(1.0) saturate(1.2) hue-rotate(270deg);
+}
+
+/* Theme 3: Miasma (Purple) */
+body[data-theme="miasma"] {
+    --active-theme: 140 50 180; 
+    --active-theme-bright: 175 90 220;
+    --lantern-filter: contrast(1.3) brightness(1.1) saturate(1.2) hue-rotate(160deg);
 }
 
 /* --- 2. GLOBAL & APP SHELL --- */
@@ -36,12 +50,6 @@ body {
     color: var(--text-main);
     display: flex; 
     justify-content: center;
-}
-
-body.theme-alt {
-  --active-theme: var(--alt-theme);
-  --active-theme-bright: var(--alt-theme-bright);
-  --lantern-filter: contrast(1.3) brightness(1.0) saturate(1.2) hue-rotate(270deg);
 }
 
 #mobile-container {
@@ -65,17 +73,12 @@ body.theme-alt {
     border: none; 
     border-bottom: 1px solid var(--border-color);
     background-color: var(--nav-bg); 
-    
-    /* ADDED/UPDATED STACKING RULES */
     z-index: 200; 
     overflow: visible !important;
-    position: relative; /* REQUIRED: Anchors the new flicker layer */
-    
-    /* CLEANED: Removed green gradient (moved to flicker layer) */
+    position: relative; 
     background: radial-gradient(circle 500px at center 10%, #2b231e 0%, var(--nav-bg) 100%);
     background-repeat: no-repeat;
     background-position: center;
-    
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,10 +90,10 @@ body.theme-alt {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* Let clicks pass through to nav items */
-    z-index: 0;           /* Sits behind the header content */
+    pointer-events: none; 
+    z-index: 0;           
     
-    /* The Green Glow */
+    /* Dynamic Theme Glow */
     background: radial-gradient(
     circle 400px at center 40%, 
     rgba(var(--active-theme) / 0.4) 0%, 
@@ -98,7 +101,6 @@ body.theme-alt {
     transparent 100%
     );
     
-    /* The Animations */
     animation: lantern-pulse 8s infinite ease-in-out, 
                lantern-flicker-smooth 4s infinite ease-in-out;
     will-change: opacity, transform, filter;
@@ -112,9 +114,8 @@ body.theme-alt {
     top: 0; left: 0; width: 100%; height: 100%;
     z-index: 1;
     pointer-events: none;
-    /* This creates a subtle grain texture */
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAASuVbXAAAACHRSTlMA78f3L993v98w4V0AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAzSURBVDjLY2AYBaNgEAFiA0MDAyYxMTAwMGAwMDDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMAAADa8A0qN+i4pAAAAAElFTkSuQmCC");
-    opacity: 0.05; /* Very subtle grain */
+    opacity: 0.05; 
 }
 
 .header-stack {
@@ -122,7 +123,7 @@ body.theme-alt {
     flex-direction: row;
     align-items: center;
     gap: 15px;
-    height: 90px; /* Sync with mobile header height */
+    height: 90px; 
     margin: 0 !important;
 }
 
@@ -137,7 +138,7 @@ body.theme-alt {
 
 .lang-link {
     text-decoration: none;
-    color: #B8975A; /* Match your existing theme */
+    color: var(--accent-color); 
     opacity: 0.7;
 }
 
@@ -154,7 +155,6 @@ body.theme-alt {
     mix-blend-mode: screen; 
     filter: var(--lantern-filter);
     cursor: pointer;
-  
     transition: filter 0.5s ease, transform 0.5s ease;
 }
 
@@ -162,7 +162,6 @@ body.theme-alt {
   transform: scale(0.95);
 }
 
-/* 1. The Diffused Bleed (Hidden beneath the nav bar) */
 .lantern-glow-bleed {
     position: absolute;
     top: 90px;  
@@ -172,10 +171,9 @@ body.theme-alt {
     height: 60px;
     background: linear-gradient(to bottom, rgba(var(--active-theme-bright) / 0.15), transparent);
     pointer-events: none;
-    z-index: 50; /* Stays beneath the nav bar (100) */
+    z-index: 50; 
 }
 
-/* 2. The Sharp Edge Highlight (Sits on top of the nav bar's top border) */
 .lantern-edge-highlight {
     position: absolute;
     top: 100%; 
@@ -185,7 +183,7 @@ body.theme-alt {
     background: radial-gradient(ellipse at center, rgba(var(--active-theme-bright) / 0.8) 0%, transparent 60%);
     box-shadow: 0 1px 4px rgba(var(--active-theme) / 0.6);
     pointer-events: none;
-    z-index: 150; /* Sits ON TOP of the nav bar (100) */
+    z-index: 150; 
 }
 
 .header-side-btn { width: 40px; display: flex; align-items: center; justify-content: flex-start; }
@@ -194,8 +192,8 @@ body.theme-alt {
 .debossed-title {
     position: relative; 
     z-index: 1; 
-    margin-top: 10px; /* Reduced for mobile */
-    font-size: 1.1rem; /* Slightly smaller for mobile */
+    margin-top: 10px; 
+    font-size: 1.1rem; 
     margin-bottom: 0;
     font-family: var(--font-headers); 
     font-weight: bold;
@@ -214,15 +212,12 @@ body.theme-alt {
     color: var(--accent-color);
     letter-spacing: 1.5px; 
     margin-top: 2px;
-    
-    /* --- The Fix: Locked to the title's bounding box --- */
     width: 100%; 
     font-size: clamp(0.75rem, 3vw, 1rem); 
     white-space: normal; 
     line-height: 1.4; 
 }
 
-/* --- EQUALIZER: Normalizes gap between Header and Content --- */
 .lantern-header + *,
 .lantern-header + nav,
 .lantern-header + main {
@@ -246,11 +241,9 @@ body.theme-alt {
 .nav-wrapper::after  { content: ""; flex: 0 0 20px; }
 
 .anchor-link {
-    /* flex: 0 0 115px; <-- REMOVED hardcoded width */
-    padding: 0 16px; /* Dynamically sizes the button based on text length */
-    white-space: nowrap; /* Forces the word to stay on one line */
-    flex-shrink: 0; /* Prevents the browser from squishing the button */
-    
+    padding: 0 16px; 
+    white-space: nowrap; 
+    flex-shrink: 0; 
     height: 28px; display: flex; align-items: center; justify-content: center;
     text-decoration: none; color: var(--text-main); font-size: 0.75rem; font-weight: bold; 
     border: 1px solid var(--border-color); border-radius: 6px; 
@@ -270,27 +263,13 @@ footer {
 /* --- 4. MARKDOWN CONTENT --- */
 main { 
     flex-grow: 1; 
-    
-    /* Make sure main handles the scroll */
     overflow-y: auto; 
-    
     -webkit-overflow-scrolling: touch; 
     line-height: 1.6;
-    
-    /* 1. Force the container to span the entire screen */
     width: 100%; 
     box-sizing: border-box;
-    
-    /* 2. DELETE THESE TWO LINES */
-    /* max-width: 1000px; */
-    /* margin: 0 auto; */
-    
-    /* 3. ADD THIS DYNAMIC PADDING */
-    /* This calculates the exact center for a 1000px column, 
-       while maintaining a 20px buffer on mobile screens */
     padding-left: max(20px, calc((100vw - 1000px) / 2));
     padding-right: max(20px, calc((100vw - 1000px) / 2));
-    
     padding-top: 20px; 
     padding-bottom: 40px; 
 }
@@ -336,7 +315,7 @@ main img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid 
 .search-bar {
     width: 100%;
     max-width: 1000px;
-    margin: 0 auto 20px auto;
+    margin: 0 auto 0px auto;
     padding: 15px 20px;
     background-color: rgba(10, 8, 7, 0.6);
     border: 1px solid var(--border-color);
@@ -365,7 +344,7 @@ dialog::backdrop { background: rgba(10, 8, 7, 0.85); backdrop-filter: blur(8px);
 dialog {
     background-color: #1a1512;
     border: 1px solid var(--accent-color);
-    border-radius: 12px; padding: 20px; color: var(--text-color);
+    border-radius: 12px; padding: 20px; color: var(--text-main);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
     margin: auto; max-width: 95vw; max-height: 90vh;
 }
@@ -373,7 +352,7 @@ dialog[open] { display: flex; flex-direction: column; align-items: center; gap: 
 dialog img { max-width: 100%; max-height: 70vh; object-fit: contain; border-radius: 4px; }
 dialog .dialog-controls { display: flex; justify-content: center; gap: 15px; width: 100%; margin-top: 5px; }
 dialog button, dialog a.dialog-btn {
-    background-color: rgba(20, 16, 14, 0.8); color: var(--text-color);
+    background-color: rgba(20, 16, 14, 0.8); color: var(--text-main);
     border: 1px solid var(--border-color); border-radius: 6px;
     padding: 10px 24px; font-size: 0.95rem; font-family: inherit;
     font-weight: 500; cursor: pointer; text-decoration: none;
@@ -400,15 +379,13 @@ dialog button:hover, dialog a.dialog-btn:hover {
 .sub-text { font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px; }
 .rank-num { width: 30px; color: var(--accent-color); font-weight: bold; text-align: center; }
 
-/* Update the wrapper to handle the margin */
 .pinned-wrapper {
     position: relative;
     width: 100%;
     max-width: 1000px;
-    margin: 0 auto 30px auto; /* Margin moved HERE */
+    margin: 0 auto 30px auto; 
 }
 
-/* Remove the margin from the section so it doesn't inflate the wrapper height */
 .pinned-section {
     display: flex; 
     overflow-x: auto; 
@@ -445,7 +422,7 @@ dialog button:hover, dialog a.dialog-btn:hover {
 .content-pane {
     background-color: rgba(20, 16, 14, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--border-color); border-radius: 12px;
-    padding: 30px 40px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    padding: 30px 40px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     scroll-margin-top: 170px; 
 }
 .content-pane > *:first-child { margin-top: 0; }
@@ -454,23 +431,20 @@ dialog button:hover, dialog a.dialog-btn:hover {
     font-size: 1.4rem; color: var(--accent-color);
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px; margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color) !important;
 }
 .anchor-link:target { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
-.divider-wrapper {
-    display: contents; /* The wrapper vanishes, letting the divider span the grid */
-}
+.divider-wrapper { display: contents; }
 
-/* Ensure the divider behaves correctly when it is a child of the grid */
 .pane-divider {
     flex: 0 0 100%; 
     height: 1px;
     background: rgba(255, 255, 255, 0.1);
-    margin: 10px 0; /* Adjusted for tighter fit */
+    margin: 10px 0; 
     position: relative;
     display: block;
 }
 
-/* Keep your existing divider icon style */
 .pane-divider::after {
     content: "◈";
     color: var(--accent-color);
@@ -482,7 +456,6 @@ dialog button:hover, dialog a.dialog-btn:hover {
 
 .warning { color: #ff6b6b; }
 .content-pane h2, .content-pane h3 { border-bottom: none !important; }
-.content-pane h2:first-child { border-bottom: 2px solid var(--border-color) !important; }
 
 .unavailable {
     background-color: #4a0404 !important; color: #8b8b8b !important;            
@@ -491,7 +464,7 @@ dialog button:hover, dialog a.dialog-btn:hover {
 
 .duel-schedule-grid {
     display: flex;
-    flex-wrap: wrap; /* Allows cards to drop to new rows */
+    flex-wrap: wrap; 
     gap: 20px; 
     padding: 20px 0; 
 }
@@ -505,7 +478,7 @@ dialog button:hover, dialog a.dialog-btn:hover {
 }
 .day-header { border-bottom: 2px solid var(--accent-color); margin-bottom: 15px; padding-bottom: 5px; }
 .day-header h3 { margin: 0; color: var(--accent-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
-.day-title { font-size: 1.4rem; color: var(--text-main); font-weight: bold; }
+.day-title { font-size: 1.2rem; color: var(--text-main); font-weight: bold; }
 .task-list { list-style: none; padding: 0; margin: 0; }
 .task-list li { padding: 8px 0; border-bottom: 1px solid var(--border-color); color: var(--text-muted); }
 .task-list .warning { color: #ff6b6b; font-weight: bold; border-left: 3px solid #ff6b6b; padding-left: 10px; margin: 10px 0; }
@@ -529,56 +502,38 @@ table.schedule-table tr.active-row td.active-col {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    
-    /* Dark, distressed base */
     background: rgba(10, 8, 7, 0.85);
-    
-    /* The Bronze Frame */
     color: var(--accent-color);
     border: 2px solid var(--accent-color);
-    
     width: 30px;
     height: 30px;
     border-radius: 50%;
     cursor: pointer;
     z-index: 10;
     font-size: 1.2rem;
-    
-    /* Lantern Glow Effect */
     box-shadow: 0 0 10px rgba(184, 151, 90, 0.3);
-    
-    /* Smooth interaction */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    line-height: 1;          /* Removes extra line-box spacing */
-    padding-bottom: 5px;     /* Nudges it up slightly to balance the weight */
-    padding-left: 2px;       /* Centers it horizontally if it feels 'heavy' on one side */
+    line-height: 1;          
+    padding-bottom: 5px;     
+    padding-left: 2px;       
 }
 
 .scroll-btn:hover {
-    /* The "Ignition" Effect */
     background: var(--accent-color);
-    color: #1a1512; /* Dark contrast */
+    color: #1a1512; 
     box-shadow: 0 0 20px rgba(184, 151, 90, 0.6);
-    transform: translateY(-50%) scale(1.1); /* Slight pop on hover */
+    transform: translateY(-50%) scale(1.1); 
 }
 
-/* Visibility adjustments */
 .scroll-btn.left { left: -35px; }
 .scroll-btn.right { right: -35px; }
 
 /* The Trigger Button */
 .lang-trigger {
-    /* 1. Darken the background slightly so the green border pops */
     background: rgba(17, 13, 11, 0.85); 
-    
-    /* 2. The Border Light: Green on the bottom-left, fading to brown on the top-right */
     border: 1px solid;
     border-image: linear-gradient(to top right, rgba(var(--active-theme-bright) / 0.9) 0%, var(--border-color) 60%) 1;
-    
-    /* 3. Cast a faint green ambient glow back towards the lantern */
     box-shadow: -3px 3px 8px rgba(var(--active-theme) / 0.25);
-    
     color: var(--text-main);
     padding: 5px 10px;
     cursor: pointer;
@@ -591,47 +546,37 @@ table.schedule-table tr.active-row td.active-col {
 /* The Dropdown Content */
 .lang-dropdown {
     position: relative;
-    z-index: 9999 !important; /* Ensure it overrides everything */
+    z-index: 9999 !important; 
     background-color: #1e1b1a;
     border: 1px solid #3d3734;
 }
 
-/* The Dropdown Content */
 .dropdown-content {
     visibility: hidden;
     opacity: 0;
     pointer-events: none; 
     transition: opacity 0.2s ease, visibility 0s linear 0.2s;
-    
     position: absolute;
     right: 0;
     top: calc(100% + 2px); 
-    
-    /* 1. THE FIX: Force exact width of the trigger button */
     width: 100%; 
-    box-sizing: border-box; /* Ensures the borders don't make it 2px wider than the parent */
-    
+    box-sizing: border-box; 
     background-color: #1e1b1a;
     z-index: 9999 !important; 
     list-style: none;
     padding: 0;
     margin: 0;
-    
     border: 1px solid;
     border-image: linear-gradient(to bottom right, rgba(var(--active-theme-bright) / 0.6) 0%, var(--border-color) 40%) 1;
 }
 
-/* The Invisible Bridge (Stays exactly the same) */
 .dropdown-content::before {
     content: ""; position: absolute; bottom: 100%; left: 0; width: 100%; height: 15px; background: transparent;
 }
 
 .dropdown-content li a {
     color: var(--text-main);
-    
-    /* Changed horizontal padding to 0 so the text centers perfectly within the 100% width box */
     padding: 8px 0; 
-    
     text-decoration: none;
     display: block;
     text-align: center;
@@ -648,7 +593,6 @@ table.schedule-table tr.active-row td.active-col {
     background-color: #3d3734;
 }
 
-/* The Hover State */
 .lang-dropdown:hover .dropdown-content {
     visibility: visible;
     opacity: 1;
@@ -661,13 +605,10 @@ table.schedule-table tr.active-row td.active-col {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 1; /* Sits above the flicker layer, below the nav */
-    
-    /* THE MAGIC: Restricts visibility to the lantern's reach */
+    z-index: 1; 
     -webkit-mask-image: radial-gradient(circle 400px at center 40%, black 0%, transparent 80%);
     mask-image: radial-gradient(circle 400px at center 40%, black 0%, transparent 80%);
     animation: lantern-pulse 5s infinite ease-in-out;
-    
 }
 
 .mote {
@@ -686,13 +627,10 @@ table.schedule-table tr.active-row td.active-col {
     transform: translate(-50%, -50%);
 }
 
-/* Individual delays for randomness */
 .mote:nth-child(3n) { animation-duration: 8s; width: 2px; height: 2px; opacity: 0.4; }
 .mote:nth-child(5n) { animation-duration: 15s; width: 6px; height: 6px; opacity: 0.6; }
 .mote:nth-child(7n) { animation-duration: 12s; }
-.mote:nth-child(n+21) {
-    display: none;
-}
+.mote:nth-child(n+21) { display: none; }
 
 @keyframes drift {
     0%   { transform: translateY(0) translateX(0); opacity: 0; }
@@ -710,21 +648,11 @@ table.schedule-table tr.active-row td.active-col {
     85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(var(--active-theme) / 0.2); }
 }
 
-/* The slow, rhythmic "breathing" of the flame */
 @keyframes lantern-pulse {
-    0%, 100% { 
-        opacity: 0.7; 
-        transform: scale(1); 
-        filter: brightness(1) blur(2px); 
-    }
-    50% { 
-        opacity: 0.85; 
-        transform: scale(1.005); 
-        filter: brightness(1.05) blur(3px); 
-    }
+    0%, 100% { opacity: 0.7; transform: scale(1); filter: brightness(1) blur(2px); }
+    50% { opacity: 0.85; transform: scale(1.005); filter: brightness(1.05) blur(3px); }
 }
 
-/* The rapid, irregular "jitter" of the flame */
 @keyframes lantern-flicker-smooth {
     0%, 100% { opacity: 0.8; filter: brightness(1) blur(2px); }
     33%      { opacity: 0.85; filter: brightness(1.05) blur(2.5px); }
@@ -738,73 +666,34 @@ table.schedule-table tr.active-row td.active-col {
 /* --- 7. DESKTOP & RESPONSIVE CONSTRAINTS --- */
 @media (min-width: 768px) { 
     html { font-size: 115%; }
-    #mobile-container { max-width: 100%; } 
-    main { 
-        max-width: none; 
-        margin: 0; 
-        padding: 40px max(40px, calc((100vw - 1000px) / 2)); 
-    }
     
-    /* Desktop Overrides */
     .lantern-header { height: 130px !important; min-height: 130px !important; }
     .header-stack { height: 130px; }
-    .lantern-img {
-        width: 130px;
-        transition: filter 0.3s ease;
-    }
-    .lantern-img.blue-mode {
-        filter: hue-rotate(180deg); /* Shifts green to blue */
-    }
-    .lantern-img.red-mode {
-        filter: hue-rotate(270deg); /* Shifts green to purple/red */
-    }
+    .lantern-img { width: 130px; transition: filter 0.3s ease; }
 
-    .parchment-border {
-        border: 5px solid var(--accent-color);
-        transition: border-color 0.4s ease;
-    }
-
-    .lantern-glow-bleed {
-        top: 130px; 
-    }
-    .debossed-title {
-        margin-top: 30px; 
-        font-size: 1.8rem; 
-    }
+    .parchment-border { border: 5px solid var(--accent-color); transition: border-color 0.4s ease; }
+    .lantern-glow-bleed { top: 130px; }
+    .debossed-title { margin-top: 30px; font-size: 1.8rem; }
     
     .anchor-nav { min-height: 45px; }
     .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
     .nav-wrapper::before, .nav-wrapper::after { display: none; }
-    .anchor-link { 
-    height: 32px; 
-    font-size: 0.85rem; 
-    padding: 0 24px; /* Slightly wider padding for desktop */
-    }
+    .anchor-link { height: 32px; font-size: 0.85rem; padding: 0 24px; }
 
     .scroll-btn { display: flex; align-items: center; justify-content: center; }
+    .duel-schedule-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
 
-    .duel-schedule-grid {
-        /* On desktop, allow them to grow larger. 
-           Changing 300px to 350px+ makes them feel less 'slim' */
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 20px;
-    }
-
-    /* motes*/
     @keyframes drift {
         0%   { transform: translateY(0) translateX(0); opacity: 0; }
         50%  { opacity: 0.6; }
-        100% { transform: translateY(-70px) translateX(100px); opacity: 0; } /* Larger drift */
+        100% { transform: translateY(-70px) translateX(100px); opacity: 0; } 
     }
+    
     .dust-container {
-        /* Expand the mask radius for wider headers */
         -webkit-mask-image: radial-gradient(circle 700px at center 40%, black 0%, transparent 80%);
         mask-image: radial-gradient(circle 700px at center 40%, black 0%, transparent 80%);
     }
-    .mote:nth-child(n+21) {
-        display: block;
-    }
-
+    .mote:nth-child(n+21) { display: block; }
 }
 
 @media (display-mode: standalone) {
