@@ -63,6 +63,17 @@ body {
     scroll-behavior: smooth;
 }
 
+/* --- TURBO FRAME FLEXBOX FIX --- */
+turbo-frame#main-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    
+    /* CRITICAL: Allows the <main> tag inside it to continue handling the scrollbar properly */
+    min-height: 0; 
+}
+
 /* --- 3. JEKYLL INCLUDES (HEADER) --- */
 .lantern-header {
     height: 90px !important;

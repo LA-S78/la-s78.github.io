@@ -1,7 +1,7 @@
 <div class="header-container">
 <header class="lantern-header">
 
-<div id="global-dust-container" class="dust-container" data-turbo-permanent>
+<div class="dust-container">
     {% for i in (1..60) %}
         {% comment %} Using prime multipliers to scatter the points {% endcomment %}
         {% assign x = i | times: 17 | modulo: 90 | plus: 5 %}
@@ -10,7 +10,6 @@
         <div class="mote" style="--mote-y: {{ y }}%; --mote-x: {{ x }}%;"></div>
     {% endfor %}
 </div>
-
     <div class="header-stack">
         <img src="/images/lantern.png" id="theme-toggle" class="lantern-img" alt="Toggle Theme">
         <div class="text-container">
@@ -26,14 +25,13 @@
             {% endif %}
 
             <div class="lantern-edge-highlight"></div>
-            <div class="subtitle">{{ header_subtitle }}</div>
+            <div class="subtitle" id="ui-subtitle">{{ header_subtitle }}</div>
         </div>
 
         {% include structure/language-switcher.html %}
 
     </div>
-    
-    <div id="global-flicker-layer" class="lantern-flicker-layer" data-turbo-permanent></div>
+    <div class="lantern-flicker-layer"></div>
     <div class="noise-overlay"></div>
 </header>
 </div>

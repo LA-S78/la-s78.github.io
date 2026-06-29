@@ -94,7 +94,6 @@
         const body = document.body;
         if (!toggle) return;
 
-        // 1. Define your available themes in a cycle array
         const themes = ['default', 'sanctuary', 'miasma'];
 
         // 2. Restore saved preference on load
@@ -125,6 +124,17 @@
         });
     }
 
+    // --- Dynamic Subtitle Sync ---
+    // Grabs the hidden subtitle from the newly loaded Turbo Frame and pushes it to the frozen header
+    function syncHeaderSubtitle() {
+        const newSubtitle = document.getElementById('secret-subtitle-data');
+        const headerSubtitle = document.getElementById('ui-subtitle');
+        
+        if (newSubtitle && headerSubtitle) {
+            headerSubtitle.textContent = newSubtitle.textContent;
+        }
+    }
+
     // --- MASTER INITIALIZER ---
     function initApp() {
         highlightCurrentSurvivalBattle();
@@ -132,6 +142,7 @@
         initSearchEngine();
         highlightActiveLanguage();
         initThemeToggle();
+        syncHeaderSubtitle(); // <-- Ensures subtitle updates on every page swap
     }
 
     // Single source of truth for initialization

@@ -8,27 +8,40 @@
 
     {% include structure/header.html %}
 
-    {% if page.nav_links %}
-        {% include structure/anchor-nav.html %}
-    {% endif %}
 
-    <div class="lantern-glow-bleed"></div>
-
-    <main>
-
-        {{ content }}
+    <turbo-frame id="main-content" data-turbo-action="advance">
         
-    </main>
+        {% assign ui_pages = site.data[site.active_lang].ui.pages %}
+        {% if page.guide_id %}
+            {% assign secret_subtitle = ui_pages.guide_panes[page.guide_id].subtitle %}
+        {% elsif page.page_key %}
+            {% assign secret_subtitle = ui_pages[page.page_key].subtitle %}
+        {% else %}
+            {% assign secret_subtitle = site.data[site.active_lang].ui.header.subtitle %}
+        {% endif %}
+        <span id="secret-subtitle-data" style="display: none;">{{ secret_subtitle }}</span>
 
-{% include structure/footer.html %}
 
-</div>
+        {% if page.nav_links %}
+            {% include structure/anchor-nav.html %}
+        {% endif %}
 
-{% if page.dialogs %}
-    {% for dialog in page.dialogs %}
-        {% include {{ dialog }} %}
-    {% endfor %}
-{% endif %}
+        <div class="lantern-glow-bleed"></div>
 
+        <main>
+            {{ content }}
+        </main>
+
+        {% include structure/footer.html %}
+
+
+        {% if page.dialogs %}
+            {% for dialog in page.dialogs %}
+                {% include {{ dialog }} %}
+            {% endfor %}
+        {% endif %}
+
+    </turbo-frame>
+    </div>
 </body>
 </html>
