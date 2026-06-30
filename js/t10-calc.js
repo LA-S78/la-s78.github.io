@@ -18,13 +18,32 @@
         scrolls: 2400
     };
 
+    const STORAGE_KEY = 'last-asylum-t10-state';
+
     const state = {
-        advProt: 0,
-        health: 0,
-        attack: 0,
-        defense: 0,
+        advProt: 10,
+        health: 6,
+        attack: 7,
+        defense: 3,
         t10Unlocked: false
     };
+
+    function loadState() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                // Merge the saved data into our default state object
+                const parsed = JSON.parse(saved);
+                Object.assign(state, parsed);
+            } catch (e) {
+                console.error("Failed to parse saved calculator state", e);
+            }
+        }
+    }
+
+    function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
 
     function calculateRemainingBranchCost(currentLevel, costArrayMapping) {
         let herbs = 0, grain = 0, scrolls = 0;
@@ -114,6 +133,7 @@
                 let newVal = state[type] + change;
                 if (newVal >= 0 && newVal <= 10) {
                     state[type] = newVal;
+                    saveState(); // Save to local storage on change
                     calculateTotals();
                 }
             });
@@ -123,12 +143,14 @@
         if (toggleT10Btn) {
             toggleT10Btn.addEventListener('click', () => {
                 state.t10Unlocked = !state.t10Unlocked;
+                saveState(); // Save to local storage on change
                 calculateTotals();
             });
         }
     }
 
     // Initialize
+    loadState(); // Pull any saved data before running initial calculations
     calculateTotals();
     bindEvents();
 })();

@@ -182,6 +182,29 @@
         }
     }
 
+    function initScrollMemory() {
+        // Create a unique key for the current page (e.g., 'scroll-pos-/en/guides/')
+        const scrollKey = 'scroll-pos-' + window.location.pathname;
+
+        // 1. Restore position on load
+        const savedScroll = sessionStorage.getItem(scrollKey);
+        if (savedScroll) {
+            // Use requestAnimationFrame to ensure the DOM has finished painting before jumping
+            requestAnimationFrame(() => {
+                window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
+            });
+        }
+
+        // 2. Save position on scroll (Debounced for performance)
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                sessionStorage.setItem(scrollKey, window.scrollY);
+            }, 100); // Only saves after scrolling pauses for 100ms
+        });
+    }
+
     // --- MASTER INITIALIZER ---
     function initApp() {
         highlightCurrentSurvivalBattle();
@@ -191,6 +214,7 @@
         highlightActiveLanguage();
         initThemeToggle();
         syncHeaderSubtitle();
+        initScrollMemory();
     }
 
     // Single source of truth for initialization
