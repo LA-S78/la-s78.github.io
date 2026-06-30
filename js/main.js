@@ -170,43 +170,39 @@
         }
     }
 
+    // Add this variable at the top of your function (outside initApp)
+    let isNewNavigation = false;
+
+    // 1. Update your turbo:visit listener
+    document.addEventListener("turbo:visit", () => {
+        isNewNavigation = true; // Mark this as a manual click
+        const mainContainer = document.querySelector('main');
+        if (mainContainer) mainContainer.scrollTop = 0;
+    });
+
+    // 2. Refine initScrollMemory
     function initScrollMemory() {
         const scrollContainer = document.querySelector('main');
         if (!scrollContainer) return;
 
-        // Apply a transition to prevent the hard "flicker"
-        scrollContainer.style.transition = 'opacity 0.15s ease-in-out';
-        scrollContainer.style.opacity = '0';
-
-        const scrollKey = 'scroll-pos-' + window.location.pathname;
-        const navType = performance.getEntriesByType("navigation")[0]?.type;
-
-        // Restore position
-        if (navType !== "navigate") {
-            const savedScroll = sessionStorage.getItem(scrollKey);
-            if (savedScroll) {
-                requestAnimationFrame(() => {
-                    scrollContainer.scrollTop = parseInt(savedScroll, 10);
-                    scrollContainer.style.opacity = '1';
-                });
-            } else {
-                scrollContainer.style.opacity = '1';
-            }
-        } else {
-            // For new navigations (where we force scrollTop = 0), fade in immediately
-            scrollContainer.style.opacity = '1';
-        }
-
-        // Listener
-        let scrollTimeout;
-        scrollContainer.addEventListener('scroll', () => {
-            if (scrollTimeout) return;
-            scrollTimeout = setTimeout(() => {
-                sessionStorage.setItem(scrollKey, scrollContainer.scrollTop);
-                scrollTimeout = null;
-            }, 100);
-        }, { passive: true });
+    // If it's a new navigation, don't try to restore anything
+    if (isNewNavigation) {
+        isNewNavigation = false; // Reset the flag
+        return; 
     }
+
+    const scrollKey = 'scroll-pos-' + window.location.pathname;
+    const navType = performance.getEntriesByType("navigation")[0]?.type;
+
+    if (navType !== "navigate") {
+        const savedScroll = sessionStorage.getItem(scrollKey);
+        if (savedScroll) {
+            requestAnimationFrame(() => {
+                scrollContainer.scrollTop = parseInt(savedScroll, 10);
+            });
+        }
+    }
+}
 
     // --- MASTER INITIALIZER ---
     function initApp() {
