@@ -103,46 +103,56 @@
     }
 
     function highlightActiveLanguage() {
-        const pathParts = window.location.pathname.split('/').filter(Boolean);
         const langLinks = document.querySelectorAll('.dropdown-content a');
         if (langLinks.length === 0) return;
 
-        // Gather all valid language codes from your dropdown data attributes
+        const currentPath = window.location.pathname;
         const availableLangs = Array.from(langLinks).map(l => l.getAttribute('data-lang')).filter(Boolean);
         
-        // Determine current language from the URL (defaults to 'en' if no valid lang code is in the path)
+        // 1. Cache the original root URLs (Jekyll generates these perfectly on load)
+        langLinks.forEach(link => {
+            if (!link.hasAttribute('data-root-url')) {
+                link.setAttribute('data-root-url', link.getAttribute('href'));
+            }
+        });
+
+        // 2. Find the absolute Base URL by looking at the default English link
+        const enLink = document.querySelector('.dropdown-content a[data-lang="en"]');
+        const baseUrl = enLink ? enLink.getAttribute('data-root-url') : '/';
+
+        // 3. Extract just the page route, ignoring the base URL
+        let relativePath = currentPath.startsWith(baseUrl) 
+            ? currentPath.slice(baseUrl.length) 
+            : currentPath.replace(/^\//, '');
+
+        // 4. Detect if a language code is currently active in the route
         let currentLang = "en";
-        if (pathParts.length > 0 && availableLangs.includes(pathParts[0])) {
-            currentLang = pathParts[0];
+        for (const lang of availableLangs) {
+            // Only trigger if it matches perfectly (e.g., "fr" or "fr/guides", not "french-guides")
+            if (lang !== "en" && (relativePath === lang || relativePath.startsWith(`${lang}/`))) {
+                currentLang = lang;
+                
+                // Strip the old language out to get the "clean" page path
+                relativePath = relativePath.slice(lang.length);
+                if (relativePath.startsWith('/')) relativePath = relativePath.slice(1);
+                break;
+            }
         }
 
+        // 5. Update all links dynamically
         langLinks.forEach(link => {
             const targetLang = link.getAttribute('data-lang');
             if (!targetLang) return;
 
-            // 1. Highlight the active link
+            // Update Visuals
             link.classList.remove('lang-active');
             if (targetLang === currentLang) link.classList.add('lang-active');
 
-            // 2. Dynamically rebuild the href for the current page
-            let newPathParts = [...pathParts];
+            // Reconstruct the deep link: Target Lang Root URL + Clean Relative Path
+            let targetRoot = link.getAttribute('data-root-url');
+            if (!targetRoot.endsWith('/')) targetRoot += '/';
             
-            if (currentLang !== "en" && availableLangs.includes(currentLang)) {
-                // We are currently on a translated page (e.g., /fr/guides)
-                if (targetLang === "en") {
-                    newPathParts.shift(); // Remove the 'fr' to return to default English root
-                } else {
-                    newPathParts[0] = targetLang; // Swap 'fr' for 'de'
-                }
-            } else {
-                // We are currently on the default English page (e.g., /guides)
-                if (targetLang !== "en") {
-                    newPathParts.unshift(targetLang); // Prepend the new language code
-                }
-            }
-
-            // Reconstruct the full URL, preserving any search queries (?) or anchor links (#)
-            link.href = '/' + newPathParts.join('/') + window.location.search + window.location.hash;
+            link.href = targetRoot + relativePath + window.location.search + window.location.hash;
         });
     }
 
