@@ -104,12 +104,45 @@
 
     function highlightActiveLanguage() {
         const pathParts = window.location.pathname.split('/').filter(Boolean);
-        const currentLang = pathParts.length > 0 ? pathParts[0] : "en"; 
         const langLinks = document.querySelectorAll('.dropdown-content a');
+        if (langLinks.length === 0) return;
+
+        // Gather all valid language codes from your dropdown data attributes
+        const availableLangs = Array.from(langLinks).map(l => l.getAttribute('data-lang')).filter(Boolean);
         
+        // Determine current language from the URL (defaults to 'en' if no valid lang code is in the path)
+        let currentLang = "en";
+        if (pathParts.length > 0 && availableLangs.includes(pathParts[0])) {
+            currentLang = pathParts[0];
+        }
+
         langLinks.forEach(link => {
+            const targetLang = link.getAttribute('data-lang');
+            if (!targetLang) return;
+
+            // 1. Highlight the active link
             link.classList.remove('lang-active');
-            if (link.getAttribute('data-lang') === currentLang) link.classList.add('lang-active');
+            if (targetLang === currentLang) link.classList.add('lang-active');
+
+            // 2. Dynamically rebuild the href for the current page
+            let newPathParts = [...pathParts];
+            
+            if (currentLang !== "en" && availableLangs.includes(currentLang)) {
+                // We are currently on a translated page (e.g., /fr/guides)
+                if (targetLang === "en") {
+                    newPathParts.shift(); // Remove the 'fr' to return to default English root
+                } else {
+                    newPathParts[0] = targetLang; // Swap 'fr' for 'de'
+                }
+            } else {
+                // We are currently on the default English page (e.g., /guides)
+                if (targetLang !== "en") {
+                    newPathParts.unshift(targetLang); // Prepend the new language code
+                }
+            }
+
+            // Reconstruct the full URL, preserving any search queries (?) or anchor links (#)
+            link.href = '/' + newPathParts.join('/') + window.location.search + window.location.hash;
         });
     }
 
