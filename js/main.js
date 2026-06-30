@@ -135,10 +135,8 @@
     }
 
     function initThemeToggle() {
-        const toggle = document.getElementById('theme-toggle');
+        // 1. Set the initial state based on localStorage
         const body = document.body;
-        if (!toggle) return;
-
         const themes = ['default', 'sanctuary', 'outbreak', 'miasma'];
         const savedTheme = localStorage.getItem('site-theme') || 'default';
         
@@ -146,19 +144,28 @@
             body.setAttribute('data-theme', savedTheme);
         }
 
-        toggle.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme') || 'default';
-            let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-            const nextTheme = themes[nextIndex];
+        // 2. Use Event Delegation on the document (Turbo-proof)
+        // Remove old listener to avoid duplication if initApp runs multiple times
+        document.removeEventListener('click', handleThemeClick);
+        document.addEventListener('click', handleThemeClick);
 
-            if (nextTheme === 'default') {
-                body.removeAttribute('data-theme');
-                localStorage.removeItem('site-theme');
-            } else {
-                body.setAttribute('data-theme', nextTheme);
-                localStorage.setItem('site-theme', nextTheme);
+        function handleThemeClick(e) {
+            const toggle = document.getElementById('theme-toggle');
+            // Only fire if the clicked element IS the toggle button
+            if (e.target && e.target.id === 'theme-toggle') {
+                const currentTheme = document.body.getAttribute('data-theme') || 'default';
+                let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+                const nextTheme = themes[nextIndex];
+
+                if (nextTheme === 'default') {
+                    document.body.removeAttribute('data-theme');
+                    localStorage.removeItem('site-theme');
+                } else {
+                    document.body.setAttribute('data-theme', nextTheme);
+                    localStorage.setItem('site-theme', nextTheme);
+                }
             }
-        });
+        }
     }
 
     function syncHeaderSubtitle() {
