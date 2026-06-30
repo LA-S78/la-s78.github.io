@@ -186,23 +186,31 @@
         const scrollContainer = document.querySelector('main');
         if (!scrollContainer) return;
 
-        const scrollKey = 'scroll-pos-' + window.location.pathname;
+        // Hide container initially to prevent "flash" of the top of the page
+        scrollContainer.style.visibility = 'hidden';
 
-        // Restore position (only if navigating "back" or "reload")
+        const scrollKey = 'scroll-pos-' + window.location.pathname;
         const navType = performance.getEntriesByType("navigation")[0]?.type;
+
         if (navType !== "navigate") {
             const savedScroll = sessionStorage.getItem(scrollKey);
             if (savedScroll) {
-                setTimeout(() => {
+                // Use requestAnimationFrame for smoother rendering
+                requestAnimationFrame(() => {
                     scrollContainer.scrollTop = parseInt(savedScroll, 10);
-                }, 100);
+                    scrollContainer.style.visibility = 'visible';
+                });
+            } else {
+                scrollContainer.style.visibility = 'visible';
             }
+        } else {
+            scrollContainer.style.visibility = 'visible';
         }
 
-        // Save position on scroll (Debounced for performance)
+        // Listener as before...
         let scrollTimeout;
         scrollContainer.addEventListener('scroll', () => {
-            if (scrollTimeout) return; // In-progress, skip
+            if (scrollTimeout) return;
             scrollTimeout = setTimeout(() => {
                 sessionStorage.setItem(scrollKey, scrollContainer.scrollTop);
                 scrollTimeout = null;
