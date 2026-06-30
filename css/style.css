@@ -1,5 +1,10 @@
 /* --- LAST ASYLUM COMPENDIUM: MASTER STYLESHEET --- */
 
+/* disable unintentional zoom */
+* {
+    touch-action: manipulation;
+}
+
 /* --- 1. VARIABLES & THEMES --- */
 /* Core Variables & Default Theme (Plague) */
 :root {
