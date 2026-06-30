@@ -183,39 +183,31 @@
     }
 
     function initScrollMemory() {
-        // Use a small delay to ensure the DOM is fully painted and container has height
-        setTimeout(() => {
-            const scrollContainer = document.getElementById('mobile-container');
-            
-            // If mobile-container doesn't exist, we fall back to window, 
-            // but log a warning so you know if your selector is wrong
-            if (!scrollContainer) {
-                console.warn("Scroll Memory: #mobile-container not found!");
-                return;
-            }
+        const scrollContainer = document.querySelector('main');
+        if (!scrollContainer) return;
 
-            const scrollKey = 'scroll-pos-' + window.location.pathname;
+        const scrollKey = 'scroll-pos-' + window.location.pathname;
 
-            // Restore position on load
-            const navType = performance.getEntriesByType("navigation")[0]?.type;
-            if (navType !== "navigate") {
-                const savedScroll = sessionStorage.getItem(scrollKey);
-                if (savedScroll) {
-                    requestAnimationFrame(() => {
-                        scrollContainer.scrollTop = parseInt(savedScroll, 10);
-                    });
-                }
-            }
-
-            // Save position on scroll
-            let scrollTimeout;
-            scrollContainer.addEventListener('scroll', () => {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    sessionStorage.setItem(scrollKey, scrollContainer.scrollTop);
+        // Restore position (only if navigating "back" or "reload")
+        const navType = performance.getEntriesByType("navigation")[0]?.type;
+        if (navType !== "navigate") {
+            const savedScroll = sessionStorage.getItem(scrollKey);
+            if (savedScroll) {
+                setTimeout(() => {
+                    scrollContainer.scrollTop = parseInt(savedScroll, 10);
                 }, 100);
-            });
-        }, 100); // Wait 100ms for layout to settle
+            }
+        }
+
+        // Save position on scroll (Debounced for performance)
+        let scrollTimeout;
+        scrollContainer.addEventListener('scroll', () => {
+            if (scrollTimeout) return; // In-progress, skip
+            scrollTimeout = setTimeout(() => {
+                sessionStorage.setItem(scrollKey, scrollContainer.scrollTop);
+                scrollTimeout = null;
+            }, 100);
+        }, { passive: true });
     }
 
     // --- MASTER INITIALIZER ---
