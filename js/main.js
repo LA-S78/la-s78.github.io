@@ -183,24 +183,35 @@
     }
 
     function initScrollMemory() {
+        // Find the element actually responsible for scrolling
+        const scrollContainer = document.getElementById('mobile-container') || window;
         const scrollKey = 'scroll-pos-' + window.location.pathname;
 
-        // 1. Only restore if this is a "reload" or "back" navigation
-        if (performance.getEntriesByType("navigation")[0].type !== "navigate") {
+        // Helper: Get Y position based on whether we are scrolling the window or a container
+        const getY = () => scrollContainer === window ? window.scrollY : scrollContainer.scrollTop;
+
+        // 1. Restore position on load (only if navigating "back" or "reload")
+        const navType = performance.getEntriesByType("navigation")[0]?.type;
+        if (navType !== "navigate") {
             const savedScroll = sessionStorage.getItem(scrollKey);
             if (savedScroll) {
+                const pos = parseInt(savedScroll, 10);
                 requestAnimationFrame(() => {
-                    window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
+                    if (scrollContainer === window) {
+                        window.scrollTo({ top: pos, behavior: 'instant' });
+                    } else {
+                        scrollContainer.scrollTop = pos;
+                    }
                 });
             }
         }
 
         // 2. Save position on scroll
         let scrollTimeout;
-        window.addEventListener('scroll', () => {
+        scrollContainer.addEventListener('scroll', () => {
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
-                sessionStorage.setItem(scrollKey, window.scrollY);
+                sessionStorage.setItem(scrollKey, getY());
             }, 100);
         });
     }
