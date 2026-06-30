@@ -136,9 +136,6 @@ nav_anchors:
   sanctuary_chart: "Chart"
   sanctuary_goals: "Goals"
   sanctuary_efficiency: "Efficiency"
-  #T10 calc
-  t10_writeup: "Writeup"
-  t10_calc: "Calculator"
 
 search:
   guides: "Search guides..."
