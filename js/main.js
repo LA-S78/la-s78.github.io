@@ -179,7 +179,8 @@
 
         const scrollKey = 'scroll-pos-' + window.location.pathname;
 
-        setTimeout(() => {
+        // Use requestAnimationFrame to execute at the start of the next paint
+        requestAnimationFrame(() => {
             if (isNewNavigation) {
                 scrollContainer.scrollTop = 0;
                 isNewNavigation = false;
@@ -187,11 +188,14 @@
                 const navType = performance.getEntriesByType("navigation")[0]?.type;
                 if (navType !== "navigate") {
                     const savedScroll = sessionStorage.getItem(scrollKey);
-                    if (savedScroll) scrollContainer.scrollTop = parseInt(savedScroll, 10);
+                    if (savedScroll) {
+                        scrollContainer.scrollTop = parseInt(savedScroll, 10);
+                    }
                 }
             }
-        }, 100);
+        });
 
+        // Save position on scroll (Debounced)
         let scrollTimeout;
         scrollContainer.addEventListener('scroll', () => {
             if (scrollTimeout) return;
