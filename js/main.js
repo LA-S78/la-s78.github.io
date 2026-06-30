@@ -5,6 +5,7 @@
  */
 (() => {
     let scrollObserver = null;
+    let isNewNavigation = false;
 
     // --- Sub-Modules ---
 
@@ -135,10 +136,7 @@
     }
 
     function initThemeToggle() {
-        const toggle = document.getElementById('theme-toggle');
         const body = document.body;
-        if (!toggle) return;
-
         const themes = ['default', 'sanctuary', 'outbreak', 'miasma'];
         const savedTheme = localStorage.getItem('site-theme') || 'default';
         
@@ -146,19 +144,24 @@
             body.setAttribute('data-theme', savedTheme);
         }
 
-        toggle.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme') || 'default';
-            let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-            const nextTheme = themes[nextIndex];
+        document.removeEventListener('click', handleThemeClick);
+        document.addEventListener('click', handleThemeClick);
 
-            if (nextTheme === 'default') {
-                body.removeAttribute('data-theme');
-                localStorage.removeItem('site-theme');
-            } else {
-                body.setAttribute('data-theme', nextTheme);
-                localStorage.setItem('site-theme', nextTheme);
+        function handleThemeClick(e) {
+            if (e.target && e.target.id === 'theme-toggle') {
+                const currentTheme = document.body.getAttribute('data-theme') || 'default';
+                let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+                const nextTheme = themes[nextIndex];
+
+                if (nextTheme === 'default') {
+                    document.body.removeAttribute('data-theme');
+                    localStorage.removeItem('site-theme');
+                } else {
+                    document.body.setAttribute('data-theme', nextTheme);
+                    localStorage.setItem('site-theme', nextTheme);
+                }
             }
-        });
+        }
     }
 
     function syncHeaderSubtitle() {
@@ -170,39 +173,34 @@
         }
     }
 
-    // Add this variable at the top of your function (outside initApp)
-    let isNewNavigation = false;
-
-    // 1. Update your turbo:visit listener
-    document.addEventListener("turbo:visit", () => {
-        isNewNavigation = true; // Mark this as a manual click
-        const mainContainer = document.querySelector('main');
-        if (mainContainer) mainContainer.scrollTop = 0;
-    });
-
-    // 2. Refine initScrollMemory
     function initScrollMemory() {
         const scrollContainer = document.querySelector('main');
         if (!scrollContainer) return;
 
-    // If it's a new navigation, don't try to restore anything
-    if (isNewNavigation) {
-        isNewNavigation = false; // Reset the flag
-        return; 
-    }
+        const scrollKey = 'scroll-pos-' + window.location.pathname;
 
-    const scrollKey = 'scroll-pos-' + window.location.pathname;
-    const navType = performance.getEntriesByType("navigation")[0]?.type;
+        setTimeout(() => {
+            if (isNewNavigation) {
+                scrollContainer.scrollTop = 0;
+                isNewNavigation = false;
+            } else {
+                const navType = performance.getEntriesByType("navigation")[0]?.type;
+                if (navType !== "navigate") {
+                    const savedScroll = sessionStorage.getItem(scrollKey);
+                    if (savedScroll) scrollContainer.scrollTop = parseInt(savedScroll, 10);
+                }
+            }
+        }, 100);
 
-    if (navType !== "navigate") {
-        const savedScroll = sessionStorage.getItem(scrollKey);
-        if (savedScroll) {
-            requestAnimationFrame(() => {
-                scrollContainer.scrollTop = parseInt(savedScroll, 10);
-            });
-        }
+        let scrollTimeout;
+        scrollContainer.addEventListener('scroll', () => {
+            if (scrollTimeout) return;
+            scrollTimeout = setTimeout(() => {
+                sessionStorage.setItem(scrollKey, scrollContainer.scrollTop);
+                scrollTimeout = null;
+            }, 100);
+        }, { passive: true });
     }
-}
 
     // --- MASTER INITIALIZER ---
     function initApp() {
@@ -216,12 +214,11 @@
         initScrollMemory();
     }
 
+    // --- EVENTS ---
     document.addEventListener("turbo:load", initApp);
 
-    // Force scroll to top on every new Turbo navigation
     document.addEventListener("turbo:visit", () => {
-        const mainContainer = document.querySelector('main');
-        if (mainContainer) mainContainer.scrollTop = 0;
+        isNewNavigation = true;
     });
 
     window.scrollPinned = function(direction) {

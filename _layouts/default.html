@@ -8,7 +8,6 @@
 
     {% include structure/header.html %}
 
-
     <turbo-frame id="main-content" data-turbo-action="advance">
         
         {% assign ui_pages = site.data[site.active_lang].ui.pages %}
@@ -21,7 +20,6 @@
         {% endif %}
         <span id="secret-subtitle-data" style="display: none;">{{ secret_subtitle }}</span>
 
-
         {% if page.nav_links %}
             {% include structure/anchor-nav.html %}
         {% endif %}
@@ -33,7 +31,6 @@
         </main>
 
         {% include structure/footer.html %}
-
 
         {% if page.dialogs %}
             {% for dialog in page.dialogs %}
