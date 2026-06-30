@@ -65,13 +65,11 @@
         sections.forEach(section => scrollObserver.observe(section));
     }
 
-    // --- NEW: Fixes Turbo's Anchor Link Jumping ---
     function initAnchorScrolling() {
         const navLinks = document.querySelectorAll('.anchor-link');
         
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
-                // Ensure it's a hash link
                 const href = this.getAttribute('href');
                 if (!href || !href.includes('#')) return;
 
@@ -79,10 +77,7 @@
                 const targetElement = document.getElementById(targetId);
 
                 if (targetElement) {
-                    // Stop Turbo from hijacking the click
                     e.preventDefault(); 
-                    
-                    // Native smooth scroll (Respects your CSS scroll-margin-top)
                     targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
@@ -106,12 +101,10 @@
         const langLinks = document.querySelectorAll('.dropdown-content a');
         if (langLinks.length === 0) return;
 
-        const currentPath = window.location.pathname; // e.g., /en/guides/index.html
+        const currentPath = window.location.pathname;
         const availableLangs = Array.from(langLinks).map(l => l.getAttribute('data-lang')).filter(Boolean);
-
         const pathParts = currentPath.split('/').filter(Boolean);
 
-        // Determine current language by checking if any path segment is a known language code
         let currentLang = "en";
         let langIndex = -1;
 
@@ -127,21 +120,16 @@
             const targetLang = link.getAttribute('data-lang');
             if (!targetLang) return;
 
-            // Highlight the active link
             link.classList.remove('lang-active');
             if (targetLang === currentLang) link.classList.add('lang-active');
 
-            // Swap out the language code in the URL parts
             let newPathParts = [...pathParts];
             if (langIndex !== -1) {
-                // Replace the existing language code (e.g., swap 'en' for 'fr')
                 newPathParts[langIndex] = targetLang;
             } else {
-                // If no language code was found in the URL, insert it at the beginning
                 newPathParts.unshift(targetLang);
             }
 
-            // Rebuild the final URL seamlessly
             link.href = '/' + newPathParts.join('/') + window.location.search + window.location.hash;
         });
     }
@@ -186,7 +174,6 @@
         const scrollContainer = document.querySelector('main');
         if (!scrollContainer) return;
 
-        // Hide container initially to prevent "flash" of the top of the page
         scrollContainer.style.visibility = 'hidden';
 
         const scrollKey = 'scroll-pos-' + window.location.pathname;
@@ -195,7 +182,6 @@
         if (navType !== "navigate") {
             const savedScroll = sessionStorage.getItem(scrollKey);
             if (savedScroll) {
-                // Use requestAnimationFrame for smoother rendering
                 requestAnimationFrame(() => {
                     scrollContainer.scrollTop = parseInt(savedScroll, 10);
                     scrollContainer.style.visibility = 'visible';
@@ -207,7 +193,6 @@
             scrollContainer.style.visibility = 'visible';
         }
 
-        // Listener as before...
         let scrollTimeout;
         scrollContainer.addEventListener('scroll', () => {
             if (scrollTimeout) return;
@@ -222,7 +207,7 @@
     function initApp() {
         highlightCurrentSurvivalBattle();
         initScrollObserver();
-        initAnchorScrolling(); // <-- Initialized Here
+        initAnchorScrolling();
         initSearchEngine();
         highlightActiveLanguage();
         initThemeToggle();
@@ -230,10 +215,14 @@
         initScrollMemory();
     }
 
-    // Single source of truth for initialization
     document.addEventListener("turbo:load", initApp);
 
-    // Expose this for your HTML onclick attributes
+    // Force scroll to top on every new Turbo navigation
+    document.addEventListener("turbo:visit", () => {
+        const mainContainer = document.querySelector('main');
+        if (mainContainer) mainContainer.scrollTop = 0;
+    });
+
     window.scrollPinned = function(direction) {
         const container = document.getElementById('pinnedContainer');
         if (!container) return;
