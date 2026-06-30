@@ -137,30 +137,11 @@
 
     function initThemeToggle() {
         const body = document.body;
-        const themes = ['default', 'sanctuary', 'outbreak', 'miasma'];
+        const themes = ['default', 'sanctuary', 'miasma'];
         const savedTheme = localStorage.getItem('site-theme') || 'default';
         
         if (savedTheme !== 'default' && themes.includes(savedTheme)) {
             body.setAttribute('data-theme', savedTheme);
-        }
-
-        document.removeEventListener('click', handleThemeClick);
-        document.addEventListener('click', handleThemeClick);
-
-        function handleThemeClick(e) {
-            if (e.target && e.target.id === 'theme-toggle') {
-                const currentTheme = document.body.getAttribute('data-theme') || 'default';
-                let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-                const nextTheme = themes[nextIndex];
-
-                if (nextTheme === 'default') {
-                    document.body.removeAttribute('data-theme');
-                    localStorage.removeItem('site-theme');
-                } else {
-                    document.body.setAttribute('data-theme', nextTheme);
-                    localStorage.setItem('site-theme', nextTheme);
-                }
-            }
         }
     }
 
@@ -179,7 +160,6 @@
 
         const scrollKey = 'scroll-pos-' + window.location.pathname;
 
-        // Use requestAnimationFrame to execute at the start of the next paint
         requestAnimationFrame(() => {
             if (isNewNavigation) {
                 scrollContainer.scrollTop = 0;
@@ -195,7 +175,6 @@
             }
         });
 
-        // Save position on scroll (Debounced)
         let scrollTimeout;
         scrollContainer.addEventListener('scroll', () => {
             if (scrollTimeout) return;
@@ -223,6 +202,25 @@
 
     document.addEventListener("turbo:visit", () => {
         isNewNavigation = true;
+    });
+
+    // Attached once to the document, survives all Turbo navigations
+    document.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('#theme-toggle');
+        if (!toggleBtn) return;
+
+        const themes = ['default', 'sanctuary', 'miasma'];
+        const currentTheme = document.body.getAttribute('data-theme') || 'default';
+        let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+        const nextTheme = themes[nextIndex];
+
+        if (nextTheme === 'default') {
+            document.body.removeAttribute('data-theme');
+            localStorage.removeItem('site-theme');
+        } else {
+            document.body.setAttribute('data-theme', nextTheme);
+            localStorage.setItem('site-theme', nextTheme);
+        }
     });
 
     window.scrollPinned = function(direction) {
