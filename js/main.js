@@ -65,6 +65,30 @@
         sections.forEach(section => scrollObserver.observe(section));
     }
 
+    // --- NEW: Fixes Turbo's Anchor Link Jumping ---
+    function initAnchorScrolling() {
+        const navLinks = document.querySelectorAll('.anchor-link');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Ensure it's a hash link
+                const href = this.getAttribute('href');
+                if (!href || !href.includes('#')) return;
+
+                const targetId = href.split('#')[1];
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    // Stop Turbo from hijacking the click
+                    e.preventDefault(); 
+                    
+                    // Native smooth scroll (Respects your CSS scroll-margin-top)
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    }
+
     function initSearchEngine() {
         const searchInput = document.getElementById('searchInput');
         if (!searchInput) return;
@@ -94,26 +118,18 @@
         const body = document.body;
         if (!toggle) return;
 
-        const themes = ['default', 'sanctuary', 'miasma'];
-
-        // 2. Restore saved preference on load
+        const themes = ['default', 'sanctuary', 'outbreak', 'miasma'];
         const savedTheme = localStorage.getItem('site-theme') || 'default';
         
-        // Ensure the saved theme is still valid before applying it
         if (savedTheme !== 'default' && themes.includes(savedTheme)) {
             body.setAttribute('data-theme', savedTheme);
         }
 
-        // 3. Cyclic Switcher Listener
         toggle.addEventListener('click', () => {
-            // Read current state
             const currentTheme = body.getAttribute('data-theme') || 'default';
-            
-            // Find the index of the next theme in the loop
             let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
             const nextTheme = themes[nextIndex];
 
-            // Apply new state
             if (nextTheme === 'default') {
                 body.removeAttribute('data-theme');
                 localStorage.removeItem('site-theme');
@@ -124,8 +140,6 @@
         });
     }
 
-    // --- Dynamic Subtitle Sync ---
-    // Grabs the hidden subtitle from the newly loaded Turbo Frame and pushes it to the frozen header
     function syncHeaderSubtitle() {
         const newSubtitle = document.getElementById('secret-subtitle-data');
         const headerSubtitle = document.getElementById('ui-subtitle');
@@ -139,10 +153,11 @@
     function initApp() {
         highlightCurrentSurvivalBattle();
         initScrollObserver();
+        initAnchorScrolling(); // <-- Initialized Here
         initSearchEngine();
         highlightActiveLanguage();
         initThemeToggle();
-        syncHeaderSubtitle(); // <-- Ensures subtitle updates on every page swap
+        syncHeaderSubtitle();
     }
 
     // Single source of truth for initialization
