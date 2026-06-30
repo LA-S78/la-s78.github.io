@@ -103,6 +103,9 @@ pages:
     premium_shop:
       title: "Premium & Gem Packs"
       subtitle: "Premium & Gem Packs"
+    t10:
+      title: "T10 Guide"
+      subtitle: "Tier 10 Troop Requirements"
 
 nav_anchors:
   server_rules: "Server Rules"
@@ -133,6 +136,9 @@ nav_anchors:
   sanctuary_chart: "Chart"
   sanctuary_goals: "Goals"
   sanctuary_efficiency: "Efficiency"
+  #T10 calc
+  t10_writeup: "Writeup"
+  t10_calc: "Calculator"
 
 search:
   guides: "Search guides..."
