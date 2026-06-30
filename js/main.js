@@ -135,8 +135,10 @@
     }
 
     function initThemeToggle() {
-        // 1. Set the initial state based on localStorage
+        const toggle = document.getElementById('theme-toggle');
         const body = document.body;
+        if (!toggle) return;
+
         const themes = ['default', 'sanctuary', 'outbreak', 'miasma'];
         const savedTheme = localStorage.getItem('site-theme') || 'default';
         
@@ -144,28 +146,19 @@
             body.setAttribute('data-theme', savedTheme);
         }
 
-        // 2. Use Event Delegation on the document (Turbo-proof)
-        // Remove old listener to avoid duplication if initApp runs multiple times
-        document.removeEventListener('click', handleThemeClick);
-        document.addEventListener('click', handleThemeClick);
+        toggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme') || 'default';
+            let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+            const nextTheme = themes[nextIndex];
 
-        function handleThemeClick(e) {
-            const toggle = document.getElementById('theme-toggle');
-            // Only fire if the clicked element IS the toggle button
-            if (e.target && e.target.id === 'theme-toggle') {
-                const currentTheme = document.body.getAttribute('data-theme') || 'default';
-                let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-                const nextTheme = themes[nextIndex];
-
-                if (nextTheme === 'default') {
-                    document.body.removeAttribute('data-theme');
-                    localStorage.removeItem('site-theme');
-                } else {
-                    document.body.setAttribute('data-theme', nextTheme);
-                    localStorage.setItem('site-theme', nextTheme);
-                }
+            if (nextTheme === 'default') {
+                body.removeAttribute('data-theme');
+                localStorage.removeItem('site-theme');
+            } else {
+                body.setAttribute('data-theme', nextTheme);
+                localStorage.setItem('site-theme', nextTheme);
             }
-        }
+        });
     }
 
     function syncHeaderSubtitle() {
@@ -181,25 +174,30 @@
         const scrollContainer = document.querySelector('main');
         if (!scrollContainer) return;
 
-        scrollContainer.style.visibility = 'hidden';
+        // Apply a transition to prevent the hard "flicker"
+        scrollContainer.style.transition = 'opacity 0.15s ease-in-out';
+        scrollContainer.style.opacity = '0';
 
         const scrollKey = 'scroll-pos-' + window.location.pathname;
         const navType = performance.getEntriesByType("navigation")[0]?.type;
 
+        // Restore position
         if (navType !== "navigate") {
             const savedScroll = sessionStorage.getItem(scrollKey);
             if (savedScroll) {
                 requestAnimationFrame(() => {
                     scrollContainer.scrollTop = parseInt(savedScroll, 10);
-                    scrollContainer.style.visibility = 'visible';
+                    scrollContainer.style.opacity = '1';
                 });
             } else {
-                scrollContainer.style.visibility = 'visible';
+                scrollContainer.style.opacity = '1';
             }
         } else {
-            scrollContainer.style.visibility = 'visible';
+            // For new navigations (where we force scrollTop = 0), fade in immediately
+            scrollContainer.style.opacity = '1';
         }
 
+        // Listener
         let scrollTimeout;
         scrollContainer.addEventListener('scroll', () => {
             if (scrollTimeout) return;
