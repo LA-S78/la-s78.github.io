@@ -31,6 +31,7 @@ guides:
   sanctuary_shop: "Negozio Santuario"
   campaign_shop: "Negozio Campagna"
   premium_shop: "Pacchetti Premium & Gemme"
+  t10: "Calcolatore T10"
 
 pages:
   home:
@@ -103,6 +104,9 @@ pages:
     premium_shop:
       title: "Pacchetti Premium & Gemme"
       subtitle: "Pacchetti Premium & Gemme"
+    t10:
+      title: "Guida T10"
+      subtitle: "Requisiti truppe livello 10"
 
 nav_anchors:
   server_rules: "Regole Server"

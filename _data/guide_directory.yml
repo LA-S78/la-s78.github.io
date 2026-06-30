@@ -27,6 +27,10 @@ strategy:
       <polyline points="9 22 9 12 15 12 15 22" />
   - key: "t10"
     url: /LANG_CODE/guides/t10.html
+    icon: |
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+      <polyline points="7 10 9 8 9 16" />
+      <rect x="13" y="8" width="4" height="8" rx="1" />
 
 events:
   - key: "duel"

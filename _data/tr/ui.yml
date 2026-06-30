@@ -31,6 +31,7 @@ guides:
   sanctuary_shop: "Sığınak Mağazası"
   campaign_shop: "Sefer Mağazası"
   premium_shop: "Premium & Elmas Paketleri"
+  t10: "T10 Hesap Makinesi"
 
 pages:
   home:
@@ -103,6 +104,9 @@ pages:
     premium_shop:
       title: "Premium & Elmas Paketleri"
       subtitle: "Premium & Elmas Paketleri"
+    t10:
+      title: "T10 Rehberi"
+      subtitle: "10. Seviye Birlik Gereksinimleri"
 
 nav_anchors:
   server_rules: "Sunucu Kuralları"

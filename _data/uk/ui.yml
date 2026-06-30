@@ -31,6 +31,7 @@ guides:
   sanctuary_shop: "Магазин Сховища"
   campaign_shop: "Магазин Кампанії"
   premium_shop: "Преміум і Набори самоцвітів"
+  t10: "Калькулятор T10"
 
 pages:
   home:
@@ -103,6 +104,9 @@ pages:
     premium_shop:
       title: "Преміум і Набори самоцвітів"
       subtitle: "Преміум і Набори самоцвітів"
+    t10:
+      title: "Гайд по T10"
+      subtitle: "Вимоги до військ 10-го рівня"
 
 nav_anchors:
   server_rules: "Правила сервера"

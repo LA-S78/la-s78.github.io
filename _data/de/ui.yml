@@ -31,6 +31,7 @@ guides:
   sanctuary_shop: "Sanktuarium-Shop"
   campaign_shop: "Kampagnen-Shop"
   premium_shop: "Premium- & Edelsteinpakete"
+  t10: "T10-Rechner"
 
 pages:
   home:
@@ -103,6 +104,9 @@ pages:
     premium_shop:
       title: "Premium- & Edelsteinpakete"
       subtitle: "Premium- & Edelsteinpakete"
+    t10:
+      title: "T10-Leitfaden"
+      subtitle: "Anforderungen für Truppen der Stufe 10"
 
 nav_anchors:
   server_rules: "Serverregeln"

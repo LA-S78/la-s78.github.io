@@ -31,6 +31,7 @@ guides:
   sanctuary_shop: "Магазин Убежища"
   campaign_shop: "Магазин Кампании"
   premium_shop: "Премиум и Наборы самоцветов"
+  t10: "Калькулятор T10"
 
 pages:
   home:
@@ -103,6 +104,9 @@ pages:
     premium_shop:
       title: "Премиум и Наборы самоцветов"
       subtitle: "Премиум и Наборы самоцветов"
+    t10:
+      title: "Гайд по T10"
+      subtitle: "Требования для войск 10-го уровня"
 
 nav_anchors:
   server_rules: "Правила сервера"

@@ -32,7 +32,6 @@
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
             try {
-                // Merge the saved data into our default state object
                 const parsed = JSON.parse(saved);
                 Object.assign(state, parsed);
             } catch (e) {
@@ -90,13 +89,17 @@
         document.getElementById('total-grain').className = grain === 0 ? 'total-value zero' : 'total-value';
         document.getElementById('total-scrolls').className = scrolls === 0 ? 'total-value zero' : 'total-value';
 
+        // Fetch localized "MAX" text from the parent container container, default to English
+        const container = document.querySelector('.tree-container');
+        const maxText = container ? (container.getAttribute('data-txt-max') || "MAX") : "MAX";
+
         ['advProt', 'health', 'attack', 'defense'].forEach(key => {
             const display = document.getElementById(`disp-${key}`);
             const node = document.getElementById(`node-${key.replace('Prot', '')}`);
             if (!display || !node) return;
             
             if (state[key] === 10) {
-                display.textContent = "MAX";
+                display.textContent = maxText;
                 display.classList.add('max-text');
                 node.classList.add('maxed');
             } else {
@@ -109,13 +112,17 @@
         const btnT10 = document.getElementById('btn-t10');
         const nodeT10 = document.getElementById('node-t10');
         if (btnT10 && nodeT10) {
+            // Fetch localized texts from button data attributes
+            const txtUnlocked = btnT10.getAttribute('data-unlocked') || "Unlocked";
+            const txtLocked = btnT10.getAttribute('data-locked') || "Locked";
+
             if (state.t10Unlocked) {
-                btnT10.textContent = "Unlocked (1/1)";
+                btnT10.textContent = `${txtUnlocked} (1/1)`;
                 btnT10.classList.add('active');
                 nodeT10.classList.remove('locked');
                 nodeT10.classList.add('maxed');
             } else {
-                btnT10.textContent = "Locked (0/1)";
+                btnT10.textContent = `${txtLocked} (0/1)`;
                 btnT10.classList.remove('active');
                 nodeT10.classList.add('locked');
                 nodeT10.classList.remove('maxed');
@@ -133,7 +140,7 @@
                 let newVal = state[type] + change;
                 if (newVal >= 0 && newVal <= 10) {
                     state[type] = newVal;
-                    saveState(); // Save to local storage on change
+                    saveState();
                     calculateTotals();
                 }
             });
@@ -143,14 +150,14 @@
         if (toggleT10Btn) {
             toggleT10Btn.addEventListener('click', () => {
                 state.t10Unlocked = !state.t10Unlocked;
-                saveState(); // Save to local storage on change
+                saveState();
                 calculateTotals();
             });
         }
     }
 
     // Initialize
-    loadState(); // Pull any saved data before running initial calculations
+    loadState();
     calculateTotals();
     bindEvents();
 })();

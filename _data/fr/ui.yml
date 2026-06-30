@@ -31,6 +31,7 @@ guides:
   sanctuary_shop: "Boutique du Sanctuaire"
   campaign_shop: "Boutique de Campagne"
   premium_shop: "Packs Premium & Gemmes"
+  t10: "Calculateur T10"
 
 pages:
   home:
@@ -103,6 +104,9 @@ pages:
     premium_shop:
       title: "Packs Premium & Gemmes"
       subtitle: "Packs Premium & Gemmes"
+    t10:
+      title: "Guide T10"
+      subtitle: "Exigences pour les troupes de rang 10"
 
 nav_anchors:
   server_rules: "Règles du Serveur"
