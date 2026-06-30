@@ -106,59 +106,43 @@
         const langLinks = document.querySelectorAll('.dropdown-content a');
         if (langLinks.length === 0) return;
 
-        const currentPath = window.location.pathname;
+        const currentPath = window.location.pathname; // e.g., /en/guides/index.html
         const availableLangs = Array.from(langLinks).map(l => l.getAttribute('data-lang')).filter(Boolean);
-        
-        // 1. Cache the original root URLs (Jekyll generates these perfectly on load)
-        langLinks.forEach(link => {
-            if (!link.hasAttribute('data-root-url')) {
-                link.setAttribute('data-root-url', link.getAttribute('href'));
-            }
-        });
 
-        // 2. Find the absolute Base URL by looking at the default English link
-        const enLink = document.querySelector('.dropdown-content a[data-lang="en"]');
-        const baseUrl = enLink ? enLink.getAttribute('data-root-url') : '/';
+        const pathParts = currentPath.split('/').filter(Boolean);
 
-        // 3. Extract just the page route, ignoring the base URL
-        let relativePath = currentPath.startsWith(baseUrl) 
-            ? currentPath.slice(baseUrl.length) 
-            : currentPath.replace(/^\//, '');
-
-        // 4. Detect if a language code is currently active in the route
+        // Determine current language by checking if any path segment is a known language code
         let currentLang = "en";
-        for (const lang of availableLangs) {
-            // Only trigger if it matches perfectly (e.g., "fr" or "fr/guides", not "french-guides")
-            if (lang !== "en" && (relativePath === lang || relativePath.startsWith(`${lang}/`))) {
-                currentLang = lang;
-                
-                // Strip the old language out to get the "clean" page path
-                relativePath = relativePath.slice(lang.length);
-                if (relativePath.startsWith('/')) relativePath = relativePath.slice(1);
+        let langIndex = -1;
+
+        for (let i = 0; i < pathParts.length; i++) {
+            if (availableLangs.includes(pathParts[i])) {
+                currentLang = pathParts[i];
+                langIndex = i;
                 break;
             }
         }
 
-        // 5. Update all links dynamically
         langLinks.forEach(link => {
             const targetLang = link.getAttribute('data-lang');
             if (!targetLang) return;
 
-            // Update Visuals
+            // Highlight the active link
             link.classList.remove('lang-active');
             if (targetLang === currentLang) link.classList.add('lang-active');
 
-            // Combine root and relative path, ensuring exactly one slash between them
-            let targetRoot = link.getAttribute('data-root-url').replace(/\/$/, '');
-            let cleanRelative = relativePath.replace(/^\//, '');
-            let fullPath = `${targetRoot}/${cleanRelative}`;
-            
-            // Strip the trailing slash (unless the entire path is literally just "/")
-            if (fullPath.endsWith('/') && fullPath.length > 1) {
-                fullPath = fullPath.slice(0, -1);
+            // Swap out the language code in the URL parts
+            let newPathParts = [...pathParts];
+            if (langIndex !== -1) {
+                // Replace the existing language code (e.g., swap 'en' for 'fr')
+                newPathParts[langIndex] = targetLang;
+            } else {
+                // If no language code was found in the URL, insert it at the beginning
+                newPathParts.unshift(targetLang);
             }
 
-            link.href = fullPath + window.location.search + window.location.hash;
+            // Rebuild the final URL seamlessly
+            link.href = '/' + newPathParts.join('/') + window.location.search + window.location.hash;
         });
     }
 
