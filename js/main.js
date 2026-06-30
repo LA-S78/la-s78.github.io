@@ -183,37 +183,39 @@
     }
 
     function initScrollMemory() {
-        // Find the element actually responsible for scrolling
-        const scrollContainer = document.getElementById('mobile-container') || window;
-        const scrollKey = 'scroll-pos-' + window.location.pathname;
-
-        // Helper: Get Y position based on whether we are scrolling the window or a container
-        const getY = () => scrollContainer === window ? window.scrollY : scrollContainer.scrollTop;
-
-        // 1. Restore position on load (only if navigating "back" or "reload")
-        const navType = performance.getEntriesByType("navigation")[0]?.type;
-        if (navType !== "navigate") {
-            const savedScroll = sessionStorage.getItem(scrollKey);
-            if (savedScroll) {
-                const pos = parseInt(savedScroll, 10);
-                requestAnimationFrame(() => {
-                    if (scrollContainer === window) {
-                        window.scrollTo({ top: pos, behavior: 'instant' });
-                    } else {
-                        scrollContainer.scrollTop = pos;
-                    }
-                });
+        // Use a small delay to ensure the DOM is fully painted and container has height
+        setTimeout(() => {
+            const scrollContainer = document.getElementById('mobile-container');
+            
+            // If mobile-container doesn't exist, we fall back to window, 
+            // but log a warning so you know if your selector is wrong
+            if (!scrollContainer) {
+                console.warn("Scroll Memory: #mobile-container not found!");
+                return;
             }
-        }
 
-        // 2. Save position on scroll
-        let scrollTimeout;
-        scrollContainer.addEventListener('scroll', () => {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                sessionStorage.setItem(scrollKey, getY());
-            }, 100);
-        });
+            const scrollKey = 'scroll-pos-' + window.location.pathname;
+
+            // Restore position on load
+            const navType = performance.getEntriesByType("navigation")[0]?.type;
+            if (navType !== "navigate") {
+                const savedScroll = sessionStorage.getItem(scrollKey);
+                if (savedScroll) {
+                    requestAnimationFrame(() => {
+                        scrollContainer.scrollTop = parseInt(savedScroll, 10);
+                    });
+                }
+            }
+
+            // Save position on scroll
+            let scrollTimeout;
+            scrollContainer.addEventListener('scroll', () => {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    sessionStorage.setItem(scrollKey, scrollContainer.scrollTop);
+                }, 100);
+            });
+        }, 100); // Wait 100ms for layout to settle
     }
 
     // --- MASTER INITIALIZER ---
