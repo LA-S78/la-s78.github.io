@@ -148,11 +148,17 @@
             link.classList.remove('lang-active');
             if (targetLang === currentLang) link.classList.add('lang-active');
 
-            // Reconstruct the deep link: Target Lang Root URL + Clean Relative Path
-            let targetRoot = link.getAttribute('data-root-url');
-            if (!targetRoot.endsWith('/')) targetRoot += '/';
+            // Combine root and relative path, ensuring exactly one slash between them
+            let targetRoot = link.getAttribute('data-root-url').replace(/\/$/, '');
+            let cleanRelative = relativePath.replace(/^\//, '');
+            let fullPath = `${targetRoot}/${cleanRelative}`;
             
-            link.href = targetRoot + relativePath + window.location.search + window.location.hash;
+            // Strip the trailing slash (unless the entire path is literally just "/")
+            if (fullPath.endsWith('/') && fullPath.length > 1) {
+                fullPath = fullPath.slice(0, -1);
+            }
+
+            link.href = fullPath + window.location.search + window.location.hash;
         });
     }
 
