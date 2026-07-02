@@ -274,7 +274,7 @@ main img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid 
 /* Bottom Footer */
 footer {
     width: 100%; background-color: var(--nav-bg); border-top: 1px solid var(--border-color); 
-    display: flex; justify-content: space-around; padding-top: 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 30; flex-shrink: 0; 
+    display: flex; justify-content: space-around; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); z-index: 30; flex-shrink: 0; 
 }
 .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 0.7rem; gap: 4px; text-decoration: none; border-bottom: none !important; }
 .nav-item.active { color: var(--accent-color); }
