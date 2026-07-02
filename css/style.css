@@ -723,7 +723,7 @@ table.schedule-table tr.active-row td.active-col {
 .hex-node {
     width: 70px;
     height: 80px;
-    background-color: var(--accent-color);
+    background-color: #7a0000;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex;
     justify-content: center;
@@ -743,14 +743,10 @@ table.schedule-table tr.active-row td.active-col {
     transition: background-color 0.3s ease;
 }
 .hex-node.maxed {
-    box-shadow: none !important;
-    transition: none !important;
-    background-color: rgba(var(--active-theme), 1) !important;
-    animation: border-pulse 2s infinite ease-in-out !important;
-    overflow: visible !important;
+    background-color: rgba(var(--active-theme), 1);
 }
 .hex-node.locked {
-    background-color: var(--accent-color);
+    background-color: #7a0000;
     box-shadow: 0 0 20px rgba(184, 151, 90, 0.4);
 }
 .icon-placeholder {
@@ -845,7 +841,8 @@ table.schedule-table tr.active-row td.active-col {
     transition: all 0.3s;
 }
 .t10-toggle.active {
-    background: var(--accent-color);
+    border: 1px solid rgba(var(--active-theme-bright), 1);
+    background: rgba(var(--active-theme-bright), 1);
     color: var(--bg-color);
 }
 .totals-banner {
@@ -906,19 +903,14 @@ svg.resource-icon {
     100% { transform: translateY(-50px) translateX(20px); opacity: 0; }
 }
 
-@keyframes border-pulse {
-    0%, 100% { box-shadow: 0 0 5px rgba(var(--active-theme-vivid), 0.3); }
-    50%      { box-shadow: 0 0 20px rgba(var(--active-theme-vivid), 0.8); }
-}
-
 /* --- 7. ANIMATIONS --- */
 @keyframes lantern-flicker {
-    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(var(--active-theme), 0.2); }
-    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(var(--active-theme), 0.3); }
-    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(var(--active-theme), 0.5); }
-    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(var(--active-theme), 0.1); }
-    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(var(--active-theme), 0.25); }
-    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(var(--active-theme), 0.2); }
+    0%, 100% { filter: brightness(1) drop-shadow(0 0 5px rgba(var(--active-theme), 0.2)); }
+    20%      { filter: brightness(0.9) drop-shadow(0 0 8px rgba(var(--active-theme), 0.3)); }
+    35%      { filter: brightness(1.05) drop-shadow(0 0 15px rgba(var(--active-theme), 0.5)); }
+    50%      { filter: brightness(0.7) drop-shadow(0 0 2px rgba(var(--active-theme), 0.1)); }
+    70%      { filter: brightness(0.95) drop-shadow(0 0 6px rgba(var(--active-theme), 0.25)); }
+    85%      { filter: brightness(0.8) drop-shadow(0 0 4px rgba(var(--active-theme), 0.2)); }
 }
 
 @keyframes lantern-pulse {
