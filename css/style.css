@@ -184,18 +184,10 @@ turbo-frame#main-content {
     width: 90px; /* Adjust to preferred size */
     height: 90px;
     flex-shrink: 0;
-    
-    /* Flexbox flow instead of absolute positioning */
-    position: relative; 
-    margin-right: 10px; /* Space between lantern and title */
-    
-    /* THE FIX: Isolate the element to stop iOS from guessing transparency */
-    isolation: isolate;
-    
-    /* The mask defines the glow shape */
-    -webkit-mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 95%);
-mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 95%);
     mix-blend-mode: screen;
+    position: relative; 
+    margin-right: 0px;
+    isolation: isolate;
 }
 
 .lantern-img {
