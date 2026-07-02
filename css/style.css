@@ -27,25 +27,25 @@
     --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
     /* Default Theme: Plague (Green) */
-    --active-theme: 35 120 45;
-    --active-theme-bright: 55 150 65;
-    --active-theme-vivid: 85 190 95; /* NEW: Vivid Highlight */
+    --active-theme: 35, 120, 45;
+    --active-theme-bright: 55, 150, 65;
+    --active-theme-vivid: 85, 190, 95; /* NEW: Vivid Highlight */
     --lantern-filter: contrast(1.3) brightness(1.0) saturate(1.2);
 }
 
 /* Theme 2: Sanctuary (Orange) */
 body[data-theme="sanctuary"] {
-    --active-theme: 230 160 80;
-    --active-theme-bright: 250 190 100;
-    --active-theme-vivid: 255 220 140; /* NEW: Vivid Highlight */
+    --active-theme: 230, 160, 80;
+    --active-theme-bright: 250, 190, 100;
+    --active-theme-vivid: 255, 220, 140; /* NEW: Vivid Highlight */
     --lantern-filter: contrast(1.3) brightness(1.0) saturate(1.2) hue-rotate(270deg);
 }
 
 /* Theme 3: Miasma (Purple) */
 body[data-theme="miasma"] {
-    --active-theme: 140 50 180; 
-    --active-theme-bright: 175 90 220;
-    --active-theme-vivid: 210 160 250; /* NEW: Vivid Highlight */
+    --active-theme: 140, 50, 180; 
+    --active-theme-bright: 175, 90, 220;
+    --active-theme-vivid: 210, 160, 250; /* NEW: Vivid Highlight */
     --lantern-filter: contrast(1.3) brightness(1.1) saturate(1.2) hue-rotate(160deg);
 }
 
@@ -120,8 +120,8 @@ turbo-frame#main-content {
     /* Dynamic Theme Glow */
     background: radial-gradient(
     circle 400px at center 40%, 
-    rgba(var(--active-theme) / 0.4) 0%, 
-    rgba(var(--active-theme) / 0.15) 50%, 
+    rgba(var(--active-theme), 0.4) 0%, 
+    rgba(var(--active-theme), 0.15) 50%, 
     transparent 100%
     );
     
@@ -199,7 +199,7 @@ turbo-frame#main-content {
     transform: translateX(-50%);
     width: 100vw;
     height: 60px;
-    background: linear-gradient(to bottom, rgba(var(--active-theme-bright) / 0.15), transparent);
+    background: linear-gradient(to bottom, rgba(var(--active-theme-bright), 0.15), transparent);
     pointer-events: none;
     z-index: 50; 
 }
@@ -210,8 +210,8 @@ turbo-frame#main-content {
     left: 0;
     width: 100vw;
     height: 1px; 
-    background: radial-gradient(ellipse at center, rgba(var(--active-theme-bright) / 0.8) 0%, transparent 60%);
-    box-shadow: 0 1px 4px rgba(var(--active-theme) / 0.6);
+    background: radial-gradient(ellipse at center, rgba(var(--active-theme-bright), 0.8) 0%, transparent 60%);
+    box-shadow: 0 1px 4px rgba(var(--active-theme), 0.6);
     pointer-events: none;
     z-index: 150; 
 }
@@ -745,7 +745,7 @@ table.schedule-table tr.active-row td.active-col {
 .hex-node.maxed {
     box-shadow: none !important;
     transition: none !important;
-    background-color: rgb(var(--active-theme)) !important;
+    background-color: rgba(var(--active-theme), 1) !important;
     animation: border-pulse 2s infinite ease-in-out !important;
     overflow: visible !important;
 }
@@ -831,7 +831,7 @@ table.schedule-table tr.active-row td.active-col {
     text-align: center;
 }
 .level-display.max-text {
-    color: rgba(var(--active-theme-vivid) / 1);
+    color: rgba(var(--active-theme-vivid), 1);
 }
 .t10-toggle {
     cursor: pointer;
@@ -907,18 +907,18 @@ svg.resource-icon {
 }
 
 @keyframes border-pulse {
-    0%, 100% { box-shadow: 0 0 5px rgba(var(--active-theme) / 0.3); }
-    50%      { box-shadow: 0 0 20px rgba(var(--active-theme) / 0.8); }
+    0%, 100% { box-shadow: 0 0 5px rgba(var(--active-theme-vivid), 0.3); }
+    50%      { box-shadow: 0 0 20px rgba(var(--active-theme-vivid), 0.8); }
 }
 
 /* --- 7. ANIMATIONS --- */
 @keyframes lantern-flicker {
-    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(var(--active-theme) / 0.2); }
-    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(var(--active-theme) / 0.3); }
-    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(var(--active-theme) / 0.5); }
-    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(var(--active-theme) / 0.1); }
-    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(var(--active-theme) / 0.25); }
-    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(var(--active-theme) / 0.2); }
+    0%, 100% { filter: brightness(1); box-shadow: 0 0 5px rgba(var(--active-theme), 0.2); }
+    20% { filter: brightness(0.9); box-shadow: 0 0 8px rgba(var(--active-theme), 0.3); }
+    35% { filter: brightness(1.05); box-shadow: 0 0 15px rgba(var(--active-theme), 0.5); }
+    50% { filter: brightness(0.7); box-shadow: 0 0 2px rgba(var(--active-theme), 0.1); }
+    70% { filter: brightness(0.95); box-shadow: 0 0 6px rgba(var(--active-theme), 0.25); }
+    85% { filter: brightness(0.8); box-shadow: 0 0 4px rgba(var(--active-theme), 0.2); }
 }
 
 @keyframes lantern-pulse {
