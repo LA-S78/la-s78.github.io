@@ -32,6 +32,11 @@ jobs:
           cp -r css _site/
           cp -r js _site/
 
+          cp sw.js _site/sw.js
+          for lang in en de es fr ru tr uk it; do
+            cp sw.js _site/$lang/sw.js
+          done
+
           # 3. MANUALLY RUN THE PRECACHE GENERATOR
           # We provide a dummy 'site' object to our script
           echo "Running Workbox injector..."
