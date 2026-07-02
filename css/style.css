@@ -193,8 +193,8 @@ turbo-frame#main-content {
     isolation: isolate;
     
     /* The mask defines the glow shape */
-    -webkit-mask-image: radial-gradient(closest-side, black 95%, transparent 95%);
-    mask-image: radial-gradient(closest-side, black 95%, transparent 95%);
+    -webkit-mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 95%);
+mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 95%);
     mix-blend-mode: screen;
 }
 
