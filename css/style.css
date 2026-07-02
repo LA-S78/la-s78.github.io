@@ -81,6 +81,7 @@ body::before {
     top: 0;
     left: 0;
     width: 100vw;
+    height: 100vh;
     height: 100dvh;
     z-index: -1;
     background-color: #050403;
@@ -273,8 +274,21 @@ main img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid 
 
 /* Bottom Footer */
 footer {
-    width: 100%; background-color: var(--nav-bg); border-top: 1px solid var(--border-color); 
-    display: flex; justify-content: space-around; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); z-index: 30; flex-shrink: 0; 
+    width: 100%; 
+    background-color: var(--nav-bg); 
+    border-top: 1px solid var(--border-color); 
+    display: flex; 
+    justify-content: space-around; 
+    padding-top: 10px; 
+    
+    /* FIX: Ensure footer covers the entire bottom safe area */
+    padding-bottom: env(safe-area-inset-bottom); 
+    
+    /* FIX: Force the background to extend even if there's extra space */
+    min-height: calc(50px + env(safe-area-inset-bottom));
+    
+    z-index: 30; 
+    flex-shrink: 0; 
 }
 .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: 0.7rem; gap: 4px; text-decoration: none; border-bottom: none !important; }
 .nav-item.active { color: var(--accent-color); }
