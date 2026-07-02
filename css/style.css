@@ -470,6 +470,11 @@ dialog button:hover, dialog a.dialog-btn:hover {
     padding-bottom: 10px; margin-bottom: 20px;
     border-bottom: 2px solid var(--border-color) !important;
 }
+.content-pane .duel-day {
+    margin-left: -20px;
+    margin-right: -20px;
+}
+
 .anchor-link:target { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
 .divider-wrapper { display: contents; }
 
