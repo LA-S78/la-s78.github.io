@@ -21,7 +21,11 @@ if (workbox) {
   // 3. Fallback routing (Optional but recommended for PWAs)
   // If an offline user tries to access a non-cached route, redirect them home.
   workbox.routing.setCatchHandler(({event}) => {
-      if (event.request.destination === 'document') {
+      const acceptHeader = event.request.headers.get('accept') || '';
+      const isNavigate = event.request.destination === 'document';
+      const isTurboFetch = event.request.destination === '' && acceptHeader.includes('text/html');
+
+      if (isNavigate || isTurboFetch) {
           return caches.match('/index.html');
       }
       return Response.error();

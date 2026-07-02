@@ -34,10 +34,9 @@ pwa:
   sw_src_filepath: sw.js
   sw_dest_filename: sw.js
   dest_js_directory: js
-  precache_recent_posts_num: 0 # Disabled: Your structure uses collections and pages, not standard posts.
+  precache_recent_posts_num: 0
   precache_glob_directory: /
   precache_glob_patterns:
     - "{css,js,images}/**/*.{css,js,png,jpg,jpeg,svg,webp}"
-    - "*.html"
-    - "guides/**/*.html"
+    - "**/*.html"
     - "site.webmanifest"
