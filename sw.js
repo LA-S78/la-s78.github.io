@@ -1,8 +1,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 if (workbox) {
-  // 1. Core Compendium Precaching (Injected by Jekyll during build)
-  workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
+  // 1. Core Compendium Precaching (Using the specific jekyll-pwa-plugin variable)
+  // We use a typeof check so the script doesn't crash in dev mode when the list is missing.
+  const pwaCache = typeof precacheList !== 'undefined' ? precacheList : [];
+  workbox.precaching.precacheAndRoute(pwaCache);
 
   // 2. Runtime Caching for external or lazy-loaded images
   workbox.routing.registerRoute(
@@ -18,8 +20,7 @@ if (workbox) {
     })
   );
 
-  // 3. Fallback routing (Optional but recommended for PWAs)
-  // If an offline user tries to access a non-cached route, redirect them home.
+  // 3. Fallback routing (Upgraded for Turbo Drive compatibility)
   workbox.routing.setCatchHandler(({event}) => {
       const acceptHeader = event.request.headers.get('accept') || '';
       const isNavigate = event.request.destination === 'document';

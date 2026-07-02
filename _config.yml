@@ -30,13 +30,3 @@ defaults:
       path: "guides"
     values:
       permalink: "/guides/:basename.html"
-pwa:
-  sw_src_filepath: sw.js
-  sw_dest_filename: sw.js
-  dest_js_directory: js
-  precache_recent_posts_num: 0
-  precache_glob_directory: /
-  precache_glob_patterns:
-    - "{css,js,images}/**/*.{css,js,png,jpg,jpeg,svg,webp}"
-    - "**/*.html"
-    - "site.webmanifest"
