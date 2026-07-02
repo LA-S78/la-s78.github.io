@@ -199,7 +199,7 @@ turbo-frame#main-content {
 }
 
 .lantern-img {
-    width: 100%; 
+    width: 90px; 
     height: 100%;
     /* This restores your hue-rotate theme switching */
     filter: var(--lantern-filter);
