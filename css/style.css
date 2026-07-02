@@ -813,12 +813,12 @@ svg.resource-icon { width: 16px; height: 16px; fill: currentColor; display: inli
         .debossed-title,
         .subtitle {
             /* Gently nudges the relative elements down without breaking flexbox */
-            top: 8px; 
+            top: 20px; 
         }
         
         .language-switcher {
-            /* The original top was 12px, adding 8px keeps it perfectly aligned */
-            top: 20px !important; 
+            /* The original top was 12px*/
+            top: 32px !important; 
         }
     }
 }
