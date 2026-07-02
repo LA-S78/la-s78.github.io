@@ -106,7 +106,7 @@ pages:
       subtitle: "Pacchetti Premium & Gemme"
     t10:
       title: "Guida T10"
-      subtitle: "Requisiti truppe livello 10"
+      subtitle: "Requisiti T10"
 
 nav_anchors:
   server_rules: "Regole Server"

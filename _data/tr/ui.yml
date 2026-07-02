@@ -106,7 +106,7 @@ pages:
       subtitle: "Premium & Elmas Paketleri"
     t10:
       title: "T10 Rehberi"
-      subtitle: "10. Seviye Birlik Gereksinimleri"
+      subtitle: "T10 Gereksinimleri"
 
 nav_anchors:
   server_rules: "Sunucu Kuralları"

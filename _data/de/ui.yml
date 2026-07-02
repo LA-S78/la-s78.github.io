@@ -106,7 +106,7 @@ pages:
       subtitle: "Premium- & Edelsteinpakete"
     t10:
       title: "T10-Leitfaden"
-      subtitle: "Anforderungen für Truppen der Stufe 10"
+      subtitle: "T10-Anforderungen"
 
 nav_anchors:
   server_rules: "Serverregeln"

@@ -145,16 +145,16 @@ turbo-frame#main-content {
     flex-direction: row;
     align-items: center;
     justify-content: center; /* Back to true center */
-    gap: 15px;
+    gap: 10px; /* Reduced from 15px to extract space */
     height: 90px; 
     margin: 0 auto !important;
-    width: 90%;
+    width: 100%;
 }
 
 .language-switcher {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 15px; /* Pulled inwards from the absolute edge */
+    top: 12px;
     display: flex;
     gap: 8px;
     font-size: 0.8rem;
@@ -181,6 +181,7 @@ turbo-frame#main-content {
     filter: var(--lantern-filter);
     cursor: pointer;
     transition: filter 0.5s ease, transform 0.5s ease;
+    padding: auto 0px auto 0px;
 }
 
 .lantern-img:active {
@@ -230,8 +231,8 @@ turbo-frame#main-content {
     
     /* THE FIX: An unbreakable invisible box */
     width: 100%;
-    min-width: 210px; 
-    max-width: 210px;
+    min-width: 190px; /* Reduced from 210px */
+    max-width: 190px;
     text-align: center; /* Visually centers short text inside the box */
 }
 
@@ -248,8 +249,8 @@ turbo-frame#main-content {
     
     /* THE FIX: An unbreakable invisible box */
     width: 100%; 
-    min-width: 210px;
-    max-width: 210px;
+    min-width: 190px; /* Reduced from 210px */
+    max-width: 190px;
     text-align: center; 
 }
 
@@ -673,7 +674,7 @@ table.schedule-table tr.active-row td.active-col {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0px 10px 100px 10px;
+    padding: 0px 10px 150px 10px;
     position: relative;
     z-index: 1;
 }
@@ -931,17 +932,23 @@ svg.resource-icon {
     .header-stack { 
         height: 130px; 
         max-width: 768px; 
+        gap: 20px; /* Expand gap on desktop */
     }
     
-    .lantern-img { width: 130px; transition: filter 0.3s ease; }
+    .language-switcher {
+        right: 20px;
+        top: 20px;
+    }
+
+    .lantern-img { width: 130px; transition: filter 0.3s ease;}
 
     .parchment-border { border: 5px solid var(--accent-color); transition: border-color 0.4s ease; }
     .lantern-glow-bleed { top: 130px; }
     .debossed-title { margin-top: 30px; font-size: 1.8rem; }
     
     .debossed-title, .subtitle {
-        min-width: 350px; 
-        max-width: 350px;
+        min-width: 300px; 
+        max-width: 300px;
     }
     
     .anchor-nav { min-height: 45px; }

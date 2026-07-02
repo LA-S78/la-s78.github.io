@@ -106,7 +106,7 @@ pages:
       subtitle: "Премиум и Наборы самоцветов"
     t10:
       title: "Гайд по T10"
-      subtitle: "Требования для войск 10-го уровня"
+      subtitle: "Требования Т10"
 
 nav_anchors:
   server_rules: "Правила сервера"
