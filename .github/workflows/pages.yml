@@ -37,6 +37,10 @@ jobs:
           echo "Running Workbox injector..."
           ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
 
+          #debug
+          echo "Verifying file content after injection:"
+          head -n 10 _site/sw.js
+
           # 4. Copy PWA essentials to the root of _site/
           cp site.webmanifest _site/
           cp sw.js _site/
