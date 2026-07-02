@@ -22,6 +22,7 @@
     <meta property="og:description" content="{{ meta_desc | default: site.data[site.active_lang].ui.header.subtitle }}">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:image" content="{{ page.image | default: '/images/default-social-banner.png' | absolute_url }}">
+    <meta property="og:type" content="website">
     <meta name="theme-color" content="#1a1512">
     <meta name="turbo-refresh-method" content="morph">
     <meta name="turbo-refresh-scroll" content="preserve">
@@ -30,6 +31,7 @@
     
     <link rel="stylesheet" href="/css/style.css?v={{ site.time | date: '%s' }}">
     <link rel="icon" href="/images/favicon.png">
+    <link rel="apple-touch-icon" href="/images/favicon.png">
     <link rel="manifest" href="/site.webmanifest">
     <script type="module" src="/js/turbo.js"></script>
     <script src="/js/main.js?v={{ site.time | date: '%s' }}" defer></script>
@@ -37,5 +39,5 @@
     {% if jekyll.environment == "development" %}
       <script src="/js/dev-router.js" defer></script>
     {% endif %}
-
+<script src="/js/theme-init.js"></script>
 </head>
