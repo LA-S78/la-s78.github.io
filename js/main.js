@@ -22,6 +22,11 @@
         // 1. Defend the HTML tag
         if (root.getAttribute('data-theme') !== savedTheme) {
             root.setAttribute('data-theme', savedTheme);
+            
+            // Force a rapid reflow on the root element itself to clear edge artifacts
+            root.style.display = 'none';
+            root.offsetHeight; 
+            root.style.display = '';
         }
 
         // 2. Defend the Status Bar
