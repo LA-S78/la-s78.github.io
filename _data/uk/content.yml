@@ -38,6 +38,7 @@ guides_page:
 home_page:
   pinned:
     title: "Важлива інформація"
+    t10: Калькулятор T10"
     server_rules: "Правила сервера"
     capitol_rotation: "Ротація Капітолію"
     capitol_rewards: "Нагороди Капітолію"

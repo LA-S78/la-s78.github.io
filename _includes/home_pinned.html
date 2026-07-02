@@ -4,6 +4,14 @@
     <button class="scroll-btn left" onclick="scrollPinned('left')" aria-label="Scroll left">&#10094;</button>
 
     <div class="pinned-section" id="pinnedContainer">
+        <a href="/{{ site.active_lang }}/guides/t10.html" class="pinned-card searchable-item">
+            <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 3H7c-1.1 0-2 0.9-2 2v14c0 1.1 0.9 2 2 2h10c1.1 0 2-0.9 2-2V5c0-1.1-0.9-2-2-2z" />
+                <path d="M9 7h6" /><path d="M9 11h6" /><path d="M9 15h4" />
+                <circle cx="17" cy="19" r="1.5" fill="none" /><path d="M17 17.5v-2" />
+            </svg>
+            <span>{{ p.t10 }}</span>
+        </a>
         <a href="/{{ site.active_lang }}/rules.html#server-rules" class="pinned-card searchable-item">
             <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17 3H7c-1.1 0-2 0.9-2 2v14c0 1.1 0.9 2 2 2h10c1.1 0 2-0.9 2-2V5c0-1.1-0.9-2-2-2z" />

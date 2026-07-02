@@ -38,6 +38,7 @@ guides_page:
 home_page:
   pinned:
     title: "Infos Critiques"
+    t10: "Calculateur T10"
     server_rules: "Règles du Serveur"
     capitol_rotation: "Rotation du Capitole"
     capitol_rewards: "Récompenses du Capitole"
