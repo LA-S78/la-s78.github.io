@@ -743,7 +743,7 @@ table.schedule-table tr.active-row td.active-col {
     transition: background-color 0.3s ease;
 }
 .hex-node.maxed {
-    background-color: rgba(var(--active-theme), 1);
+    background-color: rgba(var(--active-theme-bright), 1);
 }
 .hex-node.locked {
     background-color: #7a0000;
