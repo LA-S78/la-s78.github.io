@@ -219,7 +219,7 @@ turbo-frame#main-content {
     position: relative; 
     z-index: 1; 
     margin-top: 10px; 
-    font-size: 1.1rem; 
+    font-size: 1.4rem; 
     margin-bottom: 0;
     font-family: var(--font-headers); 
     font-weight: bold;
@@ -449,7 +449,7 @@ dialog button:hover, dialog a.dialog-btn:hover {
     animation: lantern-flicker 6s infinite ease-in-out; margin-bottom: 5px;
 }
 .dir-content { display: flex; flex-direction: column; }
-.dir-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.dir-title { font-weight: bold; font-size: 1rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
 .dir-title .nav-icon-svg { width: 18px; height: 18px; stroke: var(--accent-color); }
 .dir-sub { font-size: 0.75rem; color: var(--text-muted); margin-left: 26px; }
 .dir-arrow { color: var(--accent-color); font-weight: bold; font-size: 1.2rem; }
@@ -464,7 +464,7 @@ dialog button:hover, dialog a.dialog-btn:hover {
 .content-pane > *:first-child { margin-top: 0; }
 .content-pane > *:last-child { margin-bottom: 0; }
 .content-pane h2:first-child {
-    font-size: 1.4rem; color: var(--accent-color);
+    font-size: 1.2rem; color: var(--accent-color);
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px; margin-bottom: 20px;
     border-bottom: 2px solid var(--border-color) !important;
