@@ -40,7 +40,7 @@ html[data-theme="sanctuary"] {
     --active-theme-bright: 250, 190, 100;
     --active-theme-vivid: 255, 220, 140; /* NEW: Vivid Highlight */
     --active-theme-hex: 239, 191, 4;
-    --lantern-filter: contrast(1.3) brightness(1.0) saturate(1.2) hue-rotate(270deg);
+    --lantern-filter: contrast(1.2) brightness(1.0) saturate(1.2) hue-rotate(270deg);
 }
 
 /* Theme 3: Miasma (Purple) */
@@ -196,7 +196,7 @@ turbo-frame#main-content {
     width: 100%;
     height: 100%;
     /* Re-apply the filter settings here */
-    filter: contrast(1.2) brightness(1.0) saturate(1.2);
+    filter: var(--lantern-filter);
     display: block;
     z-index:999;
 }
