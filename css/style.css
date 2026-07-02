@@ -183,6 +183,13 @@ turbo-frame#main-content {
     pointer-events: none;
 }
 
+.lantern-wrapper {
+    width: 90px;
+    height: auto;
+    flex-shrink: 0;
+    mix-blend-mode: screen; 
+}
+
 /* REMOVED GRID ALIGNMENT, KEPT FLEX-SHRINK */
 .lantern-img {
     width: 90px;
