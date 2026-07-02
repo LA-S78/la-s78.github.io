@@ -69,14 +69,6 @@
 
     // --- Sub-Modules ---
 
-    function initPWA() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(err => {
-                console.warn('Service Worker registration failed:', err);
-            });
-        }
-    }
-
     function applyTheme(themeName) {
         const root = document.documentElement;
         
@@ -267,9 +259,35 @@
         }, { passive: true });
     }
 
+    // --- PWA UPDATE TOAST LOGIC ---
+    function showUpdateToast(newWorker) {
+        if (document.getElementById('pwa-update-toast')) return;
+
+        // Pull from the Liquid bridge, or fallback to English as a safety net
+        const t = window.pwaTranslations || {
+            toastMsg: 'New intel acquired.',
+            updateBtn: 'Update',
+            updating: 'Decrypting...'
+        };
+
+        const toast = document.createElement('div');
+        toast.id = 'pwa-update-toast';
+        toast.innerHTML = `
+            <span>${t.toastMsg}</span>
+            <button id="pwa-update-btn">${t.updateBtn}</button>
+        `;
+        document.body.appendChild(toast);
+
+        // Tell the waiting worker to activate immediately when clicked
+        document.getElementById('pwa-update-btn').addEventListener('click', () => {
+            toast.classList.add('updating');
+            toast.querySelector('span').textContent = t.updating;
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
+        });
+    }
+
     // --- MASTER INITIALIZER ---
     function initApp() {
-        initPWA(); 
         highlightCurrentSurvivalBattle();
         initScrollObserver();
         initAnchorScrolling();
@@ -304,5 +322,35 @@
         if (!container) return;
         container.scrollBy({ left: direction === 'left' ? -300 : 300, behavior: 'smooth' });
     };
+
+    // --- PWA: SERVICE WORKER REGISTRATION (Runs once on script load) ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').then(registration => {
+                // 1. Detect if a new service worker is installing
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    
+                    newWorker.addEventListener('statechange', () => {
+                        // 2. If installed AND there's an existing controller, it's an update
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            showUpdateToast(newWorker);
+                        }
+                    });
+                });
+            }).catch(err => {
+                console.warn('Service Worker registration failed:', err);
+            });
+
+            // 3. Automatically reload the page once the new worker takes control
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    refreshing = true;
+                    window.location.reload();
+                }
+            });
+        });
+    }
 
 })();

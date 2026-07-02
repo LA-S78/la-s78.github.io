@@ -143,3 +143,7 @@ search:
   home: "Search directories, posts..."
   placeholder: "Search..."
 
+pwa:
+  toast_msg: "New intel acquired."
+  update_btn: "Update"
+  updating: "Decrypting..."

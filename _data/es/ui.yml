@@ -142,3 +142,8 @@ search:
   guides: "Buscar guías..."
   home: "Buscar directorios, publicaciones..."
   placeholder: "Buscar..."
+
+pwa:
+  toast_msg: "Nueva información adquirida."
+  update_btn: "Actualizar"
+  updating: "Descifrando..."

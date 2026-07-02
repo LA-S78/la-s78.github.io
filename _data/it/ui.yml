@@ -142,3 +142,8 @@ search:
   guides: "Cerca nelle guide..."
   home: "Cerca in directory, post..."
   placeholder: "Cerca..."
+
+pwa:
+  toast_msg: "Nuove informazioni acquisite."
+  update_btn: "Aggiorna"
+  updating: "Decrittazione..."

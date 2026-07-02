@@ -142,3 +142,8 @@ search:
   guides: "Rehberlerde ara..."
   home: "Dizinleri, gönderileri ara..."
   placeholder: "Ara..."
+
+pwa:
+  toast_msg: "Yeni istihbarat alındı."
+  update_btn: "Güncelle"
+  updating: "Şifre çözülüyor..."

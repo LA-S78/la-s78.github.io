@@ -37,6 +37,13 @@
     <link rel="apple-touch-icon" href="/images/favicon.png">
     <link rel="manifest" href="/site.webmanifest">
     <script type="module" src="/js/turbo.js"></script>
+    <script>
+      window.pwaTranslations = {
+        toastMsg: "{{ site.data[site.active_lang].ui.pwa.toast_msg | default: 'New intel acquired.' }}",
+        updateBtn: "{{ site.data[site.active_lang].ui.pwa.update_btn | default: 'Update' }}",
+        updating: "{{ site.data[site.active_lang].ui.pwa.updating | default: 'Decrypting...' }}"
+      };
+    </script>
     <script src="/js/main.js?v={{ site.time | date: '%s' }}" defer></script>
 
     {% if jekyll.environment == "development" %}
