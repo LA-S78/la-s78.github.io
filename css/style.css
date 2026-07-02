@@ -34,7 +34,7 @@
 }
 
 /* Theme 2: Sanctuary (Orange) */
-body[data-theme="sanctuary"] {
+html[data-theme="sanctuary"] {
     --active-theme: 230, 160, 80;
     --active-theme-bright: 250, 190, 100;
     --active-theme-vivid: 255, 220, 140; /* NEW: Vivid Highlight */
@@ -42,7 +42,7 @@ body[data-theme="sanctuary"] {
 }
 
 /* Theme 3: Miasma (Purple) */
-body[data-theme="miasma"] {
+html[data-theme="miasma"] {
     --active-theme: 140, 50, 180; 
     --active-theme-bright: 175, 90, 220;
     --active-theme-vivid: 210, 160, 250; /* NEW: Vivid Highlight */

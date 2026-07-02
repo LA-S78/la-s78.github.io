@@ -17,17 +17,8 @@
         }
     }
 
-    function updateBrowserChrome() {
-        // Reads the background color of the body to set the status bar color
-        const bgColor = getComputedStyle(document.body).backgroundColor;
-        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-        if (metaThemeColor) {
-            metaThemeColor.setAttribute('content', bgColor);
-        }
-    }
-
     function applyTheme(themeName) {
-        const body = document.body;
+        const body = document.documentElement;
         const themes = ['default', 'sanctuary', 'miasma'];
         
         if (themeName === 'default') {
@@ -37,7 +28,6 @@
             body.setAttribute('data-theme', themeName);
             localStorage.setItem('site-theme', themeName);
         }
-        updateBrowserChrome();
     }
 
     function initThemeToggle() {
@@ -236,7 +226,7 @@
         if (!toggleBtn) return;
 
         const themes = ['default', 'sanctuary', 'miasma'];
-        const currentTheme = document.body.getAttribute('data-theme') || 'default';
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'default';
         let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
         
         applyTheme(themes[nextIndex]);
