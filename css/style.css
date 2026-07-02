@@ -965,6 +965,11 @@ svg.resource-icon {
     .scroll-btn { display: flex; align-items: center; justify-content: center; }
     .duel-schedule-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
 
+    .content-pane .duel-day {
+    margin-left: 0px;
+    margin-right: 0px;
+    }
+
     /* Desktop overrides for the T10 Calculator */
     .tree-container { padding: 0px 20px 90px 20px; }
     .line-vertical { height: 25px; }
