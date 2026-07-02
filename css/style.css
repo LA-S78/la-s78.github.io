@@ -183,20 +183,20 @@ turbo-frame#main-content {
     pointer-events: none;
 }
 
-/* REMOVED GRID ALIGNMENT, KEPT FLEX-SHRINK */
-.lantern-img {
-    will-change: transform;
-    background-color: transparent !important;
-    backface-visibility: hidden;
+.lantern-container {
+    width: 135px; 
+    position: absolute; 
+    z-index: 0;
+    -webkit-mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
+    mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
     mix-blend-mode: screen;
-    width: 90px;
+}
+
+.lantern-img {
+    width: 100%; 
     height: auto;
-    flex-shrink: 0; /* Prevents text from squeezing or moving the image */
-    filter: var(--lantern-filter);
-    cursor: pointer;
-    transition: filter 0.5s ease, transform 0.5s ease;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
+    filter: contrast(1.8) brightness(0.7);
+    display: block;
 }
 
 .lantern-img:active {
@@ -956,7 +956,7 @@ svg.resource-icon {
         top: 20px;
     }
 
-    .lantern-img { width: 130px; transition: filter 0.3s ease;}
+    /*.lantern-img { width: 130px; transition: filter 0.3s ease;}*/
 
     .parchment-border { border: 5px solid var(--accent-color); transition: border-color 0.4s ease; }
     .lantern-glow-bleed { top: 130px; }
