@@ -9,6 +9,42 @@
 
     // --- Sub-Modules ---
 
+    function initPWA() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(err => {
+                console.warn('Service Worker registration failed:', err);
+            });
+        }
+    }
+
+    function updateBrowserChrome() {
+        // Reads the background color of the body to set the status bar color
+        const bgColor = getComputedStyle(document.body).backgroundColor;
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', bgColor);
+        }
+    }
+
+    function applyTheme(themeName) {
+        const body = document.body;
+        const themes = ['default', 'sanctuary', 'miasma'];
+        
+        if (themeName === 'default') {
+            body.removeAttribute('data-theme');
+            localStorage.removeItem('site-theme');
+        } else if (themes.includes(themeName)) {
+            body.setAttribute('data-theme', themeName);
+            localStorage.setItem('site-theme', themeName);
+        }
+        updateBrowserChrome();
+    }
+
+    function initThemeToggle() {
+        const savedTheme = localStorage.getItem('site-theme') || 'default';
+        applyTheme(savedTheme);
+    }
+
     function highlightCurrentSurvivalBattle() {
         const table = document.querySelector('.schedule-table');
         if (!table) return;
@@ -135,36 +171,6 @@
         });
     }
 
-    function updateBrowserChrome() {
-    // This reads the actual computed background color of the body
-    // regardless of which data-theme is currently active.
-    const bgColor = getComputedStyle(document.body).backgroundColor;
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', bgColor);
-}
-
-function initThemeToggle() {
-    const body = document.body;
-    const themes = ['default', 'sanctuary', 'miasma'];
-    const savedTheme = localStorage.getItem('site-theme') || 'default';
-    
-    if (savedTheme !== 'default' && themes.includes(savedTheme)) {
-        body.setAttribute('data-theme', savedTheme);
-    }
-
-    // Call this immediately after setting the theme
-    updateBrowserChrome();
-}
-
-// Ensure you call updateBrowserChrome() whenever your toggle function 
-// (the one that actually changes the theme via a button click) is triggered.
-function changeTheme(themeName) {
-    document.body.setAttribute('data-theme', themeName);
-    localStorage.setItem('site-theme', themeName);
-    
-    // Update the browser chrome on the fly
-    updateBrowserChrome();
-}
-
     function syncHeaderSubtitle() {
         const newSubtitle = document.getElementById('secret-subtitle-data');
         const headerSubtitle = document.getElementById('ui-subtitle');
@@ -207,6 +213,7 @@ function changeTheme(themeName) {
 
     // --- MASTER INITIALIZER ---
     function initApp() {
+        initPWA(); // New addition
         highlightCurrentSurvivalBattle();
         initScrollObserver();
         initAnchorScrolling();
@@ -224,7 +231,6 @@ function changeTheme(themeName) {
         isNewNavigation = true;
     });
 
-    // Attached once to the document, survives all Turbo navigations
     document.addEventListener('click', (e) => {
         const toggleBtn = e.target.closest('#theme-toggle');
         if (!toggleBtn) return;
@@ -232,15 +238,8 @@ function changeTheme(themeName) {
         const themes = ['default', 'sanctuary', 'miasma'];
         const currentTheme = document.body.getAttribute('data-theme') || 'default';
         let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-        const nextTheme = themes[nextIndex];
-
-        if (nextTheme === 'default') {
-            document.body.removeAttribute('data-theme');
-            localStorage.removeItem('site-theme');
-        } else {
-            document.body.setAttribute('data-theme', nextTheme);
-            localStorage.setItem('site-theme', nextTheme);
-        }
+        
+        applyTheme(themes[nextIndex]);
     });
 
     window.scrollPinned = function(direction) {
