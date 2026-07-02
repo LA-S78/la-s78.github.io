@@ -94,15 +94,15 @@ body::before {
 }
 
 #mobile-container {
-    width: 100%; 
-    height: 100vh;  /* Fallback for older devices */
-    height: 100dvh; /* Modern fluid height */
-    background: transparent;
-    position: relative; 
-    overflow: hidden; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; /* Pin to the very bottom of the glass */
+    height: 100dvh; 
     display: flex; 
-    flex-direction: column; 
-    scroll-behavior: smooth;
+    flex-direction: column;
+    background-color: transparent;
 }
 
 /* Turbo Frame Flexbox Fix */
@@ -280,9 +280,6 @@ footer {
     display: flex; 
     justify-content: space-around; 
     padding-top: 10px; 
-    
-    /* FIX: Ensure footer covers the entire bottom safe area */
-    padding-bottom: env(safe-area-inset-bottom); 
     
     /* FIX: Force the background to extend even if there's extra space */
     min-height: calc(50px + env(safe-area-inset-bottom));
