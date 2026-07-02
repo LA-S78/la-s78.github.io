@@ -39,6 +39,7 @@ home_page:
   pinned:
     title: "Важная информация"
     t10: "Калькулятор T10"
+    survival: "Битва за Выживание"
     server_rules: "Правила сервера"
     capitol_rotation: "Ротация Капитолия"
     capitol_rewards: "Награды Капитолия"

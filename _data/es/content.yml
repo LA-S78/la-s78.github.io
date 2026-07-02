@@ -39,6 +39,7 @@ home_page:
   pinned:
     title: "Información Crítica"
     t10: "Calculadora T10"
+    survival: "Batalla de Supervivencia"
     server_rules: "Reglas del Servidor"
     capitol_rotation: "Rotación del Capitolio"
     capitol_rewards: "Recompensas del Capitolio"

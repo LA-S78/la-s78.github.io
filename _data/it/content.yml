@@ -39,6 +39,7 @@ home_page:
   pinned:
     title: "Info Critiche"
     t10: "Calcolatore T10"
+    survival: "Battaglia di Sopravvivenza"
     server_rules: "Regole del Server"
     capitol_rotation: "Rotazione del Campidoglio"
     capitol_rewards: "Ricompense del Campidoglio"
