@@ -32,11 +32,16 @@ jobs:
           cp -r css _site/
           cp -r js _site/
 
-          # 3. Copy PWA essentials to the root of _site/
+          # 3. MANUALLY RUN THE PRECACHE GENERATOR
+          # We provide a dummy 'site' object to our script
+          echo "Running Workbox injector..."
+          ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
+
+          # 4. Copy PWA essentials to the root of _site/
           cp site.webmanifest _site/
           cp sw.js _site/
           
-          # 4. Copy the redirect file to the root
+          # 5. Copy the redirect file to the root
           cp redirect.html _site/index.html
 
       - name: Upload Pages Artifact
