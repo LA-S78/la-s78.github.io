@@ -59,16 +59,29 @@ html {
 }
 
 body {
-    background-image: url('../images/background.webp'), url('../images/background.png');
-    background-attachment: fixed;
-    background-size: cover;
-    background-color: #050403;
     margin: 0; 
     padding: 0; 
     font-family: var(--font-body);
     color: var(--text-main);
     display: flex; 
     justify-content: center;
+    background-color: transparent;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-color: #050403;
+    background-image: url('/images/background.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    will-change: transform; 
 }
 
 #mobile-container {
