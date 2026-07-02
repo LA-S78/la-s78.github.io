@@ -575,8 +575,8 @@ table.schedule-table tr.active-row td.active-col {
 .lang-trigger {
     background: rgba(17, 13, 11, 0.85); 
     border: 1px solid;
-    border-image: linear-gradient(to top right, rgba(var(--active-theme-bright) / 0.9) 0%, var(--border-color) 60%) 1;
-    box-shadow: -3px 3px 8px rgba(var(--active-theme) / 0.25);
+    border-image: linear-gradient(to top right, rgba(var(--active-theme-bright), 0.9) 0%, var(--border-color) 60%) 1;
+    box-shadow: -3px 3px 8px rgba(var(--active-theme), 0.25);
     color: var(--text-main);
     padding: 5px 10px;
     cursor: pointer;
@@ -610,7 +610,7 @@ table.schedule-table tr.active-row td.active-col {
     padding: 0;
     margin: 0;
     border: 1px solid;
-    border-image: linear-gradient(to bottom right, rgba(var(--active-theme-bright) / 0.6) 0%, var(--border-color) 40%) 1;
+    border-image: linear-gradient(to bottom right, rgba(var(--active-theme-bright), 0.6) 0%, var(--border-color) 40%) 1;
 }
 
 .dropdown-content::before {
