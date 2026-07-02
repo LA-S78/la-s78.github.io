@@ -181,7 +181,7 @@ turbo-frame#main-content {
     filter: var(--lantern-filter);
     cursor: pointer;
     transition: filter 0.5s ease, transform 0.5s ease;
-    padding: auto 0px auto 0px;
+    padding: 0;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -471,8 +471,8 @@ dialog button:hover, dialog a.dialog-btn:hover {
     border-bottom: 2px solid var(--border-color) !important;
 }
 .content-pane .duel-day {
-    margin-left: -20px;
-    margin-right: -20px;
+    margin-left: -30px;
+    margin-right: -30px;
 }
 
 .anchor-link:target { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
