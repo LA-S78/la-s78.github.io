@@ -195,6 +195,7 @@ turbo-frame#main-content {
     will-change: transform;
     background-color: transparent !important;
     backface-visibility: hidden;
+    mix-blend-mode: screen;
     width: 90px;
     height: auto;
     flex-shrink: 0; /* Prevents text from squeezing or moving the image */
@@ -203,7 +204,6 @@ turbo-frame#main-content {
     transition: filter 0.5s ease, transform 0.5s ease;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
-    z-index: 999;
 }
 
 .lantern-img:active {
