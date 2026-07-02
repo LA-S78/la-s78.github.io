@@ -214,22 +214,34 @@
         }, { passive: true });
     }
 
-    function syncThemeColorMeta() {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'default';
+    function restoreThemeState() {
+        const root = document.documentElement;
+        // 1. Read the TRUE state from local storage, ignoring what Turbo just did to the DOM
+        const savedTheme = localStorage.getItem('site-theme') || 'default';
+        
+        // 2. Force the HTML tag to hold the correct theme
+        if (savedTheme === 'default') {
+            root.removeAttribute('data-theme');
+        } else {
+            root.setAttribute('data-theme', savedTheme);
+        }
+
+        // 3. Force the Meta Tag to hold the correct color
         const themeColors = {
             'default': 'rgb(35, 120, 45)',
             'sanctuary': 'rgb(230, 160, 80)',
             'miasma': 'rgb(140, 50, 180)'
         };
+        
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
         if (metaThemeColor) {
-            metaThemeColor.setAttribute('content', themeColors[currentTheme]);
+            metaThemeColor.setAttribute('content', themeColors[savedTheme]);
         }
     }
 
     // --- MASTER INITIALIZER ---
     function initApp() {
-        initPWA(); // New addition
+        initPWA(); 
         highlightCurrentSurvivalBattle();
         initScrollObserver();
         initAnchorScrolling();
@@ -238,6 +250,7 @@
         initThemeToggle();
         syncHeaderSubtitle();
         initScrollMemory();
+        restoreThemeState();
     }
 
     // --- EVENTS ---
