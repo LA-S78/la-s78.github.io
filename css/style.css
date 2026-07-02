@@ -153,12 +153,9 @@ turbo-frame#main-content {
 /* REVERTED TO FLEXBOX WITH WIDTH CONSTRAINT */
 .header-stack {
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* Ensure it stays in a row */
     align-items: center;
-    justify-content: center; /* Back to true center */
-    gap: 10px; /* Reduced from 15px to extract space */
-    height: 90px; 
-    margin: 0 auto !important;
+    justify-content: center; /* This keeps the entire group centered */
     width: 100%;
 }
 
@@ -184,19 +181,24 @@ turbo-frame#main-content {
 }
 
 .lantern-container {
-    width: 135px; 
-    position: absolute; 
-    z-index: 0;
-    -webkit-mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
-    mask-image: radial-gradient(closest-side, black 50%, transparent 95%);
+    width: 85px; /* You might want this slightly smaller now */
+    height: 85px;
+    /* REMOVE absolute, left, top, and transform */
+    position: relative; 
+    /* This creates the space between the lantern and the text */
+    margin-right: 15px; 
+    /* Keep the rendering fix */
+    isolation: isolate; 
     mix-blend-mode: screen;
 }
 
 .lantern-img {
-    width: 100%; 
-    height: auto;
-    filter: contrast(1.8) brightness(0.7);
+    width: 100%;
+    height: 100%;
+    /* Re-apply the filter settings here */
+    filter: contrast(1.2) brightness(1.0) saturate(1.2);
     display: block;
+    z-index:999;
 }
 
 .lantern-img:active {
@@ -942,7 +944,6 @@ svg.resource-icon {
 /* --- 8. DESKTOP & RESPONSIVE CONSTRAINTS --- */
 @media (min-width: 768px) { 
     html { font-size: 115%; }
-    
     .lantern-header { height: 130px !important; min-height: 130px !important; }
     
     .header-stack { 
@@ -950,13 +951,18 @@ svg.resource-icon {
         max-width: 768px; 
         gap: 20px; /* Expand gap on desktop */
     }
+
+    .lantern-container {
+    width: 130px;
+    height: 130px;
+}
     
     .language-switcher {
         right: 20px;
         top: 20px;
     }
 
-    /*.lantern-img { width: 130px; transition: filter 0.3s ease;}*/
+    *.lantern-img { width: 130px; transition: filter 0.3s ease;}*/
 
     .parchment-border { border: 5px solid var(--accent-color); transition: border-color 0.4s ease; }
     .lantern-glow-bleed { top: 130px; }
