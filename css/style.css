@@ -7,7 +7,7 @@
 
 /* --- 1. VARIABLES & THEMES --- */
 /* Core Variables & Default Theme (Plague) */
-:root {
+:root, html[data-theme="default"] {
     /* Base UI Colors */
     --bg-color: #1a1512;
     --card-bg: rgba(42, 34, 30, 0.85);

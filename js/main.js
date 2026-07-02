@@ -19,24 +19,17 @@
 
     function applyTheme(themeName) {
         const root = document.documentElement;
-        const themes = ['default', 'sanctuary', 'miasma'];
         
-        // The same dictionary
         const themeColors = {
             'default': 'rgb(35, 120, 45)',
             'sanctuary': 'rgb(230, 160, 80)',
             'miasma': 'rgb(140, 50, 180)'
         };
         
-        if (themeName === 'default') {
-            root.removeAttribute('data-theme');
-            localStorage.removeItem('site-theme');
-        } else if (themes.includes(themeName)) {
-            root.setAttribute('data-theme', themeName);
-            localStorage.setItem('site-theme', themeName);
-        }
+        // ALWAYS set the attribute to force the browser to repaint gradients
+        root.setAttribute('data-theme', themeName);
+        localStorage.setItem('site-theme', themeName);
 
-        // Apply the new color to the status bar
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
         if (metaThemeColor) {
             metaThemeColor.setAttribute('content', themeColors[themeName] || 'rgb(35, 120, 45)');
@@ -254,6 +247,26 @@
     }
 
     // --- EVENTS ---
+
+    document.addEventListener("turbo:before-render", (event) => {
+        const savedTheme = localStorage.getItem('site-theme') || 'default';
+        const incomingHtml = event.detail.newBody.parentNode;
+        
+        // 1. Force the incoming HTML to have the correct theme attribute
+        incomingHtml.setAttribute('data-theme', savedTheme);
+        
+        // 2. Rewrite the incoming meta tag BEFORE it hits the browser
+        const incomingMeta = incomingHtml.querySelector('meta[name="theme-color"]');
+        if (incomingMeta) {
+            const themeColors = {
+                'default': 'rgb(35, 120, 45)',
+                'sanctuary': 'rgb(230, 160, 80)',
+                'miasma': 'rgb(140, 50, 180)'
+            };
+            incomingMeta.setAttribute('content', themeColors[savedTheme] || 'rgb(35, 120, 45)');
+        }
+    });
+
     document.addEventListener("turbo:load", initApp);
 
     document.addEventListener("turbo:visit", () => {
