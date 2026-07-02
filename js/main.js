@@ -18,15 +18,28 @@
     }
 
     function applyTheme(themeName) {
-        const body = document.documentElement;
+        const root = document.documentElement;
         const themes = ['default', 'sanctuary', 'miasma'];
         
+        // The same dictionary
+        const themeColors = {
+            'default': 'rgb(35, 120, 45)',
+            'sanctuary': 'rgb(230, 160, 80)',
+            'miasma': 'rgb(140, 50, 180)'
+        };
+        
         if (themeName === 'default') {
-            body.removeAttribute('data-theme');
+            root.removeAttribute('data-theme');
             localStorage.removeItem('site-theme');
         } else if (themes.includes(themeName)) {
-            body.setAttribute('data-theme', themeName);
+            root.setAttribute('data-theme', themeName);
             localStorage.setItem('site-theme', themeName);
+        }
+
+        // Apply the new color to the status bar
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', themeColors[themeName] || 'rgb(35, 120, 45)');
         }
     }
 
@@ -199,6 +212,19 @@
                 scrollTimeout = null;
             }, 100);
         }, { passive: true });
+    }
+
+    function syncThemeColorMeta() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'default';
+        const themeColors = {
+            'default': 'rgb(35, 120, 45)',
+            'sanctuary': 'rgb(230, 160, 80)',
+            'miasma': 'rgb(140, 50, 180)'
+        };
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', themeColors[currentTheme]);
+        }
     }
 
     // --- MASTER INITIALIZER ---
