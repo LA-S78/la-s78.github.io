@@ -947,8 +947,45 @@ svg.resource-icon {
     66%      { opacity: 0.75; filter: brightness(0.95) blur(2px); }
 }
 
+/* REDUCED MOTION CONFIGS */
 @media (prefers-reduced-motion: reduce) {
-    .dir-card { animation: none; box-shadow: none; filter: brightness(1); }
+    /* 1. Global Interactive Reset */
+    *, ::before, ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+    }
+
+    /* 2. Static Atmospheric Fallbacks */
+    .lantern-flicker-layer {
+        animation: none !important;
+        opacity: 0.8 !important;             /* Locks header glow to a comfortable baseline */
+        filter: brightness(1) blur(2px) !important;
+    }
+
+    .dir-container,
+    .dir-card { 
+        animation: none !important; 
+        box-shadow: none !important; 
+        filter: brightness(1) !important; 
+    }
+
+    /* 3. Eliminate Floaters (Static motes look like bugs/rendering errors) */
+    .dust-container,
+    .mote { 
+        display: none !important;
+        animation: none !important; 
+    }
+    
+    /* 4. Interactive Scaling Neutralization */
+    .lantern-img:active,
+    .blueprint-img:hover,
+    .scroll-btn:hover {
+        transform: none !important;
+    }
 }
 
 /* --- 8. DESKTOP & RESPONSIVE CONSTRAINTS --- */
