@@ -1,6 +1,7 @@
 {
   "name": "Last Asylum Compendium",
   "short_name": "LA Hub",
+  "description": "Rules, guides, and more",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1a1512",
@@ -9,7 +10,24 @@
     {
       "src": "/images/favicon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop View"
+    },
+    {
+      "src": "/images/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile View"
     }
   ]
 }
