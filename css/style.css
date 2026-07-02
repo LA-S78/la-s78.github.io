@@ -59,7 +59,7 @@ html {
 }
 
 body {
-    background-image: url('../images/background.webp'), url('../images/background.png');
+    background-image: url('/images/background.webp'), url('/images/background.png');
     background-attachment: fixed;
     background-size: cover;
     background-color: #050403;
