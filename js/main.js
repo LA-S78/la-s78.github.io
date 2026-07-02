@@ -23,10 +23,16 @@
         if (root.getAttribute('data-theme') !== savedTheme) {
             root.setAttribute('data-theme', savedTheme);
             
-            // Force a rapid reflow on the root element itself to clear edge artifacts
-            root.style.display = 'none';
-            root.offsetHeight; 
-            root.style.display = '';
+            // --- THE REPAINT HACK (Targeted) ---
+            // DO NOT hide the root element, it breaks iOS safe-area env() variables.
+            // Only hide the specific elements suffering from the WebKit gradient cache bug.
+            const stubbornElements = document.querySelectorAll('.lantern-glow-bleed, .lantern-edge-highlight, .lang-trigger, .dropdown-content');
+            
+            stubbornElements.forEach(el => {
+                el.style.display = 'none';
+                el.offsetHeight; // Force layout recalculation
+                el.style.display = '';
+            });
         }
 
         // 2. Defend the Status Bar
