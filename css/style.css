@@ -139,14 +139,16 @@ turbo-frame#main-content {
     opacity: 0.05; 
 }
 
-/* REVERTED TO FLEXBOX */
+/* REVERTED TO FLEXBOX WITH WIDTH CONSTRAINT */
 .header-stack {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center; /* Back to true center */
     gap: 15px;
     height: 90px; 
-    margin: 0 !important;
+    margin: 0 auto !important;
+    width: 100%;
 }
 
 .language-switcher {
@@ -225,20 +227,30 @@ turbo-frame#main-content {
     color: var(--text-main);
     border: none; 
     text-shadow: 0 0 8px rgba(10, 8, 5, 1);
+    
+    /* THE FIX: An unbreakable invisible box */
+    width: 100%;
+    min-width: 210px; 
+    max-width: 210px;
+    text-align: center; /* Visually centers short text inside the box */
 }
 
 .subtitle {
     position: relative; 
     z-index: 1; 
     font-family: var(--font-headers);
-    text-align: center;
     color: var(--accent-color);
     letter-spacing: 1.5px; 
     margin-top: 2px;
-    width: 100%; 
     font-size: clamp(0.75rem, 3vw, 1rem); 
     white-space: normal; 
     line-height: 1.4; 
+    
+    /* THE FIX: An unbreakable invisible box */
+    width: 100%; 
+    min-width: 210px;
+    max-width: 210px;
+    text-align: center; 
 }
 
 .lantern-header + *,
@@ -661,7 +673,7 @@ table.schedule-table tr.active-row td.active-col {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0px 10px 150px 10px;
+    padding: 0px 10px 100px 10px;
     position: relative;
     z-index: 1;
 }
@@ -915,12 +927,22 @@ svg.resource-icon {
     html { font-size: 115%; }
     
     .lantern-header { height: 130px !important; min-height: 130px !important; }
-    .header-stack { height: 130px; }
+    
+    .header-stack { 
+        height: 130px; 
+        max-width: 768px; 
+    }
+    
     .lantern-img { width: 130px; transition: filter 0.3s ease; }
 
     .parchment-border { border: 5px solid var(--accent-color); transition: border-color 0.4s ease; }
     .lantern-glow-bleed { top: 130px; }
     .debossed-title { margin-top: 30px; font-size: 1.8rem; }
+    
+    .debossed-title, .subtitle {
+        min-width: 350px; 
+        max-width: 350px;
+    }
     
     .anchor-nav { min-height: 45px; }
     .nav-wrapper { max-width: 1000px; margin: 0 auto; width: 100%; justify-content: center; }
