@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     
     <!-- Dynamic Title/Description Routing -->
     {% assign ui_pages = site.data[site.active_lang].ui.pages %}
@@ -22,7 +22,7 @@
     <meta property="og:description" content="{{ meta_desc | default: site.data[site.active_lang].ui.header.subtitle }}">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:image" content="{{ page.image | default: '/images/default-social-banner.png' | absolute_url }}">
-    <meta name="theme-color" content="#B8975A">
+    <meta name="theme-color" content="#1a1512">
     <meta name="turbo-refresh-method" content="morph">
     <meta name="turbo-refresh-scroll" content="preserve">
 

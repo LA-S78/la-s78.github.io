@@ -3,8 +3,8 @@
   "short_name": "LA Hub",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#110d0b",
-  "theme_color": "#110d0b",
+  "background_color": "#1a1512",
+  "theme_color": "#1a1512",
   "icons": [
     {
       "src": "/images/favicon.png",

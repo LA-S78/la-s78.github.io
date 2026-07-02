@@ -135,15 +135,35 @@
         });
     }
 
-    function initThemeToggle() {
-        const body = document.body;
-        const themes = ['default', 'sanctuary', 'miasma'];
-        const savedTheme = localStorage.getItem('site-theme') || 'default';
-        
-        if (savedTheme !== 'default' && themes.includes(savedTheme)) {
-            body.setAttribute('data-theme', savedTheme);
-        }
+    function updateBrowserChrome() {
+    // This reads the actual computed background color of the body
+    // regardless of which data-theme is currently active.
+    const bgColor = getComputedStyle(document.body).backgroundColor;
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', bgColor);
+}
+
+function initThemeToggle() {
+    const body = document.body;
+    const themes = ['default', 'sanctuary', 'miasma'];
+    const savedTheme = localStorage.getItem('site-theme') || 'default';
+    
+    if (savedTheme !== 'default' && themes.includes(savedTheme)) {
+        body.setAttribute('data-theme', savedTheme);
     }
+
+    // Call this immediately after setting the theme
+    updateBrowserChrome();
+}
+
+// Ensure you call updateBrowserChrome() whenever your toggle function 
+// (the one that actually changes the theme via a button click) is triggered.
+function changeTheme(themeName) {
+    document.body.setAttribute('data-theme', themeName);
+    localStorage.setItem('site-theme', themeName);
+    
+    // Update the browser chrome on the fly
+    updateBrowserChrome();
+}
 
     function syncHeaderSubtitle() {
         const newSubtitle = document.getElementById('secret-subtitle-data');
