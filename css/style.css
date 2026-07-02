@@ -182,6 +182,7 @@ turbo-frame#main-content {
     cursor: pointer;
     transition: filter 0.5s ease, transform 0.5s ease;
     padding: auto 0px auto 0px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .lantern-img:active {
