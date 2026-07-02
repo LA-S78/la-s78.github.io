@@ -181,8 +181,8 @@ turbo-frame#main-content {
 }
 
 .lantern-container {
-    width: 60px; /* Adjust to preferred size */
-    height: 60px;
+    width: 90px; /* Adjust to preferred size */
+    height: 90px;
     flex-shrink: 0;
     
     /* Flexbox flow instead of absolute positioning */
