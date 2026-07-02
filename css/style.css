@@ -195,7 +195,6 @@ turbo-frame#main-content {
     width: 90px;
     height: auto;
     flex-shrink: 0; /* Prevents text from squeezing or moving the image */
-    mix-blend-mode: screen; 
     filter: var(--lantern-filter);
     cursor: pointer;
     transition: filter 0.5s ease, transform 0.5s ease;
