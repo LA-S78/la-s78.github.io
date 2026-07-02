@@ -7,6 +7,55 @@
     let scrollObserver = null;
     let isNewNavigation = false;
 
+    // --- THE THEME DICTATOR ---
+    // This absolutely forces Turbo to respect the user's theme choice.
+    const themeColors = {
+        'default': 'rgb(35, 120, 45)',
+        'sanctuary': 'rgb(230, 160, 80)',
+        'miasma': 'rgb(140, 50, 180)'
+    };
+
+    function enforceThemeState() {
+        const savedTheme = localStorage.getItem('site-theme') || 'default';
+        const root = document.documentElement;
+        
+        // 1. Defend the HTML tag
+        if (root.getAttribute('data-theme') !== savedTheme) {
+            root.setAttribute('data-theme', savedTheme);
+        }
+
+        // 2. Defend the Status Bar
+        let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        const targetColor = themeColors[savedTheme] || themeColors['default'];
+        
+        if (metaThemeColor && metaThemeColor.getAttribute('content') !== targetColor) {
+            metaThemeColor.setAttribute('content', targetColor);
+        }
+    }
+
+    // Create the Observer
+    const themeDictator = new MutationObserver(() => {
+        enforceThemeState();
+    });
+
+    // Watch the HTML tag for attribute removals
+    themeDictator.observe(document.documentElement, { 
+        attributes: true, 
+        attributeFilter: ['data-theme'] 
+    });
+
+    // Watch the Head for meta tag replacements
+    themeDictator.observe(document.head, {
+        childList: true, 
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['content']
+    });
+
+    // Run once immediately on file load
+    enforceThemeState();
+    // --------------------------
+
     // --- Sub-Modules ---
 
     function initPWA() {
@@ -207,31 +256,6 @@
         }, { passive: true });
     }
 
-    function restoreThemeState() {
-        const root = document.documentElement;
-        // 1. Read the TRUE state from local storage, ignoring what Turbo just did to the DOM
-        const savedTheme = localStorage.getItem('site-theme') || 'default';
-        
-        // 2. Force the HTML tag to hold the correct theme
-        if (savedTheme === 'default') {
-            root.removeAttribute('data-theme');
-        } else {
-            root.setAttribute('data-theme', savedTheme);
-        }
-
-        // 3. Force the Meta Tag to hold the correct color
-        const themeColors = {
-            'default': 'rgb(35, 120, 45)',
-            'sanctuary': 'rgb(230, 160, 80)',
-            'miasma': 'rgb(140, 50, 180)'
-        };
-        
-        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-        if (metaThemeColor) {
-            metaThemeColor.setAttribute('content', themeColors[savedTheme]);
-        }
-    }
-
     // --- MASTER INITIALIZER ---
     function initApp() {
         initPWA(); 
@@ -243,29 +267,9 @@
         initThemeToggle();
         syncHeaderSubtitle();
         initScrollMemory();
-        restoreThemeState();
     }
 
     // --- EVENTS ---
-
-    document.addEventListener("turbo:before-render", (event) => {
-        const savedTheme = localStorage.getItem('site-theme') || 'default';
-        const incomingHtml = event.detail.newBody.parentNode;
-        
-        // 1. Force the incoming HTML to have the correct theme attribute
-        incomingHtml.setAttribute('data-theme', savedTheme);
-        
-        // 2. Rewrite the incoming meta tag BEFORE it hits the browser
-        const incomingMeta = incomingHtml.querySelector('meta[name="theme-color"]');
-        if (incomingMeta) {
-            const themeColors = {
-                'default': 'rgb(35, 120, 45)',
-                'sanctuary': 'rgb(230, 160, 80)',
-                'miasma': 'rgb(140, 50, 180)'
-            };
-            incomingMeta.setAttribute('content', themeColors[savedTheme] || 'rgb(35, 120, 45)');
-        }
-    });
 
     document.addEventListener("turbo:load", initApp);
 
