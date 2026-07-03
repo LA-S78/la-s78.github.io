@@ -835,10 +835,5 @@ svg.resource-icon { width: 16px; height: 16px; fill: currentColor; display: inli
         #mobile-container { 
         height: 100dvh;
         }
-
-        .footer {
-        margin-bottom: 0px;
-        padding-bottom: -10px;
-        }
     }
 }
