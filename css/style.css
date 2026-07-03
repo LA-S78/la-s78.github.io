@@ -833,7 +833,6 @@ svg.resource-icon { width: 16px; height: 16px; fill: currentColor; display: inli
         }
 
         .footer {
-        margin-bottom: calc(-1 * env(safe-area-inset-bottom));
-        }
+        margin-bottom: -5px;
     }
 }
