@@ -45,7 +45,6 @@ jobs:
 
           # 4. Copy PWA essentials to the root of _site/
           cp site.webmanifest _site/
-          cp sw.js _site/
           
           # 5. Copy the redirect file to the root
           cp redirect.html _site/index.html
