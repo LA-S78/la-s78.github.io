@@ -280,10 +280,7 @@ footer {
     display: flex; 
     justify-content: space-around; 
     padding-top: 10px; 
-    padding-bottom: env(safe-area-inset-bottom); 
-    /* FIX: Force the background to extend even if there's extra space */
-    min-height: calc(50px + env(safe-area-inset-bottom));
-    
+    /* FIX: Force the background to extend even if there's extra space */    
     z-index: 30; 
     flex-shrink: 0; 
 }
@@ -801,7 +798,7 @@ svg.resource-icon { width: 16px; height: 16px; fill: currentColor; display: inli
 @media (display-mode: standalone) {
     html {
         /* Paint the lowest native layer dark to prevent white flashes */
-        background-color: #050403 !important;
+        background-color: var(--nav-bg) !important;
     }
 
     body { 
@@ -833,4 +830,3 @@ svg.resource-icon { width: 16px; height: 16px; fill: currentColor; display: inli
         }
     }
 }
-body { background-color: red !important; }
