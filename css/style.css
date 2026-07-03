@@ -99,7 +99,7 @@ body::before {
     height: 100dvh; /* Modern fluid height */
     background: transparent;
     position: relative; 
-    overflow: hidden; 
+    overflow: visible; 
     display: flex; 
     flex-direction: column; 
     scroll-behavior: smooth;
@@ -834,7 +834,7 @@ svg.resource-icon { width: 16px; height: 16px; fill: currentColor; display: inli
 
         .footer {
         padding-bottom: env(safe-area-inset-bottom);
-        margin-bottom: calc(-1 * env(safe-area-inset-bottom));
+        margin-bottom: calc(-2 * env(safe-area-inset-bottom));
         }
     }
 }
