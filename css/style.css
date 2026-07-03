@@ -279,8 +279,7 @@ footer {
     border-top: 1px solid var(--border-color); 
     display: flex; 
     justify-content: space-around; 
-    padding-top: 10px; 
-    margin-bottom: calc(0px - env(safe-area-inset-bottom));    
+    padding: 10px 0px;
     z-index: 30; 
     flex-shrink: 0; 
 }
@@ -827,6 +826,11 @@ svg.resource-icon { width: 16px; height: 16px; fill: currentColor; display: inli
         .language-switcher {
             /* The original top was 12px*/
             top: 32px !important; 
+        }
+
+        .footer {
+        padding-bottom: env(safe-area-inset-bottom);
+        margin-bottom: calc(-1 * env(safe-area-inset-bottom));
         }
     }
 }
