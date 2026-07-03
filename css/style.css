@@ -273,14 +273,9 @@ main img {
   align-items: center;
 }
 
-.lantern-header + *,
-.lantern-header + nav,
-.lantern-header + main {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-}
-
 .header-stack {
+  height: calc(90px + env(safe-area-inset-top)) !important;
+  min-height: calc(90px + env(safe-area-inset-top)) !important; 
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -364,7 +359,7 @@ main img {
   text-decoration: none;
   color: var(--text-main);
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 0.8rem;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   transition:
@@ -383,6 +378,7 @@ main img {
 
 /* Bottom Footer */
 footer {
+  height: 30px;
   border-top: 1px solid var(--border-color);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
@@ -398,9 +394,7 @@ footer {
   align-items: center;
   color: var(--text-muted);
   font-size: 0.7rem;
-  gap: 4px;
   text-decoration: none;
-  border-bottom: none !important;
 }
 .nav-item.active {
   color: var(--accent-color);
@@ -536,18 +530,15 @@ footer {
 
 /* Main Lantern Icon */
 .lantern-container {
-  height: 15dvh;
-  flex-shrink: 0;
+  height:100%;
   mix-blend-mode: screen;
   position: relative;
-  margin-right: 0px;
   isolation: isolate;
 }
 
 .lantern-img {
-  height: 100%;
   filter: var(--lantern-filter);
-  display: block;
+  height:90px;
 }
 .lantern-img:active {
   transform: scale(0.95);
@@ -1529,22 +1520,12 @@ svg.resource-icon {
   .nav-wrapper {
     justify-content: center;
   }
-  .scroll-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   .duel-schedule-grid {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 20px;
   }
   .content-pane {
     padding: 30px 40px;
-  }
-
-  .parchment-border {
-    border: 5px solid var(--accent-color);
-    transition: border-color 0.4s ease;
   }
 
   /* Desktop overrides for the T10 Calculator */
@@ -1622,34 +1603,6 @@ svg.resource-icon {
 
 /* PWA Standalone Mode */
 @media (display-mode: standalone) {
-  html {
-    /* Paint the lowest native layer dark to prevent white flashes */
-    background-color: var(--nav-bg) !important;
-  }
-
-  body {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100dvh;
-    height: 100dvh;
-    overflow: hidden;
-    background-color: transparent !important;
-  }
-
-  #mobile-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100dvh;
-    margin: 0 auto;
-    background-color: transparent;
-  }
-
   /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
   @supports (-webkit-touch-callout: none) {
     .lantern-container,

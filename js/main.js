@@ -8,7 +8,6 @@
     let isNewNavigation = false;
 
     // --- THE THEME DICTATOR ---
-    // This absolutely forces Turbo to respect the user's theme choice.
     const themeColors = {
         'default': 'rgb(35, 120, 45)',
         'sanctuary': 'rgb(230, 160, 80)',
@@ -19,23 +18,18 @@
         const savedTheme = localStorage.getItem('site-theme') || 'default';
         const root = document.documentElement;
         
-        // 1. Defend the HTML tag
         if (root.getAttribute('data-theme') !== savedTheme) {
             root.setAttribute('data-theme', savedTheme);
             
-            // --- THE REPAINT HACK (Targeted) ---
-            // DO NOT hide the root element, it breaks iOS safe-area env() variables.
-            // Only hide the specific elements suffering from the WebKit gradient cache bug.
             const stubbornElements = document.querySelectorAll('.lantern-glow-bleed, .lantern-edge-highlight, .lang-trigger, .dropdown-content');
             
             stubbornElements.forEach(el => {
                 el.style.display = 'none';
-                el.offsetHeight; // Force layout recalculation
+                el.offsetHeight; 
                 el.style.display = '';
             });
         }
 
-        // 2. Defend the Status Bar
         let metaThemeColor = document.querySelector('meta[name="theme-color"]');
         const targetColor = themeColors[savedTheme] || themeColors['default'];
         
@@ -44,18 +38,15 @@
         }
     }
 
-    // Create the Observer
     const themeDictator = new MutationObserver(() => {
         enforceThemeState();
     });
 
-    // Watch the HTML tag for attribute removals
     themeDictator.observe(document.documentElement, { 
         attributes: true, 
         attributeFilter: ['data-theme'] 
     });
 
-    // Watch the Head for meta tag replacements
     themeDictator.observe(document.head, {
         childList: true, 
         subtree: true,
@@ -63,9 +54,7 @@
         attributeFilter: ['content']
     });
 
-    // Run once immediately on file load
     enforceThemeState();
-    // --------------------------
 
     // --- Sub-Modules ---
 
@@ -78,7 +67,6 @@
             'miasma': 'rgb(140, 50, 180)'
         };
         
-        // ALWAYS set the attribute to force the browser to repaint gradients
         root.setAttribute('data-theme', themeName);
         localStorage.setItem('site-theme', themeName);
 
@@ -121,6 +109,28 @@
         });
     }
 
+    // NEW FUNCTION: Smoothly scrolls the active nav link into the center of the nav-wrapper
+    function scrollActiveNavIntoView(activeLink = null) {
+        // If a link isn't explicitly passed, look for the current active one
+        if (!activeLink) {
+            activeLink = document.querySelector('.nav-wrapper .active') || document.querySelector('.anchor-link.active');
+        }
+        
+        if (!activeLink) return;
+        
+        const navWrapper = activeLink.closest('.nav-wrapper');
+        if (!navWrapper) return;
+
+        // Calculate the center position securely to avoid vertical layout jumping
+        const wrapperCenter = navWrapper.clientWidth / 2;
+        const linkCenter = activeLink.offsetLeft + (activeLink.clientWidth / 2);
+        
+        navWrapper.scrollTo({
+            left: linkCenter - wrapperCenter,
+            behavior: 'smooth'
+        });
+    }
+
     function initScrollObserver() {
         const mainContainer = document.querySelector('main');
         const sections = document.querySelectorAll('.content-pane');
@@ -142,7 +152,11 @@
                     navLinks.forEach(link => link.classList.remove('active'));
                     const id = entry.target.getAttribute('id');
                     const activeLink = document.querySelector(`.anchor-link[href$="#${id}"]`);
-                    if (activeLink) activeLink.classList.add('active');
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                        // Trigger the horizontal scroll when the active link changes
+                        scrollActiveNavIntoView(activeLink); 
+                    }
                 }
             });
         }, observerOptions);
@@ -164,6 +178,7 @@
                 if (targetElement) {
                     e.preventDefault(); 
                     targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Visual update happens naturally via the ScrollObserver
                 }
             });
         });
@@ -263,7 +278,6 @@
     function showUpdateToast(newWorker) {
         if (document.getElementById('pwa-update-toast')) return;
 
-        // Pull from the Liquid bridge, or fallback to English as a safety net
         const t = window.pwaTranslations || {
             toastMsg: 'New intel acquired.',
             updateBtn: 'Update',
@@ -278,7 +292,6 @@
         `;
         document.body.appendChild(toast);
 
-        // Tell the waiting worker to activate immediately when clicked
         document.getElementById('pwa-update-btn').addEventListener('click', () => {
             toast.classList.add('updating');
             toast.querySelector('span').textContent = t.updating;
@@ -296,6 +309,9 @@
         initThemeToggle();
         syncHeaderSubtitle();
         initScrollMemory();
+        
+        // Ensure the active link is centered immediately on page load
+        setTimeout(() => scrollActiveNavIntoView(), 100);
     }
 
     // --- EVENTS ---
@@ -323,16 +339,14 @@
         container.scrollBy({ left: direction === 'left' ? -300 : 300, behavior: 'smooth' });
     };
 
-    // --- PWA: SERVICE WORKER REGISTRATION (Runs once on script load) ---
+    // --- PWA: SERVICE WORKER REGISTRATION ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js').then(registration => {
-                // 1. Detect if a new service worker is installing
                 registration.addEventListener('updatefound', () => {
                     const newWorker = registration.installing;
                     
                     newWorker.addEventListener('statechange', () => {
-                        // 2. If installed AND there's an existing controller, it's an update
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                             showUpdateToast(newWorker);
                         }
@@ -342,7 +356,6 @@
                 console.warn('Service Worker registration failed:', err);
             });
 
-            // 3. Automatically reload the page once the new worker takes control
             let refreshing = false;
             navigator.serviceWorker.addEventListener('controllerchange', () => {
                 if (!refreshing) {
