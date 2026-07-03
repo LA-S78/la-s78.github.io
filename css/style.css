@@ -815,7 +815,6 @@ svg.resource-icon { width: 16px; height: 16px; fill: currentColor; display: inli
         position: absolute; top: 0; bottom: 0; left: 0; right: 0; 
         height: 100dvh;
         margin: 0 auto; 
-        height: auto; 
         background-color: transparent;
     }
 
