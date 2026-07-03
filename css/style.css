@@ -280,7 +280,7 @@ footer {
     display: flex; 
     justify-content: space-around; 
     padding-top: 10px; 
-    /* FIX: Force the background to extend even if there's extra space */    
+    margin-bottom: calc(0px - env(safe-area-inset-bottom));    
     z-index: 30; 
     flex-shrink: 0; 
 }
