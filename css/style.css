@@ -119,8 +119,8 @@ body, .lantern-header, footer {
   height: 100%;
   background: transparent;
   position: relative;
-  overflow: hidden;
-  display: flex;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   flex-direction: column;
   scroll-behavior: smooth;
   touch-action: none;
@@ -130,9 +130,9 @@ body, .lantern-header, footer {
 turbo-frame#main-content {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   width: 100%;
-  min-height: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 /* ==========================================================================
@@ -402,14 +402,13 @@ main img {
 
 /* Bottom Footer */
 footer {
-  flex: 0 0 auto;
   border-top: 1px solid var(--border-color);
-  padding-top: 5px;
-  padding-bottom: 25px;
   background-color: var(--nav-bg);
   display: flex;
   justify-content: space-around;
   align-items: center;
+  padding-top: 5px;
+  padding-bottom: 25px;
 }
 .nav-item {
   display: flex;
