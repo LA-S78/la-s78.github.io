@@ -1633,6 +1633,11 @@ svg.resource-icon {
     }
   /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
   @supports (-webkit-touch-callout: none) {
+    @media (min-width: 768px) {
+        .lantern-container {
+            top: 0 !important;
+        }
+    }
     .footer{
         height: 35px;
         margin-bottom: calc(-1 * env(safe-area-inset-bottom))
