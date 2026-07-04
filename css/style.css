@@ -1669,7 +1669,7 @@ svg.resource-icon {
     }
     .lantern-container {
       /* Gently nudges the relative elements down without breaking flexbox */
-      top: 40px;
+      top: 30px;
     }
     .language-switcher {
       /* The original top was 12px*/
