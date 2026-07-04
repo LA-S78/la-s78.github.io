@@ -724,11 +724,14 @@ footer {
 
 /* Modals & Images */
 .blueprint-img {
+  display: block;
   max-width: 100%;
   max-height: 500px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
   margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   transition:
@@ -1577,11 +1580,6 @@ svg.resource-icon {
   .content-pane {
     padding: 30px 40px;
     scroll-margin-top: calc(130px + env(safe-area-inset-top));
-  }
-
-  .blueprint-img {
-    margin-left: 25%;
-    margin-right: 25%;
   }
 
   /* Desktop overrides for the T10 Calculator */
