@@ -272,6 +272,7 @@ main img {
 
 /* Main Header */
 .lantern-header {
+  flex-shrink: 0;
   height: calc(90px + env(safe-area-inset-top)) !important;
   min-height: calc(90px + env(safe-area-inset-top)) !important;
   width: 100%;
@@ -399,8 +400,7 @@ main img {
 
 /* Bottom Footer */
 footer {
-  position:sticky;
-  bottom: 0;
+  flex-shrink: 0;
   height: 35px;
   border-top: 1px solid var(--border-color);
   padding-top: 0.3rem;
