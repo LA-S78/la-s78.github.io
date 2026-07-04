@@ -316,6 +316,23 @@
 
     // --- EVENTS ---
 
+    // 1. iOS PWA Zoom Killers
+    // Intercepts Apple's proprietary multi-touch gesture event
+    document.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+    });
+
+    // Prevent double-tap-to-zoom on the document body
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (e) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+    // 2. Standard App Events
     document.addEventListener("turbo:load", initApp);
 
     document.addEventListener("turbo:visit", () => {

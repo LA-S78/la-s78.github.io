@@ -68,6 +68,7 @@ html {
   max-width: 100%;
   font-size: 100%;
   background-color: var(--nav-bg);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -102,6 +103,12 @@ body::before {
   will-change: transform;
   backface-visibility: hidden;
 }
+/* Turn the App Shell into a dead-zone for native iOS touch features */
+body, .lantern-header, footer {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
 
 #mobile-container {
   width: 100%;
@@ -129,6 +136,11 @@ turbo-frame#main-content {
    ========================================================================== */
 
 main {
+/*iOS specific fixes */
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: pan-y;
+
   flex-grow: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
