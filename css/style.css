@@ -1645,6 +1645,33 @@ svg.resource-icon {
   }
 }
 
+/* ==========================================================================
+   THE INVISIBLE SHIELDS (Wing Swipe Killers)
+   ========================================================================== */
+@media (min-width: 1000px) {
+  #mobile-container::before,
+  #mobile-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: calc((100% - 1000px) / 2); 
+    z-index: 90; 
+    touch-action: none;
+    pointer-events: auto; 
+  }
+
+  /* Snap the left shield to the left edge */
+  #mobile-container::before {
+    left: 0;
+  }
+
+  /* Snap the right shield to the right edge */
+  #mobile-container::after {
+    right: 0;
+  }
+}
+
 /* PWA Standalone Mode */
 @media (display-mode: standalone) {
     .content-pane > *:last-child {
