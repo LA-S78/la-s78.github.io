@@ -297,8 +297,9 @@ main img {
 }
 
 .header-stack {
-  height: calc(90px + env(safe-area-inset-top)) !important;
-  min-height: calc(90px + env(safe-area-inset-top)) !important; 
+  margin-top: env(safe-area-inset-top);
+  height: 90px;
+  min-height: 90px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -431,11 +432,8 @@ footer {
 
 /* Language Switcher */
 .language-switcher {
-  position: absolute;
-  right: 15px;
-  top: 12px;
-  display: flex;
-  gap: 8px;
+  position:fixed;
+  bottom:0px;
   font-size: 0.8rem;
 }
 .lang-link {
@@ -1673,7 +1671,8 @@ svg.resource-icon {
     }
     .language-switcher {
       /* The original top was 12px*/
-      top: 36px !important;
+      top: 30px !important;
+      margin-top: 6px;
     }
   }
   @media (min-width: 768px) {
