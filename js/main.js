@@ -316,13 +316,14 @@
 
     // --- EVENTS ---
 
-    // 1. iOS PWA Zoom Killers
-    // Intercepts Apple's proprietary multi-touch gesture event
-    document.addEventListener('gesturestart', function (e) {
-        e.preventDefault();
-    });
+    // 1. iOS PWA Zoom & Swipe Killers
+    
+    // A. Intercept Apple's proprietary multi-touch pinch/zoom events
+    document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+    document.addEventListener('gesturechange', function (e) { e.preventDefault(); });
+    document.addEventListener('gestureend', function (e) { e.preventDefault(); });
 
-    // Prevent double-tap-to-zoom on the document body
+    // B. Prevent double-tap-to-zoom on the document body
     let lastTouchEnd = 0;
     document.addEventListener('touchend', function (e) {
         const now = (new Date()).getTime();
@@ -331,6 +332,17 @@
         }
         lastTouchEnd = now;
     }, false);
+
+    // C. The Ultimate Background Swipe Killer
+    document.addEventListener('touchmove', function (e) {
+        // Define the specific containers where scrolling IS allowed
+        const isScrollable = e.target.closest('main, .nav-wrapper, .pinned-section, .schedule-container, dialog');
+        
+        // If the user swipes on the background, header, or footer — kill the swipe
+        if (!isScrollable) {
+            e.preventDefault();
+        }
+    }, { passive: false }); // 'passive: false' is mandatory to allow preventDefault()
 
     // 2. Standard App Events
     document.addEventListener("turbo:load", initApp);
