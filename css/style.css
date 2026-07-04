@@ -85,7 +85,7 @@ body::before {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   height: 100dvh;
   z-index: -1;
@@ -288,12 +288,12 @@ main img {
 .debossed-title {
   position: relative;
   z-index: 1;
-  margin-top: 10px;
+  margin-top: 0.6rem;
   font-size: 1.4rem;
   margin-bottom: 0;
   font-family: var(--font-headers);
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 0.13rem;
   text-transform: uppercase;
   color: var(--text-main);
   border: none;
@@ -304,17 +304,18 @@ main img {
 
 .subtitle {
   position: relative;
+  max-width: 10rem;
   z-index: 1;
   font-family: var(--font-headers);
   color: var(--accent-color);
-  letter-spacing: 1.5px;
-  margin-top: 2px;
-  font-size: clamp(0.75rem, 3vw, 1rem);
+  letter-spacing: 0.11rem;
+  font-size: 1rem;
+  margin-top: 0.2rem;
   white-space: normal;
-  line-height: 1.4;
-  width: 90%;
-  max-width: 25rem;
+  line-height: 1.3;
+  width: 100%;
   text-align: center;
+  left: 0.5rem;
 }
 
 /* Sticky Anchor Nav */
@@ -379,7 +380,9 @@ main img {
 
 /* Bottom Footer */
 footer {
-  min-height: calc(30px + env(safe-area-inset-top)) !important;
+  position:sticky;
+  bottom:0;
+  min-height: calc(30px + env(safe-area-inset-bottom)) !important;
   border-top: 1px solid var(--border-color);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
@@ -574,7 +577,7 @@ footer {
   top: 90px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100vw;
+  width: 100%;
   height: 60px;
   background: linear-gradient(
     to bottom,
@@ -589,7 +592,7 @@ footer {
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 1px;
   background: radial-gradient(
     ellipse at center,
@@ -782,13 +785,12 @@ dialog a.dialog-btn:hover {
 /* Grids & Cards */
 .guide-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.5rem;
 }
 .guide-card {
+  padding: 0.5rem 0;
   background-color: var(--card-bg);
-  padding: 15px;
   border-radius: 8px;
   text-align: center;
   border: 1px solid var(--border-color) !important;
@@ -799,7 +801,6 @@ dialog a.dialog-btn:hover {
 .guide-card .icon {
   font-size: 2rem;
   display: block;
-  margin-bottom: 10px;
 }
 
 /* Event Phases */
@@ -1528,6 +1529,9 @@ svg.resource-icon {
   .content-pane {
     padding: 30px 40px;
   }
+  .subtitle {
+    left: 1.1rem;
+  }
 
   /* Desktop overrides for the T10 Calculator */
   .tree-container {
@@ -1604,19 +1608,6 @@ svg.resource-icon {
 
 /* PWA Standalone Mode */
 @media (display-mode: standalone) {
-  body {
-    position: fixed;
-    width: 100dvh;
-    height: 100dvh;
-    overflow: hidden;
-  }
-
-  #mobile-container {
-    position: absolute;
-    height: 100dvh;
-    margin: 0 auto;
-  }
-
   /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
   @supports (-webkit-touch-callout: none) {
     .lantern-container,
