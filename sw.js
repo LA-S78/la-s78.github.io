@@ -1,8 +1,5 @@
-/* eslint-disable */
-/*
 ---
 ---
-*/
 // --- CACHE BUSTER ---
 // This liquid tag changes on every build, forcing the file bytes to change.
 // This guarantees iOS detects the update and triggers your PWA Toast.
