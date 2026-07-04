@@ -411,7 +411,7 @@ footer {
   justify-content: space-around;
   align-items: center;
   padding-top: 10px;
-  padding-bottom: 10px; /* Safe, compact baseline for Android */
+  padding-bottom: 10px;
 }
 .nav-item {
   display: flex;
@@ -1669,17 +1669,10 @@ svg.resource-icon {
    iOS EXCLUSIVE OVERRIDES (Quarantined from Android)
    ========================================================================== */
 @supports (-webkit-touch-callout: none) {
-  
-  body {
-    bottom: auto !important; 
-    height: 100dvh !important; 
-  }
-
   #mobile-container {
     height: 100dvh !important;
-  }
-
-  footer {
-    padding-bottom: 25px !important; /* iOS Safe Buffer injection */
+    /* This pushes the entire grid up by the height of the swipe bar, 
+       without adding height to any individual element. */
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
