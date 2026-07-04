@@ -1652,7 +1652,7 @@ svg.resource-icon {
 
 /* 3. PWA Standalone Mode */
 @media (display-mode: standalone) {
-    .content-pane > *:last-child {
+    .content-pane:last-of-type {
         margin-bottom: 3rem;
     }
   /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
