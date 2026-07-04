@@ -381,8 +381,8 @@ main img {
 /* Bottom Footer */
 footer {
   position:sticky;
-  bottom:0;
-  min-height: calc(30px + env(safe-area-inset-bottom)) !important;
+  bottom: 0;
+  height: calc(30px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--border-color);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
@@ -1610,15 +1610,13 @@ svg.resource-icon {
 @media (display-mode: standalone) {
   /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
   @supports (-webkit-touch-callout: none) {
-    .lantern-container,
-    .debossed-title,
-    .subtitle {
+    .lantern-container {
       /* Gently nudges the relative elements down without breaking flexbox */
       top: 20px;
     }
     .language-switcher {
       /* The original top was 12px*/
-      top: 32px !important;
+      top: 30px !important;
     }
   }
 }
