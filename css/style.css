@@ -379,7 +379,7 @@ main img {
 
 /* Bottom Footer */
 footer {
-  height: 30px;
+  min-height: calc(30px + env(safe-area-inset-top)) !important;
   border-top: 1px solid var(--border-color);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
