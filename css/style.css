@@ -941,7 +941,7 @@ dialog a.dialog-btn:hover {
   padding: 0.6rem;
   margin-bottom: 1.2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-  scroll-margin-top: 170px;
+  scroll-margin-top: calc(90px + env(safe-area-inset-top));
   overflow: hidden;
 }
 .content-pane > *:first-child {
@@ -1576,6 +1576,7 @@ svg.resource-icon {
   }
   .content-pane {
     padding: 30px 40px;
+    scroll-margin-top: calc(130px + env(safe-area-inset-top));
   }
 
   .blueprint-img {
