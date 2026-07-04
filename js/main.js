@@ -165,24 +165,29 @@
     }
 
     function initAnchorScrolling() {
-        const navLinks = document.querySelectorAll('.anchor-link');
-        
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                if (!href || !href.includes('#')) return;
+    const navLinks = document.querySelectorAll('.anchor-link');
+    const mainContainer = document.querySelector('main'); // Target the scrollable area directly
 
-                const targetId = href.split('#')[1];
-                const targetElement = document.getElementById(targetId);
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (!href || !href.includes('#')) return;
 
-                if (targetElement) {
-                    e.preventDefault(); 
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    // Visual update happens naturally via the ScrollObserver
-                }
-            });
+            const targetId = href.split('#')[1];
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                e.preventDefault(); 
+                
+                // Use the main container to scroll
+                mainContainer.scrollTo({
+                    top: targetElement.offsetTop - (mainContainer.scrollTop - targetElement.getBoundingClientRect().top),
+                    behavior: 'smooth'
+                });
+            }
         });
-    }
+    });
+}
 
     function initSearchEngine() {
         const searchInput = document.getElementById('searchInput');

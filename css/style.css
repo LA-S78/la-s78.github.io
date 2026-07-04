@@ -118,7 +118,7 @@ body, .lantern-header, footer {
   height: 100dvh; /* Modern fluid height */
   background: transparent;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   scroll-behavior: smooth;
