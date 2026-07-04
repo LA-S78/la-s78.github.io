@@ -21,7 +21,7 @@ module WorkboxInjector
     
     precache_list = files.filter_map do |file|
       next if file == sw_path
-      url = file.sub(dest_path, '')
+      url = file.sub(/^#{Regexp.escape(dest_path)}/, '')
       revision = Digest::MD5.file(file).hexdigest[0, 10]
       { 'url' => url, 'revision' => revision }
     end

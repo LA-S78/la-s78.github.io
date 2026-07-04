@@ -20,36 +20,29 @@ jobs:
         env:
           JEKYLL_ENV: production
         run: |
-          # 1. Build each language into its own subdirectory
+          # 1. Build the root (sw.js lives here and gets processed)
+          # We do this FIRST so we have a base _site folder
+          bundle exec jekyll build --config _config.yml --destination _site/
+          
+          # 2. Build each language into its own subdirectory
+          # We use --incremental or just don't wipe the root, 
+          # but the easiest way is to build languages into folders inside _site/
           for lang in en de es fr ru tr uk it; do
             echo "Building $lang..."
             bundle exec jekyll build --config _config.yml,_configs/_config_$lang.yml --destination _site/$lang
           done
-
-          # 2. Process sw.js as a standalone Jekyll build (The "secret" to getting Liquid tags processed)
-          # We tell Jekyll to build ONLY sw.js into the root _site folder
-          bundle exec jekyll build --config _config.yml --destination _site/ --include sw.js
           
-          # 3. Copy static assets to the root of _site/
-          # This makes them available at /images/, /css/, and /js/ for all languages
+          # 3. Copy static assets to the root (they might have been moved/overwritten)
           cp -r images _site/
           cp -r css _site/
           cp -r js _site/
+          cp site.webmanifest _site/
+          cp redirect.html _site/index.html
 
-          # 4. MANUALLY RUN THE PRECACHE GENERATOR
-          # We provide a dummy 'site' object to our script
+          # 4. RUN THE PRECACHE GENERATOR
+          # Now _site/ contains /en, /de, /css, /images, and sw.js
           echo "Running Workbox injector..."
           ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
-
-          #debug
-          echo "Verifying file content after injection:"
-          head -n 10 _site/sw.js
-
-          # 5. Copy PWA essentials to the root of _site/
-          cp site.webmanifest _site/
-          
-          # 6. Copy the redirect file to the root
-          cp redirect.html _site/index.html
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v5
