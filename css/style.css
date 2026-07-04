@@ -1618,5 +1618,8 @@ svg.resource-icon {
       /* The original top was 12px*/
       top: 30px !important;
     }
+    .footer{
+      height: calc(30px + env(safe-area-inset-bottom));
+    }
   }
 }
