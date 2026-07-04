@@ -1673,7 +1673,7 @@ svg.resource-icon {
     }
     .language-switcher {
       /* The original top was 12px*/
-      top: 30px !important;
+      top: 36px !important;
     }
   }
   @media (min-width: 768px) {
