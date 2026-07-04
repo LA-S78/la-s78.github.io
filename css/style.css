@@ -292,12 +292,12 @@ main img {
   background-repeat: no-repeat;
   background-position: center;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
 }
 
 .header-stack {
-  margin-top: env(safe-area-inset-top);
   height: 90px;
   min-height: 90px;
   display: flex;
