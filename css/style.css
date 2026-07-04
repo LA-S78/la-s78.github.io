@@ -405,7 +405,7 @@ footer {
   flex: 0 0 auto;
   border-top: 1px solid var(--border-color);
   padding-top: 5px;
-  padding-bottom: 5px;
+  padding-bottom: 25px;
   background-color: var(--nav-bg);
   display: flex;
   justify-content: space-around;
@@ -1663,9 +1663,7 @@ svg.resource-icon {
 @supports (-webkit-touch-callout: none) {
   
   body {
-    /* 1. Kill the bottom anchor to prevent the 20% Phantom Safari Gap */
     bottom: auto !important; 
-    /* 2. Force iOS to use dynamic hardware height instead */
     height: 100dvh !important; 
   }
 
