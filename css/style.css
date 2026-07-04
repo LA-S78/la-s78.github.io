@@ -259,7 +259,7 @@ main img {
   height: auto;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  margin: 15px 0;
+  margin: 0;
 }
 
 .warning {
@@ -725,7 +725,7 @@ footer {
 /* Modals & Images */
 .blueprint-img {
   max-width: 100%;
-  height: auto;
+  max-height: 500px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
   margin-top: 15px;
@@ -949,6 +949,7 @@ dialog a.dialog-btn:hover {
 }
 .content-pane > *:last-child {
   margin-bottom: 0;
+  padding-bottom: 0;
 }
 .content-pane h2,
 .content-pane h3 {
@@ -1575,6 +1576,11 @@ svg.resource-icon {
   }
   .content-pane {
     padding: 30px 40px;
+  }
+
+  .blueprint-img {
+    margin-left: 25%;
+    margin-right: 25%;
   }
 
   /* Desktop overrides for the T10 Calculator */
