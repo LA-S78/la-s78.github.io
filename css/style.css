@@ -1628,6 +1628,9 @@ svg.resource-icon {
 
 /* PWA Standalone Mode */
 @media (display-mode: standalone) {
+    .footer{
+        margin-top: 2rem;
+    }
   /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
   @supports (-webkit-touch-callout: none) {
     .lantern-container {
