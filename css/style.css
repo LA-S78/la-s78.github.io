@@ -1611,6 +1611,12 @@ svg.resource-icon {
     overflow: hidden;
   }
 
+  #mobile-container {
+    position: absolute;
+    height: 100dvh;
+    margin: 0 auto;
+  }
+
   /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
   @supports (-webkit-touch-callout: none) {
     .lantern-container,
