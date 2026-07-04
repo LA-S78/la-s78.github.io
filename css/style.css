@@ -102,6 +102,7 @@ body::before {
   will-change: transform;
   backface-visibility: hidden;
 }
+
 /* Turn the App Shell into a dead-zone for native iOS touch features */
 body, .lantern-header, footer {
   -webkit-user-select: none;
@@ -136,10 +137,12 @@ turbo-frame#main-content {
    ========================================================================== */
 
 main {
-/*iOS specific fixes */
+  /* iOS specific fixes */
   -webkit-user-select: text;
   user-select: text;
   touch-action: pan-y;
+  overscroll-behavior-y: contain; /* Kills vertical rubber-band bouncing */
+  overscroll-behavior-x: none;    /* Kills horizontal swipe-to-go-back warp */
 
   flex-grow: 1;
   overflow-y: auto;
@@ -1530,7 +1533,7 @@ svg.resource-icon {
    10. MEDIA QUERIES (DESKTOP & PWA)
    ========================================================================== */
 
-/* Desktop / Tablet Breakpoint */
+/* 1. Tablet & Desktop UI Overrides */
 @media (min-width: 768px) {
   /* bigger header for desktop/tablet */
   .lantern-header {
@@ -1645,9 +1648,7 @@ svg.resource-icon {
   }
 }
 
-/* ==========================================================================
-   THE INVISIBLE SHIELDS (Wing Swipe Killers)
-   ========================================================================== */
+/* 2. THE INVISIBLE SHIELDS (Wing Swipe Killers) */
 @media (min-width: 1000px) {
   #mobile-container::before,
   #mobile-container::after {
@@ -1672,7 +1673,7 @@ svg.resource-icon {
   }
 }
 
-/* PWA Standalone Mode */
+/* 3. PWA Standalone Mode */
 @media (display-mode: standalone) {
     .content-pane > *:last-child {
         margin-bottom: calc(1.2rem + 35px);
