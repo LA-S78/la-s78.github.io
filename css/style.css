@@ -400,7 +400,7 @@ main img {
 
 /* Bottom Footer */
 footer {
-  flex-shrink: 0;
+  flex: 0 0 auto;
   height: 35px;
   border-top: 1px solid var(--border-color);
   padding-top: 0.3rem;
