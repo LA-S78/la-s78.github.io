@@ -119,6 +119,7 @@ body, .lantern-header, footer {
   display: flex;
   flex-direction: column;
   scroll-behavior: smooth;
+  touch-action: none;
 }
 
 /* Turbo Frame Flexbox Fix */
@@ -353,6 +354,7 @@ main img {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  touch-action: pan-x;
 }
 .nav-wrapper::before {
   content: "";
@@ -849,6 +851,7 @@ dialog a.dialog-btn:hover {
   scroll-snap-type: x mandatory;
   padding-left: 20px;
   scroll-padding-left: 20px; /* Padding for the snapping offset */
+  touch-action: pan-x;
 }
 .pinned-section::-webkit-scrollbar {
   display: none;
@@ -1145,6 +1148,7 @@ dialog a.dialog-btn:hover {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin: 0px 0;
+  touch-action: pan-x;
 }
 .schedule-table {
   width: 100%;
