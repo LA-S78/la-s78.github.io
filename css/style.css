@@ -1665,20 +1665,11 @@ svg.resource-icon {
         height: 35px;
         margin-bottom: calc(-1 * env(safe-area-inset-bottom))
     }
-    .lantern-container {
-      /* Gently nudges the relative elements down without breaking flexbox */
-      top: 30px;
-    }
-    .language-switcher {
-      /* The original top was 12px*/
-      top: 30px !important;
-      margin-top: 6px;
-    }
-  }
   @media (min-width: 768px) {
         .lantern-container {
             top: 0;
             margin-top: -40px;
         }
     }
+  }
 }
