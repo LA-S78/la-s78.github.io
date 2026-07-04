@@ -68,6 +68,7 @@ html {
   font-size: 100%;
   background-color: var(--nav-bg);
   -webkit-text-size-adjust: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -82,6 +83,7 @@ body {
   color: var(--text-main);
   overscroll-behavior: none;
   touch-action: none;
+  overflow: hidden;
 }
 
 body::before {
