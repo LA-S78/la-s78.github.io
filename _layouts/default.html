@@ -30,8 +30,6 @@
             {{ content }}
         </main>
 
-        {% include structure/footer.html %}
-
         {% if page.dialogs %}
             {% for dialog in page.dialogs %}
                 {% include {{ dialog }} %}
@@ -39,6 +37,9 @@
         {% endif %}
 
     </turbo-frame>
+
+        {% include structure/footer.html %}
+
     </div>
 </body>
 </html>
