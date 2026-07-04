@@ -2,11 +2,11 @@
    LAST ASYLUM COMPENDIUM: MASTER STYLESHEET
    ========================================================================== */
 
-/* Disable unintentional zoom */
-* {
+/* Global Reset & Disable unintentional zoom */
+*, *::before, *::after {
+  box-sizing: border-box;
   touch-action: manipulation;
 }
-
 /* ==========================================================================
    1. VARIABLES & THEMES
    ========================================================================== */
@@ -66,6 +66,7 @@ html[data-theme="miasma"] {
 
 html {
   max-width:100%;
+  overflow-x: hidden;
   font-size: 100%;
   background-color: var(--nav-bg);
 }
@@ -1603,6 +1604,13 @@ svg.resource-icon {
 
 /* PWA Standalone Mode */
 @media (display-mode: standalone) {
+  body {
+    position: fixed;
+    width: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
   /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
   @supports (-webkit-touch-callout: none) {
     .lantern-container,
