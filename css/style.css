@@ -1513,8 +1513,34 @@ svg.resource-icon {
 
 /* Desktop / Tablet Breakpoint */
 @media (min-width: 768px) {
+  /* bigger header for desktop/tablet */
+  .lantern-header {
+    height: 130px !important;
+    min-height: 130px !important;
+    
+    background-image: radial-gradient(
+      circle 800px at center 10%,
+      #2b231e 0%,
+      var(--nav-bg) 100%
+    );
+  }
+
+  .lantern-img {
+    height: 125px;
+    margin-right: -1rem;
+  }
+
   .header-stack {
-    gap: 5%;
+    height: 100% !important;
+    min-height: 100% !important;  
+    gap: 3rem;  
+  }
+  .debossed-title {
+    font-size: 2rem;
+  }
+  .subtitle {
+    font-size: 1.3rem;
+    width: 100%;
   }
   .nav-wrapper {
     justify-content: center;
