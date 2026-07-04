@@ -1153,7 +1153,7 @@ dialog a.dialog-btn:hover {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin: 0px 0;
-  touch-action: pan-x, pan-y;
+  touch-action: pan-x pan-y;
 }
 .schedule-table {
   width: 100%;
