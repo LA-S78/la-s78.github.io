@@ -382,7 +382,7 @@ main img {
 footer {
   position:sticky;
   bottom: 0;
-  height: calc(30px + env(safe-area-inset-bottom));
+  height: 35px;
   border-top: 1px solid var(--border-color);
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
@@ -1617,9 +1617,6 @@ svg.resource-icon {
     .language-switcher {
       /* The original top was 12px*/
       top: 30px !important;
-    }
-    .footer{
-      height: calc(30px + env(safe-area-inset-bottom));
     }
   }
 }
