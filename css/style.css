@@ -1541,8 +1541,8 @@ svg.resource-icon {
 @media (min-width: 768px) {
   /* bigger header for desktop/tablet */
   .lantern-header {
-    height: 130px !important;
-    min-height: 130px !important;
+    height: calc(130px + env(safe-area-inset-top)) !important;
+    min-height: calc(130px + env(safe-area-inset-top)) !important;
     
     background-image: radial-gradient(
       circle 800px at center 10%,
@@ -1557,8 +1557,8 @@ svg.resource-icon {
   }
 
   .header-stack {
-    height: 100% !important;
-    min-height: 100% !important;  
+    height: 130px !important;
+    min-height: 130px !important;  
     gap: 3rem;  
   }
   .debossed-title {
