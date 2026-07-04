@@ -409,7 +409,7 @@ footer {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  box-sizing: content-box;
+  box-sizing: border-box;
 }
 .nav-item {
   display: flex;
@@ -1656,13 +1656,5 @@ svg.resource-icon {
 @media (display-mode: standalone) {
   .content-pane:last-of-type {
     margin-bottom: 3rem;
-  }
-  
-  /* iOS-ONLY: Camera Notch / Dynamic Island Breathing Room */
-  @supports (-webkit-touch-callout: none) {
-    footer {
-      padding-bottom: calc(0.3rem + env(safe-area-inset-bottom)) !important;
-      margin-bottom: 0 !important; 
-    }
   }
 }
