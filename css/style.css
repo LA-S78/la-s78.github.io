@@ -1619,14 +1619,9 @@ svg.resource-icon {
       /* Gently nudges the relative elements down without breaking flexbox */
       top: 20px;
     }
-
     .language-switcher {
       /* The original top was 12px*/
       top: 32px !important;
-    }
-
-    #mobile-container {
-      height: 100dvh;
     }
   }
 }
