@@ -1,4 +1,13 @@
-// Version 1.0.1
+/* eslint-disable */
+/*
+---
+---
+*/
+// --- CACHE BUSTER ---
+// This liquid tag changes on every build, forcing the file bytes to change.
+// This guarantees iOS detects the update and triggers your PWA Toast.
+const SW_VERSION = '{{ site.time | date: "%s" }}';
+
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 if (workbox) {
