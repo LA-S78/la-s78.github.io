@@ -25,16 +25,18 @@ jobs:
             echo "Building $lang..."
             bundle exec jekyll build --config _config.yml,_configs/_config_$lang.yml --destination _site/$lang
           done
+
+          # 2. Process sw.js as a standalone Jekyll build (The "secret" to getting Liquid tags processed)
+          # We tell Jekyll to build ONLY sw.js into the root _site folder
+          bundle exec jekyll build --config _config.yml --destination _site/ --include sw.js
           
-          # 2. Copy static assets to the root of _site/
+          # 3. Copy static assets to the root of _site/
           # This makes them available at /images/, /css/, and /js/ for all languages
           cp -r images _site/
           cp -r css _site/
           cp -r js _site/
 
-          cp sw.js _site/sw.js
-
-          # 3. MANUALLY RUN THE PRECACHE GENERATOR
+          # 4. MANUALLY RUN THE PRECACHE GENERATOR
           # We provide a dummy 'site' object to our script
           echo "Running Workbox injector..."
           ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
@@ -43,10 +45,10 @@ jobs:
           echo "Verifying file content after injection:"
           head -n 10 _site/sw.js
 
-          # 4. Copy PWA essentials to the root of _site/
+          # 5. Copy PWA essentials to the root of _site/
           cp site.webmanifest _site/
           
-          # 5. Copy the redirect file to the root
+          # 6. Copy the redirect file to the root
           cp redirect.html _site/index.html
 
       - name: Upload Pages Artifact

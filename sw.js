@@ -1,5 +1,11 @@
 ---
+permalink: /sw.js
 ---
+/* 
+   NOTE: This file is a Jekyll-processed template. 
+   VSCodium settings are configured to ignore validation errors 
+   caused by the Jekyll front-matter and Liquid tags below.
+*/
 // --- CACHE BUSTER ---
 // This liquid tag changes on every build, forcing the file bytes to change.
 // This guarantees iOS detects the update and triggers your PWA Toast.
