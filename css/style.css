@@ -105,6 +105,7 @@ body, .lantern-header, footer {
   grid-template-rows: auto 1fr auto;
   min-height: 0; 
   overflow: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Turbo Frame Flexbox Fix */
