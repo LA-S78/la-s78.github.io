@@ -7,6 +7,15 @@
     let scrollObserver = null;
     let isNewNavigation = false;
 
+    // --- PWA HEIGHT HACK ---
+    // Actively measures the true hardware screen real estate to bypass iOS PWA bugs
+    function setAppHeight() {
+        const doc = document.documentElement;
+        doc.style.setProperty('--app-height', `${window.innerHeight}px`);
+    }
+    window.addEventListener('resize', setAppHeight);
+    setAppHeight();
+
     // --- THE THEME DICTATOR ---
     const themeColors = {
         'default': 'rgb(35, 120, 45)',
@@ -109,9 +118,7 @@
         });
     }
 
-    // NEW FUNCTION: Smoothly scrolls the active nav link into the center of the nav-wrapper
     function scrollActiveNavIntoView(activeLink = null) {
-        // If a link isn't explicitly passed, look for the current active one
         if (!activeLink) {
             activeLink = document.querySelector('.nav-wrapper .active') || document.querySelector('.anchor-link.active');
         }
@@ -121,7 +128,6 @@
         const navWrapper = activeLink.closest('.nav-wrapper');
         if (!navWrapper) return;
 
-        // Calculate the center position securely to avoid vertical layout jumping
         const wrapperCenter = navWrapper.clientWidth / 2;
         const linkCenter = activeLink.offsetLeft + (activeLink.clientWidth / 2);
         
@@ -154,7 +160,6 @@
                     const activeLink = document.querySelector(`.anchor-link[href$="#${id}"]`);
                     if (activeLink) {
                         activeLink.classList.add('active');
-                        // Trigger the horizontal scroll when the active link changes
                         scrollActiveNavIntoView(activeLink); 
                     }
                 }
@@ -165,29 +170,28 @@
     }
 
     function initAnchorScrolling() {
-    const navLinks = document.querySelectorAll('.anchor-link');
-    const mainContainer = document.querySelector('main'); // Target the scrollable area directly
+        const navLinks = document.querySelectorAll('.anchor-link');
+        const mainContainer = document.querySelector('main'); 
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (!href || !href.includes('#')) return;
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (!href || !href.includes('#')) return;
 
-            const targetId = href.split('#')[1];
-            const targetElement = document.getElementById(targetId);
+                const targetId = href.split('#')[1];
+                const targetElement = document.getElementById(targetId);
 
-            if (targetElement) {
-                e.preventDefault(); 
-                
-                // Use the main container to scroll
-                mainContainer.scrollTo({
-                    top: targetElement.offsetTop - (mainContainer.scrollTop - targetElement.getBoundingClientRect().top),
-                    behavior: 'smooth'
-                });
-            }
+                if (targetElement) {
+                    e.preventDefault(); 
+                    
+                    mainContainer.scrollTo({
+                        top: targetElement.offsetTop - (mainContainer.scrollTop - targetElement.getBoundingClientRect().top),
+                        behavior: 'smooth'
+                    });
+                }
+            });
         });
-    });
-}
+    }
 
     function initSearchEngine() {
         const searchInput = document.getElementById('searchInput');
@@ -279,7 +283,6 @@
         }, { passive: true });
     }
 
-    // --- PWA UPDATE TOAST LOGIC ---
     function showUpdateToast(newWorker) {
         if (document.getElementById('pwa-update-toast')) return;
 
@@ -315,20 +318,15 @@
         syncHeaderSubtitle();
         initScrollMemory();
         
-        // Ensure the active link is centered immediately on page load
         setTimeout(() => scrollActiveNavIntoView(), 100);
     }
 
     // --- EVENTS ---
 
-    // 1. iOS PWA Zoom & Swipe Killers
-    
-    // A. Intercept Apple's proprietary multi-touch pinch/zoom events
     document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
     document.addEventListener('gesturechange', function (e) { e.preventDefault(); });
     document.addEventListener('gestureend', function (e) { e.preventDefault(); });
 
-    // B. Prevent double-tap-to-zoom on the document body
     let lastTouchEnd = 0;
     document.addEventListener('touchend', function (e) {
         const now = (new Date()).getTime();
@@ -338,18 +336,13 @@
         lastTouchEnd = now;
     }, false);
 
-    // C. The Ultimate Background Swipe Killer
     document.addEventListener('touchmove', function (e) {
-        // Define the specific containers where scrolling IS allowed
         const isScrollable = e.target.closest('main, .nav-wrapper, .pinned-section, .schedule-container, dialog');
-        
-        // If the user swipes on the background, header, or footer — kill the swipe
         if (!isScrollable) {
             e.preventDefault();
         }
-    }, { passive: false }); // 'passive: false' is mandatory to allow preventDefault()
+    }, { passive: false }); 
 
-    // 2. Standard App Events
     document.addEventListener("turbo:load", initApp);
 
     document.addEventListener("turbo:visit", () => {
@@ -373,7 +366,6 @@
         container.scrollBy({ left: direction === 'left' ? -300 : 300, behavior: 'smooth' });
     };
 
-    // --- PWA: SERVICE WORKER REGISTRATION ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js').then(registration => {
