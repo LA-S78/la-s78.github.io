@@ -50,4 +50,26 @@
       <script src="/js/dev-router.js" defer></script>
     {% endif %}
 <script src="/js/theme-init.js"></script>
+<!-- debug start -->
+<script>
+  (function() {
+    var consoleDiv = document.createElement('div');
+    consoleDiv.style.position = 'fixed';
+    consoleDiv.style.bottom = '0';
+    consoleDiv.style.left = '0';
+    consoleDiv.style.width = '100%';
+    consoleDiv.style.height = '150px';
+    consoleDiv.style.background = 'rgba(0,0,0,0.8)';
+    consoleDiv.style.color = '#0f0';
+    consoleDiv.style.fontSize = '12px';
+    consoleDiv.style.overflow = 'auto';
+    consoleDiv.style.zIndex = '99999';
+    document.body.appendChild(consoleDiv);
+
+    window.console.log = function(msg) {
+      consoleDiv.innerHTML += msg + '<br>';
+    };
+  })();
+</script>
+<!-- debug end -->
 </head>
