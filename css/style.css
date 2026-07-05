@@ -78,6 +78,7 @@ body {
   padding: 0;
   height: 100dvh;
   font-family: var(--font-body);
+  background-color: var(--nav-bg);
   color: var(--text-main);
   overscroll-behavior: none;
   overflow: hidden;
