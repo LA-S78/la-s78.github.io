@@ -1,26 +1,8 @@
 <head>
     <meta charset="UTF-8">
-    <!-- iPad WIP --->
-    <!--
-    <script>
-      (function() {
-        var isIpad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
-        var isOldIpad = /iPad/i.test(navigator.userAgent);
-
-        if (isIpad || isOldIpad) {
-          // iPad: "Bleed Mode" (Edge-to-edge, translucent bar)
-          document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">');
-          document.write('<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">');
-        } else {
-          // iPhone: "Safe Mode" (No Chin Gap Bug)
-          document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">');
-          document.write('<meta name="apple-mobile-web-app-status-bar-style" content="default">');
-        }
-      })();
-    </script>
-    -->
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="{{ site.title }}">
     
     <!-- Dynamic Title/Description Routing -->
@@ -67,5 +49,5 @@
     {% if jekyll.environment == "development" %}
       <script src="/js/dev-router.js" defer></script>
     {% endif %}
-    <script src="/js/theme-init.js"></script>
+<script src="/js/theme-init.js"></script>
 </head>

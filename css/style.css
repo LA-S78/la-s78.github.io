@@ -78,7 +78,6 @@ body {
   padding: 0;
   height: 100dvh;
   font-family: var(--font-body);
-  background-color: var(--nav-bg);
   color: var(--text-main);
   overscroll-behavior: none;
   overflow: hidden;
@@ -1642,9 +1641,7 @@ svg.resource-icon {
 @media (display-mode: standalone) {
   @supports (-webkit-touch-callout: none) {
   footer {
-    padding-bottom: 20px;
-    padding-bottom: max(10px, calc(20px - env(safe-area-inset-bottom)));
+    padding-bottom: 20px !important; /* Apple's precise home indicator clearance */
     }
   }
 }
-
