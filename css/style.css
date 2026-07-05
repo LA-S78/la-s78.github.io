@@ -1642,6 +1642,8 @@ svg.resource-icon {
 @media (display-mode: standalone) {
   @supports (-webkit-touch-callout: none) {
   footer {
+    position: fixed;
+    bottom: 0;
     padding-bottom: 20px;
     padding-bottom: max(0px, calc(20px - env(safe-area-inset-bottom)));
     }
