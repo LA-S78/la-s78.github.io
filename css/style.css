@@ -390,7 +390,10 @@ footer {
   justify-content: space-around;
   align-items: center;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  height: calc(60px + env(safe-area-inset-bottom));
+  min-height: calc(60px + env(safe-area-inset-bottom));
 }
 .nav-item {
   display: flex;
