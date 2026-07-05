@@ -105,7 +105,6 @@ body, .lantern-header, footer {
   grid-template-rows: auto 1fr auto;
   min-height: 0; 
   overflow: hidden;
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Turbo Frame Flexbox Fix */
@@ -395,7 +394,8 @@ footer {
   padding-bottom: max(20px, env(safe-area-inset-bottom));
   height: calc(60px + env(safe-area-inset-bottom));
   min-height: calc(60px + env(safe-area-inset-bottom));
-  margin-bottom: (-1 * env(safe-area-inset-bottom))
+  margin-bottom: calc(-1 * env(safe-area-inset-bottom));
+  background-clip: padding-box;
 }
 .nav-item {
   display: flex;
