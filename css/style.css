@@ -394,7 +394,7 @@ footer {
   justify-content: space-around;
   align-items: center;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
 }
 .nav-item {
   display: flex;
@@ -1645,11 +1645,6 @@ svg.resource-icon {
 @media (display-mode: standalone) {
   .content-pane:last-of-type {
   
-  }
-  @supports (-webkit-touch-callout: none) {
-  footer {
-    padding-bottom: 20px !important; /* Apple's precise home indicator clearance */
-    }
   }
 }
 
