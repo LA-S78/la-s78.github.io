@@ -1644,7 +1644,7 @@ svg.resource-icon {
   }
   @supports (-webkit-touch-callout: none) {
   footer {
-    padding-bottom: 34px !important; /* Apple's precise home indicator clearance */
+    padding-bottom: 20px !important; /* Apple's precise home indicator clearance */
     }
   }
 }
