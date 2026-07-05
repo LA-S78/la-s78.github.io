@@ -1639,9 +1639,6 @@ svg.resource-icon {
 
 /* 3. PWA Standalone Mode */
 @media (display-mode: standalone) {
-  .content-pane:last-of-type {
-  
-  }
   @supports (-webkit-touch-callout: none) {
   footer {
     padding-bottom: 20px !important; /* Apple's precise home indicator clearance */
