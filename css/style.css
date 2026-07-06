@@ -93,7 +93,7 @@ body::before {
   top: calc(90px + env(safe-area-inset-top));
   left: 0;
   width: 100%;
-  height: calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 150px);
+  height: calc(100% - env(safe-area-inset-top) - 150px);
   z-index: -10; /* Keeps it behind all content */
   background-color: #050403;
   background-image: url("/images/background.webp"), url("/images/background.png");
