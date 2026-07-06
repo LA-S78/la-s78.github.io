@@ -131,7 +131,7 @@ main {
   -webkit-overflow-scrolling: touch;
   line-height: 1.6;
   padding-top: calc(90px + env(safe-area-inset-top));
-  padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
+  padding-bottom: calc(60px + env(safe-area-inset-bottom)); 
   padding-left: max(20px, calc((100% - 1000px) / 2));
   padding-right: max(20px, calc((100% - 1000px) / 2));
 }
@@ -1552,7 +1552,6 @@ svg.resource-icon {
   /* Update the main routing to account for the taller 130px header */
   main {
   padding-top: calc(130px + env(safe-area-inset-top));
-  padding-bottom: calc(60px + env(safe-area-inset-bottom));
   }
 
   .lantern-img {
