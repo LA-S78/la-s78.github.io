@@ -254,19 +254,33 @@
         }, { passive: true });
     }
 
-    // --- TOUCH GUARD: PREVENT GHOST SCROLLING ---
+    // --- TOUCH GUARD: PREVENT VERTICAL RUBBER-BANDING ---
     function preventGhostScrolling() {
         const main = document.querySelector('main');
         if (!main) return;
 
-        main.addEventListener('touchmove', (e) => {
-            // FIX: Allow touch events within any content-pane to ensure horizontal/specific interactions work
-            if (e.target.closest('.content-pane')) return;
+        let startX, startY;
 
-            // Only block if the content isn't actually taller than the container
-            if (main.scrollHeight <= main.clientHeight) {
-                e.preventDefault();
+        main.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        main.addEventListener('touchmove', (e) => {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            
+            const deltaX = Math.abs(currentX - startX);
+            const deltaY = Math.abs(currentY - startY);
+
+            // If vertical movement is the primary intent
+            if (deltaY > deltaX) {
+                // Only block vertical movement if the page is too short to scroll
+                if (main.scrollHeight <= main.clientHeight) {
+                    e.preventDefault();
+                }
             }
+            // If horizontal (deltaX > deltaY), we do NOTHING, allowing swiping
         }, { passive: false });
     }
 
