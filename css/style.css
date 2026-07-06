@@ -66,7 +66,7 @@ html[data-theme="miasma"] {
 
 html {
   /* Using 100vh to ensure proper iOS PWA bleed */
-  height: 100vh;
+  height: 100dvh;
   max-width: 100%;
   font-size: 100%;
   background-color: var(--nav-bg);
@@ -78,7 +78,7 @@ body {
   margin: 0;
   padding: 0;
   /* Using 100vh instead of dvh to prevent home bar glitch */
-  height: 100vh;
+  height: 100dvh;
   font-family: var(--font-body);
   color: var(--text-main);
   overscroll-behavior: none;
@@ -101,7 +101,7 @@ body, .lantern-header, footer {
 
 #mobile-container {
   width: 100%;
-  height: 100vh; /* Lock the container to the glass */
+  height: 100dvh; /* Lock the container to the glass */
   display: flex;
   flex-direction: column;
 }
@@ -130,12 +130,8 @@ main {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   line-height: 1.6;
-  box-sizing: border-box;
-  
-  /* Your routing padding remains exactly the same! */
   padding-top: calc(90px + env(safe-area-inset-top));
-  padding-bottom: calc(70px + env(safe-area-inset-bottom)); 
-  
+  padding-bottom: calc(60px + 1.2rem + env(safe-area-inset-bottom)); 
   padding-left: max(20px, calc((100% - 1000px) / 2));
   padding-right: max(20px, calc((100% - 1000px) / 2));
 }
@@ -388,6 +384,7 @@ footer {
   bottom: 0;
   left: 0;
   right: 0;
+  height: 60px;
   width: 100%;
   z-index: 100;
   border-top: 1px solid var(--border-color);
@@ -472,7 +469,6 @@ footer {
   right: 0;
   top: calc(100% + 2px);
   width: 100%;
-  box-sizing: border-box;
   background-color: #1e1b1a;
   z-index: 9999 !important;
   list-style: none;
@@ -692,14 +688,12 @@ footer {
 .search-bar {
   width: 100%;
   max-width: 1000px;
-  margin: 0 auto 0px auto;
   padding: 15px 20px;
   background-color: rgba(10, 8, 7, 0.6);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   color: var(--text-main);
   font-size: 1rem;
-  box-sizing: border-box;
   transition: all 0.3s ease;
 }
 .search-bar:focus {
@@ -936,7 +930,7 @@ dialog a.dialog-btn:hover {
 }
  /*last pane*/
 .content-pane:last-child {
-
+  margin-bottom: 0 !important;
 }
 .content-pane > *:first-child {
   margin-top: 0;
@@ -1221,7 +1215,6 @@ table.schedule-table tr.active-row td.active-col {
   border-left: 4px solid var(--line-color);
   border-right: 4px solid var(--line-color);
   border-radius: 8px 8px 0 0;
-  box-sizing: border-box;
 }
 .branch-bottom {
   width: 100%;
@@ -1230,7 +1223,6 @@ table.schedule-table tr.active-row td.active-col {
   border-left: 4px solid var(--line-color);
   border-right: 4px solid var(--line-color);
   border-radius: 0 0 8px 8px;
-  box-sizing: border-box;
 }
 
 .hex-node {
@@ -1288,7 +1280,6 @@ table.schedule-table tr.active-row td.active-col {
   z-index: 2;
   width: max-content;
   min-width: 100%;
-  box-sizing: border-box;
 }
 .node-controls:first-of-type {
   margin-bottom: -40px;
@@ -1366,6 +1357,7 @@ table.schedule-table tr.active-row td.active-col {
   /* Locks strictly above the fixed footer */
   bottom: calc(60px + env(safe-area-inset-bottom));
   left: 0;
+  bottom: 0;
   width: 100%;
   background-color: rgba(20, 16, 14, 0.95);
   border-top: 2px solid var(--accent-color);
@@ -1547,7 +1539,7 @@ svg.resource-icon {
 
   /* Update the main routing to account for the taller 130px header */
   main {
-    padding-top: calc(130px + 1.2rem + env(safe-area-inset-top));
+  padding-top: calc(130px + env(safe-area-inset-top));
   }
 
   .lantern-img {
@@ -1581,6 +1573,7 @@ svg.resource-icon {
   }
 
   footer {
+    height: calc(60px + env(safe-area-inset-bottom));
     padding-bottom: max(10px, env(safe-area-inset-bottom));
   }
 
