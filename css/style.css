@@ -131,7 +131,7 @@ main {
   -webkit-overflow-scrolling: touch;
   line-height: 1.6;
   padding-top: calc(90px + env(safe-area-inset-top));
-  padding-bottom: calc(60px + 1.2rem + env(safe-area-inset-bottom)); 
+  padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
   padding-left: max(20px, calc((100% - 1000px) / 2));
   padding-right: max(20px, calc((100% - 1000px) / 2));
 }
@@ -258,7 +258,6 @@ main img {
   width: 100%;
   height: calc(90px + env(safe-area-inset-top)) !important;
   min-height: calc(90px + env(safe-area-inset-top)) !important;
-  padding-top: env(safe-area-inset-top) !important;
   border-bottom: 1px solid var(--border-color);
   background-color: var(--nav-bg);
   z-index: 200;
@@ -688,6 +687,7 @@ footer {
 .search-bar {
   width: 100%;
   max-width: 1000px;
+  margin-top: 1.2rem;
   padding: 15px 20px;
   background-color: rgba(10, 8, 7, 0.6);
   border: 1px solid var(--border-color);
@@ -928,9 +928,13 @@ dialog a.dialog-btn:hover {
   scroll-margin-top: calc(90px + env(safe-area-inset-top));
   overflow: hidden;
 }
+ /*first pane*/
+.content-pane:first-child {
+  margin-top: 1.2rem;
+}
  /*last pane*/
 .content-pane:last-child {
-  margin-bottom: 0 !important;
+  margin-bottom: 1.2rem;
 }
 .content-pane > *:first-child {
   margin-top: 0;
@@ -1540,6 +1544,7 @@ svg.resource-icon {
   /* Update the main routing to account for the taller 130px header */
   main {
   padding-top: calc(130px + env(safe-area-inset-top));
+  padding-bottom: calc(60px + env(safe-area-inset-bottom));
   }
 
   .lantern-img {
@@ -1658,5 +1663,18 @@ svg.resource-icon {
   }
 }
 
-/* 3. PWA Standalone Mode */
-/* Removed Apple specific legacy padding overrides, as fixed bottom + env() replaces them completely */
+/* ==========================================================================
+   iOS-SPECIFIC UI ADJUSTMENTS
+   ========================================================================== */
+@supports (-webkit-touch-callout: none) {
+  .lantern-header {
+    /* Keep the shield, but shave 15px off of it to pull content up natively */
+    padding-top: calc(env(safe-area-inset-top) - 15px) !important;
+  }
+
+  /* Move the language switcher up alongside the rest of the content */
+  .language-switcher {
+    top: calc(env(safe-area-inset-top) + 5px);
+  }
+  
+}
