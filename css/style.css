@@ -944,9 +944,7 @@ dialog a.dialog-btn:hover {
   margin-bottom: 1.2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
   scroll-margin-top: calc(90px + env(safe-area-inset-top));
-  overscroll-behavior-y: contain;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
 }
  /*first pane*/
 .content-pane:first-child {
