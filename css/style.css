@@ -122,7 +122,7 @@ turbo-frame#main-content {
 main {
   -webkit-user-select: text;
   user-select: text;
-  overscroll-behavior-y: contain; 
+  overscroll-behavior-y: none; 
   overscroll-behavior-x: none;    
   /* Allows vertical scroll, but blocks zoom/horizontal drag */
   touch-action: pan-y;

@@ -254,37 +254,6 @@
         }, { passive: true });
     }
 
-    // --- TOUCH GUARD: PREVENT VERTICAL RUBBER-BANDING ---
-    function preventGhostScrolling() {
-        const main = document.querySelector('main');
-        if (!main) return;
-
-        let startX, startY;
-
-        main.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-        }, { passive: true });
-
-        main.addEventListener('touchmove', (e) => {
-            // FIX: Allow touch events within any horizontal-scrollable pane
-            if (e.target.closest('.pinned-section, .nav-wrapper, .schedule-container')) return;
-
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
-            
-            const deltaX = Math.abs(currentX - startX);
-            const deltaY = Math.abs(currentY - startY);
-
-            // If page is short, block only pure vertical intent
-            if (main.scrollHeight <= main.clientHeight) {
-                if (deltaY > deltaX) {
-                    e.preventDefault();
-                }
-            }
-        }, { passive: false });
-    }
-
     // --- PWA UPDATE TOAST LOGIC ---
     function showUpdateToast(newWorker) {
         if (document.getElementById('pwa-update-toast')) return;
@@ -320,7 +289,6 @@
         initThemeToggle();
         syncHeaderSubtitle();
         initScrollMemory();
-        preventGhostScrolling(); 
         
         setTimeout(() => scrollActiveNavIntoView(), 100);
     }
