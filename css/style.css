@@ -101,7 +101,9 @@ body, .lantern-header, footer {
 
 #mobile-container {
   width: 100%;
-  /* Stripped grid and height wrappers */
+  height: 100vh; /* Lock the container to the glass */
+  display: flex;
+  flex-direction: column;
 }
 
 /* Turbo Frame Flexbox Fix */
@@ -116,15 +118,21 @@ turbo-frame#main-content {
 main {
   -webkit-user-select: text;
   user-select: text;
-  overscroll-behavior-y: contain; /* Kills vertical rubber-band bouncing on body, keeps it on main */
-  overscroll-behavior-x: none;    /* Kills horizontal swipe-to-go-back warp */
+  overscroll-behavior-y: contain; 
+  overscroll-behavior-x: none;    
+
+  /* THE FIX: Remove height: 100vh; */
+  flex: 1; /* Automatically absorbs whatever space is left */
+  height: auto; 
+  min-height: 0; /* CRITICAL: Prevents flex children from overflowing */
+  
   width: 100%;
-  height: 100vh; 
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* Momentum scrolling */
+  -webkit-overflow-scrolling: touch;
   line-height: 1.6;
-  box-sizing: border-box;  
-  /* Content routing behind fixed header/footer */
+  box-sizing: border-box;
+  
+  /* Your routing padding remains exactly the same! */
   padding-top: calc(90px + env(safe-area-inset-top));
   padding-bottom: calc(70px + env(safe-area-inset-bottom)); 
   
@@ -315,9 +323,9 @@ main img {
 /* Sticky Anchor Nav */
 .anchor-nav {
   position: sticky;
-  top: 0; /* Sticks perfectly under the main padding */
+  top: 90px;
   z-index: 100;
-  height: 45px;
+  height: 35px;
   background-color: #1a1512;
   border-bottom: 1px solid var(--border-color);
   box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
@@ -387,7 +395,6 @@ footer {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding-top: 10px;
   padding-bottom: max(10px, env(safe-area-inset-bottom));
 }
 .nav-item {
@@ -679,8 +686,7 @@ footer {
 /* Search */
 .search {
   text-align: center;
-  margin-bottom: 20px;
-  margin-top: 0px;
+  margin-bottom: 1.2rem;
 }
 .search-bar {
   width: 100%;
@@ -926,6 +932,10 @@ dialog a.dialog-btn:hover {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
   scroll-margin-top: calc(90px + env(safe-area-inset-top));
   overflow: hidden;
+}
+ /*last pane*/
+.content-pane:last-child {
+
 }
 .content-pane > *:first-child {
   margin-top: 0;
@@ -1527,7 +1537,6 @@ svg.resource-icon {
   .lantern-header {
     height: calc(130px + env(safe-area-inset-top)) !important;
     min-height: calc(130px + env(safe-area-inset-top)) !important;
-    
     background-image: radial-gradient(
       circle 800px at center 10%,
       #2b231e 0%,
@@ -1537,7 +1546,7 @@ svg.resource-icon {
 
   /* Update the main routing to account for the taller 130px header */
   main {
-    padding-top: calc(130px + env(safe-area-inset-top));
+    padding-top: calc(130px + 1.2rem + env(safe-area-inset-top));
   }
 
   .lantern-img {
@@ -1547,7 +1556,7 @@ svg.resource-icon {
 
   .header-stack {
     height: 130px !important;
-    min-height: 130px !important;  
+    min-height: 130px !important;
     gap: 3rem;  
   }
   .debossed-title {
@@ -1565,8 +1574,17 @@ svg.resource-icon {
     gap: 20px;
   }
   .content-pane {
+    scroll-margin-top: calc(130px + 55px + env(safe-area-inset-top));
     padding: 30px 40px;
-    scroll-margin-top: calc(130px + env(safe-area-inset-top));
+    
+  }
+
+  .anchor-nav {
+    top: 130px;
+  }
+
+  .nav-wrapper {
+    justify-content:center;
   }
 
   /* Desktop overrides for the T10 Calculator */
