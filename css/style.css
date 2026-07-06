@@ -90,10 +90,10 @@ body {
 body::before {
   content: '';
   position: fixed; /* Glues the background to the screen */
-  top: 0;
+  top: calc(90px + env(safe-area-inset-top));
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 150px);
   z-index: -10; /* Keeps it behind all content */
   background-color: #050403;
   background-image: url("/images/background.webp"), url("/images/background.png");
@@ -1574,6 +1574,12 @@ svg.resource-icon {
   /* Update the main routing to account for the taller 130px header */
   main {
   padding-top: calc(130px + env(safe-area-inset-top));
+  }
+
+  body::before {
+      top: calc(130px + env(safe-area-inset-top));
+      height: calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 180px);
+      
   }
 
   .lantern-img {
