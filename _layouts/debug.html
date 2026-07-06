@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Reinstating the EXACT workers.dev tag that unlocked the screen in V5 -->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,38 +13,48 @@
     
     <link rel="manifest" href="/site.webmanifest">
     
-    <title>PWA Bleed Test V7</title>
+    <title>PWA Bleed Test V8</title>
     
     <style>
-        /* Base reset */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* Lock the document without using vh or dvh */
         html, body {
             background: #1a1a2e;
+            /* Reinstating 100vh. This is the mandatory key for iOS PWA bleed. */
+            height: 100vh;
             overflow: hidden; 
-            overscroll-behavior: none; 
-            touch-action: none;
             font-family: sans-serif;
+        }
+
+        /* 
+           THE FIX FOR FAULT #1: 
+           If the user is in a normal browser (not installed), use dvh to prevent scrolling.
+        */
+        @media (display-mode: browser) {
+            html, body {
+                height: 100dvh;
+            }
         }
 
         /* LAYER 1: The Bleed Layer (Blue) */
         #bleed-layer {
-            /* 'fixed' binds directly to the hardware screen */
-            position: fixed;
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            bottom: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; /* Maps exactly to the 100vh/100dvh of the body */
             border: 5px solid #60a5fa; 
             background: rgba(96, 165, 250, 0.1);
             pointer-events: none;
         }
 
-        /* LAYER 2: The Safe Content Layer (Red) */
+        /* 
+           THE FIX FOR FAULT #2:
+           By using absolute positioning mapped to env(), we bypass the body padding glitch.
+           The Red Box will sit exactly where the OS tells it to.
+        */
         #safe-layer {
-            /* Also 'fixed', but squeezed by the OS safe zones */
-            position: fixed;
+            position: absolute;
             top: env(safe-area-inset-top);
             bottom: env(safe-area-inset-bottom);
             left: env(safe-area-inset-left);
@@ -64,9 +76,9 @@
     <div id="bleed-layer"></div>
     
     <div id="safe-layer">
-        <strong>The RED box</strong> should sit completely clear of the notch, status bar, and home bar.<br><br>
-        <strong>The BLUE box</strong> should touch the absolute physical edges of the device glass.<br><br>
-        There should be NO scrolling on any device.
+        <strong>V8: Back to what worked.</strong><br><br>
+        Red box = Safe content.<br>
+        Blue box = Glass edges.
     </div>
 </body>
 </html>
