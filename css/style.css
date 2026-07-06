@@ -3,9 +3,7 @@
    ========================================================================== */
 
 /* Global Reset & Disable unintentional zoom */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
@@ -13,8 +11,10 @@
    1. VARIABLES & THEMES
    ========================================================================== */
 
+/* Core Variables & Default Theme (Plague) */
 :root,
 html[data-theme="default"] {
+  /* Base UI Colors */
   --bg-color: #1a1512;
   --card-bg: rgba(42, 34, 30, 0.85);
   --nav-bg: #110d0b;
@@ -22,12 +22,18 @@ html[data-theme="default"] {
   --text-muted: #a8a19b;
   --accent-color: #b8975a;
   --border-color: #3d3128;
+
+  /* T10 calc */
   --node-bg: #2a2726;
   --line-color: #4a6c82;
   --node-border: #6495ed;
+
+  /* Typography */
   --font-headers: "Georgia", serif;
   --font-body:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Default Theme: Plague (Green) */
   --active-theme: 35, 120, 45;
   --active-theme-bright: 55, 150, 65;
   --active-theme-vivid: 85, 190, 95;
@@ -35,6 +41,7 @@ html[data-theme="default"] {
   --lantern-filter: contrast(1.3) brightness(1) saturate(1.2);
 }
 
+/* Theme 2: Sanctuary (Orange) */
 html[data-theme="sanctuary"] {
   --active-theme: 230, 160, 80;
   --active-theme-bright: 250, 190, 100;
@@ -43,6 +50,7 @@ html[data-theme="sanctuary"] {
   --lantern-filter: contrast(1.2) brightness(1) saturate(1.2) hue-rotate(270deg);
 }
 
+/* Theme 3: Miasma (Purple) */
 html[data-theme="miasma"] {
   --active-theme: 140, 50, 180;
   --active-theme-bright: 175, 90, 220;
@@ -57,55 +65,54 @@ html[data-theme="miasma"] {
    ========================================================================== */
 
 html {
-  height: 100%;
+  /* Using 100dvh to natively adapt to mobile browsers */
+  height: 100dvh;
   max-width: 100%;
   font-size: 100%;
   background-color: var(--nav-bg);
   -webkit-text-size-adjust: 100%;
   overflow: hidden;
-  overscroll-behavior: none;
-  touch-action: manipulation; /* Prevents double-tap zoom */
+  /* Prevents double-tap to zoom */
+  touch-action: manipulation;
 }
 
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  /* Using 100dvh to natively adapt to mobile browsers */
+  height: 100dvh;
   font-family: var(--font-body);
   color: var(--text-main);
   overscroll-behavior: none;
   overflow: hidden;
+  
+  /* Merged Background Properties */
   background-color: #050403;
-  background-image:
-    url("/images/background.webp"), url("/images/background.png");
+  background-image: url("/images/background.webp"), url("/images/background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* Dead-zone for native iOS touch features */
-body,
-.lantern-header,
-footer {
+/* Turn the App Shell into a dead-zone for native iOS touch features */
+body, .lantern-header, footer {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
-  touch-action: none; /* Prevents dragging/swiping on these elements */
+  /* Prevents dragging/rubber-banding on these elements */
+  touch-action: none;
 }
 
 #mobile-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100dvh; /* Lock the container to the dynamic glass */
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
+/* Turbo Frame Flexbox Fix */
 turbo-frame#main-content {
-  display: contents;
+  display: contents; /* Allows <main> to act as a direct child for layout purposes */
 }
 
 /* ==========================================================================
@@ -115,19 +122,22 @@ turbo-frame#main-content {
 main {
   -webkit-user-select: text;
   user-select: text;
-  overscroll-behavior-y: contain;
-  overscroll-behavior-x: none;
-  touch-action: pan-y; /* Allows vertical scroll, but blocks zoom/horizontal drag */
+  overscroll-behavior-y: contain; 
+  overscroll-behavior-x: none;    
+  /* Allows vertical scroll, but blocks zoom/horizontal drag */
+  touch-action: pan-y;
 
-  flex: 1;
-  height: auto;
-  min-height: 0;
+  /* THE FIX: Remove height: 100vh; */
+  flex: 1; /* Automatically absorbs whatever space is left */
+  height: auto; 
+  min-height: 0; /* CRITICAL: Prevents flex children from overflowing */
+  
   width: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   line-height: 1.6;
   padding-top: calc(90px + env(safe-area-inset-top));
-  padding-bottom: calc(60px + env(safe-area-inset-bottom));
+  padding-bottom: calc(60px + env(safe-area-inset-bottom)); 
   padding-left: max(20px, calc((100% - 1000px) / 2));
   padding-right: max(20px, calc((100% - 1000px) / 2));
 }
@@ -161,6 +171,7 @@ main ul,
 main ol {
   margin-bottom: 1.2em;
 }
+
 main a {
   color: var(--accent-color);
   text-decoration: none;
@@ -235,6 +246,7 @@ main img {
   border: 1px solid var(--border-color);
   margin: 0;
 }
+
 .warning {
   color: #ff6b6b;
 }
@@ -243,6 +255,7 @@ main img {
    4. HEADER, FOOTER & NAVIGATION
    ========================================================================== */
 
+/* Main Header */
 .lantern-header {
   position: fixed;
   top: 0;
@@ -277,6 +290,7 @@ main img {
   width: 100%;
 }
 
+/* Header Text */
 .debossed-title {
   position: relative;
   right: 5%;
@@ -293,8 +307,9 @@ main img {
   text-shadow: 0 0 8px rgba(10, 8, 5, 1);
   text-align: center;
 }
+
 .subtitle {
-  position: relative;
+  position:relative;
   right: 5%;
   width: 13.5rem;
   z-index: 1;
@@ -308,6 +323,7 @@ main img {
   text-align: center;
 }
 
+/* Sticky Anchor Nav */
 .anchor-nav {
   position: sticky;
   top: calc(90px + env(safe-area-inset-top));
@@ -320,6 +336,7 @@ main img {
 .nav-wrapper::-webkit-scrollbar {
   display: none;
 }
+
 .nav-wrapper {
   min-height: 35px;
   display: flex;
@@ -368,6 +385,7 @@ main img {
   border-bottom: 2px solid var(--accent-color);
 }
 
+/* Bottom Footer */
 footer {
   position: fixed;
   bottom: 0;
@@ -404,6 +422,7 @@ footer {
   transition: all 0.3s ease;
 }
 
+/* Language Switcher */
 .language-switcher {
   position: absolute;
   top: 30px;
@@ -421,6 +440,7 @@ footer {
   color: #fff;
   pointer-events: none;
 }
+
 .lang-trigger {
   background: rgba(17, 13, 11, 0.85);
   border: 1px solid;
@@ -503,6 +523,7 @@ footer {
     visibility 0s linear 0s;
 }
 
+/* Misc Header Buttons */
 .header-side-btn {
   width: 40px;
   display: flex;
@@ -521,6 +542,7 @@ footer {
    5. ATMOSPHERICS & EFFECTS
    ========================================================================== */
 
+/* Main Lantern Icon */
 .lantern-container {
   position: relative;
   height: 100%;
@@ -528,6 +550,7 @@ footer {
   position: relative;
   isolation: isolate;
 }
+
 .lantern-img {
   filter: var(--lantern-filter);
   height: 90px;
@@ -536,6 +559,7 @@ footer {
   transform: scale(0.95);
 }
 
+/* Ambient Glows */
 .lantern-flicker-layer {
   height: 100%;
   position: absolute;
@@ -558,6 +582,7 @@ footer {
   backface-visibility: hidden;
   transition: all 0.5s ease;
 }
+
 .lantern-glow-bleed {
   position: absolute;
   top: 90px;
@@ -572,6 +597,7 @@ footer {
   pointer-events: none;
   z-index: 50;
 }
+
 .lantern-edge-highlight {
   position: absolute;
   top: 100%;
@@ -588,6 +614,7 @@ footer {
   z-index: 150;
 }
 
+/* Overlays & Dust */
 .noise-overlay {
   position: absolute;
   top: 0;
@@ -599,6 +626,7 @@ footer {
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAASuVbXAAAACHRSTlMA78f3L993v98w4V0AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAzSURBVDjLY2AYBaNgEAFiA0MDAyYxMTAwMGAwMDDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMAAADa8A0qN+i4pAAAAAElFTkSuQmCC");
   opacity: 0.05;
 }
+
 .dust-container {
   position: absolute;
   top: 0;
@@ -620,6 +648,7 @@ footer {
   );
   animation: lantern-pulse 5s infinite ease-in-out;
 }
+
 .mote {
   position: absolute;
   background: var(--accent-color);
@@ -659,6 +688,7 @@ footer {
    6. UI COMPONENTS, CARDS & LAYOUTS
    ========================================================================== */
 
+/* Search */
 .search {
   text-align: center;
   margin-bottom: 1.2rem;
@@ -682,6 +712,7 @@ footer {
   box-shadow: 0 0 10px rgba(184, 151, 90, 0.2);
 }
 
+/* Modals & Images */
 .blueprint-img {
   display: block;
   max-width: 100%;
@@ -763,6 +794,7 @@ dialog a.dialog-btn:hover {
   transform: translateY(-2px);
 }
 
+/* Grids & Cards */
 .guide-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
@@ -783,6 +815,7 @@ dialog a.dialog-btn:hover {
   display: block;
 }
 
+/* Event Phases */
 .phase-tech {
   background-color: rgba(153, 102, 204, 0.35) !important;
 }
@@ -799,6 +832,7 @@ dialog a.dialog-btn:hover {
   background-color: rgba(210, 160, 60, 0.35) !important;
 }
 
+/* Pinned Lists */
 .pinned-wrapper {
   position: relative;
   width: 100%;
@@ -814,14 +848,14 @@ dialog a.dialog-btn:hover {
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   padding-left: 20px;
-  scroll-padding-left: 20px;
+  scroll-padding-left: 20px; /* Padding for the snapping offset */
   touch-action: pan-x;
 }
 .pinned-section::-webkit-scrollbar {
   display: none;
 }
 .pinned-card {
-  scroll-snap-align: start;
+  scroll-snap-align: start; /* Snap target lock */
   min-width: 140px;
   background-color: var(--card-bg);
   padding: 15px;
@@ -843,6 +877,7 @@ dialog a.dialog-btn:hover {
   margin: 0;
 }
 
+/* Directories */
 .directories {
   display: flex;
   flex-direction: column;
@@ -889,6 +924,7 @@ dialog a.dialog-btn:hover {
   font-size: 1.2rem;
 }
 
+/* Content Panes */
 .content-pane {
   background-color: rgba(20, 16, 14, 0.85);
   backdrop-filter: blur(8px);
@@ -901,9 +937,11 @@ dialog a.dialog-btn:hover {
   scroll-margin-top: calc(90px + env(safe-area-inset-top));
   overflow: hidden;
 }
+ /*first pane*/
 .content-pane:first-child {
   margin-top: 1.2rem;
 }
+ /*last pane*/
 .content-pane:last-child {
   margin-bottom: 1.2rem;
 }
@@ -947,6 +985,7 @@ dialog a.dialog-btn:hover {
   padding: 0 10px;
 }
 
+/* Utilities & Scroll Buttons */
 .unavailable {
   background-color: #4a0404 !important;
   color: #8b8b8b !important;
@@ -1006,8 +1045,10 @@ dialog a.dialog-btn:hover {
   right: -35px;
 }
 
+/* PWA Update Toast */
 #pwa-update-toast {
   position: fixed;
+  /* Shifted up slightly to clear the fixed footer naturally */
   bottom: calc(80px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%) translateY(100px);
@@ -1026,12 +1067,14 @@ dialog a.dialog-btn:hover {
   animation: slideUpToast 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   backdrop-filter: blur(5px);
 }
+
 #pwa-update-toast span {
   color: var(--text-main);
   font-size: 0.85rem;
   font-weight: bold;
   white-space: nowrap;
 }
+
 #pwa-update-toast button {
   background-color: var(--accent-color);
   color: #1a1512;
@@ -1043,10 +1086,12 @@ dialog a.dialog-btn:hover {
   cursor: pointer;
   text-transform: uppercase;
 }
+
 #pwa-update-toast.updating button {
   opacity: 0.5;
   pointer-events: none;
 }
+
 @keyframes slideUpToast {
   to {
     transform: translateX(-50%) translateY(0);
@@ -1130,6 +1175,7 @@ dialog a.dialog-btn:hover {
   background: #2a2726;
   color: var(--accent-color);
 }
+
 table.schedule-table tr.active-row td.active-col {
   filter: brightness(1.6) contrast(1.1) !important;
   color: #ffffff !important;
@@ -1191,6 +1237,7 @@ table.schedule-table tr.active-row td.active-col {
   border-right: 4px solid var(--line-color);
   border-radius: 0 0 8px 8px;
 }
+
 .hex-node {
   width: 70px;
   height: 80px;
@@ -1220,6 +1267,7 @@ table.schedule-table tr.active-row td.active-col {
   background-color: #7a0000;
   box-shadow: 0 0 20px rgba(184, 151, 90, 0.4);
 }
+
 .icon-placeholder {
   width: 50px;
   height: 50px;
@@ -1232,6 +1280,7 @@ table.schedule-table tr.active-row td.active-col {
   fill: var(--text-main);
   opacity: 0.8;
 }
+
 .node-controls {
   margin-top: 2px;
   display: flex;
@@ -1261,6 +1310,7 @@ table.schedule-table tr.active-row td.active-col {
   align-items: center;
   justify-content: center;
 }
+
 .level-stepper {
   display: flex;
   align-items: center;
@@ -1297,6 +1347,7 @@ table.schedule-table tr.active-row td.active-col {
 .level-display.max-text {
   color: rgba(var(--active-theme-vivid), 1);
 }
+
 .t10-toggle {
   cursor: pointer;
   padding: 4px 12px;
@@ -1316,6 +1367,9 @@ table.schedule-table tr.active-row td.active-col {
 
 .totals-banner {
   position: fixed;
+  /* Locks strictly above the fixed footer */
+  bottom: calc(60px + env(safe-area-inset-bottom));
+  left: 0;
   bottom: 0;
   width: 100%;
   background-color: rgba(20, 16, 14, 0.95);
@@ -1392,6 +1446,7 @@ svg.resource-icon {
     filter: brightness(0.8) drop-shadow(0 0 4px rgba(var(--active-theme), 0.2));
   }
 }
+
 @keyframes lantern-pulse {
   0%,
   100% {
@@ -1405,6 +1460,7 @@ svg.resource-icon {
     filter: brightness(1.05) blur(3px);
   }
 }
+
 @keyframes lantern-flicker-smooth {
   0%,
   100% {
@@ -1420,6 +1476,7 @@ svg.resource-icon {
     filter: brightness(0.95) blur(2px);
   }
 }
+
 @keyframes drift {
   0% {
     transform: translateY(0) translateX(0);
@@ -1434,7 +1491,9 @@ svg.resource-icon {
   }
 }
 
+/* Reduced Motion Configs */
 @media (prefers-reduced-motion: reduce) {
+  /* Global Interactive Reset */
   *,
   ::before,
   ::after {
@@ -1445,6 +1504,8 @@ svg.resource-icon {
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
+
+  /* Static Atmospheric Fallbacks */
   .lantern-flicker-layer {
     animation: none !important;
     opacity: 0.8 !important;
@@ -1456,11 +1517,15 @@ svg.resource-icon {
     box-shadow: none !important;
     filter: brightness(1) !important;
   }
+
+  /* Eliminate Floaters */
   .dust-container,
   .mote {
     display: none !important;
     animation: none !important;
   }
+
+  /* Interactive Scaling Neutralization */
   .lantern-img:active,
   .blueprint-img:hover,
   .scroll-btn:hover {
@@ -1472,7 +1537,9 @@ svg.resource-icon {
    10. MEDIA QUERIES (DESKTOP & PWA)
    ========================================================================== */
 
+/* 1. Tablet & Desktop UI Overrides */
 @media (min-width: 768px) {
+  /* bigger header for desktop/tablet */
   .lantern-header {
     height: calc(130px + env(safe-area-inset-top)) !important;
     min-height: calc(130px + env(safe-area-inset-top)) !important;
@@ -1482,21 +1549,26 @@ svg.resource-icon {
       var(--nav-bg) 100%
     );
   }
+
   .lantern-container {
-    position: relative;
-    right: 1.33rem;
+  position:relative;
+  right: 1.33rem;
   }
+
+  /* Update the main routing to account for the taller 130px header */
   main {
-    padding-top: calc(130px + env(safe-area-inset-top));
+  padding-top: calc(130px + env(safe-area-inset-top));
   }
+
   .lantern-img {
     height: 125px;
     margin-right: -1rem;
   }
+
   .header-stack {
     height: 130px !important;
     min-height: 130px !important;
-    gap: 3rem;
+    gap: 3rem;  
   }
   .debossed-title {
     position: relative;
@@ -1519,20 +1591,27 @@ svg.resource-icon {
   .content-pane {
     scroll-margin-top: calc(130px + 1.2rem + env(safe-area-inset-top));
     padding: 30px 40px;
+    
   }
+
   footer {
     height: calc(60px + env(safe-area-inset-bottom));
     padding-bottom: max(10px, env(safe-area-inset-bottom));
   }
+
   .anchor-nav {
     top: calc(130px + env(safe-area-inset-top));
   }
+
   .nav-wrapper {
-    justify-content: center;
+    justify-content:center;
   }
+
   .scroll-btn {
-    display: block;
+    display: block; 
   }
+
+  /* Desktop overrides for the T10 Calculator */
   .tree-container {
     padding: 0px 20px 90px 20px;
   }
@@ -1573,6 +1652,8 @@ svg.resource-icon {
   .total-label {
     font-size: 0.75rem;
   }
+
+  /* Desktop Atmospheric Tweaks */
   @keyframes drift {
     0% {
       transform: translateY(0) translateX(0);
@@ -1608,18 +1689,38 @@ svg.resource-icon {
    ========================================================================== */
 @supports (-webkit-touch-callout: none) {
   .lantern-header {
+    /* Keep the shield, but shave 15px off of it to pull content up natively */
     padding-top: calc(env(safe-area-inset-top) - 8px) !important;
   }
+
+  /* Move the language switcher up alongside the rest of the content */
   .language-switcher {
     top: calc(env(safe-area-inset-top) + 12px);
   }
+
   .scroll-btn {
-    display: none !important;
+    display: none !important; 
+  }
+  @media (display-mode: standalone) {
+    @media (max-width: 767px) {
+      main {
+        padding-bottom: 60px;
+      }
+    }
   }
 }
 
-@media (max-width: 767px) {
-  main {
-    padding-bottom: calc(115px + env(safe-area-inset-bottom));
+@media (display-mode: standalone) {
+    html,
+    body,
+    #mobile-container {
+      height: 100%;
+    }
+    @supports (-webkit-touch-callout: none) {
+      html,
+      body,
+      #mobile-container {
+        height: 100vh !important;
+      }
+    }
   }
-}
