@@ -263,6 +263,19 @@
         }, { passive: true });
     }
 
+    // --- TOUCH GUARD: PREVENT GHOST SCROLLING ---
+    function preventGhostScrolling() {
+        const main = document.querySelector('main');
+        if (!main) return;
+
+        main.addEventListener('touchmove', (e) => {
+            // Only block if the content isn't actually taller than the container
+            if (main.scrollHeight <= main.clientHeight) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    }
+
     // --- PWA UPDATE TOAST LOGIC ---
     function showUpdateToast(newWorker) {
         if (document.getElementById('pwa-update-toast')) return;
@@ -298,6 +311,7 @@
         initThemeToggle();
         syncHeaderSubtitle();
         initScrollMemory();
+        preventGhostScrolling(); 
         
         setTimeout(() => scrollActiveNavIntoView(), 100);
     }
