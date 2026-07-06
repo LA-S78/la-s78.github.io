@@ -202,11 +202,6 @@ blockquote h4 {
   text-transform: uppercase;
   font-size: 0.9rem;
 }
-blockquote p:last-child,
-blockquote ul:last-child {
-  margin-bottom: 0;
-}
-
 pre,
 code {
   font-family: monospace;
