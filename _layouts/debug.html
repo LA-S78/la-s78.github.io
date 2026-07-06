@@ -9,15 +9,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1a1a2e">
     
-    <title>PWA Bleed Test V10</title>
+    <title>PWA Bleed Test V11</title>
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         html, body {
-            /* Drop vh and dvh. Let the browser define the 100% canvas */
             height: 100%; 
-            background: #1a1a2e; /* The background bleed color */
+            background: #1a1a2e;
             overflow: hidden; 
             font-family: sans-serif;
             color: white;
@@ -26,14 +25,13 @@
         #mobile-container {
             height: 100%;
             display: grid;
-            grid-template-rows: auto 1fr auto; /* Header | Content | Footer */
+            grid-template-rows: auto 1fr auto; 
+            /* CRITICAL: No overflow: hidden here, we need the footer to bleed out */
         }
 
         header {
             background: rgba(255, 0, 0, 0.2);
-            border-top: 5px solid #f87171; /* Red top border */
-            
-            /* Push the text safely below the status bar */
+            border-top: 5px solid #f87171; 
             padding-top: env(safe-area-inset-top);
             padding-bottom: 20px;
             text-align: center;
@@ -42,18 +40,24 @@
         main {
             background: rgba(255, 255, 255, 0.05);
             padding: 20px;
-            overflow-y: auto; /* Let the middle area scroll naturally */
+            overflow-y: auto; 
             text-align: center;
         }
 
         footer {
             background: rgba(0, 255, 0, 0.2);
-            border-bottom: 5px solid #4ade80; /* Green bottom border */
-            
-            /* Push the text safely above the home bar */
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-top: 20px;
+            border-bottom: 5px solid #4ade80; 
             text-align: center;
+            padding-top: 20px;
+            
+            /* ====================================================
+               THE NEGATIVE MARGIN HACK 
+               ==================================================== */
+            /* 1. Pull the footer down into the body's gap */
+            margin-bottom: calc(-1 * env(safe-area-inset-bottom));
+            
+            /* 2. Add that exact height back as padding so content isn't crushed */
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
         }
     </style>
 </head>
@@ -61,19 +65,17 @@
     <div id="mobile-container">
         <header>
             <strong>HEADER</strong><br>
-            The RED border should touch the absolute top of the glass.<br>
-            This text should be safely below the notch.
+            The top bleed is working flawlessly.
         </header>
         
         <main>
             <strong>MAIN CONTENT</strong><br>
-            If you load this in a normal mobile browser, there should be NO extra scrolling of the body.
+            Scrolling in browser works smoothly, no overscroll.
         </main>
         
         <footer>
             <strong>FOOTER</strong><br>
-            The GREEN border should touch the absolute bottom of the glass.<br>
-            This text should be safely above the home bar.
+            Using negative margin to pull this into the safe zone.
         </footer>
     </div>
 </body>
