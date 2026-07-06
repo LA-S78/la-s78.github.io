@@ -399,6 +399,5 @@
             });
         });
     }
-    /* debug */
-console.log('Safe Area Bottom: ' + getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom'));
+
 })();

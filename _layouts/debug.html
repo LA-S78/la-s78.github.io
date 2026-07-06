@@ -22,43 +22,45 @@
             color: white;
         }
         header {
-            position:fixed;
-            top:0;
-            left:0;
-            right:0;
-            background: rgba(255, 0, 0, 0.2);
-            border-top: 5px solid #f87171; 
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: 20px;
-            text-align: center;
-        }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50; /* Keeps it above the scrolling content */
+    
+    /* Ensure it covers the safe area */
+    padding-top: env(safe-area-inset-top);
+    
+    /* Assuming your header is 90px tall (adjust this to your actual height) */
+    height: calc(90px + env(safe-area-inset-top)); 
+}
 
         main {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            overflow-y: auto; 
-            text-align: center;
-        }
+    /* Push the top of the content down exactly past the header */
+    padding-top: calc(90px + env(safe-area-inset-top)); /* Must match header height */
+    
+    /* Push the bottom of the content up exactly past the footer */
+    /* Estimate your footer's total height (e.g., 70px content + 20px padding) */
+    padding-bottom: calc(90px + env(safe-area-inset-bottom)); 
+    
+    /* Let the body handle the scrolling naturally */
+    width: 100%;
+    min-height: 100dvh;
+}
 
         footer {
-            position:fixed;
-            bottom:0;
-            left:0;
-            right:0;
-            background: rgba(0, 255, 0, 0.2);
-            border-bottom: 5px solid #4ade80; 
-            text-align: center;
-            padding-top: 20px;
-            
-            /* ====================================================
-               THE NEGATIVE MARGIN HACK 
-               ==================================================== */
-            /* 1. Pull the footer down into the body's gap */
-            /*margin-bottom: calc(-1 * env(safe-area-inset-bottom));*/
-            
-            /* 2. Add that exact height back as padding so content isn't crushed */
-            /*padding-bottom: calc(20px + env(safe-area-inset-bottom));*/
-        }
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50; /* Keeps it above the scrolling content */
+    
+    /* Your adaptive safe area logic */
+    padding-bottom: max(10px, calc(20px - env(safe-area-inset-bottom)));
+    
+    /* Assuming your footer content is about 70px tall */
+    /* We don't need a strict height here, the padding handles the spacing */
+}
     </style>
 </head>
 <body>
