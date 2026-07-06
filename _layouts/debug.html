@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    
-    <!-- Reinstating the EXACT workers.dev tag that unlocked the screen in V5 -->
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
     
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,46 +11,36 @@
     
     <link rel="manifest" href="/site.webmanifest">
     
-    <title>PWA Bleed Test V8</title>
+    <title>PWA Bleed Test V9</title>
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         html, body {
             background: #1a1a2e;
-            /* Reinstating 100vh. This is the mandatory key for iOS PWA bleed. */
-            height: 100vh;
             overflow: hidden; 
             font-family: sans-serif;
+            
+            /* 1. Apple's Proprietary Fix */
+            /* This property literally means "ignore VH and fill the physical glass" */
+            min-height: -webkit-fill-available;
+            
+            /* 2. Your Math Hack */
+            /* If the browser calculates 100vh incorrectly, we force it to add the missing status bar height back in */
+            height: calc(100vh + env(safe-area-inset-top)); 
         }
 
-        /* 
-           THE FIX FOR FAULT #1: 
-           If the user is in a normal browser (not installed), use dvh to prevent scrolling.
-        */
-        @media (display-mode: browser) {
-            html, body {
-                height: 100dvh;
-            }
-        }
-
-        /* LAYER 1: The Bleed Layer (Blue) */
         #bleed-layer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%; /* Maps exactly to the 100vh/100dvh of the body */
-            border: 5px solid #60a5fa; 
+            height: 100%; 
+            border: 5px solid #60a5fa; /* Blue Box */
             background: rgba(96, 165, 250, 0.1);
             pointer-events: none;
         }
 
-        /* 
-           THE FIX FOR FAULT #2:
-           By using absolute positioning mapped to env(), we bypass the body padding glitch.
-           The Red Box will sit exactly where the OS tells it to.
-        */
         #safe-layer {
             position: absolute;
             top: env(safe-area-inset-top);
@@ -60,7 +48,7 @@
             left: env(safe-area-inset-left);
             right: env(safe-area-inset-right);
             
-            border: 5px solid #f87171; 
+            border: 5px solid #f87171; /* Red Box */
             background: rgba(248, 113, 113, 0.1);
             
             display: flex;
@@ -76,9 +64,9 @@
     <div id="bleed-layer"></div>
     
     <div id="safe-layer">
-        <strong>V8: Back to what worked.</strong><br><br>
-        Red box = Safe content.<br>
-        Blue box = Glass edges.
+        <strong>V9: The Height Hack.</strong><br><br>
+        Using calc(100vh + env(safe-area-inset-top))<br>
+        and -webkit-fill-available.
     </div>
 </body>
 </html>
