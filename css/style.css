@@ -1695,12 +1695,6 @@ svg.resource-icon {
   .scroll-btn {
     display: none !important; 
   }
-  
-  @media (max-width: 767px) {
-    main {
-      padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
-    }
-  }
 
   /* iOS PWA Override: Revert to 100vh to fix the Apple dynamic viewport bug */
   @media (display-mode: standalone) {
@@ -1712,3 +1706,9 @@ svg.resource-icon {
   }
   
 }
+
+@media (max-width: 767px) {
+    main {
+      padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
+    }
+  }
