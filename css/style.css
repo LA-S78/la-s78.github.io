@@ -1565,7 +1565,7 @@ svg.resource-icon {
   }
 
   .lantern-glow-bleed {
-  top: 130px;
+  top: calc(130px + env(safe-area-inset-top));
   }
 
   /* Update the main routing to account for the taller 130px header */
