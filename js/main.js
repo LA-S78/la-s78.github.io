@@ -29,13 +29,8 @@
                 el.style.display = '';
             });
         }
-
-        let metaThemeColor = document.querySelector('meta[name="theme-color"]');
-        const targetColor = themeColors[savedTheme] || themeColors['default'];
         
-        if (metaThemeColor && metaThemeColor.getAttribute('content') !== targetColor) {
-            metaThemeColor.setAttribute('content', targetColor);
-        }
+        /* FIX: Removed dynamic theme-color meta update to prevent PWA redraw glitch */
     }
 
     const themeDictator = new MutationObserver(() => {
@@ -47,12 +42,7 @@
         attributeFilter: ['data-theme'] 
     });
 
-    themeDictator.observe(document.head, {
-        childList: true, 
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['content']
-    });
+    /* FIX: Removed document.head observer that was watching the meta tag */
 
     enforceThemeState();
 
@@ -64,10 +54,7 @@
         root.setAttribute('data-theme', themeName);
         localStorage.setItem('site-theme', themeName);
 
-        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-        if (metaThemeColor) {
-            metaThemeColor.setAttribute('content', themeColors[themeName] || themeColors['default']);
-        }
+        /* FIX: Removed dynamic theme-color meta update to prevent PWA redraw glitch */
     }
 
     function initThemeToggle() {
