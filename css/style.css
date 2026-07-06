@@ -134,7 +134,7 @@ main {
   overscroll-behavior-y: contain; 
   overscroll-behavior-x: none;    
   /* Allows vertical scroll, but blocks zoom/horizontal drag */
-  touch-action: pan-y;
+  touch-action: pan-x, pan-y;
 
   /* THE FIX: Remove height: 100vh; */
   flex: 1; /* Automatically absorbs whatever space is left */
@@ -945,9 +945,6 @@ dialog a.dialog-btn:hover {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
   scroll-margin-top: calc(90px + env(safe-area-inset-top));
   overflow: hidden;
-}
-.content-pane, .pinned-section, .guide-card {
-    overscroll-behavior: none;
 }
  /*first pane*/
 .content-pane:first-child {
