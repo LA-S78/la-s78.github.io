@@ -396,7 +396,7 @@ footer {
   justify-content: space-around;
   align-items: center;
   padding-top: 10px;
-  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  padding-bottom: 10px;
 }
 .nav-item {
   display: flex;
@@ -1578,6 +1578,10 @@ svg.resource-icon {
     scroll-margin-top: calc(130px + 55px + env(safe-area-inset-top));
     padding: 30px 40px;
     
+  }
+
+  footer {
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
   }
 
   .anchor-nav {
