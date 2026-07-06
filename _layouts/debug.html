@@ -11,51 +11,44 @@
     
     <link rel="manifest" href="/site.webmanifest">
     
-    <title>PWA Bleed Test V6</title>
+    <title>PWA Bleed Test V7</title>
     
     <style>
-        /* Reset */
+        /* Base reset */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* The Absolute Root */
+        /* Lock the document without using vh or dvh */
         html, body {
             background: #1a1a2e;
-            width: 100%;
-            /* 100dvh (Dynamic Viewport Height) fixes the mobile browser scrolling issue */
-            height: 100dvh; 
-            /* Stop all scrolling/rubber-banding at the root level */
             overflow: hidden; 
             overscroll-behavior: none; 
+            touch-action: none;
             font-family: sans-serif;
-        }
-
-        /* Fallback for older browsers */
-        @supports not (height: 100dvh) {
-            html, body { height: 100vh; }
         }
 
         /* LAYER 1: The Bleed Layer (Blue) */
         #bleed-layer {
-            position: absolute;
+            /* 'fixed' binds directly to the hardware screen */
+            position: fixed;
             top: 0; 
             left: 0; 
             right: 0; 
             bottom: 0;
-            border: 5px solid #60a5fa; /* Blue */
+            border: 5px solid #60a5fa; 
             background: rgba(96, 165, 250, 0.1);
             pointer-events: none;
         }
 
         /* LAYER 2: The Safe Content Layer (Red) */
         #safe-layer {
-            position: absolute;
-            /* Map this box strictly to the OS safe zones */
+            /* Also 'fixed', but squeezed by the OS safe zones */
+            position: fixed;
             top: env(safe-area-inset-top);
             bottom: env(safe-area-inset-bottom);
             left: env(safe-area-inset-left);
             right: env(safe-area-inset-right);
             
-            border: 5px solid #f87171; /* Red */
+            border: 5px solid #f87171; 
             background: rgba(248, 113, 113, 0.1);
             
             display: flex;
