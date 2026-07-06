@@ -56,6 +56,20 @@
         applyTheme(savedTheme);
     }
 
+    // --- SCROLL LOCK: ONLY ENABLE VERTICAL SCROLL IF NEEDED ---
+    function manageScrollLock() {
+        const main = document.querySelector('main');
+        if (!main) return;
+
+        // If content fits, lock Y-axis. If it's taller, allow Y-axis scroll.
+        // This stops rubber-banding on short pages while keeping pinned horizontal cards working.
+        if (main.scrollHeight <= main.clientHeight) {
+            main.style.overflowY = 'hidden';
+        } else {
+            main.style.overflowY = 'auto';
+        }
+    }
+
     function highlightCurrentSurvivalBattle() {
         const table = document.querySelector('.schedule-table');
         if (!table) return;
@@ -254,31 +268,6 @@
         }, { passive: true });
     }
 
-    // --- PWA UPDATE TOAST LOGIC ---
-    function showUpdateToast(newWorker) {
-        if (document.getElementById('pwa-update-toast')) return;
-
-        const t = window.pwaTranslations || {
-            toastMsg: 'New intel acquired.',
-            updateBtn: 'Update',
-            updating: 'Decrypting...'
-        };
-
-        const toast = document.createElement('div');
-        toast.id = 'pwa-update-toast';
-        toast.innerHTML = `
-            <span>${t.toastMsg}</span>
-            <button id="pwa-update-btn">${t.updateBtn}</button>
-        `;
-        document.body.appendChild(toast);
-
-        document.getElementById('pwa-update-btn').addEventListener('click', () => {
-            toast.classList.add('updating');
-            toast.querySelector('span').textContent = t.updating;
-            newWorker.postMessage({ type: 'SKIP_WAITING' });
-        });
-    }
-
     // --- MASTER INITIALIZER ---
     function initApp() {
         highlightCurrentSurvivalBattle();
@@ -290,12 +279,20 @@
         syncHeaderSubtitle();
         initScrollMemory();
         
+        // Initial run and watch for resize
+        manageScrollLock();
+        window.addEventListener('resize', manageScrollLock);
+        
         setTimeout(() => scrollActiveNavIntoView(), 100);
     }
 
     // --- EVENTS ---
 
-    document.addEventListener("turbo:load", initApp);
+    document.addEventListener("turbo:load", () => {
+        initApp();
+        // Re-check after content renders
+        setTimeout(manageScrollLock, 200); 
+    });
 
     document.addEventListener("turbo:visit", () => {
         isNewNavigation = true;
@@ -342,6 +339,30 @@
                     window.location.reload();
                 }
             });
+        });
+    }
+
+    function showUpdateToast(newWorker) {
+        if (document.getElementById('pwa-update-toast')) return;
+
+        const t = window.pwaTranslations || {
+            toastMsg: 'New intel acquired.',
+            updateBtn: 'Update',
+            updating: 'Decrypting...'
+        };
+
+        const toast = document.createElement('div');
+        toast.id = 'pwa-update-toast';
+        toast.innerHTML = `
+            <span>${t.toastMsg}</span>
+            <button id="pwa-update-btn">${t.updateBtn}</button>
+        `;
+        document.body.appendChild(toast);
+
+        document.getElementById('pwa-update-btn').addEventListener('click', () => {
+            toast.classList.add('updating');
+            toast.querySelector('span').textContent = t.updating;
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
         });
     }
 
