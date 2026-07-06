@@ -1,4 +1,4 @@
-<dialog id="sanctuary-prereqsZoom" onclick="this.close()">
+<dialog id="sanctuary-prereqsZoom" onclick="if(event.target==this) closeDialogGracefully(this)">
     <img src="/images/guides/sanctuary-prereqs.jpg" alt="Sanctuary Prerequisites">
     
     <div class="dialog-controls" onclick="event.stopPropagation()">
@@ -7,6 +7,6 @@
            class="dialog-btn">
            Download
         </a>
-        <button onclick="document.getElementById('sanctuary-prereqsZoom').close()">Close</button>
+        <button onclick="closeDialogGracefully(this.closest('dialog'))">Close</button>
     </div>
 </dialog>

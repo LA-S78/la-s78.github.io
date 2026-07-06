@@ -1,4 +1,4 @@
-<dialog id="rotationZoom" onclick="this.close()">
+<dialog id="rotationZoom" onclick="if(event.target==this) closeDialogGracefully(this)">
     <img src="/images/rotation.jpg" alt="Capitol Rotation Blueprint">
     
     <div class="dialog-controls" onclick="event.stopPropagation()">
@@ -7,11 +7,11 @@
            class="dialog-btn">
            Download
         </a>  
-        <button onclick="document.getElementById('rotationZoom').close()">Close</button>
+        <button onclick="closeDialogGracefully(this.closest('dialog'))">Close</button>
     </div>
 </dialog>
 
-<dialog id="rewardsZoom" onclick="this.close()">
+<dialog id="rewardsZoom" onclick="if(event.target==this) closeDialogGracefully(this)">
     <img src="/images/rewards.jpg" alt="Capitol Rewards Details">
     
     <div class="dialog-controls" onclick="event.stopPropagation()">
@@ -20,6 +20,6 @@
            class="dialog-btn">
            Download
         </a>  
-        <button onclick="document.getElementById('rewardsZoom').close()">Close</button>
+        <button onclick="closeDialogGracefully(this.closest('dialog'))">Close</button>
     </div>
 </dialog>

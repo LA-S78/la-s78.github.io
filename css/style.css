@@ -762,6 +762,9 @@ dialog::backdrop {
   animation: backdropFadeIn 0.5s ease-out forwards;
   will-change: transform, opacity;
 }
+dialog.is-closing::backdrop {
+  animation: backdropFadeOut 0.5s ease-out forwards;
+}
 dialog {
   background-color: #1a1512;
   border: 1px solid var(--accent-color);
@@ -778,8 +781,11 @@ dialog[open] {
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  animation: nativeAppFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: dialogFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: transform, opacity;
+}
+dialog.is-closing {
+  animation: dialogFadeOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 dialog img {
   max-width: 100%;
@@ -1463,9 +1469,36 @@ svg.resource-icon {
   }
 }
 
+@keyframes dialogFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dialogFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
 @keyframes backdropFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+@keyframes backdropFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 @keyframes lantern-flicker {

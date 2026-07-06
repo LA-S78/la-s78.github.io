@@ -1,4 +1,4 @@
-<dialog id="mapZoom" onclick="this.close()">
+<dialog id="mapZoom" onclick="if(event.target==this) closeDialogGracefully(this)">
     <img src="/images/map.jpg" alt="NAP Territory Map">
     <div class="dialog-controls" onclick="event.stopPropagation()">
         <a href="/images/map.jpg" 
@@ -6,6 +6,6 @@
            class="dialog-btn">
            Download
         </a>  
-        <button onclick="document.getElementById('mapZoom').close()">Close</button>
+        <button onclick="closeDialogGracefully(this.closest('dialog'))">Close</button>
     </div>
 </dialog>
