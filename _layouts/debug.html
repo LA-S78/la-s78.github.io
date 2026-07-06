@@ -2,71 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1a1a2e">
     
-    <link rel="manifest" href="/site.webmanifest">
-    
-    <title>PWA Bleed Test V9</title>
+    <title>PWA Bleed Test V10</title>
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         html, body {
-            background: #1a1a2e;
+            /* Drop vh and dvh. Let the browser define the 100% canvas */
+            height: 100%; 
+            background: #1a1a2e; /* The background bleed color */
             overflow: hidden; 
             font-family: sans-serif;
-            
-            /* 1. Apple's Proprietary Fix */
-            /* This property literally means "ignore VH and fill the physical glass" */
-            min-height: -webkit-fill-available;
-            
-            /* 2. Your Math Hack */
-            /* If the browser calculates 100vh incorrectly, we force it to add the missing status bar height back in */
-            height: calc(100vh + env(safe-area-inset-top)); 
-        }
-
-        #bleed-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%; 
-            border: 5px solid #60a5fa; /* Blue Box */
-            background: rgba(96, 165, 250, 0.1);
-            pointer-events: none;
-        }
-
-        #safe-layer {
-            position: absolute;
-            top: env(safe-area-inset-top);
-            bottom: env(safe-area-inset-bottom);
-            left: env(safe-area-inset-left);
-            right: env(safe-area-inset-right);
-            
-            border: 5px solid #f87171; /* Red Box */
-            background: rgba(248, 113, 113, 0.1);
-            
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
             color: white;
+        }
+
+        #mobile-container {
+            height: 100%;
+            display: grid;
+            grid-template-rows: auto 1fr auto; /* Header | Content | Footer */
+        }
+
+        header {
+            background: rgba(255, 0, 0, 0.2);
+            border-top: 5px solid #f87171; /* Red top border */
+            
+            /* Push the text safely below the status bar */
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: 20px;
+            text-align: center;
+        }
+
+        main {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            overflow-y: auto; /* Let the middle area scroll naturally */
+            text-align: center;
+        }
+
+        footer {
+            background: rgba(0, 255, 0, 0.2);
+            border-bottom: 5px solid #4ade80; /* Green bottom border */
+            
+            /* Push the text safely above the home bar */
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div id="bleed-layer"></div>
-    
-    <div id="safe-layer">
-        <strong>V9: The Height Hack.</strong><br><br>
-        Using calc(100vh + env(safe-area-inset-top))<br>
-        and -webkit-fill-available.
+    <div id="mobile-container">
+        <header>
+            <strong>HEADER</strong><br>
+            The RED border should touch the absolute top of the glass.<br>
+            This text should be safely below the notch.
+        </header>
+        
+        <main>
+            <strong>MAIN CONTENT</strong><br>
+            If you load this in a normal mobile browser, there should be NO extra scrolling of the body.
+        </main>
+        
+        <footer>
+            <strong>FOOTER</strong><br>
+            The GREEN border should touch the absolute bottom of the glass.<br>
+            This text should be safely above the home bar.
+        </footer>
     </div>
 </body>
 </html>
