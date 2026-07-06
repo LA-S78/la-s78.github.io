@@ -85,6 +85,11 @@ body {
   color: var(--text-main);
   overscroll-behavior: none;
   overflow: hidden;
+
+  /* THE FIX: Unify text rendering across layout/compositor threads. 
+     This eliminates dark-mode font blooming and stops layer teardown snapping. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body::before {
@@ -125,6 +130,25 @@ turbo-frame#main-content {
 }
 
 /* ==========================================================================
+   TURBO FRAME TRANSITIONS (BLUR-SAFE)
+   ========================================================================== */
+
+/* 1. Target direct children of main (the panes) instead of main itself */
+main > *, .anchor-nav {
+  animation: nativeAppFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 2. Fade out inner content and sub-nav when a link is clicked */
+turbo-frame[busy] main > *,
+turbo-frame[busy] .anchor-nav {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  animation: none; 
+}
+
+
+/* ==========================================================================
    3. TYPOGRAPHY & MARKDOWN (MAIN CONTENT)
    ========================================================================== */
 
@@ -136,7 +160,6 @@ main {
   /* Allows vertical scroll, but blocks zoom/horizontal drag */
   touch-action: pan-x, pan-y;
 
-  /* THE FIX: Remove height: 100vh; */
   flex: 1; /* Automatically absorbs whatever space is left */
   height: auto; 
   min-height: 0; /* CRITICAL: Prevents flex children from overflowing */
@@ -582,13 +605,9 @@ footer {
     rgba(var(--active-theme), 0.15) 50%,
     transparent 100%
   );
-  animation:
-    lantern-pulse 8s infinite ease-in-out,
-    lantern-flicker-smooth 4s infinite ease-in-out;
   will-change: opacity, transform, filter;
   transform: translateZ(0);
   backface-visibility: hidden;
-  transition: all 0.5s ease;
 }
 
 .lantern-glow-bleed {
@@ -654,7 +673,6 @@ footer {
     black 0%,
     transparent 80%
   );
-  animation: lantern-pulse 5s infinite ease-in-out;
 }
 
 .mote {
@@ -667,7 +685,6 @@ footer {
   mix-blend-mode: screen;
   pointer-events: none;
   will-change: transform, opacity;
-  animation: drift 12s infinite linear;
   z-index: 999 !important;
   top: var(--mote-y, 0%);
   left: var(--mote-x, 0%);
@@ -1431,71 +1448,14 @@ svg.resource-icon {
    9. ANIMATIONS & ACCESSIBILITY
    ========================================================================== */
 
-@keyframes lantern-flicker {
-  0%,
-  100% {
-    filter: brightness(1) drop-shadow(0 0 5px rgba(var(--active-theme), 0.2));
-  }
-  20% {
-    filter: brightness(0.9) drop-shadow(0 0 8px rgba(var(--active-theme), 0.3));
-  }
-  35% {
-    filter: brightness(1.05)
-      drop-shadow(0 0 15px rgba(var(--active-theme), 0.5));
-  }
-  50% {
-    filter: brightness(0.7) drop-shadow(0 0 2px rgba(var(--active-theme), 0.1));
-  }
-  70% {
-    filter: brightness(0.95)
-      drop-shadow(0 0 6px rgba(var(--active-theme), 0.25));
-  }
-  85% {
-    filter: brightness(0.8) drop-shadow(0 0 4px rgba(var(--active-theme), 0.2));
-  }
-}
-
-@keyframes lantern-pulse {
-  0%,
-  100% {
-    opacity: 0.7;
-    transform: scale(1);
-    filter: brightness(1) blur(2px);
-  }
-  50% {
-    opacity: 0.85;
-    transform: scale(1.005);
-    filter: brightness(1.05) blur(3px);
-  }
-}
-
-@keyframes lantern-flicker-smooth {
-  0%,
-  100% {
-    opacity: 0.8;
-    filter: brightness(1) blur(2px);
-  }
-  33% {
-    opacity: 0.85;
-    filter: brightness(1.05) blur(2.5px);
-  }
-  66% {
-    opacity: 0.75;
-    filter: brightness(0.95) blur(2px);
-  }
-}
-
-@keyframes drift {
-  0% {
-    transform: translateY(0) translateX(0);
+@keyframes nativeAppFadeIn {
+  from {
     opacity: 0;
+    transform: translateY(8px); /* Subtle shift prevents dizzying motion */
   }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(-50px) translateX(20px);
-    opacity: 0;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -1538,6 +1498,19 @@ svg.resource-icon {
   .blueprint-img:hover,
   .scroll-btn:hover {
     transform: none !important;
+  }
+
+  /* Disable layout fade structures safely across layout changes */
+  main > *, .anchor-nav {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  turbo-frame[busy] main > *,
+  turbo-frame[busy] .anchor-nav {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 
@@ -1669,21 +1642,6 @@ svg.resource-icon {
   }
   .total-label {
     font-size: 0.75rem;
-  }
-
-  /* Desktop Atmospheric Tweaks */
-  @keyframes drift {
-    0% {
-      transform: translateY(0) translateX(0);
-      opacity: 0;
-    }
-    50% {
-      opacity: 0.6;
-    }
-    100% {
-      transform: translateY(-70px) translateX(100px);
-      opacity: 0;
-    }
   }
   .dust-container {
     -webkit-mask-image: radial-gradient(

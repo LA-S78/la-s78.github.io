@@ -20,14 +20,6 @@
         
         if (root.getAttribute('data-theme') !== savedTheme) {
             root.setAttribute('data-theme', savedTheme);
-            
-            const stubbornElements = document.querySelectorAll('.lantern-glow-bleed, .lantern-edge-highlight, .lang-trigger, .dropdown-content');
-            
-            stubbornElements.forEach(el => {
-                el.style.display = 'none';
-                el.offsetHeight; 
-                el.style.display = '';
-            });
         }
     }
 
