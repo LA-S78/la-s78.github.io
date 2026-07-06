@@ -759,6 +759,8 @@ dialog::backdrop {
   background: rgba(10, 8, 7, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  animation: backdropFadeIn 0.5s ease-out forwards;
+  will-change: transform, opacity;
 }
 dialog {
   background-color: #1a1512;
@@ -776,6 +778,8 @@ dialog[open] {
   flex-direction: column;
   align-items: center;
   gap: 15px;
+  animation: nativeAppFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
 }
 dialog img {
   max-width: 100%;
@@ -1457,6 +1461,11 @@ svg.resource-icon {
     transform: translateY(0);
     will-change: auto; /* Temporarily trigger raster layer, torn down immediately after execution */
   }
+}
+
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes lantern-flicker {
