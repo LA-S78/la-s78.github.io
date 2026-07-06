@@ -1,47 +1,4 @@
-<div id="global-header-wrapper" class="header-container" data-turbo-permanent>
-    <style>
-    /* Force GPU isolation: This header is now its own rendering world */
-    #global-header-wrapper {
-        perspective: 1000px;
-        backface-visibility: hidden;
-        transform: translateZ(0);
-    }
-    
-    .lantern-flicker-layer {
-        /* Force the browser to NOT re-calculate this layer when the DOM changes */
-        animation: lantern-pulse 8s infinite ease-in-out, lantern-flicker-smooth 4s infinite ease-in-out;
-        animation-fill-mode: both;
-        transform: translate3d(0, 0, 0); 
-    }
-    
-    .dust-container {
-        animation: lantern-pulse 5s infinite ease-in-out;
-        animation-fill-mode: both;
-        transform: translate3d(0, 0, 0);
-    }
-
-    .mote {
-        animation: drift 12s infinite linear;
-        animation-fill-mode: both;
-        transform: translate3d(0, 0, 0);
-    }
-
-    /* Keyframes remain here... */
-    @keyframes lantern-flicker-smooth {
-        0%, 100% { opacity: 0.8; filter: brightness(1) blur(2px); }
-        33% { opacity: 0.85; filter: brightness(1.05) blur(2.5px); }
-        66% { opacity: 0.75; filter: brightness(0.95) blur(2px); }
-    }
-    @keyframes lantern-pulse {
-        0%, 100% { opacity: 0.7; transform: scale(1); filter: brightness(1) blur(2px); }
-        50% { opacity: 0.85; transform: scale(1.005); filter: brightness(1.05) blur(3px); }
-    }
-    @keyframes drift {
-        0% { transform: translateY(0) translateX(0); opacity: 0; }
-        50% { opacity: 0.5; }
-        100% { transform: translateY(-50px) translateX(20px); opacity: 0; }
-    }
-</style>
+<div class="header-container" data-turbo-permanent>
 <header class="lantern-header">
 
 <div class="dust-container">
