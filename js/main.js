@@ -267,8 +267,8 @@
         }, { passive: true });
 
         main.addEventListener('touchmove', (e) => {
-            // FIX: Allow touch events within any content-pane to ensure horizontal/specific interactions work
-            if (e.target.closest('.content-pane')) return;
+            // FIX: Allow touch events within any horizontal-scrollable pane
+            if (e.target.closest('.pinned-section, .nav-wrapper, .schedule-container')) return;
 
             const currentX = e.touches[0].clientX;
             const currentY = e.touches[0].clientY;
@@ -276,13 +276,9 @@
             const deltaX = Math.abs(currentX - startX);
             const deltaY = Math.abs(currentY - startY);
 
-            // Buffer to prevent jiggles
-            if (deltaX < 5 && deltaY < 5) return;
-
-            // Only lock if vertical movement is at least 2x greater than horizontal
-            // and the page doesn't need to scroll.
-            if (deltaY > deltaX * 2) {
-                if (main.scrollHeight <= main.clientHeight) {
+            // If page is short, block only pure vertical intent
+            if (main.scrollHeight <= main.clientHeight) {
+                if (deltaY > deltaX) {
                     e.preventDefault();
                 }
             }
