@@ -1669,12 +1669,18 @@ svg.resource-icon {
 @supports (-webkit-touch-callout: none) {
   .lantern-header {
     /* Keep the shield, but shave 15px off of it to pull content up natively */
-    padding-top: calc(env(safe-area-inset-top) - 15px) !important;
+    padding-top: calc(env(safe-area-inset-top) - 8px) !important;
   }
 
   /* Move the language switcher up alongside the rest of the content */
   .language-switcher {
-    top: calc(env(safe-area-inset-top) + 5px);
+    top: calc(env(safe-area-inset-top) + 12px);
+  }
+  
+  @media (max-width: 767px) {
+    main {
+      padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
+    }
   }
   
 }
