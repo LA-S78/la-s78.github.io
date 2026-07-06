@@ -323,7 +323,7 @@ main img {
 /* Sticky Anchor Nav */
 .anchor-nav {
   position: sticky;
-  top: 90px;
+  top: calc(90px + env(safe-area-inset-top));
   z-index: 100;
   height: 35px;
   background-color: #1a1512;
@@ -395,6 +395,7 @@ footer {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  padding-top: 10px;
   padding-bottom: max(10px, env(safe-area-inset-bottom));
 }
 .nav-item {
@@ -1580,7 +1581,7 @@ svg.resource-icon {
   }
 
   .anchor-nav {
-    top: 130px;
+    top: calc(130px + env(safe-area-inset-top));
   }
 
   .nav-wrapper {
