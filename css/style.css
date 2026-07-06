@@ -91,6 +91,7 @@ body {
   background-image: url("/images/background.webp"), url("/images/background.png");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   background-repeat: no-repeat;
 }
 
@@ -584,7 +585,7 @@ footer {
 }
 
 .lantern-glow-bleed {
-  position: absolute;
+  position: fixed;
   top: 90px;
   left: 0;
   width: 100%;
@@ -1556,6 +1557,10 @@ svg.resource-icon {
   .lantern-container {
   position:relative;
   right: 1.33rem;
+  }
+
+  .lantern-glow-bleed {
+  top: 130px;
   }
 
   /* Update the main routing to account for the taller 130px header */
