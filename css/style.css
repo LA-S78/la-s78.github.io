@@ -1572,7 +1572,7 @@ svg.resource-icon {
     gap: 20px;
   }
   .content-pane {
-    scroll-margin-top: calc(130px + 55px + env(safe-area-inset-top));
+    scroll-margin-top: calc(130px + 1.2rem + env(safe-area-inset-top));
     padding: 30px 40px;
     
   }
@@ -1588,6 +1588,10 @@ svg.resource-icon {
 
   .nav-wrapper {
     justify-content:center;
+  }
+
+  .scroll-btn {
+    display: block; 
   }
 
   /* Desktop overrides for the T10 Calculator */
@@ -1675,6 +1679,10 @@ svg.resource-icon {
   /* Move the language switcher up alongside the rest of the content */
   .language-switcher {
     top: calc(env(safe-area-inset-top) + 12px);
+  }
+
+  .scroll-btn {
+    display: none !important; 
   }
   
   @media (max-width: 767px) {

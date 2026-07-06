@@ -157,6 +157,7 @@
 
     function initAnchorScrolling() {
         const navLinks = document.querySelectorAll('.anchor-link');
+        const mainContainer = document.querySelector('main');
 
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
@@ -169,10 +170,16 @@
                 if (targetElement) {
                     e.preventDefault(); 
                     
-                    // The 'scroll-margin-top' property in your CSS perfectly handles the header offset natively
-                    targetElement.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start' 
+                    // Measure exactly where the bottom of the sticky nav currently sits on the glass
+                    const anchorNav = document.querySelector('.anchor-nav');
+                    const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
+                    
+                    // Math: Current scroll + target position relative to screen - the nav boundary - 15px visual breathing room
+                    const targetPosition = mainContainer.scrollTop + targetElement.getBoundingClientRect().top - offsetBoundary - 15;
+
+                    mainContainer.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
                     });
                 }
             });
