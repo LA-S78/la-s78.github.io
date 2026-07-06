@@ -267,20 +267,25 @@
         }, { passive: true });
 
         main.addEventListener('touchmove', (e) => {
+            // FIX: Allow touch events within any content-pane to ensure horizontal/specific interactions work
+            if (e.target.closest('.content-pane')) return;
+
             const currentX = e.touches[0].clientX;
             const currentY = e.touches[0].clientY;
             
             const deltaX = Math.abs(currentX - startX);
             const deltaY = Math.abs(currentY - startY);
 
-            // If vertical movement is the primary intent
-            if (deltaY > deltaX) {
-                // Only block vertical movement if the page is too short to scroll
+            // Buffer to prevent jiggles
+            if (deltaX < 5 && deltaY < 5) return;
+
+            // Only lock if vertical movement is at least 2x greater than horizontal
+            // and the page doesn't need to scroll.
+            if (deltaY > deltaX * 2) {
                 if (main.scrollHeight <= main.clientHeight) {
                     e.preventDefault();
                 }
             }
-            // If horizontal (deltaX > deltaY), we do NOTHING, allowing swiping
         }, { passive: false });
     }
 

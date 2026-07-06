@@ -937,6 +937,9 @@ dialog a.dialog-btn:hover {
   scroll-margin-top: calc(90px + env(safe-area-inset-top));
   overflow: hidden;
 }
+.content-pane, .pinned-section, .guide-card {
+    overscroll-behavior: none;
+}
  /*first pane*/
 .content-pane:first-child {
   margin-top: 1.2rem;
