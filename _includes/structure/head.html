@@ -1,22 +1,12 @@
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="{{ site.title }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="{{ site.title }}">
     
-    <!-- Dynamic Title/Description Routing -->
-    {% assign ui_pages = site.data[site.active_lang].ui.pages %}
-    {% if page.guide_id %}
-        {% assign meta_title = ui_pages.guide_panes[page.guide_id].title %}
-        {% assign meta_desc = ui_pages.guide_panes[page.guide_id].subtitle %}
-    {% elsif page.page_key %}
-        {% assign meta_title = ui_pages[page.page_key].title %}
-        {% assign meta_desc = ui_pages[page.page_key].subtitle %}
-    {% else %}
-        {% assign meta_title = page.title %}
-        {% assign meta_desc = page.description %}
-    {% endif %}
+    
 
     <!-- Discord / Social Media Preview Cards -->
     <meta name="twitter:card" content="summary_large_image">
