@@ -1701,11 +1701,18 @@ svg.resource-icon {
     html,
     body,
     #mobile-container {
-      height: 100vh !important;
+      height: 100%;
     }
     @media (max-width: 767px) {
       main {
         padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
+      }
+    }
+    @supports (-webkit-touch-callout: none) {
+      html,
+      body,
+      #mobile-container {
+        height: 100vh;
       }
     }
   }
