@@ -1695,6 +1695,13 @@ svg.resource-icon {
   .scroll-btn {
     display: none !important; 
   }
+  @media (display-mode: standalone) {
+    @media (max-width: 767px) {
+      main {
+        padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
+      }
+    }
+  }
 }
 
 @media (display-mode: standalone) {
@@ -1703,16 +1710,11 @@ svg.resource-icon {
     #mobile-container {
       height: 100%;
     }
-    @media (max-width: 767px) {
-      main {
-        padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
-      }
-    }
     @supports (-webkit-touch-callout: none) {
       html,
       body,
       #mobile-container {
-        height: 100vh;
+        height: 100vh !important;
       }
     }
   }
