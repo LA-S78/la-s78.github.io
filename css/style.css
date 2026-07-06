@@ -114,25 +114,16 @@ turbo-frame#main-content {
    ========================================================================== */
 
 main {
-  /* iOS specific fixes */
   -webkit-user-select: text;
   user-select: text;
-  
-  /* REMOVED: touch-action: pan-y; (Let the browser handle native scrolling/clicks) */
   overscroll-behavior-y: contain; /* Kills vertical rubber-band bouncing on body, keeps it on main */
   overscroll-behavior-x: none;    /* Kills horizontal swipe-to-go-back warp */
-
-  /* The actual scrolling container */
   width: 100%;
-  
-  /* CRITICAL FIX: Must be a strict height, not min-height, to trigger the scrollbar */
   height: 100vh; 
-  
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; /* Momentum scrolling */
   line-height: 1.6;
-  box-sizing: border-box;
-  
+  box-sizing: border-box;  
   /* Content routing behind fixed header/footer */
   padding-top: calc(90px + env(safe-area-inset-top));
   padding-bottom: calc(70px + env(safe-area-inset-bottom)); 
