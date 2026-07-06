@@ -92,19 +92,35 @@ body {
   background-repeat: no-repeat;
 }
 
-  body::before {
+html::before {
   content: "";
   position: fixed;
   top: 0;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%); /* Pulls it back to perfect center */
+  transform: translateX(-50%);
   width: 190px;
-  border-left: 2px dashed cyan;
-  border-right: 2px dashed cyan;
-  background-color: rgba(0, 255, 255, 0.05); /* Faint tint so you see the whole box */
+  border-left: 2px dashed lime;
+  border-right: 2px dashed lime;
+  background-color: rgba(0, 255, 0, 0.05); 
   z-index: 9998;
-  pointer-events: none; /* Keeps it strictly visual/unclickable */
+  pointer-events: none;
+}
+
+/* 270px Outer Bounding Box */
+html::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  border-left: 2px dashed yellow;
+  border-right: 2px dashed yellow;
+  background-color: rgba(255, 255, 0, 0.05); 
+  z-index: 9997; /* Sits slightly behind the lime box */
+  pointer-events: none;
 }
 
 /* Turn the App Shell into a dead-zone for native iOS touch features */
