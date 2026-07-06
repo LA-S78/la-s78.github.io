@@ -1695,19 +1695,14 @@ svg.resource-icon {
   .scroll-btn {
     display: none !important; 
   }
+}
 
-  /* iOS PWA Override: Revert to 100vh to fix the Apple dynamic viewport bug */
-  @media (display-mode: standalone) {
+@media (display-mode: standalone) {
     html,
     body,
     #mobile-container {
       height: 100vh !important;
     }
-  }
-  
-}
-
-@media (max-width: 767px) {
     main {
       padding-bottom: calc(115px + env(safe-area-inset-bottom)); 
     }
