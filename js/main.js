@@ -29,8 +29,6 @@
                 el.style.display = '';
             });
         }
-        
-        /* FIX: Removed dynamic theme-color meta update to prevent PWA redraw glitch */
     }
 
     const themeDictator = new MutationObserver(() => {
@@ -42,8 +40,6 @@
         attributeFilter: ['data-theme'] 
     });
 
-    /* FIX: Removed document.head observer that was watching the meta tag */
-
     enforceThemeState();
 
     // --- Sub-Modules ---
@@ -53,8 +49,6 @@
         
         root.setAttribute('data-theme', themeName);
         localStorage.setItem('site-theme', themeName);
-
-        /* FIX: Removed dynamic theme-color meta update to prevent PWA redraw glitch */
     }
 
     function initThemeToggle() {
@@ -90,7 +84,6 @@
         });
     }
 
-    // Smoothly scrolls the active nav link into the center of the nav-wrapper
     function scrollActiveNavIntoView(activeLink = null) {
         if (!activeLink) {
             activeLink = document.querySelector('.nav-wrapper .active') || document.querySelector('.anchor-link.active');
@@ -157,11 +150,9 @@
                 if (targetElement) {
                     e.preventDefault(); 
                     
-                    // Measure exactly where the bottom of the sticky nav currently sits on the glass
                     const anchorNav = document.querySelector('.anchor-nav');
                     const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
                     
-                    // Math: Current scroll + target position relative to screen - the nav boundary - 15px visual breathing room
                     const targetPosition = mainContainer.scrollTop + targetElement.getBoundingClientRect().top - offsetBoundary - 15;
 
                     mainContainer.scrollTo({
@@ -269,6 +260,9 @@
         if (!main) return;
 
         main.addEventListener('touchmove', (e) => {
+            // FIX: Allow touch events within any content-pane to ensure horizontal/specific interactions work
+            if (e.target.closest('.content-pane')) return;
+
             // Only block if the content isn't actually taller than the container
             if (main.scrollHeight <= main.clientHeight) {
                 e.preventDefault();
