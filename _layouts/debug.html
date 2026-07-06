@@ -21,14 +21,11 @@
             font-family: sans-serif;
             color: white;
         }
-
-        #mobile-container {
-            display: grid;
-            grid-template-rows: auto 1fr auto; 
-            /* CRITICAL: No overflow: hidden here, we need the footer to bleed out */
-        }
-
         header {
+            position:fixed;
+            top:0;
+            left:0;
+            right:0;
             background: rgba(255, 0, 0, 0.2);
             border-top: 5px solid #f87171; 
             padding-top: env(safe-area-inset-top);
@@ -44,6 +41,10 @@
         }
 
         footer {
+            position:fixed;
+            bottom:0;
+            left:0;
+            right:0;
             background: rgba(0, 255, 0, 0.2);
             border-bottom: 5px solid #4ade80; 
             text-align: center;
