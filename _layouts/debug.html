@@ -27,7 +27,7 @@
             
             /* 2. Your Math Hack */
             /* If the browser calculates 100vh incorrectly, we force it to add the missing status bar height back in */
-            height: calc(100vh + env(safe-area-inset-top)); 
+            height: calc(100vh + env(safe-area-inset-top) + env(safe-area-inset-bottom)); 
         }
 
         #bleed-layer {
