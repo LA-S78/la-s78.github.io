@@ -117,21 +117,25 @@ main {
   /* iOS specific fixes */
   -webkit-user-select: text;
   user-select: text;
-  touch-action: pan-y;
-  overscroll-behavior-y: contain; /* Kills vertical rubber-band bouncing */
+  
+  /* REMOVED: touch-action: pan-y; (Let the browser handle native scrolling/clicks) */
+  overscroll-behavior-y: contain; /* Kills vertical rubber-band bouncing on body, keeps it on main */
   overscroll-behavior-x: none;    /* Kills horizontal swipe-to-go-back warp */
 
   /* The actual scrolling container */
   width: 100%;
-  min-height: 100vh;
+  
+  /* CRITICAL FIX: Must be a strict height, not min-height, to trigger the scrollbar */
+  height: 100vh; 
+  
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch; /* Momentum scrolling */
   line-height: 1.6;
   box-sizing: border-box;
   
   /* Content routing behind fixed header/footer */
   padding-top: calc(90px + env(safe-area-inset-top));
-  padding-bottom: calc(70px + env(safe-area-inset-bottom)); /* Estimated footer height */
+  padding-bottom: calc(70px + env(safe-area-inset-bottom)); 
   
   padding-left: max(20px, calc((100% - 1000px) / 2));
   padding-right: max(20px, calc((100% - 1000px) / 2));
