@@ -107,6 +107,9 @@ pages:
     t10:
       title: "T10 Guide"
       subtitle: "T10 Requirements"
+    scramble:
+      title: "Royal Scramble"
+      subtitle: "Royal Scramble"
 
 nav_anchors:
   server_rules: "Server Rules"
@@ -137,6 +140,9 @@ nav_anchors:
   sanctuary_chart: "Chart"
   sanctuary_goals: "Goals"
   sanctuary_efficiency: "Efficiency"
+  #royal scramble
+  scramble_event: "Event"
+  scramble_points: "Points"
 
 search:
   guides: "Search guides..."
