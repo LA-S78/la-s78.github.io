@@ -5,9 +5,9 @@ subtitle: Royal Scramble
 active_nav: guides
 guide_id: "scramble"
 nav_links:
-  - name_key: "Scramble"
+  - name_key: "scramble_event"
     url: "#event"
-  - name_key: "Points"
+  - name_key: "scramble_points"
     url: "#points"
 ---
 

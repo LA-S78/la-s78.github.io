@@ -1,7 +1,9 @@
+#title and index subtitle
 header:
   title: "LAST ASYLUM"
   subtitle: "Survival Compendium"
 
+#footer icon names
 footer:
   nav_home: "Home"
   nav_rules: "Rules"
@@ -12,6 +14,7 @@ footer:
   aria_guides: "Go to Guides page"
   aria_alliance: "Go to Alliance and Diplomacy page"
 
+#guide page titles
 guides:
   heroes: "Heroes & Builds"
   combat: "Combat"
@@ -32,7 +35,9 @@ guides:
   campaign_shop: "Campaign Shop"
   premium_shop: "Premium & Gem Packs"
   t10: "T10 Calculator"
+  scramble: "Royal Scramble"
 
+#page title and subtitles
 pages:
   home:
     title: "Home"
@@ -111,6 +116,7 @@ pages:
       title: "Royal Scramble"
       subtitle: "Royal Scramble"
 
+#navigation bar text
 nav_anchors:
   server_rules: "Server Rules"
   rotation: "Rotation"
@@ -144,11 +150,13 @@ nav_anchors:
   scramble_event: "Event"
   scramble_points: "Points"
 
+#search bar text
 search:
   guides: "Search guides..."
   home: "Search directories, posts..."
   placeholder: "Search..."
 
+#PWA update text
 pwa:
   toast_msg: "New intel acquired."
   update_btn: "Update"
