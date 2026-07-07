@@ -1,0 +1,28 @@
+<dialog id="cheese-allianceZoom" onclick="if(event.target==this) closeDialogGracefully(this)">
+    <img src="/images/guides/cheese-alliance.jpg" alt="Alliance Cheese Trap Rewards">
+    
+    <div class="dialog-controls" onclick="event.stopPropagation()">
+        <a href="/images/guides/cheese-alliance.jpg" 
+           download="LastAsylum-Alliance-Cheese-Rewards.jpg" 
+           class="dialog-btn">
+           Download
+        </a>  
+        <button onclick="closeDialogGracefully(this.closest('dialog'))">Close</button>
+    </div>
+</dialog>
+
+<dialog id="cheese-personalZoom" onclick="if(event.target==this) closeDialogGracefully(this)">
+    <img src="/images/guides/cheese-personal.jpg" alt="Personal Cheese Trap Rewards">
+    
+    <div class="dialog-controls" onclick="event.stopPropagation()">
+        <a href="/images/guides/cheese-personal.jpg" 
+           download="LastAsylum-Personal-Cheese-Rewards.jpg" 
+           class="dialog-btn">
+           Download
+        </a>  
+        <button onclick="closeDialogGracefully(this.closest('dialog'))">Close</button>
+    </div>
+</dialog>
+
+<img src="/images/guides/cheese-alliance.jpg" alt="Alliance Cheese Trap Rewards" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-personal.jpg" alt="Personal Cheese Trap Rewards" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">

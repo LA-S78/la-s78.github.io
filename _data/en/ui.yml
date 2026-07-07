@@ -149,6 +149,11 @@ nav_anchors:
   #royal scramble
   scramble_event: "Event"
   scramble_points: "Points"
+  #cheese trap
+  cheese_event: "Event"
+  cheese_cheese: "Cheese"
+  cheese_strategy: "Strategy"
+  cheese_rewards: "Rewards"
 
 #search bar text
 search:
