@@ -797,6 +797,31 @@ footer {
   transition: background-color 0.2s ease, transform 0.1s ease;
   box-shadow: 0 4px 14px rgba(88, 101, 242, 0.3);
 }
+
+.user-avatar {
+  display: grid;
+  grid-template-rows: 60fr 40fr;
+  gap: 0.5rem;
+  align-items: center;
+  text-align: center;
+}
+
+.private-grid {
+  display: grid;
+  grid-template-columns: 20fr 80fr;
+  grid-template-rows: auto auto;
+  grid-template-areas: 
+    "left-top    right-side"
+    "left-bottom right-side";
+  gap: 0.5rem;
+}
+
+.api-right {
+  grid-column: 2;
+  grid-row: span 2;
+  grid-area: right-side;
+  text-align: center;
+}
 /*vercel test end*/
 
 .img-grid {

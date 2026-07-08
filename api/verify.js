@@ -32,7 +32,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1. Swap Code for Token (Native Fetch)
+    // 1. Swap Code for Token
     const tokenParams = new URLSearchParams({
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
@@ -76,6 +76,20 @@ export default async function handler(req, res) {
     const guildData = await guildReq.json();
     const userRoles = guildData.roles || [];
 
+    // --- DYNAMIC ALLIANCE SCANNER ---
+    let allianceName = 'Independent';
+    const excludeList = ['R5', 'R4', 'BOTS', 'MEMBER']; 
+
+    for (const [envKey, envValue] of Object.entries(process.env)) {
+        if (envKey.startsWith('DISCORD_') && userRoles.includes(envValue)) {
+            const identifier = envKey.replace('DISCORD_', '');
+            if (!excludeList.includes(identifier)) {
+                allianceName = identifier;
+                break;
+            }
+        }
+    }
+
     // 4. Evaluate Tiers
     let accessLevel = 'public';
     const isLeadership = (R4_ROLE_ID && userRoles.includes(R4_ROLE_ID)) || (R5_ROLE_ID && userRoles.includes(R5_ROLE_ID));
@@ -84,7 +98,12 @@ export default async function handler(req, res) {
     else if (MEMBER_ROLE_ID && userRoles.includes(MEMBER_ROLE_ID)) accessLevel = 'member';
     else if (!MEMBER_ROLE_ID && userRoles.length > 0) accessLevel = 'member';
 
-    return res.status(200).json({ role: accessLevel, username, avatar: avatarUrl });
+    return res.status(200).json({ 
+        role: accessLevel, 
+        username, 
+        avatar: avatarUrl,
+        alliance: allianceName 
+    });
 
   } catch (error) {
     console.error('Handshake Error:', error.message);

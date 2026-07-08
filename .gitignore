@@ -17,3 +17,6 @@ vendor/
 .idea/
 .vercel
 .env*
+
+# Random stuff
+todo

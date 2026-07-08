@@ -134,7 +134,7 @@
             lockedElements.forEach(el => el.classList.remove('content-locked'));
 
             // Hide the main login button so it doesn't clutter the reading experience
-            const loginBtn = document.getElementById('discord-login-btn');
+            const loginBtn = document.getElementsById('discord-login-btn');
             if (loginBtn) loginBtn.style.display = 'none';
         }
 
