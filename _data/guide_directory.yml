@@ -104,7 +104,7 @@ shops:
     icon: |
       <path d="M12 15l-3 3-3-3V5h6zM18 5h-6v10l3 3 3-3z" />
   - key: "sanctuary_shop"
-    url: /LANG_CODE/guides/sanctuary.html
+    url: /LANG_CODE/guides/sanctuary_shop.html
     icon: |
       <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
   - key: "campaign_shop"
