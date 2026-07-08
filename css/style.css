@@ -757,10 +757,11 @@ footer {
 
 .img-grid {
   display: grid;
-  grid-template-columns: 7fr 3fr;
-  gap: 24px;
+  grid-template-columns: 6fr 4fr;
+  gap: 0.5rem;
   align-items: center;
 }
+
 
 dialog::backdrop {
   background: rgba(10, 8, 7, 0.85);
@@ -1618,6 +1619,14 @@ svg.resource-icon {
   .scroll-btn:hover {
     transform: none !important;
   }
+ /*wider image grid for desktop */
+  .img-grid {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 
   /* Disable layout fade structures safely across layout changes */
   main, .anchor-nav {

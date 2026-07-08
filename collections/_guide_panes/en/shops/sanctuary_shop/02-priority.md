@@ -15,7 +15,7 @@ Maybe some text here?
 <table>
   <thead>
     <tr>
-      <th>Order</th>
+      <th>#</th>
       <th>Item</th>
       <th>Used</th>
     </tr>
@@ -55,6 +55,7 @@ Maybe some text here?
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary_shop.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-prereqsZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
