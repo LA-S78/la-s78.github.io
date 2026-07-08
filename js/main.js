@@ -138,7 +138,7 @@
         if (textUsername && username) textUsername.textContent = username;
 
         const textRank = document.getElementById('ui-rank');
-        if (textRank && role) textRank.textContent = role; // Already "R4" or "R5"
+        if (textRank && role) textRank.textContent = role;
 
         const textAlliance = document.getElementById('ui-alliance');
         if (textAlliance && alliance) textAlliance.textContent = alliance;
@@ -155,6 +155,37 @@
                 </div>
             `;
         }
+        
+        // Re-run highlighting if we are on the NAP page
+        highlightPlayerAlliance();
+    }
+
+    // --- NEW: DYNAMIC ALLIANCE HIGHLIGHTING ---
+    function highlightPlayerAlliance() {
+        const table = document.getElementById('nap-alliance-table');
+        const playerAlliance = localStorage.getItem('auth-alliance');
+
+        if (!table || !playerAlliance) return;
+
+        // Helper to strip diacritics and lowercase the string
+        const normalize = (str) => {
+            return str
+                .toLowerCase()
+                .normalize("NFD") // Decompose combined characters
+                .replace(/[\u0300-\u036f]/g, ""); // Remove diacritics
+        };
+
+        const normalizedPlayerAlliance = normalize(playerAlliance);
+
+        const rows = table.querySelectorAll('tr');
+        rows.forEach(row => {
+            // Normalize row text to match the alliance string
+            if (normalize(row.textContent.trim()) === normalizedPlayerAlliance) {
+                row.classList.add('highlight-alliance');
+            } else {
+                row.classList.remove('highlight-alliance');
+            }
+        });
     }
 
     window.triggerDiscordLogin = function() {
@@ -334,6 +365,7 @@
     function initApp() {
         initAuthentication(); 
         highlightCurrentSurvivalBattle();
+        highlightPlayerAlliance(); // Added here
         initScrollObserver();
         initAnchorScrolling();
         initSearchEngine();

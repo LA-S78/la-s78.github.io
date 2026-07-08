@@ -756,6 +756,13 @@ footer {
 }
 
 /* vercel test begin */
+
+.highlight-alliance {
+    background-color: rgba(230, 160, 80, 0.2); /* Soft sanctuary gold tint */
+    border-left: 4px solid var(--accent-color);
+    font-weight: bold;
+}
+
 /* 1. The Core Lock Filter */
 .content-locked {
   /* The visual blur - 12px is usually the sweet spot so you can't read headers */

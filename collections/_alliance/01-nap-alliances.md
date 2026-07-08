@@ -7,7 +7,7 @@ nav_id: "nap-alliances"
 
 <h2>{{ p.title }}</h2>
 
-<table class="list-table">
+<table class="list-table" id="nap-alliance-table">
   {% for alliance in site.data.diplomacy.nap_alliances %}
   <tr><td>{{ alliance }}</td></tr>
   {% endfor %}
