@@ -15,3 +15,5 @@ vendor/
 # Editor-specific files
 .vscode/
 .idea/
+.vercel
+.env*
