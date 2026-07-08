@@ -55,6 +55,6 @@ Maybe some text here?
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-prereqsZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
