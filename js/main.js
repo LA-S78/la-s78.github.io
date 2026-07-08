@@ -169,7 +169,17 @@
         window.location.reload();
     };
 
-    // --- SUPPORTING MODULES (Theme, Scroll, Language, Search) ---
+    // --- DIALOG GRACEFUL CLOSE ---
+    window.closeDialogGracefully = (dialog) => {
+        if (!dialog) return;
+        dialog.classList.add('is-closing');
+        dialog.addEventListener('animationend', () => {
+            dialog.classList.remove('is-closing');
+            dialog.close();
+        }, { once: true });
+    };
+
+    // --- SUPPORTING MODULES ---
     function applyTheme(themeName) {
         document.documentElement.setAttribute('data-theme', themeName);
         localStorage.setItem('site-theme', themeName);
