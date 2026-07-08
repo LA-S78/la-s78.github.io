@@ -9,8 +9,8 @@
 
     // --- AUTHENTICATION CONFIGURATION ---
     const AUTH_CONFIG = {
-        clientId: '1524254079235391558', 
-        redirectUri: window.location.origin + '/' 
+        clientId: '1524254079235391558', // Replace with your actual Discord Application Client ID
+        redirectUri: window.location.origin + '/' // Automatically targets your current domain root
     };
 
     // --- THE THEME DICTATOR ---
@@ -46,15 +46,13 @@
     async function initAuthentication() {
         const urlParams = new URLSearchParams(window.location.search);
         const oauthCode = urlParams.get('code');
-        const returnState = urlParams.get('state'); // <-- Catch the breadcrumb from Discord
 
         // 1. If returning from Discord with an authentication code
         if (oauthCode) {
-            // Clean up both the code and the state query strings immediately
+            // Clean the URL immediately to prevent Turbo from caching the code
             window.history.replaceState({}, document.title, window.location.pathname);
             
-            // Pass the state down to the processor
-            await processOAuthCallback(oauthCode, returnState); 
+            await processOAuthCallback(oauthCode); 
             return;
         }
 
@@ -66,7 +64,7 @@
         applyAuthUIState(cachedRole, cachedUser, cachedAvatar);
     }
 
-    async function processOAuthCallback(code, returnState) {
+    async function processOAuthCallback(code) {
         const loginBtn = document.getElementById('discord-login-btn');
         if (loginBtn) loginBtn.textContent = 'Decrypting Intel...';
 
@@ -90,10 +88,19 @@
 
             applyAuthUIState(data.role, data.username, data.avatar);
 
-            // --- BULLETPROOF TELEPORT NAVIGATION ---
-            // If Discord handed back a path, and it isn't just the index page, teleport them
-            if (returnState && returnState !== '/' && returnState !== window.location.pathname) {
-                window.location.replace(returnState); 
+            // --- TURBO-NATIVE TELEPORT NAVIGATION ---
+            const returnPath = localStorage.getItem('auth-return-path');
+            
+            // Ensure a path exists and we aren't already on it
+            if (returnPath && returnPath !== '/' && returnPath !== '/index.html' && returnPath !== window.location.pathname) {
+                localStorage.removeItem('auth-return-path'); // Wipe the breadcrumb
+                
+                // If Turbo is active, use its native router. Otherwise, fallback to standard JS.
+                if (window.Turbo) {
+                    window.Turbo.visit(returnPath, { action: 'replace' });
+                } else {
+                    window.location.replace(returnPath); 
+                }
             }
 
         } catch (error) {
@@ -134,12 +141,13 @@
     }
 
     window.triggerDiscordLogin = function() {
-        // Capture exact current location
-        const currentPath = window.location.pathname + window.location.hash;
+        // Drop a bulletproof localStorage breadcrumb before we leave
+        localStorage.setItem('auth-return-path', window.location.pathname + window.location.hash);
         
-        // Build the URL with the &state= parameter
-        const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify&state=${encodeURIComponent(currentPath)}`;
+        // Build the clean Discord Auth URL
+        const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify`;
         
+        // We use standard location.href here to intentionally break out of the Turbo ecosystem
         window.location.href = discordAuthUrl;
     };
 
