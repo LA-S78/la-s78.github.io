@@ -755,12 +755,57 @@ footer {
   border-color: var(--accent-color);
 }
 
+/* vercel test begin */
+/* 1. The Core Lock Filter */
+.content-locked {
+  /* The visual blur - 12px is usually the sweet spot so you can't read headers */
+  filter: blur(12px); 
+  
+  /* CRITICAL: Stops users from clicking hidden links or buttons underneath */
+  pointer-events: none; 
+  
+  /* CRITICAL: Stops users from hitting Ctrl+A and copying the text anyway */
+  user-select: none;    
+  
+  /* Dims the background slightly to make your login button pop */
+  opacity: 0.3;         
+}
+
+/* 2. The Smooth Reveal Transition */
+/* When main.js removes the .content-locked class, this makes it fade in beautifully */
+#gated-content {
+  transition: filter 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+/* 3. The Login Button Styling (Optional, but matches your test layout) */
+.profile-card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0 40px 0;
+}
+
+.login-button {
+  background-color: #5865F2; /* Official Discord Blurple */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 14px rgba(88, 101, 242, 0.3);
+}
+/*vercel test end*/
+
 .img-grid {
   display: grid;
   grid-template-columns: 6fr 4fr;
   gap: 0.5rem;
   align-items: center;
 }
+
 
 
 dialog::backdrop {

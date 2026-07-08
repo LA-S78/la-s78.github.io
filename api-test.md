@@ -3,7 +3,7 @@ layout: default
 title: "Top-Secret Alliance Intel"
 permalink: /api-test/
 ---
-
+<section class="content-pane">
 <!-- 1. The Dynamic User Profile Card Profile Component -->
 <div id="ui-profile-card" class="profile-card-wrapper">
     <!-- main.js will inject your avatar & username here if logged in -->
@@ -25,3 +25,4 @@ permalink: /api-test/
         <strong>Current Command Notice:</strong> To claim a Top 3 rank, contenders must surpass a current holder’s Might during Alliance Duel Days 3–5 of Kingdom War Week 1.
     </blockquote>
 </div>
+</section>
