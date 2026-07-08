@@ -21,9 +21,9 @@ lang: "en"
     <h2>🔒 Decrypted Title</h2>
     <p>If you can see this text without logging in, I broke something...</p>
     
-    <div class="welcome-banner">
-    <h2>Welcome back, <span id="ui-username">Commander</span>!</h2>
-    <p>Status: <strong id="ui-rank">Unverified</strong> of <strong id="ui-alliance">the Wastelands</strong>.</p>
+<div class="welcome-banner">
+<h2>Welcome back, <span id="ui-username">Commander</span>!</h2>
+<p>Status: <strong id="ui-rank">Unverified</strong> of <strong id="ui-alliance">the Wastelands</strong>.</p>
 </div>
 </div>
 </section>

@@ -60,8 +60,9 @@
         const cachedRole = localStorage.getItem('auth-role') || 'public';
         const cachedUser = localStorage.getItem('auth-username');
         const cachedAvatar = localStorage.getItem('auth-avatar');
+        const cachedAlliance = localStorage.getItem('auth-alliance');
 
-        applyAuthUIState(cachedRole, cachedUser, cachedAvatar);
+        applyAuthUIState(cachedRole, cachedUser, cachedAvatar, cachedAlliance);
     }
 
     async function processOAuthCallback(code) {
