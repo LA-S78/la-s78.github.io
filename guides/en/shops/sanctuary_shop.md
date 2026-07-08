@@ -7,6 +7,8 @@ guide_id: "sanctuary_shop"
 nav_links:
   - name_key: "sanctuary_shop_explanation"
     url: "#explanation"
+  - name_key: "sanctuary_shop_priority"
+    url: "#priority"
   - name_key: "sanctuary_shop_extra"
     url: "#extra"
 ---
