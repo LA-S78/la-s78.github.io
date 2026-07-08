@@ -11,6 +11,8 @@ nav_links:
     url: "#priority"
   - name_key: "sanctuary_shop_extra"
     url: "#extra"
+dialogs:
+  - dialogs/guides/shops/sanctuary_shop.html
 ---
 
 {% for pane in site.guide_panes %}
