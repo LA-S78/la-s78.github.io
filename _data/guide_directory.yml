@@ -54,6 +54,9 @@ events:
       <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
   - key: "scramble"
     url: /LANG_CODE/guides/scramble.html
+    icon: |
+      <path d="M2 18l2-10 4 5 4-9 4 9 4-5 2 10H2z" />
+      <path d="M4 14h16" />
   - key: "canyon"
     url: /LANG_CODE/guides/canyon.html
     status: unavailable
