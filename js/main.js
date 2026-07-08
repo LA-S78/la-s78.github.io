@@ -1,11 +1,17 @@
 /**
  * ----------------------------------------------------
- * LAST ASYLUM COMPENDIUM: MAIN ENGINE (REFACTORED)
+ * LAST ASYLUM COMPENDIUM: MAIN ENGINE (REFACTORED + AUTH)
  * ----------------------------------------------------
  */
 (() => {
     let scrollObserver = null;
     let isNewNavigation = false;
+
+    // --- AUTHENTICATION CONFIGURATION ---
+    const AUTH_CONFIG = {
+        clientId: '1524254079235391558', // Replace with your actual Discord Application Client ID
+        redirectUri: window.location.origin + '/' // Automatically targets your current domain root
+    };
 
     // --- THE THEME DICTATOR ---
     const themeColors = {
@@ -36,9 +42,109 @@
 
     // --- Sub-Modules ---
 
+    // --- AUTHENTICATION GATEKEEPER ---
+    async function initAuthentication() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const oauthCode = urlParams.get('code');
+
+        // 1. If returning from Discord with an authentication code
+        if (oauthCode) {
+            // Clean up the URL query strings immediately so the user can bookmark/refresh safely
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+            
+            await processOAuthCallback(oauthCode);
+            return;
+        }
+
+        // 2. Otherwise, instantly restore cached session identities on page transition
+        const cachedRole = localStorage.getItem('auth-role') || 'public';
+        const cachedUser = localStorage.getItem('auth-username');
+        const cachedAvatar = localStorage.getItem('auth-avatar');
+
+        applyAuthUIState(cachedRole, cachedUser, cachedAvatar);
+    }
+
+    async function processOAuthCallback(code) {
+        const loginBtn = document.getElementById('discord-login-btn');
+        if (loginBtn) loginBtn.textContent = 'Decrypting Intel...';
+
+        try {
+            // Send the code directly to your Vercel serverless function endpoint
+            const response = await fetch('/api/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    code: code,
+                    redirectUri: AUTH_CONFIG.redirectUri
+                })
+            });
+
+            if (!response.ok) throw new Error('Authentication handshake rejected.');
+
+            const data = await response.json(); // Expects: { role, username, avatar }
+
+            // Save credentials locally inside user's client browser space
+            localStorage.setItem('auth-role', data.role);
+            localStorage.setItem('auth-username', data.username);
+            localStorage.setItem('auth-avatar', data.avatar);
+
+            applyAuthUIState(data.role, data.username, data.avatar);
+
+        } catch (error) {
+            console.error('Auth Error:', error);
+            const errorBanner = document.getElementById('gate-error');
+            if (errorBanner) {
+                errorBanner.textContent = '❌ Decryption Failed. Check your connection or alliance status.';
+                errorBanner.style.display = 'block';
+            }
+            if (loginBtn) loginBtn.textContent = 'Log In via Discord';
+        }
+    }
+
+    function applyAuthUIState(role, username, avatar) {
+        const container = document.body;
+        
+        // Wipe existing structural role wrappers
+        container.classList.remove('role-public', 'role-member', 'role-leadership');
+        
+        // Inject tiered access visibility classes
+        if (role === 'leadership') {
+            container.classList.add('role-leadership', 'role-member');
+        } else if (role === 'member') {
+            container.classList.add('role-member');
+        } else {
+            container.classList.add('role-public');
+        }
+
+        // Update profile component displays across layouts if they exist
+        const profileContainer = document.getElementById('ui-profile-card');
+        if (profileContainer && username) {
+            profileContainer.innerHTML = `
+                <div class="user-badge">
+                    <img src="${avatar}" class="user-avatar" alt="Profile">
+                    <span class="user-name">${username}</span>
+                    <span class="user-role-tag">${role.toUpperCase()}</span>
+                    <button id="discord-logout-btn" class="logout-link">Log Out</button>
+                </div>
+            `;
+        }
+    }
+
+    window.triggerDiscordLogin = function() {
+        const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify`;
+        window.location.href = discordAuthUrl;
+    };
+
+    window.triggerLogout = function() {
+        localStorage.removeItem('auth-role');
+        localStorage.removeItem('auth-username');
+        localStorage.removeItem('auth-avatar');
+        window.location.reload();
+    };
+
+    // --- THEME ENGINE ---
     function applyTheme(themeName) {
         const root = document.documentElement;
-        
         root.setAttribute('data-theme', themeName);
         localStorage.setItem('site-theme', themeName);
     }
@@ -287,6 +393,7 @@
 
     // --- MASTER INITIALIZER ---
     function initApp() {
+        initAuthentication(); // Fires context rendering checks instantly on document lifecycle
         highlightCurrentSurvivalBattle();
         initScrollObserver();
         initAnchorScrolling();
@@ -308,14 +415,21 @@
     });
 
     document.addEventListener('click', (e) => {
+        // Theme button click tracking
         const toggleBtn = e.target.closest('#theme-toggle');
-        if (!toggleBtn) return;
+        if (toggleBtn) {
+            const themes = ['default', 'sanctuary', 'miasma'];
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'default';
+            let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
+            applyTheme(themes[nextIndex]);
+            return;
+        }
 
-        const themes = ['default', 'sanctuary', 'miasma'];
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'default';
-        let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
-        
-        applyTheme(themes[nextIndex]);
+        // Global intercept for dynamic logout link injection
+        const logoutBtn = e.target.closest('#discord-logout-btn');
+        if (logoutBtn) {
+            window.triggerLogout();
+        }
     });
 
     window.scrollPinned = function(direction) {

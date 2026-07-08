@@ -1,21 +1,24 @@
-name: Build Multilingual Site
+name: Build and Deploy Multilingual Site
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Pull down the repository source code
       - uses: actions/checkout@v5
 
+      # Step 2: Set up the Ruby environment for Jekyll compilation
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
           bundler-cache: true
           
+      # Step 3: Run your complex multi-pass compilation engine
       - name: Build All Languages
         env:
           JEKYLL_ENV: production
@@ -32,10 +35,11 @@ jobs:
             bundle exec jekyll build --config _config.yml,_configs/_config_$lang.yml --destination _site/$lang
           done
           
-          # 3. Copy static assets to the root (they might have been moved/overwritten)
+          # 3. Copy static assets and backend endpoints to the compiled root
           cp -r images _site/
           cp -r css _site/
           cp -r js _site/
+          cp -r api _site/  # Natively packages your verify.js bouncer script into Vercel's scope
           cp site.webmanifest _site/
           cp redirect.html _site/index.html
 
@@ -44,21 +48,21 @@ jobs:
           echo "Running Workbox injector..."
           ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
 
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: '_site/'
+      # Step 4: Install the deployment interface tooling
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+      # Step 5: Download authorization records directly from your Vercel project container
+      - name: Pull Vercel Environment Info
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      # Step 6: Push the fully engineered production build onto the live web
+      - name: Deploy Compiled Site to Vercel
+        # We target '_site/' as the working directory so Vercel builds the routes natively
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
