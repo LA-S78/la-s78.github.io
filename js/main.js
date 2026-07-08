@@ -9,8 +9,8 @@
 
     // --- AUTHENTICATION CONFIGURATION ---
     const AUTH_CONFIG = {
-        clientId: '1524254079235391558', // Replace with your actual Discord Application Client ID
-        redirectUri: window.location.origin + '/' // Automatically targets your current domain root
+        clientId: '1524254079235391558', 
+        redirectUri: window.location.origin + '/' 
     };
 
     // --- THE THEME DICTATOR ---
@@ -49,14 +49,12 @@
 
         // 1. If returning from Discord with an authentication code
         if (oauthCode) {
-            // Clean up the URL query strings immediately so the user can bookmark/refresh safely
             window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
-            
             await processOAuthCallback(oauthCode);
             return;
         }
 
-        // 2. Otherwise, instantly restore cached session identities on page transition
+        // 2. Otherwise, instantly restore cached session identities
         const cachedRole = localStorage.getItem('auth-role') || 'public';
         const cachedUser = localStorage.getItem('auth-username');
         const cachedAvatar = localStorage.getItem('auth-avatar');
@@ -69,7 +67,6 @@
         if (loginBtn) loginBtn.textContent = 'Decrypting Intel...';
 
         try {
-            // Send the code directly to your Vercel serverless function endpoint
             const response = await fetch('/api/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -81,14 +78,21 @@
 
             if (!response.ok) throw new Error('Authentication handshake rejected.');
 
-            const data = await response.json(); // Expects: { role, username, avatar }
+            const data = await response.json(); 
 
-            // Save credentials locally inside user's client browser space
             localStorage.setItem('auth-role', data.role);
             localStorage.setItem('auth-username', data.username);
             localStorage.setItem('auth-avatar', data.avatar);
 
             applyAuthUIState(data.role, data.username, data.avatar);
+
+            // --- TELEPORT NAVIGATION LOGIC ---
+            const returnPath = sessionStorage.getItem('auth-return-path');
+            
+            if (returnPath && returnPath !== window.location.pathname) {
+                sessionStorage.removeItem('auth-return-path'); 
+                window.location.replace(returnPath); 
+            }
 
         } catch (error) {
             console.error('Auth Error:', error);
@@ -104,10 +108,8 @@
     function applyAuthUIState(role, username, avatar) {
         const container = document.body;
         
-        // Wipe existing structural role wrappers
         container.classList.remove('role-public', 'role-member', 'role-leadership');
         
-        // Inject tiered access visibility classes
         if (role === 'leadership') {
             container.classList.add('role-leadership', 'role-member');
         } else if (role === 'member') {
@@ -116,7 +118,6 @@
             container.classList.add('role-public');
         }
 
-        // Update profile component displays across layouts if they exist
         const profileContainer = document.getElementById('ui-profile-card');
         if (profileContainer && username) {
             profileContainer.innerHTML = `
@@ -131,6 +132,9 @@
     }
 
     window.triggerDiscordLogin = function() {
+        // --- BREADCRUMB MEMORY DROP ---
+        sessionStorage.setItem('auth-return-path', window.location.pathname + window.location.hash);
+        
         const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify`;
         window.location.href = discordAuthUrl;
     };
@@ -381,10 +385,8 @@
     window.closeDialogGracefully = (dialog) => {
         if (!dialog) return;
         
-        // Trigger the fade-out animation
         dialog.classList.add('is-closing');
         
-        // Wait for the animation to finish before calling the native .close()
         dialog.addEventListener('animationend', () => {
             dialog.classList.remove('is-closing');
             dialog.close();
@@ -393,7 +395,7 @@
 
     // --- MASTER INITIALIZER ---
     function initApp() {
-        initAuthentication(); // Fires context rendering checks instantly on document lifecycle
+        initAuthentication(); 
         highlightCurrentSurvivalBattle();
         initScrollObserver();
         initAnchorScrolling();
@@ -415,7 +417,6 @@
     });
 
     document.addEventListener('click', (e) => {
-        // Theme button click tracking
         const toggleBtn = e.target.closest('#theme-toggle');
         if (toggleBtn) {
             const themes = ['default', 'sanctuary', 'miasma'];
@@ -425,7 +426,6 @@
             return;
         }
 
-        // Global intercept for dynamic logout link injection
         const logoutBtn = e.target.closest('#discord-logout-btn');
         if (logoutBtn) {
             window.triggerLogout();
