@@ -157,6 +157,8 @@ nav_anchors:
   cheese_cheese: "Cheese"
   cheese_strategy: "Strategy"
   cheese_rewards: "Rewards"
+  sanctuary_shop_explanation: "Explanation"
+  sanctuary_shop_extra: "Extra Bonuses"
 
 #search bar text
 search:

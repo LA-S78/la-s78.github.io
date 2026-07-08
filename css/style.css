@@ -755,6 +755,13 @@ footer {
   border-color: var(--accent-color);
 }
 
+.img-grid {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  gap: 24px;
+  align-items: center;
+}
+
 dialog::backdrop {
   background: rgba(10, 8, 7, 0.85);
   backdrop-filter: blur(8px);
