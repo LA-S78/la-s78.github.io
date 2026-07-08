@@ -1,16 +1,16 @@
 /**
  * ----------------------------------------------------
- * LAST ASYLUM COMPENDIUM: MAIN ENGINE (REFACTORED + AUTH)
+ * LAST ASYLUM COMPENDIUM: MAIN ENGINE (FINAL AUTH VERSION)
  * ----------------------------------------------------
  */
 (() => {
     let scrollObserver = null;
     let isNewNavigation = false;
 
-       // --- AUTHENTICATION CONFIGURATION ---
+    // --- AUTHENTICATION CONFIGURATION ---
     const AUTH_CONFIG = {
-        clientId: '1524254079235391558', 
-        redirectUri: window.location.origin + '/en/'
+        clientId: '1524254079235391558',
+        redirectUri: window.location.origin + '/en/' 
     };
 
     // --- THE THEME DICTATOR ---
@@ -40,23 +40,18 @@
 
     enforceThemeState();
 
-    // --- Sub-Modules ---
-
     // --- AUTHENTICATION GATEKEEPER ---
     async function initAuthentication() {
         const urlParams = new URLSearchParams(window.location.search);
         const oauthCode = urlParams.get('code');
 
-        // 1. If returning from Discord with an authentication code
         if (oauthCode) {
-            // Clean the URL immediately to prevent Turbo from caching the code
             window.history.replaceState({}, document.title, window.location.pathname);
-            
             await processOAuthCallback(oauthCode); 
             return;
         }
 
-        // 2. Otherwise, instantly restore cached session identities
+        // Restore session from cache
         const cachedRole = localStorage.getItem('auth-role') || 'public';
         const cachedUser = localStorage.getItem('auth-username');
         const cachedAvatar = localStorage.getItem('auth-avatar');
@@ -86,17 +81,16 @@
             localStorage.setItem('auth-role', data.role);
             localStorage.setItem('auth-username', data.username);
             localStorage.setItem('auth-avatar', data.avatar);
+            localStorage.setItem('auth-alliance', data.alliance);
 
-            applyAuthUIState(data.role, data.username, data.avatar);
+            applyAuthUIState(data.role, data.username, data.avatar, data.alliance);
 
             // --- TURBO-NATIVE TELEPORT NAVIGATION ---
             const returnPath = localStorage.getItem('auth-return-path');
             
-            // Ensure a path exists and we aren't already on it
             if (returnPath && returnPath !== '/' && returnPath !== '/index.html' && returnPath !== window.location.pathname) {
-                localStorage.removeItem('auth-return-path'); // Wipe the breadcrumb
+                localStorage.removeItem('auth-return-path'); 
                 
-                // If Turbo is active, use its native router. Otherwise, fallback to standard JS.
                 if (window.Turbo) {
                     window.Turbo.visit(returnPath, { action: 'replace' });
                 } else {
@@ -115,7 +109,7 @@
         }
     }
 
-    function applyAuthUIState(role, username, avatar) {
+    function applyAuthUIState(role, username, avatar, alliance) {
         const container = document.body;
         
         container.classList.remove('role-public', 'role-member', 'role-leadership');
@@ -128,17 +122,26 @@
             container.classList.add('role-public');
         }
 
-        // --- NEW: THE UNLOCK PROTOCOL ---
-        // If the user is verified as member or leadership, remove the blur filters
+        // --- UNLOCK PROTOCOL ---
         if (role === 'leadership' || role === 'member') {
             const lockedElements = document.querySelectorAll('.content-locked');
             lockedElements.forEach(el => el.classList.remove('content-locked'));
 
-            // Hide the main login button so it doesn't clutter the reading experience
             const loginBtn = document.getElementById('discord-login-btn');
             if (loginBtn) loginBtn.style.display = 'none';
         }
 
+        // --- INJECT GREETING DATA ---
+        const textUsername = document.getElementById('ui-username');
+        if (textUsername && username) textUsername.textContent = username;
+
+        const textRank = document.getElementById('ui-rank');
+        if (textRank && role) textRank.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+
+        const textAlliance = document.getElementById('ui-alliance');
+        if (textAlliance && alliance) textAlliance.textContent = alliance;
+
+        // Profile Card
         const profileContainer = document.getElementById('ui-profile-card');
         if (profileContainer && username) {
             profileContainer.innerHTML = `
@@ -153,13 +156,8 @@
     }
 
     window.triggerDiscordLogin = function() {
-        // Drop a bulletproof localStorage breadcrumb before we leave
         localStorage.setItem('auth-return-path', window.location.pathname + window.location.hash);
-        
-        // Build the clean Discord Auth URL
         const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify`;
-        
-        // We use standard location.href here to intentionally break out of the Turbo ecosystem
         window.location.href = discordAuthUrl;
     };
 
@@ -167,19 +165,18 @@
         localStorage.removeItem('auth-role');
         localStorage.removeItem('auth-username');
         localStorage.removeItem('auth-avatar');
+        localStorage.removeItem('auth-alliance');
         window.location.reload();
     };
 
-    // --- THEME ENGINE ---
+    // --- SUPPORTING MODULES (Theme, Scroll, Language, Search) ---
     function applyTheme(themeName) {
-        const root = document.documentElement;
-        root.setAttribute('data-theme', themeName);
+        document.documentElement.setAttribute('data-theme', themeName);
         localStorage.setItem('site-theme', themeName);
     }
 
     function initThemeToggle() {
-        const savedTheme = localStorage.getItem('site-theme') || 'default';
-        applyTheme(savedTheme);
+        applyTheme(localStorage.getItem('site-theme') || 'default');
     }
 
     function highlightCurrentSurvivalBattle() {
@@ -211,39 +208,22 @@
     }
 
     function scrollActiveNavIntoView(activeLink = null) {
-        if (!activeLink) {
-            activeLink = document.querySelector('.nav-wrapper .active') || document.querySelector('.anchor-link.active');
-        }
-        
+        if (!activeLink) activeLink = document.querySelector('.nav-wrapper .active') || document.querySelector('.anchor-link.active');
         if (!activeLink) return;
-        
         const navWrapper = activeLink.closest('.nav-wrapper');
         if (!navWrapper) return;
-
         const wrapperCenter = navWrapper.clientWidth / 2;
         const linkCenter = activeLink.offsetLeft + (activeLink.clientWidth / 2);
-        
-        navWrapper.scrollTo({
-            left: linkCenter - wrapperCenter,
-            behavior: 'smooth'
-        });
+        navWrapper.scrollTo({ left: linkCenter - wrapperCenter, behavior: 'smooth' });
     }
 
     function initScrollObserver() {
         const mainContainer = document.querySelector('main');
         const sections = document.querySelectorAll('.content-pane');
         const navLinks = document.querySelectorAll('.anchor-link');
-
         if (!mainContainer || sections.length === 0 || navLinks.length === 0) return;
-
         if (scrollObserver) scrollObserver.disconnect();
-
-        const observerOptions = {
-            root: mainContainer,
-            rootMargin: '-50px 0px -50% 0px',
-            threshold: 0
-        };
-
+        const observerOptions = { root: mainContainer, rootMargin: '-50px 0px -50% 0px', threshold: 0 };
         scrollObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -257,34 +237,23 @@
                 }
             });
         }, observerOptions);
-
         sections.forEach(section => scrollObserver.observe(section));
     }
 
     function initAnchorScrolling() {
         const navLinks = document.querySelectorAll('.anchor-link');
         const mainContainer = document.querySelector('main');
-
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
                 if (!href || !href.includes('#')) return;
-
                 const targetId = href.split('#')[1];
                 const targetElement = document.getElementById(targetId);
-
                 if (targetElement) {
                     e.preventDefault(); 
-                    
                     const anchorNav = document.querySelector('.anchor-nav');
                     const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
-                    
-                    const targetPosition = mainContainer.scrollTop + targetElement.getBoundingClientRect().top - offsetBoundary - 15;
-
-                    mainContainer.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
+                    mainContainer.scrollTo({ top: mainContainer.scrollTop + targetElement.getBoundingClientRect().top - offsetBoundary - 15, behavior: 'smooth' });
                 }
             });
         });
@@ -293,49 +262,32 @@
     function initSearchEngine() {
         const searchInput = document.getElementById('searchInput');
         if (!searchInput) return;
-
         searchInput.addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase();
             const items = document.querySelectorAll('.searchable-item');
-            items.forEach(item => {
-                item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
-            });
+            items.forEach(item => { item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none'; });
         });
     }
 
     function highlightActiveLanguage() {
         const langLinks = document.querySelectorAll('.dropdown-content a');
         if (langLinks.length === 0) return;
-
         const currentPath = window.location.pathname;
         const availableLangs = Array.from(langLinks).map(l => l.getAttribute('data-lang')).filter(Boolean);
         const pathParts = currentPath.split('/').filter(Boolean);
-
         let currentLang = "en";
         let langIndex = -1;
-
         for (let i = 0; i < pathParts.length; i++) {
-            if (availableLangs.includes(pathParts[i])) {
-                currentLang = pathParts[i];
-                langIndex = i;
-                break;
-            }
+            if (availableLangs.includes(pathParts[i])) { currentLang = pathParts[i]; langIndex = i; break; }
         }
-
         langLinks.forEach(link => {
             const targetLang = link.getAttribute('data-lang');
             if (!targetLang) return;
-
             link.classList.remove('lang-active');
             if (targetLang === currentLang) link.classList.add('lang-active');
-
             let newPathParts = [...pathParts];
-            if (langIndex !== -1) {
-                newPathParts[langIndex] = targetLang;
-            } else {
-                newPathParts.unshift(targetLang);
-            }
-
+            if (langIndex !== -1) newPathParts[langIndex] = targetLang;
+            else newPathParts.unshift(targetLang);
             link.href = '/' + newPathParts.join('/') + window.location.search + window.location.hash;
         });
     }
@@ -343,81 +295,30 @@
     function syncHeaderSubtitle() {
         const newSubtitle = document.getElementById('secret-subtitle-data');
         const headerSubtitle = document.getElementById('ui-subtitle');
-        
-        if (newSubtitle && headerSubtitle) {
-            headerSubtitle.textContent = newSubtitle.textContent;
-        }
+        if (newSubtitle && headerSubtitle) headerSubtitle.textContent = newSubtitle.textContent;
     }
 
     function initScrollMemory() {
         const scrollContainer = document.querySelector('main');
         if (!scrollContainer) return;
-
         const scrollKey = 'scroll-pos-' + window.location.pathname;
-
         requestAnimationFrame(() => {
-            if (isNewNavigation) {
-                scrollContainer.scrollTop = 0;
-                isNewNavigation = false;
-            } else {
+            if (isNewNavigation) { scrollContainer.scrollTop = 0; isNewNavigation = false; }
+            else {
                 const navType = performance.getEntriesByType("navigation")[0]?.type;
                 if (navType !== "navigate") {
                     const savedScroll = sessionStorage.getItem(scrollKey);
-                    if (savedScroll) {
-                        scrollContainer.scrollTop = parseInt(savedScroll, 10);
-                    }
+                    if (savedScroll) scrollContainer.scrollTop = parseInt(savedScroll, 10);
                 }
             }
         });
-
         let scrollTimeout;
         scrollContainer.addEventListener('scroll', () => {
             if (scrollTimeout) return;
-            scrollTimeout = setTimeout(() => {
-                sessionStorage.setItem(scrollKey, scrollContainer.scrollTop);
-                scrollTimeout = null;
-            }, 100);
+            scrollTimeout = setTimeout(() => { sessionStorage.setItem(scrollKey, scrollContainer.scrollTop); scrollTimeout = null; }, 100);
         }, { passive: true });
     }
 
-    // --- PWA UPDATE TOAST LOGIC ---
-    function showUpdateToast(newWorker) {
-        if (document.getElementById('pwa-update-toast')) return;
-
-        const t = window.pwaTranslations || {
-            toastMsg: 'New intel acquired.',
-            updateBtn: 'Update',
-            updating: 'Decrypting...'
-        };
-
-        const toast = document.createElement('div');
-        toast.id = 'pwa-update-toast';
-        toast.innerHTML = `
-            <span>${t.toastMsg}</span>
-            <button id="pwa-update-btn">${t.updateBtn}</button>
-        `;
-        document.body.appendChild(toast);
-
-        document.getElementById('pwa-update-btn').addEventListener('click', () => {
-            toast.classList.add('updating');
-            toast.querySelector('span').textContent = t.updating;
-            newWorker.postMessage({ type: 'SKIP_WAITING' });
-        });
-    }
-
-    // --- DIALOG GRACEFUL CLOSE ---
-    window.closeDialogGracefully = (dialog) => {
-        if (!dialog) return;
-        
-        dialog.classList.add('is-closing');
-        
-        dialog.addEventListener('animationend', () => {
-            dialog.classList.remove('is-closing');
-            dialog.close();
-        }, { once: true });
-    };
-
-    // --- MASTER INITIALIZER ---
     function initApp() {
         initAuthentication(); 
         highlightCurrentSurvivalBattle();
@@ -428,17 +329,12 @@
         initThemeToggle();
         syncHeaderSubtitle();
         initScrollMemory();
-        
         setTimeout(() => scrollActiveNavIntoView(), 100);
     }
 
     // --- EVENTS ---
-
     document.addEventListener("turbo:load", initApp);
-
-    document.addEventListener("turbo:visit", () => {
-        isNewNavigation = true;
-    });
+    document.addEventListener("turbo:visit", () => { isNewNavigation = true; });
 
     document.addEventListener('click', (e) => {
         const toggleBtn = e.target.closest('#theme-toggle');
@@ -449,11 +345,8 @@
             applyTheme(themes[nextIndex]);
             return;
         }
-
         const logoutBtn = e.target.closest('#discord-logout-btn');
-        if (logoutBtn) {
-            window.triggerLogout();
-        }
+        if (logoutBtn) window.triggerLogout();
     });
 
     window.scrollPinned = function(direction) {
@@ -462,31 +355,9 @@
         container.scrollBy({ left: direction === 'left' ? -300 : 300, behavior: 'smooth' });
     };
 
-    // --- PWA: SERVICE WORKER REGISTRATION ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').then(registration => {
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            showUpdateToast(newWorker);
-                        }
-                    });
-                });
-            }).catch(err => {
-                console.warn('Service Worker registration failed:', err);
-            });
-
-            let refreshing = false;
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                if (!refreshing) {
-                    refreshing = true;
-                    window.location.reload();
-                }
-            });
+            navigator.serviceWorker.register('/sw.js').catch(err => console.warn(err));
         });
     }
-
 })();
