@@ -46,11 +46,15 @@
     async function initAuthentication() {
         const urlParams = new URLSearchParams(window.location.search);
         const oauthCode = urlParams.get('code');
+        const returnState = urlParams.get('state'); // <-- Catch the breadcrumb from Discord
 
         // 1. If returning from Discord with an authentication code
         if (oauthCode) {
-            window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
-            await processOAuthCallback(oauthCode);
+            // Clean up both the code and the state query strings immediately
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // Pass the state down to the processor
+            await processOAuthCallback(oauthCode, returnState); 
             return;
         }
 
@@ -62,7 +66,7 @@
         applyAuthUIState(cachedRole, cachedUser, cachedAvatar);
     }
 
-    async function processOAuthCallback(code) {
+    async function processOAuthCallback(code, returnState) {
         const loginBtn = document.getElementById('discord-login-btn');
         if (loginBtn) loginBtn.textContent = 'Decrypting Intel...';
 
@@ -86,12 +90,10 @@
 
             applyAuthUIState(data.role, data.username, data.avatar);
 
-            // --- TELEPORT NAVIGATION LOGIC ---
-            const returnPath = sessionStorage.getItem('auth-return-path');
-            
-            if (returnPath && returnPath !== window.location.pathname) {
-                sessionStorage.removeItem('auth-return-path'); 
-                window.location.replace(returnPath); 
+            // --- BULLETPROOF TELEPORT NAVIGATION ---
+            // If Discord handed back a path, and it isn't just the index page, teleport them
+            if (returnState && returnState !== '/' && returnState !== window.location.pathname) {
+                window.location.replace(returnState); 
             }
 
         } catch (error) {
@@ -132,10 +134,12 @@
     }
 
     window.triggerDiscordLogin = function() {
-        // --- BREADCRUMB MEMORY DROP ---
-        sessionStorage.setItem('auth-return-path', window.location.pathname + window.location.hash);
+        // Capture exact current location
+        const currentPath = window.location.pathname + window.location.hash;
         
-        const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify`;
+        // Build the URL with the &state= parameter
+        const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify&state=${encodeURIComponent(currentPath)}`;
+        
         window.location.href = discordAuthUrl;
     };
 
