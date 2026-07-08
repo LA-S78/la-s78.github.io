@@ -114,7 +114,10 @@
         
         container.classList.remove('role-public', 'role-member', 'role-leadership');
         
-        if (role === 'leadership') {
+        // --- LOGIC: Treat R4/R5 as Leadership for CSS ---
+        const isLeadership = (role === 'R4' || role === 'R5' || role === 'leadership');
+        
+        if (isLeadership) {
             container.classList.add('role-leadership', 'role-member');
         } else if (role === 'member') {
             container.classList.add('role-member');
@@ -123,10 +126,9 @@
         }
 
         // --- UNLOCK PROTOCOL ---
-        if (role === 'leadership' || role === 'member') {
+        if (isLeadership || role === 'member') {
             const lockedElements = document.querySelectorAll('.content-locked');
             lockedElements.forEach(el => el.classList.remove('content-locked'));
-
             const loginBtn = document.getElementById('discord-login-btn');
             if (loginBtn) loginBtn.style.display = 'none';
         }
@@ -136,12 +138,12 @@
         if (textUsername && username) textUsername.textContent = username;
 
         const textRank = document.getElementById('ui-rank');
-        if (textRank && role) textRank.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+        if (textRank && role) textRank.textContent = role; // Already "R4" or "R5"
 
         const textAlliance = document.getElementById('ui-alliance');
         if (textAlliance && alliance) textAlliance.textContent = alliance;
 
-        // Profile Card
+        // Profile Card Injection
         const profileContainer = document.getElementById('ui-profile-card');
         if (profileContainer && username) {
             profileContainer.innerHTML = `

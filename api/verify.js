@@ -57,24 +57,27 @@ export default async function handler(req, res) {
     
     if (!userReq.ok) throw new Error('Failed to fetch user profile');
     const userData = await userReq.json();
-    const { id: discordUserId, username, avatar: avatarHash } = userData;
+    const { id: discordUserId, username } = userData;
 
-    const avatarUrl = avatarHash 
-      ? `https://cdn.discordapp.com/avatars/${discordUserId}/${avatarHash}.png`
-      : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(discordUserId) % 5n)}.png`;
-
-    // 3. Check Alliance Server Roles
+    // 3. Check Alliance Server Roles & Fetch Nickname
     const guildReq = await fetch(`https://discord.com/api/v10/guilds/${GUILD_ID}/members/${discordUserId}`, {
       headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` }
     });
 
     if (guildReq.status === 404) {
-      return res.status(200).json({ role: 'public', username, avatar: avatarUrl, message: 'Not in alliance server.' });
+      return res.status(200).json({ role: 'public', username, message: 'Not in alliance server.' });
     }
     if (!guildReq.ok) throw new Error('Failed to fetch guild roles');
     
     const guildData = await guildReq.json();
     const userRoles = guildData.roles || [];
+    
+    // PRIORITY: Server Nickname, then global username
+    const displayName = guildData.nick || username;
+    const avatarHash = guildData.user?.avatar || userData.avatar;
+    const avatarUrl = avatarHash 
+      ? `https://cdn.discordapp.com/avatars/${discordUserId}/${avatarHash}.png`
+      : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(discordUserId) % 5n)}.png`;
 
     // --- DYNAMIC ALLIANCE SCANNER ---
     let allianceName = 'Independent';
@@ -90,17 +93,16 @@ export default async function handler(req, res) {
         }
     }
 
-    // 4. Evaluate Tiers
+    // 4. Evaluate Tiers (Specific Ranks)
     let accessLevel = 'public';
-    const isLeadership = (R4_ROLE_ID && userRoles.includes(R4_ROLE_ID)) || (R5_ROLE_ID && userRoles.includes(R5_ROLE_ID));
-
-    if (isLeadership) accessLevel = 'leadership';
+    if (R5_ROLE_ID && userRoles.includes(R5_ROLE_ID)) accessLevel = 'R5';
+    else if (R4_ROLE_ID && userRoles.includes(R4_ROLE_ID)) accessLevel = 'R4';
     else if (MEMBER_ROLE_ID && userRoles.includes(MEMBER_ROLE_ID)) accessLevel = 'member';
     else if (!MEMBER_ROLE_ID && userRoles.length > 0) accessLevel = 'member';
 
     return res.status(200).json({ 
         role: accessLevel, 
-        username, 
+        username: displayName, 
         avatar: avatarUrl,
         alliance: allianceName 
     });
