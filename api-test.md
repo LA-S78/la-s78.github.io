@@ -1,7 +1,8 @@
 ---
 layout: default
-title: "Top-Secret Alliance Intel"
+page_key: "api-test"
 permalink: /api-test/
+lang: "en"
 ---
 <section class="content-pane private-grid">
 <div>

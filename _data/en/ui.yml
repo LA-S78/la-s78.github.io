@@ -54,6 +54,10 @@ pages:
   alliance:
     title: "Alliance"
     subtitle: "Alliance & Diplomacy"
+  #debug page
+  api-test:
+    title: "Top-Secret Alliance Intel"
+    subtitle: "Top-Secret Alliance Intel"
   guide_panes:
     heroes:
       title: "Heroes & Builds"
