@@ -7,10 +7,10 @@
     let scrollObserver = null;
     let isNewNavigation = false;
 
-    // --- AUTHENTICATION CONFIGURATION ---
+       // --- AUTHENTICATION CONFIGURATION ---
     const AUTH_CONFIG = {
-        clientId: '1524254079235391558', // Replace with your actual Discord Application Client ID
-        redirectUri: window.location.origin + '/' // Automatically targets your current domain root
+        clientId: '1524254079235391558', 
+        redirectUri: window.location.origin + '/en/'
     };
 
     // --- THE THEME DICTATOR ---
