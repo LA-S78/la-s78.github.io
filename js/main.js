@@ -161,29 +161,25 @@
     }
 
     // --- NEW: DYNAMIC ALLIANCE HIGHLIGHTING ---
-    function highlightPlayerAlliance() {
-        const table = document.getElementById('nap-alliance-table');
+    function highlightAllianceRow(tableId) {
+        const table = document.getElementById(tableId);
         const playerAlliance = localStorage.getItem('auth-alliance');
 
         if (!table || !playerAlliance) return;
 
-        // Helper to strip diacritics and lowercase the string
         const normalize = (str) => {
             return str
                 .toLowerCase()
-                .normalize("NFD") // Decompose combined characters
-                .replace(/[\u0300-\u036f]/g, ""); // Remove diacritics
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
         };
 
         const normalizedPlayerAlliance = normalize(playerAlliance);
 
         const rows = table.querySelectorAll('tr');
         rows.forEach(row => {
-            // Normalize row text to match the alliance string
             if (normalize(row.textContent.trim()) === normalizedPlayerAlliance) {
                 row.classList.add('highlight-alliance');
-            } else {
-                row.classList.remove('highlight-alliance');
             }
         });
     }
@@ -365,7 +361,8 @@
     function initApp() {
         initAuthentication(); 
         highlightCurrentSurvivalBattle();
-        highlightPlayerAlliance(); // Added here
+        highlightAllianceRow('nap-alliance-table');
+        highlightAllianceRow('nap-ranks-table');
         initScrollObserver();
         initAnchorScrolling();
         initSearchEngine();
