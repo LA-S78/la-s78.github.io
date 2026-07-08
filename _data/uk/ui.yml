@@ -107,6 +107,12 @@ pages:
     t10:
       title: "Гайд по T10"
       subtitle: "Вимоги Т10"
+    scramble:
+      title: "Королівська сутичка"
+      subtitle: "Королівська сутичка"
+    cheese:
+      title: "Сирна пастка"
+      subtitle: "Сирна пастка"
 
 nav_anchors:
   server_rules: "Правила сервера"
@@ -137,6 +143,14 @@ nav_anchors:
   sanctuary_chart: "Таблиця"
   sanctuary_goals: "Цілі"
   sanctuary_efficiency: "Ефективність"
+  #royal scramble
+  scramble_event: "Подія"
+  scramble_points: "Очки"
+  #cheese trap
+  cheese_event: "Подія"
+  cheese_cheese: "Сир"
+  cheese_strategy: "Стратегія"
+  cheese_rewards: "Нагороди"
 
 search:
   guides: "Пошук по гайдах..."

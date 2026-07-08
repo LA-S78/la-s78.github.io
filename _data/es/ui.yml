@@ -107,6 +107,12 @@ pages:
     t10:
       title: "Guía T10"
       subtitle: "Requisitos T10"
+    scramble:
+      title: "Pelea Real"
+      subtitle: "Pelea Real"
+    cheese:
+      title: "Trampa de Queso"
+      subtitle: "Trampa de Queso"
 
 nav_anchors:
   server_rules: "Reglas del Servidor"
@@ -137,6 +143,14 @@ nav_anchors:
   sanctuary_chart: "Tabla"
   sanctuary_goals: "Objetivos"
   sanctuary_efficiency: "Eficiencia"
+  #royal scramble
+  scramble_event: "Evento"
+  scramble_points: "Puntos"
+  #cheese trap
+  cheese_event: "Evento"
+  cheese_cheese: "Queso"
+  cheese_strategy: "Estrategia"
+  cheese_rewards: "Recompensas"
 
 search:
   guides: "Buscar guías..."

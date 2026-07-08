@@ -115,6 +115,9 @@ pages:
     scramble:
       title: "Royal Scramble"
       subtitle: "Royal Scramble"
+    cheese:
+      title: "Cheese Trap"
+      subtitle: "Cheese Trap"
 
 #navigation bar text
 nav_anchors:

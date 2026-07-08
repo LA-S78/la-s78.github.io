@@ -107,6 +107,12 @@ pages:
     t10:
       title: "Гайд по T10"
       subtitle: "Требования Т10"
+    scramble:
+      title: "Королевская схватка"
+      subtitle: "Королевская схватка"
+    cheese:
+      title: "Сырная ловушка"
+      subtitle: "Сырная ловушка"
 
 nav_anchors:
   server_rules: "Правила сервера"
@@ -137,6 +143,14 @@ nav_anchors:
   sanctuary_chart: "Таблица"
   sanctuary_goals: "Цели"
   sanctuary_efficiency: "Эффективность"
+  #royal scramble
+  scramble_event: "Событие"
+  scramble_points: "Очки"
+  #cheese trap
+  cheese_event: "Событие"
+  cheese_cheese: "Сыр"
+  cheese_strategy: "Стратегия"
+  cheese_rewards: "Награды"
 
 search:
   guides: "Поиск по гайдам..."

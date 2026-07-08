@@ -107,6 +107,12 @@ pages:
     t10:
       title: "Guida T10"
       subtitle: "Requisiti T10"
+    scramble:
+      title: "Mischia Reale"
+      subtitle: "Mischia Reale"
+    cheese:
+      title: "Trappola di Formaggio"
+      subtitle: "Trappola di Formaggio"
 
 nav_anchors:
   server_rules: "Regole Server"
@@ -137,6 +143,14 @@ nav_anchors:
   sanctuary_chart: "Tabella"
   sanctuary_goals: "Obiettivi"
   sanctuary_efficiency: "Efficienza"
+  #royal scramble
+  scramble_event: "Evento"
+  scramble_points: "Punti"
+  #cheese trap
+  cheese_event: "Evento"
+  cheese_cheese: "Formaggio"
+  cheese_strategy: "Strategia"
+  cheese_rewards: "Ricompense"
 
 search:
   guides: "Cerca nelle guide..."

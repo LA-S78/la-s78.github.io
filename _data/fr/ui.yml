@@ -107,6 +107,12 @@ pages:
     t10:
       title: "Guide T10"
       subtitle: "Prérequis T10"
+    scramble:
+      title: "Mêlée Royale"
+      subtitle: "Mêlée Royale"
+    cheese:
+      title: "Piège à Fromage"
+      subtitle: "Piège à Fromage"
 
 nav_anchors:
   server_rules: "Règles du Serveur"
@@ -137,6 +143,14 @@ nav_anchors:
   sanctuary_chart: "Tableau"
   sanctuary_goals: "Objectifs"
   sanctuary_efficiency: "Efficacité"
+  #royal scramble
+  scramble_event: "Événement"
+  scramble_points: "Points"
+  #cheese trap
+  cheese_event: "Événement"
+  cheese_cheese: "Fromage"
+  cheese_strategy: "Stratégie"
+  cheese_rewards: "Récompenses"
 
 search:
   guides: "Rechercher dans les guides..."

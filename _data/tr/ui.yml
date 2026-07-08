@@ -107,6 +107,12 @@ pages:
     t10:
       title: "T10 Rehberi"
       subtitle: "T10 Gereksinimleri"
+    scramble:
+      title: "Kraliyet Mücadelesi"
+      subtitle: "Kraliyet Mücadelesi"
+    cheese:
+      title: "Peynir Tuzağı"
+      subtitle: "Peynir Tuzağı"
 
 nav_anchors:
   server_rules: "Sunucu Kuralları"
@@ -137,6 +143,14 @@ nav_anchors:
   sanctuary_chart: "Tablo"
   sanctuary_goals: "Hedefler"
   sanctuary_efficiency: "Verimlilik"
+  #royal scramble
+  scramble_event: "Etkinlik"
+  scramble_points: "Puanlar"
+  #cheese trap
+  cheese_event: "Etkinlik"
+  cheese_cheese: "Peynir"
+  cheese_strategy: "Strateji"
+  cheese_rewards: "Ödüller"
 
 search:
   guides: "Rehberlerde ara..."

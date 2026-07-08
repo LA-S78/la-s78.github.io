@@ -107,6 +107,12 @@ pages:
     t10:
       title: "T10-Leitfaden"
       subtitle: "T10-Anforderungen"
+    scramble:
+      title: "Königliches Gerangel"
+      subtitle: "Königliches Gerangel"
+    cheese:
+      title: "Käsefalle"
+      subtitle: "Käsefalle"
 
 nav_anchors:
   server_rules: "Serverregeln"
@@ -137,6 +143,14 @@ nav_anchors:
   sanctuary_chart: "Tabelle"
   sanctuary_goals: "Ziele"
   sanctuary_efficiency: "Effizienz"
+  #royal scramble
+  scramble_event: "Event"
+  scramble_points: "Punkte"
+  #cheese trap
+  cheese_event: "Event"
+  cheese_cheese: "Käse"
+  cheese_strategy: "Strategie"
+  cheese_rewards: "Belohnungen"
 
 search:
   guides: "Guides durchsuchen..."
