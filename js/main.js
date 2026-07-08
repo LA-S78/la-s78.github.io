@@ -127,6 +127,17 @@
             container.classList.add('role-public');
         }
 
+        // --- NEW: THE UNLOCK PROTOCOL ---
+        // If the user is verified as member or leadership, remove the blur filters
+        if (role === 'leadership' || role === 'member') {
+            const lockedElements = document.querySelectorAll('.content-locked');
+            lockedElements.forEach(el => el.classList.remove('content-locked'));
+
+            // Hide the main login button so it doesn't clutter the reading experience
+            const loginBtn = document.getElementById('discord-login-btn');
+            if (loginBtn) loginBtn.style.display = 'none';
+        }
+
         const profileContainer = document.getElementById('ui-profile-card');
         if (profileContainer && username) {
             profileContainer.innerHTML = `
