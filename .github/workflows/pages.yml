@@ -82,7 +82,7 @@ jobs:
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
           else
-            vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+            vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/ --alias dev.la-s78.app
           fi
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
