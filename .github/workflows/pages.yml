@@ -2,7 +2,7 @@ name: Build and Deploy Multilingual Site
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
 
 jobs:
   build-and-deploy:
@@ -18,7 +18,7 @@ jobs:
           
       - name: Build All Languages
         env:
-          JEKYLL_ENV: production
+          JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         run: |
           bundle exec jekyll build --config _config.yml --destination _site/
           
@@ -32,7 +32,20 @@ jobs:
           cp -r css _site/
           cp -r js _site/
           cp site.webmanifest _site/
+          
+          # Keeps your original language router going to Vercel
           cp redirect.html _site/index.html
+
+          # --- DYNAMIC DEV ENVIRONMENT CATCH-ALL INJECTION ---
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+            echo "Dev branch detected. Injecting global URL catch-all..."
+            cat js/dev-url-fixer.js >> _site/js/main.js
+            
+            # Ensure it is appended to localized subfolders too
+            for lang in en de es fr ru tr uk it; do
+              cat js/dev-url-fixer.js >> _site/$lang/js/main.js
+            done
+          fi
 
           # RUN WORKBOX BEFORE ADDING THE BACKEND API FOLDER
           echo "Running Workbox injector..."
@@ -41,17 +54,45 @@ jobs:
           # INJECT API SECRETS SAFELY OUTSIDE THE CACHE LOOP
           cp -r api _site/
 
+      # --- PREPARE ISOLATED GITHUB REDIRECT ---
+      - name: Prepare GitHub Pages Redirect Directory
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir _github_pages_site
+          # Grab migration.html instead so we don't conflict!
+          cp migration.html _github_pages_site/index.html
+
+      # --- VERCEL DEPLOYMENT PIPELINE ---
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
       - name: Pull Vercel Environment Info
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          else
+            vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          fi
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploy Compiled Site to Vercel
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+          else
+            vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+          fi
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      # --- DEPLOY REDIRECT EXCLUSIVELY TO GITHUB PAGES ---
+      - name: Deploy Redirect to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: _github_pages_site
+          clean: true
