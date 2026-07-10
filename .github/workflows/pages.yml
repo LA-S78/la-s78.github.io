@@ -60,9 +60,19 @@ jobs:
               
               (1...blocks.length).step(2) do |i|
                 header = blocks[i].strip
-                
                 block_content = blocks[i+1].gsub("\r\n", "\n").strip
                 next if block_content.empty?
+                
+                # --- DEFENSIVE VALIDATION LAYER ---
+                allowed_patterns = [
+                  /^page--\S+$/,
+                  /^collection--\S+--\d+$/,
+                  /^guide--\S+--\S+--\S+$/,
+                  /^pane--\S+--\S+--\S+--\d+--\S+$/
+                ]
+                unless allowed_patterns.any? { |p| header =~ p }
+                  raise "CRITICAL BUILD ERROR: Invalid header syntax [=== #{header} ===]. Allowed: page, collection, guide, or pane."
+                end
                 
                 parts = header.split("--")
                 type = parts[0].strip

@@ -9,7 +9,7 @@ GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
 API_KEY = ENV['GEMINI_API_KEY']
 
 def call_gemini_api(prompt)
-  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=#{API_KEY}")
+  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
   
   # Prepare the request body
