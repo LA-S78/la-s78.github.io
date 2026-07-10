@@ -12,13 +12,16 @@ def call_gemini_api(prompt)
   uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
   
-  # Prepare the request body
   body = {
     contents: [{ parts: [{ text: prompt }] }]
   }
 
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
+  
+  # --- INCREASE TIMEOUTS ---
+  http.open_timeout = 30 # Connection time
+  http.read_timeout = 300 # Wait time for AI to finish thinking (5 minutes)
   
   request = Net::HTTP::Post.new(uri.request_uri, header)
   request.body = body.to_json
