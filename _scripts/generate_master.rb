@@ -11,34 +11,48 @@ API_KEY = ENV['GEMINI_API_KEY']
 def call_gemini_api(prompt)
   uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
+  body = { contents: [{ parts: [{ text: prompt }] }] }
   
-  body = {
-    contents: [{ parts: [{ text: prompt }] }]
-  }
+  max_retries = 3
+  attempt = 0
+  
+  begin
+    attempt += 1
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.open_timeout = 30
+    http.read_timeout = 300
+    
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = body.to_json
+    
+    response = http.request(request)
+    
+    if response.code == '200'
+      data = JSON.parse(response.body)
+      return data.dig("candidates", 0, "content", "parts", 0, "text")
+      
+    elsif response.code == '429' || response.code == '503' # 429 = Rate Limit, 503 = Overloaded
+      raise "Rate limit/High demand hit."
+    else
+      raise "API Error (#{response.code}): #{response.body}"
+    end
 
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  
-  # --- INCREASE TIMEOUTS ---
-  http.open_timeout = 30 # Connection time
-  http.read_timeout = 300 # Wait time for AI to finish thinking (5 minutes)
-  
-  request = Net::HTTP::Post.new(uri.request_uri, header)
-  request.body = body.to_json
-  
-  response = http.request(request)
-  
-  if response.code == '200'
-    data = JSON.parse(response.body)
-    return data.dig("candidates", 0, "content", "parts", 0, "text")
-  else
-    raise "API Error (#{response.code}): #{response.body}"
+  rescue => e
+    if attempt <= max_retries
+      wait_time = 2 ** attempt # Exponential backoff: 2s, 4s, 8s
+      puts "⚠️ High demand detected. Retrying in #{wait_time}s... (Attempt #{attempt}/#{max_retries})"
+      sleep(wait_time)
+      retry
+    else
+      raise "Failed after #{max_retries} attempts: #{e.message}"
+    end
   end
 end
 
 files = Dir.glob("_source/*_en.md")
 
-Parallel.each(files, in_threads: 4) do |en_file|
+Parallel.each(files, in_threads: 2) do |en_file|
   begin
     base_name = File.basename(en_file, "_en.md")
     en_content = File.read(en_file)
