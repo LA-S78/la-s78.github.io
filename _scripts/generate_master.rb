@@ -9,7 +9,7 @@ API_KEY = ENV['GEMINI_API_KEY']
 LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
 
 def call_gemini_api(prompt)
-  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=#{API_KEY}")
+  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
   
@@ -93,8 +93,8 @@ files.each do |en_file|
       final_output << translated_chunk << "\n"
       
       # MANDATORY COOLDOWN: 5 seconds between languages to satisfy API pacing
-      puts "--> Cooldown: Waiting 5s to stay under rate limits..."
-      sleep(5) 
+      puts "--> Cooldown: Waiting 15s to stay under rate limits..."
+      sleep(15) 
     end
 
     File.write("_source/#{base_name}.md", final_output)
