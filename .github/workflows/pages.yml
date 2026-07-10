@@ -20,6 +20,31 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
+      # --- AI LOCALIZATION ENGINE ---
+      - name: AI Localization Engine
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if ls _source/*_en.md 1> /dev/null 2>&1; then
+            echo "Drafts detected. Running AI Localization..."
+            bundle exec ruby _plugins/generate_master.rb
+          else
+            echo "No English source drafts found. Skipping."
+          fi
+
+      # --- AI LOCALIZATION OUTPUT SYNC ---
+      - name: Commit AI-Generated Master Files
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          if git diff --quiet _source/; then
+            echo "No changes to commit."
+          else
+            git add _source/
+            git commit -m "Auto-generate master files from AI drafts [skip ci]"
+            git push
+          fi
+
       # --- LEVEL 3 AUTOMATION: BULLETPROOF SOURCE DEMULTIPLEXER ---
       - name: Demultiplex Unified Content Files
         run: |
