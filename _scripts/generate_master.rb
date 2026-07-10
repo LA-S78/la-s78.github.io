@@ -12,7 +12,7 @@ LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
 def call_gemini_api(prompt, lang)
   # Use 2.0-flash as it is more stable than the preview/3.5 models
   # Change the model path to the stable Flash-Lite model
-  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=#{API_KEY}")
+  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
   
