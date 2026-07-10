@@ -25,7 +25,7 @@ jobs:
       - name: Demultiplex Unified Content Files
         run: |
           ruby -r fileutils -e '
-            puts "Starting bulletproof token segregation engine..."
+            puts "Starting precise bulletproof token segregation engine..."
             
             Dir.glob("_source/*.md").each do |file_path|
               basename = File.basename(file_path, ".*")
@@ -37,7 +37,9 @@ jobs:
               
               (1...blocks.length).step(2) do |i|
                 header = blocks[i].strip
-                block_content = blocks[i+1].strip
+                
+                # Strip out hidden Windows carriage returns and trailing/leading whitespace before front-matter
+                block_content = blocks[i+1].gsub("\r\n", "\n").strip
                 next if block_content.empty?
                 
                 # Split structural elements safely using double dashes
@@ -83,7 +85,7 @@ jobs:
                   next
                 end
                 
-                # Create isolated folders and save the extracted files
+                # Create isolated folders and save files ensuring NO leading whitespace before front matter
                 FileUtils.mkdir_p(dest_dir)
                 File.write(dest_file, block_content)
                 puts "✅ Segregated -> #{dest_file}"
