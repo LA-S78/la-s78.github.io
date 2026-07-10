@@ -75,35 +75,40 @@ files.each do |en_file|
 
   final_output = front_matter
 
+  # 4. Process languages sequentially
   LANGUAGES.each do |lang|
-    puts "--> Processing #{base_name} [Lang: #{lang}] [Format: #{is_legacy ? 'Legacy' : 'XML'}]"
-    
-    prompt = <<~PROMPT
-      You are an expert localization engineer. Translate the content, preserving the structural schema.
+    if lang == 'en'
+      puts "--> Preserving English source (Skipping API)..."
+      final_output << "\n" << body_content
+    else
+      puts "--> Processing #{base_name} [Lang: #{lang}] [Format: #{is_legacy ? 'Legacy' : 'XML'}]"
       
-      CRITICAL SCHEMA RULES:
-      1. XML tags (<guide>, <pane>) are IMMUTABLE. Do NOT reformat these tags.
-      
-      2. ATTRIBUTES - DYNAMIC vs STATIC:
-         - DYNAMIC: You MUST update the 'lang' attribute to match the target language: '#{lang}'.
-         - STATIC: You are STRICTLY FORBIDDEN from changing the values of 'category', 'name', or 'section'. 
-           (e.g., If source is name="crystal-valley", target MUST be name="crystal-valley").
-      
-      3. YAML FRONT MATTER: Keep keys (e.g., 'parent_guide') exactly as provided.
-      
-      4. CONTENT ONLY: Only translate the readable text content outside of the XML tags and YAML blocks.
-      
-      5. GLOSSARY (Strictly enforce these terms):
-         #{GLOSSARY.to_json}
-      
-      6. INPUT CONTENT:
-         #{body_content}
-    PROMPT
+      prompt = <<~PROMPT
+        You are an expert localization engineer. Translate the following content into '#{lang}'.
+        
+        CRITICAL SCHEMA RULES (VIOLATION RESULTS IN BUILD FAILURE):
+        1. PRESERVE STRUCTURE: #{structure_instructions}
+        2. ATTRIBUTES - DYNAMIC vs STATIC:
+           - DYNAMIC: You MUST update the 'lang' attribute to match the target language: '#{lang}'.
+           - STATIC: You are STRICTLY FORBIDDEN from changing the values of 'category', 'name', or 'section'.
+             (e.g., name="crystal-valley" MUST stay name="crystal-valley").
+        3. YAML FRONT MATTER: 
+           - Protect these keys (DO NOT translate): 'title', 'subtitle', 'nav_id', 'parent_guide', 'lang', 'order', 'layout'.
+           - Keep all front-matter exactly as provided.
+        4. GLOSSARY (Strictly enforce these terms):
+           #{GLOSSARY.to_json}
+        5. CONTENT: Translate ONLY the readable text content outside of the XML tags and YAML blocks. DO NOT translate structural tags or identifiers.
+        
+        INPUT CONTENT:
+        #{body_content}
+      PROMPT
 
-    final_output << "\n" << call_gemini_api(prompt, lang) << "\n"
-    
-    puts "--> Cooldown: Waiting 20s..."
-    sleep(20) 
+      final_output << "\n" << call_gemini_api(prompt, lang) << "\n"
+      
+      # Mandatory cooldown to respect the 5 RPM limit
+      puts "--> Cooldown: Waiting 20s..."
+      sleep(20) 
+    end
   end
 
   File.write("_source/#{base_name}.md", final_output)
