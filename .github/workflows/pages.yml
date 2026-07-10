@@ -8,7 +8,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     
-    # Grant permissions to write the redirect index to the gh-pages branch
     permissions:
       contents: write
 
@@ -31,42 +30,35 @@ jobs:
               basename = File.basename(file_path, ".*")
               content = File.read(file_path)
               
-              # Split cleanly by the distinct header tag
               blocks = content.split(/^===\s*(\S+)\s*===/)
               next if blocks.length < 2
               
               (1...blocks.length).step(2) do |i|
                 header = blocks[i].strip
                 
-                # Strip out hidden Windows carriage returns and trailing/leading whitespace before front-matter
                 block_content = blocks[i+1].gsub("\r\n", "\n").strip
                 next if block_content.empty?
                 
-                # Split structural elements safely using double dashes
                 parts = header.split("--")
                 type = parts[0].strip
                 
                 case type
                 when "page"
-                  # Pattern: page--[filename]
                   filename = parts[1].strip
                   dest_dir = "."
                   dest_file = "#{dest_dir}/#{filename}.md"
                   
                 when "collection"
-                  # Pattern: collection--[collection-name]--[step]
                   collection_name = parts[1].strip
                   step = parts[2].strip
                   dest_dir = "collections/_#{collection_name}"
                   dest_file = "#{dest_dir}/#{step}-#{collection_name}.md"
                   
                 when "guide"
-                  # Pattern: guide--[lang]--[category]--[guide-name]
                   lang = parts[1].strip
                   category = parts[2].strip
                   guide_name = parts[3].strip
                   
-                  # Automatically inject lang variable if missing from front-matter
                   unless block_content =~ /^lang:\s*/
                     block_content = block_content.sub(/^---/, "---\nlang: #{lang}")
                   end
@@ -75,7 +67,6 @@ jobs:
                   dest_file = "#{dest_dir}/#{guide_name}.md"
                   
                 when "pane"
-                  # Pattern: pane--[lang]--[category]--[guide-name]--[step]--[pane-name]
                   lang = parts[1].strip
                   category = parts[2].strip
                   guide_name = parts[3].strip
@@ -90,9 +81,16 @@ jobs:
                   next
                 end
                 
-                # Create isolated folders and save files ensuring NO leading whitespace before front matter
+                if Dir.exist?(dest_dir)
+                  Dir.glob(File.join(dest_dir, "*")).each do |existing_file|
+                    if existing_file.downcase == dest_file.downcase
+                      File.delete(existing_file)
+                    end
+                  end
+                end
+                
                 FileUtils.mkdir_p(dest_dir)
-                File.write(dest_file, block_content)
+                File.write(dest_file, block_content + "\n")
                 puts "✅ Segregated -> #{dest_file}"
               end
             end
@@ -102,29 +100,25 @@ jobs:
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         run: |
-          # Create temporary pristine backups of all freshly segregated folders
+          # --- BUILD ISOLATION: PREVENT LANGUAGE CLOBBERING ---
           cp -r guides guides_backup
           cp -r collections/_guide_panes guide_panes_backup
 
-          # --- PASSPORT 1: ISOLATE & BUILD DEFAULT ROOT (ENGLISH) ---
           echo "Isolating English assets for primary root compilation..."
           find guides -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
           find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
           
           bundle exec jekyll build --config _config.yml --destination _site/
           
-          # --- PASSPORT 2: DYNAMIC REGIONAL ENVIRONMENT COMPILATIONS ---
           echo "Scanning for localized language configuration files..."
           for config_file in _configs/_config_*.yml; do
             [ -e "$config_file" ] || continue
             lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
             
-            # Reset directories back to pristine status from our backup
             rm -rf guides collections/_guide_panes
             cp -r guides_backup guides
             cp -r guide_panes_backup collections/_guide_panes
             
-            # Wipe away all other languages except the single target of this specific loop iteration
             find guides -mindepth 1 -maxdepth 1 -type d ! -name "$lang" -exec rm -rf {} +
             find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "$lang" -exec rm -rf {} +
             
@@ -132,21 +126,17 @@ jobs:
             bundle exec jekyll build --config _config.yml,"$config_file" --destination _site/$lang
           done
           
-          # Restore the workspace directory structure back to normal for subsequent workflow hooks
           rm -rf guides collections/_guide_panes
           mv guides_backup guides
           mv guide_panes_backup collections/_guide_panes
           
-          # Move FRONTEND assets into place
           cp -r images _site/
           cp -r css _site/
           cp -r js _site/
           cp site.webmanifest _site/
           
-          # Keeps your original language router going to Vercel
           cp redirect.html _site/index.html
 
-          # --- DYNAMIC DEV ENVIRONMENT CATCH-ALL INJECTION ---
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
             echo "Dev branch detected. Injecting global URL catch-all..."
             cat js/dev-url-fixer.js >> _site/js/main.js
@@ -162,11 +152,9 @@ jobs:
             done
           fi
 
-          # RUN WORKBOX BEFORE ADDING THE BACKEND API FOLDER
           echo "Running Workbox injector..."
           ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
           
-          # INJECT API SECRETS SAFELY OUTSIDE THE CACHE LOOP
           cp -r api _site/
 
       # --- DEBUGGING: UPLOAD COMPILED SITE ARTIFACT ---
@@ -177,15 +165,21 @@ jobs:
           path: _site/
           retention-days: 1
 
-      # --- PREPARE ISOLATED GITHUB REDIRECT ---
       - name: Prepare GitHub Pages Redirect Directory
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir _github_pages_site
-          # Grab migration.html instead so we don't conflict!
           cp migration.html _github_pages_site/index.html
 
       # --- VERCEL DEPLOYMENT PIPELINE ---
+      - name: Cache Vercel CLI State
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/com.vercel.cli
+          key: ${{ runner.os }}-vercel-${{ hashFiles('**/_site/**') }}
+          restore-keys: |
+            ${{ runner.os }}-vercel-
+
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
@@ -200,7 +194,6 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      # --- FIX: Force Vercel to recognize the compiled folder as the web root ---
       - name: Prepare Vercel Deployment Folder
         run: cp -r .vercel _site/
 
@@ -209,17 +202,13 @@ jobs:
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
           else
-            # 1. Capture the unique preview URL generated by Vercel
             DEPLOY_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/)
-            
-            # 2. Point your custom dev subdomain straight to that new URL
             vercel alias set "$DEPLOY_URL" dev.la-s78.app --token=${{ secrets.VERCEL_TOKEN }}
           fi
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      # --- DEPLOY REDIRECT EXCLUSIVELY TO GITHUB PAGES ---
       - name: Deploy Redirect to GitHub Pages
         if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
@@ -228,7 +217,6 @@ jobs:
           folder: _github_pages_site
           clean: true
 
-      # --- INSTANT DISCORD STATUS ALERTS ---
       - name: Notify Discord on Success
         if: success()
         run: |
