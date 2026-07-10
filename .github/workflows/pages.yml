@@ -50,19 +50,15 @@ jobs:
         run: |
           ruby -r fileutils -e '
             puts "Starting format-agnostic segregation engine..."
-            
             Dir.glob("_source/*.md").each do |file_path|
               content = File.read(file_path)
               
               # --- NORMALIZATION BRIDGE ---
               # Convert modern XML tags into legacy delimiters so the parser handles both.
-              # Example: <guide lang="en" category="events" name="crystal-valley"> 
-              # Becomes: === guide--en--events--crystal-valley ===
+              # Note: Using double quotes to avoid YAML escaping issues.
+              normalized_content = content.gsub(/<guide\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)">/, "=== guide--\\1--\\2--\\3 ===")
+              normalized_content = normalized_content.gsub(/<pane\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)"\s+section="([^"]+)">/, "=== pane--\\1--\\2--\\3--\\4 ===")
               
-              normalized_content = content.gsub(/<guide\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)">/, '=== guide--\1--\2--\3 ===')
-              normalized_content = normalized_content.gsub(/<pane\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)"\s+section="([^"]+)">/, '=== pane--\1--\2--\3--\4 ===')
-              
-              # Now process using the existing, proven logic
               blocks = normalized_content.split(/^===\s*(\S+)\s*===/)
               next if blocks.length < 2
               
@@ -88,17 +84,14 @@ jobs:
                 case type
                 when "page"
                   dest_file = "./#{parts[1].strip}.md"
-                  
                 when "collection"
                   dest_dir = "collections/_#{parts[1].strip}"
                   dest_file = "#{dest_dir}/#{parts[2].strip}-#{parts[1].strip}.md"
-                  
                 when "guide"
                   lang, cat, name = parts[1], parts[2], parts[3]
                   block_content = block_content.sub(/^---/, "---\nlang: #{lang}") unless block_content =~ /^lang:\s*/
                   dest_dir = "guides/#{lang}/#{cat}"
                   dest_file = "#{dest_dir}/#{name}.md"
-                  
                 when "pane"
                   lang, cat, name, step, pane = parts[1], parts[2], parts[3], parts[4], parts[5]
                   dest_dir = "collections/_guide_panes/#{lang}/#{cat}/#{name}"
