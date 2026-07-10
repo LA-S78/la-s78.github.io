@@ -57,15 +57,13 @@ files.each do |en_file|
   base_name = File.basename(en_file, "_en.md")
   full_content = File.read(en_file)
 
-  # Detect format
+  # 1. Detect format
   is_legacy = full_content.include?("===")
-  
-  # Define formatting instructions based on detection
   structure_instructions = is_legacy ? 
-    "- Legacy Delimiters: Use '=== guide--[lang]--[category]--[guide-name] ===' and '=== pane--[lang]--[category]--[guide-name]--[step]--[pane-name] ==='." :
-    "- XML Schema: Use '<guide lang=\"#{LANGUAGES.join('|')}\" category=\"[category]\" name=\"[guide-name]\">' and '<pane lang=\"#{LANGUAGES.join('|')}\" category=\"[category]\" name=\"[guide-name]\" section=\"[step]--[name]\">'."
+    "- Legacy Delimiters: Use '=== guide--[lang]--... ==='." :
+    "- XML Schema: Use '<guide lang=\"#{LANGUAGES.join('|')}\" ...>' and '<pane lang=\"#{LANGUAGES.join('|')}\" ...>'."
 
-  # Surgery: Extract Front Matter
+  # 2. Extract original front matter
   front_matter = ""
   body_content = full_content
   if full_content =~ /\A(---\s*\n.*?\n---\s*\n)/m
@@ -73,45 +71,46 @@ files.each do |en_file|
     body_content = full_content.sub(front_matter, "")
   end
 
-  final_output = front_matter
+  # We will build the master file string
+  full_master_file = ""
 
-  # 4. Process languages sequentially
+  # 3. Process languages
   LANGUAGES.each do |lang|
+    puts "--> Processing #{base_name} [Lang: #{lang}]"
+    
+    # DYNAMIC FRONT MATTER: Update the YAML language key
+    localized_front_matter = front_matter.dup
+    localized_front_matter.gsub!(/^lang:\s*["']?en["']?/, "lang: \"#{lang}\"")
+    
     if lang == 'en'
-      puts "--> Preserving English source (Skipping API)..."
-      final_output << "\n" << body_content
+      puts "--> Preserving English source..."
+      full_master_file << localized_front_matter << body_content << "\n"
     else
-      puts "--> Processing #{base_name} [Lang: #{lang}] [Format: #{is_legacy ? 'Legacy' : 'XML'}]"
-      
       prompt = <<~PROMPT
-        You are an expert localization engineer. Translate the following content into '#{lang}'.
+        You are an expert localization engineer. Translate the content, preserving the structural schema.
         
-        CRITICAL SCHEMA RULES (VIOLATION RESULTS IN BUILD FAILURE):
+        CRITICAL RULES:
         1. PRESERVE STRUCTURE: #{structure_instructions}
         2. ATTRIBUTES - DYNAMIC vs STATIC:
-           - DYNAMIC: You MUST update the 'lang' attribute to match the target language: '#{lang}'.
-           - STATIC: You are STRICTLY FORBIDDEN from changing the values of 'category', 'name', or 'section'.
-             (e.g., name="crystal-valley" MUST stay name="crystal-valley").
-        3. YAML FRONT MATTER: 
-           - Protect these keys (DO NOT translate): 'title', 'subtitle', 'nav_id', 'parent_guide', 'lang', 'order', 'layout'.
-           - Keep all front-matter exactly as provided.
-        4. GLOSSARY (Strictly enforce these terms):
-           #{GLOSSARY.to_json}
-        5. CONTENT: Translate ONLY the readable text content outside of the XML tags and YAML blocks. DO NOT translate structural tags or identifiers.
+           - DYNAMIC: You MUST update the 'lang' attribute to '#{lang}'.
+           - STATIC: You are FORBIDDEN from changing 'category', 'name', or 'section'.
+        3. YAML: Keep all keys (title, subtitle, etc.) exactly as provided.
+        4. CONTENT: Translate ONLY readable text outside tags/YAML. 
+        5. GLOSSARY: #{GLOSSARY.to_json}
         
-        INPUT CONTENT:
+        INPUT:
         #{body_content}
       PROMPT
 
-      final_output << "\n" << call_gemini_api(prompt, lang) << "\n"
+      # Append the localized header + the translated AI response
+      full_master_file << localized_front_matter << "\n" << call_gemini_api(prompt, lang) << "\n"
       
-      # Mandatory cooldown to respect the 5 RPM limit
       puts "--> Cooldown: Waiting 20s..."
       sleep(20) 
     end
   end
 
-  File.write("_source/#{base_name}.md", final_output)
+  File.write("_source/#{base_name}.md", full_master_file)
   File.delete(en_file)
   puts "✅ Generated: #{base_name}.md"
 end
