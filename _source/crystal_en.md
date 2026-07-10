@@ -1,14 +1,15 @@
-=== guide--en--events--crystal-valley ===
+<guide lang="en" category="events" name="crystal"> 
 ---
 layout: guides
 title: "Crystal Valley"
 subtitle: "Dominating the Crystal Valley"
 active_nav: guides
+guide_id: crystal
 lang: "en"
 ---
 Crystal Valley is a high-stakes PvP event where alliances compete to control resource nodes. Success requires coordination and active map management.
 
-=== pane--en--events--crystal-valley--01--objectives ===
+<pane lang="en" category="events" name="crystal" section="01--objectives"> 
 ---
 title: "Objectives"
 nav_id: "objectives"
@@ -23,7 +24,7 @@ The primary goal is to maintain control over the central crystals for as long as
 * **Defend:** Reinforce allies to prevent enemy incursions.
 * **Rotation:** Coordinate shifts to ensure 24/7 coverage.
 
-=== pane--en--events--crystal-valley--02--strategy ===
+<pane lang="en" category="events" name="crystal" section="02--strategy"> 
 ---
 title: "Strategy"
 nav_id: "strategy"

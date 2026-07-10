@@ -3,7 +3,6 @@ require 'uri'
 require 'json'
 require 'fileutils'
 
-# Force logs to output in real-time
 $stdout.sync = true
 
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
@@ -11,7 +10,6 @@ API_KEY = ENV['GEMINI_API_KEY']
 LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
 
 def call_gemini_api(prompt, lang)
-  # Using the highly efficient 3.1-flash-lite model
   uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
@@ -42,7 +40,6 @@ def call_gemini_api(prompt, lang)
 
   rescue => e
     if attempt <= max_retries
-      # Exponential backoff starting at 30s
       wait_time = (2 ** (attempt - 1)) * 30 
       puts "⚠️ #{e.message} Retrying in #{wait_time}s... (Attempt #{attempt}/#{max_retries})"
       sleep(wait_time)
@@ -53,7 +50,6 @@ def call_gemini_api(prompt, lang)
   end
 end
 
-# Process only the first pending file
 all_drafts = Dir.glob("_source/*_en.md")
 files = all_drafts.empty? ? [] : [all_drafts.first]
 
@@ -61,42 +57,46 @@ files.each do |en_file|
   base_name = File.basename(en_file, "_en.md")
   full_content = File.read(en_file)
 
-  # 1. Surgery: Extract Front Matter to preserve layout
+  # Detect format
+  is_legacy = full_content.include?("===")
+  
+  # Define formatting instructions based on detection
+  structure_instructions = is_legacy ? 
+    "- Legacy Delimiters: Use '=== guide--[lang]--[category]--[guide-name] ===' and '=== pane--[lang]--[category]--[guide-name]--[step]--[pane-name] ==='." :
+    "- XML Schema: Use '<guide lang=\"#{LANGUAGES.join('|')}\" category=\"[category]\" name=\"[guide-name]\">' and '<pane lang=\"#{LANGUAGES.join('|')}\" category=\"[category]\" name=\"[guide-name]\" section=\"[step]--[name]\">'."
+
+  # Surgery: Extract Front Matter
   front_matter = ""
   body_content = full_content
-  
   if full_content =~ /\A(---\s*\n.*?\n---\s*\n)/m
     front_matter = $1
     body_content = full_content.sub(front_matter, "")
   end
 
-  # Start the final file with the preserved layout
   final_output = front_matter
 
-  # 2. Process languages sequentially
   LANGUAGES.each do |lang|
-    puts "--> Processing #{base_name} [Lang: #{lang}]"
+    puts "--> Processing #{base_name} [Lang: #{lang}] [Format: #{is_legacy ? 'Legacy' : 'XML'}]"
     
     prompt = <<~PROMPT
       You are an expert localization engineer. Translate the following content into '#{lang}'.
       
-      1. GLOSSARY: #{GLOSSARY.to_json}
-      2. BLUEPRINT:
-         - Guide Gateway: === guide--#{lang}--[category]--[guide-name] ===
-         - Localized Pane: === pane--#{lang}--[category]--[guide-name]--[step]--[pane-name] ===
+      1. GLOSSARY (Strictly enforce these terms):
+         #{GLOSSARY.to_json}
       
-      3. TASK:
-         - Translate the content into #{lang}.
-         - Use the Blueprint rules for gateways and panes.
-         - Ensure the output is formatted in Markdown.
+      2. STRUCTURAL RULES (Do NOT translate these):
+         #{structure_instructions}
       
-      CONTENT:
-      #{body_content}
+      3. YAML FRONT MATTER (Strictly protect these keys):
+         - Do NOT translate keys: 'title', 'subtitle', 'nav_id', 'parent_guide', 'lang', 'order', 'layout'.
+         - Keep all front-matter exactly as provided.
+      
+      4. CONTENT:
+         #{body_content}
     PROMPT
 
     final_output << "\n" << call_gemini_api(prompt, lang) << "\n"
     
-    # Mandatory cooldown to respect the 5 RPM limit
     puts "--> Cooldown: Waiting 20s..."
     sleep(20) 
   end
