@@ -27,7 +27,7 @@ jobs:
         run: |
           if ls _source/*_en.md 1> /dev/null 2>&1; then
             echo "Drafts detected. Running AI Localization..."
-            bundle exec ruby _plugins/generate_master.rb
+            bundle exec ruby _scripts/generate_master.rb
           else
             echo "No English source drafts found. Skipping."
           fi

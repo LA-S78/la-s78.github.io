@@ -1,16 +1,25 @@
-require 'google_generative_ai'
+require 'gemini-ai'
 require 'json'
 require 'fileutils'
 require 'parallel'
 
 # Load Glossary
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
-CLIENT = Google::GenerativeAI::Client.new(api_key: ENV['GEMINI_API_KEY'])
+
+# Initialize the client
+# Ensure GEMINI_API_KEY is set in your environment variables
+client = Gemini.new(
+  credentials: {
+    service: 'generative-language-api',
+    api_key: ENV['GEMINI_API_KEY']
+  },
+  options: { model: 'gemini-1.5-flash' }
+)
 
 # Gather all English draft files
 files = Dir.glob("_source/*_en.md")
 
-# Process files in parallel to save time during build
+# Process files in parallel
 Parallel.each(files, in_threads: 4) do |en_file|
   puts "Processing #{en_file}..."
   
@@ -47,10 +56,20 @@ Parallel.each(files, in_threads: 4) do |en_file|
       #{en_content}
     PROMPT
 
-    response = CLIENT.generate_content(prompt)
+    # Call Gemini API
+    response = client.generate_content({ 
+      contents: [{ role: 'user', parts: [{ text: prompt }] }] 
+    })
+    
+    # Extract text from response
+    translated_text = response.dig("candidates", 0, "content", "parts", 0, "text")
+    
+    if translated_text.nil?
+      raise "API returned empty response: #{response}"
+    end
     
     # Save as Master File
-    File.write("_source/#{base_name}.md", response.text)
+    File.write("_source/#{base_name}.md", translated_text)
     puts "✅ Generated Master File: _source/#{base_name}.md"
     
     # Delete the draft to avoid reprocessing
@@ -59,6 +78,6 @@ Parallel.each(files, in_threads: 4) do |en_file|
 
   rescue => e
     puts "❌ Error processing #{en_file}: #{e.message}"
-    raise e # Ensure the build fails if a translation fails
+    raise e 
   end
 end
