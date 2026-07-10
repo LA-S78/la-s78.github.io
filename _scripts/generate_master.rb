@@ -7,6 +7,8 @@ require 'fileutils'
 # Load Glossary
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
 API_KEY = ENV['GEMINI_API_KEY']
+# Define the languages to iterate through
+LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
 
 def call_gemini_api(prompt)
   uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=#{API_KEY}")
@@ -32,7 +34,7 @@ def call_gemini_api(prompt)
       data = JSON.parse(response.body)
       return data.dig("candidates", 0, "content", "parts", 0, "text")
       
-    elsif response.code == '429' || response.code == '503' # 429 = Rate Limit, 503 = Overloaded
+    elsif response.code == '429' || response.code == '503'
       raise "Rate limit/High demand hit."
     else
       raise "API Error (#{response.code}): #{response.body}"
@@ -40,7 +42,7 @@ def call_gemini_api(prompt)
 
   rescue => e
     if attempt <= max_retries
-      wait_time = 2 ** attempt # Exponential backoff: 2s, 4s, 8s
+      wait_time = 2 ** attempt
       puts "⚠️ High demand detected. Retrying in #{wait_time}s... (Attempt #{attempt}/#{max_retries})"
       sleep(wait_time)
       retry
@@ -52,44 +54,53 @@ end
 
 files = Dir.glob("_source/*_en.md")
 
-Parallel.each(files, in_threads: 2) do |en_file|
+# Processing files one-by-one (threads: 1) is safer when using the language loop
+Parallel.each(files, in_threads: 1) do |en_file|
   begin
     base_name = File.basename(en_file, "_en.md")
     en_content = File.read(en_file)
-    
-    prompt = <<~PROMPT
-      You are an expert localization engineer. Transform this English guide into a 'Master File'.
-      
-      1. GLOSSARY (Strictly Enforce These): #{GLOSSARY.to_json}
-      2. BLUEPRINT:
-         - Standalone Page: === page--[filename] ===
-         - Core Collection: === collection--[collection-name]--[step] ===
-         - Guide Gateway: === guide--[lang]--[category]--[guide-name] ===
-         - Localized Pane: === pane--[lang]--[category]--[guide-name]--[step]--[pane-name] ===
-      
-      3. TASK:
-         - Generate the complete file content.
-         - For every section (guide or pane), use this YAML exactly:
-           ---
-           title: "<Translated Title>"
-           subtitle: "<Translated Subtitle>"
-           nav_id: "<id>"
-           parent_guide: "<guide_name>"
-           lang: "<lang>"
-           order: <order>
-           ---
-           [Translated Content]
-         - Languages required: en, de, es, fr, ru, tr, uk, it.
-      
-      CONTENT:
-      #{en_content}
-    PROMPT
+    final_output = ""
 
-    translated_text = call_gemini_api(prompt)
-    
-    File.write("_source/#{base_name}.md", translated_text)
+    # Loop through each language to build the file chunk by chunk
+    LANGUAGES.each do |lang|
+      puts "--> Processing #{base_name} for language: #{lang}"
+      
+      prompt = <<~PROMPT
+        You are an expert localization engineer. Translate the following English content into '#{lang}'.
+        
+        1. GLOSSARY (Strictly Enforce These): #{GLOSSARY.to_json}
+        2. BLUEPRINT (Use tokens for '#{lang}' ONLY):
+           - Standalone Page: === page--[filename] ===
+           - Core Collection: === collection--[collection-name]--[step] ===
+           - Guide Gateway: === guide--#{lang}--[category]--[guide-name] ===
+           - Localized Pane: === pane--#{lang}--[category]--[guide-name]--[step]--[pane-name] ===
+        
+        3. TASK:
+           - Translate the content into #{lang}.
+           - Use the correct tokens above.
+           - Include YAML front-matter exactly:
+             ---
+             title: "<Translated Title>"
+             subtitle: "<Translated Subtitle>"
+             nav_id: "<id>"
+             parent_guide: "<guide_name>"
+             lang: "#{lang}"
+             order: <order>
+             ---
+             [Translated Content]
+        
+        CONTENT:
+        #{en_content}
+      PROMPT
+
+      translated_chunk = call_gemini_api(prompt)
+      final_output << translated_chunk << "\n"
+    end
+
+    File.write("_source/#{base_name}.md", final_output)
     File.delete(en_file)
-    puts "✅ Generated: #{base_name}.md"
+    puts "✅ Generated Master File: #{base_name}.md"
+    
   rescue => e
     puts "❌ Error processing #{en_file}: #{e.message}"
     raise e
