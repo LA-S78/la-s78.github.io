@@ -3,17 +3,21 @@ require 'uri'
 require 'json'
 require 'fileutils'
 
-# Load Glossary
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
 API_KEY = ENV['GEMINI_API_KEY']
-LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
+
+# Batching languages into 2 groups of 4
+BATCHES = [
+  ['en', 'de', 'es', 'fr'],
+  ['ru', 'tr', 'uk', 'it']
+]
 
 def call_gemini_api(prompt)
   uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
   
-  max_retries = 5 # Increased retries
+  max_retries = 3
   attempt = 0
   
   begin
@@ -36,12 +40,10 @@ def call_gemini_api(prompt)
     else
       raise "API Error (#{response.code}): #{response.body}"
     end
-
   rescue => e
     if attempt <= max_retries
-      # Exponential backoff + jitter to avoid synchronization
-      wait_time = (2 ** attempt) + rand(1..3)
-      puts "⚠️ High demand detected. Waiting #{wait_time}s before retry... (Attempt #{attempt}/#{max_retries})"
+      wait_time = (2 ** attempt) + 5
+      puts "⚠️ High demand detected. Waiting #{wait_time}s... (Attempt #{attempt}/#{max_retries})"
       sleep(wait_time)
       retry
     else
@@ -50,59 +52,51 @@ def call_gemini_api(prompt)
   end
 end
 
-# Sequential processing: 1 file at a time, 1 language at a time
-files = Dir.glob("_source/*_en.md")
+# Only process the first pending file
+all_drafts = Dir.glob("_source/*_en.md")
+files = all_drafts.empty? ? [] : [all_drafts.first]
 
 files.each do |en_file|
-  begin
-    base_name = File.basename(en_file, "_en.md")
-    en_content = File.read(en_file)
-    final_output = ""
+  base_name = File.basename(en_file, "_en.md")
+  en_content = File.read(en_file)
+  final_output = ""
 
-    LANGUAGES.each do |lang|
-      puts "--> Processing #{base_name} for language: #{lang}"
-      
-      prompt = <<~PROMPT
-        You are an expert localization engineer. Translate the following English content into '#{lang}'.
-        
-        1. GLOSSARY (Strictly Enforce These): #{GLOSSARY.to_json}
-        2. BLUEPRINT:
-           - Standalone Page: === page--[filename] ===
-           - Core Collection: === collection--[collection-name]--[step] ===
-           - Guide Gateway: === guide--#{lang}--[category]--[guide-name] ===
-           - Localized Pane: === pane--#{lang}--[category]--[guide-name]--[step]--[pane-name] ===
-        
-        3. TASK:
-           - Translate the content into #{lang}.
-           - For every section (guide or pane), use this YAML exactly:
-             ---
-             title: "<Translated Title>"
-             subtitle: "<Translated Subtitle>"
-             nav_id: "<id>"
-             parent_guide: "<guide_name>"
-             lang: "#{lang}"
-             order: <order>
-             ---
-             [Translated Content]
-        
-        CONTENT:
-        #{en_content}
-      PROMPT
-
-      translated_chunk = call_gemini_api(prompt)
-      final_output << translated_chunk << "\n"
-      
-      # MANDATORY COOLDOWN: 5 seconds between languages to satisfy API pacing
-      puts "--> Cooldown: Waiting 15s to stay under rate limits..."
-      sleep(15) 
-    end
-
-    File.write("_source/#{base_name}.md", final_output)
-    File.delete(en_file)
-    puts "✅ Generated Master File: #{base_name}.md"
+  BATCHES.each_with_index do |lang_batch, idx|
+    puts "--> Processing #{base_name} (Batch #{idx + 1}/2: #{lang_batch.join(', ')})"
     
-  rescue => e
-    puts "❌ Error processing #{en_file}: #{e.message}"
-    raise e
+    prompt = <<~PROMPT
+      You are an expert localization engineer. Translate the following English content into these languages: #{lang_batch.join(', ')}.
+      
+      1. GLOSSARY: #{GLOSSARY.to_json}
+      2. BLUEPRINT:
+         - Guide Gateway: === guide--[lang]--[category]--[guide-name] ===
+         - Localized Pane: === pane--[lang]--[category]--[guide-name]--[step]--[pane-name] ===
+      
+      3. TASK:
+         - Generate content for ALL requested languages: #{lang_batch.join(', ')}.
+         - For every section, use this YAML exactly:
+           ---
+           title: "<Translated Title>"
+           subtitle: "<Translated Subtitle>"
+           nav_id: "<id>"
+           parent_guide: "<guide_name>"
+           lang: "<lang>"
+           order: <order>
+           ---
+           [Translated Content]
+      
+      CONTENT:
+      #{en_content}
+    PROMPT
+
+    final_output << call_gemini_api(prompt) << "\n"
+    
+    # 15s cooldown between batches to protect RPM
+    puts "--> Cooldown: Waiting 15s..."
+    sleep(15) 
   end
+
+  File.write("_source/#{base_name}.md", final_output)
+  File.delete(en_file)
+  puts "✅ Generated Master File: #{base_name}.md"
 end
