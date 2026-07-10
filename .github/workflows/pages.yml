@@ -200,9 +200,9 @@ jobs:
       - name: Deploy Compiled Site to Vercel
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+            vercel deploy --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
           else
-            DEPLOY_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/)
+            DEPLOY_URL=$(vercel deploy --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/)
             vercel alias set "$DEPLOY_URL" dev.la-s78.app --token=${{ secrets.VERCEL_TOKEN }}
           fi
         env:
