@@ -1,83 +1,116 @@
-require 'gemini-ai'
+require 'net/http'
+require 'uri'
 require 'json'
 require 'fileutils'
-require 'parallel'
 
-# Load Glossary
+$stdout.sync = true
+
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
+API_KEY = ENV['GEMINI_API_KEY']
+LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
 
-# Initialize the client
-# Ensure GEMINI_API_KEY is set in your environment variables
-client = Gemini.new(
-  credentials: {
-    service: 'generative-language-api',
-    api_key: ENV['GEMINI_API_KEY']
-  },
-  options: { model: 'gemini-1.5-flash' }
-)
-
-# Gather all English draft files
-files = Dir.glob("_source/*_en.md")
-
-# Process files in parallel
-Parallel.each(files, in_threads: 4) do |en_file|
-  puts "Processing #{en_file}..."
+def call_gemini_api(prompt, lang)
+  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=#{API_KEY}")
+  header = { 'Content-Type': 'application/json' }
+  body = { contents: [{ parts: [{ text: prompt }] }] }
+  
+  max_retries = 8
+  attempt = 0
   
   begin
-    base_name = File.basename(en_file, "_en.md")
-    en_content = File.read(en_file)
+    attempt += 1
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.open_timeout = 30
+    http.read_timeout = 300
     
-    # AI Prompt
-    prompt = <<~PROMPT
-      You are an expert localization engineer. Transform this English guide into a 'Master File' for my build system.
-      
-      1. INPUT: English source text.
-      2. GLOSSARY (Strictly Enforce These): #{GLOSSARY.to_json}
-      3. TASK:
-         - Generate the complete file content.
-         - Use the following format for every section:
-           === pane--<lang>--<category>--<guide_name>--<order>--<pane_id> ===
-           ---
-           title: "<Translated Title>"
-           nav_id: "<pane_id>"
-           parent_guide: "<guide_name>"
-           lang: "<lang>"
-           order: <order>
-           ---
-           [Translated Content]
-         - Languages required: en, de, es, fr, ru, tr, uk, it.
-      4. RULES:
-         - Do not translate terms in the GLOSSARY differently than provided.
-         - Use the English source as the semantic base for all translations.
-         - Ensure Markdown syntax is preserved.
-         - Return ONLY the full file content.
-      
-      CONTENT:
-      #{en_content}
-    PROMPT
-
-    # Call Gemini API
-    response = client.generate_content({ 
-      contents: [{ role: 'user', parts: [{ text: prompt }] }] 
-    })
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = body.to_json
     
-    # Extract text from response
-    translated_text = response.dig("candidates", 0, "content", "parts", 0, "text")
+    response = http.request(request)
     
-    if translated_text.nil?
-      raise "API returned empty response: #{response}"
+    if response.code == '200'
+      data = JSON.parse(response.body)
+      return data.dig("candidates", 0, "content", "parts", 0, "text")
+    elsif ['429', '503', '500'].include?(response.code)
+      raise "Rate limit/High demand hit."
+    else
+      raise "API Error (#{response.code}): #{response.body}"
     end
-    
-    # Save as Master File
-    File.write("_source/#{base_name}.md", translated_text)
-    puts "✅ Generated Master File: _source/#{base_name}.md"
-    
-    # Delete the draft to avoid reprocessing
-    File.delete(en_file)
-    puts "🗑️ Cleaned up draft: #{en_file}"
 
   rescue => e
-    puts "❌ Error processing #{en_file}: #{e.message}"
-    raise e 
+    if attempt <= max_retries
+      wait_time = (2 ** (attempt - 1)) * 30 
+      puts "⚠️ #{e.message} Retrying in #{wait_time}s... (Attempt #{attempt}/#{max_retries})"
+      sleep(wait_time)
+      retry
+    else
+      raise "Failed after #{max_retries} attempts."
+    end
   end
+end
+
+all_drafts = Dir.glob("_source/*_en.md")
+files = all_drafts.empty? ? [] : [all_drafts.first]
+
+files.each do |en_file|
+  base_name = File.basename(en_file, "_en.md")
+  full_content = File.read(en_file)
+
+  # 1. Detect format
+  is_legacy = full_content.include?("===")
+  structure_instructions = is_legacy ? 
+    "- Legacy Delimiters: Use '=== guide--[lang]--... ==='." :
+    "- XML Schema: Use '<guide lang=\"#{LANGUAGES.join('|')}\" ...>' and '<pane lang=\"#{LANGUAGES.join('|')}\" ...>'."
+
+  # 2. Extract original front matter
+  front_matter = ""
+  body_content = full_content
+  if full_content =~ /\A(---\s*\n.*?\n---\s*\n)/m
+    front_matter = $1
+    body_content = full_content.sub(front_matter, "")
+  end
+
+  # We will build the master file string
+  full_master_file = ""
+
+  # 3. Process languages
+  LANGUAGES.each do |lang|
+    puts "--> Processing #{base_name} [Lang: #{lang}]"
+    
+    # DYNAMIC FRONT MATTER: Update the YAML language key
+    localized_front_matter = front_matter.dup
+    localized_front_matter.gsub!(/^lang:\s*["']?en["']?/, "lang: \"#{lang}\"")
+    
+    if lang == 'en'
+      puts "--> Preserving English source..."
+      full_master_file << localized_front_matter << body_content << "\n"
+    else
+      prompt = <<~PROMPT
+        You are an expert localization engineer. Translate the content, preserving the structural schema.
+        
+        CRITICAL RULES:
+        1. PRESERVE STRUCTURE: #{structure_instructions}
+        2. ATTRIBUTES - DYNAMIC vs STATIC:
+           - DYNAMIC: You MUST update the 'lang' attribute to '#{lang}'.
+           - STATIC: You are FORBIDDEN from changing 'category', 'name', or 'section'.
+        3. YAML: Keep all keys (title, subtitle, etc.) exactly as provided.
+        4. CONTENT: Translate ONLY readable text outside tags/YAML. 
+        5. GLOSSARY: #{GLOSSARY.to_json}
+        
+        INPUT:
+        #{body_content}
+      PROMPT
+
+      # Append the localized header + the translated AI response
+      full_master_file << localized_front_matter << "\n" << call_gemini_api(prompt, lang) << "\n"
+      
+      puts "--> Cooldown: Waiting 20s..."
+      sleep(20) 
+    end
+  end
+
+  File.write("_source/#{base_name}.md", full_master_file)
+  File.delete(en_file)
+  puts "✅ Generated: #{base_name}.md"
 end

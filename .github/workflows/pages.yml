@@ -49,72 +49,56 @@ jobs:
       - name: Demultiplex Unified Content Files
         run: |
           ruby -r fileutils -e '
-            puts "Starting precise bulletproof token segregation engine..."
-            
+            puts "Starting format-agnostic segregation engine..."
             Dir.glob("_source/*.md").each do |file_path|
-              basename = File.basename(file_path, ".*")
               content = File.read(file_path)
               
-              blocks = content.split(/^===\s*(\S+)\s*===/)
+              # --- NORMALIZATION BRIDGE ---
+              # Convert modern XML tags into legacy delimiters so the parser handles both.
+              # Note: Using double quotes to avoid YAML escaping issues.
+              normalized_content = content.gsub(/<guide\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)">/, "=== guide--\\1--\\2--\\3 ===")
+              normalized_content = normalized_content.gsub(/<pane\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)"\s+section="([^"]+)">/, "=== pane--\\1--\\2--\\3--\\4 ===")
+              
+              blocks = normalized_content.split(/^===\s*(\S+)\s*===/)
               next if blocks.length < 2
               
               (1...blocks.length).step(2) do |i|
                 header = blocks[i].strip
-                
                 block_content = blocks[i+1].gsub("\r\n", "\n").strip
                 next if block_content.empty?
+                
+                # --- DEFENSIVE VALIDATION LAYER ---
+                allowed_patterns = [
+                  /^page--\S+$/,
+                  /^collection--\S+--\d+$/,
+                  /^guide--\S+--\S+--\S+$/,
+                  /^pane--\S+--\S+--\S+--\S+--\S+$/
+                ]
+                unless allowed_patterns.any? { |p| header =~ p }
+                  raise "CRITICAL BUILD ERROR: Invalid header [#{header}]. Check markers!"
+                end
                 
                 parts = header.split("--")
                 type = parts[0].strip
                 
                 case type
                 when "page"
-                  filename = parts[1].strip
-                  dest_dir = "."
-                  dest_file = "#{dest_dir}/#{filename}.md"
-                  
+                  dest_file = "./#{parts[1].strip}.md"
                 when "collection"
-                  collection_name = parts[1].strip
-                  step = parts[2].strip
-                  dest_dir = "collections/_#{collection_name}"
-                  dest_file = "#{dest_dir}/#{step}-#{collection_name}.md"
-                  
+                  dest_dir = "collections/_#{parts[1].strip}"
+                  dest_file = "#{dest_dir}/#{parts[2].strip}-#{parts[1].strip}.md"
                 when "guide"
-                  lang = parts[1].strip
-                  category = parts[2].strip
-                  guide_name = parts[3].strip
-                  
-                  unless block_content =~ /^lang:\s*/
-                    block_content = block_content.sub(/^---/, "---\nlang: #{lang}")
-                  end
-                  
-                  dest_dir = "guides/#{lang}/#{category}"
-                  dest_file = "#{dest_dir}/#{guide_name}.md"
-                  
+                  lang, cat, name = parts[1], parts[2], parts[3]
+                  block_content = block_content.sub(/^---/, "---\nlang: #{lang}") unless block_content =~ /^lang:\s*/
+                  dest_dir = "guides/#{lang}/#{cat}"
+                  dest_file = "#{dest_dir}/#{name}.md"
                 when "pane"
-                  lang = parts[1].strip
-                  category = parts[2].strip
-                  guide_name = parts[3].strip
-                  step = parts[4].strip
-                  pane_name = parts[5].strip
-                  
-                  dest_dir = "collections/_guide_panes/#{lang}/#{category}/#{guide_name}"
-                  dest_file = "#{dest_dir}/#{step}-#{pane_name}.md"
-                  
-                else
-                  puts "⚠️ Structural Warning: Unrecognized pattern format [=== #{header} ===]. Skipping."
-                  next
+                  lang, cat, name, step, pane = parts[1], parts[2], parts[3], parts[4], parts[5]
+                  dest_dir = "collections/_guide_panes/#{lang}/#{cat}/#{name}"
+                  dest_file = "#{dest_dir}/#{step}-#{pane}.md"
                 end
                 
-                if Dir.exist?(dest_dir)
-                  Dir.glob(File.join(dest_dir, "*")).each do |existing_file|
-                    if existing_file.downcase == dest_file.downcase
-                      File.delete(existing_file)
-                    end
-                  end
-                end
-                
-                FileUtils.mkdir_p(dest_dir)
+                FileUtils.mkdir_p(File.dirname(dest_file))
                 File.write(dest_file, block_content + "\n")
                 puts "✅ Segregated -> #{dest_file}"
               end
