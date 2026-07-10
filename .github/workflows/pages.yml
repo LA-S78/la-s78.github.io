@@ -7,6 +7,11 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    
+    # Grant permission to push the redirect index to the gh-pages branch
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v5
 
@@ -77,12 +82,16 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
+      # --- FIX: Force Vercel to recognize the compiled folder as the web root ---
+      - name: Prepare Vercel Deployment Folder
+        run: cp -r .vercel _site/
+
       - name: Deploy Compiled Site to Vercel
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
           else
-            vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+            vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/ --alias dev.la-s78.app
           fi
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
