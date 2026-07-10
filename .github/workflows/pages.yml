@@ -8,7 +8,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     
-    # Grant permissions to write the redirect index to the gh-pages branch
     permissions:
       contents: write
 
@@ -20,54 +19,192 @@ jobs:
         with:
           ruby-version: '3.2'
           bundler-cache: true
+
+      # --- AI LOCALIZATION ENGINE ---
+      - name: AI Localization Engine
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if ls _source/*_en.md 1> /dev/null 2>&1; then
+            echo "Drafts detected. Running AI Localization..."
+            bundle exec ruby _scripts/generate_master.rb
+          else
+            echo "No English source drafts found. Skipping."
+          fi
+
+      # --- AI LOCALIZATION OUTPUT SYNC ---
+      - name: Commit AI-Generated Master Files
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          if git diff --quiet _source/; then
+            echo "No changes to commit."
+          else
+            git add _source/
+            git commit -m "Auto-generate master files from AI drafts [skip ci]"
+            git push
+          fi
+
+      # --- LEVEL 3 AUTOMATION: BULLETPROOF SOURCE DEMULTIPLEXER ---
+      - name: Demultiplex Unified Content Files
+        run: |
+          ruby -r fileutils -e '
+            puts "Starting precise bulletproof token segregation engine..."
+            
+            Dir.glob("_source/*.md").each do |file_path|
+              basename = File.basename(file_path, ".*")
+              content = File.read(file_path)
+              
+              blocks = content.split(/^===\s*(\S+)\s*===/)
+              next if blocks.length < 2
+              
+              (1...blocks.length).step(2) do |i|
+                header = blocks[i].strip
+                
+                block_content = blocks[i+1].gsub("\r\n", "\n").strip
+                next if block_content.empty?
+                
+                parts = header.split("--")
+                type = parts[0].strip
+                
+                case type
+                when "page"
+                  filename = parts[1].strip
+                  dest_dir = "."
+                  dest_file = "#{dest_dir}/#{filename}.md"
+                  
+                when "collection"
+                  collection_name = parts[1].strip
+                  step = parts[2].strip
+                  dest_dir = "collections/_#{collection_name}"
+                  dest_file = "#{dest_dir}/#{step}-#{collection_name}.md"
+                  
+                when "guide"
+                  lang = parts[1].strip
+                  category = parts[2].strip
+                  guide_name = parts[3].strip
+                  
+                  unless block_content =~ /^lang:\s*/
+                    block_content = block_content.sub(/^---/, "---\nlang: #{lang}")
+                  end
+                  
+                  dest_dir = "guides/#{lang}/#{category}"
+                  dest_file = "#{dest_dir}/#{guide_name}.md"
+                  
+                when "pane"
+                  lang = parts[1].strip
+                  category = parts[2].strip
+                  guide_name = parts[3].strip
+                  step = parts[4].strip
+                  pane_name = parts[5].strip
+                  
+                  dest_dir = "collections/_guide_panes/#{lang}/#{category}/#{guide_name}"
+                  dest_file = "#{dest_dir}/#{step}-#{pane_name}.md"
+                  
+                else
+                  puts "⚠️ Structural Warning: Unrecognized pattern format [=== #{header} ===]. Skipping."
+                  next
+                end
+                
+                if Dir.exist?(dest_dir)
+                  Dir.glob(File.join(dest_dir, "*")).each do |existing_file|
+                    if existing_file.downcase == dest_file.downcase
+                      File.delete(existing_file)
+                    end
+                  end
+                end
+                
+                FileUtils.mkdir_p(dest_dir)
+                File.write(dest_file, block_content + "\n")
+                puts "✅ Segregated -> #{dest_file}"
+              end
+            end
+          '
           
       - name: Build All Languages
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         run: |
+          # --- BUILD ISOLATION: PREVENT LANGUAGE CLOBBERING ---
+          cp -r guides guides_backup
+          cp -r collections/_guide_panes guide_panes_backup
+
+          echo "Isolating English assets for primary root compilation..."
+          find guides -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
+          find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
+          
           bundle exec jekyll build --config _config.yml --destination _site/
           
-          for lang in en de es fr ru tr uk it; do
-            echo "Building $lang..."
-            bundle exec jekyll build --config _config.yml,_configs/_config_$lang.yml --destination _site/$lang
+          echo "Scanning for localized language configuration files..."
+          for config_file in _configs/_config_*.yml; do
+            [ -e "$config_file" ] || continue
+            lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
+            
+            rm -rf guides collections/_guide_panes
+            cp -r guides_backup guides
+            cp -r guide_panes_backup collections/_guide_panes
+            
+            find guides -mindepth 1 -maxdepth 1 -type d ! -name "$lang" -exec rm -rf {} +
+            find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "$lang" -exec rm -rf {} +
+            
+            echo "🚀 Executing clean isolated regional build for: [$lang]..."
+            bundle exec jekyll build --config _config.yml,"$config_file" --destination _site/$lang
           done
           
-          # Move FRONTEND assets into place
+          rm -rf guides collections/_guide_panes
+          mv guides_backup guides
+          mv guide_panes_backup collections/_guide_panes
+          
           cp -r images _site/
           cp -r css _site/
           cp -r js _site/
           cp site.webmanifest _site/
           
-          # Keeps your original language router going to Vercel
           cp redirect.html _site/index.html
 
-          # --- DYNAMIC DEV ENVIRONMENT CATCH-ALL INJECTION ---
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
             echo "Dev branch detected. Injecting global URL catch-all..."
             cat js/dev-url-fixer.js >> _site/js/main.js
             
-            # Ensure it is appended to localized subfolders too
-            for lang in en de es fr ru tr uk it; do
-              cat js/dev-url-fixer.js >> _site/$lang/js/main.js
+            for config_file in _configs/_config_*.yml; do
+              [ -e "$config_file" ] || continue
+              lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
+              
+              if [ -f "_site/$lang/js/main.js" ]; then
+                echo "Injecting dev fix into localized subfolder: /$lang..."
+                cat js/dev-url-fixer.js >> _site/$lang/js/main.js
+              fi
             done
           fi
 
-          # RUN WORKBOX BEFORE ADDING THE BACKEND API FOLDER
           echo "Running Workbox injector..."
           ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
           
-          # INJECT API SECRETS SAFELY OUTSIDE THE CACHE LOOP
           cp -r api _site/
 
-      # --- PREPARE ISOLATED GITHUB REDIRECT ---
+      # --- DEBUGGING: UPLOAD COMPILED SITE ARTIFACT ---
+      - name: Upload Compiled Site Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-site
+          path: _site/
+          retention-days: 1
+
       - name: Prepare GitHub Pages Redirect Directory
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir _github_pages_site
-          # Grab migration.html instead so we don't conflict!
           cp migration.html _github_pages_site/index.html
 
       # --- VERCEL DEPLOYMENT PIPELINE ---
+      - name: Cache Vercel CLI State
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/com.vercel.cli
+          key: ${{ runner.os }}-vercel-${{ hashFiles('**/_site/**') }}
+          restore-keys: |
+            ${{ runner.os }}-vercel-
+
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
@@ -82,26 +219,21 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      # --- FIX: Force Vercel to recognize the compiled folder as the web root ---
       - name: Prepare Vercel Deployment Folder
         run: cp -r .vercel _site/
 
       - name: Deploy Compiled Site to Vercel
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+            vercel deploy --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
           else
-            # 1. Capture the unique preview URL generated by Vercel
-            DEPLOY_URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/)
-            
-            # 2. Point your custom dev subdomain straight to that new URL
+            DEPLOY_URL=$(vercel deploy --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/)
             vercel alias set "$DEPLOY_URL" dev.la-s78.app --token=${{ secrets.VERCEL_TOKEN }}
           fi
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      # --- DEPLOY REDIRECT EXCLUSIVELY TO GITHUB PAGES ---
       - name: Deploy Redirect to GitHub Pages
         if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
@@ -109,3 +241,19 @@ jobs:
           branch: gh-pages
           folder: _github_pages_site
           clean: true
+
+      - name: Notify Discord on Success
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": "✅ **Build Succeeded!** The latest layout changes are officially live on Vercel for the `'"${{ github.ref_name }}"'` branch."}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Notify Discord on Failure
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": "🚨 **Build Failed!** The deployment compilation crashed on the `'"${{ github.ref_name }}"'` branch. Check the GitHub Actions logs to see what broke."}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}

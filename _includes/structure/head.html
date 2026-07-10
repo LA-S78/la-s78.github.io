@@ -5,35 +5,32 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="{{ site.title }}">
-    
-    
 
-    <!-- Discord / Social Media Preview Cards -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:site_name" content="{{ site.data[site.active_lang].ui.header.title }}">
-    <meta property="og:title" content="{{ meta_title | default: site.title }}">
-    <meta property="og:description" content="{{ meta_desc | default: site.data[site.active_lang].ui.header.subtitle }}">
-    <meta property="og:url" content="{{ page.url | absolute_url }}">
-    <meta property="og:image" content="{{ page.image | default: '/images/default-social-banner.png' | absolute_url }}">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#110d0b">
-    <meta name="turbo-refresh-method" content="morph">
-    <meta name="turbo-refresh-scroll" content="preserve">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:site_name" content="{{ site.data[site.active_lang].ui.header.title }}">
+  <meta property="og:title" content="{{ meta_title | default: site.title }}">
+  <meta property="og:description" content="{{ meta_desc | default: site.data[site.active_lang].ui.header.subtitle }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:image" content="{{ page.image | default: '/images/default-social-banner.png' | absolute_url }}">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#110d0b">
+  <meta name="turbo-refresh-method" content="morph">
+  <meta name="turbo-refresh-scroll" content="preserve">
 
-    <title>{{ meta_title | default: site.title }} | {{ site.title }}</title>
-    
-    <link rel="stylesheet" href="/css/style.css?v={{ site.time | date: '%s' }}">
-    <link rel="icon" href="/images/favicon.png">
-    <link rel="apple-touch-icon" href="/images/favicon.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <script type="module" src="/js/turbo.js"></script>
-    <script>
-      window.pwaTranslations = {
-        toastMsg: "{{ site.data[site.active_lang].ui.pwa.toast_msg | default: 'New intel acquired.' }}",
-        updateBtn: "{{ site.data[site.active_lang].ui.pwa.update_btn | default: 'Update' }}",
-        updating: "{{ site.data[site.active_lang].ui.pwa.updating | default: 'Decrypting...' }}"
-      };
-    </script>
-    <script src="/js/main.js?v={{ site.time | date: '%s' }}" defer></script>
-<script src="/js/theme-init.js"></script>
+  <title>{{ meta_title | default: site.title }} | {{ site.title }}</title>
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/images/favicon.png">
+  <link rel="apple-touch-icon" href="/images/favicon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script type="module" src="/js/turbo.js"></script>
+  <script>
+    window.pwaTranslations = {
+      toastMsg: "{{ site.data[site.active_lang].ui.pwa.toast_msg | default: 'New intel acquired.' }}",
+      updateBtn: "{{ site.data[site.active_lang].ui.pwa.update_btn | default: 'Update' }}",
+      updating: "{{ site.data[site.active_lang].ui.pwa.updating | default: 'Decrypting...' }}"
+    };
+  </script>
+  <script src="/js/main.js" defer></script>
+  <script src="/js/theme-init.js"></script>
 </head>

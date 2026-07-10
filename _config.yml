@@ -10,6 +10,8 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - redirect.html
+  - vercel.json
+  - _source/
 collections_dir: "collections"
 collections:
   home:

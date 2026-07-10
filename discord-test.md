@@ -1,7 +1,7 @@
 ---
 layout: default
 page_key: "api-test"
-permalink: /api-test/
+permalink: /discord-test/
 lang: "en"
 ---
 <section class="content-pane private-grid">

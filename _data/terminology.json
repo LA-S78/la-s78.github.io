@@ -1,0 +1,166 @@
+{
+  "enforced_terms": {
+    "Heroes & Builds": {
+      "de": "Helden & Builds",
+      "es": "Héroes y Builds",
+      "fr": "Héros & Builds",
+      "it": "Eroi & Build",
+      "ru": "Герои и Билды",
+      "tr": "Kahramanlar & Dizilimler",
+      "uk": "Герої та Білди"
+    },
+    "Combat": {
+      "de": "Kampf",
+      "es": "Combate",
+      "fr": "Combat",
+      "it": "Combattimento",
+      "ru": "Сражение",
+      "tr": "Savaş",
+      "uk": "Бій"
+    },
+    "Building & Tech": {
+      "de": "Gebäude & Tech",
+      "es": "Edificios y Tech",
+      "fr": "Bâtiments & Tech",
+      "it": "Edifici & Tech",
+      "ru": "Здания и Технологии",
+      "tr": "Bina & Teknoloji",
+      "uk": "Будівлі та Технології"
+    },
+    "Resource Mgmt": {
+      "de": "Ressourcen-Mgmt",
+      "es": "Gestión de Recursos",
+      "fr": "Gestion des Ressources",
+      "it": "Gestione Risorse",
+      "ru": "Управление ресурсами",
+      "tr": "Kaynak Yönetimi",
+      "uk": "Керування ресурсами"
+    },
+    "Sanctuary Guide": {
+      "de": "Sanktuarium-Guide",
+      "es": "Guía del Santuario",
+      "fr": "Guide du Sanctuaire",
+      "it": "Guida al Santuario",
+      "ru": "Гайд по Убежищу",
+      "tr": "Sığınak Rehberi",
+      "uk": "Гайд по Сховищу"
+    },
+    "Alliance Duel": {
+      "de": "Allianz-Duell",
+      "es": "Duelo de Alianzas",
+      "fr": "Duel d'Alliances",
+      "it": "Duello tra Alleanze",
+      "ru": "Дуэль Альянсов",
+      "tr": "İttifak Düellosu",
+      "uk": "Дуель Альянсів"
+    },
+    "Survival Battle": {
+      "de": "Überlebenskampf",
+      "es": "Batalla de Supervivencia",
+      "fr": "Bataille de Survie",
+      "it": "Battaglia di Sopravvivenza",
+      "ru": "Битва за выживание",
+      "tr": "Hayatta Kalma Savaşı",
+      "uk": "Битва за виживання"
+    },
+    "Kingdom War": {
+      "de": "Königreichskrieg",
+      "es": "Guerra de Reinos",
+      "fr": "Guerre des Royaumes",
+      "it": "Guerra tra Regni",
+      "ru": "Война Королевств",
+      "tr": "Krallık Savaşı",
+      "uk": "Війна Королівств"
+    },
+    "Canyon Conquest": {
+      "de": "Canyon-Eroberung",
+      "es": "Conquista del Cañón",
+      "fr": "Conquête du Canyon",
+      "it": "Conquista del Canyon",
+      "ru": "Покорение Каньона",
+      "tr": "Kanyon Fethi",
+      "uk": "Підкорення Каньйону"
+    },
+    "Cheese Trap": {
+      "de": "Cheese-Falle",
+      "es": "Trampa de Queso",
+      "fr": "Piège à Fromage",
+      "it": "Trappola Cheese",
+      "ru": "Сырная Ловушка",
+      "tr": "Peynir Tuzağı",
+      "uk": "Сирна Пастка"
+    },
+    "Thief Hunt": {
+      "de": "Diebesjagd",
+      "es": "Caza de Ladrones",
+      "fr": "Chasse aux Voleurs",
+      "it": "Caccia al Ladro",
+      "ru": "Охота на Воров",
+      "tr": "Hırsız Avı",
+      "uk": "Полювання на Злодіїв"
+    },
+    "Dwarven Pickaxe": {
+      "de": "Zwergenspitzhacke",
+      "es": "Pico Enano",
+      "fr": "Pioche Naine",
+      "it": "Piccone Nanico",
+      "ru": "Гномья Кирка",
+      "tr": "Cüce Kazması",
+      "uk": "Гном'яче Кайло"
+    },
+    "Crystal Valley": {
+      "de": "Kristalltal",
+      "es": "Valle de Cristal",
+      "fr": "Vallée de Cristal",
+      "it": "Valle di Cristallo",
+      "ru": "Кристальная Долина",
+      "tr": "Kristal Vadisi",
+      "uk": "Кришталева Долина"
+    },
+    "Alliance Shop": {
+      "de": "Allianz-Shop",
+      "es": "Tienda de Alianza",
+      "fr": "Boutique d'Alliance",
+      "it": "Negozio Alleanza",
+      "ru": "Магазин Альянса",
+      "tr": "İttifak Mağazası",
+      "uk": "Магазин Альянса"
+    },
+    "Honor Shop": {
+      "de": "Ehren-Shop",
+      "es": "Tienda de Honor",
+      "fr": "Boutique d'Honneur",
+      "it": "Negozio d'Onore",
+      "ru": "Магазин Чести",
+      "tr": "Onur Mağazası",
+      "uk": "Магазин Честі"
+    },
+    "Sanctuary Shop": {
+      "de": "Sanktuarium-Shop",
+      "es": "Tienda del Santuario",
+      "fr": "Boutique du Sanctuaire",
+      "it": "Negozio Santuario",
+      "ru": "Магазин Убежища",
+      "tr": "Sığınak Mağazası",
+      "uk": "Магазин Сховища"
+    },
+    "Campaign Shop": {
+      "de": "Kampagnen-Shop",
+      "es": "Tienda de Campaña",
+      "fr": "Boutique de Campagne",
+      "it": "Negozio Campagna",
+      "ru": "Магазин Кампании",
+      "tr": "Sefer Mağazası",
+      "uk": "Магазин Кампанії"
+    },
+    "Royal Scramble": {
+      "de": "Königliches Gerangel",
+      "es": "Pelea Real",
+      "fr": "Mêlée Royale",
+      "it": "Mischia Reale",
+      "ru": "Королевская схватка",
+      "tr": "Kraliyet Mücadelesi",
+      "uk": "Королівська сутичка"
+    }
+  }
+}
