@@ -79,14 +79,18 @@ files.each do |en_file|
     puts "--> Processing #{base_name} [Lang: #{lang}] [Format: #{is_legacy ? 'Legacy' : 'XML'}]"
     
     prompt = <<~PROMPT
-      You are an expert localization engineer. Your goal is to translate the content, NOT the code.
+      You are an expert localization engineer. Translate the content, preserving the structural schema.
       
-      CRITICAL SCHEMA RULES (VIOLATION RESULTS IN BUILD FAILURE):
-      1. XML tags (<guide>, <pane>) are IMMUTABLE. Do NOT modify, translate, or reformat these tags.
-      2. ATTRIBUTES ARE IMMUTABLE: You are STRICTLY FORBIDDEN from changing the values inside the attributes (lang, category, name, section). 
-         - If the input is name="crystal-valley", the output MUST be name="crystal-valley". 
-         - If the input is section="01--objectives", the output MUST be section="01--objectives".
+      CRITICAL SCHEMA RULES:
+      1. XML tags (<guide>, <pane>) are IMMUTABLE. Do NOT reformat these tags.
+      
+      2. ATTRIBUTES - DYNAMIC vs STATIC:
+         - DYNAMIC: You MUST update the 'lang' attribute to match the target language: '#{lang}'.
+         - STATIC: You are STRICTLY FORBIDDEN from changing the values of 'category', 'name', or 'section'. 
+           (e.g., If source is name="crystal-valley", target MUST be name="crystal-valley").
+      
       3. YAML FRONT MATTER: Keep keys (e.g., 'parent_guide') exactly as provided.
+      
       4. CONTENT ONLY: Only translate the readable text content outside of the XML tags and YAML blocks.
       
       5. GLOSSARY (Strictly enforce these terms):
