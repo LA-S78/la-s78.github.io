@@ -66,7 +66,7 @@ jobs:
                   category = parts[2].strip
                   guide_name = parts[3].strip
                   
-                  # Automatically inject lang variable if missing from front-matter
+                  # DEFENSIVE CHECK: Automatically inject lang variable if missing from front-matter
                   unless block_content =~ /^lang:\s*/
                     block_content = block_content.sub(/^---/, "---\nlang: #{lang}")
                   end
@@ -102,40 +102,21 @@ jobs:
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         run: |
-          # Create temporary pristine backups of all freshly segregated folders
-          cp -r guides guides_backup
-          cp -r collections/_guide_panes guide_panes_backup
-
-          # --- PASSPORT 1: ISOLATE & BUILD DEFAULT ROOT (ENGLISH) ---
-          echo "Isolating English assets for primary root compilation..."
-          find guides -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
-          find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
-          
+          # Build core root layout
           bundle exec jekyll build --config _config.yml --destination _site/
           
-          # --- PASSPORT 2: DYNAMIC REGIONAL ENVIRONMENT COMPILATIONS ---
+          # --- LEVEL 1 AUTOMATION: DYNAMIC LANGUAGE CONFIG DISCOVERY ---
           echo "Scanning for localized language configuration files..."
           for config_file in _configs/_config_*.yml; do
+            # Secure execution in case the folder is empty
             [ -e "$config_file" ] || continue
+            
+            # Extracts language identifier (e.g., _configs/_config_fr.yml becomes 'fr')
             lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
             
-            # Reset directories back to pristine status from our backup
-            rm -rf guides collections/_guide_panes
-            cp -r guides_backup guides
-            cp -r guide_panes_backup collections/_guide_panes
-            
-            # Wipe away all other languages except the single target of this specific loop iteration
-            find guides -mindepth 1 -maxdepth 1 -type d ! -name "$lang" -exec rm -rf {} +
-            find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "$lang" -exec rm -rf {} +
-            
-            echo "🚀 Executing clean isolated regional build for: [$lang]..."
+            echo "🚀 Found language config: [$lang]. Executing regional build..."
             bundle exec jekyll build --config _config.yml,"$config_file" --destination _site/$lang
           done
-          
-          # Restore the workspace directory structure back to normal for subsequent workflow hooks
-          rm -rf guides collections/_guide_panes
-          mv guides_backup guides
-          mv guide_panes_backup collections/_guide_panes
           
           # Move FRONTEND assets into place
           cp -r images _site/
@@ -151,6 +132,7 @@ jobs:
             echo "Dev branch detected. Injecting global URL catch-all..."
             cat js/dev-url-fixer.js >> _site/js/main.js
             
+            # Dynamically target whatever language configs were just processed
             for config_file in _configs/_config_*.yml; do
               [ -e "$config_file" ] || continue
               lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
