@@ -3,6 +3,7 @@ require 'uri'
 require 'json'
 require 'fileutils'
 
+# Force logs to output in real-time
 $stdout.sync = true
 
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
@@ -10,8 +11,7 @@ API_KEY = ENV['GEMINI_API_KEY']
 LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
 
 def call_gemini_api(prompt, lang)
-  # Use 2.0-flash as it is more stable than the preview/3.5 models
-  # Change the model path to the stable Flash-Lite model
+  # Using the highly efficient 3.1-flash-lite model
   uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
@@ -53,26 +53,51 @@ def call_gemini_api(prompt, lang)
   end
 end
 
+# Process only the first pending file
 all_drafts = Dir.glob("_source/*_en.md")
 files = all_drafts.empty? ? [] : [all_drafts.first]
 
 files.each do |en_file|
   base_name = File.basename(en_file, "_en.md")
-  en_content = File.read(en_file)
-  final_output = ""
+  full_content = File.read(en_file)
 
+  # 1. Surgery: Extract Front Matter to preserve layout
+  front_matter = ""
+  body_content = full_content
+  
+  if full_content =~ /\A(---\s*\n.*?\n---\s*\n)/m
+    front_matter = $1
+    body_content = full_content.sub(front_matter, "")
+  end
+
+  # Start the final file with the preserved layout
+  final_output = front_matter
+
+  # 2. Process languages sequentially
   LANGUAGES.each do |lang|
     puts "--> Processing #{base_name} [Lang: #{lang}]"
     
     prompt = <<~PROMPT
       You are an expert localization engineer. Translate the following content into '#{lang}'.
-      [...Blueprint Rules...]
-      CONTENT: #{en_content}
+      
+      1. GLOSSARY: #{GLOSSARY.to_json}
+      2. BLUEPRINT:
+         - Guide Gateway: === guide--#{lang}--[category]--[guide-name] ===
+         - Localized Pane: === pane--#{lang}--[category]--[guide-name]--[step]--[pane-name] ===
+      
+      3. TASK:
+         - Translate the content into #{lang}.
+         - Use the Blueprint rules for gateways and panes.
+         - Ensure the output is formatted in Markdown.
+      
+      CONTENT:
+      #{body_content}
     PROMPT
 
-    final_output << call_gemini_api(prompt, lang) << "\n"
+    final_output << "\n" << call_gemini_api(prompt, lang) << "\n"
     
-    puts "--> Cooldown: Waiting 20s to stay under rate limits..."
+    # Mandatory cooldown to respect the 5 RPM limit
+    puts "--> Cooldown: Waiting 20s..."
     sleep(20) 
   end
 
