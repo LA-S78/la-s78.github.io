@@ -1,13 +1,11 @@
 require 'net/http'
 require 'uri'
 require 'json'
-require 'parallel'
 require 'fileutils'
 
 # Load Glossary
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
 API_KEY = ENV['GEMINI_API_KEY']
-# Define the languages to iterate through
 LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
 
 def call_gemini_api(prompt)
@@ -15,7 +13,7 @@ def call_gemini_api(prompt)
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
   
-  max_retries = 3
+  max_retries = 5 # Increased retries
   attempt = 0
   
   begin
@@ -33,7 +31,6 @@ def call_gemini_api(prompt)
     if response.code == '200'
       data = JSON.parse(response.body)
       return data.dig("candidates", 0, "content", "parts", 0, "text")
-      
     elsif response.code == '429' || response.code == '503'
       raise "Rate limit/High demand hit."
     else
@@ -42,8 +39,9 @@ def call_gemini_api(prompt)
 
   rescue => e
     if attempt <= max_retries
-      wait_time = 2 ** attempt
-      puts "⚠️ High demand detected. Retrying in #{wait_time}s... (Attempt #{attempt}/#{max_retries})"
+      # Exponential backoff + jitter to avoid synchronization
+      wait_time = (2 ** attempt) + rand(1..3)
+      puts "⚠️ High demand detected. Waiting #{wait_time}s before retry... (Attempt #{attempt}/#{max_retries})"
       sleep(wait_time)
       retry
     else
@@ -52,16 +50,15 @@ def call_gemini_api(prompt)
   end
 end
 
+# Sequential processing: 1 file at a time, 1 language at a time
 files = Dir.glob("_source/*_en.md")
 
-# Processing files one-by-one (threads: 1) is safer when using the language loop
-Parallel.each(files, in_threads: 1) do |en_file|
+files.each do |en_file|
   begin
     base_name = File.basename(en_file, "_en.md")
     en_content = File.read(en_file)
     final_output = ""
 
-    # Loop through each language to build the file chunk by chunk
     LANGUAGES.each do |lang|
       puts "--> Processing #{base_name} for language: #{lang}"
       
@@ -69,7 +66,7 @@ Parallel.each(files, in_threads: 1) do |en_file|
         You are an expert localization engineer. Translate the following English content into '#{lang}'.
         
         1. GLOSSARY (Strictly Enforce These): #{GLOSSARY.to_json}
-        2. BLUEPRINT (Use tokens for '#{lang}' ONLY):
+        2. BLUEPRINT:
            - Standalone Page: === page--[filename] ===
            - Core Collection: === collection--[collection-name]--[step] ===
            - Guide Gateway: === guide--#{lang}--[category]--[guide-name] ===
@@ -77,8 +74,7 @@ Parallel.each(files, in_threads: 1) do |en_file|
         
         3. TASK:
            - Translate the content into #{lang}.
-           - Use the correct tokens above.
-           - Include YAML front-matter exactly:
+           - For every section (guide or pane), use this YAML exactly:
              ---
              title: "<Translated Title>"
              subtitle: "<Translated Subtitle>"
@@ -95,6 +91,10 @@ Parallel.each(files, in_threads: 1) do |en_file|
 
       translated_chunk = call_gemini_api(prompt)
       final_output << translated_chunk << "\n"
+      
+      # MANDATORY COOLDOWN: 5 seconds between languages to satisfy API pacing
+      puts "--> Cooldown: Waiting 5s to stay under rate limits..."
+      sleep(5) 
     end
 
     File.write("_source/#{base_name}.md", final_output)
