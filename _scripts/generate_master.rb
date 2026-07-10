@@ -3,13 +3,16 @@ require 'uri'
 require 'json'
 require 'fileutils'
 
+$stdout.sync = true
+
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
 API_KEY = ENV['GEMINI_API_KEY']
 LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
 
 def call_gemini_api(prompt, lang)
   # Use 2.0-flash as it is more stable than the preview/3.5 models
-  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=#{API_KEY}")
+  # Change the model path to the stable Flash-Lite model
+  uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=#{API_KEY}")
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
   
