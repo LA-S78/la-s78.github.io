@@ -20,16 +20,95 @@ jobs:
         with:
           ruby-version: '3.2'
           bundler-cache: true
+
+      # --- LEVEL 3 AUTOMATION: BULLETPROOF SOURCE DEMULTIPLEXER ---
+      - name: Demultiplex Unified Content Files
+        run: |
+          ruby -r fileutils -e '
+            puts "Starting bulletproof token segregation engine..."
+            
+            Dir.glob("_source/*.md").each do |file_path|
+              basename = File.basename(file_path, ".*")
+              content = File.read(file_path)
+              
+              # Split cleanly by the distinct header tag
+              blocks = content.split(/^===\s*(\S+)\s*===/)
+              next if blocks.length < 2
+              
+              (1...blocks.length).step(2) do |i|
+                header = blocks[i].strip
+                block_content = blocks[i+1].strip
+                next if block_content.empty?
+                
+                # Split structural elements safely using double dashes
+                parts = header.split("--")
+                type = parts[0].strip
+                
+                case type
+                when "page"
+                  # Pattern: page--[filename]
+                  filename = parts[1].strip
+                  dest_dir = "."
+                  dest_file = "#{dest_dir}/#{filename}.md"
+                  
+                when "collection"
+                  # Pattern: collection--[collection-name]--[step]
+                  collection_name = parts[1].strip
+                  step = parts[2].strip
+                  dest_dir = "collections/_#{collection_name}"
+                  dest_file = "#{dest_dir}/#{step}-#{collection_name}.md"
+                  
+                when "guide"
+                  # Pattern: guide--[lang]--[category]--[guide-name]
+                  lang = parts[1].strip
+                  category = parts[2].strip
+                  guide_name = parts[3].strip
+                  
+                  dest_dir = "guides/#{lang}/#{category}"
+                  dest_file = "#{dest_dir}/#{guide_name}.md"
+                  
+                when "pane"
+                  # Pattern: pane--[lang]--[category]--[guide-name]--[step]--[pane-name]
+                  lang = parts[1].strip
+                  category = parts[2].strip
+                  guide_name = parts[3].strip
+                  step = parts[4].strip
+                  pane_name = parts[5].strip
+                  
+                  dest_dir = "collections/_guide_panes/#{lang}/#{category}/#{guide_name}"
+                  dest_file = "#{dest_dir}/#{step}-#{pane_name}.md"
+                  
+                else
+                  puts "⚠️ Structural Warning: Unrecognized pattern format [=== #{header} ===]. Skipping."
+                  next
+                end
+                
+                # Create isolated folders and save the extracted files
+                FileUtils.mkdir_p(dest_dir)
+                File.write(dest_file, block_content)
+                puts "✅ Segregated -> #{dest_file}"
+              end
+            end
+          '
           
       - name: Build All Languages
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         run: |
+          # Build core root layout
           bundle exec jekyll build --config _config.yml --destination _site/
           
-          for lang in en de es fr ru tr uk it; do
-            echo "Building $lang..."
-            bundle exec jekyll build --config _config.yml,_configs/_config_$lang.yml --destination _site/$lang
+          # --- LEVEL 1 AUTOMATION: DYNAMIC LANGUAGE CONFIG DISCOVERY ---
+          echo "Scanning for localized language configuration files..."
+          for config_file in _configs/_config_*.yml; do
+            # Secure execution in case the folder is empty
+            [ -e "$config_file" ] || continue
+            
+            # Extracts language identifier (e.g., _configs/_config_fr.yml becomes 'fr')
+            lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
+            
+            echo "🚀 Found language config: [$lang]. Executing regional build..."
+            bundle exec jekyll build --config _config.yml,"$config_file" --destination _site/$lang
           done
           
           # Move FRONTEND assets into place
@@ -46,9 +125,15 @@ jobs:
             echo "Dev branch detected. Injecting global URL catch-all..."
             cat js/dev-url-fixer.js >> _site/js/main.js
             
-            # Ensure it is appended to localized subfolders too
-            for lang in en de es fr ru tr uk it; do
-              cat js/dev-url-fixer.js >> _site/$lang/js/main.js
+            # Dynamically target whatever language configs were just processed
+            for config_file in _configs/_config_*.yml; do
+              [ -e "$config_file" ] || continue
+              lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
+              
+              if [ -f "_site/$lang/js/main.js" ]; then
+                echo "Injecting dev fix into localized subfolder: /$lang..."
+                cat js/dev-url-fixer.js >> _site/$lang/js/main.js
+              fi
             done
           fi
 
