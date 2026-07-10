@@ -66,6 +66,11 @@ jobs:
                   category = parts[2].strip
                   guide_name = parts[3].strip
                   
+                  # DEFENSIVE CHECK: Automatically inject lang variable if missing from front-matter
+                  unless block_content =~ /^lang:\s*/
+                    block_content = block_content.sub(/^---/, "---\nlang: #{lang}")
+                  end
+                  
                   dest_dir = "guides/#{lang}/#{category}"
                   dest_file = "#{dest_dir}/#{guide_name}.md"
                   
