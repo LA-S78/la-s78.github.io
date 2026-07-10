@@ -169,6 +169,14 @@ jobs:
           # INJECT API SECRETS SAFELY OUTSIDE THE CACHE LOOP
           cp -r api _site/
 
+      # --- DEBUGGING: UPLOAD COMPILED SITE ARTIFACT ---
+      - name: Upload Compiled Site Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-site
+          path: _site/
+          retention-days: 1
+
       # --- PREPARE ISOLATED GITHUB REDIRECT ---
       - name: Prepare GitHub Pages Redirect Directory
         if: github.ref == 'refs/heads/main'
