@@ -22,50 +22,46 @@ nav_links:
   {% endif %}
 {% endfor %}
 
-=== pane--en--events--thief--01--event ===
+=== pane--en--events--thief--01--explanation ===
 ---
-title: "Cheese Trap"
-nav_id: "event"
-parent_guide: "cheese"
+title: "Thief Hunt"
+nav_id: "explanation"
+parent_guide: "thief"
 lang: "en"
-order: 1 
+order: 1
 ---
-Cheese Trap is an event completed every other day with your alliance members. There is a possible two traps you can choose from, but you may only participate in one each day.
 
-=== pane--en--events--thief--02--cheese ===
+Thief Hunt is a three day alliance based event. Smaller mobs will spawn every 30 minutes starting 2 hours after reset. Killing these will occasionally spawn various levels of Thief Leaders requiring rallies with your alliance to kill. Leaders spawn in for 4 hours with a 5 minute grace shield, allowing time to successfully rally the leaders in your alliance. After the 5 minute shield is up any person in your server can rally and take the Initiator rewards. Each thief costs 10 stamina while rallies of Leaders cost 20, having stamina potions for the event is crucial. Ranking rewards are based off of total damage done. 
+
+> #### ⚠️ Tips
+> * While killing the smaller mobs, do not send out your main march. Use a smaller march so that your main is free to rally your Leaders.
+> * After each mob is killed your squad does not have to return to base, wait until victory and target new mob for chain kills and faster Leader spawns.
+
+=== pane--en--events--thief--02--coins ===
 ---
-title: "Acquiring Cheese"
-nav_id: "cheese"
-parent_guide: "cheese"
+title: "Lion Coins"
+nav_id: "coins"
+parent_guide: "thief"
 lang: "en"
-order: 2 
+order: 2
 ---
-Doing your daily tasks earns you cheese that you use to boost the traps by donating it directly to the trap, increasing player damage done to the boss.
 
-=== pane--en--events--thief--03--strategy ===
+#### Ways to earn Lion Coins
+* Initiating rallies of Leaders earns 36-78 coins dependent on Leader level
+* Join Leader rallies
+* Killing smaller thieves while spawning Leaders earns 10 Lion Coins each
+* Lion Coins will be sent to the mail of the finder for up to 240 coins
+
+=== pane--en--events--thief--03--shop ===
 ---
-title: "Strategy"
-nav_id: "strategy"
-parent_guide: "cheese"
+title: "Thief Hunt Store"
+nav_id: "shop"
+parent_guide: "thief"
 lang: "en"
 order: 3
 ---
-Each trap has 5 phases of points for the alliance as a whole, as well as a personal points ranking system. To hit maximum personal and alliance rewards quickly, rally with one squad while joining the rallies of alliance members with your other squads.
 
-When the event starts each player has the option to either start their own rally, or join another players. Every titled member of leaderships rallies will have an additional 5% damage boost to the rally for every member that joins.
-
-=== pane--en--events--thief--04--rewards ===
----
-title: "Rewards"
-nav_id: "rewards"
-parent_guide: "cheese"
-lang: "en"
-order: 4
----
-<div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Alliance Cheese Trap Rewards" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Personal Cheese Trap Rewards" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
-</div>
+-Thief shop priorities here-
 
 === guide--de--events--thief ===
 ---
@@ -91,50 +87,46 @@ nav_links:
   {% endif %}
 {% endfor %}
 
-=== pane--de--events--thief--01--event ===
+=== pane--de--events--thief--01--explanation ===
 ---
-title: "Käsefalle"
-nav_id: "event"
-parent_guide: "cheese"
+title: "Diebesjagd"
+nav_id: "explanation"
+parent_guide: "thief"
 lang: "de"
-order: 1 
+order: 1
 ---
-Die Käsefalle ist ein Event, das jeden zweiten Tag gemeinsam mit deinen Allianzmitgliedern absolviert wird. Es stehen zwei verschiedene Fallen zur Auswahl, du kannst jedoch nur an einer pro Tag teilnehmen.
 
-=== pane--de--events--thief--02--cheese ===
+Die Diebesjagd ist ein dreitägiges Allianz-Event. Kleinere Mobs erscheinen alle 30 Minuten, beginnend 2 Stunden nach dem Reset. Das Töten dieser Mobs lässt gelegentlich Diebesanführer (Thief Leaders) verschiedener Stufen erscheinen, für die Rallies mit deiner Allianz erforderlich sind. Anführer bleiben für 4 Stunden mit einem 5-minütigen Schutzschild, was deiner Allianz Zeit gibt, erfolgreiche Rallies zu starten. Nachdem das 5-minütige Schild abgelaufen ist, kann jede Person auf deinem Server eine Rally starten und die Belohnungen für den Initiator abgreifen. Jeder Dieb kostet 10 Ausdauer, während Rallies auf Anführer 20 kosten. Es ist entscheidend, Ausdauertränke für das Event zu haben. Ranglistenbelohnungen basieren auf dem insgesamt verursachten Schaden.
+
+> #### ⚠️ Tipps
+> * Während du die kleineren Mobs tötest, sende nicht deinen Hauptmarsch aus. Nutze einen kleineren Marsch, damit dein Hauptmarsch frei ist, um deine Anführer zu sammeln (rally).
+> * Nach jedem getöteten Mob muss dein Trupp nicht zur Basis zurückkehren. Warte auf den Sieg und ziele auf den nächsten Mob für Ketten-Kills und schnellere Anführer-Spawns ab.
+
+=== pane--de--events--thief--02--coins ===
 ---
-title: "Käse beschaffen"
-nav_id: "cheese"
-parent_guide: "cheese"
+title: "Löwenmünzen"
+nav_id: "coins"
+parent_guide: "thief"
 lang: "de"
-order: 2 
+order: 2
 ---
-Durch das Erledigen deiner täglichen Aufgaben erhältst du Käse. Diesen verwendest du, um die Fallen zu verstärken, indem du ihn direkt an die Falle spendest, wodurch der von Spielern am Boss verursachte Schaden erhöht wird.
 
-=== pane--de--events--thief--03--strategy ===
+#### Wege, um Löwenmünzen zu verdienen
+* Das Initiieren von Anführer-Rallies bringt 36-78 Münzen, abhängig von der Stufe des Anführers.
+* Tritt Anführer-Rallies bei.
+* Das Töten kleinerer Diebe, während Anführer beschworen werden, bringt jeweils 10 Löwenmünzen.
+* Löwenmünzen werden bis zu einem Maximum von 240 Münzen an das Postfach des Finders gesendet.
+
+=== pane--de--events--thief--03--shop ===
 ---
-title: "Strategie"
-nav_id: "strategy"
-parent_guide: "cheese"
+title: "Diebesjagd-Shop"
+nav_id: "shop"
+parent_guide: "thief"
 lang: "de"
 order: 3
 ---
-Jede Falle verfügt über 5 Punktephasen für die gesamte Allianz sowie über ein persönliches Punkteranglistensystem. Um schnell die maximalen persönlichen und Allianz-Belohnungen zu erreichen, starte eine Ralley mit einem Trupp, während du mit deinen anderen Trupps den Rallies anderer Allianzmitglieder beitrittst.
 
-Sobald das Event startet, hat jeder Spieler die Möglichkeit, entweder eine eigene Ralley zu starten oder einer bereits bestehenden beizutreten. Jede Ralley, die von einem ernannten Mitglied der Führung gestartet wird, erhält zusätzlich einen Schadensbonus von 5 % für jedes Mitglied, das beitritt.
-
-=== pane--de--events--thief--04--rewards ===
----
-title: "Belohnungen"
-nav_id: "rewards"
-parent_guide: "cheese"
-lang: "de"
-order: 4
----
-<div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Allianz Käsefalle Belohnungen" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Persönliche Käsefalle Belohnungen" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
-</div>
+-Prioritäten im Diebes-Shop hier-
 
 === guide--es--events--thief ===
 ---
@@ -160,50 +152,46 @@ nav_links:
   {% endif %}
 {% endfor %}
 
-=== pane--es--events--thief--01--event ===
+=== pane--es--events--thief--01--explanation ===
 ---
-title: "Trampa de Queso"
-nav_id: "event"
-parent_guide: "cheese"
+title: "Caza del Ladrón"
+nav_id: "explanation"
+parent_guide: "thief"
 lang: "es"
-order: 1 
+order: 1
 ---
-La Trampa de Queso es un evento que se completa cada dos días junto con los miembros de tu alianza. Hay dos trampas posibles para elegir, pero solo puedes participar en una cada día.
 
-=== pane--es--events--thief--02--cheese ===
+La Caza del Ladrón es un evento de alianza de tres días. Aparecerán enemigos más pequeños cada 30 minutos a partir de 2 horas después del reinicio. Matar a estos hará que ocasionalmente aparezcan Líderes Ladrones de varios niveles que requieren concentraciones (rallies) con tu alianza para ser derrotados. Los Líderes aparecen durante 4 horas con un escudo de gracia de 5 minutos, lo que da tiempo para organizar las concentraciones con éxito en tu alianza. Después de que el escudo de 5 minutos termine, cualquier persona en tu servidor puede iniciar una concentración y llevarse las recompensas de Iniciador. Cada ladrón cuesta 10 de aguante, mientras que las concentraciones a los Líderes cuestan 20, por lo que es crucial tener pociones de aguante para el evento. Las recompensas de clasificación se basan en el daño total infligido.
+
+> #### ⚠️ Consejos
+> * Al matar a los enemigos más pequeños, no envíes tu marcha principal. Usa una marcha más pequeña para que la principal esté libre para concentrarse contra tus Líderes.
+> * Después de que cada enemigo es eliminado, tu escuadrón no tiene que regresar a la base; espera a que se confirme la victoria y marca a un nuevo enemigo para realizar muertes en cadena y hacer que los Líderes aparezcan más rápido.
+
+=== pane--es--events--thief--02--coins ===
 ---
-title: "Adquisición de Queso"
-nav_id: "cheese"
-parent_guide: "cheese"
+title: "Monedas de León"
+nav_id: "coins"
+parent_guide: "thief"
 lang: "es"
-order: 2 
+order: 2
 ---
-Al realizar tus tareas diarias obtendrás queso, el cual se utiliza para potenciar las trampas donándolo directamente a ellas, aumentando así el daño que los jugadores infligen al jefe.
 
-=== pane--es--events--thief--03--strategy ===
+#### Formas de ganar Monedas de León
+* Iniciar concentraciones de Líderes otorga entre 36 y 78 monedas, dependiendo del nivel del Líder.
+* Unirse a concentraciones de Líderes.
+* Matar ladrones más pequeños mientras se hacen aparecer Líderes otorga 10 Monedas de León cada uno.
+* Las Monedas de León se enviarán al correo del descubridor hasta un máximo de 240 monedas.
+
+=== pane--es--events--thief--03--shop ===
 ---
-title: "Estrategia"
-nav_id: "strategy"
-parent_guide: "cheese"
+title: "Tienda de la Caza del Ladrón"
+nav_id: "shop"
+parent_guide: "thief"
 lang: "es"
 order: 3
 ---
-Cada trampa tiene 5 fases de puntos para la alianza en su conjunto, así como un sistema de clasificación por puntos personales. Para conseguir las máximas recompensas personales y de alianza rápidamente, organiza una concentración (rally) con un escuadrón mientras te unes a las concentraciones de otros miembros de la alianza con tus escuadrones restantes.
 
-Cuando comienza el evento, cada jugador tiene la opción de iniciar su propia concentración o unirse a la de otro jugador. Las concentraciones lideradas por cualquier miembro titulado de la directiva tendrán un aumento de daño adicional del 5% por cada miembro que se una.
-
-=== pane--es--events--thief--04--rewards ===
----
-title: "Recompensas"
-nav_id: "rewards"
-parent_guide: "cheese"
-lang: "es"
-order: 4
----
-<div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Recompensas de Alianza Trampa de Queso" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Recompensas Personales Trampa de Queso" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
-</div>
+-Prioridades de la tienda del ladrón aquí-
 
 === guide--fr--events--thief ===
 ---
@@ -229,50 +217,46 @@ nav_links:
   {% endif %}
 {% endfor %}
 
-=== pane--fr--events--thief--01--event ===
+=== pane--fr--events--thief--01--explanation ===
 ---
-title: "Piège à Fromage"
-nav_id: "event"
-parent_guide: "cheese"
+title: "Chasse au Voleur"
+nav_id: "explanation"
+parent_guide: "thief"
 lang: "fr"
-order: 1 
+order: 1
 ---
-Le Piège à Fromage est un événement à réaliser tous les deux jours avec les membres de votre alliance. Il existe deux pièges différents, mais vous ne pouvez participer qu'à un seul par jour.
 
-=== pane--fr--events--thief--02--cheese ===
+La Chasse au Voleur est un événement d'alliance de trois jours. Des ennemis plus petits apparaîtront toutes les 30 minutes à partir de 2 heures après la réinitialisation. Les tuer fera occasionnellement apparaître des Chefs Voleurs de différents niveaux nécessitant des ralliements (rallies) avec votre alliance. Les Chefs apparaissent pendant 4 heures avec un bouclier de grâce de 5 minutes, laissant le temps de réussir les ralliements au sein de votre alliance. Une fois le bouclier de 5 minutes dissipé, n'importe quelle personne sur votre serveur peut lancer un ralliement et prendre les récompenses d'Initiateur. Chaque voleur coûte 10 points d'endurance tandis que les ralliements sur les Chefs en coûtent 20. Il est crucial d'avoir des potions d'endurance pour cet événement. Les récompenses de classement sont basées sur les dégâts totaux infligés.
+
+> #### ⚠️ Astuces
+> * Lorsque vous tuez les petits ennemis, n'envoyez pas votre marche principale. Utilisez une marche plus petite pour que la principale soit libre de rallier vos Chefs.
+> * Après avoir tué chaque ennemi, votre escouade n'a pas besoin de retourner à la base : attendez la victoire et ciblez un nouvel ennemi pour des éliminations en chaîne et une apparition plus rapide des Chefs.
+
+=== pane--fr--events--thief--02--coins ===
 ---
-title: "Obtenir du Fromage"
-nav_id: "cheese"
-parent_guide: "cheese"
+title: "Pièces de Lion"
+nav_id: "coins"
+parent_guide: "thief"
 lang: "fr"
-order: 2 
+order: 2
 ---
-Accomplir vos tâches quotidiennes vous permet de gagner du fromage. Vous l'utilisez pour améliorer les pièges en le donnant directement, ce qui augmente les dégâts infligés au boss par les joueurs.
 
-=== pane--fr--events--thief--03--strategy ===
+#### Comment gagner des Pièces de Lion
+* Initier des ralliements de Chefs rapporte entre 36 et 78 pièces, selon le niveau du Chef.
+* Rejoindre des ralliements de Chefs.
+* Tuer de petits voleurs lors de l'apparition des Chefs rapporte 10 Pièces de Lion chacun.
+* Les Pièces de Lion seront envoyées dans la messagerie de celui qui les trouve, jusqu'à un maximum de 240 pièces.
+
+=== pane--fr--events--thief--03--shop ===
 ---
-title: "Stratégie"
-nav_id: "strategy"
-parent_guide: "cheese"
+title: "Boutique de la Chasse au Voleur"
+nav_id: "shop"
+parent_guide: "thief"
 lang: "fr"
 order: 3
 ---
-Chaque piège comporte 5 phases de points pour l'alliance globale, ainsi qu'un système de classement de points personnels. Pour obtenir rapidement un maximum de récompenses personnelles et d'alliance, lancez un ralliement (rally) avec une escouade tout en rejoignant les ralliements des autres membres avec vos escouades restantes.
 
-Lorsque l'événement commence, chaque joueur a le choix entre lancer son propre ralliement ou en rejoindre un autre. Chaque ralliement initié par un membre titré de la direction bénéficiera d'un bonus de dégâts supplémentaire de 5 % pour chaque membre qui s'y joint.
-
-=== pane--fr--events--thief--04--rewards ===
----
-title: "Récompenses"
-nav_id: "rewards"
-parent_guide: "cheese"
-lang: "fr"
-order: 4
----
-<div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Récompenses d'Alliance Piège à Fromage" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Récompenses Personnelles Piège à Fromage" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
-</div>
+-Priorités de la boutique du voleur ici-
 
 === guide--ru--events--thief ===
 ---
@@ -298,50 +282,46 @@ nav_links:
   {% endif %}
 {% endfor %}
 
-=== pane--ru--events--thief--01--event ===
+=== pane--ru--events--thief--01--explanation ===
 ---
-title: "Сырная Ловушка"
-nav_id: "event"
-parent_guide: "cheese"
+title: "Охота на Вора"
+nav_id: "explanation"
+parent_guide: "thief"
 lang: "ru"
-order: 1 
+order: 1
 ---
-Сырная Ловушка — это событие, которое проводится каждые два дня вместе с участниками вашего альянса. На выбор доступно две ловушки, но вы можете участвовать только в одной каждый день.
 
-=== pane--ru--events--thief--02--cheese ===
+Охота на Вора — это трехдневное событие для альянсов. Мелкие мобы будут появляться каждые 30 минут, начиная через 2 часа после сброса. Их уничтожение иногда приводит к появлению Лидеров Воров различных уровней, для убийства которых требуются сборы (ралли) вашего альянса. Лидеры появляются на 4 часа с 5-минутным защитным щитом, что дает время успешно собрать ралли внутри альянса. После окончания 5-минутного щита любой игрок на вашем сервере может собрать ралли и забрать награды Инициатора. Каждый вор стоит 10 выносливости, а сборы на Лидеров стоят 20, поэтому крайне важно иметь зелья выносливости для события. Награды в рейтинге зависят от общего нанесенного урона.
+
+> #### ⚠️ Советы
+> * При убийстве мелких мобов не отправляйте свой основной отряд. Используйте отряд поменьше, чтобы ваш основной был свободен для сборов на Лидеров.
+> * После убийства каждого моба вашему отряду не обязательно возвращаться на базу. Дождитесь победы и выберите целью нового моба для серийных убийств и более быстрого появления Лидеров.
+
+=== pane--ru--events--thief--02--coins ===
 ---
-title: "Получение Сыра"
-nav_id: "cheese"
-parent_guide: "cheese"
+title: "Львиные Монеты"
+nav_id: "coins"
+parent_guide: "thief"
 lang: "ru"
-order: 2 
+order: 2
 ---
-Выполнение ежедневных заданий приносит вам сыр. Вы используете его для усиления ловушек, жертвуя его напрямую, что увеличивает урон, наносимый игроками по боссу.
 
-=== pane--ru--events--thief--03--strategy ===
+#### Способы заработать Львиные Монеты
+* Запуск сборов на Лидеров приносит 36-78 монет в зависимости от уровня Лидера.
+* Присоединение к сборам на Лидеров.
+* Убийство мелких воров во время призыва Лидеров приносит по 10 Львиных Монет за каждого.
+* Львиные Монеты отправляются на почту нашедшего до 240 монет.
+
+=== pane--ru--events--thief--03--shop ===
 ---
-title: "Стратегия"
-nav_id: "strategy"
-parent_guide: "cheese"
+title: "Магазин Охоты на Вора"
+nav_id: "shop"
+parent_guide: "thief"
 lang: "ru"
 order: 3
 ---
-Каждая ловушка имеет 5 фаз набора очков для альянса в целом, а также систему рейтинга личных очков. Чтобы быстро получить максимальные личные и командные награды, собирайте сбор (ралли) одним своим отрядом и одновременно вступайте в сборы других участников альянса остальными отрядами.
 
-В начале события у каждого игрока есть выбор: запустить собственный сбор или присоединиться к чужому. Каждый сбор, организованный участником руководства с титулом, получит дополнительные 5% к урону за каждого присоединившегося игрока.
-
-=== pane--ru--events--thief--04--rewards ===
----
-title: "Награды"
-nav_id: "rewards"
-parent_guide: "cheese"
-lang: "ru"
-order: 4
----
-<div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Награды Альянса Сырная Ловушка" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Личные Награды Сырная Ловушка" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
-</div>
+-Приоритеты магазина вора здесь-
 
 === guide--tr--events--thief ===
 ---
@@ -367,50 +347,46 @@ nav_links:
   {% endif %}
 {% endfor %}
 
-=== pane--tr--events--thief--01--event ===
+=== pane--tr--events--thief--01--explanation ===
 ---
-title: "Peynir Tuzağı"
-nav_id: "event"
-parent_guide: "cheese"
+title: "Hırsız Avı"
+nav_id: "explanation"
+parent_guide: "thief"
 lang: "tr"
-order: 1 
+order: 1
 ---
-Peynir Tuzağı, ittifak üyelerinizle gün aşırı tamamlanan bir etkinliktir. Seçebileceğiniz iki olası tuzak vardır, ancak her gün yalnızca birine katılabilirsiniz.
 
-=== pane--tr--events--thief--02--cheese ===
+Hırsız Avı, üç günlük bir ittifak etkinliğidir. Daha küçük moblar, sıfırlamadan 2 saat sonra başlayarak her 30 dakikada bir ortaya çıkacaktır. Bunları öldürmek, ara sıra ittifakınızla ralliler (toplanmalar) yapılmasını gerektiren çeşitli seviyelerde Hırsız Liderlerin ortaya çıkmasını sağlar. Liderler 4 saatliğine ortaya çıkar ve ittifakınızın liderleri başarılı bir şekilde ralli yapabilmesi için 5 dakikalık bir lütuf kalkanına sahiptir. 5 dakikalık kalkan kalktıktan sonra sunucunuzdaki herhangi biri ralli yapabilir ve Başlatıcı ödüllerini alabilir. Her hırsız 10 dayanıklılığa (stamina) mal olurken, Liderlere yapılan ralliler 20'ye mal olur, bu nedenle etkinlik için dayanıklılık iksirlerine sahip olmak çok önemlidir. Sıralama ödülleri verilen toplam hasara bağlıdır.
+
+> #### ⚠️ İpuçları
+> * Küçük mobları öldürürken ana yürüyüşünüzü (march) göndermeyin. Liderlerinize ralli yapmak için ana yürüyüşünüzün serbest kalması adına daha küçük bir yürüyüş kullanın.
+> * Her mob öldürüldükten sonra ekibinizin üsse dönmesine gerek yoktur, zaferi bekleyin ve zincirleme ölümler ve daha hızlı Lider belirmeleri için yeni mobu hedefleyin.
+
+=== pane--tr--events--thief--02--coins ===
 ---
-title: "Peynir Kazanma"
-nav_id: "cheese"
-parent_guide: "cheese"
+title: "Aslan Sikkeleri"
+nav_id: "coins"
+parent_guide: "thief"
 lang: "tr"
-order: 2 
+order: 2
 ---
-Günlük görevlerinizi yapmak, doğrudan tuzağa bağışlayarak tuzakları güçlendirmek için kullanacağınız peynirleri kazandırır ve oyuncunun patrona verdiği hasarı artırır.
 
-=== pane--tr--events--thief--03--strategy ===
+#### Aslan Sikkesi kazanma yolları
+* Lider rallileri başlatmak, Lider seviyesine bağlı olarak 36-78 sikke kazandırır.
+* Lider rallilerine katılın.
+* Liderleri ortaya çıkarırken daha küçük hırsızları öldürmek her biri için 10 Aslan Sikkesi kazandırır.
+* Aslan Sikkeleri, en fazla 240 sikkeye kadar bulanın postasına gönderilecektir.
+
+=== pane--tr--events--thief--03--shop ===
 ---
-title: "Strateji"
-nav_id: "strategy"
-parent_guide: "cheese"
+title: "Hırsız Avı Mağazası"
+nav_id: "shop"
+parent_guide: "thief"
 lang: "tr"
 order: 3
 ---
-Her tuzağın bir bütün olarak ittifak için 5 puan aşaması ve ayrıca kişisel puan sıralama sistemi vardır. Maksimum kişisel ve ittifak ödüllerine hızlıca ulaşmak için bir ekiple ralli başlatırken diğer ekiplerinizle ittifak üyelerinin rallilerine katılın.
 
-Etkinlik başladığında her oyuncunun kendi rallisini başlatma veya başka bir oyuncunun rallisine katılma seçeneği vardır. Unvanlı bir liderlik üyesinin her rallisi, katılan her üye için ralliye ek %5 hasar artışı sağlayacaktır.
-
-=== pane--tr--events--thief--04--rewards ===
----
-title: "Ödüller"
-nav_id: "rewards"
-parent_guide: "cheese"
-lang: "tr"
-order: 4
----
-<div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="İttifak Peynir Tuzağı Ödülleri" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Kişisel Peynir Tuzağı Ödülleri" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
-</div>
+-Hırsız mağazası öncelikleri burada-
 
 === guide--uk--events--thief ===
 ---
@@ -436,50 +412,46 @@ nav_links:
   {% endif %}
 {% endfor %}
 
-=== pane--uk--events--thief--01--event ===
+=== pane--uk--events--thief--01--explanation ===
 ---
-title: "Сирна Пастка"
-nav_id: "event"
-parent_guide: "cheese"
+title: "Полювання на Злодія"
+nav_id: "explanation"
+parent_guide: "thief"
 lang: "uk"
-order: 1 
+order: 1
 ---
-Сирна Пастка — це подія, яка виконується кожні два дні разом із учасниками вашого альянсу. На вибір є дві можливі пастки, але ви можете брати участь лише в одній щодня.
 
-=== pane--uk--events--thief--02--cheese ===
+Полювання на Злодія — це триденна подія для альянсів. Менші моби з'являтимуться кожні 30 хвилин, починаючи через 2 години після скидання (reset). Їхнє знищення іноді призводить до появи Лідерів Злодіїв різних рівнів, для вбивства яких потрібні збори (ралі) вашого альянсу. Лідери з'являються на 4 години з 5-хвилинним захисним щитом, що дає час успішно зібрати ралі всередині альянсу. Після закінчення 5-хвилинного щита будь-яка людина на вашому сервері може зібрати ралі та забрати нагороди Ініціатора. Кожен злодій коштує 10 витривалості (stamina), тоді як збори на Лідерів коштують 20. Тому мати зілля витривалості для події критично важливо. Нагороди в рейтингу залежать від загальної завданої шкоди.
+
+> #### ⚠️ Поради
+> * Під час вбивства дрібних мобів не відправляйте свій основний загін. Використовуйте менший загін, щоб ваш основний був вільний для зборів на Лідерів.
+> * Після вбивства кожного моба вашому загону не потрібно повертатися на базу; дочекайтеся перемоги та виберіть ціллю нового моба для ланцюгових вбивств і швидшої появи Лідерів.
+
+=== pane--uk--events--thief--02--coins ===
 ---
-title: "Отримання Сиру"
-nav_id: "cheese"
-parent_guide: "cheese"
+title: "Левові Монети"
+nav_id: "coins"
+parent_guide: "thief"
 lang: "uk"
-order: 2 
+order: 2
 ---
-Виконання щоденних завдань приносить вам сир, який використовується для посилення пасток шляхом безпосередньої пожертви в пастку, що збільшує шкоду, яку гравець завдає босу.
 
-=== pane--uk--events--thief--03--strategy ===
+#### Способи заробити Левові Монети
+* Початок зборів на Лідерів приносить 36-78 монет залежно від рівня Лідера.
+* Приєднання до зборів на Лідерів.
+* Вбивство менших злодіїв під час призову Лідерів приносить по 10 Левових Монет за кожного.
+* Левові Монети будуть надіслані на пошту того, хто знайшов, до 240 монет.
+
+=== pane--uk--events--thief--03--shop ===
 ---
-title: "Стратегія"
-nav_id: "strategy"
-parent_guide: "cheese"
+title: "Магазин Полювання на Злодія"
+nav_id: "shop"
+parent_guide: "thief"
 lang: "uk"
 order: 3
 ---
-Кожна пастка має 5 фаз набору очок для альянсу в цілому, а также систему рейтингу особистих очок. Щоб швидко отримати максимальні особисті нагороди та нагороди альянсу, зберіть збір (ралі) одним загоном, одночасно приєднуючись до зборів учасників альянсу іншими своїми загонами.
 
-Коли подія починається, кожен гравець має можливість або почати власний збір, або приєднатися до іншого гравця. Кожен збір лідера з титулом отримає додаткові 5% до шкоди за кожного учасника, який приєднається.
-
-=== pane--uk--events--thief--04--rewards ===
----
-title: "Нагороди"
-nav_id: "rewards"
-parent_guide: "cheese"
-lang: "uk"
-order: 4
----
-<div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Нагороди Альянсу Сирна Пастка" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Особисті Нагороди Сирна Пастка" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
-</div>
+-Пріоритети магазину злодія тут-
 
 === guide--it--events--thief ===
 ---
@@ -505,47 +477,43 @@ nav_links:
   {% endif %}
 {% endfor %}
 
-=== pane--it--events--thief--01--event ===
+=== pane--it--events--thief--01--explanation ===
 ---
-title: "Trappola di Formaggio"
-nav_id: "event"
-parent_guide: "cheese"
+title: "Caccia al Ladro"
+nav_id: "explanation"
+parent_guide: "thief"
 lang: "it"
-order: 1 
+order: 1
 ---
-La Trappola di Formaggio è un evento che si completa a giorni alterni con i membri della tua alleanza. Ci sono due trappole tra cui scegliere, ma puoi partecipare a una sola al giorno.
 
-=== pane--it--events--thief--02--cheese ===
+La Caccia al Ladro è un evento di alleanza di tre giorni. Mob più piccoli appariranno ogni 30 minuti a partire da 2 ore dopo il reset. Ucciderli farà occasionalmente apparire Leader dei Ladri di vari livelli che richiedono raduni (rallies) con la tua alleanza per essere uccisi. I Leader appaiono per 4 ore con uno scudo di grazia di 5 minuti, concedendo il tempo per organizzare con successo i raduni nella tua alleanza. Dopo che lo scudo di 5 minuti è terminato, qualsiasi persona nel tuo server può lanciare un raduno e prendere le ricompense dell'Iniziatore. Ogni ladro costa 10 di resistenza (stamina), mentre i raduni per i Leader costano 20, quindi avere pozioni di resistenza per l'evento è fondamentale. Le ricompense di classifica si basano sul danno totale inflitto.
+
+> #### ⚠️ Consigli
+> * Mentre uccidi i mob più piccoli, non inviare la tua marcia principale. Usa una marcia più piccola in modo che la principale sia libera per i raduni sui tuoi Leader.
+> * Dopo che ogni mob è stato ucciso, la tua squadra non deve tornare alla base; attendi la vittoria e punta a un nuovo mob per uccisioni a catena e apparizioni più rapide dei Leader.
+
+=== pane--it--events--thief--02--coins ===
 ---
-title: "Ottenere Formaggio"
-nav_id: "cheese"
-parent_guide: "cheese"
+title: "Monete Leone"
+nav_id: "coins"
+parent_guide: "thief"
 lang: "it"
-order: 2 
+order: 2
 ---
-Svolgere i tuoi compiti giornalieri ti fa guadagnare del formaggio che usi per potenziare le trappole donandolo direttamente alla trappola, aumentando il danno del giocatore inflitto al boss.
 
-=== pane--it--events--thief--03--strategy ===
+#### Modi per guadagnare Monete Leone
+* Iniziare i raduni dei Leader fa guadagnare 36-78 monete a seconda del livello del Leader.
+* Unisciti ai raduni dei Leader.
+* Uccidere ladri più piccoli mentre fai apparire i Leader fa guadagnare 10 Monete Leone ciascuno.
+* Le Monete Leone verranno inviate alla posta di chi le trova fino a un massimo di 240 monete.
+
+=== pane--it--events--thief--03--shop ===
 ---
-title: "Strategia"
-nav_id: "strategy"
-parent_guide: "cheese"
+title: "Negozio Caccia al Ladro"
+nav_id: "shop"
+parent_guide: "thief"
 lang: "it"
 order: 3
 ---
-Ogni trappola ha 5 fasi di punti per l'alleanza nel suo complesso, oltre a un sistema di classificazione dei punti personali. Per ottenere rapidamente il massimo delle ricompense personali e di alleanza, lancia un raduno (rally) con una squadra e unisciti ai raduni dei membri della tua alleanza con le altre squadre.
 
-Quando l'evento inizia, ogni giocatore ha l'opzione di avviare il proprio raduno o di unirsi a quello di un altro giocatore. Ogni raduno dei membri titolati della leadership avrà un aumento del danno extra del 5% per ogni membro che si unisce.
-
-=== pane--it--events--thief--04--rewards ===
----
-title: "Ricompense"
-nav_id: "rewards"
-parent_guide: "cheese"
-lang: "it"
-order: 4
----
-<div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Ricompense Alleanza Trappola di Formaggio" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Ricompense Personali Trappola di Formaggio" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
-</div>
+-Priorità del negozio del ladro qui-
