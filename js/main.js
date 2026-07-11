@@ -375,6 +375,7 @@
 
     // --- EVENTS ---
     document.addEventListener("turbo:load", initApp);
+    document.addEventListener("turbo:frame-render", initApp);
     document.addEventListener("turbo:visit", () => { isNewNavigation = true; });
 
     document.addEventListener('click', (e) => {
