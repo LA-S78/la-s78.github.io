@@ -14,14 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Setup Ruby
+      - name: Setting up Ruby environment
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
           bundler-cache: true
 
-      # --- AI LOCALIZATION ENGINE ---
-      - name: AI Localization Engine
+      - name: Translating source text via AI
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -32,8 +31,7 @@ jobs:
             echo "No English source drafts found. Skipping."
           fi
 
-      # --- AI LOCALIZATION OUTPUT SYNC ---
-      - name: Commit AI-Generated Master Files
+      - name: Saving master translation files
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -45,17 +43,13 @@ jobs:
             git push
           fi
 
-      # --- LEVEL 3 AUTOMATION: BULLETPROOF SOURCE DEMULTIPLEXER ---
-      - name: Demultiplex Unified Content Files
+      - name: Dividing translated pages
         run: |
           ruby -r fileutils -e '
             puts "Starting format-agnostic segregation engine..."
             Dir.glob("_source/*.md").each do |file_path|
               content = File.read(file_path)
               
-              # --- NORMALIZATION BRIDGE ---
-              # Convert modern XML tags into legacy delimiters so the parser handles both.
-              # Note: Using double quotes to avoid YAML escaping issues.
               normalized_content = content.gsub(/<guide\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)">/, "=== guide--\\1--\\2--\\3 ===")
               normalized_content = normalized_content.gsub(/<pane\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)"\s+section="([^"]+)">/, "=== pane--\\1--\\2--\\3--\\4 ===")
               
@@ -67,7 +61,6 @@ jobs:
                 block_content = blocks[i+1].gsub("\r\n", "\n").strip
                 next if block_content.empty?
                 
-                # --- DEFENSIVE VALIDATION LAYER ---
                 allowed_patterns = [
                   /^page--\S+$/,
                   /^collection--\S+--\d+$/,
@@ -104,12 +97,14 @@ jobs:
               end
             end
           '
+
+      - name: Injecting UI navigation text
+        run: bundle exec ruby _scripts/sync_ui_data.rb
           
-      - name: Build All Languages
+      - name: Compiling regional sites
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         run: |
-          # --- BUILD ISOLATION: PREVENT LANGUAGE CLOBBERING ---
           cp -r guides guides_backup
           cp -r collections/_guide_panes guide_panes_backup
 
@@ -166,22 +161,20 @@ jobs:
           
           cp -r api _site/
 
-      # --- DEBUGGING: UPLOAD COMPILED SITE ARTIFACT ---
-      - name: Upload Compiled Site Artifact
+      - name: Uploading build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: compiled-site
           path: _site/
           retention-days: 1
 
-      - name: Prepare GitHub Pages Redirect Directory
+      - name: Preparing fallback redirects
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir _github_pages_site
           cp migration.html _github_pages_site/index.html
 
-      # --- VERCEL DEPLOYMENT PIPELINE ---
-      - name: Cache Vercel CLI State
+      - name: Caching deployment state
         uses: actions/cache@v4
         with:
           path: ~/.local/share/com.vercel.cli
@@ -189,10 +182,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-vercel-
 
-      - name: Install Vercel CLI
+      - name: Installing deployment tools
         run: npm install --global vercel@latest
 
-      - name: Pull Vercel Environment Info
+      - name: Fetching deployment environment
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
@@ -203,10 +196,10 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Prepare Vercel Deployment Folder
+      - name: Staging deployment folder
         run: cp -r .vercel _site/
 
-      - name: Deploy Compiled Site to Vercel
+      - name: Deploying to Vercel
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel deploy --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
@@ -218,7 +211,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Deploy Redirect to GitHub Pages
+      - name: Deploying redirects to GitHub Pages
         if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -226,7 +219,7 @@ jobs:
           folder: _github_pages_site
           clean: true
 
-      - name: Notify Discord on Success
+      - name: Sending success alert
         if: success()
         run: |
           curl -H "Content-Type: application/json" \
@@ -234,7 +227,7 @@ jobs:
                -d '{"content": "✅ **Build Succeeded!** The latest layout changes are officially live on Vercel for the `'"${{ github.ref_name }}"'` branch."}' \
                ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-      - name: Notify Discord on Failure
+      - name: Sending failure alert
         if: failure()
         run: |
           curl -H "Content-Type: application/json" \
