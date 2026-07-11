@@ -4,14 +4,12 @@ require 'fileutils'
 $stdout.sync = true
 
 # Primary data structure to hold our aggregated map
-# Structure: master_registry[guide_id][lang] = { category: cat, content: text, panes: [] }
 master_registry = Hash.new { |h, k| h[k] = Hash.new }
 
 puts "🔍 Scanning distributed regional guides..."
 
 # 1. Gather all Main Guide layout files
 Dir.glob("guides/**/*.md").each do |guide_path|
-  # Expected Path: guides/{lang}/{category}/{guide_id}.md
   parts = guide_path.split('/')
   next if parts.length < 4
 
@@ -32,7 +30,6 @@ puts "🔍 Scanning distributed collection guide panes..."
 
 # 2. Gather all matching Child Pane files
 Dir.glob("collections/_guide_panes/**/*.md").each do |pane_path|
-  # Expected Path: collections/_guide_panes/{lang}/{category}/{guide_id}/{step}-{pane_name}.md
   parts = pane_path.split('/')
   next if parts.length < 6
 
@@ -41,14 +38,12 @@ Dir.glob("collections/_guide_panes/**/*.md").each do |pane_path|
   guide_id = parts[4]
   filename = File.basename(parts[5], ".md")
 
-  # Split the file name at the first hyphen to isolate the step counter from the identifier name
   name_parts = filename.split('-', 2)
   step       = name_parts[0]
   pane_name  = name_parts[1] || ""
 
   content = File.read(pane_path).gsub("\r\n", "\n").strip
 
-  # Defensive check: ensure the base guide structure container entry exists in our tracking registry
   master_registry[guide_id][lang] ||= { category: category, content: "", panes: [] }
   
   master_registry[guide_id][lang][:panes] << {
@@ -64,6 +59,14 @@ FileUtils.mkdir_p("_source")
 puts "⚙️ Processing compilation and stitching operations..."
 
 master_registry.each do |guide_id, languages|
+  output_path = "_source/#{guide_id}.md"
+  
+  # CRITICAL GUARD: Skip processing completely if this master file already exists
+  if File.exist?(output_path)
+    puts "⏭️ Skipping: '#{output_path}' already exists in _source/. Protected from overwrite."
+    next
+  end
+
   master_file_content = ""
   
   # Ensure the English payload layer is always compiled and written out first
@@ -95,7 +98,6 @@ master_registry.each do |guide_id, languages|
   end
 
   # Save the finalized compiled single-file database asset
-  output_path = "_source/#{guide_id}.md"
   File.write(output_path, master_file_content.strip + "\n")
   puts "💾 Reconstructed Master: #{output_path} (Languages: #{sorted_langs.join(', ')})"
 end
