@@ -20,11 +20,6 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      # --- CONVERT TO MASTER (MIGRATION TESTING ON DEV) ---
-      - name: Reconstructing master files from distributed content
-        if: github.ref_name == 'dev'
-        run: bundle exec ruby _scripts/convert_to_master.rb
-
       - name: Translating source text via AI
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -36,7 +31,6 @@ jobs:
             echo "No English source drafts found. Skipping."
           fi
 
-      # --- FIXED INTERCEPT STAGE FOR UNTRACKED FILES ---
       - name: Saving master translation files
         run: |
           git config --global user.name 'github-actions[bot]'
