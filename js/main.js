@@ -331,6 +331,29 @@
         });
     }
 
+    // --- NEW: CLIENT-SIDE FOOTER NAVIGATION HIGHLIGHTER ---
+    function highlightActiveFooterNav() {
+        const footerLinks = document.querySelectorAll('footer .nav-item');
+        if (footerLinks.length === 0) return;
+
+        const currentPath = window.location.pathname;
+        
+        // Normalizes paths by dropping training slashes and index.html mutations
+        const normalize = (path) => path.replace(/\/index\.html$/, '/').replace(/\/$/, '');
+        const normalizedCurrent = normalize(currentPath);
+
+        footerLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+
+            if (normalize(href) === normalizedCurrent) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
     function syncHeaderSubtitle() {
         const newSubtitle = document.getElementById('secret-subtitle-data');
         const headerSubtitle = document.getElementById('ui-subtitle');
@@ -367,6 +390,7 @@
         initAnchorScrolling();
         initSearchEngine();
         highlightActiveLanguage();
+        highlightActiveFooterNav(); // Run highlight routine on page execution
         initThemeToggle();
         syncHeaderSubtitle();
         initScrollMemory();
