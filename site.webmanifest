@@ -5,7 +5,7 @@
   "description": "Rules, guides, and more",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000",
+  "background_color": "#110d0b",
   "theme_color": "#110d0b",
   "icons": [
     {
