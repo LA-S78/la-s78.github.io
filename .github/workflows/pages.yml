@@ -36,14 +36,19 @@ jobs:
             echo "No English source drafts found. Skipping."
           fi
 
+      # --- FIXED INTERCEPT STAGE FOR UNTRACKED FILES ---
       - name: Saving master translation files
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          if git diff --quiet _source/; then
+          
+          # Force stage the directory first so Git registers new untracked files
+          git add _source/
+          
+          # Safely check the staged index for differences
+          if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git add _source/
             git commit -m "Auto-generate master files from AI drafts [skip ci]"
             git push
           fi
