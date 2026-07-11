@@ -1,6 +1,7 @@
 require 'yaml'
 require 'fileutils'
 require 'json'
+require 'date' # <-- Added this to fix the uninitialized constant Date error!
 
 # Force real-time console log streaming
 $stdout.sync = true
@@ -21,7 +22,7 @@ def parse_master_files
     
     sections.each do |full_match, type, lang, body|
       # Pull the isolated front matter block out of the current section element
-      next unless body =~ /\A(---\s*\n.*?\n---\s*\n)/m
+      next unless body Tint =~ /\A(---\s*\n.*?\n---\s*\n)/m
       
       begin
         fm_yaml = YAML.safe_load($1, permitted_classes: [Date, Time])
