@@ -3,13 +3,39 @@
 <head>
     <meta charset="utf-8">
     <title>Redirecting...</title>
-    <meta http-equiv="refresh" content="0; url=/en/">
-    <script>
-        location.href = '/en/';
-    </script>
     <meta name="robots" content="noindex">
+    <script>
+        const routingData = {
+            en: { path: "/en/", label: "Redirecting to English version..." },
+            de: { path: "/de/", label: "Weiterleitung zur deutschen Version..." },
+            es: { path: "/es/", label: "Redirigiendo a la versión en español..." },
+            fr: { path: "/fr/", label: "Redirection vers la version française..." },
+            it: { path: "/it/", label: "Reindirizzamento alla versione italiana..." },
+            ru: { path: "/ru/", label: "Перенаправление на русскую версию..." },
+            tr: { path: "/tr/", label: "Türkçe sürüme yönlendiriliyor..." },
+            uk: { path: "/uk/", label: "Перенаправлення на українську версію..." }
+        };
+
+        window.navigator.DOMContentLoaded = function() {
+            // Determine client subtag match profile
+            const userLang = (navigator.language || navigator.userLanguage).split('-')[0];
+            const target = routingData[userLang] ? routingData[userLang] : routingData['en'];
+
+            // Update visual fallback label execution state
+            const infoText = document.getElementById("redirect-notice");
+            infoText.innerHTML = `${target.label} <a href="${target.path}" style="color: #e6a050;">Click here</a>`;
+
+            // Execute spatial localized transition path routing
+            window.location.href = target.path;
+        };
+        
+        // Immediate execution fallback loop catch if window parsing delays
+        const userLang = (navigator.language || navigator.userLanguage).split('-')[0];
+        const directPath = routingData[userLang] ? routingData[userLang].path : "/en/";
+        window.location.href = directPath;
+    </script>
 </head>
-<body>
-    <p>Redirecting to <a href="/en/">English version</a>...</p>
+<body style="font-family: sans-serif; background-color: #110d0b; color: #e6dfd5; text-align: center; padding-top: 20%;">
+    <p id="redirect-notice">Redirecting...</p>
 </body>
 </html>

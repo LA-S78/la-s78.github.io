@@ -20,34 +20,41 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
+      # --- TRANSLATE VIA AI (UPGRADED TO RECURSIVE DEEP SCAN) ---
       - name: Translating source text via AI
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          if ls _source/*_en.md 1> /dev/null 2>&1; then
+          if find _source/ -type f -name "*_en.md" | grep -q .; then
             echo "Drafts detected. Running AI Localization..."
             bundle exec ruby _scripts/generate_master.rb
           else
             echo "No English source drafts found. Skipping."
           fi
 
+      # --- FIXED INTERCEPT STAGE FOR UNTRACKED FILES ---
       - name: Saving master translation files
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          if git diff --quiet _source/; then
+          
+          # Force stage the directory first so Git registers new untracked files
+          git add _source/
+          
+          # Safely check the staged index for differences
+          if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git add _source/
             git commit -m "Auto-generate master files from AI drafts [skip ci]"
             git push
           fi
 
+      # --- DIVIDING ENGINE (UPGRADED TO NESTED PREFERENCE SUPPORT) ---
       - name: Dividing translated pages
         run: |
           ruby -r fileutils -e '
             puts "Starting format-agnostic segregation engine..."
-            Dir.glob("_source/*.md").each do |file_path|
+            Dir.glob("_source/**/*.md").each do |file_path|
               content = File.read(file_path)
               
               normalized_content = content.gsub(/<guide\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)">/, "=== guide--\\1--\\2--\\3 ===")
@@ -101,6 +108,7 @@ jobs:
       - name: Injecting UI navigation text
         run: bundle exec ruby _scripts/sync_ui_data.rb
           
+      # --- COMPILING ENGINE (WITH COMPONENT-LEVEL DEV INJECTION RESTORED) ---
       - name: Compiling regional sites
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
@@ -141,8 +149,9 @@ jobs:
           
           cp redirect.html _site/index.html
 
+          # Re-apply the JS URL patch module onto non-production assets
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
-            echo "Dev branch detected. Injecting global URL catch-all..."
+            echo "Dev branch detected. Injecting global URL catch-all patch..."
             cat js/dev-url-fixer.js >> _site/js/main.js
             
             for config_file in _configs/_config_*.yml; do
@@ -150,14 +159,14 @@ jobs:
               lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
               
               if [ -f "_site/$lang/js/main.js" ]; then
-                echo "Injecting dev fix into localized subfolder: /$lang..."
+                echo "Injecting dev fix into localized subfolder script bundle: /$lang..."
                 cat js/dev-url-fixer.js >> _site/$lang/js/main.js
               fi
             done
           fi
 
           echo "Running Workbox injector..."
-          ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
+          ruby -r ./_scripts/workbox_precache.rb -e "WorkboxInjector.run('_site')"
           
           cp -r api _site/
 
