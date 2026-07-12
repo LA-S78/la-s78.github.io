@@ -94,17 +94,17 @@ master_registry.each do |guide_id, languages|
 end
 
 # =====================================================================
-# PHASE 2: COMPILING CORE PAGES & STRUCTURAL COLLECTIONS
+# PHASE 2: COMPILING CORE PAGES & STRUCTURAL COLLECTIONS (FIXED INDEX)
 # =====================================================================
 puts "🔍 Scanning root pages and structural collections..."
 
 # Defines the structural link between root pages and their corresponding sub-collections
 DOMAIN_MAP = {
-  '404'         => { page: '404.md',         dir: nil },
-  'alliance'    => { page: 'alliance.md',    dir: 'collections/_alliance' },
-  'rules'       => { page: 'rules.md',       dir: 'collections/_rules' },
-  'home'        => { page: 'index.md',       dir: 'collections/_home' },
-  'guide_index' => { page: 'guide_index.md', dir: 'collections/_guide_index' }
+  '404'         => { page: '404.md',         dir: nil,                    collection_tag: nil },
+  'alliance'    => { page: 'alliance.md',    dir: 'collections/_alliance',    collection_tag: 'alliance' },
+  'rules'       => { page: 'rules.md',       dir: 'collections/_rules',       collection_tag: 'rules' },
+  'index'       => { page: 'index.md',       dir: 'collections/_home',        collection_tag: 'home' },
+  'guide_index' => { page: 'guide_index.md', dir: 'collections/_guide_index', collection_tag: 'guide_index' }
 }
 
 DOMAIN_MAP.each do |domain, paths|
@@ -123,7 +123,7 @@ DOMAIN_MAP.each do |domain, paths|
     chunks << "=== page--#{domain} ===\n#{page_content}"
   end
 
-  # 2. Process and wrap nested collection item shards (Safe checked for standalone pages)
+  # 2. Process and wrap nested collection item shards
   if paths[:dir] && Dir.exist?(paths[:dir])
     Dir.glob("#{paths[:dir]}/*.md").sort.each do |col_path|
       filename = File.basename(col_path, ".md")
@@ -132,7 +132,8 @@ DOMAIN_MAP.each do |domain, paths|
       if filename =~ /^(\d+)/
         step = $1
         col_content = File.read(col_path).gsub("\r\n", "\n").strip
-        chunks << "=== collection--#{domain}--#{step} ===\n#{col_content}"
+        # Uses the decoupled backend collection_tag (e.g., 'home') rather than the file name 'index'
+        chunks << "=== collection--#{paths[:collection_tag]}--#{step} ===\n#{col_content}"
       end
     end
   end

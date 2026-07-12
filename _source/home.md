@@ -1,4 +1,4 @@
-=== page--home ===
+=== page--index ===
 ---
 layout: default
 page_key: "home"
