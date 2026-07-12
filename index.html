@@ -5,12 +5,67 @@
     <meta http-equiv="refresh" content="0;url=https://la-s78.app/">
     <title>Compendium Relocation Protocol</title>
     <script type="text/javascript">
-        // Safeguard catch if meta-refresh fails: appends specific paths/hashes dynamically
-        window.location.href = "https://la-s78.app/" + window.location.pathname + window.location.search + window.location.hash;
+        // Localized strings dictionary for the 8 supported site languages
+        const migrationData = {
+            en: {
+                main: "The Compendium has migrated to secure Vercel servers. Redirecting to headquarters...",
+                link: "If you are not redirected automatically, follow this link to the new Compendium."
+            },
+            de: {
+                main: "Das Kompendium ist auf sichere Vercel-Server umgezogen. Weiterleitung zur Zentrale...",
+                link: "Wenn Sie nicht automatisch weitergeleitet werden, folgen Sie diesem Link zum neuen Kompendium."
+            },
+            es: {
+                main: "El Compendio se ha trasladado a servidores seguros de Vercel. Redirigiendo a la sede central...",
+                link: "Si no es redirigido automáticamente, siga este enlace al nuevo Compendio."
+            },
+            fr: {
+                main: "Le Compendium a migré vers des serveurs Vercel sécurisés. Redirection vers le quartier général...",
+                link: "Si vous n'êtes pas redirigé automatiquement, suivez ce lien vers le nouveau Compendium."
+            },
+            it: {
+                main: "Il Compendio è migrato su server Vercel sicuri. Reindirizzamento al quartier generale...",
+                link: "Se non vieni reindirizzato automaticamente, segui questo link al nuovo Compendio."
+            },
+            ru: {
+                main: "Компендиум был перенесен на безопасные серверы Vercel. Перенаправление в главный штаб...",
+                link: "Если вы не были перенаправлены автоматически, перейдите по этой ссылке на новый Компендиум."
+            },
+            tr: {
+                main: "Kılavuz (Compendium) güvenli Vercel sunucularına taşındı. Merkeze yönlendiriliyorsunuz...",
+                link: "Otomatik olarak yönlendirilmezseniz, yeni Kılavuz için bu bağlantıyı takip edin."
+            },
+            uk: {
+                main: "Компендіум було перенесено на безпечні сервери Vercel. Перенаправлення до головного штабу...",
+                link: "Якщо вас не перенаправлено автоматично, перейдіть за цим посиланням на новий Компендіум."
+            }
+        };
+
+        window.onload = function() {
+            // Sniff client browser profile language tag configuration
+            const userLang = (navigator.language || navigator.userLanguage).split('-')[0];
+            const activeLang = migrationData[userLang] ? userLang : 'en';
+
+            // Dynamically inject localized notification text blocks into view
+            document.getElementById("status-text").textContent = migrationData[activeLang].main;
+            
+            const actionLink = document.getElementById("fallback-link");
+            actionLink.textContent = migrationData[activeLang].link;
+            actionLink.href = "https://la-s78.app/" + window.location.pathname + window.location.search + window.location.hash;
+
+            // Execute path-preserving mechanical forwarding redirect
+            window.location.href = actionLink.href;
+        };
     </script>
 </head>
-<body>
-    <p>The Compendium has migrated to secure Vercel servers. Redirecting to headquarters...</p>
-    <p>If you are not redirected automatically, follow this <a href="https://la-s78.app/">link to the new Compendium</a>.</p>
+<body style="font-family: sans-serif; background-color: #110d0b; color: #e6dfd5; text-align: center; padding-top: 15%;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <p id="status-text">The Compendium has migrated to secure Vercel servers. Redirecting to headquarters...</p>
+        <p style="margin-top: 25px;">
+            <a id="fallback-link" href="https://la-s78.app/" style="color: #e6a050; text-decoration: underline;">
+                If you are not redirected automatically, follow this link to the new Compendium.
+            </a>
+        </p>
+    </div>
 </body>
 </html>
