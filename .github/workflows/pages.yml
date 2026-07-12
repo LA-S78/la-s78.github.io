@@ -108,7 +108,7 @@ jobs:
       - name: Injecting UI navigation text
         run: bundle exec ruby _scripts/sync_ui_data.rb
           
-      # --- COMPILING ENGINE (ADAPTED FOR MIGRATED DEV OVERRIDES) ---
+      # --- COMPILING ENGINE (WITH COMPONENT-LEVEL DEV INJECTION RESTORED) ---
       - name: Compiling regional sites
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
@@ -120,23 +120,12 @@ jobs:
           find guides -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
           find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
           
-          # Conditionally apply _config_dev.yml from its new home in _configs/
-          if [ "${{ github.ref_name }}" = "dev" ]; then
-            echo "Applying dev environment config overrides..."
-            bundle exec jekyll build --config _config.yml,_configs/_config_dev.yml --destination _site/
-          else
-            bundle exec jekyll build --config _config.yml --destination _site/
-          fi
+          bundle exec jekyll build --config _config.yml --destination _site/
           
           echo "Scanning for localized language configuration files..."
           for config_file in _configs/_config_*.yml; do
             [ -e "$config_file" ] || continue
             lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
-            
-            # Safeguard: Skip processing the environment config as a regional language path
-            if [ "$lang" = "dev" ]; then
-              continue
-            fi
             
             rm -rf guides collections/_guide_panes
             cp -r guides_backup guides
@@ -160,18 +149,17 @@ jobs:
           
           cp redirect.html _site/index.html
 
+          # Re-apply the JS URL patch module onto non-production assets
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
-            echo "Dev branch detected. Injecting global URL catch-all..."
+            echo "Dev branch detected. Injecting global URL catch-all patch..."
             cat js/dev-url-fixer.js >> _site/js/main.js
             
             for config_file in _configs/_config_*.yml; do
               [ -e "$config_file" ] || continue
               lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
               
-              if [ "$lang" = "dev" ]; then continue; fi
-              
               if [ -f "_site/$lang/js/main.js" ]; then
-                echo "Injecting dev fix into localized subfolder: /$lang..."
+                echo "Injecting dev fix into localized subfolder script bundle: /$lang..."
                 cat js/dev-url-fixer.js >> _site/$lang/js/main.js
               fi
             done
