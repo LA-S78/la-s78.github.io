@@ -8,7 +8,7 @@ permalink: /architecture.html
   <h2>System Blueprint</h2>
   
   <pre class="mermaid">
-    graph TD
+    flowchart TD
     %% ===========================================================
     %% 1. Source Infrastructure
     %% ===========================================================
@@ -98,11 +98,17 @@ permalink: /architecture.html
   
   mermaid.initialize({ 
     startOnLoad: true, 
-    theme: 'base', // 'base' prevents Mermaid from forcing its own color palette
+    theme: 'base',
+    
+    // The modern layout engine configs
+    flowchart: {
+      padding: 10,         // Increases outer margin of subgraphs
+      rankSpacing: 80      // Physically pushes internal nodes further down, making room for your larger headers
+    },
+
     themeVariables: {
       primaryColor: style.getPropertyValue('--card-bg').trim(),
       primaryTextColor: style.getPropertyValue('--accent-color').trim(),
-      // Custom overrides for the diagram
       clusterBkg: style.getPropertyValue('--card-bg').trim(),
       clusterBorder: style.getPropertyValue('--accent-color').trim(),
       titleColor: style.getPropertyValue('--accent-color').trim()
@@ -126,14 +132,16 @@ permalink: /architecture.html
   .mermaid .node tspan {
     font-family: var(--font-body) !important;
   }
-    .mermaid .edgeLabel,
+  .mermaid .edgeLabel,
   .mermaid .edgeLabel tspan,
   .mermaid .cluster-label,
   .mermaid .cluster-label tspan {
     font-family: var(--font-headers) !important;
     font-size: 1.25rem !important;
-    line-height: 1.5rem !important;
+    line-height: 2.5rem !important;
     font-weight: bold !important;
+    /* flowchart uses HTML divs for labels, so we define 'color' alongside 'fill' */
+    color: var(--accent-color) !important; 
+    fill: var(--accent-color) !important;
   }
-  
 </style>
