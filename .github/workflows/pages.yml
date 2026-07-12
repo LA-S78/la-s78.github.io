@@ -166,7 +166,7 @@ jobs:
           fi
 
           echo "Running Workbox injector..."
-          ruby -r ./_plugins/workbox_precache.rb -e "WorkboxInjector.run('_site')"
+          ruby -r ./_scripts/workbox_precache.rb -e "WorkboxInjector.run('_site')"
           
           cp -r api _site/
 
