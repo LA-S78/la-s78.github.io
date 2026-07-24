@@ -1554,6 +1554,32 @@ svg.resource-icon {
   padding: 15px;
 }
 
+/* Container & Responsive SVG Wrapper */
+.game-map {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* Force any embedded SVG to fit within the content pane */
+.game-map svg,
+#game-map {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 55vh; /* Caps height so intel pane remains visible on screen */
+  display: block;
+}
+
+/* Ensure text overlays don't block mouse hover on underlying paths */
+.game-map text,
+#game-map text {
+  pointer-events: none;
+  user-select: none;
+}
+
 /* SVG Map Canvas */
 #game-map {
   width: 100%;
