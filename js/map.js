@@ -1,5 +1,7 @@
 /**
- * Color-to-Level Mapping Rules:
+ * map.js - Comprehensive Map Data, Parsing, and Highlighting Utilities
+ * 
+ * City Level Mapping by Group Color:
  * green  -> Level 1
  * yellow -> Level 2
  * orange -> Level 3
@@ -8,6 +10,7 @@
  * red    -> Level 6
  * gold   -> Capitol (Unique)
  */
+
 export const COLOR_TO_LEVEL_MAP = {
   green: 1,
   yellow: 2,
@@ -18,38 +21,46 @@ export const COLOR_TO_LEVEL_MAP = {
   gold: "Capitol"
 };
 
+export const CITY_LEVEL_MAP = {
+  1: { level: 1, label: "Level 1", group: "green" },
+  2: { level: 2, label: "Level 2", group: "yellow" },
+  3: { level: 3, label: "Level 3", group: "orange" },
+  4: { level: 4, label: "Level 4", group: "purple" },
+  5: { level: 5, label: "Level 5", group: "blue" },
+  6: { level: 6, label: "Level 6", group: "red" },
+  "Capitol": { level: "Capitol", label: "Capitol", group: "gold" }
+};
+
+// Main Cities Dataset (populated dynamically via SVG parser)
+export let cities = [];
+
 /**
- * Parses an SVG document (browser DOM or JSDOM) and extracts cities 
+ * Parses an SVG document or element and extracts cities 
  * strictly based on their parent group's inkscape:label color.
  * 
  * @param {Document|Element} svgRoot - The SVG DOM root element or document
  * @returns {Array} Array of city objects with correctly assigned levels
  */
 export function extractCitiesFromSvg(svgRoot) {
-  const cities = [];
+  const extractedCities = [];
 
-  // Iterate through each color defined in our mapping
   Object.entries(COLOR_TO_LEVEL_MAP).forEach(([colorLabel, assignedLevel]) => {
-    // Target the group explicitly by its Inkscape label
     const colorGroup = svgRoot.querySelector(`g[inkscape\\:label="${colorLabel}"]`);
 
     if (colorGroup) {
-      // Find all target nodes (like paths, rects, or nested groups) inside this color group
-      const cityElements = colorGroup.querySelectorAll('path, rect, circle, g[id]');
+      const cityElements = colorGroup.querySelectorAll('path, rect, circle, polygon, g[id]');
 
       cityElements.forEach((el, index) => {
         const elementId = el.id;
         const elementLabel = el.getAttribute('inkscape:label');
         
-        // Skip generic layer wrappers or empty IDs if necessary
         if (!elementId && !elementLabel) return;
 
         const uniqueId = elementId || `${colorLabel}_city_${index + 1}`;
         const cityName = elementLabel || uniqueId;
 
-        // Prevent duplicate entries if nested sub-elements are matched
-        if (!cities.some(c => c.id === uniqueId)) {
-          cities.push({
+        if (!extractedCities.some(c => c.id === uniqueId)) {
+          extractedCities.push({
             id: uniqueId,
             name: cityName,
             level: assignedLevel,
@@ -62,21 +73,51 @@ export function extractCitiesFromSvg(svgRoot) {
     }
   });
 
-  return cities;
+  return extractedCities;
 }
 
-// Export a placeholder array that you can populate statically or dynamically
-export let cities = [];
-
 /**
- * Initialize dataset from an loaded SVG element in the browser
- * Example usage: 
- *   const svgElement = document.getElementById('my-svg-map');
- *   cities = initializeMapData(svgElement);
+ * Initialize dataset from a loaded SVG element in the browser
+ * @param {Document|Element} svgRoot 
+ * @returns {Array}
  */
 export function initializeMapData(svgRoot) {
   cities = extractCitiesFromSvg(svgRoot);
   return cities;
+}
+
+/**
+ * Enables hover/click highlighting and interaction on the SVG map elements
+ * @param {Document|Element} svgRoot - The SVG container element
+ */
+export function enableMapHighlighting(svgRoot) {
+  const colorLabels = Object.keys(COLOR_TO_LEVEL_MAP);
+
+  colorLabels.forEach(color => {
+    const group = svgRoot.querySelector(`g[inkscape\\:label="${color}"]`);
+    if (!group) return;
+
+    const elements = group.querySelectorAll('path, rect, circle, polygon');
+
+    elements.forEach(el => {
+      el.style.cursor = 'pointer';
+
+      el.addEventListener('mouseenter', (e) => {
+        e.target.style.filter = 'brightness(1.3)';
+        e.target.style.transition = 'filter 0.2s ease';
+      });
+
+      el.addEventListener('mouseleave', (e) => {
+        e.target.style.filter = 'none';
+      });
+
+      el.addEventListener('click', (e) => {
+        const cityId = e.target.id;
+        const cityData = getCityById(cityId);
+        console.log("Clicked City Details:", cityData || { id: cityId, group: color });
+      });
+    });
+  });
 }
 
 /**
@@ -91,4 +132,11 @@ export function getCityById(id) {
  */
 export function getCitiesByLevel(level) {
   return cities.filter(city => city.level === level);
+}
+
+/**
+ * Utility function to filter cities by color group
+ */
+export function getCitiesByGroup(groupColor) {
+  return cities.filter(city => city.group === groupColor);
 }
