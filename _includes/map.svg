@@ -7,7 +7,7 @@
    width="2115"
    height="1728"
    viewBox="0 0 2115 1728"
-   sodipodi:docname="map-new.svg"
+   sodipodi:docname="map.svg"
    inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
    inkscape:export-filename="map-new.png"
    inkscape:export-xdpi="96"
@@ -378,20 +378,20 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.6"
-     inkscape:cx="1025"
+     inkscape:cx="1024.1667"
      inkscape:cy="919.16667"
-     inkscape:window-width="2560"
-     inkscape:window-height="1440"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-width="2500"
+     inkscape:window-height="1348"
+     inkscape:window-x="30"
+     inkscape:window-y="62"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g89" />
+     inkscape:current-layer="layer1" />
   <g
      inkscape:groupmode="layer"
      inkscape:label="Reference Map"
      id="g1"
      sodipodi:insensitive="true"
-     style="display:inline;opacity:0.557">
+     style="display:none;opacity:0.557">
     <image
        width="2115"
        height="1728"
@@ -411,193 +411,193 @@
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="M 546.79127,159.53811 V 328.0559 h 210.15196 v 38.57816 h 66.21485 l -0.38963,-162.80945 v -44.2865 z"
-         id="path13"
+         id="Broken_Bridgehead"
          inkscape:label="Broken Bridgehead" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 204.0914,0 0.20009,186.08333 H 0 V 0 Z"
-         id="path1"
+         id="Old_Oak"
          inkscape:label="Old Oak" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 204.0914,0 h 201.73393 v 170.67773 h -60.07049 v 38.34921 H 204.20961 v -22.94361 z"
-         id="path2"
+         id="Gravel_Slope"
          inkscape:label="Gravel Slope" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="M 405.82533,0 H 675.30242 V 159.53811 H 546.79127 V 121.58253 H 405.82533 Z"
-         id="path3"
+         id="Windmill_Town"
          inkscape:label="Windmill Town" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 991.11051,0 h 191.28569 v 136.32772 h -60.8273 v 73.89976 H 969.23405 v -6.46956 l -39.48435,0.0667 V 17.874671 h 61.36081 z"
-         id="path5"
+         id="Plaster_Wall"
          sodipodi:nodetypes="ccccccccccc"
          inkscape:label="Plaster Wall" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1182.3962,0 h 309.0414 v 216.18865 h -90.173 v -97.34149 h -218.8684 z"
-         id="path6"
+         id="Raven_s_Roost"
          inkscape:label="Raven's Roost" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1491.4376,0 h 227.8847 v 110.54673 h -159.5948 v 105.64192 h -68.2899 z"
-         id="path7"
+         id="Bluestone_Slope"
          inkscape:label="Bluestone Slope" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1719.3223,0 h 290.138 v 30.560699 h -55.462 v 52.82096 h -52.4437 V 137.3345 H 1795.1581 V 51.689083 h -75.8358 z"
-         id="path8"
+         id="Wheatsheaf"
          inkscape:label="Wheatsheaf" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1901.5546,137.3345 v 52.82096 H 2115 V 0 h -105.5397 v 30.560699 h -55.462 v 52.82096 h -52.4437 z"
-         id="path9"
+         id="Stonebrook_Town"
          inkscape:label="Stonebrook Town" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 0,186.08333 v 239.31405 h 109.60349 v -93.19127 h 236.56245 l -0.4111,-123.17917 H 204.20961 v -22.94361 z"
-         id="path10"
+         id="Opal_Mine"
          inkscape:label="Opal Mine" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 109.60349,425.39738 h 99.98254 v 122.2428 h 58.85764 v -29.80612 h 168.08384 v -136.9572 h -33.76768 v -48.86151 l -56.59389,0.19076 H 109.60349 Z"
-         id="path11"
+         id="Redsoil_Wastes"
          inkscape:label="Redsoil Wastes" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="M 436.52751,377.10393 V 529.3037 h 207.76102 v -41.08506 h 112.85053 l -0.1015,-10.09463 -0.0943,-150.06811 H 546.79127 l -0.47162,49.04803 z"
-         id="path20"
+         id="Fisher_s_Bay"
          inkscape:label="Fisher's Bay" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 209.58603,547.64018 v 61.87598 H 145.069 V 782.12751 H 0 V 425.39738 h 209.58603 z"
-         id="path21"
+         id="Millstone_Creek"
          inkscape:label="Millstone Creek" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 209.58603,609.51616 h 92.68267 v 32.10451 h 58.42616 v 55.7583 h 47.48793 v 84.83799 L 145.069,782.12756 v -172.6114 z"
-         id="path22"
+         id="Crow_s_Beak"
          inkscape:label="Crow's Beak" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 257.18231,782.16565 v 145.44976 h -47.22162 v 52.29008 H 0 V 782.12751 Z"
-         id="path23"
+         id="Fox_Den"
          inkscape:label="Fox Den" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1952.6777,190.15546 v 108.47161 h -63.9511 v 89.2297 h 87.0916 v 100.09508 h 100.3115 v -52.0233 H 2115 V 190.15546 Z"
-         id="path24"
+         id="Stag_Path"
          inkscape:label="Stag Path" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1975.8182,387.85677 h -87.0916 -35.0882 v -32.25852 h -142.0506 -50.1799 v 132.61834 h 62.4419 v 61.49869 h 138.4664 v -33.95633 h 90.1729 v -27.16506 l 23.3291,-0.64204 z"
-         id="path25"
+         id="Birchwood_Grove"
          inkscape:label="Birchwood Grove" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1952.4891,515.75895 v 106.38633 h 53.2091 v 91.77443 H 2115 V 435.92855 h -38.8703 v 52.0233 h -100.3115 l -23.3291,0.64204 z"
-         id="path26"
+         id="Pinewood_Grove"
          inkscape:label="Pinewood Grove" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 2005.6982,686.86114 h -99.2388 v 186.75982 h 99.4166 v 44.52053 H 2115 V 713.91971 h -109.3018 z"
-         id="path27"
+         id="Springhead"
          inkscape:label="Springhead" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="M 172.42271,979.90549 V 1133.0096 H 78.099563 v 104.8873 H 0 V 979.90549 Z"
-         id="path28"
+         id="Maple_Town"
          inkscape:label="Maple Town" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 78.099563,1237.8969 v 44.5206 H 244.1083 v 102.2463 h -44.14323 v 144.1257 H 0 v -290.8926 z"
-         id="path29"
+         id="Eagles__Peak"
          inkscape:label="Eagles' Peak" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 199.96507,1528.7895 v 96.2049 H 369.4988 V 1728 H 0 v -199.2105 z"
-         id="path30"
+         id="Haystack"
          inkscape:label="Haystack" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 2005.876,918.14149 v 72.56884 h -73.0104 v 184.34927 h 134.1934 v -36.9499 H 2115 V 918.14149 Z"
-         id="path31"
+         id="Mossy_Crag"
          inkscape:label="Mossy Crag" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 2067.059,1175.0596 h -104.5802 v 113.6508 h -24.8111 v 66.5632 h 74.7002 v 24.2775 H 2115 v -241.4414 h -47.941 z"
-         id="path32"
+         id="Redbrick_House"
          inkscape:label="Redbrick House" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1937.6677,1288.7104 h -196.4625 v 169.5254 h 149.4079 v -34.5223 h 46.5956 l 0.459,-68.4399 z"
-         id="path33"
+         id="Mistveil_Village"
          inkscape:label="Mistveil Village" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1890.6131,1458.2358 v 17.9214 h 45.4638 v 39.0498 H 2115 v -135.6559 h -102.6321 v -24.2775 h -74.7002 l -0.459,68.4399 h -46.5956 z"
-         id="path34"
+         id="Pinecone_Market"
          inkscape:label="Pinecone Market" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1936.0769,1515.207 v 179.9521 h 43.4763 V 1728 H 2115 v -212.793 z"
-         id="path35"
+         id="Howling_Vale"
          inkscape:label="Howling Vale" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1936.0769,1593.3066 h -194.4944 v 39.6157 h -65.2716 V 1728 h 303.2423 v -32.8409 h -43.4763 z"
-         id="path36"
+         id="Lamp_Pavilion"
          inkscape:label="Lamp Pavilion" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1676.3109,1632.9223 h -44.1432 v -37.7293 h -199.9263 v 6.0574 h -35.8827 V 1728 h 279.9522 z"
-         id="path37"
+         id="Wildberry_Thicket"
          inkscape:label="Wildberry Thicket" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1396.3587,1601.2504 h -292.0233 v 34.8789 h 62.6305 V 1728 h 229.3928 z"
-         id="path38"
+         id="Snail_Shell"
          inkscape:label="Snail Shell" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="M 1104.3354,1601.2504 H 920.02795 V 1728 h 246.93795 v -91.8707 h -62.6305 z"
-         id="path39"
+         id="Narroway"
          inkscape:label="Narroway" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 920.02795,1601.2504 h -45.90316 v -36.1495 H 714.1865 v 35.8827 H 672.03429 V 1728 h 247.99366 z"
-         id="path40"
+         id="Coal_Pit"
          inkscape:label="Coal Pit" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="M 209.96069,979.90549 H 423.3896 V 1086.3532 H 323.3448 v 47.2223 l -150.92209,-0.5659 V 979.90549 Z"
-         id="path42"
+         id="Graywolf_Vale"
          inkscape:label="Graywolf Vale" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 244.1083,1282.4175 v -26.1216 h 222.76744 v 235.0386 H 199.96507 v -106.6707 h 44.14323 z"
-         id="path43"
+         id="Old_Mill"
          inkscape:label="Old Mill" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 369.4988,1624.9944 v -3.3348 h 202.0905 v 35.6159 H 672.03429 V 1728 H 369.4988 Z"
-         id="path44"
+         id="Frostleaf_Market"
          inkscape:label="Frostleaf Market" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 571.5893,1657.2755 v -35.6159 h -58.29277 v -144.4647 h 52.82366 v 23.7439 h 120.58733 v 38.9508 h 26.9454 l 0.53358,25.2113 v 35.8827 h -42.15221 v 56.2919 z"
-         id="path45"
+         id="Dry_Well"
          inkscape:label="Dry Well" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1104.3354,1601.2504 v -77.7681 h 73.2586 v -62.8282 h -43.3527 v -53.4906 H 942.68882 v 109.6491 h 37.21667 v 55.4915 h -59.09313 v 28.9463 z"
-         id="path46"
+         id="Dripping_Cavern"
          inkscape:label="Dripping Cavern" />
       <path
          style="fill:url(#linearGradient89);fill-opacity:1;stroke:url(#linearGradient95);stroke-width:5"
          d="m 1177.594,1490.2114 h 54.5492 v -19.3363 h 151.8603 v 31.4096 h 47.9162 l 0.3217,92.9083 v 6.0574 h -327.906 v -77.7681 h 73.2586 z"
-         id="path47"
+         id="Scavenger"
          inkscape:label="Scavenger" />
     </g>
     <g
@@ -607,117 +607,117 @@
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 675.30242,0 v 159.53811 h 147.46603 v 44.2865 H 929.7497 V 17.874671 h 61.36081 V 0 Z"
-         id="path4"
+         id="Copper_Street"
          inkscape:label="Copper Street" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 436.52751,380.87686 v -3.77293 h 109.79214 l 0.47162,-217.56582 V 121.58253 H 405.82533 v 49.0952 h -60.07049 l 0.4111,161.52838 56.59389,-0.19076 v 48.86151 z"
-         id="path12"
+         id="Whitestone_Town"
          inkscape:label="Whitestone Town" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 822.76845,203.82461 146.4656,-0.0667 v 6.46956 124.99697 h 56.62445 V 478.12401 H 757.03756 l -0.0943,-111.48996 h 66.21485 z"
-         id="path14"
+         id="Amber_Road"
          inkscape:label="Amber Road" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 969.23405,210.22748 h 152.33485 2.2914 v 88.77689 h 113.0934 v 74.51528 h -74.8926 v 48.67074 h -136.2026 v -86.96595 h -56.62445 z"
-         id="path15"
+         id="Violet"
          inkscape:label="Violet" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1123.8603,210.22748 h -2.2914 v -73.89976 h 60.8273 v -17.48056 h 218.8684 v 97.34149 h 45.0865 v 79.42008 h -99.0393 v 24.71267 h -53.1039 v -21.12839 l -57.2542,-0.18864 h -113.0934 z"
-         id="path16"
+         id="Stonechant_Market"
          inkscape:label="Stonechant Market" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1446.3511,295.60873 v -79.42008 h 80.9293 v 76.59039 h 184.3074 v 62.81921 h -50.1799 v 132.61834 h -183.9302 v -42.06812 h -39.427 V 295.60873 Z"
-         id="path17"
+         id="Twinspire_Town"
          inkscape:label="Twinspire Town" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1711.5878,292.77904 h 2.5467 v -55.07259 h 80.5359 l 0.4877,-100.37195 V 51.689083 h -75.8358 v 58.857647 h -159.5948 v 105.64192 h -32.4471 v 76.59039 z"
-         id="path18"
+         id="Sailport"
          inkscape:label="Sailport" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1711.5878,355.59825 h 142.0506 v 32.25852 h 35.0882 v -89.2297 h 63.9511 V 190.15546 h -51.1231 V 137.3345 h -106.3965 c 0,0 -0.4877,100.37195 -0.4877,100.37195 h -80.5359 v 55.07259 h -2.5467 z"
-         id="path19"
+         id="Anvil_Town"
          inkscape:label="Anvil Town" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 408.18279,782.21696 h 85.37157 v 25.87826 h 24.01075 v 79.50227 h -93.90872 l -0.26679,92.308 H 209.96069 v -52.29008 h 47.22162 V 782.16565 Z"
-         id="path48"
+         id="Lark_Lane"
          inkscape:label="Lark Lane" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 423.3896,1086.3532 v 43.2193 h 68.29726 v 100.0448 h -25.34469 l 0.53357,26.6786 H 244.1083 v 26.1216 H 78.099563 v -149.4079 l 245.245237,0.5659 v -47.2223 z"
-         id="path49"
+         id="Sailshadow_Harbor"
          inkscape:label="Sailshadow Harbor" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 491.68686,1129.5725 h 53.09044 v -73.633 h 18.67503 v -93.64189 h 33.61505 v -74.70012 h -79.50227 -93.90872 l -0.26679,92.308 v 106.44771 43.2193 z"
-         id="path50"
+         id="Stormgate"
          inkscape:label="Stormgate" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 466.87574,1256.2959 v 23.744 h 112.05018 v -56.0251 h 52.0233 v -44.5533 h 82.43692 v -81.3697 h -49.88901 v -67.4969 h -100.0448 v 25.3446 H 544.7773 v 73.633 h -53.09044 v 100.0448 h -25.34469 z"
-         id="path51"
+         id="Rose_Court"
          inkscape:label="Rose Court" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 513.29653,1477.1949 h -46.42079 v 14.1396 H 199.96507 v 133.6599 H 369.4988 v -3.3348 h 143.79773 z"
-         id="path54"
+         id="Echo_Town"
          inkscape:label="Echo Town" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 466.87574,1477.1949 v -197.155 h 112.05018 v 31.995 h 74.54482 v 99.0393 h 32.06987 l 1.16691,89.8646 H 566.12019 v -23.7439 z"
-         id="path55"
+         id="Stardust_Road"
          inkscape:label="Stardust Road" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 714.1865,1565.1009 -0.53358,-25.2113 h -26.9454 v -38.9508 -43.4861 h 61.6276 v -50.6894 l 194.3537,0.4002 v 109.6491 h 37.21667 v 55.4915 h -59.09313 l -0.78441,28.9463 h -45.90316 v -36.1495 z"
-         id="path56"
+         id="Irongate_Town"
          inkscape:label="Irongate Town" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
-         d="m 1757.6175,549.71528 v 53.19826 h -36.2201 V 691.2 h 138.0891 v 34.14498 h 46.9729 v -38.48384 h 99.2388 v -64.71586 h -53.2091 V 515.75895 h -90.1729 v 33.95633 z"
-         id="path57"
-         inkscape:label="Windwhisper Market" />
-      <path
-         style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="M 1932.8656,990.71033 H 1701.562 v 169.80937 h 38.9508 v 15.2068 l 192.3528,-0.6669 z"
-         id="path58"
+         id="Nymph_Falls"
          inkscape:label="Nymph Falls" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1740.5128,1175.7265 0.6924,112.9839 h 221.2736 v -113.6508 z"
-         id="path59"
+         id="Greatwood_Town"
          inkscape:label="Greatwood Town" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1572.9328,1595.193 v -53.9528 h 107.9056 v -43.3887 h 59.9896 l 0.3772,-39.6157 v -29.4288 h -304.0978 v 41.5022 l -53.1039,0.5659 v 31.4096 h 47.9162 l 0.3217,92.9083 z"
-         id="path60"
+         id="Beacon_Point"
          inkscape:label="Beacon Point" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
+         d="m 1757.6175,549.71528 v 53.19826 h -36.2201 V 691.2 h 138.0891 v 34.14498 h 46.9729 v -38.48384 h 99.2388 v -64.71586 h -53.2091 V 515.75895 h -90.1729 v 33.95633 z"
+         id="Windwhisper_Market"
+         inkscape:label="Windwhisper Market" />
+      <path
+         style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1572.9328,1595.193 h 59.2349 v 37.7293 h 109.4148 v -39.6157 h 194.4944 v -117.1494 h -45.4638 v -17.9214 h -149.4079 l -0.3772,39.6157 h -59.9896 v 43.3887 h -107.9056 z"
-         id="path61"
+         id="Stagcall_Vale"
          inkscape:label="Stagcall Vale" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1437.1074,1428.807 v -77.345 h 59.6123 v -75.0812 h 244.4099 l 0.076,12.3296 v 140.0966 z"
-         id="path62"
+         id="Rose_Garden"
          inkscape:label="Rose Garden" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;stroke:url(#linearGradient96);stroke-width:5"
          d="m 1437.1074,1470.3092 -53.1039,0.5659 h -121.2052 v -105.076 h -33.9564 v -50.5572 h 44.5205 v -38.4838 l 223.3573,-0.3773 v 75.0812 h -59.6123 z"
-         id="path63"
+         id="Blackwater_Ferry"
          inkscape:label="Blackwater Ferry" />
       <path
          style="display:inline;fill:url(#linearGradient116);stroke:url(#linearGradient95);fill-opacity:1;stroke-width:5"
          d="m 408.18279,697.37897 h 24.47747 v -66.54578 h 35.37118 v -32.44716 h 77.34498 l 0.75459,-69.08233 H 436.52751 V 517.83406 H 268.44367 v 29.80612 h -58.85764 v 61.87598 h 92.68267 v 32.10451 h 58.42616 v 55.7583 z"
-         id="path41"
+         id="Goldgrain_Town"
          inkscape:label="Goldgrain Town" />
     </g>
     <g
@@ -727,57 +727,57 @@
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 545.37642,598.38603 v 43.01135 h 102.44702 v -2.77806 H 826.45939 V 551.97904 H 757.2262 l -0.0871,-63.7604 H 644.28853 v 41.08506 h -98.15752 z"
-         id="path64"
+         id="Deepmere_Town"
          inkscape:label="Deepmere Town" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 545.37642,598.38603 h -77.34498 v 32.44716 h -35.37118 v 66.54578 h -24.47747 v 84.83799 h 85.37157 v 25.87826 h 24.01075 28.27933 v -25.0112 h 101.77892 l 0.20008,-141.68664 H 545.37642 Z"
-         id="path65"
+         id="Gale_Heights"
          inkscape:label="Gale Heights" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 757.03756,478.12401 0.10154,10.09463 0.0871,63.7604 h 69.23319 v 49.89049 h 91.49345 v -66.68001 h 96.96416 v -57.06551 z"
-         id="path66"
+         id="Falcon_s_Keep"
          inkscape:label="Falcon's Keep" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 1162.0611,422.19039 v 49.04804 h 61.1214 v 42.63406 h 36.2201 v 31.69258 h 88.2865 v -99.60524 l 90.3616,0.18864 V 295.60873 h -90.7389 v 24.71267 h -53.1039 v -21.12839 l -57.2542,-0.18864 v 74.51528 h -74.8926 z"
-         id="path67"
+         id="Drywell_Tower"
          inkscape:label="Drywell Tower" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 1477.4777,488.21659 v 69.79913 h 91.3048 v 131.29782 h 152.6149 v -86.4 h 36.2201 v -53.19826 h -33.7677 v -61.49869"
-         id="path68"
+         id="Ironwall_City"
          inkscape:label="Ironwall City" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 1721.3974,691.2 v 108.89163 h -57.1855 v 61.36082 h 141.9303 v -43.75293 h 100.3172 v -92.35454 h -46.9729 V 691.2 Z"
-         id="path69"
+         id="Holyspring_City"
          inkscape:label="Holyspring City" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 1701.562,861.45245 v 129.25788 h 231.3036 73.0104 V 873.62096 h -99.4166 v -55.92144 h -100.3172 v 43.75293 z"
-         id="path70"
+         id="Silverleaf_Grove"
          inkscape:label="Silverleaf Grove" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 653.47074,1312.0349 v 99.0393 h 32.06987 l 1.16691,46.3785 h 61.6276 v -50.6894 l 57.17297,0.1177 v -141.0644 h -42.6225 v -86.4 l -49.49945,0.045 h -82.43692 v 44.5533 h -52.0233 v 56.0251 31.995 z"
-         id="path71"
+         id="Cloudtop_Highlands"
          inkscape:label="Cloudtop Highlands" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 805.50809,1406.881 137.18073,0.2825 h 18.27537 v -198.3181 h -82.24978 v 14.7144 H 762.88559 v 42.2568 h 42.6225 z"
-         id="path72"
+         id="Cliffside_Citadel"
          inkscape:label="Cliffside Citadel" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="M 960.96419,1291.8498 H 1132.255 v 23.0148 l 96.5869,0.3773 v 50.5572 h 33.9564 v 105.076 h -30.6551 v 19.3363 h -54.5492 v -29.5573 h -43.3527 v -53.4906 H 960.96419 Z"
-         id="path73"
+         id="Stillwater_River"
          inkscape:label="Stillwater River" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;stroke:url(#linearGradient97);stroke-width:5"
          d="m 1392.5904,1276.5567 v -77.5209 h 110.5432 v -38.1065 l 198.4284,-0.4096 h 38.9508 v 15.2068 l 0.6168,100.6543 h -244.4099 z"
-         id="path74"
+         id="Frostwolf_Camp"
          inkscape:label="Frostwolf Camp" />
     </g>
     <g
@@ -787,37 +787,37 @@
       <path
          style="fill:url(#linearGradient112);fill-opacity:0.556863;stroke:url(#linearGradient98);stroke-width:5"
          d="m 917.95284,601.86953 h 47.67959 v 64.56225 h 118.58647 v -37.21667 h 175.5453 l -0.3616,-83.65004 v -31.69258 h -36.2201 v -42.63406 h -61.1214 v -49.04804 h -136.2026 v 55.93362 h -10.9415 v 57.06551 h -96.96416 z"
-         id="path75"
+         id="Dawnhold"
          inkscape:label="Dawnhold" />
       <path
          style="fill:url(#linearGradient111);fill-opacity:0.556863;stroke:url(#linearGradient98);stroke-width:5"
          d="M 1568.7825,659.69607 H 1379.5703 V 833.4393 h 284.6416 v -33.34767 h 57.1855 V 691.2 689.31354 h -152.6149 z"
-         id="path76"
+         id="Everpeak"
          inkscape:label="Everpeak" />
       <path
          style="fill:url(#linearGradient110);fill-opacity:0.556863;stroke:url(#linearGradient98);stroke-width:5"
          d="m 1701.562,1014.5877 h -229.7029 v 113.6509 h -111.5166 v 91.5076 h 32.2479 v -20.7104 h 110.5432 v -38.1065 l 198.4284,-0.4096 z"
-         id="path77"
+         id="Mithrall_Hall"
          inkscape:label="Mithrall Hall" />
       <path
          style="fill:url(#linearGradient109);fill-opacity:0.556863;stroke:url(#linearGradient98);stroke-width:5"
          d="m 1360.3425,1192.8008 h -209.6939 v 16.8076 h -18.1414 l -0.2522,82.2414 v 23.0148 l 96.5869,0.3773 h 44.5205 v -38.4838 l 119.228,-0.2014 v -56.8105 h -32.2479 z"
-         id="path78"
+         id="Sunspire_City"
          inkscape:label="Sunspire City" />
       <path
          style="fill:url(#linearGradient108);fill-opacity:0.556863;stroke:url(#linearGradient98);stroke-width:5"
          d="M 1132.255,1291.8498 H 960.96419 v -83.0044 -200.9274 h 43.21881 v 149.1335 h 146.7324 l -0.2668,35.7493 v 16.8076 h -18.1414 z"
-         id="path79"
+         id="Emerald_City"
          inkscape:label="Emerald City" />
       <path
          style="fill:url(#linearGradient106);fill-opacity:0.556863;stroke:url(#linearGradient98);stroke-width:5"
          d="m 647.62694,780.54904 h 116.39053 v 41.19419 h 59.42358 v 79.23144 H 722.51529 v 22.07162 H 597.06738 v -35.4488 h -79.50227 v -79.50227 h 28.27933 v -25.0112 h 101.77892 z"
-         id="path80"
+         id="Phantom_City"
          inkscape:label="Phantom City" />
       <path
          style="fill:url(#linearGradient107);fill-opacity:0.556863;stroke:url(#linearGradient98);stroke-width:5"
          d="m 713.38614,1098.0918 h 64.56224 v -87.5059 h 24.27754 v -14.40645 h 21.34289 l -0.12776,-95.20478 H 722.51529 v 22.07162 H 597.06738 v 39.25132 h -33.61505 v 68.29729 h 100.0448 v 67.4969 z"
-         id="path81"
+         id="Sandwind_Keep"
          inkscape:label="Sandwind Keep" />
     </g>
     <g
@@ -827,22 +827,22 @@
       <path
          style="fill:url(#linearGradient103);fill-opacity:0.556863;stroke:url(#linearGradient99);stroke-width:5"
          d="m 764.01747,780.54904 v -41.01786 h 201.74836 l -0.1334,-73.0994 v -64.56225 h -47.67959 -91.49345 v 36.74979 H 647.82344 l -0.1965,141.92972 z"
-         id="path82"
+         id="Temple_of_Order"
          inkscape:label="Temple of Order" />
       <path
          style="fill:url(#linearGradient102);fill-opacity:0.556863;stroke:url(#linearGradient99);stroke-width:5"
          d="m 1347.6891,545.56507 h -88.2865 l 0.3616,83.65004 h 85.1047 l -0.01,30.52812 34.7109,-0.0472 H 1568.782 V 558.01568 h -91.3048 v -69.79913 -42.06812 h -39.427 l -90.3616,-0.18864 z"
-         id="path83"
+         id="Temple_of_Nature"
          inkscape:label="Temple of Nature" />
       <path
          style="fill:url(#linearGradient105);fill-opacity:0.556863;stroke:url(#linearGradient99);stroke-width:5"
          d="m 1379.5703,833.4393 v 37.88423 h -61.6468 v 197.95527 h 42.3813 l 0.038,58.9598 h 111.5166 V 1014.5877 H 1701.562 V 990.71033 861.45245 h -37.3501 V 833.4393 Z"
-         id="path84"
+         id="Temple_of_War"
          inkscape:label="Temple of War" />
       <path
          style="fill:url(#linearGradient104);fill-opacity:0.556863;stroke:url(#linearGradient99);stroke-width:5"
          d="m 823.56881,996.17945 h 40.5515 v 77.63475 h 96.84388 v 135.0312 h -82.24978 v 14.7144 H 762.88559 v -44.1432 l -49.49945,0.045 v -81.3697 h 64.56224 v -87.5059 h 24.27754 v -14.40645 z"
-         id="path85"
+         id="Temple_of_Chaos"
          inkscape:label="Temple of Chaos" />
     </g>
     <g
@@ -852,7 +852,7 @@
       <path
          style="fill:url(#linearGradient86);fill-opacity:0.556863;stroke:url(#linearGradient100);stroke-width:5"
          d="M 938.28685,772.61266 V 968.70047 H 1198.6701 V 772.69603 Z"
-         id="path86"
+         id="Royal_Castle"
          inkscape:label="Royal Castle" />
     </g>
     <g
@@ -862,17 +862,17 @@
       <path
          style="fill:url(#linearGradient113);fill-opacity:0.556863;stroke:url(#linearGradient101);stroke-width:5"
          d="m 764.01747,780.54904 v -41.01786 h 201.74836 v 33.09028 H 938.28685 V 968.70047 H 1130.3729 V 1007.918 H 1004.183 960.96419 v 65.8962 h -96.84388 v -77.63475 h -40.5515 l -0.12776,-95.20478 v -79.23144 h -59.42358 z"
-         id="path87"
+         id="Sky_Fortress"
          inkscape:label="Sky Fortress" />
       <path
          style="fill:url(#linearGradient114);fill-opacity:0.556863;stroke:url(#linearGradient101);stroke-width:5"
          d="m 965.76583,739.53118 -0.1334,-73.0994 h 118.58647 v -37.21667 h 175.5453 85.1047 l -0.01,30.52812 34.7114,-0.0472 v 173.74323 37.88423 h -61.6468 -33.615 V 840.3763 h -85.6384 v -67.68031 l -232.90427,-0.0746 z"
-         id="path88"
+         id="Lionheart_Fortress"
          inkscape:label="Lionheart Fortress" />
       <path
          style="fill:url(#linearGradient115);fill-opacity:0.556863;stroke:url(#linearGradient101);stroke-width:5"
          d="M 1130.3729,968.70047 V 1007.918 H 1004.183 v 149.1335 h 146.7324 l -0.2668,35.7493 h 209.6939 l 3e-4,-64.5622 -0.038,-58.9598 h -42.3813 V 871.32353 l -33.615,-4e-5 V 840.3763 h -85.6384 v 128.32417 z"
-         id="path89"
+         id="Nightfall_Fortress"
          inkscape:label="Nightfall Fortress" />
     </g>
   </g>
