@@ -20,4 +20,4 @@ lang: "en"
   </div>
 
 </section>
-<script src="/js/map.js" defer></script>
+<script type="module" src="/js/map.js" defer></script>
