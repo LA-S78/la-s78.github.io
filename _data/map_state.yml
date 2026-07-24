@@ -1,0 +1,17 @@
+#map test
+alliances:
+  VAL:
+    name: "Valhalla"
+    color: "#ff4d4d"
+    crest: "val_logo.png"
+  APEX:
+    name: "Apex Vanguard"
+    color: "#3399ff"
+  SICK:
+    name: "Plague Bearers"
+    color: "#b8975a"
+
+territory_ownership:
+  capitol:
+    owner: "VAL"
+    status: "holding"
