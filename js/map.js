@@ -208,7 +208,10 @@ export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = n
  */
 export function initializeMapData(svgRoot) {
   cities = extractCitiesFromSvg(svgRoot);
-  
+  const capitol = cities.find(c => c.level === 'Capitol');
+  if (capitol) {
+    capitol.owner = 'WLO';
+  }
   // Use global window.MAP_STATE if available
   if (typeof window !== 'undefined' && window.MAP_STATE) {
     applyMapState(window.MAP_STATE, svgRoot);
