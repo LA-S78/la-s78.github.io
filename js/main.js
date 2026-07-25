@@ -384,27 +384,48 @@
 
     // --- MAP DIAGNOSTICS & HIGHLIGHTING ---
     function runMapDiagnostics() {
-        const svg = document.querySelector('svg');
-        if (!svg) return; // Silently skip if this isn't the map page
+        // 1. Get all SVGs on the page
+        const allSvgs = document.querySelectorAll('svg');
+        let mapSvg = null;
+
+        // 2. Hunt for the one that actually contains our Inkscape map data
+        allSvgs.forEach(svg => {
+            if (svg.innerHTML.includes('inkscape:label')) {
+                mapSvg = svg;
+            }
+        });
+
+        if (!mapSvg) return; // Silently skip if the map isn't on this page
 
         // Dynamically import map.js safely inside the IIFE scope
         import('./map.js').then((MapModule) => {
             setTimeout(() => {
-                console.log("🟢 DIAGNOSTIC: SVG found in DOM.");
+                console.log("🟢 DIAGNOSTIC: Correct Map SVG identified.");
                 
-                const greenGroup = svg.querySelector('g[inkscape\\:label="green"]');
-                if (!greenGroup) {
-                    console.error("🛑 DIAGNOSTIC: Found SVG, but could not find the 'green' group. Namespace or loading issue.");
+                // 3. Look for the group using a case-insensitive approach to be safe
+                const allGroups = mapSvg.querySelectorAll('g');
+                let targetGroup = null;
+                
+                allGroups.forEach(g => {
+                    const label = g.getAttribute('inkscape:label');
+                    if (label && label.toLowerCase() === 'green') {
+                        targetGroup = g;
+                    }
+                });
+
+                if (!targetGroup) {
+                    console.error("🛑 DIAGNOSTIC: Found the Map SVG, but the 'green' group is missing or named differently in Inkscape.");
                     return;
                 }
+                
                 console.log("🟢 DIAGNOSTIC: Target groups found.");
                 
-                const cities = MapModule.initializeMapData(svg);
+                const cities = MapModule.initializeMapData(mapSvg);
                 console.log(`🟢 DIAGNOSTIC: Extracted ${cities.length} cities.`);
                 
-                MapModule.enableMapHighlighting(svg);
-                console.log("🟢 DIAGNOSTIC: Highlighting applied. If it still doesn't glow on hover, check for overlapping layers (z-index/pointer-events).");
-            }, 1000); // Delay ensures DOM is fully rendered
+                MapModule.enableMapHighlighting(mapSvg);
+                console.log("🟢 DIAGNOSTIC: Highlighting applied. Hover over the map!");
+            }, 1000); 
             
         }).catch(err => {
             console.error("🛑 DIAGNOSTIC ERROR: Could not load map.js.", err);
