@@ -37,6 +37,28 @@ export let alliances = {};
 export let mapState = {};
 
 /**
+ * Merges Discord role colors into the alliances dataset and re-renders SVG labels
+ * 
+ * @param {Object} colorMap - Dictionary of tags and hex colors, e.g., { WLO: "#e88d63" }
+ * @param {Document|Element} svgRoot - Optional SVG element to trigger an immediate re-render
+ */
+export function setAllianceColors(colorMap, svgRoot = null) {
+  if (!colorMap || typeof colorMap !== 'object') return;
+
+  Object.entries(colorMap).forEach(([tag, color]) => {
+    if (!alliances[tag]) {
+      alliances[tag] = { name: tag };
+    }
+    alliances[tag].color = color;
+  });
+
+  // Re-render territory labels with the new colors
+  if (svgRoot) {
+    renderTerritoryLabels(svgRoot);
+  }
+}
+
+/**
  * Parses an SVG document or element and extracts cities 
  * strictly based on their parent group's inkscape:label color.
  * 
@@ -123,9 +145,10 @@ export function renderTerritoryLabels(svgRoot) {
       textEl.setAttribute('x', centerX);
       textEl.setAttribute('y', centerY);
       textEl.setAttribute('class', 'territory-label');
+      textEl.setAttribute('data-owner', city.owner);
       textEl.textContent = city.owner;
 
-      // Optional: Set text fill color based on alliance color if defined
+      // Set text fill color based on alliance color if defined
       const allianceData = alliances[city.owner];
       if (allianceData && allianceData.color) {
         textEl.style.fill = allianceData.color;
@@ -208,10 +231,7 @@ export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = n
  */
 export function initializeMapData(svgRoot) {
   cities = extractCitiesFromSvg(svgRoot);
-  const capitol = cities.find(c => c.level === 'Capitol');
-  if (capitol) {
-    capitol.owner = 'WLO';
-  }
+  
   // Use global window.MAP_STATE if available
   if (typeof window !== 'undefined' && window.MAP_STATE) {
     applyMapState(window.MAP_STATE, svgRoot);
