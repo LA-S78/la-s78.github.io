@@ -1671,27 +1671,27 @@ svg g[inkscape\:label] path {
 
 /* group colours */
 g[inkscape\:label="green"] path {
-    fill: #03aa00 !important;
+    fill: #25bb00 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="yellow"] path {
-    fill: #e0e000 !important;
+    fill: #cece00 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="orange"] path {
-    fill: #ff9d00 !important;
+    fill: #e68e00 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="purple"] path {
-    fill: #c200d0 !important;
+    fill: #a400af !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="blue"] path {
-    fill: #0022cf !important;
+    fill: #003fad !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="red"] path {
-    fill: #ff0000 !important;
+    fill: #8f0000 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="gold"] path {
@@ -1704,6 +1704,14 @@ g[inkscape\:label="gold"] path {
     filter: grayscale(100%) contrast(140%);
     opacity: 0.5;
     pointer-events: none;
+}
+
+svg #layer1 path {
+    filter: url(#territory-vignette);
+    transition: filter 0.2s ease;
+}
+svg #layer1 path:hover {
+    filter: url(#territory-vignette) brightness(1.3);
 }
 
 /* ==========================================================================

@@ -100,16 +100,8 @@ export function enableMapHighlighting(svgRoot) {
     const elements = group.querySelectorAll('path, rect, circle, polygon');
 
     elements.forEach(el => {
+      // Keep cursor pointer and click handler in JS
       el.style.cursor = 'pointer';
-
-      el.addEventListener('mouseenter', (e) => {
-        e.target.style.filter = 'brightness(1.3)';
-        e.target.style.transition = 'filter 0.2s ease';
-      });
-
-      el.addEventListener('mouseleave', (e) => {
-        e.target.style.filter = 'none';
-      });
 
       el.addEventListener('click', (e) => {
         const cityId = e.target.id;

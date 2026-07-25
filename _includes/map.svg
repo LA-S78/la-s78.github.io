@@ -30,6 +30,27 @@
        height="100%" 
        preserveAspectRatio="xMidYMid slice" />
   </pattern>
+  <filter id="territory-vignette" x="-20%" y="-20%" width="140%" height="140%">
+    <!-- 1. Blur the shape's alpha outline -->
+    <feGaussianBlur in="SourceAlpha" stdDeviation="40" result="blur" />
+    
+    <!-- 2. Invert the blur alpha: 0% in center, 100% near edges -->
+    <feComponentTransfer in="blur" result="invertedBlur">
+      <feFuncA type="linear" slope="-1" intercept="1" />
+    </feComponentTransfer>
+    
+    <!-- 3. Create the dark shadow color -->
+    <feFlood flood-color="#000000" flood-opacity="0.5" result="shadowColor" />
+    
+    <!-- 4. Apply shadow color to inverted blur -->
+    <feComposite in="shadowColor" in2="invertedBlur" operator="in" result="vignette" />
+    
+    <!-- 5. Clip strictly inside the territory boundary -->
+    <feComposite in="vignette" in2="SourceAlpha" operator="in" result="innerVignette" />
+    
+    <!-- 6. Composite the vignette over the territory fill -->
+    <feComposite in="innerVignette" in2="SourceGraphic" operator="over" />
+  </filter>
     <linearGradient
        id="swatch95"
        inkscape:swatch="solid">
