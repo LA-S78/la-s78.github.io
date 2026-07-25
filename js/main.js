@@ -157,7 +157,8 @@
         }
         
         // Re-run highlighting if we are on the NAP page
-        highlightPlayerAlliance();
+        highlightAllianceRow('nap-alliance-table');
+        highlightAllianceRow('nap-ranks-table');
     }
 
     // --- NEW: DYNAMIC ALLIANCE HIGHLIGHTING ---
@@ -381,6 +382,35 @@
         }, { passive: true });
     }
 
+    // --- MAP DIAGNOSTICS & HIGHLIGHTING ---
+    function runMapDiagnostics() {
+        const svg = document.querySelector('svg');
+        if (!svg) return; // Silently skip if this isn't the map page
+
+        // Dynamically import map.js safely inside the IIFE scope
+        import('./map.js').then((MapModule) => {
+            setTimeout(() => {
+                console.log("🟢 DIAGNOSTIC: SVG found in DOM.");
+                
+                const greenGroup = svg.querySelector('g[inkscape\\:label="green"]');
+                if (!greenGroup) {
+                    console.error("🛑 DIAGNOSTIC: Found SVG, but could not find the 'green' group. Namespace or loading issue.");
+                    return;
+                }
+                console.log("🟢 DIAGNOSTIC: Target groups found.");
+                
+                const cities = MapModule.initializeMapData(svg);
+                console.log(`🟢 DIAGNOSTIC: Extracted ${cities.length} cities.`);
+                
+                MapModule.enableMapHighlighting(svg);
+                console.log("🟢 DIAGNOSTIC: Highlighting applied. If it still doesn't glow on hover, check for overlapping layers (z-index/pointer-events).");
+            }, 1000); // Delay ensures DOM is fully rendered
+            
+        }).catch(err => {
+            console.error("🛑 DIAGNOSTIC ERROR: Could not load map.js.", err);
+        });
+    }
+
     function initApp() {
         initAuthentication(); 
         highlightCurrentSurvivalBattle();
@@ -395,6 +425,9 @@
         syncHeaderSubtitle();
         initScrollMemory();
         setTimeout(() => scrollActiveNavIntoView(), 100);
+
+        // Execute map diagnostics and dynamic binding
+        runMapDiagnostics();
     }
 
     // --- EVENTS ---
