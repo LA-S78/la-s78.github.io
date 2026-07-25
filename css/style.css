@@ -1722,6 +1722,29 @@ svg #layer1 path:hover {
   animation: territory-flash 2s ease-in-out infinite alternate;
 }
 
+/* Territory Owner Text Labels */
+.territory-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  fill: #ffffff;
+  
+  /* Black text outline for legibility over bright/dark fills */
+  stroke: rgba(0, 0, 0, 0.85);
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+  paint-order: stroke fill;
+
+  /* Perfect centering inside the calculated SVG coordinates */
+  text-anchor: middle;
+  dominant-baseline: central;
+
+  /* CRITICAL: Mouse events pass through so path hover still works */
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.5px;
+}
+
 /* map readout */
 .info-card {
   margin-top: 1rem;

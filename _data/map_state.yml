@@ -12,6 +12,6 @@ alliances:
     color: "#b8975a"
 
 territory_ownership:
-  capitol:
-    owner: "VAL"
+  Royal_Castle:
+    owner: "WLO"
     status: "holding"

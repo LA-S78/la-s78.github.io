@@ -397,10 +397,23 @@
         if (!mapSvg) return; // Silently skip if this isn't the map page
 
         // Dynamically import map.js and bind it to the correct SVG
-        import('./map.js').then((MapModule) => {
-            setTimeout(() => {
+        import('./map.js').then(async (MapModule) => {
+            setTimeout(async () => {
                 MapModule.initializeMapData(mapSvg);
                 MapModule.enableMapHighlighting(mapSvg);
+
+                // Fetch public alliance role colors directly from our API (Works for guests & members)
+                try {
+                    const response = await fetch('/api/colors');
+                    if (response.ok) {
+                        const allianceColors = await response.json();
+                        if (MapModule.setAllianceColors) {
+                            MapModule.setAllianceColors(allianceColors, mapSvg);
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Could not load public alliance colors:", err);
+                }
             }, 50); // Micro-delay ensures Turbo has fully rendered the paths
         }).catch(err => {
             console.error("Map Module Error: Could not load map.js", err);

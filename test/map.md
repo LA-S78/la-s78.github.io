@@ -24,4 +24,7 @@ lang: "en"
   </div>
   </div>
 </section>
+<script>
+  window.MAP_STATE = {{ site.data.map_state | jsonify }};
+</script>
 <script type="module" src="/js/map.js" defer></script>
