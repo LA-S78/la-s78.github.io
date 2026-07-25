@@ -11,13 +11,17 @@ lang: "en"
     <div class="game-map">
     {% include map.svg %}
     </div>
-
-    <!-- 3. Selected Territory Command Intel Pane -->
-  <div id="territory-intel-pane">
-      <h3 id="intel-title">Select a Territory</h3>
-      <p id="intel-body">Click any region on the map above to view city info, buffs, etc.</p>
+    <!-- Territory Detail Card -->
+  <div id="territory-info-card" class="info-card idle">
+    <div class="info-header">
+      <span id="city-level-badge" class="badge">Level --</span>
+      <h3 id="city-name">Hover over a territory</h3>
+    </div>
+    <div class="info-body">
+      <p><strong>Owner:</strong> <span id="city-owner">Unclaimed</span></p>
+      <p><strong>Territory Buff:</strong> <span id="city-buff">None</span></p>
+    </div>
   </div>
   </div>
-
 </section>
 <script type="module" src="/js/map.js" defer></script>

@@ -87,11 +87,39 @@ export function initializeMapData(svgRoot) {
 }
 
 /**
- * Enables hover/click highlighting and interaction on the SVG map elements
+ * Enables hover/click highlighting and updates the territory info card
  * @param {Document|Element} svgRoot - The SVG container element
  */
 export function enableMapHighlighting(svgRoot) {
   const colorLabels = Object.keys(COLOR_TO_LEVEL_MAP);
+  
+  // DOM targets for the info card
+  const card = document.getElementById('territory-info-card');
+  const cityNameEl = document.getElementById('city-name');
+  const cityLevelEl = document.getElementById('city-level-badge');
+  const cityOwnerEl = document.getElementById('city-owner');
+  const cityBuffEl = document.getElementById('city-buff');
+
+  function updateInfoCard(cityData) {
+    if (!card) return;
+
+    if (!cityData) {
+      card.classList.add('idle');
+      cityNameEl.textContent = 'Hover over a territory';
+      cityLevelEl.textContent = 'Level --';
+      cityOwnerEl.textContent = 'Unclaimed';
+      cityBuffEl.textContent = 'None';
+      return;
+    }
+
+    card.classList.remove('idle');
+    cityNameEl.textContent = cityData.name || cityData.id;
+    cityLevelEl.textContent = typeof cityData.level === 'number' 
+      ? `Level ${cityData.level}` 
+      : cityData.level; // Handles "Capitol" string
+    cityOwnerEl.textContent = cityData.owner || 'Unclaimed';
+    cityBuffEl.textContent = cityData.buff || 'No active buff';
+  }
 
   colorLabels.forEach(color => {
     const group = svgRoot.querySelector(`g[inkscape\\:label="${color}"]`);
@@ -100,13 +128,25 @@ export function enableMapHighlighting(svgRoot) {
     const elements = group.querySelectorAll('path, rect, circle, polygon');
 
     elements.forEach(el => {
-      // Keep cursor pointer and click handler in JS
       el.style.cursor = 'pointer';
 
+      // Live update on hover
+      el.addEventListener('mouseenter', (e) => {
+        const cityData = getCityById(e.target.id);
+        updateInfoCard(cityData);
+      });
+
+      // Reset card when mouse leaves
+      el.addEventListener('mouseleave', () => {
+        updateInfoCard(null);
+      });
+
+      // Handle selection click
       el.addEventListener('click', (e) => {
         const cityId = e.target.id;
         const cityData = getCityById(cityId);
-        console.log("Clicked City Details:", cityData || { id: cityId, group: color });
+        console.log("Selected City:", cityData);
+        // You can dispatch a custom Turbo / DOM event here if needed
       });
     });
   });
