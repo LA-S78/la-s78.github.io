@@ -1538,11 +1538,11 @@ svg.resource-icon {
   margin-right: 4px;
 }
 
-/* --------------------------------------------------------------------------
-   WAR ROOM MAP & ATLAS STYLES
-   -------------------------------------------------------------------------- */
-
-/* Layout & Container */
+/* game map */
+/* layout */
+svg g[inkscape\:label] path {
+    fill-opacity: 1 !important;
+}
 #map-container {
   position: relative;
   width: 100%;
@@ -1667,6 +1667,43 @@ svg.resource-icon {
   margin: 0;
   color: var(--text-muted);
   line-height: 1.5;
+}
+
+/* group colours */
+g[inkscape\:label="green"] path {
+    fill: #03aa00 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="yellow"] path {
+    fill: #e0e000 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="orange"] path {
+    fill: #ff9d00 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="purple"] path {
+    fill: #c200d0 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="blue"] path {
+    fill: #0022cf !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="red"] path {
+    fill: #ff0000 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="gold"] path {
+    fill: #b29a20 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.normal-texture-overlay {
+    mix-blend-mode: overlay;
+    filter: grayscale(100%) contrast(140%);
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 /* ==========================================================================

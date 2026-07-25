@@ -382,53 +382,28 @@
         }, { passive: true });
     }
 
-    // --- MAP DIAGNOSTICS & HIGHLIGHTING ---
-    function runMapDiagnostics() {
-        // 1. Get all SVGs on the page
+    // --- MAP INITIALIZATION & INTERACTION ---
+    function initMapInteraction() {
         const allSvgs = document.querySelectorAll('svg');
         let mapSvg = null;
 
-        // 2. Hunt for the one that actually contains our Inkscape map data
+        // Hunt for the SVG containing Inkscape map layers
         allSvgs.forEach(svg => {
             if (svg.innerHTML.includes('inkscape:label')) {
                 mapSvg = svg;
             }
         });
 
-        if (!mapSvg) return; // Silently skip if the map isn't on this page
+        if (!mapSvg) return; // Silently skip if this isn't the map page
 
-        // Dynamically import map.js safely inside the IIFE scope
+        // Dynamically import map.js and bind it to the correct SVG
         import('./map.js').then((MapModule) => {
             setTimeout(() => {
-                console.log("🟢 DIAGNOSTIC: Correct Map SVG identified.");
-                
-                // 3. Look for the group using a case-insensitive approach to be safe
-                const allGroups = mapSvg.querySelectorAll('g');
-                let targetGroup = null;
-                
-                allGroups.forEach(g => {
-                    const label = g.getAttribute('inkscape:label');
-                    if (label && label.toLowerCase() === 'green') {
-                        targetGroup = g;
-                    }
-                });
-
-                if (!targetGroup) {
-                    console.error("🛑 DIAGNOSTIC: Found the Map SVG, but the 'green' group is missing or named differently in Inkscape.");
-                    return;
-                }
-                
-                console.log("🟢 DIAGNOSTIC: Target groups found.");
-                
-                const cities = MapModule.initializeMapData(mapSvg);
-                console.log(`🟢 DIAGNOSTIC: Extracted ${cities.length} cities.`);
-                
+                MapModule.initializeMapData(mapSvg);
                 MapModule.enableMapHighlighting(mapSvg);
-                console.log("🟢 DIAGNOSTIC: Highlighting applied. Hover over the map!");
-            }, 1000); 
-            
+            }, 50); // Micro-delay ensures Turbo has fully rendered the paths
         }).catch(err => {
-            console.error("🛑 DIAGNOSTIC ERROR: Could not load map.js.", err);
+            console.error("Map Module Error: Could not load map.js", err);
         });
     }
 
@@ -447,8 +422,8 @@
         initScrollMemory();
         setTimeout(() => scrollActiveNavIntoView(), 100);
 
-        // Execute map diagnostics and dynamic binding
-        runMapDiagnostics();
+        // Execute map binding
+        initMapInteraction();
     }
 
     // --- EVENTS ---
