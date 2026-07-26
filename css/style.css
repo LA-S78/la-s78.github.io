@@ -1687,12 +1687,11 @@ svg #layer1 path {
 svg #layer1 path:hover {
   /* 1. Combine vignette + brightness boost */
   filter: url(#territory-vignette) 
-          drop-shadow(0 0 2px rgba(var(--active-theme-vivid), 1))
-          drop-shadow(0 0 8px rgba(var(--active-theme-vivid), 1))
-          drop-shadow(0 0 20px rgba(var(--active-theme-vivid), 1))
+          drop-shadow(0 0 2px rgba(var(--active-theme), 1))
+          drop-shadow(0 0 4px rgba(var(--active-theme), 1))
+          drop-shadow(0 0 8px rgba(var(--active-theme), 1))
           brightness(1.3);
   vector-effect: non-scaling-stroke;
-  paint-order: fill stroke;
   animation: territory-flash 2s ease-in-out infinite alternate;
 }
 
