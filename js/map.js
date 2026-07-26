@@ -11,6 +11,99 @@
  * gold   -> Capitol (Unique)
  */
 
+/**
+ * Manual position, rotation, and font sizing overrides for awkward territory shapes.
+ * 
+ * Available options per city ID:
+ * - offsetX: Number (positive moves right, negative moves left)
+ * - offsetY: Number (positive moves down, negative moves up)
+ * - rotate: Number in degrees (e.g. 90 or -90)
+ * - scale: Number multiplier for font size (e.g. 1.2 for 20% larger, 0.8 for 20% smaller)
+ */
+export const LABEL_OVERRIDES = {
+  Sky_Fortress: {
+    rotate: 270,
+    offsetX: -40
+  },
+  Royal_Castle: {
+    offsetX: -5,
+    offsetY: -10,
+    scale: 1.5
+  },
+  Lionheart_Fortress: {
+    offsetY: -35
+  },
+  Cloudtop_Highlands: {
+    offsetX: 20
+  },
+  Stillwater_River: {
+    offsetY: -30
+  },
+  Raven_s_Roost: {
+    offsetY: -20
+  },
+  Bluestone_Slope: {
+    offsetY: -20
+  },
+    Sunspire_City: {
+    offsetY: -20
+  },
+    Emerald_City: {
+    offsetY: 20,
+    offsetX: 20
+  },
+    Graywolf_Vale: {
+    offsetY: -20
+  },
+    Rose_Court: {
+    offsetY: -15
+  },
+    Falcon_s_Keep: {
+    offsetX: -10
+  },
+    Ironwall_City: {
+    offsetY: -30
+  },
+    Holyspring_City: {
+    offsetY: -20
+  },
+    Temple_of_War: {
+    offsetY: -20
+  },
+    Mithrall_Hall: {
+    offsetY: -20,
+    offsetX: 30
+  },
+  Cliffside_Citadel: {
+    offsetX: 10
+  },
+  Stormgate: {
+    offsetX: -10
+  },
+  Goldgrain_Town: {
+    offsetY: -20
+  },
+  Redsoil_Wastes: {
+    offsetX: 20
+  },
+  Opal_Mine: {
+    offsetY: -20
+  },
+  Maple_Town: {
+    offsetY: -20
+  },
+  Irongate_Town: {
+    offsetY: -10
+  },
+  Stagcall_Vale: {
+    offsetY: -10
+  },
+  Beacon_Point: {
+    offsetY: -20
+  },
+  
+};
+
 export const COLOR_TO_LEVEL_MAP = {
   green: 1,
   yellow: 2,
@@ -164,79 +257,67 @@ export function renderTerritoryLabels(svgRoot) {
   }
 
   // 3. Render and clip each label
-  cities.forEach(city => {
-    if (!city.owner || city.owner === 'Unclaimed') return;
+  // Inside renderTerritoryLabels() in map.js:
 
-    const pathEl = svgRoot.getElementById(city.id);
-    if (!pathEl) return;
+cities.forEach(city => {
+  if (!city.owner || city.owner === 'Unclaimed') return;
 
-    try {
-      const center = getVisualCenter(pathEl);
-      const bbox = pathEl.getBBox();
-      if (bbox.width === 0 || bbox.height === 0) return;
+  const pathEl = svgRoot.getElementById(city.id);
+  if (!pathEl) return;
 
-      const ownerTag = String(city.owner);
+  try {
+    // 1. Get base visual center and bounding box
+    const center = getVisualCenter(pathEl);
+    const bbox = pathEl.getBBox();
+    if (bbox.width === 0 || bbox.height === 0) return;
 
-      // --- HARD CLIP-PATH MASKING ---
-      // Reuses or creates a unique clipPath referencing the territory's path element
-      const clipId = `clip-label-${city.id}`;
-      let clipPath = svgRoot.querySelector(`#${clipId}`);
-      if (!clipPath) {
-        clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
-        clipPath.setAttribute('id', clipId);
-        
-        const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-        useEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `#${city.id}`);
-        useEl.setAttribute('href', `#${city.id}`);
-        
-        clipPath.appendChild(useEl);
-        defs.appendChild(clipPath);
-      }
+    // 2. Fetch any manual overrides defined for this city ID
+    const override = LABEL_OVERRIDES[city.id] || {};
+    const finalX = center.x + (override.offsetX || 0);
+    const finalY = center.y + (override.offsetY || 0);
 
-      // --- CREATE TEXT ELEMENT ---
-      const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      textEl.setAttribute('x', center.x);
-      textEl.setAttribute('y', center.y);
-      textEl.setAttribute('dy', '0.35em');
-      
-      // Bind hard clipping mask
-      textEl.setAttribute('clip-path', `url(#${clipId})`);
+    const ownerTag = String(city.owner);
 
-      // Alignment overrides
-      textEl.style.textAnchor = 'middle';
-      textEl.style.dominantBaseline = 'central';
-      
-      // Initial sizing starting point based on box height
-      let fontSize = Math.min(32, Math.max(12, bbox.height * 0.45));
-      textEl.style.fontSize = `${fontSize}px`;
+    // 3. Dynamic Font Sizing (with manual scale multiplier support)
+    const maxAllowedWidth = bbox.width * 0.68;
+    const maxAllowedHeight = bbox.height * 0.55;
+    const maxFontSizeByWidth = maxAllowedWidth / (ownerTag.length * 0.65);
+    let fontSize = Math.max(10, Math.min(36, maxFontSizeByWidth, maxAllowedHeight));
 
-      textEl.setAttribute('class', 'territory-label');
-      textEl.setAttribute('data-owner', ownerTag);
-      textEl.textContent = ownerTag;
-
-      // Color assignment
-      const allianceData = alliances[ownerTag];
-      if (allianceData && allianceData.color) {
-        textEl.style.fill = allianceData.color;
-      }
-
-      // Append to DOM first so getComputedTextLength can accurately measure rendered pixels
-      labelGroup.appendChild(textEl);
-
-      // --- EXACT BROWSER DOM MEASUREMENT & AUTOSCALING ---
-      const maxAllowedWidth = bbox.width * 0.68;
-      const actualWidth = textEl.getComputedTextLength();
-
-      if (actualWidth > maxAllowedWidth && actualWidth > 0) {
-        const scaleFactor = maxAllowedWidth / actualWidth;
-        fontSize = Math.max(9, fontSize * scaleFactor);
-        textEl.style.fontSize = `${fontSize.toFixed(1)}px`;
-      }
-
-    } catch (e) {
-      console.warn(`Could not calculate label position for city: ${city.id}`, e);
+    if (override.scale) {
+      fontSize *= override.scale;
     }
-  });
+
+    // 4. Create Text Element
+    const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    textEl.setAttribute('x', finalX);
+    textEl.setAttribute('y', finalY);
+    textEl.setAttribute('dy', '0.35em');
+
+    // Apply rotation around the text's calculated position
+    if (override.rotate) {
+      textEl.setAttribute('transform', `rotate(${override.rotate}, ${finalX}, ${finalY})`);
+    }
+
+    // Alignment and Styling
+    textEl.style.textAnchor = 'middle';
+    textEl.style.dominantBaseline = 'central';
+    textEl.style.fontSize = `${fontSize.toFixed(1)}px`;
+
+    textEl.setAttribute('class', 'territory-label');
+    textEl.setAttribute('data-owner', ownerTag);
+    textEl.textContent = ownerTag;
+
+    const allianceData = alliances[ownerTag];
+    if (allianceData && allianceData.color) {
+      textEl.style.fill = allianceData.color;
+    }
+
+    labelGroup.appendChild(textEl);
+  } catch (e) {
+    console.warn(`Could not calculate label position for city: ${city.id}`, e);
+  }
+});
 }
 
 /**
