@@ -21,8 +21,8 @@
  * - scale: Number multiplier for font size (e.g. 1.2 for 20% larger, 0.8 for 20% smaller)
  */
 export const LABEL_OVERRIDES = {
-  Sky_Fortress: { rotate: 270, offsetX: -40 },
-  Royal_Castle: { offsetX: -5, offsetY: -10, scale: 1.5 },
+  Sky_Fortress: { rotate: 270, offsetX: -52 },
+  Royal_Castle: { offsetX: -5, offsetY: -20, scale: 1.5 },
   Lionheart_Fortress: { offsetY: -35 },
   Cloudtop_Highlands: { offsetX: 28 },
   Stillwater_River: { offsetY: -30 },
