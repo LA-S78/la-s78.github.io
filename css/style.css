@@ -1675,31 +1675,31 @@ svg g[inkscape\:label] path {
 
 /* group colours */
 g[inkscape\:label="green"] path {
-    fill: var(--territory-fill, #25bb00) !important;
+    fill: #25bb00 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="yellow"] path {
-    fill: var(--territory-fill, #cece00) !important;
+    fill: #cece00 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="orange"] path {
-    fill: var(--territory-fill, #e68e00) !important;
+    fill: #e68e00 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="purple"] path {
-    fill: var(--territory-fill, #a400af) !important;
+    fill: #a400af !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="blue"] path {
-    fill: var(--territory-fill, #003fad) !important;
+    fill: #003fad !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="red"] path {
-    fill: var(--territory-fill, #8f0000) !important;
+    fill: #8f0000 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="gold"] path {
-    fill: var(--territory-fill, #b29a20) !important;
+    fill: #b29a20 !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 
@@ -1753,16 +1753,17 @@ svg #layer1 path:hover {
   stroke: rgba(0, 0, 0, 0.8) !important; 
 }
 
-/* 2. Make the colored territory translucent, but keep a solid colored border */
+/* 2. Override default fills with the JS Alliance Variable */
 .mode-alliance g[inkscape\:label] path {
-  fill-opacity: 0.5 !important; 
+  fill: var(--territory-fill, #718096) !important; /* Overrides default hex colors */
+  fill-opacity: 0.7 !important; 
   stroke: var(--territory-fill, rgba(0,0,0,0.5)) !important;
   stroke-width: 2px !important;
 }
 
 /* 3. Enhance hover effect while in alliance mode */
 .mode-alliance g[inkscape\:label] path:hover {
-  fill-opacity: 0.6 !important;
+  fill-opacity: 0.9 !important;
   stroke-width: 3px !important;
 }
 
