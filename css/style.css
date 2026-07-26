@@ -1755,7 +1755,7 @@ svg #layer1 path:hover {
 
 /* 2. Make the colored territory translucent, but keep a solid colored border */
 .mode-alliance g[inkscape\:label] path {
-  fill-opacity: 0.35 !important; 
+  fill-opacity: 0.5 !important; 
   stroke: var(--territory-fill, rgba(0,0,0,0.5)) !important;
   stroke-width: 2px !important;
 }
