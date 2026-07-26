@@ -65,6 +65,17 @@ export const COLOR_TO_LEVEL_MAP = {
   gold: "Capitol"
 };
 
+// Exact hex colors for JS to enforce natively (Bypasses iOS Safari CSS bugs)
+export const LEVEL_COLORS = {
+  green: '#25bb00',
+  yellow: '#cece00',
+  orange: '#e68e00',
+  purple: '#a400af',
+  blue: '#003fad',
+  red: '#8f0000',
+  gold: '#b29a20'
+};
+
 export const CITY_LEVEL_MAP = {
   1: { level: 1, label: "Level 1", group: "green" },
   2: { level: 2, label: "Level 2", group: "yellow" },
@@ -137,7 +148,7 @@ export function setAllianceColors(colorMap, svgRoot = null) {
 
 /**
  * Parses SVG and extracts cities.
- * (Removed the originalFill caching, as CSS variables now handle defaults!)
+ * Uses JS to explicitly set the default fill color (Fixes iOS Safari SVG bug)
  */
 export function extractCitiesFromSvg(svgRoot) {
   const extractedCities = [];
@@ -156,6 +167,9 @@ export function extractCitiesFromSvg(svgRoot) {
 
         const uniqueId = elementId || `${colorLabel}_city_${index + 1}`;
         const cityName = elementLabel || uniqueId;
+
+        // Strip any Inkscape colors and enforce our exact Compendium hex color directly
+        el.style.fill = LEVEL_COLORS[colorLabel];
 
         if (!extractedCities.some(c => c.id === uniqueId)) {
           extractedCities.push({
@@ -176,14 +190,13 @@ export function extractCitiesFromSvg(svgRoot) {
 }
 
 /**
- * Toggles map territory fill colors between 'level' and 'alliance' modes
- * using the --territory-fill CSS variable trick.
+ * Toggles map territory fill/stroke colors using absolute hex values.
+ * Bypasses iOS CSS variable bugs.
  */
 export function setMapColorMode(mode, svgRoot) {
   if (!svgRoot) return;
   currentColorMode = mode;
 
-  // Add a state class to the SVG root for CSS targeting
   if (mode === 'alliance') {
     svgRoot.classList.add('mode-alliance');
   } else {
@@ -195,20 +208,21 @@ export function setMapColorMode(mode, svgRoot) {
     if (!el) return;
 
     if (mode === 'alliance') {
-      // Apply the CSS variable inline
+      let targetColor = COLOR_FALLBACKS.unclaimed;
+      
       if (city.owner && city.owner !== 'Unclaimed') {
         const alliance = alliances[city.owner];
-        if (alliance && alliance.color) {
-          el.style.setProperty('--territory-fill', alliance.color);
-        } else {
-          el.style.setProperty('--territory-fill', COLOR_FALLBACKS.noAllianceColor);
-        }
-      } else {
-        el.style.setProperty('--territory-fill', COLOR_FALLBACKS.unclaimed);
+        targetColor = (alliance && alliance.color) ? alliance.color : COLOR_FALLBACKS.noAllianceColor;
       }
+      
+      // Explicitly set BOTH fill and stroke to the hex code
+      el.style.fill = targetColor;
+      el.style.stroke = targetColor;
+      
     } else {
-      // Removing the variable instantly triggers the default CSS fallback
-      el.style.removeProperty('--territory-fill');
+      // Revert to level color and remove the stroke override
+      el.style.fill = LEVEL_COLORS[city.group];
+      el.style.stroke = ''; 
     }
   });
 }
