@@ -11,6 +11,50 @@
  * gold   -> Capitol (Unique)
  */
 
+/**
+ * Manual position, rotation, and font sizing overrides for awkward territory shapes.
+ * 
+ * Available options per city ID:
+ * - offsetX: Number (positive moves right, negative moves left)
+ * - offsetY: Number (positive moves down, negative moves up)
+ * - rotate: Number in degrees (e.g. 90 or -90)
+ * - scale: Number multiplier for font size (e.g. 1.2 for 20% larger, 0.8 for 20% smaller)
+ */
+export const LABEL_OVERRIDES = {
+  Sky_Fortress: { rotate: 270, offsetX: -52 },
+  Royal_Castle: { offsetX: -5, offsetY: -20, scale: 1.5 },
+  Lionheart_Fortress: { offsetY: -35 },
+  Cloudtop_Highlands: { offsetX: 28 },
+  Stillwater_River: { offsetY: -30 },
+  Raven_s_Roost: { offsetY: -20 },
+  Bluestone_Slope: { offsetY: -35 },
+  Sunspire_City: { offsetY: -20 },
+  Emerald_City: { offsetY: 20, offsetX: 20 },
+  Graywolf_Vale: { offsetY: -20 },
+  Rose_Court: { offsetY: -20 },
+  Falcon_s_Keep: { offsetY: -30, offsetX: -10 },
+  Ironwall_City: { offsetY: -30, offsetX: 20 },
+  Holyspring_City: { offsetY: -20 },
+  Temple_of_War: { offsetY: -20 },
+  Mithrall_Hall: { offsetY: -20, offsetX: 30 },
+  Cliffside_Citadel: { offsetX: 10 },
+  Stormgate: { offsetX: -8 },
+  Goldgrain_Town: { offsetY: -20 },
+  Redsoil_Wastes: { offsetX: 20 },
+  Opal_Mine: { offsetY: -20 },
+  Maple_Town: { offsetY: -20 },
+  Irongate_Town: { offsetY: -10 },
+  Stagcall_Vale: { offsetY: -10 },
+  Beacon_Point: { offsetY: -20 },
+  Millstone_Creek: { offsetY: -40 },
+  Sandwind_Keep: { offsetY: -20 },
+  Lark_Lane: { offsetY: -40 },
+  Anvil_Town: { offsetY: -10 },
+  Dripping_Cavern: { offsetY: -30 },
+  Broken_Bridgehead: { offsetY: -25 },
+  Wheatsheaf: { offsetY: -15 }
+};
+
 export const COLOR_TO_LEVEL_MAP = {
   green: 1,
   yellow: 2,
@@ -19,6 +63,17 @@ export const COLOR_TO_LEVEL_MAP = {
   blue: 5,
   red: 6,
   gold: "Capitol"
+};
+
+// Exact hex colors for JS to enforce natively (Bypasses iOS Safari CSS bugs)
+export const LEVEL_COLORS = {
+  green: '#25bb00',
+  yellow: '#cece00',
+  orange: '#e68e00',
+  purple: '#a400af',
+  blue: '#003fad',
+  red: '#8f0000',
+  gold: '#b29a20'
 };
 
 export const CITY_LEVEL_MAP = {
@@ -31,17 +86,21 @@ export const CITY_LEVEL_MAP = {
   "Capitol": { level: "Capitol", label: "Capitol", group: "gold" }
 };
 
-// Datasets (populated dynamically via SVG parser & map_state.yml)
+// Datasets & State
 export let cities = [];
 export let alliances = {};
 export let mapState = {};
+export let currentColorMode = 'level';
+
+// Fallback colors for Alliance map mode
+export const COLOR_FALLBACKS = {
+  unclaimed: '#2d3748',      // Dark neutral slate
+  noAllianceColor: '#718096' // Mid-grey for claimed but color-less alliances
+};
 
 /**
  * Calculates the true visual center of an SVG path by sampling perimeter points.
  * Prevents L-shaped or irregular territories from skewing the centroid.
- * 
- * @param {SVGElement} pathEl - The SVG path DOM element
- * @returns {{x: number, y: number}} The visual center coordinate
  */
 function getVisualCenter(pathEl) {
   try {
@@ -60,7 +119,6 @@ function getVisualCenter(pathEl) {
 
     return { x: sumX / samples, y: sumY / samples };
   } catch (e) {
-    // Fallback to bounding box if length calculation isn't supported
     const bbox = pathEl.getBBox();
     return { x: bbox.x + (bbox.width / 2), y: bbox.y + (bbox.height / 2) };
   }
@@ -68,9 +126,6 @@ function getVisualCenter(pathEl) {
 
 /**
  * Merges Discord role colors into the alliances dataset and re-renders SVG labels
- * 
- * @param {Object} colorMap - Dictionary of tags and hex colors, e.g., { WLO: "#e88d63" }
- * @param {Document|Element} svgRoot - Optional SVG element to trigger an immediate re-render
  */
 export function setAllianceColors(colorMap, svgRoot = null) {
   if (!colorMap || typeof colorMap !== 'object') return;
@@ -82,18 +137,18 @@ export function setAllianceColors(colorMap, svgRoot = null) {
     alliances[tag].color = color;
   });
 
-  // Re-render territory labels with the new colors
   if (svgRoot) {
     renderTerritoryLabels(svgRoot);
+    // If we're already viewing alliance colors, force a refresh with the newly fetched colors
+    if (currentColorMode === 'alliance') {
+      setMapColorMode('alliance', svgRoot);
+    }
   }
 }
 
 /**
- * Parses an SVG document or element and extracts cities 
- * strictly based on their parent group's inkscape:label color.
- * 
- * @param {Document|Element} svgRoot - The SVG DOM root element or document
- * @returns {Array} Array of city objects with correctly assigned levels
+ * Parses SVG and extracts cities.
+ * Uses JS to explicitly set the default fill color (Fixes iOS Safari SVG bug)
  */
 export function extractCitiesFromSvg(svgRoot) {
   const extractedCities = [];
@@ -112,6 +167,9 @@ export function extractCitiesFromSvg(svgRoot) {
 
         const uniqueId = elementId || `${colorLabel}_city_${index + 1}`;
         const cityName = elementLabel || uniqueId;
+
+        // Strip any Inkscape colors and enforce our exact Compendium hex color directly
+        el.style.fill = LEVEL_COLORS[colorLabel];
 
         if (!extractedCities.some(c => c.id === uniqueId)) {
           extractedCities.push({
@@ -132,21 +190,50 @@ export function extractCitiesFromSvg(svgRoot) {
 }
 
 /**
- * Calculates territory centroids and places dynamically-scaled owner text labels
- * constrained strictly within shape dimensions.
- * 
- * @param {Document|Element} svgRoot - The SVG container element
+ * Toggles map territory fill/stroke colors using absolute hex values.
+ * Bypasses iOS CSS variable bugs.
  */
+export function setMapColorMode(mode, svgRoot) {
+  if (!svgRoot) return;
+  currentColorMode = mode;
+
+  if (mode === 'alliance') {
+    svgRoot.classList.add('mode-alliance');
+  } else {
+    svgRoot.classList.remove('mode-alliance');
+  }
+
+  cities.forEach(city => {
+    const el = svgRoot.getElementById(city.id);
+    if (!el) return;
+
+    if (mode === 'alliance') {
+      let targetColor = COLOR_FALLBACKS.unclaimed;
+      
+      if (city.owner && city.owner !== 'Unclaimed') {
+        const alliance = alliances[city.owner];
+        targetColor = (alliance && alliance.color) ? alliance.color : COLOR_FALLBACKS.noAllianceColor;
+      }
+      
+      // Explicitly set BOTH fill and stroke to the hex code
+      el.style.fill = targetColor;
+      el.style.stroke = targetColor;
+      
+    } else {
+      // Revert to level color and remove the stroke override
+      el.style.fill = LEVEL_COLORS[city.group];
+      el.style.stroke = ''; 
+    }
+  });
+}
+
 /**
  * Calculates territory centroids, places dynamically-measured owner text labels,
  * and clips text strictly within the territory's exact SVG path boundary.
- * 
- * @param {Document|Element} svgRoot - The SVG container element
  */
 export function renderTerritoryLabels(svgRoot) {
   if (!svgRoot) return;
 
-  // 1. Fetch or create top layer for labels
   let labelGroup = svgRoot.querySelector('#territory-labels');
   if (!labelGroup) {
     labelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -156,14 +243,12 @@ export function renderTerritoryLabels(svgRoot) {
   }
   labelGroup.innerHTML = '';
 
-  // 2. Fetch or create SVG <defs> container for clip paths
   let defs = svgRoot.querySelector('defs');
   if (!defs) {
     defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
     svgRoot.insertBefore(defs, svgRoot.firstChild);
   }
 
-  // 3. Render and clip each label
   cities.forEach(city => {
     if (!city.owner || city.owner === 'Unclaimed') return;
 
@@ -175,64 +260,42 @@ export function renderTerritoryLabels(svgRoot) {
       const bbox = pathEl.getBBox();
       if (bbox.width === 0 || bbox.height === 0) return;
 
+      const override = LABEL_OVERRIDES[city.id] || {};
+      const finalX = center.x + (override.offsetX || 0);
+      const finalY = center.y + (override.offsetY || 0);
+
       const ownerTag = String(city.owner);
 
-      // --- HARD CLIP-PATH MASKING ---
-      // Reuses or creates a unique clipPath referencing the territory's path element
-      const clipId = `clip-label-${city.id}`;
-      let clipPath = svgRoot.querySelector(`#${clipId}`);
-      if (!clipPath) {
-        clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
-        clipPath.setAttribute('id', clipId);
-        
-        const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-        useEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `#${city.id}`);
-        useEl.setAttribute('href', `#${city.id}`);
-        
-        clipPath.appendChild(useEl);
-        defs.appendChild(clipPath);
+      const maxAllowedWidth = bbox.width * 0.68;
+      const maxAllowedHeight = bbox.height * 0.55;
+      const maxFontSizeByWidth = maxAllowedWidth / (ownerTag.length * 0.65);
+      let fontSize = Math.max(10, Math.min(46, maxFontSizeByWidth, maxAllowedHeight));
+
+      if (override.scale) fontSize *= override.scale;
+
+      const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      textEl.setAttribute('x', finalX);
+      textEl.setAttribute('y', finalY);
+      textEl.setAttribute('dy', '0.35em');
+
+      if (override.rotate) {
+        textEl.setAttribute('transform', `rotate(${override.rotate}, ${finalX}, ${finalY})`);
       }
 
-      // --- CREATE TEXT ELEMENT ---
-      const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      textEl.setAttribute('x', center.x);
-      textEl.setAttribute('y', center.y);
-      textEl.setAttribute('dy', '0.35em');
-      
-      // Bind hard clipping mask
-      textEl.setAttribute('clip-path', `url(#${clipId})`);
-
-      // Alignment overrides
       textEl.style.textAnchor = 'middle';
       textEl.style.dominantBaseline = 'central';
-      
-      // Initial sizing starting point based on box height
-      let fontSize = Math.min(32, Math.max(12, bbox.height * 0.45));
-      textEl.style.fontSize = `${fontSize}px`;
+      textEl.style.fontSize = `${fontSize.toFixed(1)}px`;
 
       textEl.setAttribute('class', 'territory-label');
       textEl.setAttribute('data-owner', ownerTag);
       textEl.textContent = ownerTag;
 
-      // Color assignment
       const allianceData = alliances[ownerTag];
       if (allianceData && allianceData.color) {
         textEl.style.fill = allianceData.color;
       }
 
-      // Append to DOM first so getComputedTextLength can accurately measure rendered pixels
       labelGroup.appendChild(textEl);
-
-      // --- EXACT BROWSER DOM MEASUREMENT & AUTOSCALING ---
-      const maxAllowedWidth = bbox.width * 0.68;
-      const actualWidth = textEl.getComputedTextLength();
-
-      if (actualWidth > maxAllowedWidth && actualWidth > 0) {
-        const scaleFactor = maxAllowedWidth / actualWidth;
-        fontSize = Math.max(9, fontSize * scaleFactor);
-        textEl.style.fontSize = `${fontSize.toFixed(1)}px`;
-      }
-
     } catch (e) {
       console.warn(`Could not calculate label position for city: ${city.id}`, e);
     }
@@ -240,18 +303,12 @@ export function renderTerritoryLabels(svgRoot) {
 }
 
 /**
- * Applies a parsed map state object (from map_state.yml) to the cities dataset
- * @param {Object} state - Parsed YAML object containing alliances and territory_ownership
- * @param {Document|Element} svgRoot - Optional SVG element to refresh labels immediately
+ * Applies a parsed map state object to the cities dataset
  */
 export function applyMapState(state, svgRoot = null) {
   if (!state) return;
-
   mapState = state;
-
-  if (state.alliances) {
-    alliances = state.alliances;
-  }
+  if (state.alliances) alliances = state.alliances;
 
   if (state.territory_ownership) {
     Object.entries(state.territory_ownership).forEach(([cityId, data]) => {
@@ -267,16 +324,11 @@ export function applyMapState(state, svgRoot = null) {
     });
   }
 
-  if (svgRoot) {
-    renderTerritoryLabels(svgRoot);
-  }
+  if (svgRoot) renderTerritoryLabels(svgRoot);
 }
 
 /**
  * Fetches and parses map_state.yml and updates map ownership data
- * @param {string} yamlUrl - Path to map_state.yml (defaults to 'map_state.yml')
- * @param {Document|Element} svgRoot - The SVG root container
- * @returns {Promise<Object>}
  */
 export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = null) {
   try {
@@ -285,8 +337,6 @@ export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = n
     const yamlText = await response.text();
 
     let state = {};
-
-    // Use global jsyaml library if available, otherwise fall back to simple built-in parser
     if (typeof window !== 'undefined' && window.jsyaml) {
       state = window.jsyaml.load(yamlText);
     } else {
@@ -302,14 +352,11 @@ export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = n
 }
 
 /**
- * Initialize dataset from a loaded SVG element in the browser and load map state YAML
- * @param {Document|Element} svgRoot 
- * @returns {Array}
+ * Initialize dataset from a loaded SVG element in the browser
  */
 export function initializeMapData(svgRoot) {
   cities = extractCitiesFromSvg(svgRoot);
   
-  // Use global window.MAP_STATE if available
   if (typeof window !== 'undefined' && window.MAP_STATE) {
     applyMapState(window.MAP_STATE, svgRoot);
   } else {
@@ -321,28 +368,20 @@ export function initializeMapData(svgRoot) {
 
 /**
  * Updates a city's owner and refreshes both the map labels and the data store
- * @param {string} cityId - ID of the territory path
- * @param {string} newOwner - Alliance tag or owner string (e.g. "VAL")
- * @param {Document|Element} svgRoot - The SVG container element
  */
 export function updateCityOwner(cityId, newOwner, svgRoot) {
   const city = getCityById(cityId);
   if (city) {
     city.owner = newOwner || 'Unclaimed';
-    if (svgRoot) {
-      renderTerritoryLabels(svgRoot);
-    }
+    if (svgRoot) renderTerritoryLabels(svgRoot);
   }
 }
 
 /**
  * Enables hover/click highlighting and updates the territory info card
- * @param {Document|Element} svgRoot - The SVG container element
  */
 export function enableMapHighlighting(svgRoot) {
   const colorLabels = Object.keys(COLOR_TO_LEVEL_MAP);
-  
-  // DOM targets for the info card
   const card = document.getElementById('territory-info-card');
   const cityNameEl = document.getElementById('city-name');
   const cityLevelEl = document.getElementById('city-level-badge');
@@ -365,73 +404,36 @@ export function enableMapHighlighting(svgRoot) {
     if (cityNameEl) cityNameEl.textContent = cityData.name || cityData.id;
     if (cityLevelEl) {
       cityLevelEl.textContent = typeof cityData.level === 'number' 
-        ? `Level ${cityData.level}` 
-        : cityData.level; // Handles "Capitol" string
+        ? `Level ${cityData.level}` : cityData.level;
     }
-
-    // Display Alliance Name if registered in map_state.yml
     if (cityOwnerEl) {
       const ownerTag = cityData.owner || 'Unclaimed';
       const alliance = alliances[ownerTag];
       cityOwnerEl.textContent = alliance ? `${alliance.name} [${ownerTag}]` : ownerTag;
     }
-
     if (cityBuffEl) cityBuffEl.textContent = cityData.buff || 'No active buff';
   }
 
   colorLabels.forEach(color => {
     const group = svgRoot.querySelector(`g[inkscape\\:label="${color}"]`);
     if (!group) return;
-
     const elements = group.querySelectorAll('path, rect, circle, polygon');
 
     elements.forEach(el => {
       el.style.cursor = 'pointer';
-
-      // Live update on hover
-      el.addEventListener('mouseenter', (e) => {
-        const cityData = getCityById(e.target.id);
-        updateInfoCard(cityData);
-      });
-
-      // Reset card when mouse leaves
-      el.addEventListener('mouseleave', () => {
-        updateInfoCard(null);
-      });
-
-      // Handle selection click
-      el.addEventListener('click', (e) => {
-        const cityId = e.target.id;
-        const cityData = getCityById(cityId);
-        console.log("Selected City:", cityData);
-      });
+      el.addEventListener('mouseenter', (e) => updateInfoCard(getCityById(e.target.id)));
+      el.addEventListener('mouseleave', () => updateInfoCard(null));
+      el.addEventListener('click', (e) => console.log("Selected City:", getCityById(e.target.id)));
     });
   });
 }
 
-/**
- * Utility function to retrieve city details by ID
- */
-export function getCityById(id) {
-  return cities.find(city => city.id === id);
-}
+export function getCityById(id) { return cities.find(city => city.id === id); }
+export function getCitiesByLevel(level) { return cities.filter(city => city.level === level); }
+export function getCitiesByGroup(groupColor) { return cities.filter(city => city.group === groupColor); }
 
 /**
- * Utility function to filter cities by level
- */
-export function getCitiesByLevel(level) {
-  return cities.filter(city => city.level === level);
-}
-
-/**
- * Utility function to filter cities by color group
- */
-export function getCitiesByGroup(groupColor) {
-  return cities.filter(city => city.group === groupColor);
-}
-
-/**
- * Lightweight fallback YAML parser for map_state.yml structure
+ * Lightweight fallback YAML parser
  */
 function parseSimpleYaml(yamlText) {
   const result = { alliances: {}, territory_ownership: {} };
@@ -444,7 +446,6 @@ function parseSimpleYaml(yamlText) {
     if (!trimmed || trimmed.startsWith('#')) return;
 
     const indent = line.search(/\S/);
-
     if (indent === 0 && trimmed.endsWith(':')) {
       currentSection = trimmed.slice(0, -1);
       if (!result[currentSection]) result[currentSection] = {};

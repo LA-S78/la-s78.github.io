@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     SVN: process.env.DISCORD_SVN,
     PHNX: process.env.DISCORD_PHNX,
     HMDA: process.env.DISCORD_HMDA,
-    HeKi: process.env.DISCORD_HeKi,
+    HeKi: process.env.DISCORD_HEKI,
   };
 
   const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || process.env.BOT_TOKEN;

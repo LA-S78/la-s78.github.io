@@ -6,6 +6,14 @@ lang: "en"
 ---
 <section class="content-pane">
   <div id="map-container">
+  <!-- map controls -->
+  <div class="map-controls">
+      <span class="control-label">View Mode:</span>
+      <div class="segmented-control">
+        <button id="btn-mode-level" class="toggle-btn active" data-mode="level">City Levels</button>
+        <button id="btn-mode-alliance" class="toggle-btn" data-mode="alliance">Alliance Colors</button>
+      </div>
+    </div>
     <!-- 1. Scout Hover Tooltip -->
     <div id="map-tooltip"></div>
     <div class="game-map">
