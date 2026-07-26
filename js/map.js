@@ -34,7 +34,7 @@ export const LABEL_OVERRIDES = {
     offsetY: -35
   },
   Cloudtop_Highlands: {
-    offsetX: 20
+    offsetX: 28
   },
   Stillwater_River: {
     offsetY: -30
@@ -56,13 +56,15 @@ export const LABEL_OVERRIDES = {
     offsetY: -20
   },
     Rose_Court: {
-    offsetY: -15
+    offsetY: -20
   },
     Falcon_s_Keep: {
+    offsetY: -30,
     offsetX: -10
   },
     Ironwall_City: {
-    offsetY: -30
+    offsetY: -30,
+    offsetX: 20
   },
     Holyspring_City: {
     offsetY: -20
@@ -78,7 +80,7 @@ export const LABEL_OVERRIDES = {
     offsetX: 10
   },
   Stormgate: {
-    offsetX: -10
+    offsetX: -8
   },
   Goldgrain_Town: {
     offsetY: -20
@@ -100,6 +102,21 @@ export const LABEL_OVERRIDES = {
   },
   Beacon_Point: {
     offsetY: -20
+  },
+  Millstone_Creek: {
+    offsetY: -40
+  },
+  Sandwind_Keep: {
+    offsetY: -20
+  },
+  Lark_Lane: {
+    offsetY: -40
+  },
+  Anvil_Town: {
+    offsetY: -10
+  },
+  Dripping_Cavern: {
+    offsetY: -30
   },
   
 };
@@ -282,7 +299,7 @@ cities.forEach(city => {
     const maxAllowedWidth = bbox.width * 0.68;
     const maxAllowedHeight = bbox.height * 0.55;
     const maxFontSizeByWidth = maxAllowedWidth / (ownerTag.length * 0.65);
-    let fontSize = Math.max(10, Math.min(36, maxFontSizeByWidth, maxAllowedHeight));
+    let fontSize = Math.max(10, Math.min(46, maxFontSizeByWidth, maxAllowedHeight));
 
     if (override.scale) {
       fontSize *= override.scale;

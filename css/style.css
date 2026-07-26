@@ -1729,13 +1729,13 @@ svg #layer1 path:hover {
   dominant-baseline: central !important;
   alignment-baseline: central !important;
 
-  font-weight: 800;
+  font-weight: 500;
   font-family: system-ui, -apple-system, sans-serif;
   
   /* Outline contrast against dark backgrounds */
   paint-order: stroke fill;
   stroke: rgba(0, 0, 0, 0.6);
-  stroke-width: 2px;
+  stroke-width: 4px;
   stroke-linejoin: round;
 
   pointer-events: none;
