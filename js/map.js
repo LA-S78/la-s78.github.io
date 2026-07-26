@@ -27,7 +27,7 @@ export const LABEL_OVERRIDES = {
   Cloudtop_Highlands: { offsetX: 28 },
   Stillwater_River: { offsetY: -30 },
   Raven_s_Roost: { offsetY: -20 },
-  Bluestone_Slope: { offsetY: -20 },
+  Bluestone_Slope: { offsetY: -35 },
   Sunspire_City: { offsetY: -20 },
   Emerald_City: { offsetY: 20, offsetX: 20 },
   Graywolf_Vale: { offsetY: -20 },
@@ -50,7 +50,9 @@ export const LABEL_OVERRIDES = {
   Sandwind_Keep: { offsetY: -20 },
   Lark_Lane: { offsetY: -40 },
   Anvil_Town: { offsetY: -10 },
-  Dripping_Cavern: { offsetY: -30 }
+  Dripping_Cavern: { offsetY: -30 },
+  Broken_Bridgehead: { offsetY: -25 },
+  Wheatsheaf: { offsetY: -15 }
 };
 
 export const COLOR_TO_LEVEL_MAP = {

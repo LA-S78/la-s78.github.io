@@ -1743,7 +1743,7 @@ svg #layer1 path:hover {
   dominant-baseline: central !important;
   alignment-baseline: central !important;
 
-  font-weight: 500;
+  font-weight: 600;
   font-family: system-ui, -apple-system, sans-serif;
   
   /* Outline contrast against dark backgrounds */
