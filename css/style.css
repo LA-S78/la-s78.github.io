@@ -1539,6 +1539,20 @@ svg.resource-icon {
 }
 
 /* game map */
+
+/*disable touch highlighting */
+#map-container,
+.game-map svg,
+.game-map path,
+.game-map polygon,
+.game-map rect,
+.game-map circle {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  outline: none;
+}
 /* layout */
 svg g[inkscape\:label] path {
     fill-opacity: 1 !important;
@@ -1671,31 +1685,31 @@ svg g[inkscape\:label] path {
 
 /* group colours */
 g[inkscape\:label="green"] path {
-    fill: #25bb00 !important;
+    fill: var(--territory-fill, #25bb00) !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="yellow"] path {
-    fill: #cece00 !important;
+    fill: var(--territory-fill, #cece00) !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="orange"] path {
-    fill: #e68e00 !important;
+    fill: var(--territory-fill, #e68e00) !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="purple"] path {
-    fill: #a400af !important;
+    fill: var(--territory-fill, #a400af) !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="blue"] path {
-    fill: #003fad !important;
+    fill: var(--territory-fill, #003fad) !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="red"] path {
-    fill: #8f0000 !important;
+    fill: var(--territory-fill, #8f0000) !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 g[inkscape\:label="gold"] path {
-    fill: #b29a20 !important;
+    fill: var(--territory-fill, #b29a20) !important;
     transition: fill 0.3s ease, stroke 0.3s ease;
 }
 
@@ -1772,6 +1786,56 @@ svg #layer1 path:hover {
   background: var(--theme-color, #3b82f6);
   color: #fff;
   text-transform: uppercase;
+}
+
+/* map controls */
+
+/* Map Controls Header */
+.map-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.control-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a0aec0;
+}
+
+/* Segmented Button Toggle */
+.segmented-control {
+  display: inline-flex;
+  background-color: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 6px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: #a0aec0;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  color: #ffffff;
+}
+
+.toggle-btn.active {
+  background-color: #3182ce;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* ==========================================================================

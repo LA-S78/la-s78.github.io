@@ -29,15 +29,8 @@
         }
     }
 
-    const themeDictator = new MutationObserver(() => {
-        enforceThemeState();
-    });
-
-    themeDictator.observe(document.documentElement, { 
-        attributes: true, 
-        attributeFilter: ['data-theme'] 
-    });
-
+    const themeDictator = new MutationObserver(() => enforceThemeState());
+    themeDictator.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     enforceThemeState();
 
     // --- AUTHENTICATION GATEKEEPER ---
@@ -51,7 +44,6 @@
             return;
         }
 
-        // Restore session from cache
         const cachedRole = localStorage.getItem('auth-role') || 'public';
         const cachedUser = localStorage.getItem('auth-username');
         const cachedAvatar = localStorage.getItem('auth-avatar');
@@ -68,10 +60,7 @@
             const response = await fetch('/api/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    code: code,
-                    redirectUri: AUTH_CONFIG.redirectUri
-                })
+                body: JSON.stringify({ code: code, redirectUri: AUTH_CONFIG.redirectUri })
             });
 
             if (!response.ok) throw new Error('Authentication handshake rejected.');
@@ -85,17 +74,11 @@
 
             applyAuthUIState(data.role, data.username, data.avatar, data.alliance);
 
-            // --- TURBO-NATIVE TELEPORT NAVIGATION ---
             const returnPath = localStorage.getItem('auth-return-path');
-            
             if (returnPath && returnPath !== '/' && returnPath !== '/index.html' && returnPath !== window.location.pathname) {
                 localStorage.removeItem('auth-return-path'); 
-                
-                if (window.Turbo) {
-                    window.Turbo.visit(returnPath, { action: 'replace' });
-                } else {
-                    window.location.replace(returnPath); 
-                }
+                if (window.Turbo) window.Turbo.visit(returnPath, { action: 'replace' });
+                else window.location.replace(returnPath); 
             }
 
         } catch (error) {
@@ -114,18 +97,11 @@
         
         container.classList.remove('role-public', 'role-member', 'role-leadership');
         
-        // --- LOGIC: Treat R4/R5 as Leadership for CSS ---
         const isLeadership = (role === 'R4' || role === 'R5' || role === 'leadership');
-        
-        if (isLeadership) {
-            container.classList.add('role-leadership', 'role-member');
-        } else if (role === 'member') {
-            container.classList.add('role-member');
-        } else {
-            container.classList.add('role-public');
-        }
+        if (isLeadership) container.classList.add('role-leadership', 'role-member');
+        else if (role === 'member') container.classList.add('role-member');
+        else container.classList.add('role-public');
 
-        // --- UNLOCK PROTOCOL ---
         if (isLeadership || role === 'member') {
             const lockedElements = document.querySelectorAll('.content-locked');
             lockedElements.forEach(el => el.classList.remove('content-locked'));
@@ -133,7 +109,6 @@
             if (loginBtn) loginBtn.style.display = 'none';
         }
 
-        // --- INJECT GREETING DATA ---
         const textUsername = document.getElementById('ui-username');
         if (textUsername && username) textUsername.textContent = username;
 
@@ -143,7 +118,6 @@
         const textAlliance = document.getElementById('ui-alliance');
         if (textAlliance && alliance) textAlliance.textContent = alliance;
 
-        // Profile Card Injection
         const profileContainer = document.getElementById('ui-profile-card');
         if (profileContainer && username) {
             profileContainer.innerHTML = `
@@ -156,25 +130,17 @@
             `;
         }
         
-        // Re-run highlighting if we are on the NAP page
         highlightAllianceRow('nap-alliance-table');
         highlightAllianceRow('nap-ranks-table');
     }
 
-    // --- NEW: DYNAMIC ALLIANCE HIGHLIGHTING ---
     function highlightAllianceRow(tableId) {
         const table = document.getElementById(tableId);
         const playerAlliance = localStorage.getItem('auth-alliance');
 
         if (!table || !playerAlliance) return;
 
-        const normalize = (str) => {
-            return str
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
-        };
-
+        const normalize = (str) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const normalizedPlayerAlliance = normalize(playerAlliance);
 
         const rows = table.querySelectorAll('tr');
@@ -199,7 +165,6 @@
         window.location.reload();
     };
 
-    // --- DIALOG GRACEFUL CLOSE ---
     window.closeDialogGracefully = (dialog) => {
         if (!dialog) return;
         dialog.classList.add('is-closing');
@@ -209,7 +174,6 @@
         }, { once: true });
     };
 
-    // --- SUPPORTING MODULES ---
     function applyTheme(themeName) {
         document.documentElement.setAttribute('data-theme', themeName);
         localStorage.setItem('site-theme', themeName);
@@ -332,26 +296,18 @@
         });
     }
 
-    // --- NEW: CLIENT-SIDE FOOTER NAVIGATION HIGHLIGHTER ---
     function highlightActiveFooterNav() {
         const footerLinks = document.querySelectorAll('footer .nav-item');
         if (footerLinks.length === 0) return;
-
         const currentPath = window.location.pathname;
-        
-        // Normalizes paths by dropping training slashes and index.html mutations
         const normalize = (path) => path.replace(/\/index\.html$/, '/').replace(/\/$/, '');
         const normalizedCurrent = normalize(currentPath);
 
         footerLinks.forEach(link => {
             const href = link.getAttribute('href');
             if (!href) return;
-
-            if (normalize(href) === normalizedCurrent) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
+            if (normalize(href) === normalizedCurrent) link.classList.add('active');
+            else link.classList.remove('active');
         });
     }
 
@@ -387,22 +343,35 @@
         const allSvgs = document.querySelectorAll('svg');
         let mapSvg = null;
 
-        // Hunt for the SVG containing Inkscape map layers
         allSvgs.forEach(svg => {
-            if (svg.innerHTML.includes('inkscape:label')) {
-                mapSvg = svg;
-            }
+            if (svg.innerHTML.includes('inkscape:label')) mapSvg = svg;
         });
 
-        if (!mapSvg) return; // Silently skip if this isn't the map page
+        if (!mapSvg) return;
 
-        // Dynamically import map.js and bind it to the correct SVG
         import('./map.js').then(async (MapModule) => {
             setTimeout(async () => {
                 MapModule.initializeMapData(mapSvg);
                 MapModule.enableMapHighlighting(mapSvg);
 
-                // Fetch public alliance role colors directly from our API (Works for guests & members)
+                // Setup the View Mode Toggle behavior
+                const btnLevel = document.getElementById('btn-mode-level');
+                const btnAlliance = document.getElementById('btn-mode-alliance');
+
+                if (btnLevel && btnAlliance) {
+                    btnLevel.addEventListener('click', () => {
+                        btnLevel.classList.add('active');
+                        btnAlliance.classList.remove('active');
+                        MapModule.setMapColorMode('level', mapSvg);
+                    });
+
+                    btnAlliance.addEventListener('click', () => {
+                        btnAlliance.classList.add('active');
+                        btnLevel.classList.remove('active');
+                        MapModule.setMapColorMode('alliance', mapSvg);
+                    });
+                }
+
                 try {
                     const response = await fetch('/api/colors');
                     if (response.ok) {
@@ -414,7 +383,7 @@
                 } catch (err) {
                     console.warn("Could not load public alliance colors:", err);
                 }
-            }, 50); // Micro-delay ensures Turbo has fully rendered the paths
+            }, 50); 
         }).catch(err => {
             console.error("Map Module Error: Could not load map.js", err);
         });
@@ -429,13 +398,11 @@
         initAnchorScrolling();
         initSearchEngine();
         highlightActiveLanguage();
-        highlightActiveFooterNav(); // Run highlight routine on page execution
+        highlightActiveFooterNav(); 
         initThemeToggle();
         syncHeaderSubtitle();
         initScrollMemory();
         setTimeout(() => scrollActiveNavIntoView(), 100);
-
-        // Execute map binding
         initMapInteraction();
     }
 
