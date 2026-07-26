@@ -1538,11 +1538,11 @@ svg.resource-icon {
   margin-right: 4px;
 }
 
-/* --------------------------------------------------------------------------
-   WAR ROOM MAP & ATLAS STYLES
-   -------------------------------------------------------------------------- */
-
-/* Layout & Container */
+/* game map */
+/* layout */
+svg g[inkscape\:label] path {
+    fill-opacity: 1 !important;
+}
 #map-container {
   position: relative;
   width: 100%;
@@ -1669,9 +1669,139 @@ svg.resource-icon {
   line-height: 1.5;
 }
 
+/* group colours */
+g[inkscape\:label="green"] path {
+    fill: #25bb00 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="yellow"] path {
+    fill: #cece00 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="orange"] path {
+    fill: #e68e00 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="purple"] path {
+    fill: #a400af !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="blue"] path {
+    fill: #003fad !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="red"] path {
+    fill: #8f0000 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+g[inkscape\:label="gold"] path {
+    fill: #b29a20 !important;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.normal-texture-overlay {
+    mix-blend-mode: overlay;
+    filter: grayscale(100%) contrast(140%);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+svg #layer1 path {
+    filter: url(#territory-vignette);
+    transition: filter 0.2s ease, stroke 0.2s ease;
+}
+svg #layer1 path:hover {
+  /* 1. Combine vignette + brightness boost */
+  filter: url(#territory-vignette) 
+          drop-shadow(0 0 2px rgba(var(--active-theme-vivid), 1))
+          drop-shadow(0 0 8px rgba(var(--active-theme-vivid), 1))
+          drop-shadow(0 0 20px rgba(var(--active-theme-vivid), 1))
+          brightness(1.3);
+  vector-effect: non-scaling-stroke;
+  paint-order: fill stroke;
+  animation: territory-flash 2s ease-in-out infinite alternate;
+}
+
+/* Territory Owner Text Labels */
+.territory-label {
+  /* Force exact center anchoring across all browsers and CSS resets */
+  text-anchor: middle !important;
+  dominant-baseline: central !important;
+  alignment-baseline: central !important;
+
+  font-weight: 800;
+  font-family: system-ui, -apple-system, sans-serif;
+  
+  /* Outline contrast against dark backgrounds */
+  paint-order: stroke fill;
+  stroke: rgba(0, 0, 0, 0.6);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+
+  pointer-events: none;
+}
+
+/* map readout */
+.info-card {
+  margin-top: 1rem;
+  padding: 1.25rem;
+  background: rgba(18, 24, 38, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #f3f4f6;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Idle state when nothing is selected */
+.info-card.idle {
+  opacity: 0.6;
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--theme-color, #3b82f6);
+  color: #fff;
+  text-transform: uppercase;
+}
+
 /* ==========================================================================
    9. ANIMATIONS & ACCESSIBILITY
    ========================================================================== */
+
+@keyframes territory-flash {
+    0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes territory-stroke-flash {
+  0% {
+    stroke-opacity: 0.4;
+    stroke-width: 10px;
+  }
+  50% {
+    stroke-opacity: 1;
+    stroke-width: 10px;
+  }
+  100% {
+    stroke-opacity: 0.8;
+    stroke-width: 10px;
+  }
+}
 
 @keyframes war-pulse {
   from { stroke-width: 2px; opacity: 0.7; }

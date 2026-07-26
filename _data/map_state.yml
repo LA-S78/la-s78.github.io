@@ -1,17 +1,208 @@
-#map test
+# map_state.yml - Last Asylum: Plague Map State Data
+
 alliances:
-  VAL:
-    name: "Valhalla"
-    color: "#ff4d4d"
-    crest: "val_logo.png"
-  APEX:
-    name: "Apex Vanguard"
-    color: "#3399ff"
-  SICK:
-    name: "Plague Bearers"
-    color: "#b8975a"
+  WLO:
+    name: "WinterLordsOutcasts"
 
 territory_ownership:
-  capitol:
-    owner: "VAL"
-    status: "holding"
+  # ==========================================
+  # CAPITOL (Gold Group)
+  # ==========================================
+  Royal_Castle:
+    owner: "MIA"
+
+  # ==========================================
+  # LEVEL 6 (Red Group - Fortresses)
+  # ==========================================
+  Sky_Fortress:
+    owner: "RAVN"
+  Lionheart_Fortress:
+    owner: "MIA"
+  Nightfall_Fortress:
+    owner: "WLO"
+
+  # ==========================================
+  # LEVEL 5 (Blue Group - Temples)
+  # ==========================================
+  Temple_of_Order:
+    owner: "RAVN"
+  Temple_of_Nature:
+    owner: "SVN"
+  Temple_of_War:
+    owner: "WLO"
+  Temple_of_Chaos:
+    owner: "PHNX"
+
+  # ==========================================
+  # LEVEL 4 (Purple Group)
+  # ==========================================
+  Dawnhold:
+    owner: "MIA"
+  Everpeak:
+    owner: "SVN"
+  Mithrall_Hall:
+    owner: "WLO"
+  Sunspire_City:
+    owner: "BOOZ"
+  Emerald_City:
+    owner: "PHNX"
+  Phantom_City:
+    owner: "BOTS"
+  Sandwind_Keep:
+    owner: "RAVN"
+
+  # ==========================================
+  # LEVEL 3 (Orange Group)
+  # ==========================================
+  Deepmere_Town:
+    owner: "BOTS"
+  Gale_Heights:
+    owner: "BOTS"
+  Falcon_s_Keep:
+    owner: "MIA"
+  Drywell_Tower:
+    owner: "MIA"
+  Ironwall_City:
+    owner: "HeKi"
+  Holyspring_City:
+    owner: "SVN"
+  Silverleaf_Grove:
+    owner: "SVN"
+  Cloudtop_Highlands:
+    owner: "PHNX"
+  Cliffside_Citadel:
+    owner: "PHNX"
+  Stillwater_River:
+    owner: "BOOZ"
+  Frostwolf_Camp:
+    owner: "WLO"
+  Stormgate:
+    owner: "RAVN"
+
+  # ==========================================
+  # LEVEL 2 (Yellow Group)
+  # ==========================================
+  Copper_Street:
+    owner: "HMDA"
+  Whitestone_Town:
+    owner: "HMDA"
+  Amber_Road:
+    owner: "râvn"
+  Violet:
+    owner: "MIA"
+  Stonechant_Market:
+    owner: "MIA"
+  Twinspire_Town:
+    owner: "HeKi"
+  Sailport:
+    owner: "HeKi"
+  Anvil_Town:
+    owner: "HeKi"
+  Lark_Lane:
+    owner: "BOTS"
+  Sailshadow_Harbor:
+    owner: "RAVN"
+  Rose_Court:
+    owner: "RAVN"
+  Echo_Town:
+    owner: "NAVI"
+  Stardust_Road:
+    owner: "PHNX"
+  Irongate_Town:
+    owner: "PHNX"
+  Nymph_Falls:
+    owner: "NAVI"
+  Greatwood_Town:
+    owner: "WLO"
+  Beacon_Point:
+    owner: "BOOZ"
+  Windwhisper_Market:
+    owner: "SVN"
+  Stagcall_Vale:
+    owner: "RâvN"
+  Rose_Garden:
+    owner: "WLO"
+  Blackwater_Ferry:
+    owner: "HUH"
+  Goldgrain_Town:
+    owner: "BOTS"
+
+  # ==========================================
+  # LEVEL 1 (Green Group)
+  # ==========================================
+  Broken_Bridgehead:
+    owner: "epa"
+  Old_Oak:
+    owner: "HMDA"
+  Gravel_Slope:
+    owner: "HMX"
+  Windmill_Town:
+    owner: "HMDA"
+  Plaster_Wall:
+    owner: "OXY"
+  Raven_s_Roost:
+    owner: "râvn"
+  Bluestone_Slope:
+    owner: "HMX"
+  Wheatsheaf:
+    owner: "HMX"
+  Stonebrook_Town:
+    owner: "HeKi"
+  Opal_Mine:
+    owner: "HMDA"
+  Redsoil_Wastes:
+    owner: "HMX"
+  Fisher_s_Bay:
+    owner: "HMDA"
+  Millstone_Creek:
+    owner: "Ghst"
+  Crow_s_Beak:
+    owner: "Биба"
+  Fox_Den:
+    owner: "Ghst"
+  Stag_Path:
+    owner: "DKAD"
+  Birchwood_Grove:
+    owner: "HeKi"
+  Pinewood_Grove:
+    owner: "Ghst"
+  Springhead:
+    owner: "Ghst"
+  Maple_Town:
+    owner: "NAVI"
+  Eagles__Peak:
+    owner: "NAVI"
+  Haystack:
+    owner: "HMX"
+  Mossy_Crag:
+    owner: "NAVI"
+  Redbrick_House:
+    owner: "OXY"
+  Mistveil_Village:
+    owner: "RâvN"
+  Pinecone_Market:
+    owner: "GerR"
+  Howling_Vale:
+    owner: "RâvN"
+  Lamp_Pavilion:
+    owner: "RâvN"
+  Wildberry_Thicket:
+    owner: "RâvN"
+  Snail_Shell:
+    owner: "RâvN"
+  Narroway:
+    owner: "epa"
+  Coal_Pit:
+    owner: "OXY"
+  Graywolf_Vale:
+    owner: "NAVI"
+  Old_Mill:
+    owner: "OXY"
+  Frostleaf_Market:
+    owner: "HMX"
+  Dry_Well:
+    owner: "OXY"
+  Dripping_Cavern:
+    owner: "Биба"
+  Scavenger:
+    owner: "HUH"
