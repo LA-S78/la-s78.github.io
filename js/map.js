@@ -37,6 +37,36 @@ export let alliances = {};
 export let mapState = {};
 
 /**
+ * Calculates the true visual center of an SVG path by sampling perimeter points.
+ * Prevents L-shaped or irregular territories from skewing the centroid.
+ * 
+ * @param {SVGElement} pathEl - The SVG path DOM element
+ * @returns {{x: number, y: number}} The visual center coordinate
+ */
+function getVisualCenter(pathEl) {
+  try {
+    const totalLength = pathEl.getTotalLength();
+    if (!totalLength) throw new Error("Zero length path");
+
+    const samples = 32;
+    let sumX = 0;
+    let sumY = 0;
+
+    for (let i = 0; i < samples; i++) {
+      const pt = pathEl.getPointAtLength((i / samples) * totalLength);
+      sumX += pt.x;
+      sumY += pt.y;
+    }
+
+    return { x: sumX / samples, y: sumY / samples };
+  } catch (e) {
+    // Fallback to bounding box if length calculation isn't supported
+    const bbox = pathEl.getBBox();
+    return { x: bbox.x + (bbox.width / 2), y: bbox.y + (bbox.height / 2) };
+  }
+}
+
+/**
  * Merges Discord role colors into the alliances dataset and re-renders SVG labels
  * 
  * @param {Object} colorMap - Dictionary of tags and hex colors, e.g., { WLO: "#e88d63" }
@@ -102,59 +132,107 @@ export function extractCitiesFromSvg(svgRoot) {
 }
 
 /**
- * Calculates territory centroids and places owner tag text labels 
- * inside a dedicated top-level layer in the SVG.
+ * Calculates territory centroids and places dynamically-scaled owner text labels
+ * constrained strictly within shape dimensions.
+ * 
+ * @param {Document|Element} svgRoot - The SVG container element
+ */
+/**
+ * Calculates territory centroids, places dynamically-measured owner text labels,
+ * and clips text strictly within the territory's exact SVG path boundary.
  * 
  * @param {Document|Element} svgRoot - The SVG container element
  */
 export function renderTerritoryLabels(svgRoot) {
   if (!svgRoot) return;
 
-  // 1. Fetch or create a dedicated top layer for labels
+  // 1. Fetch or create top layer for labels
   let labelGroup = svgRoot.querySelector('#territory-labels');
-  
   if (!labelGroup) {
     labelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     labelGroup.setAttribute('id', 'territory-labels');
     labelGroup.style.pointerEvents = 'none';
-    
-    // Append at the end of the SVG so labels sit on top of all paths, strokes, and textures
     svgRoot.appendChild(labelGroup);
   }
-
-  // 2. Clear existing labels before re-rendering
   labelGroup.innerHTML = '';
 
-  // 3. Loop through cities and place owner text
+  // 2. Fetch or create SVG <defs> container for clip paths
+  let defs = svgRoot.querySelector('defs');
+  if (!defs) {
+    defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    svgRoot.insertBefore(defs, svgRoot.firstChild);
+  }
+
+  // 3. Render and clip each label
   cities.forEach(city => {
     if (!city.owner || city.owner === 'Unclaimed') return;
 
     const pathEl = svgRoot.getElementById(city.id);
-    if (!pathEl || typeof pathEl.getBBox !== 'function') return;
+    if (!pathEl) return;
 
     try {
-      // Calculate shape centroid using SVG bounding box
+      const center = getVisualCenter(pathEl);
       const bbox = pathEl.getBBox();
       if (bbox.width === 0 || bbox.height === 0) return;
 
-      const centerX = bbox.x + (bbox.width / 2);
-      const centerY = bbox.y + (bbox.height / 2);
+      const ownerTag = String(city.owner);
 
-      // Create SVG text node
+      // --- HARD CLIP-PATH MASKING ---
+      // Reuses or creates a unique clipPath referencing the territory's path element
+      const clipId = `clip-label-${city.id}`;
+      let clipPath = svgRoot.querySelector(`#${clipId}`);
+      if (!clipPath) {
+        clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+        clipPath.setAttribute('id', clipId);
+        
+        const useEl = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        useEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `#${city.id}`);
+        useEl.setAttribute('href', `#${city.id}`);
+        
+        clipPath.appendChild(useEl);
+        defs.appendChild(clipPath);
+      }
+
+      // --- CREATE TEXT ELEMENT ---
       const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      textEl.setAttribute('x', centerX);
-      textEl.setAttribute('y', centerY);
-      textEl.setAttribute('class', 'territory-label');
-      textEl.setAttribute('data-owner', city.owner);
-      textEl.textContent = city.owner;
+      textEl.setAttribute('x', center.x);
+      textEl.setAttribute('y', center.y);
+      textEl.setAttribute('dy', '0.35em');
+      
+      // Bind hard clipping mask
+      textEl.setAttribute('clip-path', `url(#${clipId})`);
 
-      // Set text fill color based on alliance color if defined
-      const allianceData = alliances[city.owner];
+      // Alignment overrides
+      textEl.style.textAnchor = 'middle';
+      textEl.style.dominantBaseline = 'central';
+      
+      // Initial sizing starting point based on box height
+      let fontSize = Math.min(32, Math.max(12, bbox.height * 0.45));
+      textEl.style.fontSize = `${fontSize}px`;
+
+      textEl.setAttribute('class', 'territory-label');
+      textEl.setAttribute('data-owner', ownerTag);
+      textEl.textContent = ownerTag;
+
+      // Color assignment
+      const allianceData = alliances[ownerTag];
       if (allianceData && allianceData.color) {
         textEl.style.fill = allianceData.color;
       }
 
+      // Append to DOM first so getComputedTextLength can accurately measure rendered pixels
       labelGroup.appendChild(textEl);
+
+      // --- EXACT BROWSER DOM MEASUREMENT & AUTOSCALING ---
+      const maxAllowedWidth = bbox.width * 0.68;
+      const actualWidth = textEl.getComputedTextLength();
+
+      if (actualWidth > maxAllowedWidth && actualWidth > 0) {
+        const scaleFactor = maxAllowedWidth / actualWidth;
+        fontSize = Math.max(9, fontSize * scaleFactor);
+        textEl.style.fontSize = `${fontSize.toFixed(1)}px`;
+      }
+
     } catch (e) {
       console.warn(`Could not calculate label position for city: ${city.id}`, e);
     }
@@ -226,8 +304,7 @@ export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = n
 /**
  * Initialize dataset from a loaded SVG element in the browser and load map state YAML
  * @param {Document|Element} svgRoot 
- * @param {string} yamlUrl - Optional custom path to map_state.yml
- * @returns {Promise<Array>}
+ * @returns {Array}
  */
 export function initializeMapData(svgRoot) {
   cities = extractCitiesFromSvg(svgRoot);
