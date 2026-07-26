@@ -67,7 +67,7 @@ export const COLOR_TO_LEVEL_MAP = {
 
 // Exact hex colors for JS to enforce natively (Bypasses iOS Safari CSS bugs)
 export const LEVEL_COLORS = {
-  green: '#1e9700ea',
+  green: '#25bb00',
   yellow: '#cece00',
   orange: '#e68e00',
   purple: '#a400af',
