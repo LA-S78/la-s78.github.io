@@ -183,6 +183,13 @@ export function setMapColorMode(mode, svgRoot) {
   if (!svgRoot) return;
   currentColorMode = mode;
 
+  // Add a state class to the SVG root for CSS targeting
+  if (mode === 'alliance') {
+    svgRoot.classList.add('mode-alliance');
+  } else {
+    svgRoot.classList.remove('mode-alliance');
+  }
+
   cities.forEach(city => {
     const el = svgRoot.getElementById(city.id);
     if (!el) return;

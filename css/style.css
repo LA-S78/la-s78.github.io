@@ -1601,16 +1601,6 @@ svg g[inkscape\:label] path {
   display: block;
 }
 
-/* SVG Text Labels Overlay */
-#game-map text {
-  pointer-events: none;
-  user-select: none;
-  fill: #ffffff;
-  font-size: 12px;
-  font-weight: bold;
-  text-anchor: middle;
-}
-
 /* Interactive Territory Paths */
 #game-map path,
 .map-territory {
@@ -1738,21 +1728,42 @@ svg #layer1 path:hover {
 
 /* Territory Owner Text Labels */
 .territory-label {
-  /* Force exact center anchoring across all browsers and CSS resets */
   text-anchor: middle !important;
   dominant-baseline: central !important;
   alignment-baseline: central !important;
-
   font-weight: 600;
   font-family: system-ui, -apple-system, sans-serif;
+  transition: fill 0.3s ease;
   
   /* Outline contrast against dark backgrounds */
   paint-order: stroke fill;
   stroke: rgba(0, 0, 0, 0.6);
   stroke-width: 4px;
   stroke-linejoin: round;
-
   pointer-events: none;
+}
+
+/* ==========================================================================
+   ALLIANCE MODE OVERRIDES
+   ========================================================================== */
+
+/* 1. Force text labels white to contrast with the colored territory background */
+.mode-alliance text.territory-label {
+  fill: #ffffff !important;
+  stroke: rgba(0, 0, 0, 0.8) !important; 
+}
+
+/* 2. Make the colored territory translucent, but keep a solid colored border */
+.mode-alliance g[inkscape\:label] path {
+  fill-opacity: 0.35 !important; 
+  stroke: var(--territory-fill, rgba(0,0,0,0.5)) !important;
+  stroke-width: 2px !important;
+}
+
+/* 3. Enhance hover effect while in alliance mode */
+.mode-alliance g[inkscape\:label] path:hover {
+  fill-opacity: 0.6 !important;
+  stroke-width: 3px !important;
 }
 
 /* map readout */
