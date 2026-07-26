@@ -67,7 +67,7 @@ export const COLOR_TO_LEVEL_MAP = {
 
 // Exact hex colors for JS to enforce natively (Bypasses iOS Safari CSS bugs)
 export const LEVEL_COLORS = {
-  green: '#25bb00',
+  green: '#1e9700ea',
   yellow: '#cece00',
   orange: '#e68e00',
   purple: '#a400af',
@@ -228,8 +228,8 @@ export function setMapColorMode(mode, svgRoot) {
 }
 
 /**
- * Calculates territory centroids, places dynamically-measured owner text labels,
- * and clips text strictly within the territory's exact SVG path boundary.
+ * Calculates territory centroids, places dynamically-measured owner text labels inside wrapper groups,
+ * and eliminates layout/font recalculation jitter.
  */
 export function renderTerritoryLabels(svgRoot) {
   if (!svgRoot) return;
@@ -273,17 +273,23 @@ export function renderTerritoryLabels(svgRoot) {
 
       if (override.scale) fontSize *= override.scale;
 
+      // 1. Create a parent wrapper group to hold SVG rotation
+      const wrapperGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      wrapperGroup.setAttribute('class', 'label-wrapper');
+
+      if (override.rotate) {
+        wrapperGroup.setAttribute('transform', `rotate(${override.rotate}, ${finalX}, ${finalY})`);
+      }
+
+      // 2. Create the inner text element
       const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       textEl.setAttribute('x', finalX);
       textEl.setAttribute('y', finalY);
       textEl.setAttribute('dy', '0.35em');
 
-      if (override.rotate) {
-        textEl.setAttribute('transform', `rotate(${override.rotate}, ${finalX}, ${finalY})`);
-      }
-
+      // Hardware-accelerate text rendering cleanly without wiping wrapper group rotations
+      textEl.style.transform = 'translateZ(0)';
       textEl.style.textAnchor = 'middle';
-      textEl.style.dominantBaseline = 'central';
       textEl.style.fontSize = `${fontSize.toFixed(1)}px`;
 
       textEl.setAttribute('class', 'territory-label');
@@ -295,7 +301,10 @@ export function renderTerritoryLabels(svgRoot) {
         textEl.style.fill = allianceData.color;
       }
 
-      labelGroup.appendChild(textEl);
+      // 3. Append text to wrapper, then wrapper to labelGroup
+      wrapperGroup.appendChild(textEl);
+      labelGroup.appendChild(wrapperGroup);
+
     } catch (e) {
       console.warn(`Could not calculate label position for city: ${city.id}`, e);
     }
