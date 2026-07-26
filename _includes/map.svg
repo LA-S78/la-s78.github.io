@@ -678,11 +678,6 @@
          inkscape:label="Sailshadow Harbor" />
       <path
          style="fill:url(#linearGradient90);fill-opacity:1;"
-         d="m 491.68686,1129.5725 h 53.09044 v -73.633 h 18.67503 v -93.64189 h 33.61505 v -74.70012 h -79.50227 -93.90872 l -0.26679,92.308 v 106.44771 43.2193 z"
-         id="Stormgate"
-         inkscape:label="Stormgate" />
-      <path
-         style="fill:url(#linearGradient90);fill-opacity:1;"
          d="m 466.87574,1256.2959 v 23.744 h 112.05018 v -56.0251 h 52.0233 v -44.5533 h 82.43692 v -81.3697 h -49.88901 v -67.4969 h -100.0448 v 25.3446 H 544.7773 v 73.633 h -53.09044 v 100.0448 h -25.34469 z"
          id="Rose_Court"
          inkscape:label="Rose Court" />
@@ -746,6 +741,11 @@
        id="g91"
        inkscape:label="orange"
        style="fill:url(#linearGradient91);">
+      <path
+         style="fill:url(#linearGradient90);fill-opacity:1;"
+         d="m 491.68686,1129.5725 h 53.09044 v -73.633 h 18.67503 v -93.64189 h 33.61505 v -74.70012 h -79.50227 -93.90872 l -0.26679,92.308 v 106.44771 43.2193 z"
+         id="Stormgate"
+         inkscape:label="Stormgate" />
       <path
          style="fill:url(#linearGradient91);fill-opacity:1;"
          d="m 545.37642,598.38603 v 43.01135 h 102.44702 v -2.77806 H 826.45939 V 551.97904 H 757.2262 l -0.0871,-63.7604 H 644.28853 v 41.08506 h -98.15752 z"

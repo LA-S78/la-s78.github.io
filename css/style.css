@@ -1724,20 +1724,23 @@ svg #layer1 path:hover {
 
 /* Territory Owner Text Labels */
 .territory-label {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 13px;
+  /* Adjust this value up or down depending on your map canvas size */
+  font-size: 28px; 
   font-weight: 800;
-  fill: #ffffff;
+  font-family: inherit, sans-serif;
   
-  /* Black text outline for legibility over bright/dark fills */
-  stroke: rgba(0, 0, 0, 0.85);
-  stroke-width: 3.5px;
-  stroke-linejoin: round;
-  paint-order: stroke fill;
-
-  /* Perfect centering inside the calculated SVG coordinates */
+  /* Precision alignment over centroid */
   text-anchor: middle;
   dominant-baseline: central;
+  
+  /* Text halo/outline so alliance colors stay legible over dark map tiles */
+  paint-order: stroke fill;
+  stroke: rgba(0, 0, 0, 0.85);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  
+  /* Optional slight shadow for depth */
+  filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
 
   /* CRITICAL: Mouse events pass through so path hover still works */
   pointer-events: none;
