@@ -62,6 +62,16 @@ export default async function handler(req, res) {
     const isApproved = custom_id === 'approve_proposal';
     const originalEmbed = interaction.message.embeds[0];
 
+    // --- CRITICAL FIX: Repoint the embed to the permanent Discord CDN image ---
+    if (interaction.message.attachments && interaction.message.attachments.length > 0) {
+      // Find the image attachment (Discord sets content_type to 'image/jpeg' or similar)
+      const imgAttachment = interaction.message.attachments.find(a => a.content_type?.startsWith('image/'));
+      if (imgAttachment) {
+        if (!originalEmbed.image) originalEmbed.image = {};
+        originalEmbed.image.url = imgAttachment.url;
+      }
+    }
+
     originalEmbed.color = isApproved ? 0x22c55e : 0xef4444;
     originalEmbed.fields[2] = {
       name: 'Status',

@@ -32,6 +32,13 @@ export default async function handler(req, res) {
 
     const files = [];
 
+    // --- NEW: Attach the strategy changes as a downloadable JSON file ---
+    const jsonString = JSON.stringify(changes, null, 2);
+    files.push({
+      data: Buffer.from(jsonString, 'utf-8'),
+      name: 'strategy-blueprint.json'
+    });
+
     // If a base64 image payload was sent, attach it to the embed
     if (image) {
       const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
@@ -39,11 +46,11 @@ export default async function handler(req, res) {
 
       files.push({
         data: imageBuffer,
-        name: 'map_preview.png'
+        name: 'map_preview.jpg'
       });
 
       // Point embed image to the attached file
-      embed.setImage('attachment://map_preview.png');
+      embed.setImage('attachment://map_preview.jpg');
     }
 
     // Build Action Buttons
