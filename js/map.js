@@ -107,7 +107,7 @@ export function getSvgRoot() {
 }
 
 // ==========================================================================
-// PLANNER MODE
+// PLANNER MODE & DISPATCH
 // ==========================================================================
 
 export function togglePlannerMode(active, svgRoot = null) {
@@ -192,9 +192,63 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
   });
 
   return {
-    submittedBy: authorName, timestamp: new Date().toISOString(),
-    totalChanges: Object.keys(changes).length, changes: changes
+    submittedBy: authorName,
+    timestamp: new Date().toISOString(),
+    totalChanges: Object.keys(changes).length,
+    changes: changes
   };
+}
+
+/**
+ * Dispatches the active draft strategy payload to the Discord War Room API
+ */
+export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
+  if (!isPlannerActive || !draftState) return;
+
+  const payload = generateProposalPayload();
+  if (!payload || payload.totalChanges === 0) {
+    alert('No changes detected in your draft plan.');
+    return;
+  }
+
+  const authorInput = prompt('Enter your Discord handle / Commander Name:', 'Commander');
+  if (authorInput === null) return; // User canceled
+
+  const notesInput = prompt('Add an optional strategy note for the War Room:', '') || '';
+
+  payload.submittedBy = authorInput.trim() || 'Anonymous Commander';
+  payload.notes = notesInput.trim();
+
+  const submitBtn = document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
+  const originalText = submitBtn ? submitBtn.textContent : 'Submit Plan';
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Transmitting...';
+  }
+
+  try {
+    const response = await fetch(apiEndpointUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server returned HTTP ${response.status}`);
+    }
+
+    alert('Strategy plan successfully transmitted to Discord War Room!');
+    togglePlannerMode(false);
+  } catch (err) {
+    console.error('Failed to submit strategy proposal:', err);
+    alert('Could not send proposal to Discord. Make sure the bot server is online.');
+  } finally {
+    if (submitBtn) {
+      submitBtn.textContent = originalText;
+    }
+    updateProposalUI();
+  }
 }
 
 export function updateProposalUI(btnSubmit = null, badge = null) {
@@ -259,7 +313,6 @@ export function bindMapControls(svgRoot = null) {
   const mapContainer = document.getElementById('map-container');
   const btnFullscreen = document.getElementById('btn-toggle-fullscreen');
 
-  // Add dataset.bound check to prevent Turbo double-listeners
   if (btnLevel && !btnLevel.dataset.bound) {
     btnLevel.dataset.bound = 'true';
     btnLevel.addEventListener('click', () => {
@@ -298,10 +351,8 @@ export function bindMapControls(svgRoot = null) {
     btnSubmit.dataset.bound = 'true';
     btnSubmit.addEventListener('click', (e) => {
       e.preventDefault();
-      const payload = generateProposalPayload();
-      if (!payload || payload.totalChanges === 0) return;
-      console.log('Submitted Strategy Proposal:', payload);
-      alert(`Proposal generated with ${payload.totalChanges} changes! Check developer console.`);
+      // Replace path with your API endpoint URL if hosted on a separate bot port (e.g., 'http://localhost:3000/api/proposal')
+      submitStrategyProposal('/api/proposal');
     });
   }
 
@@ -312,7 +363,6 @@ export function bindMapControls(svgRoot = null) {
       toggleFullscreen(mapContainer);
     });
 
-    // Fix: Attach to documentElement which is an HTMLElement, avoiding the TypeError on document
     if (!document.documentElement.dataset.fullscreenBound) {
       document.documentElement.dataset.fullscreenBound = 'true';
       document.addEventListener('fullscreenchange', () => {
@@ -521,7 +571,6 @@ export function enableMapHighlighting(svgRoot = null) {
   elements.forEach(el => {
     if (el.closest('#territory-labels') || el.closest('defs')) return;
 
-    // Prevent Double-Binding Bug from Turbo loads
     if (el.dataset.bound) return;
     el.dataset.bound = 'true';
 
