@@ -53,7 +53,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: '⛔ **Access Denied:** Only High Command can approve or reject strategy plans.',
+          content: '⛔ **Access Denied:** Only Admin can approve or reject map proposals.',
           flags: 64
         }
       });
@@ -94,14 +94,14 @@ export default async function handler(req, res) {
               {
                 type: 2,
                 custom_id: 'approve_proposal',
-                label: isApproved ? 'Approved' : 'Approve Strategy',
+                label: isApproved ? 'Approved' : 'Approve Map',
                 style: 3,
                 disabled: true
               },
               {
                 type: 2,
                 custom_id: 'reject_proposal',
-                label: !isApproved ? 'Rejected' : 'Reject Strategy',
+                label: !isApproved ? 'Rejected' : 'Reject Map',
                 style: 4,
                 disabled: true
               }
