@@ -31,7 +31,6 @@ export default async function handler(req, res) {
     return res.status(500).send('Server configuration error');
   }
 
-  // FIX: verifyKey is async! MUST await it so invalid signatures correctly return 401.
   const isValid = await verifyKey(rawBody, signature, timestamp, publicKey);
   if (!isValid) {
     return res.status(401).send('Bad request signature');
@@ -39,7 +38,7 @@ export default async function handler(req, res) {
 
   const interaction = JSON.parse(rawBody.toString());
 
-  // 1. Respond to Discord PING (Required for Dev Portal verification)
+  // 1. Respond to Discord PING
   if (interaction.type === InteractionType.PING) {
     return res.status(200).json({ type: InteractionResponseType.PONG });
   }
@@ -53,22 +52,35 @@ export default async function handler(req, res) {
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: '⛔ **Access Denied:** Only Admin can approve or reject map proposals.',
+          content: '⛔ **Access Denied:** Only High Command can approve or reject strategy plans.',
           flags: 64
         }
       });
     }
 
     const isApproved = custom_id === 'approve_proposal';
-    const originalEmbed = interaction.message.embeds[0];
+    
+    // Deep clone the original embed so we don't accidentally send read-only properties
+    const originalEmbed = JSON.parse(JSON.stringify(interaction.message.embeds[0]));
 
-    // --- CRITICAL FIX: Repoint the embed to the permanent Discord CDN image ---
+    // CRITICAL FIX 1: Strip read-only properties (proxy_url, width, height) that cause Discord to nuke the image
+    if (originalEmbed.image) {
+      originalEmbed.image = { url: originalEmbed.image.url }; 
+    }
+    if (originalEmbed.thumbnail) {
+      originalEmbed.thumbnail = { url: originalEmbed.thumbnail.url };
+    }
+
+    // CRITICAL FIX 2: Explicitly re-bind the image using the internal attachment URI.
+    // This stops it from duplicating above the embed, and keeps it safely inside.
     if (interaction.message.attachments && interaction.message.attachments.length > 0) {
-      // Find the image attachment (Discord sets content_type to 'image/jpeg' or similar)
-      const imgAttachment = interaction.message.attachments.find(a => a.content_type?.startsWith('image/'));
+      const imgAttachment = interaction.message.attachments.find(a => 
+        a.filename.endsWith('.jpg') || a.filename.endsWith('.png') || a.content_type?.startsWith('image/')
+      );
+      
       if (imgAttachment) {
         if (!originalEmbed.image) originalEmbed.image = {};
-        originalEmbed.image.url = imgAttachment.url;
+        originalEmbed.image.url = `attachment://${imgAttachment.filename}`;
       }
     }
 
@@ -85,7 +97,7 @@ export default async function handler(req, res) {
       type: InteractionResponseType.UPDATE_MESSAGE,
       data: {
         embeds: [originalEmbed],
-        // CRITICAL FIX: Pass the original attachments back so Discord doesn't un-link them and push them above the embed
+        // Tell Discord to retain ALL existing files (the Map Image AND the JSON blueprint)
         attachments: interaction.message.attachments ? interaction.message.attachments.map(a => ({ id: a.id })) : [],
         components: [
           {
@@ -94,14 +106,14 @@ export default async function handler(req, res) {
               {
                 type: 2,
                 custom_id: 'approve_proposal',
-                label: isApproved ? 'Approved' : 'Approve Map',
+                label: isApproved ? 'Approved' : 'Approve Strategy',
                 style: 3,
                 disabled: true
               },
               {
                 type: 2,
                 custom_id: 'reject_proposal',
-                label: !isApproved ? 'Rejected' : 'Reject Map',
+                label: !isApproved ? 'Rejected' : 'Reject Strategy',
                 style: 4,
                 disabled: true
               }
