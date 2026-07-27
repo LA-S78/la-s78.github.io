@@ -1,25 +1,7 @@
 /**
  * map.js - Comprehensive Map Data, Parsing, Highlighting, Label, Planner, and Fullscreen Utilities
- * 
- * City Level Mapping by Group Color:
- * green  -> Level 1
- * yellow -> Level 2
- * orange -> Level 3
- * purple -> Level 4
- * blue   -> Level 5
- * red    -> Level 6
- * gold   -> Capitol (Unique)
  */
 
-/**
- * Manual position, rotation, and font sizing overrides for awkward territory shapes.
- * 
- * Available options per city ID:
- * - offsetX: Number (positive moves right, negative moves left)
- * - offsetY: Number (positive moves down, negative moves up)
- * - rotate: Number in degrees (e.g. 90 or -90)
- * - scale: Number multiplier for font size (e.g. 1.2 for 20% larger, 0.8 for 20% smaller)
- */
 export const LABEL_OVERRIDES = {
   Sky_Fortress: { rotate: 270, offsetX: -52 },
   Royal_Castle: { offsetX: -5, offsetY: -20, scale: 1.5 },
@@ -56,25 +38,19 @@ export const LABEL_OVERRIDES = {
 };
 
 export const COLOR_TO_LEVEL_MAP = {
-  green: 1,
-  yellow: 2,
-  orange: 3,
-  purple: 4,
-  blue: 5,
-  red: 6,
-  gold: "Capitol"
+  green: 1, yellow: 2, orange: 3, purple: 4, blue: 5, red: 6, gold: "Capitol"
 };
 
-// Exact hex colors for JS to enforce natively (Bypasses iOS Safari CSS bugs)
 export const LEVEL_COLORS = {
-  green: '#25bb00',
-  yellow: '#cece00',
-  orange: '#e68e00',
-  purple: '#a400af',
-  blue: '#003fad',
-  red: '#8f0000',
-  gold: '#b29a20'
+  green: '#25bb00', yellow: '#cece00', orange: '#e68e00', purple: '#a400af',
+  blue: '#003fad', red: '#8f0000', gold: '#b29a20'
 };
+
+export const AUTO_ALLIANCE_PALETTE = [
+  '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
+  '#dd6b20', '#319795', '#d69e2e', '#805ad5', '#d53f8c',
+  '#38a169', '#00b5d8'
+];
 
 export const CITY_LEVEL_MAP = {
   1: { level: 1, label: "Level 1", group: "green" },
@@ -86,133 +62,132 @@ export const CITY_LEVEL_MAP = {
   "Capitol": { level: "Capitol", label: "Capitol", group: "gold" }
 };
 
-// Datasets & Core State
 export let cities = [];
 export let alliances = {};
 export let mapState = {};
 export let currentColorMode = 'level';
-
-// Planner Mode State (Local strategy drafting)
 export let isPlannerActive = false;
 export let draftState = null;
+export let DRAFT_ALLIANCE_TAGS = [];
 
-// Fallback colors for Alliance map mode
-export const COLOR_FALLBACKS = {
-  unclaimed: '#2d3748',      // Dark neutral slate
-  noAllianceColor: '#718096' // Mid-grey for claimed but color-less alliances
-};
+export const COLOR_FALLBACKS = { unclaimed: '#2d3748', noAllianceColor: '#718096' };
+
+export function setDraftAllianceTags(tags = []) { DRAFT_ALLIANCE_TAGS = tags; }
+
+export function getAllianceColor(tag) {
+  if (!tag || tag === 'Unclaimed') return COLOR_FALLBACKS.unclaimed;
+  const alliance = alliances[tag];
+  if (alliance && alliance.color) return alliance.color;
+
+  const rankedTags = getRankedAllianceTags();
+  const rankIndex = rankedTags.indexOf(tag);
+  if (rankIndex !== -1) return AUTO_ALLIANCE_PALETTE[rankIndex % AUTO_ALLIANCE_PALETTE.length];
+
+  const allTags = Object.keys(alliances);
+  const tagIndex = allTags.indexOf(tag);
+  if (tagIndex !== -1) return AUTO_ALLIANCE_PALETTE[tagIndex % AUTO_ALLIANCE_PALETTE.length];
+
+  return COLOR_FALLBACKS.noAllianceColor;
+}
+
+export function getRankedAllianceTags() {
+  const ranked = Object.entries(alliances)
+    .filter(([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '')
+    .sort(([_, a], [__, b]) => Number(a.rank) - Number(b.rank))
+    .map(([tag]) => tag);
+
+  if (ranked.length > 0) return ranked;
+  if (DRAFT_ALLIANCE_TAGS && DRAFT_ALLIANCE_TAGS.length > 0) return DRAFT_ALLIANCE_TAGS;
+
+  return Object.keys(alliances);
+}
+
+export function getSvgRoot() {
+  return document.querySelector('.game-map svg') || document.querySelector('#game-map') || document.querySelector('svg');
+}
 
 // ==========================================================================
-// PLANNER MODE & STATE RESOLUTION
+// PLANNER MODE & DISPATCH
 // ==========================================================================
 
-/**
- * Toggles Planner Mode.
- * Creates a deep clone of mapState for non-destructive client-side editing.
- */
 export function togglePlannerMode(active, svgRoot = null) {
   isPlannerActive = active;
+  const root = svgRoot || getSvgRoot();
 
   if (isPlannerActive) {
     draftState = JSON.parse(JSON.stringify(mapState));
-    if (!draftState.territory_ownership) {
-      draftState.territory_ownership = {};
-    }
-    // Draft changes depend on owner colors, force alliance mode view
+    if (!draftState.territory_ownership) draftState.territory_ownership = {};
     currentColorMode = 'alliance';
   } else {
     draftState = null;
   }
 
-  if (svgRoot) {
-    setMapColorMode(currentColorMode, svgRoot);
-    renderTerritoryLabels(svgRoot);
+  if (root) {
+    setMapColorMode(currentColorMode, root);
+    renderTerritoryLabels(root);
   }
 
   updateProposalUI();
 }
 
-/**
- * Resolves the effective owner for a given city ID.
- * Returns draft owner if Planner Mode is active, otherwise returns live mapState owner.
- */
 export function getCityOwner(cityId) {
   if (isPlannerActive && draftState && draftState.territory_ownership && draftState.territory_ownership[cityId]) {
     const draftData = draftState.territory_ownership[cityId];
     return typeof draftData === 'string' ? draftData : (draftData.owner || 'Unclaimed');
   }
-  
   const city = getCityById(cityId);
   return city ? (city.owner || 'Unclaimed') : 'Unclaimed';
 }
 
-/**
- * Reassigns a territory owner inside draft state without touching live data.
- */
 export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
-  if (!isPlannerActive || !draftState) return;
+  if (!isPlannerActive) return;
+  const root = svgRoot || getSvgRoot();
 
-  if (!draftState.territory_ownership) {
-    draftState.territory_ownership = {};
+  if (!draftState) draftState = JSON.parse(JSON.stringify(mapState));
+  if (!draftState.territory_ownership) draftState.territory_ownership = {};
+
+  draftState.territory_ownership[cityId] = { owner: newOwnerTag || 'Unclaimed' };
+
+  if (root) {
+    renderTerritoryLabels(root);
+    setMapColorMode(currentColorMode, root);
   }
-
-  draftState.territory_ownership[cityId] = {
-    owner: newOwnerTag || 'Unclaimed'
-  };
-
-  if (svgRoot) {
-    renderTerritoryLabels(svgRoot);
-    setMapColorMode(currentColorMode, svgRoot);
-  }
-
   updateProposalUI();
 }
 
-/**
- * Prompts or cycles territory assignment during Planner Mode
- */
 export function promptTerritoryAssignment(cityId, svgRoot = null) {
+  const root = svgRoot || getSvgRoot();
   const currentOwner = getCityOwner(cityId);
-  const availableTags = Object.keys(alliances);
-  let newOwner = 'Unclaimed';
+  const rankedTags = getRankedAllianceTags();
+  
+  const cycleList = ['Unclaimed', ...rankedTags];
 
-  if (availableTags.length > 0) {
-    // Cycle through registered alliance tags
-    const currentIndex = availableTags.indexOf(currentOwner);
-    if (currentIndex === -1) {
-      newOwner = availableTags[0];
-    } else if (currentIndex < availableTags.length - 1) {
-      newOwner = availableTags[currentIndex + 1];
-    } else {
-      newOwner = 'Unclaimed';
-    }
-  } else {
-    // Text prompt fallback if no alliance datasets are loaded
-    const input = prompt(`Assign owner tag for ${cityId}:`, currentOwner !== 'Unclaimed' ? currentOwner : '');
-    if (input === null) return;
-    newOwner = input.trim() || 'Unclaimed';
+  let currentIndex = cycleList.indexOf(currentOwner);
+
+  if (currentIndex === -1 && currentOwner && currentOwner !== 'Unclaimed') {
+    const normCurrent = String(currentOwner).normalize('NFC').trim().toLowerCase();
+    currentIndex = cycleList.findIndex(
+      tag => String(tag).normalize('NFC').trim().toLowerCase() === normCurrent
+    );
   }
 
-  setDraftTerritoryOwner(cityId, newOwner, svgRoot);
+  if (currentIndex === -1) currentIndex = 0;
+
+  const nextIndex = (currentIndex + 1) % cycleList.length;
+  const newOwner = cycleList[nextIndex];
+
+  setDraftTerritoryOwner(cityId, newOwner, root);
 }
 
-/**
- * Compares draft state against live mapState and produces a clean JSON proposal payload.
- */
 export function generateProposalPayload(authorName = 'Anonymous User') {
   if (!isPlannerActive || !draftState) return null;
-
   const changes = {};
 
   cities.forEach(city => {
     const draftOwner = getCityOwner(city.id);
     const originalOwner = city.owner || 'Unclaimed';
-
     if (draftOwner !== originalOwner) {
-      changes[city.id] = {
-        from: originalOwner,
-        to: draftOwner
-      };
+      changes[city.id] = { from: originalOwner, to: draftOwner };
     }
   });
 
@@ -225,14 +200,63 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
 }
 
 /**
- * Updates the change counter badge and enables/disables the submit button
+ * Dispatches the active draft strategy payload to the Discord War Room API
  */
+export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
+  if (!isPlannerActive || !draftState) return;
+
+  const payload = generateProposalPayload();
+  if (!payload || payload.totalChanges === 0) {
+    alert('No changes detected in your draft plan.');
+    return;
+  }
+
+  const authorInput = prompt('Enter your Discord handle / Commander Name:', 'Commander');
+  if (authorInput === null) return; // User canceled
+
+  const notesInput = prompt('Add an optional strategy note for the War Room:', '') || '';
+
+  payload.submittedBy = authorInput.trim() || 'Anonymous Commander';
+  payload.notes = notesInput.trim();
+
+  const submitBtn = document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
+  const originalText = submitBtn ? submitBtn.textContent : 'Submit Plan';
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Transmitting...';
+  }
+
+  try {
+    const response = await fetch(apiEndpointUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server returned HTTP ${response.status}`);
+    }
+
+    alert('Strategy plan successfully transmitted to Discord War Room!');
+    togglePlannerMode(false);
+  } catch (err) {
+    console.error('Failed to submit strategy proposal:', err);
+    alert('Could not send proposal to Discord. Make sure the bot server is online.');
+  } finally {
+    if (submitBtn) {
+      submitBtn.textContent = originalText;
+    }
+    updateProposalUI();
+  }
+}
+
 export function updateProposalUI(btnSubmit = null, badge = null) {
-  const submitBtn = btnSubmit || document.getElementById('btn-submit-proposal');
-  const badgeEl = badge || document.getElementById('change-count-badge');
+  const submitBtn = btnSubmit || document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
+  const badgeEl = badge || document.getElementById('change-count-badge') || document.querySelector('.draft-indicator');
   
   if (!isPlannerActive) {
-    if (submitBtn) submitBtn.disabled = true;
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.classList.add('hidden'); submitBtn.style.display = 'none'; }
     if (badgeEl) badgeEl.textContent = '0';
     return;
   }
@@ -240,167 +264,135 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
   const payload = generateProposalPayload();
   const count = payload ? payload.totalChanges : 0;
 
-  if (badgeEl) badgeEl.textContent = count;
-  if (submitBtn) submitBtn.disabled = count === 0;
+  if (badgeEl) badgeEl.textContent = String(count);
+  if (submitBtn) {
+    submitBtn.disabled = count === 0;
+    submitBtn.classList.remove('hidden');
+    submitBtn.style.display = 'inline-flex';
+  }
 }
 
 // ==========================================================================
-// FULLSCREEN UTILITIES
+// FULLSCREEN & CONTROLS
 // ==========================================================================
 
-/**
- * Toggles Fullscreen Mode using Native API with CSS Fixed Fallback
- */
 export function toggleFullscreen(mapContainer = document.getElementById('map-container')) {
   if (!mapContainer) return;
-
   const btnFullscreen = document.getElementById('btn-toggle-fullscreen');
   const isNative = !!document.fullscreenElement;
   const isCSSFallback = mapContainer.classList.contains('is-fullscreen');
-  const isCurrentlyActive = isNative || isCSSFallback;
-  const willBeActive = !isCurrentlyActive;
+  const willBeActive = !(isNative || isCSSFallback);
 
-  // 1. Manage global body state to prevent parent stacking contexts
   document.body.classList.toggle('map-fullscreen-active', willBeActive);
 
   if (willBeActive) {
-    // 2. UNCONDITIONALLY apply our layout class first
     mapContainer.classList.add('is-fullscreen');
     syncFullscreenUI(true, btnFullscreen);
-
-    // 3. Request native fullscreen (silently catch failures for iOS fallback)
-    if (mapContainer.requestFullscreen) {
-      mapContainer.requestFullscreen().catch(() => {});
-    }
+    if (mapContainer.requestFullscreen) mapContainer.requestFullscreen().catch(() => {});
   } else {
     mapContainer.classList.remove('is-fullscreen');
     syncFullscreenUI(false, btnFullscreen);
-
-    if (document.fullscreenElement && document.exitFullscreen) {
-      document.exitFullscreen().catch(() => {});
-    }
+    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
   }
 }
 
-/**
- * Updates button labels and active states
- */
 export function syncFullscreenUI(isActive, btn = null) {
   if (!btn) btn = document.getElementById('btn-toggle-fullscreen');
   if (!btn) return;
-
   btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
   const label = btn.querySelector('.fullscreen-label');
-  if (label) {
-    label.textContent = isActive ? 'Exit' : 'Fullscreen';
-  }
+  if (label) label.textContent = isActive ? 'Exit' : 'Fullscreen';
 }
 
-/**
- * Automatically binds toolbar controls and map interaction listeners
- */
-export function bindMapControls(svgRoot) {
-  if (!svgRoot) return;
-
+export function bindMapControls(svgRoot = null) {
   const btnLevel = document.getElementById('btn-mode-level');
   const btnAlliance = document.getElementById('btn-mode-alliance');
-  const btnDraft = document.getElementById('btn-toggle-draft');
-  const btnSubmit = document.getElementById('btn-submit-proposal');
-  const badge = document.getElementById('change-count-badge');
+  const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
+  const btnSubmit = document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
+  const badge = document.getElementById('change-count-badge') || document.querySelector('.draft-indicator');
   const mapContainer = document.getElementById('map-container');
   const btnFullscreen = document.getElementById('btn-toggle-fullscreen');
 
-  if (btnLevel) {
+  if (btnLevel && !btnLevel.dataset.bound) {
+    btnLevel.dataset.bound = 'true';
     btnLevel.addEventListener('click', () => {
       btnLevel.classList.add('active');
       if (btnAlliance) btnAlliance.classList.remove('active');
-      setMapColorMode('level', svgRoot);
+      setMapColorMode('level', svgRoot || getSvgRoot());
     });
   }
 
-  if (btnAlliance) {
+  if (btnAlliance && !btnAlliance.dataset.bound) {
+    btnAlliance.dataset.bound = 'true';
     btnAlliance.addEventListener('click', () => {
       btnAlliance.classList.add('active');
       if (btnLevel) btnLevel.classList.remove('active');
-      setMapColorMode('alliance', svgRoot);
+      setMapColorMode('alliance', svgRoot || getSvgRoot());
     });
   }
 
-  if (btnDraft) {
-    btnDraft.addEventListener('click', () => {
+  if (btnDraft && !btnDraft.dataset.bound) {
+    btnDraft.dataset.bound = 'true';
+    btnDraft.addEventListener('click', (e) => {
+      e.preventDefault();
       const willBeActive = !isPlannerActive;
       btnDraft.setAttribute('aria-pressed', willBeActive ? 'true' : 'false');
-      
-      togglePlannerMode(willBeActive, svgRoot);
-
-      if (willBeActive) {
-        if (btnSubmit) btnSubmit.classList.remove('hidden');
-        if (btnAlliance && btnLevel) {
-          btnAlliance.classList.add('active');
-          btnLevel.classList.remove('active');
-        }
-      } else {
-        if (btnSubmit) btnSubmit.classList.add('hidden');
+      btnDraft.classList.toggle('active', willBeActive);
+      togglePlannerMode(willBeActive, svgRoot || getSvgRoot());
+      if (willBeActive && btnAlliance && btnLevel) {
+        btnAlliance.classList.add('active');
+        btnLevel.classList.remove('active');
       }
-
       updateProposalUI(btnSubmit, badge);
     });
   }
 
-  if (btnSubmit) {
-    btnSubmit.addEventListener('click', () => {
-      const payload = generateProposalPayload();
-      if (!payload || payload.totalChanges === 0) return;
-      console.log('Submitted Strategy Proposal:', payload);
-      alert(`Proposal generated with ${payload.totalChanges} changes! Check developer console.`);
+  if (btnSubmit && !btnSubmit.dataset.bound) {
+    btnSubmit.dataset.bound = 'true';
+    btnSubmit.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Replace path with your API endpoint URL if hosted on a separate bot port (e.g., 'http://localhost:3000/api/proposal')
+      submitStrategyProposal('/api/proposal');
     });
   }
 
-  // Fullscreen Toggle Button & Event Listeners
-  if (btnFullscreen && mapContainer) {
-    btnFullscreen.addEventListener('click', () => {
+  if (btnFullscreen && mapContainer && !btnFullscreen.dataset.bound) {
+    btnFullscreen.dataset.bound = 'true';
+    btnFullscreen.addEventListener('click', (e) => {
+      e.preventDefault();
       toggleFullscreen(mapContainer);
     });
 
-    document.addEventListener('fullscreenchange', () => {
-      const isNativeActive = !!document.fullscreenElement;
-      
-      if (isNativeActive) {
-        mapContainer.classList.add('is-fullscreen');
-        document.body.classList.add('map-fullscreen-active');
-      } else {
-        mapContainer.classList.remove('is-fullscreen');
-        document.body.classList.remove('map-fullscreen-active');
-      }
-      
-      syncFullscreenUI(isNativeActive, btnFullscreen);
-    });
+    if (!document.documentElement.dataset.fullscreenBound) {
+      document.documentElement.dataset.fullscreenBound = 'true';
+      document.addEventListener('fullscreenchange', () => {
+        const isNativeActive = !!document.fullscreenElement;
+        if (isNativeActive) {
+          mapContainer.classList.add('is-fullscreen');
+          document.body.classList.add('map-fullscreen-active');
+        } else {
+          mapContainer.classList.remove('is-fullscreen');
+          document.body.classList.remove('map-fullscreen-active');
+        }
+        syncFullscreenUI(isNativeActive, btnFullscreen);
+      });
+    }
   }
 }
 
 // ==========================================================================
-// GEOMETRY & RENDERING UTILITIES
+// GEOMETRY & RENDERING
 // ==========================================================================
 
-/**
- * Calculates the true visual center of an SVG path by sampling perimeter points.
- * Prevents L-shaped or irregular territories from skewing the centroid.
- */
 function getVisualCenter(pathEl) {
   try {
     const totalLength = pathEl.getTotalLength();
     if (!totalLength) throw new Error("Zero length path");
-
-    const samples = 32;
-    let sumX = 0;
-    let sumY = 0;
-
+    const samples = 32; let sumX = 0, sumY = 0;
     for (let i = 0; i < samples; i++) {
       const pt = pathEl.getPointAtLength((i / samples) * totalLength);
-      sumX += pt.x;
-      sumY += pt.y;
+      sumX += pt.x; sumY += pt.y;
     }
-
     return { x: sumX / samples, y: sumY / samples };
   } catch (e) {
     const bbox = pathEl.getBBox();
@@ -408,134 +400,101 @@ function getVisualCenter(pathEl) {
   }
 }
 
-/**
- * Merges Discord role colors into the alliances dataset and re-renders SVG labels
- */
-export function setAllianceColors(colorMap, svgRoot = null) {
-  if (!colorMap || typeof colorMap !== 'object') return;
-
-  Object.entries(colorMap).forEach(([tag, color]) => {
-    if (!alliances[tag]) {
-      alliances[tag] = { name: tag };
-    }
-    alliances[tag].color = color;
-  });
-
-  if (svgRoot) {
-    renderTerritoryLabels(svgRoot);
-    if (currentColorMode === 'alliance') {
-      setMapColorMode('alliance', svgRoot);
-    }
-  }
-}
-
-/**
- * Parses SVG and extracts cities.
- * Uses JS to explicitly set the default fill color (Fixes iOS Safari SVG bug)
- */
 export function extractCitiesFromSvg(svgRoot) {
+  if (!svgRoot) return [];
   const extractedCities = [];
 
   Object.entries(COLOR_TO_LEVEL_MAP).forEach(([colorLabel, assignedLevel]) => {
-    const colorGroup = svgRoot.querySelector(`g[inkscape\\:label="${colorLabel}"]`);
+    const colorGroup = svgRoot.querySelector(`g[inkscape\\:label="${colorLabel}"]`) 
+                    || svgRoot.querySelector(`g[label="${colorLabel}"]`)
+                    || svgRoot.querySelector(`g[data-label="${colorLabel}"]`)
+                    || svgRoot.querySelector(`g#${colorLabel}`)
+                    || svgRoot.querySelector(`g.${colorLabel}`);
 
-    if (colorGroup) {
-      const cityElements = colorGroup.querySelectorAll('path, rect, circle, polygon, g[id]');
+    if (!colorGroup) return;
 
-      cityElements.forEach((el, index) => {
-        const elementId = el.id;
-        const elementLabel = el.getAttribute('inkscape:label');
-        
-        if (!elementId && !elementLabel) return;
-
-        const uniqueId = elementId || `${colorLabel}_city_${index + 1}`;
-        const cityName = elementLabel || uniqueId;
-
-        el.style.fill = LEVEL_COLORS[colorLabel];
-
-        if (!extractedCities.some(c => c.id === uniqueId)) {
-          extractedCities.push({
-            id: uniqueId,
-            name: cityName,
-            level: assignedLevel,
-            group: colorLabel,
-            buff: "Placeholder Buff",
-            owner: "Unclaimed",
-            status: null
-          });
-        }
-      });
-    }
+    const children = Array.from(colorGroup.children);
+    children.forEach((el, index) => {
+      const elementId = el.id || el.getAttribute('inkscape:label');
+      const uniqueId = elementId || `${colorLabel}_city_${index + 1}`;
+      const cityName = el.getAttribute('inkscape:label') || uniqueId;
+      if (!el.id) el.id = uniqueId;
+      el.style.fill = LEVEL_COLORS[colorLabel];
+      if (!extractedCities.some(c => c.id === uniqueId)) {
+        extractedCities.push({
+          id: uniqueId, name: cityName, level: assignedLevel,
+          group: colorLabel, buff: "Placeholder Buff", owner: "Unclaimed", status: null
+        });
+      }
+    });
   });
 
+  if (extractedCities.length === 0) {
+    const layer = svgRoot.querySelector('#layer1') || svgRoot;
+    const shapes = layer.querySelectorAll('[id]');
+    shapes.forEach(el => {
+      const id = el.id;
+      if (!id || id === 'layer1' || id.startsWith('defs') || id.includes('label') || id === 'territory-labels') return;
+      if (el.parentElement && el.parentElement.id && el.parentElement.id !== 'layer1' && el.parentElement !== svgRoot) return;
+
+      let group = 'green';
+      for (const [col] of Object.entries(COLOR_TO_LEVEL_MAP)) {
+        if (el.classList.contains(col) || el.getAttribute('fill') === LEVEL_COLORS[col]) { group = col; break; }
+      }
+      extractedCities.push({
+        id: id, name: el.getAttribute('inkscape:label') || id.replace(/_/g, ' '), level: COLOR_TO_LEVEL_MAP[group] || 1,
+        group: group, buff: "Placeholder Buff", owner: "Unclaimed", status: null
+      });
+    });
+  }
   return extractedCities;
 }
 
-/**
- * Toggles map territory fill/stroke colors using absolute hex values.
- * Uses getCityOwner() to support both live and Planner Mode views dynamically.
- */
 export function setMapColorMode(mode, svgRoot) {
-  if (!svgRoot) return;
+  const root = svgRoot || getSvgRoot();
+  if (!root) return;
   currentColorMode = mode;
-
-  if (mode === 'alliance') {
-    svgRoot.classList.add('mode-alliance');
-  } else {
-    svgRoot.classList.remove('mode-alliance');
-  }
+  if (mode === 'alliance') root.classList.add('mode-alliance');
+  else root.classList.remove('mode-alliance');
 
   cities.forEach(city => {
-    const el = svgRoot.getElementById(city.id);
+    const el = root.getElementById(city.id);
     if (!el) return;
-
     const ownerTag = getCityOwner(city.id);
 
     if (mode === 'alliance') {
-      let targetColor = COLOR_FALLBACKS.unclaimed;
-      
-      if (ownerTag && ownerTag !== 'Unclaimed') {
-        const alliance = alliances[ownerTag];
-        targetColor = (alliance && alliance.color) ? alliance.color : COLOR_FALLBACKS.noAllianceColor;
-      }
-      
-      el.style.fill = targetColor;
-      el.style.stroke = targetColor;
-      
+      const targetColor = getAllianceColor(ownerTag);
+      if (el.tagName.toLowerCase() === 'g') {
+        const shapes = el.querySelectorAll('path, polygon, rect, circle');
+        shapes.forEach(s => { s.style.fill = targetColor; s.style.stroke = targetColor; });
+      } else { el.style.fill = targetColor; el.style.stroke = targetColor; }
     } else {
-      el.style.fill = LEVEL_COLORS[city.group];
-      el.style.stroke = ''; 
+      if (el.tagName.toLowerCase() === 'g') {
+        const shapes = el.querySelectorAll('path, polygon, rect, circle');
+        shapes.forEach(s => { s.style.fill = LEVEL_COLORS[city.group]; s.style.stroke = ''; });
+      } else { el.style.fill = LEVEL_COLORS[city.group]; el.style.stroke = ''; }
     }
   });
 }
 
-/**
- * Calculates territory centroids and places owner text labels inside wrapper groups.
- * Resolves territory ownership via getCityOwner() to support Planner Mode seamlessly.
- */
 export function renderTerritoryLabels(svgRoot) {
-  if (!svgRoot) return;
+  const root = svgRoot || getSvgRoot();
+  if (!root) return;
 
-  let labelGroup = svgRoot.querySelector('#territory-labels');
+  let labelGroup = root.querySelector('#territory-labels');
   if (!labelGroup) {
     labelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     labelGroup.setAttribute('id', 'territory-labels');
     labelGroup.style.pointerEvents = 'none';
-    svgRoot.appendChild(labelGroup);
+    root.appendChild(labelGroup);
   }
   labelGroup.innerHTML = '';
-
-  let defs = svgRoot.querySelector('defs');
-  if (!defs) {
-    defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    svgRoot.insertBefore(defs, svgRoot.firstChild);
-  }
 
   cities.forEach(city => {
     const ownerTag = String(getCityOwner(city.id));
     if (!ownerTag || ownerTag === 'Unclaimed') return;
 
-    const pathEl = svgRoot.getElementById(city.id);
+    const pathEl = root.getElementById(city.id);
     if (!pathEl) return;
 
     try {
@@ -551,46 +510,108 @@ export function renderTerritoryLabels(svgRoot) {
       const maxAllowedHeight = bbox.height * 0.55;
       const maxFontSizeByWidth = maxAllowedWidth / (ownerTag.length * 0.65);
       let fontSize = Math.max(10, Math.min(46, maxFontSizeByWidth, maxAllowedHeight));
-
       if (override.scale) fontSize *= override.scale;
 
       const wrapperGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       wrapperGroup.setAttribute('class', 'label-wrapper');
-
-      if (override.rotate) {
-        wrapperGroup.setAttribute('transform', `rotate(${override.rotate}, ${finalX}, ${finalY})`);
-      }
+      if (override.rotate) wrapperGroup.setAttribute('transform', `rotate(${override.rotate}, ${finalX}, ${finalY})`);
 
       const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       textEl.setAttribute('x', finalX);
       textEl.setAttribute('y', finalY);
       textEl.setAttribute('dy', '0.35em');
-
       textEl.style.transform = 'translateZ(0)';
       textEl.style.textAnchor = 'middle';
       textEl.style.fontSize = `${fontSize.toFixed(1)}px`;
-
       textEl.setAttribute('class', 'territory-label');
       textEl.setAttribute('data-owner', ownerTag);
       textEl.textContent = ownerTag;
 
-      const allianceData = alliances[ownerTag];
-      if (allianceData && allianceData.color) {
-        textEl.style.fill = allianceData.color;
-      }
+      const allianceColor = getAllianceColor(ownerTag);
+      textEl.style.fill = allianceColor !== COLOR_FALLBACKS.unclaimed ? allianceColor : '#ffffff';
 
       wrapperGroup.appendChild(textEl);
       labelGroup.appendChild(wrapperGroup);
-
-    } catch (e) {
-      console.warn(`Could not calculate label position for city: ${city.id}`, e);
-    }
+    } catch (e) {}
   });
 }
 
-/**
- * Applies a parsed map state object to the cities dataset
- */
+export function enableMapHighlighting(svgRoot = null) {
+  const root = svgRoot || getSvgRoot();
+  if (!root) return;
+
+  const card = document.getElementById('territory-info-card');
+  const cityNameEl = document.getElementById('city-name');
+  const cityLevelEl = document.getElementById('city-level-badge');
+  const cityOwnerEl = document.getElementById('city-owner');
+  const cityBuffEl = document.getElementById('city-buff');
+
+  function updateInfoCard(cityData) {
+    if (!card) return;
+    if (!cityData) {
+      card.classList.add('idle');
+      if (cityNameEl) cityNameEl.textContent = 'Hover over a territory';
+      if (cityLevelEl) cityLevelEl.textContent = 'Level --';
+      if (cityOwnerEl) cityOwnerEl.textContent = 'Unclaimed';
+      if (cityBuffEl) cityBuffEl.textContent = 'None';
+      return;
+    }
+    card.classList.remove('idle');
+    if (cityNameEl) cityNameEl.textContent = cityData.name || cityData.id;
+    if (cityLevelEl) cityLevelEl.textContent = typeof cityData.level === 'number' ? `Level ${cityData.level}` : cityData.level;
+    if (cityOwnerEl) {
+      const ownerTag = getCityOwner(cityData.id);
+      const alliance = alliances[ownerTag];
+      cityOwnerEl.textContent = alliance ? `${alliance.name} [${ownerTag}]` : ownerTag;
+    }
+    if (cityBuffEl) cityBuffEl.textContent = cityData.buff || 'No active buff';
+  }
+
+  const elements = root.querySelectorAll('path, rect, circle, polygon');
+  elements.forEach(el => {
+    if (el.closest('#territory-labels') || el.closest('defs')) return;
+
+    if (el.dataset.bound) return;
+    el.dataset.bound = 'true';
+
+    el.style.cursor = 'pointer';
+    const getTargetCity = (e) => {
+      let current = e.target;
+      while (current && current !== root && current !== document.body) {
+        if (current.id && current.id !== 'layer1' && current.id !== 'territory-labels') {
+          const city = getCityById(current.id);
+          if (city) return city;
+        }
+        const label = current.getAttribute && current.getAttribute('inkscape:label');
+        if (label) {
+          const city = cities.find(c => c.name === label || c.id === label);
+          if (city) return city;
+        }
+        current = current.parentElement;
+      }
+      return null;
+    };
+
+    el.addEventListener('mouseenter', (e) => updateInfoCard(getTargetCity(e)));
+    el.addEventListener('mouseleave', () => updateInfoCard(null));
+    
+    el.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const city = getTargetCity(e);
+      const cityId = city ? city.id : (el.id || e.target.id);
+
+      if (isPlannerActive && cityId) {
+        promptTerritoryAssignment(cityId, root);
+        updateInfoCard(getCityById(cityId));
+      }
+    });
+  });
+}
+
+// ==========================================================================
+// STATE MANAGEMENT & INITIALIZATION
+// ==========================================================================
+
 export function applyMapState(state, svgRoot = null) {
   if (!state) return;
   mapState = state;
@@ -610,184 +631,44 @@ export function applyMapState(state, svgRoot = null) {
     });
   }
 
-  if (svgRoot) renderTerritoryLabels(svgRoot);
+  const root = svgRoot || getSvgRoot();
+  if (root) renderTerritoryLabels(root);
 }
 
-/**
- * Fetches and parses map_state.yml and updates map ownership data
- */
-export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = null) {
-  try {
-    const response = await fetch(yamlUrl);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const yamlText = await response.text();
+export function getCityById(id) { return cities.find(city => city.id === id); }
 
-    let state = {};
-    if (typeof window !== 'undefined' && window.jsyaml) {
-      state = window.jsyaml.load(yamlText);
-    } else {
-      state = parseSimpleYaml(yamlText);
-    }
-
-    applyMapState(state, svgRoot);
-    return state;
-  } catch (err) {
-    console.error('Could not load map state YAML:', err);
-    return null;
-  }
-}
-
-/**
- * Initialize dataset from a loaded SVG element in the browser
- */
 export function initializeMapData(svgRoot) {
-  cities = extractCitiesFromSvg(svgRoot);
+  const root = svgRoot || getSvgRoot();
+  if (!root) return cities;
+
+  cities = extractCitiesFromSvg(root);
   
   if (typeof window !== 'undefined' && window.MAP_STATE) {
-    applyMapState(window.MAP_STATE, svgRoot);
+    applyMapState(window.MAP_STATE, root);
   } else {
-    renderTerritoryLabels(svgRoot);
+    renderTerritoryLabels(root);
   }
   
-  bindMapControls(svgRoot);
-  enableMapHighlighting(svgRoot);
+  bindMapControls(root);
+  enableMapHighlighting(root);
   
   return cities;
 }
 
-/**
- * Updates a city's owner. Automatically routes changes to draft state if Planner Mode is active.
- */
-export function updateCityOwner(cityId, newOwner, svgRoot = null) {
-  if (isPlannerActive) {
-    setDraftTerritoryOwner(cityId, newOwner, svgRoot);
-    return;
-  }
-
-  const city = getCityById(cityId);
-  if (city) {
-    city.owner = newOwner || 'Unclaimed';
-    if (svgRoot) {
-      renderTerritoryLabels(svgRoot);
-      setMapColorMode(currentColorMode, svgRoot);
-    }
+export function initMap() {
+  const svgRoot = getSvgRoot();
+  if (svgRoot) {
+    initializeMapData(svgRoot);
+  } else {
+    bindMapControls();
   }
 }
 
-/**
- * Enables hover/click highlighting and updates the territory info card
- */
-export function enableMapHighlighting(svgRoot) {
-  const colorLabels = Object.keys(COLOR_TO_LEVEL_MAP);
-  const card = document.getElementById('territory-info-card');
-  const cityNameEl = document.getElementById('city-name');
-  const cityLevelEl = document.getElementById('city-level-badge');
-  const cityOwnerEl = document.getElementById('city-owner');
-  const cityBuffEl = document.getElementById('city-buff');
-
-  function updateInfoCard(cityData) {
-    if (!card) return;
-
-    if (!cityData) {
-      card.classList.add('idle');
-      if (cityNameEl) cityNameEl.textContent = 'Hover over a territory';
-      if (cityLevelEl) cityLevelEl.textContent = 'Level --';
-      if (cityOwnerEl) cityOwnerEl.textContent = 'Unclaimed';
-      if (cityBuffEl) cityBuffEl.textContent = 'None';
-      return;
-    }
-
-    card.classList.remove('idle');
-    if (cityNameEl) cityNameEl.textContent = cityData.name || cityData.id;
-    if (cityLevelEl) {
-      cityLevelEl.textContent = typeof cityData.level === 'number' 
-        ? `Level ${cityData.level}` : cityData.level;
-    }
-    if (cityOwnerEl) {
-      const ownerTag = getCityOwner(cityData.id);
-      const alliance = alliances[ownerTag];
-      cityOwnerEl.textContent = alliance ? `${alliance.name} [${ownerTag}]` : ownerTag;
-    }
-    if (cityBuffEl) cityBuffEl.textContent = cityData.buff || 'No active buff';
-  }
-
-  colorLabels.forEach(color => {
-    const group = svgRoot.querySelector(`g[inkscape\\:label="${color}"]`);
-    if (!group) return;
-    const elements = group.querySelectorAll('path, rect, circle, polygon');
-
-    elements.forEach(el => {
-      el.style.cursor = 'pointer';
-      el.addEventListener('mouseenter', (e) => updateInfoCard(getCityById(e.target.id)));
-      el.addEventListener('mouseleave', () => updateInfoCard(null));
-      
-      // Handle territory selection & Draft Mode assignments
-      el.addEventListener('click', (e) => {
-        const cityId = e.target.id;
-        const city = getCityById(cityId);
-        if (!city) return;
-
-        if (isPlannerActive) {
-          promptTerritoryAssignment(cityId, svgRoot);
-          updateInfoCard(city);
-        } else {
-          console.log("Selected City:", city);
-        }
-      });
-    });
-  });
-}
-
-export function getCityById(id) { return cities.find(city => city.id === id); }
-export function getCitiesByLevel(level) { return cities.filter(city => city.level === level); }
-export function getCitiesByGroup(groupColor) { return cities.filter(city => city.group === groupColor); }
-
-/**
- * Lightweight fallback YAML parser
- */
-function parseSimpleYaml(yamlText) {
-  const result = { alliances: {}, territory_ownership: {} };
-  let currentSection = null;
-  let currentKey = null;
-
-  const lines = yamlText.split('\n');
-  lines.forEach(line => {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) return;
-
-    const indent = line.search(/\S/);
-    if (indent === 0 && trimmed.endsWith(':')) {
-      currentSection = trimmed.slice(0, -1);
-      if (!result[currentSection]) result[currentSection] = {};
-    } else if (indent === 2 && currentSection) {
-      const [key, ...valParts] = trimmed.split(':');
-      const val = valParts.join(':').trim().replace(/^["']|["']$/g, '');
-      currentKey = key.trim();
-      if (val) {
-        result[currentSection][currentKey] = val;
-      } else {
-        result[currentSection][currentKey] = {};
-      }
-    } else if (indent === 4 && currentSection && currentKey) {
-      const [subKey, ...subValParts] = trimmed.split(':');
-      const subVal = subValParts.join(':').trim().replace(/^["']|["']$/g, '');
-      if (typeof result[currentSection][currentKey] === 'object') {
-        result[currentSection][currentKey][subKey.trim()] = subVal;
-      }
-    }
-  });
-
-  return result;
-}
-
-// ==========================================================================
-// DOM READY AUTO-INIT (Optional fallback)
-// ==========================================================================
 if (typeof window !== 'undefined') {
-  window.addEventListener('DOMContentLoaded', () => {
-    const svgRoot = document.querySelector('.game-map svg');
-    if (svgRoot && cities.length === 0) {
-      initializeMapData(svgRoot);
-    }
-  });
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initMap);
+  } else {
+    initMap();
+  }
+  document.addEventListener('turbo:load', initMap);
 }
