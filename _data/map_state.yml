@@ -3,6 +3,44 @@
 alliances:
   WLO:
     name: "WinterLordsOutcasts"
+  RÂVN:
+    name: "Nevrmore"
+  MIA:
+    name: "MIASMA"
+  BOTS:
+    name: "PossumCity"
+  SVN:
+    name: "DeadlySins"
+  PHNX:
+    name: "FromtheAshes"
+  HMDA:
+    name: "PRIDE"
+  NAVI:
+    name: "NatusVincere"
+  HeKi:
+    name: "HELL'S KITTENS"
+  RâvN:
+    name: "NvrMore Salamanders"
+  Ghst:
+    name: "Ghost"
+  HMX:
+    name: "HeavenLight"
+  KYIV:
+    name: "KyivVibe"
+  DKAD:
+    name: "DarkAntidote"
+  epa:
+    name: "easypeasyalliance"
+  Биба:
+    name: "БибаБоба"
+  GerR:
+    name: "Germanische Raben"
+  HUH:
+    name: "GRAVEYARD"
+  BOOZ:
+    name: "drunkdoctors"
+  râvn:
+    name: "nevermore_mini"
 
 territory_ownership:
   # ==========================================
@@ -15,7 +53,7 @@ territory_ownership:
   # LEVEL 6 (Red Group - Fortresses)
   # ==========================================
   Sky_Fortress:
-    owner: "RAVN"
+    owner: "RÂVN"
   Lionheart_Fortress:
     owner: "MIA"
   Nightfall_Fortress:
@@ -25,7 +63,7 @@ territory_ownership:
   # LEVEL 5 (Blue Group - Temples)
   # ==========================================
   Temple_of_Order:
-    owner: "RAVN"
+    owner: "RÂVN"
   Temple_of_Nature:
     owner: "SVN"
   Temple_of_War:
@@ -49,7 +87,7 @@ territory_ownership:
   Phantom_City:
     owner: "BOTS"
   Sandwind_Keep:
-    owner: "RAVN"
+    owner: "RÂVN"
 
   # ==========================================
   # LEVEL 3 (Orange Group)
@@ -77,7 +115,7 @@ territory_ownership:
   Frostwolf_Camp:
     owner: "WLO"
   Stormgate:
-    owner: "RAVN"
+    owner: "RÂVN"
 
   # ==========================================
   # LEVEL 2 (Yellow Group)
@@ -101,9 +139,9 @@ territory_ownership:
   Lark_Lane:
     owner: "BOTS"
   Sailshadow_Harbor:
-    owner: "RAVN"
+    owner: "RÂVN"
   Rose_Court:
-    owner: "RAVN"
+    owner: "RÂVN"
   Echo_Town:
     owner: "NAVI"
   Stardust_Road:

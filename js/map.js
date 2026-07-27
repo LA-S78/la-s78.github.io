@@ -13,12 +13,6 @@
 
 /**
  * Manual position, rotation, and font sizing overrides for awkward territory shapes.
- * 
- * Available options per city ID:
- * - offsetX: Number (positive moves right, negative moves left)
- * - offsetY: Number (positive moves down, negative moves up)
- * - rotate: Number in degrees (e.g. 90 or -90)
- * - scale: Number multiplier for font size (e.g. 1.2 for 20% larger, 0.8 for 20% smaller)
  */
 export const LABEL_OVERRIDES = {
   Sky_Fortress: { rotate: 270, offsetX: -52 },
@@ -188,7 +182,7 @@ export function promptTerritoryAssignment(cityId, svgRoot = null) {
     }
   } else {
     // Text prompt fallback if no alliance datasets are loaded
-    const input = prompt(`Assign owner tag for ${cityId}:`, currentOwner !== 'Unclaimed' ? currentOwner : '');
+    const input = prompt(`Assign owner alliance tag for ${cityId}:`, currentOwner !== 'Unclaimed' ? currentOwner : '');
     if (input === null) return;
     newOwner = input.trim() || 'Unclaimed';
   }
@@ -231,8 +225,14 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
   const submitBtn = btnSubmit || document.getElementById('btn-submit-proposal');
   const badgeEl = badge || document.getElementById('change-count-badge');
   
+  if (!submitBtn && !badgeEl) return;
+
   if (!isPlannerActive) {
-    if (submitBtn) submitBtn.disabled = true;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('hidden');
+      submitBtn.style.display = 'none';
+    }
     if (badgeEl) badgeEl.textContent = '0';
     return;
   }
@@ -240,8 +240,12 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
   const payload = generateProposalPayload();
   const count = payload ? payload.totalChanges : 0;
 
-  if (badgeEl) badgeEl.textContent = count;
-  if (submitBtn) submitBtn.disabled = count === 0;
+  if (badgeEl) badgeEl.textContent = String(count);
+  if (submitBtn) {
+    submitBtn.disabled = count === 0;
+    submitBtn.classList.remove('hidden');
+    submitBtn.style.display = 'inline-flex';
+  }
 }
 
 // ==========================================================================
@@ -260,15 +264,12 @@ export function toggleFullscreen(mapContainer = document.getElementById('map-con
   const isCurrentlyActive = isNative || isCSSFallback;
   const willBeActive = !isCurrentlyActive;
 
-  // 1. Manage global body state to prevent parent stacking contexts
   document.body.classList.toggle('map-fullscreen-active', willBeActive);
 
   if (willBeActive) {
-    // 2. UNCONDITIONALLY apply our layout class first
     mapContainer.classList.add('is-fullscreen');
     syncFullscreenUI(true, btnFullscreen);
 
-    // 3. Request native fullscreen (silently catch failures for iOS fallback)
     if (mapContainer.requestFullscreen) {
       mapContainer.requestFullscreen().catch(() => {});
     }
@@ -334,13 +335,10 @@ export function bindMapControls(svgRoot) {
       togglePlannerMode(willBeActive, svgRoot);
 
       if (willBeActive) {
-        if (btnSubmit) btnSubmit.classList.remove('hidden');
         if (btnAlliance && btnLevel) {
           btnAlliance.classList.add('active');
           btnLevel.classList.remove('active');
         }
-      } else {
-        if (btnSubmit) btnSubmit.classList.add('hidden');
       }
 
       updateProposalUI(btnSubmit, badge);
@@ -356,7 +354,6 @@ export function bindMapControls(svgRoot) {
     });
   }
 
-  // Fullscreen Toggle Button & Event Listeners
   if (btnFullscreen && mapContainer) {
     btnFullscreen.addEventListener('click', () => {
       toggleFullscreen(mapContainer);
@@ -382,10 +379,6 @@ export function bindMapControls(svgRoot) {
 // GEOMETRY & RENDERING UTILITIES
 // ==========================================================================
 
-/**
- * Calculates the true visual center of an SVG path by sampling perimeter points.
- * Prevents L-shaped or irregular territories from skewing the centroid.
- */
 function getVisualCenter(pathEl) {
   try {
     const totalLength = pathEl.getTotalLength();
@@ -408,9 +401,6 @@ function getVisualCenter(pathEl) {
   }
 }
 
-/**
- * Merges Discord role colors into the alliances dataset and re-renders SVG labels
- */
 export function setAllianceColors(colorMap, svgRoot = null) {
   if (!colorMap || typeof colorMap !== 'object') return;
 
@@ -431,7 +421,7 @@ export function setAllianceColors(colorMap, svgRoot = null) {
 
 /**
  * Parses SVG and extracts cities.
- * Uses JS to explicitly set the default fill color (Fixes iOS Safari SVG bug)
+ * Explicitly stamps unique IDs onto SVG elements if they lack one.
  */
 export function extractCitiesFromSvg(svgRoot) {
   const extractedCities = [];
@@ -450,6 +440,11 @@ export function extractCitiesFromSvg(svgRoot) {
 
         const uniqueId = elementId || `${colorLabel}_city_${index + 1}`;
         const cityName = elementLabel || uniqueId;
+
+        // CRITICAL FIX: Stamp ID onto the SVG element so DOM selectors work on click
+        if (!el.id) {
+          el.id = uniqueId;
+        }
 
         el.style.fill = LEVEL_COLORS[colorLabel];
 
@@ -471,10 +466,6 @@ export function extractCitiesFromSvg(svgRoot) {
   return extractedCities;
 }
 
-/**
- * Toggles map territory fill/stroke colors using absolute hex values.
- * Uses getCityOwner() to support both live and Planner Mode views dynamically.
- */
 export function setMapColorMode(mode, svgRoot) {
   if (!svgRoot) return;
   currentColorMode = mode;
@@ -509,10 +500,6 @@ export function setMapColorMode(mode, svgRoot) {
   });
 }
 
-/**
- * Calculates territory centroids and places owner text labels inside wrapper groups.
- * Resolves territory ownership via getCityOwner() to support Planner Mode seamlessly.
- */
 export function renderTerritoryLabels(svgRoot) {
   if (!svgRoot) return;
 
@@ -588,9 +575,6 @@ export function renderTerritoryLabels(svgRoot) {
   });
 }
 
-/**
- * Applies a parsed map state object to the cities dataset
- */
 export function applyMapState(state, svgRoot = null) {
   if (!state) return;
   mapState = state;
@@ -613,9 +597,6 @@ export function applyMapState(state, svgRoot = null) {
   if (svgRoot) renderTerritoryLabels(svgRoot);
 }
 
-/**
- * Fetches and parses map_state.yml and updates map ownership data
- */
 export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = null) {
   try {
     const response = await fetch(yamlUrl);
@@ -637,9 +618,6 @@ export async function loadMapState(yamlUrl = '/_data/map_state.yml', svgRoot = n
   }
 }
 
-/**
- * Initialize dataset from a loaded SVG element in the browser
- */
 export function initializeMapData(svgRoot) {
   cities = extractCitiesFromSvg(svgRoot);
   
@@ -655,9 +633,6 @@ export function initializeMapData(svgRoot) {
   return cities;
 }
 
-/**
- * Updates a city's owner. Automatically routes changes to draft state if Planner Mode is active.
- */
 export function updateCityOwner(cityId, newOwner, svgRoot = null) {
   if (isPlannerActive) {
     setDraftTerritoryOwner(cityId, newOwner, svgRoot);
@@ -675,7 +650,7 @@ export function updateCityOwner(cityId, newOwner, svgRoot = null) {
 }
 
 /**
- * Enables hover/click highlighting and updates the territory info card
+ * Enables hover/click highlighting and updates territory ownership in Draft Mode
  */
 export function enableMapHighlighting(svgRoot) {
   const colorLabels = Object.keys(COLOR_TO_LEVEL_MAP);
@@ -718,17 +693,22 @@ export function enableMapHighlighting(svgRoot) {
 
     elements.forEach(el => {
       el.style.cursor = 'pointer';
-      el.addEventListener('mouseenter', (e) => updateInfoCard(getCityById(e.target.id)));
+      
+      // CRITICAL FIX: Resolve closest element ID safely
+      const getTargetCity = (e) => {
+        const id = el.id || e.target.id || e.target.closest('[id]')?.id;
+        return getCityById(id);
+      };
+
+      el.addEventListener('mouseenter', (e) => updateInfoCard(getTargetCity(e)));
       el.addEventListener('mouseleave', () => updateInfoCard(null));
       
-      // Handle territory selection & Draft Mode assignments
       el.addEventListener('click', (e) => {
-        const cityId = e.target.id;
-        const city = getCityById(cityId);
+        const city = getTargetCity(e);
         if (!city) return;
 
         if (isPlannerActive) {
-          promptTerritoryAssignment(cityId, svgRoot);
+          promptTerritoryAssignment(city.id, svgRoot);
           updateInfoCard(city);
         } else {
           console.log("Selected City:", city);
@@ -742,9 +722,6 @@ export function getCityById(id) { return cities.find(city => city.id === id); }
 export function getCitiesByLevel(level) { return cities.filter(city => city.level === level); }
 export function getCitiesByGroup(groupColor) { return cities.filter(city => city.group === groupColor); }
 
-/**
- * Lightweight fallback YAML parser
- */
 function parseSimpleYaml(yamlText) {
   const result = { alliances: {}, territory_ownership: {} };
   let currentSection = null;
@@ -780,9 +757,6 @@ function parseSimpleYaml(yamlText) {
   return result;
 }
 
-// ==========================================================================
-// DOM READY AUTO-INIT (Optional fallback)
-// ==========================================================================
 if (typeof window !== 'undefined') {
   window.addEventListener('DOMContentLoaded', () => {
     const svgRoot = document.querySelector('.game-map svg');
