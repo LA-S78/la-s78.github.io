@@ -162,17 +162,27 @@ export async function captureMapImage(svgRoot = null) {
     // 2. Add explicit styling and the extracted CSS
     const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
     styleEl.textContent = `
-      path, polygon, rect { 
+      /* Apply static alpha and brightness to all map shapes */
+      path, polygon, rect, circle { 
         stroke-linejoin: round; 
         vector-effect: non-scaling-stroke; 
+        
+        /* --- NEW CONTROLS --- */
+        fill-opacity: 0.75 !important;  /* 0.0 to 1.0 - Lets the rust texture bleed through */
+        filter: brightness(0.85);       /* Optional: Darkens the colors slightly */
       }
+
+      /* Keep labels 100% opaque so they don't get lost in the texture */
       text.territory-label {
         font-family: system-ui, -apple-system, sans-serif;
         font-weight: bold;
         paint-order: stroke fill;
         stroke: #000000;
         stroke-width: 3px;
+        fill-opacity: 1 !important; 
+        opacity: 1 !important;
       }
+      
       ${extractedCSS}
     `;
     clonedSvg.insertBefore(styleEl, clonedSvg.firstChild);
