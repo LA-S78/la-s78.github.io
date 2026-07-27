@@ -111,15 +111,7 @@ export function getSvgRoot() {
 // ==========================================================================
 
 /**
- * Converts the current SVG map state into a Base64 PNG image string,
- * preserving external CSS stylesheets and layout styling.
- */
-// ==========================================================================
-// IMAGE CAPTURE UTILITY
-// ==========================================================================
-
-/**
- * Converts the current SVG map state into a Base64 PNG image string,
+ * Converts the current SVG map state into a Base64 JPEG image string,
  * preserving external CSS stylesheets and painting a custom background texture.
  */
 export async function captureMapImage(svgRoot = null) {
@@ -162,17 +154,12 @@ export async function captureMapImage(svgRoot = null) {
     // 2. Add explicit styling and the extracted CSS
     const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
     styleEl.textContent = `
-      /* Apply static alpha and brightness to all map shapes */
       path, polygon, rect, circle { 
         stroke-linejoin: round; 
         vector-effect: non-scaling-stroke; 
-        
-        /* --- NEW CONTROLS --- */
-        fill-opacity: 0.75 !important;  /* 0.0 to 1.0 - Lets the rust texture bleed through */
-        filter: brightness(0.85);       /* Optional: Darkens the colors slightly */
+        fill-opacity: 0.75 !important;
+        filter: brightness(0.85); 
       }
-
-      /* Keep labels 100% opaque so they don't get lost in the texture */
       text.territory-label {
         font-family: system-ui, -apple-system, sans-serif;
         font-weight: bold;
@@ -182,12 +169,9 @@ export async function captureMapImage(svgRoot = null) {
         fill-opacity: 1 !important; 
         opacity: 1 !important;
       }
-      
       ${extractedCSS}
     `;
     clonedSvg.insertBefore(styleEl, clonedSvg.firstChild);
-
-    // Note: The solid background rect block was removed here so the texture shows through.
 
     const svgString = new XMLSerializer().serializeToString(clonedSvg);
     const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
@@ -204,28 +188,45 @@ export async function captureMapImage(svgRoot = null) {
 
         // 3. Load and draw the rust texture on the canvas background
         const textureImg = new Image();
-        // IMPORTANT: Update this string to your actual texture path (e.g. '/images/rust.png')
+        textureImg.crossOrigin = 'anonymous'; // CRITICAL: Prevents Canvas Tainting
         textureImg.src = '/images/rust.jpg'; 
         
         textureImg.onload = () => {
-          // Fill canvas with the repeating rust texture
-          const pattern = ctx.createPattern(textureImg, 'repeat');
-          ctx.fillStyle = pattern;
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          
-          // Draw the transparent SVG map over the texture
-          ctx.drawImage(mapImg, 0, 0);
-          URL.revokeObjectURL(blobUrl);
-          resolve(canvas.toDataURL('image/png'));
+          try {
+            const pattern = ctx.createPattern(textureImg, 'repeat');
+            ctx.fillStyle = pattern;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.drawImage(mapImg, 0, 0);
+            URL.revokeObjectURL(blobUrl);
+            
+            // CRITICAL: Export as JPEG to shrink payload from ~5MB to ~400KB
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          } catch (err) {
+            console.warn('Texture tainted canvas, falling back to solid background:', err);
+            try {
+              // Fallback if texture fails CORS policy
+              ctx.fillStyle = '#1a202c';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(mapImg, 0, 0);
+              resolve(canvas.toDataURL('image/jpeg', 0.8));
+            } catch (fallbackErr) {
+              resolve(null); // Prevents infinite hang
+            }
+          }
         };
 
         textureImg.onerror = () => {
-          console.warn('Could not load rust texture, falling back to solid background.');
-          ctx.fillStyle = '#1a202c'; // Fallback dark color
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(mapImg, 0, 0);
-          URL.revokeObjectURL(blobUrl);
-          resolve(canvas.toDataURL('image/png'));
+          try {
+            console.warn('Could not load rust texture, falling back to solid background.');
+            ctx.fillStyle = '#1a202c';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(mapImg, 0, 0);
+            URL.revokeObjectURL(blobUrl);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          } catch (err) {
+            resolve(null);
+          }
         };
       };
 
@@ -239,7 +240,7 @@ export async function captureMapImage(svgRoot = null) {
     });
   } catch (e) {
     console.warn('Failed to capture map snapshot:', e);
-    return null;
+    return null; // Ensure we always resolve so the proposal can still send without an image
   }
 }
 
