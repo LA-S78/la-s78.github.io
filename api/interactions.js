@@ -75,6 +75,8 @@ export default async function handler(req, res) {
       type: InteractionResponseType.UPDATE_MESSAGE,
       data: {
         embeds: [originalEmbed],
+        // CRITICAL FIX: Pass the original attachments back so Discord doesn't un-link them and push them above the embed
+        attachments: interaction.message.attachments ? interaction.message.attachments.map(a => ({ id: a.id })) : [],
         components: [
           {
             type: 1,

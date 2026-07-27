@@ -252,12 +252,28 @@ export function togglePlannerMode(active, svgRoot = null) {
   isPlannerActive = active;
   const root = svgRoot || getSvgRoot();
 
+  // 1. Sync the Draft Button DOM state
+  const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
+  if (btnDraft) {
+    btnDraft.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btnDraft.classList.toggle('active', active);
+  }
+
   if (isPlannerActive) {
     draftState = JSON.parse(JSON.stringify(mapState));
     if (!draftState.territory_ownership) draftState.territory_ownership = {};
     currentColorMode = 'alliance';
   } else {
     draftState = null;
+    currentColorMode = 'level'; // 2. Reset the map color state
+    
+    // 3. Revert the Level/Alliance toggle buttons visually
+    const btnLevel = document.getElementById('btn-mode-level');
+    const btnAlliance = document.getElementById('btn-mode-alliance');
+    if (btnLevel && btnAlliance) {
+      btnLevel.classList.add('active');
+      btnAlliance.classList.remove('active');
+    }
   }
 
   if (root) {
@@ -404,19 +420,42 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
   const badgeEl = badge || document.getElementById('change-count-badge') || document.querySelector('.draft-indicator');
   
   if (!isPlannerActive) {
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.classList.add('hidden'); submitBtn.style.display = 'none'; }
-    if (badgeEl) badgeEl.textContent = '0';
+    if (submitBtn) { 
+      submitBtn.disabled = true; 
+      submitBtn.classList.add('hidden'); 
+      submitBtn.style.display = 'none'; 
+    }
+    if (badgeEl) {
+      badgeEl.textContent = '0';
+      badgeEl.classList.add('hidden');
+      badgeEl.style.display = 'none'; // CRITICAL: Actually hide the badge element
+    }
     return;
   }
 
   const payload = generateProposalPayload();
   const count = payload ? payload.totalChanges : 0;
 
-  if (badgeEl) badgeEl.textContent = String(count);
+  if (badgeEl) {
+    badgeEl.textContent = String(count);
+    if (count > 0) {
+      badgeEl.classList.remove('hidden');
+      badgeEl.style.display = 'inline-block';
+    } else {
+      badgeEl.classList.add('hidden');
+      badgeEl.style.display = 'none';
+    }
+  }
+
   if (submitBtn) {
     submitBtn.disabled = count === 0;
-    submitBtn.classList.remove('hidden');
-    submitBtn.style.display = 'inline-flex';
+    if (count > 0) {
+      submitBtn.classList.remove('hidden');
+      submitBtn.style.display = 'inline-flex';
+    } else {
+      submitBtn.classList.add('hidden');
+      submitBtn.style.display = 'none';
+    }
   }
 }
 
@@ -483,15 +522,8 @@ export function bindMapControls(svgRoot = null) {
     btnDraft.dataset.bound = 'true';
     btnDraft.addEventListener('click', (e) => {
       e.preventDefault();
-      const willBeActive = !isPlannerActive;
-      btnDraft.setAttribute('aria-pressed', willBeActive ? 'true' : 'false');
-      btnDraft.classList.toggle('active', willBeActive);
-      togglePlannerMode(willBeActive, svgRoot || getSvgRoot());
-      if (willBeActive && btnAlliance && btnLevel) {
-        btnAlliance.classList.add('active');
-        btnLevel.classList.remove('active');
-      }
-      updateProposalUI(btnSubmit, badge);
+      // Delegate all state switching and UI updates directly to togglePlannerMode
+      togglePlannerMode(!isPlannerActive, svgRoot || getSvgRoot());
     });
   }
 
