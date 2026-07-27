@@ -1,6 +1,6 @@
 import { verifyKey, InteractionType, InteractionResponseType } from 'discord-interactions';
 
-// Disable default Vercel body parsing so we can verify raw Discord signatures
+// Disable default Vercel body parsing so we can read the raw binary body required for Ed25519 verification
 export const config = {
   api: { bodyParser: false }
 };
@@ -27,19 +27,19 @@ export default async function handler(req, res) {
   const publicKey = process.env.DISCORD_PUBLIC_KEY;
 
   if (!publicKey) {
-    console.error('DISCORD_PUBLIC_KEY environment variable is missing in Vercel!');
+    console.error('DISCORD_PUBLIC_KEY is missing from Vercel environment variables!');
     return res.status(500).send('Server configuration error');
   }
 
-  // Cryptographically verify request came directly from Discord
-  const isValid = verifyKey(rawBody, signature, timestamp, publicKey);
+  // FIX: verifyKey is async! MUST await it so invalid signatures correctly return 401.
+  const isValid = await verifyKey(rawBody, signature, timestamp, publicKey);
   if (!isValid) {
     return res.status(401).send('Bad request signature');
   }
 
   const interaction = JSON.parse(rawBody.toString());
 
-  // 1. Respond to Discord PING (Required during Dev Portal URL verification)
+  // 1. Respond to Discord PING (Required for Dev Portal verification)
   if (interaction.type === InteractionType.PING) {
     return res.status(200).json({ type: InteractionResponseType.PONG });
   }
@@ -49,13 +49,12 @@ export default async function handler(req, res) {
     const { custom_id } = interaction.data;
     const userId = interaction.member?.user?.id || interaction.user?.id;
 
-    // Strict Permission Check: Only AUTHORIZED_USER_ID can approve/reject
     if (userId !== process.env.AUTHORIZED_USER_ID) {
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           content: '⛔ **Access Denied:** Only High Command can approve or reject strategy plans.',
-          flags: 64 // Ephemeral
+          flags: 64
         }
       });
     }
