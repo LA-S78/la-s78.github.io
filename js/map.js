@@ -386,10 +386,10 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
       throw new Error(`Server returned HTTP ${response.status}`);
     }
 
-    alert('Strategy plan successfully transmitted to Discord!');
+    alert('Map proposal successfully transmitted to Discord!');
     togglePlannerMode(false);
   } catch (err) {
-    console.error('Failed to submit strategy proposal:', err);
+    console.error('Failed to submit map proposal:', err);
     alert('Could not send proposal to Discord. Make sure the bot server is online.');
   } finally {
     if (submitBtn) {
