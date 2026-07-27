@@ -1486,10 +1486,8 @@ table.schedule-table tr.active-row td.active-col {
 
 .totals-banner {
   position: fixed;
-  /* Locks strictly above the fixed footer */
   bottom: calc(60px + env(safe-area-inset-bottom));
   left: 0;
-  bottom: 0;
   width: 100%;
   background-color: rgba(20, 16, 14, 0.95);
   border-top: 2px solid var(--accent-color);
@@ -1538,9 +1536,11 @@ svg.resource-icon {
   margin-right: 4px;
 }
 
-/* game map */
+/* ==========================================================================
+   GAME MAP & WAR ROOM INTERFACE
+   ========================================================================== */
 
-/*disable touch highlighting */
+/* Disable Touch Highlighting */
 #map-container,
 .game-map svg,
 .game-map path,
@@ -1553,19 +1553,21 @@ svg.resource-icon {
   -webkit-touch-callout: none;
   outline: none;
 }
-/* layout */
+
 svg g[inkscape\:label] path {
-    fill-opacity: 1 !important;
+  fill-opacity: 1 !important;
 }
+
 #map-container {
   position: relative;
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  background: rgba(13, 13, 13, 0.6);
+  background: radial-gradient(circle at center, rgba(22, 17, 14, 0.95) 0%, rgba(12, 9, 7, 0.98) 100%);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 15px;
+  padding: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 0, 0, 0.6);
 }
 
 /* Container & Responsive SVG Wrapper */
@@ -1578,27 +1580,18 @@ svg g[inkscape\:label] path {
   margin-bottom: 1rem;
 }
 
-/* Force any embedded SVG to fit within the content pane */
 .game-map svg,
 #game-map {
   width: 100% !important;
   height: auto !important;
-  max-height: 55vh; /* Caps height so intel pane remains visible on screen */
+  max-height: 55vh;
   display: block;
 }
 
-/* Ensure text overlays don't block mouse hover on underlying paths */
 .game-map text,
 #game-map text {
   pointer-events: none;
   user-select: none;
-}
-
-/* SVG Map Canvas */
-#game-map {
-  width: 100%;
-  height: auto;
-  display: block;
 }
 
 /* Interactive Territory Paths */
@@ -1624,13 +1617,7 @@ svg g[inkscape\:label] path {
   filter: brightness(1.4);
 }
 
-/* Alliance Ownership & State Overrides */
-#game-map[data-owner="VAL"] {
-  fill: rgba(255, 77, 77, 0.35); /* 35% opacity of alliance color */
-  stroke: #ff4d4d;
-  stroke-width: 2px;
-}
-
+/* Status Overrides */
 #game-map[data-status="contested"] {
   stroke-dasharray: 6;
   animation: war-pulse 1.5s infinite alternate;
@@ -1674,18 +1661,18 @@ svg g[inkscape\:label] path {
 }
 
 .normal-texture-overlay {
-    mix-blend-mode: overlay;
-    filter: grayscale(100%) contrast(140%);
-    opacity: 0.5;
-    pointer-events: none;
+  mix-blend-mode: overlay;
+  filter: grayscale(100%) contrast(140%);
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 svg #layer1 path {
-    filter: url(#territory-vignette);
-    transition: filter 0.2s ease, stroke 0.2s ease;
+  filter: url(#territory-vignette);
+  transition: filter 0.2s ease, stroke 0.2s ease;
 }
+
 svg #layer1 path:hover {
-  /* 1. Combine vignette + brightness boost */
   filter: url(#territory-vignette) 
           drop-shadow(0 0 2px rgba(var(--active-theme), 1))
           drop-shadow(0 0 4px rgba(var(--active-theme), 1))
@@ -1701,71 +1688,94 @@ svg #layer1 path:hover {
   dominant-baseline: central !important;
   alignment-baseline: central !important;
   font-weight: 600;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   transition: fill 0.3s ease;
-  
-  /* Outline contrast against dark backgrounds */
   paint-order: stroke fill;
-  stroke: rgba(0, 0, 0, 0.6);
+  stroke: rgba(0, 0, 0, 0.7);
   stroke-width: 4px;
   stroke-linejoin: round;
   pointer-events: none;
 }
 
-/* ==========================================================================
-   ALLIANCE MODE OVERRIDES
-   ========================================================================== */
-
-/* 1. Force text labels white to contrast with the colored territory background */
-.mode-alliance text.territory-label {
-  fill: #ffffff !important;
-  stroke: rgba(0, 0, 0, 0.8) !important; 
-}
-
-/* 2. Drop path opacity so background map textures show through. 
-      (Fill and Stroke colors are now managed directly by map.js) */
-.mode-alliance g[inkscape\:label] path {
-  fill-opacity: 0.35 !important; 
-  stroke-width: 2px !important;
-}
-
-/* 3. Enhance hover effect while in alliance mode */
-.mode-alliance g[inkscape\:label] path:hover {
-  fill-opacity: 0.6 !important;
-  stroke-width: 3px !important;
-}
-
-/* map readout */
+/* Territory Info Readout Strip */
 .info-card {
-  margin-top: 1rem;
-  padding: 1.25rem;
-  background: rgba(18, 24, 38, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: #f3f4f6;
-  transition: all 0.2s ease-in-out;
+  margin-top: 0.5rem;
+  padding: 0.45rem 0.8rem;
+  background: #0a0807;
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-color);
+  border-radius: 4px;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: opacity 0.2s ease;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
-/* Idle state when nothing is selected */
 .info-card.idle {
-  opacity: 0.6;
+  opacity: 0.5;
+  border-left-color: var(--text-muted);
 }
 
 .info-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+  margin-bottom: 0;
+}
+
+.info-header h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 0.88rem;
+  font-family: var(--font-headers);
+  color: #f3f0e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: none !important;
 }
 
 .badge {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: bold;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  background: var(--theme-color, #3b82f6);
-  color: #fff;
+  padding: 0.12rem 0.4rem;
+  border-radius: 3px;
+  background: var(--accent-color);
+  color: #0d0a08;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.info-details {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: #a89f91;
+  line-height: 1.2;
+}
+
+.info-item strong {
+  color: #d9ceb8;
+}
+
+.info-divider {
+  color: var(--border-color);
+  font-size: 0.65rem;
+  user-select: none;
+}
+
+@media (min-width: 640px) {
+  .info-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 0.85rem;
+  }
 }
 
 /* Compact Map Controls Bar */
@@ -1774,12 +1784,13 @@ svg #layer1 path:hover {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.4rem 0.6rem;
-  background: rgba(18, 22, 28, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.45rem 0.65rem;
+  background: #0f0c0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-color);
   border-radius: 6px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
   flex-wrap: wrap;
 }
 
@@ -1790,98 +1801,215 @@ svg #layer1 path:hover {
 }
 
 .control-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #a0aec0;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
 }
 
-/* Compact Segmented Control */
+/* Segmented Control Switcher */
 .segmented-control {
   display: flex;
-  background: rgba(0, 0, 0, 0.3);
+  background: #070504;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 4px;
   padding: 2px;
 }
 
 .toggle-btn {
-  padding: 0.25rem 0.6rem;
-  font-size: 0.8rem;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.78rem;
   border: none;
   background: transparent;
-  color: #a0aec0;
+  color: #8c827a;
   cursor: pointer;
   border-radius: 3px;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  font-weight: 500;
 }
 
 .toggle-btn:hover {
-  color: #ffffff;
+  color: #e2d7c9;
 }
 
 .toggle-btn.active {
-  background: #3182ce;
-  color: #fff;
-  font-weight: 600;
+  background: #2a221b;
+  color: var(--accent-color);
+  font-weight: bold;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(184, 151, 90, 0.4);
 }
 
-/* Draft Mode Button */
+/* Draft Mode Toggle Button */
 .draft-btn {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.8rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #e2e8f0;
+  gap: 0.45rem;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.78rem;
+  background: #14100d;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #c4b8aa;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.draft-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #718096;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+.draft-btn:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
 }
 
-/* Active Planner Mode visual feedback */
+.draft-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #52473e;
+  transition: all 0.2s ease;
+}
+
+/* Active Planner Mode (Theme Glow) */
 .draft-btn[aria-pressed="true"] {
-  background: rgba(221, 107, 32, 0.15);
-  border-color: #dd6b20;
-  color: #fbd38d;
+  background: rgba(217, 119, 6, 0.15);
+  border-color: #f59e0b;
+  color: #fef3c7;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
 }
 
 .draft-btn[aria-pressed="true"] .draft-indicator {
-  background-color: #dd6b20;
-  box-shadow: 0 0 8px #dd6b20;
+  background-color: rgba(var(--active-theme), 1);
+  box-shadow: 0 0 8px rgba(var(--active-theme), 1);
 }
 
 /* Submit Strategy Button */
 .submit-plan-btn {
-  padding: 0.25rem 0.60rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  background: #38a169;
-  color: white;
-  border: none;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: bold;
+  background: linear-gradient(180deg, #166534 0%, #14532d 100%);
+  border: 1px solid #22c55e;
+  color: #f0fdf4;
   border-radius: 4px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.submit-plan-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #15803d 0%, #166534 100%);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
 }
 
 .submit-plan-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
+  filter: grayscale(100%);
 }
 
 .submit-plan-btn.hidden {
   display: none;
+}
+
+/* ==========================================================================
+   FULLSCREEN STACKING CONTEXT BREAKOUT & LAYOUT
+   ========================================================================== */
+
+/* 1. Neutralize parent transforms & prevent background page scrolling */
+body.map-fullscreen-active {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+
+body.map-fullscreen-active main,
+body.map-fullscreen-active .content-pane,
+body.map-fullscreen-active turbo-frame {
+  transform: none !important;
+  will-change: auto !important;
+  animation: none !important;
+  filter: none !important;
+  perspective: none !important;
+  contain: none !important;
+}
+
+/* 2. Force the Map Container to 100% Viewport Bounds */
+#map-container.is-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: 100vw !important; /* OVERRIDES 960px / 860px LIMITS */
+  max-height: 100dvh !important;
+  z-index: 999999 !important;
+  
+  border-radius: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+  background: rgba(10, 8, 7, 0.98) !important;
+  backdrop-filter: blur(8px);
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  
+  /* Safe-area padding only for notch/home indicators, 0 on sides */
+  padding: max(10px, env(safe-area-inset-top)) 0 max(12px, env(safe-area-inset-bottom)) 0 !important;
+  overflow: hidden !important;
+}
+
+/* 3. Controls Header Grouping */
+#map-container.is-fullscreen .map-controls {
+  width: calc(100% - 16px) !important; 
+  max-width: 100% !important; /* Allow full span */
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+/* 4. Center & Fit the SVG Canvas (Forces True Mobile Screen Stretch) */
+#map-container.is-fullscreen .game-map {
+  flex: 0 1 auto !important; /* Keeps UI clustered */
+  align-self: stretch !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  
+  /* CRITICAL FIX: Changed from 100% to auto so it wraps the map tightly */
+  height: auto !important; 
+  
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  
+  overflow: auto !important; 
+  -webkit-overflow-scrolling: touch !important; 
+  
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#map-container.is-fullscreen .game-map svg {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  display: block !important;
+  margin: auto !important; 
+}
+
+/* 5. Bottom Readout Card Grouping */
+#map-container.is-fullscreen .info-card {
+  width: calc(100% - 16px) !important;
+  max-width: 100% !important; /* Allow full span */
+  margin: 0 !important;
+  flex: 0 0 auto !important;
 }
 
 /* ==========================================================================
@@ -2219,6 +2347,42 @@ svg #layer1 path:hover {
   }
   .total-label {
     font-size: 0.75rem;
+  }
+
+  /* ==========================================================================
+     FULLSCREEN WAR ROOM: DESKTOP / TABLET OVERRIDES
+     ========================================================================== */
+     
+  #map-container.is-fullscreen {
+    /* Revert to edge-to-edge layout with generous padding */
+    justify-content: space-between !important;
+    gap: 0 !important;
+    padding: 24px 32px !important;
+  }
+
+  #map-container.is-fullscreen .map-controls {
+    width: 100% !important; /* Reset from mobile calc() */
+    max-width: 1200px !important;
+    margin-bottom: 1.5rem !important; 
+  }
+
+  #map-container.is-fullscreen .game-map {
+    flex: 1 1 auto !important; /* CRITICAL FIX: Forces desktop map to grow and push UI to edges */
+    overflow: hidden !important; /* Disable scrollbars on desktop */
+    align-items: center !important; /* Restore standard centering */
+  }
+
+  #map-container.is-fullscreen .game-map svg {
+    /* On landscape monitors, constrain by height so the whole map fits */
+    width: auto !important;
+    height: 100% !important; 
+    max-width: 100% !important;
+  }
+
+  #map-container.is-fullscreen .info-card {
+    width: 100% !important; /* Reset from mobile calc() */
+    max-width: 1200px !important;
+    margin-top: 1.5rem !important; 
   }
 
   /* Desktop Atmospheric Tweaks */
