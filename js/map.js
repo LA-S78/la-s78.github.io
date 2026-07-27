@@ -1,5 +1,5 @@
 /**
- * map.js - Comprehensive Map Data, Parsing, Highlighting, Label, Planner, and Fullscreen Utilities
+ * map.js - Comprehensive Map Data, Parsing, Highlighting, Label, Planner, Fullscreen, and Image Snapshot Utilities
  */
 
 export const LABEL_OVERRIDES = {
@@ -107,6 +107,77 @@ export function getSvgRoot() {
 }
 
 // ==========================================================================
+// IMAGE CAPTURE UTILITY
+// ==========================================================================
+
+/**
+ * Converts the current SVG map state into a Base64 PNG image string.
+ */
+export async function captureMapImage(svgRoot = null) {
+  const root = svgRoot || getSvgRoot();
+  if (!root) return null;
+
+  try {
+    const viewBox = root.viewBox?.baseVal;
+    const width = viewBox?.width || root.clientWidth || 1000;
+    const height = viewBox?.height || root.clientHeight || 800;
+
+    // Clone root SVG to avoid modifying live DOM
+    const clonedSvg = root.cloneNode(true);
+    clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    clonedSvg.setAttribute('width', width);
+    clonedSvg.setAttribute('height', height);
+
+    // Add explicit styling to cloned SVG so labels render properly in canvas
+    const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    styleEl.textContent = `
+      text.territory-label {
+        font-family: system-ui, -apple-system, sans-serif;
+        font-weight: bold;
+        paint-order: stroke fill;
+        stroke: #000000;
+        stroke-width: 3px;
+        stroke-linejoin: round;
+      }
+    `;
+    clonedSvg.insertBefore(styleEl, clonedSvg.firstChild);
+
+    // Insert dark background layer so map looks crisp on Discord dark theme
+    const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bgRect.setAttribute('width', '100%');
+    bgRect.setAttribute('height', '100%');
+    bgRect.setAttribute('fill', '#1a202c');
+    clonedSvg.insertBefore(bgRect, styleEl.nextSibling);
+
+    const svgString = new XMLSerializer().serializeToString(clonedSvg);
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const blobUrl = URL.createObjectURL(svgBlob);
+
+    return await new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(blobUrl);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = (err) => {
+        console.warn('Map image render error:', err);
+        URL.revokeObjectURL(blobUrl);
+        resolve(null);
+      };
+      img.src = blobUrl;
+    });
+  } catch (e) {
+    console.warn('Failed to capture map snapshot:', e);
+    return null;
+  }
+}
+
+// ==========================================================================
 // PLANNER MODE & DISPATCH
 // ==========================================================================
 
@@ -200,7 +271,7 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
 }
 
 /**
- * Dispatches the active draft strategy payload to the Discord War Room API
+ * Dispatches the active draft strategy payload (with map snapshot) to the Discord War Room API
  */
 export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
   if (!isPlannerActive || !draftState) return;
@@ -224,10 +295,20 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
 
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Transmitting...';
+    submitBtn.textContent = 'Generating Preview...';
   }
 
   try {
+    // Capture live map snapshot as base64 PNG image
+    const mapImageData = await captureMapImage();
+    if (mapImageData) {
+      payload.image = mapImageData;
+    }
+
+    if (submitBtn) {
+      submitBtn.textContent = 'Transmitting...';
+    }
+
     const response = await fetch(apiEndpointUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -351,7 +432,6 @@ export function bindMapControls(svgRoot = null) {
     btnSubmit.dataset.bound = 'true';
     btnSubmit.addEventListener('click', (e) => {
       e.preventDefault();
-      // Replace path with your API endpoint URL if hosted on a separate bot port (e.g., 'http://localhost:3000/api/proposal')
       submitStrategyProposal('/api/proposal');
     });
   }

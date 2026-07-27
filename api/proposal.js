@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { submittedBy, notes, totalChanges, changes } = req.body;
+    const { submittedBy, notes, totalChanges, changes, image } = req.body;
 
     if (!changes || totalChanges === 0) {
       return res.status(400).json({ error: 'No changes provided.' });
@@ -30,6 +30,22 @@ export default async function handler(req, res) {
       )
       .setTimestamp();
 
+    const files = [];
+
+    // If a base64 image payload was sent, attach it to the embed
+    if (image) {
+      const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
+      const imageBuffer = Buffer.from(base64Data, 'base64');
+
+      files.push({
+        attachment: imageBuffer,
+        name: 'map_preview.png'
+      });
+
+      // Point embed image to the attached file
+      embed.setImage('attachment://map_preview.png');
+    }
+
     // Build Action Buttons
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
@@ -44,18 +60,18 @@ export default async function handler(req, res) {
         .setEmoji('❌')
     );
 
-    // Authenticate using your existing DISCORD_BOT_TOKEN
     const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
-    
-    // Send to your designated #war-room channel
+
+    // Post message with file attachment to the channel
     await rest.post(Routes.channelMessages(process.env.WAR_ROOM_CHANNEL_ID), {
       body: {
         embeds: [embed.toJSON()],
         components: [row.toJSON()]
-      }
+      },
+      files
     });
 
-    return res.status(200).json({ success: true, message: 'Proposal dispatched!' });
+    return res.status(200).json({ success: true, message: 'Proposal with map preview dispatched!' });
   } catch (error) {
     console.error('Failed to dispatch proposal:', error);
     return res.status(500).json({ error: 'Internal server error' });
