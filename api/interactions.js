@@ -63,26 +63,9 @@ export default async function handler(req, res) {
     // Deep clone the original embed so we don't accidentally send read-only properties
     const originalEmbed = JSON.parse(JSON.stringify(interaction.message.embeds[0]));
 
-    // CRITICAL FIX 1: Strip read-only properties (proxy_url, width, height) that cause Discord to nuke the image
-    if (originalEmbed.image) {
-      originalEmbed.image = { url: originalEmbed.image.url }; 
-    }
-    if (originalEmbed.thumbnail) {
-      originalEmbed.thumbnail = { url: originalEmbed.thumbnail.url };
-    }
-
-    // CRITICAL FIX 2: Explicitly re-bind the image using the internal attachment URI.
-    // This stops it from duplicating above the embed, and keeps it safely inside.
-    if (interaction.message.attachments && interaction.message.attachments.length > 0) {
-      const imgAttachment = interaction.message.attachments.find(a => 
-        a.filename.endsWith('.jpg') || a.filename.endsWith('.png') || a.content_type?.startsWith('image/')
-      );
-      
-      if (imgAttachment) {
-        if (!originalEmbed.image) originalEmbed.image = {};
-        originalEmbed.image.url = `attachment://${imgAttachment.filename}`;
-      }
-    }
+    // Clean out any lingering image references so Discord ignores them
+    delete originalEmbed.image;
+    delete originalEmbed.thumbnail;
 
     originalEmbed.color = isApproved ? 0x22c55e : 0xef4444;
     originalEmbed.fields[2] = {

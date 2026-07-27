@@ -39,7 +39,7 @@ export default async function handler(req, res) {
       name: 'strategy-blueprint.json'
     });
 
-    // If a base64 image payload was sent, attach it to the embed
+    // If a base64 image payload was sent, attach it as a loose file
     if (image) {
       const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
       const imageBuffer = Buffer.from(base64Data, 'base64');
@@ -48,9 +48,8 @@ export default async function handler(req, res) {
         data: imageBuffer,
         name: 'map_preview.jpg'
       });
-
-      // Point embed image to the attached file
-      embed.setImage('attachment://map_preview.jpg');
+      
+      // Removed embed.setImage() so it renders outside the embed
     }
 
     // Build Action Buttons
