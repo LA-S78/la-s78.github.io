@@ -111,7 +111,16 @@ export function getSvgRoot() {
 // ==========================================================================
 
 /**
- * Converts the current SVG map state into a Base64 PNG image string.
+ * Converts the current SVG map state into a Base64 PNG image string,
+ * preserving external CSS stylesheets and layout styling.
+ */
+// ==========================================================================
+// IMAGE CAPTURE UTILITY
+// ==========================================================================
+
+/**
+ * Converts the current SVG map state into a Base64 PNG image string,
+ * preserving external CSS stylesheets and painting a custom background texture.
  */
 export async function captureMapImage(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
@@ -128,48 +137,95 @@ export async function captureMapImage(svgRoot = null) {
     clonedSvg.setAttribute('width', width);
     clonedSvg.setAttribute('height', height);
 
-    // Add explicit styling to cloned SVG so labels render properly in canvas
+    // 1. Extract CSS rules from the document's stylesheets
+    let extractedCSS = '';
+    try {
+      for (const sheet of document.styleSheets) {
+        try {
+          if (sheet.href && !sheet.href.startsWith(window.location.origin)) continue;
+          
+          for (const rule of sheet.cssRules) {
+            const cssText = rule.cssText.toLowerCase();
+            if (cssText.includes('svg') || cssText.includes('path') || 
+                cssText.includes('polygon') || cssText.includes('rect') || 
+                cssText.includes('.game-map') || cssText.includes('.mode-alliance') ||
+                cssText.includes('text')) {
+              extractedCSS += rule.cssText + '\n';
+            }
+          }
+        } catch (err) {}
+      }
+    } catch (err) {
+      console.warn('Could not parse stylesheets for SVG capture', err);
+    }
+
+    // 2. Add explicit styling and the extracted CSS
     const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
     styleEl.textContent = `
+      path, polygon, rect { 
+        stroke-linejoin: round; 
+        vector-effect: non-scaling-stroke; 
+      }
       text.territory-label {
         font-family: system-ui, -apple-system, sans-serif;
         font-weight: bold;
         paint-order: stroke fill;
         stroke: #000000;
         stroke-width: 3px;
-        stroke-linejoin: round;
       }
+      ${extractedCSS}
     `;
     clonedSvg.insertBefore(styleEl, clonedSvg.firstChild);
 
-    // Insert dark background layer so map looks crisp on Discord dark theme
-    const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    bgRect.setAttribute('width', '100%');
-    bgRect.setAttribute('height', '100%');
-    bgRect.setAttribute('fill', '#1a202c');
-    clonedSvg.insertBefore(bgRect, styleEl.nextSibling);
+    // Note: The solid background rect block was removed here so the texture shows through.
 
     const svgString = new XMLSerializer().serializeToString(clonedSvg);
     const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
     const blobUrl = URL.createObjectURL(svgBlob);
 
     return await new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
+      const mapImg = new Image();
+      
+      mapImg.onload = () => {
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        URL.revokeObjectURL(blobUrl);
-        resolve(canvas.toDataURL('image/png'));
+
+        // 3. Load and draw the rust texture on the canvas background
+        const textureImg = new Image();
+        // IMPORTANT: Update this string to your actual texture path (e.g. '/images/rust.png')
+        textureImg.src = '/images/rust.jpg'; 
+        
+        textureImg.onload = () => {
+          // Fill canvas with the repeating rust texture
+          const pattern = ctx.createPattern(textureImg, 'repeat');
+          ctx.fillStyle = pattern;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          
+          // Draw the transparent SVG map over the texture
+          ctx.drawImage(mapImg, 0, 0);
+          URL.revokeObjectURL(blobUrl);
+          resolve(canvas.toDataURL('image/png'));
+        };
+
+        textureImg.onerror = () => {
+          console.warn('Could not load rust texture, falling back to solid background.');
+          ctx.fillStyle = '#1a202c'; // Fallback dark color
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(mapImg, 0, 0);
+          URL.revokeObjectURL(blobUrl);
+          resolve(canvas.toDataURL('image/png'));
+        };
       };
-      img.onerror = (err) => {
+
+      mapImg.onerror = (err) => {
         console.warn('Map image render error:', err);
         URL.revokeObjectURL(blobUrl);
         resolve(null);
       };
-      img.src = blobUrl;
+      
+      mapImg.src = blobUrl;
     });
   } catch (e) {
     console.warn('Failed to capture map snapshot:', e);
