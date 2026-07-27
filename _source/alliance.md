@@ -87,6 +87,10 @@ title: "NAP Territory"
 nav_id: "nap-territory"
 ---
 
+{% assign p = site.data[site.active_lang].content.alliance_page.nap_territory %}
+
+<h2>{{ p.title }}</h2>
+
 {% include map.html %}
 
 === collection--alliance--05 ===
