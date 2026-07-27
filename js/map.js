@@ -201,7 +201,7 @@ export async function captureMapImage(svgRoot = null) {
             URL.revokeObjectURL(blobUrl);
             
             // CRITICAL: Export as JPEG to shrink payload from ~5MB to ~400KB
-            resolve(canvas.toDataURL('image/jpeg', 0.8));
+            resolve(canvas.toDataURL('image/jpeg', 1));
           } catch (err) {
             console.warn('Texture tainted canvas, falling back to solid background:', err);
             try {
