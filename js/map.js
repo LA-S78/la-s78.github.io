@@ -282,12 +282,12 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
     return;
   }
 
-  const authorInput = prompt('Enter your Discord handle / Commander Name:', 'Commander');
+  const authorInput = prompt('Enter your Discord handle / IGN:', 'Doctor');
   if (authorInput === null) return; // User canceled
 
-  const notesInput = prompt('Add an optional strategy note for the War Room:', '') || '';
+  const notesInput = prompt('Add an optional note for the proposal:', '') || '';
 
-  payload.submittedBy = authorInput.trim() || 'Anonymous Commander';
+  payload.submittedBy = authorInput.trim() || 'Anonymous';
   payload.notes = notesInput.trim();
 
   const submitBtn = document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
@@ -319,7 +319,7 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
       throw new Error(`Server returned HTTP ${response.status}`);
     }
 
-    alert('Strategy plan successfully transmitted to Discord War Room!');
+    alert('Strategy plan successfully transmitted to Discord!');
     togglePlannerMode(false);
   } catch (err) {
     console.error('Failed to submit strategy proposal:', err);

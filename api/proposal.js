@@ -19,13 +19,13 @@ export default async function handler(req, res) {
 
     // Build the Discord Embed
     const embed = new EmbedBuilder()
-      .setTitle('⚔️ New Map Strategy Proposal')
+      .setTitle('⚔️ New Map Proposal')
       .setColor('#3b82f6')
-      .setDescription(notes ? `*"${notes}"*` : '*No additional strategy notes provided.*')
+      .setDescription(notes ? `*"${notes}"*` : '*No additional notes provided.*')
       .addFields(
         { name: 'Submitted By', value: `\`${submittedBy}\``, inline: true },
         { name: 'Total Shifts', value: `\`${totalChanges} territories\``, inline: true },
-        { name: 'Status', value: '⏳ **Pending High Command Review**', inline: false },
+        { name: 'Status', value: '⏳ **Pending Admin Review**', inline: false },
         { name: 'Proposed Shifts', value: changeList.length > 1024 ? changeList.substring(0, 1020) + '...' : changeList }
       )
       .setTimestamp();
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
       const imageBuffer = Buffer.from(base64Data, 'base64');
 
       files.push({
-        attachment: imageBuffer,
+        data: imageBuffer,
         name: 'map_preview.png'
       });
 
@@ -50,12 +50,12 @@ export default async function handler(req, res) {
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId('approve_proposal')
-        .setLabel('Approve Strategy')
+        .setLabel('Approve Map')
         .setStyle(ButtonStyle.Success)
         .setEmoji('✅'),
       new ButtonBuilder()
         .setCustomId('reject_proposal')
-        .setLabel('Reject Strategy')
+        .setLabel('Reject Map')
         .setStyle(ButtonStyle.Danger)
         .setEmoji('❌')
     );
