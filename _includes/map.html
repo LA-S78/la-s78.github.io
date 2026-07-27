@@ -1,29 +1,53 @@
-  <div id="map-container">
-  <!-- map controls -->
+<div id="map-container">
+  <!-- Map Bar Controls -->
   <div class="map-controls">
-      <span class="control-label">View Mode:</span>
+    <!-- Left: View Modes -->
+    <div class="control-group left">
+      <span class="control-label">View:</span>
       <div class="segmented-control">
-        <button id="btn-mode-level" class="toggle-btn active" data-mode="level">City Levels</button>
-        <button id="btn-mode-alliance" class="toggle-btn" data-mode="alliance">Alliance Colors</button>
+        <button id="btn-mode-level" class="toggle-btn active" data-mode="level">Levels</button>
+        <button id="btn-mode-alliance" class="toggle-btn" data-mode="alliance">Alliances</button>
       </div>
     </div>
-    <!-- 1. Scout Hover Tooltip -->
-    <div id="map-tooltip"></div>
-    <div class="game-map">
-    {% include map.svg %}
+
+    <!-- Right: Planner Mode & Submission -->
+    <div class="control-group right">
+      <button id="btn-toggle-draft" class="draft-btn" aria-pressed="false">
+        <span class="draft-indicator"></span>
+        <span class="draft-text">Planner Mode</span>
+      </button>
+      
+      <button id="btn-submit-proposal" class="submit-plan-btn hidden" disabled>
+        Submit Plan <span id="change-count-badge" class="badge">0</span>
+      </button>
+      <button id="btn-toggle-fullscreen" class="draft-btn" type="button" aria-label="Toggle Fullscreen" aria-pressed="false">
+        <span class="fullscreen-icon">⛶</span>
+        <span class="fullscreen-label">Fullscreen</span>
+    </button>
     </div>
-    <!-- Territory Detail Card -->
+  </div>
+
+  <!-- 1. Scout Hover Tooltip -->
+  <div id="map-tooltip"></div>
+
+  <div class="game-map">
+    {% include map.svg %}
+  </div>
+
+  <!-- Territory Detail Card -->
   <div id="territory-info-card" class="info-card idle">
     <div class="info-header">
       <span id="city-level-badge" class="badge">Level --</span>
       <h3 id="city-name">Hover over a territory</h3>
     </div>
-    <div class="info-body">
-      <p><strong>Owner:</strong> <span id="city-owner">Unclaimed</span></p>
-      <p><strong>Territory Buff:</strong> <span id="city-buff">None</span></p>
+    <div class="info-details">
+      <span class="info-item"><strong>Owner:</strong> <span id="city-owner">Unclaimed</span></span>
+      <span class="info-divider" aria-hidden="true">•</span>
+      <span class="info-item"><strong>Buff:</strong> <span id="city-buff">None</span></span>
     </div>
   </div>
-  </div>
+</div>
+
 <script id="map-data" type="application/json">
   {{ site.data.map_state | jsonify }}
 </script>
