@@ -1,5 +1,4 @@
 // api/accept-proposal.js
-import defaultState from '../public/map-state.json';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,19 +7,29 @@ export default async function handler(req, res) {
 
   const { changes, submittedBy, secretKey } = req.body;
 
-  if (secretKey !== process.env.DISCORD_BOT_TOKEN) {
+  // Authenticate request using DISCORD_BOT_TOKEN or secret
+  const authSecret = process.env.DISCORD_BOT_TOKEN || process.env.DISCORD_BOT_SECRET;
+  if (secretKey !== authSecret) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
   const GIST_ID = process.env.GIST_ID;
   const GIST_TOKEN = process.env.GIST_TOKEN;
 
+  if (!GIST_ID || !GIST_TOKEN) {
+    return res.status(500).json({ error: 'Gist environment variables missing on server' });
+  }
+
   try {
-    // 1. Get existing state from Gist
-    let currentState = defaultState;
-    const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-      headers: { Authorization: `Bearer ${GIST_TOKEN}` }
-    });
+    const headers = {
+      'Authorization': `Bearer ${GIST_TOKEN}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'WarRoom-Vercel-App'
+    };
+
+    // 1. Fetch current state from Gist
+    let currentState = { alliances: {}, territory_ownership: {} };
+    const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
 
     if (gistGetRes.ok) {
       const gistData = await gistGetRes.json();
@@ -47,7 +56,7 @@ export default async function handler(req, res) {
     const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: 'PATCH',
       headers: {
-        Authorization: `Bearer ${GIST_TOKEN}`,
+        ...headers,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -60,7 +69,7 @@ export default async function handler(req, res) {
       })
     });
 
-    if (!updateRes.ok) throw new Error('Failed to update Gist');
+    if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
 
     return res.status(200).json({ success: true, message: 'Live map updated in Gist!' });
   } catch (error) {

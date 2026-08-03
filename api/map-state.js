@@ -1,5 +1,11 @@
 // api/map-state.js
-import defaultState from '../public/map-state.json';
+
+const FALLBACK_STATE = {
+  alliances: {},
+  territory_ownership: {},
+  lastUpdated: new Date().toISOString(),
+  updatedBy: "Fallback"
+};
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -9,19 +15,26 @@ export default async function handler(req, res) {
   const GIST_ID = process.env.GIST_ID;
   const GIST_TOKEN = process.env.GIST_TOKEN;
 
+  // Fallback if environment variables aren't set yet
   if (!GIST_ID) {
-    return res.status(200).json(defaultState);
+    return res.status(200).json(FALLBACK_STATE);
   }
 
   try {
-    const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-      headers: {
-        Authorization: `Bearer ${GIST_TOKEN}`,
-        Accept: 'application/vnd.github.v3+json'
-      }
-    });
+    const headers = {
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'WarRoom-Vercel-App' // Required by GitHub API
+    };
 
-    if (!gistRes.ok) throw new Error(`GitHub returned ${gistRes.status}`);
+    if (GIST_TOKEN) {
+      headers['Authorization'] = `Bearer ${GIST_TOKEN}`;
+    }
+
+    const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
+
+    if (!gistRes.ok) {
+      throw new Error(`GitHub returned ${gistRes.status}: ${gistRes.statusText}`);
+    }
 
     const gistData = await gistRes.json();
     const mapStateContent = gistData.files['map-state.json']?.content;
@@ -31,8 +44,8 @@ export default async function handler(req, res) {
       return res.status(200).json(JSON.parse(mapStateContent));
     }
   } catch (err) {
-    console.warn('Failed to read map state from Gist, serving static fallback:', err.message);
+    console.error('Error fetching map state from Gist:', err.message);
   }
 
-  return res.status(200).json(defaultState);
+  return res.status(200).json(FALLBACK_STATE);
 }
