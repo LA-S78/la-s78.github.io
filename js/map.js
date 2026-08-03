@@ -75,11 +75,13 @@ export const COLOR_FALLBACKS = { unclaimed: '#2d3748', noAllianceColor: '#718096
 export function setDraftAllianceTags(tags = []) { DRAFT_ALLIANCE_TAGS = tags; }
 
 /**
- * Exact-case lookup preserves distinction between main/sub alliances (e.g. RÂVN vs RâvN vs râvn).
+ * EXACT-CASE LOOKUP
+ * Ensures we strictly distinguish between tags like "RÂVN" and "râvn" based on api/colors.js keys
  */
 export function getAllianceColor(tag) {
   if (!tag || tag === 'Unclaimed') return COLOR_FALLBACKS.unclaimed;
 
+  // Strict exact case match
   if (alliances[tag] && alliances[tag].color) {
     return alliances[tag].color;
   }
@@ -856,11 +858,11 @@ export function enableMapHighlighting(svgRoot = null) {
 // STATE MANAGEMENT & INITIALIZATION
 // ==========================================================================
 
-export function applyMapState(state, svgRoot = null) {
+export function applyMapState(state, svgRoot = null, autoRender = true) {
   if (!state) return;
   mapState = state;
   
-  // Safely merge alliances so live data doesn't wipe static fallback colors
+  // Safely merge static alliances in case live data is missing fields
   const staticAlliances = (typeof window !== 'undefined' && window.MAP_STATE && window.MAP_STATE.alliances) || {};
   alliances = { ...staticAlliances, ...(state.alliances || {}) };
 
@@ -879,7 +881,9 @@ export function applyMapState(state, svgRoot = null) {
   }
 
   const root = svgRoot || getSvgRoot();
-  if (root) {
+  
+  // Optional flag so we can delay coloring the map until Discord colors are fetched
+  if (root && autoRender) {
     setMapColorMode(currentColorMode, root);
   }
 }
@@ -887,30 +891,52 @@ export function applyMapState(state, svgRoot = null) {
 export function getCityById(id) { return cities.find(city => city.id === id); }
 
 /**
- * Asynchronously fetches live map state from Gist/Vercel serverless API with window fallback.
+ * Asynchronously fetches live map state AND Discord role colors concurrently.
  */
 export async function loadLiveMapState(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
 
   try {
-    const res = await fetch(`/api/map-state?t=${Date.now()}`, {
-      cache: 'no-store'
-    });
+    // Fire both fetch requests at the same time to save loading time
+    const [stateRes, colorsRes] = await Promise.all([
+      fetch(`/api/map-state?t=${Date.now()}`, { cache: 'no-store' }),
+      fetch('/api/colors') // Relies on the smart backend cache in colors.js
+    ]);
     
-    if (res.ok) {
-      const liveState = await res.json();
-      applyMapState(liveState, root);
+    // 1. Process the Map State (Territory Owners)
+    if (stateRes.ok) {
+      const liveState = await stateRes.json();
+      
+      // Apply the owners to the internal data structure, but tell it 
+      // NOT to color the map just yet (autoRender = false)
+      applyMapState(liveState, root, false);
     } else {
-      throw new Error(`Server returned HTTP ${res.status}`);
+      throw new Error(`Map State API returned HTTP ${stateRes.status}`);
     }
+
+    // 2. Process the Live Discord Colors
+    if (colorsRes.ok) {
+      const discordColors = await colorsRes.json();
+      
+      // Inject the true Discord hex codes directly into the alliances dictionary.
+      // E.g., if discordColors = { "HeKi": "#123456" }, this updates alliances["HeKi"].color
+      Object.entries(discordColors).forEach(([tag, hexColor]) => {
+        if (!alliances[tag]) alliances[tag] = { name: tag };
+        alliances[tag].color = hexColor;
+      });
+    }
+
   } catch (err) {
-    console.warn('Could not fetch live map state, falling back to static MAP_STATE:', err);
+    console.warn('Could not fetch live data, falling back to static MAP_STATE:', err);
     if (typeof window !== 'undefined' && window.MAP_STATE) {
-      applyMapState(window.MAP_STATE, root);
+      applyMapState(window.MAP_STATE, root, false);
     }
   } finally {
-    // --- FOUC FIX: Add the CSS class to fade the map in ---
     if (root) {
+      // 3. Now that both Owners AND Colors are loaded into memory, paint the map once
+      setMapColorMode(currentColorMode, root);
+      
+      // 4. FOUC FIX: Gracefully fade the map in only after everything is painted
       requestAnimationFrame(() => {
         root.classList.add('map-loaded');
       });
@@ -925,7 +951,7 @@ export function initializeMapData(svgRoot) {
   cities = extractCitiesFromSvg(root);
   
   if (typeof window !== 'undefined' && window.MAP_STATE) {
-    applyMapState(window.MAP_STATE, root);
+    applyMapState(window.MAP_STATE, root, false);
   } else {
     renderTerritoryLabels(root);
   }
@@ -933,7 +959,7 @@ export function initializeMapData(svgRoot) {
   bindMapControls(root);
   enableMapHighlighting(root);
 
-  // Asynchronously hydrate with live state
+  // Asynchronously hydrate with live state + live colors
   loadLiveMapState(root);
   
   return cities;
