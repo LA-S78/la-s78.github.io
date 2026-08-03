@@ -9,14 +9,14 @@ export default async function handler(req, res) {
   // 1. Collect all explicit alliance environment variables
   // Add any additional alliance tags here as needed
   const ALLIANCE_ENVS = {
-    WLO: process.env.DISCORD_WLO,
-    RAVN: process.env.DISCORD_RAVN,
-    MIA: process.env.DISCORD_MIA,
-    BOTS: process.env.DISCORD_BOTS,
-    SVN: process.env.DISCORD_SVN,
-    PHNX: process.env.DISCORD_PHNX,
-    HMDA: process.env.DISCORD_HMDA,
-    HeKi: process.env.DISCORD_HEKI,
+    "WLO": process.env.DISCORD_WLO,
+    "RÂVN": process.env.DISCORD_RAVN,
+    "MIA": process.env.DISCORD_MIA,
+    "BOTS": process.env.DISCORD_BOTS,
+    "SVN": process.env.DISCORD_SVN,
+    "PHNX": process.env.DISCORD_PHNX,
+    "HMDA": process.env.DISCORD_HMDA,
+    "HeKi": process.env.DISCORD_HEKI,
   };
 
   const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || process.env.BOT_TOKEN;
