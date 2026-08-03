@@ -895,7 +895,11 @@ export async function loadLiveMapState(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
 
   try {
-    const res = await fetch('/api/map-state');
+    // Cache-busting: Appends a unique timestamp and forces the browser to ignore local cache
+    const res = await fetch(`/api/map-state?t=${Date.now()}`, {
+      cache: 'no-store'
+    });
+    
     if (res.ok) {
       const liveState = await res.json();
       applyMapState(liveState, root);

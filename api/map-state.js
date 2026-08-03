@@ -40,7 +40,7 @@ export default async function handler(req, res) {
     const mapStateContent = gistData.files['map-state.json']?.content;
 
     if (mapStateContent) {
-      res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate=5');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
       return res.status(200).json(JSON.parse(mapStateContent));
     }
   } catch (err) {
