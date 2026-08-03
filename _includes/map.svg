@@ -30,7 +30,7 @@
        height="100%" 
        preserveAspectRatio="xMidYMid slice" />
   </pattern>
-  <filter id="territory-vignette" x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox">    <!-- 1. Blur the shape's alpha outline -->
+  <filter id="territory-vignette" filterUnits="objectBoundingBox">    <!-- 1. Blur the shape's alpha outline -->
     <feGaussianBlur in="SourceAlpha" stdDeviation="40" result="blur" />
     
     <!-- 2. Invert the blur alpha: 0% in center, 100% near edges -->
@@ -39,7 +39,7 @@
     </feComponentTransfer>
     
     <!-- 3. Create the dark shadow color -->
-    <feFlood flood-color="#000000" flood-opacity="0.5" result="shadowColor" />
+    <feFlood flood-color="#000000" flood-opacity="0.7" result="shadowColor" />
     
     <!-- 4. Apply shadow color to inverted blur -->
     <feComposite in="shadowColor" in2="invertedBlur" operator="in" result="vignette" />

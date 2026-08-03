@@ -881,10 +881,34 @@ export function applyMapState(state, svgRoot = null) {
   }
 
   const root = svgRoot || getSvgRoot();
-  if (root) renderTerritoryLabels(root);
+  if (root) {
+    setMapColorMode(currentColorMode, root);
+  }
 }
 
 export function getCityById(id) { return cities.find(city => city.id === id); }
+
+/**
+ * Asynchronously fetches live map state from Gist/Vercel serverless API with window fallback.
+ */
+export async function loadLiveMapState(svgRoot = null) {
+  const root = svgRoot || getSvgRoot();
+
+  try {
+    const res = await fetch('/api/map-state');
+    if (res.ok) {
+      const liveState = await res.json();
+      applyMapState(liveState, root);
+      return;
+    }
+  } catch (err) {
+    console.warn('Could not fetch live map state, falling back to static MAP_STATE:', err);
+  }
+
+  if (typeof window !== 'undefined' && window.MAP_STATE) {
+    applyMapState(window.MAP_STATE, root);
+  }
+}
 
 export function initializeMapData(svgRoot) {
   const root = svgRoot || getSvgRoot();
@@ -900,6 +924,9 @@ export function initializeMapData(svgRoot) {
   
   bindMapControls(root);
   enableMapHighlighting(root);
+
+  // Asynchronously hydrate with live state from /api/map-state
+  loadLiveMapState(root);
   
   return cities;
 }
