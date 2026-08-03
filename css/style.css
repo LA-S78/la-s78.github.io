@@ -1820,13 +1820,13 @@ svg #layer1 path:hover {
 .toggle-btn {
   padding: 0.25rem 0.65rem;
   font-size: 0.78rem;
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
   color: #8c827a;
   cursor: pointer;
   border-radius: 3px;
-  transition: all 0.15s ease;
-  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  font-weight: 600;
 }
 
 .toggle-btn:hover {
@@ -1836,9 +1836,9 @@ svg #layer1 path:hover {
 .toggle-btn.active {
   background: #2a221b;
   color: var(--accent-color);
-  font-weight: bold;
+  font-weight: 600;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(184, 151, 90, 0.4);
+  border-color: rgba(184, 151, 90, 0.4);
 }
 
 /* Draft Mode Toggle Button */

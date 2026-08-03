@@ -74,15 +74,23 @@ export const COLOR_FALLBACKS = { unclaimed: '#2d3748', noAllianceColor: '#718096
 
 export function setDraftAllianceTags(tags = []) { DRAFT_ALLIANCE_TAGS = tags; }
 
+/**
+ * Exact-case lookup preserves distinction between main/sub alliances (e.g. RÂVN vs RâvN vs râvn).
+ */
 export function getAllianceColor(tag) {
   if (!tag || tag === 'Unclaimed') return COLOR_FALLBACKS.unclaimed;
-  const alliance = alliances[tag];
-  if (alliance && alliance.color) return alliance.color;
 
+  // 1. Direct exact key match for explicit custom color
+  if (alliances[tag] && alliances[tag].color) {
+    return alliances[tag].color;
+  }
+
+  // 2. Exact match in ranked alliance tags for auto palette
   const rankedTags = getRankedAllianceTags();
   const rankIndex = rankedTags.indexOf(tag);
   if (rankIndex !== -1) return AUTO_ALLIANCE_PALETTE[rankIndex % AUTO_ALLIANCE_PALETTE.length];
 
+  // 3. Exact match in all alliances keys array
   const allTags = Object.keys(alliances);
   const tagIndex = allTags.indexOf(tag);
   if (tagIndex !== -1) return AUTO_ALLIANCE_PALETTE[tagIndex % AUTO_ALLIANCE_PALETTE.length];
@@ -110,10 +118,6 @@ export function getSvgRoot() {
 // IMAGE CAPTURE UTILITY
 // ==========================================================================
 
-/**
- * Converts the current SVG map state into a Base64 JPEG image string,
- * preserving external CSS stylesheets and painting a custom background texture.
- */
 export async function captureMapImage(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
   if (!root) return null;
@@ -123,13 +127,11 @@ export async function captureMapImage(svgRoot = null) {
     const width = viewBox?.width || root.clientWidth || 1000;
     const height = viewBox?.height || root.clientHeight || 800;
 
-    // Clone root SVG to avoid modifying live DOM
     const clonedSvg = root.cloneNode(true);
     clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     clonedSvg.setAttribute('width', width);
     clonedSvg.setAttribute('height', height);
 
-    // 1. Extract CSS rules from the document's stylesheets
     let extractedCSS = '';
     try {
       for (const sheet of document.styleSheets) {
@@ -151,7 +153,6 @@ export async function captureMapImage(svgRoot = null) {
       console.warn('Could not parse stylesheets for SVG capture', err);
     }
 
-    // 2. Add explicit styling and the extracted CSS
     const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
     styleEl.textContent = `
       path, polygon, rect, circle { 
@@ -186,9 +187,8 @@ export async function captureMapImage(svgRoot = null) {
         canvas.height = height;
         const ctx = canvas.getContext('2d');
 
-        // 3. Load and draw the rust texture on the canvas background
         const textureImg = new Image();
-        textureImg.crossOrigin = 'anonymous'; // CRITICAL: Prevents Canvas Tainting
+        textureImg.crossOrigin = 'anonymous';
         textureImg.src = '/images/rust.jpg'; 
         
         textureImg.onload = () => {
@@ -200,18 +200,16 @@ export async function captureMapImage(svgRoot = null) {
             ctx.drawImage(mapImg, 0, 0);
             URL.revokeObjectURL(blobUrl);
             
-            // CRITICAL: Export as JPEG to shrink payload from ~5MB to ~400KB
             resolve(canvas.toDataURL('image/jpeg', 1));
           } catch (err) {
             console.warn('Texture tainted canvas, falling back to solid background:', err);
             try {
-              // Fallback if texture fails CORS policy
               ctx.fillStyle = '#1a202c';
               ctx.fillRect(0, 0, canvas.width, canvas.height);
               ctx.drawImage(mapImg, 0, 0);
               resolve(canvas.toDataURL('image/jpeg', 0.8));
             } catch (fallbackErr) {
-              resolve(null); // Prevents infinite hang
+              resolve(null);
             }
           }
         };
@@ -240,7 +238,7 @@ export async function captureMapImage(svgRoot = null) {
     });
   } catch (e) {
     console.warn('Failed to capture map snapshot:', e);
-    return null; // Ensure we always resolve so the proposal can still send without an image
+    return null;
   }
 }
 
@@ -252,7 +250,6 @@ export function togglePlannerMode(active, svgRoot = null) {
   isPlannerActive = active;
   const root = svgRoot || getSvgRoot();
 
-  // 1. Sync the Draft Button DOM state
   const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
   if (btnDraft) {
     btnDraft.setAttribute('aria-pressed', active ? 'true' : 'false');
@@ -265,9 +262,8 @@ export function togglePlannerMode(active, svgRoot = null) {
     currentColorMode = 'alliance';
   } else {
     draftState = null;
-    currentColorMode = 'level'; // 2. Reset the map color state
+    currentColorMode = 'level';
     
-    // 3. Revert the Level/Alliance toggle buttons visually
     const btnLevel = document.getElementById('btn-mode-level');
     const btnAlliance = document.getElementById('btn-mode-alliance');
     if (btnLevel && btnAlliance) {
@@ -278,7 +274,6 @@ export function togglePlannerMode(active, svgRoot = null) {
 
   if (root) {
     setMapColorMode(currentColorMode, root);
-    renderTerritoryLabels(root);
   }
 
   updateProposalUI();
@@ -303,7 +298,6 @@ export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
   draftState.territory_ownership[cityId] = { owner: newOwnerTag || 'Unclaimed' };
 
   if (root) {
-    renderTerritoryLabels(root);
     setMapColorMode(currentColorMode, root);
   }
   updateProposalUI();
@@ -317,14 +311,6 @@ export function promptTerritoryAssignment(cityId, svgRoot = null) {
   const cycleList = ['Unclaimed', ...rankedTags];
 
   let currentIndex = cycleList.indexOf(currentOwner);
-
-  if (currentIndex === -1 && currentOwner && currentOwner !== 'Unclaimed') {
-    const normCurrent = String(currentOwner).normalize('NFC').trim().toLowerCase();
-    currentIndex = cycleList.findIndex(
-      tag => String(tag).normalize('NFC').trim().toLowerCase() === normCurrent
-    );
-  }
-
   if (currentIndex === -1) currentIndex = 0;
 
   const nextIndex = (currentIndex + 1) % cycleList.length;
@@ -353,9 +339,6 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
   };
 }
 
-/**
- * Dispatches the active draft strategy payload (with map snapshot) to the Discord War Room API
- */
 export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
   if (!isPlannerActive || !draftState) return;
 
@@ -366,7 +349,7 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
   }
 
   const authorInput = prompt('Enter your Discord handle / IGN:', 'Doctor');
-  if (authorInput === null) return; // User canceled
+  if (authorInput === null) return;
 
   const notesInput = prompt('Add an optional note for the proposal:', '') || '';
 
@@ -382,7 +365,6 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
   }
 
   try {
-    // Capture live map snapshot as base64 PNG image
     const mapImageData = await captureMapImage();
     if (mapImageData) {
       payload.image = mapImageData;
@@ -428,7 +410,7 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
     if (badgeEl) {
       badgeEl.textContent = '0';
       badgeEl.classList.add('hidden');
-      badgeEl.style.display = 'none'; // CRITICAL: Actually hide the badge element
+      badgeEl.style.display = 'none';
     }
     return;
   }
@@ -496,7 +478,6 @@ export function bindMapControls(svgRoot = null) {
   const btnAlliance = document.getElementById('btn-mode-alliance');
   const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
   const btnSubmit = document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
-  const badge = document.getElementById('change-count-badge') || document.querySelector('.draft-indicator');
   const mapContainer = document.getElementById('map-container');
   const btnFullscreen = document.getElementById('btn-toggle-fullscreen');
 
@@ -522,7 +503,6 @@ export function bindMapControls(svgRoot = null) {
     btnDraft.dataset.bound = 'true';
     btnDraft.addEventListener('click', (e) => {
       e.preventDefault();
-      // Delegate all state switching and UI updates directly to togglePlannerMode
       togglePlannerMode(!isPlannerActive, svgRoot || getSvgRoot());
     });
   }
@@ -654,6 +634,8 @@ export function setMapColorMode(mode, svgRoot) {
       } else { el.style.fill = LEVEL_COLORS[city.group]; el.style.stroke = ''; }
     }
   });
+
+  renderTerritoryLabels(root);
 }
 
 export function renderTerritoryLabels(svgRoot) {
@@ -706,8 +688,14 @@ export function renderTerritoryLabels(svgRoot) {
       textEl.setAttribute('data-owner', ownerTag);
       textEl.textContent = ownerTag;
 
-      const allianceColor = getAllianceColor(ownerTag);
-      textEl.style.fill = allianceColor !== COLOR_FALLBACKS.unclaimed ? allianceColor : '#ffffff';
+      if (currentColorMode === 'alliance') {
+        textEl.style.fill = '#ffffff';
+        textEl.style.stroke = '#000000';
+      } else {
+        const allianceColor = getAllianceColor(ownerTag);
+        textEl.style.fill = (allianceColor && allianceColor !== COLOR_FALLBACKS.unclaimed) ? allianceColor : '#ffffff';
+        textEl.style.stroke = '#000000';
+      }
 
       wrapperGroup.appendChild(textEl);
       labelGroup.appendChild(wrapperGroup);
