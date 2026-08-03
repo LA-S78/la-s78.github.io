@@ -80,17 +80,14 @@ export function setDraftAllianceTags(tags = []) { DRAFT_ALLIANCE_TAGS = tags; }
 export function getAllianceColor(tag) {
   if (!tag || tag === 'Unclaimed') return COLOR_FALLBACKS.unclaimed;
 
-  // 1. Direct exact key match for explicit custom color
   if (alliances[tag] && alliances[tag].color) {
     return alliances[tag].color;
   }
 
-  // 2. Exact match in ranked alliance tags for auto palette
   const rankedTags = getRankedAllianceTags();
   const rankIndex = rankedTags.indexOf(tag);
   if (rankIndex !== -1) return AUTO_ALLIANCE_PALETTE[rankIndex % AUTO_ALLIANCE_PALETTE.length];
 
-  // 3. Exact match in all alliances keys array
   const allTags = Object.keys(alliances);
   const tagIndex = allTags.indexOf(tag);
   if (tagIndex !== -1) return AUTO_ALLIANCE_PALETTE[tagIndex % AUTO_ALLIANCE_PALETTE.length];
@@ -703,6 +700,79 @@ export function renderTerritoryLabels(svgRoot) {
   });
 }
 
+// ==========================================================================
+// TOP-LEVEL OVERLAY HIGHLIGHTING
+// ==========================================================================
+
+function getHighlightOverlay(svgRoot) {
+  let overlay = svgRoot.querySelector('#highlight-overlay');
+  if (!overlay) {
+    overlay = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    overlay.setAttribute('id', 'highlight-overlay');
+    overlay.style.pointerEvents = 'none';
+
+    const labelGroup = svgRoot.querySelector('#territory-labels');
+    if (labelGroup && labelGroup.parentNode === svgRoot) {
+      svgRoot.insertBefore(overlay, labelGroup);
+    } else {
+      svgRoot.appendChild(overlay);
+    }
+  }
+  return overlay;
+}
+
+/**
+ * Projects a target territory clone into the high-Z overlay layer,
+ * bypassing SVG <use> inline style inheritance limits.
+ */
+export function setHighlightedTerritory(cityId, svgRoot = null) {
+  const root = svgRoot || getSvgRoot();
+  if (!root) return;
+
+  const overlay = getHighlightOverlay(root);
+
+  if (!cityId) {
+    overlay.innerHTML = '';
+    return;
+  }
+
+  const targetEl = root.getElementById(cityId);
+  if (!targetEl) {
+    overlay.innerHTML = '';
+    return;
+  }
+
+  overlay.innerHTML = '';
+
+  // Deep-clone the node to bypass SVG <use> shadow DOM style restrictions
+  const clone = targetEl.cloneNode(true);
+  clone.removeAttribute('id');
+
+  const computedStyle = window.getComputedStyle(targetEl);
+  const activeFill = targetEl.style.fill || computedStyle.fill || '#1a1512';
+
+  const subShapes = clone.querySelectorAll ? clone.querySelectorAll('path, polygon, rect, circle') : [];
+  const targets = subShapes.length > 0 ? Array.from(subShapes) : [clone];
+
+  targets.forEach(shape => {
+    shape.removeAttribute('id');
+    shape.style.fill = activeFill;
+    shape.style.stroke = 'rgba(var(--active-theme-vivid, 255, 255, 255), 1)';
+    shape.style.strokeWidth = '3px';
+    shape.style.paintOrder = 'stroke fill';
+    shape.style.vectorEffect = 'non-scaling-stroke';
+    shape.style.filter = 'drop-shadow(0 0 4px rgba(var(--active-theme), 1)) drop-shadow(0 0 10px rgba(var(--active-theme), 0.8)) brightness(1.25)';
+    shape.style.pointerEvents = 'none';
+  });
+
+  overlay.appendChild(clone);
+}
+
+export function bringTerritoryToFront(el, svgRoot = null) {
+  if (!el || !el.id) return;
+  setHighlightedTerritory(el.id, svgRoot);
+}
+
 export function enableMapHighlighting(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
   if (!root) return;
@@ -736,16 +806,17 @@ export function enableMapHighlighting(svgRoot = null) {
 
   const elements = root.querySelectorAll('path, rect, circle, polygon');
   elements.forEach(el => {
-    if (el.closest('#territory-labels') || el.closest('defs')) return;
+    if (el.closest('#territory-labels') || el.closest('#highlight-overlay') || el.closest('defs')) return;
 
     if (el.dataset.bound) return;
     el.dataset.bound = 'true';
 
     el.style.cursor = 'pointer';
+
     const getTargetCity = (e) => {
       let current = e.target;
       while (current && current !== root && current !== document.body) {
-        if (current.id && current.id !== 'layer1' && current.id !== 'territory-labels') {
+        if (current.id && current.id !== 'layer1' && current.id !== 'territory-labels' && current.id !== 'highlight-overlay') {
           const city = getCityById(current.id);
           if (city) return city;
         }
@@ -759,8 +830,18 @@ export function enableMapHighlighting(svgRoot = null) {
       return null;
     };
 
-    el.addEventListener('mouseenter', (e) => updateInfoCard(getTargetCity(e)));
-    el.addEventListener('mouseleave', () => updateInfoCard(null));
+    el.addEventListener('mouseenter', (e) => {
+      const city = getTargetCity(e);
+      const cityId = city ? city.id : (el.id || e.target.id);
+      
+      setHighlightedTerritory(cityId, root);
+      updateInfoCard(city);
+    });
+
+    el.addEventListener('mouseleave', () => {
+      setHighlightedTerritory(null, root);
+      updateInfoCard(null);
+    });
     
     el.addEventListener('click', (e) => {
       e.preventDefault(); e.stopPropagation();
@@ -769,6 +850,7 @@ export function enableMapHighlighting(svgRoot = null) {
 
       if (isPlannerActive && cityId) {
         promptTerritoryAssignment(cityId, root);
+        setHighlightedTerritory(cityId, root);
         updateInfoCard(getCityById(cityId));
       }
     });
