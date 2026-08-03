@@ -1586,6 +1586,12 @@ svg g[inkscape\:label] path {
   height: auto !important;
   max-height: 55vh;
   display: block;
+  opacity: 0;
+  transition: opacity 0.4s ease-in;
+}
+
+.game-map svg.map-loaded, #game-map.map-loaded {
+  opacity: 1;
 }
 
 .game-map text,

@@ -721,10 +721,6 @@ function getHighlightOverlay(svgRoot) {
   return overlay;
 }
 
-/**
- * Projects a target territory clone into the high-Z overlay layer,
- * bypassing SVG <use> inline style inheritance limits.
- */
 export function setHighlightedTerritory(cityId, svgRoot = null) {
   const root = svgRoot || getSvgRoot();
   if (!root) return;
@@ -744,7 +740,6 @@ export function setHighlightedTerritory(cityId, svgRoot = null) {
 
   overlay.innerHTML = '';
 
-  // Deep-clone the node to bypass SVG <use> shadow DOM style restrictions
   const clone = targetEl.cloneNode(true);
   clone.removeAttribute('id');
 
@@ -864,7 +859,10 @@ export function enableMapHighlighting(svgRoot = null) {
 export function applyMapState(state, svgRoot = null) {
   if (!state) return;
   mapState = state;
-  if (state.alliances) alliances = state.alliances;
+  
+  // Safely merge alliances so live data doesn't wipe static fallback colors
+  const staticAlliances = (typeof window !== 'undefined' && window.MAP_STATE && window.MAP_STATE.alliances) || {};
+  alliances = { ...staticAlliances, ...(state.alliances || {}) };
 
   if (state.territory_ownership) {
     Object.entries(state.territory_ownership).forEach(([cityId, data]) => {
@@ -895,7 +893,6 @@ export async function loadLiveMapState(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
 
   try {
-    // Cache-busting: Appends a unique timestamp and forces the browser to ignore local cache
     const res = await fetch(`/api/map-state?t=${Date.now()}`, {
       cache: 'no-store'
     });
@@ -903,14 +900,21 @@ export async function loadLiveMapState(svgRoot = null) {
     if (res.ok) {
       const liveState = await res.json();
       applyMapState(liveState, root);
-      return;
+    } else {
+      throw new Error(`Server returned HTTP ${res.status}`);
     }
   } catch (err) {
     console.warn('Could not fetch live map state, falling back to static MAP_STATE:', err);
-  }
-
-  if (typeof window !== 'undefined' && window.MAP_STATE) {
-    applyMapState(window.MAP_STATE, root);
+    if (typeof window !== 'undefined' && window.MAP_STATE) {
+      applyMapState(window.MAP_STATE, root);
+    }
+  } finally {
+    // --- FOUC FIX: Add the CSS class to fade the map in ---
+    if (root) {
+      requestAnimationFrame(() => {
+        root.classList.add('map-loaded');
+      });
+    }
   }
 }
 
@@ -929,7 +933,7 @@ export function initializeMapData(svgRoot) {
   bindMapControls(root);
   enableMapHighlighting(root);
 
-  // Asynchronously hydrate with live state from /api/map-state
+  // Asynchronously hydrate with live state
   loadLiveMapState(root);
   
   return cities;
