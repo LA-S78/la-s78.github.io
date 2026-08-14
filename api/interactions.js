@@ -17,7 +17,7 @@ async function getRawBody(req) {
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'ru', 'it', 'tr', 'uk'];
 
-// Hardcoded fallback rules in case Vercel filesystem cannot read _data
+// --- HARDCODED FALLBACK DATA ---
 const FALLBACK_RULES = [
   { title: "📜 1. Respect & Conduct", content: "**Zero Tolerance:** Bullying, racism, hate speech, harassment, or toxic behavior is prohibited.\n**Community Standard:** Treat all players with respect.\n**Reporting:** You **must** provide screenshots/proof when reporting a violation." },
   { title: "🛡️ 2. NAP Protection Rules", content: "The following actions against **NAP Alliances** and their **Academies** are prohibited:\n> 🚫 No Attacking\n> 🚫 No Scouting" },
@@ -30,6 +30,69 @@ const FALLBACK_RULES = [
   { title: "⚠️ 9. General Rule Violations", content: "*(Except #4)*\n**1st Offense:** Official Warning.\n**2nd Offense:** Removal from alliance or **NAP Blacklist**.\n**Blacklist Policy:** Prohibits joining any NAP-protected alliance." }
 ];
 
+const FALLBACK_SB_SCHEDULE = [
+  {
+    time: "00:00",
+    d1: { text: "Enhance Heroes", key: "enhance_heroes" },
+    d2: { text: "Build Territory", key: "build_territory" },
+    d3: { text: "Train Soldiers", key: "train_soldiers" },
+    d4: { text: "Tech Research", key: "tech_research" },
+    d5: { text: "Enhance Raven", key: "enhance_raven" },
+    d6: { text: "Enhance Heroes", key: "enhance_heroes" },
+    d7: { text: "Build Territory", key: "build_territory" }
+  },
+  {
+    time: "04:00",
+    d1: { text: "Build Territory", key: "build_territory" },
+    d2: { text: "Train Soldiers", key: "train_soldiers" },
+    d3: { text: "Tech Research", key: "tech_research" },
+    d4: { text: "Enhance Raven", key: "enhance_raven" },
+    d5: { text: "Enhance Heroes", key: "enhance_heroes" },
+    d6: { text: "Build Territory", key: "build_territory" },
+    d7: { text: "Train Soldiers", key: "train_soldiers" }
+  },
+  {
+    time: "08:00",
+    d1: { text: "Train Soldiers", key: "train_soldiers" },
+    d2: { text: "Tech Research", key: "tech_research" },
+    d3: { text: "Enhance Raven", key: "enhance_raven" },
+    d4: { text: "Enhance Heroes", key: "enhance_heroes" },
+    d5: { text: "Build Territory", key: "build_territory" },
+    d6: { text: "Train Soldiers", key: "train_soldiers" },
+    d7: { text: "Tech Research", key: "tech_research" }
+  },
+  {
+    time: "12:00",
+    d1: { text: "Tech Research", key: "tech_research" },
+    d2: { text: "Enhance Raven", key: "enhance_raven" },
+    d3: { text: "Enhance Heroes", key: "enhance_heroes" },
+    d4: { text: "Build Territory", key: "build_territory" },
+    d5: { text: "Train Soldiers", key: "train_soldiers" },
+    d6: { text: "Tech Research", key: "tech_research" },
+    d7: { text: "Enhance Raven", key: "enhance_raven" }
+  },
+  {
+    time: "16:00",
+    d1: { text: "Enhance Raven", key: "enhance_raven" },
+    d2: { text: "Enhance Heroes", key: "enhance_heroes" },
+    d3: { text: "Build Territory", key: "build_territory" },
+    d4: { text: "Train Soldiers", key: "train_soldiers" },
+    d5: { text: "Tech Research", key: "tech_research" },
+    d6: { text: "Enhance Raven", key: "enhance_raven" },
+    d7: { text: "Enhance Heroes", key: "enhance_heroes" }
+  },
+  {
+    time: "20:00",
+    d1: { text: "Enhance Heroes", key: "enhance_heroes" },
+    d2: { text: "Build Territory", key: "build_territory" },
+    d3: { text: "Train Soldiers", key: "train_soldiers" },
+    d4: { text: "Tech Research", key: "tech_research" },
+    d5: { text: "Enhance Raven", key: "enhance_raven" },
+    d6: { text: "Enhance Heroes", key: "enhance_heroes" },
+    d7: { text: "Build Territory", key: "build_territory" }
+  }
+];
+
 function resolveUserLocale(interaction, overrideLang) {
   if (overrideLang && SUPPORTED_LOCALES.includes(overrideLang)) return overrideLang;
   const userLocale = interaction?.locale || interaction?.guild_locale || 'en';
@@ -38,22 +101,32 @@ function resolveUserLocale(interaction, overrideLang) {
 }
 
 function getYamlData(lang, filename) {
-  try {
-    const filePath = path.join(process.cwd(), '_data', lang, filename);
-    if (fs.existsSync(filePath)) {
-      return yaml.load(fs.readFileSync(filePath, 'utf8'));
-    }
-  } catch (err) {
-    console.warn(`Could not read ${lang}/${filename}:`, err);
+  const possiblePaths = [
+    path.join(process.cwd(), '_data', lang, filename),
+    path.join(process.cwd(), '..', '_data', lang, filename)
+  ];
+
+  for (const filePath of possiblePaths) {
+    try {
+      if (fs.existsSync(filePath)) {
+        return yaml.load(fs.readFileSync(filePath, 'utf8'));
+      }
+    } catch (err) {}
   }
 
-  // Fallback to English file
-  try {
-    const fallbackPath = path.join(process.cwd(), '_data', 'en', filename);
-    if (fs.existsSync(fallbackPath)) {
-      return yaml.load(fs.readFileSync(fallbackPath, 'utf8'));
-    }
-  } catch (err) {}
+  // Fallback to English
+  const fallbackPaths = [
+    path.join(process.cwd(), '_data', 'en', filename),
+    path.join(process.cwd(), '..', '_data', 'en', filename)
+  ];
+
+  for (const fallbackPath of fallbackPaths) {
+    try {
+      if (fs.existsSync(fallbackPath)) {
+        return yaml.load(fs.readFileSync(fallbackPath, 'utf8'));
+      }
+    } catch (err) {}
+  }
 
   return null;
 }
@@ -120,7 +193,8 @@ export default async function handler(req, res) {
       const selectedDay = options?.find(opt => opt.name === 'day')?.value || defaultDay;
       const isToday = selectedDay === defaultDay;
 
-      const sbSchedule = getYamlData(lang, 'survival_battle.yml');
+      const loadedSchedule = getYamlData(lang, 'survival_battle.yml');
+      const sbSchedule = loadedSchedule || FALLBACK_SB_SCHEDULE;
       const slotHours = [0, 4, 8, 12, 16, 20]; // In-Game Hours (GT)
 
       let activeSlotIndex = 0;
@@ -134,10 +208,9 @@ export default async function handler(req, res) {
       const nextSlotIndex = (activeSlotIndex + 1) % 6;
       const dayKey = `d${selectedDay}`;
 
-      // Calculate the exact UNIX timestamp when the current 4-hour block ends
+      // Calculate UNIX timestamp when the current 4-hour block ends
       const nextSlotHourGT = (slotHours[activeSlotIndex] + 4) % 24;
       const nextSlotTime = new Date(now);
-      // In UTC, slot end hour is Game Time minus 2 hours
       const nextSlotUtcHour = (nextSlotHourGT - 2 + 24) % 24;
       nextSlotTime.setUTCHours(nextSlotUtcHour, 0, 0, 0);
       if (nextSlotUtcHour <= now.getUTCHours() && nextSlotHourGT <= gameHour) {
@@ -152,7 +225,7 @@ export default async function handler(req, res) {
 
       const timeline = slotHours.map((hour, idx) => {
         const timeStr = `${String(hour).padStart(2, '0')}:00 GT`;
-        const slotData = sbSchedule ? sbSchedule[idx]?.[dayKey] : null;
+        const slotData = sbSchedule[idx]?.[dayKey];
         const text = slotData?.text || `Event ${idx + 1}`;
         const emoji = EVENT_EMOJIS[slotData?.key] || '▫️';
 
@@ -268,7 +341,6 @@ export default async function handler(req, res) {
     if (name === 'map') {
       let mapImageUrl = `https://${host}/images/map-preview.jpg`;
 
-      // Try to read the last approved snapshot URL from map state
       try {
         const stateRes = await fetch(`https://${host}/api/map-state?t=${Date.now()}`);
         if (stateRes.ok) {
@@ -336,7 +408,7 @@ export default async function handler(req, res) {
             changes: changes,
             submittedBy: username,
             secretKey: process.env.DISCORD_BOT_TOKEN,
-            snapshotUrl: imageAttachment ? imageAttachment.url : null // Passes the Discord image URL to the Gist
+            snapshotUrl: imageAttachment ? imageAttachment.url : null
           })
         });
 
