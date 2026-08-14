@@ -104,8 +104,13 @@ jobs:
                   dest_file = "#{dest_dir}/#{filename}.yml"
                 end
                 
+                # --- CLEAN UP CONTENT ---
+                clean_content = block_content.gsub(/<\/?data[^>]*>/, "")
+                # Strip markdown code blocks if the AI accidentally included them
+                clean_content = clean_content.gsub(/^```[a-z]*\n?/i, "").gsub(/\n?```$/, "").strip
+                
                 FileUtils.mkdir_p(File.dirname(dest_file))
-                File.write(dest_file, block_content + "\n")
+                File.write(dest_file, clean_content + "\n")
                 puts "✅ Segregated -> #{dest_file}"
               end
             end
