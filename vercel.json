@@ -1,4 +1,5 @@
 {
+  "buildCommand": "node api/build-translations.js",
   "git": {
     "deploymentEnabled": {
       "main": true,
