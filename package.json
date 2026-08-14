@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "build": "node _scripts/build-translations.js"
+  },
   "dependencies": {
     "discord-interactions": "^4.4.0",
     "discord.js": "^14.27.0",

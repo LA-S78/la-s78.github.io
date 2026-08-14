@@ -1,14 +1,9 @@
 {
-  "buildCommand": "exit 0",
+  "buildCommand": "node _scripts/build-translations.js",
   "git": {
     "deploymentEnabled": {
       "main": true,
       "dev": true
-    }
-  },
-  "functions": {
-    "api/**/*.js": {
-      "includeFiles": "_data/**"
     }
   }
 }

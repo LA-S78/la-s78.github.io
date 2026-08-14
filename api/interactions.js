@@ -1,7 +1,5 @@
 import { verifyKey, InteractionType, InteractionResponseType } from 'discord-interactions';
-import fs from 'fs';
-import path from 'path';
-import yaml from 'js-yaml';
+import { RULES_DATA, SB_DATA } from './_generated_translations.js';
 
 export const config = {
   api: { bodyParser: false }
@@ -17,118 +15,11 @@ async function getRawBody(req) {
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'ru', 'it', 'tr', 'uk'];
 
-// --- HARDCODED FALLBACK DATA ---
-const FALLBACK_RULES = [
-  { title: "📜 1. Respect & Conduct", content: "**Zero Tolerance:** Bullying, racism, hate speech, harassment, or toxic behavior is prohibited.\n**Community Standard:** Treat all players with respect.\n**Reporting:** You **must** provide screenshots/proof when reporting a violation." },
-  { title: "🛡️ 2. NAP Protection Rules", content: "The following actions against **NAP Alliances** and their **Academies** are prohibited:\n> 🚫 No Attacking\n> 🚫 No Scouting" },
-  { title: "💎 3. Resource & Map Etiquette", content: "**Tile Safety:** Attacking resource tiles is strictly forbidden. Let players farm in peace." },
-  { title: "🚛 4. Caravans & Black Ops", content: "Governed by a **Three-Strike System**:\n**Strike 1 & 2:** Reported by R4s. Offender receives a formal warning.\n**Strike 3:** Results in a **Single Base Hit** penalty.\n**Conflict Resolution:** Victims may waive the strike report if an apology is accepted." },
-  { title: "🤝 5. Member Poaching", content: "**Active Recruiting:** Messaging members of other NAP alliances to switch is prohibited.\n**Player Autonomy:** Players are free to leave and join alliances voluntarily.\n**Applications:** 'Walk-in' applicants are allowed, provided no prior solicitation occurred." },
-  { title: "📉 6. Other Alliances", content: "**Fair Play:** Attacking smaller alliances because they are outside the NAP is forbidden." },
-  { title: "🕊️ 7. Diplomacy & Conflict Resolution", content: "1. **Private Resolution:** Handle disputes privately between Alliance Leads/Diplomats first.\n2. **Escalation:** If unresolved, bring to **NAP Leadership**.\n> ⚠️ Do not bring rule disputes, grievances, or drama into General or World Chat. Keep it to private channels." },
-  { title: "🎓 8. Academies", content: "**Designation:** Each NAP alliance may protect **one** academy.\n**Governance:** Academies entering the Top 10 do not receive voting rights while they maintain academy status." },
-  { title: "⚠️ 9. General Rule Violations", content: "*(Except #4)*\n**1st Offense:** Official Warning.\n**2nd Offense:** Removal from alliance or **NAP Blacklist**.\n**Blacklist Policy:** Prohibits joining any NAP-protected alliance." }
-];
-
-const FALLBACK_SB_SCHEDULE = [
-  {
-    time: "00:00",
-    d1: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d2: { text: "Build Territory", key: "build_territory" },
-    d3: { text: "Train Soldiers", key: "train_soldiers" },
-    d4: { text: "Tech Research", key: "tech_research" },
-    d5: { text: "Enhance Raven", key: "enhance_raven" },
-    d6: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d7: { text: "Build Territory", key: "build_territory" }
-  },
-  {
-    time: "04:00",
-    d1: { text: "Build Territory", key: "build_territory" },
-    d2: { text: "Train Soldiers", key: "train_soldiers" },
-    d3: { text: "Tech Research", key: "tech_research" },
-    d4: { text: "Enhance Raven", key: "enhance_raven" },
-    d5: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d6: { text: "Build Territory", key: "build_territory" },
-    d7: { text: "Train Soldiers", key: "train_soldiers" }
-  },
-  {
-    time: "08:00",
-    d1: { text: "Train Soldiers", key: "train_soldiers" },
-    d2: { text: "Tech Research", key: "tech_research" },
-    d3: { text: "Enhance Raven", key: "enhance_raven" },
-    d4: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d5: { text: "Build Territory", key: "build_territory" },
-    d6: { text: "Train Soldiers", key: "train_soldiers" },
-    d7: { text: "Tech Research", key: "tech_research" }
-  },
-  {
-    time: "12:00",
-    d1: { text: "Tech Research", key: "tech_research" },
-    d2: { text: "Enhance Raven", key: "enhance_raven" },
-    d3: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d4: { text: "Build Territory", key: "build_territory" },
-    d5: { text: "Train Soldiers", key: "train_soldiers" },
-    d6: { text: "Tech Research", key: "tech_research" },
-    d7: { text: "Enhance Raven", key: "enhance_raven" }
-  },
-  {
-    time: "16:00",
-    d1: { text: "Enhance Raven", key: "enhance_raven" },
-    d2: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d3: { text: "Build Territory", key: "build_territory" },
-    d4: { text: "Train Soldiers", key: "train_soldiers" },
-    d5: { text: "Tech Research", key: "tech_research" },
-    d6: { text: "Enhance Raven", key: "enhance_raven" },
-    d7: { text: "Enhance Heroes", key: "enhance_heroes" }
-  },
-  {
-    time: "20:00",
-    d1: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d2: { text: "Build Territory", key: "build_territory" },
-    d3: { text: "Train Soldiers", key: "train_soldiers" },
-    d4: { text: "Tech Research", key: "tech_research" },
-    d5: { text: "Enhance Raven", key: "enhance_raven" },
-    d6: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d7: { text: "Build Territory", key: "build_territory" }
-  }
-];
-
 function resolveUserLocale(interaction, overrideLang) {
   if (overrideLang && SUPPORTED_LOCALES.includes(overrideLang)) return overrideLang;
   const userLocale = interaction?.locale || interaction?.guild_locale || 'en';
   const baseCode = userLocale.split('-')[0].toLowerCase();
   return SUPPORTED_LOCALES.includes(baseCode) ? baseCode : 'en';
-}
-
-function getYamlData(lang, filename) {
-  const possiblePaths = [
-    path.join(process.cwd(), '_data', lang, filename),
-    path.join(process.cwd(), '..', '_data', lang, filename)
-  ];
-
-  for (const filePath of possiblePaths) {
-    try {
-      if (fs.existsSync(filePath)) {
-        return yaml.load(fs.readFileSync(filePath, 'utf8'));
-      }
-    } catch (err) {}
-  }
-
-  // Fallback to English
-  const fallbackPaths = [
-    path.join(process.cwd(), '_data', 'en', filename),
-    path.join(process.cwd(), '..', '_data', 'en', filename)
-  ];
-
-  for (const fallbackPath of fallbackPaths) {
-    try {
-      if (fs.existsSync(fallbackPath)) {
-        return yaml.load(fs.readFileSync(fallbackPath, 'utf8'));
-      }
-    } catch (err) {}
-  }
-
-  return null;
 }
 
 function cleanHtmlToMarkdown(htmlString) {
@@ -181,10 +72,10 @@ export default async function handler(req, res) {
     const providedLang = options?.find(opt => opt.name === 'lang')?.value;
     const lang = resolveUserLocale(interaction, providedLang);
 
-    // --- /sb COMMAND (CALIBRATED FOR UTC+2 GAME TIME) ---
+    // --- /sb COMMAND ---
     if (name === 'sb') {
       const now = new Date();
-      // Add 2 hours for UTC+2 Game Time
+      // UTC+2 Game Time offset
       const gameTime = new Date(now.getTime() + (2 * 60 * 60 * 1000));
       const gameHour = gameTime.getUTCHours();
       
@@ -193,9 +84,9 @@ export default async function handler(req, res) {
       const selectedDay = options?.find(opt => opt.name === 'day')?.value || defaultDay;
       const isToday = selectedDay === defaultDay;
 
-      const loadedSchedule = getYamlData(lang, 'survival_battle.yml');
-      const sbSchedule = loadedSchedule || FALLBACK_SB_SCHEDULE;
-      const slotHours = [0, 4, 8, 12, 16, 20]; // In-Game Hours (GT)
+      // Select localized or fallback English schedule from build-time imports
+      const sbSchedule = SB_DATA[lang] || SB_DATA['en'];
+      const slotHours = [0, 4, 8, 12, 16, 20]; // GT Hours
 
       let activeSlotIndex = 0;
       for (let i = slotHours.length - 1; i >= 0; i--) {
@@ -208,7 +99,7 @@ export default async function handler(req, res) {
       const nextSlotIndex = (activeSlotIndex + 1) % 6;
       const dayKey = `d${selectedDay}`;
 
-      // Calculate UNIX timestamp when the current 4-hour block ends
+      // Calculate relative countdown
       const nextSlotHourGT = (slotHours[activeSlotIndex] + 4) % 24;
       const nextSlotTime = new Date(now);
       const nextSlotUtcHour = (nextSlotHourGT - 2 + 24) % 24;
@@ -225,7 +116,7 @@ export default async function handler(req, res) {
 
       const timeline = slotHours.map((hour, idx) => {
         const timeStr = `${String(hour).padStart(2, '0')}:00 GT`;
-        const slotData = sbSchedule[idx]?.[dayKey];
+        const slotData = sbSchedule?.[idx]?.[dayKey];
         const text = slotData?.text || `Event ${idx + 1}`;
         const emoji = EVENT_EMOJIS[slotData?.key] || '▫️';
 
@@ -290,8 +181,7 @@ export default async function handler(req, res) {
     // --- /rules COMMAND ---
     if (name === 'rules') {
       const requestedRule = options?.find(opt => opt.name === 'rule')?.value;
-      const loadedRules = getYamlData(lang, 'rules.yml');
-      const rulesData = loadedRules || FALLBACK_RULES;
+      const rulesData = RULES_DATA[lang] || RULES_DATA['en'] || [];
       
       let title = "📜 Kingdom War & Alliance Rules";
       let fields = [];
