@@ -98,7 +98,6 @@ jobs:
                   lang, cat, name, step, pane = parts[1], parts[2], parts[3], parts[4], parts[5]
                   dest_dir = "collections/_guide_panes/#{lang}/#{cat}/#{name}"
                   dest_file = "#{dest_dir}/#{step}-#{pane}.md"
-                end
                 when "data"
                   lang, filename = parts[1].strip, parts[2].strip
                   dest_dir = "_data/#{lang}"
