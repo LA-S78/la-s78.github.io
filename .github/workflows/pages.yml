@@ -107,6 +107,13 @@ jobs:
 
       - name: Injecting UI navigation text
         run: bundle exec ruby _scripts/sync_ui_data.rb
+
+      - name: Generate Discord API Translations
+        run: |
+          echo "Installing js-yaml..."
+          npm install js-yaml
+          echo "Generating static translations file..."
+          node api/build-translations.js
           
       # --- COMPILING ENGINE (WITH COMPONENT-LEVEL DEV INJECTION RESTORED) ---
       - name: Compiling regional sites

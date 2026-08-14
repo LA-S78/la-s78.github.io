@@ -1,7 +1,4 @@
 {
-  "scripts": {
-    "vercel-build": "node api/build-translations.js"
-  },
   "dependencies": {
     "discord-interactions": "^4.4.0",
     "js-yaml": "^5.3.0"
