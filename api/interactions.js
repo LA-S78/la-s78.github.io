@@ -1,5 +1,5 @@
 import { verifyKey, InteractionType, InteractionResponseType } from 'discord-interactions';
-import { RULES_DATA, SB_DATA } from './_generated_translations.js';
+import { RULES_DATA, SB_DATA, BOT_DATA } from './_generated_translations.js';
 
 export const config = { api: { bodyParser: false } };
 
@@ -89,6 +89,36 @@ const FALLBACK_SB_SCHEDULE = [
   }
 ];
 
+const FALLBACK_BOT_STRINGS = {
+  sb: {
+    current_event: "Current Event",
+    next_event: "Next Event",
+    schedule_title: "Day {day} Schedule (Game Time / UTC+2)",
+    footer: "Times are Game Time (UTC+2). Relative countdowns adapt to your local time.",
+    button: "View Full Schedule"
+  },
+  rules: {
+    title: "📜 Server Rules",
+    description: "Official NAP & Kingdom Rules.",
+    not_found_title: "⚠️ Rule Not Found",
+    not_found_desc: "Rule {rule} does not exist. Choose between 1 and {max}.",
+    button: "Open Rules Page"
+  },
+  map: {
+    title: "🗺️ Last Asylum Territory Map",
+    description: "View real-time territory ownership.",
+    button: "Open Live Map"
+  },
+  admin: {
+    access_denied: "⛔ **Access Denied:** Only authorized leadership can approve or reject map proposals.",
+    failed_update: "Failed to update map:"
+  }
+};
+
+function getBotStrings(lang) {
+  return BOT_DATA?.[lang] || FALLBACK_BOT_STRINGS;
+}
+
 function resolveUserLocale(interaction, overrideLang) {
   if (overrideLang && SUPPORTED_LOCALES.includes(overrideLang)) return overrideLang;
   const userLocale = interaction?.locale || interaction?.guild_locale || 'en';
@@ -144,6 +174,7 @@ export default async function handler(req, res) {
     const host = req.headers.host || 'la-s78.app';
     const providedLang = options?.find(opt => opt.name === 'lang')?.value;
     const lang = resolveUserLocale(interaction, providedLang);
+    const t = getBotStrings(lang);
 
     // --- /sb COMMAND ---
     if (name === 'sb') {
@@ -156,7 +187,6 @@ export default async function handler(req, res) {
       const selectedDay = options?.find(opt => opt.name === 'day')?.value || defaultDay;
       const isToday = selectedDay === defaultDay;
 
-      // Extract translated schedule or fallback
       let sbSchedule = FALLBACK_SB_SCHEDULE;
       if (SB_DATA && SB_DATA[lang] && SB_DATA[lang].length > 0) {
         sbSchedule = SB_DATA[lang];
@@ -214,11 +244,12 @@ export default async function handler(req, res) {
       const fields = [];
       if (isToday) {
         fields.push(
-          { name: `🟢 Current Event (Ends <t:${nextTimestamp}:R>)`, value: `**${currentEventEmoji} ${currentEventText}**`, inline: false },
-          { name: `⏳ Next Event (<t:${nextTimestamp}:t>)`, value: `${nextEventEmoji} ${nextEventText}`, inline: false }
+          { name: `🟢 ${t.sb.current_event} (Ends <t:${nextTimestamp}:R>)`, value: `**${currentEventEmoji} ${currentEventText}**`, inline: false },
+          { name: `⏳ ${t.sb.next_event} (<t:${nextTimestamp}:t>)`, value: `${nextEventEmoji} ${nextEventText}`, inline: false }
         );
       }
-      fields.push({ name: `📋 Day ${selectedDay} Schedule (Game Time / UTC+2)`, value: timeline, inline: false });
+      const scheduleTitleText = t.sb.schedule_title.replace('{day}', selectedDay);
+      fields.push({ name: `📋 ${scheduleTitleText}`, value: timeline, inline: false });
 
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -227,12 +258,12 @@ export default async function handler(req, res) {
             title: `🏮 Survival Battle — Day ${selectedDay}`,
             color: 0xb29a20,
             fields: fields,
-            footer: { text: "Times are Game Time (UTC+2). Relative countdowns adapt to your local time." }
+            footer: { text: t.sb.footer }
           }],
           components: [{
             type: 1,
             components: [{
-              type: 2, style: 5, label: "View Full Schedule",
+              type: 2, style: 5, label: t.sb.button,
               url: `https://${host}/${lang}/guides/survival.html`
             }]
           }]
@@ -251,7 +282,7 @@ export default async function handler(req, res) {
         rulesData = RULES_DATA['en'];
       }
       
-      let title = "📜 Kingdom War & Alliance Rules";
+      let title = t.rules.title;
       let fields = [];
       let description = undefined;
 
@@ -263,11 +294,11 @@ export default async function handler(req, res) {
           title = targetRule.title;
           description = cleanHtmlToMarkdown(targetRule.content);
         } else {
-          title = "⚠️ Rule Not Found";
-          description = `Rule ${requestedRule} does not exist. Choose between 1 and ${rulesData.length}.`;
+          title = t.rules.not_found_title;
+          description = t.rules.not_found_desc.replace('{rule}', requestedRule).replace('{max}', rulesData.length);
         }
       } else {
-        description = "Official NAP & Kingdom Guidelines.";
+        description = t.rules.description;
         fields = rulesData.map(rule => ({
           name: rule.title,
           value: cleanHtmlToMarkdown(rule.content),
@@ -287,7 +318,7 @@ export default async function handler(req, res) {
           components: [{
             type: 1,
             components: [{
-              type: 2, style: 5, label: "Open Rules Page",
+              type: 2, style: 5, label: t.rules.button,
               url: `https://${host}/${lang}/rules.html`
             }]
           }]
@@ -295,11 +326,10 @@ export default async function handler(req, res) {
       });
     }
 
-// --- /map COMMAND ---
+    // --- /map COMMAND ---
     if (name === 'map') {
       let mapImageUrl = null;
 
-      // Try to fetch the latest live snapshot
       try {
         const stateRes = await fetch(`https://${host}/api/map-state?t=${Date.now()}`);
         if (stateRes.ok) {
@@ -310,14 +340,12 @@ export default async function handler(req, res) {
         }
       } catch (err) {}
 
-      // Build the base embed without an image
       const mapEmbed = {
-        title: "🗺️ Last Asylum War Room",
-        description: "View real-time territory ownership, alliance control, and draft battle proposals.",
+        title: t.map.title,
+        description: t.map.description,
         color: 0x0070f3
       };
 
-      // Only attach the image payload if a live snapshot was found
       if (mapImageUrl) {
         mapEmbed.image = { url: mapImageUrl };
       }
@@ -329,7 +357,7 @@ export default async function handler(req, res) {
           components: [{
             type: 1,
             components: [{
-              type: 2, style: 5, label: "Open Live War Map",
+              type: 2, style: 5, label: t.map.button,
               url: `https://${host}/${lang}/map.html`
             }]
           }]
@@ -343,12 +371,14 @@ export default async function handler(req, res) {
     const { custom_id } = interaction.data;
     const userId = interaction.member?.user?.id || interaction.user?.id;
     const username = interaction.member?.user?.username || interaction.user?.username || 'Discord Admin';
+    const lang = resolveUserLocale(interaction, null);
+    const t = getBotStrings(lang);
 
     if (userId !== process.env.AUTHORIZED_USER_ID) {
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: '⛔ **Access Denied:** Only authorized leadership can approve or reject map proposals.',
+          content: t.admin.access_denied,
           flags: 64
         }
       });
@@ -386,7 +416,7 @@ export default async function handler(req, res) {
         console.error('Interaction bridge failed:', error);
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: { content: `❌ **Failed to update map:** ${error.message}`, flags: 64 }
+          data: { content: `❌ **${t.admin.failed_update}** ${error.message}`, flags: 64 }
         });
       }
     }

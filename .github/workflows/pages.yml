@@ -59,6 +59,7 @@ jobs:
               
               normalized_content = content.gsub(/<guide\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)">/, "=== guide--\\1--\\2--\\3 ===")
               normalized_content = normalized_content.gsub(/<pane\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)"\s+section="([^"]+)">/, "=== pane--\\1--\\2--\\3--\\4 ===")
+              normalized_content = normalized_content.gsub(/<data\s+lang="([^"]+)"\s+name="([^"]+)">/, "=== data--\\1--\\2 ===")
               
               blocks = normalized_content.split(/^===\s*(\S+)\s*===/)
               next if blocks.length < 2
@@ -72,7 +73,8 @@ jobs:
                   /^page--\S+$/,
                   /^collection--\S+--\d+$/,
                   /^guide--\S+--\S+--\S+$/,
-                  /^pane--\S+--\S+--\S+--\S+--\S+$/
+                  /^pane--\S+--\S+--\S+--\S+--\S+$/,
+                  /^data--\S+--\S+$/
                 ]
                 unless allowed_patterns.any? { |p| header =~ p }
                   raise "CRITICAL BUILD ERROR: Invalid header [#{header}]. Check markers!"
@@ -96,6 +98,11 @@ jobs:
                   lang, cat, name, step, pane = parts[1], parts[2], parts[3], parts[4], parts[5]
                   dest_dir = "collections/_guide_panes/#{lang}/#{cat}/#{name}"
                   dest_file = "#{dest_dir}/#{step}-#{pane}.md"
+                end
+                when "data"
+                  lang, filename = parts[1].strip, parts[2].strip
+                  dest_dir = "_data/#{lang}"
+                  dest_file = "#{dest_dir}/#{filename}.yml"
                 end
                 
                 FileUtils.mkdir_p(File.dirname(dest_file))
