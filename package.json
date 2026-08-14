@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "node api/build-translations.js"
+    "prebuild": "node api/build-translations.js"
   },
   "dependencies": {
     "discord-interactions": "^4.4.0",
