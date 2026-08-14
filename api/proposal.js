@@ -1,4 +1,4 @@
-import { REST, Routes, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+// api/proposal.js
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -17,65 +17,85 @@ export default async function handler(req, res) {
       .map(([cityId, shift]) => `• **${cityId.replace(/_/g, ' ')}**: \`${shift.from}\` ➔ \`${shift.to}\``)
       .join('\n');
 
-    // Build the Discord Embed
-    const embed = new EmbedBuilder()
-      .setTitle('⚔️ New Map Proposal')
-      .setColor('#3b82f6')
-      .setDescription(notes ? `*"${notes}"*` : '*No additional notes provided.*')
-      .addFields(
+    // 1. Build the Raw Discord Embed JSON
+    const embed = {
+      title: '⚔️ New Map Proposal',
+      color: 0x3b82f6, // Discord uses integer colors instead of hex strings
+      description: notes ? `*"${notes}"*` : '*No additional notes provided.*',
+      fields: [
         { name: 'Submitted By', value: `\`${submittedBy}\``, inline: true },
         { name: 'Total Shifts', value: `\`${totalChanges} territories\``, inline: true },
         { name: 'Status', value: '⏳ **Pending Admin Review**', inline: false },
-        { name: 'Proposed Shifts', value: changeList.length > 1024 ? changeList.substring(0, 1020) + '...' : changeList }
-      )
-      .setTimestamp();
+        { 
+          name: 'Proposed Shifts', 
+          value: changeList.length > 1024 ? changeList.substring(0, 1020) + '...' : changeList 
+        }
+      ],
+      timestamp: new Date().toISOString()
+    };
 
-    const files = [];
+    // 2. Build the Raw Action Buttons JSON
+    const components = [
+      {
+        type: 1, // ActionRow
+        components: [
+          {
+            type: 2, // Button
+            custom_id: 'approve_proposal',
+            label: 'Approve Map',
+            style: 3, // Success (Green)
+            emoji: { name: '✅' }
+          },
+          {
+            type: 2, // Button
+            custom_id: 'reject_proposal',
+            label: 'Reject Map',
+            style: 4, // Danger (Red)
+            emoji: { name: '❌' }
+          }
+        ]
+      }
+    ];
 
-    // --- NEW: Attach the strategy changes as a downloadable JSON file ---
+    // 3. Construct the Multipart FormData Payload
+    const formData = new FormData();
+    
+    // Discord expects the JSON payload to be attached as a stringified field named "payload_json"
+    formData.append('payload_json', JSON.stringify({
+      embeds: [embed],
+      components: components
+    }));
+
+    // Attach the strategy blueprint as File 0
     const jsonString = JSON.stringify(changes, null, 2);
-    files.push({
-      data: Buffer.from(jsonString, 'utf-8'),
-      name: 'strategy-blueprint.json'
-    });
+    const jsonBlob = new Blob([jsonString], { type: 'application/json' });
+    formData.append('files[0]', jsonBlob, 'strategy-blueprint.json');
 
-    // If a base64 image payload was sent, attach it as a loose file
+    // Attach the map preview image as File 1
     if (image) {
       const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
       const imageBuffer = Buffer.from(base64Data, 'base64');
-
-      files.push({
-        data: imageBuffer,
-        name: 'map_preview.jpg'
-      });
-      
-      // Removed embed.setImage() so it renders outside the embed
+      const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });
+      formData.append('files[1]', imageBlob, 'map_preview.jpg');
     }
 
-    // Build Action Buttons
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId('approve_proposal')
-        .setLabel('Approve Map')
-        .setStyle(ButtonStyle.Success)
-        .setEmoji('✅'),
-      new ButtonBuilder()
-        .setCustomId('reject_proposal')
-        .setLabel('Reject Map')
-        .setStyle(ButtonStyle.Danger)
-        .setEmoji('❌')
-    );
+    // 4. Dispatch via Native Fetch
+    const channelId = process.env.WAR_ROOM_CHANNEL_ID;
+    const botToken = process.env.DISCORD_BOT_TOKEN;
 
-    const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
-
-    // Post message with file attachment to the channel
-    await rest.post(Routes.channelMessages(process.env.WAR_ROOM_CHANNEL_ID), {
-      body: {
-        embeds: [embed.toJSON()],
-        components: [row.toJSON()]
+    const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bot ${botToken}`
+        // Note: Do NOT manually set 'Content-Type' for FormData; fetch will automatically generate the multipart boundary.
       },
-      files
+      body: formData
     });
+
+    if (!discordRes.ok) {
+      const errorText = await discordRes.text();
+      throw new Error(`Discord API Error: ${discordRes.status} - ${errorText}`);
+    }
 
     return res.status(200).json({ success: true, message: 'Proposal with map preview dispatched!' });
   } catch (error) {
