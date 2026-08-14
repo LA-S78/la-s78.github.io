@@ -5,5 +5,10 @@
       "main": true,
       "dev": true
     }
+  },
+  "functions": {
+    "api/**/*.js": {
+      "includeFiles": "_data/**"
+    }
   }
 }
