@@ -906,9 +906,22 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
   if (!state) return;
   mapState = state;
   
-  // Safely merge static alliances in case live data is missing fields
   const staticAlliances = (typeof window !== 'undefined' && window.MAP_STATE && window.MAP_STATE.alliances) || {};
-  alliances = { ...staticAlliances, ...(state.alliances || {}) };
+  const liveAlliances = state.alliances || {};
+
+  // Deep-merge: preserve static ranks while allowing live color/data updates
+  const allTags = new Set([...Object.keys(staticAlliances), ...Object.keys(liveAlliances)]);
+  alliances = {};
+  allTags.forEach(tag => {
+    alliances[tag] = {
+      ...(staticAlliances[tag] || {}),
+      ...(liveAlliances[tag] || {})
+    };
+    // Ensure rank is preserved if live state omitted it
+    if (liveAlliances[tag]?.rank === undefined && staticAlliances[tag]?.rank !== undefined) {
+      alliances[tag].rank = staticAlliances[tag].rank;
+    }
+  });
 
   if (state.territory_ownership) {
     Object.entries(state.territory_ownership).forEach(([cityId, data]) => {
@@ -926,7 +939,6 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
 
   const root = svgRoot || getSvgRoot();
   
-  // Optional flag so we can delay coloring the map until Discord colors are fetched
   if (root && autoRender) {
     setMapColorMode(currentColorMode, root);
   }
