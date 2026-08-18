@@ -1,6 +1,42 @@
 # map_state.yml - Last Asylum: Plague Map State Data
 
 alliances:
+  WLO:
+    name: "WinterLordsOutcasts"
+    rank: 1
+    color: "#25bb00"
+  RÂVN:
+    name: "Nevrmore"
+    rank: 2
+    color: "#cece00"
+  MIA:
+    name: "MIASMA"
+    rank: 3
+    color: "#a400af"
+  BOTS:
+    name: "PossumCity"
+    rank: 4
+    color: "#0070f3"
+  SVN:
+    name: "DeadlySins"
+    rank: 5
+    color: "#e53e3e"
+  PHNX:
+    name: "FromtheAshes"
+    rank: 6
+    color: "#dd6b20"
+  HMDA:
+    name: "PRIDE"
+    rank: 7
+    color: "#d53f8c"
+  NAVI:
+    name: "NatusVincere"
+    rank: 8
+    color: "#319795"
+  HeKi:
+    name: "HELL'S KITTENS"
+    rank: 9
+    color: "#d69e2e"
   RâvN:
     name: "NvrMore Salamanders"
     rank: 10
