@@ -45,34 +45,24 @@ alliances:
     rank: 11
   HMX:
     name: "HeavenLight"
-    rank: 12
   KYIV:
     name: "KyivVibe"
-    rank: 13
   DKAD:
     name: "DarkAntidote"
-    rank: 14
   epa:
     name: "easypeasyalliance"
-    rank: 15
   play:
     name: "casualplay"
-    rank: 16
   ANWS:
     name: "AnimeWarriors"
-    rank: 17
   Биба:
     name: "БибаБоба"
-    rank: 18
   MoMa:
     name: "Moma:NewDominion"
-    rank: 19
   GerR:
     name: "Germanische Raben"
-    rank: 20
   HUH:
     name: "GRAVEYARD"
-    rank: 21
   râvn:
     name: "nevermore_mini"
 

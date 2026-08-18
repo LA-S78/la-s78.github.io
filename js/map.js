@@ -393,7 +393,22 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
   }
 
   try {
-    const mapImageData = await captureMapImage();
+    const root = getSvgRoot();
+    const prevMode = currentColorMode;
+
+    // 1. Temporarily switch SVG to Level View for the snapshot
+    if (root) {
+      setMapColorMode('level', root);
+    }
+
+    // 2. Capture the snapshot in Level mode
+    const mapImageData = await captureMapImage(root);
+
+    // 3. Immediately revert the UI back to Alliance / Planner mode
+    if (root) {
+      setMapColorMode(prevMode, root);
+    }
+
     if (mapImageData) {
       payload.image = mapImageData;
     }
