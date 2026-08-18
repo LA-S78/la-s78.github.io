@@ -17,11 +17,17 @@
         <span class="draft-text">Planner Mode</span>
       </button>
 
-      <!-- NEW: Alliance Override Input -->
-      <div id="planner-override-container" class="hidden" style="display: none; align-items: center; margin-left: 8px;">
-        <input type="text" id="alliance-override" placeholder="E.G. WLO" maxlength="6" autocomplete="off" 
-               title="Type a tag to override click assignments. Leave blank to cycle."
-               style="background: #1a202c; color: #fff; border: 1px solid #4a5568; border-radius: 4px; padding: 6px 8px; width: 75px; font-weight: bold; text-align: center; text-transform: uppercase;">
+      <!-- Alliance Override Input -->
+      <div id="planner-override-container" class="hidden">
+        <input 
+          type="text" 
+          id="alliance-override" 
+          placeholder="E.G. WLO" 
+          maxlength="6" 
+          autocomplete="off" 
+          spellcheck="false"
+          title="Type a tag to override click assignments. Leave blank to cycle." 
+        />
       </div>
       
       <button id="btn-submit-proposal" class="submit-plan-btn hidden" disabled>

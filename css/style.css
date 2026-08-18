@@ -1888,6 +1888,43 @@ svg #layer1 path:hover {
   box-shadow: 0 0 8px rgba(var(--active-theme), 1);
 }
 
+/* Planner Alliance Override Input */
+#planner-override-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+#planner-override-container.hidden {
+  display: none !important;
+}
+
+#alliance-override {
+  background-color: #070504;
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  width: 78px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+#alliance-override::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+#alliance-override:focus {
+  background-color: rgba(20, 16, 14, 0.95);
+  border-color: var(--accent-color);
+  color: #ffffff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(184, 151, 90, 0.3);
+}
+
 /* Submit Strategy Button */
 .submit-plan-btn {
   padding: 0.25rem 0.65rem;
