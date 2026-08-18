@@ -255,6 +255,20 @@ export function togglePlannerMode(active, svgRoot = null) {
     btnDraft.classList.toggle('active', active);
   }
 
+  // Toggle the Override Text Box Visibility
+  const overrideContainer = document.getElementById('planner-override-container');
+  if (overrideContainer) {
+    if (active) {
+      overrideContainer.classList.remove('hidden');
+      overrideContainer.style.display = 'inline-flex';
+    } else {
+      overrideContainer.classList.add('hidden');
+      overrideContainer.style.display = 'none';
+      const input = document.getElementById('alliance-override');
+      if (input) input.value = ''; // Automatically clear the text box when exiting
+    }
+  }
+
   if (isPlannerActive) {
     draftState = JSON.parse(JSON.stringify(mapState));
     if (!draftState.territory_ownership) draftState.territory_ownership = {};
@@ -304,6 +318,21 @@ export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
 
 export function promptTerritoryAssignment(cityId, svgRoot = null) {
   const root = svgRoot || getSvgRoot();
+  
+  // Check for Custom Text Override
+  const overrideInput = document.getElementById('alliance-override');
+  if (overrideInput && overrideInput.value.trim() !== '') {
+    let customOwner = overrideInput.value.trim();
+    
+    // Smart Case Matching: Find exact case if it exists in data (e.g. user types "heki" -> assigns "HeKi")
+    const existingTag = Object.keys(alliances).find(tag => tag.toLowerCase() === customOwner.toLowerCase());
+    customOwner = existingTag ? existingTag : customOwner.toUpperCase();
+
+    setDraftTerritoryOwner(cityId, customOwner, root);
+    return; // Exit early so it doesn't cycle!
+  }
+
+  // ORIGINAL CYCLING LOGIC (Runs only if text box is empty)
   const currentOwner = getCityOwner(cityId);
   const rankedTags = getRankedAllianceTags();
   
