@@ -59,6 +59,7 @@ jobs:
               
               normalized_content = content.gsub(/<guide\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)">/, "=== guide--\\1--\\2--\\3 ===")
               normalized_content = normalized_content.gsub(/<pane\s+lang="([^"]+)"\s+category="([^"]+)"\s+name="([^"]+)"\s+section="([^"]+)">/, "=== pane--\\1--\\2--\\3--\\4 ===")
+              normalized_content = normalized_content.gsub(/<data\s+lang="([^"]+)"\s+name="([^"]+)">/, "=== data--\\1--\\2 ===")
               
               blocks = normalized_content.split(/^===\s*(\S+)\s*===/)
               next if blocks.length < 2
@@ -72,7 +73,8 @@ jobs:
                   /^page--\S+$/,
                   /^collection--\S+--\d+$/,
                   /^guide--\S+--\S+--\S+$/,
-                  /^pane--\S+--\S+--\S+--\S+--\S+$/
+                  /^pane--\S+--\S+--\S+--\S+--\S+$/,
+                  /^data--\S+--\S+$/
                 ]
                 unless allowed_patterns.any? { |p| header =~ p }
                   raise "CRITICAL BUILD ERROR: Invalid header [#{header}]. Check markers!"
@@ -96,10 +98,19 @@ jobs:
                   lang, cat, name, step, pane = parts[1], parts[2], parts[3], parts[4], parts[5]
                   dest_dir = "collections/_guide_panes/#{lang}/#{cat}/#{name}"
                   dest_file = "#{dest_dir}/#{step}-#{pane}.md"
+                when "data"
+                  lang, filename = parts[1].strip, parts[2].strip
+                  dest_dir = "_data/#{lang}"
+                  dest_file = "#{dest_dir}/#{filename}.yml"
                 end
                 
+                # --- CLEAN UP CONTENT ---
+                clean_content = block_content.gsub(/<\/?data[^>]*>/, "")
+                # Strip markdown code blocks if the AI accidentally included them
+                clean_content = clean_content.gsub(/^```[a-z]*\n?/i, "").gsub(/\n?```$/, "").strip
+                
                 FileUtils.mkdir_p(File.dirname(dest_file))
-                File.write(dest_file, block_content + "\n")
+                File.write(dest_file, clean_content + "\n")
                 puts "✅ Segregated -> #{dest_file}"
               end
             end
@@ -107,6 +118,13 @@ jobs:
 
       - name: Injecting UI navigation text
         run: bundle exec ruby _scripts/sync_ui_data.rb
+
+      - name: Generate Discord API Translations
+        run: |
+          echo "Installing js-yaml..."
+          npm install js-yaml
+          echo "Generating static translations file..."
+          node api/build-translations.js
           
       # --- COMPILING ENGINE (WITH COMPONENT-LEVEL DEV INJECTION RESTORED) ---
       - name: Compiling regional sites

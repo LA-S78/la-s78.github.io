@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { changes, submittedBy, secretKey } = req.body;
+  const { changes, submittedBy, secretKey, snapshotUrl } = req.body;
 
   // Authenticate request using DISCORD_BOT_TOKEN or secret
   const authSecret = process.env.DISCORD_BOT_TOKEN || process.env.DISCORD_BOT_SECRET;
@@ -42,12 +42,19 @@ export default async function handler(req, res) {
     }
 
     // 2. Apply proposal changes
-    Object.entries(changes).forEach(([cityId, change]) => {
-      currentState.territory_ownership[cityId] = {
-        owner: change.to,
-        updatedAt: new Date().toISOString()
-      };
-    });
+    if (changes && typeof changes === 'object') {
+      Object.entries(changes).forEach(([cityId, change]) => {
+        currentState.territory_ownership[cityId] = {
+          owner: change.to,
+          updatedAt: new Date().toISOString()
+        };
+      });
+    }
+
+    // Persist the latest approved map snapshot image URL
+    if (snapshotUrl) {
+      currentState.lastSnapshotUrl = snapshotUrl;
+    }
 
     currentState.lastUpdated = new Date().toISOString();
     currentState.updatedBy = submittedBy || 'Discord Admin';

@@ -255,6 +255,20 @@ export function togglePlannerMode(active, svgRoot = null) {
     btnDraft.classList.toggle('active', active);
   }
 
+  // Toggle the Override Text Box Visibility
+  const overrideContainer = document.getElementById('planner-override-container');
+  if (overrideContainer) {
+    if (active) {
+      overrideContainer.classList.remove('hidden');
+      overrideContainer.style.display = 'inline-flex';
+    } else {
+      overrideContainer.classList.add('hidden');
+      overrideContainer.style.display = 'none';
+      const input = document.getElementById('alliance-override');
+      if (input) input.value = ''; // Automatically clear the text box when exiting
+    }
+  }
+
   if (isPlannerActive) {
     draftState = JSON.parse(JSON.stringify(mapState));
     if (!draftState.territory_ownership) draftState.territory_ownership = {};
@@ -304,6 +318,21 @@ export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
 
 export function promptTerritoryAssignment(cityId, svgRoot = null) {
   const root = svgRoot || getSvgRoot();
+  
+  // Check for Custom Text Override
+  const overrideInput = document.getElementById('alliance-override');
+  if (overrideInput && overrideInput.value.trim() !== '') {
+    let customOwner = overrideInput.value.trim();
+    
+    // Smart Case Matching: Find exact case if it exists in data (e.g. user types "heki" -> assigns "HeKi")
+    const existingTag = Object.keys(alliances).find(tag => tag.toLowerCase() === customOwner.toLowerCase());
+    customOwner = existingTag ? existingTag : customOwner.toUpperCase();
+
+    setDraftTerritoryOwner(cityId, customOwner, root);
+    return; // Exit early so it doesn't cycle!
+  }
+
+  // ORIGINAL CYCLING LOGIC (Runs only if text box is empty)
   const currentOwner = getCityOwner(cityId);
   const rankedTags = getRankedAllianceTags();
   
@@ -364,7 +393,22 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
   }
 
   try {
-    const mapImageData = await captureMapImage();
+    const root = getSvgRoot();
+    const prevMode = currentColorMode;
+
+    // 1. Temporarily switch SVG to Level View for the snapshot
+    if (root) {
+      setMapColorMode('level', root);
+    }
+
+    // 2. Capture the snapshot in Level mode
+    const mapImageData = await captureMapImage(root);
+
+    // 3. Immediately revert the UI back to Alliance / Planner mode
+    if (root) {
+      setMapColorMode(prevMode, root);
+    }
+
     if (mapImageData) {
       payload.image = mapImageData;
     }
@@ -862,9 +906,22 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
   if (!state) return;
   mapState = state;
   
-  // Safely merge static alliances in case live data is missing fields
   const staticAlliances = (typeof window !== 'undefined' && window.MAP_STATE && window.MAP_STATE.alliances) || {};
-  alliances = { ...staticAlliances, ...(state.alliances || {}) };
+  const liveAlliances = state.alliances || {};
+
+  // Deep-merge: preserve static ranks while allowing live color/data updates
+  const allTags = new Set([...Object.keys(staticAlliances), ...Object.keys(liveAlliances)]);
+  alliances = {};
+  allTags.forEach(tag => {
+    alliances[tag] = {
+      ...(staticAlliances[tag] || {}),
+      ...(liveAlliances[tag] || {})
+    };
+    // Ensure rank is preserved if live state omitted it
+    if (liveAlliances[tag]?.rank === undefined && staticAlliances[tag]?.rank !== undefined) {
+      alliances[tag].rank = staticAlliances[tag].rank;
+    }
+  });
 
   if (state.territory_ownership) {
     Object.entries(state.territory_ownership).forEach(([cityId, data]) => {
@@ -882,7 +939,6 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
 
   const root = svgRoot || getSvgRoot();
   
-  // Optional flag so we can delay coloring the map until Discord colors are fetched
   if (root && autoRender) {
     setMapColorMode(currentColorMode, root);
   }

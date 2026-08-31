@@ -39,8 +39,10 @@ alliances:
     color: "#d69e2e"
   RâvN:
     name: "NvrMore Salamanders"
+    rank: 10
   Ghst:
     name: "Ghost"
+    rank: 11
   HMX:
     name: "HeavenLight"
   KYIV:
@@ -49,14 +51,18 @@ alliances:
     name: "DarkAntidote"
   epa:
     name: "easypeasyalliance"
+  play:
+    name: "casualplay"
+  ANWS:
+    name: "AnimeWarriors"
   Биба:
     name: "БибаБоба"
+  MoMa:
+    name: "Moma:NewDominion"
   GerR:
     name: "Germanische Raben"
   HUH:
     name: "GRAVEYARD"
-  BOOZ:
-    name: "drunkdoctors"
   râvn:
     name: "nevermore_mini"
 

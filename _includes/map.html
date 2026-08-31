@@ -16,6 +16,19 @@
         <span class="draft-indicator"></span>
         <span class="draft-text">Planner Mode</span>
       </button>
+
+      <!-- Alliance Override Input -->
+      <div id="planner-override-container" class="hidden">
+        <input 
+          type="text" 
+          id="alliance-override" 
+          placeholder="E.G. WLO" 
+          maxlength="6" 
+          autocomplete="off" 
+          spellcheck="false"
+          title="Type a tag to override click assignments. Leave blank to cycle." 
+        />
+      </div>
       
       <button id="btn-submit-proposal" class="submit-plan-btn hidden" disabled>
         Submit Plan <span id="change-count-badge" class="badge">0</span>
@@ -23,7 +36,7 @@
       <button id="btn-toggle-fullscreen" class="draft-btn" type="button" aria-label="Toggle Fullscreen" aria-pressed="false">
         <span class="fullscreen-icon">⛶</span>
         <span class="fullscreen-label">Fullscreen</span>
-    </button>
+      </button>
     </div>
   </div>
 
