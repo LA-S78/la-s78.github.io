@@ -3,7 +3,7 @@
 {% assign rdata = site.data.rewards_data %}
 
 <div id="rewards-container" class="rewards-wrapper">
-  <!-- Controls Bar: Reusing standard .map-controls toolbar styles -->
+  <!-- Controls Bar -->
   <div class="map-controls">
     <div class="control-group left">
       <label class="toggle-switch">
@@ -23,17 +23,15 @@
     </div>
   </div>
 
-  <!-- Main Card Body: Reusing .content-pane -->
+  <!-- Main Card Body -->
   <div class="content-pane">
     <div class="rewards-header">
-      <h2 class="rewards-title">{{ t.title | default: "Alliance Reward Distribution" }}</h2>
+      <h2 class="rewards-title">{{ t.ui.title | default: "Alliance Reward Distribution" }}</h2>
       <span class="rewards-pool-text">
-        {{ t.pool_header 
-          | replace: "{c_will}", rdata.weekly_pool.commanders_will 
-          | replace: "{l_servant}", rdata.weekly_pool.loyal_servant 
-          | replace: "{f_heart}", rdata.weekly_pool.followers_heart 
-          | default: "Weekly Pool: 5 Commander's Will | 10 Loyal Servant | 20 Follower's Heart" 
-        }}
+        {{ t.ui.subtitle | default: "Weekly Allocation" }}: 
+        {{ rdata.weekly_pool.commanders_will }} {{ t.chests.commanders_will | default: "Commander's Will" }} | 
+        {{ rdata.weekly_pool.loyal_servant }} {{ t.chests.loyal_servant | default: "Loyal Servant" }} | 
+        {{ rdata.weekly_pool.followers_heart }} {{ t.chests.followers_heart | default: "Follower's Heart" }}
       </span>
     </div>
 
@@ -42,27 +40,29 @@
       {% for tier in rdata.distribution_tiers %}
       <div class="rewards-tier-row" data-tier-id="{{ tier.id }}">
         <div class="tier-label-group">
-          <span class="tier-name">{{ t.tier_labels[tier.id] | default: tier.id }}</span>
+          <span class="tier-name">
+            {{ t.ui.rank | default: "Rank" }} {{ tier.min_rank }}{% if tier.min_rank != tier.max_rank %}–{{ tier.max_rank }}{% endif %}
+          </span>
           <span class="tier-alliance-tags" data-min-rank="{{ tier.min_rank }}" data-max-rank="{{ tier.max_rank }}"></span>
         </div>
 
         <div class="tier-chests">
           {% if tier.chests.commanders_will > 0 %}
-          <div class="chest-item" title="{{ t.chests.commanders_will }}">
+          <div class="chest-item" title="{{ t.chests.commanders_will }} ({{ t.chests.gold }})">
             <span class="chest-glyph gold"></span>
             <span class="chest-multiplier">×{{ tier.chests.commanders_will }}</span>
           </div>
           {% endif %}
 
           {% if tier.chests.loyal_servant > 0 %}
-          <div class="chest-item" title="{{ t.chests.loyal_servant }}">
+          <div class="chest-item" title="{{ t.chests.loyal_servant }} ({{ t.chests.purple }})">
             <span class="chest-glyph purple"></span>
             <span class="chest-multiplier">×{{ tier.chests.loyal_servant }}</span>
           </div>
           {% endif %}
 
           {% if tier.chests.followers_heart > 0 %}
-          <div class="chest-item" title="{{ t.chests.followers_heart }}">
+          <div class="chest-item" title="{{ t.chests.followers_heart }} ({{ t.chests.blue }})">
             <span class="chest-glyph blue"></span>
             <span class="chest-multiplier">×{{ tier.chests.followers_heart }}</span>
           </div>
@@ -72,19 +72,21 @@
       {% endfor %}
     </div>
 
-    <!-- Summary Payout Table: Reuses standard markdown table layout -->
+    <!-- Summary Payout Table -->
     <table class="schedule-table">
       <thead>
         <tr>
-          <th>{{ t.table.col_rank | default: "RANK" }}</th>
-          <th>{{ t.table.col_diamonds | default: "TOTAL DIAMONDS" }} 💎</th>
-          <th>{{ t.table.col_tickets | default: "TOTAL TICKETS" }} 🎫</th>
+          <th>{{ t.ui.rank | default: "RANK" | upcase }}</th>
+          <th>{{ t.ui.total_diamonds | default: "TOTAL DIAMONDS" | upcase }} 💎</th>
+          <th>{{ t.ui.total_tickets | default: "TOTAL TICKETS" | upcase }} 🎫</th>
         </tr>
       </thead>
       <tbody id="payout-table-body">
         {% for row in rdata.payout_summary %}
         <tr data-rank-key="{{ row.label_key }}" data-base-diamonds="{{ row.diamonds }}" data-base-tickets="{{ row.tickets }}">
-          <td style="font-weight: bold; font-family: var(--font-headers);">{{ row.rank_display }}</td>
+          <td style="font-weight: bold; font-family: var(--font-headers);">
+            {{ row.rank_display | replace: "Rank", t.ui.rank }}
+          </td>
           <td class="td-diamonds" data-value="{{ row.diamonds }}">{{ row.diamonds }}</td>
           <td class="td-tickets" data-value="{{ row.tickets }}">{{ row.tickets }}</td>
         </tr>
@@ -95,13 +97,7 @@
     <!-- Themed Footnote -->
     <div class="rewards-note">
       <span class="chest-glyph crown"></span>
-      <p>
-        *{{ t.note 
-          | replace: "{diamonds}", rdata.kings_crown_bonus.diamonds 
-          | replace: "{tickets}", rdata.kings_crown_bonus.tickets 
-          | default: "Note: Totals include the weekly King's Crown Chest (+4,800 Diamonds / +24 Tickets) applied during active hosting weeks." 
-        }}
-      </p>
+      <p>*{{ t.ui.notice | default: "Note: The above totals cover the entire rotation, including the King's Chests." }}</p>
     </div>
   </div>
 </div>
