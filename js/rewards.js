@@ -1,0 +1,315 @@
+/**
+ * js/rewards.js - Interactive Alliance Reward Distribution, Live Ranking Sync, & Planner Mode
+ */
+
+export let isRewardsPlannerActive = false;
+export let draftRewardTiers = {};
+export let originalRewardTiers = {};
+
+const POOL_LIMITS = {
+  commanders_will: 5,
+  loyal_servant: 10,
+  followers_heart: 20
+};
+
+const KINGS_CROWN_BONUS = {
+  diamonds: 4800,
+  tickets: 24
+};
+
+// ==========================================================================
+// 1. HOST WEEK CALCULATION & TOGGLE
+// ==========================================================================
+
+export function initHostWeekToggle() {
+  const toggle = document.getElementById('toggle-host-week');
+  if (!toggle || toggle.dataset.bound) return;
+  toggle.dataset.bound = 'true';
+
+  toggle.addEventListener('change', () => {
+    updatePayoutTable(toggle.checked);
+  });
+}
+
+export function updatePayoutTable(isHostWeekActive) {
+  const rows = document.querySelectorAll('#payout-table-body tr');
+  rows.forEach(row => {
+    const baseDiamonds = parseInt(row.dataset.baseDiamonds, 10) || 0;
+    const baseTickets = parseInt(row.dataset.baseTickets, 10) || 0;
+    const rankKey = row.dataset.rankKey;
+
+    const diamondCell = row.querySelector('.td-diamonds');
+    const ticketCell = row.querySelector('.td-tickets');
+
+    // King's Crown chest bonus applies to Rank 1 (or the active host)
+    const isHostingRank = rankKey === 'rank_1';
+
+    let displayDiamonds = baseDiamonds;
+    let displayTickets = baseTickets;
+
+    if (!isHostWeekActive && isHostingRank) {
+      displayDiamonds = Math.max(0, baseDiamonds - KINGS_CROWN_BONUS.diamonds);
+      displayTickets = Math.max(0, baseTickets - KINGS_CROWN_BONUS.tickets);
+    }
+
+    if (diamondCell) diamondCell.textContent = displayDiamonds.toLocaleString();
+    if (ticketCell) ticketCell.textContent = displayTickets.toLocaleString();
+  });
+}
+
+// ==========================================================================
+// 2. LIVE ALLIANCE TAG BINDING
+// ==========================================================================
+
+export function syncAllianceTagsFromMapState(state = null) {
+  const mapData = state || (typeof window !== 'undefined' ? window.MAP_STATE : null);
+  if (!mapData || !mapData.alliances) return;
+
+  // Rank alliances 1..N based on map_state.yml
+  const rankedAlliances = Object.entries(mapData.alliances)
+    .filter(([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '')
+    .sort(([_, a], [__, b]) => Number(a.rank) - Number(b.rank))
+    .map(([tag, data]) => ({ tag, rank: Number(data.rank), color: data.color }));
+
+  const tagContainers = document.querySelectorAll('.tier-alliance-tags');
+  tagContainers.forEach(container => {
+    const minRank = parseInt(container.dataset.minRank, 10);
+    const maxRank = parseInt(container.dataset.maxRank, 10);
+
+    const matching = rankedAlliances.filter(a => a.rank >= minRank && a.rank <= maxRank);
+    if (matching.length > 0) {
+      container.innerHTML = matching.map(a => `<span class="alliance-badge" style="color: ${a.color || 'var(--accent-color)'};">[${a.tag}]</span>`).join(' ');
+    } else {
+      container.innerHTML = '';
+    }
+  });
+}
+
+// ==========================================================================
+// 3. REWARD PLANNER MODE & POOL VALIDATOR
+// ==========================================================================
+
+export function snapshotInitialTiers() {
+  originalRewardTiers = {};
+  const rows = document.querySelectorAll('.rewards-tier-row');
+  rows.forEach(row => {
+    const tierId = row.dataset.tierId;
+    const gold = parseInt(row.querySelector('.chest-item:has(.gold) .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
+    const purple = parseInt(row.querySelector('.chest-item:has(.purple) .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
+    const blue = parseInt(row.querySelector('.chest-item:has(.blue) .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
+
+    originalRewardTiers[tierId] = {
+      commanders_will: gold,
+      loyal_servant: purple,
+      followers_heart: blue
+    };
+  });
+  draftRewardTiers = JSON.parse(JSON.stringify(originalRewardTiers));
+}
+
+export function toggleRewardsPlanner(active) {
+  isRewardsPlannerActive = active;
+
+  const btnDraft = document.getElementById('btn-toggle-rewards-planner');
+  if (btnDraft) {
+    btnDraft.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btnDraft.classList.toggle('active', active);
+  }
+
+  const container = document.getElementById('rewards-container');
+  if (container) {
+    container.classList.toggle('planner-active', active);
+  }
+
+  if (isRewardsPlannerActive) {
+    snapshotInitialTiers();
+  } else {
+    draftRewardTiers = JSON.parse(JSON.stringify(originalRewardTiers));
+    renderDraftTiers();
+  }
+
+  updateRewardsProposalUI();
+}
+
+export function adjustChestQuantity(tierId, chestType, delta) {
+  if (!isRewardsPlannerActive || !draftRewardTiers[tierId]) return;
+
+  const currentVal = draftRewardTiers[tierId][chestType] || 0;
+  const newVal = Math.max(0, currentVal + delta);
+  draftRewardTiers[tierId][chestType] = newVal;
+
+  renderDraftTiers();
+  updateRewardsProposalUI();
+}
+
+function renderDraftTiers() {
+  Object.entries(draftRewardTiers).forEach(([tierId, chests]) => {
+    const row = document.querySelector(`.rewards-tier-row[data-tier-id="${tierId}"]`);
+    if (!row) return;
+
+    const goldMulti = row.querySelector('.chest-item:has(.gold) .chest-multiplier');
+    const purpleMulti = row.querySelector('.chest-item:has(.purple) .chest-multiplier');
+    const blueMulti = row.querySelector('.chest-item:has(.blue) .chest-multiplier');
+
+    if (goldMulti) goldMulti.textContent = `×${chests.commanders_will}`;
+    if (purpleMulti) purpleMulti.textContent = `×${chests.loyal_servant}`;
+    if (blueMulti) blueMulti.textContent = `×${chests.followers_heart}`;
+  });
+}
+
+function calculatePoolTotals() {
+  const totals = { commanders_will: 0, loyal_servant: 0, followers_heart: 0 };
+  Object.values(draftRewardTiers).forEach(tier => {
+    totals.commanders_will += tier.commanders_will || 0;
+    totals.loyal_servant += tier.loyal_servant || 0;
+    totals.followers_heart += tier.followers_heart || 0;
+  });
+  return totals;
+}
+
+export function updateRewardsProposalUI() {
+  const submitBtn = document.getElementById('btn-submit-rewards');
+  const badgeEl = document.getElementById('reward-change-badge');
+
+  if (!isRewardsPlannerActive) {
+    if (submitBtn) { submitBtn.classList.add('hidden'); submitBtn.disabled = true; }
+    if (badgeEl) badgeEl.textContent = '0';
+    return;
+  }
+
+  let totalChanges = 0;
+  Object.keys(draftRewardTiers).forEach(tierId => {
+    const orig = originalRewardTiers[tierId] || {};
+    const draft = draftRewardTiers[tierId] || {};
+    if (
+      orig.commanders_will !== draft.commanders_will ||
+      orig.loyal_servant !== draft.loyal_servant ||
+      orig.followers_heart !== draft.followers_heart
+    ) {
+      totalChanges++;
+    }
+  });
+
+  const totals = calculatePoolTotals();
+  const isOverPool = totals.commanders_will > POOL_LIMITS.commanders_will ||
+                     totals.loyal_servant > POOL_LIMITS.loyal_servant ||
+                     totals.followers_heart > POOL_LIMITS.followers_heart;
+
+  if (badgeEl) badgeEl.textContent = String(totalChanges);
+
+  if (submitBtn) {
+    submitBtn.classList.remove('hidden');
+    submitBtn.disabled = totalChanges === 0 || isOverPool;
+    if (isOverPool) {
+      submitBtn.title = 'Allocations exceed weekly pool capacity!';
+    } else {
+      submitBtn.removeAttribute('title');
+    }
+  }
+}
+
+// ==========================================================================
+// 4. SUBMIT STRATEGY PROPOSAL
+// ==========================================================================
+
+export async function submitRewardProposal(apiEndpointUrl = '/api/proposal') {
+  if (!isRewardsPlannerActive) return;
+
+  const authorInput = prompt('Enter your Discord handle / IGN:', 'Doctor');
+  if (authorInput === null) return;
+
+  const notesInput = prompt('Add an optional note for this reward distribution proposal:', '') || '';
+
+  const payload = {
+    type: 'rewards',
+    submittedBy: authorInput.trim() || 'Anonymous',
+    notes: notesInput.trim(),
+    timestamp: new Date().toISOString(),
+    distribution: draftRewardTiers
+  };
+
+  const submitBtn = document.getElementById('btn-submit-rewards');
+  const originalText = submitBtn ? submitBtn.textContent : 'Submit Plan';
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Transmitting...';
+  }
+
+  try {
+    const res = await fetch(apiEndpointUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error(`Server returned HTTP ${res.status}`);
+
+    alert('Reward distribution proposal successfully transmitted to Discord!');
+    toggleRewardsPlanner(false);
+  } catch (err) {
+    console.error('Failed to submit reward proposal:', err);
+    alert('Could not send proposal to Discord. Make sure the bot server is online.');
+  } finally {
+    if (submitBtn) submitBtn.textContent = originalText;
+    updateRewardsProposalUI();
+  }
+}
+
+// ==========================================================================
+// 5. INITIALIZATION & CONTROLS BINDING
+// ==========================================================================
+
+export function bindRewardsControls() {
+  initHostWeekToggle();
+  syncAllianceTagsFromMapState();
+
+  const btnPlanner = document.getElementById('btn-toggle-rewards-planner');
+  if (btnPlanner && !btnPlanner.dataset.bound) {
+    btnPlanner.dataset.bound = 'true';
+    btnPlanner.addEventListener('click', () => {
+      toggleRewardsPlanner(!isRewardsPlannerActive);
+    });
+  }
+
+  const btnSubmit = document.getElementById('btn-submit-rewards');
+  if (btnSubmit && !btnSubmit.dataset.bound) {
+    btnSubmit.dataset.bound = 'true';
+    btnSubmit.addEventListener('click', () => {
+      submitRewardProposal('/api/proposal');
+    });
+  }
+
+  // Bind click-to-increment on chest badges while planner is active
+  const chestItems = document.querySelectorAll('.rewards-tier-row .chest-item');
+  chestItems.forEach(item => {
+    if (item.dataset.bound) return;
+    item.dataset.bound = 'true';
+
+    item.addEventListener('click', (e) => {
+      if (!isRewardsPlannerActive) return;
+      e.preventDefault();
+      
+      const row = item.closest('.rewards-tier-row');
+      const tierId = row?.dataset.tierId;
+      if (!tierId) return;
+
+      let chestType = 'followers_heart';
+      if (item.querySelector('.gold')) chestType = 'commanders_will';
+      else if (item.querySelector('.purple')) chestType = 'loyal_servant';
+
+      // Left click = +1, Shift click / Right click = -1
+      const delta = e.shiftKey ? -1 : 1;
+      adjustChestQuantity(tierId, chestType, delta);
+    });
+  });
+}
+
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', bindRewardsControls);
+  } else {
+    bindRewardsControls();
+  }
+  document.addEventListener('turbo:load', bindRewardsControls);
+}
