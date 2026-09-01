@@ -2083,6 +2083,28 @@ body.map-fullscreen-active turbo-frame {
   margin: 1.5rem auto;
 }
 
+/* Controls Bar: Mobile-First 2-Row Stacked Layout */
+.rewards-wrapper .map-controls {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.45rem;
+  padding: 0.5rem 0.65rem;
+  min-height: auto;
+}
+
+.rewards-wrapper .map-controls .control-group.left {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.rewards-wrapper .map-controls .control-group.right {
+  width: 100%;
+  justify-content: flex-start; /* Left-aligns buttons to match toggle above */
+  gap: 0.5rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.07);
+}
+
 /* Header & Pool Subtitle */
 .rewards-header {
   text-align: center;
@@ -2152,7 +2174,7 @@ body.map-fullscreen-active turbo-frame {
   box-shadow: 0 0 6px rgba(var(--active-theme-bright), 0.8);
 }
 
-/* Tier Breakdown Cards (Mobile-First Default: Stacked Layout) */
+/* Tier Breakdown Cards (Mobile-First: Stacked Layout) */
 .rewards-tier-list {
   display: flex;
   flex-direction: column;
@@ -2200,12 +2222,13 @@ body.map-fullscreen-active turbo-frame {
   font-weight: bold;
 }
 
+/* Fixed 3-Column Slot Grid for Chest Alignment */
 .tier-chests {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
+  align-items: center;
   padding-top: 0.45rem;
   border-top: 1px dashed rgba(255, 255, 255, 0.07);
 }
@@ -2213,8 +2236,14 @@ body.map-fullscreen-active turbo-frame {
 .chest-item {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
 }
+
+/* Explicit Slot Placement */
+.chest-item[data-chest-type="commanders_will"] { grid-column: 1; }
+.chest-item[data-chest-type="loyal_servant"]    { grid-column: 2; }
+.chest-item[data-chest-type="followers_heart"]  { grid-column: 3; }
 
 .chest-multiplier {
   font-size: 0.85rem;
@@ -2282,8 +2311,6 @@ body.map-fullscreen-active turbo-frame {
 }
 
 #rewards-container.planner-active .chest-item {
-  flex: 1;
-  justify-content: center;
   padding: 5px 8px;
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -2409,6 +2436,60 @@ body.map-fullscreen-active turbo-frame {
   color: #ffffff;
 }
 
+@media (min-width: 600px) {
+  /* Restore 1-Row Inline Controls on Desktop */
+  .rewards-wrapper .map-controls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.35rem 0.65rem;
+    min-height: 42px;
+  }
+
+  .rewards-wrapper .map-controls .control-group.left {
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .rewards-wrapper .map-controls .control-group.right {
+    width: auto;
+    justify-content: flex-end;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .rewards-tier-row {
+    flex-wrap: nowrap;
+    gap: 0;
+    padding: 0.6rem 1rem;
+  }
+
+  .tier-label-group {
+    width: auto;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+
+  .tier-chests {
+    width: auto;
+    grid-template-columns: repeat(3, 75px);
+    gap: 0.75rem;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .chest-item {
+    justify-content: flex-end;
+  }
+
+  #rewards-container.planner-active .chest-item {
+    padding: 0;
+    background: transparent;
+    border: none;
+  }
+}
+
 /* ==========================================================================
    DESKTOP / TABLET OVERRIDES (Single Horizontal Row)
    ========================================================================== */
@@ -2428,14 +2509,17 @@ body.map-fullscreen-active turbo-frame {
 
   .tier-chests {
     width: auto;
-    justify-content: flex-end;
+    grid-template-columns: repeat(3, 75px);
     gap: 0.75rem;
     padding-top: 0;
     border-top: none;
   }
 
+  .chest-item {
+    justify-content: flex-end;
+  }
+
   #rewards-container.planner-active .chest-item {
-    flex: initial;
     padding: 0;
     background: transparent;
     border: none;
