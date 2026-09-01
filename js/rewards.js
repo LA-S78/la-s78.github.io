@@ -62,29 +62,55 @@ export function updatePayoutTable(isHostWeekActive) {
 // 2. LIVE ALLIANCE TAG BINDING
 // ==========================================================================
 
+const AUTO_ALLIANCE_PALETTE = [
+  '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
+  '#dd6b20', '#319795', '#d69e2e', '#805ad5', '#d53f8c',
+  '#38a169', '#00b5d8'
+];
+
 export async function syncAllianceTagsFromMapState(state = null) {
   let mapData = state || (typeof window !== 'undefined' ? window.MAP_STATE : null);
 
-  // If not yet available in global window, fetch live state from the API
-  if (!mapData || !mapData.alliances) {
+  // Fetch live state and Discord colors concurrently if either is missing
+  const needsState = !mapData || !mapData.alliances;
+  const needsColors = !window.DISCORD_COLORS;
+
+  if (needsState || needsColors) {
     try {
-      const res = await fetch(`/api/map-state?t=${Date.now()}`);
-      if (res.ok) {
-        mapData = await res.json();
+      const [stateRes, colorsRes] = await Promise.all([
+        needsState ? fetch(`/api/map-state?t=${Date.now()}`) : Promise.resolve(null),
+        needsColors ? fetch('/api/colors') : Promise.resolve(null)
+      ]);
+
+      if (stateRes && stateRes.ok) {
+        mapData = await stateRes.json();
         window.MAP_STATE = mapData;
       }
+      if (colorsRes && colorsRes.ok) {
+        window.DISCORD_COLORS = await colorsRes.json();
+      }
     } catch (err) {
-      console.warn('Could not fetch live map state for rewards card:', err);
+      console.warn('Could not fetch live map state or Discord colors for rewards card:', err);
     }
   }
 
   if (!mapData || !mapData.alliances) return;
 
-  // Rank alliances 1..N based on map_state data
+  const liveDiscordColors = window.DISCORD_COLORS || {};
+
+  // Rank alliances 1..N based on map_state data and resolve color hierarchy
   const rankedAlliances = Object.entries(mapData.alliances)
     .filter(([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '')
     .sort(([_, a], [__, b]) => Number(a.rank) - Number(b.rank))
-    .map(([tag, data]) => ({ tag, rank: Number(data.rank), color: data.color }));
+    .map(([tag, data], index) => {
+      const rank = Number(data.rank);
+      // Priority: 1. Live Discord Role Color -> 2. YAML Color -> 3. Auto Palette -> 4. Default Accent
+      const color = liveDiscordColors[tag] 
+                 || data.color 
+                 || AUTO_ALLIANCE_PALETTE[index % AUTO_ALLIANCE_PALETTE.length] 
+                 || 'var(--accent-color)';
+      return { tag, rank, color };
+    });
 
   const tagContainers = document.querySelectorAll('.tier-alliance-tags');
   tagContainers.forEach(container => {
@@ -94,7 +120,7 @@ export async function syncAllianceTagsFromMapState(state = null) {
     const matching = rankedAlliances.filter(a => a.rank >= minRank && a.rank <= maxRank);
     if (matching.length > 0) {
       container.innerHTML = matching
-        .map(a => `<span class="alliance-badge" style="color: ${a.color || 'var(--accent-color)'};">[${a.tag}]</span>`)
+        .map(a => `<span class="alliance-badge" style="color: ${a.color}; font-weight: bold;">[${a.tag}]</span>`)
         .join(' ');
     } else {
       container.innerHTML = '';
