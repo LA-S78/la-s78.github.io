@@ -135,7 +135,7 @@ export function adjustChestQuantity(tierId, chestType) {
   if (!isRewardsPlannerActive || !draftRewardTiers[tierId]) return;
 
   const currentVal = draftRewardTiers[tierId][chestType] || 0;
-  // Cycle up to 5, then reset back to 0 (0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 0)
+  // Cycle up to 5, then reset back to 0
   const newVal = currentVal >= 5 ? 0 : currentVal + 1;
   draftRewardTiers[tierId][chestType] = newVal;
 
@@ -159,12 +159,24 @@ function renderDraftTiers() {
   });
 }
 
+function getTierMemberCount(tierId) {
+  const row = document.querySelector(`.rewards-tier-row[data-tier-id="${tierId}"]`);
+  if (row) {
+    const minRank = parseInt(row.dataset.minRank, 10) || 1;
+    const maxRank = parseInt(row.dataset.maxRank, 10) || minRank;
+    return Math.max(1, maxRank - minRank + 1);
+  }
+  const fallbackCounts = { rank_1: 1, rank_2_3: 2, rank_4_5: 2, rank_6_8: 3 };
+  return fallbackCounts[tierId] || 1;
+}
+
 function calculatePoolTotals() {
   const totals = { commanders_will: 0, loyal_servant: 0, followers_heart: 0 };
-  Object.values(draftRewardTiers).forEach(tier => {
-    totals.commanders_will += tier.commanders_will || 0;
-    totals.loyal_servant += tier.loyal_servant || 0;
-    totals.followers_heart += tier.followers_heart || 0;
+  Object.entries(draftRewardTiers).forEach(([tierId, tier]) => {
+    const memberCount = getTierMemberCount(tierId);
+    totals.commanders_will += (tier.commanders_will || 0) * memberCount;
+    totals.loyal_servant += (tier.loyal_servant || 0) * memberCount;
+    totals.followers_heart += (tier.followers_heart || 0) * memberCount;
   });
   return totals;
 }
@@ -203,7 +215,7 @@ export function updateRewardsProposalUI() {
     submitBtn.classList.remove('hidden');
     submitBtn.disabled = totalChanges === 0 || isOverPool;
     if (isOverPool) {
-      submitBtn.title = 'Allocations exceed weekly pool capacity!';
+      submitBtn.title = `Capacity Exceeded! Gold: ${totals.commanders_will}/${POOL_LIMITS.commanders_will}, Purple: ${totals.loyal_servant}/${POOL_LIMITS.loyal_servant}, Blue: ${totals.followers_heart}/${POOL_LIMITS.followers_heart}`;
     } else {
       submitBtn.removeAttribute('title');
     }
