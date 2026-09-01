@@ -4,14 +4,27 @@ weekly_pool:
   loyal_servant: 10
   followers_heart: 20
 
-# King's Crown Hosting Bonus
+# Chest Currency Unit Values (Calculated from baseline distribution)
+chest_values:
+  commanders_will:
+    diamonds: 8800
+    tickets: 44
+  loyal_servant:
+    diamonds: 4400
+    tickets: 40
+  followers_heart:
+    diamonds: 1600
+    tickets: 36
+
+# King's Crown Hosting Bonus (Applies to Ranks 1-4 during host weeks)
 kings_crown_bonus:
   diamonds: 4800
   tickets: 24
+  max_eligible_rank: 4
 
-# Chest Distribution Brackets
+# Initial Default Distribution Tiers
 distribution_tiers:
-  - id: "rank_1"
+  - id: "tier_1"
     min_rank: 1
     max_rank: 1
     chests:
@@ -19,7 +32,7 @@ distribution_tiers:
       loyal_servant: 3
       followers_heart: 1
 
-  - id: "rank_2_3"
+  - id: "tier_2"
     min_rank: 2
     max_rank: 3
     chests:
@@ -27,7 +40,7 @@ distribution_tiers:
       loyal_servant: 1
       followers_heart: 3
 
-  - id: "rank_4_5"
+  - id: "tier_3"
     min_rank: 4
     max_rank: 5
     chests:
@@ -35,37 +48,10 @@ distribution_tiers:
       loyal_servant: 1
       followers_heart: 2
 
-  - id: "rank_6_8"
+  - id: "tier_4"
     min_rank: 6
     max_rank: 8
     chests:
       commanders_will: 0
       loyal_servant: 1
       followers_heart: 3
-
-# Calculated Payout Summaries (Base values including King's Crown)
-payout_summary:
-  - label_key: "rank_1"
-    rank_display: "Rank 1"
-    diamonds: 28400
-    tickets: 224
-  - label_key: "rank_2"
-    rank_display: "Rank 2"
-    diamonds: 22800
-    tickets: 216
-  - label_key: "rank_3"
-    rank_display: "Rank 3"
-    diamonds: 22800
-    tickets: 216
-  - label_key: "rank_4"
-    rank_display: "Rank 4"
-    diamonds: 21200
-    tickets: 180
-  - label_key: "rank_5"
-    rank_display: "Rank 5"
-    diamonds: 16400
-    tickets: 156
-  - label_key: "rank_6_8"
-    rank_display: "Rank 6–8"
-    diamonds: 9200
-    tickets: 148

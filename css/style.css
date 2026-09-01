@@ -2083,7 +2083,7 @@ body.map-fullscreen-active turbo-frame {
   margin: 1.5rem auto;
 }
 
-/* Plaque Header & Subtitle */
+/* Header & Pool Subtitle */
 .rewards-header {
   text-align: center;
   margin-bottom: 0.8rem;
@@ -2104,6 +2104,52 @@ body.map-fullscreen-active turbo-frame {
   color: var(--text-muted);
   font-weight: 600;
   letter-spacing: 0.04em;
+}
+
+/* Active Hosting Week Toggle Switch */
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch input {
+  display: none;
+}
+
+.switch-slider {
+  width: 32px;
+  height: 18px;
+  background: var(--nav-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.switch-slider::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.toggle-switch input:checked + .switch-slider {
+  background: rgba(var(--active-theme), 0.3);
+  border-color: var(--accent-color);
+}
+
+.toggle-switch input:checked + .switch-slider::before {
+  transform: translateX(14px);
+  background: var(--accent-color);
+  box-shadow: 0 0 6px rgba(var(--active-theme-bright), 0.8);
 }
 
 /* Tier Breakdown Cards */
@@ -2167,7 +2213,7 @@ body.map-fullscreen-active turbo-frame {
   color: var(--text-main);
 }
 
-/* Chest Glyphs (Themed using active theme colors and standard tiers) */
+/* Chest Glyphs */
 .chest-glyph {
   width: 26px;
   height: 22px;
@@ -2198,7 +2244,7 @@ body.map-fullscreen-active turbo-frame {
   flex-shrink: 0;
 }
 
-/* Rewards Footnote: Reusing blockquote aesthetics */
+/* Footnote Banner */
 .rewards-note {
   display: flex;
   align-items: center;
@@ -2221,53 +2267,7 @@ body.map-fullscreen-active turbo-frame {
   color: var(--text-main);
 }
 
-/* Switch UI */
-.toggle-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.toggle-switch input {
-  display: none;
-}
-
-.switch-slider {
-  width: 32px;
-  height: 18px;
-  background: var(--nav-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.switch-slider::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 12px;
-  height: 12px;
-  background: var(--text-muted);
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.toggle-switch input:checked + .switch-slider {
-  background: rgba(var(--active-theme), 0.3);
-  border-color: var(--accent-color);
-}
-
-.toggle-switch input:checked + .switch-slider::before {
-  transform: translateX(14px);
-  background: var(--accent-color);
-  box-shadow: 0 0 6px rgba(var(--active-theme-bright), 0.8);
-}
-
-/* Empty Chest Display Handling */
+/* Empty Chest Display & Planner Interactions */
 .chest-item.is-empty {
   display: none;
 }
@@ -2287,6 +2287,100 @@ body.map-fullscreen-active turbo-frame {
 #rewards-container.planner-active .chest-item.is-empty:hover {
   opacity: 0.8;
   filter: grayscale(0%);
+}
+
+/* Dynamic Tier Planner Controls */
+.planner-actions {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.planner-actions.hidden {
+  display: none !important;
+}
+
+.btn-add-tier {
+  width: 100%;
+  justify-content: center;
+  border-style: dashed;
+  height: 32px;
+  background: rgba(184, 151, 90, 0.05);
+}
+
+.btn-add-tier:hover {
+  background: rgba(184, 151, 90, 0.15);
+  border-color: var(--accent-color);
+}
+
+/* Tier Row Actions (Delete & Range Steppers) */
+.tier-row-controls {
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+
+#rewards-container.planner-active .tier-row-controls {
+  display: inline-flex;
+}
+
+#rewards-container.planner-active .tier-name-static {
+  display: none;
+}
+
+.btn-tier-del {
+  background: transparent;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  color: #ff6b6b;
+  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-tier-del:hover {
+  background: #ff6b6b;
+  color: #1a1512;
+}
+
+.range-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: #070504;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1px 4px;
+  gap: 4px;
+  font-size: 0.78rem;
+}
+
+.range-stepper button {
+  background: transparent;
+  border: none;
+  color: var(--accent-color);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 3px;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.range-stepper button:hover {
+  color: #ffffff;
+}
+
+.range-stepper .range-val {
+  color: var(--text-main);
+  font-weight: bold;
+  min-width: 14px;
+  text-align: center;
 }
 
 /* ==========================================================================

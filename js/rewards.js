@@ -1,10 +1,10 @@
 /**
- * js/rewards.js - Interactive Alliance Reward Distribution, Live Ranking Sync, & Planner Mode
+ * js/rewards.js - Dynamic Alliance Reward Distribution Engine & Interactive Planner
  */
 
 export let isRewardsPlannerActive = false;
-export let draftRewardTiers = {};
-export let originalRewardTiers = {};
+export let draftTiers = [];
+export let originalTiers = [];
 
 const POOL_LIMITS = {
   commanders_will: 5,
@@ -12,55 +12,17 @@ const POOL_LIMITS = {
   followers_heart: 20
 };
 
-const KINGS_CROWN_BONUS = {
-  diamonds: 4800,
-  tickets: 24
+const CHEST_VALUES = {
+  commanders_will: { diamonds: 8800, tickets: 44 },
+  loyal_servant: { diamonds: 4400, tickets: 40 },
+  followers_heart: { diamonds: 1600, tickets: 36 }
 };
 
-const HOSTING_RANKS = ['rank_1', 'rank_2', 'rank_3', 'rank_4'];
-
-// ==========================================================================
-// 1. HOST WEEK CALCULATION & TOGGLE (APPLIES TO TOP 4 RANKS)
-// ==========================================================================
-
-export function initHostWeekToggle() {
-  const toggle = document.getElementById('toggle-host-week');
-  if (!toggle || toggle.dataset.bound) return;
-  toggle.dataset.bound = 'true';
-
-  toggle.addEventListener('change', () => {
-    updatePayoutTable(toggle.checked);
-  });
-}
-
-export function updatePayoutTable(isHostWeekActive) {
-  const rows = document.querySelectorAll('#payout-table-body tr');
-  rows.forEach(row => {
-    const baseDiamonds = parseInt(row.dataset.baseDiamonds, 10) || 0;
-    const baseTickets = parseInt(row.dataset.baseTickets, 10) || 0;
-    const rankKey = row.dataset.rankKey;
-
-    const diamondCell = row.querySelector('.td-diamonds');
-    const ticketCell = row.querySelector('.td-tickets');
-
-    const isHostingRank = HOSTING_RANKS.includes(rankKey);
-
-    let displayDiamonds = baseDiamonds;
-    let displayTickets = baseTickets;
-
-    if (!isHostWeekActive && isHostingRank) {
-      displayDiamonds = Math.max(0, baseDiamonds - KINGS_CROWN_BONUS.diamonds);
-      displayTickets = Math.max(0, baseTickets - KINGS_CROWN_BONUS.tickets);
-    }
-
-    if (diamondCell) diamondCell.textContent = displayDiamonds.toLocaleString();
-    if (ticketCell) ticketCell.textContent = displayTickets.toLocaleString();
-  });
-}
-
-// ==========================================================================
-// 2. LIVE ALLIANCE TAG BINDING
-// ==========================================================================
+const KINGS_CROWN = {
+  diamonds: 4800,
+  tickets: 24,
+  max_eligible_rank: 4
+};
 
 const AUTO_ALLIANCE_PALETTE = [
   '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
@@ -68,52 +30,258 @@ const AUTO_ALLIANCE_PALETTE = [
   '#38a169', '#00b5d8'
 ];
 
-export async function syncAllianceTagsFromMapState(state = null) {
-  let mapData = state || (typeof window !== 'undefined' ? window.MAP_STATE : null);
+// ==========================================================================
+// 1. DATA INITIALIZATION & SNAPSHOTS
+// ==========================================================================
 
-  // Fetch live state and Discord colors concurrently if either is missing
-  const needsState = !mapData || !mapData.alliances;
-  const needsColors = !window.DISCORD_COLORS;
+export function initDefaultTiers() {
+  if (window.REWARDS_CONFIG && window.REWARDS_CONFIG.distribution_tiers) {
+    originalTiers = JSON.parse(JSON.stringify(window.REWARDS_CONFIG.distribution_tiers));
+  } else {
+    // Hardcoded fallback if external YAML is missing
+    originalTiers = [
+      { id: 'tier_1', min_rank: 1, max_rank: 1, chests: { commanders_will: 1, loyal_servant: 3, followers_heart: 1 } },
+      { id: 'tier_2', min_rank: 2, max_rank: 3, chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 3 } },
+      { id: 'tier_3', min_rank: 4, max_rank: 5, chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 2 } },
+      { id: 'tier_4', min_rank: 6, max_rank: 8, chests: { commanders_will: 0, loyal_servant: 1, followers_heart: 3 } }
+    ];
+  }
+  draftTiers = JSON.parse(JSON.stringify(originalTiers));
+}
 
-  if (needsState || needsColors) {
+// ==========================================================================
+// 2. RANGE CHAINING & MUTATION LOGIC
+// ==========================================================================
+
+export function rechainTiers(tiers) {
+  let currentStart = 1;
+  tiers.forEach((tier) => {
+    const span = Math.max(0, tier.max_rank - tier.min_rank);
+    tier.min_rank = currentStart;
+    tier.max_rank = Math.max(currentStart, currentStart + span);
+    currentStart = tier.max_rank + 1;
+  });
+}
+
+export function adjustTierMaxRank(tierIndex, delta) {
+  if (!isRewardsPlannerActive || !draftTiers[tierIndex]) return;
+
+  const tier = draftTiers[tierIndex];
+  const newMax = tier.max_rank + delta;
+
+  // Minimum allowed max_rank is its own min_rank
+  if (newMax < tier.min_rank) return;
+
+  tier.max_rank = newMax;
+  rechainTiers(draftTiers);
+
+  renderTierList();
+  updatePayoutTable();
+  updateRewardsProposalUI();
+}
+
+export function addTier() {
+  if (!isRewardsPlannerActive) return;
+
+  const lastTier = draftTiers[draftTiers.length - 1];
+  const nextMin = lastTier ? lastTier.max_rank + 1 : 1;
+
+  draftTiers.push({
+    id: `tier_${Date.now()}`,
+    min_rank: nextMin,
+    max_rank: nextMin,
+    chests: { commanders_will: 0, loyal_servant: 0, followers_heart: 0 }
+  });
+
+  rechainTiers(draftTiers);
+  renderTierList();
+  updatePayoutTable();
+  updateRewardsProposalUI();
+}
+
+export function removeTier(tierIndex) {
+  if (!isRewardsPlannerActive || draftTiers.length <= 1) return;
+
+  draftTiers.splice(tierIndex, 1);
+  rechainTiers(draftTiers);
+
+  renderTierList();
+  updatePayoutTable();
+  updateRewardsProposalUI();
+}
+
+export function adjustChestQuantity(tierIndex, chestType) {
+  if (!isRewardsPlannerActive || !draftTiers[tierIndex]) return;
+
+  const currentVal = draftTiers[tierIndex].chests[chestType] || 0;
+  // Cycle 0..5 -> 0
+  draftTiers[tierIndex].chests[chestType] = currentVal >= 5 ? 0 : currentVal + 1;
+
+  renderTierList();
+  updatePayoutTable();
+  updateRewardsProposalUI();
+}
+
+// ==========================================================================
+// 3. DYNAMIC RENDERING (TIERS & PAYOUT TABLE)
+// ==========================================================================
+
+export function renderTierList() {
+  const container = document.getElementById('rewards-tier-list');
+  if (!container) return;
+
+  const rankLabel = container.dataset.rankLabel || 'Rank';
+  const activeList = isRewardsPlannerActive ? draftTiers : originalTiers;
+
+  container.innerHTML = activeList.map((tier, index) => {
+    const isSingle = tier.min_rank === tier.max_rank;
+    const rangeText = isSingle ? `${rankLabel} ${tier.min_rank}` : `${rankLabel} ${tier.min_rank}–${tier.max_rank}`;
+
+    return `
+      <div class="rewards-tier-row" 
+           data-tier-index="${index}"
+           data-min-rank="${tier.min_rank}" 
+           data-max-rank="${tier.max_rank}">
+        <div class="tier-label-group">
+          <!-- Planner Delete Button -->
+          <div class="tier-row-controls">
+            ${activeList.length > 1 ? `<button class="btn-tier-del" data-action="del-tier" data-index="${index}" title="Remove Bracket">×</button>` : ''}
+            <span class="range-stepper">
+              <span class="range-text">${rankLabel} ${tier.min_rank}–<span class="range-val">${tier.max_rank}</span></span>
+              <button data-action="dec-range" data-index="${index}" type="button">-</button>
+              <button data-action="inc-range" data-index="${index}" type="button">+</button>
+            </span>
+          </div>
+
+          <!-- Static View Label -->
+          <span class="tier-name tier-name-static">${rangeText}</span>
+          <span class="tier-alliance-tags" data-min-rank="${tier.min_rank}" data-max-rank="${tier.max_rank}"></span>
+        </div>
+
+        <div class="tier-chests">
+          <div class="chest-item ${tier.chests.commanders_will === 0 ? 'is-empty' : ''}" 
+               data-chest-type="commanders_will" 
+               data-index="${index}"
+               title="Commander's Will">
+            <span class="chest-glyph gold"></span>
+            <span class="chest-multiplier">×${tier.chests.commanders_will || 0}</span>
+          </div>
+
+          <div class="chest-item ${tier.chests.loyal_servant === 0 ? 'is-empty' : ''}" 
+               data-chest-type="loyal_servant" 
+               data-index="${index}"
+               title="Loyal Servant">
+            <span class="chest-glyph purple"></span>
+            <span class="chest-multiplier">×${tier.chests.loyal_servant || 0}</span>
+          </div>
+
+          <div class="chest-item ${tier.chests.followers_heart === 0 ? 'is-empty' : ''}" 
+               data-chest-type="followers_heart" 
+               data-index="${index}"
+               title="Follower's Heart">
+            <span class="chest-glyph blue"></span>
+            <span class="chest-multiplier">×${tier.chests.followers_heart || 0}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  syncAllianceTagsFromMapState();
+}
+
+export function updatePayoutTable() {
+  const tbody = document.getElementById('payout-table-body');
+  if (!tbody) return;
+
+  const hostToggle = document.getElementById('toggle-host-week');
+  const isHostWeek = hostToggle ? hostToggle.checked : true;
+  const activeList = isRewardsPlannerActive ? draftTiers : originalTiers;
+  const rankLabel = document.getElementById('rewards-tier-list')?.dataset.rankLabel || 'Rank';
+
+  // Group payouts dynamically based on actual member rank calculation
+  const rowsHtml = [];
+
+  activeList.forEach(tier => {
+    const baseDiamonds = (tier.chests.commanders_will * CHEST_VALUES.commanders_will.diamonds) +
+                         (tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.diamonds) +
+                         (tier.chests.followers_heart * CHEST_VALUES.followers_heart.diamonds);
+
+    const baseTickets = (tier.chests.commanders_will * CHEST_VALUES.commanders_will.tickets) +
+                        (tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.tickets) +
+                        (tier.chests.followers_heart * CHEST_VALUES.followers_heart.tickets);
+
+    // If tier spans across rank 4 boundary during host week, split rows so bonuses reflect accurately
+    const ranks = [];
+    for (let r = tier.min_rank; r <= tier.max_rank; r++) {
+      ranks.push(r);
+    }
+
+    const hostRanks = ranks.filter(r => r <= KINGS_CROWN.max_eligible_rank);
+    const nonHostRanks = ranks.filter(r => r > KINGS_CROWN.max_eligible_rank);
+
+    const generateRow = (groupRanks, hasBonus) => {
+      if (groupRanks.length === 0) return '';
+      const d = baseDiamonds + (hasBonus ? KINGS_CROWN.diamonds : 0);
+      const t = baseTickets + (hasBonus ? KINGS_CROWN.tickets : 0);
+
+      const minR = groupRanks[0];
+      const maxR = groupRanks[groupRanks.length - 1];
+      const displayLabel = minR === maxR ? `${rankLabel} ${minR}` : `${rankLabel} ${minR}–${maxR}`;
+
+      return `
+        <tr>
+          <td style="font-weight: bold; font-family: var(--font-headers);">${displayLabel}</td>
+          <td class="td-diamonds">${d.toLocaleString()}</td>
+          <td class="td-tickets">${t.toLocaleString()}</td>
+        </tr>
+      `;
+    };
+
+    if (isHostWeek) {
+      if (hostRanks.length > 0) rowsHtml.push(generateRow(hostRanks, true));
+      if (nonHostRanks.length > 0) rowsHtml.push(generateRow(nonHostRanks, false));
+    } else {
+      rowsHtml.push(generateRow(ranks, false));
+    }
+  });
+
+  tbody.innerHTML = rowsHtml.join('');
+}
+
+// ==========================================================================
+// 4. ALLIANCE TAG & COLOR SYNCHRONIZATION
+// ==========================================================================
+
+export async function syncAllianceTagsFromMapState() {
+  let mapData = typeof window !== 'undefined' ? window.MAP_STATE : null;
+
+  if (!mapData || !mapData.alliances) {
     try {
       const [stateRes, colorsRes] = await Promise.all([
-        needsState ? fetch(`/api/map-state?t=${Date.now()}`) : Promise.resolve(null),
-        needsColors ? fetch('/api/colors') : Promise.resolve(null)
+        fetch(`/api/map-state?t=${Date.now()}`),
+        fetch('/api/colors')
       ]);
-
-      if (stateRes && stateRes.ok) {
-        mapData = await stateRes.json();
-        window.MAP_STATE = mapData;
-      }
-      if (colorsRes && colorsRes.ok) {
-        window.DISCORD_COLORS = await colorsRes.json();
-      }
-    } catch (err) {
-      console.warn('Could not fetch live map state or Discord colors for rewards card:', err);
-    }
+      if (stateRes.ok) window.MAP_STATE = await stateRes.json();
+      if (colorsRes.ok) window.DISCORD_COLORS = await colorsRes.json();
+      mapData = window.MAP_STATE;
+    } catch (err) {}
   }
 
   if (!mapData || !mapData.alliances) return;
 
   const liveDiscordColors = window.DISCORD_COLORS || {};
 
-  // Rank alliances 1..N based on map_state data and resolve color hierarchy
   const rankedAlliances = Object.entries(mapData.alliances)
     .filter(([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '')
     .sort(([_, a], [__, b]) => Number(a.rank) - Number(b.rank))
-    .map(([tag, data], index) => {
-      const rank = Number(data.rank);
-      // Priority: 1. Live Discord Role Color -> 2. YAML Color -> 3. Auto Palette -> 4. Default Accent
-      const color = liveDiscordColors[tag] 
-                 || data.color 
-                 || AUTO_ALLIANCE_PALETTE[index % AUTO_ALLIANCE_PALETTE.length] 
-                 || 'var(--accent-color)';
-      return { tag, rank, color };
-    });
+    .map(([tag, data], index) => ({
+      tag,
+      rank: Number(data.rank),
+      color: liveDiscordColors[tag] || data.color || AUTO_ALLIANCE_PALETTE[index % AUTO_ALLIANCE_PALETTE.length] || 'var(--accent-color)'
+    }));
 
-  const tagContainers = document.querySelectorAll('.tier-alliance-tags');
-  tagContainers.forEach(container => {
+  document.querySelectorAll('.tier-alliance-tags').forEach(container => {
     const minRank = parseInt(container.dataset.minRank, 10);
     const maxRank = parseInt(container.dataset.maxRank, 10);
 
@@ -129,97 +297,16 @@ export async function syncAllianceTagsFromMapState(state = null) {
 }
 
 // ==========================================================================
-// 3. REWARD PLANNER MODE & POOL VALIDATOR
+// 5. POOL VALIDATION & PROPOSAL SUBMISSION
 // ==========================================================================
-
-export function snapshotInitialTiers() {
-  originalRewardTiers = {};
-  const rows = document.querySelectorAll('.rewards-tier-row');
-  rows.forEach(row => {
-    const tierId = row.dataset.tierId;
-    const gold = parseInt(row.querySelector('.chest-item[data-chest-type="commanders_will"] .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
-    const purple = parseInt(row.querySelector('.chest-item[data-chest-type="loyal_servant"] .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
-    const blue = parseInt(row.querySelector('.chest-item[data-chest-type="followers_heart"] .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
-
-    originalRewardTiers[tierId] = {
-      commanders_will: gold,
-      loyal_servant: purple,
-      followers_heart: blue
-    };
-  });
-  draftRewardTiers = JSON.parse(JSON.stringify(originalRewardTiers));
-}
-
-export function toggleRewardsPlanner(active) {
-  isRewardsPlannerActive = active;
-
-  const btnDraft = document.getElementById('btn-toggle-rewards-planner');
-  if (btnDraft) {
-    btnDraft.setAttribute('aria-pressed', active ? 'true' : 'false');
-    btnDraft.classList.toggle('active', active);
-  }
-
-  const container = document.getElementById('rewards-container');
-  if (container) {
-    container.classList.toggle('planner-active', active);
-  }
-
-  if (isRewardsPlannerActive) {
-    snapshotInitialTiers();
-  } else {
-    draftRewardTiers = JSON.parse(JSON.stringify(originalRewardTiers));
-    renderDraftTiers();
-  }
-
-  updateRewardsProposalUI();
-}
-
-export function adjustChestQuantity(tierId, chestType) {
-  if (!isRewardsPlannerActive || !draftRewardTiers[tierId]) return;
-
-  const currentVal = draftRewardTiers[tierId][chestType] || 0;
-  // Cycle up to 5, then reset back to 0
-  const newVal = currentVal >= 5 ? 0 : currentVal + 1;
-  draftRewardTiers[tierId][chestType] = newVal;
-
-  renderDraftTiers();
-  updateRewardsProposalUI();
-}
-
-function renderDraftTiers() {
-  Object.entries(draftRewardTiers).forEach(([tierId, chests]) => {
-    const row = document.querySelector(`.rewards-tier-row[data-tier-id="${tierId}"]`);
-    if (!row) return;
-
-    ['commanders_will', 'loyal_servant', 'followers_heart'].forEach(chestType => {
-      const item = row.querySelector(`.chest-item[data-chest-type="${chestType}"]`);
-      if (!item) return;
-      const count = chests[chestType] || 0;
-      const multi = item.querySelector('.chest-multiplier');
-      if (multi) multi.textContent = `×${count}`;
-      item.classList.toggle('is-empty', count === 0);
-    });
-  });
-}
-
-function getTierMemberCount(tierId) {
-  const row = document.querySelector(`.rewards-tier-row[data-tier-id="${tierId}"]`);
-  if (row) {
-    const minRank = parseInt(row.dataset.minRank, 10) || 1;
-    const maxRank = parseInt(row.dataset.maxRank, 10) || minRank;
-    return Math.max(1, maxRank - minRank + 1);
-  }
-  const fallbackCounts = { rank_1: 1, rank_2_3: 2, rank_4_5: 2, rank_6_8: 3 };
-  return fallbackCounts[tierId] || 1;
-}
 
 function calculatePoolTotals() {
   const totals = { commanders_will: 0, loyal_servant: 0, followers_heart: 0 };
-  Object.entries(draftRewardTiers).forEach(([tierId, tier]) => {
-    const memberCount = getTierMemberCount(tierId);
-    totals.commanders_will += (tier.commanders_will || 0) * memberCount;
-    totals.loyal_servant += (tier.loyal_servant || 0) * memberCount;
-    totals.followers_heart += (tier.followers_heart || 0) * memberCount;
+  draftTiers.forEach(tier => {
+    const memberCount = Math.max(1, tier.max_rank - tier.min_rank + 1);
+    totals.commanders_will += (tier.chests.commanders_will || 0) * memberCount;
+    totals.loyal_servant += (tier.chests.loyal_servant || 0) * memberCount;
+    totals.followers_heart += (tier.chests.followers_heart || 0) * memberCount;
   });
   return totals;
 }
@@ -234,29 +321,17 @@ export function updateRewardsProposalUI() {
     return;
   }
 
-  let totalChanges = 0;
-  Object.keys(draftRewardTiers).forEach(tierId => {
-    const orig = originalRewardTiers[tierId] || {};
-    const draft = draftRewardTiers[tierId] || {};
-    if (
-      orig.commanders_will !== draft.commanders_will ||
-      orig.loyal_servant !== draft.loyal_servant ||
-      orig.followers_heart !== draft.followers_heart
-    ) {
-      totalChanges++;
-    }
-  });
-
+  const hasStructuralChanges = JSON.stringify(draftTiers) !== JSON.stringify(originalTiers);
   const totals = calculatePoolTotals();
   const isOverPool = totals.commanders_will > POOL_LIMITS.commanders_will ||
                      totals.loyal_servant > POOL_LIMITS.loyal_servant ||
                      totals.followers_heart > POOL_LIMITS.followers_heart;
 
-  if (badgeEl) badgeEl.textContent = String(totalChanges);
+  if (badgeEl) badgeEl.textContent = hasStructuralChanges ? '!' : '0';
 
   if (submitBtn) {
     submitBtn.classList.remove('hidden');
-    submitBtn.disabled = totalChanges === 0 || isOverPool;
+    submitBtn.disabled = !hasStructuralChanges || isOverPool;
     if (isOverPool) {
       submitBtn.title = `Capacity Exceeded! Gold: ${totals.commanders_will}/${POOL_LIMITS.commanders_will}, Purple: ${totals.loyal_servant}/${POOL_LIMITS.loyal_servant}, Blue: ${totals.followers_heart}/${POOL_LIMITS.followers_heart}`;
     } else {
@@ -265,9 +340,31 @@ export function updateRewardsProposalUI() {
   }
 }
 
-// ==========================================================================
-// 4. SUBMIT STRATEGY PROPOSAL
-// ==========================================================================
+export function toggleRewardsPlanner(active) {
+  isRewardsPlannerActive = active;
+
+  const btnDraft = document.getElementById('btn-toggle-rewards-planner');
+  if (btnDraft) {
+    btnDraft.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btnDraft.classList.toggle('active', active);
+  }
+
+  const container = document.getElementById('rewards-container');
+  const addTierBox = document.getElementById('planner-add-tier-container');
+
+  if (container) container.classList.toggle('planner-active', active);
+  if (addTierBox) addTierBox.classList.toggle('hidden', !active);
+
+  if (isRewardsPlannerActive) {
+    draftTiers = JSON.parse(JSON.stringify(originalTiers));
+  } else {
+    draftTiers = JSON.parse(JSON.stringify(originalTiers));
+  }
+
+  renderTierList();
+  updatePayoutTable();
+  updateRewardsProposalUI();
+}
 
 export async function submitRewardProposal(apiEndpointUrl = '/api/proposal') {
   if (!isRewardsPlannerActive) return;
@@ -282,7 +379,7 @@ export async function submitRewardProposal(apiEndpointUrl = '/api/proposal') {
     submittedBy: authorInput.trim() || 'Anonymous',
     notes: notesInput.trim(),
     timestamp: new Date().toISOString(),
-    distribution: draftRewardTiers
+    distribution: draftTiers
   };
 
   const submitBtn = document.getElementById('btn-submit-rewards');
@@ -303,6 +400,7 @@ export async function submitRewardProposal(apiEndpointUrl = '/api/proposal') {
     if (!res.ok) throw new Error(`Server returned HTTP ${res.status}`);
 
     alert('Reward distribution proposal successfully transmitted to Discord!');
+    originalTiers = JSON.parse(JSON.stringify(draftTiers));
     toggleRewardsPlanner(false);
   } catch (err) {
     console.error('Failed to submit reward proposal:', err);
@@ -314,46 +412,74 @@ export async function submitRewardProposal(apiEndpointUrl = '/api/proposal') {
 }
 
 // ==========================================================================
-// 5. INITIALIZATION & CONTROLS BINDING
+// 6. INITIALIZATION & EVENT DELEGATION
 // ==========================================================================
 
 export function bindRewardsControls() {
-  initHostWeekToggle();
-  syncAllianceTagsFromMapState();
+  initDefaultTiers();
+
+  const toggleHost = document.getElementById('toggle-host-week');
+  if (toggleHost && !toggleHost.dataset.bound) {
+    toggleHost.dataset.bound = 'true';
+    toggleHost.addEventListener('change', updatePayoutTable);
+  }
 
   const btnPlanner = document.getElementById('btn-toggle-rewards-planner');
   if (btnPlanner && !btnPlanner.dataset.bound) {
     btnPlanner.dataset.bound = 'true';
-    btnPlanner.addEventListener('click', () => {
-      toggleRewardsPlanner(!isRewardsPlannerActive);
-    });
+    btnPlanner.addEventListener('click', () => toggleRewardsPlanner(!isRewardsPlannerActive));
   }
 
   const btnSubmit = document.getElementById('btn-submit-rewards');
   if (btnSubmit && !btnSubmit.dataset.bound) {
     btnSubmit.dataset.bound = 'true';
-    btnSubmit.addEventListener('click', () => {
-      submitRewardProposal('/api/proposal');
+    btnSubmit.addEventListener('click', () => submitRewardProposal('/api/proposal'));
+  }
+
+  const btnAddTier = document.getElementById('btn-add-tier');
+  if (btnAddTier && !btnAddTier.dataset.bound) {
+    btnAddTier.dataset.bound = 'true';
+    btnAddTier.addEventListener('click', addTier);
+  }
+
+  // Delegated events for dynamic elements
+  const tierContainer = document.getElementById('rewards-tier-list');
+  if (tierContainer && !tierContainer.dataset.bound) {
+    tierContainer.dataset.bound = 'true';
+    tierContainer.addEventListener('click', (e) => {
+      if (!isRewardsPlannerActive) return;
+
+      const delBtn = e.target.closest('[data-action="del-tier"]');
+      if (delBtn) {
+        removeTier(parseInt(delBtn.dataset.index, 10));
+        return;
+      }
+
+      const incBtn = e.target.closest('[data-action="inc-range"]');
+      if (incBtn) {
+        adjustTierMaxRank(parseInt(incBtn.dataset.index, 10), 1);
+        return;
+      }
+
+      const decBtn = e.target.closest('[data-action="dec-range"]');
+      if (decBtn) {
+        adjustTierMaxRank(parseInt(decBtn.dataset.index, 10), -1);
+        return;
+      }
+
+      const chestItem = e.target.closest('.chest-item');
+      if (chestItem) {
+        const tierIndex = parseInt(chestItem.dataset.index, 10);
+        const chestType = chestItem.dataset.chestType;
+        if (!isNaN(tierIndex) && chestType) {
+          adjustChestQuantity(tierIndex, chestType);
+        }
+      }
     });
   }
 
-  const chestItems = document.querySelectorAll('.rewards-tier-row .chest-item');
-  chestItems.forEach(item => {
-    if (item.dataset.bound) return;
-    item.dataset.bound = 'true';
-
-    item.addEventListener('click', (e) => {
-      if (!isRewardsPlannerActive) return;
-      e.preventDefault();
-      
-      const row = item.closest('.rewards-tier-row');
-      const tierId = row?.dataset.tierId;
-      const chestType = item.dataset.chestType;
-      if (!tierId || !chestType) return;
-
-      adjustChestQuantity(tierId, chestType);
-    });
-  });
+  renderTierList();
+  updatePayoutTable();
 }
 
 if (typeof window !== 'undefined') {
