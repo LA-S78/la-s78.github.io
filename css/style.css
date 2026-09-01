@@ -1317,7 +1317,7 @@ table.schedule-table tr.active-row td.active-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0px 10px 150px 10px;
+  padding: 10px 10px 0 10px; /* Removed artificial 150px bottom padding */
   position: relative;
   z-index: 1;
 }
@@ -1485,17 +1485,20 @@ table.schedule-table tr.active-row td.active-col {
 }
 
 .totals-banner {
-  position: fixed;
-  bottom: calc(60px + env(safe-area-inset-bottom));
-  left: 0;
+  position: relative; /* Replaced broken position: fixed */
   width: 100%;
-  background-color: rgba(20, 16, 14, 0.95);
+  max-width: 800px;
+  margin: 25px auto 10px auto;
+  background-color: rgba(10, 8, 7, 0.85);
+  border: 1px solid var(--border-color);
   border-top: 2px solid var(--accent-color);
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
-  padding: 15px 0;
-  z-index: 99;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  padding: 14px 0;
+  z-index: 10;
   backdrop-filter: blur(5px);
 }
+
 .totals-container {
   max-width: 800px;
   margin: 0 auto;
@@ -1504,6 +1507,7 @@ table.schedule-table tr.active-row td.active-col {
   align-items: center;
   flex-wrap: wrap;
   gap: 15px;
+  padding: 0 10px;
 }
 .total-item {
   display: flex;
@@ -1790,7 +1794,9 @@ svg #layer1 path:hover {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.45rem 0.65rem;
+  padding: 0.35rem 0.65rem;
+  min-height: 42px; /* Locks height to prevent layout shift */
+  box-sizing: border-box;
   background: #0f0c0a;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid var(--border-color);
@@ -1804,6 +1810,7 @@ svg #layer1 path:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 28px; /* Keeps left and right groups vertically uniform */
 }
 
 .control-label {
@@ -1849,11 +1856,14 @@ svg #layer1 path:hover {
 
 /* Draft Mode Toggle Button */
 .draft-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.25rem 0.65rem;
+  height: 28px; /* Fixed height match */
+  padding: 0 0.65rem;
   font-size: 0.78rem;
+  line-height: 1;
+  box-sizing: border-box;
   background: #14100d;
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #c4b8aa;
@@ -1927,17 +1937,20 @@ svg #layer1 path:hover {
 
 /* Submit Strategy Button */
 .submit-plan-btn {
-  padding: 0.25rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 28px; /* Fixed height match */
+  padding: 0 0.65rem;
   font-size: 0.78rem;
+  line-height: 1;
+  box-sizing: border-box;
   font-weight: bold;
   background: linear-gradient(180deg, #166534 0%, #14532d 100%);
   border: 1px solid #22c55e;
   color: #f0fdf4;
   border-radius: 4px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
@@ -1955,6 +1968,12 @@ svg #layer1 path:hover {
 
 .submit-plan-btn.hidden {
   display: none;
+}
+
+.submit-plan-btn .badge {
+  line-height: 1;
+  padding: 0.15rem 0.35rem;
+  margin: 0;
 }
 
 /* ==========================================================================
@@ -2053,6 +2072,458 @@ body.map-fullscreen-active turbo-frame {
   max-width: 100% !important; /* Allow full span */
   margin: 0 !important;
   flex: 0 0 auto !important;
+}
+
+/* ==========================================================================
+   FEATURE: REWARD DISTRIBUTION COMPONENT
+   ========================================================================== */
+
+.rewards-wrapper {
+  max-width: 760px;
+  margin: 1.5rem auto;
+}
+
+/* Controls Bar: Mobile-First 2-Row Stacked Layout */
+.rewards-wrapper .map-controls {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.45rem;
+  padding: 0.5rem 0.65rem;
+  min-height: auto;
+}
+
+.rewards-wrapper .map-controls .control-group.left {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.rewards-wrapper .map-controls .control-group.right {
+  width: 100%;
+  justify-content: flex-start; /* Left-aligns buttons to match toggle above */
+  gap: 0.5rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.07);
+}
+
+/* Header & Pool Subtitle */
+.rewards-header {
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.rewards-title {
+  font-family: var(--font-headers);
+  color: var(--accent-color);
+  font-size: 1.3rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 0 0 0.3rem 0;
+  border-bottom: none !important;
+}
+
+.rewards-pool-text {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Active Hosting Week Toggle Switch */
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch input {
+  display: none;
+}
+
+.switch-slider {
+  width: 32px;
+  height: 18px;
+  background: var(--nav-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.switch-slider::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.toggle-switch input:checked + .switch-slider {
+  background: rgba(var(--active-theme), 0.3);
+  border-color: var(--accent-color);
+}
+
+.toggle-switch input:checked + .switch-slider::before {
+  transform: translateX(14px);
+  background: var(--accent-color);
+  box-shadow: 0 0 6px rgba(var(--active-theme-bright), 0.8);
+}
+
+/* Tier Breakdown Cards (Mobile-First: Stacked Layout) */
+.rewards-tier-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.rewards-tier-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.rewards-tier-row:hover {
+  border-color: var(--accent-color);
+  background: rgba(var(--active-theme), 0.08);
+}
+
+.tier-label-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tier-name {
+  font-family: var(--font-headers);
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+.tier-alliance-tags {
+  font-size: 0.72rem;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+/* Fixed 3-Column Slot Grid for Chest Alignment */
+.tier-chests {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+  padding-top: 0.45rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.07);
+}
+
+.chest-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Explicit Slot Placement */
+.chest-item[data-chest-type="commanders_will"] { grid-column: 1; }
+.chest-item[data-chest-type="loyal_servant"]    { grid-column: 2; }
+.chest-item[data-chest-type="followers_heart"]  { grid-column: 3; }
+
+.chest-multiplier {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+/* Chest Glyphs */
+.chest-glyph {
+  width: 26px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.chest-glyph.gold {
+  background: var(--accent-color);
+  box-shadow: 0 0 6px rgba(184, 151, 90, 0.4);
+}
+
+.chest-glyph.purple {
+  background: #a400af;
+  box-shadow: 0 0 6px rgba(164, 0, 175, 0.4);
+}
+
+.chest-glyph.blue {
+  background: #0070f3;
+  box-shadow: 0 0 6px rgba(0, 112, 243, 0.4);
+}
+
+.chest-glyph.crown {
+  background: #8f0000;
+  box-shadow: 0 0 6px rgba(143, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+/* Footnote Banner */
+.rewards-note {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(184, 151, 90, 0.08);
+  border-left: 4px solid var(--accent-color);
+  border-radius: 0 6px 6px 0;
+  padding: 0.6rem 0.9rem;
+  margin-top: 1rem;
+}
+
+.rewards-note p {
+  margin: 0 !important;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.rewards-note strong {
+  color: var(--text-main);
+}
+
+/* Empty Chest Display & Planner Mode Interactions */
+.chest-item.is-empty {
+  display: none;
+}
+
+#rewards-container.planner-active .chest-item {
+  padding: 5px 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+#rewards-container.planner-active .chest-item:active {
+  background: rgba(var(--active-theme), 0.2);
+  border-color: var(--accent-color);
+}
+
+#rewards-container.planner-active .chest-item.is-empty {
+  display: inline-flex;
+  opacity: 0.3;
+  filter: grayscale(80%);
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+#rewards-container.planner-active .chest-item.is-empty:hover {
+  opacity: 0.8;
+  filter: grayscale(0%);
+}
+
+/* Dynamic Tier Planner Controls */
+.planner-actions {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.planner-actions.hidden {
+  display: none !important;
+}
+
+.btn-add-tier {
+  width: 100%;
+  justify-content: center;
+  border-style: dashed;
+  height: 32px;
+  background: rgba(184, 151, 90, 0.05);
+}
+
+.btn-add-tier:hover {
+  background: rgba(184, 151, 90, 0.15);
+  border-color: var(--accent-color);
+}
+
+/* Tier Row Actions (Delete & Range Steppers) */
+.tier-row-controls {
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+
+#rewards-container.planner-active .tier-row-controls {
+  display: inline-flex;
+}
+
+#rewards-container.planner-active .tier-name-static {
+  display: none;
+}
+
+.btn-tier-del {
+  background: transparent;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  color: #ff6b6b;
+  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-tier-del:hover {
+  background: #ff6b6b;
+  color: #1a1512;
+}
+
+.range-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: #070504;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 2px 6px;
+  gap: 6px;
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
+.range-stepper .range-text {
+  color: var(--text-main);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.range-stepper .range-val {
+  color: var(--text-main);
+  font-weight: bold;
+}
+
+.range-stepper button {
+  background: transparent;
+  border: none;
+  color: var(--accent-color);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.range-stepper button:hover {
+  color: #ffffff;
+}
+
+@media (min-width: 600px) {
+  /* Restore 1-Row Inline Controls on Desktop */
+  .rewards-wrapper .map-controls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.35rem 0.65rem;
+    min-height: 42px;
+  }
+
+  .rewards-wrapper .map-controls .control-group.left {
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .rewards-wrapper .map-controls .control-group.right {
+    width: auto;
+    justify-content: flex-end;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .rewards-tier-row {
+    flex-wrap: nowrap;
+    gap: 0;
+    padding: 0.6rem 1rem;
+  }
+
+  .tier-label-group {
+    width: auto;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+
+  .tier-chests {
+    width: auto;
+    grid-template-columns: repeat(3, 75px);
+    gap: 0.75rem;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .chest-item {
+    justify-content: flex-end;
+  }
+
+  #rewards-container.planner-active .chest-item {
+    padding: 0;
+    background: transparent;
+    border: none;
+  }
+}
+
+/* ==========================================================================
+   DESKTOP / TABLET OVERRIDES (Single Horizontal Row)
+   ========================================================================== */
+@media (min-width: 600px) {
+  .rewards-tier-row {
+    flex-wrap: nowrap;
+    gap: 0;
+    padding: 0.6rem 1rem;
+  }
+
+  .tier-label-group {
+    width: auto;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+
+  .tier-chests {
+    width: auto;
+    grid-template-columns: repeat(3, 75px);
+    gap: 0.75rem;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .chest-item {
+    justify-content: flex-end;
+  }
+
+  #rewards-container.planner-active .chest-item {
+    padding: 0;
+    background: transparent;
+    border: none;
+  }
 }
 
 /* ==========================================================================
@@ -2352,8 +2823,7 @@ body.map-fullscreen-active turbo-frame {
 
   /* Desktop overrides for the T10 Calculator */
   .tree-container {
-    padding: 0px 20px 90px 20px;
-  }
+    padding: 15px 20px 0 20px; /* Removed 90px bottom padding */  }
   .line-vertical {
     height: 25px;
   }

@@ -14,6 +14,8 @@ active_nav: home
 </section>
 {% endfor %}
 
+{% include credits.html %}
+
 === collection--home--01 ===
 ---
 title: "Critical Intel"

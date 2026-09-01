@@ -74,8 +74,4 @@ nav_id: "capitol-rewards"
 
 <h2>{{ p.title }}</h2>
 
-<img src="/images/rewards.jpg" 
-     alt="{{ p.title }}" 
-     class="blueprint-img" 
-     onclick="document.getElementById('rewardsZoom').showModal()" 
-     style="cursor: pointer; margin-top: 20px;">
+{% include rewards_card.html %}

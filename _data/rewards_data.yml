@@ -1,0 +1,57 @@
+# Weekly Pool Allocations
+weekly_pool:
+  commanders_will: 5
+  loyal_servant: 10
+  followers_heart: 20
+
+# Chest Currency Unit Values (Calculated from baseline distribution)
+chest_values:
+  commanders_will:
+    diamonds: 8800
+    tickets: 44
+  loyal_servant:
+    diamonds: 4400
+    tickets: 40
+  followers_heart:
+    diamonds: 1600
+    tickets: 36
+
+# King's Crown Hosting Bonus (Applies to Ranks 1-4 during host weeks)
+kings_crown_bonus:
+  diamonds: 4800
+  tickets: 24
+  max_eligible_rank: 4
+
+# Initial Default Distribution Tiers
+distribution_tiers:
+  - id: "tier_1"
+    min_rank: 1
+    max_rank: 1
+    chests:
+      commanders_will: 1
+      loyal_servant: 3
+      followers_heart: 1
+
+  - id: "tier_2"
+    min_rank: 2
+    max_rank: 3
+    chests:
+      commanders_will: 1
+      loyal_servant: 1
+      followers_heart: 3
+
+  - id: "tier_3"
+    min_rank: 4
+    max_rank: 5
+    chests:
+      commanders_will: 1
+      loyal_servant: 1
+      followers_heart: 2
+
+  - id: "tier_4"
+    min_rank: 6
+    max_rank: 8
+    chests:
+      commanders_will: 0
+      loyal_servant: 1
+      followers_heart: 3

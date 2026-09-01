@@ -1,0 +1,133 @@
+{% assign lang = page.lang | default: "en" %}
+{% assign t = site.data[lang].rewards | default: site.data.en.rewards %}
+{% assign rdata = site.data.rewards_data %}
+
+<div id="rewards-container" class="rewards-wrapper">
+  <!-- Controls Bar -->
+  <div class="map-controls">
+    <div class="control-group left">
+      <label class="toggle-switch">
+        <input type="checkbox" id="toggle-host-week" checked>
+        <span class="switch-slider"></span>
+        <span class="control-label">Active Hosting Week</span>
+      </label>
+    </div>
+    <div class="control-group right">
+      <button id="btn-toggle-rewards-planner" class="draft-btn" aria-pressed="false" type="button">
+        <span class="draft-indicator"></span>
+        <span class="draft-text">Planner Mode</span>
+      </button>
+      <button id="btn-submit-rewards" class="submit-plan-btn hidden" disabled type="button">
+        Submit Plan <span id="reward-change-badge" class="badge">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Card Body -->
+  <div class="content-pane">
+    <div class="rewards-header">
+      <h2 class="rewards-title">{{ t.ui.title | default: "Alliance Reward Distribution" }}</h2>
+      <span class="rewards-pool-text">
+        {{ t.ui.subtitle | default: "Weekly Allocation" }}: 
+        {{ rdata.weekly_pool.commanders_will }} {{ t.chests.commanders_will | default: "Commander's Will" }} | 
+        {{ rdata.weekly_pool.loyal_servant }} {{ t.chests.loyal_servant | default: "Loyal Servant" }} | 
+        {{ rdata.weekly_pool.followers_heart }} {{ t.chests.followers_heart | default: "Follower's Heart" }}
+      </span>
+    </div>
+
+    <!-- Tier Breakdown Cards Container (Re-rendered dynamically in planner) -->
+    <div id="rewards-tier-list" class="rewards-tier-list" data-rank-label="{{ t.ui.rank | default: 'Rank' }}">
+      {% for tier in rdata.distribution_tiers %}
+      <div class="rewards-tier-row" 
+           data-tier-id="{{ tier.id }}" 
+           data-min-rank="{{ tier.min_rank }}" 
+           data-max-rank="{{ tier.max_rank }}">
+        <div class="tier-label-group">
+          <!-- Standard Mode Label -->
+          <span class="tier-name">
+            {{ t.ui.rank | default: "Rank" }} {{ tier.min_rank }}{% if tier.min_rank != tier.max_rank %}–{{ tier.max_rank }}{% endif %}
+          </span>
+          <!-- Dynamic Alliance Tag Container -->
+          <span class="tier-alliance-tags" data-min-rank="{{ tier.min_rank }}" data-max-rank="{{ tier.max_rank }}"></span>
+        </div>
+
+        <div class="tier-chests">
+          <!-- Gold -->
+          <div class="chest-item {% if tier.chests.commanders_will == 0 %}is-empty{% endif %}" 
+               title="{{ t.chests.commanders_will }} ({{ t.chests.gold }})" 
+               data-chest-type="commanders_will">
+            <span class="chest-glyph gold"></span>
+            <span class="chest-multiplier">×{{ tier.chests.commanders_will | default: 0 }}</span>
+          </div>
+
+          <!-- Purple -->
+          <div class="chest-item {% if tier.chests.loyal_servant == 0 %}is-empty{% endif %}" 
+               title="{{ t.chests.loyal_servant }} ({{ t.chests.purple }})" 
+               data-chest-type="loyal_servant">
+            <span class="chest-glyph purple"></span>
+            <span class="chest-multiplier">×{{ tier.chests.loyal_servant | default: 0 }}</span>
+          </div>
+
+          <!-- Blue -->
+          <div class="chest-item {% if tier.chests.followers_heart == 0 %}is-empty{% endif %}" 
+               title="{{ t.chests.followers_heart }} ({{ t.chests.blue }})" 
+               data-chest-type="followers_heart">
+            <span class="chest-glyph blue"></span>
+            <span class="chest-multiplier">×{{ tier.chests.followers_heart | default: 0 }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Planner Action: Add New Tier Row -->
+    <div id="planner-add-tier-container" class="planner-actions hidden">
+      <button id="btn-add-tier" class="draft-btn btn-add-tier" type="button">
+        <span>+</span> Add Reward Tier
+      </button>
+    </div>
+
+    <!-- Summary Payout Table (Dynamically recalculated on tier/range changes) -->
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>{{ t.ui.rank | default: "RANK" | upcase }}</th>
+          <th>{{ t.ui.total_diamonds | default: "TOTAL DIAMONDS" | upcase }} 💎</th>
+          <th>{{ t.ui.total_tickets | default: "TOTAL TICKETS" | upcase }} 🎫</th>
+        </tr>
+      </thead>
+      <tbody id="payout-table-body">
+        <!-- Injected via JavaScript -->
+      </tbody>
+    </table>
+
+    <!-- Themed Footnote -->
+    <div class="rewards-note">
+      <span class="chest-glyph crown"></span>
+      <p>*{{ t.ui.notice | default: "Note: The above totals cover the entire rotation, including the King's Chests." }}</p>
+    </div>
+    <div></div>
+  </div>
+</div>
+
+<script id="rewards-data-bootstrap" type="application/json">
+  {{ site.data.rewards_data | jsonify }}
+</script>
+<script id="map-state-bootstrap" type="application/json">
+  {{ site.data.map_state | jsonify }}
+</script>
+<script>
+  if (!window.REWARDS_CONFIG) {
+    const rawRData = document.getElementById('rewards-data-bootstrap');
+    if (rawRData && rawRData.textContent.trim()) {
+      try { window.REWARDS_CONFIG = JSON.parse(rawRData.textContent); } catch (e) {}
+    }
+  }
+  if (!window.MAP_STATE) {
+    const rawMapData = document.getElementById('map-state-bootstrap');
+    if (rawMapData && rawMapData.textContent.trim()) {
+      try { window.MAP_STATE = JSON.parse(rawMapData.textContent); } catch (e) {}
+    }
+  }
+</script>
+<script type="module" src="/js/rewards.js" defer></script>
