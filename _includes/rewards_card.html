@@ -47,26 +47,29 @@
         </div>
 
         <div class="tier-chests">
-          {% if tier.chests.commanders_will > 0 %}
-          <div class="chest-item" title="{{ t.chests.commanders_will }} ({{ t.chests.gold }})">
+          <!-- Gold: Commander's Will -->
+          <div class="chest-item {% if tier.chests.commanders_will == 0 %}is-empty{% endif %}" 
+               title="{{ t.chests.commanders_will }} ({{ t.chests.gold }})" 
+               data-chest-type="commanders_will">
             <span class="chest-glyph gold"></span>
-            <span class="chest-multiplier">×{{ tier.chests.commanders_will }}</span>
+            <span class="chest-multiplier">×{{ tier.chests.commanders_will | default: 0 }}</span>
           </div>
-          {% endif %}
 
-          {% if tier.chests.loyal_servant > 0 %}
-          <div class="chest-item" title="{{ t.chests.loyal_servant }} ({{ t.chests.purple }})">
+          <!-- Purple: Loyal Servant -->
+          <div class="chest-item {% if tier.chests.loyal_servant == 0 %}is-empty{% endif %}" 
+               title="{{ t.chests.loyal_servant }} ({{ t.chests.purple }})" 
+               data-chest-type="loyal_servant">
             <span class="chest-glyph purple"></span>
-            <span class="chest-multiplier">×{{ tier.chests.loyal_servant }}</span>
+            <span class="chest-multiplier">×{{ tier.chests.loyal_servant | default: 0 }}</span>
           </div>
-          {% endif %}
 
-          {% if tier.chests.followers_heart > 0 %}
-          <div class="chest-item" title="{{ t.chests.followers_heart }} ({{ t.chests.blue }})">
+          <!-- Blue: Follower's Heart -->
+          <div class="chest-item {% if tier.chests.followers_heart == 0 %}is-empty{% endif %}" 
+               title="{{ t.chests.followers_heart }} ({{ t.chests.blue }})" 
+               data-chest-type="followers_heart">
             <span class="chest-glyph blue"></span>
-            <span class="chest-multiplier">×{{ tier.chests.followers_heart }}</span>
+            <span class="chest-multiplier">×{{ tier.chests.followers_heart | default: 0 }}</span>
           </div>
-          {% endif %}
         </div>
       </div>
       {% endfor %}
@@ -102,4 +105,5 @@
     <div></div>
   </div>
 </div>
+
 <script type="module" src="/js/rewards.js" defer></script>

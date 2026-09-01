@@ -17,8 +17,10 @@ const KINGS_CROWN_BONUS = {
   tickets: 24
 };
 
+const HOSTING_RANKS = ['rank_1', 'rank_2', 'rank_3', 'rank_4'];
+
 // ==========================================================================
-// 1. HOST WEEK CALCULATION & TOGGLE
+// 1. HOST WEEK CALCULATION & TOGGLE (APPLIES TO TOP 4 RANKS)
 // ==========================================================================
 
 export function initHostWeekToggle() {
@@ -41,8 +43,7 @@ export function updatePayoutTable(isHostWeekActive) {
     const diamondCell = row.querySelector('.td-diamonds');
     const ticketCell = row.querySelector('.td-tickets');
 
-    // King's Crown chest bonus applies to Rank 1 (or the active host)
-    const isHostingRank = rankKey === 'rank_1';
+    const isHostingRank = HOSTING_RANKS.includes(rankKey);
 
     let displayDiamonds = baseDiamonds;
     let displayTickets = baseTickets;
@@ -65,7 +66,6 @@ export function syncAllianceTagsFromMapState(state = null) {
   const mapData = state || (typeof window !== 'undefined' ? window.MAP_STATE : null);
   if (!mapData || !mapData.alliances) return;
 
-  // Rank alliances 1..N based on map_state.yml
   const rankedAlliances = Object.entries(mapData.alliances)
     .filter(([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '')
     .sort(([_, a], [__, b]) => Number(a.rank) - Number(b.rank))
@@ -94,9 +94,9 @@ export function snapshotInitialTiers() {
   const rows = document.querySelectorAll('.rewards-tier-row');
   rows.forEach(row => {
     const tierId = row.dataset.tierId;
-    const gold = parseInt(row.querySelector('.chest-item:has(.gold) .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
-    const purple = parseInt(row.querySelector('.chest-item:has(.purple) .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
-    const blue = parseInt(row.querySelector('.chest-item:has(.blue) .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
+    const gold = parseInt(row.querySelector('.chest-item[data-chest-type="commanders_will"] .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
+    const purple = parseInt(row.querySelector('.chest-item[data-chest-type="loyal_servant"] .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
+    const blue = parseInt(row.querySelector('.chest-item[data-chest-type="followers_heart"] .chest-multiplier')?.textContent.replace('×', ''), 10) || 0;
 
     originalRewardTiers[tierId] = {
       commanders_will: gold,
@@ -131,11 +131,12 @@ export function toggleRewardsPlanner(active) {
   updateRewardsProposalUI();
 }
 
-export function adjustChestQuantity(tierId, chestType, delta) {
+export function adjustChestQuantity(tierId, chestType) {
   if (!isRewardsPlannerActive || !draftRewardTiers[tierId]) return;
 
   const currentVal = draftRewardTiers[tierId][chestType] || 0;
-  const newVal = Math.max(0, currentVal + delta);
+  // Cycle up to 5, then reset back to 0 (0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 0)
+  const newVal = currentVal >= 5 ? 0 : currentVal + 1;
   draftRewardTiers[tierId][chestType] = newVal;
 
   renderDraftTiers();
@@ -147,13 +148,14 @@ function renderDraftTiers() {
     const row = document.querySelector(`.rewards-tier-row[data-tier-id="${tierId}"]`);
     if (!row) return;
 
-    const goldMulti = row.querySelector('.chest-item:has(.gold) .chest-multiplier');
-    const purpleMulti = row.querySelector('.chest-item:has(.purple) .chest-multiplier');
-    const blueMulti = row.querySelector('.chest-item:has(.blue) .chest-multiplier');
-
-    if (goldMulti) goldMulti.textContent = `×${chests.commanders_will}`;
-    if (purpleMulti) purpleMulti.textContent = `×${chests.loyal_servant}`;
-    if (blueMulti) blueMulti.textContent = `×${chests.followers_heart}`;
+    ['commanders_will', 'loyal_servant', 'followers_heart'].forEach(chestType => {
+      const item = row.querySelector(`.chest-item[data-chest-type="${chestType}"]`);
+      if (!item) return;
+      const count = chests[chestType] || 0;
+      const multi = item.querySelector('.chest-multiplier');
+      if (multi) multi.textContent = `×${count}`;
+      item.classList.toggle('is-empty', count === 0);
+    });
   });
 }
 
@@ -280,7 +282,6 @@ export function bindRewardsControls() {
     });
   }
 
-  // Bind click-to-increment on chest badges while planner is active
   const chestItems = document.querySelectorAll('.rewards-tier-row .chest-item');
   chestItems.forEach(item => {
     if (item.dataset.bound) return;
@@ -292,15 +293,10 @@ export function bindRewardsControls() {
       
       const row = item.closest('.rewards-tier-row');
       const tierId = row?.dataset.tierId;
-      if (!tierId) return;
+      const chestType = item.dataset.chestType;
+      if (!tierId || !chestType) return;
 
-      let chestType = 'followers_heart';
-      if (item.querySelector('.gold')) chestType = 'commanders_will';
-      else if (item.querySelector('.purple')) chestType = 'loyal_servant';
-
-      // Left click = +1, Shift click / Right click = -1
-      const delta = e.shiftKey ? -1 : 1;
-      adjustChestQuantity(tierId, chestType, delta);
+      adjustChestQuantity(tierId, chestType);
     });
   });
 }

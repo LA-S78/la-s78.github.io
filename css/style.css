@@ -2248,6 +2248,28 @@ body.map-fullscreen-active turbo-frame {
   box-shadow: 0 0 6px rgba(var(--active-theme-bright), 0.8);
 }
 
+/* Empty Chest Display Handling */
+.chest-item.is-empty {
+  display: none;
+}
+
+#rewards-container.planner-active .chest-item {
+  cursor: pointer;
+  user-select: none;
+}
+
+#rewards-container.planner-active .chest-item.is-empty {
+  display: inline-flex;
+  opacity: 0.3;
+  filter: grayscale(80%);
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+#rewards-container.planner-active .chest-item.is-empty:hover {
+  opacity: 0.8;
+  filter: grayscale(0%);
+}
+
 /* ==========================================================================
    9. ANIMATIONS & ACCESSIBILITY
    ========================================================================== */
