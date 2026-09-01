@@ -2152,7 +2152,7 @@ body.map-fullscreen-active turbo-frame {
   box-shadow: 0 0 6px rgba(var(--active-theme-bright), 0.8);
 }
 
-/* Tier Breakdown Cards */
+/* Tier Breakdown Cards (Mobile-First Default: Stacked Layout) */
 .rewards-tier-list {
   display: flex;
   flex-direction: column;
@@ -2162,12 +2162,14 @@ body.map-fullscreen-active turbo-frame {
 
 .rewards-tier-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 0.55rem;
+  padding: 0.65rem 0.85rem;
   background: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  padding: 0.6rem 1rem;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
@@ -2177,9 +2179,12 @@ body.map-fullscreen-active turbo-frame {
 }
 
 .tier-label-group {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 .tier-name {
@@ -2196,9 +2201,13 @@ body.map-fullscreen-active turbo-frame {
 }
 
 .tier-chests {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.07);
 }
 
 .chest-item {
@@ -2267,14 +2276,25 @@ body.map-fullscreen-active turbo-frame {
   color: var(--text-main);
 }
 
-/* Empty Chest Display & Planner Interactions */
+/* Empty Chest Display & Planner Mode Interactions */
 .chest-item.is-empty {
   display: none;
 }
 
 #rewards-container.planner-active .chest-item {
+  flex: 1;
+  justify-content: center;
+  padding: 5px 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
   cursor: pointer;
   user-select: none;
+}
+
+#rewards-container.planner-active .chest-item:active {
+  background: rgba(var(--active-theme), 0.2);
+  border-color: var(--accent-color);
 }
 
 #rewards-container.planner-active .chest-item.is-empty {
@@ -2356,9 +2376,21 @@ body.map-fullscreen-active turbo-frame {
   background: #070504;
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  padding: 1px 4px;
-  gap: 4px;
+  padding: 2px 6px;
+  gap: 6px;
   font-size: 0.78rem;
+  line-height: 1;
+}
+
+.range-stepper .range-text {
+  color: var(--text-main);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.range-stepper .range-val {
+  color: var(--text-main);
+  font-weight: bold;
 }
 
 .range-stepper button {
@@ -2367,20 +2399,47 @@ body.map-fullscreen-active turbo-frame {
   color: var(--accent-color);
   font-weight: bold;
   cursor: pointer;
-  padding: 0 3px;
+  padding: 0 2px;
   font-size: 0.85rem;
   line-height: 1;
+  transition: color 0.15s ease;
 }
 
 .range-stepper button:hover {
   color: #ffffff;
 }
 
-.range-stepper .range-val {
-  color: var(--text-main);
-  font-weight: bold;
-  min-width: 14px;
-  text-align: center;
+/* ==========================================================================
+   DESKTOP / TABLET OVERRIDES (Single Horizontal Row)
+   ========================================================================== */
+@media (min-width: 600px) {
+  .rewards-tier-row {
+    flex-wrap: nowrap;
+    gap: 0;
+    padding: 0.6rem 1rem;
+  }
+
+  .tier-label-group {
+    width: auto;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+
+  .tier-chests {
+    width: auto;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  #rewards-container.planner-active .chest-item {
+    flex: initial;
+    padding: 0;
+    background: transparent;
+    border: none;
+  }
 }
 
 /* ==========================================================================
