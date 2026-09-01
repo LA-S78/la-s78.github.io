@@ -1317,7 +1317,7 @@ table.schedule-table tr.active-row td.active-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0px 10px 150px 10px;
+  padding: 10px 10px 0 10px; /* Removed artificial 150px bottom padding */
   position: relative;
   z-index: 1;
 }
@@ -1485,17 +1485,20 @@ table.schedule-table tr.active-row td.active-col {
 }
 
 .totals-banner {
-  position: fixed;
-  bottom: calc(60px + env(safe-area-inset-bottom));
-  left: 0;
+  position: relative; /* Replaced broken position: fixed */
   width: 100%;
-  background-color: rgba(20, 16, 14, 0.95);
+  max-width: 800px;
+  margin: 25px auto 10px auto;
+  background-color: rgba(10, 8, 7, 0.85);
+  border: 1px solid var(--border-color);
   border-top: 2px solid var(--accent-color);
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
-  padding: 15px 0;
-  z-index: 99;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  padding: 14px 0;
+  z-index: 10;
   backdrop-filter: blur(5px);
 }
+
 .totals-container {
   max-width: 800px;
   margin: 0 auto;
@@ -1504,6 +1507,7 @@ table.schedule-table tr.active-row td.active-col {
   align-items: center;
   flex-wrap: wrap;
   gap: 15px;
+  padding: 0 10px;
 }
 .total-item {
   display: flex;
@@ -2582,8 +2586,7 @@ body.map-fullscreen-active turbo-frame {
 
   /* Desktop overrides for the T10 Calculator */
   .tree-container {
-    padding: 0px 20px 90px 20px;
-  }
+    padding: 15px 20px 0 20px; /* Removed 90px bottom padding */  }
   .line-vertical {
     height: 25px;
   }

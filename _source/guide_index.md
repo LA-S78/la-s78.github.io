@@ -10,11 +10,11 @@ permalink: /guides/index.html
 {% include structure/search.html search_type="guides" %}
 
 {% for section in site.guide_index %}
-{% unless section.relative_path contains 'writers/' %}
-<section class="content-pane" id="{{ section.nav_id }}">
-{{ section.content }}
-</section>
-{% endunless %}
+  {% unless section.relative_path contains 'writers' or section.nav_id == 'writers' %}
+    <section class="content-pane" id="{{ section.nav_id }}">
+      {{ section.content }}
+    </section>
+  {% endunless %}
 {% endfor %}
 
 === collection--guide_index--01 ===
