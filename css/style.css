@@ -1790,7 +1790,9 @@ svg #layer1 path:hover {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.45rem 0.65rem;
+  padding: 0.35rem 0.65rem;
+  min-height: 42px; /* Locks height to prevent layout shift */
+  box-sizing: border-box;
   background: #0f0c0a;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid var(--border-color);
@@ -1804,6 +1806,7 @@ svg #layer1 path:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 28px; /* Keeps left and right groups vertically uniform */
 }
 
 .control-label {
@@ -1849,11 +1852,14 @@ svg #layer1 path:hover {
 
 /* Draft Mode Toggle Button */
 .draft-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.25rem 0.65rem;
+  height: 28px; /* Fixed height match */
+  padding: 0 0.65rem;
   font-size: 0.78rem;
+  line-height: 1;
+  box-sizing: border-box;
   background: #14100d;
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #c4b8aa;
@@ -1927,17 +1933,20 @@ svg #layer1 path:hover {
 
 /* Submit Strategy Button */
 .submit-plan-btn {
-  padding: 0.25rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 28px; /* Fixed height match */
+  padding: 0 0.65rem;
   font-size: 0.78rem;
+  line-height: 1;
+  box-sizing: border-box;
   font-weight: bold;
   background: linear-gradient(180deg, #166534 0%, #14532d 100%);
   border: 1px solid #22c55e;
   color: #f0fdf4;
   border-radius: 4px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
@@ -1955,6 +1964,12 @@ svg #layer1 path:hover {
 
 .submit-plan-btn.hidden {
   display: none;
+}
+
+.submit-plan-btn .badge {
+  line-height: 1;
+  padding: 0.15rem 0.35rem;
+  margin: 0;
 }
 
 /* ==========================================================================

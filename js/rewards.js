@@ -62,10 +62,25 @@ export function updatePayoutTable(isHostWeekActive) {
 // 2. LIVE ALLIANCE TAG BINDING
 // ==========================================================================
 
-export function syncAllianceTagsFromMapState(state = null) {
-  const mapData = state || (typeof window !== 'undefined' ? window.MAP_STATE : null);
+export async function syncAllianceTagsFromMapState(state = null) {
+  let mapData = state || (typeof window !== 'undefined' ? window.MAP_STATE : null);
+
+  // If not yet available in global window, fetch live state from the API
+  if (!mapData || !mapData.alliances) {
+    try {
+      const res = await fetch(`/api/map-state?t=${Date.now()}`);
+      if (res.ok) {
+        mapData = await res.json();
+        window.MAP_STATE = mapData;
+      }
+    } catch (err) {
+      console.warn('Could not fetch live map state for rewards card:', err);
+    }
+  }
+
   if (!mapData || !mapData.alliances) return;
 
+  // Rank alliances 1..N based on map_state data
   const rankedAlliances = Object.entries(mapData.alliances)
     .filter(([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '')
     .sort(([_, a], [__, b]) => Number(a.rank) - Number(b.rank))
@@ -78,7 +93,9 @@ export function syncAllianceTagsFromMapState(state = null) {
 
     const matching = rankedAlliances.filter(a => a.rank >= minRank && a.rank <= maxRank);
     if (matching.length > 0) {
-      container.innerHTML = matching.map(a => `<span class="alliance-badge" style="color: ${a.color || 'var(--accent-color)'};">[${a.tag}]</span>`).join(' ');
+      container.innerHTML = matching
+        .map(a => `<span class="alliance-badge" style="color: ${a.color || 'var(--accent-color)'};">[${a.tag}]</span>`)
+        .join(' ');
     } else {
       container.innerHTML = '';
     }

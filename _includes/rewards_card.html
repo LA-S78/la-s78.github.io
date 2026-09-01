@@ -105,7 +105,22 @@
       <span class="chest-glyph crown"></span>
       <p>*{{ t.ui.notice | default: "Note: The above totals cover the entire rotation, including the King's Chests." }}</p>
     </div>
+    <div></div>
   </div>
 </div>
-
+<script id="map-state-bootstrap" type="application/json">
+  {{ site.data.map_state | jsonify }}
+</script>
+<script>
+  if (!window.MAP_STATE) {
+    const rawMapData = document.getElementById('map-state-bootstrap');
+    if (rawMapData && rawMapData.textContent.trim()) {
+      try {
+        window.MAP_STATE = JSON.parse(rawMapData.textContent);
+      } catch (e) {
+        console.warn('Could not parse initial MAP_STATE:', e);
+      }
+    }
+  }
+</script>
 <script type="module" src="/js/rewards.js" defer></script>
