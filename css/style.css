@@ -3179,3 +3179,102 @@ body.map-fullscreen-active turbo-frame {
       }
     }
   }
+/* ==========================================================================
+   PORTAL / STANDALONE APP LAYOUT OVERRIDES
+   ========================================================================== */
+
+/* 1. Jitter-Free Fixed Background Canvas */
+.portal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100lvh;
+  z-index: -10;
+  pointer-events: none;
+  background-color: #0e0d0b;
+  background-image: url("/images/background.webp"), url("/images/background.png");
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* 2. Unlocked Native Mobile & Desktop Scroller */
+html {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+
+body.portal-body {
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100lvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  position: relative !important;
+  background: transparent !important;
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* 3. Transparent Layout Containers (Allows .portal-backdrop to show through) */
+body.portal-body #mobile-container {
+  position: relative !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100lvh !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  touch-action: pan-y !important;
+  padding-bottom: 3rem !important;
+}
+
+body.portal-body #main-content,
+body.portal-body main {
+  height: auto !important;
+  overflow: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  touch-action: pan-y !important;
+}
+
+/* 4. Header Visibility Adjustments */
+body.portal-body.has-no-header #mobile-container {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+body.portal-body.has-no-header #main-content {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+body.portal-body.has-no-header main {
+  padding-top: 1.5rem !important;
+  margin-top: 0 !important;
+}
+
+body.portal-body.has-no-header .lantern-glow-bleed {
+  display: none !important;
+}
+
+body.portal-body.has-header #main-content {
+  position: relative;
+}
+
+/* 5. Center Utility Panes (No background overrides: inherits native theme styling) */
+body.portal-body .content-pane {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  touch-action: pan-y !important;
+}

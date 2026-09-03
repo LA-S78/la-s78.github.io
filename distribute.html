@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>King's Distribution Console | Last Asylum</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body class="nominate-wrapper">
+---
+layout: portal
+title: King's Distribution Console
+permalink: /distribute.html
+hide_header: true
+---
 
-<div class="content-pane" style="max-width: 680px; width: 100%; margin: 0 auto; padding: 1.25rem;">
+<!-- Stripped legacy nominate-wrapper class so native .content-pane styling applies -->
+<div class="content-pane" style="max-width: 680px; width: 100%; padding: 1.25rem;">
   <div style="text-align: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">
     <h2 style="margin: 0 0 0.3rem 0; font-family: var(--font-headers); color: var(--accent-color); font-size: 1.3rem;">
       👑 King's Distribution Console
@@ -16,7 +14,6 @@
     <div class="sub-text" id="progress-indicator">Loading nominations...</div>
   </div>
 
-  <!-- View Controls -->
   <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
     <div class="segmented-control">
       <button type="button" class="toggle-btn active" id="btn-group-chest">By Chest</button>
@@ -233,5 +230,3 @@
     loadNominations();
   })();
 </script>
-</body>
-</html>

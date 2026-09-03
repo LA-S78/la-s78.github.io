@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="{{ site.active_lang | default: 'en' }}">
+
+{% include structure/head.html %}
+
+<body data-turbo="false" class="portal-body {% if page.hide_header %}has-no-header{% else %}has-header{% endif %}">
+
+<!-- Dedicated Fixed Background Canvas -->
+<div class="portal-backdrop" aria-hidden="true"></div>
+
+<div id="mobile-container">
+    {% unless page.hide_header %}
+        {% include structure/header.html %}
+    {% endunless %}
+
+    <div id="main-content">
+        {% unless page.hide_header %}
+            <div class="lantern-glow-bleed" style="pointer-events: none;"></div>
+        {% endunless %}
+
+        <main>
+            {{ content }}
+        </main>
+    </div>
+</div>
+
+</body>
+</html>

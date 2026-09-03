@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Reward Nominations | Last Asylum</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body class="nominate-wrapper">
+---
+layout: portal
+title: Reward Nominations
+permalink: /nominate.html
+hide_header: true
+---
 
+<!-- Stripped legacy nominate-wrapper class so native .content-pane styling applies -->
 <div class="content-pane" id="nominate-app" style="max-width: 560px;">
   <div id="loading-state" class="status-banner">Loading nomination portal...</div>
   <div id="error-state" class="status-banner warning" style="display: none; border: 1px solid #ff6b6b; background: rgba(122, 0, 0, 0.3);"></div>
@@ -94,12 +92,10 @@
 
     const allotment = payload.allotment || {};
 
-    // Build Standard Slots
     buildSlots('gold-slots', '🟡 Commander\'s Will (Gold)', allotment.commanders_will || 0, 'std-gold');
     buildSlots('purple-slots', '🟣 Loyal Servant (Purple)', allotment.loyal_servant || 0, 'std-purple');
     buildSlots('blue-slots', '🔵 Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'std-blue');
 
-    // Build KW Slots if KW mode
     if (isKW) {
       document.getElementById('std-section-header').style.display = 'block';
       document.getElementById('kw-pool-container').style.display = 'block';
@@ -109,7 +105,7 @@
       buildSlots('kw-blue-slots', '🔵 KW Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'kw-blue');
     }
 
-    // Prioritized Auto-fill Logic
+    // Prioritized Auto-fill Logic (KW Gold -> REG Gold -> KW Purple -> REG Purple -> KW Blue -> REG Blue)
     document.getElementById('btn-autofill').addEventListener('click', () => {
       const raw = document.getElementById('smart-paste-input').value;
       const lines = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
@@ -222,5 +218,3 @@
     }
   })();
 </script>
-</body>
-</html>
