@@ -435,7 +435,6 @@ export default async function handler(req, res) {
       }
 
       try {
-        // Parallelized fetches with 2200ms timeout ceiling
         const [roleMap, gistData] = await Promise.all([
           getGuildRoleMap(guildId, botToken),
           getGistData(GIST_ID, GIST_TOKEN)
@@ -443,7 +442,6 @@ export default async function handler(req, res) {
 
         const memberRoleNames = (member.roles || []).map(id => roleMap.get(id)).filter(Boolean);
 
-        // Verify caller holds @r5
         const isR5 = memberRoleNames.some(r => r === 'r5' || r === '@r5');
         if (!isR5) {
           return res.status(200).json({
@@ -458,7 +456,6 @@ export default async function handler(req, res) {
         const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
         const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
 
-        // Match member's roles against known alliance tags
         const knownAlliances = Object.keys(mapState.alliances || {});
         const matchedAllianceTag = knownAlliances.find(tag => {
           const cleanTag = tag.toLowerCase();
@@ -557,11 +554,67 @@ export default async function handler(req, res) {
       }
     }
 
-    // --- /rewards COMMAND ---
+    // --- /rewards COMMAND (Status Check & Admin Reset) ---
     if (name === 'rewards') {
       const GIST_ID = process.env.GIST_ID;
       const GIST_TOKEN = process.env.GIST_TOKEN;
+      const userId = interaction.member?.user?.id || interaction.user?.id;
+      const requestedAction = options?.find(opt => opt.name === 'action')?.value;
 
+      // 1. ADMIN RESET ACTION
+      if (requestedAction === 'reset') {
+        if (userId !== process.env.AUTHORIZED_USER_ID) {
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: '⛔ **Access Denied:** Only authorized leadership can reset reward nomination cycles.',
+              flags: 64
+            }
+          });
+        }
+
+        try {
+          const patchRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            method: 'PATCH',
+            headers: {
+              Authorization: `Bearer ${GIST_TOKEN}`,
+              'Content-Type': 'application/json',
+              'User-Agent': 'WarRoom-App'
+            },
+            body: JSON.stringify({
+              description: `Nominations reset by <@${userId}> at ${new Date().toISOString()}`,
+              files: {
+                'rewards-nominations.json': {
+                  content: JSON.stringify({}, null, 2)
+                }
+              }
+            })
+          });
+
+          if (!patchRes.ok) throw new Error(`GitHub API returned ${patchRes.status}`);
+
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              embeds: [{
+                title: '🔄 Reward Cycle Reset',
+                color: 0x22c55e,
+                description: 'All submitted nominations have been cleared from Kingdom records.\n\n• Alliances are now reset to `⏳ Awaiting submission`.\n• Leaders can generate new nomination rosters via `/nominate`.\n• Remind the King to click **Reset Checklist** on the console to clear local strikethroughs.',
+                footer: { text: `Cycle reset by user ID ${userId}` },
+                timestamp: new Date().toISOString()
+              }]
+            }
+          });
+        } catch (err) {
+          console.error('Rewards reset error:', err);
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: `❌ Failed to reset nominations: ${err.message}`, flags: 64 }
+          });
+        }
+      }
+
+      // 2. STATUS CHECK (Default)
       try {
         const gistData = await getGistData(GIST_ID, GIST_TOKEN);
         const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
@@ -577,7 +630,11 @@ export default async function handler(req, res) {
           const rank = parseInt(data.rank, 10);
           if (isNaN(rank)) return;
 
-          const matchedTier = tiers.find(t => rank >= t.min_rank && rank <= t.max_rank);
+          const matchedTier = tiers.find(tier => {
+            const min = parseInt(tier.min_rank ?? tier.minRank, 10);
+            const max = parseInt(tier.max_rank ?? tier.maxRank, 10);
+            return !isNaN(min) && !isNaN(max) && rank >= min && rank <= max;
+          });
           if (!matchedTier) return;
 
           const allotment = matchedTier.chests || {};
