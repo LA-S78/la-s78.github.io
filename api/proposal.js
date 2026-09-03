@@ -88,7 +88,7 @@ export default async function handler(req, res) {
           ...tierFields,
           { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false }
         ],
-        footer: { text: 'Last Asylum Council Dispatch' },
+        footer: { text: 'Last Asylum Rewards Proposal' },
         timestamp: new Date().toISOString()
       };
 
@@ -151,7 +151,7 @@ export default async function handler(req, res) {
           value: changeList.length > 1024 ? changeList.substring(0, 1020) + '...' : changeList 
         }
       ],
-      footer: { text: 'Last Asylum War Room Dispatch' },
+      footer: { text: 'Last Asylum Map Proposal' },
       timestamp: new Date().toISOString()
     };
 
