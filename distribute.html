@@ -33,9 +33,9 @@
 
 <script>
   (function () {
-    const STORAGE_KEY = 'la_sent_recipients_v1';
+    const STORAGE_KEY = 'la_sent_recipients_v2';
     let nominationsData = {};
-    let groupBy = 'chest'; // 'chest' or 'alliance'
+    let groupBy = 'chest';
 
     const elRoster = document.getElementById('roster-container');
     const elProgress = document.getElementById('progress-indicator');
@@ -78,20 +78,34 @@
         return;
       }
 
-      // Flatten list into normalized records
       const flatList = [];
+
       alliances.forEach(tag => {
         const item = nominationsData[tag];
         const rec = item.recipients || {};
-        (rec.commanders_will || []).forEach(ign => flatList.push({ ign, type: 'commanders_will', alliance: tag }));
-        (rec.loyal_servant || []).forEach(ign => flatList.push({ ign, type: 'loyal_servant', alliance: tag }));
-        (rec.followers_heart || []).forEach(ign => flatList.push({ ign, type: 'followers_heart', alliance: tag }));
+
+        const addEntries = (poolData, poolName) => {
+          if (!poolData) return;
+          (poolData.commanders_will || []).forEach(ign => flatList.push({ ign, type: 'commanders_will', alliance: tag, pool: poolName }));
+          (poolData.loyal_servant || []).forEach(ign => flatList.push({ ign, type: 'loyal_servant', alliance: tag, pool: poolName }));
+          (poolData.followers_heart || []).forEach(ign => flatList.push({ ign, type: 'followers_heart', alliance: tag, pool: poolName }));
+        };
+
+        if (rec.standard) {
+          addEntries(rec.standard, 'REG');
+          if (rec.kingdom_war) {
+            addEntries(rec.kingdom_war, 'KW');
+          }
+        } else {
+          addEntries(rec, 'REG');
+        }
       });
 
-      const sentCount = flatList.filter(entry => sentSet.has(`${entry.alliance}:${entry.type}:${entry.ign}`)).length;
+      const sentCount = flatList.filter(e => sentSet.has(`${e.alliance}:${e.pool}:${e.type}:${e.ign}`)).length;
       elProgress.textContent = `Progress: ${sentCount} / ${flatList.length} Distributed`;
 
       let html = '';
+
       if (groupBy === 'chest') {
         const tiers = [
           { key: 'commanders_will', title: '🟡 Commander\'s Will (Gold)', glyph: 'gold' },
@@ -109,8 +123,8 @@
           });
         });
       } else {
-        // Group by Alliance
         alliances.sort((a, b) => (nominationsData[a].rank || 99) - (nominationsData[b].rank || 99));
+
         alliances.forEach(tag => {
           const matched = flatList.filter(e => e.alliance === tag);
           if (matched.length === 0) return;
@@ -128,13 +142,17 @@
     }
 
     function renderRow(item, glyph, sentSet) {
-      const id = `${item.alliance}:${item.type}:${item.ign}`;
+      const id = `${item.alliance}:${item.pool}:${item.type}:${item.ign}`;
       const isSent = sentSet.has(id);
+      const isKW = item.pool === 'KW';
 
       return `
         <div class="distribute-item ${isSent ? 'sent' : ''}" data-id="${escapeHtml(id)}">
           <span class="chest-glyph ${glyph}"></span>
           <span class="badge" style="font-size: 0.65rem;">${item.alliance}</span>
+          <span class="badge" style="font-size: 0.62rem; ${isKW ? 'background: #8f0000; color: #fff;' : 'background: #2a221b; color: var(--accent-color); border: 1px solid var(--border-color);'}">
+            ${item.pool}
+          </span>
           <span class="player-ign">${escapeHtml(item.ign)}</span>
           <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">Copy</button>
         </div>
@@ -142,10 +160,9 @@
     }
 
     function bindEvents() {
-      // Toggle Sent status
       elRoster.querySelectorAll('.distribute-item').forEach(el => {
         el.addEventListener('click', (e) => {
-          if (e.target.classList.contains('copy-btn')) return; // Avoid triggering toggle on copy click
+          if (e.target.classList.contains('copy-btn')) return;
           const id = el.getAttribute('data-id');
           const sentSet = getSentSet();
 
@@ -161,7 +178,6 @@
         });
       });
 
-      // 1-Tap Copy
       elRoster.querySelectorAll('.copy-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
           e.stopPropagation();
@@ -193,7 +209,6 @@
       }[m]));
     }
 
-    // View Switching
     btnGroupChest.addEventListener('click', () => {
       groupBy = 'chest';
       btnGroupChest.classList.add('active');
@@ -208,7 +223,6 @@
       render();
     });
 
-    // Reset Checklist
     btnReset.addEventListener('click', () => {
       if (confirm('Reset all sent statuses back to uncompleted?')) {
         localStorage.removeItem(STORAGE_KEY);

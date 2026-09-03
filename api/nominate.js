@@ -41,9 +41,6 @@ export default async function handler(req, res) {
     'User-Agent': 'WarRoom-Nominations'
   };
 
-  // ========================================================================
-  // GET: Retrieve All Saved Nominations for Distribution Console
-  // ========================================================================
   if (req.method === 'GET') {
     try {
       const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
@@ -58,9 +55,6 @@ export default async function handler(req, res) {
     }
   }
 
-  // ========================================================================
-  // POST: Commit Alliance Nominations via Signed Token
-  // ========================================================================
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -78,16 +72,30 @@ export default async function handler(req, res) {
   }
 
   const allotment = payload.allotment || {};
-  const gold = (nominations.commanders_will || []).map(s => s.trim()).filter(Boolean);
-  const purple = (nominations.loyal_servant || []).map(s => s.trim()).filter(Boolean);
-  const blue = (nominations.followers_heart || []).map(s => s.trim()).filter(Boolean);
+  const isKW = payload.mode === 'kw';
 
-  if (
-    gold.length !== (allotment.commanders_will || 0) ||
-    purple.length !== (allotment.loyal_servant || 0) ||
-    blue.length !== (allotment.followers_heart || 0)
-  ) {
-    return res.status(400).json({ error: 'Submitted recipient counts do not match allotted quota.' });
+  const validatePool = (pool) => {
+    if (!pool) return false;
+    const g = (pool.commanders_will || []).map(s => s.trim()).filter(Boolean);
+    const p = (pool.loyal_servant || []).map(s => s.trim()).filter(Boolean);
+    const b = (pool.followers_heart || []).map(s => s.trim()).filter(Boolean);
+
+    return (
+      g.length === (allotment.commanders_will || 0) &&
+      p.length === (allotment.loyal_servant || 0) &&
+      b.length === (allotment.followers_heart || 0)
+    );
+  };
+
+  const stdPool = nominations.standard || nominations;
+  if (!validatePool(stdPool)) {
+    return res.status(400).json({ error: 'Standard recipient counts do not match allotted quota.' });
+  }
+
+  if (isKW) {
+    if (!validatePool(nominations.kingdom_war)) {
+      return res.status(400).json({ error: 'Kingdom War recipient counts do not match allotted quota.' });
+    }
   }
 
   try {
@@ -100,14 +108,26 @@ export default async function handler(req, res) {
       if (content) nominationsStore = JSON.parse(content);
     }
 
+    const cleanList = (arr) => (arr || []).map(s => s.trim()).filter(Boolean);
+
     nominationsStore[payload.alliance] = {
       alliance: payload.alliance,
       rank: payload.rank,
+      mode: payload.mode || 'standard',
       submittedAt: new Date().toISOString(),
       recipients: {
-        commanders_will: gold,
-        loyal_servant: purple,
-        followers_heart: blue
+        standard: {
+          commanders_will: cleanList(stdPool.commanders_will),
+          loyal_servant: cleanList(stdPool.loyal_servant),
+          followers_heart: cleanList(stdPool.followers_heart)
+        },
+        ...(isKW ? {
+          kingdom_war: {
+            commanders_will: cleanList(nominations.kingdom_war.commanders_will),
+            loyal_servant: cleanList(nominations.kingdom_war.loyal_servant),
+            followers_heart: cleanList(nominations.kingdom_war.followers_heart)
+          }
+        } : {})
       }
     };
 

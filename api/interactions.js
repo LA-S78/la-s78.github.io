@@ -455,6 +455,7 @@ export default async function handler(req, res) {
 
         const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
         const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+        const isKW = rewardsData.mode === 'kw';
 
         const knownAlliances = Object.keys(mapState.alliances || {});
         const matchedAllianceTag = knownAlliances.find(tag => {
@@ -501,36 +502,49 @@ export default async function handler(req, res) {
         }
 
         const allotment = matchedTier.chests || { commanders_will: 0, loyal_servant: 0, followers_heart: 0 };
-        const totalChests = (allotment.commanders_will || 0) + (allotment.loyal_servant || 0) + (allotment.followers_heart || 0);
+        const singleQuota = (allotment.commanders_will || 0) + (allotment.loyal_servant || 0) + (allotment.followers_heart || 0);
 
-        if (totalChests === 0) {
+        if (singleQuota === 0) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: { content: `⚠️ **[${matchedAllianceTag}]** has 0 chests allocated under the current distribution.`, flags: 64 }
           });
         }
 
+        const totalChests = isKW ? singleQuota * 2 : singleQuota;
+
         const tokenPayload = {
           alliance: matchedAllianceTag,
           rank: rank,
           allotment: allotment,
+          mode: isKW ? 'kw' : 'standard',
           exp: Date.now() + (24 * 60 * 60 * 1000)
         };
         const token = createNominationToken(tokenPayload, botToken);
         const nominateUrl = `https://${host}/nominate.html?token=${token}`;
 
+        const fields = [
+          { name: '🟡 Gold (Commander)', value: `×${allotment.commanders_will || 0}`, inline: true },
+          { name: '🟣 Purple (Servant)', value: `×${allotment.loyal_servant || 0}`, inline: true },
+          { name: '🔵 Blue (Follower)', value: `×${allotment.followers_heart || 0}`, inline: true }
+        ];
+
+        if (isKW) {
+          fields.push({
+            name: '⚔️ Kingdom War Split Pool',
+            value: `You will submit **two separate rosters** of the above quantities:\n1× **Regular Pool** (${singleQuota} chests)\n1× **Kingdom War Pool** (${singleQuota} chests)`,
+            inline: false
+          });
+        }
+
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             embeds: [{
-              title: `🎁 Reward Nominations — [${matchedAllianceTag}]`,
-              color: 0xb8975a,
-              description: `You are eligible for **${totalChests} chests** based on your **Rank ${rank}** finish.\nClick the button below to submit your recipient list.`,
-              fields: [
-                { name: '🟡 Gold (Commander)', value: `×${allotment.commanders_will || 0}`, inline: true },
-                { name: '🟣 Purple (Servant)', value: `×${allotment.loyal_servant || 0}`, inline: true },
-                { name: '🔵 Blue (Follower)', value: `×${allotment.followers_heart || 0}`, inline: true }
-              ],
+              title: `🎁 Reward Nominations — [${matchedAllianceTag}] ${isKW ? '⚔️ [KW 2x Active]' : ''}`,
+              color: isKW ? 0x8f0000 : 0xb8975a,
+              description: `You are eligible for **${totalChests} total chests** based on your **Rank ${rank}** finish.\nClick below to submit your recipient roster.`,
+              fields: fields,
               footer: { text: 'Link is private and expires in 24 hours.' }
             }],
             components: [{
@@ -538,7 +552,7 @@ export default async function handler(req, res) {
               components: [{
                 type: 2,
                 style: 5,
-                label: 'Open Nomination Portal',
+                label: isKW ? 'Open 2x Nomination Portal' : 'Open Nomination Portal',
                 url: nominateUrl
               }]
             }],
@@ -554,12 +568,14 @@ export default async function handler(req, res) {
       }
     }
 
-    // --- /rewards COMMAND (Status Check & Admin Reset) ---
+    // --- /rewards COMMAND (Status & Admin Reset) ---
     if (name === 'rewards') {
       const GIST_ID = process.env.GIST_ID;
       const GIST_TOKEN = process.env.GIST_TOKEN;
+      const host = req.headers.host || 'la-s78.app';
       const userId = interaction.member?.user?.id || interaction.user?.id;
       const requestedAction = options?.find(opt => opt.name === 'action')?.value;
+      const requestedMode = options?.find(opt => opt.name === 'mode')?.value || 'standard';
 
       // 1. ADMIN RESET ACTION
       if (requestedAction === 'reset') {
@@ -574,6 +590,11 @@ export default async function handler(req, res) {
         }
 
         try {
+          const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+          const currentRewards = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+          currentRewards.mode = requestedMode;
+          currentRewards.lastReset = new Date().toISOString();
+
           const patchRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
             method: 'PATCH',
             headers: {
@@ -582,10 +603,13 @@ export default async function handler(req, res) {
               'User-Agent': 'WarRoom-App'
             },
             body: JSON.stringify({
-              description: `Nominations reset by <@${userId}> at ${new Date().toISOString()}`,
+              description: `Cycle reset (${requestedMode}) by <@${userId}> at ${new Date().toISOString()}`,
               files: {
                 'rewards-nominations.json': {
                   content: JSON.stringify({}, null, 2)
+                },
+                'rewards-data.json': {
+                  content: JSON.stringify(currentRewards, null, 2)
                 }
               }
             })
@@ -593,14 +617,15 @@ export default async function handler(req, res) {
 
           if (!patchRes.ok) throw new Error(`GitHub API returned ${patchRes.status}`);
 
+          const isKW = requestedMode === 'kw';
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
               embeds: [{
-                title: '🔄 Reward Cycle Reset',
-                color: 0x22c55e,
-                description: 'All submitted nominations have been cleared from Kingdom records.\n\n• Alliances are now reset to `⏳ Awaiting submission`.\n• Leaders can generate new nomination rosters via `/nominate`.\n• Remind the King to click **Reset Checklist** on the console to clear local strikethroughs.',
-                footer: { text: `Cycle reset by user ID ${userId}` },
+                title: isKW ? '⚔️ Kingdom War Cycle Initialized (2x Rewards)' : '🔄 Standard Reward Cycle Reset',
+                color: isKW ? 0x8f0000 : 0x22c55e,
+                description: `All previous nominations have been cleared from Kingdom records.\n\n• **Active Mode:** ${isKW ? '⚔️ **Kingdom War (Double Allocation: 1x Regular + 1x KW)**' : '🛡️ **Standard Week (1x Allocation)**'}\n• All eligible alliances are reset to \`⏳ Awaiting submission\`.\n• Leaders can now generate fresh rosters via \`/nominate\`.\n• Remind the King to hit **Reset Checklist** on the console.`,
+                footer: { text: `Cycle initialized by user ID ${userId}` },
                 timestamp: new Date().toISOString()
               }]
             }
@@ -609,7 +634,7 @@ export default async function handler(req, res) {
           console.error('Rewards reset error:', err);
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: `❌ Failed to reset nominations: ${err.message}`, flags: 64 }
+            data: { content: `❌ Failed to reset cycle: ${err.message}`, flags: 64 }
           });
         }
       }
@@ -621,6 +646,7 @@ export default async function handler(req, res) {
         const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
         const nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
 
+        const isKW = rewardsData.mode === 'kw';
         const tiers = rewardsData.distribution_tiers || [];
         const alliances = mapState.alliances || {};
 
@@ -638,13 +664,13 @@ export default async function handler(req, res) {
           if (!matchedTier) return;
 
           const allotment = matchedTier.chests || {};
-          const totalChests = (allotment.commanders_will || 0) + (allotment.loyal_servant || 0) + (allotment.followers_heart || 0);
+          const singleTotal = (allotment.commanders_will || 0) + (allotment.loyal_servant || 0) + (allotment.followers_heart || 0);
 
-          if (totalChests > 0) {
+          if (singleTotal > 0) {
             eligibleRoster.push({
               tag,
               rank,
-              quota: totalChests
+              quota: isKW ? singleTotal * 2 : singleTotal
             });
           }
         });
@@ -654,10 +680,7 @@ export default async function handler(req, res) {
         if (eligibleRoster.length === 0) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: '⚠️ No alliances are currently eligible under the active rewards plan.',
-              flags: 64
-            }
+            data: { content: '⚠️ No alliances are currently eligible under the active rewards plan.', flags: 64 }
           });
         }
 
@@ -666,10 +689,25 @@ export default async function handler(req, res) {
           const entry = nominations[item.tag];
           if (entry && entry.recipients) {
             submittedCount++;
-            const totalNominated =
-              (entry.recipients.commanders_will?.length || 0) +
-              (entry.recipients.loyal_servant?.length || 0) +
-              (entry.recipients.followers_heart?.length || 0);
+            let totalNominated = 0;
+
+            if (entry.recipients.standard) {
+              totalNominated +=
+                (entry.recipients.standard.commanders_will?.length || 0) +
+                (entry.recipients.standard.loyal_servant?.length || 0) +
+                (entry.recipients.standard.followers_heart?.length || 0);
+              if (entry.recipients.kingdom_war) {
+                totalNominated +=
+                  (entry.recipients.kingdom_war.commanders_will?.length || 0) +
+                  (entry.recipients.kingdom_war.loyal_servant?.length || 0) +
+                  (entry.recipients.kingdom_war.followers_heart?.length || 0);
+              }
+            } else {
+              totalNominated =
+                (entry.recipients.commanders_will?.length || 0) +
+                (entry.recipients.loyal_servant?.length || 0) +
+                (entry.recipients.followers_heart?.length || 0);
+            }
 
             const submitUnix = Math.floor(new Date(entry.submittedAt).getTime() / 1000);
             return `✅ **[${item.tag}]** (Rank ${item.rank}) — **${totalNominated}/${item.quota}** nominated (<t:${submitUnix}:R>)`;
@@ -679,15 +717,15 @@ export default async function handler(req, res) {
         });
 
         const isComplete = submittedCount === eligibleRoster.length;
-        const progressHeader = `**${submittedCount} of ${eligibleRoster.length} Alliances Submitted**`;
+        const modeBadge = isKW ? '⚔️ Kingdom War (2x Split)' : '🛡️ Standard';
 
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             embeds: [{
-              title: '📋 Alliance Reward Nomination Status',
-              color: isComplete ? 0x22c55e : 0xb8975a,
-              description: `${progressHeader}\n\n${statusLines.join('\n')}`,
+              title: `📋 Alliance Reward Status — ${modeBadge}`,
+              color: isKW ? 0x8f0000 : (isComplete ? 0x22c55e : 0xb8975a),
+              description: `**${submittedCount} of ${eligibleRoster.length} Alliances Submitted**\n\n${statusLines.join('\n')}`,
               footer: { text: 'Last Asylum Capitol Administration' },
               timestamp: new Date().toISOString()
             }],

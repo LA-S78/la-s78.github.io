@@ -8,8 +8,7 @@
 </head>
 <body class="nominate-wrapper">
 
-<!-- Leverages your existing blurred card style -->
-<div class="content-pane" id="nominate-app">
+<div class="content-pane" id="nominate-app" style="max-width: 560px;">
   <div id="loading-state" class="status-banner">Loading nomination portal...</div>
   <div id="error-state" class="status-banner warning" style="display: none; border: 1px solid #ff6b6b; background: rgba(122, 0, 0, 0.3);"></div>
   <div id="success-state" class="status-banner status-success" style="display: none;"></div>
@@ -22,18 +21,32 @@
 
     <!-- Smart Paste Box -->
     <div class="smart-paste-box">
-      <label>📋 Smart Paste (Raw List)</label>
+      <label id="paste-label">📋 Smart Paste (Raw List)</label>
       <textarea id="smart-paste-input" placeholder="Paste line-by-line list from game chat or notes..."></textarea>
-      <!-- Reusing your draft-btn style -->
-      <button class="draft-btn btn-fw" id="btn-autofill" type="button" style="margin-top: 6px;">Auto-fill Slots</button>
+      <button class="draft-btn btn-fw" id="btn-autofill" type="button" style="margin-top: 6px;">Auto-fill All Slots</button>
     </div>
 
     <form id="nomination-form">
-      <div id="gold-slots" class="slot-group"></div>
-      <div id="purple-slots" class="slot-group"></div>
-      <div id="blue-slots" class="slot-group"></div>
+      <!-- Standard Pool Section -->
+      <div id="standard-pool-container">
+        <div id="std-section-header" style="display: none; margin-bottom: 0.8rem; font-family: var(--font-headers); color: var(--accent-color); font-size: 1rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 4px;">
+          🛡️ Standard Allocation
+        </div>
+        <div id="gold-slots" class="slot-group"></div>
+        <div id="purple-slots" class="slot-group"></div>
+        <div id="blue-slots" class="slot-group"></div>
+      </div>
 
-      <!-- Reusing your green submit button style -->
+      <!-- Kingdom War Pool Section (Only in KW Mode) -->
+      <div id="kw-pool-container" style="display: none; margin-top: 1.5rem; border-top: 2px solid #8f0000; padding-top: 1rem;">
+        <div style="margin-bottom: 0.8rem; font-family: var(--font-headers); color: #ff6b6b; font-size: 1rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 4px;">
+          ⚔️ Kingdom War Allocation (2nd Pool)
+        </div>
+        <div id="kw-gold-slots" class="slot-group"></div>
+        <div id="kw-purple-slots" class="slot-group"></div>
+        <div id="kw-blue-slots" class="slot-group"></div>
+      </div>
+
       <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg">
         Submit Final Nominations
       </button>
@@ -71,17 +84,32 @@
       return;
     }
 
+    const isKW = payload.mode === 'kw';
+
     elLoading.style.display = 'none';
     elFormContainer.style.display = 'block';
 
-    document.getElementById('display-alliance').textContent = `[${payload.alliance}]`;
-    document.getElementById('display-quota').textContent = `Rank ${payload.rank} • Allocated Quota`;
+    document.getElementById('display-alliance').textContent = `[${payload.alliance}] ${isKW ? '⚔️ KW 2x' : ''}`;
+    document.getElementById('display-quota').textContent = `Rank ${payload.rank} • ${isKW ? 'Double Allocation (1x Regular + 1x KW)' : 'Standard Allocation'}`;
 
     const allotment = payload.allotment || {};
-    buildSlots('gold-slots', '🟡 Commander\'s Will (Gold)', allotment.commanders_will || 0, 'gold');
-    buildSlots('purple-slots', '🟣 Loyal Servant (Purple)', allotment.loyal_servant || 0, 'purple');
-    buildSlots('blue-slots', '🔵 Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'blue');
 
+    // Build Standard Slots
+    buildSlots('gold-slots', '🟡 Commander\'s Will (Gold)', allotment.commanders_will || 0, 'std-gold');
+    buildSlots('purple-slots', '🟣 Loyal Servant (Purple)', allotment.loyal_servant || 0, 'std-purple');
+    buildSlots('blue-slots', '🔵 Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'std-blue');
+
+    // Build KW Slots if KW mode
+    if (isKW) {
+      document.getElementById('std-section-header').style.display = 'block';
+      document.getElementById('kw-pool-container').style.display = 'block';
+
+      buildSlots('kw-gold-slots', '🟡 KW Commander\'s Will (Gold)', allotment.commanders_will || 0, 'kw-gold');
+      buildSlots('kw-purple-slots', '🟣 KW Loyal Servant (Purple)', allotment.loyal_servant || 0, 'kw-purple');
+      buildSlots('kw-blue-slots', '🔵 KW Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'kw-blue');
+    }
+
+    // Auto-fill Logic
     document.getElementById('btn-autofill').addEventListener('click', () => {
       const raw = document.getElementById('smart-paste-input').value;
       const lines = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
@@ -116,9 +144,18 @@
       const body = {
         token: token,
         nominations: {
-          commanders_will: getValues('gold'),
-          loyal_servant: getValues('purple'),
-          followers_heart: getValues('blue')
+          standard: {
+            commanders_will: getValues('std-gold'),
+            loyal_servant: getValues('std-purple'),
+            followers_heart: getValues('std-blue')
+          },
+          ...(isKW ? {
+            kingdom_war: {
+              commanders_will: getValues('kw-gold'),
+              loyal_servant: getValues('kw-purple'),
+              followers_heart: getValues('kw-blue')
+            }
+          } : {})
         }
       };
 
@@ -136,8 +173,8 @@
         elSuccess.style.display = 'block';
         elSuccess.innerHTML = `
           <strong>✅ Nominations Saved!</strong><br>
-          Your recipient list for <strong>[${payload.alliance}]</strong> has been registered.<br>
-          The King has received your distribution roster.
+          ${isKW ? 'Both your <strong>Regular</strong> and <strong>Kingdom War</strong> rosters' : 'Your recipient roster'} for <strong>[${payload.alliance}]</strong> have been registered.<br>
+          The King has received your distribution list.
         `;
       } catch (err) {
         alert(`Failed to save: ${err.message}`);
@@ -150,7 +187,7 @@
       const el = document.getElementById(containerId);
       if (count <= 0) { el.style.display = 'none'; return; }
 
-      let html = `<div class="slot-group-title">${title}</div>`;
+      let html = `<div class="slot-group-title">${title} (${count})</div>`;
       for (let i = 1; i <= count; i++) {
         html += `
           <div class="slot-input-row">
