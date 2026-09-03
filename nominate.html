@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Reward Nominations | Last Asylum</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="nominate-wrapper">
+
+<!-- Leverages your existing blurred card style -->
+<div class="content-pane" id="nominate-app">
+  <div id="loading-state" class="status-banner">Loading nomination portal...</div>
+  <div id="error-state" class="status-banner warning" style="display: none; border: 1px solid #ff6b6b; background: rgba(122, 0, 0, 0.3);"></div>
+  <div id="success-state" class="status-banner status-success" style="display: none;"></div>
+
+  <div id="form-container" style="display: none;">
+    <div style="text-align: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">
+      <div class="alliance-badge-lg" id="display-alliance">[TAG]</div>
+      <div class="sub-text" id="display-quota">Allocated Quota</div>
+    </div>
+
+    <!-- Smart Paste Box -->
+    <div class="smart-paste-box">
+      <label>📋 Smart Paste (Raw List)</label>
+      <textarea id="smart-paste-input" placeholder="Paste line-by-line list from game chat or notes..."></textarea>
+      <!-- Reusing your draft-btn style -->
+      <button class="draft-btn btn-fw" id="btn-autofill" type="button" style="margin-top: 6px;">Auto-fill Slots</button>
+    </div>
+
+    <form id="nomination-form">
+      <div id="gold-slots" class="slot-group"></div>
+      <div id="purple-slots" class="slot-group"></div>
+      <div id="blue-slots" class="slot-group"></div>
+
+      <!-- Reusing your green submit button style -->
+      <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg">
+        Submit Final Nominations
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    const elLoading = document.getElementById('loading-state');
+    const elError = document.getElementById('error-state');
+    const elSuccess = document.getElementById('success-state');
+    const elFormContainer = document.getElementById('form-container');
+
+    if (!token || !token.includes('.')) {
+      showError('Invalid or missing nomination token. Please run /nominate in Discord.');
+      return;
+    }
+
+    let payload = null;
+    try {
+      const dataString = token.split('.')[0];
+      const jsonStr = atob(dataString.replace(/-/g, '+').replace(/_/g, '/'));
+      payload = JSON.parse(jsonStr);
+    } catch (e) {
+      showError('Malformed token. Please request a new link from Discord.');
+      return;
+    }
+
+    if (payload.exp && Date.now() > payload.exp) {
+      showError('This nomination link has expired (24h limit). Please run /nominate again.');
+      return;
+    }
+
+    elLoading.style.display = 'none';
+    elFormContainer.style.display = 'block';
+
+    document.getElementById('display-alliance').textContent = `[${payload.alliance}]`;
+    document.getElementById('display-quota').textContent = `Rank ${payload.rank} • Allocated Quota`;
+
+    const allotment = payload.allotment || {};
+    buildSlots('gold-slots', '🟡 Commander\'s Will (Gold)', allotment.commanders_will || 0, 'gold');
+    buildSlots('purple-slots', '🟣 Loyal Servant (Purple)', allotment.loyal_servant || 0, 'purple');
+    buildSlots('blue-slots', '🔵 Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'blue');
+
+    document.getElementById('btn-autofill').addEventListener('click', () => {
+      const raw = document.getElementById('smart-paste-input').value;
+      const lines = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+      const inputs = Array.from(document.querySelectorAll('.slot-input'));
+
+      lines.forEach((line, idx) => {
+        if (inputs[idx]) inputs[idx].value = line;
+      });
+      validateInputs();
+    });
+
+    const form = document.getElementById('nomination-form');
+    form.addEventListener('input', validateInputs);
+
+    function validateInputs() {
+      const inputs = Array.from(document.querySelectorAll('.slot-input'));
+      const allFilled = inputs.every(i => i.value.trim().length > 0);
+      document.getElementById('btn-submit').disabled = !allFilled;
+    }
+    validateInputs();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.textContent = 'Transmitting to Kingdom Records...';
+
+      const getValues = (group) =>
+        Array.from(document.querySelectorAll(`.slot-input[data-group="${group}"]`))
+          .map(i => i.value.trim());
+
+      const body = {
+        token: token,
+        nominations: {
+          commanders_will: getValues('gold'),
+          loyal_servant: getValues('purple'),
+          followers_heart: getValues('blue')
+        }
+      };
+
+      try {
+        const res = await fetch('/api/nominate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Server error');
+
+        elFormContainer.style.display = 'none';
+        elSuccess.style.display = 'block';
+        elSuccess.innerHTML = `
+          <strong>✅ Nominations Saved!</strong><br>
+          Your recipient list for <strong>[${payload.alliance}]</strong> has been registered.<br>
+          The King has received your distribution roster.
+        `;
+      } catch (err) {
+        alert(`Failed to save: ${err.message}`);
+        btn.disabled = false;
+        btn.textContent = 'Submit Final Nominations';
+      }
+    });
+
+    function buildSlots(containerId, title, count, group) {
+      const el = document.getElementById(containerId);
+      if (count <= 0) { el.style.display = 'none'; return; }
+
+      let html = `<div class="slot-group-title">${title}</div>`;
+      for (let i = 1; i <= count; i++) {
+        html += `
+          <div class="slot-input-row">
+            <span class="slot-num">${i}.</span>
+            <input type="text" class="slot-input" data-group="${group}" placeholder="Exact Player In-Game Name" required>
+          </div>
+        `;
+      }
+      el.innerHTML = html;
+    }
+
+    function showError(msg) {
+      elLoading.style.display = 'none';
+      elError.style.display = 'block';
+      elError.textContent = msg;
+    }
+  })();
+</script>
+</body>
+</html>

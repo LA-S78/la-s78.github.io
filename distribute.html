@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>King's Distribution Console | Last Asylum</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="nominate-wrapper">
+
+<div class="content-pane" style="max-width: 680px; width: 100%; margin: 0 auto; padding: 1.25rem;">
+  <div style="text-align: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">
+    <h2 style="margin: 0 0 0.3rem 0; font-family: var(--font-headers); color: var(--accent-color); font-size: 1.3rem;">
+      👑 King's Distribution Console
+    </h2>
+    <div class="sub-text" id="progress-indicator">Loading nominations...</div>
+  </div>
+
+  <!-- View Controls -->
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+    <div class="segmented-control">
+      <button type="button" class="toggle-btn active" id="btn-group-chest">By Chest</button>
+      <button type="button" class="toggle-btn" id="btn-group-alliance">By Alliance</button>
+    </div>
+
+    <button type="button" class="draft-btn" id="btn-reset-progress" style="font-size: 0.72rem; height: 26px;">
+      Reset Checklist
+    </button>
+  </div>
+
+  <div id="roster-container"></div>
+</div>
+
+<script>
+  (function () {
+    const STORAGE_KEY = 'la_sent_recipients_v1';
+    let nominationsData = {};
+    let groupBy = 'chest'; // 'chest' or 'alliance'
+
+    const elRoster = document.getElementById('roster-container');
+    const elProgress = document.getElementById('progress-indicator');
+    const btnGroupChest = document.getElementById('btn-group-chest');
+    const btnGroupAlliance = document.getElementById('btn-group-alliance');
+    const btnReset = document.getElementById('btn-reset-progress');
+
+    function getSentSet() {
+      try {
+        return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+      } catch (e) {
+        return new Set();
+      }
+    }
+
+    function saveSentSet(set) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(set)));
+    }
+
+    async function loadNominations() {
+      try {
+        const res = await fetch(`/api/nominate?t=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        nominationsData = await res.json();
+        render();
+      } catch (err) {
+        elRoster.innerHTML = `<div class="status-banner warning" style="border: 1px solid #ff6b6b; background: rgba(122, 0, 0, 0.3);">
+          Failed to load nominations: ${err.message}
+        </div>`;
+      }
+    }
+
+    function render() {
+      const sentSet = getSentSet();
+      const alliances = Object.keys(nominationsData);
+
+      if (alliances.length === 0) {
+        elRoster.innerHTML = '<div class="sub-text" style="text-align: center; padding: 2rem 0;">No nominations submitted yet.</div>';
+        elProgress.textContent = '0 Recipient Entries';
+        return;
+      }
+
+      // Flatten list into normalized records
+      const flatList = [];
+      alliances.forEach(tag => {
+        const item = nominationsData[tag];
+        const rec = item.recipients || {};
+        (rec.commanders_will || []).forEach(ign => flatList.push({ ign, type: 'commanders_will', alliance: tag }));
+        (rec.loyal_servant || []).forEach(ign => flatList.push({ ign, type: 'loyal_servant', alliance: tag }));
+        (rec.followers_heart || []).forEach(ign => flatList.push({ ign, type: 'followers_heart', alliance: tag }));
+      });
+
+      const sentCount = flatList.filter(entry => sentSet.has(`${entry.alliance}:${entry.type}:${entry.ign}`)).length;
+      elProgress.textContent = `Progress: ${sentCount} / ${flatList.length} Distributed`;
+
+      let html = '';
+      if (groupBy === 'chest') {
+        const tiers = [
+          { key: 'commanders_will', title: '🟡 Commander\'s Will (Gold)', glyph: 'gold' },
+          { key: 'loyal_servant', title: '🟣 Loyal Servant (Purple)', glyph: 'purple' },
+          { key: 'followers_heart', title: '🔵 Follower\'s Heart (Blue)', glyph: 'blue' }
+        ];
+
+        tiers.forEach(tier => {
+          const matched = flatList.filter(e => e.type === tier.key);
+          if (matched.length === 0) return;
+
+          html += `<div class="slot-group-title" style="margin-top: 1rem;">${tier.title} (${matched.length})</div>`;
+          matched.forEach(item => {
+            html += renderRow(item, tier.glyph, sentSet);
+          });
+        });
+      } else {
+        // Group by Alliance
+        alliances.sort((a, b) => (nominationsData[a].rank || 99) - (nominationsData[b].rank || 99));
+        alliances.forEach(tag => {
+          const matched = flatList.filter(e => e.alliance === tag);
+          if (matched.length === 0) return;
+
+          html += `<div class="slot-group-title" style="margin-top: 1rem;">[${tag}] • Rank ${nominationsData[tag].rank || '-'} (${matched.length})</div>`;
+          matched.forEach(item => {
+            const glyph = item.type === 'commanders_will' ? 'gold' : item.type === 'loyal_servant' ? 'purple' : 'blue';
+            html += renderRow(item, glyph, sentSet);
+          });
+        });
+      }
+
+      elRoster.innerHTML = html;
+      bindEvents();
+    }
+
+    function renderRow(item, glyph, sentSet) {
+      const id = `${item.alliance}:${item.type}:${item.ign}`;
+      const isSent = sentSet.has(id);
+
+      return `
+        <div class="distribute-item ${isSent ? 'sent' : ''}" data-id="${escapeHtml(id)}">
+          <span class="chest-glyph ${glyph}"></span>
+          <span class="badge" style="font-size: 0.65rem;">${item.alliance}</span>
+          <span class="player-ign">${escapeHtml(item.ign)}</span>
+          <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">Copy</button>
+        </div>
+      `;
+    }
+
+    function bindEvents() {
+      // Toggle Sent status
+      elRoster.querySelectorAll('.distribute-item').forEach(el => {
+        el.addEventListener('click', (e) => {
+          if (e.target.classList.contains('copy-btn')) return; // Avoid triggering toggle on copy click
+          const id = el.getAttribute('data-id');
+          const sentSet = getSentSet();
+
+          if (sentSet.has(id)) {
+            sentSet.delete(id);
+            el.classList.remove('sent');
+          } else {
+            sentSet.add(id);
+            el.classList.add('sent');
+          }
+          saveSentSet(sentSet);
+          updateProgressOnly();
+        });
+      });
+
+      // 1-Tap Copy
+      elRoster.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const text = btn.getAttribute('data-copy');
+          try {
+            await navigator.clipboard.writeText(text);
+            btn.textContent = '✓ Copied';
+            btn.classList.add('copied');
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.classList.remove('copied');
+            }, 1200);
+          } catch (err) {
+            prompt('Copy recipient name:', text);
+          }
+        });
+      });
+    }
+
+    function updateProgressOnly() {
+      const sentSet = getSentSet();
+      const total = elRoster.querySelectorAll('.distribute-item').length;
+      elProgress.textContent = `Progress: ${sentSet.size} / ${total} Distributed`;
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    // View Switching
+    btnGroupChest.addEventListener('click', () => {
+      groupBy = 'chest';
+      btnGroupChest.classList.add('active');
+      btnGroupAlliance.classList.remove('active');
+      render();
+    });
+
+    btnGroupAlliance.addEventListener('click', () => {
+      groupBy = 'alliance';
+      btnGroupAlliance.classList.add('active');
+      btnGroupChest.classList.remove('active');
+      render();
+    });
+
+    // Reset Checklist
+    btnReset.addEventListener('click', () => {
+      if (confirm('Reset all sent statuses back to uncompleted?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        render();
+      }
+    });
+
+    loadNominations();
+  })();
+</script>
+</body>
+</html>
