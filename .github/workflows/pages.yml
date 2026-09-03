@@ -122,7 +122,7 @@ jobs:
       - name: Generate Discord API Translations
         run: |
           echo "Installing js-yaml..."
-          npm install js-yaml
+          npm install js-yaml --no-audit --no-fund --no-save --no-package-lock
           echo "Generating static translations file..."
           node api/build-translations.js
           
