@@ -490,7 +490,11 @@ export default async function handler(req, res) {
         }
 
         const tiers = rewardsData.distribution_tiers || [];
-        const matchedTier = tiers.find(tier => rank >= tier.min_rank && rank <= tier.max_rank);
+        const matchedTier = tiers.find(tier => {
+          const min = parseInt(tier.min_rank ?? tier.minRank, 10);
+          const max = parseInt(tier.max_rank ?? tier.maxRank, 10);
+          return !isNaN(min) && !isNaN(max) && rank >= min && rank <= max;
+        });
 
         if (!matchedTier) {
           return res.status(200).json({
