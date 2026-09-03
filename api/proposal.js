@@ -24,9 +24,10 @@ export default async function handler(req, res) {
 
   try {
     const payload = req.body;
+    const nowUnix = Math.floor(Date.now() / 1000);
 
     // ========================================================================
-    // 1. REWARDS DISTRIBUTION PROPOSAL BRANCH
+    // 1. REWARDS DISTRIBUTION PROPOSAL
     // ========================================================================
     if (payload.type === 'rewards') {
       const { submittedBy, notes, timestamp, distribution } = payload;
@@ -35,13 +36,12 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Invalid distribution payload.' });
       }
 
-      // Server-side validation of weekly pool capacity
       const totals = { commanders_will: 0, loyal_servant: 0, followers_heart: 0 };
       distribution.forEach(tier => {
-        const memberCount = Math.max(1, (tier.max_rank - tier.min_rank) + 1);
-        totals.commanders_will += (tier.chests?.commanders_will || 0) * memberCount;
-        totals.loyal_servant += (tier.chests?.loyal_servant || 0) * memberCount;
-        totals.followers_heart += (tier.chests?.followers_heart || 0) * memberCount;
+        const count = Math.max(1, (tier.max_rank - tier.min_rank) + 1);
+        totals.commanders_will += (tier.chests?.commanders_will || 0) * count;
+        totals.loyal_servant += (tier.chests?.loyal_servant || 0) * count;
+        totals.followers_heart += (tier.chests?.followers_heart || 0) * count;
       });
 
       if (
@@ -54,7 +54,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Build breakdown fields for each tier bracket
       const tierFields = distribution.map(tier => {
         const isSingle = tier.min_rank === tier.max_rank;
         const rankRange = isSingle ? `Rank ${tier.min_rank}` : `Rank ${tier.min_rank}–${tier.max_rank}`;
@@ -76,18 +75,20 @@ export default async function handler(req, res) {
       });
 
       const poolUsage = `🟡 Gold: **${totals.commanders_will}**/${POOL_LIMITS.commanders_will}  |  🟣 Purple: **${totals.loyal_servant}**/${POOL_LIMITS.loyal_servant}  |  🔵 Blue: **${totals.followers_heart}**/${POOL_LIMITS.followers_heart}`;
+      const submitTimestamp = timestamp ? Math.floor(new Date(timestamp).getTime() / 1000) : nowUnix;
 
       const embed = {
         title: '👑 Alliance Reward Distribution Proposal',
         color: 0xb8975a,
         description: notes ? `*"${notes}"*` : '*No additional notes provided.*',
         fields: [
-          { name: 'Submitted By', value: `\`${submittedBy || 'Anonymous'}\``, inline: true },
-          { name: 'Submitted', value: `<t:${Math.floor(new Date(timestamp || Date.now()).getTime() / 1000)}:R>`, inline: true },
-          { name: 'Weekly Pool Capacity', value: poolUsage, inline: false },
+          { name: '👤 Submitter', value: `\`${submittedBy || 'Anonymous'}\``, inline: true },
+          { name: '⏱️ Submitted', value: `<t:${submitTimestamp}:R>`, inline: true },
+          { name: '📊 Pool Capacity', value: poolUsage, inline: false },
           ...tierFields,
-          { name: 'Status', value: '⏳ **Pending Leadership Review**', inline: false }
+          { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false }
         ],
+        footer: { text: 'Last Asylum Council Dispatch' },
         timestamp: new Date().toISOString()
       };
 
@@ -95,41 +96,23 @@ export default async function handler(req, res) {
         {
           type: 1,
           components: [
-            {
-              type: 2,
-              custom_id: 'approve_reward_proposal',
-              label: 'Approve Plan',
-              style: 3,
-              emoji: { name: '✅' }
-            },
-            {
-              type: 2,
-              custom_id: 'reject_reward_proposal',
-              label: 'Reject Plan',
-              style: 4,
-              emoji: { name: '❌' }
-            }
+            { type: 2, custom_id: 'approve_reward_proposal', label: 'Approve Plan', style: 3, emoji: { name: '✅' } },
+            { type: 2, custom_id: 'reject_reward_proposal', label: 'Reject Plan', style: 4, emoji: { name: '❌' } }
           ]
         }
       ];
 
       const formData = new FormData();
-      formData.append('payload_json', JSON.stringify({
-        embeds: [embed],
-        components: components
-      }));
+      formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
 
-      const jsonBlob = new Blob([JSON.stringify(distribution, null, 2)], { type: 'application/json' });
-      formData.append('files[0]', jsonBlob, 'reward-blueprint.json');
+      // Use .dat to avoid Discord rendering an expanded raw JSON preview box
+      const jsonBlob = new Blob([JSON.stringify(distribution)], { type: 'application/octet-stream' });
+      formData.append('files[0]', jsonBlob, 'reward-blueprint.dat');
 
-      // Use a dedicated rewards channel if set, otherwise fallback to the War Room channel
       const channelId = process.env.REWARDS_CHANNEL_ID || process.env.WAR_ROOM_CHANNEL_ID;
-
       const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bot ${botToken}`
-        },
+        headers: { 'Authorization': `Bot ${botToken}` },
         body: formData
       });
 
@@ -142,7 +125,7 @@ export default async function handler(req, res) {
     }
 
     // ========================================================================
-    // 2. MAP PROPOSAL BRANCH (ORIGINAL WORKING IMPLEMENTATION)
+    // 2. MAP TERRITORY PROPOSAL
     // ========================================================================
     const { submittedBy, notes, totalChanges, changes, image } = payload;
 
@@ -150,24 +133,25 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'No changes provided.' });
     }
 
-    // Format territory changes list
     const changeList = Object.entries(changes)
       .map(([cityId, shift]) => `• **${cityId.replace(/_/g, ' ')}**: \`${shift.from}\` ➔ \`${shift.to}\``)
       .join('\n');
 
     const embed = {
-      title: '⚔️ New Map Proposal',
+      title: '⚔️ New Map Strategy Proposal',
       color: 0x3b82f6,
       description: notes ? `*"${notes}"*` : '*No additional notes provided.*',
       fields: [
-        { name: 'Submitted By', value: `\`${submittedBy}\``, inline: true },
-        { name: 'Total Shifts', value: `\`${totalChanges} territories\``, inline: true },
-        { name: 'Status', value: '⏳ **Pending Admin Review**', inline: false },
+        { name: '👤 Submitter', value: `\`${submittedBy || 'Anonymous'}\``, inline: true },
+        { name: '⏱️ Submitted', value: `<t:${nowUnix}:R>`, inline: true },
+        { name: '🗺️ Total Shifts', value: `\`${totalChanges} territories\``, inline: true },
+        { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false },
         { 
           name: 'Proposed Shifts', 
           value: changeList.length > 1024 ? changeList.substring(0, 1020) + '...' : changeList 
         }
       ],
+      footer: { text: 'Last Asylum War Room Dispatch' },
       timestamp: new Date().toISOString()
     };
 
@@ -175,33 +159,18 @@ export default async function handler(req, res) {
       {
         type: 1,
         components: [
-          {
-            type: 2,
-            custom_id: 'approve_proposal',
-            label: 'Approve Map',
-            style: 3,
-            emoji: { name: '✅' }
-          },
-          {
-            type: 2,
-            custom_id: 'reject_proposal',
-            label: 'Reject Map',
-            style: 4,
-            emoji: { name: '❌' }
-          }
+          { type: 2, custom_id: 'approve_proposal', label: 'Approve Map', style: 3, emoji: { name: '✅' } },
+          { type: 2, custom_id: 'reject_proposal', label: 'Reject Map', style: 4, emoji: { name: '❌' } }
         ]
       }
     ];
 
     const formData = new FormData();
-    formData.append('payload_json', JSON.stringify({
-      embeds: [embed],
-      components: components
-    }));
+    formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
 
-    const jsonString = JSON.stringify(changes, null, 2);
-    const jsonBlob = new Blob([jsonString], { type: 'application/json' });
-    formData.append('files[0]', jsonBlob, 'strategy-blueprint.json');
+    // Use .dat to avoid Discord rendering an expanded raw JSON preview box
+    const jsonBlob = new Blob([JSON.stringify(changes)], { type: 'application/octet-stream' });
+    formData.append('files[0]', jsonBlob, 'strategy-blueprint.dat');
 
     if (image) {
       const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
@@ -211,12 +180,9 @@ export default async function handler(req, res) {
     }
 
     const channelId = process.env.WAR_ROOM_CHANNEL_ID;
-
     const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bot ${botToken}`
-      },
+      headers: { 'Authorization': `Bot ${botToken}` },
       body: formData
     });
 
@@ -225,7 +191,7 @@ export default async function handler(req, res) {
       throw new Error(`Discord API Error: ${discordRes.status} - ${errorText}`);
     }
 
-    return res.status(200).json({ success: true, message: 'Proposal with map preview dispatched!' });
+    return res.status(200).json({ success: true, message: 'Map proposal dispatched!' });
   } catch (error) {
     console.error('Failed to dispatch proposal:', error);
     return res.status(500).json({ error: error.message || 'Internal server error' });

@@ -1,216 +1,4 @@
-// api/interactions.js
-import { verifyKey, InteractionType, InteractionResponseType } from 'discord-interactions';
-import { RULES_DATA, SB_DATA, BOT_DATA } from './_generated_translations.js';
-
-export const config = { api: { bodyParser: false } };
-
-async function getRawBody(req) {
-  const chunks = [];
-  for await (const chunk of req) {
-    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
-  }
-  return Buffer.concat(chunks);
-}
-
-const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'ru', 'it', 'tr', 'uk'];
-
-const FALLBACK_RULES = [
-  { title: "📜 1. Respect & Conduct", content: "**Zero Tolerance:** Bullying, racism, hate speech, harassment, or toxic behavior is prohibited.\n**Community Standard:** Treat all players with respect.\n**Reporting:** You **must** provide screenshots/proof when reporting a violation." },
-  { title: "🛡️ 2. NAP Protection Rules", content: "The following actions against **NAP Alliances** and their **Academies** are prohibited:\n> 🚫 No Attacking\n> 🚫 No Scouting" },
-  { title: "💎 3. Resource & Map Etiquette", content: "**Tile Safety:** Attacking resource tiles is strictly forbidden. Let players farm in peace." },
-  { title: "🚛 4. Caravans & Black Ops", content: "Governed by a **Three-Strike System**:\n**Strike 1 & 2:** Reported by R4s. Offender receives a formal warning.\n**Strike 3:** Results in a **Single Base Hit** penalty.\n**Conflict Resolution:** Victims may waive the strike report if an apology is accepted." },
-  { title: "🤝 5. Member Poaching", content: "**Active Recruiting:** Messaging members of other NAP alliances to switch is prohibited.\n**Player Autonomy:** Players are free to leave and join alliances voluntarily.\n**Applications:** 'Walk-in' applicants are allowed, provided no prior solicitation occurred." },
-  { title: "📉 6. Other Alliances", content: "**Fair Play:** Attacking smaller alliances because they are outside the NAP is forbidden." },
-  { title: "🕊️ 7. Diplomacy & Conflict Resolution", content: "1. **Private Resolution:** Handle disputes privately between Alliance Leads/Diplomats first.\n2. **Escalation:** If unresolved, bring to **NAP Leadership**.\n> ⚠️ Do not bring rule disputes, grievances, or drama into General or World Chat. Keep it to private channels." },
-  { title: "🎓 8. Academies", content: "**Designation:** Each NAP alliance may protect **one** academy.\n**Governance:** Academies entering the Top 10 do not receive voting rights while they maintain academy status." },
-  { title: "⚠️ 9. General Rule Violations", content: "*(Except #4)*\n**1st Offense:** Official Warning.\n**2nd Offense:** Removal from alliance or **NAP Blacklist**.\n**Blacklist Policy:** Prohibits joining any NAP-protected alliance." }
-];
-
-const FALLBACK_SB_SCHEDULE = [
-  { time: "00:00", d1: { text: "Enhance Heroes", key: "enhance_heroes" }, d2: { text: "Build Territory", key: "build_territory" }, d3: { text: "Train Soldiers", key: "train_soldiers" }, d4: { text: "Tech Research", key: "tech_research" }, d5: { text: "Enhance Raven", key: "enhance_raven" }, d6: { text: "Enhance Heroes", key: "enhance_heroes" }, d7: { text: "Build Territory", key: "build_territory" } },
-  { time: "04:00", d1: { text: "Build Territory", key: "build_territory" }, d2: { text: "Train Soldiers", key: "train_soldiers" }, d3: { text: "Tech Research", key: "tech_research" }, d4: { text: "Enhance Raven", key: "enhance_raven" }, d5: { text: "Enhance Heroes", key: "enhance_heroes" }, d6: { text: "Build Territory", key: "build_territory" }, d7: { text: "Train Soldiers", key: "train_soldiers" } },
-  { time: "08:00", d1: { text: "Train Soldiers", key: "train_soldiers" }, d2: { text: "Tech Research", key: "tech_research" }, d3: { text: "Enhance Raven", key: "enhance_raven" }, d4: { text: "Enhance Heroes", key: "enhance_heroes" }, d5: { text: "Build Territory", key: "build_territory" }, d6: { text: "Train Soldiers", key: "train_soldiers" }, d7: { text: "Tech Research", key: "tech_research" } },
-  { time: "12:00", d1: { text: "Tech Research", key: "tech_research" }, d2: { text: "Enhance Raven", key: "enhance_raven" }, d3: { text: "Enhance Heroes", key: "enhance_heroes" }, d4: { text: "Build Territory", key: "build_territory" }, d5: { text: "Train Soldiers", key: "train_soldiers" }, d6: { text: "Tech Research", key: "tech_research" }, d7: { text: "Enhance Raven", key: "enhance_raven" } },
-  { time: "16:00", d1: { text: "Enhance Raven", key: "enhance_raven" }, d2: { text: "Enhance Heroes", key: "enhance_heroes" }, d3: { text: "Build Territory", key: "build_territory" }, d4: { text: "Train Soldiers", key: "train_soldiers" }, d5: { text: "Tech Research", key: "tech_research" }, d6: { text: "Enhance Raven", key: "enhance_raven" }, d7: { text: "Enhance Heroes", key: "enhance_heroes" } },
-  { time: "20:00", d1: { text: "Enhance Heroes", key: "enhance_heroes" }, d2: { text: "Build Territory", key: "build_territory" }, d3: { text: "Train Soldiers", key: "train_soldiers" }, d4: { text: "Tech Research", key: "tech_research" }, d5: { text: "Enhance Raven", key: "enhance_raven" }, d6: { text: "Enhance Heroes", key: "enhance_heroes" }, d7: { text: "Build Territory", key: "build_territory" } }
-];
-
-const FALLBACK_BOT_STRINGS = {
-  sb: { current_event: "Current Event", next_event: "Next Event", schedule_title: "Day {day} Schedule (Game Time / UTC+2)", footer: "Times are Game Time (UTC+2). Relative countdowns adapt to your local time.", button: "View Full Schedule" },
-  rules: { title: "📜 Server Rules", description: "Official NAP & Kingdom Rules.", not_found_title: "⚠️ Rule Not Found", not_found_desc: "Rule {rule} does not exist. Choose between 1 and {max}.", button: "Open Rules Page" },
-  map: { title: "🗺️ Last Asylum Territory Map", description: "View real-time territory ownership.", button: "Open Live Map" },
-  admin: { access_denied: "⛔ **Access Denied:** Only authorized leadership can approve or reject proposals.", failed_update: "Failed to apply proposal update:" }
-};
-
-function getBotStrings(lang) {
-  return BOT_DATA?.[lang] || FALLBACK_BOT_STRINGS;
-}
-
-function resolveUserLocale(interaction, overrideLang) {
-  if (overrideLang && SUPPORTED_LOCALES.includes(overrideLang)) return overrideLang;
-  const userLocale = interaction?.locale || interaction?.guild_locale || 'en';
-  const baseCode = userLocale.split('-')[0].toLowerCase();
-  return SUPPORTED_LOCALES.includes(baseCode) ? baseCode : 'en';
-}
-
-function cleanHtmlToMarkdown(htmlString) {
-  if (!htmlString) return '';
-  return htmlString
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/?strong>/gi, '**')
-    .replace(/<\/?em>/gi, '*')
-    .replace(/<\/?p>/gi, '')
-    .replace(/<div[^>]*>/gi, '\n> ')
-    .replace(/<\/div>/gi, '')
-    .replace(/<blockquote[^>]*>/gi, '\n> ')
-    .replace(/<\/blockquote>/gi, '')
-    .trim();
-}
-
-const EVENT_EMOJIS = {
-  'enhance_heroes': '🦸',
-  'build_territory': '🏰',
-  'train_soldiers': '⚔️',
-  'tech_research': '🔬',
-  'enhance_raven': '🦅'
-};
-
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).end();
-
-  const signature = req.headers['x-signature-ed25519'];
-  const timestamp = req.headers['x-signature-timestamp'];
-  if (!signature || !timestamp) return res.status(401).send('Missing signature headers');
-
-  const rawBody = await getRawBody(req);
-  const publicKey = process.env.DISCORD_PUBLIC_KEY;
-  if (!publicKey) return res.status(500).send('Server configuration error');
-
-  const isValid = await verifyKey(rawBody, signature, timestamp, publicKey);
-  if (!isValid) return res.status(401).send('Bad request signature');
-
-  const interaction = JSON.parse(rawBody.toString());
-
-  if (interaction.type === InteractionType.PING) {
-    return res.status(200).json({ type: InteractionResponseType.PONG });
-  }
-
-  // --- SLASH COMMANDS ---
-  if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-    const { name, options } = interaction.data;
-    const host = req.headers.host || 'la-s78.app';
-    const providedLang = options?.find(opt => opt.name === 'lang')?.value;
-    const lang = resolveUserLocale(interaction, providedLang);
-    const t = getBotStrings(lang);
-
-    if (name === 'sb') {
-      const now = new Date();
-      const gameTime = new Date(now.getTime() + (2 * 60 * 60 * 1000));
-      const gameHour = gameTime.getUTCHours();
-      const rawDay = gameTime.getUTCDay();
-      const defaultDay = rawDay === 0 ? 7 : rawDay;
-      const selectedDay = options?.find(opt => opt.name === 'day')?.value || defaultDay;
-      const isToday = selectedDay === defaultDay;
-
-      let sbSchedule = (SB_DATA && SB_DATA[lang]) || (SB_DATA && SB_DATA['en']) || FALLBACK_SB_SCHEDULE;
-      const slotHours = [0, 4, 8, 12, 16, 20];
-      let activeSlotIndex = 0;
-      for (let i = slotHours.length - 1; i >= 0; i--) {
-        if (gameHour >= slotHours[i]) { activeSlotIndex = i; break; }
-      }
-
-      const nextSlotIndex = (activeSlotIndex + 1) % 6;
-      const dayKey = `d${selectedDay}`;
-      const nextSlotHourGT = (slotHours[activeSlotIndex] + 4) % 24;
-      const nextSlotTime = new Date(now);
-      const nextSlotUtcHour = (nextSlotHourGT - 2 + 24) % 24;
-      nextSlotTime.setUTCHours(nextSlotUtcHour, 0, 0, 0);
-      if (nextSlotUtcHour <= now.getUTCHours() && nextSlotHourGT <= gameHour) {
-        nextSlotTime.setUTCDate(nextSlotTime.getUTCDate() + 1);
-      }
-      const nextTimestamp = Math.floor(nextSlotTime.getTime() / 1000);
-
-      let currentEventText = "Event", currentEventEmoji = "▫️", nextEventText = "Event", nextEventEmoji = "▫️";
-      const timeline = slotHours.map((hour, idx) => {
-        const timeStr = `${String(hour).padStart(2, '0')}:00 GT`;
-        const slotData = sbSchedule?.[idx]?.[dayKey];
-        const text = slotData?.text || `Event ${idx + 1}`;
-        const emoji = EVENT_EMOJIS[slotData?.key] || '▫️';
-        if (idx === activeSlotIndex) { currentEventText = text; currentEventEmoji = emoji; }
-        if (idx === nextSlotIndex) { nextEventText = text; nextEventEmoji = emoji; }
-        return (isToday && idx === activeSlotIndex) ? `▶ **${timeStr} — ${emoji} ${text} (ACTIVE)**` : `• \`${timeStr}\` — ${emoji} ${text}`;
-      }).join('\n');
-
-      const fields = [];
-      if (isToday) {
-        fields.push(
-          { name: `🟢 ${t.sb.current_event} (Ends <t:${nextTimestamp}:R>)`, value: `**${currentEventEmoji} ${currentEventText}**`, inline: false },
-          { name: `⏳ ${t.sb.next_event} (<t:${nextTimestamp}:t>)`, value: `${nextEventEmoji} ${nextEventText}`, inline: false }
-        );
-      }
-      fields.push({ name: `📋 ${t.sb.schedule_title.replace('{day}', selectedDay)}`, value: timeline, inline: false });
-
-      return res.status(200).json({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          embeds: [{ title: `🏮 Survival Battle — Day ${selectedDay}`, color: 0xb29a20, fields, footer: { text: t.sb.footer } }],
-          components: [{ type: 1, components: [{ type: 2, style: 5, label: t.sb.button, url: `https://${host}/${lang}/guides/survival.html` }] }]
-        }
-      });
-    }
-
-    if (name === 'rules') {
-      const requestedRule = options?.find(opt => opt.name === 'rule')?.value;
-      const rulesData = (RULES_DATA && RULES_DATA[lang]) || (RULES_DATA && RULES_DATA['en']) || FALLBACK_RULES;
-      let title = t.rules.title, fields = [], description;
-
-      if (requestedRule) {
-        const targetRule = rulesData[requestedRule - 1];
-        if (targetRule) {
-          title = targetRule.title;
-          description = cleanHtmlToMarkdown(targetRule.content);
-        } else {
-          title = t.rules.not_found_title;
-          description = t.rules.not_found_desc.replace('{rule}', requestedRule).replace('{max}', rulesData.length);
-        }
-      } else {
-        description = t.rules.description;
-        fields = rulesData.map(rule => ({ name: rule.title, value: cleanHtmlToMarkdown(rule.content), inline: false }));
-      }
-
-      return res.status(200).json({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          embeds: [{ title, description, color: 0x8f0000, fields }],
-          components: [{ type: 1, components: [{ type: 2, style: 5, label: t.rules.button, url: `https://${host}/${lang}/rules.html` }] }]
-        }
-      });
-    }
-
-    if (name === 'map') {
-      let mapImageUrl = null;
-      try {
-        const stateRes = await fetch(`https://${host}/api/map-state?t=${Date.now()}`);
-        if (stateRes.ok) {
-          const liveState = await stateRes.json();
-          if (liveState.lastSnapshotUrl) mapImageUrl = liveState.lastSnapshotUrl;
-        }
-      } catch (err) {}
-
-      const mapEmbed = { title: t.map.title, description: t.map.description, color: 0x0070f3 };
-      if (mapImageUrl) mapEmbed.image = { url: mapImageUrl };
-
-      return res.status(200).json({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          embeds: [mapEmbed],
-          components: [{ type: 1, components: [{ type: 2, style: 5, label: t.map.button, url: `https://${host}/${lang}/map.html` }] }]
-        }
-      });
-    }
-  }
-
-  // --- BUTTON INTERACTIONS (Map & Rewards Proposals) ---
+// --- BUTTON INTERACTIONS (Map & Rewards Proposals) ---
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
     const userId = interaction.member?.user?.id || interaction.user?.id;
@@ -230,13 +18,15 @@ export default async function handler(req, res) {
 
     if (isApproved) {
       try {
-        const blueprintFilename = isRewardProposal ? 'reward-blueprint.json' : 'strategy-blueprint.json';
-        const blueprintAttachment = interaction.message.attachments?.find(a => a.filename === blueprintFilename);
+        const filePrefix = isRewardProposal ? 'reward-blueprint' : 'strategy-blueprint';
+        const blueprintAttachment = interaction.message.attachments?.find(a =>
+          a.filename.startsWith(filePrefix)
+        );
 
-        if (!blueprintAttachment) throw new Error(`${blueprintFilename} missing from message.`);
+        if (!blueprintAttachment) throw new Error(`${filePrefix} blueprint data is missing.`);
 
         const blueprintRes = await fetch(blueprintAttachment.url);
-        if (!blueprintRes.ok) throw new Error('Failed to download blueprint file from Discord.');
+        if (!blueprintRes.ok) throw new Error('Failed to retrieve blueprint data.');
         const parsedData = await blueprintRes.json();
 
         const imageAttachment = interaction.message.attachments?.find(a =>
@@ -283,7 +73,7 @@ export default async function handler(req, res) {
 
     const statusIndex = originalEmbed.fields.findIndex(f => f.name.toLowerCase().includes('status'));
     const statusField = {
-      name: 'Status',
+      name: '⚖️ Status',
       value: isApproved ? `✅ **Approved by <@${userId}>**` : `❌ **Rejected by <@${userId}>**`,
       inline: false
     };
@@ -301,7 +91,7 @@ export default async function handler(req, res) {
       type: InteractionResponseType.UPDATE_MESSAGE,
       data: {
         embeds: [originalEmbed],
-        attachments: interaction.message.attachments ? interaction.message.attachments.map(a => ({ id: a.id })) : [],
+        attachments: [], // Clears the blueprint attachment upon approval/rejection
         components: [
           {
             type: 1,
@@ -314,6 +104,3 @@ export default async function handler(req, res) {
       }
     });
   }
-
-  return res.status(400).end();
-}
