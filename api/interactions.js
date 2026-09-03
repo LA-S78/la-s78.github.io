@@ -574,6 +574,13 @@ export default async function handler(req, res) {
       const GIST_TOKEN = process.env.GIST_TOKEN;
       const host = req.headers.host || 'la-s78.app';
       const userId = interaction.member?.user?.id || interaction.user?.id;
+      const username = interaction.member?.nick ||
+                       interaction.member?.user?.global_name ||
+                       interaction.member?.user?.username ||
+                       interaction.user?.global_name ||
+                       interaction.user?.username ||
+                       'Leadership';
+
       const requestedAction = options?.find(opt => opt.name === 'action')?.value;
       const requestedMode = options?.find(opt => opt.name === 'mode')?.value || 'standard';
 
@@ -603,7 +610,7 @@ export default async function handler(req, res) {
               'User-Agent': 'WarRoom-App'
             },
             body: JSON.stringify({
-              description: `Cycle reset (${requestedMode}) by <@${userId}> at ${new Date().toISOString()}`,
+              description: `Cycle reset (${requestedMode}) by ${username} at ${new Date().toISOString()}`,
               files: {
                 'rewards-nominations.json': {
                   content: JSON.stringify({}, null, 2)
@@ -625,7 +632,7 @@ export default async function handler(req, res) {
                 title: isKW ? '⚔️ Kingdom War Cycle Initialized (2x Rewards)' : '🔄 Standard Reward Cycle Reset',
                 color: isKW ? 0x8f0000 : 0x22c55e,
                 description: `All previous nominations have been cleared from Kingdom records.\n\n• **Active Mode:** ${isKW ? '⚔️ **Kingdom War (Double Allocation: 1x Regular + 1x KW)**' : '🛡️ **Standard Week (1x Allocation)**'}\n• All eligible alliances are reset to \`⏳ Awaiting submission\`.\n• Leaders can now generate fresh rosters via \`/nominate\`.\n• Remind the King to hit **Reset Checklist** on the console.`,
-                footer: { text: `Cycle initialized by user ID ${userId}` },
+                footer: { text: `Cycle initialized by ${username}` },
                 timestamp: new Date().toISOString()
               }]
             }
@@ -754,7 +761,12 @@ export default async function handler(req, res) {
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
     const userId = interaction.member?.user?.id || interaction.user?.id;
-    const username = interaction.member?.user?.username || interaction.user?.username || 'Discord Admin';
+    const username = interaction.member?.nick ||
+                     interaction.member?.user?.global_name ||
+                     interaction.member?.user?.username ||
+                     interaction.user?.global_name ||
+                     interaction.user?.username ||
+                     'Discord Admin';
     const lang = resolveUserLocale(interaction, null);
     const t = getBotStrings(lang);
 
@@ -826,7 +838,7 @@ export default async function handler(req, res) {
     const statusIndex = originalEmbed.fields.findIndex(f => f.name.toLowerCase().includes('status'));
     const statusField = {
       name: '⚖️ Status',
-      value: isApproved ? `✅ **Approved by <@${userId}>**` : `❌ **Rejected by <@${userId}>**`,
+      value: isApproved ? `✅ **Approved by ${username}**` : `❌ **Rejected by ${username}**`,
       inline: false
     };
 
