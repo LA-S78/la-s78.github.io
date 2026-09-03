@@ -31,14 +31,13 @@ const AUTO_ALLIANCE_PALETTE = [
 ];
 
 // ==========================================================================
-// 1. DATA INITIALIZATION & SNAPSHOTS
+// 1. DATA INITIALIZATION & LIVE STATE SYNC
 // ==========================================================================
 
 export function initDefaultTiers() {
   if (window.REWARDS_CONFIG && window.REWARDS_CONFIG.distribution_tiers) {
     originalTiers = JSON.parse(JSON.stringify(window.REWARDS_CONFIG.distribution_tiers));
   } else {
-    // Hardcoded fallback if external YAML is missing
     originalTiers = [
       { id: 'tier_1', min_rank: 1, max_rank: 1, chests: { commanders_will: 1, loyal_servant: 3, followers_heart: 1 } },
       { id: 'tier_2', min_rank: 2, max_rank: 3, chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 3 } },
@@ -47,6 +46,27 @@ export function initDefaultTiers() {
     ];
   }
   draftTiers = JSON.parse(JSON.stringify(originalTiers));
+}
+
+export async function fetchLiveRewardsState() {
+  try {
+    const res = await fetch(`/api/rewards-state?t=${Date.now()}`);
+    if (!res.ok) return;
+
+    const data = await res.json();
+    if (data.distribution_tiers && Array.isArray(data.distribution_tiers) && data.distribution_tiers.length > 0) {
+      originalTiers = JSON.parse(JSON.stringify(data.distribution_tiers));
+
+      // Only refresh live display if user is not actively editing in planner mode
+      if (!isRewardsPlannerActive) {
+        draftTiers = JSON.parse(JSON.stringify(originalTiers));
+        renderTierList();
+        updatePayoutTable();
+      }
+    }
+  } catch (err) {
+    console.warn('Could not fetch live rewards state, keeping current configuration:', err);
+  }
 }
 
 // ==========================================================================
@@ -69,7 +89,6 @@ export function adjustTierMaxRank(tierIndex, delta) {
   const tier = draftTiers[tierIndex];
   const newMax = tier.max_rank + delta;
 
-  // Minimum allowed max_rank is its own min_rank
   if (newMax < tier.min_rank) return;
 
   tier.max_rank = newMax;
@@ -114,7 +133,6 @@ export function adjustChestQuantity(tierIndex, chestType) {
   if (!isRewardsPlannerActive || !draftTiers[tierIndex]) return;
 
   const currentVal = draftTiers[tierIndex].chests[chestType] || 0;
-  // Cycle 0..5 -> 0
   draftTiers[tierIndex].chests[chestType] = currentVal >= 5 ? 0 : currentVal + 1;
 
   renderTierList();
@@ -143,7 +161,6 @@ export function renderTierList() {
            data-min-rank="${tier.min_rank}" 
            data-max-rank="${tier.max_rank}">
         <div class="tier-label-group">
-          <!-- Planner Delete Button -->
           <div class="tier-row-controls">
             ${activeList.length > 1 ? `<button class="btn-tier-del" data-action="del-tier" data-index="${index}" title="Remove Bracket">×</button>` : ''}
             <span class="range-stepper">
@@ -153,7 +170,6 @@ export function renderTierList() {
             </span>
           </div>
 
-          <!-- Static View Label -->
           <span class="tier-name tier-name-static">${rangeText}</span>
           <span class="tier-alliance-tags" data-min-rank="${tier.min_rank}" data-max-rank="${tier.max_rank}"></span>
         </div>
@@ -199,7 +215,6 @@ export function updatePayoutTable() {
   const activeList = isRewardsPlannerActive ? draftTiers : originalTiers;
   const rankLabel = document.getElementById('rewards-tier-list')?.dataset.rankLabel || 'Rank';
 
-  // Group payouts dynamically based on actual member rank calculation
   const rowsHtml = [];
 
   activeList.forEach(tier => {
@@ -211,7 +226,6 @@ export function updatePayoutTable() {
                         (tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.tickets) +
                         (tier.chests.followers_heart * CHEST_VALUES.followers_heart.tickets);
 
-    // If tier spans across rank 4 boundary during host week, split rows so bonuses reflect accurately
     const ranks = [];
     for (let r = tier.min_rank; r <= tier.max_rank; r++) {
       ranks.push(r);
@@ -355,11 +369,7 @@ export function toggleRewardsPlanner(active) {
   if (container) container.classList.toggle('planner-active', active);
   if (addTierBox) addTierBox.classList.toggle('hidden', !active);
 
-  if (isRewardsPlannerActive) {
-    draftTiers = JSON.parse(JSON.stringify(originalTiers));
-  } else {
-    draftTiers = JSON.parse(JSON.stringify(originalTiers));
-  }
+  draftTiers = JSON.parse(JSON.stringify(originalTiers));
 
   renderTierList();
   updatePayoutTable();
@@ -442,7 +452,6 @@ export function bindRewardsControls() {
     btnAddTier.addEventListener('click', addTier);
   }
 
-  // Delegated events for dynamic elements
   const tierContainer = document.getElementById('rewards-tier-list');
   if (tierContainer && !tierContainer.dataset.bound) {
     tierContainer.dataset.bound = 'true';
@@ -480,6 +489,9 @@ export function bindRewardsControls() {
 
   renderTierList();
   updatePayoutTable();
+
+  // Asynchronously fetch live data from Gist via api/rewards-state
+  fetchLiveRewardsState();
 }
 
 if (typeof window !== 'undefined') {
