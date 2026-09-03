@@ -49,11 +49,8 @@ export function initDefaultTiers() {
 }
 
 export async function fetchLiveRewardsState() {
-  const listEl = document.getElementById('rewards-tier-list');
-  const tableEl = document.getElementById('payout-table-body');
-
   try {
-    const res = await fetch(`/api/rewards-state?t=${Date.now()}`);
+    const res = await fetch(`/api/rewards-state?t=${Date.now()}`, { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       if (data.distribution_tiers && Array.isArray(data.distribution_tiers) && data.distribution_tiers.length > 0) {
@@ -68,8 +65,46 @@ export async function fetchLiveRewardsState() {
     }
   } catch (err) {
     console.warn('Could not fetch live rewards state, keeping current configuration:', err);
+  }
+}
+
+export async function fetchLiveMapState() {
+  try {
+    const [stateRes, colorsRes] = await Promise.all([
+      fetch(`/api/map-state?t=${Date.now()}`, { cache: 'no-store' }),
+      fetch('/api/colors', { cache: 'no-store' })
+    ]);
+
+    let hasUpdate = false;
+    if (stateRes.ok) {
+      window.MAP_STATE = await stateRes.json();
+      hasUpdate = true;
+    }
+    if (colorsRes.ok) {
+      window.DISCORD_COLORS = await colorsRes.json();
+      hasUpdate = true;
+    }
+
+    if (hasUpdate) {
+      syncAllianceTagsFromMapState();
+    }
+  } catch (err) {
+    console.warn('Could not fetch live map state:', err);
+  }
+}
+
+export async function syncAllLiveState() {
+  const listEl = document.getElementById('rewards-tier-list');
+  const tableEl = document.getElementById('payout-table-body');
+
+  try {
+    // Await both live endpoints before lifting the curtain
+    await Promise.allSettled([
+      fetchLiveRewardsState(),
+      fetchLiveMapState()
+    ]);
   } finally {
-    // Reveal UI only after live data is rendered
+    // Trigger smooth fade-in only when both tiers and tags are fully ready
     listEl?.classList.add('rewards-loaded');
     tableEl?.classList.add('rewards-loaded');
   }
@@ -273,21 +308,8 @@ export function updatePayoutTable() {
 // 4. ALLIANCE TAG & COLOR SYNCHRONIZATION
 // ==========================================================================
 
-export async function syncAllianceTagsFromMapState() {
-  let mapData = typeof window !== 'undefined' ? window.MAP_STATE : null;
-
-  if (!mapData || !mapData.alliances) {
-    try {
-      const [stateRes, colorsRes] = await Promise.all([
-        fetch(`/api/map-state?t=${Date.now()}`),
-        fetch('/api/colors')
-      ]);
-      if (stateRes.ok) window.MAP_STATE = await stateRes.json();
-      if (colorsRes.ok) window.DISCORD_COLORS = await colorsRes.json();
-      mapData = window.MAP_STATE;
-    } catch (err) {}
-  }
-
+export function syncAllianceTagsFromMapState() {
+  const mapData = typeof window !== 'undefined' ? window.MAP_STATE : null;
   if (!mapData || !mapData.alliances) return;
 
   const liveDiscordColors = window.DISCORD_COLORS || {};
@@ -498,10 +520,12 @@ export function bindRewardsControls() {
     });
   }
 
+  // Pre-render immediately with bootstrap data so DOM nodes exist
   renderTierList();
   updatePayoutTable();
 
-  fetchLiveRewardsState();
+  // Perform parallel live sync and fade in once fully resolved
+  syncAllLiveState();
 }
 
 if (typeof window !== 'undefined') {
