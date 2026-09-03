@@ -5,9 +5,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { changes, submittedBy, secretKey, snapshotUrl } = req.body;
+  const { type, distribution, changes, submittedBy, secretKey, snapshotUrl } = req.body;
 
-  // Authenticate request using DISCORD_BOT_TOKEN or secret
+  // Authenticate request using bot secret
   const authSecret = process.env.DISCORD_BOT_TOKEN || process.env.DISCORD_BOT_SECRET;
   if (secretKey !== authSecret) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -20,14 +20,47 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Gist environment variables missing on server' });
   }
 
-  try {
-    const headers = {
-      'Authorization': `Bearer ${GIST_TOKEN}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'WarRoom-Vercel-App'
-    };
+  const headers = {
+    'Authorization': `Bearer ${GIST_TOKEN}`,
+    'Accept': 'application/vnd.github.v3+json',
+    'User-Agent': 'WarRoom-Vercel-App'
+  };
 
-    // 1. Fetch current state from Gist
+  try {
+    // ======================================================================
+    // 1. REWARD DISTRIBUTION PROPOSAL ACCEPTANCE
+    // ======================================================================
+    if (type === 'rewards') {
+      if (!Array.isArray(distribution)) {
+        return res.status(400).json({ error: 'Invalid distribution data provided' });
+      }
+
+      const patchPayload = {
+        description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
+        files: {
+          'rewards-data.json': {
+            content: JSON.stringify({
+              distribution_tiers: distribution,
+              lastUpdated: new Date().toISOString(),
+              updatedBy: submittedBy || 'Discord Admin'
+            }, null, 2)
+          }
+        }
+      };
+
+      const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify(patchPayload)
+      });
+
+      if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+      return res.status(200).json({ success: true, message: 'Rewards distribution updated in Gist!' });
+    }
+
+    // ======================================================================
+    // 2. MAP TERRITORY PROPOSAL ACCEPTANCE
+    // ======================================================================
     let currentState = { alliances: {}, territory_ownership: {} };
     const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
 
@@ -41,7 +74,6 @@ export default async function handler(req, res) {
       currentState.territory_ownership = {};
     }
 
-    // 2. Apply proposal changes
     if (changes && typeof changes === 'object') {
       Object.entries(changes).forEach(([cityId, change]) => {
         currentState.territory_ownership[cityId] = {
@@ -51,7 +83,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // Persist the latest approved map snapshot image URL
     if (snapshotUrl) {
       currentState.lastSnapshotUrl = snapshotUrl;
     }
@@ -59,13 +90,9 @@ export default async function handler(req, res) {
     currentState.lastUpdated = new Date().toISOString();
     currentState.updatedBy = submittedBy || 'Discord Admin';
 
-    // 3. Patch Gist with updated state
     const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: 'PATCH',
-      headers: {
-        ...headers,
-        'Content-Type': 'application/json'
-      },
+      headers: { ...headers, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         description: `Map updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
         files: {
@@ -77,7 +104,6 @@ export default async function handler(req, res) {
     });
 
     if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
-
     return res.status(200).json({ success: true, message: 'Live map updated in Gist!' });
   } catch (error) {
     console.error('Accept proposal error:', error);

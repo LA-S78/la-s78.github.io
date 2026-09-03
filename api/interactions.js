@@ -1,3 +1,4 @@
+// api/interactions.js
 import { verifyKey, InteractionType, InteractionResponseType } from 'discord-interactions';
 import { RULES_DATA, SB_DATA, BOT_DATA } from './_generated_translations.js';
 
@@ -13,7 +14,6 @@ async function getRawBody(req) {
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'ru', 'it', 'tr', 'uk'];
 
-// --- BULLETPROOF FALLBACKS ---
 const FALLBACK_RULES = [
   { title: "📜 1. Respect & Conduct", content: "**Zero Tolerance:** Bullying, racism, hate speech, harassment, or toxic behavior is prohibited.\n**Community Standard:** Treat all players with respect.\n**Reporting:** You **must** provide screenshots/proof when reporting a violation." },
   { title: "🛡️ 2. NAP Protection Rules", content: "The following actions against **NAP Alliances** and their **Academies** are prohibited:\n> 🚫 No Attacking\n> 🚫 No Scouting" },
@@ -27,92 +27,19 @@ const FALLBACK_RULES = [
 ];
 
 const FALLBACK_SB_SCHEDULE = [
-  {
-    time: "00:00",
-    d1: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d2: { text: "Build Territory", key: "build_territory" },
-    d3: { text: "Train Soldiers", key: "train_soldiers" },
-    d4: { text: "Tech Research", key: "tech_research" },
-    d5: { text: "Enhance Raven", key: "enhance_raven" },
-    d6: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d7: { text: "Build Territory", key: "build_territory" }
-  },
-  {
-    time: "04:00",
-    d1: { text: "Build Territory", key: "build_territory" },
-    d2: { text: "Train Soldiers", key: "train_soldiers" },
-    d3: { text: "Tech Research", key: "tech_research" },
-    d4: { text: "Enhance Raven", key: "enhance_raven" },
-    d5: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d6: { text: "Build Territory", key: "build_territory" },
-    d7: { text: "Train Soldiers", key: "train_soldiers" }
-  },
-  {
-    time: "08:00",
-    d1: { text: "Train Soldiers", key: "train_soldiers" },
-    d2: { text: "Tech Research", key: "tech_research" },
-    d3: { text: "Enhance Raven", key: "enhance_raven" },
-    d4: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d5: { text: "Build Territory", key: "build_territory" },
-    d6: { text: "Train Soldiers", key: "train_soldiers" },
-    d7: { text: "Tech Research", key: "tech_research" }
-  },
-  {
-    time: "12:00",
-    d1: { text: "Tech Research", key: "tech_research" },
-    d2: { text: "Enhance Raven", key: "enhance_raven" },
-    d3: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d4: { text: "Build Territory", key: "build_territory" },
-    d5: { text: "Train Soldiers", key: "train_soldiers" },
-    d6: { text: "Tech Research", key: "tech_research" },
-    d7: { text: "Enhance Raven", key: "enhance_raven" }
-  },
-  {
-    time: "16:00",
-    d1: { text: "Enhance Raven", key: "enhance_raven" },
-    d2: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d3: { text: "Build Territory", key: "build_territory" },
-    d4: { text: "Train Soldiers", key: "train_soldiers" },
-    d5: { text: "Tech Research", key: "tech_research" },
-    d6: { text: "Enhance Raven", key: "enhance_raven" },
-    d7: { text: "Enhance Heroes", key: "enhance_heroes" }
-  },
-  {
-    time: "20:00",
-    d1: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d2: { text: "Build Territory", key: "build_territory" },
-    d3: { text: "Train Soldiers", key: "train_soldiers" },
-    d4: { text: "Tech Research", key: "tech_research" },
-    d5: { text: "Enhance Raven", key: "enhance_raven" },
-    d6: { text: "Enhance Heroes", key: "enhance_heroes" },
-    d7: { text: "Build Territory", key: "build_territory" }
-  }
+  { time: "00:00", d1: { text: "Enhance Heroes", key: "enhance_heroes" }, d2: { text: "Build Territory", key: "build_territory" }, d3: { text: "Train Soldiers", key: "train_soldiers" }, d4: { text: "Tech Research", key: "tech_research" }, d5: { text: "Enhance Raven", key: "enhance_raven" }, d6: { text: "Enhance Heroes", key: "enhance_heroes" }, d7: { text: "Build Territory", key: "build_territory" } },
+  { time: "04:00", d1: { text: "Build Territory", key: "build_territory" }, d2: { text: "Train Soldiers", key: "train_soldiers" }, d3: { text: "Tech Research", key: "tech_research" }, d4: { text: "Enhance Raven", key: "enhance_raven" }, d5: { text: "Enhance Heroes", key: "enhance_heroes" }, d6: { text: "Build Territory", key: "build_territory" }, d7: { text: "Train Soldiers", key: "train_soldiers" } },
+  { time: "08:00", d1: { text: "Train Soldiers", key: "train_soldiers" }, d2: { text: "Tech Research", key: "tech_research" }, d3: { text: "Enhance Raven", key: "enhance_raven" }, d4: { text: "Enhance Heroes", key: "enhance_heroes" }, d5: { text: "Build Territory", key: "build_territory" }, d6: { text: "Train Soldiers", key: "train_soldiers" }, d7: { text: "Tech Research", key: "tech_research" } },
+  { time: "12:00", d1: { text: "Tech Research", key: "tech_research" }, d2: { text: "Enhance Raven", key: "enhance_raven" }, d3: { text: "Enhance Heroes", key: "enhance_heroes" }, d4: { text: "Build Territory", key: "build_territory" }, d5: { text: "Train Soldiers", key: "train_soldiers" }, d6: { text: "Tech Research", key: "tech_research" }, d7: { text: "Enhance Raven", key: "enhance_raven" } },
+  { time: "16:00", d1: { text: "Enhance Raven", key: "enhance_raven" }, d2: { text: "Enhance Heroes", key: "enhance_heroes" }, d3: { text: "Build Territory", key: "build_territory" }, d4: { text: "Train Soldiers", key: "train_soldiers" }, d5: { text: "Tech Research", key: "tech_research" }, d6: { text: "Enhance Raven", key: "enhance_raven" }, d7: { text: "Enhance Heroes", key: "enhance_heroes" } },
+  { time: "20:00", d1: { text: "Enhance Heroes", key: "enhance_heroes" }, d2: { text: "Build Territory", key: "build_territory" }, d3: { text: "Train Soldiers", key: "train_soldiers" }, d4: { text: "Tech Research", key: "tech_research" }, d5: { text: "Enhance Raven", key: "enhance_raven" }, d6: { text: "Enhance Heroes", key: "enhance_heroes" }, d7: { text: "Build Territory", key: "build_territory" } }
 ];
 
 const FALLBACK_BOT_STRINGS = {
-  sb: {
-    current_event: "Current Event",
-    next_event: "Next Event",
-    schedule_title: "Day {day} Schedule (Game Time / UTC+2)",
-    footer: "Times are Game Time (UTC+2). Relative countdowns adapt to your local time.",
-    button: "View Full Schedule"
-  },
-  rules: {
-    title: "📜 Server Rules",
-    description: "Official NAP & Kingdom Rules.",
-    not_found_title: "⚠️ Rule Not Found",
-    not_found_desc: "Rule {rule} does not exist. Choose between 1 and {max}.",
-    button: "Open Rules Page"
-  },
-  map: {
-    title: "🗺️ Last Asylum Territory Map",
-    description: "View real-time territory ownership.",
-    button: "Open Live Map"
-  },
-  admin: {
-    access_denied: "⛔ **Access Denied:** Only authorized leadership can approve or reject map proposals.",
-    failed_update: "Failed to update map:"
-  }
+  sb: { current_event: "Current Event", next_event: "Next Event", schedule_title: "Day {day} Schedule (Game Time / UTC+2)", footer: "Times are Game Time (UTC+2). Relative countdowns adapt to your local time.", button: "View Full Schedule" },
+  rules: { title: "📜 Server Rules", description: "Official NAP & Kingdom Rules.", not_found_title: "⚠️ Rule Not Found", not_found_desc: "Rule {rule} does not exist. Choose between 1 and {max}.", button: "Open Rules Page" },
+  map: { title: "🗺️ Last Asylum Territory Map", description: "View real-time territory ownership.", button: "Open Live Map" },
+  admin: { access_denied: "⛔ **Access Denied:** Only authorized leadership can approve or reject proposals.", failed_update: "Failed to apply proposal update:" }
 };
 
 function getBotStrings(lang) {
@@ -168,7 +95,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ type: InteractionResponseType.PONG });
   }
 
-  // --- SLASH COMMAND HANDLING ---
+  // --- SLASH COMMANDS ---
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     const { name, options } = interaction.data;
     const host = req.headers.host || 'la-s78.app';
@@ -176,36 +103,24 @@ export default async function handler(req, res) {
     const lang = resolveUserLocale(interaction, providedLang);
     const t = getBotStrings(lang);
 
-    // --- /sb COMMAND ---
     if (name === 'sb') {
       const now = new Date();
-      const gameTime = new Date(now.getTime() + (2 * 60 * 60 * 1000)); // UTC+2
+      const gameTime = new Date(now.getTime() + (2 * 60 * 60 * 1000));
       const gameHour = gameTime.getUTCHours();
-      
       const rawDay = gameTime.getUTCDay();
       const defaultDay = rawDay === 0 ? 7 : rawDay;
       const selectedDay = options?.find(opt => opt.name === 'day')?.value || defaultDay;
       const isToday = selectedDay === defaultDay;
 
-      let sbSchedule = FALLBACK_SB_SCHEDULE;
-      if (SB_DATA && SB_DATA[lang] && SB_DATA[lang].length > 0) {
-        sbSchedule = SB_DATA[lang];
-      } else if (SB_DATA && SB_DATA['en'] && SB_DATA['en'].length > 0) {
-        sbSchedule = SB_DATA['en'];
-      }
-
+      let sbSchedule = (SB_DATA && SB_DATA[lang]) || (SB_DATA && SB_DATA['en']) || FALLBACK_SB_SCHEDULE;
       const slotHours = [0, 4, 8, 12, 16, 20];
       let activeSlotIndex = 0;
       for (let i = slotHours.length - 1; i >= 0; i--) {
-        if (gameHour >= slotHours[i]) {
-          activeSlotIndex = i;
-          break;
-        }
+        if (gameHour >= slotHours[i]) { activeSlotIndex = i; break; }
       }
 
       const nextSlotIndex = (activeSlotIndex + 1) % 6;
       const dayKey = `d${selectedDay}`;
-
       const nextSlotHourGT = (slotHours[activeSlotIndex] + 4) % 24;
       const nextSlotTime = new Date(now);
       const nextSlotUtcHour = (nextSlotHourGT - 2 + 24) % 24;
@@ -215,30 +130,15 @@ export default async function handler(req, res) {
       }
       const nextTimestamp = Math.floor(nextSlotTime.getTime() / 1000);
 
-      let currentEventText = "Event";
-      let currentEventEmoji = "▫️";
-      let nextEventText = "Event";
-      let nextEventEmoji = "▫️";
-
+      let currentEventText = "Event", currentEventEmoji = "▫️", nextEventText = "Event", nextEventEmoji = "▫️";
       const timeline = slotHours.map((hour, idx) => {
         const timeStr = `${String(hour).padStart(2, '0')}:00 GT`;
         const slotData = sbSchedule?.[idx]?.[dayKey];
         const text = slotData?.text || `Event ${idx + 1}`;
         const emoji = EVENT_EMOJIS[slotData?.key] || '▫️';
-
-        if (idx === activeSlotIndex) {
-          currentEventText = text;
-          currentEventEmoji = emoji;
-        }
-        if (idx === nextSlotIndex) {
-          nextEventText = text;
-          nextEventEmoji = emoji;
-        }
-
-        if (isToday && idx === activeSlotIndex) {
-          return `▶ **${timeStr} — ${emoji} ${text} (ACTIVE)**`;
-        }
-        return `• \`${timeStr}\` — ${emoji} ${text}`;
+        if (idx === activeSlotIndex) { currentEventText = text; currentEventEmoji = emoji; }
+        if (idx === nextSlotIndex) { nextEventText = text; nextEventEmoji = emoji; }
+        return (isToday && idx === activeSlotIndex) ? `▶ **${timeStr} — ${emoji} ${text} (ACTIVE)**` : `• \`${timeStr}\` — ${emoji} ${text}`;
       }).join('\n');
 
       const fields = [];
@@ -248,48 +148,24 @@ export default async function handler(req, res) {
           { name: `⏳ ${t.sb.next_event} (<t:${nextTimestamp}:t>)`, value: `${nextEventEmoji} ${nextEventText}`, inline: false }
         );
       }
-      const scheduleTitleText = t.sb.schedule_title.replace('{day}', selectedDay);
-      fields.push({ name: `📋 ${scheduleTitleText}`, value: timeline, inline: false });
+      fields.push({ name: `📋 ${t.sb.schedule_title.replace('{day}', selectedDay)}`, value: timeline, inline: false });
 
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          embeds: [{
-            title: `🏮 Survival Battle — Day ${selectedDay}`,
-            color: 0xb29a20,
-            fields: fields,
-            footer: { text: t.sb.footer }
-          }],
-          components: [{
-            type: 1,
-            components: [{
-              type: 2, style: 5, label: t.sb.button,
-              url: `https://${host}/${lang}/guides/survival.html`
-            }]
-          }]
+          embeds: [{ title: `🏮 Survival Battle — Day ${selectedDay}`, color: 0xb29a20, fields, footer: { text: t.sb.footer } }],
+          components: [{ type: 1, components: [{ type: 2, style: 5, label: t.sb.button, url: `https://${host}/${lang}/guides/survival.html` }] }]
         }
       });
     }
 
-    // --- /rules COMMAND ---
     if (name === 'rules') {
       const requestedRule = options?.find(opt => opt.name === 'rule')?.value;
-      
-      let rulesData = FALLBACK_RULES;
-      if (RULES_DATA && RULES_DATA[lang] && RULES_DATA[lang].length > 0) {
-        rulesData = RULES_DATA[lang];
-      } else if (RULES_DATA && RULES_DATA['en'] && RULES_DATA['en'].length > 0) {
-        rulesData = RULES_DATA['en'];
-      }
-      
-      let title = t.rules.title;
-      let fields = [];
-      let description = undefined;
+      const rulesData = (RULES_DATA && RULES_DATA[lang]) || (RULES_DATA && RULES_DATA['en']) || FALLBACK_RULES;
+      let title = t.rules.title, fields = [], description;
 
       if (requestedRule) {
-        const ruleIndex = requestedRule - 1;
-        const targetRule = rulesData[ruleIndex];
-        
+        const targetRule = rulesData[requestedRule - 1];
         if (targetRule) {
           title = targetRule.title;
           description = cleanHtmlToMarkdown(targetRule.content);
@@ -299,74 +175,42 @@ export default async function handler(req, res) {
         }
       } else {
         description = t.rules.description;
-        fields = rulesData.map(rule => ({
-          name: rule.title,
-          value: cleanHtmlToMarkdown(rule.content),
-          inline: false
-        }));
+        fields = rulesData.map(rule => ({ name: rule.title, value: cleanHtmlToMarkdown(rule.content), inline: false }));
       }
 
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          embeds: [{
-            title: title,
-            description: description,
-            color: 0x8f0000,
-            fields: fields
-          }],
-          components: [{
-            type: 1,
-            components: [{
-              type: 2, style: 5, label: t.rules.button,
-              url: `https://${host}/${lang}/rules.html`
-            }]
-          }]
+          embeds: [{ title, description, color: 0x8f0000, fields }],
+          components: [{ type: 1, components: [{ type: 2, style: 5, label: t.rules.button, url: `https://${host}/${lang}/rules.html` }] }]
         }
       });
     }
 
-    // --- /map COMMAND ---
     if (name === 'map') {
       let mapImageUrl = null;
-
       try {
         const stateRes = await fetch(`https://${host}/api/map-state?t=${Date.now()}`);
         if (stateRes.ok) {
           const liveState = await stateRes.json();
-          if (liveState.lastSnapshotUrl) {
-            mapImageUrl = liveState.lastSnapshotUrl;
-          }
+          if (liveState.lastSnapshotUrl) mapImageUrl = liveState.lastSnapshotUrl;
         }
       } catch (err) {}
 
-      const mapEmbed = {
-        title: t.map.title,
-        description: t.map.description,
-        color: 0x0070f3
-      };
-
-      if (mapImageUrl) {
-        mapEmbed.image = { url: mapImageUrl };
-      }
+      const mapEmbed = { title: t.map.title, description: t.map.description, color: 0x0070f3 };
+      if (mapImageUrl) mapEmbed.image = { url: mapImageUrl };
 
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           embeds: [mapEmbed],
-          components: [{
-            type: 1,
-            components: [{
-              type: 2, style: 5, label: t.map.button,
-              url: `https://${host}/${lang}/map.html`
-            }]
-          }]
+          components: [{ type: 1, components: [{ type: 2, style: 5, label: t.map.button, url: `https://${host}/${lang}/map.html` }] }]
         }
       });
     }
   }
 
-  // --- BUTTON INTERACTIONS (Map Proposals) ---
+  // --- BUTTON INTERACTIONS (Map & Rewards Proposals) ---
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
     const userId = interaction.member?.user?.id || interaction.user?.id;
@@ -377,35 +221,46 @@ export default async function handler(req, res) {
     if (userId !== process.env.AUTHORIZED_USER_ID) {
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: t.admin.access_denied,
-          flags: 64
-        }
+        data: { content: t.admin.access_denied, flags: 64 }
       });
     }
 
-    const isApproved = custom_id === 'approve_proposal';
+    const isRewardProposal = custom_id.includes('reward');
+    const isApproved = custom_id === 'approve_proposal' || custom_id === 'approve_reward_proposal';
 
     if (isApproved) {
       try {
-        const blueprintAttachment = interaction.message.attachments?.find(a => a.filename === 'strategy-blueprint.json');
-        const imageAttachment = interaction.message.attachments?.find(a => a.contentType?.startsWith('image/') || a.filename?.match(/\.(jpg|jpeg|png)$/i));
+        const blueprintFilename = isRewardProposal ? 'reward-blueprint.json' : 'strategy-blueprint.json';
+        const blueprintAttachment = interaction.message.attachments?.find(a => a.filename === blueprintFilename);
 
-        if (!blueprintAttachment) throw new Error('Blueprint JSON missing from message.');
+        if (!blueprintAttachment) throw new Error(`${blueprintFilename} missing from message.`);
 
         const blueprintRes = await fetch(blueprintAttachment.url);
         if (!blueprintRes.ok) throw new Error('Failed to download blueprint file from Discord.');
-        const changes = await blueprintRes.json();
+        const parsedData = await blueprintRes.json();
+
+        const imageAttachment = interaction.message.attachments?.find(a =>
+          a.contentType?.startsWith('image/') || a.filename?.match(/\.(jpg|jpeg|png)$/i)
+        );
+
+        const acceptPayload = isRewardProposal
+          ? {
+              type: 'rewards',
+              distribution: parsedData,
+              submittedBy: username,
+              secretKey: process.env.DISCORD_BOT_TOKEN
+            }
+          : {
+              changes: parsedData,
+              submittedBy: username,
+              secretKey: process.env.DISCORD_BOT_TOKEN,
+              snapshotUrl: imageAttachment ? imageAttachment.url : null
+            };
 
         const acceptRes = await fetch(`https://${req.headers.host}/api/accept-proposal`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            changes: changes,
-            submittedBy: username,
-            secretKey: process.env.DISCORD_BOT_TOKEN,
-            snapshotUrl: imageAttachment ? imageAttachment.url : null
-          })
+          body: JSON.stringify(acceptPayload)
         });
 
         if (!acceptRes.ok) {
@@ -424,13 +279,23 @@ export default async function handler(req, res) {
     const originalEmbed = JSON.parse(JSON.stringify(interaction.message.embeds[0]));
     delete originalEmbed.image;
     delete originalEmbed.thumbnail;
-
     originalEmbed.color = isApproved ? 0x22c55e : 0xef4444;
-    originalEmbed.fields[2] = {
+
+    const statusIndex = originalEmbed.fields.findIndex(f => f.name.toLowerCase().includes('status'));
+    const statusField = {
       name: 'Status',
       value: isApproved ? `✅ **Approved by <@${userId}>**` : `❌ **Rejected by <@${userId}>**`,
       inline: false
     };
+
+    if (statusIndex !== -1) {
+      originalEmbed.fields[statusIndex] = statusField;
+    } else {
+      originalEmbed.fields.push(statusField);
+    }
+
+    const approveId = isRewardProposal ? 'approve_reward_proposal' : 'approve_proposal';
+    const rejectId = isRewardProposal ? 'reject_reward_proposal' : 'reject_proposal';
 
     return res.status(200).json({
       type: InteractionResponseType.UPDATE_MESSAGE,
@@ -441,8 +306,8 @@ export default async function handler(req, res) {
           {
             type: 1,
             components: [
-              { type: 2, custom_id: 'approve_proposal', label: isApproved ? 'Approved' : 'Approve Proposal', style: 3, disabled: true },
-              { type: 2, custom_id: 'reject_proposal', label: !isApproved ? 'Rejected' : 'Reject Proposal', style: 4, disabled: true }
+              { type: 2, custom_id: approveId, label: isApproved ? 'Approved' : 'Approve', style: 3, disabled: true },
+              { type: 2, custom_id: rejectId, label: !isApproved ? 'Rejected' : 'Reject', style: 4, disabled: true }
             ]
           }
         ]
