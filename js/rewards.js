@@ -49,23 +49,29 @@ export function initDefaultTiers() {
 }
 
 export async function fetchLiveRewardsState() {
+  const listEl = document.getElementById('rewards-tier-list');
+  const tableEl = document.getElementById('payout-table-body');
+
   try {
     const res = await fetch(`/api/rewards-state?t=${Date.now()}`);
-    if (!res.ok) return;
+    if (res.ok) {
+      const data = await res.json();
+      if (data.distribution_tiers && Array.isArray(data.distribution_tiers) && data.distribution_tiers.length > 0) {
+        originalTiers = JSON.parse(JSON.stringify(data.distribution_tiers));
 
-    const data = await res.json();
-    if (data.distribution_tiers && Array.isArray(data.distribution_tiers) && data.distribution_tiers.length > 0) {
-      originalTiers = JSON.parse(JSON.stringify(data.distribution_tiers));
-
-      // Only refresh live display if user is not actively editing in planner mode
-      if (!isRewardsPlannerActive) {
-        draftTiers = JSON.parse(JSON.stringify(originalTiers));
-        renderTierList();
-        updatePayoutTable();
+        if (!isRewardsPlannerActive) {
+          draftTiers = JSON.parse(JSON.stringify(originalTiers));
+          renderTierList();
+          updatePayoutTable();
+        }
       }
     }
   } catch (err) {
     console.warn('Could not fetch live rewards state, keeping current configuration:', err);
+  } finally {
+    // Reveal UI only after live data is rendered
+    listEl?.classList.add('rewards-loaded');
+    tableEl?.classList.add('rewards-loaded');
   }
 }
 
@@ -428,6 +434,11 @@ export async function submitRewardProposal(apiEndpointUrl = '/api/proposal') {
 export function bindRewardsControls() {
   initDefaultTiers();
 
+  const listEl = document.getElementById('rewards-tier-list');
+  const tableEl = document.getElementById('payout-table-body');
+  listEl?.classList.remove('rewards-loaded');
+  tableEl?.classList.remove('rewards-loaded');
+
   const toggleHost = document.getElementById('toggle-host-week');
   if (toggleHost && !toggleHost.dataset.bound) {
     toggleHost.dataset.bound = 'true';
@@ -490,7 +501,6 @@ export function bindRewardsControls() {
   renderTierList();
   updatePayoutTable();
 
-  // Asynchronously fetch live data from Gist via api/rewards-state
   fetchLiveRewardsState();
 }
 

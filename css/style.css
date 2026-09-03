@@ -2490,6 +2490,18 @@ body.map-fullscreen-active turbo-frame {
   }
 }
 
+/* Smooth data-load transition (prevents flash of static fallback) */
+.rewards-tier-list,
+#payout-table-body {
+  opacity: 0;
+  transition: opacity 0.35s ease-in;
+}
+
+.rewards-tier-list.rewards-loaded,
+#payout-table-body.rewards-loaded {
+  opacity: 1;
+}
+
 /* ==========================================================================
    DESKTOP / TABLET OVERRIDES (Single Horizontal Row)
    ========================================================================== */
