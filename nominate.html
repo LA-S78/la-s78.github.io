@@ -109,15 +109,31 @@
       buildSlots('kw-blue-slots', '🔵 KW Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'kw-blue');
     }
 
-    // Auto-fill Logic
+    // Prioritized Auto-fill Logic
     document.getElementById('btn-autofill').addEventListener('click', () => {
       const raw = document.getElementById('smart-paste-input').value;
       const lines = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
-      const inputs = Array.from(document.querySelectorAll('.slot-input'));
+
+      const priorityGroups = [
+        'kw-gold',
+        'std-gold',
+        'kw-purple',
+        'std-purple',
+        'kw-blue',
+        'std-blue'
+      ];
+
+      const orderedInputs = [];
+      priorityGroups.forEach(group => {
+        document.querySelectorAll(`.slot-input[data-group="${group}"]`).forEach(input => {
+          orderedInputs.push(input);
+        });
+      });
 
       lines.forEach((line, idx) => {
-        if (inputs[idx]) inputs[idx].value = line;
+        if (orderedInputs[idx]) orderedInputs[idx].value = line;
       });
+
       validateInputs();
     });
 
