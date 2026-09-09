@@ -1,0 +1,12 @@
+[
+  {
+    "name": "nominate",
+    "description": "Request an authenticated portal link to submit weekly chest nominations",
+    "type": 1
+  },
+  {
+    "name": "rewards",
+    "description": "Display current reward allocations, quotas, and alliance ranks",
+    "type": 1
+  }
+]
