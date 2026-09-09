@@ -1,12 +1,31 @@
-[
-  {
-    "name": "nominate",
-    "description": "Request an authenticated portal link to submit weekly chest nominations",
-    "type": 1
-  },
-  {
-    "name": "rewards",
-    "description": "Display current reward allocations, quotas, and alliance ranks",
-    "type": 1
-  }
-]
+{
+  "nap": [
+    {
+      "name": "nominate",
+      "description": "Request an authenticated portal link to submit weekly chest nominations",
+      "type": 1
+    },
+    {
+      "name": "rewards",
+      "description": "Display current reward allocations, quotas, and alliance ranks",
+      "type": 1
+    },
+    {
+      "name": "map",
+      "description": "View the active server territory map",
+      "type": 1
+    }
+  ],
+  "wlo": [
+    {
+      "name": "rewards",
+      "description": "Display current reward allocations, quotas, and alliance ranks",
+      "type": 1
+    },
+    {
+      "name": "map",
+      "description": "View the active server territory map",
+      "type": 1
+    }
+  ]
+}

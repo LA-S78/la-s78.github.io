@@ -21,5 +21,6 @@ jobs:
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
+          DISCORD_GUILD_ID_NAP: ${{ secrets.DISCORD_GUILD_ID }}
+          DISCORD_GUILD_ID_WLO: ${{ secrets.DISCORD_GUILD_ID_WLO }}
         run: node _scripts/deploy_commands.mjs
