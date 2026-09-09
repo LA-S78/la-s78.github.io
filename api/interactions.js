@@ -790,14 +790,16 @@ export default async function handler(req, res) {
 
       // 2. /rank set
       if (sub?.name === 'set') {
-        // Enforce MANAGE_GUILD (0x20 / 32)
-        const userPermissions = BigInt(interaction.member?.permissions || '0');
-        const MANAGE_GUILD = 1n << 5n;
+        const userId = interaction.member?.user?.id || interaction.user?.id;
 
-        if ((userPermissions & MANAGE_GUILD) !== MANAGE_GUILD) {
+        // Hard lock: Only the authorized admin can mutate rankings across any server
+        if (userId !== process.env.AUTHORIZED_USER_ID) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: '⛔ Only officers with **Manage Server** permissions can set alliance ranks.', flags: 64 }
+            data: { 
+              content: '⛔ **Access Denied:** Only authorized administrators can update alliance rankings.', 
+              flags: 64 
+            }
           });
         }
 
@@ -814,6 +816,8 @@ export default async function handler(req, res) {
         const author = interaction.member?.nick ||
                        interaction.member?.user?.global_name ||
                        interaction.member?.user?.username ||
+                       interaction.user?.global_name ||
+                       interaction.user?.username ||
                        'Leadership';
 
         try {
