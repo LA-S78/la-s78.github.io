@@ -2,6 +2,7 @@
 import crypto from 'crypto';
 import { verifyKey, InteractionType, InteractionResponseType } from 'discord-interactions';
 import { RULES_DATA, SB_DATA, BOT_DATA } from './_generated_translations.js';
+import { listAllianceRanks, setAllianceRank } from './_rank_helper.js';
 
 export const config = { api: { bodyParser: false } };
 
@@ -753,6 +754,87 @@ export default async function handler(req, res) {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: { content: `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`, flags: 64 }
         });
+      }
+    }
+
+    // --- /rank COMMAND (Subcommands: list, set) ---
+    if (name === 'rank') {
+      const sub = options?.[0];
+
+      // 1. /rank list
+      if (sub?.name === 'list') {
+        try {
+          const ranks = await listAllianceRanks();
+          const desc = ranks.length
+            ? ranks.map(a => `**#${a.rank}** — \`[${a.tag}]\``).join('\n')
+            : 'No alliances registered in current state.';
+
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              embeds: [{
+                title: '🛡️ Server NAP Standings',
+                color: 0xb8975a,
+                description: desc,
+                footer: { text: 'Last Asylum War Room' }
+              }]
+            }
+          });
+        } catch (err) {
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: `⚠️ Failed to fetch rankings: ${err.message}`, flags: 64 }
+          });
+        }
+      }
+
+      // 2. /rank set
+      if (sub?.name === 'set') {
+        // Enforce MANAGE_GUILD (0x20 / 32)
+        const userPermissions = BigInt(interaction.member?.permissions || '0');
+        const MANAGE_GUILD = 1n << 5n;
+
+        if ((userPermissions & MANAGE_GUILD) !== MANAGE_GUILD) {
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: '⛔ Only officers with **Manage Server** permissions can set alliance ranks.', flags: 64 }
+          });
+        }
+
+        const tagOption = sub.options?.find(o => o.name === 'tag');
+        const rankOption = sub.options?.find(o => o.name === 'rank');
+
+        if (!tagOption || !rankOption) {
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: '⚠️ Missing required arguments: tag and rank.', flags: 64 }
+          });
+        }
+
+        const author = interaction.member?.nick ||
+                       interaction.member?.user?.global_name ||
+                       interaction.member?.user?.username ||
+                       'Leadership';
+
+        try {
+          const result = await setAllianceRank({
+            tag: tagOption.value,
+            rank: rankOption.value,
+            updatedBy: author
+          });
+
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: `👑 **NAP Standing Updated:** \`[${result.tag}]\` is now **#${result.newRank}** (was: ${result.previousRank}).`
+            }
+          });
+        } catch (err) {
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: `⚠️ Failed to update rank: ${err.message}`, flags: 64 }
+          });
+        }
       }
     }
   }
