@@ -10,15 +10,14 @@ if (!token || !clientId) {
 
 const schemas = JSON.parse(readFileSync('.github/discord.json', 'utf8'));
 
-// Map profile names in JSON to environment variables in GitHub
 const targets = [
-  { name: 'nap', guildId: process.env.DISCORD_GUILD_ID_NAP },
+  { name: 'nap', guildId: process.env.DISCORD_GUILD_ID_NAP || process.env.DISCORD_GUILD_ID },
   { name: 'wlo', guildId: process.env.DISCORD_GUILD_ID_WLO }
 ];
 
 for (const target of targets) {
   if (!target.guildId) {
-    console.log(`ℹ️ Skipping profile "${target.name}": Guild ID variable not set.`);
+    console.log(`ℹ️ Skipping profile "${target.name}": Guild ID not set.`);
     continue;
   }
 
@@ -30,7 +29,7 @@ for (const target of targets) {
   const res = await fetch(url, {
     method: 'PUT',
     headers: {
-      'Authorization': `Bot ${token}`,
+      Authorization: `Bot ${token}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(commands)
