@@ -976,8 +976,8 @@ dialog a.dialog-btn:hover {
   min-width: 140px;
   background-color: var(--card-bg);
   padding: 15px;
-  border-radius: 8px;
   border-top: 3px solid var(--accent-color);
+  border-radius: 8px;
   flex-shrink: 0;
   text-decoration: none;
   color: inherit;
@@ -1317,7 +1317,7 @@ table.schedule-table tr.active-row td.active-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 10px 0 10px; /* Removed artificial 150px bottom padding */
+  padding: 10px 10px 0 10px;
   position: relative;
   z-index: 1;
 }
@@ -1485,7 +1485,7 @@ table.schedule-table tr.active-row td.active-col {
 }
 
 .totals-banner {
-  position: relative; /* Replaced broken position: fixed */
+  position: relative;
   width: 100%;
   max-width: 800px;
   margin: 25px auto 10px auto;
@@ -1795,7 +1795,7 @@ svg #layer1 path:hover {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.35rem 0.65rem;
-  min-height: 42px; /* Locks height to prevent layout shift */
+  min-height: 42px;
   box-sizing: border-box;
   background: #0f0c0a;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1810,7 +1810,7 @@ svg #layer1 path:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 28px; /* Keeps left and right groups vertically uniform */
+  min-height: 28px;
 }
 
 .control-label {
@@ -1859,7 +1859,7 @@ svg #layer1 path:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  height: 28px; /* Fixed height match */
+  height: 28px;
   padding: 0 0.65rem;
   font-size: 0.78rem;
   line-height: 1;
@@ -1940,7 +1940,7 @@ svg #layer1 path:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  height: 28px; /* Fixed height match */
+  height: 28px;
   padding: 0 0.65rem;
   font-size: 0.78rem;
   line-height: 1;
@@ -2006,23 +2006,19 @@ body.map-fullscreen-active turbo-frame {
   bottom: 0 !important;
   width: 100vw !important;
   height: 100dvh !important;
-  max-width: 100vw !important; /* OVERRIDES 960px / 860px LIMITS */
+  max-width: 100vw !important;
   max-height: 100dvh !important;
   z-index: 999999 !important;
-  
   border-radius: 0 !important;
   border: none !important;
   margin: 0 !important;
   background: rgba(10, 8, 7, 0.98) !important;
   backdrop-filter: blur(8px);
-
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  
-  /* Safe-area padding only for notch/home indicators, 0 on sides */
   padding: max(10px, env(safe-area-inset-top)) 0 max(12px, env(safe-area-inset-bottom)) 0 !important;
   overflow: hidden !important;
 }
@@ -2030,28 +2026,23 @@ body.map-fullscreen-active turbo-frame {
 /* 3. Controls Header Grouping */
 #map-container.is-fullscreen .map-controls {
   width: calc(100% - 16px) !important; 
-  max-width: 100% !important; /* Allow full span */
+  max-width: 100% !important;
   margin: 0 !important;
   flex: 0 0 auto !important;
 }
 
-/* 4. Center & Fit the SVG Canvas (Forces True Mobile Screen Stretch) */
+/* 4. Center & Fit the SVG Canvas */
 #map-container.is-fullscreen .game-map {
-  flex: 0 1 auto !important; /* Keeps UI clustered */
+  flex: 0 1 auto !important;
   align-self: stretch !important;
   width: 100vw !important;
   max-width: 100vw !important;
-  
-  /* CRITICAL FIX: Changed from 100% to auto so it wraps the map tightly */
   height: auto !important; 
-  
   min-height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
-  
   overflow: auto !important; 
   -webkit-overflow-scrolling: touch !important; 
-  
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2069,7 +2060,7 @@ body.map-fullscreen-active turbo-frame {
 /* 5. Bottom Readout Card Grouping */
 #map-container.is-fullscreen .info-card {
   width: calc(100% - 16px) !important;
-  max-width: 100% !important; /* Allow full span */
+  max-width: 100% !important;
   margin: 0 !important;
   flex: 0 0 auto !important;
 }
@@ -2099,7 +2090,7 @@ body.map-fullscreen-active turbo-frame {
 
 .rewards-wrapper .map-controls .control-group.right {
   width: 100%;
-  justify-content: flex-start; /* Left-aligns buttons to match toggle above */
+  justify-content: flex-start;
   gap: 0.5rem;
   padding-top: 0.35rem;
   border-top: 1px dashed rgba(255, 255, 255, 0.07);
@@ -2539,7 +2530,7 @@ body.map-fullscreen-active turbo-frame {
 }
 
 /* ==========================================================================
-   FEATURE: REWARD NOMINATIONS PORTAL
+   FEATURE: REWARD NOMINATIONS PORTAL (COMPACT HIGH-DENSITY PASS)
    ========================================================================== */
 
 .nominate-wrapper {
@@ -2547,7 +2538,7 @@ body.map-fullscreen-active turbo-frame {
   justify-content: center;
   align-items: flex-start;
   min-height: 100dvh;
-  padding: 1.5rem 1rem;
+  padding: 1rem 0.5rem;
   background-color: var(--nav-bg);
 }
 
@@ -2555,36 +2546,42 @@ body.map-fullscreen-active turbo-frame {
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 1rem 0.85rem;
 }
 
 .alliance-badge-lg {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: var(--accent-color);
   font-family: var(--font-headers);
   text-align: center;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
-/* Smart Paste Area */
+/* Smart Paste Area - Compact */
 .smart-paste-box {
   background: #080605;
   border: 1px dashed var(--border-color);
-  border-radius: 6px;
-  padding: 0.75rem;
-  margin: 1.2rem 0;
+  border-radius: 5px;
+  padding: 0.5rem 0.65rem;
+  margin: 0.65rem 0 0.8rem 0;
+}
+
+.smart-paste-box label {
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: var(--text-muted);
 }
 
 .smart-paste-box textarea {
   width: 100%;
-  height: 54px;
+  height: 44px;
   background: #14100d;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 4px;
   color: var(--text-main);
-  font-size: 0.8rem;
-  padding: 6px 8px;
+  font-size: 0.76rem;
+  padding: 4px 6px;
   resize: none;
   font-family: var(--font-body);
 }
@@ -2594,43 +2591,44 @@ body.map-fullscreen-active turbo-frame {
   border-color: var(--accent-color);
 }
 
-/* Slot Groups & Inputs */
+/* Slot Groups & Inputs - High Density */
 .slot-group {
-  margin-bottom: 1rem;
+  margin-bottom: 0.65rem;
 }
 
 .slot-group-title {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.4rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.3rem;
   color: var(--accent-color);
 }
 
 .slot-input-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 0.45rem;
+  gap: 6px;
+  margin-bottom: 0.28rem;
 }
 
 .slot-num {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
-  width: 18px;
+  width: 16px;
   text-align: right;
+  flex-shrink: 0;
 }
 
 .slot-input {
   flex: 1;
-  height: 34px;
+  height: 28px;
   background: #080605;
   border: 1px solid var(--border-color);
   border-radius: 4px;
   color: #fff;
-  padding: 0 10px;
-  font-size: 0.85rem;
+  padding: 0 8px;
+  font-size: 0.78rem;
   font-family: var(--font-body);
   transition: border-color 0.2s ease, background 0.2s ease;
 }
@@ -2645,41 +2643,45 @@ body.map-fullscreen-active turbo-frame {
 .btn-fw {
   width: 100%;
   justify-content: center;
+  height: 28px;
+  font-size: 0.74rem;
 }
+
 .btn-fw-lg {
   width: 100%;
-  height: 40px;
+  height: 34px;
   justify-content: center;
-  font-size: 0.9rem;
-  margin-top: 0.8rem;
+  font-size: 0.82rem;
+  margin-top: 0.65rem;
 }
 
 /* Status Banners */
 .status-banner {
-  padding: 1rem;
-  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
   text-align: center;
-  font-size: 0.88rem;
-  line-height: 1.4;
-  margin-bottom: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  margin-bottom: 0.75rem;
 }
+
 .status-success {
   background: rgba(20, 83, 45, 0.4);
   border: 1px solid #22c55e;
   color: #86efac;
 }
 
-/* King's Distribution Console */
+/* King's Distribution Console - Compact */
 .distribute-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0.75rem;
+  padding: 0.32rem 0.55rem;
   background: #080605;
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  margin-bottom: 0.45rem;
-  gap: 0.6rem;
+  margin-bottom: 0.3rem;
+  gap: 0.45rem;
   cursor: pointer;
   user-select: none;
   transition: opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
@@ -2701,10 +2703,16 @@ body.map-fullscreen-active turbo-frame {
   color: var(--text-muted);
 }
 
+.distribute-item .chest-glyph {
+  width: 20px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
 .player-ign {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: #fff;
   flex: 1;
   overflow: hidden;
@@ -2716,10 +2724,10 @@ body.map-fullscreen-active turbo-frame {
   background: #1e1713;
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 0.2rem 0.55rem;
-  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.68rem;
   font-weight: bold;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
   flex-shrink: 0;
   transition: all 0.15s ease;
@@ -2741,28 +2749,14 @@ body.map-fullscreen-active turbo-frame {
    ========================================================================== */
 
 @keyframes territory-flash {
-    0%,
-  100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 @keyframes territory-stroke-flash {
-  0% {
-    stroke-opacity: 0.4;
-    stroke-width: 10px;
-  }
-  50% {
-    stroke-opacity: 1;
-    stroke-width: 10px;
-  }
-  100% {
-    stroke-opacity: 0.8;
-    stroke-width: 10px;
-  }
+  0% { stroke-opacity: 0.4; stroke-width: 10px; }
+  50% { stroke-opacity: 1; stroke-width: 10px; }
+  100% { stroke-opacity: 0.8; stroke-width: 10px; }
 }
 
 @keyframes war-pulse {
@@ -2773,35 +2767,23 @@ body.map-fullscreen-active turbo-frame {
 @keyframes nativeAppFadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px); /* Subtle shift prevents dizzying motion */
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    will-change: auto; /* Temporarily trigger raster layer, torn down immediately after execution */
+    will-change: auto;
   }
 }
 
 @keyframes dialogFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes dialogFadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(10px) scale(0.98); }
 }
 
 @keyframes backdropFadeIn {
@@ -2815,79 +2797,34 @@ body.map-fullscreen-active turbo-frame {
 }
 
 @keyframes lantern-flicker {
-  0%,
-  100% {
-    filter: brightness(1) drop-shadow(0 0 5px rgba(var(--active-theme), 0.2));
-  }
-  20% {
-    filter: brightness(0.9) drop-shadow(0 0 8px rgba(var(--active-theme), 0.3));
-  }
-  35% {
-    filter: brightness(1.05)
-      drop-shadow(0 0 15px rgba(var(--active-theme), 0.5));
-  }
-  50% {
-    filter: brightness(0.7) drop-shadow(0 0 2px rgba(var(--active-theme), 0.1));
-  }
-  70% {
-    filter: brightness(0.95)
-      drop-shadow(0 0 6px rgba(var(--active-theme), 0.25));
-  }
-  85% {
-    filter: brightness(0.8) drop-shadow(0 0 4px rgba(var(--active-theme), 0.2));
-  }
+  0%, 100% { filter: brightness(1) drop-shadow(0 0 5px rgba(var(--active-theme), 0.2)); }
+  20% { filter: brightness(0.9) drop-shadow(0 0 8px rgba(var(--active-theme), 0.3)); }
+  35% { filter: brightness(1.05) drop-shadow(0 0 15px rgba(var(--active-theme), 0.5)); }
+  50% { filter: brightness(0.7) drop-shadow(0 0 2px rgba(var(--active-theme), 0.1)); }
+  70% { filter: brightness(0.95) drop-shadow(0 0 6px rgba(var(--active-theme), 0.25)); }
+  85% { filter: brightness(0.8) drop-shadow(0 0 4px rgba(var(--active-theme), 0.2)); }
 }
 
 @keyframes lantern-pulse {
-  0%,
-  100% {
-    opacity: 0.7;
-    transform: scale(1);
-    filter: brightness(1) blur(2px);
-  }
-  50% {
-    opacity: 0.85;
-    transform: scale(1.005);
-    filter: brightness(1.05) blur(3px);
-  }
+  0%, 100% { opacity: 0.7; transform: scale(1); filter: brightness(1) blur(2px); }
+  50% { opacity: 0.85; transform: scale(1.005); filter: brightness(1.05) blur(3px); }
 }
 
 @keyframes lantern-flicker-smooth {
-  0%,
-  100% {
-    opacity: 0.8;
-    filter: brightness(1) blur(2px);
-  }
-  33% {
-    opacity: 0.85;
-    filter: brightness(1.05) blur(2.5px);
-  }
-  66% {
-    opacity: 0.75;
-    filter: brightness(0.95) blur(2px);
-  }
+  0%, 100% { opacity: 0.8; filter: brightness(1) blur(2px); }
+  33% { opacity: 0.85; filter: brightness(1.05) blur(2.5px); }
+  66% { opacity: 0.75; filter: brightness(0.95) blur(2px); }
 }
 
 @keyframes drift {
-  0% {
-    transform: translateY(0) translateX(0);
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(-50px) translateX(20px);
-    opacity: 0;
-  }
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(-50px) translateX(20px); opacity: 0; }
 }
 
 /* Reduced Motion Configs */
 @media (prefers-reduced-motion: reduce) {
-  /* Global Interactive Reset */
-  *,
-  ::before,
-  ::after {
+  *, ::before, ::after {
     animation-delay: -1ms !important;
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
@@ -2896,41 +2833,31 @@ body.map-fullscreen-active turbo-frame {
     transition-delay: 0s !important;
   }
 
-  /* Static Atmospheric Fallbacks */
   .lantern-flicker-layer {
     animation: none !important;
     opacity: 0.8 !important;
     filter: brightness(1) blur(2px) !important;
   }
-  .dir-container,
-  .dir-card {
+  .dir-container, .dir-card {
     animation: none !important;
     box-shadow: none !important;
     filter: brightness(1) !important;
   }
-
-  /* Eliminate Floaters */
-  .dust-container,
-  .mote {
+  .dust-container, .mote {
     display: none !important;
     animation: none !important;
   }
-
-  /* Interactive Scaling Neutralization */
   .lantern-img:active,
   .blueprint-img:hover,
   .scroll-btn:hover {
     transform: none !important;
   }
- /*wider image grid for desktop */
   .img-grid {
-  display: grid;
-  grid-template-columns: 7fr 3fr;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-  /* Disable layout fade structures safely across layout changes */
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    gap: 0.5rem;
+    align-items: center;
+  }
   main, .anchor-nav {
     animation: none !important;
     transition: none !important;
@@ -2948,9 +2875,7 @@ body.map-fullscreen-active turbo-frame {
    10. MEDIA QUERIES (DESKTOP & PWA)
    ========================================================================== */
 
-/* 1. Tablet & Desktop UI Overrides */
 @media (min-width: 768px) {
-  /* bigger header for desktop/tablet */
   .lantern-header {
     height: calc(130px + env(safe-area-inset-top)) !important;
     min-height: calc(130px + env(safe-area-inset-top)) !important;
@@ -2962,23 +2887,21 @@ body.map-fullscreen-active turbo-frame {
   }
 
   .lantern-container {
-  position:relative;
-  right: 1.33rem;
+    position: relative;
+    right: 1.33rem;
   }
 
   .lantern-glow-bleed {
-  top: calc(130px + env(safe-area-inset-top));
+    top: calc(130px + env(safe-area-inset-top));
   }
 
-  /* Update the main routing to account for the taller 130px header */
   main {
-  padding-top: calc(130px + env(safe-area-inset-top));
+    padding-top: calc(130px + env(safe-area-inset-top));
   }
 
   body::before {
-      top: calc(130px + env(safe-area-inset-top));
-      height: calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 180px);
-      
+    top: calc(130px + env(safe-area-inset-top));
+    height: calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 180px);
   }
 
   .lantern-img {
@@ -3023,17 +2946,13 @@ body.map-fullscreen-active turbo-frame {
     top: calc(130px + env(safe-area-inset-top));
   }
 
-  .nav-wrapper {
-    justify-content:center;
-  }
-
   .scroll-btn {
     display: block; 
   }
 
-  /* Desktop overrides for the T10 Calculator */
   .tree-container {
-    padding: 15px 20px 0 20px; /* Removed 90px bottom padding */  }
+    padding: 15px 20px 0 20px;
+  }
   .line-vertical {
     height: 25px;
   }
@@ -3072,87 +2991,59 @@ body.map-fullscreen-active turbo-frame {
     font-size: 0.75rem;
   }
 
-  /* ==========================================================================
-     FULLSCREEN WAR ROOM: DESKTOP / TABLET OVERRIDES
-     ========================================================================== */
-     
+  /* Fullscreen War Room: Desktop / Tablet Overrides */
   #map-container.is-fullscreen {
-    /* Revert to edge-to-edge layout with generous padding */
     justify-content: space-between !important;
     gap: 0 !important;
     padding: 24px 32px !important;
   }
 
   #map-container.is-fullscreen .map-controls {
-    width: 100% !important; /* Reset from mobile calc() */
+    width: 100% !important;
     max-width: 1200px !important;
     margin-bottom: 1.5rem !important; 
   }
 
   #map-container.is-fullscreen .game-map {
-    flex: 1 1 auto !important; /* CRITICAL FIX: Forces desktop map to grow and push UI to edges */
-    overflow: hidden !important; /* Disable scrollbars on desktop */
-    align-items: center !important; /* Restore standard centering */
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+    align-items: center !important;
   }
 
   #map-container.is-fullscreen .game-map svg {
-    /* On landscape monitors, constrain by height so the whole map fits */
     width: auto !important;
     height: 100% !important; 
     max-width: 100% !important;
   }
 
   #map-container.is-fullscreen .info-card {
-    width: 100% !important; /* Reset from mobile calc() */
+    width: 100% !important;
     max-width: 1200px !important;
     margin-top: 1.5rem !important; 
   }
 
-  /* Desktop Atmospheric Tweaks */
   @keyframes drift {
-    0% {
-      transform: translateY(0) translateX(0);
-      opacity: 0;
-    }
-    50% {
-      opacity: 0.6;
-    }
-    100% {
-      transform: translateY(-70px) translateX(100px);
-      opacity: 0;
-    }
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-70px) translateX(100px); opacity: 0; }
   }
   .dust-container {
-    -webkit-mask-image: radial-gradient(
-      circle 700px at center 40%,
-      black 0%,
-      transparent 80%
-    );
-    mask-image: radial-gradient(
-      circle 700px at center 40%,
-      black 0%,
-      transparent 80%
-    );
+    -webkit-mask-image: radial-gradient(circle 700px at center 40%, black 0%, transparent 80%);
+    mask-image: radial-gradient(circle 700px at center 40%, black 0%, transparent 80%);
   }
   .mote:nth-child(n + 21) {
     display: block;
   }
 }
 
-/* ==========================================================================
-   iOS-SPECIFIC UI ADJUSTMENTS
-   ========================================================================== */
+/* iOS Specific Adjustments */
 @supports (-webkit-touch-callout: none) {
   .lantern-header {
-    /* Keep the shield, but shave 15px off of it to pull content up natively */
     padding-top: calc(env(safe-area-inset-top) - 8px) !important;
   }
-
-  /* Move the language switcher up alongside the rest of the content */
   .language-switcher {
     top: calc(env(safe-area-inset-top) + 12px);
   }
-
   .scroll-btn {
     display: none !important; 
   }
@@ -3166,19 +3057,20 @@ body.map-fullscreen-active turbo-frame {
 }
 
 @media (display-mode: standalone) {
+  html,
+  body,
+  #mobile-container {
+    height: 100%;
+  }
+  @supports (-webkit-touch-callout: none) {
     html,
     body,
     #mobile-container {
-      height: 100%;
-    }
-    @supports (-webkit-touch-callout: none) {
-      html,
-      body,
-      #mobile-container {
-        height: 100vh !important;
-      }
+      height: 100vh !important;
     }
   }
+}
+
 /* ==========================================================================
    PORTAL / STANDALONE APP LAYOUT OVERRIDES
    ========================================================================== */
@@ -3202,8 +3094,8 @@ body.map-fullscreen-active turbo-frame {
   will-change: transform;
 }
 
-/* 2. Unlocked Native Mobile & Desktop Scroller */
-html {
+/* 2. Unlocked Native Scroller (Scoped to Portal Pages Only) */
+html:has(.portal-body) {
   height: auto !important;
   min-height: 100% !important;
   overflow-x: hidden !important;
@@ -3225,7 +3117,7 @@ body.portal-body {
   -webkit-overflow-scrolling: touch !important;
 }
 
-/* 3. Transparent Layout Containers (Allows .portal-backdrop to show through) */
+/* 3. Transparent Layout Containers */
 body.portal-body #mobile-container {
   position: relative !important;
   height: auto !important;
@@ -3236,7 +3128,7 @@ body.portal-body #mobile-container {
   background: transparent !important;
   background-color: transparent !important;
   touch-action: pan-y !important;
-  padding-bottom: 3rem !important;
+  padding-bottom: 2rem !important;
 }
 
 body.portal-body #main-content,
@@ -3260,7 +3152,7 @@ body.portal-body.has-no-header #main-content {
 }
 
 body.portal-body.has-no-header main {
-  padding-top: 1.5rem !important;
+  padding-top: 1.2rem !important;
   margin-top: 0 !important;
 }
 
@@ -3272,9 +3164,10 @@ body.portal-body.has-header #main-content {
   position: relative;
 }
 
-/* 5. Center Utility Panes (No background overrides: inherits native theme styling) */
+/* 5. Center Utility Panes & Mobile Portal Density */
 body.portal-body .content-pane {
   margin-left: auto !important;
   margin-right: auto !important;
   touch-action: pan-y !important;
+  padding: 0.85rem !important;
 }
