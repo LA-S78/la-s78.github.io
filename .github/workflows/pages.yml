@@ -120,11 +120,7 @@ jobs:
         run: bundle exec ruby _scripts/sync_ui_data.rb
 
       - name: Generate Discord API Translations
-        run: |
-          echo "Installing js-yaml..."
-          npm install js-yaml --no-audit --no-fund --no-save --no-package-lock
-          echo "Generating static translations file..."
-          node api/build-translations.js
+        run: bundle exec ruby _scripts/build_translations.rb
           
       # --- COMPILING ENGINE (WITH COMPONENT-LEVEL DEV INJECTION RESTORED) ---
       - name: Compiling regional sites

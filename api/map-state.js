@@ -12,10 +12,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
   const GIST_ID = process.env.GIST_ID;
   const GIST_TOKEN = process.env.GIST_TOKEN;
 
-  // Fallback if environment variables aren't set yet
   if (!GIST_ID) {
     return res.status(200).json(FALLBACK_STATE);
   }
@@ -23,14 +26,17 @@ export default async function handler(req, res) {
   try {
     const headers = {
       'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'WarRoom-Vercel-App' // Required by GitHub API
+      'User-Agent': 'WarRoom-Vercel-App'
     };
 
     if (GIST_TOKEN) {
       headers['Authorization'] = `Bearer ${GIST_TOKEN}`;
     }
 
-    const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
+    const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      headers,
+      cache: 'no-store'
+    });
 
     if (!gistRes.ok) {
       throw new Error(`GitHub returned ${gistRes.status}: ${gistRes.statusText}`);
@@ -40,7 +46,6 @@ export default async function handler(req, res) {
     const mapStateContent = gistData.files['map-state.json']?.content;
 
     if (mapStateContent) {
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
       return res.status(200).json(JSON.parse(mapStateContent));
     }
   } catch (err) {

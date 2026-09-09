@@ -43,11 +43,19 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
+      const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        headers,
+        cache: 'no-store'
+      });
       if (!gistRes.ok) throw new Error(`GitHub Gist error: ${gistRes.status}`);
 
       const gistData = await gistRes.json();
       const nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+
       return res.status(200).json(nominations);
     } catch (err) {
       console.error('Failed to read nominations:', err);
@@ -100,7 +108,10 @@ export default async function handler(req, res) {
 
   try {
     let nominationsStore = {};
-    const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
+    const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      headers,
+      cache: 'no-store'
+    });
 
     if (gistGetRes.ok) {
       const gistData = await gistGetRes.json();
@@ -146,6 +157,7 @@ export default async function handler(req, res) {
 
     if (!updateRes.ok) throw new Error(`GitHub Gist responded with ${updateRes.status}`);
 
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     return res.status(200).json({ success: true, alliance: payload.alliance });
   } catch (error) {
     console.error('Failed to commit nominations:', error);
