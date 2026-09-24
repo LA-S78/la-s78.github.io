@@ -135,7 +135,7 @@ function getCityResourceFill(cityId, city = {}) {
   if (combined.includes('train')) return RESOURCE_PALETTE.training;
   if (combined.includes('construct') || combined.includes('build')) return RESOURCE_PALETTE.building;
 
-  // Core 3 Resources
+  // Core 3 Resources (Grain, Timber, Herbs)
   let matchedRes = null;
   if (res.includes('grain') || combined.includes('grain') || combined.includes('wheat') || combined.includes('food')) {
     matchedRes = 'grain';
@@ -147,56 +147,94 @@ function getCityResourceFill(cityId, city = {}) {
 
   if (!matchedRes) return '#2d3748';
 
-  // Production uses the diagonal hatch pattern; Gathering uses the solid color
+  // Production uses the diagonal hatch pattern; Gathering uses solid color
   const isProduction = buffType === 'production' || combined.includes('prod') || combined.includes('output') || combined.includes('yield') || !combined.includes('gather');
   return isProduction ? `url(#pat-${matchedRes})` : RESOURCE_PALETTE[matchedRes];
 }
 
 /**
- * Directly rewrites the fill attributes on the SVG element matching cityId.
- * Bypasses Resvg CSS limitations by mutating path/polygon elements directly.
+ * 100% XML-safe attribute modifier.
+ * Preserves strict self-closing syntax (/>) and cleans up inline styles.
  */
-function applyFillToTerritory(svg, cityId, fillColor) {
-  const alt1 = cityId;
-  const alt2 = cityId.replace(/_/g, ' ');
-  const alt3 = cityId.replace(/_s_/g, "'s ").replace(/_/g, ' ');
-  const alt4 = cityId.replace(/_s_/g, "&#39;s ").replace(/_/g, ' ');
+function setTagFill(tagStr, fillColor) {
+  if (!tagStr) return tagStr;
 
-  const escapeRegex = s => s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-  const idPattern = Array.from(new Set([alt1, alt2, alt3, alt4])).map(escapeRegex).join('|');
+  const isSelfClosing = /\/>\s*$/.test(tagStr);
+  let tag = tagStr.replace(/\s*\/?>\s*$/, '');
 
-  // Case 1: Territory is a group <g ... (id|inkscape:label)="...">(content)</g>
-  const groupRegex = new RegExp(`(<g\\b[^>]*?\\b(?:id|inkscape:label)=["'](?:${idPattern})["'][^>]*>)([\\s\\S]*?)(<\\/g>)`, 'i');
-  if (groupRegex.test(svg)) {
-    return svg.replace(groupRegex, (match, openTag, inner, closeTag) => {
-      let updated = inner.replace(/(<(?:path|polygon|rect|circle)\b[^>]*?)\bfill=["'][^"']*["']/gi, `$1fill="${fillColor}"`);
-      updated = updated.replace(/(<(?:path|polygon|rect|circle)\b(?:(?!fill=)[^>])*)>/gi, `$1 fill="${fillColor}">`);
-      updated = updated.replace(/style=["']([^"']*)["']/gi, (m, st) => {
-        const clean = st.replace(/fill\s*:\s*[^;"]+;?/gi, '');
-        return `style="${clean};fill:${fillColor}"`;
-      });
-      return `${openTag}${updated}${closeTag}`;
+  // Strip existing standalone fill
+  tag = tag.replace(/\s*\bfill=["'][^"']*["']/gi, '');
+
+  // Update style attribute if present
+  if (/\bstyle=["'][^"']*["']/i.test(tag)) {
+    tag = tag.replace(/\bstyle=["']([^"']*)["']/i, (match, styleBody) => {
+      let newStyle = styleBody.replace(/(?:^|;)\s*fill\s*:\s*[^;"]+/gi, '');
+      newStyle = newStyle.replace(/^;+|;+$/g, '').trim();
+      return newStyle ? `style="${newStyle};fill:${fillColor}"` : `style="fill:${fillColor}"`;
     });
+  } else {
+    tag += ` style="fill:${fillColor}"`;
   }
 
-  // Case 2: Territory is a single tag: <path ... (id|inkscape:label)="..." ...>
-  const leafRegex = new RegExp(`(<(?:path|polygon|rect|circle)\\b[^>]*?\\b(?:id|inkscape:label)=["'](?:${idPattern})["'][^>]*?)>`, 'i');
-  if (leafRegex.test(svg)) {
-    return svg.replace(leafRegex, (match, tagBody) => {
-      let updated = tagBody;
-      if (/\bfill=["'][^"']*["']/i.test(updated)) {
-        updated = updated.replace(/\bfill=["'][^"']*["']/i, `fill="${fillColor}"`);
-      } else {
-        updated += ` fill="${fillColor}"`;
+  // Set standalone fill attribute for maximum SVG engine compatibility
+  tag += ` fill="${fillColor}"`;
+
+  return isSelfClosing ? `${tag} />` : `${tag}>`;
+}
+
+function applyFillToTerritory(svg, cityId, fillColor) {
+  const patterns = [
+    cityId,
+    cityId.replace(/_/g, ' '),
+    cityId.replace(/_s_/g, "'s ").replace(/_/g, ' '),
+    cityId.replace(/_s_/g, "&#39;s ").replace(/_/g, ' '),
+    cityId.replace(/_s_/g, "&apos;s ").replace(/_/g, ' ')
+  ];
+
+  const escapeRegex = s => s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const idPattern = Array.from(new Set(patterns)).map(escapeRegex).join('|');
+
+  // Case 1: Territory is a standalone shape (<path>, <polygon>, <rect>, <circle>)
+  const leafRegex = new RegExp(`(<(?:path|polygon|rect|circle)\\b[^>]*?\\b(?:id|inkscape:label|label)=["'](?:${idPattern})["'][^>]*\\/?>)`, 'i');
+  const leafMatch = svg.match(leafRegex);
+  if (leafMatch) {
+    const originalTag = leafMatch[1];
+    const newTag = setTagFill(originalTag, fillColor);
+    return svg.replace(originalTag, newTag);
+  }
+
+  // Case 2: Territory is a group (<g ...> ... </g>)
+  const groupOpenRegex = new RegExp(`(<g\\b[^>]*?\\b(?:id|inkscape:label|label)=["'](?:${idPattern})["'][^>]*>)`, 'i');
+  const groupMatch = svg.match(groupOpenRegex);
+  if (groupMatch) {
+    const openTag = groupMatch[1];
+    const startIndex = svg.indexOf(openTag);
+    if (startIndex !== -1) {
+      let depth = 1;
+      let currentIndex = startIndex + openTag.length;
+      const tagRegex = /<\/?g\b[^>]*>/gi;
+      tagRegex.lastIndex = currentIndex;
+
+      let m;
+      let endIndex = -1;
+      while ((m = tagRegex.exec(svg)) !== null) {
+        if (m[0].startsWith('</')) {
+          depth--;
+          if (depth === 0) {
+            endIndex = m.index + m[0].length;
+            break;
+          }
+        } else if (!m[0].endsWith('/>')) {
+          depth++;
+        }
       }
-      if (/style=["'][^"']*["']/i.test(updated)) {
-        updated = updated.replace(/style=["']([^"']*)["']/i, (m, st) => {
-          const clean = st.replace(/fill\s*:\s*[^;"]+;?/gi, '');
-          return `style="${clean};fill:${fillColor}"`;
-        });
+
+      if (endIndex !== -1) {
+        const fullGroup = svg.substring(startIndex, endIndex);
+        const updatedGroup = fullGroup.replace(/<(?:path|polygon|rect|circle|g)\b[^>]*\/?>/gi, tag => setTagFill(tag, fillColor));
+        return svg.substring(0, startIndex) + updatedGroup + svg.substring(endIndex);
       }
-      return `${updated}>`;
-    });
+    }
   }
 
   return svg;
@@ -271,7 +309,7 @@ export default async function handler(req, res) {
 
       modifiedSvg = applyFillToTerritory(modifiedSvg, cityId, targetFill);
 
-      // 2. Build Text Labels (Alliance Names ONLY on claimed territories across ALL views)
+      // 2. Render Text Labels (Alliance Names ONLY on claimed territories across ALL views)
       if (isOwned && centroids[cityId]) {
         const center = centroids[cityId];
         const override = LABEL_OVERRIDES[cityId] || {};
@@ -300,34 +338,39 @@ export default async function handler(req, res) {
       }
     });
 
-    // Clean, crisp stroke rule on all path elements
+    // Stroke style without !important so Resvg parses it cleanly
     const baseStyle = `
       <style>
-        path, polygon, rect, circle { stroke: #000000 !important; stroke-width: 1.5px !important; stroke-linejoin: round !important; }
+        path, polygon, rect, circle { stroke: #000000; stroke-width: 1.5px; stroke-linejoin: round; }
       </style>
     `;
 
-    // Production diagonal patterns for Grain, Timber, Herbs
+    // Production diagonal patterns for the 3 resources (Grain, Timber, Herbs)
     const resourcePatternDefs = `
-      <defs>
-        <pattern id="pat-grain" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
-          <rect width="10" height="10" fill="#e07a12" />
-          <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
-        </pattern>
-        <pattern id="pat-timber" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
-          <rect width="10" height="10" fill="#4a2411" />
-          <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
-        </pattern>
-        <pattern id="pat-herbs" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
-          <rect width="10" height="10" fill="#059669" />
-          <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
-        </pattern>
-      </defs>
+      <pattern id="pat-grain" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <rect width="10" height="10" fill="#e07a12" />
+        <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
+      </pattern>
+      <pattern id="pat-timber" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <rect width="10" height="10" fill="#4a2411" />
+        <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
+      </pattern>
+      <pattern id="pat-herbs" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <rect width="10" height="10" fill="#059669" />
+        <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
+      </pattern>
     `;
 
-    // Inject patterns, base stroke styles, and text labels
-    modifiedSvg = modifiedSvg.replace(/<svg[^>]*>/, `$&${resourcePatternDefs}${baseStyle}`);
-    modifiedSvg = modifiedSvg.replace(/<\/svg>/, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
+    // Inject patterns into existing <defs> or create a clean <defs>
+    if (modifiedSvg.includes('<defs')) {
+      modifiedSvg = modifiedSvg.replace(/<defs[^>]*>/i, `$&${resourcePatternDefs}`);
+    } else {
+      modifiedSvg = modifiedSvg.replace(/<svg\b[^>]*>/i, `$&<defs>${resourcePatternDefs}</defs>`);
+    }
+
+    // Inject base stroke styles and text labels
+    modifiedSvg = modifiedSvg.replace(/<svg\b[^>]*>/i, `$&${baseStyle}`);
+    modifiedSvg = modifiedSvg.replace(/<\/svg>/i, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
 
     const fontFiles = fs.existsSync(FONT_PATH) ? [FONT_PATH] : [];
     const resvg = new Resvg(modifiedSvg, {
@@ -346,7 +389,7 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=180, stale-while-revalidate=300');
     return res.status(200).send(pngBuffer);
   } catch (renderErr) {
-    console.error('Rendering error:', renderErr);
+    console.error('Rendering error in api/map-image:', renderErr);
     return res.status(500).json({ error: renderErr.message });
   }
 }
