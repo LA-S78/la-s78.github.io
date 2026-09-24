@@ -109,7 +109,22 @@ const FALLBACK_BOT_STRINGS = {
   map: {
     title: "🗺️ Last Asylum Territory Map",
     description: "View real-time territory ownership.",
-    button: "Open Live Map"
+    button: "Open Live Map",
+    footer: "Use /map [view] to switch perspectives",
+    views: {
+      alliance: {
+        title: "🗺️ Last Asylum: Alliance Territories",
+        description: "Live territorial ownership by alliance."
+      },
+      level: {
+        title: "🏰 Last Asylum: Territory Levels",
+        description: "Territories categorized by tier (Lv. 1 to Lv. 8)."
+      },
+      resource: {
+        title: "🌾 Last Asylum: Resources & Regional Buffs",
+        description: "Territory yields (Grain, Timber, Iron, Herbs) and combat buffs."
+      }
+    }
   },
   admin: {
     access_denied: "⛔ **Access Denied:** Only authorized leadership can approve or reject proposals.",
@@ -199,74 +214,6 @@ async function getGistData(gistId, gistToken) {
 
   if (!res.ok) throw new Error(`GitHub Gist error (${res.status})`);
   return res.json();
-}
-
-// --- MAP VIEW BUILDER HELPER ---
-const MAP_VIEW_METADATA = {
-  alliance: {
-    color: 0x0070f3,
-    title: "🗺️ Last Asylum: Alliance Territories",
-    description: "Live territorial ownership by alliance."
-  },
-  level: {
-    color: 0xca8a04,
-    title: "🏰 Last Asylum: Territory Levels",
-    description: "Territories categorized by level tier (Lv. 1 to Lv. 8)."
-  },
-  resource: {
-    color: 0x059669,
-    title: "🌾 Last Asylum: Resources & Buffs",
-    description: "Territory map displaying resource yields and regional buffs."
-  }
-};
-
-function buildMapResponse(resolvedHost, lang, view = 'alliance', t = {}) {
-  const selectedView = MAP_VIEW_METADATA[view] ? view : 'alliance';
-  const meta = MAP_VIEW_METADATA[selectedView];
-  const liveButtonLabel = t?.map?.button || FALLBACK_BOT_STRINGS.map.button || "Open Live Map";
-
-  // Appending &ext=.png satisfies Discord's image proxy regex requirement
-  const mapImageUrl = `https://${resolvedHost}/api/map-image?view=${selectedView}&t=${Date.now()}&ext=.png`;
-
-  return {
-    embeds: [{
-      title: meta.title,
-      description: meta.description,
-      color: meta.color,
-      image: { url: mapImageUrl }
-    }],
-    components: [
-      {
-        type: 1, // Action Row
-        components: [
-          {
-            type: 2, // Button
-            style: selectedView === 'alliance' ? 1 : 2, // Style 1 (Primary/Active), Style 2 (Secondary)
-            label: "🛡️ Alliances",
-            custom_id: "map_view_alliance"
-          },
-          {
-            type: 2,
-            style: selectedView === 'level' ? 1 : 2,
-            label: "🏰 Levels",
-            custom_id: "map_view_level"
-          },
-          {
-            type: 2,
-            style: selectedView === 'resource' ? 1 : 2,
-            label: "🌾 Resources",
-            custom_id: "map_view_resource"
-          },
-          {
-            type: 2,
-            style: 5, // Link Button
-            label: liveButtonLabel,
-            url: `https://${resolvedHost}/${lang}/map.html`
-          }
-        ]
-      }
-    ]
-  };
 }
 
 export default async function handler(req, res) {
@@ -447,26 +394,49 @@ export default async function handler(req, res) {
       });
     }
 
-    // --- /map COMMAND (Live Generated Preview + Multi-View Selector) ---
+    // --- /map COMMAND (Direct Live Generated Preview with View Argument) ---
     if (name === 'map') {
       try {
         let selectedView = 'alliance';
-
-        if (options && options.length > 0) {
-          const viewOpt = options.find(opt => opt.name === 'view');
-          if (viewOpt) {
-            if (viewOpt.value) {
-              selectedView = viewOpt.value;
-            } else if (viewOpt.options) {
-              const nested = viewOpt.options.find(o => o.name === 'mode' || o.name === 'type');
-              if (nested?.value) selectedView = nested.value;
-            }
-          }
+        const viewOpt = options?.find(opt => opt.name === 'view');
+        if (viewOpt?.value) {
+          selectedView = String(viewOpt.value).toLowerCase();
+        } else if (viewOpt?.options?.[0]?.value) {
+          selectedView = String(viewOpt.options[0].value).toLowerCase();
         }
+
+        const mapStrings = t?.map || FALLBACK_BOT_STRINGS.map;
+        const viewStrings = mapStrings?.views?.[selectedView] || FALLBACK_BOT_STRINGS.map.views[selectedView] || FALLBACK_BOT_STRINGS.map.views.alliance;
+
+        const embedColors = {
+          alliance: 0x0070f3,
+          level: 0xca8a04,
+          resource: 0x059669
+        };
+
+        // Appending &ext=.png satisfies Discord's image proxy regex requirement
+        const mapImageUrl = `https://${resolvedHost}/api/map-image?view=${selectedView}&t=${Date.now()}&ext=.png`;
 
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: buildMapResponse(resolvedHost, lang, selectedView, t)
+          data: {
+            embeds: [{
+              title: viewStrings.title,
+              description: viewStrings.description,
+              color: embedColors[selectedView] || 0x0070f3,
+              image: { url: mapImageUrl },
+              footer: { text: mapStrings.footer || FALLBACK_BOT_STRINGS.map.footer }
+            }],
+            components: [{
+              type: 1,
+              components: [{
+                type: 2,
+                style: 5, // Link Button
+                label: mapStrings.button || FALLBACK_BOT_STRINGS.map.button,
+                url: `https://${resolvedHost}/${lang}/map.html`
+              }]
+            }]
+          }
         });
       } catch (err) {
         console.error('Error handling /map command:', err);
@@ -894,23 +864,13 @@ export default async function handler(req, res) {
     }
   }
 
-  // --- BUTTON & COMPONENT INTERACTIONS ---
+  // --- BUTTON INTERACTIONS (Admin Proposals & Reviews) ---
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
     const resolvedHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
     const lang = resolveUserLocale(interaction, null);
     const t = getBotStrings(lang);
 
-    // 1. PUBLIC MAP VIEW BUTTONS (Any player can toggle)
-    if (custom_id?.startsWith('map_view_')) {
-      const selectedView = custom_id.replace('map_view_', '');
-      return res.status(200).json({
-        type: InteractionResponseType.UPDATE_MESSAGE,
-        data: buildMapResponse(resolvedHost, lang, selectedView, t)
-      });
-    }
-
-    // 2. ADMIN-PROTECTED ACTIONS (Proposals, Reviews)
     const userId = interaction.member?.user?.id || interaction.user?.id;
     const username = interaction.member?.nick ||
                      interaction.member?.user?.global_name ||
