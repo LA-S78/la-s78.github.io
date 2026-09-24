@@ -201,6 +201,74 @@ async function getGistData(gistId, gistToken) {
   return res.json();
 }
 
+// --- MAP VIEW BUILDER HELPER ---
+const MAP_VIEW_METADATA = {
+  alliance: {
+    color: 0x0070f3,
+    title: "🗺️ Last Asylum: Alliance Territories",
+    description: "Live territorial ownership by alliance."
+  },
+  level: {
+    color: 0xca8a04,
+    title: "🏰 Last Asylum: Territory Levels",
+    description: "Territories categorized by level tier (Lv. 1 to Lv. 8)."
+  },
+  resource: {
+    color: 0x059669,
+    title: "🌾 Last Asylum: Resources & Buffs",
+    description: "Territory map displaying resource yields and regional buffs."
+  }
+};
+
+function buildMapResponse(resolvedHost, lang, view = 'alliance', t = {}) {
+  const selectedView = MAP_VIEW_METADATA[view] ? view : 'alliance';
+  const meta = MAP_VIEW_METADATA[selectedView];
+  const liveButtonLabel = t?.map?.button || FALLBACK_BOT_STRINGS.map.button || "Open Live Map";
+
+  // Appending &ext=.png satisfies Discord's image proxy regex requirement
+  const mapImageUrl = `https://${resolvedHost}/api/map-image?view=${selectedView}&t=${Date.now()}&ext=.png`;
+
+  return {
+    embeds: [{
+      title: meta.title,
+      description: meta.description,
+      color: meta.color,
+      image: { url: mapImageUrl }
+    }],
+    components: [
+      {
+        type: 1, // Action Row
+        components: [
+          {
+            type: 2, // Button
+            style: selectedView === 'alliance' ? 1 : 2, // Style 1 (Primary/Active), Style 2 (Secondary)
+            label: "🛡️ Alliances",
+            custom_id: "map_view_alliance"
+          },
+          {
+            type: 2,
+            style: selectedView === 'level' ? 1 : 2,
+            label: "🏰 Levels",
+            custom_id: "map_view_level"
+          },
+          {
+            type: 2,
+            style: selectedView === 'resource' ? 1 : 2,
+            label: "🌾 Resources",
+            custom_id: "map_view_resource"
+          },
+          {
+            type: 2,
+            style: 5, // Link Button
+            label: liveButtonLabel,
+            url: `https://${resolvedHost}/${lang}/map.html`
+          }
+        ]
+      }
+    ]
+  };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -224,7 +292,7 @@ export default async function handler(req, res) {
   // --- SLASH COMMAND HANDLING ---
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     const { name, options } = interaction.data;
-    const host = req.headers.host || 'la-s78.app';
+    const resolvedHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
     const providedLang = options?.find(opt => opt.name === 'lang')?.value;
     const lang = resolveUserLocale(interaction, providedLang);
     const t = getBotStrings(lang);
@@ -317,7 +385,7 @@ export default async function handler(req, res) {
             type: 1,
             components: [{
               type: 2, style: 5, label: t.sb.button,
-              url: `https://${host}/${lang}/guides/survival.html`
+              url: `https://${resolvedHost}/${lang}/guides/survival.html`
             }]
           }]
         }
@@ -372,47 +440,33 @@ export default async function handler(req, res) {
             type: 1,
             components: [{
               type: 2, style: 5, label: t.rules.button,
-              url: `https://${host}/${lang}/rules.html`
+              url: `https://${resolvedHost}/${lang}/rules.html`
             }]
           }]
         }
       });
     }
 
-    // --- /map COMMAND (Direct Live Generated Preview) ---
+    // --- /map COMMAND (Live Generated Preview + Multi-View Selector) ---
     if (name === 'map') {
       try {
-        const mapStrings = t?.map || FALLBACK_BOT_STRINGS.map || {
-          title: "🗺️ Last Asylum Territory Map",
-          description: "View real-time territory ownership.",
-          button: "Open Live Map"
-        };
+        let selectedView = 'alliance';
 
-        const resolvedHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
-        // Appending &ext=.png satisfies Discord's image crawler regex
-        const mapImageUrl = `https://${resolvedHost}/api/map-image?t=${Date.now()}&ext=.png`;
-
-        const mapEmbed = {
-          title: mapStrings.title,
-          description: mapStrings.description,
-          color: 0x0070f3,
-          image: { url: mapImageUrl }
-        };
+        if (options && options.length > 0) {
+          const viewOpt = options.find(opt => opt.name === 'view');
+          if (viewOpt) {
+            if (viewOpt.value) {
+              selectedView = viewOpt.value;
+            } else if (viewOpt.options) {
+              const nested = viewOpt.options.find(o => o.name === 'mode' || o.name === 'type');
+              if (nested?.value) selectedView = nested.value;
+            }
+          }
+        }
 
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            embeds: [mapEmbed],
-            components: [{
-              type: 1,
-              components: [{
-                type: 2,
-                style: 5,
-                label: mapStrings.button || "Open Live Map",
-                url: `https://${resolvedHost}/${lang}/map.html`
-              }]
-            }]
-          }
+          data: buildMapResponse(resolvedHost, lang, selectedView, t)
         });
       } catch (err) {
         console.error('Error handling /map command:', err);
@@ -525,7 +579,7 @@ export default async function handler(req, res) {
           exp: Date.now() + (24 * 60 * 60 * 1000)
         };
         const token = createNominationToken(tokenPayload, botToken);
-        const nominateUrl = `https://${host}/nominate.html?token=${token}`;
+        const nominateUrl = `https://${resolvedHost}/nominate.html?token=${token}`;
 
         const fields = [
           { name: '🟡 Gold (Commander)', value: `×${allotment.commanders_will || 0}`, inline: true },
@@ -576,7 +630,6 @@ export default async function handler(req, res) {
     if (name === 'rewards') {
       const GIST_ID = process.env.GIST_ID;
       const GIST_TOKEN = process.env.GIST_TOKEN;
-      const host = req.headers.host || 'la-s78.app';
       const userId = interaction.member?.user?.id || interaction.user?.id;
       const username = interaction.member?.nick ||
                        interaction.member?.user?.global_name ||
@@ -744,7 +797,7 @@ export default async function handler(req, res) {
                 type: 2,
                 style: 5,
                 label: "Open King's Console",
-                url: `https://${host}/distribute.html`
+                url: `https://${resolvedHost}/distribute.html`
               }]
             }]
           }
@@ -828,7 +881,7 @@ export default async function handler(req, res) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: `👑 **NAP Standing Updated:** \`[${result.tag}]\` is now **#${result.newRank}** (was:${result.previousRank}).`
+              content: `👑 **NAP Standing Updated:** \`[${result.tag}]\` is now **#${result.newRank}** (was: ${result.previousRank}).`
             }
           });
         } catch (err) {
@@ -841,9 +894,23 @@ export default async function handler(req, res) {
     }
   }
 
-  // --- BUTTON INTERACTIONS ---
+  // --- BUTTON & COMPONENT INTERACTIONS ---
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
+    const resolvedHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
+    const lang = resolveUserLocale(interaction, null);
+    const t = getBotStrings(lang);
+
+    // 1. PUBLIC MAP VIEW BUTTONS (Any player can toggle)
+    if (custom_id?.startsWith('map_view_')) {
+      const selectedView = custom_id.replace('map_view_', '');
+      return res.status(200).json({
+        type: InteractionResponseType.UPDATE_MESSAGE,
+        data: buildMapResponse(resolvedHost, lang, selectedView, t)
+      });
+    }
+
+    // 2. ADMIN-PROTECTED ACTIONS (Proposals, Reviews)
     const userId = interaction.member?.user?.id || interaction.user?.id;
     const username = interaction.member?.nick ||
                      interaction.member?.user?.global_name ||
@@ -851,8 +918,6 @@ export default async function handler(req, res) {
                      interaction.user?.global_name ||
                      interaction.user?.username ||
                      'Discord Admin';
-    const lang = resolveUserLocale(interaction, null);
-    const t = getBotStrings(lang);
 
     if (userId !== process.env.AUTHORIZED_USER_ID) {
       return res.status(200).json({
@@ -890,7 +955,7 @@ export default async function handler(req, res) {
               secretKey: process.env.DISCORD_BOT_TOKEN
             };
 
-        const acceptRes = await fetch(`https://${req.headers.host}/api/accept-proposal`, {
+        const acceptRes = await fetch(`https://${resolvedHost}/api/accept-proposal`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(acceptPayload)
@@ -904,7 +969,7 @@ export default async function handler(req, res) {
         console.error('Interaction bridge failed:', error);
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: { content: `❌ **${t.admin.failed_update}**${error.message}`, flags: 64 }
+          data: { content: `❌ **${t.admin.failed_update}** ${error.message}`, flags: 64 }
         });
       }
     }

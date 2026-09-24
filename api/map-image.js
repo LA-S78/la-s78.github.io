@@ -4,6 +4,7 @@ import { Resvg } from '@resvg/resvg-js';
 import rawSvg from './map_svg.js';
 import centroids from './centroids.js';
 import fontBase64 from './font_data.js';
+import citiesData from './cities_data.js';
 
 export const LABEL_OVERRIDES = {
   Sky_Fortress: { rotate: 270, offsetX: -52 },
@@ -46,8 +47,40 @@ const AUTO_ALLIANCE_PALETTE = [
   '#38a169', '#00b5d8'
 ];
 
+// Tactical Color Palettes
+const LEVEL_COLORS = {
+  1: '#334155', // Slate Dark
+  2: '#15803d', // Green
+  3: '#0284c7', // Sky Blue
+  4: '#7e22ce', // Epic Purple
+  5: '#c2410c', // Orange
+  6: '#b91c1c', // Deep Red
+  7: '#ca8a04', // Amber
+  8: '#eab308'  // Gold (Royal Castle)
+};
+
+const RESOURCE_COLORS = {
+  grain: '#d97706',   // Amber
+  timber: '#854d0e',  // Brown
+  iron: '#475569',    // Iron Slate
+  herbs: '#059669',   // Herb Green
+  march: '#eab308',   // March Speed Gold
+  attack: '#dc2626',  // Attack Red
+  might: '#dc2626',
+  defense: '#2563eb', // Defense Blue
+  training: '#9333ea' // Purple
+};
+
+function getResourceColor(resourceType, buffType) {
+  const target = `${resourceType || ''} ${buffType || ''}`.toLowerCase();
+  for (const [key, color] of Object.entries(RESOURCE_COLORS)) {
+    if (target.includes(key)) return color;
+  }
+  return '#374151'; // Neutral Gray
+}
+
 function getAllianceColor(tag, alliances = {}) {
-  if (!tag || tag === 'Unclaimed') return '#2d3748';
+  if (!tag || tag === 'Unclaimed') return '#1f2937';
   if (alliances[tag]?.color) return alliances[tag].color;
 
   const rankedTags = Object.entries(alliances)
@@ -62,7 +95,7 @@ function getAllianceColor(tag, alliances = {}) {
   const tagIdx = allTags.indexOf(tag);
   if (tagIdx !== -1) return AUTO_ALLIANCE_PALETTE[tagIdx % AUTO_ALLIANCE_PALETTE.length];
 
-  return '#718096';
+  return '#4b5563';
 }
 
 async function getLiveMapState() {
@@ -87,7 +120,7 @@ async function getLiveMapState() {
   }
 }
 
-// Write font to Lambda writable /tmp storage on cold start
+// Stage font file in writable /tmp
 const FONT_PATH = '/tmp/DejaVuSans-Bold.ttf';
 if (fontBase64 && fontBase64.length > 100 && !fs.existsSync(FONT_PATH)) {
   try {
@@ -104,21 +137,10 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'map_svg module failed to load.' });
     }
 
+    const view = String(req.query.view || req.query.mode || 'alliance').toLowerCase();
     const mapState = await getLiveMapState();
     const ownership = mapState?.territory_ownership || {};
     const alliances = mapState?.alliances || {};
-
-    // Diagnostic route: visit /api/map-image?debug=1 in browser
-    if (req.query.debug) {
-      return res.status(200).json({
-        totalCentroids: Object.keys(centroids).length,
-        centroidSample: Object.entries(centroids).slice(0, 5),
-        totalOwnership: Object.keys(ownership).length,
-        ownershipSample: Object.entries(ownership).slice(0, 5),
-        fontFileExists: fs.existsSync(FONT_PATH),
-        fontFileSize: fs.existsSync(FONT_PATH) ? fs.statSync(FONT_PATH).size : 0
-      });
-    }
 
     const cssRules = [
       'path, polygon, rect, circle { stroke: #000000; stroke-width: 1.5px; stroke-linejoin: round; }'
@@ -126,31 +148,54 @@ export default async function handler(req, res) {
 
     let labelElements = '';
 
-    Object.entries(ownership).forEach(([cityId, data]) => {
-      const owner = typeof data === 'string' ? data : (data?.owner || 'Unclaimed');
-      if (!owner || owner === 'Unclaimed') return;
+    // Collect all unique city IDs from centroids and citiesData
+    const allCityIds = Array.from(new Set([...Object.keys(centroids), ...Object.keys(citiesData)]));
 
-      const color = getAllianceColor(owner, alliances);
+    allCityIds.forEach((cityId) => {
+      const city = citiesData[cityId] || {};
+      const ownerData = ownership[cityId];
+      const owner = typeof ownerData === 'string' ? ownerData : (ownerData?.owner || 'Unclaimed');
+
+      let fillColor = '#1f2937';
+      let labelText = '';
+
+      if (view === 'level') {
+        const lvl = city.level || (cityId === 'Royal_Castle' ? 8 : 1);
+        fillColor = LEVEL_COLORS[lvl] || '#374151';
+        labelText = `Lv.${lvl}`;
+      } else if (view === 'resource') {
+        fillColor = getResourceColor(city.resource, city.buff_type);
+        labelText = city.resource || city.buff_val || city.buff_type || '';
+      } else {
+        // Default: Alliance View
+        if (owner && owner !== 'Unclaimed') {
+          fillColor = getAllianceColor(owner, alliances);
+          labelText = owner;
+        }
+      }
+
+      // Inject fill rule
       cssRules.push(
-        `#${cityId}, #${cityId} * { fill: ${color} !important; fill-opacity: 0.85 !important; }`
+        `#${cityId}, #${cityId} * { fill: ${fillColor} !important; fill-opacity: 0.88 !important; }`
       );
 
+      // Render Label
       const center = centroids[cityId];
-      if (center) {
+      if (center && labelText) {
         const override = LABEL_OVERRIDES[cityId] || {};
         const finalX = center.x + (override.offsetX || 0);
         const finalY = center.y + (override.offsetY || 0);
 
         const maxAllowedWidth = center.width * 0.75;
         const maxAllowedHeight = center.height * 0.65;
-        const maxFontSizeByWidth = maxAllowedWidth / (owner.length * 0.55);
-        let fontSize = Math.max(12, Math.min(48, maxFontSizeByWidth, maxAllowedHeight));
+        const maxFontSizeByWidth = maxAllowedWidth / (labelText.length * 0.55);
+        let fontSize = Math.max(11, Math.min(46, maxFontSizeByWidth, maxAllowedHeight));
         if (override.scale) fontSize *= override.scale;
 
         const strokeWidth = Math.max(2, Math.round(fontSize * 0.16));
-        const safeOwner = owner.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const safeText = labelText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="${strokeWidth}px" stroke-linejoin="round" paint-order="stroke fill">${safeOwner}</text>`;
+        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="${strokeWidth}px" stroke-linejoin="round" paint-order="stroke fill">${safeText}</text>`;
 
         if (override.rotate) {
           textTag = `<g transform="rotate(${override.rotate}, ${finalX.toFixed(1)}, ${finalY.toFixed(1)})">${textTag}</g>`;
@@ -160,12 +205,21 @@ export default async function handler(req, res) {
       }
     });
 
+    // Tactical Header Badge in SVG
+    const viewTitle = view === 'level' ? 'TERRITORY TIERS (LEVELS)' : (view === 'resource' ? 'RESOURCES & REGIONAL BUFFS' : 'ALLIANCE TERRITORIES');
+    const headerBanner = `
+      <g id="map-header-badge" transform="translate(60, 60)">
+        <rect x="0" y="0" width="460" height="50" rx="8" fill="#000000" fill-opacity="0.75" stroke="#374151" stroke-width="2"/>
+        <text x="230" y="32" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="20px" fill="#ffffff" letter-spacing="2">${viewTitle}</text>
+      </g>
+    `;
+
+    // Inject styles and layers
     svg = svg.replace(/<svg[^>]*>/, `$&<style>\n${cssRules.join('\n')}\n</style>`);
-    svg = svg.replace(/<\/svg>/, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
+    svg = svg.replace(/<\/svg>/, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n${headerBanner}\n</svg>`);
 
     const fontFiles = fs.existsSync(FONT_PATH) ? [FONT_PATH] : [];
-
-    const resvgOptions = {
+    const resvg = new Resvg(svg, {
       fitTo: { mode: 'width', value: 1200 },
       background: '#120f0d',
       font: {
@@ -173,9 +227,8 @@ export default async function handler(req, res) {
         defaultFontFamily: 'DejaVu Sans',
         loadSystemFonts: true
       }
-    };
+    });
 
-    const resvg = new Resvg(svg, resvgOptions);
     const pngBuffer = resvg.render().asPng();
 
     res.setHeader('Content-Type', 'image/png');

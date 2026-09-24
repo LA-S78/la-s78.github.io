@@ -188,7 +188,14 @@ jobs:
             puts "✅ Generated api/map_svg.js"
           '
 
-          # 2. Extract runner DejaVuSans-Bold TTF into an in-memory Base64 JS module
+          # 2. Compile _data/cities.yml into in-memory JS module for level/resource view
+          ruby -r yaml -r json -e '
+            cities = YAML.load_file("_data/cities.yml") rescue {}
+            File.write("api/cities_data.js", "export default " + JSON.generate(cities) + ";\n")
+            puts "✅ Generated api/cities_data.js (#{cities.keys.size} cities)"
+          '
+
+          # 3. Extract runner DejaVuSans-Bold TTF into an in-memory Base64 JS module
           ruby -r base64 -e '
             candidates = [
               "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
