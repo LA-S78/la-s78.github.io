@@ -182,12 +182,54 @@ jobs:
           echo "Running Workbox injector..."
           ruby -r ./_scripts/workbox_precache.rb -e "WorkboxInjector.run('_site')"
           
-          # Bake map.svg into an in-memory JS module for the serverless rasterizer
+          # 1. Compile map.svg into an in-memory JS module
           ruby -r json -e '
             svg_text = File.read("_includes/map.svg")
             File.write("api/map_svg.js", "export default " + JSON.generate(svg_text) + ";\n")
           '
 
+          # 2. Pre-calculate territory centroids at build time
+          ruby -r json -e '
+            svg = File.read("_includes/map.svg")
+            centroids = {}
+            
+            svg.scan(/<path[^>]+id=["\x27]([^"\x27]+)["\x27][^>]+d=["\x27]([^"\x27]+)["\x27]/i) do |id, d|
+              next if id == "layer1" || id.start_with?("defs") || id.include?("label")
+              
+              nums = d.scan(/[-+]?(?:\d*\.\d+|\d+)/).map(&:to_f)
+              xs = nums.each_slice(2).map(&:first).compact
+              ys = nums.each_slice(2).map(&:last).compact
+              
+              if xs.any? && ys.any?
+                min_x, max_x = xs.min, xs.max
+                min_y, max_y = ys.min, ys.max
+                centroids[id] = {
+                  "x" => ((min_x + max_x) / 2.0).round(1),
+                  "y" => ((min_y + max_y) / 2.0).round(1),
+                  "width" => (max_x - min_x).round(1),
+                  "height" => (max_y - min_y).round(1)
+                }
+              end
+            end
+            
+            File.write("api/centroids.js", "export default " + JSON.generate(centroids) + ";\n")
+            puts "✅ Pre-computed #{centroids.keys.size} territory centroids."
+          '
+
+          # 3. Bake Oswald-Bold TTF into an in-memory JS module
+          ruby -r base64 -e '
+            font_path = "_assets/fonts/Oswald-Bold.ttf"
+            if File.exist?(font_path)
+              b64 = Base64.strict_encode64(File.binread(font_path))
+              File.write("api/font_data.js", "export default \"" + b64 + "\";\n")
+              puts "✅ In-memory font module generated."
+            else
+              File.write("api/font_data.js", "export default \"\";\n")
+              puts "⚠️ Warning: Oswald-Bold.ttf not found at #{font_path}"
+            end
+          '
+
+          # Stage serverless assets and configuration for Vercel
           cp -r api _site/
           cp package*.json _site/ 2>/dev/null || cp package.json _site/
           cp vercel.json _site/ 2>/dev/null || true
