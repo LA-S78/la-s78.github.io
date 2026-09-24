@@ -381,28 +381,46 @@ export default async function handler(req, res) {
 
     // --- /map COMMAND (Direct Live Generated Preview) ---
     if (name === 'map') {
-      const mapImageUrl = `https://${host}/api/map-image?t=${Date.now()}`;
+      try {
+        const mapStrings = t?.map || FALLBACK_BOT_STRINGS.map || {
+          title: "🗺️ Last Asylum Territory Map",
+          description: "View real-time territory ownership.",
+          button: "Open Live Map"
+        };
 
-      const mapEmbed = {
-        title: t.map.title,
-        description: t.map.description,
-        color: 0x0070f3,
-        image: { url: mapImageUrl }
-      };
+        const resolvedHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
+        // Appending &ext=.png satisfies Discord's image crawler regex
+        const mapImageUrl = `https://${resolvedHost}/api/map-image?t=${Date.now()}&ext=.png`;
 
-      return res.status(200).json({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          embeds: [mapEmbed],
-          components: [{
-            type: 1,
+        const mapEmbed = {
+          title: mapStrings.title,
+          description: mapStrings.description,
+          color: 0x0070f3,
+          image: { url: mapImageUrl }
+        };
+
+        return res.status(200).json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            embeds: [mapEmbed],
             components: [{
-              type: 2, style: 5, label: t.map.button,
-              url: `https://${host}/${lang}/map.html`
+              type: 1,
+              components: [{
+                type: 2,
+                style: 5,
+                label: mapStrings.button || "Open Live Map",
+                url: `https://${resolvedHost}/${lang}/map.html`
+              }]
             }]
-          }]
-        }
-      });
+          }
+        });
+      } catch (err) {
+        console.error('Error handling /map command:', err);
+        return res.status(200).json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: { content: '⚠️ Could not generate map preview.', flags: 64 }
+        });
+      }
     }
 
     // --- /nominate COMMAND ---

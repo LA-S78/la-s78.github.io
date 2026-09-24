@@ -189,8 +189,8 @@ jobs:
           '
 
           cp -r api _site/
-          cp package.json _site/
-          cp vercel.json _site/
+          cp package*.json _site/ 2>/dev/null || cp package.json _site/
+          cp vercel.json _site/ 2>/dev/null || true
 
       - name: Uploading build artifacts
         uses: actions/upload-artifact@v4
