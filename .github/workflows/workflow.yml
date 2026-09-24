@@ -73,7 +73,7 @@ jobs:
                   /^page--\S+$/,
                   /^collection--\S+--\d+$/,
                   /^guide--\S+--\S+--\S+$/,
-                  /^pane--\S+--\S+--\S+--\S+--\S+$/,
+                  /^pane--\S+--\S+--\S+--\S+$/,
                   /^data--\S+--\S+$/
                 ]
                 unless allowed_patterns.any? { |p| header =~ p }
@@ -181,21 +181,21 @@ jobs:
           echo "Running Workbox injector..."
           ruby -r ./_scripts/workbox_precache.rb -e "WorkboxInjector.run('_site')"
           
-          # 1. Compile map.svg into in-memory JS module
+          # 1. Compile map.svg into in-memory JS module (ignored as endpoint by Vercel)
           ruby -r json -e '
             svg_text = File.read("_includes/map.svg")
-            File.write("api/map_svg.js", "export default " + JSON.generate(svg_text) + ";\n")
-            puts "✅ Generated api/map_svg.js"
+            File.write("api/_map_svg.js", "export default " + JSON.generate(svg_text) + ";\n")
+            puts "✅ Generated api/_map_svg.js"
           '
 
-          # 2. Compile _data/cities.yml into in-memory JS module for level/resource view
+          # 2. Compile _data/cities.yml into in-memory JS module (ignored as endpoint by Vercel)
           ruby -r yaml -r json -e '
             cities = YAML.load_file("_data/cities.yml") rescue {}
-            File.write("api/cities_data.js", "export default " + JSON.generate(cities) + ";\n")
-            puts "✅ Generated api/cities_data.js (#{cities.keys.size} cities)"
+            File.write("api/_cities_data.js", "export default " + JSON.generate(cities) + ";\n")
+            puts "✅ Generated api/_cities_data.js (#{cities.keys.size} cities)"
           '
 
-          # 3. Extract runner DejaVuSans-Bold TTF into an in-memory Base64 JS module
+          # 3. Extract runner DejaVuSans-Bold TTF into in-memory Base64 JS module (ignored as endpoint by Vercel)
           ruby -r base64 -e '
             candidates = [
               "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
@@ -206,10 +206,10 @@ jobs:
 
             if font_path
               b64 = Base64.strict_encode64(File.binread(font_path))
-              File.write("api/font_data.js", "export default \"" + b64 + "\";\n")
+              File.write("api/_font_data.js", "export default \"" + b64 + "\";\n")
               puts "✅ In-memory font module generated from #{font_path}."
             else
-              File.write("api/font_data.js", "export default \"\";\n")
+              File.write("api/_font_data.js", "export default \"\";\n")
               puts "⚠️ Warning: No system font found."
             end
           '

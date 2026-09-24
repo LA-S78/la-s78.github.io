@@ -1,10 +1,10 @@
 // api/map-image.js
 import fs from 'fs';
 import { Resvg } from '@resvg/resvg-js';
-import rawSvg from './map_svg.js';
-import centroids from './centroids.js';
-import fontBase64 from './font_data.js';
-import citiesData from './cities_data.js';
+import rawSvg from './_map_svg.js';
+import centroids from './_centroids.js';
+import fontBase64 from './_font_data.js';
+import citiesData from './_cities_data.js';
 
 export const LABEL_OVERRIDES = {
   Sky_Fortress: { rotate: 270, offsetX: -52 },
