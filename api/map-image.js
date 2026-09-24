@@ -107,9 +107,6 @@ function getResourceFill(cityId, city = {}) {
   if (target.includes('timber') || target.includes('wood') || target.includes('lumber')) {
     return 'url(#pat-timber)';
   }
-  if (target.includes('iron') || target.includes('steel') || target.includes('metal')) {
-    return 'url(#pat-iron)';
-  }
   if (target.includes('herb') || target.includes('medicine')) {
     return 'url(#pat-herbs)';
   }
@@ -244,10 +241,6 @@ export default async function handler(req, res) {
       </pattern>
       <pattern id="pat-timber" width="16" height="16" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
         <rect width="16" height="16" fill="#4a2411" />
-        <line x1="0" y1="0" x2="0" y2="16" stroke="#000000" stroke-width="3.5" stroke-opacity="0.32" />
-      </pattern>
-      <pattern id="pat-iron" width="16" height="16" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-        <rect width="16" height="16" fill="#475569" />
         <line x1="0" y1="0" x2="0" y2="16" stroke="#000000" stroke-width="3.5" stroke-opacity="0.32" />
       </pattern>
       <pattern id="pat-herbs" width="16" height="16" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">

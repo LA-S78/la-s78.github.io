@@ -122,7 +122,7 @@ const FALLBACK_BOT_STRINGS = {
       },
       resource: {
         title: "🌾 Last Asylum: Resources & Regional Buffs",
-        description: "Territory yields (Grain, Timber, Iron, Herbs) and combat buffs."
+        description: "Territory yields (Grain, Timber, Herbs)"
       }
     }
   },

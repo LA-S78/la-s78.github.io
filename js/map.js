@@ -50,7 +50,6 @@ export const RESOURCE_PALETTE = {
   grain: '#e07a12',
   timber: '#4a2411',
   herbs: '#059669',
-  iron: '#475569',
   march: '#facc15',
   training: '#dc2626',
   research: '#7c3aed',
@@ -134,7 +133,7 @@ export function injectResourcePatterns(svgRoot) {
 
   defs.querySelectorAll('.resource-pattern').forEach(el => el.remove());
 
-  const resources = ['grain', 'timber', 'herbs', 'iron'];
+  const resources = ['grain', 'timber', 'herbs'];
   let patternMarkup = '';
 
   resources.forEach(res => {
@@ -174,7 +173,6 @@ export function getCityResourceProfile(city) {
     if (buffLower.includes('grain') || buffLower.includes('wheat') || buffLower.includes('food')) res = 'grain';
     else if (buffLower.includes('timber') || buffLower.includes('wood') || buffLower.includes('lumber')) res = 'timber';
     else if (buffLower.includes('herb') || buffLower.includes('medicine')) res = 'herbs';
-    else if (buffLower.includes('iron') || buffLower.includes('steel') || buffLower.includes('metal')) res = 'iron';
   }
 
   if (!res || !RESOURCE_PALETTE[res]) {
@@ -244,9 +242,6 @@ export function parseCityBuff(city) {
     if (!val) val = 5;
   } else if (lower.includes('herb') || lower.includes('medicine')) {
     name = lower.includes('gather') ? 'Herb Gathering' : 'Herb Output';
-    if (!val) val = 5;
-  } else if (lower.includes('iron') || lower.includes('steel') || lower.includes('metal')) {
-    name = lower.includes('gather') ? 'Iron Gathering' : 'Iron Output';
     if (!val) val = 5;
   }
 
@@ -609,10 +604,15 @@ export function togglePlannerMode(active, svgRoot = null) {
     const btnLevel = document.getElementById('btn-mode-level');
     const btnAlliance = document.getElementById('btn-mode-alliance');
     const btnResource = document.getElementById('btn-mode-resource');
+    const resourceLegend = document.getElementById('resource-map-legend');
     if (btnLevel && btnAlliance) {
       btnLevel.classList.add('active');
       btnAlliance.classList.remove('active');
       if (btnResource) btnResource.classList.remove('active');
+      if (resourceLegend) {
+        resourceLegend.classList.add('hidden');
+        resourceLegend.setAttribute('aria-hidden', 'true');
+      }
     }
   }
 
@@ -865,7 +865,10 @@ export function bindMapControls(svgRoot = null) {
       btnLevel.classList.add('active');
       if (btnAlliance) btnAlliance.classList.remove('active');
       if (btnResource) btnResource.classList.remove('active');
-      if (resourceLegend) resourceLegend.classList.add('hidden');
+      if (resourceLegend) {
+        resourceLegend.classList.add('hidden');
+        resourceLegend.setAttribute('aria-hidden', 'true');
+      }
       setMapColorMode('level', svgRoot || getSvgRoot());
     });
   }
@@ -876,7 +879,10 @@ export function bindMapControls(svgRoot = null) {
       btnAlliance.classList.add('active');
       if (btnLevel) btnLevel.classList.remove('active');
       if (btnResource) btnResource.classList.remove('active');
-      if (resourceLegend) resourceLegend.classList.add('hidden');
+      if (resourceLegend) {
+        resourceLegend.classList.add('hidden');
+        resourceLegend.setAttribute('aria-hidden', 'true');
+      }
       setMapColorMode('alliance', svgRoot || getSvgRoot());
     });
   }
@@ -887,7 +893,10 @@ export function bindMapControls(svgRoot = null) {
       btnResource.classList.add('active');
       if (btnLevel) btnLevel.classList.remove('active');
       if (btnAlliance) btnAlliance.classList.remove('active');
-      if (resourceLegend) resourceLegend.classList.remove('hidden');
+      if (resourceLegend) {
+        resourceLegend.classList.remove('hidden');
+        resourceLegend.setAttribute('aria-hidden', 'false');
+      }
       setMapColorMode('resource', svgRoot || getSvgRoot());
     });
   }

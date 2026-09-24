@@ -1955,13 +1955,14 @@ svg #layer1 path:hover {
    WAR ROOM: RESOURCE VIEW & LEGEND STYLING
    ========================================================================== */
 
+/* Resource View Legend Bar (Compact Identification Key) */
 .resource-legend {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 5px 10px;
   background: #0a0807;
   border: 1px solid var(--border-color);
   border-radius: 4px;
@@ -1971,6 +1972,13 @@ svg #layer1 path:hover {
 }
 
 .resource-legend.hidden {
+  display: none !important;
+}
+
+/* Hide any residual count badges if present */
+.resource-legend .legend-count,
+.resource-legend .legend-tally,
+.resource-legend .chip-count {
   display: none !important;
 }
 
@@ -1984,6 +1992,7 @@ svg #layer1 path:hover {
 .legend-divider {
   color: var(--border-color);
   user-select: none;
+  opacity: 0.6;
 }
 
 .legend-chip {
@@ -2001,11 +2010,10 @@ svg #layer1 path:hover {
   border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-/* Resource Base Colors */
+/* Resource Base Colors (Grain, Timber, Herbs) */
 .chip-grain  { background-color: #e07a12; }
 .chip-timber { background-color: #4a2411; }
 .chip-herbs  { background-color: #059669; }
-.chip-iron   { background-color: #475569; }
 
 /* Special Tier Colors */
 .chip-capitol  { background-color: #facc15; }
