@@ -68,8 +68,8 @@ export default async function handler(req, res) {
                   (tier.chests.followers_heart * CHEST_VALUES.followers_heart.tickets);
 
         return {
-          name: `🏆 ${rankRange} (${count} ${count === 1 ? 'Alliance' : 'Alliances'})`,
-          value: `🟡 ×${tier.chests.commanders_will} | 🟣 ×${tier.chests.loyal_servant} | 🔵 ×${tier.chests.followers_heart}\n💎 **${d.toLocaleString()}** Diamonds | 🎫 **${t.toLocaleString()}** Tickets *(base)*`,
+          name: `🏆 ${rankRange} (${count}${count === 1 ? 'Alliance' : 'Alliances'})`,
+          value: `🟡 ×${tier.chests.commanders_will} | 🟣 ×${tier.chests.loyal_servant} \vert{} 🔵 ×${tier.chests.followers_heart}\n💎 **${d.toLocaleString()}** Diamonds | 🎫 **${t.toLocaleString()}** Tickets *(base)*`,
           inline: false
         };
       });
@@ -105,7 +105,6 @@ export default async function handler(req, res) {
       const formData = new FormData();
       formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
 
-      // Use .dat to avoid Discord rendering an expanded raw JSON preview box
       const jsonBlob = new Blob([JSON.stringify(distribution)], { type: 'application/octet-stream' });
       formData.append('files[0]', jsonBlob, 'reward-blueprint.dat');
 
@@ -118,7 +117,7 @@ export default async function handler(req, res) {
 
       if (!discordRes.ok) {
         const errorText = await discordRes.text();
-        throw new Error(`Discord API Error: ${discordRes.status} - ${errorText}`);
+        throw new Error(`Discord API Error: ${discordRes.status} -${errorText}`);
       }
 
       return res.status(200).json({ success: true, message: 'Reward proposal dispatched!' });
@@ -155,6 +154,10 @@ export default async function handler(req, res) {
       timestamp: new Date().toISOString()
     };
 
+    if (image) {
+      embed.image = { url: 'attachment://map_preview.jpg' };
+    }
+
     const components = [
       {
         type: 1,
@@ -168,7 +171,6 @@ export default async function handler(req, res) {
     const formData = new FormData();
     formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
 
-    // Use .dat to avoid Discord rendering an expanded raw JSON preview box
     const jsonBlob = new Blob([JSON.stringify(changes)], { type: 'application/octet-stream' });
     formData.append('files[0]', jsonBlob, 'strategy-blueprint.dat');
 

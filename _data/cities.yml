@@ -1,0 +1,723 @@
+# ==========================================
+# CAPITOL (Gold Group)
+# ==========================================
+Royal_Castle:
+  name: "Royal Castle"
+  level: "Capitol"
+  group: "gold"
+  buff_type: "march"
+  resource: ""
+  buff_val: 10
+  buff: "+10% Overall March Speed"
+
+# ==========================================
+# LEVEL 6 (Red Group - Fortresses)
+# ==========================================
+Sky_Fortress:
+  name: "Sky Fortress"
+  level: 6
+  group: "red"
+  buff_type: "building"
+  resource: ""
+  buff_val: 20
+  buff: "+20% Building Construction Speed"
+Lionheart_Fortress:
+  name: "Lionheart Fortress"
+  level: 6
+  group: "red"
+  buff_type: "training"
+  resource: ""
+  buff_val: 5
+  buff: "+5% Training Speed"
+Nightfall_Fortress:
+  name: "Nightfall Fortress"
+  level: 6
+  group: "red"
+  buff_type: "research"
+  resource: ""
+  buff_val: 20
+  buff: "+20% Research Speed"
+
+# ==========================================
+# LEVEL 5 (Blue Group - Temples)
+# ==========================================
+Temple_of_Order:
+  name: "Temple of Order"
+  level: 5
+  group: "blue"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 20
+  buff: "+20% Herb Output"
+Temple_of_Nature:
+  name: "Temple of Nature"
+  level: 5
+  group: "blue"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 20
+  buff: "+20% Grain Gathering Speed"
+Temple_of_War:
+  name: "Temple of War"
+  level: 5
+  group: "blue"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 20
+  buff: "+20% Grain Output"
+Temple_of_Chaos:
+  name: "Temple of Chaos"
+  level: 5
+  group: "blue"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 20
+  buff: "+20% Timber Output"
+
+# ==========================================
+# LEVEL 4 (Purple Group)
+# ==========================================
+Dawnhold:
+  name: "Dawnhold"
+  level: 4
+  group: "purple"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 15
+  buff: "+15% Grain Gathering Speed"
+Everpeak:
+  name: "Everpeak"
+  level: 4
+  group: "purple"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 15
+  buff: "+15% Grain Gathering Speed"
+Mithrall_Hall:
+  name: "Mithril Hall"
+  level: 4
+  group: "purple"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 15
+  buff: "+15% Timber Output"
+Sunspire_City:
+  name: "Sunspire City"
+  level: 4
+  group: "purple"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 15
+  buff: "+15% Grain Output"
+Emerald_City:
+  name: "Emerald City"
+  level: 4
+  group: "purple"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 15
+  buff: "+15% Grain Gathering Speed"
+Phantom_City:
+  name: "Phantom City"
+  level: 4
+  group: "purple"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 15
+  buff: "+15% Herb Output"
+Sandwind_Keep:
+  name: "Sandwind Keep"
+  level: 4
+  group: "purple"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 15
+  buff: "+15% Grain Gathering Speed"
+
+# ==========================================
+# LEVEL 3 (Orange Group)
+# ==========================================
+Deepmere_Town:
+  name: "Deepmere Town"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 10
+  buff: "+10% Herb Output"
+Gale_Heights:
+  name: "Gale Heights"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 10
+  buff: "+10% Timber Output"
+Falcon_s_Keep:
+  name: "Falcon's Keep"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 10
+  buff: "+10% Timber Output"
+Drywell_Tower:
+  name: "Drywell Tower"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 10
+  buff: "+10% Herb Output"
+Ironwall_City:
+  name: "Ironwall City"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 10
+  buff: "+10% Grain Output"
+Holyspring_City:
+  name: "Holyspring City"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 10
+  buff: "+10% Grain Output"
+Silverleaf_Grove:
+  name: "Silverleaf Grove"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 10
+  buff: "+10% Herb Output"
+Cloudtop_Highlands:
+  name: "Cloudtop Highlands"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 10
+  buff: "+10% Timber Output"
+Cliffside_Citadel:
+  name: "Cliffside Citadel"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 10
+  buff: "+10% Herb Output"
+Stillwater_River:
+  name: "Stillwater River"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 10
+  buff: "+10% Grain Output"
+Frostwolf_Camp:
+  name: "Frostwolf Camp"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 10
+  buff: "+10% Herb Output"
+Stormgate:
+  name: "Stormgate"
+  level: 3
+  group: "orange"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 10
+  buff: "+10% Timber Output"
+
+# ==========================================
+# LEVEL 2 (Yellow Group)
+# ==========================================
+Copper_Street:
+  name: "Copper Street"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Whitestone_Town:
+  name: "Whitestone Town"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Amber_Road:
+  name: "Amber Road"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Violet:
+  name: "Violet"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Stonechant_Market:
+  name: "Stonechant Market"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Twinspire_Town:
+  name: "Twinspire Town"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Sailport:
+  name: "Sailport"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Anvil_Town:
+  name: "Anvil Town"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Lark_Lane:
+  name: "Lark Lane"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Sailshadow_Harbor:
+  name: "Sailshadow Harbor"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Rose_Court:
+  name: "Rose Court"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Echo_Town:
+  name: "Echo Town"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Stardust_Road:
+  name: "Stardust Road"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Irongate_Town:
+  name: "Irongate Town"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Nymph_Falls:
+  name: "Nymph Falls"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Greatwood_Town:
+  name: "Greatwood Town"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Beacon_Point:
+  name: "Beacon Point"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Windwhisper_Market:
+  name: "Windwhisper Market"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Stagcall_Vale:
+  name: "Stagcall Vale"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Rose_Garden:
+  name: "Rose Garden"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+Blackwater_Ferry:
+  name: "Blackwater Ferry"
+  level: 2
+  group: "yellow"
+  buff_type: "gathering"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Gathering Speed"
+Goldgrain_Town:
+  name: "Goldgrain Town"
+  level: 2
+  group: "yellow"
+  buff_type: "production"
+  resource: "herbs"
+  buff_val: 5
+  buff: "+5% Herb Output"
+
+# ==========================================
+# LEVEL 1 (Green Group)
+# ==========================================
+Broken_Bridgehead:
+  name: "Broken Bridgehead"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Old_Oak:
+  name: "Old Oak"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Gravel_Slope:
+  name: "Gravel Slope"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Windmill_Town:
+  name: "Windmill Town"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Plaster_Wall:
+  name: "Plaster Wall"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Raven_s_Roost:
+  name: "Raven's Roost"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Bluestone_Slope:
+  name: "Bluestone Slope"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Wheatsheaf:
+  name: "Wheatsheaf"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Stonebrook_Town:
+  name: "Stonebrook Town"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Opal_Mine:
+  name: "Opal Mine"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Redsoil_Wastes:
+  name: "Redsoil Wastes"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Fisher_s_Bay:
+  name: "Fisher's Bay"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Millstone_Creek:
+  name: "Millstone Creek"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Crow_s_Beak:
+  name: "Crow's Beak"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Fox_Den:
+  name: "Fox Den"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Stag_Path:
+  name: "Stag Path"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Birchwood_Grove:
+  name: "Birchwood Grove"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Pinewood_Grove:
+  name: "Pinewood Grove"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Springhead:
+  name: "Springhead"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Maple_Town:
+  name: "Maple Town"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Eagles__Peak:
+  name: "Eagles' Peak"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Haystack:
+  name: "Haystack"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Mossy_Crag:
+  name: "Mossy Crag"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Redbrick_House:
+  name: "Redbrick House"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Mistveil_Village:
+  name: "Mistveil Village"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Pinecone_Market:
+  name: "Pinecone Market"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Howling_Vale:
+  name: "Howling Vale"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Lamp_Pavilion:
+  name: "Lamp Pavilion"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Wildberry_Thicket:
+  name: "Wildberry Thicket"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Snail_Shell:
+  name: "Snail Shell"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Narroway:
+  name: "Narroway"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Coal_Pit:
+  name: "Coal Pit"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Graywolf_Vale:
+  name: "Graywolf Vale"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Old_Mill:
+  name: "Old Mill"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Frostleaf_Market:
+  name: "Frostleaf Market"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Dry_Well:
+  name: "Dry Well"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"
+Dripping_Cavern:
+  name: "Dripping Cavern"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "timber"
+  buff_val: 5
+  buff: "+5% Timber Output"
+Scavenger:
+  name: "Scavenger"
+  level: 1
+  group: "green"
+  buff_type: "production"
+  resource: "grain"
+  buff_val: 5
+  buff: "+5% Grain Output"

@@ -1935,6 +1935,249 @@ svg #layer1 path:hover {
   box-shadow: 0 0 8px rgba(184, 151, 90, 0.3);
 }
 
+/* Planner Alliance Active Buff Chip */
+.buff-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #070504;
+  border: 1px solid var(--border-color);
+  color: var(--accent-color);
+  font-size: 0.75rem;
+  padding: 0 0.5rem;
+  height: 28px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.buff-chip strong {
+  color: #fff;
+}
+
+.buff-chip.hidden {
+  display: none !important;
+}
+
+/* Buff Equity Drawer */
+.buff-drawer {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 360px;
+  max-width: calc(100% - 32px);
+  max-height: 480px;
+  background: rgba(18, 14, 12, 0.96);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.buff-drawer.hidden {
+  display: none !important;
+}
+
+.buff-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 6px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.drawer-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drawer-title h3 {
+  margin: 0 !important;
+  font-size: 0.95rem;
+  font-family: var(--font-headers);
+  color: var(--accent-color);
+  border: none !important;
+  padding: 0 !important;
+}
+
+.drawer-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.drawer-close-btn:hover {
+  color: #fff;
+}
+
+.buff-drawer-subtitle {
+  padding: 4px 14px 8px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.buff-drawer-content {
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+/* ==========================================================================
+   WAR ROOM: RESOURCE VIEW & LEGEND STYLING
+   ========================================================================== */
+
+/* Resource View Legend Bar */
+.resource-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #0a0807;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  margin-bottom: 0.6rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.resource-legend.hidden {
+  display: none !important;
+}
+
+.legend-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.legend-divider {
+  color: var(--border-color);
+  user-select: none;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.chip-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+/* Resource Base Colors */
+.chip-grain  { background-color: #d97706; }
+.chip-timber { background-color: #78350f; }
+.chip-herbs  { background-color: #059669; }
+
+/* Special Tier Colors */
+.chip-capitol  { background-color: #facc15; }
+.chip-training { background-color: #dc2626; }
+.chip-research { background-color: #7c3aed; }
+.chip-building { background-color: #ea580c; }
+
+/* Pattern Indicators */
+.chip-pattern {
+  width: 12px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid var(--border-color);
+}
+
+.chip-solid {
+  background-color: var(--text-muted);
+}
+
+.chip-striped {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--text-muted),
+    var(--text-muted) 2px,
+    #110d0b 2px,
+    #110d0b 4px
+  );
+}
+
+/* Scoped Buff Matrix Table */
+.buff-table {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.buff-table th,
+.buff-table td {
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.buff-table th {
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.buff-row.is-active-target {
+  background: rgba(var(--active-theme), 0.15);
+  border-left: 3px solid var(--accent-color);
+}
+
+.alliance-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.city-count-pill {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.buff-badges-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.buff-badge {
+  background: rgba(var(--active-theme), 0.2);
+  border: 1px solid rgba(var(--active-theme-bright), 0.4);
+  color: var(--text-main);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+
+.buff-none,
+.buff-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
 /* Submit Strategy Button */
 .submit-plan-btn {
   display: inline-flex;

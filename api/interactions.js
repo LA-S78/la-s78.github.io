@@ -16,7 +16,6 @@ async function getRawBody(req) {
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'ru', 'it', 'tr', 'uk'];
 
-// --- BULLETPROOF FALLBACKS ---
 const FALLBACK_RULES = [
   { title: "📜 1. Respect & Conduct", content: "**Zero Tolerance:** Bullying, racism, hate speech, harassment, or toxic behavior is prohibited.\n**Community Standard:** Treat all players with respect.\n**Reporting:** You **must** provide screenshots/proof when reporting a violation." },
   { title: "🛡️ 2. NAP Protection Rules", content: "The following actions against **NAP Alliances** and their **Academies** are prohibited:\n> 🚫 No Attacking\n> 🚫 No Scouting" },
@@ -160,7 +159,6 @@ function createNominationToken(payload, secret) {
   return `${dataString}.${signature}`;
 }
 
-// In-Memory Role Cache (15-Minute TTL)
 let roleCache = {
   guildId: null,
   map: null,
@@ -291,16 +289,16 @@ export default async function handler(req, res) {
         }
 
         if (isToday && idx === activeSlotIndex) {
-          return `▶ **${timeStr} — ${emoji} ${text} (ACTIVE)**`;
+          return `▶ **${timeStr} — ${emoji}${text} (ACTIVE)**`;
         }
-        return `• \`${timeStr}\` — ${emoji} ${text}`;
+        return `• \`${timeStr}\` — ${emoji}${text}`;
       }).join('\n');
 
       const fields = [];
       if (isToday) {
         fields.push(
-          { name: `🟢 ${t.sb.current_event} (Ends <t:${nextTimestamp}:R>)`, value: `**${currentEventEmoji} ${currentEventText}**`, inline: false },
-          { name: `⏳ ${t.sb.next_event} (<t:${nextTimestamp}:t>)`, value: `${nextEventEmoji} ${nextEventText}`, inline: false }
+          { name: `🟢 ${t.sb.current_event} (Ends <t:${nextTimestamp}:R>)`, value: `**${currentEventEmoji}${currentEventText}**`, inline: false },
+          { name: `⏳ ${t.sb.next_event} (<t:${nextTimestamp}:t>)`, value: `${nextEventEmoji}${nextEventText}`, inline: false }
         );
       }
       const scheduleTitleText = t.sb.schedule_title.replace('{day}', selectedDay);
@@ -381,29 +379,16 @@ export default async function handler(req, res) {
       });
     }
 
-    // --- /map COMMAND ---
+    // --- /map COMMAND (Direct Live Generated Preview) ---
     if (name === 'map') {
-      let mapImageUrl = null;
-
-      try {
-        const stateRes = await fetch(`https://${host}/api/map-state?t=${Date.now()}`);
-        if (stateRes.ok) {
-          const liveState = await stateRes.json();
-          if (liveState.lastSnapshotUrl) {
-            mapImageUrl = liveState.lastSnapshotUrl;
-          }
-        }
-      } catch (err) {}
+      const mapImageUrl = `https://${host}/api/map-image.png?t=${Date.now()}`;
 
       const mapEmbed = {
         title: t.map.title,
         description: t.map.description,
-        color: 0x0070f3
+        color: 0x0070f3,
+        image: { url: mapImageUrl }
       };
-
-      if (mapImageUrl) {
-        mapEmbed.image = { url: mapImageUrl };
-      }
 
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -498,7 +483,7 @@ export default async function handler(req, res) {
         if (!matchedTier) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: `⚠️ **[${matchedAllianceTag}]** (Rank ${rank}) is not currently eligible for rewards under the active plan.`, flags: 64 }
+            data: { content: `⚠️ **[${matchedAllianceTag}]** (Rank${rank}) is not currently eligible for rewards under the active plan.`, flags: 64 }
           });
         }
 
@@ -542,7 +527,7 @@ export default async function handler(req, res) {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             embeds: [{
-              title: `🎁 Reward Nominations — [${matchedAllianceTag}] ${isKW ? '⚔️ [KW 2x Active]' : ''}`,
+              title: `🎁 Reward Nominations — [${matchedAllianceTag}]${isKW ? '⚔️ [KW 2x Active]' : ''}`,
               color: isKW ? 0x8f0000 : 0xb8975a,
               description: `You are eligible for **${totalChests} total chests** based on your **Rank ${rank}** finish.\nClick below to submit your recipient roster.`,
               fields: fields,
@@ -569,7 +554,7 @@ export default async function handler(req, res) {
       }
     }
 
-    // --- /rewards COMMAND (Status & Admin Reset) ---
+    // --- /rewards COMMAND ---
     if (name === 'rewards') {
       const GIST_ID = process.env.GIST_ID;
       const GIST_TOKEN = process.env.GIST_TOKEN;
@@ -585,7 +570,6 @@ export default async function handler(req, res) {
       const requestedAction = options?.find(opt => opt.name === 'action')?.value;
       const requestedMode = options?.find(opt => opt.name === 'mode')?.value || 'standard';
 
-      // 1. ADMIN RESET ACTION
       if (requestedAction === 'reset') {
         if (userId !== process.env.AUTHORIZED_USER_ID) {
           return res.status(200).json({
@@ -611,7 +595,7 @@ export default async function handler(req, res) {
               'User-Agent': 'WarRoom-App'
             },
             body: JSON.stringify({
-              description: `Cycle reset (${requestedMode}) by ${username} at ${new Date().toISOString()}`,
+              description: `Cycle reset (${requestedMode}) by ${username} at${new Date().toISOString()}`,
               files: {
                 'rewards-nominations.json': {
                   content: JSON.stringify({}, null, 2)
@@ -647,7 +631,6 @@ export default async function handler(req, res) {
         }
       }
 
-      // 2. STATUS CHECK (Default)
       try {
         const gistData = await getGistData(GIST_ID, GIST_TOKEN);
         const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
@@ -718,7 +701,7 @@ export default async function handler(req, res) {
             }
 
             const submitUnix = Math.floor(new Date(entry.submittedAt).getTime() / 1000);
-            return `✅ **[${item.tag}]** (Rank ${item.rank}) — **${totalNominated}/${item.quota}** nominated (<t:${submitUnix}:R>)`;
+            return `✅ **[${item.tag}]** (Rank${item.rank}) — **${totalNominated}/${item.quota}** nominated (<t:${submitUnix}:R>)`;
           } else {
             return `⏳ **[${item.tag}]** (Rank ${item.rank}) — **Awaiting submission** (${item.quota} chests)`;
           }
@@ -757,11 +740,10 @@ export default async function handler(req, res) {
       }
     }
 
-    // --- /rank COMMAND (Subcommands: list, set) ---
+    // --- /rank COMMAND ---
     if (name === 'rank') {
       const sub = options?.[0];
 
-      // 1. /rank list
       if (sub?.name === 'list') {
         try {
           const ranks = await listAllianceRanks();
@@ -788,11 +770,9 @@ export default async function handler(req, res) {
         }
       }
 
-      // 2. /rank set
       if (sub?.name === 'set') {
         const userId = interaction.member?.user?.id || interaction.user?.id;
 
-        // Hard lock: Only the authorized admin can mutate rankings across any server
         if (userId !== process.env.AUTHORIZED_USER_ID) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -830,7 +810,7 @@ export default async function handler(req, res) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: `👑 **NAP Standing Updated:** \`[${result.tag}]\` is now **#${result.newRank}** (was: ${result.previousRank}).`
+              content: `👑 **NAP Standing Updated:** \`[${result.tag}]\` is now **#${result.newRank}** (was:${result.previousRank}).`
             }
           });
         } catch (err) {
@@ -843,7 +823,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // --- BUTTON INTERACTIONS (Map & Rewards Proposals) ---
+  // --- BUTTON INTERACTIONS ---
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
     const userId = interaction.member?.user?.id || interaction.user?.id;
@@ -879,10 +859,6 @@ export default async function handler(req, res) {
         if (!blueprintRes.ok) throw new Error('Failed to retrieve blueprint data.');
         const parsedData = await blueprintRes.json();
 
-        const imageAttachment = interaction.message.attachments?.find(a =>
-          a.contentType?.startsWith('image/') || a.filename?.match(/\.(jpg|jpeg|png)$/i)
-        );
-
         const acceptPayload = isRewardProposal
           ? {
               type: 'rewards',
@@ -893,8 +869,7 @@ export default async function handler(req, res) {
           : {
               changes: parsedData,
               submittedBy: username,
-              secretKey: process.env.DISCORD_BOT_TOKEN,
-              snapshotUrl: imageAttachment ? imageAttachment.url : null
+              secretKey: process.env.DISCORD_BOT_TOKEN
             };
 
         const acceptRes = await fetch(`https://${req.headers.host}/api/accept-proposal`, {
@@ -911,14 +886,12 @@ export default async function handler(req, res) {
         console.error('Interaction bridge failed:', error);
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: { content: `❌ **${t.admin.failed_update}** ${error.message}`, flags: 64 }
+          data: { content: `❌ **${t.admin.failed_update}**${error.message}`, flags: 64 }
         });
       }
     }
 
     const originalEmbed = JSON.parse(JSON.stringify(interaction.message.embeds[0]));
-    delete originalEmbed.image;
-    delete originalEmbed.thumbnail;
     originalEmbed.color = isApproved ? 0x22c55e : 0xef4444;
 
     const statusIndex = originalEmbed.fields.findIndex(f => f.name.toLowerCase().includes('status'));
@@ -941,7 +914,6 @@ export default async function handler(req, res) {
       type: InteractionResponseType.UPDATE_MESSAGE,
       data: {
         embeds: [originalEmbed],
-        attachments: [],
         components: [
           {
             type: 1,

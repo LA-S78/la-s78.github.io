@@ -46,6 +46,16 @@ export const LEVEL_COLORS = {
   blue: '#003fad', red: '#8f0000', gold: '#b29a20'
 };
 
+export const RESOURCE_PALETTE = {
+  grain: '#d97706',
+  timber: '#78350f',
+  herbs: '#059669',
+  march: '#facc15',
+  training: '#dc2626',
+  research: '#7c3aed',
+  building: '#ea580c'
+};
+
 export const AUTO_ALLIANCE_PALETTE = [
   '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
   '#dd6b20', '#319795', '#d69e2e', '#805ad5', '#d53f8c',
@@ -67,6 +77,7 @@ export let alliances = {};
 export let mapState = {};
 export let currentColorMode = 'level';
 export let isPlannerActive = false;
+export let isBuffDrawerOpen = false;
 export let draftState = null;
 export let DRAFT_ALLIANCE_TAGS = [];
 
@@ -74,14 +85,9 @@ export const COLOR_FALLBACKS = { unclaimed: '#2d3748', noAllianceColor: '#718096
 
 export function setDraftAllianceTags(tags = []) { DRAFT_ALLIANCE_TAGS = tags; }
 
-/**
- * EXACT-CASE LOOKUP
- * Ensures we strictly distinguish between tags like "RÂVN" and "râvn" based on api/colors.js keys
- */
 export function getAllianceColor(tag) {
   if (!tag || tag === 'Unclaimed') return COLOR_FALLBACKS.unclaimed;
 
-  // Strict exact case match
   if (alliances[tag] && alliances[tag].color) {
     return alliances[tag].color;
   }
@@ -111,6 +117,228 @@ export function getRankedAllianceTags() {
 
 export function getSvgRoot() {
   return document.querySelector('.game-map svg') || document.querySelector('#game-map') || document.querySelector('svg');
+}
+
+// ==========================================================================
+// RESOURCE PROFILE & PATTERN UTILITIES
+// ==========================================================================
+
+export function injectResourcePatterns(svgRoot) {
+  if (!svgRoot) return;
+  let defs = svgRoot.querySelector('defs');
+  if (!defs) {
+    defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    svgRoot.insertBefore(defs, svgRoot.firstChild);
+  }
+
+  defs.querySelectorAll('.resource-pattern').forEach(el => el.remove());
+
+  const resources = ['grain', 'timber', 'herbs'];
+  let patternMarkup = '';
+
+  resources.forEach(res => {
+    const baseColor = RESOURCE_PALETTE[res];
+    patternMarkup += `
+      <pattern id="pat-prod-${res}" class="resource-pattern" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <rect width="10" height="10" fill="${baseColor}" />
+        <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
+      </pattern>
+    `;
+  });
+
+  defs.insertAdjacentHTML('beforeend', patternMarkup);
+}
+
+export function getCityResourceProfile(city) {
+  if (city.level === 'Capitol' || city.id === 'Royal_Castle') {
+    return { type: 'special', category: 'march', fill: RESOURCE_PALETTE.march, label: 'March Speed' };
+  }
+
+  if (city.level === 6 || city.group === 'red') {
+    const buffLower = (city.buff || '').toLowerCase();
+    if (city.buff_type === 'training' || buffLower.includes('train')) {
+      return { type: 'special', category: 'training', fill: RESOURCE_PALETTE.training, label: 'Troop Training Speed' };
+    }
+    if (city.buff_type === 'research' || buffLower.includes('research') || buffLower.includes('tech')) {
+      return { type: 'special', category: 'research', fill: RESOURCE_PALETTE.research, label: 'Research Speed' };
+    }
+    return { type: 'special', category: 'building', fill: RESOURCE_PALETTE.building, label: 'Building Speed' };
+  }
+
+  let res = city.resource;
+  const buffLower = (city.buff || '').toLowerCase();
+
+  if (!res) {
+    if (buffLower.includes('grain') || buffLower.includes('wheat') || buffLower.includes('food')) res = 'grain';
+    else if (buffLower.includes('timber') || buffLower.includes('wood') || buffLower.includes('lumber')) res = 'timber';
+    else if (buffLower.includes('herb') || buffLower.includes('gold') || buffLower.includes('coin')) res = 'herbs';
+  }
+
+  if (!res || !RESOURCE_PALETTE[res]) {
+    return { type: 'unassigned', fill: '#2d3748', label: 'Unassigned Resource' };
+  }
+
+  let isProduction = city.buff_type === 'production';
+  if (!city.buff_type) {
+    isProduction = buffLower.includes('prod') || buffLower.includes('output') || buffLower.includes('yield');
+  }
+
+  const fillValue = isProduction ? `url(#pat-prod-${res})` : RESOURCE_PALETTE[res];
+  const modeLabel = isProduction ? 'Production Speed' : 'Gathering Speed';
+
+  return {
+    type: 'economy',
+    resource: res,
+    isProduction,
+    fill: fillValue,
+    label: `${res.charAt(0).toUpperCase() + res.slice(1)} (${modeLabel})`
+  };
+}
+
+// ==========================================================================
+// BUFF EQUITY & AGGREGATION UTILITIES
+// ==========================================================================
+
+export function calculateAllianceBuffSummary() {
+  const summary = {};
+  const ranked = getRankedAllianceTags();
+
+  ranked.forEach(tag => {
+    if (tag && tag !== 'Unclaimed') {
+      summary[tag] = { count: 0, cities: [], buffs: [] };
+    }
+  });
+
+  cities.forEach(city => {
+    const owner = getCityOwner(city.id);
+    if (!owner || owner === 'Unclaimed') return;
+
+    if (!summary[owner]) {
+      summary[owner] = { count: 0, cities: [], buffs: [] };
+    }
+
+    summary[owner].count += 1;
+    summary[owner].cities.push(city);
+    if (city.buff && String(city.buff).trim() !== '') {
+      summary[owner].buffs.push(String(city.buff).trim());
+    }
+  });
+
+  return summary;
+}
+
+export function renderBuffSummaryDrawer() {
+  const contentEl = document.getElementById('buff-drawer-content');
+  if (!contentEl) return;
+
+  const summary = calculateAllianceBuffSummary();
+  const sortedTags = Object.keys(summary).sort((a, b) => {
+    const rankA = alliances[a]?.rank ?? 999;
+    const rankB = alliances[b]?.rank ?? 999;
+    return Number(rankA) - Number(rankB);
+  });
+
+  if (sortedTags.length === 0) {
+    contentEl.innerHTML = '<div class="buff-empty">No alliances currently claim territory.</div>';
+    return;
+  }
+
+  const activeOverride = document.getElementById('alliance-override')?.value.trim().toLowerCase();
+
+  const rows = sortedTags.map(tag => {
+    const data = summary[tag];
+    const allianceColor = getAllianceColor(tag);
+    const isEditing = activeOverride && tag.toLowerCase() === activeOverride;
+
+    const buffBadges = data.buffs.length > 0
+      ? data.buffs.map(b => `<span class="buff-badge">${b}</span>`).join('')
+      : '<span class="buff-none">No active buffs assigned</span>';
+
+    return `
+      <tr class="buff-row ${isEditing ? 'is-active-target' : ''}">
+        <td class="buff-col-tag">
+          <span class="alliance-dot" style="background-color: ${allianceColor}"></span>
+          <strong>[${tag}]</strong>
+        </td>
+        <td class="buff-col-count">
+          <span class="city-count-pill">${data.count} ${data.count === 1 ? 'City' : 'Cities'}</span>
+        </td>
+        <td class="buff-col-buffs">
+          <div class="buff-badges-wrap">${buffBadges}</div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  contentEl.innerHTML = `
+    <table class="buff-table">
+      <thead>
+        <tr>
+          <th>Alliance</th>
+          <th>Holdings</th>
+          <th>Active Buffs</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+  `;
+}
+
+export function updatePlannerBuffChip(targetTag = null) {
+  const chip = document.getElementById('planner-alliance-buff-chip');
+  if (!chip) return;
+
+  if (!isPlannerActive) {
+    chip.classList.add('hidden');
+    chip.style.display = 'none';
+    return;
+  }
+
+  let tag = targetTag;
+  if (!tag) {
+    const input = document.getElementById('alliance-override');
+    tag = input ? input.value.trim() : '';
+  }
+
+  if (!tag) {
+    chip.classList.add('hidden');
+    chip.style.display = 'none';
+    return;
+  }
+
+  const matchedTag = Object.keys(alliances).find(t => t.toLowerCase() === tag.toLowerCase()) || tag.toUpperCase();
+  const summary = calculateAllianceBuffSummary();
+  const data = summary[matchedTag] || { count: 0, buffs: [] };
+
+  const buffPreview = data.buffs.length > 0
+    ? data.buffs.slice(0, 2).join(', ') + (data.buffs.length > 2 ? ` (+${data.buffs.length - 2} more)` : '')
+    : 'Buffs pending';
+
+  chip.innerHTML = `<strong>[${matchedTag}]</strong> • ${data.count} ${data.count === 1 ? 'City' : 'Cities'} • <span>${buffPreview}</span>`;
+  chip.classList.remove('hidden');
+  chip.style.display = 'inline-flex';
+}
+
+export function toggleBuffSummaryDrawer(forceState = null) {
+  const drawer = document.getElementById('buff-equity-drawer');
+  const btn = document.getElementById('btn-toggle-buffs');
+  if (!drawer) return;
+
+  isBuffDrawerOpen = forceState !== null ? forceState : !isBuffDrawerOpen;
+
+  drawer.classList.toggle('hidden', !isBuffDrawerOpen);
+  drawer.setAttribute('aria-hidden', String(!isBuffDrawerOpen));
+
+  if (btn) {
+    btn.setAttribute('aria-pressed', String(isBuffDrawerOpen));
+    btn.classList.toggle('active', isBuffDrawerOpen);
+  }
+
+  if (isBuffDrawerOpen) {
+    renderBuffSummaryDrawer();
+  }
 }
 
 // ==========================================================================
@@ -255,7 +483,6 @@ export function togglePlannerMode(active, svgRoot = null) {
     btnDraft.classList.toggle('active', active);
   }
 
-  // Toggle the Override Text Box Visibility
   const overrideContainer = document.getElementById('planner-override-container');
   if (overrideContainer) {
     if (active) {
@@ -265,7 +492,7 @@ export function togglePlannerMode(active, svgRoot = null) {
       overrideContainer.classList.add('hidden');
       overrideContainer.style.display = 'none';
       const input = document.getElementById('alliance-override');
-      if (input) input.value = ''; // Automatically clear the text box when exiting
+      if (input) input.value = '';
     }
   }
 
@@ -279,9 +506,11 @@ export function togglePlannerMode(active, svgRoot = null) {
     
     const btnLevel = document.getElementById('btn-mode-level');
     const btnAlliance = document.getElementById('btn-mode-alliance');
+    const btnResource = document.getElementById('btn-mode-resource');
     if (btnLevel && btnAlliance) {
       btnLevel.classList.add('active');
       btnAlliance.classList.remove('active');
+      if (btnResource) btnResource.classList.remove('active');
     }
   }
 
@@ -319,20 +548,17 @@ export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
 export function promptTerritoryAssignment(cityId, svgRoot = null) {
   const root = svgRoot || getSvgRoot();
   
-  // Check for Custom Text Override
   const overrideInput = document.getElementById('alliance-override');
   if (overrideInput && overrideInput.value.trim() !== '') {
     let customOwner = overrideInput.value.trim();
     
-    // Smart Case Matching: Find exact case if it exists in data (e.g. user types "heki" -> assigns "HeKi")
     const existingTag = Object.keys(alliances).find(tag => tag.toLowerCase() === customOwner.toLowerCase());
     customOwner = existingTag ? existingTag : customOwner.toUpperCase();
 
     setDraftTerritoryOwner(cityId, customOwner, root);
-    return; // Exit early so it doesn't cycle!
+    return;
   }
 
-  // ORIGINAL CYCLING LOGIC (Runs only if text box is empty)
   const currentOwner = getCityOwner(cityId);
   const rankedTags = getRankedAllianceTags();
   
@@ -396,15 +622,12 @@ export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
     const root = getSvgRoot();
     const prevMode = currentColorMode;
 
-    // 1. Temporarily switch SVG to Level View for the snapshot
     if (root) {
       setMapColorMode('level', root);
     }
 
-    // 2. Capture the snapshot in Level mode
     const mapImageData = await captureMapImage(root);
 
-    // 3. Immediately revert the UI back to Alliance / Planner mode
     if (root) {
       setMapColorMode(prevMode, root);
     }
@@ -455,6 +678,8 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
       badgeEl.classList.add('hidden');
       badgeEl.style.display = 'none';
     }
+    updatePlannerBuffChip(null);
+    if (isBuffDrawerOpen) renderBuffSummaryDrawer();
     return;
   }
 
@@ -482,6 +707,9 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
       submitBtn.style.display = 'none';
     }
   }
+
+  updatePlannerBuffChip();
+  if (isBuffDrawerOpen) renderBuffSummaryDrawer();
 }
 
 // ==========================================================================
@@ -519,8 +747,13 @@ export function syncFullscreenUI(isActive, btn = null) {
 export function bindMapControls(svgRoot = null) {
   const btnLevel = document.getElementById('btn-mode-level');
   const btnAlliance = document.getElementById('btn-mode-alliance');
+  const btnResource = document.getElementById('btn-mode-resource');
+  const resourceLegend = document.getElementById('resource-map-legend');
   const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
   const btnSubmit = document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
+  const btnBuffs = document.getElementById('btn-toggle-buffs');
+  const btnCloseBuffs = document.getElementById('btn-close-buffs');
+  const allianceInput = document.getElementById('alliance-override');
   const mapContainer = document.getElementById('map-container');
   const btnFullscreen = document.getElementById('btn-toggle-fullscreen');
 
@@ -529,6 +762,8 @@ export function bindMapControls(svgRoot = null) {
     btnLevel.addEventListener('click', () => {
       btnLevel.classList.add('active');
       if (btnAlliance) btnAlliance.classList.remove('active');
+      if (btnResource) btnResource.classList.remove('active');
+      if (resourceLegend) resourceLegend.classList.add('hidden');
       setMapColorMode('level', svgRoot || getSvgRoot());
     });
   }
@@ -538,7 +773,20 @@ export function bindMapControls(svgRoot = null) {
     btnAlliance.addEventListener('click', () => {
       btnAlliance.classList.add('active');
       if (btnLevel) btnLevel.classList.remove('active');
+      if (btnResource) btnResource.classList.remove('active');
+      if (resourceLegend) resourceLegend.classList.add('hidden');
       setMapColorMode('alliance', svgRoot || getSvgRoot());
+    });
+  }
+
+  if (btnResource && !btnResource.dataset.bound) {
+    btnResource.dataset.bound = 'true';
+    btnResource.addEventListener('click', () => {
+      btnResource.classList.add('active');
+      if (btnLevel) btnLevel.classList.remove('active');
+      if (btnAlliance) btnAlliance.classList.remove('active');
+      if (resourceLegend) resourceLegend.classList.remove('hidden');
+      setMapColorMode('resource', svgRoot || getSvgRoot());
     });
   }
 
@@ -555,6 +803,30 @@ export function bindMapControls(svgRoot = null) {
     btnSubmit.addEventListener('click', (e) => {
       e.preventDefault();
       submitStrategyProposal('/api/proposal');
+    });
+  }
+
+  if (btnBuffs && !btnBuffs.dataset.bound) {
+    btnBuffs.dataset.bound = 'true';
+    btnBuffs.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleBuffSummaryDrawer();
+    });
+  }
+
+  if (btnCloseBuffs && !btnCloseBuffs.dataset.bound) {
+    btnCloseBuffs.dataset.bound = 'true';
+    btnCloseBuffs.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleBuffSummaryDrawer(false);
+    });
+  }
+
+  if (allianceInput && !allianceInput.dataset.bound) {
+    allianceInput.dataset.bound = 'true';
+    allianceInput.addEventListener('input', () => {
+      updatePlannerBuffChip(allianceInput.value.trim());
+      if (isBuffDrawerOpen) renderBuffSummaryDrawer();
     });
   }
 
@@ -604,6 +876,7 @@ function getVisualCenter(pathEl) {
 
 export function extractCitiesFromSvg(svgRoot) {
   if (!svgRoot) return [];
+  const catalog = (typeof window !== 'undefined' && window.CITY_CATALOG) || {};
   const extractedCities = [];
 
   Object.entries(COLOR_TO_LEVEL_MAP).forEach(([colorLabel, assignedLevel]) => {
@@ -619,13 +892,26 @@ export function extractCitiesFromSvg(svgRoot) {
     children.forEach((el, index) => {
       const elementId = el.id || el.getAttribute('inkscape:label');
       const uniqueId = elementId || `${colorLabel}_city_${index + 1}`;
-      const cityName = el.getAttribute('inkscape:label') || uniqueId;
+      const catalogEntry = catalog[uniqueId] || {};
+      const cityName = catalogEntry.name || el.getAttribute('inkscape:label') || uniqueId.replace(/_/g, ' ');
+      const cityLevel = catalogEntry.level !== undefined ? catalogEntry.level : assignedLevel;
+      const cityGroup = catalogEntry.group || colorLabel;
+      const cityBuff = catalogEntry.buff || "";
+
       if (!el.id) el.id = uniqueId;
-      el.style.fill = LEVEL_COLORS[colorLabel];
+      el.style.fill = LEVEL_COLORS[cityGroup] || LEVEL_COLORS[colorLabel];
       if (!extractedCities.some(c => c.id === uniqueId)) {
         extractedCities.push({
-          id: uniqueId, name: cityName, level: assignedLevel,
-          group: colorLabel, buff: "Placeholder Buff", owner: "Unclaimed", status: null
+          id: uniqueId, 
+          name: cityName, 
+          level: cityLevel,
+          group: cityGroup, 
+          buff: cityBuff,
+          buff_type: catalogEntry.buff_type || "",
+          resource: catalogEntry.resource || "",
+          buff_val: catalogEntry.buff_val || "",
+          owner: "Unclaimed", 
+          status: null
         });
       }
     });
@@ -643,9 +929,18 @@ export function extractCitiesFromSvg(svgRoot) {
       for (const [col] of Object.entries(COLOR_TO_LEVEL_MAP)) {
         if (el.classList.contains(col) || el.getAttribute('fill') === LEVEL_COLORS[col]) { group = col; break; }
       }
+      const catalogEntry = catalog[id] || {};
       extractedCities.push({
-        id: id, name: el.getAttribute('inkscape:label') || id.replace(/_/g, ' '), level: COLOR_TO_LEVEL_MAP[group] || 1,
-        group: group, buff: "Placeholder Buff", owner: "Unclaimed", status: null
+        id: id, 
+        name: catalogEntry.name || el.getAttribute('inkscape:label') || id.replace(/_/g, ' '), 
+        level: catalogEntry.level !== undefined ? catalogEntry.level : (COLOR_TO_LEVEL_MAP[group] || 1),
+        group: catalogEntry.group || group, 
+        buff: catalogEntry.buff || "", 
+        buff_type: catalogEntry.buff_type || "",
+        resource: catalogEntry.resource || "",
+        buff_val: catalogEntry.buff_val || "",
+        owner: "Unclaimed", 
+        status: null
       });
     });
   }
@@ -656,25 +951,41 @@ export function setMapColorMode(mode, svgRoot) {
   const root = svgRoot || getSvgRoot();
   if (!root) return;
   currentColorMode = mode;
-  if (mode === 'alliance') root.classList.add('mode-alliance');
-  else root.classList.remove('mode-alliance');
+
+  root.classList.toggle('mode-alliance', mode === 'alliance');
+  root.classList.toggle('mode-resource', mode === 'resource');
+
+  injectResourcePatterns(root);
 
   cities.forEach(city => {
     const el = root.getElementById(city.id);
     if (!el) return;
     const ownerTag = getCityOwner(city.id);
 
+    let targetFill = '';
+    let targetStroke = '';
+
     if (mode === 'alliance') {
-      const targetColor = getAllianceColor(ownerTag);
-      if (el.tagName.toLowerCase() === 'g') {
-        const shapes = el.querySelectorAll('path, polygon, rect, circle');
-        shapes.forEach(s => { s.style.fill = targetColor; s.style.stroke = targetColor; });
-      } else { el.style.fill = targetColor; el.style.stroke = targetColor; }
+      targetFill = getAllianceColor(ownerTag);
+      targetStroke = targetFill;
+    } else if (mode === 'resource') {
+      const profile = getCityResourceProfile(city);
+      targetFill = profile.fill;
+      targetStroke = profile.type === 'special' ? '#ffffff' : 'rgba(0, 0, 0, 0.6)';
     } else {
-      if (el.tagName.toLowerCase() === 'g') {
-        const shapes = el.querySelectorAll('path, polygon, rect, circle');
-        shapes.forEach(s => { s.style.fill = LEVEL_COLORS[city.group]; s.style.stroke = ''; });
-      } else { el.style.fill = LEVEL_COLORS[city.group]; el.style.stroke = ''; }
+      targetFill = LEVEL_COLORS[city.group] || '#25bb00';
+      targetStroke = '';
+    }
+
+    if (el.tagName.toLowerCase() === 'g') {
+      const shapes = el.querySelectorAll('path, polygon, rect, circle');
+      shapes.forEach(s => {
+        s.style.fill = targetFill;
+        s.style.stroke = targetStroke;
+      });
+    } else {
+      el.style.fill = targetFill;
+      el.style.stroke = targetStroke;
     }
   });
 
@@ -732,6 +1043,9 @@ export function renderTerritoryLabels(svgRoot) {
       textEl.textContent = ownerTag;
 
       if (currentColorMode === 'alliance') {
+        textEl.style.fill = '#ffffff';
+        textEl.style.stroke = '#000000';
+      } else if (currentColorMode === 'resource') {
         textEl.style.fill = '#ffffff';
         textEl.style.stroke = '#000000';
       } else {
@@ -842,7 +1156,10 @@ export function enableMapHighlighting(svgRoot = null) {
       const alliance = alliances[ownerTag];
       cityOwnerEl.textContent = alliance ? `${alliance.name} [${ownerTag}]` : ownerTag;
     }
-    if (cityBuffEl) cityBuffEl.textContent = cityData.buff || 'No active buff';
+    if (cityBuffEl) {
+      const buffVal = cityData.buff && String(cityData.buff).trim() !== '' ? String(cityData.buff).trim() : 'No active buff';
+      cityBuffEl.textContent = buffVal;
+    }
   }
 
   const elements = root.querySelectorAll('path, rect, circle, polygon');
@@ -909,7 +1226,6 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
   const staticAlliances = (typeof window !== 'undefined' && window.MAP_STATE && window.MAP_STATE.alliances) || {};
   const liveAlliances = state.alliances || {};
 
-  // Deep-merge: preserve static ranks while allowing live color/data updates
   const allTags = new Set([...Object.keys(staticAlliances), ...Object.keys(liveAlliances)]);
   alliances = {};
   allTags.forEach(tag => {
@@ -917,7 +1233,6 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
       ...(staticAlliances[tag] || {}),
       ...(liveAlliances[tag] || {})
     };
-    // Ensure rank is preserved if live state omitted it
     if (liveAlliances[tag]?.rank === undefined && staticAlliances[tag]?.rank !== undefined) {
       alliances[tag].rank = staticAlliances[tag].rank;
     }
@@ -942,40 +1257,30 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
   if (root && autoRender) {
     setMapColorMode(currentColorMode, root);
   }
+
+  if (isBuffDrawerOpen) renderBuffSummaryDrawer();
 }
 
 export function getCityById(id) { return cities.find(city => city.id === id); }
 
-/**
- * Asynchronously fetches live map state AND Discord role colors concurrently.
- */
 export async function loadLiveMapState(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
 
   try {
-    // Fire both fetch requests at the same time to save loading time
     const [stateRes, colorsRes] = await Promise.all([
       fetch(`/api/map-state?t=${Date.now()}`, { cache: 'no-store' }),
-      fetch('/api/colors') // Relies on the smart backend cache in colors.js
+      fetch('/api/colors')
     ]);
     
-    // 1. Process the Map State (Territory Owners)
     if (stateRes.ok) {
       const liveState = await stateRes.json();
-      
-      // Apply the owners to the internal data structure, but tell it 
-      // NOT to color the map just yet (autoRender = false)
       applyMapState(liveState, root, false);
     } else {
       throw new Error(`Map State API returned HTTP ${stateRes.status}`);
     }
 
-    // 2. Process the Live Discord Colors
     if (colorsRes.ok) {
       const discordColors = await colorsRes.json();
-      
-      // Inject the true Discord hex codes directly into the alliances dictionary.
-      // E.g., if discordColors = { "HeKi": "#123456" }, this updates alliances["HeKi"].color
       Object.entries(discordColors).forEach(([tag, hexColor]) => {
         if (!alliances[tag]) alliances[tag] = { name: tag };
         alliances[tag].color = hexColor;
@@ -989,14 +1294,12 @@ export async function loadLiveMapState(svgRoot = null) {
     }
   } finally {
     if (root) {
-      // 3. Now that both Owners AND Colors are loaded into memory, paint the map once
       setMapColorMode(currentColorMode, root);
-      
-      // 4. FOUC FIX: Gracefully fade the map in only after everything is painted
       requestAnimationFrame(() => {
         root.classList.add('map-loaded');
       });
     }
+    if (isBuffDrawerOpen) renderBuffSummaryDrawer();
   }
 }
 
@@ -1015,7 +1318,6 @@ export function initializeMapData(svgRoot) {
   bindMapControls(root);
   enableMapHighlighting(root);
 
-  // Asynchronously hydrate with live state + live colors
   loadLiveMapState(root);
   
   return cities;
