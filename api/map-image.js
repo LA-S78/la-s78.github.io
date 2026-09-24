@@ -1,7 +1,6 @@
 // api/map-image.js
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { Resvg } from '@resvg/resvg-js';
+import rawSvg from './map_svg.js';
 
 const AUTO_ALLIANCE_PALETTE = [
   '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
@@ -52,51 +51,13 @@ async function getLiveMapState() {
 }
 
 export default async function handler(req, res) {
-  // --- PHASE 1: LOAD RESVG ---
-  let Resvg;
   try {
-    const resvgModule = await import('@resvg/resvg-js');
-    Resvg = resvgModule.Resvg;
-  } catch (importErr) {
-    return res.status(500).json({
-      phase: '1_LOAD_RESVG_MODULE',
-      error: importErr.message
-    });
-  }
+    let svg = rawSvg;
 
-  // --- PHASE 2: LOCATE map.svg ---
-  let svg = null;
-  const attemptedPaths = [];
+    if (!svg || typeof svg !== 'string') {
+      return res.status(500).json({ error: 'map_svg module failed to load.' });
+    }
 
-  const candidates = [
-    new URL('./map.svg', import.meta.url),
-    new URL('../_includes/map.svg', import.meta.url),
-    path.join(process.cwd(), 'api', 'map.svg'),
-    path.join(process.cwd(), '_includes', 'map.svg')
-  ];
-
-  for (const candidate of candidates) {
-    try {
-      const resolved = typeof candidate === 'string' ? candidate : fileURLToPath(candidate);
-      attemptedPaths.push(resolved);
-      if (fs.existsSync(resolved)) {
-        svg = fs.readFileSync(resolved, 'utf8');
-        break;
-      }
-    } catch (_) {}
-  }
-
-  if (!svg) {
-    return res.status(500).json({
-      phase: '2_LOCATE_SVG',
-      error: 'Could not find map.svg in function container.',
-      attemptedPaths,
-      hint: 'Ensure api/map.svg is committed to git.'
-    });
-  }
-
-  // --- PHASE 3: RASTERIZE TO PNG ---
-  try {
     const mapState = await getLiveMapState();
     const ownership = mapState?.territory_ownership || {};
     const alliances = mapState?.alliances || {};
@@ -130,8 +91,8 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=180, stale-while-revalidate=300');
     return res.status(200).send(pngBuffer);
   } catch (renderErr) {
+    console.error('Rendering error:', renderErr);
     return res.status(500).json({
-      phase: '3_RENDER_SVG_TO_PNG',
       error: renderErr.message,
       stack: renderErr.stack
     });
