@@ -381,7 +381,7 @@ export default async function handler(req, res) {
 
     // --- /map COMMAND (Direct Live Generated Preview) ---
     if (name === 'map') {
-      const mapImageUrl = `https://${host}/api/map-image.png?t=${Date.now()}`;
+      const mapImageUrl = `https://${host}/api/map-image?t=${Date.now()}`;
 
       const mapEmbed = {
         title: t.map.title,
