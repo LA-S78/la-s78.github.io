@@ -59,11 +59,11 @@ const LEVEL_COLORS = {
 };
 
 const RESOURCE_COLORS = {
-  grain: '#d97706',   // Amber
-  timber: '#854d0e',  // Wood Brown
+  grain: '#e07a12',   // Warm Ripe Wheat / Harvest Honey
+  timber: '#4a2411',  // Deep Dark Walnut / Log Bark
   iron: '#475569',    // Iron Slate
   herbs: '#059669',   // Herb Green
-  march: '#eab308',   // Speed Gold
+  march: '#eab308',   // March Speed Gold
   attack: '#dc2626',  // Attack Red
   might: '#dc2626',
   defense: '#2563eb', // Defense Blue
