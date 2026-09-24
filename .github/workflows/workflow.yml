@@ -187,7 +187,7 @@ jobs:
             File.write("api/map_svg.js", "export default " + JSON.generate(svg_text) + ";\n")
           '
 
-          # 2. Pre-calculate territory centroids (Order-agnostic & accounts for relative path deltas)
+          # 2. Pre-calculate territory centroids at build time
           ruby -r json -e '
             svg = File.read("_includes/map.svg")
             centroids = {}
@@ -271,19 +271,27 @@ jobs:
             puts "✅ Pre-computed #{centroids.keys.size} territory centroids."
           '
 
-          # 3. Automatically fetch and encode Oswald-Bold TTF
-          ruby -r open-uri -r fileutils -r base64 -e '
-            font_path = "_assets/fonts/Oswald-Bold.ttf"
-            unless File.exist?(font_path) && File.size(font_path) > 1000
-              puts "Downloading Oswald-Bold.ttf from Google Fonts..."
-              FileUtils.mkdir_p("_assets/fonts")
-              URI.open("https://raw.githubusercontent.com/google/fonts/main/ofl/oswald/static/Oswald-Bold.ttf") do |f|
-                File.binwrite(font_path, f.read)
-              end
+          # 3. Source TTF font from local repo or runner system (no network downloads)
+          ruby -r base64 -e '
+            candidates = [
+              "_assets/fonts/Oswald-Bold.ttf",
+              "_assets/fonts/font.ttf",
+              "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+              "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+              "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+            ]
+            font_path = candidates.find { |p| File.exist?(p) && File.size(p) > 1000 }
+            font_path ||= Dir.glob("/usr/share/fonts/**/{*Bold*,*bold*,*DejaVu*,*Liberation*}.ttf").first
+            font_path ||= Dir.glob("/usr/share/fonts/**/*.ttf").first
+
+            if font_path
+              b64 = Base64.strict_encode64(File.binread(font_path))
+              File.write("api/font_data.js", "export default \"" + b64 + "\";\n")
+              puts "✅ In-memory font module generated from #{font_path} (#{File.size(font_path) / 1024} KB)."
+            else
+              File.write("api/font_data.js", "export default \"\";\n")
+              puts "⚠️ Warning: No system font found."
             end
-            b64 = Base64.strict_encode64(File.binread(font_path))
-            File.write("api/font_data.js", "export default \"" + b64 + "\";\n")
-            puts "✅ In-memory font module generated (#{b64.length} chars)."
           '
 
           # Stage serverless assets and configuration for Vercel

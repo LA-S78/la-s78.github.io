@@ -86,7 +86,6 @@ async function getLiveMapState() {
   }
 }
 
-// Convert in-memory base64 font to Buffer on cold start
 const fontBuffer = (fontBase64 && fontBase64.length > 100) ? Buffer.from(fontBase64, 'base64') : null;
 
 export default async function handler(req, res) {
@@ -128,8 +127,7 @@ export default async function handler(req, res) {
         if (override.scale) fontSize *= override.scale;
 
         const safeOwner = owner.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="Oswald, sans-serif" font-weight="700" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="4px" stroke-linejoin="round" paint-order="stroke fill">${safeOwner}</text>`;
+        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="MapFont, sans-serif" font-weight="700" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="4px" stroke-linejoin="round" paint-order="stroke fill">${safeOwner}</text>`;
 
         if (override.rotate) {
           textTag = `<g transform="rotate(${override.rotate}, ${finalX.toFixed(1)}, ${finalY.toFixed(1)})">${textTag}</g>`;
@@ -139,7 +137,6 @@ export default async function handler(req, res) {
       }
     });
 
-    // Inject styles and labels
     svg = svg.replace(/<svg[^>]*>/, `$&<style>\n${cssRules.join('\n')}\n</style>`);
     svg = svg.replace(/<\/svg>/, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
 
@@ -151,7 +148,7 @@ export default async function handler(req, res) {
     if (fontBuffer && fontBuffer.length > 0) {
       resvgOptions.font = {
         fontBuffers: [fontBuffer],
-        defaultFontFamily: 'Oswald',
+        defaultFontFamily: 'MapFont',
         loadSystemFonts: false
       };
     }
