@@ -65,21 +65,18 @@ html[data-theme="miasma"] {
    ========================================================================== */
 
 html {
-  /* Using 100dvh to natively adapt to mobile browsers */
   height: 100dvh;
   max-width: 100%;
   font-size: 100%;
   background-color: var(--nav-bg);
   -webkit-text-size-adjust: 100%;
   overflow: hidden;
-  /* Prevents double-tap to zoom */
   touch-action: manipulation;
 }
 
 body {
   margin: 0;
   padding: 0;
-  /* Using 100dvh to natively adapt to mobile browsers */
   height: 100dvh;
   font-family: var(--font-body);
   color: var(--text-main);
@@ -89,48 +86,43 @@ body {
 
 body::before {
   content: '';
-  position: fixed; /* Glues the background to the screen */
+  position: fixed;
   top: calc(90px + env(safe-area-inset-top));
   left: 0;
   width: 100%;
   height: calc(100% - env(safe-area-inset-top) - 150px);
-  z-index: -10; /* Keeps it behind all content */
+  z-index: -10;
   background-color: #050403;
   background-image: url("/images/background.webp"), url("/images/background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  pointer-events: none; /* Allows clicks to pass through to buttons below */
+  pointer-events: none;
 }
 
-/* Turn the App Shell into a dead-zone for native iOS touch features */
 body, .lantern-header, footer {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
-  /* Prevents dragging/rubber-banding on these elements */
   touch-action: none;
 }
 
 #mobile-container {
   width: 100%;
-  height: 100dvh; /* Lock the container to the dynamic glass */
+  height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-/* Turbo Frame Flexbox Fix */
 turbo-frame#main-content {
-  display: contents; /* Allows <main> to act as a direct child for layout purposes */
+  display: contents;
 }
 
-/* Old content and sub-nav fading OUT completely when a link is clicked */
 turbo-frame[busy] main,
 turbo-frame[busy] .anchor-nav {
   opacity: 0;
   transform: translateY(-4px);
   transition: opacity 0.15s ease-out, transform 0.15s ease-out;
-  /* Pause the fade-in animation while transitioning layout trees */
   animation: none; 
 }
 
@@ -143,13 +135,10 @@ main {
   user-select: text;
   overscroll-behavior-y: contain; 
   overscroll-behavior-x: none;    
-  /* Allows vertical scroll, but blocks zoom/horizontal drag */
   touch-action: pan-x, pan-y;
-
-  flex: 1; /* Automatically absorbs whatever space is left */
+  flex: 1;
   height: auto; 
-  min-height: 0; /* CRITICAL: Prevents flex children from overflowing */
-  
+  min-height: 0;
   width: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -272,7 +261,6 @@ main img {
    4. HEADER, FOOTER & NAVIGATION
    ========================================================================== */
 
-/* Main Header */
 .lantern-header {
   position: fixed;
   top: 0;
@@ -307,7 +295,6 @@ main img {
   width: 100%;
 }
 
-/* Header Text */
 .debossed-title {
   position: relative;
   right: 5%;
@@ -326,7 +313,7 @@ main img {
 }
 
 .subtitle {
-  position:relative;
+  position: relative;
   right: 5%;
   width: 13.5rem;
   z-index: 1;
@@ -340,7 +327,6 @@ main img {
   text-align: center;
 }
 
-/* Sticky Anchor Nav */
 .anchor-nav {
   position: sticky;
   top: calc(90px + env(safe-area-inset-top));
@@ -349,8 +335,6 @@ main img {
   background-color: #1a1512;
   border-bottom: 1px solid var(--border-color);
   box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
-  
-  /* Synchronized native app-like entry animation */
   animation: nativeAppFadeIn 0.5s cubic-bezier(0.3, 1, 0.3, 1) forwards;
   will-change: transform, opacity;
 }
@@ -392,9 +376,7 @@ main img {
   font-size: 0.8rem;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
   margin: 0;
 }
 .anchor-link.active {
@@ -406,7 +388,6 @@ main img {
   border-bottom: 2px solid var(--accent-color);
 }
 
-/* Bottom Footer */
 footer {
   position: fixed;
   bottom: 0;
@@ -443,7 +424,6 @@ footer {
   transition: all 0.3s ease;
 }
 
-/* Language Switcher */
 .language-switcher {
   position: absolute;
   top: 30px;
@@ -490,9 +470,7 @@ footer {
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
-  transition:
-    opacity 0.2s ease,
-    visibility 0s linear 0.2s;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
   position: absolute;
   right: 0;
   top: calc(100% + 2px);
@@ -539,12 +517,9 @@ footer {
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
-  transition:
-    opacity 0.3s ease,
-    visibility 0s linear 0s;
+  transition: opacity 0.3s ease, visibility 0s linear 0s;
 }
 
-/* Misc Header Buttons */
 .header-side-btn {
   width: 40px;
   display: flex;
@@ -563,12 +538,10 @@ footer {
    5. ATMOSPHERICS & EFFECTS
    ========================================================================== */
 
-/* Main Lantern Icon */
 .lantern-container {
   position: relative;
   height: 100%;
   mix-blend-mode: screen;
-  position: relative;
   isolation: isolate;
 }
 
@@ -580,7 +553,6 @@ footer {
   transform: scale(0.95);
 }
 
-/* Ambient Glows */
 .lantern-flicker-layer {
   height: 100%;
   position: absolute;
@@ -635,7 +607,6 @@ footer {
   z-index: 150;
 }
 
-/* Overlays & Dust */
 .noise-overlay {
   position: absolute;
   top: 0;
@@ -709,7 +680,6 @@ footer {
    6. UI COMPONENTS, CARDS & LAYOUTS
    ========================================================================== */
 
-/* Search */
 .search {
   text-align: center;
   margin-bottom: 1.2rem;
@@ -734,7 +704,6 @@ footer {
   box-shadow: 0 0 10px rgba(184, 151, 90, 0.2);
 }
 
-/* Modals & Images */
 .blueprint-img {
   display: block;
   max-width: 100%;
@@ -746,45 +715,30 @@ footer {
   margin-right: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 .blueprint-img:hover {
   transform: scale(1.02);
   border-color: var(--accent-color);
 }
 
-/* vercel test begin */
-
 .highlight-alliance {
-    background-color: rgba(230, 160, 80, 0.2); /* Soft sanctuary gold tint */
-    border-left: 4px solid var(--accent-color);
-    font-weight: bold;
+  background-color: rgba(230, 160, 80, 0.2);
+  border-left: 4px solid var(--accent-color);
+  font-weight: bold;
 }
 
-/* 1. The Core Lock Filter */
 .content-locked {
-  /* The visual blur - 12px is usually the sweet spot so you can't read headers */
   filter: blur(12px); 
-  
-  /* CRITICAL: Stops users from clicking hidden links or buttons underneath */
   pointer-events: none; 
-  
-  /* CRITICAL: Stops users from hitting Ctrl+A and copying the text anyway */
   user-select: none;    
-  
-  /* Dims the background slightly to make your login button pop */
   opacity: 0.3;         
 }
 
-/* 2. The Smooth Reveal Transition */
-/* When main.js removes the .content-locked class, this makes it fade in beautifully */
 #gated-content {
   transition: filter 0.6s ease-out, opacity 0.6s ease-out;
 }
 
-/* 3. The Login Button Styling (Optional, but matches your test layout) */
 .profile-card-wrapper {
   display: flex;
   justify-content: center;
@@ -793,7 +747,7 @@ footer {
 }
 
 .login-button {
-  background-color: #5865F2; /* Official Discord Blurple */
+  background-color: #5865F2;
   color: white;
   border: none;
   border-radius: 6px;
@@ -829,7 +783,6 @@ footer {
   grid-area: right-side;
   text-align: center;
 }
-/*vercel test end*/
 
 .img-grid {
   display: grid;
@@ -911,7 +864,6 @@ dialog a.dialog-btn:hover {
   transform: translateY(-2px);
 }
 
-/* Grids & Cards */
 .guide-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
@@ -932,24 +884,12 @@ dialog a.dialog-btn:hover {
   display: block;
 }
 
-/* Event Phases */
-.phase-tech {
-  background-color: rgba(153, 102, 204, 0.35) !important;
-}
-.phase-raven {
-  background-color: rgba(70, 140, 200, 0.35) !important;
-}
-.phase-heroes {
-  background-color: rgba(200, 80, 80, 0.35) !important;
-}
-.phase-build {
-  background-color: rgba(80, 180, 100, 0.35) !important;
-}
-.phase-train {
-  background-color: rgba(210, 160, 60, 0.35) !important;
-}
+.phase-tech   { background-color: rgba(153, 102, 204, 0.35) !important; }
+.phase-raven  { background-color: rgba(70, 140, 200, 0.35) !important; }
+.phase-heroes { background-color: rgba(200, 80, 80, 0.35) !important; }
+.phase-build  { background-color: rgba(80, 180, 100, 0.35) !important; }
+.phase-train  { background-color: rgba(210, 160, 60, 0.35) !important; }
 
-/* Pinned Lists */
 .pinned-wrapper {
   position: relative;
   width: 100%;
@@ -965,14 +905,14 @@ dialog a.dialog-btn:hover {
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   padding-left: 20px;
-  scroll-padding-left: 20px; /* Padding for the snapping offset */
+  scroll-padding-left: 20px;
   touch-action: pan-x;
 }
 .pinned-section::-webkit-scrollbar {
   display: none;
 }
 .pinned-card {
-  scroll-snap-align: start; /* Snap target lock */
+  scroll-snap-align: start;
   min-width: 140px;
   background-color: var(--card-bg);
   padding: 15px;
@@ -994,7 +934,6 @@ dialog a.dialog-btn:hover {
   margin: 0;
 }
 
-/* Directories */
 .directories {
   display: flex;
   flex-direction: column;
@@ -1041,7 +980,6 @@ dialog a.dialog-btn:hover {
   font-size: 1.2rem;
 }
 
-/* Content Panes */
 .content-pane {
   background-color: rgba(20, 16, 14, 0.85);
   backdrop-filter: blur(8px);
@@ -1056,11 +994,9 @@ dialog a.dialog-btn:hover {
   animation: nativeAppFadeIn 0.5s cubic-bezier(0.3, 1, 0.3, 1) forwards;
   will-change: transform, opacity;
 }
- /*first pane*/
 .content-pane:first-child {
   margin-top: 1.2rem;
 }
- /*last pane*/
 .content-pane:last-child {
   margin-bottom: 1.2rem;
 }
@@ -1104,7 +1040,6 @@ dialog a.dialog-btn:hover {
   padding: 0 10px;
 }
 
-/* Utilities & Scroll Buttons */
 .unavailable {
   background-color: #4a0404 !important;
   color: #8b8b8b !important;
@@ -1164,10 +1099,8 @@ dialog a.dialog-btn:hover {
   right: -35px;
 }
 
-/* PWA Update Toast */
 #pwa-update-toast {
   position: fixed;
-  /* Shifted up slightly to clear the fixed footer naturally */
   bottom: calc(80px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%) translateY(100px);
@@ -1544,7 +1477,6 @@ svg.resource-icon {
    GAME MAP & WAR ROOM INTERFACE
    ========================================================================== */
 
-/* Disable Touch Highlighting */
 #map-container,
 .game-map svg,
 .game-map path,
@@ -1574,7 +1506,6 @@ svg g[inkscape\:label] path {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 0, 0, 0.6);
 }
 
-/* Container & Responsive SVG Wrapper */
 .game-map {
   width: 100%;
   display: flex;
@@ -1604,7 +1535,6 @@ svg g[inkscape\:label] path {
   user-select: none;
 }
 
-/* Interactive Territory Paths */
 #game-map path,
 .map-territory {
   cursor: pointer;
@@ -1627,13 +1557,11 @@ svg g[inkscape\:label] path {
   filter: brightness(1.4);
 }
 
-/* Status Overrides */
 #game-map[data-status="contested"] {
   stroke-dasharray: 6;
   animation: war-pulse 1.5s infinite alternate;
 }
 
-/* Floating Tooltip */
 #map-tooltip {
   display: none;
   position: absolute;
@@ -1648,7 +1576,6 @@ svg g[inkscape\:label] path {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* Command Intel Display Pane */
 #territory-intel-pane {
   margin-top: 15px;
   padding: 15px 20px;
@@ -1692,7 +1619,6 @@ svg #layer1 path:hover {
   animation: territory-flash 2s ease-in-out infinite alternate;
 }
 
-/* Territory Owner Text Labels */
 .territory-label {
   text-anchor: middle !important;
   dominant-baseline: central !important;
@@ -1707,7 +1633,6 @@ svg #layer1 path:hover {
   pointer-events: none;
 }
 
-/* Territory Info Readout Strip */
 .info-card {
   margin-top: 0.5rem;
   padding: 0.45rem 0.8rem;
@@ -1788,7 +1713,6 @@ svg #layer1 path:hover {
   }
 }
 
-/* Compact Map Controls Bar */
 .map-controls {
   display: flex;
   align-items: center;
@@ -1821,7 +1745,6 @@ svg #layer1 path:hover {
   color: var(--text-muted);
 }
 
-/* Segmented Control Switcher */
 .segmented-control {
   display: flex;
   background: #070504;
@@ -1854,7 +1777,6 @@ svg #layer1 path:hover {
   border-color: rgba(184, 151, 90, 0.4);
 }
 
-/* Draft Mode Toggle Button */
 .draft-btn {
   display: inline-flex;
   align-items: center;
@@ -1885,7 +1807,6 @@ svg #layer1 path:hover {
   transition: all 0.2s ease;
 }
 
-/* Active Planner Mode (Theme Glow) */
 .draft-btn[aria-pressed="true"] {
   background: rgba(217, 119, 6, 0.15);
   border-color: #f59e0b;
@@ -1898,7 +1819,6 @@ svg #layer1 path:hover {
   box-shadow: 0 0 8px rgba(var(--active-theme), 1);
 }
 
-/* Planner Alliance Override Input */
 #planner-override-container {
   display: inline-flex;
   align-items: center;
@@ -1935,7 +1855,6 @@ svg #layer1 path:hover {
   box-shadow: 0 0 8px rgba(184, 151, 90, 0.3);
 }
 
-/* Planner Alliance Active Buff Chip */
 .buff-chip {
   display: inline-flex;
   align-items: center;
@@ -1944,10 +1863,12 @@ svg #layer1 path:hover {
   border: 1px solid var(--border-color);
   color: var(--accent-color);
   font-size: 0.75rem;
-  padding: 0 0.5rem;
+  padding: 0 0.65rem;
   height: 28px;
   border-radius: 4px;
   white-space: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .buff-chip strong {
@@ -1958,12 +1879,11 @@ svg #layer1 path:hover {
   display: none !important;
 }
 
-/* Buff Equity Drawer */
 .buff-drawer {
   position: absolute;
   bottom: 16px;
   right: 16px;
-  width: 360px;
+  width: 380px;
   max-width: calc(100% - 32px);
   max-height: 480px;
   background: rgba(18, 14, 12, 0.96);
@@ -2035,7 +1955,6 @@ svg #layer1 path:hover {
    WAR ROOM: RESOURCE VIEW & LEGEND STYLING
    ========================================================================== */
 
-/* Resource View Legend Bar */
 .resource-legend {
   display: flex;
   align-items: center;
@@ -2086,6 +2005,7 @@ svg #layer1 path:hover {
 .chip-grain  { background-color: #e07a12; }
 .chip-timber { background-color: #4a2411; }
 .chip-herbs  { background-color: #059669; }
+.chip-iron   { background-color: #475569; }
 
 /* Special Tier Colors */
 .chip-capitol  { background-color: #facc15; }
@@ -2093,7 +2013,6 @@ svg #layer1 path:hover {
 .chip-research { background-color: #7c3aed; }
 .chip-building { background-color: #ea580c; }
 
-/* Pattern Indicators */
 .chip-pattern {
   width: 12px;
   height: 10px;
@@ -2165,10 +2084,27 @@ svg #layer1 path:hover {
   background: rgba(var(--active-theme), 0.2);
   border: 1px solid rgba(var(--active-theme-bright), 0.4);
   color: var(--text-main);
-  padding: 1px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   line-height: 1.3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.buff-badge strong {
+  color: #ffffff;
+}
+
+.buff-badge-count {
+  font-size: 0.65rem;
+  padding: 0 4px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 3px;
+  color: var(--accent-color);
+  font-weight: bold;
 }
 
 .buff-none,
@@ -2178,7 +2114,6 @@ svg #layer1 path:hover {
   font-size: 0.75rem;
 }
 
-/* Submit Strategy Button */
 .submit-plan-btn {
   display: inline-flex;
   align-items: center;
@@ -2223,7 +2158,6 @@ svg #layer1 path:hover {
    FULLSCREEN STACKING CONTEXT BREAKOUT & LAYOUT
    ========================================================================== */
 
-/* 1. Neutralize parent transforms & prevent background page scrolling */
 body.map-fullscreen-active {
   overflow: hidden !important;
   touch-action: none !important;
@@ -2240,7 +2174,6 @@ body.map-fullscreen-active turbo-frame {
   contain: none !important;
 }
 
-/* 2. Force the Map Container to 100% Viewport Bounds */
 #map-container.is-fullscreen {
   position: fixed !important;
   top: 0 !important;
@@ -2266,7 +2199,6 @@ body.map-fullscreen-active turbo-frame {
   overflow: hidden !important;
 }
 
-/* 3. Controls Header Grouping */
 #map-container.is-fullscreen .map-controls {
   width: calc(100% - 16px) !important; 
   max-width: 100% !important;
@@ -2274,7 +2206,6 @@ body.map-fullscreen-active turbo-frame {
   flex: 0 0 auto !important;
 }
 
-/* 4. Center & Fit the SVG Canvas */
 #map-container.is-fullscreen .game-map {
   flex: 0 1 auto !important;
   align-self: stretch !important;
@@ -2300,7 +2231,6 @@ body.map-fullscreen-active turbo-frame {
   margin: auto !important; 
 }
 
-/* 5. Bottom Readout Card Grouping */
 #map-container.is-fullscreen .info-card {
   width: calc(100% - 16px) !important;
   max-width: 100% !important;
@@ -2317,7 +2247,6 @@ body.map-fullscreen-active turbo-frame {
   margin: 1.5rem auto;
 }
 
-/* Controls Bar: Mobile-First 2-Row Stacked Layout */
 .rewards-wrapper .map-controls {
   flex-direction: column;
   align-items: stretch;
@@ -2339,7 +2268,6 @@ body.map-fullscreen-active turbo-frame {
   border-top: 1px dashed rgba(255, 255, 255, 0.07);
 }
 
-/* Header & Pool Subtitle */
 .rewards-header {
   text-align: center;
   margin-bottom: 0.8rem;
@@ -2362,7 +2290,6 @@ body.map-fullscreen-active turbo-frame {
   letter-spacing: 0.04em;
 }
 
-/* Active Hosting Week Toggle Switch */
 .toggle-switch {
   display: inline-flex;
   align-items: center;
@@ -2408,7 +2335,6 @@ body.map-fullscreen-active turbo-frame {
   box-shadow: 0 0 6px rgba(var(--active-theme-bright), 0.8);
 }
 
-/* Tier Breakdown Cards (Mobile-First: Stacked Layout) */
 .rewards-tier-list {
   display: flex;
   flex-direction: column;
@@ -2456,7 +2382,6 @@ body.map-fullscreen-active turbo-frame {
   font-weight: bold;
 }
 
-/* Fixed 3-Column Slot Grid for Chest Alignment */
 .tier-chests {
   width: 100%;
   display: grid;
@@ -2474,7 +2399,6 @@ body.map-fullscreen-active turbo-frame {
   gap: 4px;
 }
 
-/* Explicit Slot Placement */
 .chest-item[data-chest-type="commanders_will"] { grid-column: 1; }
 .chest-item[data-chest-type="loyal_servant"]    { grid-column: 2; }
 .chest-item[data-chest-type="followers_heart"]  { grid-column: 3; }
@@ -2485,7 +2409,6 @@ body.map-fullscreen-active turbo-frame {
   color: var(--text-main);
 }
 
-/* Chest Glyphs */
 .chest-glyph {
   width: 26px;
   height: 22px;
@@ -2516,7 +2439,6 @@ body.map-fullscreen-active turbo-frame {
   flex-shrink: 0;
 }
 
-/* Footnote Banner */
 .rewards-note {
   display: flex;
   align-items: center;
@@ -2539,7 +2461,6 @@ body.map-fullscreen-active turbo-frame {
   color: var(--text-main);
 }
 
-/* Empty Chest Display & Planner Mode Interactions */
 .chest-item.is-empty {
   display: none;
 }
@@ -2570,7 +2491,6 @@ body.map-fullscreen-active turbo-frame {
   filter: grayscale(0%);
 }
 
-/* Dynamic Tier Planner Controls */
 .planner-actions {
   display: flex;
   justify-content: center;
@@ -2594,7 +2514,6 @@ body.map-fullscreen-active turbo-frame {
   border-color: var(--accent-color);
 }
 
-/* Tier Row Actions (Delete & Range Steppers) */
 .tier-row-controls {
   display: none;
   align-items: center;
@@ -2671,7 +2590,6 @@ body.map-fullscreen-active turbo-frame {
 }
 
 @media (min-width: 600px) {
-  /* Restore 1-Row Inline Controls on Desktop */
   .rewards-wrapper .map-controls {
     flex-direction: row;
     align-items: center;
@@ -2724,7 +2642,6 @@ body.map-fullscreen-active turbo-frame {
   }
 }
 
-/* Smooth data-load transition (prevents flash of static fallback) */
 .rewards-tier-list,
 #payout-table-body {
   opacity: 0;
@@ -2737,43 +2654,7 @@ body.map-fullscreen-active turbo-frame {
 }
 
 /* ==========================================================================
-   DESKTOP / TABLET OVERRIDES (Single Horizontal Row)
-   ========================================================================== */
-@media (min-width: 600px) {
-  .rewards-tier-row {
-    flex-wrap: nowrap;
-    gap: 0;
-    padding: 0.6rem 1rem;
-  }
-
-  .tier-label-group {
-    width: auto;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    gap: 0.6rem;
-  }
-
-  .tier-chests {
-    width: auto;
-    grid-template-columns: repeat(3, 75px);
-    gap: 0.75rem;
-    padding-top: 0;
-    border-top: none;
-  }
-
-  .chest-item {
-    justify-content: flex-end;
-  }
-
-  #rewards-container.planner-active .chest-item {
-    padding: 0;
-    background: transparent;
-    border: none;
-  }
-}
-
-/* ==========================================================================
-   FEATURE: REWARD NOMINATIONS PORTAL (COMPACT HIGH-DENSITY PASS)
+   FEATURE: REWARD NOMINATIONS PORTAL
    ========================================================================== */
 
 .nominate-wrapper {
@@ -2801,7 +2682,6 @@ body.map-fullscreen-active turbo-frame {
   letter-spacing: 0.5px;
 }
 
-/* Smart Paste Area - Compact */
 .smart-paste-box {
   background: #080605;
   border: 1px dashed var(--border-color);
@@ -2834,7 +2714,6 @@ body.map-fullscreen-active turbo-frame {
   border-color: var(--accent-color);
 }
 
-/* Slot Groups & Inputs - High Density */
 .slot-group {
   margin-bottom: 0.65rem;
 }
@@ -2882,7 +2761,6 @@ body.map-fullscreen-active turbo-frame {
   background: #110d0b;
 }
 
-/* Utility overrides for existing buttons to span full width */
 .btn-fw {
   width: 100%;
   justify-content: center;
@@ -2898,7 +2776,6 @@ body.map-fullscreen-active turbo-frame {
   margin-top: 0.65rem;
 }
 
-/* Status Banners */
 .status-banner {
   padding: 0.75rem 1rem;
   border-radius: 5px;
@@ -2914,7 +2791,6 @@ body.map-fullscreen-active turbo-frame {
   color: #86efac;
 }
 
-/* King's Distribution Console - Compact */
 .distribute-item {
   display: flex;
   align-items: center;
@@ -3065,7 +2941,6 @@ body.map-fullscreen-active turbo-frame {
   100% { transform: translateY(-50px) translateX(20px); opacity: 0; }
 }
 
-/* Reduced Motion Configs */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-delay: -1ms !important;
@@ -3234,7 +3109,6 @@ body.map-fullscreen-active turbo-frame {
     font-size: 0.75rem;
   }
 
-  /* Fullscreen War Room: Desktop / Tablet Overrides */
   #map-container.is-fullscreen {
     justify-content: space-between !important;
     gap: 0 !important;
@@ -3279,7 +3153,6 @@ body.map-fullscreen-active turbo-frame {
   }
 }
 
-/* iOS Specific Adjustments */
 @supports (-webkit-touch-callout: none) {
   .lantern-header {
     padding-top: calc(env(safe-area-inset-top) - 8px) !important;
@@ -3318,7 +3191,6 @@ body.map-fullscreen-active turbo-frame {
    PORTAL / STANDALONE APP LAYOUT OVERRIDES
    ========================================================================== */
 
-/* 1. Jitter-Free Fixed Background Canvas */
 .portal-backdrop {
   position: fixed;
   top: 0;
@@ -3337,7 +3209,6 @@ body.map-fullscreen-active turbo-frame {
   will-change: transform;
 }
 
-/* 2. Unlocked Native Scroller (Scoped to Portal Pages Only) */
 html:has(.portal-body) {
   height: auto !important;
   min-height: 100% !important;
@@ -3360,7 +3231,6 @@ body.portal-body {
   -webkit-overflow-scrolling: touch !important;
 }
 
-/* 3. Transparent Layout Containers */
 body.portal-body #mobile-container {
   position: relative !important;
   height: auto !important;
@@ -3383,7 +3253,6 @@ body.portal-body main {
   touch-action: pan-y !important;
 }
 
-/* 4. Header Visibility Adjustments */
 body.portal-body.has-no-header #mobile-container {
   padding-top: 0 !important;
   margin-top: 0 !important;
@@ -3407,7 +3276,6 @@ body.portal-body.has-header #main-content {
   position: relative;
 }
 
-/* 5. Center Utility Panes & Mobile Portal Density */
 body.portal-body .content-pane {
   margin-left: auto !important;
   margin-right: auto !important;

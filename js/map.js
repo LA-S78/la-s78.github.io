@@ -47,9 +47,10 @@ export const LEVEL_COLORS = {
 };
 
 export const RESOURCE_PALETTE = {
-  grain: '#d97706',
-  timber: '#78350f',
+  grain: '#e07a12',
+  timber: '#4a2411',
   herbs: '#059669',
+  iron: '#475569',
   march: '#facc15',
   training: '#dc2626',
   research: '#7c3aed',
@@ -133,11 +134,12 @@ export function injectResourcePatterns(svgRoot) {
 
   defs.querySelectorAll('.resource-pattern').forEach(el => el.remove());
 
-  const resources = ['grain', 'timber', 'herbs'];
+  const resources = ['grain', 'timber', 'herbs', 'iron'];
   let patternMarkup = '';
 
   resources.forEach(res => {
     const baseColor = RESOURCE_PALETTE[res];
+    if (!baseColor) return;
     patternMarkup += `
       <pattern id="pat-prod-${res}" class="resource-pattern" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
         <rect width="10" height="10" fill="${baseColor}" />
@@ -171,7 +173,8 @@ export function getCityResourceProfile(city) {
   if (!res) {
     if (buffLower.includes('grain') || buffLower.includes('wheat') || buffLower.includes('food')) res = 'grain';
     else if (buffLower.includes('timber') || buffLower.includes('wood') || buffLower.includes('lumber')) res = 'timber';
-    else if (buffLower.includes('herb') || buffLower.includes('gold') || buffLower.includes('coin')) res = 'herbs';
+    else if (buffLower.includes('herb') || buffLower.includes('medicine')) res = 'herbs';
+    else if (buffLower.includes('iron') || buffLower.includes('steel') || buffLower.includes('metal')) res = 'iron';
   }
 
   if (!res || !RESOURCE_PALETTE[res]) {
@@ -180,7 +183,7 @@ export function getCityResourceProfile(city) {
 
   let isProduction = city.buff_type === 'production';
   if (!city.buff_type) {
-    isProduction = buffLower.includes('prod') || buffLower.includes('output') || buffLower.includes('yield');
+    isProduction = buffLower.includes('prod') || buffLower.includes('output') || buffLower.includes('yield') || !buffLower.includes('gather');
   }
 
   const fillValue = isProduction ? `url(#pat-prod-${res})` : RESOURCE_PALETTE[res];
@@ -196,8 +199,66 @@ export function getCityResourceProfile(city) {
 }
 
 // ==========================================================================
-// BUFF EQUITY & AGGREGATION UTILITIES
+// BUFF EQUITY & COMBINED AGGREGATION UTILITIES
 // ==========================================================================
+
+export function parseCityBuff(city) {
+  if (!city) return null;
+  const rawBuff = String(city.buff || '').trim();
+  const buffVal = city.buff_val;
+  const buffType = String(city.buff_type || '').toLowerCase();
+  const resource = String(city.resource || '').toLowerCase();
+
+  let val = 0;
+  let unit = '%';
+  const numMatch = rawBuff.match(/([+-]?\d+(?:\.\d+)?)\s*(%?)/);
+  if (numMatch) {
+    val = parseFloat(numMatch[1]) || 0;
+    if (numMatch[2]) unit = numMatch[2];
+  } else if (buffVal !== undefined && buffVal !== null && buffVal !== '') {
+    val = parseFloat(buffVal) || 0;
+    if (String(buffVal).includes('%')) unit = '%';
+  }
+
+  const rawName = rawBuff.replace(/([+-]?\d+(?:\.\d+)?)\s*%?/g, '').replace(/:\s*$/, '').trim();
+  let name = rawName;
+  const lower = (rawName + ' ' + buffType + ' ' + resource).toLowerCase();
+
+  if (lower.includes('research') || lower.includes('tech')) {
+    name = 'Research Speed';
+    if (!val) val = 10;
+  } else if (lower.includes('train')) {
+    name = 'Troop Training Speed';
+    if (!val) val = 10;
+  } else if (lower.includes('construct') || lower.includes('build')) {
+    name = 'Building Speed';
+    if (!val) val = 10;
+  } else if (lower.includes('march') || city.id === 'Royal_Castle' || city.level === 'Capitol') {
+    name = 'March Speed';
+    if (!val) val = 15;
+  } else if (lower.includes('grain') || lower.includes('wheat') || lower.includes('food')) {
+    name = lower.includes('gather') ? 'Grain Gathering' : 'Grain Output';
+    if (!val) val = 5;
+  } else if (lower.includes('timber') || lower.includes('wood') || lower.includes('lumber')) {
+    name = lower.includes('gather') ? 'Timber Gathering' : 'Timber Output';
+    if (!val) val = 5;
+  } else if (lower.includes('herb') || lower.includes('medicine')) {
+    name = lower.includes('gather') ? 'Herb Gathering' : 'Herb Output';
+    if (!val) val = 5;
+  } else if (lower.includes('iron') || lower.includes('steel') || lower.includes('metal')) {
+    name = lower.includes('gather') ? 'Iron Gathering' : 'Iron Output';
+    if (!val) val = 5;
+  }
+
+  if (!name) return null;
+
+  return {
+    key: name.toLowerCase().replace(/\s+/g, '_'),
+    name: name,
+    val: Math.abs(val),
+    unit: unit
+  };
+}
 
 export function calculateAllianceBuffSummary() {
   const summary = {};
@@ -205,7 +266,7 @@ export function calculateAllianceBuffSummary() {
 
   ranked.forEach(tag => {
     if (tag && tag !== 'Unclaimed') {
-      summary[tag] = { count: 0, cities: [], buffs: [] };
+      summary[tag] = { count: 0, cities: [], buffs: [], aggregatedBuffs: [] };
     }
   });
 
@@ -214,14 +275,50 @@ export function calculateAllianceBuffSummary() {
     if (!owner || owner === 'Unclaimed') return;
 
     if (!summary[owner]) {
-      summary[owner] = { count: 0, cities: [], buffs: [] };
+      summary[owner] = { count: 0, cities: [], buffs: [], aggregatedBuffs: [] };
     }
 
     summary[owner].count += 1;
     summary[owner].cities.push(city);
-    if (city.buff && String(city.buff).trim() !== '') {
-      summary[owner].buffs.push(String(city.buff).trim());
-    }
+  });
+
+  Object.keys(summary).forEach(owner => {
+    const buffMap = {};
+
+    summary[owner].cities.forEach(city => {
+      const parsed = parseCityBuff(city);
+      if (!parsed) return;
+
+      if (!buffMap[parsed.key]) {
+        buffMap[parsed.key] = {
+          name: parsed.name,
+          total: 0,
+          unit: parsed.unit,
+          count: 0,
+          cities: []
+        };
+      }
+
+      buffMap[parsed.key].total += parsed.val;
+      buffMap[parsed.key].count += 1;
+      buffMap[parsed.key].cities.push(city.name || city.id.replace(/_/g, ' '));
+    });
+
+    const aggList = Object.values(buffMap).map(b => ({
+      ...b,
+      label: `${b.name} +${b.total}${b.unit}`
+    }));
+
+    aggList.sort((a, b) => {
+      const isASpecial = a.name.includes('Speed');
+      const isBSpecial = b.name.includes('Speed');
+      if (isASpecial && !isBSpecial) return -1;
+      if (!isASpecial && isBSpecial) return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    summary[owner].aggregatedBuffs = aggList;
+    summary[owner].buffs = aggList.map(b => b.label);
   });
 
   return summary;
@@ -250,8 +347,13 @@ export function renderBuffSummaryDrawer() {
     const allianceColor = getAllianceColor(tag);
     const isEditing = activeOverride && tag.toLowerCase() === activeOverride;
 
-    const buffBadges = data.buffs.length > 0
-      ? data.buffs.map(b => `<span class="buff-badge">${b}</span>`).join('')
+    const buffBadges = data.aggregatedBuffs && data.aggregatedBuffs.length > 0
+      ? data.aggregatedBuffs.map(b => `
+          <span class="buff-badge" title="${b.count} ${b.count === 1 ? 'City' : 'Cities'}: ${b.cities.join(', ')}">
+            ${b.name} <strong>+${b.total}${b.unit}</strong>
+            ${b.count > 1 ? `<span class="buff-badge-count">×${b.count}</span>` : ''}
+          </span>
+        `).join('')
       : '<span class="buff-none">No active buffs assigned</span>';
 
     return `
@@ -310,11 +412,11 @@ export function updatePlannerBuffChip(targetTag = null) {
 
   const matchedTag = Object.keys(alliances).find(t => t.toLowerCase() === tag.toLowerCase()) || tag.toUpperCase();
   const summary = calculateAllianceBuffSummary();
-  const data = summary[matchedTag] || { count: 0, buffs: [] };
+  const data = summary[matchedTag] || { count: 0, buffs: [], aggregatedBuffs: [] };
 
-  const buffPreview = data.buffs.length > 0
-    ? data.buffs.slice(0, 2).join(', ') + (data.buffs.length > 2 ? ` (+${data.buffs.length - 2} more)` : '')
-    : 'Buffs pending';
+  const buffPreview = data.buffs && data.buffs.length > 0
+    ? data.buffs.join(' • ')
+    : 'No active bonuses';
 
   chip.innerHTML = `<strong>[${matchedTag}]</strong> • ${data.count} ${data.count === 1 ? 'City' : 'Cities'} • <span>${buffPreview}</span>`;
   chip.classList.remove('hidden');

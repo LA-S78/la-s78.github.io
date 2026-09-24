@@ -94,13 +94,13 @@ function getAllianceColor(tag, alliances = {}) {
 }
 
 function getResourceFill(cityId, city = {}) {
-  if (cityId === 'Royal_Castle') return '#eab308';
+  if (cityId === 'Royal_Castle') return '#eab308'; // Capitol Gold
 
   const resType = String(city.resource || '').toLowerCase();
   const buffType = String(city.buff_type || '').toLowerCase();
   const target = `${resType} ${buffType}`;
 
-  // Production Resources (Hatched Patterns)
+  // 1. Basic Production Resources (Hatched Patterns)
   if (target.includes('grain') || target.includes('wheat') || target.includes('food')) {
     return 'url(#pat-grain)';
   }
@@ -114,21 +114,18 @@ function getResourceFill(cityId, city = {}) {
     return 'url(#pat-herbs)';
   }
 
-  // Combat & Stat Buffs (Solid Tactical Fills)
-  if (target.includes('march') || target.includes('speed')) {
-    return '#eab308'; // Speed Gold
+  // 2. Level 6 Development Specializations (Solid Tactical Fills)
+  if (target.includes('research') || target.includes('tech')) {
+    return '#2563eb'; // Tech Sapphire
   }
-  if (target.includes('attack') || target.includes('might')) {
-    return '#dc2626'; // Attack Red
-  }
-  if (target.includes('defense') || target.includes('def')) {
-    return '#2563eb'; // Defense Blue
+  if (target.includes('construct') || target.includes('build')) {
+    return '#06b6d4'; // Blueprint Cyan
   }
   if (target.includes('train')) {
-    return '#9333ea'; // Training Purple
+    return '#9333ea'; // Barracks Purple
   }
 
-  return '#27272a'; // Base zinc for non-resource territories
+  return '#27272a'; // Neutral zinc for territories without active bonuses
 }
 
 async function getLiveMapState() {
