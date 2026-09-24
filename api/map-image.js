@@ -1,6 +1,7 @@
 // api/map-image.js
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 const AUTO_ALLIANCE_PALETTE = [
   '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
@@ -51,7 +52,7 @@ async function getLiveMapState() {
 }
 
 export default async function handler(req, res) {
-  // --- PHASE 1: TEST RESVG MODULE IMPORT ---
+  // --- PHASE 1: LOAD RESVG ---
   let Resvg;
   try {
     const resvgModule = await import('@resvg/resvg-js');
@@ -59,43 +60,44 @@ export default async function handler(req, res) {
   } catch (importErr) {
     return res.status(500).json({
       phase: '1_LOAD_RESVG_MODULE',
-      error: importErr.message,
-      stack: importErr.stack,
-      hint: 'The native binary for @resvg/resvg-js is missing or not installed in Vercels environment.'
+      error: importErr.message
     });
   }
 
   // --- PHASE 2: LOCATE map.svg ---
-  const cwd = process.cwd();
-  const candidatePaths = [
-    path.join(cwd, '_includes', 'map.svg'),
-    path.join(cwd, 'map.svg'),
-    path.resolve('_includes/map.svg')
+  let svg = null;
+  const attemptedPaths = [];
+
+  const candidates = [
+    new URL('./map.svg', import.meta.url),
+    new URL('../_includes/map.svg', import.meta.url),
+    path.join(process.cwd(), 'api', 'map.svg'),
+    path.join(process.cwd(), '_includes', 'map.svg')
   ];
 
-  const svgPath = candidatePaths.find(p => fs.existsSync(p));
-  if (!svgPath) {
-    let filesInCwd = [];
-    let filesInIncludes = [];
-    try { filesInCwd = fs.readdirSync(cwd); } catch (_) {}
-    try { filesInIncludes = fs.readdirSync(path.join(cwd, '_includes')); } catch (_) {}
+  for (const candidate of candidates) {
+    try {
+      const resolved = typeof candidate === 'string' ? candidate : fileURLToPath(candidate);
+      attemptedPaths.push(resolved);
+      if (fs.existsSync(resolved)) {
+        svg = fs.readFileSync(resolved, 'utf8');
+        break;
+      }
+    } catch (_) {}
+  }
 
+  if (!svg) {
     return res.status(500).json({
       phase: '2_LOCATE_SVG',
       error: 'Could not find map.svg in function container.',
-      cwd,
-      candidatePaths,
-      filesInCwd,
-      filesInIncludes,
-      hint: 'Vercel tree-shook the SVG file. vercel.json needs includeFiles.'
+      attemptedPaths,
+      hint: 'Ensure api/map.svg is committed to git.'
     });
   }
 
-  // --- PHASE 3: RASTERIZE ---
+  // --- PHASE 3: RASTERIZE TO PNG ---
   try {
-    let svg = fs.readFileSync(svgPath, 'utf8');
     const mapState = await getLiveMapState();
-
     const ownership = mapState?.territory_ownership || {};
     const alliances = mapState?.alliances || {};
 

@@ -182,6 +182,9 @@ jobs:
           echo "Running Workbox injector..."
           ruby -r ./_scripts/workbox_precache.rb -e "WorkboxInjector.run('_site')"
           
+          # Automatically sync map SVG asset into api/ for serverless rasterizer
+          cp _includes/map.svg api/map.svg
+
           cp -r api _site/
 
       - name: Uploading build artifacts
