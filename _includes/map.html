@@ -24,7 +24,7 @@
         <span class="draft-text">Planner Mode</span>
       </button>
 
-      <!-- Alliance Override Input & Live Buff Chip -->
+      <!-- Alliance Override Input -->
       <div id="planner-override-container" class="hidden">
         <input 
           type="text" 
@@ -35,7 +35,6 @@
           spellcheck="false"
           title="Type a tag to override click assignments. Leave blank to cycle." 
         />
-        <div id="planner-alliance-buff-chip" class="buff-chip hidden"></div>
       </div>
       
       <button id="btn-submit-proposal" class="submit-plan-btn hidden" disabled>
@@ -48,7 +47,7 @@
     </div>
   </div>
 
-  <!-- Resource Map Legend Strip (Compact Key: No Tallies, 3 Core Resources) -->
+  <!-- Resource Map Legend Strip (Compact Key: Resources Only) -->
   <div id="resource-map-legend" class="resource-legend hidden" aria-hidden="true">
     <div class="legend-group">
       <span class="legend-chip"><span class="chip-color chip-grain"></span> 🌾 Grain</span>
@@ -59,13 +58,6 @@
     <div class="legend-group">
       <span class="legend-chip"><span class="chip-pattern chip-solid"></span> Solid: Gather</span>
       <span class="legend-chip"><span class="chip-pattern chip-striped"></span> Stripe: Output</span>
-    </div>
-    <div class="legend-divider">|</div>
-    <div class="legend-group">
-      <span class="legend-chip"><span class="chip-color chip-capitol"></span> 👑 March</span>
-      <span class="legend-chip"><span class="chip-color chip-training"></span> ⚔️ Train</span>
-      <span class="legend-chip"><span class="chip-color chip-research"></span> 🔬 Tech</span>
-      <span class="legend-chip"><span class="chip-color chip-building"></span> 🏰 Build</span>
     </div>
   </div>
 

@@ -47,15 +47,25 @@ const AUTO_ALLIANCE_PALETTE = [
   '#38a169', '#00b5d8'
 ];
 
-const LEVEL_COLORS = {
-  1: '#334155', // Slate Dark
-  2: '#15803d', // Forest Green
-  3: '#0284c7', // Sky Blue
-  4: '#7e22ce', // Epic Purple
-  5: '#c2410c', // Fiery Orange
-  6: '#b91c1c', // Deep Crimson
-  7: '#ca8a04', // Amber
-  8: '#eab308'  // Golden Capitol
+const LEVEL_COLORS_BY_NUM = {
+  1: '#25bb00', // Lv 1 Green
+  2: '#cece00', // Lv 2 Yellow
+  3: '#e68e00', // Lv 3 Orange
+  4: '#a400af', // Lv 4 Purple
+  5: '#003fad', // Lv 5 Blue
+  6: '#8f0000', // Lv 6 Red
+  7: '#b29a20', // Gold
+  8: '#b29a20'  // Capitol Gold
+};
+
+const RESOURCE_PALETTE = {
+  grain: '#e07a12',
+  timber: '#4a2411',
+  herbs: '#059669',
+  march: '#facc15',
+  training: '#dc2626',
+  research: '#7c3aed',
+  building: '#ea580c'
 };
 
 // Normalize city lookup catalog
@@ -75,7 +85,7 @@ if (Array.isArray(rawCitiesData)) {
 }
 
 function getAllianceColor(tag, alliances = {}) {
-  if (!tag || tag === 'Unclaimed') return '#27272a';
+  if (!tag || tag === 'Unclaimed') return '#2d3748';
   if (alliances[tag]?.color) return alliances[tag].color;
 
   const rankedTags = Object.entries(alliances)
@@ -90,39 +100,106 @@ function getAllianceColor(tag, alliances = {}) {
   const tagIdx = allTags.indexOf(tag);
   if (tagIdx !== -1) return AUTO_ALLIANCE_PALETTE[tagIdx % AUTO_ALLIANCE_PALETTE.length];
 
-  return '#52525b';
+  return '#718096';
 }
 
-function getResourceFill(cityId, city = {}) {
-  if (cityId === 'Royal_Castle') return '#eab308'; // Capitol Gold
+function getCityLevelFill(cityId, city = {}) {
+  if (cityId === 'Royal_Castle') return '#b29a20';
+  const lvl = parseInt(city.level, 10);
+  if (!isNaN(lvl) && LEVEL_COLORS_BY_NUM[lvl]) {
+    return LEVEL_COLORS_BY_NUM[lvl];
+  }
+  const group = String(city.group || '').toLowerCase();
+  const groupMap = {
+    green: '#25bb00',
+    yellow: '#cece00',
+    orange: '#e68e00',
+    purple: '#a400af',
+    blue: '#003fad',
+    red: '#8f0000',
+    gold: '#b29a20'
+  };
+  return groupMap[group] || '#25bb00';
+}
 
-  const resType = String(city.resource || '').toLowerCase();
+function getCityResourceFill(cityId, city = {}) {
+  if (cityId === 'Royal_Castle' || city.level === 'Capitol') return RESOURCE_PALETTE.march;
+
+  const buff = String(city.buff || '').toLowerCase();
   const buffType = String(city.buff_type || '').toLowerCase();
-  const target = `${resType} ${buffType}`;
+  const res = String(city.resource || '').toLowerCase();
+  const combined = `${buff} ${buffType} ${res}`;
 
-  // 1. Basic Production Resources (Hatched Patterns)
-  if (target.includes('grain') || target.includes('wheat') || target.includes('food')) {
-    return 'url(#pat-grain)';
-  }
-  if (target.includes('timber') || target.includes('wood') || target.includes('lumber')) {
-    return 'url(#pat-timber)';
-  }
-  if (target.includes('herb') || target.includes('medicine')) {
-    return 'url(#pat-herbs)';
-  }
+  // Level 6 / Special Hubs
+  if (city.level === 6 || combined.includes('research') || combined.includes('tech')) return RESOURCE_PALETTE.research;
+  if (combined.includes('train')) return RESOURCE_PALETTE.training;
+  if (combined.includes('construct') || combined.includes('build')) return RESOURCE_PALETTE.building;
 
-  // 2. Level 6 Development Specializations (Solid Tactical Fills)
-  if (target.includes('research') || target.includes('tech')) {
-    return '#2563eb'; // Tech Sapphire
-  }
-  if (target.includes('construct') || target.includes('build')) {
-    return '#06b6d4'; // Blueprint Cyan
-  }
-  if (target.includes('train')) {
-    return '#9333ea'; // Barracks Purple
+  // Core 3 Resources
+  let matchedRes = null;
+  if (res.includes('grain') || combined.includes('grain') || combined.includes('wheat') || combined.includes('food')) {
+    matchedRes = 'grain';
+  } else if (res.includes('timber') || combined.includes('timber') || combined.includes('wood') || combined.includes('lumber')) {
+    matchedRes = 'timber';
+  } else if (res.includes('herb') || combined.includes('herb') || combined.includes('medicine')) {
+    matchedRes = 'herbs';
   }
 
-  return '#27272a'; // Neutral zinc for territories without active bonuses
+  if (!matchedRes) return '#2d3748';
+
+  // Production uses the diagonal hatch pattern; Gathering uses the solid color
+  const isProduction = buffType === 'production' || combined.includes('prod') || combined.includes('output') || combined.includes('yield') || !combined.includes('gather');
+  return isProduction ? `url(#pat-${matchedRes})` : RESOURCE_PALETTE[matchedRes];
+}
+
+/**
+ * Directly rewrites the fill attributes on the SVG element matching cityId.
+ * Bypasses Resvg CSS limitations by mutating path/polygon elements directly.
+ */
+function applyFillToTerritory(svg, cityId, fillColor) {
+  const alt1 = cityId;
+  const alt2 = cityId.replace(/_/g, ' ');
+  const alt3 = cityId.replace(/_s_/g, "'s ").replace(/_/g, ' ');
+  const alt4 = cityId.replace(/_s_/g, "&#39;s ").replace(/_/g, ' ');
+
+  const escapeRegex = s => s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const idPattern = Array.from(new Set([alt1, alt2, alt3, alt4])).map(escapeRegex).join('|');
+
+  // Case 1: Territory is a group <g ... (id|inkscape:label)="...">(content)</g>
+  const groupRegex = new RegExp(`(<g\\b[^>]*?\\b(?:id|inkscape:label)=["'](?:${idPattern})["'][^>]*>)([\\s\\S]*?)(<\\/g>)`, 'i');
+  if (groupRegex.test(svg)) {
+    return svg.replace(groupRegex, (match, openTag, inner, closeTag) => {
+      let updated = inner.replace(/(<(?:path|polygon|rect|circle)\b[^>]*?)\bfill=["'][^"']*["']/gi, `$1fill="${fillColor}"`);
+      updated = updated.replace(/(<(?:path|polygon|rect|circle)\b(?:(?!fill=)[^>])*)>/gi, `$1 fill="${fillColor}">`);
+      updated = updated.replace(/style=["']([^"']*)["']/gi, (m, st) => {
+        const clean = st.replace(/fill\s*:\s*[^;"]+;?/gi, '');
+        return `style="${clean};fill:${fillColor}"`;
+      });
+      return `${openTag}${updated}${closeTag}`;
+    });
+  }
+
+  // Case 2: Territory is a single tag: <path ... (id|inkscape:label)="..." ...>
+  const leafRegex = new RegExp(`(<(?:path|polygon|rect|circle)\\b[^>]*?\\b(?:id|inkscape:label)=["'](?:${idPattern})["'][^>]*?)>`, 'i');
+  if (leafRegex.test(svg)) {
+    return svg.replace(leafRegex, (match, tagBody) => {
+      let updated = tagBody;
+      if (/\bfill=["'][^"']*["']/i.test(updated)) {
+        updated = updated.replace(/\bfill=["'][^"']*["']/i, `fill="${fillColor}"`);
+      } else {
+        updated += ` fill="${fillColor}"`;
+      }
+      if (/style=["'][^"']*["']/i.test(updated)) {
+        updated = updated.replace(/style=["']([^"']*)["']/i, (m, st) => {
+          const clean = st.replace(/fill\s*:\s*[^;"]+;?/gi, '');
+          return `style="${clean};fill:${fillColor}"`;
+        });
+      }
+      return `${updated}>`;
+    });
+  }
+
+  return svg;
 }
 
 async function getLiveMapState() {
@@ -164,8 +241,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'map_svg module failed to load.' });
     }
 
-    // Default view is 'level'
-    let rawView = String(req.query.view || req.query.mode || 'level').toLowerCase();
+    const rawView = String(req.query.view || req.query.mode || 'level').toLowerCase();
     let view = 'level';
     if (rawView.startsWith('alliance')) view = 'alliance';
     if (rawView.startsWith('resource')) view = 'resource';
@@ -174,36 +250,28 @@ export default async function handler(req, res) {
     const ownership = mapState?.territory_ownership || {};
     const alliances = mapState?.alliances || {};
 
-    const cssRules = [
-      'path, polygon, rect, circle { stroke: #000000; stroke-width: 1.5px; stroke-linejoin: round; }'
-    ];
-
     let labelElements = '';
+    let modifiedSvg = svg;
 
-    // Iterate through all mapped territories
+    // 1. Recolor each territory directly on the SVG markup
     Object.keys(centroids).forEach((cityId) => {
       const city = CITIES_MAP[cityId] || CITIES_MAP[cityId.replace(/_/g, ' ')] || {};
       const ownerData = ownership[cityId];
       const owner = typeof ownerData === 'string' ? ownerData : (ownerData?.owner || 'Unclaimed');
       const isOwned = owner && owner !== 'Unclaimed';
 
-      let fillColor = '#27272a';
-
-      // 1. Determine Territory Color based on View
-      if (view === 'level') {
-        const lvl = city.level || (cityId === 'Royal_Castle' ? 8 : 1);
-        fillColor = LEVEL_COLORS[lvl] || LEVEL_COLORS[1];
-      } else if (view === 'alliance') {
-        fillColor = isOwned ? getAllianceColor(owner, alliances) : '#27272a';
+      let targetFill = '#2d3748';
+      if (view === 'alliance') {
+        targetFill = isOwned ? getAllianceColor(owner, alliances) : '#2d3748';
       } else if (view === 'resource') {
-        fillColor = getResourceFill(cityId, city);
+        targetFill = getCityResourceFill(cityId, city);
+      } else {
+        targetFill = getCityLevelFill(cityId, city);
       }
 
-      cssRules.push(
-        `#${cityId}, #${cityId} * { fill: ${fillColor} !important; fill-opacity: 0.9 !important; }`
-      );
+      modifiedSvg = applyFillToTerritory(modifiedSvg, cityId, targetFill);
 
-      // 2. Render Text Labels (Alliance Names ONLY on claimed territories across ALL views)
+      // 2. Build Text Labels (Alliance Names ONLY on claimed territories across ALL views)
       if (isOwned && centroids[cityId]) {
         const center = centroids[cityId];
         const override = LABEL_OVERRIDES[cityId] || {};
@@ -232,30 +300,37 @@ export default async function handler(req, res) {
       }
     });
 
-    // SVG Pattern Definitions for Resource View (Production Diagonal Hatches)
-    const resourcePatternDefs = `
-    <defs>
-      <pattern id="pat-grain" width="16" height="16" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-        <rect width="16" height="16" fill="#e07a12" />
-        <line x1="0" y1="0" x2="0" y2="16" stroke="#000000" stroke-width="3.5" stroke-opacity="0.32" />
-      </pattern>
-      <pattern id="pat-timber" width="16" height="16" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-        <rect width="16" height="16" fill="#4a2411" />
-        <line x1="0" y1="0" x2="0" y2="16" stroke="#000000" stroke-width="3.5" stroke-opacity="0.32" />
-      </pattern>
-      <pattern id="pat-herbs" width="16" height="16" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-        <rect width="16" height="16" fill="#059669" />
-        <line x1="0" y1="0" x2="0" y2="16" stroke="#000000" stroke-width="3.5" stroke-opacity="0.32" />
-      </pattern>
-    </defs>
+    // Clean, crisp stroke rule on all path elements
+    const baseStyle = `
+      <style>
+        path, polygon, rect, circle { stroke: #000000 !important; stroke-width: 1.5px !important; stroke-linejoin: round !important; }
+      </style>
     `;
 
-    // Inject styles, patterns, and labels
-    svg = svg.replace(/<svg[^>]*>/, `$&${resourcePatternDefs}<style>\n${cssRules.join('\n')}\n</style>`);
-    svg = svg.replace(/<\/svg>/, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
+    // Production diagonal patterns for Grain, Timber, Herbs
+    const resourcePatternDefs = `
+      <defs>
+        <pattern id="pat-grain" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+          <rect width="10" height="10" fill="#e07a12" />
+          <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
+        </pattern>
+        <pattern id="pat-timber" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+          <rect width="10" height="10" fill="#4a2411" />
+          <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
+        </pattern>
+        <pattern id="pat-herbs" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+          <rect width="10" height="10" fill="#059669" />
+          <line x1="0" y1="0" x2="0" y2="10" stroke="#000000" stroke-width="3.5" stroke-opacity="0.45" />
+        </pattern>
+      </defs>
+    `;
+
+    // Inject patterns, base stroke styles, and text labels
+    modifiedSvg = modifiedSvg.replace(/<svg[^>]*>/, `$&${resourcePatternDefs}${baseStyle}`);
+    modifiedSvg = modifiedSvg.replace(/<\/svg>/, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
 
     const fontFiles = fs.existsSync(FONT_PATH) ? [FONT_PATH] : [];
-    const resvg = new Resvg(svg, {
+    const resvg = new Resvg(modifiedSvg, {
       fitTo: { mode: 'width', value: 1200 },
       background: '#120f0d',
       font: {

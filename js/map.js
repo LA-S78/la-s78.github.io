@@ -383,41 +383,6 @@ export function renderBuffSummaryDrawer() {
   `;
 }
 
-export function updatePlannerBuffChip(targetTag = null) {
-  const chip = document.getElementById('planner-alliance-buff-chip');
-  if (!chip) return;
-
-  if (!isPlannerActive) {
-    chip.classList.add('hidden');
-    chip.style.display = 'none';
-    return;
-  }
-
-  let tag = targetTag;
-  if (!tag) {
-    const input = document.getElementById('alliance-override');
-    tag = input ? input.value.trim() : '';
-  }
-
-  if (!tag) {
-    chip.classList.add('hidden');
-    chip.style.display = 'none';
-    return;
-  }
-
-  const matchedTag = Object.keys(alliances).find(t => t.toLowerCase() === tag.toLowerCase()) || tag.toUpperCase();
-  const summary = calculateAllianceBuffSummary();
-  const data = summary[matchedTag] || { count: 0, buffs: [], aggregatedBuffs: [] };
-
-  const buffPreview = data.buffs && data.buffs.length > 0
-    ? data.buffs.join(' • ')
-    : 'No active bonuses';
-
-  chip.innerHTML = `<strong>[${matchedTag}]</strong> • ${data.count} ${data.count === 1 ? 'City' : 'Cities'} • <span>${buffPreview}</span>`;
-  chip.classList.remove('hidden');
-  chip.style.display = 'inline-flex';
-}
-
 export function toggleBuffSummaryDrawer(forceState = null) {
   const drawer = document.getElementById('buff-equity-drawer');
   const btn = document.getElementById('btn-toggle-buffs');
@@ -780,7 +745,6 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
       badgeEl.classList.add('hidden');
       badgeEl.style.display = 'none';
     }
-    updatePlannerBuffChip(null);
     if (isBuffDrawerOpen) renderBuffSummaryDrawer();
     return;
   }
@@ -810,7 +774,6 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
     }
   }
 
-  updatePlannerBuffChip();
   if (isBuffDrawerOpen) renderBuffSummaryDrawer();
 }
 
@@ -936,7 +899,6 @@ export function bindMapControls(svgRoot = null) {
   if (allianceInput && !allianceInput.dataset.bound) {
     allianceInput.dataset.bound = 'true';
     allianceInput.addEventListener('input', () => {
-      updatePlannerBuffChip(allianceInput.value.trim());
       if (isBuffDrawerOpen) renderBuffSummaryDrawer();
     });
   }

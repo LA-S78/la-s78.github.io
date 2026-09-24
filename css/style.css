@@ -1855,30 +1855,6 @@ svg #layer1 path:hover {
   box-shadow: 0 0 8px rgba(184, 151, 90, 0.3);
 }
 
-.buff-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #070504;
-  border: 1px solid var(--border-color);
-  color: var(--accent-color);
-  font-size: 0.75rem;
-  padding: 0 0.65rem;
-  height: 28px;
-  border-radius: 4px;
-  white-space: nowrap;
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-.buff-chip strong {
-  color: #fff;
-}
-
-.buff-chip.hidden {
-  display: none !important;
-}
-
 .buff-drawer {
   position: absolute;
   bottom: 16px;
@@ -2014,12 +1990,6 @@ svg #layer1 path:hover {
 .chip-grain  { background-color: #e07a12; }
 .chip-timber { background-color: #4a2411; }
 .chip-herbs  { background-color: #059669; }
-
-/* Special Tier Colors */
-.chip-capitol  { background-color: #facc15; }
-.chip-training { background-color: #dc2626; }
-.chip-research { background-color: #7c3aed; }
-.chip-building { background-color: #ea580c; }
 
 .chip-pattern {
   width: 12px;
@@ -2720,6 +2690,7 @@ body.map-fullscreen-active turbo-frame {
 .smart-paste-box textarea:focus {
   outline: none;
   border-color: var(--accent-color);
+  background: #110d0b;
 }
 
 .slot-group {
@@ -2760,7 +2731,7 @@ body.map-fullscreen-active turbo-frame {
   padding: 0 8px;
   font-size: 0.78rem;
   font-family: var(--font-body);
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .slot-input:focus {
