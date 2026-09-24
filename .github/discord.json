@@ -223,8 +223,20 @@
     },
     {
       "name": "map",
-      "description": "View the live territory map and latest snapshot",
-      "type": 1
+      "description": "View live Last Asylum territory map",
+      "options": [
+        {
+          "name": "view",
+          "description": "Select the map layer to display",
+          "type": 3,
+          "required": false,
+          "choices": [
+            { "name": "🛡️ Alliances (Default)", "value": "alliance" },
+            { "name": "🏰 Territory Levels", "value": "level" },
+            { "name": "🌾 Resources & Regional Buffs", "value": "resource" }
+          ]
+        }
+      ]
     }
   ]
 }
