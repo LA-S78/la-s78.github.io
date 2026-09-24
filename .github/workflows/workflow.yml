@@ -185,145 +185,22 @@ jobs:
           ruby -r json -e '
             svg_text = File.read("_includes/map.svg")
             File.write("api/map_svg.js", "export default " + JSON.generate(svg_text) + ";\n")
+            puts "✅ Generated api/map_svg.js"
           '
 
-          # 2. Comprehensive Centroid Extractor (Matches <g>, <path>, <polygon>, and inkscape:label)
-          ruby -r yaml -r json -e '
-            cities_data = YAML.load_file("_data/cities.yml") rescue {}
-            catalog_ids = cities_data.keys
-            svg = File.read("_includes/map.svg")
-            centroids = {}
-
-            extract_points = lambda do |snippet|
-              pts_x = []
-              pts_y = []
-              
-              # Extract path d coordinates
-              snippet.scan(/\bd=["\x27]([^"\x27]+)["\x27]/i) do |(d)|
-                cur_x = 0.0
-                cur_y = 0.0
-                d.scan(/([a-df-z])([^a-df-z]*)/i) do |cmd, args_str|
-                  nums = args_str.scan(/[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?/).map(&:to_f)
-                  is_rel = (cmd == cmd.downcase)
-                  case cmd.upcase
-                  when "M", "L", "T"
-                    nums.each_slice(2) do |x, y|
-                      break unless x && y
-                      cur_x = is_rel ? cur_x + x : x
-                      cur_y = is_rel ? cur_y + y : y
-                      pts_x << cur_x; pts_y << cur_y
-                    end
-                  when "H"
-                    nums.each { |x| cur_x = is_rel ? cur_x + x : x; pts_x << cur_x }
-                  when "V"
-                    nums.each { |y| cur_y = is_rel ? cur_y + y : y; pts_y << cur_y }
-                  when "C"
-                    nums.each_slice(6) do |_x1, _y1, _x2, _y2, x, y|
-                      break unless x && y
-                      cur_x = is_rel ? cur_x + x : x
-                      cur_y = is_rel ? cur_y + y : y
-                      pts_x << cur_x; pts_y << cur_y
-                    end
-                  when "S", "Q"
-                    nums.each_slice(4) do |_x1, _y1, x, y|
-                      break unless x && y
-                      cur_x = is_rel ? cur_x + x : x
-                      cur_y = is_rel ? cur_y + y : y
-                      pts_x << cur_x; pts_y << cur_y
-                    end
-                  when "A"
-                    nums.each_slice(7) do |_rx, _ry, _rot, _laf, _sf, x, y|
-                      break unless x && y
-                      cur_x = is_rel ? cur_x + x : x
-                      cur_y = is_rel ? cur_y + y : y
-                      pts_x << cur_x; pts_y << cur_y
-                    end
-                  end
-                end
-              end
-
-              # Extract polygon points coordinates
-              snippet.scan(/\bpoints=["\x27]([^"\x27]+)["\x27]/i) do |(pts_str)|
-                nums = pts_str.scan(/[-+]?(?:\d*\.\d+|\d+)/).map(&:to_f)
-                nums.each_slice(2) { |x, y| pts_x << x; pts_y << y if x && y }
-              end
-
-              [pts_x, pts_y]
-            end
-
-            # Map directly by catalog IDs (checks id and inkscape:label)
-            catalog_ids.each do |cid|
-              escaped_id = Regexp.escape(cid)
-              escaped_label = Regexp.escape(cid.tr("_", " "))
-              
-              # Check for group tag <g ...>...</g>
-              pattern_g = /<g\b[^>]*?(?:id=["\x27]#{escaped_id}["\x27]|inkscape:label=["\x27](#{escaped_id}|#{escaped_label})["\x27])[^>]*>(.*?)<\/g>/im
-              if (m = svg.match(pattern_g))
-                xs, ys = extract_points.call(m[0])
-                if xs.any? && ys.any?
-                  centroids[cid] = {
-                    "x" => ((xs.min + xs.max) / 2.0).round(1),
-                    "y" => ((ys.min + ys.max) / 2.0).round(1),
-                    "width" => (xs.max - xs.min).round(1),
-                    "height" => (ys.max - ys.min).round(1)
-                  }
-                  next
-                end
-              end
-
-              # Check for self-closing or leaf tags (<path>, <polygon>, <rect>)
-              pattern_leaf = /<(?:path|polygon|rect)\b[^>]*?(?:id=["\x27]#{escaped_id}["\x27]|inkscape:label=["\x27](#{escaped_id}|#{escaped_label})["\x27])[^>]*>/im
-              if (m = svg.match(pattern_leaf))
-                xs, ys = extract_points.call(m[0])
-                if xs.any? && ys.any?
-                  centroids[cid] = {
-                    "x" => ((xs.min + xs.max) / 2.0).round(1),
-                    "y" => ((ys.min + ys.max) / 2.0).round(1),
-                    "width" => (xs.max - xs.min).round(1),
-                    "height" => (ys.max - ys.min).round(1)
-                  }
-                end
-              end
-            end
-
-            # Fallback: scan any remaining paths/polygons with an ID
-            svg.scan(/<(path|polygon)\b([^>]+)>/i) do |_tag, attrs|
-              id = attrs[/id=["\x27]([^"\x27]+)["\x27]/, 1]
-              next unless id && !centroids.key?(id)
-              next if id == "layer1" || id.start_with?("defs") || id.include?("label")
-              xs, ys = extract_points.call(attrs)
-              if xs.any? && ys.any?
-                centroids[id] = {
-                  "x" => ((xs.min + xs.max) / 2.0).round(1),
-                  "y" => ((ys.min + ys.max) / 2.0).round(1),
-                  "width" => (xs.max - xs.min).round(1),
-                  "height" => (ys.max - ys.min).round(1)
-                }
-              end
-            end
-
-            File.write("api/centroids.js", "export default " + JSON.generate(centroids) + ";\n")
-            matched = catalog_ids.count { |c| centroids.key?(c) }
-            puts "✅ Centroid calculation complete: Matched #{matched}/#{catalog_ids.size} catalog cities (Total targets: #{centroids.size})."
-          '
-
-          # 3. Base64-encode runner system font into in-memory JS module
+          # 2. Extract runner DejaVuSans-Bold TTF into an in-memory Base64 JS module
           ruby -r base64 -e '
             candidates = [
-              "_assets/fonts/Oswald-Bold.ttf",
-              "_assets/fonts/font.ttf",
               "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
               "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
               "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
             ]
-            font_path = candidates.find { |p| File.exist?(p) && File.size(p) > 1000 }
-            font_path ||= Dir.glob("/usr/share/fonts/**/{*Bold*,*bold*,*DejaVu*,*Liberation*}.ttf").first
-            font_path ||= Dir.glob("/usr/share/fonts/**/*.ttf").first
+            font_path = candidates.find { |p| File.exist?(p) } || Dir.glob("/usr/share/fonts/**/*.ttf").first
 
             if font_path
               b64 = Base64.strict_encode64(File.binread(font_path))
               File.write("api/font_data.js", "export default \"" + b64 + "\";\n")
-              puts "✅ In-memory font module generated from #{font_path} (#{File.size(font_path) / 1024} KB)."
+              puts "✅ In-memory font module generated from #{font_path}."
             else
               File.write("api/font_data.js", "export default \"\";\n")
               puts "⚠️ Warning: No system font found."

@@ -87,8 +87,8 @@ async function getLiveMapState() {
   }
 }
 
-// Write font to Lambda writable /tmp directory on cold start
-const FONT_PATH = '/tmp/map_font.ttf';
+// Write font to Lambda writable /tmp storage on cold start
+const FONT_PATH = '/tmp/DejaVuSans-Bold.ttf';
 if (fontBase64 && fontBase64.length > 100 && !fs.existsSync(FONT_PATH)) {
   try {
     fs.writeFileSync(FONT_PATH, Buffer.from(fontBase64, 'base64'));
@@ -108,14 +108,13 @@ export default async function handler(req, res) {
     const ownership = mapState?.territory_ownership || {};
     const alliances = mapState?.alliances || {};
 
-    // Support runtime diagnostic check: /api/map-image?debug=1
+    // Diagnostic route: visit /api/map-image?debug=1 in browser
     if (req.query.debug) {
       return res.status(200).json({
         totalCentroids: Object.keys(centroids).length,
         centroidSample: Object.entries(centroids).slice(0, 5),
         totalOwnership: Object.keys(ownership).length,
         ownershipSample: Object.entries(ownership).slice(0, 5),
-        fontBase64Length: (fontBase64 || '').length,
         fontFileExists: fs.existsSync(FONT_PATH),
         fontFileSize: fs.existsSync(FONT_PATH) ? fs.statSync(FONT_PATH).size : 0
       });
@@ -144,14 +143,14 @@ export default async function handler(req, res) {
 
         const maxAllowedWidth = center.width * 0.75;
         const maxAllowedHeight = center.height * 0.65;
-        const maxFontSizeByWidth = maxAllowedWidth / (owner.length * 0.52);
+        const maxFontSizeByWidth = maxAllowedWidth / (owner.length * 0.55);
         let fontSize = Math.max(12, Math.min(48, maxFontSizeByWidth, maxAllowedHeight));
         if (override.scale) fontSize *= override.scale;
 
         const strokeWidth = Math.max(2, Math.round(fontSize * 0.16));
         const safeOwner = owner.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-weight="bold" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="${strokeWidth}px" stroke-linejoin="round" paint-order="stroke fill">${safeOwner}</text>`;
+        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="DejaVu Sans, sans-serif" font-weight="bold" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="${strokeWidth}px" stroke-linejoin="round" paint-order="stroke fill">${safeOwner}</text>`;
 
         if (override.rotate) {
           textTag = `<g transform="rotate(${override.rotate}, ${finalX.toFixed(1)}, ${finalY.toFixed(1)})">${textTag}</g>`;
@@ -171,6 +170,7 @@ export default async function handler(req, res) {
       background: '#120f0d',
       font: {
         fontFiles: fontFiles,
+        defaultFontFamily: 'DejaVu Sans',
         loadSystemFonts: true
       }
     };
