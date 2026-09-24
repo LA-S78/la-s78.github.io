@@ -102,22 +102,31 @@
       ]
     },
     {
-      "name": "map",
-      "description": "View live Last Asylum territory map",
-      "options": [
+  "name": "map",
+  "description": "View live Last Asylum territory map",
+  "options": [
+    {
+      "name": "view",
+      "description": "Select map view (Levels, Alliances, or Resources)",
+      "type": 3,
+      "required": false,
+      "choices": [
         {
-          "name": "view",
-          "description": "Select the map layer to display",
-          "type": 3,
-          "required": false,
-          "choices": [
-            { "name": "🛡️ Alliances (Default)", "value": "alliance" },
-            { "name": "🏰 Territory Levels", "value": "level" },
-            { "name": "🌾 Resources & Regional Buffs", "value": "resource" }
-          ]
+          "name": "🏰 Territory Levels (Default)",
+          "value": "level"
+        },
+        {
+          "name": "🛡️ Alliances",
+          "value": "alliance"
+        },
+        {
+          "name": "🌾 Resources & Regional Buffs",
+          "value": "resource"
         }
       ]
     }
+  ]
+}
   ],
   "wlo": [
     {
@@ -222,21 +231,30 @@
       ]
     },
     {
-      "name": "map",
-      "description": "View live Last Asylum territory map",
-      "options": [
+  "name": "map",
+  "description": "View live Last Asylum territory map",
+  "options": [
+    {
+      "name": "view",
+      "description": "Select map view (Levels, Alliances, or Resources)",
+      "type": 3,
+      "required": false,
+      "choices": [
         {
-          "name": "view",
-          "description": "Select the map layer to display",
-          "type": 3,
-          "required": false,
-          "choices": [
-            { "name": "🛡️ Alliances (Default)", "value": "alliance" },
-            { "name": "🏰 Territory Levels", "value": "level" },
-            { "name": "🌾 Resources & Regional Buffs", "value": "resource" }
-          ]
+          "name": "🏰 Territory Levels (Default)",
+          "value": "level"
+        },
+        {
+          "name": "🛡️ Alliances",
+          "value": "alliance"
+        },
+        {
+          "name": "🌾 Resources & Regional Buffs",
+          "value": "resource"
         }
       ]
     }
+  ]
+}
   ]
 }

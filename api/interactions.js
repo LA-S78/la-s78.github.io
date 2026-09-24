@@ -397,7 +397,7 @@ export default async function handler(req, res) {
     // --- /map COMMAND (Direct Live Generated Preview with View Argument) ---
     if (name === 'map') {
       try {
-        let selectedView = 'alliance';
+        let selectedView = 'level'; // Default to level view
         const viewOpt = options?.find(opt => opt.name === 'view');
         if (viewOpt?.value) {
           selectedView = String(viewOpt.value).toLowerCase();
@@ -405,34 +405,43 @@ export default async function handler(req, res) {
           selectedView = String(viewOpt.options[0].value).toLowerCase();
         }
 
-        const mapStrings = t?.map || FALLBACK_BOT_STRINGS.map;
-        const viewStrings = mapStrings?.views?.[selectedView] || FALLBACK_BOT_STRINGS.map.views[selectedView] || FALLBACK_BOT_STRINGS.map.views.alliance;
+        const titles = {
+          level: "🏰 Last Asylum: Territory Levels",
+          alliance: "🗺️ Last Asylum: Alliance Territories",
+          resource: "🌾 Last Asylum: Resources & Regional Buffs"
+        };
+
+        const descriptions = {
+          level: "Territories categorized by tier (Lv. 1 to Lv. 8).",
+          alliance: "Territories colored by alliance ownership.",
+          resource: "Territories colored by resource yields and regional buffs."
+        };
 
         const embedColors = {
-          alliance: 0x0070f3,
           level: 0xca8a04,
+          alliance: 0x0070f3,
           resource: 0x059669
         };
 
-        // Appending &ext=.png satisfies Discord's image proxy regex requirement
+        // Unique timestamp and extension for Discord proxy validation
         const mapImageUrl = `https://${resolvedHost}/api/map-image?view=${selectedView}&t=${Date.now()}&ext=.png`;
 
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             embeds: [{
-              title: viewStrings.title,
-              description: viewStrings.description,
-              color: embedColors[selectedView] || 0x0070f3,
+              title: titles[selectedView] || titles.level,
+              description: descriptions[selectedView] || descriptions.level,
+              color: embedColors[selectedView] || 0xca8a04,
               image: { url: mapImageUrl },
-              footer: { text: mapStrings.footer || FALLBACK_BOT_STRINGS.map.footer }
+              footer: { text: "Use /map [view] to switch views (Levels, Alliances, Resources)" }
             }],
             components: [{
               type: 1,
               components: [{
                 type: 2,
                 style: 5, // Link Button
-                label: mapStrings.button || FALLBACK_BOT_STRINGS.map.button,
+                label: t?.map?.button || "Open Interactive Web Map",
                 url: `https://${resolvedHost}/${lang}/map.html`
               }]
             }]
