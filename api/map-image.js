@@ -1,4 +1,5 @@
 // api/map-image.js
+import fs from 'fs';
 import { Resvg } from '@resvg/resvg-js';
 import rawSvg from './map_svg.js';
 import centroids from './centroids.js';
@@ -86,7 +87,15 @@ async function getLiveMapState() {
   }
 }
 
-const fontBuffer = (fontBase64 && fontBase64.length > 100) ? Buffer.from(fontBase64, 'base64') : null;
+// Write font to Lambda writable /tmp directory on cold start
+const FONT_PATH = '/tmp/map_font.ttf';
+if (fontBase64 && fontBase64.length > 100 && !fs.existsSync(FONT_PATH)) {
+  try {
+    fs.writeFileSync(FONT_PATH, Buffer.from(fontBase64, 'base64'));
+  } catch (err) {
+    console.warn('Could not write font to /tmp:', err);
+  }
+}
 
 export default async function handler(req, res) {
   try {
@@ -98,6 +107,19 @@ export default async function handler(req, res) {
     const mapState = await getLiveMapState();
     const ownership = mapState?.territory_ownership || {};
     const alliances = mapState?.alliances || {};
+
+    // Support runtime diagnostic check: /api/map-image?debug=1
+    if (req.query.debug) {
+      return res.status(200).json({
+        totalCentroids: Object.keys(centroids).length,
+        centroidSample: Object.entries(centroids).slice(0, 5),
+        totalOwnership: Object.keys(ownership).length,
+        ownershipSample: Object.entries(ownership).slice(0, 5),
+        fontBase64Length: (fontBase64 || '').length,
+        fontFileExists: fs.existsSync(FONT_PATH),
+        fontFileSize: fs.existsSync(FONT_PATH) ? fs.statSync(FONT_PATH).size : 0
+      });
+    }
 
     const cssRules = [
       'path, polygon, rect, circle { stroke: #000000; stroke-width: 1.5px; stroke-linejoin: round; }'
@@ -126,8 +148,10 @@ export default async function handler(req, res) {
         let fontSize = Math.max(12, Math.min(48, maxFontSizeByWidth, maxAllowedHeight));
         if (override.scale) fontSize *= override.scale;
 
+        const strokeWidth = Math.max(2, Math.round(fontSize * 0.16));
         const safeOwner = owner.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="MapFont, sans-serif" font-weight="700" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="4px" stroke-linejoin="round" paint-order="stroke fill">${safeOwner}</text>`;
+
+        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-weight="bold" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="${strokeWidth}px" stroke-linejoin="round" paint-order="stroke fill">${safeOwner}</text>`;
 
         if (override.rotate) {
           textTag = `<g transform="rotate(${override.rotate}, ${finalX.toFixed(1)}, ${finalY.toFixed(1)})">${textTag}</g>`;
@@ -140,18 +164,16 @@ export default async function handler(req, res) {
     svg = svg.replace(/<svg[^>]*>/, `$&<style>\n${cssRules.join('\n')}\n</style>`);
     svg = svg.replace(/<\/svg>/, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
 
+    const fontFiles = fs.existsSync(FONT_PATH) ? [FONT_PATH] : [];
+
     const resvgOptions = {
       fitTo: { mode: 'width', value: 1200 },
-      background: '#120f0d'
+      background: '#120f0d',
+      font: {
+        fontFiles: fontFiles,
+        loadSystemFonts: true
+      }
     };
-
-    if (fontBuffer && fontBuffer.length > 0) {
-      resvgOptions.font = {
-        fontBuffers: [fontBuffer],
-        defaultFontFamily: 'MapFont',
-        loadSystemFonts: false
-      };
-    }
 
     const resvg = new Resvg(svg, resvgOptions);
     const pngBuffer = resvg.render().asPng();
