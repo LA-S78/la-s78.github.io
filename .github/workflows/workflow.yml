@@ -106,7 +106,6 @@ jobs:
                 
                 # --- CLEAN UP CONTENT ---
                 clean_content = block_content.gsub(/<\/?data[^>]*>/, "")
-                # Strip markdown code blocks if the AI accidentally included them
                 clean_content = clean_content.gsub(/^```[a-z]*\n?/i, "").gsub(/\n?```$/, "").strip
                 
                 FileUtils.mkdir_p(File.dirname(dest_file))
@@ -122,7 +121,7 @@ jobs:
       - name: Generate Discord API Translations
         run: bundle exec ruby _scripts/build_translations.rb
           
-      # --- COMPILING ENGINE (WITH COMPONENT-LEVEL DEV INJECTION RESTORED) ---
+      # --- COMPILING ENGINE ---
       - name: Compiling regional sites
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
@@ -182,27 +181,83 @@ jobs:
           echo "Running Workbox injector..."
           ruby -r ./_scripts/workbox_precache.rb -e "WorkboxInjector.run('_site')"
           
-          # 1. Compile map.svg into an in-memory JS module
+          # 1. Compile map.svg into in-memory JS module
           ruby -r json -e '
             svg_text = File.read("_includes/map.svg")
             File.write("api/map_svg.js", "export default " + JSON.generate(svg_text) + ";\n")
           '
 
-          # 2. Pre-calculate territory centroids at build time
+          # 2. Pre-calculate territory centroids (Order-agnostic & accounts for relative path deltas)
           ruby -r json -e '
             svg = File.read("_includes/map.svg")
             centroids = {}
-            
-            svg.scan(/<path[^>]+id=["\x27]([^"\x27]+)["\x27][^>]+d=["\x27]([^"\x27]+)["\x27]/i) do |id, d|
+
+            svg.scan(/<(path|polygon)\b([^>]+)>/i) do |tag_name, attrs|
+              id = attrs[/id=["\x27]([^"\x27]+)["\x27]/, 1]
+              next unless id
               next if id == "layer1" || id.start_with?("defs") || id.include?("label")
-              
-              nums = d.scan(/[-+]?(?:\d*\.\d+|\d+)/).map(&:to_f)
-              xs = nums.each_slice(2).map(&:first).compact
-              ys = nums.each_slice(2).map(&:last).compact
-              
-              if xs.any? && ys.any?
-                min_x, max_x = xs.min, xs.max
-                min_y, max_y = ys.min, ys.max
+
+              pts_x = []
+              pts_y = []
+
+              if tag_name.downcase == "path"
+                d = attrs[/\bd=["\x27]([^"\x27]+)["\x27]/, 1]
+                next unless d
+
+                cur_x = 0.0
+                cur_y = 0.0
+
+                d.scan(/([a-df-z])([^a-df-z]*)/i) do |cmd, args_str|
+                  nums = args_str.scan(/[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?/).map(&:to_f)
+                  is_rel = (cmd == cmd.downcase)
+                  c = cmd.upcase
+
+                  case c
+                  when "M", "L", "T"
+                    nums.each_slice(2) do |x, y|
+                      break unless x && y
+                      cur_x = is_rel ? cur_x + x : x
+                      cur_y = is_rel ? cur_y + y : y
+                      pts_x << cur_x; pts_y << cur_y
+                    end
+                  when "H"
+                    nums.each { |x| cur_x = is_rel ? cur_x + x : x; pts_x << cur_x }
+                  when "V"
+                    nums.each { |y| cur_y = is_rel ? cur_y + y : y; pts_y << cur_y }
+                  when "C"
+                    nums.each_slice(6) do |_x1, _y1, _x2, _y2, x, y|
+                      break unless x && y
+                      cur_x = is_rel ? cur_x + x : x
+                      cur_y = is_rel ? cur_y + y : y
+                      pts_x << cur_x; pts_y << cur_y
+                    end
+                  when "S", "Q"
+                    nums.each_slice(4) do |_x1, _y1, x, y|
+                      break unless x && y
+                      cur_x = is_rel ? cur_x + x : x
+                      cur_y = is_rel ? cur_y + y : y
+                      pts_x << cur_x; pts_y << cur_y
+                    end
+                  when "A"
+                    nums.each_slice(7) do |_rx, _ry, _rot, _laf, _sf, x, y|
+                      break unless x && y
+                      cur_x = is_rel ? cur_x + x : x
+                      cur_y = is_rel ? cur_y + y : y
+                      pts_x << cur_x; pts_y << cur_y
+                    end
+                  end
+                end
+              elsif tag_name.downcase == "polygon"
+                pts_str = attrs[/points=["\x27]([^"\x27]+)["\x27]/, 1]
+                if pts_str
+                  nums = pts_str.scan(/[-+]?(?:\d*\.\d+|\d+)/).map(&:to_f)
+                  nums.each_slice(2) { |x, y| pts_x << x; pts_y << y if x && y }
+                end
+              end
+
+              if pts_x.any? && pts_y.any?
+                min_x, max_x = pts_x.min, pts_x.max
+                min_y, max_y = pts_y.min, pts_y.max
                 centroids[id] = {
                   "x" => ((min_x + max_x) / 2.0).round(1),
                   "y" => ((min_y + max_y) / 2.0).round(1),
@@ -211,22 +266,24 @@ jobs:
                 }
               end
             end
-            
+
             File.write("api/centroids.js", "export default " + JSON.generate(centroids) + ";\n")
             puts "✅ Pre-computed #{centroids.keys.size} territory centroids."
           '
 
-          # 3. Bake Oswald-Bold TTF into an in-memory JS module
-          ruby -r base64 -e '
+          # 3. Automatically fetch and encode Oswald-Bold TTF
+          ruby -r open-uri -r fileutils -r base64 -e '
             font_path = "_assets/fonts/Oswald-Bold.ttf"
-            if File.exist?(font_path)
-              b64 = Base64.strict_encode64(File.binread(font_path))
-              File.write("api/font_data.js", "export default \"" + b64 + "\";\n")
-              puts "✅ In-memory font module generated."
-            else
-              File.write("api/font_data.js", "export default \"\";\n")
-              puts "⚠️ Warning: Oswald-Bold.ttf not found at #{font_path}"
+            unless File.exist?(font_path) && File.size(font_path) > 1000
+              puts "Downloading Oswald-Bold.ttf from Google Fonts..."
+              FileUtils.mkdir_p("_assets/fonts")
+              URI.open("https://raw.githubusercontent.com/google/fonts/main/ofl/oswald/static/Oswald-Bold.ttf") do |f|
+                File.binwrite(font_path, f.read)
+              end
             end
+            b64 = Base64.strict_encode64(File.binread(font_path))
+            File.write("api/font_data.js", "export default \"" + b64 + "\";\n")
+            puts "✅ In-memory font module generated (#{b64.length} chars)."
           '
 
           # Stage serverless assets and configuration for Vercel

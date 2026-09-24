@@ -86,8 +86,8 @@ async function getLiveMapState() {
   }
 }
 
-// Convert base64 font into memory buffer once during Lambda cold start
-const fontBuffer = fontBase64 ? Buffer.from(fontBase64, 'base64') : null;
+// Convert in-memory base64 font to Buffer on cold start
+const fontBuffer = (fontBase64 && fontBase64.length > 100) ? Buffer.from(fontBase64, 'base64') : null;
 
 export default async function handler(req, res) {
   try {
@@ -101,8 +101,7 @@ export default async function handler(req, res) {
     const alliances = mapState?.alliances || {};
 
     const cssRules = [
-      'path, polygon, rect, circle { stroke: #000000; stroke-width: 1.5px; stroke-linejoin: round; }',
-      'text.territory-label { font-family: "Oswald", sans-serif; font-weight: 700; paint-order: stroke fill; stroke: #000000; stroke-width: 4px; stroke-linejoin: round; fill: #ffffff; }'
+      'path, polygon, rect, circle { stroke: #000000; stroke-width: 1.5px; stroke-linejoin: round; }'
     ];
 
     let labelElements = '';
@@ -129,7 +128,8 @@ export default async function handler(req, res) {
         if (override.scale) fontSize *= override.scale;
 
         const safeOwner = owner.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-size="${fontSize.toFixed(1)}px" class="territory-label">${safeOwner}</text>`;
+
+        let textTag = `<text x="${finalX.toFixed(1)}" y="${finalY.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="Oswald, sans-serif" font-weight="700" font-size="${fontSize.toFixed(1)}px" fill="#ffffff" stroke="#000000" stroke-width="4px" stroke-linejoin="round" paint-order="stroke fill">${safeOwner}</text>`;
 
         if (override.rotate) {
           textTag = `<g transform="rotate(${override.rotate}, ${finalX.toFixed(1)}, ${finalY.toFixed(1)})">${textTag}</g>`;
@@ -139,7 +139,7 @@ export default async function handler(req, res) {
       }
     });
 
-    // Inject CSS styles and label elements
+    // Inject styles and labels
     svg = svg.replace(/<svg[^>]*>/, `$&<style>\n${cssRules.join('\n')}\n</style>`);
     svg = svg.replace(/<\/svg>/, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
 
