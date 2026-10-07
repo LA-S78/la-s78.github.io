@@ -4,7 +4,7 @@ title: Todo
 permalink: /todo.html
 hide_header: true
 ---
-<div class="content-pane" id="nominate-app" style="max-width: 560px;">
+<div class="content-pane" style="max-width: 560px;" markdown="1">
 
 # 📋 Todo
 
