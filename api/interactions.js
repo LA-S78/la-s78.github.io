@@ -16,6 +16,18 @@ async function getRawBody(req) {
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'ru', 'it', 'tr', 'uk'];
 
+// Dedicated Alliance Server Registry
+// Any guild mapped here bypasses the generic @r5 + tag-role check in favor of server-level delegation.
+// The NAP server and unlisted servers continue using strict @r5 + dynamic tag matching.
+const ALLIANCE_GUILD_MAPPINGS = {
+  ...(process.env.DISCORD_GUILD_ID_WLO ? {
+    [process.env.DISCORD_GUILD_ID_WLO]: {
+      tag: 'WLO',
+      roles: ['r5', '@r5', 'hr', '@hr', 'officer', '@officer']
+    }
+  } : {})
+};
+
 const FALLBACK_RULES = [
   { title: "📜 1. Respect & Conduct", content: "**Zero Tolerance:** Bullying, racism, hate speech, harassment, or toxic behavior is prohibited.\n**Community Standard:** Treat all players with respect.\n**Reporting:** You **must** provide screenshots/proof when reporting a violation." },
   { title: "🛡️ 2. NAP Protection Rules", content: "The following actions against **NAP Alliances** and their **Academies** are prohibited:\n> 🚫 No Attacking\n> 🚫 No Scouting" },
@@ -118,7 +130,7 @@ const FALLBACK_BOT_STRINGS = {
       },
       level: {
         title: "🏰 Last Asylum: Territory Levels",
-        description: "Territories categorized by tier (Lv. 1 to Lv. 7)."
+        description: "Territories categorized by tier (Lv. 1 to Lv. 8)."
       },
       resource: {
         title: "🌾 Last Asylum: Resources & Regional Buffs",
@@ -252,7 +264,7 @@ function buildMapMessagePayload({ view = 'level', revision = 'initial', resolved
   };
 
   const descriptions = {
-    level: "Territories categorized by tier (Lv. 1 to Lv. 7).",
+    level: "Territories categorized by tier (Lv. 1 to Lv. 8).",
     alliance: "Territories colored by alliance ownership.",
     resource: "Territories colored by resource yields and regional buffs."
   };
@@ -545,41 +557,64 @@ export default async function handler(req, res) {
         ]);
 
         const memberRoleNames = (member.roles || []).map(id => roleMap.get(id)).filter(Boolean);
+        const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+        const knownAlliances = Object.keys(mapState.alliances || {});
 
-        const isR5 = memberRoleNames.some(r => r === 'r5' || r === '@r5');
-        if (!isR5) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: '⛔ **Access Denied:** Only Alliance Leaders holding the **@r5** role can submit reward nominations.',
-              flags: 64
-            }
+        let matchedAllianceTag = null;
+        const allianceGuildConfig = ALLIANCE_GUILD_MAPPINGS[guildId];
+
+        // --- PATH A: Dedicated Alliance Server (Configured via ALLIANCE_GUILD_MAPPINGS) ---
+        if (allianceGuildConfig) {
+          matchedAllianceTag = allianceGuildConfig.tag;
+          const allowedRoles = allianceGuildConfig.roles.map(r => r.toLowerCase().trim());
+          const isAuthorized = memberRoleNames.some(r => allowedRoles.includes(r));
+
+          if (!isAuthorized) {
+            return res.status(200).json({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: `⛔ **Access Denied:** Only members holding authorized leadership roles (${allianceGuildConfig.roles.join(', ')}) can submit reward nominations for **[${matchedAllianceTag}]**.`,
+                flags: 64
+              }
+            });
+          }
+        } 
+        // --- PATH B: Shared Server (NAP Server / Unmapped Guilds) ---
+        // Runs strict original verification: requires @r5 and dynamic tag role matching
+        else {
+          const isR5 = memberRoleNames.some(r => r === 'r5' || r === '@r5');
+          if (!isR5) {
+            return res.status(200).json({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: '⛔ **Access Denied:** Only Alliance Leaders holding the **@r5** role can submit reward nominations.',
+                flags: 64
+              }
+            });
+          }
+
+          matchedAllianceTag = knownAlliances.find(tag => {
+            const cleanTag = tag.toLowerCase();
+            return memberRoleNames.some(r =>
+              r === cleanTag ||
+              r === `@${cleanTag}` ||
+              r === `[${cleanTag}]`
+            );
           });
+
+          if (!matchedAllianceTag) {
+            return res.status(200).json({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: `⚠️ Could not detect your alliance tag role. Make sure you have your alliance role (e.g. \`@${knownAlliances[0] || 'TAG'}\`) assigned.`,
+                flags: 64
+              }
+            });
+          }
         }
 
-        const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
         const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
         const isKW = rewardsData.mode === 'kw';
-
-        const knownAlliances = Object.keys(mapState.alliances || {});
-        const matchedAllianceTag = knownAlliances.find(tag => {
-          const cleanTag = tag.toLowerCase();
-          return memberRoleNames.some(r =>
-            r === cleanTag ||
-            r === `@${cleanTag}` ||
-            r === `[${cleanTag}]`
-          );
-        });
-
-        if (!matchedAllianceTag) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ Could not detect your alliance tag role. Make sure you have your alliance role (e.g. \`@${knownAlliances[0] || 'TAG'}\`) assigned.`,
-              flags: 64
-            }
-          });
-        }
 
         const allianceInfo = mapState.alliances[matchedAllianceTag];
         const rank = parseInt(allianceInfo?.rank, 10);
