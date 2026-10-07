@@ -70,7 +70,10 @@ hide_header: true
     let payload = null;
     try {
       const dataString = token.split('.')[0];
-      const jsonStr = atob(dataString.replace(/-/g, '+').replace(/_/g, '/'));
+      // UTF-8 safe decoding via TextDecoder (prevents Â turning into Ã‚)
+      const binary = atob(dataString.replace(/-/g, '+').replace(/_/g, '/'));
+      const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+      const jsonStr = new TextDecoder('utf-8').decode(bytes);
       payload = JSON.parse(jsonStr);
     } catch (e) {
       showError('Malformed token. Please request a new link from Discord.');
@@ -105,7 +108,7 @@ hide_header: true
       buildSlots('kw-blue-slots', '🔵 KW Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'kw-blue');
     }
 
-    // Prioritized Auto-fill Logic (KW Gold -> REG Gold -> KW Purple -> REG Purple -> KW Blue -> REG Blue)
+    // Auto-fill logic
     document.getElementById('btn-autofill').addEventListener('click', () => {
       const raw = document.getElementById('smart-paste-input').value;
       const lines = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
@@ -138,8 +141,18 @@ hide_header: true
 
     function validateInputs() {
       const inputs = Array.from(document.querySelectorAll('.slot-input'));
-      const allFilled = inputs.every(i => i.value.trim().length > 0);
-      document.getElementById('btn-submit').disabled = !allFilled;
+      const filledCount = inputs.filter(i => i.value.trim().length > 0).length;
+      const totalCount = inputs.length;
+      const allFilled = filledCount === totalCount && totalCount > 0;
+
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = !allFilled;
+
+      if (!allFilled) {
+        btn.textContent = `Fill All Slots (${filledCount}/${totalCount} Completed)`;
+      } else {
+        btn.textContent = 'Submit Final Nominations';
+      }
     }
     validateInputs();
 
