@@ -109,6 +109,11 @@
   ],
   "nap": [
     {
+      "name": "registerbot",
+      "description": "Register your alliance Discord server to receive strategy bot commands (R5 only)",
+      "type": 1
+    },
+    {
       "name": "nominate",
       "description": "Request an authenticated portal link to submit weekly chest nominations",
       "type": 1

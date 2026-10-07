@@ -1,0 +1,154 @@
+---
+layout: portal
+title: Alliance Server Registration
+permalink: /register.html
+hide_header: true
+---
+
+<div class="content-pane" id="register-app" style="max-width: 560px;">
+  <div id="loading-state" class="status-banner">Loading registration portal...</div>
+  <div id="error-state" class="status-banner warning" style="display: none; border: 1px solid #ff6b6b; background: rgba(122, 0, 0, 0.3);"></div>
+  <div id="success-state" class="status-banner status-success" style="display: none;"></div>
+
+  <div id="form-container" style="display: none;">
+    <div style="text-align: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">
+      <div class="alliance-badge-lg" id="display-alliance">[TAG]</div>
+      <div class="sub-text" style="margin-top: 4px;">Alliance Server Integration Portal</div>
+    </div>
+
+    <!-- Step 1: Invite Bot -->
+    <div class="smart-paste-box" style="margin-bottom: 1.2rem;">
+      <label style="font-weight: bold; color: var(--accent-color);">1. Invite Bot to Your Server</label>
+      <p style="font-size: 0.82rem; margin: 4px 0 10px 0; color: #a0aec0;">
+        You must add the bot to your alliance Discord before completing registration.
+      </p>
+      <a id="btn-oauth-invite" href="#" target="_blank" class="draft-btn btn-fw" style="display: block; text-align: center; text-decoration: none; padding: 7px 0; font-size: 0.85rem;">
+        🤖 Click to Authorize Bot
+      </a>
+    </div>
+
+    <!-- Step 2: Form Configuration -->
+    <form id="registration-form">
+      <div class="slot-group">
+        <div class="slot-group-title">2. Server & Role Credentials</div>
+
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; font-size: 0.8rem; margin-bottom: 4px; color: var(--accent-color);">
+            Discord Server ID (Guild ID)
+          </label>
+          <input type="text" id="input-guild-id" class="slot-input" placeholder="e.g. 1333913822980735048" required style="width: 100%; box-sizing: border-box;">
+          <div style="font-size: 0.72rem; color: #718096; margin-top: 4px;">
+            In Discord: Enable Developer Mode &rarr; Right-click your server icon &rarr; <strong>Copy Server ID</strong>.
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; font-size: 0.8rem; margin-bottom: 4px; color: var(--accent-color);">
+            Delegated Leadership Roles (Optional)
+          </label>
+          <input type="text" id="input-roles" class="slot-input" placeholder="HR, Officer, Leader" style="width: 100%; box-sizing: border-box;">
+          <div style="font-size: 0.72rem; color: #718096; margin-top: 4px;">
+            Comma-separated role names that can submit chest nominations in your server. (<code>@R5</code> is always allowed by default).
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg" style="margin-top: 0.5rem;">
+        Register Server & Deploy Commands
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    const elLoading = document.getElementById('loading-state');
+    const elError = document.getElementById('error-state');
+    const elSuccess = document.getElementById('success-state');
+    const elFormContainer = document.getElementById('form-container');
+    const btnOAuth = document.getElementById('btn-oauth-invite');
+
+    if (!token || !token.includes('.')) {
+      showError('Invalid or missing registration token. Run /registerbot in the NAP server.');
+      return;
+    }
+
+    let payload = null;
+    try {
+      const dataString = token.split('.')[0];
+      const jsonStr = atob(dataString.replace(/-/g, '+').replace(/_/g, '/'));
+      payload = JSON.parse(jsonStr);
+    } catch (e) {
+      showError('Malformed token. Please request a new link from Discord.');
+      return;
+    }
+
+    if (payload.exp && Date.now() > payload.exp) {
+      showError('This registration link has expired (24h limit). Run /registerbot again.');
+      return;
+    }
+
+    elLoading.style.display = 'none';
+    elFormContainer.style.display = 'block';
+
+    document.getElementById('display-alliance').textContent = `[${payload.alliance}]`;
+
+    // Construct OAuth invite URL using the app Client ID encoded in token
+    const clientId = payload.client_id || 'YOUR_CLIENT_ID';
+    btnOAuth.href = `https://discord.com/oauth2/authorize?client_id=${clientId}&scope=bot%20applications.commands&permissions=379904`;
+
+    const form = document.getElementById('registration-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit');
+      const guildId = document.getElementById('input-guild-id').value.trim();
+      const rawRoles = document.getElementById('input-roles').value;
+      const delegatedRoles = rawRoles.split(/[,]+/).map(r => r.trim()).filter(Boolean);
+
+      if (!/^\d{17,20}$/.test(guildId)) {
+        alert('Invalid Discord Server ID format. Must be a 17-20 digit number.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying Server & Registering...';
+
+      try {
+        const res = await fetch('/api/register-alliance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: token,
+            guildId: guildId,
+            delegatedRoles: delegatedRoles
+          })
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Registration failed');
+
+        elFormContainer.style.display = 'none';
+        elSuccess.style.display = 'block';
+        elSuccess.innerHTML = `
+          <strong>✅ Registration Successful!</strong><br><br>
+          Server ID <code>${guildId}</code> is now linked to <strong>[${payload.alliance}]</strong>.<br><br>
+          • Slash commands (<code>/nominate</code>, <code>/rewards</code>, <code>/map</code>, <code>/sb</code>, <code>/rules</code>) have been installed instantly to your server.<br>
+          • Authorized nomination roles: <strong>@R5</strong>${delegatedRoles.length ? `, ${delegatedRoles.map(r => '@' + r).join(', ')}` : ''}.
+        `;
+      } catch (err) {
+        alert(`Registration Error: ${err.message}`);
+        btn.disabled = false;
+        btn.textContent = 'Register Server & Deploy Commands';
+      }
+    });
+
+    function showError(msg) {
+      elLoading.style.display = 'none';
+      elError.style.display = 'block';
+      elError.textContent = msg;
+    }
+  })();
+</script>

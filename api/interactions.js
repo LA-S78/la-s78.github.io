@@ -118,7 +118,7 @@ const FALLBACK_BOT_STRINGS = {
       },
       level: {
         title: "🏰 Last Asylum: Territory Levels",
-        description: "Territories categorized by tier (Lv. 1 to Lv. 8)."
+        description: "Territories categorized by tier (Lv. 1 to Lv. 7)."
       },
       resource: {
         title: "🌾 Last Asylum: Resources & Regional Buffs",
@@ -165,7 +165,7 @@ const EVENT_EMOJIS = {
   enhance_raven: '🦅'
 };
 
-function createNominationToken(payload, secret) {
+function createHmacToken(payload, secret) {
   const dataString = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const signature = crypto
     .createHmac('sha256', secret)
@@ -174,7 +174,6 @@ function createNominationToken(payload, secret) {
   return `${dataString}.${signature}`;
 }
 
-// Multi-guild role cache: stores independent role maps per guild ID
 const roleCacheMap = new Map();
 
 async function getGuildRoleMap(guildId, botToken, memberRoleIds = []) {
@@ -533,6 +532,105 @@ export default async function handler(req, res) {
       }
     }
 
+    // --- /registerbot COMMAND (NAP Server Only) ---
+    if (name === 'registerbot') {
+      const guildId = interaction.guild_id;
+      const member = interaction.member;
+      const botToken = process.env.DISCORD_BOT_TOKEN;
+      const clientId = process.env.DISCORD_CLIENT_ID;
+      const GIST_ID = process.env.GIST_ID;
+      const GIST_TOKEN = process.env.GIST_TOKEN;
+      const napGuildId = (process.env.DISCORD_GUILD_ID_NAP || process.env.DISCORD_GUILD_ID || '').trim();
+
+      // Enforce execution exclusively within the NAP server
+      if (!napGuildId || guildId !== napGuildId) {
+        return res.status(200).json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: { content: '⚠️ This command can only be executed in the official NAP server.', flags: 64 }
+        });
+      }
+
+      try {
+        const memberRoleIds = member.roles || [];
+        const [roleMap, gistData] = await Promise.all([
+          getGuildRoleMap(guildId, botToken, memberRoleIds),
+          getGistData(GIST_ID, GIST_TOKEN)
+        ]);
+
+        const memberRoleNames = memberRoleIds.map(id => roleMap.get(id)).filter(Boolean);
+        const isR5 = memberRoleNames.some(r => r === 'r5' || r === '@r5' || matchesRoleKeyword(r, 'r5'));
+
+        if (!isR5) {
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: '⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can register alliance servers.',
+              flags: 64
+            }
+          });
+        }
+
+        const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+        const knownAlliances = Object.keys(mapState.alliances || {});
+
+        const matchedAllianceTag = knownAlliances.find(tag => {
+          const cleanTag = tag.toLowerCase();
+          return memberRoleNames.some(r =>
+            r === cleanTag ||
+            r === `@${cleanTag}` ||
+            r === `[${cleanTag}]`
+          );
+        });
+
+        if (!matchedAllianceTag) {
+          return res.status(200).json({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: `⚠️ Could not detect your alliance tag role. Ensure you hold your alliance role (e.g. \`@${knownAlliances[0] || 'TAG'}\`) in the NAP server.`,
+              flags: 64
+            }
+          });
+        }
+
+        const tokenPayload = {
+          alliance: matchedAllianceTag,
+          action: 'register',
+          client_id: clientId,
+          exp: Date.now() + (24 * 60 * 60 * 1000)
+        };
+        const token = createHmacToken(tokenPayload, botToken);
+        const registerUrl = `https://${resolvedHost}/register.html?token=${token}`;
+
+        return res.status(200).json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            embeds: [{
+              title: `🤖 Alliance Server Setup — [${matchedAllianceTag}]`,
+              color: 0xb8975a,
+              description: `Click below to authorize the bot and link your alliance's Discord server to the War Room.\n\n• Installs commands (\`/nominate\`, \`/rewards\`, \`/map\`, \`/sb\`, \`/rules\`).\n• Allows configuring delegated roles (e.g. \`@HR\`).`,
+              footer: { text: 'Link is private and expires in 24 hours.' }
+            }],
+            components: [{
+              type: 1,
+              components: [{
+                type: 2,
+                style: 5,
+                label: 'Open Registration Portal',
+                url: registerUrl
+              }]
+            }],
+            flags: 64
+          }
+        });
+      } catch (err) {
+        console.error('Registerbot error:', err);
+        return res.status(200).json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: { content: `⚠️ Service busy: ${err.message}. Please retry in a few moments.`, flags: 64 }
+        });
+      }
+    }
+
     // --- /nominate COMMAND ---
     if (name === 'nominate') {
       const guildId = interaction.guild_id;
@@ -552,7 +650,7 @@ export default async function handler(req, res) {
         });
       }
 
-      // 1. OWNER SERVER RESTRICTION: Block non-admin users from running /nominate here
+      // 1. OWNER SERVER RESTRICTION: Non-admin users cannot submit nominations here
       if (ownerGuildId && guildId === ownerGuildId && userId !== process.env.AUTHORIZED_USER_ID) {
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -576,12 +674,24 @@ export default async function handler(req, res) {
 
         let matchedAllianceTag = null;
 
-        // 2. PATH A: Dedicated Alliance Server (WLO Server)
-        if (wloGuildId && guildId === wloGuildId) {
-          matchedAllianceTag = 'WLO';
+        // Dynamic Alliance Server Resolution (Registered via Gist)
+        let registeredAlliance = Object.entries(mapState.alliances || {}).find(
+          ([_, data]) => data?.guild_id && String(data.guild_id).trim() === guildId
+        );
+
+        // Fallback compatibility for existing WLO environment variable
+        if (!registeredAlliance && wloGuildId && guildId === wloGuildId) {
+          registeredAlliance = ['WLO', { guild_id: wloGuildId, delegated_roles: ['hr', 'officer'] }];
+        }
+
+        // --- PATH A: Dedicated Alliance Server ---
+        if (registeredAlliance) {
+          matchedAllianceTag = registeredAlliance[0];
+          const allianceData = registeredAlliance[1] || {};
 
           const isAdmin = (BigInt(member.permissions || '0') & 8n) === 8n;
-          const allowedRoles = ['r5', 'hr', 'officer', 'leader'];
+          const allowedRoles = ['r5', ...(allianceData.delegated_roles || ['hr', 'officer', 'leader'])];
+
           const isAuthorized = isAdmin || memberRoleNames.some(roleName =>
             allowedRoles.some(kw => matchesRoleKeyword(roleName, kw))
           );
@@ -590,13 +700,13 @@ export default async function handler(req, res) {
             return res.status(200).json({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: '⛔ **Access Denied:** Only members holding **@R5**, **@HR**, or **@Officer** roles can submit nominations for **[WLO]**.',
+                content: `⛔ **Access Denied:** Only members holding **@R5** or authorized leadership roles (${allowedRoles.map(r => '@' + r).join(', ')}) can submit nominations for **[${matchedAllianceTag}]**.`,
                 flags: 64
               }
             });
           }
         }
-        // 3. PATH B: Shared Server (NAP Server / Global)
+        // --- PATH B: Shared Server (NAP Server / Global) ---
         else {
           const isR5 = memberRoleNames.some(r => r === 'r5' || r === '@r5' || matchesRoleKeyword(r, 'r5'));
           if (!isR5 && userId !== process.env.AUTHORIZED_USER_ID) {
@@ -675,7 +785,7 @@ export default async function handler(req, res) {
           mode: isKW ? 'kw' : 'standard',
           exp: Date.now() + (24 * 60 * 60 * 1000)
         };
-        const token = createNominationToken(tokenPayload, botToken);
+        const token = createHmacToken(tokenPayload, botToken);
         const nominateUrl = `https://${resolvedHost}/nominate.html?token=${token}`;
 
         const fields = [
@@ -999,7 +1109,7 @@ export default async function handler(req, res) {
     const lang = resolveUserLocale(interaction, null);
     const t = getBotStrings(lang);
 
-    // 1. PUBLIC MAP VIEW SWITCH BUTTONS (Accessible by everyone)
+    // 1. PUBLIC MAP VIEW SWITCH BUTTONS
     if (custom_id && custom_id.startsWith('map_view:')) {
       const targetView = custom_id.replace('map_view:', '');
       const revision = await getLatestMapRevision(process.env.GIST_ID, process.env.GIST_TOKEN);
@@ -1073,7 +1183,6 @@ export default async function handler(req, res) {
           throw new Error(acceptJson.error || `Server responded with ${acceptRes.status}`);
         }
 
-        // Sync local revision immediately upon successful map update
         if (acceptJson.revision) {
           mapRevisionCache.revision = acceptJson.revision;
           mapRevisionCache.timestamp = Date.now();
