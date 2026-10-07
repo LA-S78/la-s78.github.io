@@ -102,31 +102,10 @@
       ]
     },
     {
-  "name": "map",
-  "description": "View live Last Asylum territory map",
-  "options": [
-    {
-      "name": "view",
-      "description": "Select map view (Levels, Alliances, or Resources)",
-      "type": 3,
-      "required": false,
-      "choices": [
-        {
-          "name": "🏰 Territory Levels (Default)",
-          "value": "level"
-        },
-        {
-          "name": "🛡️ Alliances",
-          "value": "alliance"
-        },
-        {
-          "name": "🌾 Resources & Regional Buffs",
-          "value": "resource"
-        }
-      ]
+      "name": "map",
+      "description": "View live Last Asylum territory map",
+      "type": 1
     }
-  ]
-}
   ],
   "wlo": [
     {
@@ -231,30 +210,9 @@
       ]
     },
     {
-  "name": "map",
-  "description": "View live Last Asylum territory map",
-  "options": [
-    {
-      "name": "view",
-      "description": "Select map view (Levels, Alliances, or Resources)",
-      "type": 3,
-      "required": false,
-      "choices": [
-        {
-          "name": "🏰 Territory Levels (Default)",
-          "value": "level"
-        },
-        {
-          "name": "🛡️ Alliances",
-          "value": "alliance"
-        },
-        {
-          "name": "🌾 Resources & Regional Buffs",
-          "value": "resource"
-        }
-      ]
+      "name": "map",
+      "description": "View live Last Asylum territory map",
+      "type": 1
     }
-  ]
-}
   ]
 }

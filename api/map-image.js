@@ -391,7 +391,7 @@ export default async function handler(req, res) {
 
     if (revision) {
       // Edge caches for 7 days; any new map change gets a new ?v= hash and bypasses this
-      res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400, immutable');
+      res.setHeader('Cache-Control', 'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable');
     } else {
       // Fallback for unversioned browser hits
       res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=180, stale-while-revalidate=300');

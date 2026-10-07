@@ -118,7 +118,7 @@ const FALLBACK_BOT_STRINGS = {
       },
       level: {
         title: "🏰 Last Asylum: Territory Levels",
-        description: "Territories categorized by tier (Lv. 1 to Lv. 8)."
+        description: "Territories categorized by tier (Lv. 1 to Lv. 7)."
       },
       resource: {
         title: "🌾 Last Asylum: Resources & Regional Buffs",
