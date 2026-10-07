@@ -539,14 +539,27 @@ export default async function handler(req, res) {
     if (name === 'nominate') {
       const guildId = interaction.guild_id;
       const member = interaction.member;
+      const userId = member?.user?.id || interaction.user?.id;
       const botToken = process.env.DISCORD_BOT_TOKEN;
       const GIST_ID = process.env.GIST_ID;
       const GIST_TOKEN = process.env.GIST_TOKEN;
+      const ownerGuildId = (process.env.DISCORD_GUILD_ID_OWNER || '').trim();
 
       if (!guildId || !member) {
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: { content: '⚠️ This command must be executed inside your alliance Discord server.', flags: 64 }
+        });
+      }
+
+      // Block non-admin users from running /nominate in the Owner server
+      if (ownerGuildId && guildId === ownerGuildId && userId !== process.env.AUTHORIZED_USER_ID) {
+        return res.status(200).json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '⛔ **Access Denied:** Reward nominations cannot be submitted from this server. Leaders must submit via the NAP server or their alliance server.',
+            flags: 64
+          }
         });
       }
 
