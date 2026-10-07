@@ -16,18 +16,6 @@ async function getRawBody(req) {
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'ru', 'it', 'tr', 'uk'];
 
-// Dedicated Alliance Server Registry
-// Any guild mapped here bypasses the generic @r5 + tag-role check in favor of server-level delegation.
-// The NAP server and unlisted servers continue using strict @r5 + dynamic tag matching.
-const ALLIANCE_GUILD_MAPPINGS = {
-  ...(process.env.DISCORD_GUILD_ID_WLO ? {
-    [process.env.DISCORD_GUILD_ID_WLO]: {
-      tag: 'WLO',
-      roles: ['r5', '@r5', 'hr', '@hr', 'officer', '@officer']
-    }
-  } : {})
-};
-
 const FALLBACK_RULES = [
   { title: "📜 1. Respect & Conduct", content: "**Zero Tolerance:** Bullying, racism, hate speech, harassment, or toxic behavior is prohibited.\n**Community Standard:** Treat all players with respect.\n**Reporting:** You **must** provide screenshots/proof when reporting a violation." },
   { title: "🛡️ 2. NAP Protection Rules", content: "The following actions against **NAP Alliances** and their **Academies** are prohibited:\n> 🚫 No Attacking\n> 🚫 No Scouting" },
@@ -186,16 +174,18 @@ function createNominationToken(payload, secret) {
   return `${dataString}.${signature}`;
 }
 
-let roleCache = {
-  guildId: null,
-  map: null,
-  timestamp: 0
-};
+// Multi-guild role cache: stores independent role maps per guild ID
+const roleCacheMap = new Map();
 
-async function getGuildRoleMap(guildId, botToken) {
+async function getGuildRoleMap(guildId, botToken, memberRoleIds = []) {
   const now = Date.now();
-  if (roleCache.map && roleCache.guildId === guildId && (now - roleCache.timestamp < 15 * 60 * 1000)) {
-    return roleCache.map;
+  const cached = roleCacheMap.get(guildId);
+
+  if (cached && (now - cached.timestamp < 3 * 60 * 1000)) {
+    const hasUnknownRole = memberRoleIds.some(id => !cached.map.has(id));
+    if (!hasUnknownRole) {
+      return cached.map;
+    }
   }
 
   const res = await fetch(`https://discord.com/api/v10/guilds/${guildId}/roles`, {
@@ -209,13 +199,21 @@ async function getGuildRoleMap(guildId, botToken) {
   const map = new Map();
   roles.forEach(r => map.set(r.id, r.name.toLowerCase().trim()));
 
-  roleCache = {
-    guildId,
+  roleCacheMap.set(guildId, {
     map,
     timestamp: now
-  };
+  });
 
   return map;
+}
+
+function matchesRoleKeyword(roleName, keyword) {
+  if (!roleName || !keyword) return false;
+  const cleanRole = roleName.toLowerCase().replace(/[@\[\]]/g, ' ').trim();
+  const cleanKey = keyword.toLowerCase().replace(/[@\[\]]/g, ' ').trim();
+  if (cleanRole === cleanKey) return true;
+  const regex = new RegExp(`(^|\\s|_|-)${cleanKey}(\\s\vert{}_\vert{}-\vert{}$)`, 'i');
+  return regex.test(cleanRole);
 }
 
 async function getGistData(gistId, gistToken) {
@@ -502,7 +500,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // --- /map COMMAND (Direct Live Generated Preview with Button Switcher) ---
+    // --- /map COMMAND ---
     if (name === 'map') {
       try {
         let selectedView = 'level';
@@ -536,56 +534,72 @@ export default async function handler(req, res) {
     }
 
     // --- /nominate COMMAND ---
-    // --- /nominate COMMAND ---
     if (name === 'nominate') {
       const guildId = interaction.guild_id;
-      const wloGuildId = (process.env.DISCORD_GUILD_ID_WLO || '').trim();
+      const member = interaction.member;
+      const userId = member?.user?.id || interaction.user?.id;
+      const botToken = process.env.DISCORD_BOT_TOKEN;
+      const GIST_ID = process.env.GIST_ID;
+      const GIST_TOKEN = process.env.GIST_TOKEN;
 
-      // TEMPORARY DEBUG: Compare incoming guild ID with Vercel's env variable
-      if (guildId !== wloGuildId) {
+      const ownerGuildId = (process.env.DISCORD_GUILD_ID_OWNER || '').trim();
+      const wloGuildId = (process.env.DISCORD_GUILD_ID_WLO || process.env.DISCORD_WLO || '').trim();
+
+      if (!guildId || !member) {
+        return res.status(200).json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: { content: '⚠️ This command must be executed inside your alliance Discord server.', flags: 64 }
+        });
+      }
+
+      // 1. OWNER SERVER RESTRICTION: Block non-admin users from running /nominate here
+      if (ownerGuildId && guildId === ownerGuildId && userId !== process.env.AUTHORIZED_USER_ID) {
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: `🔍 **Debug Mismatch:**\n• Discord Guild ID: \`${guildId}\`\n• Env Var (WLO): \`${wloGuildId || 'NOT SET / UNDEFINED'}\``,
+            content: '⛔ **Access Denied:** Reward nominations cannot be submitted from this server. Leaders must submit via the NAP server or their alliance server.',
             flags: 64
           }
         });
       }
 
       try {
+        const memberRoleIds = member.roles || [];
         const [roleMap, gistData] = await Promise.all([
-          getGuildRoleMap(guildId, botToken),
+          getGuildRoleMap(guildId, botToken, memberRoleIds),
           getGistData(GIST_ID, GIST_TOKEN)
         ]);
 
-        const memberRoleNames = (member.roles || []).map(id => roleMap.get(id)).filter(Boolean);
+        const memberRoleNames = memberRoleIds.map(id => roleMap.get(id)).filter(Boolean);
         const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
         const knownAlliances = Object.keys(mapState.alliances || {});
 
         let matchedAllianceTag = null;
-        const allianceGuildConfig = ALLIANCE_GUILD_MAPPINGS[guildId];
 
-        // --- PATH A: Dedicated Alliance Server (Configured via ALLIANCE_GUILD_MAPPINGS) ---
-        if (allianceGuildConfig) {
-          matchedAllianceTag = allianceGuildConfig.tag;
-          const allowedRoles = allianceGuildConfig.roles.map(r => r.toLowerCase().trim());
-          const isAuthorized = memberRoleNames.some(r => allowedRoles.includes(r));
+        // 2. PATH A: Dedicated Alliance Server (WLO Server)
+        if (wloGuildId && guildId === wloGuildId) {
+          matchedAllianceTag = 'WLO';
+
+          const isAdmin = (BigInt(member.permissions || '0') & 8n) === 8n;
+          const allowedRoles = ['r5', 'hr', 'officer', 'leader'];
+          const isAuthorized = isAdmin || memberRoleNames.some(roleName =>
+            allowedRoles.some(kw => matchesRoleKeyword(roleName, kw))
+          );
 
           if (!isAuthorized) {
             return res.status(200).json({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: `⛔ **Access Denied:** Only members holding authorized leadership roles (${allianceGuildConfig.roles.join(', ')}) can submit reward nominations for **[${matchedAllianceTag}]**.`,
+                content: '⛔ **Access Denied:** Only members holding **@R5**, **@HR**, or **@Officer** roles can submit nominations for **[WLO]**.',
                 flags: 64
               }
             });
           }
-        } 
-        // --- PATH B: Shared Server (NAP Server / Unmapped Guilds) ---
-        // Runs strict original verification: requires @r5 and dynamic tag role matching
+        }
+        // 3. PATH B: Shared Server (NAP Server / Global)
         else {
-          const isR5 = memberRoleNames.some(r => r === 'r5' || r === '@r5');
-          if (!isR5) {
+          const isR5 = memberRoleNames.some(r => r === 'r5' || r === '@r5' || matchesRoleKeyword(r, 'r5'));
+          if (!isR5 && userId !== process.env.AUTHORIZED_USER_ID) {
             return res.status(200).json({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
