@@ -114,6 +114,20 @@ hide_header: true
           const matched = flatList.filter(e => e.type === tier.key);
           if (matched.length === 0) return;
 
+          // Prioritize pool (REG before KW), then Alliance Rank, then IGN
+          matched.sort((a, b) => {
+            const poolOrder = { REG: 1, KW: 2 };
+            const poolDiff = (poolOrder[a.pool] || 1) - (poolOrder[b.pool] || 1);
+            if (poolDiff !== 0) return poolDiff;
+
+            const rankA = nominationsData[a.alliance]?.rank ?? 99;
+            const rankB = nominationsData[b.alliance]?.rank ?? 99;
+            if (rankA !== rankB) return rankA - rankB;
+            if (a.alliance !== b.alliance) return a.alliance.localeCompare(b.alliance);
+
+            return a.ign.localeCompare(b.ign);
+          });
+
           html += `<div class="slot-group-title" style="margin-top: 1rem;">${tier.title} (${matched.length})</div>`;
           matched.forEach(item => {
             html += renderRow(item, tier.glyph, sentSet);
@@ -125,6 +139,16 @@ hide_header: true
         alliances.forEach(tag => {
           const matched = flatList.filter(e => e.alliance === tag);
           if (matched.length === 0) return;
+
+          // When viewing by Alliance, show REG chests before KW chests
+          matched.sort((a, b) => {
+            const poolOrder = { REG: 1, KW: 2 };
+            const poolDiff = (poolOrder[a.pool] || 1) - (poolOrder[b.pool] || 1);
+            if (poolDiff !== 0) return poolDiff;
+
+            const tierOrder = { commanders_will: 1, loyal_servant: 2, followers_heart: 3 };
+            return (tierOrder[a.type] || 99) - (tierOrder[b.type] || 99);
+          });
 
           html += `<div class="slot-group-title" style="margin-top: 1rem;">[${tag}] • Rank ${nominationsData[tag].rank || '-'} (${matched.length})</div>`;
           matched.forEach(item => {
