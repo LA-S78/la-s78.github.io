@@ -11,6 +11,7 @@ if (!token || !clientId) {
 const schemas = JSON.parse(readFileSync('.github/discord.json', 'utf8'));
 
 const targets = [
+  { name: 'owner', guildId: process.env.DISCORD_GUILD_ID_OWNER },
   { name: 'nap', guildId: process.env.DISCORD_GUILD_ID_NAP || process.env.DISCORD_GUILD_ID },
   { name: 'wlo', guildId: process.env.DISCORD_GUILD_ID_WLO }
 ];
