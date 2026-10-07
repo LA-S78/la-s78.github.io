@@ -3,7 +3,7 @@
 # 📋 Todo
 
 ## 🔴 High Priority (Core)
-- [ ] **Audit Residual "Iron" Mentions** — Clean out lingering references across `_data/cities.yml` and static guides.
+Completed, for now!
 
 ## 🟡 Mid Priority (Pipelines & Systems)
 - [ ] **Enhanced Event Calendar** — Alliance-agnostic web scheduler with automated, delayed Discord `@Role` alerts.
