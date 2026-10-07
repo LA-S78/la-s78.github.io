@@ -2,9 +2,15 @@ title: Last Asylum Guide
 description: A strategy compendium for Last Asylum.
 theme: null
 url: "https://la-s78.github.io"
+
+plugins:
+  - jekyll-optional-front-matter
+
 kramdown:
   input: GFM
   syntax_highlighter: rouge
+  parse_block_html: true
+
 exclude:
   - README.md
   - Gemfile
@@ -12,6 +18,7 @@ exclude:
   - redirect.html
   - vercel.json
   - _source/
+
 collections_dir: "collections"
 collections:
   home:
@@ -25,10 +32,19 @@ collections:
     directory: "_guide_panes"
   alliance:
     output: false
+
 languages: ["de", "en", "es", "fr", "ru", "tr", "uk", "it"]
 default_lang: "en"
+
 defaults:
   - scope:
       path: "guides"
     values:
       permalink: "/guides/:basename.html"
+  - scope:
+      path: "todo.md"
+    values:
+      layout: "portal"
+      title: "Project Roadmap"
+      permalink: "/todo.html"
+      hide_header: true
