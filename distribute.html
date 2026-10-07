@@ -30,7 +30,7 @@ hide_header: true
 
 <script>
   (function () {
-    const STORAGE_KEY = 'la_sent_recipients_v2';
+    let currentStorageKey = 'la_sent_recipients_default';
     let nominationsData = {};
     let groupBy = 'chest';
 
@@ -42,21 +42,37 @@ hide_header: true
 
     function getSentSet() {
       try {
-        return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+        return new Set(JSON.parse(localStorage.getItem(currentStorageKey) || '[]'));
       } catch (e) {
         return new Set();
       }
     }
 
     function saveSentSet(set) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(set)));
+      localStorage.setItem(currentStorageKey, JSON.stringify(Array.from(set)));
     }
 
     async function loadNominations() {
       try {
         const res = await fetch(`/api/nominate?t=${Date.now()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        nominationsData = await res.json();
+        const data = await res.json();
+
+        // Handle both enveloped { nominations, lastReset } and legacy raw responses
+        if (data && data.nominations) {
+          nominationsData = data.nominations;
+          if (data.lastReset) {
+            const cycleHash = btoa(data.lastReset).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16);
+            currentStorageKey = `la_sent_recipients_${cycleHash}`;
+          }
+        } else {
+          nominationsData = data || {};
+          const headerCycle = res.headers.get('x-cycle-id');
+          if (headerCycle) {
+            currentStorageKey = `la_sent_recipients_${headerCycle}`;
+          }
+        }
+
         render();
       } catch (err) {
         elRoster.innerHTML = `<div class="status-banner warning" style="border: 1px solid #ff6b6b; background: rgba(122, 0, 0, 0.3);">
@@ -245,8 +261,8 @@ hide_header: true
     });
 
     btnReset.addEventListener('click', () => {
-      if (confirm('Reset all sent statuses back to uncompleted?')) {
-        localStorage.removeItem(STORAGE_KEY);
+      if (confirm('Reset all sent statuses back to uncompleted for this cycle?')) {
+        localStorage.removeItem(currentStorageKey);
         render();
       }
     });

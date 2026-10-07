@@ -51,12 +51,22 @@ export default async function handler(req, res) {
 
       const gistData = await gistRes.json();
       const nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+      const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
 
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');
 
-      return res.status(200).json(nominations);
+      const lastReset = rewardsData.lastReset || null;
+      if (lastReset) {
+        res.setHeader('X-Cycle-Id', Buffer.from(lastReset).toString('hex').slice(0, 12));
+      }
+
+      return res.status(200).json({
+        nominations,
+        lastReset,
+        mode: rewardsData.mode || 'standard'
+      });
     } catch (err) {
       console.error('Failed to read nominations:', err);
       return res.status(500).json({ error: err.message });
