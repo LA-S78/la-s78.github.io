@@ -252,7 +252,7 @@ function buildMapMessagePayload({ view = 'level', revision = 'initial', resolved
   };
 
   const descriptions = {
-    level: "Territories categorized by tier (Lv. 1 to Lv. 8).",
+    level: "Territories categorized by tier (Lv. 1 to Lv. 7).",
     alliance: "Territories colored by alliance ownership.",
     resource: "Territories colored by resource yields and regional buffs."
   };
