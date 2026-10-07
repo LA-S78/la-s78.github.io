@@ -4,13 +4,14 @@ title: Todo
 permalink: /todo.html
 hide_header: true
 ---
+<div class="content-pane" id="nominate-app" style="max-width: 560px;">
 
 # 📋 Todo
 
 ## 🔴 High Priority (Core)
 - [ ] **Fix `/map` Image Generation** — Verify XML-safe tag rewrite in `api/map-image.js` so Discord proxy renders all 3 views cleanly.
-- [f] **Register `/map` Slash Command** — Push updated schema to Discord API with explicit `view` options (`level`, `alliance`, `resource`).
-- [ ] **Commit 5-Chest Weekly Payout** — Update Gist & `rewards-data.json` with verified tiers (Rank 1: 1G 2P 2B | Rank 2–5: 1G 1P 3B | Rank 6–7: 0G 2P 3B).
+- [ ] **Register `/map` Slash Command** — Push updated schema to Discord API with explicit `view` options (`level`, `alliance`, `resource`).
+- [x] **Commit 5-Chest Weekly Payout** — Update Gist & `rewards-data.json` with verified tiers (Rank 1: 1G 2P 2B | Rank 2–5: 1G 1P 3B | Rank 6–7: 0G 2P 3B).
 - [x] **Wire 2x KvK Win Pool** — Update `nominate.html` & `distribute.html` to mirror the 5-chest setup for active KvK bonus cycles.
 - [ ] **Audit Residual "Iron" Mentions** — Clean out lingering references across `_data/cities.yml` and static guides.
 
@@ -28,6 +29,4 @@ hide_header: true
 - [ ] **T10 Calculator CSS Layout** — Polish branch connectors, node scaling, and mobile viewport touch targets.
 - [ ] **PWA & Cache Audit** — Verify offline service worker caching rules for textures and update toast.
 
-# Legend
-- f = failed attempt
-- x = successful attempt
+</div>
