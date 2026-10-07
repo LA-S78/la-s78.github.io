@@ -87,6 +87,9 @@ export default async function handler(req, res) {
       currentState.lastSnapshotUrl = snapshotUrl;
     }
 
+    // Generate revision key based on timestamp
+    const revision = Date.now().toString(36);
+    currentState.revision = revision;
     currentState.lastUpdated = new Date().toISOString();
     currentState.updatedBy = submittedBy || 'Discord Admin';
 
@@ -104,7 +107,23 @@ export default async function handler(req, res) {
     });
 
     if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
-    return res.status(200).json({ success: true, message: 'Live map updated in Gist!' });
+
+    // Pre-warm Edge CDN for all 3 perspectives (capped to 1.8s timeout)
+    const rawHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
+    const resolvedHost = rawHost.split(',')[0].trim();
+    const protocol = req.headers['x-forwarded-proto'] || 'https';
+    const baseUrl = `${protocol}://${resolvedHost}`;
+
+    await Promise.allSettled(
+      ['level', 'alliance', 'resource'].map(view =>
+        fetch(`${baseUrl}/api/map-image?view=${view}&v=${revision}&ext=.png`, {
+          headers: { 'User-Agent': 'WarRoom-Prewarmer' },
+          signal: AbortSignal.timeout(1800)
+        })
+      )
+    ).catch(() => {});
+
+    return res.status(200).json({ success: true, revision, message: 'Live map updated in Gist!' });
   } catch (error) {
     console.error('Accept proposal error:', error);
     return res.status(500).json({ error: error.message });

@@ -109,8 +109,8 @@ const FALLBACK_BOT_STRINGS = {
   map: {
     title: "🗺️ Last Asylum Territory Map",
     description: "View real-time territory ownership.",
-    button: "Open Live Map",
-    footer: "Use /map [view] to switch perspectives",
+    button: "Web Map",
+    footer: "Click the buttons below to switch perspectives",
     views: {
       alliance: {
         title: "🗺️ Last Asylum: Alliance Territories",
@@ -216,6 +216,101 @@ async function getGistData(gistId, gistToken) {
   return res.json();
 }
 
+let mapRevisionCache = {
+  revision: 'initial',
+  timestamp: 0
+};
+
+async function getLatestMapRevision(gistId, gistToken) {
+  const now = Date.now();
+  if (mapRevisionCache.revision && (now - mapRevisionCache.timestamp < 45 * 1000)) {
+    return mapRevisionCache.revision;
+  }
+  try {
+    const gistData = await getGistData(gistId, gistToken);
+    const content = gistData.files?.['map-state.json']?.content;
+    if (content) {
+      const state = JSON.parse(content);
+      mapRevisionCache.revision = state.revision || state.lastUpdated || 'initial';
+      mapRevisionCache.timestamp = now;
+    }
+  } catch (e) {
+    if (!mapRevisionCache.revision || mapRevisionCache.revision === 'initial') {
+      mapRevisionCache.revision = Math.floor(now / (5 * 60 * 1000)).toString();
+    }
+  }
+  return mapRevisionCache.revision;
+}
+
+function buildMapMessagePayload({ view = 'level', revision = 'initial', resolvedHost, lang, t }) {
+  const selectedView = ['level', 'alliance', 'resource'].includes(view) ? view : 'level';
+
+  const titles = {
+    level: "🏰 Last Asylum: Territory Levels",
+    alliance: "🗺️ Last Asylum: Alliance Territories",
+    resource: "🌾 Last Asylum: Resources & Regional Buffs"
+  };
+
+  const descriptions = {
+    level: "Territories categorized by tier (Lv. 1 to Lv. 8).",
+    alliance: "Territories colored by alliance ownership.",
+    resource: "Territories colored by resource yields and regional buffs."
+  };
+
+  const embedColors = {
+    level: 0xca8a04,
+    alliance: 0x0070f3,
+    resource: 0x059669
+  };
+
+  const mapImageUrl = `https://${resolvedHost}/api/map-image?view=${selectedView}&v=${revision}&ext=.png`;
+
+  return {
+    embeds: [{
+      title: titles[selectedView],
+      description: descriptions[selectedView],
+      color: embedColors[selectedView],
+      image: { url: mapImageUrl },
+      footer: { text: "Click the buttons below to switch perspectives" }
+    }],
+    components: [{
+      type: 1,
+      components: [
+        {
+          type: 2,
+          style: selectedView === 'level' ? 1 : 2,
+          label: "Levels",
+          custom_id: "map_view:level",
+          disabled: selectedView === 'level',
+          emoji: { name: "🏰" }
+        },
+        {
+          type: 2,
+          style: selectedView === 'alliance' ? 1 : 2,
+          label: "Alliances",
+          custom_id: "map_view:alliance",
+          disabled: selectedView === 'alliance',
+          emoji: { name: "🗺️" }
+        },
+        {
+          type: 2,
+          style: selectedView === 'resource' ? 1 : 2,
+          label: "Resources",
+          custom_id: "map_view:resource",
+          disabled: selectedView === 'resource',
+          emoji: { name: "🌾" }
+        },
+        {
+          type: 2,
+          style: 5,
+          label: t?.map?.button || "Web Map",
+          url: `https://${resolvedHost}/${lang}/map.html`
+        }
+      ]
+    }]
+  };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -239,7 +334,8 @@ export default async function handler(req, res) {
   // --- SLASH COMMAND HANDLING ---
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     const { name, options } = interaction.data;
-    const resolvedHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
+    const rawHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
+    const resolvedHost = rawHost.split(',')[0].trim();
     const providedLang = options?.find(opt => opt.name === 'lang')?.value;
     const lang = resolveUserLocale(interaction, providedLang);
     const t = getBotStrings(lang);
@@ -394,10 +490,10 @@ export default async function handler(req, res) {
       });
     }
 
-    // --- /map COMMAND (Direct Live Generated Preview with View Argument) ---
+    // --- /map COMMAND (Direct Live Generated Preview with Button Switcher) ---
     if (name === 'map') {
       try {
-        let selectedView = 'level'; // Default to level view
+        let selectedView = 'level';
         const viewOpt = options?.find(opt => opt.name === 'view');
         if (viewOpt?.value) {
           selectedView = String(viewOpt.value).toLowerCase();
@@ -405,47 +501,18 @@ export default async function handler(req, res) {
           selectedView = String(viewOpt.options[0].value).toLowerCase();
         }
 
-        const titles = {
-          level: "🏰 Last Asylum: Territory Levels",
-          alliance: "🗺️ Last Asylum: Alliance Territories",
-          resource: "🌾 Last Asylum: Resources & Regional Buffs"
-        };
-
-        const descriptions = {
-          level: "Territories categorized by tier (Lv. 1 to Lv. 8).",
-          alliance: "Territories colored by alliance ownership.",
-          resource: "Territories colored by resource yields and regional buffs."
-        };
-
-        const embedColors = {
-          level: 0xca8a04,
-          alliance: 0x0070f3,
-          resource: 0x059669
-        };
-
-        // Unique timestamp and extension for Discord proxy validation
-        const mapImageUrl = `https://${resolvedHost}/api/map-image?view=${selectedView}&t=${Date.now()}&ext=.png`;
+        const revision = await getLatestMapRevision(process.env.GIST_ID, process.env.GIST_TOKEN);
+        const payload = buildMapMessagePayload({
+          view: selectedView,
+          revision,
+          resolvedHost,
+          lang,
+          t
+        });
 
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            embeds: [{
-              title: titles[selectedView] || titles.level,
-              description: descriptions[selectedView] || descriptions.level,
-              color: embedColors[selectedView] || 0xca8a04,
-              image: { url: mapImageUrl },
-              footer: { text: "Use /map [view] to switch views (Levels, Alliances, Resources)" }
-            }],
-            components: [{
-              type: 1,
-              components: [{
-                type: 2,
-                style: 5, // Link Button
-                label: t?.map?.button || "Open Interactive Web Map",
-                url: `https://${resolvedHost}/${lang}/map.html`
-              }]
-            }]
-          }
+          data: payload
         });
       } catch (err) {
         console.error('Error handling /map command:', err);
@@ -873,13 +940,33 @@ export default async function handler(req, res) {
     }
   }
 
-  // --- BUTTON INTERACTIONS (Admin Proposals & Reviews) ---
+  // --- BUTTON INTERACTIONS (Map Switcher & Admin Proposals) ---
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
-    const resolvedHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
+    const rawHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
+    const resolvedHost = rawHost.split(',')[0].trim();
     const lang = resolveUserLocale(interaction, null);
     const t = getBotStrings(lang);
 
+    // 1. PUBLIC MAP VIEW SWITCH BUTTONS (Accessible by everyone)
+    if (custom_id && custom_id.startsWith('map_view:')) {
+      const targetView = custom_id.replace('map_view:', '');
+      const revision = await getLatestMapRevision(process.env.GIST_ID, process.env.GIST_TOKEN);
+      const payload = buildMapMessagePayload({
+        view: targetView,
+        revision,
+        resolvedHost,
+        lang,
+        t
+      });
+
+      return res.status(200).json({
+        type: InteractionResponseType.UPDATE_MESSAGE,
+        data: payload
+      });
+    }
+
+    // 2. ADMIN PROPOSALS & REVIEWS (Protected by AUTHORIZED_USER_ID)
     const userId = interaction.member?.user?.id || interaction.user?.id;
     const username = interaction.member?.nick ||
                      interaction.member?.user?.global_name ||
@@ -930,9 +1017,15 @@ export default async function handler(req, res) {
           body: JSON.stringify(acceptPayload)
         });
 
+        const acceptJson = await acceptRes.json().catch(() => ({}));
         if (!acceptRes.ok) {
-          const errorData = await acceptRes.json().catch(() => ({}));
-          throw new Error(errorData.error || `Server responded with ${acceptRes.status}`);
+          throw new Error(acceptJson.error || `Server responded with ${acceptRes.status}`);
+        }
+
+        // Sync local revision immediately upon successful map update
+        if (acceptJson.revision) {
+          mapRevisionCache.revision = acceptJson.revision;
+          mapRevisionCache.timestamp = Date.now();
         }
       } catch (error) {
         console.error('Interaction bridge failed:', error);
