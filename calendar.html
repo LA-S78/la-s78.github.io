@@ -18,7 +18,7 @@ permalink: /calendar.html
           <span class="mgmt-tag" id="mgmt-scope-tag">MANAGE MODE</span>
           <span class="mgmt-desc" id="mgmt-scope-desc">Authenticated Session Active</span>
         </div>
-        <button type="button" class="btn btn-primary" id="btn-toggle-event-form">➕ Schedule Event</button>
+        <button type="button" class="btn btn-primary" id="btn-toggle-event-form">➕ Schedule Operation</button>
       </div>
 
       <!-- Collapsible Event Creation Form -->
@@ -26,30 +26,85 @@ permalink: /calendar.html
         <h3 class="form-title" id="form-heading">Create Operation</h3>
 
         <div class="form-grid">
+          <!-- Preset Selector -->
           <div class="form-group form-col-full">
-            <label for="evt-input-title">Event Title <span class="req">*</span></label>
-            <input type="text" id="evt-input-title" placeholder="e.g. Fortress Lv. 5 Assault or Strategy Council" required maxlength="60" />
+            <label for="evt-input-preset">Operation Preset</label>
+            <select id="evt-input-preset" class="cal-form-select">
+              <option value="custom">🛠️ Custom Operation (Blank)</option>
+              <option value="crystal_cluster">🔮 Crystal Cluster Valley (0.5h)</option>
+              <option value="elixir_scramble">🧪 Elixir Scramble (0.5h)</option>
+              <option value="survival_battle">⚔️ Survival Battle (4.0h)</option>
+              <option value="kill_event">🩸 Kill Event (24.0h)</option>
+              <option value="kvk_battle">👑 Kingdom vs Kingdom Battle (1.0h)</option>
+              <option value="gear_event">🛡️ Gear Event (48.0h)</option>
+              <option value="cheese_trap">🧀 Cheese Trap (0.5h)</option>
+            </select>
           </div>
 
+          <!-- Title -->
+          <div class="form-group form-col-full">
+            <label for="evt-input-title">Event Title <span class="req">*</span></label>
+            <input type="text" id="evt-input-title" placeholder="e.g. Hive Defense Drill or Outpost Assault" required maxlength="60" />
+          </div>
+
+          <!-- Date -->
           <div class="form-group">
-            <label for="evt-input-date">Date (YYYY-MM-DD) <span class="req">*</span></label>
+            <label for="evt-input-date">Start Date (YYYY-MM-DD) <span class="req">*</span></label>
             <input type="date" id="evt-input-date" required />
           </div>
 
+          <!-- Game Time (5-minute step snapping) -->
           <div class="form-group">
             <label for="evt-input-time">Game Time (HH:MM UTC-2) <span class="req">*</span></label>
-            <input type="time" id="evt-input-time" required />
-            <small class="form-hint">Server Game Time (00:00 to 23:59)</small>
+            <input type="time" id="evt-input-time" step="300" required />
+            <small class="form-hint">Server Game Time (snaps to 5-minute increments)</small>
           </div>
 
+          <!-- Duration (Up to 48h) -->
           <div class="form-group">
             <label for="evt-input-duration">Duration (Hours)</label>
-            <input type="number" id="evt-input-duration" min="0.5" max="24" step="0.5" value="1" />
+            <input type="number" id="evt-input-duration" min="0.5" max="48" step="0.5" value="1" />
           </div>
 
+          <!-- Recurrence Mode -->
+          <div class="form-group">
+            <label for="evt-input-recurrence">Frequency</label>
+            <select id="evt-input-recurrence" class="cal-form-select">
+              <option value="none">One-Time Event (Does not repeat)</option>
+              <option value="2days">Repeats Every 2 Days</option>
+              <option value="weekly">Repeats Weekly (Same day & time)</option>
+            </select>
+          </div>
+
+          <!-- Discord Notification Target -->
+          <div class="form-group form-col-full">
+            <label for="evt-input-notify">Discord Alert Level</label>
+            <select id="evt-input-notify" class="cal-form-select">
+              <option value="role">🔔 Ping Default Alliance Role (Falls back to @everyone)</option>
+              <option value="custom_role">🎯 Target Specific Role ID (One-off override)</option>
+              <option value="everyone">🚨 Force @everyone Broadcast (Mandatory Operation)</option>
+              <option value="none">🔕 Silent (Calendar Only - No Discord Ping)</option>
+            </select>
+          </div>
+
+          <!-- Non-Jumping Custom Role Input -->
+          <div class="form-group form-col-full" id="group-custom-role">
+            <label for="evt-input-role-id">Specific Role ID <small class="form-hint-inline">(Required only for Target Specific Role)</small></label>
+            <input 
+              type="text" 
+              id="evt-input-role-id" 
+              placeholder="e.g. 1198765432109876543" 
+              pattern="^\d{17,20}$"
+              title="Must be a valid 17-20 digit Discord Role ID"
+              disabled 
+              style="opacity: 0.45; cursor: not-allowed;"
+            />
+          </div>
+
+          <!-- Instructions / Rally Point -->
           <div class="form-group form-col-full">
             <label for="evt-input-details">Instructions / Rally Point</label>
-            <textarea id="evt-input-details" rows="2" placeholder="e.g. Assembly at Hive Alpha. All R4s lead rallies." maxlength="250"></textarea>
+            <textarea id="evt-input-details" rows="2" placeholder="e.g. Assembly at Hive Alpha. R4s lead rallies. Voice comms active." maxlength="250"></textarea>
           </div>
         </div>
 
@@ -92,12 +147,12 @@ permalink: /calendar.html
         </div>
       </section>
 
-      <!-- Scoped Filter Toolbar -->
-      <div class="cal-filter-toolbar" id="cal-filter-toolbar">
+      <!-- Scoped Filter Toolbar (Shown only when alliance context exists) -->
+      <div class="cal-filter-toolbar" id="cal-filter-toolbar" style="display: none;">
         <div class="filter-controls-group">
-          <label for="cal-scope-filter" class="filter-label">🔍 FILTER VIEW:</label>
+          <label for="cal-scope-filter" class="filter-label">🔍 PERSPECTIVE:</label>
           <select id="cal-scope-filter" class="cal-filter-select">
-            <!-- Dynamically populated only with relevant options -->
+            <!-- Dynamically populated -->
           </select>
         </div>
         <div id="filter-status-tag" class="filter-active-badge"></div>
@@ -242,7 +297,8 @@ permalink: /calendar.html
     color: #ef4444;
   }
   .form-group input,
-  .form-group textarea {
+  .form-group textarea,
+  .cal-form-select {
     width: 100%;
     background: #0d1117;
     border: 1px solid #334155;
@@ -251,9 +307,11 @@ permalink: /calendar.html
     border-radius: 6px;
     font-size: 0.88rem;
     box-sizing: border-box;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
   }
   .form-group input:focus,
-  .form-group textarea:focus {
+  .form-group textarea:focus,
+  .cal-form-select:focus {
     outline: none;
     border-color: #3b82f6;
   }
@@ -262,6 +320,11 @@ permalink: /calendar.html
     font-size: 0.7rem;
     color: #64748b;
     margin-top: 3px;
+  }
+  .form-hint-inline {
+    font-size: 0.72rem;
+    color: #64748b;
+    font-weight: 400;
   }
   .form-actions {
     display: flex;
@@ -472,12 +535,38 @@ permalink: /calendar.html
   .event-alliance { border-left-color: #3b82f6; }
 
   .event-main { flex: 1; }
+  .event-title-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 3px;
+  }
   .event-title {
     font-size: 0.92rem;
     font-weight: 700;
     color: #f1f5f9;
-    margin-bottom: 3px;
   }
+  .event-tag-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+  }
+  .pill-recurring {
+    border-color: #3b82f6;
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.15);
+  }
+  .pill-force {
+    border-color: #ef4444;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.15);
+  }
+
   .event-desc { font-size: 0.78rem; color: #94a3b8; }
   .event-actions-group {
     display: flex;
@@ -559,8 +648,7 @@ permalink: /calendar.html
     const sessionScope = isManagementSession ? tokenPayload.scope : null;
     const isGlobalAdmin = sessionScope === 'global';
 
-    // The active alliance context for this viewer (if any).
-    // If it's a global admin session, there is NO active alliance context (they only see Kingdom events).
+    // The active alliance context for this viewer (if any)
     const activeAlliance = (!isGlobalAdmin && sessionScope)
       ? sessionScope.toUpperCase()
       : (allianceParam || null);
@@ -655,12 +743,11 @@ permalink: /calendar.html
       filterSelect.innerHTML = '';
 
       if (activeAlliance) {
-        // Alliance Perspective: Options are limited strictly to their own alliance + Kingdom operations
         filterToolbar.style.display = 'flex';
 
         const optCombined = document.createElement('option');
         optCombined.value = 'combined';
-        optCombined.textContent = `🌐 Combined (Global + [${activeAlliance}])`;
+        optCombined.textContent = `🌐 Combined (Kingdom + [${activeAlliance}])`;
         filterSelect.appendChild(optCombined);
 
         const optAlliance = document.createElement('option');
@@ -670,13 +757,11 @@ permalink: /calendar.html
 
         const optGlobal = document.createElement('option');
         optGlobal.value = 'global';
-        optGlobal.textContent = '👑 Global Kingdom Operations Only';
+        optGlobal.textContent = '👑 Kingdom Operations Only';
         filterSelect.appendChild(optGlobal);
 
         filterSelect.value = 'combined';
-
       } else {
-        // Global Admin or Public Guest: No alliance options exist. Fixed to Kingdom Operations.
         filterToolbar.style.display = 'none';
       }
     }
@@ -694,7 +779,7 @@ permalink: /calendar.html
           return e.scope.toUpperCase() === activeAlliance;
         });
         filterStatusTag.style.display = 'block';
-        filterStatusTag.textContent = `🛡️ [${activeAlliance}] Schedule Active`;
+        filterStatusTag.textContent = `🛡️ [${activeAlliance}] Operations Active`;
       } else {
         filtered = allEvents.filter(e => e.scope && e.scope.toUpperCase() === activeAlliance);
         filterStatusTag.style.display = 'block';
@@ -706,7 +791,7 @@ permalink: /calendar.html
 
     filterSelect.addEventListener('change', applyFilterAndRender);
 
-    // 5. Render Timeline Items with Strict Deletion Checks
+    // 5. Render Timeline Items
     function renderTimeline(eventsList) {
       const timelineContainer = document.getElementById('events-timeline-container');
 
@@ -723,15 +808,26 @@ permalink: /calendar.html
         const localDateStr = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
         const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
-        // Can current session delete this event?
-        // Admin can ONLY delete global events. Alliance leaders can ONLY delete their own alliance events.
+        // Recurrence Badge
+        let recurrenceLabel = '';
+        if (evt.recurrence === '2days') recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Every 2 Days</span>';
+        else if (evt.recurrence === 'weekly') recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Weekly</span>';
+
+        // Force Notify Badge
+        const forceLabel = evt.notify_target === 'everyone' ? '<span class="event-tag-pill pill-force">🚨 Mandatory</span>' : '';
+
+        // Strict Delete check: Admins can ONLY delete global events; alliance officers can ONLY delete their own
         const canDelete = isManagementSession && evt.id && evt.id.startsWith('evt-') &&
           (sessionScope && evt.scope && evt.scope.toLowerCase() === sessionScope.toLowerCase());
 
         return `
-          <div class="timeline-event-row event-${evt.type || 'custom'}">
+          <div class="timeline-event-row event-${evt.type || 'custom'}" style="${evt.color ? `border-left-color: ${evt.color};` : ''}">
             <div class="event-main">
-              <div class="event-title">${evt.title}</div>
+              <div class="event-title-line">
+                <span class="event-title">${evt.title}</span>
+                ${recurrenceLabel}
+                ${forceLabel}
+              </div>
               <div class="event-desc">${evt.description || ''}</div>
             </div>
             <div class="event-actions-group">
@@ -750,7 +846,7 @@ permalink: /calendar.html
       });
     }
 
-    // 6. Management Mode UI & Actions
+    // 6. Management Mode UI & Non-Jumping Controls
     if (isManagementSession) {
       const mgmtPanel = document.getElementById('management-panel');
       const mgmtScopeTag = document.getElementById('mgmt-scope-tag');
@@ -760,7 +856,7 @@ permalink: /calendar.html
       mgmtPanel.style.display = 'block';
       if (isGlobalAdmin) {
         mgmtPanel.classList.add('scope-global');
-        mgmtScopeTag.textContent = '👑 GLOBAL ADMIN';
+        mgmtScopeTag.textContent = '👑 KINGDOM ADMIN';
         mgmtScopeDesc.textContent = 'Scheduling Kingdom-wide alerts and operations';
         formHeading.textContent = 'Create Kingdom Operation ([GLOBAL])';
       } else {
@@ -772,6 +868,90 @@ permalink: /calendar.html
       const formEl = document.getElementById('form-create-event');
       const btnToggle = document.getElementById('btn-toggle-event-form');
       const btnCancel = document.getElementById('btn-cancel-event-form');
+      const notifySelect = document.getElementById('evt-input-notify');
+      const customRoleInput = document.getElementById('evt-input-role-id');
+      const presetSelect = document.getElementById('evt-input-preset');
+
+      // Operation Presets Catalog
+      const OPERATION_PRESETS = {
+        crystal_cluster: {
+          title: "Crystal Cluster Valley",
+          color: "#7946C0",
+          duration: 0.5,
+          recurrence: "weekly",
+          description: "Free For All event every Sunday"
+        },
+        elixir_scramble: {
+          title: "Elixir Scramble",
+          color: "#24523B",
+          duration: 0.5,
+          recurrence: "weekly",
+          description: "Team Battle event every Friday"
+        },
+        survival_battle: {
+          title: "Survival Battle",
+          color: "#CF6214",
+          duration: 4.0,
+          recurrence: "none",
+          description: "Complete tasks to earn rewards"
+        },
+        kill_event: {
+          title: "Kill Event",
+          color: "#B12A2A",
+          duration: 24.0,
+          recurrence: "none",
+          description: "Invaders from other servers arrive! Make sure you are shielded"
+        },
+        kvk_battle: {
+          title: "Kingdom vs Kingdom Battle",
+          color: "#8ED2EF",
+          duration: 1.0,
+          recurrence: "none",
+          description: "The battle for the Royal Castle begins!"
+        },
+        gear_event: {
+          title: "Gear Event",
+          color: "#303A40",
+          duration: 48.0,
+          recurrence: "none",
+          description: "Get rewarded for upgrading gear"
+        },
+        cheese_trap: {
+          title: "Cheese Trap",
+          color: "#FAB22F",
+          duration: 0.5,
+          recurrence: "2days",
+          description: "Help fend off the Cheese Thief to earn rewards"
+        }
+      };
+
+      let activePresetColor = null;
+
+      presetSelect.addEventListener('change', () => {
+        const selected = OPERATION_PRESETS[presetSelect.value];
+        if (selected) {
+          document.getElementById('evt-input-title').value = selected.title;
+          document.getElementById('evt-input-duration').value = selected.duration;
+          document.getElementById('evt-input-recurrence').value = selected.recurrence;
+          document.getElementById('evt-input-details').value = selected.description;
+          activePresetColor = selected.color;
+        } else {
+          activePresetColor = null;
+        }
+      });
+
+      // Non-jumping toggle for Custom Role input
+      notifySelect.addEventListener('change', () => {
+        const isCustom = notifySelect.value === 'custom_role';
+        customRoleInput.disabled = !isCustom;
+        customRoleInput.style.opacity = isCustom ? '1' : '0.45';
+        customRoleInput.style.cursor = isCustom ? 'text' : 'not-allowed';
+        if (isCustom) {
+          customRoleInput.focus();
+        } else {
+          customRoleInput.value = '';
+        }
+      });
 
       btnToggle.addEventListener('click', () => {
         const isHidden = formEl.style.display === 'none';
@@ -789,6 +969,23 @@ permalink: /calendar.html
       // Submit Event Creation
       formEl.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const timeVal = document.getElementById('evt-input-time').value;
+        const [hh, mm] = timeVal.split(':').map(Number);
+        if (mm % 5 !== 0) {
+          showNotification('Game Time must be set in 5-minute increments (:00, :05, :10, etc.)', 'error');
+          return;
+        }
+
+        const notifyTarget = notifySelect.value;
+        const customRoleId = customRoleInput.value.trim();
+
+        if (notifyTarget === 'custom_role' && !/^\d{17,20}$/.test(customRoleId)) {
+          showNotification('Please enter a valid 17-20 digit Discord Role ID for the custom alert target.', 'error');
+          customRoleInput.focus();
+          return;
+        }
+
         const submitBtn = document.getElementById('btn-submit-event');
         submitBtn.disabled = true;
         submitBtn.textContent = 'Publishing...';
@@ -799,8 +996,12 @@ permalink: /calendar.html
           eventData: {
             title: document.getElementById('evt-input-title').value,
             date: document.getElementById('evt-input-date').value,
-            time_gt: document.getElementById('evt-input-time').value,
+            time_gt: timeVal,
             duration_hours: document.getElementById('evt-input-duration').value,
+            recurrence: document.getElementById('evt-input-recurrence').value,
+            notify_target: notifyTarget,
+            custom_role_id: notifyTarget === 'custom_role' ? customRoleId : null,
+            color: activePresetColor,
             description: document.getElementById('evt-input-details').value
           }
         };
@@ -816,6 +1017,10 @@ permalink: /calendar.html
 
           showNotification(result.message || 'Operation published successfully!', 'success');
           formEl.reset();
+          activePresetColor = null;
+          customRoleInput.disabled = true;
+          customRoleInput.style.opacity = '0.45';
+          customRoleInput.style.cursor = 'not-allowed';
           formEl.style.display = 'none';
           await loadCalendar();
         } catch (err) {

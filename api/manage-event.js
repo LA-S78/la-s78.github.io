@@ -1,4 +1,6 @@
 // api/manage-event.js
+
+// Handles creating, deleting, modifying events
 import crypto from 'crypto';
 
 /**
@@ -92,7 +94,17 @@ export default async function handler(req, res) {
 
     // --- ACTION: CREATE EVENT ---
     if (action === 'create') {
-      const { title, date, time_gt, duration_hours = 1, description = '' } = eventData || {};
+      const {
+        title,
+        date,
+        time_gt,
+        duration_hours = 1,
+        recurrence = 'none',
+        notify_target = 'role',
+        custom_role_id = null,
+        color = null,
+        description = ''
+      } = eventData || {};
 
       if (!title || !date || !time_gt) {
         return res.status(400).json({ error: 'Title, Date, and Game Time are required.' });
@@ -102,31 +114,73 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Date must be formatted as YYYY-MM-DD.' });
       }
 
+      // 5-Minute Snapping Validation
       if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time_gt)) {
         return res.status(400).json({ error: 'Game Time must be formatted as HH:MM (00:00 to 23:59).' });
       }
 
-      const duration = Math.max(0.5, Math.min(24, parseFloat(duration_hours) || 1));
+      const [hh, mm] = time_gt.split(':').map(Number);
+      if (mm % 5 !== 0) {
+        return res.status(400).json({
+          error: 'Game Time must be in 5-minute increments (:00, :05, :10, :15, etc.).'
+        });
+      }
+
+      // Multi-day events: Allow up to 48 hours (e.g. Gear Event)
+      const duration = Math.max(0.5, Math.min(48, parseFloat(duration_hours) || 1));
+
+      // Recurrence Mode Validation (Mutually Exclusive)
+      const allowedRecurrences = ['none', '2days', 'weekly'];
+      const cleanRecurrence = allowedRecurrences.includes(recurrence) ? recurrence : 'none';
+
+      // Alert Level & Role Validation
+      const allowedTargets = ['role', 'custom_role', 'everyone', 'none'];
+      const cleanNotifyTarget = allowedTargets.includes(notify_target) ? notify_target : 'role';
+
+      let cleanCustomRoleId = null;
+      if (cleanNotifyTarget === 'custom_role') {
+        const rawRole = String(custom_role_id || '').trim();
+        if (!/^\d{17,20}$/.test(rawRole)) {
+          return res.status(400).json({
+            error: 'Target Specific Role requires a valid 17-20 digit Discord Role ID.'
+          });
+        }
+        cleanCustomRoleId = rawRole;
+      }
+
+      // Sanitize Accent Color Hex
+      let cleanColor = isGlobalAdmin ? '#10b981' : '#3b82f6';
+      if (color && /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(String(color).trim())) {
+        cleanColor = String(color).trim();
+      }
 
       // Game Time is UTC-2 => UTC = GT + 2 hours
       const [year, month, day] = date.split('-').map(Number);
-      const [hh, mm] = time_gt.split(':').map(Number);
       const startUtc = new Date(Date.UTC(year, month - 1, day, hh + 2, mm, 0));
-      const endUtc = new Date(startUtc.getTime() + (duration * 3600000));
+      const endUtc = new Date(startUtc.getTime() + duration * 3600000);
 
       const cleanTitle = title.trim().replace(/^\[(GLOBAL\vert{}[A-Z0-9]+)\]\s*/i, '');
       const uniqueId = `evt-${callerScope.toLowerCase().replace(/[^a-z0-9]/g, '')}-${Date.now().toString(36)}`;
 
       const newEvent = {
         id: uniqueId,
-        scope: callerScope, // Strictly enforced from the verified token
+        scope: callerScope,
         title: isGlobalAdmin ? `[GLOBAL] ${cleanTitle}` : `[${callerScope}] ${cleanTitle}`,
         description: description.trim() || (isGlobalAdmin ? 'Kingdom-wide operation.' : `Alliance event for [${callerScope}].`),
         start: startUtc.toISOString(),
         end: endUtc.toISOString(),
         time_gt: time_gt,
+        duration_hours: duration,
+        recurrence: cleanRecurrence,
+        notify_target: cleanNotifyTarget,
+        custom_role_id: cleanCustomRoleId,
+        notification_status: {
+          reminder_15m_sent: false,
+          start_sent: false,
+          last_notified_occurrence: null
+        },
         type: isGlobalAdmin ? 'custom' : 'alliance',
-        color: isGlobalAdmin ? '#10b981' : '#3b82f6',
+        color: cleanColor,
         allDay: false,
         createdAt: new Date().toISOString()
       };

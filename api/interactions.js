@@ -1,4 +1,6 @@
 // api/interactions.js
+
+// Manages interactions between github, vercel, and Discord
 import crypto from "crypto";
 import {
   verifyKey,

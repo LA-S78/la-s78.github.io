@@ -1,4 +1,6 @@
 // api/nominate.js
+
+// For /nominate in Discord
 import crypto from 'crypto';
 
 function verifyNominationToken(token, secret) {

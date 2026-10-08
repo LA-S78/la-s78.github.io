@@ -18,7 +18,9 @@ hide_header: true
 
     <!-- Step 1: Invite Bot -->
     <div class="smart-paste-box" style="margin-bottom: 1.2rem;">
-      <label style="font-weight: bold; color: var(--accent-color);">1. Invite Bot to Your Server</label>
+      <label style="font-weight: bold; color: var(--accent-color); display: block; margin-bottom: 4px;">
+        1. Invite Bot to Your Server
+      </label>
       <p style="font-size: 0.82rem; margin: 4px 0 10px 0; color: #a0aec0;">
         You must add the bot to your alliance Discord before completing registration.
       </p>
@@ -32,23 +34,89 @@ hide_header: true
       <div class="slot-group">
         <div class="slot-group-title">2. Server & Role Credentials</div>
 
+        <!-- Server Guild ID -->
         <div style="margin-bottom: 1rem;">
-          <label style="display: block; font-size: 0.8rem; margin-bottom: 4px; color: var(--accent-color);">
-            Discord Server ID (Guild ID)
+          <label for="input-guild-id" style="display: block; font-size: 0.8rem; margin-bottom: 4px; color: var(--accent-color);">
+            Discord Server ID (Guild ID) <span style="color: #ff6b6b;">*</span>
           </label>
-          <input type="text" id="input-guild-id" class="slot-input" placeholder="e.g. 1333913822980735048" required style="width: 100%; box-sizing: border-box;">
+          <input 
+            type="text" 
+            id="input-guild-id" 
+            class="slot-input" 
+            placeholder="e.g. 1333913822980735048" 
+            required 
+            style="width: 100%; box-sizing: border-box;"
+          />
           <div style="font-size: 0.72rem; color: #718096; margin-top: 4px;">
             In Discord: Enable Developer Mode &rarr; Right-click your server icon &rarr; <strong>Copy Server ID</strong>.
           </div>
         </div>
 
-        <div style="margin-bottom: 1rem;">
-          <label style="display: block; font-size: 0.8rem; margin-bottom: 4px; color: var(--accent-color);">
+        <!-- Notification Routing Configuration -->
+        <div style="margin-bottom: 1rem; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+          <label style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 4px; color: var(--accent-color);">
+            📢 Operations & Event Alerts
+          </label>
+          <p style="font-size: 0.75rem; color: #a0aec0; margin: 0 0 0.75rem 0;">
+            Configure where the bot posts operation notices, countdown reminders, and emergency broadcasts.
+          </p>
+
+          <!-- Alert Channel ID -->
+          <div style="margin-bottom: 0.85rem;">
+            <label for="reg-alert-channel" style="display: block; font-size: 0.78rem; margin-bottom: 4px; color: #cbd5e1;">
+              Alert Channel ID <span style="color: #ff6b6b;">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="reg-alert-channel" 
+              name="alert_channel_id" 
+              class="slot-input" 
+              placeholder="e.g. 1198765432109876543" 
+              pattern="^\d{17,20}$"
+              title="Must be a valid 17-20 digit Discord Channel ID"
+              required 
+              style="width: 100%; box-sizing: border-box;"
+            />
+            <div style="font-size: 0.72rem; color: #718096; margin-top: 4px;">
+              Right-click your dedicated alert channel in Discord &rarr; <strong>Copy Channel ID</strong>.
+            </div>
+          </div>
+
+          <!-- Alert Role ID -->
+          <div>
+            <label for="reg-alert-role" style="display: block; font-size: 0.78rem; margin-bottom: 4px; color: #cbd5e1;">
+              Default Alert Role ID <small style="color: #64748b;">(Optional)</small>
+            </label>
+            <input 
+              type="text" 
+              id="reg-alert-role" 
+              name="alert_role_id" 
+              class="slot-input" 
+              placeholder="Leave blank to default to @everyone" 
+              pattern="^\d{17,20}$"
+              title="Must be a valid 17-20 digit Discord Role ID"
+              style="width: 100%; box-sizing: border-box;"
+            />
+            <div style="font-size: 0.72rem; color: #718096; margin-top: 4px;">
+              Right-click your ping role (e.g. <code>@War-Alerts</code>) in Server Settings &gt; Roles &rarr; <strong>Copy Role ID</strong>. If left blank, alerts default to <code>@everyone</code>.
+            </div>
+          </div>
+        </div>
+
+        <!-- Delegated Leadership Roles -->
+        <div style="margin-bottom: 1rem; padding-top: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+          <label for="input-roles" style="display: block; font-size: 0.8rem; margin-bottom: 4px; color: var(--accent-color);">
             Delegated Leadership Roles (Optional)
           </label>
-          <input type="text" id="input-roles" class="slot-input" placeholder="HR, Officer, Leader" style="width: 100%; box-sizing: border-box;">
+          <input 
+            type="text" 
+            id="input-roles" 
+            class="slot-input" 
+            placeholder="HR, Officer, Leader" 
+            style="width: 100%; box-sizing: border-box;"
+          />
           <div style="font-size: 0.72rem; color: #718096; margin-top: 4px;">
-            Comma-separated role names that can submit chest nominations in your server (<code>@R5</code> is always allowed by default).
+            Comma-separated role names that can manage events and chest nominations (<code>@R5</code> is always allowed by default).
           </div>
         </div>
       </div>
@@ -79,7 +147,6 @@ hide_header: true
     let payload = null;
     try {
       const dataString = token.split('.')[0];
-      // UTF-8 multi-byte decoding (preserves characters like Â, é, ö)
       const binary = atob(dataString.replace(/-/g, '+').replace(/_/g, '/'));
       const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
       const jsonStr = new TextDecoder('utf-8').decode(bytes);
@@ -107,11 +174,25 @@ hide_header: true
       e.preventDefault();
       const btn = document.getElementById('btn-submit');
       const guildId = document.getElementById('input-guild-id').value.trim();
+      const alertChannelId = document.getElementById('reg-alert-channel').value.trim();
+      const rawAlertRole = document.getElementById('reg-alert-role').value.trim();
+      const alertRoleId = rawAlertRole || null;
+
       const rawRoles = document.getElementById('input-roles').value;
       const delegatedRoles = rawRoles.split(/[,]+/).map(r => r.trim()).filter(Boolean);
 
       if (!/^\d{17,20}$/.test(guildId)) {
         alert('Invalid Discord Server ID format. Must be a 17-20 digit number.');
+        return;
+      }
+
+      if (!/^\d{17,20}$/.test(alertChannelId)) {
+        alert('Invalid Discord Alert Channel ID format. Must be a 17-20 digit number.');
+        return;
+      }
+
+      if (alertRoleId && !/^\d{17,20}$/.test(alertRoleId)) {
+        alert('Invalid Alert Role ID format. Must be a 17-20 digit number (or left empty for @everyone).');
         return;
       }
 
@@ -125,7 +206,9 @@ hide_header: true
           body: JSON.stringify({
             token: token,
             guildId: guildId,
-            delegatedRoles: delegatedRoles
+            delegatedRoles: delegatedRoles,
+            alert_channel_id: alertChannelId,
+            alert_role_id: alertRoleId
           })
         });
 
@@ -137,8 +220,10 @@ hide_header: true
         elSuccess.innerHTML = `
           <strong>✅ Registration Successful!</strong><br><br>
           Server ID <code>${guildId}</code> is now linked to <strong>[${payload.alliance}]</strong>.<br><br>
-          • Slash commands (<code>/nominate</code>, <code>/rewards</code>, <code>/map</code>, <code>/sb</code>, <code>/rules</code>) have been installed instantly to your server.<br>
-          • Authorized nomination roles: <strong>@R5</strong>${delegatedRoles.length ? `, ${delegatedRoles.map(r => '@' + r).join(', ')}` : ''}.
+          - <strong>Alert Channel:</strong> <code>${alertChannelId}</code><br>
+          - <strong>Notification Target:</strong> ${alertRoleId ? `Role <code>${alertRoleId}</code>` : '<code>@everyone</code> (Default)'}<br>
+          - <strong>Slash Commands Deployed:</strong> <code>/calendar</code>, <code>/nominate</code>, <code>/rewards</code>, <code>/map</code>, <code>/sb</code>, <code>/rules</code>.<br>
+          - <strong>Authorized Leadership:</strong> <strong>@R5</strong>${delegatedRoles.length ? `, ${delegatedRoles.map(r => '@' + r).join(', ')}` : ''}.
         `;
       } catch (err) {
         alert(`Registration Error: ${err.message}`);

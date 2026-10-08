@@ -105,7 +105,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { token, guildId, delegatedRoles } = req.body;
+  const { token, guildId, delegatedRoles, alert_channel_id, alert_role_id } = req.body;
   const botToken = process.env.DISCORD_BOT_TOKEN;
   const clientId = process.env.DISCORD_CLIENT_ID;
   const gistId = process.env.GIST_ID;
@@ -142,6 +142,29 @@ export default async function handler(req, res) {
         )
         .filter(Boolean)
     : [];
+
+  // Validate alert routing if provided
+  let cleanChannelId = null;
+  if (alert_channel_id) {
+    const rawChannelId = String(alert_channel_id).trim();
+    if (!/^\d{17,20}$/.test(rawChannelId)) {
+      return res.status(400).json({
+        error: "Invalid Discord Alert Channel ID format (must be 17-20 digits).",
+      });
+    }
+    cleanChannelId = rawChannelId;
+  }
+
+  let cleanRoleId = null;
+  if (alert_role_id) {
+    const rawRoleId = String(alert_role_id).trim();
+    if (!/^\d{17,20}$/.test(rawRoleId)) {
+      return res.status(400).json({
+        error: "Invalid Discord Alert Role ID format (must be 17-20 digits).",
+      });
+    }
+    cleanRoleId = rawRoleId;
+  }
 
   // 1. Verify Bot Membership via Discord REST API
   const rolesCheckRes = await fetch(
@@ -190,7 +213,7 @@ export default async function handler(req, res) {
     console.error("Failed to retrieve Gist state:", err);
     return res
       .status(500)
-      .json({ error: `Failed to read War Room state: ${err.message}` });
+      .json({ error: `Failed to read kingdom state: ${err.message}` });
   }
 
   const alliances = currentState.alliances || {};
@@ -228,22 +251,30 @@ export default async function handler(req, res) {
       .json({ error: "Failed to deploy slash commands to your server." });
   }
 
-  // 4. Persist Guild Mapping to GitHub Gist
+  // 4. Persist Guild Mapping & Alert Config to GitHub Gist
   try {
     if (!currentState.alliances) currentState.alliances = {};
     if (!currentState.alliances[payload.alliance]) {
       currentState.alliances[payload.alliance] = {};
     }
 
-    currentState.alliances[payload.alliance].guild_id = cleanGuildId;
-    currentState.alliances[payload.alliance].delegated_roles = cleanRoles;
+    const allianceRecord = currentState.alliances[payload.alliance];
+    allianceRecord.guild_id = cleanGuildId;
+    allianceRecord.delegated_roles = cleanRoles;
+
+    if (cleanChannelId) {
+      allianceRecord.alert_channel_id = cleanChannelId;
+    }
+    // Null defaults to @everyone fallback
+    allianceRecord.alert_role_id = cleanRoleId;
+
     currentState.lastUpdated = new Date().toISOString();
 
     const patchRes = await fetch(`https://api.github.com/gists/${gistId}`, {
       method: "PATCH",
       headers: { ...gistHeaders, "Content-Type": "application/json" },
       body: JSON.stringify({
-        description: `Server registered for [${payload.alliance}] at ${new Date().toISOString()}`,
+        description: `Server and alert routing registered for [${payload.alliance}] at ${new Date().toISOString()}`,
         files: {
           "map-state.json": {
             content: JSON.stringify(currentState, null, 2),
@@ -260,6 +291,8 @@ export default async function handler(req, res) {
       alliance: payload.alliance,
       guildId: cleanGuildId,
       delegatedRoles: cleanRoles,
+      alertChannelId: allianceRecord.alert_channel_id || null,
+      alertRoleId: allianceRecord.alert_role_id || null,
     });
   } catch (gistErr) {
     console.error("Failed to commit alliance registration:", gistErr);
