@@ -95,8 +95,8 @@ const FALLBACK_BOT_STRINGS = {
   sb: {
     current_event: "Current Event",
     next_event: "Next Event",
-    schedule_title: "Day {day} Schedule (Game Time / UTC+2)",
-    footer: "Times are Game Time (UTC+2). Relative countdowns adapt to your local time.",
+    schedule_title: "Day {day} Schedule (Game Time / UTC-2)",
+    footer: "Times are Game Time (UTC-2). Relative countdowns adapt to your local time.",
     button: "View Full Schedule"
   },
   rules: {
@@ -352,7 +352,9 @@ export default async function handler(req, res) {
     // --- /sb COMMAND ---
     if (name === 'sb') {
       const now = new Date();
-      const gameTime = new Date(now.getTime() + (2 * 60 * 60 * 1000));
+
+      // Game Time is UTC-2 (subtract 2 hours from UTC)
+      const gameTime = new Date(now.getTime() - (2 * 60 * 60 * 1000));
       const gameHour = gameTime.getUTCHours();
 
       const rawDay = gameTime.getUTCDay();
@@ -379,11 +381,17 @@ export default async function handler(req, res) {
       const nextSlotIndex = (activeSlotIndex + 1) % 6;
       const dayKey = `d${selectedDay}`;
 
+      // Next slot hour in Game Time
       const nextSlotHourGT = (slotHours[activeSlotIndex] + 4) % 24;
+
+      // Convert GT hour to UTC hour: GT = UTC - 2 => UTC = GT + 2
+      const nextSlotUtcHour = (nextSlotHourGT + 2) % 24;
+
       const nextSlotTime = new Date(now);
-      const nextSlotUtcHour = (nextSlotHourGT - 2 + 24) % 24;
       nextSlotTime.setUTCHours(nextSlotUtcHour, 0, 0, 0);
-      if (nextSlotUtcHour <= now.getUTCHours() && nextSlotHourGT <= gameHour) {
+
+      // If the next slot wraps past midnight GT into tomorrow
+      if (nextSlotHourGT <= gameHour) {
         nextSlotTime.setUTCDate(nextSlotTime.getUTCDate() + 1);
       }
       const nextTimestamp = Math.floor(nextSlotTime.getTime() / 1000);
