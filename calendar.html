@@ -233,9 +233,14 @@ permalink: /calendar.html
     padding: 1.25rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: background 0.25s ease, border-left-color 0.25s ease, box-shadow 0.25s ease;
   }
   .cal-management-panel.scope-global {
     border-left-color: #10b981;
+  }
+  /* Submit Button dynamic transition */
+  #btn-submit-event {
+    transition: background 0.25s ease, border-color 0.25s ease;
   }
   .mgmt-header {
     display: flex;
@@ -490,24 +495,32 @@ permalink: /calendar.html
     position: relative;
   }
   .cycle-week-card.active {
-    border-color: #b8975a;
-    background: linear-gradient(180deg, rgba(184, 151, 90, 0.12), #14171e);
+    border-color: var(--active-theme-vivid, var(--active-theme, #b8975a));
+    background: linear-gradient(
+      180deg, 
+      color-mix(in srgb, var(--active-theme, #b8975a) 18%, #14171e), 
+      #14171e
+    );
   }
   .active-indicator {
     position: absolute;
     top: -9px;
     right: 12px;
-    background: #b8975a;
+    background: var(--active-theme-vivid, var(--active-theme, #b8975a));
     color: #000;
     font-size: 0.6rem;
     font-weight: 800;
     padding: 2px 7px;
     border-radius: 4px;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--active-theme-vivid, #b8975a) 40%, transparent);
   }
   .week-card-num { font-size: 0.72rem; font-weight: 700; color: #94a3b8; }
   .week-card-title { font-size: 0.92rem; font-weight: 700; margin: 4px 0 10px 0; }
   .week-card-meta { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
-  .week-card-holder { font-weight: 700; color: #fef08a; }
+  .week-card-holder { 
+    font-weight: 700; 
+    color: var(--active-theme-bright, #fef08a); 
+  }
 
   /* Timeline & Event Rows */
   .events-timeline {
@@ -872,53 +885,60 @@ permalink: /calendar.html
       const customRoleInput = document.getElementById('evt-input-role-id');
       const presetSelect = document.getElementById('evt-input-preset');
 
-      // Operation Presets Catalog
+      // Operation Presets Catalog with Paired Dynamic Theming
       const OPERATION_PRESETS = {
         crystal_cluster: {
           title: "Crystal Cluster Valley",
-          color: "#7946C0",
+          accent: "#9d65ea",                                // Brighter purple for the side accent
+          bg: "linear-gradient(145deg, rgba(121, 70, 192, 0.18), #111317)",
           duration: 0.5,
           recurrence: "weekly",
           description: "Free For All event every Sunday"
         },
         elixir_scramble: {
           title: "Elixir Scramble",
-          color: "#24523B",
+          accent: "#34d399",                                // Vibrant emerald
+          bg: "linear-gradient(145deg, rgba(36, 82, 59, 0.25), #111317)",
           duration: 0.5,
           recurrence: "weekly",
           description: "Team Battle event every Friday"
         },
         survival_battle: {
           title: "Survival Battle",
-          color: "#CF6214",
+          accent: "#f97316",                                // Vivid ember orange
+          bg: "linear-gradient(145deg, rgba(207, 98, 20, 0.20), #111317)",
           duration: 4.0,
           recurrence: "none",
           description: "Complete tasks to earn rewards"
         },
         kill_event: {
           title: "Kill Event",
-          color: "#B12A2A",
+          accent: "#ef4444",                                // High-alert blood crimson
+          bg: "linear-gradient(145deg, rgba(177, 42, 42, 0.20), #111317)",
           duration: 24.0,
           recurrence: "none",
           description: "Invaders from other servers arrive! Make sure you are shielded"
         },
         kvk_battle: {
           title: "Kingdom vs Kingdom Battle",
-          color: "#8ED2EF",
+          accent: "#8ed2ef",                                // Glacial/castle ice blue
+          bg: "linear-gradient(145deg, rgba(142, 210, 239, 0.16), #111317)",
           duration: 1.0,
           recurrence: "none",
           description: "The battle for the Royal Castle begins!"
         },
         gear_event: {
           title: "Gear Event",
-          color: "#303A40",
+          accent: "#94a3b8",                                // Polished steel grey
+          bg: "linear-gradient(145deg, rgba(48, 58, 64, 0.35), #111317)",
           duration: 48.0,
           recurrence: "none",
           description: "Get rewarded for upgrading gear"
         },
         cheese_trap: {
           title: "Cheese Trap",
-          color: "#FAB22F",
+          accent: "#fab22f",                                // Warm glowing gold
+          bg: "linear-gradient(145deg, rgba(250, 178, 47, 0.20), #111317)",
           duration: 0.5,
           recurrence: "2days",
           description: "Help fend off the Cheese Thief to earn rewards"
@@ -927,16 +947,35 @@ permalink: /calendar.html
 
       let activePresetColor = null;
 
+      // Base default theme to revert to when "Custom" is picked
+      const defaultBorderColor = isGlobalAdmin ? '#10b981' : '#3b82f6';
+      const defaultBackground = '#14171f';
+      const submitBtn = document.getElementById('btn-submit-event');
+
       presetSelect.addEventListener('change', () => {
         const selected = OPERATION_PRESETS[presetSelect.value];
         if (selected) {
+          // Fill inputs
           document.getElementById('evt-input-title').value = selected.title;
           document.getElementById('evt-input-duration').value = selected.duration;
           document.getElementById('evt-input-recurrence').value = selected.recurrence;
           document.getElementById('evt-input-details').value = selected.description;
-          activePresetColor = selected.color;
+          activePresetColor = selected.accent;
+
+          // Dynamically theme the Schedule panel
+          mgmtPanel.style.borderLeftColor = selected.accent;
+          mgmtPanel.style.background = selected.bg;
+          mgmtPanel.style.boxShadow = `0 4px 20px ${selected.accent}22`;
+          submitBtn.style.background = selected.accent;
+          submitBtn.style.color = (selected === OPERATION_PRESETS.cheese_trap || selected === OPERATION_PRESETS.kvk_battle) ? '#000' : '#fff';
         } else {
+          // Revert to neutral alliance / global admin theme
           activePresetColor = null;
+          mgmtPanel.style.borderLeftColor = defaultBorderColor;
+          mgmtPanel.style.background = defaultBackground;
+          mgmtPanel.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
+          submitBtn.style.background = defaultBorderColor;
+          submitBtn.style.color = '#fff';
         }
       });
 
