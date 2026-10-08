@@ -1,0 +1,449 @@
+---
+layout: portal
+title: Kingdom War & Event Calendar
+permalink: /calendar.html
+---
+
+<div class="calendar-app-container">
+  <!-- Status Banner / Loading -->
+  <div id="loading-state" class="cal-status-banner">Loading Kingdom schedule...</div>
+  <div id="error-state" class="cal-status-banner error" style="display: none;"></div>
+
+  <div id="calendar-content" style="display: none;">
+    <!-- Hero / Active Cycle Overview -->
+    <section class="cal-hero-card">
+      <div class="cal-hero-header">
+        <div>
+          <span class="cal-badge" id="hero-phase-badge">Phase</span>
+          <h1 id="hero-phase-title" class="cal-hero-title">Kingdom War Schedule</h1>
+          <p class="cal-hero-subtitle" id="hero-phase-subtitle">Loading cycle details...</p>
+        </div>
+        <div class="cal-capitol-card">
+          <div class="cal-capitol-label">CURRENT CAPITOL HOLDER</div>
+          <div class="cal-capitol-holder" id="hero-capitol-holder">--</div>
+          <div class="cal-capitol-rank" id="hero-capitol-rank">Rank #--</div>
+        </div>
+      </div>
+
+      <div class="cal-hero-metrics">
+        <div class="metric-item">
+          <span class="metric-label">CYCLE PROGRESS</span>
+          <span class="metric-val" id="metric-cycle-progress">Day -- of 28</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">NEXT DAILY RESET (00:00 GT)</span>
+          <span class="metric-val" id="metric-reset-countdown">--:--:--</span>
+        </div>
+        <div class="metric-item" id="metric-kw-box">
+          <span class="metric-label">NEXT KW BATTLE</span>
+          <span class="metric-val" id="metric-kw-countdown">Saturday</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4-Week Cycle Visual Roadmap -->
+    <section class="cal-section">
+      <h2 class="section-heading">4-Week Capitol Rotation Cycle</h2>
+      <div class="cycle-track-grid" id="cycle-cards-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- Event Timeline & Agenda -->
+    <section class="cal-section">
+      <div class="section-header-row">
+        <h2 class="section-heading">Upcoming Operations & Milestones</h2>
+        <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> & your Local Time</div>
+      </div>
+
+      <div class="events-timeline" id="events-timeline-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .calendar-app-container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: inherit;
+    color: #e2e8f0;
+  }
+
+  .cal-status-banner {
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid #334155;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+  .cal-status-banner.error {
+    background: rgba(127, 29, 29, 0.4);
+    border-color: #ef4444;
+    color: #fca5a5;
+  }
+
+  .cal-hero-card {
+    background: linear-gradient(145deg, #181b22, #111317);
+    border: 1px solid #2d3340;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .cal-hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #232834;
+  }
+
+  .cal-hero-title {
+    margin: 0.5rem 0 0.25rem 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .cal-hero-subtitle {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  .cal-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-kw { background: rgba(185, 28, 28, 0.25); border: 1px solid #ef4444; color: #f87171; }
+  .badge-off { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; }
+
+  .cal-capitol-card {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid #3e3828;
+    border-radius: 8px;
+    padding: 0.9rem 1.4rem;
+    text-align: right;
+    min-width: 180px;
+  }
+  .cal-capitol-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #b8975a;
+  }
+  .cal-capitol-holder {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #fef08a;
+    margin: 2px 0;
+  }
+  .cal-capitol-rank {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  .cal-hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .metric-item {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid #262c38;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+  }
+  .metric-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .metric-val {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .cal-section {
+    margin-bottom: 2.25rem;
+  }
+  .section-heading {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0 0 1rem 0;
+  }
+  .section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .cal-tz-notice {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  /* 4-Week Cycle Roadmap */
+  .cycle-track-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.85rem;
+  }
+  .cycle-week-card {
+    background: #14171e;
+    border: 1px solid #252b37;
+    border-radius: 8px;
+    padding: 1rem;
+    position: relative;
+    transition: transform 0.15s ease;
+  }
+  .cycle-week-card.active {
+    border-color: #b8975a;
+    background: linear-gradient(180deg, rgba(184, 151, 90, 0.12), #14171e);
+    box-shadow: 0 0 15px rgba(184, 151, 90, 0.15);
+  }
+  .active-indicator {
+    position: absolute;
+    top: -9px;
+    right: 12px;
+    background: #b8975a;
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+  .week-card-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+  }
+  .week-card-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 4px 0 10px 0;
+  }
+  .week-card-meta {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    line-height: 1.4;
+  }
+  .week-card-holder {
+    font-weight: 700;
+    color: #fef08a;
+  }
+
+  /* Timeline List */
+  .events-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .timeline-event-row {
+    background: #14171e;
+    border-left: 4px solid #475569;
+    border-top: 1px solid #202531;
+    border-right: 1px solid #202531;
+    border-bottom: 1px solid #202531;
+    border-radius: 0 6px 6px 0;
+    padding: 0.85rem 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .event-rotation { border-left-color: #b8975a; }
+  .event-war { border-left-color: #ef4444; }
+  .event-snapshot { border-left-color: #3b82f6; }
+  .event-custom { border-left-color: #10b981; }
+
+  .event-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 3px;
+  }
+  .event-desc {
+    font-size: 0.78rem;
+    color: #94a3b8;
+  }
+  .event-time-block {
+    text-align: right;
+    font-size: 0.75rem;
+    color: #64748b;
+    white-space: nowrap;
+  }
+  .time-gt {
+    color: #cbd5e1;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 768px) {
+    .cycle-track-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cal-hero-header {
+      flex-direction: column;
+    }
+    .cal-capitol-card {
+      text-align: left;
+      width: 100%;
+    }
+    .timeline-event-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .event-time-block {
+      text-align: left;
+    }
+  }
+</style>
+
+<script>
+  (async function () {
+    const elLoading = document.getElementById('loading-state');
+    const elError = document.getElementById('error-state');
+    const elContent = document.getElementById('calendar-content');
+
+    let calendarData = null;
+
+    try {
+      const res = await fetch('/api/calendar');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      calendarData = await res.json();
+    } catch (e) {
+      elLoading.style.display = 'none';
+      elError.style.display = 'block';
+      elError.textContent = `Failed to load calendar: ${e.message}`;
+      return;
+    }
+
+    elLoading.style.display = 'none';
+    elContent.style.display = 'block';
+
+    const { status, capitolHolder, events } = calendarData;
+
+    // 1. Populate Hero
+    const heroBadge = document.getElementById('hero-phase-badge');
+    heroBadge.textContent = status.isKW ? '⚔️ Kingdom War Active' : '🛡️ NAP Rest Week';
+    heroBadge.className = `cal-badge ${status.isKW ? 'badge-kw' : 'badge-off'}`;
+
+    document.getElementById('hero-phase-title').textContent = status.phaseName;
+    document.getElementById('hero-phase-subtitle').textContent = status.isKW
+      ? 'Double reward allotments active. Prepare for Saturday Kingdom War confrontation.'
+      : 'Standard single allocation. Fortresses and territory restructuring active.';
+
+    document.getElementById('hero-capitol-holder').textContent = capitolHolder;
+    document.getElementById('hero-capitol-rank').textContent = `Rank #${status.capitolRank} Privilege`;
+
+    document.getElementById('metric-cycle-progress').textContent = `Day ${status.cycleDay} of 28 (Week ${status.currentWeekNumber})`;
+
+    if (status.isKW) {
+      const kwDate = new Date(status.kwBattleTimestamp * 1000);
+      document.getElementById('metric-kw-countdown').textContent = status.isKWBattleDay
+        ? '🔥 TODAY'
+        : kwDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+    } else {
+      document.getElementById('metric-kw-box').style.opacity = '0.5';
+      document.getElementById('metric-kw-countdown').textContent = 'None (Rest)';
+    }
+
+    // 2. Live Countdown to 00:00 GT Reset
+    function updateResetClock() {
+      const now = Date.now();
+      const target = status.nextResetTimestamp * 1000;
+      const diff = Math.max(0, target - now);
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('metric-reset-countdown').textContent =
+        `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+    updateResetClock();
+    setInterval(updateResetClock, 1000);
+
+    // 3. Render 4-Week Rotation Roadmap
+    const cycleWeeks = [
+      { week: 1, name: 'KW Week 1', rank: 3, desc: 'Might Snapshots (Days 3–5)' },
+      { week: 2, name: 'KW Week 2', rank: 2, desc: 'War Confrontation' },
+      { week: 3, name: 'KW Week 3', rank: 1, desc: 'War Confrontation' },
+      { week: 4, name: 'Rest Week', rank: 4, desc: 'Peace & Restructuring' }
+    ];
+
+    const cardsContainer = document.getElementById('cycle-cards-grid');
+    cardsContainer.innerHTML = cycleWeeks.map(cw => {
+      const isActive = cw.week === status.currentWeekNumber;
+      return `
+        <div class="cycle-week-card ${isActive ? 'active' : ''}">
+          ${isActive ? '<span class="active-indicator">CURRENT</span>' : ''}
+          <div class="week-card-num">Week ${cw.week}</div>
+          <div class="week-card-title">${cw.name}</div>
+          <div class="week-card-meta">
+            Capitol: <span class="week-card-holder">Rank #${cw.rank}</span><br>
+            ${cw.desc}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // 4. Render Event Timeline
+    const timelineContainer = document.getElementById('events-timeline-container');
+    if (!events || events.length === 0) {
+      timelineContainer.innerHTML = '<div class="cal-status-banner">No upcoming events scheduled.</div>';
+    } else {
+      timelineContainer.innerHTML = events.map(evt => {
+        const start = new Date(evt.start);
+
+        // Convert UTC to Game Time (UTC-2)
+        const gtHours = (start.getUTCHours() - 2 + 24) % 24;
+        const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
+        const gtTimeStr = evt.allDay ? 'All Day' : `${String(gtHours).padStart(2, '0')}:${gtMins} GT`;
+
+        const localDateStr = start.toLocaleDateString(undefined, {
+          weekday: 'short', month: 'short', day: 'numeric'
+        });
+        const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
+        return `
+          <div class="timeline-event-row event-${evt.type || 'custom'}">
+            <div>
+              <div class="event-title">${evt.title}</div>
+              <div class="event-desc">${evt.description}</div>
+            </div>
+            <div class="event-time-block">
+              <div class="time-gt">${gtTimeStr}</div>
+              <div>${localDateStr}${localTimeStr}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  })();
+</script>

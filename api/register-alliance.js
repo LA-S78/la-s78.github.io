@@ -3,8 +3,13 @@ import crypto from 'crypto';
 
 const ALLIANCE_COMMANDS_SCHEMA = [
   {
+    name: 'calendar',
+    description: 'View the Event Calendar',
+    type: 1
+  },
+  {
     name: 'nominate',
-    description: 'Request an authenticated portal link to submit weekly chest nominations',
+    description: 'Request a portal link to submit weekly chest nominations',
     type: 1
   },
   {
@@ -14,7 +19,7 @@ const ALLIANCE_COMMANDS_SCHEMA = [
   },
   {
     name: 'sb',
-    description: 'Display the Survival Battle arms race schedule and active events',
+    description: 'Display the Survival Battle schedule',
     type: 1,
     options: [
       {
@@ -43,7 +48,7 @@ const ALLIANCE_COMMANDS_SCHEMA = [
   },
   {
     name: 'map',
-    description: 'View live Last Asylum territory map',
+    description: 'View the live territory map',
     type: 1
   }
 ];
