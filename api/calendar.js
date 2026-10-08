@@ -60,6 +60,7 @@ export default async function handler(req, res) {
   return res.status(200).json({
     status: currentStatus,
     capitolHolder: capitolHolderTag,
-    events: allEvents
+    events: allEvents,
+    alliances: Object.keys(alliances || {})
   });
 }

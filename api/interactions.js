@@ -513,6 +513,11 @@ export default async function handler(req, res) {
         process.env.DISCORD_GUILD_ID ||
         ""
       ).trim();
+      const wloGuildId = (
+        process.env.DISCORD_GUILD_ID_WLO ||
+        process.env.DISCORD_WLO ||
+        ""
+      ).trim();
 
       const requestedAction = options?.find(
         (opt) => opt.name === "action",
@@ -523,7 +528,7 @@ export default async function handler(req, res) {
 
       try {
         if (GIST_ID && GIST_TOKEN) {
-          const gistData = await getCachedCalendarGist(GIST_ID, GIST_TOKEN);
+          const gistData = await getGistData(GIST_ID, GIST_TOKEN);
           const calRaw = gistData.files?.["calendar-state.json"]?.content;
           const mapRaw = gistData.files?.["map-state.json"]?.content;
 
@@ -532,18 +537,36 @@ export default async function handler(req, res) {
         }
       } catch (err) {
         console.warn(
-          "Calendar state fetch failed, utilizing defaults:",
+          "Calendar state fetch failed, using defaults:",
           err.message,
         );
       }
 
-      // 1. Resolve caller alliance tag from Guild ID or NAP Server Roles
+      // 1. Resolve Alliance from Guild ID first
       let detectedAllianceTag = null;
-      let memberRoleNames = [];
+      let allianceData = null;
 
-      try {
-        const memberRoleIds = member?.roles || [];
-        if (guildId && botToken && memberRoleIds.length > 0) {
+      const registeredEntry = Object.entries(alliances).find(
+        ([_, data]) =>
+          data?.guild_id && String(data.guild_id).trim() === guildId,
+      );
+
+      if (registeredEntry) {
+        detectedAllianceTag = registeredEntry[0];
+        allianceData = registeredEntry[1];
+      } else if (wloGuildId && guildId === wloGuildId) {
+        detectedAllianceTag = "WLO";
+        allianceData = alliances["WLO"] || {
+          delegated_roles: ["hr", "officer"],
+        };
+      }
+
+      // 2. If in NAP Server, resolve Alliance from assigned Discord roles
+      let memberRoleNames = [];
+      const memberRoleIds = member?.roles || [];
+
+      if (guildId && botToken && memberRoleIds.length > 0) {
+        try {
           const roleMap = await getGuildRoleMap(
             guildId,
             botToken,
@@ -552,29 +575,23 @@ export default async function handler(req, res) {
           memberRoleNames = memberRoleIds
             .map((id) => roleMap.get(id))
             .filter(Boolean);
+        } catch (roleErr) {
+          console.warn("Role map lookup failed:", roleErr.message);
         }
+      }
 
-        // Check if inside a registered alliance server
-        const registeredEntry = Object.entries(alliances).find(
-          ([_, data]) =>
-            data?.guild_id && String(data.guild_id).trim() === guildId,
-        );
-
-        if (registeredEntry) {
-          detectedAllianceTag = registeredEntry[0];
-        } else if (napGuildId && guildId === napGuildId) {
-          // Check for alliance tag role in NAP server
-          const knownTags = Object.keys(alliances);
-          detectedAllianceTag = knownTags.find((tag) => {
-            const cleanTag = tag.toLowerCase();
-            return memberRoleNames.some(
-              (r) =>
-                r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
-            );
-          });
+      if (!detectedAllianceTag && napGuildId && guildId === napGuildId) {
+        const knownTags = Object.keys(alliances);
+        detectedAllianceTag = knownTags.find((tag) => {
+          const cleanTag = tag.toLowerCase();
+          return memberRoleNames.some(
+            (r) =>
+              r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
+          );
+        });
+        if (detectedAllianceTag) {
+          allianceData = alliances[detectedAllianceTag];
         }
-      } catch (err) {
-        console.warn("Failed to resolve caller alliance context:", err.message);
       }
 
       // --- SUB-ACTION: Manage Global Events (Admin Only) ---
@@ -593,7 +610,7 @@ export default async function handler(req, res) {
         const tokenPayload = {
           scope: "global",
           action: "manage_events",
-          exp: Date.now() + 4 * 60 * 60 * 1000, // 4 hours
+          exp: Date.now() + 4 * 60 * 60 * 1000,
         };
         const token = createHmacToken(tokenPayload, botToken);
         const manageUrl = `https://${resolvedHost}/calendar.html?token=${token}`;
@@ -641,11 +658,10 @@ export default async function handler(req, res) {
           });
         }
 
-        const allianceData = alliances[detectedAllianceTag] || {};
         const isAdmin = (BigInt(member?.permissions || "0") & 8n) === 8n;
         const allowedRoles = [
           "r5",
-          ...(allianceData.delegated_roles || ["hr", "officer", "leader"]),
+          ...(allianceData?.delegated_roles || ["hr", "officer", "leader"]),
         ];
         const isAuthorized =
           userId === process.env.AUTHORIZED_USER_ID ||
@@ -668,7 +684,7 @@ export default async function handler(req, res) {
           scope: detectedAllianceTag,
           alliance: detectedAllianceTag,
           action: "manage_events",
-          exp: Date.now() + 4 * 60 * 60 * 1000, // 4 hours
+          exp: Date.now() + 4 * 60 * 60 * 1000,
         };
         const token = createHmacToken(tokenPayload, botToken);
         const manageUrl = `https://${resolvedHost}/calendar.html?token=${token}`;
@@ -764,7 +780,6 @@ export default async function handler(req, res) {
         inline: false,
       });
 
-      // Tailor the button to their alliance if detected
       const viewQuery = detectedAllianceTag
         ? `?alliance=${detectedAllianceTag}`
         : "";

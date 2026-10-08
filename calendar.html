@@ -3,126 +3,130 @@ layout: portal
 title: Kingdom War & Event Calendar
 permalink: /calendar.html
 ---
-<div class="content-pane">
-<div class="calendar-app-container">
-  <!-- Status & Feedback Alerts -->
-  <div id="loading-state" class="cal-status-banner">Loading Kingdom schedule...</div>
-  <div id="error-state" class="cal-status-banner error" style="display: none;"></div>
-  <div id="action-notification" class="cal-notification-banner" style="display: none;"></div>
 
-  <!-- Management Controls (Rendered only when authenticated via token) -->
-  <div id="management-panel" class="cal-management-panel" style="display: none;">
-    <div class="mgmt-header">
-      <div class="mgmt-badge-group">
-        <span class="mgmt-tag" id="mgmt-scope-tag">MANAGE MODE</span>
-        <span class="mgmt-desc" id="mgmt-scope-desc">Authenticated Session Active</span>
+<div class="content-pane">
+  <div class="calendar-app-container">
+    <!-- Status & Feedback Alerts -->
+    <div id="loading-state" class="cal-status-banner">Loading Kingdom schedule...</div>
+    <div id="error-state" class="cal-status-banner error" style="display: none;"></div>
+    <div id="action-notification" class="cal-notification-banner" style="display: none;"></div>
+
+    <!-- Management Controls (Rendered only when authenticated via token) -->
+    <div id="management-panel" class="cal-management-panel" style="display: none;">
+      <div class="mgmt-header">
+        <div class="mgmt-badge-group">
+          <span class="mgmt-tag" id="mgmt-scope-tag">MANAGE MODE</span>
+          <span class="mgmt-desc" id="mgmt-scope-desc">Authenticated Session Active</span>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-toggle-event-form">➕ Schedule Event</button>
       </div>
-      <button type="button" class="btn btn-primary" id="btn-toggle-event-form">➕ Schedule Event</button>
+
+      <!-- Collapsible Event Creation Form -->
+      <form id="form-create-event" class="cal-create-card" style="display: none;">
+        <h3 class="form-title" id="form-heading">Create Operation</h3>
+
+        <div class="form-grid">
+          <div class="form-group form-col-full">
+            <label for="evt-input-title">Event Title <span class="req">*</span></label>
+            <input type="text" id="evt-input-title" placeholder="e.g. Fortress Lv. 5 Assault or Strategy Council" required maxlength="60" />
+          </div>
+
+          <div class="form-group">
+            <label for="evt-input-date">Date (YYYY-MM-DD) <span class="req">*</span></label>
+            <input type="date" id="evt-input-date" required />
+          </div>
+
+          <div class="form-group">
+            <label for="evt-input-time">Game Time (HH:MM UTC-2) <span class="req">*</span></label>
+            <input type="time" id="evt-input-time" required />
+            <small class="form-hint">Server Game Time (00:00 to 23:59)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="evt-input-duration">Duration (Hours)</label>
+            <input type="number" id="evt-input-duration" min="0.5" max="24" step="0.5" value="1" />
+          </div>
+
+          <div class="form-group form-col-full">
+            <label for="evt-input-details">Instructions / Rally Point</label>
+            <textarea id="evt-input-details" rows="2" placeholder="e.g. Assembly at Hive Alpha. All R4s lead rallies." maxlength="250"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-event-form">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-event">Publish to Calendar</button>
+        </div>
+      </form>
     </div>
 
-    <!-- Collapsible Event Creation Form -->
-    <form id="form-create-event" class="cal-create-card" style="display: none;">
-      <h3 class="form-title" id="form-heading">Create Operation</h3>
-      
-      <div class="form-grid">
-        <div class="form-group form-col-full">
-          <label for="evt-input-title">Event Title <span class="req">*</span></label>
-          <input type="text" id="evt-input-title" placeholder="e.g. Fortress Lv. 5 Assault or Strategy Council" required maxlength="60" />
+    <div id="calendar-content" style="display: none;">
+      <!-- Active Cycle Overview -->
+      <section class="cal-hero-card">
+        <div class="cal-hero-header">
+          <div>
+            <span class="cal-badge" id="hero-phase-badge">Phase</span>
+            <h1 id="hero-phase-title" class="cal-hero-title">Kingdom War Schedule</h1>
+            <p class="cal-hero-subtitle" id="hero-phase-subtitle">Loading cycle details...</p>
+          </div>
+          <div class="cal-capitol-card">
+            <div class="cal-capitol-label">CURRENT CAPITOL HOLDER</div>
+            <div class="cal-capitol-holder" id="hero-capitol-holder">--</div>
+            <div class="cal-capitol-rank" id="hero-capitol-rank">Rank #--</div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="evt-input-date">Date (YYYY-MM-DD) <span class="req">*</span></label>
-          <input type="date" id="evt-input-date" required />
+        <div class="cal-hero-metrics">
+          <div class="metric-item">
+            <span class="metric-label">CYCLE PROGRESS</span>
+            <span class="metric-val" id="metric-cycle-progress">Day -- of 28</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">NEXT RESET (00:00 GT)</span>
+            <span class="metric-val" id="metric-reset-countdown">--:--:--</span>
+          </div>
+          <div class="metric-item" id="metric-kw-box">
+            <span class="metric-label">NEXT KW BATTLE</span>
+            <span class="metric-val" id="metric-kw-countdown">Saturday</span>
+          </div>
         </div>
+      </section>
 
-        <div class="form-group">
-          <label for="evt-input-time">Game Time (HH:MM UTC-2) <span class="req">*</span></label>
-          <input type="time" id="evt-input-time" required />
-          <small class="form-hint">Server Game Time (00:00 to 23:59)</small>
-        </div>
-
-        <div class="form-group">
-          <label for="evt-input-duration">Duration (Hours)</label>
-          <input type="number" id="evt-input-duration" min="0.5" max="24" step="0.5" value="1" />
-        </div>
-
-        <div class="form-group form-col-full">
-          <label for="evt-input-details">Instructions / Rally Point</label>
-          <textarea id="evt-input-details" rows="2" placeholder="e.g. Assembly at Hive Alpha. All R4s lead rallies." maxlength="250"></textarea>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button type="button" class="btn btn-secondary" id="btn-cancel-event-form">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="btn-submit-event">Publish to Calendar</button>
-      </div>
-    </form>
-  </div>
-
-  <div id="calendar-content" style="display: none;">
-    <!-- Active Cycle Overview -->
-    <section class="cal-hero-card">
-      <div class="cal-hero-header">
-        <div>
-          <span class="cal-badge" id="hero-phase-badge">Phase</span>
-          <h1 id="hero-phase-title" class="cal-hero-title">Kingdom War Schedule</h1>
-          <p class="cal-hero-subtitle" id="hero-phase-subtitle">Loading cycle details...</p>
-        </div>
-        <div class="cal-capitol-card">
-          <div class="cal-capitol-label">CURRENT CAPITOL HOLDER</div>
-          <div class="cal-capitol-holder" id="hero-capitol-holder">--</div>
-          <div class="cal-capitol-rank" id="hero-capitol-rank">Rank #--</div>
-        </div>
-      </div>
-
-      <div class="cal-hero-metrics">
-        <div class="metric-item">
-          <span class="metric-label">CYCLE PROGRESS</span>
-          <span class="metric-val" id="metric-cycle-progress">Day -- of 28</span>
-        </div>
-        <div class="metric-item">
-          <span class="metric-label">NEXT RESET (00:00 GT)</span>
-          <span class="metric-val" id="metric-reset-countdown">--:--:--</span>
-        </div>
-        <div class="metric-item" id="metric-kw-box">
-          <span class="metric-label">NEXT KW BATTLE</span>
-          <span class="metric-val" id="metric-kw-countdown">Saturday</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4-Week Cycle Roadmap -->
-    <section class="cal-section">
-      <h2 class="section-heading">4-Week Capitol Rotation Cycle</h2>
-      <div class="cycle-track-grid" id="cycle-cards-grid">
-        <!-- Rendered dynamically -->
-      </div>
-    </section>
-
-    <!-- Operations & Filter Section -->
-    <section class="cal-section">
-      <div class="section-header-row">
-        <div>
-          <h2 class="section-heading" style="margin-bottom: 0.25rem;">Upcoming Operations & Milestones</h2>
-          <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> & your Local Time</div>
-        </div>
-
-        <!-- Scope Filter Control -->
-        <div class="filter-wrapper">
-          <label for="cal-scope-filter" class="filter-label">VIEW:</label>
+      <!-- Prominent Filter Bar Directly Under Hero -->
+      <div class="cal-filter-toolbar">
+        <div class="filter-controls-group">
+          <label for="cal-scope-filter" class="filter-label">🔍 FILTER VIEW:</label>
           <select id="cal-scope-filter" class="cal-filter-select">
-            <option value="all">All Operations</option>
-            <option value="global">Kingdom / Global Only</option>
+            <option value="all">🌐 All Kingdom & Alliance Operations</option>
+            <option value="global">👑 Global Kingdom Operations Only</option>
           </select>
         </div>
+        <div id="filter-status-tag" class="filter-active-badge" style="display: none;"></div>
       </div>
 
-      <div class="events-timeline" id="events-timeline-container">
-        <!-- Rendered dynamically -->
-      </div>
-    </section>
+      <!-- 4-Week Cycle Roadmap -->
+      <section class="cal-section">
+        <h2 class="section-heading">4-Week Capitol Rotation Cycle</h2>
+        <div class="cycle-track-grid" id="cycle-cards-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- Operations Timeline Section -->
+      <section class="cal-section">
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-heading" style="margin-bottom: 0.25rem;">Upcoming Operations & Milestones</h2>
+            <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> & your Local Time</div>
+          </div>
+        </div>
+
+        <div class="events-timeline" id="events-timeline-container">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+    </div>
   </div>
-</div>
 </div>
 
 <style>
@@ -267,7 +271,7 @@ permalink: /calendar.html
     margin-top: 1.25rem;
   }
 
-  /* Generic Button Styles */
+  /* Buttons */
   .btn {
     border: none;
     border-radius: 6px;
@@ -289,7 +293,7 @@ permalink: /calendar.html
     border: 1px solid #2d3340;
     border-radius: 12px;
     padding: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
   .cal-hero-header {
     display: flex;
@@ -354,6 +358,50 @@ permalink: /calendar.html
   }
   .metric-val { font-size: 1rem; font-weight: 700; }
 
+  /* Toolbar Filter */
+  .cal-filter-toolbar {
+    background: #14171f;
+    border: 1px solid #2d3748;
+    border-radius: 8px;
+    padding: 0.85rem 1.25rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .filter-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .filter-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+  }
+  .cal-filter-select {
+    background: #0d1117;
+    border: 1px solid #3b82f6;
+    color: #f1f5f9;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .filter-active-badge {
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid #3b82f6;
+    color: #93c5fd;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
   .cal-section { margin-bottom: 2.25rem; }
   .section-heading { font-size: 1.15rem; font-weight: 700; margin: 0 0 1rem 0; }
   .section-header-row {
@@ -365,27 +413,6 @@ permalink: /calendar.html
     margin-bottom: 1rem;
   }
   .cal-tz-notice { font-size: 0.75rem; color: #64748b; }
-
-  /* Scope Filter Control */
-  .filter-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .filter-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #94a3b8;
-  }
-  .cal-filter-select {
-    background: #14171f;
-    border: 1px solid #334155;
-    color: #e2e8f0;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-  }
 
   /* 4-Week Cycle Roadmap */
   .cycle-track-grid {
@@ -488,6 +515,7 @@ permalink: /calendar.html
     .cal-capitol-card { text-align: left; width: 100%; }
     .form-grid { grid-template-columns: 1fr; }
     .form-col-full { grid-column: span 1; }
+    .cal-filter-toolbar { flex-direction: column; align-items: flex-start; }
     .timeline-event-row {
       flex-direction: column;
       align-items: flex-start;
@@ -508,6 +536,7 @@ permalink: /calendar.html
     const elContent = document.getElementById('calendar-content');
     const elNotification = document.getElementById('action-notification');
     const filterSelect = document.getElementById('cal-scope-filter');
+    const filterStatusTag = document.getElementById('filter-status-tag');
 
     // 1. Parse URL Parameters
     const urlParams = new URLSearchParams(window.location.search);
@@ -540,7 +569,7 @@ permalink: /calendar.html
         const data = await res.json();
         allEvents = data.events || [];
         renderHero(data.status, data.capitolHolder);
-        setupFilterOptions();
+        setupFilterOptions(data.alliances || []);
         applyFilterAndRender();
       } catch (err) {
         elLoading.style.display = 'none';
@@ -614,27 +643,31 @@ permalink: /calendar.html
     }
 
     // 4. Setup Scope Filter Dropdown
-    function setupFilterOptions() {
-      // Clear existing custom options
+    function setupFilterOptions(knownAlliances = []) {
       while (filterSelect.options.length > 2) {
         filterSelect.remove(2);
       }
 
-      const distinctScopes = [...new Set(
-        allEvents.map(e => e.scope).filter(s => s && s !== 'global')
-      )];
+      // Union of all known alliances + existing event scopes + parameters
+      const tags = new Set([
+        ...knownAlliances,
+        ...allEvents.map(e => e.scope).filter(s => s && s !== 'global')
+      ]);
 
-      distinctScopes.forEach(tag => {
+      if (allianceParam) tags.add(allianceParam);
+      if (sessionScope && sessionScope !== 'global') tags.add(sessionScope);
+
+      [...tags].sort().forEach(tag => {
         const opt = document.createElement('option');
         opt.value = tag;
-        opt.textContent = `[${tag}] Operations Only`;
+        opt.textContent = `🛡️ [${tag}] Operations Only`;
         filterSelect.appendChild(opt);
       });
 
-      // Default selection priority: sessionScope -> allianceParam -> 'all'
+      // Default selection priority: sessionScope -> allianceParam -> default 'all'
       if (sessionScope && sessionScope !== 'global') {
         filterSelect.value = sessionScope;
-      } else if (allianceParam && distinctScopes.includes(allianceParam)) {
+      } else if (allianceParam && tags.has(allianceParam)) {
         filterSelect.value = allianceParam;
       }
     }
@@ -645,9 +678,14 @@ permalink: /calendar.html
 
       if (selected === 'global') {
         filtered = allEvents.filter(e => !e.scope || e.scope === 'global');
+        filterStatusTag.style.display = 'block';
+        filterStatusTag.textContent = '👑 Global Only';
       } else if (selected !== 'all') {
-        // Show specific alliance operations + universal War/Rotation milestones
         filtered = allEvents.filter(e => e.scope === selected || e.type === 'war' || e.type === 'rotation');
+        filterStatusTag.style.display = 'block';
+        filterStatusTag.textContent = `🛡️ [${selected}] Filter Active`;
+      } else {
+        filterStatusTag.style.display = 'none';
       }
 
       renderTimeline(filtered);
@@ -672,7 +710,7 @@ permalink: /calendar.html
         const localDateStr = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
         const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
-        // Can the current session delete this event?
+        // Can current session delete this event?
         const canDelete = isManagementSession && evt.id && evt.id.startsWith('evt-') &&
           (isGlobalAdmin || evt.scope === sessionScope);
 
@@ -693,7 +731,6 @@ permalink: /calendar.html
         `;
       }).join('');
 
-      // Wire Delete Buttons
       timelineContainer.querySelectorAll('.btn-delete-event').forEach(btn => {
         btn.addEventListener('click', () => handleDeleteEvent(btn.dataset.eventId));
       });
@@ -726,7 +763,6 @@ permalink: /calendar.html
         const isHidden = formEl.style.display === 'none';
         formEl.style.display = isHidden ? 'block' : 'none';
         if (isHidden) {
-          // Pre-populate today's date
           document.getElementById('evt-input-date').value = new Date().toISOString().split('T')[0];
           document.getElementById('evt-input-time').value = '19:00';
         }
