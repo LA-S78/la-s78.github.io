@@ -61,6 +61,9 @@ export default async function handler(req, res) {
     status: currentStatus,
     capitolHolder: capitolHolderTag,
     events: allEvents,
-    alliances: Object.keys(alliances || {})
+    alliances: Object.entries(alliances || {}).map(([tag, d]) => ({
+      tag,
+      rank: parseInt(d?.rank, 10) || null
+    }))
   });
 }
