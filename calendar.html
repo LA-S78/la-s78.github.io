@@ -495,10 +495,10 @@ permalink: /calendar.html
     position: relative;
   }
   .cycle-week-card.active {
-    border-color: var(--active-theme-vivid, var(--active-theme, #b8975a));
+    border-color: rgb(var(--active-theme-vivid, var(--active-theme, 184, 151, 90)));
     background: linear-gradient(
       180deg, 
-      color-mix(in srgb, var(--active-theme, #b8975a) 18%, #14171e), 
+      rgba(var(--active-theme, 184, 151, 90), 0.18), 
       #14171e
     );
   }
@@ -506,20 +506,21 @@ permalink: /calendar.html
     position: absolute;
     top: -9px;
     right: 12px;
-    background: var(--active-theme-vivid, var(--active-theme, #b8975a));
-    color: #000;
+    background: rgb(var(--active-theme-vivid, var(--active-theme, 184, 151, 90)));
+    color: #0b0d11;
     font-size: 0.6rem;
     font-weight: 800;
     padding: 2px 7px;
     border-radius: 4px;
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--active-theme-vivid, #b8975a) 40%, transparent);
+    box-shadow: 0 2px 8px rgba(var(--active-theme-vivid, var(--active-theme, 184, 151, 90)), 0.45);
+    display: inline-block;
   }
   .week-card-num { font-size: 0.72rem; font-weight: 700; color: #94a3b8; }
   .week-card-title { font-size: 0.92rem; font-weight: 700; margin: 4px 0 10px 0; }
   .week-card-meta { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
   .week-card-holder { 
     font-weight: 700; 
-    color: var(--active-theme-bright, #fef08a); 
+    color: rgb(var(--active-theme-bright, var(--active-theme, 254, 240, 138))); 
   }
 
   /* Timeline & Event Rows */
@@ -947,35 +948,16 @@ permalink: /calendar.html
 
       let activePresetColor = null;
 
-      // Base default theme to revert to when "Custom" is picked
-      const defaultBorderColor = isGlobalAdmin ? '#10b981' : '#3b82f6';
-      const defaultBackground = '#14171f';
-      const submitBtn = document.getElementById('btn-submit-event');
-
       presetSelect.addEventListener('change', () => {
         const selected = OPERATION_PRESETS[presetSelect.value];
         if (selected) {
-          // Fill inputs
           document.getElementById('evt-input-title').value = selected.title;
           document.getElementById('evt-input-duration').value = selected.duration;
           document.getElementById('evt-input-recurrence').value = selected.recurrence;
           document.getElementById('evt-input-details').value = selected.description;
-          activePresetColor = selected.accent;
-
-          // Dynamically theme the Schedule panel
-          mgmtPanel.style.borderLeftColor = selected.accent;
-          mgmtPanel.style.background = selected.bg;
-          mgmtPanel.style.boxShadow = `0 4px 20px ${selected.accent}22`;
-          submitBtn.style.background = selected.accent;
-          submitBtn.style.color = (selected === OPERATION_PRESETS.cheese_trap || selected === OPERATION_PRESETS.kvk_battle) ? '#000' : '#fff';
+          activePresetColor = selected.color;
         } else {
-          // Revert to neutral alliance / global admin theme
           activePresetColor = null;
-          mgmtPanel.style.borderLeftColor = defaultBorderColor;
-          mgmtPanel.style.background = defaultBackground;
-          mgmtPanel.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
-          submitBtn.style.background = defaultBorderColor;
-          submitBtn.style.color = '#fff';
         }
       });
 
