@@ -4,14 +4,63 @@ title: Kingdom War & Event Calendar
 permalink: /calendar.html
 ---
 
-<div class="content-pane">
 <div class="calendar-app-container">
-  <!-- Status Banner / Loading -->
+  <!-- Status & Feedback Alerts -->
   <div id="loading-state" class="cal-status-banner">Loading Kingdom schedule...</div>
   <div id="error-state" class="cal-status-banner error" style="display: none;"></div>
+  <div id="action-notification" class="cal-notification-banner" style="display: none;"></div>
+
+  <!-- Management Controls (Rendered only when authenticated via token) -->
+  <div id="management-panel" class="cal-management-panel" style="display: none;">
+    <div class="mgmt-header">
+      <div class="mgmt-badge-group">
+        <span class="mgmt-tag" id="mgmt-scope-tag">MANAGE MODE</span>
+        <span class="mgmt-desc" id="mgmt-scope-desc">Authenticated Session Active</span>
+      </div>
+      <button type="button" class="btn btn-primary" id="btn-toggle-event-form">➕ Schedule Event</button>
+    </div>
+
+    <!-- Collapsible Event Creation Form -->
+    <form id="form-create-event" class="cal-create-card" style="display: none;">
+      <h3 class="form-title" id="form-heading">Create Operation</h3>
+      
+      <div class="form-grid">
+        <div class="form-group form-col-full">
+          <label for="evt-input-title">Event Title <span class="req">*</span></label>
+          <input type="text" id="evt-input-title" placeholder="e.g. Fortress Lv. 5 Assault or Strategy Council" required maxlength="60" />
+        </div>
+
+        <div class="form-group">
+          <label for="evt-input-date">Date (YYYY-MM-DD) <span class="req">*</span></label>
+          <input type="date" id="evt-input-date" required />
+        </div>
+
+        <div class="form-group">
+          <label for="evt-input-time">Game Time (HH:MM UTC-2) <span class="req">*</span></label>
+          <input type="time" id="evt-input-time" required />
+          <small class="form-hint">Server Game Time (00:00 to 23:59)</small>
+        </div>
+
+        <div class="form-group">
+          <label for="evt-input-duration">Duration (Hours)</label>
+          <input type="number" id="evt-input-duration" min="0.5" max="24" step="0.5" value="1" />
+        </div>
+
+        <div class="form-group form-col-full">
+          <label for="evt-input-details">Instructions / Rally Point</label>
+          <textarea id="evt-input-details" rows="2" placeholder="e.g. Assembly at Hive Alpha. All R4s lead rallies." maxlength="250"></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-event-form">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btn-submit-event">Publish to Calendar</button>
+      </div>
+    </form>
+  </div>
 
   <div id="calendar-content" style="display: none;">
-    <!-- Hero / Active Cycle Overview -->
+    <!-- Active Cycle Overview -->
     <section class="cal-hero-card">
       <div class="cal-hero-header">
         <div>
@@ -32,7 +81,7 @@ permalink: /calendar.html
           <span class="metric-val" id="metric-cycle-progress">Day -- of 28</span>
         </div>
         <div class="metric-item">
-          <span class="metric-label">NEXT DAILY RESET (00:00 GT)</span>
+          <span class="metric-label">NEXT RESET (00:00 GT)</span>
           <span class="metric-val" id="metric-reset-countdown">--:--:--</span>
         </div>
         <div class="metric-item" id="metric-kw-box">
@@ -42,7 +91,7 @@ permalink: /calendar.html
       </div>
     </section>
 
-    <!-- 4-Week Cycle Visual Roadmap -->
+    <!-- 4-Week Cycle Roadmap -->
     <section class="cal-section">
       <h2 class="section-heading">4-Week Capitol Rotation Cycle</h2>
       <div class="cycle-track-grid" id="cycle-cards-grid">
@@ -50,11 +99,22 @@ permalink: /calendar.html
       </div>
     </section>
 
-    <!-- Event Timeline & Agenda -->
+    <!-- Operations & Filter Section -->
     <section class="cal-section">
       <div class="section-header-row">
-        <h2 class="section-heading">Upcoming Operations & Milestones</h2>
-        <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> & your Local Time</div>
+        <div>
+          <h2 class="section-heading" style="margin-bottom: 0.25rem;">Upcoming Operations & Milestones</h2>
+          <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> & your Local Time</div>
+        </div>
+
+        <!-- Scope Filter Control -->
+        <div class="filter-wrapper">
+          <label for="cal-scope-filter" class="filter-label">VIEW:</label>
+          <select id="cal-scope-filter" class="cal-filter-select">
+            <option value="all">All Operations</option>
+            <option value="global">Kingdom / Global Only</option>
+          </select>
+        </div>
       </div>
 
       <div class="events-timeline" id="events-timeline-container">
@@ -62,7 +122,6 @@ permalink: /calendar.html
       </div>
     </section>
   </div>
-</div>
 </div>
 
 <style>
@@ -88,15 +147,149 @@ permalink: /calendar.html
     color: #fca5a5;
   }
 
+  .cal-notification-banner {
+    padding: 0.85rem 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .cal-notification-banner.success {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid #10b981;
+    color: #34d399;
+  }
+  .cal-notification-banner.error {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid #ef4444;
+    color: #f87171;
+  }
+
+  /* Management Panel */
+  .cal-management-panel {
+    background: #14171f;
+    border: 1px solid #2d3748;
+    border-left: 4px solid #3b82f6;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  .cal-management-panel.scope-global {
+    border-left-color: #10b981;
+  }
+  .mgmt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .mgmt-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    border: 1px solid #3b82f6;
+    color: #60a5fa;
+  }
+  .scope-global .mgmt-tag {
+    border-color: #10b981;
+    color: #34d399;
+  }
+  .mgmt-desc {
+    margin-left: 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+
+  /* Form Styles */
+  .cal-create-card {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #28303f;
+  }
+  .form-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    color: #f8fafc;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .form-col-full {
+    grid-column: span 2;
+  }
+  .form-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 4px;
+  }
+  .form-group .req {
+    color: #ef4444;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    background: #0d1117;
+    border: 1px solid #334155;
+    color: #e2e8f0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    box-sizing: border-box;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+  .form-hint {
+    display: block;
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-top: 3px;
+  }
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  /* Generic Button Styles */
+  .btn {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .btn:hover { opacity: 0.9; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background: #2563eb; color: #fff; }
+  .scope-global .btn-primary { background: #059669; }
+  .btn-secondary { background: #334155; color: #e2e8f0; }
+
+  /* Hero Card */
   .cal-hero-card {
     background: linear-gradient(145deg, #181b22, #111317);
     border: 1px solid #2d3340;
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
-
   .cal-hero-header {
     display: flex;
     justify-content: space-between;
@@ -106,27 +299,22 @@ permalink: /calendar.html
     padding-bottom: 1.25rem;
     border-bottom: 1px solid #232834;
   }
-
   .cal-hero-title {
     margin: 0.5rem 0 0.25rem 0;
     font-size: 1.6rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
   }
-
   .cal-hero-subtitle {
     margin: 0;
     color: #94a3b8;
     font-size: 0.9rem;
   }
-
   .cal-badge {
     display: inline-block;
     padding: 3px 10px;
     border-radius: 4px;
     font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.05em;
     text-transform: uppercase;
   }
   .badge-kw { background: rgba(185, 28, 28, 0.25); border: 1px solid #ef4444; color: #f87171; }
@@ -140,22 +328,9 @@ permalink: /calendar.html
     text-align: right;
     min-width: 180px;
   }
-  .cal-capitol-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    color: #b8975a;
-  }
-  .cal-capitol-holder {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: #fef08a;
-    margin: 2px 0;
-  }
-  .cal-capitol-rank {
-    font-size: 0.75rem;
-    color: #94a3b8;
-  }
+  .cal-capitol-label { font-size: 0.65rem; font-weight: 700; color: #b8975a; }
+  .cal-capitol-holder { font-size: 1.35rem; font-weight: 800; color: #fef08a; }
+  .cal-capitol-rank { font-size: 0.75rem; color: #94a3b8; }
 
   .cal-hero-metrics {
     display: grid;
@@ -174,35 +349,41 @@ permalink: /calendar.html
     font-size: 0.68rem;
     font-weight: 600;
     color: #64748b;
-    letter-spacing: 0.05em;
     margin-bottom: 4px;
   }
-  .metric-val {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #f1f5f9;
-  }
+  .metric-val { font-size: 1rem; font-weight: 700; }
 
-  .cal-section {
-    margin-bottom: 2.25rem;
-  }
-  .section-heading {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #f1f5f9;
-    margin: 0 0 1rem 0;
-  }
+  .cal-section { margin-bottom: 2.25rem; }
+  .section-heading { font-size: 1.15rem; font-weight: 700; margin: 0 0 1rem 0; }
   .section-header-row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: flex-end;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 1rem;
     margin-bottom: 1rem;
   }
-  .cal-tz-notice {
+  .cal-tz-notice { font-size: 0.75rem; color: #64748b; }
+
+  /* Scope Filter Control */
+  .filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .filter-label {
     font-size: 0.75rem;
-    color: #64748b;
+    font-weight: 700;
+    color: #94a3b8;
+  }
+  .cal-filter-select {
+    background: #14171f;
+    border: 1px solid #334155;
+    color: #e2e8f0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
   }
 
   /* 4-Week Cycle Roadmap */
@@ -217,12 +398,10 @@ permalink: /calendar.html
     border-radius: 8px;
     padding: 1rem;
     position: relative;
-    transition: transform 0.15s ease;
   }
   .cycle-week-card.active {
     border-color: #b8975a;
     background: linear-gradient(180deg, rgba(184, 151, 90, 0.12), #14171e);
-    box-shadow: 0 0 15px rgba(184, 151, 90, 0.15);
   }
   .active-indicator {
     position: absolute;
@@ -234,31 +413,13 @@ permalink: /calendar.html
     font-weight: 800;
     padding: 2px 7px;
     border-radius: 4px;
-    letter-spacing: 0.05em;
   }
-  .week-card-num {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #94a3b8;
-    text-transform: uppercase;
-  }
-  .week-card-title {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: #f8fafc;
-    margin: 4px 0 10px 0;
-  }
-  .week-card-meta {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    line-height: 1.4;
-  }
-  .week-card-holder {
-    font-weight: 700;
-    color: #fef08a;
-  }
+  .week-card-num { font-size: 0.72rem; font-weight: 700; color: #94a3b8; }
+  .week-card-title { font-size: 0.92rem; font-weight: 700; margin: 4px 0 10px 0; }
+  .week-card-meta { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+  .week-card-holder { font-weight: 700; color: #fef08a; }
 
-  /* Timeline List */
+  /* Timeline & Event Rows */
   .events-timeline {
     display: flex;
     flex-direction: column;
@@ -276,22 +437,25 @@ permalink: /calendar.html
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    flex-wrap: wrap;
   }
   .event-rotation { border-left-color: #b8975a; }
   .event-war { border-left-color: #ef4444; }
   .event-snapshot { border-left-color: #3b82f6; }
   .event-custom { border-left-color: #10b981; }
+  .event-alliance { border-left-color: #3b82f6; }
 
+  .event-main { flex: 1; }
   .event-title {
     font-size: 0.92rem;
     font-weight: 700;
     color: #f1f5f9;
     margin-bottom: 3px;
   }
-  .event-desc {
-    font-size: 0.78rem;
-    color: #94a3b8;
+  .event-desc { font-size: 0.78rem; color: #94a3b8; }
+  .event-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
   .event-time-block {
     text-align: right;
@@ -299,30 +463,40 @@ permalink: /calendar.html
     color: #64748b;
     white-space: nowrap;
   }
-  .time-gt {
-    color: #cbd5e1;
-    font-weight: 600;
-    font-size: 0.82rem;
+  .time-gt { color: #cbd5e1; font-weight: 600; font-size: 0.82rem; }
+
+  /* Delete Button */
+  .btn-delete-event {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    color: #f87171;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .btn-delete-event:hover {
+    background: #ef4444;
+    color: #fff;
   }
 
   @media (max-width: 768px) {
-    .cycle-track-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-    .cal-hero-header {
-      flex-direction: column;
-    }
-    .cal-capitol-card {
-      text-align: left;
-      width: 100%;
-    }
+    .cycle-track-grid { grid-template-columns: 1fr 1fr; }
+    .cal-hero-header { flex-direction: column; }
+    .cal-capitol-card { text-align: left; width: 100%; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-col-full { grid-column: span 1; }
     .timeline-event-row {
       flex-direction: column;
       align-items: flex-start;
     }
-    .event-time-block {
-      text-align: left;
+    .event-actions-group {
+      width: 100%;
+      justify-content: space-between;
+      margin-top: 0.5rem;
     }
+    .event-time-block { text-align: left; }
   }
 </style>
 
@@ -331,121 +505,307 @@ permalink: /calendar.html
     const elLoading = document.getElementById('loading-state');
     const elError = document.getElementById('error-state');
     const elContent = document.getElementById('calendar-content');
+    const elNotification = document.getElementById('action-notification');
+    const filterSelect = document.getElementById('cal-scope-filter');
 
-    let calendarData = null;
+    // 1. Parse URL Parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const allianceParam = urlParams.get('alliance');
+    const tokenParam = urlParams.get('token');
 
-    try {
-      const res = await fetch('/api/calendar');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      calendarData = await res.json();
-    } catch (e) {
+    // Decode HMAC Token safely (client-side inspect)
+    let tokenPayload = null;
+    if (tokenParam) {
+      try {
+        const [dataStr] = tokenParam.split('.');
+        const jsonStr = atob(dataStr.replace(/-/g, '+').replace(/_/g, '/'));
+        tokenPayload = JSON.parse(jsonStr);
+      } catch (e) {
+        console.warn('Invalid token structure:', e);
+      }
+    }
+
+    const isManagementSession = tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp);
+    const sessionScope = isManagementSession ? tokenPayload.scope : null; // e.g. 'global' or 'WLO'
+    const isGlobalAdmin = sessionScope === 'global';
+
+    let allEvents = [];
+
+    // 2. Fetch Live Calendar Data
+    async function loadCalendar() {
+      try {
+        const res = await fetch('/api/calendar');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        allEvents = data.events || [];
+        renderHero(data.status, data.capitolHolder);
+        setupFilterOptions();
+        applyFilterAndRender();
+      } catch (err) {
+        elLoading.style.display = 'none';
+        elError.style.display = 'block';
+        elError.textContent = `Failed to load calendar: ${err.message}`;
+      }
+    }
+
+    // 3. Render Hero & Reset Clock
+    function renderHero(status, capitolHolder) {
       elLoading.style.display = 'none';
-      elError.style.display = 'block';
-      elError.textContent = `Failed to load calendar: ${e.message}`;
-      return;
-    }
+      elContent.style.display = 'block';
 
-    elLoading.style.display = 'none';
-    elContent.style.display = 'block';
+      const heroBadge = document.getElementById('hero-phase-badge');
+      heroBadge.textContent = status.isKW ? '⚔️ Kingdom War Active' : '🛡️ NAP Rest Week';
+      heroBadge.className = `cal-badge ${status.isKW ? 'badge-kw' : 'badge-off'}`;
 
-    const { status, capitolHolder, events } = calendarData;
+      document.getElementById('hero-phase-title').textContent = status.phaseName;
+      document.getElementById('hero-phase-subtitle').textContent = status.isKW
+        ? 'Double reward allotments active. Prepare for Saturday Kingdom War confrontation.'
+        : 'Standard single allocation. Fortresses and territory restructuring active.';
 
-    // 1. Populate Hero
-    const heroBadge = document.getElementById('hero-phase-badge');
-    heroBadge.textContent = status.isKW ? '⚔️ Kingdom War Active' : '🛡️ NAP Rest Week';
-    heroBadge.className = `cal-badge ${status.isKW ? 'badge-kw' : 'badge-off'}`;
+      document.getElementById('hero-capitol-holder').textContent = capitolHolder;
+      document.getElementById('hero-capitol-rank').textContent = `Rank #${status.capitolRank} Privilege`;
+      document.getElementById('metric-cycle-progress').textContent = `Day ${status.cycleDay} of 28 (Week ${status.currentWeekNumber})`;
 
-    document.getElementById('hero-phase-title').textContent = status.phaseName;
-    document.getElementById('hero-phase-subtitle').textContent = status.isKW
-      ? 'Double reward allotments active. Prepare for Saturday Kingdom War confrontation.'
-      : 'Standard single allocation. Fortresses and territory restructuring active.';
+      if (status.isKW) {
+        const kwDate = new Date(status.kwBattleTimestamp * 1000);
+        document.getElementById('metric-kw-countdown').textContent = status.isKWBattleDay
+          ? '🔥 TODAY'
+          : kwDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+      } else {
+        document.getElementById('metric-kw-box').style.opacity = '0.5';
+        document.getElementById('metric-kw-countdown').textContent = 'None (Rest)';
+      }
 
-    document.getElementById('hero-capitol-holder').textContent = capitolHolder;
-    document.getElementById('hero-capitol-rank').textContent = `Rank #${status.capitolRank} Privilege`;
+      function updateResetClock() {
+        const now = Date.now();
+        const diff = Math.max(0, (status.nextResetTimestamp * 1000) - now);
+        const hours = Math.floor(diff / 3600000);
+        const mins = Math.floor((diff % 3600000) / 60000);
+        const secs = Math.floor((diff % 60000) / 1000);
+        document.getElementById('metric-reset-countdown').textContent =
+          `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }
+      updateResetClock();
+      setInterval(updateResetClock, 1000);
 
-    document.getElementById('metric-cycle-progress').textContent = `Day ${status.cycleDay} of 28 (Week ${status.currentWeekNumber})`;
+      // Render 4-Week Grid
+      const cycleWeeks = [
+        { week: 1, name: 'KW Week 1', rank: 3, desc: 'Might Snapshots (Days 3–5)' },
+        { week: 2, name: 'KW Week 2', rank: 2, desc: 'War Confrontation' },
+        { week: 3, name: 'KW Week 3', rank: 1, desc: 'War Confrontation' },
+        { week: 4, name: 'Rest Week', rank: 4, desc: 'Peace & Restructuring' }
+      ];
 
-    if (status.isKW) {
-      const kwDate = new Date(status.kwBattleTimestamp * 1000);
-      document.getElementById('metric-kw-countdown').textContent = status.isKWBattleDay
-        ? '🔥 TODAY'
-        : kwDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-    } else {
-      document.getElementById('metric-kw-box').style.opacity = '0.5';
-      document.getElementById('metric-kw-countdown').textContent = 'None (Rest)';
-    }
-
-    // 2. Live Countdown to 00:00 GT Reset
-    function updateResetClock() {
-      const now = Date.now();
-      const target = status.nextResetTimestamp * 1000;
-      const diff = Math.max(0, target - now);
-
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-      document.getElementById('metric-reset-countdown').textContent =
-        `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    }
-    updateResetClock();
-    setInterval(updateResetClock, 1000);
-
-    // 3. Render 4-Week Rotation Roadmap
-    const cycleWeeks = [
-      { week: 1, name: 'KW Week 1', rank: 3, desc: 'Might Snapshots (Days 3–5)' },
-      { week: 2, name: 'KW Week 2', rank: 2, desc: 'War Confrontation' },
-      { week: 3, name: 'KW Week 3', rank: 1, desc: 'War Confrontation' },
-      { week: 4, name: 'Rest Week', rank: 4, desc: 'Peace & Restructuring' }
-    ];
-
-    const cardsContainer = document.getElementById('cycle-cards-grid');
-    cardsContainer.innerHTML = cycleWeeks.map(cw => {
-      const isActive = cw.week === status.currentWeekNumber;
-      return `
-        <div class="cycle-week-card ${isActive ? 'active' : ''}">
-          ${isActive ? '<span class="active-indicator">CURRENT</span>' : ''}
-          <div class="week-card-num">Week ${cw.week}</div>
-          <div class="week-card-title">${cw.name}</div>
-          <div class="week-card-meta">
-            Capitol: <span class="week-card-holder">Rank #${cw.rank}</span><br>
-            ${cw.desc}
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    // 4. Render Event Timeline
-    const timelineContainer = document.getElementById('events-timeline-container');
-    if (!events || events.length === 0) {
-      timelineContainer.innerHTML = '<div class="cal-status-banner">No upcoming events scheduled.</div>';
-    } else {
-      timelineContainer.innerHTML = events.map(evt => {
-        const start = new Date(evt.start);
-
-        // Convert UTC to Game Time (UTC-2)
-        const gtHours = (start.getUTCHours() - 2 + 24) % 24;
-        const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
-        const gtTimeStr = evt.allDay ? 'All Day' : `${String(gtHours).padStart(2, '0')}:${gtMins} GT`;
-
-        const localDateStr = start.toLocaleDateString(undefined, {
-          weekday: 'short', month: 'short', day: 'numeric'
-        });
-        const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-
+      document.getElementById('cycle-cards-grid').innerHTML = cycleWeeks.map(cw => {
+        const isActive = cw.week === status.currentWeekNumber;
         return `
-          <div class="timeline-event-row event-${evt.type || 'custom'}">
-            <div>
-              <div class="event-title">${evt.title}</div>
-              <div class="event-desc">${evt.description}</div>
-            </div>
-            <div class="event-time-block">
-              <div class="time-gt">${gtTimeStr}</div>
-              <div>${localDateStr}${localTimeStr}</div>
+          <div class="cycle-week-card ${isActive ? 'active' : ''}">
+            ${isActive ? '<span class="active-indicator">CURRENT</span>' : ''}
+            <div class="week-card-num">Week ${cw.week}</div>
+            <div class="week-card-title">${cw.name}</div>
+            <div class="week-card-meta">
+              Capitol: <span class="week-card-holder">Rank #${cw.rank}</span><br>
+              ${cw.desc}
             </div>
           </div>
         `;
       }).join('');
     }
+
+    // 4. Setup Scope Filter Dropdown
+    function setupFilterOptions() {
+      // Clear existing custom options
+      while (filterSelect.options.length > 2) {
+        filterSelect.remove(2);
+      }
+
+      const distinctScopes = [...new Set(
+        allEvents.map(e => e.scope).filter(s => s && s !== 'global')
+      )];
+
+      distinctScopes.forEach(tag => {
+        const opt = document.createElement('option');
+        opt.value = tag;
+        opt.textContent = `[${tag}] Operations Only`;
+        filterSelect.appendChild(opt);
+      });
+
+      // Default selection priority: sessionScope -> allianceParam -> 'all'
+      if (sessionScope && sessionScope !== 'global') {
+        filterSelect.value = sessionScope;
+      } else if (allianceParam && distinctScopes.includes(allianceParam)) {
+        filterSelect.value = allianceParam;
+      }
+    }
+
+    function applyFilterAndRender() {
+      const selected = filterSelect.value;
+      let filtered = allEvents;
+
+      if (selected === 'global') {
+        filtered = allEvents.filter(e => !e.scope || e.scope === 'global');
+      } else if (selected !== 'all') {
+        // Show specific alliance operations + universal War/Rotation milestones
+        filtered = allEvents.filter(e => e.scope === selected || e.type === 'war' || e.type === 'rotation');
+      }
+
+      renderTimeline(filtered);
+    }
+
+    filterSelect.addEventListener('change', applyFilterAndRender);
+
+    // 5. Render Timeline Items with Permission-Gated Delete Buttons
+    function renderTimeline(eventsList) {
+      const timelineContainer = document.getElementById('events-timeline-container');
+
+      if (!eventsList || eventsList.length === 0) {
+        timelineContainer.innerHTML = '<div class="cal-status-banner">No operations scheduled for this perspective.</div>';
+        return;
+      }
+
+      timelineContainer.innerHTML = eventsList.map(evt => {
+        const start = new Date(evt.start);
+        const gtHours = (start.getUTCHours() - 2 + 24) % 24;
+        const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
+        const gtTimeStr = evt.allDay ? 'All Day' : `${String(gtHours).padStart(2, '0')}:${gtMins} GT`;
+        const localDateStr = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+        const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
+        // Can the current session delete this event?
+        const canDelete = isManagementSession && evt.id && evt.id.startsWith('evt-') &&
+          (isGlobalAdmin || evt.scope === sessionScope);
+
+        return `
+          <div class="timeline-event-row event-${evt.type || 'custom'}">
+            <div class="event-main">
+              <div class="event-title">${evt.title}</div>
+              <div class="event-desc">${evt.description || ''}</div>
+            </div>
+            <div class="event-actions-group">
+              <div class="event-time-block">
+                <div class="time-gt">${gtTimeStr}</div>
+                <div>${localDateStr}${localTimeStr}</div>
+              </div>
+              ${canDelete ? `<button type="button" class="btn-delete-event" data-event-id="${evt.id}">🗑️ Delete</button>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Wire Delete Buttons
+      timelineContainer.querySelectorAll('.btn-delete-event').forEach(btn => {
+        btn.addEventListener('click', () => handleDeleteEvent(btn.dataset.eventId));
+      });
+    }
+
+    // 6. Management Mode UI & Actions
+    if (isManagementSession) {
+      const mgmtPanel = document.getElementById('management-panel');
+      const mgmtScopeTag = document.getElementById('mgmt-scope-tag');
+      const mgmtScopeDesc = document.getElementById('mgmt-scope-desc');
+      const formHeading = document.getElementById('form-heading');
+
+      mgmtPanel.style.display = 'block';
+      if (isGlobalAdmin) {
+        mgmtPanel.classList.add('scope-global');
+        mgmtScopeTag.textContent = '👑 GLOBAL ADMIN';
+        mgmtScopeDesc.textContent = 'Scheduling Kingdom-wide alerts and operations';
+        formHeading.textContent = 'Create Kingdom Operation ([GLOBAL])';
+      } else {
+        mgmtScopeTag.textContent = `🛡️ [${sessionScope}] LEADERSHIP`;
+        mgmtScopeDesc.textContent = `Managing schedule for [${sessionScope}]`;
+        formHeading.textContent = `Create [${sessionScope}] Operation`;
+      }
+
+      const formEl = document.getElementById('form-create-event');
+      const btnToggle = document.getElementById('btn-toggle-event-form');
+      const btnCancel = document.getElementById('btn-cancel-event-form');
+
+      btnToggle.addEventListener('click', () => {
+        const isHidden = formEl.style.display === 'none';
+        formEl.style.display = isHidden ? 'block' : 'none';
+        if (isHidden) {
+          // Pre-populate today's date
+          document.getElementById('evt-input-date').value = new Date().toISOString().split('T')[0];
+          document.getElementById('evt-input-time').value = '19:00';
+        }
+      });
+
+      btnCancel.addEventListener('click', () => {
+        formEl.style.display = 'none';
+      });
+
+      // Submit Event Creation
+      formEl.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-event');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Publishing...';
+
+        const payload = {
+          token: tokenParam,
+          action: 'create',
+          eventData: {
+            title: document.getElementById('evt-input-title').value,
+            date: document.getElementById('evt-input-date').value,
+            time_gt: document.getElementById('evt-input-time').value,
+            duration_hours: document.getElementById('evt-input-duration').value,
+            description: document.getElementById('evt-input-details').value
+          }
+        };
+
+        try {
+          const res = await fetch('/api/manage-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+          if (!res.ok) throw new Error(result.error || 'Failed to save event');
+
+          showNotification(result.message || 'Operation published successfully!', 'success');
+          formEl.reset();
+          formEl.style.display = 'none';
+          await loadCalendar();
+        } catch (err) {
+          showNotification(err.message, 'error');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Publish to Calendar';
+        }
+      });
+    }
+
+    // 7. Delete Event Handler
+    async function handleDeleteEvent(eventId) {
+      if (!confirm('Are you sure you want to remove this operation from the calendar?')) return;
+
+      try {
+        const res = await fetch('/api/manage-event', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: tokenParam, action: 'delete', eventId })
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || 'Failed to delete event');
+
+        showNotification(result.message || 'Operation removed.', 'success');
+        await loadCalendar();
+      } catch (err) {
+        showNotification(err.message, 'error');
+      }
+    }
+
+    function showNotification(msg, type) {
+      elNotification.textContent = msg;
+      elNotification.className = `cal-notification-banner ${type}`;
+      elNotification.style.display = 'block';
+      setTimeout(() => {
+        elNotification.style.display = 'none';
+      }, 5000);
+    }
+
+    // Initial Load
+    await loadCalendar();
   })();
 </script>

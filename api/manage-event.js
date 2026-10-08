@@ -1,0 +1,225 @@
+// api/manage-event.js
+import crypto from 'crypto';
+
+/**
+ * Validates HMAC-SHA256 signed token and checks expiration
+ */
+function verifyHmacToken(token, secret) {
+  if (!token || typeof token !== 'string') return null;
+
+  const parts = token.split('.');
+  if (parts.length !== 2) return null;
+
+  const [dataString, signature] = parts;
+
+  try {
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(dataString)
+      .digest('base64url');
+
+    const sigBuf = Buffer.from(signature);
+    const expBuf = Buffer.from(expectedSignature);
+
+    if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
+      return null;
+    }
+
+    const payload = JSON.parse(Buffer.from(dataString, 'base64url').toString('utf8'));
+
+    // Check expiration
+    if (payload.exp && Date.now() > payload.exp) {
+      return null;
+    }
+
+    if (payload.action !== 'manage_events') {
+      return null;
+    }
+
+    return payload;
+  } catch (err) {
+    return null;
+  }
+}
+
+export default async function handler(req, res) {
+  // Only accept POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const botSecret = process.env.DISCORD_BOT_TOKEN;
+  const gistId = process.env.GIST_ID;
+  const gistToken = process.env.GIST_TOKEN;
+
+  if (!botSecret || !gistId || !gistToken) {
+    return res.status(500).json({ error: 'Server configuration error: missing credentials' });
+  }
+
+  const { token, action, eventData, eventId } = req.body || {};
+
+  // 1. Verify Authentication Token
+  const tokenPayload = verifyHmacToken(token, botSecret);
+  if (!tokenPayload) {
+    return res.status(401).json({
+      error: 'Invalid, tampered, or expired session token. Please re-run /calendar in Discord.'
+    });
+  }
+
+  const callerScope = tokenPayload.scope; // e.g., 'global' or 'WLO'
+  const isGlobalAdmin = callerScope === 'global';
+
+  try {
+    // 2. Fetch current calendar state from GitHub Gist
+    const gistRes = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: {
+        Authorization: `Bearer ${gistToken}`,
+        'User-Agent': 'WarRoom-App'
+      }
+    });
+
+    if (!gistRes.ok) {
+      throw new Error(`GitHub Gist fetch failed (HTTP ${gistRes.status})`);
+    }
+
+    const gistData = await gistRes.json();
+    const rawContent = gistData.files?.['calendar-state.json']?.content;
+
+    let calendarState = { custom_events: [] };
+    if (rawContent) {
+      calendarState = JSON.parse(rawContent);
+    }
+    calendarState.custom_events = calendarState.custom_events || [];
+
+    // --- ACTION: CREATE EVENT ---
+    if (action === 'create') {
+      const { title, date, time_gt, duration_hours = 1, description = '' } = eventData || {};
+
+      // Validate required fields
+      if (!title || !date || !time_gt) {
+        return res.status(400).json({ error: 'Title, Date, and Game Time are required.' });
+      }
+
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return res.status(400).json({ error: 'Date must be formatted as YYYY-MM-DD.' });
+      }
+
+      if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time_gt)) {
+        return res.status(400).json({ error: 'Game Time must be formatted as HH:MM (00:00 to 23:59).' });
+      }
+
+      const duration = Math.max(0.5, Math.min(24, parseFloat(duration_hours) || 1));
+
+      // Game Time is UTC-2 => UTC = GT + 2 hours
+      const [year, month, day] = date.split('-').map(Number);
+      const [hh, mm] = time_gt.split(':').map(Number);
+      const startUtc = new Date(Date.UTC(year, month - 1, day, hh + 2, mm, 0));
+      const endUtc = new Date(startUtc.getTime() + (duration * 3600000));
+
+      const cleanTitle = title.trim().replace(/^\[(GLOBAL\vert{}[A-Z0-9]+)\]\s*/i, '');
+      const uniqueId = `evt-${callerScope.toLowerCase().replace(/[^a-z0-9]/g, '')}-${Date.now().toString(36)}`;
+
+      const newEvent = {
+        id: uniqueId,
+        scope: callerScope, // Strictly enforced from verified token
+        title: isGlobalAdmin ? `[GLOBAL] ${cleanTitle}` : `[${callerScope}] ${cleanTitle}`,
+        description: description.trim() || (isGlobalAdmin ? 'Kingdom-wide operation.' : `Alliance event for [${callerScope}].`),
+        start: startUtc.toISOString(),
+        end: endUtc.toISOString(),
+        time_gt: time_gt,
+        type: isGlobalAdmin ? 'custom' : 'alliance',
+        color: isGlobalAdmin ? '#10b981' : '#3b82f6',
+        allDay: false,
+        createdAt: new Date().toISOString()
+      };
+
+      calendarState.custom_events.push(newEvent);
+
+      // Sort chronological
+      calendarState.custom_events.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+      // Patch Gist
+      const patchRes = await fetch(`https://api.github.com/gists/${gistId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${gistToken}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'WarRoom-App'
+        },
+        body: JSON.stringify({
+          files: {
+            'calendar-state.json': {
+              content: JSON.stringify(calendarState, null, 2)
+            }
+          }
+        })
+      });
+
+      if (!patchRes.ok) {
+        throw new Error(`Failed to write to GitHub Gist (HTTP ${patchRes.status})`);
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: `Event "${newEvent.title}" scheduled successfully.`,
+        event: newEvent
+      });
+    }
+
+    // --- ACTION: DELETE EVENT ---
+    if (action === 'delete') {
+      if (!eventId) {
+        return res.status(400).json({ error: 'Missing eventId to delete.' });
+      }
+
+      const targetIndex = calendarState.custom_events.findIndex(e => e.id === eventId);
+      if (targetIndex === -1) {
+        return res.status(404).json({ error: 'Event not found or already deleted.' });
+      }
+
+      const targetEvt = calendarState.custom_events[targetIndex];
+
+      // Enforce Scope Ownership: Non-global admins can only delete events under their own scope
+      if (!isGlobalAdmin && targetEvt.scope !== callerScope) {
+        return res.status(403).json({
+          error: 'Access Denied: You cannot delete events belonging to another alliance or Kingdom operations.'
+        });
+      }
+
+      // Remove from array
+      calendarState.custom_events.splice(targetIndex, 1);
+
+      // Patch Gist
+      const patchRes = await fetch(`https://api.github.com/gists/${gistId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${gistToken}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'WarRoom-App'
+        },
+        body: JSON.stringify({
+          files: {
+            'calendar-state.json': {
+              content: JSON.stringify(calendarState, null, 2)
+            }
+          }
+        })
+      });
+
+      if (!patchRes.ok) {
+        throw new Error(`Failed to update GitHub Gist (HTTP ${patchRes.status})`);
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: `Deleted event: ${targetEvt.title}`
+      });
+    }
+
+    return res.status(400).json({ error: `Unsupported action: "${action}"` });
+
+  } catch (err) {
+    console.error('manage-event API error:', err);
+    return res.status(500).json({ error: err.message || 'Internal server error' });
+  }
+}
