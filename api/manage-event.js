@@ -27,7 +27,7 @@ function verifyHmacToken(token, secret) {
 
     const payload = JSON.parse(Buffer.from(dataString, 'base64url').toString('utf8'));
 
-    // Check expiration
+    // Check expiration timestamp
     if (payload.exp && Date.now() > payload.exp) {
       return null;
     }
@@ -43,7 +43,6 @@ function verifyHmacToken(token, secret) {
 }
 
 export default async function handler(req, res) {
-  // Only accept POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -58,7 +57,7 @@ export default async function handler(req, res) {
 
   const { token, action, eventData, eventId } = req.body || {};
 
-  // 1. Verify Authentication Token
+  // 1. Verify Cryptographic Token
   const tokenPayload = verifyHmacToken(token, botSecret);
   if (!tokenPayload) {
     return res.status(401).json({
@@ -95,7 +94,6 @@ export default async function handler(req, res) {
     if (action === 'create') {
       const { title, date, time_gt, duration_hours = 1, description = '' } = eventData || {};
 
-      // Validate required fields
       if (!title || !date || !time_gt) {
         return res.status(400).json({ error: 'Title, Date, and Game Time are required.' });
       }
@@ -121,7 +119,7 @@ export default async function handler(req, res) {
 
       const newEvent = {
         id: uniqueId,
-        scope: callerScope, // Strictly enforced from verified token
+        scope: callerScope, // Strictly enforced from the verified token
         title: isGlobalAdmin ? `[GLOBAL] ${cleanTitle}` : `[${callerScope}] ${cleanTitle}`,
         description: description.trim() || (isGlobalAdmin ? 'Kingdom-wide operation.' : `Alliance event for [${callerScope}].`),
         start: startUtc.toISOString(),
@@ -134,11 +132,8 @@ export default async function handler(req, res) {
       };
 
       calendarState.custom_events.push(newEvent);
-
-      // Sort chronological
       calendarState.custom_events.sort((a, b) => new Date(a.start) - new Date(b.start));
 
-      // Patch Gist
       const patchRes = await fetch(`https://api.github.com/gists/${gistId}`, {
         method: 'PATCH',
         headers: {
@@ -161,7 +156,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
-        message: `Event "${newEvent.title}" scheduled successfully.`,
+        message: `Operation "${newEvent.title}" published successfully.`,
         event: newEvent
       });
     }
@@ -172,24 +167,26 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Missing eventId to delete.' });
       }
 
-      const targetIndex = calendarState.custom_events.findIndex(e => e.id === eventId);
+      const targetIndex = calendarState.custom_events.findIndex((e) => e.id === eventId);
       if (targetIndex === -1) {
         return res.status(404).json({ error: 'Event not found or already deleted.' });
       }
 
       const targetEvt = calendarState.custom_events[targetIndex];
+      const targetScope = (targetEvt.scope || 'global').toLowerCase();
+      const currentCallerScope = callerScope.toLowerCase();
 
-      // Enforce Scope Ownership: Non-global admins can only delete events under their own scope
-      if (!isGlobalAdmin && targetEvt.scope !== callerScope) {
+      // Zero-Crossover Silo:
+      // Global Admins can ONLY delete global events.
+      // Alliance Leaders can ONLY delete events matching their exact alliance tag.
+      if (targetScope !== currentCallerScope) {
         return res.status(403).json({
-          error: 'Access Denied: You cannot delete events belonging to another alliance or Kingdom operations.'
+          error: 'Access Denied: You cannot modify or delete events outside your assigned scope.'
         });
       }
 
-      // Remove from array
       calendarState.custom_events.splice(targetIndex, 1);
 
-      // Patch Gist
       const patchRes = await fetch(`https://api.github.com/gists/${gistId}`, {
         method: 'PATCH',
         headers: {
@@ -212,7 +209,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
-        message: `Deleted event: ${targetEvt.title}`
+        message: `Deleted operation: ${targetEvt.title}`
       });
     }
 

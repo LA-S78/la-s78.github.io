@@ -7,129 +7,67 @@ permalink: /calendar.html
 <div class="content-pane">
   <div class="calendar-app-container">
     <!-- Status & Feedback Alerts -->
-    <div id="loading-state" class="cal-status-banner">
-      Loading Kingdom schedule...
-    </div>
-    <div
-      id="error-state"
-      class="cal-status-banner error"
-      style="display: none"
-    ></div>
-    <div
-      id="action-notification"
-      class="cal-notification-banner"
-      style="display: none"
-    ></div>
+    <div id="loading-state" class="cal-status-banner">Loading Kingdom schedule...</div>
+    <div id="error-state" class="cal-status-banner error" style="display: none;"></div>
+    <div id="action-notification" class="cal-notification-banner" style="display: none;"></div>
 
     <!-- Management Controls (Rendered only when authenticated via token) -->
-    <div
-      id="management-panel"
-      class="cal-management-panel"
-      style="display: none"
-    >
+    <div id="management-panel" class="cal-management-panel" style="display: none;">
       <div class="mgmt-header">
         <div class="mgmt-badge-group">
           <span class="mgmt-tag" id="mgmt-scope-tag">MANAGE MODE</span>
-          <span class="mgmt-desc" id="mgmt-scope-desc"
-            >Authenticated Session Active</span
-          >
+          <span class="mgmt-desc" id="mgmt-scope-desc">Authenticated Session Active</span>
         </div>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="btn-toggle-event-form"
-        >
-          ➕ Schedule Event
-        </button>
+        <button type="button" class="btn btn-primary" id="btn-toggle-event-form">➕ Schedule Event</button>
       </div>
 
       <!-- Collapsible Event Creation Form -->
-      <form
-        id="form-create-event"
-        class="cal-create-card"
-        style="display: none"
-      >
+      <form id="form-create-event" class="cal-create-card" style="display: none;">
         <h3 class="form-title" id="form-heading">Create Operation</h3>
 
         <div class="form-grid">
           <div class="form-group form-col-full">
-            <label for="evt-input-title"
-              >Event Title <span class="req">*</span></label
-            >
-            <input
-              type="text"
-              id="evt-input-title"
-              placeholder="e.g. Fortress Lv. 5 Assault or Strategy Council"
-              required
-              maxlength="60"
-            />
+            <label for="evt-input-title">Event Title <span class="req">*</span></label>
+            <input type="text" id="evt-input-title" placeholder="e.g. Fortress Lv. 5 Assault or Strategy Council" required maxlength="60" />
           </div>
 
           <div class="form-group">
-            <label for="evt-input-date"
-              >Date (YYYY-MM-DD) <span class="req">*</span></label
-            >
+            <label for="evt-input-date">Date (YYYY-MM-DD) <span class="req">*</span></label>
             <input type="date" id="evt-input-date" required />
           </div>
 
           <div class="form-group">
-            <label for="evt-input-time"
-              >Game Time (HH:MM UTC-2) <span class="req">*</span></label
-            >
+            <label for="evt-input-time">Game Time (HH:MM UTC-2) <span class="req">*</span></label>
             <input type="time" id="evt-input-time" required />
             <small class="form-hint">Server Game Time (00:00 to 23:59)</small>
           </div>
 
           <div class="form-group">
             <label for="evt-input-duration">Duration (Hours)</label>
-            <input
-              type="number"
-              id="evt-input-duration"
-              min="0.5"
-              max="24"
-              step="0.5"
-              value="1"
-            />
+            <input type="number" id="evt-input-duration" min="0.5" max="24" step="0.5" value="1" />
           </div>
 
           <div class="form-group form-col-full">
             <label for="evt-input-details">Instructions / Rally Point</label>
-            <textarea
-              id="evt-input-details"
-              rows="2"
-              placeholder="e.g. Assembly at Hive Alpha. All R4s lead rallies."
-              maxlength="250"
-            ></textarea>
+            <textarea id="evt-input-details" rows="2" placeholder="e.g. Assembly at Hive Alpha. All R4s lead rallies." maxlength="250"></textarea>
           </div>
         </div>
 
         <div class="form-actions">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            id="btn-cancel-event-form"
-          >
-            Cancel
-          </button>
-          <button type="submit" class="btn btn-primary" id="btn-submit-event">
-            Publish to Calendar
-          </button>
+          <button type="button" class="btn btn-secondary" id="btn-cancel-event-form">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-event">Publish to Calendar</button>
         </div>
       </form>
     </div>
 
-    <div id="calendar-content" style="display: none">
+    <div id="calendar-content" style="display: none;">
       <!-- Active Cycle Overview -->
       <section class="cal-hero-card">
         <div class="cal-hero-header">
           <div>
             <span class="cal-badge" id="hero-phase-badge">Phase</span>
-            <h1 id="hero-phase-title" class="cal-hero-title">
-              Kingdom War Schedule
-            </h1>
-            <p class="cal-hero-subtitle" id="hero-phase-subtitle">
-              Loading cycle details...
-            </p>
+            <h1 id="hero-phase-title" class="cal-hero-title">Kingdom War Schedule</h1>
+            <p class="cal-hero-subtitle" id="hero-phase-subtitle">Loading cycle details...</p>
           </div>
           <div class="cal-capitol-card">
             <div class="cal-capitol-label">CURRENT CAPITOL HOLDER</div>
@@ -141,9 +79,7 @@ permalink: /calendar.html
         <div class="cal-hero-metrics">
           <div class="metric-item">
             <span class="metric-label">CYCLE PROGRESS</span>
-            <span class="metric-val" id="metric-cycle-progress"
-              >Day -- of 28</span
-            >
+            <span class="metric-val" id="metric-cycle-progress">Day -- of 28</span>
           </div>
           <div class="metric-item">
             <span class="metric-label">NEXT RESET (00:00 GT)</span>
@@ -156,22 +92,15 @@ permalink: /calendar.html
         </div>
       </section>
 
-      <!-- Prominent Filter Bar Directly Under Hero -->
-      <div class="cal-filter-toolbar">
+      <!-- Scoped Filter Toolbar -->
+      <div class="cal-filter-toolbar" id="cal-filter-toolbar">
         <div class="filter-controls-group">
-          <label for="cal-scope-filter" class="filter-label"
-            >🔍 FILTER VIEW:</label
-          >
+          <label for="cal-scope-filter" class="filter-label">🔍 FILTER VIEW:</label>
           <select id="cal-scope-filter" class="cal-filter-select">
-            <option value="all">🌐 All Kingdom & Alliance Operations</option>
-            <option value="global">👑 Global Kingdom Operations Only</option>
+            <!-- Dynamically populated only with relevant options -->
           </select>
         </div>
-        <div
-          id="filter-status-tag"
-          class="filter-active-badge"
-          style="display: none"
-        ></div>
+        <div id="filter-status-tag" class="filter-active-badge"></div>
       </div>
 
       <!-- 4-Week Cycle Roadmap -->
@@ -186,13 +115,8 @@ permalink: /calendar.html
       <section class="cal-section">
         <div class="section-header-row">
           <div>
-            <h2 class="section-heading" style="margin-bottom: 0.25rem">
-              Upcoming Operations & Milestones
-            </h2>
-            <div class="cal-tz-notice">
-              Times displayed in <strong>Game Time (UTC-2)</strong> & your Local
-              Time
-            </div>
+            <h2 class="section-heading" style="margin-bottom: 0.25rem;">Upcoming Operations & Milestones</h2>
+            <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> & your Local Time</div>
           </div>
         </div>
 
@@ -356,24 +280,11 @@ permalink: /calendar.html
     cursor: pointer;
     transition: opacity 0.15s ease;
   }
-  .btn:hover {
-    opacity: 0.9;
-  }
-  .btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  .btn-primary {
-    background: #2563eb;
-    color: #fff;
-  }
-  .scope-global .btn-primary {
-    background: #059669;
-  }
-  .btn-secondary {
-    background: #334155;
-    color: #e2e8f0;
-  }
+  .btn:hover { opacity: 0.9; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background: #2563eb; color: #fff; }
+  .scope-global .btn-primary { background: #059669; }
+  .btn-secondary { background: #334155; color: #e2e8f0; }
 
   /* Hero Card */
   .cal-hero-card {
@@ -410,16 +321,8 @@ permalink: /calendar.html
     font-weight: 700;
     text-transform: uppercase;
   }
-  .badge-kw {
-    background: rgba(185, 28, 28, 0.25);
-    border: 1px solid #ef4444;
-    color: #f87171;
-  }
-  .badge-off {
-    background: rgba(16, 185, 129, 0.2);
-    border: 1px solid #10b981;
-    color: #34d399;
-  }
+  .badge-kw { background: rgba(185, 28, 28, 0.25); border: 1px solid #ef4444; color: #f87171; }
+  .badge-off { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; }
 
   .cal-capitol-card {
     background: rgba(0, 0, 0, 0.35);
@@ -429,20 +332,9 @@ permalink: /calendar.html
     text-align: right;
     min-width: 180px;
   }
-  .cal-capitol-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #b8975a;
-  }
-  .cal-capitol-holder {
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: #fef08a;
-  }
-  .cal-capitol-rank {
-    font-size: 0.75rem;
-    color: #94a3b8;
-  }
+  .cal-capitol-label { font-size: 0.65rem; font-weight: 700; color: #b8975a; }
+  .cal-capitol-holder { font-size: 1.35rem; font-weight: 800; color: #fef08a; }
+  .cal-capitol-rank { font-size: 0.75rem; color: #94a3b8; }
 
   .cal-hero-metrics {
     display: grid;
@@ -463,10 +355,7 @@ permalink: /calendar.html
     color: #64748b;
     margin-bottom: 4px;
   }
-  .metric-val {
-    font-size: 1rem;
-    font-weight: 700;
-  }
+  .metric-val { font-size: 1rem; font-weight: 700; }
 
   /* Toolbar Filter */
   .cal-filter-toolbar {
@@ -512,14 +401,8 @@ permalink: /calendar.html
     border-radius: 4px;
   }
 
-  .cal-section {
-    margin-bottom: 2.25rem;
-  }
-  .section-heading {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin: 0 0 1rem 0;
-  }
+  .cal-section { margin-bottom: 2.25rem; }
+  .section-heading { font-size: 1.15rem; font-weight: 700; margin: 0 0 1rem 0; }
   .section-header-row {
     display: flex;
     justify-content: space-between;
@@ -528,10 +411,7 @@ permalink: /calendar.html
     gap: 1rem;
     margin-bottom: 1rem;
   }
-  .cal-tz-notice {
-    font-size: 0.75rem;
-    color: #64748b;
-  }
+  .cal-tz-notice { font-size: 0.75rem; color: #64748b; }
 
   /* 4-Week Cycle Roadmap */
   .cycle-track-grid {
@@ -561,25 +441,10 @@ permalink: /calendar.html
     padding: 2px 7px;
     border-radius: 4px;
   }
-  .week-card-num {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #94a3b8;
-  }
-  .week-card-title {
-    font-size: 0.92rem;
-    font-weight: 700;
-    margin: 4px 0 10px 0;
-  }
-  .week-card-meta {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    line-height: 1.4;
-  }
-  .week-card-holder {
-    font-weight: 700;
-    color: #fef08a;
-  }
+  .week-card-num { font-size: 0.72rem; font-weight: 700; color: #94a3b8; }
+  .week-card-title { font-size: 0.92rem; font-weight: 700; margin: 4px 0 10px 0; }
+  .week-card-meta { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+  .week-card-holder { font-weight: 700; color: #fef08a; }
 
   /* Timeline & Event Rows */
   .events-timeline {
@@ -600,35 +465,20 @@ permalink: /calendar.html
     justify-content: space-between;
     gap: 1rem;
   }
-  .event-rotation {
-    border-left-color: #b8975a;
-  }
-  .event-war {
-    border-left-color: #ef4444;
-  }
-  .event-snapshot {
-    border-left-color: #3b82f6;
-  }
-  .event-custom {
-    border-left-color: #10b981;
-  }
-  .event-alliance {
-    border-left-color: #3b82f6;
-  }
+  .event-rotation { border-left-color: #b8975a; }
+  .event-war { border-left-color: #ef4444; }
+  .event-snapshot { border-left-color: #3b82f6; }
+  .event-custom { border-left-color: #10b981; }
+  .event-alliance { border-left-color: #3b82f6; }
 
-  .event-main {
-    flex: 1;
-  }
+  .event-main { flex: 1; }
   .event-title {
     font-size: 0.92rem;
     font-weight: 700;
     color: #f1f5f9;
     margin-bottom: 3px;
   }
-  .event-desc {
-    font-size: 0.78rem;
-    color: #94a3b8;
-  }
+  .event-desc { font-size: 0.78rem; color: #94a3b8; }
   .event-actions-group {
     display: flex;
     align-items: center;
@@ -640,11 +490,7 @@ permalink: /calendar.html
     color: #64748b;
     white-space: nowrap;
   }
-  .time-gt {
-    color: #cbd5e1;
-    font-weight: 600;
-    font-size: 0.82rem;
-  }
+  .time-gt { color: #cbd5e1; font-weight: 600; font-size: 0.82rem; }
 
   /* Delete Button */
   .btn-delete-event {
@@ -663,26 +509,12 @@ permalink: /calendar.html
   }
 
   @media (max-width: 768px) {
-    .cycle-track-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-    .cal-hero-header {
-      flex-direction: column;
-    }
-    .cal-capitol-card {
-      text-align: left;
-      width: 100%;
-    }
-    .form-grid {
-      grid-template-columns: 1fr;
-    }
-    .form-col-full {
-      grid-column: span 1;
-    }
-    .cal-filter-toolbar {
-      flex-direction: column;
-      align-items: flex-start;
-    }
+    .cycle-track-grid { grid-template-columns: 1fr 1fr; }
+    .cal-hero-header { flex-direction: column; }
+    .cal-capitol-card { text-align: left; width: 100%; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-col-full { grid-column: span 1; }
+    .cal-filter-toolbar { flex-direction: column; align-items: flex-start; }
     .timeline-event-row {
       flex-direction: column;
       align-items: flex-start;
@@ -692,133 +524,121 @@ permalink: /calendar.html
       justify-content: space-between;
       margin-top: 0.5rem;
     }
-    .event-time-block {
-      text-align: left;
-    }
+    .event-time-block { text-align: left; }
   }
 </style>
 
 <script>
   (async function () {
-    const elLoading = document.getElementById("loading-state");
-    const elError = document.getElementById("error-state");
-    const elContent = document.getElementById("calendar-content");
-    const elNotification = document.getElementById("action-notification");
-    const filterSelect = document.getElementById("cal-scope-filter");
-    const filterStatusTag = document.getElementById("filter-status-tag");
+    const elLoading = document.getElementById('loading-state');
+    const elError = document.getElementById('error-state');
+    const elContent = document.getElementById('calendar-content');
+    const elNotification = document.getElementById('action-notification');
+    const filterSelect = document.getElementById('cal-scope-filter');
+    const filterStatusTag = document.getElementById('filter-status-tag');
+    const filterToolbar = document.getElementById('cal-filter-toolbar');
 
     // 1. Parse URL Parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const allianceParam = urlParams.get("alliance");
-    const tokenParam = urlParams.get("token");
+    const allianceParam = urlParams.get('alliance')?.toUpperCase() || null;
+    const tokenParam = urlParams.get('token');
 
     // Decode HMAC Token safely (client-side inspect)
     let tokenPayload = null;
     if (tokenParam) {
       try {
-        const [dataStr] = tokenParam.split(".");
-        const jsonStr = atob(dataStr.replace(/-/g, "+").replace(/_/g, "/"));
+        const [dataStr] = tokenParam.split('.');
+        const jsonStr = atob(dataStr.replace(/-/g, '+').replace(/_/g, '/'));
         tokenPayload = JSON.parse(jsonStr);
       } catch (e) {
-        console.warn("Invalid token structure:", e);
+        console.warn('Invalid token structure:', e);
       }
     }
 
-    const isManagementSession =
-      tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp);
-    const sessionScope = isManagementSession ? tokenPayload.scope : null; // e.g. 'global' or 'WLO'
-    const isGlobalAdmin = sessionScope === "global";
+    const isManagementSession = tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp);
+    const sessionScope = isManagementSession ? tokenPayload.scope : null;
+    const isGlobalAdmin = sessionScope === 'global';
+
+    // The active alliance context for this viewer (if any).
+    // If it's a global admin session, there is NO active alliance context (they only see Kingdom events).
+    const activeAlliance = (!isGlobalAdmin && sessionScope)
+      ? sessionScope.toUpperCase()
+      : (allianceParam || null);
 
     let allEvents = [];
 
-    // 2. Fetch Live Calendar Data
+    // 2. Fetch Live Calendar Data (Scoped directly at the API)
     async function loadCalendar() {
       try {
-        const res = await fetch("/api/calendar");
+        const query = activeAlliance ? `?alliance=${encodeURIComponent(activeAlliance)}` : '';
+        const res = await fetch(`/api/calendar${query}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
+
         allEvents = data.events || [];
         renderHero(data.status, data.capitolHolder);
-        setupFilterOptions(data.alliances || []);
+        setupFilterOptions();
         applyFilterAndRender();
       } catch (err) {
-        elLoading.style.display = "none";
-        elError.style.display = "block";
+        elLoading.style.display = 'none';
+        elError.style.display = 'block';
         elError.textContent = `Failed to load calendar: ${err.message}`;
       }
     }
 
     // 3. Render Hero & Reset Clock
     function renderHero(status, capitolHolder) {
-      elLoading.style.display = "none";
-      elContent.style.display = "block";
+      elLoading.style.display = 'none';
+      elContent.style.display = 'block';
 
-      const heroBadge = document.getElementById("hero-phase-badge");
-      heroBadge.textContent = status.isKW
-        ? "⚔️ Kingdom War Active"
-        : "🛡️ NAP Rest Week";
-      heroBadge.className = `cal-badge ${status.isKW ? "badge-kw" : "badge-off"}`;
+      const heroBadge = document.getElementById('hero-phase-badge');
+      heroBadge.textContent = status.isKW ? '⚔️ Kingdom War Active' : '🛡️ NAP Rest Week';
+      heroBadge.className = `cal-badge ${status.isKW ? 'badge-kw' : 'badge-off'}`;
 
-      document.getElementById("hero-phase-title").textContent =
-        status.phaseName;
-      document.getElementById("hero-phase-subtitle").textContent = status.isKW
-        ? "Double reward allotments active. Prepare for Saturday Kingdom War confrontation."
-        : "Standard single allocation. Fortresses and territory restructuring active.";
+      document.getElementById('hero-phase-title').textContent = status.phaseName;
+      document.getElementById('hero-phase-subtitle').textContent = status.isKW
+        ? 'Double reward allotments active. Prepare for Saturday Kingdom War confrontation.'
+        : 'Standard single allocation. Fortresses and territory restructuring active.';
 
-      document.getElementById("hero-capitol-holder").textContent =
-        capitolHolder;
-      document.getElementById("hero-capitol-rank").textContent =
-        `Rank #${status.capitolRank} Privilege`;
-      document.getElementById("metric-cycle-progress").textContent =
-        `Day ${status.cycleDay} of 28 (Week ${status.currentWeekNumber})`;
+      document.getElementById('hero-capitol-holder').textContent = capitolHolder;
+      document.getElementById('hero-capitol-rank').textContent = `Rank #${status.capitolRank} Privilege`;
+      document.getElementById('metric-cycle-progress').textContent = `Day ${status.cycleDay} of 28 (Week ${status.currentWeekNumber})`;
 
       if (status.isKW) {
         const kwDate = new Date(status.kwBattleTimestamp * 1000);
-        document.getElementById("metric-kw-countdown").textContent =
-          status.isKWBattleDay
-            ? "🔥 TODAY"
-            : kwDate.toLocaleDateString(undefined, {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-              });
+        document.getElementById('metric-kw-countdown').textContent = status.isKWBattleDay
+          ? '🔥 TODAY'
+          : kwDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
       } else {
-        document.getElementById("metric-kw-box").style.opacity = "0.5";
-        document.getElementById("metric-kw-countdown").textContent =
-          "None (Rest)";
+        document.getElementById('metric-kw-box').style.opacity = '0.5';
+        document.getElementById('metric-kw-countdown').textContent = 'None (Rest)';
       }
 
       function updateResetClock() {
         const now = Date.now();
-        const diff = Math.max(0, status.nextResetTimestamp * 1000 - now);
+        const diff = Math.max(0, (status.nextResetTimestamp * 1000) - now);
         const hours = Math.floor(diff / 3600000);
         const mins = Math.floor((diff % 3600000) / 60000);
         const secs = Math.floor((diff % 60000) / 1000);
-        document.getElementById("metric-reset-countdown").textContent =
-          `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+        document.getElementById('metric-reset-countdown').textContent =
+          `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
       }
       updateResetClock();
       setInterval(updateResetClock, 1000);
 
       // Render 4-Week Grid
       const cycleWeeks = [
-        {
-          week: 1,
-          name: "KW Week 1",
-          rank: 3,
-          desc: "Might Snapshots (Days 3–5)",
-        },
-        { week: 2, name: "KW Week 2", rank: 2, desc: "War Confrontation" },
-        { week: 3, name: "KW Week 3", rank: 1, desc: "War Confrontation" },
-        { week: 4, name: "Rest Week", rank: 4, desc: "Peace & Restructuring" },
+        { week: 1, name: 'KW Week 1', rank: 3, desc: 'Might Snapshots (Days 3–5)' },
+        { week: 2, name: 'KW Week 2', rank: 2, desc: 'War Confrontation' },
+        { week: 3, name: 'KW Week 3', rank: 1, desc: 'War Confrontation' },
+        { week: 4, name: 'Rest Week', rank: 4, desc: 'Peace & Restructuring' }
       ];
 
-      document.getElementById("cycle-cards-grid").innerHTML = cycleWeeks
-        .map((cw) => {
-          const isActive = cw.week === status.currentWeekNumber;
-          return `
-          <div class="cycle-week-card ${isActive ? "active" : ""}">
-            ${isActive ? '<span class="active-indicator">CURRENT</span>' : ""}
+      document.getElementById('cycle-cards-grid').innerHTML = cycleWeeks.map(cw => {
+        const isActive = cw.week === status.currentWeekNumber;
+        return `
+          <div class="cycle-week-card ${isActive ? 'active' : ''}">
+            ${isActive ? '<span class="active-indicator">CURRENT</span>' : ''}
             <div class="week-card-num">Week ${cw.week}</div>
             <div class="week-card-title">${cw.name}</div>
             <div class="week-card-meta">
@@ -827,284 +647,212 @@ permalink: /calendar.html
             </div>
           </div>
         `;
-        })
-        .join("");
+      }).join('');
     }
 
-    // 4. Setup Scope Filter Dropdown (Sorted by Rank, fallback to Alphabetical)
-    function setupFilterOptions(knownAlliances = []) {
-      while (filterSelect.options.length > 2) {
-        filterSelect.remove(2);
-      }
+    // 4. Setup Scoped Filter Dropdown (Zero-Crossover Isolation)
+    function setupFilterOptions() {
+      filterSelect.innerHTML = '';
 
-      // Map each alliance tag to its rank
-      const rankMap = new Map();
+      if (activeAlliance) {
+        // Alliance Perspective: Options are limited strictly to their own alliance + Kingdom operations
+        filterToolbar.style.display = 'flex';
 
-      if (Array.isArray(knownAlliances)) {
-        knownAlliances.forEach((item) => {
-          if (typeof item === "string") {
-            rankMap.set(item, null);
-          } else if (item && typeof item === "object") {
-            const tag = item.tag || item.name;
-            const r = parseInt(item.rank, 10);
-            if (tag) rankMap.set(tag, !isNaN(r) ? r : null);
-          }
-        });
-      } else if (knownAlliances && typeof knownAlliances === "object") {
-        Object.entries(knownAlliances).forEach(([tag, val]) => {
-          const r = typeof val === "number" ? val : parseInt(val?.rank, 10);
-          rankMap.set(tag, !isNaN(r) ? r : null);
-        });
-      }
+        const optCombined = document.createElement('option');
+        optCombined.value = 'combined';
+        optCombined.textContent = `🌐 Combined (Global + [${activeAlliance}])`;
+        filterSelect.appendChild(optCombined);
 
-      // Collect all tags (API data + existing events + URL param + session token)
-      const allTags = new Set(rankMap.keys());
-      allEvents.forEach((e) => {
-        if (e.scope && e.scope !== "global") allTags.add(e.scope);
-      });
-      if (allianceParam) allTags.add(allianceParam);
-      if (sessionScope && sessionScope !== "global") allTags.add(sessionScope);
+        const optAlliance = document.createElement('option');
+        optAlliance.value = activeAlliance;
+        optAlliance.textContent = `🛡️ [${activeAlliance}] Internal Only`;
+        filterSelect.appendChild(optAlliance);
 
-      // Sort: Ranked alliances first (1 -> N), then Unranked alliances (A -> Z)
-      const sortedTags = [...allTags].sort((a, b) => {
-        const rankA = rankMap.get(a) ?? null;
-        const rankB = rankMap.get(b) ?? null;
+        const optGlobal = document.createElement('option');
+        optGlobal.value = 'global';
+        optGlobal.textContent = '👑 Global Kingdom Operations Only';
+        filterSelect.appendChild(optGlobal);
 
-        const hasRankA = rankA !== null && !isNaN(rankA) && rankA > 0;
-        const hasRankB = rankB !== null && !isNaN(rankB) && rankB > 0;
+        filterSelect.value = 'combined';
 
-        if (hasRankA && hasRankB) {
-          if (rankA !== rankB) return rankA - rankB;
-          return a.localeCompare(b);
-        }
-        if (hasRankA) return -1; // Ranked placed before unranked
-        if (hasRankB) return 1; // Unranked placed after ranked
-        return a.localeCompare(b); // Both unranked -> alphabetical
-      });
-
-      // Build dropdown options
-      sortedTags.forEach((tag) => {
-        const rank = rankMap.get(tag);
-        const hasRank = rank !== null && !isNaN(rank) && rank > 0;
-        const opt = document.createElement("option");
-        opt.value = tag;
-        opt.textContent = hasRank
-          ? `🛡️ #${rank} [${tag}] Operations Only`
-          : `🛡️ [${tag}] Operations Only`;
-        filterSelect.appendChild(opt);
-      });
-
-      // Preserve active filter selection
-      if (sessionScope && sessionScope !== "global") {
-        filterSelect.value = sessionScope;
-      } else if (allianceParam && allTags.has(allianceParam)) {
-        filterSelect.value = allianceParam;
+      } else {
+        // Global Admin or Public Guest: No alliance options exist. Fixed to Kingdom Operations.
+        filterToolbar.style.display = 'none';
       }
     }
 
     function applyFilterAndRender() {
-      const selected = filterSelect.value;
-      let filtered = allEvents;
+      const selected = filterSelect.value || 'global';
+      let filtered = [];
 
-      if (selected === "global") {
-        filtered = allEvents.filter((e) => !e.scope || e.scope === "global");
-        filterStatusTag.style.display = "block";
-        filterStatusTag.textContent = "👑 Global Only";
-      } else if (selected !== "all") {
-        filtered = allEvents.filter(
-          (e) =>
-            e.scope === selected || e.type === "war" || e.type === "rotation",
-        );
-        filterStatusTag.style.display = "block";
-        filterStatusTag.textContent = `🛡️ [${selected}] Filter Active`;
+      if (!activeAlliance || selected === 'global') {
+        filtered = allEvents.filter(e => !e.scope || e.scope.toLowerCase() === 'global' || e.type === 'war' || e.type === 'rotation');
+        filterStatusTag.style.display = 'none';
+      } else if (selected === 'combined') {
+        filtered = allEvents.filter(e => {
+          if (!e.scope || e.scope.toLowerCase() === 'global' || e.type === 'war' || e.type === 'rotation') return true;
+          return e.scope.toUpperCase() === activeAlliance;
+        });
+        filterStatusTag.style.display = 'block';
+        filterStatusTag.textContent = `🛡️ [${activeAlliance}] Schedule Active`;
       } else {
-        filterStatusTag.style.display = "none";
+        filtered = allEvents.filter(e => e.scope && e.scope.toUpperCase() === activeAlliance);
+        filterStatusTag.style.display = 'block';
+        filterStatusTag.textContent = `🛡️ [${activeAlliance}] Internal Only`;
       }
 
       renderTimeline(filtered);
     }
 
-    filterSelect.addEventListener("change", applyFilterAndRender);
+    filterSelect.addEventListener('change', applyFilterAndRender);
 
-    // 5. Render Timeline Items with Permission-Gated Delete Buttons
+    // 5. Render Timeline Items with Strict Deletion Checks
     function renderTimeline(eventsList) {
-      const timelineContainer = document.getElementById(
-        "events-timeline-container",
-      );
+      const timelineContainer = document.getElementById('events-timeline-container');
 
       if (!eventsList || eventsList.length === 0) {
-        timelineContainer.innerHTML =
-          '<div class="cal-status-banner">No operations scheduled for this perspective.</div>';
+        timelineContainer.innerHTML = '<div class="cal-status-banner">No operations scheduled for this perspective.</div>';
         return;
       }
 
-      timelineContainer.innerHTML = eventsList
-        .map((evt) => {
-          const start = new Date(evt.start);
-          const gtHours = (start.getUTCHours() - 2 + 24) % 24;
-          const gtMins = String(start.getUTCMinutes()).padStart(2, "0");
-          const gtTimeStr = evt.allDay
-            ? "All Day"
-            : `${String(gtHours).padStart(2, "0")}:${gtMins} GT`;
-          const localDateStr = start.toLocaleDateString(undefined, {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-          });
-          const localTimeStr = evt.allDay
-            ? ""
-            : ` • ${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+      timelineContainer.innerHTML = eventsList.map(evt => {
+        const start = new Date(evt.start);
+        const gtHours = (start.getUTCHours() - 2 + 24) % 24;
+        const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
+        const gtTimeStr = evt.allDay ? 'All Day' : `${String(gtHours).padStart(2, '0')}:${gtMins} GT`;
+        const localDateStr = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+        const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
-          // Can current session delete this event?
-          const canDelete =
-            isManagementSession &&
-            evt.id &&
-            evt.id.startsWith("evt-") &&
-            (isGlobalAdmin || evt.scope === sessionScope);
+        // Can current session delete this event?
+        // Admin can ONLY delete global events. Alliance leaders can ONLY delete their own alliance events.
+        const canDelete = isManagementSession && evt.id && evt.id.startsWith('evt-') &&
+          (sessionScope && evt.scope && evt.scope.toLowerCase() === sessionScope.toLowerCase());
 
-          return `
-          <div class="timeline-event-row event-${evt.type || "custom"}">
+        return `
+          <div class="timeline-event-row event-${evt.type || 'custom'}">
             <div class="event-main">
               <div class="event-title">${evt.title}</div>
-              <div class="event-desc">${evt.description || ""}</div>
+              <div class="event-desc">${evt.description || ''}</div>
             </div>
             <div class="event-actions-group">
               <div class="event-time-block">
                 <div class="time-gt">${gtTimeStr}</div>
                 <div>${localDateStr}${localTimeStr}</div>
               </div>
-              ${canDelete ? `<button type="button" class="btn-delete-event" data-event-id="${evt.id}">🗑️ Delete</button>` : ""}
+              ${canDelete ? `<button type="button" class="btn-delete-event" data-event-id="${evt.id}">🗑️ Delete</button>` : ''}
             </div>
           </div>
         `;
-        })
-        .join("");
+      }).join('');
 
-      timelineContainer.querySelectorAll(".btn-delete-event").forEach((btn) => {
-        btn.addEventListener("click", () =>
-          handleDeleteEvent(btn.dataset.eventId),
-        );
+      timelineContainer.querySelectorAll('.btn-delete-event').forEach(btn => {
+        btn.addEventListener('click', () => handleDeleteEvent(btn.dataset.eventId));
       });
     }
 
     // 6. Management Mode UI & Actions
     if (isManagementSession) {
-      const mgmtPanel = document.getElementById("management-panel");
-      const mgmtScopeTag = document.getElementById("mgmt-scope-tag");
-      const mgmtScopeDesc = document.getElementById("mgmt-scope-desc");
-      const formHeading = document.getElementById("form-heading");
+      const mgmtPanel = document.getElementById('management-panel');
+      const mgmtScopeTag = document.getElementById('mgmt-scope-tag');
+      const mgmtScopeDesc = document.getElementById('mgmt-scope-desc');
+      const formHeading = document.getElementById('form-heading');
 
-      mgmtPanel.style.display = "block";
+      mgmtPanel.style.display = 'block';
       if (isGlobalAdmin) {
-        mgmtPanel.classList.add("scope-global");
-        mgmtScopeTag.textContent = "👑 GLOBAL ADMIN";
-        mgmtScopeDesc.textContent =
-          "Scheduling Kingdom-wide alerts and operations";
-        formHeading.textContent = "Create Kingdom Operation ([GLOBAL])";
+        mgmtPanel.classList.add('scope-global');
+        mgmtScopeTag.textContent = '👑 GLOBAL ADMIN';
+        mgmtScopeDesc.textContent = 'Scheduling Kingdom-wide alerts and operations';
+        formHeading.textContent = 'Create Kingdom Operation ([GLOBAL])';
       } else {
         mgmtScopeTag.textContent = `🛡️ [${sessionScope}] LEADERSHIP`;
-        mgmtScopeDesc.textContent = `Managing schedule for [${sessionScope}]`;
+        mgmtScopeDesc.textContent = `Managing internal operations for [${sessionScope}]`;
         formHeading.textContent = `Create [${sessionScope}] Operation`;
       }
 
-      const formEl = document.getElementById("form-create-event");
-      const btnToggle = document.getElementById("btn-toggle-event-form");
-      const btnCancel = document.getElementById("btn-cancel-event-form");
+      const formEl = document.getElementById('form-create-event');
+      const btnToggle = document.getElementById('btn-toggle-event-form');
+      const btnCancel = document.getElementById('btn-cancel-event-form');
 
-      btnToggle.addEventListener("click", () => {
-        const isHidden = formEl.style.display === "none";
-        formEl.style.display = isHidden ? "block" : "none";
+      btnToggle.addEventListener('click', () => {
+        const isHidden = formEl.style.display === 'none';
+        formEl.style.display = isHidden ? 'block' : 'none';
         if (isHidden) {
-          document.getElementById("evt-input-date").value = new Date()
-            .toISOString()
-            .split("T")[0];
-          document.getElementById("evt-input-time").value = "19:00";
+          document.getElementById('evt-input-date').value = new Date().toISOString().split('T')[0];
+          document.getElementById('evt-input-time').value = '19:00';
         }
       });
 
-      btnCancel.addEventListener("click", () => {
-        formEl.style.display = "none";
+      btnCancel.addEventListener('click', () => {
+        formEl.style.display = 'none';
       });
 
       // Submit Event Creation
-      formEl.addEventListener("submit", async (e) => {
+      formEl.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const submitBtn = document.getElementById("btn-submit-event");
+        const submitBtn = document.getElementById('btn-submit-event');
         submitBtn.disabled = true;
-        submitBtn.textContent = "Publishing...";
+        submitBtn.textContent = 'Publishing...';
 
         const payload = {
           token: tokenParam,
-          action: "create",
+          action: 'create',
           eventData: {
-            title: document.getElementById("evt-input-title").value,
-            date: document.getElementById("evt-input-date").value,
-            time_gt: document.getElementById("evt-input-time").value,
-            duration_hours: document.getElementById("evt-input-duration").value,
-            description: document.getElementById("evt-input-details").value,
-          },
+            title: document.getElementById('evt-input-title').value,
+            date: document.getElementById('evt-input-date').value,
+            time_gt: document.getElementById('evt-input-time').value,
+            duration_hours: document.getElementById('evt-input-duration').value,
+            description: document.getElementById('evt-input-details').value
+          }
         };
 
         try {
-          const res = await fetch("/api/manage-event", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
+          const res = await fetch('/api/manage-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
           });
           const result = await res.json();
-          if (!res.ok) throw new Error(result.error || "Failed to save event");
+          if (!res.ok) throw new Error(result.error || 'Failed to save event');
 
-          showNotification(
-            result.message || "Operation published successfully!",
-            "success",
-          );
+          showNotification(result.message || 'Operation published successfully!', 'success');
           formEl.reset();
-          formEl.style.display = "none";
+          formEl.style.display = 'none';
           await loadCalendar();
         } catch (err) {
-          showNotification(err.message, "error");
+          showNotification(err.message, 'error');
         } finally {
           submitBtn.disabled = false;
-          submitBtn.textContent = "Publish to Calendar";
+          submitBtn.textContent = 'Publish to Calendar';
         }
       });
     }
 
     // 7. Delete Event Handler
     async function handleDeleteEvent(eventId) {
-      if (
-        !confirm(
-          "Are you sure you want to remove this operation from the calendar?",
-        )
-      )
-        return;
+      if (!confirm('Are you sure you want to remove this operation from the calendar?')) return;
 
       try {
-        const res = await fetch("/api/manage-event", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token: tokenParam,
-            action: "delete",
-            eventId,
-          }),
+        const res = await fetch('/api/manage-event', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: tokenParam, action: 'delete', eventId })
         });
         const result = await res.json();
-        if (!res.ok) throw new Error(result.error || "Failed to delete event");
+        if (!res.ok) throw new Error(result.error || 'Failed to delete event');
 
-        showNotification(result.message || "Operation removed.", "success");
+        showNotification(result.message || 'Operation removed.', 'success');
         await loadCalendar();
       } catch (err) {
-        showNotification(err.message, "error");
+        showNotification(err.message, 'error');
       }
     }
 
     function showNotification(msg, type) {
       elNotification.textContent = msg;
       elNotification.className = `cal-notification-banner ${type}`;
-      elNotification.style.display = "block";
+      elNotification.style.display = 'block';
       setTimeout(() => {
-        elNotification.style.display = "none";
+        elNotification.style.display = 'none';
       }, 5000);
     }
 
