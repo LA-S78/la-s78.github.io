@@ -11,7 +11,7 @@ permalink: /calendar.html
     <div id="error-state" class="cal-status-banner error" style="display: none;"></div>
     <div id="action-notification" class="cal-notification-banner" style="display: none;"></div>
 
-    <!-- Management Controls (Rendered only when authenticated via token) -->
+    <!-- Management Controls (Rendered when authenticated or via ?preview=true) -->
     <div id="management-panel" class="cal-management-panel" style="display: none;">
       <div class="mgmt-header">
         <div class="mgmt-badge-group">
@@ -238,10 +238,6 @@ permalink: /calendar.html
   .cal-management-panel.scope-global {
     border-left-color: #10b981;
   }
-  /* Submit Button dynamic transition */
-  #btn-submit-event {
-    transition: background 0.25s ease, border-color 0.25s ease;
-  }
   .mgmt-header {
     display: flex;
     justify-content: space-between;
@@ -346,7 +342,7 @@ permalink: /calendar.html
     font-size: 0.82rem;
     font-weight: 700;
     cursor: pointer;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.15s ease, background 0.25s ease;
   }
   .btn:hover { opacity: 0.9; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -481,7 +477,7 @@ permalink: /calendar.html
   }
   .cal-tz-notice { font-size: 0.75rem; color: #64748b; }
 
-  /* 4-Week Cycle Roadmap */
+  /* 4-Week Cycle Roadmap - Dynamic RGB Ambient Wash */
   .cycle-track-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -645,8 +641,8 @@ permalink: /calendar.html
     const urlParams = new URLSearchParams(window.location.search);
     const allianceParam = urlParams.get('alliance')?.toUpperCase() || null;
     const tokenParam = urlParams.get('token');
+    const isDevPreview = urlParams.get('preview') === 'true'; // Access ?preview=true to test form UI
 
-    // Decode HMAC Token safely (client-side inspect)
     let tokenPayload = null;
     if (tokenParam) {
       try {
@@ -658,18 +654,17 @@ permalink: /calendar.html
       }
     }
 
-    const isManagementSession = tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp);
-    const sessionScope = isManagementSession ? tokenPayload.scope : null;
+    const isManagementSession = (tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp)) || isDevPreview;
+    const sessionScope = isManagementSession ? (tokenPayload?.scope || 'WLO') : null;
     const isGlobalAdmin = sessionScope === 'global';
 
-    // The active alliance context for this viewer (if any)
     const activeAlliance = (!isGlobalAdmin && sessionScope)
       ? sessionScope.toUpperCase()
       : (allianceParam || null);
 
     let allEvents = [];
 
-    // 2. Fetch Live Calendar Data (Scoped directly at the API)
+    // 2. Fetch Live Calendar Data
     async function loadCalendar() {
       try {
         const query = activeAlliance ? `?alliance=${encodeURIComponent(activeAlliance)}` : '';
@@ -752,7 +747,7 @@ permalink: /calendar.html
       }).join('');
     }
 
-    // 4. Setup Scoped Filter Dropdown (Zero-Crossover Isolation)
+    // 4. Setup Scoped Filter Dropdown
     function setupFilterOptions() {
       filterSelect.innerHTML = '';
 
@@ -805,7 +800,7 @@ permalink: /calendar.html
 
     filterSelect.addEventListener('change', applyFilterAndRender);
 
-    // 5. Render Timeline Items
+    // 5. Render Timeline Items with Exact Preset Colors
     function renderTimeline(eventsList) {
       const timelineContainer = document.getElementById('events-timeline-container');
 
@@ -830,12 +825,14 @@ permalink: /calendar.html
         // Force Notify Badge
         const forceLabel = evt.notify_target === 'everyone' ? '<span class="event-tag-pill pill-force">🚨 Mandatory</span>' : '';
 
-        // Strict Delete check: Admins can ONLY delete global events; alliance officers can ONLY delete their own
+        // Exact border accent: evt.color takes full precedence
+        const borderStyle = evt.color ? `border-left-color: ${evt.color} !important;` : '';
+
         const canDelete = isManagementSession && evt.id && evt.id.startsWith('evt-') &&
           (sessionScope && evt.scope && evt.scope.toLowerCase() === sessionScope.toLowerCase());
 
         return `
-          <div class="timeline-event-row event-${evt.type || 'custom'}" style="${evt.color ? `border-left-color: ${evt.color};` : ''}">
+          <div class="timeline-event-row event-${evt.type || 'custom'}" style="${borderStyle}">
             <div class="event-main">
               <div class="event-title-line">
                 <span class="event-title">${evt.title}</span>
@@ -860,7 +857,7 @@ permalink: /calendar.html
       });
     }
 
-    // 6. Management Mode UI & Non-Jumping Controls
+    // 6. Management Mode UI & Unified Preset Theming
     if (isManagementSession) {
       const mgmtPanel = document.getElementById('management-panel');
       const mgmtScopeTag = document.getElementById('mgmt-scope-tag');
@@ -885,61 +882,55 @@ permalink: /calendar.html
       const notifySelect = document.getElementById('evt-input-notify');
       const customRoleInput = document.getElementById('evt-input-role-id');
       const presetSelect = document.getElementById('evt-input-preset');
+      const submitBtn = document.getElementById('btn-submit-event');
 
-      // Operation Presets Catalog with Paired Dynamic Theming
+      // Canonical Operation Presets Dictionary
       const OPERATION_PRESETS = {
         crystal_cluster: {
           title: "Crystal Cluster Valley",
-          accent: "#9d65ea",                                // Brighter purple for the side accent
-          bg: "linear-gradient(145deg, rgba(121, 70, 192, 0.18), #111317)",
+          color: "#7946C0",
           duration: 0.5,
           recurrence: "weekly",
           description: "Free For All event every Sunday"
         },
         elixir_scramble: {
           title: "Elixir Scramble",
-          accent: "#34d399",                                // Vibrant emerald
-          bg: "linear-gradient(145deg, rgba(36, 82, 59, 0.25), #111317)",
+          color: "#24523B",
           duration: 0.5,
           recurrence: "weekly",
           description: "Team Battle event every Friday"
         },
         survival_battle: {
           title: "Survival Battle",
-          accent: "#f97316",                                // Vivid ember orange
-          bg: "linear-gradient(145deg, rgba(207, 98, 20, 0.20), #111317)",
+          color: "#CF6214",
           duration: 4.0,
           recurrence: "none",
           description: "Complete tasks to earn rewards"
         },
         kill_event: {
           title: "Kill Event",
-          accent: "#ef4444",                                // High-alert blood crimson
-          bg: "linear-gradient(145deg, rgba(177, 42, 42, 0.20), #111317)",
+          color: "#B12A2A",
           duration: 24.0,
           recurrence: "none",
           description: "Invaders from other servers arrive! Make sure you are shielded"
         },
         kvk_battle: {
           title: "Kingdom vs Kingdom Battle",
-          accent: "#8ed2ef",                                // Glacial/castle ice blue
-          bg: "linear-gradient(145deg, rgba(142, 210, 239, 0.16), #111317)",
+          color: "#8ED2EF",
           duration: 1.0,
           recurrence: "none",
           description: "The battle for the Royal Castle begins!"
         },
         gear_event: {
           title: "Gear Event",
-          accent: "#94a3b8",                                // Polished steel grey
-          bg: "linear-gradient(145deg, rgba(48, 58, 64, 0.35), #111317)",
+          color: "#303A40",
           duration: 48.0,
           recurrence: "none",
           description: "Get rewarded for upgrading gear"
         },
         cheese_trap: {
           title: "Cheese Trap",
-          accent: "#fab22f",                                // Warm glowing gold
-          bg: "linear-gradient(145deg, rgba(250, 178, 47, 0.20), #111317)",
+          color: "#FAB22F",
           duration: 0.5,
           recurrence: "2days",
           description: "Help fend off the Cheese Thief to earn rewards"
@@ -947,7 +938,10 @@ permalink: /calendar.html
       };
 
       let activePresetColor = null;
+      const defaultBorderColor = isGlobalAdmin ? '#10b981' : '#3b82f6';
+      const defaultBackground = '#14171f';
 
+      // Dynamic Preset Theming Listener (single, clean registration)
       presetSelect.addEventListener('change', () => {
         const selected = OPERATION_PRESETS[presetSelect.value];
         if (selected) {
@@ -956,8 +950,19 @@ permalink: /calendar.html
           document.getElementById('evt-input-recurrence').value = selected.recurrence;
           document.getElementById('evt-input-details').value = selected.description;
           activePresetColor = selected.color;
+
+          mgmtPanel.style.borderLeftColor = selected.color;
+          mgmtPanel.style.background = `linear-gradient(145deg, ${selected.color}2e, #111317)`;
+          mgmtPanel.style.boxShadow = `0 4px 20px ${selected.color}22`;
+          submitBtn.style.background = selected.color;
+          submitBtn.style.color = (selected.color === '#FAB22F' || selected.color === '#8ED2EF') ? '#0b0d11' : '#ffffff';
         } else {
           activePresetColor = null;
+          mgmtPanel.style.borderLeftColor = defaultBorderColor;
+          mgmtPanel.style.background = defaultBackground;
+          mgmtPanel.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
+          submitBtn.style.background = defaultBorderColor;
+          submitBtn.style.color = '#ffffff';
         }
       });
 
@@ -1007,7 +1012,6 @@ permalink: /calendar.html
           return;
         }
 
-        const submitBtn = document.getElementById('btn-submit-event');
         submitBtn.disabled = true;
         submitBtn.textContent = 'Publishing...';
 
@@ -1039,6 +1043,11 @@ permalink: /calendar.html
           showNotification(result.message || 'Operation published successfully!', 'success');
           formEl.reset();
           activePresetColor = null;
+          mgmtPanel.style.borderLeftColor = defaultBorderColor;
+          mgmtPanel.style.background = defaultBackground;
+          mgmtPanel.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
+          submitBtn.style.background = defaultBorderColor;
+          submitBtn.style.color = '#ffffff';
           customRoleInput.disabled = true;
           customRoleInput.style.opacity = '0.45';
           customRoleInput.style.cursor = 'not-allowed';
