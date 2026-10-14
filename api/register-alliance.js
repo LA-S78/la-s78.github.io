@@ -4,7 +4,7 @@ import crypto from "crypto";
 const ALLIANCE_COMMANDS_SCHEMA = [
   {
     name: "calendar",
-    description: "View or manage the Event Calendar",
+    description: "View or manage the Kingdom Event Calendar",
     type: 1,
     options: [
       {
@@ -20,6 +20,33 @@ const ALLIANCE_COMMANDS_SCHEMA = [
           {
             name: "Manage Global Events (Admin Only)",
             value: "manage_global",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "suggest",
+    description: "Submit a rule proposal, report an alliance issue, or check your ticket status",
+    type: 1,
+    options: [
+      {
+        type: 3,
+        name: "type",
+        description: "Select ticket category or check your active submissions",
+        required: true,
+        choices: [
+          {
+            name: "👑 Kingdom / NAP Proposal (Server-Wide Rule or Event Idea)",
+            value: "nap_proposal",
+          },
+          {
+            name: "🛡️ Internal Alliance Issue (Handled Privately by Your R4/R5s)",
+            value: "alliance_issue",
+          },
+          {
+            name: "📋 View My Ticket Status (Active & Recent History)",
+            value: "status",
           },
         ],
       },
@@ -105,7 +132,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { token, guildId, delegatedRoles, alert_channel_id, alert_role_id } = req.body;
+  const {
+    token,
+    guildId,
+    delegatedRoles,
+    alert_channel_id,
+    alert_role_id,
+    officer_channel_id,
+    alliance_color,
+  } = req.body || {};
+
   const botToken = process.env.DISCORD_BOT_TOKEN;
   const clientId = process.env.DISCORD_CLIENT_ID;
   const gistId = process.env.GIST_ID;
@@ -123,12 +159,9 @@ export default async function handler(req, res) {
 
   const payload = verifyRegistrationToken(token, botToken);
   if (!payload || payload.action !== "register" || !payload.alliance) {
-    return res
-      .status(403)
-      .json({
-        error:
-          "Token is invalid or expired. Run /registerbot again in Discord.",
-      });
+    return res.status(403).json({
+      error: "Token is invalid or expired. Run /registerbot again in Discord.",
+    });
   }
 
   const cleanGuildId = String(guildId).trim();
@@ -138,23 +171,21 @@ export default async function handler(req, res) {
           String(r)
             .replace(/[@\[\]]/g, "")
             .trim()
-            .toLowerCase(),
+            .toLowerCase()
         )
         .filter(Boolean)
     : [];
 
-  // Validate alert routing if provided
-  let cleanChannelId = null;
-  if (alert_channel_id) {
-    const rawChannelId = String(alert_channel_id).trim();
-    if (!/^\d{17,20}$/.test(rawChannelId)) {
-      return res.status(400).json({
-        error: "Invalid Discord Alert Channel ID format (must be 17-20 digits).",
-      });
-    }
-    cleanChannelId = rawChannelId;
+  // Validate Operations Alert Channel ID
+  const rawAlertChannel = String(alert_channel_id || "").trim();
+  if (!rawAlertChannel || !/^\d{17,20}$/.test(rawAlertChannel)) {
+    return res.status(400).json({
+      error: "A valid 17-20 digit Operations Alert Channel ID is required.",
+    });
   }
+  const cleanChannelId = rawAlertChannel;
 
+  // Validate Optional Default Alert Role ID
   let cleanRoleId = null;
   if (alert_role_id) {
     const rawRoleId = String(alert_role_id).trim();
@@ -166,12 +197,33 @@ export default async function handler(req, res) {
     cleanRoleId = rawRoleId;
   }
 
+  // Validate Officer Ticket Intake Channel ID
+  const rawOfficerChannel = String(officer_channel_id || "").trim();
+  if (!rawOfficerChannel || !/^\d{17,20}$/.test(rawOfficerChannel)) {
+    return res.status(400).json({
+      error: "A valid 17-20 digit Officer Ticket Intake Channel ID is required.",
+    });
+  }
+  const cleanOfficerChannelId = rawOfficerChannel;
+
+  // Validate Alliance Identity Color (Hex)
+  let cleanColor = "#B8975A";
+  if (alliance_color) {
+    const rawColor = String(alliance_color).trim().toUpperCase();
+    if (!/^#[0-9A-F]{6}$/.test(rawColor)) {
+      return res.status(400).json({
+        error: "Invalid Alliance Identity Color format (must be a 6-digit hex code like #B8975A).",
+      });
+    }
+    cleanColor = rawColor;
+  }
+
   // 1. Verify Bot Membership via Discord REST API
   const rolesCheckRes = await fetch(
     `https://discord.com/api/v10/guilds/${cleanGuildId}/roles`,
     {
       headers: { Authorization: `Bot ${botToken}` },
-    },
+    }
   );
 
   if (rolesCheckRes.status === 403 || rolesCheckRes.status === 404) {
@@ -182,11 +234,9 @@ export default async function handler(req, res) {
   }
 
   if (!rolesCheckRes.ok) {
-    return res
-      .status(500)
-      .json({
-        error: `Discord verification failed (${rolesCheckRes.status}).`,
-      });
+    return res.status(500).json({
+      error: `Discord verification failed (${rolesCheckRes.status}).`,
+    });
   }
 
   // 2. Fetch Current Gist State & Check for Guild ID Collisions
@@ -207,7 +257,7 @@ export default async function handler(req, res) {
 
     const gistData = await gistGetRes.json();
     currentState = JSON.parse(
-      gistData.files["map-state.json"]?.content || "{}",
+      gistData.files["map-state.json"]?.content || "{}"
     );
   } catch (err) {
     console.error("Failed to retrieve Gist state:", err);
@@ -223,7 +273,7 @@ export default async function handler(req, res) {
     ([tag, data]) =>
       data?.guild_id &&
       String(data.guild_id).trim() === cleanGuildId &&
-      tag !== payload.alliance,
+      tag !== payload.alliance
   );
 
   if (existingClaim) {
@@ -251,7 +301,7 @@ export default async function handler(req, res) {
       .json({ error: "Failed to deploy slash commands to your server." });
   }
 
-  // 4. Persist Guild Mapping & Alert Config to GitHub Gist
+  // 4. Persist Guild Mapping, Alert Config, Ticket Channel & Color to GitHub Gist
   try {
     if (!currentState.alliances) currentState.alliances = {};
     if (!currentState.alliances[payload.alliance]) {
@@ -261,12 +311,10 @@ export default async function handler(req, res) {
     const allianceRecord = currentState.alliances[payload.alliance];
     allianceRecord.guild_id = cleanGuildId;
     allianceRecord.delegated_roles = cleanRoles;
-
-    if (cleanChannelId) {
-      allianceRecord.alert_channel_id = cleanChannelId;
-    }
-    // Null defaults to @everyone fallback
+    allianceRecord.alert_channel_id = cleanChannelId;
     allianceRecord.alert_role_id = cleanRoleId;
+    allianceRecord.officer_channel_id = cleanOfficerChannelId;
+    allianceRecord.color = cleanColor;
 
     currentState.lastUpdated = new Date().toISOString();
 
@@ -274,7 +322,7 @@ export default async function handler(req, res) {
       method: "PATCH",
       headers: { ...gistHeaders, "Content-Type": "application/json" },
       body: JSON.stringify({
-        description: `Server and alert routing registered for [${payload.alliance}] at ${new Date().toISOString()}`,
+        description: `Server, alerts, and ticket routing registered for [${payload.alliance}] at ${new Date().toISOString()}`,
         files: {
           "map-state.json": {
             content: JSON.stringify(currentState, null, 2),
@@ -291,15 +339,15 @@ export default async function handler(req, res) {
       alliance: payload.alliance,
       guildId: cleanGuildId,
       delegatedRoles: cleanRoles,
-      alertChannelId: allianceRecord.alert_channel_id || null,
-      alertRoleId: allianceRecord.alert_role_id || null,
+      alertChannelId: allianceRecord.alert_channel_id,
+      alertRoleId: allianceRecord.alert_role_id,
+      officerChannelId: allianceRecord.officer_channel_id,
+      allianceColor: allianceRecord.color,
     });
   } catch (gistErr) {
     console.error("Failed to commit alliance registration:", gistErr);
-    return res
-      .status(500)
-      .json({
-        error: `Commands deployed, but failed to save configuration: ${gistErr.message}`,
-      });
+    return res.status(500).json({
+      error: `Commands deployed, but failed to save configuration: ${gistErr.message}`,
+    });
   }
 }

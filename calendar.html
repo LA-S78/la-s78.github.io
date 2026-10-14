@@ -4,7 +4,7 @@ title: Kingdom War & Event Calendar
 permalink: /calendar.html
 ---
 
-<div class="content-pane">
+<div class="content-pane portal-pane-lg">
   <div class="calendar-app-container">
     <!-- Status & Feedback Alerts -->
     <div id="loading-state" class="cal-status-banner">Loading Kingdom schedule...</div>
@@ -72,7 +72,7 @@ permalink: /calendar.html
             <select id="evt-input-recurrence" class="cal-form-select">
               <option value="none">One-Time Event (Does not repeat)</option>
               <option value="2days">Repeats Every 2 Days</option>
-              <option value="weekly">Repeats Weekly (Same day & time)</option>
+              <option value="weekly">Repeats Weekly (Same day &amp; time)</option>
             </select>
           </div>
 
@@ -90,14 +90,14 @@ permalink: /calendar.html
           <!-- Non-Jumping Custom Role Input -->
           <div class="form-group form-col-full" id="group-custom-role">
             <label for="evt-input-role-id">Specific Role ID <small class="form-hint-inline">(Required only for Target Specific Role)</small></label>
-            <input 
-              type="text" 
-              id="evt-input-role-id" 
-              placeholder="e.g. 1198765432109876543" 
+            <input
+              type="text"
+              id="evt-input-role-id"
+              class="input-locked"
+              placeholder="e.g. 1198765432109876543"
               pattern="^\d{17,20}$"
               title="Must be a valid 17-20 digit Discord Role ID"
-              disabled 
-              style="opacity: 0.45; cursor: not-allowed;"
+              disabled
             />
           </div>
 
@@ -151,9 +151,7 @@ permalink: /calendar.html
       <div class="cal-filter-toolbar" id="cal-filter-toolbar" style="display: none;">
         <div class="filter-controls-group">
           <label for="cal-scope-filter" class="filter-label">🔍 PERSPECTIVE:</label>
-          <select id="cal-scope-filter" class="cal-filter-select">
-            <!-- Dynamically populated -->
-          </select>
+          <select id="cal-scope-filter" class="cal-filter-select"></select>
         </div>
         <div id="filter-status-tag" class="filter-active-badge"></div>
       </div>
@@ -161,471 +159,23 @@ permalink: /calendar.html
       <!-- 4-Week Cycle Roadmap -->
       <section class="cal-section">
         <h2 class="section-heading">4-Week Capitol Rotation Cycle</h2>
-        <div class="cycle-track-grid" id="cycle-cards-grid">
-          <!-- Rendered dynamically -->
-        </div>
+        <div class="cycle-track-grid" id="cycle-cards-grid"></div>
       </section>
 
       <!-- Operations Timeline Section -->
       <section class="cal-section">
         <div class="section-header-row">
           <div>
-            <h2 class="section-heading" style="margin-bottom: 0.25rem;">Upcoming Operations & Milestones</h2>
-            <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> & your Local Time</div>
+            <h2 class="section-heading">Upcoming Operations &amp; Milestones</h2>
+            <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> &amp; your Local Time</div>
           </div>
         </div>
 
-        <div class="events-timeline" id="events-timeline-container">
-          <!-- Rendered dynamically -->
-        </div>
+        <div class="events-timeline" id="events-timeline-container"></div>
       </section>
     </div>
   </div>
 </div>
-
-<style>
-  .calendar-app-container {
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 1rem;
-    font-family: inherit;
-    color: #e2e8f0;
-  }
-
-  .cal-status-banner {
-    padding: 1.5rem;
-    border-radius: 8px;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid #334155;
-    text-align: center;
-    font-size: 0.95rem;
-  }
-  .cal-status-banner.error {
-    background: rgba(127, 29, 29, 0.4);
-    border-color: #ef4444;
-    color: #fca5a5;
-  }
-
-  .cal-notification-banner {
-    padding: 0.85rem 1.25rem;
-    border-radius: 8px;
-    margin-bottom: 1.25rem;
-    font-size: 0.88rem;
-    font-weight: 600;
-  }
-  .cal-notification-banner.success {
-    background: rgba(16, 185, 129, 0.2);
-    border: 1px solid #10b981;
-    color: #34d399;
-  }
-  .cal-notification-banner.error {
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid #ef4444;
-    color: #f87171;
-  }
-
-  /* Management Panel */
-  .cal-management-panel {
-    background: #14171f;
-    border: 1px solid #2d3748;
-    border-left: 4px solid #3b82f6;
-    border-radius: 8px;
-    padding: 1.25rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: background 0.25s ease, border-left-color 0.25s ease, box-shadow 0.25s ease;
-  }
-  .cal-management-panel.scope-global {
-    border-left-color: #10b981;
-  }
-  .mgmt-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .mgmt-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    background: #1e293b;
-    border: 1px solid #3b82f6;
-    color: #60a5fa;
-  }
-  .scope-global .mgmt-tag {
-    border-color: #10b981;
-    color: #34d399;
-  }
-  .mgmt-desc {
-    margin-left: 0.5rem;
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: #f1f5f9;
-  }
-
-  /* Form Styles */
-  .cal-create-card {
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid #28303f;
-  }
-  .form-title {
-    font-size: 1rem;
-    font-weight: 700;
-    margin: 0 0 1rem 0;
-    color: #f8fafc;
-  }
-  .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  .form-col-full {
-    grid-column: span 2;
-  }
-  .form-group label {
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #94a3b8;
-    margin-bottom: 4px;
-  }
-  .form-group .req {
-    color: #ef4444;
-  }
-  .form-group input,
-  .form-group textarea,
-  .cal-form-select {
-    width: 100%;
-    background: #0d1117;
-    border: 1px solid #334155;
-    color: #e2e8f0;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 0.88rem;
-    box-sizing: border-box;
-    transition: opacity 0.2s ease, border-color 0.2s ease;
-  }
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .cal-form-select:focus {
-    outline: none;
-    border-color: #3b82f6;
-  }
-  .form-hint {
-    display: block;
-    font-size: 0.7rem;
-    color: #64748b;
-    margin-top: 3px;
-  }
-  .form-hint-inline {
-    font-size: 0.72rem;
-    color: #64748b;
-    font-weight: 400;
-  }
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    margin-top: 1.25rem;
-  }
-
-  /* Buttons */
-  .btn {
-    border: none;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.15s ease, background 0.25s ease;
-  }
-  .btn:hover { opacity: 0.9; }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-primary { background: #2563eb; color: #fff; }
-  .scope-global .btn-primary { background: #059669; }
-  .btn-secondary { background: #334155; color: #e2e8f0; }
-
-  /* Hero Card */
-  .cal-hero-card {
-    background: linear-gradient(145deg, #181b22, #111317);
-    border: 1px solid #2d3340;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-  .cal-hero-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid #232834;
-  }
-  .cal-hero-title {
-    margin: 0.5rem 0 0.25rem 0;
-    font-size: 1.6rem;
-    font-weight: 700;
-  }
-  .cal-hero-subtitle {
-    margin: 0;
-    color: #94a3b8;
-    font-size: 0.9rem;
-  }
-  .cal-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-  .badge-kw { background: rgba(185, 28, 28, 0.25); border: 1px solid #ef4444; color: #f87171; }
-  .badge-off { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; }
-
-  .cal-capitol-card {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid #3e3828;
-    border-radius: 8px;
-    padding: 0.9rem 1.4rem;
-    text-align: right;
-    min-width: 180px;
-  }
-  .cal-capitol-label { font-size: 0.65rem; font-weight: 700; color: #b8975a; }
-  .cal-capitol-holder { font-size: 1.35rem; font-weight: 800; color: #fef08a; }
-  .cal-capitol-rank { font-size: 0.75rem; color: #94a3b8; }
-
-  .cal-hero-metrics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-top: 1.25rem;
-  }
-  .metric-item {
-    background: rgba(15, 23, 42, 0.5);
-    border: 1px solid #262c38;
-    border-radius: 6px;
-    padding: 0.75rem 1rem;
-  }
-  .metric-label {
-    display: block;
-    font-size: 0.68rem;
-    font-weight: 600;
-    color: #64748b;
-    margin-bottom: 4px;
-  }
-  .metric-val { font-size: 1rem; font-weight: 700; }
-
-  /* Toolbar Filter */
-  .cal-filter-toolbar {
-    background: #14171f;
-    border: 1px solid #2d3748;
-    border-radius: 8px;
-    padding: 0.85rem 1.25rem;
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .filter-controls-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .filter-label {
-    font-size: 0.78rem;
-    font-weight: 800;
-    color: #94a3b8;
-    letter-spacing: 0.05em;
-  }
-  .cal-filter-select {
-    background: #0d1117;
-    border: 1px solid #3b82f6;
-    color: #f1f5f9;
-    padding: 7px 12px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .filter-active-badge {
-    background: rgba(59, 130, 246, 0.2);
-    border: 1px solid #3b82f6;
-    color: #93c5fd;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-  }
-
-  .cal-section { margin-bottom: 2.25rem; }
-  .section-heading { font-size: 1.15rem; font-weight: 700; margin: 0 0 1rem 0; }
-  .section-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-  .cal-tz-notice { font-size: 0.75rem; color: #64748b; }
-
-  /* 4-Week Cycle Roadmap - Dynamic RGB Ambient Wash */
-  .cycle-track-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.85rem;
-  }
-  .cycle-week-card {
-    background: #14171e;
-    border: 1px solid #252b37;
-    border-radius: 8px;
-    padding: 1rem;
-    position: relative;
-  }
-  .cycle-week-card.active {
-    border-color: rgb(var(--active-theme-vivid, var(--active-theme, 184, 151, 90)));
-    background: linear-gradient(
-      180deg, 
-      rgba(var(--active-theme, 184, 151, 90), 0.18), 
-      #14171e
-    );
-  }
-  .active-indicator {
-    position: absolute;
-    top: -9px;
-    right: 12px;
-    background: rgb(var(--active-theme-vivid, var(--active-theme, 184, 151, 90)));
-    color: #0b0d11;
-    font-size: 0.6rem;
-    font-weight: 800;
-    padding: 2px 7px;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(var(--active-theme-vivid, var(--active-theme, 184, 151, 90)), 0.45);
-    display: inline-block;
-  }
-  .week-card-num { font-size: 0.72rem; font-weight: 700; color: #94a3b8; }
-  .week-card-title { font-size: 0.92rem; font-weight: 700; margin: 4px 0 10px 0; }
-  .week-card-meta { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
-  .week-card-holder { 
-    font-weight: 700; 
-    color: rgb(var(--active-theme-bright, var(--active-theme, 254, 240, 138))); 
-  }
-
-  /* Timeline & Event Rows */
-  .events-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  .timeline-event-row {
-    background: #14171e;
-    border-left: 4px solid #475569;
-    border-top: 1px solid #202531;
-    border-right: 1px solid #202531;
-    border-bottom: 1px solid #202531;
-    border-radius: 0 6px 6px 0;
-    padding: 0.85rem 1.15rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .event-rotation { border-left-color: #b8975a; }
-  .event-war { border-left-color: #ef4444; }
-  .event-snapshot { border-left-color: #3b82f6; }
-  .event-custom { border-left-color: #10b981; }
-  .event-alliance { border-left-color: #3b82f6; }
-
-  .event-main { flex: 1; }
-  .event-title-line {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 3px;
-  }
-  .event-title {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: #f1f5f9;
-  }
-  .event-tag-pill {
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 4px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #94a3b8;
-  }
-  .pill-recurring {
-    border-color: #3b82f6;
-    color: #60a5fa;
-    background: rgba(59, 130, 246, 0.15);
-  }
-  .pill-force {
-    border-color: #ef4444;
-    color: #f87171;
-    background: rgba(239, 68, 68, 0.15);
-  }
-
-  .event-desc { font-size: 0.78rem; color: #94a3b8; }
-  .event-actions-group {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .event-time-block {
-    text-align: right;
-    font-size: 0.75rem;
-    color: #64748b;
-    white-space: nowrap;
-  }
-  .time-gt { color: #cbd5e1; font-weight: 600; font-size: 0.82rem; }
-
-  /* Delete Button */
-  .btn-delete-event {
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid #ef4444;
-    color: #f87171;
-    padding: 5px 8px;
-    border-radius: 4px;
-    font-size: 0.72rem;
-    cursor: pointer;
-    font-weight: 700;
-  }
-  .btn-delete-event:hover {
-    background: #ef4444;
-    color: #fff;
-  }
-
-  @media (max-width: 768px) {
-    .cycle-track-grid { grid-template-columns: 1fr 1fr; }
-    .cal-hero-header { flex-direction: column; }
-    .cal-capitol-card { text-align: left; width: 100%; }
-    .form-grid { grid-template-columns: 1fr; }
-    .form-col-full { grid-column: span 1; }
-    .cal-filter-toolbar { flex-direction: column; align-items: flex-start; }
-    .timeline-event-row {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .event-actions-group {
-      width: 100%;
-      justify-content: space-between;
-      margin-top: 0.5rem;
-    }
-    .event-time-block { text-align: left; }
-  }
-</style>
 
 <script>
   (async function () {
@@ -637,17 +187,21 @@ permalink: /calendar.html
     const filterStatusTag = document.getElementById('filter-status-tag');
     const filterToolbar = document.getElementById('cal-filter-toolbar');
 
+    let resetClockInterval = null;
+
     // 1. Parse URL Parameters
     const urlParams = new URLSearchParams(window.location.search);
     const allianceParam = urlParams.get('alliance')?.toUpperCase() || null;
     const tokenParam = urlParams.get('token');
-    const isDevPreview = urlParams.get('preview') === 'true'; // Access ?preview=true to test form UI
+    const isDevPreview = urlParams.get('preview') === 'true';
 
     let tokenPayload = null;
     if (tokenParam) {
       try {
         const [dataStr] = tokenParam.split('.');
-        const jsonStr = atob(dataStr.replace(/-/g, '+').replace(/_/g, '/'));
+        const binary = atob(dataStr.replace(/-/g, '+').replace(/_/g, '/'));
+        const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+        const jsonStr = new TextDecoder('utf-8').decode(bytes);
         tokenPayload = JSON.parse(jsonStr);
       } catch (e) {
         console.warn('Invalid token structure:', e);
@@ -701,13 +255,15 @@ permalink: /calendar.html
       document.getElementById('hero-capitol-rank').textContent = `Rank #${status.capitolRank} Privilege`;
       document.getElementById('metric-cycle-progress').textContent = `Day ${status.cycleDay} of 28 (Week ${status.currentWeekNumber})`;
 
+      const kwBox = document.getElementById('metric-kw-box');
       if (status.isKW) {
+        kwBox.style.opacity = '1';
         const kwDate = new Date(status.kwBattleTimestamp * 1000);
         document.getElementById('metric-kw-countdown').textContent = status.isKWBattleDay
           ? '🔥 TODAY'
           : kwDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
       } else {
-        document.getElementById('metric-kw-box').style.opacity = '0.5';
+        kwBox.style.opacity = '0.5';
         document.getElementById('metric-kw-countdown').textContent = 'None (Rest)';
       }
 
@@ -720,8 +276,10 @@ permalink: /calendar.html
         document.getElementById('metric-reset-countdown').textContent =
           `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
       }
+
+      if (resetClockInterval) clearInterval(resetClockInterval);
       updateResetClock();
-      setInterval(updateResetClock, 1000);
+      resetClockInterval = setInterval(updateResetClock, 1000);
 
       // Render 4-Week Grid
       const cycleWeeks = [
@@ -817,15 +375,12 @@ permalink: /calendar.html
         const localDateStr = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
         const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
-        // Recurrence Badge
         let recurrenceLabel = '';
         if (evt.recurrence === '2days') recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Every 2 Days</span>';
         else if (evt.recurrence === 'weekly') recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Weekly</span>';
 
-        // Force Notify Badge
         const forceLabel = evt.notify_target === 'everyone' ? '<span class="event-tag-pill pill-force">🚨 Mandatory</span>' : '';
 
-        // Exact border accent: evt.color takes full precedence
         const borderStyle = evt.color ? `border-left-color: ${evt.color} !important;` : '';
 
         const canDelete = isManagementSession && evt.id && evt.id.startsWith('evt-') &&
@@ -938,10 +493,17 @@ permalink: /calendar.html
       };
 
       let activePresetColor = null;
-      const defaultBorderColor = isGlobalAdmin ? '#10b981' : '#3b82f6';
-      const defaultBackground = '#14171f';
 
-      // Dynamic Preset Theming Listener (single, clean registration)
+      function resetPanelTheme() {
+        activePresetColor = null;
+        mgmtPanel.style.borderLeftColor = '';
+        mgmtPanel.style.background = '';
+        mgmtPanel.style.boxShadow = '';
+        submitBtn.style.background = '';
+        submitBtn.style.borderColor = '';
+        submitBtn.style.color = '';
+      }
+
       presetSelect.addEventListener('change', () => {
         const selected = OPERATION_PRESETS[presetSelect.value];
         if (selected) {
@@ -952,26 +514,20 @@ permalink: /calendar.html
           activePresetColor = selected.color;
 
           mgmtPanel.style.borderLeftColor = selected.color;
-          mgmtPanel.style.background = `linear-gradient(145deg, ${selected.color}2e, #111317)`;
+          mgmtPanel.style.background = `linear-gradient(145deg, ${selected.color}2e, var(--nav-bg))`;
           mgmtPanel.style.boxShadow = `0 4px 20px ${selected.color}22`;
           submitBtn.style.background = selected.color;
+          submitBtn.style.borderColor = selected.color;
           submitBtn.style.color = (selected.color === '#FAB22F' || selected.color === '#8ED2EF') ? '#0b0d11' : '#ffffff';
         } else {
-          activePresetColor = null;
-          mgmtPanel.style.borderLeftColor = defaultBorderColor;
-          mgmtPanel.style.background = defaultBackground;
-          mgmtPanel.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
-          submitBtn.style.background = defaultBorderColor;
-          submitBtn.style.color = '#ffffff';
+          resetPanelTheme();
         }
       });
 
-      // Non-jumping toggle for Custom Role input
       notifySelect.addEventListener('change', () => {
         const isCustom = notifySelect.value === 'custom_role';
         customRoleInput.disabled = !isCustom;
-        customRoleInput.style.opacity = isCustom ? '1' : '0.45';
-        customRoleInput.style.cursor = isCustom ? 'text' : 'not-allowed';
+        customRoleInput.classList.toggle('input-locked', !isCustom);
         if (isCustom) {
           customRoleInput.focus();
         } else {
@@ -992,7 +548,6 @@ permalink: /calendar.html
         formEl.style.display = 'none';
       });
 
-      // Submit Event Creation
       formEl.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -1042,15 +597,9 @@ permalink: /calendar.html
 
           showNotification(result.message || 'Operation published successfully!', 'success');
           formEl.reset();
-          activePresetColor = null;
-          mgmtPanel.style.borderLeftColor = defaultBorderColor;
-          mgmtPanel.style.background = defaultBackground;
-          mgmtPanel.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
-          submitBtn.style.background = defaultBorderColor;
-          submitBtn.style.color = '#ffffff';
+          resetPanelTheme();
           customRoleInput.disabled = true;
-          customRoleInput.style.opacity = '0.45';
-          customRoleInput.style.cursor = 'not-allowed';
+          customRoleInput.classList.add('input-locked');
           formEl.style.display = 'none';
           await loadCalendar();
         } catch (err) {
@@ -1091,7 +640,6 @@ permalink: /calendar.html
       }, 5000);
     }
 
-    // Initial Load
     await loadCalendar();
   })();
 </script>

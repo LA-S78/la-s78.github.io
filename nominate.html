@@ -5,14 +5,13 @@ permalink: /nominate.html
 hide_header: true
 ---
 
-<!-- Stripped legacy nominate-wrapper class so native .content-pane styling applies -->
-<div class="content-pane" id="nominate-app" style="max-width: 560px;">
+<div class="content-pane portal-pane-sm" id="nominate-app">
   <div id="loading-state" class="status-banner">Loading nomination portal...</div>
-  <div id="error-state" class="status-banner warning" style="display: none; border: 1px solid #ff6b6b; background: rgba(122, 0, 0, 0.3);"></div>
+  <div id="error-state" class="status-banner warning" style="display: none;"></div>
   <div id="success-state" class="status-banner status-success" style="display: none;"></div>
 
   <div id="form-container" style="display: none;">
-    <div style="text-align: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">
+    <div class="portal-header">
       <div class="alliance-badge-lg" id="display-alliance">[TAG]</div>
       <div class="sub-text" id="display-quota">Allocated Quota</div>
     </div>
@@ -21,13 +20,13 @@ hide_header: true
     <div class="smart-paste-box">
       <label id="paste-label">📋 Smart Paste (Raw List)</label>
       <textarea id="smart-paste-input" placeholder="Paste line-by-line list from game chat or notes..."></textarea>
-      <button class="draft-btn btn-fw" id="btn-autofill" type="button" style="margin-top: 6px;">Auto-fill All Slots</button>
+      <button class="draft-btn btn-fw" id="btn-autofill" type="button">Auto-fill All Slots</button>
     </div>
 
     <form id="nomination-form">
       <!-- Standard Pool Section -->
       <div id="standard-pool-container">
-        <div id="std-section-header" style="display: none; margin-bottom: 0.8rem; font-family: var(--font-headers); color: var(--accent-color); font-size: 1rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 4px;">
+        <div id="std-section-header" class="pool-section-header" style="display: none;">
           🛡️ Standard Allocation
         </div>
         <div id="gold-slots" class="slot-group"></div>
@@ -36,8 +35,8 @@ hide_header: true
       </div>
 
       <!-- Kingdom War Pool Section (Only in KW Mode) -->
-      <div id="kw-pool-container" style="display: none; margin-top: 1.5rem; border-top: 2px solid #8f0000; padding-top: 1rem;">
-        <div style="margin-bottom: 0.8rem; font-family: var(--font-headers); color: #ff6b6b; font-size: 1rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 4px;">
+      <div id="kw-pool-container" class="kw-pool-container" style="display: none;">
+        <div class="kw-pool-header">
           ⚔️ Kingdom War Allocation (2nd Pool)
         </div>
         <div id="kw-gold-slots" class="slot-group"></div>
@@ -70,7 +69,6 @@ hide_header: true
     let payload = null;
     try {
       const dataString = token.split('.')[0];
-      // UTF-8 safe decoding via TextDecoder (prevents Â turning into Ã‚)
       const binary = atob(dataString.replace(/-/g, '+').replace(/_/g, '/'));
       const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
       const jsonStr = new TextDecoder('utf-8').decode(bytes);
@@ -108,7 +106,6 @@ hide_header: true
       buildSlots('kw-blue-slots', '🔵 KW Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'kw-blue');
     }
 
-    // Auto-fill logic
     document.getElementById('btn-autofill').addEventListener('click', () => {
       const raw = document.getElementById('smart-paste-input').value;
       const lines = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
