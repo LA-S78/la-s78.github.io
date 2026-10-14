@@ -1,6 +1,4 @@
 // api/interactions.js
-
-// Manages interactions between GitHub, Vercel, and Discord
 import crypto from "crypto";
 import {
   verifyKey,
@@ -13,8 +11,6 @@ import { getCycleState, DEFAULT_CALENDAR_CONFIG } from "./_calendar_helper.js";
 
 export const config = { api: { bodyParser: false } };
 
-// --- DYNAMIC ALLIANCE COMMAND SCHEMA ---
-// Pushed to member alliance servers via /registerbot and /register-alliance
 const ALLIANCE_COMMANDS_SCHEMA = [
   {
     name: "calendar",
@@ -375,9 +371,8 @@ function matchesRoleKeyword(roleName, keyword) {
     .replace(/[@\[\]]/g, " ")
     .trim();
   if (cleanRole === cleanKey) return true;
-  const escapedKey = cleanKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const regex = new RegExp(`(^|\\s|_|-)${escapedKey}(\\s\vert{}_\vert{}-\vert{}$)`, "i");
-  return regex.test(cleanRole);
+  const tokens = cleanRole.split(/[\s_-]+/);
+  return tokens.includes(cleanKey);
 }
 
 async function getGistData(gistId, gistToken) {
@@ -386,14 +381,20 @@ async function getGistData(gistId, gistToken) {
       Authorization: `Bearer ${gistToken}`,
       "User-Agent": "WarRoom-App",
     },
-    signal: AbortSignal.timeout(2500),
+    signal: AbortSignal.timeout(2400),
   });
 
   if (!res.ok) throw new Error(`GitHub Gist error (${res.status})`);
   return res.json();
 }
 
-async function patchGistFile(gistId, gistToken, filename, contentObj, description) {
+async function patchGistFile(
+  gistId,
+  gistToken,
+  filename,
+  contentObj,
+  description
+) {
   const res = await fetch(`https://api.github.com/gists/${gistId}`, {
     method: "PATCH",
     headers: {
@@ -402,7 +403,8 @@ async function patchGistFile(gistId, gistToken, filename, contentObj, descriptio
       "User-Agent": "WarRoom-App",
     },
     body: JSON.stringify({
-      description: description || `Updated ${filename} at${new Date().toISOString()}`,
+      description:
+        description || `Updated ${filename} at${new Date().toISOString()}`,
       files: {
         [filename]: {
           content: JSON.stringify(contentObj, null, 2),
@@ -414,9 +416,6 @@ async function patchGistFile(gistId, gistToken, filename, contentObj, descriptio
   return res.json();
 }
 
-/**
- * Enforces 30-day auto-expiry (44d if extended) and 60-day GDPR identity scrubbing
- */
 function applyTicketRetentionPolicy(suggestionsState) {
   let mutated = false;
   const nowMs = Date.now();
@@ -431,7 +430,6 @@ function applyTicketRetentionPolicy(suggestionsState) {
     const isActive =
       tkt.status === "pending_alliance" || tkt.status === "in_discussion";
 
-    // 1. Auto-expire unfinalized tickets past their deadline
     if (isActive) {
       const createdMs = new Date(tkt.created_at).getTime() || nowMs;
       const defaultDeadlineMs =
@@ -449,7 +447,6 @@ function applyTicketRetentionPolicy(suggestionsState) {
       }
     }
 
-    // 2. GDPR Scrub: 30 days after closure, scrub personal identifiers
     if (!isActive && tkt.closed_at && tkt.author_id !== null) {
       const closedMs = new Date(tkt.closed_at).getTime();
       if (!isNaN(closedMs) && nowMs - closedMs >= THIRTY_DAYS_MS) {
@@ -463,9 +460,6 @@ function applyTicketRetentionPolicy(suggestionsState) {
   return mutated;
 }
 
-/**
- * Safely archives a Discord thread (verifies channel type 11 or 12 first)
- */
 async function safeArchiveThread(threadId, botToken) {
   if (!threadId || !botToken) return;
   try {
@@ -478,13 +472,7 @@ async function safeArchiveThread(threadId, botToken) {
     if (!checkRes.ok) return;
     const channelData = await checkRes.json();
 
-    // Type 11 = PUBLIC_THREAD, Type 12 = PRIVATE_THREAD
-    if (channelData.type !== 11 && channelData.type !== 12) {
-      console.warn(
-        `Safety Guard: Refusing to archive non-thread channel ${threadId} (type${channelData.type})`
-      );
-      return;
-    }
+    if (channelData.type !== 11 && channelData.type !== 12) return;
 
     await fetch(`https://discord.com/api/v10/channels/${threadId}`, {
       method: "PATCH",
@@ -499,9 +487,6 @@ async function safeArchiveThread(threadId, botToken) {
   }
 }
 
-/**
- * Builds the Triage Embed & Action Components for an Alliance Officer Channel
- */
 function buildTriageCardPayload(ticket, allianceColorHex) {
   const isNap = ticket.type === "nap_proposal";
   const embedColor = isNap
@@ -802,7 +787,6 @@ export default async function handler(req, res) {
           ? JSON.parse(suggestionsRaw)
           : { next_ticket_id: 1, suggestions: [] };
 
-        // Apply lazy 30d auto-expiry & 60d GDPR scrub
         const wasCleaned = applyTicketRetentionPolicy(suggestionsState);
         if (wasCleaned) {
           patchGistFile(
@@ -814,7 +798,6 @@ export default async function handler(req, res) {
           ).catch(() => {});
         }
 
-        // Resolve Alliance Context
         const alliances = mapState.alliances || {};
         let detectedAllianceTag = null;
         let allianceData = null;
@@ -851,7 +834,6 @@ export default async function handler(req, res) {
           }
         }
 
-        // --- SUB-OPTION: View My Ticket Status ---
         if (subType === "status") {
           const userTickets = (suggestionsState.suggestions || []).filter(
             (s) => s.author_id === userId
@@ -936,7 +918,6 @@ export default async function handler(req, res) {
           });
         }
 
-        // --- SUB-OPTIONS: Open Modal for NAP Proposal or Alliance Issue ---
         if (!detectedAllianceTag || !allianceData) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -958,7 +939,6 @@ export default async function handler(req, res) {
           });
         }
 
-        // Check Concurrency Limit (Max 2 active tickets per player)
         const activeUserTickets = (suggestionsState.suggestions || []).filter(
           (s) =>
             s.author_id === userId &&
@@ -979,7 +959,7 @@ export default async function handler(req, res) {
         const isNapProposal = subType === "nap_proposal";
 
         return res.status(200).json({
-          type: 9, // InteractionResponseType.MODAL
+          type: 9,
           data: {
             custom_id: `suggest_modal:${subType}:${detectedAllianceTag}`,
             title: isNapProposal
@@ -1091,7 +1071,6 @@ export default async function handler(req, res) {
         );
       }
 
-      // 1. Resolve Alliance from Guild ID first
       let detectedAllianceTag = null;
       let allianceData = null;
 
@@ -1110,7 +1089,6 @@ export default async function handler(req, res) {
         };
       }
 
-      // 2. If in NAP Server, resolve Alliance from assigned Discord roles
       let memberRoleNames = [];
       const memberRoleIds = member?.roles || [];
 
@@ -1143,7 +1121,6 @@ export default async function handler(req, res) {
         }
       }
 
-      // --- SUB-ACTION: Manage Global Events (Admin Only) ---
       if (requestedAction === "manage_global") {
         if (userId !== process.env.AUTHORIZED_USER_ID) {
           return res.status(200).json({
@@ -1194,7 +1171,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // --- SUB-ACTION: Manage Alliance Events (R5 / Officers) ---
       if (requestedAction === "manage_alliance") {
         if (!detectedAllianceTag) {
           return res.status(200).json({
@@ -1267,7 +1243,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // --- DEFAULT ACTION: Public Calendar Status & Link ---
       const now = new Date();
       const state = getCycleState(now, calConfig);
 
@@ -1375,8 +1350,6 @@ export default async function handler(req, res) {
     // --- /sb COMMAND ---
     if (name === "sb") {
       const now = new Date();
-
-      // Game Time is UTC-2 (subtract 2 hours from UTC)
       const gameTime = new Date(now.getTime() - 2 * 60 * 60 * 1000);
       const gameHour = gameTime.getUTCHours();
 
@@ -2387,7 +2360,7 @@ export default async function handler(req, res) {
   }
 
   // =========================================================================
-  // 2. MODAL SUBMIT HANDLING (TYPE 5 — /suggest & Officer Close Note)
+  // 2. MODAL SUBMIT HANDLING (TYPE 5)
   // =========================================================================
   if (interaction.type === 5) {
     const { custom_id, components } = interaction.data;
@@ -2413,7 +2386,6 @@ export default async function handler(req, res) {
       return "";
     };
 
-    // --- MODAL A: Player Submits New Suggestion / Alliance Ticket ---
     if (custom_id && custom_id.startsWith("suggest_modal:")) {
       const [, ticketType, allianceTag] = custom_id.split(":");
       const title = getFieldVal("sug_title");
@@ -2444,7 +2416,6 @@ export default async function handler(req, res) {
           });
         }
 
-        // Re-verify active concurrency cap (max 2)
         const activeCount = (suggestionsState.suggestions || []).filter(
           (s) =>
             s.author_id === userId &&
@@ -2472,7 +2443,7 @@ export default async function handler(req, res) {
 
         const newTicket = {
           id: ticketId,
-          type: ticketType, // 'nap_proposal' | 'alliance_issue'
+          type: ticketType,
           alliance: allianceTag,
           author_id: userId,
           author_tag: username,
@@ -2492,7 +2463,6 @@ export default async function handler(req, res) {
           closed_at: null,
         };
 
-        // Post Triage Card to Alliance Officer Channel
         const triagePayload = buildTriageCardPayload(
           newTicket,
           allianceData.color
@@ -2511,8 +2481,6 @@ export default async function handler(req, res) {
         );
 
         if (!postRes.ok) {
-          const errText = await postRes.text();
-          console.error("Failed to post triage card:", errText);
           throw new Error(
             "Could not post to your alliance's officer channel. Verify bot permissions."
           );
@@ -2556,7 +2524,6 @@ export default async function handler(req, res) {
       }
     }
 
-    // --- MODAL B: Officer Closes Ticket (Resolve or Decline with Optional Note) ---
     if (custom_id && custom_id.startsWith("tkt_close_modal:")) {
       const [, closeAction, rawTicketId] = custom_id.split(":");
       const ticketId = parseInt(rawTicketId, 10);
@@ -2592,50 +2559,57 @@ export default async function handler(req, res) {
             ? "Resolved by alliance leadership."
             : "Reviewed and declined by alliance leadership.");
 
-        await patchGistFile(
-          GIST_ID,
-          GIST_TOKEN,
-          "suggestions-state.json",
-          suggestionsState,
-          `Ticket #${ticketId} ${ticket.status} by ${username}`
-        );
-
         const allianceColor = mapState.alliances?.[ticket.alliance]?.color;
         const updatedCard = buildTriageCardPayload(ticket, allianceColor);
 
-        // Update original triage card in #officer-intake
+        const tasks = [
+          patchGistFile(
+            GIST_ID,
+            GIST_TOKEN,
+            "suggestions-state.json",
+            suggestionsState,
+            `Ticket #${ticketId} ${ticket.status} by ${username}`
+          ),
+        ];
+
         if (ticket.channel_id && ticket.message_id) {
-          await fetch(
-            `https://discord.com/api/v10/channels/${ticket.channel_id}/messages/${ticket.message_id}`,
-            {
-              method: "PATCH",
-              headers: {
-                Authorization: `Bot ${botToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(updatedCard),
-            }
-          ).catch(() => {});
+          tasks.push(
+            fetch(
+              `https://discord.com/api/v10/channels/${ticket.channel_id}/messages/${ticket.message_id}`,
+              {
+                method: "PATCH",
+                headers: {
+                  Authorization: `Bot ${botToken}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedCard),
+              }
+            ).catch(() => {})
+          );
         }
 
-        // Safely archive discussion thread if one was opened
         if (ticket.thread_id) {
-          await fetch(
-            `https://discord.com/api/v10/channels/${ticket.thread_id}/messages`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bot ${botToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                content: `${isResolve ? "✅ **Ticket Resolved**" : "❌ **Ticket Declined**"} by **${username}**.\n> 📝 **Note:** ${ticket.resolution_note}\n*This thread is now archived.*`,
-              }),
-            }
-          ).catch(() => {});
-
-          await safeArchiveThread(ticket.thread_id, botToken);
+          tasks.push(
+            (async () => {
+              await fetch(
+                `https://discord.com/api/v10/channels/${ticket.thread_id}/messages`,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bot ${botToken}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    content: `${isResolve ? "✅ **Ticket Resolved**" : "❌ **Ticket Declined**"} by **${username}**.\n> 📝 **Note:** ${ticket.resolution_note}\n*This thread is now archived.*`,
+                  }),
+                }
+              ).catch(() => {});
+              await safeArchiveThread(ticket.thread_id, botToken);
+            })()
+          );
         }
+
+        await Promise.all(tasks);
 
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -2658,7 +2632,7 @@ export default async function handler(req, res) {
   }
 
   // =========================================================================
-  // 3. BUTTON INTERACTIONS (TYPE 3 — Map Switcher, Ticket Triage & Admin)
+  // 3. BUTTON INTERACTIONS (TYPE 3)
   // =========================================================================
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
@@ -2668,7 +2642,6 @@ export default async function handler(req, res) {
     const lang = resolveUserLocale(interaction, null);
     const t = getBotStrings(lang);
 
-    // --- 3A. PUBLIC MAP VIEW SWITCH BUTTONS ---
     if (custom_id && custom_id.startsWith("map_view:")) {
       const targetView = custom_id.replace("map_view:", "");
       const revision = await getLatestMapRevision(
@@ -2689,7 +2662,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // --- 3B. OFFICER TICKET TRIAGE BUTTONS (tkt_*) ---
     if (custom_id && custom_id.startsWith("tkt_")) {
       const [actionKey, rawTicketId] = custom_id.split(":");
       const ticketId = parseInt(rawTicketId, 10);
@@ -2707,6 +2679,38 @@ export default async function handler(req, res) {
       const botToken = process.env.DISCORD_BOT_TOKEN;
       const GIST_ID = process.env.GIST_ID;
       const GIST_TOKEN = process.env.GIST_TOKEN;
+
+      // Pop close modal immediately without Gist round-trip to beat 3s timeout
+      if (actionKey === "tkt_resolve" || actionKey === "tkt_decline") {
+        const isResolve = actionKey === "tkt_resolve";
+        return res.status(200).json({
+          type: 9,
+          data: {
+            custom_id: `tkt_close_modal:${isResolve ? "resolve" : "decline"}:${ticketId}`,
+            title: isResolve
+              ? `✅ Resolve Ticket #${ticketId}`
+              : `❌ Decline Ticket #${ticketId}`,
+            components: [
+              {
+                type: 1,
+                components: [
+                  {
+                    type: 4,
+                    custom_id: "close_note",
+                    label: "Note for Submitter (Optional)",
+                    style: 2,
+                    max_length: 300,
+                    placeholder: isResolve
+                      ? "Optional: e.g., Addressed! We will adjust the schedule starting Friday."
+                      : "Optional: e.g., Covered by NAP Rule 4 / Not feasible during KW.",
+                    required: false,
+                  },
+                ],
+              },
+            ],
+          },
+        });
+      }
 
       try {
         const [roleMap, gistData] = await Promise.all([
@@ -2759,39 +2763,6 @@ export default async function handler(req, res) {
           });
         }
 
-        // 1. RESOLVE or DECLINE -> Pop 1-Field Modal for Optional Note
-        if (actionKey === "tkt_resolve" || actionKey === "tkt_decline") {
-          const isResolve = actionKey === "tkt_resolve";
-          return res.status(200).json({
-            type: 9, // MODAL
-            data: {
-              custom_id: `tkt_close_modal:${isResolve ? "resolve" : "decline"}:${ticket.id}`,
-              title: isResolve
-                ? `✅ Resolve Ticket #${ticket.id}`
-                : `❌ Decline Ticket #${ticket.id}`,
-              components: [
-                {
-                  type: 1,
-                  components: [
-                    {
-                      type: 4,
-                      custom_id: "close_note",
-                      label: "Note for Submitter (Optional)",
-                      style: 2,
-                      max_length: 300,
-                      placeholder: isResolve
-                        ? "Optional: e.g., Addressed! We will adjust the schedule starting Friday."
-                        : "Optional: e.g., Covered by NAP Rule 4 / Not feasible during KW.",
-                      required: false,
-                    },
-                  ],
-                },
-              ],
-            },
-          });
-        }
-
-        // 2. ENDORSE TO NAP -> Forward Anonymously to Central NAP Channel
         if (actionKey === "tkt_endorse") {
           if (ticket.type !== "nap_proposal") {
             return res.status(200).json({
@@ -2822,7 +2793,6 @@ export default async function handler(req, res) {
             });
           }
 
-          // Post to NAP Council with Alliance Brand Color & "Kingdom Shield" Anonymity
           const councilEmbed = {
             title: `👑 Council Proposal #${ticket.id} — ${ticket.title}`,
             color: hexToDiscordColor(allianceData.color, 0xb8975a),
@@ -2870,36 +2840,42 @@ export default async function handler(req, res) {
           ticket.closed_at = new Date().toISOString();
           ticket.resolution_note = `Endorsed by [${ticket.alliance}] Leadership (${username}) and forwarded to the Kingdom Council.`;
 
-          await patchGistFile(
-            GIST_ID,
-            GIST_TOKEN,
-            "suggestions-state.json",
-            suggestionsState,
-            `Ticket #${ticket.id} endorsed to NAP by ${username}`
-          );
-
           const updatedCard = buildTriageCardPayload(
             ticket,
             allianceData.color
           );
 
+          const endorseTasks = [
+            patchGistFile(
+              GIST_ID,
+              GIST_TOKEN,
+              "suggestions-state.json",
+              suggestionsState,
+              `Ticket #${ticket.id} endorsed to NAP by ${username}`
+            ),
+          ];
+
           if (ticket.channel_id && ticket.message_id) {
-            await fetch(
-              `https://discord.com/api/v10/channels/${ticket.channel_id}/messages/${ticket.message_id}`,
-              {
-                method: "PATCH",
-                headers: {
-                  Authorization: `Bot ${botToken}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedCard),
-              }
-            ).catch(() => {});
+            endorseTasks.push(
+              fetch(
+                `https://discord.com/api/v10/channels/${ticket.channel_id}/messages/${ticket.message_id}`,
+                {
+                  method: "PATCH",
+                  headers: {
+                    Authorization: `Bot ${botToken}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(updatedCard),
+                }
+              ).catch(() => {})
+            );
           }
 
           if (ticket.thread_id) {
-            await safeArchiveThread(ticket.thread_id, botToken);
+            endorseTasks.push(safeArchiveThread(ticket.thread_id, botToken));
           }
+
+          await Promise.all(endorseTasks);
 
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -2910,7 +2886,6 @@ export default async function handler(req, res) {
           });
         }
 
-        // 3. MANAGE -> Spawn Discussion Thread under Triage Card
         if (actionKey === "tkt_manage") {
           if (ticket.thread_id) {
             return res.status(200).json({
@@ -2938,8 +2913,6 @@ export default async function handler(req, res) {
           );
 
           if (!threadRes.ok) {
-            const errTxt = await threadRes.text();
-            console.error("Thread creation failed:", errTxt);
             throw new Error(
               "Could not create thread. Ensure the bot has 'Create Public/Private Threads' permissions."
             );
@@ -2948,81 +2921,81 @@ export default async function handler(req, res) {
           const threadData = await threadRes.json();
           ticket.thread_id = threadData.id;
 
-          await patchGistFile(
-            GIST_ID,
-            GIST_TOKEN,
-            "suggestions-state.json",
-            suggestionsState,
-            `Manage thread opened for Ticket #${ticket.id}`
-          );
-
           const isNap = ticket.type === "nap_proposal";
 
-          // Post Officer Control Panel inside the new thread
-          await fetch(
-            `https://discord.com/api/v10/channels/${threadData.id}/messages`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bot ${botToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                embeds: [
-                  {
-                    title: `🛠️ Officer Deliberation — Ticket #${ticket.id}`,
-                    color: hexToDiscordColor(allianceData.color, 0xb8975a),
-                    description: `Thread opened by **${username}**.\n\n• Discuss internally here (hidden from the submitter by default).\n• Click **Discuss with Submitter** below if you want to invite <@${ticket.author_id}> into this thread for Q&A.`,
-                  },
-                ],
-                components: [
-                  {
-                    type: 1,
-                    components: [
-                      {
-                        type: 2,
-                        style: 1,
-                        label: "Discuss with Submitter",
-                        custom_id: `tkt_discuss:${ticket.id}`,
-                        emoji: { name: "💬" },
-                        disabled: !ticket.author_id,
-                      },
-                      {
-                        type: 2,
-                        style: 2,
-                        label: "Extend (+14 Days)",
-                        custom_id: `tkt_extend:${ticket.id}`,
-                        emoji: { name: "⏳" },
-                        disabled: Boolean(ticket.extended),
-                      },
-                      isNap
-                        ? {
-                            type: 2,
-                            style: 3,
-                            label: "Endorse to NAP",
-                            custom_id: `tkt_endorse:${ticket.id}`,
-                            emoji: { name: "🚀" },
-                          }
-                        : {
-                            type: 2,
-                            style: 3,
-                            label: "Resolve",
-                            custom_id: `tkt_resolve:${ticket.id}`,
-                            emoji: { name: "✅" },
-                          },
-                      {
-                        type: 2,
-                        style: 4,
-                        label: "Decline",
-                        custom_id: `tkt_decline:${ticket.id}`,
-                        emoji: { name: "❌" },
-                      },
-                    ],
-                  },
-                ],
-              }),
-            }
-          );
+          await Promise.all([
+            patchGistFile(
+              GIST_ID,
+              GIST_TOKEN,
+              "suggestions-state.json",
+              suggestionsState,
+              `Manage thread opened for Ticket #${ticket.id}`
+            ),
+            fetch(
+              `https://discord.com/api/v10/channels/${threadData.id}/messages`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bot ${botToken}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  embeds: [
+                    {
+                      title: `🛠️ Officer Deliberation — Ticket #${ticket.id}`,
+                      color: hexToDiscordColor(allianceData.color, 0xb8975a),
+                      description: `Thread opened by **${username}**.\n\n• Discuss internally here (hidden from the submitter by default).\n• Click **Discuss with Submitter** below if you want to invite <@${ticket.author_id}> into this thread for Q&A.`,
+                    },
+                  ],
+                  components: [
+                    {
+                      type: 1,
+                      components: [
+                        {
+                          type: 2,
+                          style: 1,
+                          label: "Discuss with Submitter",
+                          custom_id: `tkt_discuss:${ticket.id}`,
+                          emoji: { name: "💬" },
+                          disabled: !ticket.author_id,
+                        },
+                        {
+                          type: 2,
+                          style: 2,
+                          label: "Extend (+14 Days)",
+                          custom_id: `tkt_extend:${ticket.id}`,
+                          emoji: { name: "⏳" },
+                          disabled: Boolean(ticket.extended),
+                        },
+                        isNap
+                          ? {
+                              type: 2,
+                              style: 3,
+                              label: "Endorse to NAP",
+                              custom_id: `tkt_endorse:${ticket.id}`,
+                              emoji: { name: "🚀" },
+                            }
+                          : {
+                              type: 2,
+                              style: 3,
+                              label: "Resolve",
+                              custom_id: `tkt_resolve:${ticket.id}`,
+                              emoji: { name: "✅" },
+                            },
+                        {
+                          type: 2,
+                          style: 4,
+                          label: "Decline",
+                          custom_id: `tkt_decline:${ticket.id}`,
+                          emoji: { name: "❌" },
+                        },
+                      ],
+                    },
+                  ],
+                }),
+              }
+            ),
+          ]);
 
           const updatedCard = buildTriageCardPayload(
             ticket,
@@ -3034,7 +3007,6 @@ export default async function handler(req, res) {
           });
         }
 
-        // 4. DISCUSS WITH SUBMITTER -> Add Submitter to Thread
         if (actionKey === "tkt_discuss") {
           const targetThreadId = ticket.thread_id || interaction.channel_id;
           if (!ticket.author_id) {
@@ -3048,22 +3020,23 @@ export default async function handler(req, res) {
             });
           }
 
-          await fetch(
-            `https://discord.com/api/v10/channels/${targetThreadId}/thread-members/${ticket.author_id}`,
-            {
-              method: "PUT",
-              headers: { Authorization: `Bot ${botToken}` },
-            }
-          ).catch(() => {});
-
           ticket.status = "in_discussion";
-          await patchGistFile(
-            GIST_ID,
-            GIST_TOKEN,
-            "suggestions-state.json",
-            suggestionsState,
-            `Submitter invited to Ticket #${ticket.id}`
-          );
+          await Promise.all([
+            fetch(
+              `https://discord.com/api/v10/channels/${targetThreadId}/thread-members/${ticket.author_id}`,
+              {
+                method: "PUT",
+                headers: { Authorization: `Bot ${botToken}` },
+              }
+            ).catch(() => {}),
+            patchGistFile(
+              GIST_ID,
+              GIST_TOKEN,
+              "suggestions-state.json",
+              suggestionsState,
+              `Submitter invited to Ticket #${ticket.id}`
+            ),
+          ]);
 
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -3073,7 +3046,6 @@ export default async function handler(req, res) {
           });
         }
 
-        // 5. EXTEND (+14 DAYS) -> One-Time Deadline Extension
         if (actionKey === "tkt_extend") {
           if (ticket.extended) {
             return res.status(200).json({
@@ -3125,7 +3097,6 @@ export default async function handler(req, res) {
       }
     }
 
-    // --- 3C. ADMIN PROPOSALS & REVIEWS (Protected by AUTHORIZED_USER_ID) ---
     const userId = interaction.member?.user?.id || interaction.user?.id;
     const username =
       interaction.member?.nick ||
