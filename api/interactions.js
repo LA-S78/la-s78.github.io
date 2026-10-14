@@ -1,4 +1,6 @@
 // api/interactions.js
+
+// Manages interactions between github, vercel, and Discord
 import crypto from "crypto";
 import {
   verifyKey,
@@ -11,10 +13,12 @@ import { getCycleState, DEFAULT_CALENDAR_CONFIG } from "./_calendar_helper.js";
 
 export const config = { api: { bodyParser: false } };
 
+// --- DYNAMIC ALLIANCE COMMAND SCHEMA ---
+// Pushed to member alliance servers via /registerbot and /register-alliance
 const ALLIANCE_COMMANDS_SCHEMA = [
   {
     name: "calendar",
-    description: "View or manage the Kingdom Event Calendar",
+    description: "View or manage the Event Calendar",
     type: 1,
     options: [
       {
@@ -30,34 +34,6 @@ const ALLIANCE_COMMANDS_SCHEMA = [
           {
             name: "Manage Global Events (Admin Only)",
             value: "manage_global",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: "suggest",
-    description:
-      "Submit a rule proposal, report an alliance issue, or check your ticket status",
-    type: 1,
-    options: [
-      {
-        type: 3,
-        name: "type",
-        description: "Select ticket category or check your active submissions",
-        required: true,
-        choices: [
-          {
-            name: "👑 Kingdom / NAP Proposal (Server-Wide Rule or Event Idea)",
-            value: "nap_proposal",
-          },
-          {
-            name: "🛡️ Internal Alliance Issue (Handled Privately by Your R4/R5s)",
-            value: "alliance_issue",
-          },
-          {
-            name: "📋 View My Ticket Status (Active & Recent History)",
-            value: "status",
           },
         ],
       },
@@ -301,13 +277,6 @@ function cleanHtmlToMarkdown(htmlString) {
     .trim();
 }
 
-function hexToDiscordColor(hexStr, fallback = 0xb8975a) {
-  if (!hexStr || typeof hexStr !== "string") return fallback;
-  const cleaned = hexStr.trim().replace(/^#/, "");
-  if (!/^[0-9A-Fa-f]{6}$/.test(cleaned)) return fallback;
-  return parseInt(cleaned, 16);
-}
-
 const EVENT_EMOJIS = {
   enhance_heroes: "🦸",
   build_territory: "🏰",
@@ -343,7 +312,7 @@ async function getGuildRoleMap(guildId, botToken, memberRoleIds = []) {
     {
       headers: { Authorization: `Bot ${botToken}` },
       signal: AbortSignal.timeout(2200),
-    }
+    },
   );
 
   if (!res.ok) throw new Error(`Discord API roles error (${res.status})`);
@@ -371,8 +340,11 @@ function matchesRoleKeyword(roleName, keyword) {
     .replace(/[@\[\]]/g, " ")
     .trim();
   if (cleanRole === cleanKey) return true;
-  const tokens = cleanRole.split(/[\s_-]+/);
-  return tokens.includes(cleanKey);
+  const regex = new RegExp(
+    `(^|\\s|_|-)${cleanKey}(\\s\vert{}_\vert{}-\vert{}$)`,
+    "i",
+  );
+  return regex.test(cleanRole);
 }
 
 async function getGistData(gistId, gistToken) {
@@ -381,233 +353,11 @@ async function getGistData(gistId, gistToken) {
       Authorization: `Bearer ${gistToken}`,
       "User-Agent": "WarRoom-App",
     },
-    signal: AbortSignal.timeout(2400),
+    signal: AbortSignal.timeout(2200),
   });
 
   if (!res.ok) throw new Error(`GitHub Gist error (${res.status})`);
   return res.json();
-}
-
-async function patchGistFile(
-  gistId,
-  gistToken,
-  filename,
-  contentObj,
-  description
-) {
-  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${gistToken}`,
-      "Content-Type": "application/json",
-      "User-Agent": "WarRoom-App",
-    },
-    body: JSON.stringify({
-      description:
-        description || `Updated ${filename} at${new Date().toISOString()}`,
-      files: {
-        [filename]: {
-          content: JSON.stringify(contentObj, null, 2),
-        },
-      },
-    }),
-  });
-  if (!res.ok) throw new Error(`Gist PATCH failed (${res.status})`);
-  return res.json();
-}
-
-function applyTicketRetentionPolicy(suggestionsState) {
-  let mutated = false;
-  const nowMs = Date.now();
-  const nowIso = new Date(nowMs).toISOString();
-  const THIRTY_DAYS_MS = 30 * 86400 * 1000;
-
-  if (!Array.isArray(suggestionsState.suggestions)) {
-    suggestionsState.suggestions = [];
-  }
-
-  for (const tkt of suggestionsState.suggestions) {
-    const isActive =
-      tkt.status === "pending_alliance" || tkt.status === "in_discussion";
-
-    if (isActive) {
-      const createdMs = new Date(tkt.created_at).getTime() || nowMs;
-      const defaultDeadlineMs =
-        createdMs + (tkt.extended ? 44 : 30) * 86400 * 1000;
-      const expiryMs = tkt.expires_at
-        ? new Date(tkt.expires_at).getTime()
-        : defaultDeadlineMs;
-
-      if (nowMs >= expiryMs) {
-        tkt.status = "expired";
-        tkt.closed_at = nowIso;
-        tkt.resolution_note =
-          "Closed automatically due to 30 days of inactivity.";
-        mutated = true;
-      }
-    }
-
-    if (!isActive && tkt.closed_at && tkt.author_id !== null) {
-      const closedMs = new Date(tkt.closed_at).getTime();
-      if (!isNaN(closedMs) && nowMs - closedMs >= THIRTY_DAYS_MS) {
-        tkt.author_id = null;
-        tkt.author_tag = "Archived Member";
-        mutated = true;
-      }
-    }
-  }
-
-  return mutated;
-}
-
-async function safeArchiveThread(threadId, botToken) {
-  if (!threadId || !botToken) return;
-  try {
-    const checkRes = await fetch(
-      `https://discord.com/api/v10/channels/${threadId}`,
-      {
-        headers: { Authorization: `Bot ${botToken}` },
-      }
-    );
-    if (!checkRes.ok) return;
-    const channelData = await checkRes.json();
-
-    if (channelData.type !== 11 && channelData.type !== 12) return;
-
-    await fetch(`https://discord.com/api/v10/channels/${threadId}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bot ${botToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ archived: true, locked: true }),
-    });
-  } catch (err) {
-    console.warn("Could not archive thread:", err.message);
-  }
-}
-
-function buildTriageCardPayload(ticket, allianceColorHex) {
-  const isNap = ticket.type === "nap_proposal";
-  const embedColor = isNap
-    ? 0xb8975a
-    : hexToDiscordColor(allianceColorHex, 0x3b82f6);
-
-  const statusLabels = {
-    pending_alliance: "⏳ Pending Officer Review",
-    in_discussion: "💬 In Discussion with Submitter",
-    endorsed_to_council: `🚀 Endorsed to NAP by ${ticket.officer_vouched_by || "Leadership"}`,
-    resolved: `✅ Resolved by ${ticket.officer_vouched_by || "Leadership"}`,
-    declined: `❌ Declined by ${ticket.officer_vouched_by || "Leadership"}`,
-    expired: "⌛ Expired (30d Inactivity)",
-  };
-
-  let finalColor = embedColor;
-  if (ticket.status === "endorsed_to_council" || ticket.status === "resolved") {
-    finalColor = 0x22c55e;
-  } else if (ticket.status === "declined" || ticket.status === "expired") {
-    finalColor = 0x64748b;
-  }
-
-  const fields = [
-    {
-      name: "👤 Submitter",
-      value: ticket.author_id
-        ? `<@${ticket.author_id}> (\`${ticket.author_tag}\`)`
-        : `\`${ticket.author_tag || "Archived Member"}\``,
-      inline: true,
-    },
-    {
-      name: "🏷️ Category",
-      value: isNap
-        ? "👑 **Kingdom / NAP Proposal**"
-        : `🛡️ **[${ticket.alliance}] Alliance Ticket**`,
-      inline: true,
-    },
-    {
-      name: "⚠️ Observed Issue / Problem",
-      value: ticket.problem || "*None provided*",
-      inline: false,
-    },
-    {
-      name: "💡 Proposed Solution",
-      value: ticket.solution || "*No specific solution proposed*",
-      inline: false,
-    },
-    {
-      name: "📌 Status",
-      value: statusLabels[ticket.status] || ticket.status,
-      inline: false,
-    },
-  ];
-
-  if (ticket.resolution_note) {
-    fields.push({
-      name: "📝 Leadership Note",
-      value: ticket.resolution_note,
-      inline: false,
-    });
-  }
-
-  const isClosed = !["pending_alliance", "in_discussion"].includes(
-    ticket.status
-  );
-
-  const primaryButton = isNap
-    ? {
-        type: 2,
-        style: 3,
-        label: "Endorse to NAP",
-        custom_id: `tkt_endorse:${ticket.id}`,
-        emoji: { name: "🚀" },
-        disabled: isClosed,
-      }
-    : {
-        type: 2,
-        style: 3,
-        label: "Resolve",
-        custom_id: `tkt_resolve:${ticket.id}`,
-        emoji: { name: "✅" },
-        disabled: isClosed,
-      };
-
-  const declineButton = {
-    type: 2,
-    style: 4,
-    label: "Decline",
-    custom_id: `tkt_decline:${ticket.id}`,
-    emoji: { name: "❌" },
-    disabled: isClosed,
-  };
-
-  const manageButton = {
-    type: 2,
-    style: 2,
-    label: ticket.thread_id ? "Manage (Thread Active)" : "Manage",
-    custom_id: `tkt_manage:${ticket.id}`,
-    emoji: { name: "🛠️" },
-    disabled: isClosed || Boolean(ticket.thread_id),
-  };
-
-  return {
-    embeds: [
-      {
-        title: `${isNap ? "👑 NAP Proposal" : "🛡️ Alliance Ticket"} #${ticket.id} —${ticket.title}`,
-        color: finalColor,
-        fields,
-        footer: {
-          text: `[${ticket.alliance}] Leadership Triage • Submitted`,
-        },
-        timestamp: ticket.created_at,
-      },
-    ],
-    components: [
-      {
-        type: 1,
-        components: [primaryButton, declineButton, manageButton],
-      },
-    ],
-  };
 }
 
 let mapRevisionCache = {
@@ -742,9 +492,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ type: InteractionResponseType.PONG });
   }
 
-  // =========================================================================
-  // 1. SLASH COMMAND HANDLING (TYPE 2)
-  // =========================================================================
+  // --- SLASH COMMAND HANDLING ---
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     const { name, options } = interaction.data;
     const rawHost =
@@ -753,283 +501,6 @@ export default async function handler(req, res) {
     const providedLang = options?.find((opt) => opt.name === "lang")?.value;
     const lang = resolveUserLocale(interaction, providedLang);
     const t = getBotStrings(lang);
-
-    // --- /suggest COMMAND ---
-    if (name === "suggest") {
-      const guildId = interaction.guild_id;
-      const member = interaction.member;
-      const userId = member?.user?.id || interaction.user?.id;
-      const botToken = process.env.DISCORD_BOT_TOKEN;
-      const GIST_ID = process.env.GIST_ID;
-      const GIST_TOKEN = process.env.GIST_TOKEN;
-      const napGuildId = (
-        process.env.DISCORD_GUILD_ID_NAP ||
-        process.env.DISCORD_GUILD_ID ||
-        ""
-      ).trim();
-      const wloGuildId = (
-        process.env.DISCORD_GUILD_ID_WLO ||
-        process.env.DISCORD_WLO ||
-        ""
-      ).trim();
-
-      const subType =
-        options?.find((opt) => opt.name === "type")?.value || "status";
-
-      try {
-        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
-        const mapState = JSON.parse(
-          gistData.files?.["map-state.json"]?.content || "{}"
-        );
-        const suggestionsRaw =
-          gistData.files?.["suggestions-state.json"]?.content;
-        const suggestionsState = suggestionsRaw
-          ? JSON.parse(suggestionsRaw)
-          : { next_ticket_id: 1, suggestions: [] };
-
-        const wasCleaned = applyTicketRetentionPolicy(suggestionsState);
-        if (wasCleaned) {
-          patchGistFile(
-            GIST_ID,
-            GIST_TOKEN,
-            "suggestions-state.json",
-            suggestionsState,
-            "Automated ticket retention policy update"
-          ).catch(() => {});
-        }
-
-        const alliances = mapState.alliances || {};
-        let detectedAllianceTag = null;
-        let allianceData = null;
-
-        const registeredEntry = Object.entries(alliances).find(
-          ([_, data]) =>
-            data?.guild_id && String(data.guild_id).trim() === guildId
-        );
-
-        if (registeredEntry) {
-          detectedAllianceTag = registeredEntry[0];
-          allianceData = registeredEntry[1];
-        } else if (wloGuildId && guildId === wloGuildId) {
-          detectedAllianceTag = "WLO";
-          allianceData = alliances["WLO"] || {};
-        } else if (napGuildId && guildId === napGuildId && member?.roles) {
-          const roleMap = await getGuildRoleMap(
-            guildId,
-            botToken,
-            member.roles
-          );
-          const memberRoleNames = member.roles
-            .map((id) => roleMap.get(id))
-            .filter(Boolean);
-          detectedAllianceTag = Object.keys(alliances).find((tag) => {
-            const cleanTag = tag.toLowerCase();
-            return memberRoleNames.some(
-              (r) =>
-                r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`
-            );
-          });
-          if (detectedAllianceTag) {
-            allianceData = alliances[detectedAllianceTag];
-          }
-        }
-
-        if (subType === "status") {
-          const userTickets = (suggestionsState.suggestions || []).filter(
-            (s) => s.author_id === userId
-          );
-
-          const activeTickets = userTickets.filter(
-            (s) =>
-              s.status === "pending_alliance" || s.status === "in_discussion"
-          );
-          const closedTickets = userTickets
-            .filter(
-              (s) =>
-                s.status !== "pending_alliance" && s.status !== "in_discussion"
-            )
-            .sort(
-              (a, b) =>
-                new Date(b.closed_at || b.created_at) -
-                new Date(a.closed_at || a.created_at)
-            )
-            .slice(0, 3);
-
-          const statusMap = {
-            pending_alliance: "⏳ Pending Officer Review",
-            in_discussion: "💬 In Discussion with Officers",
-            endorsed_to_council: "🚀 Endorsed to NAP Council",
-            resolved: "✅ Resolved by Leadership",
-            declined: "❌ Declined",
-            expired: "⌛ Expired (30d Inactivity)",
-          };
-
-          const fields = [];
-
-          if (activeTickets.length > 0) {
-            activeTickets.forEach((tkt) => {
-              const createdTs = Math.floor(
-                new Date(tkt.created_at).getTime() / 1000
-              );
-              const typeLabel = tkt.type === "nap_proposal" ? "NAP Proposal" : "[" + tkt.alliance + "] Issue";
-              
-              fields.push({
-                name: "📌 #" + tkt.id + " — " + tkt.title + " (" + typeLabel + ")",
-                value: "• **Status:** " + (statusMap[tkt.status] || tkt.status) + "\n• **Submitted:** <t:" + createdTs + ":R>" + (tkt.extended ? "\n• *Extended +14d for review*" : ""),
-                inline: false,
-              });
-            });
-          } else {
-            fields.push({
-              name: "📭 Active Submissions (0 / 2)",
-              value: "You currently have no open tickets awaiting review.",
-              inline: false,
-            });
-          }
-
-          if (closedTickets.length > 0) {
-            const historyLines = closedTickets.map((tkt) => {
-              const noteStr = tkt.resolution_note
-                ? `\n  ↳ *Note: ${tkt.resolution_note}*`
-                : "";
-              return `• **#${tkt.id} [${tkt.title}]** — ${statusMap[tkt.status] \vert{}\vert{} tkt.status}${noteStr}`;
-            });
-
-            fields.push({
-              name: "🕓 Recent Resolved History (Last 30 Days)",
-              value: historyLines.join("\n"),
-              inline: false,
-            });
-          }
-
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              embeds: [
-                {
-                  title: `📋 Your Ticket Status (${activeTickets.length} / 2 Active Slots Used)`,
-                  color: hexToDiscordColor(allianceData?.color, 0xb8975a),
-                  fields,
-                  footer: {
-                    text: "Resolved tickets are automatically anonymized after 30 days.",
-                  },
-                },
-              ],
-              flags: 64,
-            },
-          });
-        }
-
-        if (!detectedAllianceTag || !allianceData) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⚠️ Could not detect your registered alliance. Please run `/suggest` inside your alliance's Discord server.",
-              flags: 64,
-            },
-          });
-        }
-
-        if (!allianceData.officer_channel_id) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ **[${detectedAllianceTag}]** leadership has not linked an Officer Ticket Intake Channel yet. Please ask your R5 to update their server registration via \`/registerbot\`.`,
-              flags: 64,
-            },
-          });
-        }
-
-        const activeUserTickets = (suggestionsState.suggestions || []).filter(
-          (s) =>
-            s.author_id === userId &&
-            (s.status === "pending_alliance" || s.status === "in_discussion")
-        );
-
-        if (activeUserTickets.length >= 2) {
-          const openIds = activeUserTickets.map((s) => `#${s.id}`).join(", ");
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⏳ **Active Limit Reached (2 / 2):** You currently have 2 open submissions (${openIds}) awaiting leadership review.\n\nPlease wait for at least one to be resolved before submitting another. You can check their progress anytime with \`/suggest type:status\`.`,
-              flags: 64,
-            },
-          });
-        }
-
-        const isNapProposal = subType === "nap_proposal";
-
-        return res.status(200).json({
-          type: 9,
-          data: {
-            custom_id: `suggest_modal:${subType}:${detectedAllianceTag}`,
-            title: isNapProposal
-              ? `👑 [${detectedAllianceTag}] Kingdom / NAP Proposal`
-              : `🛡️ [${detectedAllianceTag}] Internal Alliance Ticket`,
-            components: [
-              {
-                type: 1,
-                components: [
-                  {
-                    type: 4,
-                    custom_id: "sug_title",
-                    label: "Subject / Topic",
-                    style: 1,
-                    min_length: 4,
-                    max_length: 75,
-                    placeholder: isNapProposal
-                      ? "e.g., Adjust Kill Event shielding rules for academies"
-                      : "e.g., Cheese Trap timing or hive tile coordination",
-                    required: true,
-                  },
-                ],
-              },
-              {
-                type: 1,
-                components: [
-                  {
-                    type: 4,
-                    custom_id: "sug_problem",
-                    label: "Observed Problem or Issue",
-                    style: 2,
-                    min_length: 15,
-                    max_length: 700,
-                    placeholder:
-                      "Describe the issue or friction clearly so leadership can evaluate it...",
-                    required: true,
-                  },
-                ],
-              },
-              {
-                type: 1,
-                components: [
-                  {
-                    type: 4,
-                    custom_id: "sug_solution",
-                    label: "Proposed Solution (Optional)",
-                    style: 2,
-                    max_length: 700,
-                    placeholder:
-                      "Optional: Share any specific fix or compromise you have in mind...",
-                    required: false,
-                  },
-                ],
-              },
-            ],
-          },
-        });
-      } catch (err) {
-        console.error("/suggest command error:", err);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `⚠️ Service busy: ${err.message}. Please try again in a moment.`,
-            flags: 64,
-          },
-        });
-      }
-    }
 
     // --- /calendar COMMAND ---
     if (name === "calendar") {
@@ -1051,7 +522,7 @@ export default async function handler(req, res) {
       ).trim();
 
       const requestedAction = options?.find(
-        (opt) => opt.name === "action"
+        (opt) => opt.name === "action",
       )?.value;
 
       let calConfig = DEFAULT_CALENDAR_CONFIG;
@@ -1069,16 +540,17 @@ export default async function handler(req, res) {
       } catch (err) {
         console.warn(
           "Calendar state fetch failed, using defaults:",
-          err.message
+          err.message,
         );
       }
 
+      // 1. Resolve Alliance from Guild ID first
       let detectedAllianceTag = null;
       let allianceData = null;
 
       const registeredEntry = Object.entries(alliances).find(
         ([_, data]) =>
-          data?.guild_id && String(data.guild_id).trim() === guildId
+          data?.guild_id && String(data.guild_id).trim() === guildId,
       );
 
       if (registeredEntry) {
@@ -1091,6 +563,7 @@ export default async function handler(req, res) {
         };
       }
 
+      // 2. If in NAP Server, resolve Alliance from assigned Discord roles
       let memberRoleNames = [];
       const memberRoleIds = member?.roles || [];
 
@@ -1099,7 +572,7 @@ export default async function handler(req, res) {
           const roleMap = await getGuildRoleMap(
             guildId,
             botToken,
-            memberRoleIds
+            memberRoleIds,
           );
           memberRoleNames = memberRoleIds
             .map((id) => roleMap.get(id))
@@ -1115,7 +588,7 @@ export default async function handler(req, res) {
           const cleanTag = tag.toLowerCase();
           return memberRoleNames.some(
             (r) =>
-              r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`
+              r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
           );
         });
         if (detectedAllianceTag) {
@@ -1123,6 +596,7 @@ export default async function handler(req, res) {
         }
       }
 
+      // --- SUB-ACTION: Manage Global Events (Admin Only) ---
       if (requestedAction === "manage_global") {
         if (userId !== process.env.AUTHORIZED_USER_ID) {
           return res.status(200).json({
@@ -1151,7 +625,7 @@ export default async function handler(req, res) {
                 title: "👑 Kingdom Event Management Portal",
                 color: 0x10b981,
                 description:
-                  "Click below to open the Kingdom Calendar in **Global Management Mode**.\n\nYou can schedule kingdom-wide announcements, truce alerts, or delete entries.",
+                  "Click below to open the War Room calendar in **Global Management Mode**.\n\nYou can schedule kingdom-wide announcements, truce alerts, or delete entries.",
                 footer: { text: "Link is private and expires in 4 hours." },
               },
             ],
@@ -1173,6 +647,7 @@ export default async function handler(req, res) {
         });
       }
 
+      // --- SUB-ACTION: Manage Alliance Events (R5 / Officers) ---
       if (requestedAction === "manage_alliance") {
         if (!detectedAllianceTag) {
           return res.status(200).json({
@@ -1194,7 +669,7 @@ export default async function handler(req, res) {
           userId === process.env.AUTHORIZED_USER_ID ||
           isAdmin ||
           memberRoleNames.some((roleName) =>
-            allowedRoles.some((kw) => matchesRoleKeyword(roleName, kw))
+            allowedRoles.some((kw) => matchesRoleKeyword(roleName, kw)),
           );
 
         if (!isAuthorized) {
@@ -1222,7 +697,7 @@ export default async function handler(req, res) {
             embeds: [
               {
                 title: `🛡️ Alliance Event Management — [${detectedAllianceTag}]`,
-                color: hexToDiscordColor(allianceData?.color, 0x3b82f6),
+                color: 0x3b82f6,
                 description: `Click below to open the calendar in **Alliance Management Mode** for **[${detectedAllianceTag}]**.\n\nYou can schedule internal raids, hive movements, and training drills.`,
                 footer: { text: "Link is private and expires in 4 hours." },
               },
@@ -1245,11 +720,12 @@ export default async function handler(req, res) {
         });
       }
 
+      // --- DEFAULT ACTION: Public Calendar Status & Link ---
       const now = new Date();
       const state = getCycleState(now, calConfig);
 
       const holderEntry = Object.entries(alliances).find(
-        ([_, data]) => parseInt(data.rank, 10) === state.capitolRank
+        ([_, data]) => parseInt(data.rank, 10) === state.capitolRank,
       );
       const holderTag = holderEntry
         ? `[${holderEntry[0]}]`
@@ -1260,11 +736,11 @@ export default async function handler(req, res) {
         state.nextResetTimestamp + (daysUntilNextWeek - 1) * 86400;
       const nextWeekNum = (state.currentWeekNumber % 4) + 1;
       const nextWeekConfig = calConfig.capitol_rotation.find(
-        (w) => w.week === nextWeekNum
+        (w) => w.week === nextWeekNum,
       );
 
       const nextHolderEntry = Object.entries(alliances).find(
-        ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank
+        ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank,
       );
       const nextHolderTag = nextHolderEntry
         ? `[${nextHolderEntry[0]}]`
@@ -1313,22 +789,18 @@ export default async function handler(req, res) {
         ? `Open Calendar ([${detectedAllianceTag}])`
         : "Open Full Calendar";
 
-      const defaultColor = state.isKW
-        ? 0x8f0000
-        : hexToDiscordColor(allianceData?.color, 0xb8975a);
-
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           embeds: [
             {
               title: `📅 Kingdom War & Rotation Calendar — ${state.phaseName}`,
-              color: defaultColor,
+              color: state.isKW ? 0x8f0000 : 0xb8975a,
               description: state.isKW
                 ? "⚔️ **Kingdom War Cycle is ACTIVE.** 2x Reward allocations apply this week."
                 : "🛡️ **NAP Rest Week.** Standard kingdom operations and territory consolidation.",
               fields: fields,
-              footer: { text: "Last Asylum Kingdom Calendar" },
+              footer: { text: "Last Asylum Kingdom War Room" },
               timestamp: new Date().toISOString(),
             },
           ],
@@ -1352,6 +824,8 @@ export default async function handler(req, res) {
     // --- /sb COMMAND ---
     if (name === "sb") {
       const now = new Date();
+
+      // Game Time is UTC-2 (subtract 2 hours from UTC)
       const gameTime = new Date(now.getTime() - 2 * 60 * 60 * 1000);
       const gameHour = gameTime.getUTCHours();
 
@@ -1380,12 +854,16 @@ export default async function handler(req, res) {
       const nextSlotIndex = (activeSlotIndex + 1) % 6;
       const dayKey = `d${selectedDay}`;
 
+      // Next slot hour in Game Time
       const nextSlotHourGT = (slotHours[activeSlotIndex] + 4) % 24;
+
+      // Convert GT hour to UTC hour: GT = UTC - 2 => UTC = GT + 2
       const nextSlotUtcHour = (nextSlotHourGT + 2) % 24;
 
       const nextSlotTime = new Date(now);
       nextSlotTime.setUTCHours(nextSlotUtcHour, 0, 0, 0);
 
+      // If the next slot wraps past midnight GT into tomorrow
       if (nextSlotHourGT <= gameHour) {
         nextSlotTime.setUTCDate(nextSlotTime.getUTCDate() + 1);
       }
@@ -1431,12 +909,12 @@ export default async function handler(req, res) {
             name: `⏳ ${t.sb.next_event} (<t:${nextTimestamp}:t>)`,
             value: `${nextEventEmoji}${nextEventText}`,
             inline: false,
-          }
+          },
         );
       }
       const scheduleTitleText = t.sb.schedule_title.replace(
         "{day}",
-        selectedDay
+        selectedDay,
       );
       fields.push({
         name: `📋 ${scheduleTitleText}`,
@@ -1554,7 +1032,7 @@ export default async function handler(req, res) {
 
         const revision = await getLatestMapRevision(
           process.env.GIST_ID,
-          process.env.GIST_TOKEN
+          process.env.GIST_TOKEN,
         );
         const payload = buildMapMessagePayload({
           view: selectedView,
@@ -1593,9 +1071,10 @@ export default async function handler(req, res) {
       ).trim();
 
       const requestedAction = options?.find(
-        (opt) => opt.name === "action"
+        (opt) => opt.name === "action",
       )?.value;
 
+      // Enforce execution exclusively within the NAP server
       if (!napGuildId || guildId !== napGuildId) {
         return res.status(200).json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -1607,6 +1086,7 @@ export default async function handler(req, res) {
         });
       }
 
+      // SUB-ACTION: Broad-sync all registered alliance servers (Admin only)
       if (requestedAction === "sync") {
         if (userId !== process.env.AUTHORIZED_USER_ID) {
           return res.status(200).json({
@@ -1622,7 +1102,7 @@ export default async function handler(req, res) {
         try {
           const gistData = await getGistData(GIST_ID, GIST_TOKEN);
           const mapState = JSON.parse(
-            gistData.files["map-state.json"]?.content || "{}"
+            gistData.files["map-state.json"]?.content || "{}",
           );
           const alliances = mapState.alliances || {};
 
@@ -1639,11 +1119,11 @@ export default async function handler(req, res) {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify(ALLIANCE_COMMANDS_SCHEMA),
-              }
+              },
             );
 
             results.push(
-              `${syncRes.ok ? "✅" : "❌"} **[${tag}]** (\`${data.guild_id}\`)`
+              `${syncRes.ok ? "✅" : "❌"} **[${tag}]** (\`${data.guild_id}\`)`,
             );
           }
 
@@ -1672,6 +1152,7 @@ export default async function handler(req, res) {
         }
       }
 
+      // DEFAULT ACTION: R5 Registration Portal Link
       try {
         const memberRoleIds = member.roles || [];
         const [roleMap, gistData] = await Promise.all([
@@ -1683,7 +1164,7 @@ export default async function handler(req, res) {
           .map((id) => roleMap.get(id))
           .filter(Boolean);
         const isR5 = memberRoleNames.some(
-          (r) => r === "r5" || r === "@r5" || matchesRoleKeyword(r, "r5")
+          (r) => r === "r5" || r === "@r5" || matchesRoleKeyword(r, "r5"),
         );
 
         if (!isR5) {
@@ -1698,7 +1179,7 @@ export default async function handler(req, res) {
         }
 
         const mapState = JSON.parse(
-          gistData.files["map-state.json"]?.content || "{}"
+          gistData.files["map-state.json"]?.content || "{}",
         );
         const knownAlliances = Object.keys(mapState.alliances || {});
 
@@ -1706,7 +1187,7 @@ export default async function handler(req, res) {
           const cleanTag = tag.toLowerCase();
           return memberRoleNames.some(
             (r) =>
-              r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`
+              r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
           );
         });
 
@@ -1720,13 +1201,10 @@ export default async function handler(req, res) {
           });
         }
 
-        const existingAlliance = mapState.alliances?.[matchedAllianceTag] || {};
-
         const tokenPayload = {
           alliance: matchedAllianceTag,
           action: "register",
           client_id: clientId,
-          color: existingAlliance.color || "#B8975A",
           exp: Date.now() + 24 * 60 * 60 * 1000,
         };
         const token = createHmacToken(tokenPayload, botToken);
@@ -1738,8 +1216,8 @@ export default async function handler(req, res) {
             embeds: [
               {
                 title: `🤖 Alliance Server Setup — [${matchedAllianceTag}]`,
-                color: hexToDiscordColor(existingAlliance.color, 0xb8975a),
-                description: `Click below to authorize the bot and link your alliance's Discord server.\n\n• Installs commands (\`/calendar\`, \`/suggest\`, \`/nominate\`, \`/rewards\`, \`/map\`, \`/sb\`, \`/rules\`).\n• Configures alert channels, private R4 ticket routing, and alliance branding.`,
+                color: 0xb8975a,
+                description: `Click below to authorize the bot and link your alliance's Discord server to the War Room.\n\n• Installs commands (\`/calendar\`, \`/nominate\`, \`/rewards\`, \`/map\`, \`/sb\`, \`/rules\`).\n• Allows configuring delegated roles (e.g. \`@HR\`).`,
                 footer: { text: "Link is private and expires in 24 hours." },
               },
             ],
@@ -1798,6 +1276,7 @@ export default async function handler(req, res) {
         });
       }
 
+      // 1. OWNER SERVER RESTRICTION: Non-admin users cannot submit nominations here
       if (
         ownerGuildId &&
         guildId === ownerGuildId &&
@@ -1824,17 +1303,19 @@ export default async function handler(req, res) {
           .map((id) => roleMap.get(id))
           .filter(Boolean);
         const mapState = JSON.parse(
-          gistData.files["map-state.json"]?.content || "{}"
+          gistData.files["map-state.json"]?.content || "{}",
         );
         const knownAlliances = Object.keys(mapState.alliances || {});
 
         let matchedAllianceTag = null;
 
+        // Dynamic Alliance Server Resolution (Registered via Gist)
         let registeredAlliance = Object.entries(mapState.alliances || {}).find(
           ([_, data]) =>
-            data?.guild_id && String(data.guild_id).trim() === guildId
+            data?.guild_id && String(data.guild_id).trim() === guildId,
         );
 
+        // Fallback compatibility for existing WLO environment variable
         if (!registeredAlliance && wloGuildId && guildId === wloGuildId) {
           registeredAlliance = [
             "WLO",
@@ -1842,6 +1323,7 @@ export default async function handler(req, res) {
           ];
         }
 
+        // --- PATH A: Dedicated Alliance Server ---
         if (registeredAlliance) {
           matchedAllianceTag = registeredAlliance[0];
           const allianceData = registeredAlliance[1] || {};
@@ -1855,7 +1337,7 @@ export default async function handler(req, res) {
           const isAuthorized =
             isAdmin ||
             memberRoleNames.some((roleName) =>
-              allowedRoles.some((kw) => matchesRoleKeyword(roleName, kw))
+              allowedRoles.some((kw) => matchesRoleKeyword(roleName, kw)),
             );
 
           if (!isAuthorized) {
@@ -1867,9 +1349,11 @@ export default async function handler(req, res) {
               },
             });
           }
-        } else {
+        }
+        // --- PATH B: Shared Server (NAP Server / Global) ---
+        else {
           const isR5 = memberRoleNames.some(
-            (r) => r === "r5" || r === "@r5" || matchesRoleKeyword(r, "r5")
+            (r) => r === "r5" || r === "@r5" || matchesRoleKeyword(r, "r5"),
           );
           if (!isR5 && userId !== process.env.AUTHORIZED_USER_ID) {
             return res.status(200).json({
@@ -1886,7 +1370,7 @@ export default async function handler(req, res) {
             const cleanTag = tag.toLowerCase();
             return memberRoleNames.some(
               (r) =>
-                r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`
+                r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
             );
           });
 
@@ -1902,7 +1386,7 @@ export default async function handler(req, res) {
         }
 
         const rewardsData = JSON.parse(
-          gistData.files["rewards-data.json"]?.content || "{}"
+          gistData.files["rewards-data.json"]?.content || "{}",
         );
         const isKW = rewardsData.mode === "kw";
 
@@ -1913,7 +1397,7 @@ export default async function handler(req, res) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned.`,
+              content: `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned in the War Room.`,
               flags: 64,
             },
           });
@@ -1999,10 +1483,8 @@ export default async function handler(req, res) {
           data: {
             embeds: [
               {
-                title: `🎁 Reward Nominations — [${matchedAllianceTag}]${isKW ? " ⚔️ [KW 2x Active]" : ""}`,
-                color: isKW
-                  ? 0x8f0000
-                  : hexToDiscordColor(allianceInfo?.color, 0xb8975a),
+                title: `🎁 Reward Nominations — [${matchedAllianceTag}]${isKW ? "⚔️ [KW 2x Active]" : ""}`,
+                color: isKW ? 0x8f0000 : 0xb8975a,
                 description: `You are eligible for **${totalChests} total chests** based on your **Rank ${rank}** finish.\nClick below to submit your recipient roster.`,
                 fields: fields,
                 footer: { text: "Link is private and expires in 24 hours." },
@@ -2052,7 +1534,7 @@ export default async function handler(req, res) {
         "Leadership";
 
       const requestedAction = options?.find(
-        (opt) => opt.name === "action"
+        (opt) => opt.name === "action",
       )?.value;
       const requestedMode =
         options?.find((opt) => opt.name === "mode")?.value || "standard";
@@ -2072,7 +1554,7 @@ export default async function handler(req, res) {
         try {
           const gistData = await getGistData(GIST_ID, GIST_TOKEN);
           const currentRewards = JSON.parse(
-            gistData.files["rewards-data.json"]?.content || "{}"
+            gistData.files["rewards-data.json"]?.content || "{}",
           );
           currentRewards.mode = requestedMode;
           currentRewards.lastReset = new Date().toISOString();
@@ -2097,7 +1579,7 @@ export default async function handler(req, res) {
                   },
                 },
               }),
-            }
+            },
           );
 
           if (!patchRes.ok)
@@ -2135,13 +1617,13 @@ export default async function handler(req, res) {
       try {
         const gistData = await getGistData(GIST_ID, GIST_TOKEN);
         const mapState = JSON.parse(
-          gistData.files["map-state.json"]?.content || "{}"
+          gistData.files["map-state.json"]?.content || "{}",
         );
         const rewardsData = JSON.parse(
-          gistData.files["rewards-data.json"]?.content || "{}"
+          gistData.files["rewards-data.json"]?.content || "{}",
         );
         const nominations = JSON.parse(
-          gistData.files["rewards-nominations.json"]?.content || "{}"
+          gistData.files["rewards-nominations.json"]?.content || "{}",
         );
 
         const isKW = rewardsData.mode === "kw";
@@ -2215,7 +1697,7 @@ export default async function handler(req, res) {
             }
 
             const submitUnix = Math.floor(
-              new Date(entry.submittedAt).getTime() / 1000
+              new Date(entry.submittedAt).getTime() / 1000,
             );
             return `✅ **[${item.tag}]** (Rank${item.rank}) — **${totalNominated}/${item.quota}** nominated (<t:${submitUnix}:R>)`;
           } else {
@@ -2284,7 +1766,7 @@ export default async function handler(req, res) {
                   title: "🛡️ Server NAP Standings",
                   color: 0xb8975a,
                   description: desc,
-                  footer: { text: "Last Asylum Kingdom Standings" },
+                  footer: { text: "Last Asylum War Room" },
                 },
               ],
             },
@@ -2361,281 +1843,7 @@ export default async function handler(req, res) {
     }
   }
 
-  // =========================================================================
-  // 2. MODAL SUBMIT HANDLING (TYPE 5)
-  // =========================================================================
-  if (interaction.type === 5) {
-    const { custom_id, components } = interaction.data;
-    const userId = interaction.member?.user?.id || interaction.user?.id;
-    const username =
-      interaction.member?.nick ||
-      interaction.member?.user?.global_name ||
-      interaction.member?.user?.username ||
-      interaction.user?.global_name ||
-      interaction.user?.username ||
-      "Member";
-
-    const botToken = process.env.DISCORD_BOT_TOKEN;
-    const GIST_ID = process.env.GIST_ID;
-    const GIST_TOKEN = process.env.GIST_TOKEN;
-
-    const getFieldVal = (id) => {
-      for (const row of components || []) {
-        for (const comp of row.components || []) {
-          if (comp.custom_id === id) return (comp.value || "").trim();
-        }
-      }
-      return "";
-    };
-
-    if (custom_id && custom_id.startsWith("suggest_modal:")) {
-      const [, ticketType, allianceTag] = custom_id.split(":");
-      const title = getFieldVal("sug_title");
-      const problem = getFieldVal("sug_problem");
-      const solution = getFieldVal("sug_solution") || null;
-
-      try {
-        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
-        const mapState = JSON.parse(
-          gistData.files?.["map-state.json"]?.content || "{}"
-        );
-        const suggestionsRaw =
-          gistData.files?.["suggestions-state.json"]?.content;
-        const suggestionsState = suggestionsRaw
-          ? JSON.parse(suggestionsRaw)
-          : { next_ticket_id: 1, suggestions: [] };
-
-        applyTicketRetentionPolicy(suggestionsState);
-
-        const allianceData = mapState.alliances?.[allianceTag];
-        if (!allianceData || !allianceData.officer_channel_id) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ Officer intake channel is not configured for **[${allianceTag}]**.`,
-              flags: 64,
-            },
-          });
-        }
-
-        const activeCount = (suggestionsState.suggestions || []).filter(
-          (s) =>
-            s.author_id === userId &&
-            (s.status === "pending_alliance" || s.status === "in_discussion")
-        ).length;
-
-        if (activeCount >= 2) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⚠️ You already have 2 active tickets open. Please wait for leadership to resolve one first.",
-              flags: 64,
-            },
-          });
-        }
-
-        const ticketId = suggestionsState.next_ticket_id || 1;
-        suggestionsState.next_ticket_id = ticketId + 1;
-
-        const nowIso = new Date().toISOString();
-        const expiresIso = new Date(
-          Date.now() + 30 * 86400 * 1000
-        ).toISOString();
-
-        const newTicket = {
-          id: ticketId,
-          type: ticketType,
-          alliance: allianceTag,
-          author_id: userId,
-          author_tag: username,
-          title,
-          problem,
-          solution,
-          status: "pending_alliance",
-          resolution_note: null,
-          officer_vouched_by: null,
-          channel_id: allianceData.officer_channel_id,
-          message_id: null,
-          thread_id: null,
-          extended: false,
-          nudge_sent: false,
-          created_at: nowIso,
-          expires_at: expiresIso,
-          closed_at: null,
-        };
-
-        const triagePayload = buildTriageCardPayload(
-          newTicket,
-          allianceData.color
-        );
-
-        const postRes = await fetch(
-          `https://discord.com/api/v10/channels/${allianceData.officer_channel_id}/messages`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bot ${botToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(triagePayload),
-          }
-        );
-
-        if (!postRes.ok) {
-          throw new Error(
-            "Could not post to your alliance's officer channel. Verify bot permissions."
-          );
-        }
-
-        const postedMsg = await postRes.json();
-        newTicket.message_id = postedMsg.id;
-
-        suggestionsState.suggestions.push(newTicket);
-        await patchGistFile(
-          GIST_ID,
-          GIST_TOKEN,
-          "suggestions-state.json",
-          suggestionsState,
-          `Ticket #${ticketId} submitted by ${username} ([${allianceTag}])`
-        );
-
-        const isNap = ticketType === "nap_proposal";
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            embeds: [
-              {
-                title: `✅ Ticket #${ticketId} Submitted to [${allianceTag}] Leadership`,
-                color: hexToDiscordColor(allianceData.color, 0x22c55e),
-                description: `Your **${isNap ? "Kingdom / NAP Proposal" : "Internal Alliance Issue"}** (*"${title}"*) has been routed to your alliance officers for review.\n\n💡 *You can check its status and officer notes anytime by running \`/suggest\` and selecting **View My Ticket Status**.*`,
-              },
-            ],
-            flags: 64,
-          },
-        });
-      } catch (err) {
-        console.error("Modal submit error:", err);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `❌ Submission failed: ${err.message}`,
-            flags: 64,
-          },
-        });
-      }
-    }
-
-    if (custom_id && custom_id.startsWith("tkt_close_modal:")) {
-      const [, closeAction, rawTicketId] = custom_id.split(":");
-      const ticketId = parseInt(rawTicketId, 10);
-      const customNote = getFieldVal("close_note");
-
-      try {
-        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
-        const mapState = JSON.parse(
-          gistData.files?.["map-state.json"]?.content || "{}"
-        );
-        const suggestionsState = JSON.parse(
-          gistData.files?.["suggestions-state.json"]?.content ||
-            '{"next_ticket_id":1,"suggestions":[]}'
-        );
-
-        const ticket = (suggestionsState.suggestions || []).find(
-          (s) => s.id === ticketId
-        );
-        if (!ticket) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: "⚠️ Ticket not found.", flags: 64 },
-          });
-        }
-
-        const isResolve = closeAction === "resolve";
-        ticket.status = isResolve ? "resolved" : "declined";
-        ticket.officer_vouched_by = username;
-        ticket.closed_at = new Date().toISOString();
-        ticket.resolution_note =
-          customNote ||
-          (isResolve
-            ? "Resolved by alliance leadership."
-            : "Reviewed and declined by alliance leadership.");
-
-        const allianceColor = mapState.alliances?.[ticket.alliance]?.color;
-        const updatedCard = buildTriageCardPayload(ticket, allianceColor);
-
-        const tasks = [
-          patchGistFile(
-            GIST_ID,
-            GIST_TOKEN,
-            "suggestions-state.json",
-            suggestionsState,
-            `Ticket #${ticketId} ${ticket.status} by ${username}`
-          ),
-        ];
-
-        if (ticket.channel_id && ticket.message_id) {
-          tasks.push(
-            fetch(
-              `https://discord.com/api/v10/channels/${ticket.channel_id}/messages/${ticket.message_id}`,
-              {
-                method: "PATCH",
-                headers: {
-                  Authorization: `Bot ${botToken}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(updatedCard),
-              }
-            ).catch(() => {})
-          );
-        }
-
-        if (ticket.thread_id) {
-          tasks.push(
-            (async () => {
-              await fetch(
-                `https://discord.com/api/v10/channels/${ticket.thread_id}/messages`,
-                {
-                  method: "POST",
-                  headers: {
-                    Authorization: `Bot ${botToken}`,
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    content: `${isResolve ? "✅ **Ticket Resolved**" : "❌ **Ticket Declined**"} by **${username}**.\n> 📝 **Note:** ${ticket.resolution_note}\n*This thread is now archived.*`,
-                  }),
-                }
-              ).catch(() => {});
-              await safeArchiveThread(ticket.thread_id, botToken);
-            })()
-          );
-        }
-
-        await Promise.all(tasks);
-
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `${isResolve ? "✅" : "❌"} **Ticket #${ticketId}** has been marked as **${isResolve ? "Resolved" : "Declined"}**.`,
-            flags: 64,
-          },
-        });
-      } catch (err) {
-        console.error("Close ticket modal error:", err);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `❌ Failed to update ticket: ${err.message}`,
-            flags: 64,
-          },
-        });
-      }
-    }
-  }
-
-  // =========================================================================
-  // 3. BUTTON INTERACTIONS (TYPE 3)
-  // =========================================================================
+  // --- BUTTON INTERACTIONS (Map Switcher & Admin Proposals) ---
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
     const rawHost =
@@ -2644,11 +1852,12 @@ export default async function handler(req, res) {
     const lang = resolveUserLocale(interaction, null);
     const t = getBotStrings(lang);
 
+    // 1. PUBLIC MAP VIEW SWITCH BUTTONS
     if (custom_id && custom_id.startsWith("map_view:")) {
       const targetView = custom_id.replace("map_view:", "");
       const revision = await getLatestMapRevision(
         process.env.GIST_ID,
-        process.env.GIST_TOKEN
+        process.env.GIST_TOKEN,
       );
       const payload = buildMapMessagePayload({
         view: targetView,
@@ -2664,441 +1873,7 @@ export default async function handler(req, res) {
       });
     }
 
-    if (custom_id && custom_id.startsWith("tkt_")) {
-      const [actionKey, rawTicketId] = custom_id.split(":");
-      const ticketId = parseInt(rawTicketId, 10);
-      const guildId = interaction.guild_id;
-      const member = interaction.member;
-      const userId = member?.user?.id || interaction.user?.id;
-      const username =
-        member?.nick ||
-        member?.user?.global_name ||
-        member?.user?.username ||
-        interaction.user?.global_name ||
-        interaction.user?.username ||
-        "Officer";
-
-      const botToken = process.env.DISCORD_BOT_TOKEN;
-      const GIST_ID = process.env.GIST_ID;
-      const GIST_TOKEN = process.env.GIST_TOKEN;
-
-      // Pop close modal immediately without Gist round-trip to beat 3s timeout
-      if (actionKey === "tkt_resolve" || actionKey === "tkt_decline") {
-        const isResolve = actionKey === "tkt_resolve";
-        return res.status(200).json({
-          type: 9,
-          data: {
-            custom_id: `tkt_close_modal:${isResolve ? "resolve" : "decline"}:${ticketId}`,
-            title: isResolve
-              ? `✅ Resolve Ticket #${ticketId}`
-              : `❌ Decline Ticket #${ticketId}`,
-            components: [
-              {
-                type: 1,
-                components: [
-                  {
-                    type: 4,
-                    custom_id: "close_note",
-                    label: "Note for Submitter (Optional)",
-                    style: 2,
-                    max_length: 300,
-                    placeholder: isResolve
-                      ? "Optional: e.g., Addressed! We will adjust the schedule starting Friday."
-                      : "Optional: e.g., Covered by NAP Rule 4 / Not feasible during KW.",
-                    required: false,
-                  },
-                ],
-              },
-            ],
-          },
-        });
-      }
-
-      try {
-        const [roleMap, gistData] = await Promise.all([
-          getGuildRoleMap(guildId, botToken, member?.roles || []),
-          getGistData(GIST_ID, GIST_TOKEN),
-        ]);
-
-        const mapState = JSON.parse(
-          gistData.files?.["map-state.json"]?.content || "{}"
-        );
-        const suggestionsState = JSON.parse(
-          gistData.files?.["suggestions-state.json"]?.content ||
-            '{"next_ticket_id":1,"suggestions":[]}'
-        );
-
-        const ticket = (suggestionsState.suggestions || []).find(
-          (s) => s.id === ticketId
-        );
-        if (!ticket) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: "⚠️ Ticket record not found.", flags: 64 },
-          });
-        }
-
-        const allianceData = mapState.alliances?.[ticket.alliance] || {};
-        const memberRoleNames = (member?.roles || [])
-          .map((id) => roleMap.get(id))
-          .filter(Boolean);
-
-        const isAdmin = (BigInt(member?.permissions || "0") & 8n) === 8n;
-        const allowedRoles = [
-          "r5",
-          ...(allianceData.delegated_roles || ["hr", "officer", "leader"]),
-        ];
-        const isAuthorizedOfficer =
-          userId === process.env.AUTHORIZED_USER_ID ||
-          isAdmin ||
-          memberRoleNames.some((roleName) =>
-            allowedRoles.some((kw) => matchesRoleKeyword(roleName, kw))
-          );
-
-        if (!isAuthorizedOfficer) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⛔ **Access Denied:** Only **@R5** or authorized leadership roles (${allowedRoles.map((r) => "@" + r).join(", ")}) can triage tickets.`,
-              flags: 64,
-            },
-          });
-        }
-
-        if (actionKey === "tkt_endorse") {
-          if (ticket.type !== "nap_proposal") {
-            return res.status(200).json({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content:
-                  "⚠️ Internal alliance tickets cannot be escalated to the NAP Council.",
-                flags: 64,
-              },
-            });
-          }
-
-          const napChannelId = (
-            process.env.WAR_ROOM_CHANNEL_ID ||
-            process.env.REWARDS_CHANNEL_ID ||
-            mapState.nap_channel_id ||
-            ""
-          ).trim();
-
-          if (!napChannelId) {
-            return res.status(200).json({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content:
-                  "⚠️ Central NAP Council channel ID is not configured (`WAR_ROOM_CHANNEL_ID` / `REWARDS_CHANNEL_ID`).",
-                flags: 64,
-              },
-            });
-          }
-
-          const councilEmbed = {
-            title: `👑 Council Proposal #${ticket.id} — ${ticket.title}`,
-            color: hexToDiscordColor(allianceData.color, 0xb8975a),
-            description: `🛡️ **Sponsored & Endorsed by [${ticket.alliance}] Leadership** *(Vouched by ${username})*`,
-            fields: [
-              {
-                name: "⚠️ Observed Issue / Friction",
-                value: ticket.problem,
-                inline: false,
-              },
-              {
-                name: "💡 Proposed Solution",
-                value:
-                  ticket.solution ||
-                  "*Open for Kingdom Council deliberation*",
-                inline: false,
-              },
-            ],
-            footer: {
-              text: `Sponsored by [${ticket.alliance}] • Proposal #${ticket.id}`,
-            },
-            timestamp: new Date().toISOString(),
-          };
-
-          const napPostRes = await fetch(
-            `https://discord.com/api/v10/channels/${napChannelId}/messages`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bot ${botToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ embeds: [councilEmbed] }),
-            }
-          );
-
-          if (!napPostRes.ok) {
-            throw new Error(
-              `Failed to post to NAP Council channel (${napPostRes.status}).`
-            );
-          }
-
-          ticket.status = "endorsed_to_council";
-          ticket.officer_vouched_by = username;
-          ticket.closed_at = new Date().toISOString();
-          ticket.resolution_note = `Endorsed by [${ticket.alliance}] Leadership (${username}) and forwarded to the Kingdom Council.`;
-
-          const updatedCard = buildTriageCardPayload(
-            ticket,
-            allianceData.color
-          );
-
-          const endorseTasks = [
-            patchGistFile(
-              GIST_ID,
-              GIST_TOKEN,
-              "suggestions-state.json",
-              suggestionsState,
-              `Ticket #${ticket.id} endorsed to NAP by ${username}`
-            ),
-          ];
-
-          if (ticket.channel_id && ticket.message_id) {
-            endorseTasks.push(
-              fetch(
-                `https://discord.com/api/v10/channels/${ticket.channel_id}/messages/${ticket.message_id}`,
-                {
-                  method: "PATCH",
-                  headers: {
-                    Authorization: `Bot ${botToken}`,
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(updatedCard),
-                }
-              ).catch(() => {})
-            );
-          }
-
-          if (ticket.thread_id) {
-            endorseTasks.push(safeArchiveThread(ticket.thread_id, botToken));
-          }
-
-          await Promise.all(endorseTasks);
-
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `🚀 **Proposal #${ticket.id}** has been officially endorsed on behalf of **[${ticket.alliance}]** and posted to the NAP Council!`,
-              flags: 64,
-            },
-          });
-        }
-
-        if (actionKey === "tkt_manage") {
-          if (ticket.thread_id) {
-            return res.status(200).json({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content: `💬 A discussion thread is already open: <#${ticket.thread_id}>`,
-                flags: 64,
-              },
-            });
-          }
-
-          const threadRes = await fetch(
-            `https://discord.com/api/v10/channels/${interaction.channel_id}/messages/${interaction.message.id}/threads`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bot ${botToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: `Ticket #${ticket.id} — ${ticket.title.slice(0, 45)}`,
-                auto_archive_duration: 1440,
-              }),
-            }
-          );
-
-          if (!threadRes.ok) {
-            throw new Error(
-              "Could not create thread. Ensure the bot has 'Create Public/Private Threads' permissions."
-            );
-          }
-
-          const threadData = await threadRes.json();
-          ticket.thread_id = threadData.id;
-
-          const isNap = ticket.type === "nap_proposal";
-
-          await Promise.all([
-            patchGistFile(
-              GIST_ID,
-              GIST_TOKEN,
-              "suggestions-state.json",
-              suggestionsState,
-              `Manage thread opened for Ticket #${ticket.id}`
-            ),
-            fetch(
-              `https://discord.com/api/v10/channels/${threadData.id}/messages`,
-              {
-                method: "POST",
-                headers: {
-                  Authorization: `Bot ${botToken}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  embeds: [
-                    {
-                      title: `🛠️ Officer Deliberation — Ticket #${ticket.id}`,
-                      color: hexToDiscordColor(allianceData.color, 0xb8975a),
-                      description: `Thread opened by **${username}**.\n\n• Discuss internally here (hidden from the submitter by default).\n• Click **Discuss with Submitter** below if you want to invite <@${ticket.author_id}> into this thread for Q&A.`,
-                    },
-                  ],
-                  components: [
-                    {
-                      type: 1,
-                      components: [
-                        {
-                          type: 2,
-                          style: 1,
-                          label: "Discuss with Submitter",
-                          custom_id: `tkt_discuss:${ticket.id}`,
-                          emoji: { name: "💬" },
-                          disabled: !ticket.author_id,
-                        },
-                        {
-                          type: 2,
-                          style: 2,
-                          label: "Extend (+14 Days)",
-                          custom_id: `tkt_extend:${ticket.id}`,
-                          emoji: { name: "⏳" },
-                          disabled: Boolean(ticket.extended),
-                        },
-                        isNap
-                          ? {
-                              type: 2,
-                              style: 3,
-                              label: "Endorse to NAP",
-                              custom_id: `tkt_endorse:${ticket.id}`,
-                              emoji: { name: "🚀" },
-                            }
-                          : {
-                              type: 2,
-                              style: 3,
-                              label: "Resolve",
-                              custom_id: `tkt_resolve:${ticket.id}`,
-                              emoji: { name: "✅" },
-                            },
-                        {
-                          type: 2,
-                          style: 4,
-                          label: "Decline",
-                          custom_id: `tkt_decline:${ticket.id}`,
-                          emoji: { name: "❌" },
-                        },
-                      ],
-                    },
-                  ],
-                }),
-              }
-            ),
-          ]);
-
-          const updatedCard = buildTriageCardPayload(
-            ticket,
-            allianceData.color
-          );
-          return res.status(200).json({
-            type: InteractionResponseType.UPDATE_MESSAGE,
-            data: updatedCard,
-          });
-        }
-
-        if (actionKey === "tkt_discuss") {
-          const targetThreadId = ticket.thread_id || interaction.channel_id;
-          if (!ticket.author_id) {
-            return res.status(200).json({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content:
-                  "⚠️ Submitter identity has already been anonymized.",
-                flags: 64,
-              },
-            });
-          }
-
-          ticket.status = "in_discussion";
-          await Promise.all([
-            fetch(
-              `https://discord.com/api/v10/channels/${targetThreadId}/thread-members/${ticket.author_id}`,
-              {
-                method: "PUT",
-                headers: { Authorization: `Bot ${botToken}` },
-              }
-            ).catch(() => {}),
-            patchGistFile(
-              GIST_ID,
-              GIST_TOKEN,
-              "suggestions-state.json",
-              suggestionsState,
-              `Submitter invited to Ticket #${ticket.id}`
-            ),
-          ]);
-
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `💬 <@${ticket.author_id}> — You have been invited by **${username}** to discuss **Ticket #${ticket.id}** (*"${ticket.title}"*) with **[${ticket.alliance}]** leadership.`,
-            },
-          });
-        }
-
-        if (actionKey === "tkt_extend") {
-          if (ticket.extended) {
-            return res.status(200).json({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content:
-                  "⚠️ This ticket has already received its one-time 14-day extension.",
-                flags: 64,
-              },
-            });
-          }
-
-          const currentExpiryMs = ticket.expires_at
-            ? new Date(ticket.expires_at).getTime()
-            : Date.now() + 30 * 86400 * 1000;
-
-          ticket.extended = true;
-          ticket.expires_at = new Date(
-            currentExpiryMs + 14 * 86400 * 1000
-          ).toISOString();
-
-          await patchGistFile(
-            GIST_ID,
-            GIST_TOKEN,
-            "suggestions-state.json",
-            suggestionsState,
-            `Ticket #${ticket.id} extended +14d by ${username}`
-          );
-
-          const newExpUnix = Math.floor(
-            new Date(ticket.expires_at).getTime() / 1000
-          );
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⏳ **Ticket #${ticket.id} Extended:** Deliberation window extended by 14 days by **${username}** (New expiry: <t:${newExpUnix}:D>).`,
-            },
-          });
-        }
-      } catch (err) {
-        console.error("Ticket button error:", err);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `❌ Action failed: ${err.message}`,
-            flags: 64,
-          },
-        });
-      }
-    }
-
+    // 2. ADMIN PROPOSALS & REVIEWS (Protected by AUTHORIZED_USER_ID)
     const userId = interaction.member?.user?.id || interaction.user?.id;
     const username =
       interaction.member?.nick ||
@@ -3126,7 +1901,7 @@ export default async function handler(req, res) {
           ? "reward-blueprint"
           : "strategy-blueprint";
         const blueprintAttachment = interaction.message.attachments?.find((a) =>
-          a.filename.startsWith(filePrefix)
+          a.filename.startsWith(filePrefix),
         );
 
         if (!blueprintAttachment)
@@ -3156,13 +1931,13 @@ export default async function handler(req, res) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(acceptPayload),
-          }
+          },
         );
 
         const acceptJson = await acceptRes.json().catch(() => ({}));
         if (!acceptRes.ok) {
           throw new Error(
-            acceptJson.error || `Server responded with ${acceptRes.status}`
+            acceptJson.error || `Server responded with ${acceptRes.status}`,
           );
         }
 
@@ -3183,12 +1958,12 @@ export default async function handler(req, res) {
     }
 
     const originalEmbed = JSON.parse(
-      JSON.stringify(interaction.message.embeds[0])
+      JSON.stringify(interaction.message.embeds[0]),
     );
     originalEmbed.color = isApproved ? 0x22c55e : 0xef4444;
 
     const statusIndex = originalEmbed.fields.findIndex((f) =>
-      f.name.toLowerCase().includes("status")
+      f.name.toLowerCase().includes("status"),
     );
     const statusField = {
       name: "⚖️ Status",
