@@ -1112,6 +1112,9 @@ body.portal-body .content-pane {
   background: #ef4444;
   color: #fff;
 }
+/* hide language selector on portal pages */
+
+/* end */
 
 @media (max-width: 768px) {
   .cycle-track-grid {
