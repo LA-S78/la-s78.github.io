@@ -871,9 +871,11 @@ export default async function handler(req, res) {
               const createdTs = Math.floor(
                 new Date(tkt.created_at).getTime() / 1000
               );
+              const typeLabel = tkt.type === "nap_proposal" ? "NAP Proposal" : "[" + tkt.alliance + "] Issue";
+              
               fields.push({
-                name: `📌 #${tkt.id} — ${tkt.title} (${tkt.type === "nap_proposal" ? "NAP Proposal" : `[${tkt.alliance}] Issue`})`,
-                value: `• **Status:** ${statusMap[tkt.status] || tkt.status}\n• **Submitted:** <t:${createdTs}:R>${tkt.extended ? "\n• *Extended +14d for review*" : ""}`,
+                name: "📌 #" + tkt.id + " — " + tkt.title + " (" + typeLabel + ")",
+                value: "• **Status:** " + (statusMap[tkt.status] || tkt.status) + "\n• **Submitted:** <t:" + createdTs + ":R>" + (tkt.extended ? "\n• *Extended +14d for review*" : ""),
                 inline: false,
               });
             });
