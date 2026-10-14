@@ -58,6 +58,12 @@ pages:
   api-test:
     title: "Top-Secret Alliance Intel"
     subtitle: "Top-Secret Alliance Intel"
+  #portal pages
+  calendar:
+    title: "Event Calendar"
+    subtitle: "Alliance & Server Events"
+  
+  #guide pages
   guide_panes:
     heroes:
       title: "Heroes & Builds"
