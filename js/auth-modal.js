@@ -18,7 +18,7 @@ function ensureModalDOM() {
         <div class="auth-modal-header">
           <div class="auth-modal-title-wrap">
             <span class="auth-modal-icon">👑</span>
-            <h3 id="auth-modal-title" class="auth-modal-title">Submit War Room Proposal</h3>
+            <h3 id="auth-modal-title" class="auth-modal-title">Submit Proposal</h3>
           </div>
           <button type="button" class="auth-modal-close" id="auth-modal-close-btn" aria-label="Close">&times;</button>
         </div>
@@ -132,7 +132,7 @@ export function clearStashedProposal() {
  */
 export async function submitProposalWithAuth({
   type, // 'map' | 'rewards' | 'alliance'
-  title = "Submit War Room Proposal",
+  title = "Submit Proposal",
   payload, // Object matching proposal schema
   diffSummaryHtml = "<p>Pending shifts</p>",
   onSuccess = () => {},
@@ -175,7 +175,7 @@ export async function submitProposalWithAuth({
         </div>
       </div>
     `;
-    btnText.textContent = "Transmit to War Room";
+    btnText.textContent = "Transmit to Discord";
     actionBtn.onclick = async () => {
       await performTransmission();
     };
@@ -185,7 +185,7 @@ export async function submitProposalWithAuth({
         <span class="auth-guest-icon">⚠️</span>
         <div>
           <strong>Leadership Authentication Required</strong>
-          <p>War Room proposals require verified Discord leadership or officer status to dispatch.</p>
+          <p>Proposals require verified Discord leadership or officer status to dispatch.</p>
         </div>
       </div>
     `;
@@ -228,6 +228,7 @@ export async function submitProposalWithAuth({
       }
 
       clearStashedProposal();
+      localStorage.removeItem('la_map_planner_draft'); // Clean up map draft
       closeModal();
       alert("✅ Proposal successfully transmitted to the War Room on Discord!");
       onSuccess(resData);
@@ -247,7 +248,7 @@ export async function submitProposalWithAuth({
     if (isLoading) {
       btnText.textContent = "Transmitting...";
     } else {
-      btnText.textContent = isAuthenticated ? "Transmit to War Room" : "Log In via Discord to Submit";
+      btnText.textContent = isAuthenticated ? "Transmit to Discord" : "Log In via Discord to Submit";
     }
   }
 }

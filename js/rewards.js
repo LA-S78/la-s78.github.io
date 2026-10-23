@@ -2,9 +2,13 @@
  * js/rewards.js - Dynamic Alliance Reward Distribution Engine & Interactive Planner
  */
 
+import { submitProposalWithAuth } from './auth-modal.js';
+
 export let isRewardsPlannerActive = false;
 export let draftTiers = [];
 export let originalTiers = [];
+
+const REWARDS_DRAFT_KEY = 'la_rewards_planner_draft';
 
 const POOL_LIMITS = {
   commanders_will: 5,
@@ -48,6 +52,50 @@ export function initDefaultTiers() {
   draftTiers = JSON.parse(JSON.stringify(originalTiers));
 }
 
+function saveDraftToStorage() {
+  if (!isRewardsPlannerActive) return;
+  try {
+    localStorage.setItem(REWARDS_DRAFT_KEY, JSON.stringify(draftTiers));
+  } catch (e) {}
+}
+
+export function checkAndRestoreRewardsDraft() {
+  let saved = null;
+  try {
+    saved = localStorage.getItem(REWARDS_DRAFT_KEY);
+  } catch (e) {}
+
+  if (!saved) return false;
+
+  try {
+    const parsed = JSON.parse(saved);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      isRewardsPlannerActive = true;
+      draftTiers = parsed;
+
+      const btnDraft = document.getElementById('btn-toggle-rewards-planner');
+      if (btnDraft) {
+        btnDraft.setAttribute('aria-pressed', 'true');
+        btnDraft.classList.add('active');
+      }
+
+      const container = document.getElementById('rewards-container');
+      const addTierBox = document.getElementById('planner-add-tier-container');
+
+      if (container) container.classList.add('planner-active');
+      if (addTierBox) addTierBox.classList.remove('hidden');
+
+      renderTierList();
+      updatePayoutTable();
+      updateRewardsProposalUI();
+      return true;
+    }
+  } catch (err) {
+    console.warn('Could not restore rewards draft from localStorage:', err);
+  }
+  return false;
+}
+
 export async function fetchLiveRewardsState() {
   try {
     const res = await fetch(`/api/state?scope=rewards&t=${Date.now()}`);
@@ -77,7 +125,8 @@ export async function fetchLiveMapState() {
 
     let hasUpdate = false;
     if (stateRes.ok) {
-      window.MAP_STATE = await stateRes.json();
+      const stateData = await stateRes.json();
+      window.MAP_STATE = { alliances: stateData.alliances || stateData };
       hasUpdate = true;
     }
     if (colorsRes.ok) {
@@ -98,13 +147,16 @@ export async function syncAllLiveState() {
   const tableEl = document.getElementById('payout-table-body');
 
   try {
-    // Await both live endpoints before lifting the curtain
     await Promise.allSettled([
       fetchLiveRewardsState(),
       fetchLiveMapState()
     ]);
   } finally {
-    // Trigger smooth fade-in only when both tiers and tags are fully ready
+    const restored = checkAndRestoreRewardsDraft();
+    if (!restored) {
+      renderTierList();
+      updatePayoutTable();
+    }
     listEl?.classList.add('rewards-loaded');
     tableEl?.classList.add('rewards-loaded');
   }
@@ -134,6 +186,7 @@ export function adjustTierMaxRank(tierIndex, delta) {
 
   tier.max_rank = newMax;
   rechainTiers(draftTiers);
+  saveDraftToStorage();
 
   renderTierList();
   updatePayoutTable();
@@ -154,6 +207,8 @@ export function addTier() {
   });
 
   rechainTiers(draftTiers);
+  saveDraftToStorage();
+
   renderTierList();
   updatePayoutTable();
   updateRewardsProposalUI();
@@ -164,6 +219,7 @@ export function removeTier(tierIndex) {
 
   draftTiers.splice(tierIndex, 1);
   rechainTiers(draftTiers);
+  saveDraftToStorage();
 
   renderTierList();
   updatePayoutTable();
@@ -175,6 +231,7 @@ export function adjustChestQuantity(tierIndex, chestType) {
 
   const currentVal = draftTiers[tierIndex].chests[chestType] || 0;
   draftTiers[tierIndex].chests[chestType] = currentVal >= 5 ? 0 : currentVal + 1;
+  saveDraftToStorage();
 
   renderTierList();
   updatePayoutTable();
@@ -397,33 +454,54 @@ export function toggleRewardsPlanner(active) {
   if (container) container.classList.toggle('planner-active', active);
   if (addTierBox) addTierBox.classList.toggle('hidden', !active);
 
-  draftTiers = JSON.parse(JSON.stringify(originalTiers));
+  if (!active) {
+    try {
+      localStorage.removeItem(REWARDS_DRAFT_KEY);
+    } catch (e) {}
+    draftTiers = JSON.parse(JSON.stringify(originalTiers));
+  } else {
+    saveDraftToStorage();
+  }
 
   renderTierList();
   updatePayoutTable();
   updateRewardsProposalUI();
 }
 
-import { submitProposalWithAuth } from './auth-modal.js';
-
 export async function submitRewardProposal() {
   if (!isRewardsPlannerActive) return;
 
   const payload = {
     type: 'rewards',
+    timestamp: new Date().toISOString(),
     distribution: draftTiers
   };
 
-  const diffHtml = draftTiers
-    .map(tier => `<div><strong>Rank ${tier.min_rank}–${tier.max_rank}</strong>: 🟡 ×${tier.chests.commanders_will} | 🟣 ×${tier.chests.loyal_servant} | 🔵 ×${tier.chests.followers_heart}</div>`)
-    .join('');
+  const diffItems = draftTiers.map(tier => {
+    const isSingle = tier.min_rank === tier.max_rank;
+    const label = isSingle ? `Rank ${tier.min_rank}` : `Rank ${tier.min_rank}–${tier.max_rank}`;
+    return `
+      <div>
+        <strong>${label}</strong>: 
+        🟡 ×${tier.chests.commanders_will || 0} | 
+        🟣 ×${tier.chests.loyal_servant || 0} | 
+        🔵 ×${tier.chests.followers_heart || 0}
+      </div>
+    `;
+  }).join('');
 
   submitProposalWithAuth({
     type: 'rewards',
     title: '👑 Submit Reward Distribution Proposal',
     payload: payload,
-    diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
-    onSuccess: () => toggleRewardsPlanner(false)
+    diffSummaryHtml: `<div class="diff-list">${diffItems}</div>`,
+    onSuccess: () => {
+      try {
+        localStorage.removeItem(REWARDS_DRAFT_KEY);
+      } catch (e) {}
+      originalTiers = JSON.parse(JSON.stringify(draftTiers));
+      toggleRewardsPlanner(false);
+    }
   });
 }
 
@@ -454,7 +532,7 @@ export function bindRewardsControls() {
   const btnSubmit = document.getElementById('btn-submit-rewards');
   if (btnSubmit && !btnSubmit.dataset.bound) {
     btnSubmit.dataset.bound = 'true';
-    btnSubmit.addEventListener('click', () => submitRewardProposal('/api/proposal'));
+    btnSubmit.addEventListener('click', () => submitRewardProposal());
   }
 
   const btnAddTier = document.getElementById('btn-add-tier');
@@ -498,11 +576,9 @@ export function bindRewardsControls() {
     });
   }
 
-  // Pre-render immediately with bootstrap data so DOM nodes exist
   renderTierList();
   updatePayoutTable();
 
-  // Perform parallel live sync and fade in once fully resolved
   syncAllLiveState();
 }
 

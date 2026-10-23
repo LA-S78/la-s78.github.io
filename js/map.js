@@ -2,6 +2,10 @@
  * map.js - Comprehensive Map Data, Parsing, Highlighting, Label, Planner, Fullscreen, and Image Snapshot Utilities
  */
 
+import { submitProposalWithAuth } from './auth-modal.js';
+
+const DRAFT_STORAGE_KEY = 'la_map_planner_draft';
+
 export const LABEL_OVERRIDES = {
   Sky_Fortress: { rotate: 270, offsetX: -52 },
   Royal_Castle: { offsetX: -5, offsetY: -20, scale: 1.5 },
@@ -559,11 +563,16 @@ export function togglePlannerMode(active, svgRoot = null) {
   }
 
   if (isPlannerActive) {
-    draftState = JSON.parse(JSON.stringify(mapState));
-    if (!draftState.territory_ownership) draftState.territory_ownership = {};
+    if (!draftState) {
+      draftState = JSON.parse(JSON.stringify(mapState));
+      if (!draftState.territory_ownership) draftState.territory_ownership = {};
+    }
     currentColorMode = 'alliance';
   } else {
     draftState = null;
+    try {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+    } catch (e) {}
     currentColorMode = 'level';
     
     const btnLevel = document.getElementById('btn-mode-level');
@@ -605,6 +614,10 @@ export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
   if (!draftState.territory_ownership) draftState.territory_ownership = {};
 
   draftState.territory_ownership[cityId] = { owner: newOwnerTag || 'Unclaimed' };
+
+  try {
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draftState.territory_ownership));
+  } catch (e) {}
 
   if (root) {
     setMapColorMode(currentColorMode, root);
@@ -653,6 +666,7 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
   });
 
   return {
+    type: 'map',
     submittedBy: authorName,
     timestamp: new Date().toISOString(),
     totalChanges: Object.keys(changes).length,
@@ -660,31 +674,47 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
   };
 }
 
-import { submitProposalWithAuth } from './auth-modal.js';
-
 export async function submitStrategyProposal() {
   if (!isPlannerActive || !draftState) return;
+
   const payload = generateProposalPayload();
   if (!payload || payload.totalChanges === 0) {
     alert('No changes detected in your draft plan.');
     return;
   }
 
-  // Pre-generate map snapshot
-  const mapImageData = await captureMapImage();
-  if (mapImageData) payload.image = mapImageData;
+  const root = getSvgRoot();
+  const prevMode = currentColorMode;
 
-  // Build clean diff HTML
-  const diffHtml = Object.entries(payload.changes)
-    .map(([cityId, shift]) => `<div><strong>${cityId.replace(/_/g, ' ')}</strong>: <code>${shift.from}</code> ➔ <code>${shift.to}</code></div>`)
-    .join('');
+  if (root) {
+    setMapColorMode('level', root);
+  }
+
+  const mapImageData = await captureMapImage(root);
+
+  if (root) {
+    setMapColorMode(prevMode, root);
+  }
+
+  if (mapImageData) {
+    payload.image = mapImageData;
+  }
+
+  const diffItems = Object.entries(payload.changes).map(([cityId, shift]) => `
+    <div><strong>${cityId.replace(/_/g, ' ')}</strong>: <code>${shift.from}</code> ➔ <code>${shift.to}</code></div>
+  `).join('');
 
   submitProposalWithAuth({
     type: 'map',
     title: '🗺️ Submit Map Territory Proposal',
     payload: payload,
-    diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
-    onSuccess: () => togglePlannerMode(false)
+    diffSummaryHtml: `<div class="diff-list">${diffItems}</div>`,
+    onSuccess: () => {
+      try {
+        localStorage.removeItem(DRAFT_STORAGE_KEY);
+      } catch (e) {}
+      togglePlannerMode(false);
+    }
   });
 }
 
@@ -834,7 +864,7 @@ export function bindMapControls(svgRoot = null) {
     btnSubmit.dataset.bound = 'true';
     btnSubmit.addEventListener('click', (e) => {
       e.preventDefault();
-      submitStrategyProposal('/api/proposal');
+      submitStrategyProposal();
     });
   }
 
@@ -1250,6 +1280,47 @@ export function enableMapHighlighting(svgRoot = null) {
 // STATE MANAGEMENT & INITIALIZATION
 // ==========================================================================
 
+export function checkAndRestoreMapDraft(svgRoot = null) {
+  const root = svgRoot || getSvgRoot();
+  let savedDraft = null;
+  try {
+    savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+  } catch (e) {}
+
+  if (!savedDraft) return false;
+
+  try {
+    const ownership = JSON.parse(savedDraft);
+    if (ownership && typeof ownership === 'object' && Object.keys(ownership).length > 0) {
+      isPlannerActive = true;
+      draftState = JSON.parse(JSON.stringify(mapState));
+      draftState.territory_ownership = {
+        ...(draftState.territory_ownership || {}),
+        ...ownership
+      };
+      currentColorMode = 'alliance';
+
+      const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
+      if (btnDraft) {
+        btnDraft.setAttribute('aria-pressed', 'true');
+        btnDraft.classList.add('active');
+      }
+      const overrideContainer = document.getElementById('planner-override-container');
+      if (overrideContainer) {
+        overrideContainer.classList.remove('hidden');
+        overrideContainer.style.display = 'inline-flex';
+      }
+
+      if (root) setMapColorMode('alliance', root);
+      updateProposalUI();
+      return true;
+    }
+  } catch (err) {
+    console.warn('Could not restore map draft from localStorage:', err);
+  }
+  return false;
+}
+
 export function applyMapState(state, svgRoot = null, autoRender = true) {
   if (!state) return;
   mapState = state;
@@ -1325,7 +1396,10 @@ export async function loadLiveMapState(svgRoot = null) {
     }
   } finally {
     if (root) {
-      setMapColorMode(currentColorMode, root);
+      const restored = checkAndRestoreMapDraft(root);
+      if (!restored) {
+        setMapColorMode(currentColorMode, root);
+      }
       requestAnimationFrame(() => {
         root.classList.add('map-loaded');
       });

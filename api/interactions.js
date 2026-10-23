@@ -791,7 +791,7 @@ export default async function handler(req, res) {
                 title: "👑 Kingdom Event Management Portal",
                 color: 0x10b981,
                 description:
-                  "Click below to open the War Room calendar in **Global Management Mode**.\n\nYou can schedule kingdom-wide announcements, truce alerts, or delete entries.",
+                  "Click below to open the calendar in **Global Management Mode**.\n\nYou can schedule kingdom-wide announcements, truce alerts, or delete entries.",
                 footer: { text: "Link is private and expires in 4 hours." },
               },
             ],
@@ -950,7 +950,7 @@ export default async function handler(req, res) {
                 ? "⚔️ **Kingdom War Cycle is ACTIVE.** 2x Reward allocations apply this week."
                 : "🛡️ **NAP Rest Week.** Standard kingdom operations and territory consolidation.",
               fields,
-              footer: { text: "Last Asylum Kingdom War Room" },
+              footer: { text: "la-s78.app" },
               timestamp: new Date().toISOString(),
             },
           ],
@@ -1319,7 +1319,7 @@ export default async function handler(req, res) {
                 title: `🤖 Alliance Server Setup — [${matchedAllianceTag}]`,
                 color: 0xb8975a,
                 description:
-                  "Click below to authorize the bot and link your alliance's Discord server to the War Room.\n\n• Installs commands (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).\n• Allows configuring delegated roles (e.g. `@HR`).",
+                  "Click below to authorize the bot and link your alliance's Discord server to the website.\n\n• Installs commands (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).\n• Allows configuring delegated roles (e.g. `@HR`).",
                 footer: { text: "Link is private and expires in 24 hours." },
               },
             ],
@@ -1428,7 +1428,7 @@ export default async function handler(req, res) {
         if (isNaN(rank)) {
           return sendEphemeralMessage(
             res,
-            `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned in the War Room.`,
+            `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned.`,
           );
         }
 
@@ -1762,7 +1762,7 @@ export default async function handler(req, res) {
                   title: "🛡️ Server NAP Standings",
                   color: 0xb8975a,
                   description: desc,
-                  footer: { text: "Last Asylum War Room" },
+                  footer: { text: "la-s78.app" },
                   timestamp: new Date().toISOString(),
                 },
               ],
