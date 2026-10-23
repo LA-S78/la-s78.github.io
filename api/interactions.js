@@ -1,6 +1,6 @@
 // api/interactions.js
 
-// Manages interactions between github, vercel, and Discord
+// Manages interactions between GitHub Gist, Vercel, and Discord
 import crypto from "crypto";
 import {
   verifyKey,
@@ -14,11 +14,11 @@ import { getCycleState, DEFAULT_CALENDAR_CONFIG } from "./_calendar_helper.js";
 export const config = { api: { bodyParser: false } };
 
 // --- DYNAMIC ALLIANCE COMMAND SCHEMA ---
-// Pushed to member alliance servers via /registerbot and /register-alliance
+// Synchronized with api/register-alliance.js; pushed to member servers via /registerbot
 const ALLIANCE_COMMANDS_SCHEMA = [
   {
     name: "calendar",
-    description: "View or manage the Event Calendar",
+    description: "View or manage the Kingdom Event Calendar",
     type: 1,
     options: [
       {
@@ -34,6 +34,34 @@ const ALLIANCE_COMMANDS_SCHEMA = [
           {
             name: "Manage Global Events (Admin Only)",
             value: "manage_global",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: "suggest",
+    description:
+      "Submit a rule proposal, report an alliance issue, or check your ticket status",
+    type: 1,
+    options: [
+      {
+        type: 3,
+        name: "type",
+        description: "Select ticket category or check your active submissions",
+        required: true,
+        choices: [
+          {
+            name: "👑 Kingdom / NAP Proposal (Server-Wide Rule or Event Idea)",
+            value: "nap_proposal",
+          },
+          {
+            name: "🛡️ Internal Alliance Issue (Handled Privately by Your R4/R5s)",
+            value: "alliance_issue",
+          },
+          {
+            name: "📋 View My Ticket Status (Active & Recent History)",
+            value: "status",
           },
         ],
       },
@@ -86,6 +114,65 @@ const ALLIANCE_COMMANDS_SCHEMA = [
     type: 1,
   },
 ];
+
+// --- PROPOSAL COMPONENT REGISTRY ---
+// Maps Discord button custom_ids to their respective blueprint files and accept-proposal types
+const PROPOSAL_CONFIGS = {
+  approve_proposal: {
+    type: "map",
+    isApproved: true,
+    filePrefix: "strategy-blueprint",
+    approveId: "approve_proposal",
+    rejectId: "reject_proposal",
+    approveLabel: "Approve Map",
+    rejectLabel: "Reject Map",
+  },
+  reject_proposal: {
+    type: "map",
+    isApproved: false,
+    filePrefix: "strategy-blueprint",
+    approveId: "approve_proposal",
+    rejectId: "reject_proposal",
+    approveLabel: "Approve Map",
+    rejectLabel: "Reject Map",
+  },
+  approve_reward_proposal: {
+    type: "rewards",
+    isApproved: true,
+    filePrefix: "reward-blueprint",
+    approveId: "approve_reward_proposal",
+    rejectId: "reject_reward_proposal",
+    approveLabel: "Approve Plan",
+    rejectLabel: "Reject Plan",
+  },
+  reject_reward_proposal: {
+    type: "rewards",
+    isApproved: false,
+    filePrefix: "reward-blueprint",
+    approveId: "approve_reward_proposal",
+    rejectId: "reject_reward_proposal",
+    approveLabel: "Approve Plan",
+    rejectLabel: "Reject Plan",
+  },
+  approve_alliance_proposal: {
+    type: "alliance",
+    isApproved: true,
+    filePrefix: "diplomacy-blueprint",
+    approveId: "approve_alliance_proposal",
+    rejectId: "reject_alliance_proposal",
+    approveLabel: "Approve Standings",
+    rejectLabel: "Reject",
+  },
+  reject_alliance_proposal: {
+    type: "alliance",
+    isApproved: false,
+    filePrefix: "diplomacy-blueprint",
+    approveId: "approve_alliance_proposal",
+    rejectId: "reject_alliance_proposal",
+    approveLabel: "Approve Standings",
+    rejectLabel: "Reject",
+  },
+};
 
 async function getRawBody(req) {
   const chunks = [];
@@ -251,6 +338,16 @@ const FALLBACK_BOT_STRINGS = {
   },
 };
 
+const EVENT_EMOJIS = {
+  enhance_heroes: "🦸",
+  build_territory: "🏰",
+  train_soldiers: "⚔️",
+  tech_research: "🔬",
+  enhance_raven: "🦅",
+};
+
+// --- UNIFIED HELPERS ---
+
 function getBotStrings(lang) {
   return BOT_DATA?.[lang] || FALLBACK_BOT_STRINGS;
 }
@@ -261,6 +358,28 @@ function resolveUserLocale(interaction, overrideLang) {
   const userLocale = interaction?.locale || interaction?.guild_locale || "en";
   const baseCode = userLocale.split("-")[0].toLowerCase();
   return SUPPORTED_LOCALES.includes(baseCode) ? baseCode : "en";
+}
+
+function resolveActorName(interaction, fallback = "Leadership") {
+  return (
+    interaction.member?.nick ||
+    interaction.member?.user?.global_name ||
+    interaction.member?.user?.username ||
+    interaction.user?.global_name ||
+    interaction.user?.username ||
+    fallback
+  );
+}
+
+function resolveUserId(interaction) {
+  return interaction.member?.user?.id || interaction.user?.id;
+}
+
+function sendEphemeralMessage(res, content) {
+  return res.status(200).json({
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: { content, flags: 64 },
+  });
 }
 
 function cleanHtmlToMarkdown(htmlString) {
@@ -276,14 +395,6 @@ function cleanHtmlToMarkdown(htmlString) {
     .replace(/<\/blockquote>/gi, "")
     .trim();
 }
-
-const EVENT_EMOJIS = {
-  enhance_heroes: "🦸",
-  build_territory: "🏰",
-  train_soldiers: "⚔️",
-  tech_research: "🔬",
-  enhance_raven: "🦅",
-};
 
 function createHmacToken(payload, secret) {
   const dataString = Buffer.from(JSON.stringify(payload)).toString("base64url");
@@ -340,11 +451,108 @@ function matchesRoleKeyword(roleName, keyword) {
     .replace(/[@\[\]]/g, " ")
     .trim();
   if (cleanRole === cleanKey) return true;
-  const regex = new RegExp(
-    `(^|\\s|_|-)${cleanKey}(\\s\vert{}_\vert{}-\vert{}$)`,
-    "i",
-  );
+  const regex = new RegExp(`(^|\\s|_|-)${cleanKey}(\\s|_|-|$)`, "i");
   return regex.test(cleanRole);
+}
+
+/**
+ * Unified resolver for member alliance affiliation & leadership authorization
+ * Works across both Dedicated Alliance Servers and the central NAP Server.
+ */
+async function resolveMemberAllianceContext({
+  guildId,
+  member,
+  alliances = {},
+  botToken,
+}) {
+  const napGuildId = (
+    process.env.DISCORD_GUILD_ID_NAP ||
+    process.env.DISCORD_GUILD_ID ||
+    ""
+  ).trim();
+  const wloGuildId = (
+    process.env.DISCORD_GUILD_ID_WLO ||
+    process.env.DISCORD_WLO ||
+    ""
+  ).trim();
+
+  const memberRoleIds = member?.roles || [];
+  let memberRoleNames = [];
+
+  if (guildId && botToken && memberRoleIds.length > 0) {
+    try {
+      const roleMap = await getGuildRoleMap(guildId, botToken, memberRoleIds);
+      memberRoleNames = memberRoleIds
+        .map((id) => roleMap.get(id))
+        .filter(Boolean);
+    } catch (err) {
+      console.warn("Role map lookup failed:", err.message);
+    }
+  }
+
+  let detectedTag = null;
+  let allianceData = null;
+  let isDedicatedServer = false;
+
+  // 1. Check if executed inside a registered Alliance Discord Server
+  const registeredEntry = Object.entries(alliances).find(
+    ([_, data]) => data?.guild_id && String(data.guild_id).trim() === guildId,
+  );
+
+  if (registeredEntry) {
+    detectedTag = registeredEntry[0];
+    allianceData = registeredEntry[1];
+    isDedicatedServer = true;
+  } else if (wloGuildId && guildId === wloGuildId) {
+    detectedTag = "WLO";
+    allianceData = alliances["WLO"] || {
+      guild_id: wloGuildId,
+      delegated_roles: ["hr", "officer"],
+    };
+    isDedicatedServer = true;
+  }
+
+  // 2. If in the NAP Server (or another shared server), match via Alliance Tag Role
+  if (!detectedTag && (!napGuildId || guildId === napGuildId)) {
+    const knownTags = Object.keys(alliances);
+    detectedTag =
+      knownTags.find((tag) => {
+        const cleanTag = tag.toLowerCase();
+        return memberRoleNames.some(
+          (r) => r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
+        );
+      }) || null;
+
+    if (detectedTag) {
+      allianceData = alliances[detectedTag];
+    }
+  }
+
+  const isR5 = memberRoleNames.some(
+    (r) => r === "r5" || r === "@r5" || matchesRoleKeyword(r, "r5"),
+  );
+  const isGuildAdmin = (BigInt(member?.permissions || "0") & 8n) === 8n;
+  const allowedRoles = [
+    "r5",
+    ...(allianceData?.delegated_roles || ["hr", "officer", "leader"]),
+  ];
+
+  const hasDelegatedLeadership =
+    isGuildAdmin ||
+    memberRoleNames.some((roleName) =>
+      allowedRoles.some((kw) => matchesRoleKeyword(roleName, kw)),
+    );
+
+  return {
+    detectedTag,
+    allianceData,
+    isDedicatedServer,
+    memberRoleNames,
+    isR5,
+    isGuildAdmin,
+    allowedRoles,
+    hasDelegatedLeadership,
+  };
 }
 
 async function getGistData(gistId, gistToken) {
@@ -402,15 +610,24 @@ function buildMapMessagePayload({
     : "level";
 
   const titles = {
-    level: "🏰 Last Asylum: Territory Levels",
-    alliance: "🗺️ Last Asylum: Alliance Territories",
-    resource: "🌾 Last Asylum: Resources & Regional Buffs",
+    level: t?.map?.views?.level?.title || "🏰 Last Asylum: Territory Levels",
+    alliance:
+      t?.map?.views?.alliance?.title || "🗺️ Last Asylum: Alliance Territories",
+    resource:
+      t?.map?.views?.resource?.title ||
+      "🌾 Last Asylum: Resources & Regional Buffs",
   };
 
   const descriptions = {
-    level: "Territories categorized by tier (Lv. 1 to Lv. 8).",
-    alliance: "Territories colored by alliance ownership.",
-    resource: "Territories colored by resource yields and regional buffs.",
+    level:
+      t?.map?.views?.level?.description ||
+      "Territories categorized by tier (Lv. 1 to Lv. 8).",
+    alliance:
+      t?.map?.views?.alliance?.description ||
+      "Territories colored by alliance ownership.",
+    resource:
+      t?.map?.views?.resource?.description ||
+      "Territories colored by resource yields and regional buffs.",
   };
 
   const embedColors = {
@@ -428,7 +645,10 @@ function buildMapMessagePayload({
         description: descriptions[selectedView],
         color: embedColors[selectedView],
         image: { url: mapImageUrl },
-        footer: { text: "Click the buttons below to switch perspectives" },
+        footer: {
+          text:
+            t?.map?.footer || "Click the buttons below to switch perspectives",
+        },
       },
     ],
     components: [
@@ -471,6 +691,8 @@ function buildMapMessagePayload({
   };
 }
 
+// --- MAIN INTERACTION HANDLER ---
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
@@ -492,7 +714,9 @@ export default async function handler(req, res) {
     return res.status(200).json({ type: InteractionResponseType.PONG });
   }
 
-  // --- SLASH COMMAND HANDLING ---
+  // ==========================================================================
+  // 1. SLASH COMMANDS (APPLICATION_COMMAND)
+  // ==========================================================================
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     const { name, options } = interaction.data;
     const rawHost =
@@ -502,25 +726,15 @@ export default async function handler(req, res) {
     const lang = resolveUserLocale(interaction, providedLang);
     const t = getBotStrings(lang);
 
+    const guildId = interaction.guild_id;
+    const member = interaction.member;
+    const userId = resolveUserId(interaction);
+    const botToken = process.env.DISCORD_BOT_TOKEN;
+    const GIST_ID = process.env.GIST_ID;
+    const GIST_TOKEN = process.env.GIST_TOKEN;
+
     // --- /calendar COMMAND ---
     if (name === "calendar") {
-      const guildId = interaction.guild_id;
-      const member = interaction.member;
-      const userId = member?.user?.id || interaction.user?.id;
-      const botToken = process.env.DISCORD_BOT_TOKEN;
-      const GIST_ID = process.env.GIST_ID;
-      const GIST_TOKEN = process.env.GIST_TOKEN;
-      const napGuildId = (
-        process.env.DISCORD_GUILD_ID_NAP ||
-        process.env.DISCORD_GUILD_ID ||
-        ""
-      ).trim();
-      const wloGuildId = (
-        process.env.DISCORD_GUILD_ID_WLO ||
-        process.env.DISCORD_WLO ||
-        ""
-      ).trim();
-
       const requestedAction = options?.find(
         (opt) => opt.name === "action",
       )?.value;
@@ -538,75 +752,27 @@ export default async function handler(req, res) {
           if (mapRaw) alliances = JSON.parse(mapRaw).alliances || {};
         }
       } catch (err) {
-        console.warn(
-          "Calendar state fetch failed, using defaults:",
-          err.message,
-        );
+        console.warn("Calendar state fetch failed, using defaults:", err.message);
       }
 
-      // 1. Resolve Alliance from Guild ID first
-      let detectedAllianceTag = null;
-      let allianceData = null;
+      const {
+        detectedTag: detectedAllianceTag,
+        allowedRoles,
+        hasDelegatedLeadership,
+      } = await resolveMemberAllianceContext({
+        guildId,
+        member,
+        alliances,
+        botToken,
+      });
 
-      const registeredEntry = Object.entries(alliances).find(
-        ([_, data]) =>
-          data?.guild_id && String(data.guild_id).trim() === guildId,
-      );
-
-      if (registeredEntry) {
-        detectedAllianceTag = registeredEntry[0];
-        allianceData = registeredEntry[1];
-      } else if (wloGuildId && guildId === wloGuildId) {
-        detectedAllianceTag = "WLO";
-        allianceData = alliances["WLO"] || {
-          delegated_roles: ["hr", "officer"],
-        };
-      }
-
-      // 2. If in NAP Server, resolve Alliance from assigned Discord roles
-      let memberRoleNames = [];
-      const memberRoleIds = member?.roles || [];
-
-      if (guildId && botToken && memberRoleIds.length > 0) {
-        try {
-          const roleMap = await getGuildRoleMap(
-            guildId,
-            botToken,
-            memberRoleIds,
-          );
-          memberRoleNames = memberRoleIds
-            .map((id) => roleMap.get(id))
-            .filter(Boolean);
-        } catch (roleErr) {
-          console.warn("Role map lookup failed:", roleErr.message);
-        }
-      }
-
-      if (!detectedAllianceTag && napGuildId && guildId === napGuildId) {
-        const knownTags = Object.keys(alliances);
-        detectedAllianceTag = knownTags.find((tag) => {
-          const cleanTag = tag.toLowerCase();
-          return memberRoleNames.some(
-            (r) =>
-              r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
-          );
-        });
-        if (detectedAllianceTag) {
-          allianceData = alliances[detectedAllianceTag];
-        }
-      }
-
-      // --- SUB-ACTION: Manage Global Events (Admin Only) ---
+      // SUB-ACTION: Manage Global Events (Admin Only)
       if (requestedAction === "manage_global") {
         if (userId !== process.env.AUTHORIZED_USER_ID) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⛔ **Access Denied:** Only the authorized administrator can manage Kingdom-wide events.",
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            "⛔ **Access Denied:** Only the authorized administrator can manage Kingdom-wide events.",
+          );
         }
 
         const tokenPayload = {
@@ -647,39 +813,23 @@ export default async function handler(req, res) {
         });
       }
 
-      // --- SUB-ACTION: Manage Alliance Events (R5 / Officers) ---
+      // SUB-ACTION: Manage Alliance Events (R5 / Delegated Officers)
       if (requestedAction === "manage_alliance") {
         if (!detectedAllianceTag) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⚠️ Could not detect your alliance. Run this command inside your registered alliance server, or ensure you have your alliance role in the NAP server.",
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            "⚠️ Could not detect your alliance. Run this command inside your registered alliance server, or ensure you have your alliance role in the NAP server.",
+          );
         }
 
-        const isAdmin = (BigInt(member?.permissions || "0") & 8n) === 8n;
-        const allowedRoles = [
-          "r5",
-          ...(allianceData?.delegated_roles || ["hr", "officer", "leader"]),
-        ];
         const isAuthorized =
-          userId === process.env.AUTHORIZED_USER_ID ||
-          isAdmin ||
-          memberRoleNames.some((roleName) =>
-            allowedRoles.some((kw) => matchesRoleKeyword(roleName, kw)),
-          );
+          userId === process.env.AUTHORIZED_USER_ID || hasDelegatedLeadership;
 
         if (!isAuthorized) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⛔ **Access Denied:** Only members holding **@R5** or leadership roles (${allowedRoles.map((r) => "@" + r).join(", ")}) can manage events for **[${detectedAllianceTag}]**.`,
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            `⛔ **Access Denied:** Only members holding **@R5** or leadership roles (${allowedRoles.map((r) => "@" + r).join(", ")}) can manage events for **[${detectedAllianceTag}]**.`,
+          );
         }
 
         const tokenPayload = {
@@ -720,7 +870,7 @@ export default async function handler(req, res) {
         });
       }
 
-      // --- DEFAULT ACTION: Public Calendar Status & Link ---
+      // DEFAULT ACTION: Public Calendar Status & Link
       const now = new Date();
       const state = getCycleState(now, calConfig);
 
@@ -770,7 +920,7 @@ export default async function handler(req, res) {
             ? "⚔️ Kingdom War Battle (TODAY)"
             : "⚔️ Next Kingdom War Battle",
           value: state.isKWBattleDay
-            ? "🔥 **Active War Window:** Defend and conquer the capitol!"
+            ? "🔥 **Active War Window:** Defend and conquer the Capitol!"
             : `Scheduled for **Saturday** (<t:${state.kwBattleTimestamp}:R> / <t:${state.kwBattleTimestamp}:D>)`,
           inline: false,
         });
@@ -799,7 +949,7 @@ export default async function handler(req, res) {
               description: state.isKW
                 ? "⚔️ **Kingdom War Cycle is ACTIVE.** 2x Reward allocations apply this week."
                 : "🛡️ **NAP Rest Week.** Standard kingdom operations and territory consolidation.",
-              fields: fields,
+              fields,
               footer: { text: "Last Asylum Kingdom War Room" },
               timestamp: new Date().toISOString(),
             },
@@ -836,9 +986,9 @@ export default async function handler(req, res) {
       const isToday = selectedDay === defaultDay;
 
       let sbSchedule = FALLBACK_SB_SCHEDULE;
-      if (SB_DATA && SB_DATA[lang] && SB_DATA[lang].length > 0) {
+      if (SB_DATA?.[lang]?.length > 0) {
         sbSchedule = SB_DATA[lang];
-      } else if (SB_DATA && SB_DATA["en"] && SB_DATA["en"].length > 0) {
+      } else if (SB_DATA?.["en"]?.length > 0) {
         sbSchedule = SB_DATA["en"];
       }
 
@@ -854,16 +1004,12 @@ export default async function handler(req, res) {
       const nextSlotIndex = (activeSlotIndex + 1) % 6;
       const dayKey = `d${selectedDay}`;
 
-      // Next slot hour in Game Time
       const nextSlotHourGT = (slotHours[activeSlotIndex] + 4) % 24;
-
-      // Convert GT hour to UTC hour: GT = UTC - 2 => UTC = GT + 2
       const nextSlotUtcHour = (nextSlotHourGT + 2) % 24;
 
       const nextSlotTime = new Date(now);
       nextSlotTime.setUTCHours(nextSlotUtcHour, 0, 0, 0);
 
-      // If the next slot wraps past midnight GT into tomorrow
       if (nextSlotHourGT <= gameHour) {
         nextSlotTime.setUTCDate(nextSlotTime.getUTCDate() + 1);
       }
@@ -891,9 +1037,9 @@ export default async function handler(req, res) {
           }
 
           if (isToday && idx === activeSlotIndex) {
-            return `▶ **${timeStr} — ${emoji}${text} (ACTIVE)**`;
+            return `▶ **${timeStr} — ${emoji} ${text} (ACTIVE)**`;
           }
-          return `• \`${timeStr}\` — ${emoji}${text}`;
+          return `• \`${timeStr}\` — ${emoji} ${text}`;
         })
         .join("\n");
 
@@ -902,12 +1048,12 @@ export default async function handler(req, res) {
         fields.push(
           {
             name: `🟢 ${t.sb.current_event} (Ends <t:${nextTimestamp}:R>)`,
-            value: `**${currentEventEmoji}${currentEventText}**`,
+            value: `**${currentEventEmoji} ${currentEventText}**`,
             inline: false,
           },
           {
             name: `⏳ ${t.sb.next_event} (<t:${nextTimestamp}:t>)`,
-            value: `${nextEventEmoji}${nextEventText}`,
+            value: `${nextEventEmoji} ${nextEventText}`,
             inline: false,
           },
         );
@@ -929,7 +1075,7 @@ export default async function handler(req, res) {
             {
               title: `🏮 Survival Battle — Day ${selectedDay}`,
               color: 0xb29a20,
-              fields: fields,
+              fields,
               footer: { text: t.sb.footer },
             },
           ],
@@ -955,13 +1101,9 @@ export default async function handler(req, res) {
       const requestedRule = options?.find((opt) => opt.name === "rule")?.value;
 
       let rulesData = FALLBACK_RULES;
-      if (RULES_DATA && RULES_DATA[lang] && RULES_DATA[lang].length > 0) {
+      if (RULES_DATA?.[lang]?.length > 0) {
         rulesData = RULES_DATA[lang];
-      } else if (
-        RULES_DATA &&
-        RULES_DATA["en"] &&
-        RULES_DATA["en"].length > 0
-      ) {
+      } else if (RULES_DATA?.["en"]?.length > 0) {
         rulesData = RULES_DATA["en"];
       }
 
@@ -996,10 +1138,11 @@ export default async function handler(req, res) {
         data: {
           embeds: [
             {
-              title: title,
-              description: description,
+              title,
+              description,
               color: 0x8f0000,
-              fields: fields,
+              fields,
+              footer: { text: "Last Asylum Kingdom Compendium" },
             },
           ],
           components: [
@@ -1030,10 +1173,7 @@ export default async function handler(req, res) {
           selectedView = String(viewOpt.options[0].value).toLowerCase();
         }
 
-        const revision = await getLatestMapRevision(
-          process.env.GIST_ID,
-          process.env.GIST_TOKEN,
-        );
+        const revision = await getLatestMapRevision(GIST_ID, GIST_TOKEN);
         const payload = buildMapMessagePayload({
           view: selectedView,
           revision,
@@ -1048,22 +1188,13 @@ export default async function handler(req, res) {
         });
       } catch (err) {
         console.error("Error handling /map command:", err);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: { content: "⚠️ Could not generate map preview.", flags: 64 },
-        });
+        return sendEphemeralMessage(res, "⚠️ Could not generate map preview.");
       }
     }
 
     // --- /registerbot COMMAND (NAP Server Only) ---
     if (name === "registerbot") {
-      const guildId = interaction.guild_id;
-      const member = interaction.member;
-      const userId = member?.user?.id || interaction.user?.id;
-      const botToken = process.env.DISCORD_BOT_TOKEN;
       const clientId = process.env.DISCORD_CLIENT_ID;
-      const GIST_ID = process.env.GIST_ID;
-      const GIST_TOKEN = process.env.GIST_TOKEN;
       const napGuildId = (
         process.env.DISCORD_GUILD_ID_NAP ||
         process.env.DISCORD_GUILD_ID ||
@@ -1074,29 +1205,20 @@ export default async function handler(req, res) {
         (opt) => opt.name === "action",
       )?.value;
 
-      // Enforce execution exclusively within the NAP server
       if (!napGuildId || guildId !== napGuildId) {
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content:
-              "⚠️ This command can only be executed in the official NAP server.",
-            flags: 64,
-          },
-        });
+        return sendEphemeralMessage(
+          res,
+          "⚠️ This command can only be executed in the official NAP server.",
+        );
       }
 
       // SUB-ACTION: Broad-sync all registered alliance servers (Admin only)
       if (requestedAction === "sync") {
         if (userId !== process.env.AUTHORIZED_USER_ID) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⛔ **Access Denied:** Only the kingdom bot administrator can broadcast-sync commands.",
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            "⛔ **Access Denied:** Only the kingdom bot administrator can broadcast-sync commands.",
+          );
         }
 
         try {
@@ -1145,60 +1267,39 @@ export default async function handler(req, res) {
             },
           });
         } catch (err) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: `❌ Sync failed: ${err.message}`, flags: 64 },
-          });
+          return sendEphemeralMessage(res, `❌ Sync failed: ${err.message}`);
         }
       }
 
       // DEFAULT ACTION: R5 Registration Portal Link
       try {
-        const memberRoleIds = member.roles || [];
-        const [roleMap, gistData] = await Promise.all([
-          getGuildRoleMap(guildId, botToken, memberRoleIds),
-          getGistData(GIST_ID, GIST_TOKEN),
-        ]);
-
-        const memberRoleNames = memberRoleIds
-          .map((id) => roleMap.get(id))
-          .filter(Boolean);
-        const isR5 = memberRoleNames.some(
-          (r) => r === "r5" || r === "@r5" || matchesRoleKeyword(r, "r5"),
-        );
-
-        if (!isR5) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can register alliance servers.",
-              flags: 64,
-            },
-          });
-        }
-
+        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
         const mapState = JSON.parse(
           gistData.files["map-state.json"]?.content || "{}",
         );
-        const knownAlliances = Object.keys(mapState.alliances || {});
+        const alliances = mapState.alliances || {};
+        const knownAlliances = Object.keys(alliances);
 
-        const matchedAllianceTag = knownAlliances.find((tag) => {
-          const cleanTag = tag.toLowerCase();
-          return memberRoleNames.some(
-            (r) =>
-              r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
+        const { detectedTag: matchedAllianceTag, isR5 } =
+          await resolveMemberAllianceContext({
+            guildId,
+            member,
+            alliances,
+            botToken,
+          });
+
+        if (!isR5 && userId !== process.env.AUTHORIZED_USER_ID) {
+          return sendEphemeralMessage(
+            res,
+            "⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can register alliance servers.",
           );
-        });
+        }
 
         if (!matchedAllianceTag) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ Could not detect your alliance tag role. Ensure you hold your alliance role (e.g. \`@${knownAlliances[0] || "TAG"}\`) in the NAP server.`,
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            `⚠️ Could not detect your alliance tag role. Ensure you hold your alliance role (e.g. \`@${knownAlliances[0] || "TAG"}\`) in the NAP server.`,
+          );
         }
 
         const tokenPayload = {
@@ -1217,7 +1318,8 @@ export default async function handler(req, res) {
               {
                 title: `🤖 Alliance Server Setup — [${matchedAllianceTag}]`,
                 color: 0xb8975a,
-                description: `Click below to authorize the bot and link your alliance's Discord server to the War Room.\n\n• Installs commands (\`/calendar\`, \`/nominate\`, \`/rewards\`, \`/map\`, \`/sb\`, \`/rules\`).\n• Allows configuring delegated roles (e.g. \`@HR\`).`,
+                description:
+                  "Click below to authorize the bot and link your alliance's Discord server to the War Room.\n\n• Installs commands (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).\n• Allows configuring delegated roles (e.g. `@HR`).",
                 footer: { text: "Link is private and expires in 24 hours." },
               },
             ],
@@ -1239,149 +1341,79 @@ export default async function handler(req, res) {
         });
       } catch (err) {
         console.error("Registerbot error:", err);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `⚠️ Service busy: ${err.message}. Please retry in a few moments.`,
-            flags: 64,
-          },
-        });
+        return sendEphemeralMessage(
+          res,
+          `⚠️ Service busy: ${err.message}. Please retry in a few moments.`,
+        );
       }
     }
 
     // --- /nominate COMMAND ---
     if (name === "nominate") {
-      const guildId = interaction.guild_id;
-      const member = interaction.member;
-      const userId = member?.user?.id || interaction.user?.id;
-      const botToken = process.env.DISCORD_BOT_TOKEN;
-      const GIST_ID = process.env.GIST_ID;
-      const GIST_TOKEN = process.env.GIST_TOKEN;
-
       const ownerGuildId = (process.env.DISCORD_GUILD_ID_OWNER || "").trim();
-      const wloGuildId = (
-        process.env.DISCORD_GUILD_ID_WLO ||
-        process.env.DISCORD_WLO ||
-        ""
-      ).trim();
 
       if (!guildId || !member) {
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content:
-              "⚠️ This command must be executed inside your alliance Discord server.",
-            flags: 64,
-          },
-        });
+        return sendEphemeralMessage(
+          res,
+          "⚠️ This command must be executed inside your alliance Discord server or the NAP server.",
+        );
       }
 
-      // 1. OWNER SERVER RESTRICTION: Non-admin users cannot submit nominations here
       if (
         ownerGuildId &&
         guildId === ownerGuildId &&
         userId !== process.env.AUTHORIZED_USER_ID
       ) {
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content:
-              "⛔ **Access Denied:** Reward nominations cannot be submitted from this server. Leaders must submit via the NAP server or their alliance server.",
-            flags: 64,
-          },
-        });
+        return sendEphemeralMessage(
+          res,
+          "⛔ **Access Denied:** Reward nominations cannot be submitted from this server. Leaders must submit via the NAP server or their alliance server.",
+        );
       }
 
       try {
-        const memberRoleIds = member.roles || [];
-        const [roleMap, gistData] = await Promise.all([
-          getGuildRoleMap(guildId, botToken, memberRoleIds),
-          getGistData(GIST_ID, GIST_TOKEN),
-        ]);
-
-        const memberRoleNames = memberRoleIds
-          .map((id) => roleMap.get(id))
-          .filter(Boolean);
+        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
         const mapState = JSON.parse(
           gistData.files["map-state.json"]?.content || "{}",
         );
-        const knownAlliances = Object.keys(mapState.alliances || {});
+        const alliances = mapState.alliances || {};
+        const knownAlliances = Object.keys(alliances);
 
-        let matchedAllianceTag = null;
+        const {
+          detectedTag: matchedAllianceTag,
+          isDedicatedServer,
+          isR5,
+          allowedRoles,
+          hasDelegatedLeadership,
+        } = await resolveMemberAllianceContext({
+          guildId,
+          member,
+          alliances,
+          botToken,
+        });
 
-        // Dynamic Alliance Server Resolution (Registered via Gist)
-        let registeredAlliance = Object.entries(mapState.alliances || {}).find(
-          ([_, data]) =>
-            data?.guild_id && String(data.guild_id).trim() === guildId,
-        );
-
-        // Fallback compatibility for existing WLO environment variable
-        if (!registeredAlliance && wloGuildId && guildId === wloGuildId) {
-          registeredAlliance = [
-            "WLO",
-            { guild_id: wloGuildId, delegated_roles: ["hr", "officer"] },
-          ];
-        }
-
-        // --- PATH A: Dedicated Alliance Server ---
-        if (registeredAlliance) {
-          matchedAllianceTag = registeredAlliance[0];
-          const allianceData = registeredAlliance[1] || {};
-
-          const isAdmin = (BigInt(member.permissions || "0") & 8n) === 8n;
-          const allowedRoles = [
-            "r5",
-            ...(allianceData.delegated_roles || ["hr", "officer", "leader"]),
-          ];
-
-          const isAuthorized =
-            isAdmin ||
-            memberRoleNames.some((roleName) =>
-              allowedRoles.some((kw) => matchesRoleKeyword(roleName, kw)),
+        // Authorization Check: Dedicated Server vs. Shared NAP Server
+        if (isDedicatedServer) {
+          if (
+            !hasDelegatedLeadership &&
+            userId !== process.env.AUTHORIZED_USER_ID
+          ) {
+            return sendEphemeralMessage(
+              res,
+              `⛔ **Access Denied:** Only members holding **@R5** or authorized leadership roles (${allowedRoles.map((r) => "@" + r).join(", ")}) can submit nominations for **[${matchedAllianceTag}]**.`,
             );
-
-          if (!isAuthorized) {
-            return res.status(200).json({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content: `⛔ **Access Denied:** Only members holding **@R5** or authorized leadership roles (${allowedRoles.map((r) => "@" + r).join(", ")}) can submit nominations for **[${matchedAllianceTag}]**.`,
-                flags: 64,
-              },
-            });
           }
-        }
-        // --- PATH B: Shared Server (NAP Server / Global) ---
-        else {
-          const isR5 = memberRoleNames.some(
-            (r) => r === "r5" || r === "@r5" || matchesRoleKeyword(r, "r5"),
-          );
+        } else {
           if (!isR5 && userId !== process.env.AUTHORIZED_USER_ID) {
-            return res.status(200).json({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content:
-                  "⛔ **Access Denied:** Only Alliance Leaders holding the **@r5** role can submit reward nominations.",
-                flags: 64,
-              },
-            });
-          }
-
-          matchedAllianceTag = knownAlliances.find((tag) => {
-            const cleanTag = tag.toLowerCase();
-            return memberRoleNames.some(
-              (r) =>
-                r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
+            return sendEphemeralMessage(
+              res,
+              "⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can submit reward nominations.",
             );
-          });
-
+          }
           if (!matchedAllianceTag) {
-            return res.status(200).json({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content: `⚠️ Could not detect your alliance tag role. Make sure you have your alliance role (e.g. \`@${knownAlliances[0] || "TAG"}\`) assigned.`,
-                flags: 64,
-              },
-            });
+            return sendEphemeralMessage(
+              res,
+              `⚠️ Could not detect your alliance tag role. Make sure you have your alliance role (e.g. \`@${knownAlliances[0] || "TAG"}\`) assigned.`,
+            );
           }
         }
 
@@ -1390,17 +1422,14 @@ export default async function handler(req, res) {
         );
         const isKW = rewardsData.mode === "kw";
 
-        const allianceInfo = mapState.alliances[matchedAllianceTag];
+        const allianceInfo = alliances[matchedAllianceTag];
         const rank = parseInt(allianceInfo?.rank, 10);
 
         if (isNaN(rank)) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned in the War Room.`,
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned in the War Room.`,
+          );
         }
 
         const tiers = rewardsData.distribution_tiers || [];
@@ -1411,13 +1440,10 @@ export default async function handler(req, res) {
         });
 
         if (!matchedTier) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ **[${matchedAllianceTag}]** (Rank${rank}) is not currently eligible for rewards under the active plan.`,
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            `⚠️ **[${matchedAllianceTag}]** (Rank #${rank}) is not currently eligible for rewards under the active plan.`,
+          );
         }
 
         const allotment = matchedTier.chests || {
@@ -1431,21 +1457,18 @@ export default async function handler(req, res) {
           (allotment.followers_heart || 0);
 
         if (singleQuota === 0) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ **[${matchedAllianceTag}]** has 0 chests allocated under the current distribution.`,
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            `⚠️ **[${matchedAllianceTag}]** has 0 chests allocated under the current distribution.`,
+          );
         }
 
         const totalChests = isKW ? singleQuota * 2 : singleQuota;
 
         const tokenPayload = {
           alliance: matchedAllianceTag,
-          rank: rank,
-          allotment: allotment,
+          rank,
+          allotment,
           mode: isKW ? "kw" : "standard",
           exp: Date.now() + 24 * 60 * 60 * 1000,
         };
@@ -1483,10 +1506,10 @@ export default async function handler(req, res) {
           data: {
             embeds: [
               {
-                title: `🎁 Reward Nominations — [${matchedAllianceTag}]${isKW ? "⚔️ [KW 2x Active]" : ""}`,
+                title: `🎁 Reward Nominations — [${matchedAllianceTag}]${isKW ? " ⚔️ [KW 2x Active]" : ""}`,
                 color: isKW ? 0x8f0000 : 0xb8975a,
-                description: `You are eligible for **${totalChests} total chests** based on your **Rank ${rank}** finish.\nClick below to submit your recipient roster.`,
-                fields: fields,
+                description: `You are eligible for **${totalChests} total chests** based on your **Rank #${rank}** finish.\nClick below to submit your recipient roster.`,
+                fields,
                 footer: { text: "Link is private and expires in 24 hours." },
               },
             ],
@@ -1510,29 +1533,16 @@ export default async function handler(req, res) {
         });
       } catch (err) {
         console.error("Nominate error:", err);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`,
-            flags: 64,
-          },
-        });
+        return sendEphemeralMessage(
+          res,
+          `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`,
+        );
       }
     }
 
     // --- /rewards COMMAND ---
     if (name === "rewards") {
-      const GIST_ID = process.env.GIST_ID;
-      const GIST_TOKEN = process.env.GIST_TOKEN;
-      const userId = interaction.member?.user?.id || interaction.user?.id;
-      const username =
-        interaction.member?.nick ||
-        interaction.member?.user?.global_name ||
-        interaction.member?.user?.username ||
-        interaction.user?.global_name ||
-        interaction.user?.username ||
-        "Leadership";
-
+      const username = resolveActorName(interaction, "Leadership");
       const requestedAction = options?.find(
         (opt) => opt.name === "action",
       )?.value;
@@ -1541,14 +1551,10 @@ export default async function handler(req, res) {
 
       if (requestedAction === "reset") {
         if (userId !== process.env.AUTHORIZED_USER_ID) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⛔ **Access Denied:** Only authorized leadership can reset reward nomination cycles.",
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            "⛔ **Access Denied:** Only authorized leadership can reset reward nomination cycles.",
+          );
         }
 
         try {
@@ -1569,7 +1575,7 @@ export default async function handler(req, res) {
                 "User-Agent": "WarRoom-App",
               },
               body: JSON.stringify({
-                description: `Cycle reset (${requestedMode}) by ${username} at${new Date().toISOString()}`,
+                description: `Cycle reset (${requestedMode}) by ${username} at ${new Date().toISOString()}`,
                 files: {
                   "rewards-nominations.json": {
                     content: JSON.stringify({}, null, 2),
@@ -1604,13 +1610,10 @@ export default async function handler(req, res) {
           });
         } catch (err) {
           console.error("Rewards reset error:", err);
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `❌ Failed to reset cycle: ${err.message}`,
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            `❌ Failed to reset cycle: ${err.message}`,
+          );
         }
       }
 
@@ -1661,14 +1664,10 @@ export default async function handler(req, res) {
         eligibleRoster.sort((a, b) => a.rank - b.rank);
 
         if (eligibleRoster.length === 0) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⚠️ No alliances are currently eligible under the active rewards plan.",
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            "⚠️ No alliances are currently eligible under the active rewards plan.",
+          );
         }
 
         let submittedCount = 0;
@@ -1699,9 +1698,9 @@ export default async function handler(req, res) {
             const submitUnix = Math.floor(
               new Date(entry.submittedAt).getTime() / 1000,
             );
-            return `✅ **[${item.tag}]** (Rank${item.rank}) — **${totalNominated}/${item.quota}** nominated (<t:${submitUnix}:R>)`;
+            return `✅ **[${item.tag}]** (Rank #${item.rank}) — **${totalNominated}/${item.quota}** nominated (<t:${submitUnix}:R>)`;
           } else {
-            return `⏳ **[${item.tag}]** (Rank ${item.rank}) — **Awaiting submission** (${item.quota} chests)`;
+            return `⏳ **[${item.tag}]** (Rank #${item.rank}) — **Awaiting submission** (${item.quota} chests)`;
           }
         });
 
@@ -1737,13 +1736,10 @@ export default async function handler(req, res) {
         });
       } catch (err) {
         console.error("Rewards status error:", err);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`,
-            flags: 64,
-          },
-        });
+        return sendEphemeralMessage(
+          res,
+          `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`,
+        );
       }
     }
 
@@ -1767,55 +1763,51 @@ export default async function handler(req, res) {
                   color: 0xb8975a,
                   description: desc,
                   footer: { text: "Last Asylum War Room" },
+                  timestamp: new Date().toISOString(),
+                },
+              ],
+              components: [
+                {
+                  type: 1,
+                  components: [
+                    {
+                      type: 2,
+                      style: 5,
+                      label: "Open Diplomacy & Standings",
+                      url: `https://${resolvedHost}/${lang}/alliance.html`,
+                    },
+                  ],
                 },
               ],
             },
           });
         } catch (err) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ Failed to fetch rankings: ${err.message}`,
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            `⚠️ Failed to fetch rankings: ${err.message}`,
+          );
         }
       }
 
       if (sub?.name === "set") {
-        const userId = interaction.member?.user?.id || interaction.user?.id;
-
         if (userId !== process.env.AUTHORIZED_USER_ID) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content:
-                "⛔ **Access Denied:** Only authorized administrators can update alliance rankings.",
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            "⛔ **Access Denied:** Only authorized administrators can update alliance rankings.",
+          );
         }
 
         const tagOption = sub.options?.find((o) => o.name === "tag");
         const rankOption = sub.options?.find((o) => o.name === "rank");
 
         if (!tagOption || !rankOption) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: "⚠️ Missing required arguments: tag and rank.",
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            "⚠️ Missing required arguments: tag and rank.",
+          );
         }
 
-        const author =
-          interaction.member?.nick ||
-          interaction.member?.user?.global_name ||
-          interaction.member?.user?.username ||
-          interaction.user?.global_name ||
-          interaction.user?.username ||
-          "Leadership";
+        const author = resolveActorName(interaction, "Leadership");
 
         try {
           const result = await setAllianceRank({
@@ -1827,23 +1819,43 @@ export default async function handler(req, res) {
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: `👑 **NAP Standing Updated:** \`[${result.tag}]\` is now **#${result.newRank}** (was: ${result.previousRank}).`,
+              embeds: [
+                {
+                  title: "👑 NAP Standing Updated",
+                  color: 0x22c55e,
+                  description: `Alliance \`[${result.tag}]\` has been assigned to **Rank #${result.newRank}** *(previously: ${result.previousRank === "Unranked" ? "Unranked" : `#${result.previousRank}`})*.`,
+                  footer: { text: `Updated by ${author}` },
+                  timestamp: new Date().toISOString(),
+                },
+              ],
+              components: [
+                {
+                  type: 1,
+                  components: [
+                    {
+                      type: 2,
+                      style: 5,
+                      label: "View Standings",
+                      url: `https://${resolvedHost}/${lang}/alliance.html`,
+                    },
+                  ],
+                },
+              ],
             },
           });
         } catch (err) {
-          return res.status(200).json({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: `⚠️ Failed to update rank: ${err.message}`,
-              flags: 64,
-            },
-          });
+          return sendEphemeralMessage(
+            res,
+            `⚠️ Failed to update rank: ${err.message}`,
+          );
         }
       }
     }
   }
 
-  // --- BUTTON INTERACTIONS (Map Switcher & Admin Proposals) ---
+  // ==========================================================================
+  // 2. BUTTON & COMPONENT INTERACTIONS (MESSAGE_COMPONENT)
+  // ==========================================================================
   if (interaction.type === InteractionType.MESSAGE_COMPONENT) {
     const { custom_id } = interaction.data;
     const rawHost =
@@ -1873,57 +1885,62 @@ export default async function handler(req, res) {
       });
     }
 
-    // 2. ADMIN PROPOSALS & REVIEWS (Protected by AUTHORIZED_USER_ID)
-    const userId = interaction.member?.user?.id || interaction.user?.id;
-    const username =
-      interaction.member?.nick ||
-      interaction.member?.user?.global_name ||
-      interaction.member?.user?.username ||
-      interaction.user?.global_name ||
-      interaction.user?.username ||
-      "Discord Admin";
-
-    if (userId !== process.env.AUTHORIZED_USER_ID) {
-      return res.status(200).json({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { content: t.admin.access_denied, flags: 64 },
-      });
+    // 2. ADMIN PROPOSALS & REVIEWS (Map, Rewards, Alliance Standings)
+    const proposalConfig = PROPOSAL_CONFIGS[custom_id];
+    if (!proposalConfig) {
+      return sendEphemeralMessage(
+        res,
+        `⚠️ Unrecognized interaction component: \`${custom_id}\`.`,
+      );
     }
 
-    const isRewardProposal = custom_id.includes("reward");
-    const isApproved =
-      custom_id === "approve_proposal" ||
-      custom_id === "approve_reward_proposal";
+    const userId = resolveUserId(interaction);
+    const username = resolveActorName(interaction, "Discord Admin");
+
+    if (userId !== process.env.AUTHORIZED_USER_ID) {
+      return sendEphemeralMessage(res, t.admin.access_denied);
+    }
+
+    const {
+      type: proposalType,
+      isApproved,
+      filePrefix,
+      approveId,
+      rejectId,
+      approveLabel,
+      rejectLabel,
+    } = proposalConfig;
 
     if (isApproved) {
       try {
-        const filePrefix = isRewardProposal
-          ? "reward-blueprint"
-          : "strategy-blueprint";
         const blueprintAttachment = interaction.message.attachments?.find((a) =>
           a.filename.startsWith(filePrefix),
         );
 
-        if (!blueprintAttachment)
-          throw new Error(`${filePrefix} blueprint data is missing.`);
+        if (!blueprintAttachment) {
+          throw new Error(`${filePrefix}.dat attachment is missing.`);
+        }
 
         const blueprintRes = await fetch(blueprintAttachment.url);
-        if (!blueprintRes.ok)
-          throw new Error("Failed to retrieve blueprint data.");
+        if (!blueprintRes.ok) {
+          throw new Error("Failed to retrieve blueprint attachment from Discord.");
+        }
         const parsedData = await blueprintRes.json();
 
-        const acceptPayload = isRewardProposal
-          ? {
-              type: "rewards",
-              distribution: parsedData,
-              submittedBy: username,
-              secretKey: process.env.DISCORD_BOT_TOKEN,
-            }
-          : {
-              changes: parsedData,
-              submittedBy: username,
-              secretKey: process.env.DISCORD_BOT_TOKEN,
-            };
+        let acceptPayload = {
+          type: proposalType,
+          submittedBy: username,
+          secretKey: process.env.DISCORD_BOT_TOKEN,
+        };
+
+        if (proposalType === "rewards") {
+          acceptPayload.distribution = parsedData;
+        } else if (proposalType === "alliance") {
+          acceptPayload.alliances = parsedData.alliances;
+          acceptPayload.blacklist = parsedData.blacklist;
+        } else {
+          acceptPayload.changes = parsedData;
+        }
 
         const acceptRes = await fetch(
           `https://${resolvedHost}/api/accept-proposal`,
@@ -1947,13 +1964,10 @@ export default async function handler(req, res) {
         }
       } catch (error) {
         console.error("Interaction bridge failed:", error);
-        return res.status(200).json({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `❌ **${t.admin.failed_update}** ${error.message}`,
-            flags: 64,
-          },
-        });
+        return sendEphemeralMessage(
+          res,
+          `❌ **${t.admin.failed_update}** ${error.message}`,
+        );
       }
     }
 
@@ -1979,13 +1993,6 @@ export default async function handler(req, res) {
       originalEmbed.fields.push(statusField);
     }
 
-    const approveId = isRewardProposal
-      ? "approve_reward_proposal"
-      : "approve_proposal";
-    const rejectId = isRewardProposal
-      ? "reject_reward_proposal"
-      : "reject_proposal";
-
     return res.status(200).json({
       type: InteractionResponseType.UPDATE_MESSAGE,
       data: {
@@ -1997,15 +2004,17 @@ export default async function handler(req, res) {
               {
                 type: 2,
                 custom_id: approveId,
-                label: isApproved ? "Approved" : "Approve",
+                label: isApproved ? "Approved" : approveLabel,
                 style: 3,
+                emoji: { name: "✅" },
                 disabled: true,
               },
               {
                 type: 2,
                 custom_id: rejectId,
-                label: !isApproved ? "Rejected" : "Reject",
+                label: !isApproved ? "Rejected" : rejectLabel,
                 style: 4,
+                emoji: { name: "❌" },
                 disabled: true,
               },
             ],

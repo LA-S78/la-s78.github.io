@@ -5,11 +5,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { type, distribution, changes, submittedBy, secretKey, snapshotUrl } = req.body;
+  const {
+    type,
+    distribution,
+    changes,
+    alliances: newAlliances,
+    blacklist: newBlacklist,
+    submittedBy,
+    secretKey,
+    snapshotUrl
+  } = req.body || {};
 
   // Authenticate request using bot secret
   const authSecret = process.env.DISCORD_BOT_TOKEN || process.env.DISCORD_BOT_SECRET;
-  if (secretKey !== authSecret) {
+  if (!secretKey || secretKey !== authSecret) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
@@ -21,109 +30,196 @@ export default async function handler(req, res) {
   }
 
   const headers = {
-    'Authorization': `Bearer ${GIST_TOKEN}`,
-    'Accept': 'application/vnd.github.v3+json',
+    Authorization: `Bearer ${GIST_TOKEN}`,
+    Accept: 'application/vnd.github.v3+json',
     'User-Agent': 'WarRoom-Vercel-App'
   };
 
+  // Fallback: If legacy interaction dispatch omitted type, infer 'map' if changes are present
+  const resolvedType = type || (changes ? 'map' : null);
+
   try {
-    // ======================================================================
-    // 1. REWARD DISTRIBUTION PROPOSAL ACCEPTANCE
-    // ======================================================================
-    if (type === 'rewards') {
-      if (!Array.isArray(distribution)) {
-        return res.status(400).json({ error: 'Invalid distribution data provided' });
+    switch (resolvedType) {
+      // ======================================================================
+      // 1. REWARD DISTRIBUTION PROPOSAL ACCEPTANCE
+      // ======================================================================
+      case 'rewards': {
+        if (!Array.isArray(distribution)) {
+          return res.status(400).json({ error: 'Invalid distribution data provided' });
+        }
+
+        const patchPayload = {
+          description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
+          files: {
+            'rewards-data.json': {
+              content: JSON.stringify(
+                {
+                  distribution_tiers: distribution,
+                  lastUpdated: new Date().toISOString(),
+                  updatedBy: submittedBy || 'Discord Admin'
+                },
+                null,
+                2
+              )
+            }
+          }
+        };
+
+        const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          method: 'PATCH',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify(patchPayload)
+        });
+
+        if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+        return res.status(200).json({ success: true, message: 'Rewards distribution updated in Gist!' });
       }
 
-      const patchPayload = {
-        description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
-        files: {
-          'rewards-data.json': {
-            content: JSON.stringify({
-              distribution_tiers: distribution,
-              lastUpdated: new Date().toISOString(),
-              updatedBy: submittedBy || 'Discord Admin'
-            }, null, 2)
-          }
+      // ======================================================================
+      // 2. MAP TERRITORY PROPOSAL ACCEPTANCE
+      // ======================================================================
+      case 'map': {
+        if (!changes || typeof changes !== 'object') {
+          return res.status(400).json({ error: 'Invalid territory changes payload.' });
         }
-      };
 
-      const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-        method: 'PATCH',
-        headers: { ...headers, 'Content-Type': 'application/json' },
-        body: JSON.stringify(patchPayload)
-      });
+        let currentState = { alliances: {}, territory_ownership: {} };
+        const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
 
-      if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
-      return res.status(200).json({ success: true, message: 'Rewards distribution updated in Gist!' });
-    }
-
-    // ======================================================================
-    // 2. MAP TERRITORY PROPOSAL ACCEPTANCE
-    // ======================================================================
-    let currentState = { alliances: {}, territory_ownership: {} };
-    const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
-
-    if (gistGetRes.ok) {
-      const gistData = await gistGetRes.json();
-      const content = gistData.files['map-state.json']?.content;
-      if (content) currentState = JSON.parse(content);
-    }
-
-    if (!currentState.territory_ownership) {
-      currentState.territory_ownership = {};
-    }
-
-    if (changes && typeof changes === 'object') {
-      Object.entries(changes).forEach(([cityId, change]) => {
-        currentState.territory_ownership[cityId] = {
-          owner: change.to,
-          updatedAt: new Date().toISOString()
-        };
-      });
-    }
-
-    if (snapshotUrl) {
-      currentState.lastSnapshotUrl = snapshotUrl;
-    }
-
-    // Generate revision key based on timestamp
-    const revision = Date.now().toString(36);
-    currentState.revision = revision;
-    currentState.lastUpdated = new Date().toISOString();
-    currentState.updatedBy = submittedBy || 'Discord Admin';
-
-    const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-      method: 'PATCH',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        description: `Map updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
-        files: {
-          'map-state.json': {
-            content: JSON.stringify(currentState, null, 2)
-          }
+        if (gistGetRes.ok) {
+          const gistData = await gistGetRes.json();
+          const content = gistData.files['map-state.json']?.content;
+          if (content) currentState = JSON.parse(content);
         }
-      })
-    });
 
-    if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+        if (!currentState.territory_ownership) {
+          currentState.territory_ownership = {};
+        }
 
-    // Pre-warm Edge CDN for all 3 perspectives (capped to 1.8s timeout)
-    const rawHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
-    const resolvedHost = rawHost.split(',')[0].trim();
-    const protocol = req.headers['x-forwarded-proto'] || 'https';
-    const baseUrl = `${protocol}://${resolvedHost}`;
+        Object.entries(changes).forEach(([cityId, change]) => {
+          currentState.territory_ownership[cityId] = {
+            owner: change.to,
+            updatedAt: new Date().toISOString()
+          };
+        });
 
-    await Promise.allSettled(
-      ['level', 'alliance', 'resource'].map(view =>
-        fetch(`${baseUrl}/api/map-image?view=${view}&v=${revision}&ext=.png`, {
-          headers: { 'User-Agent': 'WarRoom-Prewarmer' },
-          signal: AbortSignal.timeout(1800)
-        })
-      )
-    ).catch(() => {});
+        if (snapshotUrl) {
+          currentState.lastSnapshotUrl = snapshotUrl;
+        }
 
-    return res.status(200).json({ success: true, revision, message: 'Live map updated in Gist!' });
+        const revision = Date.now().toString(36);
+        currentState.revision = revision;
+        currentState.lastUpdated = new Date().toISOString();
+        currentState.updatedBy = submittedBy || 'Discord Admin';
+
+        const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          method: 'PATCH',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: `Map updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
+            files: {
+              'map-state.json': {
+                content: JSON.stringify(currentState, null, 2)
+              }
+            }
+          })
+        });
+
+        if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+
+        // Pre-warm Edge CDN for all 3 perspectives (capped to 1.8s timeout)
+        const rawHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
+        const resolvedHost = rawHost.split(',')[0].trim();
+        const protocol = req.headers['x-forwarded-proto'] || 'https';
+        const baseUrl = `${protocol}://${resolvedHost}`;
+
+        await Promise.allSettled(
+          ['level', 'alliance', 'resource'].map(view =>
+            fetch(`${baseUrl}/api/map-image?view=${view}&v=${revision}&ext=.png`, {
+              headers: { 'User-Agent': 'WarRoom-Prewarmer' },
+              signal: AbortSignal.timeout(1800)
+            })
+          )
+        ).catch(() => {});
+
+        return res.status(200).json({ success: true, revision, message: 'Live map updated in Gist!' });
+      }
+
+      // ======================================================================
+      // 3. ALLIANCE & NAP STANDINGS PROPOSAL ACCEPTANCE
+      // ======================================================================
+      case 'alliance': {
+        if (!newAlliances || typeof newAlliances !== 'object') {
+          return res.status(400).json({ error: 'Invalid alliance data provided' });
+        }
+
+        let currentState = { alliances: {}, territory_ownership: {}, blacklist: {} };
+        const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
+
+        if (gistGetRes.ok) {
+          const gistData = await gistGetRes.json();
+          const content = gistData.files['map-state.json']?.content;
+          if (content) currentState = JSON.parse(content);
+        }
+
+        currentState.alliances = currentState.alliances || {};
+
+        // Merge updated standings while strictly preserving bot server bindings
+        Object.entries(newAlliances).forEach(([tag, updatedData]) => {
+          const cleanTag = tag.toUpperCase().trim();
+          const existing = currentState.alliances[cleanTag] || {};
+
+          currentState.alliances[cleanTag] = {
+            ...existing,
+            ...updatedData,
+            // Preserve private server routing IDs
+            guild_id: existing.guild_id || updatedData.guild_id,
+            alert_channel_id: existing.alert_channel_id || updatedData.alert_channel_id,
+            alert_role_id: existing.alert_role_id || updatedData.alert_role_id,
+            officer_channel_id: existing.officer_channel_id || updatedData.officer_channel_id,
+            delegated_roles: existing.delegated_roles || updatedData.delegated_roles
+          };
+        });
+
+        // Prune retired alliances from active standings
+        Object.keys(currentState.alliances).forEach(existingTag => {
+          if (!newAlliances[existingTag]) {
+            delete currentState.alliances[existingTag];
+          }
+        });
+
+        if (newBlacklist) {
+          currentState.blacklist = newBlacklist;
+        }
+
+        const revision = Date.now().toString(36);
+        currentState.revision = revision;
+        currentState.lastUpdated = new Date().toISOString();
+        currentState.updatedBy = submittedBy || 'Discord Admin';
+
+        const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          method: 'PATCH',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: `Alliances & NAP updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
+            files: {
+              'map-state.json': {
+                content: JSON.stringify(currentState, null, 2)
+              }
+            }
+          })
+        });
+
+        if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+
+        return res.status(200).json({ success: true, revision, message: 'Alliance standings updated in Gist!' });
+      }
+
+      default:
+        return res.status(400).json({
+          error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance".`
+        });
+    }
   } catch (error) {
     console.error('Accept proposal error:', error);
     return res.status(500).json({ error: error.message });
