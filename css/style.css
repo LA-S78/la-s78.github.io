@@ -3224,7 +3224,21 @@ body.map-fullscreen-active turbo-frame {
   font-size: 0.82rem;
 }
 
-.add-alliance-inline input#input-new-tag { width: 90px; }
+.add-alliance-inline input#input-new-tag {
+  width: 90px;
+}
+
+.alliance-color-picker {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .add-alliance-inline input#input-new-name { flex: 1; }
 
 /* Blacklist Cards */

@@ -1,5 +1,18 @@
 // api/accept-proposal.js
 
+const DEFAULT_FALLBACK_COLORS = {
+  WLO: '#25bb00',
+  'RÂVN': '#cece00',
+  RAVN: '#cece00',
+  MIA: '#a400af',
+  BOTS: '#0070f3',
+  SVN: '#e53e3e',
+  PHNX: '#dd6b20',
+  HMDA: '#d53f8c',
+  NAVI: '#319795',
+  HeKi: '#d69e2e'
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -48,12 +61,21 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Invalid distribution data provided' });
         }
 
+        const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
+        let existingRewards = {};
+        if (gistGetRes.ok) {
+          const gistData = await gistGetRes.json();
+          const content = gistData.files?.['rewards-data.json']?.content;
+          if (content) existingRewards = JSON.parse(content);
+        }
+
         const patchPayload = {
           description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
           files: {
             'rewards-data.json': {
               content: JSON.stringify(
                 {
+                  ...existingRewards,
                   distribution_tiers: distribution,
                   lastUpdated: new Date().toISOString(),
                   updatedBy: submittedBy || 'Discord Admin'
@@ -88,7 +110,7 @@ export default async function handler(req, res) {
 
         if (gistGetRes.ok) {
           const gistData = await gistGetRes.json();
-          const content = gistData.files['map-state.json']?.content;
+          const content = gistData.files?.['map-state.json']?.content;
           if (content) currentState = JSON.parse(content);
         }
 
@@ -158,21 +180,33 @@ export default async function handler(req, res) {
 
         if (gistGetRes.ok) {
           const gistData = await gistGetRes.json();
-          const content = gistData.files['map-state.json']?.content;
+          const content = gistData.files?.['map-state.json']?.content;
           if (content) currentState = JSON.parse(content);
         }
 
-        currentState.alliances = currentState.alliances || {};
+        const previousAlliances = currentState.alliances || {};
+        const mergedAlliances = {};
 
-        // Merge updated standings while strictly preserving bot server bindings
+        // Preserve exact tag casing (RÂVN, RâvN, râvn remain distinct keys)
         Object.entries(newAlliances).forEach(([tag, updatedData]) => {
-          const cleanTag = tag.toUpperCase().trim();
-          const existing = currentState.alliances[cleanTag] || {};
+          const cleanTag = tag.trim();
+          if (!cleanTag) return;
 
-          currentState.alliances[cleanTag] = {
+          const existing = previousAlliances[cleanTag] || {};
+          const incomingColor = updatedData.color;
+          const resolvedColor =
+            incomingColor && incomingColor !== '#b8975a'
+              ? incomingColor
+              : existing.color && existing.color !== '#b8975a'
+                ? existing.color
+                : DEFAULT_FALLBACK_COLORS[cleanTag] || incomingColor || existing.color;
+
+          mergedAlliances[cleanTag] = {
             ...existing,
             ...updatedData,
-            // Preserve private server routing IDs
+            tag: cleanTag,
+            color: resolvedColor,
+            // Strictly preserve private Discord server bindings
             guild_id: existing.guild_id || updatedData.guild_id,
             alert_channel_id: existing.alert_channel_id || updatedData.alert_channel_id,
             alert_role_id: existing.alert_role_id || updatedData.alert_role_id,
@@ -181,12 +215,7 @@ export default async function handler(req, res) {
           };
         });
 
-        // Prune retired alliances from active standings
-        Object.keys(currentState.alliances).forEach(existingTag => {
-          if (!newAlliances[existingTag]) {
-            delete currentState.alliances[existingTag];
-          }
-        });
+        currentState.alliances = mergedAlliances;
 
         if (newBlacklist) {
           currentState.blacklist = newBlacklist;

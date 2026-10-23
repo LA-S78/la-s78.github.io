@@ -1,78 +1,170 @@
 /**
  * js/alliance.js - Dynamic NAP Diplomacy, Standings Ladder & Blacklist Engine
+ * Preserves exact tag capitalization (e.g., RÂVN vs RâvN vs râvn) without conflict.
  */
 
 import { submitProposalWithAuth } from './auth-modal.js';
 
 const ALLIANCE_DRAFT_KEY = 'la_alliance_planner_draft';
 
+const DEFAULT_ALLIANCE_COLORS = {
+  WLO: '#25bb00',
+  'RÂVN': '#cece00',
+  RAVN: '#cece00',
+  MIA: '#a400af',
+  BOTS: '#0070f3',
+  SVN: '#e53e3e',
+  PHNX: '#dd6b20',
+  HMDA: '#d53f8c',
+  NAVI: '#319795',
+  HeKi: '#d69e2e'
+};
+
+const AUTO_PALETTE = [
+  '#25bb00', '#cece00', '#a400af', '#0070f3', '#e53e3e',
+  '#dd6b20', '#d53f8c', '#319795', '#d69e2e', '#805ad5',
+  '#38a169', '#00b5d8'
+];
+
 export let isAlliancePlannerActive = false;
 export let originalAlliances = {};
 export let originalBlacklist = { players: [], alliances: [] };
 export let draftAlliances = {};
 export let draftBlacklist = { players: [], alliances: [] };
+export let liveDiscordColors = {};
 
 // ============================================================================
-// 1. DATA INITIALIZATION & LIVE SYNC
+// 1. COLOR & CASE-SENSITIVE TAG HELPERS
+// ============================================================================
+
+function resolveAllianceColor(tag, explicitColor = null, rank = null) {
+  const cleanTag = String(tag || '').trim();
+
+  // 1. Exact match in live Discord colors
+  if (liveDiscordColors[cleanTag]) {
+    return liveDiscordColors[cleanTag];
+  }
+
+  // 2. If tag is all-uppercase (e.g. "RAVN"), check diacritic-normalized match in liveDiscordColors (e.g. "RÂVN")
+  if (cleanTag === cleanTag.toUpperCase()) {
+    const stripDiacritics = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const normalizedTarget = stripDiacritics(cleanTag);
+    const matchedDiscordKey = Object.keys(liveDiscordColors).find(
+      (k) => k === k.toUpperCase() && stripDiacritics(k) === normalizedTarget
+    );
+    if (matchedDiscordKey) {
+      return liveDiscordColors[matchedDiscordKey];
+    }
+  }
+
+  // 3. Explicit custom color (ignore generic gold default if a canonical color exists)
+  if (explicitColor && explicitColor !== '#b8975a') {
+    return explicitColor;
+  }
+
+  // 4. Canonical static fallback color
+  if (DEFAULT_ALLIANCE_COLORS[cleanTag]) {
+    return DEFAULT_ALLIANCE_COLORS[cleanTag];
+  }
+
+  // 5. Rank-based palette fallback
+  if (rank !== null && rank !== undefined && !isNaN(rank) && Number(rank) > 0) {
+    return AUTO_PALETTE[(Number(rank) - 1) % AUTO_PALETTE.length];
+  }
+
+  return explicitColor || '#718096';
+}
+
+// ============================================================================
+// 2. DATA INITIALIZATION & LIVE SYNC
 // ============================================================================
 
 export function initBootstrapData() {
+  const mapEl = document.getElementById('map-state-bootstrap');
+  const dipEl = document.getElementById('diplomacy-data-bootstrap');
+
+  if (!window.MAP_STATE && mapEl?.textContent?.trim()) {
+    try { window.MAP_STATE = JSON.parse(mapEl.textContent); } catch (e) {}
+  }
+  if (!window.DIPLOMACY_DATA && dipEl?.textContent?.trim()) {
+    try { window.DIPLOMACY_DATA = JSON.parse(dipEl.textContent); } catch (e) {}
+  }
+
   const mapData = window.MAP_STATE || {};
   const diplomacyData = window.DIPLOMACY_DATA || {};
 
   const rawAlliances = mapData.alliances || {};
   originalAlliances = {};
 
+  // Preserve exact tag casing (never force toUpperCase)
   Object.entries(rawAlliances).forEach(([tag, data]) => {
-    // Preserve exact original case tag instead of forcing toUpperCase()
     const cleanTag = tag.trim();
+    if (!cleanTag) return;
+
+    const parsedRank =
+      typeof data.rank === 'number'
+        ? data.rank
+        : !isNaN(parseInt(data.rank, 10))
+          ? parseInt(data.rank, 10)
+          : null;
+
     originalAlliances[cleanTag] = {
       tag: cleanTag,
       name: data.name || cleanTag,
-      rank: typeof data.rank === 'number' ? data.rank : (parseInt(data.rank, 10) || null),
+      rank: parsedRank,
       type: data.type || (data.parent_tag ? 'academy' : 'main'),
-      // Preserve exact case for parent links as well
-      parent_tag: data.parent_tag ? data.parent_tag.trim() : null,
-      academies: Array.isArray(data.academies) ? data.academies.map(a => a.trim()) : [],
+      parent_tag: data.parent_tag ? String(data.parent_tag).trim() : null,
+      academies: Array.isArray(data.academies) ? data.academies.map(a => String(a).trim()) : [],
       is_nap: data.is_nap !== undefined ? Boolean(data.is_nap) : true,
-      color: data.color || '#b8975a'
+      color: resolveAllianceColor(cleanTag, data.color, parsedRank)
     };
   });
 
-  // Reconcile academies from diplomacy.yml
+  // Reconcile academies from diplomacy.yml using exact case first
   if (Array.isArray(diplomacyData.nap_academies)) {
     diplomacyData.nap_academies.forEach(acad => {
-      const acadTag = (acad.name || '').trim();
+      const rawAcadName = (acad.name || '').trim();
       const parentTag = (acad.parent || '').trim();
-      if (acadTag && parentTag) {
-        if (!originalAlliances[acadTag]) {
-          originalAlliances[acadTag] = {
-            tag: acadTag,
-            name: acad.name,
-            rank: null,
-            type: 'academy',
-            parent_tag: parentTag,
-            academies: [],
-            is_nap: true,
-            color: '#718096'
-          };
-        } else {
-          originalAlliances[acadTag].type = 'academy';
-          originalAlliances[acadTag].parent_tag = parentTag;
-        }
+      if (!rawAcadName || !parentTag) return;
 
-        if (originalAlliances[parentTag]) {
-          if (!originalAlliances[parentTag].academies.includes(acadTag)) {
-            originalAlliances[parentTag].academies.push(acadTag);
-          }
+      // Match existing non-parent tag if casing differs slightly in diplomacy.yml (e.g. Râvn -> RâvN)
+      let acadTag = rawAcadName;
+      if (!originalAlliances[acadTag]) {
+        const caseInsensitiveCandidate = Object.keys(originalAlliances).find(
+          k => k !== parentTag && k.toLowerCase() === rawAcadName.toLowerCase()
+        );
+        if (caseInsensitiveCandidate) {
+          acadTag = caseInsensitiveCandidate;
+        }
+      }
+
+      if (!originalAlliances[acadTag]) {
+        originalAlliances[acadTag] = {
+          tag: acadTag,
+          name: rawAcadName,
+          rank: null,
+          type: 'academy',
+          parent_tag: parentTag,
+          academies: [],
+          is_nap: true,
+          color: '#718096'
+        };
+      } else if (acadTag !== parentTag) {
+        originalAlliances[acadTag].type = 'academy';
+        originalAlliances[acadTag].parent_tag = parentTag;
+      }
+
+      if (originalAlliances[parentTag] && acadTag !== parentTag) {
+        if (!originalAlliances[parentTag].academies.includes(acadTag)) {
+          originalAlliances[parentTag].academies.push(acadTag);
         }
       }
     });
   }
 
   originalBlacklist = {
-    players: diplomacyData.blacklist_players || [],
-    alliances: diplomacyData.blacklist_alliances || []
+    players: Array.isArray(diplomacyData.blacklist_players) ? [...diplomacyData.blacklist_players] : [],
+    alliances: Array.isArray(diplomacyData.blacklist_alliances) ? [...diplomacyData.blacklist_alliances] : []
   };
 
   draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
@@ -100,10 +192,15 @@ export function checkAndRestoreAllianceDraft() {
 
   try {
     const parsed = JSON.parse(saved);
-    if (parsed && parsed.alliances) {
+    if (parsed && parsed.alliances && Object.keys(parsed.alliances).length > 0) {
       isAlliancePlannerActive = true;
       draftAlliances = parsed.alliances;
       draftBlacklist = parsed.blacklist || { players: [], alliances: [] };
+
+      // Ensure colors are resolved on restored drafts
+      Object.entries(draftAlliances).forEach(([tag, data]) => {
+        data.color = resolveAllianceColor(tag, data.color, data.rank);
+      });
 
       const btnDraft = document.getElementById('btn-toggle-alliance-planner');
       if (btnDraft) {
@@ -139,25 +236,44 @@ export async function fetchLiveAllianceState() {
       fetch('/api/colors', { cache: 'no-store' })
     ]);
 
-    let liveColors = {};
     if (colorsRes.ok) {
-      liveColors = await colorsRes.json();
+      liveDiscordColors = await colorsRes.json();
     }
 
     if (stateRes.ok) {
       const data = await stateRes.json();
-      if (data.alliances && typeof data.alliances === 'object') {
-        originalAlliances = data.alliances;
-        
-        // Merge Discord hex colors
-        Object.entries(liveColors).forEach(([tag, color]) => {
-          if (originalAlliances[tag]) {
-            originalAlliances[tag].color = color;
-          }
+      if (data.alliances && typeof data.alliances === 'object' && Object.keys(data.alliances).length > 0) {
+        const normalizedLive = {};
+
+        Object.entries(data.alliances).forEach(([tag, allyData]) => {
+          const cleanTag = tag.trim();
+          if (!cleanTag) return;
+
+          const parsedRank =
+            allyData.rank !== null && allyData.rank !== undefined && allyData.rank !== ''
+              ? Number(allyData.rank)
+              : null;
+
+          normalizedLive[cleanTag] = {
+            ...allyData,
+            tag: cleanTag,
+            rank: parsedRank,
+            parent_tag: allyData.parent_tag ? String(allyData.parent_tag).trim() : null,
+            academies: Array.isArray(allyData.academies)
+              ? allyData.academies.map(a => String(a).trim()).filter(Boolean)
+              : [],
+            color: resolveAllianceColor(cleanTag, allyData.color, parsedRank)
+          };
         });
+
+        originalAlliances = normalizedLive;
       }
-      if (data.blacklist) {
-        originalBlacklist = data.blacklist;
+
+      if (data.blacklist && (Array.isArray(data.blacklist.players) || Array.isArray(data.blacklist.alliances))) {
+        originalBlacklist = {
+          players: data.blacklist.players || [],
+          alliances: data.blacklist.alliances || []
+        };
       }
 
       if (!isAlliancePlannerActive) {
@@ -173,7 +289,7 @@ export async function fetchLiveAllianceState() {
 }
 
 // ============================================================================
-// 2. LADDER REORDERING & MUTATION LOGIC
+// 3. LADDER REORDERING & MUTATION LOGIC
 // ============================================================================
 
 function getSortedLadder(alliancesObj) {
@@ -195,7 +311,6 @@ export function moveAllianceRank(tag, direction) {
   const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
   if (targetIndex < 0 || targetIndex >= ladder.length) return;
 
-  // Swap ranks
   const currentAlliance = ladder[currentIndex];
   const targetAlliance = ladder[targetIndex];
 
@@ -206,6 +321,14 @@ export function moveAllianceRank(tag, direction) {
   draftAlliances[currentAlliance.tag].rank = currentAlliance.rank;
   draftAlliances[targetAlliance.tag].rank = targetAlliance.rank;
 
+  saveDraftToStorage();
+  renderStandingsHierarchy();
+  updateAllianceProposalUI();
+}
+
+export function setAllianceCustomColor(tag, newHexColor) {
+  if (!isAlliancePlannerActive || !draftAlliances[tag]) return;
+  draftAlliances[tag].color = newHexColor;
   saveDraftToStorage();
   renderStandingsHierarchy();
   updateAllianceProposalUI();
@@ -243,27 +366,37 @@ export function linkAcademyPrompt(parentTag) {
   if (!isAlliancePlannerActive) return;
 
   const availableAcademies = Object.values(draftAlliances).filter(
-    a => a.tag !== parentTag && !a.parent_tag && a.type !== 'academy'
+    a => a.tag !== parentTag && !a.parent_tag
   );
 
-  if (availableAcademies.length === 0) {
-    alert('No unlinked alliances available to assign as an academy.');
-    return;
-  }
-
   const promptOptions = availableAcademies.map(a => `[${a.tag}]`).join(', ');
-  const selectedTag = prompt(`Enter alliance tag to link under [${parentTag}]:\nAvailable: ${promptOptions}`);
-  if (!selectedTag) return;
+  const selectedInput = prompt(
+    `Enter exact alliance tag to link as an Academy under [${parentTag}] (case-sensitive, e.g. RâvN or râvn):\n${
+      promptOptions ? `Available: ${promptOptions}` : 'Or type a new academy tag to create it:'
+    }`
+  );
+  if (!selectedInput) return;
 
-  // Preserve exact case (strip only brackets/whitespace)
-  const cleanTag = selectedTag.trim().replace(/[@\[\]]/g, '');
+  // Preserve exact case (only strip brackets/@)
+  const cleanTag = selectedInput.trim().replace(/[@\[\]]/g, '');
+  if (!cleanTag || cleanTag === parentTag) return;
+
+  // If academy tag doesn't exist yet, create it as an unranked academy
   if (!draftAlliances[cleanTag]) {
-    alert(`Alliance [${cleanTag}] not found.`);
-    return;
+    draftAlliances[cleanTag] = {
+      tag: cleanTag,
+      name: cleanTag,
+      rank: null,
+      type: 'academy',
+      parent_tag: parentTag,
+      academies: [],
+      is_nap: true,
+      color: '#718096'
+    };
+  } else {
+    draftAlliances[cleanTag].type = 'academy';
+    draftAlliances[cleanTag].parent_tag = parentTag;
   }
-
-  draftAlliances[cleanTag].type = 'academy';
-  draftAlliances[cleanTag].parent_tag = parentTag;
 
   if (!draftAlliances[parentTag].academies) draftAlliances[parentTag].academies = [];
   if (!draftAlliances[parentTag].academies.includes(cleanTag)) {
@@ -277,16 +410,16 @@ export function linkAcademyPrompt(parentTag) {
 
 export function addContender(tag, name) {
   if (!isAlliancePlannerActive) return;
-  // Preserve exact case except for stripping decoration brackets
+
+  // Strictly preserve original case (e.g., RÂVN, RâvN, râvn, HeKi)
   const cleanTag = tag.trim().replace(/[@\[\]]/g, '');
   const cleanName = name.trim() || cleanTag;
 
   if (!cleanTag) return;
-  
-  // Case-insensitive check to prevent exact duplicate collisions
-  const existingKey = Object.keys(draftAlliances).find(k => k.toLowerCase() === cleanTag.toLowerCase());
-  if (existingKey) {
-    alert(`Alliance [${existingKey}] already exists.`);
+
+  // Exact case-sensitive check ONLY so RÂVN and RâvN never conflict
+  if (draftAlliances[cleanTag]) {
+    alert(`Alliance [${cleanTag}] already exists with that exact capitalization.`);
     return;
   }
 
@@ -301,7 +434,7 @@ export function addContender(tag, name) {
     parent_tag: null,
     academies: [],
     is_nap: true,
-    color: '#b8975a'
+    color: resolveAllianceColor(cleanTag, null, nextRank)
   };
 
   saveDraftToStorage();
@@ -312,9 +445,20 @@ export function addContender(tag, name) {
 export function removeContender(tag) {
   if (!isAlliancePlannerActive || !draftAlliances[tag]) return;
 
+  // Also clean up any parent's academy references to this tag
+  Object.values(draftAlliances).forEach(ally => {
+    if (Array.isArray(ally.academies)) {
+      ally.academies = ally.academies.filter(a => a !== tag);
+    }
+    if (ally.parent_tag === tag) {
+      ally.parent_tag = null;
+      ally.type = 'main';
+    }
+  });
+
   delete draftAlliances[tag];
 
-  // Re-normalize ranks
+  // Re-normalize sequential ranks for remaining ranked alliances
   const ladder = getSortedLadder(draftAlliances).filter(a => a.rank !== null);
   ladder.forEach((item, index) => {
     item.rank = index + 1;
@@ -327,12 +471,12 @@ export function removeContender(tag) {
 }
 
 // ============================================================================
-// 3. BLACKLIST MUTATIONS
+// 4. BLACKLIST MUTATIONS
 // ============================================================================
 
 export function addBlacklistEntry(type, target) {
   if (!isAlliancePlannerActive) return;
-  const clean = target.trim();
+  const clean = target.trim().replace(/[@\[\]]/g, '');
   if (!clean) return;
 
   const list = type === 'players' ? draftBlacklist.players : draftBlacklist.alliances;
@@ -356,7 +500,7 @@ export function removeBlacklistEntry(type, index) {
 }
 
 // ============================================================================
-// 4. RENDERING & UI UPDATES
+// 5. RENDERING & UI UPDATES
 // ============================================================================
 
 export function renderStandingsHierarchy() {
@@ -370,24 +514,21 @@ export function renderStandingsHierarchy() {
   const totalNap = Object.values(activeAlliances).filter(a => a.is_nap).length;
   if (countBadge) countBadge.textContent = `${totalNap} NAP Alliances`;
 
-  const playerAlliance = (localStorage.getItem('auth-alliance') || '').toUpperCase();
+  const playerAlliance = (localStorage.getItem('auth-alliance') || '').trim();
 
   container.innerHTML = ladder.map((alliance, index) => {
     const isRanked = alliance.rank !== null && alliance.rank !== undefined;
     const isTop3 = isRanked && alliance.rank <= 3;
     const rankTier = isTop3 ? (alliance.rank === 1 ? 'rank-gold' : alliance.rank === 2 ? 'rank-silver' : 'rank-bronze') : '';
-    const isSelf = alliance.tag === playerAlliance;
+    const isSelf = playerAlliance && alliance.tag === playerAlliance;
+    const displayColor = resolveAllianceColor(alliance.tag, alliance.color, alliance.rank);
 
-    // Academy Pills
-    const academyPills = (alliance.academies || []).map(acadTag => {
-      const acadObj = activeAlliances[acadTag];
-      return `
-        <span class="academy-pill" title="Protected Academy">
-          🎓 [${acadTag}]
-          ${isAlliancePlannerActive ? `<button class="btn-unlink-acad" data-action="unlink-acad" data-parent="${alliance.tag}" data-acad="${acadTag}">&times;</button>` : ''}
-        </span>
-      `;
-    }).join('');
+    const academyPills = (alliance.academies || []).map(acadTag => `
+      <span class="academy-pill" title="Protected Academy">
+        🎓 [${acadTag}]
+        ${isAlliancePlannerActive ? `<button type="button" class="btn-unlink-acad" data-action="unlink-acad" data-parent="${alliance.tag}" data-acad="${acadTag}">&times;</button>` : ''}
+      </span>
+    `).join('');
 
     return `
       <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}" data-tag="${alliance.tag}">
@@ -397,16 +538,27 @@ export function renderStandingsHierarchy() {
           </span>
           ${isAlliancePlannerActive && isRanked ? `
             <div class="ladder-steppers">
-              <button class="ladder-step-btn" data-action="rank-up" data-tag="${alliance.tag}" ${index === 0 ? 'disabled' : ''}>▲</button>
-              <button class="ladder-step-btn" data-action="rank-down" data-tag="${alliance.tag}">▼</button>
+              <button type="button" class="ladder-step-btn" data-action="rank-up" data-tag="${alliance.tag}" ${index === 0 ? 'disabled' : ''}>▲</button>
+              <button type="button" class="ladder-step-btn" data-action="rank-down" data-tag="${alliance.tag}">▼</button>
             </div>
           ` : ''}
         </div>
 
         <div class="ladder-identity-col">
           <div class="ladder-primary-line">
-            <span class="alliance-color-indicator" style="background-color: ${alliance.color || '#b8975a'}"></span>
-            <strong class="ladder-tag">[${alliance.tag}]</strong>
+            ${isAlliancePlannerActive ? `
+              <input
+                type="color"
+                class="alliance-color-picker"
+                data-action="pick-color"
+                data-tag="${alliance.tag}"
+                value="${displayColor.startsWith('#') ? displayColor : '#b8975a'}"
+                title="Change [${alliance.tag}] Color"
+              />
+            ` : `
+              <span class="alliance-color-indicator" style="background-color: ${displayColor}"></span>
+            `}
+            <strong class="ladder-tag" style="color: ${displayColor}">[${alliance.tag}]</strong>
             <span class="ladder-name">${alliance.name}</span>
             ${alliance.parent_tag ? `<span class="academy-child-badge">Academy of [${alliance.parent_tag}]</span>` : ''}
           </div>
@@ -414,7 +566,7 @@ export function renderStandingsHierarchy() {
           <div class="ladder-sub-line">
             ${academyPills}
             ${isAlliancePlannerActive && !alliance.parent_tag ? `
-              <button class="btn-link-acad-prompt" data-action="link-acad-prompt" data-parent="${alliance.tag}">+ Link Academy</button>
+              <button type="button" class="btn-link-acad-prompt" data-action="link-acad-prompt" data-parent="${alliance.tag}">+ Link Academy</button>
             ` : ''}
           </div>
         </div>
@@ -424,10 +576,10 @@ export function renderStandingsHierarchy() {
             ${alliance.is_nap ? 'NAP Protected' : 'External'}
           </span>
           ${isAlliancePlannerActive ? `
-            <button class="btn-nap-toggle" data-action="toggle-nap" data-tag="${alliance.tag}">
+            <button type="button" class="btn-nap-toggle" data-action="toggle-nap" data-tag="${alliance.tag}">
               ${alliance.is_nap ? 'Revoke NAP' : 'Grant NAP'}
             </button>
-            <button class="btn-ladder-del" data-action="del-alliance" data-tag="${alliance.tag}" title="Remove Alliance">&times;</button>
+            <button type="button" class="btn-ladder-del" data-action="del-alliance" data-tag="${alliance.tag}" title="Remove Alliance">&times;</button>
           ` : ''}
         </div>
       </div>
@@ -453,7 +605,7 @@ export function renderBlacklist() {
       playersContainer.innerHTML = activeBlacklist.players.map((player, idx) => `
         <div class="blacklist-item">
           <span class="blacklist-ign">${player}</span>
-          ${isAlliancePlannerActive ? `<button class="btn-blacklist-del" data-action="del-blacklist" data-type="players" data-index="${idx}">&times;</button>` : ''}
+          ${isAlliancePlannerActive ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="players" data-index="${idx}">&times;</button>` : ''}
         </div>
       `).join('');
     }
@@ -466,7 +618,7 @@ export function renderBlacklist() {
       alliancesContainer.innerHTML = activeBlacklist.alliances.map((ally, idx) => `
         <div class="blacklist-item">
           <span class="blacklist-ign">[${ally}]</span>
-          ${isAlliancePlannerActive ? `<button class="btn-blacklist-del" data-action="del-blacklist" data-type="alliances" data-index="${idx}">&times;</button>` : ''}
+          ${isAlliancePlannerActive ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="alliances" data-index="${idx}">&times;</button>` : ''}
         </div>
       `).join('');
     }
@@ -474,13 +626,12 @@ export function renderBlacklist() {
 }
 
 // ============================================================================
-// 5. DIFF ENGINE & PROPOSAL SUBMISSION
+// 6. DIFF ENGINE & PROPOSAL SUBMISSION
 // ============================================================================
 
 export function calculateAllianceDiff() {
   const diff = [];
 
-  // 1. Detect Rank Shifts & Academy Shifts
   Object.entries(draftAlliances).forEach(([tag, draft]) => {
     const orig = originalAlliances[tag];
     if (!orig) {
@@ -499,16 +650,18 @@ export function calculateAllianceDiff() {
     if (orig.is_nap !== draft.is_nap) {
       diff.push({ type: 'nap', tag, status: draft.is_nap ? 'Protected' : 'Revoked' });
     }
+
+    if (orig.color !== draft.color) {
+      diff.push({ type: 'color', tag, from: orig.color, to: draft.color });
+    }
   });
 
-  // Removals
   Object.keys(originalAlliances).forEach(origTag => {
     if (!draftAlliances[origTag]) {
       diff.push({ type: 'removed', tag: origTag });
     }
   });
 
-  // 2. Detect Blacklist Deltas
   const origPlayers = originalBlacklist.players || [];
   const draftPlayers = draftBlacklist.players || [];
   draftPlayers.forEach(p => {
@@ -606,6 +759,7 @@ export async function submitAllianceProposal() {
     if (d.type === 'rank') return `<div>• <strong>[${d.tag}]</strong>: Rank <code>#${d.from}</code> ➔ <code>#${d.to}</code></div>`;
     if (d.type === 'academy') return `<div>• <strong>[${d.tag}]</strong>: Assigned as Academy of <strong>[${d.parent}]</strong></div>`;
     if (d.type === 'nap') return `<div>• <strong>[${d.tag}]</strong>: NAP Status <code>${d.status}</code></div>`;
+    if (d.type === 'color') return `<div>• 🎨 <strong>[${d.tag}]</strong>: Color updated to <code>${d.to}</code></div>`;
     if (d.type === 'blacklist') return `<div>• ⚠️ <strong>Blacklist ${d.action.toUpperCase()}</strong>: [${d.target}] (${d.category})</div>`;
     if (d.type === 'added') return `<div>• ➕ <strong>Added [${d.tag}]</strong>: Rank #${d.rank} (${d.name})</div>`;
     if (d.type === 'removed') return `<div>• ➖ <strong>Removed [${d.tag}]</strong> from standings</div>`;
@@ -629,11 +783,17 @@ export async function submitAllianceProposal() {
 }
 
 // ============================================================================
-// 6. EVENT DELEGATION & MOUNT
+// 7. EVENT DELEGATION & MOUNT
 // ============================================================================
 
 export function bindAllianceControls() {
   initBootstrapData();
+
+  // Strip any lingering inline uppercase transform on #input-new-tag
+  const tagInputEl = document.getElementById('input-new-tag');
+  if (tagInputEl) {
+    tagInputEl.style.textTransform = 'none';
+  }
 
   const btnPlanner = document.getElementById('btn-toggle-alliance-planner');
   if (btnPlanner && !btnPlanner.dataset.bound) {
@@ -647,10 +807,10 @@ export function bindAllianceControls() {
     btnSubmit.addEventListener('click', () => submitAllianceProposal());
   }
 
-  // Hierarchy Click Delegation (Rank Steppers, Unlink, NAP Toggle, Delete)
   const hierarchyList = document.getElementById('alliance-hierarchy-list');
   if (hierarchyList && !hierarchyList.dataset.bound) {
     hierarchyList.dataset.bound = 'true';
+
     hierarchyList.addEventListener('click', (e) => {
       if (!isAlliancePlannerActive) return;
 
@@ -672,9 +832,16 @@ export function bindAllianceControls() {
       const delAllianceBtn = e.target.closest('[data-action="del-alliance"]');
       if (delAllianceBtn) { removeContender(delAllianceBtn.dataset.tag); return; }
     });
+
+    hierarchyList.addEventListener('change', (e) => {
+      if (!isAlliancePlannerActive) return;
+      const colorInput = e.target.closest('[data-action="pick-color"]');
+      if (colorInput) {
+        setAllianceCustomColor(colorInput.dataset.tag, colorInput.value);
+      }
+    });
   }
 
-  // Add Contender Form
   const btnAddAlliance = document.getElementById('btn-add-alliance');
   if (btnAddAlliance && !btnAddAlliance.dataset.bound) {
     btnAddAlliance.dataset.bound = 'true';
@@ -689,7 +856,6 @@ export function bindAllianceControls() {
     });
   }
 
-  // Blacklist Add / Del Delegation
   const btnAddPlayer = document.getElementById('btn-add-blacklist-player');
   if (btnAddPlayer && !btnAddPlayer.dataset.bound) {
     btnAddPlayer.dataset.bound = 'true';
@@ -726,11 +892,9 @@ export function bindAllianceControls() {
     });
   });
 
-  // Render initial bootstrap state immediately
   renderStandingsHierarchy();
   renderBlacklist();
 
-  // Parallel live sync with Gist state proxy & OAuth draft restoration
   fetchLiveAllianceState().then(() => {
     checkAndRestoreAllianceDraft();
   });
