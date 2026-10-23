@@ -3224,7 +3224,7 @@ body.map-fullscreen-active turbo-frame {
   font-size: 0.82rem;
 }
 
-.add-alliance-inline input#input-new-tag { width: 90px; text-transform: uppercase; }
+.add-alliance-inline input#input-new-tag { width: 90px; }
 .add-alliance-inline input#input-new-name { flex: 1; }
 
 /* Blacklist Cards */
