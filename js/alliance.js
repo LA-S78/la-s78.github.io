@@ -20,29 +20,30 @@ export function initBootstrapData() {
   const mapData = window.MAP_STATE || {};
   const diplomacyData = window.DIPLOMACY_DATA || {};
 
-  // Normalize static bootstrap data
   const rawAlliances = mapData.alliances || {};
   originalAlliances = {};
 
   Object.entries(rawAlliances).forEach(([tag, data]) => {
-    const cleanTag = tag.toUpperCase().trim();
+    // Preserve exact original case tag instead of forcing toUpperCase()
+    const cleanTag = tag.trim();
     originalAlliances[cleanTag] = {
       tag: cleanTag,
       name: data.name || cleanTag,
       rank: typeof data.rank === 'number' ? data.rank : (parseInt(data.rank, 10) || null),
       type: data.type || (data.parent_tag ? 'academy' : 'main'),
-      parent_tag: data.parent_tag ? data.parent_tag.toUpperCase().trim() : null,
-      academies: Array.isArray(data.academies) ? data.academies.map(a => a.toUpperCase().trim()) : [],
+      // Preserve exact case for parent links as well
+      parent_tag: data.parent_tag ? data.parent_tag.trim() : null,
+      academies: Array.isArray(data.academies) ? data.academies.map(a => a.trim()) : [],
       is_nap: data.is_nap !== undefined ? Boolean(data.is_nap) : true,
       color: data.color || '#b8975a'
     };
   });
 
-  // Reconcile academies from diplomacy.yml if missing in map_state.yml
+  // Reconcile academies from diplomacy.yml
   if (Array.isArray(diplomacyData.nap_academies)) {
     diplomacyData.nap_academies.forEach(acad => {
-      const acadTag = (acad.name || '').toUpperCase().trim();
-      const parentTag = (acad.parent || '').toUpperCase().trim();
+      const acadTag = (acad.name || '').trim();
+      const parentTag = (acad.parent || '').trim();
       if (acadTag && parentTag) {
         if (!originalAlliances[acadTag]) {
           originalAlliances[acadTag] = {
@@ -254,7 +255,8 @@ export function linkAcademyPrompt(parentTag) {
   const selectedTag = prompt(`Enter alliance tag to link under [${parentTag}]:\nAvailable: ${promptOptions}`);
   if (!selectedTag) return;
 
-  const cleanTag = selectedTag.trim().toUpperCase().replace(/[@\[\]]/g, '');
+  // Preserve exact case (strip only brackets/whitespace)
+  const cleanTag = selectedTag.trim().replace(/[@\[\]]/g, '');
   if (!draftAlliances[cleanTag]) {
     alert(`Alliance [${cleanTag}] not found.`);
     return;
@@ -275,16 +277,19 @@ export function linkAcademyPrompt(parentTag) {
 
 export function addContender(tag, name) {
   if (!isAlliancePlannerActive) return;
-  const cleanTag = tag.trim().toUpperCase().replace(/[@\[\]]/g, '');
+  // Preserve exact case except for stripping decoration brackets
+  const cleanTag = tag.trim().replace(/[@\[\]]/g, '');
   const cleanName = name.trim() || cleanTag;
 
   if (!cleanTag) return;
-  if (draftAlliances[cleanTag]) {
-    alert(`Alliance [${cleanTag}] already exists.`);
+  
+  // Case-insensitive check to prevent exact duplicate collisions
+  const existingKey = Object.keys(draftAlliances).find(k => k.toLowerCase() === cleanTag.toLowerCase());
+  if (existingKey) {
+    alert(`Alliance [${existingKey}] already exists.`);
     return;
   }
 
-  // Assign next sequential rank
   const ladder = getSortedLadder(draftAlliances).filter(a => a.rank !== null);
   const nextRank = ladder.length > 0 ? ladder[ladder.length - 1].rank + 1 : 1;
 
