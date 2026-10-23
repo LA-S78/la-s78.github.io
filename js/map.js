@@ -1341,7 +1341,7 @@ export async function loadLiveMapState(svgRoot = null) {
 
   try {
     const [stateRes, colorsRes] = await Promise.all([
-      fetch(`/api/map-state?t=${Date.now()}`, { cache: 'no-store' }),
+      fetch(`/api/state?scope=map&t=${Date.now()}`),
       fetch('/api/colors')
     ]);
     

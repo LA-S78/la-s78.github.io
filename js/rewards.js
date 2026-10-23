@@ -50,7 +50,7 @@ export function initDefaultTiers() {
 
 export async function fetchLiveRewardsState() {
   try {
-    const res = await fetch(`/api/rewards-state?t=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(`/api/state?scope=rewards&t=${Date.now()}`);
     if (res.ok) {
       const data = await res.json();
       if (data.distribution_tiers && Array.isArray(data.distribution_tiers) && data.distribution_tiers.length > 0) {
@@ -71,7 +71,7 @@ export async function fetchLiveRewardsState() {
 export async function fetchLiveMapState() {
   try {
     const [stateRes, colorsRes] = await Promise.all([
-      fetch(`/api/map-state?t=${Date.now()}`, { cache: 'no-store' }),
+      fetch(`/api/state?scope=alliances&t=${Date.now()}`),
       fetch('/api/colors', { cache: 'no-store' })
     ]);
 
