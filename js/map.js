@@ -660,74 +660,32 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
   };
 }
 
-export async function submitStrategyProposal(apiEndpointUrl = '/api/proposal') {
-  if (!isPlannerActive || !draftState) return;
+import { submitProposalWithAuth } from './auth-modal.js';
 
+export async function submitStrategyProposal() {
+  if (!isPlannerActive || !draftState) return;
   const payload = generateProposalPayload();
   if (!payload || payload.totalChanges === 0) {
     alert('No changes detected in your draft plan.');
     return;
   }
 
-  const authorInput = prompt('Enter your Discord handle / IGN:', 'Doctor');
-  if (authorInput === null) return;
+  // Pre-generate map snapshot
+  const mapImageData = await captureMapImage();
+  if (mapImageData) payload.image = mapImageData;
 
-  const notesInput = prompt('Add an optional note for the proposal:', '') || '';
+  // Build clean diff HTML
+  const diffHtml = Object.entries(payload.changes)
+    .map(([cityId, shift]) => `<div><strong>${cityId.replace(/_/g, ' ')}</strong>: <code>${shift.from}</code> ➔ <code>${shift.to}</code></div>`)
+    .join('');
 
-  payload.submittedBy = authorInput.trim() || 'Anonymous';
-  payload.notes = notesInput.trim();
-
-  const submitBtn = document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
-  const originalText = submitBtn ? submitBtn.textContent : 'Submit Plan';
-
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Generating Preview...';
-  }
-
-  try {
-    const root = getSvgRoot();
-    const prevMode = currentColorMode;
-
-    if (root) {
-      setMapColorMode('level', root);
-    }
-
-    const mapImageData = await captureMapImage(root);
-
-    if (root) {
-      setMapColorMode(prevMode, root);
-    }
-
-    if (mapImageData) {
-      payload.image = mapImageData;
-    }
-
-    if (submitBtn) {
-      submitBtn.textContent = 'Transmitting...';
-    }
-
-    const response = await fetch(apiEndpointUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      throw new Error(`Server returned HTTP ${response.status}`);
-    }
-
-    alert('Map proposal successfully transmitted to Discord!');
-    togglePlannerMode(false);
-  } catch (err) {
-    console.error('Failed to submit map proposal:', err);
-    alert('Could not send proposal to Discord. Make sure the bot server is online.');
-  } finally {
-    if (submitBtn) {
-      submitBtn.textContent = originalText;
-    }
-    updateProposalUI();
-  }
+  submitProposalWithAuth({
+    type: 'map',
+    title: '🗺️ Submit Map Territory Proposal',
+    payload: payload,
+    diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
+    onSuccess: () => togglePlannerMode(false)
+  });
 }
 
 export function updateProposalUI(btnSubmit = null, badge = null) {

@@ -404,49 +404,27 @@ export function toggleRewardsPlanner(active) {
   updateRewardsProposalUI();
 }
 
-export async function submitRewardProposal(apiEndpointUrl = '/api/proposal') {
+import { submitProposalWithAuth } from './auth-modal.js';
+
+export async function submitRewardProposal() {
   if (!isRewardsPlannerActive) return;
-
-  const authorInput = prompt('Enter your Discord handle / IGN:', 'Doctor');
-  if (authorInput === null) return;
-
-  const notesInput = prompt('Add an optional note for this reward distribution proposal:', '') || '';
 
   const payload = {
     type: 'rewards',
-    submittedBy: authorInput.trim() || 'Anonymous',
-    notes: notesInput.trim(),
-    timestamp: new Date().toISOString(),
     distribution: draftTiers
   };
 
-  const submitBtn = document.getElementById('btn-submit-rewards');
-  const originalText = submitBtn ? submitBtn.textContent : 'Submit Plan';
+  const diffHtml = draftTiers
+    .map(tier => `<div><strong>Rank ${tier.min_rank}–${tier.max_rank}</strong>: 🟡 ×${tier.chests.commanders_will} | 🟣 ×${tier.chests.loyal_servant} | 🔵 ×${tier.chests.followers_heart}</div>`)
+    .join('');
 
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Transmitting...';
-  }
-
-  try {
-    const res = await fetch(apiEndpointUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) throw new Error(`Server returned HTTP ${res.status}`);
-
-    alert('Reward distribution proposal successfully transmitted to Discord!');
-    originalTiers = JSON.parse(JSON.stringify(draftTiers));
-    toggleRewardsPlanner(false);
-  } catch (err) {
-    console.error('Failed to submit reward proposal:', err);
-    alert('Could not send proposal to Discord. Make sure the bot server is online.');
-  } finally {
-    if (submitBtn) submitBtn.textContent = originalText;
-    updateRewardsProposalUI();
-  }
+  submitProposalWithAuth({
+    type: 'rewards',
+    title: '👑 Submit Reward Distribution Proposal',
+    payload: payload,
+    diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
+    onSuccess: () => toggleRewardsPlanner(false)
+  });
 }
 
 // ==========================================================================
