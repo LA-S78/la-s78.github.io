@@ -23,6 +23,27 @@ html[data-theme="default"] {
   --accent-color: #b8975a;
   --border-color: #3d3128;
 
+  /* Shared Surface & Palette Variables */
+  --surface-dark: #080605;
+  --surface-elevated: #0d0a08;
+  --surface-card: #14100d;
+  
+  --status-danger: #ef4444;
+  --status-danger-hover: #ff6b6b;
+  --status-danger-bg: rgba(122, 0, 0, 0.25);
+  --status-danger-text: #fca5a5;
+
+  --status-success: #22c55e;
+  --status-success-bg: rgba(20, 83, 45, 0.35);
+  --status-success-text: #86efac;
+
+  --brand-discord: #5865F2;
+  --brand-discord-hover: #4752c4;
+
+  --rank-gold: #facc15;
+  --rank-silver: #e2e8f0;
+  --rank-bronze: #f97316;
+
   /* T10 calc */
   --node-bg: #2a2726;
   --line-color: #4a6c82;
@@ -254,7 +275,7 @@ main img {
 }
 
 .warning {
-  color: #ff6b6b;
+  color: var(--status-danger-hover);
 }
 
 /* ==========================================================================
@@ -747,7 +768,7 @@ footer {
 }
 
 .login-button {
-  background-color: #5865F2;
+  background-color: var(--brand-discord);
   color: white;
   border: none;
   border-radius: 6px;
@@ -875,7 +896,7 @@ dialog.auth-modal {
   margin: auto !important;
   border: 1px solid var(--accent-color) !important;
   border-radius: 10px !important;
-  background: #14100d !important;
+  background: var(--surface-card) !important;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.95), 0 0 24px rgba(184, 151, 90, 0.25) !important;
   color: var(--text-main) !important;
   overflow: hidden !important;
@@ -900,7 +921,7 @@ dialog.auth-modal[open] {
   align-items: center;
   justify-content: space-between;
   padding: 12px 18px;
-  background: #0d0a08;
+  background: var(--surface-elevated);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -959,12 +980,12 @@ dialog.auth-modal[open] {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  background: rgba(122, 0, 0, 0.25);
-  border: 1px solid #ef4444;
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
   border-radius: 6px;
   padding: 10px 12px;
   font-size: 0.82rem;
-  color: #fca5a5;
+  color: var(--status-danger-text);
   line-height: 1.35;
 }
 
@@ -983,8 +1004,8 @@ dialog.auth-modal[open] {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(20, 83, 45, 0.35);
-  border: 1px solid #22c55e;
+  background: var(--status-success-bg);
+  border: 1px solid var(--status-success);
   border-radius: 6px;
   padding: 8px 12px;
 }
@@ -1037,7 +1058,7 @@ dialog.auth-modal[open] {
 
 /* Diff / Change Summary Box */
 .auth-diff-box {
-  background: #080605;
+  background: var(--surface-dark);
   border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 8px 12px;
@@ -1068,7 +1089,7 @@ dialog.auth-modal[open] {
 /* Notes Textarea (Overrides browser raw white background) */
 .auth-modal-textarea {
   width: 100% !important;
-  background: #080605 !important;
+  background: var(--surface-dark) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 6px !important;
   color: var(--text-main) !important;
@@ -1090,12 +1111,12 @@ dialog.auth-modal[open] {
 
 /* Error Banner */
 .auth-modal-error {
-  background: rgba(122, 0, 0, 0.35);
-  border: 1px solid #ef4444;
+  background: var(--status-danger-bg);
+  border: 1px solid var(--status-danger);
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 0.8rem;
-  color: #fca5a5;
+  color: var(--status-danger-text);
 }
 
 .auth-modal-error.hidden {
@@ -1109,7 +1130,7 @@ dialog.auth-modal[open] {
   justify-content: flex-end;
   gap: 10px;
   padding: 12px 18px;
-  background: #0d0a08;
+  background: var(--surface-elevated);
   border-top: 1px solid var(--border-color);
 }
 
@@ -1134,8 +1155,8 @@ dialog.auth-modal[open] {
 }
 
 .btn-modal-action {
-  background: #5865F2 !important; /* Discord Indigo */
-  border: 1px solid #5865F2 !important;
+  background: var(--brand-discord) !important;
+  border: 1px solid var(--brand-discord) !important;
   color: #ffffff !important;
   padding: 8px 18px !important;
   font-size: 0.84rem !important;
@@ -1150,8 +1171,8 @@ dialog.auth-modal[open] {
 }
 
 .btn-modal-action:hover:not(:disabled) {
-  background: #4752c4 !important;
-  border-color: #4752c4 !important;
+  background: var(--brand-discord-hover) !important;
+  border-color: var(--brand-discord-hover) !important;
   box-shadow: 0 6px 18px rgba(88, 101, 242, 0.6) !important;
   transform: translateY(-1px) !important;
 }
@@ -1514,9 +1535,9 @@ dialog.auth-modal[open] {
   color: var(--text-muted);
 }
 .task-list .warning {
-  color: #ff6b6b;
+  color: var(--status-danger-hover);
   font-weight: bold;
-  border-left: 3px solid #ff6b6b;
+  border-left: 3px solid var(--status-danger-hover);
   padding-left: 10px;
   margin: 10px 0;
 }
@@ -2064,7 +2085,7 @@ svg #layer1 path:hover {
 
 .segmented-control {
   display: flex;
-  background: #070504;
+  background: var(--surface-dark);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 4px;
   padding: 2px;
@@ -2103,7 +2124,7 @@ svg #layer1 path:hover {
   font-size: 0.78rem;
   line-height: 1;
   box-sizing: border-box;
-  background: #14100d;
+  background: var(--surface-card);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #c4b8aa;
   border-radius: 4px;
@@ -2146,7 +2167,7 @@ svg #layer1 path:hover {
 }
 
 #alliance-override {
-  background-color: #070504;
+  background-color: var(--surface-dark);
   color: var(--text-main);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 4px;
@@ -2420,7 +2441,7 @@ svg #layer1 path:hover {
   box-sizing: border-box;
   font-weight: bold;
   background: linear-gradient(180deg, #166534 0%, #14532d 100%);
-  border: 1px solid #22c55e;
+  border: 1px solid var(--status-success);
   color: #f0fdf4;
   border-radius: 4px;
   cursor: pointer;
@@ -2826,7 +2847,7 @@ body.map-fullscreen-active turbo-frame {
 .btn-tier-del {
   background: transparent;
   border: 1px solid rgba(255, 107, 107, 0.4);
-  color: #ff6b6b;
+  color: var(--status-danger-hover);
   border-radius: 4px;
   width: 22px;
   height: 22px;
@@ -2841,14 +2862,14 @@ body.map-fullscreen-active turbo-frame {
 }
 
 .btn-tier-del:hover {
-  background: #ff6b6b;
+  background: var(--status-danger-hover);
   color: #1a1512;
 }
 
 .range-stepper {
   display: inline-flex;
   align-items: center;
-  background: #070504;
+  background: var(--surface-dark);
   border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 2px 6px;
@@ -2946,6 +2967,338 @@ body.map-fullscreen-active turbo-frame {
 .rewards-tier-list.rewards-loaded,
 #payout-table-body.rewards-loaded {
   opacity: 1;
+}
+
+/* ==========================================================================
+   INTERACTIVE ALLIANCE HIERARCHY & BLACKLIST (.alliance-wrapper)
+   ========================================================================== */
+
+.alliance-wrapper {
+  width: 100%;
+}
+
+.alliance-hierarchy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.alliance-ladder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.alliance-ladder-row:hover {
+  border-color: var(--accent-color);
+  background: rgba(var(--active-theme), 0.08);
+}
+
+/* Capitol Top 3 Circlet Highlights */
+.alliance-ladder-row.rank-gold {
+  border-left: 4px solid var(--accent-color);
+  background: linear-gradient(90deg, rgba(184, 151, 90, 0.12), transparent);
+}
+.alliance-ladder-row.rank-silver {
+  border-left: 4px solid #94a3b8;
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.12), transparent);
+}
+.alliance-ladder-row.rank-bronze {
+  border-left: 4px solid #b45309;
+  background: linear-gradient(90deg, rgba(180, 83, 9, 0.12), transparent);
+}
+
+/* Rank Column */
+.ladder-rank-col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 45px;
+}
+
+.ladder-rank-badge {
+  font-family: var(--font-headers);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent-color);
+  min-width: 28px;
+}
+
+.ladder-rank-badge.rank-gold   { color: var(--rank-gold); text-shadow: 0 0 8px rgba(250, 204, 21, 0.4); }
+.ladder-rank-badge.rank-silver { color: var(--rank-silver); text-shadow: 0 0 8px rgba(226, 232, 240, 0.4); }
+.ladder-rank-badge.rank-bronze { color: var(--rank-bronze); text-shadow: 0 0 8px rgba(249, 115, 22, 0.4); }
+
+.ladder-steppers {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ladder-step-btn {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  color: var(--accent-color);
+  font-size: 0.55rem;
+  width: 18px;
+  height: 14px;
+  padding: 0;
+  line-height: 1;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ladder-step-btn:hover:not(:disabled) {
+  background: var(--accent-color);
+  color: #110d0b;
+}
+
+.ladder-step-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+/* Identity Column */
+.ladder-identity-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ladder-primary-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.alliance-color-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.ladder-tag {
+  font-family: var(--font-headers);
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.ladder-name {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ladder-sub-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Academy Tag Pills */
+.academy-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.academy-child-badge {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.btn-unlink-acad {
+  background: transparent;
+  border: none;
+  color: var(--status-danger-hover);
+  cursor: pointer;
+  font-size: 0.8rem;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.btn-link-acad-prompt {
+  background: transparent;
+  border: 1px dashed var(--accent-color);
+  color: var(--accent-color);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Status & NAP Controls */
+.ladder-status-col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.nap-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.nap-badge.nap-active {
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid var(--status-success);
+  color: var(--status-success-text);
+}
+
+.nap-badge.nap-inactive {
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid var(--status-danger);
+  color: var(--status-danger-text);
+}
+
+.btn-nap-toggle {
+  background: #1e1713;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 3px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-ladder-del {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: var(--status-danger);
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+}
+
+/* Inline Add Contender Form */
+.add-alliance-inline {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.add-alliance-inline input {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.add-alliance-inline input#input-new-tag { width: 90px; text-transform: uppercase; }
+.add-alliance-inline input#input-new-name { flex: 1; }
+
+/* Blacklist Cards */
+.blacklist-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.blacklist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.blacklist-header h3 {
+  margin: 0 !important;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  border-bottom: none !important;
+}
+
+.blacklist-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.blacklist-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(122, 0, 0, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  color: var(--status-danger-text);
+}
+
+.blacklist-ign {
+  font-weight: 700;
+}
+
+.btn-blacklist-del {
+  background: transparent;
+  border: none;
+  color: var(--status-danger);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.planner-blacklist-add {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.planner-blacklist-add input {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+}
+
+.blacklist-empty {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 /* ==========================================================================
