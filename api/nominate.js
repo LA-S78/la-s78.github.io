@@ -1,6 +1,6 @@
 // api/nominate.js
+// Handles /nominate token verification, dynamic quota validation, and buyout fulfillment.
 
-// For /nominate in Discord
 import crypto from 'crypto';
 
 function verifyNominationToken(token, secret) {
@@ -24,7 +24,7 @@ function verifyNominationToken(token, secret) {
     const payload = JSON.parse(Buffer.from(dataString, 'base64url').toString());
     if (payload.exp && Date.now() > payload.exp) return null;
     return payload;
-  } catch (err) {
+  } catch {
     return null;
   }
 }
@@ -43,6 +43,7 @@ export default async function handler(req, res) {
     'User-Agent': 'WarRoom-Nominations'
   };
 
+  // GET: Read current nominations for portals/consoles
   if (req.method === 'GET') {
     try {
       const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
@@ -67,7 +68,8 @@ export default async function handler(req, res) {
       return res.status(200).json({
         nominations,
         lastReset,
-        mode: rewardsData.mode || 'standard'
+        mode: rewardsData.mode || 'standard',
+        wartime_buyouts: rewardsData.wartime_buyouts || []
       });
     } catch (err) {
       console.error('Failed to read nominations:', err);
@@ -91,62 +93,80 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: 'Token is invalid or expired. Run /nominate again.' });
   }
 
+  const cleanTag = String(payload.alliance || '').trim();
   const allotment = payload.allotment || {};
   const isKW = payload.mode === 'kw';
+  const buyoutMeta = payload.buyout || null; // Injected if this alliance holds an active buyout
 
-  const validatePool = (pool) => {
-    if (!pool) return false;
+  // Validation function enforcing exact slot counts
+  const validatePool = (pool, poolName) => {
+    if (!pool) return `Missing ${poolName} pool payload.`;
     const g = (pool.commanders_will || []).map(s => s.trim()).filter(Boolean);
     const p = (pool.loyal_servant || []).map(s => s.trim()).filter(Boolean);
     const b = (pool.followers_heart || []).map(s => s.trim()).filter(Boolean);
 
-    return (
-      g.length === (allotment.commanders_will || 0) &&
-      p.length === (allotment.loyal_servant || 0) &&
-      b.length === (allotment.followers_heart || 0)
-    );
+    const expectedG = Number(allotment.commanders_will || 0);
+    const expectedP = Number(allotment.loyal_servant || 0);
+    const expectedB = Number(allotment.followers_heart || 0);
+
+    if (g.length !== expectedG) {
+      return `${poolName}: Expected ${expectedG} Commander's Will, received ${g.length}.`;
+    }
+    if (p.length !== expectedP) {
+      return `${poolName}: Expected ${expectedP} Loyal Servant, received ${p.length}.`;
+    }
+    if (b.length !== expectedB) {
+      return `${poolName}: Expected ${expectedB} Follower's Heart, received ${b.length}.`;
+    }
+    return null;
   };
 
   const stdPool = nominations.standard || nominations;
-  if (!validatePool(stdPool)) {
-    return res.status(400).json({ error: 'Standard recipient counts do not match allotted quota.' });
+  const stdError = validatePool(stdPool, 'Standard');
+  if (stdError) {
+    return res.status(400).json({ error: stdError });
   }
 
   if (isKW) {
-    if (!validatePool(nominations.kingdom_war)) {
-      return res.status(400).json({ error: 'Kingdom War recipient counts do not match allotted quota.' });
+    const kwError = validatePool(nominations.kingdom_war, 'Kingdom War');
+    if (kwError) {
+      return res.status(400).json({ error: kwError });
     }
   }
 
   try {
-    let nominationsStore = {};
     const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       headers,
       cache: 'no-store'
     });
+    if (!gistGetRes.ok) throw new Error(`GitHub Gist load failed: ${gistGetRes.status}`);
 
-    if (gistGetRes.ok) {
-      const gistData = await gistGetRes.json();
-      const content = gistData.files['rewards-nominations.json']?.content;
-      if (content) nominationsStore = JSON.parse(content);
-    }
+    const gistData = await gistGetRes.json();
+    let nominationsStore = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+    let rewardsState = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
 
     const cleanList = (arr) => (arr || []).map(s => s.trim()).filter(Boolean);
 
-    nominationsStore[payload.alliance] = {
-      alliance: payload.alliance,
+    const regGoldList = cleanList(stdPool.commanders_will);
+    const kwGoldList = isKW ? cleanList(nominations.kingdom_war.commanders_will) : [];
+
+    // 1. Commit to rewards-nominations.json
+    nominationsStore[cleanTag] = {
+      alliance: cleanTag,
       rank: payload.rank,
       mode: payload.mode || 'standard',
+      hasBuyoutBonus: Boolean(buyoutMeta?.hasBonus),
+      isWloDeducted: Boolean(buyoutMeta?.isDeducted),
       submittedAt: new Date().toISOString(),
       recipients: {
         standard: {
-          commanders_will: cleanList(stdPool.commanders_will),
+          commanders_will: regGoldList,
           loyal_servant: cleanList(stdPool.loyal_servant),
           followers_heart: cleanList(stdPool.followers_heart)
         },
         ...(isKW ? {
           kingdom_war: {
-            commanders_will: cleanList(nominations.kingdom_war.commanders_will),
+            commanders_will: kwGoldList,
             loyal_servant: cleanList(nominations.kingdom_war.loyal_servant),
             followers_heart: cleanList(nominations.kingdom_war.followers_heart)
           }
@@ -154,23 +174,47 @@ export default async function handler(req, res) {
       }
     };
 
+    // 2. If this alliance has an active buyout installment, record the nominees
+    if (buyoutMeta?.ticketId && Array.isArray(rewardsState.wartime_buyouts)) {
+      const ticket = rewardsState.wartime_buyouts.find(b => b.id === buyoutMeta.ticketId);
+      if (ticket && Array.isArray(ticket.installments)) {
+        const inst = ticket.installments.find(i => Number(i.week) === Number(buyoutMeta.week));
+        if (inst) {
+          // The last nominated slot in the list represents the buyout bonus chest
+          inst.nominated_players = {
+            regular: regGoldList.slice(-1),
+            kw: kwGoldList.slice(-1)
+          };
+          inst.status = 'nominated';
+        }
+      }
+    }
+
+    // 3. Atomically update both Gist files in a single PATCH
     const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: 'PATCH',
       headers: { ...headers, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        description: `Nominations updated: [${payload.alliance}] at ${new Date().toISOString()}`,
+        description: `Nominations updated: [${cleanTag}] at ${new Date().toISOString()}`,
         files: {
           'rewards-nominations.json': {
             content: JSON.stringify(nominationsStore, null, 2)
+          },
+          'rewards-data.json': {
+            content: JSON.stringify(rewardsState, null, 2)
           }
         }
       })
     });
 
-    if (!updateRes.ok) throw new Error(`GitHub Gist responded with ${updateRes.status}`);
+    if (!updateRes.ok) throw new Error(`GitHub Gist PATCH error: ${updateRes.status}`);
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-    return res.status(200).json({ success: true, alliance: payload.alliance });
+    return res.status(200).json({ 
+      success: true, 
+      alliance: cleanTag,
+      hasBuyoutBonus: Boolean(buyoutMeta?.hasBonus)
+    });
   } catch (error) {
     console.error('Failed to commit nominations:', error);
     return res.status(500).json({ error: error.message });

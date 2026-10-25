@@ -12,6 +12,9 @@ hide_header: true
     <div class="sub-text" id="progress-indicator">Loading nominations...</div>
   </div>
 
+  <!-- Shown automatically when an alliance has an active Wartime Buyout this week -->
+  <div id="buyout-status-banner" class="nomination-alert-banner buyout-active" style="display: none;"></div>
+
   <div class="distribute-toolbar">
     <div class="segmented-control">
       <button type="button" class="toggle-btn active" id="btn-group-chest">By Chest</button>
@@ -30,10 +33,12 @@ hide_header: true
   (function () {
     let currentStorageKey = 'la_sent_recipients_default';
     let nominationsData = {};
+    let wartimeBuyouts = [];
     let groupBy = 'chest';
 
     const elRoster = document.getElementById('roster-container');
     const elProgress = document.getElementById('progress-indicator');
+    const elBuyoutBanner = document.getElementById('buyout-status-banner');
     const btnGroupChest = document.getElementById('btn-group-chest');
     const btnGroupAlliance = document.getElementById('btn-group-alliance');
     const btnReset = document.getElementById('btn-reset-progress');
@@ -58,6 +63,7 @@ hide_header: true
 
         if (data && data.nominations) {
           nominationsData = data.nominations;
+          wartimeBuyouts = data.wartime_buyouts || [];
           if (data.lastReset) {
             const cycleHash = btoa(data.lastReset).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16);
             currentStorageKey = `la_sent_recipients_${cycleHash}`;
@@ -78,9 +84,30 @@ hide_header: true
       }
     }
 
+    function renderBuyoutBanner() {
+      if (!elBuyoutBanner) return;
+
+      const buyoutAlliances = Object.values(nominationsData).filter(a => a && a.hasBuyoutBonus);
+      if (buyoutAlliances.length > 0) {
+        const tags = buyoutAlliances.map(a => `<strong>[${escapeHtml(a.alliance)}]</strong>`).join(', ');
+        elBuyoutBanner.innerHTML = `
+          <span>🛡️</span>
+          <div>
+            <strong>Wartime Restitution Active:</strong> ${tags} ${buyoutAlliances.length === 1 ? 'includes' : 'include'} bonus Commander's Will slots funded from WLO's Rank #1 allotment.
+          </div>
+        `;
+        elBuyoutBanner.style.display = 'flex';
+      } else {
+        elBuyoutBanner.style.display = 'none';
+        elBuyoutBanner.innerHTML = '';
+      }
+    }
+
     function render() {
       const sentSet = getSentSet();
       const alliances = Object.keys(nominationsData);
+
+      renderBuyoutBanner();
 
       if (alliances.length === 0) {
         elRoster.innerHTML = '<div class="sub-text distribute-empty">No nominations submitted yet.</div>';
@@ -93,12 +120,22 @@ hide_header: true
       alliances.forEach(tag => {
         const item = nominationsData[tag];
         const rec = item.recipients || {};
+        const hasBuyout = Boolean(item.hasBuyoutBonus);
 
         const addEntries = (poolData, poolName) => {
           if (!poolData) return;
-          (poolData.commanders_will || []).forEach(ign => flatList.push({ ign, type: 'commanders_will', alliance: tag, pool: poolName }));
-          (poolData.loyal_servant || []).forEach(ign => flatList.push({ ign, type: 'loyal_servant', alliance: tag, pool: poolName }));
-          (poolData.followers_heart || []).forEach(ign => flatList.push({ ign, type: 'followers_heart', alliance: tag, pool: poolName }));
+          const cwList = poolData.commanders_will || [];
+          cwList.forEach((ign, idx) => {
+            // The final gold slot in a buyout beneficiary's list is the restitution chest
+            const isBuyout = hasBuyout && idx === cwList.length - 1;
+            flatList.push({ ign, type: 'commanders_will', alliance: tag, pool: poolName, isBuyout });
+          });
+          (poolData.loyal_servant || []).forEach(ign =>
+            flatList.push({ ign, type: 'loyal_servant', alliance: tag, pool: poolName, isBuyout: false })
+          );
+          (poolData.followers_heart || []).forEach(ign =>
+            flatList.push({ ign, type: 'followers_heart', alliance: tag, pool: poolName, isBuyout: false })
+          );
         };
 
         if (rec.standard) {
@@ -179,12 +216,13 @@ hide_header: true
       const isKW = item.pool === 'KW';
 
       return `
-        <div class="distribute-item ${isSent ? 'sent' : ''}" data-id="${escapeHtml(id)}">
+        <div class="distribute-item ${isSent ? 'sent' : ''} ${item.isBuyout ? 'is-buyout' : ''}" data-id="${escapeHtml(id)}">
           <span class="chest-glyph ${glyph}"></span>
-          <span class="badge badge-alliance-sm">${item.alliance}</span>
+          <span class="badge badge-alliance-sm">${escapeHtml(item.alliance)}</span>
           <span class="badge ${isKW ? 'badge-pool-kw' : 'badge-pool-reg'}">
             ${item.pool}
           </span>
+          ${item.isBuyout ? '<span class="badge badge-buyout">BUYOUT</span>' : ''}
           <span class="player-ign">${escapeHtml(item.ign)}</span>
           <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">Copy</button>
         </div>

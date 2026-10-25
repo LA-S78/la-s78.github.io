@@ -10,6 +10,10 @@ import {
 import { RULES_DATA, SB_DATA, BOT_DATA } from "./_generated_translations.js";
 import { listAllianceRanks, setAllianceRank } from "./_rank_helper.js";
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from "./_calendar_helper.js";
+import {
+  getAllianceNominationQuota,
+  applySafeCycleReset,
+} from "./_rewards_helper.js";
 
 export const config = { api: { bodyParser: false } };
 
@@ -77,6 +81,30 @@ const ALLIANCE_COMMANDS_SCHEMA = [
     name: "rewards",
     description: "Display reward allocations and nomination status",
     type: 1,
+    options: [
+      {
+        type: 3,
+        name: "action",
+        description: "Action to perform (leave blank to check status)",
+        required: false,
+        choices: [
+          {
+            name: "Reset Nomination Cycle (Admin Only)",
+            value: "reset",
+          },
+        ],
+      },
+      {
+        type: 3,
+        name: "mode",
+        description: "Reward mode for reset (standard or kw)",
+        required: false,
+        choices: [
+          { name: "Standard (1x)", value: "standard" },
+          { name: "Kingdom War (2x)", value: "kw" },
+        ],
+      },
+    ],
   },
   {
     name: "sb",
@@ -171,6 +199,24 @@ const PROPOSAL_CONFIGS = {
     rejectId: "reject_alliance_proposal",
     approveLabel: "Approve Standings",
     rejectLabel: "Reject",
+  },
+  approve_override_proposal: {
+    type: "override",
+    isApproved: true,
+    filePrefix: "override-blueprint",
+    approveId: "approve_override_proposal",
+    rejectId: "reject_override_proposal",
+    approveLabel: "Approve Defense Override",
+    rejectLabel: "Reject Override",
+  },
+  reject_override_proposal: {
+    type: "override",
+    isApproved: false,
+    filePrefix: "override-blueprint",
+    approveId: "approve_override_proposal",
+    rejectId: "reject_override_proposal",
+    approveLabel: "Approve Defense Override",
+    rejectLabel: "Reject Override",
   },
 };
 
@@ -519,7 +565,8 @@ async function resolveMemberAllianceContext({
       knownTags.find((tag) => {
         const cleanTag = tag.toLowerCase();
         return memberRoleNames.some(
-          (r) => r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
+          (r) =>
+            r === cleanTag || r === `@${cleanTag}` || r === `[${cleanTag}]`,
         );
       }) || null;
 
@@ -752,7 +799,10 @@ export default async function handler(req, res) {
           if (mapRaw) alliances = JSON.parse(mapRaw).alliances || {};
         }
       } catch (err) {
-        console.warn("Calendar state fetch failed, using defaults:", err.message);
+        console.warn(
+          "Calendar state fetch failed, using defaults:",
+          err.message,
+        );
       }
 
       const {
@@ -1348,7 +1398,7 @@ export default async function handler(req, res) {
       }
     }
 
-    // --- /nominate COMMAND ---
+    // --- /nominate COMMAND (DYNAMIC QUOTA & BUYOUT INTERCEPTOR) ---
     if (name === "nominate") {
       const ownerGuildId = (process.env.DISCORD_GUILD_ID_OWNER || "").trim();
 
@@ -1420,65 +1470,86 @@ export default async function handler(req, res) {
         const rewardsData = JSON.parse(
           gistData.files["rewards-data.json"]?.content || "{}",
         );
-        const isKW = rewardsData.mode === "kw";
 
-        const allianceInfo = alliances[matchedAllianceTag];
-        const rank = parseInt(allianceInfo?.rank, 10);
+        // 1. Resolve live quota with dynamic Wartime Buyout & WLO deduction support
+        const quotaData = getAllianceNominationQuota(
+          matchedAllianceTag,
+          rewardsData,
+          mapState,
+        );
 
-        if (isNaN(rank)) {
+        const rank = quotaData.rank;
+        const isKW = quotaData.isKW;
+        const currentWeek = quotaData.currentWeek;
+
+        if (isNaN(rank) || rank > 50) {
           return sendEphemeralMessage(
             res,
-            `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned.`,
+            `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned in the standings.`,
           );
         }
 
-        const tiers = rewardsData.distribution_tiers || [];
-        const matchedTier = tiers.find((tier) => {
-          const min = parseInt(tier.min_rank ?? tier.minRank, 10);
-          const max = parseInt(tier.max_rank ?? tier.maxRank, 10);
-          return !isNaN(min) && !isNaN(max) && rank >= min && rank <= max;
-        });
-
-        if (!matchedTier) {
-          return sendEphemeralMessage(
-            res,
-            `⚠️ **[${matchedAllianceTag}]** (Rank #${rank}) is not currently eligible for rewards under the active plan.`,
-          );
-        }
-
-        const allotment = matchedTier.chests || {
-          commanders_will: 0,
-          loyal_servant: 0,
-          followers_heart: 0,
+        const allotment = {
+          commanders_will: quotaData.quotas.commanders_will_regular,
+          commanders_will_kw: quotaData.quotas.commanders_will_kw,
+          loyal_servant: quotaData.quotas.loyal_servant,
+          followers_heart: quotaData.quotas.followers_heart,
         };
-        const singleQuota =
+
+        const regTotal =
           (allotment.commanders_will || 0) +
           (allotment.loyal_servant || 0) +
           (allotment.followers_heart || 0);
 
-        if (singleQuota === 0) {
+        const kwTotal =
+          (allotment.commanders_will_kw || 0) +
+          (allotment.loyal_servant || 0) +
+          (allotment.followers_heart || 0);
+
+        const totalChests = isKW ? regTotal + kwTotal : regTotal;
+
+        if (totalChests === 0) {
           return sendEphemeralMessage(
             res,
             `⚠️ **[${matchedAllianceTag}]** has 0 chests allocated under the current distribution.`,
           );
         }
 
-        const totalChests = isKW ? singleQuota * 2 : singleQuota;
-
+        // 2. Build signed HMAC JWT payload (24h expiry)
         const tokenPayload = {
           alliance: matchedAllianceTag,
           rank,
           allotment,
           mode: isKW ? "kw" : "standard",
           exp: Date.now() + 24 * 60 * 60 * 1000,
+          buyout: quotaData.hasBuyoutBonus
+            ? {
+                hasBonus: true,
+                ticketId: quotaData.buyoutDetails?.ticketId,
+                week: currentWeek,
+                threat: quotaData.buyoutDetails?.threat,
+              }
+            : quotaData.isWloDeducted
+              ? {
+                  isDeducted: true,
+                  week: currentWeek,
+                }
+              : null,
         };
+
         const token = createHmacToken(tokenPayload, botToken);
         const nominateUrl = `https://${resolvedHost}/nominate.html?token=${token}`;
+
+        // 3. Render Embed Fields
+        const goldDesc =
+          isKW && allotment.commanders_will !== allotment.commanders_will_kw
+            ? `×${allotment.commanders_will} Reg / ×${allotment.commanders_will_kw} KW`
+            : `×${allotment.commanders_will || 0}`;
 
         const fields = [
           {
             name: "🟡 Gold (Commander)",
-            value: `×${allotment.commanders_will || 0}`,
+            value: goldDesc,
             inline: true,
           },
           {
@@ -1493,10 +1564,24 @@ export default async function handler(req, res) {
           },
         ];
 
+        if (quotaData.hasBuyoutBonus) {
+          fields.push({
+            name: "🛡️ Wartime Buyout Restitution Active",
+            value: `Includes **+1 Regular Gold & +1 KW Gold** quota funded by WLO for this week's defense override (Threat: \`${quotaData.buyoutDetails?.threat || "Red List"}\`).`,
+            inline: false,
+          });
+        } else if (quotaData.isWloDeducted) {
+          fields.push({
+            name: "⚖️ Wartime Buyout Restitution Funded",
+            value: `WLO has yielded **1 Regular Gold & 1 KW Gold** from this week's Rank #1 allotment to fund the displaced alliance's restitution.`,
+            inline: false,
+          });
+        }
+
         if (isKW) {
           fields.push({
             name: "⚔️ Kingdom War Split Pool",
-            value: `You will submit **two separate rosters** of the above quantities:\n1× **Regular Pool** (${singleQuota} chests)\n1× **Kingdom War Pool** (${singleQuota} chests)`,
+            value: `You will submit **two separate rosters**:\n1× **Regular Pool** (${regTotal} chests)\n1× **Kingdom War Pool** (${kwTotal} chests)`,
             inline: false,
           });
         }
@@ -1507,8 +1592,12 @@ export default async function handler(req, res) {
             embeds: [
               {
                 title: `🎁 Reward Nominations — [${matchedAllianceTag}]${isKW ? " ⚔️ [KW 2x Active]" : ""}`,
-                color: isKW ? 0x8f0000 : 0xb8975a,
-                description: `You are eligible for **${totalChests} total chests** based on your **Rank #${rank}** finish.\nClick below to submit your recipient roster.`,
+                color: quotaData.hasBuyoutBonus
+                  ? 0xef4444
+                  : isKW
+                    ? 0x8f0000
+                    : 0xb8975a,
+                description: `You are eligible for **${totalChests} total chests** based on your standings (Rank #${rank}).\nClick below to submit your recipient roster.`,
                 fields,
                 footer: { text: "Link is private and expires in 24 hours." },
               },
@@ -1562,8 +1651,14 @@ export default async function handler(req, res) {
           const currentRewards = JSON.parse(
             gistData.files["rewards-data.json"]?.content || "{}",
           );
-          currentRewards.mode = requestedMode;
-          currentRewards.lastReset = new Date().toISOString();
+
+          const {
+            updatedRewards,
+            archivedCount,
+            preservedCount,
+            cycleAdvanced,
+            nextWeek,
+          } = applySafeCycleReset(currentRewards, requestedMode, username);
 
           const patchRes = await fetch(
             `https://api.github.com/gists/${GIST_ID}`,
@@ -1581,7 +1676,7 @@ export default async function handler(req, res) {
                     content: JSON.stringify({}, null, 2),
                   },
                   "rewards-data.json": {
-                    content: JSON.stringify(currentRewards, null, 2),
+                    content: JSON.stringify(updatedRewards, null, 2),
                   },
                 },
               }),
@@ -1592,6 +1687,17 @@ export default async function handler(req, res) {
             throw new Error(`GitHub API returned ${patchRes.status}`);
 
           const isKW = requestedMode === "kw";
+          const cycleNotice = cycleAdvanced
+            ? `\n• 🔄 **Rotation Cycle Completed:** Override count reset to \`0/2\` for the new cycle.`
+            : `\n• 📅 **Rotation Week Advanced:** Now entering \`Week ${nextWeek}\`.`;
+
+          const buyoutNotice =
+            preservedCount > 0
+              ? `\n• 🛡️ **Buyout Protected:** \`${preservedCount}\` active buyout ticket(s) rolled over.`
+              : archivedCount > 0
+                ? `\n• 📦 **Buyout Settled:** \`${archivedCount}\` completed buyout ticket(s) archived.`
+                : "";
+
           return res.status(200).json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
@@ -1601,7 +1707,7 @@ export default async function handler(req, res) {
                     ? "⚔️ Kingdom War Cycle Initialized (2x Rewards)"
                     : "🔄 Standard Reward Cycle Reset",
                   color: isKW ? 0x8f0000 : 0x22c55e,
-                  description: `All previous nominations have been cleared from Kingdom records.\n\n• **Active Mode:** ${isKW ? "⚔️ **Kingdom War (Double Allocation: 1x Regular + 1x KW)**" : "🛡️ **Standard Week (1x Allocation)**"}\n• All eligible alliances are reset to \`⏳ Awaiting submission\`.\n• Leaders can now generate fresh rosters via \`/nominate\`.\n• Remind the King to hit **Reset Checklist** on the console.`,
+                  description: `All previous nominations have been cleared from Kingdom records.\n\n• **Active Mode:** ${isKW ? "⚔️ **Kingdom War (Double Allocation: 1x Regular + 1x KW)**" : "🛡️ **Standard Week (1x Allocation)**"}${cycleNotice}${buyoutNotice}\n• All eligible alliances are reset to \`⏳ Awaiting submission\`.\n• Leaders can now generate fresh rosters via \`/nominate\`.\n• Remind the King to hit **Reset Checklist** on the console.`,
                   footer: { text: `Cycle initialized by ${username}` },
                   timestamp: new Date().toISOString(),
                 },
@@ -1630,33 +1736,38 @@ export default async function handler(req, res) {
         );
 
         const isKW = rewardsData.mode === "kw";
-        const tiers = rewardsData.distribution_tiers || [];
         const alliances = mapState.alliances || {};
-
         const eligibleRoster = [];
 
         Object.entries(alliances).forEach(([tag, data]) => {
           const rank = parseInt(data.rank, 10);
           if (isNaN(rank)) return;
 
-          const matchedTier = tiers.find((tier) => {
-            const min = parseInt(tier.min_rank ?? tier.minRank, 10);
-            const max = parseInt(tier.max_rank ?? tier.maxRank, 10);
-            return !isNaN(min) && !isNaN(max) && rank >= min && rank <= max;
-          });
-          if (!matchedTier) return;
+          // Compute dynamic quota taking buyouts/deductions into account
+          const quotaData = getAllianceNominationQuota(
+            tag,
+            rewardsData,
+            mapState,
+          );
+          const regTotal =
+            (quotaData.quotas.commanders_will_regular || 0) +
+            (quotaData.quotas.loyal_servant || 0) +
+            (quotaData.quotas.followers_heart || 0);
 
-          const allotment = matchedTier.chests || {};
-          const singleTotal =
-            (allotment.commanders_will || 0) +
-            (allotment.loyal_servant || 0) +
-            (allotment.followers_heart || 0);
+          const kwTotal =
+            (quotaData.quotas.commanders_will_kw || 0) +
+            (quotaData.quotas.loyal_servant || 0) +
+            (quotaData.quotas.followers_heart || 0);
 
-          if (singleTotal > 0) {
+          const totalQuota = isKW ? regTotal + kwTotal : regTotal;
+
+          if (totalQuota > 0) {
             eligibleRoster.push({
               tag,
               rank,
-              quota: isKW ? singleTotal * 2 : singleTotal,
+              quota: totalQuota,
+              hasBuyout: quotaData.hasBuyoutBonus,
+              isWloDeducted: quotaData.isWloDeducted,
             });
           }
         });
@@ -1673,6 +1784,12 @@ export default async function handler(req, res) {
         let submittedCount = 0;
         const statusLines = eligibleRoster.map((item) => {
           const entry = nominations[item.tag];
+          const buyoutTag = item.hasBuyout
+            ? " 🛡️ [Buyout]"
+            : item.isWloDeducted
+              ? " ⚖️ [-1 Reg/-1 KW]"
+              : "";
+
           if (entry && entry.recipients) {
             submittedCount++;
             let totalNominated = 0;
@@ -1698,9 +1815,9 @@ export default async function handler(req, res) {
             const submitUnix = Math.floor(
               new Date(entry.submittedAt).getTime() / 1000,
             );
-            return `✅ **[${item.tag}]** (Rank #${item.rank}) — **${totalNominated}/${item.quota}** nominated (<t:${submitUnix}:R>)`;
+            return `✅ **[${item.tag}]** (Rank #${item.rank})${buyoutTag} — **${totalNominated}/${item.quota}** nominated (<t:${submitUnix}:R>)`;
           } else {
-            return `⏳ **[${item.tag}]** (Rank #${item.rank}) — **Awaiting submission** (${item.quota} chests)`;
+            return `⏳ **[${item.tag}]** (Rank #${item.rank})${buyoutTag} — **Awaiting submission** (${item.quota} chests)`;
           }
         });
 
@@ -1885,7 +2002,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // 2. ADMIN PROPOSALS & REVIEWS (Map, Rewards, Alliance Standings)
+    // 2. ADMIN PROPOSALS & REVIEWS (Map, Rewards, Alliance Standings, Overrides)
     const proposalConfig = PROPOSAL_CONFIGS[custom_id];
     if (!proposalConfig) {
       return sendEphemeralMessage(
@@ -1923,7 +2040,9 @@ export default async function handler(req, res) {
 
         const blueprintRes = await fetch(blueprintAttachment.url);
         if (!blueprintRes.ok) {
-          throw new Error("Failed to retrieve blueprint attachment from Discord.");
+          throw new Error(
+            "Failed to retrieve blueprint attachment from Discord.",
+          );
         }
         const parsedData = await blueprintRes.json();
 
@@ -1938,6 +2057,11 @@ export default async function handler(req, res) {
         } else if (proposalType === "alliance") {
           acceptPayload.alliances = parsedData.alliances;
           acceptPayload.blacklist = parsedData.blacklist;
+        } else if (proposalType === "override") {
+          acceptPayload.targetWeek = parsedData.targetWeek;
+          acceptPayload.threatName = parsedData.threatName;
+          acceptPayload.action = parsedData.action;
+          acceptPayload.displacedAlly = parsedData.displacedAlly;
         } else {
           acceptPayload.changes = parsedData;
         }

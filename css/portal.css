@@ -427,6 +427,42 @@ body.portal-body .content-pane {
   padding-bottom: 4px;
 }
 
+/* Wartime Restitution Nomination Banners & Slots */
+.nomination-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.nomination-alert-banner.buyout-active {
+  background: rgba(184, 151, 90, 0.12);
+  border: 1px solid var(--accent-color);
+  color: var(--text-main);
+}
+
+.nomination-alert-banner.buyout-deducted {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+}
+
+.slot-buyout-bonus {
+  background: rgba(184, 151, 90, 0.06);
+  border: 1px dashed var(--accent-color);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-top: 6px;
+}
+
+.input-buyout {
+  border-color: var(--accent-color) !important;
+}
+
 /* ==========================================================================
    4. DISTRIBUTE CONSOLE STYLES
    ========================================================================== */
@@ -506,6 +542,18 @@ body.portal-body .content-pane {
   font-size: 0.62rem;
   background: #8f0000;
   color: #fff;
+}
+
+.distribute-item.is-buyout {
+  border-left: 3px solid var(--accent-color);
+  background: linear-gradient(90deg, rgba(184, 151, 90, 0.12) 0%, #080605 100%);
+}
+
+.badge-buyout {
+  font-size: 0.62rem;
+  background: rgba(184, 151, 90, 0.2);
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
 }
 
 .player-ign {
