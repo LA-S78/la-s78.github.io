@@ -197,8 +197,8 @@ export function updateOverridePreview() {
           <span>Week 3 Finale: <strong style="color: ${allyColor}">[${currentScheduledAlly}]</strong></span>
         </div>
         <div class="preview-perks">
-          🎁 <strong>[${currentScheduledAlly}]</strong> receives 2 King Chests, the KvK Finale seat, and the reusable King Buff Item.
-          <strong>WLO Alliance Chest Cost: 0.</strong>
+          🎁 <strong>[${currentScheduledAlly}]</strong> lose 0 chests.
+          <strong>WLO loses 0 chests.</strong>
         </div>
       </div>
     `;
@@ -210,14 +210,15 @@ export function updateOverridePreview() {
         <div class="preview-type-badge alert">Step 2: Wartime Buyout (2-Installment Restitution)</div>
         <p>
           This is the <strong>second defense override</strong> in this cycle. Week 3 was already traded, so
-          <strong style="color: ${allyColor}">[${currentScheduledAlly}]</strong> sits out and receives a full material buyout:
+          <strong style="color: ${allyColor}">[${currentScheduledAlly}]</strong> sits out and receives a buyout with chests:
         </p>
         <div class="preview-installment-plan">
           <div class="p-item">• <strong>Week ${targetWeek} Distribution:</strong> +1 Regular Gold &amp; +1 KW Gold to [${currentScheduledAlly}]</div>
           <div class="p-item">• <strong>Week 3 Distribution:</strong> +1 Regular Gold &amp; +1 KW Gold to [${currentScheduledAlly}]</div>
         </div>
         <div class="preview-perks">
-          💰 <strong>Total Restitution:</strong> 2 Regular Gold + 2 KW Gold chests (~9,400 Diamonds / 44 Tickets equivalent). Zero calendar debt created.
+          🎁 <strong>[${currentScheduledAlly}]</strong> lose 2 King chests, gain 4 gold chests.
+          <strong>WLO gains 2 King chests, loses 4 gold chests.</strong>
         </div>
       </div>
     `;

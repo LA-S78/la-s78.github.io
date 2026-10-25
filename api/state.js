@@ -150,6 +150,7 @@ export default async function handler(req, res) {
             lastUpdated: rewardsState.lastUpdated || null
           }
         });
+      }
   } catch (error) {
     console.error('Error in /api/state:', error);
     return res.status(500).json({ error: 'Failed to load state from Gist' });
