@@ -1114,6 +1114,300 @@ body.portal-body .content-pane {
 }
 /* hide language selector on portal pages */
 
+/* ==========================================================================
+   WAR ROOM OPERATIONS & CAPITOL ROTATION PORTAL (.ops-portal)
+   ========================================================================== */
+
+.ops-portal {
+  margin: 1.5rem auto;
+  max-width: 1000px;
+}
+
+.ops-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.ops-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ops-title {
+  margin: 0 !important;
+  font-family: var(--font-headers);
+  font-size: 1.25rem;
+  color: var(--accent-color);
+  letter-spacing: 1px;
+}
+
+.ops-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.ops-cycle-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 4-Week Overview Cards */
+.ops-schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ops-week-card {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.ops-week-card.is-active-week {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 12px rgba(184, 151, 90, 0.25);
+  background: linear-gradient(180deg, rgba(184, 151, 90, 0.08) 0%, var(--surface-dark) 100%);
+}
+
+.ops-week-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ops-week-num {
+  font-family: var(--font-headers);
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--text-main);
+  text-transform: uppercase;
+}
+
+.ops-week-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ops-week-tag {
+  font-family: var(--font-headers);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.ops-week-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.ops-week-loot {
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  padding-top: 6px;
+  font-size: 0.72rem;
+  color: var(--accent-color);
+}
+
+/* Active Buyouts Tracker */
+.ops-buyout-section {
+  background: var(--surface-card);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.ops-buyout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ops-buyout-card {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ops-buyout-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.84rem;
+}
+
+.ops-installments-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.ops-installment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+}
+
+.ops-installment-item.is-fulfilled {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+/* Override Form & Simulator Box */
+.ops-override-box {
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ops-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.ops-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ops-select,
+.ops-input {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ops-select:focus,
+.ops-input:focus {
+  border-color: var(--accent-color);
+}
+
+/* Mathematical Preview Banners */
+.ops-preview-banner {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.preview-type-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid var(--status-success);
+  color: var(--status-success-text);
+  margin-bottom: 8px;
+}
+
+.preview-type-badge.alert {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger-text);
+}
+
+.preview-swap-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 6px 0;
+  font-size: 0.88rem;
+}
+
+.swap-arrow {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.preview-perks {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  padding-top: 6px;
+}
+
+.ops-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.ops-disclaimer {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.btn-submit-override {
+  background: var(--brand-discord);
+  border: 1px solid var(--brand-discord);
+  color: #ffffff;
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
+}
+
+.btn-submit-override:hover:not(:disabled) {
+  background: var(--brand-discord-hover);
+  transform: translateY(-1px);
+}
+
+.btn-submit-override:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* end */
 
 @media (max-width: 768px) {

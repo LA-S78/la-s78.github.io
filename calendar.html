@@ -158,10 +158,82 @@ lang: "en"
         <div id="filter-status-tag" class="filter-active-badge"></div>
       </div>
 
-      <!-- 4-Week Cycle Roadmap -->
-      <section class="cal-section">
-        <h2 class="section-heading">4-Week Capitol Rotation Cycle</h2>
-        <div class="cycle-track-grid" id="cycle-cards-grid"></div>
+      <!-- ======================================================================
+           CAPITOL DEFENSE & ROTATION OPERATIONS CONSOLE
+           ====================================================================== -->
+      <section class="cal-section ops-portal" id="operations-portal">
+        <div class="section-header-row ops-header">
+          <div class="ops-title-wrap">
+            <h2 class="section-heading ops-title">⚔️ Capitol Defense &amp; Rotation Console</h2>
+            <div class="cal-tz-notice ops-subtitle">12-Week Macro Governance &amp; Automated Wartime Restitution</div>
+          </div>
+          <div class="ops-cycle-badges">
+            <span class="badge" id="ops-macro-badge">Macro Cycle 1</span>
+            <span class="badge badge-sub" id="ops-override-counter-badge">Overrides: 0/2</span>
+          </div>
+        </div>
+
+        <!-- Dynamic 4-Week Rotation Overview Cards -->
+        <div class="ops-schedule-grid" id="ops-schedule-cards">
+          <div class="cal-status-banner">Loading live schedule...</div>
+        </div>
+
+        <!-- Active Buyout Tickets / Restitution Tracker -->
+        <div id="ops-buyouts-container" class="ops-buyout-section hidden" style="display: none;">
+          <div class="ops-section-header">
+            <h3 class="ops-section-title">🛡️ Active Wartime Buyout Restitution</h3>
+            <span class="badge" id="ops-buyout-count-badge">0 Active</span>
+          </div>
+          <div class="ops-buyout-list" id="ops-buyout-list"></div>
+        </div>
+
+        <!-- Threat Assessment & Override Simulator -->
+        <div class="ops-override-box">
+          <div class="ops-section-header">
+            <h3 class="ops-section-title">🚨 Declare Matchup Threat Override</h3>
+            <span class="sub-text">Scouted a Red List powerhouse on Monday reset? Engage automated defense.</span>
+          </div>
+
+          <div class="ops-form-grid">
+            <div class="ops-form-group">
+              <label for="ops-input-target-week" class="control-label">Target KvK Week</label>
+              <select id="ops-input-target-week" class="ops-select cal-form-select">
+                <option value="1">Week 1 Friday (Boss 2 Matchup)</option>
+                <option value="2">Week 2 Friday (Boss 3 Matchup)</option>
+              </select>
+            </div>
+
+            <div class="ops-form-group">
+              <label for="ops-input-threat" class="control-label">Scouted Opponent (Server)</label>
+              <input
+                type="text"
+                id="ops-input-threat"
+                class="ops-input"
+                placeholder="e.g. S94, S77, S102"
+                list="red-list-presets"
+                autocomplete="off"
+              />
+              <datalist id="red-list-presets">
+                <option value="S94 (Red List Powerhouse)">
+                <option value="S77 (Red List Powerhouse)">
+                <option value="S102 (War Council Alert)">
+              </datalist>
+            </div>
+          </div>
+
+          <!-- Real-Time Stepped Model Mathematical Preview Banner -->
+          <div class="ops-preview-banner" id="ops-preview-box"></div>
+
+          <!-- Action Bar -->
+          <div class="ops-actions-bar">
+            <div class="ops-disclaimer">
+              *Overrides dispatch a senate proposal to Discord leadership for verification.
+            </div>
+            <button type="button" id="btn-submit-override" class="btn btn-primary btn-submit-override" disabled>
+              Review &amp; Dispatch Override
+            </button>
+          </div>
+        </div>
       </section>
 
       <!-- Operations Timeline Section -->
@@ -179,469 +251,6 @@ lang: "en"
   </div>
 </div>
 
-<script>
-  (async function () {
-    const elLoading = document.getElementById('loading-state');
-    const elError = document.getElementById('error-state');
-    const elContent = document.getElementById('calendar-content');
-    const elNotification = document.getElementById('action-notification');
-    const filterSelect = document.getElementById('cal-scope-filter');
-    const filterStatusTag = document.getElementById('filter-status-tag');
-    const filterToolbar = document.getElementById('cal-filter-toolbar');
-
-    let resetClockInterval = null;
-
-    // 1. Parse URL Parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const allianceParam = urlParams.get('alliance')?.toUpperCase() || null;
-    const tokenParam = urlParams.get('token');
-    const isDevPreview = urlParams.get('preview') === 'true';
-
-    let tokenPayload = null;
-    if (tokenParam) {
-      try {
-        const [dataStr] = tokenParam.split('.');
-        const binary = atob(dataStr.replace(/-/g, '+').replace(/_/g, '/'));
-        const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
-        const jsonStr = new TextDecoder('utf-8').decode(bytes);
-        tokenPayload = JSON.parse(jsonStr);
-      } catch (e) {
-        console.warn('Invalid token structure:', e);
-      }
-    }
-
-    const isManagementSession = (tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp)) || isDevPreview;
-    const sessionScope = isManagementSession ? (tokenPayload?.scope || 'WLO') : null;
-    const isGlobalAdmin = sessionScope === 'global';
-
-    const activeAlliance = (!isGlobalAdmin && sessionScope)
-      ? sessionScope.toUpperCase()
-      : (allianceParam || null);
-
-    let allEvents = [];
-
-    // 2. Fetch Live Calendar Data
-    async function loadCalendar() {
-      try {
-        const query = activeAlliance ? `?alliance=${encodeURIComponent(activeAlliance)}` : '';
-        const res = await fetch(`/api/calendar${query}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-
-        allEvents = data.events || [];
-        renderHero(data.status, data.capitolHolder);
-        setupFilterOptions();
-        applyFilterAndRender();
-      } catch (err) {
-        elLoading.style.display = 'none';
-        elError.style.display = 'block';
-        elError.textContent = `Failed to load calendar: ${err.message}`;
-      }
-    }
-
-    // 3. Render Hero & Reset Clock
-    function renderHero(status, capitolHolder) {
-      elLoading.style.display = 'none';
-      elContent.style.display = 'block';
-
-      const heroBadge = document.getElementById('hero-phase-badge');
-      heroBadge.textContent = status.isKW ? '⚔️ Kingdom War Active' : '🛡️ NAP Rest Week';
-      heroBadge.className = `cal-badge ${status.isKW ? 'badge-kw' : 'badge-off'}`;
-
-      document.getElementById('hero-phase-title').textContent = status.phaseName;
-      document.getElementById('hero-phase-subtitle').textContent = status.isKW
-        ? 'Double reward allotments active. Prepare for Saturday Kingdom War confrontation.'
-        : 'Standard single allocation. Fortresses and territory restructuring active.';
-
-      document.getElementById('hero-capitol-holder').textContent = capitolHolder;
-      document.getElementById('hero-capitol-rank').textContent = `Rank #${status.capitolRank} Privilege`;
-      document.getElementById('metric-cycle-progress').textContent = `Day ${status.cycleDay} of 28 (Week ${status.currentWeekNumber})`;
-
-      const kwBox = document.getElementById('metric-kw-box');
-      if (status.isKW) {
-        kwBox.style.opacity = '1';
-        const kwDate = new Date(status.kwBattleTimestamp * 1000);
-        document.getElementById('metric-kw-countdown').textContent = status.isKWBattleDay
-          ? '🔥 TODAY'
-          : kwDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-      } else {
-        kwBox.style.opacity = '0.5';
-        document.getElementById('metric-kw-countdown').textContent = 'None (Rest)';
-      }
-
-      function updateResetClock() {
-        const now = Date.now();
-        const diff = Math.max(0, (status.nextResetTimestamp * 1000) - now);
-        const hours = Math.floor(diff / 3600000);
-        const mins = Math.floor((diff % 3600000) / 60000);
-        const secs = Math.floor((diff % 60000) / 1000);
-        document.getElementById('metric-reset-countdown').textContent =
-          `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-      }
-
-      if (resetClockInterval) clearInterval(resetClockInterval);
-      updateResetClock();
-      resetClockInterval = setInterval(updateResetClock, 1000);
-
-      // Render 4-Week Grid
-      const cycleWeeks = [
-        { week: 1, name: 'KW Week 1', rank: 3, desc: 'Might Snapshots (Days 3–5)' },
-        { week: 2, name: 'KW Week 2', rank: 2, desc: 'War Confrontation' },
-        { week: 3, name: 'KW Week 3', rank: 1, desc: 'War Confrontation' },
-        { week: 4, name: 'Rest Week', rank: 4, desc: 'Peace & Restructuring' }
-      ];
-
-      document.getElementById('cycle-cards-grid').innerHTML = cycleWeeks.map(cw => {
-        const isActive = cw.week === status.currentWeekNumber;
-        return `
-          <div class="cycle-week-card ${isActive ? 'active' : ''}">
-            ${isActive ? '<span class="active-indicator">CURRENT</span>' : ''}
-            <div class="week-card-num">Week ${cw.week}</div>
-            <div class="week-card-title">${cw.name}</div>
-            <div class="week-card-meta">
-              Capitol: <span class="week-card-holder">Rank #${cw.rank}</span><br>
-              ${cw.desc}
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // 4. Setup Scoped Filter Dropdown
-    function setupFilterOptions() {
-      filterSelect.innerHTML = '';
-
-      if (activeAlliance) {
-        filterToolbar.style.display = 'flex';
-
-        const optCombined = document.createElement('option');
-        optCombined.value = 'combined';
-        optCombined.textContent = `🌐 Combined (Kingdom + [${activeAlliance}])`;
-        filterSelect.appendChild(optCombined);
-
-        const optAlliance = document.createElement('option');
-        optAlliance.value = activeAlliance;
-        optAlliance.textContent = `🛡️ [${activeAlliance}] Internal Only`;
-        filterSelect.appendChild(optAlliance);
-
-        const optGlobal = document.createElement('option');
-        optGlobal.value = 'global';
-        optGlobal.textContent = '👑 Kingdom Operations Only';
-        filterSelect.appendChild(optGlobal);
-
-        filterSelect.value = 'combined';
-      } else {
-        filterToolbar.style.display = 'none';
-      }
-    }
-
-    function applyFilterAndRender() {
-      const selected = filterSelect.value || 'global';
-      let filtered = [];
-
-      if (!activeAlliance || selected === 'global') {
-        filtered = allEvents.filter(e => !e.scope || e.scope.toLowerCase() === 'global' || e.type === 'war' || e.type === 'rotation');
-        filterStatusTag.style.display = 'none';
-      } else if (selected === 'combined') {
-        filtered = allEvents.filter(e => {
-          if (!e.scope || e.scope.toLowerCase() === 'global' || e.type === 'war' || e.type === 'rotation') return true;
-          return e.scope.toUpperCase() === activeAlliance;
-        });
-        filterStatusTag.style.display = 'block';
-        filterStatusTag.textContent = `🛡️ [${activeAlliance}] Operations Active`;
-      } else {
-        filtered = allEvents.filter(e => e.scope && e.scope.toUpperCase() === activeAlliance);
-        filterStatusTag.style.display = 'block';
-        filterStatusTag.textContent = `🛡️ [${activeAlliance}] Internal Only`;
-      }
-
-      renderTimeline(filtered);
-    }
-
-    filterSelect.addEventListener('change', applyFilterAndRender);
-
-    // 5. Render Timeline Items with Exact Preset Colors
-    function renderTimeline(eventsList) {
-      const timelineContainer = document.getElementById('events-timeline-container');
-
-      if (!eventsList || eventsList.length === 0) {
-        timelineContainer.innerHTML = '<div class="cal-status-banner">No operations scheduled for this perspective.</div>';
-        return;
-      }
-
-      timelineContainer.innerHTML = eventsList.map(evt => {
-        const start = new Date(evt.start);
-        const gtHours = (start.getUTCHours() - 2 + 24) % 24;
-        const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
-        const gtTimeStr = evt.allDay ? 'All Day' : `${String(gtHours).padStart(2, '0')}:${gtMins} GT`;
-        const localDateStr = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-        const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-
-        let recurrenceLabel = '';
-        if (evt.recurrence === '2days') recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Every 2 Days</span>';
-        else if (evt.recurrence === 'weekly') recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Weekly</span>';
-
-        const forceLabel = evt.notify_target === 'everyone' ? '<span class="event-tag-pill pill-force">🚨 Mandatory</span>' : '';
-
-        const borderStyle = evt.color ? `border-left-color: ${evt.color} !important;` : '';
-
-        const canDelete = isManagementSession && evt.id && evt.id.startsWith('evt-') &&
-          (sessionScope && evt.scope && evt.scope.toLowerCase() === sessionScope.toLowerCase());
-
-        return `
-          <div class="timeline-event-row event-${evt.type || 'custom'}" style="${borderStyle}">
-            <div class="event-main">
-              <div class="event-title-line">
-                <span class="event-title">${evt.title}</span>
-                ${recurrenceLabel}
-                ${forceLabel}
-              </div>
-              <div class="event-desc">${evt.description || ''}</div>
-            </div>
-            <div class="event-actions-group">
-              <div class="event-time-block">
-                <div class="time-gt">${gtTimeStr}</div>
-                <div>${localDateStr}${localTimeStr}</div>
-              </div>
-              ${canDelete ? `<button type="button" class="btn-delete-event" data-event-id="${evt.id}">🗑️ Delete</button>` : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      timelineContainer.querySelectorAll('.btn-delete-event').forEach(btn => {
-        btn.addEventListener('click', () => handleDeleteEvent(btn.dataset.eventId));
-      });
-    }
-
-    // 6. Management Mode UI & Unified Preset Theming
-    if (isManagementSession) {
-      const mgmtPanel = document.getElementById('management-panel');
-      const mgmtScopeTag = document.getElementById('mgmt-scope-tag');
-      const mgmtScopeDesc = document.getElementById('mgmt-scope-desc');
-      const formHeading = document.getElementById('form-heading');
-
-      mgmtPanel.style.display = 'block';
-      if (isGlobalAdmin) {
-        mgmtPanel.classList.add('scope-global');
-        mgmtScopeTag.textContent = '👑 KINGDOM ADMIN';
-        mgmtScopeDesc.textContent = 'Scheduling Kingdom-wide alerts and operations';
-        formHeading.textContent = 'Create Kingdom Operation ([GLOBAL])';
-      } else {
-        mgmtScopeTag.textContent = `🛡️ [${sessionScope}] LEADERSHIP`;
-        mgmtScopeDesc.textContent = `Managing internal operations for [${sessionScope}]`;
-        formHeading.textContent = `Create [${sessionScope}] Operation`;
-      }
-
-      const formEl = document.getElementById('form-create-event');
-      const btnToggle = document.getElementById('btn-toggle-event-form');
-      const btnCancel = document.getElementById('btn-cancel-event-form');
-      const notifySelect = document.getElementById('evt-input-notify');
-      const customRoleInput = document.getElementById('evt-input-role-id');
-      const presetSelect = document.getElementById('evt-input-preset');
-      const submitBtn = document.getElementById('btn-submit-event');
-
-      // Canonical Operation Presets Dictionary
-      const OPERATION_PRESETS = {
-        crystal_cluster: {
-          title: "Crystal Cluster Valley",
-          color: "#7946C0",
-          duration: 0.5,
-          recurrence: "weekly",
-          description: "Free For All event every Sunday"
-        },
-        elixir_scramble: {
-          title: "Elixir Scramble",
-          color: "#24523B",
-          duration: 0.5,
-          recurrence: "weekly",
-          description: "Team Battle event every Friday"
-        },
-        survival_battle: {
-          title: "Survival Battle",
-          color: "#CF6214",
-          duration: 4.0,
-          recurrence: "none",
-          description: "Complete tasks to earn rewards"
-        },
-        kill_event: {
-          title: "Kill Event",
-          color: "#B12A2A",
-          duration: 24.0,
-          recurrence: "none",
-          description: "Invaders from other servers arrive! Make sure you are shielded"
-        },
-        kvk_battle: {
-          title: "Kingdom vs Kingdom Battle",
-          color: "#8ED2EF",
-          duration: 1.0,
-          recurrence: "none",
-          description: "The battle for the Royal Castle begins!"
-        },
-        gear_event: {
-          title: "Gear Event",
-          color: "#303A40",
-          duration: 48.0,
-          recurrence: "none",
-          description: "Get rewarded for upgrading gear"
-        },
-        cheese_trap: {
-          title: "Cheese Trap",
-          color: "#FAB22F",
-          duration: 0.5,
-          recurrence: "2days",
-          description: "Help fend off the Cheese Thief to earn rewards"
-        }
-      };
-
-      let activePresetColor = null;
-
-      function resetPanelTheme() {
-        activePresetColor = null;
-        mgmtPanel.style.borderLeftColor = '';
-        mgmtPanel.style.background = '';
-        mgmtPanel.style.boxShadow = '';
-        submitBtn.style.background = '';
-        submitBtn.style.borderColor = '';
-        submitBtn.style.color = '';
-      }
-
-      presetSelect.addEventListener('change', () => {
-        const selected = OPERATION_PRESETS[presetSelect.value];
-        if (selected) {
-          document.getElementById('evt-input-title').value = selected.title;
-          document.getElementById('evt-input-duration').value = selected.duration;
-          document.getElementById('evt-input-recurrence').value = selected.recurrence;
-          document.getElementById('evt-input-details').value = selected.description;
-          activePresetColor = selected.color;
-
-          mgmtPanel.style.borderLeftColor = selected.color;
-          mgmtPanel.style.background = `linear-gradient(145deg, ${selected.color}2e, var(--nav-bg))`;
-          mgmtPanel.style.boxShadow = `0 4px 20px ${selected.color}22`;
-          submitBtn.style.background = selected.color;
-          submitBtn.style.borderColor = selected.color;
-          submitBtn.style.color = (selected.color === '#FAB22F' || selected.color === '#8ED2EF') ? '#0b0d11' : '#ffffff';
-        } else {
-          resetPanelTheme();
-        }
-      });
-
-      notifySelect.addEventListener('change', () => {
-        const isCustom = notifySelect.value === 'custom_role';
-        customRoleInput.disabled = !isCustom;
-        customRoleInput.classList.toggle('input-locked', !isCustom);
-        if (isCustom) {
-          customRoleInput.focus();
-        } else {
-          customRoleInput.value = '';
-        }
-      });
-
-      btnToggle.addEventListener('click', () => {
-        const isHidden = formEl.style.display === 'none';
-        formEl.style.display = isHidden ? 'block' : 'none';
-        if (isHidden) {
-          document.getElementById('evt-input-date').value = new Date().toISOString().split('T')[0];
-          document.getElementById('evt-input-time').value = '19:00';
-        }
-      });
-
-      btnCancel.addEventListener('click', () => {
-        formEl.style.display = 'none';
-      });
-
-      formEl.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const timeVal = document.getElementById('evt-input-time').value;
-        const [hh, mm] = timeVal.split(':').map(Number);
-        if (mm % 5 !== 0) {
-          showNotification('Game Time must be set in 5-minute increments (:00, :05, :10, etc.)', 'error');
-          return;
-        }
-
-        const notifyTarget = notifySelect.value;
-        const customRoleId = customRoleInput.value.trim();
-
-        if (notifyTarget === 'custom_role' && !/^\d{17,20}$/.test(customRoleId)) {
-          showNotification('Please enter a valid 17-20 digit Discord Role ID for the custom alert target.', 'error');
-          customRoleInput.focus();
-          return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Publishing...';
-
-        const payload = {
-          token: tokenParam,
-          action: 'create',
-          eventData: {
-            title: document.getElementById('evt-input-title').value,
-            date: document.getElementById('evt-input-date').value,
-            time_gt: timeVal,
-            duration_hours: document.getElementById('evt-input-duration').value,
-            recurrence: document.getElementById('evt-input-recurrence').value,
-            notify_target: notifyTarget,
-            custom_role_id: notifyTarget === 'custom_role' ? customRoleId : null,
-            color: activePresetColor,
-            description: document.getElementById('evt-input-details').value
-          }
-        };
-
-        try {
-          const res = await fetch('/api/manage-event', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const result = await res.json();
-          if (!res.ok) throw new Error(result.error || 'Failed to save event');
-
-          showNotification(result.message || 'Operation published successfully!', 'success');
-          formEl.reset();
-          resetPanelTheme();
-          customRoleInput.disabled = true;
-          customRoleInput.classList.add('input-locked');
-          formEl.style.display = 'none';
-          await loadCalendar();
-        } catch (err) {
-          showNotification(err.message, 'error');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Publish to Calendar';
-        }
-      });
-    }
-
-    // 7. Delete Event Handler
-    async function handleDeleteEvent(eventId) {
-      if (!confirm('Are you sure you want to remove this operation from the calendar?')) return;
-
-      try {
-        const res = await fetch('/api/manage-event', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: tokenParam, action: 'delete', eventId })
-        });
-        const result = await res.json();
-        if (!res.ok) throw new Error(result.error || 'Failed to delete event');
-
-        showNotification(result.message || 'Operation removed.', 'success');
-        await loadCalendar();
-      } catch (err) {
-        showNotification(err.message, 'error');
-      }
-    }
-
-    function showNotification(msg, type) {
-      elNotification.textContent = msg;
-      elNotification.className = `cal-notification-banner ${type}`;
-      elNotification.style.display = 'block';
-      setTimeout(() => {
-        elNotification.style.display = 'none';
-      }, 5000);
-    }
-
-    await loadCalendar();
-  })();
-</script>
+<!-- Modular Scripts -->
+<script src="/js/calendar.js"></script>
+<script type="module" src="/js/kvk-scheduler.js"></script>

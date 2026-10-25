@@ -244,6 +244,70 @@ export default async function handler(req, res) {
         return res.status(200).json({ success: true, revision, message: 'Alliance standings updated in Gist!' });
       }
 
+      // ======================================================================
+      // 4. CAPITOL DEFENSE OVERRIDE (MODEL 1: SWAP OR INSTALLMENT BUYOUT)
+      // ======================================================================
+      case 'override': {
+        const { targetWeek, threatName } = req.body || {};
+        if (!targetWeek || !threatName) {
+          return res.status(400).json({ error: 'Missing targetWeek or threatName' });
+        }
+
+        const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
+        let rewardsState = {};
+        if (gistGetRes.ok) {
+          const gistData = await gistGetRes.json();
+          const content = gistData.files?.['rewards-data.json']?.content;
+          if (content) rewardsState = JSON.parse(content);
+        }
+
+        const cycleState = rewardsState.cycle_state || {
+          macro_cycle: 1,
+          current_week: 1,
+          override_count: 0,
+          active_schedule: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' }
+        };
+
+        const result = calculateOverrideAction(cycleState, Number(targetWeek), threatName);
+
+        // Apply state updates
+        rewardsState.cycle_state = {
+          ...cycleState,
+          override_count: result.nextOverrideCount,
+          active_schedule: result.newSchedule
+        };
+
+        if (result.action === 'buyout' && result.buyoutTicket) {
+          if (!rewardsState.wartime_buyouts) rewardsState.wartime_buyouts = [];
+          rewardsState.wartime_buyouts.push(result.buyoutTicket);
+        }
+
+        rewardsState.lastUpdated = new Date().toISOString();
+        rewardsState.updatedBy = submittedBy || 'Discord Admin';
+
+        const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          method: 'PATCH',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: `Override Week ${targetWeek} (${result.action}) by ${submittedBy || 'Admin'}`,
+            files: {
+              'rewards-data.json': {
+                content: JSON.stringify(rewardsState, null, 2)
+              }
+            }
+          })
+        });
+
+        if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+
+        return res.status(200).json({
+          success: true,
+          action: result.action,
+          message: result.summary,
+          newSchedule: result.newSchedule
+        });
+      }
+
       default:
         return res.status(400).json({
           error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance".`

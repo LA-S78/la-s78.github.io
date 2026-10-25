@@ -113,6 +113,14 @@ export default async function handler(req, res) {
         return res.status(200).json({
           mode: rewardsState.mode || 'standard',
           distribution_tiers: rewardsState.distribution_tiers || [],
+          cycle_state: rewardsState.cycle_state || {
+            macro_cycle: 1,
+            current_week: 1,
+            override_count: 0,
+            active_schedule: {}
+          },
+          wartime_buyouts: rewardsState.wartime_buyouts || [],
+          buyout_history: rewardsState.buyout_history || [],
           lastReset: rewardsState.lastReset || null,
           lastUpdated: rewardsState.lastUpdated || null
         });
@@ -130,11 +138,18 @@ export default async function handler(req, res) {
           rewards: {
             mode: rewardsState.mode || 'standard',
             distribution_tiers: rewardsState.distribution_tiers || [],
+            cycle_state: rewardsState.cycle_state || {
+              macro_cycle: 1,
+              current_week: 1,
+              override_count: 0,
+              active_schedule: {}
+            },
+            wartime_buyouts: rewardsState.wartime_buyouts || [],
+            buyout_history: rewardsState.buyout_history || [],
             lastReset: rewardsState.lastReset || null,
             lastUpdated: rewardsState.lastUpdated || null
           }
         });
-    }
   } catch (error) {
     console.error('Error in /api/state:', error);
     return res.status(500).json({ error: 'Failed to load state from Gist' });
