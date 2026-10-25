@@ -14,6 +14,32 @@ const DEFAULT_FALLBACK_COLORS = {
   HeKi: '#d69e2e'
 };
 
+const BASELINE_SCHEDULES = {
+  1: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
+  2: { downtime: 'MIA', week_1: 'BOTS', week_2: 'RÂVN', week_3: 'WLO' },
+  3: { downtime: 'RÂVN', week_1: 'MIA', week_2: 'BOTS', week_3: 'WLO' }
+};
+
+/**
+ * Ensures cycle_state always returns valid numbers and never has an empty active_schedule.
+ */
+function resolveCycleState(raw = {}) {
+  const macroCycle = Number(raw?.macro_cycle) || 1;
+  const baseline = BASELINE_SCHEDULES[macroCycle] || BASELINE_SCHEDULES[1];
+
+  const hasValidSchedule = raw?.active_schedule &&
+    typeof raw.active_schedule === 'object' &&
+    Object.keys(raw.active_schedule).length > 0;
+
+  return {
+    macro_cycle: macroCycle,
+    current_week: raw?.current_week !== undefined && raw?.current_week !== null ? Number(raw.current_week) : 1,
+    override_count: Number(raw?.override_count) || 0,
+    active_schedule: hasValidSchedule ? raw.active_schedule : { ...baseline },
+    history: Array.isArray(raw?.history) ? raw.history : []
+  };
+}
+
 /**
  * Strips private Discord bot configuration fields before sending alliance data to public clients.
  * Preserves exact tag capitalization and diacritics (e.g., RÂVN, RâvN, râvn, HeKi).
@@ -88,6 +114,7 @@ export default async function handler(req, res) {
 
     const cleanAlliances = sanitizeAlliances(mapState.alliances || {});
     const blacklist = mapState.blacklist || { players: [], alliances: [] };
+    const resolvedCycleState = resolveCycleState(rewardsState.cycle_state);
 
     // Short edge cache with stale-while-revalidate
     res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=30');
@@ -113,12 +140,7 @@ export default async function handler(req, res) {
         return res.status(200).json({
           mode: rewardsState.mode || 'standard',
           distribution_tiers: rewardsState.distribution_tiers || [],
-          cycle_state: rewardsState.cycle_state || {
-            macro_cycle: 1,
-            current_week: 1,
-            override_count: 0,
-            active_schedule: {}
-          },
+          cycle_state: resolvedCycleState,
           wartime_buyouts: rewardsState.wartime_buyouts || [],
           buyout_history: rewardsState.buyout_history || [],
           lastReset: rewardsState.lastReset || null,
@@ -138,19 +160,14 @@ export default async function handler(req, res) {
           rewards: {
             mode: rewardsState.mode || 'standard',
             distribution_tiers: rewardsState.distribution_tiers || [],
-            cycle_state: rewardsState.cycle_state || {
-              macro_cycle: 1,
-              current_week: 1,
-              override_count: 0,
-              active_schedule: {}
-            },
+            cycle_state: resolvedCycleState,
             wartime_buyouts: rewardsState.wartime_buyouts || [],
             buyout_history: rewardsState.buyout_history || [],
             lastReset: rewardsState.lastReset || null,
             lastUpdated: rewardsState.lastUpdated || null
           }
         });
-      }
+    }
   } catch (error) {
     console.error('Error in /api/state:', error);
     return res.status(500).json({ error: 'Failed to load state from Gist' });

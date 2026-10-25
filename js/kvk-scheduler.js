@@ -74,10 +74,10 @@ function renderScheduleGrid() {
   const currentWeek = cycleState.current_week ?? 1;
 
   const weeks = [
-    { key: 'downtime', label: 'Downtime', sub: 'Boss 1 (Blind)', seat: schedule.downtime || 'BOTS', loot: '1 King Chest' },
+    { key: 'downtime', label: 'Downtime', sub: 'Boss 1 Window', seat: schedule.downtime || 'BOTS', loot: '1 King Chest' },
     { key: 'week_1', label: 'Week 1 Fri', sub: 'Boss 2 Window', seat: schedule.week_1 || 'RÂVN', loot: '2 King Chests' },
     { key: 'week_2', label: 'Week 2 Fri', sub: 'Boss 3 Window', seat: schedule.week_2 || 'MIA', loot: '2 King Chests' },
-    { key: 'week_3', label: 'Week 3 Fri', sub: 'KvK Finale', seat: schedule.week_3 || 'WLO', loot: '2 King Chests + Buff Item' }
+    { key: 'week_3', label: 'Week 3 Fri', sub: 'KvK Finale', seat: schedule.week_3 || 'WLO', loot: '2 King Chests + Border' }
   ];
 
   container.innerHTML = weeks.map((w) => {
