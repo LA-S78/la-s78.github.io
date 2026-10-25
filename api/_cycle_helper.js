@@ -11,11 +11,12 @@ export const BASELINE_SCHEDULES = {
  * - 1st Override in cycle: Calendar Swap with Week 3 (Cost: 0 chests)
  * - 2nd Override in cycle: 2-Installment Buyout (Cost: 1 Reg+1 KW in W2, 1 Reg+1 KW in W3)
  */
-export function calculateOverrideAction(cycleState, targetWeek, threatName) {
-  const currentCount = cycleState.override_count || 0;
-  const currentSchedule = { ...cycleState.active_schedule };
+export function calculateOverrideAction(cycleState = {}, targetWeek, threatName) {
+  const currentCount = Number(cycleState.override_count) || 0;
+  const currentSchedule = { ...(cycleState.active_schedule || {}) };
   const targetWeekKey = `week_${targetWeek}`;
   const scheduledAlliance = currentSchedule[targetWeekKey];
+  const macroCycle = Number(cycleState.macro_cycle) || 1;
 
   if (scheduledAlliance === 'WLO') {
     throw new Error(`WLO is already scheduled for Week ${targetWeek}. No override needed.`);
@@ -25,14 +26,13 @@ export function calculateOverrideAction(cycleState, targetWeek, threatName) {
     // ------------------------------------------------------------------------
     // OVERRIDE 1: CALENDAR SWAP
     // ------------------------------------------------------------------------
-    const originalW3Holder = currentSchedule.week_3; // Usually WLO
     currentSchedule[targetWeekKey] = 'WLO';
     currentSchedule.week_3 = scheduledAlliance;
 
     return {
       action: 'swap',
       nextOverrideCount: 1,
-      targetWeek,
+      targetWeek: Number(targetWeek),
       threatName,
       defender: 'WLO',
       displacedAlliance: scheduledAlliance,
@@ -46,14 +46,14 @@ export function calculateOverrideAction(cycleState, targetWeek, threatName) {
     currentSchedule[targetWeekKey] = 'WLO';
 
     const buyoutTicket = {
-      id: `buyout_c${cycleState.macro_cycle}_w${targetWeek}_${Date.now().toString(36)}`,
-      cycle: cycleState.macro_cycle,
+      id: `buyout_c${macroCycle}_w${targetWeek}_${Date.now().toString(36)}`,
+      cycle: macroCycle,
       beneficiary: scheduledAlliance,
       threat: threatName,
       total_owed: { regular: 2, kw: 2 },
       installments: [
         {
-          week: targetWeek,
+          week: Number(targetWeek),
           payout: { regular: 1, kw: 1 },
           status: 'pending',
           nominated_players: { regular: [], kw: [] }
@@ -72,7 +72,7 @@ export function calculateOverrideAction(cycleState, targetWeek, threatName) {
     return {
       action: 'buyout',
       nextOverrideCount: 2,
-      targetWeek,
+      targetWeek: Number(targetWeek),
       threatName,
       defender: 'WLO',
       displacedAlliance: scheduledAlliance,
@@ -86,25 +86,30 @@ export function calculateOverrideAction(cycleState, targetWeek, threatName) {
 /**
  * Rolls the cycle state forward to the next week or next 4-week macro cycle.
  */
-export function advanceCycleState(cycleState) {
-  let { macro_cycle = 1, current_week = 1 } = cycleState;
+export function advanceCycleState(cycleState = {}) {
+  let macroCycle = Number(cycleState.macro_cycle) || 1;
+  let currentWeek = cycleState.current_week !== undefined && cycleState.current_week !== null
+    ? Number(cycleState.current_week)
+    : 1;
 
-  if (current_week >= 3) {
-    // Advance to next 4-week macro cycle Downtime (Week 0)
-    macro_cycle = macro_cycle >= 3 ? 1 : macro_cycle + 1;
-    current_week = 0; // 0 = Downtime
+  if (currentWeek >= 3) {
+    // Advance to next 4-week cycle Downtime (Week 0)
+    macroCycle = macroCycle >= 3 ? 1 : macroCycle + 1;
+    currentWeek = 0; // 0 = Downtime
 
     return {
-      macro_cycle,
-      current_week,
+      macro_cycle: macroCycle,
+      current_week: 0,
       override_count: 0,
-      active_schedule: { ...BASELINE_SCHEDULES[macro_cycle] },
-      history: cycleState.history || []
+      active_schedule: { ...(BASELINE_SCHEDULES[macroCycle] || BASELINE_SCHEDULES[1]) },
+      history: Array.isArray(cycleState.history) ? cycleState.history : []
     };
   } else {
     return {
       ...cycleState,
-      current_week: current_week + 1
+      macro_cycle: macroCycle,
+      current_week: currentWeek + 1,
+      override_count: Number(cycleState.override_count) || 0
     };
   }
 }

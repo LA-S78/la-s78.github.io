@@ -278,9 +278,94 @@ export default async function handler(req, res) {
         return res.status(200).json({ success: true, message: 'Alliance proposal dispatched to Discord!' });
       }
 
+      // ======================================================================
+      // 4. CAPITOL DEFENSE OVERRIDE PROPOSAL
+      // ======================================================================
+      case 'override': {
+        const { submittedBy, notes, targetWeek, threatName, displacedAlly, action } = payload;
+
+        if (!targetWeek || !threatName) {
+          return res.status(400).json({ error: 'Target week and threat server are required.' });
+        }
+
+        const isBuyout = action === 'buyout';
+        const title = isBuyout
+          ? '🛡️ Wartime Buyout Declaration (Double Threat)'
+          : '⚔️ Matchup Threat Override Declaration';
+
+        const descriptionText = isBuyout
+          ? `**Second Threat Override this cycle.** WLO will defend Week ${targetWeek} against **${threatName}**.\n**[${displacedAlly}]** receives a material buyout of **2 Regular Gold + 2 KW Gold** chests across 2 installments.`
+          : `WLO will step into **Week ${targetWeek}** for kingdom defense against **${threatName}**.\n**[${displacedAlly}]** is promoted to **Week 3 (Finale Week)** (2 King chests + Buff Item). WLO chest cost: 0.`;
+
+        const embed = {
+          title,
+          color: isBuyout ? 0xef4444 : 0xb8975a,
+          description: notes ? `*"${notes}"*\n\n${descriptionText}` : descriptionText,
+          fields: [
+            { name: '👤 Declared By', value: `\`${submittedBy || 'Anonymous'}\``, inline: true },
+            { name: '⏱️ Submitted', value: `<t:${nowUnix}:R>`, inline: true },
+            { name: '🎯 Defense Target', value: `Week ${targetWeek} vs \`${threatName}\``, inline: true },
+            { name: '🛡️ Displaced Holder', value: `**[${displacedAlly || 'Ally'}]**`, inline: true },
+            { name: '📦 Settlement Model', value: isBuyout ? '💰 2-Installment Buyout' : '⇄ Calendar Swap (0 Chest Cost)', inline: true },
+            { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false }
+          ],
+          footer: { text: 'Last Asylum NAP Council' },
+          timestamp: new Date().toISOString()
+        };
+
+        const components = [
+          {
+            type: 1,
+            components: [
+              {
+                type: 2,
+                custom_id: 'approve_override_proposal',
+                label: 'Approve Defense Override',
+                style: 3,
+                emoji: { name: '✅' }
+              },
+              {
+                type: 2,
+                custom_id: 'reject_override_proposal',
+                label: 'Reject Override',
+                style: 4,
+                emoji: { name: '❌' }
+              }
+            ]
+          }
+        ];
+
+        const formData = new FormData();
+        formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
+
+        // Blueprint file attachment (Read by api/interactions.js upon approval)
+        const blueprintData = {
+          targetWeek: Number(targetWeek),
+          threatName,
+          displacedAlly,
+          action
+        };
+        const jsonBlob = new Blob([JSON.stringify(blueprintData)], { type: 'application/octet-stream' });
+        formData.append('files[0]', jsonBlob, 'override-blueprint.dat');
+
+        const channelId = process.env.WAR_ROOM_CHANNEL_ID;
+        const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
+          method: 'POST',
+          headers: { Authorization: `Bot ${botToken}` },
+          body: formData
+        });
+
+        if (!discordRes.ok) {
+          const errorText = await discordRes.text();
+          throw new Error(`Discord API Error: ${discordRes.status} - ${errorText}`);
+        }
+
+        return res.status(200).json({ success: true, message: 'Defense override proposal dispatched!' });
+      }
+
       default:
         return res.status(400).json({
-          error: `Unsupported proposal type: "${type || 'unknown'}". Supported types: "rewards", "map", "alliance".`
+          error: `Unsupported proposal type: "${type || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`
         });
     }
   } catch (error) {

@@ -1,5 +1,7 @@
 // api/accept-proposal.js
 
+import { calculateOverrideAction } from './_cycle_helper.js';
+
 const DEFAULT_FALLBACK_COLORS = {
   WLO: '#25bb00',
   'RÂVN': '#cece00',
@@ -310,7 +312,7 @@ export default async function handler(req, res) {
 
       default:
         return res.status(400).json({
-          error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance".`
+          error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`
         });
     }
   } catch (error) {
