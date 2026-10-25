@@ -1119,7 +1119,7 @@ body.portal-body .content-pane {
    ========================================================================== */
 
 .ops-portal {
-  margin: 1.5rem auto;
+  margin: 0.75rem auto 1.5rem auto;
   max-width: 1000px;
 }
 
@@ -1128,10 +1128,10 @@ body.portal-body .content-pane {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 12px;
-  border-bottom: 2px solid var(--border-color);
-  padding-bottom: 12px;
-  margin-bottom: 16px;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .ops-title-wrap {
@@ -1143,13 +1143,13 @@ body.portal-body .content-pane {
 .ops-title {
   margin: 0 !important;
   font-family: var(--font-headers);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   color: var(--accent-color);
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .ops-subtitle {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
 }
 
@@ -1159,23 +1159,28 @@ body.portal-body .content-pane {
   gap: 8px;
 }
 
-/* 4-Week Overview Cards */
+/* 4-Week Overview Cards - 2x2 grid on mobile so it doesn't push down the page */
 .ops-schedule-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px; /* reduced from 20px */
+}
+
+@media (max-width: 540px) {
+  .ops-schedule-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2x2 compact grid on phones */
+  }
 }
 
 .ops-week-card {
   background: var(--surface-dark);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 12px;
+  border-radius: 6px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  transition: all 0.2s ease;
+  gap: 6px;
 }
 
 .ops-week-card.is-active-week {
@@ -1278,27 +1283,61 @@ body.portal-body .content-pane {
   text-decoration: line-through;
 }
 
-/* Override Form & Simulator Box */
+/* Override Box - Resets top padding and title margins */
 .ops-override-box {
   background: var(--surface-card);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 16px;
+  padding: 12px 14px; /* compact padding */
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
+/* Strip default browser h3 margin that caused the huge blank top space */
+.ops-section-title,
+.ops-section-header h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: var(--font-headers);
+  font-size: 1.05rem;
+  color: var(--accent-color);
+  line-height: 1.25;
+}
+
+.ops-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+}
+
+.ops-section-header .sub-text {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Form Controls Spacing */
 .ops-form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
 }
 
 .ops-form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+}
+
+.ops-form-group label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
 }
 
 .ops-select,
