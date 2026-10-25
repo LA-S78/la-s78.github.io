@@ -282,10 +282,8 @@ export async function submitOverrideProposal() {
  * Master UI Render Routine
  */
 export function renderOperationsUI() {
-  const macroBadge = document.getElementById('ops-macro-badge');
   const counterBadge = document.getElementById('ops-override-counter-badge');
 
-  if (macroBadge) macroBadge.textContent = `Macro Cycle ${cycleState.macro_cycle || 1}`;
   if (counterBadge) {
     const count = cycleState.override_count || 0;
     counterBadge.textContent = `Overrides: ${count}/2`;

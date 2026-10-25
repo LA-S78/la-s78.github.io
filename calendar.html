@@ -9,22 +9,48 @@ lang: "en"
 <div class="content-pane portal-pane-lg">
   <div class="calendar-app-container">
     <!-- Status & Feedback Alerts -->
-    <div id="loading-state" class="cal-status-banner">Loading Kingdom schedule...</div>
-    <div id="error-state" class="cal-status-banner error" style="display: none;"></div>
-    <div id="action-notification" class="cal-notification-banner" style="display: none;"></div>
+    <div id="loading-state" class="cal-status-banner">
+      Loading Kingdom schedule...
+    </div>
+    <div
+      id="error-state"
+      class="cal-status-banner error"
+      style="display: none"
+    ></div>
+    <div
+      id="action-notification"
+      class="cal-notification-banner"
+      style="display: none"
+    ></div>
 
     <!-- Management Controls (Rendered when authenticated or via ?preview=true) -->
-    <div id="management-panel" class="cal-management-panel" style="display: none;">
+    <div
+      id="management-panel"
+      class="cal-management-panel"
+      style="display: none"
+    >
       <div class="mgmt-header">
         <div class="mgmt-badge-group">
           <span class="mgmt-tag" id="mgmt-scope-tag">MANAGE MODE</span>
-          <span class="mgmt-desc" id="mgmt-scope-desc">Authenticated Session Active</span>
+          <span class="mgmt-desc" id="mgmt-scope-desc"
+            >Authenticated Session Active</span
+          >
         </div>
-        <button type="button" class="btn btn-primary" id="btn-toggle-event-form">➕ Schedule Operation</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="btn-toggle-event-form"
+        >
+          ➕ Schedule Operation
+        </button>
       </div>
 
       <!-- Collapsible Event Creation Form -->
-      <form id="form-create-event" class="cal-create-card" style="display: none;">
+      <form
+        id="form-create-event"
+        class="cal-create-card"
+        style="display: none"
+      >
         <h3 class="form-title" id="form-heading">Create Operation</h3>
 
         <div class="form-grid">
@@ -33,11 +59,15 @@ lang: "en"
             <label for="evt-input-preset">Operation Preset</label>
             <select id="evt-input-preset" class="cal-form-select">
               <option value="custom">🛠️ Custom Operation (Blank)</option>
-              <option value="crystal_cluster">🔮 Crystal Cluster Valley (0.5h)</option>
+              <option value="crystal_cluster">
+                🔮 Crystal Cluster Valley (0.5h)
+              </option>
               <option value="elixir_scramble">🧪 Elixir Scramble (0.5h)</option>
               <option value="survival_battle">⚔️ Survival Battle (4.0h)</option>
               <option value="kill_event">🩸 Kill Event (24.0h)</option>
-              <option value="kvk_battle">👑 Kingdom vs Kingdom Battle (1.0h)</option>
+              <option value="kvk_battle">
+                👑 Kingdom vs Kingdom Battle (1.0h)
+              </option>
               <option value="gear_event">🛡️ Gear Event (48.0h)</option>
               <option value="cheese_trap">🧀 Cheese Trap (0.5h)</option>
             </select>
@@ -45,27 +75,48 @@ lang: "en"
 
           <!-- Title -->
           <div class="form-group form-col-full">
-            <label for="evt-input-title">Event Title <span class="req">*</span></label>
-            <input type="text" id="evt-input-title" placeholder="e.g. Hive Defense Drill or Outpost Assault" required maxlength="60" />
+            <label for="evt-input-title"
+              >Event Title <span class="req">*</span></label
+            >
+            <input
+              type="text"
+              id="evt-input-title"
+              placeholder="e.g. Hive Defense Drill or Outpost Assault"
+              required
+              maxlength="60"
+            />
           </div>
 
           <!-- Date -->
           <div class="form-group">
-            <label for="evt-input-date">Start Date (YYYY-MM-DD) <span class="req">*</span></label>
+            <label for="evt-input-date"
+              >Start Date (YYYY-MM-DD) <span class="req">*</span></label
+            >
             <input type="date" id="evt-input-date" required />
           </div>
 
           <!-- Game Time (5-minute step snapping) -->
           <div class="form-group">
-            <label for="evt-input-time">Game Time (HH:MM UTC-2) <span class="req">*</span></label>
+            <label for="evt-input-time"
+              >Game Time (HH:MM UTC-2) <span class="req">*</span></label
+            >
             <input type="time" id="evt-input-time" step="300" required />
-            <small class="form-hint">Server Game Time (snaps to 5-minute increments)</small>
+            <small class="form-hint"
+              >Server Game Time (snaps to 5-minute increments)</small
+            >
           </div>
 
           <!-- Duration (Up to 48h) -->
           <div class="form-group">
             <label for="evt-input-duration">Duration (Hours)</label>
-            <input type="number" id="evt-input-duration" min="0.5" max="48" step="0.5" value="1" />
+            <input
+              type="number"
+              id="evt-input-duration"
+              min="0.5"
+              max="48"
+              step="0.5"
+              value="1"
+            />
           </div>
 
           <!-- Recurrence Mode -->
@@ -74,7 +125,9 @@ lang: "en"
             <select id="evt-input-recurrence" class="cal-form-select">
               <option value="none">One-Time Event (Does not repeat)</option>
               <option value="2days">Repeats Every 2 Days</option>
-              <option value="weekly">Repeats Weekly (Same day &amp; time)</option>
+              <option value="weekly">
+                Repeats Weekly (Same day &amp; time)
+              </option>
             </select>
           </div>
 
@@ -82,16 +135,29 @@ lang: "en"
           <div class="form-group form-col-full">
             <label for="evt-input-notify">Discord Alert Level</label>
             <select id="evt-input-notify" class="cal-form-select">
-              <option value="role">🔔 Ping Default Alliance Role (Falls back to @everyone)</option>
-              <option value="custom_role">🎯 Target Specific Role ID (One-off override)</option>
-              <option value="everyone">🚨 Force @everyone Broadcast (Mandatory Operation)</option>
-              <option value="none">🔕 Silent (Calendar Only - No Discord Ping)</option>
+              <option value="role">
+                🔔 Ping Default Alliance Role (Falls back to @everyone)
+              </option>
+              <option value="custom_role">
+                🎯 Target Specific Role ID (One-off override)
+              </option>
+              <option value="everyone">
+                🚨 Force @everyone Broadcast (Mandatory Operation)
+              </option>
+              <option value="none">
+                🔕 Silent (Calendar Only - No Discord Ping)
+              </option>
             </select>
           </div>
 
           <!-- Non-Jumping Custom Role Input -->
           <div class="form-group form-col-full" id="group-custom-role">
-            <label for="evt-input-role-id">Specific Role ID <small class="form-hint-inline">(Required only for Target Specific Role)</small></label>
+            <label for="evt-input-role-id"
+              >Specific Role ID
+              <small class="form-hint-inline"
+                >(Required only for Target Specific Role)</small
+              ></label
+            >
             <input
               type="text"
               id="evt-input-role-id"
@@ -106,25 +172,42 @@ lang: "en"
           <!-- Instructions / Rally Point -->
           <div class="form-group form-col-full">
             <label for="evt-input-details">Instructions / Rally Point</label>
-            <textarea id="evt-input-details" rows="2" placeholder="e.g. Assembly at Hive Alpha. R4s lead rallies. Voice comms active." maxlength="250"></textarea>
+            <textarea
+              id="evt-input-details"
+              rows="2"
+              placeholder="e.g. Assembly at Hive Alpha. R4s lead rallies. Voice comms active."
+              maxlength="250"
+            ></textarea>
           </div>
         </div>
 
         <div class="form-actions">
-          <button type="button" class="btn btn-secondary" id="btn-cancel-event-form">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="btn-submit-event">Publish to Calendar</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="btn-cancel-event-form"
+          >
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-event">
+            Publish to Calendar
+          </button>
         </div>
       </form>
     </div>
 
-    <div id="calendar-content" style="display: none;">
+    <div id="calendar-content" style="display: none">
       <!-- Active Cycle Overview -->
       <section class="cal-hero-card">
         <div class="cal-hero-header">
           <div>
             <span class="cal-badge" id="hero-phase-badge">Phase</span>
-            <h1 id="hero-phase-title" class="cal-hero-title">Kingdom War Schedule</h1>
-            <p class="cal-hero-subtitle" id="hero-phase-subtitle">Loading cycle details...</p>
+            <h1 id="hero-phase-title" class="cal-hero-title">
+              Kingdom War Schedule
+            </h1>
+            <p class="cal-hero-subtitle" id="hero-phase-subtitle">
+              Loading cycle details...
+            </p>
           </div>
           <div class="cal-capitol-card">
             <div class="cal-capitol-label">CURRENT CAPITOL HOLDER</div>
@@ -136,7 +219,9 @@ lang: "en"
         <div class="cal-hero-metrics">
           <div class="metric-item">
             <span class="metric-label">CYCLE PROGRESS</span>
-            <span class="metric-val" id="metric-cycle-progress">Day -- of 28</span>
+            <span class="metric-val" id="metric-cycle-progress"
+              >Day -- of 28</span
+            >
           </div>
           <div class="metric-item">
             <span class="metric-label">NEXT RESET (00:00 GT)</span>
@@ -150,9 +235,15 @@ lang: "en"
       </section>
 
       <!-- Scoped Filter Toolbar (Shown only when alliance context exists) -->
-      <div class="cal-filter-toolbar" id="cal-filter-toolbar" style="display: none;">
+      <div
+        class="cal-filter-toolbar"
+        id="cal-filter-toolbar"
+        style="display: none"
+      >
         <div class="filter-controls-group">
-          <label for="cal-scope-filter" class="filter-label">🔍 PERSPECTIVE:</label>
+          <label for="cal-scope-filter" class="filter-label"
+            >🔍 PERSPECTIVE:</label
+          >
           <select id="cal-scope-filter" class="cal-filter-select"></select>
         </div>
         <div id="filter-status-tag" class="filter-active-badge"></div>
@@ -164,12 +255,17 @@ lang: "en"
       <section class="cal-section ops-portal" id="operations-portal">
         <div class="section-header-row ops-header">
           <div class="ops-title-wrap">
-            <h2 class="section-heading ops-title">⚔️ Capitol Defense &amp; Rotation Console</h2>
-            <div class="cal-tz-notice ops-subtitle">12-Week Macro Governance &amp; Automated Wartime Restitution</div>
+            <h2 class="section-heading ops-title">
+              ⚔️ Capitol Defense &amp; Rotation Console
+            </h2>
+            <div class="cal-tz-notice ops-subtitle">
+              Automated Matchup Defense &amp; Restitution Schedule
+            </div>
           </div>
           <div class="ops-cycle-badges">
-            <span class="badge" id="ops-macro-badge">Macro Cycle 1</span>
-            <span class="badge badge-sub" id="ops-override-counter-badge">Overrides: 0/2</span>
+            <span class="badge badge-sub" id="ops-override-counter-badge"
+              >Overrides: 0/2</span
+            >
           </div>
         </div>
 
@@ -179,9 +275,15 @@ lang: "en"
         </div>
 
         <!-- Active Buyout Tickets / Restitution Tracker -->
-        <div id="ops-buyouts-container" class="ops-buyout-section hidden" style="display: none;">
+        <div
+          id="ops-buyouts-container"
+          class="ops-buyout-section hidden"
+          style="display: none"
+        >
           <div class="ops-section-header">
-            <h3 class="ops-section-title">🛡️ Active Wartime Buyout Restitution</h3>
+            <h3 class="ops-section-title">
+              🛡️ Active Wartime Buyout Restitution
+            </h3>
             <span class="badge" id="ops-buyout-count-badge">0 Active</span>
           </div>
           <div class="ops-buyout-list" id="ops-buyout-list"></div>
@@ -191,31 +293,40 @@ lang: "en"
         <div class="ops-override-box">
           <div class="ops-section-header">
             <h3 class="ops-section-title">🚨 Declare Schedule Override</h3>
-            <span class="sub-text">Scouted a dangerous server? Enter the opponent's server ID</span>
+            <span class="sub-text"
+              >Scouted a dangerous server? Enter the opponent's server ID</span
+            >
           </div>
 
           <div class="ops-form-grid">
             <div class="ops-form-group">
-              <label for="ops-input-target-week" class="control-label">Target KvK Week</label>
-              <select id="ops-input-target-week" class="ops-select cal-form-select">
+              <label for="ops-input-target-week" class="control-label"
+                >Target KvK Week</label
+              >
+              <select
+                id="ops-input-target-week"
+                class="ops-select cal-form-select"
+              >
                 <option value="1">Week 1 Friday (Boss 2 Matchup)</option>
                 <option value="2">Week 2 Friday (Boss 3 Matchup)</option>
               </select>
             </div>
 
             <div class="ops-form-group">
-              <label for="ops-input-threat" class="control-label">Scouted Opponent (Server)</label>
+              <label for="ops-input-threat" class="control-label"
+                >Scouted Opponent (Server)</label
+              >
               <input
                 type="text"
                 id="ops-input-threat"
                 class="ops-input"
-                placeholder="e.g. S94, S77, S102"
+                placeholder="e.g. S94, S77"
                 list="red-list-presets"
                 autocomplete="off"
               />
               <datalist id="red-list-presets">
-                <option value="S94">
-                <option value="S77">
+                <option value="S94"></option>
+                <option value="S77"></option>
               </datalist>
             </div>
           </div>
@@ -226,9 +337,15 @@ lang: "en"
           <!-- Action Bar -->
           <div class="ops-actions-bar">
             <div class="ops-disclaimer">
-              *Overrides dispatch a senate proposal to Discord leadership for verification.
+              *Overrides dispatch a senate proposal to Discord leadership for
+              verification.
             </div>
-            <button type="button" id="btn-submit-override" class="btn btn-primary btn-submit-override" disabled>
+            <button
+              type="button"
+              id="btn-submit-override"
+              class="btn btn-primary btn-submit-override"
+              disabled
+            >
               Review &amp; Dispatch Override
             </button>
           </div>
@@ -239,8 +356,13 @@ lang: "en"
       <section class="cal-section">
         <div class="section-header-row">
           <div>
-            <h2 class="section-heading">Upcoming Operations &amp; Milestones</h2>
-            <div class="cal-tz-notice">Times displayed in <strong>Game Time (UTC-2)</strong> &amp; your Local Time</div>
+            <h2 class="section-heading">
+              Upcoming Operations &amp; Milestones
+            </h2>
+            <div class="cal-tz-notice">
+              Times displayed in <strong>Game Time (UTC-2)</strong> &amp; your
+              Local Time
+            </div>
           </div>
         </div>
 
