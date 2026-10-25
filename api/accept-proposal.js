@@ -250,7 +250,7 @@ export default async function handler(req, res) {
       // 4. CAPITOL DEFENSE OVERRIDE (MODEL 1: SWAP OR INSTALLMENT BUYOUT)
       // ======================================================================
       case 'override': {
-        const { targetWeek, threatName } = req.body || {};
+        const { targetWeek, threatName, action: declaredAction } = req.body || {};
         if (!targetWeek || !threatName) {
           return res.status(400).json({ error: 'Missing targetWeek or threatName' });
         }
@@ -269,6 +269,11 @@ export default async function handler(req, res) {
           override_count: 0,
           active_schedule: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' }
         };
+
+        // Force override_count to at least 1 if the UI explicitly declared a buyout
+        if (declaredAction === 'buyout' && (!cycleState.override_count || cycleState.override_count === 0)) {
+          cycleState.override_count = 1;
+        }
 
         const result = calculateOverrideAction(cycleState, Number(targetWeek), threatName);
 
