@@ -5,13 +5,17 @@ async function getGistData(gistId, gistToken) {
   const res = await fetch(`https://api.github.com/gists/${gistId}`, {
     headers: {
       Authorization: `Bearer ${gistToken}`,
-      'User-Agent': 'WarRoom-App'
+      'User-Agent': 'NAP-Leadership-App'
     },
     signal: AbortSignal.timeout(3000)
   });
 
   if (!res.ok) throw new Error(`GitHub Gist error (${res.status})`);
   return res.json();
+}
+
+function getScheduleSlotKey(weekNumber) {
+  return Number(weekNumber) === 4 ? 'downtime' : `week_${weekNumber}`;
 }
 
 export default async function handler(req, res) {
@@ -24,15 +28,18 @@ export default async function handler(req, res) {
 
   let calConfig = DEFAULT_CALENDAR_CONFIG;
   let mapState = { alliances: {} };
+  let rewardsState = {};
 
   try {
     if (GIST_ID && GIST_TOKEN) {
       const gistData = await getGistData(GIST_ID, GIST_TOKEN);
       const calRaw = gistData.files?.['calendar-state.json']?.content;
       const mapRaw = gistData.files?.['map-state.json']?.content;
+      const rewardsRaw = gistData.files?.['rewards-data.json']?.content;
 
       if (calRaw) calConfig = { ...calConfig, ...JSON.parse(calRaw) };
       if (mapRaw) mapState = JSON.parse(mapRaw);
+      if (rewardsRaw) rewardsState = JSON.parse(rewardsRaw);
     }
   } catch (err) {
     console.warn('Gist state fetch failed, utilizing defaults:', err.message);
@@ -41,36 +48,66 @@ export default async function handler(req, res) {
   const now = new Date();
   const currentStatus = getCycleState(now, calConfig);
 
-  // Resolve current Capitol Holder tag
+  // Map 1..4 calendar week to 0..3 scheduler week (Week 4 = 0 / downtime)
+  const clockWeek = currentStatus.currentWeekNumber === 4 ? 0 : currentStatus.currentWeekNumber;
+  currentStatus.clockWeek = clockWeek;
+
   const alliances = mapState.alliances || {};
-  const holderEntry = Object.entries(alliances).find(
-    ([_, data]) => parseInt(data.rank, 10) === currentStatus.capitolRank
-  );
-  const capitolHolderTag = holderEntry
-    ? `[${holderEntry[0]}]`
-    : `Rank #${currentStatus.capitolRank}`;
+  const activeSchedule = rewardsState.cycle_state?.active_schedule || null;
+
+  // Resolve current Capitol Holder from active_schedule first, falling back to static rank
+  const currentSlotKey = getScheduleSlotKey(currentStatus.currentWeekNumber);
+  const scheduledHolderTag = activeSchedule?.[currentSlotKey]?.trim();
+
+  let capitolHolderTag = `Rank #${currentStatus.capitolRank}`;
+  if (scheduledHolderTag) {
+    capitolHolderTag = `[${scheduledHolderTag}]`;
+    const actualRank = alliances[scheduledHolderTag]?.rank;
+    if (actualRank) {
+      currentStatus.isOverrideWeek = parseInt(actualRank, 10) !== currentStatus.capitolRank;
+      currentStatus.holderActualRank = parseInt(actualRank, 10);
+    }
+  } else {
+    const holderEntry = Object.entries(alliances).find(
+      ([_, data]) => parseInt(data.rank, 10) === currentStatus.capitolRank
+    );
+    if (holderEntry) capitolHolderTag = `[${holderEntry[0]}]`;
+  }
 
   // 1. Generate System Milestones (Rotation Transfers & War Battle Days)
   const cycleMilestones = [];
 
-  // Next Phase / Rotation Milestone
   const daysUntilNextWeek = 7 - currentStatus.dayOfWeekNumber + 1;
   const nextWeekResetTs = currentStatus.nextResetTimestamp + (daysUntilNextWeek - 1) * 86400;
   const nextWeekNum = (currentStatus.currentWeekNumber % 4) + 1;
   const nextWeekConfig = calConfig.capitol_rotation.find((w) => w.week === nextWeekNum);
 
-  const nextHolderEntry = Object.entries(alliances).find(
-    ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank
-  );
-  const nextHolderTag = nextHolderEntry
-    ? `[${nextHolderEntry[0]}]`
-    : `Rank #${nextWeekConfig?.capitol_rank}`;
+  const nextSlotKey = getScheduleSlotKey(nextWeekNum);
+  const nextScheduledTag = activeSchedule?.[nextSlotKey]?.trim();
+
+  let nextHolderTag = `Rank #${nextWeekConfig?.capitol_rank}`;
+  let nextHolderRankLabel = `Rank #${nextWeekConfig?.capitol_rank}`;
+
+  if (nextScheduledTag) {
+    nextHolderTag = `[${nextScheduledTag}]`;
+    const nextActualRank = alliances[nextScheduledTag]?.rank;
+    if (nextActualRank) {
+      nextHolderRankLabel = parseInt(nextActualRank, 10) !== nextWeekConfig?.capitol_rank
+        ? `Rank #${nextActualRank} • Override Schedule`
+        : `Rank #${nextActualRank}`;
+    }
+  } else {
+    const nextHolderEntry = Object.entries(alliances).find(
+      ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank
+    );
+    if (nextHolderEntry) nextHolderTag = `[${nextHolderEntry[0]}]`;
+  }
 
   cycleMilestones.push({
     id: `sys-rotation-w${nextWeekNum}`,
     scope: 'global',
     title: `👑 Capitol Transfer — ${nextHolderTag}`,
-    description: `Rotation Phase transfer to ${nextHolderTag} (Rank #${nextWeekConfig?.capitol_rank}).`,
+    description: `Rotation Phase transfer to ${nextHolderTag} (${nextHolderRankLabel}).`,
     start: new Date(nextWeekResetTs * 1000).toISOString(),
     end: new Date(nextWeekResetTs * 1000 + 3600000).toISOString(),
     type: 'rotation',
@@ -84,7 +121,7 @@ export default async function handler(req, res) {
       id: `sys-kw-battle-w${currentStatus.currentWeekNumber}`,
       scope: 'global',
       title: '⚔️ Kingdom War Battle Window',
-      description: 'Active combat phase for the Capitol. 2x chest allocations apply.',
+      description: 'Active combat phase for the Capitol. 2x chest allocations apply upon victory.',
       start: kwBattleDate.toISOString(),
       end: new Date(kwBattleDate.getTime() + 4 * 3600000).toISOString(),
       type: 'war',
@@ -98,24 +135,19 @@ export default async function handler(req, res) {
 
   const sanitizedCustomEvents = customEvents.filter((evt) => {
     const scope = (evt.scope || 'global').trim().toUpperCase();
-
-    // Global events are always visible
     if (scope === 'GLOBAL') return true;
-
-    // Alliance events are ONLY visible if the request is scoped to that exact alliance
     return requestedAlliance && scope === requestedAlliance;
   });
 
   // 3. Project Recurring Events Forward Across the 28-Day Cycle Horizon
-  const windowStartMs = now.getTime() - (24 * 3600 * 1000); // Retain events active in the last 24h
-  const windowEndMs = now.getTime() + (28 * 86400 * 1000);  // Project 28 days forward
+  const windowStartMs = now.getTime() - (24 * 3600 * 1000);
+  const windowEndMs = now.getTime() + (28 * 86400 * 1000);
 
   const projectedEvents = [];
 
   for (const evt of sanitizedCustomEvents) {
     const recurrence = evt.recurrence || 'none';
 
-    // One-time event: include if not expired beyond window
     if (recurrence === 'none') {
       const evtEndMs = new Date(evt.end || evt.start).getTime();
       if (evtEndMs >= windowStartMs) {
@@ -124,9 +156,8 @@ export default async function handler(req, res) {
       continue;
     }
 
-    // Recurring event ('2days' or 'weekly')
-    const stepMs = recurrence === '2days' 
-      ? 2 * 86400 * 1000 
+    const stepMs = recurrence === '2days'
+      ? 2 * 86400 * 1000
       : 7 * 86400 * 1000;
 
     const baseStartMs = new Date(evt.start).getTime();
@@ -135,18 +166,16 @@ export default async function handler(req, res) {
       continue;
     }
 
-    const durationMs = evt.duration_hours 
-      ? parseFloat(evt.duration_hours) * 3600 * 1000 
+    const durationMs = evt.duration_hours
+      ? parseFloat(evt.duration_hours) * 3600 * 1000
       : Math.max(1800000, new Date(evt.end).getTime() - baseStartMs || 3600000);
 
-    // Fast-forward to current window if the original date was in the past
     let curStartMs = baseStartMs;
     if (curStartMs < windowStartMs) {
       const skipSteps = Math.floor((windowStartMs - curStartMs) / stepMs);
       curStartMs += skipSteps * stepMs;
     }
 
-    // Generate occurrences across the 28-day window (capped at 30 instances)
     let count = 0;
     while (curStartMs <= windowEndMs && count < 30) {
       const curEndMs = curStartMs + durationMs;

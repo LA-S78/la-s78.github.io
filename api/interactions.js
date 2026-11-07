@@ -89,7 +89,7 @@ const ALLIANCE_COMMANDS_SCHEMA = [
         required: false,
         choices: [
           {
-            name: "Reset Nomination Cycle (Admin Only)",
+            name: "Reset Nomination Cycle (Steward Only)",
             value: "reset",
           },
         ],
@@ -379,7 +379,7 @@ const FALLBACK_BOT_STRINGS = {
   },
   admin: {
     access_denied:
-      "⛔ **Access Denied:** Only authorized leadership can approve or reject proposals.",
+      "⛔ **Access Denied:** Only designated Kingdom Stewards can approve or reject NAP Leadership proposals.",
     failed_update: "Failed to apply proposal update:",
   },
 };
@@ -419,6 +419,23 @@ function resolveActorName(interaction, fallback = "Leadership") {
 
 function resolveUserId(interaction) {
   return interaction.member?.user?.id || interaction.user?.id;
+}
+
+/**
+ * Checks if a Discord User ID belongs to the designated Kingdom Stewards (1-3 admins)
+ * Supports STEWARD_USER_IDS (comma-separated) and legacy AUTHORIZED_USER_ID in Vercel env vars.
+ */
+function isSteward(userId) {
+  if (!userId) return false;
+  const rawList = [
+    process.env.STEWARD_USER_IDS || "",
+    process.env.AUTHORIZED_USER_ID || "",
+  ].join(",");
+  const allowedIds = rawList
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+  return allowedIds.includes(String(userId).trim());
 }
 
 function sendEphemeralMessage(res, content) {
@@ -606,7 +623,7 @@ async function getGistData(gistId, gistToken) {
   const res = await fetch(`https://api.github.com/gists/${gistId}`, {
     headers: {
       Authorization: `Bearer ${gistToken}`,
-      "User-Agent": "WarRoom-App",
+      "User-Agent": "NAP-Leadership-App",
     },
     signal: AbortSignal.timeout(2200),
   });
@@ -788,15 +805,18 @@ export default async function handler(req, res) {
 
       let calConfig = DEFAULT_CALENDAR_CONFIG;
       let alliances = {};
+      let rewardsState = {};
 
       try {
         if (GIST_ID && GIST_TOKEN) {
           const gistData = await getGistData(GIST_ID, GIST_TOKEN);
           const calRaw = gistData.files?.["calendar-state.json"]?.content;
           const mapRaw = gistData.files?.["map-state.json"]?.content;
+          const rewardsRaw = gistData.files?.["rewards-data.json"]?.content;
 
           if (calRaw) calConfig = { ...calConfig, ...JSON.parse(calRaw) };
           if (mapRaw) alliances = JSON.parse(mapRaw).alliances || {};
+          if (rewardsRaw) rewardsState = JSON.parse(rewardsRaw);
         }
       } catch (err) {
         console.warn(
@@ -816,12 +836,12 @@ export default async function handler(req, res) {
         botToken,
       });
 
-      // SUB-ACTION: Manage Global Events (Admin Only)
+      // SUB-ACTION: Manage Global Events (Steward Only)
       if (requestedAction === "manage_global") {
-        if (userId !== process.env.AUTHORIZED_USER_ID) {
+        if (!isSteward(userId)) {
           return sendEphemeralMessage(
             res,
-            "⛔ **Access Denied:** Only the authorized administrator can manage Kingdom-wide events.",
+            "⛔ **Access Denied:** Only designated Kingdom Stewards can manage Kingdom-wide events.",
           );
         }
 
@@ -872,8 +892,7 @@ export default async function handler(req, res) {
           );
         }
 
-        const isAuthorized =
-          userId === process.env.AUTHORIZED_USER_ID || hasDelegatedLeadership;
+        const isAuthorized = isSteward(userId) || hasDelegatedLeadership;
 
         if (!isAuthorized) {
           return sendEphemeralMessage(
@@ -920,16 +939,28 @@ export default async function handler(req, res) {
         });
       }
 
-      // DEFAULT ACTION: Public Calendar Status & Link
+      // DEFAULT ACTION: Public Calendar Status & Link (Synced with Override Schedule)
       const now = new Date();
       const state = getCycleState(now, calConfig);
+      const activeSchedule = rewardsState.cycle_state?.active_schedule || {};
+      const slotKey =
+        state.currentWeekNumber === 4
+          ? "downtime"
+          : `week_${state.currentWeekNumber}`;
+      const scheduledTag = activeSchedule[slotKey]?.trim();
 
       const holderEntry = Object.entries(alliances).find(
         ([_, data]) => parseInt(data.rank, 10) === state.capitolRank,
       );
-      const holderTag = holderEntry
-        ? `[${holderEntry[0]}]`
-        : `Rank #${state.capitolRank}`;
+      const holderTag = scheduledTag
+        ? `[${scheduledTag}]`
+        : holderEntry
+          ? `[${holderEntry[0]}]`
+          : `Rank #${state.capitolRank}`;
+
+      const holderActualRank = scheduledTag
+        ? alliances[scheduledTag]?.rank || state.capitolRank
+        : state.capitolRank;
 
       const daysUntilNextWeek = 7 - state.dayOfWeekNumber + 1;
       const nextWeekResetTs =
@@ -938,23 +969,37 @@ export default async function handler(req, res) {
       const nextWeekConfig = calConfig.capitol_rotation.find(
         (w) => w.week === nextWeekNum,
       );
+      const nextSlotKey =
+        nextWeekNum === 4 ? "downtime" : `week_${nextWeekNum}`;
+      const nextScheduledTag = activeSchedule[nextSlotKey]?.trim();
 
       const nextHolderEntry = Object.entries(alliances).find(
         ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank,
       );
-      const nextHolderTag = nextHolderEntry
-        ? `[${nextHolderEntry[0]}]`
-        : `Rank #${nextWeekConfig?.capitol_rank}`;
+      const nextHolderTag = nextScheduledTag
+        ? `[${nextScheduledTag}]`
+        : nextHolderEntry
+          ? `[${nextHolderEntry[0]}]`
+          : `Rank #${nextWeekConfig?.capitol_rank}`;
+
+      const nextActualRank = nextScheduledTag
+        ? alliances[nextScheduledTag]?.rank || nextWeekConfig?.capitol_rank
+        : nextWeekConfig?.capitol_rank;
+
+      const weekDisplayLabel =
+        state.currentWeekNumber === 4
+          ? "Downtime"
+          : `Week ${state.currentWeekNumber}`;
 
       const fields = [
         {
           name: "👑 Active Capitol Holder",
-          value: `**${holderTag}** *(Rank #${state.capitolRank})*`,
+          value: `**${holderTag}** *(Rank #${holderActualRank})*`,
           inline: true,
         },
         {
           name: "🔄 Cycle Progress",
-          value: `Day **${state.cycleDay}** of 28 *(Week ${state.currentWeekNumber})*`,
+          value: `Day **${state.cycleDay}** of 28 *(${weekDisplayLabel})*`,
           inline: true,
         },
         {
@@ -978,7 +1023,7 @@ export default async function handler(req, res) {
 
       fields.push({
         name: "⏭️ Next Rotation Phase",
-        value: `**${nextWeekConfig?.phase || "Next Phase"}** begins <t:${nextWeekResetTs}:R>.\nCapitol transfers to **${nextHolderTag}** *(Rank #${nextWeekConfig?.capitol_rank})*.`,
+        value: `**${nextWeekConfig?.phase || "Next Phase"}** begins <t:${nextWeekResetTs}:R>.\nCapitol transfers to **${nextHolderTag}** *(Rank #${nextActualRank})*.`,
         inline: false,
       });
 
@@ -997,7 +1042,7 @@ export default async function handler(req, res) {
               title: `📅 Kingdom War & Rotation Calendar — ${state.phaseName}`,
               color: state.isKW ? 0x8f0000 : 0xb8975a,
               description: state.isKW
-                ? "⚔️ **Kingdom War Cycle is ACTIVE.** 2x Reward allocations apply this week."
+                ? "⚔️ **Kingdom War Cycle is ACTIVE.** 2x Reward allocations apply upon victory."
                 : "🛡️ **NAP Rest Week.** Standard kingdom operations and territory consolidation.",
               fields,
               footer: { text: "la-s78.app" },
@@ -1262,12 +1307,12 @@ export default async function handler(req, res) {
         );
       }
 
-      // SUB-ACTION: Broad-sync all registered alliance servers (Admin only)
+      // SUB-ACTION: Broad-sync all registered alliance servers (Steward only)
       if (requestedAction === "sync") {
-        if (userId !== process.env.AUTHORIZED_USER_ID) {
+        if (!isSteward(userId)) {
           return sendEphemeralMessage(
             res,
-            "⛔ **Access Denied:** Only the kingdom bot administrator can broadcast-sync commands.",
+            "⛔ **Access Denied:** Only designated Kingdom Stewards can broadcast-sync commands.",
           );
         }
 
@@ -1338,7 +1383,7 @@ export default async function handler(req, res) {
             botToken,
           });
 
-        if (!isR5 && userId !== process.env.AUTHORIZED_USER_ID) {
+        if (!isR5 && !isSteward(userId)) {
           return sendEphemeralMessage(
             res,
             "⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can register alliance servers.",
@@ -1409,11 +1454,7 @@ export default async function handler(req, res) {
         );
       }
 
-      if (
-        ownerGuildId &&
-        guildId === ownerGuildId &&
-        userId !== process.env.AUTHORIZED_USER_ID
-      ) {
+      if (ownerGuildId && guildId === ownerGuildId && !isSteward(userId)) {
         return sendEphemeralMessage(
           res,
           "⛔ **Access Denied:** Reward nominations cannot be submitted from this server. Leaders must submit via the NAP server or their alliance server.",
@@ -1443,17 +1484,14 @@ export default async function handler(req, res) {
 
         // Authorization Check: Dedicated Server vs. Shared NAP Server
         if (isDedicatedServer) {
-          if (
-            !hasDelegatedLeadership &&
-            userId !== process.env.AUTHORIZED_USER_ID
-          ) {
+          if (!hasDelegatedLeadership && !isSteward(userId)) {
             return sendEphemeralMessage(
               res,
               `⛔ **Access Denied:** Only members holding **@R5** or authorized leadership roles (${allowedRoles.map((r) => "@" + r).join(", ")}) can submit nominations for **[${matchedAllianceTag}]**.`,
             );
           }
         } else {
-          if (!isR5 && userId !== process.env.AUTHORIZED_USER_ID) {
+          if (!isR5 && !isSteward(userId)) {
             return sendEphemeralMessage(
               res,
               "⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can submit reward nominations.",
@@ -1467,9 +1505,132 @@ export default async function handler(req, res) {
           }
         }
 
-        const rewardsData = JSON.parse(
+        let rewardsData = JSON.parse(
           gistData.files["rewards-data.json"]?.content || "{}",
         );
+        const calRaw = gistData.files?.["calendar-state.json"]?.content;
+        const calConfig = calRaw
+          ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
+          : DEFAULT_CALENDAR_CONFIG;
+
+        const liveCalState = getCycleState(new Date(), calConfig);
+        const clockWeek =
+          liveCalState.currentWeekNumber === 4
+            ? 0
+            : liveCalState.currentWeekNumber;
+        const storedWeek =
+          rewardsData.cycle_state?.current_week ?? clockWeek;
+
+        // 0. Clock-Sync & KvK Outcome Confirmation Gate
+        if (storedWeek !== clockWeek) {
+          if (clockWeek === 0) {
+            // Downtime (Off-Week): Auto-advance & reset to 1x Standard immediately
+            const { updatedRewards } = applySafeCycleReset(
+              rewardsData,
+              "standard",
+              "Auto-Clock (Downtime)",
+              mapState,
+              0,
+            );
+            rewardsData = updatedRewards;
+            await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+              method: "PATCH",
+              headers: {
+                Authorization: `Bearer ${GIST_TOKEN}`,
+                "Content-Type": "application/json",
+                "User-Agent": "NAP-Leadership-App",
+              },
+              body: JSON.stringify({
+                description: `Auto-reset to Downtime (1x) at ${new Date().toISOString()}`,
+                files: {
+                  "rewards-nominations.json": {
+                    content: JSON.stringify({}, null, 2),
+                  },
+                  "rewards-data.json": {
+                    content: JSON.stringify(updatedRewards, null, 2),
+                  },
+                },
+              }),
+            });
+          } else {
+            // KvK Week (1, 2, or 3): Require Steward confirmation of 1x vs 2x outcome
+            const confirmComponents = [
+              {
+                type: 1,
+                components: [
+                  {
+                    type: 2,
+                    style: 3,
+                    label: "Confirm 2x Chests (Won KvK)",
+                    custom_id: `confirm_kvk_reset:kw:${clockWeek}`,
+                    emoji: { name: "⚔️" },
+                  },
+                  {
+                    type: 2,
+                    style: 2,
+                    label: "Confirm 1x Chests (Standard)",
+                    custom_id: `confirm_kvk_reset:standard:${clockWeek}`,
+                    emoji: { name: "🛡️" },
+                  },
+                ],
+              },
+            ];
+
+            if (isSteward(userId)) {
+              return res.status(200).json({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: {
+                  embeds: [
+                    {
+                      title: `⚔️ Confirm KvK Outcome — Week ${clockWeek}`,
+                      color: 0xf59e0b,
+                      description: `The calendar has entered **Week ${clockWeek}**, but the reward pool has not been initialized yet.\n\nSelect the outcome below to reset nominations and unlock \`/nominate\` for all alliances:`,
+                    },
+                  ],
+                  components: confirmComponents,
+                  flags: 64,
+                },
+              });
+            }
+
+            // Ping NAP Leadership channel if not already prompted this week
+            const napChannelId =
+              process.env.DISCORD_CHANNEL_ID_NAP_LEADERSHIP ||
+              process.env.DISCORD_WEBHOOK_CHANNEL_ID;
+            if (
+              napChannelId &&
+              botToken &&
+              rewardsData.lastPromptedWeek !== clockWeek
+            ) {
+              rewardsData.lastPromptedWeek = clockWeek;
+              await fetch(
+                `https://discord.com/api/v10/channels/${napChannelId}/messages`,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bot ${botToken}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    embeds: [
+                      {
+                        title: `👑 NAP Leadership Action Required — Week ${clockWeek} Rewards`,
+                        color: 0xf59e0b,
+                        description: `Alliance leaders are attempting to run \`/nominate\` for **Week ${clockWeek}**.\n\nA designated **Steward** must confirm the chest multiplier below to initialize the new week's nomination cycle:`,
+                      },
+                    ],
+                    components: confirmComponents,
+                  }),
+                },
+              ).catch(() => {});
+            }
+
+            return sendEphemeralMessage(
+              res,
+              `⏳ **Awaiting NAP Leadership Confirmation:** The calendar has advanced to **Week ${clockWeek}**, and **NAP Leadership** has been prompted to confirm whether this week's pool is **1x (Standard)** or **2x (Kingdom War)**. Please try \`/nominate\` again shortly!`,
+            );
+          }
+        }
 
         // 1. Resolve live quota with dynamic Wartime Buyout & WLO deduction support
         const quotaData = getAllianceNominationQuota(
@@ -1639,10 +1800,10 @@ export default async function handler(req, res) {
         options?.find((opt) => opt.name === "mode")?.value || "standard";
 
       if (requestedAction === "reset") {
-        if (userId !== process.env.AUTHORIZED_USER_ID) {
+        if (!isSteward(userId)) {
           return sendEphemeralMessage(
             res,
-            "⛔ **Access Denied:** Only authorized leadership can reset reward nomination cycles.",
+            "⛔ **Access Denied:** Only designated Kingdom Stewards can reset reward nomination cycles.",
           );
         }
 
@@ -1651,6 +1812,18 @@ export default async function handler(req, res) {
           const currentRewards = JSON.parse(
             gistData.files["rewards-data.json"]?.content || "{}",
           );
+          const mapState = JSON.parse(
+            gistData.files["map-state.json"]?.content || "{}",
+          );
+          const calRaw = gistData.files?.["calendar-state.json"]?.content;
+          const calConfig = calRaw
+            ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
+            : DEFAULT_CALENDAR_CONFIG;
+          const liveCalState = getCycleState(new Date(), calConfig);
+          const clockWeek =
+            liveCalState.currentWeekNumber === 4
+              ? 0
+              : liveCalState.currentWeekNumber;
 
           const {
             updatedRewards,
@@ -1658,7 +1831,13 @@ export default async function handler(req, res) {
             preservedCount,
             cycleAdvanced,
             nextWeek,
-          } = applySafeCycleReset(currentRewards, requestedMode, username);
+          } = applySafeCycleReset(
+            currentRewards,
+            requestedMode,
+            username,
+            mapState,
+            clockWeek,
+          );
 
           const patchRes = await fetch(
             `https://api.github.com/gists/${GIST_ID}`,
@@ -1667,7 +1846,7 @@ export default async function handler(req, res) {
               headers: {
                 Authorization: `Bearer ${GIST_TOKEN}`,
                 "Content-Type": "application/json",
-                "User-Agent": "WarRoom-App",
+                "User-Agent": "NAP-Leadership-App",
               },
               body: JSON.stringify({
                 description: `Cycle reset (${requestedMode}) by ${username} at ${new Date().toISOString()}`,
@@ -1689,7 +1868,7 @@ export default async function handler(req, res) {
           const isKW = requestedMode === "kw";
           const cycleNotice = cycleAdvanced
             ? `\n• 🔄 **Rotation Cycle Completed:** Override count reset to \`0/2\` for the new cycle.`
-            : `\n• 📅 **Rotation Week Advanced:** Now entering \`Week ${nextWeek}\`.`;
+            : `\n• 📅 **Rotation Week Synced:** Active on \`${nextWeek === 0 ? "Downtime (Week 0)" : `Week ${nextWeek}`}\`.`;
 
           const buyoutNotice =
             preservedCount > 0
@@ -1907,10 +2086,10 @@ export default async function handler(req, res) {
       }
 
       if (sub?.name === "set") {
-        if (userId !== process.env.AUTHORIZED_USER_ID) {
+        if (!isSteward(userId)) {
           return sendEphemeralMessage(
             res,
-            "⛔ **Access Denied:** Only authorized administrators can update alliance rankings.",
+            "⛔ **Access Denied:** Only designated Kingdom Stewards can update alliance rankings.",
           );
         }
 
@@ -1981,7 +2160,7 @@ export default async function handler(req, res) {
     const lang = resolveUserLocale(interaction, null);
     const t = getBotStrings(lang);
 
-    // 1. PUBLIC MAP VIEW SWITCH BUTTONS
+    // 1A. PUBLIC MAP VIEW SWITCH BUTTONS
     if (custom_id && custom_id.startsWith("map_view:")) {
       const targetView = custom_id.replace("map_view:", "");
       const revision = await getLatestMapRevision(
@@ -2002,7 +2181,92 @@ export default async function handler(req, res) {
       });
     }
 
-    // 2. ADMIN PROPOSALS & REVIEWS (Map, Rewards, Alliance Standings, Overrides)
+    // 1B. STEWARD KVK OUTCOME CONFIRMATION BUTTONS
+    if (custom_id && custom_id.startsWith("confirm_kvk_reset:")) {
+      const userId = resolveUserId(interaction);
+      const username = resolveActorName(interaction, "Steward");
+
+      if (!isSteward(userId)) {
+        return sendEphemeralMessage(
+          res,
+          "⛔ **Access Denied:** Only designated Kingdom Stewards can confirm KvK reward outcomes.",
+        );
+      }
+
+      const [, mode, targetWeekStr] = custom_id.split(":");
+      const targetWeek = parseInt(targetWeekStr, 10);
+      const GIST_ID = process.env.GIST_ID;
+      const GIST_TOKEN = process.env.GIST_TOKEN;
+
+      try {
+        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+        const currentRewards = JSON.parse(
+          gistData.files["rewards-data.json"]?.content || "{}",
+        );
+        const mapState = JSON.parse(
+          gistData.files["map-state.json"]?.content || "{}",
+        );
+
+        const { updatedRewards } = applySafeCycleReset(
+          currentRewards,
+          mode,
+          username,
+          mapState,
+          isNaN(targetWeek) ? null : targetWeek,
+        );
+
+        const patchRes = await fetch(
+          `https://api.github.com/gists/${GIST_ID}`,
+          {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${GIST_TOKEN}`,
+              "Content-Type": "application/json",
+              "User-Agent": "NAP-Leadership-App",
+            },
+            body: JSON.stringify({
+              description: `KvK Week ${targetWeek} confirmed (${mode}) by ${username}`,
+              files: {
+                "rewards-nominations.json": {
+                  content: JSON.stringify({}, null, 2),
+                },
+                "rewards-data.json": {
+                  content: JSON.stringify(updatedRewards, null, 2),
+                },
+              },
+            }),
+          },
+        );
+
+        if (!patchRes.ok)
+          throw new Error(`GitHub API error ${patchRes.status}`);
+
+        const isKW = mode === "kw";
+        return res.status(200).json({
+          type: InteractionResponseType.UPDATE_MESSAGE,
+          data: {
+            embeds: [
+              {
+                title: isKW
+                  ? `⚔️ Week ${targetWeek} Initialized — 2x Kingdom War Rewards`
+                  : `🛡️ Week ${targetWeek} Initialized — 1x Standard Rewards`,
+                color: isKW ? 0x22c55e : 0xb8975a,
+                description: `✅ **Confirmed by ${username}**.\n\n• Previous nominations cleared.\n• \`/nominate\` is now **unlocked** for all eligible alliances.`,
+                timestamp: new Date().toISOString(),
+              },
+            ],
+            components: [],
+          },
+        });
+      } catch (err) {
+        return sendEphemeralMessage(
+          res,
+          `❌ Failed to initialize week: ${err.message}`,
+        );
+      }
+    }
+
+    // 2. STEWARD PROPOSALS & REVIEWS (Map, Rewards, Alliance Standings, Overrides)
     const proposalConfig = PROPOSAL_CONFIGS[custom_id];
     if (!proposalConfig) {
       return sendEphemeralMessage(
@@ -2012,9 +2276,9 @@ export default async function handler(req, res) {
     }
 
     const userId = resolveUserId(interaction);
-    const username = resolveActorName(interaction, "Discord Admin");
+    const username = resolveActorName(interaction, "Kingdom Steward");
 
-    if (userId !== process.env.AUTHORIZED_USER_ID) {
+    if (!isSteward(userId)) {
       return sendEphemeralMessage(res, t.admin.access_denied);
     }
 

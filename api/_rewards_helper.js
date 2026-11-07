@@ -10,13 +10,16 @@ import { advanceCycleState } from "./_cycle_helper.js";
 export function getAllianceNominationQuota(allianceTag, rewardsState = {}, mapState = {}) {
   const cleanTag = String(allianceTag || "").trim();
   const currentWeek = rewardsState.cycle_state?.current_week ?? 1;
-  const isKW = rewardsState.mode === "kw" || (currentWeek >= 1 && currentWeek <= 3);
+  const isKW = rewardsState.mode
+    ? rewardsState.mode === "kw"
+    : currentWeek >= 1 && currentWeek <= 3;
 
   // 1. Determine Alliance Rank from map-state
   const allianceInfo = mapState.alliances?.[cleanTag];
-  const rank = allianceInfo?.rank !== undefined && allianceInfo?.rank !== null
-    ? parseInt(allianceInfo.rank, 10)
-    : 99;
+  const rank =
+    allianceInfo?.rank !== undefined && allianceInfo?.rank !== null
+      ? parseInt(allianceInfo.rank, 10)
+      : 99;
 
   // 2. Base Quota from distribution_tiers
   let baseQuota = {
@@ -117,7 +120,6 @@ export function getAllianceNominationQuota(allianceTag, rewardsState = {}, mapSt
 }
 
 /**
- * Called by /rewards action:reset in api/interactions.js.
  * Marks current week's nominated buyout installments as fulfilled, archives completed tickets,
  * protects uncollected installments, updates lastReset, and advances the cycle week.
  */
@@ -125,11 +127,15 @@ export function applySafeCycleReset(
   rewardsState = {},
   requestedMode = "standard",
   username = "Leadership",
+  mapState = null,
+  targetClockWeek = null,
 ) {
   const currentWeek = rewardsState.cycle_state?.current_week ?? 1;
 
-  if (!Array.isArray(rewardsState.wartime_buyouts)) rewardsState.wartime_buyouts = [];
-  if (!Array.isArray(rewardsState.buyout_history)) rewardsState.buyout_history = [];
+  if (!Array.isArray(rewardsState.wartime_buyouts))
+    rewardsState.wartime_buyouts = [];
+  if (!Array.isArray(rewardsState.buyout_history))
+    rewardsState.buyout_history = [];
 
   const remainingBuyouts = [];
   let archivedCount = 0;
@@ -162,9 +168,15 @@ export function applySafeCycleReset(
     }
   });
 
-  const cycleAdvanced = currentWeek >= 3;
+  const nextCycleState = advanceCycleState(
+    rewardsState.cycle_state || {},
+    mapState,
+    targetClockWeek,
+  );
+  const cycleAdvanced = nextCycleState.current_week === 0 && currentWeek >= 3;
+
   rewardsState.wartime_buyouts = remainingBuyouts;
-  rewardsState.cycle_state = advanceCycleState(rewardsState.cycle_state || {});
+  rewardsState.cycle_state = nextCycleState;
   rewardsState.mode = requestedMode;
   rewardsState.lastReset = new Date().toISOString();
   rewardsState.lastUpdated = new Date().toISOString();

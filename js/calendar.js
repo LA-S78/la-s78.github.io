@@ -89,8 +89,21 @@
     }
 
     if (capHolderEl) capHolderEl.textContent = capitolHolder;
-    if (capRankEl) capRankEl.textContent = `Rank #${status.capitolRank} Privilege`;
-    if (cycleProgressEl) cycleProgressEl.textContent = `Day ${status.cycleDay} of 28 (Week ${status.currentWeekNumber})`;
+    if (capRankEl) {
+      if (status.isOverrideWeek && status.holderActualRank) {
+        capRankEl.textContent = `Rank #${status.holderActualRank} (Override Active)`;
+      } else {
+        capRankEl.textContent = `Rank #${status.capitolRank} Privilege`;
+      }
+    }
+    if (cycleProgressEl) {
+      const weekLabel = status.clockWeek === 0 ? 'Downtime' : `Week ${status.clockWeek}`;
+      cycleProgressEl.textContent = `Day ${status.cycleDay} of 28 (${weekLabel})`;
+    }
+
+    // Broadcast live clock week so kvk-scheduler.js stays 100% synced
+    window.__LIVE_CLOCK_WEEK__ = status.clockWeek;
+    window.dispatchEvent(new CustomEvent('calendar:clock-synced', { detail: { clockWeek: status.clockWeek } }));
 
     const kwBox = document.getElementById('metric-kw-box');
     const kwCountdown = document.getElementById('metric-kw-countdown');

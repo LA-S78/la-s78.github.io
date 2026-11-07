@@ -7,6 +7,51 @@ export const BASELINE_SCHEDULES = {
 };
 
 /**
+ * Resolves the 3-cycle cohort seats [SeatA, SeatB, SeatC] and Rank #1 holder.
+ * Uses Option A (Seat Inheritance): if a new alliance enters the Top 4 in mapState,
+ * they inherit the exact wheel seat vacated by the alliance that dropped out of Top 4.
+ */
+export function resolveCohortSchedule(macroCycle = 1, previousCohort = null, mapState = null) {
+  const defaultCohort = ['BOTS', 'RÂVN', 'MIA']; // [Seat A, Seat B, Seat C]
+  let cohort = Array.isArray(previousCohort) && previousCohort.length === 3
+    ? [...previousCohort]
+    : [...defaultCohort];
+  let rankOneTag = 'WLO';
+
+  const alliances = mapState?.alliances || {};
+  const rankedList = Object.entries(alliances)
+    .map(([tag, data]) => ({ tag: tag.trim(), rank: parseInt(data?.rank, 10) }))
+    .filter(a => !isNaN(a.rank) && a.rank >= 1 && a.rank <= 4)
+    .sort((a, b) => a.rank - b.rank);
+
+  if (rankedList.length === 4) {
+    rankOneTag = rankedList[0].tag;
+    const topThreeChallengers = rankedList.slice(1).map(a => a.tag);
+
+    // Replace any seat holder who dropped out of Ranks #2-#4 with the newcomer
+    const newcomers = topThreeChallengers.filter(tag => !cohort.includes(tag));
+    cohort = cohort.map(seatTag => {
+      if (topThreeChallengers.includes(seatTag)) return seatTag;
+      return newcomers.shift() || seatTag;
+    });
+  }
+
+  const [seatA, seatB, seatC] = cohort;
+
+  // 3-Cycle Permutation Wheel across Seats A, B, C
+  const wheelByCycle = {
+    1: { downtime: seatA, week_1: seatB, week_2: seatC, week_3: rankOneTag },
+    2: { downtime: seatC, week_1: seatA, week_2: seatB, week_3: rankOneTag },
+    3: { downtime: seatB, week_1: seatC, week_2: seatA, week_3: rankOneTag }
+  };
+
+  return {
+    cohort,
+    schedule: wheelByCycle[macroCycle] || wheelByCycle[1]
+  };
+}
+
+/**
  * Evaluates an override request under Model 1:
  * - 1st Override in cycle: Calendar Swap with Week 3 (Cost: 0 chests)
  * - 2nd Override in cycle: 2-Installment Buyout (Cost: 1 Reg+1 KW in W2, 1 Reg+1 KW in W3)
@@ -23,9 +68,6 @@ export function calculateOverrideAction(cycleState = {}, targetWeek, threatName)
   }
 
   if (currentCount === 0) {
-    // ------------------------------------------------------------------------
-    // OVERRIDE 1: CALENDAR SWAP
-    // ------------------------------------------------------------------------
     currentSchedule[targetWeekKey] = 'WLO';
     currentSchedule.week_3 = scheduledAlliance;
 
@@ -40,9 +82,6 @@ export function calculateOverrideAction(cycleState = {}, targetWeek, threatName)
       summary: `WLO swaps into Week ${targetWeek} for server defense against ${threatName}. [${scheduledAlliance}] takes Week 3 Finale (receives 2 King chests & Buff Item). Cost to WLO: 0 chests.`
     };
   } else {
-    // ------------------------------------------------------------------------
-    // OVERRIDE 2: TWO-INSTALLMENT BUYOUT
-    // ------------------------------------------------------------------------
     currentSchedule[targetWeekKey] = 'WLO';
 
     const buyoutTicket = {
@@ -86,29 +125,32 @@ export function calculateOverrideAction(cycleState = {}, targetWeek, threatName)
 /**
  * Rolls the cycle state forward to the next week or next 4-week macro cycle.
  */
-export function advanceCycleState(cycleState = {}) {
+export function advanceCycleState(cycleState = {}, mapState = null, targetClockWeek = null) {
   let macroCycle = Number(cycleState.macro_cycle) || 1;
   let currentWeek = cycleState.current_week !== undefined && cycleState.current_week !== null
     ? Number(cycleState.current_week)
     : 1;
 
-  if (currentWeek >= 3) {
-    // Advance to next 4-week cycle Downtime (Week 0)
+  const nextWeek = targetClockWeek !== null ? Number(targetClockWeek) : (currentWeek >= 3 ? 0 : currentWeek + 1);
+
+  if (nextWeek === 0 || currentWeek >= 3) {
+    // Advance to next 4-week cycle Downtime (Week 0) with Seat Inheritance
     macroCycle = macroCycle >= 3 ? 1 : macroCycle + 1;
-    currentWeek = 0; // 0 = Downtime
+    const { cohort, schedule } = resolveCohortSchedule(macroCycle, cycleState.cohort_seats, mapState);
 
     return {
       macro_cycle: macroCycle,
       current_week: 0,
       override_count: 0,
-      active_schedule: { ...(BASELINE_SCHEDULES[macroCycle] || BASELINE_SCHEDULES[1]) },
+      cohort_seats: cohort,
+      active_schedule: schedule,
       history: Array.isArray(cycleState.history) ? cycleState.history : []
     };
   } else {
     return {
       ...cycleState,
       macro_cycle: macroCycle,
-      current_week: currentWeek + 1,
+      current_week: nextWeek,
       override_count: Number(cycleState.override_count) || 0
     };
   }

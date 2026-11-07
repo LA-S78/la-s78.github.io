@@ -36,6 +36,13 @@ function getAllianceColor(tag) {
   return DEFAULT_ALLIANCE_COLORS[clean] || '#b8975a';
 }
 
+function getEffectiveActiveWeek() {
+  if (typeof window !== 'undefined' && typeof window.__LIVE_CLOCK_WEEK__ === 'number') {
+    return window.__LIVE_CLOCK_WEEK__;
+  }
+  return cycleState.current_week ?? 1;
+}
+
 /**
  * 1. Fetch live state from unified /api/state proxy
  */
@@ -71,7 +78,7 @@ function renderScheduleGrid() {
   if (!container) return;
 
   const schedule = cycleState.active_schedule || {};
-  const currentWeek = cycleState.current_week ?? 1;
+  const currentWeek = getEffectiveActiveWeek();
 
   const weeks = [
     { key: 'downtime', label: 'Downtime', sub: 'Boss 1 Window', seat: schedule.downtime || 'BOTS', loot: '1 King Chest' },
@@ -183,7 +190,6 @@ export function updateOverridePreview() {
   }
 
   if (overrideCount === 0) {
-    // Stepped Model: Step 1 (Calendar Swap)
     const allyColor = getAllianceColor(currentScheduledAlly);
     previewBox.innerHTML = `
       <div class="preview-stepped-swap">
@@ -203,7 +209,6 @@ export function updateOverridePreview() {
       </div>
     `;
   } else {
-    // Stepped Model: Step 2 (2-Installment Buyout)
     const allyColor = getAllianceColor(currentScheduledAlly);
     previewBox.innerHTML = `
       <div class="preview-stepped-buyout">
@@ -316,6 +321,13 @@ export function bindOperationsControls() {
   if (submitBtn && !submitBtn.dataset.bound) {
     submitBtn.dataset.bound = 'true';
     submitBtn.addEventListener('click', submitOverrideProposal);
+  }
+
+  if (typeof window !== 'undefined' && !window.__KVK_CLOCK_LISTENER__) {
+    window.__KVK_CLOCK_LISTENER__ = true;
+    window.addEventListener('calendar:clock-synced', () => {
+      renderScheduleGrid();
+    });
   }
 
   fetchOperationsState();
