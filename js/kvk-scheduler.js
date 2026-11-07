@@ -204,7 +204,7 @@ export function updateOverridePreview() {
         </div>
         <div class="preview-perks">
           🎁 <strong>[${currentScheduledAlly}]</strong> lose 0 chests.
-          <strong>[WLO]</strong> loses 0 chests.
+          <strong>[WLO]</strong> lose 0 chests.
         </div>
       </div>
     `;
