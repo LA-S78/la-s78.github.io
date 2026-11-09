@@ -15,6 +15,32 @@ const click = (selector) => async (page) => {
   await page.evaluate((s) => document.querySelector(s)?.click(), selector);
 };
 
+/** Opens the proposal pop-up the way the planners do. */
+const openProposal = async (page) =>
+  page.evaluate(async () => {
+    const m = await import('/js/auth-modal.js');
+    m.submitProposalWithAuth({
+      type: 'map',
+      title: 'Visual Test Proposal',
+      payload: {},
+      diffSummaryHtml: '<p>3 territories change owner</p>',
+    });
+  });
+
+/** Changes the reward cycle in the sample data (used by `api` below). */
+const cycle = (change) => (fixture, data) => {
+  const rewards = data.rewards || (fixture === 'state-rewards' ? data : null);
+  if (rewards?.cycle_state) change(rewards.cycle_state);
+};
+
+/** Fills in the Capitol Defense console so its preview box appears. */
+const defensePreview = (week) => async (page) => {
+  await page.selectOption('#ops-input-target-week', String(week));
+  await page.fill('#ops-input-threat', 'Server 112');
+  // Leave the box, so the blinking text cursor isn't in the screenshot.
+  await page.evaluate(() => document.activeElement?.blur());
+};
+
 export const STATES = [
   { name: 'default' },
   { name: 'leader', storage: LEADER },
@@ -78,16 +104,50 @@ export const STATES = [
     name: 'proposal-modal',
     needs: '#map-container, .alliance-wrapper',
     storage: LEADER,
-    run: async (page) =>
-      page.evaluate(async () => {
-        const m = await import('/js/auth-modal.js');
-        m.submitProposalWithAuth({
-          type: 'map',
-          title: 'Visual Test Proposal',
-          payload: {},
-          diffSummaryHtml: '<p>3 territories change owner</p>',
-        });
-      }),
+    run: openProposal,
+  },
+  // Not logged in: the pop-up asks the visitor to log in via Discord.
+  {
+    name: 'proposal-modal-guest',
+    needs: '#map-container, .alliance-wrapper',
+    run: openProposal,
+  },
+  // Sending fails (the test API has no /api/proposal): the pop-up shows its error box.
+  {
+    name: 'proposal-modal-error',
+    needs: '#map-container, .alliance-wrapper',
+    storage: LEADER,
+    run: async (page) => {
+      await openProposal(page);
+      await click('#auth-modal-action-btn')(page);
+      await page.waitForSelector('#auth-modal-error:not(.hidden)', { timeout: 5000 });
+    },
+  },
+  // Calendar hero card with no Capitol holder alliance: the tag falls back to the theme colour.
+  {
+    name: 'hero-no-holder-colour',
+    needs: '.cal-hero-card',
+    api: (fixture, data) => {
+      if (fixture === 'calendar') data.capitolHolderColor = null;
+    },
+  },
+  // Capitol Defense console previews. The normal view already shows the Step 2 buyout box
+  // (the sample data has one override used), so these add the other two boxes.
+  {
+    name: 'defense-swap',
+    needs: '#ops-preview-box',
+    storage: LEADER,
+    api: cycle((c) => (c.override_count = 0)),
+    run: defensePreview(1),
+  },
+  {
+    name: 'defense-already-scheduled',
+    needs: '#ops-preview-box',
+    storage: LEADER,
+    api: cycle(
+      (c) => (c.active_schedule = { ...c.active_schedule, week_1: 'WLO', week_3: 'BOTS' }),
+    ),
+    run: defensePreview(1),
   },
   // One state per <dialog> on the page (image zoom dialogs etc.), added automatically.
   {

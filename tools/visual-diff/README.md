@@ -3,7 +3,8 @@
 Checks that a change didn't alter how the site looks. It renders **every page** of two
 builds in **every theme** (default, Sanctuary, Miasma), at **phone and desktop widths**
 (390 px, 1280 px), and in each **interactive state** (planners open, map modes,
-fullscreen, dialogs, the proposal modal, logged-in leader view...). Then it compares:
+fullscreen, dialogs, the proposal pop-up logged in / as a guest / with an error, the
+calendar's Capitol Defense previews, logged-in leader view...). Then it compares:
 
 1. **Every element's computed style.** This is the browser's final answer for each
    property after all CSS rules are applied. Any real CSS change shows up here, and the
@@ -36,7 +37,8 @@ gives the page, state, theme and width, the elements whose styles changed, and
 
 Other options: `--head <branch or site folder>`, `--pages <regex>`,
 `--states <regex>`, `--themes default,miasma`, `--widths 390`, `--workers 4`,
-`--out <folder>`. `--base`/`--head` accept a git branch/commit (built automatically in a
+`--out <folder>`, `--save-all` (keep the screenshots of every view, not only the ones that
+differ: useful to look at a new state). `--base`/`--head` accept a git branch/commit (built automatically in a
 temporary copy) or an already built `_site` folder.
 
 ## What keeps it repeatable
@@ -64,3 +66,14 @@ where it applies).
   `states.mjs`, aren't covered. Add a state there when a feature gains a new view.
 - **English pages only.** CSS applies the same way in every language, but very long
   translated words could wrap differently.
+
+## Adding a state
+
+Each entry in `states.mjs` can have:
+- `needs`: a selector; the state runs on every page where it exists.
+- `storage`: localStorage values, e.g. `LEADER` for the logged-in leader view.
+- `run(page)`: what to click or type before the capture.
+- `api(fixture, data)`: changes the sample data for this state only (e.g. no holder colour,
+  or a different reward schedule). `fixture` is the file name in `fixtures/` without `.json`.
+
+Check a new state with `--states <name> --save-all`, then open its `__head.png`.
