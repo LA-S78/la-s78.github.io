@@ -8,6 +8,14 @@ on:
   pull_request:
     branches: [main, dev]
 
+# One run at a time per branch (or per pull request). On main/dev a new push waits for
+# the running deploy to finish instead of racing it, so an older build can never finish
+# last and overwrite the live site; if several pushes queue up, only the newest runs.
+# Pull request checks are just builds, so a new commit cancels the outdated check.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

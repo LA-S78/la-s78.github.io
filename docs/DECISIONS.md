@@ -91,6 +91,7 @@ under *Must not change*, or someone will "fix" it.
 ## Conventions
 - **Game Time is UTC-2.** All schedule/calendar code and bot strings use this.
 - **Pull requests** must pass the "Checking build output" CI step before merge.
+- **Deploys never overlap.** The workflow's `concurrency` setting runs one deploy per branch at a time; a newer push waits rather than racing, so the newest commit always deploys last. Don't remove it.
 - **One build script.** `_scripts/build.rb` is the only build definition; CI calls it rather than running its own inline steps, so a local build matches production. New build steps go in the script, not in the workflow.
 - **Code style is automatic.** JavaScript and JSON are formatted by Prettier (`.prettierrc.json`: defaults plus single quotes and 100-character lines). Don't hand-format or argue style in reviews; run `npm run format` or use format-on-save. HTML/Markdown/YAML are excluded because of Liquid tags. The CI formatting check is advisory, not blocking.
 - **Generated files are git-ignored** (see `.gitignore` and the README's "Never edit these" list) so local builds never show up as changes.
