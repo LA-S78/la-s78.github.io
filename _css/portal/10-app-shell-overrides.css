@@ -26,58 +26,58 @@
 }
 
 html:has(.portal-body) {
-  height: auto !important;
-  min-height: 100% !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch !important;
-  touch-action: pan-y !important;
+  touch-action: pan-y;
 }
 
 body.portal-body {
-  height: auto !important;
+  height: auto;
   min-height: 100vh !important;
   min-height: 100lvh !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: visible !important;
-  position: relative !important;
-  background: transparent !important;
-  touch-action: pan-y !important;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  position: relative;
+  background: transparent;
+  touch-action: pan-y;
   -webkit-overflow-scrolling: touch !important;
 }
 
 body.portal-body #mobile-container {
-  position: relative !important;
-  height: auto !important;
+  position: relative;
+  height: auto;
   min-height: 100vh !important;
   min-height: 100lvh !important;
-  box-sizing: border-box !important;
-  overflow: visible !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  touch-action: pan-y !important;
-  padding-bottom: 2rem !important;
+  box-sizing: border-box;
+  overflow: visible;
+  background: transparent;
+  background-color: transparent;
+  touch-action: pan-y;
+  padding-bottom: 2rem;
 }
 
 body.portal-body #main-content,
 body.portal-body main {
-  height: auto !important;
-  overflow: visible !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  touch-action: pan-y !important;
+  height: auto;
+  overflow: visible;
+  background: transparent;
+  background-color: transparent;
+  touch-action: pan-y;
 }
 
 body.portal-body.has-no-header #mobile-container,
 body.portal-body.has-no-header #main-content {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 body.portal-body.has-no-header main {
-  padding-top: 1.2rem !important;
-  margin-top: 0 !important;
+  padding-top: 1.2rem;
+  margin-top: 0;
 }
 
 body.portal-body.has-no-header .lantern-glow-bleed {
@@ -89,10 +89,10 @@ body.portal-body.has-header #main-content {
 }
 
 body.portal-body .content-pane {
-  margin-left: auto !important;
-  margin-right: auto !important;
-  touch-action: pan-y !important;
-  padding: 1.15rem !important;
+  margin-left: auto;
+  margin-right: auto;
+  touch-action: pan-y;
+  padding: 1.15rem;
 }
 
 /* Portal Container Width Modifiers */

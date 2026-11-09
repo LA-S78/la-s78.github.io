@@ -171,7 +171,7 @@
 }
 
 .color-hex-input {
-  width: 98px !important;
+  width: 98px;
   text-transform: uppercase;
   font-family: monospace;
   font-size: 0.85rem;
