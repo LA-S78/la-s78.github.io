@@ -2,8 +2,8 @@
 sb:
   current_event: "Current Event"
   next_event: "Next Event"
-  schedule_title: "Day {day} Schedule (Game Time / UTC+2)"
-  footer: "Times are Game Time (UTC+2). Relative countdowns adapt to your local time."
+  schedule_title: "Day {day} Schedule (Game Time / UTC-2)"
+  footer: "Times are Game Time (UTC-2). Relative countdowns adapt to your local time."
   button: "View Full Schedule"
 
 rules:
@@ -26,8 +26,8 @@ admin:
 sb:
   current_event: "Aktuelles Event"
   next_event: "Nächstes Event"
-  schedule_title: "Zeitplan Tag {day} (Spielzeit / UTC+2)"
-  footer: "Die Zeiten entsprechen der Spielzeit (UTC+2). Relative Countdowns passen sich Ihrer lokalen Zeit an."
+  schedule_title: "Zeitplan Tag {day} (Spielzeit / UTC-2)"
+  footer: "Die Zeiten entsprechen der Spielzeit (UTC-2). Relative Countdowns passen sich Ihrer lokalen Zeit an."
   button: "Vollständigen Zeitplan ansehen"
 
 rules:
@@ -50,8 +50,8 @@ admin:
 sb:
   current_event: "Evento Actual"
   next_event: "Próximo Evento"
-  schedule_title: "Horario del Día {day} (Hora del Juego / UTC+2)"
-  footer: "Los horarios son según la hora del juego (UTC+2). Las cuentas regresivas relativas se adaptan a tu hora local."
+  schedule_title: "Horario del Día {day} (Hora del Juego / UTC-2)"
+  footer: "Los horarios son según la hora del juego (UTC-2). Las cuentas regresivas relativas se adaptan a tu hora local."
   button: "Ver Horario Completo"
 
 rules:
@@ -74,8 +74,8 @@ admin:
 sb:
   current_event: "Événement en cours"
   next_event: "Événement suivant"
-  schedule_title: "Planning du jour {day} (Heure du jeu / UTC+2)"
-  footer: "Les heures sont à l'heure du jeu (UTC+2). Les comptes à rebours s'adaptent à votre heure locale."
+  schedule_title: "Planning du jour {day} (Heure du jeu / UTC-2)"
+  footer: "Les heures sont à l'heure du jeu (UTC-2). Les comptes à rebours s'adaptent à votre heure locale."
   button: "Voir le planning complet"
 
 rules:
@@ -98,8 +98,8 @@ admin:
 sb:
   current_event: "Текущее событие"
   next_event: "Следующее событие"
-  schedule_title: "Расписание на день {day} (Игровое время / UTC+2)"
-  footer: "Время указано игровое (UTC+2). Обратный отсчет адаптируется под ваше местное время."
+  schedule_title: "Расписание на день {day} (Игровое время / UTC-2)"
+  footer: "Время указано игровое (UTC-2). Обратный отсчет адаптируется под ваше местное время."
   button: "Посмотреть полное расписание"
 
 rules:
@@ -122,8 +122,8 @@ admin:
 sb:
   current_event: "Mevcut Etkinlik"
   next_event: "Sıradaki Etkinlik"
-  schedule_title: "{day}. Gün Programı (Oyun Saati / UTC+2)"
-  footer: "Zamanlar Oyun Saatidir (UTC+2). Geri sayımlar yerel saatinize göre ayarlanır."
+  schedule_title: "{day}. Gün Programı (Oyun Saati / UTC-2)"
+  footer: "Zamanlar Oyun Saatidir (UTC-2). Geri sayımlar yerel saatinize göre ayarlanır."
   button: "Tam Programı Görüntüle"
 
 rules:
@@ -146,8 +146,8 @@ admin:
 sb:
   current_event: "Поточна подія"
   next_event: "Наступна подія"
-  schedule_title: "Розклад на день {day} (Ігровий час / UTC+2)"
-  footer: "Час вказано за ігровим часом (UTC+2). Зворотний відлік адаптується до вашого місцевого часу."
+  schedule_title: "Розклад на день {day} (Ігровий час / UTC-2)"
+  footer: "Час вказано за ігровим часом (UTC-2). Зворотний відлік адаптується до вашого місцевого часу."
   button: "Переглянути повний розклад"
 
 rules:
@@ -170,8 +170,8 @@ admin:
 sb:
   current_event: "Evento Attuale"
   next_event: "Prossimo Evento"
-  schedule_title: "Programma Giorno {day} (Orario di Gioco / UTC+2)"
-  footer: "Gli orari sono in Orario di Gioco (UTC+2). I conti alla rovescia relativi si adattano al tuo orario locale."
+  schedule_title: "Programma Giorno {day} (Orario di Gioco / UTC-2)"
+  footer: "Gli orari sono in Orario di Gioco (UTC-2). I conti alla rovescia relativi si adattano al tuo orario locale."
   button: "Visualizza Programma Completo"
 
 rules:

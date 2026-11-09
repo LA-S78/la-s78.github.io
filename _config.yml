@@ -17,6 +17,15 @@ exclude:
   - redirect.html
   - vercel.json
   - _source/
+  # Build-only / server-only files that must not be published as static pages
+  - api/
+  - package.json
+  - package-lock.json
+  - migration.html
+  - node_modules/
+  - vendor/
+  - guides_backup/
+  - guide_panes_backup/
 
 collections_dir: "collections"
 collections:

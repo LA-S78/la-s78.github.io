@@ -126,56 +126,58 @@ jobs:
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         run: |
-          cp -r guides guides_backup
-          cp -r collections/_guide_panes guide_panes_backup
+          # Keep pristine copies OUTSIDE the Jekyll source tree so they are never
+          # picked up as pages (previously caused ~99 permalink conflicts per build
+          # and ~2,000 junk pages under /<lang>/guide_panes_backup/).
+          BACKUP_DIR=$(mktemp -d)
+          cp -r guides "$BACKUP_DIR/guides"
+          cp -r collections/_guide_panes "$BACKUP_DIR/guide_panes"
 
-          echo "Isolating English assets for primary root compilation..."
-          find guides -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
-          find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "en" -exec rm -rf {} +
-          
-          bundle exec jekyll build --config _config.yml --destination _site/
-          
+          isolate_lang() {
+            rm -rf guides collections/_guide_panes
+            cp -r "$BACKUP_DIR/guides" guides
+            cp -r "$BACKUP_DIR/guide_panes" collections/_guide_panes
+            find guides -mindepth 1 -maxdepth 1 -type d ! -name "$1" -exec rm -rf {} +
+            find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "$1" -exec rm -rf {} +
+          }
+
+          # Root build uses the English config so root URLs (/rules.html, /404.html, ...)
+          # render real content and link to /en/... instead of protocol-relative //rules.html.
+          echo "Compiling English root site..."
+          isolate_lang en
+          bundle exec jekyll build --config _config.yml,_configs/_config_en.yml --destination _site/
+
           echo "Scanning for localized language configuration files..."
           for config_file in _configs/_config_*.yml; do
             [ -e "$config_file" ] || continue
             lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
-            
-            rm -rf guides collections/_guide_panes
-            cp -r guides_backup guides
-            cp -r guide_panes_backup collections/_guide_panes
-            
-            find guides -mindepth 1 -maxdepth 1 -type d ! -name "$lang" -exec rm -rf {} +
-            find collections/_guide_panes -mindepth 1 -maxdepth 1 -type d ! -name "$lang" -exec rm -rf {} +
-            
+
+            isolate_lang "$lang"
+
             echo "🚀 Executing clean isolated regional build for: [$lang]..."
             bundle exec jekyll build --config _config.yml,"$config_file" --destination _site/$lang
+
+            # Pages reference shared assets by absolute path (/css, /js, /images), so the
+            # per-language copies are never used. Dropping them shrinks the deploy ~9x.
+            rm -rf "_site/$lang/images" "_site/$lang/css" "_site/$lang/js"
           done
-          
+
           rm -rf guides collections/_guide_panes
-          mv guides_backup guides
-          mv guide_panes_backup collections/_guide_panes
-          
+          mv "$BACKUP_DIR/guides" guides
+          mv "$BACKUP_DIR/guide_panes" collections/_guide_panes
+          rm -rf "$BACKUP_DIR"
+
           cp -r images _site/
           cp -r css _site/
           cp -r js _site/
           cp site.webmanifest _site/
-          
+
           cp redirect.html _site/index.html
 
           # Re-apply the JS URL patch module onto non-production assets
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
             echo "Dev branch detected. Injecting global URL catch-all patch..."
             cat js/dev-url-fixer.js >> _site/js/main.js
-            
-            for config_file in _configs/_config_*.yml; do
-              [ -e "$config_file" ] || continue
-              lang=$(basename "$config_file" | sed 's/_config_\(.*\)\.yml/\1/')
-              
-              if [ -f "_site/$lang/js/main.js" ]; then
-                echo "Injecting dev fix into localized subfolder script bundle: /$lang..."
-                cat js/dev-url-fixer.js >> _site/$lang/js/main.js
-              fi
-            done
           fi
 
           echo "Running Workbox injector..."
@@ -231,6 +233,9 @@ jobs:
         run: |
           mkdir _github_pages_site
           cp migration.html _github_pages_site/index.html
+          # GitHub Pages serves 404.html for any unknown path, so old deep links
+          # (e.g. /en/rules.html) also reach the path-preserving redirect.
+          cp migration.html _github_pages_site/404.html
 
       - name: Caching deployment state
         uses: actions/cache@v4
