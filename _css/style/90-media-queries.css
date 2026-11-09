@@ -37,8 +37,8 @@
   }
 
   .header-stack {
-    height: 130px !important;
-    min-height: 130px !important;
+    height: 130px;
+    min-height: 130px;
     gap: 3rem;  
   }
   .debossed-title {
