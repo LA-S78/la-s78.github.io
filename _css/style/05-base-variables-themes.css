@@ -1,0 +1,83 @@
+/* ==========================================================================
+   LAST ASYLUM COMPENDIUM: MASTER STYLESHEET
+   ========================================================================== */
+
+/* Global Reset & Disable unintentional zoom */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   1. VARIABLES & THEMES
+   ========================================================================== */
+
+/* Core Variables & Default Theme (Plague) */
+:root,
+html[data-theme="default"] {
+  /* Base UI Colors */
+  --bg-color: #1a1512;
+  --card-bg: rgba(42, 34, 30, 0.85);
+  --nav-bg: #110d0b;
+  --text-main: #d9cbb8;
+  --text-muted: #a8a19b;
+  --accent-color: #b8975a;
+  --border-color: #3d3128;
+
+  /* Shared Surface & Palette Variables */
+  --surface-dark: #080605;
+  --surface-elevated: #0d0a08;
+  --surface-card: #14100d;
+  
+  --status-danger: #ef4444;
+  --status-danger-hover: #ff6b6b;
+  --status-danger-bg: rgba(122, 0, 0, 0.25);
+  --status-danger-text: #fca5a5;
+
+  --status-success: #22c55e;
+  --status-success-bg: rgba(20, 83, 45, 0.35);
+  --status-success-text: #86efac;
+
+  --brand-discord: #5865F2;
+  --brand-discord-hover: #4752c4;
+
+  --rank-gold: #facc15;
+  --rank-silver: #e2e8f0;
+  --rank-bronze: #f97316;
+
+  /* T10 calc */
+  --node-bg: #2a2726;
+  --line-color: #4a6c82;
+  --node-border: #6495ed;
+
+  /* Typography */
+  --font-headers: "Georgia", serif;
+  --font-body:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Default Theme: Plague (Green) */
+  --active-theme: 35, 120, 45;
+  --active-theme-bright: 55, 150, 65;
+  --active-theme-vivid: 85, 190, 95;
+  --active-theme-hex: 55, 150, 65;
+  --lantern-filter: contrast(1.3) brightness(1) saturate(1.2);
+}
+
+/* Theme 2: Sanctuary (Orange) */
+html[data-theme="sanctuary"] {
+  --active-theme: 230, 160, 80;
+  --active-theme-bright: 250, 190, 100;
+  --active-theme-vivid: 255, 220, 140;
+  --active-theme-hex: 239, 191, 4;
+  --lantern-filter: contrast(1.2) brightness(1) saturate(1.2) hue-rotate(270deg);
+}
+
+/* Theme 3: Miasma (Purple) */
+html[data-theme="miasma"] {
+  --active-theme: 140, 50, 180;
+  --active-theme-bright: 175, 90, 220;
+  --active-theme-vivid: 210, 160, 250;
+  --active-theme-hex: 175, 90, 220;
+  --lantern-filter: contrast(1.3) brightness(1.1) saturate(1.2)
+    hue-rotate(160deg);
+}
+

@@ -1,0 +1,188 @@
+/* ==========================================================================
+   6. UI COMPONENTS, CARDS & LAYOUTS
+   ========================================================================== */
+
+.search {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+.search-bar {
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 1.2rem;
+  padding: 15px 20px;
+  background-color: rgba(10, 8, 7, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-main);
+  font-size: 1rem;
+  animation: nativeAppFadeIn 0.5s cubic-bezier(0.3, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+.search-bar:focus {
+  background-color: rgba(20, 16, 14, 0.9);
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 10px rgba(184, 151, 90, 0.2);
+}
+
+.blueprint-img {
+  display: block;
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.blueprint-img:hover {
+  transform: scale(1.02);
+  border-color: var(--accent-color);
+}
+
+.highlight-alliance {
+  background-color: rgba(230, 160, 80, 0.2);
+  border-left: 4px solid var(--accent-color);
+  font-weight: bold;
+}
+
+.content-locked {
+  filter: blur(12px); 
+  pointer-events: none; 
+  user-select: none;    
+  opacity: 0.3;         
+}
+
+#gated-content {
+  transition: filter 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.profile-card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0 40px 0;
+}
+
+.login-button {
+  background-color: var(--brand-discord);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 14px rgba(88, 101, 242, 0.3);
+}
+
+.user-avatar {
+  display: grid;
+  grid-template-rows: 60fr 40fr;
+  gap: 0.5rem;
+  align-items: center;
+  text-align: center;
+}
+
+.private-grid {
+  display: grid;
+  grid-template-columns: 20fr 80fr;
+  grid-template-rows: auto auto;
+  grid-template-areas: 
+    "left-top    right-side"
+    "left-bottom right-side";
+  gap: 0.5rem;
+}
+
+.api-right {
+  grid-column: 2;
+  grid-row: span 2;
+  grid-area: right-side;
+  text-align: center;
+}
+
+.img-grid {
+  display: grid;
+  grid-template-columns: 6fr 4fr;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+dialog::backdrop {
+  background: rgba(10, 8, 7, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: backdropFadeIn 0.5s ease-out forwards;
+  will-change: transform, opacity;
+}
+dialog.is-closing::backdrop {
+  animation: backdropFadeOut 0.5s ease-out forwards;
+  will-change: transform, opacity;
+}
+dialog {
+  background-color: #1a1512;
+  border: 1px solid var(--accent-color);
+  border-radius: 12px;
+  padding: 20px;
+  color: var(--text-main);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+  margin: auto;
+  max-width: 95vw;
+  max-height: 90vh;
+}
+dialog[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  animation: dialogFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+dialog.is-closing {
+  animation: dialogFadeOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+dialog img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+dialog .dialog-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  margin-top: 5px;
+}
+dialog button,
+dialog a.dialog-btn {
+  background-color: rgba(20, 16, 14, 0.8);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+dialog button:hover,
+dialog a.dialog-btn:hover {
+  background-color: var(--accent-color);
+  color: #1a1512;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 15px rgba(184, 151, 90, 0.4);
+  transform: translateY(-2px);
+}
+

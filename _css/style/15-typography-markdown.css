@@ -1,0 +1,131 @@
+/* ==========================================================================
+   3. TYPOGRAPHY & MARKDOWN (MAIN CONTENT)
+   ========================================================================== */
+
+main {
+  -webkit-user-select: text;
+  user-select: text;
+  overscroll-behavior-y: contain; 
+  overscroll-behavior-x: none;    
+  touch-action: pan-x, pan-y;
+  flex: 1;
+  height: auto; 
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  line-height: 1.6;
+  padding-top: calc(90px + env(safe-area-inset-top));
+  padding-bottom: calc(60px + env(safe-area-inset-bottom)); 
+  padding-left: max(20px, calc((100% - 1000px) / 2));
+  padding-right: max(20px, calc((100% - 1000px) / 2));
+}
+
+main h1,
+main h2,
+main h3,
+main h4 {
+  font-family: var(--font-headers);
+  color: var(--accent-color);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+main h1 {
+  font-size: 1.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--accent-color);
+  padding-bottom: 5px;
+}
+main h2 {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 5px;
+}
+main p,
+main ul,
+main ol {
+  margin-bottom: 1.2em;
+}
+
+main a {
+  color: var(--accent-color);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent-color);
+}
+main a:hover {
+  filter: brightness(1.2);
+}
+
+blockquote {
+  background: rgba(184, 151, 90, 0.1);
+  border-left: 4px solid var(--accent-color);
+  padding: 15px 20px !important;
+  border-radius: 0 8px 8px 0;
+  margin: 20px 0;
+}
+blockquote h4 {
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+blockquote p:last-child,
+blockquote ul:last-child {
+  margin-bottom: 0;
+}
+pre,
+code {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+pre {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+  margin: 20px 0;
+}
+code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.85rem;
+}
+th,
+td {
+  padding: 10px;
+  border: 1px solid #3d3734;
+  text-align: left;
+}
+th {
+  background: #2a2726;
+  color: var(--accent-color);
+  font-family: var(--font-headers);
+}
+tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+main img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin: 0;
+}
+
+.warning {
+  color: var(--status-danger-hover);
+}
+

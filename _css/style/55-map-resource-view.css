@@ -1,0 +1,205 @@
+/* ==========================================================================
+   WAR ROOM: RESOURCE VIEW & LEGEND STYLING
+   ========================================================================== */
+
+/* Resource View Legend Bar (Compact Identification Key) */
+.resource-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 5px 10px;
+  background: #0a0807;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  margin-bottom: 0.6rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.resource-legend.hidden {
+  display: none !important;
+}
+
+/* Hide any residual count badges if present */
+.resource-legend .legend-count,
+.resource-legend .legend-tally,
+.resource-legend .chip-count {
+  display: none !important;
+}
+
+.legend-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.legend-divider {
+  color: var(--border-color);
+  user-select: none;
+  opacity: 0.6;
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.chip-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+/* Resource Base Colors (Grain, Timber, Herbs) */
+.chip-grain  { background-color: #e07a12; }
+.chip-timber { background-color: #4a2411; }
+.chip-herbs  { background-color: #059669; }
+
+.chip-pattern {
+  width: 12px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid var(--border-color);
+}
+
+.chip-solid {
+  background-color: var(--text-muted);
+}
+
+.chip-striped {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--text-muted),
+    var(--text-muted) 2px,
+    #110d0b 2px,
+    #110d0b 4px
+  );
+}
+
+/* Scoped Buff Matrix Table */
+.buff-table {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.buff-table th,
+.buff-table td {
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.buff-table th {
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.buff-row.is-active-target {
+  background: rgba(var(--active-theme), 0.15);
+  border-left: 3px solid var(--accent-color);
+}
+
+.alliance-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.city-count-pill {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.buff-badges-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.buff-badge {
+  background: rgba(var(--active-theme), 0.2);
+  border: 1px solid rgba(var(--active-theme-bright), 0.4);
+  color: var(--text-main);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.buff-badge strong {
+  color: #ffffff;
+}
+
+.buff-badge-count {
+  font-size: 0.65rem;
+  padding: 0 4px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 3px;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.buff-none,
+.buff-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
+.submit-plan-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 28px;
+  padding: 0 0.65rem;
+  font-size: 0.78rem;
+  line-height: 1;
+  box-sizing: border-box;
+  font-weight: bold;
+  background: linear-gradient(180deg, #166534 0%, #14532d 100%);
+  border: 1px solid var(--status-success);
+  color: #f0fdf4;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.submit-plan-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #15803d 0%, #166534 100%);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+.submit-plan-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
+.submit-plan-btn.hidden {
+  display: none;
+}
+
+.submit-plan-btn .badge {
+  line-height: 1;
+  padding: 0.15rem 0.35rem;
+  margin: 0;
+}
+

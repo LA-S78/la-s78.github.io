@@ -126,7 +126,21 @@ end
 
 # ---------------------------------------------------------------------------
 step 'Copying shared assets to the site root'
-%w[images css js].each { |d| FileUtils.cp_r(d, SITE) }
+%w[images js].each { |d| FileUtils.cp_r(d, SITE) }
+
+# Each folder in _css/ becomes one stylesheet: _css/style/*.css -> /css/style.css.
+# Pieces are joined in filename order (05-, 10-, 15- ...). Order matters in CSS:
+# when two rules conflict, the later one wins, so media queries stay last.
+step 'Joining stylesheets from _css/ into /css/'
+FileUtils.mkdir_p(File.join(SITE, 'css'))
+Dir.children('_css').sort.each do |name|
+  dir = File.join('_css', name)
+  next unless File.directory?(dir)
+
+  pieces = Dir[File.join(dir, '*.css')].sort
+  File.binwrite(File.join(SITE, 'css', "#{name}.css"), pieces.map { |f| File.binread(f) }.join)
+  puts "css/#{name}.css <- #{pieces.size} pieces from #{dir}/"
+end
 FileUtils.cp('site.webmanifest', SITE)
 FileUtils.cp('_deploy/redirect.html', File.join(SITE, 'index.html'))
 
