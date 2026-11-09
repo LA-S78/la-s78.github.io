@@ -196,7 +196,7 @@ hide_header: true
         elSuccess.style.display = 'block';
         elSuccess.innerHTML = `
           <strong>✅ Nominations Saved!</strong><br>
-          ${isKW ? 'Both your <strong>Regular</strong> and <strong>Kingdom War</strong> rosters' : 'Your recipient roster'} for <strong>[${payload.alliance}]</strong> have been registered.<br>
+          ${isKW ? 'Both your <strong>Regular</strong> and <strong>Kingdom War</strong> rosters' : 'Your recipient roster'} for <strong>[${escapeHtml(payload.alliance)}]</strong> have been registered.<br>
           The King has received your distribution list.
         `;
       } catch (err) {
