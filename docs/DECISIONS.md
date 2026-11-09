@@ -62,8 +62,10 @@ under *Must not change*, or someone will "fix" it.
 - **Must not change:**
   - `map-state.json` is the single source of truth for alliance ranks (`#1`–`#10`).
   - All Gist reads and writes go through `api/_gist.js` (`readGist`, `gistJson`, `writeGist`). Endpoints must not call the GitHub API directly.
+  - **Write paths never fall back to defaults.** If the Gist can't be read, a write or mutation (approvals, nominations, events, registration, cycle resets) stops with an error and saves nothing; continuing with `{}` would wipe live data. Defaults are only used when a read succeeds but the file doesn't exist yet. Read-only endpoints (`api/state.js`, `api/calendar.js`, `api/map-image.js`) may fall back to defaults so pages still render.
+  - **A failed save is never hidden.** E.g. if the automatic Downtime reset in `/nominate` can't be saved, the leader gets "Service busy … retry" instead of a nomination link.
+  - Each save sends only the Gist files it changed (`writeGist` only sends what it is given).
 - **Open questions:**
-  - `api/accept-proposal.js` (every approval type): if GitHub returns an error when reading the Gist, the approval carries on with default data and **saves over the live file**. This is kept as-is in `readForApproval()` pending review. Should a failed read abort the approval instead?
   - Every write reads, changes and saves the whole file with no check for a concurrent change, so two simultaneous writes can lose one. Is that acceptable at current usage?
 
 ## Rewards, nominations & KvK cycle
