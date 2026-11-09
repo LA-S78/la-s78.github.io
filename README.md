@@ -63,6 +63,21 @@ Pushing to `main` (production) or `dev` (preview at dev.la-s78.app) runs
 
 Pull requests run steps 2 and 3 only, so you can see whether a change builds before merging.
 
+## Code formatting
+
+JavaScript and JSON follow one style, applied automatically by
+[Prettier](https://prettier.io) (settings in `.prettierrc.json`). You never need to
+format code by hand:
+
+- **VS Code (easiest):** open the project and accept the recommended extensions.
+  Files are then formatted every time you save.
+- **Command line** (needs [Node.js](https://nodejs.org)): `npm install` once, then
+  `npm run format` to tidy everything, or `npm run format:check` to only check.
+
+HTML, Markdown and YAML are not auto-formatted, because Prettier doesn't understand
+Jekyll's `{% %}` / `{{ }}` tags. GitHub reports unformatted JS/JSON on pull requests
+as a warning; it never blocks publishing.
+
 ## Scripts (`_scripts/`)
 
 | Script                  | What it does                                                    |

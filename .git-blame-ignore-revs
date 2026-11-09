@@ -1,0 +1,5 @@
+# Commits that only reformatted code. GitHub's "Blame" view (and `git blame` with
+# blame.ignoreRevsFile set) skips these, so blame shows who last really changed a line.
+
+# Format all JavaScript and JSON with Prettier
+9dd5e8edf674abb276f05c1613b9b801f72b19ab
