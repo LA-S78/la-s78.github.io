@@ -12,6 +12,7 @@ your edits would vanish. Git ignores them, so they never show up as changes.
 - [Change English text that is already translated](#change-english-text-that-is-already-translated)
 - [Add a new guide](#add-a-new-guide)
 - [Add a UI label](#add-a-ui-label)
+- [Change styles (CSS) safely](#change-styles-css-safely)
 - [Add or change an alliance](#add-or-change-an-alliance)
 - [Add a Discord command](#add-a-discord-command)
 - [Get a change onto the live site](#get-a-change-onto-the-live-site)
@@ -176,6 +177,38 @@ translated per push, so add guides one at a time.
    ```
 3. If a language is missing the key, that language shows **nothing** there, so check
    all 8 files. Use `content.yml` instead of `ui.yml` for longer page wording.
+
+---
+
+## Change styles (CSS) safely
+
+Styles live in `_css/style/` (every page) and `_css/portal/` (Discord tool pages),
+one small numbered file per section. See [`_css/README.md`](../_css/README.md) for how
+they're joined and why the order matters.
+
+**For a deliberate visual change** (new colours, a new component), preview it:
+`bundle exec ruby _scripts/build.rb --lang=en --serve`, and check it in all three
+themes (click the lantern) and on a narrow window.
+
+**For a clean-up that should change *nothing* visible** (removing unused CSS, tidying,
+reorganising), prove it with the visual diff tool:
+
+1. First time only:
+   ```bash
+   cd tools/visual-diff && npm install && npx playwright install chromium && cd ../..
+   ```
+2. Compare your working copy with `main`:
+   ```bash
+   node tools/visual-diff/run.mjs --base main --quick   # ~2 min: default theme, desktop
+   node tools/visual-diff/run.mjs --base main           # ~10 min: every theme, phone + desktop
+   ```
+3. Read `tools/visual-diff/output/report.md`. "No differences" means every element on
+   every page looks exactly the same. Otherwise it lists each changed property
+   (e.g. `padding-bottom: 15px -> 0px`), with before/after/diff screenshots in the
+   same folder.
+
+Pixel-only "rendering wobble" listed separately is normal (blur effects); it doesn't
+fail the check. Details and limits: [`tools/visual-diff/README.md`](../tools/visual-diff/README.md).
 
 ---
 

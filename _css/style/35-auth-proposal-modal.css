@@ -3,23 +3,23 @@
    ========================================================================== */
 
 dialog.auth-modal {
-  width: 92vw !important;
-  max-width: 520px !important;
-  padding: 0 !important;
-  margin: auto !important;
-  border: 1px solid var(--accent-color) !important;
-  border-radius: 10px !important;
-  background: var(--surface-card) !important;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.95), 0 0 24px rgba(184, 151, 90, 0.25) !important;
-  color: var(--text-main) !important;
-  overflow: hidden !important;
+  width: 92vw;
+  max-width: 520px;
+  padding: 0;
+  margin: auto;
+  border: 1px solid var(--accent-color);
+  border-radius: 10px;
+  background: var(--surface-card);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.95), 0 0 24px rgba(184, 151, 90, 0.25);
+  color: var(--text-main);
+  overflow: hidden;
 }
 
 dialog.auth-modal[open] {
   display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important; /* Overrides style.css dialog[open] center collapse */
-  gap: 0 !important;
+  flex-direction: column;
+  align-items: stretch; /* Overrides style.css dialog[open] center collapse */
+  gap: 0;
 }
 
 .auth-modal-frame {
@@ -49,24 +49,24 @@ dialog.auth-modal[open] {
 }
 
 .auth-modal-title {
-  margin: 0 !important;
-  padding: 0 !important;
-  font-family: var(--font-headers) !important;
-  font-size: 1.05rem !important;
-  color: var(--accent-color) !important;
-  border-bottom: none !important;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-headers);
+  font-size: 1.05rem;
+  color: var(--accent-color);
+  border-bottom: none;
 }
 
 .auth-modal-close {
-  background: transparent !important;
-  border: none !important;
-  color: var(--text-muted) !important;
-  font-size: 1.5rem !important;
-  line-height: 1 !important;
-  padding: 0 4px !important;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 4px;
   cursor: pointer;
-  box-shadow: none !important;
-  transform: none !important;
+  box-shadow: none;
+  transform: none;
 }
 
 .auth-modal-close:hover {
@@ -201,18 +201,18 @@ dialog.auth-modal[open] {
 
 /* Notes Textarea (Overrides browser raw white background) */
 .auth-modal-textarea {
-  width: 100% !important;
-  background: var(--surface-dark) !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: 6px !important;
-  color: var(--text-main) !important;
-  padding: 8px 10px !important;
-  font-size: 0.82rem !important;
-  font-family: var(--font-body) !important;
-  resize: vertical !important;
+  width: 100%;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+  resize: vertical;
   min-height: 60px;
-  box-sizing: border-box !important;
-  line-height: 1.4 !important;
+  box-sizing: border-box;
+  line-height: 1.4;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -248,13 +248,13 @@ dialog.auth-modal[open] {
 }
 
 .btn-modal-cancel {
-  background: transparent !important;
-  border: 1px solid var(--border-color) !important;
-  color: var(--text-muted) !important;
-  padding: 8px 16px !important;
-  font-size: 0.82rem !important;
-  font-weight: 600 !important;
-  border-radius: 5px !important;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -268,18 +268,18 @@ dialog.auth-modal[open] {
 }
 
 .btn-modal-action {
-  background: var(--brand-discord) !important;
-  border: 1px solid var(--brand-discord) !important;
-  color: #ffffff !important;
-  padding: 8px 18px !important;
-  font-size: 0.84rem !important;
-  font-weight: 700 !important;
-  border-radius: 5px !important;
+  background: var(--brand-discord);
+  border: 1px solid var(--brand-discord);
+  color: #ffffff;
+  padding: 8px 18px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  border-radius: 5px;
   cursor: pointer;
   display: inline-flex !important;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(88, 101, 242, 0.4) !important;
+  box-shadow: 0 4px 14px rgba(88, 101, 242, 0.4);
   transition: all 0.2s ease;
 }
 
@@ -337,9 +337,9 @@ dialog.auth-modal[open] {
 
 .phase-tech   { background-color: rgba(153, 102, 204, 0.35) !important; }
 .phase-raven  { background-color: rgba(70, 140, 200, 0.35) !important; }
-.phase-heroes { background-color: rgba(200, 80, 80, 0.35) !important; }
+.phase-heroes { background-color: rgba(200, 80, 80, 0.35); }
 .phase-build  { background-color: rgba(80, 180, 100, 0.35) !important; }
-.phase-train  { background-color: rgba(210, 160, 60, 0.35) !important; }
+.phase-train  { background-color: rgba(210, 160, 60, 0.35); }
 
 .pinned-wrapper {
   position: relative;
@@ -379,7 +379,7 @@ dialog.auth-modal[open] {
   text-align: center;
   font-size: 0.85rem;
   font-weight: bold;
-  border-bottom: none !important;
+  border-bottom: none;
 }
 .pinned-card .nav-icon-svg {
   margin: 0;
@@ -399,7 +399,7 @@ dialog.auth-modal[open] {
   justify-content: space-between;
   text-decoration: none;
   color: inherit;
-  border: 1px solid var(--border-color) !important;
+  border: 1px solid var(--border-color);
   animation: lantern-flicker 6s infinite ease-in-out;
   margin-bottom: 5px;
 }
@@ -488,8 +488,8 @@ dialog.auth-modal[open] {
 }
 
 .unavailable {
-  background-color: #4a0404 !important;
-  color: #8b8b8b !important;
+  background-color: #4a0404;
+  color: #8b8b8b;
   border: 1px solid #7a0000 !important;
   cursor: not-allowed;
   pointer-events: none;
