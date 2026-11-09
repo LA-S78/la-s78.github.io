@@ -4,6 +4,9 @@
 
 import { submitProposalWithAuth } from './auth-modal.js';
 
+// Escape data before putting it into HTML (see js/escape-html.js).
+const esc = (value) => window.escapeHtml(value);
+
 export let isRewardsPlannerActive = false;
 export let draftTiers = [];
 export let originalTiers = [];
@@ -289,20 +292,20 @@ export function renderTierList() {
       return `
       <div class="rewards-tier-row" 
            data-tier-index="${index}"
-           data-min-rank="${tier.min_rank}" 
-           data-max-rank="${tier.max_rank}">
+           data-min-rank="${esc(tier.min_rank)}" 
+           data-max-rank="${esc(tier.max_rank)}">
         <div class="tier-label-group">
           <div class="tier-row-controls">
             ${activeList.length > 1 ? `<button class="btn-tier-del" data-action="del-tier" data-index="${index}" title="Remove Bracket">×</button>` : ''}
             <span class="range-stepper">
-              <span class="range-text">${rankLabel} ${tier.min_rank}–<span class="range-val">${tier.max_rank}</span></span>
+              <span class="range-text">${rankLabel} ${esc(tier.min_rank)}–<span class="range-val">${esc(tier.max_rank)}</span></span>
               <button data-action="dec-range" data-index="${index}" type="button">-</button>
               <button data-action="inc-range" data-index="${index}" type="button">+</button>
             </span>
           </div>
 
-          <span class="tier-name tier-name-static">${rangeText}</span>
-          <span class="tier-alliance-tags" data-min-rank="${tier.min_rank}" data-max-rank="${tier.max_rank}"></span>
+          <span class="tier-name tier-name-static">${esc(rangeText)}</span>
+          <span class="tier-alliance-tags" data-min-rank="${esc(tier.min_rank)}" data-max-rank="${esc(tier.max_rank)}"></span>
         </div>
 
         <div class="tier-chests">
@@ -311,7 +314,7 @@ export function renderTierList() {
                data-index="${index}"
                title="Commander's Will">
             <span class="chest-glyph gold"></span>
-            <span class="chest-multiplier">×${tier.chests.commanders_will || 0}</span>
+            <span class="chest-multiplier">×${esc(tier.chests.commanders_will || 0)}</span>
           </div>
 
           <div class="chest-item ${tier.chests.loyal_servant === 0 ? 'is-empty' : ''}" 
@@ -319,7 +322,7 @@ export function renderTierList() {
                data-index="${index}"
                title="Loyal Servant">
             <span class="chest-glyph purple"></span>
-            <span class="chest-multiplier">×${tier.chests.loyal_servant || 0}</span>
+            <span class="chest-multiplier">×${esc(tier.chests.loyal_servant || 0)}</span>
           </div>
 
           <div class="chest-item ${tier.chests.followers_heart === 0 ? 'is-empty' : ''}" 
@@ -327,7 +330,7 @@ export function renderTierList() {
                data-index="${index}"
                title="Follower's Heart">
             <span class="chest-glyph blue"></span>
-            <span class="chest-multiplier">×${tier.chests.followers_heart || 0}</span>
+            <span class="chest-multiplier">×${esc(tier.chests.followers_heart || 0)}</span>
           </div>
         </div>
       </div>
@@ -379,7 +382,7 @@ export function updatePayoutTable() {
 
       return `
         <tr>
-          <td style="font-weight: bold; font-family: var(--font-headers);">${displayLabel}</td>
+          <td style="font-weight: bold; font-family: var(--font-headers);">${esc(displayLabel)}</td>
           <td class="td-diamonds">${d.toLocaleString()}</td>
           <td class="td-tickets">${t.toLocaleString()}</td>
         </tr>
@@ -431,7 +434,7 @@ export function syncAllianceTagsFromMapState() {
       container.innerHTML = matching
         .map(
           (a) =>
-            `<span class="alliance-badge" style="color: ${a.color}; font-weight: bold;">[${a.tag}]</span>`,
+            `<span class="alliance-badge" style="color: ${esc(a.color)}; font-weight: bold;">[${esc(a.tag)}]</span>`,
         )
         .join(' ');
     } else {
@@ -532,10 +535,10 @@ export async function submitRewardProposal() {
       const label = isSingle ? `Rank ${tier.min_rank}` : `Rank ${tier.min_rank}–${tier.max_rank}`;
       return `
       <div>
-        <strong>${label}</strong>: 
-        🟡 ×${tier.chests.commanders_will || 0} | 
-        🟣 ×${tier.chests.loyal_servant || 0} | 
-        🔵 ×${tier.chests.followers_heart || 0}
+        <strong>${esc(label)}</strong>: 
+        🟡 ×${esc(tier.chests.commanders_will || 0)} | 
+        🟣 ×${esc(tier.chests.loyal_servant || 0)} | 
+        🔵 ×${esc(tier.chests.followers_heart || 0)}
       </div>
     `;
     })

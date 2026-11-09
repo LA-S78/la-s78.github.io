@@ -34,7 +34,7 @@ under *Must not change*, or someone will "fix" it.
 ## Site shell (Turbo navigation, PWA / service worker, themes)
 - **Purpose:** Provides fast app-like navigation and offline caching for guides and schedules on mobile and desktop.
 - **Constraints:** Service worker precache (`_scripts/workbox_precache.rb`) must stay under 20 MB (skipping files >512 KB and `mermaid.min.js`).
-- **Must not change:** Shared assets (`/css`, `/js`, `/images`) live only at the site root (`_site/`), never duplicated under `/<lang>/`. Event listeners in frontend JS must be idempotent across `DOMContentLoaded` and `turbo:load`. `initApp` (js/main.js) runs on both `turbo:load` and `turbo:frame-render`, so element listeners are attached through `firstTime(el, key)`; map controls are bound only by `js/map.js` (guarded by `data-bound`).
+- **Must not change:** Shared assets (`/css`, `/js`, `/images`) live only at the site root (`_site/`), never duplicated under `/<lang>/`. Event listeners in frontend JS must be idempotent across `DOMContentLoaded` and `turbo:load`. `initApp` (js/main.js) runs on both `turbo:load` and `turbo:frame-render`, so element listeners are attached through `firstTime(el, key)`; map controls are bound only by `js/map.js` (guarded by `data-bound`). Any data inserted into HTML (names, titles, tags, colours, anything from the API, localStorage or a form) goes through `escapeHtml()` from `js/escape-html.js`; never put raw data into `innerHTML`.
 - **Open questions:**
   - Should the offline precache cover only the visitor's language?
 

@@ -3,6 +3,9 @@
  * Unified Proposal & Deferred Authentication Engine for Last Asylum Tools
  */
 
+// Escape data before putting it into HTML (see js/escape-html.js).
+const esc = (value) => window.escapeHtml(value);
+
 const STASH_KEY = 'la_pending_proposal_stash';
 
 // ============================================================================
@@ -152,7 +155,7 @@ export async function submitProposalWithAuth({
 
   // Populate static fields
   modalTitle.textContent = title;
-  diffBox.innerHTML = diffSummaryHtml;
+  diffBox.innerHTML = diffSummaryHtml; // HTML built by the caller; callers must escape data in it
   notesInput.value = payload.notes || '';
   errorBox.classList.add('hidden');
   errorBox.textContent = '';
@@ -168,10 +171,10 @@ export async function submitProposalWithAuth({
   if (isAuthenticated) {
     userStrip.innerHTML = `
       <div class="auth-logged-in">
-        <img src="${currentAvatar || '/images/default-avatar.png'}" class="auth-avatar-mini" alt="User Avatar" />
+        <img src="${esc(currentAvatar || '/images/default-avatar.png')}" class="auth-avatar-mini" alt="User Avatar" />
         <div class="auth-user-meta">
-          <span class="auth-username-label">Submitting as <strong>${currentUser}</strong></span>
-          <span class="auth-badge-role ${currentRole.toLowerCase()}">${currentRole.toUpperCase()}${currentAlliance ? ` • [${currentAlliance}]` : ''}</span>
+          <span class="auth-username-label">Submitting as <strong>${esc(currentUser)}</strong></span>
+          <span class="auth-badge-role ${esc(currentRole.toLowerCase())}">${esc(currentRole.toUpperCase())}${currentAlliance ? ` • [${esc(currentAlliance)}]` : ''}</span>
         </div>
       </div>
     `;

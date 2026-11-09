@@ -7,6 +7,9 @@
 
 import { submitProposalWithAuth } from './auth-modal.js';
 
+// Escape data before putting it into HTML (see js/escape-html.js).
+const esc = (value) => window.escapeHtml(value);
+
 let cycleState = {
   macro_cycle: 1,
   current_week: 1,
@@ -124,7 +127,7 @@ function renderScheduleGrid() {
           ${isCurrent ? '<span class="badge">ACTIVE</span>' : ''}
         </div>
         <div class="ops-week-body">
-          <span class="ops-week-tag" style="color: ${color}">[${w.seat}]</span>
+          <span class="ops-week-tag" style="color: ${esc(color)}">[${esc(w.seat)}]</span>
           <span class="ops-week-sub">${w.sub}</span>
         </div>
         <div class="ops-week-loot">
@@ -166,9 +169,9 @@ function renderActiveBuyouts() {
         .map(
           (inst) => `
       <div class="ops-installment-item ${inst.status === 'fulfilled' ? 'is-fulfilled' : ''}">
-        <span class="ops-installment-week">Week ${inst.week} Payout:</span>
+        <span class="ops-installment-week">Week ${esc(inst.week)} Payout:</span>
         <span class="ops-installment-chests">
-          <strong>+${inst.payout.regular} Reg Gold</strong> &amp; <strong>+${inst.payout.kw} KW Gold</strong>
+          <strong>+${esc(inst.payout.regular)} Reg Gold</strong> &amp; <strong>+${esc(inst.payout.kw)} KW Gold</strong>
         </span>
         <span class="badge ${inst.status === 'fulfilled' ? 'badge-success' : 'badge-pending'}">
           ${inst.status === 'fulfilled' ? 'PAID' : 'PENDING'}
@@ -182,8 +185,8 @@ function renderActiveBuyouts() {
       <div class="ops-buyout-card">
         <div class="ops-buyout-card-header">
           <div>
-            <strong>Beneficiary:</strong> <span style="color: ${color}">[${buyout.beneficiary}]</span>
-            <small class="text-muted">(Threat: ${buyout.threat || 'Red List'})</small>
+            <strong>Beneficiary:</strong> <span style="color: ${esc(color)}">[${esc(buyout.beneficiary)}]</span>
+            <small class="text-muted">(Threat: ${esc(buyout.threat || 'Red List')})</small>
           </div>
           <span class="badge badge-warning">Wartime Buyout</span>
         </div>
@@ -230,15 +233,15 @@ export function updateOverridePreview() {
       <div class="preview-stepped-swap">
         <div class="preview-type-badge">Step 1: Calendar Swap (0 Chest Cost)</div>
         <p>
-          WLO will take <strong>Week ${targetWeek}</strong> for kingdom defense against <strong>${threatName || '[Opponent]'}</strong>.
+          WLO will take <strong>Week ${targetWeek}</strong> for kingdom defense against <strong>${esc(threatName || '[Opponent]')}</strong>.
         </p>
         <div class="preview-swap-row">
           <span>Week ${targetWeek}: <strong style="color: #25bb00">[WLO]</strong></span>
           <span class="swap-arrow">⇄</span>
-          <span>Week 3 Finale: <strong style="color: ${allyColor}">[${currentScheduledAlly}]</strong></span>
+          <span>Week 3 Finale: <strong style="color: ${esc(allyColor)}">[${esc(currentScheduledAlly)}]</strong></span>
         </div>
         <div class="preview-perks">
-          🎁 <strong>[${currentScheduledAlly}]</strong> lose 0 chests.
+          🎁 <strong>[${esc(currentScheduledAlly)}]</strong> lose 0 chests.
           <strong>[WLO]</strong> lose 0 chests.
         </div>
       </div>
@@ -250,14 +253,14 @@ export function updateOverridePreview() {
         <div class="preview-type-badge alert">Step 2: Wartime Buyout (2-Installment Restitution)</div>
         <p>
           This is the <strong>second defense override</strong> in this cycle. Week 3 was already traded, so
-          <strong style="color: ${allyColor}">[${currentScheduledAlly}]</strong> sits out and receives a buyout with chests:
+          <strong style="color: ${esc(allyColor)}">[${esc(currentScheduledAlly)}]</strong> sits out and receives a buyout with chests:
         </p>
         <div class="preview-installment-plan">
-          <div class="p-item">• <strong>Week ${targetWeek} Distribution:</strong> +1 Regular Gold &amp; +1 KW Gold to [${currentScheduledAlly}]</div>
-          <div class="p-item">• <strong>Week 3 Distribution:</strong> +1 Regular Gold &amp; +1 KW Gold to [${currentScheduledAlly}]</div>
+          <div class="p-item">• <strong>Week ${targetWeek} Distribution:</strong> +1 Regular Gold &amp; +1 KW Gold to [${esc(currentScheduledAlly)}]</div>
+          <div class="p-item">• <strong>Week 3 Distribution:</strong> +1 Regular Gold &amp; +1 KW Gold to [${esc(currentScheduledAlly)}]</div>
         </div>
         <div class="preview-perks">
-          🎁 <strong>[${currentScheduledAlly}]</strong> lose 2 King chests, gain 4 gold chests.
+          🎁 <strong>[${esc(currentScheduledAlly)}]</strong> lose 2 King chests, gain 4 gold chests.
           <strong>[WLO]</strong> gains 2 King chests, loses 4 gold chests.
         </div>
       </div>
@@ -294,15 +297,15 @@ export async function submitOverrideProposal() {
 
   const diffSummaryHtml = isBuyout
     ? `
-      <div>• 🚨 <strong>WLO 2nd Defense Override</strong>: Week ${targetWeek} vs <code>${threatName}</code></div>
-      <div>• 🛡️ <strong>[${displacedAlly}] Wartime Buyout Issued</strong>: 4 Gold Chests total</div>
+      <div>• 🚨 <strong>WLO 2nd Defense Override</strong>: Week ${targetWeek} vs <code>${esc(threatName)}</code></div>
+      <div>• 🛡️ <strong>[${esc(displacedAlly)}] Wartime Buyout Issued</strong>: 4 Gold Chests total</div>
       <div>• 📦 <em>Installment 1 (W${targetWeek}):</em> 1 Reg Gold + 1 KW Gold</div>
       <div>• 📦 <em>Installment 2 (W3):</em> 1 Reg Gold + 1 KW Gold</div>
     `
     : `
-      <div>• ⚔️ <strong>WLO 1st Defense Override</strong>: Week ${targetWeek} vs <code>${threatName}</code></div>
+      <div>• ⚔️ <strong>WLO 1st Defense Override</strong>: Week ${targetWeek} vs <code>${esc(threatName)}</code></div>
       <div>• ⇄ <strong>Calendar Swap</strong>: WLO takes W${targetWeek} Friday</div>
-      <div>• 👑 <strong>[${displacedAlly}] Promoted to Week 3 Finale</strong> (2 King Chests + Buff Item)</div>
+      <div>• 👑 <strong>[${esc(displacedAlly)}] Promoted to Week 3 Finale</strong> (2 King Chests + Buff Item)</div>
       <div>• 💰 <strong>WLO Alliance Chest Cost: 0</strong></div>
     `;
 

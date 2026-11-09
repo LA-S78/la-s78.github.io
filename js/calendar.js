@@ -4,6 +4,9 @@
  */
 
 (async function () {
+  // Escape data before putting it into HTML (see js/escape-html.js).
+  const esc = (value) => window.escapeHtml(value);
+
   const elLoading = document.getElementById('loading-state');
   const elError = document.getElementById('error-state');
   const elContent = document.getElementById('calendar-content');
@@ -256,7 +259,7 @@
           evt.notify_target === 'everyone'
             ? '<span class="event-tag-pill pill-force">🚨 Mandatory</span>'
             : '';
-        const borderStyle = evt.color ? `border-left-color: ${evt.color} !important;` : '';
+        const borderStyle = evt.color ? `border-left-color: ${esc(evt.color)} !important;` : '';
 
         const canDelete =
           isManagementSession &&
@@ -267,21 +270,21 @@
           evt.scope.toLowerCase() === sessionScope.toLowerCase();
 
         return `
-        <div class="timeline-event-row event-${evt.type || 'custom'}" style="${borderStyle}">
+        <div class="timeline-event-row event-${esc(evt.type || 'custom')}" style="${borderStyle}">
           <div class="event-main">
             <div class="event-title-line">
-              <span class="event-title">${evt.title}</span>
+              <span class="event-title">${esc(evt.title)}</span>
               ${recurrenceLabel}
               ${forceLabel}
             </div>
-            <div class="event-desc">${evt.description || ''}</div>
+            <div class="event-desc">${esc(evt.description || '')}</div>
           </div>
           <div class="event-actions-group">
             <div class="event-time-block">
               <div class="time-gt">${gtTimeStr}</div>
               <div>${localDateStr}${localTimeStr}</div>
             </div>
-            ${canDelete ? `<button type="button" class="btn-delete-event" data-event-id="${evt.id}">🗑️ Delete</button>` : ''}
+            ${canDelete ? `<button type="button" class="btn-delete-event" data-event-id="${esc(evt.id)}">🗑️ Delete</button>` : ''}
           </div>
         </div>
       `;

@@ -273,11 +273,7 @@ hide_header: true
       elProgress.textContent = `Progress: ${sentSet.size} / ${total} Distributed`;
     }
 
-    function escapeHtml(str) {
-      return (str || '').replace(/[&<>"']/g, (m) => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[m]));
-    }
+    // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
 
     btnGroupChest.addEventListener('click', () => {
       groupBy = 'chest';
