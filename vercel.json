@@ -1,9 +1,6 @@
 {
   "buildCommand": "exit 0",
   "git": {
-    "deploymentEnabled": {
-      "main": true,
-      "dev": true
-    }
+    "deploymentEnabled": false
   }
 }
