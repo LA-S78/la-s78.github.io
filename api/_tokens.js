@@ -6,8 +6,19 @@
 
 import crypto from 'crypto';
 
+// Portal links are signed with their own key, never with the raw Discord bot token, so a
+// leaked or brute-forced portal signature can't be used against the bot token itself.
+// PORTAL_HMAC_SECRET (Vercel env) takes precedence if set; otherwise a key is derived
+// from the secret callers pass in (the bot token), so no new configuration is needed.
+// Changing the label below invalidates every outstanding portal link.
+const KEY_LABEL = 'la-s78-portal-token-v1';
+function signingKey(secret) {
+  if (process.env.PORTAL_HMAC_SECRET) return process.env.PORTAL_HMAC_SECRET;
+  return crypto.createHmac('sha256', secret).update(KEY_LABEL).digest('hex');
+}
+
 function sign(dataString, secret) {
-  return crypto.createHmac('sha256', secret).update(dataString).digest('base64url');
+  return crypto.createHmac('sha256', signingKey(secret)).update(dataString).digest('base64url');
 }
 
 /**
