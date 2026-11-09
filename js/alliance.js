@@ -5,6 +5,9 @@
 
 import { submitProposalWithAuth } from './auth-modal.js';
 
+// Escape data before putting it into HTML (see js/escape-html.js).
+const esc = (value) => window.escapeHtml(value);
+
 const ALLIANCE_DRAFT_KEY = 'la_alliance_planner_draft';
 
 const DEFAULT_ALLIANCE_COLORS = {
@@ -558,25 +561,25 @@ export function renderStandingsHierarchy() {
         .map(
           (acadTag) => `
       <span class="academy-pill" title="Protected Academy">
-        🎓 [${acadTag}]
-        ${isAlliancePlannerActive ? `<button type="button" class="btn-unlink-acad" data-action="unlink-acad" data-parent="${alliance.tag}" data-acad="${acadTag}">&times;</button>` : ''}
+        🎓 [${esc(acadTag)}]
+        ${isAlliancePlannerActive ? `<button type="button" class="btn-unlink-acad" data-action="unlink-acad" data-parent="${esc(alliance.tag)}" data-acad="${esc(acadTag)}">&times;</button>` : ''}
       </span>
     `,
         )
         .join('');
 
       return `
-      <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}" data-tag="${alliance.tag}">
+      <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}" data-tag="${esc(alliance.tag)}">
         <div class="ladder-rank-col">
           <span class="ladder-rank-badge ${rankTier}">
-            ${isRanked ? `#${alliance.rank}` : '--'}
+            ${isRanked ? `#${esc(alliance.rank)}` : '--'}
           </span>
           ${
             isAlliancePlannerActive && isRanked
               ? `
             <div class="ladder-steppers">
-              <button type="button" class="ladder-step-btn" data-action="rank-up" data-tag="${alliance.tag}" ${index === 0 ? 'disabled' : ''}>▲</button>
-              <button type="button" class="ladder-step-btn" data-action="rank-down" data-tag="${alliance.tag}">▼</button>
+              <button type="button" class="ladder-step-btn" data-action="rank-up" data-tag="${esc(alliance.tag)}" ${index === 0 ? 'disabled' : ''}>▲</button>
+              <button type="button" class="ladder-step-btn" data-action="rank-down" data-tag="${esc(alliance.tag)}">▼</button>
             </div>
           `
               : ''
@@ -592,18 +595,18 @@ export function renderStandingsHierarchy() {
                 type="color"
                 class="alliance-color-picker"
                 data-action="pick-color"
-                data-tag="${alliance.tag}"
-                value="${displayColor.startsWith('#') ? displayColor : '#b8975a'}"
-                title="Change [${alliance.tag}] Color"
+                data-tag="${esc(alliance.tag)}"
+                value="${esc(displayColor.startsWith('#') ? displayColor : '#b8975a')}"
+                title="Change [${esc(alliance.tag)}] Color"
               />
             `
                 : `
-              <span class="alliance-color-indicator" style="background-color: ${displayColor}"></span>
+              <span class="alliance-color-indicator" style="background-color: ${esc(displayColor)}"></span>
             `
             }
-            <strong class="ladder-tag" style="color: ${displayColor}">[${alliance.tag}]</strong>
-            <span class="ladder-name">${alliance.name}</span>
-            ${alliance.parent_tag ? `<span class="academy-child-badge">Academy of [${alliance.parent_tag}]</span>` : ''}
+            <strong class="ladder-tag" style="color: ${esc(displayColor)}">[${esc(alliance.tag)}]</strong>
+            <span class="ladder-name">${esc(alliance.name)}</span>
+            ${alliance.parent_tag ? `<span class="academy-child-badge">Academy of [${esc(alliance.parent_tag)}]</span>` : ''}
           </div>
 
           <div class="ladder-sub-line">
@@ -611,7 +614,7 @@ export function renderStandingsHierarchy() {
             ${
               isAlliancePlannerActive && !alliance.parent_tag
                 ? `
-              <button type="button" class="btn-link-acad-prompt" data-action="link-acad-prompt" data-parent="${alliance.tag}">+ Link Academy</button>
+              <button type="button" class="btn-link-acad-prompt" data-action="link-acad-prompt" data-parent="${esc(alliance.tag)}">+ Link Academy</button>
             `
                 : ''
             }
@@ -625,10 +628,10 @@ export function renderStandingsHierarchy() {
           ${
             isAlliancePlannerActive
               ? `
-            <button type="button" class="btn-nap-toggle" data-action="toggle-nap" data-tag="${alliance.tag}">
+            <button type="button" class="btn-nap-toggle" data-action="toggle-nap" data-tag="${esc(alliance.tag)}">
               ${alliance.is_nap ? 'Revoke NAP' : 'Grant NAP'}
             </button>
-            <button type="button" class="btn-ladder-del" data-action="del-alliance" data-tag="${alliance.tag}" title="Remove Alliance">&times;</button>
+            <button type="button" class="btn-ladder-del" data-action="del-alliance" data-tag="${esc(alliance.tag)}" title="Remove Alliance">&times;</button>
           `
               : ''
           }
@@ -659,7 +662,7 @@ export function renderBlacklist() {
         .map(
           (player, idx) => `
         <div class="blacklist-item">
-          <span class="blacklist-ign">${player}</span>
+          <span class="blacklist-ign">${esc(player)}</span>
           ${isAlliancePlannerActive ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="players" data-index="${idx}">&times;</button>` : ''}
         </div>
       `,
@@ -677,7 +680,7 @@ export function renderBlacklist() {
         .map(
           (ally, idx) => `
         <div class="blacklist-item">
-          <span class="blacklist-ign">[${ally}]</span>
+          <span class="blacklist-ign">[${esc(ally)}]</span>
           ${isAlliancePlannerActive ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="alliances" data-index="${idx}">&times;</button>` : ''}
         </div>
       `,
@@ -827,20 +830,20 @@ export async function submitAllianceProposal() {
   const diffHtml = diff
     .map((d) => {
       if (d.type === 'rank')
-        return `<div>• <strong>[${d.tag}]</strong>: Rank <code>#${d.from}</code> ➔ <code>#${d.to}</code></div>`;
+        return `<div>• <strong>[${esc(d.tag)}]</strong>: Rank <code>#${esc(d.from)}</code> ➔ <code>#${esc(d.to)}</code></div>`;
       if (d.type === 'academy')
-        return `<div>• <strong>[${d.tag}]</strong>: Assigned as Academy of <strong>[${d.parent}]</strong></div>`;
+        return `<div>• <strong>[${esc(d.tag)}]</strong>: Assigned as Academy of <strong>[${esc(d.parent)}]</strong></div>`;
       if (d.type === 'nap')
-        return `<div>• <strong>[${d.tag}]</strong>: NAP Status <code>${d.status}</code></div>`;
+        return `<div>• <strong>[${esc(d.tag)}]</strong>: NAP Status <code>${esc(d.status)}</code></div>`;
       if (d.type === 'color')
-        return `<div>• 🎨 <strong>[${d.tag}]</strong>: Color updated to <code>${d.to}</code></div>`;
+        return `<div>• 🎨 <strong>[${esc(d.tag)}]</strong>: Color updated to <code>${esc(d.to)}</code></div>`;
       if (d.type === 'blacklist')
-        return `<div>• ⚠️ <strong>Blacklist ${d.action.toUpperCase()}</strong>: [${d.target}] (${d.category})</div>`;
+        return `<div>• ⚠️ <strong>Blacklist ${esc(d.action.toUpperCase())}</strong>: [${esc(d.target)}] (${esc(d.category)})</div>`;
       if (d.type === 'added')
-        return `<div>• ➕ <strong>Added [${d.tag}]</strong>: Rank #${d.rank} (${d.name})</div>`;
+        return `<div>• ➕ <strong>Added [${esc(d.tag)}]</strong>: Rank #${esc(d.rank)} (${esc(d.name)})</div>`;
       if (d.type === 'removed')
-        return `<div>• ➖ <strong>Removed [${d.tag}]</strong> from standings</div>`;
-      return `<div>• Modified [${d.tag || 'Unknown'}]</div>`;
+        return `<div>• ➖ <strong>Removed [${esc(d.tag)}]</strong> from standings</div>`;
+      return `<div>• Modified [${esc(d.tag || 'Unknown')}]</div>`;
     })
     .join('');
 

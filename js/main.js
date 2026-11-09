@@ -4,6 +4,9 @@
  * ----------------------------------------------------
  */
 (() => {
+  // Escape data before putting it into HTML (see js/escape-html.js).
+  const esc = (value) => window.escapeHtml(value);
+
   let scrollObserver = null;
   let isNewNavigation = false;
 
@@ -132,9 +135,9 @@
     if (profileContainer && username) {
       profileContainer.innerHTML = `
                 <div class="user-badge">
-                    <img src="${avatar}" class="user-avatar" alt="Profile">
-                    <span class="user-name">${username}</span>
-                    <span class="user-role-tag">${role.toUpperCase()}</span>
+                    <img src="${esc(avatar)}" class="user-avatar" alt="Profile">
+                    <span class="user-name">${esc(username)}</span>
+                    <span class="user-role-tag">${esc(role.toUpperCase())}</span>
                     <button id="discord-logout-btn" class="logout-link">Log Out</button>
                 </div>
             `;

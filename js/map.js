@@ -4,6 +4,9 @@
 
 import { submitProposalWithAuth } from './auth-modal.js';
 
+// Escape data before putting it into HTML (see js/escape-html.js).
+const esc = (value) => window.escapeHtml(value);
+
 const DRAFT_STORAGE_KEY = 'la_map_planner_draft';
 
 export const LABEL_OVERRIDES = {
@@ -417,8 +420,8 @@ export function renderBuffSummaryDrawer() {
           ? data.aggregatedBuffs
               .map(
                 (b) => `
-          <span class="buff-badge" title="${b.count} ${b.count === 1 ? 'City' : 'Cities'}: ${b.cities.join(', ')}">
-            ${b.name} <strong>+${b.total}${b.unit}</strong>
+          <span class="buff-badge" title="${b.count} ${b.count === 1 ? 'City' : 'Cities'}: ${esc(b.cities.join(', '))}">
+            ${esc(b.name)} <strong>+${esc(b.total)}${esc(b.unit)}</strong>
             ${b.count > 1 ? `<span class="buff-badge-count">×${b.count}</span>` : ''}
           </span>
         `,
@@ -429,8 +432,8 @@ export function renderBuffSummaryDrawer() {
       return `
       <tr class="buff-row ${isEditing ? 'is-active-target' : ''}">
         <td class="buff-col-tag">
-          <span class="alliance-dot" style="background-color: ${allianceColor}"></span>
-          <strong>[${tag}]</strong>
+          <span class="alliance-dot" style="background-color: ${esc(allianceColor)}"></span>
+          <strong>[${esc(tag)}]</strong>
         </td>
         <td class="buff-col-count">
           <span class="city-count-pill">${data.count} ${data.count === 1 ? 'City' : 'Cities'}</span>
@@ -788,7 +791,7 @@ export async function submitStrategyProposal() {
   const diffItems = Object.entries(payload.changes)
     .map(
       ([cityId, shift]) => `
-    <div><strong>${cityId.replace(/_/g, ' ')}</strong>: <code>${shift.from}</code> ➔ <code>${shift.to}</code></div>
+    <div><strong>${esc(cityId.replace(/_/g, ' '))}</strong>: <code>${esc(shift.from)}</code> ➔ <code>${esc(shift.to)}</code></div>
   `,
     )
     .join('');
