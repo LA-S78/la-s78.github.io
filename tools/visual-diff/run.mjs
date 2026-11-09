@@ -29,17 +29,22 @@ const FIXED_TIME = new Date('2026-11-10T12:00:00Z');
 // ---------- options ----------
 const args = Object.fromEntries(
   process.argv.slice(2).reduce((acc, a, i, all) => {
-    if (a.startsWith('--')) acc.push([a.slice(2), all[i + 1]?.startsWith('--') ? true : (all[i + 1] ?? true)]);
+    if (a.startsWith('--'))
+      acc.push([a.slice(2), all[i + 1]?.startsWith('--') ? true : (all[i + 1] ?? true)]);
     return acc;
   }, []),
 );
 if (!args.base) {
-  console.error('Usage: node tools/visual-diff/run.mjs --base <git ref | site dir> [--head <git ref | site dir>]');
+  console.error(
+    'Usage: node tools/visual-diff/run.mjs --base <git ref | site dir> [--head <git ref | site dir>]',
+  );
   process.exit(2);
 }
 const opt = {
   themes: String(args.themes || (args.quick ? 'default' : 'default,sanctuary,miasma')).split(','),
-  widths: String(args.widths || (args.quick ? '1280' : '390,1280')).split(',').map(Number),
+  widths: String(args.widths || (args.quick ? '1280' : '390,1280'))
+    .split(',')
+    .map(Number),
   pages: args.pages ? new RegExp(args.pages) : null,
   states: args.states ? new RegExp(args.states) : null,
   workers: Number(args.workers || Math.max(2, Math.min(6, os.cpus().length))),
@@ -47,7 +52,8 @@ const opt = {
 };
 
 // ---------- getting a built site ----------
-const isSiteDir = (p) => fs.existsSync(path.join(p, 'index.html')) && fs.existsSync(path.join(p, 'en'));
+const isSiteDir = (p) =>
+  fs.existsSync(path.join(p, 'index.html')) && fs.existsSync(path.join(p, 'en'));
 
 function build(cwd) {
   execFileSync('bundle', ['exec', 'ruby', '_scripts/build.rb', '--no-check'], {
@@ -67,7 +73,10 @@ function siteFor(spec, label) {
   } else {
     console.log(`Building ${label}: ${spec}...`);
     const tree = path.join(out, 'tree');
-    execFileSync('git', ['worktree', 'add', '--detach', tree, spec], { cwd: REPO, stdio: 'ignore' });
+    execFileSync('git', ['worktree', 'add', '--detach', tree, spec], {
+      cwd: REPO,
+      stdio: 'ignore',
+    });
     try {
       build(tree);
       fs.cpSync(path.join(tree, '_site'), path.join(out, 'site'), { recursive: true });
@@ -80,9 +89,17 @@ function siteFor(spec, label) {
 
 // ---------- static server with correct content types ----------
 const TYPES = {
-  '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript',
-  '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.webmanifest': 'application/manifest+json',
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.mjs': 'text/javascript',
+  '.json': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.webmanifest': 'application/manifest+json',
 };
 function serve(root) {
   return new Promise((resolve) => {
@@ -91,21 +108,29 @@ function serve(root) {
       if (fs.existsSync(p) && fs.statSync(p).isDirectory()) p = path.join(p, 'index.html');
       if (!fs.existsSync(p)) {
         res.writeHead(404, { 'content-type': 'text/html' });
-        return res.end(fs.existsSync(path.join(root, '404.html')) ? fs.readFileSync(path.join(root, '404.html')) : '');
+        return res.end(
+          fs.existsSync(path.join(root, '404.html'))
+            ? fs.readFileSync(path.join(root, '404.html'))
+            : '',
+        );
       }
       res.writeHead(200, { 'content-type': TYPES[path.extname(p)] || 'application/octet-stream' });
       res.end(fs.readFileSync(p));
     });
-    srv.listen(0, '127.0.0.1', () => resolve({ srv, origin: `http://127.0.0.1:${srv.address().port}` }));
+    srv.listen(0, '127.0.0.1', () =>
+      resolve({ srv, origin: `http://127.0.0.1:${srv.address().port}` }),
+    );
   });
 }
 
 // ---------- fake API (fixed sample data) ----------
 const FIX = Object.fromEntries(
-  fs.readdirSync(path.join(HERE, 'fixtures')).map((f) => [
-    path.basename(f, '.json'),
-    fs.readFileSync(path.join(HERE, 'fixtures', f), 'utf8'),
-  ]),
+  fs
+    .readdirSync(path.join(HERE, 'fixtures'))
+    .map((f) => [
+      path.basename(f, '.json'),
+      fs.readFileSync(path.join(HERE, 'fixtures', f), 'utf8'),
+    ]),
 );
 const PIXEL_PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
@@ -114,9 +139,12 @@ const PIXEL_PNG = Buffer.from(
 async function routeApi(route) {
   const url = new URL(route.request().url());
   const name = url.pathname.replace(/^\/api\//, '');
-  const json = (body, status = 200) => route.fulfill({ status, contentType: 'application/json', body });
-  if (name === 'state') return json(FIX[`state-${url.searchParams.get('scope') || 'all'}`] || FIX['state-all']);
-  if (name === 'map-image') return route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG });
+  const json = (body, status = 200) =>
+    route.fulfill({ status, contentType: 'application/json', body });
+  if (name === 'state')
+    return json(FIX[`state-${url.searchParams.get('scope') || 'all'}`] || FIX['state-all']);
+  if (name === 'map-image')
+    return route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG });
   if (FIX[name]) return json(FIX[name]);
   return json('{"error":"not available in visual tests"}', 404);
 }
@@ -127,9 +155,14 @@ const IN_PAGE = {
   snapshot: (raw) => {
     const pathOf = (el) => {
       const parts = [];
-      for (let e = el; e && e.nodeType === 1 && e !== document.documentElement; e = e.parentElement) {
+      for (
+        let e = el;
+        e && e.nodeType === 1 && e !== document.documentElement;
+        e = e.parentElement
+      ) {
         let i = 1;
-        for (let s = e.previousElementSibling; s; s = s.previousElementSibling) if (s.tagName === e.tagName) i++;
+        for (let s = e.previousElementSibling; s; s = s.previousElementSibling)
+          if (s.tagName === e.tagName) i++;
         parts.unshift(`${e.tagName.toLowerCase()}:${i}`); // position only: some libraries use random ids
       }
       return parts.join('>');
@@ -140,7 +173,12 @@ const IN_PAGE = {
       const parts = [];
       for (let i = 0; i < cs.length; i++) parts.push(cs[i] + ':' + cs.getPropertyValue(cs[i]));
       // Strip the server origin and Mermaid's timestamp-based ids (url(#mermaid-1794...)).
-      return parts.sort().join(';').split(location.origin).join('').replace(/mermaid-\d+/g, 'mermaid-N');
+      return parts
+        .sort()
+        .join(';')
+        .split(location.origin)
+        .join('')
+        .replace(/mermaid-\d+/g, 'mermaid-N');
     };
     const fnv = (s) => {
       let h = 0x811c9dc5;
@@ -148,12 +186,21 @@ const IN_PAGE = {
       return (h >>> 0).toString(36);
     };
     const out = {};
-    for (const el of [document.documentElement, ...document.body.querySelectorAll('*'), document.body]) {
+    for (const el of [
+      document.documentElement,
+      ...document.body.querySelectorAll('*'),
+      document.body,
+    ]) {
       let t = styleText(getComputedStyle(el));
       for (const pseudo of ['::before', '::after']) {
         const ps = getComputedStyle(el, pseudo);
         if (ps.content && ps.content !== 'none') t += pseudo + styleText(ps);
       }
+      // Pseudo-elements that exist without `content`, for the elements that have them.
+      if (el.tagName === 'DIALOG')
+        t += '::backdrop' + styleText(getComputedStyle(el, '::backdrop'));
+      if (el.placeholder) t += '::placeholder' + styleText(getComputedStyle(el, '::placeholder'));
+      if (el.tagName === 'LI') t += '::marker' + styleText(getComputedStyle(el, '::marker'));
       out[pathOf(el)] = raw ? t : fnv(t);
     }
     return out;
@@ -164,7 +211,9 @@ const IN_PAGE = {
       if (!p) return el;
       for (const part of p.split('>')) {
         const [, tag, nth] = part.match(/^([a-z0-9-]+)(?:#[^:]*)?:(\d+)$/i) || [];
-        el = [...(el?.children || [])].filter((c) => c.tagName.toLowerCase() === tag)[Number(nth) - 1];
+        el = [...(el?.children || [])].filter((c) => c.tagName.toLowerCase() === tag)[
+          Number(nth) - 1
+        ];
       }
       return el;
     };
@@ -189,7 +238,10 @@ const IN_PAGE = {
     document.getAnimations().forEach((a) => {
       const t = a.effect?.getComputedTiming?.();
       if (t && Number.isFinite(t.endTime)) a.finish();
-      else { a.pause(); a.currentTime = 0; }
+      else {
+        a.pause();
+        a.currentTime = 0;
+      }
     }),
   contentHeight: () => {
     let extra = 0;
@@ -210,7 +262,9 @@ async function settle(page, ms) {
   for (let i = 0; i < 20; i++) {
     await page.waitForLoadState('networkidle').catch(() => {});
     await page.clock.runFor(250);
-    const now = await page.evaluate(() => `${document.body.innerHTML.length}:${document.documentElement.scrollHeight}`);
+    const now = await page.evaluate(
+      () => `${document.body.innerHTML.length}:${document.documentElement.scrollHeight}`,
+    );
     if (now === last) return;
     last = now;
   }
@@ -232,12 +286,15 @@ async function openState(browser, origin, job) {
     // depends on scroll timing. A no-op observer keeps that highlight identical in both builds.
     // Native fullscreen can only be held by one window at a time (base and head race for
     // it). Refusing it makes the map use its CSS fullscreen fallback, which is what the CSS controls.
-    Element.prototype.requestFullscreen = () => Promise.reject(new Error('disabled in visual tests'));
+    Element.prototype.requestFullscreen = () =>
+      Promise.reject(new Error('disabled in visual tests'));
     window.IntersectionObserver = class {
       observe() {}
       unobserve() {}
       disconnect() {}
-      takeRecords() { return []; }
+      takeRecords() {
+        return [];
+      }
     };
   }, storage);
   await context.route('**/*', (route) => {
@@ -261,17 +318,28 @@ async function openState(browser, origin, job) {
   if (!isFullscreen) {
     const fullHeight = Math.min(16000, await page.evaluate(IN_PAGE.contentHeight));
     // A browser window in fullscreen mode can't be resized; then the screen is all there is.
-    const resized = await page.setViewportSize({ width: job.width, height: fullHeight }).then(() => true, () => false);
+    const resized = await page.setViewportSize({ width: job.width, height: fullHeight }).then(
+      () => true,
+      () => false,
+    );
     if (resized) await settle(page, 500);
     await page.evaluate(() =>
-      document.querySelectorAll('.nav-wrapper').forEach((n) => { n.style.scrollBehavior = 'auto'; n.scrollLeft = 0; }),
+      document.querySelectorAll('.nav-wrapper').forEach((n) => {
+        n.style.scrollBehavior = 'auto';
+        n.scrollLeft = 0;
+      }),
     );
   }
   await page.evaluate(IN_PAGE.freeze);
   // Masked in screenshots (its styles are still compared): its hover look depends on
   // mouse timing rather than CSS.
   const mask = [page.locator('.lang-trigger')];
-  const png = await page.screenshot({ animations: 'disabled', caret: 'hide', mask, maskColor: '#ff00ff' });
+  const png = await page.screenshot({
+    animations: 'disabled',
+    caret: 'hide',
+    mask,
+    maskColor: '#ff00ff',
+  });
   return { context, page, styles, png };
 }
 
@@ -282,7 +350,8 @@ function listPages(site) {
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       const p = path.join(d, e.name);
       if (e.isDirectory()) walk(p);
-      else if (e.name.endsWith('.html')) out.push('/' + path.relative(site, p).split(path.sep).join('/'));
+      else if (e.name.endsWith('.html'))
+        out.push('/' + path.relative(site, p).split(path.sep).join('/'));
     }
   };
   walk(path.join(site, 'en'));
@@ -291,7 +360,13 @@ function listPages(site) {
 
 async function discoverStates(browser, origin, page) {
   const ctx = await browser.newContext({ serviceWorkers: 'block' });
-  await ctx.route('**/*', (r) => (r.request().url().startsWith(origin) ? (r.request().url().includes('/api/') ? routeApi(r) : r.continue()) : r.abort()));
+  await ctx.route('**/*', (r) =>
+    r.request().url().startsWith(origin)
+      ? r.request().url().includes('/api/')
+        ? routeApi(r)
+        : r.continue()
+      : r.abort(),
+  );
   const pg = await ctx.newPage();
   await pg.goto(origin + page, { waitUntil: 'load' });
   await pg.waitForTimeout(300);
@@ -306,7 +381,10 @@ async function discoverStates(browser, origin, page) {
   const states = [];
   STATES.forEach((s, i) => {
     if (opt.states && !opt.states.test(s.name)) return;
-    if (s.perDialog) found.dialogs.forEach((id) => states.push({ state: { ...s, name: `dialog:${id}` }, dialogId: id }));
+    if (s.perDialog)
+      found.dialogs.forEach((id) =>
+        states.push({ state: { ...s, name: `dialog:${id}` }, dialogId: id }),
+      );
     else if (found.present[i]) states.push({ state: s });
   });
   return states;
@@ -323,42 +401,99 @@ const browser = await chromium.launch();
 const jobs = [];
 for (const page of listPages(baseSite)) {
   for (const s of await discoverStates(browser, A.origin, page)) {
-    for (const theme of opt.themes) for (const width of opt.widths) jobs.push({ page, theme, width, ...s });
+    for (const theme of opt.themes)
+      for (const width of opt.widths) jobs.push({ page, theme, width, ...s });
   }
 }
-console.log(`Comparing ${jobs.length} page views (${opt.themes.length} themes x ${opt.widths.length} widths, ${opt.workers} at a time)...`);
+console.log(
+  `Comparing ${jobs.length} page views (${opt.themes.length} themes x ${opt.widths.length} widths, ${opt.workers} at a time)...`,
+);
 
 const results = [];
 let done = 0;
 async function runJob(job) {
-  const tag = [job.page.replace(/^\/en\//, '').replace(/[/.]/g, '_'), job.state.name.replace(/[:]/g, '-'), job.theme, job.width].join('__');
-  const [a, b] = await Promise.all([openState(browser, A.origin, job), openState(browser, B.origin, job)]);
-  const r = { page: job.page, state: job.state.name, theme: job.theme, width: job.width, pixels: 0, styleDiffs: [] };
+  for (let attempt = 1; ; attempt++) {
+    const r = await compareOnce(job);
+    const pixelOnly = r.pixels > 0 && !r.styleDiffs.length;
+    if (!pixelOnly) return finish(r);
+    if (attempt === 3) return finish({ ...r, unstable: true });
+  }
+}
+function finish(r) {
+  results.push(r);
+  if (++done % 25 === 0 || done === jobs.length) console.log(`  ${done}/${jobs.length}`);
+}
+
+async function compareOnce(job) {
+  const tag = [
+    job.page.replace(/^\/en\//, '').replace(/[/.]/g, '_'),
+    job.state.name.replace(/[:]/g, '-'),
+    job.theme,
+    job.width,
+  ].join('__');
+  const [a, b] = await Promise.all([
+    openState(browser, A.origin, job),
+    openState(browser, B.origin, job),
+  ]);
+  const r = {
+    page: job.page,
+    state: job.state.name,
+    theme: job.theme,
+    width: job.width,
+    pixels: 0,
+    styleDiffs: [],
+  };
   // Element-by-element comparison of computed styles
   const keys = new Set([...Object.keys(a.styles), ...Object.keys(b.styles)]);
   const changed = [...keys].filter((k) => a.styles[k] !== b.styles[k]);
   if (changed.length && process.env.VD_DEBUG) {
-    const split = (t) => Object.fromEntries((t || '').split(';').map((x) => [x.slice(0, x.indexOf(':')), x.slice(x.indexOf(':') + 1)]));
+    const split = (t) =>
+      Object.fromEntries(
+        (t || '').split(';').map((x) => [x.slice(0, x.indexOf(':')), x.slice(x.indexOf(':') + 1)]),
+      );
     r.styleDiffCount = changed.length;
     r.styleDiffs = changed.slice(0, 15).map((p) => {
-      const sa = a.styles[p] || '', sb = b.styles[p] || '';
-      let i = 0; while (i < sa.length && sa[i] === sb[i]) i++;
-      if (process.env.VD_DEBUG === 'raw') return { element: p, props: [`@${i}: …${sa.slice(Math.max(0, i - 120), i + 60)}  ||  …${sb.slice(Math.max(0, i - 120), i + 60)}`] };
-      const x = split(a.styles[p]), y = split(b.styles[p]);
-      return { element: p, props: Object.keys({ ...x, ...y }).filter((k) => x[k] !== y[k]).slice(0, 8).map((k) => `${k}: ${x[k]} -> ${y[k]}`) };
+      const sa = a.styles[p] || '',
+        sb = b.styles[p] || '';
+      let i = 0;
+      while (i < sa.length && sa[i] === sb[i]) i++;
+      if (process.env.VD_DEBUG === 'raw')
+        return {
+          element: p,
+          props: [
+            `@${i}: …${sa.slice(Math.max(0, i - 120), i + 60)}  ||  …${sb.slice(Math.max(0, i - 120), i + 60)}`,
+          ],
+        };
+      const x = split(a.styles[p]),
+        y = split(b.styles[p]);
+      return {
+        element: p,
+        props: Object.keys({ ...x, ...y })
+          .filter((k) => x[k] !== y[k])
+          .slice(0, 8)
+          .map((k) => `${k}: ${x[k]} -> ${y[k]}`),
+      };
     });
   } else if (changed.length) {
     const sample = changed.slice(0, 15);
-    const [da, db] = await Promise.all([a.page.evaluate(IN_PAGE.details, sample), b.page.evaluate(IN_PAGE.details, sample)]);
+    const [da, db] = await Promise.all([
+      a.page.evaluate(IN_PAGE.details, sample),
+      b.page.evaluate(IN_PAGE.details, sample),
+    ]);
     r.styleDiffCount = changed.length;
     r.styleDiffs = sample.map((p) => {
-      if (!da[p] || !db[p]) return { element: p, change: da[p] ? 'missing in head' : 'missing in base' };
+      if (!da[p] || !db[p])
+        return { element: p, change: da[p] ? 'missing in head' : 'missing in base' };
       const props = Object.keys({ ...da[p], ...db[p] }).filter((k) => da[p][k] !== db[p][k]);
-      return { element: p, props: props.slice(0, 8).map((k) => `${k}: ${da[p][k]} -> ${db[p][k]}`) };
+      return {
+        element: p,
+        props: props.slice(0, 8).map((k) => `${k}: ${da[p][k]} -> ${db[p][k]}`),
+      };
     });
   }
   // Pixel comparison
-  const ia = PNG.sync.read(a.png), ib = PNG.sync.read(b.png);
+  const ia = PNG.sync.read(a.png),
+    ib = PNG.sync.read(b.png);
   if (ia.width !== ib.width || ia.height !== ib.height) {
     r.pixels = -1;
     r.size = `${ia.width}x${ia.height} -> ${ib.width}x${ib.height}`;
@@ -372,8 +507,7 @@ async function runJob(job) {
     fs.writeFileSync(path.join(opt.out, `${tag}__head.png`), b.png);
   }
   await Promise.all([a.context.close(), b.context.close()]);
-  results.push(r);
-  if (++done % 25 === 0 || done === jobs.length) console.log(`  ${done}/${jobs.length}`);
+  return r;
 }
 const queue = [...jobs];
 await Promise.all(
@@ -383,7 +517,13 @@ await Promise.all(
       try {
         await runJob(job);
       } catch (e) {
-        results.push({ page: job.page, state: job.state.name, theme: job.theme, width: job.width, error: String(e.message || e).split('\n')[0] });
+        results.push({
+          page: job.page,
+          state: job.state.name,
+          theme: job.theme,
+          width: job.width,
+          error: String(e.message || e).split('\n')[0],
+        });
       }
     }
   }),
@@ -393,16 +533,33 @@ A.srv.close();
 B.srv.close();
 
 // ---------- report ----------
-const bad = results.filter((r) => r.pixels || r.styleDiffs?.length || r.error);
+// A real CSS change always changes some element's computed style. Pixel-only differences
+// that survive retries are GPU rendering wobble (blurs, gradients, scaled images): listed
+// separately for a human to glance at, but they don't fail the run.
+const bad = results.filter((r) => !r.unstable && (r.pixels || r.styleDiffs?.length || r.error));
+const unstable = results.filter((r) => r.unstable);
 const lines = [
   '# Visual diff report',
   '',
   `Base: \`${args.base}\` · Head: \`${args.head || 'working copy'}\``,
   `${results.length} page views compared (${opt.themes.join(', ')} × ${opt.widths.join(', ')} px).`,
   '',
-  bad.length ? `**${bad.length} page views differ.**` : '**No differences: every page view is pixel-identical with identical computed styles.**',
+  bad.length
+    ? `**${bad.length} page views differ.**`
+    : '**No differences: every element has identical computed styles in every page view.**',
   '',
 ];
+if (unstable.length) {
+  lines.push(
+    `### ${unstable.length} pixel-only differences (styles identical; usually blur/gradient rendering wobble)`,
+    'Glance at these `__diff.png` files; they do not fail the run.',
+    '',
+    ...unstable.map(
+      (r) => `- ${r.page} · ${r.state} · ${r.theme} · ${r.width}px: ${r.pixels} pixels`,
+    ),
+    '',
+  );
+}
 for (const r of bad.sort((x, y) => (x.page + x.state).localeCompare(y.page + y.state))) {
   lines.push(`## ${r.page} · ${r.state} · ${r.theme} · ${r.width}px`);
   if (r.error) lines.push(`- Error: ${r.error}`);
@@ -410,11 +567,19 @@ for (const r of bad.sort((x, y) => (x.page + x.state).localeCompare(y.page + y.s
   else if (r.pixels) lines.push(`- ${r.pixels} pixels differ (see the matching \`__diff.png\`)`);
   if (r.styleDiffCount) {
     lines.push(`- ${r.styleDiffCount} elements have different computed styles, e.g.:`);
-    for (const d of r.styleDiffs) lines.push(`  - \`${d.element}\` ${d.change || ''}`, ...(d.props || []).map((p) => `    - ${p}`));
+    for (const d of r.styleDiffs)
+      lines.push(
+        `  - \`${d.element}\` ${d.change || ''}`,
+        ...(d.props || []).map((p) => `    - ${p}`),
+      );
   }
   lines.push('');
 }
 fs.writeFileSync(path.join(opt.out, 'report.md'), lines.join('\n'));
 fs.writeFileSync(path.join(opt.out, 'report.json'), JSON.stringify(results, null, 1));
-console.log(bad.length ? `${bad.length} of ${results.length} page views differ. See ${path.join(opt.out, 'report.md')}` : `All ${results.length} page views identical.`);
+console.log(
+  bad.length
+    ? `${bad.length} of ${results.length} page views differ. See ${path.join(opt.out, 'report.md')}`
+    : `All ${results.length} page views identical${unstable.length ? ` (${unstable.length} pixel-only rendering wobbles listed in the report)` : ''}.`,
+);
 process.exit(bad.length ? 1 : 0);

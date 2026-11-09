@@ -23,8 +23,18 @@ export const STATES = [
     needs: '.lang-dropdown',
     run: async (page) => page.hover('.lang-trigger').catch(() => {}),
   },
-  { name: 'map-alliance', needs: '#btn-mode-alliance', storage: LEADER, run: click('#btn-mode-alliance') },
-  { name: 'map-resource', needs: '#btn-mode-resource', storage: LEADER, run: click('#btn-mode-resource') },
+  {
+    name: 'map-alliance',
+    needs: '#btn-mode-alliance',
+    storage: LEADER,
+    run: click('#btn-mode-alliance'),
+  },
+  {
+    name: 'map-resource',
+    needs: '#btn-mode-resource',
+    storage: LEADER,
+    run: click('#btn-mode-resource'),
+  },
   {
     name: 'map-buffs',
     needs: '#btn-toggle-buffs',
@@ -34,8 +44,18 @@ export const STATES = [
       await click('#btn-toggle-buffs')(page);
     },
   },
-  { name: 'map-planner', needs: '#btn-toggle-draft', storage: LEADER, run: click('#btn-toggle-draft') },
-  { name: 'map-fullscreen', needs: '#btn-toggle-fullscreen', storage: LEADER, run: click('#btn-toggle-fullscreen') },
+  {
+    name: 'map-planner',
+    needs: '#btn-toggle-draft',
+    storage: LEADER,
+    run: click('#btn-toggle-draft'),
+  },
+  {
+    name: 'map-fullscreen',
+    needs: '#btn-toggle-fullscreen',
+    storage: LEADER,
+    run: click('#btn-toggle-fullscreen'),
+  },
   {
     name: 'alliance-planner',
     needs: '#btn-toggle-alliance-planner',
@@ -48,7 +68,12 @@ export const STATES = [
     storage: LEADER,
     run: click('#btn-toggle-rewards-planner'),
   },
-  { name: 'event-form', needs: '#btn-toggle-event-form', storage: LEADER, run: click('#btn-toggle-event-form') },
+  {
+    name: 'event-form',
+    needs: '#btn-toggle-event-form',
+    storage: LEADER,
+    run: click('#btn-toggle-event-form'),
+  },
   {
     name: 'proposal-modal',
     needs: '#map-container, .alliance-wrapper',
