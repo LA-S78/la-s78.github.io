@@ -15,6 +15,7 @@
     "holderActualRank": 3
   },
   "capitolHolder": "[MIA]",
+  "capitolHolderColor": "#a400af",
   "events": [
     {
       "id": "e1",

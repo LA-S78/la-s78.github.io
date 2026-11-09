@@ -288,6 +288,10 @@
   font-size: 1.35rem;
   font-weight: 800;
   color: rgb(var(--active-theme-vivid, 254, 240, 138));
+  /* Soft halo in the tag's own colour (the holder's alliance colour, set by js/calendar.js). */
+  text-shadow:
+    0 0 14px color-mix(in srgb, currentColor 55%, transparent),
+    0 0 28px color-mix(in srgb, currentColor 30%, transparent);
 }
 
 .cal-capitol-rank {

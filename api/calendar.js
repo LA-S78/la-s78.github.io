@@ -1,6 +1,7 @@
 // api/calendar.js
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
+import { sanitizeAlliances } from './_alliances.js';
 
 function getScheduleSlotKey(weekNumber) {
   return Number(weekNumber) === 4 ? 'downtime' : `week_${weekNumber}`;
@@ -41,7 +42,9 @@ export default async function handler(req, res) {
   const scheduledHolderTag = activeSchedule?.[currentSlotKey]?.trim();
 
   let capitolHolderTag = `Rank #${currentStatus.capitolRank}`;
+  let holderTag = null; // the alliance holding the Capitol, if known (for its colour)
   if (scheduledHolderTag) {
+    holderTag = scheduledHolderTag;
     capitolHolderTag = `[${scheduledHolderTag}]`;
     const actualRank = alliances[scheduledHolderTag]?.rank;
     if (actualRank) {
@@ -52,8 +55,15 @@ export default async function handler(req, res) {
     const holderEntry = Object.entries(alliances).find(
       ([_, data]) => parseInt(data.rank, 10) === currentStatus.capitolRank,
     );
-    if (holderEntry) capitolHolderTag = `[${holderEntry[0]}]`;
+    if (holderEntry) {
+      holderTag = holderEntry[0];
+      capitolHolderTag = `[${holderEntry[0]}]`;
+    }
   }
+  // Same colour the rest of the site shows for this alliance (/api/state's resolution).
+  const capitolHolderColor = holderTag
+    ? sanitizeAlliances(alliances)[holderTag]?.color || null
+    : null;
 
   // 1. Generate System Milestones (Rotation Transfers & War Battle Days)
   const cycleMilestones = [];
@@ -179,6 +189,7 @@ export default async function handler(req, res) {
   return res.status(200).json({
     status: currentStatus,
     capitolHolder: capitolHolderTag,
+    capitolHolderColor,
     events: allEvents,
   });
 }
