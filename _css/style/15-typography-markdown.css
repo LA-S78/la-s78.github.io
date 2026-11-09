@@ -109,7 +109,7 @@ td {
   text-align: left;
 }
 th {
-  background: #2a2726;
+  background: var(--node-bg);
   color: var(--accent-color);
   font-family: var(--font-headers);
 }

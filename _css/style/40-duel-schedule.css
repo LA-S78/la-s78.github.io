@@ -71,7 +71,7 @@
   text-align: center;
 }
 .schedule-table th {
-  background: #2a2726;
+  background: var(--node-bg);
   color: var(--accent-color);
 }
 

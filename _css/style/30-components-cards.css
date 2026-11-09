@@ -125,7 +125,7 @@ dialog.is-closing::backdrop {
   will-change: transform, opacity;
 }
 dialog {
-  background-color: #1a1512;
+  background-color: var(--bg-color);
   border: 1px solid var(--accent-color);
   border-radius: 12px;
   padding: 20px;
@@ -180,7 +180,7 @@ dialog a.dialog-btn {
 dialog button:hover,
 dialog a.dialog-btn:hover {
   background-color: var(--accent-color);
-  color: #1a1512;
+  color: var(--bg-color);
   border-color: var(--accent-color);
   box-shadow: 0 0 15px rgba(184, 151, 90, 0.4);
   transform: translateY(-2px);

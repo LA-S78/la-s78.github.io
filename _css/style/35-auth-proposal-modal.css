@@ -522,7 +522,7 @@ dialog.auth-modal[open] {
 }
 .scroll-btn:hover {
   background: var(--accent-color);
-  color: #1a1512;
+  color: var(--bg-color);
   box-shadow: 0 0 20px rgba(184, 151, 90, 0.6);
   transform: translateY(-50%) scale(1.1);
 }

@@ -307,7 +307,7 @@
 
 .btn-tier-del:hover {
   background: var(--status-danger-hover);
-  color: #1a1512;
+  color: var(--bg-color);
 }
 
 .range-stepper {
