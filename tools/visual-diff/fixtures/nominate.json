@@ -7,20 +7,9 @@
       "submittedAt": "2026-11-08T12:00:00Z",
       "recipients": {
         "standard": {
-          "commanders_will": [
-            "Josh",
-            "Ana"
-          ],
-          "loyal_servant": [
-            "Bo",
-            "Cy"
-          ],
-          "followers_heart": [
-            "Di",
-            "Ed",
-            "Fi",
-            "Gu"
-          ]
+          "commanders_will": ["Josh", "Ana"],
+          "loyal_servant": ["Bo", "Cy"],
+          "followers_heart": ["Di", "Ed", "Fi", "Gu"]
         }
       }
     }

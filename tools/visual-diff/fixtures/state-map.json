@@ -6,9 +6,7 @@
       "rank": 1,
       "type": "main",
       "parent_tag": null,
-      "academies": [
-        "WLA"
-      ],
+      "academies": ["WLA"],
       "is_nap": true,
       "color": "#25bb00"
     },
@@ -18,9 +16,7 @@
       "rank": 2,
       "type": "main",
       "parent_tag": null,
-      "academies": [
-        "RÂA"
-      ],
+      "academies": ["RÂA"],
       "is_nap": true,
       "color": "#cece00"
     },
