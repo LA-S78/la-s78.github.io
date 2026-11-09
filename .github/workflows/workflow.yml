@@ -61,7 +61,7 @@ jobs:
         env:
           JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
           BUILD_LOG: ${{ runner.temp }}/jekyll-build.log
-        run: bundle exec ruby _scripts/build.rb --no-check ${{ github.ref != 'refs/heads/main' && '--dev' || '' }}
+        run: bundle exec ruby _scripts/build.rb --no-check
 
       - name: Checking build output
         env:

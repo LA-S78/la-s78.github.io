@@ -48,9 +48,8 @@ permalink: /architecture.html
     %% ===========================================================
     subgraph Post_Processing [5. Post-Build Assembly]
         J1[" Step 4: Asset Injection<br>(Copies css, js, images) "]
-        J2[" Step 5: Runtime Patching<br>(dev-url-fixer) "]
-        J3[" Step 6: Workbox Precache<br>(sw.js cache hashes) "]
-        J4[" Step 7: API Payload<br>(Copies /api/ directory) "]
+        J3[" Step 5: Workbox Precache<br>(sw.js cache hashes) "]
+        J4[" Step 6: API Payload<br>(Copies /api/ directory) "]
     end
 
     %% ===========================================================
@@ -72,7 +71,7 @@ permalink: /architecture.html
     D --> F
     A2 --> F
     F --> G --> H --> I
-    I --> J1 --> J2 --> J3 --> J4
+    I --> J1 --> J3 --> J4
     J4 --> K --> M --> N & O & P
 
     %% Classes (Original Block Colors)
@@ -83,7 +82,7 @@ permalink: /architecture.html
     classDef deploy fill:#111,stroke:#fff,stroke-width:2px,color:#fff;
 
     class A1,A2 source;
-    class B,C,D,J2,J3 script;
+    class B,C,D,J3 script;
     class F,G,H,I jekyll;
     class E1,E2,E3,J1,J4 asset;
     class K,M,N,O,P deploy;

@@ -8,7 +8,6 @@
 # Other options:
 #   --port=N      preview port (default 4000)
 #   --no-check    skip the build output checks (CI runs them as a separate step)
-#   --dev         append js/dev-url-fixer.js to main.js (CI does this for non-main branches)
 #
 # Translation (Gemini) is NOT part of this script; it only runs in CI on push.
 
@@ -32,14 +31,13 @@ SITE = '_site'
 LANGS = Dir['_configs/_config_*.yml'].map { |f| File.basename(f)[/_config_(.+)\.yml/, 1] }.sort
 BUILD_LOG = ENV['BUILD_LOG'] || File.join(Dir.tmpdir, 'la-s78-jekyll-build.log')
 
-options = { serve: false, port: 4000, check: true, dev: false, lang: nil }
+options = { serve: false, port: 4000, check: true, lang: nil }
 OptionParser.new do |o|
   o.banner = 'Usage: bundle exec ruby _scripts/build.rb [options]'
   o.on('--serve', 'Preview the built site locally') { options[:serve] = true }
   o.on('--port=N', Integer, 'Preview port (default 4000)') { |n| options[:port] = n }
   o.on('--lang=CODE', "Build only one language (#{LANGS.join(', ')})") { |l| options[:lang] = l }
   o.on('--no-check', 'Skip build output checks') { options[:check] = false }
-  o.on('--dev', 'Append js/dev-url-fixer.js (non-main branches)') { options[:dev] = true }
 end.parse!
 
 if options[:lang] && !LANGS.include?(options[:lang])
@@ -131,11 +129,6 @@ step 'Copying shared assets to the site root'
 %w[images css js].each { |d| FileUtils.cp_r(d, SITE) }
 FileUtils.cp('site.webmanifest', SITE)
 FileUtils.cp('redirect.html', File.join(SITE, 'index.html'))
-
-if options[:dev]
-  puts 'Dev build: appending js/dev-url-fixer.js to /js/main.js'
-  File.write(File.join(SITE, 'js', 'main.js'), File.read('js/dev-url-fixer.js'), mode: 'a')
-end
 
 # Quick single-language builds skip the root build, which normally produces /sw.js.
 if options[:lang] && !File.exist?(File.join(SITE, 'sw.js'))

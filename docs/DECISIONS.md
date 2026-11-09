@@ -80,9 +80,8 @@ under *Must not change*, or someone will "fix" it.
 - **Must not change:** Both the Top Hero Card (`api/calendar.js` / `js/calendar.js`) and the 4-Week Override Console (`js/kvk-scheduler.js`) must resolve the active Capitol holder from `rewards-data.json`'s `cycle_state.active_schedule` and highlight the active week using the live clock (`clockWeek`), never static `capitol_rank` lookups alone.
 
 ## Test pages (`test/`)
-- **Purpose:** Internal sandbox pages.
-- **Open questions:**
-  - Should these be publicly published? (`mermaid.min.js`, 3.3 MB, exists only for them.)
+- **Purpose:** Internal sandbox pages, also used to demo features.
+- **Must not change:** They stay publicly published (owner decision), so `js/mermaid.min.js` stays too. It is excluded from the service-worker precache because of its size (3.3 MB).
 
 ## Conventions
 - **Game Time is UTC-2.** All schedule/calendar code and bot strings use this.
