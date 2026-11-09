@@ -52,7 +52,7 @@
       const data = await res.json();
 
       allEvents = data.events || [];
-      renderHero(data.status, data.capitolHolder);
+      renderHero(data.status, data.capitolHolder, data.capitolHolderColor);
       setupFilterOptions();
       applyFilterAndRender();
     } catch (err) {
@@ -65,7 +65,7 @@
   }
 
   // 3. Render Hero & Reset Clock
-  function renderHero(status, capitolHolder) {
+  function renderHero(status, capitolHolder, capitolHolderColor) {
     if (elLoading) elLoading.style.display = 'none';
     if (elContent) elContent.style.display = 'block';
 
@@ -88,7 +88,11 @@
         : 'Standard single allocation. Fortresses and territory restructuring active.';
     }
 
-    if (capHolderEl) capHolderEl.textContent = capitolHolder;
+    if (capHolderEl) {
+      capHolderEl.textContent = capitolHolder;
+      // The holder's own alliance colour; without one, the CSS (theme colour) applies.
+      capHolderEl.style.color = capitolHolderColor || '';
+    }
     if (capRankEl) {
       if (status.isOverrideWeek && status.holderActualRank) {
         capRankEl.textContent = `Rank #${status.holderActualRank} (Override Active)`;

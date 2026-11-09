@@ -1,19 +1,7 @@
 // api/state.js
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
+import { sanitizeAlliances } from './_alliances.js';
 // Unified Read-Only State Proxy for Map, Rewards, and Alliance Hierarchy
-
-const DEFAULT_FALLBACK_COLORS = {
-  WLO: '#25bb00',
-  RÂVN: '#cece00',
-  RAVN: '#cece00',
-  MIA: '#a400af',
-  BOTS: '#0070f3',
-  SVN: '#e53e3e',
-  PHNX: '#dd6b20',
-  HMDA: '#d53f8c',
-  NAVI: '#319795',
-  HeKi: '#d69e2e',
-};
 
 const BASELINE_SCHEDULES = {
   1: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
@@ -41,43 +29,6 @@ function resolveCycleState(raw = {}) {
     active_schedule: hasValidSchedule ? raw.active_schedule : { ...baseline },
     history: Array.isArray(raw?.history) ? raw.history : [],
   };
-}
-
-/**
- * Strips private Discord bot configuration fields before sending alliance data to public clients.
- * Preserves exact tag capitalization and diacritics (e.g., RÂVN, RâvN, râvn, HeKi).
- */
-function sanitizeAlliances(rawAlliances = {}) {
-  const sanitized = {};
-
-  Object.entries(rawAlliances).forEach(([tag, data]) => {
-    const cleanTag = tag.trim();
-    if (!cleanTag) return;
-
-    const storedColor = data?.color;
-    const resolvedColor =
-      storedColor && storedColor !== '#b8975a'
-        ? storedColor
-        : DEFAULT_FALLBACK_COLORS[cleanTag] || storedColor || null;
-
-    sanitized[cleanTag] = {
-      tag: cleanTag,
-      name: data?.name || cleanTag,
-      rank:
-        data?.rank !== undefined && data?.rank !== null && data?.rank !== ''
-          ? Number(data.rank)
-          : null,
-      type: data?.type || (data?.parent_tag ? 'academy' : 'main'),
-      parent_tag: data?.parent_tag ? String(data.parent_tag).trim() : null,
-      academies: Array.isArray(data?.academies)
-        ? data.academies.map((a) => String(a).trim()).filter(Boolean)
-        : [],
-      is_nap: data?.is_nap !== undefined ? Boolean(data.is_nap) : true,
-      color: resolvedColor,
-    };
-  });
-
-  return sanitized;
 }
 
 export default async function handler(req, res) {
