@@ -19,7 +19,7 @@ under *Must not change*, or someone will "fix" it.
 - **Purpose:** Compiles an 8-language Jekyll static site alongside Node.js serverless API routes (`api/`), deploying the combined bundle (`_site/`) to Vercel (`la-s78.app`) while publishing a path-preserving redirect (`migration.html`) to GitHub Pages (`gh-pages`).
 - **Constraints:** Vercel deployments are built and pushed via CLI (`vercel deploy --cwd _site/`) inside GitHub Actions after Ruby scripts generate in-memory JS modules (`api/_generated_translations.js`, `api/_map_svg.js`, `api/_cities_data.js`, `api/_font_data.js`).
 - **Must not change:**
-  - `cp -r api _site/` in `.github/workflows/workflow.yml` MUST run *after* `WorkboxInjector.run('_site')` so `api/` is deployed to Vercel without being scanned by Jekyll or precached by the service worker.
+  - Staging `api/` into `_site/` (in `_scripts/build.rb`) MUST run *after* `WorkboxInjector.run('_site')` so `api/` is deployed to Vercel without being scanned by Jekyll or precached by the service worker.
   - The Vercel project is connected to this GitHub repo (kept for PR comments), but `vercel.json` sets `git.deploymentEnabled: false`. The GitHub Actions CLI deploy is the **only** route to production: a Git-triggered deploy would publish the raw, unbuilt repo, without `_site/` or the generated `api/_*.js` modules.
 - **Open questions:**
   - Does the `dev` preview deployment share the production Gist and Discord bot?
@@ -87,3 +87,5 @@ under *Must not change*, or someone will "fix" it.
 ## Conventions
 - **Game Time is UTC-2.** All schedule/calendar code and bot strings use this.
 - **Pull requests** must pass the "Checking build output" CI step before merge.
+- **One build script.** `_scripts/build.rb` is the only build definition; CI calls it rather than running its own inline steps, so a local build matches production. New build steps go in the script, not in the workflow.
+- **Generated files are git-ignored** (see `.gitignore` and the README's "Never edit these" list) so local builds never show up as changes.
