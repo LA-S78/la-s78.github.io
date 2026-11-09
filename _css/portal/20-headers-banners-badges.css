@@ -45,16 +45,16 @@
 
 .status-banner.error,
 .status-banner.warning {
-  border: 1px solid #ff6b6b;
+  border: 1px solid var(--status-danger-hover);
   background: rgba(122, 0, 0, 0.3);
-  color: #fca5a5;
+  color: var(--status-danger-text);
   text-align: left;
 }
 
 .status-banner.status-success {
   background: rgba(20, 83, 45, 0.4);
-  border: 1px solid #22c55e;
-  color: #86efac;
+  border: 1px solid var(--status-success);
+  color: var(--status-success-text);
   text-align: left;
 }
 

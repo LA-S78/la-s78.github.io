@@ -179,7 +179,7 @@ svg #layer1 path:hover {
   padding: 0.12rem 0.4rem;
   border-radius: 3px;
   background: var(--accent-color);
-  color: #0d0a08;
+  color: var(--surface-elevated);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   flex-shrink: 0;

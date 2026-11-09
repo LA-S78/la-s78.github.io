@@ -88,7 +88,7 @@
 
 .ladder-step-btn:hover:not(:disabled) {
   background: var(--accent-color);
-  color: #110d0b;
+  color: var(--nav-bg);
 }
 
 .ladder-step-btn:disabled {

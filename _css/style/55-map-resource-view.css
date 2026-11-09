@@ -71,8 +71,8 @@
     45deg,
     var(--text-muted),
     var(--text-muted) 2px,
-    #110d0b 2px,
-    #110d0b 4px
+    var(--nav-bg) 2px,
+    var(--nav-bg) 4px
   );
 }
 

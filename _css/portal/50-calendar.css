@@ -22,8 +22,8 @@
 
 .cal-status-banner.error {
   background: rgba(122, 0, 0, 0.35);
-  border-color: #ef4444;
-  color: #fca5a5;
+  border-color: var(--status-danger);
+  color: var(--status-danger-text);
 }
 
 .cal-notification-banner {
@@ -36,14 +36,14 @@
 
 .cal-notification-banner.success {
   background: rgba(20, 83, 45, 0.4);
-  border: 1px solid #22c55e;
-  color: #86efac;
+  border: 1px solid var(--status-success);
+  color: var(--status-success-text);
 }
 
 .cal-notification-banner.error {
   background: rgba(122, 0, 0, 0.4);
-  border: 1px solid #ef4444;
-  color: #fca5a5;
+  border: 1px solid var(--status-danger);
+  color: var(--status-danger-text);
 }
 
 /* Management Panel (Dynamic Preset & Theme Aware) */
@@ -129,14 +129,14 @@
 }
 
 .form-group .req {
-  color: #ef4444;
+  color: var(--status-danger);
 }
 
 .form-group input,
 .form-group textarea,
 .cal-form-select {
   width: 100%;
-  background: #080605;
+  background: var(--surface-dark);
   border: 1px solid var(--border-color);
   color: var(--text-main);
   padding: 8px 12px;
@@ -207,7 +207,7 @@
 
 .scope-global .btn-primary {
   background: var(--accent-color);
-  color: #110d0b;
+  color: var(--nav-bg);
 }
 
 .btn-secondary {
@@ -259,7 +259,7 @@
 
 .badge-kw {
   background: rgba(185, 28, 28, 0.25);
-  border: 1px solid #ef4444;
+  border: 1px solid var(--status-danger);
   color: #f87171;
 }
 
@@ -351,7 +351,7 @@
 }
 
 .cal-filter-select {
-  background: #080605;
+  background: var(--surface-dark);
   border: 1px solid var(--accent-color);
   color: var(--text-main);
   padding: 7px 12px;
@@ -421,7 +421,7 @@
 }
 
 .event-rotation { border-left-color: var(--accent-color); }
-.event-war      { border-left-color: #ef4444; }
+.event-war      { border-left-color: var(--status-danger); }
 .event-snapshot { border-left-color: #3b82f6; }
 .event-custom   { border-left-color: #10b981; }
 .event-alliance { border-left-color: #3b82f6; }
@@ -449,7 +449,7 @@
   font-weight: 700;
   padding: 1px 6px;
   border-radius: 4px;
-  background: #1a1512;
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
   color: var(--text-muted);
 }
@@ -461,7 +461,7 @@
 }
 
 .pill-force {
-  border-color: #ef4444;
+  border-color: var(--status-danger);
   color: #f87171;
   background: rgba(239, 68, 68, 0.15);
 }
@@ -492,7 +492,7 @@
 
 .btn-delete-event {
   background: rgba(239, 68, 68, 0.15);
-  border: 1px solid #ef4444;
+  border: 1px solid var(--status-danger);
   color: #f87171;
   padding: 5px 8px;
   border-radius: 4px;
@@ -502,7 +502,7 @@
 }
 
 .btn-delete-event:hover {
-  background: #ef4444;
+  background: var(--status-danger);
   color: #fff;
 }
 /* hide language selector on portal pages */
