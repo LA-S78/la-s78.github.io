@@ -5,6 +5,7 @@ import rawSvg from './_map_svg.js';
 import centroids from './_centroids.js';
 import fontBase64 from './_font_data.js';
 import rawCitiesData from './_cities_data.js';
+import { readGist, gistJson } from './_gist.js';
 
 export const LABEL_OVERRIDES = {
   Sky_Fortress: { rotate: 270, offsetX: -52 },
@@ -241,24 +242,13 @@ function applyFillToTerritory(svg, cityId, fillColor) {
 }
 
 async function getLiveMapState() {
-  const gistId = process.env.GIST_ID;
-  const gistToken = process.env.GIST_TOKEN;
-  if (!gistId) return null;
+  if (!process.env.GIST_ID) return null;
 
   try {
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-      headers: {
-        ...(gistToken ? { Authorization: `Bearer ${gistToken}` } : {}),
-        'User-Agent': 'WarRoom-MapRenderer'
-      },
-      signal: AbortSignal.timeout(2000)
-    });
-
-    if (!res.ok) return null;
-    const gistData = await res.json();
-    return JSON.parse(gistData.files?.['map-state.json']?.content || '{}');
+    const gist = await readGist({ timeoutMs: 2000 });
+    return gistJson(gist, 'map-state.json');
   } catch (err) {
-    return null;
+    return null; // render with defaults rather than fail the image
   }
 }
 

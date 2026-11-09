@@ -1,27 +1,10 @@
 // api/_rank_helper.js
-
-const GIST_ID = process.env.GIST_ID;
-const GIST_TOKEN = process.env.GIST_TOKEN;
-
-const headers = {
-  Authorization: `Bearer ${GIST_TOKEN}`,
-  Accept: 'application/vnd.github.v3+json',
-  'User-Agent': 'WarRoom-RankHelper',
-  'Content-Type': 'application/json'
-};
+import { readGist, gistJson, writeGist } from './_gist.js';
 
 async function getMapState() {
-  const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-    headers,
-    cache: 'no-store'
-  });
-  if (!res.ok) throw new Error(`GitHub Gist error: ${res.statusText}`);
-
-  const gistData = await res.json();
-  const content = gistData.files['map-state.json']?.content;
-  if (!content) throw new Error('map-state.json missing from target Gist');
-
-  return JSON.parse(content);
+  const state = gistJson(await readGist(), 'map-state.json', null);
+  if (!state) throw new Error('map-state.json missing from target Gist');
+  return state;
 }
 
 export async function listAllianceRanks() {
@@ -66,20 +49,10 @@ export async function setAllianceRank({ tag, rank, updatedBy = 'Discord Bot' }) 
   state.lastUpdated = new Date().toISOString();
   state.updatedBy = updatedBy;
 
-  const patchRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-    method: 'PATCH',
-    headers,
-    body: JSON.stringify({
-      description: `Rank updated: [${targetKey}] -> #${newRank}`,
-      files: {
-        'map-state.json': {
-          content: JSON.stringify(state, null, 2)
-        }
-      }
-    })
-  });
-
-  if (!patchRes.ok) throw new Error(`Failed to commit rank: ${patchRes.statusText}`);
+  await writeGist(
+    { 'map-state.json': state },
+    { description: `Rank updated: [${targetKey}] -> #${newRank}` }
+  );
 
   return { tag: targetKey, previousRank, newRank };
 }

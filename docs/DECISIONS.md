@@ -44,14 +44,14 @@ under *Must not change*, or someone will "fix" it.
 ## Authentication & roles (Discord OAuth, R4/R5/member, Stewards)
 - **Purpose:** Restricts administrative actions, reward nominations, and calendar management to authorized leadership.
 - **Constraints:** Kingdom-wide administrative approval and maintenance tasks are restricted to 1–3 designated **Kingdom Stewards** defined in Vercel environment variables (`STEWARD_USER_IDS`, comma-separated Discord User IDs, with fallback support for `AUTHORIZED_USER_ID`).
-- **Must not change:** Steward user IDs must remain in Vercel environment variables (read-only at runtime), never stored inside the GitHub Gist JSON files. Official leadership communications and embeds use the term **NAP Leadership** (never "War Room"). Internal identifiers (the `WAR_ROOM_CHANNEL_ID` env var, API `User-Agent` strings) are not user-facing and keep their names.
+- **Must not change:** Steward user IDs must remain in Vercel environment variables (read-only at runtime), never stored inside the GitHub Gist JSON files. Official leadership communications and embeds use the term **NAP Leadership** (never "War Room"). Internal identifiers (e.g. the `WAR_ROOM_CHANNEL_ID` env var) are not user-facing and keep their names.
 - **Open questions:**
   - Is `.content-locked` content meant to be secret, or only decluttering? (It is currently hidden client-side only.)
 
 ## Discord bot & proposal/approval flow (`api/interactions.js`, `api/proposal.js`, `api/accept-proposal.js`)
 - **Purpose:** Powers slash commands (`/calendar`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`, `/rank`, `/registerbot`) and interactive button approvals for map, standings, rewards, and defense overrides.
 - **Constraints:** Discord interaction responses must complete within 3 seconds (Gist and Discord role fetches use strict `AbortSignal.timeout`).
-- **Must not change:** Only designated Stewards (`isSteward(userId)`) can click Approve/Reject on proposals or confirm KvK reward outcomes. Unauthorized clicks must return an ephemeral access-denied message without mutating the button state.
+- **Must not change:** Portal links are signed and checked only through `api/_tokens.js` (`createToken`, `verifyToken`). Only designated Stewards (`isSteward(userId)`) can click Approve/Reject on proposals or confirm KvK reward outcomes. Unauthorized clicks must return an ephemeral access-denied message without mutating the button state.
 - **Open questions:**
   - Should submitting a proposal require a signed token (like `/nominate`)?
   - The Approve path does not meet the 3-second constraint reliably. It downloads the blueprint attachment and then calls `/api/accept-proposal` over HTTP (a Gist read and write) with no timeout and no deferred response. A slow Gist could make Discord show "interaction failed" even though the change was saved. Should it use a deferred update?
@@ -59,7 +59,12 @@ under *Must not change*, or someone will "fix" it.
 ## Data storage (GitHub Gist as database)
 - **Purpose:** Stores live mutable state (`map-state.json`, `rewards-data.json`, `rewards-nominations.json`, `calendar-state.json`) without requiring an external database server.
 - **Constraints:** All state files reside in a single GitHub Gist (`process.env.GIST_ID`), fetched in one HTTP request.
-- **Must not change:** `map-state.json` is the single source of truth for alliance ranks (`#1`–`#10`).
+- **Must not change:**
+  - `map-state.json` is the single source of truth for alliance ranks (`#1`–`#10`).
+  - All Gist reads and writes go through `api/_gist.js` (`readGist`, `gistJson`, `writeGist`). Endpoints must not call the GitHub API directly.
+- **Open questions:**
+  - `api/accept-proposal.js` (every approval type): if GitHub returns an error when reading the Gist, the approval carries on with default data and **saves over the live file**. This is kept as-is in `readForApproval()` pending review. Should a failed read abort the approval instead?
+  - Every write reads, changes and saves the whole file with no check for a concurrent change, so two simultaneous writes can lose one. Is that acceptable at current usage?
 
 ## Rewards, nominations & KvK cycle
 - **Purpose:** Automates the 4-week Capitol rotation, stepped defense overrides (Swap vs. Wartime Buyout), and weekly chest nomination quotas.

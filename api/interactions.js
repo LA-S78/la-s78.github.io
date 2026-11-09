@@ -1,7 +1,6 @@
 // api/interactions.js
 
 // Manages interactions between GitHub Gist, Vercel, and Discord
-import crypto from "crypto";
 import {
   verifyKey,
   InteractionType,
@@ -9,6 +8,8 @@ import {
 } from "discord-interactions";
 import { RULES_DATA, SB_DATA, BOT_DATA } from "./_generated_translations.js";
 import { listAllianceRanks, setAllianceRank } from "./_rank_helper.js";
+import { isGistConfigured, readGist, writeGist } from "./_gist.js";
+import { createToken } from "./_tokens.js";
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from "./_calendar_helper.js";
 import {
   getAllianceNominationQuota,
@@ -459,15 +460,6 @@ function cleanHtmlToMarkdown(htmlString) {
     .trim();
 }
 
-function createHmacToken(payload, secret) {
-  const dataString = Buffer.from(JSON.stringify(payload)).toString("base64url");
-  const signature = crypto
-    .createHmac("sha256", secret)
-    .update(dataString)
-    .digest("base64url");
-  return `${dataString}.${signature}`;
-}
-
 const roleCacheMap = new Map();
 
 async function getGuildRoleMap(guildId, botToken, memberRoleIds = []) {
@@ -619,17 +611,9 @@ async function resolveMemberAllianceContext({
   };
 }
 
-async function getGistData(gistId, gistToken) {
-  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-    headers: {
-      Authorization: `Bearer ${gistToken}`,
-      "User-Agent": "NAP-Leadership-App",
-    },
-    signal: AbortSignal.timeout(2200),
-  });
-
-  if (!res.ok) throw new Error(`GitHub Gist error (${res.status})`);
-  return res.json();
+// Discord drops an interaction after 3 seconds, so Gist reads here give up after 2.2 s.
+function getGistData() {
+  return readGist({ timeoutMs: 2200 });
 }
 
 let mapRevisionCache = {
@@ -637,7 +621,7 @@ let mapRevisionCache = {
   timestamp: 0,
 };
 
-async function getLatestMapRevision(gistId, gistToken) {
+async function getLatestMapRevision() {
   const now = Date.now();
   if (
     mapRevisionCache.revision &&
@@ -646,7 +630,7 @@ async function getLatestMapRevision(gistId, gistToken) {
     return mapRevisionCache.revision;
   }
   try {
-    const gistData = await getGistData(gistId, gistToken);
+    const gistData = await getGistData();
     const content = gistData.files?.["map-state.json"]?.content;
     if (content) {
       const state = JSON.parse(content);
@@ -794,8 +778,6 @@ export default async function handler(req, res) {
     const member = interaction.member;
     const userId = resolveUserId(interaction);
     const botToken = process.env.DISCORD_BOT_TOKEN;
-    const GIST_ID = process.env.GIST_ID;
-    const GIST_TOKEN = process.env.GIST_TOKEN;
 
     // --- /calendar COMMAND ---
     if (name === "calendar") {
@@ -808,8 +790,8 @@ export default async function handler(req, res) {
       let rewardsState = {};
 
       try {
-        if (GIST_ID && GIST_TOKEN) {
-          const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+        if (isGistConfigured()) {
+          const gistData = await getGistData();
           const calRaw = gistData.files?.["calendar-state.json"]?.content;
           const mapRaw = gistData.files?.["map-state.json"]?.content;
           const rewardsRaw = gistData.files?.["rewards-data.json"]?.content;
@@ -850,7 +832,7 @@ export default async function handler(req, res) {
           action: "manage_events",
           exp: Date.now() + 4 * 60 * 60 * 1000,
         };
-        const token = createHmacToken(tokenPayload, botToken);
+        const token = createToken(tokenPayload, botToken);
         const manageUrl = `https://${resolvedHost}/calendar.html?token=${token}`;
 
         return res.status(200).json({
@@ -907,7 +889,7 @@ export default async function handler(req, res) {
           action: "manage_events",
           exp: Date.now() + 4 * 60 * 60 * 1000,
         };
-        const token = createHmacToken(tokenPayload, botToken);
+        const token = createToken(tokenPayload, botToken);
         const manageUrl = `https://${resolvedHost}/calendar.html?token=${token}`;
 
         return res.status(200).json({
@@ -1268,7 +1250,7 @@ export default async function handler(req, res) {
           selectedView = String(viewOpt.options[0].value).toLowerCase();
         }
 
-        const revision = await getLatestMapRevision(GIST_ID, GIST_TOKEN);
+        const revision = await getLatestMapRevision();
         const payload = buildMapMessagePayload({
           view: selectedView,
           revision,
@@ -1317,7 +1299,7 @@ export default async function handler(req, res) {
         }
 
         try {
-          const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+          const gistData = await getGistData();
           const mapState = JSON.parse(
             gistData.files["map-state.json"]?.content || "{}",
           );
@@ -1368,7 +1350,7 @@ export default async function handler(req, res) {
 
       // DEFAULT ACTION: R5 Registration Portal Link
       try {
-        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+        const gistData = await getGistData();
         const mapState = JSON.parse(
           gistData.files["map-state.json"]?.content || "{}",
         );
@@ -1403,7 +1385,7 @@ export default async function handler(req, res) {
           client_id: clientId,
           exp: Date.now() + 24 * 60 * 60 * 1000,
         };
-        const token = createHmacToken(tokenPayload, botToken);
+        const token = createToken(tokenPayload, botToken);
         const registerUrl = `https://${resolvedHost}/register.html?token=${token}`;
 
         return res.status(200).json({
@@ -1462,7 +1444,7 @@ export default async function handler(req, res) {
       }
 
       try {
-        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+        const gistData = await getGistData();
         const mapState = JSON.parse(
           gistData.files["map-state.json"]?.content || "{}",
         );
@@ -1533,24 +1515,15 @@ export default async function handler(req, res) {
               0,
             );
             rewardsData = updatedRewards;
-            await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-              method: "PATCH",
-              headers: {
-                Authorization: `Bearer ${GIST_TOKEN}`,
-                "Content-Type": "application/json",
-                "User-Agent": "NAP-Leadership-App",
+            // A rejected save is ignored here (original behaviour); network errors still throw.
+            await writeGist(
+              {
+                "rewards-nominations.json": {},
+                "rewards-data.json": updatedRewards,
               },
-              body: JSON.stringify({
-                description: `Auto-reset to Downtime (1x) at ${new Date().toISOString()}`,
-                files: {
-                  "rewards-nominations.json": {
-                    content: JSON.stringify({}, null, 2),
-                  },
-                  "rewards-data.json": {
-                    content: JSON.stringify(updatedRewards, null, 2),
-                  },
-                },
-              }),
+              { description: `Auto-reset to Downtime (1x) at ${new Date().toISOString()}` },
+            ).catch((err) => {
+              if (!err.status) throw err;
             });
           } else {
             // KvK Week (1, 2, or 3): Require Steward confirmation of 1x vs 2x outcome
@@ -1698,7 +1671,7 @@ export default async function handler(req, res) {
               : null,
         };
 
-        const token = createHmacToken(tokenPayload, botToken);
+        const token = createToken(tokenPayload, botToken);
         const nominateUrl = `https://${resolvedHost}/nominate.html?token=${token}`;
 
         // 3. Render Embed Fields
@@ -1808,7 +1781,7 @@ export default async function handler(req, res) {
         }
 
         try {
-          const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+          const gistData = await getGistData();
           const currentRewards = JSON.parse(
             gistData.files["rewards-data.json"]?.content || "{}",
           );
@@ -1839,31 +1812,13 @@ export default async function handler(req, res) {
             clockWeek,
           );
 
-          const patchRes = await fetch(
-            `https://api.github.com/gists/${GIST_ID}`,
+          await writeGist(
             {
-              method: "PATCH",
-              headers: {
-                Authorization: `Bearer ${GIST_TOKEN}`,
-                "Content-Type": "application/json",
-                "User-Agent": "NAP-Leadership-App",
-              },
-              body: JSON.stringify({
-                description: `Cycle reset (${requestedMode}) by ${username} at ${new Date().toISOString()}`,
-                files: {
-                  "rewards-nominations.json": {
-                    content: JSON.stringify({}, null, 2),
-                  },
-                  "rewards-data.json": {
-                    content: JSON.stringify(updatedRewards, null, 2),
-                  },
-                },
-              }),
+              "rewards-nominations.json": {},
+              "rewards-data.json": updatedRewards,
             },
+            { description: `Cycle reset (${requestedMode}) by ${username} at ${new Date().toISOString()}` },
           );
-
-          if (!patchRes.ok)
-            throw new Error(`GitHub API returned ${patchRes.status}`);
 
           const isKW = requestedMode === "kw";
           const cycleNotice = cycleAdvanced
@@ -1903,7 +1858,7 @@ export default async function handler(req, res) {
       }
 
       try {
-        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+        const gistData = await getGistData();
         const mapState = JSON.parse(
           gistData.files["map-state.json"]?.content || "{}",
         );
@@ -2163,10 +2118,7 @@ export default async function handler(req, res) {
     // 1A. PUBLIC MAP VIEW SWITCH BUTTONS
     if (custom_id && custom_id.startsWith("map_view:")) {
       const targetView = custom_id.replace("map_view:", "");
-      const revision = await getLatestMapRevision(
-        process.env.GIST_ID,
-        process.env.GIST_TOKEN,
-      );
+      const revision = await getLatestMapRevision();
       const payload = buildMapMessagePayload({
         view: targetView,
         revision,
@@ -2195,11 +2147,9 @@ export default async function handler(req, res) {
 
       const [, mode, targetWeekStr] = custom_id.split(":");
       const targetWeek = parseInt(targetWeekStr, 10);
-      const GIST_ID = process.env.GIST_ID;
-      const GIST_TOKEN = process.env.GIST_TOKEN;
 
       try {
-        const gistData = await getGistData(GIST_ID, GIST_TOKEN);
+        const gistData = await getGistData();
         const currentRewards = JSON.parse(
           gistData.files["rewards-data.json"]?.content || "{}",
         );
@@ -2215,31 +2165,13 @@ export default async function handler(req, res) {
           isNaN(targetWeek) ? null : targetWeek,
         );
 
-        const patchRes = await fetch(
-          `https://api.github.com/gists/${GIST_ID}`,
+        await writeGist(
           {
-            method: "PATCH",
-            headers: {
-              Authorization: `Bearer ${GIST_TOKEN}`,
-              "Content-Type": "application/json",
-              "User-Agent": "NAP-Leadership-App",
-            },
-            body: JSON.stringify({
-              description: `KvK Week ${targetWeek} confirmed (${mode}) by ${username}`,
-              files: {
-                "rewards-nominations.json": {
-                  content: JSON.stringify({}, null, 2),
-                },
-                "rewards-data.json": {
-                  content: JSON.stringify(updatedRewards, null, 2),
-                },
-              },
-            }),
+            "rewards-nominations.json": {},
+            "rewards-data.json": updatedRewards,
           },
+          { description: `KvK Week ${targetWeek} confirmed (${mode}) by ${username}` },
         );
-
-        if (!patchRes.ok)
-          throw new Error(`GitHub API error ${patchRes.status}`);
 
         const isKW = mode === "kw";
         return res.status(200).json({

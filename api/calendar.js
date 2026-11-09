@@ -1,18 +1,6 @@
 // api/calendar.js
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
-
-async function getGistData(gistId, gistToken) {
-  const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-    headers: {
-      Authorization: `Bearer ${gistToken}`,
-      'User-Agent': 'NAP-Leadership-App'
-    },
-    signal: AbortSignal.timeout(3000)
-  });
-
-  if (!res.ok) throw new Error(`GitHub Gist error (${res.status})`);
-  return res.json();
-}
+import { isGistConfigured, readGist, gistJson } from './_gist.js';
 
 function getScheduleSlotKey(weekNumber) {
   return Number(weekNumber) === 4 ? 'downtime' : `week_${weekNumber}`;
@@ -23,23 +11,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const GIST_ID = process.env.GIST_ID;
-  const GIST_TOKEN = process.env.GIST_TOKEN;
-
   let calConfig = DEFAULT_CALENDAR_CONFIG;
   let mapState = { alliances: {} };
   let rewardsState = {};
 
   try {
-    if (GIST_ID && GIST_TOKEN) {
-      const gistData = await getGistData(GIST_ID, GIST_TOKEN);
-      const calRaw = gistData.files?.['calendar-state.json']?.content;
-      const mapRaw = gistData.files?.['map-state.json']?.content;
-      const rewardsRaw = gistData.files?.['rewards-data.json']?.content;
-
-      if (calRaw) calConfig = { ...calConfig, ...JSON.parse(calRaw) };
-      if (mapRaw) mapState = JSON.parse(mapRaw);
-      if (rewardsRaw) rewardsState = JSON.parse(rewardsRaw);
+    if (isGistConfigured()) {
+      const gist = await readGist({ timeoutMs: 3000 });
+      calConfig = { ...calConfig, ...gistJson(gist, 'calendar-state.json') };
+      mapState = gistJson(gist, 'map-state.json', mapState);
+      rewardsState = gistJson(gist, 'rewards-data.json', rewardsState);
     }
   } catch (err) {
     console.warn('Gist state fetch failed, utilizing defaults:', err.message);
