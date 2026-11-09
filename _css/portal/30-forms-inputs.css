@@ -1,0 +1,292 @@
+/* ==========================================================================
+   3. SHARED FORMS, INPUTS & CONTROLS (REGISTER & NOMINATE)
+   ========================================================================== */
+
+.smart-paste-box {
+  background: #080605;
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  padding: 0.65rem 0.8rem;
+  margin: 0.65rem 0 1.1rem 0;
+}
+
+.smart-paste-box label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: bold;
+  color: var(--accent-color);
+  margin-bottom: 4px;
+}
+
+.smart-paste-desc {
+  font-size: 0.8rem;
+  margin: 4px 0 10px 0;
+  color: var(--text-muted);
+}
+
+.smart-paste-box textarea {
+  width: 100%;
+  height: 48px;
+  background: #14100d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: var(--text-main);
+  font-size: 0.78rem;
+  padding: 6px 8px;
+  resize: none;
+  font-family: var(--font-body);
+}
+
+.smart-paste-box textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  background: var(--nav-bg);
+}
+
+.portal-section-divider {
+  margin-bottom: 1.1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.portal-section-heading {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--accent-color);
+}
+
+.portal-section-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0 0 0.75rem 0;
+}
+
+.portal-field {
+  margin-bottom: 0.9rem;
+}
+
+.portal-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-main);
+}
+
+.portal-label-accent {
+  color: var(--accent-color);
+}
+
+.portal-req {
+  color: #ff6b6b;
+}
+
+.portal-opt {
+  color: var(--text-muted);
+  font-weight: normal;
+  font-size: 0.72rem;
+}
+
+.portal-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.slot-group {
+  margin-bottom: 0.75rem;
+}
+
+.slot-group-title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.45rem;
+  color: var(--accent-color);
+}
+
+.slot-input-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0.32rem;
+}
+
+.slot-num {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  width: 18px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.slot-input {
+  flex: 1;
+  width: 100%;
+  height: 32px;
+  background: #080605;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  color: #fff;
+  padding: 0 10px;
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.slot-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  background: var(--nav-bg);
+}
+
+/* Color Picker & Live Badge Row */
+.color-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.color-inputs-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.color-swatch-input {
+  width: 44px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background: #080605;
+  cursor: pointer;
+}
+
+.color-hex-input {
+  width: 98px !important;
+  text-transform: uppercase;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.color-preview-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.color-preview-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.color-preview-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  background: #080605;
+  border: 2px solid #b8975a;
+  color: #b8975a;
+  box-shadow: 0 0 12px rgba(184, 151, 90, 0.25);
+  transition: all 0.15s ease;
+}
+
+/* Buttons */
+.btn-fw {
+  width: 100%;
+  justify-content: center;
+  height: 30px;
+  font-size: 0.78rem;
+}
+
+.btn-fw-link {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  padding: 7px 0;
+  font-size: 0.85rem;
+  height: auto;
+}
+
+.btn-fw-lg {
+  width: 100%;
+  height: 36px;
+  justify-content: center;
+  font-size: 0.84rem;
+  margin-top: 0.65rem;
+}
+
+/* Nomination Pool Headers */
+.pool-section-header {
+  margin-bottom: 0.8rem;
+  font-family: var(--font-headers);
+  color: var(--accent-color);
+  font-size: 1rem;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 4px;
+}
+
+.kw-pool-container {
+  margin-top: 1.5rem;
+  border-top: 2px solid #8f0000;
+  padding-top: 1rem;
+}
+
+.kw-pool-header {
+  margin-bottom: 0.8rem;
+  font-family: var(--font-headers);
+  color: #ff6b6b;
+  font-size: 1rem;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 4px;
+}
+
+/* Wartime Restitution Nomination Banners & Slots */
+.nomination-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.nomination-alert-banner.buyout-active {
+  background: rgba(184, 151, 90, 0.12);
+  border: 1px solid var(--accent-color);
+  color: var(--text-main);
+}
+
+.nomination-alert-banner.buyout-deducted {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed var(--border-color);
+  color: var(--text-muted);
+}
+
+.slot-buyout-bonus {
+  background: rgba(184, 151, 90, 0.06);
+  border: 1px dashed var(--accent-color);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-top: 6px;
+}
+
+.input-buyout {
+  border-color: var(--accent-color) !important;
+}
+

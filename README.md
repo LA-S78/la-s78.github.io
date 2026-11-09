@@ -34,7 +34,8 @@ _data/        Site text per language (ui.yml, content.yml, rules.yml...) and sit
 _layouts/     Page templates
 _includes/    Reusable page blocks (header, footer, map, reward cards...)
 portal/       Discord tool pages: calendar, nominate, register, distribute
-css/ js/ images/   Styles, scripts and pictures (served from the site root)
+_css/        Stylesheets, split into numbered pieces (joined into /css/*.css by the build)
+js/ images/  Scripts and pictures (served from the site root)
 api/          Server functions for Discord and live data (run on Vercel)
 _scripts/     Build scripts (start with build.rb)
 _configs/     One small settings file per language
@@ -58,7 +59,7 @@ app), `todo.md` (roadmap, published at /todo.html), `vercel.json`, `package.json
 | Discord bot messages                      | `_source/bot.md`                             |
 | Page layout and reusable blocks           | `_layouts/`, `_includes/`                    |
 | Discord tool pages (calendar, nominate, register, distribute) | `portal/`                   |
-| Styling                                   | `css/style.css` (site), `css/portal.css` (tool pages) |
+| Styling                                   | `_css/style/` (site), `_css/portal/` (tool pages); see `_css/README.md` |
 | Interactive features                      | `js/`                                        |
 | Discord commands and server logic         | `api/` (runs on Vercel)                      |
 | The build itself                          | `_scripts/build.rb`                          |
