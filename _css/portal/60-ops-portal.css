@@ -334,9 +334,6 @@
 /* end */
 
 @media (max-width: 768px) {
-  .cycle-track-grid {
-    grid-template-columns: 1fr 1fr;
-  }
   .cal-hero-header {
     flex-direction: column;
   }

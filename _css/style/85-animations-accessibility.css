@@ -91,7 +91,7 @@
     opacity: 0.8 !important;
     filter: brightness(1) blur(2px) !important;
   }
-  .dir-container, .dir-card {
+  .dir-card {
     animation: none !important;
     box-shadow: none !important;
     filter: brightness(1) !important;
