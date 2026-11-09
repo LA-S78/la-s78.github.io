@@ -3,13 +3,13 @@
 const POOL_LIMITS = {
   commanders_will: 5,
   loyal_servant: 10,
-  followers_heart: 20
+  followers_heart: 20,
 };
 
 const CHEST_VALUES = {
   commanders_will: { diamonds: 8800, tickets: 44 },
   loyal_servant: { diamonds: 4400, tickets: 40 },
-  followers_heart: { diamonds: 1600, tickets: 36 }
+  followers_heart: { diamonds: 1600, tickets: 36 },
 };
 
 export default async function handler(req, res) {
@@ -41,8 +41,8 @@ export default async function handler(req, res) {
         }
 
         const totals = { commanders_will: 0, loyal_servant: 0, followers_heart: 0 };
-        distribution.forEach(tier => {
-          const count = Math.max(1, (tier.max_rank - tier.min_rank) + 1);
+        distribution.forEach((tier) => {
+          const count = Math.max(1, tier.max_rank - tier.min_rank + 1);
           totals.commanders_will += (tier.chests?.commanders_will || 0) * count;
           totals.loyal_servant += (tier.chests?.loyal_servant || 0) * count;
           totals.followers_heart += (tier.chests?.followers_heart || 0) * count;
@@ -54,32 +54,38 @@ export default async function handler(req, res) {
           totals.followers_heart > POOL_LIMITS.followers_heart
         ) {
           return res.status(400).json({
-            error: `Pool limits exceeded: Gold ${totals.commanders_will}/${POOL_LIMITS.commanders_will}, Purple ${totals.loyal_servant}/${POOL_LIMITS.loyal_servant}, Blue ${totals.followers_heart}/${POOL_LIMITS.followers_heart}`
+            error: `Pool limits exceeded: Gold ${totals.commanders_will}/${POOL_LIMITS.commanders_will}, Purple ${totals.loyal_servant}/${POOL_LIMITS.loyal_servant}, Blue ${totals.followers_heart}/${POOL_LIMITS.followers_heart}`,
           });
         }
 
-        const tierFields = distribution.map(tier => {
+        const tierFields = distribution.map((tier) => {
           const isSingle = tier.min_rank === tier.max_rank;
-          const rankRange = isSingle ? `Rank ${tier.min_rank}` : `Rank ${tier.min_rank}–${tier.max_rank}`;
-          const count = Math.max(1, (tier.max_rank - tier.min_rank) + 1);
+          const rankRange = isSingle
+            ? `Rank ${tier.min_rank}`
+            : `Rank ${tier.min_rank}–${tier.max_rank}`;
+          const count = Math.max(1, tier.max_rank - tier.min_rank + 1);
 
-          const d = (tier.chests.commanders_will * CHEST_VALUES.commanders_will.diamonds) +
-                    (tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.diamonds) +
-                    (tier.chests.followers_heart * CHEST_VALUES.followers_heart.diamonds);
+          const d =
+            tier.chests.commanders_will * CHEST_VALUES.commanders_will.diamonds +
+            tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.diamonds +
+            tier.chests.followers_heart * CHEST_VALUES.followers_heart.diamonds;
 
-          const t = (tier.chests.commanders_will * CHEST_VALUES.commanders_will.tickets) +
-                    (tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.tickets) +
-                    (tier.chests.followers_heart * CHEST_VALUES.followers_heart.tickets);
+          const t =
+            tier.chests.commanders_will * CHEST_VALUES.commanders_will.tickets +
+            tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.tickets +
+            tier.chests.followers_heart * CHEST_VALUES.followers_heart.tickets;
 
           return {
             name: `🏆 ${rankRange} (${count}${count === 1 ? ' Alliance' : ' Alliances'})`,
             value: `🟡 ×${tier.chests.commanders_will} | 🟣 ×${tier.chests.loyal_servant} | 🔵 ×${tier.chests.followers_heart}\n💎 **${d.toLocaleString()}** Diamonds | 🎫 **${t.toLocaleString()}** Tickets *(base)*`,
-            inline: false
+            inline: false,
           };
         });
 
         const poolUsage = `🟡 Gold: **${totals.commanders_will}**/${POOL_LIMITS.commanders_will}  |  🟣 Purple: **${totals.loyal_servant}**/${POOL_LIMITS.loyal_servant}  |  🔵 Blue: **${totals.followers_heart}**/${POOL_LIMITS.followers_heart}`;
-        const submitTimestamp = timestamp ? Math.floor(new Date(timestamp).getTime() / 1000) : nowUnix;
+        const submitTimestamp = timestamp
+          ? Math.floor(new Date(timestamp).getTime() / 1000)
+          : nowUnix;
 
         const embed = {
           title: '👑 Alliance Reward Distribution Proposal',
@@ -90,34 +96,51 @@ export default async function handler(req, res) {
             { name: '⏱️ Submitted', value: `<t:${submitTimestamp}:R>`, inline: true },
             { name: '📊 Pool Capacity', value: poolUsage, inline: false },
             ...tierFields,
-            { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false }
+            { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false },
           ],
           footer: { text: 'Last Asylum Rewards Proposal' },
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
 
         const components = [
           {
             type: 1,
             components: [
-              { type: 2, custom_id: 'approve_reward_proposal', label: 'Approve Plan', style: 3, emoji: { name: '✅' } },
-              { type: 2, custom_id: 'reject_reward_proposal', label: 'Reject Plan', style: 4, emoji: { name: '❌' } }
-            ]
-          }
+              {
+                type: 2,
+                custom_id: 'approve_reward_proposal',
+                label: 'Approve Plan',
+                style: 3,
+                emoji: { name: '✅' },
+              },
+              {
+                type: 2,
+                custom_id: 'reject_reward_proposal',
+                label: 'Reject Plan',
+                style: 4,
+                emoji: { name: '❌' },
+              },
+            ],
+          },
         ];
 
         const formData = new FormData();
         formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
 
-        const jsonBlob = new Blob([JSON.stringify(distribution)], { type: 'application/octet-stream' });
+        const jsonBlob = new Blob([JSON.stringify(distribution)], {
+          type: 'application/octet-stream',
+        });
         formData.append('files[0]', jsonBlob, 'reward-blueprint.dat');
 
         const channelId = process.env.REWARDS_CHANNEL_ID || process.env.WAR_ROOM_CHANNEL_ID;
-        const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-          method: 'POST',
-          headers: { Authorization: `Bot ${botToken}` },
-          body: formData
-        });
+        const discordRes = await fetch(
+          `https://discord.com/api/v10/channels/${channelId}/messages`,
+          {
+            method: 'POST',
+            headers: { Authorization: `Bot ${botToken}` },
+            body: formData,
+          },
+        );
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -138,7 +161,10 @@ export default async function handler(req, res) {
         }
 
         const changeList = Object.entries(changes)
-          .map(([cityId, shift]) => `• **${cityId.replace(/_/g, ' ')}**: \`${shift.from}\` ➔ \`${shift.to}\``)
+          .map(
+            ([cityId, shift]) =>
+              `• **${cityId.replace(/_/g, ' ')}**: \`${shift.from}\` ➔ \`${shift.to}\``,
+          )
           .join('\n');
 
         const embed = {
@@ -152,11 +178,11 @@ export default async function handler(req, res) {
             { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false },
             {
               name: 'Proposed Shifts',
-              value: changeList.length > 1024 ? changeList.substring(0, 1020) + '...' : changeList
-            }
+              value: changeList.length > 1024 ? changeList.substring(0, 1020) + '...' : changeList,
+            },
           ],
           footer: { text: 'Last Asylum Map Proposal' },
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
 
         if (image) {
@@ -167,10 +193,22 @@ export default async function handler(req, res) {
           {
             type: 1,
             components: [
-              { type: 2, custom_id: 'approve_proposal', label: 'Approve Map', style: 3, emoji: { name: '✅' } },
-              { type: 2, custom_id: 'reject_proposal', label: 'Reject Map', style: 4, emoji: { name: '❌' } }
-            ]
-          }
+              {
+                type: 2,
+                custom_id: 'approve_proposal',
+                label: 'Approve Map',
+                style: 3,
+                emoji: { name: '✅' },
+              },
+              {
+                type: 2,
+                custom_id: 'reject_proposal',
+                label: 'Reject Map',
+                style: 4,
+                emoji: { name: '❌' },
+              },
+            ],
+          },
         ];
 
         const formData = new FormData();
@@ -187,11 +225,14 @@ export default async function handler(req, res) {
         }
 
         const channelId = process.env.WAR_ROOM_CHANNEL_ID;
-        const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-          method: 'POST',
-          headers: { Authorization: `Bot ${botToken}` },
-          body: formData
-        });
+        const discordRes = await fetch(
+          `https://discord.com/api/v10/channels/${channelId}/messages`,
+          {
+            method: 'POST',
+            headers: { Authorization: `Bot ${botToken}` },
+            body: formData,
+          },
+        );
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -215,10 +256,11 @@ export default async function handler(req, res) {
         if (Array.isArray(diff) && diff.length > 0) {
           shiftSummary = diff
             .slice(0, 15)
-            .map(d => {
+            .map((d) => {
               if (d.type === 'rank') return `• **[${d.tag}]**: Rank \`#${d.from}\` ➔ \`#${d.to}\``;
               if (d.type === 'academy') return `• **[${d.tag}]**: Academy of **[${d.parent}]**`;
-              if (d.type === 'blacklist') return `• ⚠️ **Blacklist**: \`${d.action.toUpperCase()}\` [${d.target}] (${d.category})`;
+              if (d.type === 'blacklist')
+                return `• ⚠️ **Blacklist**: \`${d.action.toUpperCase()}\` [${d.target}] (${d.category})`;
               return `• **[${d.tag || 'Unknown'}]**: Modified`;
             })
             .join('\n');
@@ -229,7 +271,8 @@ export default async function handler(req, res) {
         }
 
         const totalAlliances = Object.keys(alliances).length;
-        const totalBlacklist = (blacklist?.players?.length || 0) + (blacklist?.alliances?.length || 0);
+        const totalBlacklist =
+          (blacklist?.players?.length || 0) + (blacklist?.alliances?.length || 0);
 
         const embed = {
           title: '👑 NAP Roster & Alliance Standings Proposal',
@@ -238,44 +281,71 @@ export default async function handler(req, res) {
           fields: [
             { name: '👤 Submitter', value: `\`${submittedBy || 'Anonymous'}\``, inline: true },
             { name: '⏱️ Submitted', value: `<t:${nowUnix}:R>`, inline: true },
-            { name: '📊 Total Registered', value: `\`${totalAlliances} Alliances | ${totalBlacklist} Blacklisted\``, inline: false },
-            { name: '📝 Proposed Modifications', value: shiftSummary.substring(0, 1024), inline: false },
-            { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false }
+            {
+              name: '📊 Total Registered',
+              value: `\`${totalAlliances} Alliances | ${totalBlacklist} Blacklisted\``,
+              inline: false,
+            },
+            {
+              name: '📝 Proposed Modifications',
+              value: shiftSummary.substring(0, 1024),
+              inline: false,
+            },
+            { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false },
           ],
           footer: { text: 'Last Asylum Diplomacy Engine' },
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
 
         const components = [
           {
             type: 1,
             components: [
-              { type: 2, custom_id: 'approve_alliance_proposal', label: 'Approve Standings', style: 3, emoji: { name: '✅' } },
-              { type: 2, custom_id: 'reject_alliance_proposal', label: 'Reject', style: 4, emoji: { name: '❌' } }
-            ]
-          }
+              {
+                type: 2,
+                custom_id: 'approve_alliance_proposal',
+                label: 'Approve Standings',
+                style: 3,
+                emoji: { name: '✅' },
+              },
+              {
+                type: 2,
+                custom_id: 'reject_alliance_proposal',
+                label: 'Reject',
+                style: 4,
+                emoji: { name: '❌' },
+              },
+            ],
+          },
         ];
 
         const formData = new FormData();
         formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
 
         const blueprintData = { alliances, blacklist: blacklist || { players: [], alliances: [] } };
-        const jsonBlob = new Blob([JSON.stringify(blueprintData)], { type: 'application/octet-stream' });
+        const jsonBlob = new Blob([JSON.stringify(blueprintData)], {
+          type: 'application/octet-stream',
+        });
         formData.append('files[0]', jsonBlob, 'diplomacy-blueprint.dat');
 
         const channelId = process.env.WAR_ROOM_CHANNEL_ID;
-        const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-          method: 'POST',
-          headers: { Authorization: `Bot ${botToken}` },
-          body: formData
-        });
+        const discordRes = await fetch(
+          `https://discord.com/api/v10/channels/${channelId}/messages`,
+          {
+            method: 'POST',
+            headers: { Authorization: `Bot ${botToken}` },
+            body: formData,
+          },
+        );
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
           throw new Error(`Discord API Error: ${discordRes.status} - ${errorText}`);
         }
 
-        return res.status(200).json({ success: true, message: 'Alliance proposal dispatched to Discord!' });
+        return res
+          .status(200)
+          .json({ success: true, message: 'Alliance proposal dispatched to Discord!' });
       }
 
       // ======================================================================
@@ -304,13 +374,25 @@ export default async function handler(req, res) {
           fields: [
             { name: '👤 Declared By', value: `\`${submittedBy || 'Anonymous'}\``, inline: true },
             { name: '⏱️ Submitted', value: `<t:${nowUnix}:R>`, inline: true },
-            { name: '🎯 Defense Target', value: `Week ${targetWeek} vs \`${threatName}\``, inline: true },
-            { name: '🛡️ Displaced Holder', value: `**[${displacedAlly || 'Ally'}]**`, inline: true },
-            { name: '📦 Settlement Model', value: isBuyout ? '💰 2-Installment Buyout' : '⇄ Calendar Swap (0 Chest Cost)', inline: true },
-            { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false }
+            {
+              name: '🎯 Defense Target',
+              value: `Week ${targetWeek} vs \`${threatName}\``,
+              inline: true,
+            },
+            {
+              name: '🛡️ Displaced Holder',
+              value: `**[${displacedAlly || 'Ally'}]**`,
+              inline: true,
+            },
+            {
+              name: '📦 Settlement Model',
+              value: isBuyout ? '💰 2-Installment Buyout' : '⇄ Calendar Swap (0 Chest Cost)',
+              inline: true,
+            },
+            { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false },
           ],
           footer: { text: 'Last Asylum NAP Council' },
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
 
         const components = [
@@ -322,17 +404,17 @@ export default async function handler(req, res) {
                 custom_id: 'approve_override_proposal',
                 label: 'Approve Defense Override',
                 style: 3,
-                emoji: { name: '✅' }
+                emoji: { name: '✅' },
               },
               {
                 type: 2,
                 custom_id: 'reject_override_proposal',
                 label: 'Reject Override',
                 style: 4,
-                emoji: { name: '❌' }
-              }
-            ]
-          }
+                emoji: { name: '❌' },
+              },
+            ],
+          },
         ];
 
         const formData = new FormData();
@@ -343,29 +425,36 @@ export default async function handler(req, res) {
           targetWeek: Number(targetWeek),
           threatName,
           displacedAlly,
-          action
+          action,
         };
-        const jsonBlob = new Blob([JSON.stringify(blueprintData)], { type: 'application/octet-stream' });
+        const jsonBlob = new Blob([JSON.stringify(blueprintData)], {
+          type: 'application/octet-stream',
+        });
         formData.append('files[0]', jsonBlob, 'override-blueprint.dat');
 
         const channelId = process.env.WAR_ROOM_CHANNEL_ID;
-        const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-          method: 'POST',
-          headers: { Authorization: `Bot ${botToken}` },
-          body: formData
-        });
+        const discordRes = await fetch(
+          `https://discord.com/api/v10/channels/${channelId}/messages`,
+          {
+            method: 'POST',
+            headers: { Authorization: `Bot ${botToken}` },
+            body: formData,
+          },
+        );
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
           throw new Error(`Discord API Error: ${discordRes.status} - ${errorText}`);
         }
 
-        return res.status(200).json({ success: true, message: 'Defense override proposal dispatched!' });
+        return res
+          .status(200)
+          .json({ success: true, message: 'Defense override proposal dispatched!' });
       }
 
       default:
         return res.status(400).json({
-          error: `Unsupported proposal type: "${type || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`
+          error: `Unsupported proposal type: "${type || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`,
         });
     }
   } catch (error) {

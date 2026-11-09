@@ -13,25 +13,34 @@ const REWARDS_DRAFT_KEY = 'la_rewards_planner_draft';
 const POOL_LIMITS = {
   commanders_will: 5,
   loyal_servant: 10,
-  followers_heart: 20
+  followers_heart: 20,
 };
 
 const CHEST_VALUES = {
   commanders_will: { diamonds: 8800, tickets: 44 },
   loyal_servant: { diamonds: 4400, tickets: 40 },
-  followers_heart: { diamonds: 1600, tickets: 36 }
+  followers_heart: { diamonds: 1600, tickets: 36 },
 };
 
 const KINGS_CROWN = {
   diamonds: 4800,
   tickets: 24,
-  max_eligible_rank: 4
+  max_eligible_rank: 4,
 };
 
 const AUTO_ALLIANCE_PALETTE = [
-  '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
-  '#dd6b20', '#319795', '#d69e2e', '#805ad5', '#d53f8c',
-  '#38a169', '#00b5d8'
+  '#e68e00',
+  '#a400af',
+  '#0070f3',
+  '#25bb00',
+  '#e53e3e',
+  '#dd6b20',
+  '#319795',
+  '#d69e2e',
+  '#805ad5',
+  '#d53f8c',
+  '#38a169',
+  '#00b5d8',
 ];
 
 // ==========================================================================
@@ -43,10 +52,30 @@ export function initDefaultTiers() {
     originalTiers = JSON.parse(JSON.stringify(window.REWARDS_CONFIG.distribution_tiers));
   } else {
     originalTiers = [
-      { id: 'tier_1', min_rank: 1, max_rank: 1, chests: { commanders_will: 1, loyal_servant: 3, followers_heart: 1 } },
-      { id: 'tier_2', min_rank: 2, max_rank: 3, chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 3 } },
-      { id: 'tier_3', min_rank: 4, max_rank: 5, chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 2 } },
-      { id: 'tier_4', min_rank: 6, max_rank: 8, chests: { commanders_will: 0, loyal_servant: 1, followers_heart: 3 } }
+      {
+        id: 'tier_1',
+        min_rank: 1,
+        max_rank: 1,
+        chests: { commanders_will: 1, loyal_servant: 3, followers_heart: 1 },
+      },
+      {
+        id: 'tier_2',
+        min_rank: 2,
+        max_rank: 3,
+        chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 3 },
+      },
+      {
+        id: 'tier_3',
+        min_rank: 4,
+        max_rank: 5,
+        chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 2 },
+      },
+      {
+        id: 'tier_4',
+        min_rank: 6,
+        max_rank: 8,
+        chests: { commanders_will: 0, loyal_servant: 1, followers_heart: 3 },
+      },
     ];
   }
   draftTiers = JSON.parse(JSON.stringify(originalTiers));
@@ -101,7 +130,11 @@ export async function fetchLiveRewardsState() {
     const res = await fetch(`/api/state?scope=rewards&t=${Date.now()}`);
     if (res.ok) {
       const data = await res.json();
-      if (data.distribution_tiers && Array.isArray(data.distribution_tiers) && data.distribution_tiers.length > 0) {
+      if (
+        data.distribution_tiers &&
+        Array.isArray(data.distribution_tiers) &&
+        data.distribution_tiers.length > 0
+      ) {
         originalTiers = JSON.parse(JSON.stringify(data.distribution_tiers));
 
         if (!isRewardsPlannerActive) {
@@ -120,7 +153,7 @@ export async function fetchLiveMapState() {
   try {
     const [stateRes, colorsRes] = await Promise.all([
       fetch(`/api/state?scope=alliances&t=${Date.now()}`),
-      fetch('/api/colors', { cache: 'no-store' })
+      fetch('/api/colors', { cache: 'no-store' }),
     ]);
 
     let hasUpdate = false;
@@ -147,10 +180,7 @@ export async function syncAllLiveState() {
   const tableEl = document.getElementById('payout-table-body');
 
   try {
-    await Promise.allSettled([
-      fetchLiveRewardsState(),
-      fetchLiveMapState()
-    ]);
+    await Promise.allSettled([fetchLiveRewardsState(), fetchLiveMapState()]);
   } finally {
     const restored = checkAndRestoreRewardsDraft();
     if (!restored) {
@@ -203,7 +233,7 @@ export function addTier() {
     id: `tier_${Date.now()}`,
     min_rank: nextMin,
     max_rank: nextMin,
-    chests: { commanders_will: 0, loyal_servant: 0, followers_heart: 0 }
+    chests: { commanders_will: 0, loyal_servant: 0, followers_heart: 0 },
   });
 
   rechainTiers(draftTiers);
@@ -249,11 +279,14 @@ export function renderTierList() {
   const rankLabel = container.dataset.rankLabel || 'Rank';
   const activeList = isRewardsPlannerActive ? draftTiers : originalTiers;
 
-  container.innerHTML = activeList.map((tier, index) => {
-    const isSingle = tier.min_rank === tier.max_rank;
-    const rangeText = isSingle ? `${rankLabel} ${tier.min_rank}` : `${rankLabel} ${tier.min_rank}–${tier.max_rank}`;
+  container.innerHTML = activeList
+    .map((tier, index) => {
+      const isSingle = tier.min_rank === tier.max_rank;
+      const rangeText = isSingle
+        ? `${rankLabel} ${tier.min_rank}`
+        : `${rankLabel} ${tier.min_rank}–${tier.max_rank}`;
 
-    return `
+      return `
       <div class="rewards-tier-row" 
            data-tier-index="${index}"
            data-min-rank="${tier.min_rank}" 
@@ -299,7 +332,8 @@ export function renderTierList() {
         </div>
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 
   syncAllianceTagsFromMapState();
 }
@@ -315,22 +349,24 @@ export function updatePayoutTable() {
 
   const rowsHtml = [];
 
-  activeList.forEach(tier => {
-    const baseDiamonds = (tier.chests.commanders_will * CHEST_VALUES.commanders_will.diamonds) +
-                         (tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.diamonds) +
-                         (tier.chests.followers_heart * CHEST_VALUES.followers_heart.diamonds);
+  activeList.forEach((tier) => {
+    const baseDiamonds =
+      tier.chests.commanders_will * CHEST_VALUES.commanders_will.diamonds +
+      tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.diamonds +
+      tier.chests.followers_heart * CHEST_VALUES.followers_heart.diamonds;
 
-    const baseTickets = (tier.chests.commanders_will * CHEST_VALUES.commanders_will.tickets) +
-                        (tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.tickets) +
-                        (tier.chests.followers_heart * CHEST_VALUES.followers_heart.tickets);
+    const baseTickets =
+      tier.chests.commanders_will * CHEST_VALUES.commanders_will.tickets +
+      tier.chests.loyal_servant * CHEST_VALUES.loyal_servant.tickets +
+      tier.chests.followers_heart * CHEST_VALUES.followers_heart.tickets;
 
     const ranks = [];
     for (let r = tier.min_rank; r <= tier.max_rank; r++) {
       ranks.push(r);
     }
 
-    const hostRanks = ranks.filter(r => r <= KINGS_CROWN.max_eligible_rank);
-    const nonHostRanks = ranks.filter(r => r > KINGS_CROWN.max_eligible_rank);
+    const hostRanks = ranks.filter((r) => r <= KINGS_CROWN.max_eligible_rank);
+    const nonHostRanks = ranks.filter((r) => r > KINGS_CROWN.max_eligible_rank);
 
     const generateRow = (groupRanks, hasBonus) => {
       if (groupRanks.length === 0) return '';
@@ -372,22 +408,31 @@ export function syncAllianceTagsFromMapState() {
   const liveDiscordColors = window.DISCORD_COLORS || {};
 
   const rankedAlliances = Object.entries(mapData.alliances)
-    .filter(([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '')
+    .filter(
+      ([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '',
+    )
     .sort(([_, a], [__, b]) => Number(a.rank) - Number(b.rank))
     .map(([tag, data], index) => ({
       tag,
       rank: Number(data.rank),
-      color: liveDiscordColors[tag] || data.color || AUTO_ALLIANCE_PALETTE[index % AUTO_ALLIANCE_PALETTE.length] || 'var(--accent-color)'
+      color:
+        liveDiscordColors[tag] ||
+        data.color ||
+        AUTO_ALLIANCE_PALETTE[index % AUTO_ALLIANCE_PALETTE.length] ||
+        'var(--accent-color)',
     }));
 
-  document.querySelectorAll('.tier-alliance-tags').forEach(container => {
+  document.querySelectorAll('.tier-alliance-tags').forEach((container) => {
     const minRank = parseInt(container.dataset.minRank, 10);
     const maxRank = parseInt(container.dataset.maxRank, 10);
 
-    const matching = rankedAlliances.filter(a => a.rank >= minRank && a.rank <= maxRank);
+    const matching = rankedAlliances.filter((a) => a.rank >= minRank && a.rank <= maxRank);
     if (matching.length > 0) {
       container.innerHTML = matching
-        .map(a => `<span class="alliance-badge" style="color: ${a.color}; font-weight: bold;">[${a.tag}]</span>`)
+        .map(
+          (a) =>
+            `<span class="alliance-badge" style="color: ${a.color}; font-weight: bold;">[${a.tag}]</span>`,
+        )
         .join(' ');
     } else {
       container.innerHTML = '';
@@ -401,7 +446,7 @@ export function syncAllianceTagsFromMapState() {
 
 function calculatePoolTotals() {
   const totals = { commanders_will: 0, loyal_servant: 0, followers_heart: 0 };
-  draftTiers.forEach(tier => {
+  draftTiers.forEach((tier) => {
     const memberCount = Math.max(1, tier.max_rank - tier.min_rank + 1);
     totals.commanders_will += (tier.chests.commanders_will || 0) * memberCount;
     totals.loyal_servant += (tier.chests.loyal_servant || 0) * memberCount;
@@ -415,16 +460,20 @@ export function updateRewardsProposalUI() {
   const badgeEl = document.getElementById('reward-change-badge');
 
   if (!isRewardsPlannerActive) {
-    if (submitBtn) { submitBtn.classList.add('hidden'); submitBtn.disabled = true; }
+    if (submitBtn) {
+      submitBtn.classList.add('hidden');
+      submitBtn.disabled = true;
+    }
     if (badgeEl) badgeEl.textContent = '0';
     return;
   }
 
   const hasStructuralChanges = JSON.stringify(draftTiers) !== JSON.stringify(originalTiers);
   const totals = calculatePoolTotals();
-  const isOverPool = totals.commanders_will > POOL_LIMITS.commanders_will ||
-                     totals.loyal_servant > POOL_LIMITS.loyal_servant ||
-                     totals.followers_heart > POOL_LIMITS.followers_heart;
+  const isOverPool =
+    totals.commanders_will > POOL_LIMITS.commanders_will ||
+    totals.loyal_servant > POOL_LIMITS.loyal_servant ||
+    totals.followers_heart > POOL_LIMITS.followers_heart;
 
   if (badgeEl) badgeEl.textContent = hasStructuralChanges ? '!' : '0';
 
@@ -474,13 +523,14 @@ export async function submitRewardProposal() {
   const payload = {
     type: 'rewards',
     timestamp: new Date().toISOString(),
-    distribution: draftTiers
+    distribution: draftTiers,
   };
 
-  const diffItems = draftTiers.map(tier => {
-    const isSingle = tier.min_rank === tier.max_rank;
-    const label = isSingle ? `Rank ${tier.min_rank}` : `Rank ${tier.min_rank}–${tier.max_rank}`;
-    return `
+  const diffItems = draftTiers
+    .map((tier) => {
+      const isSingle = tier.min_rank === tier.max_rank;
+      const label = isSingle ? `Rank ${tier.min_rank}` : `Rank ${tier.min_rank}–${tier.max_rank}`;
+      return `
       <div>
         <strong>${label}</strong>: 
         🟡 ×${tier.chests.commanders_will || 0} | 
@@ -488,7 +538,8 @@ export async function submitRewardProposal() {
         🔵 ×${tier.chests.followers_heart || 0}
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 
   submitProposalWithAuth({
     type: 'rewards',
@@ -501,7 +552,7 @@ export async function submitRewardProposal() {
       } catch (e) {}
       originalTiers = JSON.parse(JSON.stringify(draftTiers));
       toggleRewardsPlanner(false);
-    }
+    },
   });
 }
 

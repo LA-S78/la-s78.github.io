@@ -13,7 +13,7 @@ const schemas = JSON.parse(readFileSync('.github/discord.json', 'utf8'));
 const targets = [
   { name: 'owner', guildId: process.env.DISCORD_GUILD_ID_OWNER },
   { name: 'nap', guildId: process.env.DISCORD_GUILD_ID_NAP || process.env.DISCORD_GUILD_ID },
-  { name: 'wlo', guildId: process.env.DISCORD_GUILD_ID_WLO }
+  { name: 'wlo', guildId: process.env.DISCORD_GUILD_ID_WLO },
 ];
 
 for (const target of targets) {
@@ -31,9 +31,9 @@ for (const target of targets) {
     method: 'PUT',
     headers: {
       Authorization: `Bot ${token}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(commands)
+    body: JSON.stringify(commands),
   });
 
   if (!res.ok) {

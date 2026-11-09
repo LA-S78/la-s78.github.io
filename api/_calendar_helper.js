@@ -8,8 +8,8 @@ export const DEFAULT_CALENDAR_CONFIG = {
     { week: 1, is_kw: true, phase: 'Kingdom War Week 1', capitol_rank: 3 },
     { week: 2, is_kw: true, phase: 'Kingdom War Week 2', capitol_rank: 2 },
     { week: 3, is_kw: true, phase: 'Kingdom War Week 3', capitol_rank: 1 },
-    { week: 4, is_kw: false, phase: 'NAP Rest Week (Off-Week)', capitol_rank: 4 }
-  ]
+    { week: 4, is_kw: false, phase: 'NAP Rest Week (Off-Week)', capitol_rank: 4 },
+  ],
 };
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -33,20 +33,20 @@ export function getCycleState(targetDate = new Date(), customConfig = {}) {
   const currentWeekNumber = Math.floor(cycleDayZeroIndexed / 7) + 1; // 1 to 4
   const dayOfWeekNumber = (cycleDayZeroIndexed % 7) + 1; // 1 = Monday, 6 = Saturday, 7 = Sunday
 
-  const weekConfig = config.capitol_rotation.find(w => w.week === currentWeekNumber) || {
+  const weekConfig = config.capitol_rotation.find((w) => w.week === currentWeekNumber) || {
     week: currentWeekNumber,
     is_kw: false,
     phase: 'Unknown Phase',
-    capitol_rank: 4
+    capitol_rank: 4,
   };
 
   // Calculate upcoming reset (00:00 GT / 02:00 UTC)
   const daysSinceAnchor = Math.floor((targetTime - anchorTime) / MS_PER_DAY);
-  const nextResetTime = new Date(anchorTime + ((daysSinceAnchor + 1) * MS_PER_DAY));
+  const nextResetTime = new Date(anchorTime + (daysSinceAnchor + 1) * MS_PER_DAY);
 
   // Saturday of the current week (Day 6 of the week = Kingdom War Battle day)
   const daysUntilSaturday = 6 - dayOfWeekNumber;
-  const kwBattleTime = new Date(anchorTime + ((daysSinceAnchor + daysUntilSaturday) * MS_PER_DAY));
+  const kwBattleTime = new Date(anchorTime + (daysSinceAnchor + daysUntilSaturday) * MS_PER_DAY);
 
   return {
     cycleDay, // 1 to 28
@@ -58,7 +58,7 @@ export function getCycleState(targetDate = new Date(), customConfig = {}) {
     nextResetUtc: nextResetTime.toISOString(),
     nextResetTimestamp: Math.floor(nextResetTime.getTime() / 1000),
     kwBattleTimestamp: Math.floor(kwBattleTime.getTime() / 1000),
-    isKWBattleDay: weekConfig.is_kw && dayOfWeekNumber === 6
+    isKWBattleDay: weekConfig.is_kw && dayOfWeekNumber === 6,
   };
 }
 
@@ -78,14 +78,14 @@ export function generateCycleEvents(startDate, endDate, customConfig = {}) {
   const endElapsedDays = Math.ceil((endMs - anchorTime) / MS_PER_DAY);
 
   for (let dayOffset = startElapsedDays; dayOffset <= endElapsedDays; dayOffset++) {
-    const dayStartUtc = new Date(anchorTime + (dayOffset * MS_PER_DAY));
-    const dayEndUtc = new Date(anchorTime + ((dayOffset + 1) * MS_PER_DAY));
+    const dayStartUtc = new Date(anchorTime + dayOffset * MS_PER_DAY);
+    const dayEndUtc = new Date(anchorTime + (dayOffset + 1) * MS_PER_DAY);
 
     const totalDays = config.cycle_length_days;
     const cycleDay = (((dayOffset % totalDays) + totalDays) % totalDays) + 1;
     const weekNum = Math.floor((cycleDay - 1) / 7) + 1;
     const dayOfWeek = ((cycleDay - 1) % 7) + 1; // 1 = Mon ... 6 = Sat, 7 = Sun
-    const weekConfig = config.capitol_rotation.find(w => w.week === weekNum);
+    const weekConfig = config.capitol_rotation.find((w) => w.week === weekNum);
 
     const dateStr = dayStartUtc.toISOString().split('T')[0];
 
@@ -96,10 +96,10 @@ export function generateCycleEvents(startDate, endDate, customConfig = {}) {
         title: `👑 Capitol Rotation: Rank #${weekConfig.capitol_rank}`,
         description: `Week ${weekNum} begins. Alliance Rank #${weekConfig.capitol_rank} holds Capitol privileges.`,
         start: dayStartUtc.toISOString(),
-        end: new Date(dayStartUtc.getTime() + (7 * MS_PER_DAY)).toISOString(),
+        end: new Date(dayStartUtc.getTime() + 7 * MS_PER_DAY).toISOString(),
         type: 'rotation',
         color: '#b8975a',
-        allDay: true
+        allDay: true,
       });
     }
 
@@ -113,21 +113,21 @@ export function generateCycleEvents(startDate, endDate, customConfig = {}) {
         end: dayEndUtc.toISOString(),
         type: 'war',
         color: '#8f0000',
-        allDay: true
+        allDay: true,
       });
     }
 
     // 3. Might Snapshot Windows (KW Week 1, Days 3–5)
-    if (weekNum === 1 && (dayOfWeek >= 3 && dayOfWeek <= 5)) {
+    if (weekNum === 1 && dayOfWeek >= 3 && dayOfWeek <= 5) {
       events.push({
         id: `might-snapshot-d${dayOfWeek}-${dateStr}`,
         title: `📸 Capitol Might Snapshot (Day ${dayOfWeek})`,
         description: `Contenders must surpass current holder's might before daily reset (00:00 GT).`,
-        start: new Date(dayEndUtc.getTime() - (10 * 60 * 1000)).toISOString(),
+        start: new Date(dayEndUtc.getTime() - 10 * 60 * 1000).toISOString(),
         end: dayEndUtc.toISOString(),
         type: 'snapshot',
         color: '#3b82f6',
-        allDay: false
+        allDay: false,
       });
     }
   }

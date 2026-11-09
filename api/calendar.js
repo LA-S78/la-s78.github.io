@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     }
   } else {
     const holderEntry = Object.entries(alliances).find(
-      ([_, data]) => parseInt(data.rank, 10) === currentStatus.capitolRank
+      ([_, data]) => parseInt(data.rank, 10) === currentStatus.capitolRank,
     );
     if (holderEntry) capitolHolderTag = `[${holderEntry[0]}]`;
   }
@@ -73,13 +73,14 @@ export default async function handler(req, res) {
     nextHolderTag = `[${nextScheduledTag}]`;
     const nextActualRank = alliances[nextScheduledTag]?.rank;
     if (nextActualRank) {
-      nextHolderRankLabel = parseInt(nextActualRank, 10) !== nextWeekConfig?.capitol_rank
-        ? `Rank #${nextActualRank} • Override Schedule`
-        : `Rank #${nextActualRank}`;
+      nextHolderRankLabel =
+        parseInt(nextActualRank, 10) !== nextWeekConfig?.capitol_rank
+          ? `Rank #${nextActualRank} • Override Schedule`
+          : `Rank #${nextActualRank}`;
     }
   } else {
     const nextHolderEntry = Object.entries(alliances).find(
-      ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank
+      ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank,
     );
     if (nextHolderEntry) nextHolderTag = `[${nextHolderEntry[0]}]`;
   }
@@ -92,7 +93,7 @@ export default async function handler(req, res) {
     start: new Date(nextWeekResetTs * 1000).toISOString(),
     end: new Date(nextWeekResetTs * 1000 + 3600000).toISOString(),
     type: 'rotation',
-    allDay: false
+    allDay: false,
   });
 
   // Kingdom War Battle Window Milestone
@@ -106,7 +107,7 @@ export default async function handler(req, res) {
       start: kwBattleDate.toISOString(),
       end: new Date(kwBattleDate.getTime() + 4 * 3600000).toISOString(),
       type: 'war',
-      allDay: false
+      allDay: false,
     });
   }
 
@@ -121,8 +122,8 @@ export default async function handler(req, res) {
   });
 
   // 3. Project Recurring Events Forward Across the 28-Day Cycle Horizon
-  const windowStartMs = now.getTime() - (24 * 3600 * 1000);
-  const windowEndMs = now.getTime() + (28 * 86400 * 1000);
+  const windowStartMs = now.getTime() - 24 * 3600 * 1000;
+  const windowEndMs = now.getTime() + 28 * 86400 * 1000;
 
   const projectedEvents = [];
 
@@ -137,9 +138,7 @@ export default async function handler(req, res) {
       continue;
     }
 
-    const stepMs = recurrence === '2days'
-      ? 2 * 86400 * 1000
-      : 7 * 86400 * 1000;
+    const stepMs = recurrence === '2days' ? 2 * 86400 * 1000 : 7 * 86400 * 1000;
 
     const baseStartMs = new Date(evt.start).getTime();
     if (isNaN(baseStartMs)) {
@@ -164,7 +163,7 @@ export default async function handler(req, res) {
         projectedEvents.push({
           ...evt,
           start: new Date(curStartMs).toISOString(),
-          end: new Date(curEndMs).toISOString()
+          end: new Date(curEndMs).toISOString(),
         });
       }
       curStartMs += stepMs;
@@ -174,12 +173,12 @@ export default async function handler(req, res) {
 
   // 4. Combine and Sort Chronologically
   const allEvents = [...cycleMilestones, ...projectedEvents].sort(
-    (a, b) => new Date(a.start) - new Date(b.start)
+    (a, b) => new Date(a.start) - new Date(b.start),
   );
 
   return res.status(200).json({
     status: currentStatus,
     capitolHolder: capitolHolderTag,
-    events: allEvents
+    events: allEvents,
   });
 }

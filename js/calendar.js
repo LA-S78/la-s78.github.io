@@ -33,13 +33,13 @@
     }
   }
 
-  const isManagementSession = (tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp)) || isDevPreview;
-  const sessionScope = isManagementSession ? (tokenPayload?.scope || 'WLO') : null;
+  const isManagementSession =
+    (tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp)) || isDevPreview;
+  const sessionScope = isManagementSession ? tokenPayload?.scope || 'WLO' : null;
   const isGlobalAdmin = sessionScope?.toLowerCase() === 'global';
 
-  const activeAlliance = (!isGlobalAdmin && sessionScope)
-    ? sessionScope.trim()
-    : (allianceParam || null);
+  const activeAlliance =
+    !isGlobalAdmin && sessionScope ? sessionScope.trim() : allianceParam || null;
 
   let allEvents = [];
 
@@ -103,7 +103,9 @@
 
     // Broadcast live clock week so kvk-scheduler.js stays 100% synced
     window.__LIVE_CLOCK_WEEK__ = status.clockWeek;
-    window.dispatchEvent(new CustomEvent('calendar:clock-synced', { detail: { clockWeek: status.clockWeek } }));
+    window.dispatchEvent(
+      new CustomEvent('calendar:clock-synced', { detail: { clockWeek: status.clockWeek } }),
+    );
 
     const kwBox = document.getElementById('metric-kw-box');
     const kwCountdown = document.getElementById('metric-kw-countdown');
@@ -113,7 +115,11 @@
         const kwDate = new Date(status.kwBattleTimestamp * 1000);
         kwCountdown.textContent = status.isKWBattleDay
           ? '🔥 TODAY'
-          : kwDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+          : kwDate.toLocaleDateString(undefined, {
+              weekday: 'short',
+              month: 'short',
+              day: 'numeric',
+            });
       } else {
         kwBox.style.opacity = '0.5';
         kwCountdown.textContent = 'None (Rest)';
@@ -122,14 +128,13 @@
 
     function updateResetClock() {
       const now = Date.now();
-      const diff = Math.max(0, (status.nextResetTimestamp * 1000) - now);
+      const diff = Math.max(0, status.nextResetTimestamp * 1000 - now);
       const hours = Math.floor(diff / 3600000);
       const mins = Math.floor((diff % 3600000) / 60000);
       const secs = Math.floor((diff % 60000) / 1000);
       const countdownEl = document.getElementById('metric-reset-countdown');
       if (countdownEl) {
-        countdownEl.textContent =
-          `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        countdownEl.textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
       }
     }
 
@@ -173,11 +178,23 @@
     let filtered = [];
 
     if (!activeAlliance || selected === 'global') {
-      filtered = allEvents.filter(e => !e.scope || e.scope.toLowerCase() === 'global' || e.type === 'war' || e.type === 'rotation');
+      filtered = allEvents.filter(
+        (e) =>
+          !e.scope ||
+          e.scope.toLowerCase() === 'global' ||
+          e.type === 'war' ||
+          e.type === 'rotation',
+      );
       if (filterStatusTag) filterStatusTag.style.display = 'none';
     } else if (selected === 'combined') {
-      filtered = allEvents.filter(e => {
-        if (!e.scope || e.scope.toLowerCase() === 'global' || e.type === 'war' || e.type === 'rotation') return true;
+      filtered = allEvents.filter((e) => {
+        if (
+          !e.scope ||
+          e.scope.toLowerCase() === 'global' ||
+          e.type === 'war' ||
+          e.type === 'rotation'
+        )
+          return true;
         return e.scope.trim().toLowerCase() === activeAlliance.toLowerCase();
       });
       if (filterStatusTag) {
@@ -185,7 +202,9 @@
         filterStatusTag.textContent = `🛡️ [${activeAlliance}] Operations Active`;
       }
     } else {
-      filtered = allEvents.filter(e => e.scope && e.scope.trim().toLowerCase() === activeAlliance.toLowerCase());
+      filtered = allEvents.filter(
+        (e) => e.scope && e.scope.trim().toLowerCase() === activeAlliance.toLowerCase(),
+      );
       if (filterStatusTag) {
         filterStatusTag.style.display = 'block';
         filterStatusTag.textContent = `🛡️ [${activeAlliance}] Internal Only`;
@@ -205,29 +224,49 @@
     if (!timelineContainer) return;
 
     if (!eventsList || eventsList.length === 0) {
-      timelineContainer.innerHTML = '<div class="cal-status-banner">No operations scheduled for this perspective.</div>';
+      timelineContainer.innerHTML =
+        '<div class="cal-status-banner">No operations scheduled for this perspective.</div>';
       return;
     }
 
-    timelineContainer.innerHTML = eventsList.map((evt) => {
-      const start = new Date(evt.start);
-      const gtHours = (start.getUTCHours() - 2 + 24) % 24;
-      const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
-      const gtTimeStr = evt.allDay ? 'All Day' : `${String(gtHours).padStart(2, '0')}:${gtMins} GT`;
-      const localDateStr = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-      const localTimeStr = evt.allDay ? '' : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    timelineContainer.innerHTML = eventsList
+      .map((evt) => {
+        const start = new Date(evt.start);
+        const gtHours = (start.getUTCHours() - 2 + 24) % 24;
+        const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
+        const gtTimeStr = evt.allDay
+          ? 'All Day'
+          : `${String(gtHours).padStart(2, '0')}:${gtMins} GT`;
+        const localDateStr = start.toLocaleDateString(undefined, {
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+        });
+        const localTimeStr = evt.allDay
+          ? ''
+          : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
-      let recurrenceLabel = '';
-      if (evt.recurrence === '2days') recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Every 2 Days</span>';
-      else if (evt.recurrence === 'weekly') recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Weekly</span>';
+        let recurrenceLabel = '';
+        if (evt.recurrence === '2days')
+          recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Every 2 Days</span>';
+        else if (evt.recurrence === 'weekly')
+          recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Weekly</span>';
 
-      const forceLabel = evt.notify_target === 'everyone' ? '<span class="event-tag-pill pill-force">🚨 Mandatory</span>' : '';
-      const borderStyle = evt.color ? `border-left-color: ${evt.color} !important;` : '';
+        const forceLabel =
+          evt.notify_target === 'everyone'
+            ? '<span class="event-tag-pill pill-force">🚨 Mandatory</span>'
+            : '';
+        const borderStyle = evt.color ? `border-left-color: ${evt.color} !important;` : '';
 
-      const canDelete = isManagementSession && evt.id && evt.id.startsWith('evt-') &&
-        (sessionScope && evt.scope && evt.scope.toLowerCase() === sessionScope.toLowerCase());
+        const canDelete =
+          isManagementSession &&
+          evt.id &&
+          evt.id.startsWith('evt-') &&
+          sessionScope &&
+          evt.scope &&
+          evt.scope.toLowerCase() === sessionScope.toLowerCase();
 
-      return `
+        return `
         <div class="timeline-event-row event-${evt.type || 'custom'}" style="${borderStyle}">
           <div class="event-main">
             <div class="event-title-line">
@@ -246,9 +285,10 @@
           </div>
         </div>
       `;
-    }).join('');
+      })
+      .join('');
 
-    timelineContainer.querySelectorAll('.btn-delete-event').forEach(btn => {
+    timelineContainer.querySelectorAll('.btn-delete-event').forEach((btn) => {
       btn.addEventListener('click', () => handleDeleteEvent(btn.dataset.eventId));
     });
   }
@@ -265,11 +305,13 @@
     if (isGlobalAdmin) {
       if (mgmtPanel) mgmtPanel.classList.add('scope-global');
       if (mgmtScopeTag) mgmtScopeTag.textContent = '👑 KINGDOM ADMIN';
-      if (mgmtScopeDesc) mgmtScopeDesc.textContent = 'Scheduling Kingdom-wide alerts and operations';
+      if (mgmtScopeDesc)
+        mgmtScopeDesc.textContent = 'Scheduling Kingdom-wide alerts and operations';
       if (formHeading) formHeading.textContent = 'Create Kingdom Operation ([GLOBAL])';
     } else {
       if (mgmtScopeTag) mgmtScopeTag.textContent = `🛡️ [${sessionScope}] LEADERSHIP`;
-      if (mgmtScopeDesc) mgmtScopeDesc.textContent = `Managing internal operations for [${sessionScope}]`;
+      if (mgmtScopeDesc)
+        mgmtScopeDesc.textContent = `Managing internal operations for [${sessionScope}]`;
       if (formHeading) formHeading.textContent = `Create [${sessionScope}] Operation`;
     }
 
@@ -282,13 +324,55 @@
     const submitBtn = document.getElementById('btn-submit-event');
 
     const OPERATION_PRESETS = {
-      crystal_cluster: { title: "Crystal Cluster Valley", color: "#7946C0", duration: 0.5, recurrence: "weekly", description: "Free For All event every Sunday" },
-      elixir_scramble: { title: "Elixir Scramble", color: "#24523B", duration: 0.5, recurrence: "weekly", description: "Team Battle event every Friday" },
-      survival_battle: { title: "Survival Battle", color: "#CF6214", duration: 4.0, recurrence: "none", description: "Complete tasks to earn rewards" },
-      kill_event: { title: "Kill Event", color: "#B12A2A", duration: 24.0, recurrence: "none", description: "Invaders from other servers arrive! Shield up" },
-      kvk_battle: { title: "Kingdom vs Kingdom Battle", color: "#8ED2EF", duration: 1.0, recurrence: "none", description: "The battle for the Royal Castle begins!" },
-      gear_event: { title: "Gear Event", color: "#303A40", duration: 48.0, recurrence: "none", description: "Get rewarded for upgrading gear" },
-      cheese_trap: { title: "Cheese Trap", color: "#FAB22F", duration: 0.5, recurrence: "2days", description: "Help fend off the Cheese Thief" }
+      crystal_cluster: {
+        title: 'Crystal Cluster Valley',
+        color: '#7946C0',
+        duration: 0.5,
+        recurrence: 'weekly',
+        description: 'Free For All event every Sunday',
+      },
+      elixir_scramble: {
+        title: 'Elixir Scramble',
+        color: '#24523B',
+        duration: 0.5,
+        recurrence: 'weekly',
+        description: 'Team Battle event every Friday',
+      },
+      survival_battle: {
+        title: 'Survival Battle',
+        color: '#CF6214',
+        duration: 4.0,
+        recurrence: 'none',
+        description: 'Complete tasks to earn rewards',
+      },
+      kill_event: {
+        title: 'Kill Event',
+        color: '#B12A2A',
+        duration: 24.0,
+        recurrence: 'none',
+        description: 'Invaders from other servers arrive! Shield up',
+      },
+      kvk_battle: {
+        title: 'Kingdom vs Kingdom Battle',
+        color: '#8ED2EF',
+        duration: 1.0,
+        recurrence: 'none',
+        description: 'The battle for the Royal Castle begins!',
+      },
+      gear_event: {
+        title: 'Gear Event',
+        color: '#303A40',
+        duration: 48.0,
+        recurrence: 'none',
+        description: 'Get rewarded for upgrading gear',
+      },
+      cheese_trap: {
+        title: 'Cheese Trap',
+        color: '#FAB22F',
+        duration: 0.5,
+        recurrence: '2days',
+        description: 'Help fend off the Cheese Thief',
+      },
     };
 
     let activePresetColor = null;
@@ -320,7 +404,8 @@
             mgmtPanel.style.boxShadow = `0 4px 20px ${selected.color}22`;
             submitBtn.style.background = selected.color;
             submitBtn.style.borderColor = selected.color;
-            submitBtn.style.color = (selected.color === '#FAB22F' || selected.color === '#8ED2EF') ? '#0b0d11' : '#ffffff';
+            submitBtn.style.color =
+              selected.color === '#FAB22F' || selected.color === '#8ED2EF' ? '#0b0d11' : '#ffffff';
           }
         } else {
           resetPanelTheme();
@@ -350,7 +435,9 @@
     }
 
     if (btnCancel && formEl) {
-      btnCancel.addEventListener('click', () => { formEl.style.display = 'none'; });
+      btnCancel.addEventListener('click', () => {
+        formEl.style.display = 'none';
+      });
     }
 
     if (formEl) {
@@ -360,7 +447,10 @@
         const timeVal = document.getElementById('evt-input-time').value;
         const [, mm] = timeVal.split(':').map(Number);
         if (mm % 5 !== 0) {
-          showNotification('Game Time must be set in 5-minute increments (:00, :05, :10, etc.)', 'error');
+          showNotification(
+            'Game Time must be set in 5-minute increments (:00, :05, :10, etc.)',
+            'error',
+          );
           return;
         }
 
@@ -368,7 +458,10 @@
         const customRoleId = customRoleInput.value.trim();
 
         if (notifyTarget === 'custom_role' && !/^\d{17,20}$/.test(customRoleId)) {
-          showNotification('Please enter a valid 17-20 digit Discord Role ID for the custom alert target.', 'error');
+          showNotification(
+            'Please enter a valid 17-20 digit Discord Role ID for the custom alert target.',
+            'error',
+          );
           customRoleInput.focus();
           return;
         }
@@ -388,15 +481,15 @@
             notify_target: notifyTarget,
             custom_role_id: notifyTarget === 'custom_role' ? customRoleId : null,
             color: activePresetColor,
-            description: document.getElementById('evt-input-details').value
-          }
+            description: document.getElementById('evt-input-details').value,
+          },
         };
 
         try {
           const res = await fetch('/api/manage-event', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
           });
           const result = await res.json();
           if (!res.ok) throw new Error(result.error || 'Failed to save event');
@@ -426,7 +519,7 @@
       const res = await fetch('/api/manage-event', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: tokenParam, action: 'delete', eventId })
+        body: JSON.stringify({ token: tokenParam, action: 'delete', eventId }),
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || 'Failed to delete event');

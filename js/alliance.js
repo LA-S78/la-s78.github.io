@@ -9,7 +9,7 @@ const ALLIANCE_DRAFT_KEY = 'la_alliance_planner_draft';
 
 const DEFAULT_ALLIANCE_COLORS = {
   WLO: '#25bb00',
-  'RÂVN': '#cece00',
+  RÂVN: '#cece00',
   RAVN: '#cece00',
   MIA: '#a400af',
   BOTS: '#0070f3',
@@ -17,13 +17,22 @@ const DEFAULT_ALLIANCE_COLORS = {
   PHNX: '#dd6b20',
   HMDA: '#d53f8c',
   NAVI: '#319795',
-  HeKi: '#d69e2e'
+  HeKi: '#d69e2e',
 };
 
 const AUTO_PALETTE = [
-  '#25bb00', '#cece00', '#a400af', '#0070f3', '#e53e3e',
-  '#dd6b20', '#d53f8c', '#319795', '#d69e2e', '#805ad5',
-  '#38a169', '#00b5d8'
+  '#25bb00',
+  '#cece00',
+  '#a400af',
+  '#0070f3',
+  '#e53e3e',
+  '#dd6b20',
+  '#d53f8c',
+  '#319795',
+  '#d69e2e',
+  '#805ad5',
+  '#38a169',
+  '#00b5d8',
 ];
 
 export let isAlliancePlannerActive = false;
@@ -50,7 +59,7 @@ function resolveAllianceColor(tag, explicitColor = null, rank = null) {
     const stripDiacritics = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const normalizedTarget = stripDiacritics(cleanTag);
     const matchedDiscordKey = Object.keys(liveDiscordColors).find(
-      (k) => k === k.toUpperCase() && stripDiacritics(k) === normalizedTarget
+      (k) => k === k.toUpperCase() && stripDiacritics(k) === normalizedTarget,
     );
     if (matchedDiscordKey) {
       return liveDiscordColors[matchedDiscordKey];
@@ -84,10 +93,14 @@ export function initBootstrapData() {
   const dipEl = document.getElementById('diplomacy-data-bootstrap');
 
   if (!window.MAP_STATE && mapEl?.textContent?.trim()) {
-    try { window.MAP_STATE = JSON.parse(mapEl.textContent); } catch (e) {}
+    try {
+      window.MAP_STATE = JSON.parse(mapEl.textContent);
+    } catch (e) {}
   }
   if (!window.DIPLOMACY_DATA && dipEl?.textContent?.trim()) {
-    try { window.DIPLOMACY_DATA = JSON.parse(dipEl.textContent); } catch (e) {}
+    try {
+      window.DIPLOMACY_DATA = JSON.parse(dipEl.textContent);
+    } catch (e) {}
   }
 
   const mapData = window.MAP_STATE || {};
@@ -114,15 +127,15 @@ export function initBootstrapData() {
       rank: parsedRank,
       type: data.type || (data.parent_tag ? 'academy' : 'main'),
       parent_tag: data.parent_tag ? String(data.parent_tag).trim() : null,
-      academies: Array.isArray(data.academies) ? data.academies.map(a => String(a).trim()) : [],
+      academies: Array.isArray(data.academies) ? data.academies.map((a) => String(a).trim()) : [],
       is_nap: data.is_nap !== undefined ? Boolean(data.is_nap) : true,
-      color: resolveAllianceColor(cleanTag, data.color, parsedRank)
+      color: resolveAllianceColor(cleanTag, data.color, parsedRank),
     };
   });
 
   // Reconcile academies from diplomacy.yml using exact case first
   if (Array.isArray(diplomacyData.nap_academies)) {
-    diplomacyData.nap_academies.forEach(acad => {
+    diplomacyData.nap_academies.forEach((acad) => {
       const rawAcadName = (acad.name || '').trim();
       const parentTag = (acad.parent || '').trim();
       if (!rawAcadName || !parentTag) return;
@@ -131,7 +144,7 @@ export function initBootstrapData() {
       let acadTag = rawAcadName;
       if (!originalAlliances[acadTag]) {
         const caseInsensitiveCandidate = Object.keys(originalAlliances).find(
-          k => k !== parentTag && k.toLowerCase() === rawAcadName.toLowerCase()
+          (k) => k !== parentTag && k.toLowerCase() === rawAcadName.toLowerCase(),
         );
         if (caseInsensitiveCandidate) {
           acadTag = caseInsensitiveCandidate;
@@ -147,7 +160,7 @@ export function initBootstrapData() {
           parent_tag: parentTag,
           academies: [],
           is_nap: true,
-          color: '#718096'
+          color: '#718096',
         };
       } else if (acadTag !== parentTag) {
         originalAlliances[acadTag].type = 'academy';
@@ -163,8 +176,12 @@ export function initBootstrapData() {
   }
 
   originalBlacklist = {
-    players: Array.isArray(diplomacyData.blacklist_players) ? [...diplomacyData.blacklist_players] : [],
-    alliances: Array.isArray(diplomacyData.blacklist_alliances) ? [...diplomacyData.blacklist_alliances] : []
+    players: Array.isArray(diplomacyData.blacklist_players)
+      ? [...diplomacyData.blacklist_players]
+      : [],
+    alliances: Array.isArray(diplomacyData.blacklist_alliances)
+      ? [...diplomacyData.blacklist_alliances]
+      : [],
   };
 
   draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
@@ -176,7 +193,7 @@ function saveDraftToStorage() {
   try {
     const bundle = {
       alliances: draftAlliances,
-      blacklist: draftBlacklist
+      blacklist: draftBlacklist,
     };
     localStorage.setItem(ALLIANCE_DRAFT_KEY, JSON.stringify(bundle));
   } catch (e) {}
@@ -233,7 +250,7 @@ export async function fetchLiveAllianceState() {
   try {
     const [stateRes, colorsRes] = await Promise.all([
       fetch(`/api/state?scope=alliances&t=${Date.now()}`),
-      fetch('/api/colors', { cache: 'no-store' })
+      fetch('/api/colors', { cache: 'no-store' }),
     ]);
 
     if (colorsRes.ok) {
@@ -242,7 +259,11 @@ export async function fetchLiveAllianceState() {
 
     if (stateRes.ok) {
       const data = await stateRes.json();
-      if (data.alliances && typeof data.alliances === 'object' && Object.keys(data.alliances).length > 0) {
+      if (
+        data.alliances &&
+        typeof data.alliances === 'object' &&
+        Object.keys(data.alliances).length > 0
+      ) {
         const normalizedLive = {};
 
         Object.entries(data.alliances).forEach(([tag, allyData]) => {
@@ -260,19 +281,22 @@ export async function fetchLiveAllianceState() {
             rank: parsedRank,
             parent_tag: allyData.parent_tag ? String(allyData.parent_tag).trim() : null,
             academies: Array.isArray(allyData.academies)
-              ? allyData.academies.map(a => String(a).trim()).filter(Boolean)
+              ? allyData.academies.map((a) => String(a).trim()).filter(Boolean)
               : [],
-            color: resolveAllianceColor(cleanTag, allyData.color, parsedRank)
+            color: resolveAllianceColor(cleanTag, allyData.color, parsedRank),
           };
         });
 
         originalAlliances = normalizedLive;
       }
 
-      if (data.blacklist && (Array.isArray(data.blacklist.players) || Array.isArray(data.blacklist.alliances))) {
+      if (
+        data.blacklist &&
+        (Array.isArray(data.blacklist.players) || Array.isArray(data.blacklist.alliances))
+      ) {
         originalBlacklist = {
           players: data.blacklist.players || [],
-          alliances: data.blacklist.alliances || []
+          alliances: data.blacklist.alliances || [],
         };
       }
 
@@ -304,8 +328,8 @@ function getSortedLadder(alliancesObj) {
 export function moveAllianceRank(tag, direction) {
   if (!isAlliancePlannerActive) return;
 
-  const ladder = getSortedLadder(draftAlliances).filter(a => a.rank !== null);
-  const currentIndex = ladder.findIndex(a => a.tag === tag);
+  const ladder = getSortedLadder(draftAlliances).filter((a) => a.rank !== null);
+  const currentIndex = ladder.findIndex((a) => a.tag === tag);
   if (currentIndex === -1) return;
 
   const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
@@ -348,7 +372,7 @@ export function unlinkAcademy(parentTag, academyTag) {
 
   if (draftAlliances[parentTag]) {
     draftAlliances[parentTag].academies = (draftAlliances[parentTag].academies || []).filter(
-      a => a !== academyTag
+      (a) => a !== academyTag,
     );
   }
 
@@ -366,14 +390,14 @@ export function linkAcademyPrompt(parentTag) {
   if (!isAlliancePlannerActive) return;
 
   const availableAcademies = Object.values(draftAlliances).filter(
-    a => a.tag !== parentTag && !a.parent_tag
+    (a) => a.tag !== parentTag && !a.parent_tag,
   );
 
-  const promptOptions = availableAcademies.map(a => `[${a.tag}]`).join(', ');
+  const promptOptions = availableAcademies.map((a) => `[${a.tag}]`).join(', ');
   const selectedInput = prompt(
     `Enter exact alliance tag to link as an Academy under [${parentTag}] (case-sensitive, e.g. RâvN or râvn):\n${
       promptOptions ? `Available: ${promptOptions}` : 'Or type a new academy tag to create it:'
-    }`
+    }`,
   );
   if (!selectedInput) return;
 
@@ -391,7 +415,7 @@ export function linkAcademyPrompt(parentTag) {
       parent_tag: parentTag,
       academies: [],
       is_nap: true,
-      color: '#718096'
+      color: '#718096',
     };
   } else {
     draftAlliances[cleanTag].type = 'academy';
@@ -423,7 +447,7 @@ export function addContender(tag, name) {
     return;
   }
 
-  const ladder = getSortedLadder(draftAlliances).filter(a => a.rank !== null);
+  const ladder = getSortedLadder(draftAlliances).filter((a) => a.rank !== null);
   const nextRank = ladder.length > 0 ? ladder[ladder.length - 1].rank + 1 : 1;
 
   draftAlliances[cleanTag] = {
@@ -434,7 +458,7 @@ export function addContender(tag, name) {
     parent_tag: null,
     academies: [],
     is_nap: true,
-    color: resolveAllianceColor(cleanTag, null, nextRank)
+    color: resolveAllianceColor(cleanTag, null, nextRank),
   };
 
   saveDraftToStorage();
@@ -446,9 +470,9 @@ export function removeContender(tag) {
   if (!isAlliancePlannerActive || !draftAlliances[tag]) return;
 
   // Also clean up any parent's academy references to this tag
-  Object.values(draftAlliances).forEach(ally => {
+  Object.values(draftAlliances).forEach((ally) => {
     if (Array.isArray(ally.academies)) {
-      ally.academies = ally.academies.filter(a => a !== tag);
+      ally.academies = ally.academies.filter((a) => a !== tag);
     }
     if (ally.parent_tag === tag) {
       ally.parent_tag = null;
@@ -459,7 +483,7 @@ export function removeContender(tag) {
   delete draftAlliances[tag];
 
   // Re-normalize sequential ranks for remaining ranked alliances
-  const ladder = getSortedLadder(draftAlliances).filter(a => a.rank !== null);
+  const ladder = getSortedLadder(draftAlliances).filter((a) => a.rank !== null);
   ladder.forEach((item, index) => {
     item.rank = index + 1;
     draftAlliances[item.tag].rank = item.rank;
@@ -511,42 +535,59 @@ export function renderStandingsHierarchy() {
   const activeAlliances = isAlliancePlannerActive ? draftAlliances : originalAlliances;
   const ladder = getSortedLadder(activeAlliances);
 
-  const totalNap = Object.values(activeAlliances).filter(a => a.is_nap).length;
+  const totalNap = Object.values(activeAlliances).filter((a) => a.is_nap).length;
   if (countBadge) countBadge.textContent = `${totalNap} NAP Alliances`;
 
   const playerAlliance = (localStorage.getItem('auth-alliance') || '').trim();
 
-  container.innerHTML = ladder.map((alliance, index) => {
-    const isRanked = alliance.rank !== null && alliance.rank !== undefined;
-    const isTop3 = isRanked && alliance.rank <= 3;
-    const rankTier = isTop3 ? (alliance.rank === 1 ? 'rank-gold' : alliance.rank === 2 ? 'rank-silver' : 'rank-bronze') : '';
-    const isSelf = playerAlliance && alliance.tag === playerAlliance;
-    const displayColor = resolveAllianceColor(alliance.tag, alliance.color, alliance.rank);
+  container.innerHTML = ladder
+    .map((alliance, index) => {
+      const isRanked = alliance.rank !== null && alliance.rank !== undefined;
+      const isTop3 = isRanked && alliance.rank <= 3;
+      const rankTier = isTop3
+        ? alliance.rank === 1
+          ? 'rank-gold'
+          : alliance.rank === 2
+            ? 'rank-silver'
+            : 'rank-bronze'
+        : '';
+      const isSelf = playerAlliance && alliance.tag === playerAlliance;
+      const displayColor = resolveAllianceColor(alliance.tag, alliance.color, alliance.rank);
 
-    const academyPills = (alliance.academies || []).map(acadTag => `
+      const academyPills = (alliance.academies || [])
+        .map(
+          (acadTag) => `
       <span class="academy-pill" title="Protected Academy">
         🎓 [${acadTag}]
         ${isAlliancePlannerActive ? `<button type="button" class="btn-unlink-acad" data-action="unlink-acad" data-parent="${alliance.tag}" data-acad="${acadTag}">&times;</button>` : ''}
       </span>
-    `).join('');
+    `,
+        )
+        .join('');
 
-    return `
+      return `
       <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}" data-tag="${alliance.tag}">
         <div class="ladder-rank-col">
           <span class="ladder-rank-badge ${rankTier}">
             ${isRanked ? `#${alliance.rank}` : '--'}
           </span>
-          ${isAlliancePlannerActive && isRanked ? `
+          ${
+            isAlliancePlannerActive && isRanked
+              ? `
             <div class="ladder-steppers">
               <button type="button" class="ladder-step-btn" data-action="rank-up" data-tag="${alliance.tag}" ${index === 0 ? 'disabled' : ''}>▲</button>
               <button type="button" class="ladder-step-btn" data-action="rank-down" data-tag="${alliance.tag}">▼</button>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
 
         <div class="ladder-identity-col">
           <div class="ladder-primary-line">
-            ${isAlliancePlannerActive ? `
+            ${
+              isAlliancePlannerActive
+                ? `
               <input
                 type="color"
                 class="alliance-color-picker"
@@ -555,9 +596,11 @@ export function renderStandingsHierarchy() {
                 value="${displayColor.startsWith('#') ? displayColor : '#b8975a'}"
                 title="Change [${alliance.tag}] Color"
               />
-            ` : `
+            `
+                : `
               <span class="alliance-color-indicator" style="background-color: ${displayColor}"></span>
-            `}
+            `
+            }
             <strong class="ladder-tag" style="color: ${displayColor}">[${alliance.tag}]</strong>
             <span class="ladder-name">${alliance.name}</span>
             ${alliance.parent_tag ? `<span class="academy-child-badge">Academy of [${alliance.parent_tag}]</span>` : ''}
@@ -565,9 +608,13 @@ export function renderStandingsHierarchy() {
 
           <div class="ladder-sub-line">
             ${academyPills}
-            ${isAlliancePlannerActive && !alliance.parent_tag ? `
+            ${
+              isAlliancePlannerActive && !alliance.parent_tag
+                ? `
               <button type="button" class="btn-link-acad-prompt" data-action="link-acad-prompt" data-parent="${alliance.tag}">+ Link Academy</button>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
         </div>
 
@@ -575,16 +622,21 @@ export function renderStandingsHierarchy() {
           <span class="nap-badge ${alliance.is_nap ? 'nap-active' : 'nap-inactive'}">
             ${alliance.is_nap ? 'NAP Protected' : 'External'}
           </span>
-          ${isAlliancePlannerActive ? `
+          ${
+            isAlliancePlannerActive
+              ? `
             <button type="button" class="btn-nap-toggle" data-action="toggle-nap" data-tag="${alliance.tag}">
               ${alliance.is_nap ? 'Revoke NAP' : 'Grant NAP'}
             </button>
             <button type="button" class="btn-ladder-del" data-action="del-alliance" data-tag="${alliance.tag}" title="Remove Alliance">&times;</button>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 }
 
 export function renderBlacklist() {
@@ -600,27 +652,37 @@ export function renderBlacklist() {
 
   if (playersContainer) {
     if (activeBlacklist.players.length === 0) {
-      playersContainer.innerHTML = '<div class="blacklist-empty">No rogue commanders blacklisted.</div>';
+      playersContainer.innerHTML =
+        '<div class="blacklist-empty">No rogue commanders blacklisted.</div>';
     } else {
-      playersContainer.innerHTML = activeBlacklist.players.map((player, idx) => `
+      playersContainer.innerHTML = activeBlacklist.players
+        .map(
+          (player, idx) => `
         <div class="blacklist-item">
           <span class="blacklist-ign">${player}</span>
           ${isAlliancePlannerActive ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="players" data-index="${idx}">&times;</button>` : ''}
         </div>
-      `).join('');
+      `,
+        )
+        .join('');
     }
   }
 
   if (alliancesContainer) {
     if (activeBlacklist.alliances.length === 0) {
-      alliancesContainer.innerHTML = '<div class="blacklist-empty">No hostile alliances blacklisted.</div>';
+      alliancesContainer.innerHTML =
+        '<div class="blacklist-empty">No hostile alliances blacklisted.</div>';
     } else {
-      alliancesContainer.innerHTML = activeBlacklist.alliances.map((ally, idx) => `
+      alliancesContainer.innerHTML = activeBlacklist.alliances
+        .map(
+          (ally, idx) => `
         <div class="blacklist-item">
           <span class="blacklist-ign">[${ally}]</span>
           ${isAlliancePlannerActive ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="alliances" data-index="${idx}">&times;</button>` : ''}
         </div>
-      `).join('');
+      `,
+        )
+        .join('');
     }
   }
 }
@@ -656,7 +718,7 @@ export function calculateAllianceDiff() {
     }
   });
 
-  Object.keys(originalAlliances).forEach(origTag => {
+  Object.keys(originalAlliances).forEach((origTag) => {
     if (!draftAlliances[origTag]) {
       diff.push({ type: 'removed', tag: origTag });
     }
@@ -664,20 +726,24 @@ export function calculateAllianceDiff() {
 
   const origPlayers = originalBlacklist.players || [];
   const draftPlayers = draftBlacklist.players || [];
-  draftPlayers.forEach(p => {
-    if (!origPlayers.includes(p)) diff.push({ type: 'blacklist', action: 'add', target: p, category: 'players' });
+  draftPlayers.forEach((p) => {
+    if (!origPlayers.includes(p))
+      diff.push({ type: 'blacklist', action: 'add', target: p, category: 'players' });
   });
-  origPlayers.forEach(p => {
-    if (!draftPlayers.includes(p)) diff.push({ type: 'blacklist', action: 'remove', target: p, category: 'players' });
+  origPlayers.forEach((p) => {
+    if (!draftPlayers.includes(p))
+      diff.push({ type: 'blacklist', action: 'remove', target: p, category: 'players' });
   });
 
   const origAllies = originalBlacklist.alliances || [];
   const draftAllies = draftBlacklist.alliances || [];
-  draftAllies.forEach(a => {
-    if (!origAllies.includes(a)) diff.push({ type: 'blacklist', action: 'add', target: a, category: 'alliances' });
+  draftAllies.forEach((a) => {
+    if (!origAllies.includes(a))
+      diff.push({ type: 'blacklist', action: 'add', target: a, category: 'alliances' });
   });
-  origAllies.forEach(a => {
-    if (!draftAllies.includes(a)) diff.push({ type: 'blacklist', action: 'remove', target: a, category: 'alliances' });
+  origAllies.forEach((a) => {
+    if (!draftAllies.includes(a))
+      diff.push({ type: 'blacklist', action: 'remove', target: a, category: 'alliances' });
   });
 
   return diff;
@@ -688,7 +754,10 @@ export function updateAllianceProposalUI() {
   const badgeEl = document.getElementById('alliance-change-badge');
 
   if (!isAlliancePlannerActive) {
-    if (submitBtn) { submitBtn.classList.add('hidden'); submitBtn.disabled = true; }
+    if (submitBtn) {
+      submitBtn.classList.add('hidden');
+      submitBtn.disabled = true;
+    }
     if (badgeEl) badgeEl.textContent = '0';
     return;
   }
@@ -752,19 +821,28 @@ export async function submitAllianceProposal() {
     timestamp: new Date().toISOString(),
     alliances: draftAlliances,
     blacklist: draftBlacklist,
-    diff: diff
+    diff: diff,
   };
 
-  const diffHtml = diff.map(d => {
-    if (d.type === 'rank') return `<div>• <strong>[${d.tag}]</strong>: Rank <code>#${d.from}</code> ➔ <code>#${d.to}</code></div>`;
-    if (d.type === 'academy') return `<div>• <strong>[${d.tag}]</strong>: Assigned as Academy of <strong>[${d.parent}]</strong></div>`;
-    if (d.type === 'nap') return `<div>• <strong>[${d.tag}]</strong>: NAP Status <code>${d.status}</code></div>`;
-    if (d.type === 'color') return `<div>• 🎨 <strong>[${d.tag}]</strong>: Color updated to <code>${d.to}</code></div>`;
-    if (d.type === 'blacklist') return `<div>• ⚠️ <strong>Blacklist ${d.action.toUpperCase()}</strong>: [${d.target}] (${d.category})</div>`;
-    if (d.type === 'added') return `<div>• ➕ <strong>Added [${d.tag}]</strong>: Rank #${d.rank} (${d.name})</div>`;
-    if (d.type === 'removed') return `<div>• ➖ <strong>Removed [${d.tag}]</strong> from standings</div>`;
-    return `<div>• Modified [${d.tag || 'Unknown'}]</div>`;
-  }).join('');
+  const diffHtml = diff
+    .map((d) => {
+      if (d.type === 'rank')
+        return `<div>• <strong>[${d.tag}]</strong>: Rank <code>#${d.from}</code> ➔ <code>#${d.to}</code></div>`;
+      if (d.type === 'academy')
+        return `<div>• <strong>[${d.tag}]</strong>: Assigned as Academy of <strong>[${d.parent}]</strong></div>`;
+      if (d.type === 'nap')
+        return `<div>• <strong>[${d.tag}]</strong>: NAP Status <code>${d.status}</code></div>`;
+      if (d.type === 'color')
+        return `<div>• 🎨 <strong>[${d.tag}]</strong>: Color updated to <code>${d.to}</code></div>`;
+      if (d.type === 'blacklist')
+        return `<div>• ⚠️ <strong>Blacklist ${d.action.toUpperCase()}</strong>: [${d.target}] (${d.category})</div>`;
+      if (d.type === 'added')
+        return `<div>• ➕ <strong>Added [${d.tag}]</strong>: Rank #${d.rank} (${d.name})</div>`;
+      if (d.type === 'removed')
+        return `<div>• ➖ <strong>Removed [${d.tag}]</strong> from standings</div>`;
+      return `<div>• Modified [${d.tag || 'Unknown'}]</div>`;
+    })
+    .join('');
 
   submitProposalWithAuth({
     type: 'alliance',
@@ -778,7 +856,7 @@ export async function submitAllianceProposal() {
       originalAlliances = JSON.parse(JSON.stringify(draftAlliances));
       originalBlacklist = JSON.parse(JSON.stringify(draftBlacklist));
       toggleAlliancePlanner(false);
-    }
+    },
   });
 }
 
@@ -815,22 +893,40 @@ export function bindAllianceControls() {
       if (!isAlliancePlannerActive) return;
 
       const upBtn = e.target.closest('[data-action="rank-up"]');
-      if (upBtn) { moveAllianceRank(upBtn.dataset.tag, 'up'); return; }
+      if (upBtn) {
+        moveAllianceRank(upBtn.dataset.tag, 'up');
+        return;
+      }
 
       const downBtn = e.target.closest('[data-action="rank-down"]');
-      if (downBtn) { moveAllianceRank(downBtn.dataset.tag, 'down'); return; }
+      if (downBtn) {
+        moveAllianceRank(downBtn.dataset.tag, 'down');
+        return;
+      }
 
       const unlinkBtn = e.target.closest('[data-action="unlink-acad"]');
-      if (unlinkBtn) { unlinkAcademy(unlinkBtn.dataset.parent, unlinkBtn.dataset.acad); return; }
+      if (unlinkBtn) {
+        unlinkAcademy(unlinkBtn.dataset.parent, unlinkBtn.dataset.acad);
+        return;
+      }
 
       const linkPromptBtn = e.target.closest('[data-action="link-acad-prompt"]');
-      if (linkPromptBtn) { linkAcademyPrompt(linkPromptBtn.dataset.parent); return; }
+      if (linkPromptBtn) {
+        linkAcademyPrompt(linkPromptBtn.dataset.parent);
+        return;
+      }
 
       const napToggleBtn = e.target.closest('[data-action="toggle-nap"]');
-      if (napToggleBtn) { toggleNAPStatus(napToggleBtn.dataset.tag); return; }
+      if (napToggleBtn) {
+        toggleNAPStatus(napToggleBtn.dataset.tag);
+        return;
+      }
 
       const delAllianceBtn = e.target.closest('[data-action="del-alliance"]');
-      if (delAllianceBtn) { removeContender(delAllianceBtn.dataset.tag); return; }
+      if (delAllianceBtn) {
+        removeContender(delAllianceBtn.dataset.tag);
+        return;
+      }
     });
 
     hierarchyList.addEventListener('change', (e) => {
@@ -880,7 +976,7 @@ export function bindAllianceControls() {
     });
   }
 
-  document.querySelectorAll('.blacklist-card-list').forEach(list => {
+  document.querySelectorAll('.blacklist-card-list').forEach((list) => {
     if (list.dataset.bound) return;
     list.dataset.bound = 'true';
     list.addEventListener('click', (e) => {

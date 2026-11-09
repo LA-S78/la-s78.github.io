@@ -9,37 +9,37 @@
 
   // --- AUTHENTICATION CONFIGURATION ---
   const AUTH_CONFIG = {
-    clientId: "1524254079235391558",
-    redirectUri: window.location.origin + "/en/",
+    clientId: '1524254079235391558',
+    redirectUri: window.location.origin + '/en/',
   };
 
   // --- THE THEME DICTATOR ---
   const themeColors = {
-    default: "rgb(35, 120, 45)",
-    sanctuary: "rgb(230, 160, 80)",
-    miasma: "rgb(140, 50, 180)",
+    default: 'rgb(35, 120, 45)',
+    sanctuary: 'rgb(230, 160, 80)',
+    miasma: 'rgb(140, 50, 180)',
   };
 
   function enforceThemeState() {
-    const savedTheme = localStorage.getItem("site-theme") || "default";
+    const savedTheme = localStorage.getItem('site-theme') || 'default';
     const root = document.documentElement;
 
-    if (root.getAttribute("data-theme") !== savedTheme) {
-      root.setAttribute("data-theme", savedTheme);
+    if (root.getAttribute('data-theme') !== savedTheme) {
+      root.setAttribute('data-theme', savedTheme);
     }
   }
 
   const themeDictator = new MutationObserver(() => enforceThemeState());
   themeDictator.observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ["data-theme"],
+    attributeFilter: ['data-theme'],
   });
   enforceThemeState();
 
   // --- AUTHENTICATION GATEKEEPER ---
   async function initAuthentication() {
     const urlParams = new URLSearchParams(window.location.search);
-    const oauthCode = urlParams.get("code");
+    const oauthCode = urlParams.get('code');
 
     if (oauthCode) {
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -47,90 +47,88 @@
       return;
     }
 
-    const cachedRole = localStorage.getItem("auth-role") || "public";
-    const cachedUser = localStorage.getItem("auth-username");
-    const cachedAvatar = localStorage.getItem("auth-avatar");
-    const cachedAlliance = localStorage.getItem("auth-alliance");
+    const cachedRole = localStorage.getItem('auth-role') || 'public';
+    const cachedUser = localStorage.getItem('auth-username');
+    const cachedAvatar = localStorage.getItem('auth-avatar');
+    const cachedAlliance = localStorage.getItem('auth-alliance');
 
     applyAuthUIState(cachedRole, cachedUser, cachedAvatar, cachedAlliance);
   }
 
   async function processOAuthCallback(code) {
-    const loginBtn = document.getElementById("discord-login-btn");
-    if (loginBtn) loginBtn.textContent = "Decrypting Intel...";
+    const loginBtn = document.getElementById('discord-login-btn');
+    if (loginBtn) loginBtn.textContent = 'Decrypting Intel...';
 
     try {
-      const response = await fetch("/api/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           code: code,
           redirectUri: AUTH_CONFIG.redirectUri,
         }),
       });
 
-      if (!response.ok) throw new Error("Authentication handshake rejected.");
+      if (!response.ok) throw new Error('Authentication handshake rejected.');
 
       const data = await response.json();
 
-      localStorage.setItem("auth-role", data.role);
-      localStorage.setItem("auth-username", data.username);
-      localStorage.setItem("auth-avatar", data.avatar);
-      localStorage.setItem("auth-alliance", data.alliance);
+      localStorage.setItem('auth-role', data.role);
+      localStorage.setItem('auth-username', data.username);
+      localStorage.setItem('auth-avatar', data.avatar);
+      localStorage.setItem('auth-alliance', data.alliance);
 
       applyAuthUIState(data.role, data.username, data.avatar, data.alliance);
 
-      const returnPath = localStorage.getItem("auth-return-path");
+      const returnPath = localStorage.getItem('auth-return-path');
       if (
         returnPath &&
-        returnPath !== "/" &&
-        returnPath !== "/index.html" &&
+        returnPath !== '/' &&
+        returnPath !== '/index.html' &&
         returnPath !== window.location.pathname
       ) {
-        localStorage.removeItem("auth-return-path");
-        if (window.Turbo) window.Turbo.visit(returnPath, { action: "replace" });
+        localStorage.removeItem('auth-return-path');
+        if (window.Turbo) window.Turbo.visit(returnPath, { action: 'replace' });
         else window.location.replace(returnPath);
       }
     } catch (error) {
-      console.error("Auth Error:", error);
-      const errorBanner = document.getElementById("gate-error");
+      console.error('Auth Error:', error);
+      const errorBanner = document.getElementById('gate-error');
       if (errorBanner) {
-        errorBanner.textContent =
-          "❌ Decryption Failed. Check your connection or alliance status.";
-        errorBanner.style.display = "block";
+        errorBanner.textContent = '❌ Decryption Failed. Check your connection or alliance status.';
+        errorBanner.style.display = 'block';
       }
-      if (loginBtn) loginBtn.textContent = "Log In via Discord";
+      if (loginBtn) loginBtn.textContent = 'Log In via Discord';
     }
   }
 
   function applyAuthUIState(role, username, avatar, alliance) {
     const container = document.body;
 
-    container.classList.remove("role-public", "role-member", "role-leadership");
+    container.classList.remove('role-public', 'role-member', 'role-leadership');
 
-    const isLeadership =
-      role === "R4" || role === "R5" || role === "leadership";
-    if (isLeadership) container.classList.add("role-leadership", "role-member");
-    else if (role === "member") container.classList.add("role-member");
-    else container.classList.add("role-public");
+    const isLeadership = role === 'R4' || role === 'R5' || role === 'leadership';
+    if (isLeadership) container.classList.add('role-leadership', 'role-member');
+    else if (role === 'member') container.classList.add('role-member');
+    else container.classList.add('role-public');
 
-    if (isLeadership || role === "member") {
-      const lockedElements = document.querySelectorAll(".content-locked");
-      lockedElements.forEach((el) => el.classList.remove("content-locked"));
-      const loginBtn = document.getElementById("discord-login-btn");
-      if (loginBtn) loginBtn.style.display = "none";
+    if (isLeadership || role === 'member') {
+      const lockedElements = document.querySelectorAll('.content-locked');
+      lockedElements.forEach((el) => el.classList.remove('content-locked'));
+      const loginBtn = document.getElementById('discord-login-btn');
+      if (loginBtn) loginBtn.style.display = 'none';
     }
 
-    const textUsername = document.getElementById("ui-username");
+    const textUsername = document.getElementById('ui-username');
     if (textUsername && username) textUsername.textContent = username;
 
-    const textRank = document.getElementById("ui-rank");
+    const textRank = document.getElementById('ui-rank');
     if (textRank && role) textRank.textContent = role;
 
-    const textAlliance = document.getElementById("ui-alliance");
+    const textAlliance = document.getElementById('ui-alliance');
     if (textAlliance && alliance) textAlliance.textContent = alliance;
 
-    const profileContainer = document.getElementById("ui-profile-card");
+    const profileContainer = document.getElementById('ui-profile-card');
     if (profileContainer && username) {
       profileContainer.innerHTML = `
                 <div class="user-badge">
@@ -142,55 +140,52 @@
             `;
     }
 
-    highlightAllianceRow("nap-alliance-table");
-    highlightAllianceRow("nap-ranks-table");
+    highlightAllianceRow('nap-alliance-table');
+    highlightAllianceRow('nap-ranks-table');
   }
 
   function highlightAllianceRow(tableId) {
     const table = document.getElementById(tableId);
-    const playerAlliance = localStorage.getItem("auth-alliance");
+    const playerAlliance = localStorage.getItem('auth-alliance');
 
     if (!table || !playerAlliance) return;
 
     const normalize = (str) =>
       str
         .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
     const normalizedPlayerAlliance = normalize(playerAlliance);
 
-    const rows = table.querySelectorAll("tr");
+    const rows = table.querySelectorAll('tr');
     rows.forEach((row) => {
       if (normalize(row.textContent.trim()) === normalizedPlayerAlliance) {
-        row.classList.add("highlight-alliance");
+        row.classList.add('highlight-alliance');
       }
     });
   }
 
   window.triggerDiscordLogin = function () {
-    localStorage.setItem(
-      "auth-return-path",
-      window.location.pathname + window.location.hash,
-    );
+    localStorage.setItem('auth-return-path', window.location.pathname + window.location.hash);
     const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify`;
     window.location.href = discordAuthUrl;
   };
 
   window.triggerLogout = function () {
-    localStorage.removeItem("auth-role");
-    localStorage.removeItem("auth-username");
-    localStorage.removeItem("auth-avatar");
-    localStorage.removeItem("auth-alliance");
+    localStorage.removeItem('auth-role');
+    localStorage.removeItem('auth-username');
+    localStorage.removeItem('auth-avatar');
+    localStorage.removeItem('auth-alliance');
     window.location.reload();
   };
 
   window.closeDialogGracefully = (dialog) => {
     if (!dialog) return;
-    dialog.classList.add("is-closing");
+    dialog.classList.add('is-closing');
     dialog.addEventListener(
-      "animationend",
+      'animationend',
       () => {
-        dialog.classList.remove("is-closing");
+        dialog.classList.remove('is-closing');
         dialog.close();
       },
       { once: true },
@@ -198,16 +193,16 @@
   };
 
   function applyTheme(themeName) {
-    document.documentElement.setAttribute("data-theme", themeName);
-    localStorage.setItem("site-theme", themeName);
+    document.documentElement.setAttribute('data-theme', themeName);
+    localStorage.setItem('site-theme', themeName);
   }
 
   function initThemeToggle() {
-    applyTheme(localStorage.getItem("site-theme") || "default");
+    applyTheme(localStorage.getItem('site-theme') || 'default');
   }
 
   function highlightCurrentSurvivalBattle() {
-    const table = document.querySelector(".schedule-table");
+    const table = document.querySelector('.schedule-table');
     if (!table) return;
 
     const now = new Date();
@@ -215,24 +210,24 @@
     const gameTime = new Date(now.getTime() - 2 * 3600000);
     const hours = gameTime.getUTCHours();
     const block = Math.floor(hours / 4) * 4;
-    const formattedBlock = block.toString().padStart(2, "0") + ":00";
+    const formattedBlock = block.toString().padStart(2, '0') + ':00';
 
     const dayOfWeek = gameTime.getUTCDay();
     const colIndex = dayOfWeek === 0 ? 7 : dayOfWeek;
 
-    const rows = table.querySelectorAll("tbody tr");
+    const rows = table.querySelectorAll('tbody tr');
     rows.forEach((row) => {
-      const cells = row.querySelectorAll("td");
+      const cells = row.querySelectorAll('td');
       const timeCell = cells[0];
 
       // Clear all previous highlights in this row first
-      row.classList.remove("active-row");
-      cells.forEach((cell) => cell.classList.remove("active-col"));
+      row.classList.remove('active-row');
+      cells.forEach((cell) => cell.classList.remove('active-col'));
 
       if (timeCell && timeCell.textContent.includes(formattedBlock)) {
-        row.classList.add("active-row");
+        row.classList.add('active-row');
         if (cells[colIndex]) {
-          cells[colIndex].classList.add("active-col");
+          cells[colIndex].classList.add('active-col');
         }
       }
     });
@@ -241,41 +236,38 @@
   function scrollActiveNavIntoView(activeLink = null) {
     if (!activeLink)
       activeLink =
-        document.querySelector(".nav-wrapper .active") ||
-        document.querySelector(".anchor-link.active");
+        document.querySelector('.nav-wrapper .active') ||
+        document.querySelector('.anchor-link.active');
     if (!activeLink) return;
-    const navWrapper = activeLink.closest(".nav-wrapper");
+    const navWrapper = activeLink.closest('.nav-wrapper');
     if (!navWrapper) return;
     const wrapperCenter = navWrapper.clientWidth / 2;
     const linkCenter = activeLink.offsetLeft + activeLink.clientWidth / 2;
     navWrapper.scrollTo({
       left: linkCenter - wrapperCenter,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   }
 
   function initScrollObserver() {
-    const mainContainer = document.querySelector("main");
-    const sections = document.querySelectorAll(".content-pane");
-    const navLinks = document.querySelectorAll(".anchor-link");
-    if (!mainContainer || sections.length === 0 || navLinks.length === 0)
-      return;
+    const mainContainer = document.querySelector('main');
+    const sections = document.querySelectorAll('.content-pane');
+    const navLinks = document.querySelectorAll('.anchor-link');
+    if (!mainContainer || sections.length === 0 || navLinks.length === 0) return;
     if (scrollObserver) scrollObserver.disconnect();
     const observerOptions = {
       root: mainContainer,
-      rootMargin: "-50px 0px -50% 0px",
+      rootMargin: '-50px 0px -50% 0px',
       threshold: 0,
     };
     scrollObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          navLinks.forEach((link) => link.classList.remove("active"));
-          const id = entry.target.getAttribute("id");
-          const activeLink = document.querySelector(
-            `.anchor-link[href$="#${id}"]`,
-          );
+          navLinks.forEach((link) => link.classList.remove('active'));
+          const id = entry.target.getAttribute('id');
+          const activeLink = document.querySelector(`.anchor-link[href$="#${id}"]`);
           if (activeLink) {
-            activeLink.classList.add("active");
+            activeLink.classList.add('active');
             scrollActiveNavIntoView(activeLink);
           }
         }
@@ -285,27 +277,25 @@
   }
 
   function initAnchorScrolling() {
-    const navLinks = document.querySelectorAll(".anchor-link");
-    const mainContainer = document.querySelector("main");
+    const navLinks = document.querySelectorAll('.anchor-link');
+    const mainContainer = document.querySelector('main');
     navLinks.forEach((link) => {
-      link.addEventListener("click", function (e) {
-        const href = this.getAttribute("href");
-        if (!href || !href.includes("#")) return;
-        const targetId = href.split("#")[1];
+      link.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (!href || !href.includes('#')) return;
+        const targetId = href.split('#')[1];
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
           e.preventDefault();
-          const anchorNav = document.querySelector(".anchor-nav");
-          const offsetBoundary = anchorNav
-            ? anchorNav.getBoundingClientRect().bottom
-            : 90;
+          const anchorNav = document.querySelector('.anchor-nav');
+          const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
           mainContainer.scrollTo({
             top:
               mainContainer.scrollTop +
               targetElement.getBoundingClientRect().top -
               offsetBoundary -
               15,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
         }
       });
@@ -313,28 +303,26 @@
   }
 
   function initSearchEngine() {
-    const searchInput = document.getElementById("searchInput");
+    const searchInput = document.getElementById('searchInput');
     if (!searchInput) return;
-    searchInput.addEventListener("input", function (e) {
+    searchInput.addEventListener('input', function (e) {
       const query = e.target.value.toLowerCase();
-      const items = document.querySelectorAll(".searchable-item");
+      const items = document.querySelectorAll('.searchable-item');
       items.forEach((item) => {
-        item.style.display = item.textContent.toLowerCase().includes(query)
-          ? ""
-          : "none";
+        item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
       });
     });
   }
 
   function highlightActiveLanguage() {
-    const langLinks = document.querySelectorAll(".dropdown-content a");
+    const langLinks = document.querySelectorAll('.dropdown-content a');
     if (langLinks.length === 0) return;
     const currentPath = window.location.pathname;
     const availableLangs = Array.from(langLinks)
-      .map((l) => l.getAttribute("data-lang"))
+      .map((l) => l.getAttribute('data-lang'))
       .filter(Boolean);
-    const pathParts = currentPath.split("/").filter(Boolean);
-    let currentLang = "en";
+    const pathParts = currentPath.split('/').filter(Boolean);
+    let currentLang = 'en';
     let langIndex = -1;
     for (let i = 0; i < pathParts.length; i++) {
       if (availableLangs.includes(pathParts[i])) {
@@ -344,64 +332,57 @@
       }
     }
     langLinks.forEach((link) => {
-      const targetLang = link.getAttribute("data-lang");
+      const targetLang = link.getAttribute('data-lang');
       if (!targetLang) return;
-      link.classList.remove("lang-active");
-      if (targetLang === currentLang) link.classList.add("lang-active");
+      link.classList.remove('lang-active');
+      if (targetLang === currentLang) link.classList.add('lang-active');
       let newPathParts = [...pathParts];
       if (langIndex !== -1) newPathParts[langIndex] = targetLang;
       else newPathParts.unshift(targetLang);
-      link.href =
-        "/" +
-        newPathParts.join("/") +
-        window.location.search +
-        window.location.hash;
+      link.href = '/' + newPathParts.join('/') + window.location.search + window.location.hash;
     });
   }
 
   function highlightActiveFooterNav() {
-    const footerLinks = document.querySelectorAll("footer .nav-item");
+    const footerLinks = document.querySelectorAll('footer .nav-item');
     if (footerLinks.length === 0) return;
     const currentPath = window.location.pathname;
-    const normalize = (path) =>
-      path.replace(/\/index\.html$/, "/").replace(/\/$/, "");
+    const normalize = (path) => path.replace(/\/index\.html$/, '/').replace(/\/$/, '');
     const normalizedCurrent = normalize(currentPath);
 
     footerLinks.forEach((link) => {
-      const href = link.getAttribute("href");
+      const href = link.getAttribute('href');
       if (!href) return;
-      if (normalize(href) === normalizedCurrent) link.classList.add("active");
-      else link.classList.remove("active");
+      if (normalize(href) === normalizedCurrent) link.classList.add('active');
+      else link.classList.remove('active');
     });
   }
 
   function syncHeaderSubtitle() {
-    const newSubtitle = document.getElementById("secret-subtitle-data");
-    const headerSubtitle = document.getElementById("ui-subtitle");
-    if (newSubtitle && headerSubtitle)
-      headerSubtitle.textContent = newSubtitle.textContent;
+    const newSubtitle = document.getElementById('secret-subtitle-data');
+    const headerSubtitle = document.getElementById('ui-subtitle');
+    if (newSubtitle && headerSubtitle) headerSubtitle.textContent = newSubtitle.textContent;
   }
 
   function initScrollMemory() {
-    const scrollContainer = document.querySelector("main");
+    const scrollContainer = document.querySelector('main');
     if (!scrollContainer) return;
-    const scrollKey = "scroll-pos-" + window.location.pathname;
+    const scrollKey = 'scroll-pos-' + window.location.pathname;
     requestAnimationFrame(() => {
       if (isNewNavigation) {
         scrollContainer.scrollTop = 0;
         isNewNavigation = false;
       } else {
-        const navType = performance.getEntriesByType("navigation")[0]?.type;
-        if (navType !== "navigate") {
+        const navType = performance.getEntriesByType('navigation')[0]?.type;
+        if (navType !== 'navigate') {
           const savedScroll = sessionStorage.getItem(scrollKey);
-          if (savedScroll)
-            scrollContainer.scrollTop = parseInt(savedScroll, 10);
+          if (savedScroll) scrollContainer.scrollTop = parseInt(savedScroll, 10);
         }
       }
     });
     let scrollTimeout;
     scrollContainer.addEventListener(
-      "scroll",
+      'scroll',
       () => {
         if (scrollTimeout) return;
         scrollTimeout = setTimeout(() => {
@@ -415,41 +396,41 @@
 
   // --- MAP INITIALIZATION & INTERACTION ---
   function initMapInteraction() {
-    const allSvgs = document.querySelectorAll("svg");
+    const allSvgs = document.querySelectorAll('svg');
     let mapSvg = null;
 
     allSvgs.forEach((svg) => {
-      if (svg.innerHTML.includes("inkscape:label")) mapSvg = svg;
+      if (svg.innerHTML.includes('inkscape:label')) mapSvg = svg;
     });
 
     if (!mapSvg) return;
 
-    import("./map.js")
+    import('./map.js')
       .then(async (MapModule) => {
         setTimeout(async () => {
           MapModule.initializeMapData(mapSvg);
           MapModule.enableMapHighlighting(mapSvg);
 
           // Setup the View Mode Toggle behavior
-          const btnLevel = document.getElementById("btn-mode-level");
-          const btnAlliance = document.getElementById("btn-mode-alliance");
+          const btnLevel = document.getElementById('btn-mode-level');
+          const btnAlliance = document.getElementById('btn-mode-alliance');
 
           if (btnLevel && btnAlliance) {
-            btnLevel.addEventListener("click", () => {
-              btnLevel.classList.add("active");
-              btnAlliance.classList.remove("active");
-              MapModule.setMapColorMode("level", mapSvg);
+            btnLevel.addEventListener('click', () => {
+              btnLevel.classList.add('active');
+              btnAlliance.classList.remove('active');
+              MapModule.setMapColorMode('level', mapSvg);
             });
 
-            btnAlliance.addEventListener("click", () => {
-              btnAlliance.classList.add("active");
-              btnLevel.classList.remove("active");
-              MapModule.setMapColorMode("alliance", mapSvg);
+            btnAlliance.addEventListener('click', () => {
+              btnAlliance.classList.add('active');
+              btnLevel.classList.remove('active');
+              MapModule.setMapColorMode('alliance', mapSvg);
             });
           }
 
           try {
-            const response = await fetch("/api/colors");
+            const response = await fetch('/api/colors');
             if (response.ok) {
               const allianceColors = await response.json();
               if (MapModule.setAllianceColors) {
@@ -457,20 +438,20 @@
               }
             }
           } catch (err) {
-            console.warn("Could not load public alliance colors:", err);
+            console.warn('Could not load public alliance colors:', err);
           }
         }, 50);
       })
       .catch((err) => {
-        console.error("Map Module Error: Could not load map.js", err);
+        console.error('Map Module Error: Could not load map.js', err);
       });
   }
 
   function initApp() {
     initAuthentication();
     highlightCurrentSurvivalBattle();
-    highlightAllianceRow("nap-alliance-table");
-    highlightAllianceRow("nap-ranks-table");
+    highlightAllianceRow('nap-alliance-table');
+    highlightAllianceRow('nap-ranks-table');
     initScrollObserver();
     initAnchorScrolling();
     initSearchEngine();
@@ -484,40 +465,37 @@
   }
 
   // --- EVENTS ---
-  document.addEventListener("turbo:load", initApp);
-  document.addEventListener("turbo:frame-render", initApp);
-  document.addEventListener("turbo:visit", () => {
+  document.addEventListener('turbo:load', initApp);
+  document.addEventListener('turbo:frame-render', initApp);
+  document.addEventListener('turbo:visit', () => {
     isNewNavigation = true;
   });
 
-  document.addEventListener("click", (e) => {
-    const toggleBtn = e.target.closest("#theme-toggle");
+  document.addEventListener('click', (e) => {
+    const toggleBtn = e.target.closest('#theme-toggle');
     if (toggleBtn) {
-      const themes = ["default", "sanctuary", "miasma"];
-      const currentTheme =
-        document.documentElement.getAttribute("data-theme") || "default";
+      const themes = ['default', 'sanctuary', 'miasma'];
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'default';
       let nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
       applyTheme(themes[nextIndex]);
       return;
     }
-    const logoutBtn = e.target.closest("#discord-logout-btn");
+    const logoutBtn = e.target.closest('#discord-logout-btn');
     if (logoutBtn) window.triggerLogout();
   });
 
   window.scrollPinned = function (direction) {
-    const container = document.getElementById("pinnedContainer");
+    const container = document.getElementById('pinnedContainer');
     if (!container) return;
     container.scrollBy({
-      left: direction === "left" ? -300 : 300,
-      behavior: "smooth",
+      left: direction === 'left' ? -300 : 300,
+      behavior: 'smooth',
     });
   };
 
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .catch((err) => console.warn(err));
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch((err) => console.warn(err));
     });
   }
 })();

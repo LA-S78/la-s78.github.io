@@ -20,7 +20,7 @@ async function readForApproval(filename, fallback) {
 
 const DEFAULT_FALLBACK_COLORS = {
   WLO: '#25bb00',
-  'RÂVN': '#cece00',
+  RÂVN: '#cece00',
   RAVN: '#cece00',
   MIA: '#a400af',
   BOTS: '#0070f3',
@@ -28,7 +28,7 @@ const DEFAULT_FALLBACK_COLORS = {
   PHNX: '#dd6b20',
   HMDA: '#d53f8c',
   NAVI: '#319795',
-  HeKi: '#d69e2e'
+  HeKi: '#d69e2e',
 };
 
 export default async function handler(req, res) {
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     blacklist: newBlacklist,
     submittedBy,
     secretKey,
-    snapshotUrl
+    snapshotUrl,
   } = req.body || {};
 
   // Authenticate request using bot secret
@@ -78,12 +78,16 @@ export default async function handler(req, res) {
               ...existingRewards,
               distribution_tiers: distribution,
               lastUpdated: new Date().toISOString(),
-              updatedBy: submittedBy || 'Discord Admin'
-            }
+              updatedBy: submittedBy || 'Discord Admin',
+            },
           },
-          { description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}` }
+          {
+            description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
+          },
         );
-        return res.status(200).json({ success: true, message: 'Rewards distribution updated in Gist!' });
+        return res
+          .status(200)
+          .json({ success: true, message: 'Rewards distribution updated in Gist!' });
       }
 
       // ======================================================================
@@ -94,7 +98,10 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Invalid territory changes payload.' });
         }
 
-        const currentState = await readForApproval('map-state.json', { alliances: {}, territory_ownership: {} });
+        const currentState = await readForApproval('map-state.json', {
+          alliances: {},
+          territory_ownership: {},
+        });
 
         if (!currentState.territory_ownership) {
           currentState.territory_ownership = {};
@@ -103,7 +110,7 @@ export default async function handler(req, res) {
         Object.entries(changes).forEach(([cityId, change]) => {
           currentState.territory_ownership[cityId] = {
             owner: change.to,
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           };
         });
 
@@ -118,7 +125,9 @@ export default async function handler(req, res) {
 
         await writeGist(
           { 'map-state.json': currentState },
-          { description: `Map updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}` }
+          {
+            description: `Map updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
+          },
         );
 
         // Pre-warm Edge CDN for all 3 perspectives (capped to 1.8s timeout)
@@ -128,15 +137,17 @@ export default async function handler(req, res) {
         const baseUrl = `${protocol}://${resolvedHost}`;
 
         await Promise.allSettled(
-          ['level', 'alliance', 'resource'].map(view =>
+          ['level', 'alliance', 'resource'].map((view) =>
             fetch(`${baseUrl}/api/map-image?view=${view}&v=${revision}&ext=.png`, {
               headers: { 'User-Agent': 'WarRoom-Prewarmer' },
-              signal: AbortSignal.timeout(1800)
-            })
-          )
+              signal: AbortSignal.timeout(1800),
+            }),
+          ),
         ).catch(() => {});
 
-        return res.status(200).json({ success: true, revision, message: 'Live map updated in Gist!' });
+        return res
+          .status(200)
+          .json({ success: true, revision, message: 'Live map updated in Gist!' });
       }
 
       // ======================================================================
@@ -147,7 +158,11 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Invalid alliance data provided' });
         }
 
-        const currentState = await readForApproval('map-state.json', { alliances: {}, territory_ownership: {}, blacklist: {} });
+        const currentState = await readForApproval('map-state.json', {
+          alliances: {},
+          territory_ownership: {},
+          blacklist: {},
+        });
 
         const previousAlliances = currentState.alliances || {};
         const mergedAlliances = {};
@@ -176,7 +191,7 @@ export default async function handler(req, res) {
             alert_channel_id: existing.alert_channel_id || updatedData.alert_channel_id,
             alert_role_id: existing.alert_role_id || updatedData.alert_role_id,
             officer_channel_id: existing.officer_channel_id || updatedData.officer_channel_id,
-            delegated_roles: existing.delegated_roles || updatedData.delegated_roles
+            delegated_roles: existing.delegated_roles || updatedData.delegated_roles,
           };
         });
 
@@ -193,10 +208,14 @@ export default async function handler(req, res) {
 
         await writeGist(
           { 'map-state.json': currentState },
-          { description: `Alliances & NAP updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}` }
+          {
+            description: `Alliances & NAP updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
+          },
         );
 
-        return res.status(200).json({ success: true, revision, message: 'Alliance standings updated in Gist!' });
+        return res
+          .status(200)
+          .json({ success: true, revision, message: 'Alliance standings updated in Gist!' });
       }
 
       // ======================================================================
@@ -214,11 +233,14 @@ export default async function handler(req, res) {
           macro_cycle: 1,
           current_week: 1,
           override_count: 0,
-          active_schedule: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' }
+          active_schedule: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
         };
 
         // Force override_count to at least 1 if the UI explicitly declared a buyout
-        if (declaredAction === 'buyout' && (!cycleState.override_count || cycleState.override_count === 0)) {
+        if (
+          declaredAction === 'buyout' &&
+          (!cycleState.override_count || cycleState.override_count === 0)
+        ) {
           cycleState.override_count = 1;
         }
 
@@ -228,7 +250,7 @@ export default async function handler(req, res) {
         rewardsState.cycle_state = {
           ...cycleState,
           override_count: result.nextOverrideCount,
-          active_schedule: result.newSchedule
+          active_schedule: result.newSchedule,
         };
 
         if (result.action === 'buyout' && result.buyoutTicket) {
@@ -241,20 +263,22 @@ export default async function handler(req, res) {
 
         await writeGist(
           { 'rewards-data.json': rewardsState },
-          { description: `Override Week ${targetWeek} (${result.action}) by ${submittedBy || 'Admin'}` }
+          {
+            description: `Override Week ${targetWeek} (${result.action}) by ${submittedBy || 'Admin'}`,
+          },
         );
 
         return res.status(200).json({
           success: true,
           action: result.action,
           message: result.summary,
-          newSchedule: result.newSchedule
+          newSchedule: result.newSchedule,
         });
       }
 
       default:
         return res.status(400).json({
-          error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`
+          error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`,
         });
     }
   } catch (error) {

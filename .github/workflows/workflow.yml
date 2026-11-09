@@ -68,6 +68,14 @@ jobs:
           BUILD_LOG: ${{ runner.temp }}/jekyll-build.log
         run: bundle exec ruby _scripts/check_build.rb
 
+      # Advisory: reports unformatted JS/JSON (fix with `npm run format` or format-on-save)
+      # but never blocks a build or deploy.
+      - name: Checking code formatting
+        continue-on-error: true
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run format:check
+
       - name: Uploading build artifacts
         uses: actions/upload-artifact@v4
         with:

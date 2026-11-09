@@ -4,7 +4,7 @@ import { isGistConfigured, readGist, gistJson } from './_gist.js';
 
 const DEFAULT_FALLBACK_COLORS = {
   WLO: '#25bb00',
-  'RÂVN': '#cece00',
+  RÂVN: '#cece00',
   RAVN: '#cece00',
   MIA: '#a400af',
   BOTS: '#0070f3',
@@ -12,13 +12,13 @@ const DEFAULT_FALLBACK_COLORS = {
   PHNX: '#dd6b20',
   HMDA: '#d53f8c',
   NAVI: '#319795',
-  HeKi: '#d69e2e'
+  HeKi: '#d69e2e',
 };
 
 const BASELINE_SCHEDULES = {
   1: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
   2: { downtime: 'MIA', week_1: 'BOTS', week_2: 'RÂVN', week_3: 'WLO' },
-  3: { downtime: 'RÂVN', week_1: 'MIA', week_2: 'BOTS', week_3: 'WLO' }
+  3: { downtime: 'RÂVN', week_1: 'MIA', week_2: 'BOTS', week_3: 'WLO' },
 };
 
 /**
@@ -28,16 +28,18 @@ function resolveCycleState(raw = {}) {
   const macroCycle = Number(raw?.macro_cycle) || 1;
   const baseline = BASELINE_SCHEDULES[macroCycle] || BASELINE_SCHEDULES[1];
 
-  const hasValidSchedule = raw?.active_schedule &&
+  const hasValidSchedule =
+    raw?.active_schedule &&
     typeof raw.active_schedule === 'object' &&
     Object.keys(raw.active_schedule).length > 0;
 
   return {
     macro_cycle: macroCycle,
-    current_week: raw?.current_week !== undefined && raw?.current_week !== null ? Number(raw.current_week) : 1,
+    current_week:
+      raw?.current_week !== undefined && raw?.current_week !== null ? Number(raw.current_week) : 1,
     override_count: Number(raw?.override_count) || 0,
     active_schedule: hasValidSchedule ? raw.active_schedule : { ...baseline },
-    history: Array.isArray(raw?.history) ? raw.history : []
+    history: Array.isArray(raw?.history) ? raw.history : [],
   };
 }
 
@@ -68,10 +70,10 @@ function sanitizeAlliances(rawAlliances = {}) {
       type: data?.type || (data?.parent_tag ? 'academy' : 'main'),
       parent_tag: data?.parent_tag ? String(data.parent_tag).trim() : null,
       academies: Array.isArray(data?.academies)
-        ? data.academies.map(a => String(a).trim()).filter(Boolean)
+        ? data.academies.map((a) => String(a).trim()).filter(Boolean)
         : [],
       is_nap: data?.is_nap !== undefined ? Boolean(data.is_nap) : true,
-      color: resolvedColor
+      color: resolvedColor,
     };
   });
 
@@ -107,7 +109,7 @@ export default async function handler(req, res) {
           alliances: cleanAlliances,
           territory_ownership: mapState.territory_ownership || {},
           revision: mapState.revision || 'initial',
-          lastUpdated: mapState.lastUpdated || null
+          lastUpdated: mapState.lastUpdated || null,
         });
 
       case 'alliances':
@@ -115,7 +117,7 @@ export default async function handler(req, res) {
           alliances: cleanAlliances,
           blacklist,
           revision: mapState.revision || 'initial',
-          lastUpdated: mapState.lastUpdated || null
+          lastUpdated: mapState.lastUpdated || null,
         });
 
       case 'rewards':
@@ -126,7 +128,7 @@ export default async function handler(req, res) {
           wartime_buyouts: rewardsState.wartime_buyouts || [],
           buyout_history: rewardsState.buyout_history || [],
           lastReset: rewardsState.lastReset || null,
-          lastUpdated: rewardsState.lastUpdated || null
+          lastUpdated: rewardsState.lastUpdated || null,
         });
 
       case 'all':
@@ -137,7 +139,7 @@ export default async function handler(req, res) {
             territory_ownership: mapState.territory_ownership || {},
             blacklist,
             revision: mapState.revision || 'initial',
-            lastUpdated: mapState.lastUpdated || null
+            lastUpdated: mapState.lastUpdated || null,
           },
           rewards: {
             mode: rewardsState.mode || 'standard',
@@ -146,8 +148,8 @@ export default async function handler(req, res) {
             wartime_buyouts: rewardsState.wartime_buyouts || [],
             buyout_history: rewardsState.buyout_history || [],
             lastReset: rewardsState.lastReset || null,
-            lastUpdated: rewardsState.lastUpdated || null
-          }
+            lastUpdated: rewardsState.lastUpdated || null,
+          },
         });
     }
   } catch (error) {
