@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0;url=https://la-s78.app/">
+    <!-- Only used when JavaScript is disabled; otherwise the script below redirects
+         while preserving the original path (an instant meta refresh would race it). -->
+    <noscript><meta http-equiv="refresh" content="0;url=https://la-s78.app/"></noscript>
     <title>Compendium Relocation Protocol</title>
     <script type="text/javascript">
         // Localized strings dictionary for the 8 supported site languages
@@ -51,7 +53,7 @@
             
             const actionLink = document.getElementById("fallback-link");
             actionLink.textContent = migrationData[activeLang].link;
-            actionLink.href = "https://la-s78.app/" + window.location.pathname + window.location.search + window.location.hash;
+            actionLink.href = "https://la-s78.app" + window.location.pathname + window.location.search + window.location.hash;
 
             // Execute path-preserving mechanical forwarding redirect
             window.location.href = actionLink.href;
