@@ -341,25 +341,21 @@ export function renderOperationsUI() {
 /**
  * Event Listeners & Binding
  */
+const startedPortals = new WeakSet();
 export function bindOperationsControls() {
+  // Runs on every page's turbo:load; only the calendar has the console. Once per visit:
+  // each visit (also the back button's copy of the page) brings a fresh #operations-portal.
+  const portal = document.getElementById('operations-portal');
+  if (!portal || startedPortals.has(portal)) return;
+  startedPortals.add(portal);
+
   const weekSelect = document.getElementById('ops-input-target-week');
   const threatInput = document.getElementById('ops-input-threat');
   const submitBtn = document.getElementById('btn-submit-override');
 
-  if (weekSelect && !weekSelect.dataset.bound) {
-    weekSelect.dataset.bound = 'true';
-    weekSelect.addEventListener('change', updateOverridePreview);
-  }
-
-  if (threatInput && !threatInput.dataset.bound) {
-    threatInput.dataset.bound = 'true';
-    threatInput.addEventListener('input', updateOverridePreview);
-  }
-
-  if (submitBtn && !submitBtn.dataset.bound) {
-    submitBtn.dataset.bound = 'true';
-    submitBtn.addEventListener('click', submitOverrideProposal);
-  }
+  weekSelect?.addEventListener('change', updateOverridePreview);
+  threatInput?.addEventListener('input', updateOverridePreview);
+  submitBtn?.addEventListener('click', submitOverrideProposal);
 
   if (typeof window !== 'undefined' && !window.__KVK_CLOCK_LISTENER__) {
     window.__KVK_CLOCK_LISTENER__ = true;

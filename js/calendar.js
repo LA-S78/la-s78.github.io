@@ -3,19 +3,25 @@
  * Manages operations, presets, time-conversion, and scoped perspectives.
  */
 
-(async function () {
+// The calendar is a regular page, so it can be reached by a full page load or by Turbo
+// (footer navigation, back button). initCalendar runs on both, once per visit: each visit
+// brings fresh page elements, and the ones already set up are remembered here. (Not a
+// data- attribute: Turbo's back-button copy of the page would keep it.)
+window.__calendarStarted = window.__calendarStarted || new WeakSet();
+async function initCalendar() {
+  const elContent = document.getElementById('calendar-content');
+  if (!elContent || window.__calendarStarted.has(elContent)) return;
+  window.__calendarStarted.add(elContent);
+
   // Escape data before putting it into HTML (see js/escape-html.js).
   const esc = (value) => window.escapeHtml(value);
 
   const elLoading = document.getElementById('loading-state');
   const elError = document.getElementById('error-state');
-  const elContent = document.getElementById('calendar-content');
   const elNotification = document.getElementById('action-notification');
   const filterSelect = document.getElementById('cal-scope-filter');
   const filterStatusTag = document.getElementById('filter-status-tag');
   const filterToolbar = document.getElementById('cal-filter-toolbar');
-
-  let resetClockInterval = null;
 
   // 1. Parse URL Parameters & Session Context
   const urlParams = new URLSearchParams(window.location.search);
@@ -140,14 +146,18 @@
       const mins = Math.floor((diff % 3600000) / 60000);
       const secs = Math.floor((diff % 60000) / 1000);
       const countdownEl = document.getElementById('metric-reset-countdown');
-      if (countdownEl) {
-        countdownEl.textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      if (!countdownEl) {
+        // Left the calendar page: stop ticking.
+        clearInterval(window.__calendarResetClock);
+        return;
       }
+      countdownEl.textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
-    if (resetClockInterval) clearInterval(resetClockInterval);
+    // One countdown at a time, also across visits (kept on window for that reason).
+    clearInterval(window.__calendarResetClock);
     updateResetClock();
-    resetClockInterval = setInterval(updateResetClock, 1000);
+    window.__calendarResetClock = setInterval(updateResetClock, 1000);
   }
 
   // 4. Filter Toolbar
@@ -549,4 +559,11 @@
   }
 
   await loadCalendar();
-})();
+}
+
+// Turbo may run this file again on each visit; the listener is added only once.
+if (!window.__calendarTurboListener) {
+  window.__calendarTurboListener = true;
+  document.addEventListener('turbo:load', () => initCalendar());
+}
+initCalendar();

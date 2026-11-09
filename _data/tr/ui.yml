@@ -7,10 +7,12 @@ footer:
   nav_rules: "Kurallar"
   nav_guides: "Rehberler"
   nav_alliance: "İttifak"
+  nav_calendar: "Takvim"
   aria_home: "Ana Sayfaya Git"
   aria_rules: "Sunucu Kuralları sayfasına git"
   aria_guides: "Rehberler sayfasına git"
   aria_alliance: "İttifak ve Diplomasi sayfasına git"
+  aria_calendar: "Etkinlik Takvimi sayfasına git"
 
 guides:
   heroes: "Kahramanlar & Dizilimler"

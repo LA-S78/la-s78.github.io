@@ -81,7 +81,8 @@ under *Must not change*, or someone will "fix" it.
 - **Must not change:** Updating alliance ranks in `map-state.json` updates weekly chest tiers immediately, while Capitol rotation seats remain locked until the next 4-week cycle rollover.
 
 ## Calendar & event management
-- **Purpose:** Displays the 28-day Kingdom War & Capitol rotation cycle alongside global and alliance-scoped operations (`portal/calendar.html`, `/calendar`).
+- **Purpose:** Displays the 28-day Kingdom War & Capitol rotation cycle alongside global and alliance-scoped operations (`calendar.html`, `/calendar`).
+- **Page type (owner decision):** a regular page with the footer, like Map and Alliance (everyone reads it; leaders get extra controls), not a portal page. Its styles come from `/css/portal.css`, linked inside the page so they apply only there. Its scripts start once per visit, whether reached by a full load, the footer, or the back button, and the countdown stops when the page is left. Discord links (`/calendar.html?token=…`, `?view=…`) are unchanged.
 - **Constraints:** `_calendar_helper.js` numbers weeks `1..4` (where `4` is Off-Week), whereas `rewards-data.json` and `kvk-scheduler.js` number weeks `0..3` (where `0` is `downtime`).
 - **Must not change:** Both the Top Hero Card (`api/calendar.js` / `js/calendar.js`) and the 4-Week Override Console (`js/kvk-scheduler.js`) must resolve the active Capitol holder from `rewards-data.json`'s `cycle_state.active_schedule` and highlight the active week using the live clock (`clockWeek`), never static `capitol_rank` lookups alone.
 
@@ -93,7 +94,7 @@ under *Must not change*, or someone will "fix" it.
 - **Game Time is UTC-2.** All schedule/calendar code and bot strings use this.
 - **Pull requests** must pass the "Checking build output" CI step before merge.
 - **Deploys never overlap.** The workflow's `concurrency` setting runs one deploy per branch at a time; a newer push waits rather than racing, so the newest commit always deploys last. Don't remove it.
-- **Folder layout.** Discord tool pages live in `portal/`, and their public URLs come from each page's `permalink` (e.g. `/calendar.html`), not from the folder. Files used only by the deploy (`redirect.html`, `migration.html`) live in `_deploy/`, which Jekyll never publishes. Keep public URLs unchanged when moving files.
+- **Folder layout.** Discord tool pages (single-purpose, opened from a Discord link, no footer) live in `portal/`, and their public URLs come from each page's `permalink` (e.g. `/calendar.html`), not from the folder. Files used only by the deploy (`redirect.html`, `migration.html`) live in `_deploy/`, which Jekyll never publishes. Keep public URLs unchanged when moving files.
 - **Stylesheets are split into ordered pieces.** `_css/<name>/*.css` is joined in filename order into `/css/<name>.css` by `build.rb` (plain CSS, no Sass). Order is significant (later rules win), so pieces are numbered and media queries come last. The published URLs `/css/style.css` and `/css/portal.css` must not change.
 - **One build script.** `_scripts/build.rb` is the only build definition; CI calls it rather than running its own inline steps, so a local build matches production. New build steps go in the script, not in the workflow.
 - **Code style is automatic.** JavaScript and JSON are formatted by Prettier (`.prettierrc.json`: defaults plus single quotes and 100-character lines). Don't hand-format or argue style in reviews; run `npm run format` or use format-on-save. HTML/Markdown/YAML are excluded because of Liquid tags. The CI formatting check is advisory, not blocking.

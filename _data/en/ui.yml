@@ -9,10 +9,12 @@ footer:
   nav_rules: "Rules"
   nav_guides: "Guides"
   nav_alliance: "Alliance"
+  nav_calendar: "Calendar"
   aria_home: "Go to Home page"
   aria_rules: "Go to Server Rules page"
   aria_guides: "Go to Guides page"
   aria_alliance: "Go to Alliance and Diplomacy page"
+  aria_calendar: "Go to Event Calendar page"
 
 #guide page titles
 guides:
