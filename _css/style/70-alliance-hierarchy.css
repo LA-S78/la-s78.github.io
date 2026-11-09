@@ -285,7 +285,7 @@
 }
 
 .blacklist-header h3 {
-  margin: 0;
+  margin: 0 !important;
   font-size: 0.95rem;
   color: var(--text-main);
   border-bottom: none !important;

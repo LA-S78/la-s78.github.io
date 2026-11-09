@@ -122,8 +122,8 @@ svg #layer1 path:hover {
 
 .territory-label {
   text-anchor: middle !important;
-  dominant-baseline: central;
-  alignment-baseline: central;
+  dominant-baseline: central !important;
+  alignment-baseline: central !important;
   font-weight: 600;
   font-family: var(--font-body);
   transition: fill 0.3s ease;
@@ -162,15 +162,15 @@ svg #layer1 path:hover {
 }
 
 .info-header h3 {
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   font-size: 0.88rem;
   font-family: var(--font-headers);
   color: #f3f0e8;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: none;
+  border: none !important;
 }
 
 .badge {
@@ -394,12 +394,12 @@ svg #layer1 path:hover {
 }
 
 .drawer-title h3 {
-  margin: 0;
+  margin: 0 !important;
   font-size: 0.95rem;
   font-family: var(--font-headers);
   color: var(--accent-color);
-  border: none;
-  padding: 0;
+  border: none !important;
+  padding: 0 !important;
 }
 
 .drawer-close-btn {

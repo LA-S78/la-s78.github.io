@@ -37,8 +37,8 @@
   }
 
   .header-stack {
-    height: 130px;
-    min-height: 130px;
+    height: 130px !important;
+    min-height: 130px !important;
     gap: 3rem;  
   }
   .debossed-title {
@@ -127,7 +127,7 @@
   #map-container.is-fullscreen .map-controls {
     width: 100% !important;
     max-width: 1200px !important;
-    margin-bottom: 1.5rem; 
+    margin-bottom: 1.5rem !important; 
   }
 
   #map-container.is-fullscreen .game-map {
@@ -145,7 +145,7 @@
   #map-container.is-fullscreen .info-card {
     width: 100% !important;
     max-width: 1200px !important;
-    margin-top: 1.5rem; 
+    margin-top: 1.5rem !important; 
   }
 
   @keyframes drift {

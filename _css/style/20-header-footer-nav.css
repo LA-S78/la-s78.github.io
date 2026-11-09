@@ -121,8 +121,8 @@
   margin: 0;
 }
 .anchor-link.active {
-  background-color: var(--accent-color);
-  color: #110d0b;
+  background-color: var(--accent-color) !important;
+  color: #110d0b !important;
 }
 .anchor-link:target {
   color: var(--accent-color);
@@ -198,7 +198,7 @@ footer {
 }
 .lang-dropdown {
   position: relative;
-  z-index: 9999;
+  z-index: 9999 !important;
   background-color: #1e1b1a;
   border: 1px solid #3d3734;
 }
@@ -212,7 +212,7 @@ footer {
   top: calc(100% + 2px);
   width: 100%;
   background-color: #1e1b1a;
-  z-index: 9999;
+  z-index: 9999 !important;
   list-style: none;
   padding: 0;
   margin: 0;

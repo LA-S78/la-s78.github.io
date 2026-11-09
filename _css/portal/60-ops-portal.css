@@ -181,8 +181,8 @@
 /* Strip default browser h3 margin that caused the huge blank top space */
 .ops-section-title,
 .ops-section-header h3 {
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   font-family: var(--font-headers);
   font-size: 1.05rem;
   color: var(--accent-color);
