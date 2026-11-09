@@ -230,7 +230,7 @@ export async function submitProposalWithAuth({
       clearStashedProposal();
       localStorage.removeItem('la_map_planner_draft'); // Clean up map draft
       closeModal();
-      alert("✅ Proposal successfully transmitted to the War Room on Discord!");
+      alert("✅ Proposal successfully transmitted to NAP Leadership on Discord!");
       onSuccess(resData);
     } catch (err) {
       console.error("Proposal dispatch error:", err);
