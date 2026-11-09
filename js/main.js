@@ -4,6 +4,18 @@
  * ----------------------------------------------------
  */
 (() => {
+  // initApp runs on both 'turbo:load' and 'turbo:frame-render', often twice for the same
+  // page. firstTime(el, key) returns true only the first time it's asked about this
+  // element and purpose, so each listener is attached exactly once (see DECISIONS.md).
+  const bindings = new WeakMap();
+  function firstTime(el, key) {
+    let keys = bindings.get(el);
+    if (!keys) bindings.set(el, (keys = new Set()));
+    if (keys.has(key)) return false;
+    keys.add(key);
+    return true;
+  }
+
   let scrollObserver = null;
   let isNewNavigation = false;
 
@@ -280,6 +292,7 @@
     const navLinks = document.querySelectorAll('.anchor-link');
     const mainContainer = document.querySelector('main');
     navLinks.forEach((link) => {
+      if (!firstTime(link, 'anchor-scroll')) return;
       link.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
         if (!href || !href.includes('#')) return;
@@ -304,7 +317,7 @@
 
   function initSearchEngine() {
     const searchInput = document.getElementById('searchInput');
-    if (!searchInput) return;
+    if (!searchInput || !firstTime(searchInput, 'search')) return;
     searchInput.addEventListener('input', function (e) {
       const query = e.target.value.toLowerCase();
       const items = document.querySelectorAll('.searchable-item');
@@ -380,13 +393,17 @@
         }
       }
     });
+    if (!firstTime(scrollContainer, 'scroll-memory')) return;
     let scrollTimeout;
     scrollContainer.addEventListener(
       'scroll',
       () => {
         if (scrollTimeout) return;
         scrollTimeout = setTimeout(() => {
-          sessionStorage.setItem(scrollKey, scrollContainer.scrollTop);
+          sessionStorage.setItem(
+            'scroll-pos-' + window.location.pathname,
+            scrollContainer.scrollTop,
+          );
           scrollTimeout = null;
         }, 100);
       },
@@ -403,7 +420,7 @@
       if (svg.innerHTML.includes('inkscape:label')) mapSvg = svg;
     });
 
-    if (!mapSvg) return;
+    if (!mapSvg || !firstTime(mapSvg, 'map-init')) return;
 
     import('./map.js')
       .then(async (MapModule) => {
@@ -411,23 +428,8 @@
           MapModule.initializeMapData(mapSvg);
           MapModule.enableMapHighlighting(mapSvg);
 
-          // Setup the View Mode Toggle behavior
-          const btnLevel = document.getElementById('btn-mode-level');
-          const btnAlliance = document.getElementById('btn-mode-alliance');
-
-          if (btnLevel && btnAlliance) {
-            btnLevel.addEventListener('click', () => {
-              btnLevel.classList.add('active');
-              btnAlliance.classList.remove('active');
-              MapModule.setMapColorMode('level', mapSvg);
-            });
-
-            btnAlliance.addEventListener('click', () => {
-              btnAlliance.classList.add('active');
-              btnLevel.classList.remove('active');
-              MapModule.setMapColorMode('alliance', mapSvg);
-            });
-          }
+          // The view-mode buttons (level / alliance / resource) are bound by map.js itself
+          // (bindMapControls, guarded by data-bound), so they're not bound again here.
 
           try {
             const response = await fetch('/api/colors');
