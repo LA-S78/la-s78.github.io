@@ -1424,16 +1424,23 @@ export default async function handler(req, res) {
               0,
             );
             rewardsData = updatedRewards;
-            // A rejected save is ignored here (original behaviour); network errors still throw.
-            await writeGist(
-              {
-                'rewards-nominations.json': {},
-                'rewards-data.json': updatedRewards,
-              },
-              { description: `Auto-reset to Downtime (1x) at ${new Date().toISOString()}` },
-            ).catch((err) => {
-              if (!err.status) throw err;
-            });
+            // If the new cycle can't be saved, stop: never hand out a nomination link for a
+            // cycle reset that didn't persist (DECISIONS.md, "Data storage").
+            try {
+              await writeGist(
+                {
+                  'rewards-nominations.json': {},
+                  'rewards-data.json': updatedRewards,
+                },
+                { description: `Auto-reset to Downtime (1x) at ${new Date().toISOString()}` },
+              );
+            } catch (err) {
+              console.error('Automatic Downtime reset could not be saved:', err);
+              return sendEphemeralMessage(
+                res,
+                '⚠️ Service busy: could not initialize the new reward cycle. Please retry /nominate in a few seconds.',
+              );
+            }
           } else {
             // KvK Week (1, 2, or 3): Require Steward confirmation of 1x vs 2x outcome
             const confirmComponents = [

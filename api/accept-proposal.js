@@ -4,18 +4,14 @@ import { calculateOverrideAction } from './_cycle_helper.js';
 import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
 
 /**
- * Reads one Gist file for an approval, keeping this endpoint's original behaviour:
- * if GitHub answers with an error, carry on with `fallback` instead of failing.
- * WARNING: the approval then saves on top of `fallback`, which can overwrite live data.
- * Kept as-is pending maintainer review (see the open question in docs/DECISIONS.md).
+ * Reads one Gist file for an approval. Write paths never fall back to defaults when the
+ * read fails (DECISIONS.md, "Data storage"): an approval saved on top of empty defaults
+ * would wipe live kingdom data. If GitHub can't be read, the error propagates and the
+ * Steward sees "Failed to update ..." in Discord; nothing is saved. `fallback` is only
+ * used when the read succeeds but the file doesn't exist yet.
  */
 async function readForApproval(filename, fallback) {
-  try {
-    return gistJson(await readGist(), filename, fallback);
-  } catch (err) {
-    if (err.status) return fallback;
-    throw err;
-  }
+  return gistJson(await readGist(), filename, fallback);
 }
 
 const DEFAULT_FALLBACK_COLORS = {
