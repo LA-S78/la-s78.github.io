@@ -38,16 +38,27 @@ export const LABEL_OVERRIDES = {
   Anvil_Town: { offsetY: -10 },
   Dripping_Cavern: { offsetY: -30 },
   Broken_Bridgehead: { offsetY: -25 },
-  Wheatsheaf: { offsetY: -15 }
+  Wheatsheaf: { offsetY: -15 },
 };
 
 export const COLOR_TO_LEVEL_MAP = {
-  green: 1, yellow: 2, orange: 3, purple: 4, blue: 5, red: 6, gold: "Capitol"
+  green: 1,
+  yellow: 2,
+  orange: 3,
+  purple: 4,
+  blue: 5,
+  red: 6,
+  gold: 'Capitol',
 };
 
 export const LEVEL_COLORS = {
-  green: '#25bb00', yellow: '#cece00', orange: '#e68e00', purple: '#a400af',
-  blue: '#003fad', red: '#8f0000', gold: '#b29a20'
+  green: '#25bb00',
+  yellow: '#cece00',
+  orange: '#e68e00',
+  purple: '#a400af',
+  blue: '#003fad',
+  red: '#8f0000',
+  gold: '#b29a20',
 };
 
 export const RESOURCE_PALETTE = {
@@ -57,23 +68,32 @@ export const RESOURCE_PALETTE = {
   march: '#facc15',
   training: '#dc2626',
   research: '#7c3aed',
-  building: '#ea580c'
+  building: '#ea580c',
 };
 
 export const AUTO_ALLIANCE_PALETTE = [
-  '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
-  '#dd6b20', '#319795', '#d69e2e', '#805ad5', '#d53f8c',
-  '#38a169', '#00b5d8'
+  '#e68e00',
+  '#a400af',
+  '#0070f3',
+  '#25bb00',
+  '#e53e3e',
+  '#dd6b20',
+  '#319795',
+  '#d69e2e',
+  '#805ad5',
+  '#d53f8c',
+  '#38a169',
+  '#00b5d8',
 ];
 
 export const CITY_LEVEL_MAP = {
-  1: { level: 1, label: "Level 1", group: "green" },
-  2: { level: 2, label: "Level 2", group: "yellow" },
-  3: { level: 3, label: "Level 3", group: "orange" },
-  4: { level: 4, label: "Level 4", group: "purple" },
-  5: { level: 5, label: "Level 5", group: "blue" },
-  6: { level: 6, label: "Level 6", group: "red" },
-  "Capitol": { level: "Capitol", label: "Capitol", group: "gold" }
+  1: { level: 1, label: 'Level 1', group: 'green' },
+  2: { level: 2, label: 'Level 2', group: 'yellow' },
+  3: { level: 3, label: 'Level 3', group: 'orange' },
+  4: { level: 4, label: 'Level 4', group: 'purple' },
+  5: { level: 5, label: 'Level 5', group: 'blue' },
+  6: { level: 6, label: 'Level 6', group: 'red' },
+  Capitol: { level: 'Capitol', label: 'Capitol', group: 'gold' },
 };
 
 export let cities = [];
@@ -87,7 +107,9 @@ export let DRAFT_ALLIANCE_TAGS = [];
 
 export const COLOR_FALLBACKS = { unclaimed: '#2d3748', noAllianceColor: '#718096' };
 
-export function setDraftAllianceTags(tags = []) { DRAFT_ALLIANCE_TAGS = tags; }
+export function setDraftAllianceTags(tags = []) {
+  DRAFT_ALLIANCE_TAGS = tags;
+}
 
 export function getAllianceColor(tag) {
   if (!tag || tag === 'Unclaimed') return COLOR_FALLBACKS.unclaimed;
@@ -109,7 +131,9 @@ export function getAllianceColor(tag) {
 
 export function getRankedAllianceTags() {
   const ranked = Object.entries(alliances)
-    .filter(([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '')
+    .filter(
+      ([_, data]) => data && data.rank !== undefined && data.rank !== null && data.rank !== '',
+    )
     .sort(([_, a], [__, b]) => Number(a.rank) - Number(b.rank))
     .map(([tag]) => tag);
 
@@ -120,7 +144,11 @@ export function getRankedAllianceTags() {
 }
 
 export function getSvgRoot() {
-  return document.querySelector('.game-map svg') || document.querySelector('#game-map') || document.querySelector('svg');
+  return (
+    document.querySelector('.game-map svg') ||
+    document.querySelector('#game-map') ||
+    document.querySelector('svg')
+  );
 }
 
 // ==========================================================================
@@ -135,12 +163,12 @@ export function injectResourcePatterns(svgRoot) {
     svgRoot.insertBefore(defs, svgRoot.firstChild);
   }
 
-  defs.querySelectorAll('.resource-pattern').forEach(el => el.remove());
+  defs.querySelectorAll('.resource-pattern').forEach((el) => el.remove());
 
   const resources = ['grain', 'timber', 'herbs'];
   let patternMarkup = '';
 
-  resources.forEach(res => {
+  resources.forEach((res) => {
     const baseColor = RESOURCE_PALETTE[res];
     if (!baseColor) return;
     patternMarkup += `
@@ -156,26 +184,56 @@ export function injectResourcePatterns(svgRoot) {
 
 export function getCityResourceProfile(city) {
   if (city.level === 'Capitol' || city.id === 'Royal_Castle') {
-    return { type: 'special', category: 'march', fill: RESOURCE_PALETTE.march, label: 'March Speed' };
+    return {
+      type: 'special',
+      category: 'march',
+      fill: RESOURCE_PALETTE.march,
+      label: 'March Speed',
+    };
   }
 
   if (city.level === 6 || city.group === 'red') {
     const buffLower = (city.buff || '').toLowerCase();
     if (city.buff_type === 'training' || buffLower.includes('train')) {
-      return { type: 'special', category: 'training', fill: RESOURCE_PALETTE.training, label: 'Troop Training Speed' };
+      return {
+        type: 'special',
+        category: 'training',
+        fill: RESOURCE_PALETTE.training,
+        label: 'Troop Training Speed',
+      };
     }
-    if (city.buff_type === 'research' || buffLower.includes('research') || buffLower.includes('tech')) {
-      return { type: 'special', category: 'research', fill: RESOURCE_PALETTE.research, label: 'Research Speed' };
+    if (
+      city.buff_type === 'research' ||
+      buffLower.includes('research') ||
+      buffLower.includes('tech')
+    ) {
+      return {
+        type: 'special',
+        category: 'research',
+        fill: RESOURCE_PALETTE.research,
+        label: 'Research Speed',
+      };
     }
-    return { type: 'special', category: 'building', fill: RESOURCE_PALETTE.building, label: 'Building Speed' };
+    return {
+      type: 'special',
+      category: 'building',
+      fill: RESOURCE_PALETTE.building,
+      label: 'Building Speed',
+    };
   }
 
   let res = city.resource;
   const buffLower = (city.buff || '').toLowerCase();
 
   if (!res) {
-    if (buffLower.includes('grain') || buffLower.includes('wheat') || buffLower.includes('food')) res = 'grain';
-    else if (buffLower.includes('timber') || buffLower.includes('wood') || buffLower.includes('lumber')) res = 'timber';
+    if (buffLower.includes('grain') || buffLower.includes('wheat') || buffLower.includes('food'))
+      res = 'grain';
+    else if (
+      buffLower.includes('timber') ||
+      buffLower.includes('wood') ||
+      buffLower.includes('lumber')
+    )
+      res = 'timber';
     else if (buffLower.includes('herb') || buffLower.includes('medicine')) res = 'herbs';
   }
 
@@ -185,7 +243,11 @@ export function getCityResourceProfile(city) {
 
   let isProduction = city.buff_type === 'production';
   if (!city.buff_type) {
-    isProduction = buffLower.includes('prod') || buffLower.includes('output') || buffLower.includes('yield') || !buffLower.includes('gather');
+    isProduction =
+      buffLower.includes('prod') ||
+      buffLower.includes('output') ||
+      buffLower.includes('yield') ||
+      !buffLower.includes('gather');
   }
 
   const fillValue = isProduction ? `url(#pat-prod-${res})` : RESOURCE_PALETTE[res];
@@ -196,7 +258,7 @@ export function getCityResourceProfile(city) {
     resource: res,
     isProduction,
     fill: fillValue,
-    label: `${res.charAt(0).toUpperCase() + res.slice(1)} (${modeLabel})`
+    label: `${res.charAt(0).toUpperCase() + res.slice(1)} (${modeLabel})`,
   };
 }
 
@@ -222,7 +284,10 @@ export function parseCityBuff(city) {
     if (String(buffVal).includes('%')) unit = '%';
   }
 
-  const rawName = rawBuff.replace(/([+-]?\d+(?:\.\d+)?)\s*%?/g, '').replace(/:\s*$/, '').trim();
+  const rawName = rawBuff
+    .replace(/([+-]?\d+(?:\.\d+)?)\s*%?/g, '')
+    .replace(/:\s*$/, '')
+    .trim();
   let name = rawName;
   const lower = (rawName + ' ' + buffType + ' ' + resource).toLowerCase();
 
@@ -255,7 +320,7 @@ export function parseCityBuff(city) {
     key: name.toLowerCase().replace(/\s+/g, '_'),
     name: name,
     val: Math.abs(val),
-    unit: unit
+    unit: unit,
   };
 }
 
@@ -263,13 +328,13 @@ export function calculateAllianceBuffSummary() {
   const summary = {};
   const ranked = getRankedAllianceTags();
 
-  ranked.forEach(tag => {
+  ranked.forEach((tag) => {
     if (tag && tag !== 'Unclaimed') {
       summary[tag] = { count: 0, cities: [], buffs: [], aggregatedBuffs: [] };
     }
   });
 
-  cities.forEach(city => {
+  cities.forEach((city) => {
     const owner = getCityOwner(city.id);
     if (!owner || owner === 'Unclaimed') return;
 
@@ -281,10 +346,10 @@ export function calculateAllianceBuffSummary() {
     summary[owner].cities.push(city);
   });
 
-  Object.keys(summary).forEach(owner => {
+  Object.keys(summary).forEach((owner) => {
     const buffMap = {};
 
-    summary[owner].cities.forEach(city => {
+    summary[owner].cities.forEach((city) => {
       const parsed = parseCityBuff(city);
       if (!parsed) return;
 
@@ -294,7 +359,7 @@ export function calculateAllianceBuffSummary() {
           total: 0,
           unit: parsed.unit,
           count: 0,
-          cities: []
+          cities: [],
         };
       }
 
@@ -303,9 +368,9 @@ export function calculateAllianceBuffSummary() {
       buffMap[parsed.key].cities.push(city.name || city.id.replace(/_/g, ' '));
     });
 
-    const aggList = Object.values(buffMap).map(b => ({
+    const aggList = Object.values(buffMap).map((b) => ({
       ...b,
-      label: `${b.name} +${b.total}${b.unit}`
+      label: `${b.name} +${b.total}${b.unit}`,
     }));
 
     aggList.sort((a, b) => {
@@ -317,7 +382,7 @@ export function calculateAllianceBuffSummary() {
     });
 
     summary[owner].aggregatedBuffs = aggList;
-    summary[owner].buffs = aggList.map(b => b.label);
+    summary[owner].buffs = aggList.map((b) => b.label);
   });
 
   return summary;
@@ -341,21 +406,27 @@ export function renderBuffSummaryDrawer() {
 
   const activeOverride = document.getElementById('alliance-override')?.value.trim().toLowerCase();
 
-  const rows = sortedTags.map(tag => {
-    const data = summary[tag];
-    const allianceColor = getAllianceColor(tag);
-    const isEditing = activeOverride && tag.toLowerCase() === activeOverride;
+  const rows = sortedTags
+    .map((tag) => {
+      const data = summary[tag];
+      const allianceColor = getAllianceColor(tag);
+      const isEditing = activeOverride && tag.toLowerCase() === activeOverride;
 
-    const buffBadges = data.aggregatedBuffs && data.aggregatedBuffs.length > 0
-      ? data.aggregatedBuffs.map(b => `
+      const buffBadges =
+        data.aggregatedBuffs && data.aggregatedBuffs.length > 0
+          ? data.aggregatedBuffs
+              .map(
+                (b) => `
           <span class="buff-badge" title="${b.count} ${b.count === 1 ? 'City' : 'Cities'}: ${b.cities.join(', ')}">
             ${b.name} <strong>+${b.total}${b.unit}</strong>
             ${b.count > 1 ? `<span class="buff-badge-count">×${b.count}</span>` : ''}
           </span>
-        `).join('')
-      : '<span class="buff-none">No active buffs assigned</span>';
+        `,
+              )
+              .join('')
+          : '<span class="buff-none">No active buffs assigned</span>';
 
-    return `
+      return `
       <tr class="buff-row ${isEditing ? 'is-active-target' : ''}">
         <td class="buff-col-tag">
           <span class="alliance-dot" style="background-color: ${allianceColor}"></span>
@@ -369,7 +440,8 @@ export function renderBuffSummaryDrawer() {
         </td>
       </tr>
     `;
-  }).join('');
+    })
+    .join('');
 
   contentEl.innerHTML = `
     <table class="buff-table">
@@ -430,13 +502,18 @@ export async function captureMapImage(svgRoot = null) {
       for (const sheet of document.styleSheets) {
         try {
           if (sheet.href && !sheet.href.startsWith(window.location.origin)) continue;
-          
+
           for (const rule of sheet.cssRules) {
             const cssText = rule.cssText.toLowerCase();
-            if (cssText.includes('svg') || cssText.includes('path') || 
-                cssText.includes('polygon') || cssText.includes('rect') || 
-                cssText.includes('.game-map') || cssText.includes('.mode-alliance') ||
-                cssText.includes('text')) {
+            if (
+              cssText.includes('svg') ||
+              cssText.includes('path') ||
+              cssText.includes('polygon') ||
+              cssText.includes('rect') ||
+              cssText.includes('.game-map') ||
+              cssText.includes('.mode-alliance') ||
+              cssText.includes('text')
+            ) {
               extractedCSS += rule.cssText + '\n';
             }
           }
@@ -473,7 +550,7 @@ export async function captureMapImage(svgRoot = null) {
 
     return await new Promise((resolve) => {
       const mapImg = new Image();
-      
+
       mapImg.onload = () => {
         const canvas = document.createElement('canvas');
         canvas.width = width;
@@ -482,17 +559,17 @@ export async function captureMapImage(svgRoot = null) {
 
         const textureImg = new Image();
         textureImg.crossOrigin = 'anonymous';
-        textureImg.src = '/images/rust.jpg'; 
-        
+        textureImg.src = '/images/rust.jpg';
+
         textureImg.onload = () => {
           try {
             const pattern = ctx.createPattern(textureImg, 'repeat');
             ctx.fillStyle = pattern;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+
             ctx.drawImage(mapImg, 0, 0);
             URL.revokeObjectURL(blobUrl);
-            
+
             resolve(canvas.toDataURL('image/jpeg', 1));
           } catch (err) {
             console.warn('Texture tainted canvas, falling back to solid background:', err);
@@ -526,7 +603,7 @@ export async function captureMapImage(svgRoot = null) {
         URL.revokeObjectURL(blobUrl);
         resolve(null);
       };
-      
+
       mapImg.src = blobUrl;
     });
   } catch (e) {
@@ -543,7 +620,8 @@ export function togglePlannerMode(active, svgRoot = null) {
   isPlannerActive = active;
   const root = svgRoot || getSvgRoot();
 
-  const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
+  const btnDraft =
+    document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
   if (btnDraft) {
     btnDraft.setAttribute('aria-pressed', active ? 'true' : 'false');
     btnDraft.classList.toggle('active', active);
@@ -574,7 +652,7 @@ export function togglePlannerMode(active, svgRoot = null) {
       localStorage.removeItem(DRAFT_STORAGE_KEY);
     } catch (e) {}
     currentColorMode = 'level';
-    
+
     const btnLevel = document.getElementById('btn-mode-level');
     const btnAlliance = document.getElementById('btn-mode-alliance');
     const btnResource = document.getElementById('btn-mode-resource');
@@ -598,12 +676,17 @@ export function togglePlannerMode(active, svgRoot = null) {
 }
 
 export function getCityOwner(cityId) {
-  if (isPlannerActive && draftState && draftState.territory_ownership && draftState.territory_ownership[cityId]) {
+  if (
+    isPlannerActive &&
+    draftState &&
+    draftState.territory_ownership &&
+    draftState.territory_ownership[cityId]
+  ) {
     const draftData = draftState.territory_ownership[cityId];
-    return typeof draftData === 'string' ? draftData : (draftData.owner || 'Unclaimed');
+    return typeof draftData === 'string' ? draftData : draftData.owner || 'Unclaimed';
   }
   const city = getCityById(cityId);
-  return city ? (city.owner || 'Unclaimed') : 'Unclaimed';
+  return city ? city.owner || 'Unclaimed' : 'Unclaimed';
 }
 
 export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
@@ -627,12 +710,14 @@ export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
 
 export function promptTerritoryAssignment(cityId, svgRoot = null) {
   const root = svgRoot || getSvgRoot();
-  
+
   const overrideInput = document.getElementById('alliance-override');
   if (overrideInput && overrideInput.value.trim() !== '') {
     let customOwner = overrideInput.value.trim();
-    
-    const existingTag = Object.keys(alliances).find(tag => tag.toLowerCase() === customOwner.toLowerCase());
+
+    const existingTag = Object.keys(alliances).find(
+      (tag) => tag.toLowerCase() === customOwner.toLowerCase(),
+    );
     customOwner = existingTag ? existingTag : customOwner.toUpperCase();
 
     setDraftTerritoryOwner(cityId, customOwner, root);
@@ -641,7 +726,7 @@ export function promptTerritoryAssignment(cityId, svgRoot = null) {
 
   const currentOwner = getCityOwner(cityId);
   const rankedTags = getRankedAllianceTags();
-  
+
   const cycleList = ['Unclaimed', ...rankedTags];
 
   let currentIndex = cycleList.indexOf(currentOwner);
@@ -657,7 +742,7 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
   if (!isPlannerActive || !draftState) return null;
   const changes = {};
 
-  cities.forEach(city => {
+  cities.forEach((city) => {
     const draftOwner = getCityOwner(city.id);
     const originalOwner = city.owner || 'Unclaimed';
     if (draftOwner !== originalOwner) {
@@ -670,7 +755,7 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
     submittedBy: authorName,
     timestamp: new Date().toISOString(),
     totalChanges: Object.keys(changes).length,
-    changes: changes
+    changes: changes,
   };
 }
 
@@ -700,9 +785,13 @@ export async function submitStrategyProposal() {
     payload.image = mapImageData;
   }
 
-  const diffItems = Object.entries(payload.changes).map(([cityId, shift]) => `
+  const diffItems = Object.entries(payload.changes)
+    .map(
+      ([cityId, shift]) => `
     <div><strong>${cityId.replace(/_/g, ' ')}</strong>: <code>${shift.from}</code> ➔ <code>${shift.to}</code></div>
-  `).join('');
+  `,
+    )
+    .join('');
 
   submitProposalWithAuth({
     type: 'map',
@@ -714,19 +803,25 @@ export async function submitStrategyProposal() {
         localStorage.removeItem(DRAFT_STORAGE_KEY);
       } catch (e) {}
       togglePlannerMode(false);
-    }
+    },
   });
 }
 
 export function updateProposalUI(btnSubmit = null, badge = null) {
-  const submitBtn = btnSubmit || document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
-  const badgeEl = badge || document.getElementById('change-count-badge') || document.querySelector('.draft-indicator');
-  
+  const submitBtn =
+    btnSubmit ||
+    document.getElementById('btn-submit-proposal') ||
+    document.querySelector('.submit-plan-btn');
+  const badgeEl =
+    badge ||
+    document.getElementById('change-count-badge') ||
+    document.querySelector('.draft-indicator');
+
   if (!isPlannerActive) {
-    if (submitBtn) { 
-      submitBtn.disabled = true; 
-      submitBtn.classList.add('hidden'); 
-      submitBtn.style.display = 'none'; 
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('hidden');
+      submitBtn.style.display = 'none';
     }
     if (badgeEl) {
       badgeEl.textContent = '0';
@@ -785,7 +880,8 @@ export function toggleFullscreen(mapContainer = document.getElementById('map-con
   } else {
     mapContainer.classList.remove('is-fullscreen');
     syncFullscreenUI(false, btnFullscreen);
-    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    if (document.fullscreenElement && document.exitFullscreen)
+      document.exitFullscreen().catch(() => {});
   }
 }
 
@@ -802,8 +898,10 @@ export function bindMapControls(svgRoot = null) {
   const btnAlliance = document.getElementById('btn-mode-alliance');
   const btnResource = document.getElementById('btn-mode-resource');
   const resourceLegend = document.getElementById('resource-map-legend');
-  const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
-  const btnSubmit = document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
+  const btnDraft =
+    document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
+  const btnSubmit =
+    document.getElementById('btn-submit-proposal') || document.querySelector('.submit-plan-btn');
   const btnBuffs = document.getElementById('btn-toggle-buffs');
   const btnCloseBuffs = document.getElementById('btn-close-buffs');
   const allianceInput = document.getElementById('alliance-override');
@@ -922,16 +1020,19 @@ export function bindMapControls(svgRoot = null) {
 function getVisualCenter(pathEl) {
   try {
     const totalLength = pathEl.getTotalLength();
-    if (!totalLength) throw new Error("Zero length path");
-    const samples = 32; let sumX = 0, sumY = 0;
+    if (!totalLength) throw new Error('Zero length path');
+    const samples = 32;
+    let sumX = 0,
+      sumY = 0;
     for (let i = 0; i < samples; i++) {
       const pt = pathEl.getPointAtLength((i / samples) * totalLength);
-      sumX += pt.x; sumY += pt.y;
+      sumX += pt.x;
+      sumY += pt.y;
     }
     return { x: sumX / samples, y: sumY / samples };
   } catch (e) {
     const bbox = pathEl.getBBox();
-    return { x: bbox.x + (bbox.width / 2), y: bbox.y + (bbox.height / 2) };
+    return { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2 };
   }
 }
 
@@ -941,11 +1042,12 @@ export function extractCitiesFromSvg(svgRoot) {
   const extractedCities = [];
 
   Object.entries(COLOR_TO_LEVEL_MAP).forEach(([colorLabel, assignedLevel]) => {
-    const colorGroup = svgRoot.querySelector(`g[inkscape\\:label="${colorLabel}"]`) 
-                    || svgRoot.querySelector(`g[label="${colorLabel}"]`)
-                    || svgRoot.querySelector(`g[data-label="${colorLabel}"]`)
-                    || svgRoot.querySelector(`g#${colorLabel}`)
-                    || svgRoot.querySelector(`g.${colorLabel}`);
+    const colorGroup =
+      svgRoot.querySelector(`g[inkscape\\:label="${colorLabel}"]`) ||
+      svgRoot.querySelector(`g[label="${colorLabel}"]`) ||
+      svgRoot.querySelector(`g[data-label="${colorLabel}"]`) ||
+      svgRoot.querySelector(`g#${colorLabel}`) ||
+      svgRoot.querySelector(`g.${colorLabel}`);
 
     if (!colorGroup) return;
 
@@ -954,25 +1056,26 @@ export function extractCitiesFromSvg(svgRoot) {
       const elementId = el.id || el.getAttribute('inkscape:label');
       const uniqueId = elementId || `${colorLabel}_city_${index + 1}`;
       const catalogEntry = catalog[uniqueId] || {};
-      const cityName = catalogEntry.name || el.getAttribute('inkscape:label') || uniqueId.replace(/_/g, ' ');
+      const cityName =
+        catalogEntry.name || el.getAttribute('inkscape:label') || uniqueId.replace(/_/g, ' ');
       const cityLevel = catalogEntry.level !== undefined ? catalogEntry.level : assignedLevel;
       const cityGroup = catalogEntry.group || colorLabel;
-      const cityBuff = catalogEntry.buff || "";
+      const cityBuff = catalogEntry.buff || '';
 
       if (!el.id) el.id = uniqueId;
       el.style.fill = LEVEL_COLORS[cityGroup] || LEVEL_COLORS[colorLabel];
-      if (!extractedCities.some(c => c.id === uniqueId)) {
+      if (!extractedCities.some((c) => c.id === uniqueId)) {
         extractedCities.push({
-          id: uniqueId, 
-          name: cityName, 
+          id: uniqueId,
+          name: cityName,
           level: cityLevel,
-          group: cityGroup, 
+          group: cityGroup,
           buff: cityBuff,
-          buff_type: catalogEntry.buff_type || "",
-          resource: catalogEntry.resource || "",
-          buff_val: catalogEntry.buff_val || "",
-          owner: "Unclaimed", 
-          status: null
+          buff_type: catalogEntry.buff_type || '',
+          resource: catalogEntry.resource || '',
+          buff_val: catalogEntry.buff_val || '',
+          owner: 'Unclaimed',
+          status: null,
         });
       }
     });
@@ -981,27 +1084,44 @@ export function extractCitiesFromSvg(svgRoot) {
   if (extractedCities.length === 0) {
     const layer = svgRoot.querySelector('#layer1') || svgRoot;
     const shapes = layer.querySelectorAll('[id]');
-    shapes.forEach(el => {
+    shapes.forEach((el) => {
       const id = el.id;
-      if (!id || id === 'layer1' || id.startsWith('defs') || id.includes('label') || id === 'territory-labels') return;
-      if (el.parentElement && el.parentElement.id && el.parentElement.id !== 'layer1' && el.parentElement !== svgRoot) return;
+      if (
+        !id ||
+        id === 'layer1' ||
+        id.startsWith('defs') ||
+        id.includes('label') ||
+        id === 'territory-labels'
+      )
+        return;
+      if (
+        el.parentElement &&
+        el.parentElement.id &&
+        el.parentElement.id !== 'layer1' &&
+        el.parentElement !== svgRoot
+      )
+        return;
 
       let group = 'green';
       for (const [col] of Object.entries(COLOR_TO_LEVEL_MAP)) {
-        if (el.classList.contains(col) || el.getAttribute('fill') === LEVEL_COLORS[col]) { group = col; break; }
+        if (el.classList.contains(col) || el.getAttribute('fill') === LEVEL_COLORS[col]) {
+          group = col;
+          break;
+        }
       }
       const catalogEntry = catalog[id] || {};
       extractedCities.push({
-        id: id, 
-        name: catalogEntry.name || el.getAttribute('inkscape:label') || id.replace(/_/g, ' '), 
-        level: catalogEntry.level !== undefined ? catalogEntry.level : (COLOR_TO_LEVEL_MAP[group] || 1),
-        group: catalogEntry.group || group, 
-        buff: catalogEntry.buff || "", 
-        buff_type: catalogEntry.buff_type || "",
-        resource: catalogEntry.resource || "",
-        buff_val: catalogEntry.buff_val || "",
-        owner: "Unclaimed", 
-        status: null
+        id: id,
+        name: catalogEntry.name || el.getAttribute('inkscape:label') || id.replace(/_/g, ' '),
+        level:
+          catalogEntry.level !== undefined ? catalogEntry.level : COLOR_TO_LEVEL_MAP[group] || 1,
+        group: catalogEntry.group || group,
+        buff: catalogEntry.buff || '',
+        buff_type: catalogEntry.buff_type || '',
+        resource: catalogEntry.resource || '',
+        buff_val: catalogEntry.buff_val || '',
+        owner: 'Unclaimed',
+        status: null,
       });
     });
   }
@@ -1018,7 +1138,7 @@ export function setMapColorMode(mode, svgRoot) {
 
   injectResourcePatterns(root);
 
-  cities.forEach(city => {
+  cities.forEach((city) => {
     const el = root.getElementById(city.id);
     if (!el) return;
     const ownerTag = getCityOwner(city.id);
@@ -1040,7 +1160,7 @@ export function setMapColorMode(mode, svgRoot) {
 
     if (el.tagName.toLowerCase() === 'g') {
       const shapes = el.querySelectorAll('path, polygon, rect, circle');
-      shapes.forEach(s => {
+      shapes.forEach((s) => {
         s.style.fill = targetFill;
         s.style.stroke = targetStroke;
       });
@@ -1066,7 +1186,7 @@ export function renderTerritoryLabels(svgRoot) {
   }
   labelGroup.innerHTML = '';
 
-  cities.forEach(city => {
+  cities.forEach((city) => {
     const ownerTag = String(getCityOwner(city.id));
     if (!ownerTag || ownerTag === 'Unclaimed') return;
 
@@ -1090,7 +1210,8 @@ export function renderTerritoryLabels(svgRoot) {
 
       const wrapperGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       wrapperGroup.setAttribute('class', 'label-wrapper');
-      if (override.rotate) wrapperGroup.setAttribute('transform', `rotate(${override.rotate}, ${finalX}, ${finalY})`);
+      if (override.rotate)
+        wrapperGroup.setAttribute('transform', `rotate(${override.rotate}, ${finalX}, ${finalY})`);
 
       const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       textEl.setAttribute('x', finalX);
@@ -1111,7 +1232,8 @@ export function renderTerritoryLabels(svgRoot) {
         textEl.style.stroke = '#000000';
       } else {
         const allianceColor = getAllianceColor(ownerTag);
-        textEl.style.fill = (allianceColor && allianceColor !== COLOR_FALLBACKS.unclaimed) ? allianceColor : '#ffffff';
+        textEl.style.fill =
+          allianceColor && allianceColor !== COLOR_FALLBACKS.unclaimed ? allianceColor : '#ffffff';
         textEl.style.stroke = '#000000';
       }
 
@@ -1167,17 +1289,20 @@ export function setHighlightedTerritory(cityId, svgRoot = null) {
   const computedStyle = window.getComputedStyle(targetEl);
   const activeFill = targetEl.style.fill || computedStyle.fill || '#1a1512';
 
-  const subShapes = clone.querySelectorAll ? clone.querySelectorAll('path, polygon, rect, circle') : [];
+  const subShapes = clone.querySelectorAll
+    ? clone.querySelectorAll('path, polygon, rect, circle')
+    : [];
   const targets = subShapes.length > 0 ? Array.from(subShapes) : [clone];
 
-  targets.forEach(shape => {
+  targets.forEach((shape) => {
     shape.removeAttribute('id');
     shape.style.fill = activeFill;
     shape.style.stroke = 'rgba(var(--active-theme-vivid, 255, 255, 255), 1)';
     shape.style.strokeWidth = '3px';
     shape.style.paintOrder = 'stroke fill';
     shape.style.vectorEffect = 'non-scaling-stroke';
-    shape.style.filter = 'drop-shadow(0 0 4px rgba(var(--active-theme), 1)) drop-shadow(0 0 10px rgba(var(--active-theme), 0.8)) brightness(1.25)';
+    shape.style.filter =
+      'drop-shadow(0 0 4px rgba(var(--active-theme), 1)) drop-shadow(0 0 10px rgba(var(--active-theme), 0.8)) brightness(1.25)';
     shape.style.pointerEvents = 'none';
   });
 
@@ -1211,21 +1336,27 @@ export function enableMapHighlighting(svgRoot = null) {
     }
     card.classList.remove('idle');
     if (cityNameEl) cityNameEl.textContent = cityData.name || cityData.id;
-    if (cityLevelEl) cityLevelEl.textContent = typeof cityData.level === 'number' ? `Level ${cityData.level}` : cityData.level;
+    if (cityLevelEl)
+      cityLevelEl.textContent =
+        typeof cityData.level === 'number' ? `Level ${cityData.level}` : cityData.level;
     if (cityOwnerEl) {
       const ownerTag = getCityOwner(cityData.id);
       const alliance = alliances[ownerTag];
       cityOwnerEl.textContent = alliance ? `${alliance.name} [${ownerTag}]` : ownerTag;
     }
     if (cityBuffEl) {
-      const buffVal = cityData.buff && String(cityData.buff).trim() !== '' ? String(cityData.buff).trim() : 'No active buff';
+      const buffVal =
+        cityData.buff && String(cityData.buff).trim() !== ''
+          ? String(cityData.buff).trim()
+          : 'No active buff';
       cityBuffEl.textContent = buffVal;
     }
   }
 
   const elements = root.querySelectorAll('path, rect, circle, polygon');
-  elements.forEach(el => {
-    if (el.closest('#territory-labels') || el.closest('#highlight-overlay') || el.closest('defs')) return;
+  elements.forEach((el) => {
+    if (el.closest('#territory-labels') || el.closest('#highlight-overlay') || el.closest('defs'))
+      return;
 
     if (el.dataset.bound) return;
     el.dataset.bound = 'true';
@@ -1235,13 +1366,18 @@ export function enableMapHighlighting(svgRoot = null) {
     const getTargetCity = (e) => {
       let current = e.target;
       while (current && current !== root && current !== document.body) {
-        if (current.id && current.id !== 'layer1' && current.id !== 'territory-labels' && current.id !== 'highlight-overlay') {
+        if (
+          current.id &&
+          current.id !== 'layer1' &&
+          current.id !== 'territory-labels' &&
+          current.id !== 'highlight-overlay'
+        ) {
           const city = getCityById(current.id);
           if (city) return city;
         }
         const label = current.getAttribute && current.getAttribute('inkscape:label');
         if (label) {
-          const city = cities.find(c => c.name === label || c.id === label);
+          const city = cities.find((c) => c.name === label || c.id === label);
           if (city) return city;
         }
         current = current.parentElement;
@@ -1251,8 +1387,8 @@ export function enableMapHighlighting(svgRoot = null) {
 
     el.addEventListener('mouseenter', (e) => {
       const city = getTargetCity(e);
-      const cityId = city ? city.id : (el.id || e.target.id);
-      
+      const cityId = city ? city.id : el.id || e.target.id;
+
       setHighlightedTerritory(cityId, root);
       updateInfoCard(city);
     });
@@ -1261,11 +1397,12 @@ export function enableMapHighlighting(svgRoot = null) {
       setHighlightedTerritory(null, root);
       updateInfoCard(null);
     });
-    
+
     el.addEventListener('click', (e) => {
-      e.preventDefault(); e.stopPropagation();
+      e.preventDefault();
+      e.stopPropagation();
       const city = getTargetCity(e);
-      const cityId = city ? city.id : (el.id || e.target.id);
+      const cityId = city ? city.id : el.id || e.target.id;
 
       if (isPlannerActive && cityId) {
         promptTerritoryAssignment(cityId, root);
@@ -1296,11 +1433,12 @@ export function checkAndRestoreMapDraft(svgRoot = null) {
       draftState = JSON.parse(JSON.stringify(mapState));
       draftState.territory_ownership = {
         ...(draftState.territory_ownership || {}),
-        ...ownership
+        ...ownership,
       };
       currentColorMode = 'alliance';
 
-      const btnDraft = document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
+      const btnDraft =
+        document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
       if (btnDraft) {
         btnDraft.setAttribute('aria-pressed', 'true');
         btnDraft.classList.add('active');
@@ -1324,16 +1462,17 @@ export function checkAndRestoreMapDraft(svgRoot = null) {
 export function applyMapState(state, svgRoot = null, autoRender = true) {
   if (!state) return;
   mapState = state;
-  
-  const staticAlliances = (typeof window !== 'undefined' && window.MAP_STATE && window.MAP_STATE.alliances) || {};
+
+  const staticAlliances =
+    (typeof window !== 'undefined' && window.MAP_STATE && window.MAP_STATE.alliances) || {};
   const liveAlliances = state.alliances || {};
 
   const allTags = new Set([...Object.keys(staticAlliances), ...Object.keys(liveAlliances)]);
   alliances = {};
-  allTags.forEach(tag => {
+  allTags.forEach((tag) => {
     alliances[tag] = {
       ...(staticAlliances[tag] || {}),
-      ...(liveAlliances[tag] || {})
+      ...(liveAlliances[tag] || {}),
     };
     if (liveAlliances[tag]?.rank === undefined && staticAlliances[tag]?.rank !== undefined) {
       alliances[tag].rank = staticAlliances[tag].rank;
@@ -1355,7 +1494,7 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
   }
 
   const root = svgRoot || getSvgRoot();
-  
+
   if (root && autoRender) {
     setMapColorMode(currentColorMode, root);
   }
@@ -1363,7 +1502,9 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
   if (isBuffDrawerOpen) renderBuffSummaryDrawer();
 }
 
-export function getCityById(id) { return cities.find(city => city.id === id); }
+export function getCityById(id) {
+  return cities.find((city) => city.id === id);
+}
 
 export async function loadLiveMapState(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
@@ -1371,9 +1512,9 @@ export async function loadLiveMapState(svgRoot = null) {
   try {
     const [stateRes, colorsRes] = await Promise.all([
       fetch(`/api/state?scope=map&t=${Date.now()}`),
-      fetch('/api/colors')
+      fetch('/api/colors'),
     ]);
-    
+
     if (stateRes.ok) {
       const liveState = await stateRes.json();
       applyMapState(liveState, root, false);
@@ -1388,7 +1529,6 @@ export async function loadLiveMapState(svgRoot = null) {
         alliances[tag].color = hexColor;
       });
     }
-
   } catch (err) {
     console.warn('Could not fetch live data, falling back to static MAP_STATE:', err);
     if (typeof window !== 'undefined' && window.MAP_STATE) {
@@ -1413,18 +1553,18 @@ export function initializeMapData(svgRoot) {
   if (!root) return cities;
 
   cities = extractCitiesFromSvg(root);
-  
+
   if (typeof window !== 'undefined' && window.MAP_STATE) {
     applyMapState(window.MAP_STATE, root, false);
   } else {
     renderTerritoryLabels(root);
   }
-  
+
   bindMapControls(root);
   enableMapHighlighting(root);
 
   loadLiveMapState(root);
-  
+
   return cities;
 }
 

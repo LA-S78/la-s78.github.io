@@ -39,13 +39,22 @@ export const LABEL_OVERRIDES = {
   Anvil_Town: { offsetY: -10 },
   Dripping_Cavern: { offsetY: -30 },
   Broken_Bridgehead: { offsetY: -25 },
-  Wheatsheaf: { offsetY: -15 }
+  Wheatsheaf: { offsetY: -15 },
 };
 
 const AUTO_ALLIANCE_PALETTE = [
-  '#e68e00', '#a400af', '#0070f3', '#25bb00', '#e53e3e',
-  '#dd6b20', '#319795', '#d69e2e', '#805ad5', '#d53f8c',
-  '#38a169', '#00b5d8'
+  '#e68e00',
+  '#a400af',
+  '#0070f3',
+  '#25bb00',
+  '#e53e3e',
+  '#dd6b20',
+  '#319795',
+  '#d69e2e',
+  '#805ad5',
+  '#d53f8c',
+  '#38a169',
+  '#00b5d8',
 ];
 
 const LEVEL_COLORS_BY_NUM = {
@@ -56,7 +65,7 @@ const LEVEL_COLORS_BY_NUM = {
   5: '#003fad', // Lv 5 Blue
   6: '#8f0000', // Lv 6 Red
   7: '#b29a20', // Gold
-  8: '#b29a20'  // Capitol Gold
+  8: '#b29a20', // Capitol Gold
 };
 
 const RESOURCE_PALETTE = {
@@ -66,13 +75,13 @@ const RESOURCE_PALETTE = {
   march: '#facc15',
   training: '#dc2626',
   research: '#7c3aed',
-  building: '#ea580c'
+  building: '#ea580c',
 };
 
 // Normalize city lookup catalog
 const CITIES_MAP = {};
 if (Array.isArray(rawCitiesData)) {
-  rawCitiesData.forEach(c => {
+  rawCitiesData.forEach((c) => {
     if (c?.id) {
       CITIES_MAP[c.id] = c;
       CITIES_MAP[c.id.replace(/\s+/g, '_')] = c;
@@ -118,7 +127,7 @@ function getCityLevelFill(cityId, city = {}) {
     purple: '#a400af',
     blue: '#003fad',
     red: '#8f0000',
-    gold: '#b29a20'
+    gold: '#b29a20',
   };
   return groupMap[group] || '#25bb00';
 }
@@ -132,15 +141,27 @@ function getCityResourceFill(cityId, city = {}) {
   const combined = `${buff} ${buffType} ${res}`;
 
   // Level 6 / Special Hubs
-  if (city.level === 6 || combined.includes('research') || combined.includes('tech')) return RESOURCE_PALETTE.research;
+  if (city.level === 6 || combined.includes('research') || combined.includes('tech'))
+    return RESOURCE_PALETTE.research;
   if (combined.includes('train')) return RESOURCE_PALETTE.training;
-  if (combined.includes('construct') || combined.includes('build')) return RESOURCE_PALETTE.building;
+  if (combined.includes('construct') || combined.includes('build'))
+    return RESOURCE_PALETTE.building;
 
   // Core 3 Resources (Grain, Timber, Herbs)
   let matchedRes = null;
-  if (res.includes('grain') || combined.includes('grain') || combined.includes('wheat') || combined.includes('food')) {
+  if (
+    res.includes('grain') ||
+    combined.includes('grain') ||
+    combined.includes('wheat') ||
+    combined.includes('food')
+  ) {
     matchedRes = 'grain';
-  } else if (res.includes('timber') || combined.includes('timber') || combined.includes('wood') || combined.includes('lumber')) {
+  } else if (
+    res.includes('timber') ||
+    combined.includes('timber') ||
+    combined.includes('wood') ||
+    combined.includes('lumber')
+  ) {
     matchedRes = 'timber';
   } else if (res.includes('herb') || combined.includes('herb') || combined.includes('medicine')) {
     matchedRes = 'herbs';
@@ -149,7 +170,12 @@ function getCityResourceFill(cityId, city = {}) {
   if (!matchedRes) return '#2d3748';
 
   // Production uses the diagonal hatch pattern; Gathering uses solid color
-  const isProduction = buffType === 'production' || combined.includes('prod') || combined.includes('output') || combined.includes('yield') || !combined.includes('gather');
+  const isProduction =
+    buffType === 'production' ||
+    combined.includes('prod') ||
+    combined.includes('output') ||
+    combined.includes('yield') ||
+    !combined.includes('gather');
   return isProduction ? `url(#pat-${matchedRes})` : RESOURCE_PALETTE[matchedRes];
 }
 
@@ -188,15 +214,18 @@ function applyFillToTerritory(svg, cityId, fillColor) {
     cityId,
     cityId.replace(/_/g, ' '),
     cityId.replace(/_s_/g, "'s ").replace(/_/g, ' '),
-    cityId.replace(/_s_/g, "&#39;s ").replace(/_/g, ' '),
-    cityId.replace(/_s_/g, "&apos;s ").replace(/_/g, ' ')
+    cityId.replace(/_s_/g, '&#39;s ').replace(/_/g, ' '),
+    cityId.replace(/_s_/g, '&apos;s ').replace(/_/g, ' '),
   ];
 
-  const escapeRegex = s => s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const escapeRegex = (s) => s.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
   const idPattern = Array.from(new Set(patterns)).map(escapeRegex).join('|');
 
   // Case 1: Territory is a standalone shape (<path>, <polygon>, <rect>, <circle>)
-  const leafRegex = new RegExp(`(<(?:path|polygon|rect|circle)\\b[^>]*?\\b(?:id|inkscape:label|label)=["'](?:${idPattern})["'][^>]*\\/?>)`, 'i');
+  const leafRegex = new RegExp(
+    `(<(?:path|polygon|rect|circle)\\b[^>]*?\\b(?:id|inkscape:label|label)=["'](?:${idPattern})["'][^>]*\\/?>)`,
+    'i',
+  );
   const leafMatch = svg.match(leafRegex);
   if (leafMatch) {
     const originalTag = leafMatch[1];
@@ -205,7 +234,10 @@ function applyFillToTerritory(svg, cityId, fillColor) {
   }
 
   // Case 2: Territory is a group (<g ...> ... </g>)
-  const groupOpenRegex = new RegExp(`(<g\\b[^>]*?\\b(?:id|inkscape:label|label)=["'](?:${idPattern})["'][^>]*>)`, 'i');
+  const groupOpenRegex = new RegExp(
+    `(<g\\b[^>]*?\\b(?:id|inkscape:label|label)=["'](?:${idPattern})["'][^>]*>)`,
+    'i',
+  );
   const groupMatch = svg.match(groupOpenRegex);
   if (groupMatch) {
     const openTag = groupMatch[1];
@@ -232,7 +264,10 @@ function applyFillToTerritory(svg, cityId, fillColor) {
 
       if (endIndex !== -1) {
         const fullGroup = svg.substring(startIndex, endIndex);
-        const updatedGroup = fullGroup.replace(/<(?:path|polygon|rect|circle|g)\b[^>]*\/?>/gi, tag => setTagFill(tag, fillColor));
+        const updatedGroup = fullGroup.replace(
+          /<(?:path|polygon|rect|circle|g)\b[^>]*\/?>/gi,
+          (tag) => setTagFill(tag, fillColor),
+        );
         return svg.substring(0, startIndex) + updatedGroup + svg.substring(endIndex);
       }
     }
@@ -285,7 +320,7 @@ export default async function handler(req, res) {
     Object.keys(centroids).forEach((cityId) => {
       const city = CITIES_MAP[cityId] || CITIES_MAP[cityId.replace(/_/g, ' ')] || {};
       const ownerData = ownership[cityId];
-      const owner = typeof ownerData === 'string' ? ownerData : (ownerData?.owner || 'Unclaimed');
+      const owner = typeof ownerData === 'string' ? ownerData : ownerData?.owner || 'Unclaimed';
       const isOwned = owner && owner !== 'Unclaimed';
 
       let targetFill = '#2d3748';
@@ -360,7 +395,10 @@ export default async function handler(req, res) {
 
     // Inject base stroke styles and text labels
     modifiedSvg = modifiedSvg.replace(/<svg\b[^>]*>/i, `$&${baseStyle}`);
-    modifiedSvg = modifiedSvg.replace(/<\/svg>/i, `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`);
+    modifiedSvg = modifiedSvg.replace(
+      /<\/svg>/i,
+      `<g id="territory-labels" style="pointer-events: none;">\n${labelElements}</g>\n</svg>`,
+    );
 
     const fontFiles = fs.existsSync(FONT_PATH) ? [FONT_PATH] : [];
     const resvg = new Resvg(modifiedSvg, {
@@ -369,8 +407,8 @@ export default async function handler(req, res) {
       font: {
         fontFiles: fontFiles,
         defaultFontFamily: 'DejaVu Sans',
-        loadSystemFonts: true
-      }
+        loadSystemFonts: true,
+      },
     });
 
     const pngBuffer = resvg.render().asPng();
@@ -381,10 +419,16 @@ export default async function handler(req, res) {
 
     if (revision) {
       // Edge caches for 7 days; any new map change gets a new ?v= hash and bypasses this
-      res.setHeader('Cache-Control', 'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable');
+      res.setHeader(
+        'Cache-Control',
+        'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable',
+      );
     } else {
       // Fallback for unversioned browser hits
-      res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=180, stale-while-revalidate=300');
+      res.setHeader(
+        'Cache-Control',
+        'public, max-age=60, s-maxage=180, stale-while-revalidate=300',
+      );
     }
 
     return res.status(200).send(pngBuffer);

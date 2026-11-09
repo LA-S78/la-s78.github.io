@@ -3,7 +3,7 @@
 export const BASELINE_SCHEDULES = {
   1: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
   2: { downtime: 'MIA', week_1: 'BOTS', week_2: 'RÂVN', week_3: 'WLO' },
-  3: { downtime: 'RÂVN', week_1: 'MIA', week_2: 'BOTS', week_3: 'WLO' }
+  3: { downtime: 'RÂVN', week_1: 'MIA', week_2: 'BOTS', week_3: 'WLO' },
 };
 
 /**
@@ -13,24 +13,25 @@ export const BASELINE_SCHEDULES = {
  */
 export function resolveCohortSchedule(macroCycle = 1, previousCohort = null, mapState = null) {
   const defaultCohort = ['BOTS', 'RÂVN', 'MIA']; // [Seat A, Seat B, Seat C]
-  let cohort = Array.isArray(previousCohort) && previousCohort.length === 3
-    ? [...previousCohort]
-    : [...defaultCohort];
+  let cohort =
+    Array.isArray(previousCohort) && previousCohort.length === 3
+      ? [...previousCohort]
+      : [...defaultCohort];
   let rankOneTag = 'WLO';
 
   const alliances = mapState?.alliances || {};
   const rankedList = Object.entries(alliances)
     .map(([tag, data]) => ({ tag: tag.trim(), rank: parseInt(data?.rank, 10) }))
-    .filter(a => !isNaN(a.rank) && a.rank >= 1 && a.rank <= 4)
+    .filter((a) => !isNaN(a.rank) && a.rank >= 1 && a.rank <= 4)
     .sort((a, b) => a.rank - b.rank);
 
   if (rankedList.length === 4) {
     rankOneTag = rankedList[0].tag;
-    const topThreeChallengers = rankedList.slice(1).map(a => a.tag);
+    const topThreeChallengers = rankedList.slice(1).map((a) => a.tag);
 
     // Replace any seat holder who dropped out of Ranks #2-#4 with the newcomer
-    const newcomers = topThreeChallengers.filter(tag => !cohort.includes(tag));
-    cohort = cohort.map(seatTag => {
+    const newcomers = topThreeChallengers.filter((tag) => !cohort.includes(tag));
+    cohort = cohort.map((seatTag) => {
       if (topThreeChallengers.includes(seatTag)) return seatTag;
       return newcomers.shift() || seatTag;
     });
@@ -42,12 +43,12 @@ export function resolveCohortSchedule(macroCycle = 1, previousCohort = null, map
   const wheelByCycle = {
     1: { downtime: seatA, week_1: seatB, week_2: seatC, week_3: rankOneTag },
     2: { downtime: seatC, week_1: seatA, week_2: seatB, week_3: rankOneTag },
-    3: { downtime: seatB, week_1: seatC, week_2: seatA, week_3: rankOneTag }
+    3: { downtime: seatB, week_1: seatC, week_2: seatA, week_3: rankOneTag },
   };
 
   return {
     cohort,
-    schedule: wheelByCycle[macroCycle] || wheelByCycle[1]
+    schedule: wheelByCycle[macroCycle] || wheelByCycle[1],
   };
 }
 
@@ -79,7 +80,7 @@ export function calculateOverrideAction(cycleState = {}, targetWeek, threatName)
       defender: 'WLO',
       displacedAlliance: scheduledAlliance,
       newSchedule: currentSchedule,
-      summary: `WLO swaps into Week ${targetWeek} for server defense against ${threatName}. [${scheduledAlliance}] takes Week 3 Finale (receives 2 King chests & Buff Item). Cost to WLO: 0 chests.`
+      summary: `WLO swaps into Week ${targetWeek} for server defense against ${threatName}. [${scheduledAlliance}] takes Week 3 Finale (receives 2 King chests & Buff Item). Cost to WLO: 0 chests.`,
     };
   } else {
     currentSchedule[targetWeekKey] = 'WLO';
@@ -95,17 +96,17 @@ export function calculateOverrideAction(cycleState = {}, targetWeek, threatName)
           week: Number(targetWeek),
           payout: { regular: 1, kw: 1 },
           status: 'pending',
-          nominated_players: { regular: [], kw: [] }
+          nominated_players: { regular: [], kw: [] },
         },
         {
           week: 3,
           payout: { regular: 1, kw: 1 },
           status: 'pending',
-          nominated_players: { regular: [], kw: [] }
-        }
+          nominated_players: { regular: [], kw: [] },
+        },
       ],
       status: 'active',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     return {
@@ -117,7 +118,7 @@ export function calculateOverrideAction(cycleState = {}, targetWeek, threatName)
       displacedAlliance: scheduledAlliance,
       newSchedule: currentSchedule,
       buyoutTicket,
-      summary: `WLO takes Week ${targetWeek} as 2nd defense override against ${threatName}. [${scheduledAlliance}] sits out and receives a Wartime Buyout: 2 Regular Gold + 2 KW Gold chests, split as 1 Reg + 1 KW in Week ${targetWeek} and 1 Reg + 1 KW in Week 3.`
+      summary: `WLO takes Week ${targetWeek} as 2nd defense override against ${threatName}. [${scheduledAlliance}] sits out and receives a Wartime Buyout: 2 Regular Gold + 2 KW Gold chests, split as 1 Reg + 1 KW in Week ${targetWeek} and 1 Reg + 1 KW in Week 3.`,
     };
   }
 }
@@ -127,16 +128,22 @@ export function calculateOverrideAction(cycleState = {}, targetWeek, threatName)
  */
 export function advanceCycleState(cycleState = {}, mapState = null, targetClockWeek = null) {
   let macroCycle = Number(cycleState.macro_cycle) || 1;
-  let currentWeek = cycleState.current_week !== undefined && cycleState.current_week !== null
-    ? Number(cycleState.current_week)
-    : 1;
+  let currentWeek =
+    cycleState.current_week !== undefined && cycleState.current_week !== null
+      ? Number(cycleState.current_week)
+      : 1;
 
-  const nextWeek = targetClockWeek !== null ? Number(targetClockWeek) : (currentWeek >= 3 ? 0 : currentWeek + 1);
+  const nextWeek =
+    targetClockWeek !== null ? Number(targetClockWeek) : currentWeek >= 3 ? 0 : currentWeek + 1;
 
   if (nextWeek === 0 || currentWeek >= 3) {
     // Advance to next 4-week cycle Downtime (Week 0) with Seat Inheritance
     macroCycle = macroCycle >= 3 ? 1 : macroCycle + 1;
-    const { cohort, schedule } = resolveCohortSchedule(macroCycle, cycleState.cohort_seats, mapState);
+    const { cohort, schedule } = resolveCohortSchedule(
+      macroCycle,
+      cycleState.cohort_seats,
+      mapState,
+    );
 
     return {
       macro_cycle: macroCycle,
@@ -144,14 +151,14 @@ export function advanceCycleState(cycleState = {}, mapState = null, targetClockW
       override_count: 0,
       cohort_seats: cohort,
       active_schedule: schedule,
-      history: Array.isArray(cycleState.history) ? cycleState.history : []
+      history: Array.isArray(cycleState.history) ? cycleState.history : [],
     };
   } else {
     return {
       ...cycleState,
       macro_cycle: macroCycle,
       current_week: nextWeek,
-      override_count: Number(cycleState.override_count) || 0
+      override_count: Number(cycleState.override_count) || 0,
     };
   }
 }

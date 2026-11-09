@@ -21,7 +21,7 @@ function headers(token, extra = {}) {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     Accept: 'application/vnd.github.v3+json',
     'User-Agent': USER_AGENT,
-    ...extra
+    ...extra,
   };
 }
 
@@ -37,7 +37,7 @@ export async function readGist({ timeoutMs } = {}) {
   const res = await fetch(`${GIST_API}/${id}`, {
     headers: headers(token),
     cache: 'no-store',
-    ...(timeoutMs ? { signal: AbortSignal.timeout(timeoutMs) } : {})
+    ...(timeoutMs ? { signal: AbortSignal.timeout(timeoutMs) } : {}),
   });
   if (!res.ok) {
     const err = new Error(`GitHub Gist error (${res.status})`);
@@ -76,7 +76,7 @@ export async function writeGist(files, { description, timeoutMs } = {}) {
     method: 'PATCH',
     headers: headers(token, { 'Content-Type': 'application/json' }),
     body: JSON.stringify(body),
-    ...(timeoutMs ? { signal: AbortSignal.timeout(timeoutMs) } : {})
+    ...(timeoutMs ? { signal: AbortSignal.timeout(timeoutMs) } : {}),
   });
   if (!res.ok) {
     const err = new Error(`GitHub Gist update failed (${res.status})`);

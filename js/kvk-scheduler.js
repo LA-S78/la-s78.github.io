@@ -11,7 +11,7 @@ let cycleState = {
   macro_cycle: 1,
   current_week: 1,
   override_count: 0,
-  active_schedule: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' }
+  active_schedule: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
 };
 
 let activeBuyouts = [];
@@ -19,7 +19,7 @@ let alliancesData = {};
 
 const DEFAULT_ALLIANCE_COLORS = {
   WLO: '#25bb00',
-  'RÂVN': '#cece00',
+  RÂVN: '#cece00',
   RAVN: '#cece00',
   MIA: '#a400af',
   BOTS: '#0070f3',
@@ -27,7 +27,7 @@ const DEFAULT_ALLIANCE_COLORS = {
   PHNX: '#dd6b20',
   HMDA: '#d53f8c',
   NAVI: '#319795',
-  HeKi: '#d69e2e'
+  HeKi: '#d69e2e',
 };
 
 function getAllianceColor(tag) {
@@ -81,17 +81,43 @@ function renderScheduleGrid() {
   const currentWeek = getEffectiveActiveWeek();
 
   const weeks = [
-    { key: 'downtime', label: 'Downtime', sub: 'Boss 1 Window', seat: schedule.downtime || 'BOTS', loot: '1 King Chest' },
-    { key: 'week_1', label: 'Week 1 Fri', sub: 'Boss 2 Window', seat: schedule.week_1 || 'RÂVN', loot: '2 King Chests' },
-    { key: 'week_2', label: 'Week 2 Fri', sub: 'Boss 3 Window', seat: schedule.week_2 || 'MIA', loot: '2 King Chests' },
-    { key: 'week_3', label: 'Week 3 Fri', sub: 'KvK Finale', seat: schedule.week_3 || 'WLO', loot: '2 King Chests + Border' }
+    {
+      key: 'downtime',
+      label: 'Downtime',
+      sub: 'Boss 1 Window',
+      seat: schedule.downtime || 'BOTS',
+      loot: '1 King Chest',
+    },
+    {
+      key: 'week_1',
+      label: 'Week 1 Fri',
+      sub: 'Boss 2 Window',
+      seat: schedule.week_1 || 'RÂVN',
+      loot: '2 King Chests',
+    },
+    {
+      key: 'week_2',
+      label: 'Week 2 Fri',
+      sub: 'Boss 3 Window',
+      seat: schedule.week_2 || 'MIA',
+      loot: '2 King Chests',
+    },
+    {
+      key: 'week_3',
+      label: 'Week 3 Fri',
+      sub: 'KvK Finale',
+      seat: schedule.week_3 || 'WLO',
+      loot: '2 King Chests + Border',
+    },
   ];
 
-  container.innerHTML = weeks.map((w) => {
-    const isCurrent = (w.key === 'downtime' && currentWeek === 0) || w.key === `week_${currentWeek}`;
-    const color = getAllianceColor(w.seat);
+  container.innerHTML = weeks
+    .map((w) => {
+      const isCurrent =
+        (w.key === 'downtime' && currentWeek === 0) || w.key === `week_${currentWeek}`;
+      const color = getAllianceColor(w.seat);
 
-    return `
+      return `
       <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}">
         <div class="ops-week-header">
           <span class="ops-week-num">${w.label}</span>
@@ -106,7 +132,8 @@ function renderScheduleGrid() {
         </div>
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 }
 
 /**
@@ -118,7 +145,9 @@ function renderActiveBuyouts() {
   const badgeEl = document.getElementById('ops-buyout-count-badge');
   if (!container || !listEl) return;
 
-  const pendingBuyouts = activeBuyouts.filter(b => b.status === 'active' || b.status === 'pending');
+  const pendingBuyouts = activeBuyouts.filter(
+    (b) => b.status === 'active' || b.status === 'pending',
+  );
 
   if (badgeEl) badgeEl.textContent = `${pendingBuyouts.length} Active`;
 
@@ -129,10 +158,13 @@ function renderActiveBuyouts() {
   }
 
   container.style.display = 'block';
-  listEl.innerHTML = pendingBuyouts.map((buyout) => {
-    const color = getAllianceColor(buyout.beneficiary);
+  listEl.innerHTML = pendingBuyouts
+    .map((buyout) => {
+      const color = getAllianceColor(buyout.beneficiary);
 
-    const installmentsHtml = (buyout.installments || []).map(inst => `
+      const installmentsHtml = (buyout.installments || [])
+        .map(
+          (inst) => `
       <div class="ops-installment-item ${inst.status === 'fulfilled' ? 'is-fulfilled' : ''}">
         <span class="ops-installment-week">Week ${inst.week} Payout:</span>
         <span class="ops-installment-chests">
@@ -142,9 +174,11 @@ function renderActiveBuyouts() {
           ${inst.status === 'fulfilled' ? 'PAID' : 'PENDING'}
         </span>
       </div>
-    `).join('');
+    `,
+        )
+        .join('');
 
-    return `
+      return `
       <div class="ops-buyout-card">
         <div class="ops-buyout-card-header">
           <div>
@@ -158,7 +192,8 @@ function renderActiveBuyouts() {
         </div>
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 }
 
 /**
@@ -254,7 +289,7 @@ export async function submitOverrideProposal() {
     displacedAlly,
     overrideCount,
     action: isBuyout ? 'buyout' : 'swap',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   const diffSummaryHtml = isBuyout
@@ -279,7 +314,7 @@ export async function submitOverrideProposal() {
     onSuccess: () => {
       threatInput.value = '';
       fetchOperationsState();
-    }
+    },
   });
 }
 

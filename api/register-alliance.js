@@ -1,77 +1,77 @@
 // api/register-alliance.js
-import { isGistConfigured, readGist, gistJson, writeGist } from "./_gist.js";
-import { verifyToken } from "./_tokens.js";
+import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+import { verifyToken } from './_tokens.js';
 
 const ALLIANCE_COMMANDS_SCHEMA = [
   {
-    name: "calendar",
-    description: "View or manage the Kingdom Event Calendar",
+    name: 'calendar',
+    description: 'View or manage the Kingdom Event Calendar',
     type: 1,
     options: [
       {
         type: 3,
-        name: "action",
-        description: "Action to perform (leave blank to view calendar)",
+        name: 'action',
+        description: 'Action to perform (leave blank to view calendar)',
         required: false,
         choices: [
           {
-            name: "Manage Alliance Events (R5 by default)",
-            value: "manage_alliance",
+            name: 'Manage Alliance Events (R5 by default)',
+            value: 'manage_alliance',
           },
           {
-            name: "Manage Global Events (Admin Only)",
-            value: "manage_global",
+            name: 'Manage Global Events (Admin Only)',
+            value: 'manage_global',
           },
         ],
       },
     ],
   },
   {
-    name: "suggest",
-    description: "Submit a rule proposal, report an alliance issue, or check your ticket status",
+    name: 'suggest',
+    description: 'Submit a rule proposal, report an alliance issue, or check your ticket status',
     type: 1,
     options: [
       {
         type: 3,
-        name: "type",
-        description: "Select ticket category or check your active submissions",
+        name: 'type',
+        description: 'Select ticket category or check your active submissions',
         required: true,
         choices: [
           {
-            name: "👑 Kingdom / NAP Proposal (Server-Wide Rule or Event Idea)",
-            value: "nap_proposal",
+            name: '👑 Kingdom / NAP Proposal (Server-Wide Rule or Event Idea)',
+            value: 'nap_proposal',
           },
           {
-            name: "🛡️ Internal Alliance Issue (Handled Privately by Your R4/R5s)",
-            value: "alliance_issue",
+            name: '🛡️ Internal Alliance Issue (Handled Privately by Your R4/R5s)',
+            value: 'alliance_issue',
           },
           {
-            name: "📋 View My Ticket Status (Active & Recent History)",
-            value: "status",
+            name: '📋 View My Ticket Status (Active & Recent History)',
+            value: 'status',
           },
         ],
       },
     ],
   },
   {
-    name: "nominate",
-    description: "Request a portal link to submit weekly chest nominations",
+    name: 'nominate',
+    description: 'Request a portal link to submit weekly chest nominations',
     type: 1,
   },
   {
-    name: "rewards",
-    description: "Display reward allocations and nomination status",
+    name: 'rewards',
+    description: 'Display reward allocations and nomination status',
     type: 1,
   },
   {
-    name: "sb",
-    description: "Display the Survival Battle schedule",
+    name: 'sb',
+    description: 'Display the Survival Battle schedule',
     type: 1,
     options: [
       {
         type: 4,
-        name: "day",
-        description: "Day of the cycle (1-7)",
+        name: 'day',
+        description: 'Day of the cycle (1-7)',
         required: false,
         min_value: 1,
         max_value: 7,
@@ -79,29 +79,29 @@ const ALLIANCE_COMMANDS_SCHEMA = [
     ],
   },
   {
-    name: "rules",
-    description: "Display server and Kingdom NAP rules",
+    name: 'rules',
+    description: 'Display server and Kingdom NAP rules',
     type: 1,
     options: [
       {
         type: 4,
-        name: "rule",
-        description: "Specific rule number to view",
+        name: 'rule',
+        description: 'Specific rule number to view',
         required: false,
         min_value: 1,
       },
     ],
   },
   {
-    name: "map",
-    description: "View the live territory map",
+    name: 'map',
+    description: 'View the live territory map',
     type: 1,
   },
 ];
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const {
@@ -117,19 +117,17 @@ export default async function handler(req, res) {
   const botToken = process.env.DISCORD_BOT_TOKEN;
   const clientId = process.env.DISCORD_CLIENT_ID;
   if (!token || !guildId || !botToken || !clientId || !isGistConfigured()) {
-    return res
-      .status(400)
-      .json({ error: "Missing required configuration or parameters." });
+    return res.status(400).json({ error: 'Missing required configuration or parameters.' });
   }
 
   if (!/^\d{17,20}$/.test(String(guildId).trim())) {
-    return res.status(400).json({ error: "Invalid Discord Guild ID format." });
+    return res.status(400).json({ error: 'Invalid Discord Guild ID format.' });
   }
 
   const payload = verifyToken(token, botToken);
-  if (!payload || payload.action !== "register" || !payload.alliance) {
+  if (!payload || payload.action !== 'register' || !payload.alliance) {
     return res.status(403).json({
-      error: "Token is invalid or expired. Run /registerbot again in Discord.",
+      error: 'Token is invalid or expired. Run /registerbot again in Discord.',
     });
   }
 
@@ -138,18 +136,18 @@ export default async function handler(req, res) {
     ? delegatedRoles
         .map((r) =>
           String(r)
-            .replace(/[@\[\]]/g, "")
+            .replace(/[@\[\]]/g, '')
             .trim()
-            .toLowerCase()
+            .toLowerCase(),
         )
         .filter(Boolean)
     : [];
 
   // Validate Operations Alert Channel ID
-  const rawAlertChannel = String(alert_channel_id || "").trim();
+  const rawAlertChannel = String(alert_channel_id || '').trim();
   if (!rawAlertChannel || !/^\d{17,20}$/.test(rawAlertChannel)) {
     return res.status(400).json({
-      error: "A valid 17-20 digit Operations Alert Channel ID is required.",
+      error: 'A valid 17-20 digit Operations Alert Channel ID is required.',
     });
   }
   const cleanChannelId = rawAlertChannel;
@@ -160,40 +158,37 @@ export default async function handler(req, res) {
     const rawRoleId = String(alert_role_id).trim();
     if (!/^\d{17,20}$/.test(rawRoleId)) {
       return res.status(400).json({
-        error: "Invalid Discord Alert Role ID format (must be 17-20 digits).",
+        error: 'Invalid Discord Alert Role ID format (must be 17-20 digits).',
       });
     }
     cleanRoleId = rawRoleId;
   }
 
   // Validate Officer Ticket Intake Channel ID
-  const rawOfficerChannel = String(officer_channel_id || "").trim();
+  const rawOfficerChannel = String(officer_channel_id || '').trim();
   if (!rawOfficerChannel || !/^\d{17,20}$/.test(rawOfficerChannel)) {
     return res.status(400).json({
-      error: "A valid 17-20 digit Officer Ticket Intake Channel ID is required.",
+      error: 'A valid 17-20 digit Officer Ticket Intake Channel ID is required.',
     });
   }
   const cleanOfficerChannelId = rawOfficerChannel;
 
   // Validate Alliance Identity Color (Hex)
-  let cleanColor = "#B8975A";
+  let cleanColor = '#B8975A';
   if (alliance_color) {
     const rawColor = String(alliance_color).trim().toUpperCase();
     if (!/^#[0-9A-F]{6}$/.test(rawColor)) {
       return res.status(400).json({
-        error: "Invalid Alliance Identity Color format (must be a 6-digit hex code like #B8975A).",
+        error: 'Invalid Alliance Identity Color format (must be a 6-digit hex code like #B8975A).',
       });
     }
     cleanColor = rawColor;
   }
 
   // 1. Verify Bot Membership via Discord REST API
-  const rolesCheckRes = await fetch(
-    `https://discord.com/api/v10/guilds/${cleanGuildId}/roles`,
-    {
-      headers: { Authorization: `Bot ${botToken}` },
-    }
-  );
+  const rolesCheckRes = await fetch(`https://discord.com/api/v10/guilds/${cleanGuildId}/roles`, {
+    headers: { Authorization: `Bot ${botToken}` },
+  });
 
   if (rolesCheckRes.status === 403 || rolesCheckRes.status === 404) {
     return res.status(400).json({
@@ -211,12 +206,10 @@ export default async function handler(req, res) {
   // 2. Fetch Current Gist State & Check for Guild ID Collisions
   let currentState = {};
   try {
-    currentState = gistJson(await readGist(), "map-state.json");
+    currentState = gistJson(await readGist(), 'map-state.json');
   } catch (err) {
-    console.error("Failed to retrieve Gist state:", err);
-    return res
-      .status(500)
-      .json({ error: `Failed to read kingdom state: ${err.message}` });
+    console.error('Failed to retrieve Gist state:', err);
+    return res.status(500).json({ error: `Failed to read kingdom state: ${err.message}` });
   }
 
   const alliances = currentState.alliances || {};
@@ -224,9 +217,7 @@ export default async function handler(req, res) {
   // Conflict Guard: Ensure this Discord Server isn't already claimed by another alliance
   const existingClaim = Object.entries(alliances).find(
     ([tag, data]) =>
-      data?.guild_id &&
-      String(data.guild_id).trim() === cleanGuildId &&
-      tag !== payload.alliance
+      data?.guild_id && String(data.guild_id).trim() === cleanGuildId && tag !== payload.alliance,
   );
 
   if (existingClaim) {
@@ -238,20 +229,18 @@ export default async function handler(req, res) {
   // 3. Deploy Guild Slash Commands Instantly
   const deployUrl = `https://discord.com/api/v10/applications/${clientId}/guilds/${cleanGuildId}/commands`;
   const deployRes = await fetch(deployUrl, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
       Authorization: `Bot ${botToken}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(ALLIANCE_COMMANDS_SCHEMA),
   });
 
   if (!deployRes.ok) {
     const errText = await deployRes.text();
-    console.error("Failed to register guild commands:", errText);
-    return res
-      .status(500)
-      .json({ error: "Failed to deploy slash commands to your server." });
+    console.error('Failed to register guild commands:', errText);
+    return res.status(500).json({ error: 'Failed to deploy slash commands to your server.' });
   }
 
   // 4. Persist Guild Mapping, Alert Config, Ticket Channel & Color to GitHub Gist
@@ -272,10 +261,10 @@ export default async function handler(req, res) {
     currentState.lastUpdated = new Date().toISOString();
 
     await writeGist(
-      { "map-state.json": currentState },
+      { 'map-state.json': currentState },
       {
         description: `Server, alerts, and ticket routing registered for [${payload.alliance}] at ${new Date().toISOString()}`,
-      }
+      },
     );
 
     return res.status(200).json({
@@ -289,7 +278,7 @@ export default async function handler(req, res) {
       allianceColor: allianceRecord.color,
     });
   } catch (gistErr) {
-    console.error("Failed to commit alliance registration:", gistErr);
+    console.error('Failed to commit alliance registration:', gistErr);
     return res.status(500).json({
       error: `Commands deployed, but failed to save configuration: ${gistErr.message}`,
     });

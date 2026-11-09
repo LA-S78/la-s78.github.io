@@ -14,12 +14,12 @@ export async function listAllianceRanks() {
   return Object.entries(alliances)
     .map(([tag, data]) => ({
       tag: tag.toUpperCase(),
-      rank: typeof data.rank === 'number' ? data.rank : 999
+      rank: typeof data.rank === 'number' ? data.rank : 999,
     }))
     .sort((a, b) => a.rank - b.rank)
     .map((item) => ({
       tag: item.tag,
-      rank: item.rank === 999 ? 'Unranked' : item.rank
+      rank: item.rank === 999 ? 'Unranked' : item.rank,
     }));
 }
 
@@ -34,9 +34,7 @@ export async function setAllianceRank({ tag, rank, updatedBy = 'Discord Bot' }) 
   const state = await getMapState();
   state.alliances = state.alliances || {};
 
-  const matchingKey = Object.keys(state.alliances).find(
-    (k) => k.toUpperCase() === cleanTag
-  );
+  const matchingKey = Object.keys(state.alliances).find((k) => k.toUpperCase() === cleanTag);
   const targetKey = matchingKey || cleanTag;
   const previousRank = state.alliances[targetKey]?.rank ?? 'Unranked';
 
@@ -51,7 +49,7 @@ export async function setAllianceRank({ tag, rank, updatedBy = 'Discord Bot' }) 
 
   await writeGist(
     { 'map-state.json': state },
-    { description: `Rank updated: [${targetKey}] -> #${newRank}` }
+    { description: `Rank updated: [${targetKey}] -> #${newRank}` },
   );
 
   return { tag: targetKey, previousRank, newRank };

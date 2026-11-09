@@ -3,14 +3,14 @@
  * Unified Proposal & Deferred Authentication Engine for Last Asylum Tools
  */
 
-const STASH_KEY = "la_pending_proposal_stash";
+const STASH_KEY = 'la_pending_proposal_stash';
 
 // ============================================================================
 // 1. DYNAMIC MODAL INJECTION & STYLING
 // ============================================================================
 
 function ensureModalDOM() {
-  if (document.getElementById("proposal-dialog")) return;
+  if (document.getElementById('proposal-dialog')) return;
 
   const modalHtml = `
     <dialog id="proposal-dialog" class="auth-modal">
@@ -60,21 +60,21 @@ function ensureModalDOM() {
     </dialog>
   `;
 
-  document.body.insertAdjacentHTML("beforeend", modalHtml);
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
 
   // Bind close buttons
-  const dialog = document.getElementById("proposal-dialog");
-  document.getElementById("auth-modal-close-btn")?.addEventListener("click", () => closeModal());
-  document.getElementById("auth-modal-cancel-btn")?.addEventListener("click", () => closeModal());
-  
-  dialog.addEventListener("click", (e) => {
+  const dialog = document.getElementById('proposal-dialog');
+  document.getElementById('auth-modal-close-btn')?.addEventListener('click', () => closeModal());
+  document.getElementById('auth-modal-cancel-btn')?.addEventListener('click', () => closeModal());
+
+  dialog.addEventListener('click', (e) => {
     if (e.target === dialog) closeModal();
   });
 }
 
 function closeModal() {
-  const dialog = document.getElementById("proposal-dialog");
-  if (dialog && typeof dialog.close === "function") {
+  const dialog = document.getElementById('proposal-dialog');
+  if (dialog && typeof dialog.close === 'function') {
     if (window.closeDialogGracefully) {
       window.closeDialogGracefully(dialog);
     } else {
@@ -87,18 +87,18 @@ function closeModal() {
 // 2. STASH & RETRIEVE (LOCALSTORAGE PERSISTENCE)
 // ============================================================================
 
-export function stashProposalDraft(type, payload, diffSummaryHtml = "") {
+export function stashProposalDraft(type, payload, diffSummaryHtml = '') {
   try {
     const data = {
       type,
       payload,
       diffSummaryHtml,
       timestamp: Date.now(),
-      path: window.location.pathname + window.location.search + window.location.hash
+      path: window.location.pathname + window.location.search + window.location.hash,
     };
     localStorage.setItem(STASH_KEY, JSON.stringify(data));
   } catch (err) {
-    console.warn("Failed to stash proposal in localStorage:", err);
+    console.warn('Failed to stash proposal in localStorage:', err);
   }
 }
 
@@ -132,37 +132,37 @@ export function clearStashedProposal() {
  */
 export async function submitProposalWithAuth({
   type, // 'map' | 'rewards' | 'alliance'
-  title = "Submit Proposal",
+  title = 'Submit Proposal',
   payload, // Object matching proposal schema
-  diffSummaryHtml = "<p>Pending shifts</p>",
+  diffSummaryHtml = '<p>Pending shifts</p>',
   onSuccess = () => {},
-  onError = () => {}
+  onError = () => {},
 }) {
   ensureModalDOM();
 
-  const dialog = document.getElementById("proposal-dialog");
-  const modalTitle = document.getElementById("auth-modal-title");
-  const userStrip = document.getElementById("auth-modal-user-strip");
-  const diffBox = document.getElementById("auth-modal-diff-summary");
-  const notesInput = document.getElementById("auth-modal-notes");
-  const errorBox = document.getElementById("auth-modal-error");
-  const actionBtn = document.getElementById("auth-modal-action-btn");
-  const btnText = document.getElementById("auth-btn-text");
-  const btnSpinner = document.getElementById("auth-btn-spinner");
+  const dialog = document.getElementById('proposal-dialog');
+  const modalTitle = document.getElementById('auth-modal-title');
+  const userStrip = document.getElementById('auth-modal-user-strip');
+  const diffBox = document.getElementById('auth-modal-diff-summary');
+  const notesInput = document.getElementById('auth-modal-notes');
+  const errorBox = document.getElementById('auth-modal-error');
+  const actionBtn = document.getElementById('auth-modal-action-btn');
+  const btnText = document.getElementById('auth-btn-text');
+  const btnSpinner = document.getElementById('auth-btn-spinner');
 
   // Populate static fields
   modalTitle.textContent = title;
   diffBox.innerHTML = diffSummaryHtml;
-  notesInput.value = payload.notes || "";
-  errorBox.classList.add("hidden");
-  errorBox.textContent = "";
+  notesInput.value = payload.notes || '';
+  errorBox.classList.add('hidden');
+  errorBox.textContent = '';
 
-  const currentUser = localStorage.getItem("auth-username");
-  const currentAvatar = localStorage.getItem("auth-avatar");
-  const currentRole = localStorage.getItem("auth-role") || "public";
-  const currentAlliance = localStorage.getItem("auth-alliance");
+  const currentUser = localStorage.getItem('auth-username');
+  const currentAvatar = localStorage.getItem('auth-avatar');
+  const currentRole = localStorage.getItem('auth-role') || 'public';
+  const currentAlliance = localStorage.getItem('auth-alliance');
 
-  const isAuthenticated = Boolean(currentUser && currentRole !== "public");
+  const isAuthenticated = Boolean(currentUser && currentRole !== 'public');
 
   // Render User Auth Identity Card
   if (isAuthenticated) {
@@ -175,7 +175,7 @@ export async function submitProposalWithAuth({
         </div>
       </div>
     `;
-    btnText.textContent = "Transmit to Discord";
+    btnText.textContent = 'Transmit to Discord';
     actionBtn.onclick = async () => {
       await performTransmission();
     };
@@ -189,17 +189,17 @@ export async function submitProposalWithAuth({
         </div>
       </div>
     `;
-    btnText.textContent = "Log In via Discord to Submit";
+    btnText.textContent = 'Log In via Discord to Submit';
     actionBtn.onclick = () => {
       // Stash draft and payload first
       payload.notes = notesInput.value.trim();
       stashProposalDraft(type, payload, diffSummaryHtml);
 
       // Trigger OAuth redirect
-      if (typeof window.triggerDiscordLogin === "function") {
+      if (typeof window.triggerDiscordLogin === 'function') {
         window.triggerDiscordLogin();
       } else {
-        alert("Discord OAuth service is unreachable. Please refresh and try again.");
+        alert('Discord OAuth service is unreachable. Please refresh and try again.');
       }
     };
   }
@@ -208,17 +208,17 @@ export async function submitProposalWithAuth({
 
   async function performTransmission() {
     setLoading(true);
-    errorBox.classList.add("hidden");
+    errorBox.classList.add('hidden');
 
     try {
       payload.notes = notesInput.value.trim();
-      payload.submittedBy = currentUser || "Anonymous";
+      payload.submittedBy = currentUser || 'Anonymous';
       payload.type = type;
 
-      const res = await fetch("/api/proposal", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+      const res = await fetch('/api/proposal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
       const resData = await res.json().catch(() => ({}));
@@ -230,12 +230,12 @@ export async function submitProposalWithAuth({
       clearStashedProposal();
       localStorage.removeItem('la_map_planner_draft'); // Clean up map draft
       closeModal();
-      alert("✅ Proposal successfully transmitted to NAP Leadership on Discord!");
+      alert('✅ Proposal successfully transmitted to NAP Leadership on Discord!');
       onSuccess(resData);
     } catch (err) {
-      console.error("Proposal dispatch error:", err);
+      console.error('Proposal dispatch error:', err);
       errorBox.textContent = `❌ ${err.message}`;
-      errorBox.classList.remove("hidden");
+      errorBox.classList.remove('hidden');
       onError(err);
     } finally {
       setLoading(false);
@@ -244,11 +244,13 @@ export async function submitProposalWithAuth({
 
   function setLoading(isLoading) {
     actionBtn.disabled = isLoading;
-    btnSpinner.classList.toggle("hidden", !isLoading);
+    btnSpinner.classList.toggle('hidden', !isLoading);
     if (isLoading) {
-      btnText.textContent = "Transmitting...";
+      btnText.textContent = 'Transmitting...';
     } else {
-      btnText.textContent = isAuthenticated ? "Transmit to Discord" : "Log In via Discord to Submit";
+      btnText.textContent = isAuthenticated
+        ? 'Transmit to Discord'
+        : 'Log In via Discord to Submit';
     }
   }
 }
@@ -264,15 +266,15 @@ export function checkAndResumePendingProposal(handlers = {}) {
   const stashed = getStashedProposal();
   if (!stashed) return;
 
-  const currentUser = localStorage.getItem("auth-username");
-  const currentRole = localStorage.getItem("auth-role") || "public";
+  const currentUser = localStorage.getItem('auth-username');
+  const currentRole = localStorage.getItem('auth-role') || 'public';
 
   // If user has returned and is authenticated
-  if (currentUser && currentRole !== "public") {
+  if (currentUser && currentRole !== 'public') {
     const handler = handlers[stashed.type];
-    
+
     // Allow tool-specific reconciliation if registered
-    if (handler && typeof handler.onResumed === "function") {
+    if (handler && typeof handler.onResumed === 'function') {
       handler.onResumed(stashed);
     } else {
       // Default: Pop modal immediately for final confirmation
@@ -281,8 +283,9 @@ export function checkAndResumePendingProposal(handlers = {}) {
           type: stashed.type,
           title: `Resume ${stashed.type.toUpperCase()} Proposal`,
           payload: stashed.payload,
-          diffSummaryHtml: stashed.diffSummaryHtml || "<p>Draft restored from previous session.</p>",
-          onSuccess: () => clearStashedProposal()
+          diffSummaryHtml:
+            stashed.diffSummaryHtml || '<p>Draft restored from previous session.</p>',
+          onSuccess: () => clearStashedProposal(),
         });
       }, 350);
     }
@@ -290,7 +293,7 @@ export function checkAndResumePendingProposal(handlers = {}) {
 }
 
 // Automatic check on Turbo load
-if (typeof document !== "undefined") {
-  document.addEventListener("turbo:load", () => checkAndResumePendingProposal());
-  document.addEventListener("DOMContentLoaded", () => checkAndResumePendingProposal());
+if (typeof document !== 'undefined') {
+  document.addEventListener('turbo:load', () => checkAndResumePendingProposal());
+  document.addEventListener('DOMContentLoaded', () => checkAndResumePendingProposal());
 }

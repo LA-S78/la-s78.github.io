@@ -1,17 +1,17 @@
 // api/_rewards_helper.js
 // Centralized Quota & Safe Reset Helper
 
-import { advanceCycleState } from "./_cycle_helper.js";
+import { advanceCycleState } from './_cycle_helper.js';
 
 /**
  * Calculates the exact chest nomination quota for an alliance for the active week.
  * Automatically intercepts active Wartime Buyout installments and WLO deductions.
  */
 export function getAllianceNominationQuota(allianceTag, rewardsState = {}, mapState = {}) {
-  const cleanTag = String(allianceTag || "").trim();
+  const cleanTag = String(allianceTag || '').trim();
   const currentWeek = rewardsState.cycle_state?.current_week ?? 1;
   const isKW = rewardsState.mode
-    ? rewardsState.mode === "kw"
+    ? rewardsState.mode === 'kw'
     : currentWeek >= 1 && currentWeek <= 3;
 
   // 1. Determine Alliance Rank from map-state
@@ -52,11 +52,11 @@ export function getAllianceNominationQuota(allianceTag, rewardsState = {}, mapSt
 
   // Case A: Displaced Beneficiary Alliance receives bonus slots
   buyouts.forEach((buyout) => {
-    if (buyout.status === "active" && buyout.beneficiary === cleanTag) {
+    if (buyout.status === 'active' && buyout.beneficiary === cleanTag) {
       const instIdx = (buyout.installments || []).findIndex(
         (i) =>
           Number(i.week) === Number(currentWeek) &&
-          (i.status === "pending" || i.status === "nominated"),
+          (i.status === 'pending' || i.status === 'nominated'),
       );
       if (instIdx !== -1) {
         const inst = buyout.installments[instIdx];
@@ -70,13 +70,13 @@ export function getAllianceNominationQuota(allianceTag, rewardsState = {}, mapSt
 
   // Case B: WLO surrenders gold chests to fund the payout
   let wloDeduction = { regular: 0, kw: 0 };
-  if (cleanTag === "WLO") {
+  if (cleanTag === 'WLO') {
     buyouts.forEach((buyout) => {
-      if (buyout.status === "active") {
+      if (buyout.status === 'active') {
         const inst = (buyout.installments || []).find(
           (i) =>
             Number(i.week) === Number(currentWeek) &&
-            (i.status === "pending" || i.status === "nominated"),
+            (i.status === 'pending' || i.status === 'nominated'),
         );
         if (inst) {
           wloDeduction.regular += Number(inst.payout?.regular || 0);
@@ -125,40 +125,34 @@ export function getAllianceNominationQuota(allianceTag, rewardsState = {}, mapSt
  */
 export function applySafeCycleReset(
   rewardsState = {},
-  requestedMode = "standard",
-  username = "Leadership",
+  requestedMode = 'standard',
+  username = 'Leadership',
   mapState = null,
   targetClockWeek = null,
 ) {
   const currentWeek = rewardsState.cycle_state?.current_week ?? 1;
 
-  if (!Array.isArray(rewardsState.wartime_buyouts))
-    rewardsState.wartime_buyouts = [];
-  if (!Array.isArray(rewardsState.buyout_history))
-    rewardsState.buyout_history = [];
+  if (!Array.isArray(rewardsState.wartime_buyouts)) rewardsState.wartime_buyouts = [];
+  if (!Array.isArray(rewardsState.buyout_history)) rewardsState.buyout_history = [];
 
   const remainingBuyouts = [];
   let archivedCount = 0;
   let preservedCount = 0;
 
   rewardsState.wartime_buyouts.forEach((buyout) => {
-    const inst = (buyout.installments || []).find(
-      (i) => Number(i.week) === Number(currentWeek),
-    );
+    const inst = (buyout.installments || []).find((i) => Number(i.week) === Number(currentWeek));
     // Mark fulfilled if the alliance nominated their recipients for this week
-    if (inst && inst.status === "nominated") {
-      inst.status = "fulfilled";
+    if (inst && inst.status === 'nominated') {
+      inst.status = 'fulfilled';
       inst.fulfilledAt = new Date().toISOString();
     }
 
-    const allDone = (buyout.installments || []).every(
-      (i) => i.status === "fulfilled",
-    );
+    const allDone = (buyout.installments || []).every((i) => i.status === 'fulfilled');
     if (allDone) {
       archivedCount++;
       rewardsState.buyout_history.push({
         ...buyout,
-        status: "fulfilled",
+        status: 'fulfilled',
         archivedAt: new Date().toISOString(),
         archivedBy: username,
       });

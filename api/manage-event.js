@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   const tokenPayload = verifyToken(token, botSecret, { action: 'manage_events' });
   if (!tokenPayload) {
     return res.status(401).json({
-      error: 'Invalid, tampered, or expired session token. Please re-run /calendar in Discord.'
+      error: 'Invalid, tampered, or expired session token. Please re-run /calendar in Discord.',
     });
   }
 
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
         notify_target = 'role',
         custom_role_id = null,
         color = null,
-        description = ''
+        description = '',
       } = eventData || {};
 
       if (!title || !date || !time_gt) {
@@ -58,13 +58,15 @@ export default async function handler(req, res) {
 
       // 5-Minute Snapping Validation
       if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time_gt)) {
-        return res.status(400).json({ error: 'Game Time must be formatted as HH:MM (00:00 to 23:59).' });
+        return res
+          .status(400)
+          .json({ error: 'Game Time must be formatted as HH:MM (00:00 to 23:59).' });
       }
 
       const [hh, mm] = time_gt.split(':').map(Number);
       if (mm % 5 !== 0) {
         return res.status(400).json({
-          error: 'Game Time must be in 5-minute increments (:00, :05, :10, :15, etc.).'
+          error: 'Game Time must be in 5-minute increments (:00, :05, :10, :15, etc.).',
         });
       }
 
@@ -84,7 +86,7 @@ export default async function handler(req, res) {
         const rawRole = String(custom_role_id || '').trim();
         if (!/^\d{17,20}$/.test(rawRole)) {
           return res.status(400).json({
-            error: 'Target Specific Role requires a valid 17-20 digit Discord Role ID.'
+            error: 'Target Specific Role requires a valid 17-20 digit Discord Role ID.',
           });
         }
         cleanCustomRoleId = rawRole;
@@ -108,7 +110,9 @@ export default async function handler(req, res) {
         id: uniqueId,
         scope: callerScope,
         title: isGlobalAdmin ? `[GLOBAL] ${cleanTitle}` : `[${callerScope}] ${cleanTitle}`,
-        description: description.trim() || (isGlobalAdmin ? 'Kingdom-wide operation.' : `Alliance event for [${callerScope}].`),
+        description:
+          description.trim() ||
+          (isGlobalAdmin ? 'Kingdom-wide operation.' : `Alliance event for [${callerScope}].`),
         start: startUtc.toISOString(),
         end: endUtc.toISOString(),
         time_gt: time_gt,
@@ -119,12 +123,12 @@ export default async function handler(req, res) {
         notification_status: {
           reminder_15m_sent: false,
           start_sent: false,
-          last_notified_occurrence: null
+          last_notified_occurrence: null,
         },
         type: isGlobalAdmin ? 'custom' : 'alliance',
         color: cleanColor,
         allDay: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       calendarState.custom_events.push(newEvent);
@@ -135,7 +139,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         success: true,
         message: `Operation "${newEvent.title}" published successfully.`,
-        event: newEvent
+        event: newEvent,
       });
     }
 
@@ -159,7 +163,7 @@ export default async function handler(req, res) {
       // Alliance Leaders can ONLY delete events matching their exact alliance tag.
       if (targetScope !== currentCallerScope) {
         return res.status(403).json({
-          error: 'Access Denied: You cannot modify or delete events outside your assigned scope.'
+          error: 'Access Denied: You cannot modify or delete events outside your assigned scope.',
         });
       }
 
@@ -169,12 +173,11 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
-        message: `Deleted operation: ${targetEvt.title}`
+        message: `Deleted operation: ${targetEvt.title}`,
       });
     }
 
     return res.status(400).json({ error: `Unsupported action: "${action}"` });
-
   } catch (err) {
     console.error('manage-event API error:', err);
     return res.status(500).json({ error: err.message || 'Internal server error' });
