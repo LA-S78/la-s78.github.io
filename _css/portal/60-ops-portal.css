@@ -293,6 +293,49 @@
   padding-top: 6px;
 }
 
+/* Step 1 (swap) and Step 2 (buyout) previews: an edge tinted like their badge */
+.preview-stepped-swap,
+.preview-stepped-buyout {
+  border-left: 3px solid var(--status-success);
+  padding-left: 10px;
+}
+
+.preview-stepped-buyout {
+  border-left-color: var(--status-danger);
+}
+
+.preview-stepped-swap p,
+.preview-stepped-buyout p {
+  margin: 0 0 6px;
+}
+
+.preview-installment-plan {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--status-danger) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--status-danger) 25%, transparent);
+}
+
+.preview-installment-plan .p-item {
+  font-size: 0.8rem;
+}
+
+/* "WLO is already scheduled" and similar notices */
+.preview-notice {
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.preview-notice.warning {
+  border-color: #f59e0b;
+  background: color-mix(in srgb, #f59e0b 12%, transparent);
+  color: #fef3c7;
+}
+
 .ops-actions-bar {
   display: flex;
   align-items: center;
