@@ -26,6 +26,28 @@ Press **Ctrl+C** to stop the preview. Run the command again after editing files.
   pages that load live data will show errors in a local preview. That is expected.
 - Translation with Gemini only happens on GitHub (see below), never locally.
 
+## Project layout
+
+```
+_source/      Guides and pages you write (all 8 languages in each file)
+_data/        Site text per language (ui.yml, content.yml, rules.yml...) and site data
+_layouts/     Page templates
+_includes/    Reusable page blocks (header, footer, map, reward cards...)
+portal/       Discord tool pages: calendar, nominate, register, distribute
+css/ js/ images/   Styles, scripts and pictures (served from the site root)
+api/          Server functions for Discord and live data (run on Vercel)
+_scripts/     Build scripts (start with build.rb)
+_configs/     One small settings file per language
+_deploy/      Redirect pages used only during deployment
+docs/         HOWTO.md (recipes) and DECISIONS.md (why things are the way they are)
+test/         Demo / sandbox pages
+.github/      GitHub Actions workflows and the Discord command list
+```
+
+Root files: `_config.yml` (Jekyll settings), `sw.js` + `site.webmanifest` (offline / installable
+app), `todo.md` (roadmap, published at /todo.html), `vercel.json`, `package.json` and `Gemfile`
+(dependencies), and formatting settings (`.prettierrc.json`, `.editorconfig`).
+
 ## Where to edit what
 
 | To change...                              | Edit                                         |
@@ -35,6 +57,7 @@ Press **Ctrl+C** to stop the preview. Run the command again after editing files.
 | Server rules / Survival Battle schedule   | `_data/<lang>/rules.yml`, `_data/<lang>/survival_battle.yml` |
 | Discord bot messages                      | `_source/bot.md`                             |
 | Page layout and reusable blocks           | `_layouts/`, `_includes/`                    |
+| Discord tool pages (calendar, nominate, register, distribute) | `portal/`                   |
 | Styling                                   | `css/style.css` (site), `css/portal.css` (tool pages) |
 | Interactive features                      | `js/`                                        |
 | Discord commands and server logic         | `api/` (runs on Vercel)                      |

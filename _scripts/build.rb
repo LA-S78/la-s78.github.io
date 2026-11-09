@@ -128,7 +128,7 @@ end
 step 'Copying shared assets to the site root'
 %w[images css js].each { |d| FileUtils.cp_r(d, SITE) }
 FileUtils.cp('site.webmanifest', SITE)
-FileUtils.cp('redirect.html', File.join(SITE, 'index.html'))
+FileUtils.cp('_deploy/redirect.html', File.join(SITE, 'index.html'))
 
 # Quick single-language builds skip the root build, which normally produces /sw.js.
 if options[:lang] && !File.exist?(File.join(SITE, 'sw.js'))
