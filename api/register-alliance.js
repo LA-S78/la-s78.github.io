@@ -1,5 +1,6 @@
 // api/register-alliance.js
-import crypto from "crypto";
+import { isGistConfigured, readGist, gistJson, writeGist } from "./_gist.js";
+import { verifyToken } from "./_tokens.js";
 
 const ALLIANCE_COMMANDS_SCHEMA = [
   {
@@ -98,35 +99,6 @@ const ALLIANCE_COMMANDS_SCHEMA = [
   },
 ];
 
-function verifyRegistrationToken(token, secret) {
-  const parts = token.split(".");
-  if (parts.length !== 2) return null;
-
-  const [dataString, signature] = parts;
-  const expectedSignature = crypto
-    .createHmac("sha256", secret)
-    .update(dataString)
-    .digest("base64url");
-
-  const sigBuffer = Buffer.from(signature);
-  const expBuffer = Buffer.from(expectedSignature);
-
-  if (
-    sigBuffer.length !== expBuffer.length ||
-    !crypto.timingSafeEqual(sigBuffer, expBuffer)
-  ) {
-    return null;
-  }
-
-  try {
-    const payload = JSON.parse(Buffer.from(dataString, "base64url").toString());
-    if (payload.exp && Date.now() > payload.exp) return null;
-    return payload;
-  } catch (err) {
-    return null;
-  }
-}
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -144,10 +116,7 @@ export default async function handler(req, res) {
 
   const botToken = process.env.DISCORD_BOT_TOKEN;
   const clientId = process.env.DISCORD_CLIENT_ID;
-  const gistId = process.env.GIST_ID;
-  const gistToken = process.env.GIST_TOKEN;
-
-  if (!token || !guildId || !botToken || !clientId || !gistId || !gistToken) {
+  if (!token || !guildId || !botToken || !clientId || !isGistConfigured()) {
     return res
       .status(400)
       .json({ error: "Missing required configuration or parameters." });
@@ -157,7 +126,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid Discord Guild ID format." });
   }
 
-  const payload = verifyRegistrationToken(token, botToken);
+  const payload = verifyToken(token, botToken);
   if (!payload || payload.action !== "register" || !payload.alliance) {
     return res.status(403).json({
       error: "Token is invalid or expired. Run /registerbot again in Discord.",
@@ -240,25 +209,9 @@ export default async function handler(req, res) {
   }
 
   // 2. Fetch Current Gist State & Check for Guild ID Collisions
-  const gistHeaders = {
-    Authorization: `Bearer ${gistToken}`,
-    Accept: "application/vnd.github.v3+json",
-    "User-Agent": "WarRoom-App",
-  };
-
   let currentState = {};
   try {
-    const gistGetRes = await fetch(`https://api.github.com/gists/${gistId}`, {
-      headers: gistHeaders,
-      cache: "no-store",
-    });
-    if (!gistGetRes.ok)
-      throw new Error(`GitHub Gist get error (${gistGetRes.status})`);
-
-    const gistData = await gistGetRes.json();
-    currentState = JSON.parse(
-      gistData.files["map-state.json"]?.content || "{}"
-    );
+    currentState = gistJson(await readGist(), "map-state.json");
   } catch (err) {
     console.error("Failed to retrieve Gist state:", err);
     return res
@@ -318,21 +271,12 @@ export default async function handler(req, res) {
 
     currentState.lastUpdated = new Date().toISOString();
 
-    const patchRes = await fetch(`https://api.github.com/gists/${gistId}`, {
-      method: "PATCH",
-      headers: { ...gistHeaders, "Content-Type": "application/json" },
-      body: JSON.stringify({
+    await writeGist(
+      { "map-state.json": currentState },
+      {
         description: `Server, alerts, and ticket routing registered for [${payload.alliance}] at ${new Date().toISOString()}`,
-        files: {
-          "map-state.json": {
-            content: JSON.stringify(currentState, null, 2),
-          },
-        },
-      }),
-    });
-
-    if (!patchRes.ok)
-      throw new Error(`GitHub Gist patch error (${patchRes.status})`);
+      }
+    );
 
     return res.status(200).json({
       success: true,

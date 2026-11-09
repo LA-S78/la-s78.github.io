@@ -1,60 +1,20 @@
 // api/nominate.js
 // Handles /nominate token verification, dynamic quota validation, and buyout fulfillment.
 
-import crypto from 'crypto';
-
-function verifyNominationToken(token, secret) {
-  const parts = token.split('.');
-  if (parts.length !== 2) return null;
-
-  const [dataString, signature] = parts;
-  const expectedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(dataString)
-    .digest('base64url');
-
-  const sigBuffer = Buffer.from(signature);
-  const expBuffer = Buffer.from(expectedSignature);
-
-  if (sigBuffer.length !== expBuffer.length || !crypto.timingSafeEqual(sigBuffer, expBuffer)) {
-    return null;
-  }
-
-  try {
-    const payload = JSON.parse(Buffer.from(dataString, 'base64url').toString());
-    if (payload.exp && Date.now() > payload.exp) return null;
-    return payload;
-  } catch {
-    return null;
-  }
-}
+import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+import { verifyToken } from './_tokens.js';
 
 export default async function handler(req, res) {
-  const GIST_ID = process.env.GIST_ID;
-  const GIST_TOKEN = process.env.GIST_TOKEN;
-
-  if (!GIST_ID || !GIST_TOKEN) {
+  if (!isGistConfigured()) {
     return res.status(500).json({ error: 'Gist configuration is missing.' });
   }
-
-  const headers = {
-    Authorization: `Bearer ${GIST_TOKEN}`,
-    Accept: 'application/vnd.github.v3+json',
-    'User-Agent': 'WarRoom-Nominations'
-  };
 
   // GET: Read current nominations for portals/consoles
   if (req.method === 'GET') {
     try {
-      const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-        headers,
-        cache: 'no-store'
-      });
-      if (!gistRes.ok) throw new Error(`GitHub Gist error: ${gistRes.status}`);
-
-      const gistData = await gistRes.json();
-      const nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
-      const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+      const gist = await readGist();
+      const nominations = gistJson(gist, 'rewards-nominations.json');
+      const rewardsData = gistJson(gist, 'rewards-data.json');
 
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
       res.setHeader('Pragma', 'no-cache');
@@ -88,7 +48,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required parameters.' });
   }
 
-  const payload = verifyNominationToken(token, botToken);
+  const payload = verifyToken(token, botToken);
   if (!payload) {
     return res.status(403).json({ error: 'Token is invalid or expired. Run /nominate again.' });
   }
@@ -135,15 +95,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-      headers,
-      cache: 'no-store'
-    });
-    if (!gistGetRes.ok) throw new Error(`GitHub Gist load failed: ${gistGetRes.status}`);
-
-    const gistData = await gistGetRes.json();
-    let nominationsStore = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
-    let rewardsState = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+    const gist = await readGist();
+    let nominationsStore = gistJson(gist, 'rewards-nominations.json');
+    let rewardsState = gistJson(gist, 'rewards-data.json');
 
     const cleanList = (arr) => (arr || []).map(s => s.trim()).filter(Boolean);
 
@@ -191,23 +145,13 @@ export default async function handler(req, res) {
     }
 
     // 3. Atomically update both Gist files in a single PATCH
-    const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-      method: 'PATCH',
-      headers: { ...headers, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        description: `Nominations updated: [${cleanTag}] at ${new Date().toISOString()}`,
-        files: {
-          'rewards-nominations.json': {
-            content: JSON.stringify(nominationsStore, null, 2)
-          },
-          'rewards-data.json': {
-            content: JSON.stringify(rewardsState, null, 2)
-          }
-        }
-      })
-    });
-
-    if (!updateRes.ok) throw new Error(`GitHub Gist PATCH error: ${updateRes.status}`);
+    await writeGist(
+      {
+        'rewards-nominations.json': nominationsStore,
+        'rewards-data.json': rewardsState
+      },
+      { description: `Nominations updated: [${cleanTag}] at ${new Date().toISOString()}` }
+    );
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     return res.status(200).json({ 

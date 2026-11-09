@@ -1,4 +1,5 @@
 // api/state.js
+import { isGistConfigured, readGist, gistJson } from './_gist.js';
 // Unified Read-Only State Proxy for Map, Rewards, and Alliance Hierarchy
 
 const DEFAULT_FALLBACK_COLORS = {
@@ -82,35 +83,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const GIST_ID = process.env.GIST_ID;
-  const GIST_TOKEN = process.env.GIST_TOKEN;
-
-  if (!GIST_ID || !GIST_TOKEN) {
+  if (!isGistConfigured()) {
     return res.status(500).json({ error: 'Server Gist configuration missing' });
   }
 
   const scope = String(req.query.scope || 'all').toLowerCase();
 
   try {
-    const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-      headers: {
-        Authorization: `Bearer ${GIST_TOKEN}`,
-        Accept: 'application/vnd.github.v3+json',
-        'User-Agent': 'WarRoom-State-Proxy'
-      }
-    });
-
-    if (!gistRes.ok) {
-      throw new Error(`GitHub Gist API responded with ${gistRes.status}`);
-    }
-
-    const gistData = await gistRes.json();
-
-    const mapRaw = gistData.files?.['map-state.json']?.content;
-    const rewardsRaw = gistData.files?.['rewards-data.json']?.content;
-
-    const mapState = mapRaw ? JSON.parse(mapRaw) : {};
-    const rewardsState = rewardsRaw ? JSON.parse(rewardsRaw) : {};
+    const gist = await readGist();
+    const mapState = gistJson(gist, 'map-state.json');
+    const rewardsState = gistJson(gist, 'rewards-data.json');
 
     const cleanAlliances = sanitizeAlliances(mapState.alliances || {});
     const blacklist = mapState.blacklist || { players: [], alliances: [] };

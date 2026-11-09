@@ -1,48 +1,8 @@
 // api/manage-event.js
 
 // Handles creating, deleting, modifying events
-import crypto from 'crypto';
-
-/**
- * Validates HMAC-SHA256 signed token and checks expiration
- */
-function verifyHmacToken(token, secret) {
-  if (!token || typeof token !== 'string') return null;
-
-  const parts = token.split('.');
-  if (parts.length !== 2) return null;
-
-  const [dataString, signature] = parts;
-
-  try {
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(dataString)
-      .digest('base64url');
-
-    const sigBuf = Buffer.from(signature);
-    const expBuf = Buffer.from(expectedSignature);
-
-    if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
-      return null;
-    }
-
-    const payload = JSON.parse(Buffer.from(dataString, 'base64url').toString('utf8'));
-
-    // Check expiration timestamp
-    if (payload.exp && Date.now() > payload.exp) {
-      return null;
-    }
-
-    if (payload.action !== 'manage_events') {
-      return null;
-    }
-
-    return payload;
-  } catch (err) {
-    return null;
-  }
-}
+import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+import { verifyToken } from './_tokens.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -50,17 +10,15 @@ export default async function handler(req, res) {
   }
 
   const botSecret = process.env.DISCORD_BOT_TOKEN;
-  const gistId = process.env.GIST_ID;
-  const gistToken = process.env.GIST_TOKEN;
 
-  if (!botSecret || !gistId || !gistToken) {
+  if (!botSecret || !isGistConfigured()) {
     return res.status(500).json({ error: 'Server configuration error: missing credentials' });
   }
 
   const { token, action, eventData, eventId } = req.body || {};
 
   // 1. Verify Cryptographic Token
-  const tokenPayload = verifyHmacToken(token, botSecret);
+  const tokenPayload = verifyToken(token, botSecret, { action: 'manage_events' });
   if (!tokenPayload) {
     return res.status(401).json({
       error: 'Invalid, tampered, or expired session token. Please re-run /calendar in Discord.'
@@ -72,24 +30,8 @@ export default async function handler(req, res) {
 
   try {
     // 2. Fetch current calendar state from GitHub Gist
-    const gistRes = await fetch(`https://api.github.com/gists/${gistId}`, {
-      headers: {
-        Authorization: `Bearer ${gistToken}`,
-        'User-Agent': 'WarRoom-App'
-      }
-    });
-
-    if (!gistRes.ok) {
-      throw new Error(`GitHub Gist fetch failed (HTTP ${gistRes.status})`);
-    }
-
-    const gistData = await gistRes.json();
-    const rawContent = gistData.files?.['calendar-state.json']?.content;
-
-    let calendarState = { custom_events: [] };
-    if (rawContent) {
-      calendarState = JSON.parse(rawContent);
-    }
+    const gist = await readGist();
+    let calendarState = gistJson(gist, 'calendar-state.json', { custom_events: [] });
     calendarState.custom_events = calendarState.custom_events || [];
 
     // --- ACTION: CREATE EVENT ---
@@ -188,25 +130,7 @@ export default async function handler(req, res) {
       calendarState.custom_events.push(newEvent);
       calendarState.custom_events.sort((a, b) => new Date(a.start) - new Date(b.start));
 
-      const patchRes = await fetch(`https://api.github.com/gists/${gistId}`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${gistToken}`,
-          'Content-Type': 'application/json',
-          'User-Agent': 'WarRoom-App'
-        },
-        body: JSON.stringify({
-          files: {
-            'calendar-state.json': {
-              content: JSON.stringify(calendarState, null, 2)
-            }
-          }
-        })
-      });
-
-      if (!patchRes.ok) {
-        throw new Error(`Failed to write to GitHub Gist (HTTP ${patchRes.status})`);
-      }
+      await writeGist({ 'calendar-state.json': calendarState });
 
       return res.status(200).json({
         success: true,
@@ -241,25 +165,7 @@ export default async function handler(req, res) {
 
       calendarState.custom_events.splice(targetIndex, 1);
 
-      const patchRes = await fetch(`https://api.github.com/gists/${gistId}`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${gistToken}`,
-          'Content-Type': 'application/json',
-          'User-Agent': 'WarRoom-App'
-        },
-        body: JSON.stringify({
-          files: {
-            'calendar-state.json': {
-              content: JSON.stringify(calendarState, null, 2)
-            }
-          }
-        })
-      });
-
-      if (!patchRes.ok) {
-        throw new Error(`Failed to update GitHub Gist (HTTP ${patchRes.status})`);
-      }
+      await writeGist({ 'calendar-state.json': calendarState });
 
       return res.status(200).json({
         success: true,

@@ -1,6 +1,22 @@
 // api/accept-proposal.js
 
 import { calculateOverrideAction } from './_cycle_helper.js';
+import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+
+/**
+ * Reads one Gist file for an approval, keeping this endpoint's original behaviour:
+ * if GitHub answers with an error, carry on with `fallback` instead of failing.
+ * WARNING: the approval then saves on top of `fallback`, which can overwrite live data.
+ * Kept as-is pending maintainer review (see the open question in docs/DECISIONS.md).
+ */
+async function readForApproval(filename, fallback) {
+  try {
+    return gistJson(await readGist(), filename, fallback);
+  } catch (err) {
+    if (err.status) return fallback;
+    throw err;
+  }
+}
 
 const DEFAULT_FALLBACK_COLORS = {
   WLO: '#25bb00',
@@ -37,18 +53,9 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const GIST_ID = process.env.GIST_ID;
-  const GIST_TOKEN = process.env.GIST_TOKEN;
-
-  if (!GIST_ID || !GIST_TOKEN) {
+  if (!isGistConfigured()) {
     return res.status(500).json({ error: 'Gist environment variables missing on server' });
   }
-
-  const headers = {
-    Authorization: `Bearer ${GIST_TOKEN}`,
-    Accept: 'application/vnd.github.v3+json',
-    'User-Agent': 'WarRoom-Vercel-App'
-  };
 
   // Fallback: If legacy interaction dispatch omitted type, infer 'map' if changes are present
   const resolvedType = type || (changes ? 'map' : null);
@@ -63,39 +70,19 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Invalid distribution data provided' });
         }
 
-        const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
-        let existingRewards = {};
-        if (gistGetRes.ok) {
-          const gistData = await gistGetRes.json();
-          const content = gistData.files?.['rewards-data.json']?.content;
-          if (content) existingRewards = JSON.parse(content);
-        }
+        const existingRewards = await readForApproval('rewards-data.json', {});
 
-        const patchPayload = {
-          description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
-          files: {
+        await writeGist(
+          {
             'rewards-data.json': {
-              content: JSON.stringify(
-                {
-                  ...existingRewards,
-                  distribution_tiers: distribution,
-                  lastUpdated: new Date().toISOString(),
-                  updatedBy: submittedBy || 'Discord Admin'
-                },
-                null,
-                2
-              )
+              ...existingRewards,
+              distribution_tiers: distribution,
+              lastUpdated: new Date().toISOString(),
+              updatedBy: submittedBy || 'Discord Admin'
             }
-          }
-        };
-
-        const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-          method: 'PATCH',
-          headers: { ...headers, 'Content-Type': 'application/json' },
-          body: JSON.stringify(patchPayload)
-        });
-
-        if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+          },
+          { description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}` }
+        );
         return res.status(200).json({ success: true, message: 'Rewards distribution updated in Gist!' });
       }
 
@@ -107,14 +94,7 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Invalid territory changes payload.' });
         }
 
-        let currentState = { alliances: {}, territory_ownership: {} };
-        const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
-
-        if (gistGetRes.ok) {
-          const gistData = await gistGetRes.json();
-          const content = gistData.files?.['map-state.json']?.content;
-          if (content) currentState = JSON.parse(content);
-        }
+        const currentState = await readForApproval('map-state.json', { alliances: {}, territory_ownership: {} });
 
         if (!currentState.territory_ownership) {
           currentState.territory_ownership = {};
@@ -136,20 +116,10 @@ export default async function handler(req, res) {
         currentState.lastUpdated = new Date().toISOString();
         currentState.updatedBy = submittedBy || 'Discord Admin';
 
-        const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-          method: 'PATCH',
-          headers: { ...headers, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            description: `Map updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
-            files: {
-              'map-state.json': {
-                content: JSON.stringify(currentState, null, 2)
-              }
-            }
-          })
-        });
-
-        if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+        await writeGist(
+          { 'map-state.json': currentState },
+          { description: `Map updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}` }
+        );
 
         // Pre-warm Edge CDN for all 3 perspectives (capped to 1.8s timeout)
         const rawHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
@@ -177,14 +147,7 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Invalid alliance data provided' });
         }
 
-        let currentState = { alliances: {}, territory_ownership: {}, blacklist: {} };
-        const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
-
-        if (gistGetRes.ok) {
-          const gistData = await gistGetRes.json();
-          const content = gistData.files?.['map-state.json']?.content;
-          if (content) currentState = JSON.parse(content);
-        }
+        const currentState = await readForApproval('map-state.json', { alliances: {}, territory_ownership: {}, blacklist: {} });
 
         const previousAlliances = currentState.alliances || {};
         const mergedAlliances = {};
@@ -228,20 +191,10 @@ export default async function handler(req, res) {
         currentState.lastUpdated = new Date().toISOString();
         currentState.updatedBy = submittedBy || 'Discord Admin';
 
-        const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-          method: 'PATCH',
-          headers: { ...headers, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            description: `Alliances & NAP updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
-            files: {
-              'map-state.json': {
-                content: JSON.stringify(currentState, null, 2)
-              }
-            }
-          })
-        });
-
-        if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+        await writeGist(
+          { 'map-state.json': currentState },
+          { description: `Alliances & NAP updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}` }
+        );
 
         return res.status(200).json({ success: true, revision, message: 'Alliance standings updated in Gist!' });
       }
@@ -255,13 +208,7 @@ export default async function handler(req, res) {
           return res.status(400).json({ error: 'Missing targetWeek or threatName' });
         }
 
-        const gistGetRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers });
-        let rewardsState = {};
-        if (gistGetRes.ok) {
-          const gistData = await gistGetRes.json();
-          const content = gistData.files?.['rewards-data.json']?.content;
-          if (content) rewardsState = JSON.parse(content);
-        }
+        const rewardsState = await readForApproval('rewards-data.json', {});
 
         const cycleState = rewardsState.cycle_state || {
           macro_cycle: 1,
@@ -292,20 +239,10 @@ export default async function handler(req, res) {
         rewardsState.lastUpdated = new Date().toISOString();
         rewardsState.updatedBy = submittedBy || 'Discord Admin';
 
-        const updateRes = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-          method: 'PATCH',
-          headers: { ...headers, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            description: `Override Week ${targetWeek} (${result.action}) by ${submittedBy || 'Admin'}`,
-            files: {
-              'rewards-data.json': {
-                content: JSON.stringify(rewardsState, null, 2)
-              }
-            }
-          })
-        });
-
-        if (!updateRes.ok) throw new Error(`Failed to update Gist: ${updateRes.status}`);
+        await writeGist(
+          { 'rewards-data.json': rewardsState },
+          { description: `Override Week ${targetWeek} (${result.action}) by ${submittedBy || 'Admin'}` }
+        );
 
         return res.status(200).json({
           success: true,
