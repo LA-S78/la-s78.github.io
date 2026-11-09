@@ -16,7 +16,7 @@ under *Must not change*, or someone will "fix" it.
 ---
 
 ## Hosting & deployment (GitHub Actions → Vercel, GitHub Pages redirect)
-- **Purpose:** Compiles an 8-language Jekyll static site alongside Node.js serverless API routes (`api/`), deploying the combined bundle (`_site/`) to Vercel (`la-s78.app`) while publishing a path-preserving redirect (`migration.html`) to GitHub Pages (`gh-pages`).
+- **Purpose:** Compiles an 8-language Jekyll static site alongside Node.js serverless API routes (`api/`), deploying the combined bundle (`_site/`) to Vercel (`la-s78.app`) while publishing a path-preserving redirect (`_deploy/migration.html`) to GitHub Pages (`gh-pages`).
 - **Constraints:** Vercel deployments are built and pushed via CLI (`vercel deploy --cwd _site/`) inside GitHub Actions after Ruby scripts generate in-memory JS modules (`api/_generated_translations.js`, `api/_map_svg.js`, `api/_cities_data.js`, `api/_font_data.js`).
 - **Must not change:**
   - Staging `api/` into `_site/` (in `_scripts/build.rb`) MUST run *after* `WorkboxInjector.run('_site')` so `api/` is deployed to Vercel without being scanned by Jekyll or precached by the service worker.
@@ -80,7 +80,7 @@ under *Must not change*, or someone will "fix" it.
 - **Must not change:** Updating alliance ranks in `map-state.json` updates weekly chest tiers immediately, while Capitol rotation seats remain locked until the next 4-week cycle rollover.
 
 ## Calendar & event management
-- **Purpose:** Displays the 28-day Kingdom War & Capitol rotation cycle alongside global and alliance-scoped operations (`calendar.html`, `/calendar`).
+- **Purpose:** Displays the 28-day Kingdom War & Capitol rotation cycle alongside global and alliance-scoped operations (`portal/calendar.html`, `/calendar`).
 - **Constraints:** `_calendar_helper.js` numbers weeks `1..4` (where `4` is Off-Week), whereas `rewards-data.json` and `kvk-scheduler.js` number weeks `0..3` (where `0` is `downtime`).
 - **Must not change:** Both the Top Hero Card (`api/calendar.js` / `js/calendar.js`) and the 4-Week Override Console (`js/kvk-scheduler.js`) must resolve the active Capitol holder from `rewards-data.json`'s `cycle_state.active_schedule` and highlight the active week using the live clock (`clockWeek`), never static `capitol_rank` lookups alone.
 
@@ -91,6 +91,7 @@ under *Must not change*, or someone will "fix" it.
 ## Conventions
 - **Game Time is UTC-2.** All schedule/calendar code and bot strings use this.
 - **Pull requests** must pass the "Checking build output" CI step before merge.
+- **Folder layout.** Discord tool pages live in `portal/`, and their public URLs come from each page's `permalink` (e.g. `/calendar.html`), not from the folder. Files used only by the deploy (`redirect.html`, `migration.html`) live in `_deploy/`, which Jekyll never publishes. Keep public URLs unchanged when moving files.
 - **One build script.** `_scripts/build.rb` is the only build definition; CI calls it rather than running its own inline steps, so a local build matches production. New build steps go in the script, not in the workflow.
 - **Code style is automatic.** JavaScript and JSON are formatted by Prettier (`.prettierrc.json`: defaults plus single quotes and 100-character lines). Don't hand-format or argue style in reviews; run `npm run format` or use format-on-save. HTML/Markdown/YAML are excluded because of Liquid tags. The CI formatting check is advisory, not blocking.
 - **Generated files are git-ignored** (see `.gitignore` and the README's "Never edit these" list) so local builds never show up as changes.
