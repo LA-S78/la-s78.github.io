@@ -9,6 +9,7 @@
 //
 // Options: --pages <regex>  --themes default,sanctuary,miasma  --widths 390,1280
 //          --states <regex>  --workers 4  --out tools/visual-diff/output  --quick
+//          --save-all  (keep screenshots of every view, not only the ones that differ)
 // Exit code 0 = no visible or style difference; 1 = differences (see report.md).
 
 import { chromium } from 'playwright';
@@ -49,6 +50,7 @@ const opt = {
   states: args.states ? new RegExp(args.states) : null,
   workers: Number(args.workers || Math.max(2, Math.min(6, os.cpus().length))),
   out: path.resolve(args.out || path.join(HERE, 'output')),
+  saveAll: Boolean(args['save-all']),
 };
 
 // ---------- getting a built site ----------
@@ -136,16 +138,25 @@ const PIXEL_PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
   'base64',
 );
-async function routeApi(route) {
+// A state can change the sample data with `api: (fixtureName, data) => void` (states.mjs).
+async function routeApi(route, edit) {
   const url = new URL(route.request().url());
   const name = url.pathname.replace(/^\/api\//, '');
   const json = (body, status = 200) =>
     route.fulfill({ status, contentType: 'application/json', body });
-  if (name === 'state')
-    return json(FIX[`state-${url.searchParams.get('scope') || 'all'}`] || FIX['state-all']);
+  const fixture = (key) => {
+    if (!edit) return FIX[key];
+    const data = JSON.parse(FIX[key]);
+    edit(key, data);
+    return JSON.stringify(data);
+  };
+  if (name === 'state') {
+    const key = `state-${url.searchParams.get('scope') || 'all'}`;
+    return json(fixture(FIX[key] ? key : 'state-all'));
+  }
   if (name === 'map-image')
     return route.fulfill({ status: 200, contentType: 'image/png', body: PIXEL_PNG });
-  if (FIX[name]) return json(FIX[name]);
+  if (FIX[name]) return json(fixture(name));
   return json('{"error":"not available in visual tests"}', 404);
 }
 
@@ -299,7 +310,7 @@ async function openState(browser, origin, job) {
   }, storage);
   await context.route('**/*', (route) => {
     const url = route.request().url();
-    if (url.startsWith(origin + '/api/')) return routeApi(route);
+    if (url.startsWith(origin + '/api/')) return routeApi(route, job.state.api);
     if (url.startsWith(origin)) return route.continue();
     return route.abort(); // nothing outside the site, for repeatable results
   });
@@ -502,7 +513,7 @@ async function compareOnce(job) {
     r.pixels = pixelmatch(ia.data, ib.data, diff.data, ia.width, ia.height, { threshold: 0 });
     if (r.pixels) fs.writeFileSync(path.join(opt.out, `${tag}__diff.png`), PNG.sync.write(diff));
   }
-  if (r.pixels || r.styleDiffs.length) {
+  if (opt.saveAll || r.pixels || r.styleDiffs.length) {
     fs.writeFileSync(path.join(opt.out, `${tag}__base.png`), a.png);
     fs.writeFileSync(path.join(opt.out, `${tag}__head.png`), b.png);
   }
