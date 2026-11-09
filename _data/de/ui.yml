@@ -7,10 +7,12 @@ footer:
   nav_rules: "Regeln"
   nav_guides: "Guides"
   nav_alliance: "Allianz"
+  nav_calendar: "Kalender"
   aria_home: "Zur Startseite gehen"
   aria_rules: "Zur Serverregeln-Seite gehen"
   aria_guides: "Zur Guides-Seite gehen"
   aria_alliance: "Zur Allianz- und Diplomatie-Seite gehen"
+  aria_calendar: "Zur Eventkalender-Seite gehen"
 
 guides:
   heroes: "Helden & Builds"

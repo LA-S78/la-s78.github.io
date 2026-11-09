@@ -7,10 +7,12 @@ footer:
   nav_rules: "Правила"
   nav_guides: "Гайди"
   nav_alliance: "Альянс"
+  nav_calendar: "Календар"
   aria_home: "Перейти на Головну сторінку"
   aria_rules: "Перейти на сторінку Правил сервера"
   aria_guides: "Перейти на сторінку Гайдів"
   aria_alliance: "Перейти на сторінку Альянсу та Дипломатії"
+  aria_calendar: "Перейти на сторінку календаря подій"
 
 guides:
   heroes: "Герої та Білди"
