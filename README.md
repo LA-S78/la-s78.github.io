@@ -3,8 +3,9 @@
 Source code for the S78 Last Asylum Guide site (https://la-s78.app): an 8-language
 Jekyll site with Discord-connected tools, deployed to Vercel by GitHub Actions.
 
-Before changing a feature, read [`docs/DECISIONS.md`](docs/DECISIONS.md): it explains
-why things work the way they do.
+- **How do I…?** Step-by-step recipes (fix text, add a guide, add a Discord command…):
+  [`docs/HOWTO.md`](docs/HOWTO.md)
+- **Why is it like this?** Read [`docs/DECISIONS.md`](docs/DECISIONS.md) before changing a feature.
 
 ## Preview the site on your computer
 
