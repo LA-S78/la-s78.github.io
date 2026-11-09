@@ -493,9 +493,73 @@
     });
   };
 
+  // --- PWA: SERVICE WORKER & "NEW VERSION" TOAST ---
+  // When a new version of the site has downloaded in the background, offer to switch to it.
+  // Texts come from _data/<lang>/ui.yml (pwa:), via window.pwaTranslations in head.html.
+  function showUpdateToast(waitingWorker) {
+    if (!waitingWorker || document.getElementById('pwa-update-toast')) return;
+    const t = window.pwaTranslations || {
+      toastMsg: 'New intel acquired.',
+      updateBtn: 'Update',
+      updating: 'Decrypting...',
+    };
+
+    const toast = document.createElement('div');
+    toast.id = 'pwa-update-toast';
+    toast.setAttribute('role', 'status');
+    const text = document.createElement('span');
+    text.textContent = t.toastMsg;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = t.updateBtn;
+    toast.append(text, button);
+    document.body.appendChild(toast);
+
+    button.addEventListener('click', () => {
+      toast.classList.add('updating');
+      text.textContent = t.updating;
+      // sw.js listens for this and activates the new version; 'controllerchange' then reloads.
+      waitingWorker.postMessage({ type: 'SKIP_WAITING' });
+    });
+  }
+
+  function watchForUpdates(registration) {
+    // An update downloaded on an earlier visit is already waiting.
+    if (registration.waiting && navigator.serviceWorker.controller) {
+      showUpdateToast(registration.waiting);
+    }
+    // An update found during this visit.
+    registration.addEventListener('updatefound', () => {
+      const newWorker = registration.installing;
+      if (!newWorker) return;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          showUpdateToast(newWorker);
+        }
+      });
+    });
+  }
+
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch((err) => console.warn(err));
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then(watchForUpdates)
+        .catch((err) => console.warn('Service worker registration failed:', err));
+
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
+    });
+
+    // Turbo replaces the page body on navigation, which removes the toast; show it again.
+    document.addEventListener('turbo:load', () => {
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (reg?.waiting && navigator.serviceWorker.controller) showUpdateToast(reg.waiting);
+      });
     });
   }
 })();
