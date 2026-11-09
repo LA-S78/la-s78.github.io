@@ -17,6 +17,7 @@ exclude:
   - vercel.json
   - _source/
   - docs/
+  - tools/
   # Build-only / server-only files that must not be published as static pages
   - api/
   - package.json
