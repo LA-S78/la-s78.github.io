@@ -60,23 +60,20 @@ svg g[inkscape\:label] path {
   user-select: none;
 }
 
-#game-map path,
-.map-territory {
+#game-map path {
   cursor: pointer;
   transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease;
   stroke: rgba(0, 0, 0, 0.5);
   stroke-width: 1.5px;
 }
 
-#game-map path:hover,
-.map-territory:hover {
+#game-map path:hover {
   stroke: var(--accent-color) !important;
   stroke-width: 3px !important;
   filter: brightness(1.25);
 }
 
-#game-map path.selected,
-.map-territory.selected {
+#game-map path.selected {
   stroke: #ffffff !important;
   stroke-width: 4px !important;
   filter: brightness(1.4);
@@ -99,27 +96,6 @@ svg g[inkscape\:label] path {
   font-size: 0.85rem;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-#territory-intel-pane {
-  margin-top: 15px;
-  padding: 15px 20px;
-  background: var(--card-bg);
-  border-left: 4px solid var(--accent-color);
-  border-radius: 0 4px 4px 0;
-  color: var(--text-main);
-}
-
-#intel-title {
-  margin: 0 0 8px 0;
-  font-size: 1.2rem;
-  color: var(--accent-color);
-}
-
-#intel-body {
-  margin: 0;
-  color: var(--text-muted);
-  line-height: 1.5;
 }
 
 .normal-texture-overlay {

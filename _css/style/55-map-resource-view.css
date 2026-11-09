@@ -22,13 +22,6 @@
   display: none !important;
 }
 
-/* Hide any residual count badges if present */
-.resource-legend .legend-count,
-.resource-legend .legend-tally,
-.resource-legend .chip-count {
-  display: none !important;
-}
-
 .legend-group {
   display: inline-flex;
   align-items: center;

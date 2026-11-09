@@ -469,10 +469,6 @@ dialog.auth-modal[open] {
   padding-bottom: 10px;
   margin-bottom: 20px;
 }
-
-.divider-wrapper {
-  display: contents;
-}
 .pane-divider {
   flex: 0 0 100%;
   height: 1px;
@@ -504,19 +500,6 @@ dialog.auth-modal[open] {
   width: 100%;
   border-collapse: collapse;
 }
-.sub-text {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  display: block;
-  margin-top: 2px;
-}
-.rank-num {
-  width: 30px;
-  color: var(--accent-color);
-  font-weight: bold;
-  text-align: center;
-}
-
 .scroll-btn {
   display: none;
   position: absolute;
@@ -548,51 +531,6 @@ dialog.auth-modal[open] {
 }
 .scroll-btn.right {
   right: -35px;
-}
-
-#pwa-update-toast {
-  position: fixed;
-  bottom: calc(80px + env(safe-area-inset-bottom));
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background-color: rgba(20, 16, 14, 0.95);
-  border: 1px solid var(--accent-color);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.8),
-    0 0 10px rgba(184, 151, 90, 0.3);
-  border-radius: 8px;
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  z-index: 9999;
-  opacity: 0;
-  animation: slideUpToast 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  backdrop-filter: blur(5px);
-}
-
-#pwa-update-toast span {
-  color: var(--text-main);
-  font-size: 0.85rem;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-#pwa-update-toast button {
-  background-color: var(--accent-color);
-  color: #1a1512;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-  font-weight: bold;
-  font-size: 0.8rem;
-  cursor: pointer;
-  text-transform: uppercase;
-}
-
-#pwa-update-toast.updating button {
-  opacity: 0.5;
-  pointer-events: none;
 }
 
 @keyframes slideUpToast {

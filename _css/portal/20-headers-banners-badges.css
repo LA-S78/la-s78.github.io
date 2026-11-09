@@ -58,3 +58,10 @@
   text-align: left;
 }
 
+/* Small muted caption under portal titles (used by every portal page) */
+.sub-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}

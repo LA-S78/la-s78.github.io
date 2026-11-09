@@ -1,5 +1,5 @@
 /* ==========================================================================
-   8. FEATURE: ELITE TROOP (T10) CALCULATOR & WAR ROOM MAP
+   8. FEATURE: ELITE TROOP (T10) CALCULATOR
    ========================================================================== */
 
 .tree-container {
@@ -220,13 +220,5 @@
 .total-value.zero {
   color: var(--text-muted);
   opacity: 0.5;
-}
-svg.resource-icon {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 4px;
 }
 

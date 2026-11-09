@@ -272,21 +272,3 @@
   color: var(--text-main);
 }
 
-.nomination-alert-banner.buyout-deducted {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px dashed var(--border-color);
-  color: var(--text-muted);
-}
-
-.slot-buyout-bonus {
-  background: rgba(184, 151, 90, 0.06);
-  border: 1px dashed var(--accent-color);
-  border-radius: 6px;
-  padding: 8px 10px;
-  margin-top: 6px;
-}
-
-.input-buyout {
-  border-color: var(--accent-color) !important;
-}
-
