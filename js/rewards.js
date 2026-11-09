@@ -532,9 +532,7 @@ export async function submitRewardProposal() {
   const diffItems = draftTiers
     .map((tier) => {
       const isSingle = tier.min_rank === tier.max_rank;
-      const label = isSingle
-        ? `Rank ${tier.min_rank}`
-        : `Rank ${tier.min_rank}–${tier.max_rank}`;
+      const label = isSingle ? `Rank ${tier.min_rank}` : `Rank ${tier.min_rank}–${tier.max_rank}`;
       return `
       <div>
         <strong>${esc(label)}</strong>: 
