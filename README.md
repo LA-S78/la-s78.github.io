@@ -33,7 +33,8 @@ _source/      Guides and pages you write (all 8 languages in each file)
 _data/        Site text per language (ui.yml, content.yml, rules.yml...) and site data
 _layouts/     Page templates
 _includes/    Reusable page blocks (header, footer, map, reward cards...)
-portal/       Discord tool pages: calendar, nominate, register, distribute
+portal/       Discord tool pages: nominate, register, distribute
+calendar.html The event calendar (a regular page with the footer)
 _css/        Stylesheets, split into numbered pieces (joined into /css/*.css by the build)
 js/ images/  Scripts and pictures (served from the site root)
 api/          Server functions for Discord and live data (run on Vercel)
@@ -58,8 +59,9 @@ app), `todo.md` (roadmap, published at /todo.html), `vercel.json`, `package.json
 | Server rules / Survival Battle schedule   | `_data/<lang>/rules.yml`, `_data/<lang>/survival_battle.yml` |
 | Discord bot messages                      | `_source/bot.md`                             |
 | Page layout and reusable blocks           | `_layouts/`, `_includes/`                    |
-| Discord tool pages (calendar, nominate, register, distribute) | `portal/`                   |
-| Styling                                   | `_css/style/` (site), `_css/portal/` (tool pages); see `_css/README.md` |
+| Discord tool pages (nominate, register, distribute) | `portal/`                   |
+| Event calendar                            | `calendar.html`, `js/calendar.js`, `js/kvk-scheduler.js` |
+| Styling                                   | `_css/style/` (site), `_css/portal/` (tool pages and the calendar); see `_css/README.md` |
 | Interactive features                      | `js/`                                        |
 | Discord commands and server logic         | `api/` (runs on Vercel)                      |
 | The build itself                          | `_scripts/build.rb`                          |

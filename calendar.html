@@ -1,10 +1,15 @@
 ---
-layout: portal
+layout: default
 title: Kingdom War & Event Calendar
 page_key: "calendar"
+active_nav: calendar
 permalink: /calendar.html
 lang: "en"
 ---
+
+<!-- The calendar's card and console styles live in the portal stylesheet. Loaded here (not in
+     <head>) so they only apply on this page, also when it is reached by footer navigation. -->
+<link rel="stylesheet" href="/css/portal.css">
 
 <div class="content-pane portal-pane-lg">
   <div class="calendar-app-container">

@@ -182,7 +182,7 @@ translated per push, so add guides one at a time.
 
 ## Change styles (CSS) safely
 
-Styles live in `_css/style/` (every page) and `_css/portal/` (Discord tool pages),
+Styles live in `_css/style/` (every page) and `_css/portal/` (Discord tool pages and the calendar),
 one small numbered file per section. See [`_css/README.md`](../_css/README.md) for how
 they're joined and why the order matters.
 

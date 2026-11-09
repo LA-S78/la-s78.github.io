@@ -5,7 +5,7 @@ Each folder here becomes **one** stylesheet on the site:
 | Folder          | Published as      | Used by                                   |
 |-----------------|-------------------|-------------------------------------------|
 | `_css/style/`   | `/css/style.css`  | Every page                                |
-| `_css/portal/`  | `/css/portal.css` | Discord tool pages (`portal/`), on top of `style.css` |
+| `_css/portal/`  | `/css/portal.css` | Discord tool pages (`portal/`) and the calendar, on top of `style.css` |
 
 `_scripts/build.rb` joins the `.css` files in each folder **in filename order**
 (`05-…`, `10-…`, `15-…`) into the published file. Visitors still download a single
