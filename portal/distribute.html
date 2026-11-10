@@ -180,17 +180,19 @@ hide_header: true
       let html = '';
 
       if (groupBy === 'chest') {
-        // In-game chest names, most valuable first (KW = King of Battle Reward,
-        // REG = King's Commendation)
+        // One set at a time, like the game's two tabs: all of King's Commendation (REG),
+        // then all of King of Battle Reward (KW); within a set, most valuable first.
         const tiers = [
-          { pool: 'KW', key: 'commanders_will', title: '🟡 Honor Vanguard (King of Battle)', glyph: 'gold' },
-          { pool: 'REG', key: 'commanders_will', title: '🟡 Commander\'s Will (King\'s Commendation)', glyph: 'gold' },
-          { pool: 'KW', key: 'loyal_servant', title: '🟣 Fearless Hero (King of Battle)', glyph: 'purple' },
-          { pool: 'REG', key: 'loyal_servant', title: '🟣 Loyal Servant (King\'s Commendation)', glyph: 'purple' },
-          { pool: 'KW', key: 'followers_heart', title: '🔵 Logistics Support (King of Battle)', glyph: 'blue' },
-          { pool: 'REG', key: 'followers_heart', title: '🔵 Follower\'s Heart (King\'s Commendation)', glyph: 'blue' }
+          { pool: 'REG', key: 'commanders_will', title: '🟡 Commander\'s Will', glyph: 'gold' },
+          { pool: 'REG', key: 'loyal_servant', title: '🟣 Loyal Servant', glyph: 'purple' },
+          { pool: 'REG', key: 'followers_heart', title: '🔵 Follower\'s Heart', glyph: 'blue' },
+          { pool: 'KW', key: 'commanders_will', title: '🟡 Honor Vanguard', glyph: 'gold' },
+          { pool: 'KW', key: 'loyal_servant', title: '🟣 Fearless Hero', glyph: 'purple' },
+          { pool: 'KW', key: 'followers_heart', title: '🔵 Logistics Support', glyph: 'blue' }
         ];
+        const SET_NAMES = { REG: '👑 King\'s Commendation', KW: '⚔️ King of Battle Reward' };
 
+        let currentSet = null;
         tiers.forEach(tier => {
           const matched = flatList.filter(e => e.type === tier.key && e.pool === tier.pool);
           if (matched.length === 0) return;
@@ -204,6 +206,11 @@ hide_header: true
             return a.ign.localeCompare(b.ign);
           });
 
+          if (tier.pool !== currentSet) {
+            currentSet = tier.pool;
+            const setCount = flatList.filter(e => e.pool === tier.pool).length;
+            html += `<div class="distribute-set-heading">${SET_NAMES[tier.pool]} (${setCount})</div>`;
+          }
           html += `<div class="slot-group-title distribute-group-heading">${tier.title} (${matched.length})</div>`;
           matched.forEach(item => {
             html += renderRow(item, tier.glyph, sentSet);

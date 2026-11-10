@@ -126,3 +126,18 @@
   color: var(--button-go-text);
 }
 
+
+/* "By Chest": one heading per set (the game's two tabs), handed out one after the other */
+.distribute-set-heading {
+  margin: 1.4rem 0 0.2rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border-color);
+  font-family: var(--font-headers);
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+.distribute-set-heading:first-child {
+  margin-top: 0.2rem;
+}
