@@ -903,10 +903,17 @@ export default async function handler(req, res) {
 
       const weekDisplayLabel = state.clockWeek === 0 ? 'Downtime' : `Week ${state.clockWeek}`;
 
+      // The week's alliance captures the Capitol on Friday (see _calendar_helper.js).
+      const captureNote = state.capitolCaptured
+        ? 'captured Friday'
+        : state.isCaptureDay
+          ? 'captures today'
+          : `captures Friday, <t:${state.captureTimestamp}:R>`;
+
       const fields = [
         {
-          name: '👑 Active Capitol Holder',
-          value: `**${holderTag}** *(Rank #${holderActualRank})*`,
+          name: state.capitolCaptured ? '👑 Current Capitol Holder' : '👑 Next Capitol Holder',
+          value: `**${holderTag}** *(Rank #${holderActualRank})* — ${captureNote}`,
           inline: true,
         },
         {
@@ -935,7 +942,7 @@ export default async function handler(req, res) {
 
       fields.push({
         name: '⏭️ Next Rotation Phase',
-        value: `**${nextWeekConfig?.phase || 'Next Phase'}** begins <t:${nextWeekResetTs}:R>.\nCapitol transfers to **${nextHolderTag}** *(Rank #${nextActualRank})*.`,
+        value: `**${nextWeekConfig?.phase || 'Next Phase'}** begins <t:${nextWeekResetTs}:R>.\n**${nextHolderTag}** *(Rank #${nextActualRank})* captures the Capitol that Friday.`,
         inline: false,
       });
 

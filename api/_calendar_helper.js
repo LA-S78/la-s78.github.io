@@ -4,6 +4,10 @@ export const DEFAULT_CALENDAR_CONFIG = {
   cycle_anchor: '2026-09-21T02:00:00Z', // Monday 00:00 GT (UTC-2)
   cycle_length_days: 28,
   server_tz_offset_hours: -2, // GT is UTC-2
+  // Event weeks run Monday to Saturday, and the week's alliance captures the Capitol on
+  // Friday (1 = Monday ... 5 = Friday). Before that day the tag shown is the alliance that
+  // *will* capture it; from the day after, the one that holds it.
+  capture_day_of_week: 5,
   capitol_rotation: [
     { week: 1, is_kw: true, phase: 'Kingdom War Week 1', capitol_rank: 3 },
     { week: 2, is_kw: true, phase: 'Kingdom War Week 2', capitol_rank: 2 },
@@ -70,6 +74,12 @@ export function getCycleState(targetDate = new Date(), customConfig = {}) {
 
   const { clockWeek, slotKey } = getScheduleSlot(currentWeekNumber, config);
 
+  // Capitol capture day of the current week (00:00 GT of that day)
+  const captureDayOfWeek = Number(config.capture_day_of_week) || 5;
+  const captureTime = new Date(
+    anchorTime + (daysSinceAnchor + captureDayOfWeek - dayOfWeekNumber) * MS_PER_DAY,
+  );
+
   return {
     cycleDay, // 1 to 28
     currentWeekNumber, // 1 to 4 (calendar order; use clockWeek/scheduleSlot for the schedule)
@@ -83,6 +93,10 @@ export function getCycleState(targetDate = new Date(), customConfig = {}) {
     nextResetTimestamp: Math.floor(nextResetTime.getTime() / 1000),
     kwBattleTimestamp: Math.floor(kwBattleTime.getTime() / 1000),
     isKWBattleDay: weekConfig.is_kw && dayOfWeekNumber === 6,
+    captureDayOfWeek, // 5 = Friday
+    captureTimestamp: Math.floor(captureTime.getTime() / 1000),
+    isCaptureDay: dayOfWeekNumber === captureDayOfWeek,
+    capitolCaptured: dayOfWeekNumber > captureDayOfWeek, // this week's capture is done
   };
 }
 

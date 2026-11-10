@@ -60,11 +60,9 @@ export default async function handler(req, res) {
     ? sanitizeAlliances(alliances)[holderTag]?.color || null
     : null;
 
-  // 1. Generate System Milestones (Rotation Transfers & War Battle Days)
+  // 1. Generate System Milestones (Capitol Captures & War Battle Days)
   const cycleMilestones = [];
 
-  const daysUntilNextWeek = 7 - currentStatus.dayOfWeekNumber + 1;
-  const nextWeekResetTs = currentStatus.nextResetTimestamp + (daysUntilNextWeek - 1) * 86400;
   const nextWeekNum = (currentStatus.currentWeekNumber % 4) + 1;
   const nextWeekConfig = calConfig.capitol_rotation.find((w) => w.week === nextWeekNum);
 
@@ -90,15 +88,27 @@ export default async function handler(req, res) {
     if (nextHolderEntry) nextHolderTag = `[${nextHolderEntry[0]}]`;
   }
 
+  // The upcoming Capitol capture. The week's alliance captures it on Friday: until then
+  // that is this week's alliance, afterwards next week's.
+  const upcomingIsNextWeek = currentStatus.capitolCaptured;
+  const captureTs = currentStatus.captureTimestamp + (upcomingIsNextWeek ? 7 * 86400 : 0);
+  const capturerTag = upcomingIsNextWeek ? nextHolderTag : capitolHolderTag;
+  let capturerRankLabel = nextHolderRankLabel;
+  if (!upcomingIsNextWeek) {
+    capturerRankLabel = currentStatus.isOverrideWeek
+      ? `Rank #${currentStatus.holderActualRank} • Override Schedule`
+      : `Rank #${currentStatus.holderActualRank || currentStatus.capitolRank}`;
+  }
+
   cycleMilestones.push({
-    id: `sys-rotation-w${nextWeekNum}`,
+    id: `sys-capture-w${upcomingIsNextWeek ? nextWeekNum : currentStatus.currentWeekNumber}`,
     scope: 'global',
-    title: `👑 Capitol Transfer — ${nextHolderTag}`,
-    description: `Rotation Phase transfer to ${nextHolderTag} (${nextHolderRankLabel}).`,
-    start: new Date(nextWeekResetTs * 1000).toISOString(),
-    end: new Date(nextWeekResetTs * 1000 + 3600000).toISOString(),
+    title: `👑 Capitol Capture — ${capturerTag}`,
+    description: `${capturerTag} (${capturerRankLabel}) captures the Capitol on Friday.`,
+    start: new Date(captureTs * 1000).toISOString(),
+    end: new Date((captureTs + 86400) * 1000).toISOString(),
     type: 'rotation',
-    allDay: false,
+    allDay: true,
   });
 
   // Kingdom War Battle Window Milestone

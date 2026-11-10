@@ -102,12 +102,25 @@ async function initCalendar() {
       // The holder's own alliance colour; without one, the CSS (theme colour) applies.
       capHolderEl.style.color = capitolHolderColor || '';
     }
+    // The week's alliance captures the Capitol on Friday: before that the card shows who
+    // is due to capture it, afterwards who holds it.
+    const capLabelEl = document.getElementById('hero-capitol-label');
+    if (capLabelEl) {
+      capLabelEl.textContent = status.capitolCaptured
+        ? 'CURRENT CAPITOL HOLDER'
+        : 'NEXT CAPITOL HOLDER';
+    }
     if (capRankEl) {
-      if (status.isOverrideWeek && status.holderActualRank) {
-        capRankEl.textContent = `Rank #${status.holderActualRank} (Override Active)`;
-      } else {
-        capRankEl.textContent = `Rank #${status.capitolRank} Privilege`;
-      }
+      const rankText =
+        status.isOverrideWeek && status.holderActualRank
+          ? `Rank #${status.holderActualRank} (Override)`
+          : `Rank #${status.capitolRank}`;
+      const captureText = status.capitolCaptured
+        ? 'Captured Friday'
+        : status.isCaptureDay
+          ? 'Captures today'
+          : 'Captures Friday';
+      capRankEl.textContent = `${rankText} · ${captureText}`;
     }
     if (cycleProgressEl) {
       const weekLabel = status.clockWeek === 0 ? 'Downtime' : `Week ${status.clockWeek}`;
