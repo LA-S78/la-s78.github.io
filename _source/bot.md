@@ -19,8 +19,8 @@ map:
   button: "Open Live Map"
 
 admin:
-  access_denied: "⛔ **Access Denied:** Only authorized leadership can approve or reject map proposals."
-  failed_update: "Failed to update map:"
+  access_denied: "⛔ **Access Denied:** Only Stewards can approve or reject proposals."
+  failed_update: "Failed to apply the proposal:"
 </data>
 <data lang="de" name="bot">
 sb:
@@ -43,8 +43,8 @@ map:
   button: "Live-Karte öffnen"
 
 admin:
-  access_denied: "⛔ **Zugriff verweigert:** Nur autorisierte Führungskräfte können Kartenentwürfe genehmigen oder ablehnen."
-  failed_update: "Fehler beim Aktualisieren der Karte:"
+  access_denied: "⛔ **Zugriff verweigert:** Nur Stewards können Vorschläge genehmigen oder ablehnen."
+  failed_update: "Der Vorschlag konnte nicht übernommen werden:"
 </data>
 <data lang="es" name="bot">
 sb:
@@ -67,8 +67,8 @@ map:
   button: "Abrir Mapa en Vivo"
 
 admin:
-  access_denied: "⛔ **Acceso denegado:** Solo el liderazgo autorizado puede aprobar o rechazar propuestas de mapas."
-  failed_update: "Error al actualizar el mapa:"
+  access_denied: "⛔ **Acceso denegado:** Solo los Stewards pueden aprobar o rechazar propuestas."
+  failed_update: "No se pudo aplicar la propuesta:"
 </data>
 <data lang="fr" name="bot">
 sb:
@@ -91,8 +91,8 @@ map:
   button: "Ouvrir la carte en direct"
 
 admin:
-  access_denied: "⛔ **Accès refusé :** Seuls les membres autorisés de la direction peuvent approuver ou rejeter les propositions de carte."
-  failed_update: "Échec de la mise à jour de la carte :"
+  access_denied: "⛔ **Accès refusé :** Seuls les Stewards peuvent approuver ou rejeter les propositions."
+  failed_update: "Échec de l'application de la proposition :"
 </data>
 <data lang="ru" name="bot">
 sb:
@@ -115,8 +115,8 @@ map:
   button: "Открыть интерактивную карту"
 
 admin:
-  access_denied: "⛔ **Доступ запрещен:** Только авторизованное руководство может одобрять или отклонять предложения по карте."
-  failed_update: "Не удалось обновить карту:"
+  access_denied: "⛔ **Доступ запрещен:** Только Steward могут одобрять или отклонять предложения."
+  failed_update: "Не удалось применить предложение:"
 </data>
 <data lang="tr" name="bot">
 sb:
@@ -139,8 +139,8 @@ map:
   button: "Canlı Haritayı Aç"
 
 admin:
-  access_denied: "⛔ **Erişim Engellendi:** Sadece yetkili liderlik harita tekliflerini onaylayabilir veya reddedebilir."
-  failed_update: "Harita güncellenemedi:"
+  access_denied: "⛔ **Erişim Engellendi:** Teklifleri yalnızca Steward'lar onaylayabilir veya reddedebilir."
+  failed_update: "Teklif uygulanamadı:"
 </data>
 <data lang="uk" name="bot">
 sb:
@@ -163,8 +163,8 @@ map:
   button: "Відкрити інтерактивну карту"
 
 admin:
-  access_denied: "⛔ **Доступ заборонено:** Тільки авторизоване керівництво може схвалювати або відхиляти пропозиції щодо карти."
-  failed_update: "Не вдалося оновити карту:"
+  access_denied: "⛔ **Доступ заборонено:** Лише Steward можуть схвалювати або відхиляти пропозиції."
+  failed_update: "Не вдалося застосувати пропозицію:"
 </data>
 <data lang="it" name="bot">
 sb:
@@ -187,6 +187,6 @@ map:
   button: "Apri Mappa in Tempo Reale"
 
 admin:
-  access_denied: "⛔ **Accesso Negato:** Solo la leadership autorizzata può approvare o rifiutare le proposte per la mappa."
-  failed_update: "Aggiornamento mappa fallito:"
+  access_denied: "⛔ **Accesso Negato:** Solo gli Steward possono approvare o rifiutare le proposte."
+  failed_update: "Impossibile applicare la proposta:"
 </data>
