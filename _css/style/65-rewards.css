@@ -194,8 +194,8 @@
 }
 
 .chest-glyph.crown {
-  background: #8f0000;
-  box-shadow: 0 0 6px rgba(143, 0, 0, 0.5);
+  background: var(--war-red);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--war-red) 50%, transparent);
   flex-shrink: 0;
 }
 
@@ -346,7 +346,7 @@
 }
 
 .range-stepper button:hover {
-  color: #ffffff;
+  color: var(--white);
 }
 
 @media (min-width: 600px) {

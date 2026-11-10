@@ -70,7 +70,7 @@ dialog.auth-modal[open] {
 }
 
 .auth-modal-close:hover {
-  color: #ffffff !important;
+  color: var(--white) !important;
   background: transparent !important;
   box-shadow: none !important;
   transform: none !important;
@@ -139,7 +139,7 @@ dialog.auth-modal[open] {
 }
 
 .auth-username-label strong {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .auth-badge-role {
@@ -260,7 +260,7 @@ dialog.auth-modal[open] {
 }
 
 .btn-modal-cancel:hover {
-  color: #ffffff !important;
+  color: var(--white) !important;
   border-color: var(--overlay-25) !important;
   background: var(--overlay-5) !important;
   box-shadow: none !important;
@@ -270,7 +270,7 @@ dialog.auth-modal[open] {
 .btn-modal-action {
   background: var(--brand-discord);
   border: 1px solid var(--brand-discord);
-  color: #ffffff;
+  color: var(--white);
   padding: 8px 18px;
   font-size: 0.84rem;
   font-weight: 700;
@@ -301,7 +301,7 @@ dialog.auth-modal[open] {
   width: 14px;
   height: 14px;
   border: 2px solid var(--overlay-25);
-  border-top-color: #ffffff;
+  border-top-color: var(--white);
   border-radius: 50%;
   animation: modalSpin 0.75s linear infinite;
   display: inline-block;
@@ -335,11 +335,11 @@ dialog.auth-modal[open] {
   display: block;
 }
 
-.phase-tech   { background-color: rgba(153, 102, 204, 0.35) !important; }
-.phase-raven  { background-color: rgba(70, 140, 200, 0.35) !important; }
-.phase-heroes { background-color: rgba(200, 80, 80, 0.35); }
-.phase-build  { background-color: rgba(80, 180, 100, 0.35) !important; }
-.phase-train  { background-color: rgba(210, 160, 60, 0.35); }
+.phase-tech   { background-color: color-mix(in srgb, var(--phase-tech) 35%, transparent) !important; }
+.phase-raven  { background-color: color-mix(in srgb, var(--phase-raven) 35%, transparent) !important; }
+.phase-heroes { background-color: color-mix(in srgb, var(--phase-heroes) 35%, transparent); }
+.phase-build  { background-color: color-mix(in srgb, var(--phase-build) 35%, transparent) !important; }
+.phase-train  { background-color: color-mix(in srgb, var(--phase-train) 35%, transparent); }
 
 .pinned-wrapper {
   position: relative;
@@ -432,7 +432,7 @@ dialog.auth-modal[open] {
 }
 
 .content-pane {
-  background-color: rgba(20, 16, 14, 0.85);
+  background-color: color-mix(in srgb, var(--surface-card) 85%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
@@ -490,7 +490,7 @@ dialog.auth-modal[open] {
 .unavailable {
   background-color: #4a0404;
   color: #8b8b8b;
-  border: 1px solid #7a0000 !important;
+  border: 1px solid var(--danger-deep) !important;
   cursor: not-allowed;
   pointer-events: none;
   opacity: 0.7;
@@ -505,7 +505,7 @@ dialog.auth-modal[open] {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(10, 8, 7, 0.85);
+  background: color-mix(in srgb, var(--surface-dark) 85%, transparent);
   color: var(--accent-color);
   border: 2px solid var(--accent-color);
   width: 30px;

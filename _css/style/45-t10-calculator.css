@@ -50,7 +50,7 @@
 .hex-node {
   width: 70px;
   height: 80px;
-  background-color: #7a0000;
+  background-color: var(--danger-deep);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   display: flex;
   justify-content: center;
@@ -73,7 +73,7 @@
   background-color: rgba(var(--active-theme-hex), 1);
 }
 .hex-node.locked {
-  background-color: #7a0000;
+  background-color: var(--danger-deep);
   box-shadow: 0 0 20px color-mix(in srgb, var(--accent-color) 40%, transparent);
 }
 
@@ -95,7 +95,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(10, 8, 7, 0.8);
+  background: color-mix(in srgb, var(--surface-dark) 80%, transparent);
   padding: 3px 6px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
@@ -149,7 +149,7 @@
 .level-display {
   font-size: 0.8rem;
   font-weight: bold;
-  color: #fff;
+  color: var(--white);
   width: 35px;
   text-align: center;
 }
@@ -179,7 +179,7 @@
   width: 100%;
   max-width: 800px;
   margin: 25px auto 10px auto;
-  background-color: rgba(10, 8, 7, 0.85);
+  background-color: color-mix(in srgb, var(--surface-dark) 85%, transparent);
   border: 1px solid var(--border-color);
   border-top: 2px solid var(--accent-color);
   border-radius: 8px;

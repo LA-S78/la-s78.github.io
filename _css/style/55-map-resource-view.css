@@ -51,9 +51,9 @@
 }
 
 /* Resource Base Colors (Grain, Timber, Herbs) */
-.chip-grain  { background-color: #e07a12; }
-.chip-timber { background-color: #4a2411; }
-.chip-herbs  { background-color: #059669; }
+.chip-grain  { background-color: var(--resource-grain); }
+.chip-timber { background-color: var(--resource-timber); }
+.chip-herbs  { background-color: var(--resource-herbs); }
 
 .chip-pattern {
   width: 12px;
@@ -137,7 +137,7 @@
 }
 
 .buff-badge strong {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .buff-badge-count {
@@ -166,9 +166,9 @@
   line-height: 1;
   box-sizing: border-box;
   font-weight: bold;
-  background: linear-gradient(180deg, #166534 0%, #14532d 100%);
+  background: linear-gradient(180deg, var(--button-go) 0%, var(--success-deep) 100%);
   border: 1px solid var(--status-success);
-  color: #f0fdf4;
+  color: var(--button-go-text);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -176,7 +176,7 @@
 }
 
 .submit-plan-btn:hover:not(:disabled) {
-  background: linear-gradient(180deg, #15803d 0%, #166534 100%);
+  background: linear-gradient(180deg, var(--button-go-hover) 0%, var(--button-go) 100%);
   box-shadow: 0 0 12px color-mix(in srgb, var(--status-success) 40%, transparent);
 }
 

@@ -21,7 +21,7 @@
 }
 
 .cal-status-banner.error {
-  background: rgba(122, 0, 0, 0.35);
+  background: color-mix(in srgb, var(--danger-deep) 35%, transparent);
   border-color: var(--status-danger);
   color: var(--status-danger-text);
 }
@@ -35,13 +35,13 @@
 }
 
 .cal-notification-banner.success {
-  background: rgba(20, 83, 45, 0.4);
+  background: color-mix(in srgb, var(--success-deep) 40%, transparent);
   border: 1px solid var(--status-success);
   color: var(--status-success-text);
 }
 
 .cal-notification-banner.error {
-  background: rgba(122, 0, 0, 0.4);
+  background: color-mix(in srgb, var(--danger-deep) 40%, transparent);
   border: 1px solid var(--status-danger);
   color: var(--status-danger-text);
 }
@@ -202,7 +202,7 @@
 .btn-primary {
   background: rgb(var(--active-theme, 35, 120, 45));
   border-color: rgb(var(--active-theme-bright, 55, 150, 65));
-  color: #fff;
+  color: var(--white);
 }
 
 .scope-global .btn-primary {
@@ -218,7 +218,7 @@
 
 /* Hero Card */
 .cal-hero-card {
-  background: linear-gradient(145deg, rgba(30, 24, 20, 0.95), var(--nav-bg));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--bg-color) 95%, transparent), var(--nav-bg));
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 1.4rem;
@@ -507,7 +507,7 @@
 
 .btn-delete-event:hover {
   background: var(--status-danger);
-  color: #fff;
+  color: var(--white);
 }
 /* hide language selector on portal pages */
 

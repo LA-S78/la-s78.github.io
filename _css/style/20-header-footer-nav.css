@@ -174,7 +174,7 @@ footer {
 }
 .lang-active {
   font-weight: bold;
-  color: #fff;
+  color: var(--white);
   pointer-events: none;
 }
 

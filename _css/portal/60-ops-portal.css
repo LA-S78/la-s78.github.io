@@ -357,7 +357,7 @@
 .btn-submit-override {
   background: var(--brand-discord);
   border: 1px solid var(--brand-discord);
-  color: #ffffff;
+  color: var(--white);
   padding: 9px 18px;
   font-size: 0.85rem;
   font-weight: 700;

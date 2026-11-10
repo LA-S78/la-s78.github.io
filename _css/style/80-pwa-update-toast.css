@@ -7,7 +7,7 @@
   bottom: calc(80px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%) translateY(100px);
-  background-color: rgba(20, 16, 14, 0.95);
+  background-color: color-mix(in srgb, var(--surface-card) 95%, transparent);
   border: 1px solid var(--accent-color);
   box-shadow:
     0 4px 20px var(--shade-80),

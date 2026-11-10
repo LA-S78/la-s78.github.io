@@ -24,7 +24,7 @@ svg g[inkscape\:label] path {
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
-  background: radial-gradient(circle at center, rgba(22, 17, 14, 0.95) 0%, rgba(12, 9, 7, 0.98) 100%);
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--surface-card) 95%, transparent) 0%, color-mix(in srgb, var(--surface-elevated) 98%, transparent) 100%);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 12px;
@@ -74,7 +74,7 @@ svg g[inkscape\:label] path {
 }
 
 #game-map path.selected {
-  stroke: #ffffff !important;
+  stroke: var(--white) !important;
   stroke-width: 4px !important;
   filter: brightness(1.4);
 }
@@ -297,7 +297,7 @@ svg #layer1 path:hover {
 
 .draft-btn:hover {
   border-color: var(--overlay-25);
-  color: #ffffff;
+  color: var(--white);
 }
 
 .draft-indicator {
@@ -349,9 +349,9 @@ svg #layer1 path:hover {
 }
 
 #alliance-override:focus {
-  background-color: rgba(20, 16, 14, 0.95);
+  background-color: color-mix(in srgb, var(--surface-card) 95%, transparent);
   border-color: var(--accent-color);
-  color: #ffffff;
+  color: var(--white);
   outline: none;
   box-shadow: 0 0 8px color-mix(in srgb, var(--accent-color) 30%, transparent);
 }
@@ -363,7 +363,7 @@ svg #layer1 path:hover {
   width: 380px;
   max-width: calc(100% - 32px);
   max-height: 480px;
-  background: rgba(18, 14, 12, 0.96);
+  background: color-mix(in srgb, var(--nav-bg) 96%, transparent);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -413,7 +413,7 @@ svg #layer1 path:hover {
 }
 
 .drawer-close-btn:hover {
-  color: #fff;
+  color: var(--white);
 }
 
 .buff-drawer-subtitle {

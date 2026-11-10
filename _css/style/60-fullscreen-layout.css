@@ -32,7 +32,7 @@ body.map-fullscreen-active turbo-frame {
   border-radius: 0;
   border: none;
   margin: 0;
-  background: rgba(10, 8, 7, 0.98);
+  background: color-mix(in srgb, var(--surface-dark) 98%, transparent);
   backdrop-filter: blur(8px);
   display: flex !important;
   flex-direction: column;
