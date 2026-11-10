@@ -222,7 +222,7 @@ will merge these into one list). Until then:
 | Rank, name, academies, blacklist      | The live data (`map-state.json` in the Gist). Change it on the Alliance page, which sends a proposal to Discord for Steward approval |
 | The alliance's own Discord server     | Its R5 runs `/registerbot` in Discord. The alliance's tag must already exist in the live data (`map-state.json`), so add the alliance first. Later command updates reach member servers with `/registerbot action:sync` |
 | Login detection and map colour        | Vercel environment variable `DISCORD_<TAG>` = the alliance's role ID in the NAP server, plus a line in `api/colors.js` |
-| Fallback colour if none is set        | `DEFAULT_FALLBACK_COLORS` in `api/state.js`, `api/accept-proposal.js`, `js/alliance.js` and `js/kvk-scheduler.js` (keep all four the same) |
+| Fallback colour if none is set        | `DEFAULT_FALLBACK_COLORS` in `api/state.js`, `api/_accept_proposal.js`, `js/alliance.js` and `js/kvk-scheduler.js` (keep all four the same) |
 
 Rewards and Capitol rotation logic also depend on alliances. Read the "Rewards" entry
 in `DECISIONS.md` before changing anything there.
