@@ -83,7 +83,7 @@ code {
   color: var(--text-main);
 }
 pre {
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--shade-40);
   padding: 15px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
@@ -91,7 +91,7 @@ pre {
   margin: 20px 0;
 }
 code {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--shade-30);
   padding: 2px 4px;
   border-radius: 4px;
 }
@@ -114,7 +114,7 @@ th {
   font-family: var(--font-headers);
 }
 tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: var(--overlay-5);
 }
 
 main img {
