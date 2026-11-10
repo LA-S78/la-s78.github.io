@@ -211,7 +211,7 @@
 }
 
 .btn-secondary {
-  background: #2a221b;
+  background: var(--card-bg-solid);
   border-color: var(--border-color);
   color: var(--text-main);
 }
@@ -260,7 +260,7 @@
 .badge-kw {
   background: rgba(185, 28, 28, 0.25);
   border: 1px solid var(--status-danger);
-  color: #f87171;
+  color: var(--status-danger-hover);
 }
 
 .badge-off {
@@ -466,7 +466,7 @@
 
 .pill-force {
   border-color: var(--status-danger);
-  color: #f87171;
+  color: var(--status-danger-hover);
   background: rgba(239, 68, 68, 0.15);
 }
 
@@ -497,7 +497,7 @@
 .btn-delete-event {
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid var(--status-danger);
-  color: #f87171;
+  color: var(--status-danger-hover);
   padding: 5px 8px;
   border-radius: 4px;
   font-size: 0.72rem;

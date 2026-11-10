@@ -137,7 +137,7 @@ svg #layer1 path:hover {
 .info-card {
   margin-top: 0.5rem;
   padding: 0.45rem 0.8rem;
-  background: #0a0807;
+  background: var(--surface-dark);
   border: 1px solid var(--border-color);
   border-left: 3px solid var(--accent-color);
   border-radius: 4px;
@@ -191,12 +191,12 @@ svg #layer1 path:hover {
   flex-wrap: wrap;
   gap: 0.45rem;
   font-size: 0.78rem;
-  color: #a89f91;
+  color: var(--text-muted);
   line-height: 1.2;
 }
 
 .info-item strong {
-  color: #d9ceb8;
+  color: var(--text-main);
 }
 
 .info-divider {
@@ -222,7 +222,7 @@ svg #layer1 path:hover {
   padding: 0.35rem 0.65rem;
   min-height: 42px;
   box-sizing: border-box;
-  background: #0f0c0a;
+  background: var(--nav-bg);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid var(--border-color);
   border-radius: 6px;
@@ -271,7 +271,7 @@ svg #layer1 path:hover {
 }
 
 .toggle-btn.active {
-  background: #2a221b;
+  background: var(--card-bg-solid);
   color: var(--accent-color);
   font-weight: 600;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.2);

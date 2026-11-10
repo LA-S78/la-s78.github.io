@@ -22,6 +22,7 @@ html[data-theme="default"] {
   --text-muted: #a8a19b;
   --accent-color: #b8975a;
   --border-color: #3d3128;
+  --card-bg-solid: #2a221e; /* --card-bg without transparency */
 
   /* Shared Surface & Palette Variables */
   --surface-dark: #080605;
@@ -48,8 +49,9 @@ html[data-theme="default"] {
   --status-warning: #f59e0b;
   --status-warning-text: #fef3c7;
 
-  /* Slate: the alliance ladder's 2nd-rank row and the academy badges (a cooler grey than
-     --rank-silver; whether they should be one colour is an open question) */
+  /* Slate: the alliance ladder's 2nd-rank row and the academy badges. Deliberately not
+     --rank-silver: the owner compared both and kept slate, which suits the ladder's muted gold
+     and bronze rows better. */
   --badge-slate: #94a3b8;
   --badge-slate-text: #cbd5e1;
 

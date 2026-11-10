@@ -68,7 +68,7 @@
 
 .badge-pool-reg {
   font-size: 0.62rem;
-  background: #2a221b;
+  background: var(--card-bg-solid);
   color: var(--accent-color);
   border: 1px solid var(--border-color);
 }
@@ -103,7 +103,7 @@
 }
 
 .copy-btn {
-  background: #1e1713;
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
   color: var(--text-main);
   padding: 0.15rem 0.45rem;

@@ -8,7 +8,7 @@
     min-height: calc(130px + env(safe-area-inset-top)) !important;
     background-image: radial-gradient(
       circle 800px at center 10%,
-      #2b231e 0%,
+      var(--card-bg-solid) 0%,
       var(--nav-bg) 100%
     );
   }
