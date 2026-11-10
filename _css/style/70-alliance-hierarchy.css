@@ -15,6 +15,9 @@
 
 .alliance-ladder-row {
   display: flex;
+  /* When the name and the status/planner controls don't both fit (planner mode on a
+     phone), the controls move to their own line below instead of squeezing the name. */
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
@@ -98,7 +101,7 @@
 
 /* Identity Column */
 .ladder-identity-col {
-  flex: 1;
+  flex: 1 1 110px; /* the name keeps at least 110px; below that the controls wrap */
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -188,6 +191,7 @@
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
+  margin-left: auto; /* right-aligned, also when wrapped onto its own line */
 }
 
 .nap-badge {
