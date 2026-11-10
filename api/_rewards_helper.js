@@ -10,9 +10,9 @@ import { advanceCycleState } from './_cycle_helper.js';
 export function getAllianceNominationQuota(allianceTag, rewardsState = {}, mapState = {}) {
   const cleanTag = String(allianceTag || '').trim();
   const currentWeek = rewardsState.cycle_state?.current_week ?? 1;
-  const isKW = rewardsState.mode
-    ? rewardsState.mode === 'kw'
-    : currentWeek >= 1 && currentWeek <= 3;
+  // Set 2 (King of Battle Reward) only after a recorded Kingdom War win (owner rule): never
+  // guessed from the week number.
+  const isKW = rewardsState.mode === 'kw';
 
   // 1. Determine Alliance Rank from map-state
   const allianceInfo = mapState.alliances?.[cleanTag];
@@ -117,6 +117,11 @@ export function getAllianceNominationQuota(allianceTag, rewardsState = {}, mapSt
       followers_heart: baseQuota.followers_heart,
     },
   };
+}
+
+/** The quota as it would be after a Kingdom War win (for "if won" previews). */
+export function quotaIfWon(allianceTag, rewardsState = {}, mapState = {}) {
+  return getAllianceNominationQuota(allianceTag, { ...rewardsState, mode: 'kw' }, mapState);
 }
 
 /**

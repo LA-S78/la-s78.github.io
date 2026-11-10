@@ -12,6 +12,9 @@ hide_header: true
     <div class="sub-text" id="progress-indicator">Loading nominations...</div>
   </div>
 
+  <!-- This week's reward period: open/closed, and whether to wait for the battle result -->
+  <div id="period-banner" class="nomination-alert-banner" style="display: none;"></div>
+
   <!-- Shown automatically when an alliance has an active Wartime Buyout this week -->
   <div id="buyout-status-banner" class="nomination-alert-banner buyout-active" style="display: none;"></div>
 
@@ -35,6 +38,7 @@ hide_header: true
     let nominationsData = {};
     let wartimeBuyouts = [];
     let groupBy = 'chest';
+    let period = null;
 
     const elRoster = document.getElementById('roster-container');
     const elProgress = document.getElementById('progress-indicator');
@@ -64,6 +68,7 @@ hide_header: true
         if (data && data.nominations) {
           nominationsData = data.nominations;
           wartimeBuyouts = data.wartime_buyouts || [];
+          period = data.period || null;
           if (data.lastReset) {
             const cycleHash = btoa(data.lastReset).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16);
             currentStorageKey = `la_sent_recipients_${cycleHash}`;
@@ -82,6 +87,26 @@ hide_header: true
           Failed to load nominations: ${err.message}
         </div>`;
       }
+    }
+
+    // The period (api/_reward_period.js). In a Kingdom War week the King waits for the battle
+    // result before handing out: a win re-sorts every list, and chests given can't be moved.
+    function renderPeriodBanner() {
+      const el = document.getElementById('period-banner');
+      if (!el || !period) return;
+      const until = new Date(period.closesAt).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      let text;
+      if (!period.open) {
+        text = '🔒 Rewards are closed. The lists below are from the last week; the next rewards open Friday at about 20:00 GT.';
+      } else if (period.kwWeek && period.result === 'pending') {
+        text = `⏳ <strong>Hold the chests:</strong> wait for Saturday's battle result before handing out. If the war is won, King of Battle Reward chests open and every list is re-sorted. Rewards close ${until}.`;
+      } else if (period.result === 'won') {
+        text = `⚔️ <strong>Kingdom War won:</strong> hand out both sets. Rewards close ${until} (Wednesday 00:00 GT).`;
+      } else {
+        text = `🎁 <strong>${period.weekName} rewards:</strong> hand out the King's Commendation. Rewards close ${until} (Wednesday 00:00 GT).`;
+      }
+      el.innerHTML = `<span>${text}</span>`; // one block, so the bold words stay inline
+      el.style.display = 'flex';
     }
 
     function renderBuyoutBanner() {
@@ -107,6 +132,7 @@ hide_header: true
       const sentSet = getSentSet();
       const alliances = Object.keys(nominationsData);
 
+      renderPeriodBanner();
       renderBuyoutBanner();
 
       if (alliances.length === 0) {
@@ -154,21 +180,22 @@ hide_header: true
       let html = '';
 
       if (groupBy === 'chest') {
+        // In-game chest names, most valuable first (KW = King of Battle Reward,
+        // REG = King's Commendation)
         const tiers = [
-          { key: 'commanders_will', title: '🟡 Commander\'s Will (Gold)', glyph: 'gold' },
-          { key: 'loyal_servant', title: '🟣 Loyal Servant (Purple)', glyph: 'purple' },
-          { key: 'followers_heart', title: '🔵 Follower\'s Heart (Blue)', glyph: 'blue' }
+          { pool: 'KW', key: 'commanders_will', title: '🟡 Honor Vanguard (King of Battle)', glyph: 'gold' },
+          { pool: 'REG', key: 'commanders_will', title: '🟡 Commander\'s Will (King\'s Commendation)', glyph: 'gold' },
+          { pool: 'KW', key: 'loyal_servant', title: '🟣 Fearless Hero (King of Battle)', glyph: 'purple' },
+          { pool: 'REG', key: 'loyal_servant', title: '🟣 Loyal Servant (King\'s Commendation)', glyph: 'purple' },
+          { pool: 'KW', key: 'followers_heart', title: '🔵 Logistics Support (King of Battle)', glyph: 'blue' },
+          { pool: 'REG', key: 'followers_heart', title: '🔵 Follower\'s Heart (King\'s Commendation)', glyph: 'blue' }
         ];
 
         tiers.forEach(tier => {
-          const matched = flatList.filter(e => e.type === tier.key);
+          const matched = flatList.filter(e => e.type === tier.key && e.pool === tier.pool);
           if (matched.length === 0) return;
 
           matched.sort((a, b) => {
-            const poolOrder = { REG: 1, KW: 2 };
-            const poolDiff = (poolOrder[a.pool] || 1) - (poolOrder[b.pool] || 1);
-            if (poolDiff !== 0) return poolDiff;
-
             const rankA = nominationsData[a.alliance]?.rank ?? 99;
             const rankB = nominationsData[b.alliance]?.rank ?? 99;
             if (rankA !== rankB) return rankA - rankB;

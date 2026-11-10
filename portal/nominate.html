@@ -7,219 +7,210 @@ hide_header: true
 ---
 
 <div class="content-pane portal-pane-sm" id="nominate-app">
-  <div id="loading-state" class="status-banner">Loading nomination portal...</div>
+  <div id="loading-state" class="status-banner">Loading nomination page...</div>
   <div id="error-state" class="status-banner warning" style="display: none;"></div>
-  <div id="success-state" class="status-banner status-success" style="display: none;"></div>
 
   <div id="form-container" style="display: none;">
     <div class="portal-header">
       <div class="alliance-badge-lg" id="display-alliance">[TAG]</div>
-      <div class="sub-text" id="display-quota">Allocated Quota</div>
+      <div class="sub-text" id="display-period"></div>
     </div>
 
-    <!-- Smart Paste Box -->
-    <div class="smart-paste-box">
-      <label id="paste-label">📋 Smart Paste (Raw List)</label>
-      <textarea id="smart-paste-input" placeholder="Paste line-by-line list from game chat or notes..."></textarea>
-      <button class="draft-btn btn-fw" id="btn-autofill" type="button">Auto-fill All Slots</button>
-    </div>
+    <div id="set2-banner" class="nomination-alert-banner"></div>
 
     <form id="nomination-form">
-      <!-- Standard Pool Section -->
-      <div id="standard-pool-container">
-        <div id="std-section-header" class="pool-section-header" style="display: none;">
-          🛡️ Standard Allocation
-        </div>
-        <div id="gold-slots" class="slot-group"></div>
-        <div id="purple-slots" class="slot-group"></div>
-        <div id="blue-slots" class="slot-group"></div>
+      <div class="smart-paste-box">
+        <label for="ranked-input">📋 Your players, best first</label>
+        <p class="smart-paste-desc">
+          One name per line (or separated by commas), your best player first. Chests go down the
+          list in order of value across both sets; names beyond the chests are kept as reserves
+          and move up if more chests open.
+        </p>
+        <textarea id="ranked-input" rows="10" placeholder="Exact in-game names, best first..."></textarea>
       </div>
 
-      <!-- Kingdom War Pool Section (Only in KW Mode) -->
-      <div id="kw-pool-container" class="kw-pool-container" style="display: none;">
-        <div class="kw-pool-header">
-          ⚔️ Kingdom War Allocation (2nd Pool)
-        </div>
-        <div id="kw-gold-slots" class="slot-group"></div>
-        <div id="kw-purple-slots" class="slot-group"></div>
-        <div id="kw-blue-slots" class="slot-group"></div>
-      </div>
+      <div class="slot-group-title" id="assign-title">Who gets what</div>
+      <div class="sub-text" id="assign-summary"></div>
+      <div id="assign-list" class="nominate-assign-list"></div>
 
-      <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg">
-        Submit Final Nominations
-      </button>
+      <div id="save-status" class="status-banner" style="display: none;"></div>
+      <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg">Save List</button>
     </form>
   </div>
 </div>
 
 <script>
   (function () {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
-
+    const token = new URLSearchParams(window.location.search).get('token');
     const elLoading = document.getElementById('loading-state');
     const elError = document.getElementById('error-state');
-    const elSuccess = document.getElementById('success-state');
-    const elFormContainer = document.getElementById('form-container');
+    const elForm = document.getElementById('form-container');
+    const input = document.getElementById('ranked-input');
 
-    if (!token || !token.includes('.')) {
-      showError('Invalid or missing nomination token. Please run /nominate in Discord.');
-      return;
-    }
+    // Same order as api/_nomination_assign.js (CHEST_ORDER): best chest first.
+    // set 1 = King's Commendation ('standard'), set 2 = King of Battle Reward ('kingdom_war').
+    const CHEST_ORDER = [
+      ['kingdom_war', 'commanders_will'],
+      ['standard', 'commanders_will'],
+      ['kingdom_war', 'loyal_servant'],
+      ['standard', 'loyal_servant'],
+      ['kingdom_war', 'followers_heart'],
+      ['standard', 'followers_heart'],
+    ];
+    const CHEST_NAMES = {
+      standard: { commanders_will: "Commander's Will", loyal_servant: 'Loyal Servant', followers_heart: "Follower's Heart" },
+      kingdom_war: { commanders_will: 'Honor Vanguard', loyal_servant: 'Fearless Hero', followers_heart: 'Logistics Support' },
+    };
+    const GLYPH = { commanders_will: 'gold', loyal_servant: 'purple', followers_heart: 'blue' };
 
-    let payload = null;
-    try {
-      const dataString = token.split('.')[0];
-      const binary = atob(dataString.replace(/-/g, '+').replace(/_/g, '/'));
-      const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
-      const jsonStr = new TextDecoder('utf-8').decode(bytes);
-      payload = JSON.parse(jsonStr);
-    } catch (e) {
-      showError('Malformed token. Please request a new link from Discord.');
-      return;
-    }
-
-    if (payload.exp && Date.now() > payload.exp) {
-      showError('This nomination link has expired (24h limit). Please run /nominate again.');
-      return;
-    }
-
-    const isKW = payload.mode === 'kw';
-
-    elLoading.style.display = 'none';
-    elFormContainer.style.display = 'block';
-
-    document.getElementById('display-alliance').textContent = `[${payload.alliance}] ${isKW ? '⚔️ KW 2x' : ''}`;
-    document.getElementById('display-quota').textContent = `Rank ${payload.rank} • ${isKW ? 'Double Allocation (1x Regular + 1x KW)' : 'Standard Allocation'}`;
-
-    const allotment = payload.allotment || {};
-
-    buildSlots('gold-slots', '🟡 Commander\'s Will (Gold)', allotment.commanders_will || 0, 'std-gold');
-    buildSlots('purple-slots', '🟣 Loyal Servant (Purple)', allotment.loyal_servant || 0, 'std-purple');
-    buildSlots('blue-slots', '🔵 Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'std-blue');
-
-    if (isKW) {
-      document.getElementById('std-section-header').style.display = 'block';
-      document.getElementById('kw-pool-container').style.display = 'block';
-
-      buildSlots('kw-gold-slots', '🟡 KW Commander\'s Will (Gold)', allotment.commanders_will || 0, 'kw-gold');
-      buildSlots('kw-purple-slots', '🟣 KW Loyal Servant (Purple)', allotment.loyal_servant || 0, 'kw-purple');
-      buildSlots('kw-blue-slots', '🔵 KW Follower\'s Heart (Blue)', allotment.followers_heart || 0, 'kw-blue');
-    }
-
-    document.getElementById('btn-autofill').addEventListener('click', () => {
-      const raw = document.getElementById('smart-paste-input').value;
-      const lines = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
-
-      const priorityGroups = [
-        'kw-gold',
-        'std-gold',
-        'kw-purple',
-        'std-purple',
-        'kw-blue',
-        'std-blue'
-      ];
-
-      const orderedInputs = [];
-      priorityGroups.forEach(group => {
-        document.querySelectorAll(`.slot-input[data-group="${group}"]`).forEach(input => {
-          orderedInputs.push(input);
-        });
-      });
-
-      lines.forEach((line, idx) => {
-        if (orderedInputs[idx]) orderedInputs[idx].value = line;
-      });
-
-      validateInputs();
-    });
-
-    const form = document.getElementById('nomination-form');
-    form.addEventListener('input', validateInputs);
-
-    function validateInputs() {
-      const inputs = Array.from(document.querySelectorAll('.slot-input'));
-      const filledCount = inputs.filter(i => i.value.trim().length > 0).length;
-      const totalCount = inputs.length;
-      const allFilled = filledCount === totalCount && totalCount > 0;
-
-      const btn = document.getElementById('btn-submit');
-      btn.disabled = !allFilled;
-
-      if (!allFilled) {
-        btn.textContent = `Fill All Slots (${filledCount}/${totalCount} Completed)`;
-      } else {
-        btn.textContent = 'Submit Final Nominations';
+    /** Chest for each position of the list, best first (null = reserve). */
+    function chestsInOrder(counts) {
+      const out = [];
+      for (const [pool, chest] of CHEST_ORDER) {
+        const n = (counts && counts[pool] && counts[pool][chest]) || 0;
+        for (let i = 0; i < n; i++) out.push({ pool, chest });
       }
+      return out;
     }
-    validateInputs();
 
-    form.addEventListener('submit', async (e) => {
+    function namesFromInput() {
+      const seen = new Set();
+      const names = [];
+      for (const raw of input.value.split(/[\n,]+/)) {
+        const name = raw.trim();
+        if (!name || seen.has(name.toLowerCase())) continue;
+        seen.add(name.toLowerCase());
+        names.push(name);
+      }
+      return names;
+    }
+
+    function duplicatesInInput() {
+      const seen = new Set();
+      const dupes = [];
+      for (const raw of input.value.split(/[\n,]+/)) {
+        const name = raw.trim();
+        if (!name) continue;
+        if (seen.has(name.toLowerCase())) dupes.push(name);
+        seen.add(name.toLowerCase());
+      }
+      return dupes;
+    }
+
+    let data = null;
+
+    async function load() {
+      if (!token || !token.includes('.')) return showError('This link is incomplete. Run /nominate in Discord for a new one.');
+      try {
+        const res = await fetch(`/api/nominate?token=${encodeURIComponent(token)}&t=${Date.now()}`);
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        data = body;
+      } catch (err) {
+        return showError(`${err.message} Run /nominate in Discord for a new link.`);
+      }
+      const p = data.period;
+      if (!p.open) {
+        return showError(`Rewards are closed. The next open ${formatTime(p.nextOpensAt)}, after Friday's capitol event.`);
+      }
+
+      document.getElementById('display-alliance').textContent = `[${data.alliance.tag}]`;
+      document.getElementById('display-period').textContent =
+        `Rank ${data.alliance.rank} · ${p.weekName} rewards · open until ${formatTime(p.closesAt)}`;
+
+      const banner = document.getElementById('set2-banner');
+      if (!p.kwWeek) {
+        banner.textContent = "👑 King's Commendation only this week (no Kingdom War).";
+      } else if (p.result === 'won') {
+        banner.textContent = "⚔️ Kingdom War won: King of Battle Reward chests are open too.";
+      } else if (p.result === 'lost') {
+        banner.textContent = "🛡️ Kingdom War lost: King's Commendation only this week.";
+      } else {
+        banner.textContent =
+          `⏳ Waiting for Saturday's battle result (about ${formatTime(p.battleEndsAt)}). If it's won, King of Battle Reward chests open too and your list is re-sorted. The King hands out after the result, so nobody's chest changes.`;
+      }
+
+      input.value = (data.alliance.ranked || []).join('\n');
+      elLoading.style.display = 'none';
+      elForm.style.display = 'block';
+      render();
+    }
+
+    function render() {
+      const names = namesFromInput();
+      const pending = data.period.kwWeek && data.period.result === 'pending';
+      const now = chestsInOrder(data.alliance.chests);
+      const ifWon = pending ? chestsInOrder(data.alliance.chestsIfWon) : null;
+      const rows = Math.max(names.length, (ifWon || now).length);
+
+      const cell = (c) =>
+        c
+          ? `<span class="chest-glyph ${GLYPH[c.chest]}"></span><span>${CHEST_NAMES[c.pool][c.chest]}</span>`
+          : '<span class="nominate-reserve">Reserve</span>';
+
+      let html = `<div class="nominate-assign-row nominate-assign-head">
+          <span>#</span><span>Player</span><span>${pending ? 'Now' : 'Chest'}</span>${pending ? '<span>If won</span>' : ''}
+        </div>`;
+      for (let i = 0; i < rows; i++) {
+        const name = names[i];
+        html += `<div class="nominate-assign-row${name ? '' : ' is-empty'}">
+          <span class="slot-num">${i + 1}.</span>
+          <span class="player-ign">${name ? escapeHtml(name) : '—'}</span>
+          <span class="nominate-chest">${cell(now[i])}</span>
+          ${pending ? `<span class="nominate-chest">${cell(ifWon[i])}</span>` : ''}
+        </div>`;
+      }
+      document.getElementById('assign-list').innerHTML = html;
+
+      const open = now.length;
+      const missing = Math.max(0, open - names.length);
+      const reserves = Math.max(0, names.length - open);
+      document.getElementById('assign-summary').textContent =
+        `${open} chests now${pending ? ` · ${ifWon.length} if won` : ''} · ${names.length} named` +
+        (missing ? ` · ${missing} still need a name` : '') +
+        (reserves ? ` · ${reserves} reserve${reserves === 1 ? '' : 's'}` : '');
+
+      const dupes = duplicatesInInput();
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = names.length === 0 || dupes.length > 0;
+      btn.textContent = dupes.length ? `${dupes[0]} is listed twice` : 'Save List';
+    }
+
+    input.addEventListener('input', render);
+
+    document.getElementById('nomination-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btn-submit');
+      const status = document.getElementById('save-status');
       btn.disabled = true;
-      btn.textContent = 'Transmitting to Kingdom Records...';
-
-      const getValues = (group) =>
-        Array.from(document.querySelectorAll(`.slot-input[data-group="${group}"]`))
-          .map(i => i.value.trim());
-
-      const body = {
-        token: token,
-        nominations: {
-          standard: {
-            commanders_will: getValues('std-gold'),
-            loyal_servant: getValues('std-purple'),
-            followers_heart: getValues('std-blue')
-          },
-          ...(isKW ? {
-            kingdom_war: {
-              commanders_will: getValues('kw-gold'),
-              loyal_servant: getValues('kw-purple'),
-              followers_heart: getValues('kw-blue')
-            }
-          } : {})
-        }
-      };
-
+      btn.textContent = 'Saving...';
       try {
         const res = await fetch('/api/nominate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
+          body: JSON.stringify({ token, ranked: namesFromInput() }),
         });
-
-        const result = await res.json();
-        if (!res.ok) throw new Error(result.error || 'Server error');
-
-        elFormContainer.style.display = 'none';
-        elSuccess.style.display = 'block';
-        elSuccess.innerHTML = `
-          <strong>✅ Nominations Saved!</strong><br>
-          ${isKW ? 'Both your <strong>Regular</strong> and <strong>Kingdom War</strong> rosters' : 'Your recipient roster'} for <strong>[${escapeHtml(payload.alliance)}]</strong> have been registered.<br>
-          The King has received your distribution list.
-        `;
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
+        status.className = 'status-banner status-success';
+        status.textContent = `✅ Saved. The King sees your list. You can change it until ${formatTime(data.period.closesAt)}.`;
       } catch (err) {
-        alert(`Failed to save: ${err.message}`);
-        btn.disabled = false;
-        btn.textContent = 'Submit Final Nominations';
+        status.className = 'status-banner warning';
+        status.textContent = `Could not save: ${err.message}`;
       }
+      status.style.display = 'block';
+      render();
     });
 
-    function buildSlots(containerId, title, count, group) {
-      const el = document.getElementById(containerId);
-      if (count <= 0) { el.style.display = 'none'; return; }
-
-      let html = `<div class="slot-group-title">${title} (${count})</div>`;
-      for (let i = 1; i <= count; i++) {
-        html += `
-          <div class="slot-input-row">
-            <span class="slot-num">${i}.</span>
-            <input type="text" class="slot-input" data-group="${group}" placeholder="Exact Player In-Game Name" required>
-          </div>
-        `;
-      }
-      el.innerHTML = html;
+    /** A time in the reader's own time zone, with Game Time (UTC-2) alongside. */
+    function formatTime(iso) {
+      const d = new Date(iso);
+      const local = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      const gt = new Date(d.getTime() - 2 * 3600000);
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const hh = String(gt.getUTCHours()).padStart(2, '0');
+      const mm = String(gt.getUTCMinutes()).padStart(2, '0');
+      return `${local} (${days[gt.getUTCDay()]} ${hh}:${mm} GT)`;
     }
 
     function showError(msg) {
@@ -227,5 +218,7 @@ hide_header: true
       elError.style.display = 'block';
       elError.textContent = msg;
     }
+
+    load();
   })();
 </script>

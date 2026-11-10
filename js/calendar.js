@@ -78,11 +78,21 @@ async function initCalendar() {
     if (elLoading) elLoading.style.display = 'none';
     if (elContent) elContent.style.display = 'block';
 
+    // The reward period (api/_reward_period.js): Friday ~20:00 GT to Wednesday 00:00 GT,
+    // named after the week it belongs to (on Monday/Tuesday, the week before).
+    const rewards = status.rewards || null;
     const heroBadge = document.getElementById('hero-phase-badge');
-    if (heroBadge) {
-      // The title names the week; the badge shows the reward mode, so they don't repeat.
-      heroBadge.textContent = status.isKW ? '⚔️ 2x Rewards' : '🛡️ 1x Rewards';
-      heroBadge.className = `cal-badge ${status.isKW ? 'badge-kw' : 'badge-off'}`;
+    if (heroBadge && rewards) {
+      // The title names the week; the badge shows the rewards, so they don't repeat.
+      const badge = !rewards.open
+        ? ['🔒 Rewards closed', 'badge-off']
+        : rewards.result === 'won'
+          ? ['⚔️ King of Battle open', 'badge-kw']
+          : rewards.result === 'pending'
+            ? ['⏳ Awaiting KW result', 'badge-kw']
+            : ['🎁 Rewards open', 'badge-off'];
+      heroBadge.textContent = badge[0];
+      heroBadge.className = `cal-badge ${badge[1]}`;
     }
 
     const titleEl = document.getElementById('hero-phase-title');
@@ -93,10 +103,17 @@ async function initCalendar() {
 
     // weekName, not the configured phase name, so the site always says "Off-Week".
     if (titleEl) titleEl.textContent = status.weekName || status.phaseName;
-    if (subEl) {
-      subEl.textContent = status.isKW
-        ? 'Double reward allotments active. Prepare for Saturday Kingdom War confrontation.'
-        : 'Standard single allocation. Fortresses and territory restructuring active.';
+    if (subEl && rewards) {
+      const set2 = !rewards.kwWeek
+        ? "King's Commendation only (no Kingdom War)."
+        : rewards.result === 'won'
+          ? 'Kingdom War won: King of Battle Reward open too.'
+          : rewards.result === 'lost'
+            ? "Kingdom War lost: King's Commendation only."
+            : "King of Battle Reward if Saturday's war is won; the King hands out after the result.";
+      subEl.textContent = rewards.open
+        ? `${rewards.weekName} rewards open until Tuesday 23:59 GT. ${set2}`
+        : 'Rewards are closed. The next open Friday at about 20:00 GT, after the capitol event.';
     }
 
     if (capHolderEl) {

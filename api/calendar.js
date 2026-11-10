@@ -2,6 +2,7 @@
 import { getCycleState, getScheduleSlot, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -25,6 +26,9 @@ export default async function handler(req, res) {
 
   const now = new Date();
   const currentStatus = getCycleState(now, calConfig);
+  // This week's reward period (api/_reward_period.js): the hero card shows it
+  const rewardPeriod = getRewardPeriod(now.getTime(), calConfig);
+  currentStatus.rewards = describeRewardPeriod(rewardPeriod, rewardsState);
 
   // currentStatus.clockWeek / scheduleSlot say which seat of the reward schedule is active
   // (see getScheduleSlot): the hero card and the 4-week console both follow them.
@@ -111,17 +115,46 @@ export default async function handler(req, res) {
     allDay: true,
   });
 
-  // Kingdom War Battle Window Milestone
+  // Kingdom War battle: Saturday from 12:00 GT, usually over by about 14:00 GT
   if (currentStatus.isKW) {
-    const kwBattleDate = new Date(currentStatus.kwBattleTimestamp * 1000);
+    const battleStart = currentStatus.kwBattleTimestamp * 1000 + 12 * 3600000;
     cycleMilestones.push({
       id: `sys-kw-battle-w${currentStatus.currentWeekNumber}`,
       scope: 'global',
-      title: '⚔️ Kingdom War Battle Window',
-      description: 'Active combat phase for the Capitol. 2x chest allocations apply upon victory.',
-      start: kwBattleDate.toISOString(),
-      end: new Date(kwBattleDate.getTime() + 4 * 3600000).toISOString(),
+      title: '⚔️ Kingdom War Battle',
+      description:
+        "Starts 12:00 GT, usually over by about 14:00 GT. A win opens the King of Battle Reward chests on top of the King's Commendation.",
+      start: new Date(battleStart).toISOString(),
+      end: new Date(battleStart + 2 * 3600000).toISOString(),
       type: 'war',
+      allDay: false,
+    });
+  }
+
+  // Reward periods: open Friday ~20:00 GT (after the capitol event), close Wednesday 00:00 GT.
+  // The current or last period, and the next one.
+  for (const opensAt of [rewardPeriod.opensAt, rewardPeriod.nextOpensAt]) {
+    const p = getRewardPeriod(opensAt, calConfig);
+    cycleMilestones.push({
+      id: `sys-rewards-open-${p.id}`,
+      scope: 'global',
+      title: `🎁 Rewards Open — ${p.weekName}`,
+      description: p.kwWeek
+        ? "King's Commendation opens after the capitol event. King of Battle Reward follows if Saturday's Kingdom War is won; the King hands out after the result."
+        : "King's Commendation opens after the capitol event (no Kingdom War this week).",
+      start: new Date(p.opensAt).toISOString(),
+      end: new Date(p.opensAt + 3600000).toISOString(),
+      type: 'rotation',
+      allDay: false,
+    });
+    cycleMilestones.push({
+      id: `sys-rewards-close-${p.id}`,
+      scope: 'global',
+      title: `⌛ Rewards Close — ${p.weekName}`,
+      description: 'Chests expire at Wednesday 00:00 GT: hand out everything before then.',
+      start: new Date(p.closesAt - 3600000).toISOString(),
+      end: new Date(p.closesAt).toISOString(),
+      type: 'rotation',
       allDay: false,
     });
   }
