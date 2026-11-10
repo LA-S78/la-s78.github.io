@@ -30,34 +30,26 @@
     },
     {
       "name": "rewards",
-      "description": "Display reward allocations and nomination status",
+      "description": "This week's rewards: status, and the Kingdom War result (Stewards)",
       "type": 1,
       "options": [
         {
           "type": 3,
           "name": "action",
-          "description": "Action to perform (leave blank to check status)",
+          "description": "Leave blank to see this week's reward status",
           "required": false,
           "choices": [
             {
-              "name": "Reset Cycle (Admin Only)",
-              "value": "reset"
-            }
-          ]
-        },
-        {
-          "type": 3,
-          "name": "mode",
-          "description": "Target cycle mode when resetting (defaults to Standard)",
-          "required": false,
-          "choices": [
-            {
-              "name": "Standard (1x Allocation)",
-              "value": "standard"
+              "name": "Record Kingdom War: Won (Steward)",
+              "value": "won"
             },
             {
-              "name": "Kingdom War (2x Split Pool)",
-              "value": "kw"
+              "name": "Record Kingdom War: Lost (Steward)",
+              "value": "lost"
+            },
+            {
+              "name": "Clear this week's nominations (Steward)",
+              "value": "reset"
             }
           ]
         }
@@ -180,34 +172,26 @@
     },
     {
       "name": "rewards",
-      "description": "Display reward allocations and nomination status",
+      "description": "This week's rewards: status, and the Kingdom War result (Stewards)",
       "type": 1,
       "options": [
         {
           "type": 3,
           "name": "action",
-          "description": "Action to perform (leave blank to check status)",
+          "description": "Leave blank to see this week's reward status",
           "required": false,
           "choices": [
             {
-              "name": "Reset Cycle (Admin Only)",
-              "value": "reset"
-            }
-          ]
-        },
-        {
-          "type": 3,
-          "name": "mode",
-          "description": "Target cycle mode when resetting (defaults to Standard)",
-          "required": false,
-          "choices": [
-            {
-              "name": "Standard (1x Allocation)",
-              "value": "standard"
+              "name": "Record Kingdom War: Won (Steward)",
+              "value": "won"
             },
             {
-              "name": "Kingdom War (2x Split Pool)",
-              "value": "kw"
+              "name": "Record Kingdom War: Lost (Steward)",
+              "value": "lost"
+            },
+            {
+              "name": "Clear this week's nominations (Steward)",
+              "value": "reset"
             }
           ]
         }
@@ -311,8 +295,30 @@
     },
     {
       "name": "rewards",
-      "description": "Display reward allocations and nomination status",
-      "type": 1
+      "description": "This week's rewards: status, and the Kingdom War result (Stewards)",
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "action",
+          "description": "Leave blank to see this week's reward status",
+          "required": false,
+          "choices": [
+            {
+              "name": "Record Kingdom War: Won (Steward)",
+              "value": "won"
+            },
+            {
+              "name": "Record Kingdom War: Lost (Steward)",
+              "value": "lost"
+            },
+            {
+              "name": "Clear this week's nominations (Steward)",
+              "value": "reset"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "sb",

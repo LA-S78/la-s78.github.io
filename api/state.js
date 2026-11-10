@@ -1,6 +1,8 @@
 // api/state.js
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
+import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 // Unified Read-Only State Proxy for Map, Rewards, and Alliance Hierarchy
 
 const BASELINE_SCHEDULES = {
@@ -50,6 +52,14 @@ export default async function handler(req, res) {
     const cleanAlliances = sanitizeAlliances(mapState.alliances || {});
     const blacklist = mapState.blacklist || { players: [], alliances: [] };
     const resolvedCycleState = resolveCycleState(rewardsState.cycle_state);
+    // This week's reward period, from the clock (api/_reward_period.js)
+    const rewardPeriod = describeRewardPeriod(
+      getRewardPeriod(Date.now(), {
+        ...DEFAULT_CALENDAR_CONFIG,
+        ...gistJson(gist, 'calendar-state.json', {}),
+      }),
+      rewardsState,
+    );
 
     // Short edge cache with stale-while-revalidate
     res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=30');
@@ -80,6 +90,7 @@ export default async function handler(req, res) {
           buyout_history: rewardsState.buyout_history || [],
           lastReset: rewardsState.lastReset || null,
           lastUpdated: rewardsState.lastUpdated || null,
+          period: rewardPeriod,
         });
 
       case 'all':
@@ -100,6 +111,7 @@ export default async function handler(req, res) {
             buyout_history: rewardsState.buyout_history || [],
             lastReset: rewardsState.lastReset || null,
             lastUpdated: rewardsState.lastUpdated || null,
+            period: rewardPeriod,
           },
         });
     }
