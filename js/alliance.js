@@ -178,17 +178,26 @@ export function initBootstrapData() {
     });
   }
 
-  originalBlacklist = {
-    players: Array.isArray(diplomacyData.blacklist_players)
-      ? [...diplomacyData.blacklist_players]
-      : [],
-    alliances: Array.isArray(diplomacyData.blacklist_alliances)
-      ? [...diplomacyData.blacklist_alliances]
-      : [],
-  };
+  originalBlacklist = normaliseBlacklist({
+    players: diplomacyData.blacklist_players,
+    alliances: diplomacyData.blacklist_alliances,
+  });
 
   draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
   draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
+}
+
+/** Always { players: [...], alliances: [...] } of trimmed, non-empty names, whatever came in
+ *  (old saved drafts, live data, page data). A different shape made "+ Add" fail silently. */
+function normaliseBlacklist(raw, fallback = { players: [], alliances: [] }) {
+  // A list that is missing or not a list keeps the fallback (e.g. the live blacklist), so an
+  // old saved draft never quietly proposes emptying it.
+  const list = (x, keep) =>
+    Array.isArray(x) ? x.map((v) => String(v ?? '').trim()).filter(Boolean) : [...(keep || [])];
+  return {
+    players: list(raw?.players, fallback.players),
+    alliances: list(raw?.alliances, fallback.alliances),
+  };
 }
 
 function saveDraftToStorage() {
@@ -215,7 +224,7 @@ export function checkAndRestoreAllianceDraft() {
     if (parsed && parsed.alliances && Object.keys(parsed.alliances).length > 0) {
       isAlliancePlannerActive = true;
       draftAlliances = parsed.alliances;
-      draftBlacklist = parsed.blacklist || { players: [], alliances: [] };
+      draftBlacklist = normaliseBlacklist(parsed.blacklist, originalBlacklist);
 
       // Ensure colors are resolved on restored drafts
       Object.entries(draftAlliances).forEach(([tag, data]) => {
@@ -297,10 +306,7 @@ export async function fetchLiveAllianceState() {
         data.blacklist &&
         (Array.isArray(data.blacklist.players) || Array.isArray(data.blacklist.alliances))
       ) {
-        originalBlacklist = {
-          players: data.blacklist.players || [],
-          alliances: data.blacklist.alliances || [],
-        };
+        originalBlacklist = normaliseBlacklist(data.blacklist);
       }
 
       if (!isAlliancePlannerActive) {
@@ -501,28 +507,82 @@ export function removeContender(tag) {
 // 4. BLACKLIST MUTATIONS
 // ============================================================================
 
+/** Adds a name to the draft blacklist. Returns 'added', 'duplicate', 'empty' or 'inactive'. */
 export function addBlacklistEntry(type, target) {
-  if (!isAlliancePlannerActive) return;
-  const clean = target.trim().replace(/[@\[\]]/g, '');
-  if (!clean) return;
+  if (!isAlliancePlannerActive) return 'inactive';
+  const clean = String(target)
+    .trim()
+    .replace(/[@\[\]]/g, '');
+  if (!clean) return 'empty';
 
+  draftBlacklist = normaliseBlacklist(draftBlacklist, originalBlacklist);
   const list = type === 'players' ? draftBlacklist.players : draftBlacklist.alliances;
-  if (list.includes(clean)) return;
+  if (list.some((x) => x.toLowerCase() === clean.toLowerCase())) return 'duplicate';
 
   list.push(clean);
   saveDraftToStorage();
   renderBlacklist();
   updateAllianceProposalUI();
+  return 'added';
+}
+
+/** A message under the blacklist, so adding/removing never happens silently. */
+function showBlacklistStatus(html, kind = 'info') {
+  const section = document.querySelector('.blacklist-section');
+  if (!section) return;
+  let el = document.getElementById('blacklist-status');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'blacklist-status';
+    el.setAttribute('role', 'status');
+    section.after(el);
+  }
+  el.className = `blacklist-status ${kind}`;
+  el.innerHTML = `<span>${html}</span>`;
+}
+
+/** Runs an add from one of the blacklist boxes and reports the result. */
+function addFromInput(type, inputId) {
+  const input = document.getElementById(inputId);
+  if (!input || !input.value.trim()) return;
+  const label =
+    type === 'players' ? input.value.trim() : `[${input.value.trim().replace(/[[\]]/g, '')}]`;
+  try {
+    const result = addBlacklistEntry(type, input.value);
+    if (result === 'added') {
+      input.value = '';
+      showBlacklistStatus(
+        `<strong>${esc(label)}</strong> added to your plan. It isn't sent yet: press <strong>Submit Plan</strong> above to send it to leadership for approval.`,
+        'success',
+      );
+    } else if (result === 'duplicate') {
+      showBlacklistStatus(`<strong>${esc(label)}</strong> is already on the blacklist.`, 'warning');
+    } else if (result === 'inactive') {
+      showBlacklistStatus('Press <strong>Edit Blacklist</strong> first.', 'warning');
+    }
+  } catch (err) {
+    console.error('Blacklist add failed:', err);
+    showBlacklistStatus(
+      `Could not add <strong>${esc(label)}</strong>: ${esc(err.message)}`,
+      'error',
+    );
+  }
 }
 
 export function removeBlacklistEntry(type, index) {
   if (!isAlliancePlannerActive) return;
+  draftBlacklist = normaliseBlacklist(draftBlacklist, originalBlacklist);
   const list = type === 'players' ? draftBlacklist.players : draftBlacklist.alliances;
   if (index >= 0 && index < list.length) {
-    list.splice(index, 1);
+    const [removed] = list.splice(index, 1);
     saveDraftToStorage();
     renderBlacklist();
     updateAllianceProposalUI();
+    const label = type === 'players' ? removed : `[${removed}]`;
+    showBlacklistStatus(
+      `<strong>${esc(label)}</strong> removed from your plan. It isn't sent yet: press <strong>Submit Plan</strong> above to send it to leadership for approval.`,
+      'success',
+    );
   }
 }
 
@@ -752,9 +812,58 @@ export function calculateAllianceDiff() {
   return diff;
 }
 
+/**
+ * The blacklist's own Edit / Submit buttons, next to the blacklist (bottom of the page), so
+ * editing it doesn't need Planner Mode and Submit Plan at the top. They switch the same
+ * planner on and submit the same plan, so both sets of buttons always agree.
+ */
+function ensureBlacklistControls() {
+  const section = document.querySelector('.blacklist-section');
+  if (!section) return;
+  // A bar left in Turbo's back-button copy of the page has no listeners: replace it.
+  document.getElementById('blacklist-controls')?.remove();
+  const bar = document.createElement('div');
+  bar.id = 'blacklist-controls';
+  bar.className = 'blacklist-controls';
+  bar.innerHTML = `
+    <button id="btn-edit-blacklist" class="draft-btn" aria-pressed="false" type="button">
+      <span class="draft-indicator"></span>
+      <span class="draft-text">Edit Blacklist</span>
+    </button>
+    <button id="btn-submit-blacklist" class="submit-plan-btn hidden" disabled type="button">
+      Submit Plan <span class="badge">0</span>
+    </button>`;
+  section.before(bar);
+  bar
+    .querySelector('#btn-edit-blacklist')
+    .addEventListener('click', () => toggleAlliancePlanner(!isAlliancePlannerActive));
+  bar
+    .querySelector('#btn-submit-blacklist')
+    .addEventListener('click', () => submitAllianceProposal());
+  syncBlacklistControls();
+}
+
+function syncBlacklistControls(count = 0) {
+  const edit = document.getElementById('btn-edit-blacklist');
+  const submit = document.getElementById('btn-submit-blacklist');
+  if (edit) {
+    edit.setAttribute('aria-pressed', isAlliancePlannerActive ? 'true' : 'false');
+    edit.classList.toggle('active', isAlliancePlannerActive);
+    edit.querySelector('.draft-text').textContent = isAlliancePlannerActive
+      ? 'Stop Editing'
+      : 'Edit Blacklist';
+  }
+  if (submit) {
+    submit.classList.toggle('hidden', !isAlliancePlannerActive);
+    submit.disabled = !isAlliancePlannerActive || count === 0;
+    submit.querySelector('.badge').textContent = String(count);
+  }
+}
+
 export function updateAllianceProposalUI() {
   const submitBtn = document.getElementById('btn-submit-alliance');
   const badgeEl = document.getElementById('alliance-change-badge');
+  syncBlacklistControls(isAlliancePlannerActive ? calculateAllianceDiff().length : 0);
 
   if (!isAlliancePlannerActive) {
     if (submitBtn) {
@@ -880,6 +989,9 @@ export function bindAllianceControls() {
   for (const area of [container, document.querySelector('.blacklist-section')]) {
     area?.querySelectorAll('[data-bound]').forEach((el) => el.removeAttribute('data-bound'));
   }
+  // A blacklist message left in that copy of the page belongs to the previous visit.
+  document.getElementById('blacklist-status')?.remove();
+  ensureBlacklistControls();
 
   initBootstrapData();
 
@@ -971,25 +1083,32 @@ export function bindAllianceControls() {
   const btnAddPlayer = document.getElementById('btn-add-blacklist-player');
   if (btnAddPlayer && !btnAddPlayer.dataset.bound) {
     btnAddPlayer.dataset.bound = 'true';
-    btnAddPlayer.addEventListener('click', () => {
-      const input = document.getElementById('input-new-player');
-      if (input && input.value.trim()) {
-        addBlacklistEntry('players', input.value);
-        input.value = '';
-      }
-    });
+    btnAddPlayer.addEventListener('click', () => addFromInput('players', 'input-new-player'));
   }
 
   const btnAddBlacklistAlly = document.getElementById('btn-add-blacklist-alliance');
   if (btnAddBlacklistAlly && !btnAddBlacklistAlly.dataset.bound) {
     btnAddBlacklistAlly.dataset.bound = 'true';
-    btnAddBlacklistAlly.addEventListener('click', () => {
-      const input = document.getElementById('input-new-blacklist-alliance');
-      if (input && input.value.trim()) {
-        addBlacklistEntry('alliances', input.value);
-        input.value = '';
-      }
-    });
+    btnAddBlacklistAlly.addEventListener('click', () =>
+      addFromInput('alliances', 'input-new-blacklist-alliance'),
+    );
+  }
+
+  // Enter (or "Go" on a phone keyboard) in a blacklist box adds the entry, like "+ Add".
+  for (const [inputId, type] of [
+    ['input-new-player', 'players'],
+    ['input-new-blacklist-alliance', 'alliances'],
+  ]) {
+    const input = document.getElementById(inputId);
+    if (input && !input.dataset.bound) {
+      input.dataset.bound = 'true';
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addFromInput(type, inputId);
+        }
+      });
+    }
   }
 
   document.querySelectorAll('.blacklist-card-list').forEach((list) => {
