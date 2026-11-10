@@ -6,6 +6,7 @@ import { RULES_DATA, SB_DATA, BOT_DATA } from './_generated_translations.js';
 import { listAllianceRanks, setAllianceRank } from './_rank_helper.js';
 import { isGistConfigured, readGist, writeGist } from './_gist.js';
 import { acceptProposal } from './_accept_proposal.js';
+import { getWaitUntil } from './_after_response.js';
 import { createToken } from './_tokens.js';
 import {
   getCycleState,
@@ -2076,81 +2077,27 @@ export default async function handler(req, res) {
       rejectLabel,
     } = proposalConfig;
 
-    if (isApproved) {
-      try {
-        const blueprintAttachment = interaction.message.attachments?.find((a) =>
-          a.filename.startsWith(filePrefix),
-        );
+    // The reviewed message: status field set, both buttons disabled.
+    const buildReviewedMessage = () => {
+      const originalEmbed = JSON.parse(JSON.stringify(interaction.message.embeds[0]));
+      originalEmbed.color = isApproved ? 0x22c55e : 0xef4444;
 
-        if (!blueprintAttachment) {
-          throw new Error(`${filePrefix}.dat attachment is missing.`);
-        }
+      const statusIndex = originalEmbed.fields.findIndex((f) =>
+        f.name.toLowerCase().includes('status'),
+      );
+      const statusField = {
+        name: '⚖️ Status',
+        value: isApproved ? `✅ **Approved by ${username}**` : `❌ **Rejected by ${username}**`,
+        inline: false,
+      };
 
-        const blueprintRes = await fetch(blueprintAttachment.url);
-        if (!blueprintRes.ok) {
-          throw new Error('Failed to retrieve blueprint attachment from Discord.');
-        }
-        const parsedData = await blueprintRes.json();
-
-        // Already checked above: the click came from Discord (signature) and the clicker is a
-        // Steward. The proposal is saved directly here; no token is sent anywhere.
-        let acceptPayload = {
-          type: proposalType,
-          submittedBy: username,
-        };
-
-        if (proposalType === 'rewards') {
-          acceptPayload.distribution = parsedData;
-        } else if (proposalType === 'alliance') {
-          acceptPayload.alliances = parsedData.alliances;
-          acceptPayload.blacklist = parsedData.blacklist;
-        } else if (proposalType === 'override') {
-          acceptPayload.targetWeek = parsedData.targetWeek;
-          acceptPayload.threatName = parsedData.threatName;
-          acceptPayload.action = parsedData.action;
-          acceptPayload.displacedAlly = parsedData.displacedAlly;
-        } else {
-          acceptPayload.changes = parsedData;
-        }
-
-        const { status: acceptStatus, json: acceptJson } = await acceptProposal(acceptPayload, {
-          baseUrl: `https://${resolvedHost}`,
-        });
-        if (acceptStatus < 200 || acceptStatus >= 300) {
-          throw new Error(acceptJson.error || `Server responded with ${acceptStatus}`);
-        }
-
-        if (acceptJson.revision) {
-          mapRevisionCache.revision = acceptJson.revision;
-          mapRevisionCache.timestamp = Date.now();
-        }
-      } catch (error) {
-        console.error('Interaction bridge failed:', error);
-        return sendEphemeralMessage(res, `❌ **${t.admin.failed_update}** ${error.message}`);
+      if (statusIndex !== -1) {
+        originalEmbed.fields[statusIndex] = statusField;
+      } else {
+        originalEmbed.fields.push(statusField);
       }
-    }
 
-    const originalEmbed = JSON.parse(JSON.stringify(interaction.message.embeds[0]));
-    originalEmbed.color = isApproved ? 0x22c55e : 0xef4444;
-
-    const statusIndex = originalEmbed.fields.findIndex((f) =>
-      f.name.toLowerCase().includes('status'),
-    );
-    const statusField = {
-      name: '⚖️ Status',
-      value: isApproved ? `✅ **Approved by ${username}**` : `❌ **Rejected by ${username}**`,
-      inline: false,
-    };
-
-    if (statusIndex !== -1) {
-      originalEmbed.fields[statusIndex] = statusField;
-    } else {
-      originalEmbed.fields.push(statusField);
-    }
-
-    return res.status(200).json({
-      type: InteractionResponseType.UPDATE_MESSAGE,
-      data: {
+      return {
         embeds: [originalEmbed],
         components: [
           {
@@ -2175,8 +2122,120 @@ export default async function handler(req, res) {
             ],
           },
         ],
-      },
-    });
+      };
+    };
+
+    if (!isApproved) {
+      // Reject saves nothing, so it answers straight away.
+      return res.status(200).json({
+        type: InteractionResponseType.UPDATE_MESSAGE,
+        data: buildReviewedMessage(),
+      });
+    }
+
+    // Downloads the proposal attached to the Discord message and saves it. Throws on failure.
+    const saveApproval = async () => {
+      const blueprintAttachment = interaction.message.attachments?.find((a) =>
+        a.filename.startsWith(filePrefix),
+      );
+
+      if (!blueprintAttachment) {
+        throw new Error(`${filePrefix}.dat attachment is missing.`);
+      }
+
+      const blueprintRes = await fetch(blueprintAttachment.url);
+      if (!blueprintRes.ok) {
+        throw new Error('Failed to retrieve blueprint attachment from Discord.');
+      }
+      const parsedData = await blueprintRes.json();
+
+      // Already checked above: the click came from Discord (signature) and the clicker is a
+      // Steward. The proposal is saved directly here; no token is sent anywhere.
+      let acceptPayload = {
+        type: proposalType,
+        submittedBy: username,
+      };
+
+      if (proposalType === 'rewards') {
+        acceptPayload.distribution = parsedData;
+      } else if (proposalType === 'alliance') {
+        acceptPayload.alliances = parsedData.alliances;
+        acceptPayload.blacklist = parsedData.blacklist;
+      } else if (proposalType === 'override') {
+        acceptPayload.targetWeek = parsedData.targetWeek;
+        acceptPayload.threatName = parsedData.threatName;
+        acceptPayload.action = parsedData.action;
+        acceptPayload.displacedAlly = parsedData.displacedAlly;
+      } else {
+        acceptPayload.changes = parsedData;
+      }
+
+      const { status: acceptStatus, json: acceptJson } = await acceptProposal(acceptPayload, {
+        baseUrl: `https://${resolvedHost}`,
+      });
+      if (acceptStatus < 200 || acceptStatus >= 300) {
+        throw new Error(acceptJson.error || `Server responded with ${acceptStatus}`);
+      }
+
+      if (acceptJson.revision) {
+        mapRevisionCache.revision = acceptJson.revision;
+        mapRevisionCache.timestamp = Date.now();
+      }
+    };
+    const failedMessage = (error) => `❌ **${t.admin.failed_update}** ${error.message}`;
+
+    // Finishing after answering needs Vercel's waitUntil and this click's id and token
+    // (Discord always sends them). Without them, save first and then answer, as before.
+    const waitUntil = interaction.application_id && interaction.token ? getWaitUntil() : null;
+    if (!waitUntil) {
+      try {
+        await saveApproval();
+      } catch (error) {
+        console.error('Interaction bridge failed:', error);
+        return sendEphemeralMessage(res, failedMessage(error));
+      }
+      return res.status(200).json({
+        type: InteractionResponseType.UPDATE_MESSAGE,
+        data: buildReviewedMessage(),
+      });
+    }
+
+    // Answer Discord at once (the button shows it is working), so a slow GitHub save can't
+    // run past Discord's 3-second limit, then save and edit the message. The edit uses this
+    // click's own interaction token (valid 15 minutes), not the bot token.
+    const webhook = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}`;
+    const sendToDiscord = async (url, method, body) => {
+      const r = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!r.ok) throw new Error(`Discord responded with ${r.status}`);
+    };
+    waitUntil(
+      (async () => {
+        try {
+          await saveApproval();
+        } catch (error) {
+          console.error('Interaction bridge failed:', error);
+          // Same private message as before; the proposal stays open and can be approved again.
+          await sendToDiscord(webhook, 'POST', { content: failedMessage(error), flags: 64 }).catch(
+            (e) => console.error('Could not report the failed approval:', e),
+          );
+          return;
+        }
+        try {
+          await sendToDiscord(`${webhook}/messages/@original`, 'PATCH', buildReviewedMessage());
+        } catch (error) {
+          console.error('Approval saved, but the message could not be updated:', error);
+          await sendToDiscord(webhook, 'POST', {
+            content: `✅ Approved and saved, but this message couldn't be updated (${error.message}).`,
+            flags: 64,
+          }).catch(() => {});
+        }
+      })(),
+    );
+    return res.status(200).json({ type: InteractionResponseType.DEFERRED_UPDATE_MESSAGE });
   }
 
   return res.status(400).end();
