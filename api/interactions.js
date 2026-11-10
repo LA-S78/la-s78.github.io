@@ -1549,6 +1549,7 @@ export default async function handler(req, res) {
 
         // 2. Build signed HMAC JWT payload (24h expiry)
         const tokenPayload = {
+          action: 'nominate', // /api/nominate only accepts links made for nominating
           alliance: matchedAllianceTag,
           rank,
           allotment,
