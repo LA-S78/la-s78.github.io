@@ -331,9 +331,9 @@
 }
 
 .preview-notice.warning {
-  border-color: #f59e0b;
-  background: color-mix(in srgb, #f59e0b 12%, transparent);
-  color: #fef3c7;
+  border-color: var(--status-warning);
+  background: color-mix(in srgb, var(--status-warning) 12%, transparent);
+  color: var(--status-warning-text);
 }
 
 .ops-actions-bar {

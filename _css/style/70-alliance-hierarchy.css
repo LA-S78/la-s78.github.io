@@ -36,7 +36,7 @@
   background: linear-gradient(90deg, rgba(184, 151, 90, 0.12), transparent);
 }
 .alliance-ladder-row.rank-silver {
-  border-left: 4px solid #94a3b8;
+  border-left: 4px solid var(--badge-slate);
   background: linear-gradient(90deg, rgba(148, 163, 184, 0.12), transparent);
 }
 .alliance-ladder-row.rank-bronze {
@@ -148,7 +148,7 @@
   gap: 4px;
   background: rgba(148, 163, 184, 0.15);
   border: 1px solid rgba(148, 163, 184, 0.3);
-  color: #cbd5e1;
+  color: var(--badge-slate-text);
   font-size: 0.68rem;
   font-weight: 700;
   padding: 1px 6px;
@@ -157,7 +157,7 @@
 
 .academy-child-badge {
   font-size: 0.68rem;
-  color: #94a3b8;
+  color: var(--badge-slate);
   font-style: italic;
 }
 

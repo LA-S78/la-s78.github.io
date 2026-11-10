@@ -426,9 +426,9 @@
 
 .event-rotation { border-left-color: var(--accent-color); }
 .event-war      { border-left-color: var(--status-danger); }
-.event-snapshot { border-left-color: #3b82f6; }
-.event-custom   { border-left-color: #10b981; }
-.event-alliance { border-left-color: #3b82f6; }
+.event-snapshot { border-left-color: var(--event-snapshot); }
+.event-custom   { border-left-color: var(--event-custom); }
+.event-alliance { border-left-color: var(--event-alliance); }
 
 .event-main {
   flex: 1;

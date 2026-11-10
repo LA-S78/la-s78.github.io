@@ -184,12 +184,12 @@
 }
 
 .chest-glyph.purple {
-  background: #a400af;
+  background: var(--chest-purple);
   box-shadow: 0 0 6px rgba(164, 0, 175, 0.4);
 }
 
 .chest-glyph.blue {
-  background: #0070f3;
+  background: var(--chest-blue);
   box-shadow: 0 0 6px rgba(0, 112, 243, 0.4);
 }
 
