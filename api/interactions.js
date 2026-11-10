@@ -7,6 +7,7 @@ import { listAllianceRanks, setAllianceRank } from './_rank_helper.js';
 import { isGistConfigured, readGist, writeGist } from './_gist.js';
 import { acceptProposal } from './_accept_proposal.js';
 import { getWaitUntil } from './_after_response.js';
+import { isSteward } from './_stewards.js';
 import { createToken } from './_tokens.js';
 import {
   getCycleState,
@@ -415,22 +416,6 @@ function resolveActorName(interaction, fallback = 'Leadership') {
 
 function resolveUserId(interaction) {
   return interaction.member?.user?.id || interaction.user?.id;
-}
-
-/**
- * Checks if a Discord User ID belongs to the designated Kingdom Stewards (1-3 admins)
- * Supports STEWARD_USER_IDS (comma-separated) and legacy AUTHORIZED_USER_ID in Vercel env vars.
- */
-function isSteward(userId) {
-  if (!userId) return false;
-  const rawList = [process.env.STEWARD_USER_IDS || '', process.env.AUTHORIZED_USER_ID || ''].join(
-    ',',
-  );
-  const allowedIds = rawList
-    .split(',')
-    .map((id) => id.trim())
-    .filter(Boolean);
-  return allowedIds.includes(String(userId).trim());
 }
 
 function sendEphemeralMessage(res, content) {
@@ -1564,6 +1549,7 @@ export default async function handler(req, res) {
 
         // 2. Build signed HMAC JWT payload (24h expiry)
         const tokenPayload = {
+          action: 'nominate', // /api/nominate only accepts links made for nominating
           alliance: matchedAllianceTag,
           rank,
           allotment,

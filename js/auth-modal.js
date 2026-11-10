@@ -8,6 +8,19 @@ const esc = (value) => window.escapeHtml(value);
 
 const STASH_KEY = 'la_pending_proposal_stash';
 
+// Who may send proposals (checked again by the server): R4 and R5 leaders, and Stewards.
+const PROPOSAL_ROLES = ['R4', 'R5'];
+
+/** True if the stored login pass exists and hasn't expired (the server checks the signature). */
+function loginPassIsUsable(pass) {
+  try {
+    const data = JSON.parse(atob(pass.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')));
+    return data.kind === 'session' && Number(data.exp) > Date.now() + 60 * 1000;
+  } catch {
+    return false;
+  }
+}
+
 // ============================================================================
 // 1. DYNAMIC MODAL INJECTION & STYLING
 // ============================================================================
@@ -165,10 +178,18 @@ export async function submitProposalWithAuth({
   const currentRole = localStorage.getItem('auth-role') || 'public';
   const currentAlliance = localStorage.getItem('auth-alliance');
 
-  const isAuthenticated = Boolean(currentUser && currentRole !== 'public');
+  const loginPass = localStorage.getItem('auth-session');
+  const isSteward = localStorage.getItem('auth-steward') === 'true';
 
-  // Render User Auth Identity Card
-  if (isAuthenticated) {
+  // A valid login pass is needed to send (older logins without one must log in once more).
+  const isAuthenticated = Boolean(
+    currentUser && currentRole !== 'public' && loginPassIsUsable(loginPass || ''),
+  );
+  const canSend = isAuthenticated && (PROPOSAL_ROLES.includes(currentRole) || isSteward);
+  // 'send' | 'login' | 'leaders-only'
+  let mode = !isAuthenticated ? 'login' : canSend ? 'send' : 'leaders-only';
+
+  function showSignedIn(noteHtml = '') {
     userStrip.innerHTML = `
       <div class="auth-logged-in">
         <img src="${esc(currentAvatar || '/images/default-avatar.png')}" class="auth-avatar-mini" alt="User Avatar" />
@@ -177,24 +198,25 @@ export async function submitProposalWithAuth({
           <span class="auth-badge-role ${esc(currentRole.toLowerCase())}">${esc(currentRole.toUpperCase())}${currentAlliance ? ` • [${esc(currentAlliance)}]` : ''}</span>
         </div>
       </div>
+      ${noteHtml}
     `;
-    btnText.textContent = 'Transmit to Discord';
-    actionBtn.onclick = async () => {
-      await performTransmission();
-    };
-  } else {
+  }
+
+  function showLogin(reason) {
+    mode = 'login';
     userStrip.innerHTML = `
       <div class="auth-guest-notice">
         <span class="auth-guest-icon">⚠️</span>
         <div>
           <strong>Leadership Authentication Required</strong>
-          <p>Proposals require verified Discord leadership or officer status to dispatch.</p>
+          <p>${esc(reason || 'Proposals require verified Discord leadership or officer status to dispatch.')}</p>
         </div>
       </div>
     `;
+    actionBtn.disabled = false;
     btnText.textContent = 'Log In via Discord to Submit';
     actionBtn.onclick = () => {
-      // Stash draft and payload first
+      // Stash draft and payload first; the proposal reopens after logging in.
       payload.notes = notesInput.value.trim();
       stashProposalDraft(type, payload, diffSummaryHtml);
 
@@ -207,6 +229,28 @@ export async function submitProposalWithAuth({
     };
   }
 
+  if (mode === 'send') {
+    showSignedIn();
+    actionBtn.disabled = false;
+    btnText.textContent = 'Transmit to Discord';
+    actionBtn.onclick = async () => {
+      await performTransmission();
+    };
+  } else if (mode === 'leaders-only') {
+    showSignedIn(
+      '<p class="auth-modal-note">Only R4 and R5 leaders can send proposals. Ask your alliance leader to submit this plan.</p>',
+    );
+    actionBtn.disabled = true;
+    btnText.textContent = 'Leaders Only';
+    actionBtn.onclick = null;
+  } else {
+    showLogin(
+      currentUser && currentRole !== 'public'
+        ? 'Your login has expired. Log in with Discord again to send this proposal.'
+        : '',
+    );
+  }
+
   dialog.showModal();
 
   async function performTransmission() {
@@ -215,17 +259,26 @@ export async function submitProposalWithAuth({
 
     try {
       payload.notes = notesInput.value.trim();
-      payload.submittedBy = currentUser || 'Anonymous';
+      payload.submittedBy = currentUser || 'Anonymous'; // display only; the server uses the login pass
       payload.type = type;
 
       const res = await fetch('/api/proposal', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('auth-session') || ''}`,
+        },
         body: JSON.stringify(payload),
       });
 
       const resData = await res.json().catch(() => ({}));
 
+      if (res.status === 401 && resData.code === 'login_required') {
+        // The pass is missing, expired or no longer valid: log in again, then resume.
+        localStorage.removeItem('auth-session');
+        showLogin(resData.error);
+        return;
+      }
       if (!res.ok) {
         throw new Error(resData.error || `Server responded with HTTP ${res.status}`);
       }
@@ -250,10 +303,10 @@ export async function submitProposalWithAuth({
     btnSpinner.classList.toggle('hidden', !isLoading);
     if (isLoading) {
       btnText.textContent = 'Transmitting...';
-    } else {
-      btnText.textContent = isAuthenticated
-        ? 'Transmit to Discord'
-        : 'Log In via Discord to Submit';
+    } else if (mode === 'send') {
+      btnText.textContent = 'Transmit to Discord';
+    } else if (mode === 'login') {
+      btnText.textContent = 'Log In via Discord to Submit';
     }
   }
 }

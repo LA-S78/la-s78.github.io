@@ -48,7 +48,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required parameters.' });
   }
 
-  const payload = verifyToken(token, botToken);
+  // Only links made by /nominate: other portal links (e.g. /registerbot or calendar
+  // management) are signed the same way and also name an alliance.
+  const payload = verifyToken(token, botToken, { action: 'nominate' });
   if (!payload) {
     return res.status(403).json({ error: 'Token is invalid or expired. Run /nominate again.' });
   }

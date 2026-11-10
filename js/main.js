@@ -92,6 +92,10 @@
       localStorage.setItem('auth-username', data.username);
       localStorage.setItem('auth-avatar', data.avatar);
       localStorage.setItem('auth-alliance', data.alliance);
+      // Signed login pass for sending proposals (only given to members of the Discord server).
+      if (data.session) localStorage.setItem('auth-session', data.session);
+      else localStorage.removeItem('auth-session');
+      localStorage.setItem('auth-steward', data.steward ? 'true' : 'false');
 
       applyAuthUIState(data.role, data.username, data.avatar, data.alliance);
 
@@ -191,6 +195,8 @@
     localStorage.removeItem('auth-username');
     localStorage.removeItem('auth-avatar');
     localStorage.removeItem('auth-alliance');
+    localStorage.removeItem('auth-session');
+    localStorage.removeItem('auth-steward');
     window.location.reload();
   };
 

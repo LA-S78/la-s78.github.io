@@ -1,6 +1,7 @@
 // api/_gist.js
 // Shared access to the GitHub Gist that stores the site's live data
-// (map-state.json, rewards-data.json, rewards-nominations.json, calendar-state.json).
+// (map-state.json, rewards-data.json, rewards-nominations.json, calendar-state.json,
+// proposal-log.json).
 // Files starting with "_" in api/ are helpers, not public endpoints.
 
 const GIST_API = 'https://api.github.com/gists';

@@ -1,4 +1,7 @@
-// api/verify.js (Vercel Serverless Function - Zero Dependencies)
+// api/verify.js (Vercel Serverless Function)
+import { createSessionToken } from './_tokens.js';
+import { isSteward } from './_stewards.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -110,11 +113,24 @@ export default async function handler(req, res) {
     else if (MEMBER_ROLE_ID && userRoles.includes(MEMBER_ROLE_ID)) accessLevel = 'member';
     else if (!MEMBER_ROLE_ID && userRoles.length > 0) accessLevel = 'member';
 
+    // A signed login pass, so the server can check who is sending a proposal (the role and
+    // name above are only for the page's display; the browser could edit those).
+    const passSecret = process.env.DISCORD_BOT_TOKEN || DISCORD_BOT_TOKEN;
+    const session =
+      accessLevel !== 'public' && passSecret
+        ? createSessionToken(
+            { uid: discordUserId, name: displayName, role: accessLevel, alliance: allianceName },
+            passSecret,
+          )
+        : null;
+
     return res.status(200).json({
       role: accessLevel,
       username: displayName,
       avatar: avatarUrl,
       alliance: allianceName,
+      steward: isSteward(discordUserId),
+      session,
     });
   } catch (error) {
     console.error('Handshake Error:', error.message);
