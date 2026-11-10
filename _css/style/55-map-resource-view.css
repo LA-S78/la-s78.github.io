@@ -177,7 +177,7 @@
 
 .submit-plan-btn:hover:not(:disabled) {
   background: linear-gradient(180deg, #15803d 0%, #166534 100%);
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--status-success) 40%, transparent);
 }
 
 .submit-plan-btn:disabled {

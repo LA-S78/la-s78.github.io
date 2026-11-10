@@ -275,7 +275,7 @@ svg #layer1 path:hover {
   color: var(--accent-color);
   font-weight: 600;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), inset 0 0 1px rgba(255, 255, 255, 0.2);
-  border-color: rgba(184, 151, 90, 0.4);
+  border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
 }
 
 .draft-btn {
@@ -312,7 +312,7 @@ svg #layer1 path:hover {
   background: rgba(217, 119, 6, 0.15);
   border-color: var(--status-warning);
   color: var(--status-warning-text);
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--status-warning) 20%, transparent);
 }
 
 .draft-btn[aria-pressed="true"] .draft-indicator {
@@ -353,7 +353,7 @@ svg #layer1 path:hover {
   border-color: var(--accent-color);
   color: #ffffff;
   outline: none;
-  box-shadow: 0 0 8px rgba(184, 151, 90, 0.3);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent-color) 30%, transparent);
 }
 
 .buff-drawer {

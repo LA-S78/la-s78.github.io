@@ -36,11 +36,11 @@
 /* Capitol Top 3 Circlet Highlights */
 .alliance-ladder-row.rank-gold {
   border-left: 4px solid var(--accent-color);
-  background: linear-gradient(90deg, rgba(184, 151, 90, 0.12), transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent-color) 12%, transparent), transparent);
 }
 .alliance-ladder-row.rank-silver {
   border-left: 4px solid var(--badge-slate);
-  background: linear-gradient(90deg, rgba(148, 163, 184, 0.12), transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--badge-slate) 12%, transparent), transparent);
 }
 .alliance-ladder-row.rank-bronze {
   border-left: 4px solid #b45309;
@@ -63,9 +63,9 @@
   min-width: 28px;
 }
 
-.ladder-rank-badge.rank-gold   { color: var(--rank-gold); text-shadow: 0 0 8px rgba(250, 204, 21, 0.4); }
-.ladder-rank-badge.rank-silver { color: var(--rank-silver); text-shadow: 0 0 8px rgba(226, 232, 240, 0.4); }
-.ladder-rank-badge.rank-bronze { color: var(--rank-bronze); text-shadow: 0 0 8px rgba(249, 115, 22, 0.4); }
+.ladder-rank-badge.rank-gold   { color: var(--rank-gold); text-shadow: 0 0 8px color-mix(in srgb, var(--rank-gold) 40%, transparent); }
+.ladder-rank-badge.rank-silver { color: var(--rank-silver); text-shadow: 0 0 8px color-mix(in srgb, var(--rank-silver) 40%, transparent); }
+.ladder-rank-badge.rank-bronze { color: var(--rank-bronze); text-shadow: 0 0 8px color-mix(in srgb, var(--rank-bronze) 40%, transparent); }
 
 .ladder-steppers {
   display: flex;
@@ -149,8 +149,8 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(148, 163, 184, 0.15);
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: color-mix(in srgb, var(--badge-slate) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--badge-slate) 30%, transparent);
   color: var(--badge-slate-text);
   font-size: 0.68rem;
   font-weight: 700;
@@ -203,13 +203,13 @@
 }
 
 .nap-badge.nap-active {
-  background: rgba(34, 197, 94, 0.18);
+  background: color-mix(in srgb, var(--status-success) 18%, transparent);
   border: 1px solid var(--status-success);
   color: var(--status-success-text);
 }
 
 .nap-badge.nap-inactive {
-  background: rgba(239, 68, 68, 0.18);
+  background: color-mix(in srgb, var(--status-danger) 18%, transparent);
   border: 1px solid var(--status-danger);
   color: var(--status-danger-text);
 }
@@ -227,7 +227,7 @@
 
 .btn-ladder-del {
   background: transparent;
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  border: 1px solid color-mix(in srgb, var(--status-danger) 40%, transparent);
   color: var(--status-danger);
   width: 20px;
   height: 20px;
@@ -306,7 +306,7 @@
   align-items: center;
   gap: 6px;
   background: rgba(122, 0, 0, 0.2);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  border: 1px solid color-mix(in srgb, var(--status-danger) 40%, transparent);
   padding: 3px 8px;
   border-radius: 4px;
   font-size: 0.78rem;

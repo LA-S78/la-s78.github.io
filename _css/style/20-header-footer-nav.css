@@ -179,7 +179,7 @@ footer {
 }
 
 .lang-trigger {
-  background: rgba(17, 13, 11, 0.85);
+  background: color-mix(in srgb, var(--nav-bg) 85%, transparent);
   border: 1px solid;
   border-image: linear-gradient(
       to top right,
@@ -244,7 +244,7 @@ footer {
   color: var(--accent-color);
   font-weight: bold;
   pointer-events: none;
-  background-color: rgba(184, 151, 90, 0.05);
+  background-color: color-mix(in srgb, var(--accent-color) 5%, transparent);
 }
 .dropdown-content li a:hover {
   background-color: var(--border-color);
