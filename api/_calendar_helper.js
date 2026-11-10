@@ -38,6 +38,11 @@ export function getScheduleSlot(weekNumber, customConfig = {}) {
   return { clockWeek, slotKey: `week_${clockWeek}` };
 }
 
+/** Short name of a week of the reward schedule: clockWeek 0 is the off-week. */
+export function weekLabel(clockWeek) {
+  return Number(clockWeek) === 0 ? 'Off-Week' : `Kingdom War Week ${clockWeek}`;
+}
+
 /**
  * Calculates current cycle status for any given date
  */
