@@ -35,8 +35,8 @@
 
 /* Capitol Top 3 Circlet Highlights */
 .alliance-ladder-row.rank-gold {
-  border-left: 4px solid var(--accent-color);
-  background: linear-gradient(90deg, color-mix(in srgb, var(--accent-color) 12%, transparent), transparent);
+  border-left: 4px solid var(--gold);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--gold) 12%, transparent), transparent);
 }
 .alliance-ladder-row.rank-silver {
   border-left: 4px solid var(--badge-slate);

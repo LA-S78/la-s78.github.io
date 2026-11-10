@@ -179,8 +179,8 @@
 }
 
 .chest-glyph.gold {
-  background: var(--accent-color);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--accent-color) 40%, transparent);
+  background: var(--gold);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--gold) 40%, transparent);
 }
 
 .chest-glyph.purple {

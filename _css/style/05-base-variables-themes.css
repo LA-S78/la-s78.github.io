@@ -14,20 +14,24 @@
 /* Core Variables & Default Theme (Plague) */
 :root,
 html[data-theme="default"] {
-  /* Base UI Colors */
-  --bg-color: #1a1512;
-  --card-bg: rgba(42, 34, 30, 0.85);
-  --nav-bg: #110d0b;
+  /* Base UI Colors.
+     The accent, borders and surfaces follow the theme (owner decision, idea D option "3c"):
+     each mixes the theme colour (--active-theme*, set per theme below) into the original
+     gold or brown. Text and fixed meanings (status, rank, chest, alliance colours) don't. */
+  --gold: #b8975a; /* the original accent; stays gold where gold means something (gold chests, rank #1 row) */
+  --accent-color: color-mix(in srgb, rgb(var(--active-theme-bright)) 70%, var(--gold));
+  --border-color: color-mix(in srgb, rgb(var(--active-theme)) 30%, #3d3128);
+  --bg-color: color-mix(in srgb, rgb(var(--active-theme)) 8%, #1a1512);
+  --nav-bg: color-mix(in srgb, rgb(var(--active-theme)) 8%, #110d0b);
+  --card-bg-solid: color-mix(in srgb, rgb(var(--active-theme)) 8%, #2a221e);
+  --card-bg: color-mix(in srgb, var(--card-bg-solid) 85%, transparent);
   --text-main: #d9cbb8;
   --text-muted: #a8a19b;
-  --accent-color: #b8975a;
-  --border-color: #3d3128;
-  --card-bg-solid: #2a221e; /* --card-bg without transparency */
 
-  /* Shared Surface & Palette Variables */
-  --surface-dark: #080605;
-  --surface-elevated: #0d0a08;
-  --surface-card: #14100d;
+  /* Shared Surface & Palette Variables (the darkest surfaces get a little less tint) */
+  --surface-dark: color-mix(in srgb, rgb(var(--active-theme)) 6%, #080605);
+  --surface-elevated: color-mix(in srgb, rgb(var(--active-theme)) 6%, #0d0a08);
+  --surface-card: color-mix(in srgb, rgb(var(--active-theme)) 6%, #14100d);
   
   --status-danger: #ef4444;
   --status-danger-hover: #ff6b6b;

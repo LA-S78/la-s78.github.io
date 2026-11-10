@@ -45,7 +45,8 @@
 }
 
 .highlight-alliance {
-  background-color: rgba(230, 160, 80, 0.2);
+  /* your own alliance: the theme colour (it was Sanctuary's orange in every theme) */
+  background-color: rgba(var(--active-theme-bright), 0.2);
   border-left: 4px solid var(--accent-color);
   font-weight: bold;
 }
