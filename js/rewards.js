@@ -563,7 +563,17 @@ export async function submitRewardProposal() {
 // 6. INITIALIZATION & EVENT DELEGATION
 // ==========================================================================
 
+// Runs on every page's turbo:load. Sets up the rewards card only where it is shown, once per
+// visit: each visit (also the back button's copy of the page) brings a fresh container.
+const startedRewardsCards = new WeakSet();
 export function bindRewardsControls() {
+  const container = document.getElementById('rewards-container');
+  if (!container || startedRewardsCards.has(container)) return;
+  startedRewardsCards.add(container);
+  // A fresh container can be Turbo's back-button copy of the page, which keeps the data-bound
+  // marks of the controls wired up last time. Clear them so the controls are wired up again.
+  container.querySelectorAll('[data-bound]').forEach((el) => el.removeAttribute('data-bound'));
+
   initDefaultTiers();
 
   const listEl = document.getElementById('rewards-tier-list');

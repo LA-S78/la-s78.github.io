@@ -428,11 +428,10 @@
     import('./map.js')
       .then(async (MapModule) => {
         setTimeout(async () => {
-          MapModule.initializeMapData(mapSvg);
+          // map.js sets the map up itself (initMap: once per visit, controls included). Calling
+          // it here too is harmless: whichever runs first does the work, the other does nothing.
+          MapModule.initMap();
           MapModule.enableMapHighlighting(mapSvg);
-
-          // The view-mode buttons (level / alliance / resource) are bound by map.js itself
-          // (bindMapControls, guarded by data-bound), so they're not bound again here.
 
           try {
             const response = await fetch('/api/colors');
