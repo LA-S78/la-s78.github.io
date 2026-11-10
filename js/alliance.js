@@ -552,7 +552,7 @@ function addFromInput(type, inputId) {
     if (result === 'added') {
       input.value = '';
       showBlacklistStatus(
-        `<strong>${esc(label)}</strong> added to your plan. It isn't sent yet: press <strong>Submit Plan</strong> above to send it to leadership for approval.`,
+        `<strong>${esc(label)}</strong> added to your plan. It isn't sent yet: press <strong>Submit Plan</strong> above the blacklist to send it to leadership for approval.`,
         'success',
       );
     } else if (result === 'duplicate') {
@@ -580,7 +580,7 @@ export function removeBlacklistEntry(type, index) {
     updateAllianceProposalUI();
     const label = type === 'players' ? removed : `[${removed}]`;
     showBlacklistStatus(
-      `<strong>${esc(label)}</strong> removed from your plan. It isn't sent yet: press <strong>Submit Plan</strong> above to send it to leadership for approval.`,
+      `<strong>${esc(label)}</strong> removed from your plan. It isn't sent yet: press <strong>Submit Plan</strong> above the blacklist to send it to leadership for approval.`,
       'success',
     );
   }
@@ -758,7 +758,8 @@ export function renderBlacklist() {
 // 6. DIFF ENGINE & PROPOSAL SUBMISSION
 // ============================================================================
 
-export function calculateAllianceDiff() {
+/** Changes to the standings (ranks, NAP, academies, colours, added/removed alliances). */
+export function calculateStandingsDiff() {
   const diff = [];
 
   Object.entries(draftAlliances).forEach(([tag, draft]) => {
@@ -791,6 +792,12 @@ export function calculateAllianceDiff() {
     }
   });
 
+  return diff;
+}
+
+/** Changes to the blacklist, as add/remove operations. */
+export function calculateBlacklistDiff() {
+  const diff = [];
   const origPlayers = originalBlacklist.players || [];
   const draftPlayers = draftBlacklist.players || [];
   draftPlayers.forEach((p) => {
@@ -816,10 +823,16 @@ export function calculateAllianceDiff() {
   return diff;
 }
 
+/** Every change in the planner (standings and blacklist). */
+export function calculateAllianceDiff() {
+  return [...calculateStandingsDiff(), ...calculateBlacklistDiff()];
+}
+
 /**
  * The blacklist's own Edit / Submit buttons, next to the blacklist (bottom of the page), so
- * editing it doesn't need Planner Mode and Submit Plan at the top. They switch the same
- * planner on and submit the same plan, so both sets of buttons always agree.
+ * editing it doesn't need Planner Mode at the top. Edit switches the same planner on; Submit
+ * sends the blacklist changes only, as their own "NAP Blacklist Proposal" (the top Submit Plan
+ * sends the standings only).
  */
 function ensureBlacklistControls() {
   const section = document.querySelector('.blacklist-section');
@@ -843,7 +856,7 @@ function ensureBlacklistControls() {
     .addEventListener('click', () => toggleAlliancePlanner(!isAlliancePlannerActive));
   bar
     .querySelector('#btn-submit-blacklist')
-    .addEventListener('click', () => submitAllianceProposal());
+    .addEventListener('click', () => submitBlacklistProposal());
   syncBlacklistControls();
 }
 
@@ -867,7 +880,7 @@ function syncBlacklistControls(count = 0) {
 export function updateAllianceProposalUI() {
   const submitBtn = document.getElementById('btn-submit-alliance');
   const badgeEl = document.getElementById('alliance-change-badge');
-  syncBlacklistControls(isAlliancePlannerActive ? calculateAllianceDiff().length : 0);
+  syncBlacklistControls(isAlliancePlannerActive ? calculateBlacklistDiff().length : 0);
 
   if (!isAlliancePlannerActive) {
     if (submitBtn) {
@@ -878,8 +891,8 @@ export function updateAllianceProposalUI() {
     return;
   }
 
-  const diff = calculateAllianceDiff();
-  const count = diff.length;
+  // The top Submit Plan sends the standings; the blacklist has its own Submit.
+  const count = calculateStandingsDiff().length;
 
   if (badgeEl) badgeEl.textContent = String(count);
 
@@ -923,20 +936,35 @@ export function toggleAlliancePlanner(active) {
   updateAllianceProposalUI();
 }
 
+/**
+ * After one part of the plan was sent: that part becomes the new starting point. The planner
+ * stays open while the other part still has unsent changes; otherwise it closes.
+ */
+function afterProposalSent() {
+  if (calculateAllianceDiff().length === 0) {
+    toggleAlliancePlanner(false);
+    return;
+  }
+  saveDraftToStorage();
+  renderStandingsHierarchy();
+  renderBlacklist();
+  updateAllianceProposalUI();
+}
+
 export async function submitAllianceProposal() {
   if (!isAlliancePlannerActive) return;
 
-  const diff = calculateAllianceDiff();
+  const diff = calculateStandingsDiff();
   if (diff.length === 0) {
     alert('No modifications detected in current standings.');
     return;
   }
 
+  // Standings only: blacklist changes go in their own proposal (submitBlacklistProposal).
   const payload = {
     type: 'alliance',
     timestamp: new Date().toISOString(),
     alliances: draftAlliances,
-    blacklist: draftBlacklist,
     diff: diff,
   };
 
@@ -966,12 +994,44 @@ export async function submitAllianceProposal() {
     payload: payload,
     diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
     onSuccess: () => {
-      try {
-        localStorage.removeItem(ALLIANCE_DRAFT_KEY);
-      } catch (e) {}
       originalAlliances = JSON.parse(JSON.stringify(draftAlliances));
+      afterProposalSent();
+    },
+  });
+}
+
+/** Sends the blacklist changes as their own proposal ("NAP Blacklist Proposal" in Discord). */
+export async function submitBlacklistProposal() {
+  if (!isAlliancePlannerActive) return;
+
+  const diff = calculateBlacklistDiff();
+  if (diff.length === 0) {
+    showBlacklistStatus('No blacklist changes to send.', 'warning');
+    return;
+  }
+
+  const diffHtml = diff
+    .map((d) => {
+      const label = d.category === 'alliances' ? `[${esc(d.target)}]` : esc(d.target);
+      const what = d.category === 'alliances' ? 'alliance' : 'player';
+      return d.action === 'add'
+        ? `<div>• ⚠️ <strong>Add</strong> ${what} <strong>${label}</strong></div>`
+        : `<div>• ✅ <strong>Remove</strong> ${what} <strong>${label}</strong></div>`;
+    })
+    .join('');
+
+  submitProposalWithAuth({
+    type: 'blacklist',
+    title: '🚫 Submit NAP Blacklist Proposal',
+    payload: { type: 'blacklist', timestamp: new Date().toISOString(), diff },
+    diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
+    onSuccess: () => {
       originalBlacklist = JSON.parse(JSON.stringify(draftBlacklist));
-      toggleAlliancePlanner(false);
+      afterProposalSent();
+      showBlacklistStatus(
+        'Blacklist proposal sent to leadership on Discord. It applies once a Steward approves it.',
+        'success',
+      );
     },
   });
 }

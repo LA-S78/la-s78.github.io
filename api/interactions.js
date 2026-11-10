@@ -199,6 +199,24 @@ const PROPOSAL_CONFIGS = {
     approveLabel: 'Approve Standings',
     rejectLabel: 'Reject',
   },
+  approve_blacklist_proposal: {
+    type: 'blacklist',
+    isApproved: true,
+    filePrefix: 'blacklist-blueprint',
+    approveId: 'approve_blacklist_proposal',
+    rejectId: 'reject_blacklist_proposal',
+    approveLabel: 'Approve Blacklist',
+    rejectLabel: 'Reject',
+  },
+  reject_blacklist_proposal: {
+    type: 'blacklist',
+    isApproved: false,
+    filePrefix: 'blacklist-blueprint',
+    approveId: 'approve_blacklist_proposal',
+    rejectId: 'reject_blacklist_proposal',
+    approveLabel: 'Approve Blacklist',
+    rejectLabel: 'Reject',
+  },
   approve_override_proposal: {
     type: 'override',
     isApproved: true,
@@ -2146,7 +2164,9 @@ export default async function handler(req, res) {
         acceptPayload.distribution = parsedData;
       } else if (proposalType === 'alliance') {
         acceptPayload.alliances = parsedData.alliances;
-        acceptPayload.blacklist = parsedData.blacklist;
+        acceptPayload.blacklist = parsedData.blacklist; // only in proposals sent before the split
+      } else if (proposalType === 'blacklist') {
+        acceptPayload.diff = parsedData.diff;
       } else if (proposalType === 'override') {
         acceptPayload.targetWeek = parsedData.targetWeek;
         acceptPayload.threatName = parsedData.threatName;

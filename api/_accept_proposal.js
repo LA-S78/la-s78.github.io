@@ -49,6 +49,7 @@ export async function acceptProposal(payload, { baseUrl = 'https://la-s78.app' }
     changes,
     alliances: newAlliances,
     blacklist: newBlacklist,
+    diff,
     submittedBy,
     snapshotUrl,
   } = payload || {};
@@ -188,6 +189,7 @@ export async function acceptProposal(payload, { baseUrl = 'https://la-s78.app' }
 
         currentState.alliances = mergedAlliances;
 
+        // Proposals sent before blacklist proposals existed still carry the whole blacklist.
         if (newBlacklist) {
           currentState.blacklist = newBlacklist;
         }
@@ -209,6 +211,60 @@ export async function acceptProposal(payload, { baseUrl = 'https://la-s78.app' }
           revision,
           message: 'Alliance standings updated in Gist!',
         });
+      }
+
+      // ======================================================================
+      // 3B. NAP BLACKLIST PROPOSAL ACCEPTANCE
+      // ======================================================================
+      // Applies the proposal's add/remove changes to the blacklist as it is now, so two
+      // blacklist proposals approved one after the other don't undo each other.
+      case 'blacklist': {
+        if (!Array.isArray(diff) || diff.length === 0) {
+          return jsonResult(400, { error: 'Invalid blacklist changes provided' });
+        }
+
+        const currentState = await readForApproval('map-state.json', {
+          alliances: {},
+          territory_ownership: {},
+        });
+
+        const clean = (list) =>
+          Array.isArray(list) ? list.map((v) => String(v ?? '').trim()).filter(Boolean) : [];
+        const blacklist = {
+          players: clean(currentState.blacklist?.players),
+          alliances: clean(currentState.blacklist?.alliances),
+        };
+
+        for (const change of diff) {
+          const category = ['players', 'alliances'].includes(change?.category)
+            ? change.category
+            : null;
+          const target = String(change?.target ?? '')
+            .trim()
+            .replace(/[@[\]]/g, '');
+          if (!category || !target) continue;
+          const same = (entry) => entry.toLowerCase() === target.toLowerCase();
+          if (change.action === 'add') {
+            if (!blacklist[category].some(same)) blacklist[category].push(target);
+          } else if (change.action === 'remove') {
+            blacklist[category] = blacklist[category].filter((entry) => !same(entry));
+          }
+        }
+
+        currentState.blacklist = blacklist;
+        const revision = Date.now().toString(36);
+        currentState.revision = revision;
+        currentState.lastUpdated = new Date().toISOString();
+        currentState.updatedBy = submittedBy || 'Discord Admin';
+
+        await writeGist(
+          { 'map-state.json': currentState },
+          {
+            description: `Blacklist updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
+          },
+        );
+
+        return jsonResult(200, { success: true, revision, message: 'Blacklist updated in Gist!' });
       }
 
       // ======================================================================
@@ -271,7 +327,7 @@ export async function acceptProposal(payload, { baseUrl = 'https://la-s78.app' }
 
       default:
         return jsonResult(400, {
-          error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`,
+          error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance", "blacklist", "override".`,
         });
     }
   } catch (error) {

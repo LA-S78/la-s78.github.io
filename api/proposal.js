@@ -178,6 +178,21 @@ function validateProposal(payload) {
     ) {
       return bad('change list');
     }
+  } else if (type === 'blacklist') {
+    const d = payload.diff;
+    if (!Array.isArray(d) || d.length === 0 || d.length > 200) return bad('blacklist changes');
+    for (const c of d) {
+      if (
+        !isObj(c) ||
+        !['add', 'remove'].includes(c.action) ||
+        !['players', 'alliances'].includes(c.category) ||
+        typeof c.target !== 'string' ||
+        !c.target.trim() ||
+        c.target.length > 64
+      ) {
+        return bad('blacklist change');
+      }
+    }
   } else if (type === 'override') {
     if (!smallInt(Number(payload.targetWeek), 1, 4) || !shortText(payload.threatName, 64)) {
       return bad('defense override');
@@ -444,8 +459,11 @@ async function dispatchProposal(payload, botToken, submitter) {
         }
 
         const totalAlliances = Object.keys(alliances).length;
-        const totalBlacklist =
-          (blacklist?.players?.length || 0) + (blacklist?.alliances?.length || 0);
+        // Blacklist changes have their own proposal type now ('blacklist'); older pages may
+        // still send the whole blacklist with the standings.
+        const totalBlacklist = blacklist
+          ? ` | ${(blacklist.players?.length || 0) + (blacklist.alliances?.length || 0)} Blacklisted`
+          : '';
 
         const embed = {
           title: '👑 NAP Roster & Alliance Standings Proposal',
@@ -456,7 +474,7 @@ async function dispatchProposal(payload, botToken, submitter) {
             { name: '⏱️ Submitted', value: `<t:${nowUnix}:R>`, inline: true },
             {
               name: '📊 Total Registered',
-              value: `\`${totalAlliances} Alliances | ${totalBlacklist} Blacklisted\``,
+              value: `\`${totalAlliances} Alliances${totalBlacklist}\``,
               inline: false,
             },
             {
@@ -495,7 +513,9 @@ async function dispatchProposal(payload, botToken, submitter) {
         const formData = new FormData();
         formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
 
-        const blueprintData = { alliances, blacklist: blacklist || { players: [], alliances: [] } };
+        // Only include a blacklist if one was sent: an empty one would wipe the live blacklist
+        // when the standings are approved.
+        const blueprintData = { alliances, ...(blacklist ? { blacklist } : {}) };
         const jsonBlob = new Blob([JSON.stringify(blueprintData)], {
           type: 'application/octet-stream',
         });
@@ -517,6 +537,87 @@ async function dispatchProposal(payload, botToken, submitter) {
         }
 
         return result(200, { success: true, message: 'Alliance proposal dispatched to Discord!' });
+      }
+
+      // ======================================================================
+      // 3B. NAP BLACKLIST PROPOSAL (add/remove players and alliances)
+      // ======================================================================
+      case 'blacklist': {
+        const { notes, diff } = payload;
+        const lines = diff.map((d) => {
+          const target = d.category === 'alliances' ? `[${d.target}]` : d.target;
+          const what = d.category === 'alliances' ? 'alliance' : 'player';
+          return d.action === 'add'
+            ? `• ⚠️ **Add** ${what} \`${target}\``
+            : `• ✅ **Remove** ${what} \`${target}\``;
+        });
+        let changes = lines.slice(0, 20).join('\n');
+        if (lines.length > 20) changes += `\n*...and ${lines.length - 20} more changes*`;
+
+        const embed = {
+          title: '🚫 NAP Blacklist Proposal',
+          color: 0xef4444,
+          description: notes ? `*"${notes}"*` : '*No additional notes provided.*',
+          fields: [
+            { name: '👤 Submitter', value: submitterValue, inline: true },
+            { name: '⏱️ Submitted', value: `<t:${nowUnix}:R>`, inline: true },
+            { name: '📝 Proposed Changes', value: changes.substring(0, 1024), inline: false },
+            { name: '⚖️ Status', value: '⏳ **Pending Leadership Review**', inline: false },
+          ],
+          footer: { text: 'Last Asylum Diplomacy Engine' },
+          timestamp: new Date().toISOString(),
+        };
+
+        const components = [
+          {
+            type: 1,
+            components: [
+              {
+                type: 2,
+                custom_id: 'approve_blacklist_proposal',
+                label: 'Approve Blacklist',
+                style: 3,
+                emoji: { name: '✅' },
+              },
+              {
+                type: 2,
+                custom_id: 'reject_blacklist_proposal',
+                label: 'Reject',
+                style: 4,
+                emoji: { name: '❌' },
+              },
+            ],
+          },
+        ];
+
+        const formData = new FormData();
+        formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
+        // Only the changes: on approval they are applied to the blacklist as it is then.
+        const blueprintData = {
+          diff: diff.map(({ action, category, target }) => ({ action, category, target })),
+        };
+        formData.append(
+          'files[0]',
+          new Blob([JSON.stringify(blueprintData)], { type: 'application/octet-stream' }),
+          'blacklist-blueprint.dat',
+        );
+
+        const channelId = process.env.WAR_ROOM_CHANNEL_ID;
+        const discordRes = await fetch(
+          `https://discord.com/api/v10/channels/${channelId}/messages`,
+          {
+            method: 'POST',
+            headers: { Authorization: `Bot ${botToken}` },
+            body: formData,
+          },
+        );
+
+        if (!discordRes.ok) {
+          const errorText = await discordRes.text();
+          throw new Error(`Discord API Error: ${discordRes.status} - ${errorText}`);
+        }
+
+        return result(200, { success: true, message: 'Blacklist proposal dispatched to Discord!' });
       }
 
       // ======================================================================
@@ -623,7 +724,7 @@ async function dispatchProposal(payload, botToken, submitter) {
 
       default:
         return result(400, {
-          error: `Unsupported proposal type: "${type || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`,
+          error: `Unsupported proposal type: "${type || 'unknown'}". Supported types: "rewards", "map", "alliance", "blacklist", "override".`,
         });
     }
   } catch (error) {
