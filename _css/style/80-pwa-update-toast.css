@@ -10,7 +10,7 @@
   background-color: rgba(20, 16, 14, 0.95);
   border: 1px solid var(--accent-color);
   box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.8),
+    0 4px 20px var(--shade-80),
     0 0 10px color-mix(in srgb, var(--accent-color) 30%, transparent);
   border-radius: 8px;
   padding: 12px 20px;

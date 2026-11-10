@@ -47,7 +47,7 @@
   width: 10px;
   height: 10px;
   border-radius: 2px;
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--shade-40);
 }
 
 /* Resource Base Colors (Grain, Timber, Herbs) */
@@ -85,7 +85,7 @@
 .buff-table th,
 .buff-table td {
   padding: 6px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--overlay-5);
   vertical-align: middle;
 }
 
@@ -109,7 +109,7 @@
 }
 
 .city-count-pill {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-8);
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.72rem;
@@ -143,7 +143,7 @@
 .buff-badge-count {
   font-size: 0.65rem;
   padding: 0 4px;
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--shade-50);
   border-radius: 3px;
   color: var(--accent-color);
   font-weight: bold;
@@ -172,7 +172,7 @@
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 6px var(--shade-50);
 }
 
 .submit-plan-btn:hover:not(:disabled) {

@@ -108,7 +108,7 @@
 }
 
 .ops-week-loot {
-  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  border-top: 1px dashed var(--overlay-8);
   padding-top: 6px;
   font-size: 0.72rem;
   color: var(--accent-color);
@@ -152,14 +152,14 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 8px;
   padding-top: 6px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  border-top: 1px dashed var(--overlay-8);
 }
 
 .ops-installment-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--overlay-3);
   padding: 6px 10px;
   border-radius: 4px;
   font-size: 0.76rem;
@@ -292,7 +292,7 @@
   margin-top: 8px;
   font-size: 0.78rem;
   color: var(--text-muted);
-  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  border-top: 1px dashed var(--overlay-8);
   padding-top: 6px;
 }
 

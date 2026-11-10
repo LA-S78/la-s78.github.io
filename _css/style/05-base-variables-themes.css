@@ -60,6 +60,21 @@ html[data-theme="default"] {
   --event-alliance: #3b82f6;
   --event-custom: #10b981;
 
+  /* Overlay and shadow scale: the only strengths of white and black used for see-through
+     fills, borders and shadows. Pick the nearest step instead of a new alpha value. */
+  --overlay-3: rgba(255, 255, 255, 0.03);
+  --overlay-5: rgba(255, 255, 255, 0.05);
+  --overlay-8: rgba(255, 255, 255, 0.08);
+  --overlay-12: rgba(255, 255, 255, 0.12);
+  --overlay-25: rgba(255, 255, 255, 0.25);
+  --shade-30: rgba(0, 0, 0, 0.3);
+  --shade-40: rgba(0, 0, 0, 0.4);
+  --shade-50: rgba(0, 0, 0, 0.5);
+  --shade-60: rgba(0, 0, 0, 0.6);
+  --shade-70: rgba(0, 0, 0, 0.7);
+  --shade-80: rgba(0, 0, 0, 0.8);
+  --shade-95: rgba(0, 0, 0, 0.95);
+
   /* Reward chest tiers (gold chests use --accent-color). Game colours, not alliance colours:
      they only happen to match the MIA / BOTS fallback colours. */
   --chest-purple: #a400af;

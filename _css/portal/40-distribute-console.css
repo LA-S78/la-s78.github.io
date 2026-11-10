@@ -48,8 +48,8 @@
 .distribute-item.sent {
   opacity: 0.35;
   text-decoration: line-through;
-  background: rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 255, 255, 0.05);
+  background: var(--shade-40);
+  border-color: var(--overlay-5);
 }
 
 .distribute-item.sent .player-ign {

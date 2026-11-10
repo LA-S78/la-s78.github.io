@@ -25,7 +25,7 @@
   justify-content: flex-start;
   gap: 0.5rem;
   padding-top: 0.35rem;
-  border-top: 1px dashed rgba(255, 255, 255, 0.07);
+  border-top: 1px dashed var(--overlay-8);
 }
 
 .rewards-header {
@@ -149,7 +149,7 @@
   gap: 0.5rem;
   align-items: center;
   padding-top: 0.45rem;
-  border-top: 1px dashed rgba(255, 255, 255, 0.07);
+  border-top: 1px dashed var(--overlay-8);
 }
 
 .chest-item {
@@ -173,9 +173,9 @@
   width: 26px;
   height: 22px;
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--overlay-25);
   display: inline-block;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 6px var(--shade-50);
 }
 
 .chest-glyph.gold {
@@ -227,8 +227,8 @@
 
 #rewards-container.planner-active .chest-item {
   padding: 5px 8px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--shade-40);
+  border: 1px solid var(--overlay-5);
   border-radius: 5px;
   cursor: pointer;
   user-select: none;
