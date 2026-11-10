@@ -107,7 +107,8 @@ export default async function handler(req, res) {
     const excludeList = ['R5', 'R4', 'BOTS', 'MEMBER', 'MEMBER_ROLE_ID'];
 
     for (const [envKey, envValue] of Object.entries(process.env)) {
-      if (envKey.startsWith('DISCORD_') && userRoles.includes(envValue)) {
+      // Trimmed: a value pasted into Vercel with a stray space or line break still matches.
+      if (envKey.startsWith('DISCORD_') && userRoles.includes(String(envValue).trim())) {
         const identifier = envKey.replace('DISCORD_', '');
         if (!excludeList.includes(identifier)) {
           allianceName = identifier;
