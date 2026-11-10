@@ -4,6 +4,10 @@ export const DEFAULT_CALENDAR_CONFIG = {
   cycle_anchor: '2026-09-21T02:00:00Z', // Monday 00:00 GT (UTC-2)
   cycle_length_days: 28,
   server_tz_offset_hours: -2, // GT is UTC-2
+  // Event weeks run Monday to Saturday, and the week's alliance captures the Capitol on
+  // Friday (1 = Monday ... 5 = Friday). Before that day the tag shown is the alliance that
+  // *will* capture it; from the day after, the one that holds it.
+  capture_day_of_week: 5,
   capitol_rotation: [
     { week: 1, is_kw: true, phase: 'Kingdom War Week 1', capitol_rank: 3 },
     { week: 2, is_kw: true, phase: 'Kingdom War Week 2', capitol_rank: 2 },
@@ -13,6 +17,26 @@ export const DEFAULT_CALENDAR_CONFIG = {
 };
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/**
+ * Which seat of the reward schedule a calendar week uses.
+ *
+ * The calendar numbers its weeks 1..4 in whatever order `capitol_rotation` lists them; the
+ * reward schedule (rewards-data.json `active_schedule`) has the seats `downtime`, `week_1`,
+ * `week_2`, `week_3`. The off-week is the one marked `is_kw: false` (wherever it sits in the
+ * cycle), and the Kingdom War weeks count up from 1 in calendar order.
+ *
+ * Returns { clockWeek, slotKey }: clockWeek is 0 for downtime, 1..3 for a Kingdom War week.
+ * Every caller must use this, so the website and the bot always agree on the active week.
+ */
+export function getScheduleSlot(weekNumber, customConfig = {}) {
+  const config = { ...DEFAULT_CALENDAR_CONFIG, ...customConfig };
+  const rotation = Array.isArray(config.capitol_rotation) ? config.capitol_rotation : [];
+  const week = rotation.find((w) => Number(w.week) === Number(weekNumber));
+  if (!week || !week.is_kw) return { clockWeek: 0, slotKey: 'downtime' };
+  const clockWeek = rotation.filter((w) => w.is_kw && Number(w.week) <= Number(weekNumber)).length;
+  return { clockWeek, slotKey: `week_${clockWeek}` };
+}
 
 /**
  * Calculates current cycle status for any given date
@@ -48,9 +72,19 @@ export function getCycleState(targetDate = new Date(), customConfig = {}) {
   const daysUntilSaturday = 6 - dayOfWeekNumber;
   const kwBattleTime = new Date(anchorTime + (daysSinceAnchor + daysUntilSaturday) * MS_PER_DAY);
 
+  const { clockWeek, slotKey } = getScheduleSlot(currentWeekNumber, config);
+
+  // Capitol capture day of the current week (00:00 GT of that day)
+  const captureDayOfWeek = Number(config.capture_day_of_week) || 5;
+  const captureTime = new Date(
+    anchorTime + (daysSinceAnchor + captureDayOfWeek - dayOfWeekNumber) * MS_PER_DAY,
+  );
+
   return {
     cycleDay, // 1 to 28
-    currentWeekNumber, // 1 to 4
+    currentWeekNumber, // 1 to 4 (calendar order; use clockWeek/scheduleSlot for the schedule)
+    clockWeek, // 0 = downtime, 1 to 3 = Kingdom War week
+    scheduleSlot: slotKey, // 'downtime' | 'week_1' | 'week_2' | 'week_3'
     dayOfWeekNumber, // 1 to 7 (1 = Mon, 7 = Sun)
     isKW: weekConfig.is_kw,
     phaseName: weekConfig.phase,
@@ -59,6 +93,10 @@ export function getCycleState(targetDate = new Date(), customConfig = {}) {
     nextResetTimestamp: Math.floor(nextResetTime.getTime() / 1000),
     kwBattleTimestamp: Math.floor(kwBattleTime.getTime() / 1000),
     isKWBattleDay: weekConfig.is_kw && dayOfWeekNumber === 6,
+    captureDayOfWeek, // 5 = Friday
+    captureTimestamp: Math.floor(captureTime.getTime() / 1000),
+    isCaptureDay: dayOfWeekNumber === captureDayOfWeek,
+    capitolCaptured: dayOfWeekNumber > captureDayOfWeek, // this week's capture is done
   };
 }
 

@@ -1,11 +1,7 @@
 // api/calendar.js
-import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
+import { getCycleState, getScheduleSlot, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
-
-function getScheduleSlotKey(weekNumber) {
-  return Number(weekNumber) === 4 ? 'downtime' : `week_${weekNumber}`;
-}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -30,15 +26,14 @@ export default async function handler(req, res) {
   const now = new Date();
   const currentStatus = getCycleState(now, calConfig);
 
-  // Map 1..4 calendar week to 0..3 scheduler week (Week 4 = 0 / downtime)
-  const clockWeek = currentStatus.currentWeekNumber === 4 ? 0 : currentStatus.currentWeekNumber;
-  currentStatus.clockWeek = clockWeek;
+  // currentStatus.clockWeek / scheduleSlot say which seat of the reward schedule is active
+  // (see getScheduleSlot): the hero card and the 4-week console both follow them.
 
   const alliances = mapState.alliances || {};
   const activeSchedule = rewardsState.cycle_state?.active_schedule || null;
 
   // Resolve current Capitol Holder from active_schedule first, falling back to static rank
-  const currentSlotKey = getScheduleSlotKey(currentStatus.currentWeekNumber);
+  const currentSlotKey = currentStatus.scheduleSlot;
   const scheduledHolderTag = activeSchedule?.[currentSlotKey]?.trim();
 
   let capitolHolderTag = `Rank #${currentStatus.capitolRank}`;
@@ -65,15 +60,13 @@ export default async function handler(req, res) {
     ? sanitizeAlliances(alliances)[holderTag]?.color || null
     : null;
 
-  // 1. Generate System Milestones (Rotation Transfers & War Battle Days)
+  // 1. Generate System Milestones (Capitol Captures & War Battle Days)
   const cycleMilestones = [];
 
-  const daysUntilNextWeek = 7 - currentStatus.dayOfWeekNumber + 1;
-  const nextWeekResetTs = currentStatus.nextResetTimestamp + (daysUntilNextWeek - 1) * 86400;
   const nextWeekNum = (currentStatus.currentWeekNumber % 4) + 1;
   const nextWeekConfig = calConfig.capitol_rotation.find((w) => w.week === nextWeekNum);
 
-  const nextSlotKey = getScheduleSlotKey(nextWeekNum);
+  const nextSlotKey = getScheduleSlot(nextWeekNum, calConfig).slotKey;
   const nextScheduledTag = activeSchedule?.[nextSlotKey]?.trim();
 
   let nextHolderTag = `Rank #${nextWeekConfig?.capitol_rank}`;
@@ -95,15 +88,27 @@ export default async function handler(req, res) {
     if (nextHolderEntry) nextHolderTag = `[${nextHolderEntry[0]}]`;
   }
 
+  // The upcoming Capitol capture. The week's alliance captures it on Friday: until then
+  // that is this week's alliance, afterwards next week's.
+  const upcomingIsNextWeek = currentStatus.capitolCaptured;
+  const captureTs = currentStatus.captureTimestamp + (upcomingIsNextWeek ? 7 * 86400 : 0);
+  const capturerTag = upcomingIsNextWeek ? nextHolderTag : capitolHolderTag;
+  let capturerRankLabel = nextHolderRankLabel;
+  if (!upcomingIsNextWeek) {
+    capturerRankLabel = currentStatus.isOverrideWeek
+      ? `Rank #${currentStatus.holderActualRank} • Override Schedule`
+      : `Rank #${currentStatus.holderActualRank || currentStatus.capitolRank}`;
+  }
+
   cycleMilestones.push({
-    id: `sys-rotation-w${nextWeekNum}`,
+    id: `sys-capture-w${upcomingIsNextWeek ? nextWeekNum : currentStatus.currentWeekNumber}`,
     scope: 'global',
-    title: `👑 Capitol Transfer — ${nextHolderTag}`,
-    description: `Rotation Phase transfer to ${nextHolderTag} (${nextHolderRankLabel}).`,
-    start: new Date(nextWeekResetTs * 1000).toISOString(),
-    end: new Date(nextWeekResetTs * 1000 + 3600000).toISOString(),
+    title: `👑 Capitol Capture — ${capturerTag}`,
+    description: `${capturerTag} (${capturerRankLabel}) captures the Capitol on Friday.`,
+    start: new Date(captureTs * 1000).toISOString(),
+    end: new Date((captureTs + 86400) * 1000).toISOString(),
     type: 'rotation',
-    allDay: false,
+    allDay: true,
   });
 
   // Kingdom War Battle Window Milestone
