@@ -7,11 +7,12 @@ permalink: /calendar.html
 lang: "en"
 ---
 
-<!-- The calendar's card and console styles live in the portal stylesheet. Loaded here (not in
-     <head>) so they only apply on this page, also when it is reached by footer navigation. -->
-<link rel="stylesheet" href="/css/portal.css">
-
 <div class="content-pane portal-pane-lg">
+  <!-- The calendar's card and console styles live in the portal stylesheet. Loaded here (not in
+       <head>) so they only apply on this page, also when it is reached by footer navigation.
+       Kept inside the pane: as the pane's sibling it would stop the pane being main's first
+       child, which removes the gap below the header (.content-pane:first-child). -->
+  <link rel="stylesheet" href="/css/portal.css">
   <div class="calendar-app-container">
     <!-- Status & Feedback Alerts -->
     <div id="loading-state" class="cal-status-banner">
