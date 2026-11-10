@@ -867,7 +867,20 @@ export async function submitAllianceProposal() {
 // 7. EVENT DELEGATION & MOUNT
 // ============================================================================
 
+// Runs on every page's turbo:load. Sets up the alliance page only where it is shown, once per
+// visit: each visit (also the back button's copy of the page) brings a fresh container.
+const startedAlliancePages = new WeakSet();
 export function bindAllianceControls() {
+  const container = document.getElementById('alliance-container');
+  if (!container || startedAlliancePages.has(container)) return;
+  startedAlliancePages.add(container);
+  // A fresh container can be Turbo's back-button copy of the page, which keeps the data-bound
+  // marks of the controls wired up last time. Clear them so the controls are wired up again.
+  // The blacklist controls are in their own section of the page, outside the container.
+  for (const area of [container, document.querySelector('.blacklist-section')]) {
+    area?.querySelectorAll('[data-bound]').forEach((el) => el.removeAttribute('data-bound'));
+  }
+
   initBootstrapData();
 
   // Strip any lingering inline uppercase transform on #input-new-tag

@@ -106,9 +106,9 @@
   {{ site.data.cities | jsonify }}
 </script>
 <script>
-  const dataElement = document.getElementById('map-data');
-  window.MAP_STATE = JSON.parse(dataElement.textContent || '{}');
-  const cityDataElement = document.getElementById('city-data');
-  window.CITY_CATALOG = JSON.parse(cityDataElement.textContent || '{}');
+  // No top-level const/let here: Turbo runs this again on every visit to the page, and a
+  // second declaration of the same name would throw.
+  window.MAP_STATE = JSON.parse(document.getElementById('map-data').textContent || '{}');
+  window.CITY_CATALOG = JSON.parse(document.getElementById('city-data').textContent || '{}');
 </script>
 <script type="module" src="/js/map.js" defer></script>

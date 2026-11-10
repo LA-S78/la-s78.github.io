@@ -146,12 +146,10 @@ export function getRankedAllianceTags() {
   return Object.keys(alliances);
 }
 
+// The map always sits in .game-map (_includes/map.html). No "first <svg> on the page"
+// fallback: on other pages that would be a footer icon.
 export function getSvgRoot() {
-  return (
-    document.querySelector('.game-map svg') ||
-    document.querySelector('#game-map') ||
-    document.querySelector('svg')
-  );
+  return document.querySelector('.game-map svg') || document.querySelector('#game-map');
 }
 
 // ==========================================================================
@@ -1571,7 +1569,16 @@ export function initializeMapData(svgRoot) {
   return cities;
 }
 
+// initMap runs on every page's turbo:load. It sets up the map only where there is one, once
+// per visit: each visit (also the back button's copy of the page) brings a fresh container.
+const startedMaps = new WeakSet();
 export function initMap() {
+  const container = document.getElementById('map-container');
+  if (!container || startedMaps.has(container)) return;
+  startedMaps.add(container);
+  // A fresh container can be Turbo's back-button copy of the page, which keeps the data-bound
+  // marks of the controls wired up last time. Clear them so the controls are wired up again.
+  container.querySelectorAll('[data-bound]').forEach((el) => el.removeAttribute('data-bound'));
   const svgRoot = getSvgRoot();
   if (svgRoot) {
     initializeMapData(svgRoot);
