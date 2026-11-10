@@ -12,7 +12,7 @@ export const DEFAULT_CALENDAR_CONFIG = {
     { week: 1, is_kw: true, phase: 'Kingdom War Week 1', capitol_rank: 3 },
     { week: 2, is_kw: true, phase: 'Kingdom War Week 2', capitol_rank: 2 },
     { week: 3, is_kw: true, phase: 'Kingdom War Week 3', capitol_rank: 1 },
-    { week: 4, is_kw: false, phase: 'NAP Rest Week (Off-Week)', capitol_rank: 4 },
+    { week: 4, is_kw: false, phase: 'Off-Week', capitol_rank: 4 },
   ],
 };
 
@@ -90,6 +90,7 @@ export function getCycleState(targetDate = new Date(), customConfig = {}) {
     currentWeekNumber, // 1 to 4 (calendar order; use clockWeek/scheduleSlot for the schedule)
     clockWeek, // 0 = downtime, 1 to 3 = Kingdom War week
     scheduleSlot: slotKey, // 'downtime' | 'week_1' | 'week_2' | 'week_3'
+    weekName: weekLabel(clockWeek), // 'Off-Week' | 'Kingdom War Week 1..3': the name to show
     dayOfWeekNumber, // 1 to 7 (1 = Mon, 7 = Sun)
     isKW: weekConfig.is_kw,
     phaseName: weekConfig.phase,
