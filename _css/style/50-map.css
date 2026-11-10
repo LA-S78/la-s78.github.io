@@ -128,7 +128,7 @@ svg #layer1 path:hover {
   font-family: var(--font-body);
   transition: fill 0.3s ease;
   paint-order: stroke fill;
-  stroke: var(--shade-80);
+  stroke: var(--shade-70);
   stroke-width: 4px;
   stroke-linejoin: round;
   pointer-events: none;
@@ -249,7 +249,7 @@ svg #layer1 path:hover {
 .segmented-control {
   display: flex;
   background: var(--surface-dark);
-  border: 1px solid var(--overlay-8);
+  border: 1px solid var(--overlay-5);
   border-radius: 4px;
   padding: 2px;
 }
@@ -420,7 +420,7 @@ svg #layer1 path:hover {
   padding: 4px 14px 8px;
   font-size: 0.72rem;
   color: var(--text-muted);
-  border-bottom: 1px solid var(--overlay-5);
+  border-bottom: 1px solid var(--overlay-3);
 }
 
 .buff-drawer-content {

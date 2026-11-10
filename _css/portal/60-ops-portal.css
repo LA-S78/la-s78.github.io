@@ -159,7 +159,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--overlay-5);
+  background: var(--overlay-3);
   padding: 6px 10px;
   border-radius: 4px;
   font-size: 0.76rem;

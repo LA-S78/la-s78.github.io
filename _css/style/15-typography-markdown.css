@@ -114,7 +114,7 @@ th {
   font-family: var(--font-headers);
 }
 tr:nth-child(even) {
-  background-color: var(--overlay-5);
+  background-color: var(--overlay-3);
 }
 
 main img {

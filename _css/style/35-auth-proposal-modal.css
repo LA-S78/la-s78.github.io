@@ -439,7 +439,7 @@ dialog.auth-modal[open] {
   border-radius: 12px;
   padding: 0.6rem;
   margin-bottom: 1.2rem;
-  box-shadow: 0 10px 30px var(--shade-80);
+  box-shadow: 0 10px 30px var(--shade-70);
   scroll-margin-top: calc(90px + env(safe-area-inset-top));
   overflow: hidden;
   animation: nativeAppFadeIn 0.5s cubic-bezier(0.3, 1, 0.3, 1) forwards;
