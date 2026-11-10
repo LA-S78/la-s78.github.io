@@ -13,7 +13,7 @@
 .cal-status-banner {
   padding: 1.5rem;
   border-radius: 8px;
-  background: rgba(17, 13, 11, 0.75);
+  background: color-mix(in srgb, var(--nav-bg) 75%, transparent);
   border: 1px solid var(--border-color);
   text-align: center;
   font-size: 0.92rem;
@@ -85,7 +85,7 @@
 .scope-global .mgmt-tag {
   border-color: var(--accent-color);
   color: var(--accent-color);
-  background: rgba(184, 151, 90, 0.15);
+  background: color-mix(in srgb, var(--accent-color) 15%, transparent);
 }
 
 .mgmt-desc {
@@ -270,7 +270,7 @@
 }
 
 .cal-capitol-card {
-  background: rgba(8, 6, 5, 0.65);
+  background: color-mix(in srgb, var(--surface-dark) 65%, transparent);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 0.9rem 1.4rem;
@@ -307,7 +307,7 @@
 }
 
 .metric-item {
-  background: rgba(8, 6, 5, 0.55);
+  background: color-mix(in srgb, var(--surface-dark) 55%, transparent);
   border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 0.75rem 1rem;
@@ -461,13 +461,13 @@
 .pill-recurring {
   border-color: var(--accent-color);
   color: var(--accent-color);
-  background: rgba(184, 151, 90, 0.14);
+  background: color-mix(in srgb, var(--accent-color) 14%, transparent);
 }
 
 .pill-force {
   border-color: var(--status-danger);
   color: var(--status-danger-hover);
-  background: rgba(239, 68, 68, 0.15);
+  background: color-mix(in srgb, var(--status-danger) 15%, transparent);
 }
 
 .event-desc {
@@ -495,7 +495,7 @@
 }
 
 .btn-delete-event {
-  background: rgba(239, 68, 68, 0.15);
+  background: color-mix(in srgb, var(--status-danger) 15%, transparent);
   border: 1px solid var(--status-danger);
   color: var(--status-danger-hover);
   padding: 5px 8px;

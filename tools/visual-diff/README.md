@@ -50,7 +50,7 @@ Every run uses the same conditions:
 - **Fixed clock and randomness:** a fixed date and time, and fixed `Math.random`.
 - **Fixed data:** sample API data from `fixtures/`, and no network outside the site.
 - **No moving parts:** looping animations are rewound, and one-off animations and transitions are finished.
-- **Normalised comparisons:** computed styles are compared with the property order sorted, and with the test server address and Mermaid's timestamp IDs removed.
+- **Normalised comparisons:** computed styles are compared with the property order sorted, and with the test server address and Mermaid's timestamp IDs removed. Colours made with `color-mix()` (which Chrome writes as `color(srgb 0.72 0.59 0.35 / 0.2)`) are compared in the `rgba(184, 151, 90, 0.2)` form, rounded to the nearest 1/255, so a rewrite that keeps the same colour doesn't show up while a one-shade change still does.
 - **Behaviour that depends on timing is pinned:**
   - Native fullscreen is refused, so the map uses its CSS fullscreen fallback.
   - The scroll-based "current section" tab highlight is switched off.

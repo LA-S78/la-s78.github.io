@@ -23,7 +23,7 @@
   background-color: rgba(20, 16, 14, 0.9);
   border-color: var(--accent-color);
   outline: none;
-  box-shadow: 0 0 10px rgba(184, 151, 90, 0.2);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
 
 .blueprint-img {
@@ -78,7 +78,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
-  box-shadow: 0 4px 14px rgba(88, 101, 242, 0.3);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--brand-discord) 30%, transparent);
 }
 
 .user-avatar {
@@ -182,7 +182,7 @@ dialog a.dialog-btn:hover {
   background-color: var(--accent-color);
   color: var(--bg-color);
   border-color: var(--accent-color);
-  box-shadow: 0 0 15px rgba(184, 151, 90, 0.4);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color) 40%, transparent);
   transform: translateY(-2px);
 }
 

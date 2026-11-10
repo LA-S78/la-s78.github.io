@@ -111,7 +111,7 @@
   border-radius: 50%;
   width: 8px;
   height: 8px;
-  box-shadow: 0 0 6px 2px rgba(184, 151, 90, 0.6);
+  box-shadow: 0 0 6px 2px color-mix(in srgb, var(--accent-color) 60%, transparent);
   mix-blend-mode: screen;
   pointer-events: none;
   will-change: transform, opacity;

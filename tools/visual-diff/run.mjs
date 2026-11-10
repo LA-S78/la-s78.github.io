@@ -163,9 +163,18 @@ async function routeApi(route, edit) {
 }
 
 // ---------- capturing one page state ----------
+// Chrome writes colours made with color-mix() as color(srgb 0.72 0.59 0.35 / 0.2), and plain
+// ones as rgba(184, 151, 90, 0.2). Same colour, so both are compared in the rgba form (each
+// channel rounded to the nearest 1/255, so a one-shade change is still caught).
+const COLOUR_FN = `(v) => v.replace(/color\\(srgb ([\\d.e-]+) ([\\d.e-]+) ([\\d.e-]+)(?: \\/ ([\\d.e-]+))?\\)/g,
+  (_, r, g, b, a) => {
+    const c = [r, g, b].map((x) => Math.round(Number(x) * 255)).join(', ');
+    return a === undefined || Number(a) === 1 ? 'rgb(' + c + ')' : 'rgba(' + c + ', ' + Number(a) + ')';
+  })`;
 const IN_PAGE = {
   // Every element's computed style, hashed (FNV-1a) so the result is small.
-  snapshot: ({ raw, ignoreVars }) => {
+  snapshot: ({ raw, ignoreVars, colourFn }) => {
+    const normaliseColours = (0, eval)(colourFn);
     const pathOf = (el) => {
       const parts = [];
       for (
@@ -186,7 +195,7 @@ const IN_PAGE = {
       const parts = [];
       for (let i = 0; i < cs.length; i++) {
         if (ignoreVars && cs[i].startsWith('--')) continue;
-        parts.push(cs[i] + ':' + cs.getPropertyValue(cs[i]));
+        parts.push(cs[i] + ':' + normaliseColours(cs.getPropertyValue(cs[i])));
       }
       // Strip the server origin and Mermaid's timestamp-based ids (url(#mermaid-1794...)).
       return parts
@@ -221,7 +230,8 @@ const IN_PAGE = {
     }
     return out;
   },
-  details: ({ paths, ignoreVars }) => {
+  details: ({ paths, ignoreVars, colourFn }) => {
+    const normaliseColours = (0, eval)(colourFn);
     const find = (p) => {
       let el = document.documentElement;
       if (!p) return el;
@@ -243,7 +253,9 @@ const IN_PAGE = {
           if (pseudo && (!cs.content || cs.content === 'none')) continue;
           for (let i = 0; i < cs.length; i++) {
             if (ignoreVars && cs[i].startsWith('--')) continue;
-            o[(pseudo || '') + cs[i]] = cs.getPropertyValue(cs[i]).split(location.origin).join('');
+            o[(pseudo || '') + cs[i]] = normaliseColours(
+              cs.getPropertyValue(cs[i]).split(location.origin).join(''),
+            );
           }
         }
         return [p, o];
@@ -332,6 +344,7 @@ async function openState(browser, origin, job) {
   const styles = await page.evaluate(IN_PAGE.snapshot, {
     raw: !!process.env.VD_DEBUG,
     ignoreVars: opt.ignoreVars,
+    colourFn: COLOUR_FN,
   });
   // The site scrolls inside <main>, so grow the window to fit everything, then screenshot.
   const isFullscreen = await page.evaluate(() => !!document.fullscreenElement);
@@ -497,8 +510,16 @@ async function compareOnce(job) {
   } else if (changed.length) {
     const sample = changed.slice(0, 15);
     const [da, db] = await Promise.all([
-      a.page.evaluate(IN_PAGE.details, { paths: sample, ignoreVars: opt.ignoreVars }),
-      b.page.evaluate(IN_PAGE.details, { paths: sample, ignoreVars: opt.ignoreVars }),
+      a.page.evaluate(IN_PAGE.details, {
+        paths: sample,
+        ignoreVars: opt.ignoreVars,
+        colourFn: COLOUR_FN,
+      }),
+      b.page.evaluate(IN_PAGE.details, {
+        paths: sample,
+        ignoreVars: opt.ignoreVars,
+        colourFn: COLOUR_FN,
+      }),
     ]);
     r.styleDiffCount = changed.length;
     r.styleDiffs = sample.map((p) => {

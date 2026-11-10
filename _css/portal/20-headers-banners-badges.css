@@ -38,7 +38,7 @@
   font-size: 0.84rem;
   line-height: 1.4;
   margin-bottom: 0.85rem;
-  background: rgba(17, 13, 11, 0.75);
+  background: color-mix(in srgb, var(--nav-bg) 75%, transparent);
   border: 1px solid var(--border-color);
   color: var(--text-main);
 }

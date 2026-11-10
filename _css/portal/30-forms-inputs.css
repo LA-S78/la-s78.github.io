@@ -200,7 +200,7 @@
   background: var(--surface-dark);
   border: 2px solid var(--accent-color);
   color: var(--accent-color);
-  box-shadow: 0 0 12px rgba(184, 151, 90, 0.25);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-color) 25%, transparent);
   transition: all 0.15s ease;
 }
 
@@ -267,7 +267,7 @@
 }
 
 .nomination-alert-banner.buyout-active {
-  background: rgba(184, 151, 90, 0.12);
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
   border: 1px solid var(--accent-color);
   color: var(--text-main);
 }

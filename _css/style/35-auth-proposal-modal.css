@@ -10,7 +10,7 @@ dialog.auth-modal {
   border: 1px solid var(--accent-color);
   border-radius: 10px;
   background: var(--surface-card);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.95), 0 0 24px rgba(184, 151, 90, 0.25);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.95), 0 0 24px color-mix(in srgb, var(--accent-color) 25%, transparent);
   color: var(--text-main);
   overflow: hidden;
 }
@@ -149,7 +149,7 @@ dialog.auth-modal[open] {
   letter-spacing: 0.05em;
   padding: 1px 6px;
   border-radius: 3px;
-  background: rgba(184, 151, 90, 0.2);
+  background: color-mix(in srgb, var(--accent-color) 20%, transparent);
   color: var(--accent-color);
   width: fit-content;
 }
@@ -219,7 +219,7 @@ dialog.auth-modal[open] {
 .auth-modal-textarea:focus {
   outline: none !important;
   border-color: var(--accent-color) !important;
-  box-shadow: 0 0 10px rgba(184, 151, 90, 0.25) !important;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-color) 25%, transparent) !important;
 }
 
 /* Error Banner */
@@ -279,14 +279,14 @@ dialog.auth-modal[open] {
   display: inline-flex !important;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(88, 101, 242, 0.4);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--brand-discord) 40%, transparent);
   transition: all 0.2s ease;
 }
 
 .btn-modal-action:hover:not(:disabled) {
   background: var(--brand-discord-hover) !important;
   border-color: var(--brand-discord-hover) !important;
-  box-shadow: 0 6px 18px rgba(88, 101, 242, 0.6) !important;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--brand-discord) 60%, transparent) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -514,7 +514,7 @@ dialog.auth-modal[open] {
   cursor: pointer;
   z-index: 10;
   font-size: 1.2rem;
-  box-shadow: 0 0 10px rgba(184, 151, 90, 0.3);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-color) 30%, transparent);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   line-height: 1;
   padding-bottom: 5px;
@@ -523,7 +523,7 @@ dialog.auth-modal[open] {
 .scroll-btn:hover {
   background: var(--accent-color);
   color: var(--bg-color);
-  box-shadow: 0 0 20px rgba(184, 151, 90, 0.6);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--accent-color) 60%, transparent);
   transform: translateY(-50%) scale(1.1);
 }
 .scroll-btn.left {
