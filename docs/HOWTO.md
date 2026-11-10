@@ -252,6 +252,32 @@ or Claude) before merging. The pieces:
 
 ---
 
+## Test on dev.la-s78.app (test data)
+
+Pushing to the `dev` branch publishes it to **dev.la-s78.app**. It uses its own copy of the
+data, so nothing there changes the live site.
+
+**One-time setup** (needs your GitHub and Vercel accounts):
+
+1. **Make the test Gist:** at gist.github.com, create a **secret** gist with one file named
+   `map-state.json` containing `{}`. Copy its ID: the last part of its address.
+2. **GitHub** (repository → Settings → Secrets and variables → Actions): add `TEST_GIST_ID`.
+   The copy job also needs `GIST_ID` and `GIST_TOKEN` here, the same values as in Vercel.
+3. **Vercel** (project → Settings → Environment Variables), for **Preview** only:
+   - `TEST_GIST_ID`: the test Gist's ID.
+   - `TEST_CHANNEL_ID`: a Discord channel for test proposals (the bot must be able to post
+     there).
+   The existing `GIST_TOKEN` is used for the test Gist too, if both Gists are on the same
+   GitHub account; otherwise add `TEST_GIST_TOKEN`.
+4. **Fill it:** GitHub → Actions → **Copy live data to test Gist** → Run workflow. Run it
+   again whenever you want fresh test data.
+
+What to expect: the test site works like the live one, but proposals go to the test channel
+marked 🧪 TEST, and the live bot refuses to approve them (the bot only runs on the live
+site). Discord commands themselves always use live data.
+
+---
+
 ## Get a change onto the live site
 
 1. Make your edits on a new branch, not directly on `main`.

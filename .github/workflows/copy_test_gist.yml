@@ -1,0 +1,25 @@
+name: Copy live data to test Gist
+
+# Run by hand (Actions tab -> this workflow -> Run workflow). Copies the live data into the
+# test Gist used by dev.la-s78.app; it only reads the live Gist.
+on:
+  workflow_dispatch:
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Copy the data
+        env:
+          GIST_ID: ${{ secrets.GIST_ID }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          TEST_GIST_ID: ${{ secrets.TEST_GIST_ID }}
+          TEST_GIST_TOKEN: ${{ secrets.TEST_GIST_TOKEN }}
+        run: node _scripts/copy_live_to_test_gist.mjs
