@@ -449,8 +449,13 @@ footer {
   .id-pill .id-badge {
     padding: 1px 5px;
   }
+  /* Lift the language button (and nudge it off the screen edge) so the pill under it stays
+     well inside the 90px header */
+  .header-tools {
+    transform: translate(-8px, -14px);
+  }
   .id-pill-wrap {
-    top: calc(100% + 4px);
+    top: calc(100% + 5px);
   }
   .id-pill {
     font-size: 0.75rem;
