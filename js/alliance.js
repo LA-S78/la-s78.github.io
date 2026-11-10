@@ -527,7 +527,7 @@ export function addBlacklistEntry(type, target) {
 }
 
 /** A message under the blacklist, so adding/removing never happens silently. */
-function showBlacklistStatus(html, kind = 'info', withSubmit = false) {
+function showBlacklistStatus(html, kind = 'info') {
   const section = document.querySelector('.blacklist-section');
   if (!section) return;
   let el = document.getElementById('blacklist-status');
@@ -537,15 +537,8 @@ function showBlacklistStatus(html, kind = 'info', withSubmit = false) {
     el.setAttribute('role', 'status');
     section.after(el);
   }
-  el.onclick = (e) => {
-    if (e.target.closest('[data-action="submit-plan"]')) submitAllianceProposal();
-  };
   el.className = `blacklist-status ${kind}`;
-  el.innerHTML = `<span>${html}</span>${
-    withSubmit
-      ? '<button type="button" class="submit-plan-btn" data-action="submit-plan">Submit Plan now</button>'
-      : ''
-  }`;
+  el.innerHTML = `<span>${html}</span>`;
 }
 
 /** Runs an add from one of the blacklist boxes and reports the result. */
@@ -559,17 +552,13 @@ function addFromInput(type, inputId) {
     if (result === 'added') {
       input.value = '';
       showBlacklistStatus(
-        `<strong>${esc(label)}</strong> added to your plan. It isn't sent yet: submit the plan to send it to leadership for approval.`,
+        `<strong>${esc(label)}</strong> added to your plan. It isn't sent yet: press <strong>Submit Plan</strong> above to send it to leadership for approval.`,
         'success',
-        true,
       );
     } else if (result === 'duplicate') {
       showBlacklistStatus(`<strong>${esc(label)}</strong> is already on the blacklist.`, 'warning');
     } else if (result === 'inactive') {
-      showBlacklistStatus(
-        'Turn on <strong>Planner Mode</strong> (top of the page) to edit the blacklist.',
-        'warning',
-      );
+      showBlacklistStatus('Press <strong>Edit Blacklist</strong> first.', 'warning');
     }
   } catch (err) {
     console.error('Blacklist add failed:', err);
@@ -591,9 +580,8 @@ export function removeBlacklistEntry(type, index) {
     updateAllianceProposalUI();
     const label = type === 'players' ? removed : `[${removed}]`;
     showBlacklistStatus(
-      `<strong>${esc(label)}</strong> removed from your plan. It isn't sent yet: submit the plan to send it to leadership for approval.`,
+      `<strong>${esc(label)}</strong> removed from your plan. It isn't sent yet: press <strong>Submit Plan</strong> above to send it to leadership for approval.`,
       'success',
-      true,
     );
   }
 }
@@ -824,9 +812,58 @@ export function calculateAllianceDiff() {
   return diff;
 }
 
+/**
+ * The blacklist's own Edit / Submit buttons, next to the blacklist (bottom of the page), so
+ * editing it doesn't need Planner Mode and Submit Plan at the top. They switch the same
+ * planner on and submit the same plan, so both sets of buttons always agree.
+ */
+function ensureBlacklistControls() {
+  const section = document.querySelector('.blacklist-section');
+  if (!section) return;
+  // A bar left in Turbo's back-button copy of the page has no listeners: replace it.
+  document.getElementById('blacklist-controls')?.remove();
+  const bar = document.createElement('div');
+  bar.id = 'blacklist-controls';
+  bar.className = 'blacklist-controls';
+  bar.innerHTML = `
+    <button id="btn-edit-blacklist" class="draft-btn" aria-pressed="false" type="button">
+      <span class="draft-indicator"></span>
+      <span class="draft-text">Edit Blacklist</span>
+    </button>
+    <button id="btn-submit-blacklist" class="submit-plan-btn hidden" disabled type="button">
+      Submit Plan <span class="badge">0</span>
+    </button>`;
+  section.before(bar);
+  bar
+    .querySelector('#btn-edit-blacklist')
+    .addEventListener('click', () => toggleAlliancePlanner(!isAlliancePlannerActive));
+  bar
+    .querySelector('#btn-submit-blacklist')
+    .addEventListener('click', () => submitAllianceProposal());
+  syncBlacklistControls();
+}
+
+function syncBlacklistControls(count = 0) {
+  const edit = document.getElementById('btn-edit-blacklist');
+  const submit = document.getElementById('btn-submit-blacklist');
+  if (edit) {
+    edit.setAttribute('aria-pressed', isAlliancePlannerActive ? 'true' : 'false');
+    edit.classList.toggle('active', isAlliancePlannerActive);
+    edit.querySelector('.draft-text').textContent = isAlliancePlannerActive
+      ? 'Stop Editing'
+      : 'Edit Blacklist';
+  }
+  if (submit) {
+    submit.classList.toggle('hidden', !isAlliancePlannerActive);
+    submit.disabled = !isAlliancePlannerActive || count === 0;
+    submit.querySelector('.badge').textContent = String(count);
+  }
+}
+
 export function updateAllianceProposalUI() {
   const submitBtn = document.getElementById('btn-submit-alliance');
   const badgeEl = document.getElementById('alliance-change-badge');
+  syncBlacklistControls(isAlliancePlannerActive ? calculateAllianceDiff().length : 0);
 
   if (!isAlliancePlannerActive) {
     if (submitBtn) {
@@ -954,6 +991,7 @@ export function bindAllianceControls() {
   }
   // A blacklist message left in that copy of the page belongs to the previous visit.
   document.getElementById('blacklist-status')?.remove();
+  ensureBlacklistControls();
 
   initBootstrapData();
 
