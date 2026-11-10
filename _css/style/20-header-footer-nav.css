@@ -452,7 +452,8 @@ footer {
   /* Lift the language button (and nudge it off the screen edge) so the pill under it stays
      well inside the 90px header */
   .header-tools {
-    transform: translate(-8px, -14px);
+    top: -14px;
+    left: -8px; /* not a transform: that would trap the card (position: fixed) inside it */
   }
   .id-pill-wrap {
     top: calc(100% + 5px);
