@@ -1,4 +1,9 @@
-// api/accept-proposal.js
+// api/_accept_proposal.js
+// Saves an approved Steward proposal (rewards, map, alliance standings, Capitol override)
+// to the Gist. Called directly by the Discord bot (api/interactions.js) after it has checked
+// that the click came from Discord and that the clicker is a Steward. This used to be the
+// public endpoint /api/accept-proposal, which took the bot token as a password; it is now an
+// internal helper (files starting with "_" are not endpoints), so no token leaves the server.
 
 import { calculateOverrideAction } from './_cycle_helper.js';
 import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
@@ -10,6 +15,8 @@ import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
  * Steward sees "Failed to update ..." in Discord; nothing is saved. `fallback` is only
  * used when the read succeeds but the file doesn't exist yet.
  */
+const jsonResult = (status, json) => ({ status, json });
+
 async function readForApproval(filename, fallback) {
   return gistJson(await readGist(), filename, fallback);
 }
@@ -27,11 +34,15 @@ const DEFAULT_FALLBACK_COLORS = {
   HeKi: '#d69e2e',
 };
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+/**
+ * @param {object} payload the proposal: { type, submittedBy, distribution | changes |
+ *   alliances + blacklist | targetWeek + threatName + action, snapshotUrl }
+ * @param {object} [options]
+ * @param {string} [options.baseUrl] site address, used to pre-warm the map images after a map save
+ * @returns {Promise<{status: number, json: object}>} the same status codes and bodies the
+ *   endpoint used to send
+ */
+export async function acceptProposal(payload, { baseUrl = 'https://la-s78.app' } = {}) {
   const {
     type,
     distribution,
@@ -39,18 +50,11 @@ export default async function handler(req, res) {
     alliances: newAlliances,
     blacklist: newBlacklist,
     submittedBy,
-    secretKey,
     snapshotUrl,
-  } = req.body || {};
-
-  // Authenticate request using bot secret
-  const authSecret = process.env.DISCORD_BOT_TOKEN || process.env.DISCORD_BOT_SECRET;
-  if (!secretKey || secretKey !== authSecret) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+  } = payload || {};
 
   if (!isGistConfigured()) {
-    return res.status(500).json({ error: 'Gist environment variables missing on server' });
+    return { status: 500, json: { error: 'Gist environment variables missing on server' } };
   }
 
   // Fallback: If legacy interaction dispatch omitted type, infer 'map' if changes are present
@@ -63,7 +67,7 @@ export default async function handler(req, res) {
       // ======================================================================
       case 'rewards': {
         if (!Array.isArray(distribution)) {
-          return res.status(400).json({ error: 'Invalid distribution data provided' });
+          return jsonResult(400, { error: 'Invalid distribution data provided' });
         }
 
         const existingRewards = await readForApproval('rewards-data.json', {});
@@ -81,9 +85,7 @@ export default async function handler(req, res) {
             description: `Rewards updated by ${submittedBy || 'Admin'} at ${new Date().toISOString()}`,
           },
         );
-        return res
-          .status(200)
-          .json({ success: true, message: 'Rewards distribution updated in Gist!' });
+        return jsonResult(200, { success: true, message: 'Rewards distribution updated in Gist!' });
       }
 
       // ======================================================================
@@ -91,7 +93,7 @@ export default async function handler(req, res) {
       // ======================================================================
       case 'map': {
         if (!changes || typeof changes !== 'object') {
-          return res.status(400).json({ error: 'Invalid territory changes payload.' });
+          return jsonResult(400, { error: 'Invalid territory changes payload.' });
         }
 
         const currentState = await readForApproval('map-state.json', {
@@ -127,11 +129,6 @@ export default async function handler(req, res) {
         );
 
         // Pre-warm Edge CDN for all 3 perspectives (capped to 1.8s timeout)
-        const rawHost = req.headers['x-forwarded-host'] || req.headers.host || 'la-s78.app';
-        const resolvedHost = rawHost.split(',')[0].trim();
-        const protocol = req.headers['x-forwarded-proto'] || 'https';
-        const baseUrl = `${protocol}://${resolvedHost}`;
-
         await Promise.allSettled(
           ['level', 'alliance', 'resource'].map((view) =>
             fetch(`${baseUrl}/api/map-image?view=${view}&v=${revision}&ext=.png`, {
@@ -141,9 +138,7 @@ export default async function handler(req, res) {
           ),
         ).catch(() => {});
 
-        return res
-          .status(200)
-          .json({ success: true, revision, message: 'Live map updated in Gist!' });
+        return jsonResult(200, { success: true, revision, message: 'Live map updated in Gist!' });
       }
 
       // ======================================================================
@@ -151,7 +146,7 @@ export default async function handler(req, res) {
       // ======================================================================
       case 'alliance': {
         if (!newAlliances || typeof newAlliances !== 'object') {
-          return res.status(400).json({ error: 'Invalid alliance data provided' });
+          return jsonResult(400, { error: 'Invalid alliance data provided' });
         }
 
         const currentState = await readForApproval('map-state.json', {
@@ -209,18 +204,20 @@ export default async function handler(req, res) {
           },
         );
 
-        return res
-          .status(200)
-          .json({ success: true, revision, message: 'Alliance standings updated in Gist!' });
+        return jsonResult(200, {
+          success: true,
+          revision,
+          message: 'Alliance standings updated in Gist!',
+        });
       }
 
       // ======================================================================
       // 4. CAPITOL DEFENSE OVERRIDE (MODEL 1: SWAP OR INSTALLMENT BUYOUT)
       // ======================================================================
       case 'override': {
-        const { targetWeek, threatName, action: declaredAction } = req.body || {};
+        const { targetWeek, threatName, action: declaredAction } = payload || {};
         if (!targetWeek || !threatName) {
-          return res.status(400).json({ error: 'Missing targetWeek or threatName' });
+          return jsonResult(400, { error: 'Missing targetWeek or threatName' });
         }
 
         const rewardsState = await readForApproval('rewards-data.json', {});
@@ -264,7 +261,7 @@ export default async function handler(req, res) {
           },
         );
 
-        return res.status(200).json({
+        return jsonResult(200, {
           success: true,
           action: result.action,
           message: result.summary,
@@ -273,12 +270,12 @@ export default async function handler(req, res) {
       }
 
       default:
-        return res.status(400).json({
+        return jsonResult(400, {
           error: `Unsupported proposal acceptance type: "${resolvedType || 'unknown'}". Supported types: "rewards", "map", "alliance", "override".`,
         });
     }
   } catch (error) {
     console.error('Accept proposal error:', error);
-    return res.status(500).json({ error: error.message });
+    return jsonResult(500, { error: error.message });
   }
 }

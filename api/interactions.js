@@ -5,6 +5,7 @@ import { verifyKey, InteractionType, InteractionResponseType } from 'discord-int
 import { RULES_DATA, SB_DATA, BOT_DATA } from './_generated_translations.js';
 import { listAllianceRanks, setAllianceRank } from './_rank_helper.js';
 import { isGistConfigured, readGist, writeGist } from './_gist.js';
+import { acceptProposal } from './_accept_proposal.js';
 import { createToken } from './_tokens.js';
 import {
   getCycleState,
@@ -2091,10 +2092,11 @@ export default async function handler(req, res) {
         }
         const parsedData = await blueprintRes.json();
 
+        // Already checked above: the click came from Discord (signature) and the clicker is a
+        // Steward. The proposal is saved directly here; no token is sent anywhere.
         let acceptPayload = {
           type: proposalType,
           submittedBy: username,
-          secretKey: process.env.DISCORD_BOT_TOKEN,
         };
 
         if (proposalType === 'rewards') {
@@ -2111,15 +2113,11 @@ export default async function handler(req, res) {
           acceptPayload.changes = parsedData;
         }
 
-        const acceptRes = await fetch(`https://${resolvedHost}/api/accept-proposal`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(acceptPayload),
+        const { status: acceptStatus, json: acceptJson } = await acceptProposal(acceptPayload, {
+          baseUrl: `https://${resolvedHost}`,
         });
-
-        const acceptJson = await acceptRes.json().catch(() => ({}));
-        if (!acceptRes.ok) {
-          throw new Error(acceptJson.error || `Server responded with ${acceptRes.status}`);
+        if (acceptStatus < 200 || acceptStatus >= 300) {
+          throw new Error(acceptJson.error || `Server responded with ${acceptStatus}`);
         }
 
         if (acceptJson.revision) {
