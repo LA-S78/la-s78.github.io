@@ -238,12 +238,15 @@ or Claude) before merging. The pieces:
    `.github/discord.json`, under each server profile that should have it (`owner`,
    `nap`, `wlo`). Pushing a change to this file automatically updates Discord
    (`.github/workflows/discord_commands.yml`).
-2. **Make it do something:** add an `if (name === "yourcommand") { … }` block in
-   `api/interactions.js`, next to the existing ones (`sb`, `rules`, `map`…).
-   Discord gives up after **3 seconds**, so slow work needs a deferred reply.
+2. **Make it do something:** write a handler, `export async function handleYourCommand(ctx)`,
+   in the `api/_bot_*.js` module it belongs to (or a new one), and add it to the
+   `COMMANDS` table at the top of `api/interactions.js`. `ctx` holds what every command
+   gets (`res`, `interaction`, `options`, `userId`, `lang`, `t`…); look at `/sb` in
+   `api/_bot_info.js` for a short example. Discord gives up after **3 seconds**, so slow
+   work needs a deferred reply. Buttons work the same way, in the `BUTTONS` table.
 3. **Alliance servers:** if registered alliance servers should get it too, add it to
-   `ALLIANCE_COMMANDS_SCHEMA` in **both** `api/interactions.js` and
-   `api/register-alliance.js`.
+   `ALLIANCE_COMMANDS_SCHEMA` in `api/_bot_schema.js` (one list, used by both
+   `/registerbot` and the website's registration).
 4. **Translated replies:** put the message text in `_source/bot.md` (all 8 language
    blocks) and read it via `getBotStrings(lang)`.
 
