@@ -16,7 +16,7 @@
   height: 100lvh;
   z-index: -10;
   pointer-events: none;
-  background-color: #0e0d0b;
+  background-color: var(--nav-bg);
   background-image: url("/images/background.webp"), url("/images/background.png");
   background-position: top center;
   background-size: cover;

@@ -30,7 +30,7 @@ body::before {
   width: 100%;
   height: calc(100% - env(safe-area-inset-top) - 150px);
   z-index: -10;
-  background-color: #050403;
+  background-color: var(--surface-dark);
   background-image: url("/images/background.webp"), url("/images/background.png");
   background-size: cover;
   background-position: center;

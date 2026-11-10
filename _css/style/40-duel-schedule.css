@@ -60,14 +60,14 @@
 .schedule-table {
   width: 100%;
   border-collapse: collapse;
-  background: #1e1b1a;
+  background: var(--bg-color);
   color: #e0d8cc;
   font-size: 0.85rem;
 }
 .schedule-table th,
 .schedule-table td {
   height: 2rem;
-  border: 1px solid #3d3734;
+  border: 1px solid var(--border-color);
   text-align: center;
 }
 .schedule-table th {
