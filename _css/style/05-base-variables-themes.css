@@ -44,6 +44,25 @@ html[data-theme="default"] {
   --rank-silver: #e2e8f0;
   --rank-bronze: #f97316;
 
+  /* "Active / attention" state: map planner draft mode on, "already scheduled" notices */
+  --status-warning: #f59e0b;
+  --status-warning-text: #fef3c7;
+
+  /* Slate: the alliance ladder's 2nd-rank row and the academy badges (a cooler grey than
+     --rank-silver; whether they should be one colour is an open question) */
+  --badge-slate: #94a3b8;
+  --badge-slate-text: #cbd5e1;
+
+  /* Calendar event types (left border of each timeline entry) */
+  --event-snapshot: #3b82f6;
+  --event-alliance: #3b82f6;
+  --event-custom: #10b981;
+
+  /* Reward chest tiers (gold chests use --accent-color). Game colours, not alliance colours:
+     they only happen to match the MIA / BOTS fallback colours. */
+  --chest-purple: #a400af;
+  --chest-blue: #0070f3;
+
   /* T10 calc */
   --node-bg: #2a2726;
   --line-color: #4a6c82;

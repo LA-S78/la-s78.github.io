@@ -38,7 +38,10 @@ gives the page, state, theme and width, the elements whose styles changed, and
 Other options: `--head <branch or site folder>`, `--pages <regex>`,
 `--states <regex>`, `--themes default,miasma`, `--widths 390`, `--workers 4`,
 `--out <folder>`, `--save-all` (keep the screenshots of every view, not only the ones that
-differ: useful to look at a new state). `--base`/`--head` accept a git branch/commit (built automatically in a
+differ: useful to look at a new state), `--ignore-vars` (leave CSS variables such as
+`--accent-color` out of the style comparison: for changes that add or rename variables, which
+otherwise show up on every element. Real properties are still compared with the variables
+filled in, so a variable that changes how anything looks is still caught). `--base`/`--head` accept a git branch/commit (built automatically in a
 temporary copy) or an already built `_site` folder.
 
 ## What keeps it repeatable

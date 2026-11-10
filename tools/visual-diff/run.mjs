@@ -10,6 +10,7 @@
 // Options: --pages <regex>  --themes default,sanctuary,miasma  --widths 390,1280
 //          --states <regex>  --workers 4  --out tools/visual-diff/output  --quick
 //          --save-all  (keep screenshots of every view, not only the ones that differ)
+//          --ignore-vars  (leave CSS variables out of the style comparison; see README)
 // Exit code 0 = no visible or style difference; 1 = differences (see report.md).
 
 import { chromium } from 'playwright';
@@ -51,6 +52,7 @@ const opt = {
   workers: Number(args.workers || Math.max(2, Math.min(6, os.cpus().length))),
   out: path.resolve(args.out || path.join(HERE, 'output')),
   saveAll: Boolean(args['save-all']),
+  ignoreVars: Boolean(args['ignore-vars']),
 };
 
 // ---------- getting a built site ----------
@@ -163,7 +165,7 @@ async function routeApi(route, edit) {
 // ---------- capturing one page state ----------
 const IN_PAGE = {
   // Every element's computed style, hashed (FNV-1a) so the result is small.
-  snapshot: (raw) => {
+  snapshot: ({ raw, ignoreVars }) => {
     const pathOf = (el) => {
       const parts = [];
       for (
@@ -182,7 +184,10 @@ const IN_PAGE = {
     // Sorted, because Chrome lists custom properties (--vars) in an unpredictable order.
     const styleText = (cs) => {
       const parts = [];
-      for (let i = 0; i < cs.length; i++) parts.push(cs[i] + ':' + cs.getPropertyValue(cs[i]));
+      for (let i = 0; i < cs.length; i++) {
+        if (ignoreVars && cs[i].startsWith('--')) continue;
+        parts.push(cs[i] + ':' + cs.getPropertyValue(cs[i]));
+      }
       // Strip the server origin and Mermaid's timestamp-based ids (url(#mermaid-1794...)).
       return parts
         .sort()
@@ -216,7 +221,7 @@ const IN_PAGE = {
     }
     return out;
   },
-  details: (paths) => {
+  details: ({ paths, ignoreVars }) => {
     const find = (p) => {
       let el = document.documentElement;
       if (!p) return el;
@@ -237,6 +242,7 @@ const IN_PAGE = {
           const cs = getComputedStyle(el, pseudo);
           if (pseudo && (!cs.content || cs.content === 'none')) continue;
           for (let i = 0; i < cs.length; i++) {
+            if (ignoreVars && cs[i].startsWith('--')) continue;
             o[(pseudo || '') + cs[i]] = cs.getPropertyValue(cs[i]).split(location.origin).join('');
           }
         }
@@ -323,7 +329,10 @@ async function openState(browser, origin, job) {
     await settle(page, 1500);
   }
   await page.evaluate(IN_PAGE.freeze);
-  const styles = await page.evaluate(IN_PAGE.snapshot, !!process.env.VD_DEBUG);
+  const styles = await page.evaluate(IN_PAGE.snapshot, {
+    raw: !!process.env.VD_DEBUG,
+    ignoreVars: opt.ignoreVars,
+  });
   // The site scrolls inside <main>, so grow the window to fit everything, then screenshot.
   const isFullscreen = await page.evaluate(() => !!document.fullscreenElement);
   if (!isFullscreen) {
@@ -488,8 +497,8 @@ async function compareOnce(job) {
   } else if (changed.length) {
     const sample = changed.slice(0, 15);
     const [da, db] = await Promise.all([
-      a.page.evaluate(IN_PAGE.details, sample),
-      b.page.evaluate(IN_PAGE.details, sample),
+      a.page.evaluate(IN_PAGE.details, { paths: sample, ignoreVars: opt.ignoreVars }),
+      b.page.evaluate(IN_PAGE.details, { paths: sample, ignoreVars: opt.ignoreVars }),
     ]);
     r.styleDiffCount = changed.length;
     r.styleDiffs = sample.map((p) => {

@@ -310,8 +310,8 @@ svg #layer1 path:hover {
 
 .draft-btn[aria-pressed="true"] {
   background: rgba(217, 119, 6, 0.15);
-  border-color: #f59e0b;
-  color: #fef3c7;
+  border-color: var(--status-warning);
+  color: var(--status-warning-text);
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
 }
 
