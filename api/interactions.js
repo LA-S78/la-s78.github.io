@@ -8,6 +8,7 @@ import { isGistConfigured, readGist, writeGist } from './_gist.js';
 import { acceptProposal } from './_accept_proposal.js';
 import { getWaitUntil } from './_after_response.js';
 import { isSteward } from './_stewards.js';
+import { leadershipRoles, matchesRoleKeyword } from './_officer_roles.js';
 import { createToken } from './_tokens.js';
 import {
   getCycleState,
@@ -489,21 +490,6 @@ async function getGuildRoleMap(guildId, botToken, memberRoleIds = []) {
   return map;
 }
 
-function matchesRoleKeyword(roleName, keyword) {
-  if (!roleName || !keyword) return false;
-  const cleanRole = roleName
-    .toLowerCase()
-    .replace(/[@\[\]]/g, ' ')
-    .trim();
-  const cleanKey = keyword
-    .toLowerCase()
-    .replace(/[@\[\]]/g, ' ')
-    .trim();
-  if (cleanRole === cleanKey) return true;
-  const regex = new RegExp(`(^|\\s|_|-)${cleanKey}(\\s|_|-|$)`, 'i');
-  return regex.test(cleanRole);
-}
-
 /**
  * Unified resolver for member alliance affiliation & leadership authorization
  * Works across both Dedicated Alliance Servers and the central NAP Server.
@@ -570,7 +556,7 @@ async function resolveMemberAllianceContext({ guildId, member, alliances = {}, b
     (r) => r === 'r5' || r === '@r5' || matchesRoleKeyword(r, 'r5'),
   );
   const isGuildAdmin = (BigInt(member?.permissions || '0') & 8n) === 8n;
-  const allowedRoles = ['r5', ...(allianceData?.delegated_roles || ['hr', 'officer', 'leader'])];
+  const allowedRoles = leadershipRoles(allianceData);
 
   const hasDelegatedLeadership =
     isGuildAdmin ||
