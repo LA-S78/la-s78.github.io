@@ -332,6 +332,10 @@
   gap: 6px;
   margin-top: 8px;
 }
+/* Only while editing the blacklist (the site has no general .hidden rule) */
+.planner-blacklist-add.hidden {
+  display: none;
+}
 
 .planner-blacklist-add input {
   background: var(--surface-dark);

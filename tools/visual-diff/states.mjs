@@ -134,10 +134,11 @@ export const STATES = [
     run: openProposal,
   },
   // Sending fails (the test API has no /api/proposal): the pop-up shows its error box.
+  // Needs a login pass, or the pop-up asks to log in instead of sending.
   {
     name: 'proposal-modal-error',
     needs: '#map-container, .alliance-wrapper',
-    storage: LEADER,
+    storage: SIGNED_IN,
     run: async (page) => {
       await openProposal(page);
       await click('#auth-modal-action-btn')(page);

@@ -82,6 +82,7 @@ under *Must not change*, or someone will "fix" it.
 ## Territory map & alliance standings
 - **Purpose:** Tracks territory ownership (`map.html`, `/map`) and NAP alliance ranks (`alliance.html`, `/rank`).
 - **Constraints:** Map PNGs are rendered dynamically via `api/map-image.js` using in-memory SVG/font/city modules compiled during the CI build.
+- **Two separate edit modes (owner decision):** on the Alliance page, **Planner Mode** (top) edits the standings and **Edit Blacklist** (bottom) edits the blacklist. Each switches on and off by itself, keeps its own saved draft (`la_alliance_planner_draft`, `la_blacklist_draft`), and has its own Submit (Submit Plan / Submit Blacklist), which sends its own proposal and closes only its own mode. The blacklist's add boxes show only while editing it.
 - **Must not change:** Updating alliance ranks in `map-state.json` updates weekly chest tiers immediately, while Capitol rotation seats remain locked until the next 4-week cycle rollover.
 
 ## Calendar & event management

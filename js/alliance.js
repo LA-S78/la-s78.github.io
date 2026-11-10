@@ -8,7 +8,10 @@ import { submitProposalWithAuth } from './auth-modal.js';
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
 
+// Planner Mode (standings, top of the page) and Edit Blacklist (bottom) are separate modes,
+// each with its own saved draft, so switching one on or off never touches the other.
 const ALLIANCE_DRAFT_KEY = 'la_alliance_planner_draft';
+const BLACKLIST_DRAFT_KEY = 'la_blacklist_draft';
 
 const DEFAULT_ALLIANCE_COLORS = {
   WLO: '#25bb00',
@@ -39,6 +42,7 @@ const AUTO_PALETTE = [
 ];
 
 export let isAlliancePlannerActive = false;
+export let isBlacklistEditing = false;
 export let originalAlliances = {};
 export let originalBlacklist = { players: [], alliances: [] };
 export let draftAlliances = {};
@@ -203,12 +207,50 @@ function normaliseBlacklist(raw, fallback = { players: [], alliances: [] }) {
 function saveDraftToStorage() {
   if (!isAlliancePlannerActive) return;
   try {
-    const bundle = {
-      alliances: draftAlliances,
-      blacklist: draftBlacklist,
-    };
-    localStorage.setItem(ALLIANCE_DRAFT_KEY, JSON.stringify(bundle));
+    localStorage.setItem(ALLIANCE_DRAFT_KEY, JSON.stringify({ alliances: draftAlliances }));
   } catch (e) {}
+}
+
+function saveBlacklistDraft() {
+  if (!isBlacklistEditing) return;
+  try {
+    localStorage.setItem(BLACKLIST_DRAFT_KEY, JSON.stringify(draftBlacklist));
+  } catch (e) {}
+}
+
+/** Shows or hides the blacklist's add boxes. */
+function showBlacklistEditors(active) {
+  document.getElementById('planner-add-player-box')?.classList.toggle('hidden', !active);
+  document
+    .getElementById('planner-add-blacklist-alliance-box')
+    ?.classList.toggle('hidden', !active);
+}
+
+/**
+ * Reopens a blacklist edit left unsent. Drafts saved before the two modes were separated
+ * kept the blacklist inside the planner's draft: one with changes is moved over.
+ */
+function restoreBlacklistDraft(oldBundleBlacklist) {
+  let saved = null;
+  try {
+    saved = JSON.parse(localStorage.getItem(BLACKLIST_DRAFT_KEY) || 'null');
+  } catch (e) {}
+  const fromOldDraft = !saved && !!oldBundleBlacklist;
+  if (fromOldDraft) saved = oldBundleBlacklist;
+  if (!saved) return false;
+
+  const previous = draftBlacklist;
+  draftBlacklist = normaliseBlacklist(saved, originalBlacklist);
+  if (fromOldDraft && calculateBlacklistDiff().length === 0) {
+    draftBlacklist = previous; // the old draft had no blacklist changes: nothing to reopen
+    return false;
+  }
+  isBlacklistEditing = true;
+  saveBlacklistDraft();
+  showBlacklistEditors(true);
+  renderBlacklist();
+  updateAllianceProposalUI();
+  return true;
 }
 
 export function checkAndRestoreAllianceDraft() {
@@ -217,14 +259,18 @@ export function checkAndRestoreAllianceDraft() {
     saved = localStorage.getItem(ALLIANCE_DRAFT_KEY);
   } catch (e) {}
 
-  if (!saved) return false;
+  let parsed = null;
+  try {
+    parsed = saved ? JSON.parse(saved) : null;
+  } catch (e) {}
+  restoreBlacklistDraft(parsed?.blacklist);
+  if (!parsed) return false;
 
   try {
-    const parsed = JSON.parse(saved);
-    if (parsed && parsed.alliances && Object.keys(parsed.alliances).length > 0) {
+    if (parsed.alliances && Object.keys(parsed.alliances).length > 0) {
       isAlliancePlannerActive = true;
       draftAlliances = parsed.alliances;
-      draftBlacklist = normaliseBlacklist(parsed.blacklist, originalBlacklist);
+      if (parsed.blacklist) saveDraftToStorage(); // re-save without the old blacklist part
 
       // Ensure colors are resolved on restored drafts
       Object.entries(draftAlliances).forEach(([tag, data]) => {
@@ -239,16 +285,10 @@ export function checkAndRestoreAllianceDraft() {
 
       const container = document.getElementById('alliance-container');
       const addAllianceBox = document.getElementById('planner-add-alliance-container');
-      const addPlayerBox = document.getElementById('planner-add-player-box');
-      const addBlacklistAllianceBox = document.getElementById('planner-add-blacklist-alliance-box');
-
       if (container) container.classList.add('planner-active');
       if (addAllianceBox) addAllianceBox.classList.remove('hidden');
-      if (addPlayerBox) addPlayerBox.classList.remove('hidden');
-      if (addBlacklistAllianceBox) addBlacklistAllianceBox.classList.remove('hidden');
 
       renderStandingsHierarchy();
-      renderBlacklist();
       updateAllianceProposalUI();
       return true;
     }
@@ -311,8 +351,10 @@ export async function fetchLiveAllianceState() {
 
       if (!isAlliancePlannerActive) {
         draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
-        draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
         renderStandingsHierarchy();
+      }
+      if (!isBlacklistEditing) {
+        draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
         renderBlacklist();
       }
     }
@@ -509,7 +551,7 @@ export function removeContender(tag) {
 
 /** Adds a name to the draft blacklist. Returns 'added', 'duplicate', 'empty' or 'inactive'. */
 export function addBlacklistEntry(type, target) {
-  if (!isAlliancePlannerActive) return 'inactive';
+  if (!isBlacklistEditing) return 'inactive';
   const clean = String(target)
     .trim()
     .replace(/[@\[\]]/g, '');
@@ -520,7 +562,7 @@ export function addBlacklistEntry(type, target) {
   if (list.some((x) => x.toLowerCase() === clean.toLowerCase())) return 'duplicate';
 
   list.push(clean);
-  saveDraftToStorage();
+  saveBlacklistDraft();
   renderBlacklist();
   updateAllianceProposalUI();
   return 'added';
@@ -552,7 +594,7 @@ function addFromInput(type, inputId) {
     if (result === 'added') {
       input.value = '';
       showBlacklistStatus(
-        `<strong>${esc(label)}</strong> added to your plan. It isn't sent yet: press <strong>Submit Plan</strong> above the blacklist to send it to leadership for approval.`,
+        `<strong>${esc(label)}</strong> added to your plan. It isn't sent yet: press <strong>Submit Blacklist</strong> above the blacklist to send it to leadership for approval.`,
         'success',
       );
     } else if (result === 'duplicate') {
@@ -570,17 +612,17 @@ function addFromInput(type, inputId) {
 }
 
 export function removeBlacklistEntry(type, index) {
-  if (!isAlliancePlannerActive) return;
+  if (!isBlacklistEditing) return;
   draftBlacklist = normaliseBlacklist(draftBlacklist, originalBlacklist);
   const list = type === 'players' ? draftBlacklist.players : draftBlacklist.alliances;
   if (index >= 0 && index < list.length) {
     const [removed] = list.splice(index, 1);
-    saveDraftToStorage();
+    saveBlacklistDraft();
     renderBlacklist();
     updateAllianceProposalUI();
     const label = type === 'players' ? removed : `[${removed}]`;
     showBlacklistStatus(
-      `<strong>${esc(label)}</strong> removed from your plan. It isn't sent yet: press <strong>Submit Plan</strong> above the blacklist to send it to leadership for approval.`,
+      `<strong>${esc(label)}</strong> removed from your plan. It isn't sent yet: press <strong>Submit Blacklist</strong> above the blacklist to send it to leadership for approval.`,
       'success',
     );
   }
@@ -712,7 +754,7 @@ export function renderBlacklist() {
   const playerCountBadge = document.getElementById('blacklist-player-count');
   const allianceCountBadge = document.getElementById('blacklist-alliance-count');
 
-  const activeBlacklist = isAlliancePlannerActive ? draftBlacklist : originalBlacklist;
+  const activeBlacklist = isBlacklistEditing ? draftBlacklist : originalBlacklist;
 
   if (playerCountBadge) playerCountBadge.textContent = activeBlacklist.players.length;
   if (allianceCountBadge) allianceCountBadge.textContent = activeBlacklist.alliances.length;
@@ -727,7 +769,7 @@ export function renderBlacklist() {
           (player, idx) => `
         <div class="blacklist-item">
           <span class="blacklist-ign">${esc(player)}</span>
-          ${isAlliancePlannerActive ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="players" data-index="${idx}">&times;</button>` : ''}
+          ${isBlacklistEditing ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="players" data-index="${idx}">&times;</button>` : ''}
         </div>
       `,
         )
@@ -745,7 +787,7 @@ export function renderBlacklist() {
           (ally, idx) => `
         <div class="blacklist-item">
           <span class="blacklist-ign">[${esc(ally)}]</span>
-          ${isAlliancePlannerActive ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="alliances" data-index="${idx}">&times;</button>` : ''}
+          ${isBlacklistEditing ? `<button type="button" class="btn-blacklist-del" data-action="del-blacklist" data-type="alliances" data-index="${idx}">&times;</button>` : ''}
         </div>
       `,
         )
@@ -823,16 +865,10 @@ export function calculateBlacklistDiff() {
   return diff;
 }
 
-/** Every change in the planner (standings and blacklist). */
-export function calculateAllianceDiff() {
-  return [...calculateStandingsDiff(), ...calculateBlacklistDiff()];
-}
-
 /**
- * The blacklist's own Edit / Submit buttons, next to the blacklist (bottom of the page), so
- * editing it doesn't need Planner Mode at the top. Edit switches the same planner on; Submit
- * sends the blacklist changes only, as their own "NAP Blacklist Proposal" (the top Submit Plan
- * sends the standings only).
+ * The blacklist's own Edit / Submit buttons, next to the blacklist (bottom of the page). Edit
+ * Blacklist is its own mode, separate from Planner Mode at the top; Submit sends the blacklist
+ * changes as their own "NAP Blacklist Proposal" (the top Submit Plan sends the standings only).
  */
 function ensureBlacklistControls() {
   const section = document.querySelector('.blacklist-section');
@@ -848,12 +884,12 @@ function ensureBlacklistControls() {
       <span class="draft-text">Edit Blacklist</span>
     </button>
     <button id="btn-submit-blacklist" class="submit-plan-btn hidden" disabled type="button">
-      Submit Plan <span class="badge">0</span>
+      Submit Blacklist <span class="badge">0</span>
     </button>`;
   section.before(bar);
   bar
     .querySelector('#btn-edit-blacklist')
-    .addEventListener('click', () => toggleAlliancePlanner(!isAlliancePlannerActive));
+    .addEventListener('click', () => toggleBlacklistEditing(!isBlacklistEditing));
   bar
     .querySelector('#btn-submit-blacklist')
     .addEventListener('click', () => submitBlacklistProposal());
@@ -864,15 +900,15 @@ function syncBlacklistControls(count = 0) {
   const edit = document.getElementById('btn-edit-blacklist');
   const submit = document.getElementById('btn-submit-blacklist');
   if (edit) {
-    edit.setAttribute('aria-pressed', isAlliancePlannerActive ? 'true' : 'false');
-    edit.classList.toggle('active', isAlliancePlannerActive);
-    edit.querySelector('.draft-text').textContent = isAlliancePlannerActive
+    edit.setAttribute('aria-pressed', isBlacklistEditing ? 'true' : 'false');
+    edit.classList.toggle('active', isBlacklistEditing);
+    edit.querySelector('.draft-text').textContent = isBlacklistEditing
       ? 'Stop Editing'
       : 'Edit Blacklist';
   }
   if (submit) {
-    submit.classList.toggle('hidden', !isAlliancePlannerActive);
-    submit.disabled = !isAlliancePlannerActive || count === 0;
+    submit.classList.toggle('hidden', !isBlacklistEditing);
+    submit.disabled = !isBlacklistEditing || count === 0;
     submit.querySelector('.badge').textContent = String(count);
   }
 }
@@ -880,7 +916,7 @@ function syncBlacklistControls(count = 0) {
 export function updateAllianceProposalUI() {
   const submitBtn = document.getElementById('btn-submit-alliance');
   const badgeEl = document.getElementById('alliance-change-badge');
-  syncBlacklistControls(isAlliancePlannerActive ? calculateBlacklistDiff().length : 0);
+  syncBlacklistControls(isBlacklistEditing ? calculateBlacklistDiff().length : 0);
 
   if (!isAlliancePlannerActive) {
     if (submitBtn) {
@@ -913,40 +949,34 @@ export function toggleAlliancePlanner(active) {
 
   const container = document.getElementById('alliance-container');
   const addAllianceBox = document.getElementById('planner-add-alliance-container');
-  const addPlayerBox = document.getElementById('planner-add-player-box');
-  const addBlacklistAllianceBox = document.getElementById('planner-add-blacklist-alliance-box');
-
   if (container) container.classList.toggle('planner-active', active);
   if (addAllianceBox) addAllianceBox.classList.toggle('hidden', !active);
-  if (addPlayerBox) addPlayerBox.classList.toggle('hidden', !active);
-  if (addBlacklistAllianceBox) addBlacklistAllianceBox.classList.toggle('hidden', !active);
 
   if (!active) {
     try {
       localStorage.removeItem(ALLIANCE_DRAFT_KEY);
     } catch (e) {}
     draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
-    draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
   } else {
     saveDraftToStorage();
   }
 
   renderStandingsHierarchy();
-  renderBlacklist();
   updateAllianceProposalUI();
 }
 
-/**
- * After one part of the plan was sent: that part becomes the new starting point. The planner
- * stays open while the other part still has unsent changes; otherwise it closes.
- */
-function afterProposalSent() {
-  if (calculateAllianceDiff().length === 0) {
-    toggleAlliancePlanner(false);
-    return;
+/** Edit Blacklist on or off. Off drops unsent blacklist changes (like Planner Mode). */
+export function toggleBlacklistEditing(active) {
+  isBlacklistEditing = active;
+  showBlacklistEditors(active);
+  if (!active) {
+    try {
+      localStorage.removeItem(BLACKLIST_DRAFT_KEY);
+    } catch (e) {}
+    draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
+  } else {
+    saveBlacklistDraft();
   }
-  saveDraftToStorage();
-  renderStandingsHierarchy();
   renderBlacklist();
   updateAllianceProposalUI();
 }
@@ -995,14 +1025,14 @@ export async function submitAllianceProposal() {
     diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
     onSuccess: () => {
       originalAlliances = JSON.parse(JSON.stringify(draftAlliances));
-      afterProposalSent();
+      toggleAlliancePlanner(false);
     },
   });
 }
 
 /** Sends the blacklist changes as their own proposal ("NAP Blacklist Proposal" in Discord). */
 export async function submitBlacklistProposal() {
-  if (!isAlliancePlannerActive) return;
+  if (!isBlacklistEditing) return;
 
   const diff = calculateBlacklistDiff();
   if (diff.length === 0) {
@@ -1027,7 +1057,7 @@ export async function submitBlacklistProposal() {
     diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
     onSuccess: () => {
       originalBlacklist = JSON.parse(JSON.stringify(draftBlacklist));
-      afterProposalSent();
+      toggleBlacklistEditing(false);
       showBlacklistStatus(
         'Blacklist proposal sent to leadership on Discord. It applies once a Steward approves it.',
         'success',
@@ -1179,7 +1209,7 @@ export function bindAllianceControls() {
     if (list.dataset.bound) return;
     list.dataset.bound = 'true';
     list.addEventListener('click', (e) => {
-      if (!isAlliancePlannerActive) return;
+      if (!isBlacklistEditing) return;
       const delBtn = e.target.closest('[data-action="del-blacklist"]');
       if (delBtn) {
         removeBlacklistEntry(delBtn.dataset.type, parseInt(delBtn.dataset.index, 10));
