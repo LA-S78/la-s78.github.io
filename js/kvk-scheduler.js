@@ -86,7 +86,7 @@ function renderScheduleGrid() {
   const weeks = [
     {
       key: 'downtime',
-      label: 'Downtime',
+      label: 'Off-Week',
       sub: 'Boss 1 Window',
       seat: schedule.downtime || 'BOTS',
       loot: '1 King Chest',

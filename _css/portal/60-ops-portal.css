@@ -75,6 +75,8 @@
 
 .ops-week-header {
   display: flex;
+  flex-wrap: wrap; /* on narrow cards the ACTIVE badge goes below the label */
+  gap: 4px;
   align-items: center;
   justify-content: space-between;
 }
@@ -85,6 +87,7 @@
   font-weight: bold;
   color: var(--text-main);
   text-transform: uppercase;
+  white-space: nowrap; /* "OFF-WEEK", "WEEK 1 FRI" stay on one line */
 }
 
 .ops-week-body {

@@ -6,7 +6,12 @@ import { RULES_DATA, SB_DATA, BOT_DATA } from './_generated_translations.js';
 import { listAllianceRanks, setAllianceRank } from './_rank_helper.js';
 import { isGistConfigured, readGist, writeGist } from './_gist.js';
 import { createToken } from './_tokens.js';
-import { getCycleState, getScheduleSlot, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
+import {
+  getCycleState,
+  getScheduleSlot,
+  weekLabel,
+  DEFAULT_CALENDAR_CONFIG,
+} from './_calendar_helper.js';
 import { getAllianceNominationQuota, applySafeCycleReset } from './_rewards_helper.js';
 
 export const config = { api: { bodyParser: false } };
@@ -885,8 +890,8 @@ export default async function handler(req, res) {
       const nextWeekResetTs = state.nextResetTimestamp + (daysUntilNextWeek - 1) * 86400;
       const nextWeekNum = (state.currentWeekNumber % 4) + 1;
       const nextWeekConfig = calConfig.capitol_rotation.find((w) => w.week === nextWeekNum);
-      const nextSlotKey = getScheduleSlot(nextWeekNum, calConfig).slotKey;
-      const nextScheduledTag = activeSchedule[nextSlotKey]?.trim();
+      const nextSlot = getScheduleSlot(nextWeekNum, calConfig);
+      const nextScheduledTag = activeSchedule[nextSlot.slotKey]?.trim();
 
       const nextHolderEntry = Object.entries(alliances).find(
         ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank,
@@ -901,7 +906,10 @@ export default async function handler(req, res) {
         ? alliances[nextScheduledTag]?.rank || nextWeekConfig?.capitol_rank
         : nextWeekConfig?.capitol_rank;
 
-      const weekDisplayLabel = state.clockWeek === 0 ? 'Downtime' : `Week ${state.clockWeek}`;
+      // Time to the daily reset, written out: Discord's own relative time says "in a day"
+      // for anything over ~22 hours, which isn't useful here.
+      const minsToReset = Math.max(0, Math.round((state.nextResetTimestamp * 1000 - now) / 60000));
+      const resetIn = `${Math.floor(minsToReset / 60)}h ${minsToReset % 60}m`;
 
       // The week's alliance captures the Capitol on Friday (see _calendar_helper.js).
       const captureNote = state.capitolCaptured
@@ -917,14 +925,9 @@ export default async function handler(req, res) {
           inline: true,
         },
         {
-          name: '🔄 Cycle Progress',
-          value: `Day **${state.cycleDay}** of 28 *(${weekDisplayLabel})*`,
-          inline: true,
-        },
-        {
           name: '⏰ Next Daily Reset (00:00 GT)',
-          value: `<t:${state.nextResetTimestamp}:R> (<t:${state.nextResetTimestamp}:t>)`,
-          inline: false,
+          value: `**<t:${state.nextResetTimestamp}:t>** (in ${resetIn})`,
+          inline: true,
         },
       ];
 
@@ -942,7 +945,7 @@ export default async function handler(req, res) {
 
       fields.push({
         name: '⏭️ Next Rotation Phase',
-        value: `**${nextWeekConfig?.phase || 'Next Phase'}** begins <t:${nextWeekResetTs}:R>.\n**${nextHolderTag}** *(Rank #${nextActualRank})* captures the Capitol that Friday.`,
+        value: `**${weekLabel(nextSlot.clockWeek)}** begins <t:${nextWeekResetTs}:R>.\n**${nextHolderTag}** *(Rank #${nextActualRank})* captures the Capitol that Friday.`,
         inline: false,
       });
 
@@ -956,11 +959,9 @@ export default async function handler(req, res) {
         data: {
           embeds: [
             {
-              title: `📅 Kingdom War & Rotation Calendar — ${state.phaseName}`,
+              title: '📅 Kingdom War Calendar',
               color: state.isKW ? 0x8f0000 : 0xb8975a,
-              description: state.isKW
-                ? '⚔️ **Kingdom War Cycle is ACTIVE.** 2x Reward allocations apply upon victory.'
-                : '🛡️ **NAP Rest Week.** Standard kingdom operations and territory consolidation.',
+              description: `${state.clockWeek === 0 ? '🛡️' : '⚔️'} **${weekLabel(state.clockWeek)}**`,
               fields,
               footer: { text: 'la-s78.app' },
               timestamp: new Date().toISOString(),
@@ -1420,11 +1421,11 @@ export default async function handler(req, res) {
         // 0. Clock-Sync & KvK Outcome Confirmation Gate
         if (storedWeek !== clockWeek) {
           if (clockWeek === 0) {
-            // Downtime (Off-Week): Auto-advance & reset to 1x Standard immediately
+            // Off-Week: auto-advance & reset to 1x Standard immediately
             const { updatedRewards } = applySafeCycleReset(
               rewardsData,
               'standard',
-              'Auto-Clock (Downtime)',
+              'Auto-Clock (Off-Week)',
               mapState,
               0,
             );
@@ -1437,10 +1438,10 @@ export default async function handler(req, res) {
                   'rewards-nominations.json': {},
                   'rewards-data.json': updatedRewards,
                 },
-                { description: `Auto-reset to Downtime (1x) at ${new Date().toISOString()}` },
+                { description: `Auto-reset to Off-Week (1x) at ${new Date().toISOString()}` },
               );
             } catch (err) {
-              console.error('Automatic Downtime reset could not be saved:', err);
+              console.error('Automatic Off-Week reset could not be saved:', err);
               return sendEphemeralMessage(
                 res,
                 '⚠️ Service busy: could not initialize the new reward cycle. Please retry /nominate in a few seconds.',
@@ -1708,7 +1709,7 @@ export default async function handler(req, res) {
           const isKW = requestedMode === 'kw';
           const cycleNotice = cycleAdvanced
             ? `\n• 🔄 **Rotation Cycle Completed:** Override count reset to \`0/2\` for the new cycle.`
-            : `\n• 📅 **Rotation Week Synced:** Active on \`${nextWeek === 0 ? 'Downtime (Week 0)' : `Week ${nextWeek}`}\`.`;
+            : `\n• 📅 **Rotation Week Synced:** Active on \`${nextWeek === 0 ? 'Off-Week' : `Week ${nextWeek}`}\`.`;
 
           const buyoutNotice =
             preservedCount > 0
