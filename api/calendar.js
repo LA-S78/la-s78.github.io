@@ -1,11 +1,7 @@
 // api/calendar.js
-import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
+import { getCycleState, getScheduleSlot, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
-
-function getScheduleSlotKey(weekNumber) {
-  return Number(weekNumber) === 4 ? 'downtime' : `week_${weekNumber}`;
-}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -30,15 +26,14 @@ export default async function handler(req, res) {
   const now = new Date();
   const currentStatus = getCycleState(now, calConfig);
 
-  // Map 1..4 calendar week to 0..3 scheduler week (Week 4 = 0 / downtime)
-  const clockWeek = currentStatus.currentWeekNumber === 4 ? 0 : currentStatus.currentWeekNumber;
-  currentStatus.clockWeek = clockWeek;
+  // currentStatus.clockWeek / scheduleSlot say which seat of the reward schedule is active
+  // (see getScheduleSlot): the hero card and the 4-week console both follow them.
 
   const alliances = mapState.alliances || {};
   const activeSchedule = rewardsState.cycle_state?.active_schedule || null;
 
   // Resolve current Capitol Holder from active_schedule first, falling back to static rank
-  const currentSlotKey = getScheduleSlotKey(currentStatus.currentWeekNumber);
+  const currentSlotKey = currentStatus.scheduleSlot;
   const scheduledHolderTag = activeSchedule?.[currentSlotKey]?.trim();
 
   let capitolHolderTag = `Rank #${currentStatus.capitolRank}`;
@@ -73,7 +68,7 @@ export default async function handler(req, res) {
   const nextWeekNum = (currentStatus.currentWeekNumber % 4) + 1;
   const nextWeekConfig = calConfig.capitol_rotation.find((w) => w.week === nextWeekNum);
 
-  const nextSlotKey = getScheduleSlotKey(nextWeekNum);
+  const nextSlotKey = getScheduleSlot(nextWeekNum, calConfig).slotKey;
   const nextScheduledTag = activeSchedule?.[nextSlotKey]?.trim();
 
   let nextHolderTag = `Rank #${nextWeekConfig?.capitol_rank}`;

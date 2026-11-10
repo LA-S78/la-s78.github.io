@@ -15,6 +15,26 @@ export const DEFAULT_CALENDAR_CONFIG = {
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 /**
+ * Which seat of the reward schedule a calendar week uses.
+ *
+ * The calendar numbers its weeks 1..4 in whatever order `capitol_rotation` lists them; the
+ * reward schedule (rewards-data.json `active_schedule`) has the seats `downtime`, `week_1`,
+ * `week_2`, `week_3`. The off-week is the one marked `is_kw: false` (wherever it sits in the
+ * cycle), and the Kingdom War weeks count up from 1 in calendar order.
+ *
+ * Returns { clockWeek, slotKey }: clockWeek is 0 for downtime, 1..3 for a Kingdom War week.
+ * Every caller must use this, so the website and the bot always agree on the active week.
+ */
+export function getScheduleSlot(weekNumber, customConfig = {}) {
+  const config = { ...DEFAULT_CALENDAR_CONFIG, ...customConfig };
+  const rotation = Array.isArray(config.capitol_rotation) ? config.capitol_rotation : [];
+  const week = rotation.find((w) => Number(w.week) === Number(weekNumber));
+  if (!week || !week.is_kw) return { clockWeek: 0, slotKey: 'downtime' };
+  const clockWeek = rotation.filter((w) => w.is_kw && Number(w.week) <= Number(weekNumber)).length;
+  return { clockWeek, slotKey: `week_${clockWeek}` };
+}
+
+/**
  * Calculates current cycle status for any given date
  */
 export function getCycleState(targetDate = new Date(), customConfig = {}) {
@@ -48,9 +68,13 @@ export function getCycleState(targetDate = new Date(), customConfig = {}) {
   const daysUntilSaturday = 6 - dayOfWeekNumber;
   const kwBattleTime = new Date(anchorTime + (daysSinceAnchor + daysUntilSaturday) * MS_PER_DAY);
 
+  const { clockWeek, slotKey } = getScheduleSlot(currentWeekNumber, config);
+
   return {
     cycleDay, // 1 to 28
-    currentWeekNumber, // 1 to 4
+    currentWeekNumber, // 1 to 4 (calendar order; use clockWeek/scheduleSlot for the schedule)
+    clockWeek, // 0 = downtime, 1 to 3 = Kingdom War week
+    scheduleSlot: slotKey, // 'downtime' | 'week_1' | 'week_2' | 'week_3'
     dayOfWeekNumber, // 1 to 7 (1 = Mon, 7 = Sun)
     isKW: weekConfig.is_kw,
     phaseName: weekConfig.phase,

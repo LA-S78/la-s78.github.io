@@ -6,7 +6,7 @@ import { RULES_DATA, SB_DATA, BOT_DATA } from './_generated_translations.js';
 import { listAllianceRanks, setAllianceRank } from './_rank_helper.js';
 import { isGistConfigured, readGist, writeGist } from './_gist.js';
 import { createToken } from './_tokens.js';
-import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
+import { getCycleState, getScheduleSlot, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getAllianceNominationQuota, applySafeCycleReset } from './_rewards_helper.js';
 
 export const config = { api: { bodyParser: false } };
@@ -865,8 +865,7 @@ export default async function handler(req, res) {
       const now = new Date();
       const state = getCycleState(now, calConfig);
       const activeSchedule = rewardsState.cycle_state?.active_schedule || {};
-      const slotKey =
-        state.currentWeekNumber === 4 ? 'downtime' : `week_${state.currentWeekNumber}`;
+      const slotKey = state.scheduleSlot;
       const scheduledTag = activeSchedule[slotKey]?.trim();
 
       const holderEntry = Object.entries(alliances).find(
@@ -886,7 +885,7 @@ export default async function handler(req, res) {
       const nextWeekResetTs = state.nextResetTimestamp + (daysUntilNextWeek - 1) * 86400;
       const nextWeekNum = (state.currentWeekNumber % 4) + 1;
       const nextWeekConfig = calConfig.capitol_rotation.find((w) => w.week === nextWeekNum);
-      const nextSlotKey = nextWeekNum === 4 ? 'downtime' : `week_${nextWeekNum}`;
+      const nextSlotKey = getScheduleSlot(nextWeekNum, calConfig).slotKey;
       const nextScheduledTag = activeSchedule[nextSlotKey]?.trim();
 
       const nextHolderEntry = Object.entries(alliances).find(
@@ -902,8 +901,7 @@ export default async function handler(req, res) {
         ? alliances[nextScheduledTag]?.rank || nextWeekConfig?.capitol_rank
         : nextWeekConfig?.capitol_rank;
 
-      const weekDisplayLabel =
-        state.currentWeekNumber === 4 ? 'Downtime' : `Week ${state.currentWeekNumber}`;
+      const weekDisplayLabel = state.clockWeek === 0 ? 'Downtime' : `Week ${state.clockWeek}`;
 
       const fields = [
         {
@@ -1409,7 +1407,7 @@ export default async function handler(req, res) {
           : DEFAULT_CALENDAR_CONFIG;
 
         const liveCalState = getCycleState(new Date(), calConfig);
-        const clockWeek = liveCalState.currentWeekNumber === 4 ? 0 : liveCalState.currentWeekNumber;
+        const clockWeek = liveCalState.clockWeek;
         const storedWeek = rewardsData.cycle_state?.current_week ?? clockWeek;
 
         // 0. Clock-Sync & KvK Outcome Confirmation Gate
@@ -1685,8 +1683,7 @@ export default async function handler(req, res) {
             ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
             : DEFAULT_CALENDAR_CONFIG;
           const liveCalState = getCycleState(new Date(), calConfig);
-          const clockWeek =
-            liveCalState.currentWeekNumber === 4 ? 0 : liveCalState.currentWeekNumber;
+          const clockWeek = liveCalState.clockWeek;
 
           const { updatedRewards, archivedCount, preservedCount, cycleAdvanced, nextWeek } =
             applySafeCycleReset(currentRewards, requestedMode, username, mapState, clockWeek);

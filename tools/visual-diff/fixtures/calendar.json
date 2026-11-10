@@ -2,6 +2,8 @@
   "status": {
     "cycleDay": 23,
     "currentWeekNumber": 4,
+    "clockWeek": 0,
+    "scheduleSlot": "downtime",
     "dayOfWeekNumber": 2,
     "isKW": false,
     "phaseName": "NAP Rest Week (Off-Week)",
@@ -10,7 +12,6 @@
     "nextResetTimestamp": 1794362400,
     "kwBattleTimestamp": 1794621600,
     "isKWBattleDay": false,
-    "clockWeek": 0,
     "isOverrideWeek": true,
     "holderActualRank": 3
   },
