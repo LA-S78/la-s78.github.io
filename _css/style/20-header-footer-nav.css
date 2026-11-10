@@ -340,6 +340,9 @@ footer {
 .id-badge-icon {
   font-size: 0.75rem;
 }
+.id-badge--icon-only {
+  padding: 1px 5px;
+}
 .id-badge--steward { --badge: var(--gold); }
 .id-badge--r5 { --badge: var(--status-warning); }
 .id-badge--r4 { --badge: var(--badge-slate-text); }
@@ -380,6 +383,9 @@ footer {
   color: var(--text-muted);
 }
 .id-pop-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 10px;
 }
 .id-pop-title {
@@ -447,7 +453,7 @@ footer {
     display: none;
   }
   .id-pill .id-badge {
-    padding: 1px 5px;
+    padding: 1px 4px;
   }
   /* Lift the language button (and nudge it off the screen edge) so the pill under it stays
      well inside the 90px header */
@@ -459,6 +465,7 @@ footer {
     top: calc(100% + 5px);
   }
   .id-pill {
+    gap: 3px;
     font-size: 0.75rem;
     padding: 2px 3px 2px 2px;
   }

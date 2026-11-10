@@ -31,7 +31,8 @@
 
   /**
    * What the header should show, from what main.js stored at login.
-   * tier: 'signed-out' | 'guest' | 'expired' | 'member' | 'R4' | 'R5' | 'steward'
+   * tier: 'signed-out' | 'guest' | 'expired' | 'member' | 'R4' | 'R5'
+   * steward: shown as well as the alliance rank (a Steward can also be an R5)
    */
   function readIdentity() {
     const name = stored('auth-username');
@@ -49,9 +50,9 @@
     if (role === 'public') return { ...base, tier: 'guest' };
     // Members and leaders get a login pass; without a usable one they must sign in again.
     if (exp <= Date.now()) return { ...base, tier: 'expired' };
-    if (stored('auth-steward') === 'true') return { ...base, tier: 'steward' };
-    if (role === 'R4' || role === 'R5') return { ...base, tier: role };
-    return { ...base, tier: 'member' };
+    const steward = stored('auth-steward') === 'true';
+    if (role === 'R4' || role === 'R5') return { ...base, tier: role, steward };
+    return { ...base, tier: 'member', steward };
   }
 
   const BADGES = {
@@ -70,6 +71,7 @@
     member: ['access_view', 'access_draft', 'access_ask_leader'],
     R4: ['access_view', 'access_draft', 'access_send'],
     R5: ['access_view', 'access_draft', 'access_send'],
+    // Stewards, whatever their alliance rank
     steward: ['access_view', 'access_draft', 'access_send_unlimited', 'access_approve'],
   };
 
@@ -88,10 +90,17 @@
     return img;
   }
 
-  function badge(tier, t, officer) {
+  /** A rank badge. iconOnly: just the icon (the Steward crown beside the rank on the pill). */
+  function badge(tier, t, { officer, iconOnly } = {}) {
     const [icon, key] = BADGES[tier];
     const b = el('span', `id-badge id-badge--${tier.toLowerCase()}`);
-    b.append(el('span', 'id-badge-icon', icon), el('span', 'id-badge-text', t[key]));
+    b.append(el('span', 'id-badge-icon', icon));
+    if (iconOnly) {
+      b.classList.add('id-badge--icon-only');
+      b.title = t[key];
+      return b;
+    }
+    b.append(el('span', 'id-badge-text', t[key]));
     if (officer && tier === 'R4') b.append(el('span', 'id-badge-extra', ` · ${t.role_officer}`));
     return b;
   }
@@ -138,7 +147,9 @@
     const label = `${t.account}: ${id.alliance ? `[${id.alliance}] ` : ''}${id.name}`;
     pill.setAttribute('aria-label', label);
     pill.title = label;
-    pill.append(avatarImg(id.avatar, 'id-avatar'), badge(id.tier, t));
+    pill.append(avatarImg(id.avatar, 'id-avatar'));
+    if (id.steward) pill.append(badge('steward', t, { iconOnly: true }));
+    pill.append(badge(id.tier, t));
 
     // --- the card ---
     const head = el('div', 'id-pop-head');
@@ -153,12 +164,13 @@
     );
     head.append(avatarImg(id.avatar, 'id-avatar id-avatar--large'), who);
     const badgeRow = el('div', 'id-pop-badges');
-    badgeRow.append(badge(id.tier, t, id.officer));
+    if (id.steward) badgeRow.append(badge('steward', t));
+    badgeRow.append(badge(id.tier, t, { officer: id.officer }));
     pop.append(head, badgeRow);
 
     pop.append(el('div', 'id-pop-title', t.access_title));
     const list = el('ul', 'id-pop-access');
-    for (const key of ACCESS[id.tier])
+    for (const key of ACCESS[id.steward ? 'steward' : id.tier])
       list.append(el('li', key === 'access_expired' ? 'is-warning' : '', t[key]));
     pop.append(list);
 

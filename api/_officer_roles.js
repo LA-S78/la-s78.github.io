@@ -83,3 +83,47 @@ export async function findOfficerRole({ uid, alliance, alliances, botToken, time
     return null; // Discord slow or down: stay a Member
   }
 }
+
+/**
+ * Finds a player's alliance tag the way the bot does in the NAP server: a role named after
+ * a known alliance ("WLO", "[WLO]" or "@WLO", any letter case). If no role matches, a
+ * "[TAG]" at the start of their server nickname counts, when TAG is a known alliance (for
+ * display; officer access still needs a role in that alliance's own server).
+ * Returns the tag as stored in map-state.json, or null.
+ * @param {{guildId: string, roleIds: string[], nickname?: string, alliances: object, botToken: string, timeoutMs?: number}} args
+ */
+export async function findAllianceTag({
+  guildId,
+  roleIds,
+  nickname,
+  alliances,
+  botToken,
+  timeoutMs = 2500,
+}) {
+  const tags = Object.keys(alliances || {});
+  if (!tags.length) return null;
+  const byLower = new Map(tags.map((tag) => [tag.toLowerCase(), tag]));
+
+  if (guildId && botToken && roleIds?.length) {
+    try {
+      const res = await fetch(`https://discord.com/api/v10/guilds/${guildId}/roles`, {
+        headers: { Authorization: `Bot ${botToken}` },
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      const roles = res.ok ? await res.json() : [];
+      for (const role of Array.isArray(roles) ? roles : []) {
+        if (!roleIds.includes(role.id)) continue;
+        const name = String(role.name || '')
+          .toLowerCase()
+          .trim();
+        const bare = name.replace(/^@/, '').replace(/^\[(.*)\]$/, '$1');
+        if (byLower.has(bare)) return byLower.get(bare);
+      }
+    } catch {
+      // Discord slow or down: try the nickname
+    }
+  }
+
+  const fromNick = /^\s*\[([^\]]{1,10})\]/.exec(nickname || '');
+  return fromNick ? byLower.get(fromNick[1].trim().toLowerCase()) || null : null;
+}
