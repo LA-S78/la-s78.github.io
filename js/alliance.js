@@ -596,7 +596,11 @@ export function renderStandingsHierarchy() {
 
   const countBadge = document.getElementById('alliance-total-count');
   const activeAlliances = isAlliancePlannerActive ? draftAlliances : originalAlliances;
-  const ladder = getSortedLadder(activeAlliances);
+  // The ladder lists NAP alliances only; planner mode shows every alliance, so one can be
+  // granted NAP (or have it revoked) and still be found in the list.
+  const ladder = getSortedLadder(activeAlliances).filter(
+    (alliance) => isAlliancePlannerActive || alliance.is_nap,
+  );
 
   const totalNap = Object.values(activeAlliances).filter((a) => a.is_nap).length;
   if (countBadge) countBadge.textContent = `${totalNap} NAP Alliances`;
