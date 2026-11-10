@@ -80,7 +80,8 @@ async function initCalendar() {
 
     const heroBadge = document.getElementById('hero-phase-badge');
     if (heroBadge) {
-      heroBadge.textContent = status.isKW ? '⚔️ Kingdom War Active' : '🛡️ NAP Rest Week';
+      // The title names the week; the badge shows the reward mode, so they don't repeat.
+      heroBadge.textContent = status.isKW ? '⚔️ 2x Rewards' : '🛡️ 1x Rewards';
       heroBadge.className = `cal-badge ${status.isKW ? 'badge-kw' : 'badge-off'}`;
     }
 
@@ -90,7 +91,8 @@ async function initCalendar() {
     const capRankEl = document.getElementById('hero-capitol-rank');
     const cycleProgressEl = document.getElementById('metric-cycle-progress');
 
-    if (titleEl) titleEl.textContent = status.phaseName;
+    // weekName, not the configured phase name, so the site always says "Off-Week".
+    if (titleEl) titleEl.textContent = status.weekName || status.phaseName;
     if (subEl) {
       subEl.textContent = status.isKW
         ? 'Double reward allotments active. Prepare for Saturday Kingdom War confrontation.'
@@ -123,7 +125,7 @@ async function initCalendar() {
       capRankEl.textContent = `${rankText} · ${captureText}`;
     }
     if (cycleProgressEl) {
-      const weekLabel = status.clockWeek === 0 ? 'Downtime' : `Week ${status.clockWeek}`;
+      const weekLabel = status.clockWeek === 0 ? 'Off-Week' : `Week ${status.clockWeek}`;
       cycleProgressEl.textContent = `Day ${status.cycleDay} of 28 (${weekLabel})`;
     }
 
@@ -148,7 +150,7 @@ async function initCalendar() {
             });
       } else {
         kwBox.style.opacity = '0.5';
-        kwCountdown.textContent = 'None (Rest)';
+        kwCountdown.textContent = 'None this week';
       }
     }
 

@@ -1421,11 +1421,11 @@ export default async function handler(req, res) {
         // 0. Clock-Sync & KvK Outcome Confirmation Gate
         if (storedWeek !== clockWeek) {
           if (clockWeek === 0) {
-            // Downtime (Off-Week): Auto-advance & reset to 1x Standard immediately
+            // Off-Week: auto-advance & reset to 1x Standard immediately
             const { updatedRewards } = applySafeCycleReset(
               rewardsData,
               'standard',
-              'Auto-Clock (Downtime)',
+              'Auto-Clock (Off-Week)',
               mapState,
               0,
             );
@@ -1438,10 +1438,10 @@ export default async function handler(req, res) {
                   'rewards-nominations.json': {},
                   'rewards-data.json': updatedRewards,
                 },
-                { description: `Auto-reset to Downtime (1x) at ${new Date().toISOString()}` },
+                { description: `Auto-reset to Off-Week (1x) at ${new Date().toISOString()}` },
               );
             } catch (err) {
-              console.error('Automatic Downtime reset could not be saved:', err);
+              console.error('Automatic Off-Week reset could not be saved:', err);
               return sendEphemeralMessage(
                 res,
                 '⚠️ Service busy: could not initialize the new reward cycle. Please retry /nominate in a few seconds.',
@@ -1709,7 +1709,7 @@ export default async function handler(req, res) {
           const isKW = requestedMode === 'kw';
           const cycleNotice = cycleAdvanced
             ? `\n• 🔄 **Rotation Cycle Completed:** Override count reset to \`0/2\` for the new cycle.`
-            : `\n• 📅 **Rotation Week Synced:** Active on \`${nextWeek === 0 ? 'Downtime (Week 0)' : `Week ${nextWeek}`}\`.`;
+            : `\n• 📅 **Rotation Week Synced:** Active on \`${nextWeek === 0 ? 'Off-Week' : `Week ${nextWeek}`}\`.`;
 
           const buyoutNotice =
             preservedCount > 0
