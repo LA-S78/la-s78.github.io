@@ -43,8 +43,8 @@
   background: linear-gradient(90deg, color-mix(in srgb, var(--badge-slate) 12%, transparent), transparent);
 }
 .alliance-ladder-row.rank-bronze {
-  border-left: 4px solid #b45309;
-  background: linear-gradient(90deg, rgba(180, 83, 9, 0.12), transparent);
+  border-left: 4px solid var(--ladder-bronze);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ladder-bronze) 12%, transparent), transparent);
 }
 
 /* Rank Column */
@@ -126,7 +126,7 @@
 .ladder-tag {
   font-family: var(--font-headers);
   font-size: 0.95rem;
-  color: #ffffff;
+  color: var(--white);
 }
 
 .ladder-name {
@@ -251,7 +251,7 @@
 .add-alliance-inline input {
   background: var(--surface-dark);
   border: 1px solid var(--border-color);
-  color: #ffffff;
+  color: var(--white);
   padding: 6px 10px;
   border-radius: 4px;
   font-size: 0.82rem;
@@ -305,7 +305,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(122, 0, 0, 0.2);
+  background: color-mix(in srgb, var(--danger-deep) 20%, transparent);
   border: 1px solid color-mix(in srgb, var(--status-danger) 40%, transparent);
   padding: 3px 8px;
   border-radius: 4px;
@@ -336,7 +336,7 @@
 .planner-blacklist-add input {
   background: var(--surface-dark);
   border: 1px solid var(--border-color);
-  color: #ffffff;
+  color: var(--white);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.78rem;

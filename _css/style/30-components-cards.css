@@ -11,7 +11,7 @@
   max-width: 1000px;
   margin-top: 1.2rem;
   padding: 15px 20px;
-  background-color: rgba(10, 8, 7, 0.6);
+  background-color: color-mix(in srgb, var(--surface-dark) 60%, transparent);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   color: var(--text-main);
@@ -20,7 +20,7 @@
   will-change: transform, opacity;
 }
 .search-bar:focus {
-  background-color: rgba(20, 16, 14, 0.9);
+  background-color: color-mix(in srgb, var(--surface-card) 90%, transparent);
   border-color: var(--accent-color);
   outline: none;
   box-shadow: 0 0 10px color-mix(in srgb, var(--accent-color) 20%, transparent);
@@ -114,7 +114,7 @@
 }
 
 dialog::backdrop {
-  background: rgba(10, 8, 7, 0.85);
+  background: color-mix(in srgb, var(--surface-dark) 85%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   animation: backdropFadeIn 0.5s ease-out forwards;
@@ -162,7 +162,7 @@ dialog .dialog-controls {
 }
 dialog button,
 dialog a.dialog-btn {
-  background-color: rgba(20, 16, 14, 0.8);
+  background-color: color-mix(in srgb, var(--surface-card) 80%, transparent);
   color: var(--text-main);
   border: 1px solid var(--border-color);
   border-radius: 6px;

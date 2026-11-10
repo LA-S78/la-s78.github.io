@@ -77,7 +77,7 @@
 
 table.schedule-table tr.active-row td.active-col {
   filter: brightness(1.6) contrast(1.1);
-  color: #ffffff;
+  color: var(--white);
   font-weight: bold;
   text-shadow: 0 2px 4px var(--shade-80);
   border: 2px solid var(--accent-color);

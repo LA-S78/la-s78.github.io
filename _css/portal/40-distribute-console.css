@@ -75,8 +75,8 @@
 
 .badge-pool-kw {
   font-size: 0.62rem;
-  background: #8f0000;
-  color: #fff;
+  background: var(--war-red);
+  color: var(--white);
 }
 
 .distribute-item.is-buyout {
@@ -95,7 +95,7 @@
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.82rem;
-  color: #fff;
+  color: var(--white);
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -121,8 +121,8 @@
 }
 
 .copy-btn.copied {
-  background: #166534;
+  background: var(--button-go);
   border-color: var(--status-success);
-  color: #f0fdf4;
+  color: var(--button-go-text);
 }
 

@@ -31,11 +31,13 @@ html[data-theme="default"] {
   
   --status-danger: #ef4444;
   --status-danger-hover: #ff6b6b;
-  --status-danger-bg: rgba(122, 0, 0, 0.25);
+  --danger-deep: #7a0000; /* deep red: base of --status-danger-bg, blocked T10 nodes */
+  --status-danger-bg: color-mix(in srgb, var(--danger-deep) 25%, transparent);
   --status-danger-text: #fca5a5;
 
   --status-success: #22c55e;
-  --status-success-bg: rgba(20, 83, 45, 0.35);
+  --success-deep: #14532d; /* deep green: base of --status-success-bg */
+  --status-success-bg: color-mix(in srgb, var(--success-deep) 35%, transparent);
   --status-success-text: #86efac;
 
   --brand-discord: #5865F2;
@@ -74,6 +76,32 @@ html[data-theme="default"] {
   --shade-70: rgba(0, 0, 0, 0.7);
   --shade-80: rgba(0, 0, 0, 0.8);
   --shade-95: rgba(0, 0, 0, 0.95);
+
+  /* Plain white (text on dark or coloured surfaces, a few outlines) */
+  --white: #ffffff;
+
+  /* Kingdom War red (KW badges, KW pool, crown chests; the Discord bot uses it too) */
+  --war-red: #8f0000;
+
+  /* Green "submit / go" buttons (Submit Plan, copied) */
+  --button-go: #166534;
+  --button-go-hover: #15803d;
+  --button-go-text: #f0fdf4;
+
+  /* Alliance ladder: the 3rd-rank row (muted like the gold and slate rows) */
+  --ladder-bronze: #b45309;
+
+  /* Guide card phase icons */
+  --phase-tech: #9966cc;
+  --phase-raven: #468cc8;
+  --phase-heroes: #c85050;
+  --phase-build: #50b464;
+  --phase-train: #d2a03c;
+
+  /* Map resource chips (game colours) */
+  --resource-grain: #e07a12;
+  --resource-timber: #4a2411;
+  --resource-herbs: #059669;
 
   /* Reward chest tiers (gold chests use --accent-color). Game colours, not alliance colours:
      they only happen to match the MIA / BOTS fallback colours. */
