@@ -1,7 +1,7 @@
 // api/verify.js (Vercel Serverless Function)
 import { createSessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
-import { findOfficerRole } from './_officer_roles.js';
+import { findAllianceTag, findOfficerRole } from './_officer_roles.js';
 import { gistJson, isGistConfigured, readGist } from './_gist.js';
 
 export default async function handler(req, res) {
@@ -107,13 +107,43 @@ export default async function handler(req, res) {
     const excludeList = ['R5', 'R4', 'BOTS', 'MEMBER', 'MEMBER_ROLE_ID'];
 
     for (const [envKey, envValue] of Object.entries(process.env)) {
-      if (envKey.startsWith('DISCORD_') && userRoles.includes(envValue)) {
+      // Trimmed: a value pasted into Vercel with a stray space or line break still matches.
+      if (envKey.startsWith('DISCORD_') && userRoles.includes(String(envValue).trim())) {
         const identifier = envKey.replace('DISCORD_', '');
         if (!excludeList.includes(identifier)) {
           allianceName = identifier;
           break;
         }
       }
+    }
+
+    // The registered alliances (map-state.json), read once and only when needed below.
+    let alliances = null;
+    const loadAlliances = async () => {
+      if (alliances) return alliances;
+      alliances = {};
+      if (isGistConfigured()) {
+        try {
+          alliances =
+            gistJson(await readGist({ timeoutMs: 2500 }), 'map-state.json').alliances || {};
+        } catch (err) {
+          console.warn('Alliance list unavailable:', err.message);
+        }
+      }
+      return alliances;
+    };
+
+    // No alliance role set up in the environment: find it like the bot does, by role name
+    // in the NAP server (or a "[TAG]" nickname).
+    if (allianceName === 'Independent') {
+      allianceName =
+        (await findAllianceTag({
+          guildId: GUILD_ID,
+          roleIds: userRoles,
+          nickname: guildData.nick,
+          alliances: await loadAlliances(),
+          botToken: DISCORD_BOT_TOKEN,
+        })) || 'Independent';
     }
 
     // 4. Evaluate Tiers (Specific Ranks)
@@ -126,18 +156,13 @@ export default async function handler(req, res) {
     // Officers: an alliance can name its own officer roles with /registerbot (held in the
     // alliance's own Discord server). The bot treats them like R4, so the site does too.
     let officerRole = null;
-    if (accessLevel === 'member' && allianceName !== 'Independent' && isGistConfigured()) {
-      try {
-        const alliances = gistJson(await readGist({ timeoutMs: 2500 }), 'map-state.json').alliances;
-        officerRole = await findOfficerRole({
-          uid: discordUserId,
-          alliance: allianceName,
-          alliances,
-          botToken: DISCORD_BOT_TOKEN,
-        });
-      } catch (err) {
-        console.warn('Officer role check skipped:', err.message); // stays a Member
-      }
+    if (accessLevel === 'member' && allianceName !== 'Independent') {
+      officerRole = await findOfficerRole({
+        uid: discordUserId,
+        alliance: allianceName,
+        alliances: await loadAlliances(),
+        botToken: DISCORD_BOT_TOKEN,
+      }); // null when Discord doesn't answer: stays a Member
       if (officerRole) accessLevel = 'R4';
     }
 
