@@ -1,6 +1,8 @@
 // api/verify.js (Vercel Serverless Function)
 import { createSessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
+import { findOfficerRole } from './_officer_roles.js';
+import { gistJson, isGistConfigured, readGist } from './_gist.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -77,8 +79,18 @@ export default async function handler(req, res) {
       },
     );
 
+    const avatarFor = (hash) =>
+      hash
+        ? `https://cdn.discordapp.com/avatars/${discordUserId}/${hash}.png`
+        : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(discordUserId) % 5n)}.png`;
+
     if (guildReq.status === 404) {
-      return res.status(200).json({ role: 'public', username, message: 'Not in alliance server.' });
+      return res.status(200).json({
+        role: 'public',
+        username,
+        avatar: avatarFor(userData.avatar),
+        message: 'Not in alliance server.',
+      });
     }
     if (!guildReq.ok) throw new Error('Failed to fetch guild roles');
 
@@ -88,13 +100,11 @@ export default async function handler(req, res) {
     // PRIORITY: Server Nickname, then global username
     const displayName = guildData.nick || username;
     const avatarHash = guildData.user?.avatar || userData.avatar;
-    const avatarUrl = avatarHash
-      ? `https://cdn.discordapp.com/avatars/${discordUserId}/${avatarHash}.png`
-      : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(discordUserId) % 5n)}.png`;
+    const avatarUrl = avatarFor(avatarHash);
 
     // --- DYNAMIC ALLIANCE SCANNER ---
     let allianceName = 'Independent';
-    const excludeList = ['R5', 'R4', 'BOTS', 'MEMBER'];
+    const excludeList = ['R5', 'R4', 'BOTS', 'MEMBER', 'MEMBER_ROLE_ID'];
 
     for (const [envKey, envValue] of Object.entries(process.env)) {
       if (envKey.startsWith('DISCORD_') && userRoles.includes(envValue)) {
@@ -113,6 +123,24 @@ export default async function handler(req, res) {
     else if (MEMBER_ROLE_ID && userRoles.includes(MEMBER_ROLE_ID)) accessLevel = 'member';
     else if (!MEMBER_ROLE_ID && userRoles.length > 0) accessLevel = 'member';
 
+    // Officers: an alliance can name its own officer roles with /registerbot (held in the
+    // alliance's own Discord server). The bot treats them like R4, so the site does too.
+    let officerRole = null;
+    if (accessLevel === 'member' && allianceName !== 'Independent' && isGistConfigured()) {
+      try {
+        const alliances = gistJson(await readGist({ timeoutMs: 2500 }), 'map-state.json').alliances;
+        officerRole = await findOfficerRole({
+          uid: discordUserId,
+          alliance: allianceName,
+          alliances,
+          botToken: DISCORD_BOT_TOKEN,
+        });
+      } catch (err) {
+        console.warn('Officer role check skipped:', err.message); // stays a Member
+      }
+      if (officerRole) accessLevel = 'R4';
+    }
+
     // A signed login pass, so the server can check who is sending a proposal (the role and
     // name above are only for the page's display; the browser could edit those).
     const passSecret = process.env.DISCORD_BOT_TOKEN || DISCORD_BOT_TOKEN;
@@ -130,6 +158,7 @@ export default async function handler(req, res) {
       avatar: avatarUrl,
       alliance: allianceName,
       steward: isSteward(discordUserId),
+      officer: officerRole ? officerRole : undefined,
       session,
     });
   } catch (error) {

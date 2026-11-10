@@ -256,3 +256,225 @@ footer {
   transition: opacity 0.3s ease, visibility 0s linear 0s;
 }
 
+
+/* --- Header tools: language switcher + sign-in pill (js/identity-pill.js) ---
+   The pill hangs under the language button, outside the layout, so the header (title,
+   lantern) sits exactly where it did and doesn't move with the length of a name. */
+.header-tools {
+  position: relative;
+  z-index: 9999;
+}
+.id-pill-wrap {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+}
+/* Hidden until the script has filled it in, so "Sign In" doesn't flash for signed-in visitors */
+.id-pill-wrap:not([data-ready]) {
+  visibility: hidden;
+}
+.id-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 15rem;
+  padding: 3px 8px 3px 3px;
+  white-space: nowrap;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--nav-bg) 85%, transparent);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.id-pill:hover,
+.id-pill-wrap.is-open .id-pill {
+  border-color: var(--accent-color);
+}
+.id-pill:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+.id-pill:disabled {
+  cursor: progress;
+  opacity: 0.8;
+}
+.id-pill-wrap[data-tier="signed-out"] .id-pill {
+  padding: 4px 10px;
+}
+.id-discord-icon {
+  color: var(--brand-discord);
+  flex-shrink: 0;
+}
+.id-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--surface-dark);
+}
+.id-avatar--large {
+  width: 40px;
+  height: 40px;
+}
+
+/* Rank badges: gold Steward, amber R5, slate R4, muted Member/Guest, red when expired */
+.id-badge {
+  --badge: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  padding: 1px 7px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--badge);
+  background: color-mix(in srgb, var(--badge) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--badge) 45%, transparent);
+  border-radius: 999px;
+}
+.id-badge-icon {
+  font-size: 0.75rem;
+}
+.id-badge--steward { --badge: var(--gold); }
+.id-badge--r5 { --badge: var(--status-warning); }
+.id-badge--r4 { --badge: var(--badge-slate-text); }
+.id-badge--expired { --badge: var(--status-danger-text); }
+
+/* The card that opens under the pill */
+.id-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 18rem;
+  max-width: calc(100vw - 32px);
+  padding: 14px;
+  text-align: left;
+  color: var(--text-main);
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 10px 24px var(--shade-60);
+}
+.id-pop[hidden] {
+  display: none;
+}
+.id-pop-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.id-pop-who {
+  min-width: 0;
+}
+.id-pop-name {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.id-pop-alliance {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.id-pop-badges {
+  margin-top: 10px;
+}
+.id-pop-title {
+  margin-top: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+}
+.id-pop-access {
+  margin: 6px 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+.id-pop-access li + li {
+  margin-top: 3px;
+}
+.id-pop-access li.is-warning {
+  color: var(--status-danger-text);
+}
+.id-pop-foot {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+.id-pop-expiry {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.id-pop-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.id-btn {
+  flex: 1;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.id-btn:hover {
+  background: var(--overlay-12);
+}
+.id-btn--primary {
+  color: var(--white);
+  background: var(--brand-discord);
+  border-color: var(--brand-discord);
+}
+.id-btn--primary:hover {
+  background: var(--brand-discord-hover);
+}
+
+/* Phones: the collapsed pill shows only the avatar and the rank icon (the full badge is
+   in the card), and the card spans the screen under the header */
+@media (max-width: 767px) {
+  .id-pill .id-badge-text {
+    display: none;
+  }
+  .id-pill .id-badge {
+    padding: 1px 5px;
+  }
+  /* Lift the language button (and nudge it off the screen edge) so the pill under it stays
+     well inside the 90px header */
+  .header-tools {
+    top: -14px;
+    left: -8px; /* not a transform: that would trap the card (position: fixed) inside it */
+  }
+  .id-pill-wrap {
+    top: calc(100% + 5px);
+  }
+  .id-pill {
+    font-size: 0.75rem;
+    padding: 2px 3px 2px 2px;
+  }
+  .id-pill-wrap[data-tier="signed-out"] .id-pill {
+    padding: 2px 8px;
+  }
+  .id-pill .id-avatar {
+    width: 20px;
+    height: 20px;
+  }
+  .id-pop {
+    position: fixed;
+    top: calc(92px + env(safe-area-inset-top));
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-width: none;
+  }
+}

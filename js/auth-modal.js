@@ -276,6 +276,7 @@ export async function submitProposalWithAuth({
       if (res.status === 401 && resData.code === 'login_required') {
         // The pass is missing, expired or no longer valid: log in again, then resume.
         localStorage.removeItem('auth-session');
+        window.renderIdentityPill?.(); // header pill now shows "Expired"
         showLogin(resData.error);
         return;
       }

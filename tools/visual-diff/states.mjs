@@ -11,6 +11,20 @@ export const LEADER = {
   'auth-avatar': '/images/favicon.png',
 };
 
+/** Logged-in R5 with a login pass that has 30 days left at run.mjs's fixed clock (FIXED_TIME). */
+const loginPass = (payload) =>
+  Buffer.from(JSON.stringify({ kind: 'session', ...payload })).toString('base64url') + '.sig';
+export const SIGNED_IN = {
+  ...LEADER,
+  'auth-session': loginPass({
+    uid: '1',
+    name: 'Visual Test',
+    role: 'R5',
+    exp: Date.parse('2026-12-10T12:00:00Z'),
+  }),
+  'auth-steward': 'false',
+};
+
 const click = (selector) => async (page) => {
   await page.evaluate((s) => document.querySelector(s)?.click(), selector);
 };
@@ -44,6 +58,13 @@ const defensePreview = (week) => async (page) => {
 export const STATES = [
   { name: 'default' },
   { name: 'leader', storage: LEADER },
+  // The account card under the header's sign-in pill (one page is enough: same header everywhere)
+  {
+    name: 'account-card',
+    needs: '.alliance-wrapper',
+    storage: SIGNED_IN,
+    run: click('#identity-pill .id-pill'),
+  },
   {
     name: 'lang-menu',
     needs: '.lang-dropdown',

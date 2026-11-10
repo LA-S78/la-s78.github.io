@@ -62,6 +62,14 @@
       return;
     }
 
+    // Discord sends ?error=... instead of a code when the login is cancelled or refused.
+    if (urlParams.get('error') && localStorage.getItem('auth-return-path')) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      window.renderIdentityPill?.({ error: true });
+      returnAfterLogin();
+      return;
+    }
+
     const cachedRole = localStorage.getItem('auth-role') || 'public';
     const cachedUser = localStorage.getItem('auth-username');
     const cachedAvatar = localStorage.getItem('auth-avatar');
@@ -73,6 +81,7 @@
   async function processOAuthCallback(code) {
     const loginBtn = document.getElementById('discord-login-btn');
     if (loginBtn) loginBtn.textContent = 'Decrypting Intel...';
+    window.renderIdentityPill?.({ busy: true });
 
     try {
       const response = await fetch('/api/verify', {
@@ -88,28 +97,22 @@
 
       const data = await response.json();
 
-      localStorage.setItem('auth-role', data.role);
-      localStorage.setItem('auth-username', data.username);
-      localStorage.setItem('auth-avatar', data.avatar);
-      localStorage.setItem('auth-alliance', data.alliance);
+      // Missing values are removed, not stored as the text "undefined".
+      const keep = (key, value) =>
+        value ? localStorage.setItem(key, value) : localStorage.removeItem(key);
+      keep('auth-role', data.role);
+      keep('auth-username', data.username);
+      keep('auth-avatar', data.avatar);
+      keep('auth-alliance', data.alliance);
+      // Officer role from the alliance's own server (counts as R4; see api/_officer_roles.js).
+      keep('auth-officer', data.officer);
       // Signed login pass for sending proposals (only given to members of the Discord server).
       if (data.session) localStorage.setItem('auth-session', data.session);
       else localStorage.removeItem('auth-session');
       localStorage.setItem('auth-steward', data.steward ? 'true' : 'false');
 
       applyAuthUIState(data.role, data.username, data.avatar, data.alliance);
-
-      const returnPath = localStorage.getItem('auth-return-path');
-      if (
-        returnPath &&
-        returnPath !== '/' &&
-        returnPath !== '/index.html' &&
-        returnPath !== window.location.pathname
-      ) {
-        localStorage.removeItem('auth-return-path');
-        if (window.Turbo) window.Turbo.visit(returnPath, { action: 'replace' });
-        else window.location.replace(returnPath);
-      }
+      returnAfterLogin();
     } catch (error) {
       console.error('Auth Error:', error);
       const errorBanner = document.getElementById('gate-error');
@@ -118,6 +121,22 @@
         errorBanner.style.display = 'block';
       }
       if (loginBtn) loginBtn.textContent = 'Log In via Discord';
+      window.renderIdentityPill?.({ error: true });
+    }
+  }
+
+  /** Goes back to the page the visitor was on before the Discord login. */
+  function returnAfterLogin() {
+    const returnPath = localStorage.getItem('auth-return-path');
+    localStorage.removeItem('auth-return-path');
+    if (
+      returnPath &&
+      returnPath !== '/' &&
+      returnPath !== '/index.html' &&
+      returnPath !== window.location.pathname
+    ) {
+      if (window.Turbo) window.Turbo.visit(returnPath, { action: 'replace' });
+      else window.location.replace(returnPath);
     }
   }
 
@@ -161,6 +180,7 @@
 
     highlightAllianceRow('nap-alliance-table');
     highlightAllianceRow('nap-ranks-table');
+    window.renderIdentityPill?.();
   }
 
   function highlightAllianceRow(tableId) {
@@ -184,9 +204,13 @@
     });
   }
 
-  window.triggerDiscordLogin = function () {
+  /**
+   * Sends the visitor to Discord to log in, then back to this page.
+   * quiet: skip Discord's "Authorize" screen if they already allowed the site (Refresh Access).
+   */
+  window.triggerDiscordLogin = function ({ quiet = false } = {}) {
     localStorage.setItem('auth-return-path', window.location.pathname + window.location.hash);
-    const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify`;
+    const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify${quiet ? '&prompt=none' : ''}`;
     window.location.href = discordAuthUrl;
   };
 
@@ -197,6 +221,7 @@
     localStorage.removeItem('auth-alliance');
     localStorage.removeItem('auth-session');
     localStorage.removeItem('auth-steward');
+    localStorage.removeItem('auth-officer');
     window.location.reload();
   };
 

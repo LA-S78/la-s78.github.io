@@ -30,7 +30,10 @@
             <div class="subtitle" id="ui-subtitle">{{ header_subtitle }}</div>
         </div>
 
-        {% include structure/language-switcher.html %}
+        <div class="header-tools">
+            {% include structure/language-switcher.html %}
+            {% include structure/identity-pill.html %}
+        </div>
 
     </div>
     <div class="lantern-flicker-layer"></div>
