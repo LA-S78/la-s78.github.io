@@ -1,0 +1,565 @@
+// api/_bot_rewards.js
+// Rewards: /nominate, /rewards and the Kingdom War Won/Lost buttons (see api/_reward_period.js).
+// Split out of api/interactions.js unchanged.
+
+import { InteractionResponseType } from 'discord-interactions';
+import {
+  NOT_HANDLED,
+  getGistData,
+  resolveActorName,
+  resolveUserId,
+  sendEphemeralMessage,
+  unix,
+} from './_bot_common.js';
+import { resolveMemberAllianceContext } from './_bot_roles.js';
+import { DEFAULT_CALENDAR_CONFIG, weekLabel } from './_calendar_helper.js';
+import { writeGist } from './_gist.js';
+import { chestCounts } from './_nomination_assign.js';
+import { reassignAllNominations } from './_nominations.js';
+import {
+  describeRewardPeriod,
+  getRewardPeriod,
+  recordKingdomWarResult,
+  syncRewardPeriod,
+} from './_reward_period.js';
+import { getAllianceNominationQuota, quotaIfWon } from './_rewards_helper.js';
+import { isSteward } from './_stewards.js';
+import { createToken } from './_tokens.js';
+
+/** --- /nominate COMMAND (DYNAMIC QUOTA & BUYOUT INTERCEPTOR) --- */
+export async function handleNominateCommand(ctx) {
+  const { res, name, resolvedHost, t, guildId, member, userId, botToken } = ctx;
+  const ownerGuildId = (process.env.DISCORD_GUILD_ID_OWNER || '').trim();
+
+  if (!guildId || !member) {
+    return sendEphemeralMessage(
+      res,
+      '⚠️ This command must be executed inside your alliance Discord server or the NAP server.',
+    );
+  }
+
+  if (ownerGuildId && guildId === ownerGuildId && !isSteward(userId)) {
+    return sendEphemeralMessage(
+      res,
+      '⛔ **Access Denied:** Reward nominations cannot be submitted from this server. Leaders must submit via the NAP server or their alliance server.',
+    );
+  }
+
+  try {
+    const gistData = await getGistData();
+    const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+    const alliances = mapState.alliances || {};
+    const knownAlliances = Object.keys(alliances);
+
+    const {
+      detectedTag: matchedAllianceTag,
+      isDedicatedServer,
+      isR5,
+      allowedRoles,
+      hasDelegatedLeadership,
+    } = await resolveMemberAllianceContext({
+      guildId,
+      member,
+      alliances,
+      botToken,
+    });
+
+    // Authorization Check: Dedicated Server vs. Shared NAP Server
+    if (isDedicatedServer) {
+      if (!hasDelegatedLeadership && !isSteward(userId)) {
+        return sendEphemeralMessage(
+          res,
+          `⛔ **Access Denied:** Only members holding **@R5** or authorized leadership roles (${allowedRoles.map((r) => '@' + r).join(', ')}) can submit nominations for **[${matchedAllianceTag}]**.`,
+        );
+      }
+    } else {
+      if (!isR5 && !isSteward(userId)) {
+        return sendEphemeralMessage(
+          res,
+          '⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can submit reward nominations.',
+        );
+      }
+      if (!matchedAllianceTag) {
+        return sendEphemeralMessage(
+          res,
+          `⚠️ Could not detect your alliance tag role. Make sure you have your alliance role (e.g. \`@${knownAlliances[0] || 'TAG'}\`) assigned.`,
+        );
+      }
+    }
+
+    const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+    const calRaw = gistData.files?.['calendar-state.json']?.content;
+    const calConfig = calRaw
+      ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
+      : DEFAULT_CALENDAR_CONFIG;
+
+    // 0. The reward period (api/_reward_period.js): Friday 20:00 GT to Wednesday 00:00 GT
+    const period = getRewardPeriod(Date.now(), calConfig);
+    if (!period.open) {
+      return sendEphemeralMessage(
+        res,
+        `🔒 **Rewards are closed.** The ${period.weekName} rewards expired <t:${unix(period.closesAt)}:R>.\nThe next rewards open <t:${unix(period.nextOpensAt)}:F>, after Friday's capitol event.`,
+      );
+    }
+
+    // A new period: move the schedule on and clear last week's nominations. After the
+    // battle, ask leadership once for the Kingdom War result.
+    const synced = syncRewardPeriod(rewardsData, mapState, period);
+    const newPeriod = synced.changed;
+    const askForResult =
+      period.kwWeek &&
+      period.battleOver &&
+      rewardsData.period.result === 'pending' &&
+      !rewardsData.period.prompted;
+    if (askForResult) rewardsData.period.prompted = true;
+    if (newPeriod || askForResult) {
+      // If this can't be saved, stop: never hand out a nomination link for a period that
+      // didn't persist (DECISIONS.md, "Data storage").
+      try {
+        await writeGist(
+          {
+            ...(synced.clearNominations ? { 'rewards-nominations.json': {} } : {}),
+            'rewards-data.json': rewardsData,
+          },
+          { description: `Reward period ${period.id} (${period.weekName})` },
+        );
+      } catch (err) {
+        console.error('Reward period could not be saved:', err);
+        return sendEphemeralMessage(
+          res,
+          '⚠️ Service busy: could not open the new reward period. Please retry /nominate in a few seconds.',
+        );
+      }
+    }
+    if (askForResult) await postKingdomWarResultPrompt(rewardsData.period, botToken);
+
+    // 1. The alliance's chests now, and after a win
+    const quotaData = getAllianceNominationQuota(matchedAllianceTag, rewardsData, mapState);
+    const rank = quotaData.rank;
+
+    if (isNaN(rank) || rank > 50) {
+      return sendEphemeralMessage(
+        res,
+        `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned in the standings.`,
+      );
+    }
+
+    const chestsNow = chestCounts(quotaData, quotaData.isKW);
+    const chestsIfWon = chestCounts(quotaIfWon(matchedAllianceTag, rewardsData, mapState), true);
+    if (countChests(chestsNow) === 0) {
+      return sendEphemeralMessage(
+        res,
+        `⚠️ **[${matchedAllianceTag}]** has 0 chests allocated under the current distribution.`,
+      );
+    }
+
+    // 2. A private link for this period (the page reads the chests live, so it stays right
+    // when the result is recorded)
+    const token = createToken(
+      {
+        action: 'nominate', // /api/nominate only accepts links made for nominating
+        alliance: matchedAllianceTag,
+        rank,
+        period: period.id,
+        exp: Math.min(Date.now() + 24 * 60 * 60 * 1000, period.closesAt),
+      },
+      botToken,
+    );
+    const nominateUrl = `https://${resolvedHost}/nominate.html?token=${token}`;
+
+    // 3. The message
+    const set1 = chestsNow.standard;
+    const set2 = chestsIfWon.kingdom_war;
+    const result = rewardsData.period?.result;
+    const set2Text = !period.kwWeek
+      ? 'No Kingdom War this week.'
+      : result === 'won'
+        ? `⚔️ **Won.** Honor Vanguard ×${set2.commanders_will} · Fearless Hero ×${set2.loyal_servant} · Logistics Support ×${set2.followers_heart}`
+        : result === 'lost'
+          ? 'Not this week: the Kingdom War was lost.'
+          : `⏳ **Waiting for the battle result** (about <t:${unix(period.battleEndsAt)}:t>). If won: Honor Vanguard ×${set2.commanders_will} · Fearless Hero ×${set2.loyal_servant} · Logistics Support ×${set2.followers_heart}`;
+
+    const fields = [
+      {
+        name: "👑 King's Commendation",
+        value: `Commander's Will ×${set1.commanders_will} · Loyal Servant ×${set1.loyal_servant} · Follower's Heart ×${set1.followers_heart}`,
+        inline: false,
+      },
+      { name: '⚔️ King of Battle Reward', value: set2Text, inline: false },
+    ];
+
+    if (quotaData.hasBuyoutBonus) {
+      fields.push({
+        name: '🛡️ Wartime Buyout Restitution Active',
+        value: `Includes **+1 Commander's Will** (and **+1 Honor Vanguard** if the war is won), funded by WLO for this week's defense override (Threat: \`${quotaData.buyoutDetails?.threat || 'Red List'}\`).`,
+        inline: false,
+      });
+    } else if (quotaData.isWloDeducted) {
+      fields.push({
+        name: '⚖️ Wartime Buyout Restitution Funded',
+        value: `WLO yields **1 Commander's Will** (and **1 Honor Vanguard** if the war is won) from this week's Rank #1 allotment to fund the displaced alliance's restitution.`,
+        inline: false,
+      });
+    }
+
+    fields.push({
+      name: '📝 How it works',
+      value:
+        'List your players **best first**. Chests go down the list in order of value across both sets; extra names are kept as reserves and move up if more chests open.' +
+        (period.kwWeek && result === 'pending'
+          ? "\n⏳ The King hands out after the battle result, so nobody's chest changes."
+          : ''),
+      inline: false,
+    });
+
+    return res.status(200).json({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        embeds: [
+          {
+            title: `🎁 ${period.weekName} Rewards — [${matchedAllianceTag}]`,
+            color: quotaData.hasBuyoutBonus ? 0xef4444 : result === 'won' ? 0x8f0000 : 0xb8975a,
+            description: `Rank #${rank} · open until <t:${unix(period.closesAt)}:F> (<t:${unix(period.closesAt)}:R>).`,
+            fields,
+            footer: { text: 'Link is private and expires in 24 hours.' },
+          },
+        ],
+        components: [
+          {
+            type: 1,
+            components: [{ type: 2, style: 5, label: 'Open Nomination Page', url: nominateUrl }],
+          },
+        ],
+        flags: 64,
+      },
+    });
+  } catch (err) {
+    console.error('Nominate error:', err);
+    return sendEphemeralMessage(
+      res,
+      `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`,
+    );
+  }
+  return NOT_HANDLED;
+}
+
+/** --- /rewards COMMAND --- */
+export async function handleRewardsCommand(ctx) {
+  const { res, interaction, name, options, resolvedHost, t, userId } = ctx;
+  const username = resolveActorName(interaction, 'Leadership');
+  const action = options?.find((opt) => opt.name === 'action')?.value;
+
+  // Stewards: record the Kingdom War result (re-sorts every alliance's list)
+  if (action === 'won' || action === 'lost') {
+    if (!isSteward(userId)) {
+      return sendEphemeralMessage(
+        res,
+        '⛔ **Access Denied:** Only designated Kingdom Stewards can record the Kingdom War result.',
+      );
+    }
+    const outcome = await saveKingdomWarResult(action, username);
+    if (outcome.error) return sendEphemeralMessage(res, `⚠️ ${outcome.error}`);
+    return res.status(200).json({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: kingdomWarResultMessage(outcome),
+    });
+  }
+
+  try {
+    const gistData = await getGistData();
+    const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+    const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+    let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+    const calRaw = gistData.files?.['calendar-state.json']?.content;
+    const calConfig = calRaw
+      ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
+      : DEFAULT_CALENDAR_CONFIG;
+    const period = getRewardPeriod(Date.now(), calConfig);
+
+    // Stewards: clear this period's nominations (the result stays)
+    if (action === 'reset') {
+      if (!isSteward(userId)) {
+        return sendEphemeralMessage(
+          res,
+          '⛔ **Access Denied:** Only designated Kingdom Stewards can clear nominations.',
+        );
+      }
+      if (!period.open) {
+        return sendEphemeralMessage(
+          res,
+          '🔒 No reward period is open, so there is nothing to clear.',
+        );
+      }
+      syncRewardPeriod(rewardsData, mapState, period, username);
+      rewardsData.lastReset = new Date().toISOString(); // a fresh checklist for the King
+      await writeGist(
+        { 'rewards-nominations.json': {}, 'rewards-data.json': rewardsData },
+        { description: `Nominations cleared (${period.weekName}) by ${username}` },
+      );
+      return res.status(200).json({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          embeds: [
+            {
+              title: `🔄 Nominations Cleared — ${period.weekName}`,
+              color: 0xb8975a,
+              description: `All alliances' lists for this week were cleared by **${username}**.\n\n• Leaders can send new lists with \`/nominate\`.\n• Rewards close <t:${unix(period.closesAt)}:F>.\n• Remind the King to hit **Reset Checklist** on the console.`,
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        },
+      });
+    }
+
+    // Status (read-only: a period nobody has used yet shows as just opened)
+    // (no stored period yet: data from before reward periods, still this week's)
+    const current = period.open && (!rewardsData.period || rewardsData.period.id === period.id);
+    const view = current ? rewardsData : { ...rewardsData, mode: 'standard' };
+    if (!current) nominations = {};
+    const result = describeRewardPeriod(period, rewardsData).result;
+
+    const roster = Object.entries(mapState.alliances || {})
+      .map(([tag, data]) => ({ tag, rank: parseInt(data.rank, 10) }))
+      .filter((a) => !isNaN(a.rank))
+      .map((a) => {
+        const quota = getAllianceNominationQuota(a.tag, view, mapState);
+        return { ...a, quota, total: countChests(chestCounts(quota, quota.isKW)) };
+      })
+      .filter((a) => a.total > 0)
+      .sort((a, b) => a.rank - b.rank);
+
+    if (roster.length === 0) {
+      return sendEphemeralMessage(
+        res,
+        '⚠️ No alliances are currently eligible under the active rewards plan.',
+      );
+    }
+
+    let submittedCount = 0;
+    const statusLines = roster.map((item) => {
+      const entry = nominations[item.tag];
+      const buyoutTag = item.quota.hasBuyoutBonus
+        ? ' 🛡️ [Buyout]'
+        : item.quota.isWloDeducted
+          ? ' ⚖️ [Funds buyout]'
+          : '';
+      if (!entry) {
+        return `⏳ **[${item.tag}]** (Rank #${item.rank})${buyoutTag} — **Awaiting list** (${item.total} chests)`;
+      }
+      submittedCount++;
+      const named = item.total - Number(entry.unfilled || 0);
+      const reserves = entry.reserves?.length ? ` · ${entry.reserves.length} reserve(s)` : '';
+      const submitUnix = Math.floor(new Date(entry.submittedAt).getTime() / 1000);
+      return `✅ **[${item.tag}]** (Rank #${item.rank})${buyoutTag} — **${named}/${item.total}** named${reserves} (<t:${submitUnix}:R>)`;
+    });
+
+    const header = !period.open
+      ? `🔒 **Closed.** The next rewards open <t:${unix(period.nextOpensAt)}:F>.`
+      : `🎁 **${period.weekName} rewards** · open until <t:${unix(period.closesAt)}:F>`;
+    const set2Line = !period.kwWeek
+      ? '⚔️ King of Battle Reward: no Kingdom War this week.'
+      : result === 'won'
+        ? '⚔️ King of Battle Reward: **won**, open.'
+        : result === 'lost'
+          ? '⚔️ King of Battle Reward: lost, not this week.'
+          : `⚔️ King of Battle Reward: ⏳ **waiting for the battle result** (about <t:${unix(period.battleEndsAt)}:t>). The King hands out after it.`;
+
+    const components = [
+      {
+        type: 1,
+        components: [
+          {
+            type: 2,
+            style: 5,
+            label: "Open King's Console",
+            url: `https://${resolvedHost}/distribute.html`,
+          },
+        ],
+      },
+    ];
+    if (period.open && period.kwWeek && isSteward(userId)) {
+      components.push(...kingdomWarResultButtons(period.id));
+    }
+
+    return res.status(200).json({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        embeds: [
+          {
+            title: `📋 Alliance Reward Status — ${period.weekName}`,
+            color:
+              result === 'won' ? 0x8f0000 : submittedCount === roster.length ? 0x22c55e : 0xb8975a,
+            description: `${header}\n${set2Line}\n\n**${submittedCount} of ${roster.length} alliances have sent a list**\n\n${statusLines.join('\n')}`,
+            footer: { text: 'Last Asylum Capitol Administration' },
+            timestamp: new Date().toISOString(),
+          },
+        ],
+        components,
+      },
+    });
+  } catch (err) {
+    console.error('Rewards status error:', err);
+    return sendEphemeralMessage(
+      res,
+      `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`,
+    );
+  }
+  return NOT_HANDLED;
+}
+
+/** 1B. KINGDOM WAR RESULT BUTTONS (Stewards): kw_result:<won|lost>:<period id> */
+export async function handleKingdomWarResultButton(ctx) {
+  const { res, interaction, custom_id } = ctx;
+  const userId = resolveUserId(interaction);
+  const username = resolveActorName(interaction, 'Steward');
+  if (!isSteward(userId)) {
+    return sendEphemeralMessage(
+      res,
+      '⛔ **Access Denied:** Only designated Kingdom Stewards can record the Kingdom War result.',
+    );
+  }
+  // The period id is a timestamp, which has colons of its own
+  const [, result, ...rest] = custom_id.split(':');
+  const periodId = rest.join(':');
+  const outcome = await saveKingdomWarResult(result, username, periodId);
+  if (outcome.error) return sendEphemeralMessage(res, `⚠️ ${outcome.error}`);
+  return res.status(200).json({
+    type: InteractionResponseType.UPDATE_MESSAGE,
+    data: kingdomWarResultMessage(outcome),
+  });
+  return NOT_HANDLED;
+}
+
+/** Buttons from before reward periods ("Confirm 2x / 1x"): the period now opens by itself. */
+export async function handleOldOutcomeButton(ctx) {
+  const { res } = ctx;
+  return sendEphemeralMessage(
+    res,
+    "ℹ️ This button is no longer used: rewards now open every Friday at 20:00 GT by themselves. Record the Kingdom War result with `/rewards` (Won or Lost) after Saturday's battle.",
+  );
+  return NOT_HANDLED;
+}
+
+/** Total chests in chestCounts() form. */
+export function countChests(counts) {
+  return Object.values(counts).reduce(
+    (n, pool) => n + pool.commanders_will + pool.loyal_servant + pool.followers_heart,
+    0,
+  );
+}
+
+/** Won / Lost buttons for a period's Kingdom War result. */
+export function kingdomWarResultButtons(periodId) {
+  return [
+    {
+      type: 1,
+      components: [
+        {
+          type: 2,
+          style: 3,
+          label: 'Won',
+          custom_id: `kw_result:won:${periodId}`,
+          emoji: { name: '⚔️' },
+        },
+        {
+          type: 2,
+          style: 4,
+          label: 'Lost',
+          custom_id: `kw_result:lost:${periodId}`,
+          emoji: { name: '🛡️' },
+        },
+      ],
+    },
+  ];
+}
+
+/**
+ * Asks NAP Leadership for the Kingdom War result (once per period, after the battle). A
+ * failure is only logged: a Steward can always record it with /rewards.
+ */
+export async function postKingdomWarResultPrompt(stored, botToken) {
+  const channelId =
+    process.env.DISCORD_CHANNEL_ID_NAP_LEADERSHIP || process.env.DISCORD_WEBHOOK_CHANNEL_ID;
+  if (!channelId || !botToken) return;
+  try {
+    await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
+      method: 'POST',
+      headers: { Authorization: `Bot ${botToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        embeds: [
+          {
+            title: `⚔️ Kingdom War Result — ${weekLabel(stored.week)}`,
+            color: 0xf59e0b,
+            description:
+              "Did we win Kingdom War (invasion rights and the battle)?\n\n• **Won** opens the **King of Battle Reward** chests on top of the King's Commendation.\n• **Lost** keeps this week to the King's Commendation.\n\nA Steward can change it until the rewards close. Alliances' lists are re-sorted automatically.",
+          },
+        ],
+        components: kingdomWarResultButtons(stored.id),
+      }),
+    });
+  } catch (err) {
+    console.warn('Kingdom War result prompt not sent:', err.message);
+  }
+}
+
+/**
+ * Records the Kingdom War result for the open period and re-sorts every alliance's list.
+ * periodId (from a button) must still be the open period. Returns { error } or the details.
+ */
+export async function saveKingdomWarResult(result, actor, periodId = null) {
+  try {
+    const gistData = await getGistData();
+    const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+    const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+    let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+    const calRaw = gistData.files?.['calendar-state.json']?.content;
+    const calConfig = calRaw
+      ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
+      : DEFAULT_CALENDAR_CONFIG;
+
+    const period = getRewardPeriod(Date.now(), calConfig);
+    if (periodId && periodId !== period.id) {
+      return { error: 'This button is for an earlier week; that result can no longer change.' };
+    }
+    if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominations = {};
+    const previous = rewardsData.period?.result || null;
+    const error = recordKingdomWarResult(rewardsData, period, result, actor);
+    if (error) return { error };
+    nominations = reassignAllNominations(nominations, rewardsData, mapState);
+
+    await writeGist(
+      { 'rewards-nominations.json': nominations, 'rewards-data.json': rewardsData },
+      { description: `Kingdom War ${result} (${period.weekName}) recorded by ${actor}` },
+    );
+    return { period, result, previous, actor, alliances: Object.keys(nominations).length };
+  } catch (err) {
+    console.error('Kingdom War result not saved:', err);
+    return { error: `Could not save the result: ${err.message}` };
+  }
+}
+
+/** The message after a result is recorded (keeps the buttons, so it can be corrected). */
+export function kingdomWarResultMessage({ period, result, previous, actor, alliances }) {
+  const won = result === 'won';
+  const changed = previous && previous !== 'pending' && previous !== result;
+  return {
+    embeds: [
+      {
+        title: `${won ? '⚔️ Kingdom War Won' : '🛡️ Kingdom War Lost'} — ${period.weekName}`,
+        color: won ? 0x22c55e : 0xb8975a,
+        description:
+          (won
+            ? "**King of Battle Reward** chests are open on top of the King's Commendation."
+            : "This week stays with the **King's Commendation** chests.") +
+          `\n\n• Recorded by **${actor}**${changed ? ` (changed from ${previous})` : ''}.` +
+          `\n• ${alliances} alliance list(s) re-sorted: the best players get the best chests.` +
+          `\n• Rewards close <t:${unix(period.closesAt)}:F>.` +
+          (changed
+            ? "\n\n⚠️ **Check with the King:** chests already handed out in the game can't be changed."
+            : ''),
+        timestamp: new Date().toISOString(),
+      },
+    ],
+    components: kingdomWarResultButtons(period.id),
+  };
+}

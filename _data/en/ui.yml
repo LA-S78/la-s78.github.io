@@ -9,10 +9,12 @@ footer:
   nav_rules: "Rules"
   nav_guides: "Guides"
   nav_alliance: "Alliance"
+  nav_calendar: "Calendar"
   aria_home: "Go to Home page"
   aria_rules: "Go to Server Rules page"
   aria_guides: "Go to Guides page"
   aria_alliance: "Go to Alliance and Diplomacy page"
+  aria_calendar: "Go to Event Calendar page"
 
 #guide page titles
 guides:
@@ -58,6 +60,12 @@ pages:
   api-test:
     title: "Top-Secret Alliance Intel"
     subtitle: "Top-Secret Alliance Intel"
+  #portal pages
+  calendar:
+    title: "Event Calendar"
+    subtitle: "Alliance & Server Events"
+  
+  #guide pages
   guide_panes:
     heroes:
       title: "Heroes & Builds"
@@ -176,3 +184,34 @@ pwa:
   toast_msg: "New intel acquired."
   update_btn: "Update"
   updating: "Decrypting..."
+
+#header sign-in pill (js/identity-pill.js)
+identity:
+  account: "Your account"
+  sign_in: "Sign In"
+  signing_in: "Signing in…"
+  sign_in_failed: "Sign-in failed, try again"
+  sign_in_again: "Sign In Again"
+  refresh: "Refresh Access"
+  sign_out: "Sign Out"
+  role_steward: "Steward"
+  role_r5: "R5"
+  role_r4: "R4"
+  role_officer: "Officer"
+  role_member: "Member"
+  role_guest: "Guest"
+  role_expired: "Expired"
+  alliance_label: "Alliance"
+  alliance_none: "none"
+  access_title: "Your access"
+  access_view: "View the live map, schedules and standings"
+  access_draft: "Draft plans in Planner Mode"
+  access_join: "Join the NAP Discord server for more access"
+  access_ask_leader: "Ask your R4 or R5 to send your plans as proposals"
+  access_send: "Send proposals for the map, standings, blacklist and rewards (5 a day)"
+  access_send_unlimited: "Send proposals with no daily limit"
+  access_approve: "Approve or reject proposals in Discord"
+  access_expired: "Your login has expired. Sign in again to send proposals."
+  expires_days: "Login expires in {n} days"
+  expires_one: "Login expires in 1 day"
+  expires_today: "Login expires today"

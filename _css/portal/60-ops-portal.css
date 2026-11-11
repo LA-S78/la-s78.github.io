@@ -1,0 +1,412 @@
+/* ==========================================================================
+   WAR ROOM OPERATIONS & CAPITOL ROTATION PORTAL (.ops-portal)
+   ========================================================================== */
+
+.ops-portal {
+  margin: 0.75rem auto 1.5rem auto;
+  max-width: 1000px;
+}
+
+.ops-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.ops-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ops-title {
+  margin: 0 !important;
+  font-family: var(--font-headers);
+  font-size: 1.15rem;
+  color: var(--accent-color);
+  letter-spacing: 0.5px;
+}
+
+.ops-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.ops-cycle-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 4-Week Overview Cards - 2x2 grid on mobile so it doesn't push down the page */
+.ops-schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px; /* reduced from 20px */
+}
+
+@media (max-width: 540px) {
+  .ops-schedule-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2x2 compact grid on phones */
+  }
+}
+
+.ops-week-card {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ops-week-card.is-active-week {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-color) 25%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-color) 8%, transparent) 0%, var(--surface-dark) 100%);
+}
+
+.ops-week-header {
+  display: flex;
+  flex-wrap: wrap; /* on narrow cards the ACTIVE badge goes below the label */
+  gap: 4px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ops-week-num {
+  font-family: var(--font-headers);
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--text-main);
+  text-transform: uppercase;
+  white-space: nowrap; /* "OFF-WEEK", "WEEK 1 FRI" stay on one line */
+}
+
+.ops-week-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ops-week-tag {
+  font-family: var(--font-headers);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.ops-week-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.ops-week-loot {
+  border-top: 1px dashed var(--overlay-8);
+  padding-top: 6px;
+  font-size: 0.72rem;
+  color: var(--accent-color);
+}
+
+/* Active Buyouts Tracker */
+.ops-buyout-section {
+  background: var(--surface-card);
+  border: 1px solid color-mix(in srgb, var(--status-danger) 40%, transparent);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.ops-buyout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ops-buyout-card {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ops-buyout-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.84rem;
+}
+
+.ops-installments-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--overlay-8);
+}
+
+.ops-installment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--overlay-3);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.76rem;
+}
+
+.ops-installment-item.is-fulfilled {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+/* Override Box - Resets top padding and title margins */
+.ops-override-box {
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 14px; /* compact padding */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Strip default browser h3 margin that caused the huge blank top space */
+.ops-section-title,
+.ops-section-header h3 {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-headers);
+  font-size: 1.05rem;
+  color: var(--accent-color);
+  line-height: 1.25;
+}
+
+.ops-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+}
+
+.ops-section-header .sub-text {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Form Controls Spacing */
+.ops-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.ops-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ops-form-group label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.ops-select,
+.ops-input {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ops-select:focus,
+.ops-input:focus {
+  border-color: var(--accent-color);
+}
+
+/* Mathematical Preview Banners */
+.ops-preview-banner {
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.preview-type-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--status-success) 15%, transparent);
+  border: 1px solid var(--status-success);
+  color: var(--status-success-text);
+  margin-bottom: 8px;
+}
+
+.preview-type-badge.alert {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger);
+  color: var(--status-danger-text);
+}
+
+.preview-swap-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 6px 0;
+  font-size: 0.88rem;
+}
+
+.swap-arrow {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.preview-perks {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--overlay-8);
+  padding-top: 6px;
+}
+
+/* Step 1 (swap) and Step 2 (buyout) previews: an edge tinted like their badge */
+.preview-stepped-swap,
+.preview-stepped-buyout {
+  border-left: 3px solid var(--status-success);
+  padding-left: 10px;
+}
+
+.preview-stepped-buyout {
+  border-left-color: var(--status-danger);
+}
+
+.preview-stepped-swap p,
+.preview-stepped-buyout p {
+  margin: 0 0 6px;
+}
+
+.preview-installment-plan {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--status-danger) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--status-danger) 25%, transparent);
+}
+
+.preview-installment-plan .p-item {
+  font-size: 0.8rem;
+}
+
+/* "WLO is already scheduled" and similar notices */
+.preview-notice {
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.preview-notice.warning {
+  border-color: var(--status-warning);
+  background: color-mix(in srgb, var(--status-warning) 12%, transparent);
+  color: var(--status-warning-text);
+}
+
+.ops-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.ops-disclaimer {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.btn-submit-override {
+  background: var(--brand-discord);
+  border: 1px solid var(--brand-discord);
+  color: var(--white);
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--brand-discord) 35%, transparent);
+}
+
+.btn-submit-override:hover:not(:disabled) {
+  background: var(--brand-discord-hover);
+  transform: translateY(-1px);
+}
+
+.btn-submit-override:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* end */
+
+@media (max-width: 768px) {
+  .cal-hero-header {
+    flex-direction: column;
+  }
+  .cal-capitol-card {
+    text-align: left;
+    width: 100%;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-col-full {
+    grid-column: span 1;
+  }
+  .cal-filter-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .timeline-event-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .event-actions-group {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+  .event-time-block {
+    text-align: left;
+  }
+}

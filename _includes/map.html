@@ -1,17 +1,24 @@
 <div id="map-container">
   <!-- Map Bar Controls -->
   <div class="map-controls">
-    <!-- Left: View Modes -->
+    <!-- Left: View Modes (Levels, Alliances, Resources) -->
     <div class="control-group left">
       <span class="control-label">View:</span>
       <div class="segmented-control">
         <button id="btn-mode-level" class="toggle-btn active" data-mode="level">Levels</button>
         <button id="btn-mode-alliance" class="toggle-btn" data-mode="alliance">Alliances</button>
+        <button id="btn-mode-resource" class="toggle-btn" data-mode="resource">Resources</button>
       </div>
     </div>
 
     <!-- Right: Planner Mode & Submission -->
     <div class="control-group right">
+      <!-- Buff Summary Drawer Toggle -->
+      <button id="btn-toggle-buffs" class="draft-btn" type="button" aria-label="Toggle Buff Summary" aria-pressed="false">
+        <span class="buffs-icon">⚖️</span>
+        <span class="buffs-label">Buff Summary</span>
+      </button>
+
       <button id="btn-toggle-draft" class="draft-btn" aria-pressed="false">
         <span class="draft-indicator"></span>
         <span class="draft-text">Planner Mode</span>
@@ -40,7 +47,21 @@
     </div>
   </div>
 
-  <!-- 1. Scout Hover Tooltip -->
+  <!-- Resource Map Legend Strip (Compact Key: Resources Only) -->
+  <div id="resource-map-legend" class="resource-legend hidden" aria-hidden="true">
+    <div class="legend-group">
+      <span class="legend-chip"><span class="chip-color chip-grain"></span> 🌾 Grain</span>
+      <span class="legend-chip"><span class="chip-color chip-timber"></span> 🪵 Timber</span>
+      <span class="legend-chip"><span class="chip-color chip-herbs"></span> 🌿 Herbs</span>
+    </div>
+    <div class="legend-divider">|</div>
+    <div class="legend-group">
+      <span class="legend-chip"><span class="chip-pattern chip-solid"></span> Solid: Gather</span>
+      <span class="legend-chip"><span class="chip-pattern chip-striped"></span> Stripe: Output</span>
+    </div>
+  </div>
+
+  <!-- Scout Hover Tooltip -->
   <div id="map-tooltip"></div>
 
   <div class="game-map">
@@ -59,13 +80,35 @@
       <span class="info-item"><strong>Buff:</strong> <span id="city-buff">None</span></span>
     </div>
   </div>
+
+  <!-- Buff Equity Drawer -->
+  <div id="buff-equity-drawer" class="buff-drawer hidden" aria-hidden="true">
+    <div class="buff-drawer-header">
+      <div class="drawer-title">
+        <span class="drawer-icon">⚖️</span>
+        <h3>Alliance Buff Distribution</h3>
+      </div>
+      <button id="btn-close-buffs" class="drawer-close-btn" type="button" aria-label="Close Buff Summary">&times;</button>
+    </div>
+    <div class="buff-drawer-subtitle">
+      <span>Dynamic tally based on active map / planner assignments</span>
+    </div>
+    <div id="buff-drawer-content" class="buff-drawer-content">
+      <!-- Populated dynamically via map.js -->
+    </div>
+  </div>
 </div>
 
 <script id="map-data" type="application/json">
   {{ site.data.map_state | jsonify }}
 </script>
+<script id="city-data" type="application/json">
+  {{ site.data.cities | jsonify }}
+</script>
 <script>
-  const dataElement = document.getElementById('map-data');
-  window.MAP_STATE = JSON.parse(dataElement.textContent);
+  // No top-level const/let here: Turbo runs this again on every visit to the page, and a
+  // second declaration of the same name would throw.
+  window.MAP_STATE = JSON.parse(document.getElementById('map-data').textContent || '{}');
+  window.CITY_CATALOG = JSON.parse(document.getElementById('city-data').textContent || '{}');
 </script>
 <script type="module" src="/js/map.js" defer></script>

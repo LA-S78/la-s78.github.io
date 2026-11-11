@@ -1,0 +1,197 @@
+/* ==========================================================================
+   10. MEDIA QUERIES (DESKTOP & PWA)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .lantern-header {
+    height: calc(130px + env(safe-area-inset-top)) !important;
+    min-height: calc(130px + env(safe-area-inset-top)) !important;
+    background-image: radial-gradient(
+      circle 800px at center 10%,
+      var(--card-bg-solid) 0%,
+      var(--nav-bg) 100%
+    );
+  }
+
+  .lantern-container {
+    position: relative;
+    right: 1.33rem;
+  }
+
+  .lantern-glow-bleed {
+    top: calc(130px + env(safe-area-inset-top));
+  }
+
+  main {
+    padding-top: calc(130px + env(safe-area-inset-top));
+  }
+
+  body::before {
+    top: calc(130px + env(safe-area-inset-top));
+    height: calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top) - 180px);
+  }
+
+  .lantern-img {
+    height: 125px;
+    margin-right: -1rem;
+  }
+
+  .header-stack {
+    height: 130px;
+    min-height: 130px;
+    gap: 3rem;  
+  }
+  .debossed-title {
+    position: relative;
+    right: 1.33rem;
+    font-size: 2rem;
+  }
+  .subtitle {
+    position: relative;
+    right: 1.33rem;
+    font-size: 1.3rem;
+    width: 20rem;
+  }
+  .nav-wrapper {
+    justify-content: center;
+  }
+  .duel-schedule-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+  }
+  .content-pane {
+    scroll-margin-top: calc(130px + 1.2rem + env(safe-area-inset-top));
+    padding: 30px 40px;
+  }
+
+  footer {
+    height: calc(60px + env(safe-area-inset-bottom));
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .anchor-nav {
+    top: calc(130px + env(safe-area-inset-top));
+  }
+
+  .scroll-btn {
+    display: block; 
+  }
+
+  .tree-container {
+    padding: 15px 20px 0 20px;
+  }
+  .line-vertical {
+    height: 25px;
+  }
+  .branch-top,
+  .branch-bottom {
+    height: 18px;
+  }
+  .hex-node {
+    width: 80px;
+    height: 92px;
+  }
+  .node-controls {
+    margin-top: 5px;
+    padding: 5px 10px;
+  }
+  .node-controls:first-of-type {
+    margin-bottom: -35px;
+  }
+  .node-title {
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+  }
+  .level-display {
+    font-size: 0.9rem;
+    width: 45px;
+  }
+  .level-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 1rem;
+  }
+  .total-value {
+    font-size: 1.3rem;
+  }
+  .total-label {
+    font-size: 0.75rem;
+  }
+
+  #map-container.is-fullscreen {
+    justify-content: space-between !important;
+    gap: 0 !important;
+    padding: 24px 32px !important;
+  }
+
+  #map-container.is-fullscreen .map-controls {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin-bottom: 1.5rem !important; 
+  }
+
+  #map-container.is-fullscreen .game-map {
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+    align-items: center !important;
+  }
+
+  #map-container.is-fullscreen .game-map svg {
+    width: auto !important;
+    height: 100% !important; 
+    max-width: 100% !important;
+  }
+
+  #map-container.is-fullscreen .info-card {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin-top: 1.5rem !important; 
+  }
+
+  @keyframes drift {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-70px) translateX(100px); opacity: 0; }
+  }
+  .dust-container {
+    -webkit-mask-image: radial-gradient(circle 700px at center 40%, black 0%, transparent 80%);
+    mask-image: radial-gradient(circle 700px at center 40%, black 0%, transparent 80%);
+  }
+  .mote:nth-child(n + 21) {
+    display: block;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .lantern-header {
+    padding-top: calc(env(safe-area-inset-top) - 8px) !important;
+  }
+  .language-switcher {
+    top: calc(env(safe-area-inset-top) + 12px);
+  }
+  .scroll-btn {
+    display: none !important; 
+  }
+  @media (display-mode: standalone) {
+    @media (max-width: 767px) {
+      main {
+        padding-bottom: 60px;
+      }
+    }
+  }
+}
+
+@media (display-mode: standalone) {
+  html,
+  body,
+  #mobile-container {
+    height: 100%;
+  }
+  @supports (-webkit-touch-callout: none) {
+    html,
+    body,
+    #mobile-container {
+      height: 100vh !important;
+    }
+  }
+}

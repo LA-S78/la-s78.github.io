@@ -1,0 +1,327 @@
+{
+  "map": {
+    "alliances": {
+      "WLO": {
+        "tag": "WLO",
+        "name": "WLO Alliance",
+        "rank": 1,
+        "type": "main",
+        "parent_tag": null,
+        "academies": ["WLA"],
+        "is_nap": true,
+        "color": "#25bb00"
+      },
+      "RÂVN": {
+        "tag": "RÂVN",
+        "name": "RÂVN Alliance",
+        "rank": 2,
+        "type": "main",
+        "parent_tag": null,
+        "academies": ["RÂA"],
+        "is_nap": true,
+        "color": "#cece00"
+      },
+      "MIA": {
+        "tag": "MIA",
+        "name": "MIA Alliance",
+        "rank": 3,
+        "type": "main",
+        "parent_tag": null,
+        "academies": [],
+        "is_nap": true,
+        "color": "#a400af"
+      },
+      "BOTS": {
+        "tag": "BOTS",
+        "name": "BOTS Alliance",
+        "rank": 4,
+        "type": "main",
+        "parent_tag": null,
+        "academies": [],
+        "is_nap": true,
+        "color": "#0070f3"
+      },
+      "SVN": {
+        "tag": "SVN",
+        "name": "SVN Alliance",
+        "rank": 5,
+        "type": "main",
+        "parent_tag": null,
+        "academies": [],
+        "is_nap": true,
+        "color": "#e53e3e"
+      },
+      "PHNX": {
+        "tag": "PHNX",
+        "name": "PHNX Alliance",
+        "rank": 6,
+        "type": "main",
+        "parent_tag": null,
+        "academies": [],
+        "is_nap": true,
+        "color": "#dd6b20"
+      },
+      "HMDA": {
+        "tag": "HMDA",
+        "name": "HMDA Alliance",
+        "rank": 7,
+        "type": "main",
+        "parent_tag": null,
+        "academies": [],
+        "is_nap": true,
+        "color": "#d53f8c"
+      },
+      "HeKi": {
+        "tag": "HeKi",
+        "name": "HeKi Alliance",
+        "rank": 8,
+        "type": "main",
+        "parent_tag": null,
+        "academies": [],
+        "is_nap": false,
+        "color": "#d69e2e"
+      },
+      "WLA": {
+        "tag": "WLA",
+        "name": "WLA",
+        "rank": null,
+        "type": "academy",
+        "parent_tag": "WLO",
+        "academies": [],
+        "is_nap": true,
+        "color": null
+      }
+    },
+    "territory_ownership": {
+      "Royal_Castle": {
+        "owner": "WLO",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Sky_Fortress": {
+        "owner": "RÂVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Lionheart_Fortress": {
+        "owner": "MIA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Nightfall_Fortress": {
+        "owner": "BOTS",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Temple_of_Order": {
+        "owner": "SVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Temple_of_Nature": {
+        "owner": "PHNX",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Temple_of_War": {
+        "owner": "HMDA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Temple_of_Chaos": {
+        "owner": "HeKi",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Dawnhold": {
+        "owner": "WLO",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Everpeak": {
+        "owner": "RÂVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Mithrall_Hall": {
+        "owner": "MIA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Sunspire_City": {
+        "owner": "BOTS",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Emerald_City": {
+        "owner": "SVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Phantom_City": {
+        "owner": "PHNX",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Sandwind_Keep": {
+        "owner": "HMDA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Deepmere_Town": {
+        "owner": "HeKi",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Gale_Heights": {
+        "owner": "WLO",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Falcon_s_Keep": {
+        "owner": "RÂVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Drywell_Tower": {
+        "owner": "MIA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Ironwall_City": {
+        "owner": "BOTS",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Holyspring_City": {
+        "owner": "SVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Silverleaf_Grove": {
+        "owner": "PHNX",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Cloudtop_Highlands": {
+        "owner": "HMDA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Cliffside_Citadel": {
+        "owner": "HeKi",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Stillwater_River": {
+        "owner": "WLO",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Frostwolf_Camp": {
+        "owner": "RÂVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Stormgate": {
+        "owner": "MIA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Copper_Street": {
+        "owner": "BOTS",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Whitestone_Town": {
+        "owner": "SVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Amber_Road": {
+        "owner": "PHNX",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Violet": {
+        "owner": "HMDA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Stonechant_Market": {
+        "owner": "HeKi",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Twinspire_Town": {
+        "owner": "WLO",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Sailport": {
+        "owner": "RÂVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Anvil_Town": {
+        "owner": "MIA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Lark_Lane": {
+        "owner": "BOTS",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Sailshadow_Harbor": {
+        "owner": "SVN",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Rose_Court": {
+        "owner": "PHNX",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Echo_Town": {
+        "owner": "HMDA",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      },
+      "Stardust_Road": {
+        "owner": "HeKi",
+        "updatedAt": "2026-11-08T10:00:00Z"
+      }
+    },
+    "blacklist": {
+      "players": ["Griefer123", "NightRaider"],
+      "alliances": ["XXX"]
+    },
+    "revision": "r1",
+    "lastUpdated": "2026-11-08T10:00:00Z"
+  },
+  "rewards": {
+    "mode": "standard",
+    "distribution_tiers": [
+      {
+        "min_rank": 1,
+        "max_rank": 1,
+        "chests": {
+          "commanders_will": 2,
+          "loyal_servant": 2,
+          "followers_heart": 4
+        }
+      },
+      {
+        "min_rank": 2,
+        "max_rank": 3,
+        "chests": {
+          "commanders_will": 1,
+          "loyal_servant": 2,
+          "followers_heart": 3
+        }
+      },
+      {
+        "min_rank": 4,
+        "max_rank": 6,
+        "chests": {
+          "commanders_will": 0,
+          "loyal_servant": 1,
+          "followers_heart": 2
+        }
+      }
+    ],
+    "cycle_state": {
+      "macro_cycle": 2,
+      "current_week": 2,
+      "override_count": 1,
+      "active_schedule": {
+        "downtime": "MIA",
+        "week_1": "BOTS",
+        "week_2": "RÂVN",
+        "week_3": "WLO"
+      },
+      "history": []
+    },
+    "wartime_buyouts": [
+      {
+        "id": "b1",
+        "displaced": "RÂVN",
+        "installments": [
+          {
+            "week": 2,
+            "status": "pending"
+          },
+          {
+            "week": 3,
+            "status": "pending"
+          }
+        ]
+      }
+    ],
+    "buyout_history": [],
+    "lastReset": "2026-11-07T22:00:00Z",
+    "lastUpdated": null
+  }
+}

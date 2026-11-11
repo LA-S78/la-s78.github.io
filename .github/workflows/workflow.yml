@@ -1,0 +1,167 @@
+name: Build and Deploy Multilingual Site
+
+on:
+  push:
+    branches: [main, dev]
+  # Pull requests run the full build + sanity checks, but never translate,
+  # commit, deploy or post alerts (all deploy-side steps are gated on push).
+  pull_request:
+    branches: [main, dev]
+
+# One run at a time per branch (or per pull request). On main/dev a new push waits for
+# the running deploy to finish instead of racing it, so an older build can never finish
+# last and overwrite the live site; if several pushes queue up, only the newest runs.
+# Pull request checks are just builds, so a new commit cancels the outdated check.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setting up Ruby environment
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      # --- TRANSLATE VIA AI (UPGRADED TO RECURSIVE DEEP SCAN) ---
+      - name: Translating source text via AI
+        if: github.event_name == 'push'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if find _source/ -type f -name "*_en.md" | grep -q .; then
+            echo "Drafts detected. Running AI Localization..."
+            bundle exec ruby _scripts/generate_master.rb
+          else
+            echo "No English source drafts found. Skipping."
+          fi
+
+      # --- FIXED INTERCEPT STAGE FOR UNTRACKED FILES ---
+      - name: Saving master translation files
+        if: github.event_name == 'push'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Force stage the directory first so Git registers new untracked files
+          git add _source/
+          
+          # Safely check the staged index for differences
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-generate master files from AI drafts [skip ci]"
+            git push
+          fi
+
+      # --- BUILD ---
+      # Same script you run locally: bundle exec ruby _scripts/build.rb --serve
+      - name: Building site
+        env:
+          JEKYLL_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+          BUILD_LOG: ${{ runner.temp }}/jekyll-build.log
+        run: bundle exec ruby _scripts/build.rb --no-check
+
+      - name: Checking build output
+        env:
+          BUILD_LOG: ${{ runner.temp }}/jekyll-build.log
+        run: bundle exec ruby _scripts/check_build.rb
+
+      # Advisory: reports unformatted JS/JSON (fix with `npm run format` or format-on-save)
+      # but never blocks a build or deploy.
+      - name: Checking code formatting
+        continue-on-error: true
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run format:check
+
+      - name: Uploading build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-site
+          path: _site/
+          retention-days: 1
+
+      - name: Preparing fallback redirects
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          mkdir _github_pages_site
+          cp _deploy/migration.html _github_pages_site/index.html
+          # GitHub Pages serves 404.html for any unknown path, so old deep links
+          # (e.g. /en/rules.html) also reach the path-preserving redirect.
+          cp _deploy/migration.html _github_pages_site/404.html
+
+      - name: Caching deployment state
+        if: github.event_name == 'push'
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/com.vercel.cli
+          key: ${{ runner.os }}-vercel-${{ hashFiles('**/_site/**') }}
+          restore-keys: |
+            ${{ runner.os }}-vercel-
+
+      - name: Installing deployment tools
+        if: github.event_name == 'push'
+        run: npm install --global vercel@latest
+
+      - name: Fetching deployment environment
+        if: github.event_name == 'push'
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          else
+            vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          fi
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Staging deployment folder
+        if: github.event_name == 'push'
+        run: cp -r .vercel _site/
+
+      - name: Deploying to Vercel
+        if: github.event_name == 'push'
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            vercel deploy --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
+          else
+            DEPLOY_URL=$(vercel deploy --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/)
+            vercel alias set "$DEPLOY_URL" dev.la-s78.app --token=${{ secrets.VERCEL_TOKEN }}
+          fi
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploying redirects to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: _github_pages_site
+          clean: true
+
+      - name: Sending success alert
+        if: success() && github.event_name == 'push'
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": "✅ **Build Succeeded!** The latest layout changes are officially live on Vercel for the `'"${{ github.ref_name }}"'` branch."}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Sending failure alert
+        if: failure() && github.event_name == 'push'
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": "🚨 **Build Failed!** The deployment compilation crashed on the `'"${{ github.ref_name }}"'` branch. Check the GitHub Actions logs to see what broke."}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}

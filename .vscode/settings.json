@@ -1,0 +1,12 @@
+{
+  // Format JavaScript and JSON automatically on save, using .prettierrc.json.
+  // HTML/Markdown are NOT auto-formatted: Prettier doesn't understand Jekyll's Liquid tags.
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
+}
