@@ -6,10 +6,6 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 
 ## 🔴 High Priority
 
-- [ ] **Safe saves when two happen at once (next)**
-  - `rewards-nominations.json` holds every alliance's list, and every nomination also saves `rewards-data.json` (which the Saturday Won/Lost result rewrites). Two saves close together can wipe an alliance's list or undo the result.
-  - For nominations, the Won/Lost result and `proposal-log.json`: re-read just before saving, change only your own part, read back to confirm, retry once. (Gists can't refuse a save on conflict, so this narrows the gap rather than closing it.)
-
 - [ ] **Alliance Registration Hardening (`portal/register.html`, `api/register-alliance.js`)**
   - Replace the raw tag text box with a dropdown of the alliances in the live data (`map-state.json`).
   - Enforce the 4-way check:
@@ -28,7 +24,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - Self-service nomination withdrawal.
   - Monthly Gist history squash, so old revisions don't keep personal data forever.
 
-- [ ] **King's checklist on the server**
+- [ ] **King's checklist on the server (next)**
   - The King's console remembers handed-out chests on one device only. Save it with the period, so a handed-out chest stays locked everywhere.
 
 ---
@@ -80,6 +76,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 - [x] **Test site with its own data** — dev.la-s78.app uses a separate test Gist; Stewards refresh it with `/devupdate`. (#61–#65)
 - [x] **One alliance list & live data only** — `_data/alliances.yml` is the single list of alliance colours and starting rotation; pages show live data, with clear notices when loading, failed or offline. (#69)
 - [x] **Installed app (PWA)** — update notice, app shortcuts, iPhone icon, offline fallback to the home page, old caches cleaned up. (#69; Workbox upgrade still open above)
+- [x] **Safe saves** — every Gist save checks the revision history afterwards and repairs any save it overwrote, so nominations, the Won/Lost result, approvals, `/rank`, events and the proposal log made at the same moment are all kept. (#73)
 - [x] **Theme colours** — accent, borders and surfaces follow the chosen theme. (#50–#52)
 
 </div>
