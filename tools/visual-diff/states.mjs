@@ -173,6 +173,87 @@ export const STATES = [
   },
   // Alliance Dashboard (portal/dashboard.html). Its normal view (no login) asks to sign in.
   { name: 'dashboard-leader', needs: '#dashboard-app', storage: SIGNED_IN },
+  // All five chart types (js/dashboard-widgets.js), as a leader sees them.
+  {
+    name: 'dashboard-widgets',
+    needs: '#dashboard-app',
+    storage: SIGNED_IN,
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      const table = (columns, rows) => ({ columns, rows });
+      const widget = (type, title, d, options = {}, visibility = 'members') => ({
+        id: `w_${type}`,
+        type,
+        title,
+        note: '',
+        visibility,
+        data: d,
+        options: { labelCol: 0, valueCols: [1], ...options },
+        updatedAt: '2026-11-09T12:00:00.000Z',
+      });
+      const players = table(
+        ['Player', 'Score', 'Last week'],
+        [
+          ['Aria', '15.2M', '14M'],
+          ['Bram', '12.9M', '13.5M'],
+          ['Cato', '9.8M', '9M'],
+        ],
+      );
+      data.dashboard.widgets = [
+        widget('bar', 'Duel scores', players, { valueCols: [1, 2] }, 'r4_only'),
+        widget('bar', 'Duel scores (vertical)', players, { vertical: true }),
+        widget(
+          'line',
+          'Might',
+          table(
+            ['Week', 'WLO', 'MIA'],
+            [
+              ['W1', '1.2B', '1.05B'],
+              ['W2', '1.26B', '1.08B'],
+              ['W3', '1.31B', '1.15B'],
+            ],
+          ),
+          { valueCols: [1, 2] },
+        ),
+        widget(
+          'pie',
+          'Troops',
+          table(
+            ['Tier', 'Troops'],
+            [
+              ['T10', '420K'],
+              ['T9', '610K'],
+              ['T8', '380K'],
+            ],
+          ),
+        ),
+        widget(
+          'progress',
+          'Donations',
+          table(
+            ['Player', 'Given'],
+            [
+              ['Aria', '52K'],
+              ['Bram', '31K'],
+            ],
+          ),
+          { target: 50000 },
+        ),
+        widget(
+          'table',
+          'Roster',
+          table(
+            ['Player', 'Power'],
+            [
+              ['Aria', '312M'],
+              ['Bram', '298M'],
+            ],
+          ),
+          { highlightCol: 1, highlightMin: 300000000 },
+        ),
+      ];
+    },
+  },
   {
     name: 'dashboard-member',
     needs: '#dashboard-app',

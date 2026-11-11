@@ -3,6 +3,11 @@
    Colours come from the theme variables, so it follows Plague, Sanctuary and Miasma.
    ========================================================================== */
 
+/* Anything the page hides stays hidden, whatever layout rule it has (switcher, edit bar…) */
+#dashboard-app [hidden] {
+  display: none !important;
+}
+
 .dash-switcher {
   display: inline-flex;
   align-items: center;
@@ -187,4 +192,518 @@
   text-align: center;
   font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+/* ---------- Widgets: charts and tables (js/dashboard-widgets.js) ---------- */
+
+/* Series colours from the theme: accent, gold, then mixes of them */
+.dw-s0 { --dw: var(--accent-color); }
+.dw-s1 { --dw: var(--gold); }
+.dw-s2 { --dw: color-mix(in srgb, var(--accent-color) 55%, var(--white)); }
+.dw-s3 { --dw: color-mix(in srgb, var(--gold) 55%, var(--status-danger-text)); }
+.dw-s4 { --dw: color-mix(in srgb, var(--accent-color) 45%, var(--gold)); }
+.dw-s5 { --dw: var(--text-muted); }
+
+/* Sanctuary's accent is itself orange-gold, so gold would be nearly the same colour:
+   contrasting second and fifth colours there instead */
+html[data-theme='sanctuary'] .dw-s1 { --dw: #6fa8dc; }
+html[data-theme='sanctuary'] .dw-s4 { --dw: #8fbf7f; }
+
+.dash-widget-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.dash-widget-head .dash-card-title {
+  flex: 1;
+  margin-bottom: 0.2rem;
+}
+
+.dash-widget-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-bottom: 0.5rem;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.dash-widget-note {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-main);
+  white-space: pre-line;
+}
+
+.dash-widget-tools {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.dash-icon-btn {
+  min-width: 28px;
+  height: 26px;
+  padding: 0 6px;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dash-icon-btn:hover {
+  background: var(--overlay-12);
+}
+
+.dash-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.dash-edit-bar[hidden] {
+  display: none;
+}
+
+.dash-edit-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.dw-empty,
+.dw-note {
+  padding: 0.5rem 0;
+  font-size: 0.75rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Horizontal bars (leaderboard) and progress */
+.dw-bars {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dw-bars li {
+  display: grid;
+  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 0.76rem;
+}
+
+.dw-bars li.dw-extra {
+  display: none;
+}
+
+.dw-show-all .dw-bars li.dw-extra {
+  display: grid;
+}
+
+.dw-bar-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-main);
+}
+
+.dw-bar-track {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 10px;
+  justify-content: center;
+  background: var(--overlay-5);
+  border-radius: 3px;
+}
+
+.dw-bar {
+  display: block;
+  min-height: 10px;
+  flex: 1;
+  background: var(--dw);
+  border-radius: 3px;
+}
+
+.dw-bar-value {
+  min-width: 3.2rem;
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main);
+}
+
+.dw-progress li.is-done .dw-bar-value {
+  color: var(--accent-color);
+}
+
+.dw-progress-summary {
+  margin-bottom: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.dw-progress-summary b {
+  color: var(--text-main);
+}
+
+.dw-more {
+  display: block;
+  margin: 0.4rem auto 0;
+  padding: 2px 10px;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--accent-color);
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* SVG charts: the drawing, with its value labels as ordinary text on the left and the
+   row labels underneath (readable at any width) */
+.dw-chart {
+  position: relative;
+  padding-left: 2.9rem;
+}
+
+.dw-y {
+  position: absolute;
+  left: 0;
+  width: 2.6rem;
+  transform: translateY(-50%);
+  font-size: 0.66rem;
+  text-align: right;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.dw-xaxis {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  padding-left: 2.9rem;
+  margin-top: 2px;
+  font-size: 0.66rem;
+  color: var(--text-muted);
+}
+
+.dw-xaxis span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* SVG charts */
+.dw-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.dw-svg rect {
+  fill: var(--dw);
+}
+
+.dw-grid {
+  stroke: var(--overlay-12);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.dw-axis {
+  font-size: 11px;
+  fill: var(--text-muted);
+}
+
+.dw-line {
+  fill: none;
+  stroke: var(--dw);
+  stroke-width: 2.5px; /* the same on a phone as on a desktop */
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.dw-dot {
+  fill: var(--dw);
+  stroke: var(--surface-dark);
+  stroke-width: 1.5;
+}
+
+.dw-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
+  margin-top: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.dw-legend i,
+.dw-pie-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  vertical-align: -1px;
+  background: var(--dw);
+  border-radius: 2px;
+}
+
+/* Pie / donut */
+.dw-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 20px;
+}
+
+.dw-pie svg {
+  width: 150px;
+  height: 150px;
+  flex-shrink: 0;
+}
+
+.dw-slice {
+  fill: none;
+  stroke: var(--dw);
+}
+
+.dw-total {
+  font-size: 18px;
+  font-weight: 700;
+  fill: var(--text-main);
+}
+
+.dw-pie-legend {
+  flex: 1;
+  min-width: 10rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.76rem;
+}
+
+.dw-pie-legend li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.dw-pie-legend span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dw-pie-legend small {
+  min-width: 3rem;
+  text-align: right;
+  color: var(--text-muted);
+}
+
+/* Table */
+.dw-search {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0.5rem;
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.dw-table-wrap {
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.dw-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+
+/* Undo the site's article-table look (cell borders, padding, margins) inside widgets */
+.dw-table th,
+.dw-table td {
+  border: 0;
+}
+
+.dw-table th {
+  position: sticky;
+  top: 0;
+  padding: 0;
+  background: var(--surface-dark);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dw-table th button {
+  width: 100%;
+  padding: 6px 8px;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--accent-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dw-table th button[data-sort='desc']::after {
+  content: ' ▼';
+}
+
+.dw-table th button[data-sort='asc']::after {
+  content: ' ▲';
+}
+
+.dw-table td {
+  padding: 5px 8px;
+  border-top: 1px solid var(--overlay-5);
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.dw-table tr.is-hit td {
+  background: color-mix(in srgb, var(--accent-color) 14%, transparent);
+}
+
+.dw-table-foot {
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* ---------- The widget editor ---------- */
+.dash-editor {
+  border-color: color-mix(in srgb, var(--accent-color) 60%, var(--border-color));
+}
+
+.dash-editor label {
+  display: block;
+  margin: 0.6rem 0 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.dash-editor input[type='text'],
+.dash-editor input[type='number'],
+.dash-editor select,
+.dash-editor textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.dash-editor textarea {
+  resize: vertical;
+}
+
+.dash-editor .dash-paste {
+  min-height: 110px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  white-space: pre;
+}
+
+.dash-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dash-types button {
+  flex: 1;
+  min-width: 4.5rem;
+  padding: 6px 4px;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dash-types button[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--accent-color) 28%, transparent);
+  border-color: var(--accent-color);
+}
+
+.dash-check {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  font-weight: 400 !important;
+  color: var(--text-main) !important;
+}
+
+.dash-cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.dash-cols label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font-weight: 400;
+  color: var(--text-main);
+}
+
+.dash-editor-preview {
+  margin-top: 0.8rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+.dash-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 0.8rem;
+}
+
+.dash-error {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--status-danger-text);
+}
+
+.dash-error:empty {
+  display: none;
 }
