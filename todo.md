@@ -6,6 +6,10 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 
 ## 🔴 High Priority
 
+- [ ] **Safe saves when two happen at once (next)**
+  - `rewards-nominations.json` holds every alliance's list, and every nomination also saves `rewards-data.json` (which the Saturday Won/Lost result rewrites). Two saves close together can wipe an alliance's list or undo the result.
+  - For nominations, the Won/Lost result and `proposal-log.json`: re-read just before saving, change only your own part, read back to confirm, retry once. (Gists can't refuse a save on conflict, so this narrows the gap rather than closing it.)
+
 - [ ] **Alliance Registration Hardening (`portal/register.html`, `api/register-alliance.js`)**
   - Replace the raw tag text box with a dropdown of the alliances in the live data (`map-state.json`).
   - Enforce the 4-way check:
@@ -23,9 +27,6 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - Field-level AES-256 encryption for author IDs and sensitive admin notes.
   - Self-service nomination withdrawal.
   - Monthly Gist history squash, so old revisions don't keep personal data forever.
-
-- [ ] **Safe concurrent Gist writes**
-  - Two saves at the same moment (e.g. a Steward approval and a nomination) can overwrite each other. Re-read and retry, or lock, before writing.
 
 - [ ] **King's checklist on the server**
   - The King's console remembers handed-out chests on one device only. Save it with the period, so a handed-out chest stays locked everywhere.
@@ -65,7 +66,6 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 - [ ] **Visual-diff coverage** — add the nomination page and the King's console to `tools/visual-diff`.
 - [ ] **GitHub Actions Node warning** — GitHub is retiring Node 20 for actions; update the workflow actions (and `node-version: 20` in `discord_commands.yml`) when newer versions are out.
 - [ ] **Test Discord bot (optional)** — a second bot for dev.la-s78.app, so test proposals never touch the live bot's servers.
-- [ ] **Check: BOTS sign-in by role ID** — `api/verify.js` skips any `DISCORD_BOTS` variable, so BOTS members are only found by role name or nickname. Confirm whether that is intended.
 
 ---
 
@@ -74,7 +74,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 - [x] **Unified read API (`api/state.js`)** — one `GET /api/state?scope=all|alliances|map|rewards`, public data only, edge-cached.
 - [x] **Proposal pipeline** — sandbox planners on the site save a draft, ask for a login pass and send a proposal to Discord; Stewards approve in Discord and the change is saved (map, alliance ladder, blacklist each have their own proposal). R4/R5 only, 5 a day; Stewards unlimited. (#53–#55, #58)
 - [x] **Interactive NAP ranks & diplomacy tool (`alliance.html`)** — one hierarchy card, live data, drag-and-drop and ▲/▼ ordering, academies, a separate Edit Blacklist mode.
-- [x] **Discord login (`api/verify.js`)** — Discord sign-in with a signed 30-day login pass; alliance found by role ID, NAP role name, then `[TAG]` nickname; officers named with /registerbot get R4 access; header sign-in pill. (#56, #57, #67)
+- [x] **Discord login (`api/verify.js`)** — Discord sign-in with a signed 30-day login pass; alliance found by role ID, NAP role name, then `[TAG]` nickname; officers named with /registerbot get R4 access; header sign-in pill. (#56, #57, #67; alliances from `_data/alliances.yml` role settings only, so BOTS and NAVI are found by role ID: #72)
 - [x] **Split the Discord bot (`api/interactions.js`)** — now only checks and routes; each command lives in an `api/_bot_*.js` module. (#60)
 - [x] **Weekly reward periods** — King's Commendation every week; King of Battle Reward after a Steward records a Won; ranked nomination lists; King's console hands out one set at a time. (#59)
 - [x] **Test site with its own data** — dev.la-s78.app uses a separate test Gist; Stewards refresh it with `/devupdate`. (#61–#65)
