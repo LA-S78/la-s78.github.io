@@ -89,7 +89,7 @@ export async function findOfficerRole({ uid, alliance, alliances, botToken, time
  * a known alliance ("WLO", "[WLO]" or "@WLO", any letter case). If no role matches, a
  * "[TAG]" at the start of their server nickname counts, when TAG is a known alliance (for
  * display; officer access still needs a role in that alliance's own server).
- * Returns the tag as stored in map-state.json, or null.
+ * Returns { tag, via } (tag as stored in map-state.json; via 'role-name' or 'nickname'), or null.
  * @param {{guildId: string, roleIds: string[], nickname?: string, alliances: object, botToken: string, timeoutMs?: number}} args
  */
 export async function findAllianceTag({
@@ -117,7 +117,7 @@ export async function findAllianceTag({
           .toLowerCase()
           .trim();
         const bare = name.replace(/^@/, '').replace(/^\[(.*)\]$/, '$1');
-        if (byLower.has(bare)) return byLower.get(bare);
+        if (byLower.has(bare)) return { tag: byLower.get(bare), via: 'role-name' };
       }
     } catch {
       // Discord slow or down: try the nickname
@@ -125,5 +125,6 @@ export async function findAllianceTag({
   }
 
   const fromNick = /^\s*\[([^\]]{1,10})\]/.exec(nickname || '');
-  return fromNick ? byLower.get(fromNick[1].trim().toLowerCase()) || null : null;
+  const nickTag = fromNick ? byLower.get(fromNick[1].trim().toLowerCase()) : null;
+  return nickTag ? { tag: nickTag, via: 'nickname' } : null;
 }

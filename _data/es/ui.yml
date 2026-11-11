@@ -195,3 +195,6 @@ identity:
   expires_days: "La sesión caduca en {n} días"
   expires_one: "La sesión caduca en 1 día"
   expires_today: "La sesión caduca hoy"
+  found_role_id: "encontrada por ID de rol"
+  found_role_name: "encontrada por nombre de rol"
+  found_nickname: "encontrada por apodo"

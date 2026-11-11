@@ -106,6 +106,8 @@
       keep('auth-alliance', data.alliance);
       // Officer role from the alliance's own server (counts as R4; see api/_officer_roles.js).
       keep('auth-officer', data.officer);
+      // How the alliance was found (shown to Stewards in the header pill)
+      keep('auth-alliance-source', data.alliance_source);
       // Signed login pass for sending proposals (only given to members of the Discord server).
       if (data.session) localStorage.setItem('auth-session', data.session);
       else localStorage.removeItem('auth-session');
@@ -222,6 +224,7 @@
     localStorage.removeItem('auth-session');
     localStorage.removeItem('auth-steward');
     localStorage.removeItem('auth-officer');
+    localStorage.removeItem('auth-alliance-source');
     window.location.reload();
   };
 
