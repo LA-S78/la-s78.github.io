@@ -16,17 +16,18 @@
   const pct1 = (f) => `${Math.round(f * 1000) / 10}%`;
   const isPercentCell = (cell) => /%\s*$/.test(String(cell ?? ''));
 
-  /**
-   * Makes a chart part selectable: tapping or clicking it (or Enter on it) shows a readout
-   * with `title` and `lines`; line `on` is the part that was tapped (shown bold). Parts
-   * sharing a `key` (a pie slice and its legend row) light up together. See mount().
-   */
   // Numbers in a readout keep one more decimal than the chart (1.26B, not 1.3B).
   const exact = (n) => short(n, 2);
 
-  function pick(title, lines, on = -1, key = '') {
+  /**
+   * Makes a chart part selectable, like a territory on the map: hovering, tapping or Enter
+   * highlights it and fills the info card under the chart with `title`, an optional `badge`
+   * and `lines` ("Name: value"); line `on` is the part itself (shown bold). Parts sharing a
+   * `key` (a pie slice and its legend row) light up together. See selectable().
+   */
+  function pick(title, lines, on = -1, key = '', badge = '') {
     const text = lines.map((l) => esc(l)).join('&#10;');
-    return `data-tip="${esc(title)}" data-lines="${text}" data-on="${on}"${key ? ` data-key="${esc(key)}"` : ''} tabindex="0"`;
+    return `data-tip="${esc(title)}" data-lines="${text}" data-on="${on}"${key ? ` data-key="${esc(key)}"` : ''}${badge ? ` data-badge="${esc(badge)}"` : ''} tabindex="0"`;
   }
 
   /**
@@ -190,17 +191,21 @@
     const readout = (r) => {
       const keys = [];
       const lines = [];
+      const badges = [];
       r.values.forEach((v, k) => {
         if (!Number.isFinite(v)) return;
         const cell = r.cells[s.values[k]];
         let text;
         if (stacked === 'percent') {
           text = total(r) ? pct1(v / total(r)) : short(v);
+          badges.push(text);
           if (cell !== undefined && v !== 0 && !isPercentCell(cell)) text += ` (${cell})`;
         } else if (stacked === 'sum') {
           text = `${exact(v)}${total(r) ? ` (${pct1(v / total(r))})` : ''}`;
+          badges.push(exact(v));
         } else {
           text = exact(v);
+          badges.push(text);
           if (!isPercentCell(cell) && colTotal[k] > 0 && v > 0 && rows.length > 1)
             text += ` · ${pct1(v / colTotal[k])} of all`;
         }
@@ -208,7 +213,12 @@
         lines.push(n > 1 || stacked ? `${s.names[k]}: ${text}` : text);
       });
       if (stacked === 'sum' && lines.length > 1) lines.push(`Total: ${exact(total(r))}`);
-      return { lines, on: (k) => keys.indexOf(k) };
+      return {
+        lines,
+        on: (k) => keys.indexOf(k),
+        badge: (k) => badges[keys.indexOf(k)] ?? '',
+        rowBadge: stacked === 'sum' ? exact(total(r)) : stacked ? '' : (badges[0] ?? ''),
+      };
     };
 
     const horizontal = () => {
@@ -231,12 +241,12 @@
           const segs = r.values
             .map((v, k) =>
               Number.isFinite(v) && (!stacked || v > 0)
-                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`)} title="${esc(tip(r, k))}" ${pick(r.label, ro.lines, ro.on(k))}></span>`
+                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`)} title="${esc(tip(r, k))}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}></span>`
                 : '',
             )
             .join('');
           const value = stacked === 'percent' ? '' : short(stacked ? total(r) : r.values[0]);
-          return `<li class="${i >= 25 ? 'dw-extra' : ''}" ${pick(r.label, ro.lines)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
+          return `<li class="${i >= 25 ? 'dw-extra' : ''}" ${pick(r.label, ro.lines, -1, '', ro.rowBadge)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
         })
         .join('');
       return `<ol class="dw-bars${stacked === 'percent' ? ' dw-no-value' : ''}">${items}</ol>${legend(s.names, w)}${list.length > 25 ? showAll(list.length) : ''}`;
@@ -268,7 +278,7 @@
             const x = stacked ? i * groupW + groupW * 0.15 : i * groupW + groupW * 0.1 + k * barW;
             const y = stacked ? base - h : 190 - h;
             if (stacked) base -= h;
-            return `<rect ${paint(w, k, n)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" ${pick(r.label, ro.lines, ro.on(k))}><title>${esc(tip(r, k))}</title></rect>`;
+            return `<rect ${paint(w, k, n)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}><title>${esc(tip(r, k))}</title></rect>`;
           })
           .join('');
       })
@@ -417,9 +427,10 @@
     const pieTip = (p, i) =>
       pick(
         p.label,
-        [`${exact(p.v)} · ${pct1(p.v / total)}`, `of ${exact(total)} in all`],
+        [`${s.names[0] || 'Value'}: ${exact(p.v)}`, `Total: ${exact(total)}`],
         -1,
         `p${i}`,
+        pct1(p.v / total),
       );
     const rings = parts
       .map((p, i) => {
@@ -459,7 +470,7 @@
       `<ol class="dw-bars dw-progress">${rows
         .map(
           (r, i) =>
-            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}" ${pick(r.label, [`${exact(r.v)} of ${exact(r.target)} (${Math.round(r.pct * 100)}%)`, r.pct >= 1 ? 'Target reached ✓' : `${exact(r.target - r.v)} to go`])}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%" title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
+            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}" ${pick(r.label, [`${s.names[0] || 'Value'}: ${exact(r.v)} of ${exact(r.target)}`, r.pct >= 1 ? 'Target reached ✓' : `To go: ${exact(r.target - r.v)}`], -1, '', r.pct >= 1 ? '✓ Done' : `${Math.round(r.pct * 100)}%`)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%" title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
         )
         .join('')}</ol>` +
       (rows.length > 25 ? showAll(rows.length) : '')
@@ -551,79 +562,130 @@
   }
 
   /**
-   * Tap a bar, slice, row or point to read its numbers: a small readout appears beside it
-   * and the other parts fade. Tap it again, tap elsewhere or press Escape to close.
+   * Chart parts work like territories on the map (js/map.js): hovering one (or tapping it
+   * on a phone, or Tab + Enter) gives it the map's glowing outline and fills the info card
+   * under the chart. Moving off clears it; a tap or click keeps it until tapped again,
+   * Escape, or a tap outside the chart.
    */
-  function selectable(el) {
-    // The editor's preview box is redrawn in place: set it up once, and start fresh each time.
-    if (el.dwClearSelection) return el.dwClearSelection();
-    if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
-    let box = null;
+  function selectable(el, hint) {
+    // The editor's preview box is redrawn in place: drop the listeners of the last drawing.
+    el.dwSelectable?.abort();
+    const ctl = new AbortController();
+    el.dwSelectable = ctl;
+    const { signal } = ctl;
+    const card = document.createElement('div');
+    card.className = 'info-card idle dw-info';
+    card.setAttribute('aria-live', 'polite');
+    el.append(card);
     let current = null;
+    let pinned = false;
+    const idle = () => {
+      card.classList.add('idle');
+      card.innerHTML = `<div class="info-header"><h3>${esc(hint)}</h3></div>`;
+    };
     const clear = () => {
-      el.querySelectorAll('.dw-sel, .dw-dim').forEach((x) =>
-        x.classList.remove('dw-sel', 'dw-dim'),
-      );
-      box?.remove();
-      box = null;
+      el.querySelectorAll('.dw-sel').forEach((x) => x.classList.remove('dw-sel'));
       current = null;
+      pinned = false;
+      idle();
     };
     const show = (part) => {
-      clear();
+      el.querySelectorAll('.dw-sel').forEach((x) => x.classList.remove('dw-sel'));
       current = part;
       const key = part.dataset.key;
-      const lit = key ? [...el.querySelectorAll(`[data-key="${CSS.escape(key)}"]`)] : [part];
+      const lit = key ? el.querySelectorAll(`[data-key="${CSS.escape(key)}"]`) : [part];
       lit.forEach((x) => x.classList.add('dw-sel'));
-      el.querySelectorAll('[data-tip]').forEach((x) => {
-        const related = lit.some((l) => l === x || l.contains(x) || x.contains(l));
-        if (!related) x.classList.add('dw-dim');
-      });
-      box = document.createElement('div');
-      box.className = 'dw-readout';
-      box.setAttribute('role', 'status');
-      const title = document.createElement('b');
-      title.textContent = part.dataset.tip;
-      box.append(title);
+      card.classList.remove('idle');
+      card.textContent = '';
+      const head = document.createElement('div');
+      head.className = 'info-header';
+      if (part.dataset.badge) {
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = part.dataset.badge;
+        head.append(badge);
+      }
+      const name = document.createElement('h3');
+      name.textContent = part.dataset.tip;
+      head.append(name);
+      const details = document.createElement('div');
+      details.className = 'info-details';
       const on = Number(part.dataset.on);
       part.dataset.lines.split('\n').forEach((line, i) => {
-        const row = document.createElement('span');
-        row.textContent = line;
-        if (i === on) row.className = 'is-on';
-        box.append(row);
+        if (i) {
+          const dot = document.createElement('span');
+          dot.className = 'info-divider';
+          dot.setAttribute('aria-hidden', 'true');
+          dot.textContent = '•';
+          details.append(dot);
+        }
+        const item = document.createElement('span');
+        item.className = `info-item${i === on ? ' is-on' : ''}`;
+        const at = line.indexOf(': ');
+        if (at > 0) {
+          const label = document.createElement('strong');
+          label.textContent = `${line.slice(0, at)}:`;
+          item.append(label, ` ${line.slice(at + 2)}`);
+        } else item.textContent = line;
+        details.append(item);
       });
-      el.append(box);
-      // Above the part (below if there's no room), kept inside the widget.
-      const host = el.getBoundingClientRect();
-      const r = part.getBoundingClientRect();
-      const bw = box.offsetWidth;
-      const bh = box.offsetHeight;
-      const left = Math.min(
-        Math.max(4, r.left - host.left + r.width / 2 - bw / 2),
-        host.width - bw - 4,
-      );
-      let top = r.top - host.top - bh - 6;
-      if (top < 0) top = Math.min(r.bottom - host.top + 6, host.height - bh);
-      box.style.left = `${Math.max(0, left)}px`;
-      box.style.top = `${Math.max(0, top)}px`;
+      card.append(head, details);
     };
-    el.dwClearSelection = clear;
-    el.addEventListener('click', (e) => {
-      const part = e.target.closest('[data-tip]');
-      if (!part || !el.contains(part)) return clear();
-      if (part === current) return clear();
-      show(part);
-    });
-    el.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') return clear();
-      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('[data-tip]')) {
-        e.preventDefault();
-        if (e.target === current) clear();
-        else show(e.target);
-      }
-    });
-    document.addEventListener('click', (e) => {
-      if (current && !el.contains(e.target)) clear();
-    });
+    idle();
+    const partOf = (e) => {
+      const part = e.target.closest?.('[data-tip]');
+      return part && el.contains(part) ? part : null;
+    };
+    el.addEventListener(
+      'pointerover',
+      (e) => {
+        if (e.pointerType !== 'mouse' || pinned) return;
+        const part = partOf(e);
+        if (part && part !== current) show(part);
+      },
+      { signal },
+    );
+    el.addEventListener(
+      'pointerleave',
+      (e) => {
+        if (e.pointerType === 'mouse' && !pinned) clear();
+      },
+      { signal },
+    );
+    el.addEventListener(
+      'click',
+      (e) => {
+        const part = partOf(e);
+        if (!part) return pinned && !e.target.closest('.dw-info') ? clear() : undefined;
+        if (pinned && part === current) return clear();
+        show(part);
+        pinned = true;
+      },
+      { signal },
+    );
+    el.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape') return clear();
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('[data-tip]')) {
+          e.preventDefault();
+          if (pinned && e.target === current) clear();
+          else {
+            show(e.target);
+            pinned = true;
+          }
+        }
+      },
+      { signal },
+    );
+    document.addEventListener(
+      'click',
+      (e) => {
+        if (!el.isConnected) return ctl.abort();
+        if (pinned && !el.contains(e.target)) clear();
+      },
+      { signal },
+    );
   }
 
   /** Makes a rendered widget interactive (table sorting/search, "Show all", tap to read). */
@@ -635,7 +697,9 @@
       el.classList.add('dw-show-all');
       b.remove();
     });
-    if (w.type !== 'table') selectable(el);
+    const hint = { bar: 'a bar', line: 'a week', pie: 'a slice', progress: 'a row' }[w.type];
+    if (hint && el.querySelector('[data-tip]'))
+      selectable(el, `Tap or hover over ${hint} to see its numbers`);
   }
 
   window.DashboardWidgets = { parseTable, toText, number, short, render, mount };

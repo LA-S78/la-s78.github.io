@@ -953,11 +953,12 @@ html[data-theme='sanctuary'] .dw-s4 {
   }
 }
 
-/* Tap a chart part to read its numbers (selectable() in js/dashboard-widgets.js) */
+/* Chart parts highlight like territories on the map (setHighlightedTerritory in js/map.js):
+   a vivid theme outline, a glow and a little brightness; the info card under the chart is
+   the map's own .info-card. See selectable() in js/dashboard-widgets.js. */
 .dash-widget-body [data-tip],
 #ed-preview [data-tip] {
   cursor: pointer;
-  transition: opacity 0.15s;
 }
 
 [data-tip]:focus {
@@ -965,21 +966,54 @@ html[data-theme='sanctuary'] .dw-s4 {
 }
 
 [data-tip]:focus-visible {
-  outline: 2px solid var(--accent-color);
+  outline: 2px solid rgba(var(--active-theme-vivid), 1);
   outline-offset: 1px;
 }
 
-.dw-dim {
-  opacity: 0.35;
+.dw-svg rect.dw-sel:not(.dw-hit) {
+  stroke: rgba(var(--active-theme-vivid), 1);
+  stroke-width: 3px;
+  paint-order: stroke fill;
+  vector-effect: non-scaling-stroke;
 }
 
-.dw-bar.dw-sel,
-rect.dw-sel:not(.dw-hit) {
+.dw-svg rect.dw-sel:not(.dw-hit),
+.dw-slice.dw-sel {
+  filter: drop-shadow(0 0 4px rgba(var(--active-theme), 1))
+    drop-shadow(0 0 10px rgba(var(--active-theme), 0.8)) brightness(1.25);
+}
+
+.dw-bar.dw-sel {
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 0 0 2px rgba(var(--active-theme-vivid), 1),
+    0 0 4px 2px rgba(var(--active-theme), 1),
+    0 0 10px 2px rgba(var(--active-theme), 0.8);
   filter: brightness(1.25);
 }
 
-.dw-slice.dw-sel {
-  filter: brightness(1.2);
+/* Stacked rows clip anything outside a segment, so its outline goes inside. */
+.dw-stack .dw-bar.dw-sel {
+  box-shadow:
+    inset 0 0 0 2px rgba(var(--active-theme-vivid), 1),
+    inset 0 0 8px rgba(var(--active-theme), 1);
+}
+
+li.dw-sel > .dw-bar-label,
+.dw-pie-legend li.dw-sel span {
+  color: rgba(var(--active-theme-vivid), 1);
+}
+
+li.dw-sel > .dw-bar-track {
+  box-shadow:
+    0 0 0 2px rgba(var(--active-theme-vivid), 1),
+    0 0 10px rgba(var(--active-theme), 0.8);
+}
+
+.dw-pie-legend li.dw-sel i {
+  box-shadow: 0 0 6px 1px rgba(var(--active-theme), 1);
+  filter: brightness(1.25);
 }
 
 .dw-svg rect.dw-hit {
@@ -987,39 +1021,15 @@ rect.dw-sel:not(.dw-hit) {
 }
 
 .dw-svg rect.dw-hit.dw-sel {
-  fill: color-mix(in srgb, var(--accent-color) 14%, transparent);
+  fill: rgba(var(--active-theme), 0.18);
 }
 
-.dw-hit.dw-dim {
-  opacity: 1;
+.dw-info {
+  margin-top: 0.6rem;
 }
 
-.dw-readout {
-  position: absolute;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  min-width: 8rem;
-  max-width: min(17rem, 92%);
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  line-height: 1.35;
-  color: var(--text-muted);
-  background: var(--surface-dark);
-  border: 1px solid var(--accent-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
-  pointer-events: none;
-}
-
-.dw-readout b {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--accent-color);
-}
-
-.dw-readout .is-on {
+.dw-info .is-on,
+.dw-info .is-on strong {
   font-weight: 700;
-  color: var(--text-main);
+  color: rgba(var(--active-theme-vivid), 1);
 }
