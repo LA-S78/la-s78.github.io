@@ -20,7 +20,7 @@ lang: "en"
 
   <!-- R4/R5, officers and Stewards only (the server sends it only to them) -->
   <section class="dash-card dash-rewards" id="dash-rewards" hidden aria-labelledby="dash-rewards-title">
-    <h3 class="dash-card-title" id="dash-rewards-title">🔒 Weekly Rewards <span class="dash-tag">Officers only</span></h3>
+    <h3 class="dash-card-title" id="dash-rewards-title">🔒 Weekly Rewards <span class="dash-tag">Officers</span></h3>
     <div id="dash-rewards-body"></div>
   </section>
 
@@ -109,11 +109,17 @@ lang: "en"
       renderWidgets();
     }
 
-    function chestLine(counts, pool) {
+    /** Chests as coloured icons with counts (names in the tooltip): gold, purple, blue. */
+    function chestIcons(counts, pool) {
       const c = (counts && counts[pool]) || {};
-      return Object.keys(CHESTS[pool])
-        .map((k) => `${CHESTS[pool][k]} ×${Number(c[k] || 0)}`)
-        .join(' · ');
+      const names = Object.keys(CHESTS[pool]).map((k) => `${CHESTS[pool][k]} ×${Number(c[k] || 0)}`).join(', ');
+      return `<span class="dash-chests" title="${escapeHtml(names)}" aria-label="${escapeHtml(names)}">${[
+        ['commanders_will', 'gold'],
+        ['loyal_servant', 'purple'],
+        ['followers_heart', 'blue'],
+      ]
+        .map(([k, glyph]) => `<span class="dash-chest"><span class="chest-glyph ${glyph}"></span>${Number(c[k] || 0)}</span>`)
+        .join('')}</span>`;
     }
 
     function when(iso) {
@@ -138,43 +144,54 @@ lang: "en"
       $('dash-rewards').hidden = !r;
       if (!r) return;
       const p = r.period;
-      const rows = [];
-      rows.push([
-        'Reward period',
-        p.open
-          ? `🟢 <strong>Open</strong> · closes in <span data-countdown="${escapeHtml(p.closesAt)}">${countdown(p.closesAt)}</span> <span class="dash-muted">· ${when(p.closesAt)}</span>`
-          : `⚪ <strong>Closed</strong> · opens in <span data-countdown="${escapeHtml(p.nextOpensAt)}">${countdown(p.nextOpensAt)}</span> <span class="dash-muted">· ${when(p.nextOpensAt)}, after Friday's capitol event</span>`,
-      ]);
-      rows.push(["👑 King's Commendation", chestLine(r.chests, 'standard')]);
-      let set2;
-      if (!p.kwWeek) set2 = '<span class="dash-muted">N/A: no Kingdom War this week (Off-Week)</span>';
-      else if (p.result === 'won') set2 = `🏆 <strong>Won</strong>, unlocked · ${chestLine(r.chests, 'kingdom_war')}`;
-      else if (p.result === 'lost') set2 = '🛡️ <strong>Lost</strong>: King\'s Commendation only this week';
-      else set2 = `⏳ <strong>Awaiting Saturday's result</strong> · if won: ${chestLine(r.chestsIfWon, 'kingdom_war')}`;
-      rows.push(['⚔️ King of Battle Reward', set2]);
-      if (r.hasBuyoutBonus) rows.push(['🛡️ Wartime Buyout', `+1 Commander's Will (and +1 Honor Vanguard if won), funded by WLO${r.buyoutThreat ? ` · threat: ${escapeHtml(r.buyoutThreat)}` : ''}`]);
-      if (r.isWloDeducted) rows.push(['⚖️ Wartime Buyout', "−1 Commander's Will (and −1 Honor Vanguard if won) this week, funding the displaced alliance"]);
       const n = r.nomination;
-      rows.push([
-        'Your list',
-        n.submitted
-          ? `✅ <strong>Sent</strong> · ${n.ranked} players ranked${n.reserves ? `, ${n.reserves} reserve${n.reserves === 1 ? '' : 's'}` : ''}${n.unfilled ? `, <span class="dash-warn">${n.unfilled} chest${n.unfilled === 1 ? '' : 's'} still need a name</span>` : ''}${n.submittedAt ? ` <span class="dash-muted">· ${when(n.submittedAt)}</span>` : ''}`
-          : p.open
-            ? '⚠️ <strong>Not sent yet</strong>'
-            : '<span class="dash-muted">Nothing to send while rewards are closed</span>',
-      ]);
 
+      // 1. Period and Kingdom War result
+      const status = p.open
+        ? `<span title="Closes ${escapeHtml(when(p.closesAt))}">🟢 <strong>Open</strong> · <span data-countdown="${escapeHtml(p.closesAt)}">${countdown(p.closesAt)}</span> left</span>`
+        : `<span title="Opens ${escapeHtml(when(p.nextOpensAt))}, after Friday's capitol event">⚪ <strong>Closed</strong> · opens in <span data-countdown="${escapeHtml(p.nextOpensAt)}">${countdown(p.nextOpensAt)}</span></span>`;
+      const war = !p.kwWeek
+        ? '<span class="dash-pill">Off-Week</span>'
+        : p.result === 'won'
+          ? '<span class="dash-pill is-good">🏆 KW won</span>'
+          : p.result === 'lost'
+            ? '<span class="dash-pill">🛡️ KW lost</span>'
+            : '<span class="dash-pill is-wait">⏳ KW pending</span>';
+
+      // 2. Chests: set 1 always; set 2 when won, greyed "if won" while pending
+      let set2 = '';
+      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="King of Battle Reward">⚔️ ${chestIcons(r.chests, 'kingdom_war')}</span>`;
+      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="King of Battle Reward, if the war is won">⚔️ ${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>if won</small></span>`;
+      const chests = r.rank
+        ? `<span class="dash-set" title="King's Commendation">👑 ${chestIcons(r.chests, 'standard')}</span>${set2}`
+        : '<span class="dash-warn">No rank in the standings: no chests</span>';
+
+      // 3. The list
+      const list = n.submitted
+        ? `<span title="${n.submittedAt ? `Sent ${escapeHtml(when(n.submittedAt))}` : ''}">✅ List sent · ${n.ranked}${n.reserves ? ` <span class="dash-muted">(${n.reserves} reserve${n.reserves === 1 ? '' : 's'})</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${n.unfilled} empty</span>` : ''}</span>`
+        : p.open
+          ? '<span class="dash-warn">⚠️ List not sent</span>'
+          : '<span class="dash-muted">No list while closed</span>';
       let action = '';
       if (p.open && data.viewer.canNominate) {
-        action = `<button type="button" class="submit-plan-btn" id="dash-nominate">📝 ${n.submitted ? 'Change the list' : 'Open the nomination page'}</button><div class="dash-muted dash-small" id="dash-nominate-error"></div>`;
+        action = `<button type="button" class="dash-btn" id="dash-nominate">📝 ${n.submitted ? 'Edit' : 'Send list'}</button>`;
       } else if (p.open) {
-        action = '<div class="dash-muted dash-small">Your R5 can open the nomination page from here, or run <code>/nominate</code> in Discord.</div>';
+        action = '<span class="dash-muted dash-small" title="Your R5 can open the nomination page from here, or run /nominate in Discord.">R5 or /nominate</span>';
       }
 
+      // 4. Buyout, only when it applies
+      const buyout = r.hasBuyoutBonus
+        ? `<div class="dash-line dash-small" title="Funded by WLO${r.buyoutThreat ? ` · threat: ${escapeHtml(r.buyoutThreat)}` : ''}"><span>🛡️ Buyout: <strong>+1</strong> <span class="chest-glyph gold"></span> in each set won</span></div>`
+        : r.isWloDeducted
+          ? '<div class="dash-line dash-small" title="Funding the displaced alliance this week"><span>⚖️ Buyout: <strong>−1</strong> <span class="chest-glyph gold"></span> in each set</span></div>'
+          : '';
+
       $('dash-rewards-body').innerHTML =
-        `<dl class="dash-rows">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` +
-        (r.rank ? '' : '<div class="dash-warn dash-small">This alliance has no rank in the standings, so it has no chests.</div>') +
-        (action ? `<div class="dash-actions">${action}</div>` : '');
+        `<div class="dash-line">${status}${war}</div>` +
+        `<div class="dash-line dash-chest-row">${chests}</div>` +
+        `<div class="dash-line">${list}${action}</div>` +
+        buyout +
+        '<div class="dash-warn dash-small" id="dash-nominate-error"></div>';
 
       $('dash-nominate')?.addEventListener('click', openNomination);
       clearInterval(countdownTimer);
