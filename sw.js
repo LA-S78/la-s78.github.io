@@ -18,6 +18,8 @@ if (workbox) {
   // We use a typeof check so the script doesn't crash in dev mode when the list is missing.
   const pwaCache = typeof precacheList !== 'undefined' ? precacheList : [];
   workbox.precaching.precacheAndRoute(pwaCache);
+  // Delete what older versions of this worker saved, so phones don't keep stale copies
+  workbox.precaching.cleanupOutdatedCaches();
 
   // 2. Runtime Caching for external or lazy-loaded images
   workbox.routing.registerRoute(
@@ -65,16 +67,33 @@ if (workbox) {
     }
   );
 
-  // 4. Fallback routing (Upgraded for Turbo Drive compatibility)
-  workbox.routing.setCatchHandler(({event}) => {
-      const acceptHeader = event.request.headers.get('accept') || '';
-      const isNavigate = event.request.destination === 'document';
-      const isTurboFetch = event.request.destination === '' && acceptHeader.includes('text/html');
+  // Pages that weren't saved: straight from the network, as without a worker. Having a
+  // route means a failed load (offline) reaches the fallback below.
+  workbox.routing.registerRoute(
+    ({ url, event }) =>
+      url.origin === self.location.origin &&
+      (event.request.mode === 'navigate' ||
+        (event.request.headers.get('accept') || '').includes('text/html')),
+    new workbox.strategies.NetworkOnly()
+  );
 
-      if (isNavigate || isTurboFetch) {
-          return caches.match('/index.html');
-      }
-      return Response.error();
+  // 4. Fallback routing (Upgraded for Turbo Drive compatibility)
+  //    Offline, a page that was never saved opens the home page in the reader's language
+  //    (always saved). Saved pages are stored under a versioned address, so they are looked
+  //    up through Workbox (a plain caches.match('/index.html') never found them).
+  workbox.routing.setCatchHandler(async ({ event }) => {
+    const acceptHeader = event.request.headers.get('accept') || '';
+    const isNavigate = event.request.destination === 'document';
+    const isTurboFetch = event.request.destination === '' && acceptHeader.includes('text/html');
+    if (!isNavigate && !isTurboFetch) return Response.error();
+
+    const path = new URL(event.request.url).pathname;
+    const lang = (path.match(/^\/(en|de|es|fr|it|ru|tr|uk)\//) || [])[1] || 'en';
+    for (const url of [`/${lang}/index.html`, '/en/index.html', '/index.html']) {
+      const saved = await caches.match(workbox.precaching.getCacheKeyForURL(url) || url);
+      if (saved) return saved;
+    }
+    return Response.error();
   });
 }
 

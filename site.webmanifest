@@ -30,5 +30,59 @@
       "form_factor": "narrow",
       "label": "Mobile View"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Map",
+      "short_name": "Map",
+      "description": "Territory map",
+      "url": "/?to=map",
+      "icons": [
+        {
+          "src": "/images/favicon.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Alliance",
+      "short_name": "Alliance",
+      "description": "NAP standings and blacklist",
+      "url": "/?to=alliance",
+      "icons": [
+        {
+          "src": "/images/favicon.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Calendar",
+      "short_name": "Calendar",
+      "description": "Events and the Capitol rotation",
+      "url": "/?to=calendar",
+      "icons": [
+        {
+          "src": "/images/favicon.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Rules",
+      "short_name": "Rules",
+      "description": "Server rules and rewards",
+      "url": "/?to=rules",
+      "icons": [
+        {
+          "src": "/images/favicon.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    }
   ]
 }
