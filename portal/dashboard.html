@@ -245,7 +245,14 @@ lang: "en"
 
     function widgetCard(w, i, count) {
       const vis = w.visibility === 'members' ? '👥 All members' : '🔒 Officers only';
-      const updated = w.updatedAt ? `Updated ${new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}` : '';
+      const linked = w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc');
+      const day = (iso) => new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      const updated = linked
+        ? `🔗 ${w.source.kind === 'doc' ? 'Google Doc' : 'Google Sheet'}${w.syncedAt ? ` · synced ${day(w.syncedAt)}` : ''}`
+        : w.updatedAt
+          ? `Updated ${new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}`
+          : '';
+      const sync = linked && isLeader() ? '<button type="button" class="dash-sync" data-act="sync" title="Fetch the latest numbers from the sheet">🔄 Sync now</button>' : '';
       const tools = editing
         ? `<div class="dash-widget-tools">
             <button type="button" class="dash-icon-btn" data-act="up" ${i === 0 ? 'disabled' : ''} title="Move up" aria-label="Move up">▲</button>
@@ -256,7 +263,7 @@ lang: "en"
         : '';
       return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}">
         <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
-        <div class="dash-widget-meta">${isLeader() ? `<span>${vis}</span>` : ''}${updated ? `<span>${updated}</span>` : ''}</div>
+        <div class="dash-widget-meta">${isLeader() ? `<span>${vis}</span>` : ''}${updated ? `<span>${updated}</span>` : ''}${sync}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
         <div class="dash-widget-body">${W.render(w)}</div>
       </article>`;
@@ -299,6 +306,16 @@ lang: "en"
       const id = b.closest('.dash-widget').dataset.id;
       const act = b.dataset.act;
       if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
+      if (act === 'sync') {
+        b.disabled = true;
+        b.textContent = '🔄 Syncing…';
+        const error = await save({ action: 'sync-widget', id });
+        if (error && document.body.contains(b)) {
+          b.disabled = false;
+          b.textContent = '🔄 Sync now';
+        }
+        return;
+      }
       if (act === 'delete') {
         const w = data.dashboard.widgets.find((x) => x.id === id);
         if (!confirm(`Delete "${w ? w.title : 'this chart'}"? This can't be undone.`)) return;
@@ -341,7 +358,7 @@ lang: "en"
       ed.innerHTML = `
         <h3 class="dash-card-title">${existing ? '✏️ Edit chart or table' : '➕ New chart or table'}</h3>
         <label>Type</label>
-        <div class="dash-types" role="group" aria-label="Type">${TYPES.map(([t, name]) => `<button type="button" data-type="${t}" aria-pressed="${w.type === t}">${name}</button>`).join('')}</div>
+        <div class="dash-types" id="ed-types" role="group" aria-label="Type">${TYPES.map(([t, name]) => `<button type="button" data-type="${t}" aria-pressed="${w.type === t}">${name}</button>`).join('')}</div>
         <label for="ed-title">Title</label>
         <input type="text" id="ed-title" maxlength="80" value="${escapeHtml(w.title)}" placeholder="e.g. Alliance Duel scores">
         <label for="ed-note">Explanation <span class="dash-muted">(optional)</span></label>
@@ -351,8 +368,27 @@ lang: "en"
           <option value="r4_only"${w.visibility !== 'members' ? ' selected' : ''}>🔒 Officers only (R4/R5)</option>
           <option value="members"${w.visibility === 'members' ? ' selected' : ''}>👥 All alliance members</option>
         </select>
-        <label for="ed-paste">Data <span class="dash-muted">(paste from Google Sheets or Excel, header row first)</span></label>
-        <textarea id="ed-paste" class="dash-paste" placeholder="Name&#9;Score&#10;Aria&#9;15200000&#10;Bram&#9;12900000"></textarea>
+        <label>Data</label>
+        <div class="dash-types dash-src" role="group" aria-label="Where the data comes from">
+          <button type="button" data-src="paste" aria-pressed="true">📋 Paste a table</button>
+          <button type="button" data-src="link" aria-pressed="false">🔗 Google Sheet / Doc link</button>
+        </div>
+        <div id="ed-src-paste">
+          <div class="dash-muted dash-small">Copy the cells from Google Sheets or Excel (header row first) and paste them here.</div>
+          <textarea id="ed-paste" class="dash-paste" placeholder="Name&#9;Score&#10;Aria&#9;15200000&#10;Bram&#9;12900000"></textarea>
+        </div>
+        <div id="ed-src-link" hidden>
+          <input type="text" id="ed-url" placeholder="https://docs.google.com/spreadsheets/d/…" value="${escapeHtml((w.source && w.source.url) || '')}">
+          <div class="dash-link-opts" id="ed-sheet-opts">
+            <input type="text" id="ed-sheet" placeholder="Tab name (optional)" value="${escapeHtml((w.source && w.source.sheet) || '')}">
+            <input type="text" id="ed-range" placeholder="Range, e.g. A1:D20 (optional)" value="${escapeHtml((w.source && w.source.range) || '')}">
+          </div>
+          <div class="dash-link-opts" id="ed-doc-opts" hidden>
+            <input type="text" inputmode="numeric" id="ed-table" placeholder="Which table in the Doc (1, 2…)" value="${escapeHtml(String((w.source && w.source.table) || ''))}">
+          </div>
+          <button type="button" class="dash-btn" id="ed-load">⤓ Load from Google</button>
+          <div class="dash-muted dash-small">Sheets: Share → “Anyone with the link can view” (or File → Share → Publish to web). Docs: File → Share → Publish to web. “Sync now” on the card fetches the latest numbers later.</div>
+        </div>
         <div class="dash-muted dash-small" id="ed-parsed"></div>
         <div id="ed-options"></div>
         <div class="dash-editor-preview"><div class="dash-muted dash-small">Preview</div><div id="ed-preview"></div></div>
@@ -448,8 +484,28 @@ lang: "en"
         W.mount(box, w);
       }
 
-      function readPaste() {
-        const parsed = W.parseTable($('ed-paste').value);
+      // Where the data comes from: a pasted table, or a Google Sheet / Doc (loaded by the server).
+      let mode = w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc') ? 'link' : 'paste';
+      function setMode(m) {
+        mode = m;
+        ed.querySelectorAll('.dash-src button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.src === m)));
+        $('ed-src-paste').hidden = m !== 'paste';
+        $('ed-src-link').hidden = m !== 'link';
+      }
+      function linkKind() {
+        return /\/document\//.test($('ed-url').value) ? 'doc' : 'sheet';
+      }
+      function showLinkOptions() {
+        $('ed-sheet-opts').hidden = linkKind() !== 'sheet';
+        $('ed-doc-opts').hidden = linkKind() !== 'doc';
+      }
+      function linkSource() {
+        const kind = linkKind();
+        return kind === 'doc'
+          ? { kind, url: $('ed-url').value.trim(), table: Number($('ed-table').value) || 1 }
+          : { kind, url: $('ed-url').value.trim(), sheet: $('ed-sheet').value.trim(), range: $('ed-range').value.trim() };
+      }
+      function useData(parsed) {
         const changed = parsed.columns.join('\t') !== w.data.columns.join('\t');
         w.data = parsed;
         if (changed) w.options = { ...w.options, labelCol: 0, valueCols: [] };
@@ -459,13 +515,44 @@ lang: "en"
         drawOptions();
         preview();
       }
+      ed.querySelector('.dash-src').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-src]');
+        if (b) setMode(b.dataset.src);
+      });
+      $('ed-url').addEventListener('input', showLinkOptions);
+      $('ed-load').addEventListener('click', async () => {
+        const btn = $('ed-load');
+        btn.disabled = true;
+        btn.textContent = '⤓ Loading…';
+        $('ed-error').textContent = '';
+        try {
+          const res = await fetch('/api/dashboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+            body: JSON.stringify({ action: 'load-source', source: linkSource(), alliance: data.alliance.tag }),
+          });
+          const body = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+          w.source = linkSource();
+          w.syncedAt = body.syncedAt;
+          useData(body.data);
+        } catch (err) {
+          $('ed-error').textContent = err.message;
+        }
+        btn.disabled = false;
+        btn.textContent = '⤓ Load from Google';
+      });
 
-      ed.querySelector('.dash-types').addEventListener('click', (e) => {
+      function readPaste() {
+        useData(W.parseTable($('ed-paste').value));
+      }
+
+      $('ed-types').addEventListener('click', (e) => {
         const b = e.target.closest('[data-type]');
         if (!b) return;
         readOptions();
         w.type = b.dataset.type;
-        ed.querySelectorAll('.dash-types button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        ed.querySelectorAll('#ed-types button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
         if (w.type === 'pie' || w.type === 'progress') w.options.valueCols = (w.options.valueCols || []).slice(0, 1);
         if (w.type === 'line' && (w.options.valueCols || []).length <= 1) w.options.valueCols = [];
         drawOptions();
@@ -482,6 +569,15 @@ lang: "en"
       $('ed-save').addEventListener('click', async () => {
         readOptions();
         preview();
+        if (mode === 'link') {
+          if (!w.source || !w.source.url || w.source.url !== $('ed-url').value.trim()) {
+            $('ed-error').textContent = 'Load the sheet first (⤓ Load from Google).';
+            return;
+          }
+        } else {
+          w.source = { kind: 'paste' };
+          delete w.syncedAt;
+        }
         const btn = $('ed-save');
         btn.disabled = true;
         btn.textContent = 'Saving…';
@@ -492,7 +588,10 @@ lang: "en"
         else closeEditor();
       });
 
-      readPaste();
+      setMode(mode);
+      showLinkOptions();
+      if (mode === 'link') useData(w.data);
+      else readPaste();
       ed.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 

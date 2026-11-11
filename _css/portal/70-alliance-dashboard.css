@@ -707,3 +707,35 @@ html[data-theme='sanctuary'] .dw-s4 { --dw: #8fbf7f; }
 .dash-error:empty {
   display: none;
 }
+
+/* Linked to a Google Sheet / Doc: the link fields, and Sync now on the card */
+.dash-src {
+  margin-bottom: 0.4rem;
+}
+
+.dash-link-opts {
+  display: flex;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+#ed-src-link .dash-btn {
+  margin: 4px 0 6px;
+}
+
+.dash-sync {
+  margin-left: auto;
+  padding: 1px 8px;
+  font: inherit;
+  font-size: 0.68rem;
+  color: var(--accent-color);
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dash-sync:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}

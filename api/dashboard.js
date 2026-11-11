@@ -7,6 +7,9 @@
 //      Stewards, as /nominate gives in Discord.
 // POST { action: 'save-widget' | 'delete-widget' | 'move-widget', ... [, alliance] }: leaders
 //      edit their dashboard's charts and tables (api/_dashboard.js applyDashboardEdit).
+// POST { action: 'load-source', source } reads a Google Sheet / Doc for the editor's preview;
+//      { action: 'sync-widget', id } refreshes a saved chart from its sheet
+//      (api/_google_source.js: Google hosts only).
 //
 // Rules and storage: api/_dashboard.js and docs/DECISIONS.md ("Alliance Dashboard").
 
@@ -16,6 +19,7 @@ import { isSteward } from './_stewards.js';
 import { DEFAULT_FALLBACK_COLORS } from './_alliances.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
+import { fetchSourceTable } from './_google_source.js';
 import {
   applyDashboardEdit,
   dashboardFile,
@@ -117,17 +121,48 @@ async function editDashboard(req, res, { gist, tag, access, session }) {
       .status(403)
       .json({ error: "Only your alliance's R4s and R5s can change the dashboard." });
   }
+  const body = req.body || {};
   const file = dashboardFile(tag);
+
+  // Read a Google Sheet / Doc for the editor's preview (nothing is saved).
+  if (body.action === 'load-source') {
+    try {
+      const data = await fetchSourceTable(body.source || {});
+      return res.status(200).json({ data, syncedAt: new Date().toISOString() });
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
+  }
+
+  // Sync a saved chart from its sheet: fetched first, then saved like any other edit.
+  let edit = body;
+  if (body.action === 'sync-widget') {
+    const widget = readDashboard(gistJson(gist, file, {}), tag).widgets.find(
+      (w) => w.id === body.id,
+    );
+    if (!widget) return res.status(404).json({ error: 'That chart was removed.' });
+    if (!['sheet', 'doc'].includes(widget.source?.kind)) {
+      return res.status(400).json({ error: "This chart isn't linked to a Google Sheet or Doc." });
+    }
+    try {
+      edit = { action: 'sync-data', id: body.id, data: await fetchSourceTable(widget.source) };
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
+  } else if (body.action === 'sync-data') {
+    return res.status(400).json({ error: 'Unknown change.' }); // only after a fetch, above
+  }
+
   try {
     const out = await updateGist(
       (fresh) => {
         const stored = readDashboard(gistJson(fresh, file, {}), tag);
-        const result = applyDashboardEdit(stored, req.body || {}, { actor: session.name || '' });
+        const result = applyDashboardEdit(stored, edit, { actor: session.name || '' });
         if (result.error) return { refused: result };
         return {
           dashboard: result.dashboard,
           files: { [file]: result.dashboard },
-          description: `Dashboard [${tag}]: ${req.body?.action} by ${session.name || 'a leader'}`,
+          description: `Dashboard [${tag}]: ${edit.action} by ${session.name || 'a leader'}`,
         };
       },
       { gist },
