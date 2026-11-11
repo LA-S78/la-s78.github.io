@@ -15,7 +15,8 @@ module WorkboxInjector
   # Paths (relative to the site root) that must never be precached.
   EXCLUDED_PREFIXES = [
     '/api/',                 # Vercel serverless sources, not static assets
-    '/js/mermaid.min.js'     # 3.3 MB, only used by the internal test page
+    '/js/mermaid.min.js',    # 3.3 MB, only used by the internal test page
+    '/images/compendium-desk.webp' # only on /reset, which empties the saved copy anyway
   ].freeze
 
   def self.run(dest_path)

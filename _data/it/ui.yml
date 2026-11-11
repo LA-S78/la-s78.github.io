@@ -164,6 +164,7 @@ pwa:
   toast_msg: "Nuove informazioni acquisite."
   update_btn: "Aggiorna"
   updating: "Decrittazione..."
+  updated_msg: "✅ App aggiornata all’ultima versione."
 
 #header sign-in pill (js/identity-pill.js)
 identity:
@@ -174,6 +175,8 @@ identity:
   sign_in_again: "Accedi di nuovo"
   refresh: "Aggiorna accesso"
   sign_out: "Esci"
+  force_update: "Aggiorna app"
+  force_updating: "Aggiornamento…"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

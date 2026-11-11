@@ -445,6 +445,26 @@ footer {
 .id-btn--primary:hover {
   background: var(--brand-discord-hover);
 }
+/* "Update App": a quiet text button under Refresh Access / Sign Out */
+.id-btn-link {
+  display: block;
+  margin: 8px auto 0;
+  padding: 2px 6px;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.id-btn-link:hover {
+  color: var(--text-main);
+  text-decoration: underline;
+}
+.id-btn-link:disabled {
+  cursor: progress;
+  text-decoration: none;
+}
 
 /* Phones: the collapsed pill shows only the avatar and the rank icon (the full badge is
    in the card), and the card spans the screen under the header */
