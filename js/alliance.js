@@ -4,6 +4,7 @@
  */
 
 import { submitProposalWithAuth } from './auth-modal.js';
+import { ALLIANCE_COLORS } from './alliance-defaults.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -13,18 +14,8 @@ const esc = (value) => window.escapeHtml(value);
 const ALLIANCE_DRAFT_KEY = 'la_alliance_planner_draft';
 const BLACKLIST_DRAFT_KEY = 'la_blacklist_draft';
 
-const DEFAULT_ALLIANCE_COLORS = {
-  WLO: '#25bb00',
-  RÂVN: '#cece00',
-  RAVN: '#cece00',
-  MIA: '#a400af',
-  BOTS: '#0070f3',
-  SVN: '#e53e3e',
-  PHNX: '#dd6b20',
-  HMDA: '#d53f8c',
-  NAVI: '#319795',
-  HeKi: '#d69e2e',
-};
+// Colours for alliances with none of their own: _data/alliances.yml (via js/alliance-defaults.js)
+const DEFAULT_ALLIANCE_COLORS = ALLIANCE_COLORS;
 
 const AUTO_PALETTE = [
   '#25bb00',

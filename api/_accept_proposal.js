@@ -15,24 +15,14 @@ import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
  * Steward sees "Failed to update ..." in Discord; nothing is saved. `fallback` is only
  * used when the read succeeds but the file doesn't exist yet.
  */
+import { DEFAULT_FALLBACK_COLORS } from './_alliances.js';
+import { BASELINE_SCHEDULES } from './_cycle_helper.js';
+
 const jsonResult = (status, json) => ({ status, json });
 
 async function readForApproval(filename, fallback) {
   return gistJson(await readGist(), filename, fallback);
 }
-
-const DEFAULT_FALLBACK_COLORS = {
-  WLO: '#25bb00',
-  RÂVN: '#cece00',
-  RAVN: '#cece00',
-  MIA: '#a400af',
-  BOTS: '#0070f3',
-  SVN: '#e53e3e',
-  PHNX: '#dd6b20',
-  HMDA: '#d53f8c',
-  NAVI: '#319795',
-  HeKi: '#d69e2e',
-};
 
 /**
  * @param {object} payload the proposal: { type, submittedBy, distribution | changes |
@@ -282,7 +272,7 @@ export async function acceptProposal(payload, { baseUrl = 'https://la-s78.app' }
           macro_cycle: 1,
           current_week: 1,
           override_count: 0,
-          active_schedule: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
+          active_schedule: { ...BASELINE_SCHEDULES[1] },
         };
 
         // Force override_count to at least 1 if the UI explicitly declared a buyout

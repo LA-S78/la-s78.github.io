@@ -5,11 +5,7 @@ import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 // Unified Read-Only State Proxy for Map, Rewards, and Alliance Hierarchy
 
-const BASELINE_SCHEDULES = {
-  1: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
-  2: { downtime: 'MIA', week_1: 'BOTS', week_2: 'RÂVN', week_3: 'WLO' },
-  3: { downtime: 'RÂVN', week_1: 'MIA', week_2: 'BOTS', week_3: 'WLO' },
-};
+import { BASELINE_SCHEDULES } from './_cycle_helper.js';
 
 /**
  * Ensures cycle_state always returns valid numbers and never has an empty active_schedule.
