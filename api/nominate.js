@@ -4,12 +4,24 @@
 // again whenever the Kingdom War result changes what's available.
 
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
-import { verifyToken } from './_tokens.js';
+import { verifySessionToken, verifyToken } from './_tokens.js';
+import { isSteward } from './_stewards.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { describeRewardPeriod, getRewardPeriod, syncRewardPeriod } from './_reward_period.js';
 import { getAllianceNominationQuota, quotaIfWon } from './_rewards_helper.js';
-import { chestCounts, cleanRankedList, rankedFromSlots } from './_nomination_assign.js';
-import { buildNomination, reassignAllNominations } from './_nominations.js';
+import {
+  CHEST_TYPES,
+  chestCounts,
+  cleanRankedList,
+  rankedFromSlots,
+} from './_nomination_assign.js';
+import {
+  buildNomination,
+  handedOutFor,
+  handedOutKey,
+  kingAlliance,
+  reassignAllNominations,
+} from './_nominations.js';
 
 export default async function handler(req, res) {
   if (!isGistConfigured()) {
@@ -44,6 +56,9 @@ export default async function handler(req, res) {
         mode: view.mode || 'standard',
         period: describeRewardPeriod(period, rewardsData),
         wartime_buyouts: rewardsData.wartime_buyouts || [],
+        // The King's checklist: chests ticked as handed out, and whose leaders may tick
+        handed_out: current ? rewardsData.period?.handed_out || {} : {},
+        king: current ? kingAlliance(rewardsData, period) : null,
       };
 
       const token = req.query?.token;
@@ -63,6 +78,10 @@ export default async function handler(req, res) {
           isWloDeducted: now.isWloDeducted,
           ranked: nominations[tag]?.ranked || rankedFromSlots(nominations[tag]?.recipients || {}),
           submittedAt: nominations[tag]?.submittedAt || null,
+          // Already handed out by the King: locked, kept whatever the list says
+          handedOut: current
+            ? handedOutFor(rewardsData, tag).map(({ pool, chest, name }) => ({ pool, chest, name }))
+            : [],
         };
       }
       return res.status(200).json(body);
@@ -75,6 +94,8 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  if (req.body?.action === 'handout') return handleHandout(req, res);
 
   const { token } = req.body || {};
   const botToken = process.env.DISCORD_BOT_TOKEN;
@@ -155,6 +176,128 @@ export default async function handler(req, res) {
 }
 
 /** The calendar settings (calendar-state.json), over the defaults. */
+/** Tags compared without letter case or accents (RÂVN = ravn). */
+const sameTag = (a, b) =>
+  Boolean(a && b) &&
+  String(a)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase() ===
+    String(b)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+/**
+ * POST { action: 'handout', alliance, pool, chest, name, done } with the login pass
+ * (Authorization: Bearer): ticks (done: true) or unticks a chest on the King's checklist.
+ * Allowed for the R4/R5 of this period's King's alliance (kingAlliance) and Stewards. A
+ * ticked chest is locked: later re-sorts keep it with that player (assignChests).
+ */
+async function handleHandout(req, res) {
+  const botToken = process.env.DISCORD_BOT_TOKEN;
+  const pass = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '');
+  const session = verifySessionToken(pass, botToken);
+  if (!session) {
+    return res
+      .status(401)
+      .json({ error: 'Sign in with Discord (top right) to tick chests.', code: 'login' });
+  }
+  const { alliance, pool, chest, name, done } = req.body || {};
+  if (
+    typeof alliance !== 'string' ||
+    !['standard', 'kingdom_war'].includes(pool) ||
+    !CHEST_TYPES.includes(chest) ||
+    typeof name !== 'string' ||
+    !name.trim() ||
+    name.length > 60
+  ) {
+    return res.status(400).json({ error: 'Invalid chest.' });
+  }
+  const steward = isSteward(session.uid);
+
+  try {
+    const saved = await updateGist((gist) => {
+      const rewardsData = gistJson(gist, 'rewards-data.json');
+      const period = getRewardPeriod(Date.now(), calendarConfig(gist));
+      if (!period.open || rewardsData.period?.id !== period.id) {
+        return { refused: { status: 409, error: 'No reward period is open right now.' } };
+      }
+      const king = kingAlliance(rewardsData, period);
+      const leader = ['R4', 'R5'].includes(session.role) && sameTag(session.alliance, king);
+      if (!steward && !leader) {
+        return {
+          refused: {
+            status: 403,
+            error: `Only the King's alliance${king ? ` [${king}]` : ''} (R4/R5) and Stewards can tick chests.`,
+          },
+        };
+      }
+
+      const handed = { ...(rewardsData.period.handed_out || {}) };
+      const key = handedOutKey(alliance, pool, chest, name);
+      const nominations = gistJson(gist, 'rewards-nominations.json');
+      if (done) {
+        // The King ticks what the console showed: that chest is given in the game, so the
+        // tick stands even if the list was re-sorted meanwhile (the lock then puts the player
+        // back in that chest). Only a player who isn't on the alliance's list is refused.
+        const entry = nominations[alliance];
+        const listed = [
+          ...(entry?.ranked || []),
+          ...Object.values(entry?.recipients || {}).flatMap((p) => Object.values(p).flat()),
+        ];
+        const holder = listed.find((n) => n.toLowerCase() === name.trim().toLowerCase());
+        if (!holder && !handed[key]) {
+          return {
+            refused: {
+              status: 409,
+              error: `${name} is no longer on [${alliance}]'s list. Refresh the page.`,
+            },
+          };
+        }
+        if (handed[key]) return { handedOut: handed }; // already ticked
+        // One chest per player: a tick for another chest (from a page not yet refreshed) is replaced.
+        for (const [k, h] of Object.entries(handed)) {
+          if (h.alliance === alliance && h.name.toLowerCase() === holder.toLowerCase())
+            delete handed[k];
+        }
+        handed[key] = {
+          alliance,
+          pool,
+          chest,
+          name: holder,
+          by: session.name || 'Unknown',
+          at: new Date().toISOString(),
+        };
+      } else {
+        if (!handed[key]) return { handedOut: handed }; // not ticked
+        delete handed[key];
+      }
+      rewardsData.period.handed_out = handed;
+      // The lists sorted again with the lock (or without it), so the saved chests always
+      // match the checklist, even if a list was re-sent at the same moment.
+      const sorted = reassignAllNominations(
+        nominations,
+        rewardsData,
+        gistJson(gist, 'map-state.json'),
+      );
+      return {
+        handedOut: handed,
+        files: { 'rewards-data.json': rewardsData, 'rewards-nominations.json': sorted },
+        description: `King's checklist: ${done ? 'handed out' : 'unticked'} ${name} [${alliance}] by ${session.name}`,
+      };
+    });
+    if (saved.refused) {
+      return res.status(saved.refused.status).json({ error: saved.refused.error });
+    }
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(200).json({ success: true, handed_out: saved.handedOut });
+  } catch (err) {
+    console.error("King's checklist not saved:", err);
+    return res.status(500).json({ error: `Could not save: ${err.message}` });
+  }
+}
+
 function calendarConfig(gist) {
   return { ...DEFAULT_CALENDAR_CONFIG, ...gistJson(gist, 'calendar-state.json', {}) };
 }

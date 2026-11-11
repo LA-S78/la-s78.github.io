@@ -3,7 +3,6 @@ layout: portal
 title: King's Distribution Console
 permalink: /distribute.html
 lang: "en"
-hide_header: true
 ---
 
 <div class="content-pane portal-pane-md">
@@ -24,69 +23,97 @@ hide_header: true
       <button type="button" class="toggle-btn" id="btn-group-alliance">By Alliance</button>
     </div>
 
-    <button type="button" class="draft-btn btn-reset-checklist" id="btn-reset-progress">
-      Reset Checklist
-    </button>
   </div>
+
+  <!-- Who can tick, and why not (signed out, another alliance) -->
+  <div id="checklist-note" class="sub-text distribute-checklist-note"></div>
 
   <div id="roster-container"></div>
 </div>
 
 <script>
   (function () {
-    let currentStorageKey = 'la_sent_recipients_default';
     let nominationsData = {};
     let wartimeBuyouts = [];
     let groupBy = 'chest';
     let period = null;
+    // The King's checklist, saved on the server for everyone (api/nominate.js):
+    // { key: { alliance, pool, chest, name, by, at } }. A ticked chest is locked.
+    let handedOut = {};
+    let king = null;
 
     const elRoster = document.getElementById('roster-container');
     const elProgress = document.getElementById('progress-indicator');
     const elBuyoutBanner = document.getElementById('buyout-status-banner');
+    const elNote = document.getElementById('checklist-note');
     const btnGroupChest = document.getElementById('btn-group-chest');
     const btnGroupAlliance = document.getElementById('btn-group-alliance');
-    const btnReset = document.getElementById('btn-reset-progress');
 
-    function getSentSet() {
+    const POOL = { REG: 'standard', KW: 'kingdom_war' };
+    const keyOf = (e) => `${e.alliance}:${POOL[e.pool]}:${e.type}:${e.ign.toLowerCase()}`;
+    const fold = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+    // Who may tick (the server checks it again): Stewards, and R4/R5 of the King's alliance.
+    function loginPass() {
       try {
-        return new Set(JSON.parse(localStorage.getItem(currentStorageKey) || '[]'));
+        return localStorage.getItem('auth-session') || '';
       } catch (e) {
-        return new Set();
+        return '';
+      }
+    }
+    function tickAccess() {
+      const stored = (k) => {
+        try {
+          return localStorage.getItem(k) || '';
+        } catch (e) {
+          return '';
+        }
+      };
+      if (!loginPass()) return { can: false, why: 'signed-out' };
+      if (stored('auth-steward') === 'true') return { can: true };
+      const leader = ['R4', 'R5'].includes(stored('auth-role'));
+      if (leader && king && fold(stored('auth-alliance')) === fold(king)) return { can: true };
+      return { can: false, why: 'not-king' };
+    }
+
+    function renderNote() {
+      if (!elNote) return;
+      const access = tickAccess();
+      const kingText = king ? `[${escapeHtml(king)}]` : "the King's alliance";
+      if (!period || !period.open) {
+        elNote.innerHTML = '';
+      } else if (access.can) {
+        elNote.innerHTML = `✅ Tap a player once their chest is handed out in the game. Ticks are saved for everyone, and a ticked chest stays with that player if the lists are re-sorted.`;
+      } else if (access.why === 'signed-out') {
+        elNote.innerHTML = `👀 View only. The King's checklist can be ticked by ${kingText} R4/R5 and Stewards: sign in with Discord (top right).`;
+      } else {
+        elNote.innerHTML = `👀 View only: the checklist is ticked by ${kingText} R4/R5 and Stewards.`;
       }
     }
 
-    function saveSentSet(set) {
-      localStorage.setItem(currentStorageKey, JSON.stringify(Array.from(set)));
-    }
-
+    let loading = null;
     async function loadNominations() {
-      try {
-        const res = await fetch(`/api/nominate?t=${Date.now()}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-
-        if (data && data.nominations) {
-          nominationsData = data.nominations;
+      if (loading) return loading;
+      loading = (async () => {
+        try {
+          const res = await fetch(`/api/nominate?t=${Date.now()}`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          nominationsData = data.nominations || {};
           wartimeBuyouts = data.wartime_buyouts || [];
           period = data.period || null;
-          if (data.lastReset) {
-            const cycleHash = btoa(data.lastReset).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16);
-            currentStorageKey = `la_sent_recipients_${cycleHash}`;
-          }
-        } else {
-          nominationsData = data || {};
-          const headerCycle = res.headers.get('x-cycle-id');
-          if (headerCycle) {
-            currentStorageKey = `la_sent_recipients_${headerCycle}`;
-          }
+          handedOut = data.handed_out || {};
+          king = data.king || null;
+          render();
+        } catch (err) {
+          elRoster.innerHTML = `<div class="status-banner warning">
+            Failed to load nominations: ${escapeHtml(err.message)}
+          </div>`;
+        } finally {
+          loading = null;
         }
-
-        render();
-      } catch (err) {
-        elRoster.innerHTML = `<div class="status-banner warning">
-          Failed to load nominations: ${err.message}
-        </div>`;
-      }
+      })();
+      return loading;
     }
 
     // The period (api/_reward_period.js). In a Kingdom War week the King waits for the battle
@@ -129,11 +156,11 @@ hide_header: true
     }
 
     function render() {
-      const sentSet = getSentSet();
       const alliances = Object.keys(nominationsData);
 
       renderPeriodBanner();
       renderBuyoutBanner();
+      renderNote();
 
       if (alliances.length === 0) {
         elRoster.innerHTML = '<div class="sub-text distribute-empty">No nominations submitted yet.</div>';
@@ -174,7 +201,7 @@ hide_header: true
         }
       });
 
-      const sentCount = flatList.filter(e => sentSet.has(`${e.alliance}:${e.pool}:${e.type}:${e.ign}`)).length;
+      const sentCount = flatList.filter(e => handedOut[keyOf(e)]).length;
       elProgress.textContent = `Progress: ${sentCount} / ${flatList.length} Distributed`;
 
       let html = '';
@@ -213,7 +240,7 @@ hide_header: true
           }
           html += `<div class="slot-group-title distribute-group-heading">${tier.title} (${matched.length})</div>`;
           matched.forEach(item => {
-            html += renderRow(item, tier.glyph, sentSet);
+            html += renderRow(item, tier.glyph);
           });
         });
       } else {
@@ -235,7 +262,7 @@ hide_header: true
           html += `<div class="slot-group-title distribute-group-heading">[${tag}] • Rank ${nominationsData[tag].rank || '-'} (${matched.length})</div>`;
           matched.forEach(item => {
             const glyph = item.type === 'commanders_will' ? 'gold' : item.type === 'loyal_servant' ? 'purple' : 'blue';
-            html += renderRow(item, glyph, sentSet);
+            html += renderRow(item, glyph);
           });
         });
       }
@@ -244,13 +271,82 @@ hide_header: true
       bindEvents();
     }
 
-    function renderRow(item, glyph, sentSet) {
-      const id = `${item.alliance}:${item.pool}:${item.type}:${item.ign}`;
-      const isSent = sentSet.has(id);
+    const CHEST_LABEL = {
+      standard: { commanders_will: "Commander's Will", loyal_servant: 'Loyal Servant', followers_heart: "Follower's Heart" },
+      kingdom_war: { commanders_will: 'Honor Vanguard', loyal_servant: 'Fearless Hero', followers_heart: 'Logistics Support' },
+    };
+
+    /** Where `name` is in an alliance's saved list now: "pool.chest", 'reserve' or null. */
+    function chestNow(nominations, alliance, name) {
+      const entry = nominations[alliance];
+      for (const [pool, chests] of Object.entries((entry && entry.recipients) || {})) {
+        for (const [chest, names] of Object.entries(chests || {})) {
+          if ((names || []).includes(name)) return `${pool}.${chest}`;
+        }
+      }
+      return entry && (entry.reserves || []).includes(name) ? 'reserve' : null;
+    }
+
+    async function checkStillDue(row) {
+      const alliance = row.getAttribute('data-alliance');
+      const pool = row.getAttribute('data-pool');
+      const chest = row.getAttribute('data-chest');
+      const name = row.getAttribute('data-name');
+      let fresh;
+      try {
+        const res = await fetch(`/api/nominate?t=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        fresh = await res.json();
+      } catch (err) {
+        return; // can't check (offline): nothing to warn about, the page stays as it is
+      }
+      const now = chestNow(fresh.nominations || {}, alliance, name);
+      if (now === `${pool}.${chest}`) {
+        document.getElementById('copy-warning')?.remove(); // still right
+        return;
+      }
+      const shown = CHEST_LABEL[pool]?.[chest] || chest;
+      let why;
+      if (!now) why = `${name} is no longer on [${alliance}]'s list (the alliance changed it).`;
+      else if (now === 'reserve') why = `${name} is now a reserve on [${alliance}]'s list: no chest.`;
+      else {
+        const [p, c] = now.split('.');
+        why = `${name} now gets ${CHEST_LABEL[p]?.[c] || c}, not ${shown}.`;
+      }
+      // Show the latest lists, then the warning above them, and say it plainly.
+      nominationsData = fresh.nominations || {};
+      handedOut = fresh.handed_out || {};
+      period = fresh.period || period;
+      king = fresh.king || king;
+      render();
+      showCopyWarning(`⚠️ Stop: don't send that ${shown}. ${why} The lists have been refreshed: copy the name again from the list below.`);
+      alert(`Don't send it!\n\n${why}\n\nThe lists have been refreshed.`);
+    }
+
+    function showCopyWarning(text) {
+      let el = document.getElementById('copy-warning');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'copy-warning';
+        el.className = 'status-banner warning distribute-copy-warning';
+        el.setAttribute('role', 'alert');
+        elRoster.parentNode.insertBefore(el, elRoster);
+      }
+      el.textContent = text;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+
+    function renderRow(item, glyph) {
+      const key = keyOf(item);
+      const tick = handedOut[key];
       const isKW = item.pool === 'KW';
+      const when = tick ? new Date(tick.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+      const title = tick ? `Handed out (locked) · ticked by ${tick.by} · ${when}` : '';
 
       return `
-        <div class="distribute-item ${isSent ? 'sent' : ''} ${item.isBuyout ? 'is-buyout' : ''}" data-id="${escapeHtml(id)}">
+        <div class="distribute-item ${tick ? 'sent' : ''} ${item.isBuyout ? 'is-buyout' : ''}" data-key="${escapeHtml(key)}"
+          data-alliance="${escapeHtml(item.alliance)}" data-pool="${POOL[item.pool]}" data-chest="${item.type}" data-name="${escapeHtml(item.ign)}"
+          ${title ? `title="${escapeHtml(title)}"` : ''}>
           <span class="chest-glyph ${glyph}"></span>
           <span class="badge badge-alliance-sm">${escapeHtml(item.alliance)}</span>
           <span class="badge ${isKW ? 'badge-pool-kw' : 'badge-pool-reg'}">
@@ -265,20 +361,42 @@ hide_header: true
 
     function bindEvents() {
       elRoster.querySelectorAll('.distribute-item').forEach(el => {
-        el.addEventListener('click', (e) => {
+        el.addEventListener('click', async (e) => {
           if (e.target.classList.contains('copy-btn')) return;
-          const id = el.getAttribute('data-id');
-          const sentSet = getSentSet();
-
-          if (sentSet.has(id)) {
-            sentSet.delete(id);
-            el.classList.remove('sent');
-          } else {
-            sentSet.add(id);
-            el.classList.add('sent');
+          if (!tickAccess().can || !period || !period.open) {
+            elNote.classList.remove('flash');
+            void elNote.offsetWidth; // restart the highlight
+            elNote.classList.add('flash');
+            return;
           }
-          saveSentSet(sentSet);
-          updateProgressOnly();
+          if (el.classList.contains('saving')) return;
+          const key = el.getAttribute('data-key');
+          const done = !handedOut[key];
+          el.classList.toggle('sent', done); // shown at once, undone if the save fails
+          el.classList.add('saving');
+          try {
+            const res = await fetch('/api/nominate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+              body: JSON.stringify({
+                action: 'handout',
+                alliance: el.getAttribute('data-alliance'),
+                pool: el.getAttribute('data-pool'),
+                chest: el.getAttribute('data-chest'),
+                name: el.getAttribute('data-name'),
+                done,
+              }),
+            });
+            const body = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+            handedOut = body.handed_out || {};
+            render();
+          } catch (err) {
+            el.classList.toggle('sent', !done);
+            el.classList.remove('saving');
+            alert(`Not saved: ${err.message}`);
+            loadNominations(); // the lists may have changed
+          }
         });
       });
 
@@ -297,14 +415,13 @@ hide_header: true
           } catch (err) {
             prompt('Copy recipient name:', text);
           }
+          // Copied at once (phones only allow it straight after a tap), then checked against
+          // the latest lists: an alliance may have corrected or removed this name since the
+          // page loaded. A chest sent in the game can't be taken back, so warn before it is.
+          const row = btn.closest('.distribute-item');
+          if (row) checkStillDue(row);
         });
       });
-    }
-
-    function updateProgressOnly() {
-      const sentSet = getSentSet();
-      const total = elRoster.querySelectorAll('.distribute-item').length;
-      elProgress.textContent = `Progress: ${sentSet.size} / ${total} Distributed`;
     }
 
     // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
@@ -323,12 +440,13 @@ hide_header: true
       render();
     });
 
-    btnReset.addEventListener('click', () => {
-      if (confirm('Reset all sent statuses back to uncompleted for this cycle?')) {
-        localStorage.removeItem(currentStorageKey);
-        render();
-      }
+    // Ticks from other devices: refreshed when the page is shown again, and every 30 s.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') loadNominations();
     });
+    setInterval(() => {
+      if (document.visibilityState === 'visible') loadNominations();
+    }, 30000);
 
     loadNominations();
   })();
