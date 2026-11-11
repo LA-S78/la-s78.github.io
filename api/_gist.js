@@ -7,11 +7,33 @@
 const GIST_API = 'https://api.github.com/gists';
 const USER_AGENT = 'LA-S78-Compendium';
 
+/**
+ * True on dev.la-s78.app and other Vercel preview deployments (Vercel sets VERCEL_ENV).
+ * They use test data only: see gistConfig().
+ */
+export function isTestDeployment() {
+  return process.env.VERCEL_ENV === 'preview';
+}
+
+/** Field on a proposal sent from a test deployment; the live bot won't approve it. */
+export const TEST_PROPOSAL_FIELD = '🧪 Test proposal';
+
+/**
+ * Which Gist to use. The live site uses GIST_ID. A preview deployment (dev.la-s78.app) uses
+ * TEST_GIST_ID and nothing else: without it, it has no data at all rather than touching the
+ * live Gist (TEST_GIST_TOKEN, if set, is its token; otherwise GIST_TOKEN).
+ */
 function gistConfig() {
+  if (isTestDeployment()) {
+    return {
+      id: process.env.TEST_GIST_ID,
+      token: process.env.TEST_GIST_TOKEN || process.env.GIST_TOKEN,
+    };
+  }
   return { id: process.env.GIST_ID, token: process.env.GIST_TOKEN };
 }
 
-/** True when the GIST_ID and GIST_TOKEN environment variables are both set. */
+/** True when a Gist and its token are set (TEST_GIST_ID on a preview deployment). */
 export function isGistConfigured() {
   const { id, token } = gistConfig();
   return Boolean(id && token);

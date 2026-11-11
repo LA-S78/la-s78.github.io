@@ -4,7 +4,14 @@
 // R4/R5 to a few proposals per day.
 import { verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
-import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+import {
+  isGistConfigured,
+  readGist,
+  gistJson,
+  writeGist,
+  isTestDeployment,
+  TEST_PROPOSAL_FIELD,
+} from './_gist.js';
 
 const POOL_LIMITS = {
   commanders_will: 5,
@@ -203,6 +210,33 @@ function validateProposal(payload) {
   return null;
 }
 
+/** Adds the test marker to a proposal's message on a test deployment (dev.la-s78.app). */
+function markTest(embed) {
+  if (!isTestDeployment()) return embed;
+  return {
+    ...embed,
+    title: `🧪 TEST · ${embed.title}`,
+    fields: [
+      ...(embed.fields || []),
+      {
+        name: TEST_PROPOSAL_FIELD,
+        value:
+          "Sent from the test site (test data). It can't be approved and changes nothing live.",
+        inline: false,
+      },
+    ],
+  };
+}
+
+/** Where a proposal posts: the given channel, or TEST_CHANNEL_ID on a test deployment. */
+function proposalChannel(liveChannelId) {
+  if (!isTestDeployment()) return liveChannelId;
+  if (!process.env.TEST_CHANNEL_ID) {
+    throw new Error('Test proposals need TEST_CHANNEL_ID (a Discord channel for tests).');
+  }
+  return process.env.TEST_CHANNEL_ID;
+}
+
 /**
  * Posts one proposal to Discord. Returns { status, json } (the endpoint's reply).
  * @param {{name: string, uid: string}} submitter verified sender, from the login pass
@@ -313,14 +347,16 @@ async function dispatchProposal(payload, botToken, submitter) {
         ];
 
         const formData = new FormData();
-        formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
+        formData.append('payload_json', JSON.stringify({ embeds: [markTest(embed)], components }));
 
         const jsonBlob = new Blob([JSON.stringify(distribution)], {
           type: 'application/octet-stream',
         });
         formData.append('files[0]', jsonBlob, 'reward-blueprint.dat');
 
-        const channelId = process.env.REWARDS_CHANNEL_ID || process.env.WAR_ROOM_CHANNEL_ID;
+        const channelId = proposalChannel(
+          process.env.REWARDS_CHANNEL_ID || process.env.WAR_ROOM_CHANNEL_ID,
+        );
         const discordRes = await fetch(
           `https://discord.com/api/v10/channels/${channelId}/messages`,
           {
@@ -400,7 +436,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         ];
 
         const formData = new FormData();
-        formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
+        formData.append('payload_json', JSON.stringify({ embeds: [markTest(embed)], components }));
 
         const jsonBlob = new Blob([JSON.stringify(changes)], { type: 'application/octet-stream' });
         formData.append('files[0]', jsonBlob, 'strategy-blueprint.dat');
@@ -412,7 +448,7 @@ async function dispatchProposal(payload, botToken, submitter) {
           formData.append('files[1]', imageBlob, 'map_preview.jpg');
         }
 
-        const channelId = process.env.WAR_ROOM_CHANNEL_ID;
+        const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
         const discordRes = await fetch(
           `https://discord.com/api/v10/channels/${channelId}/messages`,
           {
@@ -511,7 +547,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         ];
 
         const formData = new FormData();
-        formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
+        formData.append('payload_json', JSON.stringify({ embeds: [markTest(embed)], components }));
 
         // Only include a blacklist if one was sent: an empty one would wipe the live blacklist
         // when the standings are approved.
@@ -521,7 +557,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         });
         formData.append('files[0]', jsonBlob, 'diplomacy-blueprint.dat');
 
-        const channelId = process.env.WAR_ROOM_CHANNEL_ID;
+        const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
         const discordRes = await fetch(
           `https://discord.com/api/v10/channels/${channelId}/messages`,
           {
@@ -591,7 +627,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         ];
 
         const formData = new FormData();
-        formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
+        formData.append('payload_json', JSON.stringify({ embeds: [markTest(embed)], components }));
         // Only the changes: on approval they are applied to the blacklist as it is then.
         const blueprintData = {
           diff: diff.map(({ action, category, target }) => ({ action, category, target })),
@@ -602,7 +638,7 @@ async function dispatchProposal(payload, botToken, submitter) {
           'blacklist-blueprint.dat',
         );
 
-        const channelId = process.env.WAR_ROOM_CHANNEL_ID;
+        const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
         const discordRes = await fetch(
           `https://discord.com/api/v10/channels/${channelId}/messages`,
           {
@@ -690,7 +726,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         ];
 
         const formData = new FormData();
-        formData.append('payload_json', JSON.stringify({ embeds: [embed], components }));
+        formData.append('payload_json', JSON.stringify({ embeds: [markTest(embed)], components }));
 
         // Blueprint file attachment (Read by api/interactions.js upon approval)
         const blueprintData = {
@@ -704,7 +740,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         });
         formData.append('files[0]', jsonBlob, 'override-blueprint.dat');
 
-        const channelId = process.env.WAR_ROOM_CHANNEL_ID;
+        const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
         const discordRes = await fetch(
           `https://discord.com/api/v10/channels/${channelId}/messages`,
           {

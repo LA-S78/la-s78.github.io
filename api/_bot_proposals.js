@@ -7,6 +7,7 @@ import { acceptProposal } from './_accept_proposal.js';
 import { getWaitUntil } from './_after_response.js';
 import { resolveActorName, resolveUserId, sendEphemeralMessage } from './_bot_common.js';
 import { mapRevisionCache } from './_bot_map.js';
+import { TEST_PROPOSAL_FIELD } from './_gist.js';
 import { isSteward } from './_stewards.js';
 
 /** Steward Approve / Reject on a proposal message (map, rewards, standings, blacklist, overrides). */
@@ -22,6 +23,18 @@ export async function handleProposalButton(ctx) {
 
   if (!isSteward(userId)) {
     return sendEphemeralMessage(res, t.admin.access_denied);
+  }
+
+  // Proposals sent from the test site (dev.la-s78.app) use test data: the live bot never
+  // applies them (api/proposal.js marks them).
+  const isTestProposal = (interaction.message?.embeds || []).some((e) =>
+    (e.fields || []).some((f) => f.name === TEST_PROPOSAL_FIELD),
+  );
+  if (isTestProposal) {
+    return sendEphemeralMessage(
+      res,
+      "🧪 This is a test proposal from the test site. It uses test data, so it can't be approved or change anything live.",
+    );
   }
 
   const {
