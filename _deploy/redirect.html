@@ -32,7 +32,10 @@
         // Immediate execution fallback loop catch if window parsing delays
         const userLang = (navigator.language || navigator.userLanguage).split('-')[0];
         const directPath = routingData[userLang] ? routingData[userLang].path : "/en/";
-        window.location.href = directPath;
+        // App shortcuts (site.webmanifest) open a page directly: /?to=map, alliance, calendar, rules
+        const shortcutPages = { map: "map/", alliance: "alliance.html", calendar: "calendar.html", rules: "rules.html" };
+        const shortcut = shortcutPages[new URLSearchParams(window.location.search).get("to")] || "";
+        window.location.href = directPath + shortcut;
     </script>
 </head>
 <body style="font-family: sans-serif; background-color: #110d0b; color: #e6dfd5; text-align: center; padding-top: 20%;">

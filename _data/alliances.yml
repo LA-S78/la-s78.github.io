@@ -1,0 +1,36 @@
+# The alliances the site's code knows before any live data loads. This is the only place
+# to edit them: the build turns it into api/_alliances_data.js (server) and
+# js/alliance-defaults.js (browser). Live ranks, names, academies and colours chosen on
+# the Alliance page come from the live data (map-state.json), not from here.
+
+# Colour used when an alliance has none of its own (the gold #b8975a counts as none).
+# RAVN is RÂVN written without the accent.
+colors:
+  WLO: "#25bb00"
+  RÂVN: "#cece00"
+  RAVN: "#cece00"
+  MIA: "#a400af"
+  BOTS: "#0070f3"
+  SVN: "#e53e3e"
+  PHNX: "#dd6b20"
+  HMDA: "#d53f8c"
+  NAVI: "#319795"
+  HeKi: "#d69e2e"
+
+# The Vercel setting that holds each alliance's role ID in the NAP server, as
+# DISCORD_<name> (used for the map colours from Discord, api/colors.js).
+role_settings:
+  WLO: WLO
+  RÂVN: RAVN
+  MIA: MIA
+  BOTS: BOTS
+  SVN: SVN
+  PHNX: PHNX
+  HMDA: HMDA
+  HeKi: HEKI
+
+# The Capitol rotation before any live schedule exists: rank #1 holds Week 3, and the
+# three seats take turns over the 3 cycles (see "Option A" in docs/DECISIONS.md).
+starting_rotation:
+  rank_one: WLO
+  seats: [BOTS, RÂVN, MIA] # Seat A, Seat B, Seat C
