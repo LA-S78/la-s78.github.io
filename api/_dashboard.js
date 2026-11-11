@@ -9,6 +9,7 @@
 import { getAllianceNominationQuota, quotaIfWon } from './_rewards_helper.js';
 import { chestCounts } from './_nomination_assign.js';
 import { describeRewardPeriod } from './_reward_period.js';
+import { sourceRequest } from './_google_source.js';
 
 /** Most bytes one alliance's dashboard file may hold (thousands of table rows). */
 export const MAX_DASHBOARD_BYTES = 150 * 1024;
@@ -196,6 +197,23 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
       Object.assign(options, { highlightCol: hc, highlightMin: min });
   }
 
+  // Where the data comes from: pasted, or a Google Sheet / Doc it can be synced from again.
+  let source = { kind: 'paste' };
+  let syncedAt;
+  if (w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc')) {
+    const src = {
+      kind: w.source.kind,
+      url: clip(w.source.url, 500).trim(),
+      ...(w.source.kind === 'sheet'
+        ? { sheet: clip(w.source.sheet, 100).trim(), range: clip(w.source.range, 20).trim() }
+        : { table: Math.max(1, Math.min(50, parseInt(w.source.table, 10) || 1)) }),
+    };
+    const req = sourceRequest(src);
+    if (req.error) return { error: req.error };
+    source = src;
+    syncedAt = !Number.isNaN(Date.parse(w.syncedAt)) ? new Date(w.syncedAt).toISOString() : now;
+  }
+
   const id = /^w_[a-z0-9]{4,20}$/.test(String(w.id || ''))
     ? w.id
     : `w_${Math.random().toString(36).slice(2, 10)}`;
@@ -206,7 +224,8 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
       title,
       note: clip(w.note, LIMITS.noteChars).trim(),
       visibility: w.visibility === 'members' ? 'members' : 'r4_only',
-      source: { kind: 'paste' },
+      source,
+      ...(syncedAt ? { syncedAt } : {}),
       data: { columns, rows },
       options,
       updatedAt: now,
@@ -234,6 +253,16 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     else if (d.widgets.length >= LIMITS.widgets) {
       return { error: `At most ${LIMITS.widgets} charts and tables per alliance.`, status: 400 };
     } else d.widgets.push(widget);
+  } else if (edit.action === 'sync-data') {
+    // Fresh data from the widget's Google Sheet / Doc (fetched by api/dashboard.js).
+    const at = d.widgets.findIndex((w) => w.id === edit.id);
+    if (at < 0) return { error: 'That chart was removed.', status: 404 };
+    const { widget, error } = cleanWidget(
+      { ...d.widgets[at], data: edit.data, syncedAt: now || new Date().toISOString() },
+      { actor, now },
+    );
+    if (error) return { error: `The sheet's data can't be used: ${error}`, status: 400 };
+    d.widgets[at] = widget;
   } else if (edit.action === 'delete-widget') {
     const before = d.widgets.length;
     d.widgets = d.widgets.filter((w) => w.id !== edit.id);
