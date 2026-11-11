@@ -197,17 +197,33 @@
 /* ---------- Widgets: charts and tables (js/dashboard-widgets.js) ---------- */
 
 /* Series colours from the theme: accent, gold, then mixes of them */
-.dw-s0 { --dw: var(--accent-color); }
-.dw-s1 { --dw: var(--gold); }
-.dw-s2 { --dw: color-mix(in srgb, var(--accent-color) 55%, var(--white)); }
-.dw-s3 { --dw: color-mix(in srgb, var(--gold) 55%, var(--status-danger-text)); }
-.dw-s4 { --dw: color-mix(in srgb, var(--accent-color) 45%, var(--gold)); }
-.dw-s5 { --dw: var(--text-muted); }
+.dw-s0 {
+  --dw: var(--accent-color);
+}
+.dw-s1 {
+  --dw: var(--gold);
+}
+.dw-s2 {
+  --dw: color-mix(in srgb, var(--accent-color) 55%, var(--white));
+}
+.dw-s3 {
+  --dw: color-mix(in srgb, var(--gold) 55%, var(--status-danger-text));
+}
+.dw-s4 {
+  --dw: color-mix(in srgb, var(--accent-color) 45%, var(--gold));
+}
+.dw-s5 {
+  --dw: var(--text-muted);
+}
 
 /* Sanctuary's accent is itself orange-gold, so gold would be nearly the same colour:
    contrasting second and fifth colours there instead */
-html[data-theme='sanctuary'] .dw-s1 { --dw: #6fa8dc; }
-html[data-theme='sanctuary'] .dw-s4 { --dw: #8fbf7f; }
+html[data-theme='sanctuary'] .dw-s1 {
+  --dw: #6fa8dc;
+}
+html[data-theme='sanctuary'] .dw-s4 {
+  --dw: #8fbf7f;
+}
 
 .dash-widget-head {
   display: flex;
@@ -935,4 +951,75 @@ html[data-theme='sanctuary'] .dw-s4 { --dw: #8fbf7f; }
   .dw-narrow {
     display: block;
   }
+}
+
+/* Tap a chart part to read its numbers (selectable() in js/dashboard-widgets.js) */
+.dash-widget-body [data-tip],
+#ed-preview [data-tip] {
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+[data-tip]:focus {
+  outline: none;
+}
+
+[data-tip]:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
+
+.dw-dim {
+  opacity: 0.35;
+}
+
+.dw-bar.dw-sel,
+rect.dw-sel:not(.dw-hit) {
+  filter: brightness(1.25);
+}
+
+.dw-slice.dw-sel {
+  filter: brightness(1.2);
+}
+
+.dw-svg rect.dw-hit {
+  fill: transparent;
+}
+
+.dw-svg rect.dw-hit.dw-sel {
+  fill: color-mix(in srgb, var(--accent-color) 14%, transparent);
+}
+
+.dw-hit.dw-dim {
+  opacity: 1;
+}
+
+.dw-readout {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  min-width: 8rem;
+  max-width: min(17rem, 92%);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+  background: var(--surface-dark);
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.dw-readout b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--accent-color);
+}
+
+.dw-readout .is-on {
+  font-weight: 700;
+  color: var(--text-main);
 }

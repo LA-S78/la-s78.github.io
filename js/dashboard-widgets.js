@@ -13,6 +13,21 @@
 (() => {
   const esc = (v) => window.escapeHtml(String(v ?? ''));
   const SERIES = 6; // colours .dw-s0 … .dw-s5
+  const pct1 = (f) => `${Math.round(f * 1000) / 10}%`;
+  const isPercentCell = (cell) => /%\s*$/.test(String(cell ?? ''));
+
+  /**
+   * Makes a chart part selectable: tapping or clicking it (or Enter on it) shows a readout
+   * with `title` and `lines`; line `on` is the part that was tapped (shown bold). Parts
+   * sharing a `key` (a pie slice and its legend row) light up together. See mount().
+   */
+  // Numbers in a readout keep one more decimal than the chart (1.26B, not 1.3B).
+  const exact = (n) => short(n, 2);
+
+  function pick(title, lines, on = -1, key = '') {
+    const text = lines.map((l) => esc(l)).join('&#10;');
+    return `data-tip="${esc(title)}" data-lines="${text}" data-on="${on}"${key ? ` data-key="${esc(key)}"` : ''} tabindex="0"`;
+  }
 
   /**
    * A table pasted from Google Sheets / Excel (tab-separated) or a CSV (commas or
@@ -94,10 +109,11 @@
   }
 
   /** Short form of a number: 15.2M, 1.2K, 980. */
-  function short(n) {
+  function short(n, digits = 1) {
     if (!Number.isFinite(n)) return '–';
     const a = Math.abs(n);
-    const f = (v, s) => `${(Math.round(v * 10) / 10).toLocaleString()}${s}`;
+    const k = 10 ** digits;
+    const f = (v, s) => `${(Math.round(v * k) / k).toLocaleString()}${s}`;
     if (a >= 1e9) return f(n / 1e9, 'B');
     if (a >= 1e6) return f(n / 1e6, 'M');
     if (a >= 1e4) return f(n / 1e3, 'K');
@@ -164,6 +180,37 @@
       return `${r.label} · ${s.names[k]}:${pct || ` ${short(v)}`}${raw}`;
     };
 
+    // The readout for a bar: every column of its row, the tapped one bold.
+    const colTotal = s.values.map((_, k) =>
+      rows.reduce(
+        (t, r) => t + (Number.isFinite(r.values[k]) && r.values[k] > 0 ? r.values[k] : 0),
+        0,
+      ),
+    );
+    const readout = (r) => {
+      const keys = [];
+      const lines = [];
+      r.values.forEach((v, k) => {
+        if (!Number.isFinite(v)) return;
+        const cell = r.cells[s.values[k]];
+        let text;
+        if (stacked === 'percent') {
+          text = total(r) ? pct1(v / total(r)) : short(v);
+          if (cell !== undefined && v !== 0 && !isPercentCell(cell)) text += ` (${cell})`;
+        } else if (stacked === 'sum') {
+          text = `${exact(v)}${total(r) ? ` (${pct1(v / total(r))})` : ''}`;
+        } else {
+          text = exact(v);
+          if (!isPercentCell(cell) && colTotal[k] > 0 && v > 0 && rows.length > 1)
+            text += ` · ${pct1(v / colTotal[k])} of all`;
+        }
+        keys.push(k);
+        lines.push(n > 1 || stacked ? `${s.names[k]}: ${text}` : text);
+      });
+      if (stacked === 'sum' && lines.length > 1) lines.push(`Total: ${exact(total(r))}`);
+      return { lines, on: (k) => keys.indexOf(k) };
+    };
+
     const horizontal = () => {
       const list = stacked
         ? rows
@@ -180,15 +227,16 @@
       const items = list
         .map((r, i) => {
           const scale = stacked === 'percent' ? total(r) || 1 : max;
+          const ro = readout(r);
           const segs = r.values
             .map((v, k) =>
               Number.isFinite(v) && (!stacked || v > 0)
-                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`)} title="${esc(tip(r, k))}"></span>`
+                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`)} title="${esc(tip(r, k))}" ${pick(r.label, ro.lines, ro.on(k))}></span>`
                 : '',
             )
             .join('');
           const value = stacked === 'percent' ? '' : short(stacked ? total(r) : r.values[0]);
-          return `<li class="${i >= 25 ? 'dw-extra' : ''}"><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
+          return `<li class="${i >= 25 ? 'dw-extra' : ''}" ${pick(r.label, ro.lines)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
         })
         .join('');
       return `<ol class="dw-bars${stacked === 'percent' ? ' dw-no-value' : ''}">${items}</ol>${legend(s.names, w)}${list.length > 25 ? showAll(list.length) : ''}`;
@@ -211,6 +259,7 @@
     const rects = shown
       .map((r, i) => {
         let base = 190;
+        const ro = readout(r);
         return r.values
           .map((v, k) => {
             if (!Number.isFinite(v) || v <= 0) return '';
@@ -219,12 +268,12 @@
             const x = stacked ? i * groupW + groupW * 0.15 : i * groupW + groupW * 0.1 + k * barW;
             const y = stacked ? base - h : 190 - h;
             if (stacked) base -= h;
-            return `<rect ${paint(w, k, n)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}"><title>${esc(tip(r, k))}</title></rect>`;
+            return `<rect ${paint(w, k, n)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" ${pick(r.label, ro.lines, ro.on(k))}><title>${esc(tip(r, k))}</title></rect>`;
           })
           .join('');
       })
       .join('');
-    const g = guides(0, top, stacked === 'percent' ? (v) => `${Math.round(v)}%` : short);
+    const g = guides(0, top, stacked === 'percent' ? (v) => `${Math.round(v)}%` : undefined);
     const vertical =
       frame(
         w,
@@ -245,8 +294,14 @@
    * y = 20 (hi), with their values as ordinary text beside the drawing (text inside the SVG
    * would shrink with it on a phone).
    */
-  function guides(lo, hi, label = short) {
+  function guides(lo, hi, label) {
     const ys = [0, 0.5, 1].map((f) => ({ y: 190 - 170 * f, v: lo + (hi - lo) * f }));
+    if (!label) {
+      // Close values (1.15B … 1.35B) need more decimals, or two labels read "1.2B".
+      let digits = 1;
+      while (digits < 3 && new Set(ys.map(({ v }) => short(v, digits))).size < ys.length) digits++;
+      label = (v) => short(v, digits);
+    }
     return {
       svg: ys
         .map(({ y }) => `<line class="dw-grid" x1="0" x2="600" y1="${y}" y2="${y}"/>`)
@@ -308,10 +363,32 @@
         return `<path class="dw-line dw-s${k % SERIES}" d="${d}"/>${dots}`;
       })
       .join('');
+    // One tall tap area per row (the dots are too small to tap on a phone): its readout lists
+    // every line's value there and the change since the row before.
+    const colW = 584 / (rows.length - 1);
+    const hits = rows
+      .map((r, i) => {
+        const lines = s.values
+          .map((_, k) => {
+            const v = r.values[k];
+            if (!Number.isFinite(v)) return null;
+            const prev = i ? rows[i - 1].values[k] : NaN;
+            const change =
+              Number.isFinite(prev) && prev !== 0
+                ? ` (${v >= prev ? '+' : '−'}${pct1(Math.abs(v - prev) / Math.abs(prev))})`
+                : '';
+            return `${s.names[k]}: ${exact(v)}${change}`;
+          })
+          .filter(Boolean);
+        const left = Math.max(0, x(i) - colW / 2);
+        const right = Math.min(600, x(i) + colW / 2);
+        return `<rect class="dw-hit" x="${left.toFixed(1)}" y="0" width="${(right - left).toFixed(1)}" height="200" ${pick(r.label, lines)}/>`;
+      })
+      .join('');
     return (
       frame(
         w,
-        paths,
+        paths + hits,
         guides(lo, hi),
         rows.map((r) => r.label),
       ) + legend(s.names, w)
@@ -337,10 +414,17 @@
     const width = donut ? 26 : 80;
     const C = 2 * Math.PI * R;
     let at = 0;
+    const pieTip = (p, i) =>
+      pick(
+        p.label,
+        [`${exact(p.v)} · ${pct1(p.v / total)}`, `of ${exact(total)} in all`],
+        -1,
+        `p${i}`,
+      );
     const rings = parts
       .map((p, i) => {
         const len = (p.v / total) * C;
-        const seg = `<circle class="dw-slice dw-s${i % SERIES}" r="${R}" cx="80" cy="80" stroke-width="${width}" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-at).toFixed(2)}"><title>${esc(p.label)}: ${short(p.v)} (${Math.round((p.v / total) * 100)}%)</title></circle>`;
+        const seg = `<circle class="dw-slice dw-s${i % SERIES}" ${pieTip(p, i)} r="${R}" cx="80" cy="80" stroke-width="${width}" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-at).toFixed(2)}"><title>${esc(p.label)}: ${short(p.v)} (${Math.round((p.v / total) * 100)}%)</title></circle>`;
         at += len;
         return seg;
       })
@@ -351,7 +435,7 @@
     return `<div class="dw-pie"><svg viewBox="0 0 160 160" role="img" aria-label="${esc(w.title)}"><g transform="rotate(-90 80 80)">${rings}</g>${middle}</svg><ul class="dw-pie-legend">${parts
       .map(
         (p, i) =>
-          `<li><i class="dw-s${i % SERIES}"></i><span>${esc(p.label)}</span><b>${Math.round((p.v / total) * 100)}%</b><small>${short(p.v)}</small></li>`,
+          `<li ${pieTip(p, i)}><i class="dw-s${i % SERIES}"></i><span>${esc(p.label)}</span><b>${Math.round((p.v / total) * 100)}%</b><small>${short(p.v)}</small></li>`,
       )
       .join('')}</ul></div>`;
   }
@@ -375,7 +459,7 @@
       `<ol class="dw-bars dw-progress">${rows
         .map(
           (r, i) =>
-            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}"><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%" title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
+            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}" ${pick(r.label, [`${exact(r.v)} of ${exact(r.target)} (${Math.round(r.pct * 100)}%)`, r.pct >= 1 ? 'Target reached ✓' : `${exact(r.target - r.v)} to go`])}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%" title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
         )
         .join('')}</ol>` +
       (rows.length > 25 ? showAll(rows.length) : '')
@@ -466,7 +550,83 @@
     }
   }
 
-  /** Makes a rendered widget interactive (table sorting/search, "Show all"). */
+  /**
+   * Tap a bar, slice, row or point to read its numbers: a small readout appears beside it
+   * and the other parts fade. Tap it again, tap elsewhere or press Escape to close.
+   */
+  function selectable(el) {
+    // The editor's preview box is redrawn in place: set it up once, and start fresh each time.
+    if (el.dwClearSelection) return el.dwClearSelection();
+    if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+    let box = null;
+    let current = null;
+    const clear = () => {
+      el.querySelectorAll('.dw-sel, .dw-dim').forEach((x) =>
+        x.classList.remove('dw-sel', 'dw-dim'),
+      );
+      box?.remove();
+      box = null;
+      current = null;
+    };
+    const show = (part) => {
+      clear();
+      current = part;
+      const key = part.dataset.key;
+      const lit = key ? [...el.querySelectorAll(`[data-key="${CSS.escape(key)}"]`)] : [part];
+      lit.forEach((x) => x.classList.add('dw-sel'));
+      el.querySelectorAll('[data-tip]').forEach((x) => {
+        const related = lit.some((l) => l === x || l.contains(x) || x.contains(l));
+        if (!related) x.classList.add('dw-dim');
+      });
+      box = document.createElement('div');
+      box.className = 'dw-readout';
+      box.setAttribute('role', 'status');
+      const title = document.createElement('b');
+      title.textContent = part.dataset.tip;
+      box.append(title);
+      const on = Number(part.dataset.on);
+      part.dataset.lines.split('\n').forEach((line, i) => {
+        const row = document.createElement('span');
+        row.textContent = line;
+        if (i === on) row.className = 'is-on';
+        box.append(row);
+      });
+      el.append(box);
+      // Above the part (below if there's no room), kept inside the widget.
+      const host = el.getBoundingClientRect();
+      const r = part.getBoundingClientRect();
+      const bw = box.offsetWidth;
+      const bh = box.offsetHeight;
+      const left = Math.min(
+        Math.max(4, r.left - host.left + r.width / 2 - bw / 2),
+        host.width - bw - 4,
+      );
+      let top = r.top - host.top - bh - 6;
+      if (top < 0) top = Math.min(r.bottom - host.top + 6, host.height - bh);
+      box.style.left = `${Math.max(0, left)}px`;
+      box.style.top = `${Math.max(0, top)}px`;
+    };
+    el.dwClearSelection = clear;
+    el.addEventListener('click', (e) => {
+      const part = e.target.closest('[data-tip]');
+      if (!part || !el.contains(part)) return clear();
+      if (part === current) return clear();
+      show(part);
+    });
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') return clear();
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('[data-tip]')) {
+        e.preventDefault();
+        if (e.target === current) clear();
+        else show(e.target);
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (current && !el.contains(e.target)) clear();
+    });
+  }
+
+  /** Makes a rendered widget interactive (table sorting/search, "Show all", tap to read). */
   function mount(el, w) {
     if (w.type === 'table') fillTable(el, w);
     el.addEventListener('click', (e) => {
@@ -475,6 +635,7 @@
       el.classList.add('dw-show-all');
       b.remove();
     });
+    if (w.type !== 'table') selectable(el);
   }
 
   window.DashboardWidgets = { parseTable, toText, number, short, render, mount };

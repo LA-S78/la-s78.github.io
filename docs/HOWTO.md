@@ -303,6 +303,8 @@ Sign in (top right), open your account card and choose **🏰 Alliance Dashboard
   the shares) or *totals*. Tick **Colours as a scale** when the columns go from low to high.
   Blank headings under a merged cell are named for you ("3.6m- (2)"), and counts written
   "2/16" are read as 2. Vertical charts turn sideways on phones.
+- **Reading a chart:** tap (or click) a bar, slice, row or week to see its numbers and
+  percentages; tap it again or anywhere else to close.
 - **Caravan Rotor:** add players (Game Time windows optional), tap **✓ Picked** when one
   gets a caravan, **🔄 New week** to start again. Tick **👥 Members can view** to let
   members see it.
