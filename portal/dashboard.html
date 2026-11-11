@@ -24,9 +24,17 @@ lang: "en"
     <div id="dash-rewards-body"></div>
   </section>
 
+  <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
+  <div class="dash-edit-bar" id="dash-edit-bar" hidden>
+    <button type="button" class="dash-btn" id="dash-edit-toggle" aria-pressed="false">✏️ Edit Dashboard</button>
+    <button type="button" class="dash-btn" id="dash-add" hidden>➕ Add a chart or table</button>
+  </div>
+  <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="Chart or table editor"></section>
+
   <section class="dash-widgets" id="dash-widgets" hidden aria-label="Alliance charts and tables"></section>
 </div>
 
+<script src="/js/dashboard-widgets.js"></script>
 <script>
   (function () {
     // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
@@ -220,22 +228,272 @@ lang: "en"
       }
     }
 
+    // ---------- Charts and tables ----------
+    const W = window.DashboardWidgets;
+    const TYPES = [
+      ['bar', '📊 Bar'],
+      ['line', '📈 Line'],
+      ['pie', '🍩 Pie'],
+      ['progress', '🎯 Progress'],
+      ['table', '📋 Table'],
+    ];
+    let editing = false;
+
+    function isLeader() {
+      return data && data.viewer.tier !== 'member';
+    }
+
+    function widgetCard(w, i, count) {
+      const vis = w.visibility === 'members' ? '👥 All members' : '🔒 Officers only';
+      const updated = w.updatedAt ? `Updated ${new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}` : '';
+      const tools = editing
+        ? `<div class="dash-widget-tools">
+            <button type="button" class="dash-icon-btn" data-act="up" ${i === 0 ? 'disabled' : ''} title="Move up" aria-label="Move up">▲</button>
+            <button type="button" class="dash-icon-btn" data-act="down" ${i === count - 1 ? 'disabled' : ''} title="Move down" aria-label="Move down">▼</button>
+            <button type="button" class="dash-icon-btn" data-act="edit" title="Edit" aria-label="Edit">✏️</button>
+            <button type="button" class="dash-icon-btn" data-act="delete" title="Delete" aria-label="Delete">🗑️</button>
+          </div>`
+        : '';
+      return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}">
+        <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
+        <div class="dash-widget-meta">${isLeader() ? `<span>${vis}</span>` : ''}${updated ? `<span>${updated}</span>` : ''}</div>
+        ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
+        <div class="dash-widget-body">${W.render(w)}</div>
+      </article>`;
+    }
+
     function renderWidgets() {
       const list = (data.dashboard && data.dashboard.widgets) || [];
       const el = $('dash-widgets');
       el.hidden = false;
+      $('dash-edit-bar').hidden = !isLeader();
+      $('dash-edit-toggle').setAttribute('aria-pressed', String(editing));
+      $('dash-edit-toggle').textContent = editing ? '✓ Done editing' : '✏️ Edit Dashboard';
+      $('dash-add').hidden = !editing;
       if (!list.length) {
         el.innerHTML = `<div class="dash-card dash-empty">${
-          data.viewer.tier === 'member'
+          !isLeader()
             ? "📊 Your alliance's leaders haven't shared any charts or tables here yet."
-            : '📊 No charts or tables yet.'
+            : editing
+              ? '📊 No charts or tables yet: use “Add a chart or table”.'
+              : '📊 No charts or tables yet. Use “Edit Dashboard” to add one.'
         }</div>`;
         return;
       }
-      // Charts and tables are drawn here (next step of the dashboard).
-      el.innerHTML = list
-        .map((w) => `<div class="dash-card"><h3 class="dash-card-title">${escapeHtml(w.title || 'Untitled')}</h3></div>`)
-        .join('');
+      el.innerHTML = list.map((w, i) => widgetCard(w, i, list.length)).join('');
+      el.querySelectorAll('.dash-widget').forEach((card) => {
+        const w = list.find((x) => x.id === card.dataset.id);
+        W.mount(card.querySelector('.dash-widget-body'), w);
+      });
+    }
+
+    $('dash-edit-toggle').addEventListener('click', () => {
+      editing = !editing;
+      if (!editing) closeEditor();
+      renderWidgets();
+    });
+    $('dash-add').addEventListener('click', () => openEditor(null));
+    $('dash-widgets').addEventListener('click', async (e) => {
+      const b = e.target.closest('[data-act]');
+      if (!b) return;
+      const id = b.closest('.dash-widget').dataset.id;
+      const act = b.dataset.act;
+      if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
+      if (act === 'delete') {
+        const w = data.dashboard.widgets.find((x) => x.id === id);
+        if (!confirm(`Delete "${w ? w.title : 'this chart'}"? This can't be undone.`)) return;
+        return save({ action: 'delete-widget', id });
+      }
+      return save({ action: 'move-widget', id, by: act === 'up' ? -1 : 1 });
+    });
+
+    /** Sends a change; on success shows the dashboard as saved. Returns the error text or ''. */
+    async function save(change) {
+      try {
+        const res = await fetch('/api/dashboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+          body: JSON.stringify({ ...change, alliance: data.alliance.tag }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        data.dashboard = body.dashboard;
+        renderWidgets();
+        return '';
+      } catch (err) {
+        if (!change.widget) alert(`Not saved: ${err.message}`);
+        return err.message;
+      }
+    }
+
+    // ---------- The editor ----------
+    function closeEditor() {
+      $('dash-editor').hidden = true;
+      $('dash-editor').innerHTML = '';
+    }
+
+    function openEditor(existing) {
+      const w = existing
+        ? JSON.parse(JSON.stringify(existing))
+        : { type: 'bar', title: '', note: '', visibility: 'r4_only', data: { columns: [], rows: [] }, options: {} };
+      const ed = $('dash-editor');
+      ed.hidden = false;
+      ed.innerHTML = `
+        <h3 class="dash-card-title">${existing ? '✏️ Edit chart or table' : '➕ New chart or table'}</h3>
+        <label>Type</label>
+        <div class="dash-types" role="group" aria-label="Type">${TYPES.map(([t, name]) => `<button type="button" data-type="${t}" aria-pressed="${w.type === t}">${name}</button>`).join('')}</div>
+        <label for="ed-title">Title</label>
+        <input type="text" id="ed-title" maxlength="80" value="${escapeHtml(w.title)}" placeholder="e.g. Alliance Duel scores">
+        <label for="ed-note">Explanation <span class="dash-muted">(optional)</span></label>
+        <textarea id="ed-note" rows="2" maxlength="400" placeholder="e.g. Minimum 15M Duel points required by Friday reset">${escapeHtml(w.note)}</textarea>
+        <label for="ed-vis">Who can see it</label>
+        <select id="ed-vis">
+          <option value="r4_only"${w.visibility !== 'members' ? ' selected' : ''}>🔒 Officers only (R4/R5)</option>
+          <option value="members"${w.visibility === 'members' ? ' selected' : ''}>👥 All alliance members</option>
+        </select>
+        <label for="ed-paste">Data <span class="dash-muted">(paste from Google Sheets or Excel, header row first)</span></label>
+        <textarea id="ed-paste" class="dash-paste" placeholder="Name&#9;Score&#10;Aria&#9;15200000&#10;Bram&#9;12900000"></textarea>
+        <div class="dash-muted dash-small" id="ed-parsed"></div>
+        <div id="ed-options"></div>
+        <div class="dash-editor-preview"><div class="dash-muted dash-small">Preview</div><div id="ed-preview"></div></div>
+        <div class="dash-error" id="ed-error"></div>
+        <div class="dash-editor-actions">
+          <button type="button" class="dash-icon-btn" id="ed-cancel">Cancel</button>
+          <button type="button" class="submit-plan-btn" id="ed-save">💾 Save</button>
+        </div>`;
+      $('ed-paste').value = w.data.columns.length ? W.toText(w.data) : '';
+
+      const colSelect = (id, value, { none } = {}) =>
+        `<select id="${id}">${none ? `<option value="">${none}</option>` : ''}${w.data.columns
+          .map((c, i) => `<option value="${i}"${Number(value) === i && value !== '' && value !== undefined ? ' selected' : ''}>${escapeHtml(c)}</option>`)
+          .join('')}</select>`;
+
+      function drawOptions() {
+        const o = w.options;
+        const cols = w.data.columns;
+        if (!cols.length) {
+          $('ed-options').innerHTML = '';
+          return;
+        }
+        if (o.labelCol === undefined || o.labelCol >= cols.length) o.labelCol = 0;
+        if (!o.valueCols || !o.valueCols.length) {
+          // Columns holding numbers: a line chart starts with all of them (trends side by
+          // side), the others with the first.
+          const numeric = cols
+            .map((_, i) => i)
+            .filter((i) => i !== o.labelCol && w.data.rows.some((r) => Number.isFinite(W.number(r[i]))));
+          o.valueCols = w.type === 'line' ? numeric.slice(0, 6) : numeric.slice(0, 1);
+        }
+        let html = '';
+        if (w.type !== 'table') {
+          html += `<label for="ed-label">Names (labels)</label>${colSelect('ed-label', o.labelCol)}`;
+          const multi = w.type === 'bar' || w.type === 'line';
+          html += `<label>${multi ? 'Numbers to show' : 'Numbers'}</label><div class="dash-cols">${cols
+            .map((c, i) =>
+              i === o.labelCol
+                ? ''
+                : `<label><input type="${multi ? 'checkbox' : 'radio'}" name="ed-val" value="${i}"${o.valueCols.includes(i) ? ' checked' : ''}> ${escapeHtml(c)}</label>`,
+            )
+            .join('')}</div>`;
+        }
+        if (w.type === 'bar') html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> Vertical bars (instead of a leaderboard)</label>`;
+        if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> Donut (ring)</label>`;
+        if (w.type === 'progress') {
+          html += `<label for="ed-target">Target for everyone</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="e.g. 15M or 15000000">`;
+          html += `<label for="ed-targetcol">…or a column of targets</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: '(use the number above)' })}`;
+        }
+        if (w.type === 'table') {
+          html += `<label for="ed-hlcol">Highlight rows where</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: '(no highlight)' })}`;
+          html += `<label for="ed-hlmin">is at least</label><input type="text" inputmode="decimal" id="ed-hlmin" value="${o.highlightMin ?? ''}" placeholder="e.g. 300M">`;
+        }
+        $('ed-options').innerHTML = html;
+      }
+
+      function readOptions() {
+        const o = w.options;
+        const val = (id) => $(id) && $(id).value;
+        if ($('ed-label')) o.labelCol = Number(val('ed-label'));
+        const checked = [...document.querySelectorAll('input[name="ed-val"]:checked')].map((x) => Number(x.value));
+        if (document.querySelector('input[name="ed-val"]')) o.valueCols = checked;
+        if ($('ed-vertical')) o.vertical = $('ed-vertical').checked;
+        if ($('ed-donut')) o.donut = $('ed-donut').checked;
+        if ($('ed-target')) {
+          // Same shorthand as the data: 15M, 50K, 1.2B, 15,000,000
+          const t = W.number(val('ed-target'));
+          if (!Number.isFinite(t)) delete o.target;
+          else o.target = t;
+          if (val('ed-targetcol') === '') delete o.targetCol;
+          else o.targetCol = Number(val('ed-targetcol'));
+        }
+        if ($('ed-hlcol')) {
+          // Kept separately until both are set, so choosing the column first isn't lost.
+          const min = W.number(val('ed-hlmin'));
+          if (val('ed-hlcol') === '') delete o.highlightCol;
+          else o.highlightCol = Number(val('ed-hlcol'));
+          if (Number.isFinite(min)) o.highlightMin = min;
+          else delete o.highlightMin;
+        }
+      }
+
+      function preview() {
+        w.title = $('ed-title').value;
+        w.note = $('ed-note').value;
+        w.visibility = $('ed-vis').value;
+        const box = $('ed-preview');
+        if (!w.data.columns.length) {
+          box.innerHTML = '<div class="dw-empty">Paste a table above to see the chart.</div>';
+          return;
+        }
+        box.innerHTML = W.render(w);
+        W.mount(box, w);
+      }
+
+      function readPaste() {
+        const parsed = W.parseTable($('ed-paste').value);
+        const changed = parsed.columns.join('\t') !== w.data.columns.join('\t');
+        w.data = parsed;
+        if (changed) w.options = { ...w.options, labelCol: 0, valueCols: [] };
+        $('ed-parsed').textContent = parsed.columns.length
+          ? `${parsed.rows.length} row${parsed.rows.length === 1 ? '' : 's'} × ${parsed.columns.length} column${parsed.columns.length === 1 ? '' : 's'}${parsed.rows.length > 500 ? ' (500 at most)' : ''}`
+          : '';
+        drawOptions();
+        preview();
+      }
+
+      ed.querySelector('.dash-types').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-type]');
+        if (!b) return;
+        readOptions();
+        w.type = b.dataset.type;
+        ed.querySelectorAll('.dash-types button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        if (w.type === 'pie' || w.type === 'progress') w.options.valueCols = (w.options.valueCols || []).slice(0, 1);
+        if (w.type === 'line' && (w.options.valueCols || []).length <= 1) w.options.valueCols = [];
+        drawOptions();
+        preview();
+      });
+      $('ed-paste').addEventListener('input', readPaste);
+      ['ed-title', 'ed-note', 'ed-vis'].forEach((id) => $(id).addEventListener('input', preview));
+      $('ed-options').addEventListener('change', () => {
+        readOptions();
+        drawOptions();
+        preview();
+      });
+      $('ed-cancel').addEventListener('click', closeEditor);
+      $('ed-save').addEventListener('click', async () => {
+        readOptions();
+        preview();
+        const btn = $('ed-save');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        const error = await save({ action: 'save-widget', widget: w });
+        btn.disabled = false;
+        btn.textContent = '💾 Save';
+        if (error) $('ed-error').textContent = error;
+        else closeEditor();
+      });
+
+      readPaste();
+      ed.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     $('dash-switcher-select').addEventListener('change', (e) => load(e.target.value));

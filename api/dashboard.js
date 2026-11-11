@@ -5,16 +5,19 @@
 //      weekly reward and nomination status.
 // POST { action: 'nominate-link' [, alliance] } (same pass): a nomination link for R5s and
 //      Stewards, as /nominate gives in Discord.
+// POST { action: 'save-widget' | 'delete-widget' | 'move-widget', ... [, alliance] }: leaders
+//      edit their dashboard's charts and tables (api/_dashboard.js applyDashboardEdit).
 //
 // Rules and storage: api/_dashboard.js and docs/DECISIONS.md ("Alliance Dashboard").
 
-import { gistJson, isGistConfigured, readGist } from './_gist.js';
+import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { DEFAULT_FALLBACK_COLORS } from './_alliances.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
 import {
+  applyDashboardEdit,
   dashboardFile,
   findAllianceKey,
   readDashboard,
@@ -72,7 +75,12 @@ export default async function handler(req, res) {
     });
   }
 
-  if (req.method === 'POST') return nominateLink(req, res, { gist, mapState, tag, access });
+  if (req.method === 'POST') {
+    if (req.body?.action === 'nominate-link') {
+      return nominateLink(req, res, { gist, mapState, tag, access });
+    }
+    return editDashboard(req, res, { gist, tag, access, session });
+  }
 
   const body = {
     viewer: { name: session.name || '', tier: access.tier, canNominate: access.canNominate },
@@ -99,11 +107,41 @@ export default async function handler(req, res) {
   return res.status(200).json(body);
 }
 
+/**
+ * Leaders' edits to their alliance's dashboard (Stewards: any alliance): save, delete or move
+ * a chart or table. Saved with updateGist, so edits made at the same moment are all kept.
+ */
+async function editDashboard(req, res, { gist, tag, access, session }) {
+  if (!access.leader) {
+    return res
+      .status(403)
+      .json({ error: "Only your alliance's R4s and R5s can change the dashboard." });
+  }
+  const file = dashboardFile(tag);
+  try {
+    const out = await updateGist(
+      (fresh) => {
+        const stored = readDashboard(gistJson(fresh, file, {}), tag);
+        const result = applyDashboardEdit(stored, req.body || {}, { actor: session.name || '' });
+        if (result.error) return { refused: result };
+        return {
+          dashboard: result.dashboard,
+          files: { [file]: result.dashboard },
+          description: `Dashboard [${tag}]: ${req.body?.action} by ${session.name || 'a leader'}`,
+        };
+      },
+      { gist },
+    );
+    if (out.refused) return res.status(out.refused.status).json({ error: out.refused.error });
+    return res.status(200).json({ dashboard: visibleDashboard(out.dashboard, true) });
+  } catch (err) {
+    console.error('Dashboard not saved:', err);
+    return res.status(500).json({ error: `Could not save: ${err.message}` });
+  }
+}
+
 /** A nomination link (as /nominate gives in Discord), for R5s and Stewards. */
 function nominateLink(req, res, { gist, mapState, tag, access }) {
-  if (req.body?.action !== 'nominate-link') {
-    return res.status(400).json({ error: 'Unknown action.' });
-  }
   if (!access.canNominate) {
     return res.status(403).json({
       error: 'Only your R5 can open the nomination page here. Run /nominate in Discord.',
