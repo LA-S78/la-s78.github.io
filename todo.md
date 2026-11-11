@@ -6,15 +6,6 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 
 ## 🔴 High Priority
 
-- [ ] **Alliance Registration Hardening (`portal/register.html`, `api/register-alliance.js`)**
-  - Replace the raw tag text box with a dropdown of the alliances in the live data (`map-state.json`).
-  - Enforce the 4-way check:
-    1. Caller holds `@R5` on the primary NAP server.
-    2. Caller holds the matching `@<TAG>` alliance role on the primary NAP server.
-    3. Caller holds `ADMINISTRATOR` or `MANAGE_GUILD` in the target Discord server.
-    4. The bot is present in the target server (`GET /guilds/{guild_id}`).
-  - Add a live preview card (colours, crest, tags).
-
 - [ ] **Alliance Dashboard (`dashboard.html` & `/api/dashboard`)**
   - Server-side Google Doc rendering with container shields (scrolling tables on phones, image width limits) and fallback Gist blocks.
   - Add `[ 🔒 Officers Only ]` block visibility filters.
@@ -75,6 +66,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 - [x] **Installed app (PWA)** — update notice, app shortcuts, iPhone icon, offline fallback to the home page, old caches cleaned up. (#69; Workbox upgrade still open above)
 - [x] **Safe saves** — every Gist save checks the revision history afterwards and repairs any save it overwrote, so nominations, the Won/Lost result, approvals, `/rank`, events and the proposal log made at the same moment are all kept. (#73)
 - [x] **King's checklist on the server** — ticks saved for everyone, by the King's alliance R4/R5 and Stewards; a handed-out chest is locked through any re-sort. (#74)
+- [x] **Alliance registration hardening** — the alliance comes from the signed `/registerbot` link (R5 + alliance role checked); the portal checks the bot is in the server, the person can manage it, and the channels and role belong to it. (#75)
 - [x] **Theme colours** — accent, borders and surfaces follow the chosen theme. (#50–#52)
 
 </div>

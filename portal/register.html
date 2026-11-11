@@ -54,6 +54,8 @@ lang: "en"
           />
           <div class="portal-hint">
             In Discord: Enable Developer Mode &rarr; Right-click your server icon &rarr; <strong>Copy Server ID</strong>.
+            You must own that server or have <strong>Administrator</strong> or <strong>Manage Server</strong> there.
+            The channels and role below are checked against it.
           </div>
         </div>
 
@@ -328,15 +330,19 @@ lang: "en"
 
         elFormContainer.style.display = "none";
         elSuccess.style.display = "block";
+        const warnings = (result.warnings || [])
+          .map((w) => `<br>⚠️ ${escapeHtml(w)}`)
+          .join("");
         elSuccess.innerHTML = `
           <strong>✅ Registration Successful!</strong><br><br>
-          Server ID <code>${escapeHtml(guildId)}</code> is now linked to <strong style="color: ${escapeHtml(allianceColor)};">[${escapeHtml(payload.alliance)}]</strong>.<br><br>
+          ${result.serverName ? `<strong>${escapeHtml(result.serverName)}</strong> (` : "Server ID "}<code>${escapeHtml(guildId)}</code>${result.serverName ? ")" : ""} is now linked to <strong style="color: ${escapeHtml(allianceColor)};">[${escapeHtml(payload.alliance)}]</strong>.<br><br>
           - <strong>Operations Alert Channel:</strong> <code>${escapeHtml(alertChannelId)}</code><br>
           - <strong>Notification Target:</strong> ${alertRoleId ? `Role <code>${escapeHtml(alertRoleId)}</code>` : "<code>@everyone</code> (Default)"}<br>
           - <strong>Officer Ticket Channel:</strong> <code>${escapeHtml(officerChannelId)}</code><br>
           - <strong>Identity Color:</strong> <code>${escapeHtml(allianceColor)}</code><br>
           - <strong>Slash Commands Deployed:</strong> <code>/calendar</code>, <code>/suggest</code>, <code>/nominate</code>, <code>/rewards</code>, <code>/map</code>, <code>/sb</code>, <code>/rules</code>.<br>
           - <strong>Authorized Leadership:</strong> <strong>@R5</strong>${delegatedRoles.length ? `, ${delegatedRoles.map((r) => "@" + escapeHtml(r)).join(", ")}` : ""}.
+          ${warnings ? `<br>${warnings}` : ""}
         `;
       } catch (err) {
         alert(`Registration Error: ${err.message}`);

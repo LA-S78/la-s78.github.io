@@ -114,6 +114,7 @@ export async function handleRegisterBotCommand(ctx) {
     const tokenPayload = {
       alliance: matchedAllianceTag,
       action: 'register',
+      uid: userId, // the portal checks this person may manage the server being linked
       client_id: clientId,
       exp: Date.now() + 24 * 60 * 60 * 1000,
     };
