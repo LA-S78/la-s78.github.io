@@ -52,12 +52,18 @@ const PAGE = `<!DOCTYPE html>
     try { sessionStorage.setItem('app-updated', '1'); } catch (e) {}
     window.location.replace('/?updated=1');
   }
-  // Never stay here: carry on after 1.5 s whatever happens.
-  setTimeout(go, 1500);
+  // Shown for at least 1.5 s, so it reads as a step rather than a flicker; never more than
+  // 4 s, even if clearing the saved copy hangs.
+  var started = Date.now();
+  var MIN_MS = 1500;
+  setTimeout(go, 4000);
   setTimeout(function () {
     var m = document.getElementById('msg');
-    if (m) m.innerHTML = 'Taking a while? <a href="/?updated=1">Open the website</a>.';
-  }, 4000);
+    if (m && !done) m.innerHTML = 'Taking a while? <a href="/?updated=1">Open the website</a>.';
+  }, 2500);
+  function finished() {
+    setTimeout(go, Math.max(0, MIN_MS - (Date.now() - started)));
+  }
   var jobs = [];
   try {
     if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
@@ -71,7 +77,7 @@ const PAGE = `<!DOCTYPE html>
       }));
     }
   } catch (e) {}
-  Promise.all(jobs).then(go, go);
+  Promise.all(jobs).then(finished, finished);
 })();
 </script>
 </body>
