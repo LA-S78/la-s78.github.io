@@ -1,10 +1,4 @@
-// api/reset.js — served at /reset (vercel.json). A link Stewards can post in Discord for a
-// player stuck on an old version of the site or installed app: it drops this site's
-// service worker and saved files, then opens the home page fresh. /reset was never in any
-// service worker's saved list, so even a stuck app fetches it from the network.
-// The login pass, theme and planner drafts (localStorage) are kept.
-
-const PAGE = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -81,13 +75,4 @@ const PAGE = `<!DOCTYPE html>
 })();
 </script>
 </body>
-</html>`;
-
-export default function handler(req, res) {
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-  // Chromium and Firefox also empty the browser's own cache for this site (not localStorage).
-  res.setHeader('Clear-Site-Data', '"cache"');
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('X-Robots-Tag', 'noindex');
-  return res.status(200).send(PAGE);
-}
+</html>

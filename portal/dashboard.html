@@ -1,0 +1,244 @@
+---
+layout: portal
+title: Alliance Dashboard
+permalink: /dashboard.html
+lang: "en"
+---
+
+<div class="content-pane portal-pane-md" id="dashboard-app">
+  <div class="portal-header">
+    <div class="alliance-badge-lg" id="dash-alliance">Alliance Dashboard</div>
+    <div class="sub-text" id="dash-subtitle">Loading your alliance dashboard…</div>
+    <!-- Stewards: look at (and help with) any alliance's dashboard -->
+    <label class="dash-switcher" id="dash-switcher" hidden>
+      <span>View as</span>
+      <select id="dash-switcher-select"></select>
+    </label>
+  </div>
+
+  <div id="dash-message" class="status-banner" hidden></div>
+
+  <!-- R4/R5, officers and Stewards only (the server sends it only to them) -->
+  <section class="dash-card dash-rewards" id="dash-rewards" hidden aria-labelledby="dash-rewards-title">
+    <h3 class="dash-card-title" id="dash-rewards-title">🔒 Weekly Rewards <span class="dash-tag">Officers</span></h3>
+    <div id="dash-rewards-body"></div>
+  </section>
+
+  <section class="dash-widgets" id="dash-widgets" hidden aria-label="Alliance charts and tables"></section>
+</div>
+
+<script>
+  (function () {
+    // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
+    const $ = (id) => document.getElementById(id);
+    const CHESTS = {
+      standard: { commanders_will: "Commander's Will", loyal_servant: 'Loyal Servant', followers_heart: "Follower's Heart" },
+      kingdom_war: { commanders_will: 'Honor Vanguard', loyal_servant: 'Fearless Hero', followers_heart: 'Logistics Support' },
+    };
+    let data = null;
+    let countdownTimer = null;
+
+    function loginPass() {
+      try {
+        return localStorage.getItem('auth-session') || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function message(html, kind) {
+      const el = $('dash-message');
+      el.className = `status-banner${kind ? ` ${kind}` : ''}`;
+      el.innerHTML = html;
+      el.hidden = false;
+    }
+
+    async function load(alliance) {
+      const pass = loginPass();
+      if (!pass) {
+        $('dash-subtitle').textContent = '';
+        message(
+          '🔐 <strong>Sign in to see your alliance dashboard.</strong><br>Use <strong>Sign In</strong> at the top right (Discord). Your alliance is found from your NAP server role.' +
+            '<br><br><button type="button" class="submit-plan-btn" id="dash-signin">Sign in with Discord</button>',
+        );
+        $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
+        return;
+      }
+      try {
+        const res = await fetch(`/api/dashboard${alliance ? `?alliance=${encodeURIComponent(alliance)}` : ''}`, {
+          headers: { Authorization: `Bearer ${pass}` },
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          $('dash-subtitle').textContent = '';
+          if (body.code === 'login') {
+            message(`🔐 ${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">Sign in again</button>`, 'warning');
+            $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
+          } else {
+            message(`⚠️ ${escapeHtml(body.error || `HTTP ${res.status}`)}`, 'warning');
+          }
+          return;
+        }
+        data = body;
+        $('dash-message').hidden = true;
+        render();
+      } catch (err) {
+        message(`⚠️ Couldn't load the dashboard. Check your connection and refresh. (${escapeHtml(err.message)})`, 'warning');
+      }
+    }
+
+    function render() {
+      const a = data.alliance;
+      const badge = $('dash-alliance');
+      badge.textContent = `[${a.tag}]`;
+      if (a.color && /^#[0-9a-f]{6}$/i.test(a.color)) badge.style.color = a.color;
+      const who = { steward: 'Steward view', leader: 'Leadership view', member: 'Member view' }[data.viewer.tier];
+      $('dash-subtitle').textContent = `Alliance Dashboard${a.rank ? ` · Rank #${a.rank}` : ''} · ${who}`;
+      document.title = `[${a.tag}] Alliance Dashboard | Last Asylum`;
+
+      // Stewards: alliance switcher
+      if (Array.isArray(data.alliances) && data.alliances.length) {
+        const select = $('dash-switcher-select');
+        select.innerHTML = data.alliances
+          .map((x) => `<option value="${escapeHtml(x.tag)}"${x.tag === a.tag ? ' selected' : ''}>[${escapeHtml(x.tag)}]${x.rank ? ` · #${x.rank}` : ''}</option>`)
+          .join('');
+        $('dash-switcher').hidden = false;
+      }
+
+      renderRewards();
+      renderWidgets();
+    }
+
+    /** Chests as coloured icons with counts (names in the tooltip): gold, purple, blue. */
+    function chestIcons(counts, pool) {
+      const c = (counts && counts[pool]) || {};
+      const names = Object.keys(CHESTS[pool]).map((k) => `${CHESTS[pool][k]} ×${Number(c[k] || 0)}`).join(', ');
+      return `<span class="dash-chests" title="${escapeHtml(names)}" aria-label="${escapeHtml(names)}">${[
+        ['commanders_will', 'gold'],
+        ['loyal_servant', 'purple'],
+        ['followers_heart', 'blue'],
+      ]
+        .map(([k, glyph]) => `<span class="dash-chest"><span class="chest-glyph ${glyph}"></span>${Number(c[k] || 0)}</span>`)
+        .join('')}</span>`;
+    }
+
+    function when(iso) {
+      const d = new Date(iso);
+      const local = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      const gt = new Date(d.getTime() - 2 * 3600000);
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      return `${local} (${days[gt.getUTCDay()]} ${String(gt.getUTCHours()).padStart(2, '0')}:${String(gt.getUTCMinutes()).padStart(2, '0')} GT)`;
+    }
+
+    function countdown(iso) {
+      const ms = new Date(iso).getTime() - Date.now();
+      if (ms <= 0) return 'now';
+      const d = Math.floor(ms / 864e5);
+      const h = Math.floor((ms % 864e5) / 36e5);
+      const m = Math.floor((ms % 36e5) / 6e4);
+      return d ? `${d}d ${h}h` : h ? `${h}h ${m}m` : `${m}m`;
+    }
+
+    function renderRewards() {
+      const r = data.rewards;
+      $('dash-rewards').hidden = !r;
+      if (!r) return;
+      const p = r.period;
+      const n = r.nomination;
+
+      // 1. Period and Kingdom War result
+      const status = p.open
+        ? `<span title="Closes ${escapeHtml(when(p.closesAt))}">🟢 <strong>Open</strong> · <span data-countdown="${escapeHtml(p.closesAt)}">${countdown(p.closesAt)}</span> left</span>`
+        : `<span title="Opens ${escapeHtml(when(p.nextOpensAt))}, after Friday's capitol event">⚪ <strong>Closed</strong> · opens in <span data-countdown="${escapeHtml(p.nextOpensAt)}">${countdown(p.nextOpensAt)}</span></span>`;
+      const war = !p.kwWeek
+        ? '<span class="dash-pill">Off-Week</span>'
+        : p.result === 'won'
+          ? '<span class="dash-pill is-good">🏆 KW won</span>'
+          : p.result === 'lost'
+            ? '<span class="dash-pill">🛡️ KW lost</span>'
+            : '<span class="dash-pill is-wait">⏳ KW pending</span>';
+
+      // 2. Chests: set 1 always; set 2 when won, greyed "if won" while pending
+      let set2 = '';
+      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="King of Battle Reward">⚔️ ${chestIcons(r.chests, 'kingdom_war')}</span>`;
+      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="King of Battle Reward, if the war is won">⚔️ ${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>if won</small></span>`;
+      const chests = r.rank
+        ? `<span class="dash-set" title="King's Commendation">👑 ${chestIcons(r.chests, 'standard')}</span>${set2}`
+        : '<span class="dash-warn">No rank in the standings: no chests</span>';
+
+      // 3. The list
+      const list = n.submitted
+        ? `<span title="${n.submittedAt ? `Sent ${escapeHtml(when(n.submittedAt))}` : ''}">✅ List sent · ${n.ranked}${n.reserves ? ` <span class="dash-muted">(${n.reserves} reserve${n.reserves === 1 ? '' : 's'})</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${n.unfilled} empty</span>` : ''}</span>`
+        : p.open
+          ? '<span class="dash-warn">⚠️ List not sent</span>'
+          : '<span class="dash-muted">No list while closed</span>';
+      let action = '';
+      if (p.open && data.viewer.canNominate) {
+        action = `<button type="button" class="dash-btn" id="dash-nominate">📝 ${n.submitted ? 'Edit' : 'Send list'}</button>`;
+      } else if (p.open) {
+        action = '<span class="dash-muted dash-small" title="Your R5 can open the nomination page from here, or run /nominate in Discord.">R5 or /nominate</span>';
+      }
+
+      // 4. Buyout, only when it applies
+      const buyout = r.hasBuyoutBonus
+        ? `<div class="dash-line dash-small" title="Funded by WLO${r.buyoutThreat ? ` · threat: ${escapeHtml(r.buyoutThreat)}` : ''}"><span>🛡️ Buyout: <strong>+1</strong> <span class="chest-glyph gold"></span> in each set won</span></div>`
+        : r.isWloDeducted
+          ? '<div class="dash-line dash-small" title="Funding the displaced alliance this week"><span>⚖️ Buyout: <strong>−1</strong> <span class="chest-glyph gold"></span> in each set</span></div>'
+          : '';
+
+      $('dash-rewards-body').innerHTML =
+        `<div class="dash-line">${status}${war}</div>` +
+        `<div class="dash-line dash-chest-row">${chests}</div>` +
+        `<div class="dash-line">${list}${action}</div>` +
+        buyout +
+        '<div class="dash-warn dash-small" id="dash-nominate-error"></div>';
+
+      $('dash-nominate')?.addEventListener('click', openNomination);
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        document.querySelectorAll('[data-countdown]').forEach((el) => {
+          el.textContent = countdown(el.getAttribute('data-countdown'));
+        });
+      }, 30000);
+    }
+
+    async function openNomination(e) {
+      const btn = e.currentTarget;
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/dashboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+          body: JSON.stringify({ action: 'nominate-link', alliance: data.alliance.tag }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        window.location.href = body.url;
+      } catch (err) {
+        btn.disabled = false;
+        $('dash-nominate-error').textContent = err.message;
+      }
+    }
+
+    function renderWidgets() {
+      const list = (data.dashboard && data.dashboard.widgets) || [];
+      const el = $('dash-widgets');
+      el.hidden = false;
+      if (!list.length) {
+        el.innerHTML = `<div class="dash-card dash-empty">${
+          data.viewer.tier === 'member'
+            ? "📊 Your alliance's leaders haven't shared any charts or tables here yet."
+            : '📊 No charts or tables yet.'
+        }</div>`;
+        return;
+      }
+      // Charts and tables are drawn here (next step of the dashboard).
+      el.innerHTML = list
+        .map((w) => `<div class="dash-card"><h3 class="dash-card-title">${escapeHtml(w.title || 'Untitled')}</h3></div>`)
+        .join('');
+    }
+
+    $('dash-switcher-select').addEventListener('change', (e) => load(e.target.value));
+    load(new URLSearchParams(window.location.search).get('alliance'));
+  })();
+</script>

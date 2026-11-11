@@ -1,0 +1,190 @@
+/* ==========================================================================
+   7. ALLIANCE DASHBOARD (portal/dashboard.html)
+   Colours come from the theme variables, so it follows Plague, Sanctuary and Miasma.
+   ========================================================================== */
+
+.dash-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.dash-switcher[hidden] {
+  display: none;
+}
+
+.dash-switcher select {
+  padding: 4px 8px;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.dash-card {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.dash-rewards {
+  border-color: color-mix(in srgb, var(--accent-color) 45%, var(--border-color));
+}
+
+.dash-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 0.6rem;
+  font-family: var(--font-headers);
+  font-size: 1rem;
+  color: var(--accent-color);
+  border: none;
+}
+
+.dash-tag {
+  margin-left: auto;
+  padding: 1px 7px;
+  font-family: inherit;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+}
+
+/* The weekly reward card: a few short lines, chests as coloured icons */
+.dash-rewards {
+  padding: 0.65rem 0.85rem;
+}
+
+.dash-rewards .dash-card-title {
+  margin-bottom: 0.4rem;
+  font-size: 0.92rem;
+}
+
+.dash-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 10px;
+  padding: 0.3rem 0;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  border-top: 1px solid var(--overlay-5);
+}
+
+.dash-line:first-child {
+  border-top: none;
+}
+
+.dash-chest-row {
+  justify-content: flex-start;
+  gap: 6px 16px;
+}
+
+.dash-set {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.dash-set.is-maybe {
+  opacity: 0.55;
+}
+
+.dash-set small {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.dash-chests {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.dash-chest {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+}
+
+.dash-rewards .chest-glyph {
+  width: 13px;
+  height: 11px;
+  border-radius: 3px;
+  vertical-align: -1px;
+}
+
+.dash-pill {
+  padding: 1px 8px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+}
+
+.dash-pill.is-good {
+  color: var(--text-main);
+  border-color: color-mix(in srgb, var(--accent-color) 60%, var(--border-color));
+}
+
+.dash-pill.is-wait {
+  color: var(--gold);
+  border-color: color-mix(in srgb, var(--gold) 45%, var(--border-color));
+}
+
+.dash-btn {
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--accent-color) 25%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 60%, var(--border-color));
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dash-btn:hover {
+  background: color-mix(in srgb, var(--accent-color) 40%, transparent);
+}
+
+.dash-btn:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.dash-muted {
+  color: var(--text-muted);
+}
+
+.dash-small {
+  font-size: 0.72rem;
+}
+
+#dash-nominate-error:empty {
+  display: none;
+}
+
+.dash-warn {
+  color: var(--status-danger-text);
+}
+
+.dash-empty {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

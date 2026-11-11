@@ -177,6 +177,7 @@ identity:
   sign_out: "Çıkış Yap"
   force_update: "Uygulamayı Güncelle"
   force_updating: "Güncelleniyor…"
+  dashboard: "İttifak Paneli"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

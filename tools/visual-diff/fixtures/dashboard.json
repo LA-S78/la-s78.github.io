@@ -1,0 +1,39 @@
+{
+  "viewer": { "name": "Visual Test", "tier": "leader", "canNominate": true },
+  "alliance": { "tag": "WLO", "rank": 1, "color": "#25bb00" },
+  "dashboard": { "alliance": "WLO", "widgets": [], "updatedAt": null, "settings": {} },
+  "rewards": {
+    "period": {
+      "id": "2026-11-06T22:00:00.000Z",
+      "week": 1,
+      "weekName": "Kingdom War Week 1",
+      "kwWeek": true,
+      "open": true,
+      "opensAt": "2026-11-06T22:00:00.000Z",
+      "battleEndsAt": "2026-11-07T16:00:00.000Z",
+      "closesAt": "2026-11-11T02:00:00.000Z",
+      "nextOpensAt": "2026-11-13T22:00:00.000Z",
+      "result": "won"
+    },
+    "rank": 1,
+    "chests": {
+      "standard": { "commanders_will": 3, "loyal_servant": 2, "followers_heart": 4 },
+      "kingdom_war": { "commanders_will": 3, "loyal_servant": 2, "followers_heart": 4 }
+    },
+    "chestsIfWon": {
+      "standard": { "commanders_will": 3, "loyal_servant": 2, "followers_heart": 4 },
+      "kingdom_war": { "commanders_will": 3, "loyal_servant": 2, "followers_heart": 4 }
+    },
+    "totalNow": 18,
+    "hasBuyoutBonus": false,
+    "isWloDeducted": true,
+    "buyoutThreat": null,
+    "nomination": {
+      "submitted": true,
+      "ranked": 20,
+      "reserves": 2,
+      "unfilled": 0,
+      "submittedAt": "2026-11-08T09:30:00.000Z"
+    }
+  }
+}

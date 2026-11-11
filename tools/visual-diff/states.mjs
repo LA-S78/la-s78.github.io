@@ -171,6 +171,32 @@ export const STATES = [
     ),
     run: defensePreview(1),
   },
+  // Alliance Dashboard (portal/dashboard.html). Its normal view (no login) asks to sign in.
+  { name: 'dashboard-leader', needs: '#dashboard-app', storage: SIGNED_IN },
+  {
+    name: 'dashboard-member',
+    needs: '#dashboard-app',
+    storage: SIGNED_IN,
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      data.viewer = { ...data.viewer, tier: 'member', canNominate: false };
+      delete data.rewards;
+    },
+  },
+  {
+    name: 'dashboard-steward',
+    needs: '#dashboard-app',
+    storage: { ...SIGNED_IN, 'auth-steward': 'true' },
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      data.viewer = { ...data.viewer, tier: 'steward' };
+      data.alliances = [
+        { tag: 'WLO', rank: 1 },
+        { tag: 'MIA', rank: 2 },
+      ];
+      data.rewards.nomination = { submitted: false };
+    },
+  },
   // One state per <dialog> on the page (image zoom dialogs etc.), added automatically.
   {
     name: 'dialog',

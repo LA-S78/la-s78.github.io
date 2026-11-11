@@ -165,6 +165,8 @@ Dir.children('_css').sort.each do |name|
 end
 FileUtils.cp('site.webmanifest', SITE)
 FileUtils.cp('_deploy/redirect.html', File.join(SITE, 'index.html'))
+# /reset (vercel.json): a plain page, so it needs no serverless function (Hobby plan: 12 at most)
+FileUtils.cp('_deploy/reset.html', File.join(SITE, 'reset.html'))
 
 # Quick single-language builds skip the root build, which normally produces /sw.js.
 if options[:lang] && !File.exist?(File.join(SITE, 'sw.js'))

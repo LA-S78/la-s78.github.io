@@ -177,6 +177,7 @@ identity:
   sign_out: "Вийти"
   force_update: "Оновити застосунок"
   force_updating: "Оновлення…"
+  dashboard: "Панель альянсу"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

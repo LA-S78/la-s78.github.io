@@ -16,7 +16,8 @@ module WorkboxInjector
   EXCLUDED_PREFIXES = [
     '/api/',                 # Vercel serverless sources, not static assets
     '/js/mermaid.min.js',    # 3.3 MB, only used by the internal test page
-    '/images/compendium-desk.webp' # only on /reset, which empties the saved copy anyway
+    '/images/compendium-desk.webp', # only on /reset, which empties the saved copy anyway
+    '/reset.html'            # must always come from the network (it clears the saved copy)
   ].freeze
 
   def self.run(dest_path)
