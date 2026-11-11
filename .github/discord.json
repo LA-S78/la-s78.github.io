@@ -1,0 +1,358 @@
+{
+  "owner": [
+    {
+      "name": "calendar",
+      "description": "View or manage the Event Calendar",
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "action",
+          "description": "Action to perform (leave blank to view calendar)",
+          "required": false,
+          "choices": [
+            {
+              "name": "Manage Alliance Events (R5 by default)",
+              "value": "manage_alliance"
+            },
+            {
+              "name": "Manage Global Events (Admin Only)",
+              "value": "manage_global"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nominate",
+      "description": "Request a portal link to submit weekly chest nominations",
+      "type": 1
+    },
+    {
+      "name": "rewards",
+      "description": "This week's rewards: status, and the Kingdom War result (Stewards)",
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "action",
+          "description": "Leave blank to see this week's reward status",
+          "required": false,
+          "choices": [
+            {
+              "name": "Record Kingdom War: Won (Steward)",
+              "value": "won"
+            },
+            {
+              "name": "Record Kingdom War: Lost (Steward)",
+              "value": "lost"
+            },
+            {
+              "name": "Clear this week's nominations (Steward)",
+              "value": "reset"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rank",
+      "description": "View or manage alliance NAP rankings",
+      "type": 1,
+      "options": [
+        {
+          "name": "set",
+          "description": "Update an alliance's NAP rank (Admin only)",
+          "type": 1,
+          "options": [
+            {
+              "type": 3,
+              "name": "tag",
+              "description": "Alliance tag (e.g., ABC)",
+              "required": true
+            },
+            {
+              "type": 4,
+              "name": "rank",
+              "description": "New rank position (e.g., 1 to 10)",
+              "required": true,
+              "min_value": 1
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Display current NAP rankings and standings",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "name": "sb",
+      "description": "Display the Survival Battle schedule",
+      "type": 1,
+      "options": [
+        {
+          "type": 4,
+          "name": "day",
+          "description": "Day of the cycle (1-7)",
+          "required": false,
+          "min_value": 1,
+          "max_value": 7
+        }
+      ]
+    },
+    {
+      "name": "rules",
+      "description": "Display server and Kingdom NAP rules",
+      "type": 1,
+      "options": [
+        {
+          "type": 4,
+          "name": "rule",
+          "description": "Specific rule number to view",
+          "required": false,
+          "min_value": 1
+        }
+      ]
+    },
+    {
+      "name": "map",
+      "description": "View the live territory map",
+      "type": 1
+    }
+  ],
+  "nap": [
+    {
+      "name": "calendar",
+      "description": "View or manage the Event Calendar",
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "action",
+          "description": "Action to perform (leave blank to view calendar)",
+          "required": false,
+          "choices": [
+            {
+              "name": "Manage Alliance Events (R5 by default)",
+              "value": "manage_alliance"
+            },
+            {
+              "name": "Manage Global Events (Admin Only)",
+              "value": "manage_global"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "registerbot",
+      "description": "Register alliance server or sync slash commands",
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "action",
+          "description": "Action to perform (leave blank to get registration portal link)",
+          "required": false,
+          "choices": [
+            {
+              "name": "Sync All Registered Servers (Admin Only)",
+              "value": "sync"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nominate",
+      "description": "Request a portal link to submit weekly chest nominations",
+      "type": 1
+    },
+    {
+      "name": "rewards",
+      "description": "This week's rewards: status, and the Kingdom War result (Stewards)",
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "action",
+          "description": "Leave blank to see this week's reward status",
+          "required": false,
+          "choices": [
+            {
+              "name": "Record Kingdom War: Won (Steward)",
+              "value": "won"
+            },
+            {
+              "name": "Record Kingdom War: Lost (Steward)",
+              "value": "lost"
+            },
+            {
+              "name": "Clear this week's nominations (Steward)",
+              "value": "reset"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rank",
+      "description": "View or manage alliance NAP rankings",
+      "type": 1,
+      "options": [
+        {
+          "name": "set",
+          "description": "Update an alliance's NAP rank (Admin only)",
+          "type": 1,
+          "options": [
+            {
+              "type": 3,
+              "name": "tag",
+              "description": "Alliance tag (e.g., ABC)",
+              "required": true
+            },
+            {
+              "type": 4,
+              "name": "rank",
+              "description": "New rank position (e.g., 1 to 10)",
+              "required": true,
+              "min_value": 1
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "description": "Display current NAP rankings and standings",
+          "type": 1
+        }
+      ]
+    },
+    {
+      "name": "sb",
+      "description": "Display the Survival Battle schedule",
+      "type": 1,
+      "options": [
+        {
+          "type": 4,
+          "name": "day",
+          "description": "Day of the cycle (1-7)",
+          "required": false,
+          "min_value": 1,
+          "max_value": 7
+        }
+      ]
+    },
+    {
+      "name": "rules",
+      "description": "Display server and Kingdom NAP rules",
+      "type": 1,
+      "options": [
+        {
+          "type": 4,
+          "name": "rule",
+          "description": "Specific rule number to view",
+          "required": false,
+          "min_value": 1
+        }
+      ]
+    },
+    {
+      "name": "map",
+      "description": "View the live territory map",
+      "type": 1
+    }
+  ],
+  "wlo": [
+    {
+      "name": "calendar",
+      "description": "View or manage the Event Calendar",
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "action",
+          "description": "Action to perform (leave blank to view calendar)",
+          "required": false,
+          "choices": [
+            {
+              "name": "Manage Alliance Events (R5 by default)",
+              "value": "manage_alliance"
+            },
+            {
+              "name": "Manage Global Events (Admin Only)",
+              "value": "manage_global"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nominate",
+      "description": "Request a portal link to submit weekly chest nominations",
+      "type": 1
+    },
+    {
+      "name": "rewards",
+      "description": "This week's rewards: status, and the Kingdom War result (Stewards)",
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "action",
+          "description": "Leave blank to see this week's reward status",
+          "required": false,
+          "choices": [
+            {
+              "name": "Record Kingdom War: Won (Steward)",
+              "value": "won"
+            },
+            {
+              "name": "Record Kingdom War: Lost (Steward)",
+              "value": "lost"
+            },
+            {
+              "name": "Clear this week's nominations (Steward)",
+              "value": "reset"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sb",
+      "description": "Display the Survival Battle schedule",
+      "type": 1,
+      "options": [
+        {
+          "type": 4,
+          "name": "day",
+          "description": "Day of the cycle (1-7)",
+          "required": false,
+          "min_value": 1,
+          "max_value": 7
+        }
+      ]
+    },
+    {
+      "name": "rules",
+      "description": "Display server and Kingdom NAP rules",
+      "type": 1,
+      "options": [
+        {
+          "type": 4,
+          "name": "rule",
+          "description": "Specific rule number to view",
+          "required": false,
+          "min_value": 1
+        }
+      ]
+    },
+    {
+      "name": "map",
+      "description": "View the live territory map",
+      "type": 1
+    }
+  ]
+}

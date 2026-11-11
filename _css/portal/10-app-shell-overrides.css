@@ -1,0 +1,113 @@
+/* ==========================================================================
+   LAST ASYLUM COMPENDIUM: PORTAL & WEB APPS STYLESHEET (portal.css)
+   Inherits theme variables from style.css
+   ========================================================================== */
+
+/* ==========================================================================
+   1. PORTAL STANDALONE APP SHELL OVERRIDES
+   ========================================================================== */
+
+.portal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100lvh;
+  z-index: -10;
+  pointer-events: none;
+  background-color: var(--nav-bg);
+  background-image: url("/images/background.webp"), url("/images/background.png");
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+html:has(.portal-body) {
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y;
+}
+
+body.portal-body {
+  height: auto;
+  min-height: 100vh !important;
+  min-height: 100lvh !important;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  position: relative;
+  background: transparent;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+body.portal-body #mobile-container {
+  position: relative;
+  height: auto;
+  min-height: 100vh !important;
+  min-height: 100lvh !important;
+  box-sizing: border-box;
+  overflow: visible;
+  background: transparent !important;
+  background-color: transparent !important;
+  touch-action: pan-y;
+  padding-bottom: 2rem;
+}
+
+body.portal-body #main-content,
+body.portal-body main {
+  height: auto;
+  overflow: visible;
+  background: transparent !important;
+  background-color: transparent !important;
+  touch-action: pan-y;
+}
+
+body.portal-body.has-no-header #mobile-container,
+body.portal-body.has-no-header #main-content {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+body.portal-body.has-no-header main {
+  padding-top: 1.2rem;
+  margin-top: 0;
+}
+
+body.portal-body.has-no-header .lantern-glow-bleed {
+  display: none !important;
+}
+
+body.portal-body.has-header #main-content {
+  position: relative;
+}
+
+body.portal-body .content-pane {
+  margin-left: auto;
+  margin-right: auto;
+  touch-action: pan-y;
+  padding: 1.15rem;
+}
+
+/* Portal Container Width Modifiers */
+.portal-pane-sm {
+  max-width: 560px;
+  width: 100%;
+}
+
+.portal-pane-md {
+  max-width: 680px;
+  width: 100%;
+}
+
+.portal-pane-lg {
+  max-width: 980px;
+  width: 100%;
+}
+

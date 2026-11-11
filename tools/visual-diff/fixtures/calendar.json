@@ -1,0 +1,44 @@
+{
+  "status": {
+    "cycleDay": 23,
+    "currentWeekNumber": 4,
+    "clockWeek": 0,
+    "scheduleSlot": "downtime",
+    "weekName": "Off-Week",
+    "dayOfWeekNumber": 2,
+    "isKW": false,
+    "phaseName": "Off-Week",
+    "capitolRank": 4,
+    "nextResetUtc": "2026-11-11T02:00:00.000Z",
+    "nextResetTimestamp": 1794362400,
+    "kwBattleTimestamp": 1794621600,
+    "isKWBattleDay": false,
+    "isOverrideWeek": true,
+    "holderActualRank": 3,
+    "captureDayOfWeek": 5,
+    "captureTimestamp": 1794535200,
+    "isCaptureDay": false,
+    "capitolCaptured": false
+  },
+  "capitolHolder": "[MIA]",
+  "capitolHolderColor": "#a400af",
+  "events": [
+    {
+      "id": "e1",
+      "title": "Crystal Cluster",
+      "start": "2026-11-11T08:00:00Z",
+      "end": "2026-11-11T09:00:00Z",
+      "scope": "global"
+    },
+    {
+      "id": "sys-capture-w4",
+      "scope": "global",
+      "title": "👑 Capitol Capture — [MIA]",
+      "description": "[MIA] (Rank #3 • Override Schedule) captures the Capitol on Friday.",
+      "start": "2026-11-13T02:00:00.000Z",
+      "end": "2026-11-14T02:00:00.000Z",
+      "type": "rotation",
+      "allDay": true
+    }
+  ]
+}

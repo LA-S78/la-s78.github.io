@@ -1,0 +1,355 @@
+---
+layout: portal
+title: Alliance Server Registration
+permalink: /register.html
+lang: "en"
+hide_header: true
+---
+
+<div class="content-pane portal-pane-sm" id="register-app">
+  <div id="loading-state" class="status-banner">
+    Loading registration portal...
+  </div>
+  <div id="error-state" class="status-banner warning" style="display: none"></div>
+  <div id="success-state" class="status-banner status-success" style="display: none"></div>
+
+  <div id="form-container" style="display: none">
+    <div class="portal-header">
+      <div class="alliance-badge-lg" id="display-alliance">[TAG]</div>
+      <div class="sub-text">Alliance Server Integration Portal</div>
+    </div>
+
+    <!-- Step 1: Invite Bot -->
+    <div class="smart-paste-box">
+      <label>1. Invite Bot to Your Server</label>
+      <p class="smart-paste-desc">
+        You must add the bot to your alliance Discord before completing registration.
+      </p>
+      <a
+        id="btn-oauth-invite"
+        href="#"
+        target="_blank"
+        class="draft-btn btn-fw btn-fw-link"
+      >
+        🤖 Click to Authorize Bot
+      </a>
+    </div>
+
+    <!-- Step 2: Form Configuration -->
+    <form id="registration-form">
+      <div class="slot-group">
+        <div class="slot-group-title">2. Server &amp; Role Credentials</div>
+
+        <!-- Server Guild ID -->
+        <div class="portal-field">
+          <label for="input-guild-id" class="portal-label portal-label-accent">
+            Discord Server ID (Guild ID) <span class="portal-req">*</span>
+          </label>
+          <input
+            type="text"
+            id="input-guild-id"
+            class="slot-input"
+            placeholder="e.g. 1333913822980735048"
+            pattern="^\d{17,20}$"
+            required
+          />
+          <div class="portal-hint">
+            In Discord: Enable Developer Mode &rarr; Right-click your server icon &rarr; <strong>Copy Server ID</strong>.
+          </div>
+        </div>
+
+        <!-- Notification & Ticket Routing Configuration -->
+        <div class="portal-section-divider">
+          <span class="portal-section-heading">📢 Operations &amp; Ticket Routing</span>
+          <p class="portal-section-sub">
+            Configure where the bot posts public operation alerts and routes private member suggestions/tickets.
+          </p>
+
+          <!-- Alert Channel ID -->
+          <div class="portal-field">
+            <label for="reg-alert-channel" class="portal-label">
+              Operations Alert Channel ID <span class="portal-req">*</span>
+            </label>
+            <input
+              type="text"
+              id="reg-alert-channel"
+              name="alert_channel_id"
+              class="slot-input"
+              placeholder="e.g. 1198765432109876543"
+              pattern="^\d{17,20}$"
+              title="Must be a valid 17-20 digit Discord Channel ID"
+              required
+            />
+            <div class="portal-hint">
+              Right-click your announcement/alert channel &rarr; <strong>Copy Channel ID</strong>.
+            </div>
+          </div>
+
+          <!-- Default Alert Role ID -->
+          <div class="portal-field">
+            <label for="reg-alert-role" class="portal-label">
+              Default Alert Role ID <span class="portal-opt">(Optional)</span>
+            </label>
+            <input
+              type="text"
+              id="reg-alert-role"
+              name="alert_role_id"
+              class="slot-input"
+              placeholder="Leave blank to default to @everyone"
+              pattern="^\d{17,20}$"
+              title="Must be a valid 17-20 digit Discord Role ID"
+            />
+            <div class="portal-hint">
+              Right-click your ping role (e.g. <code>@War-Alerts</code>) &rarr; <strong>Copy Role ID</strong>. Defaults to <code>@everyone</code> if blank.
+            </div>
+          </div>
+
+          <!-- Officer Triage / Ticket Channel ID -->
+          <div class="portal-field">
+            <label for="reg-officer-channel" class="portal-label">
+              Officer Ticket Intake Channel ID <span class="portal-req">*</span>
+            </label>
+            <input
+              type="text"
+              id="reg-officer-channel"
+              name="officer_channel_id"
+              class="slot-input"
+              placeholder="e.g. 1298765432109876543"
+              pattern="^\d{17,20}$"
+              title="Must be a valid 17-20 digit Discord Channel ID"
+              required
+            />
+            <div class="portal-hint">
+              Right-click your <strong>private R4/R5 ticket channel</strong> &rarr; <strong>Copy Channel ID</strong>. Member proposals and alliance tickets from <code>/suggest</code> will route here for leadership review.
+            </div>
+          </div>
+        </div>
+
+        <!-- Delegated Leadership Roles -->
+        <div class="portal-section-divider">
+          <label for="input-roles" class="portal-label portal-label-accent">
+            Delegated Leadership Roles <span class="portal-opt">(Optional)</span>
+          </label>
+          <input
+            type="text"
+            id="input-roles"
+            class="slot-input"
+            placeholder="HR, Officer, R4"
+          />
+          <div class="portal-hint">
+            Comma-separated role names that can triage tickets, manage events, and submit chest nominations (<code>@R5</code> is always authorized).
+          </div>
+        </div>
+
+        <!-- Alliance Brand Color & Live Badge Preview -->
+        <div class="portal-section-divider">
+          <label for="reg-color" class="portal-label portal-label-accent">
+            Alliance Identity Color
+          </label>
+
+          <div class="color-picker-row">
+            <div class="color-inputs-group">
+              <input
+                type="color"
+                id="reg-color"
+                name="alliance_color"
+                value="#b8975a"
+                class="color-swatch-input"
+              />
+              <input
+                type="text"
+                id="reg-color-hex"
+                value="#B8975A"
+                maxlength="7"
+                pattern="^#([0-9A-Fa-f]{6})$"
+                placeholder="#B8975A"
+                class="slot-input color-hex-input"
+              />
+            </div>
+
+            <div class="color-preview-wrap">
+              <span class="color-preview-label">Preview:</span>
+              <div id="color-preview-badge" class="color-preview-badge">[TAG]</div>
+            </div>
+          </div>
+
+          <div class="portal-hint">
+            Applied to your operations calendar, internal ticket cards, and endorsed NAP Council proposals.
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg">
+        Register Server &amp; Deploy Commands
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    const elLoading = document.getElementById("loading-state");
+    const elError = document.getElementById("error-state");
+    const elSuccess = document.getElementById("success-state");
+    const elFormContainer = document.getElementById("form-container");
+    const btnOAuth = document.getElementById("btn-oauth-invite");
+
+    const topAllianceBadge = document.getElementById("display-alliance");
+    const previewBadge = document.getElementById("color-preview-badge");
+    const colorPicker = document.getElementById("reg-color");
+    const colorHexInput = document.getElementById("reg-color-hex");
+
+    if (!token || !token.includes(".")) {
+      showError(
+        "Invalid or missing registration token. Run /registerbot in the NAP server."
+      );
+      return;
+    }
+
+    let payload = null;
+    try {
+      const dataString = token.split(".")[0];
+      const binary = atob(dataString.replace(/-/g, "+").replace(/_/g, "/"));
+      const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+      const jsonStr = new TextDecoder("utf-8").decode(bytes);
+      payload = JSON.parse(jsonStr);
+    } catch (e) {
+      showError("Malformed token. Please request a new link from Discord.");
+      return;
+    }
+
+    if (payload.exp && Date.now() > payload.exp) {
+      showError(
+        "This registration link has expired (24h limit). Run /registerbot again."
+      );
+      return;
+    }
+
+    elLoading.style.display = "none";
+    elFormContainer.style.display = "block";
+
+    const tagDisplay = payload.alliance ? `[${payload.alliance}]` : "[TAG]";
+    topAllianceBadge.textContent = tagDisplay;
+    previewBadge.textContent = tagDisplay;
+
+    // 395137371136 = Base (379904) + Private/Public Threads & Manage Threads (Zero Manage Channels risk)
+    const clientId = payload.client_id || "YOUR_CLIENT_ID";
+    btnOAuth.href = `https://discord.com/oauth2/authorize?client_id=${clientId}&scope=bot%20applications.commands&permissions=395137371136`;
+
+    // Two-Way Live Color Synchronization
+    function applyBrandColor(hex) {
+      if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) return;
+      const cleanHex = hex.toUpperCase();
+
+      colorPicker.value = cleanHex.toLowerCase();
+      colorHexInput.value = cleanHex;
+
+      previewBadge.style.color = cleanHex;
+      previewBadge.style.borderColor = cleanHex;
+      previewBadge.style.boxShadow = `0 0 12px ${cleanHex}40`;
+
+      topAllianceBadge.style.color = cleanHex;
+    }
+
+    // Initialize default or token-provided color
+    applyBrandColor(payload.color || "#B8975A");
+
+    colorPicker.addEventListener("input", (e) => {
+      applyBrandColor(e.target.value);
+    });
+
+    colorHexInput.addEventListener("input", (e) => {
+      let val = e.target.value.trim();
+      if (val && !val.startsWith("#")) val = "#" + val;
+      if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+        applyBrandColor(val);
+      }
+    });
+
+    const form = document.getElementById("registration-form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("btn-submit");
+      const guildId = document.getElementById("input-guild-id").value.trim();
+      const alertChannelId = document.getElementById("reg-alert-channel").value.trim();
+      const rawAlertRole = document.getElementById("reg-alert-role").value.trim();
+      const alertRoleId = rawAlertRole || null;
+      const officerChannelId = document.getElementById("reg-officer-channel").value.trim();
+      const allianceColor = colorPicker.value.toUpperCase();
+
+      const rawRoles = document.getElementById("input-roles").value;
+      const delegatedRoles = rawRoles
+        .split(/[,]+/)
+        .map((r) => r.trim())
+        .filter(Boolean);
+
+      if (!/^\d{17,20}$/.test(guildId)) {
+        alert("Invalid Discord Server ID format. Must be a 17-20 digit number.");
+        return;
+      }
+
+      if (!/^\d{17,20}$/.test(alertChannelId)) {
+        alert("Invalid Operations Alert Channel ID format. Must be a 17-20 digit number.");
+        return;
+      }
+
+      if (alertRoleId && !/^\d{17,20}$/.test(alertRoleId)) {
+        alert("Invalid Alert Role ID format. Must be a 17-20 digit number (or left empty for @everyone).");
+        return;
+      }
+
+      if (!/^\d{17,20}$/.test(officerChannelId)) {
+        alert("Invalid Officer Ticket Intake Channel ID format. Must be a 17-20 digit number.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Verifying Server & Registering...";
+
+      try {
+        const res = await fetch("/api/register-alliance", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            token: token,
+            guildId: guildId,
+            delegatedRoles: delegatedRoles,
+            alert_channel_id: alertChannelId,
+            alert_role_id: alertRoleId,
+            officer_channel_id: officerChannelId,
+            alliance_color: allianceColor,
+          }),
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || "Registration failed");
+
+        elFormContainer.style.display = "none";
+        elSuccess.style.display = "block";
+        elSuccess.innerHTML = `
+          <strong>✅ Registration Successful!</strong><br><br>
+          Server ID <code>${escapeHtml(guildId)}</code> is now linked to <strong style="color: ${escapeHtml(allianceColor)};">[${escapeHtml(payload.alliance)}]</strong>.<br><br>
+          - <strong>Operations Alert Channel:</strong> <code>${escapeHtml(alertChannelId)}</code><br>
+          - <strong>Notification Target:</strong> ${alertRoleId ? `Role <code>${escapeHtml(alertRoleId)}</code>` : "<code>@everyone</code> (Default)"}<br>
+          - <strong>Officer Ticket Channel:</strong> <code>${escapeHtml(officerChannelId)}</code><br>
+          - <strong>Identity Color:</strong> <code>${escapeHtml(allianceColor)}</code><br>
+          - <strong>Slash Commands Deployed:</strong> <code>/calendar</code>, <code>/suggest</code>, <code>/nominate</code>, <code>/rewards</code>, <code>/map</code>, <code>/sb</code>, <code>/rules</code>.<br>
+          - <strong>Authorized Leadership:</strong> <strong>@R5</strong>${delegatedRoles.length ? `, ${delegatedRoles.map((r) => "@" + escapeHtml(r)).join(", ")}` : ""}.
+        `;
+      } catch (err) {
+        alert(`Registration Error: ${err.message}`);
+        btn.disabled = false;
+        btn.textContent = "Register Server & Deploy Commands";
+      }
+    });
+
+    function showError(msg) {
+      elLoading.style.display = "none";
+      elError.style.display = "block";
+      elError.textContent = msg;
+    }
+  })();
+</script>

@@ -2,8 +2,8 @@
 sb:
   current_event: "Current Event"
   next_event: "Next Event"
-  schedule_title: "Day {day} Schedule (Game Time / UTC+2)"
-  footer: "Times are Game Time (UTC+2). Relative countdowns adapt to your local time."
+  schedule_title: "Day {day} Schedule (Game Time / UTC-2)"
+  footer: "Times are Game Time (UTC-2). Relative countdowns adapt to your local time."
   button: "View Full Schedule"
 
 rules:
@@ -19,15 +19,15 @@ map:
   button: "Open Live Map"
 
 admin:
-  access_denied: "⛔ **Access Denied:** Only authorized leadership can approve or reject map proposals."
-  failed_update: "Failed to update map:"
+  access_denied: "⛔ **Access Denied:** Only Stewards can approve or reject proposals."
+  failed_update: "Failed to apply the proposal:"
 </data>
 <data lang="de" name="bot">
 sb:
   current_event: "Aktuelles Event"
   next_event: "Nächstes Event"
-  schedule_title: "Zeitplan Tag {day} (Spielzeit / UTC+2)"
-  footer: "Die Zeiten entsprechen der Spielzeit (UTC+2). Relative Countdowns passen sich Ihrer lokalen Zeit an."
+  schedule_title: "Zeitplan Tag {day} (Spielzeit / UTC-2)"
+  footer: "Die Zeiten entsprechen der Spielzeit (UTC-2). Relative Countdowns passen sich Ihrer lokalen Zeit an."
   button: "Vollständigen Zeitplan ansehen"
 
 rules:
@@ -43,15 +43,15 @@ map:
   button: "Live-Karte öffnen"
 
 admin:
-  access_denied: "⛔ **Zugriff verweigert:** Nur autorisierte Führungskräfte können Kartenentwürfe genehmigen oder ablehnen."
-  failed_update: "Fehler beim Aktualisieren der Karte:"
+  access_denied: "⛔ **Zugriff verweigert:** Nur Stewards können Vorschläge genehmigen oder ablehnen."
+  failed_update: "Der Vorschlag konnte nicht übernommen werden:"
 </data>
 <data lang="es" name="bot">
 sb:
   current_event: "Evento Actual"
   next_event: "Próximo Evento"
-  schedule_title: "Horario del Día {day} (Hora del Juego / UTC+2)"
-  footer: "Los horarios son según la hora del juego (UTC+2). Las cuentas regresivas relativas se adaptan a tu hora local."
+  schedule_title: "Horario del Día {day} (Hora del Juego / UTC-2)"
+  footer: "Los horarios son según la hora del juego (UTC-2). Las cuentas regresivas relativas se adaptan a tu hora local."
   button: "Ver Horario Completo"
 
 rules:
@@ -67,15 +67,15 @@ map:
   button: "Abrir Mapa en Vivo"
 
 admin:
-  access_denied: "⛔ **Acceso denegado:** Solo el liderazgo autorizado puede aprobar o rechazar propuestas de mapas."
-  failed_update: "Error al actualizar el mapa:"
+  access_denied: "⛔ **Acceso denegado:** Solo los Stewards pueden aprobar o rechazar propuestas."
+  failed_update: "No se pudo aplicar la propuesta:"
 </data>
 <data lang="fr" name="bot">
 sb:
   current_event: "Événement en cours"
   next_event: "Événement suivant"
-  schedule_title: "Planning du jour {day} (Heure du jeu / UTC+2)"
-  footer: "Les heures sont à l'heure du jeu (UTC+2). Les comptes à rebours s'adaptent à votre heure locale."
+  schedule_title: "Planning du jour {day} (Heure du jeu / UTC-2)"
+  footer: "Les heures sont à l'heure du jeu (UTC-2). Les comptes à rebours s'adaptent à votre heure locale."
   button: "Voir le planning complet"
 
 rules:
@@ -91,15 +91,15 @@ map:
   button: "Ouvrir la carte en direct"
 
 admin:
-  access_denied: "⛔ **Accès refusé :** Seuls les membres autorisés de la direction peuvent approuver ou rejeter les propositions de carte."
-  failed_update: "Échec de la mise à jour de la carte :"
+  access_denied: "⛔ **Accès refusé :** Seuls les Stewards peuvent approuver ou rejeter les propositions."
+  failed_update: "Échec de l'application de la proposition :"
 </data>
 <data lang="ru" name="bot">
 sb:
   current_event: "Текущее событие"
   next_event: "Следующее событие"
-  schedule_title: "Расписание на день {day} (Игровое время / UTC+2)"
-  footer: "Время указано игровое (UTC+2). Обратный отсчет адаптируется под ваше местное время."
+  schedule_title: "Расписание на день {day} (Игровое время / UTC-2)"
+  footer: "Время указано игровое (UTC-2). Обратный отсчет адаптируется под ваше местное время."
   button: "Посмотреть полное расписание"
 
 rules:
@@ -115,15 +115,15 @@ map:
   button: "Открыть интерактивную карту"
 
 admin:
-  access_denied: "⛔ **Доступ запрещен:** Только авторизованное руководство может одобрять или отклонять предложения по карте."
-  failed_update: "Не удалось обновить карту:"
+  access_denied: "⛔ **Доступ запрещен:** Только Steward могут одобрять или отклонять предложения."
+  failed_update: "Не удалось применить предложение:"
 </data>
 <data lang="tr" name="bot">
 sb:
   current_event: "Mevcut Etkinlik"
   next_event: "Sıradaki Etkinlik"
-  schedule_title: "{day}. Gün Programı (Oyun Saati / UTC+2)"
-  footer: "Zamanlar Oyun Saatidir (UTC+2). Geri sayımlar yerel saatinize göre ayarlanır."
+  schedule_title: "{day}. Gün Programı (Oyun Saati / UTC-2)"
+  footer: "Zamanlar Oyun Saatidir (UTC-2). Geri sayımlar yerel saatinize göre ayarlanır."
   button: "Tam Programı Görüntüle"
 
 rules:
@@ -139,15 +139,15 @@ map:
   button: "Canlı Haritayı Aç"
 
 admin:
-  access_denied: "⛔ **Erişim Engellendi:** Sadece yetkili liderlik harita tekliflerini onaylayabilir veya reddedebilir."
-  failed_update: "Harita güncellenemedi:"
+  access_denied: "⛔ **Erişim Engellendi:** Teklifleri yalnızca Steward'lar onaylayabilir veya reddedebilir."
+  failed_update: "Teklif uygulanamadı:"
 </data>
 <data lang="uk" name="bot">
 sb:
   current_event: "Поточна подія"
   next_event: "Наступна подія"
-  schedule_title: "Розклад на день {day} (Ігровий час / UTC+2)"
-  footer: "Час вказано за ігровим часом (UTC+2). Зворотний відлік адаптується до вашого місцевого часу."
+  schedule_title: "Розклад на день {day} (Ігровий час / UTC-2)"
+  footer: "Час вказано за ігровим часом (UTC-2). Зворотний відлік адаптується до вашого місцевого часу."
   button: "Переглянути повний розклад"
 
 rules:
@@ -163,15 +163,15 @@ map:
   button: "Відкрити інтерактивну карту"
 
 admin:
-  access_denied: "⛔ **Доступ заборонено:** Тільки авторизоване керівництво може схвалювати або відхиляти пропозиції щодо карти."
-  failed_update: "Не вдалося оновити карту:"
+  access_denied: "⛔ **Доступ заборонено:** Лише Steward можуть схвалювати або відхиляти пропозиції."
+  failed_update: "Не вдалося застосувати пропозицію:"
 </data>
 <data lang="it" name="bot">
 sb:
   current_event: "Evento Attuale"
   next_event: "Prossimo Evento"
-  schedule_title: "Programma Giorno {day} (Orario di Gioco / UTC+2)"
-  footer: "Gli orari sono in Orario di Gioco (UTC+2). I conti alla rovescia relativi si adattano al tuo orario locale."
+  schedule_title: "Programma Giorno {day} (Orario di Gioco / UTC-2)"
+  footer: "Gli orari sono in Orario di Gioco (UTC-2). I conti alla rovescia relativi si adattano al tuo orario locale."
   button: "Visualizza Programma Completo"
 
 rules:
@@ -187,6 +187,6 @@ map:
   button: "Apri Mappa in Tempo Reale"
 
 admin:
-  access_denied: "⛔ **Accesso Negato:** Solo la leadership autorizzata può approvare o rifiutare le proposte per la mappa."
-  failed_update: "Aggiornamento mappa fallito:"
+  access_denied: "⛔ **Accesso Negato:** Solo gli Steward possono approvare o rifiutare le proposte."
+  failed_update: "Impossibile applicare la proposta:"
 </data>

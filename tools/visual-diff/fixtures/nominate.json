@@ -1,0 +1,35 @@
+{
+  "nominations": {
+    "WLO": {
+      "alliance": "WLO",
+      "rank": 1,
+      "mode": "standard",
+      "submittedAt": "2026-11-08T12:00:00Z",
+      "recipients": {
+        "standard": {
+          "commanders_will": ["Josh", "Ana"],
+          "loyal_servant": ["Bo", "Cy"],
+          "followers_heart": ["Di", "Ed", "Fi", "Gu"]
+        }
+      }
+    }
+  },
+  "lastReset": "2026-11-07T22:00:00Z",
+  "mode": "standard",
+  "wartime_buyouts": [
+    {
+      "id": "b1",
+      "displaced": "RÂVN",
+      "installments": [
+        {
+          "week": 2,
+          "status": "pending"
+        },
+        {
+          "week": 3,
+          "status": "pending"
+        }
+      ]
+    }
+  ]
+}

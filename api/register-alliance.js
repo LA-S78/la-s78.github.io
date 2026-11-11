@@ -1,0 +1,190 @@
+// api/register-alliance.js
+import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+import { verifyToken } from './_tokens.js';
+import { ALLIANCE_COMMANDS_SCHEMA } from './_bot_schema.js'; // one list, shared with the bot
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const {
+    token,
+    guildId,
+    delegatedRoles,
+    alert_channel_id,
+    alert_role_id,
+    officer_channel_id,
+    alliance_color,
+  } = req.body || {};
+
+  const botToken = process.env.DISCORD_BOT_TOKEN;
+  const clientId = process.env.DISCORD_CLIENT_ID;
+  if (!token || !guildId || !botToken || !clientId || !isGistConfigured()) {
+    return res.status(400).json({ error: 'Missing required configuration or parameters.' });
+  }
+
+  if (!/^\d{17,20}$/.test(String(guildId).trim())) {
+    return res.status(400).json({ error: 'Invalid Discord Guild ID format.' });
+  }
+
+  const payload = verifyToken(token, botToken);
+  if (!payload || payload.action !== 'register' || !payload.alliance) {
+    return res.status(403).json({
+      error: 'Token is invalid or expired. Run /registerbot again in Discord.',
+    });
+  }
+
+  const cleanGuildId = String(guildId).trim();
+  const cleanRoles = Array.isArray(delegatedRoles)
+    ? delegatedRoles
+        .map((r) =>
+          String(r)
+            .replace(/[@\[\]]/g, '')
+            .trim()
+            .toLowerCase(),
+        )
+        .filter(Boolean)
+    : [];
+
+  // Validate Operations Alert Channel ID
+  const rawAlertChannel = String(alert_channel_id || '').trim();
+  if (!rawAlertChannel || !/^\d{17,20}$/.test(rawAlertChannel)) {
+    return res.status(400).json({
+      error: 'A valid 17-20 digit Operations Alert Channel ID is required.',
+    });
+  }
+  const cleanChannelId = rawAlertChannel;
+
+  // Validate Optional Default Alert Role ID
+  let cleanRoleId = null;
+  if (alert_role_id) {
+    const rawRoleId = String(alert_role_id).trim();
+    if (!/^\d{17,20}$/.test(rawRoleId)) {
+      return res.status(400).json({
+        error: 'Invalid Discord Alert Role ID format (must be 17-20 digits).',
+      });
+    }
+    cleanRoleId = rawRoleId;
+  }
+
+  // Validate Officer Ticket Intake Channel ID
+  const rawOfficerChannel = String(officer_channel_id || '').trim();
+  if (!rawOfficerChannel || !/^\d{17,20}$/.test(rawOfficerChannel)) {
+    return res.status(400).json({
+      error: 'A valid 17-20 digit Officer Ticket Intake Channel ID is required.',
+    });
+  }
+  const cleanOfficerChannelId = rawOfficerChannel;
+
+  // Validate Alliance Identity Color (Hex)
+  let cleanColor = '#B8975A';
+  if (alliance_color) {
+    const rawColor = String(alliance_color).trim().toUpperCase();
+    if (!/^#[0-9A-F]{6}$/.test(rawColor)) {
+      return res.status(400).json({
+        error: 'Invalid Alliance Identity Color format (must be a 6-digit hex code like #B8975A).',
+      });
+    }
+    cleanColor = rawColor;
+  }
+
+  // 1. Verify Bot Membership via Discord REST API
+  const rolesCheckRes = await fetch(`https://discord.com/api/v10/guilds/${cleanGuildId}/roles`, {
+    headers: { Authorization: `Bot ${botToken}` },
+  });
+
+  if (rolesCheckRes.status === 403 || rolesCheckRes.status === 404) {
+    return res.status(400).json({
+      error:
+        'The bot is not in this server. Please click "Authorize Bot" (Step 1) and invite it before registering.',
+    });
+  }
+
+  if (!rolesCheckRes.ok) {
+    return res.status(500).json({
+      error: `Discord verification failed (${rolesCheckRes.status}).`,
+    });
+  }
+
+  // 2. Fetch Current Gist State & Check for Guild ID Collisions
+  let currentState = {};
+  try {
+    currentState = gistJson(await readGist(), 'map-state.json');
+  } catch (err) {
+    console.error('Failed to retrieve Gist state:', err);
+    return res.status(500).json({ error: `Failed to read kingdom state: ${err.message}` });
+  }
+
+  const alliances = currentState.alliances || {};
+
+  // Conflict Guard: Ensure this Discord Server isn't already claimed by another alliance
+  const existingClaim = Object.entries(alliances).find(
+    ([tag, data]) =>
+      data?.guild_id && String(data.guild_id).trim() === cleanGuildId && tag !== payload.alliance,
+  );
+
+  if (existingClaim) {
+    return res.status(409).json({
+      error: `Server ID ${cleanGuildId} is already linked to alliance [${existingClaim[0]}]. A Discord server cannot be registered to multiple alliances.`,
+    });
+  }
+
+  // 3. Deploy Guild Slash Commands Instantly
+  const deployUrl = `https://discord.com/api/v10/applications/${clientId}/guilds/${cleanGuildId}/commands`;
+  const deployRes = await fetch(deployUrl, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bot ${botToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(ALLIANCE_COMMANDS_SCHEMA),
+  });
+
+  if (!deployRes.ok) {
+    const errText = await deployRes.text();
+    console.error('Failed to register guild commands:', errText);
+    return res.status(500).json({ error: 'Failed to deploy slash commands to your server.' });
+  }
+
+  // 4. Persist Guild Mapping, Alert Config, Ticket Channel & Color to GitHub Gist
+  try {
+    if (!currentState.alliances) currentState.alliances = {};
+    if (!currentState.alliances[payload.alliance]) {
+      currentState.alliances[payload.alliance] = {};
+    }
+
+    const allianceRecord = currentState.alliances[payload.alliance];
+    allianceRecord.guild_id = cleanGuildId;
+    allianceRecord.delegated_roles = cleanRoles;
+    allianceRecord.alert_channel_id = cleanChannelId;
+    allianceRecord.alert_role_id = cleanRoleId;
+    allianceRecord.officer_channel_id = cleanOfficerChannelId;
+    allianceRecord.color = cleanColor;
+
+    currentState.lastUpdated = new Date().toISOString();
+
+    await writeGist(
+      { 'map-state.json': currentState },
+      {
+        description: `Server, alerts, and ticket routing registered for [${payload.alliance}] at ${new Date().toISOString()}`,
+      },
+    );
+
+    return res.status(200).json({
+      success: true,
+      alliance: payload.alliance,
+      guildId: cleanGuildId,
+      delegatedRoles: cleanRoles,
+      alertChannelId: allianceRecord.alert_channel_id,
+      alertRoleId: allianceRecord.alert_role_id,
+      officerChannelId: allianceRecord.officer_channel_id,
+      allianceColor: allianceRecord.color,
+    });
+  } catch (gistErr) {
+    console.error('Failed to commit alliance registration:', gistErr);
+    return res.status(500).json({
+      error: `Commands deployed, but failed to save configuration: ${gistErr.message}`,
+    });
+  }
+}

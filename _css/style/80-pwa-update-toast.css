@@ -1,0 +1,61 @@
+/* ==========================================================================
+   PWA "NEW VERSION AVAILABLE" TOAST (#pwa-update-toast, created by js/main.js)
+   ========================================================================== */
+
+#pwa-update-toast {
+  position: fixed;
+  bottom: calc(80px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: color-mix(in srgb, var(--surface-card) 95%, transparent);
+  border: 1px solid var(--accent-color);
+  box-shadow:
+    0 4px 20px var(--shade-80),
+    0 0 10px color-mix(in srgb, var(--accent-color) 30%, transparent);
+  border-radius: 8px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  /* Long translations (fr, ru, uk) wrap instead of running off narrow phones */
+  width: max-content;
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
+  z-index: 9999;
+  opacity: 0;
+  animation: slideUpToast 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  backdrop-filter: blur(5px);
+}
+
+#pwa-update-toast span {
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+#pwa-update-toast button {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+#pwa-update-toast.updating button {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes slideUpToast {
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+

@@ -1,0 +1,100 @@
+{
+  "alliances": {
+    "WLO": {
+      "tag": "WLO",
+      "name": "WLO Alliance",
+      "rank": 1,
+      "type": "main",
+      "parent_tag": null,
+      "academies": ["WLA"],
+      "is_nap": true,
+      "color": "#25bb00"
+    },
+    "RÂVN": {
+      "tag": "RÂVN",
+      "name": "RÂVN Alliance",
+      "rank": 2,
+      "type": "main",
+      "parent_tag": null,
+      "academies": ["RÂA"],
+      "is_nap": true,
+      "color": "#cece00"
+    },
+    "MIA": {
+      "tag": "MIA",
+      "name": "MIA Alliance",
+      "rank": 3,
+      "type": "main",
+      "parent_tag": null,
+      "academies": [],
+      "is_nap": true,
+      "color": "#a400af"
+    },
+    "BOTS": {
+      "tag": "BOTS",
+      "name": "BOTS Alliance",
+      "rank": 4,
+      "type": "main",
+      "parent_tag": null,
+      "academies": [],
+      "is_nap": true,
+      "color": "#0070f3"
+    },
+    "SVN": {
+      "tag": "SVN",
+      "name": "SVN Alliance",
+      "rank": 5,
+      "type": "main",
+      "parent_tag": null,
+      "academies": [],
+      "is_nap": true,
+      "color": "#e53e3e"
+    },
+    "PHNX": {
+      "tag": "PHNX",
+      "name": "PHNX Alliance",
+      "rank": 6,
+      "type": "main",
+      "parent_tag": null,
+      "academies": [],
+      "is_nap": true,
+      "color": "#dd6b20"
+    },
+    "HMDA": {
+      "tag": "HMDA",
+      "name": "HMDA Alliance",
+      "rank": 7,
+      "type": "main",
+      "parent_tag": null,
+      "academies": [],
+      "is_nap": true,
+      "color": "#d53f8c"
+    },
+    "HeKi": {
+      "tag": "HeKi",
+      "name": "HeKi Alliance",
+      "rank": 8,
+      "type": "main",
+      "parent_tag": null,
+      "academies": [],
+      "is_nap": false,
+      "color": "#d69e2e"
+    },
+    "WLA": {
+      "tag": "WLA",
+      "name": "WLA",
+      "rank": null,
+      "type": "academy",
+      "parent_tag": "WLO",
+      "academies": [],
+      "is_nap": true,
+      "color": null
+    }
+  },
+  "blacklist": {
+    "players": ["Griefer123", "NightRaider"],
+    "alliances": ["XXX"]
+  },
+  "revision": "r1",
+  "lastUpdated": "2026-11-08T10:00:00Z"
+}
