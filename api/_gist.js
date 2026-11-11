@@ -21,12 +21,16 @@ export const TEST_PROPOSAL_FIELD = '🧪 Test proposal';
 /**
  * Which Gist to use. The live site uses GIST_ID. A preview deployment (dev.la-s78.app) uses
  * TEST_GIST_ID and nothing else: without it, it has no data at all rather than touching the
- * live Gist (TEST_GIST_TOKEN, if set, is its token; otherwise GIST_TOKEN).
+ * live Gist (TEST_GIST_TOKEN, if set, is its token; otherwise GIST_TOKEN). A TEST_GIST_ID equal
+ * to GIST_ID is refused the same way.
  */
 function gistConfig() {
   if (isTestDeployment()) {
+    const testId = (process.env.TEST_GIST_ID || '').trim();
+    // A test Gist set to the live one (an easy slip) counts as no test Gist at all.
+    const isLive = testId && testId === (process.env.GIST_ID || '').trim();
     return {
-      id: process.env.TEST_GIST_ID,
+      id: isLive ? undefined : testId || undefined,
       token: process.env.TEST_GIST_TOKEN || process.env.GIST_TOKEN,
     };
   }
