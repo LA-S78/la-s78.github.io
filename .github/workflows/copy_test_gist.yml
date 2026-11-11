@@ -16,7 +16,23 @@ jobs:
         with:
           node-version: 20
 
+      - name: Installing Vercel tools
+        run: npm install --global vercel@latest
+
+      # The Gist settings live in Vercel: download them (Production = live, Preview = test)
+      # with the same access key the deploy uses. Nothing is printed.
+      - name: Fetching the data settings from Vercel
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} > /dev/null
+          cp .vercel/.env.production.local .vercel/live.env
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} > /dev/null
+          cp .vercel/.env.preview.local .vercel/test.env
+
       - name: Copy the data
+        # Optional overrides, only needed if a value is marked "Sensitive" in Vercel
         env:
           GIST_ID: ${{ secrets.GIST_ID }}
           GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
