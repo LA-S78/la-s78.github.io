@@ -4,6 +4,8 @@
  */
 
 import { submitProposalWithAuth } from './auth-modal.js';
+import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
+import { ALLIANCE_COLORS } from './alliance-defaults.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -13,18 +15,8 @@ const esc = (value) => window.escapeHtml(value);
 const ALLIANCE_DRAFT_KEY = 'la_alliance_planner_draft';
 const BLACKLIST_DRAFT_KEY = 'la_blacklist_draft';
 
-const DEFAULT_ALLIANCE_COLORS = {
-  WLO: '#25bb00',
-  RÂVN: '#cece00',
-  RAVN: '#cece00',
-  MIA: '#a400af',
-  BOTS: '#0070f3',
-  SVN: '#e53e3e',
-  PHNX: '#dd6b20',
-  HMDA: '#d53f8c',
-  NAVI: '#319795',
-  HeKi: '#d69e2e',
-};
+// Colours for alliances with none of their own: _data/alliances.yml (via js/alliance-defaults.js)
+const DEFAULT_ALLIANCE_COLORS = ALLIANCE_COLORS;
 
 const AUTO_PALETTE = [
   '#25bb00',
@@ -48,6 +40,8 @@ export let originalBlacklist = { players: [], alliances: [] };
 export let draftAlliances = {};
 export let draftBlacklist = { players: [], alliances: [] };
 export let liveDiscordColors = {};
+/** 'loading' | 'ok' | 'failed': whether the live standings and blacklist have arrived. */
+let liveState = 'loading';
 
 // ============================================================================
 // 1. COLOR & CASE-SENSITIVE TAG HELPERS
@@ -95,100 +89,17 @@ function resolveAllianceColor(tag, explicitColor = null, rank = null) {
 // 2. DATA INITIALIZATION & LIVE SYNC
 // ============================================================================
 
+/**
+ * Starts the page empty: the standings and blacklist come from the live data only (no
+ * built-in snapshot; offline, sw.js answers with the last copy saved on this device).
+ * Until it arrives the lists say "Loading…".
+ */
 export function initBootstrapData() {
-  const mapEl = document.getElementById('map-state-bootstrap');
-  const dipEl = document.getElementById('diplomacy-data-bootstrap');
-
-  if (!window.MAP_STATE && mapEl?.textContent?.trim()) {
-    try {
-      window.MAP_STATE = JSON.parse(mapEl.textContent);
-    } catch (e) {}
-  }
-  if (!window.DIPLOMACY_DATA && dipEl?.textContent?.trim()) {
-    try {
-      window.DIPLOMACY_DATA = JSON.parse(dipEl.textContent);
-    } catch (e) {}
-  }
-
-  const mapData = window.MAP_STATE || {};
-  const diplomacyData = window.DIPLOMACY_DATA || {};
-
-  const rawAlliances = mapData.alliances || {};
+  liveState = 'loading';
   originalAlliances = {};
-
-  // Preserve exact tag casing (never force toUpperCase)
-  Object.entries(rawAlliances).forEach(([tag, data]) => {
-    const cleanTag = tag.trim();
-    if (!cleanTag) return;
-
-    const parsedRank =
-      typeof data.rank === 'number'
-        ? data.rank
-        : !isNaN(parseInt(data.rank, 10))
-          ? parseInt(data.rank, 10)
-          : null;
-
-    originalAlliances[cleanTag] = {
-      tag: cleanTag,
-      name: data.name || cleanTag,
-      rank: parsedRank,
-      type: data.type || (data.parent_tag ? 'academy' : 'main'),
-      parent_tag: data.parent_tag ? String(data.parent_tag).trim() : null,
-      academies: Array.isArray(data.academies) ? data.academies.map((a) => String(a).trim()) : [],
-      is_nap: data.is_nap !== undefined ? Boolean(data.is_nap) : true,
-      color: resolveAllianceColor(cleanTag, data.color, parsedRank),
-    };
-  });
-
-  // Reconcile academies from diplomacy.yml using exact case first
-  if (Array.isArray(diplomacyData.nap_academies)) {
-    diplomacyData.nap_academies.forEach((acad) => {
-      const rawAcadName = (acad.name || '').trim();
-      const parentTag = (acad.parent || '').trim();
-      if (!rawAcadName || !parentTag) return;
-
-      // Match existing non-parent tag if casing differs slightly in diplomacy.yml (e.g. Râvn -> RâvN)
-      let acadTag = rawAcadName;
-      if (!originalAlliances[acadTag]) {
-        const caseInsensitiveCandidate = Object.keys(originalAlliances).find(
-          (k) => k !== parentTag && k.toLowerCase() === rawAcadName.toLowerCase(),
-        );
-        if (caseInsensitiveCandidate) {
-          acadTag = caseInsensitiveCandidate;
-        }
-      }
-
-      if (!originalAlliances[acadTag]) {
-        originalAlliances[acadTag] = {
-          tag: acadTag,
-          name: rawAcadName,
-          rank: null,
-          type: 'academy',
-          parent_tag: parentTag,
-          academies: [],
-          is_nap: true,
-          color: '#718096',
-        };
-      } else if (acadTag !== parentTag) {
-        originalAlliances[acadTag].type = 'academy';
-        originalAlliances[acadTag].parent_tag = parentTag;
-      }
-
-      if (originalAlliances[parentTag] && acadTag !== parentTag) {
-        if (!originalAlliances[parentTag].academies.includes(acadTag)) {
-          originalAlliances[parentTag].academies.push(acadTag);
-        }
-      }
-    });
-  }
-
-  originalBlacklist = normaliseBlacklist({
-    players: diplomacyData.blacklist_players,
-    alliances: diplomacyData.blacklist_alliances,
-  });
-
-  draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
-  draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
+  originalBlacklist = { players: [], alliances: [] };
+  draftAlliances = {};
+  draftBlacklist = { players: [], alliances: [] };
 }
 
 /** Always { players: [...], alliances: [...] } of trimmed, non-empty names, whatever came in
@@ -309,8 +220,13 @@ export async function fetchLiveAllianceState() {
       liveDiscordColors = await colorsRes.json();
     }
 
-    if (stateRes.ok) {
+    if (!stateRes.ok) throw new Error(`State API returned HTTP ${stateRes.status}`);
+    {
       const data = await stateRes.json();
+      liveState = 'ok';
+      showLiveDataNotice(document.getElementById('alliance-container'), {
+        savedAt: offlineCopySavedAt(stateRes),
+      });
       if (
         data.alliances &&
         typeof data.alliances === 'object' &&
@@ -359,7 +275,11 @@ export async function fetchLiveAllianceState() {
       }
     }
   } catch (err) {
-    console.warn('Could not fetch live alliance state, utilizing defaults:', err);
+    console.warn('Could not fetch live alliance state:', err);
+    liveState = 'failed';
+    showLiveDataNotice(document.getElementById('alliance-container'), { failed: true });
+    renderStandingsHierarchy();
+    renderBlacklist();
   }
 }
 
@@ -637,6 +557,11 @@ export function renderStandingsHierarchy() {
   if (!container) return;
 
   const countBadge = document.getElementById('alliance-total-count');
+  if (liveState !== 'ok') {
+    container.innerHTML = `<div class="blacklist-empty">${liveState === 'failed' ? "Couldn't load the standings." : 'Loading the standings…'}</div>`;
+    if (countBadge) countBadge.textContent = '…';
+    return;
+  }
   const activeAlliances = isAlliancePlannerActive ? draftAlliances : originalAlliances;
   // The ladder lists NAP alliances only; planner mode shows every alliance, so one can be
   // granted NAP (or have it revoked) and still be found in the list.
@@ -758,6 +683,17 @@ export function renderBlacklist() {
 
   if (playerCountBadge) playerCountBadge.textContent = activeBlacklist.players.length;
   if (allianceCountBadge) allianceCountBadge.textContent = activeBlacklist.alliances.length;
+
+  if (liveState !== 'ok') {
+    const text = liveState === 'failed' ? "Couldn't load the blacklist." : 'Loading…';
+    for (const el of [playersContainer, alliancesContainer]) {
+      if (el) el.innerHTML = `<div class="blacklist-empty">${text}</div>`;
+    }
+    for (const el of [playerCountBadge, allianceCountBadge]) {
+      if (el) el.textContent = '…';
+    }
+    return;
+  }
 
   if (playersContainer) {
     if (activeBlacklist.players.length === 0) {
@@ -939,6 +875,9 @@ export function updateAllianceProposalUI() {
 }
 
 export function toggleAlliancePlanner(active) {
+  // Never plan from an empty page: a plan made before the live standings load would
+  // propose replacing them with almost nothing.
+  if (active && liveState !== 'ok') return;
   isAlliancePlannerActive = active;
 
   const btnDraft = document.getElementById('btn-toggle-alliance-planner');
@@ -967,6 +906,7 @@ export function toggleAlliancePlanner(active) {
 
 /** Edit Blacklist on or off. Off drops unsent blacklist changes (like Planner Mode). */
 export function toggleBlacklistEditing(active) {
+  if (active && liveState !== 'ok') return; // only edit once the live blacklist is loaded
   isBlacklistEditing = active;
   showBlacklistEditors(active);
   if (!active) {
@@ -1221,7 +1161,8 @@ export function bindAllianceControls() {
   renderBlacklist();
 
   fetchLiveAllianceState().then(() => {
-    checkAndRestoreAllianceDraft();
+    // A saved plan only makes sense next to the live data it was made from.
+    if (liveState === 'ok') checkAndRestoreAllianceDraft();
   });
 }
 

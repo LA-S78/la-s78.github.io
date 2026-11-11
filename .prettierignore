@@ -9,6 +9,8 @@ sw.js
 api/_generated_translations.js
 api/_map_svg.js
 api/_cities_data.js
+api/_alliances_data.js
+js/alliance-defaults.js
 api/_font_data.js
 _site/
 guides/

@@ -1,10 +1,18 @@
 // api/_cycle_helper.js
 
-export const BASELINE_SCHEDULES = {
-  1: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
-  2: { downtime: 'MIA', week_1: 'BOTS', week_2: 'RÂVN', week_3: 'WLO' },
-  3: { downtime: 'RÂVN', week_1: 'MIA', week_2: 'BOTS', week_3: 'WLO' },
-};
+import { STARTING_ROTATION } from './_alliances.js';
+
+/** The rotation wheel: who holds each week in cycles 1-3, from seats A, B, C and rank #1. */
+function wheel([seatA, seatB, seatC], rankOneTag) {
+  return {
+    1: { downtime: seatA, week_1: seatB, week_2: seatC, week_3: rankOneTag },
+    2: { downtime: seatC, week_1: seatA, week_2: seatB, week_3: rankOneTag },
+    3: { downtime: seatB, week_1: seatC, week_2: seatA, week_3: rankOneTag },
+  };
+}
+
+/** The three cycles' schedules before any live data (from _data/alliances.yml). */
+export const BASELINE_SCHEDULES = wheel(STARTING_ROTATION.seats, STARTING_ROTATION.rank_one);
 
 /**
  * Resolves the 3-cycle cohort seats [SeatA, SeatB, SeatC] and Rank #1 holder.
@@ -12,12 +20,12 @@ export const BASELINE_SCHEDULES = {
  * they inherit the exact wheel seat vacated by the alliance that dropped out of Top 4.
  */
 export function resolveCohortSchedule(macroCycle = 1, previousCohort = null, mapState = null) {
-  const defaultCohort = ['BOTS', 'RÂVN', 'MIA']; // [Seat A, Seat B, Seat C]
+  const defaultCohort = [...STARTING_ROTATION.seats]; // [Seat A, Seat B, Seat C]
   let cohort =
     Array.isArray(previousCohort) && previousCohort.length === 3
       ? [...previousCohort]
       : [...defaultCohort];
-  let rankOneTag = 'WLO';
+  let rankOneTag = STARTING_ROTATION.rank_one;
 
   const alliances = mapState?.alliances || {};
   const rankedList = Object.entries(alliances)
@@ -40,11 +48,7 @@ export function resolveCohortSchedule(macroCycle = 1, previousCohort = null, map
   const [seatA, seatB, seatC] = cohort;
 
   // 3-Cycle Permutation Wheel across Seats A, B, C
-  const wheelByCycle = {
-    1: { downtime: seatA, week_1: seatB, week_2: seatC, week_3: rankOneTag },
-    2: { downtime: seatC, week_1: seatA, week_2: seatB, week_3: rankOneTag },
-    3: { downtime: seatB, week_1: seatC, week_2: seatA, week_3: rankOneTag },
-  };
+  const wheelByCycle = wheel([seatA, seatB, seatC], rankOneTag);
 
   return {
     cohort,

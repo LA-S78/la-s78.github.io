@@ -1,18 +1,16 @@
 // api/_alliances.js
 // Shared alliance helpers for the API ("_" files are helpers, not endpoints).
 
-export const DEFAULT_FALLBACK_COLORS = {
-  WLO: '#25bb00',
-  RÂVN: '#cece00',
-  RAVN: '#cece00',
-  MIA: '#a400af',
-  BOTS: '#0070f3',
-  SVN: '#e53e3e',
-  PHNX: '#dd6b20',
-  HMDA: '#d53f8c',
-  NAVI: '#319795',
-  HeKi: '#d69e2e',
-};
+import ALLIANCES from './_alliances_data.js'; // generated from _data/alliances.yml
+
+/** Colour for an alliance with none of its own (_data/alliances.yml). */
+export const DEFAULT_FALLBACK_COLORS = ALLIANCES.colors;
+
+/** The Vercel setting name (DISCORD_<name>) holding each alliance's NAP role ID. */
+export const ALLIANCE_ROLE_SETTINGS = ALLIANCES.role_settings || {};
+
+/** Rank #1's tag and the three rotation seats [A, B, C] before any live schedule exists. */
+export const STARTING_ROTATION = ALLIANCES.starting_rotation;
 
 /**
  * Strips private Discord bot configuration fields before sending alliance data to public clients.

@@ -5,6 +5,7 @@
  *  - 2nd Threat Override: 2-Installment Wartime Buyout (2 Reg + 2 KW Gold chests).
  */
 
+import { ALLIANCE_COLORS, startingSchedule } from './alliance-defaults.js';
 import { submitProposalWithAuth } from './auth-modal.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
@@ -14,24 +15,14 @@ let cycleState = {
   macro_cycle: 1,
   current_week: 1,
   override_count: 0,
-  active_schedule: { downtime: 'BOTS', week_1: 'RÂVN', week_2: 'MIA', week_3: 'WLO' },
+  active_schedule: startingSchedule(),
 };
 
 let activeBuyouts = [];
 let alliancesData = {};
 
-const DEFAULT_ALLIANCE_COLORS = {
-  WLO: '#25bb00',
-  RÂVN: '#cece00',
-  RAVN: '#cece00',
-  MIA: '#a400af',
-  BOTS: '#0070f3',
-  SVN: '#e53e3e',
-  PHNX: '#dd6b20',
-  HMDA: '#d53f8c',
-  NAVI: '#319795',
-  HeKi: '#d69e2e',
-};
+// Colours for alliances with none of their own: _data/alliances.yml (via js/alliance-defaults.js)
+const DEFAULT_ALLIANCE_COLORS = ALLIANCE_COLORS;
 
 function getAllianceColor(tag) {
   const clean = String(tag || '').trim();
@@ -88,28 +79,28 @@ function renderScheduleGrid() {
       key: 'downtime',
       label: 'Off-Week',
       sub: 'Boss 1 Window',
-      seat: schedule.downtime || 'BOTS',
+      seat: schedule.downtime || startingSchedule().downtime,
       loot: '1 King Chest',
     },
     {
       key: 'week_1',
       label: 'Week 1 Fri',
       sub: 'Boss 2 Window',
-      seat: schedule.week_1 || 'RÂVN',
+      seat: schedule.week_1 || startingSchedule().week_1,
       loot: '2 King Chests',
     },
     {
       key: 'week_2',
       label: 'Week 2 Fri',
       sub: 'Boss 3 Window',
-      seat: schedule.week_2 || 'MIA',
+      seat: schedule.week_2 || startingSchedule().week_2,
       loot: '2 King Chests',
     },
     {
       key: 'week_3',
       label: 'Week 3 Fri',
       sub: 'KvK Finale',
-      seat: schedule.week_3 || 'WLO',
+      seat: schedule.week_3 || startingSchedule().week_3,
       loot: '2 King Chests + Border',
     },
   ];
@@ -236,7 +227,7 @@ export function updateOverridePreview() {
           WLO will take <strong>Week ${targetWeek}</strong> for kingdom defense against <strong>${esc(threatName || '[Opponent]')}</strong>.
         </p>
         <div class="preview-swap-row">
-          <span>Week ${targetWeek}: <strong style="color: #25bb00">[WLO]</strong></span>
+          <span>Week ${targetWeek}: <strong style="color: ${ALLIANCE_COLORS.WLO}">[WLO]</strong></span>
           <span class="swap-arrow">⇄</span>
           <span>Week 3 Finale: <strong style="color: ${esc(allyColor)}">[${esc(currentScheduledAlly)}]</strong></span>
         </div>
