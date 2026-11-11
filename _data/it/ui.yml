@@ -195,3 +195,6 @@ identity:
   expires_days: "L’accesso scade tra {n} giorni"
   expires_one: "L’accesso scade tra 1 giorno"
   expires_today: "L’accesso scade oggi"
+  found_role_id: "trovata tramite ID ruolo"
+  found_role_name: "trovata tramite nome ruolo"
+  found_nickname: "trovata tramite soprannome"

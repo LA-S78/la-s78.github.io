@@ -44,6 +44,7 @@
       avatar: stored('auth-avatar'),
       alliance: alliance && alliance !== 'Independent' ? alliance : '',
       officer: stored('auth-officer'),
+      allianceSource: stored('auth-alliance-source'),
       exp,
     };
     if (!name) return { ...base, tier: 'signed-out' };
@@ -105,6 +106,26 @@
     return b;
   }
 
+  const FOUND_BY = {
+    'role-id': 'found_role_id',
+    'role-name': 'found_role_name',
+    nickname: 'found_nickname',
+  };
+
+  /** "Alliance: [TAG]", and for Stewards a quiet note of how sign-in found it. */
+  function allianceLine(id, t) {
+    const line = el(
+      'div',
+      'id-pop-alliance',
+      `${t.alliance_label}: ${id.alliance ? `[${id.alliance}]` : t.alliance_none}`,
+    );
+    const found = FOUND_BY[id.allianceSource];
+    if (id.steward && id.alliance && found && t[found]) {
+      line.append(el('span', 'id-pop-source', ` · ${t[found]}`));
+    }
+    return line;
+  }
+
   function expiryText(exp, t) {
     const days = Math.round((exp - Date.now()) / DAY);
     if (days < 1) return t.expires_today;
@@ -154,14 +175,7 @@
     // --- the card ---
     const head = el('div', 'id-pop-head');
     const who = el('div', 'id-pop-who');
-    who.append(
-      el('div', 'id-pop-name', id.name),
-      el(
-        'div',
-        'id-pop-alliance',
-        `${t.alliance_label}: ${id.alliance ? `[${id.alliance}]` : t.alliance_none}`,
-      ),
-    );
+    who.append(el('div', 'id-pop-name', id.name), allianceLine(id, t));
     head.append(avatarImg(id.avatar, 'id-avatar id-avatar--large'), who);
     const badgeRow = el('div', 'id-pop-badges');
     if (id.steward) badgeRow.append(badge('steward', t));

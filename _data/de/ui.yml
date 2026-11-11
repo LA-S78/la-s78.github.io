@@ -195,3 +195,6 @@ identity:
   expires_days: "Anmeldung läuft in {n} Tagen ab"
   expires_one: "Anmeldung läuft in 1 Tag ab"
   expires_today: "Anmeldung läuft heute ab"
+  found_role_id: "per Rollen-ID gefunden"
+  found_role_name: "per Rollenname gefunden"
+  found_nickname: "per Spitzname gefunden"

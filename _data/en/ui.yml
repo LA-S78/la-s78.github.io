@@ -215,3 +215,6 @@ identity:
   expires_days: "Login expires in {n} days"
   expires_one: "Login expires in 1 day"
   expires_today: "Login expires today"
+  found_role_id: "found by role ID"
+  found_role_name: "found by role name"
+  found_nickname: "found by nickname"
