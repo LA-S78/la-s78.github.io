@@ -2,6 +2,8 @@
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken } from './_tokens.js';
 import { ALLIANCE_COMMANDS_SCHEMA } from './_bot_schema.js'; // one list, shared with the bot
+import { checkTargetServer } from './_register_checks.js';
+import { isSteward } from './_stewards.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -28,7 +30,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid Discord Guild ID format.' });
   }
 
-  const payload = verifyToken(token, botToken);
+  const payload = verifyToken(token, botToken, { action: 'register' });
   if (!payload || payload.action !== 'register' || !payload.alliance) {
     return res.status(403).json({
       error: 'Token is invalid or expired. Run /registerbot again in Discord.',
@@ -89,23 +91,23 @@ export default async function handler(req, res) {
     cleanColor = rawColor;
   }
 
-  // 1. Verify Bot Membership via Discord REST API
-  const rolesCheckRes = await fetch(`https://discord.com/api/v10/guilds/${cleanGuildId}/roles`, {
-    headers: { Authorization: `Bot ${botToken}` },
-  });
-
-  if (rolesCheckRes.status === 403 || rolesCheckRes.status === 404) {
-    return res.status(400).json({
-      error:
-        'The bot is not in this server. Please click "Authorize Bot" (Step 1) and invite it before registering.',
-    });
-  }
-
-  if (!rolesCheckRes.ok) {
-    return res.status(500).json({
-      error: `Discord verification failed (${rolesCheckRes.status}).`,
-    });
-  }
+  // 1. The server: bot present, the person registering may manage it (Administrator or
+  //    Manage Server; Stewards may register for an alliance), channels and role are in it.
+  const check = await checkTargetServer({
+    guildId: cleanGuildId,
+    uid: payload.uid || null,
+    steward: Boolean(payload.uid && isSteward(payload.uid)),
+    alertChannelId: cleanChannelId,
+    officerChannelId: cleanOfficerChannelId,
+    alertRoleId: cleanRoleId,
+    delegatedRoles: cleanRoles,
+    botToken,
+  }).catch((err) => ({
+    ok: false,
+    status: 502,
+    error: `Discord could not be reached: ${err.message}`,
+  }));
+  if (!check.ok) return res.status(check.status).json({ error: check.error });
 
   // 2. Fetch Current Gist State & Check for Guild ID Collisions
   let currentState = {};
@@ -177,10 +179,12 @@ export default async function handler(req, res) {
       alliance: payload.alliance,
       guildId: cleanGuildId,
       delegatedRoles: cleanRoles,
-      alertChannelId: allianceRecord.alert_channel_id,
-      alertRoleId: allianceRecord.alert_role_id,
-      officerChannelId: allianceRecord.officer_channel_id,
-      allianceColor: allianceRecord.color,
+      alertChannelId: cleanChannelId,
+      alertRoleId: cleanRoleId,
+      officerChannelId: cleanOfficerChannelId,
+      allianceColor: cleanColor,
+      serverName: check.serverName,
+      warnings: check.warnings,
     });
   } catch (gistErr) {
     console.error('Failed to commit alliance registration:', gistErr);
