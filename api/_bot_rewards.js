@@ -301,6 +301,7 @@ export async function handleRewardsCommand(ctx) {
           const map = JSON.parse(gist.files['map-state.json']?.content || '{}');
           syncRewardPeriod(data, map, period, username);
           data.lastReset = new Date().toISOString(); // a fresh checklist for the King
+          if (data.period) data.period.handed_out = {}; // ...with no chest ticked or locked
           return {
             files: { 'rewards-nominations.json': {}, 'rewards-data.json': data },
             description: `Nominations cleared (${period.weekName}) by ${username}`,

@@ -11,9 +11,33 @@
   margin-bottom: 1rem;
 }
 
-.btn-reset-checklist {
-  font-size: 0.72rem;
-  height: 26px;
+/* Who can tick the King's checklist (flashes when a view-only reader taps a row) */
+.distribute-checklist-note {
+  margin: -0.4rem 0 0.9rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.78rem;
+}
+
+.distribute-checklist-note:empty {
+  display: none;
+}
+
+.distribute-checklist-note.flash {
+  animation: checklist-note-flash 1.2s ease;
+}
+
+@keyframes checklist-note-flash {
+  0%,
+  40% {
+    background: var(--overlay-12);
+    color: var(--text-main);
+  }
+}
+
+/* A tick being saved */
+.distribute-item.saving {
+  cursor: progress;
 }
 
 .distribute-empty {

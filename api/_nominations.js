@@ -6,10 +6,44 @@
 import { getAllianceNominationQuota } from './_rewards_helper.js';
 import { assignChests, chestCounts, rankedFromSlots } from './_nomination_assign.js';
 
+/**
+ * Chests the King has ticked as handed out this period (rewards-data.json
+ * `period.handed_out`): { key: { alliance, pool, chest, name, by, at } }. A handed-out chest
+ * is locked: re-sorting a list never moves it (assignChests).
+ */
+export function handedOutFor(rewardsData, tag) {
+  const all = rewardsData?.period?.handed_out || {};
+  return Object.values(all).filter((h) => h && h.alliance === tag);
+}
+
+/** The key of a handed-out chest in `period.handed_out`. */
+export function handedOutKey(alliance, pool, chest, name) {
+  return `${alliance}:${pool}:${chest}:${String(name).trim().toLowerCase()}`;
+}
+
+/**
+ * The alliance whose leader is King this period: the one scheduled to hold the Capitol in
+ * the period's week (with any swap or buyout applied). Null when unknown.
+ */
+export function kingAlliance(rewardsData, period) {
+  return rewardsData?.cycle_state?.active_schedule?.[period?.slotKey] || null;
+}
+
 /** The saved entry for an alliance's ranked list, with chests for what's available now. */
-export function buildNomination(tag, ranked, rewardsData, mapState, submittedAt) {
+export function buildNomination(tag, names, rewardsData, mapState, submittedAt) {
   const quota = getAllianceNominationQuota(tag, rewardsData, mapState);
-  const { recipients, reserves, unfilled } = assignChests(ranked, chestCounts(quota, quota.isKW));
+  // Handed-out players stay on the list (an alliance can't drop a chest already given).
+  const locked = handedOutFor(rewardsData, tag);
+  const listed = new Set(names.map((n) => n.toLowerCase()));
+  const ranked = [
+    ...locked.map((l) => l.name).filter((n) => !listed.has(n.toLowerCase())),
+    ...names,
+  ];
+  const { recipients, reserves, unfilled } = assignChests(
+    ranked,
+    chestCounts(quota, quota.isKW),
+    locked,
+  );
   return {
     alliance: tag,
     rank: quota.rank,

@@ -342,6 +342,20 @@
   flex-shrink: 0;
 }
 
+/* Chests the King has already handed out: locked */
+.nominate-locked {
+  margin-bottom: 0.9rem;
+}
+
+.nominate-locked .sub-text {
+  margin: 0.2rem 0 0.45rem;
+}
+
+.nominate-assign-row.is-locked {
+  background: var(--shade-40);
+  border-color: var(--overlay-5);
+}
+
 .nominate-reserve {
   color: var(--text-muted);
   font-style: italic;

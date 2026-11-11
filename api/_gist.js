@@ -142,6 +142,15 @@ export function mergeJson(base, theirs, mine) {
   if (same(theirs, base)) return mine;
   if (same(mine, base) || same(mine, theirs)) return theirs;
   const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+  // A list or object missing on one side (not created yet, or removed): merged as empty,
+  // so additions made by the other sides are kept.
+  const kind = (v) => (Array.isArray(v) ? 'list' : isObj(v) ? 'obj' : v == null ? 'none' : 'value');
+  const kinds = [kind(base), kind(theirs), kind(mine)];
+  const shape = kinds.find((k) => k === 'list' || k === 'obj');
+  if (shape && kinds.includes('none') && kinds.every((k) => k === shape || k === 'none')) {
+    const fill = (v) => (v == null ? (shape === 'list' ? [] : {}) : v);
+    return mergeJson(fill(base), fill(theirs), fill(mine));
+  }
   if (Array.isArray(base) && Array.isArray(theirs) && Array.isArray(mine)) {
     const key = (v) => JSON.stringify(v);
     const inBase = new Set(base.map(key));
@@ -268,8 +277,17 @@ export async function updateGist(
     }
     from = { ...latest, files };
     fromVersion = latest.history?.[0]?.version;
+    const previous = out;
     out = await change(from);
-    if (!out?.files) return out;
+    // Nothing of ours left to change (e.g. it is now refused): the rebuilt data, with what
+    // we overwrote put back and our change taken out, must still be saved.
+    if (!out?.files) {
+      out = {
+        ...out,
+        files: Object.fromEntries(Object.keys(previous.files).map((n) => [n, parse(from, n)])),
+        description: previous.description,
+      };
+    }
   }
 }
 
