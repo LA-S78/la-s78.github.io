@@ -1,86 +1,85 @@
 <div class="content-pane" style="max-width: 560px;" markdown="1">
 
-# 📋 Todo
+# 📋 Roadmap
 
-## 🔴 High Priority (Immediate Architecture & Core Overhaul)
+_Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIONS.md`._
 
-- [ ] **1. Unified Read Proxy & Data Sanitizer (`api/state.js`)**
-  - Consolidate `/api/alliance`, `/api/map-state`, and `/api/rewards-state` into a single `GET` proxy endpoint.
-  - Implement server-side projection and data minimization: strip sensitive Discord guild IDs, alert channel/role IDs, and author tags before serving public data.
-  - Configure Edge caching (`s-maxage=60, stale-while-revalidate=300`) with scoped query support (`?scope=all|alliances|map|rewards`).
+## 🔴 High Priority
 
-- [ ] **2. Unified Portal Architecture (Deferred Auth & Proposal Pipeline)**
-  - **Client (`assets/js/auth-modal.js`):** Create the reusable "Sandbox → LocalStorage Auto-Stash → Deferred Discord Auth / Token Fallback" modal.
-  - **Proposal Engine (`api/proposal.js`):** Add `type: 'alliance'` payload handler that attaches `diplomacy-blueprint.dat` binary attachments to the review message.
-  - **Execution Engine (`api/accept-proposal.js`):** Add `type: 'alliance'` handler to perform atomic Gist writes updating `alliances` and `blacklist` in `map-state.json`.
-  - **Discord Interactions (`api/interactions.js`):** Wire button interaction handlers for `approve_alliance_proposal` and `reject_alliance_proposal`.
-
-- [ ] **3. Interactive NAP Ranks & Diplomacy Tool (`alliance.html`)**
-  - Merge Section 01 (NAP Alliances), Section 02 (NAP Academies), and Section 03 (NAP Ranks) into a single cohesive hierarchy card.
-  - Implement client-side hydration via `/api/state?scope=alliances`.
-  - Build interactive Sandbox mode: drag-and-drop ladder sorting, mobile step controls (`[▲][▼]`), nested academy management, and integrated blacklist maintenance.
-  - Connect submission action to `api/proposal.js`.
-
-- [ ] **4. Alliance Registration Hardening (`register.html`)**
-  - Replace raw tag text input with a council-controlled dropdown sourced from `map-state.json`.
-  - Enforce the 4-way validation check:
-    1. Caller holds `@R5` role on the primary NAP server.
-    2. Caller holds the corresponding `@<TAG>` alliance role on the primary NAP server.
+- [ ] **Alliance Registration Hardening (`portal/register.html`, `api/register-alliance.js`)**
+  - Replace the raw tag text box with a dropdown of the alliances in the live data (`map-state.json`).
+  - Enforce the 4-way check:
+    1. Caller holds `@R5` on the primary NAP server.
+    2. Caller holds the matching `@<TAG>` alliance role on the primary NAP server.
     3. Caller holds `ADMINISTRATOR` or `MANAGE_GUILD` in the target Discord server.
-    4. Discord bot is verified present in the target Discord server (`GET /guilds/{guild_id}`).
-  - Add real-time visual brand preview card (colors, crest, tags).
+    4. The bot is present in the target server (`GET /guilds/{guild_id}`).
+  - Add a live preview card (colours, crest, tags).
 
-- [ ] **5. Alliance Dashboard (`dashboard.html` & `/api/dashboard`)**
-  - Server-side Google Doc rendering with container shields (mobile table scroll wrappers, max-width image constraints) and fallback Gist blocks.
+- [ ] **Alliance Dashboard (`dashboard.html` & `/api/dashboard`)**
+  - Server-side Google Doc rendering with container shields (scrolling tables on phones, image width limits) and fallback Gist blocks.
   - Add `[ 🔒 Officers Only ]` block visibility filters.
 
-- [ ] **6. Stateless Discord Verification (`api/auth.js`)**
-  - Implement Discord OAuth2 flow and live REST role validation to issue 14-day HMAC session cookies.
-  - Provide fallback validation for signed admin/officer URL tokens.
+- [ ] **GDPR & Gist Security Hardening**
+  - Field-level AES-256 encryption for author IDs and sensitive admin notes.
+  - Self-service nomination withdrawal.
+  - Monthly Gist history squash, so old revisions don't keep personal data forever.
 
-- [ ] **7. GDPR & Gist Security Hardening**
-  - Implement field-level AES-256 encryption for author IDs and sensitive administrative notes.
-  - Add self-service nomination withdrawal.
-  - Establish monthly Gist commit squash routine to prevent long-term log leakage.
+- [ ] **Safe concurrent Gist writes**
+  - Two saves at the same moment (e.g. a Steward approval and a nomination) can overwrite each other. Re-read and retry, or lock, before writing.
 
-- [ ] **8. Modularization of `api/interactions.js`**
-  - Refactor large slash-command blocks into specialized helpers (`_calendar_helper.js`, `_ticket_helper.js`, `_diplomacy_helper.js`) to safeguard serverless function execution times and syntax clarity.
+- [ ] **King's checklist on the server**
+  - The King's console remembers handed-out chests on one device only. Save it with the period, so a handed-out chest stays locked everywhere.
 
 ---
 
 ## 🟡 Mid Priority (Automation, Tools & Pipelines)
 
-- [ ] **9. Kingdom Calendar Automation Engine (`api/cron/check-reminders.js`)**
-  - Set up 5-minute cron worker to query upcoming operations and dispatch webhook notifications to alliance-specific Discord channels.
-  - Support instant direct-publishing for internal alliance operations by verified R4/R5 officers, while routing Kingdom-wide events to Council review.
+- [ ] **Kingdom Calendar Reminders (`api/cron/check-reminders.js`)**
+  - A 5-minute scheduled job that posts upcoming events to each alliance's Discord channel.
+  - Alliance-only events published directly by verified R4/R5; Kingdom-wide events go to Steward review.
 
-- [ ] **10. Alliance Might & Scoreboard OCR Pipeline**
-  - Integrate Gemini Flash vision pipeline to extract player and alliance Might scores from in-game Duel/Rank screenshots.
+- [ ] **Alliance Might & Scoreboard OCR**
+  - Read player and alliance Might from in-game Duel/Rank screenshots (Gemini Flash vision).
 
-- [ ] **11. Infographic Translation Pipeline**
-  - Build Canva SVG XML automation script to replace text nodes across all 8 supported languages.
+- [ ] **Infographic Translation Pipeline**
+  - Script to replace text in Canva SVG exports for all 8 languages.
 
-- [ ] **12. Portal Localization & Discord Bot String i18n**
-  - Centralize embed strings and response messages in `_data/<lang>/`.
-  - Connect client-side dynamic tools to the site language switcher.
+- [ ] **Portal & Bot Translations**
+  - Bot replies already come from `_data/<lang>/` (`api/_generated_translations.js`); the portal pages (nominate, distribute, register) and the planners' messages are still English only.
+  - Connect them to the site's language switcher.
 
-- [ ] **13. Map Plan Import / Export**
-  - Add base64 URL hash serialization (`map.html#plan=...`) to allow war-room tacticians to share and load map marker drawings without database writes.
+- [ ] **Map Plan Import / Export**
+  - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.
+
+- [ ] **Workbox upgrade (`sw.js`)**
+  - The service worker loads Workbox 4.3.1 from Google's CDN. Bundle a current version with the site instead (see `docs/HOWTO.md`).
 
 ---
 
-## 🟢 Low Priority (Reference Tools & Interface Polish)
+## 🟢 Low Priority (Reference Tools & Polish)
 
-- [ ] **14. Building Prerequisite Interactive Tree**
-  - Build dependency graph viewer for Keep levels 1–30+.
+- [ ] **Building Prerequisite Interactive Tree** — dependency viewer for Keep levels 1–30+.
+- [ ] **Interactive Capitol Rotation Tool (`rules.html`)** — replace the static rotation picture with a 3-week simulator driven by the live NAP ranks.
+- [ ] **T10 Calculator Mobile Polish** — node scaling, connector alignment and touch targets on narrow screens.
+- [ ] **Distinct page titles** — every page currently has the same browser-tab title ("Last Asylum Guide" twice).
+- [ ] **Visual-diff coverage** — add the nomination page and the King's console to `tools/visual-diff`.
+- [ ] **GitHub Actions Node warning** — GitHub is retiring Node 20 for actions; update the workflow actions (and `node-version: 20` in `discord_commands.yml`) when newer versions are out.
+- [ ] **Test Discord bot (optional)** — a second bot for dev.la-s78.app, so test proposals never touch the live bot's servers.
+- [ ] **Check: BOTS sign-in by role ID** — `api/verify.js` skips any `DISCORD_BOTS` variable, so BOTS members are only found by role name or nickname. Confirm whether that is intended.
 
-- [ ] **15. Interactive Capitol Rotation Tool (`rules.html`)**
-  - Replace static blueprint graphic with a dynamic 3-week rotation simulator driven by live NAP ranks from `map-state.json`.
+---
 
-- [ ] **16. T10 Calculator Mobile Polish**
-  - Refine node scaling, tree connector alignment, and touch targets on narrow viewports.
+## ✅ Done
 
-- [ ] **17. Progressive Web App (PWA) & Cache Audit**
-  - Configure service worker caching policies for map assets, fonts, and stylesheets, with automatic update notifications.
+- [x] **Unified read API (`api/state.js`)** — one `GET /api/state?scope=all|alliances|map|rewards`, public data only, edge-cached.
+- [x] **Proposal pipeline** — sandbox planners on the site save a draft, ask for a login pass and send a proposal to Discord; Stewards approve in Discord and the change is saved (map, alliance ladder, blacklist each have their own proposal). R4/R5 only, 5 a day; Stewards unlimited. (#53–#55, #58)
+- [x] **Interactive NAP ranks & diplomacy tool (`alliance.html`)** — one hierarchy card, live data, drag-and-drop and ▲/▼ ordering, academies, a separate Edit Blacklist mode.
+- [x] **Discord login (`api/verify.js`)** — Discord sign-in with a signed 30-day login pass; alliance found by role ID, NAP role name, then `[TAG]` nickname; officers named with /registerbot get R4 access; header sign-in pill. (#56, #57, #67)
+- [x] **Split the Discord bot (`api/interactions.js`)** — now only checks and routes; each command lives in an `api/_bot_*.js` module. (#60)
+- [x] **Weekly reward periods** — King's Commendation every week; King of Battle Reward after a Steward records a Won; ranked nomination lists; King's console hands out one set at a time. (#59)
+- [x] **Test site with its own data** — dev.la-s78.app uses a separate test Gist; Stewards refresh it with `/devupdate`. (#61–#65)
+- [x] **One alliance list & live data only** — `_data/alliances.yml` is the single list of alliance colours and starting rotation; pages show live data, with clear notices when loading, failed or offline. (#69)
+- [x] **Installed app (PWA)** — update notice, app shortcuts, iPhone icon, offline fallback to the home page, old caches cleaned up. (#69; Workbox upgrade still open above)
+- [x] **Theme colours** — accent, borders and surfaces follow the chosen theme. (#50–#52)
 
 </div>
