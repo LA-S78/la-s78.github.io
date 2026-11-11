@@ -164,6 +164,7 @@ pwa:
   toast_msg: "Yeni istihbarat alındı."
   update_btn: "Güncelle"
   updating: "Şifre çözülüyor..."
+  updated_msg: "✅ Uygulama en son sürüme güncellendi."
 
 #header sign-in pill (js/identity-pill.js)
 identity:
@@ -174,6 +175,8 @@ identity:
   sign_in_again: "Tekrar Giriş Yap"
   refresh: "Erişimi Yenile"
   sign_out: "Çıkış Yap"
+  force_update: "Uygulamayı Güncelle"
+  force_updating: "Güncelleniyor…"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

@@ -584,7 +584,73 @@
     });
   }
 
+  /**
+   * Force Update (identity pill card, and /reset): drops this site's service worker and
+   * saved files, then loads the page fresh from the network. The login pass, theme and
+   * planner drafts live in localStorage and are kept.
+   */
+  async function clearAppCache() {
+    try {
+      const registrations = (await navigator.serviceWorker?.getRegistrations?.()) || [];
+      await Promise.all(registrations.map((r) => r.unregister()));
+    } catch (e) {
+      /* nothing registered, or not allowed: carry on */
+    }
+    try {
+      if (window.caches) await Promise.all((await caches.keys()).map((k) => caches.delete(k)));
+    } catch (e) {
+      /* no saved files */
+    }
+  }
+  window.forceAppUpdate = async function () {
+    try {
+      sessionStorage.setItem('app-updated', '1'); // "App updated" note after the reload
+    } catch (e) {
+      /* private mode: no note */
+    }
+    // Never wait more than 3 s: reload whatever happens.
+    await Promise.race([clearAppCache(), new Promise((r) => setTimeout(r, 3000))]);
+    window.location.reload();
+  };
+
+  /** A short "App updated" note after Force Update or /reset (/?updated=1). */
+  function showUpdatedNote() {
+    let flagged = false;
+    try {
+      flagged = sessionStorage.getItem('app-updated') === '1';
+      sessionStorage.removeItem('app-updated');
+    } catch (e) {
+      /* no session storage */
+    }
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('updated') === '1') {
+      flagged = true;
+      url.searchParams.delete('updated');
+      history.replaceState(history.state, '', url.pathname + url.search + url.hash);
+    }
+    if (!flagged || document.getElementById('pwa-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'pwa-update-toast';
+    toast.className = 'is-done';
+    toast.setAttribute('role', 'status');
+    toast.textContent =
+      (window.pwaTranslations && window.pwaTranslations.updatedMsg) ||
+      '✅ App updated to the latest version.';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
+
   if ('serviceWorker' in navigator) {
+    // A new version (sw.js) asks open pages whether they can show the update toast. Pages
+    // too old to answer are updated automatically after 2 s; this one answers, and shows
+    // the toast when the new version is ready (watchForUpdates).
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'SW_UPDATE_AVAILABLE' && event.source) {
+        event.source.postMessage({ type: 'SW_TOAST_SHOWN' });
+      }
+    });
+    window.addEventListener('load', showUpdatedNote);
+
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('/sw.js')

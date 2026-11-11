@@ -204,6 +204,11 @@
     out.dataset.idAction = 'sign-out';
     actions.append(refresh, out);
     foot.append(actions);
+    // Stuck on an old version of the site or app: drop the saved copy and load it fresh.
+    const update = el('button', 'id-btn-link', `🔄 ${t.force_update || 'Update App'}`);
+    update.type = 'button';
+    update.dataset.idAction = 'force-update';
+    foot.append(update);
     pop.append(foot);
   }
 
@@ -235,6 +240,12 @@
       // Discord skips its "Authorize" screen for someone who already allowed the site.
       if (action === 'refresh') window.triggerDiscordLogin?.({ quiet: true });
       if (action === 'sign-out') window.triggerLogout?.();
+      if (action === 'force-update') {
+        const btn = e.target.closest('[data-id-action]');
+        btn.disabled = true;
+        btn.textContent = `🔄 ${root._strings.force_updating || 'Updating…'}`;
+        window.forceAppUpdate?.();
+      }
     });
     document.addEventListener('click', (e) => {
       if (root.classList.contains('is-open') && !root.contains(e.target)) setOpen(root, false);

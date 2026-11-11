@@ -103,3 +103,45 @@ self.addEventListener('message', (event) => {
     self.skipWaiting();
   }
 });
+
+// 6. Rescue for pages too old to show the update toast (before November 2026): without it
+//    nothing ever tells a new version to take over, so it would wait forever. A new version
+//    asks the open pages first; current pages answer (js/main.js) and show the toast as
+//    usual. If none answers within 2 s, the new version takes over by itself and reloads
+//    those pages, so they get the new files. (The first install, with nothing to replace,
+//    is untouched.)
+let tookOverAlone = false;
+self.addEventListener('install', (event) => {
+  if (!self.registration.active) return;
+  event.waitUntil(
+    (async () => {
+      const pages = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      if (pages.length === 0) return; // nothing open: it takes over on the next visit anyway
+      const answered = await new Promise((resolve) => {
+        const timer = setTimeout(() => resolve(false), 2000);
+        self.addEventListener('message', function onAnswer(e) {
+          if (e.data && e.data.type === 'SW_TOAST_SHOWN') {
+            clearTimeout(timer);
+            self.removeEventListener('message', onAnswer);
+            resolve(true);
+          }
+        });
+        pages.forEach((page) => page.postMessage({ type: 'SW_UPDATE_AVAILABLE' }));
+      });
+      if (!answered) {
+        tookOverAlone = true;
+        await self.skipWaiting();
+      }
+    })(),
+  );
+});
+self.addEventListener('activate', (event) => {
+  if (!tookOverAlone) return;
+  event.waitUntil(
+    (async () => {
+      await self.clients.claim();
+      const pages = await self.clients.matchAll({ type: 'window' });
+      await Promise.all(pages.map((page) => page.navigate(page.url).catch(() => {})));
+    })(),
+  );
+});

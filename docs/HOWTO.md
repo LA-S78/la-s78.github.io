@@ -287,6 +287,17 @@ Pushing to `dev` publishes a test copy at https://dev.la-s78.app instead.
 
 ---
 
+## Help a player stuck on an old version
+
+If someone sees an old page, a missing feature, or no "Update" toast, send them:
+
+**https://la-s78.app/reset**
+
+It clears the site's saved copy on their device and opens the newest version; their login
+and theme are kept. Signed-in players (and guests) can also tap their account pill in the
+header, then **🔄 Update App**. Since November 2026 an installed app normally updates
+itself; this is for anyone who doesn't.
+
 ## When the build check fails
 
 Run `bundle exec ruby _scripts/build.rb` locally; it prints the same messages.
