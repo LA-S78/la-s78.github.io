@@ -188,6 +188,15 @@
       list.append(el('li', key === 'access_expired' ? 'is-warning' : '', t[key]));
     pop.append(list);
 
+    // The alliance's dashboard (portal/dashboard.html): for signed-in members of an alliance,
+    // and Stewards (who can look at any alliance's).
+    if ((id.alliance || id.steward) && id.tier !== 'guest' && id.tier !== 'expired') {
+      const dash = el('a', 'id-pop-link', `🏰 ${t.dashboard || 'Alliance Dashboard'}`);
+      dash.href = '/dashboard.html';
+      dash.setAttribute('data-turbo', 'false');
+      pop.append(dash);
+    }
+
     const foot = el('div', 'id-pop-foot');
     if (id.tier !== 'guest' && id.tier !== 'expired')
       foot.append(el('div', 'id-pop-expiry', expiryText(id.exp, t)));

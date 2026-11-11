@@ -177,6 +177,7 @@ identity:
   sign_out: "Cerrar sesión"
   force_update: "Actualizar app"
   force_updating: "Actualizando…"
+  dashboard: "Panel de la alianza"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

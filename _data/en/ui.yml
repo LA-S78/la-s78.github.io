@@ -197,6 +197,7 @@ identity:
   sign_out: "Sign Out"
   force_update: "Update App"
   force_updating: "Updating…"
+  dashboard: "Alliance Dashboard"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

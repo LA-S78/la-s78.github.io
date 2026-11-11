@@ -177,6 +177,7 @@ identity:
   sign_out: "Se déconnecter"
   force_update: "Mettre à jour l’app"
   force_updating: "Mise à jour…"
+  dashboard: "Tableau de bord de l’alliance"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

@@ -445,6 +445,22 @@ footer {
 .id-btn--primary:hover {
   background: var(--brand-discord-hover);
 }
+/* Link to the alliance dashboard, under the access list */
+.id-pop-link {
+  display: block;
+  margin-top: 10px;
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  color: var(--accent-color);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 45%, var(--border-color));
+  border-radius: 6px;
+}
+.id-pop-link:hover {
+  background: var(--overlay-5);
+}
 /* "Update App": a quiet text button under Refresh Access / Sign Out */
 .id-btn-link {
   display: block;

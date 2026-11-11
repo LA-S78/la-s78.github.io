@@ -1,0 +1,120 @@
+/* ==========================================================================
+   7. ALLIANCE DASHBOARD (portal/dashboard.html)
+   Colours come from the theme variables, so it follows Plague, Sanctuary and Miasma.
+   ========================================================================== */
+
+.dash-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.dash-switcher[hidden] {
+  display: none;
+}
+
+.dash-switcher select {
+  padding: 4px 8px;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.dash-card {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.dash-rewards {
+  border-color: color-mix(in srgb, var(--accent-color) 45%, var(--border-color));
+}
+
+.dash-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 0.6rem;
+  font-family: var(--font-headers);
+  font-size: 1rem;
+  color: var(--accent-color);
+  border: none;
+}
+
+.dash-tag {
+  margin-left: auto;
+  padding: 1px 7px;
+  font-family: inherit;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+}
+
+.dash-rows {
+  margin: 0;
+}
+
+.dash-rows > div {
+  display: grid;
+  grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr);
+  gap: 10px;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--overlay-5);
+  font-size: 0.82rem;
+}
+
+.dash-rows > div:first-child {
+  border-top: none;
+}
+
+.dash-rows dt {
+  color: var(--text-muted);
+}
+
+.dash-rows dd {
+  margin: 0;
+  color: var(--text-main);
+}
+
+.dash-muted {
+  color: var(--text-muted);
+}
+
+.dash-small {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+}
+
+.dash-warn {
+  color: var(--status-danger-text);
+}
+
+.dash-actions {
+  margin-top: 0.7rem;
+  text-align: center;
+}
+
+.dash-empty {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Phones: label above value */
+@media (max-width: 480px) {
+  .dash-rows > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
