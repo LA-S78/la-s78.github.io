@@ -1,4 +1,6 @@
 // api/colors.js (Vercel Serverless Function)
+import { ALLIANCE_ROLE_SETTINGS } from './_alliances.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
@@ -6,18 +8,14 @@ export default async function handler(req, res) {
 
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
 
-  // 1. Collect all explicit alliance environment variables
-  // Maybe add NAVI, HMX?
-  const ALLIANCE_ENVS = {
-    WLO: process.env.DISCORD_WLO,
-    RÂVN: process.env.DISCORD_RAVN,
-    MIA: process.env.DISCORD_MIA,
-    BOTS: process.env.DISCORD_BOTS,
-    SVN: process.env.DISCORD_SVN,
-    PHNX: process.env.DISCORD_PHNX,
-    HMDA: process.env.DISCORD_HMDA,
-    HeKi: process.env.DISCORD_HEKI,
-  };
+  // 1. Each alliance's role ID in the NAP server, from its DISCORD_<name> setting
+  // (the names are listed in _data/alliances.yml, role_settings)
+  const ALLIANCE_ENVS = Object.fromEntries(
+    Object.entries(ALLIANCE_ROLE_SETTINGS).map(([tag, name]) => [
+      tag,
+      process.env[`DISCORD_${name}`],
+    ]),
+  );
 
   const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || process.env.BOT_TOKEN;
   const GUILD_ID = process.env.DISCORD_GUILD_ID || process.env.GUILD_ID;

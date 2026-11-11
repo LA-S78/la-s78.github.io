@@ -2,6 +2,7 @@
  * map.js - Comprehensive Map Data, Parsing, Highlighting, Label, Planner, Fullscreen, and Image Snapshot Utilities
  */
 
+import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
 import { submitProposalWithAuth } from './auth-modal.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
@@ -1464,20 +1465,11 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
   if (!state) return;
   mapState = state;
 
-  const staticAlliances =
-    (typeof window !== 'undefined' && window.MAP_STATE && window.MAP_STATE.alliances) || {};
-  const liveAlliances = state.alliances || {};
-
-  const allTags = new Set([...Object.keys(staticAlliances), ...Object.keys(liveAlliances)]);
+  // The live data is the only source (no built-in snapshot; offline, sw.js answers with
+  // the last copy saved on this device).
   alliances = {};
-  allTags.forEach((tag) => {
-    alliances[tag] = {
-      ...(staticAlliances[tag] || {}),
-      ...(liveAlliances[tag] || {}),
-    };
-    if (liveAlliances[tag]?.rank === undefined && staticAlliances[tag]?.rank !== undefined) {
-      alliances[tag].rank = staticAlliances[tag].rank;
-    }
+  Object.entries(state.alliances || {}).forEach(([tag, data]) => {
+    alliances[tag] = { ...data };
   });
 
   if (state.territory_ownership) {
@@ -1507,6 +1499,11 @@ export function getCityById(id) {
   return cities.find((city) => city.id === id);
 }
 
+/** Where the live-data notice goes: above the map. */
+function noticeAnchor(root) {
+  return document.getElementById('map-container') || root;
+}
+
 export async function loadLiveMapState(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
 
@@ -1519,6 +1516,7 @@ export async function loadLiveMapState(svgRoot = null) {
     if (stateRes.ok) {
       const liveState = await stateRes.json();
       applyMapState(liveState, root, false);
+      showLiveDataNotice(noticeAnchor(root), { savedAt: offlineCopySavedAt(stateRes) });
     } else {
       throw new Error(`Map State API returned HTTP ${stateRes.status}`);
     }
@@ -1531,10 +1529,8 @@ export async function loadLiveMapState(svgRoot = null) {
       });
     }
   } catch (err) {
-    console.warn('Could not fetch live data, falling back to static MAP_STATE:', err);
-    if (typeof window !== 'undefined' && window.MAP_STATE) {
-      applyMapState(window.MAP_STATE, root, false);
-    }
+    console.warn('Could not fetch live map data:', err);
+    showLiveDataNotice(noticeAnchor(root), { failed: true });
   } finally {
     if (root) {
       const restored = checkAndRestoreMapDraft(root);
@@ -1555,11 +1551,7 @@ export function initializeMapData(svgRoot) {
 
   cities = extractCitiesFromSvg(root);
 
-  if (typeof window !== 'undefined' && window.MAP_STATE) {
-    applyMapState(window.MAP_STATE, root, false);
-  } else {
-    renderTerritoryLabels(root);
-  }
+  renderTerritoryLabels(root);
 
   bindMapControls(root);
   enableMapHighlighting(root);

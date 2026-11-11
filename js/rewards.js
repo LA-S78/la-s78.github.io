@@ -3,6 +3,7 @@
  */
 
 import { submitProposalWithAuth } from './auth-modal.js';
+import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -50,39 +51,18 @@ const AUTO_ALLIANCE_PALETTE = [
 // 1. DATA INITIALIZATION & LIVE STATE SYNC
 // ==========================================================================
 
+/**
+ * Starts the card empty: the tiers come from the live data only (no built-in snapshot or
+ * defaults; offline, sw.js answers with the last copy saved on this device).
+ */
 export function initDefaultTiers() {
-  if (window.REWARDS_CONFIG && window.REWARDS_CONFIG.distribution_tiers) {
-    originalTiers = JSON.parse(JSON.stringify(window.REWARDS_CONFIG.distribution_tiers));
-  } else {
-    originalTiers = [
-      {
-        id: 'tier_1',
-        min_rank: 1,
-        max_rank: 1,
-        chests: { commanders_will: 1, loyal_servant: 3, followers_heart: 1 },
-      },
-      {
-        id: 'tier_2',
-        min_rank: 2,
-        max_rank: 3,
-        chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 3 },
-      },
-      {
-        id: 'tier_3',
-        min_rank: 4,
-        max_rank: 5,
-        chests: { commanders_will: 1, loyal_servant: 1, followers_heart: 2 },
-      },
-      {
-        id: 'tier_4',
-        min_rank: 6,
-        max_rank: 8,
-        chests: { commanders_will: 0, loyal_servant: 1, followers_heart: 3 },
-      },
-    ];
-  }
-  draftTiers = JSON.parse(JSON.stringify(originalTiers));
+  liveState = 'loading';
+  originalTiers = [];
+  draftTiers = [];
 }
+
+/** 'loading' | 'ok' | 'failed': whether the live reward tiers have arrived. */
+let liveState = 'loading';
 
 function saveDraftToStorage() {
   if (!isRewardsPlannerActive) return;
@@ -131,8 +111,13 @@ export function checkAndRestoreRewardsDraft() {
 export async function fetchLiveRewardsState() {
   try {
     const res = await fetch(`/api/state?scope=rewards&t=${Date.now()}`);
-    if (res.ok) {
+    if (!res.ok) throw new Error(`State API returned HTTP ${res.status}`);
+    {
       const data = await res.json();
+      liveState = 'ok';
+      showLiveDataNotice(document.getElementById('rewards-container'), {
+        savedAt: offlineCopySavedAt(res),
+      });
       if (
         data.distribution_tiers &&
         Array.isArray(data.distribution_tiers) &&
@@ -148,7 +133,9 @@ export async function fetchLiveRewardsState() {
       }
     }
   } catch (err) {
-    console.warn('Could not fetch live rewards state, keeping current configuration:', err);
+    console.warn('Could not fetch live rewards state:', err);
+    liveState = 'failed';
+    showLiveDataNotice(document.getElementById('rewards-container'), { failed: true });
   }
 }
 
@@ -185,7 +172,8 @@ export async function syncAllLiveState() {
   try {
     await Promise.allSettled([fetchLiveRewardsState(), fetchLiveMapState()]);
   } finally {
-    const restored = checkAndRestoreRewardsDraft();
+    // A saved plan only makes sense next to the live tiers it was made from.
+    const restored = liveState === 'ok' && checkAndRestoreRewardsDraft();
     if (!restored) {
       renderTierList();
       updatePayoutTable();
@@ -280,6 +268,10 @@ export function renderTierList() {
   if (!container) return;
 
   const rankLabel = container.dataset.rankLabel || 'Rank';
+  if (liveState !== 'ok') {
+    container.innerHTML = `<div class="rewards-tier-placeholder">${liveState === 'failed' ? "Couldn't load the reward tiers." : 'Loading the reward tiers…'}</div>`;
+    return;
+  }
   const activeList = isRewardsPlannerActive ? draftTiers : originalTiers;
 
   container.innerHTML = activeList
@@ -492,6 +484,9 @@ export function updateRewardsProposalUI() {
 }
 
 export function toggleRewardsPlanner(active) {
+  // Never plan from an empty card: a plan made before the live tiers load would propose
+  // replacing them.
+  if (active && liveState !== 'ok') return;
   isRewardsPlannerActive = active;
 
   const btnDraft = document.getElementById('btn-toggle-rewards-planner');

@@ -67,12 +67,6 @@ nav_id: "nap-ranks"
   </div>
 </div>
 
-<script id="diplomacy-data-bootstrap" type="application/json">
-  {{ site.data.diplomacy | jsonify }}
-</script>
-<script id="map-state-bootstrap" type="application/json">
-  {{ site.data.map_state | jsonify }}
-</script>
 
 === collection--alliance--02 ===
 ---
