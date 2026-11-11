@@ -165,3 +165,9 @@
 .distribute-set-heading:first-child {
   margin-top: 0.2rem;
 }
+
+/* "Don't send it": a copied name that changed since the page loaded */
+.distribute-copy-warning {
+  margin-bottom: 0.9rem;
+  font-weight: bold;
+}

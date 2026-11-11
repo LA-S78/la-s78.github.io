@@ -135,7 +135,9 @@
       returnPath &&
       returnPath !== '/' &&
       returnPath !== '/index.html' &&
-      returnPath !== window.location.pathname
+      returnPath !== window.location.pathname &&
+      returnPath.startsWith('/') &&
+      !returnPath.startsWith('//')
     ) {
       if (window.Turbo) window.Turbo.visit(returnPath, { action: 'replace' });
       else window.location.replace(returnPath);
@@ -211,7 +213,11 @@
    * quiet: skip Discord's "Authorize" screen if they already allowed the site (Refresh Access).
    */
   window.triggerDiscordLogin = function ({ quiet = false } = {}) {
-    localStorage.setItem('auth-return-path', window.location.pathname + window.location.hash);
+    // The whole address, query included (portal links carry their ?token=...).
+    localStorage.setItem(
+      'auth-return-path',
+      window.location.pathname + window.location.search + window.location.hash,
+    );
     const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify${quiet ? '&prompt=none' : ''}`;
     window.location.href = discordAuthUrl;
   };

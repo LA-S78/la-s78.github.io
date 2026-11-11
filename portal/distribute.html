@@ -3,7 +3,6 @@ layout: portal
 title: King's Distribution Console
 permalink: /distribute.html
 lang: "en"
-hide_header: true
 ---
 
 <div class="content-pane portal-pane-md">
@@ -272,6 +271,71 @@ hide_header: true
       bindEvents();
     }
 
+    const CHEST_LABEL = {
+      standard: { commanders_will: "Commander's Will", loyal_servant: 'Loyal Servant', followers_heart: "Follower's Heart" },
+      kingdom_war: { commanders_will: 'Honor Vanguard', loyal_servant: 'Fearless Hero', followers_heart: 'Logistics Support' },
+    };
+
+    /** Where `name` is in an alliance's saved list now: "pool.chest", 'reserve' or null. */
+    function chestNow(nominations, alliance, name) {
+      const entry = nominations[alliance];
+      for (const [pool, chests] of Object.entries((entry && entry.recipients) || {})) {
+        for (const [chest, names] of Object.entries(chests || {})) {
+          if ((names || []).includes(name)) return `${pool}.${chest}`;
+        }
+      }
+      return entry && (entry.reserves || []).includes(name) ? 'reserve' : null;
+    }
+
+    async function checkStillDue(row) {
+      const alliance = row.getAttribute('data-alliance');
+      const pool = row.getAttribute('data-pool');
+      const chest = row.getAttribute('data-chest');
+      const name = row.getAttribute('data-name');
+      let fresh;
+      try {
+        const res = await fetch(`/api/nominate?t=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        fresh = await res.json();
+      } catch (err) {
+        return; // can't check (offline): nothing to warn about, the page stays as it is
+      }
+      const now = chestNow(fresh.nominations || {}, alliance, name);
+      if (now === `${pool}.${chest}`) {
+        document.getElementById('copy-warning')?.remove(); // still right
+        return;
+      }
+      const shown = CHEST_LABEL[pool]?.[chest] || chest;
+      let why;
+      if (!now) why = `${name} is no longer on [${alliance}]'s list (the alliance changed it).`;
+      else if (now === 'reserve') why = `${name} is now a reserve on [${alliance}]'s list: no chest.`;
+      else {
+        const [p, c] = now.split('.');
+        why = `${name} now gets ${CHEST_LABEL[p]?.[c] || c}, not ${shown}.`;
+      }
+      // Show the latest lists, then the warning above them, and say it plainly.
+      nominationsData = fresh.nominations || {};
+      handedOut = fresh.handed_out || {};
+      period = fresh.period || period;
+      king = fresh.king || king;
+      render();
+      showCopyWarning(`⚠️ Stop: don't send that ${shown}. ${why} The lists have been refreshed: copy the name again from the list below.`);
+      alert(`Don't send it!\n\n${why}\n\nThe lists have been refreshed.`);
+    }
+
+    function showCopyWarning(text) {
+      let el = document.getElementById('copy-warning');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'copy-warning';
+        el.className = 'status-banner warning distribute-copy-warning';
+        el.setAttribute('role', 'alert');
+        elRoster.parentNode.insertBefore(el, elRoster);
+      }
+      el.textContent = text;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+
     function renderRow(item, glyph) {
       const key = keyOf(item);
       const tick = handedOut[key];
@@ -351,6 +415,11 @@ hide_header: true
           } catch (err) {
             prompt('Copy recipient name:', text);
           }
+          // Copied at once (phones only allow it straight after a tap), then checked against
+          // the latest lists: an alliance may have corrected or removed this name since the
+          // page loaded. A chest sent in the game can't be taken back, so warn before it is.
+          const row = btn.closest('.distribute-item');
+          if (row) checkStillDue(row);
         });
       });
     }
