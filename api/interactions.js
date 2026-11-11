@@ -4,6 +4,7 @@
 
 import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
 import { handleCalendarCommand } from './_bot_calendar.js';
+import { handleDevUpdateCommand } from './_bot_devupdate.js';
 import { NOT_HANDLED, getBotStrings, resolveUserId, resolveUserLocale } from './_bot_common.js';
 import { handleRulesCommand, handleSbCommand } from './_bot_info.js';
 import { handleMapCommand, handleMapViewButton } from './_bot_map.js';
@@ -29,6 +30,7 @@ const COMMANDS = {
   nominate: handleNominateCommand,
   rewards: handleRewardsCommand,
   rank: handleRankCommand,
+  devupdate: handleDevUpdateCommand,
 };
 
 /** Buttons by custom_id prefix, checked in this order; anything else is a proposal review. */

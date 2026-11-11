@@ -120,6 +120,11 @@
       "name": "map",
       "description": "View the live territory map",
       "type": 1
+    },
+    {
+      "name": "devupdate",
+      "description": "Copy the live data into the test site's data (Stewards only; only you see the reply)",
+      "type": 1
     }
   ],
   "nap": [

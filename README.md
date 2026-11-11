@@ -116,7 +116,6 @@ as a warning; it never blocks publishing.
 | `check_build.rb`        | Sanity checks on the finished `_site/`                          |
 | `generate_master.rb`    | Gemini translation of `_en` drafts (CI only)                    |
 | `deploy_commands.mjs`   | Registers Discord slash commands (CI only)                      |
-| `copy_live_to_test_gist.mjs` | Copies the live data into the test Gist (CI, run by hand) |
 
 ## Copyright & Licensing
 

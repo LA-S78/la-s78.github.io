@@ -112,3 +112,47 @@ export async function writeGist(files, { description, timeoutMs } = {}) {
   }
   return res.json().catch(() => ({}));
 }
+
+/**
+ * Copies every file of the live Gist (GIST_ID) into the test Gist (TEST_GIST_ID) used by the
+ * test site, for /devupdate. Only reads the live Gist and only writes the test one. Runs on
+ * the live site, which can see the real values (Vercel never hands out values marked
+ * Sensitive to anything else).
+ * @returns {Promise<string[]>} the names of the files copied
+ * @throws {Error} with a message for the person running it (missing or same test Gist, …)
+ */
+export async function copyLiveGistToTest({ timeoutMs } = {}) {
+  const liveId = (process.env.GIST_ID || '').trim();
+  const testId = (process.env.TEST_GIST_ID || '').trim();
+  const liveToken = process.env.GIST_TOKEN;
+  const testToken = process.env.TEST_GIST_TOKEN || liveToken;
+  if (!liveId || !liveToken) throw new Error('The live Gist (GIST_ID, GIST_TOKEN) is not set.');
+  if (!testId) throw new Error('TEST_GIST_ID is not set for Production in Vercel.');
+  if (testId === liveId)
+    throw new Error('TEST_GIST_ID is the live Gist. It must be a separate Gist.');
+
+  const signal = () => (timeoutMs ? { signal: AbortSignal.timeout(timeoutMs) } : {});
+  const res = await fetch(`${GIST_API}/${liveId}`, {
+    headers: headers(liveToken),
+    cache: 'no-store',
+    ...signal(),
+  });
+  if (!res.ok) throw new Error(`Could not read the live Gist (${res.status}).`);
+  const files = {};
+  for (const [name, file] of Object.entries((await res.json()).files || {})) {
+    if (file.truncated) throw new Error(`${name} is too large to copy this way.`);
+    files[name] = { content: file.content };
+  }
+
+  const out = await fetch(`${GIST_API}/${testId}`, {
+    method: 'PATCH',
+    headers: headers(testToken, { 'Content-Type': 'application/json' }),
+    body: JSON.stringify({
+      description: `Test data, copied from the live data at ${new Date().toISOString()}`,
+      files,
+    }),
+    ...signal(),
+  });
+  if (!out.ok) throw new Error(`Could not write the test Gist (${out.status}).`);
+  return Object.keys(files);
+}
