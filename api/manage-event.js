@@ -1,7 +1,7 @@
 // api/manage-event.js
 
 // Handles creating, deleting, modifying events
-import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken } from './_tokens.js';
 
 export default async function handler(req, res) {
@@ -131,10 +131,17 @@ export default async function handler(req, res) {
         createdAt: new Date().toISOString(),
       };
 
-      calendarState.custom_events.push(newEvent);
-      calendarState.custom_events.sort((a, b) => new Date(a.start) - new Date(b.start));
-
-      await writeGist({ 'calendar-state.json': calendarState });
+      // Added to the stored list as it is when saving (updateGist), so two events made at
+      // the same moment are both kept.
+      await updateGist(
+        (fresh) => {
+          const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
+          state.custom_events = [...(state.custom_events || []), newEvent];
+          state.custom_events.sort((a, b) => new Date(a.start) - new Date(b.start));
+          return { files: { 'calendar-state.json': state } };
+        },
+        { gist },
+      );
 
       return res.status(200).json({
         success: true,
@@ -167,9 +174,14 @@ export default async function handler(req, res) {
         });
       }
 
-      calendarState.custom_events.splice(targetIndex, 1);
-
-      await writeGist({ 'calendar-state.json': calendarState });
+      await updateGist(
+        (fresh) => {
+          const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
+          state.custom_events = (state.custom_events || []).filter((e) => e.id !== eventId);
+          return { files: { 'calendar-state.json': state } };
+        },
+        { gist },
+      );
 
       return res.status(200).json({
         success: true,

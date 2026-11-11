@@ -8,7 +8,7 @@ import {
   isGistConfigured,
   readGist,
   gistJson,
-  writeGist,
+  updateGist,
   isTestDeployment,
   TEST_PROPOSAL_FIELD,
 } from './_gist.js';
@@ -96,8 +96,13 @@ export default async function handler(req, res) {
   // has still gone out; it just isn't counted.
   if (log && result.status === 200) {
     try {
-      log.entries.push({ uid: session.uid, at: Date.now() });
-      await writeGist({ [LOG_FILE]: log }, { description: `Proposal by ${session.name}` });
+      // Added to the log as stored when saving (updateGist): a proposal from someone else at
+      // the same moment must not drop this entry, or the daily limit could be dodged.
+      const entry = { uid: session.uid, at: Date.now() };
+      await updateGist((gist) => ({
+        files: { [LOG_FILE]: { entries: [...recentEntries(gist), entry] } },
+        description: `Proposal by ${session.name}`,
+      }));
     } catch (err) {
       console.error('Proposal sent, but the proposal log could not be saved:', err.message);
     }
@@ -108,12 +113,16 @@ export default async function handler(req, res) {
 /** The proposal log, keeping only the last 24 hours. Throws if the Gist can't be read. */
 async function readProposalLog() {
   if (!isGistConfigured()) return { entries: [] };
-  const stored = gistJson(await readGist({ timeoutMs: 4000 }), LOG_FILE, { entries: [] });
+  return { entries: recentEntries(await readGist({ timeoutMs: 4000 })) };
+}
+
+/** The proposal log's entries from the last 24 hours. */
+function recentEntries(gist) {
+  const stored = gistJson(gist, LOG_FILE, { entries: [] });
   const since = Date.now() - DAY_MS;
-  const entries = Array.isArray(stored.entries)
+  return Array.isArray(stored.entries)
     ? stored.entries.filter((e) => e && e.uid && Number(e.at) > since)
     : [];
-  return { entries };
 }
 
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);

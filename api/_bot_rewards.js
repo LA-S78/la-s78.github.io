@@ -13,7 +13,8 @@ import {
 } from './_bot_common.js';
 import { resolveMemberAllianceContext } from './_bot_roles.js';
 import { DEFAULT_CALENDAR_CONFIG, weekLabel } from './_calendar_helper.js';
-import { writeGist } from './_gist.js';
+import { updateGist } from './_gist.js';
+import { getWaitUntil } from './_after_response.js';
 import { chestCounts } from './_nomination_assign.js';
 import { reassignAllNominations } from './_nominations.js';
 import {
@@ -87,7 +88,6 @@ export async function handleNominateCommand(ctx) {
       }
     }
 
-    const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
     const calRaw = gistData.files?.['calendar-state.json']?.content;
     const calConfig = calRaw
       ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
@@ -103,33 +103,43 @@ export async function handleNominateCommand(ctx) {
     }
 
     // A new period: move the schedule on and clear last week's nominations. After the
-    // battle, ask leadership once for the Kingdom War result.
-    const synced = syncRewardPeriod(rewardsData, mapState, period);
-    const newPeriod = synced.changed;
-    const askForResult =
-      period.kwWeek &&
-      period.battleOver &&
-      rewardsData.period.result === 'pending' &&
-      !rewardsData.period.prompted;
-    if (askForResult) rewardsData.period.prompted = true;
-    if (newPeriod || askForResult) {
+    // battle, ask leadership once for the Kingdom War result. Saved safely alongside other
+    // saves (updateGist); only a quick second try fits in Discord's 3 seconds.
+    let rewardsData;
+    let askForResult = false;
+    try {
+      ({ rewardsData, askForResult } = await updateGist(
+        (gist) => {
+          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const map = JSON.parse(gist.files['map-state.json']?.content || '{}');
+          const synced = syncRewardPeriod(data, map, period);
+          const ask =
+            period.kwWeek &&
+            period.battleOver &&
+            data.period.result === 'pending' &&
+            !data.period.prompted;
+          if (ask) data.period.prompted = true;
+          if (!synced.changed && !ask) return { rewardsData: data };
+          return {
+            rewardsData: data,
+            askForResult: ask,
+            files: {
+              ...(synced.clearNominations ? { 'rewards-nominations.json': {} } : {}),
+              'rewards-data.json': data,
+            },
+            description: `Reward period ${period.id} (${period.weekName})`,
+          };
+        },
+        { gist: gistData, deadline: Date.now() + 700 },
+      ));
+    } catch (err) {
       // If this can't be saved, stop: never hand out a nomination link for a period that
       // didn't persist (DECISIONS.md, "Data storage").
-      try {
-        await writeGist(
-          {
-            ...(synced.clearNominations ? { 'rewards-nominations.json': {} } : {}),
-            'rewards-data.json': rewardsData,
-          },
-          { description: `Reward period ${period.id} (${period.weekName})` },
-        );
-      } catch (err) {
-        console.error('Reward period could not be saved:', err);
-        return sendEphemeralMessage(
-          res,
-          '⚠️ Service busy: could not open the new reward period. Please retry /nominate in a few seconds.',
-        );
-      }
+      console.error('Reward period could not be saved:', err);
+      return sendEphemeralMessage(
+        res,
+        '⚠️ Service busy: could not open the new reward period. Please retry /nominate in a few seconds.',
+      );
     }
     if (askForResult) await postKingdomWarResultPrompt(rewardsData.period, botToken);
 
@@ -257,12 +267,7 @@ export async function handleRewardsCommand(ctx) {
         '⛔ **Access Denied:** Only designated Kingdom Stewards can record the Kingdom War result.',
       );
     }
-    const outcome = await saveKingdomWarResult(action, username);
-    if (outcome.error) return sendEphemeralMessage(res, `⚠️ ${outcome.error}`);
-    return res.status(200).json({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: kingdomWarResultMessage(outcome),
-    });
+    return recordResultAndAnswer(ctx, action, username, null, { button: false });
   }
 
   try {
@@ -290,11 +295,18 @@ export async function handleRewardsCommand(ctx) {
           '🔒 No reward period is open, so there is nothing to clear.',
         );
       }
-      syncRewardPeriod(rewardsData, mapState, period, username);
-      rewardsData.lastReset = new Date().toISOString(); // a fresh checklist for the King
-      await writeGist(
-        { 'rewards-nominations.json': {}, 'rewards-data.json': rewardsData },
-        { description: `Nominations cleared (${period.weekName}) by ${username}` },
+      await updateGist(
+        (gist) => {
+          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const map = JSON.parse(gist.files['map-state.json']?.content || '{}');
+          syncRewardPeriod(data, map, period, username);
+          data.lastReset = new Date().toISOString(); // a fresh checklist for the King
+          return {
+            files: { 'rewards-nominations.json': {}, 'rewards-data.json': data },
+            description: `Nominations cleared (${period.weekName}) by ${username}`,
+          };
+        },
+        { gist: gistData, deadline: Date.now() + 700 },
       );
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -421,13 +433,63 @@ export async function handleKingdomWarResultButton(ctx) {
   // The period id is a timestamp, which has colons of its own
   const [, result, ...rest] = custom_id.split(':');
   const periodId = rest.join(':');
-  const outcome = await saveKingdomWarResult(result, username, periodId);
-  if (outcome.error) return sendEphemeralMessage(res, `⚠️ ${outcome.error}`);
+  return recordResultAndAnswer(ctx, result, username, periodId, { button: true });
+}
+
+/**
+ * Saves a Kingdom War result and answers Discord. The save re-sorts every alliance's list
+ * and, when nominations land at the same moment, may need extra rounds (updateGist), which
+ * can take longer than Discord's 3 seconds. So, as with Steward approvals, Discord is
+ * answered at once and the message is filled in when the save is done (through this
+ * interaction's own token, valid 15 minutes). Without Vercel's waitUntil (e.g. in tests)
+ * the result is saved first, within the 3 seconds, and then answered as before.
+ */
+async function recordResultAndAnswer(ctx, result, username, periodId, { button }) {
+  const { res, interaction } = ctx;
+  const waitUntil = interaction?.application_id && interaction?.token ? getWaitUntil() : null;
+  if (!waitUntil) {
+    const outcome = await saveKingdomWarResult(result, username, periodId, {
+      deadline: Date.now() + 700,
+    });
+    if (outcome.error) return sendEphemeralMessage(res, `⚠️ ${outcome.error}`);
+    return res.status(200).json({
+      type: button
+        ? InteractionResponseType.UPDATE_MESSAGE
+        : InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: kingdomWarResultMessage(outcome),
+    });
+  }
+
+  const webhook = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}`;
+  const send = (url, method, body) =>
+    fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    }).then((r) => {
+      if (!r.ok) throw new Error(`Discord responded with ${r.status}`);
+    });
+  waitUntil(
+    (async () => {
+      const outcome = await saveKingdomWarResult(result, username, periodId);
+      try {
+        if (outcome.error) {
+          // Privately, as before. A command's public "thinking…" answer is removed first.
+          if (!button) await send(`${webhook}/messages/@original`, 'DELETE').catch(() => {});
+          await send(webhook, 'POST', { content: `⚠️ ${outcome.error}`, flags: 64 });
+        } else {
+          await send(`${webhook}/messages/@original`, 'PATCH', kingdomWarResultMessage(outcome));
+        }
+      } catch (err) {
+        console.error('Kingdom War result: Discord could not be answered:', err.message);
+      }
+    })(),
+  );
   return res.status(200).json({
-    type: InteractionResponseType.UPDATE_MESSAGE,
-    data: kingdomWarResultMessage(outcome),
+    type: button
+      ? InteractionResponseType.DEFERRED_UPDATE_MESSAGE
+      : InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
   });
-  return NOT_HANDLED;
 }
 
 /** Buttons from before reward periods ("Confirm 2x / 1x"): the period now opens by itself. */
@@ -506,32 +568,46 @@ export async function postKingdomWarResultPrompt(stored, botToken) {
  * Records the Kingdom War result for the open period and re-sorts every alliance's list.
  * periodId (from a button) must still be the open period. Returns { error } or the details.
  */
-export async function saveKingdomWarResult(result, actor, periodId = null) {
+export async function saveKingdomWarResult(result, actor, periodId = null, { deadline } = {}) {
   try {
-    const gistData = await getGistData();
-    const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
-    const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
-    let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
-    const calRaw = gistData.files?.['calendar-state.json']?.content;
-    const calConfig = calRaw
-      ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
-      : DEFAULT_CALENDAR_CONFIG;
+    // Re-sorts every alliance's list, so it is saved safely alongside a nomination sent at
+    // the same moment (updateGist).
+    return await updateGist(
+      (gistData) => {
+        const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+        const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+        let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+        const calRaw = gistData.files?.['calendar-state.json']?.content;
+        const calConfig = calRaw
+          ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
+          : DEFAULT_CALENDAR_CONFIG;
 
-    const period = getRewardPeriod(Date.now(), calConfig);
-    if (periodId && periodId !== period.id) {
-      return { error: 'This button is for an earlier week; that result can no longer change.' };
-    }
-    if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominations = {};
-    const previous = rewardsData.period?.result || null;
-    const error = recordKingdomWarResult(rewardsData, period, result, actor);
-    if (error) return { error };
-    nominations = reassignAllNominations(nominations, rewardsData, mapState);
+        const period = getRewardPeriod(Date.now(), calConfig);
+        if (periodId && periodId !== period.id) {
+          return {
+            error: 'This button is for an earlier week; that result can no longer change.',
+          };
+        }
+        if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominations = {};
+        const previous = rewardsData.period?.result || null;
+        const error = recordKingdomWarResult(rewardsData, period, result, actor);
+        if (error) return { error };
+        nominations = reassignAllNominations(nominations, rewardsData, mapState);
 
-    await writeGist(
-      { 'rewards-nominations.json': nominations, 'rewards-data.json': rewardsData },
-      { description: `Kingdom War ${result} (${period.weekName}) recorded by ${actor}` },
+        return {
+          period,
+          result,
+          previous,
+          actor,
+          alliances: Object.keys(nominations).length,
+          files: { 'rewards-nominations.json': nominations, 'rewards-data.json': rewardsData },
+          description: `Kingdom War ${result} (${period.weekName}) recorded by ${actor}`,
+        };
+      },
+      // Answering Discord first (recordResultAndAnswer) leaves time for every repair round;
+      // otherwise Discord's 3 seconds set the `deadline`.
+      { gist: await getGistData(), deadline },
     );
-    return { period, result, previous, actor, alliances: Object.keys(nominations).length };
   } catch (err) {
     console.error('Kingdom War result not saved:', err);
     return { error: `Could not save the result: ${err.message}` };

@@ -3,13 +3,13 @@
 // list of players; the chests are worked out from it (api/_nomination_assign.js), here and
 // again whenever the Kingdom War result changes what's available.
 
-import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken } from './_tokens.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { describeRewardPeriod, getRewardPeriod, syncRewardPeriod } from './_reward_period.js';
 import { getAllianceNominationQuota, quotaIfWon } from './_rewards_helper.js';
 import { chestCounts, cleanRankedList, rankedFromSlots } from './_nomination_assign.js';
-import { buildNomination, recordBuyoutNominees } from './_nominations.js';
+import { buildNomination, reassignAllNominations } from './_nominations.js';
 
 export default async function handler(req, res) {
   if (!isGistConfigured()) {
@@ -95,45 +95,49 @@ export default async function handler(req, res) {
     ? req.body.ranked
     : rankedFromSlots(req.body.nominations || {});
   const { names, error } = cleanRankedList(raw);
+  const refuse = (status, message) => ({ refused: { status, error: message } });
   if (error) return res.status(400).json({ error });
 
   try {
-    const gist = await readGist();
-    const rewardsData = gistJson(gist, 'rewards-data.json');
-    const mapState = gistJson(gist, 'map-state.json');
-    let nominationsStore = gistJson(gist, 'rewards-nominations.json');
+    // Worked out from the stored data and saved; redone on newer data if another save (e.g.
+    // another alliance's list, or the Kingdom War result) lands at the same moment.
+    const saved = await updateGist((gist) => {
+      const rewardsData = gistJson(gist, 'rewards-data.json');
+      const mapState = gistJson(gist, 'map-state.json');
+      let nominationsStore = gistJson(gist, 'rewards-nominations.json');
 
-    const period = getRewardPeriod(Date.now(), calendarConfig(gist));
-    if (!period.open) {
-      return res.status(409).json({
-        error: `Rewards are closed until ${new Date(period.nextOpensAt).toUTCString()}.`,
-      });
-    }
-    if (payload.period && payload.period !== period.id) {
-      return res
-        .status(409)
-        .json({ error: 'This link is for an earlier week. Run /nominate again for a new one.' });
-    }
-    if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominationsStore = {};
+      const period = getRewardPeriod(Date.now(), calendarConfig(gist));
+      if (!period.open) {
+        return refuse(
+          409,
+          `Rewards are closed until ${new Date(period.nextOpensAt).toUTCString()}.`,
+        );
+      }
+      if (payload.period && payload.period !== period.id) {
+        return refuse(409, 'This link is for an earlier week. Run /nominate again for a new one.');
+      }
+      if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominationsStore = {};
 
-    const entry = buildNomination(tag, names, rewardsData, mapState, new Date().toISOString());
-    if (entry.rank > 50) {
-      return res.status(400).json({ error: `[${tag}] has no rank in the standings.` });
-    }
-    const chests = names.length - entry.reserves.length + entry.unfilled;
-    if (chests === 0) {
-      return res.status(400).json({ error: `[${tag}] has no chests this week.` });
-    }
-    nominationsStore[tag] = entry;
-    recordBuyoutNominees(rewardsData, entry);
+      const entry = buildNomination(tag, names, rewardsData, mapState, new Date().toISOString());
+      if (entry.rank > 50) return refuse(400, `[${tag}] has no rank in the standings.`);
+      const chests = names.length - entry.reserves.length + entry.unfilled;
+      if (chests === 0) return refuse(400, `[${tag}] has no chests this week.`);
+      nominationsStore[tag] = entry;
+      // Every list is sorted again from its names, so all chests match the stored result
+      // even if this save had to be merged with a Kingdom War result saved at the same moment.
+      nominationsStore = reassignAllNominations(nominationsStore, rewardsData, mapState);
 
-    await writeGist(
-      {
-        'rewards-nominations.json': nominationsStore,
-        'rewards-data.json': rewardsData,
-      },
-      { description: `Nominations updated: [${tag}] at ${new Date().toISOString()}` },
-    );
+      return {
+        entry: nominationsStore[tag],
+        files: {
+          'rewards-nominations.json': nominationsStore,
+          'rewards-data.json': rewardsData,
+        },
+        description: `Nominations updated: [${tag}] at ${new Date().toISOString()}`,
+      };
+    });
+    if (saved.refused) return res.status(saved.refused.status).json({ error: saved.refused.error });
+    const { entry } = saved;
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     return res.status(200).json({

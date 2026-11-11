@@ -1,5 +1,5 @@
 // api/register-alliance.js
-import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
+import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken } from './_tokens.js';
 import { ALLIANCE_COMMANDS_SCHEMA } from './_bot_schema.js'; // one list, shared with the bot
 
@@ -148,28 +148,29 @@ export default async function handler(req, res) {
   }
 
   // 4. Persist Guild Mapping, Alert Config, Ticket Channel & Color to GitHub Gist
+  // Re-read and saved safely (updateGist): the slash-command step above can take a while,
+  // and other saves may have landed meanwhile.
   try {
-    if (!currentState.alliances) currentState.alliances = {};
-    if (!currentState.alliances[payload.alliance]) {
-      currentState.alliances[payload.alliance] = {};
-    }
+    await updateGist((gist) => {
+      const state = gistJson(gist, 'map-state.json');
+      if (!state.alliances) state.alliances = {};
+      if (!state.alliances[payload.alliance]) state.alliances[payload.alliance] = {};
 
-    const allianceRecord = currentState.alliances[payload.alliance];
-    allianceRecord.guild_id = cleanGuildId;
-    allianceRecord.delegated_roles = cleanRoles;
-    allianceRecord.alert_channel_id = cleanChannelId;
-    allianceRecord.alert_role_id = cleanRoleId;
-    allianceRecord.officer_channel_id = cleanOfficerChannelId;
-    allianceRecord.color = cleanColor;
+      const allianceRecord = state.alliances[payload.alliance];
+      allianceRecord.guild_id = cleanGuildId;
+      allianceRecord.delegated_roles = cleanRoles;
+      allianceRecord.alert_channel_id = cleanChannelId;
+      allianceRecord.alert_role_id = cleanRoleId;
+      allianceRecord.officer_channel_id = cleanOfficerChannelId;
+      allianceRecord.color = cleanColor;
 
-    currentState.lastUpdated = new Date().toISOString();
+      state.lastUpdated = new Date().toISOString();
 
-    await writeGist(
-      { 'map-state.json': currentState },
-      {
+      return {
+        files: { 'map-state.json': state },
         description: `Server, alerts, and ticket routing registered for [${payload.alliance}] at ${new Date().toISOString()}`,
-      },
-    );
+      };
+    });
 
     return res.status(200).json({
       success: true,
