@@ -214,15 +214,11 @@ fail the check. Details and limits: [`tools/visual-diff/README.md`](../tools/vis
 
 ## Add or change an alliance
 
-Alliances are currently listed in several places (a planned clean-up
-will merge these into one list). Until then:
-
 | What                                  | Where                                          |
 |---------------------------------------|------------------------------------------------|
-| Rank, name, academies, blacklist      | The live data (`map-state.json` in the Gist). Change it on the Alliance page, which sends a proposal to Discord for Steward approval |
+| Rank, name, academies, blacklist, colour | The live data (`map-state.json` in the Gist). Change it on the Alliance page, which sends a proposal to Discord for Steward approval |
 | The alliance's own Discord server     | Its R5 runs `/registerbot` in Discord. The alliance's tag must already exist in the live data (`map-state.json`), so add the alliance first. Later command updates reach member servers with `/registerbot action:sync` |
-| Login detection and map colour        | Vercel environment variable `DISCORD_<TAG>` = the alliance's role ID in the NAP server, plus a line in `api/colors.js` |
-| Fallback colour if none is set        | `DEFAULT_FALLBACK_COLORS` in `api/state.js`, `api/_accept_proposal.js`, `js/alliance.js` and `js/kvk-scheduler.js` (keep all four the same) |
+| Fallback colour, Discord role setting, starting rotation | **`_data/alliances.yml`**, the one list in the code: `colors` (used when an alliance has no colour of its own), `role_settings` (the Vercel setting `DISCORD_<name>` holding the alliance's role ID in the NAP server, for sign-in and map colours) and `starting_rotation`. Add the Vercel setting too |
 
 Rewards and Capitol rotation logic also depend on alliances. Read the "Rewards" entry
 in `DECISIONS.md` before changing anything there.

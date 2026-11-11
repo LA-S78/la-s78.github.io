@@ -33,7 +33,39 @@ if (workbox) {
     })
   );
 
-  // 3. Fallback routing (Upgraded for Turbo Drive compatibility)
+  // 3. Live data (map, alliances, rewards, calendar): always fetched fresh when online; the
+  //    last good answer is kept, so offline the pages show the most recent live data seen
+  //    (marked with an X-Offline-Copy header holding when it was saved). Requests add a
+  //    changing ?t=... to avoid stale copies, so answers are stored without it.
+  workbox.routing.registerRoute(
+    ({ url }) =>
+      url.origin === self.location.origin &&
+      (url.pathname === '/api/state' || url.pathname === '/api/calendar'),
+    async ({ url, event }) => {
+      const key = new URL(url.href);
+      key.searchParams.delete('t');
+      const cache = await caches.open('asylum-live-data');
+      try {
+        const response = await fetch(event.request);
+        if (response.ok) {
+          const headers = new Headers(response.headers);
+          headers.set('X-Offline-Copy', new Date().toISOString());
+          const saved = new Response(await response.clone().blob(), {
+            status: response.status,
+            headers,
+          });
+          await cache.put(key.href, saved);
+        }
+        return response;
+      } catch (err) {
+        const saved = await cache.match(key.href);
+        if (saved) return saved;
+        throw err;
+      }
+    }
+  );
+
+  // 4. Fallback routing (Upgraded for Turbo Drive compatibility)
   workbox.routing.setCatchHandler(({event}) => {
       const acceptHeader = event.request.headers.get('accept') || '';
       const isNavigate = event.request.destination === 'document';
@@ -46,7 +78,7 @@ if (workbox) {
   });
 }
 
-// 4. Listen for the update command from the UI
+// 5. Listen for the update command from the UI
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();

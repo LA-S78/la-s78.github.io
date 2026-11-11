@@ -187,3 +187,24 @@ dialog a.dialog-btn:hover {
   transform: translateY(-2px);
 }
 
+
+/* Above a live-data section (map, alliance standings, rewards card) when it isn't showing
+   fresh data: offline copy saved on this device, or nothing could be loaded
+   (js/live-data-notice.js) */
+.live-data-notice {
+  margin: 0 0 0.8rem;
+  padding: 0.5rem 0.8rem;
+  border-left: 3px solid var(--status-warning);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--status-warning) 10%, transparent);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+/* The rewards card before its tiers arrive from the live data */
+.rewards-tier-placeholder {
+  padding: 0.8rem 0;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-muted);
+}

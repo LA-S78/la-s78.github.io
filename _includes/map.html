@@ -99,16 +99,12 @@
   </div>
 </div>
 
-<script id="map-data" type="application/json">
-  {{ site.data.map_state | jsonify }}
-</script>
 <script id="city-data" type="application/json">
   {{ site.data.cities | jsonify }}
 </script>
 <script>
   // No top-level const/let here: Turbo runs this again on every visit to the page, and a
   // second declaration of the same name would throw.
-  window.MAP_STATE = JSON.parse(document.getElementById('map-data').textContent || '{}');
   window.CITY_CATALOG = JSON.parse(document.getElementById('city-data').textContent || '{}');
 </script>
 <script type="module" src="/js/map.js" defer></script>
