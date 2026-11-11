@@ -287,6 +287,23 @@ Pushing to `dev` publishes a test copy at https://dev.la-s78.app instead.
 
 ---
 
+## Use the Alliance Dashboard (for alliance leaders)
+
+Sign in (top right), open your account card and choose **🏰 Alliance Dashboard**.
+
+- **Weekly Rewards** (officers only): whether rewards are open, your chests, the Kingdom
+  War result, and whether your list was sent. R5s can open the nomination page from here.
+- **Charts and tables:** press **✏️ Edit Dashboard**, then **➕ Add a chart or table**.
+  Paste cells from Google Sheets or Excel (header row first), or use **🔗 Google Sheet /
+  Doc link** for a sheet shared as "Anyone with the link can view" and press **Load**.
+  Choose the type, who can see it (officers only, or all members), and **Save**. Linked
+  charts have **🔄 Sync now** to fetch the latest numbers.
+- **Caravan Rotor:** add players (Game Time windows optional), tap **✓ Picked** when one
+  gets a caravan, **🔄 New week** to start again. Tick **👥 Members can view** to let
+  members see it.
+
+Stewards can look at (and help with) any alliance's dashboard with **View as**.
+
 ## Help a player stuck on an old version
 
 If someone sees an old page, a missing feature, or no "Update" toast, send them:

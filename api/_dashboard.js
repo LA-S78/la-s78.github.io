@@ -49,6 +49,7 @@ export function readDashboard(gistFileJson, tag) {
     widgets: Array.isArray(d.widgets) ? d.widgets : [],
     settings: d.settings && typeof d.settings === 'object' ? d.settings : {},
     tickets: d.tickets ?? null,
+    caravan: readCaravan(d.caravan),
     updatedAt: d.updatedAt || null,
     updatedBy: d.updatedBy || null,
   };
@@ -63,6 +64,23 @@ export function visibleDashboard(dashboard, leader) {
   const widgets = dashboard.widgets.filter((w) => leader || w?.visibility === 'members');
   const out = { alliance: dashboard.alliance, widgets, updatedAt: dashboard.updatedAt };
   if (leader) out.settings = dashboard.settings;
+  // The Caravan Rotor: leaders always; members only when leaders let them (read-only, and
+  // without which officer ticked each name).
+  const c = dashboard.caravan;
+  if (leader) out.caravan = c;
+  else if (c.membersCanView) {
+    out.caravan = {
+      membersCanView: true,
+      weekStartedAt: c.weekStartedAt,
+      roster: c.roster.map(({ id, name, from, to, picked }) => ({
+        id,
+        name,
+        from,
+        to,
+        picked: picked ? { at: picked.at } : null,
+      })),
+    };
+  }
   return out;
 }
 
@@ -263,6 +281,10 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     );
     if (error) return { error: `The sheet's data can't be used: ${error}`, status: 400 };
     d.widgets[at] = widget;
+  } else if (String(edit.action || '').startsWith('caravan-')) {
+    const result = applyCaravanEdit(d.caravan, edit, { actor, now });
+    if (result.error) return { error: result.error, status: 400 };
+    d.caravan = result.caravan;
   } else if (edit.action === 'delete-widget') {
     const before = d.widgets.length;
     d.widgets = d.widgets.filter((w) => w.id !== edit.id);
@@ -287,4 +309,108 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     };
   }
   return { dashboard: d };
+}
+
+// ---------------------------------------------------------------------------------------
+// Caravan Rotor: R4s pick who gets each caravan, by who is available, not a fixed queue.
+// { membersCanView, weekStartedAt, roster: [{ id, name, from, to, picked: { at, by } | null }] }
+// from/to: an optional Game Time (UTC-2) window, "HH:MM"; to may be empty (a single time).
+
+export const CARAVAN_LIMITS = Object.freeze({ roster: 100, nameChars: 40 });
+
+const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+function readCaravan(c) {
+  const v = c && typeof c === 'object' ? c : {};
+  return {
+    membersCanView: Boolean(v.membersCanView),
+    weekStartedAt: v.weekStartedAt || null,
+    roster: (Array.isArray(v.roster) ? v.roster : []).filter((p) => p && p.id && p.name),
+  };
+}
+
+/** A Game Time like "8", "20", "20:30", "2030" as "HH:MM"; '' when empty; null when invalid. */
+export function gameTime(v) {
+  const s = String(v ?? '').trim();
+  if (!s) return '';
+  const m = s.match(/^(\d{1,2})(?::?(\d{2}))?$/);
+  if (!m) return null;
+  const t = `${m[1].padStart(2, '0')}:${m[2] || '00'}`;
+  return HHMM.test(t) ? t : null;
+}
+
+/** Applies a Caravan Rotor change (actions starting "caravan-"); { caravan } or { error }. */
+export function applyCaravanEdit(
+  stored,
+  edit,
+  { actor = '', now = new Date().toISOString() } = {},
+) {
+  const c = readCaravan(stored);
+  const roster = c.roster.map((p) => ({ ...p }));
+  const find = () => roster.findIndex((p) => p.id === edit.id);
+  const person = () => {
+    const name = clip(edit.name, CARAVAN_LIMITS.nameChars).trim();
+    if (!name) return { error: 'Enter a player name.' };
+    const from = gameTime(edit.from);
+    const to = gameTime(edit.to);
+    if (from === null || to === null)
+      return { error: 'Times are Game Time like 18:00 (or leave them empty).' };
+    if (to && !from) return { error: 'Give the start time too (or leave both empty).' };
+    return { name, from, to };
+  };
+  switch (edit.action) {
+    case 'caravan-add': {
+      if (roster.length >= CARAVAN_LIMITS.roster && !roster.some((x) => x.id === edit.id)) {
+        return { error: `At most ${CARAVAN_LIMITS.roster} players in the rotor.` };
+      }
+      const p = person();
+      if (p.error) return p;
+      const newId = /^p_[a-z0-9]{4,20}$/.test(String(edit.id || ''))
+        ? edit.id
+        : `p_${Math.random().toString(36).slice(2, 10)}`;
+      if (roster.some((x) => x.id === newId)) break; // already added (this save, repeated)
+      if (roster.some((x) => x.name.toLowerCase() === p.name.toLowerCase())) {
+        return { error: `${p.name} is already in the rotor.` };
+      }
+      roster.push({ id: newId, ...p, picked: null });
+      break;
+    }
+    case 'caravan-edit': {
+      const at = find();
+      if (at < 0) return { error: 'That player was removed.' };
+      const p = person();
+      if (p.error) return p;
+      if (roster.some((x, i) => i !== at && x.name.toLowerCase() === p.name.toLowerCase())) {
+        return { error: `${p.name} is already in the rotor.` };
+      }
+      Object.assign(roster[at], p);
+      break;
+    }
+    case 'caravan-remove': {
+      const at = find();
+      if (at >= 0) roster.splice(at, 1);
+      break;
+    }
+    case 'caravan-pick':
+    case 'caravan-unpick': {
+      const at = find();
+      if (at < 0) return { error: 'That player was removed.' };
+      // Picking someone already picked keeps the first pick (two officers tapping at once).
+      if (edit.action === 'caravan-pick' && !roster[at].picked) {
+        roster[at].picked = { at: now, by: clip(actor, 60) };
+      }
+      if (edit.action === 'caravan-unpick') roster[at].picked = null;
+      break;
+    }
+    case 'caravan-new-week':
+      roster.forEach((p) => (p.picked = null));
+      c.weekStartedAt = now;
+      break;
+    case 'caravan-visibility':
+      c.membersCanView = Boolean(edit.membersCanView);
+      break;
+    default:
+      return { error: 'Unknown change.' };
+  }
+  return { caravan: { ...c, roster } };
 }

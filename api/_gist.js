@@ -134,8 +134,9 @@ export async function readGistRevision(version, { timeoutMs } = {}) {
 
 /**
  * Merges two edits of the same JSON data: `theirs` and `mine` both started from `base`.
- * Objects are merged key by key; lists by item (items `theirs` added are added, items it
- * removed are removed); where both changed the same value differently, `mine` wins.
+ * Objects are merged key by key; lists of items with an `id` item by item (matched by id);
+ * other lists by whole item (items `theirs` added are added, items it removed are removed);
+ * where both changed the same value differently, `mine` wins.
  */
 export function mergeJson(base, theirs, mine) {
   const same = (x, y) => JSON.stringify(x) === JSON.stringify(y);
@@ -152,6 +153,22 @@ export function mergeJson(base, theirs, mine) {
     return mergeJson(fill(base), fill(theirs), fill(mine));
   }
   if (Array.isArray(base) && Array.isArray(theirs) && Array.isArray(mine)) {
+    // Lists of items with ids (dashboard widgets, rotor players): merged item by item, so
+    // two people changing different items (or the same item's different fields) both count.
+    const hasId = (v) => isObj(v) && typeof v.id === 'string' && v.id !== '';
+    if ([...base, ...theirs, ...mine].every(hasId)) {
+      const byId = (list) => new Map(list.map((v) => [v.id, v]));
+      const b = byId(base);
+      const t = byId(theirs);
+      const m = byId(mine);
+      const order = [
+        ...mine.map((v) => v.id),
+        ...theirs.map((v) => v.id).filter((id) => !m.has(id)),
+      ];
+      return order
+        .map((id) => mergeJson(b.get(id), t.get(id), m.get(id)))
+        .filter((v) => v !== undefined);
+    }
     const key = (v) => JSON.stringify(v);
     const inBase = new Set(base.map(key));
     const inTheirs = new Set(theirs.map(key));

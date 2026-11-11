@@ -739,3 +739,161 @@ html[data-theme='sanctuary'] .dw-s4 { --dw: #8fbf7f; }
   cursor: progress;
   opacity: 0.6;
 }
+
+/* ---------- Caravan Rotor ---------- */
+.dash-cv-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.dash-cv-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.dash-cv-filters {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.dash-cv-filters input,
+.dash-cv-add input,
+.dash-cv-row.is-editing input {
+  min-width: 0;
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.dash-cv-filters input {
+  flex: 1;
+}
+
+.dash-cv-filters [aria-pressed='true'] {
+  background: color-mix(in srgb, var(--accent-color) 28%, transparent);
+  border-color: var(--accent-color);
+}
+
+.dash-cv-filters small {
+  color: var(--text-muted);
+}
+
+.dash-cv-head,
+.dash-cv-picked summary {
+  margin: 0.4rem 0 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.dash-cv-picked summary {
+  cursor: pointer;
+}
+
+.dash-cv-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dash-cv-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'name tools' 'when tools';
+  align-items: center;
+  column-gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--overlay-5);
+  font-size: 0.8rem;
+}
+
+.dash-cv-name {
+  grid-area: name;
+  font-weight: 600;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-cv-when {
+  grid-area: when;
+  font-size: 0.72rem;
+  color: var(--text-main);
+}
+
+.dash-cv-tools {
+  grid-area: tools;
+  display: inline-flex;
+  gap: 4px;
+}
+
+.dash-cv-row.is-picked .dash-cv-name {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.dash-cv-row.is-editing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.dash-cv-row.is-editing .cv-name {
+  flex: 1 1 8rem;
+}
+
+.dash-cv-row.is-editing .cv-from,
+.dash-cv-row.is-editing .cv-to {
+  width: 4.5rem;
+}
+
+.dash-cv-empty {
+  padding: 6px 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.dash-cv-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 0.7rem;
+}
+
+.dash-cv-add #cv-add-name {
+  flex: 1 1 9rem;
+}
+
+.dash-cv-add #cv-add-from,
+.dash-cv-add #cv-add-to {
+  width: 5.5rem;
+}
+
+.dash-cv-bar .dash-check {
+  margin: 0;
+  font-size: 0.78rem;
+}
+
+.dash-cv-tools .dash-btn {
+  padding: 2px 8px;
+  font-size: 0.72rem;
+}
+
+.dash-cv-tools .dash-icon-btn {
+  min-width: 26px;
+  height: 24px;
+  font-size: 0.7rem;
+}
