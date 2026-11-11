@@ -6,11 +6,11 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 
 ## 🔴 High Priority
 
-- [ ] **Alliance Dashboard (`portal/dashboard.html`, `api/dashboard.js`)** — spec agreed 2026-11-11, built in four steps:
+- [x] **Alliance Dashboard (`portal/dashboard.html`, `api/dashboard.js`)** — spec agreed 2026-11-11, built in four steps:
   - [x] Foundation: page, who sees what (server-side), Steward switcher, pill link, officers-only reward card, R5 nomination link. (#78)
   - [x] Widgets: edit mode, paste-in tables, 5 themed chart types, visibility per widget, size limits. (#79)
   - [x] Google Sheets / Docs sync (Google hosts only, Sync Now). (#80)
-  - [ ] Caravan Rotor (R4-managed pick list, Undo, New Week, game time + local time, copy status).
+  - [x] Caravan Rotor (R4-managed pick list, Undo, New Week, game time + local time, copy status). (#81)
 
 - [ ] **GDPR & Gist Security Hardening**
   - Field-level AES-256 encryption for author IDs and sensitive admin notes.

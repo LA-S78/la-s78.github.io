@@ -136,6 +136,13 @@ async function editDashboard(req, res, { gist, tag, access, session }) {
 
   // Sync a saved chart from its sheet: fetched first, then saved like any other edit.
   let edit = body;
+  // A new chart or rotor player gets its id here, once: a save may be worked out again after
+  // a clash (updateGist), and must then replace the same item rather than add a second one.
+  const newId = (prefix) => `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
+  if (body.action === 'save-widget' && !/^w_[a-z0-9]{4,20}$/.test(String(body.widget?.id || ''))) {
+    edit = { ...body, widget: { ...(body.widget || {}), id: newId('w') } };
+  }
+  if (body.action === 'caravan-add') edit = { ...body, id: newId('p') };
   if (body.action === 'sync-widget') {
     const widget = readDashboard(gistJson(gist, file, {}), tag).widgets.find(
       (w) => w.id === body.id,

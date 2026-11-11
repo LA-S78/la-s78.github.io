@@ -24,6 +24,9 @@ lang: "en"
     <div id="dash-rewards-body"></div>
   </section>
 
+  <!-- Caravan Rotor: run by leaders; members see it read-only when leaders allow -->
+  <section class="dash-card dash-caravan" id="dash-caravan" hidden aria-labelledby="dash-caravan-title"></section>
+
   <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
     <button type="button" class="dash-btn" id="dash-edit-toggle" aria-pressed="false">✏️ Edit Dashboard</button>
@@ -114,6 +117,7 @@ lang: "en"
       }
 
       renderRewards();
+      renderCaravan();
       renderWidgets();
     }
 
@@ -228,6 +232,197 @@ lang: "en"
       }
     }
 
+    // ---------- Caravan Rotor ----------
+    // Times are Game Time (UTC-2) and shown with the reader's own time beside them.
+    let caravanFilter = { text: '', now: false };
+    let caravanEditing = null; // id of the row being edited
+
+    const gtToLocal = (hhmm) => {
+      const [h, m] = hhmm.split(':').map(Number);
+      const d = new Date();
+      const at = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), h + 2, m));
+      return at.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    };
+    const nowGtMinutes = () => {
+      const d = new Date();
+      return (((d.getUTCHours() - 2) * 60 + d.getUTCMinutes()) % 1440 + 1440) % 1440;
+    };
+    const minutes = (hhmm) => {
+      const [h, m] = hhmm.split(':').map(Number);
+      return h * 60 + m;
+    };
+    function windowText(p) {
+      if (!p.from) return '<span class="dash-muted">flexible</span>';
+      const gt = p.to ? `${p.from}–${p.to}` : p.from;
+      const local = p.to ? `${gtToLocal(p.from)}–${gtToLocal(p.to)}` : gtToLocal(p.from);
+      return `${gt} GT <span class="dash-muted">(${escapeHtml(local)} your time)</span>`;
+    }
+    /** Available around now: inside their window (or within an hour of a single time); flexible players always. */
+    function aroundNow(p) {
+      if (!p.from) return true;
+      const n = nowGtMinutes();
+      const f = minutes(p.from);
+      if (!p.to) return Math.min(Math.abs(n - f), 1440 - Math.abs(n - f)) <= 60;
+      const t = minutes(p.to);
+      return f <= t ? n >= f && n <= t : n >= f || n <= t; // a window past midnight
+    }
+
+    function renderCaravan() {
+      const el = $('dash-caravan');
+      const c = data.dashboard && data.dashboard.caravan;
+      const leader = isLeader();
+      el.hidden = !c;
+      if (!c) return;
+      const all = c.roster || [];
+      const picked = all.filter((p) => p.picked);
+      const q = caravanFilter.text.trim().toLowerCase();
+      const available = all
+        .filter((p) => !p.picked)
+        .filter((p) => (!q || p.name.toLowerCase().includes(q)) && (!caravanFilter.now || aroundNow(p)));
+      const now = nowGtMinutes();
+      const nowText = `${String(Math.floor(now / 60)).padStart(2, '0')}:${String(now % 60).padStart(2, '0')} GT`;
+
+      const row = (p) => {
+        if (leader && caravanEditing === p.id) {
+          return `<li class="dash-cv-row is-editing" data-id="${escapeHtml(p.id)}">
+            <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="Name">
+            <input type="text" class="cv-from" value="${escapeHtml(p.from || '')}" placeholder="18:00" aria-label="From (Game Time)">
+            <input type="text" class="cv-to" value="${escapeHtml(p.to || '')}" placeholder="22:00" aria-label="To (Game Time)">
+            <button type="button" class="dash-icon-btn" data-cv="save-edit">💾</button>
+            <button type="button" class="dash-icon-btn" data-cv="cancel-edit">✕</button>
+          </li>`;
+        }
+        const tools = leader
+          ? p.picked
+            ? '<button type="button" class="dash-icon-btn" data-cv="unpick" title="Back to available">Undo</button>'
+            : `<button type="button" class="dash-btn" data-cv="pick">✓ Picked</button>
+               <button type="button" class="dash-icon-btn" data-cv="edit" title="Edit" aria-label="Edit">✏️</button>
+               <button type="button" class="dash-icon-btn" data-cv="remove" title="Remove" aria-label="Remove">🗑️</button>`
+          : '';
+        const pickedText = p.picked
+          ? `<span class="dash-muted">✓ ${new Date(p.picked.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}${p.picked.by ? ` · ${escapeHtml(p.picked.by)}` : ''}</span>`
+          : windowText(p);
+        return `<li class="dash-cv-row${p.picked ? ' is-picked' : ''}" data-id="${escapeHtml(p.id)}">
+          <span class="dash-cv-name">${escapeHtml(p.name)}</span>
+          <span class="dash-cv-when">${pickedText}</span>
+          <span class="dash-cv-tools">${tools}</span>
+        </li>`;
+      };
+
+      el.innerHTML = `
+        <h3 class="dash-card-title" id="dash-caravan-title">🐪 Caravan Rotor <span class="dash-tag">${picked.length}/${all.length} picked</span></h3>
+        ${leader ? `<div class="dash-cv-bar">
+          <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> 👥 Members can view</label>
+          <span class="dash-cv-actions">
+            <button type="button" class="dash-icon-btn" data-cv="copy">📋 Copy status</button>
+            <button type="button" class="dash-icon-btn" data-cv="new-week">🔄 New week</button>
+          </span>
+        </div>` : `<div class="dash-cv-bar"><span class="dash-muted dash-small">Picked by your R4s when a caravan is ready.</span><button type="button" class="dash-icon-btn" data-cv="copy">📋 Copy status</button></div>`}
+        <div class="dash-cv-filters">
+          <input type="search" id="cv-search" placeholder="Search names…" value="${escapeHtml(caravanFilter.text)}" aria-label="Search names">
+          <button type="button" class="dash-icon-btn" data-cv="now" aria-pressed="${caravanFilter.now}" title="Only players available around now">⏰ Around now <small>${nowText}</small></button>
+        </div>
+        <div class="dash-cv-head">Available this week (${all.length - picked.length})</div>
+        <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${all.length - picked.length ? 'Nobody matches.' : all.length ? 'Everyone has had a caravan this week. 🎉' : leader ? 'Add players below.' : 'No players yet.'}</li>`}</ul>
+        ${picked.length ? `<details class="dash-cv-picked"${leader ? '' : ' open'}><summary>Picked this week (${picked.length})</summary><ul class="dash-cv-list">${picked.map(row).join('')}</ul></details>` : ''}
+        ${leader ? `<form class="dash-cv-add" id="cv-add">
+          <input type="text" id="cv-add-name" maxlength="40" placeholder="Player name" aria-label="Player name">
+          <input type="text" id="cv-add-from" placeholder="From 18:00" aria-label="Available from (Game Time, optional)">
+          <input type="text" id="cv-add-to" placeholder="To 22:00" aria-label="Available until (Game Time, optional)">
+          <button type="submit" class="dash-btn">➕ Add</button>
+        </form>
+        <div class="dash-muted dash-small">Times are Game Time (UTC-2) and optional; leave them empty for players who are flexible.</div>
+        <div class="dash-error" id="cv-error"></div>` : ''}`;
+      const search = $('cv-search');
+      search.addEventListener('input', () => {
+        caravanFilter.text = search.value;
+        const pos = search.selectionStart;
+        renderCaravan();
+        const again = $('cv-search');
+        again.focus();
+        again.setSelectionRange(pos, pos);
+      });
+      $('cv-members')?.addEventListener('change', (e) => caravanChange({ action: 'caravan-visibility', membersCanView: e.target.checked }));
+      $('cv-add')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const ok = await caravanChange({ action: 'caravan-add', name: $('cv-add-name').value, from: $('cv-add-from').value, to: $('cv-add-to').value });
+        if (ok) $('cv-add-name')?.focus();
+      });
+    }
+
+    async function caravanChange(change) {
+      const error = await save(change, { quiet: true });
+      if (error) {
+        const box = $('cv-error');
+        if (box) box.textContent = error;
+        else alert(`Not saved: ${error}`);
+        return false;
+      }
+      return true;
+    }
+
+    function caravanStatusText() {
+      const c = data.dashboard.caravan;
+      const left = c.roster.filter((p) => !p.picked);
+      const done = c.roster.filter((p) => p.picked);
+      const when = (p) => (p.from ? ` (${p.to ? `${p.from}–${p.to}` : p.from} GT)` : '');
+      return [
+        `🐪 [${data.alliance.tag}] Caravan Rotor: ${done.length}/${c.roster.length} picked`,
+        `Available: ${left.map((p) => p.name + when(p)).join(', ') || 'nobody'}`,
+        `Picked: ${done.map((p) => p.name).join(', ') || 'nobody yet'}`,
+      ].join('\n');
+    }
+
+    $('dash-caravan').addEventListener('click', async (e) => {
+      const b = e.target.closest('[data-cv]');
+      if (!b) return;
+      const act = b.dataset.cv;
+      const id = b.closest('[data-id]')?.dataset.id;
+      if (act === 'now') {
+        caravanFilter.now = !caravanFilter.now;
+        return renderCaravan();
+      }
+      if (act === 'copy') {
+        const text = caravanStatusText();
+        try {
+          await navigator.clipboard.writeText(text);
+          b.textContent = '✓ Copied';
+          setTimeout(() => renderCaravan(), 1200);
+        } catch (err) {
+          prompt('Copy the rotor status:', text);
+        }
+        return;
+      }
+      if (act === 'edit') {
+        caravanEditing = id;
+        return renderCaravan();
+      }
+      if (act === 'cancel-edit') {
+        caravanEditing = null;
+        return renderCaravan();
+      }
+      if (act === 'save-edit') {
+        const li = b.closest('li');
+        const ok = await caravanChange({ action: 'caravan-edit', id, name: li.querySelector('.cv-name').value, from: li.querySelector('.cv-from').value, to: li.querySelector('.cv-to').value });
+        if (ok) {
+          caravanEditing = null;
+          renderCaravan();
+        }
+        return;
+      }
+      if (act === 'remove') {
+        const p = data.dashboard.caravan.roster.find((x) => x.id === id);
+        if (!confirm(`Remove ${p ? p.name : 'this player'} from the rotor?`)) return;
+        return caravanChange({ action: 'caravan-remove', id });
+      }
+      if (act === 'new-week') {
+        if (!confirm('Start a new week? Everyone goes back to available (the names and times stay).')) return;
+        return caravanChange({ action: 'caravan-new-week' });
+      }
+      b.disabled = true;
+      return caravanChange({ action: act === 'pick' ? 'caravan-pick' : 'caravan-unpick', id });
+    });
+
     // ---------- Charts and tables ----------
     const W = window.DashboardWidgets;
     const TYPES = [
@@ -325,7 +520,7 @@ lang: "en"
     });
 
     /** Sends a change; on success shows the dashboard as saved. Returns the error text or ''. */
-    async function save(change) {
+    async function save(change, { quiet = false } = {}) {
       try {
         const res = await fetch('/api/dashboard', {
           method: 'POST',
@@ -335,10 +530,11 @@ lang: "en"
         const body = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
         data.dashboard = body.dashboard;
+        renderCaravan();
         renderWidgets();
         return '';
       } catch (err) {
-        if (!change.widget) alert(`Not saved: ${err.message}`);
+        if (!change.widget && !quiet) alert(`Not saved: ${err.message}`);
         return err.message;
       }
     }

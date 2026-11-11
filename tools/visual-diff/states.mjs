@@ -254,6 +254,31 @@ export const STATES = [
       ];
     },
   },
+  // Caravan Rotor (leader view): available players with Game Time windows, one picked.
+  {
+    name: 'dashboard-caravan',
+    needs: '#dashboard-app',
+    storage: SIGNED_IN,
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      data.dashboard.caravan = {
+        membersCanView: true,
+        weekStartedAt: '2026-11-09T00:00:00.000Z',
+        roster: [
+          { id: 'p_aria', name: 'Aria', from: '18:00', to: '22:00', picked: null },
+          { id: 'p_bram', name: 'Bram', from: '06:00', to: '', picked: null },
+          { id: 'p_cato', name: 'Cato', from: '', to: '', picked: null },
+          {
+            id: 'p_dax',
+            name: 'Dax',
+            from: '20:00',
+            to: '23:00',
+            picked: { at: '2026-11-10T10:00:00.000Z', by: 'Visual Test' },
+          },
+        ],
+      };
+    },
+  },
   {
     name: 'dashboard-member',
     needs: '#dashboard-app',
