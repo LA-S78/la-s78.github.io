@@ -51,8 +51,26 @@
     };
     const [head, ...body] = lines.map((l) => split(l).map((c) => c.trim()));
     const width = Math.max(head.length, ...body.map((r) => r.length));
-    const columns = Array.from({ length: width }, (_, i) => head[i] || `Column ${i + 1}`);
-    return { columns, rows: body.map((r) => columns.map((_, i) => r[i] ?? '')) };
+    return {
+      columns: headings(head, width),
+      rows: body.map((r) => Array.from({ length: width }, (_, i) => r[i] ?? '')),
+    };
+  }
+
+  /**
+   * Column names from a header row. A heading merged over two columns in Sheets/Excel pastes
+   * as a name then a blank: the blank becomes "<name> (2)" (then (3)…), so it can be chosen.
+   */
+  function headings(head, width) {
+    const out = [];
+    let last = '';
+    let n = 1;
+    for (let i = 0; i < width; i++) {
+      const h = String(head[i] ?? '').trim();
+      if (h) (out[i] = h), (last = h), (n = 1);
+      else out[i] = last ? `${last} (${++n})` : `Column ${i + 1}`;
+    }
+    return out;
   }
 
   /** The table back as tab-separated text (to edit it again). */
@@ -61,11 +79,15 @@
     return [line(data?.columns || []), ...(data?.rows || []).map(line)].join('\n');
   }
 
-  /** A number from a cell: "15,000,000", "15M", "1.2k", "3.5B", "45%", "-7"; NaN if none. */
+  /**
+   * A number from a cell: "15,000,000", "15M", "1.2k", "3.5B", "45%", "-7", and "2/16"
+   * (2: a count out of a total, as in "2 of 16 weeks"); NaN if none.
+   */
   function number(cell) {
-    const m = String(cell ?? '')
-      .replace(/[\s,]/g, '')
-      .match(/^([-+]?\d*\.?\d+)([kmbt%])?$/i);
+    const text = String(cell ?? '').replace(/[\s,]/g, '');
+    const frac = text.match(/^(\d*\.?\d+)\/\d*\.?\d+$/);
+    if (frac) return Number(frac[1]);
+    const m = text.match(/^([-+]?\d*\.?\d+)([kmbt%])?$/i);
     if (!m) return NaN;
     const scale = { k: 1e3, m: 1e6, b: 1e9, t: 1e12 }[(m[2] || '').toLowerCase()] || 1;
     return Number(m[1]) * scale;
@@ -97,63 +119,125 @@
     return { label, values, names: values.map((c) => cols[c]), rows };
   }
 
-  function legend(names) {
+  /**
+   * A series' colour: the theme palette (.dw-s0…), or with options.scale a ramp from dark to
+   * the theme's accent (first column darkest), for columns that run low → high.
+   * Returns the attributes: class="…" and, for the ramp or `css`, style="…".
+   */
+  function paint(w, k, n, extra = '', css = '') {
+    const styles = [];
+    let cls = extra;
+    if (w.options?.scale && n > 1) {
+      const dark = Math.round((1 - k / (n - 1)) * 72);
+      styles.push(`--dw: color-mix(in srgb, var(--accent-color), #0d1a1d ${dark}%)`);
+    } else cls = `${extra ? `${extra} ` : ''}dw-s${k % SERIES}`;
+    if (css) styles.push(css);
+    return `class="${cls}"${styles.length ? ` style="${styles.join('; ')}"` : ''}`;
+  }
+
+  function legend(names, w) {
     if (names.length < 2) return '';
     return `<div class="dw-legend">${names
-      .map((n, i) => `<span><i class="dw-s${i % SERIES}"></i>${esc(n)}</span>`)
+      .map((n, i) => `<span><i ${paint(w, i, names.length)}></i>${esc(n)}</span>`)
       .join('')}</div>`;
   }
 
-  // ---------- bar: horizontal leaderboard (best first) or vertical bars ----------
+  // ---------- bar: horizontal (one row each) or vertical; side by side or stacked ----------
+  // options.stacked: '' (side by side) | 'sum' (stacked totals) | 'percent' (stacked to 100%).
+  // Side-by-side horizontal bars are a best-first leaderboard; stacked bars keep the sheet's
+  // order. Vertical charts with many rows switch to horizontal on narrow screens (phones).
   function bar(w) {
     const s = series(w);
+    const o = w.options || {};
+    const stacked = o.stacked === 'sum' || o.stacked === 'percent' ? o.stacked : '';
     const rows = s.rows.filter((r) => r.values.some(Number.isFinite));
     if (!rows.length) return empty('No numbers to chart in the chosen column.');
-    const max = Math.max(...rows.flatMap((r) => r.values.filter(Number.isFinite)), 0) || 1;
-    if (w.options?.vertical) {
-      const shown = rows.slice(0, 30);
-      const groupW = 600 / shown.length;
-      const barW = Math.max(2, (groupW * 0.8) / s.values.length);
-      const bars = shown
-        .map((r, i) =>
-          r.values
-            .map((v, k) => {
-              if (!Number.isFinite(v) || v <= 0) return '';
-              const h = (v / max) * 170;
-              const x = i * groupW + groupW * 0.1 + k * barW;
-              return `<rect class="dw-s${k % SERIES}" x="${x.toFixed(1)}" y="${(190 - h).toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}"><title>${esc(r.label)} · ${esc(s.names[k])}: ${short(v)}</title></rect>`;
-            })
-            .join(''),
-        )
+    const total = (r) => r.values.reduce((t, v) => t + (Number.isFinite(v) && v > 0 ? v : 0), 0);
+    const n = s.values.length;
+    // A segment's tooltip: its share (stacked to 100%) and the cell as written in the sheet.
+    const tip = (r, k) => {
+      const v = r.values[k];
+      const cell = r.cells[s.values[k]];
+      const pct =
+        stacked === 'percent' && total(r) ? ` ${Math.round((v / total(r)) * 1000) / 10}%` : '';
+      const raw = pct && cell !== undefined && !/%\s*$/.test(cell) ? ` (${cell})` : '';
+      return `${r.label} · ${s.names[k]}:${pct || ` ${short(v)}`}${raw}`;
+    };
+
+    const horizontal = () => {
+      const list = stacked
+        ? rows
+        : [...rows].sort((a, b) => (b.values[0] || 0) - (a.values[0] || 0));
+      const max =
+        stacked === 'percent'
+          ? 1
+          : Math.max(
+              ...list.map((r) =>
+                stacked ? total(r) : Math.max(...r.values.filter(Number.isFinite), 0),
+              ),
+              0,
+            ) || 1;
+      const items = list
+        .map((r, i) => {
+          const scale = stacked === 'percent' ? total(r) || 1 : max;
+          const segs = r.values
+            .map((v, k) =>
+              Number.isFinite(v) && (!stacked || v > 0)
+                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`)} title="${esc(tip(r, k))}"></span>`
+                : '',
+            )
+            .join('');
+          const value = stacked === 'percent' ? '' : short(stacked ? total(r) : r.values[0]);
+          return `<li class="${i >= 25 ? 'dw-extra' : ''}"><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
+        })
         .join('');
-      return (
-        frame(
-          w,
-          bars,
-          guides(0, max),
-          shown.map((r) => r.label),
-        ) +
-        legend(s.names) +
-        more(rows.length, 30)
-      );
-    }
-    const sorted = [...rows].sort((a, b) => (b.values[0] || 0) - (a.values[0] || 0));
-    return (
-      `<ol class="dw-bars">${sorted
-        .map(
-          (r, i) =>
-            `<li class="${i >= 25 ? 'dw-extra' : ''}"><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track">${r.values
-              .map((v, k) =>
-                Number.isFinite(v)
-                  ? `<span class="dw-bar dw-s${k % SERIES}" style="width:${Math.max(0, (v / max) * 100).toFixed(1)}%" title="${esc(s.names[k])}: ${short(v)}"></span>`
-                  : '',
-              )
-              .join('')}</span><span class="dw-bar-value">${short(r.values[0])}</span></li>`,
-        )
-        .join('')}</ol>` +
-      legend(s.names) +
-      (sorted.length > 25 ? showAll(sorted.length) : '')
-    );
+      return `<ol class="dw-bars${stacked === 'percent' ? ' dw-no-value' : ''}">${items}</ol>${legend(s.names, w)}${list.length > 25 ? showAll(list.length) : ''}`;
+    };
+
+    if (!o.vertical) return horizontal();
+
+    const shown = rows.slice(0, 30);
+    const top =
+      stacked === 'percent'
+        ? 100
+        : Math.max(
+            ...shown.map((r) =>
+              stacked ? total(r) : Math.max(...r.values.filter(Number.isFinite), 0),
+            ),
+            0,
+          ) || 1;
+    const groupW = 600 / shown.length;
+    const barW = stacked ? Math.max(2, groupW * 0.7) : Math.max(2, (groupW * 0.8) / n);
+    const rects = shown
+      .map((r, i) => {
+        let base = 190;
+        return r.values
+          .map((v, k) => {
+            if (!Number.isFinite(v) || v <= 0) return '';
+            const value = stacked === 'percent' ? (v / (total(r) || 1)) * 100 : v;
+            const h = (value / top) * 170;
+            const x = stacked ? i * groupW + groupW * 0.15 : i * groupW + groupW * 0.1 + k * barW;
+            const y = stacked ? base - h : 190 - h;
+            if (stacked) base -= h;
+            return `<rect ${paint(w, k, n)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}"><title>${esc(tip(r, k))}</title></rect>`;
+          })
+          .join('');
+      })
+      .join('');
+    const g = guides(0, top, stacked === 'percent' ? (v) => `${Math.round(v)}%` : short);
+    const vertical =
+      frame(
+        w,
+        rects,
+        g,
+        shown.map((r) => r.label),
+      ) +
+      legend(s.names, w) +
+      more(rows.length, 30);
+    // Many vertical bars don't fit a phone: there, the same chart as horizontal rows.
+    return rows.length > 8
+      ? `<div class="dw-wide">${vertical}</div><div class="dw-narrow">${horizontal()}</div>`
+      : vertical;
   }
 
   /**
@@ -161,7 +245,7 @@
    * y = 20 (hi), with their values as ordinary text beside the drawing (text inside the SVG
    * would shrink with it on a phone).
    */
-  function guides(lo, hi) {
+  function guides(lo, hi, label = short) {
     const ys = [0, 0.5, 1].map((f) => ({ y: 190 - 170 * f, v: lo + (hi - lo) * f }));
     return {
       svg: ys
@@ -170,7 +254,7 @@
       labels: ys
         .map(
           ({ y, v }) =>
-            `<span class="dw-y" style="top:${((y / 200) * 100).toFixed(1)}%">${short(v)}</span>`,
+            `<span class="dw-y" style="top:${((y / 200) * 100).toFixed(1)}%">${label(v)}</span>`,
         )
         .join(''),
     };
@@ -230,7 +314,7 @@
         paths,
         guides(lo, hi),
         rows.map((r) => r.label),
-      ) + legend(s.names)
+      ) + legend(s.names, w)
     );
   }
 

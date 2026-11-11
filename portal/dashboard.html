@@ -628,7 +628,16 @@ lang: "en"
             )
             .join('')}</div>`;
         }
-        if (w.type === 'bar') html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> Vertical bars (instead of a leaderboard)</label>`;
+        if (w.type === 'bar') {
+          html += `<label for="ed-stacked">Several number columns</label>
+            <select id="ed-stacked">
+              <option value=""${!o.stacked ? ' selected' : ''}>Side by side</option>
+              <option value="sum"${o.stacked === 'sum' ? ' selected' : ''}>Stacked: totals</option>
+              <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>Stacked: each bar to 100%</option>
+            </select>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> Vertical bars${o.stacked ? '' : ' (instead of a leaderboard)'}</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> Colours as a scale (low → high, first column darkest)</label>`;
+        }
         if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> Donut (ring)</label>`;
         if (w.type === 'progress') {
           html += `<label for="ed-target">Target for everyone</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="e.g. 15M or 15000000">`;
@@ -648,6 +657,8 @@ lang: "en"
         const checked = [...document.querySelectorAll('input[name="ed-val"]:checked')].map((x) => Number(x.value));
         if (document.querySelector('input[name="ed-val"]')) o.valueCols = checked;
         if ($('ed-vertical')) o.vertical = $('ed-vertical').checked;
+        if ($('ed-stacked')) o.stacked = $('ed-stacked').value || undefined;
+        if ($('ed-scale')) o.scale = $('ed-scale').checked;
         if ($('ed-donut')) o.donut = $('ed-donut').checked;
         if ($('ed-target')) {
           // Same shorthand as the data: 15M, 50K, 1.2B, 15,000,000

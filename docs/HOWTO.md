@@ -298,6 +298,11 @@ Sign in (top right), open your account card and choose **🏰 Alliance Dashboard
   Doc link** for a sheet shared as "Anyone with the link can view" and press **Load**.
   Choose the type, who can see it (officers only, or all members), and **Save**. Linked
   charts have **🔄 Sync now** to fetch the latest numbers.
+- **Stacked bars** (e.g. how often each player scored in each Duel band): choose **Bar**,
+  tick the columns that make up each bar, and set **Stacked** to *to 100%* (each bar shows
+  the shares) or *totals*. Tick **Colours as a scale** when the columns go from low to high.
+  Blank headings under a merged cell are named for you ("3.6m- (2)"), and counts written
+  "2/16" are read as 2. Vertical charts turn sideways on phones.
 - **Caravan Rotor:** add players (Game Time windows optional), tap **✓ Picked** when one
   gets a caravan, **🔄 New week** to start again. Tick **👥 Members can view** to let
   members see it.
