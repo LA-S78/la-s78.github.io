@@ -10,26 +10,38 @@ const PAGE = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Updating Last Asylum…</title>
+<title>Updating the Survival Compendium…</title>
+<script>
+  // The reader's theme (saved by the site), so the art and colours match their header lantern.
+  try {
+    var theme = localStorage.getItem('site-theme');
+    if (theme === 'sanctuary' || theme === 'miasma') document.documentElement.className = theme;
+  } catch (e) {}
+</script>
 <style>
-  :root { color-scheme: dark; }
+  :root { color-scheme: dark; --f: contrast(1.15) saturate(1.2) hue-rotate(90deg);
+    --accent: #4cb85a; --bg: #141a15; --line: #2f4a33; --page: #0b0f0c; }
+  .sanctuary { --f: contrast(1.1) saturate(1.15); --accent: #e0a54a; --bg: #17140f; --line: #4a3b28; --page: #0b0a09; }
+  .miasma { --f: contrast(1.15) brightness(1.05) saturate(1.2) hue-rotate(245deg);
+    --accent: #b26ee0; --bg: #17121b; --line: #43304f; --page: #0c0a0e; }
   body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: #0d110e; color: #e8e2d0; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-  .card { max-width: 340px; margin: 16px; padding: 28px 24px; text-align: center; border-radius: 12px;
-    background: #161c17; border: 1px solid #3a4a3c; box-shadow: 0 8px 30px rgba(0,0,0,.5); }
-  h1 { margin: 0 0 8px; font-size: 1.15rem; color: #d4b06a; letter-spacing: .03em; }
-  p { margin: 0; color: #a9b3a5; font-size: .9rem; }
-  a { color: #d4b06a; }
-  .spin { width: 28px; height: 28px; margin: 0 auto 14px; border-radius: 50%;
-    border: 3px solid #3a4a3c; border-top-color: #d4b06a; animation: s .9s linear infinite; }
-  @keyframes s { to { transform: rotate(360deg); } }
+    background: var(--page); color: #e8e2d0; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .card { width: 100%; max-width: 360px; margin: 16px; padding: 0 0 24px; overflow: hidden; text-align: center;
+    border-radius: 12px; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(0,0,0,.6); }
+  .art { height: 150px; margin-bottom: 18px; background: url(/images/compendium-desk.webp) center 45% / cover;
+    filter: var(--f); }
+  h1 { margin: 0; font: bold 1.05rem Georgia, serif; letter-spacing: .14em; text-transform: uppercase; }
+  .sub { margin: 2px 0 14px; font: 1rem Georgia, serif; letter-spacing: .08em; color: var(--accent); }
+  p { margin: 0; padding: 0 20px; color: #b3aa98; font-size: .9rem; }
+  a { color: var(--accent); }
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="spin" aria-hidden="true"></div>
-  <h1>Updating Last Asylum…</h1>
-  <p id="msg">Fetching the latest version. Your login is kept.</p>
+  <div class="art" role="img" aria-label="The Survival Compendium on a survivor's desk"></div>
+  <h1>Last Asylum</h1>
+  <div class="sub">Survival Compendium</div>
+  <p id="msg">Updating the website to the latest version…<br>Your login is kept.</p>
 </div>
 <script>
 (function () {
@@ -44,7 +56,7 @@ const PAGE = `<!DOCTYPE html>
   setTimeout(go, 1500);
   setTimeout(function () {
     var m = document.getElementById('msg');
-    if (m) m.innerHTML = 'Taking a while? <a href="/?updated=1">Open the site</a>.';
+    if (m) m.innerHTML = 'Taking a while? <a href="/?updated=1">Open the website</a>.';
   }, 4000);
   var jobs = [];
   try {
