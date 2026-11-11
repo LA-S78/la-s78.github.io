@@ -261,16 +261,16 @@ data, so nothing there changes the live site.
 
 1. **Make the test Gist:** at gist.github.com, create a **secret** gist with one file named
    `map-state.json` containing `{}`. Copy its ID: the last part of its address.
-2. **Vercel** (project → Settings → Environment Variables), for **Preview** only:
-   - `TEST_GIST_ID`: the test Gist's ID.
-   - `TEST_CHANNEL_ID`: a Discord channel for test proposals (the bot must be able to post
-     there).
+2. **Vercel** (project → Settings → Environment Variables):
+   - `TEST_GIST_ID`: the test Gist's ID, for **Production and Preview**. Preview is what the
+     test site uses; Production lets the live bot fill it (`/devupdate`).
+   - `TEST_CHANNEL_ID` (**Preview**): a Discord channel for test proposals (the bot must be
+     able to post there).
    The existing `GIST_TOKEN` is used for the test Gist too, if both Gists are on the same
    GitHub account; otherwise add `TEST_GIST_TOKEN`.
-3. **Fill it:** GitHub → Actions → **Copy live data to test Gist** → Run workflow. Run it
-   again whenever you want fresh test data. It reads the Gist settings from Vercel; if one
-   is marked **Sensitive** there (Vercel never hands those out), the job says which, and you
-   add it under GitHub → Settings → Secrets and variables → Actions with the same name.
+3. **Fill it:** in the owner Discord server, a Steward runs **`/devupdate`**. It copies the
+   live data into the test Gist (only reading the live data) and replies privately. Run it
+   again whenever you want fresh test data.
 
 What to expect: the test site works like the live one, but proposals go to the test channel
 marked 🧪 TEST, and the live bot refuses to approve them (the bot only runs on the live
