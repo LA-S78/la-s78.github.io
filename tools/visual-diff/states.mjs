@@ -254,6 +254,57 @@ export const STATES = [
       ];
     },
   },
+  // Stacked bar to 100% with scale colours (Duel score bands), as on a phone it turns sideways.
+  {
+    name: 'dashboard-stacked',
+    needs: '#dashboard-app',
+    storage: SIGNED_IN,
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      data.dashboard.widgets = [
+        {
+          id: 'w_bands',
+          type: 'bar',
+          title: 'Alliance Duel bands',
+          note: '',
+          visibility: 'members',
+          data: {
+            columns: ['User', '3.6m-', '3.6m+', '7.2m+'],
+            rows: [
+              ['Aria', '18.75%', '68.75%', '12.50%'],
+              ['Bram', '6.25%', '37.50%', '56.25%'],
+              ['Cato', '100%', '0', '0'],
+              ['Dax', '0', '33.33%', '66.67%'],
+            ],
+          },
+          options: {
+            labelCol: 0,
+            valueCols: [1, 2, 3],
+            stacked: 'percent',
+            vertical: true,
+            scale: true,
+          },
+          updatedAt: '2026-11-09T12:00:00.000Z',
+        },
+        {
+          id: 'w_totals',
+          type: 'bar',
+          title: 'Duel weeks (totals)',
+          note: '',
+          visibility: 'members',
+          data: {
+            columns: ['User', 'Low', 'Mid', 'High'],
+            rows: [
+              ['Aria', '2/16', '11/16', '2/16'],
+              ['Bram', '1/16', '6/16', '9/16'],
+            ],
+          },
+          options: { labelCol: 0, valueCols: [1, 2, 3], stacked: 'sum' },
+          updatedAt: '2026-11-09T12:00:00.000Z',
+        },
+      ];
+    },
+  },
   // Caravan Rotor (leader view): available players with Game Time windows, one picked.
   {
     name: 'dashboard-caravan',

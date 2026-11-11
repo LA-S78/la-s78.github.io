@@ -143,10 +143,16 @@ export function toData(rows) {
   if (!rows || !rows.length) return { columns: [], rows: [] };
   const [head, ...body] = rows;
   const width = Math.max(...rows.map((r) => r.length));
-  const columns = Array.from(
-    { length: width },
-    (_, i) => String(head[i] ?? '').trim() || `Column ${i + 1}`,
-  );
+  // A heading merged over two columns arrives as a name then a blank: "<name> (2)", as when pasted.
+  const columns = [];
+  let last = '';
+  let n = 1;
+  for (let i = 0; i < width; i++) {
+    const h = String(head[i] ?? '').trim();
+    if (h) (columns[i] = h), (last = h), (n = 1);
+    else columns[i] = last ? `${last} (${++n})` : `Column ${i + 1}`;
+  }
+
   return { columns, rows: body.map((r) => columns.map((_, i) => String(r[i] ?? '').trim())) };
 }
 

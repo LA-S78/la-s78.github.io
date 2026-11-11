@@ -199,7 +199,12 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     if (columns.length < 2) return { error: 'A chart needs a column of numbers to show.' };
     options.valueCols = [options.labelCol === 1 ? 0 : 1];
   }
-  if (w.type === 'bar') options.vertical = Boolean(o.vertical);
+  if (w.type === 'bar') {
+    options.vertical = Boolean(o.vertical);
+    // Stacked: 'sum' (totals) or 'percent' (each bar to 100%); scale: colours dark → accent.
+    if (o.stacked === 'sum' || o.stacked === 'percent') options.stacked = o.stacked;
+    if (o.scale) options.scale = true;
+  }
   if (w.type === 'pie') options.donut = o.donut !== false;
   if (w.type === 'progress') {
     const target = Number(o.target);

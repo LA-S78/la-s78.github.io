@@ -897,3 +897,42 @@ html[data-theme='sanctuary'] .dw-s4 { --dw: #8fbf7f; }
   height: 24px;
   font-size: 0.7rem;
 }
+
+/* Stacked bars: segments side by side in one track, a thin gap between them */
+.dw-bar-track.dw-stack {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 0;
+  overflow: hidden;
+}
+
+.dw-stack .dw-bar {
+  flex: none;
+  min-height: 12px;
+  border-radius: 0;
+  box-shadow: inset -1px 0 0 var(--surface-dark);
+}
+
+/* Stacked to 100%: every bar is full, so no value column */
+.dw-no-value li {
+  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr);
+}
+
+.dw-no-value .dw-bar-value {
+  display: none;
+}
+
+/* A vertical chart with many bars becomes horizontal rows on narrow screens */
+.dw-narrow {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .dw-wide {
+    display: none;
+  }
+
+  .dw-narrow {
+    display: block;
+  }
+}
