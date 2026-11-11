@@ -104,6 +104,7 @@ export default async function handler(req, res) {
 
     // --- DYNAMIC ALLIANCE SCANNER ---
     let allianceName = 'Independent';
+    let allianceSource = null; // how it was found (see alliance_source below)
     const excludeList = ['R5', 'R4', 'BOTS', 'MEMBER', 'MEMBER_ROLE_ID'];
 
     for (const [envKey, envValue] of Object.entries(process.env)) {
@@ -112,6 +113,7 @@ export default async function handler(req, res) {
         const identifier = envKey.replace('DISCORD_', '');
         if (!excludeList.includes(identifier)) {
           allianceName = identifier;
+          allianceSource = 'role-id';
           break;
         }
       }
@@ -136,14 +138,17 @@ export default async function handler(req, res) {
     // No alliance role set up in the environment: find it like the bot does, by role name
     // in the NAP server (or a "[TAG]" nickname).
     if (allianceName === 'Independent') {
-      allianceName =
-        (await findAllianceTag({
-          guildId: GUILD_ID,
-          roleIds: userRoles,
-          nickname: guildData.nick,
-          alliances: await loadAlliances(),
-          botToken: DISCORD_BOT_TOKEN,
-        })) || 'Independent';
+      const found = await findAllianceTag({
+        guildId: GUILD_ID,
+        roleIds: userRoles,
+        nickname: guildData.nick,
+        alliances: await loadAlliances(),
+        botToken: DISCORD_BOT_TOKEN,
+      });
+      if (found) {
+        allianceName = found.tag;
+        allianceSource = found.via;
+      }
     }
 
     // 4. Evaluate Tiers (Specific Ranks)
@@ -184,6 +189,9 @@ export default async function handler(req, res) {
       alliance: allianceName,
       steward: isSteward(discordUserId),
       officer: officerRole ? officerRole : undefined,
+      // How the alliance was found (the pill shows it to Stewards): 'role-id' (DISCORD_<TAG>),
+      // 'role-name' or 'nickname'
+      alliance_source: allianceSource || undefined,
       session,
     });
   } catch (error) {

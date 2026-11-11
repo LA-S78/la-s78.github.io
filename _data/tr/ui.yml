@@ -195,3 +195,6 @@ identity:
   expires_days: "Girişin {n} gün içinde sona erer"
   expires_one: "Girişin 1 gün içinde sona erer"
   expires_today: "Girişin bugün sona erer"
+  found_role_id: "rol kimliğiyle bulundu"
+  found_role_name: "rol adıyla bulundu"
+  found_nickname: "takma adla bulundu"

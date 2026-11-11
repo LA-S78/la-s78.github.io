@@ -195,3 +195,6 @@ identity:
   expires_days: "La connexion expire dans {n} jours"
   expires_one: "La connexion expire dans 1 jour"
   expires_today: "La connexion expire aujourd’hui"
+  found_role_id: "trouvée par ID de rôle"
+  found_role_name: "trouvée par nom de rôle"
+  found_nickname: "trouvée par pseudo"

@@ -195,3 +195,6 @@ identity:
   expires_days: "Вход истекает через {n} дн."
   expires_one: "Вход истекает через 1 день"
   expires_today: "Вход истекает сегодня"
+  found_role_id: "найден по ID роли"
+  found_role_name: "найден по названию роли"
+  found_nickname: "найден по нику"

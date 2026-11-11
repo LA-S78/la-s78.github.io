@@ -485,3 +485,9 @@ footer {
     max-width: none;
   }
 }
+
+/* Stewards only: how sign-in found the alliance (a quiet hint, not a badge) */
+.id-pop-source {
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
