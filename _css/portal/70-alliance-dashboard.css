@@ -706,6 +706,25 @@ html[data-theme='sanctuary'] .dw-s4 {
   color: var(--text-main);
 }
 
+/* Swapped charts: the rows to draw, a scrolling list (sheets can have hundreds of rows) */
+.dash-rows {
+  max-height: 11rem;
+  overflow-y: auto;
+  padding: 4px 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.dash-cols label[hidden] {
+  display: none;
+}
+
+.dash-help {
+  margin: 2px 0 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
 .dash-editor-preview {
   margin-top: 0.8rem;
   padding-top: 0.6rem;
