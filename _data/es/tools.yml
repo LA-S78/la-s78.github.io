@@ -546,3 +546,143 @@ event_presets:
   gear_event_desc: Obtén recompensas por mejorar el equipamiento
   cheese_trap_title: Trampa de Queso
   cheese_trap_desc: Ayuda a defenderte del Ladrón de Queso
+alliance_planner:
+  roster: 'Lista NAP:'
+  roster_loading: "-- Alianzas"
+  nap_alliances: "{n} Alianzas NAP"
+  planner_mode: Modo Planificador
+  submit_plan: Enviar plan
+  tag_placeholder: TAG (ej. WLO)
+  name_placeholder: Nombre completo de la alianza
+  add_contender: "+ Añadir competidor"
+  loading_standings: Cargando la clasificación...
+  standings_failed: No se pudo cargar la clasificación.
+  protected_academy: Academia protegida
+  change_color: Cambiar color de [{tag}]
+  academy_of: Academia de [{tag}]
+  link_academy: "+ Vincular academia"
+  nap_protected: Protegido por NAP
+  external: Externo
+  revoke_nap: Revocar NAP
+  grant_nap: Conceder NAP
+  remove_alliance: Eliminar alianza
+  academy_prompt: 'Introduce el tag exacto de la alianza para vincularla como academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, ej. RâvN o râvn):'
+  academy_available: 'Disponible: {tags}'
+  academy_new: 'O escribe un nuevo tag de academia para crearla:'
+  already_exists: La alianza [{tag}] ya existe con esa capitalización exacta.
+  no_changes: No se detectaron modificaciones en la clasificación actual.
+  proposal_title: "👑 Enviar clasificación NAP y propuesta diplomática"
+  diff_rank: "{tag}: Rango {from} ➔ {to}"
+  diff_academy: "{tag}: Asignada como academia de {parent}"
+  diff_nap: "{tag}: Estado NAP {status}"
+  nap_status_protected: Protegido
+  nap_status_revoked: Revocado
+  diff_color: "{tag}: Color actualizado a {color}"
+  diff_added: "{added}: Rango #{rank} ({name})"
+  added_tag: Añadido [{tag}]
+  diff_removed: "{removed} de la clasificación"
+  removed_tag: Eliminado [{tag}]
+  diff_modified: Modificado [{tag}]
+  unknown: Desconocido
+blacklist_planner:
+  players_title: "🚫 Jugadores en lista negra"
+  alliances_title: "⚠️ Alianzas en lista negra"
+  player_placeholder: IGN del jugador
+  alliance_placeholder: TAG de la alianza
+  add: "+ Añadir"
+  edit: Editar lista negra
+  stop_editing: Dejar de editar
+  submit: Enviar lista negra
+  loading: Cargando...
+  failed: No se pudo cargar la lista negra.
+  no_players: No hay comandantes rebeldes en la lista negra.
+  no_alliances: No hay alianzas hostiles en la lista negra.
+  added: "{name} añadido a tu plan. Aún no se ha enviado: presiona {submit} sobre la lista negra para enviarlo al liderazgo para su aprobación."
+  removed: "{name} eliminado de tu plan. Aún no se ha enviado: presiona {submit} sobre la lista negra para enviarlo al liderazgo para su aprobación."
+  duplicate: "{name} ya está en la lista negra."
+  press_edit: Presiona {edit} primero.
+  add_failed: 'No se pudo añadir {name}: {error}'
+  no_changes: No hay cambios en la lista negra para enviar.
+  proposal_title: "🚫 Enviar propuesta de lista negra NAP"
+  diff_add: "{add} {what} {name}"
+  diff_remove: "{remove} {what} {name}"
+  add_word: Añadir
+  remove_word: Eliminar
+  what_alliance: alianza
+  what_player: jugador
+  sent: Propuesta de lista negra enviada al liderazgo en Discord. Se aplicará una vez que un R5 la apruebe.
+map_planner:
+  view: 'Ver:'
+  levels: Niveles
+  alliances: Alianzas
+  resources: Recursos
+  buff_summary: Resumen de buffs
+  toggle_buff_summary: Alternar resumen de buffs
+  close_buff_summary: Cerrar resumen de buffs
+  planner_mode: Modo Planificador
+  override_placeholder: EJ. WLO
+  override_help: Escribe un tag para anular las asignaciones de clic. Déjalo en blanco para ciclar.
+  submit_plan: Enviar plan
+  fullscreen: Pantalla completa
+  toggle_fullscreen: Alternar pantalla completa
+  exit: Salir
+  grain: "🌾 Grano"
+  timber: "🪵 Madera"
+  herbs: "🌿 Hierbas"
+  solid_gather: 'Sólido: Recolección'
+  stripe_output: 'Franja: Producción'
+  level_unknown: Nivel --
+  level: Nivel {n}
+  hover: Pasa el ratón sobre un territorio
+  owner: 'Propietario:'
+  unclaimed: Sin reclamar
+  buff: 'Buff:'
+  none: Ninguno
+  no_active_buff: Sin buff activo
+  drawer_title: Distribución de buffs de alianza
+  drawer_subtitle: Recuento dinámico basado en el mapa activo / asignaciones del planificador
+  no_claims: Ninguna alianza reclama territorio actualmente.
+  no_buffs: Sin buffs activos asignados
+  cities_one: "{n} ciudad"
+  cities_other: "{n} ciudades"
+  col_alliance: Alianza
+  col_holdings: Propiedades
+  col_buffs: Buffs activos
+  buff_research_speed: Velocidad de investigación
+  buff_troop_training_speed: Velocidad de entrenamiento
+  buff_building_speed: Velocidad de construcción
+  buff_march_speed: Velocidad de marcha
+  buff_grain_gathering: Recolección de grano
+  buff_grain_output: Producción de grano
+  buff_timber_gathering: Recolección de madera
+  buff_timber_output: Producción de madera
+  buff_herb_gathering: Recolección de hierbas
+  buff_herb_output: Producción de hierbas
+  no_changes: No se detectaron cambios en tu borrador.
+  proposal_title: "🗺️ Enviar propuesta de territorio del mapa"
+proposals:
+  title: Enviar propuesta
+  close: Cerrar
+  summary: Resumen de la propuesta
+  notes: Notas de liderazgo (Opcional)
+  notes_placeholder: Explica el contexto o la razón estratégica de esta propuesta...
+  transmit: Transmitir propuesta
+  user_avatar: Avatar de usuario
+  submitting_as: Enviando como {name}
+  auth_required: Autenticación de liderazgo requerida
+  auth_reason: Las propuestas requieren liderazgo verificado en Discord o rango de oficial para ser enviadas.
+  log_in: Iniciar sesión con Discord para enviar
+  oauth_unreachable: El servicio OAuth de Discord no está accesible. Por favor, actualiza e inténtalo de nuevo.
+  transmit_discord: Transmitir a Discord
+  leaders_only_note: Solo los líderes R4 y R5 pueden enviar propuestas. Pide a tu líder de alianza que envíe este plan.
+  leaders_only: Solo líderes
+  login_expired: Tu sesión ha expirado. Inicia sesión con Discord de nuevo para enviar esta propuesta.
+  transmitted: "✅ ¡Propuesta transmitida con éxito al liderazgo NAP en Discord!"
+  transmitting: Transmitiendo...
+  resume: Reanudar propuesta de {type}
+  draft_restored: Borrador restaurado de la sesión anterior.
+  pending_shifts: Cambios pendientes
+  server_error: El servidor respondió con HTTP {status}
+live_data:
+  failed: "⚠️ No se pudieron cargar los datos más recientes. Comprueba tu conexión y actualiza la página."
+  offline: "📴 Desconectado: mostrando los datos guardados en este dispositivo ({when})."

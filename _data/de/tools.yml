@@ -546,3 +546,143 @@ event_presets:
   gear_event_desc: Erhalte Belohnungen für das Verbessern von Ausrüstung
   cheese_trap_title: Cheese-Falle
   cheese_trap_desc: Hilf bei der Abwehr des Cheese-Diebs
+alliance_planner:
+  roster: 'NAP Roster:'
+  roster_loading: "-- Allianzen"
+  nap_alliances: "{n} NAP-Allianzen"
+  planner_mode: Planer-Modus
+  submit_plan: Plan einreichen
+  tag_placeholder: TAG (z. B. WLO)
+  name_placeholder: Vollständiger Allianzname
+  add_contender: "+ Allianz hinzufügen"
+  loading_standings: Rangliste wird geladen…
+  standings_failed: Rangliste konnte nicht geladen werden.
+  protected_academy: Geschützte Akademie
+  change_color: "[{tag}]-Farbe ändern"
+  academy_of: Akademie von [{tag}]
+  link_academy: "+ Akademie verknüpfen"
+  nap_protected: NAP-geschützt
+  external: Extern
+  revoke_nap: NAP widerrufen
+  grant_nap: NAP gewähren
+  remove_alliance: Allianz entfernen
+  academy_prompt: 'Gib das genaue Allianz-TAG ein, um es als Akademie unter [{tag}] zu verknüpfen (Groß-/Kleinschreibung beachten, z. B. RâvN oder râvn):'
+  academy_available: 'Verfügbar: {tags}'
+  academy_new: 'Oder gib ein neues Akademie-TAG ein, um es zu erstellen:'
+  already_exists: Die Allianz [{tag}] existiert bereits unter genau dieser Schreibweise.
+  no_changes: Keine Änderungen in der aktuellen Rangliste erkannt.
+  proposal_title: "👑 NAP-Rangliste & Diplomatievorschlag einreichen"
+  diff_rank: "{tag}: Rang {from} ➔ {to}"
+  diff_academy: "{tag}: Zugewiesen als Akademie von {parent}"
+  diff_nap: "{tag}: NAP-Status {status}"
+  nap_status_protected: Geschützt
+  nap_status_revoked: Widerrufen
+  diff_color: "{tag}: Farbe aktualisiert auf {color}"
+  diff_added: "{added}: Rang #{rank} ({name})"
+  added_tag: "[{tag}] hinzugefügt"
+  diff_removed: "{removed} aus der Rangliste"
+  removed_tag: "[{tag}] entfernt"
+  diff_modified: "[{tag}] geändert"
+  unknown: Unbekannt
+blacklist_planner:
+  players_title: "🚫 Blacklist Spieler"
+  alliances_title: "⚠️ Blacklist Allianzen"
+  player_placeholder: Spieler IGN
+  alliance_placeholder: Allianz-TAG
+  add: "+ Hinzufügen"
+  edit: Blacklist bearbeiten
+  stop_editing: Bearbeitung beenden
+  submit: Blacklist einreichen
+  loading: Lädt…
+  failed: Blacklist konnte nicht geladen werden.
+  no_players: Keine abtrünnigen Kommandanten auf der Blacklist.
+  no_alliances: Keine feindlichen Allianzen auf der Blacklist.
+  added: "{name} wurde deinem Plan hinzugefügt. Dies wurde noch nicht gesendet: Drücke {submit} über der Blacklist, um es zur Genehmigung an die Führung zu senden."
+  removed: "{name} wurde aus deinem Plan entfernt. Dies wurde noch nicht gesendet: Drücke {submit} über der Blacklist, um es zur Genehmigung an die Führung zu senden."
+  duplicate: "{name} steht bereits auf der Blacklist."
+  press_edit: Drücke zuerst {edit}.
+  add_failed: "{name} konnte nicht hinzugefügt werden: {error}"
+  no_changes: Keine Blacklist-Änderungen zum Senden vorhanden.
+  proposal_title: "🚫 NAP-Blacklist-Vorschlag einreichen"
+  diff_add: "{add} {what} {name}"
+  diff_remove: "{remove} {what} {name}"
+  add_word: Hinzufügen
+  remove_word: Entfernen
+  what_alliance: Allianz
+  what_player: Spieler
+  sent: Blacklist-Vorschlag wurde auf Discord an die Führung gesendet. Er tritt in Kraft, sobald ein R4/R5 ihn genehmigt.
+map_planner:
+  view: 'Ansicht:'
+  levels: Level
+  alliances: Allianzen
+  resources: Ressourcen
+  buff_summary: Buff-Zusammenfassung
+  toggle_buff_summary: Buff-Zusammenfassung umschalten
+  close_buff_summary: Buff-Zusammenfassung schließen
+  planner_mode: Planer-Modus
+  override_placeholder: Z. B. WLO
+  override_help: Gib ein TAG ein, um Klick-Zuweisungen zu überschreiben. Leer lassen zum Durchwechseln.
+  submit_plan: Plan einreichen
+  fullscreen: Vollbild
+  toggle_fullscreen: Vollbild umschalten
+  exit: Beenden
+  grain: "🌾 Getreide"
+  timber: "🪵 Holz"
+  herbs: "🌿 Kräuter"
+  solid_gather: 'Solid: Sammeln'
+  stripe_output: 'Stripe: Produktion'
+  level_unknown: Level --
+  level: Level {n}
+  hover: Über ein Gebiet fahren
+  owner: 'Besitzer:'
+  unclaimed: Nicht beansprucht
+  buff: 'Buff:'
+  none: Keiner
+  no_active_buff: Kein aktiver Buff
+  drawer_title: Allianz-Buff-Verteilung
+  drawer_subtitle: Dynamische Übersicht basierend auf aktiven Karten-/Planer-Zuweisungen
+  no_claims: Aktuell beanspruchen keine Allianzen Gebiete.
+  no_buffs: Keine aktiven Buffs zugewiesen
+  cities_one: "{n} Stadt"
+  cities_other: "{n} Städte"
+  col_alliance: Allianz
+  col_holdings: Besitztümer
+  col_buffs: Aktive Buffs
+  buff_research_speed: Forschungsgeschwindigkeit
+  buff_troop_training_speed: Truppenausbildungstempo
+  buff_building_speed: Baugeschwindigkeit
+  buff_march_speed: Marschgeschwindigkeit
+  buff_grain_gathering: Getreidesammeln
+  buff_grain_output: Getreideproduktion
+  buff_timber_gathering: Holzsammeln
+  buff_timber_output: Holzproduktion
+  buff_herb_gathering: Kräutersammeln
+  buff_herb_output: Kräuterproduktion
+  no_changes: Keine Änderungen in deinem Planentwurf erkannt.
+  proposal_title: "🗺️ Vorschlag für Kartengebiet einreichen"
+proposals:
+  title: Vorschlag einreichen
+  close: Schließen
+  summary: Zusammenfassung des Vorschlags
+  notes: Anmerkungen der Führung (Optional)
+  notes_placeholder: Erkläre den Kontext oder den strategischen Grund für diesen Vorschlag...
+  transmit: Vorschlag übermitteln
+  user_avatar: Benutzer-Avatar
+  submitting_as: Einreichen als {name}
+  auth_required: Führungs-Authentifizierung erforderlich
+  auth_reason: Vorschläge erfordern eine verifizierte Discord-Führungsrolle oder Offiziersstatus zum Senden.
+  log_in: Über Discord anmelden zum Einreichen
+  oauth_unreachable: Discord OAuth-Dienst ist nicht erreichbar. Bitte neu laden und erneut versuchen.
+  transmit_discord: An Discord übermitteln
+  leaders_only_note: Nur R4- und R5-Führungskräfte können Vorschläge senden. Bitte deinen Allianzführer, diesen Plan einzureichen.
+  leaders_only: Nur für Führung
+  login_expired: Deine Anmeldung ist abgelaufen. Melde dich erneut mit Discord an, um diesen Vorschlag zu senden.
+  transmitted: "✅ Vorschlag erfolgreich an die NAP-Führung auf Discord übermittelt!"
+  transmitting: Übermittlung läuft...
+  resume: "{type}-Vorschlag fortsetzen"
+  draft_restored: Entwurf aus vorheriger Sitzung wiederhergestellt.
+  pending_shifts: Ausstehende Verschiebungen
+  server_error: Server antwortete mit HTTP {status}
+live_data:
+  failed: "⚠️ Die neuesten Daten konnten nicht geladen werden. Überprüfe deine Verbindung und aktualisiere die Seite."
+  offline: "📴 Offline: Zeige die auf diesem Gerät gespeicherten Daten ({when})."

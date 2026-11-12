@@ -546,3 +546,143 @@ event_presets:
   gear_event_desc: Ricevi ricompense migliorando l'equipaggiamento
   cheese_trap_title: Trappola Cheese
   cheese_trap_desc: Aiuta a respingere il Ladro di Cheese
+alliance_planner:
+  roster: 'Lista NAP:'
+  roster_loading: "-- Alleanze"
+  nap_alliances: "{n} Alleanze NAP"
+  planner_mode: Modalità pianificatore
+  submit_plan: Invia piano
+  tag_placeholder: TAG (es. WLO)
+  name_placeholder: Nome completo alleanza
+  add_contender: "+ Aggiungi contendente"
+  loading_standings: Caricamento classifiche in corso...
+  standings_failed: Impossibile caricare le classifiche.
+  protected_academy: Accademia protetta
+  change_color: Cambia colore [{tag}]
+  academy_of: Accademia di [{tag}]
+  link_academy: "+ Collega accademia"
+  nap_protected: NAP protetto
+  external: Esterno
+  revoke_nap: Revoca NAP
+  grant_nap: Concedi NAP
+  remove_alliance: Rimuovi alleanza
+  academy_prompt: 'Inserisci l''esatto tag dell''alleanza da collegare come accademia sotto [{tag}] (distingue tra maiuscole e minuscole, es. RâvN o râvn):'
+  academy_available: 'Disponibile: {tags}'
+  academy_new: 'O digita un nuovo tag accademia per crearla:'
+  already_exists: L'alleanza [{tag}] esiste già con questa esatta capitalizzazione.
+  no_changes: Nessuna modifica rilevata nelle classifiche correnti.
+  proposal_title: "👑 Invia classifiche NAP e proposta diplomatica"
+  diff_rank: "{tag}: Posizione {from} ➔ {to}"
+  diff_academy: "{tag}: Assegnata come accademia di {parent}"
+  diff_nap: "{tag}: Stato NAP {status}"
+  nap_status_protected: Protetto
+  nap_status_revoked: Revocato
+  diff_color: "{tag}: Colore aggiornato a {color}"
+  diff_added: "{added}: Posizione #{rank} ({name})"
+  added_tag: Aggiunta [{tag}]
+  diff_removed: "{removed} dalle classifiche"
+  removed_tag: Rimossa [{tag}]
+  diff_modified: Modificata [{tag}]
+  unknown: Sconosciuto
+blacklist_planner:
+  players_title: "🚫 Giocatori in blacklist"
+  alliances_title: "⚠️ Alleanze in blacklist"
+  player_placeholder: IGN giocatore
+  alliance_placeholder: TAG alleanza
+  add: "+ Aggiungi"
+  edit: Modifica blacklist
+  stop_editing: Termina modifica
+  submit: Invia blacklist
+  loading: Caricamento...
+  failed: Impossibile caricare la blacklist.
+  no_players: Nessun comandante ribelle in blacklist.
+  no_alliances: Nessuna alleanza ostile in blacklist.
+  added: "{name} aggiunto al tuo piano. Non è ancora stato inviato: premi {submit} sopra la blacklist per inviarlo alla leadership per l'approvazione."
+  removed: "{name} rimosso dal tuo piano. Non è ancora stato inviato: premi {submit} sopra la blacklist per inviarlo alla leadership per l'approvazione."
+  duplicate: "{name} è già presente nella blacklist."
+  press_edit: Premi prima {edit}.
+  add_failed: 'Impossibile aggiungere {name}: {error}'
+  no_changes: Nessuna modifica alla blacklist da inviare.
+  proposal_title: "🚫 Invia proposta blacklist NAP"
+  diff_add: "{add} {what} {name}"
+  diff_remove: "{remove} {what} {name}"
+  add_word: Aggiungi
+  remove_word: Rimuovi
+  what_alliance: alleanza
+  what_player: giocatore
+  sent: Proposta di blacklist inviata alla leadership su Discord. Sarà applicata una volta approvata da un ufficiale.
+map_planner:
+  view: 'Visualizza:'
+  levels: Livelli
+  alliances: Alleanze
+  resources: Risorse
+  buff_summary: Riepilogo buff
+  toggle_buff_summary: Attiva/disattiva riepilogo buff
+  close_buff_summary: Chiudi riepilogo buff
+  planner_mode: Modalità pianificatore
+  override_placeholder: ES. WLO
+  override_help: Digita un tag per sovrascrivere le assegnazioni. Lascia vuoto per scorrere.
+  submit_plan: Invia piano
+  fullscreen: Schermo intero
+  toggle_fullscreen: Attiva/disattiva schermo intero
+  exit: Esci
+  grain: "🌾 Grano"
+  timber: "🪵 Legname"
+  herbs: "🌿 Erbe"
+  solid_gather: 'Solido: Raccolta'
+  stripe_output: 'Striscia: Produzione'
+  level_unknown: Livello --
+  level: Livello {n}
+  hover: Passa sopra un territorio
+  owner: 'Proprietario:'
+  unclaimed: Non reclamato
+  buff: 'Buff:'
+  none: Nessuno
+  no_active_buff: Nessun buff attivo
+  drawer_title: Distribuzione buff alleanza
+  drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni pianificate
+  no_claims: Nessuna alleanza reclama attualmente il territorio.
+  no_buffs: Nessun buff attivo assegnato
+  cities_one: "{n} città"
+  cities_other: "{n} città"
+  col_alliance: Alleanza
+  col_holdings: Possedimenti
+  col_buffs: Buff attivi
+  buff_research_speed: Velocità ricerca
+  buff_troop_training_speed: Velocità addestramento truppe
+  buff_building_speed: Velocità costruzione
+  buff_march_speed: Velocità marcia
+  buff_grain_gathering: Raccolta grano
+  buff_grain_output: Produzione grano
+  buff_timber_gathering: Raccolta legname
+  buff_timber_output: Produzione legname
+  buff_herb_gathering: Raccolta erbe
+  buff_herb_output: Produzione erbe
+  no_changes: Nessuna modifica rilevata nella bozza del piano.
+  proposal_title: "🗺️ Invia proposta territori mappa"
+proposals:
+  title: Invia proposta
+  close: Chiudi
+  summary: Riepilogo proposta
+  notes: Note della leadership (opzionale)
+  notes_placeholder: Spiega il contesto o la ragione strategica di questa proposta...
+  transmit: Trasmetti proposta
+  user_avatar: Avatar utente
+  submitting_as: Invio come {name}
+  auth_required: Richiesta autenticazione leadership
+  auth_reason: Le proposte richiedono uno status verificato di leadership o ufficiale su Discord per essere inviate.
+  log_in: Accedi tramite Discord per inviare
+  oauth_unreachable: Servizio Discord OAuth non raggiungibile. Aggiorna e riprova.
+  transmit_discord: Trasmetti su Discord
+  leaders_only_note: Solo i leader R4 e R5 possono inviare proposte. Chiedi al tuo leader dell'alleanza di inviare questo piano.
+  leaders_only: Solo leader
+  login_expired: Il tuo accesso è scaduto. Accedi di nuovo con Discord per inviare questa proposta.
+  transmitted: "✅ Proposta trasmessa con successo alla leadership NAP su Discord!"
+  transmitting: Trasmissione in corso...
+  resume: Riprendi proposta {type}
+  draft_restored: Bozza ripristinata dalla sessione precedente.
+  pending_shifts: Cambiamenti in attesa
+  server_error: Il server ha risposto con HTTP {status}
+live_data:
+  failed: "⚠️ Impossibile caricare i dati più recenti. Controlla la connessione e aggiorna la pagina."
+  offline: "📴 Offline: visualizzazione dei dati salvati su questo dispositivo ({when})."

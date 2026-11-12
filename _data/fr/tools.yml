@@ -546,3 +546,143 @@ event_presets:
   gear_event_desc: Soyez récompensé pour l'amélioration de votre équipement
   cheese_trap_title: Piège à Fromage
   cheese_trap_desc: Aidez à repousser le Voleur de Fromage
+alliance_planner:
+  roster: 'Liste NAP :'
+  roster_loading: "-- Alliances"
+  nap_alliances: "{n} alliances NAP"
+  planner_mode: Mode planificateur
+  submit_plan: Soumettre le plan
+  tag_placeholder: TAG (ex. WLO)
+  name_placeholder: Nom complet de l'alliance
+  add_contender: "+ Ajouter un concurrent"
+  loading_standings: Chargement du classement…
+  standings_failed: Impossible de charger le classement.
+  protected_academy: Académie protégée
+  change_color: Changer la couleur de [{tag}]
+  academy_of: Académie de [{tag}]
+  link_academy: "+ Lier une académie"
+  nap_protected: NAP protégé
+  external: Externe
+  revoke_nap: Révoquer le NAP
+  grant_nap: Accorder le NAP
+  remove_alliance: Supprimer l'alliance
+  academy_prompt: 'Entrez le tag exact de l''alliance à lier en tant qu''Académie sous [{tag}] (sensible à la casse, ex. RâvN ou râvn) :'
+  academy_available: 'Disponible : {tags}'
+  academy_new: 'Ou tapez un nouveau tag d''académie pour le créer :'
+  already_exists: L'alliance [{tag}] existe déjà avec cette capitalisation exacte.
+  no_changes: Aucune modification détectée dans le classement actuel.
+  proposal_title: "👑 Soumettre le classement NAP et la proposition diplomatique"
+  diff_rank: "{tag} : Rang {from} ➔ {to}"
+  diff_academy: "{tag} : Assignée comme académie de {parent}"
+  diff_nap: "{tag} : Statut NAP {status}"
+  nap_status_protected: Protégé
+  nap_status_revoked: Révoqué
+  diff_color: "{tag} : Couleur mise à jour en {color}"
+  diff_added: "{added} : Rang #{rank} ({name})"
+  added_tag: Ajouté [{tag}]
+  diff_removed: "{removed} du classement"
+  removed_tag: Supprimé [{tag}]
+  diff_modified: Modifié [{tag}]
+  unknown: Inconnu
+blacklist_planner:
+  players_title: "🚫 Joueurs sur liste noire"
+  alliances_title: "⚠️ Alliances sur liste noire"
+  player_placeholder: Pseudo du joueur
+  alliance_placeholder: TAG de l'alliance
+  add: "+ Ajouter"
+  edit: Modifier la liste noire
+  stop_editing: Arrêter la modification
+  submit: Soumettre la liste noire
+  loading: Chargement…
+  failed: Impossible de charger la liste noire.
+  no_players: Aucun commandant rebelle sur liste noire.
+  no_alliances: Aucune alliance hostile sur liste noire.
+  added: "{name} ajouté à votre plan. Il n'est pas encore envoyé : appuyez sur {submit} au-dessus de la liste noire pour l'envoyer aux dirigeants pour approbation."
+  removed: "{name} retiré de votre plan. Il n'est pas encore envoyé : appuyez sur {submit} au-dessus de la liste noire pour l'envoyer aux dirigeants pour approbation."
+  duplicate: "{name} est déjà sur la liste noire."
+  press_edit: Appuyez d'abord sur {edit}.
+  add_failed: 'Impossible d''ajouter {name} : {error}'
+  no_changes: Aucun changement de liste noire à envoyer.
+  proposal_title: "🚫 Soumettre une proposition de liste noire NAP"
+  diff_add: "{add} {what} {name}"
+  diff_remove: "{remove} {what} {name}"
+  add_word: Ajouter
+  remove_word: Retirer
+  what_alliance: l'alliance
+  what_player: le joueur
+  sent: Proposition de liste noire envoyée aux dirigeants sur Discord. Elle s'appliquera une fois qu'un Intendant l'aura approuvée.
+map_planner:
+  view: 'Vue :'
+  levels: Niveaux
+  alliances: Alliances
+  resources: Ressources
+  buff_summary: Résumé des buffs
+  toggle_buff_summary: Afficher/Masquer le résumé des buffs
+  close_buff_summary: Fermer le résumé des buffs
+  planner_mode: Mode planificateur
+  override_placeholder: EX. WLO
+  override_help: Tapez un tag pour remplacer les attributions de clic. Laissez vide pour faire défiler.
+  submit_plan: Soumettre le plan
+  fullscreen: Plein écran
+  toggle_fullscreen: Basculer en plein écran
+  exit: Quitter
+  grain: "🌾 Grain"
+  timber: "🪵 Bois"
+  herbs: "🌿 Herbes"
+  solid_gather: 'Plein : Récolte'
+  stripe_output: 'Rayé : Production'
+  level_unknown: Niveau --
+  level: Niveau {n}
+  hover: Survolez un territoire
+  owner: 'Propriétaire :'
+  unclaimed: Non réclamé
+  buff: 'Buff :'
+  none: Aucun
+  no_active_buff: Aucun buff actif
+  drawer_title: Distribution des buffs d'alliance
+  drawer_subtitle: Calcul dynamique basé sur les attributions actives de la carte / du planificateur
+  no_claims: Aucune alliance ne réclame actuellement de territoire.
+  no_buffs: Aucun buff actif assigné
+  cities_one: "{n} ville"
+  cities_other: "{n} villes"
+  col_alliance: Alliance
+  col_holdings: Possessions
+  col_buffs: Buffs actifs
+  buff_research_speed: Vitesse de recherche
+  buff_troop_training_speed: Vitesse d'entraînement des troupes
+  buff_building_speed: Vitesse de construction
+  buff_march_speed: Vitesse de marche
+  buff_grain_gathering: Récolte de grain
+  buff_grain_output: Production de grain
+  buff_timber_gathering: Récolte de bois
+  buff_timber_output: Production de bois
+  buff_herb_gathering: Récolte d'herbes
+  buff_herb_output: Production d'herbes
+  no_changes: Aucun changement détecté dans votre brouillon de plan.
+  proposal_title: "🗺️ Soumettre une proposition de territoire sur la carte"
+proposals:
+  title: Soumettre une proposition
+  close: Fermer
+  summary: Résumé de la proposition
+  notes: Notes de la direction (Optionnel)
+  notes_placeholder: Expliquez le contexte ou la raison stratégique de cette proposition...
+  transmit: Transmettre la proposition
+  user_avatar: Avatar utilisateur
+  submitting_as: Soumission en tant que {name}
+  auth_required: Authentification de la direction requise
+  auth_reason: Les propositions nécessitent un statut de dirigeant ou d'officier vérifié sur Discord pour être envoyées.
+  log_in: Connectez-vous via Discord pour soumettre
+  oauth_unreachable: Le service OAuth Discord est injoignable. Veuillez rafraîchir et réessayer.
+  transmit_discord: Transmettre sur Discord
+  leaders_only_note: Seuls les dirigeants R4 et R5 peuvent envoyer des propositions. Demandez à votre chef d'alliance de soumettre ce plan.
+  leaders_only: Dirigeants uniquement
+  login_expired: Votre session a expiré. Connectez-vous à nouveau avec Discord pour envoyer cette proposition.
+  transmitted: "✅ Proposition transmise avec succès à la direction NAP sur Discord !"
+  transmitting: Transmission en cours...
+  resume: Reprendre la proposition {type}
+  draft_restored: Brouillon restauré à partir de la session précédente.
+  pending_shifts: Changements en attente
+  server_error: Le serveur a répondu avec le code HTTP {status}
+live_data:
+  failed: "⚠️ Impossible de charger les dernières données. Vérifiez votre connexion et rafraîchissez la page."
+  offline: "📴 Hors ligne : affichage des données enregistrées sur cet appareil ({when})."

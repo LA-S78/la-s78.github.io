@@ -547,3 +547,144 @@ event_presets:
   gear_event_desc: Получайте награды за улучшение снаряжения
   cheese_trap_title: Сырная Ловушка
   cheese_trap_desc: Помогите дать отпор Сырному вору
+alliance_planner:
+  roster: 'Список NAP:'
+  roster_loading: "-- Альянсы"
+  nap_alliances: "{n} альянсов NAP"
+  planner_mode: Режим планировщика
+  submit_plan: Отправить план
+  tag_placeholder: ТЕГ (напр. WLO)
+  name_placeholder: Полное название альянса
+  add_contender: "+ Добавить претендента"
+  loading_standings: Загрузка турнирной таблицы…
+  standings_failed: Не удалось загрузить турнирную таблицу.
+  protected_academy: Защищенная академия
+  change_color: Изменить цвет [{tag}]
+  academy_of: Академия [{tag}]
+  link_academy: "+ Привязать академию"
+  nap_protected: Под защитой NAP
+  external: Внешний
+  revoke_nap: Отозвать NAP
+  grant_nap: Предоставить NAP
+  remove_alliance: Удалить альянс
+  academy_prompt: 'Введите точный тег альянса для привязки в качестве Академии к [{tag}] (регистр имеет значение, напр. RâvN или râvn):'
+  academy_available: 'Доступно: {tags}'
+  academy_new: 'Или введите новый тег академии, чтобы создать её:'
+  already_exists: Альянс [{tag}] уже существует с таким регистром.
+  no_changes: Изменения в текущем положении не обнаружены.
+  proposal_title: "👑 Отправить положение NAP и дипломатическое предложение"
+  diff_rank: "{tag}: Ранг {from} ➔ {to}"
+  diff_academy: "{tag}: Назначен академией {parent}"
+  diff_nap: "{tag}: Статус NAP {status}"
+  nap_status_protected: Защищен
+  nap_status_revoked: Отозван
+  diff_color: "{tag}: Цвет изменен на {color}"
+  diff_added: "{added}: Ранг #{rank} ({name})"
+  added_tag: Добавлен [{tag}]
+  diff_removed: "{removed} из положения"
+  removed_tag: Удален [{tag}]
+  diff_modified: Изменен [{tag}]
+  unknown: Неизвестно
+blacklist_planner:
+  players_title: "🚫 Черный список игроков"
+  alliances_title: "⚠️ Черный список альянсов"
+  player_placeholder: Имя игрока
+  alliance_placeholder: Тег альянса
+  add: "+ Добавить"
+  edit: Редактировать черный список
+  stop_editing: Закончить редактирование
+  submit: Отправить черный список
+  loading: Загрузка…
+  failed: Не удалось загрузить черный список.
+  no_players: Игроки в черном списке отсутствуют.
+  no_alliances: Враждебные альянсы в черном списке отсутствуют.
+  added: "{name} добавлен в ваш план. Это еще не отправлено: нажмите {submit} над черным списком, чтобы отправить руководству на утверждение."
+  removed: "{name} убран из вашего плана. Это еще не отправлено: нажмите {submit} над черным списком, чтобы отправить руководству на утверждение."
+  duplicate: "{name} уже в черном списке."
+  press_edit: Сначала нажмите {edit}.
+  add_failed: 'Не удалось добавить {name}: {error}'
+  no_changes: Нет изменений черного списка для отправки.
+  proposal_title: "🚫 Отправить предложение по черному списку NAP"
+  diff_add: "{add} {what} {name}"
+  diff_remove: "{remove} {what} {name}"
+  add_word: Добавить
+  remove_word: Удалить
+  what_alliance: альянс
+  what_player: игрока
+  sent: Предложение по черному списку отправлено руководству в Discord. Оно вступит в силу после одобрения Стюардом.
+map_planner:
+  view: 'Вид:'
+  levels: Уровни
+  alliances: Альянсы
+  resources: Ресурсы
+  buff_summary: Сводка баффов
+  toggle_buff_summary: Переключить сводку баффов
+  close_buff_summary: Закрыть сводку баффов
+  planner_mode: Режим планировщика
+  override_placeholder: НАПР. WLO
+  override_help: Введите тег для переопределения назначений. Оставьте пустым для перебора.
+  submit_plan: Отправить план
+  fullscreen: Полноэкранный режим
+  toggle_fullscreen: Переключить полноэкранный режим
+  exit: Выход
+  grain: "🌾 Зерно"
+  timber: "🪵 Древесина"
+  herbs: "🌿 Травы"
+  solid_gather: 'Сплошной: Сбор'
+  stripe_output: 'Полоса: Выход'
+  level_unknown: Уровень --
+  level: Уровень {n}
+  hover: Наведите на территорию
+  owner: 'Владелец:'
+  unclaimed: Ничейная
+  buff: 'Бафф:'
+  none: Нет
+  no_active_buff: Нет активного баффа
+  drawer_title: Распределение баффов альянса
+  drawer_subtitle: Динамический подсчет на основе активной карты / назначений планировщика
+  no_claims: Ни один альянс в данный момент не претендует на территорию.
+  no_buffs: Нет назначенных активных баффов
+  cities_one: "{n} город"
+  cities_few: "{n} города"
+  cities_other: "{n} городов"
+  col_alliance: Альянс
+  col_holdings: Владения
+  col_buffs: Активные баффы
+  buff_research_speed: Скорость исследования
+  buff_troop_training_speed: Скорость обучения войск
+  buff_building_speed: Скорость строительства
+  buff_march_speed: Скорость марша
+  buff_grain_gathering: Сбор зерна
+  buff_grain_output: Добыча зерна
+  buff_timber_gathering: Сбор древесины
+  buff_timber_output: Добыча древесины
+  buff_herb_gathering: Сбор трав
+  buff_herb_output: Добыча трав
+  no_changes: В вашем черновике плана не обнаружено изменений.
+  proposal_title: "🗺️ Отправить предложение по территориям на карте"
+proposals:
+  title: Отправить предложение
+  close: Закрыть
+  summary: Краткое содержание предложения
+  notes: Заметки руководства (необязательно)
+  notes_placeholder: Объясните контекст или стратегическую причину этого предложения...
+  transmit: Передать предложение
+  user_avatar: Аватар пользователя
+  submitting_as: Отправка от имени {name}
+  auth_required: Требуется аутентификация руководства
+  auth_reason: Для отправки предложений требуется подтвержденный статус руководства или офицера в Discord.
+  log_in: Войдите через Discord для отправки
+  oauth_unreachable: Сервис Discord OAuth недоступен. Пожалуйста, обновите страницу и попробуйте снова.
+  transmit_discord: Передать в Discord
+  leaders_only_note: Только лидеры R4 и R5 могут отправлять предложения. Попросите лидера вашего альянса отправить этот план.
+  leaders_only: Только для лидеров
+  login_expired: Ваш сеанс истек. Войдите через Discord снова, чтобы отправить это предложение.
+  transmitted: "✅ Предложение успешно передано руководству NAP в Discord!"
+  transmitting: Передача...
+  resume: Возобновить предложение {type}
+  draft_restored: Черновик восстановлен из предыдущего сеанса.
+  pending_shifts: Ожидающие сдвиги
+  server_error: Сервер ответил HTTP {status}
+live_data:
+  failed: "⚠️ Не удалось загрузить последние данные. Проверьте соединение и обновите страницу."
+  offline: "📴 Оффлайн: отображаются данные, сохраненные на этом устройстве ({when})."

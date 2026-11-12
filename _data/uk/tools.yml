@@ -551,3 +551,144 @@ event_presets:
   gear_event_desc: Отримуйте нагороди за покращення спорядження
   cheese_trap_title: Сирна Пастка
   cheese_trap_desc: Допоможіть відбитись від Сирного Злодія
+alliance_planner:
+  roster: 'Список NAP:'
+  roster_loading: "-- Альянси"
+  nap_alliances: "{n} NAP Альянсів"
+  planner_mode: Режим планування
+  submit_plan: Надіслати план
+  tag_placeholder: ТЕГ (наприклад, WLO)
+  name_placeholder: Повна назва альянсу
+  add_contender: "+ Додати претендента"
+  loading_standings: Завантаження таблиці лідерів…
+  standings_failed: Не вдалося завантажити таблицю лідерів.
+  protected_academy: Захищена академія
+  change_color: Змінити колір [{tag}]
+  academy_of: Академія [{tag}]
+  link_academy: "+ Приєднати академію"
+  nap_protected: NAP під захистом
+  external: Зовнішній
+  revoke_nap: Скасувати NAP
+  grant_nap: Надати NAP
+  remove_alliance: Видалити альянс
+  academy_prompt: 'Введіть точний тег альянсу, щоб приєднати його як академію під [{tag}] (враховується регістр, наприклад RâvN або râvn):'
+  academy_available: 'Доступно: {tags}'
+  academy_new: 'Або введіть новий тег академії, щоб створити її:'
+  already_exists: Альянс [{tag}] вже існує з таким самим регістром.
+  no_changes: У поточній таблиці лідерів не виявлено змін.
+  proposal_title: "👑 Надіслати пропозицію щодо NAP та дипломатії"
+  diff_rank: "{tag}: Ранг {from} ➔ {to}"
+  diff_academy: "{tag}: Призначено академією {parent}"
+  diff_nap: "{tag}: Статус NAP {status}"
+  nap_status_protected: Під захистом
+  nap_status_revoked: Скасовано
+  diff_color: "{tag}: Колір оновлено до {color}"
+  diff_added: "{added}: Ранг #{rank} ({name})"
+  added_tag: Додано [{tag}]
+  diff_removed: "{removed} з таблиці лідерів"
+  removed_tag: Видалено [{tag}]
+  diff_modified: Змінено [{tag}]
+  unknown: Невідомо
+blacklist_planner:
+  players_title: "🚫 Гравці у чорному списку"
+  alliances_title: "⚠️ Альянси у чорному списку"
+  player_placeholder: Ігрове ім'я гравця
+  alliance_placeholder: ТЕГ альянсу
+  add: "+ Додати"
+  edit: Редагувати чорний список
+  stop_editing: Зупинити редагування
+  submit: Надіслати чорний список
+  loading: Завантаження…
+  failed: Не вдалося завантажити чорний список.
+  no_players: Немає командирів-порушників у чорному списку.
+  no_alliances: Немає ворожих альянсів у чорному списку.
+  added: "{name} додано до вашого плану. Це ще не надіслано: натисніть {submit} над чорним списком, щоб надіслати керівництву на схвалення."
+  removed: "{name} видалено з вашого плану. Це ще не надіслано: натисніть {submit} над чорним списком, щоб надіслати керівництву на схвалення."
+  duplicate: "{name} вже є у чорному списку."
+  press_edit: Спочатку натисніть {edit}.
+  add_failed: 'Не вдалося додати {name}: {error}'
+  no_changes: Немає змін у чорному списку для надсилання.
+  proposal_title: "🚫 Надіслати пропозицію щодо чорного списку NAP"
+  diff_add: "{add} {what} {name}"
+  diff_remove: "{remove} {what} {name}"
+  add_word: Додати
+  remove_word: Видалити
+  what_alliance: альянс
+  what_player: гравець
+  sent: Пропозицію щодо чорного списку надіслано керівництву в Discord. Вона набуде чинності після схвалення офіцером.
+map_planner:
+  view: 'Вигляд:'
+  levels: Рівні
+  alliances: Альянси
+  resources: Ресурси
+  buff_summary: Зведення бонусів
+  toggle_buff_summary: Перемкнути зведення бонусів
+  close_buff_summary: Закрити зведення бонусів
+  planner_mode: Режим планування
+  override_placeholder: НАПРИКЛАД WLO
+  override_help: Введіть тег, щоб змінити призначення за кліком. Залиште порожнім для циклічного вибору.
+  submit_plan: Надіслати план
+  fullscreen: На весь екран
+  toggle_fullscreen: Перемкнути повноекранний режим
+  exit: Вийти
+  grain: "🌾 Зерно"
+  timber: "🪵 Деревина"
+  herbs: "🌿 Трави"
+  solid_gather: 'Суцільне: Збір'
+  stripe_output: 'Смуга: Виробництво'
+  level_unknown: Рівень --
+  level: Рівень {n}
+  hover: Наведіть на територію
+  owner: 'Власник:'
+  unclaimed: Нічийна
+  buff: 'Бонус:'
+  none: Немає
+  no_active_buff: Немає активних бонусів
+  drawer_title: Розподіл бонусів альянсу
+  drawer_subtitle: Динамічний підрахунок на основі активної карти / призначень планувальника
+  no_claims: Наразі жоден альянс не претендує на територію.
+  no_buffs: Немає призначених активних бонусів
+  cities_one: "{n} місто"
+  cities_few: "{n} міста"
+  cities_other: "{n} міст"
+  col_alliance: Альянс
+  col_holdings: Володіння
+  col_buffs: Активні бонуси
+  buff_research_speed: Швидкість досліджень
+  buff_troop_training_speed: Швидкість тренування військ
+  buff_building_speed: Швидкість будівництва
+  buff_march_speed: Швидкість маршу
+  buff_grain_gathering: Збір зерна
+  buff_grain_output: Виробництво зерна
+  buff_timber_gathering: Збір деревини
+  buff_timber_output: Виробництво деревини
+  buff_herb_gathering: Збір трав
+  buff_herb_output: Виробництво трав
+  no_changes: У вашому проекті плану не виявлено змін.
+  proposal_title: "🗺️ Надіслати пропозицію щодо території на карті"
+proposals:
+  title: Надіслати пропозицію
+  close: Закрити
+  summary: Зведення пропозиції
+  notes: Примітки керівництва (необов'язково)
+  notes_placeholder: Поясніть контекст або стратегічну причину цієї пропозиції...
+  transmit: Передати пропозицію
+  user_avatar: Аватар користувача
+  submitting_as: Надсилання від імені {name}
+  auth_required: Потрібна авторизація керівництва
+  auth_reason: Для надсилання пропозицій потрібен перевірений статус керівництва або офіцера в Discord.
+  log_in: Увійдіть через Discord для надсилання
+  oauth_unreachable: Служба Discord OAuth недоступна. Будь ласка, оновіть сторінку і спробуйте ще раз.
+  transmit_discord: Передати в Discord
+  leaders_only_note: Тільки лідери R4 та R5 можуть надсилати пропозиції. Попросіть вашого лідера альянсу подати цей план.
+  leaders_only: Тільки для лідерів
+  login_expired: Ваш сеанс закінчився. Увійдіть через Discord ще раз, щоб надіслати цю пропозицію.
+  transmitted: "✅ Пропозицію успішно передано керівництву NAP у Discord!"
+  transmitting: Передача...
+  resume: Відновити пропозицію {type}
+  draft_restored: Чернетку відновлено з попереднього сеансу.
+  pending_shifts: Зміни на розгляді
+  server_error: Сервер відповів помилкою HTTP {status}
+live_data:
+  failed: "⚠️ Не вдалося завантажити останні дані. Перевірте підключення та оновіть сторінку."
+  offline: "📴 Офлайн: відображаються дані, збережені на цьому пристрої ({when})."
