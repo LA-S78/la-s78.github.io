@@ -57,17 +57,16 @@ nav_id: "capitol-rotation"
   {{ p.note }}
 </small>
 
-{% comment %} The rotation from the live calendar (js/capitol-rotation.js, /api/calendar). Until it loads, or without it: the plain rule. {% endcomment %}
-<div id="rotation-board" class="rotation-board" aria-live="polite">
+{% comment %} The rotation from the live calendar (js/capitol-rotation.js, /api/calendar). The week order comes from the calendar's settings, so the page starts with four blank cards of the same size, and the script fills them in (in the order remembered from the last visit, then live). {% endcomment %}
+<div id="rotation-board" class="rotation-board" aria-live="polite" aria-busy="true">
   <div class="rotation-grid">
-    {% assign seats = "3,2,1,4" | split: "," %}
-    {% for seat in seats %}
-      <div class="rotation-week{% if forloop.last %} is-off-week{% endif %}">
-        <div class="rotation-week-head">{% if forloop.last %}{{ "common.off_week" | t }}{% else %}{{ "common.kw_week" | t_html: "n", forloop.index }}{% endif %}</div>
-        <div class="rotation-crown rank-{{ seat }}" aria-hidden="true">{% if seat == "1" %}👑{% elsif seat == "2" %}🥈{% elsif seat == "3" %}🥉{% else %}🛡️{% endif %}</div>
-      </div>
-    {% endfor %}
+    <div class="rotation-week is-loading"></div>
+    <div class="rotation-week is-loading"></div>
+    <div class="rotation-week is-loading"></div>
+    <div class="rotation-week is-loading"></div>
   </div>
+  <p class="rotation-note">&nbsp;</p>
+  <p class="rotation-source">{{ "capitol_rotation.schedule_note" | t }}</p>
 </div>
 <script type="module" src="/js/capitol-rotation.js"></script>
 

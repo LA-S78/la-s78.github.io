@@ -4,8 +4,11 @@
  * the alliance that captures the Capitol each Friday, from the live calendar (/api/calendar
  * status.rotation; api/_calendar_helper.js describeRotation). Text in the page's language
  * (capitol_rotation.* and common.* in _data/<lang>/tools.yml, js/i18n.js).
- * Without the calendar (offline, error) the page keeps the plain rank-by-week chart it
- * was built with, and a notice says the live data couldn't be loaded.
+ * The page is built with four blank cards: the week order is in the calendar's settings
+ * (the Gist), which the build can't see. They're filled at once with the order remembered
+ * from the last visit (week names and crowns only), then with the live chart, so the cards
+ * don't jump around. Without the calendar (offline, error) the plain chart stays in that
+ * order (or the default one) and a notice says the live data couldn't be loaded.
  */
 import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
 
@@ -30,6 +33,45 @@ function weekName(w) {
   return w.isKW ? window.t('common.kw_week', { n: w.clockWeek }) : window.t('common.off_week');
 }
 
+// The order of the weeks last seen (this browser only): { isKW, clockWeek, seat } per card.
+const ORDER_KEY = 'la_rotation_order';
+const DEFAULT_ORDER = [
+  { isKW: true, clockWeek: 1, seat: 3 },
+  { isKW: true, clockWeek: 2, seat: 2 },
+  { isKW: true, clockWeek: 3, seat: 1 },
+  { isKW: false, clockWeek: 0, seat: 4 },
+];
+function rememberedOrder() {
+  try {
+    const order = JSON.parse(localStorage.getItem(ORDER_KEY) || 'null');
+    return Array.isArray(order) && order.length === 4 ? order : null;
+  } catch (e) {
+    return null;
+  }
+}
+function rememberOrder(rotation) {
+  try {
+    const order = rotation.map(({ isKW, clockWeek, seat }) => ({ isKW, clockWeek, seat }));
+    localStorage.setItem(ORDER_KEY, JSON.stringify(order));
+  } catch (e) {
+    // private window or storage off: the next visit starts with blank cards again
+  }
+}
+
+/** A card with only the week's name and crown (before the live data, or without it). */
+function renderPlainWeek(w) {
+  return `
+    <div class="rotation-week is-plain${w.isKW ? '' : ' is-off-week'}">
+      <div class="rotation-week-head"><span>${esc(weekName(w))}</span></div>
+      <div class="rotation-crown rank-${esc(w.seat)}" aria-hidden="true">${CROWNS[w.seat] || '🛡️'}</div>
+    </div>`;
+}
+// Only the cards and the one-line note change; the note under them is part of the page, so
+// the board keeps its size as it fills in.
+function renderPlain(board, order) {
+  board.querySelector('.rotation-grid').innerHTML = order.map(renderPlainWeek).join('');
+}
+
 function renderWeek(w) {
   const current = w.state === 'current';
   const date = captureDate(w.captureAt);
@@ -52,10 +94,10 @@ function renderWeek(w) {
 
 function render(board, rotation) {
   const current = rotation.find((w) => w.state === 'current');
-  board.innerHTML = `
-    <div class="rotation-grid">${rotation.map(renderWeek).join('')}</div>
-    ${current ? `<p class="rotation-note">${esc(t(current.isKW ? 'kw_note' : 'off_week_note', { tag: current.tag || '?' }))}</p>` : ''}
-    <p class="rotation-source">${esc(t('schedule_note'))}</p>`;
+  board.querySelector('.rotation-grid').innerHTML = rotation.map(renderWeek).join('');
+  board.querySelector('.rotation-note').textContent = current
+    ? t(current.isKW ? 'kw_note' : 'off_week_note', { tag: current.tag || '?' })
+    : '\u00a0'; // keeps the line's height
 }
 
 // Boards already started (a WeakSet, not a data- attribute: Turbo's back-button copy of the
@@ -66,6 +108,8 @@ async function init() {
   const board = document.getElementById('rotation-board');
   if (!board || started.has(board)) return;
   started.add(board);
+  const remembered = rememberedOrder();
+  if (remembered) renderPlain(board, remembered);
   try {
     const res = await fetch('/api/calendar');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -73,9 +117,13 @@ async function init() {
     const rotation = data?.status?.rotation;
     if (!Array.isArray(rotation) || !rotation.length) throw new Error('no rotation');
     render(board, rotation);
+    rememberOrder(rotation);
+    board.removeAttribute('aria-busy');
     showLiveDataNotice(board, { savedAt: offlineCopySavedAt(res) });
   } catch (err) {
     console.warn('Capitol rotation: live calendar not loaded:', err.message);
+    renderPlain(board, remembered || DEFAULT_ORDER);
+    board.removeAttribute('aria-busy');
     showLiveDataNotice(board, { failed: true });
   }
 }
