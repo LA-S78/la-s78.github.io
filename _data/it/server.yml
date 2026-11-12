@@ -187,33 +187,47 @@ bot_nominate:
   summary: 'Grado #{rank} · aperto fino al {until} ({relative}).'
   open_page: Apri Pagina Candidature
 bot_rewards:
-  reset_denied: "⛔ **Accesso Negato:** Solo gli Steward del Regno designati possono cancellare le candidature."
-  nothing_to_clear: "🔒 Nessun periodo di ricompense è aperto, quindi non c'è nulla da cancellare."
-  cleared_title: "🔄 Candidature Cancellate — {week}"
+  reset_denied: "⛔ **Accesso negato:** Solo gli Steward del Regno designati possono cancellare le candidature."
+  nothing_to_clear: "🔒 Nessun periodo di ricompensa è aperto, quindi non c'è nulla da cancellare."
+  cleared_title: "🔄 Candidature cancellate — {week}"
   cleared_text: |-
-    Le liste di tutte le alleanze per questa settimana sono state cancellate da **{name}**.
+    Gli elenchi di tutte le alleanze per questa settimana sono stati cancellati da **{name}**.
 
-    • I leader possono inviare nuove liste con `/nominate`.
-    • Le ricompense chiudono il {closes}.
+    • I leader possono inviare nuovi elenchi con `/nominate`.
+    • Le ricompense chiudono {closes}.
     • Ricorda al Re di premere **Reset Checklist** sulla console.
   none_eligible: "⚠️ Nessuna alleanza è attualmente idonea secondo il piano di ricompense attivo."
-  tag_buyout: " 🛡️ [Riscatto]"
-  tag_funds: " ⚖️ [Riscatto fondi]"
-  awaiting: "⏳ **[{tag}]** (Grado #{rank}){buyout} — **In attesa della lista** ({total} forzieri)"
+  tag_buyout: " 🛡️ [Buyout]"
+  tag_funds: " ⚖️ [Funds buyout]"
+  awaiting: "⏳ **[{tag}]** (Rango #{rank}){buyout} — **In attesa di elenco** ({total} casse)"
   reserves_one: " · {count} riserva"
   reserves_other: " · {count} riserve"
-  sent: "✅ **[{tag}]** (Grado #{rank}){buyout} — **{named}/{total}** nominati{reserves} ({when})"
-  closed: "🔒 **Chiuso.** Le prossime ricompense aprono il {opens}."
-  open: "🎁 **Ricompense {week}** · aperte fino al {closes}"
+  sent: "✅ **[{tag}]** (Rango #{rank}){buyout} — **{named}/{total}** nominati{reserves} ({when})"
+  closed: "🔒 **Chiuso.** Le prossime ricompense apriranno {opens}."
+  open: "🎁 **Ricompense {week}** · aperte fino a {closes}"
   battle_no_kw: "⚔️ Ricompensa Re della Battaglia: nessuna Guerra tra Regni questa settimana."
   battle_won: "⚔️ Ricompensa Re della Battaglia: **vinta**, aperta."
   battle_lost: "⚔️ Ricompensa Re della Battaglia: persa, non questa settimana."
-  battle_waiting: "⚔️ Ricompensa Re della Battaglia: ⏳ **in attesa del risultato della battaglia** (circa {time}). Il Re distribuisce dopo tale momento."
-  open_console: Apri Console del Re
-  title: "📋 Stato Ricompense Alleanza — {week}"
-  count_line: "**{sent} su {total} alleanze hanno inviato la lista**"
-  footer: Amministrazione Campidoglio Last Asylum
-  old_button: 'ℹ️ Questo pulsante non è più utilizzato: le ricompense ora si aprono automaticamente ogni venerdì alle 20:00 GT. Registra il risultato della Guerra tra Regni con `/rewards` (Vinta o Persa) dopo la battaglia di sabato.'
+  battle_waiting: "⚔️ Ricompensa Re della Battaglia: ⏳ **in attesa del risultato della battaglia** (circa {time}). Il Re le distribuirà dopo."
+  open_console: Apri console del Re
+  title: "📋 Stato ricompense Alleanza — {week}"
+  count_line: "**{sent} di {total} alleanze hanno inviato un elenco**"
+  footer: Amministrazione Capitol Last Asylum
+  old_button: 'ℹ️ Questo pulsante non è più utilizzato: le ricompense ora aprono automaticamente ogni venerdì alle 20:00 GT. Registra il risultato della Guerra tra Regni con `/rewards` (Vinta o Persa) dopo la battaglia di sabato.'
+  overrides_denied: "⛔ **Accesso negato:** Solo gli Steward del Regno designati possono resettare gli override del Capitol."
+  overrides_nothing: |-
+    ℹ️ Nulla da resettare: nessun override o buyout, e la rotazione è già impostata sul programma standard.
+    {schedule}
+  overrides_title: "🧹 Reset override Capitol"
+  overrides_text: |-
+    Resettato da **{name}**. La rotazione è tornata al programma standard:
+    {after}
+
+    Prima: {before}
+
+    • Override cancellati: {overrides}
+    • Buyout in tempo di guerra annullati: {buyouts} (mantenuti nella cronologia)
+    • L'elenco di ogni alleanza è stato riordinato per le casse corrette.
 bot_admin:
   rank_none: Nessuna alleanza registrata nello stato attuale.
   rank_title: "🛡️ Classifiche NAP del Server"
@@ -259,33 +273,34 @@ bot_commands:
   calendar: Visualizza o gestisci il calendario eventi
   calendar_kingdom: Visualizza o gestisci il calendario eventi del Regno
   calendar_action: Azione da eseguire (lascia vuoto per visualizzare il calendario)
-  calendar_manage_alliance: Gestisci gli eventi dell'Alleanza (R5 di default)
-  calendar_manage_global: Gestisci gli eventi globali (solo Admin)
-  nominate: Richiedi un link al portale per inviare le candidature settimanali per i forzieri
-  nominate_authenticated: Richiedi un link al portale autenticato per inviare le candidature settimanali per i forzieri
-  rewards: 'Ricompense di questa settimana: stato e risultato della Guerra tra Regni (Stewards)'
+  calendar_manage_alliance: Gestisci eventi Alleanza (R5 di default)
+  calendar_manage_global: Gestisci eventi globali (Solo Admin)
+  nominate: Richiedi un link al portale per inviare le candidature settimanali per le casse
+  nominate_authenticated: Richiedi un link autenticato al portale per inviare le candidature settimanali per le casse
+  rewards: 'Ricompense di questa settimana: stato e risultato della Guerra tra Regni (Steward)'
   rewards_action: Lascia vuoto per vedere lo stato delle ricompense di questa settimana
-  rewards_won: 'Registra Guerra tra Regni: Vittoria (Steward)'
-  rewards_lost: 'Registra Guerra tra Regni: Sconfitta (Steward)'
+  rewards_won: 'Registra Guerra tra Regni: Vinta (Steward)'
+  rewards_lost: 'Registra Guerra tra Regni: Persa (Steward)'
   rewards_reset: Cancella le candidature di questa settimana (Steward)
-  rank: Visualizza o gestisci le classifiche NAP dell'alleanza
-  rank_set: Aggiorna il rango NAP di un'alleanza (solo Admin)
-  rank_tag: Tag alleanza (es. ABC)
-  rank_position: Nuova posizione in classifica (es. da 1 a 10)
-  rank_list: Mostra le classifiche NAP e le posizioni attuali
+  rewards_reset_overrides: Resetta override e buyout del Capitol (Steward)
+  rank: Visualizza o gestisci i ranghi NAP delle alleanze
+  rank_set: Aggiorna il rango NAP di un'alleanza (Solo Admin)
+  rank_tag: Tag dell'alleanza (es. ABC)
+  rank_position: Nuova posizione di rango (es. da 1 a 10)
+  rank_list: Mostra i ranghi e le posizioni NAP attuali
   sb: Mostra il programma della Battaglia di Sopravvivenza
   sb_long: Mostra il programma della corsa agli armamenti della Battaglia di Sopravvivenza e gli eventi attivi
   sb_day: Giorno del ciclo (1-7)
-  rules: Mostra le regole NAP del server e del Regno
+  rules: Mostra le regole del server e del NAP del Regno
   rules_rule: Numero specifico della regola da visualizzare
   map: Visualizza la mappa del territorio in tempo reale
   map_long: Visualizza la mappa del territorio di Last Asylum in tempo reale
-  devupdate: Copia i dati live nei dati del sito di test (solo Stewards; solo tu vedrai la risposta)
-  registerbot: Registra il server dell'alleanza o sincronizza gli slash command
+  devupdate: Copia i dati in tempo reale nei dati del sito di test (Solo Steward; solo tu vedrai la risposta)
+  registerbot: Registra il server dell'alleanza o sincronizza i comandi slash
   registerbot_action: Azione da eseguire (lascia vuoto per ottenere il link al portale di registrazione)
-  registerbot_sync: Sincronizza tutti i server registrati (solo Admin)
+  registerbot_sync: Sincronizza tutti i server registrati (Solo Admin)
   suggest: Invia una proposta di regola, segnala un problema dell'alleanza o controlla lo stato del tuo ticket
   suggest_type: Seleziona la categoria del ticket o controlla le tue richieste attive
-  suggest_nap: "👑 Proposta Regno / NAP (Regola per tutto il server o idea per un evento)"
-  suggest_alliance: "🛡️ Problema interno all'Alleanza (Gestito privatamente dai tuoi R4/R5)"
+  suggest_nap: "👑 Proposta Regno / NAP (Regola per tutto il server o idea per evento)"
+  suggest_alliance: "🛡️ Problema interno all'alleanza (Gestito privatamente dai tuoi R4/R5)"
   suggest_status: "📋 Visualizza lo stato del mio ticket (Attivo e cronologia recente)"

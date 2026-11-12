@@ -187,33 +187,47 @@ bot_nominate:
   summary: 'Sıra #{rank} · {until} ({relative}) tarihine kadar açık.'
   open_page: Adaylık Sayfasını Aç
 bot_rewards:
-  reset_denied: "⛔ **Erişim Engellendi:** Sadece görevli Krallık Yöneticileri adaylıkları temizleyebilir."
-  nothing_to_clear: "🔒 Açık bir ödül dönemi yok, temizlenecek bir şey bulunmuyor."
+  reset_denied: "⛔ **Erişim Reddedildi:** Adaylıkları yalnızca atanmış Krallık Görevlileri temizleyebilir."
+  nothing_to_clear: "🔒 Açık bir ödül dönemi yok, bu yüzden temizlenecek bir şey yok."
   cleared_title: "🔄 Adaylıklar Temizlendi — {week}"
   cleared_text: |-
-    Bu hafta için tüm ittifakların listeleri **{name}** tarafından temizlendi.
+    Tüm ittifakların bu haftaki listeleri **{name}** tarafından temizlendi.
 
-    • Liderler `/nominate` ile yeni listeler gönderebilir.
+    • Liderler `/nominate` komutuyla yeni listeler gönderebilir.
     • Ödüller {closes} kapanır.
-    • Krala konsol üzerinde **Kontrol Listesini Sıfırla** düğmesine basmasını hatırlatın.
-  none_eligible: "⚠️ Mevcut ödül planı kapsamında şu anda uygun ittifak bulunmuyor."
-  tag_buyout: " 🛡️ [Geri Ödeme]"
-  tag_funds: " ⚖️ [Fon Geri Ödemesi]"
+    • Krala konsoldaki **Reset Checklist** (Kontrol Listesini Sıfırla) düğmesine basmasını hatırlatın.
+  none_eligible: "⚠️ Mevcut ödül planına göre şu anda uygun ittifak yok."
+  tag_buyout: " 🛡️ [Satın Alma]"
+  tag_funds: " ⚖️ [Fon satın alımı]"
   awaiting: "⏳ **[{tag}]** (Sıra #{rank}){buyout} — **Liste bekleniyor** ({total} sandık)"
   reserves_one: " · {count} yedek"
   reserves_other: " · {count} yedek"
-  sent: "✅ **[{tag}]** (Sıra #{rank}){buyout} — **{named}/{total}** kişi belirlendi{reserves} ({when})"
-  closed: "🔒 **Kapalı.** Sonraki ödüller {opens} açılacak."
+  sent: "✅ **[{tag}]** (Sıra #{rank}){buyout} — **{named}/{total}** isimlendirildi{reserves} ({when})"
+  closed: "🔒 **Kapalı.** Bir sonraki ödüller {opens} açılır."
   open: "🎁 **{week} ödülleri** · {closes} tarihine kadar açık"
-  battle_no_kw: "⚔️ Savaş Kralı Ödülü: Bu hafta Krallık Savaşı yok."
+  battle_no_kw: "⚔️ Savaş Kralı Ödülü: bu hafta Krallık Savaşı yok."
   battle_won: "⚔️ Savaş Kralı Ödülü: **kazanıldı**, açık."
   battle_lost: "⚔️ Savaş Kralı Ödülü: kaybedildi, bu hafta değil."
-  battle_waiting: "⚔️ Savaş Kralı Ödülü: ⏳ **savaş sonucu bekleniyor** (yaklaşık {time}). Kral dağıtımı sonrasında yapar."
+  battle_waiting: "⚔️ Savaş Kralı Ödülü: ⏳ **savaş sonucunu bekliyor** (yaklaşık {time}). Kral sonuçtan sonra dağıtır."
   open_console: Kral Konsolunu Aç
   title: "📋 İttifak Ödül Durumu — {week}"
   count_line: "**{total} ittifaktan {sent} tanesi liste gönderdi**"
   footer: Last Asylum Başkent Yönetimi
-  old_button: 'ℹ️ Bu düğme artık kullanılmıyor: ödüller artık her Cuma 20:00 GT''de kendiliğinden açılır. Cumartesi günkü savaştan sonra Krallık Savaşı sonucunu (Kazandı veya Kaybetti) `/rewards` ile kaydedin.'
+  old_button: 'ℹ️ Bu düğme artık kullanılmıyor: ödüller artık her Cuma saat 20:00 GT''de kendiliğinden açılıyor. Cumartesi günkü savaştan sonra `/rewards` (Kazandı veya Kaybetti) ile Krallık Savaşı sonucunu kaydedin.'
+  overrides_denied: "⛔ **Erişim Reddedildi:** Başkent geçersiz kılmalarını yalnızca atanmış Krallık Görevlileri sıfırlayabilir."
+  overrides_nothing: |-
+    ℹ️ Sıfırlanacak bir şey yok: geçersiz kılma veya satın alma yok ve rotasyon zaten standart programda.
+    {schedule}
+  overrides_title: "🧹 Başkent Geçersiz Kılmaları Sıfırlandı"
+  overrides_text: |-
+    Sıfırlayan: **{name}**. Rotasyon standart programa geri döndü:
+    {after}
+
+    Önce: {before}
+
+    • Temizlenen geçersiz kılmalar: {overrides}
+    • Savaş dönemi satın alımları iptal edildi: {buyouts} (geçmişte tutuldu)
+    • Her ittifakın listesi düzeltilmiş sandıklar için yeniden sıralandı.
 bot_admin:
   rank_none: Mevcut durumda kayıtlı ittifak yok.
   rank_title: "🛡️ Sunucu NAP Durumları"
@@ -256,36 +270,37 @@ bot_register:
   open_portal: Kayıt Portalı'nı Aç
   busy: "⚠️ Hizmet meşgul: {reason}. Lütfen kısa süre içinde tekrar deneyin."
 bot_commands:
-  calendar: Etkinlik Takvimini görüntüle veya yönet
-  calendar_kingdom: Krallık Etkinlik Takvimini görüntüle veya yönet
+  calendar: Etkinlik Takvimini görüntüleyin veya yönetin
+  calendar_kingdom: Krallık Etkinlik Takvimini görüntüleyin veya yönetin
   calendar_action: Gerçekleştirilecek eylem (takvimi görüntülemek için boş bırakın)
-  calendar_manage_alliance: İttifak Etkinliklerini yönet (varsayılan R5)
-  calendar_manage_global: Küresel Etkinlikleri yönet (Sadece Yönetici)
-  nominate: Haftalık sandık adaylıklarını göndermek için bir portal bağlantısı iste
-  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimlik doğrulamalı bir portal bağlantısı iste
-  rewards: 'Bu haftanın ödülleri: durum ve Krallık Savaşı sonucu (Sorumlular)'
-  rewards_action: Bu haftanın ödül durumunu görmek için boş bırakın
-  rewards_won: 'Krallık Savaşı''nı kaydet: Kazanıldı (Sorumlu)'
-  rewards_lost: 'Krallık Savaşı''nı kaydet: Kaybedildi (Sorumlu)'
-  rewards_reset: Bu haftanın adaylıklarını temizle (Sorumlu)
-  rank: İttifak NAP sıralamalarını görüntüle veya yönet
-  rank_set: Bir ittifakın NAP sıralamasını güncelle (Sadece Yönetici)
-  rank_tag: İttifak etiketi (ör. ABC)
-  rank_position: Yeni sıra konumu (ör. 1 ila 10)
+  calendar_manage_alliance: İttifak Etkinliklerini Yönet (varsayılan R5)
+  calendar_manage_global: Küresel Etkinlikleri Yönet (Sadece Yönetici)
+  nominate: Haftalık sandık adaylıklarını göndermek için bir portal bağlantısı isteyin
+  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimliği doğrulanmış bir portal bağlantısı isteyin
+  rewards: 'Bu haftaki ödüller: durum ve Krallık Savaşı sonucu (Görevliler)'
+  rewards_action: Bu haftaki ödül durumunu görmek için boş bırakın
+  rewards_won: 'Krallık Savaşını kaydet: Kazanıldı (Görevli)'
+  rewards_lost: 'Krallık Savaşını kaydet: Kaybedildi (Görevli)'
+  rewards_reset: Bu haftaki adaylıkları temizle (Görevli)
+  rewards_reset_overrides: Başkent geçersiz kılmalarını ve satın alımları sıfırla (Görevli)
+  rank: İttifak NAP sıralamalarını görüntüleyin veya yönetin
+  rank_set: Bir ittifakın NAP sırasını güncelle (Sadece Yönetici)
+  rank_tag: İttifak etiketi (örneğin ABC)
+  rank_position: Yeni sıra konumu (örneğin 1'den 10'a)
   rank_list: Mevcut NAP sıralamalarını ve durumlarını görüntüle
   sb: Hayatta Kalma Savaşı programını görüntüle
-  sb_long: Hayatta Kalma Savaşı silahlanma yarışı programını ve aktif etkinlikleri görüntüle
-  sb_day: Döngünün günü (1-7)
+  sb_long: Hayatta Kalma Savaşı silah yarışı programını ve aktif etkinlikleri görüntüle
+  sb_day: Döngü günü (1-7)
   rules: Sunucu ve Krallık NAP kurallarını görüntüle
   rules_rule: Görüntülenecek belirli kural numarası
   map: Canlı bölge haritasını görüntüle
   map_long: Canlı Last Asylum bölge haritasını görüntüle
-  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Sorumlular; yanıtı sadece siz görürsünüz)
-  registerbot: İttifak sunucusunu kaydet veya eğik çizgi komutlarını eşitle
+  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Görevliler; yanıtı sadece siz görürsünüz)
+  registerbot: İttifak sunucusunu kaydet veya eğik çizgi komutlarını senkronize et
   registerbot_action: Gerçekleştirilecek eylem (kayıt portalı bağlantısını almak için boş bırakın)
-  registerbot_sync: Tüm Kayıtlı Sunucuları Eşitle (Sadece Yönetici)
-  suggest: Bir kural önerisi gönderin, bir ittifak sorunu bildirin veya destek talebi durumunuzu kontrol edin
-  suggest_type: Destek talebi kategorisini seçin veya aktif gönderilerinizi kontrol edin
-  suggest_nap: "👑 Krallık / NAP Önerisi (Sunucu Genelinde Kural veya Etkinlik Fikri)"
-  suggest_alliance: "🛡️ Dahili İttifak Sorunu (R4/R5'leriniz Tarafından Gizlice Ele Alınır)"
-  suggest_status: "📋 Destek Talebi Durumumu Görüntüle (Aktif ve Yakın Geçmiş)"
+  registerbot_sync: Tüm Kayıtlı Sunucuları Senkronize Et (Sadece Yönetici)
+  suggest: Bir kural önerisi gönderin, bir ittifak sorununu bildirin veya bilet durumunuzu kontrol edin
+  suggest_type: Bilet kategorisi seçin veya aktif başvurularınızı kontrol edin
+  suggest_nap: "👑 Krallık / NAP Önerisi (Sunucu Geneli Kural veya Etkinlik Fikri)"
+  suggest_alliance: "🛡️ Dahili İttifak Sorunu (R4/R5'leriniz Tarafından Özel Olarak Ele Alınır)"
+  suggest_status: "📋 Bilet Durumumu Görüntüle (Aktif ve Son Geçmiş)"

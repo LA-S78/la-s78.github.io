@@ -187,33 +187,47 @@ bot_nominate:
   summary: 'Rang #{rank} · geöffnet bis {until} ({relative}).'
   open_page: Nominierungsseite öffnen
 bot_rewards:
-  reset_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Nominierungen löschen."
-  nothing_to_clear: "🔒 Es ist keine Belohnungsperiode geöffnet, daher gibt es nichts zu löschen."
+  reset_denied: "⛔ **Zugriff verweigert:** Nur ernannte Königreich-Verwalter können Nominierungen löschen."
+  nothing_to_clear: "🔒 Es ist kein Belohnungszeitraum offen, daher gibt es nichts zu löschen."
   cleared_title: "🔄 Nominierungen gelöscht — {week}"
   cleared_text: |-
-    Alle Allianzen-Listen für diese Woche wurden von **{name}** gelöscht.
+    Die Listen aller Allianzen für diese Woche wurden von **{name}** gelöscht.
 
-    • Führungskräfte können neue Listen mit `/nominate` senden.
+    • Anführer können neue Listen mit `/nominate` senden.
     • Belohnungen schließen {closes}.
-    • Erinnere den König daran, auf **Reset Checklist** auf der Konsole zu drücken.
-  none_eligible: "⚠️ Keine Allianzen sind derzeit für den aktiven Belohnungsplan berechtigt."
-  tag_buyout: " 🛡️ [Buyout]"
-  tag_funds: " ⚖️ [Finanzierter Buyout]"
-  awaiting: "⏳ **[{tag}]** (Rang #{rank}){buyout} — **Wartet auf Liste** ({total} Truhen)"
+    • Erinnere den König daran, **Checkliste zurücksetzen** auf der Konsole zu drücken.
+  none_eligible: "⚠️ Momentan sind keine Allianzen gemäß dem aktiven Belohnungsplan berechtigt."
+  tag_buyout: " 🛡️ [Ausgleich]"
+  tag_funds: " ⚖️ [Fonds-Ausgleich]"
+  awaiting: "⏳ **[{tag}]** (Rang #{rank}){buyout} — **Warte auf Liste** ({total} Truhen)"
   reserves_one: " · {count} Reserve"
   reserves_other: " · {count} Reserven"
   sent: "✅ **[{tag}]** (Rang #{rank}){buyout} — **{named}/{total}** benannt{reserves} ({when})"
-  closed: "🔒 **Geschlossen.** Die nächsten Belohnungen öffnen am {opens}."
-  open: "🎁 **{week} Belohnungen** · geöffnet bis {closes}"
-  battle_no_kw: "⚔️ Belohnung des Schlachtkönigs: Kein Königreichskrieg diese Woche."
-  battle_won: "⚔️ Belohnung des Schlachtkönigs: **gewonnen**, geöffnet."
-  battle_lost: "⚔️ Belohnung des Schlachtkönigs: verloren, nicht diese Woche."
-  battle_waiting: "⚔️ Belohnung des Schlachtkönigs: ⏳ **warten auf das Kampfergebnis** (etwa {time}). Der König verteilt danach."
+  closed: "🔒 **Geschlossen.** Die nächsten Belohnungen öffnen {opens}."
+  open: "🎁 **{week} Belohnungen** · offen bis {closes}"
+  battle_no_kw: "⚔️ Kampf-um-den-König-Belohnung: kein Königreichskrieg diese Woche."
+  battle_won: "⚔️ Kampf-um-den-König-Belohnung: **gewonnen**, offen."
+  battle_lost: "⚔️ Kampf-um-den-König-Belohnung: verloren, nicht diese Woche."
+  battle_waiting: "⚔️ Kampf-um-den-König-Belohnung: ⏳ **warte auf Kampfergebnis** (etwa {time}). Der König verteilt sie danach."
   open_console: Königskonsole öffnen
   title: "📋 Allianz-Belohnungsstatus — {week}"
   count_line: "**{sent} von {total} Allianzen haben eine Liste gesendet**"
   footer: Last Asylum Kapitol-Verwaltung
-  old_button: 'ℹ️ Dieser Button wird nicht mehr verwendet: Belohnungen öffnen jetzt jeden Freitag um 20:00 GT von selbst. Erfasse das Königreichskrieg-Ergebnis mit `/rewards` (Won oder Lost) nach dem Kampf am Samstag.'
+  old_button: 'ℹ️ Dieser Knopf wird nicht mehr verwendet: Belohnungen öffnen jetzt jeden Freitag um 20:00 GT von selbst. Zeichne das Königreichskrieg-Ergebnis mit `/rewards` (Gewonnen oder Verloren) nach dem Kampf am Samstag auf.'
+  overrides_denied: "⛔ **Zugriff verweigert:** Nur ernannte Königreich-Verwalter können die Kapitol-Überschreibungen zurücksetzen."
+  overrides_nothing: |-
+    ℹ️ Nichts zurückzusetzen: keine Überschreibungen oder Ausgleiche, und die Rotation entspricht bereits dem Standard-Zeitplan.
+    {schedule}
+  overrides_title: "🧹 Kapitol-Überschreibungen zurücksetzen"
+  overrides_text: |-
+    Zurückgesetzt von **{name}**. Die Rotation ist zurück beim Standard-Zeitplan:
+    {after}
+
+    Vorher: {before}
+
+    • Überschreibungen gelöscht: {overrides}
+    • Kriegszeit-Ausgleiche storniert: {buyouts} (in der Historie behalten)
+    • Die Liste jeder Allianz wurde für die korrigierten Truhen neu sortiert.
 bot_admin:
   rank_none: Keine Allianzen im aktuellen Staat registriert.
   rank_title: "🛡️ Server NAP-Rangliste"
@@ -256,36 +270,37 @@ bot_register:
   open_portal: Registrierungsportal öffnen
   busy: "⚠️ Dienst ausgelastet: {reason}. Bitte versuche es in wenigen Momenten erneut."
 bot_commands:
-  calendar: Event-Kalender ansehen oder verwalten
-  calendar_kingdom: Königreich-Event-Kalender ansehen oder verwalten
+  calendar: Veranstaltungskalender anzeigen oder verwalten
+  calendar_kingdom: Königreich-Veranstaltungskalender anzeigen oder verwalten
   calendar_action: Auszuführende Aktion (leer lassen, um den Kalender anzuzeigen)
-  calendar_manage_alliance: Allianz-Events verwalten (standardmäßig R5)
-  calendar_manage_global: Globale Events verwalten (nur für Admins)
-  nominate: Portal-Link für die wöchentlichen Truhen-Nominierungen anfordern
-  nominate_authenticated: Authentifizierten Portal-Link für die wöchentlichen Truhen-Nominierungen anfordern
-  rewards: 'Belohnungen dieser Woche: Status und das Ergebnis vom Königreichskrieg (Stewards)'
+  calendar_manage_alliance: Allianz-Veranstaltungen verwalten (standardmäßig R5)
+  calendar_manage_global: Globale Veranstaltungen verwalten (nur Admins)
+  nominate: Portal-Link für die Einreichung wöchentlicher Truhen-Nominierungen anfordern
+  nominate_authenticated: Authentifizierten Portal-Link für die Einreichung wöchentlicher Truhen-Nominierungen anfordern
+  rewards: 'Belohnungen dieser Woche: Status und Königreichskrieg-Ergebnis (Verwalter)'
   rewards_action: Leer lassen, um den Belohnungsstatus dieser Woche zu sehen
-  rewards_won: 'Königreichskrieg: Gewonnen erfassen (Steward)'
-  rewards_lost: 'Königreichskrieg: Verloren erfassen (Steward)'
-  rewards_reset: Nominierungen dieser Woche löschen (Steward)
-  rank: NAP-Ranglisten der Allianz ansehen oder verwalten
-  rank_set: NAP-Rang einer Allianz aktualisieren (nur für Admins)
-  rank_tag: Allianz-Tag (z. B. [ABC])
+  rewards_won: 'Königreichskrieg aufzeichnen: Gewonnen (Verwalter)'
+  rewards_lost: 'Königreichskrieg aufzeichnen: Verloren (Verwalter)'
+  rewards_reset: Nominierungen dieser Woche löschen (Verwalter)
+  rewards_reset_overrides: Kapitol-Überschreibungen und Ausgleiche zurücksetzen (Verwalter)
+  rank: NAP-Ranglisten der Allianz anzeigen oder verwalten
+  rank_set: NAP-Rang einer Allianz aktualisieren (nur Admins)
+  rank_tag: Allianz-Tag (z. B. ABC)
   rank_position: Neue Rangposition (z. B. 1 bis 10)
-  rank_list: Aktuelle NAP-Ranglisten und Platzierungen anzeigen
-  sb: Zeitplan für den Überlebenskampf anzeigen
-  sb_long: Zeitplan und aktive Events des Überlebenskampfs anzeigen
+  rank_list: Aktuelle NAP-Ranglisten und Standings anzeigen
+  sb: Überlebenskampf-Zeitplan anzeigen
+  sb_long: Überlebenskampf-Rüstungswettlauf-Zeitplan und aktive Veranstaltungen anzeigen
   sb_day: Tag des Zyklus (1-7)
   rules: Server- und Königreich-NAP-Regeln anzeigen
   rules_rule: Spezifische Regelnummer zum Anzeigen
-  map: Live-Gebietskarte ansehen
-  map_long: Live-Gebietskarte von Last Asylum ansehen
-  devupdate: Live-Daten in die Test-Seite kopieren (nur Stewards; nur du siehst die Antwort)
-  registerbot: Allianz-Server registrieren oder Slash-Commands synchronisieren
-  registerbot_action: Auszuführende Aktion (leer lassen, um einen Registrierungs-Portal-Link zu erhalten)
-  registerbot_sync: Alle registrierten Server synchronisieren (nur für Admins)
-  suggest: Regelvorschlag einreichen, ein Allianzproblem melden oder Ticket-Status prüfen
-  suggest_type: Ticket-Kategorie auswählen oder aktive Einreichungen prüfen
-  suggest_nap: "👑 Königreich / NAP-Vorschlag (Serverweite Regel oder Event-Idee)"
-  suggest_alliance: "🛡️ Internes Allianzproblem (wird privat von deinen R4/R5s behandelt)"
-  suggest_status: "📋 Meinen Ticket-Status ansehen (aktiv & Verlauf)"
+  map: Live-Gebietskarte anzeigen
+  map_long: Last Asylum Live-Gebietskarte anzeigen
+  devupdate: Live-Daten in die Testseite kopieren (nur Verwalter; nur du siehst die Antwort)
+  registerbot: Allianz-Server registrieren oder Slash-Befehle synchronisieren
+  registerbot_action: Auszuführende Aktion (leer lassen, um Registrierungs-Portal-Link zu erhalten)
+  registerbot_sync: Alle registrierten Server synchronisieren (nur Admins)
+  suggest: Regelvorschlag einreichen, Allianz-Problem melden oder Ticketstatus prüfen
+  suggest_type: Ticketkategorie wählen oder aktive Einreichungen prüfen
+  suggest_nap: "👑 Königreich- / NAP-Vorschlag (Serverweite Regel oder Veranstaltungsidee)"
+  suggest_alliance: "🛡️ Internes Allianz-Problem (wird privat durch deine R4/R5s behandelt)"
+  suggest_status: "📋 Meinen Ticketstatus anzeigen (aktiv & letzte Historie)"

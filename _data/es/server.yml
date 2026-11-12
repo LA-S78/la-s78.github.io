@@ -187,33 +187,47 @@ bot_nominate:
   summary: 'Rango #{rank} · abierto hasta el {until} ({relative}).'
   open_page: Abrir página de nominación
 bot_rewards:
-  reset_denied: "⛔ **Acceso denegado:** Solo los Administradores de Reino designados pueden borrar las nominaciones."
-  nothing_to_clear: "🔒 No hay un periodo de recompensas abierto, así que no hay nada que borrar."
+  reset_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden borrar las nominaciones."
+  nothing_to_clear: "🔒 No hay un periodo de recompensas abierto, por lo que no hay nada que borrar."
   cleared_title: "🔄 Nominaciones borradas — {week}"
   cleared_text: |-
     Las listas de todas las alianzas de esta semana fueron borradas por **{name}**.
 
     • Los líderes pueden enviar nuevas listas con `/nominate`.
-    • Las recompensas cierran el {closes}.
-    • Recuérdale al Rey presionar **Reset Checklist** en la consola.
-  none_eligible: "⚠️ Ninguna alianza es elegible actualmente bajo el plan de recompensas activo."
+    • Las recompensas cierran {closes}.
+    • Recuérdale al Rey que presione **Reset Checklist** en la consola.
+  none_eligible: "⚠️ Ninguna alianza es elegible bajo el plan de recompensas activo actualmente."
   tag_buyout: " 🛡️ [Compra]"
-  tag_funds: " ⚖️ [Compra con fondos]"
+  tag_funds: " ⚖️ [Compra de fondos]"
   awaiting: "⏳ **[{tag}]** (Rango #{rank}){buyout} — **Esperando lista** ({total} cofres)"
   reserves_one: " · {count} reserva"
   reserves_other: " · {count} reservas"
   sent: "✅ **[{tag}]** (Rango #{rank}){buyout} — **{named}/{total}** nombrados{reserves} ({when})"
-  closed: "🔒 **Cerrado.** Las próximas recompensas abren el {opens}."
-  open: "🎁 **Recompensas {week}** · abierto hasta el {closes}"
-  battle_no_kw: "⚔️ Recompensa Rey de la Batalla: no hay Guerra de Reinos esta semana."
-  battle_won: "⚔️ Recompensa Rey de la Batalla: **ganada**, abierta."
-  battle_lost: "⚔️ Recompensa Rey de la Batalla: perdida, no esta semana."
-  battle_waiting: "⚔️ Recompensa Rey de la Batalla: ⏳ **esperando el resultado de la batalla** (aprox. {time}). El Rey entrega las recompensas después."
+  closed: "🔒 **Cerrado.** Las próximas recompensas abren {opens}."
+  open: "🎁 **Recompensas de {week}** · abiertas hasta {closes}"
+  battle_no_kw: "⚔️ Recompensa Rey de Batalla: no hay Guerra de Reinos esta semana."
+  battle_won: "⚔️ Recompensa Rey de Batalla: **ganada**, abierta."
+  battle_lost: "⚔️ Recompensa Rey de Batalla: perdida, no esta semana."
+  battle_waiting: "⚔️ Recompensa Rey de Batalla: ⏳ **esperando el resultado de la batalla** (aprox. {time}). El Rey las reparte después."
   open_console: Abrir Consola del Rey
-  title: "📋 Estado de Recompensas de Alianza — {week}"
-  count_line: "**{sent} de {total} alianzas han enviado su lista**"
+  title: "📋 Estado de las recompensas de la alianza — {week}"
+  count_line: "**{sent} de {total} alianzas han enviado una lista**"
   footer: Administración del Capitolio de Last Asylum
-  old_button: 'ℹ️ Este botón ya no se usa: las recompensas ahora se abren automáticamente cada viernes a las 20:00 GT. Registra el resultado de la Guerra de Reinos con `/rewards` (Ganada o Perdida) después de la batalla del sábado.'
+  old_button: 'ℹ️ Este botón ya no se utiliza: las recompensas se abren automáticamente todos los viernes a las 20:00 GT. Registra el resultado de la Guerra de Reinos con `/rewards` (Won o Lost) después de la batalla del sábado.'
+  overrides_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden restablecer los reemplazos del Capitolio."
+  overrides_nothing: |-
+    ℹ️ Nada que restablecer: no hay reemplazos ni compras, y la rotación ya sigue el cronograma estándar.
+    {schedule}
+  overrides_title: "🧹 Restablecer reemplazos del Capitolio"
+  overrides_text: |-
+    Restablecido por **{name}**. La rotación ha vuelto al cronograma estándar:
+    {after}
+
+    Antes: {before}
+
+    • Reemplazos borrados: {overrides}
+    • Compras en tiempo de guerra canceladas: {buyouts} (mantenidas en el historial)
+    • La lista de cada alianza fue reordenada para los cofres corregidos.
 bot_admin:
   rank_none: No hay alianzas registradas en el estado actual.
   rank_title: "🛡️ Clasificación de NAP del servidor"
@@ -256,36 +270,37 @@ bot_register:
   open_portal: Abrir portal de registro
   busy: "⚠️ Servicio ocupado: {reason}. Por favor, inténtalo de nuevo en unos momentos."
 bot_commands:
-  calendar: Ver o gestionar el calendario de eventos
-  calendar_kingdom: Ver o gestionar el calendario de eventos del reino
+  calendar: Ver o gestionar el Calendario de Eventos
+  calendar_kingdom: Ver o gestionar el Calendario de Eventos del Reino
   calendar_action: Acción a realizar (dejar en blanco para ver el calendario)
-  calendar_manage_alliance: Gestionar eventos de alianza (R5 por defecto)
-  calendar_manage_global: Gestionar eventos globales (solo administradores)
+  calendar_manage_alliance: Gestionar Eventos de la Alianza (R5 por defecto)
+  calendar_manage_global: Gestionar Eventos Globales (Solo Administradores)
   nominate: Solicitar un enlace al portal para enviar nominaciones semanales de cofres
-  nominate_authenticated: Solicitar un enlace autenticado al portal para enviar nominaciones semanales de cofres
-  rewards: 'Recompensas de esta semana: estado y resultado de la Guerra de Reinos (Stewards)'
+  nominate_authenticated: Solicitar un enlace al portal autenticado para enviar nominaciones semanales de cofres
+  rewards: 'Recompensas de esta semana: estado y resultado de la Guerra de Reinos (Administradores)'
   rewards_action: Dejar en blanco para ver el estado de las recompensas de esta semana
-  rewards_won: 'Registrar Guerra de Reinos: Victoria (Steward)'
-  rewards_lost: 'Registrar Guerra de Reinos: Derrota (Steward)'
-  rewards_reset: Borrar nominaciones de esta semana (Steward)
-  rank: Ver o gestionar clasificaciones de NAP de alianza
-  rank_set: Actualizar el rango NAP de una alianza (solo administradores)
-  rank_tag: Etiqueta de alianza (ej. ABC)
+  rewards_won: 'Registrar Guerra de Reinos: Ganada (Administrador)'
+  rewards_lost: 'Registrar Guerra de Reinos: Perdida (Administrador)'
+  rewards_reset: Borrar las nominaciones de esta semana (Administrador)
+  rewards_reset_overrides: Restablecer reemplazos y compras del Capitolio (Administrador)
+  rank: Ver o gestionar rangos NAP de la alianza
+  rank_set: Actualizar el rango NAP de una alianza (Solo Administradores)
+  rank_tag: Etiqueta de la alianza (ej. ABC)
   rank_position: Nueva posición de rango (ej. 1 al 10)
-  rank_list: Mostrar las clasificaciones y posiciones NAP actuales
-  sb: Mostrar el horario de Batalla de Supervivencia
-  sb_long: Mostrar el horario de la carrera armamentista de Batalla de Supervivencia y eventos activos
+  rank_list: Mostrar rangos y posiciones NAP actuales
+  sb: Mostrar el cronograma de Batalla de Supervivencia
+  sb_long: Mostrar el cronograma de carrera armamentista de Batalla de Supervivencia y eventos activos
   sb_day: Día del ciclo (1-7)
-  rules: Mostrar las reglas NAP del servidor y del Reino
+  rules: Mostrar las reglas del servidor y las reglas NAP del Reino
   rules_rule: Número de regla específica para ver
-  map: Ver el mapa de territorio en vivo
-  map_long: Ver el mapa de territorio de Last Asylum en vivo
-  devupdate: Copiar los datos en vivo al sitio de pruebas (solo Stewards; solo tú verás la respuesta)
-  registerbot: Registrar servidor de alianza o sincronizar comandos de barra
+  map: Ver el mapa de territorio en tiempo real
+  map_long: Ver el mapa de territorio de Last Asylum en tiempo real
+  devupdate: Copiar los datos en vivo a los datos del sitio de prueba (Solo Administradores; solo tú ves la respuesta)
+  registerbot: Registrar el servidor de la alianza o sincronizar comandos slash
   registerbot_action: Acción a realizar (dejar en blanco para obtener el enlace del portal de registro)
-  registerbot_sync: Sincronizar todos los servidores registrados (solo administradores)
-  suggest: Enviar una propuesta de regla, reportar un problema de alianza o consultar el estado de tu ticket
-  suggest_type: Seleccionar categoría de ticket o consultar tus envíos activos
+  registerbot_sync: Sincronizar todos los servidores registrados (Solo Administradores)
+  suggest: Enviar una propuesta de regla, informar un problema de la alianza o verificar el estado de tu ticket
+  suggest_type: Seleccionar categoría de ticket o verificar tus envíos activos
   suggest_nap: "👑 Propuesta de Reino / NAP (Regla para todo el servidor o idea de evento)"
-  suggest_alliance: "🛡️ Problema interno de alianza (Gestionado de forma privada por tus R4/R5)"
-  suggest_status: "📋 Ver el estado de mi ticket (Activo e historial reciente)"
+  suggest_alliance: "🛡️ Problema interno de la alianza (Gestionado de forma privada por tus R4/R5s)"
+  suggest_status: "📋 Ver el estado de mi ticket (Activo y historial reciente)"
