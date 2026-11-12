@@ -1,204 +1,195 @@
+# Translated automatically from _data/en/ui.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 header:
-  title: "LAST ASYLUM"
-  subtitle: "Довідник із виживання"
-
+  title: LAST ASYLUM
+  subtitle: Довідник із виживання
 footer:
-  nav_home: "Головна"
-  nav_rules: "Правила"
-  nav_guides: "Гайди"
-  nav_alliance: "Альянс"
-  nav_calendar: "Календар"
-  aria_home: "Перейти на Головну сторінку"
-  aria_rules: "Перейти на сторінку Правил сервера"
-  aria_guides: "Перейти на сторінку Гайдів"
-  aria_alliance: "Перейти на сторінку Альянсу та Дипломатії"
-  aria_calendar: "Перейти на сторінку календаря подій"
-
+  nav_home: Головна
+  nav_rules: Правила
+  nav_guides: Гайди
+  nav_alliance: Альянс
+  nav_calendar: Календар
+  aria_home: Перейти на Головну сторінку
+  aria_rules: Перейти на сторінку Правил сервера
+  aria_guides: Перейти на сторінку Гайдів
+  aria_alliance: Перейти на сторінку Альянсу та Дипломатії
+  aria_calendar: Перейти на сторінку календаря подій
 guides:
-  heroes: "Герої та Білди"
-  combat: "Бій"
-  building: "Будівлі та Технології"
-  resources: "Керування ресурсами"
-  sanctuary: "Гайд по Сховищу"
-  duel: "Дуель Альянсів"
-  survival: "Битва за виживання"
-  kingdom: "Війна Королівств"
-  canyon: "Підкорення Каньйону"
-  cheese: "Сирна Пастка"
-  thief: "Полювання на Злодіїв"
-  pickaxe: "Гном'яче Кайло"
-  crystal: "Кришталева Долина"
-  alliance_shop: "Магазин Альянса"
-  honor_shop: "Магазин Честі"
-  sanctuary_shop: "Магазин Сховища"
-  campaign_shop: "Магазин Кампанії"
-  premium_shop: "Преміум і Набори самоцвітів"
-  t10: "Калькулятор T10"
-  scramble: "Королівська сутичка"
-
+  heroes: Герої та Білди
+  combat: Бій
+  building: Будівлі та Технології
+  resources: Керування ресурсами
+  sanctuary: Гайд по Сховищу
+  duel: Дуель Альянсів
+  survival: Битва за виживання
+  kingdom: Війна Королівств
+  canyon: Підкорення Каньйону
+  cheese: Сирна Пастка
+  thief: Полювання на Злодіїв
+  pickaxe: Гном'яче Кайло
+  crystal: Кришталева Долина
+  alliance_shop: Магазин Альянса
+  honor_shop: Магазин Честі
+  sanctuary_shop: Магазин Сховища
+  campaign_shop: Магазин Кампанії
+  premium_shop: Преміум і Набори самоцвітів
+  t10: Калькулятор T10
+  scramble: Королівська сутичка
 pages:
   home:
-    title: "Головна"
-    subtitle: "Довідник із виживання"
+    title: Головна
+    subtitle: Компендіум виживання
   rules:
-    title: "Правила"
-    subtitle: "Правила сервера та Ротація"
+    title: Правила
+    subtitle: Правила сервера та ротація
   guides:
-    title: "Гайди"
-    subtitle: "Гайди по грі"
+    title: Гайди
+    subtitle: Гайди по грі
     writers:
-      title: "Посібник для авторів"
-      subtitle: "Посібник для авторів"
+      title: Гайд для авторів
+      subtitle: Гайд для авторів
   alliance:
-    title: "Альянс"
-    subtitle: "Альянс та Дипломатія"
+    title: Альянс
+    subtitle: Альянс та дипломатія
+  api-test:
+    title: Цілком таємна розвідка альянсу
+    subtitle: Цілком таємна розвідка альянсу
+  calendar:
+    title: Календар подій
+    subtitle: Події альянсу та сервера
   guide_panes:
     heroes:
-      title: "Герої та Білди"
-      subtitle: "Герої та Білди"
+      title: Герої та Білди
+      subtitle: Герої та Білди
     combat:
-      title: "Бій"
-      subtitle: "Бій"
+      title: Бій
+      subtitle: Бій
     building:
-      title: "Будівлі та Технології"
-      subtitle: "Будівлі та Технології"
+      title: Будівлі та Технології
+      subtitle: Будівлі та Технології
     resources:
-      title: "Керування ресурсами"
-      subtitle: "Керування ресурсами"
+      title: Керування ресурсами
+      subtitle: Керування ресурсами
     sanctuary:
-      title: "Гайд по Сховищу"
-      subtitle: "Гайд по Сховищу"
+      title: Гайд по Сховищу
+      subtitle: Гайд по Сховищу
     duel:
-      title: "Дуель Альянсів"
-      subtitle: "Дуель Альянсів"
+      title: Дуель Альянсів
+      subtitle: Дуель Альянсів
     survival:
-      title: "Битва за виживання"
-      subtitle: "Битва за виживання"
+      title: Битва за виживання
+      subtitle: Битва за виживання
     kingdom:
-      title: "Війна Королівств"
-      subtitle: "Війна Королівств"
+      title: Війна Королівств
+      subtitle: Війна Королівств
     canyon:
-      title: "Підкорення Каньйону"
-      subtitle: "Підкорення Каньйону"
+      title: Підкорення Каньйону
+      subtitle: Підкорення Каньйону
     cheese:
-      title: "Сирна Пастка"
-      subtitle: "Сирна Пастка"
+      title: Сирна Пастка
+      subtitle: Сирна Пастка
     thief:
-      title: "Полювання на Злодіїв"
-      subtitle: "Полювання на Злодіїв"
+      title: Полювання на Злодіїв
+      subtitle: Полювання на Злодіїв
     pickaxe:
-      title: "Гном'яче Кайло"
-      subtitle: "Гном'яче Кайло"
+      title: Гном'яче Кайло
+      subtitle: Гном'яче Кайло
     crystal:
-      title: "Кришталева Долина"
-      subtitle: "Кришталева Долина"
+      title: Кришталева Долина
+      subtitle: Кришталева Долина
     alliance_shop:
-      title: "Магазин Альянса"
-      subtitle: "Магазин Альянса"
+      title: Магазин Альянса
+      subtitle: Магазин Альянса
     honor_shop:
-      title: "Магазин Честі"
-      subtitle: "Магазин Честі"
+      title: Магазин Честі
+      subtitle: Магазин Честі
     sanctuary_shop:
-      title: "Магазин Сховища"
-      subtitle: "Магазин Сховища"
+      title: Магазин Сховища
+      subtitle: Магазин Сховища
     campaign_shop:
-      title: "Магазин Кампанії"
-      subtitle: "Магазин Кампанії"
+      title: Магазин Кампанії
+      subtitle: Магазин Кампанії
     premium_shop:
-      title: "Преміум і Набори самоцвітів"
-      subtitle: "Преміум і Набори самоцвітів"
+      title: Преміум та набори самоцвітів
+      subtitle: Преміум та набори самоцвітів
     t10:
-      title: "Гайд по T10"
-      subtitle: "Вимоги Т10"
+      title: Гайд по T10
+      subtitle: Вимоги до T10
     scramble:
-      title: "Королівська сутичка"
-      subtitle: "Королівська сутичка"
-    cheese:
-      title: "Сирна пастка"
-      subtitle: "Сирна пастка"
-
+      title: Королівська сутичка
+      subtitle: Королівська сутичка
 nav_anchors:
-  server_rules: "Правила сервера"
-  rotation: "Ротація"
-  rewards: "Нагороди"
-  nap_alliances: "NAP Альянси"
-  nap_academies: "NAP Академії"
-  nap_ranks: "Ранги NAP"
-  nap_territory: "Територія NAP"
-  blacklist: "Чорний список"
-  markdown_usage: "Використання"
-  markdown_example: "Приклад"
-  guide_submissions: "Відправлення"
-  #guide pages
-  #survival battle
-  survival_explanation: "Пояснення"
-  survival_schedule: "Розклад"
-  survival_reference: "Довідка"
-  #kingdom war
-  kingdom_explanation: "Пояснення"
-  kingdom_scoring: "Очки"
-  kingdom_strategy: "Стратегія"
-  #alliance duel
-  duel_schedule: "Розклад"
-  duel_rules: "Правила"
-  #sanctuary guide
-  sanctuary_strategy: "Стратегія"
-  sanctuary_chart: "Таблиця"
-  sanctuary_goals: "Цілі"
-  sanctuary_efficiency: "Ефективність"
-  #royal scramble
-  scramble_event: "Подія"
-  scramble_points: "Очки"
-  #cheese trap
-  cheese_event: "Подія"
-  cheese_cheese: "Сир"
-  cheese_strategy: "Стратегія"
-  cheese_rewards: "Нагороди"
-
+  server_rules: Правила сервера
+  rotation: Ротація
+  rewards: Нагороди
+  nap_alliances: NAP Альянси
+  nap_academies: NAP Академії
+  nap_ranks: Ранги NAP
+  nap_territory: Територія NAP
+  blacklist: Чорний список
+  markdown_usage: Використання
+  markdown_example: Приклад
+  guide_submissions: Відправлення
+  survival_explanation: Пояснення
+  survival_schedule: Розклад
+  survival_reference: Довідка
+  kingdom_explanation: Пояснення
+  kingdom_scoring: Очки
+  kingdom_strategy: Стратегія
+  duel_schedule: Розклад
+  duel_rules: Правила
+  sanctuary_strategy: Стратегія
+  sanctuary_chart: Таблиця
+  sanctuary_goals: Цілі
+  sanctuary_efficiency: Ефективність
+  scramble_event: Подія
+  scramble_points: Очки
+  cheese_event: Подія
+  cheese_cheese: Сир
+  cheese_strategy: Стратегія
+  cheese_rewards: Нагороди
 search:
-  guides: "Пошук по гайдах..."
-  home: "Пошук по каталогах, дописах..."
-  placeholder: "Пошук..."
-
+  guides: Пошук по гайдах...
+  home: Пошук по каталогах, дописах...
+  placeholder: Пошук...
 pwa:
-  toast_msg: "Отримано нові розвіддані."
-  update_btn: "Оновити"
-  updating: "Розшифрування..."
+  toast_msg: Отримано нові розвіддані.
+  update_btn: Оновити
+  updating: Розшифрування...
   updated_msg: "✅ Застосунок оновлено до останньої версії."
-
-#header sign-in pill (js/identity-pill.js)
 identity:
-  account: "Ваш акаунт"
-  sign_in: "Увійти"
-  signing_in: "Вхід…"
-  sign_in_failed: "Не вдалося увійти, спробуйте ще раз"
-  sign_in_again: "Увійти знову"
-  refresh: "Оновити доступ"
-  sign_out: "Вийти"
-  force_update: "Оновити застосунок"
-  force_updating: "Оновлення…"
-  dashboard: "Панель альянсу"
-  role_steward: "Steward"
-  role_r5: "R5"
-  role_r4: "R4"
-  role_officer: "Офіцер"
-  role_member: "Учасник"
-  role_guest: "Гість"
-  role_expired: "Минув"
-  alliance_label: "Альянс"
-  alliance_none: "немає"
-  access_title: "Ваш доступ"
-  access_view: "Перегляд карти, розкладів і рейтингів"
-  access_draft: "Чернетки планів у режимі планувальника"
-  access_join: "Приєднайтеся до Discord-сервера NAP, щоб отримати більше доступу"
-  access_ask_leader: "Попросіть свого R4 або R5 надіслати ваші плани як пропозиції"
-  access_send: "Надсилання пропозицій щодо карти, рейтингу, чорного списку та нагород (5 на день)"
-  access_send_unlimited: "Надсилання пропозицій без денного ліміту"
-  access_approve: "Схвалення та відхилення пропозицій у Discord"
-  access_expired: "Термін входу минув. Увійдіть знову, щоб надсилати пропозиції."
-  expires_days: "Вхід спливає через {n} дн."
-  expires_one: "Вхід спливає через 1 день"
-  expires_today: "Вхід спливає сьогодні"
-  found_role_id: "знайдено за ID ролі"
-  found_role_name: "знайдено за назвою ролі"
-  found_nickname: "знайдено за ніком"
+  account: Ваш акаунт
+  sign_in: Увійти
+  signing_in: Вхід…
+  sign_in_failed: Не вдалося увійти, спробуйте ще раз
+  sign_in_again: Увійти знову
+  refresh: Оновити доступ
+  sign_out: Вийти
+  force_update: Оновити застосунок
+  force_updating: Оновлення…
+  dashboard: Панель альянсу
+  role_steward: Steward
+  role_r5: R5
+  role_r4: R4
+  role_officer: Офіцер
+  role_member: Учасник
+  role_guest: Гість
+  role_expired: Минув
+  alliance_label: Альянс
+  alliance_none: немає
+  access_title: Ваш доступ
+  access_view: Перегляд карти, розкладів і рейтингів
+  access_draft: Чернетки планів у режимі планувальника
+  access_join: Приєднайтеся до Discord-сервера NAP, щоб отримати більше доступу
+  access_ask_leader: Попросіть свого R4 або R5 надіслати ваші плани як пропозиції
+  access_send: Надсилання пропозицій щодо карти, рейтингу, чорного списку та нагород (5 на день)
+  access_send_unlimited: Надсилання пропозицій без денного ліміту
+  access_approve: Схвалення та відхилення пропозицій у Discord
+  access_expired: Термін входу минув. Увійдіть знову, щоб надсилати пропозиції.
+  expires_days: Вхід спливає через {n} дн.
+  expires_one: Вхід спливає через 1 день
+  expires_today: Вхід спливає сьогодні
+  found_role_id: знайдено за ID ролі
+  found_role_name: знайдено за назвою ролі
+  found_nickname: знайдено за ніком
