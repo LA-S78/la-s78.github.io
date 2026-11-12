@@ -27,6 +27,7 @@
         <div class="lantern-glow-bleed"></div>
 
         <main data-turbo-permanent="false">
+            {% if page.strings %}<script type="application/json" id="tool-strings">{{ page.strings | tool_strings_json }}</script>{% endif %}
             {{ content }}
         </main>
 

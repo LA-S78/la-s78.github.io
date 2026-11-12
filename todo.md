@@ -31,9 +31,13 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 - [ ] **Infographic Translation Pipeline**
   - Script to replace text in Canva SVG exports for all 8 languages.
 
-- [ ] **Portal & Bot Translations**
-  - Bot replies already come from `_data/<lang>/` (`api/_generated_translations.js`); the portal pages (nominate, distribute, register) and the planners' messages are still English only.
-  - Connect them to the site's language switcher.
+- [ ] **Tool Translations** (in progress, leaders' tools first)
+  - Tool text lives in `_data/en/tools.yml`; changed sections are translated by Gemini on push (`_scripts/translate_sections.rb`, see HOWTO "Add or change text in a tool").
+  - [x] System + Alliance Dashboard (charts, editor, Caravan Rotor, reward card)
+  - [ ] Nomination page, King's console, registration
+  - [ ] Calendar, King's scheduler, rewards
+  - [ ] Alliance page and map planners
+  - [ ] Later: server messages (`api/`) and `ui.yml` through the same system
 
 - [ ] **Map Plan Import / Export**
   - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.

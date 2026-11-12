@@ -19,6 +19,7 @@
         {% endunless %}
 
         <main>
+            {% if page.strings %}<script type="application/json" id="tool-strings">{{ page.strings | tool_strings_json }}</script>{% endif %}
             {{ content }}
         </main>
     </div>
