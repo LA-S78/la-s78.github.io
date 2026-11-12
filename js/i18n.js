@@ -86,6 +86,32 @@
   /** The page's language code, e.g. for dates and numbers. */
   const lang = () => strings().lang || 'en';
 
+  // The site's own /api/ calls say which language the page is in, so the server's messages
+  // (errors, confirmations) come back in it (api/_messages.js reads X-Site-Lang).
+  const pageLang = () => document.documentElement.lang || lang();
+  if (typeof window.fetch === 'function' && !window.fetch.siteLang) {
+    const plainFetch = window.fetch.bind(window);
+    const sameSiteApi = (url) => {
+      try {
+        const u = new URL(url, window.location.href);
+        return u.origin === window.location.origin && u.pathname.startsWith('/api/');
+      } catch (e) {
+        return false;
+      }
+    };
+    const withLang = (input, init) => {
+      const url = typeof input === 'string' || input instanceof URL ? String(input) : input?.url;
+      if (!url || !sameSiteApi(url)) return plainFetch(input, init);
+      const headers = new Headers(
+        init?.headers || (input instanceof Request ? input.headers : undefined),
+      );
+      if (!headers.has('X-Site-Lang')) headers.set('X-Site-Lang', pageLang());
+      return plainFetch(input, { ...init, headers });
+    };
+    withLang.siteLang = true;
+    window.fetch = withLang;
+  }
+
   window.t = t;
   window.tn = tn;
   window.th = th;

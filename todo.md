@@ -38,7 +38,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - [x] Calendar, King's scheduler, rewards
   - [x] Alliance page and map planners (incl. the proposal pop-up and live-data notices)
   - [x] `ui.yml` through the same system (hand translations kept; `guides`/`nav_anchors` left to the guides)
-  - [ ] Server messages (`api/`)
+  - [x] Server messages (`api/`, `_data/en/server.yml`; technical admin messages stay English)
 
 - [ ] **Map Plan Import / Export**
   - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.

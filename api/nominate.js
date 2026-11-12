@@ -22,8 +22,13 @@ import {
   kingAlliance,
   reassignAllNominations,
 } from './_nominations.js';
+import { inLanguage, say } from './_messages.js';
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
+  return inLanguage(req, () => respond(req, res));
+}
+
+async function respond(req, res) {
   if (!isGistConfigured()) {
     return res.status(500).json({ error: 'Gist configuration is missing.' });
   }
@@ -66,7 +71,7 @@ export default async function handler(req, res) {
         const payload = verifyToken(String(token), process.env.DISCORD_BOT_TOKEN, {
           action: 'nominate',
         });
-        if (!payload) return res.status(403).json({ error: 'This link is invalid or expired.' });
+        if (!payload) return res.status(403).json({ error: say('api_nominate.link_invalid') });
         const tag = String(payload.alliance || '').trim();
         const now = getAllianceNominationQuota(tag, view, mapState);
         body.alliance = {
@@ -107,7 +112,7 @@ export default async function handler(req, res) {
   // management) are signed the same way and also name an alliance.
   const payload = verifyToken(token, botToken, { action: 'nominate' });
   if (!payload) {
-    return res.status(403).json({ error: 'Token is invalid or expired. Run /nominate again.' });
+    return res.status(403).json({ error: say('api_nominate.token_invalid') });
   }
   const tag = String(payload.alliance || '').trim();
 
@@ -199,9 +204,7 @@ async function handleHandout(req, res) {
   const pass = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '');
   const session = verifySessionToken(pass, botToken);
   if (!session) {
-    return res
-      .status(401)
-      .json({ error: 'Sign in with Discord (top right) to tick chests.', code: 'login' });
+    return res.status(401).json({ error: say('api_nominate.signed_out'), code: 'login' });
   }
   const { alliance, pool, chest, name, done } = req.body || {};
   if (
@@ -212,7 +215,7 @@ async function handleHandout(req, res) {
     !name.trim() ||
     name.length > 60
   ) {
-    return res.status(400).json({ error: 'Invalid chest.' });
+    return res.status(400).json({ error: say('api_nominate.invalid_chest') });
   }
   const steward = isSteward(session.uid);
 
@@ -221,7 +224,7 @@ async function handleHandout(req, res) {
       const rewardsData = gistJson(gist, 'rewards-data.json');
       const period = getRewardPeriod(Date.now(), calendarConfig(gist));
       if (!period.open || rewardsData.period?.id !== period.id) {
-        return { refused: { status: 409, error: 'No reward period is open right now.' } };
+        return { refused: { status: 409, error: say('api_nominate.no_period') } };
       }
       const king = kingAlliance(rewardsData, period);
       const leader = ['R4', 'R5'].includes(session.role) && sameTag(session.alliance, king);
@@ -229,7 +232,9 @@ async function handleHandout(req, res) {
         return {
           refused: {
             status: 403,
-            error: `Only the King's alliance${king ? ` [${king}]` : ''} (R4/R5) and Stewards can tick chests.`,
+            error: king
+              ? say('api_nominate.king_only_tag', { king })
+              : say('api_nominate.king_only'),
           },
         };
       }
@@ -251,7 +256,7 @@ async function handleHandout(req, res) {
           return {
             refused: {
               status: 409,
-              error: `${name} is no longer on [${alliance}]'s list. Refresh the page.`,
+              error: say('api_nominate.not_listed', { name, alliance }),
             },
           };
         }
@@ -294,7 +299,9 @@ async function handleHandout(req, res) {
     return res.status(200).json({ success: true, handed_out: saved.handedOut });
   } catch (err) {
     console.error("King's checklist not saved:", err);
-    return res.status(500).json({ error: `Could not save: ${err.message}` });
+    return res
+      .status(500)
+      .json({ error: say('api_nominate.save_failed', { reason: err.message }) });
   }
 }
 

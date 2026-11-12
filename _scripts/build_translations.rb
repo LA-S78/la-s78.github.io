@@ -11,6 +11,7 @@ SUPPORTED_LOCALES = %w[en es de fr ru it tr uk]
 rules_by_lang = {}
 sb_by_lang = {}
 bot_by_lang = {}
+server_by_lang = {}
 
 SUPPORTED_LOCALES.each do |lang|
   # 1. Rules
@@ -33,6 +34,17 @@ SUPPORTED_LOCALES.each do |lang|
     end
   end
 
+  # 4. Server messages for the site's pages (_data/<lang>/server.yml, translated from
+  # _data/en/server.yml by _scripts/translate_sections.rb); used by api/_messages.js
+  server_path = File.join(DATA_DIR, lang, 'server.yml')
+  if File.exist?(server_path)
+    begin
+      server_by_lang[lang] = YAML.load_file(server_path)
+    rescue StandardError => e
+      warn "⚠️ Failed to parse #{server_path}: #{e.message}"
+    end
+  end
+
   # 3. Bot UI Strings
   bot_path = File.join(DATA_DIR, lang, 'bot.yml')
   if File.exist?(bot_path)
@@ -52,6 +64,7 @@ file_content = <<~JAVASCRIPT
   export const RULES_DATA = #{JSON.pretty_generate(rules_by_lang)};
   export const SB_DATA = #{JSON.pretty_generate(sb_by_lang)};
   export const BOT_DATA = #{JSON.pretty_generate(bot_by_lang)};
+  export const SERVER_DATA = #{JSON.pretty_generate(server_by_lang)};
 JAVASCRIPT
 
 FileUtils.mkdir_p(File.dirname(OUTPUT_FILE))

@@ -4,8 +4,13 @@ import { verifyToken } from './_tokens.js';
 import { ALLIANCE_COMMANDS_SCHEMA } from './_bot_schema.js'; // one list, shared with the bot
 import { checkTargetServer } from './_register_checks.js';
 import { isSteward } from './_stewards.js';
+import { inLanguage, say } from './_messages.js';
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
+  return inLanguage(req, () => respond(req, res));
+}
+
+async function respond(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -27,13 +32,13 @@ export default async function handler(req, res) {
   }
 
   if (!/^\d{17,20}$/.test(String(guildId).trim())) {
-    return res.status(400).json({ error: 'Invalid Discord Guild ID format.' });
+    return res.status(400).json({ error: say('api_register.guild_id_format') });
   }
 
   const payload = verifyToken(token, botToken, { action: 'register' });
   if (!payload || payload.action !== 'register' || !payload.alliance) {
     return res.status(403).json({
-      error: 'Token is invalid or expired. Run /registerbot again in Discord.',
+      error: say('api_register.token_invalid'),
     });
   }
 
@@ -53,7 +58,7 @@ export default async function handler(req, res) {
   const rawAlertChannel = String(alert_channel_id || '').trim();
   if (!rawAlertChannel || !/^\d{17,20}$/.test(rawAlertChannel)) {
     return res.status(400).json({
-      error: 'A valid 17-20 digit Operations Alert Channel ID is required.',
+      error: say('api_register.alert_channel_needed'),
     });
   }
   const cleanChannelId = rawAlertChannel;
@@ -64,7 +69,7 @@ export default async function handler(req, res) {
     const rawRoleId = String(alert_role_id).trim();
     if (!/^\d{17,20}$/.test(rawRoleId)) {
       return res.status(400).json({
-        error: 'Invalid Discord Alert Role ID format (must be 17-20 digits).',
+        error: say('api_register.alert_role_format'),
       });
     }
     cleanRoleId = rawRoleId;
@@ -74,7 +79,7 @@ export default async function handler(req, res) {
   const rawOfficerChannel = String(officer_channel_id || '').trim();
   if (!rawOfficerChannel || !/^\d{17,20}$/.test(rawOfficerChannel)) {
     return res.status(400).json({
-      error: 'A valid 17-20 digit Officer Ticket Intake Channel ID is required.',
+      error: say('api_register.officer_channel_needed'),
     });
   }
   const cleanOfficerChannelId = rawOfficerChannel;
@@ -85,7 +90,7 @@ export default async function handler(req, res) {
     const rawColor = String(alliance_color).trim().toUpperCase();
     if (!/^#[0-9A-F]{6}$/.test(rawColor)) {
       return res.status(400).json({
-        error: 'Invalid Alliance Identity Color format (must be a 6-digit hex code like #B8975A).',
+        error: say('api_register.color_format'),
       });
     }
     cleanColor = rawColor;
@@ -105,7 +110,7 @@ export default async function handler(req, res) {
   }).catch((err) => ({
     ok: false,
     status: 502,
-    error: `Discord could not be reached: ${err.message}`,
+    error: say('api_register.discord_unreachable', { reason: err.message }),
   }));
   if (!check.ok) return res.status(check.status).json({ error: check.error });
 
@@ -128,7 +133,7 @@ export default async function handler(req, res) {
 
   if (existingClaim) {
     return res.status(409).json({
-      error: `Server ID ${cleanGuildId} is already linked to alliance [${existingClaim[0]}]. A Discord server cannot be registered to multiple alliances.`,
+      error: say('api_register.already_linked', { guild: cleanGuildId, tag: existingClaim[0] }),
     });
   }
 
@@ -146,7 +151,7 @@ export default async function handler(req, res) {
   if (!deployRes.ok) {
     const errText = await deployRes.text();
     console.error('Failed to register guild commands:', errText);
-    return res.status(500).json({ error: 'Failed to deploy slash commands to your server.' });
+    return res.status(500).json({ error: say('api_register.deploy_failed') });
   }
 
   // 4. Persist Guild Mapping, Alert Config, Ticket Channel & Color to GitHub Gist
@@ -189,7 +194,7 @@ export default async function handler(req, res) {
   } catch (gistErr) {
     console.error('Failed to commit alliance registration:', gistErr);
     return res.status(500).json({
-      error: `Commands deployed, but failed to save configuration: ${gistErr.message}`,
+      error: say('api_register.save_failed', { reason: gistErr.message }),
     });
   }
 }

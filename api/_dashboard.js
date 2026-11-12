@@ -10,6 +10,7 @@ import { getAllianceNominationQuota, quotaIfWon } from './_rewards_helper.js';
 import { chestCounts } from './_nomination_assign.js';
 import { describeRewardPeriod } from './_reward_period.js';
 import { sourceRequest } from './_google_source.js';
+import { say } from './_messages.js';
 
 /** Most bytes one alliance's dashboard file may hold (thousands of table rows). */
 export const MAX_DASHBOARD_BYTES = 150 * 1024;
@@ -168,26 +169,35 @@ const colIndex = (v, columns) => {
  */
 export function cleanWidget(input, { actor = '', now = new Date().toISOString() } = {}) {
   const w = input && typeof input === 'object' ? input : {};
-  if (!WIDGET_TYPES.includes(w.type)) return { error: 'Choose a chart or table type.' };
+  if (!WIDGET_TYPES.includes(w.type)) return { error: say('api_dashboard.choose_type') };
   const title = clip(w.title, LIMITS.titleChars).trim();
-  if (!title) return { error: 'Give the chart or table a title.' };
+  if (!title) return { error: say('api_dashboard.title_needed') };
 
   const data = w.data && typeof w.data === 'object' ? w.data : {};
   const rawColumns = Array.isArray(data.columns) ? data.columns : [];
   const rawRows = Array.isArray(data.rows) ? data.rows : [];
   if (rawColumns.length > LIMITS.columns) {
-    return { error: `At most ${LIMITS.columns} columns (this table has ${rawColumns.length}).` };
+    return {
+      error: say('api_dashboard.too_many_columns', {
+        max: LIMITS.columns,
+        count: rawColumns.length,
+      }),
+    };
   }
   if (rawRows.length > LIMITS.rows) {
-    return { error: `At most ${LIMITS.rows} rows (this table has ${rawRows.length}).` };
+    return {
+      error: say('api_dashboard.too_many_rows', { max: LIMITS.rows, count: rawRows.length }),
+    };
   }
-  const columns = rawColumns.map((c, i) => clip(c, LIMITS.cellChars).trim() || `Column ${i + 1}`);
-  if (!columns.length) return { error: 'Paste a table first (a header row, then the data).' };
+  const columns = rawColumns.map(
+    (c, i) => clip(c, LIMITS.cellChars).trim() || say('api_dashboard.column_name', { n: i + 1 }),
+  );
+  if (!columns.length) return { error: say('api_dashboard.paste_first') };
   const rows = rawRows
     .filter(Array.isArray)
     .map((r) => columns.map((_, i) => clip(r[i], LIMITS.cellChars).trim()))
     .filter((r) => r.some((cell) => cell !== ''));
-  if (!rows.length) return { error: 'The table has no data rows under its header.' };
+  if (!rows.length) return { error: say('api_dashboard.no_data_rows') };
 
   const o = w.options && typeof w.options === 'object' ? w.options : {};
   const options = { labelCol: colIndex(o.labelCol, columns.length) ?? 0 };
@@ -196,7 +206,7 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     .filter((v) => v !== null && v !== options.labelCol);
   options.valueCols = [...new Set(valueCols)].slice(0, 6);
   if (w.type !== 'table' && !options.valueCols.length) {
-    if (columns.length < 2) return { error: 'A chart needs a column of numbers to show.' };
+    if (columns.length < 2) return { error: say('api_dashboard.needs_numbers') };
     options.valueCols = [options.labelCol === 1 ? 0 : 1];
   }
   if (w.type === 'bar') {
@@ -216,7 +226,7 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     const targetCol = colIndex(o.targetCol, columns.length);
     if (targetCol !== null) options.targetCol = targetCol;
     else if (Number.isFinite(target) && target > 0) options.target = target;
-    else return { error: 'A progress chart needs a target: a number, or a column of targets.' };
+    else return { error: say('api_dashboard.needs_target') };
   }
   if (w.type === 'table') {
     const hc = colIndex(o.highlightCol, columns.length);
@@ -279,17 +289,21 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     const at = d.widgets.findIndex((w) => w.id === widget.id);
     if (at >= 0) d.widgets[at] = widget;
     else if (d.widgets.length >= LIMITS.widgets) {
-      return { error: `At most ${LIMITS.widgets} charts and tables per alliance.`, status: 400 };
+      return {
+        error: say('api_dashboard.too_many_widgets', { max: LIMITS.widgets }),
+        status: 400,
+      };
     } else d.widgets.push(widget);
   } else if (edit.action === 'sync-data') {
     // Fresh data from the widget's Google Sheet / Doc (fetched by api/dashboard.js).
     const at = d.widgets.findIndex((w) => w.id === edit.id);
-    if (at < 0) return { error: 'That chart was removed.', status: 404 };
+    if (at < 0) return { error: say('api_dashboard.chart_removed'), status: 404 };
     const { widget, error } = cleanWidget(
       { ...d.widgets[at], data: edit.data, syncedAt: now || new Date().toISOString() },
       { actor, now },
     );
-    if (error) return { error: `The sheet's data can't be used: ${error}`, status: 400 };
+    if (error)
+      return { error: say('api_dashboard.sheet_unusable', { reason: error }), status: 400 };
     d.widgets[at] = widget;
   } else if (String(edit.action || '').startsWith('caravan-')) {
     const result = applyCaravanEdit(d.caravan, edit, { actor, now });
@@ -299,22 +313,25 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     const before = d.widgets.length;
     d.widgets = d.widgets.filter((w) => w.id !== edit.id);
     if (d.widgets.length === before)
-      return { error: 'That chart was already removed.', status: 404 };
+      return { error: say('api_dashboard.chart_already_removed'), status: 404 };
   } else if (edit.action === 'move-widget') {
     const at = d.widgets.findIndex((w) => w.id === edit.id);
     const to = at + (Number(edit.by) < 0 ? -1 : 1);
-    if (at < 0) return { error: 'That chart was removed.', status: 404 };
+    if (at < 0) return { error: say('api_dashboard.chart_removed'), status: 404 };
     if (to >= 0 && to < d.widgets.length)
       [d.widgets[at], d.widgets[to]] = [d.widgets[to], d.widgets[at]];
   } else {
-    return { error: 'Unknown change.', status: 400 };
+    return { error: say('api_dashboard.unknown_change'), status: 400 };
   }
   d.updatedAt = now || new Date().toISOString();
   d.updatedBy = String(actor).slice(0, 60);
   const bytes = Buffer.byteLength(JSON.stringify(d, null, 2));
   if (bytes > MAX_DASHBOARD_BYTES) {
     return {
-      error: `That would make this dashboard too big (${Math.round(bytes / 1024)} KB of ${MAX_DASHBOARD_BYTES / 1024} KB). Use fewer rows, or remove a table.`,
+      error: say('api_dashboard.too_big', {
+        size: Math.round(bytes / 1024),
+        max: MAX_DASHBOARD_BYTES / 1024,
+      }),
       status: 413,
     };
   }
@@ -360,18 +377,17 @@ export function applyCaravanEdit(
   const find = () => roster.findIndex((p) => p.id === edit.id);
   const person = () => {
     const name = clip(edit.name, CARAVAN_LIMITS.nameChars).trim();
-    if (!name) return { error: 'Enter a player name.' };
+    if (!name) return { error: say('api_dashboard.player_name_needed') };
     const from = gameTime(edit.from);
     const to = gameTime(edit.to);
-    if (from === null || to === null)
-      return { error: 'Times are Game Time like 18:00 (or leave them empty).' };
-    if (to && !from) return { error: 'Give the start time too (or leave both empty).' };
+    if (from === null || to === null) return { error: say('api_dashboard.time_format') };
+    if (to && !from) return { error: say('api_dashboard.start_time_needed') };
     return { name, from, to };
   };
   switch (edit.action) {
     case 'caravan-add': {
       if (roster.length >= CARAVAN_LIMITS.roster && !roster.some((x) => x.id === edit.id)) {
-        return { error: `At most ${CARAVAN_LIMITS.roster} players in the rotor.` };
+        return { error: say('api_dashboard.rotor_full', { max: CARAVAN_LIMITS.roster }) };
       }
       const p = person();
       if (p.error) return p;
@@ -380,18 +396,18 @@ export function applyCaravanEdit(
         : `p_${Math.random().toString(36).slice(2, 10)}`;
       if (roster.some((x) => x.id === newId)) break; // already added (this save, repeated)
       if (roster.some((x) => x.name.toLowerCase() === p.name.toLowerCase())) {
-        return { error: `${p.name} is already in the rotor.` };
+        return { error: say('api_dashboard.already_in_rotor', { name: p.name }) };
       }
       roster.push({ id: newId, ...p, picked: null });
       break;
     }
     case 'caravan-edit': {
       const at = find();
-      if (at < 0) return { error: 'That player was removed.' };
+      if (at < 0) return { error: say('api_dashboard.player_removed') };
       const p = person();
       if (p.error) return p;
       if (roster.some((x, i) => i !== at && x.name.toLowerCase() === p.name.toLowerCase())) {
-        return { error: `${p.name} is already in the rotor.` };
+        return { error: say('api_dashboard.already_in_rotor', { name: p.name }) };
       }
       Object.assign(roster[at], p);
       break;
@@ -404,7 +420,7 @@ export function applyCaravanEdit(
     case 'caravan-pick':
     case 'caravan-unpick': {
       const at = find();
-      if (at < 0) return { error: 'That player was removed.' };
+      if (at < 0) return { error: say('api_dashboard.player_removed') };
       // Picking someone already picked keeps the first pick (two officers tapping at once).
       if (edit.action === 'caravan-pick' && !roster[at].picked) {
         roster[at].picked = { at: now, by: clip(actor, 60) };
@@ -420,7 +436,7 @@ export function applyCaravanEdit(
       c.membersCanView = Boolean(edit.membersCanView);
       break;
     default:
-      return { error: 'Unknown change.' };
+      return { error: say('api_dashboard.unknown_change') };
   }
   return { caravan: { ...c, roster } };
 }
