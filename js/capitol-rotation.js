@@ -43,9 +43,9 @@ function renderWeek(w) {
         ${current ? `<span class="badge">${esc(t('this_week'))}</span>` : ''}
       </div>
       <div class="rotation-crown rank-${esc(w.seat)}" aria-hidden="true">${CROWNS[w.seat] || '🛡️'}</div>
-      <div class="rotation-seat">${esc(t('seat', { rank: w.seat }))}</div>
+      ${w.rank ? `<div class="rotation-seat">${esc(t('rank', { rank: w.rank }))}</div>` : ''}
       ${tag}
-      ${w.override ? `<div class="rotation-override">${esc(t('override', { rank: w.rank, seat: w.seat }))}</div>` : ''}
+      ${w.override ? `<div class="rotation-override">${esc(t('override', { replaced: w.replaced }))}</div>` : ''}
       <div class="rotation-date">${esc(t(w.captured ? 'captured' : 'captures', { date }))}</div>
     </div>`;
 }
@@ -54,7 +54,7 @@ function render(board, rotation) {
   const current = rotation.find((w) => w.state === 'current');
   board.innerHTML = `
     <div class="rotation-grid">${rotation.map(renderWeek).join('')}</div>
-    ${current ? `<p class="rotation-note">${esc(t(current.isKW ? 'kw_note' : 'off_week_note'))}</p>` : ''}
+    ${current ? `<p class="rotation-note">${esc(t(current.isKW ? 'kw_note' : 'off_week_note', { tag: current.tag || '?' }))}</p>` : ''}
     <p class="rotation-source">${esc(t('schedule_note'))}</p>`;
 }
 
