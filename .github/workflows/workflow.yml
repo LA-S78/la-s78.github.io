@@ -68,6 +68,8 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "Auto-translate new text (guides, data drafts, tool text) [skip ci]"
+            # Translating takes a minute or two: take any commit that landed meanwhile first.
+            git pull --rebase origin "${{ github.ref_name }}"
             git push
           fi
 

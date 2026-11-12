@@ -8,10 +8,12 @@ require 'json'
 
 GEMINI_MODEL = 'gemini-3.1-flash-lite'
 
-def call_gemini_api(prompt, _lang = nil, max_retries: 8)
+# json: true asks for a JSON reply (no YAML quoting pitfalls such as French "Statut : Ouvert").
+def call_gemini_api(prompt, _lang = nil, max_retries: 8, json: false)
   uri = URI("https://generativelanguage.googleapis.com/v1beta/models/#{GEMINI_MODEL}:generateContent?key=#{ENV['GEMINI_API_KEY']}")
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
+  body[:generationConfig] = { responseMimeType: 'application/json' } if json
 
   attempt = 0
 

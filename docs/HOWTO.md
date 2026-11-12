@@ -201,8 +201,11 @@ translated automatically when your change reaches `main`.
    Gemini, saves `_data/<lang>/tools.yml` and builds. Until then, and if a translation
    fails, that text shows in English.
 
-To fix one translation by hand, edit that language's `_data/<lang>/tools.yml`: your fix is
-kept until the English of that section changes again. To see what would be sent, run
+To fix one translation by hand, add it to `_data/translation_overrides.yml` (language →
+section → key, keeping the same `{placeholders}`); it's applied on the next push and kept
+through every re-translation. Don't edit `_data/<lang>/tools.yml` directly: it's rewritten.
+A game term that should always read the same goes in `_data/terminology.json` instead.
+Keep sections to about 25–60 strings. To see what would be sent, run
 `ruby _scripts/translate_sections.rb --check`.
 
 ---

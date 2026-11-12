@@ -45,9 +45,21 @@
     return fill(text, vars);
   }
 
-  /** Singular or plural: key_one when n is 1, key_other otherwise ({n} is filled in). */
+  /**
+   * Singular or plural ({n} is filled in): the language's own form for n (e.g. Russian and
+   * Ukrainian key_few for 2–4), else key_other, else key_one for 1.
+   */
   function tn(key, n, vars) {
-    return t(`${key}_${Number(n) === 1 ? 'one' : 'other'}`, { n, ...vars });
+    const d = strings();
+    let form = Number(n) === 1 ? 'one' : 'other';
+    try {
+      form = new Intl.PluralRules(d.lang || 'en').select(Number(n));
+    } catch (e) {
+      // older browser: one/other only
+    }
+    const has = (k) => typeof find(d.t, k) === 'string' || typeof find(d.en, k) === 'string';
+    const pick = [`${key}_${form}`, Number(n) === 1 ? `${key}_one` : `${key}_other`, `${key}_other`].find(has);
+    return t(pick || `${key}_other`, { n, ...vars });
   }
 
   /**

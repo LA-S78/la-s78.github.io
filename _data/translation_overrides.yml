@@ -1,0 +1,16 @@
+# Human fixes to the automatic translations of the tools' text (_data/<lang>/tools.yml).
+#
+# A fix here is laid over Gemini's translation every time _scripts/translate_sections.rb
+# runs (on each push to main), so it survives when its section is translated again.
+# Write it as language → section → key, with the same {placeholders} as the English:
+#
+#   de:
+#     caravan:
+#       new_week: "🔄 Neue Woche"
+#   ru:
+#     chart_editor:
+#       rows_few: "{n} строки"
+#
+# For a game term that should read the same everywhere, add it to _data/terminology.json
+# instead (Gemini then uses it in every translation).
+{}
