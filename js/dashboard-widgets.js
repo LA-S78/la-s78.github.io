@@ -3,7 +3,7 @@
  * Draws the Alliance Dashboard's charts and tables (portal/dashboard.html) from a widget:
  *   { type: 'bar'|'line'|'pie'|'progress'|'table', title, note, visibility,
  *     data: { columns, rows }, options: { labelCol, valueCols, vertical, donut, target,
- *     targetCol, highlightCol, highlightMin }, updatedAt }
+ *     targetCol, highlightCol, highlightMin, swap, rowNames }, updatedAt }
  * Everything is plain SVG/HTML coloured with the theme's CSS variables (.dw-s0 … .dw-s5 in
  * _css/portal/70-alliance-dashboard.css), so charts follow Plague, Sanctuary and Miasma.
  * Every value from the data goes through escapeHtml() (js/escape-html.js).
@@ -123,6 +123,14 @@
     return (Math.round(n * 100) / 100).toLocaleString();
   }
 
+  /**
+   * The chart's points and lines. Normally each sheet row is a point (its label along the
+   * bottom) and each chosen column a line or bar series. With options.swap (line and bar
+   * charts), it's the other way round: each chosen column is a point (e.g. a week), and
+   * each row picked in options.rowNames (by its label, e.g. a player) is a line; for sheets
+   * with one row per player and one column per week. Either way: { values, names, rows },
+   * where a row's cells[values[k]] is the sheet cell behind its k-th number.
+   */
   function series(w) {
     const o = w.options || {};
     const cols = w.data?.columns || [];
@@ -130,12 +138,43 @@
     const values = (o.valueCols && o.valueCols.length ? o.valueCols : [label === 1 ? 0 : 1]).filter(
       (c) => c < cols.length,
     );
+    if (o.swap && (w.type === 'line' || w.type === 'bar')) return swapped(w, label, values);
     const rows = (w.data?.rows || []).map((r) => ({
       label: r[label] ?? '',
       values: values.map((c) => number(r[c])),
       cells: r,
     }));
     return { label, values, names: values.map((c) => cols[c]), rows };
+  }
+
+  /** The rows a swapped chart draws: those named in options.rowNames, else the first 3. */
+  function pickedRows(w, label) {
+    const data = w.data?.rows || [];
+    const key = (v) => String(v ?? '').trim();
+    const wanted = (w.options?.rowNames || []).map(key).filter(Boolean);
+    const picked = [];
+    for (const name of wanted) {
+      const i = data.findIndex((r, j) => key(r[label]) === name && !picked.includes(j));
+      if (i >= 0) picked.push(i);
+    }
+    if (!picked.length) return data.slice(0, 3).map((_, i) => i);
+    return picked.slice(0, SERIES);
+  }
+
+  function swapped(w, label, columns) {
+    const cols = w.data?.columns || [];
+    const data = w.data?.rows || [];
+    const picked = pickedRows(w, label);
+    return {
+      label,
+      values: picked,
+      names: picked.map((i) => data[i][label] ?? ''),
+      rows: columns.map((c) => ({
+        label: cols[c],
+        values: picked.map((i) => number(data[i][c])),
+        cells: data.map((r) => r[c]),
+      })),
+    };
   }
 
   // Traffic-light stops (red → yellow → green), softened for the dark themes.
@@ -375,7 +414,7 @@
   function line(w) {
     const s = series(w);
     const rows = s.rows;
-    if (rows.length < 2) return empty(say('line_two_rows'));
+    if (rows.length < 2) return empty(say(w.options?.swap ? 'line_two_columns' : 'line_two_rows'));
     const all = rows.flatMap((r) => r.values.filter(Number.isFinite));
     if (!all.length) return empty(say('no_numbers'));
     // Trends: the chart spans the data's own range (a little margin), not from zero, so

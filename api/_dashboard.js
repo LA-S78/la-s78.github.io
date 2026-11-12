@@ -143,7 +143,7 @@ export function rewardStatus({ tag, rewardsData, mapState, nominations, period }
 export const LIMITS = Object.freeze({
   widgets: 20,
   rows: 500,
-  columns: 12,
+  columns: 40, // a weekly sheet gains a column each week; the 150 KB cap still applies
   cellChars: 100,
   titleChars: 80,
   noteChars: 400,
@@ -204,7 +204,17 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
   const valueCols = (Array.isArray(o.valueCols) ? o.valueCols : [])
     .map((v) => colIndex(v, columns.length))
     .filter((v) => v !== null && v !== options.labelCol);
-  options.valueCols = [...new Set(valueCols)].slice(0, 6);
+  // Swapped (line/bar): the columns are the points along the bottom (weeks), so any
+  // number of them; the lines are rows picked by their label (up to 6, one per colour).
+  const swap = (w.type === 'line' || w.type === 'bar') && Boolean(o.swap);
+  options.valueCols = [...new Set(valueCols)].slice(0, swap ? LIMITS.columns : 6);
+  if (swap) {
+    options.swap = true;
+    const names = (Array.isArray(o.rowNames) ? o.rowNames : [])
+      .map((n) => clip(n, LIMITS.cellChars).trim())
+      .filter(Boolean);
+    options.rowNames = [...new Set(names)].slice(0, 6);
+  }
   if (w.type !== 'table' && !options.valueCols.length) {
     if (columns.length < 2) return { error: say('api_dashboard.needs_numbers') };
     options.valueCols = [options.labelCol === 1 ? 0 : 1];

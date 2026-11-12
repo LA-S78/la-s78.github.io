@@ -594,6 +594,16 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
           .map((c, i) => `<option value="${i}"${Number(value) === i && value !== '' && value !== undefined ? ' selected' : ''}>${escapeHtml(c)}</option>`)
           .join('')}</select>`;
 
+      // Swapped line/bar charts: the text typed to find rows (kept while the options redraw).
+      let rowFilter = '';
+      const numericCols = (o) =>
+        w.data.columns
+          .map((_, i) => i)
+          .filter((i) => i !== o.labelCol && w.data.rows.some((r) => Number.isFinite(W.number(r[i]))));
+      const rowLabels = () => [
+        ...new Set(w.data.rows.map((r) => String(r[w.options.labelCol] ?? '').trim()).filter(Boolean)),
+      ];
+
       function drawOptions() {
         const o = w.options;
         const cols = w.data.columns;
@@ -608,13 +618,33 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
           const numeric = cols
             .map((_, i) => i)
             .filter((i) => i !== o.labelCol && w.data.rows.some((r) => Number.isFinite(W.number(r[i]))));
-          o.valueCols = w.type === 'line' ? numeric.slice(0, 6) : numeric.slice(0, 1);
+          o.valueCols = o.swap ? numeric : w.type === 'line' ? numeric.slice(0, 6) : numeric.slice(0, 1);
         }
         let html = '';
         if (w.type !== 'table') {
-          html += `<label for="ed-label">${e('labels')}</label>${colSelect('ed-label', o.labelCol)}`;
           const multi = w.type === 'bar' || w.type === 'line';
-          html += `<label>${e(multi ? 'numbers_to_show' : 'numbers')}</label><div class="dash-cols">${cols
+          const swap = multi && Boolean(o.swap);
+          html += `<label for="ed-label">${e(swap ? 'labels_swapped' : 'labels')}</label>${colSelect('ed-label', o.labelCol)}`;
+          if (multi) {
+            html += `<label class="dash-check"><input type="checkbox" id="ed-swap"${swap ? ' checked' : ''}> ${e(w.type === 'line' ? 'swap_line' : 'swap_bar')}</label>`;
+            html += `<p class="dash-help">${e('swap_help')}</p>`;
+          }
+          if (swap) {
+            // The rows to draw (by their label), up to 6: one colour each.
+            const chosen = o.rowNames || [];
+            const full = chosen.length >= 6;
+            html += `<label for="ed-rowfilter">${e('rows_to_draw')}</label>
+              <input type="text" id="ed-rowfilter" placeholder="${e('rows_filter')}" value="${escapeHtml(rowFilter)}" autocomplete="off">
+              <div class="dash-cols dash-rows" id="ed-rows">${rowLabels()
+                .map((name) => {
+                  const on = chosen.includes(name);
+                  const hide = rowFilter && !name.toLowerCase().includes(rowFilter.toLowerCase());
+                  return `<label${hide ? ' hidden' : ''}><input type="checkbox" name="ed-row" value="${escapeHtml(name)}"${on ? ' checked' : ''}${full && !on ? ' disabled' : ''}> ${escapeHtml(name)}</label>`;
+                })
+                .join('')}</div>
+              <p class="dash-help">${escapeHtml(t('chart_editor.rows_count', { n: chosen.length }))}</p>`;
+          }
+          html += `<label>${e(swap ? 'columns_along' : multi ? 'numbers_to_show' : 'numbers')}</label><div class="dash-cols">${cols
             .map((c, i) =>
               i === o.labelCol
                 ? ''
@@ -653,6 +683,30 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         if ($('ed-label')) o.labelCol = Number(val('ed-label'));
         const checked = [...document.querySelectorAll('input[name="ed-val"]:checked')].map((x) => Number(x.value));
         if (document.querySelector('input[name="ed-val"]')) o.valueCols = checked;
+        if ($('ed-swap')) {
+          const swap = $('ed-swap').checked;
+          if (swap && !o.swap) {
+            // Switched on: every number column along the bottom, the first 3 rows as lines.
+            o.valueCols = numericCols(o);
+            o.rowNames = rowLabels().slice(0, 3);
+          } else if (!swap && o.swap) {
+            o.valueCols = (o.valueCols || []).slice(0, 6);
+          }
+          if (swap) o.swap = true;
+          else {
+            delete o.swap;
+            delete o.rowNames;
+          }
+        }
+        if (o.swap && document.querySelector('input[name="ed-row"]')) {
+          // Checked rows in the list (in its order), keeping ones hidden by the filter.
+          const shown = [...document.querySelectorAll('input[name="ed-row"]')];
+          const checkedNow = shown.filter((x) => x.checked).map((x) => x.value);
+          const hiddenKept = (o.rowNames || []).filter((n) =>
+            shown.some((x) => x.value === n && x.closest('label').hidden),
+          );
+          o.rowNames = [...new Set([...checkedNow, ...hiddenKept])].slice(0, 6);
+        }
         if ($('ed-vertical')) o.vertical = $('ed-vertical').checked;
         if ($('ed-stacked')) o.stacked = $('ed-stacked').value || undefined;
         if ($('ed-scale')) o.scale = $('ed-scale').checked;
@@ -767,6 +821,14 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       });
       $('ed-paste').addEventListener('input', readPaste);
       ['ed-title', 'ed-note', 'ed-vis'].forEach((id) => $(id).addEventListener('input', preview));
+      $('ed-options').addEventListener('input', (ev) => {
+        if (ev.target.id !== 'ed-rowfilter') return;
+        rowFilter = ev.target.value.trim();
+        const q = rowFilter.toLowerCase();
+        document.querySelectorAll('#ed-rows label').forEach((l) => {
+          l.hidden = Boolean(q) && !l.textContent.toLowerCase().includes(q);
+        });
+      });
       $('ed-options').addEventListener('change', () => {
         readOptions();
         drawOptions();
