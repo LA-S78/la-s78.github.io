@@ -221,7 +221,9 @@ with `api_`). In the code, write `say('api_dashboard.chart_removed')` (or
 `say('api_dashboard.no_rank', { tag })`) from `api/_messages.js`, and wrap a new endpoint's
 handler in `inLanguage(req, …)` so it answers in the page's language (the page sends it
 in an `X-Site-Lang` header, added by `js/i18n.js`). Technical messages for administrators
-(server set-up, raw Discord errors) can stay as plain English text.
+(server set-up, raw Discord errors) can stay as plain English text. The Discord bot works the same way:
+its text is in `server.yml` sections starting `bot_`, and `api/interactions.js` already
+answers in the user's Discord language, so a bot module only needs `say()`.
 
 ---
 

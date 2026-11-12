@@ -3,14 +3,10 @@
 // Split out of api/interactions.js unchanged.
 
 import { InteractionResponseType } from 'discord-interactions';
-import { NOT_HANDLED, getGistData, sendEphemeralMessage } from './_bot_common.js';
+import { NOT_HANDLED, getGistData, sendEphemeralMessage, weekName } from './_bot_common.js';
+import { say } from './_messages.js';
 import { resolveMemberAllianceContext } from './_bot_roles.js';
-import {
-  DEFAULT_CALENDAR_CONFIG,
-  getCycleState,
-  getScheduleSlot,
-  weekLabel,
-} from './_calendar_helper.js';
+import { DEFAULT_CALENDAR_CONFIG, getCycleState, getScheduleSlot } from './_calendar_helper.js';
 import { isGistConfigured } from './_gist.js';
 import { isSteward } from './_stewards.js';
 import { createToken } from './_tokens.js';
@@ -53,10 +49,7 @@ export async function handleCalendarCommand(ctx) {
   // SUB-ACTION: Manage Global Events (Steward Only)
   if (requestedAction === 'manage_global') {
     if (!isSteward(userId)) {
-      return sendEphemeralMessage(
-        res,
-        '⛔ **Access Denied:** Only designated Kingdom Stewards can manage Kingdom-wide events.',
-      );
+      return sendEphemeralMessage(res, say('bot_calendar.global_denied'));
     }
 
     const tokenPayload = {
@@ -72,11 +65,10 @@ export async function handleCalendarCommand(ctx) {
       data: {
         embeds: [
           {
-            title: '👑 Kingdom Event Management Portal',
+            title: say('bot_calendar.global_title'),
             color: 0x10b981,
-            description:
-              'Click below to open the calendar in **Global Management Mode**.\n\nYou can schedule kingdom-wide announcements, truce alerts, or delete entries.',
-            footer: { text: 'Link is private and expires in 4 hours.' },
+            description: say('bot_calendar.global_text'),
+            footer: { text: say('bot_common.link_expires_4h') },
           },
         ],
         components: [
@@ -86,7 +78,7 @@ export async function handleCalendarCommand(ctx) {
               {
                 type: 2,
                 style: 5,
-                label: 'Open Global Management Portal',
+                label: say('bot_calendar.global_button'),
                 url: manageUrl,
               },
             ],
@@ -100,10 +92,7 @@ export async function handleCalendarCommand(ctx) {
   // SUB-ACTION: Manage Alliance Events (R5 / Delegated Officers)
   if (requestedAction === 'manage_alliance') {
     if (!detectedAllianceTag) {
-      return sendEphemeralMessage(
-        res,
-        '⚠️ Could not detect your alliance. Run this command inside your registered alliance server, or ensure you have your alliance role in the NAP server.',
-      );
+      return sendEphemeralMessage(res, say('bot_calendar.no_alliance'));
     }
 
     const isAuthorized = isSteward(userId) || hasDelegatedLeadership;
@@ -111,7 +100,10 @@ export async function handleCalendarCommand(ctx) {
     if (!isAuthorized) {
       return sendEphemeralMessage(
         res,
-        `⛔ **Access Denied:** Only members holding **@R5** or leadership roles (${allowedRoles.map((r) => '@' + r).join(', ')}) can manage events for **[${detectedAllianceTag}]**.`,
+        say('bot_common.leaders_denied', {
+          roles: allowedRoles.map((r) => '@' + r).join(', '),
+          tag: detectedAllianceTag,
+        }),
       );
     }
 
@@ -129,10 +121,10 @@ export async function handleCalendarCommand(ctx) {
       data: {
         embeds: [
           {
-            title: `🛡️ Alliance Event Management — [${detectedAllianceTag}]`,
+            title: say('bot_calendar.alliance_title', { tag: detectedAllianceTag }),
             color: 0x3b82f6,
-            description: `Click below to open the calendar in **Alliance Management Mode** for **[${detectedAllianceTag}]**.\n\nYou can schedule internal raids, hive movements, and training drills.`,
-            footer: { text: 'Link is private and expires in 4 hours.' },
+            description: say('bot_calendar.alliance_text', { tag: detectedAllianceTag }),
+            footer: { text: say('bot_common.link_expires_4h') },
           },
         ],
         components: [
@@ -142,7 +134,7 @@ export async function handleCalendarCommand(ctx) {
               {
                 type: 2,
                 style: 5,
-                label: `Open [${detectedAllianceTag}] Management Portal`,
+                label: say('bot_calendar.alliance_button', { tag: detectedAllianceTag }),
                 url: manageUrl,
               },
             ],
@@ -167,7 +159,7 @@ export async function handleCalendarCommand(ctx) {
     ? `[${scheduledTag}]`
     : holderEntry
       ? `[${holderEntry[0]}]`
-      : `Rank #${state.capitolRank}`;
+      : say('bot_calendar.rank', { rank: state.capitolRank });
 
   const holderActualRank = scheduledTag
     ? alliances[scheduledTag]?.rank || state.capitolRank
@@ -187,7 +179,7 @@ export async function handleCalendarCommand(ctx) {
     ? `[${nextScheduledTag}]`
     : nextHolderEntry
       ? `[${nextHolderEntry[0]}]`
-      : `Rank #${nextWeekConfig?.capitol_rank}`;
+      : say('bot_calendar.rank', { rank: nextWeekConfig?.capitol_rank });
 
   const nextActualRank = nextScheduledTag
     ? alliances[nextScheduledTag]?.rank || nextWeekConfig?.capitol_rank
@@ -196,57 +188,72 @@ export async function handleCalendarCommand(ctx) {
   // Time to the daily reset, written out: Discord's own relative time says "in a day"
   // for anything over ~22 hours, which isn't useful here.
   const minsToReset = Math.max(0, Math.round((state.nextResetTimestamp * 1000 - now) / 60000));
-  const resetIn = `${Math.floor(minsToReset / 60)}h ${minsToReset % 60}m`;
 
   // The week's alliance captures the Capitol on Friday (see _calendar_helper.js).
   const captureNote = state.capitolCaptured
-    ? 'captured Friday'
+    ? say('bot_calendar.captured_friday')
     : state.isCaptureDay
-      ? 'captures today'
-      : `captures Friday, <t:${state.captureTimestamp}:R>`;
+      ? say('bot_calendar.captures_today')
+      : say('bot_calendar.captures_friday', { when: `<t:${state.captureTimestamp}:R>` });
 
   const fields = [
     {
-      name: state.capitolCaptured ? '👑 Current Capitol Holder' : '👑 Next Capitol Holder',
-      value: `**${holderTag}** *(Rank #${holderActualRank})* — ${captureNote}`,
+      name: say(state.capitolCaptured ? 'bot_calendar.current_holder' : 'bot_calendar.next_holder'),
+      value: say('bot_calendar.holder_line', {
+        tag: holderTag,
+        rank: holderActualRank,
+        note: captureNote,
+      }),
       inline: true,
     },
     {
-      name: '⏰ Next Daily Reset (00:00 GT)',
-      value: `**<t:${state.nextResetTimestamp}:t>** (in ${resetIn})`,
+      name: say('bot_calendar.next_reset'),
+      value: say('bot_calendar.reset_line', {
+        time: `<t:${state.nextResetTimestamp}:t>`,
+        hours: Math.floor(minsToReset / 60),
+        minutes: minsToReset % 60,
+      }),
       inline: true,
     },
   ];
 
   if (state.isKW) {
     fields.push({
-      name: state.isKWBattleDay ? '⚔️ Kingdom War Battle (TODAY)' : '⚔️ Next Kingdom War Battle',
+      name: say(state.isKWBattleDay ? 'bot_calendar.kw_today' : 'bot_calendar.kw_next'),
       value: state.isKWBattleDay
-        ? '🔥 **Active War Window:** Defend and conquer the Capitol!'
-        : `Scheduled for **Saturday** (<t:${state.kwBattleTimestamp}:R> / <t:${state.kwBattleTimestamp}:D>)`,
+        ? say('bot_calendar.kw_active')
+        : say('bot_calendar.kw_scheduled', {
+            relative: `<t:${state.kwBattleTimestamp}:R>`,
+            date: `<t:${state.kwBattleTimestamp}:D>`,
+          }),
       inline: false,
     });
   }
 
   fields.push({
-    name: '⏭️ Next Rotation Phase',
-    value: `**${weekLabel(nextSlot.clockWeek)}** begins <t:${nextWeekResetTs}:R>.\n**${nextHolderTag}** *(Rank #${nextActualRank})* captures the Capitol that Friday.`,
+    name: say('bot_calendar.next_phase'),
+    value: say('bot_calendar.next_phase_line', {
+      week: weekName(nextSlot.clockWeek),
+      when: `<t:${nextWeekResetTs}:R>`,
+      tag: nextHolderTag,
+      rank: nextActualRank,
+    }),
     inline: false,
   });
 
   const viewQuery = detectedAllianceTag ? `?alliance=${detectedAllianceTag}` : '';
   const buttonLabel = detectedAllianceTag
-    ? `Open Calendar ([${detectedAllianceTag}])`
-    : 'Open Full Calendar';
+    ? say('bot_calendar.open_alliance', { tag: detectedAllianceTag })
+    : say('bot_calendar.open_full');
 
   return res.status(200).json({
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       embeds: [
         {
-          title: '📅 Kingdom War Calendar',
+          title: say('bot_calendar.title'),
           color: state.isKW ? 0x8f0000 : 0xb8975a,
-          description: `${state.clockWeek === 0 ? '🛡️' : '⚔️'} **${weekLabel(state.clockWeek)}**`,
+          description: `${state.clockWeek === 0 ? '🛡️' : '⚔️'} **${weekName(state.clockWeek)}**`,
           fields,
           footer: { text: 'la-s78.app' },
           timestamp: new Date().toISOString(),

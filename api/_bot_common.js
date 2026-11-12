@@ -5,6 +5,7 @@
 import { InteractionResponseType } from 'discord-interactions';
 import { BOT_DATA } from './_generated_translations.js';
 import { readGist } from './_gist.js';
+import { say } from './_messages.js';
 
 export const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'ru', 'it', 'tr', 'uk'];
 
@@ -27,21 +28,6 @@ export const FALLBACK_BOT_STRINGS = {
     title: '🗺️ Last Asylum Territory Map',
     description: 'View real-time territory ownership.',
     button: 'Web Map',
-    footer: 'Click the buttons below to switch perspectives',
-    views: {
-      alliance: {
-        title: '🗺️ Last Asylum: Alliance Territories',
-        description: 'Live territorial ownership by alliance.',
-      },
-      level: {
-        title: '🏰 Last Asylum: Territory Levels',
-        description: 'Territories categorized by tier (Lv. 1 to Lv. 7).',
-      },
-      resource: {
-        title: '🌾 Last Asylum: Resources & Regional Buffs',
-        description: 'Territory yields (Grain, Timber, Herbs)',
-      },
-    },
   },
   admin: {
     access_denied:
@@ -82,6 +68,12 @@ export function sendEphemeralMessage(res, content) {
     data: { content, flags: 64 },
   });
 }
+
+/** A week's name in the user's language ('Off-Week', 'Kingdom War Week 2'), as weekLabel(). */
+export const weekName = (clockWeek) =>
+  Number(clockWeek) === 0
+    ? say('bot_common.off_week')
+    : say('bot_common.kw_week', { n: clockWeek });
 
 /** Unix seconds for a Discord timestamp (<t:…>). */
 export const unix = (ms) => Math.floor(ms / 1000);

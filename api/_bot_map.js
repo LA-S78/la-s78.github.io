@@ -4,6 +4,7 @@
 
 import { InteractionResponseType } from 'discord-interactions';
 import { NOT_HANDLED, getGistData, sendEphemeralMessage } from './_bot_common.js';
+import { say } from './_messages.js';
 
 /** --- /map COMMAND --- */
 export async function handleMapCommand(ctx) {
@@ -32,7 +33,7 @@ export async function handleMapCommand(ctx) {
     });
   } catch (err) {
     console.error('Error handling /map command:', err);
-    return sendEphemeralMessage(res, '⚠️ Could not generate map preview.');
+    return sendEphemeralMessage(res, say('bot_map.failed'));
   }
   return NOT_HANDLED;
 }
@@ -92,18 +93,17 @@ export function buildMapMessagePayload({
 }) {
   const selectedView = ['level', 'alliance', 'resource'].includes(view) ? view : 'level';
 
+  // The view's title and text (_data/en/server.yml bot_map; the old map.views strings in
+  // _source/bot.md were never filled in, so these replace them).
   const titles = {
-    level: t?.map?.views?.level?.title || '🏰 Last Asylum: Territory Levels',
-    alliance: t?.map?.views?.alliance?.title || '🗺️ Last Asylum: Alliance Territories',
-    resource: t?.map?.views?.resource?.title || '🌾 Last Asylum: Resources & Regional Buffs',
+    level: say('bot_map.level_title'),
+    alliance: say('bot_map.alliance_title'),
+    resource: say('bot_map.resource_title'),
   };
-
   const descriptions = {
-    level: t?.map?.views?.level?.description || 'Territories categorized by tier (Lv. 1 to Lv. 8).',
-    alliance: t?.map?.views?.alliance?.description || 'Territories colored by alliance ownership.',
-    resource:
-      t?.map?.views?.resource?.description ||
-      'Territories colored by resource yields and regional buffs.',
+    level: say('bot_map.level_text'),
+    alliance: say('bot_map.alliance_text'),
+    resource: say('bot_map.resource_text'),
   };
 
   const embedColors = {
@@ -122,7 +122,7 @@ export function buildMapMessagePayload({
         color: embedColors[selectedView],
         image: { url: mapImageUrl },
         footer: {
-          text: t?.map?.footer || 'Click the buttons below to switch perspectives',
+          text: say('bot_map.footer'),
         },
       },
     ],
@@ -133,7 +133,7 @@ export function buildMapMessagePayload({
           {
             type: 2,
             style: selectedView === 'level' ? 1 : 2,
-            label: 'Levels',
+            label: say('bot_map.levels'),
             custom_id: 'map_view:level',
             disabled: selectedView === 'level',
             emoji: { name: '🏰' },
@@ -141,7 +141,7 @@ export function buildMapMessagePayload({
           {
             type: 2,
             style: selectedView === 'alliance' ? 1 : 2,
-            label: 'Alliances',
+            label: say('bot_map.alliances'),
             custom_id: 'map_view:alliance',
             disabled: selectedView === 'alliance',
             emoji: { name: '🗺️' },
@@ -149,7 +149,7 @@ export function buildMapMessagePayload({
           {
             type: 2,
             style: selectedView === 'resource' ? 1 : 2,
-            label: 'Resources',
+            label: say('bot_map.resources'),
             custom_id: 'map_view:resource',
             disabled: selectedView === 'resource',
             emoji: { name: '🌾' },

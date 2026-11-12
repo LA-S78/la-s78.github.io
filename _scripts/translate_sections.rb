@@ -160,6 +160,17 @@ def yaml_text(data, source)
 end
 
 state = File.exist?(STATE_FILE) ? JSON.parse(File.read(STATE_FILE)) : {}
+
+# Section names must be unique across the files: overrides go by section name.
+seen = {}
+FILES.each do |name|
+  path = "_data/en/#{name}.yml"
+  next unless File.exist?(path)
+  (YAML.load_file(path) || {}).each_key do |section|
+    abort "❌ Section '#{section}' is in both #{seen[section]}.yml and #{name}.yml; rename one." if seen[section]
+    seen[section] = name
+  end
+end
 overrides = (File.exist?(OVERRIDES_FILE) && YAML.load_file(OVERRIDES_FILE)) || {}
 
 if ADOPT

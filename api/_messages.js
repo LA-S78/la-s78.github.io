@@ -1,5 +1,6 @@
 // api/_messages.js
-// Messages the server sends to the site's pages, in the reader's language
+// Messages the server sends to the site's pages and the Discord bot's replies, in the
+// reader's language
 // ("_" files are helpers, not endpoints).
 //
 // The English text is in _data/en/server.yml; _scripts/translate_sections.rb translates it,
@@ -9,8 +10,9 @@
 //   return res.status(400).json({ error: say('api_dashboard.signed_out') });    // anywhere below
 //
 // The language comes from the page (js/i18n.js adds an X-Site-Lang header to the site's own
-// /api/ requests), else the browser's Accept-Language, else English. Code running outside a
-// request (tests, the Discord bot) gets English. Technical messages for administrators
+// /api/ requests), else the browser's Accept-Language, else English. The Discord bot uses
+// the user's Discord language (inLocale, api/interactions.js). Code running outside either
+// (tests, scheduled jobs) gets English. Technical messages for administrators
 // (server set-up, raw Discord errors) stay in English and don't use this.
 
 import { AsyncLocalStorage } from 'node:async_hooks';
@@ -36,21 +38,27 @@ export function inLanguage(req, fn) {
   return current.run(requestLanguage(req), fn);
 }
 
+/** Runs `fn` in a given language (the Discord bot: the user's Discord language). */
+export function inLocale(lang, fn) {
+  return current.run(LANGUAGES.includes(lang) ? lang : 'en', fn);
+}
+
 /** The language of the request being handled ('en' outside one). */
 export function language() {
   return current.getStore() || 'en';
 }
 
-const find = (tree, key) =>
+const findIn = (tree, key) =>
   key
     .split('.')
     .reduce((node, part) => (node && typeof node === 'object' ? node[part] : undefined), tree);
+const find = (lang, key) => findIn(SERVER_DATA?.[lang], key);
 
 /** A message in the current request's language (English if not translated yet), {vars} filled in. */
 export function say(key, vars = {}) {
   const lang = language();
-  let text = find(SERVER_DATA?.[lang], key);
-  if (typeof text !== 'string') text = find(SERVER_DATA?.en, key);
+  let text = find(lang, key);
+  if (typeof text !== 'string') text = find('en', key);
   if (typeof text !== 'string') return key;
   return text.replace(/\{([a-z_][a-z0-9_]*)\}/gi, (whole, name) =>
     vars[name] !== undefined && vars[name] !== null ? String(vars[name]) : whole,
@@ -64,9 +72,7 @@ export function say(key, vars = {}) {
 export function sayCount(key, count, vars = {}) {
   const lang = language();
   const form = new Intl.PluralRules(lang).select(count);
-  const has = (k) =>
-    typeof find(SERVER_DATA?.[lang], k) === 'string' ||
-    typeof find(SERVER_DATA?.en, k) === 'string';
+  const has = (k) => typeof find(lang, k) === 'string' || typeof find('en', k) === 'string';
   const pick = [`${key}_${form}`, `${key}_other`, `${key}_one`].find(has) || `${key}_other`;
   return say(pick, { count, ...vars });
 }
