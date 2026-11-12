@@ -45,13 +45,17 @@ jobs:
             echo "No English source drafts found. Skipping."
           fi
 
-      # --- TRANSLATE THE TOOLS' TEXT (only the sections whose English changed) ---
-      # _data/en/tools.yml -> _data/<lang>/tools.yml; see _scripts/translate_sections.rb.
+      # --- TRANSLATE THE TOOLS' TEXT AND ui.yml (only the sections whose English changed) ---
+      # _data/en/{tools,ui}.yml -> _data/<lang>/...; see _scripts/translate_sections.rb.
       - name: Translating changed tool text via AI
         if: github.event_name == 'push'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: bundle exec ruby _scripts/translate_sections.rb
+        # --adopt first: a section that already has every English key and no record yet (e.g.
+        # ui.yml's hand translations, the first time) is kept as it is, not sent to Gemini.
+        run: |
+          bundle exec ruby _scripts/translate_sections.rb --adopt
+          bundle exec ruby _scripts/translate_sections.rb
 
       # --- FIXED INTERCEPT STAGE FOR UNTRACKED FILES ---
       - name: Saving master translation files
@@ -61,7 +65,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
           # Force stage the directories first so Git registers new untracked files
-          git add _source/ _data/*/tools.yml _scripts/translation_state.json 2>/dev/null || git add _source/
+          git add _source/ _data/*/tools.yml _data/*/ui.yml _scripts/translation_state.json 2>/dev/null || git add _source/
           
           # Safely check the staged index for differences
           if git diff --cached --quiet; then

@@ -18,6 +18,9 @@
 # Runs in CI on pushes to main/dev (see .github/workflows/workflow.yml), before the build.
 #   GEMINI_API_KEY=... ruby _scripts/translate_sections.rb            translate what changed
 #   ruby _scripts/translate_sections.rb --check                         list what would be sent
+#   ruby _scripts/translate_sections.rb --adopt                         mark existing translations that
+#     already have every English key (and its {placeholders}) as up to date, so they aren't sent
+#     again until their English changes (used once when ui.yml joined, keeping its hand translations)
 
 require 'yaml'
 require 'json'
@@ -28,7 +31,10 @@ Encoding.default_external = Encoding::UTF_8
 $stdout.sync = true
 Dir.chdir(File.expand_path('..', __dir__))
 
-FILES = %w[tools].freeze # _data/en/<name>.yml files translated this way
+FILES = %w[tools ui].freeze # _data/en/<name>.yml files translated this way
+# Sections left alone: in ui.yml, guide titles and their tab anchors come from the guides'
+# own translations (_scripts/sync_ui_data.rb adds them at build time); Gemini mustn't replace them.
+SKIP_SECTIONS = { 'ui' => %w[guides nav_anchors] }.freeze
 LANGS = %w[de es fr ru tr uk it].freeze
 LANG_NAMES = { 'de' => 'German', 'es' => 'Spanish', 'fr' => 'French', 'ru' => 'Russian',
                'tr' => 'Turkish', 'uk' => 'Ukrainian', 'it' => 'Italian' }.freeze
@@ -42,6 +48,7 @@ STATE_FILE = '_scripts/translation_state.json'
 OVERRIDES_FILE = '_data/translation_overrides.yml'
 COOLDOWN = 8 # seconds between Gemini calls
 CHECK_ONLY = ARGV.include?('--check')
+ADOPT = ARGV.include?('--adopt')
 
 def fingerprint(value)
   Digest::SHA256.hexdigest(JSON.generate(value))[0, 16]
@@ -154,6 +161,29 @@ end
 
 state = File.exist?(STATE_FILE) ? JSON.parse(File.read(STATE_FILE)) : {}
 overrides = (File.exist?(OVERRIDES_FILE) && YAML.load_file(OVERRIDES_FILE)) || {}
+
+if ADOPT
+  FILES.each do |name|
+    english = (File.exist?("_data/en/#{name}.yml") && YAML.load_file("_data/en/#{name}.yml")) || {}
+    LANGS.each do |lang|
+      path = "_data/#{lang}/#{name}.yml"
+      current = (File.exist?(path) && YAML.load_file(path)) || {}
+      english.each do |section, value|
+        next if SKIP_SECTIONS.fetch(name, []).include?(section)
+        key = "#{name}/#{lang}/#{section}"
+        next if state[key]
+        if same_shape?(value, current[section], lang)
+          state[key] = fingerprint(value)
+          puts "adopted #{key}"
+        else
+          puts "left for translation: #{key}"
+        end
+      end
+    end
+  end
+  File.write(STATE_FILE, JSON.pretty_generate(state.sort.to_h) + "\n")
+  exit 0
+end
 unless CHECK_ONLY || ENV['GEMINI_API_KEY'].to_s != ''
   puts 'GEMINI_API_KEY is not set: nothing translated (this only runs in CI).'
   exit 0
@@ -169,6 +199,7 @@ FILES.each do |name|
     path = "_data/#{lang}/#{name}.yml"
     current = (File.exist?(path) && YAML.load_file(path)) || {}
     todo = english.select do |section, value|
+      next false if SKIP_SECTIONS.fetch(name, []).include?(section)
       state["#{name}/#{lang}/#{section}"] != fingerprint(value) || !current.key?(section)
     end
     stale = current.keys - english.keys
