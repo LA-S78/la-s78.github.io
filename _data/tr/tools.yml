@@ -140,8 +140,8 @@ caravan:
   this_player: bu oyuncu
   confirm_new_week: Yeni bir hafta başlasın mı? Herkes uygun olanlara dönecek (isimler ve saatler aynı kalır).
 chart_editor:
-  edit_title: "✏️ Çizelgeyi veya tabloyu düzenle"
-  new_title: "➕ Yeni çizelge veya tablo"
+  edit_title: "✏️ Grafik veya tabloyu düzenle"
+  new_title: "➕ Yeni grafik veya tablo"
   type: Tür
   type_bar: "📊 Sütun"
   type_line: "📈 Çizgi"
@@ -151,24 +151,24 @@ chart_editor:
   title: Başlık
   title_example: ör. İttifak Düellosu puanları
   note: Açıklama
-  note_example: ör. Cuma sıfırlanmasına kadar en az 15M Düello puanı gerekir
+  note_example: ör. Cuma sıfırlamasına kadar minimum 15M Düello puanı gerekir
   who_sees: Kimler görebilir
   officers_only: "🔒 Sadece yetkililer (R4/R5)"
   all_members: "👥 Tüm ittifak üyeleri"
   data: Veri
   data_source: Veri kaynağı
   paste: "📋 Tablo yapıştır"
-  link: "🔗 Google E-tablo / Doküman bağlantısı"
-  paste_help: Google E-tablolar veya Excel'den hücreleri kopyalayın (başlık satırı önce olacak şekilde) ve buraya yapıştırın.
+  link: "🔗 Google E-Tablo / Doküman bağlantısı"
+  paste_help: Google E-Tablolar veya Excel'den hücreleri kopyalayın (başlık satırı önce olacak şekilde) ve buraya yapıştırın.
   tab_name: Sekme adı (isteğe bağlı)
   range: Aralık, ör. A1:D20 (isteğe bağlı)
-  doc_table: Dokümandaki tablo numarası (1, 2…)
+  doc_table: Dokümandaki hangi tablo (1, 2...)
   load: "⤓ Google'dan yükle"
   loading: "⤓ Yükleniyor…"
-  link_help: 'E-tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi senkronize et” en güncel verileri çeker.'
+  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi senkronize et” özelliği daha sonra en güncel sayıları çeker.'
   load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
   preview: Önizleme
-  preview_empty: Çizelgeyi görmek için yukarıya bir tablo yapıştırın.
+  preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
   size: "{rows} × {columns}"
   rows_one: "{n} satır"
   rows_other: "{n} satır"
@@ -177,6 +177,14 @@ chart_editor:
   at_most_500: "(en fazla 500)"
   labels: İsimler (etiketler)
   numbers_to_show: Gösterilecek sayılar
+  labels_swapped: İsimler (her biri bir satır veya çubukta)
+  swap_line: "⇄ Satır ve sütunları değiştir: satır başına bir çizgi, altta sütunlar"
+  swap_bar: "⇄ Satır ve sütunları değiştir: sütunlar çubuk olarak, satır başına bir renk"
+  swap_help: 'Satır başına bir oyuncu ve sütun başına bir hafta olan tablolar için: oyuncuları haftalar boyunca takip etmek için bunu işaretleyin.'
+  rows_to_draw: Çizilecek satırlar (en fazla 6)
+  rows_filter: İsim ara…
+  rows_count: "{n} / 6 seçildi"
+  columns_along: Alttaki sütunlar (tablo sırasına göre)
   numbers: Sayılar
   several_columns: Birden fazla sayı sütunu
   side_by_side: Yan yana
@@ -185,23 +193,24 @@ chart_editor:
   vertical: Dikey sütunlar
   vertical_leaderboard: Dikey sütunlar (sıralama tablosu yerine)
   traffic_columns: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil"
-  traffic_size: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): sıralamaya göre, en üst yeşil"
-  traffic_reverse: "↕️ Tersine çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
-  traffic_target: "🚦 Hedefe yakınlığa göre kırmızı → sarı → yeşil"
-  traffic_target_reverse: "↕️ Tersine çevir: hedefin ne kadar altında kalırsa o kadar iyi"
+  traffic_size: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): dereceye göre, en üsttekiler yeşil"
+  traffic_reverse: "↕️ Ters çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
+  traffic_target: "🚦 Her birinin hedefe yakınlığına göre kırmızı → sarı → yeşil"
+  traffic_target_reverse: "↕️ Ters çevir: hedefin ne kadar altında kalırsa o kadar iyidir"
   donut: Halka (donut)
   target: Herkes için hedef
   target_example: ör. 15M veya 15000000
   target_column: "…veya hedef sütunu"
   use_number_above: "(yukarıdaki sayıyı kullan)"
-  highlight_where: Şu durumlarda satırları vurgula
-  no_highlight: "(vurgu yok)"
+  highlight_where: 'Satırları vurgula:'
+  no_highlight: "(vurgulama yok)"
   at_least: en az
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}
   no_numbers: Seçilen sütunda grafiklenecek sayı yok.
-  line_two_rows: Çizgi grafiği için en az iki satır gerekir.
+  line_two_rows: Bir çizgi grafiği için en az iki satır gerekir.
+  line_two_columns: Bir çizgi grafiği için altta en az iki sütun gerekir.
   no_positive: Seçilen sütunda grafiklenecek pozitif sayı yok.
   no_targets: Karşılaştırılacak sayı (veya hedef) yok.
   no_table: Henüz tablo yok.
@@ -211,22 +220,22 @@ charts:
   value: Değer
   total: Toplam
   total_value: 'Toplam: {value}'
-  share_of_all: "{value} · toplamın {share}'i"
-  value_of_target: "{target} üzerinden {value}"
+  share_of_all: "{value} · tamamının %{share}'i"
+  value_of_target: "{target} hedefinin {value}'si"
   to_go: 'Kalan: {value}'
   target_reached: Hedefe ulaşıldı ✓
   done: "✓ Tamamlandı"
-  reached_target: "{total} üzerinden {done} hedefe ulaştı"
+  reached_target: "{total} kişiden {done} tanesi hedefe ulaştı"
   search: Ara…
   search_label: Bu tabloda ara
-  matching: "{n} eşleşen"
+  matching: "{n} eşleşme"
   show_all: Tüm {n} taneyi göster
   show_all_rows: Tüm {n} satırı göster
-  first_rows: Toplam {n} satırın ilk {shown} tanesi gösteriliyor.
-  hint_bar: Bir çubuğun üzerine dokunun veya gelin
-  hint_line: Bir haftanın üzerine dokunun veya gelin
-  hint_pie: Bir dilimin üzerine dokunun veya gelin
-  hint_progress: Bir satırın üzerine dokunun veya gelin
+  first_rows: "{n} satırın ilk {shown} tanesi gösteriliyor."
+  hint_bar: Bir sütuna dokunun veya üzerine gelin
+  hint_line: Bir haftaya dokunun veya üzerine gelin
+  hint_pie: Bir dilime dokunun veya üzerine gelin
+  hint_progress: Bir satıra dokunun veya üzerine gelin
 nominate:
   page_title: Ödül Adaylıkları
   loading: Adaylık sayfası yükleniyor...

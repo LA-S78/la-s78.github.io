@@ -149,7 +149,7 @@ chart_editor:
   type_progress: "🎯 Progresso"
   type_table: "📋 Tabella"
   title: Titolo
-  title_example: es. punteggi Duello tra Alleanze
+  title_example: es. Punteggi Duello tra Alleanze
   note: Spiegazione
   note_example: es. Minimo 15M di punti Duello richiesti entro il reset di venerdì
   who_sees: Chi può vederlo
@@ -159,16 +159,16 @@ chart_editor:
   data_source: Da dove provengono i dati
   paste: "📋 Incolla una tabella"
   link: "🔗 Link Google Sheet / Doc"
-  paste_help: Copia le celle da Google Sheets o Excel (prima la riga di intestazione) e incollale qui.
+  paste_help: Copia le celle da Google Sheets o Excel (prima la riga dell'intestazione) e incollale qui.
   tab_name: Nome scheda (opzionale)
   range: Intervallo, es. A1:D20 (opzionale)
   doc_table: Quale tabella nel Doc (1, 2…)
   load: "⤓ Carica da Google"
   loading: "⤓ Caricamento…"
-  link_help: 'Sheets: Condividi → “Chiunque abbia il link può visualizzare” (oppure File → Condividi → Pubblica sul web). Docs: File → Condividi → Pubblica sul web. “Sincronizza ora” sulla scheda recupera i numeri più recenti in seguito.'
+  link_help: 'Sheets: Condividi → “Chiunque abbia il link può visualizzare” (o File → Condividi → Pubblica sul web). Docs: File → Condividi → Pubblica sul web. “Sincronizza ora” sulla scheda recupera i numeri più recenti in seguito.'
   load_first: Carica prima il foglio (⤓ Carica da Google).
   preview: Anteprima
-  preview_empty: Incolla una tabella qui sopra per vedere il grafico.
+  preview_empty: Incolla una tabella sopra per vedere il grafico.
   size: "{rows} × {columns}"
   rows_one: "{n} riga"
   rows_other: "{n} righe"
@@ -177,6 +177,14 @@ chart_editor:
   at_most_500: "(massimo 500)"
   labels: Nomi (etichette)
   numbers_to_show: Numeri da mostrare
+  labels_swapped: Nomi (una riga o una barra ciascuno)
+  swap_line: "⇄ Scambia righe e colonne: una linea per riga, le colonne in basso"
+  swap_bar: "⇄ Scambia righe e colonne: le colonne come barre, un colore per riga"
+  swap_help: 'Per fogli con una riga per giocatore e una colonna per settimana: seleziona questo per seguire i giocatori nelle settimane.'
+  rows_to_draw: Righe da disegnare (fino a 6)
+  rows_filter: Cerca un nome…
+  rows_count: "{n} di 6 scelti"
+  columns_along: Colonne in basso (in ordine di foglio)
   numbers: Numeri
   several_columns: Diverse colonne numeriche
   side_by_side: Affiancate
@@ -184,45 +192,46 @@ chart_editor:
   stacked_percent: 'Impilate: ogni barra al 100%'
   vertical: Barre verticali
   vertical_leaderboard: Barre verticali (invece di una classifica)
-  traffic_columns: "🚦 Rosso → giallo → verde (basso → alto): prima colonna rossa, ultima verde"
-  traffic_size: "🚦 Rosso → giallo → verde (basso → alto): per rango, i migliori in verde"
-  traffic_reverse: "↕️ Invertito: basso è bene (verde), alto è male (rosso)"
+  traffic_columns: "🚦 Rosso → giallo → verde (basso → alto): prima colonna rosso, ultima verde"
+  traffic_size: "🚦 Rosso → giallo → verde (basso → alto): per rango, i migliori verde"
+  traffic_reverse: "↕️ Inverti: basso è buono (verde), alto è cattivo (rosso)"
   traffic_target: "🚦 Rosso → giallo → verde in base a quanto ognuno è vicino all'obiettivo"
-  traffic_target_reverse: "↕️ Invertito: più al di sotto dell'obiettivo è meglio"
-  donut: A ciambella (anello)
+  traffic_target_reverse: "↕️ Inverti: più si è sotto l'obiettivo, meglio è"
+  donut: Ciambella (anello)
   target: Obiettivo per tutti
   target_example: es. 15M o 15000000
   target_column: "…o una colonna di obiettivi"
-  use_number_above: "(usa il numero qui sopra)"
+  use_number_above: "(usa il numero sopra)"
   highlight_where: Evidenzia righe dove
   no_highlight: "(nessuna evidenziazione)"
   at_least: è almeno
   at_least_example: es. 300M
 charts:
   column: Colonna {n}
-  no_numbers: Nessun numero da rappresentare nella colonna scelta.
-  line_two_rows: Una linea richiede almeno due righe.
-  no_positive: Nessun numero positivo da rappresentare nella colonna scelta.
+  no_numbers: Nessun numero da inserire nel grafico nella colonna scelta.
+  line_two_rows: Una linea necessita di almeno due righe.
+  line_two_columns: Una linea necessita di almeno due colonne in basso.
+  no_positive: Nessun numero positivo da inserire nel grafico nella colonna scelta.
   no_targets: Nessun numero (o obiettivo) da confrontare.
-  no_table: Ancora nessuna tabella.
+  no_table: Nessuna tabella ancora.
   unknown_type: Tipo di grafico sconosciuto.
-  draw_failed: Impossibile disegnare questo grafico ({error}).
+  draw_failed: Questo grafico non può essere disegnato ({error}).
   other: Altro
   value: Valore
   total: Totale
   total_value: 'Totale: {value}'
   share_of_all: "{value} · {share} del totale"
   value_of_target: "{value} di {target}"
-  to_go: 'Mancanti: {value}'
+  to_go: 'Mancano: {value}'
   target_reached: Obiettivo raggiunto ✓
-  done: "✓ Fatto"
+  done: "✓ Completato"
   reached_target: "{done} di {total} hanno raggiunto l'obiettivo"
   search: Cerca…
   search_label: Cerca in questa tabella
   matching: "{n} corrispondenze"
-  show_all: Mostra tutti i {n}
+  show_all: Mostra tutti {n}
   show_all_rows: Mostra tutte le {n} righe
-  first_rows: Visualizzazione delle prime {shown} di {n} righe.
+  first_rows: Mostrate le prime {shown} di {n} righe.
   hint_bar: Tocca o passa sopra una barra
   hint_line: Tocca o passa sopra una settimana
   hint_pie: Tocca o passa sopra una fetta

@@ -141,7 +141,7 @@ caravan:
   confirm_new_week: Eine neue Woche starten? Jeder wird wieder auf verfügbar gesetzt (die Namen und Zeiten bleiben erhalten).
 chart_editor:
   edit_title: "✏️ Diagramm oder Tabelle bearbeiten"
-  new_title: "➕ Neues Diagramm oder Tabelle"
+  new_title: "➕ Neues Diagramm oder neue Tabelle"
   type: Typ
   type_bar: "📊 Balken"
   type_line: "📈 Linie"
@@ -149,24 +149,24 @@ chart_editor:
   type_progress: "🎯 Fortschritt"
   type_table: "📋 Tabelle"
   title: Titel
-  title_example: z. B. Allianz-Duell Punkte
+  title_example: z. B. Punktzahl Allianz-Duell
   note: Erklärung
-  note_example: z. B. Mindestens 15M Duell-Punkte bis Freitag-Reset erforderlich
-  who_sees: Wer kann es sehen
+  note_example: z. B. Mindestens 15M Duell-Punkte bis Freitag-Reset
+  who_sees: Wer darf es sehen
   officers_only: "🔒 Nur Offiziere (R4/R5)"
   all_members: "👥 Alle Allianzmitglieder"
   data: Daten
   data_source: Datenquelle
   paste: "📋 Tabelle einfügen"
-  link: "🔗 Google Sheet / Doc-Link"
+  link: "🔗 Google Sheet / Doc Link"
   paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
   tab_name: Tab-Name (optional)
   range: Bereich, z. B. A1:D20 (optional)
   doc_table: Welche Tabelle im Dokument (1, 2…)
   load: "⤓ Von Google laden"
-  loading: "⤓ Ladevorgang…"
-  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft die neuesten Zahlen später ab.'
-  load_first: Zuerst das Blatt laden (⤓ Von Google laden).
+  loading: "⤓ Wird geladen…"
+  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann die Datei ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte lädt später die neuesten Zahlen.'
+  load_first: Lade zuerst die Tabelle (⤓ Von Google laden).
   preview: Vorschau
   preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
   size: "{rows} × {columns}"
@@ -177,33 +177,42 @@ chart_editor:
   at_most_500: "(maximal 500)"
   labels: Namen (Beschriftungen)
   numbers_to_show: Anzuzeigende Zahlen
+  labels_swapped: Namen (jeweils eine Zeile oder ein Balken)
+  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten unten"
+  swap_bar: "⇄ Zeilen und Spalten tauschen: die Spalten als Balken, eine Farbe pro Zeile"
+  swap_help: 'Für Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
+  rows_to_draw: Anzuzeigende Zeilen (bis zu 6)
+  rows_filter: Suche einen Namen…
+  rows_count: "{n} von 6 gewählt"
+  columns_along: Spalten unten (in Tabellenreihenfolge)
   numbers: Zahlen
   several_columns: Mehrere Zahlenspalten
   side_by_side: Nebeneinander
-  stacked_totals: 'Gestapelt: Gesamtsummen'
+  stacked_totals: 'Gestapelt: Summen'
   stacked_percent: 'Gestapelt: jeder Balken auf 100%'
   vertical: Vertikale Balken
-  vertical_leaderboard: Vertikale Balken (statt Rangliste)
+  vertical_leaderboard: Vertikale Balken (anstelle einer Rangliste)
   traffic_columns: "🚦 Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün"
-  traffic_size: "🚦 Rot → gelb → grün (niedrig → hoch): nach Rang, Spitze grün"
-  traffic_reverse: "↕️ Umgekehrt: niedrig ist gut (grün), hoch ist schlecht (rot)"
-  traffic_target: "🚦 Rot → gelb → grün basierend darauf, wie nah jeder am Ziel ist"
-  traffic_target_reverse: "↕️ Umgekehrt: weiter unter dem Ziel ist besser"
+  traffic_size: "🚦 Rot → gelb → grün (niedrig → hoch): nach Rang, Top-Werte grün"
+  traffic_reverse: "↕️ Umkehren: niedrig ist gut (grün), hoch ist schlecht (rot)"
+  traffic_target: "🚦 Rot → gelb → grün danach, wie nah jeder am Ziel ist"
+  traffic_target_reverse: "↕️ Umkehren: weiter unter dem Ziel ist besser"
   donut: Donut (Ring)
   target: Ziel für alle
   target_example: z. B. 15M oder 15000000
-  target_column: "…oder eine Zielspalte"
-  use_number_above: "(die Zahl oben verwenden)"
+  target_column: "…oder eine Spalte mit Zielen"
+  use_number_above: "(die Zahl von oben verwenden)"
   highlight_where: Zeilen hervorheben, in denen
   no_highlight: "(keine Hervorhebung)"
   at_least: mindestens ist
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}
-  no_numbers: Keine Zahlen zum Diagramm in der gewählten Spalte.
+  no_numbers: Keine Zahlen zum Darstellen in der gewählten Spalte.
   line_two_rows: Eine Linie benötigt mindestens zwei Zeilen.
-  no_positive: Keine positiven Zahlen zum Diagramm in der gewählten Spalte.
-  no_targets: Keine Zahlen (oder Ziele) zum Vergleich.
+  line_two_columns: Eine Linie benötigt mindestens zwei Spalten unten.
+  no_positive: Keine positiven Zahlen zum Darstellen in der gewählten Spalte.
+  no_targets: Keine Zahlen (oder Ziele) zum Vergleichen.
   no_table: Noch keine Tabelle.
   unknown_type: Unbekannter Diagrammtyp.
   draw_failed: Dieses Diagramm konnte nicht gezeichnet werden ({error}).
@@ -213,20 +222,20 @@ charts:
   total_value: 'Gesamt: {value}'
   share_of_all: "{value} · {share} von allen"
   value_of_target: "{value} von {target}"
-  to_go: 'Noch offen: {value}'
+  to_go: 'Noch zu erreichen: {value}'
   target_reached: Ziel erreicht ✓
   done: "✓ Erledigt"
   reached_target: "{done} von {total} haben das Ziel erreicht"
-  search: Suchen…
+  search: Suche…
   search_label: Diese Tabelle durchsuchen
-  matching: "{n} passend"
-  show_all: Alle {n} anzeigen
-  show_all_rows: Alle {n} Zeilen anzeigen
+  matching: "{n} Treffer"
+  show_all: Zeige alle {n}
+  show_all_rows: Zeige alle {n} Zeilen
   first_rows: Zeige die ersten {shown} von {n} Zeilen.
-  hint_bar: Tippe oder fahre mit der Maus über einen Balken
-  hint_line: Tippe oder fahre mit der Maus über eine Woche
-  hint_pie: Tippe oder fahre mit der Maus über ein Segment
-  hint_progress: Tippe oder fahre mit der Maus über eine Zeile
+  hint_bar: Tippe oder bewege die Maus über einen Balken
+  hint_line: Tippe oder bewege die Maus über eine Woche
+  hint_pie: Tippe oder bewege die Maus über ein Tortenstück
+  hint_progress: Tippe oder bewege die Maus über eine Zeile
 nominate:
   page_title: Belohnungs-Nominierungen
   loading: Nominierungsseite wird geladen...

@@ -140,7 +140,7 @@ caravan:
   this_player: ce joueur
   confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde revient en disponible (les noms et heures sont conservés).
 chart_editor:
-  edit_title: "✏️ Modifier le graphique ou le tableau"
+  edit_title: "✏️ Modifier le graphique ou tableau"
   new_title: "➕ Nouveau graphique ou tableau"
   type: Type
   type_bar: "📊 Barres"
@@ -151,7 +151,7 @@ chart_editor:
   title: Titre
   title_example: ex. Scores du Duel d'Alliances
   note: Explication
-  note_example: ex. 15M de points au Duel minimum requis avant le reset de vendredi
+  note_example: ex. Minimum 15M de points de Duel requis avant la réinitialisation du vendredi
   who_sees: Qui peut le voir
   officers_only: "🔒 Officiers uniquement (R4/R5)"
   all_members: "👥 Tous les membres de l'alliance"
@@ -159,15 +159,15 @@ chart_editor:
   data_source: Source des données
   paste: "📋 Coller un tableau"
   link: "🔗 Lien Google Sheet / Doc"
-  paste_help: Copiez les cellules depuis Google Sheets ou Excel (en-têtes en premier) et collez-les ici.
+  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
   tab_name: Nom de l'onglet (optionnel)
   range: Plage, ex. A1:D20 (optionnel)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent voir » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupère les derniers chiffres plus tard.'
+  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la carte permet de récupérer les chiffres les plus récents plus tard.'
   load_first: Chargez d'abord la feuille (⤓ Charger depuis Google).
-  preview: Aperçu
+  preview: Prévisualiser
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
   rows_one: "{n} ligne"
@@ -176,35 +176,44 @@ chart_editor:
   columns_other: "{n} colonnes"
   at_most_500: "(500 maximum)"
   labels: Noms (étiquettes)
-  numbers_to_show: Nombres à afficher
-  numbers: Nombres
-  several_columns: Plusieurs colonnes de nombres
+  numbers_to_show: Chiffres à afficher
+  labels_swapped: Noms (une ligne ou barre chacun)
+  swap_line: "⇄ Inverser les lignes et colonnes : une ligne par rangée, les colonnes en bas"
+  swap_bar: "⇄ Inverser les lignes et colonnes : les colonnes en barres, une couleur par rangée"
+  swap_help: 'Pour les feuilles avec une rangée par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
+  rows_to_draw: Lignes à dessiner (jusqu'à 6)
+  rows_filter: Trouver un nom…
+  rows_count: "{n} sur 6 choisis"
+  columns_along: Colonnes le long du bas (dans l'ordre de la feuille)
+  numbers: Chiffres
+  several_columns: Plusieurs colonnes de chiffres
   side_by_side: Côte à côte
   stacked_totals: 'Empilés : totaux'
-  stacked_percent: 'Empilés : chaque barre à 100 %'
+  stacked_percent: 'Empilés : chaque barre à 100%'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: "🚦 Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte"
-  traffic_size: "🚦 Rouge → jaune → vert (bas → haut) : par rang, le top est vert"
-  traffic_reverse: "↕️ Inversé : bas est bon (vert), haut est mauvais (rouge)"
-  traffic_target: "🚦 Rouge → jaune → vert selon la proximité par rapport à la cible"
-  traffic_target_reverse: "↕️ Inversé : plus c'est en dessous de la cible, mieux c'est"
+  traffic_size: "🚦 Rouge → jaune → vert (bas → haut) : par rang, les meilleurs en vert"
+  traffic_reverse: "↕️ Inverser : bas est bon (vert), haut est mauvais (rouge)"
+  traffic_target: "🚦 Rouge → jaune → vert selon la proximité de la cible"
+  traffic_target_reverse: "↕️ Inverser : plus on est loin en dessous de la cible, mieux c'est"
   donut: Donut (anneau)
   target: Cible pour tout le monde
   target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le nombre ci-dessus)"
+  use_number_above: "(utiliser le chiffre ci-dessus)"
   highlight_where: Surligner les lignes où
-  no_highlight: "(pas de surlignage)"
+  no_highlight: "(aucun surlignage)"
   at_least: est au moins
   at_least_example: ex. 300M
 charts:
   column: Colonne {n}
-  no_numbers: Aucun nombre à représenter dans la colonne choisie.
+  no_numbers: Aucun chiffre à représenter dans la colonne choisie.
   line_two_rows: Une ligne nécessite au moins deux rangées.
-  no_positive: Aucun nombre positif à représenter dans la colonne choisie.
-  no_targets: Aucun nombre (ou objectif) à comparer.
-  no_table: Aucun tableau pour le moment.
+  line_two_columns: Une ligne nécessite au moins deux colonnes en bas.
+  no_positive: Aucun chiffre positif à représenter dans la colonne choisie.
+  no_targets: Aucun chiffre (ou cible) à comparer.
+  no_table: Aucun tableau pour l'instant.
   unknown_type: Type de graphique inconnu.
   draw_failed: Ce graphique n'a pas pu être dessiné ({error}).
   other: Autre
@@ -213,19 +222,19 @@ charts:
   total_value: 'Total : {value}'
   share_of_all: "{value} · {share} du total"
   value_of_target: "{value} sur {target}"
-  to_go: 'Reste à faire : {value}'
-  target_reached: Objectif atteint ✓
-  done: "✓ Fait"
-  reached_target: "{done} sur {total} ont atteint l'objectif"
+  to_go: 'Restant : {value}'
+  target_reached: Cible atteinte ✓
+  done: "✓ Terminé"
+  reached_target: "{done} sur {total} ont atteint la cible"
   search: Rechercher…
   search_label: Rechercher dans ce tableau
-  matching: "{n} correspondance(s)"
+  matching: "{n} correspondant"
   show_all: Afficher les {n}
   show_all_rows: Afficher les {n} lignes
   first_rows: Affichage des {shown} premières lignes sur {n}.
   hint_bar: Appuyez ou survolez une barre
   hint_line: Appuyez ou survolez une semaine
-  hint_pie: Appuyez ou survolez une tranche
+  hint_pie: Appuyez ou survolez une part
   hint_progress: Appuyez ou survolez une ligne
 nominate:
   page_title: Nominations aux Récompenses
