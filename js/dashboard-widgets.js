@@ -243,13 +243,17 @@
     // One column with traffic-light colours: each bar by its size (biggest green).
     // By rank, not by size (maintainer review): one huge score mustn't turn everyone else
     // red. The best is green, the worst red, ties share a colour; Reverse flips it (paint()).
+    // Ties share their average rank, then the scale is stretched so the bottom group is
+    // always red (0) and the top group always green (1), e.g. a block of players on 0.
     const ranked = rows.map((r) => r.values[0]).filter(Number.isFinite);
-    const rankOf = (v) => {
-      if (ranked.length < 2) return 1;
+    const avgRank = (v) => {
       const below = ranked.filter((x) => x < v).length;
       const same = ranked.filter((x) => x === v).length;
-      return (below + (same - 1) / 2) / (ranked.length - 1);
+      return below + (same - 1) / 2;
     };
+    const lowest = ranked.length ? avgRank(Math.min(...ranked)) : 0;
+    const highest = ranked.length ? avgRank(Math.max(...ranked)) : 0;
+    const rankOf = (v) => (highest > lowest ? (avgRank(v) - lowest) / (highest - lowest) : 0.5);
     const bySize = (r) => (n === 1 && !stacked ? rankOf(r.values[0]) : undefined);
 
     const horizontal = () => {
