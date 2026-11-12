@@ -20,6 +20,8 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  /* Blank, plain and live cards share a height, so filling them in doesn't move the page */
+  min-height: 13.5rem;
   padding: 0 0.6rem 0.8rem;
   text-align: center;
   background: var(--surface-card);
@@ -105,6 +107,26 @@
 
 .rotation-note {
   color: var(--text-main);
+}
+
+/* Before anything is known: empty cards with a gentle pulse */
+.rotation-week.is-loading {
+  background:
+    linear-gradient(var(--surface-elevated), var(--surface-elevated)) top / 100% 2.6rem no-repeat,
+    var(--surface-card);
+  animation: rotation-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes rotation-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotation-week.is-loading {
+    animation: none;
+  }
 }
 
 @media (max-width: 640px) {
