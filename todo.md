@@ -40,8 +40,9 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - [x] `ui.yml` through the same system (hand translations kept; `guides`/`nav_anchors` left to the guides)
   - [x] Server messages (`api/`, `_data/en/server.yml`; technical admin messages stay English)
   - [x] Discord bot replies: `/calendar`, `/map`, `/nominate`, `/rewards` (shared leadership-channel posts stay English)
-  - [ ] Discord command picker descriptions (`description_localizations`; needs the command deploy to run after translations)
+  - [x] Discord command picker descriptions (`bot_commands`; alliance servers update on `/registerbot` sync)
   - [ ] `/registerbot`, `/rank`, `/devupdate` and the proposal-review buttons (Steward/admin tools)
+  - [ ] `/suggest` is in the alliance servers' command list but the bot has no handler for it (fails in Discord): add it or remove it
 
 - [ ] **Map Plan Import / Export**
   - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.

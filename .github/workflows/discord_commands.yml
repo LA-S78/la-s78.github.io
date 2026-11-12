@@ -5,18 +5,34 @@ on:
     branches: [main, dev]
     paths:
       - '.github/discord.json'
+      - '_scripts/deploy_commands.mjs'
+      - 'api/_command_text.js'
+  # After each deploy of main: the command picker's translations (bot_commands in
+  # _data/<lang>/server.yml) arrive in that run's own translation commit, which doesn't
+  # start workflows itself. Sending the same commands again changes nothing in Discord.
+  workflow_run:
+    workflows: ['Build and Deploy Multilingual Site']
+    types: [completed]
+    branches: [main]
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     steps:
+      # workflow_run: the branch as it is now, with the translation commit
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && 'main' || '' }}
       
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           
+      - name: Install dependencies
+        run: npm ci --omit=dev --ignore-scripts
+
       - name: Deploy Commands
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
