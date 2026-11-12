@@ -7,7 +7,7 @@ common:
   not_saved: 'Kaydedilmedi: {error}'
   cancel: İptal
   save: "💾 Kaydet"
-  saving: Kaydediliyor…
+  saving: Kaydediliyor...
   edit: Düzenle
   delete: Sil
   remove: Kaldır
@@ -22,6 +22,11 @@ common:
   duration_minutes: "{m}d"
   game_time: "{time} GT"
   your_time: "{time} yerel saatiniz"
+  off_week: Boş Hafta
+  kw_week: Krallık Savaşı Haftası {n}
+  copy: Kopyala
+  set_one: Kralın Övgüsü
+  set_two: Savaş Kralı Ödülü
   chests:
     commanders_will: Komutanın İradesi
     loyal_servant: Sadık Hizmetkar
@@ -222,3 +227,128 @@ charts:
   hint_line: Bir haftanın üzerine dokunun veya gelin
   hint_pie: Bir dilimin üzerine dokunun veya gelin
   hint_progress: Bir satırın üzerine dokunun veya gelin
+nominate:
+  page_title: Ödül Adaylıkları
+  loading: Adaylık sayfası yükleniyor...
+  players_label: "📋 Oyuncularınız, en iyiden başlayarak"
+  players_help: Her satıra bir isim (veya virgülle ayırarak), en iyi oyuncunuzu başa yazın. Sandıklar, her iki setteki değer sırasına göre listeden aşağıya doğru dağıtılır; sandık sayısını aşan isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
+  players_placeholder: Oyun içi tam isimler, en iyisi başta olacak şekilde...
+  who_gets_what: Kim ne alıyor
+  save: Listeyi Kaydet
+  saving: Kaydediliyor...
+  link_incomplete: Bu bağlantı eksik. Yeni bir tane için Discord'da /nominate komutunu çalıştırın.
+  load_failed: "{error} Yeni bir bağlantı için Discord'da /nominate komutunu çalıştırın."
+  closed: Ödül dönemi kapandı. Bir sonraki dönem Cuma günkü başkent etkinliğinden sonra {when} açılacak.
+  header: Sıra {rank} · {week} ödülleri · {when} tarihine kadar açık
+  banner_off_week: "👑 Bu hafta sadece Kralın Övgüsü var (Krallık Savaşı yok)."
+  banner_won: "⚔️ Krallık Savaşı kazanıldı: Savaş Kralı Ödülü sandıkları da açık."
+  banner_lost: "🛡️ Krallık Savaşı kaybedildi: Bu hafta sadece Kralın Övgüsü var."
+  banner_pending: "⏳ Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Eğer kazanılırsa, Savaş Kralı Ödülü sandıkları da açılır ve listeniz yeniden sıralanır. Kral ödülleri sonuçlandıktan sonra dağıtır, bu yüzden kimsenin sandığı değişmez."
+  handed_out_title: "✓ Kral tarafından halihazırda dağıtıldı ({n})"
+  handed_out_help: Bu sandıklar oyunda verildiği için, listeniz ne derse desin bu oyuncularda kalır. Aşağıdaki liste geri kalanını paylaştırır.
+  reserve: Yedek
+  col_player: Oyuncu
+  col_chest: Sandık
+  col_now: Şu an
+  col_if_won: Kazanılırsa
+  chests_now: şu an {n} sandık
+  chests_if_won: kazanılırsa {n}
+  named: "{n} kişi adlandırıldı"
+  still_need_name: "{n} isme hala ihtiyaç var"
+  reserves_one: "{n} yedek"
+  reserves_other: "{n} yedek"
+  listed_twice: "{name} iki kez listelenmiş"
+  saved: "✅ Kaydedildi. Kral listenizi görüyor. {when} tarihine kadar değiştirebilirsiniz."
+  save_failed: 'Kaydedilemedi: {error}'
+kings_console:
+  page_title: Kralın Dağıtım Konsolu
+  title: "👑 Kralın Dağıtım Konsolu"
+  loading: Adaylıklar yükleniyor...
+  by_chest: Sandıka Göre
+  by_alliance: İttifaka Göre
+  can_tick: "✅ Sandık oyunda dağıtıldığında oyuncuya dokunun. İşaretler herkes için kaydedilir ve listeler yeniden sıralanırsa işaretlenmiş bir sandık o oyuncuda kalır."
+  view_only_signed_out: "👀 Sadece görüntüleme. Kralın kontrol listesi {king} R4/R5 ve Kâhyalar tarafından işaretlenebilir: Discord ile giriş yapın (sağ üst)."
+  view_only: "👀 Sadece görüntüleme: Kontrol listesi {king} R4/R5 ve Kâhyalar tarafından işaretlenir."
+  kings_alliance: Kralın ittifakı
+  load_failed: 'Adaylıklar yüklenemedi: {error}'
+  closed: "🔒 Ödüller kapalı. Aşağıdaki listeler son haftaya aittir; bir sonraki ödüller Cuma günü yaklaşık 20:00 GT'de açılır."
+  hold_title: 'Sandıkları beklet:'
+  hold: "{title} dağıtım için Cumartesi günkü savaş sonucunu bekliyor. Savaş kazanılırsa, Savaş Kralı Ödülü sandıkları açılır ve her liste yeniden sıralanır. Ödüller {when} tarihinde kapanır."
+  won_title: 'Krallık Savaşı kazanıldı:'
+  won: "{title} her iki seti de dağıtıyor. Ödüller {when} tarihinde (Çarşamba 00:00 GT) kapanır."
+  week_title: "{week} ödülleri:"
+  week: "{title} Kralın Övgüsü'nü dağıtıyor. Ödüller {when} tarihinde (Çarşamba 00:00 GT) kapanır."
+  buyout_title: 'Savaş Zamanı Tazminatı Aktif:'
+  buyout_one: "{title} {tags} WLO'nun 1. Sıra tahsisinden finanse edilen bonus Komutanın İradesi yuvaları içerir."
+  buyout_other: "{title} {tags} WLO'nun 1. Sıra tahsisinden finanse edilen bonus Komutanın İradesi yuvaları içerir."
+  no_nominations: Henüz adaylık gönderilmedi.
+  no_entries: 0 Alıcı Kaydı
+  progress: 'İlerleme: {sent} / {total} Dağıtıldı'
+  alliance_heading: "[{tag}] • Sıra {rank} ({n})"
+  ticked_by: Dağıtıldı (kilitli) · {name} tarafından işaretlendi · {when}
+  buyout_badge: SATIN ALIM
+  pool_reg: NORMAL
+  pool_kw: KS
+  copy_prompt: 'Alıcı ismini kopyala:'
+  not_on_list: "{name} artık [{tag}] listesinde değil (ittifak değiştirdi)."
+  now_reserve: "{name} artık [{tag}] listesinde yedek: sandık yok."
+  now_other_chest: "{name} artık {shown} yerine {chest} alıyor."
+  stop_warning: "⚠️ Dur: o {chest} sandığını gönderme. {why} Listeler yenilendi: ismi aşağıdaki listeden tekrar kopyalayın."
+  stop_alert: Gönderme!
+  lists_refreshed: Listeler yenilendi.
+register:
+  page_title: İttifak Sunucusu Kaydı
+  loading: Kayıt portalı yükleniyor...
+  subtitle: İttifak Sunucusu Entegrasyon Portalı
+  step_invite: 1. Botu Sunucunuza Davet Edin
+  invite_help: Kaydı tamamlamadan önce botu ittifak Discord sunucunuza eklemelisiniz.
+  authorize: "🤖 Botu Yetkilendirmek için Tıklayın"
+  step_credentials: 2. Sunucu ve Rol Kimlik Bilgileri
+  guild_id: Discord Sunucu Kimliği (Guild ID)
+  example: ör. {id}
+  guild_help: 'Discord''da: Geliştirici Modunu Etkinleştir → Sunucu simgenize sağ tıklayın → {copy}. O sunucunun sahibi olmalı veya {admin} veya {manage} yetkisine sahip olmalısınız. Aşağıdaki kanallar ve rol bu sunucuya göre kontrol edilir.'
+  copy_server_id: Sunucu Kimliğini Kopyala
+  administrator: Yönetici
+  manage_server: Sunucuyu Yönet
+  routing_heading: "📢 Operasyonlar ve Bilet Yönlendirme"
+  routing_help: Botun herkese açık operasyon uyarılarını nerede paylaşacağını ve özel üye önerilerini/biletlerini nereye yönlendireceğini yapılandırın.
+  alert_channel: Operasyon Uyarı Kanalı Kimliği
+  channel_id_title: Geçerli bir 17-20 haneli Discord Kanal Kimliği olmalıdır
+  role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
+  alert_channel_help: Duyuru/uyarı kanalınıza sağ tıklayın → {copy}.
+  copy_channel_id: Kanal Kimliğini Kopyala
+  alert_role: Varsayılan Uyarı Rolü Kimliği
+  optional: "(İsteğe Bağlı)"
+  alert_role_placeholder: Varsayılan @everyone olması için boş bırakın
+  alert_role_help: Ping rolünüze sağ tıklayın (ör. {example}) → {copy}. Boş bırakılırsa {everyone} olarak varsayılır.
+  copy_role_id: Rol Kimliğini Kopyala
+  officer_channel: Subay Bilet Kabul Kanalı Kimliği
+  officer_channel_help: "{channel} kanalınıza sağ tıklayın → {copy}. {suggest} üzerinden gelen üye teklifleri ve ittifak biletleri, liderlik değerlendirmesi için buraya yönlendirilecektir."
+  private_channel: özel R4/R5 bilet kanalı
+  delegated_roles: Yetkilendirilmiş Liderlik Rolleri
+  delegated_roles_help: Biletleri ayıklayabilen, etkinlikleri yönetebilen ve sandık adaylıklarını gönderebilen virgülle ayrılmış rol isimleri ({r5} her zaman yetkilidir).
+  color: İttifak Kimlik Rengi
+  preview: 'Önizleme:'
+  color_help: Operasyon takviminize, dahili bilet kartlarınıza ve onaylı NAP Konseyi tekliflerine uygulanır.
+  submit: Sunucuyu Kaydet ve Komutları Dağıt
+  submitting: Sunucu Doğrulanıyor ve Kaydediliyor...
+  bad_token: Geçersiz veya eksik kayıt belirteci. NAP sunucusunda /registerbot çalıştırın.
+  malformed_token: Hatalı belirteç. Lütfen Discord'dan yeni bir bağlantı isteyin.
+  expired: Bu kayıt bağlantısının süresi doldu (24 saat sınırı). /registerbot komutunu tekrar çalıştırın.
+  bad_guild: Geçersiz Discord Sunucu Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
+  bad_alert_channel: Geçersiz Operasyon Uyarı Kanalı Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
+  bad_alert_role: Geçersiz Uyarı Rolü Kimliği formatı. 17-20 haneli bir sayı olmalıdır (@everyone için boş bırakılabilir).
+  bad_officer_channel: Geçersiz Subay Bilet Kabul Kanalı Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
+  failed: Kayıt başarısız
+  error: 'Kayıt Hatası: {error}'
+  success: "✅ Kayıt Başarılı!"
+  linked: "{server} artık {tag} ile bağlantılı."
+  server_id: Sunucu Kimliği {id}
+  r_alert_channel: 'Operasyon Uyarı Kanalı:'
+  r_target: 'Bildirim Hedefi:'
+  r_role: Rol {id}
+  r_default: "(Varsayılan)"
+  r_officer_channel: 'Subay Bilet Kanalı:'
+  r_color: 'Kimlik Rengi:'
+  r_commands: 'Slash Komutları Dağıtıldı:'
+  r_leaders: 'Yetkili Liderlik:'

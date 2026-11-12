@@ -15,13 +15,18 @@ common:
   move_up: Monter
   move_down: Descendre
   copied: "✓ Copié"
-  optional: "(facultatif)"
+  optional: "(optionnel)"
   now: maintenant
   duration_days: "{d}j {h}h"
   duration_hours: "{h}h {m}m"
   duration_minutes: "{m}m"
   game_time: "{time} GT"
   your_time: "{time} heure locale"
+  off_week: Semaine de pause
+  kw_week: Semaine de Guerre des Royaumes {n}
+  copy: Copier
+  set_one: Mention du Roi
+  set_two: Récompense du Roi de la Bataille
   chests:
     commanders_will: Volonté du Commandant
     loyal_servant: Serviteur Loyal
@@ -222,3 +227,128 @@ charts:
   hint_line: Appuyez ou survolez une semaine
   hint_pie: Appuyez ou survolez une tranche
   hint_progress: Appuyez ou survolez une ligne
+nominate:
+  page_title: Nominations aux Récompenses
+  loading: Chargement de la page de nomination...
+  players_label: "📋 Vos joueurs, les meilleurs en premier"
+  players_help: Un nom par ligne (ou séparé par des virgules), le meilleur joueur en premier. Les coffres sont distribués selon l'ordre de la liste pour les deux ensembles ; les noms au-delà des coffres sont conservés comme réserve et remontent si d'autres coffres sont ouverts.
+  players_placeholder: Noms exacts en jeu, les meilleurs d'abord...
+  who_gets_what: Qui reçoit quoi
+  save: Enregistrer la liste
+  saving: Enregistrement...
+  link_incomplete: Ce lien est incomplet. Utilisez /nominate sur Discord pour en obtenir un nouveau.
+  load_failed: "{error} Utilisez /nominate sur Discord pour obtenir un nouveau lien."
+  closed: Les récompenses sont closes. Les prochaines s'ouvrent {when}, après l'événement du capitole du vendredi.
+  header: Rang {rank} · récompenses {week} · ouvert jusqu'au {when}
+  banner_off_week: "👑 Mention du Roi uniquement cette semaine (pas de Guerre des Royaumes)."
+  banner_won: "⚔️ Guerre des Royaumes gagnée : les coffres de Récompense du Roi de la Bataille sont également ouverts."
+  banner_lost: "🛡️ Guerre des Royaumes perdue : Mention du Roi uniquement cette semaine."
+  banner_pending: "⏳ En attente du résultat de la bataille de samedi (environ {when}). Si elle est gagnée, les coffres de Récompense du Roi de la Bataille s'ouvriront et votre liste sera réordonnée. Le Roi distribue après le résultat, donc le coffre de personne n'est modifié."
+  handed_out_title: "✓ Déjà distribué par le Roi ({n})"
+  handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc avec ces joueurs, quoi que dise votre liste. La liste ci-dessous répartit le reste.
+  reserve: Réserve
+  col_player: Joueur
+  col_chest: Coffre
+  col_now: Maintenant
+  col_if_won: Si victoire
+  chests_now: "{n} coffres maintenant"
+  chests_if_won: "{n} si victoire"
+  named: "{n} nommés"
+  still_need_name: "{n} noms encore nécessaires"
+  reserves_one: "{n} réserve"
+  reserves_other: "{n} réserves"
+  listed_twice: "{name} est listé deux fois"
+  saved: "✅ Enregistré. Le Roi peut voir votre liste. Vous pouvez la modifier jusqu'au {when}."
+  save_failed: 'Échec de l''enregistrement : {error}'
+kings_console:
+  page_title: Console de Distribution du Roi
+  title: "👑 Console de Distribution du Roi"
+  loading: Chargement des nominations...
+  by_chest: Par Coffre
+  by_alliance: Par Alliance
+  can_tick: "✅ Cochez un joueur une fois son coffre remis en jeu. Les coches sont enregistrées pour tout le monde, et un coffre coché reste avec ce joueur si les listes sont réordonnées."
+  view_only_signed_out: "👀 Lecture seule. La liste de contrôle du Roi peut être cochée par les R4/R5 du {king} et les Intendants : connectez-vous avec Discord (en haut à droite)."
+  view_only: "👀 Lecture seule : la liste de contrôle est gérée par les R4/R5 du {king} et les Intendants."
+  kings_alliance: l'alliance du Roi
+  load_failed: 'Échec du chargement des nominations : {error}'
+  closed: "🔒 Les récompenses sont closes. Les listes ci-dessous datent de la semaine dernière ; les prochaines récompenses s'ouvriront vendredi vers 20:00 GT."
+  hold_title: 'Retenir les coffres :'
+  hold: "{title} attendez le résultat de la bataille de samedi avant de distribuer. Si la guerre est gagnée, les coffres de Récompense du Roi de la Bataille s'ouvrent et chaque liste est réordonnée. Les récompenses ferment le {when}."
+  won_title: 'Guerre des Royaumes gagnée :'
+  won: "{title} distribuez les deux ensembles. Les récompenses ferment le {when} (mercredi 00:00 GT)."
+  week_title: 'Récompenses {week} :'
+  week: "{title} distribuez la Mention du Roi. Les récompenses ferment le {when} (mercredi 00:00 GT)."
+  buyout_title: 'Restitution de Guerre active :'
+  buyout_one: "{title} {tags} inclut des emplacements bonus de Volonté du Commandant financés par le quota de Rang #1 de WLO."
+  buyout_other: "{title} {tags} incluent des emplacements bonus de Volonté du Commandant financés par le quota de Rang #1 de WLO."
+  no_nominations: Aucune nomination soumise pour le moment.
+  no_entries: 0 Entrée de destinataire
+  progress: 'Progression : {sent} / {total} Distribué'
+  alliance_heading: "[{tag}] • Rang {rank} ({n})"
+  ticked_by: Distribué (verrouillé) · coché par {name} · {when}
+  buyout_badge: RACHAT
+  pool_reg: REG
+  pool_kw: KW
+  copy_prompt: 'Copier le nom du destinataire :'
+  not_on_list: "{name} n'est plus sur la liste de [{tag}] (l'alliance a modifié la liste)."
+  now_reserve: "{name} est maintenant en réserve sur la liste de [{tag}] : aucun coffre."
+  now_other_chest: "{name} reçoit désormais {chest}, et non {shown}."
+  stop_warning: "⚠️ Stop : n'envoyez pas ce {chest}. {why} Les listes ont été actualisées : copiez à nouveau le nom depuis la liste ci-dessous."
+  stop_alert: Ne l'envoyez pas !
+  lists_refreshed: Les listes ont été actualisées.
+register:
+  page_title: Enregistrement de Serveur d'Alliance
+  loading: Chargement du portail d'enregistrement...
+  subtitle: Portail d'Intégration du Serveur d'Alliance
+  step_invite: 1. Inviter le Bot sur votre Serveur
+  invite_help: Vous devez ajouter le bot à votre Discord d'alliance avant de terminer l'enregistrement.
+  authorize: "🤖 Cliquer pour Autoriser le Bot"
+  step_credentials: 2. Identifiants Serveur & Rôle
+  guild_id: ID du Serveur Discord (ID de Guilde)
+  example: ex. {id}
+  guild_help: 'Dans Discord : Activez le Mode Développeur → Clic droit sur l''icône de votre serveur → {copy}. Vous devez posséder ce serveur ou avoir les permissions {admin} ou {manage} dessus. Les salons et le rôle ci-dessous seront vérifiés par rapport à cela.'
+  copy_server_id: Copier l'ID du Serveur
+  administrator: Administrateur
+  manage_server: Gérer le serveur
+  routing_heading: "📢 Opérations & Routage des Tickets"
+  routing_help: Configurez où le bot publie les alertes d'opérations publiques et achemine les suggestions/tickets privés des membres.
+  alert_channel: ID du Salon d'Alerte des Opérations
+  channel_id_title: Doit être un ID de Salon Discord valide de 17-20 chiffres
+  role_id_title: Doit être un ID de Rôle Discord valide de 17-20 chiffres
+  alert_channel_help: Clic droit sur votre salon d'annonces/alertes → {copy}.
+  copy_channel_id: Copier l'ID du Salon
+  alert_role: ID du Rôle d'Alerte par défaut
+  optional: "(Optionnel)"
+  alert_role_placeholder: Laissez vide pour @everyone par défaut
+  alert_role_help: Clic droit sur votre rôle de ping (ex. {example}) → {copy}. Par défaut {everyone} si vide.
+  copy_role_id: Copier l'ID du Rôle
+  officer_channel: ID du Salon de Réception des Tickets Officiers
+  officer_channel_help: Clic droit sur votre {channel} → {copy}. Les propositions des membres et les tickets d'alliance de {suggest} seront acheminés ici pour examen par les dirigeants.
+  private_channel: salon privé des R4/R5
+  delegated_roles: Rôles de Leadership Délégués
+  delegated_roles_help: Noms de rôles séparés par des virgules pouvant trier les tickets, gérer les événements et soumettre des nominations de coffres ({r5} est toujours autorisé).
+  color: Couleur d'Identité de l'Alliance
+  preview: 'Aperçu :'
+  color_help: Appliqué à votre calendrier des opérations, cartes de tickets internes et propositions du Conseil NAP approuvées.
+  submit: Enregistrer le Serveur & Déployer les Commandes
+  submitting: Vérification du Serveur & Enregistrement...
+  bad_token: Jeton d'enregistrement invalide ou manquant. Utilisez /registerbot dans le serveur NAP.
+  malformed_token: Jeton mal formé. Veuillez demander un nouveau lien sur Discord.
+  expired: Ce lien d'enregistrement a expiré (limite de 24h). Utilisez /registerbot à nouveau.
+  bad_guild: Format d'ID de Serveur Discord invalide. Doit être un nombre de 17-20 chiffres.
+  bad_alert_channel: Format d'ID de Salon d'Alerte invalide. Doit être un nombre de 17-20 chiffres.
+  bad_alert_role: Format d'ID de Rôle d'Alerte invalide. Doit être un nombre de 17-20 chiffres (ou laissé vide pour @everyone).
+  bad_officer_channel: Format d'ID de Salon des Officiers invalide. Doit être un nombre de 17-20 chiffres.
+  failed: Échec de l'enregistrement
+  error: 'Erreur d''enregistrement : {error}'
+  success: "✅ Enregistrement réussi !"
+  linked: "{server} est maintenant lié à {tag}."
+  server_id: ID Serveur {id}
+  r_alert_channel: 'Salon d''Alerte des Opérations :'
+  r_target: 'Cible de la notification :'
+  r_role: Rôle {id}
+  r_default: "(Défaut)"
+  r_officer_channel: 'Salon des Tickets Officiers :'
+  r_color: 'Couleur d''Identité :'
+  r_commands: 'Commandes Slash déployées :'
+  r_leaders: 'Leadership autorisé :'

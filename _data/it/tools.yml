@@ -15,19 +15,24 @@ common:
   move_up: Sposta su
   move_down: Sposta giù
   copied: "✓ Copiato"
-  optional: "(opzionale)"
-  now: ora
-  duration_days: "{d}g {h}o"
-  duration_hours: "{h}o {m}m"
+  optional: "(facoltativo)"
+  now: adesso
+  duration_days: "{d}g {h}h"
+  duration_hours: "{h}h {m}m"
   duration_minutes: "{m}m"
   game_time: "{time} GT"
   your_time: "{time} ora locale"
+  off_week: Settimana di pausa
+  kw_week: Settimana Guerra tra Regni {n}
+  copy: Copia
+  set_one: Encomio del Re
+  set_two: Ricompensa Re della Battaglia
   chests:
     commanders_will: Volontà del Comandante
-    loyal_servant: Leale Servitore
+    loyal_servant: Servo Leale
     followers_heart: Cuore del Seguace
     honor_vanguard: Avanguardia d'Onore
-    fearless_hero: Eroe Senza Paura
+    fearless_hero: Eroe Impavido
     logistics_support: Supporto Logistico
 dashboard:
   title: Dashboard Alleanza
@@ -222,3 +227,128 @@ charts:
   hint_line: Tocca o passa sopra una settimana
   hint_pie: Tocca o passa sopra una fetta
   hint_progress: Tocca o passa sopra una riga
+nominate:
+  page_title: Candidature Ricompense
+  loading: Caricamento pagina candidature...
+  players_label: "📋 I tuoi giocatori, i migliori per primi"
+  players_help: Un nome per riga (o separati da virgole), il tuo miglior giocatore per primo. I forzieri seguono la lista in ordine di valore tra entrambi i set; i nomi oltre i forzieri sono considerati riserve e avanzano se si aprono più forzieri.
+  players_placeholder: Nomi esatti nel gioco, migliori per primi...
+  who_gets_what: Chi riceve cosa
+  save: Salva Lista
+  saving: Salvataggio...
+  link_incomplete: Questo link è incompleto. Esegui /nominate su Discord per averne uno nuovo.
+  load_failed: "{error} Esegui /nominate su Discord per un nuovo link."
+  closed: Le ricompense sono chiuse. Il prossimo round {when}, dopo l'evento del Campidoglio di venerdì.
+  header: Grado {rank} · {week} ricompense · aperte fino al {when}
+  banner_off_week: "👑 Solo Encomio del Re questa settimana (niente Guerra tra Regni)."
+  banner_won: "⚔️ Guerra tra Regni vinta: anche i forzieri Ricompensa Re della Battaglia sono aperti."
+  banner_lost: "🛡️ Guerra tra Regni persa: solo Encomio del Re questa settimana."
+  banner_pending: "⏳ In attesa del risultato della battaglia di sabato (circa {when}). Se vinta, si apriranno anche i forzieri Ricompensa Re della Battaglia e la tua lista verrà riordinata. Il Re distribuisce dopo il risultato, quindi il forzieri di nessuno cambierà."
+  handed_out_title: "✓ Già consegnati dal Re ({n})"
+  handed_out_help: Questi forzieri sono assegnati nel gioco, quindi restano a questi giocatori indipendentemente dalla tua lista. La lista sottostante distribuisce il resto.
+  reserve: Riserva
+  col_player: Giocatore
+  col_chest: Forziere
+  col_now: Ora
+  col_if_won: Se vinta
+  chests_now: "{n} forzieri ora"
+  chests_if_won: "{n} se vinta"
+  named: "{n} nominati"
+  still_need_name: "{n} mancano ancora di un nome"
+  reserves_one: "{n} riserva"
+  reserves_other: "{n} riserve"
+  listed_twice: "{name} è elencato due volte"
+  saved: "✅ Salvato. Il Re può vedere la tua lista. Puoi modificarla fino al {when}."
+  save_failed: 'Impossibile salvare: {error}'
+kings_console:
+  page_title: Console di Distribuzione del Re
+  title: "👑 Console di Distribuzione del Re"
+  loading: Caricamento candidature...
+  by_chest: Per Forziere
+  by_alliance: Per Alleanza
+  can_tick: "✅ Tocca un giocatore una volta che il suo forziere è stato consegnato nel gioco. I segni di spunta sono salvati per tutti e un forziere contrassegnato resta a quel giocatore se le liste vengono riordinate."
+  view_only_signed_out: "👀 Solo visualizzazione. La lista di controllo del Re può essere contrassegnata dagli R4/R5 e dagli Steward del {king}: accedi con Discord (in alto a destra)."
+  view_only: "👀 Solo visualizzazione: la lista di controllo è contrassegnata dagli R4/R5 e dagli Steward del {king}."
+  kings_alliance: l'alleanza del Re
+  load_failed: 'Caricamento candidature fallito: {error}'
+  closed: "🔒 Le ricompense sono chiuse. Le liste sottostanti provengono dall'ultima settimana; le prossime ricompense apriranno venerdì verso le 20:00 GT."
+  hold_title: 'In attesa dei forzieri:'
+  hold: "{title} attendi il risultato della battaglia di sabato prima di consegnare. Se la guerra viene vinta, i forzieri Ricompensa Re della Battaglia si aprono e ogni lista viene riordinata. Le ricompense chiudono il {when}."
+  won_title: 'Guerra tra Regni vinta:'
+  won: "{title} consegna entrambi i set. Le ricompense chiudono il {when} (mercoledì 00:00 GT)."
+  week_title: "{week} ricompense:"
+  week: "{title} consegna l'Encomio del Re. Le ricompense chiudono il {when} (mercoledì 00:00 GT)."
+  buyout_title: 'Restituzione in tempo di guerra attiva:'
+  buyout_one: "{title} {tags} include slot bonus Volontà del Comandante finanziati dal contingente Rank #1 della WLO."
+  buyout_other: "{title} {tags} includono slot bonus Volontà del Comandante finanziati dal contingente Rank #1 della WLO."
+  no_nominations: Nessuna candidatura inviata finora.
+  no_entries: 0 Candidature
+  progress: 'Progresso: {sent} / {total} Distribuiti'
+  alliance_heading: "[{tag}] • Grado {rank} ({n})"
+  ticked_by: Consegnato (bloccato) · contrassegnato da {name} · {when}
+  buyout_badge: BUYOUT
+  pool_reg: REG
+  pool_kw: KW
+  copy_prompt: 'Copia nome del destinatario:'
+  not_on_list: "{name} non è più nella lista di [{tag}] (l'alleanza l'ha modificata)."
+  now_reserve: "{name} è ora una riserva nella lista di [{tag}]: nessun forziere."
+  now_other_chest: "{name} ora riceve {chest}, non {shown}."
+  stop_warning: "⚠️ Stop: non inviare quel {chest}. {why} Le liste sono state aggiornate: copia di nuovo il nome dalla lista sottostante."
+  stop_alert: Non inviarlo!
+  lists_refreshed: Le liste sono state aggiornate.
+register:
+  page_title: Registrazione Server Alleanza
+  loading: Caricamento portale di registrazione...
+  subtitle: Portale di integrazione Server Alleanza
+  step_invite: 1. Invita il bot nel tuo Server
+  invite_help: Devi aggiungere il bot al Discord della tua alleanza prima di completare la registrazione.
+  authorize: "🤖 Clicca per Autorizzare il Bot"
+  step_credentials: 2. Credenziali Server & Ruoli
+  guild_id: ID Server Discord (ID Guild)
+  example: es. {id}
+  guild_help: 'In Discord: Attiva Modalità Sviluppatore → Tasto destro sull''icona del tuo server → {copy}. Devi essere il proprietario del server o avere {admin} o {manage} lì. Canali e ruoli sottostanti vengono verificati in base a questo.'
+  copy_server_id: Copia ID Server
+  administrator: Amministratore
+  manage_server: Gestisci Server
+  routing_heading: "📢 Operazioni & Instradamento Ticket"
+  routing_help: Configura dove il bot pubblica gli avvisi operativi pubblici e instrada suggerimenti/ticket privati dei membri.
+  alert_channel: ID Canale Avvisi Operativi
+  channel_id_title: Deve essere un ID Canale Discord valido di 17-20 cifre
+  role_id_title: Deve essere un ID Ruolo Discord valido di 17-20 cifre
+  alert_channel_help: Tasto destro sul tuo canale annunci/avvisi → {copy}.
+  copy_channel_id: Copia ID Canale
+  alert_role: ID Ruolo Avviso Predefinito
+  optional: "(Facoltativo)"
+  alert_role_placeholder: Lascia vuoto per usare @everyone
+  alert_role_help: Tasto destro sul tuo ruolo per i ping (es. {example}) → {copy}. Usa {everyone} se lasciato vuoto.
+  copy_role_id: Copia ID Ruolo
+  officer_channel: ID Canale Ricezione Ticket Ufficiali
+  officer_channel_help: Tasto destro sul tuo {channel} → {copy}. Proposte dei membri e ticket dell'alleanza da {suggest} verranno instradati qui per la revisione della leadership.
+  private_channel: canale ticket R4/R5 privato
+  delegated_roles: Ruoli Leadership Delegati
+  delegated_roles_help: Nomi dei ruoli separati da virgola che possono gestire i ticket, organizzare eventi e inviare candidature per i forzieri ({r5} è sempre autorizzato).
+  color: Colore Identità Alleanza
+  preview: 'Anteprima:'
+  color_help: Applicato al tuo calendario delle operazioni, alle schede dei ticket interni e alle proposte approvate del Consiglio NAP.
+  submit: Registra Server & Distribuisci Comandi
+  submitting: Verifica Server & Registrazione in corso...
+  bad_token: Token di registrazione non valido o mancante. Esegui /registerbot nel server NAP.
+  malformed_token: Token malformato. Richiedi un nuovo link da Discord.
+  expired: Questo link di registrazione è scaduto (limite 24h). Esegui di nuovo /registerbot.
+  bad_guild: Formato ID Server Discord non valido. Deve essere un numero di 17-20 cifre.
+  bad_alert_channel: Formato ID Canale Avvisi Operativi non valido. Deve essere un numero di 17-20 cifre.
+  bad_alert_role: Formato ID Ruolo Avviso non valido. Deve essere un numero di 17-20 cifre (o lasciato vuoto per @everyone).
+  bad_officer_channel: Formato ID Canale Ricezione Ticket Ufficiali non valido. Deve essere un numero di 17-20 cifre.
+  failed: Registrazione fallita
+  error: 'Errore di Registrazione: {error}'
+  success: "✅ Registrazione Riuscita!"
+  linked: "{server} è ora collegato a {tag}."
+  server_id: ID Server {id}
+  r_alert_channel: 'Canale Avvisi Operativi:'
+  r_target: 'Target Notifica:'
+  r_role: Ruolo {id}
+  r_default: "(Predefinito)"
+  r_officer_channel: 'Canale Ticket Ufficiali:'
+  r_color: 'Colore Identità:'
+  r_commands: 'Comandi Slash Distribuiti:'
+  r_leaders: 'Leadership Autorizzata:'
