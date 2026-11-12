@@ -8,6 +8,7 @@ import { getWaitUntil } from './_after_response.js';
 import { resolveActorName, resolveUserId, sendEphemeralMessage } from './_bot_common.js';
 import { mapRevisionCache } from './_bot_map.js';
 import { TEST_PROPOSAL_FIELD } from './_gist.js';
+import { say } from './_messages.js';
 import { isSteward } from './_stewards.js';
 
 /** Steward Approve / Reject on a proposal message (map, rewards, standings, blacklist, overrides). */
@@ -31,10 +32,7 @@ export async function handleProposalButton(ctx) {
     (e.fields || []).some((f) => f.name === TEST_PROPOSAL_FIELD),
   );
   if (isTestProposal) {
-    return sendEphemeralMessage(
-      res,
-      "🧪 This is a test proposal from the test site. It uses test data, so it can't be approved or change anything live.",
-    );
+    return sendEphemeralMessage(res, say('bot_admin.test_proposal'));
   }
 
   const {
@@ -47,7 +45,8 @@ export async function handleProposalButton(ctx) {
     rejectLabel,
   } = proposalConfig;
 
-  // The reviewed message: status field set, both buttons disabled.
+  // The reviewed message: status field set, both buttons disabled. It's the shared
+  // war-room post, so it stays in English whoever clicks.
   const buildReviewedMessage = () => {
     const originalEmbed = JSON.parse(JSON.stringify(interaction.message.embeds[0]));
     originalEmbed.color = isApproved ? 0x22c55e : 0xef4444;
@@ -201,7 +200,7 @@ export async function handleProposalButton(ctx) {
       } catch (error) {
         console.error('Approval saved, but the message could not be updated:', error);
         await sendToDiscord(webhook, 'POST', {
-          content: `✅ Approved and saved, but this message couldn't be updated (${error.message}).`,
+          content: say('bot_admin.approved_not_updated', { reason: error.message }),
           flags: 64,
         }).catch(() => {});
       }
