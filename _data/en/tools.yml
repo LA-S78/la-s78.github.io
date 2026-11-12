@@ -193,7 +193,7 @@ chart_editor:
   vertical: "Vertical bars"
   vertical_leaderboard: "Vertical bars (instead of a leaderboard)"
   traffic_columns: "🚦 Red → yellow → green (low → high): first column red, last green"
-  traffic_size: "🚦 Red → yellow → green (low → high): by size, biggest green"
+  traffic_size: "🚦 Red → yellow → green (low → high): by rank, top green"
   traffic_reverse: "↕️ Reverse: low is good (green), high is bad (red)"
   traffic_target: "🚦 Red → yellow → green by how close each is to the target"
   traffic_target_reverse: "↕️ Reverse: further below the target is better"

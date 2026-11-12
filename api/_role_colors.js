@@ -10,10 +10,18 @@ const TTL_MS = 10 * 60 * 1000; // role colours rarely change; Discord limits how
 const TIMEOUT_MS = 2500; // a slow Discord must not hold up the page's data
 let cache = { at: 0, colors: null };
 
+/** A colour too dark to read as text on the site's dark surfaces (perceived brightness < 15%). */
+export function tooDark(rgb) {
+  const r = (rgb >> 16) & 255;
+  const g = (rgb >> 8) & 255;
+  const b = rgb & 255;
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.15;
+}
+
 /**
  * { tag: '#rrggbb' } for every alliance whose role (DISCORD_<name>, listed in role_settings)
- * is found in the NAP server; a role with no colour set gives '#ffffff' (as /api/colors
- * always has). Kept for 10 minutes. Never throws: without a bot token, or if Discord fails,
+ * is found in the NAP server and has a readable colour (a role without a colour, or a
+ * near-black one, is left out, so the alliance keeps its site or default colour). Kept for 10 minutes. Never throws: without a bot token, or if Discord fails,
  * it returns the last known colours (or {}), and alliances keep their stored colours.
  */
 export async function getRoleColors({
@@ -37,7 +45,10 @@ export async function getRoleColors({
       const roleId = String(env[`DISCORD_${name}`] || '').trim();
       const raw = roleId ? roles.get(roleId) : undefined;
       if (raw === undefined) continue;
-      colors[tag] = raw ? `#${raw.toString(16).padStart(6, '0')}` : '#ffffff';
+      // No colour set (0) or too dark to read on the dark pages: leave it to the site's own
+      // colour or the default (maintainer review).
+      if (!raw || tooDark(raw)) continue;
+      colors[tag] = `#${raw.toString(16).padStart(6, '0')}`;
     }
     cache = { at: now, colors };
     return colors;

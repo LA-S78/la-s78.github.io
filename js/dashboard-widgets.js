@@ -156,8 +156,8 @@
 
   /**
    * A series' colour: the theme palette (.dw-s0…), or with options.scale traffic-light
-   * colours: across the columns (first red, last green) or, given `frac`, by size
-   * (0 = red … 1 = green). Returns the attributes: class="…" and, if needed, style="…".
+   * colours: across the columns (first red, last green) or, given `frac`, from 0 = red to
+   * 1 = green (a single column's rank, a progress bar's share of its target). Returns the attributes: class="…" and, if needed, style="…".
    */
   function paint(w, k, n, extra = '', css = '', frac) {
     const styles = [];
@@ -241,8 +241,16 @@
     };
 
     // One column with traffic-light colours: each bar by its size (biggest green).
-    const peak = Math.max(...rows.map((r) => r.values[0]).filter(Number.isFinite), 0) || 1;
-    const bySize = (r) => (n === 1 && !stacked ? r.values[0] / peak : undefined);
+    // By rank, not by size (maintainer review): one huge score mustn't turn everyone else
+    // red. The best is green, the worst red, ties share a colour; Reverse flips it (paint()).
+    const ranked = rows.map((r) => r.values[0]).filter(Number.isFinite);
+    const rankOf = (v) => {
+      if (ranked.length < 2) return 1;
+      const below = ranked.filter((x) => x < v).length;
+      const same = ranked.filter((x) => x === v).length;
+      return (below + (same - 1) / 2) / (ranked.length - 1);
+    };
+    const bySize = (r) => (n === 1 && !stacked ? rankOf(r.values[0]) : undefined);
 
     const horizontal = () => {
       const list = stacked
