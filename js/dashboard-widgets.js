@@ -136,18 +136,33 @@
     return { label, values, names: values.map((c) => cols[c]), rows };
   }
 
+  // Traffic-light stops (red → yellow → green), softened for the dark themes.
+  const RAMP = [
+    [196, 80, 72],
+    [214, 168, 58],
+    [96, 170, 86],
+  ];
+
+  /** The red → yellow → green colour at `f` (0 = low … 1 = high), tinted towards the theme. */
+  function ramp(f) {
+    const x = Math.min(1, Math.max(0, Number.isFinite(f) ? f : 0)) * (RAMP.length - 1);
+    const i = Math.min(RAMP.length - 2, Math.floor(x));
+    const t = x - i;
+    const rgb = RAMP[i].map((c, j) => Math.round(c + (RAMP[i + 1][j] - c) * t));
+    return `color-mix(in srgb, rgb(${rgb.join(', ')}) 85%, var(--accent-color))`;
+  }
+
   /**
-   * A series' colour: the theme palette (.dw-s0…), or with options.scale a ramp from dark to
-   * the theme's accent (first column darkest), for columns that run low → high.
-   * Returns the attributes: class="…" and, for the ramp or `css`, style="…".
+   * A series' colour: the theme palette (.dw-s0…), or with options.scale traffic-light
+   * colours: across the columns (first red, last green) or, given `frac`, by size
+   * (0 = red … 1 = green). Returns the attributes: class="…" and, if needed, style="…".
    */
-  function paint(w, k, n, extra = '', css = '') {
+  function paint(w, k, n, extra = '', css = '', frac) {
     const styles = [];
     let cls = extra;
-    if (w.options?.scale && n > 1) {
-      const dark = Math.round((1 - k / (n - 1)) * 72);
-      styles.push(`--dw: color-mix(in srgb, var(--accent-color), #0d1a1d ${dark}%)`);
-    } else cls = `${extra ? `${extra} ` : ''}dw-s${k % SERIES}`;
+    const f = frac ?? (n > 1 ? k / (n - 1) : undefined);
+    if (w.options?.scale && f !== undefined) styles.push(`--dw: ${ramp(f)}`);
+    else cls = `${extra ? `${extra} ` : ''}dw-s${k % SERIES}`;
     if (css) styles.push(css);
     return `class="${cls}"${styles.length ? ` style="${styles.join('; ')}"` : ''}`;
   }
@@ -221,6 +236,10 @@
       };
     };
 
+    // One column with traffic-light colours: each bar by its size (biggest green).
+    const peak = Math.max(...rows.map((r) => r.values[0]).filter(Number.isFinite), 0) || 1;
+    const bySize = (r) => (n === 1 && !stacked ? r.values[0] / peak : undefined);
+
     const horizontal = () => {
       const list = stacked
         ? rows
@@ -241,7 +260,7 @@
           const segs = r.values
             .map((v, k) =>
               Number.isFinite(v) && (!stacked || v > 0)
-                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`)} title="${esc(tip(r, k))}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}></span>`
+                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`, bySize(r))} title="${esc(tip(r, k))}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}></span>`
                 : '',
             )
             .join('');
@@ -278,7 +297,7 @@
             const x = stacked ? i * groupW + groupW * 0.15 : i * groupW + groupW * 0.1 + k * barW;
             const y = stacked ? base - h : 190 - h;
             if (stacked) base -= h;
-            return `<rect ${paint(w, k, n)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}><title>${esc(tip(r, k))}</title></rect>`;
+            return `<rect ${paint(w, k, n, '', '', bySize(r))} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}><title>${esc(tip(r, k))}</title></rect>`;
           })
           .join('');
       })
@@ -470,7 +489,7 @@
       `<ol class="dw-bars dw-progress">${rows
         .map(
           (r, i) =>
-            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}" ${pick(r.label, [`${s.names[0] || 'Value'}: ${exact(r.v)} of ${exact(r.target)}`, r.pct >= 1 ? 'Target reached ✓' : `To go: ${exact(r.target - r.v)}`], -1, '', r.pct >= 1 ? '✓ Done' : `${Math.round(r.pct * 100)}%`)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%" title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
+            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}" ${pick(r.label, [`${s.names[0] || 'Value'}: ${exact(r.v)} of ${exact(r.target)}`, r.pct >= 1 ? 'Target reached ✓' : `To go: ${exact(r.target - r.v)}`], -1, '', r.pct >= 1 ? '✓ Done' : `${Math.round(r.pct * 100)}%`)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span ${o.scale ? paint(w, 0, 1, 'dw-bar', `width:${Math.min(100, r.pct * 100).toFixed(1)}%`, r.pct) : `class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%"`} title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
         )
         .join('')}</ol>` +
       (rows.length > 25 ? showAll(rows.length) : '')
@@ -699,7 +718,7 @@
     });
     const hint = { bar: 'a bar', line: 'a week', pie: 'a slice', progress: 'a row' }[w.type];
     if (hint && el.querySelector('[data-tip]'))
-      selectable(el, `Tap or hover over ${hint} to see its numbers`);
+      selectable(el, `Tap or hover over ${hint}`);
   }
 
   window.DashboardWidgets = { parseTable, toText, number, short, render, mount };
