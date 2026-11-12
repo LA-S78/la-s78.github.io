@@ -687,12 +687,12 @@ live_data:
   failed: "⚠️ Impossibile caricare i dati più recenti. Controlla la connessione e aggiorna la pagina."
   offline: "📴 Offline: visualizzazione dei dati salvati su questo dispositivo ({when})."
 capitol_rotation:
-  seat: 'Grado #{rank}'
+  rank: 'Grado #{rank}'
   this_week: Questa settimana
   captures: Catture {date}
   captured: Catturato {date}
-  override: 'Sovrascrivi: il grado #{rank} difende al posto di #{seat}'
-  no_alliance: Nessuna alleanza ancora a questo grado
-  off_week_note: 'Nessuna Guerra tra Regni questa settimana: l''alleanza #4 detiene il Campidoglio.'
+  override: 'Sovrascrivi: sostituisce [{replaced}] questa settimana'
+  no_alliance: Nessuna alleanza a questo grado ancora
+  off_week_note: 'Nessuna Guerra tra Regni questa settimana: [{tag}] detiene il Campidoglio.'
   kw_note: 'Settimana di Guerra tra Regni: la battaglia è sabato.'
-  schedule_note: Dal calendario in tempo reale e dalle classifiche NAP. Le sovrascritture impostate dai Stewards vengono mostrate qui non appena salvate.
+  schedule_note: Dal calendario in tempo reale e dalle classifiche NAP. Le sostituzioni impostate dagli Steward sono mostrate qui non appena salvate.

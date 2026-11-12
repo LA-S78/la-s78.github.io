@@ -687,12 +687,12 @@ live_data:
   failed: "⚠️ No se pudieron cargar los datos más recientes. Comprueba tu conexión y actualiza la página."
   offline: "📴 Desconectado: mostrando los datos guardados en este dispositivo ({when})."
 capitol_rotation:
-  seat: 'Rango #{rank}'
+  rank: 'Rango #{rank}'
   this_week: Esta semana
   captures: Capturas {date}
   captured: Capturado {date}
-  override: 'Anular: el rango #{rank} defiende en lugar de #{seat}'
-  no_alliance: Todavía no hay alianza en este rango
-  off_week_note: 'No hay Guerra de Reinos esta semana: la alianza #{4} ocupa el Capitolio.'
+  override: 'Anular: reemplaza a [{replaced}] esta semana'
+  no_alliance: Aún no hay alianza en este rango
+  off_week_note: 'No hay Guerra de Reinos esta semana: [{tag}] mantiene el Capitolio.'
   kw_note: 'Semana de Guerra de Reinos: la batalla es el sábado.'
-  schedule_note: Basado en el calendario en vivo y las posiciones NAP. Las anulaciones establecidas por los Stewards se muestran aquí tan pronto como se guardan.
+  schedule_note: Basado en el calendario en vivo y las clasificaciones NAP. Las anulaciones establecidas por los administradores se muestran aquí tan pronto como se guardan.
