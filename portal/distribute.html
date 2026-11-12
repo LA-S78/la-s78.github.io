@@ -3,12 +3,13 @@ layout: portal
 title: King's Distribution Console
 permalink: /distribute.html
 lang: "en"
+strings: [kings_console]
 ---
 
 <div class="content-pane portal-pane-md">
   <div class="portal-header">
-    <h2 class="portal-title">👑 King's Distribution Console</h2>
-    <div class="sub-text" id="progress-indicator">Loading nominations...</div>
+    <h2 class="portal-title">{{ "kings_console.title" | t }}</h2>
+    <div class="sub-text" id="progress-indicator">{{ "kings_console.loading" | t }}</div>
   </div>
 
   <!-- This week's reward period: open/closed, and whether to wait for the battle result -->
@@ -19,8 +20,8 @@ lang: "en"
 
   <div class="distribute-toolbar">
     <div class="segmented-control">
-      <button type="button" class="toggle-btn active" id="btn-group-chest">By Chest</button>
-      <button type="button" class="toggle-btn" id="btn-group-alliance">By Alliance</button>
+      <button type="button" class="toggle-btn active" id="btn-group-chest">{{ "kings_console.by_chest" | t }}</button>
+      <button type="button" class="toggle-btn" id="btn-group-alliance">{{ "kings_console.by_alliance" | t }}</button>
     </div>
 
   </div>
@@ -79,15 +80,15 @@ lang: "en"
     function renderNote() {
       if (!elNote) return;
       const access = tickAccess();
-      const kingText = king ? `[${escapeHtml(king)}]` : "the King's alliance";
+      const kingText = king ? `[${king}]` : t('kings_console.kings_alliance');
       if (!period || !period.open) {
-        elNote.innerHTML = '';
+        elNote.textContent = '';
       } else if (access.can) {
-        elNote.innerHTML = `✅ Tap a player once their chest is handed out in the game. Ticks are saved for everyone, and a ticked chest stays with that player if the lists are re-sorted.`;
+        elNote.textContent = t('kings_console.can_tick');
       } else if (access.why === 'signed-out') {
-        elNote.innerHTML = `👀 View only. The King's checklist can be ticked by ${kingText} R4/R5 and Stewards: sign in with Discord (top right).`;
+        elNote.textContent = t('kings_console.view_only_signed_out', { king: kingText });
       } else {
-        elNote.innerHTML = `👀 View only: the checklist is ticked by ${kingText} R4/R5 and Stewards.`;
+        elNote.textContent = t('kings_console.view_only', { king: kingText });
       }
     }
 
@@ -107,7 +108,7 @@ lang: "en"
           render();
         } catch (err) {
           elRoster.innerHTML = `<div class="status-banner warning">
-            Failed to load nominations: ${escapeHtml(err.message)}
+            ${escapeHtml(t('kings_console.load_failed', { error: err.message }))}
           </div>`;
         } finally {
           loading = null;
@@ -122,15 +123,18 @@ lang: "en"
       const el = document.getElementById('period-banner');
       if (!el || !period) return;
       const until = new Date(period.closesAt).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      // The bold lead-in (<strong>) goes wherever the translation puts {title}.
+      const bold = (key, vars) => `<strong>${escapeHtml(t(key, vars))}</strong>`;
+      const week = Number(period.week) === 0 ? t('common.off_week') : t('common.kw_week', { n: period.week });
       let text;
       if (!period.open) {
-        text = '🔒 Rewards are closed. The lists below are from the last week; the next rewards open Friday at about 20:00 GT.';
+        text = escapeHtml(t('kings_console.closed'));
       } else if (period.kwWeek && period.result === 'pending') {
-        text = `⏳ <strong>Hold the chests:</strong> wait for Saturday's battle result before handing out. If the war is won, King of Battle Reward chests open and every list is re-sorted. Rewards close ${until}.`;
+        text = `⏳ ${th('kings_console.hold', { title: bold('kings_console.hold_title') }, { when: until })}`;
       } else if (period.result === 'won') {
-        text = `⚔️ <strong>Kingdom War won:</strong> hand out both sets. Rewards close ${until} (Wednesday 00:00 GT).`;
+        text = `⚔️ ${th('kings_console.won', { title: bold('kings_console.won_title') }, { when: until })}`;
       } else {
-        text = `🎁 <strong>${period.weekName} rewards:</strong> hand out the King's Commendation. Rewards close ${until} (Wednesday 00:00 GT).`;
+        text = `🎁 ${th('kings_console.week', { title: bold('kings_console.week_title', { week }) }, { when: until })}`;
       }
       el.innerHTML = `<span>${text}</span>`; // one block, so the bold words stay inline
       el.style.display = 'flex';
@@ -145,7 +149,7 @@ lang: "en"
         elBuyoutBanner.innerHTML = `
           <span>🛡️</span>
           <div>
-            <strong>Wartime Restitution Active:</strong> ${tags} ${buyoutAlliances.length === 1 ? 'includes' : 'include'} bonus Commander's Will slots funded from WLO's Rank #1 allotment.
+            ${th(buyoutAlliances.length === 1 ? 'kings_console.buyout_one' : 'kings_console.buyout_other', { title: `<strong>${escapeHtml(t('kings_console.buyout_title'))}</strong>`, tags })}
           </div>
         `;
         elBuyoutBanner.style.display = 'flex';
@@ -163,8 +167,8 @@ lang: "en"
       renderNote();
 
       if (alliances.length === 0) {
-        elRoster.innerHTML = '<div class="sub-text distribute-empty">No nominations submitted yet.</div>';
-        elProgress.textContent = '0 Recipient Entries';
+        elRoster.innerHTML = `<div class="sub-text distribute-empty">${escapeHtml(t('kings_console.no_nominations'))}</div>`;
+        elProgress.textContent = t('kings_console.no_entries');
         return;
       }
 
@@ -202,7 +206,7 @@ lang: "en"
       });
 
       const sentCount = flatList.filter(e => handedOut[keyOf(e)]).length;
-      elProgress.textContent = `Progress: ${sentCount} / ${flatList.length} Distributed`;
+      elProgress.textContent = t('kings_console.progress', { sent: sentCount, total: flatList.length });
 
       let html = '';
 
@@ -210,14 +214,14 @@ lang: "en"
         // One set at a time, like the game's two tabs: all of King's Commendation (REG),
         // then all of King of Battle Reward (KW); within a set, most valuable first.
         const tiers = [
-          { pool: 'REG', key: 'commanders_will', title: '🟡 Commander\'s Will', glyph: 'gold' },
-          { pool: 'REG', key: 'loyal_servant', title: '🟣 Loyal Servant', glyph: 'purple' },
-          { pool: 'REG', key: 'followers_heart', title: '🔵 Follower\'s Heart', glyph: 'blue' },
-          { pool: 'KW', key: 'commanders_will', title: '🟡 Honor Vanguard', glyph: 'gold' },
-          { pool: 'KW', key: 'loyal_servant', title: '🟣 Fearless Hero', glyph: 'purple' },
-          { pool: 'KW', key: 'followers_heart', title: '🔵 Logistics Support', glyph: 'blue' }
+          { pool: 'REG', key: 'commanders_will', title: `🟡 ${CHEST_LABEL.standard.commanders_will}`, glyph: 'gold' },
+          { pool: 'REG', key: 'loyal_servant', title: `🟣 ${CHEST_LABEL.standard.loyal_servant}`, glyph: 'purple' },
+          { pool: 'REG', key: 'followers_heart', title: `🔵 ${CHEST_LABEL.standard.followers_heart}`, glyph: 'blue' },
+          { pool: 'KW', key: 'commanders_will', title: `🟡 ${CHEST_LABEL.kingdom_war.commanders_will}`, glyph: 'gold' },
+          { pool: 'KW', key: 'loyal_servant', title: `🟣 ${CHEST_LABEL.kingdom_war.loyal_servant}`, glyph: 'purple' },
+          { pool: 'KW', key: 'followers_heart', title: `🔵 ${CHEST_LABEL.kingdom_war.followers_heart}`, glyph: 'blue' }
         ];
-        const SET_NAMES = { REG: '👑 King\'s Commendation', KW: '⚔️ King of Battle Reward' };
+        const SET_NAMES = { REG: `👑 ${t('common.set_one')}`, KW: `⚔️ ${t('common.set_two')}` };
 
         let currentSet = null;
         tiers.forEach(tier => {
@@ -236,9 +240,9 @@ lang: "en"
           if (tier.pool !== currentSet) {
             currentSet = tier.pool;
             const setCount = flatList.filter(e => e.pool === tier.pool).length;
-            html += `<div class="distribute-set-heading">${SET_NAMES[tier.pool]} (${setCount})</div>`;
+            html += `<div class="distribute-set-heading">${escapeHtml(SET_NAMES[tier.pool])} (${setCount})</div>`;
           }
-          html += `<div class="slot-group-title distribute-group-heading">${tier.title} (${matched.length})</div>`;
+          html += `<div class="slot-group-title distribute-group-heading">${escapeHtml(tier.title)} (${matched.length})</div>`;
           matched.forEach(item => {
             html += renderRow(item, tier.glyph);
           });
@@ -259,7 +263,7 @@ lang: "en"
             return (tierOrder[a.type] || 99) - (tierOrder[b.type] || 99);
           });
 
-          html += `<div class="slot-group-title distribute-group-heading">[${tag}] • Rank ${nominationsData[tag].rank || '-'} (${matched.length})</div>`;
+          html += `<div class="slot-group-title distribute-group-heading">${escapeHtml(t('kings_console.alliance_heading', { tag, rank: nominationsData[tag].rank || '-', n: matched.length }))}</div>`;
           matched.forEach(item => {
             const glyph = item.type === 'commanders_will' ? 'gold' : item.type === 'loyal_servant' ? 'purple' : 'blue';
             html += renderRow(item, glyph);
@@ -271,9 +275,10 @@ lang: "en"
       bindEvents();
     }
 
-    const CHEST_LABEL = {
-      standard: { commanders_will: "Commander's Will", loyal_servant: 'Loyal Servant', followers_heart: "Follower's Heart" },
-      kingdom_war: { commanders_will: 'Honor Vanguard', loyal_servant: 'Fearless Hero', followers_heart: 'Logistics Support' },
+    // The in-game chest names (common.chests in _data/<lang>/tools.yml).
+    var CHEST_LABEL = {
+      standard: { commanders_will: t('common.chests.commanders_will'), loyal_servant: t('common.chests.loyal_servant'), followers_heart: t('common.chests.followers_heart') },
+      kingdom_war: { commanders_will: t('common.chests.honor_vanguard'), loyal_servant: t('common.chests.fearless_hero'), followers_heart: t('common.chests.logistics_support') },
     };
 
     /** Where `name` is in an alliance's saved list now: "pool.chest", 'reserve' or null. */
@@ -307,11 +312,11 @@ lang: "en"
       }
       const shown = CHEST_LABEL[pool]?.[chest] || chest;
       let why;
-      if (!now) why = `${name} is no longer on [${alliance}]'s list (the alliance changed it).`;
-      else if (now === 'reserve') why = `${name} is now a reserve on [${alliance}]'s list: no chest.`;
+      if (!now) why = t('kings_console.not_on_list', { name, tag: alliance });
+      else if (now === 'reserve') why = t('kings_console.now_reserve', { name, tag: alliance });
       else {
         const [p, c] = now.split('.');
-        why = `${name} now gets ${CHEST_LABEL[p]?.[c] || c}, not ${shown}.`;
+        why = t('kings_console.now_other_chest', { name, chest: CHEST_LABEL[p]?.[c] || c, shown });
       }
       // Show the latest lists, then the warning above them, and say it plainly.
       nominationsData = fresh.nominations || {};
@@ -319,8 +324,8 @@ lang: "en"
       period = fresh.period || period;
       king = fresh.king || king;
       render();
-      showCopyWarning(`⚠️ Stop: don't send that ${shown}. ${why} The lists have been refreshed: copy the name again from the list below.`);
-      alert(`Don't send it!\n\n${why}\n\nThe lists have been refreshed.`);
+      showCopyWarning(t('kings_console.stop_warning', { chest: shown, why }));
+      alert(`${t('kings_console.stop_alert')}\n\n${why}\n\n${t('kings_console.lists_refreshed')}`);
     }
 
     function showCopyWarning(text) {
@@ -341,7 +346,7 @@ lang: "en"
       const tick = handedOut[key];
       const isKW = item.pool === 'KW';
       const when = tick ? new Date(tick.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-      const title = tick ? `Handed out (locked) · ticked by ${tick.by} · ${when}` : '';
+      const title = tick ? t('kings_console.ticked_by', { name: tick.by, when }) : '';
 
       return `
         <div class="distribute-item ${tick ? 'sent' : ''} ${item.isBuyout ? 'is-buyout' : ''}" data-key="${escapeHtml(key)}"
@@ -350,11 +355,11 @@ lang: "en"
           <span class="chest-glyph ${glyph}"></span>
           <span class="badge badge-alliance-sm">${escapeHtml(item.alliance)}</span>
           <span class="badge ${isKW ? 'badge-pool-kw' : 'badge-pool-reg'}">
-            ${item.pool}
+            ${escapeHtml(t(isKW ? 'kings_console.pool_kw' : 'kings_console.pool_reg'))}
           </span>
-          ${item.isBuyout ? '<span class="badge badge-buyout">BUYOUT</span>' : ''}
+          ${item.isBuyout ? `<span class="badge badge-buyout">${escapeHtml(t('kings_console.buyout_badge'))}</span>` : ''}
           <span class="player-ign">${escapeHtml(item.ign)}</span>
-          <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">Copy</button>
+          <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">${escapeHtml(t('common.copy'))}</button>
         </div>
       `;
     }
@@ -394,7 +399,7 @@ lang: "en"
           } catch (err) {
             el.classList.toggle('sent', !done);
             el.classList.remove('saving');
-            alert(`Not saved: ${err.message}`);
+            alert(t('common.not_saved', { error: err.message }));
             loadNominations(); // the lists may have changed
           }
         });
@@ -406,14 +411,14 @@ lang: "en"
           const text = btn.getAttribute('data-copy');
           try {
             await navigator.clipboard.writeText(text);
-            btn.textContent = '✓ Copied';
+            btn.textContent = t('common.copied');
             btn.classList.add('copied');
             setTimeout(() => {
-              btn.textContent = 'Copy';
+              btn.textContent = t('common.copy');
               btn.classList.remove('copied');
             }, 1200);
           } catch (err) {
-            prompt('Copy recipient name:', text);
+            prompt(t('kings_console.copy_prompt'), text);
           }
           // Copied at once (phones only allow it straight after a tap), then checked against
           // the latest lists: an alliance may have corrected or removed this name since the
