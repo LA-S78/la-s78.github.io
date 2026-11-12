@@ -13,6 +13,22 @@
 (() => {
   const esc = (v) => window.escapeHtml(String(v ?? ''));
   const SERIES = 6; // colours .dw-s0 … .dw-s5
+  const pct1 = (f) => `${Math.round(f * 1000) / 10}%`;
+  const isPercentCell = (cell) => /%\s*$/.test(String(cell ?? ''));
+
+  // Numbers in a readout keep one more decimal than the chart (1.26B, not 1.3B).
+  const exact = (n) => short(n, 2);
+
+  /**
+   * Makes a chart part selectable, like a territory on the map: hovering, tapping or Enter
+   * highlights it and fills the info card under the chart with `title`, an optional `badge`
+   * and `lines` ("Name: value"); line `on` is the part itself (shown bold). Parts sharing a
+   * `key` (a pie slice and its legend row) light up together. See selectable().
+   */
+  function pick(title, lines, on = -1, key = '', badge = '') {
+    const text = lines.map((l) => esc(l)).join('&#10;');
+    return `data-tip="${esc(title)}" data-lines="${text}" data-on="${on}"${key ? ` data-key="${esc(key)}"` : ''}${badge ? ` data-badge="${esc(badge)}"` : ''} tabindex="0"`;
+  }
 
   /**
    * A table pasted from Google Sheets / Excel (tab-separated) or a CSV (commas or
@@ -94,10 +110,11 @@
   }
 
   /** Short form of a number: 15.2M, 1.2K, 980. */
-  function short(n) {
+  function short(n, digits = 1) {
     if (!Number.isFinite(n)) return '–';
     const a = Math.abs(n);
-    const f = (v, s) => `${(Math.round(v * 10) / 10).toLocaleString()}${s}`;
+    const k = 10 ** digits;
+    const f = (v, s) => `${(Math.round(v * k) / k).toLocaleString()}${s}`;
     if (a >= 1e9) return f(n / 1e9, 'B');
     if (a >= 1e6) return f(n / 1e6, 'M');
     if (a >= 1e4) return f(n / 1e3, 'K');
@@ -164,6 +181,46 @@
       return `${r.label} · ${s.names[k]}:${pct || ` ${short(v)}`}${raw}`;
     };
 
+    // The readout for a bar: every column of its row, the tapped one bold.
+    const colTotal = s.values.map((_, k) =>
+      rows.reduce(
+        (t, r) => t + (Number.isFinite(r.values[k]) && r.values[k] > 0 ? r.values[k] : 0),
+        0,
+      ),
+    );
+    const readout = (r) => {
+      const keys = [];
+      const lines = [];
+      const badges = [];
+      r.values.forEach((v, k) => {
+        if (!Number.isFinite(v)) return;
+        const cell = r.cells[s.values[k]];
+        let text;
+        if (stacked === 'percent') {
+          text = total(r) ? pct1(v / total(r)) : short(v);
+          badges.push(text);
+          if (cell !== undefined && v !== 0 && !isPercentCell(cell)) text += ` (${cell})`;
+        } else if (stacked === 'sum') {
+          text = `${exact(v)}${total(r) ? ` (${pct1(v / total(r))})` : ''}`;
+          badges.push(exact(v));
+        } else {
+          text = exact(v);
+          badges.push(text);
+          if (!isPercentCell(cell) && colTotal[k] > 0 && v > 0 && rows.length > 1)
+            text += ` · ${pct1(v / colTotal[k])} of all`;
+        }
+        keys.push(k);
+        lines.push(n > 1 || stacked ? `${s.names[k]}: ${text}` : text);
+      });
+      if (stacked === 'sum' && lines.length > 1) lines.push(`Total: ${exact(total(r))}`);
+      return {
+        lines,
+        on: (k) => keys.indexOf(k),
+        badge: (k) => badges[keys.indexOf(k)] ?? '',
+        rowBadge: stacked === 'sum' ? exact(total(r)) : stacked ? '' : (badges[0] ?? ''),
+      };
+    };
+
     const horizontal = () => {
       const list = stacked
         ? rows
@@ -180,15 +237,16 @@
       const items = list
         .map((r, i) => {
           const scale = stacked === 'percent' ? total(r) || 1 : max;
+          const ro = readout(r);
           const segs = r.values
             .map((v, k) =>
               Number.isFinite(v) && (!stacked || v > 0)
-                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`)} title="${esc(tip(r, k))}"></span>`
+                ? `<span ${paint(w, k, n, 'dw-bar', `width:${Math.max(0, (v / scale) * 100).toFixed(2)}%`)} title="${esc(tip(r, k))}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}></span>`
                 : '',
             )
             .join('');
           const value = stacked === 'percent' ? '' : short(stacked ? total(r) : r.values[0]);
-          return `<li class="${i >= 25 ? 'dw-extra' : ''}"><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
+          return `<li class="${i >= 25 ? 'dw-extra' : ''}" ${pick(r.label, ro.lines, -1, '', ro.rowBadge)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
         })
         .join('');
       return `<ol class="dw-bars${stacked === 'percent' ? ' dw-no-value' : ''}">${items}</ol>${legend(s.names, w)}${list.length > 25 ? showAll(list.length) : ''}`;
@@ -211,6 +269,7 @@
     const rects = shown
       .map((r, i) => {
         let base = 190;
+        const ro = readout(r);
         return r.values
           .map((v, k) => {
             if (!Number.isFinite(v) || v <= 0) return '';
@@ -219,12 +278,12 @@
             const x = stacked ? i * groupW + groupW * 0.15 : i * groupW + groupW * 0.1 + k * barW;
             const y = stacked ? base - h : 190 - h;
             if (stacked) base -= h;
-            return `<rect ${paint(w, k, n)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}"><title>${esc(tip(r, k))}</title></rect>`;
+            return `<rect ${paint(w, k, n)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}><title>${esc(tip(r, k))}</title></rect>`;
           })
           .join('');
       })
       .join('');
-    const g = guides(0, top, stacked === 'percent' ? (v) => `${Math.round(v)}%` : short);
+    const g = guides(0, top, stacked === 'percent' ? (v) => `${Math.round(v)}%` : undefined);
     const vertical =
       frame(
         w,
@@ -245,8 +304,14 @@
    * y = 20 (hi), with their values as ordinary text beside the drawing (text inside the SVG
    * would shrink with it on a phone).
    */
-  function guides(lo, hi, label = short) {
+  function guides(lo, hi, label) {
     const ys = [0, 0.5, 1].map((f) => ({ y: 190 - 170 * f, v: lo + (hi - lo) * f }));
+    if (!label) {
+      // Close values (1.15B … 1.35B) need more decimals, or two labels read "1.2B".
+      let digits = 1;
+      while (digits < 3 && new Set(ys.map(({ v }) => short(v, digits))).size < ys.length) digits++;
+      label = (v) => short(v, digits);
+    }
     return {
       svg: ys
         .map(({ y }) => `<line class="dw-grid" x1="0" x2="600" y1="${y}" y2="${y}"/>`)
@@ -308,10 +373,32 @@
         return `<path class="dw-line dw-s${k % SERIES}" d="${d}"/>${dots}`;
       })
       .join('');
+    // One tall tap area per row (the dots are too small to tap on a phone): its readout lists
+    // every line's value there and the change since the row before.
+    const colW = 584 / (rows.length - 1);
+    const hits = rows
+      .map((r, i) => {
+        const lines = s.values
+          .map((_, k) => {
+            const v = r.values[k];
+            if (!Number.isFinite(v)) return null;
+            const prev = i ? rows[i - 1].values[k] : NaN;
+            const change =
+              Number.isFinite(prev) && prev !== 0
+                ? ` (${v >= prev ? '+' : '−'}${pct1(Math.abs(v - prev) / Math.abs(prev))})`
+                : '';
+            return `${s.names[k]}: ${exact(v)}${change}`;
+          })
+          .filter(Boolean);
+        const left = Math.max(0, x(i) - colW / 2);
+        const right = Math.min(600, x(i) + colW / 2);
+        return `<rect class="dw-hit" x="${left.toFixed(1)}" y="0" width="${(right - left).toFixed(1)}" height="200" ${pick(r.label, lines)}/>`;
+      })
+      .join('');
     return (
       frame(
         w,
-        paths,
+        paths + hits,
         guides(lo, hi),
         rows.map((r) => r.label),
       ) + legend(s.names, w)
@@ -337,10 +424,18 @@
     const width = donut ? 26 : 80;
     const C = 2 * Math.PI * R;
     let at = 0;
+    const pieTip = (p, i) =>
+      pick(
+        p.label,
+        [`${s.names[0] || 'Value'}: ${exact(p.v)}`, `Total: ${exact(total)}`],
+        -1,
+        `p${i}`,
+        pct1(p.v / total),
+      );
     const rings = parts
       .map((p, i) => {
         const len = (p.v / total) * C;
-        const seg = `<circle class="dw-slice dw-s${i % SERIES}" r="${R}" cx="80" cy="80" stroke-width="${width}" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-at).toFixed(2)}"><title>${esc(p.label)}: ${short(p.v)} (${Math.round((p.v / total) * 100)}%)</title></circle>`;
+        const seg = `<circle class="dw-slice dw-s${i % SERIES}" ${pieTip(p, i)} r="${R}" cx="80" cy="80" stroke-width="${width}" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-at).toFixed(2)}"><title>${esc(p.label)}: ${short(p.v)} (${Math.round((p.v / total) * 100)}%)</title></circle>`;
         at += len;
         return seg;
       })
@@ -351,7 +446,7 @@
     return `<div class="dw-pie"><svg viewBox="0 0 160 160" role="img" aria-label="${esc(w.title)}"><g transform="rotate(-90 80 80)">${rings}</g>${middle}</svg><ul class="dw-pie-legend">${parts
       .map(
         (p, i) =>
-          `<li><i class="dw-s${i % SERIES}"></i><span>${esc(p.label)}</span><b>${Math.round((p.v / total) * 100)}%</b><small>${short(p.v)}</small></li>`,
+          `<li ${pieTip(p, i)}><i class="dw-s${i % SERIES}"></i><span>${esc(p.label)}</span><b>${Math.round((p.v / total) * 100)}%</b><small>${short(p.v)}</small></li>`,
       )
       .join('')}</ul></div>`;
   }
@@ -375,7 +470,7 @@
       `<ol class="dw-bars dw-progress">${rows
         .map(
           (r, i) =>
-            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}"><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%" title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
+            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}" ${pick(r.label, [`${s.names[0] || 'Value'}: ${exact(r.v)} of ${exact(r.target)}`, r.pct >= 1 ? 'Target reached ✓' : `To go: ${exact(r.target - r.v)}`], -1, '', r.pct >= 1 ? '✓ Done' : `${Math.round(r.pct * 100)}%`)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%" title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
         )
         .join('')}</ol>` +
       (rows.length > 25 ? showAll(rows.length) : '')
@@ -466,7 +561,134 @@
     }
   }
 
-  /** Makes a rendered widget interactive (table sorting/search, "Show all"). */
+  /**
+   * Chart parts work like territories on the map (js/map.js): hovering one (or tapping it
+   * on a phone, or Tab + Enter) gives it the map's glowing outline and fills the info card
+   * under the chart. Moving off clears it; a tap or click keeps it until tapped again,
+   * Escape, or a tap outside the chart.
+   */
+  function selectable(el, hint) {
+    // The editor's preview box is redrawn in place: drop the listeners of the last drawing.
+    el.dwSelectable?.abort();
+    const ctl = new AbortController();
+    el.dwSelectable = ctl;
+    const { signal } = ctl;
+    const card = document.createElement('div');
+    card.className = 'info-card idle dw-info';
+    card.setAttribute('aria-live', 'polite');
+    el.append(card);
+    let current = null;
+    let pinned = false;
+    const idle = () => {
+      card.classList.add('idle');
+      card.innerHTML = `<div class="info-header"><h3>${esc(hint)}</h3></div>`;
+    };
+    const clear = () => {
+      el.querySelectorAll('.dw-sel').forEach((x) => x.classList.remove('dw-sel'));
+      current = null;
+      pinned = false;
+      idle();
+    };
+    const show = (part) => {
+      el.querySelectorAll('.dw-sel').forEach((x) => x.classList.remove('dw-sel'));
+      current = part;
+      const key = part.dataset.key;
+      const lit = key ? el.querySelectorAll(`[data-key="${CSS.escape(key)}"]`) : [part];
+      lit.forEach((x) => x.classList.add('dw-sel'));
+      card.classList.remove('idle');
+      card.textContent = '';
+      const head = document.createElement('div');
+      head.className = 'info-header';
+      if (part.dataset.badge) {
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = part.dataset.badge;
+        head.append(badge);
+      }
+      const name = document.createElement('h3');
+      name.textContent = part.dataset.tip;
+      head.append(name);
+      const details = document.createElement('div');
+      details.className = 'info-details';
+      const on = Number(part.dataset.on);
+      part.dataset.lines.split('\n').forEach((line, i) => {
+        if (i) {
+          const dot = document.createElement('span');
+          dot.className = 'info-divider';
+          dot.setAttribute('aria-hidden', 'true');
+          dot.textContent = '•';
+          details.append(dot);
+        }
+        const item = document.createElement('span');
+        item.className = `info-item${i === on ? ' is-on' : ''}`;
+        const at = line.indexOf(': ');
+        if (at > 0) {
+          const label = document.createElement('strong');
+          label.textContent = `${line.slice(0, at)}:`;
+          item.append(label, ` ${line.slice(at + 2)}`);
+        } else item.textContent = line;
+        details.append(item);
+      });
+      card.append(head, details);
+    };
+    idle();
+    const partOf = (e) => {
+      const part = e.target.closest?.('[data-tip]');
+      return part && el.contains(part) ? part : null;
+    };
+    el.addEventListener(
+      'pointerover',
+      (e) => {
+        if (e.pointerType !== 'mouse' || pinned) return;
+        const part = partOf(e);
+        if (part && part !== current) show(part);
+      },
+      { signal },
+    );
+    el.addEventListener(
+      'pointerleave',
+      (e) => {
+        if (e.pointerType === 'mouse' && !pinned) clear();
+      },
+      { signal },
+    );
+    el.addEventListener(
+      'click',
+      (e) => {
+        const part = partOf(e);
+        if (!part) return pinned && !e.target.closest('.dw-info') ? clear() : undefined;
+        if (pinned && part === current) return clear();
+        show(part);
+        pinned = true;
+      },
+      { signal },
+    );
+    el.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape') return clear();
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('[data-tip]')) {
+          e.preventDefault();
+          if (pinned && e.target === current) clear();
+          else {
+            show(e.target);
+            pinned = true;
+          }
+        }
+      },
+      { signal },
+    );
+    document.addEventListener(
+      'click',
+      (e) => {
+        if (!el.isConnected) return ctl.abort();
+        if (pinned && !el.contains(e.target)) clear();
+      },
+      { signal },
+    );
+  }
+
+  /** Makes a rendered widget interactive (table sorting/search, "Show all", tap to read). */
   function mount(el, w) {
     if (w.type === 'table') fillTable(el, w);
     el.addEventListener('click', (e) => {
@@ -475,6 +697,9 @@
       el.classList.add('dw-show-all');
       b.remove();
     });
+    const hint = { bar: 'a bar', line: 'a week', pie: 'a slice', progress: 'a row' }[w.type];
+    if (hint && el.querySelector('[data-tip]'))
+      selectable(el, `Tap or hover over ${hint} to see its numbers`);
   }
 
   window.DashboardWidgets = { parseTable, toText, number, short, render, mount };

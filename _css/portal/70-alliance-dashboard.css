@@ -197,17 +197,33 @@
 /* ---------- Widgets: charts and tables (js/dashboard-widgets.js) ---------- */
 
 /* Series colours from the theme: accent, gold, then mixes of them */
-.dw-s0 { --dw: var(--accent-color); }
-.dw-s1 { --dw: var(--gold); }
-.dw-s2 { --dw: color-mix(in srgb, var(--accent-color) 55%, var(--white)); }
-.dw-s3 { --dw: color-mix(in srgb, var(--gold) 55%, var(--status-danger-text)); }
-.dw-s4 { --dw: color-mix(in srgb, var(--accent-color) 45%, var(--gold)); }
-.dw-s5 { --dw: var(--text-muted); }
+.dw-s0 {
+  --dw: var(--accent-color);
+}
+.dw-s1 {
+  --dw: var(--gold);
+}
+.dw-s2 {
+  --dw: color-mix(in srgb, var(--accent-color) 55%, var(--white));
+}
+.dw-s3 {
+  --dw: color-mix(in srgb, var(--gold) 55%, var(--status-danger-text));
+}
+.dw-s4 {
+  --dw: color-mix(in srgb, var(--accent-color) 45%, var(--gold));
+}
+.dw-s5 {
+  --dw: var(--text-muted);
+}
 
 /* Sanctuary's accent is itself orange-gold, so gold would be nearly the same colour:
    contrasting second and fifth colours there instead */
-html[data-theme='sanctuary'] .dw-s1 { --dw: #6fa8dc; }
-html[data-theme='sanctuary'] .dw-s4 { --dw: #8fbf7f; }
+html[data-theme='sanctuary'] .dw-s1 {
+  --dw: #6fa8dc;
+}
+html[data-theme='sanctuary'] .dw-s4 {
+  --dw: #8fbf7f;
+}
 
 .dash-widget-head {
   display: flex;
@@ -935,4 +951,85 @@ html[data-theme='sanctuary'] .dw-s4 { --dw: #8fbf7f; }
   .dw-narrow {
     display: block;
   }
+}
+
+/* Chart parts highlight like territories on the map (setHighlightedTerritory in js/map.js):
+   a vivid theme outline, a glow and a little brightness; the info card under the chart is
+   the map's own .info-card. See selectable() in js/dashboard-widgets.js. */
+.dash-widget-body [data-tip],
+#ed-preview [data-tip] {
+  cursor: pointer;
+}
+
+[data-tip]:focus {
+  outline: none;
+}
+
+[data-tip]:focus-visible {
+  outline: 2px solid rgba(var(--active-theme-vivid), 1);
+  outline-offset: 1px;
+}
+
+.dw-svg rect.dw-sel:not(.dw-hit) {
+  stroke: rgba(var(--active-theme-vivid), 1);
+  stroke-width: 3px;
+  paint-order: stroke fill;
+  vector-effect: non-scaling-stroke;
+}
+
+.dw-svg rect.dw-sel:not(.dw-hit),
+.dw-slice.dw-sel {
+  filter: drop-shadow(0 0 4px rgba(var(--active-theme), 1))
+    drop-shadow(0 0 10px rgba(var(--active-theme), 0.8)) brightness(1.25);
+}
+
+.dw-bar.dw-sel {
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 0 0 2px rgba(var(--active-theme-vivid), 1),
+    0 0 4px 2px rgba(var(--active-theme), 1),
+    0 0 10px 2px rgba(var(--active-theme), 0.8);
+  filter: brightness(1.25);
+}
+
+/* Stacked rows clip anything outside a segment, so its outline goes inside. */
+.dw-stack .dw-bar.dw-sel {
+  box-shadow:
+    inset 0 0 0 2px rgba(var(--active-theme-vivid), 1),
+    inset 0 0 8px rgba(var(--active-theme), 1);
+}
+
+li.dw-sel > .dw-bar-label,
+.dw-pie-legend li.dw-sel span {
+  color: rgba(var(--active-theme-vivid), 1);
+}
+
+li.dw-sel > .dw-bar-track {
+  box-shadow:
+    0 0 0 2px rgba(var(--active-theme-vivid), 1),
+    0 0 10px rgba(var(--active-theme), 0.8);
+}
+
+.dw-pie-legend li.dw-sel i {
+  box-shadow: 0 0 6px 1px rgba(var(--active-theme), 1);
+  filter: brightness(1.25);
+}
+
+.dw-svg rect.dw-hit {
+  fill: transparent;
+}
+
+.dw-svg rect.dw-hit.dw-sel {
+  fill: rgba(var(--active-theme), 0.18);
+}
+
+.dw-info {
+  margin-top: 0.6rem;
+}
+
+.dw-info .is-on,
+.dw-info .is-on strong {
+  font-weight: 700;
+  color: rgba(var(--active-theme-vivid), 1);
 }
