@@ -10,6 +10,12 @@ import { submitProposalWithAuth } from './auth-modal.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
+// The page's language (kings_scheduler.* in _data/<lang>/tools.yml, js/i18n.js): text, and
+// text around trusted HTML (bold tags, coloured alliance tags).
+const t = (key, vars) => window.t(`kings_scheduler.${key}`, vars);
+const th = (key, html, vars) => window.th(`kings_scheduler.${key}`, html, vars);
+const tag = (name, color) =>
+  `<strong${color ? ` style="color: ${esc(color)}"` : ''}>[${esc(name)}]</strong>`;
 
 let cycleState = {
   macro_cycle: 1,
@@ -77,31 +83,31 @@ function renderScheduleGrid() {
   const weeks = [
     {
       key: 'downtime',
-      label: 'Off-Week',
-      sub: 'Boss 1 Window',
+      label: t('off_week'),
+      sub: t('boss_window', { n: 1 }),
       seat: schedule.downtime || startingSchedule().downtime,
-      loot: '1 King Chest',
+      loot: window.tn('kings_scheduler.loot', 1),
     },
     {
       key: 'week_1',
-      label: 'Week 1 Fri',
-      sub: 'Boss 2 Window',
+      label: t('week_fri', { n: 1 }),
+      sub: t('boss_window', { n: 2 }),
       seat: schedule.week_1 || startingSchedule().week_1,
-      loot: '2 King Chests',
+      loot: window.tn('kings_scheduler.loot', 2),
     },
     {
       key: 'week_2',
-      label: 'Week 2 Fri',
-      sub: 'Boss 3 Window',
+      label: t('week_fri', { n: 2 }),
+      sub: t('boss_window', { n: 3 }),
       seat: schedule.week_2 || startingSchedule().week_2,
-      loot: '2 King Chests',
+      loot: window.tn('kings_scheduler.loot', 2),
     },
     {
       key: 'week_3',
-      label: 'Week 3 Fri',
-      sub: 'KvK Finale',
+      label: t('week_fri', { n: 3 }),
+      sub: t('kvk_finale'),
       seat: schedule.week_3 || startingSchedule().week_3,
-      loot: '2 King Chests + Border',
+      loot: t('loot_border'),
     },
   ];
 
@@ -114,15 +120,15 @@ function renderScheduleGrid() {
       return `
       <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}">
         <div class="ops-week-header">
-          <span class="ops-week-num">${w.label}</span>
-          ${isCurrent ? '<span class="badge">ACTIVE</span>' : ''}
+          <span class="ops-week-num">${esc(w.label)}</span>
+          ${isCurrent ? `<span class="badge">${esc(t('active'))}</span>` : ''}
         </div>
         <div class="ops-week-body">
           <span class="ops-week-tag" style="color: ${esc(color)}">[${esc(w.seat)}]</span>
-          <span class="ops-week-sub">${w.sub}</span>
+          <span class="ops-week-sub">${esc(w.sub)}</span>
         </div>
         <div class="ops-week-loot">
-          <small>${w.loot}</small>
+          <small>${esc(w.loot)}</small>
         </div>
       </div>
     `;
@@ -143,7 +149,7 @@ function renderActiveBuyouts() {
     (b) => b.status === 'active' || b.status === 'pending',
   );
 
-  if (badgeEl) badgeEl.textContent = `${pendingBuyouts.length} Active`;
+  if (badgeEl) badgeEl.textContent = t('buyouts_count', { n: pendingBuyouts.length });
 
   if (pendingBuyouts.length === 0) {
     container.style.display = 'none';
@@ -160,12 +166,12 @@ function renderActiveBuyouts() {
         .map(
           (inst) => `
       <div class="ops-installment-item ${inst.status === 'fulfilled' ? 'is-fulfilled' : ''}">
-        <span class="ops-installment-week">Week ${esc(inst.week)} Payout:</span>
+        <span class="ops-installment-week">${esc(t('installment', { week: inst.week }))}</span>
         <span class="ops-installment-chests">
-          <strong>+${esc(inst.payout.regular)} Reg Gold</strong> &amp; <strong>+${esc(inst.payout.kw)} KW Gold</strong>
+          ${th('payout', { reg: `<strong>${esc(t('reg_gold', { n: inst.payout.regular }))}</strong>`, kw: `<strong>${esc(t('kw_gold', { n: inst.payout.kw }))}</strong>` })}
         </span>
         <span class="badge ${inst.status === 'fulfilled' ? 'badge-success' : 'badge-pending'}">
-          ${inst.status === 'fulfilled' ? 'PAID' : 'PENDING'}
+          ${esc(t(inst.status === 'fulfilled' ? 'paid' : 'pending'))}
         </span>
       </div>
     `,
@@ -176,10 +182,10 @@ function renderActiveBuyouts() {
       <div class="ops-buyout-card">
         <div class="ops-buyout-card-header">
           <div>
-            <strong>Beneficiary:</strong> <span style="color: ${esc(color)}">[${esc(buyout.beneficiary)}]</span>
-            <small class="text-muted">(Threat: ${esc(buyout.threat || 'Red List')})</small>
+            <strong>${esc(t('beneficiary'))}</strong> <span style="color: ${esc(color)}">[${esc(buyout.beneficiary)}]</span>
+            <small class="text-muted">${esc(t('threat', { threat: buyout.threat || t('red_list') }))}</small>
           </div>
-          <span class="badge badge-warning">Wartime Buyout</span>
+          <span class="badge badge-warning">${esc(t('wartime_buyout'))}</span>
         </div>
         <div class="ops-installments-wrap">
           ${installmentsHtml}
@@ -211,7 +217,7 @@ export function updateOverridePreview() {
   if (currentScheduledAlly === 'WLO') {
     previewBox.innerHTML = `
       <div class="preview-notice warning">
-        ⚠️ <strong>WLO is already scheduled for Week ${targetWeek}.</strong> No defense override required.
+        ⚠️ ${th('already_scheduled', { who: `<strong>${esc(t('already_scheduled_who', { n: targetWeek }))}</strong>` })}
       </div>
     `;
     submitBtn.disabled = true;
@@ -222,18 +228,17 @@ export function updateOverridePreview() {
     const allyColor = getAllianceColor(currentScheduledAlly);
     previewBox.innerHTML = `
       <div class="preview-stepped-swap">
-        <div class="preview-type-badge">Step 1: Calendar Swap (0 Chest Cost)</div>
+        <div class="preview-type-badge">${esc(t('step1'))}</div>
         <p>
-          WLO will take <strong>Week ${targetWeek}</strong> for kingdom defense against <strong>${esc(threatName || '[Opponent]')}</strong>.
+          ${th('step1_text', { week: `<strong>${esc(t('week_label', { n: targetWeek }))}</strong>`, threat: `<strong>${esc(threatName || t('opponent_placeholder'))}</strong>` })}
         </p>
         <div class="preview-swap-row">
-          <span>Week ${targetWeek}: <strong style="color: ${ALLIANCE_COLORS.WLO}">[WLO]</strong></span>
+          <span>${esc(t('week_label', { n: targetWeek }))}: ${tag('WLO', ALLIANCE_COLORS.WLO)}</span>
           <span class="swap-arrow">⇄</span>
-          <span>Week 3 Finale: <strong style="color: ${esc(allyColor)}">[${esc(currentScheduledAlly)}]</strong></span>
+          <span>${esc(t('week3_finale'))} ${tag(currentScheduledAlly, allyColor)}</span>
         </div>
         <div class="preview-perks">
-          🎁 <strong>[${esc(currentScheduledAlly)}]</strong> lose 0 chests.
-          <strong>[WLO]</strong> lose 0 chests.
+          🎁 ${th('lose_nothing', { ally: tag(currentScheduledAlly), wlo: tag('WLO') })}
         </div>
       </div>
     `;
@@ -241,18 +246,16 @@ export function updateOverridePreview() {
     const allyColor = getAllianceColor(currentScheduledAlly);
     previewBox.innerHTML = `
       <div class="preview-stepped-buyout">
-        <div class="preview-type-badge alert">Step 2: Wartime Buyout (2-Installment Restitution)</div>
+        <div class="preview-type-badge alert">${esc(t('step2'))}</div>
         <p>
-          This is the <strong>second defense override</strong> in this cycle. Week 3 was already traded, so
-          <strong style="color: ${esc(allyColor)}">[${esc(currentScheduledAlly)}]</strong> sits out and receives a buyout with chests:
+          ${th('step2_text', { second: `<strong>${esc(t('second_override'))}</strong>`, ally: tag(currentScheduledAlly, allyColor) })}
         </p>
         <div class="preview-installment-plan">
-          <div class="p-item">• <strong>Week ${targetWeek} Distribution:</strong> +1 Regular Gold &amp; +1 KW Gold to [${esc(currentScheduledAlly)}]</div>
-          <div class="p-item">• <strong>Week 3 Distribution:</strong> +1 Regular Gold &amp; +1 KW Gold to [${esc(currentScheduledAlly)}]</div>
+          <div class="p-item">• <strong>${esc(t('distribution', { n: targetWeek }))}</strong> ${esc(t('plus_gold', { tag: currentScheduledAlly }))}</div>
+          <div class="p-item">• <strong>${esc(t('distribution', { n: 3 }))}</strong> ${esc(t('plus_gold', { tag: currentScheduledAlly }))}</div>
         </div>
         <div class="preview-perks">
-          🎁 <strong>[${esc(currentScheduledAlly)}]</strong> lose 2 King chests, gain 4 gold chests.
-          <strong>[WLO]</strong> gains 2 King chests, loses 4 gold chests.
+          🎁 ${th('buyout_perks', { ally: tag(currentScheduledAlly), wlo: tag('WLO') })}
         </div>
       </div>
     `;
@@ -286,23 +289,27 @@ export async function submitOverrideProposal() {
     timestamp: new Date().toISOString(),
   };
 
+  const b = (key, vars) => `<strong>${esc(t(key, vars))}</strong>`;
+  const vs = th('sum_vs', { threat: `<code>${esc(threatName)}</code>` }, { n: targetWeek });
+  const installment = (i, week) =>
+    `<div>• 📦 <em>${esc(t('sum_installment', { i, week }))}</em> ${esc(t('sum_installment_chests'))}</div>`;
   const diffSummaryHtml = isBuyout
     ? `
-      <div>• 🚨 <strong>WLO 2nd Defense Override</strong>: Week ${targetWeek} vs <code>${esc(threatName)}</code></div>
-      <div>• 🛡️ <strong>[${esc(displacedAlly)}] Wartime Buyout Issued</strong>: 4 Gold Chests total</div>
-      <div>• 📦 <em>Installment 1 (W${targetWeek}):</em> 1 Reg Gold + 1 KW Gold</div>
-      <div>• 📦 <em>Installment 2 (W3):</em> 1 Reg Gold + 1 KW Gold</div>
+      <div>• 🚨 ${b('sum_second')}: ${vs}</div>
+      <div>• 🛡️ ${b('sum_buyout_issued', { tag: displacedAlly })}: ${esc(t('sum_four_gold'))}</div>
+      ${installment(1, targetWeek)}
+      ${installment(2, 3)}
     `
     : `
-      <div>• ⚔️ <strong>WLO 1st Defense Override</strong>: Week ${targetWeek} vs <code>${esc(threatName)}</code></div>
-      <div>• ⇄ <strong>Calendar Swap</strong>: WLO takes W${targetWeek} Friday</div>
-      <div>• 👑 <strong>[${esc(displacedAlly)}] Promoted to Week 3 Finale</strong> (2 King Chests + Buff Item)</div>
-      <div>• 💰 <strong>WLO Alliance Chest Cost: 0</strong></div>
+      <div>• ⚔️ ${b('sum_first')}: ${vs}</div>
+      <div>• ⇄ ${b('sum_swap')}: ${esc(t('sum_swap_text', { n: targetWeek }))}</div>
+      <div>• 👑 ${b('sum_promoted', { tag: displacedAlly })} ${esc(t('sum_promoted_text'))}</div>
+      <div>• 💰 ${b('sum_cost')}</div>
     `;
 
   submitProposalWithAuth({
     type: 'override',
-    title: isBuyout ? '🛡️ Declare Wartime Buyout' : '⚔️ Declare Defense Swap',
+    title: t(isBuyout ? 'proposal_buyout' : 'proposal_swap'),
     payload,
     diffSummaryHtml,
     onSuccess: () => {
@@ -320,7 +327,7 @@ export function renderOperationsUI() {
 
   if (counterBadge) {
     const count = cycleState.override_count || 0;
-    counterBadge.textContent = `Overrides: ${count}/2`;
+    counterBadge.textContent = t('overrides', { n: count });
     counterBadge.className = count === 0 ? 'badge' : count === 1 ? 'badge-warning' : 'badge-danger';
   }
 

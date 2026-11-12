@@ -1,7 +1,10 @@
-{% assign lang = page.lang | default: "en" %}
+{% comment %} The build's language (the Rules page has no lang of its own, so page.lang showed English everywhere). {% endcomment %}
+{% assign lang = site.active_lang | default: page.lang | default: "en" %}
 {% assign t = site.data[lang].rewards | default: site.data.en.rewards %}
 {% assign rdata = site.data.rewards_data %}
 
+{% comment %} The planner's own text (rewards_planner.* in _data/<lang>/tools.yml) for js/rewards.js; the card sits inside other pages, so it brings its strings itself. {% endcomment %}
+{% unless page.strings %}<script type="application/json" id="tool-strings">{{ "rewards_planner" | tool_strings_json }}</script>{% endunless %}
 <div id="rewards-container" class="rewards-wrapper">
   <!-- Controls Bar -->
   <div class="map-controls">
@@ -9,16 +12,16 @@
       <label class="toggle-switch">
         <input type="checkbox" id="toggle-host-week" checked>
         <span class="switch-slider"></span>
-        <span class="control-label">Active Hosting Week</span>
+        <span class="control-label">{{ "rewards_planner.host_week" | t }}</span>
       </label>
     </div>
     <div class="control-group right">
       <button id="btn-toggle-rewards-planner" class="draft-btn" aria-pressed="false" type="button">
         <span class="draft-indicator"></span>
-        <span class="draft-text">Planner Mode</span>
+        <span class="draft-text">{{ "rewards_planner.planner_mode" | t }}</span>
       </button>
       <button id="btn-submit-rewards" class="submit-plan-btn hidden" disabled type="button">
-        Submit Plan <span id="reward-change-badge" class="badge">0</span>
+        {{ "rewards_planner.submit_plan" | t }} <span id="reward-change-badge" class="badge">0</span>
       </button>
     </div>
   </div>
@@ -38,13 +41,13 @@
     <!-- Tier Breakdown Cards Container (Re-rendered dynamically in planner) -->
     <div id="rewards-tier-list" class="rewards-tier-list" data-rank-label="{{ t.ui.rank | default: 'Rank' }}">
       <!-- Filled in by js/rewards.js from the live data -->
-      <div class="rewards-tier-placeholder">Loading the reward tiers…</div>
+      <div class="rewards-tier-placeholder">{{ "rewards_planner.loading" | t }}</div>
     </div>
 
     <!-- Planner Action: Add New Tier Row -->
     <div id="planner-add-tier-container" class="planner-actions hidden">
       <button id="btn-add-tier" class="draft-btn btn-add-tier" type="button">
-        <span>+</span> Add Reward Tier
+        <span>+</span> {{ "rewards_planner.add_tier" | t }}
       </button>
     </div>
 

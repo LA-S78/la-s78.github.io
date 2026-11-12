@@ -76,15 +76,19 @@ export default async function handler(req, res) {
 
   let nextHolderTag = `Rank #${nextWeekConfig?.capitol_rank}`;
   let nextHolderRankLabel = `Rank #${nextWeekConfig?.capitol_rank}`;
+  // The same as numbers, for the page to word in its own language (js/calendar.js).
+  let nextHolderRank = nextWeekConfig?.capitol_rank ?? null;
+  let nextHolderOverride = false;
 
   if (nextScheduledTag) {
     nextHolderTag = `[${nextScheduledTag}]`;
     const nextActualRank = alliances[nextScheduledTag]?.rank;
     if (nextActualRank) {
-      nextHolderRankLabel =
-        parseInt(nextActualRank, 10) !== nextWeekConfig?.capitol_rank
-          ? `Rank #${nextActualRank} • Override Schedule`
-          : `Rank #${nextActualRank}`;
+      nextHolderOverride = parseInt(nextActualRank, 10) !== nextWeekConfig?.capitol_rank;
+      nextHolderRank = parseInt(nextActualRank, 10);
+      nextHolderRankLabel = nextHolderOverride
+        ? `Rank #${nextActualRank} • Override Schedule`
+        : `Rank #${nextActualRank}`;
     }
   } else {
     const nextHolderEntry = Object.entries(alliances).find(
@@ -99,10 +103,16 @@ export default async function handler(req, res) {
   const captureTs = currentStatus.captureTimestamp + (upcomingIsNextWeek ? 7 * 86400 : 0);
   const capturerTag = upcomingIsNextWeek ? nextHolderTag : capitolHolderTag;
   let capturerRankLabel = nextHolderRankLabel;
+  let capturerRank = nextHolderRank;
+  let capturerOverride = nextHolderOverride;
   if (!upcomingIsNextWeek) {
     capturerRankLabel = currentStatus.isOverrideWeek
       ? `Rank #${currentStatus.holderActualRank} • Override Schedule`
       : `Rank #${currentStatus.holderActualRank || currentStatus.capitolRank}`;
+    capturerRank = currentStatus.isOverrideWeek
+      ? currentStatus.holderActualRank
+      : currentStatus.holderActualRank || currentStatus.capitolRank;
+    capturerOverride = Boolean(currentStatus.isOverrideWeek);
   }
 
   cycleMilestones.push({
@@ -110,6 +120,12 @@ export default async function handler(req, res) {
     scope: 'global',
     title: `👑 Capitol Capture — ${capturerTag}`,
     description: `${capturerTag} (${capturerRankLabel}) captures the Capitol on Friday.`,
+    // The site's own milestones carry a key and values, so each page can word them in its
+    // language (js/calendar.js); title/description stay in English for anything else.
+    i18n: {
+      key: 'capture',
+      vars: { who: capturerTag, rank: capturerRank, override: capturerOverride },
+    },
     start: new Date(captureTs * 1000).toISOString(),
     end: new Date((captureTs + 86400) * 1000).toISOString(),
     type: 'rotation',
@@ -125,6 +141,7 @@ export default async function handler(req, res) {
       title: '⚔️ Kingdom War Battle',
       description:
         "Starts 12:00 GT, usually over by about 14:00 GT. A win opens the King of Battle Reward chests on top of the King's Commendation.",
+      i18n: { key: 'kw_battle', vars: {} },
       start: new Date(battleStart).toISOString(),
       end: new Date(battleStart + 2 * 3600000).toISOString(),
       type: 'war',
@@ -143,6 +160,7 @@ export default async function handler(req, res) {
       description: p.kwWeek
         ? "King's Commendation opens after the capitol event. King of Battle Reward follows if Saturday's Kingdom War is won; the King hands out after the result."
         : "King's Commendation opens after the capitol event (no Kingdom War this week).",
+      i18n: { key: 'rewards_open', vars: { week: p.week, kw: p.kwWeek } },
       start: new Date(p.opensAt).toISOString(),
       end: new Date(p.opensAt + 3600000).toISOString(),
       type: 'rotation',
@@ -153,6 +171,7 @@ export default async function handler(req, res) {
       scope: 'global',
       title: `⌛ Rewards Close — ${p.weekName}`,
       description: 'Chests expire at Wednesday 00:00 GT: hand out everything before then.',
+      i18n: { key: 'rewards_close', vars: { week: p.week } },
       start: new Date(p.closesAt - 3600000).toISOString(),
       end: new Date(p.closesAt).toISOString(),
       type: 'rotation',
