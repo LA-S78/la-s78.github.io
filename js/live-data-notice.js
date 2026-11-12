@@ -33,8 +33,7 @@ export function showLiveDataNotice(anchor, { savedAt = null, failed = false } = 
     anchor.parentNode.insertBefore(el, anchor);
   }
   if (failed) {
-    el.textContent =
-      "⚠️ Couldn't load the latest data. Check your connection and refresh the page.";
+    el.textContent = window.t('live_data.failed');
   } else {
     const when = new Date(savedAt).toLocaleString(undefined, {
       weekday: 'short',
@@ -43,6 +42,6 @@ export function showLiveDataNotice(anchor, { savedAt = null, failed = false } = 
       hour: '2-digit',
       minute: '2-digit',
     });
-    el.textContent = `📴 Offline: showing the data saved on this device (${when}).`;
+    el.textContent = window.t('live_data.offline', { when });
   }
 }

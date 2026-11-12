@@ -36,7 +36,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - [x] System + Alliance Dashboard (charts, editor, Caravan Rotor, reward card)
   - [x] Nomination page, King's console, registration
   - [x] Calendar, King's scheduler, rewards
-  - [ ] Alliance page and map planners
+  - [x] Alliance page and map planners (incl. the proposal pop-up and live-data notices)
   - [ ] Later: server messages (`api/`) and `ui.yml` through the same system
 
 - [ ] **Map Plan Import / Export**
