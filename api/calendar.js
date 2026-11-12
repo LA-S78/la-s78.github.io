@@ -2,6 +2,7 @@
 import { getCycleState, getScheduleSlot, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 
 export default async function handler(req, res) {
@@ -61,7 +62,7 @@ export default async function handler(req, res) {
   }
   // Same colour the rest of the site shows for this alliance (/api/state's resolution).
   const capitolHolderColor = holderTag
-    ? sanitizeAlliances(alliances)[holderTag]?.color || null
+    ? sanitizeAlliances(alliances, await getRoleColors())[holderTag]?.color || null
     : null;
 
   // 1. Generate System Milestones (Capitol Captures & War Battle Days)

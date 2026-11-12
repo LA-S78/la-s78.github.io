@@ -28,22 +28,38 @@ export function allianceFromRoleIds(roleIds = [], env = process.env) {
 /** Rank #1's tag and the three rotation seats [A, B, C] before any live schedule exists. */
 export const STARTING_ROTATION = ALLIANCES.starting_rotation;
 
+/** An alliance's role colour, by its exact tag or the same letters without accents (RAVN/RÂVN). */
+export function roleColorFor(tag, roleColors = {}) {
+  if (roleColors[tag]) return roleColors[tag];
+  const fold = (t) =>
+    String(t)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toUpperCase();
+  const key = Object.keys(roleColors).find((k) => fold(k) === fold(tag));
+  return key ? roleColors[key] : null;
+}
+
 /**
  * Strips private Discord bot configuration fields before sending alliance data to public clients.
  * Preserves exact tag capitalization and diacritics (e.g., RÂVN, RâvN, râvn, HeKi).
  */
-export function sanitizeAlliances(rawAlliances = {}) {
+export function sanitizeAlliances(rawAlliances = {}, roleColors = {}) {
   const sanitized = {};
 
   Object.entries(rawAlliances).forEach(([tag, data]) => {
     const cleanTag = tag.trim();
     if (!cleanTag) return;
 
+    // The same order as the Alliance page (js/alliance.js resolveAllianceColor): the
+    // alliance's Discord role colour (getRoleColors in _role_colors.js), then a colour chosen
+    // on the site (the gold #b8975a counts as none), then _data/alliances.yml.
     const storedColor = data?.color;
     const resolvedColor =
-      storedColor && storedColor !== '#b8975a'
+      roleColorFor(cleanTag, roleColors) ||
+      (storedColor && storedColor !== '#b8975a'
         ? storedColor
-        : DEFAULT_FALLBACK_COLORS[cleanTag] || storedColor || null;
+        : DEFAULT_FALLBACK_COLORS[cleanTag] || storedColor || null);
 
     sanitized[cleanTag] = {
       tag: cleanTag,
