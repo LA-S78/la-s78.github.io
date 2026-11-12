@@ -686,3 +686,13 @@ proposals:
 live_data:
   failed: "⚠️ En güncel veriler yüklenemedi. Bağlantınızı kontrol edin ve sayfayı yenileyin."
   offline: "📴 Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
+capitol_rotation:
+  seat: 'Sıra #{rank}'
+  this_week: Bu hafta
+  captures: Ele geçirme {date}
+  captured: Ele geçirildi {date}
+  override: 'Geçersiz kıl: #{seat} yerine #{rank} savunuyor'
+  no_alliance: Bu sırada henüz ittifak yok
+  off_week_note: 'Bu hafta Krallık Savaşı yok: #4 ittifak Başkenti elinde tutuyor.'
+  kw_note: 'Krallık Savaşı haftası: savaş Cumartesi günü.'
+  schedule_note: Canlı takvimden ve NAP durumundan alınmıştır. Kahyalar tarafından belirlenen geçersiz kılmalar kaydedildikleri anda burada gösterilir.

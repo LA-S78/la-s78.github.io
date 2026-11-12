@@ -686,3 +686,13 @@ proposals:
 live_data:
   failed: "⚠️ Impossible de charger les dernières données. Vérifiez votre connexion et rafraîchissez la page."
   offline: "📴 Hors ligne : affichage des données enregistrées sur cet appareil ({when})."
+capitol_rotation:
+  seat: 'Rang #{rank}'
+  this_week: Cette semaine
+  captures: Captures le {date}
+  captured: Capturé le {date}
+  override: 'Priorité : le rang #{rank} défend à la place du #{seat}'
+  no_alliance: Aucune alliance à ce rang pour le moment
+  off_week_note: 'Pas de Guerre des Royaumes cette semaine : l''alliance #4 détient le Capitole.'
+  kw_note: 'Semaine de Guerre des Royaumes : la bataille a lieu samedi.'
+  schedule_note: Basé sur le calendrier en direct et les classements NAP. Les priorités définies par les intendants s'affichent ici dès leur enregistrement.

@@ -686,3 +686,13 @@ proposals:
 live_data:
   failed: "⚠️ Die neuesten Daten konnten nicht geladen werden. Überprüfe deine Verbindung und aktualisiere die Seite."
   offline: "📴 Offline: Zeige die auf diesem Gerät gespeicherten Daten ({when})."
+capitol_rotation:
+  seat: 'Rang #{rank}'
+  this_week: Diese Woche
+  captures: Eroberungen {date}
+  captured: Erobert am {date}
+  override: 'Überschreiben: Rang #{rank} verteidigt anstelle von #{seat}'
+  no_alliance: Noch keine Allianz auf diesem Rang
+  off_week_note: 'Kein Königreichskrieg diese Woche: Die Allianz auf Platz #4 hält das Capitol.'
+  kw_note: 'Königreichskrieg-Woche: Die Schlacht findet am Samstag statt.'
+  schedule_note: Basierend auf dem Live-Kalender und NAP-Tabellen. Überschreibungen durch die Stewards werden hier angezeigt, sobald sie gespeichert wurden.
