@@ -16,7 +16,8 @@
 import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
-import { DEFAULT_FALLBACK_COLORS } from './_alliances.js';
+import { sanitizeAlliances } from './_alliances.js';
+import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
 import { fetchSourceTable } from './_google_source.js';
@@ -91,7 +92,8 @@ export default async function handler(req, res) {
     alliance: {
       tag,
       rank: alliances[tag]?.rank ?? null,
-      color: alliances[tag]?.color || DEFAULT_FALLBACK_COLORS[tag] || null,
+      // The same colour as the Alliance page and /api/state (Discord role colour first).
+      color: sanitizeAlliances({ [tag]: alliances[tag] || {} }, await getRoleColors())[tag].color,
     },
     dashboard: visibleDashboard(
       readDashboard(gistJson(gist, dashboardFile(tag), {}), tag),
