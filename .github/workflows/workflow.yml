@@ -24,7 +24,13 @@ jobs:
       contents: write
 
     steps:
+      # A push builds the branch as it is now, not the commit that started the run: a run
+      # that waited in the queue (concurrency, above) then starts from the previous run's
+      # translation commit, instead of translating the same sections again and clashing
+      # with it when saving (this failed the run after #95). Pull requests build their commit.
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event_name == 'push' && github.ref || '' }}
 
       - name: Setting up Ruby environment
         uses: ruby/setup-ruby@v1
