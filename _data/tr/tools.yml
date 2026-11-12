@@ -135,10 +135,10 @@ caravan:
   this_player: bu oyuncu
   confirm_new_week: Yeni bir hafta başlasın mı? Herkes uygun olanlara dönecek (isimler ve saatler aynı kalır).
 chart_editor:
-  edit_title: "✏️ Grafik veya tabloyu düzenle"
-  new_title: "➕ Yeni grafik veya tablo"
+  edit_title: "✏️ Çizelgeyi veya tabloyu düzenle"
+  new_title: "➕ Yeni çizelge veya tablo"
   type: Tür
-  type_bar: "\U0001F4CA Çubuk"
+  type_bar: "\U0001F4CA Sütun"
   type_line: "\U0001F4C8 Çizgi"
   type_pie: "\U0001F369 Pasta"
   type_progress: "\U0001F3AF İlerleme"
@@ -146,24 +146,24 @@ chart_editor:
   title: Başlık
   title_example: ör. İttifak Düellosu puanları
   note: Açıklama
-  note_example: ör. Cuma sıfırlamasına kadar minimum 15M Düello puanı gerekli
+  note_example: ör. Cuma sıfırlanmasına kadar en az 15M Düello puanı gerekir
   who_sees: Kimler görebilir
   officers_only: "\U0001F512 Sadece yetkililer (R4/R5)"
   all_members: "\U0001F465 Tüm ittifak üyeleri"
   data: Veri
   data_source: Veri kaynağı
   paste: "\U0001F4CB Tablo yapıştır"
-  link: "\U0001F517 Google E-Tablo / Doküman bağlantısı"
-  paste_help: Google E-Tablolar veya Excel'den hücreleri kopyalayın (önce başlık satırı) ve buraya yapıştırın.
-  tab_name: Sekme ismi (isteğe bağlı)
+  link: "\U0001F517 Google E-tablo / Doküman bağlantısı"
+  paste_help: Google E-tablolar veya Excel'den hücreleri kopyalayın (başlık satırı önce olacak şekilde) ve buraya yapıştırın.
+  tab_name: Sekme adı (isteğe bağlı)
   range: Aralık, ör. A1:D20 (isteğe bağlı)
-  doc_table: Dokümandaki hangi tablo (1, 2…)
+  doc_table: Dokümandaki tablo numarası (1, 2…)
   load: "⤓ Google'dan yükle"
   loading: "⤓ Yükleniyor…"
-  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Karttaki “Şimdi senkronize et” daha sonra en güncel sayıları getirir.'
+  link_help: 'E-tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi senkronize et” en güncel verileri çeker.'
   load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
   preview: Önizleme
-  preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
+  preview_empty: Çizelgeyi görmek için yukarıya bir tablo yapıştırın.
   size: "{rows} × {columns}"
   rows_one: "{n} satır"
   rows_other: "{n} satır"
@@ -177,21 +177,21 @@ chart_editor:
   side_by_side: Yan yana
   stacked_totals: 'Yığılmış: toplamlar'
   stacked_percent: 'Yığılmış: her çubuk %100''e'
-  vertical: Dikey çubuklar
-  vertical_leaderboard: Dikey çubuklar (skor tablosu yerine)
-  traffic_columns: "\U0001F6A6 Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, son yeşil"
-  traffic_size: "\U0001F6A6 Kırmızı → sarı → yeşil (düşük → yüksek): boyuta göre, en büyük yeşil"
-  traffic_reverse: "↕️ Ters: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
+  vertical: Dikey sütunlar
+  vertical_leaderboard: Dikey sütunlar (sıralama tablosu yerine)
+  traffic_columns: "\U0001F6A6 Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil"
+  traffic_size: "\U0001F6A6 Kırmızı → sarı → yeşil (düşük → yüksek): sıralamaya göre, en üst yeşil"
+  traffic_reverse: "↕️ Tersine çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
   traffic_target: "\U0001F6A6 Hedefe yakınlığa göre kırmızı → sarı → yeşil"
-  traffic_target_reverse: "↕️ Ters: hedefin altında olmak daha iyidir"
-  donut: Donut (halka)
+  traffic_target_reverse: "↕️ Tersine çevir: hedefin ne kadar altında kalırsa o kadar iyi"
+  donut: Halka (donut)
   target: Herkes için hedef
   target_example: ör. 15M veya 15000000
   target_column: "…veya hedef sütunu"
   use_number_above: "(yukarıdaki sayıyı kullan)"
-  highlight_where: Şu satırları vurgula
+  highlight_where: Şu durumlarda satırları vurgula
   no_highlight: "(vurgu yok)"
-  at_least: en az şuna eşitse
+  at_least: en az
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}

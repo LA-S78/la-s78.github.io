@@ -136,7 +136,7 @@ caravan:
   confirm_new_week: Eine neue Woche starten? Jeder wird wieder auf verfügbar gesetzt (die Namen und Zeiten bleiben erhalten).
 chart_editor:
   edit_title: "✏️ Diagramm oder Tabelle bearbeiten"
-  new_title: "➕ Neues Diagramm oder neue Tabelle"
+  new_title: "➕ Neues Diagramm oder Tabelle"
   type: Typ
   type_bar: "\U0001F4CA Balken"
   type_line: "\U0001F4C8 Linie"
@@ -144,24 +144,24 @@ chart_editor:
   type_progress: "\U0001F3AF Fortschritt"
   type_table: "\U0001F4CB Tabelle"
   title: Titel
-  title_example: z.B. Ergebnisse Allianz-Duell
+  title_example: z. B. Allianz-Duell Punkte
   note: Erklärung
-  note_example: z.B. Mindestens 15M Duell-Punkte bis Freitag-Reset erforderlich
+  note_example: z. B. Mindestens 15M Duell-Punkte bis Freitag-Reset erforderlich
   who_sees: Wer kann es sehen
   officers_only: "\U0001F512 Nur Offiziere (R4/R5)"
   all_members: "\U0001F465 Alle Allianzmitglieder"
   data: Daten
-  data_source: Woher die Daten kommen
+  data_source: Datenquelle
   paste: "\U0001F4CB Tabelle einfügen"
-  link: "\U0001F517 Google Sheet / Doc Link"
-  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (Kopfzeile zuerst) und füge sie hier ein.
+  link: "\U0001F517 Google Sheet / Doc-Link"
+  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
   tab_name: Tab-Name (optional)
-  range: Bereich, z.B. A1:D20 (optional)
-  doc_table: Welche Tabelle im Doc (1, 2…)
+  range: Bereich, z. B. A1:D20 (optional)
+  doc_table: Welche Tabelle im Dokument (1, 2…)
   load: "⤓ Von Google laden"
-  loading: "⤓ Laden…"
-  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann die Seite ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
-  load_first: Lade zuerst die Tabelle (⤓ Von Google laden).
+  loading: "⤓ Ladevorgang…"
+  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft die neuesten Zahlen später ab.'
+  load_first: Zuerst das Blatt laden (⤓ Von Google laden).
   preview: Vorschau
   preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
   size: "{rows} × {columns}"
@@ -175,24 +175,24 @@ chart_editor:
   numbers: Zahlen
   several_columns: Mehrere Zahlenspalten
   side_by_side: Nebeneinander
-  stacked_totals: 'Gestapelt: Summen'
-  stacked_percent: 'Gestapelt: jeder Balken bis 100%'
+  stacked_totals: 'Gestapelt: Gesamtsummen'
+  stacked_percent: 'Gestapelt: jeder Balken auf 100%'
   vertical: Vertikale Balken
-  vertical_leaderboard: Vertikale Balken (statt einer Rangliste)
+  vertical_leaderboard: Vertikale Balken (statt Rangliste)
   traffic_columns: "\U0001F6A6 Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün"
-  traffic_size: "\U0001F6A6 Rot → gelb → grün (niedrig → hoch): nach Größe, größtes grün"
-  traffic_reverse: "↕️ Umkehren: niedrig ist gut (grün), hoch ist schlecht (rot)"
-  traffic_target: "\U0001F6A6 Rot → gelb → grün je nachdem, wie nah jeder am Ziel ist"
-  traffic_target_reverse: "↕️ Umkehren: weiter unter dem Ziel ist besser"
+  traffic_size: "\U0001F6A6 Rot → gelb → grün (niedrig → hoch): nach Rang, Spitze grün"
+  traffic_reverse: "↕️ Umgekehrt: niedrig ist gut (grün), hoch ist schlecht (rot)"
+  traffic_target: "\U0001F6A6 Rot → gelb → grün basierend darauf, wie nah jeder am Ziel ist"
+  traffic_target_reverse: "↕️ Umgekehrt: weiter unter dem Ziel ist besser"
   donut: Donut (Ring)
   target: Ziel für alle
-  target_example: z.B. 15M oder 15000000
-  target_column: "…oder eine Spalte mit Zielen"
-  use_number_above: "(benutze die Zahl oben)"
-  highlight_where: Zeilen hervorheben, wo
+  target_example: z. B. 15M oder 15000000
+  target_column: "…oder eine Zielspalte"
+  use_number_above: "(die Zahl oben verwenden)"
+  highlight_where: Zeilen hervorheben, in denen
   no_highlight: "(keine Hervorhebung)"
-  at_least: ist mindestens
-  at_least_example: z.B. 300M
+  at_least: mindestens ist
+  at_least_example: z. B. 300M
 charts:
   column: Spalte {n}
   no_numbers: Keine Zahlen zum Diagramm in der gewählten Spalte.

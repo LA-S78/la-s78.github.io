@@ -135,34 +135,34 @@ caravan:
   this_player: ce joueur
   confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde revient en disponible (les noms et heures sont conservés).
 chart_editor:
-  edit_title: "✏️ Modifier le graphique ou tableau"
+  edit_title: "✏️ Modifier le graphique ou le tableau"
   new_title: "➕ Nouveau graphique ou tableau"
   type: Type
   type_bar: "\U0001F4CA Barres"
-  type_line: "\U0001F4C8 Ligne"
+  type_line: "\U0001F4C8 Lignes"
   type_pie: "\U0001F369 Secteurs"
   type_progress: "\U0001F3AF Progression"
   type_table: "\U0001F4CB Tableau"
   title: Titre
-  title_example: 'ex: Scores du Duel d''Alliances'
+  title_example: ex. Scores du Duel d'Alliances
   note: Explication
-  note_example: 'ex: Minimum 15M de points de Duel requis avant la réinitialisation du vendredi'
-  who_sees: Visibilité
+  note_example: ex. 15M de points au Duel minimum requis avant le reset de vendredi
+  who_sees: Qui peut le voir
   officers_only: "\U0001F512 Officiers uniquement (R4/R5)"
   all_members: "\U0001F465 Tous les membres de l'alliance"
   data: Données
-  data_source: Origine des données
+  data_source: Source des données
   paste: "\U0001F4CB Coller un tableau"
   link: "\U0001F517 Lien Google Sheet / Doc"
-  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête en premier) et collez-les ici.
-  tab_name: Nom de l'onglet (facultatif)
-  range: 'Plage, ex: A1:D20 (facultatif)'
+  paste_help: Copiez les cellules depuis Google Sheets ou Excel (en-têtes en premier) et collez-les ici.
+  tab_name: Nom de l'onglet (optionnel)
+  range: Plage, ex. A1:D20 (optionnel)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent consulter » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la fiche récupère les dernières données plus tard.'
+  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent voir » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupère les derniers chiffres plus tard.'
   load_first: Chargez d'abord la feuille (⤓ Charger depuis Google).
-  preview: Prévisualisation
+  preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
   rows_one: "{n} ligne"
@@ -176,23 +176,23 @@ chart_editor:
   several_columns: Plusieurs colonnes de nombres
   side_by_side: Côte à côte
   stacked_totals: 'Empilés : totaux'
-  stacked_percent: 'Empilés : chaque barre à 100%'
+  stacked_percent: 'Empilés : chaque barre à 100 %'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: "\U0001F6A6 Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte"
-  traffic_size: "\U0001F6A6 Rouge → jaune → vert (bas → haut) : selon la taille, le plus grand en vert"
+  traffic_size: "\U0001F6A6 Rouge → jaune → vert (bas → haut) : par rang, le top est vert"
   traffic_reverse: "↕️ Inversé : bas est bon (vert), haut est mauvais (rouge)"
-  traffic_target: "\U0001F6A6 Rouge → jaune → vert selon la proximité par rapport à l'objectif"
-  traffic_target_reverse: "↕️ Inversé : plus loin en dessous de l'objectif est meilleur"
+  traffic_target: "\U0001F6A6 Rouge → jaune → vert selon la proximité par rapport à la cible"
+  traffic_target_reverse: "↕️ Inversé : plus c'est en dessous de la cible, mieux c'est"
   donut: Donut (anneau)
-  target: Objectif pour tout le monde
-  target_example: 'ex: 15M ou 15000000'
-  target_column: "…ou une colonne d'objectifs"
-  use_number_above: "(utiliser le nombre au-dessus)"
-  highlight_where: Mettre en surbrillance les lignes où
-  no_highlight: "(pas de surbrillance)"
+  target: Cible pour tout le monde
+  target_example: ex. 15M ou 15000000
+  target_column: "…ou une colonne de cibles"
+  use_number_above: "(utiliser le nombre ci-dessus)"
+  highlight_where: Surligner les lignes où
+  no_highlight: "(pas de surlignage)"
   at_least: est au moins
-  at_least_example: 'ex: 300M'
+  at_least_example: ex. 300M
 charts:
   column: Colonne {n}
   no_numbers: Aucun nombre à représenter dans la colonne choisie.

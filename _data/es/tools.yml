@@ -144,24 +144,24 @@ chart_editor:
   type_progress: "\U0001F3AF Progreso"
   type_table: "\U0001F4CB Tabla"
   title: Título
-  title_example: ej. puntuaciones del Duelo de Alianzas
+  title_example: ej. Puntuaciones del Duelo de Alianzas
   note: Explicación
-  note_example: ej. mínimo 15M de puntos de duelo requeridos para el reset del viernes
+  note_example: ej. Mínimo 15M de puntos en Duelo de Alianzas requerido para el reinicio del viernes
   who_sees: Quién puede verlo
   officers_only: "\U0001F512 Solo oficiales (R4/R5)"
   all_members: "\U0001F465 Todos los miembros de la alianza"
   data: Datos
-  data_source: De dónde provienen los datos
+  data_source: Origen de los datos
   paste: "\U0001F4CB Pegar una tabla"
   link: "\U0001F517 Enlace de Google Sheet / Doc"
-  paste_help: Copia las celdas de Google Sheets o Excel (fila de encabezado primero) y pégalas aquí.
+  paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
   range: Rango, ej. A1:D20 (opcional)
-  doc_table: Qué tabla en el Doc (1, 2…)
-  load: "⤓ Cargar de Google"
+  doc_table: Qué tabla en el documento (1, 2…)
+  load: "⤓ Cargar desde Google"
   loading: "⤓ Cargando…"
-  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede ver” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene los últimos números más tarde.'
-  load_first: Carga la hoja primero (⤓ Cargar de Google).
+  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede ver” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtendrá los números más recientes después.'
+  load_first: Carga la hoja primero (⤓ Cargar desde Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
   size: "{rows} × {columns}"
@@ -173,17 +173,17 @@ chart_editor:
   labels: Nombres (etiquetas)
   numbers_to_show: Números a mostrar
   numbers: Números
-  several_columns: Varias columnas de números
+  several_columns: Varias columnas numéricas
   side_by_side: Lado a lado
-  stacked_totals: 'Apilados: totales'
-  stacked_percent: 'Apilados: cada barra al 100%'
+  stacked_totals: 'Apilado: totales'
+  stacked_percent: 'Apilado: cada barra al 100%'
   vertical: Barras verticales
   vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
   traffic_columns: "\U0001F6A6 Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde"
-  traffic_size: "\U0001F6A6 Rojo → amarillo → verde (bajo → alto): por tamaño, el más grande verde"
+  traffic_size: "\U0001F6A6 Rojo → amarillo → verde (bajo → alto): por rango, los mejores en verde"
   traffic_reverse: "↕️ Invertido: bajo es bueno (verde), alto es malo (rojo)"
   traffic_target: "\U0001F6A6 Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo"
-  traffic_target_reverse: "↕️ Invertido: cuanto más lejos por debajo del objetivo, mejor"
+  traffic_target_reverse: "↕️ Invertido: estar más por debajo del objetivo es mejor"
   donut: Donut (anillo)
   target: Objetivo para todos
   target_example: ej. 15M o 15000000

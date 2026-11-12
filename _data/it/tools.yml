@@ -144,26 +144,26 @@ chart_editor:
   type_progress: "\U0001F3AF Progresso"
   type_table: "\U0001F4CB Tabella"
   title: Titolo
-  title_example: es. Punteggi Duello tra Alleanze
+  title_example: es. punteggi Duello tra Alleanze
   note: Spiegazione
-  note_example: es. Minimo 15M punti Duello richiesti entro il reset di venerdì
+  note_example: es. Minimo 15M di punti Duello richiesti entro il reset di venerdì
   who_sees: Chi può vederlo
   officers_only: "\U0001F512 Solo ufficiali (R4/R5)"
   all_members: "\U0001F465 Tutti i membri dell'alleanza"
   data: Dati
-  data_source: Origine dei dati
+  data_source: Da dove provengono i dati
   paste: "\U0001F4CB Incolla una tabella"
   link: "\U0001F517 Link Google Sheet / Doc"
   paste_help: Copia le celle da Google Sheets o Excel (prima la riga di intestazione) e incollale qui.
-  tab_name: Nome foglio (opzionale)
+  tab_name: Nome scheda (opzionale)
   range: Intervallo, es. A1:D20 (opzionale)
   doc_table: Quale tabella nel Doc (1, 2…)
   load: "⤓ Carica da Google"
   loading: "⤓ Caricamento…"
-  link_help: 'Fogli: Condividi → “Chiunque abbia il link può visualizzare” (o File → Condividi → Pubblica sul web). Doc: File → Condividi → Pubblica sul web. “Sincronizza ora” sulla scheda recupererà i numeri più recenti in seguito.'
+  link_help: 'Sheets: Condividi → “Chiunque abbia il link può visualizzare” (oppure File → Condividi → Pubblica sul web). Docs: File → Condividi → Pubblica sul web. “Sincronizza ora” sulla scheda recupera i numeri più recenti in seguito.'
   load_first: Carica prima il foglio (⤓ Carica da Google).
   preview: Anteprima
-  preview_empty: Incolla una tabella sopra per vedere il grafico.
+  preview_empty: Incolla una tabella qui sopra per vedere il grafico.
   size: "{rows} × {columns}"
   rows_one: "{n} riga"
   rows_other: "{n} righe"
@@ -178,17 +178,17 @@ chart_editor:
   stacked_totals: 'Impilate: totali'
   stacked_percent: 'Impilate: ogni barra al 100%'
   vertical: Barre verticali
-  vertical_leaderboard: Barre verticali (anziché una classifica)
+  vertical_leaderboard: Barre verticali (invece di una classifica)
   traffic_columns: "\U0001F6A6 Rosso → giallo → verde (basso → alto): prima colonna rossa, ultima verde"
-  traffic_size: "\U0001F6A6 Rosso → giallo → verde (basso → alto): per dimensione, la più grande è verde"
-  traffic_reverse: "↕️ Inverso: basso è bene (verde), alto è male (rosso)"
+  traffic_size: "\U0001F6A6 Rosso → giallo → verde (basso → alto): per rango, i migliori in verde"
+  traffic_reverse: "↕️ Invertito: basso è bene (verde), alto è male (rosso)"
   traffic_target: "\U0001F6A6 Rosso → giallo → verde in base a quanto ognuno è vicino all'obiettivo"
-  traffic_target_reverse: "↕️ Inverso: più si è lontani sotto l'obiettivo, meglio è"
+  traffic_target_reverse: "↕️ Invertito: più al di sotto dell'obiettivo è meglio"
   donut: A ciambella (anello)
   target: Obiettivo per tutti
   target_example: es. 15M o 15000000
   target_column: "…o una colonna di obiettivi"
-  use_number_above: "(usa il numero sopra)"
+  use_number_above: "(usa il numero qui sopra)"
   highlight_where: Evidenzia righe dove
   no_highlight: "(nessuna evidenziazione)"
   at_least: è almeno
