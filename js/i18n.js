@@ -58,7 +58,11 @@
       // older browser: one/other only
     }
     const has = (k) => typeof find(d.t, k) === 'string' || typeof find(d.en, k) === 'string';
-    const pick = [`${key}_${form}`, Number(n) === 1 ? `${key}_one` : `${key}_other`, `${key}_other`].find(has);
+    const pick = [
+      `${key}_${form}`,
+      Number(n) === 1 ? `${key}_one` : `${key}_other`,
+      `${key}_other`,
+    ].find(has);
     return t(pick || `${key}_other`, { n, ...vars });
   }
 
