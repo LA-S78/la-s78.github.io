@@ -1,4 +1,6 @@
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
+import { load as loadYaml } from 'js-yaml';
+import { localizeCommands } from '../api/_command_text.js';
 
 const token = process.env.DISCORD_BOT_TOKEN;
 const clientId = process.env.DISCORD_CLIENT_ID;
@@ -9,6 +11,14 @@ if (!token || !clientId) {
 }
 
 const schemas = JSON.parse(readFileSync('.github/discord.json', 'utf8'));
+
+// The command picker's translations (bot_commands in _data/<lang>/server.yml, see
+// api/_command_text.js). A language not translated yet is simply left out.
+const byLang = {};
+for (const lang of ['en', 'de', 'es', 'fr', 'it', 'ru', 'tr', 'uk']) {
+  const file = `_data/${lang}/server.yml`;
+  if (existsSync(file)) byLang[lang] = loadYaml(readFileSync(file, 'utf8')) || {};
+}
 
 const targets = [
   { name: 'owner', guildId: process.env.DISCORD_GUILD_ID_OWNER },
@@ -22,7 +32,7 @@ for (const target of targets) {
     continue;
   }
 
-  const commands = schemas[target.name] || [];
+  const commands = localizeCommands(schemas[target.name] || [], byLang);
   const url = `https://discord.com/api/v10/applications/${clientId}/guilds/${target.guildId}/commands`;
 
   console.log(`Deploying ${commands.length} commands to "${target.name}" (${target.guildId})...`);

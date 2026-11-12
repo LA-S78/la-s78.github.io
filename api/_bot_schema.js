@@ -2,9 +2,13 @@
 // The slash commands installed in registered alliance servers (/registerbot pushes them).
 // Split out of api/interactions.js unchanged.
 
+import { localizeCommands } from './_command_text.js';
+import { SERVER_DATA } from './_generated_translations.js';
+
 // --- DYNAMIC ALLIANCE COMMAND SCHEMA ---
-// Synchronized with api/register-alliance.js; pushed to member servers via /registerbot
-export const ALLIANCE_COMMANDS_SCHEMA = [
+// Synchronized with api/register-alliance.js; pushed to member servers via /registerbot.
+// The English is here; translations for the command picker are added below.
+const ALLIANCE_COMMANDS = [
   {
     name: 'calendar',
     description: 'View or manage the Kingdom Event Calendar',
@@ -113,3 +117,10 @@ export const ALLIANCE_COMMANDS_SCHEMA = [
     type: 1,
   },
 ];
+
+/**
+ * The commands as sent to Discord, with the picker's translations (_data/<lang>/server.yml,
+ * bot_commands). Alliance servers get new translations when they register, or when a
+ * Steward runs /registerbot action: Sync All Registered Servers.
+ */
+export const ALLIANCE_COMMANDS_SCHEMA = localizeCommands(ALLIANCE_COMMANDS, SERVER_DATA);

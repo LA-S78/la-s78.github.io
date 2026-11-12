@@ -223,7 +223,10 @@ handler in `inLanguage(req, …)` so it answers in the page's language (the page
 in an `X-Site-Lang` header, added by `js/i18n.js`). Technical messages for administrators
 (server set-up, raw Discord errors) can stay as plain English text. The Discord bot works the same way:
 its text is in `server.yml` sections starting `bot_`, and `api/interactions.js` already
-answers in the user's Discord language, so a bot module only needs `say()`.
+answers in the user's Discord language, so a bot module only needs `say()`. A new slash command's description,
+option descriptions and choice names also go in `server.yml` under `bot_commands` (word for
+word as in `.github/discord.json` or `api/_bot_schema.js`), so the command picker shows
+them translated; keep them under 100 characters.
 
 ---
 
