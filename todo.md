@@ -41,7 +41,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - [x] Server messages (`api/`, `_data/en/server.yml`; technical admin messages stay English)
   - [x] Discord bot replies: `/calendar`, `/map`, `/nominate`, `/rewards` (shared leadership-channel posts stay English)
   - [x] Discord command picker descriptions (`bot_commands`; alliance servers update on `/registerbot` sync)
-  - [ ] `/registerbot`, `/rank`, `/devupdate` and the proposal-review buttons (Steward/admin tools)
+  - [x] `/registerbot`, `/rank`, `/devupdate` and the proposal-review buttons' private replies (the shared war-room post stays English)
   - [ ] `/suggest` is in the alliance servers' command list but the bot has no handler for it (fails in Discord): add it or remove it
 
 - [ ] **Map Plan Import / Export**

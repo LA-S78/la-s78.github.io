@@ -219,6 +219,43 @@ bot_rewards:
   footer: "Last Asylum Capitol Administration"
   old_button: "ℹ️ This button is no longer used: rewards now open every Friday at 20:00 GT by themselves. Record the Kingdom War result with `/rewards` (Won or Lost) after Saturday's battle."
 
+# Stewards' and leaders' admin commands: /rank, /registerbot, /devupdate, and the private
+# replies to the proposal review buttons. (The reviewed proposal message itself is in the
+# shared war-room channel and stays in English.)
+bot_admin:
+  rank_none: "No alliances registered in current state."
+  rank_title: "🛡️ Server NAP Standings"
+  rank_open: "Open Diplomacy & Standings"
+  rank_fetch_failed: "⚠️ Failed to fetch rankings: {reason}"
+  rank_denied: "⛔ **Access Denied:** Only designated Kingdom Stewards can update alliance rankings."
+  rank_missing: "⚠️ Missing required arguments: tag and rank."
+  rank_set_title: "👑 NAP Standing Updated"
+  rank_set_text: "Alliance `[{tag}]` has been assigned to **Rank #{rank}** *(previously: {previous})*."
+  rank_unranked: "Unranked"
+  rank_updated_by: "Updated by {name}"
+  rank_view: "View Standings"
+  rank_set_failed: "⚠️ Failed to update rank: {reason}"
+  dev_done: "✅ **Test data updated.** Copied {count} file(s) from the live data into the test Gist used by dev.la-s78.app: {files}.\nThe live data was only read, not changed."
+  dev_failed: "⚠️ **Test data not updated:** {reason}"
+  dev_denied: "⛔ **Access Denied:** Only Stewards can update the test data."
+  test_proposal: "🧪 This is a test proposal from the test site. It uses test data, so it can't be approved or change anything live."
+  approved_not_updated: "✅ Approved and saved, but this message couldn't be updated ({reason})."
+
+bot_register:
+  nap_only: "⚠️ This command can only be executed in the official NAP server."
+  sync_denied: "⛔ **Access Denied:** Only designated Kingdom Stewards can broadcast-sync commands."
+  sync_title: "🔄 Alliance Slash Commands Broad-Synced"
+  sync_done: "Pushed latest command schema to:\n\n{results}"
+  sync_none: "⚠️ No registered alliance servers found in state."
+  sync_footer: "Last Asylum Bot Deployment Manager"
+  sync_failed: "❌ Sync failed: {reason}"
+  r5_only: "⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can register alliance servers."
+  no_tag_role: "⚠️ Could not detect your alliance tag role. Ensure you hold your alliance role (e.g. `@{example}`) in the NAP server."
+  title: "🤖 Alliance Server Setup — [{tag}]"
+  text: "Click below to authorize the bot and link your alliance's Discord server to the website.\n\n• Installs commands (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).\n• Allows configuring delegated roles (e.g. `@HR`)."
+  open_portal: "Open Registration Portal"
+  busy: "⚠️ Service busy: {reason}. Please retry in a few moments."
+
 # Discord's command picker: the descriptions and choices people see when typing /. Each
 # text here must match the English in .github/discord.json or api/_bot_schema.js word for
 # word (api/_command_text.js finds translations by the English text). Discord allows at
