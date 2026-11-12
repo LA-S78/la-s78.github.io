@@ -214,6 +214,47 @@ bot_rewards:
   count_line: "**{sent} su {total} alleanze hanno inviato la lista**"
   footer: Amministrazione Campidoglio Last Asylum
   old_button: 'ℹ️ Questo pulsante non è più utilizzato: le ricompense ora si aprono automaticamente ogni venerdì alle 20:00 GT. Registra il risultato della Guerra tra Regni con `/rewards` (Vinta o Persa) dopo la battaglia di sabato.'
+bot_admin:
+  rank_none: Nessuna alleanza registrata nello stato attuale.
+  rank_title: "🛡️ Classifiche NAP del Server"
+  rank_open: Diplomazia e Classifiche Aperte
+  rank_fetch_failed: "⚠️ Impossibile recuperare le classifiche: {reason}"
+  rank_denied: "⛔ **Accesso Negato:** Solo i Kingdom Steward designati possono aggiornare le classifiche delle alleanze."
+  rank_missing: "⚠️ Argomenti richiesti mancanti: tag e rank."
+  rank_set_title: "👑 Classifica NAP Aggiornata"
+  rank_set_text: 'L''alleanza `[{tag}]` è stata assegnata al **Rank #{rank}** *(precedentemente: {previous})*.'
+  rank_unranked: Senza rango
+  rank_updated_by: Aggiornato da {name}
+  rank_view: Visualizza Classifiche
+  rank_set_failed: "⚠️ Impossibile aggiornare il rango: {reason}"
+  dev_done: |-
+    ✅ **Dati di test aggiornati.** Copiati {count} file dai dati live al Gist di test usato da dev.la-s78.app: {files}.
+    I dati live sono stati solo letti, non modificati.
+  dev_failed: "⚠️ **Dati di test non aggiornati:** {reason}"
+  dev_denied: "⛔ **Accesso Negato:** Solo gli Steward possono aggiornare i dati di test."
+  test_proposal: "🧪 Questa è una proposta di test dal sito di test. Usa dati di test, quindi non può essere approvata né modificare nulla di live."
+  approved_not_updated: "✅ Approvato e salvato, ma questo messaggio non ha potuto essere aggiornato ({reason})."
+bot_register:
+  nap_only: "⚠️ Questo comando può essere eseguito solo nel server NAP ufficiale."
+  sync_denied: "⛔ **Accesso Negato:** Solo i Kingdom Steward designati possono eseguire comandi di broadcast-sync."
+  sync_title: "🔄 Sincronizzazione Comandi Slash Alleanza"
+  sync_done: |-
+    Inviato l'ultimo schema comandi a:
+
+    {results}
+  sync_none: "⚠️ Nessun server di alleanza registrato trovato nello stato."
+  sync_footer: Responsabile Distribuzione Bot Last Asylum
+  sync_failed: "❌ Sincronizzazione fallita: {reason}"
+  r5_only: "⛔ **Accesso Negato:** Solo i Leader dell'Alleanza con il ruolo **@R5** possono registrare i server delle alleanze."
+  no_tag_role: "⚠️ Impossibile rilevare il ruolo con il tag della tua alleanza. Assicurati di avere il ruolo della tua alleanza (es. `@{example}`) nel server NAP."
+  title: "🤖 Configurazione Server Alleanza — [{tag}]"
+  text: |-
+    Clicca qui sotto per autorizzare il bot e collegare il server Discord della tua alleanza al sito.
+
+    • Installa i comandi (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).
+    • Permette di configurare ruoli delegati (es. `@HR`).
+  open_portal: Apri Portale di Registrazione
+  busy: "⚠️ Servizio occupato: {reason}. Riprova tra poco."
 bot_commands:
   calendar: Visualizza o gestisci il calendario eventi
   calendar_kingdom: Visualizza o gestisci il calendario eventi del Regno

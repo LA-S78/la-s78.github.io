@@ -214,6 +214,47 @@ bot_rewards:
   count_line: "**{sent} de {total} alianzas han enviado su lista**"
   footer: Administración del Capitolio de Last Asylum
   old_button: 'ℹ️ Este botón ya no se usa: las recompensas ahora se abren automáticamente cada viernes a las 20:00 GT. Registra el resultado de la Guerra de Reinos con `/rewards` (Ganada o Perdida) después de la batalla del sábado.'
+bot_admin:
+  rank_none: No hay alianzas registradas en el estado actual.
+  rank_title: "🛡️ Clasificación de NAP del servidor"
+  rank_open: Diplomacia y clasificación abiertas
+  rank_fetch_failed: "⚠️ Error al obtener la clasificación: {reason}"
+  rank_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden actualizar la clasificación de las alianzas."
+  rank_missing: "⚠️ Faltan argumentos requeridos: tag y rank."
+  rank_set_title: "👑 Clasificación NAP actualizada"
+  rank_set_text: 'La alianza `[{tag}]` ha sido asignada al **Puesto #{rank}** *(anteriormente: {previous})*.'
+  rank_unranked: Sin clasificación
+  rank_updated_by: Actualizado por {name}
+  rank_view: Ver clasificación
+  rank_set_failed: "⚠️ Error al actualizar la clasificación: {reason}"
+  dev_done: |-
+    ✅ **Datos de prueba actualizados.** Se copiaron {count} archivo(s) de los datos reales al Gist de prueba usado por dev.la-s78.app: {files}.
+    Los datos reales solo fueron leídos, no modificados.
+  dev_failed: "⚠️ **Datos de prueba no actualizados:** {reason}"
+  dev_denied: "⛔ **Acceso denegado:** Solo los administradores pueden actualizar los datos de prueba."
+  test_proposal: "🧪 Esta es una propuesta de prueba desde el sitio de prueba. Utiliza datos de prueba, por lo que no se puede aprobar ni cambiar nada en tiempo real."
+  approved_not_updated: "✅ Aprobado y guardado, pero este mensaje no pudo ser actualizado ({reason})."
+bot_register:
+  nap_only: "⚠️ Este comando solo puede ser ejecutado en el servidor oficial de NAP."
+  sync_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden sincronizar comandos por transmisión."
+  sync_title: "🔄 Comandos de barra de alianza sincronizados"
+  sync_done: |-
+    Se envió el esquema de comandos más reciente a:
+
+    {results}
+  sync_none: "⚠️ No se encontraron servidores de alianza registrados en el estado."
+  sync_footer: Administrador de despliegue del bot de Last Asylum
+  sync_failed: "❌ Error de sincronización: {reason}"
+  r5_only: "⛔ **Acceso denegado:** Solo los líderes de alianza con el rol **@R5** pueden registrar servidores de alianza."
+  no_tag_role: "⚠️ No se pudo detectar el rol de tu tag de alianza. Asegúrate de tener el rol de tu alianza (ej. `@{example}`) en el servidor de NAP."
+  title: "🤖 Configuración del servidor de alianza — [{tag}]"
+  text: |-
+    Haz clic abajo para autorizar al bot y vincular el servidor de Discord de tu alianza con el sitio web.
+
+    • Instala comandos (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).
+    • Permite configurar roles delegados (ej. `@HR`).
+  open_portal: Abrir portal de registro
+  busy: "⚠️ Servicio ocupado: {reason}. Por favor, inténtalo de nuevo en unos momentos."
 bot_commands:
   calendar: Ver o gestionar el calendario de eventos
   calendar_kingdom: Ver o gestionar el calendario de eventos del reino

@@ -214,6 +214,47 @@ bot_rewards:
   count_line: "**{sent} sur {total} alliances ont envoyé une liste**"
   footer: Administration du Capitole de Last Asylum
   old_button: 'ℹ️ Ce bouton n''est plus utilisé : les récompenses ouvrent désormais automatiquement chaque vendredi à 20:00 GT. Enregistrez le résultat de la Guerre des Royaumes avec `/rewards` (Gagné ou Perdu) après la bataille du samedi.'
+bot_admin:
+  rank_none: Aucune alliance enregistrée dans l'état actuel.
+  rank_title: "🛡️ Classement NAP du serveur"
+  rank_open: Diplomatie ouverte et classement
+  rank_fetch_failed: "⚠️ Échec de la récupération du classement : {reason}"
+  rank_denied: "⛔ **Accès refusé :** Seuls les intendants du Royaume désignés peuvent mettre à jour le classement des alliances."
+  rank_missing: "⚠️ Arguments requis manquants : tag et rang."
+  rank_set_title: "👑 Classement NAP mis à jour"
+  rank_set_text: 'L''alliance `[{tag}]` a été assignée au **Rang #{rank}** *(précédemment : {previous})*.'
+  rank_unranked: Non classé
+  rank_updated_by: Mis à jour par {name}
+  rank_view: Voir le classement
+  rank_set_failed: "⚠️ Échec de la mise à jour du rang : {reason}"
+  dev_done: |-
+    ✅ **Données de test mises à jour.** {count} fichier(s) copié(s) depuis les données en direct vers le Gist de test utilisé par dev.la-s78.app : {files}.
+    Les données en direct ont été uniquement lues, et non modifiées.
+  dev_failed: "⚠️ **Données de test non mises à jour :** {reason}"
+  dev_denied: "⛔ **Accès refusé :** Seuls les intendants peuvent mettre à jour les données de test."
+  test_proposal: "🧪 Ceci est une proposition de test depuis le site de test. Elle utilise des données de test, elle ne peut donc pas être approuvée ni modifier quoi que ce soit en direct."
+  approved_not_updated: "✅ Approuvé et enregistré, mais ce message n'a pas pu être mis à jour ({reason})."
+bot_register:
+  nap_only: "⚠️ Cette commande peut uniquement être exécutée sur le serveur NAP officiel."
+  sync_denied: "⛔ **Accès refusé :** Seuls les intendants du Royaume désignés peuvent synchroniser les commandes."
+  sync_title: "🔄 Commandes Slash d'Alliance synchronisées"
+  sync_done: |-
+    Dernier schéma de commande envoyé à :
+
+    {results}
+  sync_none: "⚠️ Aucun serveur d'alliance enregistré trouvé dans l'état."
+  sync_footer: Gestionnaire de déploiement du bot Last Asylum
+  sync_failed: "❌ Échec de la synchronisation : {reason}"
+  r5_only: "⛔ **Accès refusé :** Seuls les chefs d'alliance détenant le rôle **@R5** peuvent enregistrer des serveurs d'alliance."
+  no_tag_role: "⚠️ Impossible de détecter votre rôle de tag d'alliance. Assurez-vous de détenir votre rôle d'alliance (ex: `@{example}`) sur le serveur NAP."
+  title: "🤖 Configuration du serveur d'alliance — [{tag}]"
+  text: |-
+    Cliquez ci-dessous pour autoriser le bot et lier le serveur Discord de votre alliance au site web.
+
+    • Installe les commandes (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).
+    • Permet de configurer les rôles délégués (ex : `@HR`).
+  open_portal: Ouvrir le portail d'enregistrement
+  busy: "⚠️ Service occupé : {reason}. Veuillez réessayer dans quelques instants."
 bot_commands:
   calendar: Afficher ou gérer le Calendrier des Événements
   calendar_kingdom: Afficher ou gérer le Calendrier des Événements du Royaume

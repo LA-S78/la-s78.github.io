@@ -214,6 +214,47 @@ bot_rewards:
   count_line: "**{sent} von {total} Allianzen haben eine Liste gesendet**"
   footer: Last Asylum Kapitol-Verwaltung
   old_button: 'ℹ️ Dieser Button wird nicht mehr verwendet: Belohnungen öffnen jetzt jeden Freitag um 20:00 GT von selbst. Erfasse das Königreichskrieg-Ergebnis mit `/rewards` (Won oder Lost) nach dem Kampf am Samstag.'
+bot_admin:
+  rank_none: Keine Allianzen im aktuellen Staat registriert.
+  rank_title: "🛡️ Server NAP-Rangliste"
+  rank_open: Offene Diplomatie & Rangliste
+  rank_fetch_failed: "⚠️ Abrufen der Rangliste fehlgeschlagen: {reason}"
+  rank_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Allianz-Ranglisten aktualisieren."
+  rank_missing: "⚠️ Erforderliche Argumente fehlen: Tag und Rang."
+  rank_set_title: "👑 NAP-Rangliste aktualisiert"
+  rank_set_text: 'Allianz `[{tag}]` wurde **Rang #{rank}** zugewiesen *(zuvor: {previous})*.'
+  rank_unranked: Nicht gelistet
+  rank_updated_by: Aktualisiert von {name}
+  rank_view: Rangliste anzeigen
+  rank_set_failed: "⚠️ Aktualisierung des Rangs fehlgeschlagen: {reason}"
+  dev_done: |-
+    ✅ **Testdaten aktualisiert.** {count} Datei(en) von den Live-Daten in das von dev.la-s78.app verwendete Test-Gist kopiert: {files}.
+    Die Live-Daten wurden nur gelesen, nicht verändert.
+  dev_failed: "⚠️ **Testdaten nicht aktualisiert:** {reason}"
+  dev_denied: "⛔ **Zugriff verweigert:** Nur Verwalter können Testdaten aktualisieren."
+  test_proposal: "🧪 Dies ist ein Testvorschlag von der Test-Website. Er verwendet Testdaten und kann daher weder genehmigt werden noch Live-Änderungen vornehmen."
+  approved_not_updated: "✅ Genehmigt und gespeichert, aber diese Nachricht konnte nicht aktualisiert werden ({reason})."
+bot_register:
+  nap_only: "⚠️ Dieser Befehl kann nur auf dem offiziellen NAP-Server ausgeführt werden."
+  sync_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Broadcast-Sync-Befehle ausführen."
+  sync_title: "🔄 Allianz Slash-Befehle Broad-Synced"
+  sync_done: |-
+    Neuestes Befehlsschema übertragen an:
+
+    {results}
+  sync_none: "⚠️ Keine registrierten Allianz-Server im Staat gefunden."
+  sync_footer: Last Asylum Bot Deployment Manager
+  sync_failed: "❌ Synchronisierung fehlgeschlagen: {reason}"
+  r5_only: "⛔ **Zugriff verweigert:** Nur Allianz-Anführer mit der Rolle **@R5** können Allianz-Server registrieren."
+  no_tag_role: "⚠️ Dein Allianz-Tag konnte nicht ermittelt werden. Stelle sicher, dass du auf dem NAP-Server deine Allianz-Rolle (z. B. `@{example}`) besitzt."
+  title: "🤖 Allianz-Server-Setup — [{tag}]"
+  text: |-
+    Klicke unten, um den Bot zu autorisieren und den Discord-Server deiner Allianz mit der Website zu verknüpfen.
+
+    • Installiert Befehle (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).
+    • Ermöglicht die Konfiguration delegierter Rollen (z. B. `@HR`).
+  open_portal: Registrierungsportal öffnen
+  busy: "⚠️ Dienst ausgelastet: {reason}. Bitte versuche es in wenigen Momenten erneut."
 bot_commands:
   calendar: Event-Kalender ansehen oder verwalten
   calendar_kingdom: Königreich-Event-Kalender ansehen oder verwalten

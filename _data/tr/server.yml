@@ -214,6 +214,47 @@ bot_rewards:
   count_line: "**{total} ittifaktan {sent} tanesi liste gönderdi**"
   footer: Last Asylum Başkent Yönetimi
   old_button: 'ℹ️ Bu düğme artık kullanılmıyor: ödüller artık her Cuma 20:00 GT''de kendiliğinden açılır. Cumartesi günkü savaştan sonra Krallık Savaşı sonucunu (Kazandı veya Kaybetti) `/rewards` ile kaydedin.'
+bot_admin:
+  rank_none: Mevcut durumda kayıtlı ittifak yok.
+  rank_title: "🛡️ Sunucu NAP Durumları"
+  rank_open: Açık Diplomasi & Durumlar
+  rank_fetch_failed: "⚠️ Sıralamalar alınamadı: {reason}"
+  rank_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Sorumluları ittifak sıralamalarını güncelleyebilir."
+  rank_missing: "⚠️ Gerekli argümanlar eksik: tag ve rank."
+  rank_set_title: "👑 NAP Durumu Güncellendi"
+  rank_set_text: "`[{tag}]` ittifakı **Sıra #{rank}** olarak atandı *(önceki: {previous})*."
+  rank_unranked: Sıralamasız
+  rank_updated_by: "{name} tarafından güncellendi"
+  rank_view: Durumları Görüntüle
+  rank_set_failed: "⚠️ Sıra güncellenemedi: {reason}"
+  dev_done: |-
+    ✅ **Test verileri güncellendi.** {count} dosya canlı verilerden, dev.la-s78.app tarafından kullanılan test Gist'ine kopyalandı: {files}.
+    Canlı veriler sadece okundu, değiştirilmedi.
+  dev_failed: "⚠️ **Test verileri güncellenemedi:** {reason}"
+  dev_denied: "⛔ **Erişim Engellendi:** Sadece Sorumlular test verilerini güncelleyebilir."
+  test_proposal: "🧪 Bu, test sitesinden gelen bir test önerisidir. Test verilerini kullandığı için onaylanamaz veya canlı sistemde hiçbir şeyi değiştiremez."
+  approved_not_updated: "✅ Onaylandı ve kaydedildi ancak bu mesaj güncellenemedi ({reason})."
+bot_register:
+  nap_only: "⚠️ Bu komut sadece resmi NAP sunucusunda çalıştırılabilir."
+  sync_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Sorumluları yayın-senkronizasyon komutlarını kullanabilir."
+  sync_title: "🔄 İttifak Slash Komutları Senkronize Edildi"
+  sync_done: |-
+    En güncel komut şeması şuraya gönderildi:
+
+    {results}
+  sync_none: "⚠️ Mevcut durumda kayıtlı ittifak sunucusu bulunamadı."
+  sync_footer: Last Asylum Bot Dağıtım Yöneticisi
+  sync_failed: "❌ Senkronizasyon başarısız: {reason}"
+  r5_only: "⛔ **Erişim Engellendi:** Sadece **@R5** rolüne sahip İttifak Liderleri ittifak sunucularını kaydedebilir."
+  no_tag_role: "⚠️ İttifak etiketi rolünüz algılanamadı. NAP sunucusunda ittifak rolünüze (örneğin: `@{example}`) sahip olduğunuzdan emin olun."
+  title: "🤖 İttifak Sunucusu Kurulumu — [{tag}]"
+  text: |-
+    Botu yetkilendirmek ve ittifakınızın Discord sunucusunu web sitesine bağlamak için aşağıya tıklayın.
+
+    • Komutları yükler (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).
+    • Yetkili rollerin (örneğin `@HR`) yapılandırılmasına olanak tanır.
+  open_portal: Kayıt Portalı'nı Aç
+  busy: "⚠️ Hizmet meşgul: {reason}. Lütfen kısa süre içinde tekrar deneyin."
 bot_commands:
   calendar: Etkinlik Takvimini görüntüle veya yönet
   calendar_kingdom: Krallık Etkinlik Takvimini görüntüle veya yönet
