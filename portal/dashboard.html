@@ -71,7 +71,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       if (!pass) {
         $('dash-subtitle').textContent = '';
         message(
-          `🔐 <strong>${escapeHtml(t('dashboard.sign_in_title'))}</strong><br>${escapeHtml(t('dashboard.sign_in_help'))}` +
+          `🔐 <strong>${escapeHtml(t('dashboard.sign_in_title'))}</strong><br>${th('dashboard.sign_in_help', { sign_in: `<strong>${escapeHtml(t('dashboard.sign_in_button'))}</strong>` })}` +
             `<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_discord'))}</button>`,
         );
         $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());

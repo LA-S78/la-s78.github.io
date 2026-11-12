@@ -18,8 +18,9 @@
             <div class="lantern-glow-bleed" style="pointer-events: none;"></div>
         {% endunless %}
 
+        {% comment %} The tools' text for this page's scripts (outside <main>, so no style sees it). {% endcomment %}
+        {% if page.strings %}<script type="application/json" id="tool-strings">{{ page.strings | tool_strings_json }}</script>{% endif %}
         <main>
-            {% if page.strings %}<script type="application/json" id="tool-strings">{{ page.strings | tool_strings_json }}</script>{% endif %}
             {{ content }}
         </main>
     </div>
