@@ -218,6 +218,10 @@ bot_rewards:
   count_line: "**{sent} of {total} alliances have sent a list**"
   footer: "Last Asylum Capitol Administration"
   old_button: "ℹ️ This button is no longer used: rewards now open every Friday at 20:00 GT by themselves. Record the Kingdom War result with `/rewards` (Won or Lost) after Saturday's battle."
+  overrides_denied: "⛔ **Access Denied:** Only designated Kingdom Stewards can reset the Capitol overrides."
+  overrides_nothing: "ℹ️ Nothing to reset: no overrides or buyouts, and the rotation is already the plain schedule.\n{schedule}"
+  overrides_title: "🧹 Capitol Overrides Reset"
+  overrides_text: "Reset by **{name}**. The rotation is back to the plain schedule:\n{after}\n\nBefore: {before}\n\n• Overrides cleared: {overrides}\n• Wartime buyouts cancelled: {buyouts} (kept in the history)\n• Every alliance's list was re-sorted for the corrected chests."
 
 # Stewards' and leaders' admin commands: /rank, /registerbot, /devupdate, and the private
 # replies to the proposal review buttons. (The reviewed proposal message itself is in the
@@ -273,6 +277,7 @@ bot_commands:
   rewards_won: "Record Kingdom War: Won (Steward)"
   rewards_lost: "Record Kingdom War: Lost (Steward)"
   rewards_reset: "Clear this week's nominations (Steward)"
+  rewards_reset_overrides: "Reset Capitol overrides and buyouts (Steward)"
   rank: "View or manage alliance NAP rankings"
   rank_set: "Update an alliance's NAP rank (Admin only)"
   rank_tag: "Alliance tag (e.g., ABC)"

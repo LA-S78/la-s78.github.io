@@ -18,6 +18,7 @@ import { DEFAULT_CALENDAR_CONFIG, weekLabel } from './_calendar_helper.js';
 import { updateGist } from './_gist.js';
 import { getWaitUntil } from './_after_response.js';
 import { chestCounts } from './_nomination_assign.js';
+import { resetOverrides } from './_cycle_helper.js';
 import { reassignAllNominations } from './_nominations.js';
 import {
   describeRewardPeriod,
@@ -329,6 +330,58 @@ export async function handleRewardsCommand(ctx) {
       });
     }
 
+    // Stewards: wipe this cycle's Capitol overrides and wartime buyouts (resetOverrides in
+    // api/_cycle_helper.js), then re-sort every alliance's list for the corrected chests.
+    if (action === 'reset_overrides') {
+      if (!isSteward(userId)) {
+        return sendEphemeralMessage(res, say('bot_rewards.overrides_denied'));
+      }
+      const out = await updateGist(
+        (gist) => {
+          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const map = JSON.parse(gist.files['map-state.json']?.content || '{}');
+          const lists = JSON.parse(gist.files['rewards-nominations.json']?.content || '{}');
+          const reset = resetOverrides(data, map, username);
+          if (!reset.changed) return { reset };
+          return {
+            reset,
+            files: {
+              'rewards-data.json': data,
+              'rewards-nominations.json': reassignAllNominations(lists, data, map),
+            },
+            description: `Capitol overrides reset by ${username}`,
+          };
+        },
+        { gist: gistData, deadline: Date.now() + 700 },
+      );
+      const { reset } = out;
+      if (!reset.changed) {
+        return sendEphemeralMessage(
+          res,
+          say('bot_rewards.overrides_nothing', { schedule: scheduleLine(reset.after) }),
+        );
+      }
+      return res.status(200).json({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          embeds: [
+            {
+              title: say('bot_rewards.overrides_title'),
+              color: 0xb8975a,
+              description: say('bot_rewards.overrides_text', {
+                name: username,
+                after: scheduleLine(reset.after),
+                before: scheduleLine(reset.before),
+                overrides: reset.overrides,
+                buyouts: reset.cancelled,
+              }),
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        },
+      });
+    }
+
     // Status (read-only: a period nobody has used yet shows as just opened)
     // (no stored period yet: data from before reward periods, still this week's)
     const current = period.open && (!rewardsData.period || rewardsData.period.id === period.id);
@@ -512,6 +565,13 @@ export async function handleOldOutcomeButton(ctx) {
   const { res } = ctx;
   return sendEphemeralMessage(res, say('bot_rewards.old_button'));
   return NOT_HANDLED;
+}
+
+/** "Off-Week [BOTS] · Kingdom War Week 1 [RÂVN] · …" for a reward schedule. */
+function scheduleLine(schedule = {}) {
+  return ['downtime', 'week_1', 'week_2', 'week_3']
+    .map((key, i) => `${weekName(i)} **[${schedule[key] || '?'}]**`)
+    .join(' · ');
 }
 
 /** Total chests in chestCounts() form. */
