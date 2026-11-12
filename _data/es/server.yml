@@ -214,3 +214,37 @@ bot_rewards:
   count_line: "**{sent} de {total} alianzas han enviado su lista**"
   footer: Administración del Capitolio de Last Asylum
   old_button: 'ℹ️ Este botón ya no se usa: las recompensas ahora se abren automáticamente cada viernes a las 20:00 GT. Registra el resultado de la Guerra de Reinos con `/rewards` (Ganada o Perdida) después de la batalla del sábado.'
+bot_commands:
+  calendar: Ver o gestionar el calendario de eventos
+  calendar_kingdom: Ver o gestionar el calendario de eventos del reino
+  calendar_action: Acción a realizar (dejar en blanco para ver el calendario)
+  calendar_manage_alliance: Gestionar eventos de alianza (R5 por defecto)
+  calendar_manage_global: Gestionar eventos globales (solo administradores)
+  nominate: Solicitar un enlace al portal para enviar nominaciones semanales de cofres
+  nominate_authenticated: Solicitar un enlace autenticado al portal para enviar nominaciones semanales de cofres
+  rewards: 'Recompensas de esta semana: estado y resultado de la Guerra de Reinos (Stewards)'
+  rewards_action: Dejar en blanco para ver el estado de las recompensas de esta semana
+  rewards_won: 'Registrar Guerra de Reinos: Victoria (Steward)'
+  rewards_lost: 'Registrar Guerra de Reinos: Derrota (Steward)'
+  rewards_reset: Borrar nominaciones de esta semana (Steward)
+  rank: Ver o gestionar clasificaciones de NAP de alianza
+  rank_set: Actualizar el rango NAP de una alianza (solo administradores)
+  rank_tag: Etiqueta de alianza (ej. ABC)
+  rank_position: Nueva posición de rango (ej. 1 al 10)
+  rank_list: Mostrar las clasificaciones y posiciones NAP actuales
+  sb: Mostrar el horario de Batalla de Supervivencia
+  sb_long: Mostrar el horario de la carrera armamentista de Batalla de Supervivencia y eventos activos
+  sb_day: Día del ciclo (1-7)
+  rules: Mostrar las reglas NAP del servidor y del Reino
+  rules_rule: Número de regla específica para ver
+  map: Ver el mapa de territorio en vivo
+  map_long: Ver el mapa de territorio de Last Asylum en vivo
+  devupdate: Copiar los datos en vivo al sitio de pruebas (solo Stewards; solo tú verás la respuesta)
+  registerbot: Registrar servidor de alianza o sincronizar comandos de barra
+  registerbot_action: Acción a realizar (dejar en blanco para obtener el enlace del portal de registro)
+  registerbot_sync: Sincronizar todos los servidores registrados (solo administradores)
+  suggest: Enviar una propuesta de regla, reportar un problema de alianza o consultar el estado de tu ticket
+  suggest_type: Seleccionar categoría de ticket o consultar tus envíos activos
+  suggest_nap: "👑 Propuesta de Reino / NAP (Regla para todo el servidor o idea de evento)"
+  suggest_alliance: "🛡️ Problema interno de alianza (Gestionado de forma privada por tus R4/R5)"
+  suggest_status: "📋 Ver el estado de mi ticket (Activo e historial reciente)"

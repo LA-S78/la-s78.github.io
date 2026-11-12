@@ -214,3 +214,37 @@ bot_rewards:
   count_line: "**{total} ittifaktan {sent} tanesi liste gönderdi**"
   footer: Last Asylum Başkent Yönetimi
   old_button: 'ℹ️ Bu düğme artık kullanılmıyor: ödüller artık her Cuma 20:00 GT''de kendiliğinden açılır. Cumartesi günkü savaştan sonra Krallık Savaşı sonucunu (Kazandı veya Kaybetti) `/rewards` ile kaydedin.'
+bot_commands:
+  calendar: Etkinlik Takvimini görüntüle veya yönet
+  calendar_kingdom: Krallık Etkinlik Takvimini görüntüle veya yönet
+  calendar_action: Gerçekleştirilecek eylem (takvimi görüntülemek için boş bırakın)
+  calendar_manage_alliance: İttifak Etkinliklerini yönet (varsayılan R5)
+  calendar_manage_global: Küresel Etkinlikleri yönet (Sadece Yönetici)
+  nominate: Haftalık sandık adaylıklarını göndermek için bir portal bağlantısı iste
+  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimlik doğrulamalı bir portal bağlantısı iste
+  rewards: 'Bu haftanın ödülleri: durum ve Krallık Savaşı sonucu (Sorumlular)'
+  rewards_action: Bu haftanın ödül durumunu görmek için boş bırakın
+  rewards_won: 'Krallık Savaşı''nı kaydet: Kazanıldı (Sorumlu)'
+  rewards_lost: 'Krallık Savaşı''nı kaydet: Kaybedildi (Sorumlu)'
+  rewards_reset: Bu haftanın adaylıklarını temizle (Sorumlu)
+  rank: İttifak NAP sıralamalarını görüntüle veya yönet
+  rank_set: Bir ittifakın NAP sıralamasını güncelle (Sadece Yönetici)
+  rank_tag: İttifak etiketi (ör. ABC)
+  rank_position: Yeni sıra konumu (ör. 1 ila 10)
+  rank_list: Mevcut NAP sıralamalarını ve durumlarını görüntüle
+  sb: Hayatta Kalma Savaşı programını görüntüle
+  sb_long: Hayatta Kalma Savaşı silahlanma yarışı programını ve aktif etkinlikleri görüntüle
+  sb_day: Döngünün günü (1-7)
+  rules: Sunucu ve Krallık NAP kurallarını görüntüle
+  rules_rule: Görüntülenecek belirli kural numarası
+  map: Canlı bölge haritasını görüntüle
+  map_long: Canlı Last Asylum bölge haritasını görüntüle
+  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Sorumlular; yanıtı sadece siz görürsünüz)
+  registerbot: İttifak sunucusunu kaydet veya eğik çizgi komutlarını eşitle
+  registerbot_action: Gerçekleştirilecek eylem (kayıt portalı bağlantısını almak için boş bırakın)
+  registerbot_sync: Tüm Kayıtlı Sunucuları Eşitle (Sadece Yönetici)
+  suggest: Bir kural önerisi gönderin, bir ittifak sorunu bildirin veya destek talebi durumunuzu kontrol edin
+  suggest_type: Destek talebi kategorisini seçin veya aktif gönderilerinizi kontrol edin
+  suggest_nap: "👑 Krallık / NAP Önerisi (Sunucu Genelinde Kural veya Etkinlik Fikri)"
+  suggest_alliance: "🛡️ Dahili İttifak Sorunu (R4/R5'leriniz Tarafından Gizlice Ele Alınır)"
+  suggest_status: "📋 Destek Talebi Durumumu Görüntüle (Aktif ve Yakın Geçmiş)"

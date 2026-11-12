@@ -214,3 +214,37 @@ bot_rewards:
   count_line: "**{sent} von {total} Allianzen haben eine Liste gesendet**"
   footer: Last Asylum Kapitol-Verwaltung
   old_button: 'ℹ️ Dieser Button wird nicht mehr verwendet: Belohnungen öffnen jetzt jeden Freitag um 20:00 GT von selbst. Erfasse das Königreichskrieg-Ergebnis mit `/rewards` (Won oder Lost) nach dem Kampf am Samstag.'
+bot_commands:
+  calendar: Event-Kalender ansehen oder verwalten
+  calendar_kingdom: Königreich-Event-Kalender ansehen oder verwalten
+  calendar_action: Auszuführende Aktion (leer lassen, um den Kalender anzuzeigen)
+  calendar_manage_alliance: Allianz-Events verwalten (standardmäßig R5)
+  calendar_manage_global: Globale Events verwalten (nur für Admins)
+  nominate: Portal-Link für die wöchentlichen Truhen-Nominierungen anfordern
+  nominate_authenticated: Authentifizierten Portal-Link für die wöchentlichen Truhen-Nominierungen anfordern
+  rewards: 'Belohnungen dieser Woche: Status und das Ergebnis vom Königreichskrieg (Stewards)'
+  rewards_action: Leer lassen, um den Belohnungsstatus dieser Woche zu sehen
+  rewards_won: 'Königreichskrieg: Gewonnen erfassen (Steward)'
+  rewards_lost: 'Königreichskrieg: Verloren erfassen (Steward)'
+  rewards_reset: Nominierungen dieser Woche löschen (Steward)
+  rank: NAP-Ranglisten der Allianz ansehen oder verwalten
+  rank_set: NAP-Rang einer Allianz aktualisieren (nur für Admins)
+  rank_tag: Allianz-Tag (z. B. [ABC])
+  rank_position: Neue Rangposition (z. B. 1 bis 10)
+  rank_list: Aktuelle NAP-Ranglisten und Platzierungen anzeigen
+  sb: Zeitplan für den Überlebenskampf anzeigen
+  sb_long: Zeitplan und aktive Events des Überlebenskampfs anzeigen
+  sb_day: Tag des Zyklus (1-7)
+  rules: Server- und Königreich-NAP-Regeln anzeigen
+  rules_rule: Spezifische Regelnummer zum Anzeigen
+  map: Live-Gebietskarte ansehen
+  map_long: Live-Gebietskarte von Last Asylum ansehen
+  devupdate: Live-Daten in die Test-Seite kopieren (nur Stewards; nur du siehst die Antwort)
+  registerbot: Allianz-Server registrieren oder Slash-Commands synchronisieren
+  registerbot_action: Auszuführende Aktion (leer lassen, um einen Registrierungs-Portal-Link zu erhalten)
+  registerbot_sync: Alle registrierten Server synchronisieren (nur für Admins)
+  suggest: Regelvorschlag einreichen, ein Allianzproblem melden oder Ticket-Status prüfen
+  suggest_type: Ticket-Kategorie auswählen oder aktive Einreichungen prüfen
+  suggest_nap: "👑 Königreich / NAP-Vorschlag (Serverweite Regel oder Event-Idee)"
+  suggest_alliance: "🛡️ Internes Allianzproblem (wird privat von deinen R4/R5s behandelt)"
+  suggest_status: "📋 Meinen Ticket-Status ansehen (aktiv & Verlauf)"

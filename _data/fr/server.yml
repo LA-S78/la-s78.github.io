@@ -214,3 +214,37 @@ bot_rewards:
   count_line: "**{sent} sur {total} alliances ont envoyé une liste**"
   footer: Administration du Capitole de Last Asylum
   old_button: 'ℹ️ Ce bouton n''est plus utilisé : les récompenses ouvrent désormais automatiquement chaque vendredi à 20:00 GT. Enregistrez le résultat de la Guerre des Royaumes avec `/rewards` (Gagné ou Perdu) après la bataille du samedi.'
+bot_commands:
+  calendar: Afficher ou gérer le Calendrier des Événements
+  calendar_kingdom: Afficher ou gérer le Calendrier des Événements du Royaume
+  calendar_action: Action à effectuer (laisser vide pour voir le calendrier)
+  calendar_manage_alliance: Gérer les Événements d'Alliance (R5 par défaut)
+  calendar_manage_global: Gérer les Événements Mondiaux (Admin uniquement)
+  nominate: Demander un lien de portail pour soumettre les nominations hebdomadaires aux coffres
+  nominate_authenticated: Demander un lien de portail authentifié pour soumettre les nominations hebdomadaires aux coffres
+  rewards: 'Récompenses de cette semaine : statut et résultat de la Guerre des Royaumes (Intendants)'
+  rewards_action: Laisser vide pour voir le statut des récompenses de cette semaine
+  rewards_won: 'Enregistrer Guerre des Royaumes : Victoire (Intendant)'
+  rewards_lost: 'Enregistrer Guerre des Royaumes : Défaite (Intendant)'
+  rewards_reset: Réinitialiser les nominations de cette semaine (Intendant)
+  rank: Afficher ou gérer les classements NAP de l'alliance
+  rank_set: Mettre à jour le rang NAP d'une alliance (Admin uniquement)
+  rank_tag: 'Tag d''alliance (ex : ABC)'
+  rank_position: 'Nouvelle position de rang (ex : 1 à 10)'
+  rank_list: Afficher les classements et positions NAP actuels
+  sb: Afficher le planning de la Bataille de Survie
+  sb_long: Afficher le planning de la course à l'armement de la Bataille de Survie et les événements actifs
+  sb_day: Jour du cycle (1-7)
+  rules: Afficher les règles du serveur et du NAP du Royaume
+  rules_rule: Numéro de règle spécifique à consulter
+  map: Voir la carte du territoire en direct
+  map_long: Voir la carte du territoire de Last Asylum en direct
+  devupdate: Copier les données en direct vers les données du site de test (Intendants uniquement ; vous seul voyez la réponse)
+  registerbot: Enregistrer le serveur d'alliance ou synchroniser les commandes slash
+  registerbot_action: Action à effectuer (laisser vide pour obtenir le lien du portail d'enregistrement)
+  registerbot_sync: Synchroniser tous les serveurs enregistrés (Admin uniquement)
+  suggest: Soumettre une proposition de règle, signaler un problème d'alliance ou vérifier le statut de votre ticket
+  suggest_type: Sélectionner la catégorie de ticket ou vérifier vos soumissions actives
+  suggest_nap: "👑 Proposition Royaume / NAP (Règle à l'échelle du serveur ou idée d'événement)"
+  suggest_alliance: "🛡️ Problème d'Alliance interne (Traité en privé par vos R4/R5)"
+  suggest_status: "📋 Voir le statut de mon ticket (Actif et historique récent)"
