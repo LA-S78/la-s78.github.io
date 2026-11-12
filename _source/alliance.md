@@ -10,8 +10,6 @@ nav_links:
     url: "#nap-territory"
   - name_key: "blacklist"
     url: "#blacklist"
-dialogs:
-  - dialogs/alliance.html
 strings: [alliance_planner, blacklist_planner, map_planner, proposals, live_data]
 ---
 

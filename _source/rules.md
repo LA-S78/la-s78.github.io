@@ -10,8 +10,7 @@ nav_links:
     url: "#capitol-rotation"
   - name_key: "rewards"
     url: "#capitol-rewards"
-dialogs:
-  - dialogs/rules.html
+strings: [capitol_rotation, rewards_planner, proposals, live_data]
 ---
 
 {% for section in site.rules %}
@@ -58,11 +57,20 @@ nav_id: "capitol-rotation"
   {{ p.note }}
 </small>
 
-<img src="/images/rotation.jpg" 
-     alt="{{ p.title }}" 
-     class="blueprint-img" 
-     onclick="document.getElementById('rotationZoom').showModal()" 
-     style="cursor: pointer; margin-top: 20px;">
+{% comment %} The rotation from the live calendar (js/capitol-rotation.js, /api/calendar). Until it loads, or without it: the plain rule. {% endcomment %}
+<div id="rotation-board" class="rotation-board" aria-live="polite">
+  <div class="rotation-grid">
+    {% assign seats = "3,2,1,4" | split: "," %}
+    {% for seat in seats %}
+      <div class="rotation-week{% if forloop.last %} is-off-week{% endif %}">
+        <div class="rotation-week-head">{% if forloop.last %}{{ "common.off_week" | t }}{% else %}{{ "common.kw_week" | t_html: "n", forloop.index }}{% endif %}</div>
+        <div class="rotation-crown rank-{{ seat }}" aria-hidden="true">{% if seat == "1" %}👑{% elsif seat == "2" %}🥈{% elsif seat == "3" %}🥉{% else %}🛡️{% endif %}</div>
+        <div class="rotation-seat">{{ "capitol_rotation.seat" | t_html: "rank", seat }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<script type="module" src="/js/capitol-rotation.js"></script>
 
 === collection--rules--03 ===
 ---
