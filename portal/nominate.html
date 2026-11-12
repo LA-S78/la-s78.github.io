@@ -3,10 +3,11 @@ layout: portal
 title: Reward Nominations
 permalink: /nominate.html
 lang: "en"
+strings: [nominate]
 ---
 
 <div class="content-pane portal-pane-sm" id="nominate-app">
-  <div id="loading-state" class="status-banner">Loading nomination page...</div>
+  <div id="loading-state" class="status-banner">{{ "nominate.loading" | t }}</div>
   <div id="error-state" class="status-banner warning" style="display: none;"></div>
 
   <div id="form-container" style="display: none;">
@@ -19,24 +20,20 @@ lang: "en"
 
     <form id="nomination-form">
       <div class="smart-paste-box">
-        <label for="ranked-input">📋 Your players, best first</label>
-        <p class="smart-paste-desc">
-          One name per line (or separated by commas), your best player first. Chests go down the
-          list in order of value across both sets; names beyond the chests are kept as reserves
-          and move up if more chests open.
-        </p>
-        <textarea id="ranked-input" rows="10" placeholder="Exact in-game names, best first..."></textarea>
+        <label for="ranked-input">{{ "nominate.players_label" | t }}</label>
+        <p class="smart-paste-desc">{{ "nominate.players_help" | t }}</p>
+        <textarea id="ranked-input" rows="10" placeholder="{{ "nominate.players_placeholder" | t }}"></textarea>
       </div>
 
       <!-- Chests the King has already handed out in the game: locked, kept whatever the list says -->
       <div id="locked-box" class="nominate-locked" style="display: none;"></div>
 
-      <div class="slot-group-title" id="assign-title">Who gets what</div>
+      <div class="slot-group-title" id="assign-title">{{ "nominate.who_gets_what" | t }}</div>
       <div class="sub-text" id="assign-summary"></div>
       <div id="assign-list" class="nominate-assign-list"></div>
 
       <div id="save-status" class="status-banner" style="display: none;"></div>
-      <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg">Save List</button>
+      <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg">{{ "nominate.save" | t }}</button>
     </form>
   </div>
 </div>
@@ -59,10 +56,13 @@ lang: "en"
       ['kingdom_war', 'followers_heart'],
       ['standard', 'followers_heart'],
     ];
+    // The in-game chest names (common.chests in _data/<lang>/tools.yml).
     const CHEST_NAMES = {
-      standard: { commanders_will: "Commander's Will", loyal_servant: 'Loyal Servant', followers_heart: "Follower's Heart" },
-      kingdom_war: { commanders_will: 'Honor Vanguard', loyal_servant: 'Fearless Hero', followers_heart: 'Logistics Support' },
+      standard: { commanders_will: t('common.chests.commanders_will'), loyal_servant: t('common.chests.loyal_servant'), followers_heart: t('common.chests.followers_heart') },
+      kingdom_war: { commanders_will: t('common.chests.honor_vanguard'), loyal_servant: t('common.chests.fearless_hero'), followers_heart: t('common.chests.logistics_support') },
     };
+    // The week's name from its number, as the server's weekLabel() does (0 = Off-Week).
+    const weekName = (p) => (Number(p.week) === 0 ? t('common.off_week') : t('common.kw_week', { n: p.week }));
     const GLYPH = { commanders_will: 'gold', loyal_servant: 'purple', followers_heart: 'blue' };
 
     /** Chest for each position of the list, best first (null = reserve). */
@@ -115,34 +115,33 @@ lang: "en"
     let data = null;
 
     async function load() {
-      if (!token || !token.includes('.')) return showError('This link is incomplete. Run /nominate in Discord for a new one.');
+      if (!token || !token.includes('.')) return showError(t('nominate.link_incomplete'));
       try {
         const res = await fetch(`/api/nominate?token=${encodeURIComponent(token)}&t=${Date.now()}`);
         const body = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
         data = body;
       } catch (err) {
-        return showError(`${err.message} Run /nominate in Discord for a new link.`);
+        return showError(t('nominate.load_failed', { error: err.message }));
       }
       const p = data.period;
       if (!p.open) {
-        return showError(`Rewards are closed. The next open ${formatTime(p.nextOpensAt)}, after Friday's capitol event.`);
+        return showError(t('nominate.closed', { when: formatTime(p.nextOpensAt) }));
       }
 
       document.getElementById('display-alliance').textContent = `[${data.alliance.tag}]`;
       document.getElementById('display-period').textContent =
-        `Rank ${data.alliance.rank} · ${p.weekName} rewards · open until ${formatTime(p.closesAt)}`;
+        t('nominate.header', { rank: data.alliance.rank, week: weekName(p), when: formatTime(p.closesAt) });
 
       const banner = document.getElementById('set2-banner');
       if (!p.kwWeek) {
-        banner.textContent = "👑 King's Commendation only this week (no Kingdom War).";
+        banner.textContent = t('nominate.banner_off_week');
       } else if (p.result === 'won') {
-        banner.textContent = "⚔️ Kingdom War won: King of Battle Reward chests are open too.";
+        banner.textContent = t('nominate.banner_won');
       } else if (p.result === 'lost') {
-        banner.textContent = "🛡️ Kingdom War lost: King's Commendation only this week.";
+        banner.textContent = t('nominate.banner_lost');
       } else {
-        banner.textContent =
-          `⏳ Waiting for Saturday's battle result (about ${formatTime(p.battleEndsAt)}). If it's won, King of Battle Reward chests open too and your list is re-sorted. The King hands out after the result, so nobody's chest changes.`;
+        banner.textContent = t('nominate.banner_pending', { when: formatTime(p.battleEndsAt) });
       }
 
       locked = data.alliance.handedOut || [];
@@ -161,14 +160,14 @@ lang: "en"
       const lockedBox = document.getElementById('locked-box');
       lockedBox.style.display = locked.length ? 'block' : 'none';
       lockedBox.innerHTML = locked.length
-        ? `<div class="slot-group-title">✓ Already handed out by the King (${locked.length})</div>
-           <p class="sub-text">These chests are given in the game, so they stay with these players whatever your list says. The list below shares out the rest.</p>` +
+        ? `<div class="slot-group-title">${escapeHtml(t('nominate.handed_out_title', { n: locked.length }))}</div>
+           <p class="sub-text">${escapeHtml(t('nominate.handed_out_help'))}</p>` +
           locked
             .map(
               (l) => `<div class="nominate-assign-row is-locked">
                 <span class="slot-num">🔒</span>
                 <span class="player-ign">${escapeHtml(l.name)}</span>
-                <span class="nominate-chest"><span class="chest-glyph ${GLYPH[l.chest]}"></span><span>${CHEST_NAMES[l.pool][l.chest]}</span></span>
+                <span class="nominate-chest"><span class="chest-glyph ${GLYPH[l.chest]}"></span><span>${escapeHtml(CHEST_NAMES[l.pool][l.chest])}</span></span>
               </div>`,
             )
             .join('')
@@ -177,11 +176,11 @@ lang: "en"
 
       const cell = (c) =>
         c
-          ? `<span class="chest-glyph ${GLYPH[c.chest]}"></span><span>${CHEST_NAMES[c.pool][c.chest]}</span>`
-          : '<span class="nominate-reserve">Reserve</span>';
+          ? `<span class="chest-glyph ${GLYPH[c.chest]}"></span><span>${escapeHtml(CHEST_NAMES[c.pool][c.chest])}</span>`
+          : `<span class="nominate-reserve">${escapeHtml(t('nominate.reserve'))}</span>`;
 
       let html = `<div class="nominate-assign-row nominate-assign-head">
-          <span>#</span><span>Player</span><span>${pending ? 'Now' : 'Chest'}</span>${pending ? '<span>If won</span>' : ''}
+          <span>#</span><span>${escapeHtml(t('nominate.col_player'))}</span><span>${escapeHtml(t(pending ? 'nominate.col_now' : 'nominate.col_chest'))}</span>${pending ? `<span>${escapeHtml(t('nominate.col_if_won'))}</span>` : ''}
         </div>`;
       for (let i = 0; i < rows; i++) {
         const name = names[i];
@@ -197,15 +196,20 @@ lang: "en"
       const open = now.length;
       const missing = Math.max(0, open - names.length);
       const reserves = Math.max(0, names.length - open);
-      document.getElementById('assign-summary').textContent =
-        `${open} chests now${pending ? ` · ${ifWon.length} if won` : ''} · ${names.length} named` +
-        (missing ? ` · ${missing} still need a name` : '') +
-        (reserves ? ` · ${reserves} reserve${reserves === 1 ? '' : 's'}` : '');
+      document.getElementById('assign-summary').textContent = [
+        t('nominate.chests_now', { n: open }),
+        pending ? t('nominate.chests_if_won', { n: ifWon.length }) : '',
+        t('nominate.named', { n: names.length }),
+        missing ? t('nominate.still_need_name', { n: missing }) : '',
+        reserves ? tn('nominate.reserves', reserves) : '',
+      ]
+        .filter(Boolean)
+        .join(' · ');
 
       const dupes = duplicatesInInput();
       const btn = document.getElementById('btn-submit');
       btn.disabled = names.length === 0 || dupes.length > 0;
-      btn.textContent = dupes.length ? `${dupes[0]} is listed twice` : 'Save List';
+      btn.textContent = dupes.length ? t('nominate.listed_twice', { name: dupes[0] }) : t('nominate.save');
     }
 
     input.addEventListener('input', render);
@@ -215,7 +219,7 @@ lang: "en"
       const btn = document.getElementById('btn-submit');
       const status = document.getElementById('save-status');
       btn.disabled = true;
-      btn.textContent = 'Saving...';
+      btn.textContent = t('nominate.saving');
       try {
         const res = await fetch('/api/nominate', {
           method: 'POST',
@@ -225,10 +229,10 @@ lang: "en"
         const result = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
         status.className = 'status-banner status-success';
-        status.textContent = `✅ Saved. The King sees your list. You can change it until ${formatTime(data.period.closesAt)}.`;
+        status.textContent = t('nominate.saved', { when: formatTime(data.period.closesAt) });
       } catch (err) {
         status.className = 'status-banner warning';
-        status.textContent = `Could not save: ${err.message}`;
+        status.textContent = t('nominate.save_failed', { error: err.message });
       }
       status.style.display = 'block';
       render();
@@ -238,11 +242,9 @@ lang: "en"
     function formatTime(iso) {
       const d = new Date(iso);
       const local = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
-      const gt = new Date(d.getTime() - 2 * 3600000);
-      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      const hh = String(gt.getUTCHours()).padStart(2, '0');
-      const mm = String(gt.getUTCMinutes()).padStart(2, '0');
-      return `${local} (${days[gt.getUTCDay()]} ${hh}:${mm} GT)`;
+      // Game Time is UTC-2 (the "Etc/GMT+2" zone); the day name in the reader's language.
+      const gt = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'Etc/GMT+2' });
+      return `${local} (${t('common.game_time', { time: gt })})`;
     }
 
     function showError(msg) {
