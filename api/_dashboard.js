@@ -201,10 +201,11 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
   }
   if (w.type === 'bar') {
     options.vertical = Boolean(o.vertical);
-    // Stacked: 'sum' (totals) or 'percent' (each bar to 100%); scale: colours dark → accent.
+    // Stacked: 'sum' (totals) or 'percent' (each bar to 100%).
     if (o.stacked === 'sum' || o.stacked === 'percent') options.stacked = o.stacked;
-    if (o.scale) options.scale = true;
   }
+  // scale: traffic-light colours, red (low) → yellow → green (high).
+  if ((w.type === 'bar' || w.type === 'progress') && o.scale) options.scale = true;
   if (w.type === 'pie') options.donut = o.donut !== false;
   if (w.type === 'progress') {
     const target = Number(o.target);

@@ -636,12 +636,13 @@ lang: "en"
               <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>Stacked: each bar to 100%</option>
             </select>`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> Vertical bars${o.stacked ? '' : ' (instead of a leaderboard)'}</label>`;
-          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> Colours as a scale (low → high, first column darkest)</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> 🚦 Red → yellow → green (low → high): ${(o.valueCols || []).length > 1 ? 'first column red, last green' : 'by size, biggest green'}</label>`;
         }
         if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> Donut (ring)</label>`;
         if (w.type === 'progress') {
           html += `<label for="ed-target">Target for everyone</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="e.g. 15M or 15000000">`;
           html += `<label for="ed-targetcol">…or a column of targets</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: '(use the number above)' })}`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> 🚦 Red → yellow → green by how close each is to the target</label>`;
         }
         if (w.type === 'table') {
           html += `<label for="ed-hlcol">Highlight rows where</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: '(no highlight)' })}`;
