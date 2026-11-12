@@ -1,0 +1,114 @@
+/* ==========================================================================
+   FEATURE: CAPITOL ROTATION CHART (Rules page, js/capitol-rotation.js)
+   The four weeks of the cycle as cards, like the old rotation picture: week name,
+   crown for the seat, the alliance that captures the Capitol, and the Friday date.
+   ========================================================================== */
+
+.rotation-board {
+  max-width: 820px;
+  margin: 1.25rem auto 0.5rem;
+}
+
+.rotation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.rotation-week {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0.6rem 0.8rem;
+  text-align: center;
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.rotation-week-head {
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 -0.6rem 0.4rem;
+  padding: 0.45rem 0.4rem;
+  font-family: var(--font-headers);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  background: var(--surface-elevated);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.rotation-crown {
+  font-size: 2.1rem;
+  line-height: 1.2;
+}
+
+.rotation-seat {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.rotation-tag {
+  font-family: var(--font-headers);
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: var(--text-main);
+  overflow-wrap: anywhere;
+}
+
+.rotation-tag.is-empty {
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: normal;
+  color: var(--text-muted);
+}
+
+.rotation-override {
+  font-size: 0.72rem;
+  color: var(--status-warning);
+}
+
+.rotation-date {
+  margin-top: auto;
+  padding-top: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--text-main);
+}
+
+/* This week: highlighted like the King's scheduler's active week */
+.rotation-week.is-current {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 1px var(--accent-color), 0 0 14px color-mix(in srgb, var(--accent-color) 35%, transparent);
+}
+
+/* Earlier weeks of this cycle: already captured */
+.rotation-week.is-done {
+  opacity: 0.6;
+}
+
+.rotation-note,
+.rotation-source {
+  margin: 0.7rem 0 0;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.rotation-note {
+  color: var(--text-main);
+}
+
+@media (max-width: 640px) {
+  .rotation-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2x2 on phones */
+  }
+}

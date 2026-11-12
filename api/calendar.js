@@ -1,5 +1,10 @@
 // api/calendar.js
-import { getCycleState, getScheduleSlot, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
+import {
+  describeRotation,
+  getCycleState,
+  getScheduleSlot,
+  DEFAULT_CALENDAR_CONFIG,
+} from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { getRoleColors } from './_role_colors.js';
@@ -61,9 +66,10 @@ export default async function handler(req, res) {
     }
   }
   // Same colour the rest of the site shows for this alliance (/api/state's resolution).
-  const capitolHolderColor = holderTag
-    ? sanitizeAlliances(alliances, await getRoleColors())[holderTag]?.color || null
-    : null;
+  const coloured = sanitizeAlliances(alliances, await getRoleColors());
+  const capitolHolderColor = holderTag ? coloured[holderTag]?.color || null : null;
+  // The cycle's four weeks for the Capitol Rotation chart on the Rules page.
+  currentStatus.rotation = describeRotation(currentStatus, calConfig, coloured, activeSchedule);
 
   // 1. Generate System Milestones (Capitol Captures & War Battle Days)
   const cycleMilestones = [];

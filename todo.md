@@ -28,8 +28,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 - [ ] **Alliance Might & Scoreboard OCR**
   - Read player and alliance Might from in-game Duel/Rank screenshots (Gemini Flash vision).
 
-- [ ] **Infographic Translation Pipeline**
-  - Script to replace text in Canva SVG exports for all 8 languages.
+- [x] **Infographics** (decided 2026-11-12): the designed pictures were replaced by live, translated components. The Capitol Rotation chart is drawn from the calendar; the reward-distribution and territory-map pictures were removed (the rewards card and the live map replace them). Game screenshots in the guides stay as they are (players see the game in their own language).
 
 - [ ] **Tool Translations** (in progress, leaders' tools first)
   - Tool text lives in `_data/en/tools.yml`; changed sections are translated by Gemini on push (`_scripts/translate_sections.rb`, see HOWTO "Add or change text in a tool").
@@ -55,7 +54,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 ## 🟢 Low Priority (Reference Tools & Polish)
 
 - [ ] **Building Prerequisite Interactive Tree** — dependency viewer for Keep levels 1–30+.
-- [ ] **Interactive Capitol Rotation Tool (`rules.html`)** — replace the static rotation picture with a 3-week simulator driven by the live NAP ranks.
+- [x] **Interactive Capitol Rotation Tool (`rules.html`)** — the static picture is replaced by a live 4-week chart from the calendar (`js/capitol-rotation.js`).
 - [ ] **T10 Calculator Mobile Polish** — node scaling, connector alignment and touch targets on narrow screens.
 - [ ] **Distinct page titles** — every page currently has the same browser-tab title ("Last Asylum Guide" twice).
 - [ ] **Visual-diff coverage** — add the nomination page and the King's console to `tools/visual-diff`.

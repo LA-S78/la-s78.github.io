@@ -714,3 +714,16 @@ live_data:
   failed: "⚠️ Couldn't load the latest data. Check your connection and refresh the page."
   offline: "📴 Offline: showing the data saved on this device ({when})."
 
+
+# The Capitol Rotation chart on the Rules page (js/capitol-rotation.js), drawn from the live
+# calendar: which alliance captures the Capitol each week of the 4-week cycle.
+capitol_rotation:
+  seat: "Rank #{rank}"
+  this_week: "This week"
+  captures: "Captures {date}"
+  captured: "Captured {date}"
+  override: "Override: rank #{rank} defends instead of #{seat}"
+  no_alliance: "No alliance at this rank yet"
+  off_week_note: "No Kingdom War this week: the #4 alliance holds the Capitol."
+  kw_note: "Kingdom War week: the battle is on Saturday."
+  schedule_note: "From the live calendar and NAP standings. Overrides set by the Stewards are shown here as soon as they're saved."
