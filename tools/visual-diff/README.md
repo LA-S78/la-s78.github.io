@@ -27,9 +27,26 @@ npx playwright install chromium
 Then, from the repository root:
 
 ```bash
-node tools/visual-diff/run.mjs --base main            # your working copy vs main (~10 min)
+node tools/visual-diff/run.mjs --base main            # your working copy vs main
 node tools/visual-diff/run.mjs --base main --quick    # default theme, desktop only (~2 min)
 ```
+
+**What makes it faster** (November 2026):
+
+- Only English is built: only `/en/` pages are compared, and every language is a full build.
+- A build of a branch or commit is kept (in the system temp folder, by commit id, newest 4)
+  and reused, so running against the same `main` again skips that build. `--no-cache`
+  rebuilds it.
+- Only pages a change can reach are compared. The two builds are compared file by file;
+  a page is opened if its own HTML changed or if a changed file is named in the page or in
+  a script, stylesheet or data file the page names (followed by file name). Service workers
+  and `api/` are left out (the tests block or replace them). If a changed file isn't named
+  anywhere, every page is compared to be safe. The report says how many pages were skipped;
+  `--all` compares every page anyway. A change to `js/dashboard-widgets.js` now opens the
+  dashboard only; one to `css/style.css` still opens every page.
+- Your working copy is built from a temporary copy of its files, so the build never touches
+  your folder (it used to leave changes in `_data/*/ui.yml`), and the temporary copies are
+  deleted at the end.
 
 The result is in `tools/visual-diff/output/report.md`. For each difference, the report
 gives the page, state, theme and width, the elements whose styles changed, and
@@ -37,7 +54,7 @@ gives the page, state, theme and width, the elements whose styles changed, and
 
 Other options: `--head <branch or site folder>`, `--pages <regex>`,
 `--states <regex>`, `--themes default,miasma`, `--widths 390`, `--workers 4`,
-`--out <folder>`, `--save-all` (keep the screenshots of every view, not only the ones that
+`--out <folder>`, `--all` (every page, see above), `--no-cache`, `--save-all` (keep the screenshots of every view, not only the ones that
 differ: useful to look at a new state), `--ignore-vars` (leave CSS variables such as
 `--accent-color` out of the style comparison: for changes that add or rename variables, which
 otherwise show up on every element. Real properties are still compared with the variables
