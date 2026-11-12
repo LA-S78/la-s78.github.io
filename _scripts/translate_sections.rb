@@ -31,7 +31,7 @@ Encoding.default_external = Encoding::UTF_8
 $stdout.sync = true
 Dir.chdir(File.expand_path('..', __dir__))
 
-FILES = %w[tools ui].freeze # _data/en/<name>.yml files translated this way
+FILES = %w[tools ui server].freeze # _data/en/<name>.yml files translated this way
 # Sections left alone: in ui.yml, guide titles and their tab anchors come from the guides'
 # own translations (_scripts/sync_ui_data.rb adds them at build time); Gemini mustn't replace them.
 SKIP_SECTIONS = { 'ui' => %w[guides nav_anchors] }.freeze

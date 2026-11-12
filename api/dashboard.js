@@ -30,13 +30,18 @@ import {
   viewerAccess,
   visibleDashboard,
 } from './_dashboard.js';
+import { inLanguage, say, utcTime } from './_messages.js';
 
 const calendarConfig = (gist) => ({
   ...DEFAULT_CALENDAR_CONFIG,
   ...gistJson(gist, 'calendar-state.json', {}),
 });
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
+  return inLanguage(req, () => respond(req, res));
+}
+
+async function respond(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (!['GET', 'POST'].includes(req.method)) {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -50,7 +55,7 @@ export default async function handler(req, res) {
   const session = verifySessionToken(pass, botToken);
   if (!session) {
     return res.status(401).json({
-      error: 'Sign in with Discord (top right) to see your alliance dashboard.',
+      error: say('api_dashboard.signed_out'),
       code: 'login',
     });
   }
@@ -61,7 +66,9 @@ export default async function handler(req, res) {
   try {
     gist = await readGist({ timeoutMs: 5000 });
   } catch (err) {
-    return res.status(503).json({ error: `Could not load the dashboard: ${err.message}` });
+    return res
+      .status(503)
+      .json({ error: say('api_dashboard.load_failed', { reason: err.message }) });
   }
   const mapState = gistJson(gist, 'map-state.json');
   const alliances = mapState.alliances || {};
@@ -74,8 +81,7 @@ export default async function handler(req, res) {
     (steward ? firstByRank(alliances) : null);
   if (!tag) {
     return res.status(404).json({
-      error:
-        "We couldn't tell which alliance you're in. The site finds it from your alliance role in the NAP Discord server, or a [TAG] at the start of your server nickname. Fix that in Discord, then use Refresh Access in your account card (top right).",
+      error: say('api_dashboard.no_alliance'),
       code: 'no_alliance',
     });
   }
@@ -119,9 +125,7 @@ export default async function handler(req, res) {
  */
 async function editDashboard(req, res, { gist, tag, access, session }) {
   if (!access.leader) {
-    return res
-      .status(403)
-      .json({ error: "Only your alliance's R4s and R5s can change the dashboard." });
+    return res.status(403).json({ error: say('api_dashboard.leaders_only') });
   }
   const body = req.body || {};
   const file = dashboardFile(tag);
@@ -149,9 +153,9 @@ async function editDashboard(req, res, { gist, tag, access, session }) {
     const widget = readDashboard(gistJson(gist, file, {}), tag).widgets.find(
       (w) => w.id === body.id,
     );
-    if (!widget) return res.status(404).json({ error: 'That chart was removed.' });
+    if (!widget) return res.status(404).json({ error: say('api_dashboard.chart_removed') });
     if (!['sheet', 'doc'].includes(widget.source?.kind)) {
-      return res.status(400).json({ error: "This chart isn't linked to a Google Sheet or Doc." });
+      return res.status(400).json({ error: say('api_dashboard.not_linked') });
     }
     try {
       edit = { action: 'sync-data', id: body.id, data: await fetchSourceTable(widget.source) };
@@ -159,7 +163,7 @@ async function editDashboard(req, res, { gist, tag, access, session }) {
       return res.status(400).json({ error: err.message });
     }
   } else if (body.action === 'sync-data') {
-    return res.status(400).json({ error: 'Unknown change.' }); // only after a fetch, above
+    return res.status(400).json({ error: say('api_dashboard.unknown_change') }); // only after a fetch, above
   }
 
   try {
@@ -180,7 +184,9 @@ async function editDashboard(req, res, { gist, tag, access, session }) {
     return res.status(200).json({ dashboard: visibleDashboard(out.dashboard, true) });
   } catch (err) {
     console.error('Dashboard not saved:', err);
-    return res.status(500).json({ error: `Could not save: ${err.message}` });
+    return res
+      .status(500)
+      .json({ error: say('api_dashboard.save_failed', { reason: err.message }) });
   }
 }
 
@@ -188,18 +194,18 @@ async function editDashboard(req, res, { gist, tag, access, session }) {
 function nominateLink(req, res, { gist, mapState, tag, access }) {
   if (!access.canNominate) {
     return res.status(403).json({
-      error: 'Only your R5 can open the nomination page here. Run /nominate in Discord.',
+      error: say('api_dashboard.r5_only_nominate'),
     });
   }
   const period = getRewardPeriod(Date.now(), calendarConfig(gist));
   if (!period.open) {
     return res.status(409).json({
-      error: `Rewards are closed until ${new Date(period.nextOpensAt).toUTCString()}.`,
+      error: say('api_dashboard.rewards_closed', { when: utcTime(period.nextOpensAt) }),
     });
   }
   const rank = Number(mapState.alliances?.[tag]?.rank);
   if (!Number.isFinite(rank) || rank < 1 || rank > 50) {
-    return res.status(409).json({ error: `[${tag}] has no rank in the standings.` });
+    return res.status(409).json({ error: say('api_dashboard.no_rank', { tag }) });
   }
   const token = createToken(
     {

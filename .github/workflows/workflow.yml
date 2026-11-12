@@ -65,7 +65,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
           # Force stage the directories first so Git registers new untracked files
-          git add _source/ _data/*/tools.yml _data/*/ui.yml _scripts/translation_state.json 2>/dev/null || git add _source/
+          git add _source/ _data/*/tools.yml _data/*/ui.yml _data/*/server.yml _scripts/translation_state.json 2>/dev/null || git add _source/
           
           # Safely check the staged index for differences
           if git diff --cached --quiet; then

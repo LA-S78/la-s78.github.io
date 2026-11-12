@@ -4,6 +4,7 @@
 // the channels and role they typed really are in it. Helpers, not an endpoint.
 
 import { matchesRoleKeyword } from './_officer_roles.js';
+import { say } from './_messages.js';
 
 const DISCORD_API = 'https://discord.com/api/v10';
 const ADMINISTRATOR = 0x8n;
@@ -63,34 +64,29 @@ export async function checkTargetServer({
   // The bot is in the server (the server, with its roles, is only visible to the bot then)
   const guildRes = await get(`/guilds/${guildId}`);
   if (guildRes.status === 403 || guildRes.status === 404) {
-    return fail(
-      400,
-      'The bot is not in this server. Click "Authorize Bot" (step 1), add it to your server, then register.',
-    );
+    return fail(400, say('api_register.bot_not_in_server'));
   }
-  if (!guildRes.ok) return fail(502, `Discord could not check the server (${guildRes.status}).`);
+  if (!guildRes.ok)
+    return fail(502, say('api_register.server_check_failed', { status: guildRes.status }));
   const guild = await guildRes.json();
 
   // The person registering may manage it (Stewards may register on an alliance's behalf)
   if (!steward) {
     if (!uid) {
-      return fail(403, 'This link is from before a security update. Run /registerbot again.');
+      return fail(403, say('api_register.old_link'));
     }
     const isOwner = guild.owner_id && guild.owner_id === uid;
     if (!isOwner) {
       const memberRes = await get(`/guilds/${guildId}/members/${uid}`);
       if (memberRes.status === 404) {
-        return fail(403, `You aren't a member of "${guild.name}". Register a server you manage.`);
+        return fail(403, say('api_register.not_member', { server: guild.name }));
       }
       if (!memberRes.ok) {
-        return fail(502, `Discord could not check your roles (${memberRes.status}).`);
+        return fail(502, say('api_register.roles_check_failed', { status: memberRes.status }));
       }
       const member = await memberRes.json();
       if (!canManageServer(guild, member.roles || [])) {
-        return fail(
-          403,
-          `You need Administrator or Manage Server in "${guild.name}" to link it. Ask its owner, or have them run /registerbot.`,
-        );
+        return fail(403, say('api_register.needs_manage', { server: guild.name }));
       }
     }
   }
@@ -98,34 +94,34 @@ export async function checkTargetServer({
   // The channels and role typed are in this server
   const channelsRes = await get(`/guilds/${guildId}/channels`);
   if (!channelsRes.ok) {
-    return fail(502, `Discord could not list the server's channels (${channelsRes.status}).`);
+    return fail(502, say('api_register.channels_check_failed', { status: channelsRes.status }));
   }
   const channels = await channelsRes.json();
   const channelIds = new Set((Array.isArray(channels) ? channels : []).map((c) => c.id));
   if (!channelIds.has(alertChannelId)) {
     return fail(
       400,
-      `The Operations Alert Channel (${alertChannelId}) isn't in "${guild.name}" (or the bot can't see it). Copy its ID again.`,
+      say('api_register.alert_channel_missing', { id: alertChannelId, server: guild.name }),
     );
   }
   if (!channelIds.has(officerChannelId)) {
     return fail(
       400,
-      `The Officer Ticket Intake Channel (${officerChannelId}) isn't in "${guild.name}" (or the bot can't see it). Copy its ID again.`,
+      say('api_register.officer_channel_missing', { id: officerChannelId, server: guild.name }),
     );
   }
   const roles = Array.isArray(guild.roles) ? guild.roles : [];
   if (alertRoleId && !roles.some((r) => r.id === alertRoleId)) {
     return fail(
       400,
-      `The Default Alert Role (${alertRoleId}) isn't a role in "${guild.name}". Copy its ID again, or leave it empty for @everyone.`,
+      say('api_register.alert_role_missing', { id: alertRoleId, server: guild.name }),
     );
   }
 
   // Delegated role names that match no role: saved anyway (the role may be made later)
   const warnings = delegatedRoles
     .filter((name) => !roles.some((r) => matchesRoleKeyword(r.name, name)))
-    .map((name) => `No role in "${guild.name}" matches "${name}" yet; it will work once one does.`);
+    .map((name) => say('api_register.role_not_found', { server: guild.name, role: name }));
 
   return { ok: true, warnings, serverName: guild.name || '' };
 }

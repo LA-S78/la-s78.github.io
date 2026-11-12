@@ -215,6 +215,14 @@ A game term that should always read the same goes in `_data/terminology.json` in
 Keep sections to about 25–60 strings. To see what would be sent, run
 `ruby _scripts/translate_sections.rb --check`.
 
+**Messages from the server** (errors and confirmations the site's `api/` sends back, such
+as "Sign in with Discord…") work the same way, from `_data/en/server.yml` (sections start
+with `api_`). In the code, write `say('api_dashboard.chart_removed')` (or
+`say('api_dashboard.no_rank', { tag })`) from `api/_messages.js`, and wrap a new endpoint's
+handler in `inLanguage(req, …)` so it answers in the page's language (the page sends it
+in an `X-Site-Lang` header, added by `js/i18n.js`). Technical messages for administrators
+(server set-up, raw Discord errors) can stay as plain English text.
+
 ---
 
 ## Change styles (CSS) safely

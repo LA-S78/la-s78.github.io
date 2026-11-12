@@ -3,8 +3,13 @@
 // Handles creating, deleting, modifying events
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken } from './_tokens.js';
+import { inLanguage, say } from './_messages.js';
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
+  return inLanguage(req, () => respond(req, res));
+}
+
+async function respond(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -21,7 +26,7 @@ export default async function handler(req, res) {
   const tokenPayload = verifyToken(token, botSecret, { action: 'manage_events' });
   if (!tokenPayload) {
     return res.status(401).json({
-      error: 'Invalid, tampered, or expired session token. Please re-run /calendar in Discord.',
+      error: say('api_events.session_invalid'),
     });
   }
 
@@ -49,24 +54,22 @@ export default async function handler(req, res) {
       } = eventData || {};
 
       if (!title || !date || !time_gt) {
-        return res.status(400).json({ error: 'Title, Date, and Game Time are required.' });
+        return res.status(400).json({ error: say('api_events.required_fields') });
       }
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-        return res.status(400).json({ error: 'Date must be formatted as YYYY-MM-DD.' });
+        return res.status(400).json({ error: say('api_events.date_format') });
       }
 
       // 5-Minute Snapping Validation
       if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time_gt)) {
-        return res
-          .status(400)
-          .json({ error: 'Game Time must be formatted as HH:MM (00:00 to 23:59).' });
+        return res.status(400).json({ error: say('api_events.time_format') });
       }
 
       const [hh, mm] = time_gt.split(':').map(Number);
       if (mm % 5 !== 0) {
         return res.status(400).json({
-          error: 'Game Time must be in 5-minute increments (:00, :05, :10, :15, etc.).',
+          error: say('api_events.time_step'),
         });
       }
 
@@ -86,7 +89,7 @@ export default async function handler(req, res) {
         const rawRole = String(custom_role_id || '').trim();
         if (!/^\d{17,20}$/.test(rawRole)) {
           return res.status(400).json({
-            error: 'Target Specific Role requires a valid 17-20 digit Discord Role ID.',
+            error: say('api_events.role_id_needed'),
           });
         }
         cleanCustomRoleId = rawRole;
@@ -145,7 +148,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
-        message: `Operation "${newEvent.title}" published successfully.`,
+        message: say('api_events.published', { title: newEvent.title }),
         event: newEvent,
       });
     }
@@ -158,7 +161,7 @@ export default async function handler(req, res) {
 
       const targetIndex = calendarState.custom_events.findIndex((e) => e.id === eventId);
       if (targetIndex === -1) {
-        return res.status(404).json({ error: 'Event not found or already deleted.' });
+        return res.status(404).json({ error: say('api_events.not_found') });
       }
 
       const targetEvt = calendarState.custom_events[targetIndex];
@@ -170,7 +173,7 @@ export default async function handler(req, res) {
       // Alliance Leaders can ONLY delete events matching their exact alliance tag.
       if (targetScope !== currentCallerScope) {
         return res.status(403).json({
-          error: 'Access Denied: You cannot modify or delete events outside your assigned scope.',
+          error: say('api_events.out_of_scope'),
         });
       }
 
@@ -185,7 +188,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         success: true,
-        message: `Deleted operation: ${targetEvt.title}`,
+        message: say('api_events.deleted', { title: targetEvt.title }),
       });
     }
 

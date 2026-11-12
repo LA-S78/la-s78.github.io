@@ -6,6 +6,11 @@
 // hosts its downloads redirect to), with a timeout and a size cap, so a dashboard can't be
 // used to make the server fetch anything else.
 
+import { say, sayCount } from './_messages.js';
+
+/** An error whose message is written for the leader (shown as it is). */
+const forLeader = (message) => Object.assign(new Error(message), { forLeader: true });
+
 const MAX_BYTES = 2 * 1024 * 1024;
 const TIMEOUT_MS = 8000;
 
@@ -25,16 +30,16 @@ export function sourceRequest(src) {
   try {
     url = new URL(String(src?.url || '').trim());
   } catch {
-    return { error: 'Paste the full link (starting https://docs.google.com/…).' };
+    return { error: say('api_sheets.full_link') };
   }
   if (url.protocol !== 'https:' || url.hostname !== 'docs.google.com') {
-    return { error: 'Only Google Sheets and Google Docs links (docs.google.com) can be used.' };
+    return { error: say('api_sheets.google_only') };
   }
   const parts = url.pathname.split('/').filter(Boolean);
   const gid = url.searchParams.get('gid') || (url.hash.match(/gid=(\d+)/) || [])[1] || '';
   const range = String(src.range || '').trim();
   if (range && !/^[A-Za-z]{1,3}\d{0,7}(:[A-Za-z]{1,3}\d{0,7})?$/.test(range)) {
-    return { error: 'The range should look like A1:D20 (or leave it empty).' };
+    return { error: say('api_sheets.range_format') };
   }
   const table = Math.max(1, Math.min(50, parseInt(src.table, 10) || 1));
 
@@ -82,7 +87,7 @@ export function sourceRequest(src) {
       };
     }
   }
-  return { error: "That link isn't a Google Sheet or Google Doc." };
+  return { error: say('api_sheets.not_sheet_or_doc') };
 }
 
 /** A CSV text as rows of cells ("quoted, cells" and doubled quotes allowed). */
@@ -162,7 +167,7 @@ async function googleGet(url, { timeoutMs }) {
   let at = url;
   for (let hop = 0; hop < 5; hop++) {
     if (!isGoogleHost(new URL(at).hostname)) {
-      throw new Error('Google sent the download somewhere unexpected, so it was not fetched.');
+      throw forLeader(say('api_sheets.unexpected_redirect'));
     }
     const res = await fetch(at, {
       redirect: 'manual',
@@ -177,7 +182,7 @@ async function googleGet(url, { timeoutMs }) {
     }
     return res;
   }
-  throw new Error('Too many redirects from Google.');
+  throw forLeader(say('api_sheets.too_many_redirects'));
 }
 
 /**
@@ -193,22 +198,18 @@ export async function fetchSourceTable(src, { timeoutMs = TIMEOUT_MS } = {}) {
     res = await googleGet(req.fetchUrl, { timeoutMs });
   } catch (err) {
     if (err.name === 'TimeoutError' || err.name === 'AbortError') {
-      throw new Error('Google took too long to answer. Try again in a moment.');
+      throw forLeader(say('api_sheets.too_slow'));
     }
-    throw err.message?.startsWith('Google') || err.message?.startsWith('Too many')
-      ? err
-      : new Error(`Couldn't reach Google (${err.message}).`);
+    throw err.forLeader ? err : forLeader(say('api_sheets.unreachable', { reason: err.message }));
   }
   const notShared =
-    src.kind === 'doc'
-      ? 'Google said no: publish the Doc (File → Share → Publish to web), then use that link.'
-      : 'Google said no: share the sheet as "Anyone with the link can view", or use File → Share → Publish to web.';
+    src.kind === 'doc' ? say('api_sheets.doc_not_shared') : say('api_sheets.sheet_not_shared');
   if (res.status === 401 || res.status === 403 || res.status === 404) throw new Error(notShared);
-  if (!res.ok) throw new Error(`Google answered with an error (${res.status}). Check the link.`);
+  if (!res.ok) throw new Error(say('api_sheets.google_error', { status: res.status }));
   const length = Number(res.headers.get('content-length') || 0);
-  if (length > MAX_BYTES) throw new Error('That sheet is too big to read (over 2 MB).');
+  if (length > MAX_BYTES) throw new Error(say('api_sheets.too_large'));
   const body = await res.text();
-  if (body.length > MAX_BYTES) throw new Error('That sheet is too big to read (over 2 MB).');
+  if (body.length > MAX_BYTES) throw new Error(say('api_sheets.too_large'));
   const type = res.headers.get('content-type') || '';
 
   if (req.format === 'csv') {
@@ -216,7 +217,7 @@ export async function fetchSourceTable(src, { timeoutMs = TIMEOUT_MS } = {}) {
     if (/text\/html/i.test(type) || /^\s*<!doctype html|^\s*<html/i.test(body))
       throw new Error(notShared);
     const data = toData(parseCsv(body));
-    if (!data.columns.length) throw new Error('That sheet (or range) is empty.');
+    if (!data.columns.length) throw new Error(say('api_sheets.empty'));
     return data;
   }
   if (/accounts\.google\.com|ServiceLogin/i.test(body)) throw new Error(notShared);
@@ -225,8 +226,8 @@ export async function fetchSourceTable(src, { timeoutMs = TIMEOUT_MS } = {}) {
     const count = (body.match(/<table/gi) || []).length;
     throw new Error(
       count
-        ? `That Doc has ${count} table${count === 1 ? '' : 's'}; there's no table ${req.table}.`
-        : 'That Doc has no table in it.',
+        ? sayCount('api_sheets.no_such_table', count, { table: req.table })
+        : say('api_sheets.no_table'),
     );
   }
   return toData(rows);
