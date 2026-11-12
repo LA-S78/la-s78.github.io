@@ -1,0 +1,227 @@
+# Translated automatically from _data/en/tools.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+common:
+  sign_in_discord: Увійти через Discord
+  sign_in_again: Увійти знову
+  not_saved: 'Не збережено: {error}'
+  cancel: Скасувати
+  save: "\U0001F4BE Зберегти"
+  saving: Зберігаю…
+  edit: Редагувати
+  delete: Видалити
+  remove: Прибрати
+  undo: Скасувати
+  move_up: Вгору
+  move_down: Вниз
+  copied: "✓ Скопійовано"
+  optional: "(необов'язково)"
+  now: зараз
+  duration_days: "{d}д {h}г"
+  duration_hours: "{h}г {m}хв"
+  duration_minutes: "{m}хв"
+  game_time: "{time} GT"
+  your_time: "{time} ваш час"
+  chests:
+    commanders_will: Воля Командира
+    loyal_servant: Відданий Слуга
+    followers_heart: Серце Послідовника
+    honor_vanguard: Авангард Честі
+    fearless_hero: Безстрашний Герой
+    logistics_support: Матеріально-технічне забезпечення
+dashboard:
+  title: Панель Альянсу
+  loading: Завантаження панелі вашого альянсу…
+  view_as: Перегляд як
+  page_title: "[{tag}] Панель Альянсу"
+  subtitle: Панель Альянсу · {view}
+  subtitle_rank: 'Панель Альянсу · Ранг #{rank} · {view}'
+  view_steward: Вигляд стюарда
+  view_leader: Вигляд керівництва
+  view_member: Вигляд учасника
+  sign_in_title: Увійдіть, щоб побачити панель вашого альянсу.
+  sign_in_help: Використовуйте {sign_in} у верхньому правому куті (Discord). Ваш альянс знайдено за вашою роллю NAP на сервері.
+  sign_in_button: Увійти
+  load_failed: Не вдалося завантажити панель. Перевірте з'єднання та оновіть сторінку. ({error})
+  edit_dashboard: "✏️ Редагувати Панель"
+  done_editing: "✓ Редагування завершено"
+  add_chart: "➕ Додати графік або таблицю"
+  editor_label: Редактор графіків або таблиць
+  charts_label: Графіки та таблиці альянсу
+  empty_member: "\U0001F4CA Лідери вашого альянсу ще не додали сюди графіки чи таблиці."
+  empty_editing: "\U0001F4CA Поки немає графіків чи таблиць: використайте “Додати графік або таблицю”."
+  empty_leader: "\U0001F4CA Поки немає графіків чи таблиць. Використайте “Редагувати Панель”, щоб додати їх."
+  visible_members: "\U0001F465 Усі учасники"
+  visible_officers: "\U0001F512 Тільки офіцери"
+  google_sheet: Google Таблиця
+  google_doc: Google Документ
+  synced: синхронізовано {when}
+  updated: Оновлено {when}
+  sync_now: "\U0001F504 Синхронізувати зараз"
+  syncing: "\U0001F504 Синхронізація…"
+  sync_help: Отримати останні дані з таблиці
+  confirm_delete: Видалити "{title}"? Цю дію неможливо скасувати.
+  this_chart: цей графік
+rewards_card:
+  title: "\U0001F512 Щотижневі винагороди"
+  officers: Офіцери
+  open: Відкрито
+  closed: Закрито
+  time_left: залишилось {time}
+  opens_in: відкриється через {time}
+  closes_at: Закривається {when}
+  opens_at: Відкриється {when}, після п'ятничного захоплення Капітолію
+  off_week: Вихідний тиждень
+  kw_won: "\U0001F3C6 Війна Королівств переможна"
+  kw_lost: "\U0001F6E1️ Війна Королівств програна"
+  kw_pending: "⏳ Війна Королівств очікується"
+  set_one: Комендація Короля
+  set_two: Винагорода Короля Битви
+  set_two_if_won: Винагорода Короля Битви, у разі перемоги у війні
+  if_won: якщо перемога
+  no_rank: 'Немає рангу в рейтингу: немає скринь'
+  list_sent: "✅ Список надіслано · {count}"
+  sent_at: Надіслано {when}
+  reserves_one: "({n} резерв)"
+  reserves_few: "({n} резерви)"
+  reserves_other: "({n} резервів)"
+  empty_slots: "{n} порожньо"
+  list_not_sent: "⚠️ Список не надіслано"
+  no_list_closed: Немає списку, поки закрито
+  edit_list: "\U0001F4DD Редагувати"
+  send_list: "\U0001F4DD Надіслати список"
+  ask_r5: R5 або /nominate
+  ask_r5_help: Ваш R5 може відкрити сторінку номінацій звідси або ввести /nominate в Discord.
+  buyout_bonus: "\U0001F6E1️ Викуп: {amount} {chest} у кожному виграному наборі"
+  buyout_bonus_help: Фінансується WLO
+  buyout_threat: 'загроза: {threat}'
+  buyout_cost: "⚖️ Викуп: {amount} {chest} у кожному наборі"
+  buyout_cost_help: Фінансування іншого альянсу цього тижня
+caravan:
+  title: "\U0001F42A Ротація Караванів"
+  picked_count: "{picked}/{total} обрано"
+  members_can_view: "\U0001F465 Учасники можуть переглядати"
+  copy_status: "\U0001F4CB Скопіювати статус"
+  new_week: "\U0001F504 Новий тиждень"
+  member_note: Обирається вашими R4, коли караван готовий.
+  search: Пошук імен…
+  around_now: "⏰ Приблизно зараз"
+  around_now_help: Тільки гравці, доступні зараз
+  available: Доступні цього тижня ({n})
+  picked: Обрані цього тижня ({n})
+  nobody_matches: Ніхто не знайдений.
+  everyone_picked: "Кожен отримав караван цього тижня. \U0001F389"
+  add_players: Додайте гравців нижче.
+  no_players: Ще немає гравців.
+  flexible: гнучкий графік
+  pick: "✓ Обрати"
+  back_to_available: Повернути до доступних
+  name: Ім'я
+  from: З (Game Time)
+  to: До (Game Time)
+  player_name: Ім'я гравця
+  add_from: З 18:00
+  add_to: До 22:00
+  add_from_label: Доступний з (Game Time, необов'язково)
+  add_to_label: Доступний до (Game Time, необов'язково)
+  add: "➕ Додати"
+  times_help: Час вказано за Game Time (UTC-2) і є необов'язковим; залиште порожнім для гравців із гнучким графіком.
+  status_title: "\U0001F42A [{tag}] Ротація Караванів: {picked}/{total} обрано"
+  status_available: 'Доступні: {names}'
+  status_picked: 'Обрані: {names}'
+  nobody: ніхто
+  nobody_yet: поки ніхто
+  copy_prompt: 'Скопіювати статус ротації:'
+  confirm_remove: Видалити {name} з ротації?
+  this_player: цього гравця
+  confirm_new_week: Почати новий тиждень? Усі повернуться до доступних (імена та час залишаться).
+chart_editor:
+  edit_title: "✏️ Редагувати графік або таблицю"
+  new_title: "➕ Новий графік або таблиця"
+  type: Тип
+  type_bar: "\U0001F4CA Гістограма"
+  type_line: "\U0001F4C8 Лінійний"
+  type_pie: "\U0001F369 Круговий"
+  type_progress: "\U0001F3AF Прогрес"
+  type_table: "\U0001F4CB Таблиця"
+  title: Назва
+  title_example: напр. Бали Дуелі Альянсів
+  note: Пояснення
+  note_example: напр. Мінімум 15M балів Дуелі до п'ятничного скидання
+  who_sees: Хто може бачити
+  officers_only: "\U0001F512 Тільки офіцери (R4/R5)"
+  all_members: "\U0001F465 Усі учасники альянсу"
+  data: Дані
+  data_source: Звідки беруться дані
+  paste: "\U0001F4CB Вставити таблицю"
+  link: "\U0001F517 Посилання на Google Таблицю / Документ"
+  paste_help: Скопіюйте комірки з Google Таблиць або Excel (спочатку рядок заголовків) і вставте сюди.
+  tab_name: Назва вкладки (необов'язково)
+  range: Діапазон, напр. A1:D20 (необов'язково)
+  doc_table: Яка таблиця в Документі (1, 2…)
+  load: "⤓ Завантажити з Google"
+  loading: "⤓ Завантаження…"
+  link_help: 'Таблиці: Надати доступ → “Усі, хто має посилання, можуть переглядати” (або Файл → Поділитися → Опублікувати в мережі). Документи: Файл → Поділитися → Опублікувати в мережі. “Синхронізувати зараз” на картці отримує останні числа.'
+  load_first: Спочатку завантажте таблицю (⤓ Завантажити з Google).
+  preview: Попередній перегляд
+  preview_empty: Вставте таблицю вище, щоб побачити графік.
+  size: "{rows} × {columns}"
+  rows_one: "{n} рядок"
+  rows_few: "{n} рядки"
+  rows_other: "{n} рядків"
+  columns_one: "{n} стовпець"
+  columns_few: "{n} стовпці"
+  columns_other: "{n} стовпців"
+  at_most_500: "(максимум 500)"
+  labels: Імена (мітки)
+  numbers_to_show: Числа для відображення
+  numbers: Числа
+  several_columns: Кілька стовпців із числами
+  side_by_side: Поруч
+  stacked_totals: 'З накопиченням: підсумки'
+  stacked_percent: 'З накопиченням: кожен стовпець до 100%'
+  vertical: Вертикальні стовпці
+  vertical_leaderboard: Вертикальні стовпці (замість таблиці лідерів)
+  traffic_columns: "\U0001F6A6 Червоний → жовтий → зелений (низький → високий): перший стовпець червоний, останній зелений"
+  traffic_size: "\U0001F6A6 Червоний → жовтий → зелений (низький → високий): за розміром, найбільший зелений"
+  traffic_reverse: "↕️ Зворотний: низький це добре (зелений), високий це погано (червоний)"
+  traffic_target: "\U0001F6A6 Червоний → жовтий → зелений залежно від наближення до цілі"
+  traffic_target_reverse: "↕️ Зворотний: чим далі нижче цілі, тим краще"
+  donut: Кільцевий
+  target: Ціль для кожного
+  target_example: напр. 15M або 15000000
+  target_column: "…або стовпець цілей"
+  use_number_above: "(використати число вище)"
+  highlight_where: Виділити рядки, де
+  no_highlight: "(без виділення)"
+  at_least: принаймні
+  at_least_example: напр. 300M
+charts:
+  column: Стовпець {n}
+  no_numbers: У вибраному стовпці немає чисел для побудови графіка.
+  line_two_rows: Для лінії потрібно принаймні два рядки.
+  no_positive: У вибраному стовпці немає додатних чисел для побудови графіка.
+  no_targets: Немає чисел (або цілей) для порівняння.
+  no_table: Таблиці ще немає.
+  unknown_type: Невідомий тип графіка.
+  draw_failed: Цей графік не вдалося побудувати ({error}).
+  other: Інше
+  value: Значення
+  total: Разом
+  total_value: 'Разом: {value}'
+  share_of_all: "{value} · {share} від усіх"
+  value_of_target: "{value} із {target}"
+  to_go: 'Залишилось: {value}'
+  target_reached: Ціль досягнуто ✓
+  done: "✓ Готово"
+  reached_target: "{done} із {total} досягли цілі"
+  search: Пошук…
+  search_label: Шукати в цій таблиці
+  matching: "{n} збігається"
+  show_all: Показати всі {n}
+  show_all_rows: Показати всі {n} рядків
+  first_rows: Відображення перших {shown} із {n} рядків.
+  hint_bar: Натисніть або наведіть на стовпець
+  hint_line: Натисніть або наведіть на тиждень
+  hint_pie: Натисніть або наведіть на сектор
+  hint_progress: Натисніть або наведіть на рядок

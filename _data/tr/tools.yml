@@ -1,0 +1,224 @@
+# Translated automatically from _data/en/tools.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+common:
+  sign_in_discord: Discord ile giriş yap
+  sign_in_again: Tekrar giriş yap
+  not_saved: 'Kaydedilmedi: {error}'
+  cancel: İptal
+  save: "\U0001F4BE Kaydet"
+  saving: Kaydediliyor…
+  edit: Düzenle
+  delete: Sil
+  remove: Kaldır
+  undo: Geri al
+  move_up: Yukarı taşı
+  move_down: Aşağı taşı
+  copied: "✓ Kopyalandı"
+  optional: "(isteğe bağlı)"
+  now: şimdi
+  duration_days: "{d}g {h}s"
+  duration_hours: "{h}s {m}d"
+  duration_minutes: "{m}d"
+  game_time: "{time} GT"
+  your_time: "{time} yerel saatiniz"
+  chests:
+    commanders_will: Komutanın İradesi
+    loyal_servant: Sadık Hizmetkar
+    followers_heart: Takipçinin Kalbi
+    honor_vanguard: Onur Öncüsü
+    fearless_hero: Korkusuz Kahraman
+    logistics_support: Lojistik Destek
+dashboard:
+  title: İttifak Paneli
+  loading: İttifak paneliniz yükleniyor…
+  view_as: Görünüm
+  page_title: "[{tag}] İttifak Paneli"
+  subtitle: İttifak Paneli · {view}
+  subtitle_rank: 'İttifak Paneli · Sıra #{rank} · {view}'
+  view_steward: Görevli görünümü
+  view_leader: Yönetim görünümü
+  view_member: Üye görünümü
+  sign_in_title: İttifak panelinizi görmek için giriş yapın.
+  sign_in_help: Sağ üstteki {sign_in} (Discord) seçeneğini kullanın. İttifakınız NAP sunucu rolünüzden bulunur.
+  sign_in_button: Giriş Yap
+  load_failed: Panel yüklenemedi. Bağlantınızı kontrol edip sayfayı yenileyin. ({error})
+  edit_dashboard: "✏️ Paneli Düzenle"
+  done_editing: "✓ Düzenlemeyi bitir"
+  add_chart: "➕ Grafik veya tablo ekle"
+  editor_label: Grafik veya tablo düzenleyici
+  charts_label: İttifak grafikleri ve tabloları
+  empty_member: "\U0001F4CA İttifak liderleriniz henüz burada herhangi bir grafik veya tablo paylaşmadı."
+  empty_editing: "\U0001F4CA Henüz grafik veya tablo yok: “Grafik veya tablo ekle” seçeneğini kullanın."
+  empty_leader: "\U0001F4CA Henüz grafik veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın."
+  visible_members: "\U0001F465 Tüm üyeler"
+  visible_officers: "\U0001F512 Sadece yetkililer"
+  google_sheet: Google E-Tablosu
+  google_doc: Google Dokümanı
+  synced: "{when} senkronize edildi"
+  updated: "{when} güncellendi"
+  sync_now: "\U0001F504 Şimdi senkronize et"
+  syncing: "\U0001F504 Senkronize ediliyor…"
+  sync_help: Tablodaki en son verileri getir
+  confirm_delete: '"{title}" silinsin mi? Bu işlem geri alınamaz.'
+  this_chart: bu grafik
+rewards_card:
+  title: "\U0001F512 Haftalık Ödüller"
+  officers: Yetkililer
+  open: Açık
+  closed: Kapalı
+  time_left: "{time} kaldı"
+  opens_in: "{time} içinde açılacak"
+  closes_at: "{when} kapanıyor"
+  opens_at: "{when}, Cuma günkü başkent etkinliğinden sonra açılır"
+  off_week: Ödül Yok Haftası
+  kw_won: "\U0001F3C6 KW kazanıldı"
+  kw_lost: "\U0001F6E1️ KW kaybedildi"
+  kw_pending: "⏳ KW beklemede"
+  set_one: Kralın Övgüsü
+  set_two: Savaş Kralı Ödülü
+  set_two_if_won: Savaş Kralı Ödülü, eğer savaş kazanılırsa
+  if_won: eğer kazanılırsa
+  no_rank: 'Sıralamada derece yok: sandık verilmez'
+  list_sent: "✅ Liste gönderildi · {count}"
+  sent_at: "{when} gönderildi"
+  reserves_one: "({n} yedek)"
+  reserves_other: "({n} yedek)"
+  empty_slots: "{n} boş slot"
+  list_not_sent: "⚠️ Liste gönderilmedi"
+  no_list_closed: Kapalıyken liste yok
+  edit_list: "\U0001F4DD Düzenle"
+  send_list: "\U0001F4DD Liste gönder"
+  ask_r5: R5 veya /nominate
+  ask_r5_help: R5'iniz buradan aday gösterme sayfasını açabilir veya Discord'da /nominate komutunu çalıştırabilir.
+  buyout_bonus: "\U0001F6E1️ Satın alma: Her kazanılan sette {amount} {chest}"
+  buyout_bonus_help: WLO tarafından finanse edilmektedir
+  buyout_threat: 'tehdit: {threat}'
+  buyout_cost: "⚖️ Satın alma: Her sette {amount} {chest}"
+  buyout_cost_help: Bu hafta yerinden edilen ittifakı finanse etmek için
+caravan:
+  title: "\U0001F42A Kervan Çizelgesi"
+  picked_count: "{picked}/{total} seçildi"
+  members_can_view: "\U0001F465 Üyeler görüntüleyebilir"
+  copy_status: "\U0001F4CB Durumu kopyala"
+  new_week: "\U0001F504 Yeni hafta"
+  member_note: Bir kervan hazır olduğunda R4'leriniz tarafından seçilir.
+  search: İsim ara…
+  around_now: "⏰ Şu sıralar"
+  around_now_help: Sadece şu sıralar uygun olan oyuncular
+  available: Bu hafta uygun ({n})
+  picked: Bu hafta seçilen ({n})
+  nobody_matches: Kimse eşleşmiyor.
+  everyone_picked: "Bu hafta herkesin kervanı var. \U0001F389"
+  add_players: Aşağıdan oyuncu ekleyin.
+  no_players: Henüz oyuncu yok.
+  flexible: esnek
+  pick: "✓ Seçildi"
+  back_to_available: Uygun olanlara geri taşı
+  name: İsim
+  from: Başlangıç (Game Time)
+  to: Bitiş (Game Time)
+  player_name: Oyuncu ismi
+  add_from: 18:00'den
+  add_to: 22:00'ye kadar
+  add_from_label: Müsaitlik başlangıcı (Game Time, isteğe bağlı)
+  add_to_label: Müsaitlik bitişi (Game Time, isteğe bağlı)
+  add: "➕ Ekle"
+  times_help: Saatler Game Time (UTC-2) cinsindendir ve isteğe bağlıdır; esnek olan oyuncular için boş bırakın.
+  status_title: "\U0001F42A [{tag}] Kervan Çizelgesi: {picked}/{total} seçildi"
+  status_available: 'Uygun: {names}'
+  status_picked: 'Seçilen: {names}'
+  nobody: kimse
+  nobody_yet: henüz kimse yok
+  copy_prompt: 'Çizelge durumunu kopyala:'
+  confirm_remove: "{name} çizelgeden kaldırılsın mı?"
+  this_player: bu oyuncu
+  confirm_new_week: Yeni bir hafta başlasın mı? Herkes uygun olanlara dönecek (isimler ve saatler aynı kalır).
+chart_editor:
+  edit_title: "✏️ Grafik veya tabloyu düzenle"
+  new_title: "➕ Yeni grafik veya tablo"
+  type: Tür
+  type_bar: "\U0001F4CA Çubuk"
+  type_line: "\U0001F4C8 Çizgi"
+  type_pie: "\U0001F369 Pasta"
+  type_progress: "\U0001F3AF İlerleme"
+  type_table: "\U0001F4CB Tablo"
+  title: Başlık
+  title_example: ör. İttifak Düellosu puanları
+  note: Açıklama
+  note_example: ör. Cuma sıfırlamasına kadar minimum 15M Düello puanı gerekli
+  who_sees: Kimler görebilir
+  officers_only: "\U0001F512 Sadece yetkililer (R4/R5)"
+  all_members: "\U0001F465 Tüm ittifak üyeleri"
+  data: Veri
+  data_source: Veri kaynağı
+  paste: "\U0001F4CB Tablo yapıştır"
+  link: "\U0001F517 Google E-Tablo / Doküman bağlantısı"
+  paste_help: Google E-Tablolar veya Excel'den hücreleri kopyalayın (önce başlık satırı) ve buraya yapıştırın.
+  tab_name: Sekme ismi (isteğe bağlı)
+  range: Aralık, ör. A1:D20 (isteğe bağlı)
+  doc_table: Dokümandaki hangi tablo (1, 2…)
+  load: "⤓ Google'dan yükle"
+  loading: "⤓ Yükleniyor…"
+  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Karttaki “Şimdi senkronize et” daha sonra en güncel sayıları getirir.'
+  load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
+  preview: Önizleme
+  preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
+  size: "{rows} × {columns}"
+  rows_one: "{n} satır"
+  rows_other: "{n} satır"
+  columns_one: "{n} sütun"
+  columns_other: "{n} sütun"
+  at_most_500: "(en fazla 500)"
+  labels: İsimler (etiketler)
+  numbers_to_show: Gösterilecek sayılar
+  numbers: Sayılar
+  several_columns: Birden fazla sayı sütunu
+  side_by_side: Yan yana
+  stacked_totals: 'Yığılmış: toplamlar'
+  stacked_percent: 'Yığılmış: her çubuk %100''e'
+  vertical: Dikey çubuklar
+  vertical_leaderboard: Dikey çubuklar (skor tablosu yerine)
+  traffic_columns: "\U0001F6A6 Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, son yeşil"
+  traffic_size: "\U0001F6A6 Kırmızı → sarı → yeşil (düşük → yüksek): boyuta göre, en büyük yeşil"
+  traffic_reverse: "↕️ Ters: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
+  traffic_target: "\U0001F6A6 Hedefe yakınlığa göre kırmızı → sarı → yeşil"
+  traffic_target_reverse: "↕️ Ters: hedefin altında olmak daha iyidir"
+  donut: Donut (halka)
+  target: Herkes için hedef
+  target_example: ör. 15M veya 15000000
+  target_column: "…veya hedef sütunu"
+  use_number_above: "(yukarıdaki sayıyı kullan)"
+  highlight_where: Şu satırları vurgula
+  no_highlight: "(vurgu yok)"
+  at_least: en az şuna eşitse
+  at_least_example: ör. 300M
+charts:
+  column: Sütun {n}
+  no_numbers: Seçilen sütunda grafiklenecek sayı yok.
+  line_two_rows: Çizgi grafiği için en az iki satır gerekir.
+  no_positive: Seçilen sütunda grafiklenecek pozitif sayı yok.
+  no_targets: Karşılaştırılacak sayı (veya hedef) yok.
+  no_table: Henüz tablo yok.
+  unknown_type: Bilinmeyen grafik türü.
+  draw_failed: Bu grafik çizilemedi ({error}).
+  other: Diğer
+  value: Değer
+  total: Toplam
+  total_value: 'Toplam: {value}'
+  share_of_all: "{value} · toplamın {share}'i"
+  value_of_target: "{target} üzerinden {value}"
+  to_go: 'Kalan: {value}'
+  target_reached: Hedefe ulaşıldı ✓
+  done: "✓ Tamamlandı"
+  reached_target: "{total} üzerinden {done} hedefe ulaştı"
+  search: Ara…
+  search_label: Bu tabloda ara
+  matching: "{n} eşleşen"
+  show_all: Tüm {n} taneyi göster
+  show_all_rows: Tüm {n} satırı göster
+  first_rows: Toplam {n} satırın ilk {shown} tanesi gösteriliyor.
+  hint_bar: Bir çubuğun üzerine dokunun veya gelin
+  hint_line: Bir haftanın üzerine dokunun veya gelin
+  hint_pie: Bir dilimin üzerine dokunun veya gelin
+  hint_progress: Bir satırın üzerine dokunun veya gelin

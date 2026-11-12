@@ -1,0 +1,224 @@
+# Translated automatically from _data/en/tools.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+common:
+  sign_in_discord: Mit Discord anmelden
+  sign_in_again: Erneut anmelden
+  not_saved: 'Nicht gespeichert: {error}'
+  cancel: Abbrechen
+  save: "\U0001F4BE Speichern"
+  saving: Speichern…
+  edit: Bearbeiten
+  delete: Löschen
+  remove: Entfernen
+  undo: Rückgängig
+  move_up: Nach oben
+  move_down: Nach unten
+  copied: "✓ Kopiert"
+  optional: "(optional)"
+  now: jetzt
+  duration_days: "{d}T {h}Std."
+  duration_hours: "{h}Std. {m}Min."
+  duration_minutes: "{m}Min."
+  game_time: "{time} GT"
+  your_time: "{time} deine Zeit"
+  chests:
+    commanders_will: Wille des Kommandanten
+    loyal_servant: Treuer Diener
+    followers_heart: Herz des Gefolgsmanns
+    honor_vanguard: Ehrenvorhut
+    fearless_hero: Furchtloser Held
+    logistics_support: Logistikunterstützung
+dashboard:
+  title: Allianz-Dashboard
+  loading: Allianz-Dashboard wird geladen…
+  view_as: Anzeigen als
+  page_title: "[{tag}] Allianz-Dashboard"
+  subtitle: Allianz-Dashboard · {view}
+  subtitle_rank: 'Allianz-Dashboard · Rang #{rank} · {view}'
+  view_steward: Verwalter-Ansicht
+  view_leader: Führungs-Ansicht
+  view_member: Mitglieder-Ansicht
+  sign_in_title: Melde dich an, um dein Allianz-Dashboard zu sehen.
+  sign_in_help: Nutze {sign_in} oben rechts (Discord). Deine Allianz wird anhand deiner NAP-Serverrolle gefunden.
+  sign_in_button: Anmelden
+  load_failed: Dashboard konnte nicht geladen werden. Überprüfe die Verbindung und aktualisiere. ({error})
+  edit_dashboard: "✏️ Dashboard bearbeiten"
+  done_editing: "✓ Bearbeitung beenden"
+  add_chart: "➕ Diagramm oder Tabelle hinzufügen"
+  editor_label: Diagramm- oder Tabellen-Editor
+  charts_label: Allianz-Diagramme und -Tabellen
+  empty_member: "\U0001F4CA Die Führung deiner Allianz hat hier noch keine Diagramme oder Tabellen geteilt."
+  empty_editing: "\U0001F4CA Noch keine Diagramme oder Tabellen: Nutze „Diagramm oder Tabelle hinzufügen“."
+  empty_leader: "\U0001F4CA Noch keine Diagramme oder Tabellen. Nutze „Dashboard bearbeiten“, um eine hinzuzufügen."
+  visible_members: "\U0001F465 Alle Mitglieder"
+  visible_officers: "\U0001F512 Nur Offiziere"
+  google_sheet: Google Tabelle
+  google_doc: Google Dokument
+  synced: synchronisiert {when}
+  updated: Aktualisiert {when}
+  sync_now: "\U0001F504 Jetzt synchronisieren"
+  syncing: "\U0001F504 Synchronisiere…"
+  sync_help: Die neuesten Zahlen aus der Tabelle abrufen
+  confirm_delete: "„{title}“ löschen? Dies kann nicht rückgängig gemacht werden."
+  this_chart: dieses Diagramm
+rewards_card:
+  title: "\U0001F512 Wöchentliche Belohnungen"
+  officers: Offiziere
+  open: Offen
+  closed: Geschlossen
+  time_left: "{time} verbleibend"
+  opens_in: öffnet in {time}
+  closes_at: Schließt {when}
+  opens_at: Öffnet {when}, nach dem Kapitol-Event am Freitag
+  off_week: Woche ohne Belohnungen
+  kw_won: "\U0001F3C6 KW gewonnen"
+  kw_lost: "\U0001F6E1️ KW verloren"
+  kw_pending: "⏳ KW ausstehend"
+  set_one: Belobigung des Königs
+  set_two: Belohnung des Schlachtkönigs
+  set_two_if_won: Belohnung des Schlachtkönigs, wenn der Krieg gewonnen wurde
+  if_won: falls gewonnen
+  no_rank: 'Kein Rang in der Wertung: keine Truhen'
+  list_sent: "✅ Liste gesendet · {count}"
+  sent_at: Gesendet {when}
+  reserves_one: "({n} Reserve)"
+  reserves_other: "({n} Reserven)"
+  empty_slots: "{n} leer"
+  list_not_sent: "⚠️ Liste nicht gesendet"
+  no_list_closed: Keine Liste während der Schließung
+  edit_list: "\U0001F4DD Bearbeiten"
+  send_list: "\U0001F4DD Liste senden"
+  ask_r5: R5 oder /nominate
+  ask_r5_help: Dein R5 kann hier die Nominierungsseite öffnen oder /nominate in Discord nutzen.
+  buyout_bonus: "\U0001F6E1️ Auszahlung: {amount} {chest} in jedem gewonnenen Set"
+  buyout_bonus_help: Finanziert durch WLO
+  buyout_threat: 'Bedrohung: {threat}'
+  buyout_cost: "⚖️ Auszahlung: {amount} {chest} in jedem Set"
+  buyout_cost_help: Finanzierung der verdrängten Allianz diese Woche
+caravan:
+  title: "\U0001F42A Karawanen-Rotation"
+  picked_count: "{picked}/{total} ausgewählt"
+  members_can_view: "\U0001F465 Mitglieder können dies sehen"
+  copy_status: "\U0001F4CB Status kopieren"
+  new_week: "\U0001F504 Neue Woche"
+  member_note: Wird von deinen R4s ausgewählt, wenn eine Karawane bereit ist.
+  search: Namen suchen…
+  around_now: "⏰ Ungefähr jetzt"
+  around_now_help: Nur Spieler, die ungefähr jetzt verfügbar sind
+  available: Diese Woche verfügbar ({n})
+  picked: Diese Woche ausgewählt ({n})
+  nobody_matches: Niemand gefunden.
+  everyone_picked: "Jeder hatte diese Woche eine Karawane. \U0001F389"
+  add_players: Spieler unten hinzufügen.
+  no_players: Noch keine Spieler.
+  flexible: flexibel
+  pick: "✓ Ausgewählt"
+  back_to_available: Zurück zur Verfügbarkeit
+  name: Name
+  from: Von (Game Time)
+  to: Bis (Game Time)
+  player_name: Spielername
+  add_from: Von 18:00
+  add_to: Bis 22:00
+  add_from_label: Verfügbar ab (Game Time, optional)
+  add_to_label: Verfügbar bis (Game Time, optional)
+  add: "➕ Hinzufügen"
+  times_help: Die Zeiten sind Game Time (UTC-2) und optional; lass sie leer für Spieler, die flexibel sind.
+  status_title: "\U0001F42A [{tag}] Karawanen-Rotation: {picked}/{total} ausgewählt"
+  status_available: 'Verfügbar: {names}'
+  status_picked: 'Ausgewählt: {names}'
+  nobody: niemand
+  nobody_yet: noch niemand
+  copy_prompt: 'Rotationsstatus kopieren:'
+  confirm_remove: "{name} aus der Rotation entfernen?"
+  this_player: dieser Spieler
+  confirm_new_week: Eine neue Woche starten? Jeder wird wieder auf verfügbar gesetzt (die Namen und Zeiten bleiben erhalten).
+chart_editor:
+  edit_title: "✏️ Diagramm oder Tabelle bearbeiten"
+  new_title: "➕ Neues Diagramm oder neue Tabelle"
+  type: Typ
+  type_bar: "\U0001F4CA Balken"
+  type_line: "\U0001F4C8 Linie"
+  type_pie: "\U0001F369 Kreis"
+  type_progress: "\U0001F3AF Fortschritt"
+  type_table: "\U0001F4CB Tabelle"
+  title: Titel
+  title_example: z.B. Ergebnisse Allianz-Duell
+  note: Erklärung
+  note_example: z.B. Mindestens 15M Duell-Punkte bis Freitag-Reset erforderlich
+  who_sees: Wer kann es sehen
+  officers_only: "\U0001F512 Nur Offiziere (R4/R5)"
+  all_members: "\U0001F465 Alle Allianzmitglieder"
+  data: Daten
+  data_source: Woher die Daten kommen
+  paste: "\U0001F4CB Tabelle einfügen"
+  link: "\U0001F517 Google Sheet / Doc Link"
+  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (Kopfzeile zuerst) und füge sie hier ein.
+  tab_name: Tab-Name (optional)
+  range: Bereich, z.B. A1:D20 (optional)
+  doc_table: Welche Tabelle im Doc (1, 2…)
+  load: "⤓ Von Google laden"
+  loading: "⤓ Laden…"
+  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann die Seite ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
+  load_first: Lade zuerst die Tabelle (⤓ Von Google laden).
+  preview: Vorschau
+  preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
+  size: "{rows} × {columns}"
+  rows_one: "{n} Zeile"
+  rows_other: "{n} Zeilen"
+  columns_one: "{n} Spalte"
+  columns_other: "{n} Spalten"
+  at_most_500: "(maximal 500)"
+  labels: Namen (Beschriftungen)
+  numbers_to_show: Anzuzeigende Zahlen
+  numbers: Zahlen
+  several_columns: Mehrere Zahlenspalten
+  side_by_side: Nebeneinander
+  stacked_totals: 'Gestapelt: Summen'
+  stacked_percent: 'Gestapelt: jeder Balken bis 100%'
+  vertical: Vertikale Balken
+  vertical_leaderboard: Vertikale Balken (statt einer Rangliste)
+  traffic_columns: "\U0001F6A6 Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün"
+  traffic_size: "\U0001F6A6 Rot → gelb → grün (niedrig → hoch): nach Größe, größtes grün"
+  traffic_reverse: "↕️ Umkehren: niedrig ist gut (grün), hoch ist schlecht (rot)"
+  traffic_target: "\U0001F6A6 Rot → gelb → grün je nachdem, wie nah jeder am Ziel ist"
+  traffic_target_reverse: "↕️ Umkehren: weiter unter dem Ziel ist besser"
+  donut: Donut (Ring)
+  target: Ziel für alle
+  target_example: z.B. 15M oder 15000000
+  target_column: "…oder eine Spalte mit Zielen"
+  use_number_above: "(benutze die Zahl oben)"
+  highlight_where: Zeilen hervorheben, wo
+  no_highlight: "(keine Hervorhebung)"
+  at_least: ist mindestens
+  at_least_example: z.B. 300M
+charts:
+  column: Spalte {n}
+  no_numbers: Keine Zahlen zum Diagramm in der gewählten Spalte.
+  line_two_rows: Eine Linie benötigt mindestens zwei Zeilen.
+  no_positive: Keine positiven Zahlen zum Diagramm in der gewählten Spalte.
+  no_targets: Keine Zahlen (oder Ziele) zum Vergleich.
+  no_table: Noch keine Tabelle.
+  unknown_type: Unbekannter Diagrammtyp.
+  draw_failed: Dieses Diagramm konnte nicht gezeichnet werden ({error}).
+  other: Andere
+  value: Wert
+  total: Gesamt
+  total_value: 'Gesamt: {value}'
+  share_of_all: "{value} · {share} von allen"
+  value_of_target: "{value} von {target}"
+  to_go: 'Noch offen: {value}'
+  target_reached: Ziel erreicht ✓
+  done: "✓ Erledigt"
+  reached_target: "{done} von {total} haben das Ziel erreicht"
+  search: Suchen…
+  search_label: Diese Tabelle durchsuchen
+  matching: "{n} passend"
+  show_all: Alle {n} anzeigen
+  show_all_rows: Alle {n} Zeilen anzeigen
+  first_rows: Zeige die ersten {shown} von {n} Zeilen.
+  hint_bar: Tippe oder fahre mit der Maus über einen Balken
+  hint_line: Tippe oder fahre mit der Maus über eine Woche
+  hint_pie: Tippe oder fahre mit der Maus über ein Segment
+  hint_progress: Tippe oder fahre mit der Maus über eine Zeile
