@@ -1,0 +1,105 @@
+# Translated automatically from _data/en/server.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+api_dashboard:
+  signed_out: Accedi con Discord (in alto a destra) per vedere la dashboard della tua alleanza.
+  load_failed: 'Impossibile caricare la dashboard: {reason}'
+  no_alliance: Non siamo riusciti a determinare a quale alleanza appartieni. Il sito la individua dal tuo ruolo alleanza nel server Discord NAP, o da un [TAG] all'inizio del tuo soprannome nel server. Correggi questo su Discord, poi usa Aggiorna Accesso nella tua scheda account (in alto a destra).
+  leaders_only: Solo gli R4 e R5 della tua alleanza possono modificare la dashboard.
+  chart_removed: Quel grafico è stato rimosso.
+  chart_already_removed: Quel grafico era già stato rimosso.
+  not_linked: Questo grafico non è collegato a un foglio o un documento Google.
+  unknown_change: Modifica sconosciuta.
+  save_failed: 'Impossibile salvare: {reason}'
+  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate su Discord.
+  rewards_closed: Le ricompense sono chiuse fino a {when}.
+  no_rank: "[{tag}] non ha un rango nella classifica."
+  choose_type: Scegli un tipo di grafico o tabella.
+  title_needed: Dai un titolo al grafico o alla tabella.
+  too_many_columns: Massimo {max} colonne (questa tabella ne ha {count}).
+  too_many_rows: Massimo {max} righe (questa tabella ne ha {count}).
+  column_name: Colonna {n}
+  paste_first: Incolla prima una tabella (una riga di intestazione, poi i dati).
+  no_data_rows: La tabella non ha righe di dati sotto l'intestazione.
+  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere visualizzato.
+  needs_target: 'Un grafico di progresso ha bisogno di un obiettivo: un numero, o una colonna di obiettivi.'
+  too_many_widgets: Massimo {max} grafici e tabelle per alleanza.
+  sheet_unusable: 'I dati del foglio non possono essere utilizzati: {reason}'
+  too_big: Ciò renderebbe questa dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
+  player_name_needed: Inserisci un nome giocatore.
+  time_format: Gli orari sono in Game Time come 18:00 (oppure lasciali vuoti).
+  start_time_needed: Inserisci anche l'orario di inizio (oppure lasciali entrambi vuoti).
+  rotor_full: Massimo {max} giocatori nel rotore.
+  already_in_rotor: "{name} è già nel rotore."
+  player_removed: Quel giocatore è stato rimosso.
+api_sheets:
+  full_link: Incolla il link completo (che inizia con https://docs.google.com/…).
+  google_only: Si possono usare solo link di Google Sheets e Google Docs (docs.google.com).
+  range_format: L'intervallo dovrebbe essere simile a A1:D20 (o lascialo vuoto).
+  not_sheet_or_doc: Quel link non è un foglio o un documento Google.
+  unexpected_redirect: Google ha inviato il download in un posto inaspettato, quindi non è stato recuperato.
+  too_many_redirects: Troppi reindirizzamenti da Google.
+  too_slow: Google ha impiegato troppo tempo a rispondere. Riprova tra un momento.
+  unreachable: Impossibile raggiungere Google ({reason}).
+  doc_not_shared: 'Google ha detto no: pubblica il documento (File → Condividi → Pubblica sul web), poi usa quel link.'
+  sheet_not_shared: 'Google ha detto no: condividi il foglio come "Chiunque abbia il link può visualizzare", oppure usa File → Condividi → Pubblica sul web.'
+  google_error: Google ha risposto con un errore ({status}). Controlla il link.
+  too_large: Quel foglio è troppo grande da leggere (oltre 2 MB).
+  empty: Quel foglio (o intervallo) è vuoto.
+  no_such_table_one: Quel documento ha {count} tabella; non esiste la tabella {table}.
+  no_such_table_other: Quel documento ha {count} tabelle; non esiste la tabella {table}.
+  no_table: Quel documento non contiene tabelle.
+api_nominate:
+  link_invalid: Questo link non è valido o è scaduto.
+  token_invalid: Il token non è valido o è scaduto. Esegui /nominate di nuovo.
+  signed_out: Accedi con Discord (in alto a destra) per spuntare i forzieri.
+  invalid_chest: Forziere non valido.
+  no_period: Nessun periodo di ricompense è attivo al momento.
+  king_only: Solo l'alleanza del Re (R4/R5) e gli Steward possono spuntare i forzieri.
+  king_only_tag: Solo l'alleanza del Re [{king}] (R4/R5) e gli Steward possono spuntare i forzieri.
+  not_listed: "{name} non è più nell'elenco di [{alliance}]. Aggiorna la pagina."
+  save_failed: 'Impossibile salvare: {reason}'
+api_register:
+  guild_id_format: Formato ID server Discord non valido.
+  token_invalid: Il token non è valido o è scaduto. Esegui /registerbot di nuovo su Discord.
+  alert_channel_needed: È richiesto un ID canale avvisi operativi valido di 17-20 cifre.
+  alert_role_format: Formato ID ruolo avvisi Discord non valido (deve essere di 17-20 cifre).
+  officer_channel_needed: È richiesto un ID canale ticket ufficiali valido di 17-20 cifre.
+  color_format: 'Formato colore identificativo alleanza non valido (deve essere un codice esadecimale di 6 cifre come #B8975A).'
+  discord_unreachable: 'Impossibile raggiungere Discord: {reason}'
+  already_linked: L'ID server {guild} è già collegato all'alleanza [{tag}]. Un server Discord non può essere registrato a più alleanze.
+  deploy_failed: Impossibile distribuire i comandi slash sul tuo server.
+  save_failed: 'Comandi distribuiti, ma impossibile salvare la configurazione: {reason}'
+  bot_not_in_server: Il bot non è in questo server. Clicca "Autorizza Bot" (passaggio 1), aggiungilo al tuo server, poi registra.
+  server_check_failed: Impossibile verificare il server su Discord ({status}).
+  old_link: Questo link risale a prima di un aggiornamento di sicurezza. Esegui /registerbot di nuovo.
+  not_member: Non sei un membro di "{server}". Registra un server che gestisci.
+  roles_check_failed: Impossibile verificare i tuoi ruoli su Discord ({status}).
+  needs_manage: Hai bisogno dei permessi di Amministratore o Gestisci Server in "{server}" per collegarlo. Chiedi al proprietario o fai eseguire a lui /registerbot.
+  channels_check_failed: Impossibile elencare i canali del server su Discord ({status}).
+  alert_channel_missing: Il canale avvisi operativi ({id}) non è in "{server}" (o il bot non può vederlo). Copia di nuovo l'ID.
+  officer_channel_missing: Il canale ticket ufficiali ({id}) non è in "{server}" (o il bot non può vederlo). Copia di nuovo l'ID.
+  alert_role_missing: Il ruolo avvisi predefinito ({id}) non è un ruolo in "{server}". Copia di nuovo l'ID, oppure lascialo vuoto per @everyone.
+  role_not_found: Nessun ruolo in "{server}" corrisponde a "{role}" al momento; funzionerà una volta che ne verrà creato uno.
+api_proposals:
+  login_required: Per favore accedi di nuovo con Discord per inviare proposte.
+  leaders_only: Solo i leader R4 e R5 possono inviare proposte.
+  limit_check_failed: Impossibile verificare il limite giornaliero di proposte al momento. Per favore riprova tra un minuto.
+  daily_limit: 'Limite giornaliero raggiunto: {max} proposte ogni 24 ore. Puoi inviarne un''altra dopo le {when}.'
+  too_large: La proposta è troppo grande.
+  notes_limit: Le note sono limitate a 500 caratteri.
+  image_too_large: L'immagine della mappa è troppo grande.
+  pool_limits: 'Limiti del pool superati: Oro {gold}/{gold_max}, Viola {purple}/{purple_max}, Blu {blue}/{blue_max}'
+  no_changes: Nessuna modifica fornita.
+  week_and_threat: La settimana di riferimento e il server minaccia sono obbligatori.
+api_events:
+  session_invalid: Token di sessione non valido, manomesso o scaduto. Per favore esegui di nuovo /calendar su Discord.
+  required_fields: Titolo, Data e Game Time sono obbligatori.
+  date_format: La data deve essere formattata come AAAA-MM-GG.
+  time_format: Il Game Time deve essere formattato come HH:MM (da 00:00 a 23:59).
+  time_step: Il Game Time deve essere impostato con incrementi di 5 minuti (:00, :05, :10, :15, ecc.).
+  role_id_needed: Il ruolo specifico per l'obiettivo richiede un ID ruolo Discord valido di 17-20 cifre.
+  published: Operazione "{title}" pubblicata con successo.
+  not_found: Evento non trovato o già eliminato.
+  out_of_scope: 'Accesso negato: non puoi modificare o eliminare eventi al di fuori del tuo ambito assegnato.'
+  deleted: 'Operazione eliminata: {title}'

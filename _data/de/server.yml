@@ -1,0 +1,105 @@
+# Translated automatically from _data/en/server.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+api_dashboard:
+  signed_out: Melde dich mit Discord an (oben rechts), um dein Allianz-Dashboard zu sehen.
+  load_failed: 'Das Dashboard konnte nicht geladen werden: {reason}'
+  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite findet dies über deine Allianz-Rolle im NAP Discord-Server oder ein [TAG] am Anfang deines Server-Spitznamens. Korrigiere dies in Discord und verwende dann „Zugriff aktualisieren“ in deiner Account-Karte (oben rechts).
+  leaders_only: Nur die R4- und R5-Mitglieder deiner Allianz können das Dashboard ändern.
+  chart_removed: Dieses Diagramm wurde entfernt.
+  chart_already_removed: Dieses Diagramm wurde bereits entfernt.
+  not_linked: Dieses Diagramm ist nicht mit einem Google Sheet oder Doc verknüpft.
+  unknown_change: Unbekannte Änderung.
+  save_failed: 'Speichern fehlgeschlagen: {reason}'
+  r5_only_nominate: Nur dein R5 kann hier die Nominierungsseite öffnen. Führe /nominate in Discord aus.
+  rewards_closed: Belohnungen sind geschlossen bis {when}.
+  no_rank: "[{tag}] hat keinen Rang in der Tabelle."
+  choose_type: Wähle einen Diagramm- oder Tabellentyp.
+  title_needed: Gib dem Diagramm oder der Tabelle einen Titel.
+  too_many_columns: Maximal {max} Spalten (diese Tabelle hat {count}).
+  too_many_rows: Maximal {max} Zeilen (diese Tabelle hat {count}).
+  column_name: Spalte {n}
+  paste_first: Füge zuerst eine Tabelle ein (eine Kopfzeile, dann die Daten).
+  no_data_rows: Die Tabelle enthält keine Datenzeilen unter ihrer Kopfzeile.
+  needs_numbers: Ein Diagramm benötigt eine Spalte mit Zahlen zur Anzeige.
+  needs_target: 'Ein Fortschrittsdiagramm benötigt ein Ziel: eine Zahl oder eine Spalte mit Zielen.'
+  too_many_widgets: Maximal {max} Diagramme und Tabellen pro Allianz.
+  sheet_unusable: 'Die Daten des Sheets können nicht verwendet werden: {reason}'
+  too_big: Das würde dieses Dashboard zu groß machen ({size} KB von {max} KB). Verwende weniger Zeilen oder entferne eine Tabelle.
+  player_name_needed: Gib einen Spielernamen ein.
+  time_format: Zeiten sind Game Time wie 18:00 (oder lasse sie leer).
+  start_time_needed: Gib auch die Startzeit an (oder lasse beides leer).
+  rotor_full: Maximal {max} Spieler im Rotor.
+  already_in_rotor: "{name} ist bereits im Rotor."
+  player_removed: Der Spieler wurde entfernt.
+api_sheets:
+  full_link: Füge den vollständigen Link ein (beginnend mit https://docs.google.com/…).
+  google_only: Nur Links zu Google Sheets und Google Docs (docs.google.com) können verwendet werden.
+  range_format: Der Bereich sollte wie A1:D20 aussehen (oder lasse ihn leer).
+  not_sheet_or_doc: Dieser Link ist kein Google Sheet oder Google Doc.
+  unexpected_redirect: Google hat den Download an einen unerwarteten Ort geleitet, daher wurde er nicht abgerufen.
+  too_many_redirects: Zu viele Weiterleitungen von Google.
+  too_slow: Google hat zu lange geantwortet. Versuche es in einem Moment erneut.
+  unreachable: Google konnte nicht erreicht werden ({reason}).
+  doc_not_shared: 'Google sagte nein: Veröffentliche das Dokument (Datei → Teilen → Im Web veröffentlichen) und verwende dann diesen Link.'
+  sheet_not_shared: 'Google sagte nein: Teile das Sheet als „Jeder mit dem Link kann ansehen“ oder verwende Datei → Teilen → Im Web veröffentlichen.'
+  google_error: Google antwortete mit einem Fehler ({status}). Überprüfe den Link.
+  too_large: Dieses Sheet ist zu groß zum Lesen (über 2 MB).
+  empty: Dieses Sheet (oder der Bereich) ist leer.
+  no_such_table_one: Dieses Doc hat {count} Tabelle; es gibt keine Tabelle {table}.
+  no_such_table_other: Dieses Doc hat {count} Tabellen; es gibt keine Tabelle {table}.
+  no_table: Dieses Doc enthält keine Tabelle.
+api_nominate:
+  link_invalid: Dieser Link ist ungültig oder abgelaufen.
+  token_invalid: Token ist ungültig oder abgelaufen. Führe /nominate erneut aus.
+  signed_out: Melde dich mit Discord an (oben rechts), um Truhen zu markieren.
+  invalid_chest: Ungültige Truhe.
+  no_period: Derzeit ist kein Belohnungszeitraum offen.
+  king_only: Nur die Allianz des Königs (R4/R5) und Stewards können Truhen markieren.
+  king_only_tag: Nur die Allianz des Königs [{king}] (R4/R5) und Stewards können Truhen markieren.
+  not_listed: "{name} steht nicht mehr auf der Liste von [{alliance}]. Aktualisiere die Seite."
+  save_failed: 'Speichern fehlgeschlagen: {reason}'
+api_register:
+  guild_id_format: Ungültiges Discord Guild ID-Format.
+  token_invalid: Token ist ungültig oder abgelaufen. Führe /registerbot erneut in Discord aus.
+  alert_channel_needed: Eine gültige 17-20-stellige Operations-Alarmkanal-ID ist erforderlich.
+  alert_role_format: Ungültiges Discord-Alarmrollen-ID-Format (muss 17-20 Stellen haben).
+  officer_channel_needed: Eine gültige 17-20-stellige Offiziers-Ticket-Kanal-ID ist erforderlich.
+  color_format: 'Ungültiges Allianz-Identitätsfarben-Format (muss ein 6-stelliger Hex-Code wie #B8975A sein).'
+  discord_unreachable: 'Discord konnte nicht erreicht werden: {reason}'
+  already_linked: Server-ID {guild} ist bereits mit der Allianz [{tag}] verknüpft. Ein Discord-Server kann nicht mit mehreren Allianzen verknüpft sein.
+  deploy_failed: Bereitstellung der Slash-Befehle auf deinem Server fehlgeschlagen.
+  save_failed: 'Befehle bereitgestellt, aber Konfiguration konnte nicht gespeichert werden: {reason}'
+  bot_not_in_server: Der Bot ist nicht auf diesem Server. Klicke auf „Bot autorisieren“ (Schritt 1), füge ihn deinem Server hinzu und registriere ihn dann.
+  server_check_failed: Discord konnte den Server nicht überprüfen ({status}).
+  old_link: Dieser Link stammt von vor einem Sicherheitsupdate. Führe /registerbot erneut aus.
+  not_member: Du bist kein Mitglied von „{server}“. Registriere einen Server, den du verwaltest.
+  roles_check_failed: Discord konnte deine Rollen nicht überprüfen ({status}).
+  needs_manage: Du benötigst Administrator- oder Server-Verwalten-Rechte in „{server}“, um ihn zu verknüpfen. Frage den Eigentümer oder lass ihn /registerbot ausführen.
+  channels_check_failed: Discord konnte die Kanäle des Servers nicht auflisten ({status}).
+  alert_channel_missing: Der Operations-Alarmkanal ({id}) ist nicht in „{server}“ (oder der Bot kann ihn nicht sehen). Kopiere die ID erneut.
+  officer_channel_missing: Der Offiziers-Ticket-Kanal ({id}) ist nicht in „{server}“ (oder der Bot kann ihn nicht sehen). Kopiere die ID erneut.
+  alert_role_missing: Die Standard-Alarmrolle ({id}) ist keine Rolle in „{server}“. Kopiere die ID erneut oder lasse sie für @everyone leer.
+  role_not_found: Keine Rolle in „{server}“ entspricht bisher „{role}“; es wird funktionieren, sobald eine existiert.
+api_proposals:
+  login_required: Bitte melde dich erneut mit Discord an, um Vorschläge zu senden.
+  leaders_only: Nur R4- und R5-Anführer können Vorschläge senden.
+  limit_check_failed: Das tägliche Vorschlagslimit konnte nicht überprüft werden. Bitte versuche es in einer Minute erneut.
+  daily_limit: 'Tägliches Limit erreicht: {max} Vorschläge pro 24 Stunden. Du kannst den nächsten nach {when} senden.'
+  too_large: Der Vorschlag ist zu groß.
+  notes_limit: Notizen sind auf 500 Zeichen begrenzt.
+  image_too_large: Kartenbild ist zu groß.
+  pool_limits: 'Pool-Limits überschritten: Gold {gold}/{gold_max}, Lila {purple}/{purple_max}, Blau {blue}/{blue_max}'
+  no_changes: Keine Änderungen angegeben.
+  week_and_threat: Zielwoche und Bedrohungsserver sind erforderlich.
+api_events:
+  session_invalid: Ungültiges, manipuliertes oder abgelaufenes Session-Token. Bitte führe /calendar erneut in Discord aus.
+  required_fields: Titel, Datum und Game Time sind erforderlich.
+  date_format: Das Datum muss im Format JJJJ-MM-TT sein.
+  time_format: Game Time muss im Format HH:MM (00:00 bis 23:59) sein.
+  time_step: Game Time muss in 5-Minuten-Schritten erfolgen (:00, :05, :10, :15, etc.).
+  role_id_needed: Für eine rollenspezifische Zielvorgabe ist eine gültige 17-20-stellige Discord-Rollen-ID erforderlich.
+  published: Operation „{title}“ erfolgreich veröffentlicht.
+  not_found: Ereignis nicht gefunden oder bereits gelöscht.
+  out_of_scope: 'Zugriff verweigert: Du kannst Ereignisse außerhalb deines zugewiesenen Bereichs nicht ändern oder löschen.'
+  deleted: 'Operation gelöscht: {title}'

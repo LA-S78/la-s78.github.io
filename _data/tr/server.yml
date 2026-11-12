@@ -1,0 +1,105 @@
+# Translated automatically from _data/en/server.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+api_dashboard:
+  signed_out: İttifak panelinizi görmek için Discord ile giriş yapın (sağ üst).
+  load_failed: 'Panel yüklenemedi: {reason}'
+  no_alliance: Hangi ittifakta olduğunuzu tespit edemedik. Site, bunu NAP Discord sunucusundaki ittifak rolünüzden veya sunucu takma adınızın başındaki [ETİKET]'ten bulur. Discord'da bunu düzeltin, ardından hesap kartınızdaki (sağ üst) Erişim Yenile butonunu kullanın.
+  leaders_only: Panelde yalnızca ittifakınızın R4 ve R5 yetkilileri değişiklik yapabilir.
+  chart_removed: Bu grafik kaldırıldı.
+  chart_already_removed: Bu grafik zaten kaldırılmıştı.
+  not_linked: Bu grafik bir Google E-Tablo veya Dokümanına bağlı değil.
+  unknown_change: Bilinmeyen değişiklik.
+  save_failed: 'Kaydedilemedi: {reason}'
+  r5_only_nominate: Burada adaylık sayfasını yalnızca R5 yetkiliniz açabilir. Discord'da /nominate komutunu çalıştırın.
+  rewards_closed: Ödüller {when} tarihine kadar kapalıdır.
+  no_rank: "[{tag}] sıralamada yer almıyor."
+  choose_type: Bir grafik veya tablo türü seçin.
+  title_needed: Grafiğe veya tabloya bir başlık verin.
+  too_many_columns: En fazla {max} sütun olabilir (bu tabloda {count} tane var).
+  too_many_rows: En fazla {max} satır olabilir (bu tabloda {count} tane var).
+  column_name: Sütun {n}
+  paste_first: Önce bir tablo yapıştırın (bir başlık satırı, ardından veriler).
+  no_data_rows: Tablonun başlık altında hiç veri satırı yok.
+  needs_numbers: Bir grafiğin gösterilmesi için sayısal bir sütuna ihtiyacı vardır.
+  needs_target: 'Bir ilerleme grafiğinin bir hedefe ihtiyacı vardır: bir sayı veya hedef sütunu.'
+  too_many_widgets: İttifak başına en fazla {max} grafik ve tablo.
+  sheet_unusable: 'Tablonun verileri kullanılamıyor: {reason}'
+  too_big: Bu işlem paneli çok büyük hale getirir ({size} KB / {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
+  player_name_needed: Bir oyuncu adı girin.
+  time_format: Saatler 18:00 gibi Oyun Saati formatındadır (veya boş bırakın).
+  start_time_needed: Başlangıç saatini de verin (veya her ikisini de boş bırakın).
+  rotor_full: Rotasyonda en fazla {max} oyuncu olabilir.
+  already_in_rotor: "{name} zaten rotasyonda."
+  player_removed: Oyuncu kaldırıldı.
+api_sheets:
+  full_link: Tam bağlantıyı yapıştırın (https://docs.google.com/ ile başlayan).
+  google_only: Yalnızca Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.
+  range_format: Aralık A1:D20 gibi görünmelidir (veya boş bırakın).
+  not_sheet_or_doc: Bu bağlantı bir Google E-Tablosu veya Google Dokümanı değil.
+  unexpected_redirect: Google indirme işlemini beklenmedik bir yere yönlendirdi, bu yüzden alınamadı.
+  too_many_redirects: Google'dan çok fazla yönlendirme geldi.
+  too_slow: Google'ın yanıt vermesi çok uzun sürdü. Bir süre sonra tekrar deneyin.
+  unreachable: Google'a ulaşılamadı ({reason}).
+  doc_not_shared: 'Google reddetti: Dokümanı yayınlayın (Dosya → Paylaş → Web''de yayınla), ardından o bağlantıyı kullanın.'
+  sheet_not_shared: 'Google reddetti: Tabloyu "Bağlantıya sahip olan herkes görüntüleyebilir" şeklinde paylaşın veya Dosya → Paylaş → Web''de yayınla yolunu kullanın.'
+  google_error: Google bir hata ile yanıt verdi ({status}). Bağlantıyı kontrol edin.
+  too_large: Bu tablo okunmayacak kadar büyük (2 MB üzeri).
+  empty: Bu tablo (veya aralık) boş.
+  no_such_table_one: Bu Dokümanda {count} tablo var; {table} tablosu bulunamadı.
+  no_such_table_other: Bu Dokümanda {count} tablo var; {table} tablosu bulunamadı.
+  no_table: Bu Dokümanda hiç tablo yok.
+api_nominate:
+  link_invalid: Bu bağlantı geçersiz veya süresi dolmuş.
+  token_invalid: Jeton geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
+  signed_out: Sandıkları işaretlemek için Discord ile giriş yapın (sağ üst).
+  invalid_chest: Geçersiz sandık.
+  no_period: Şu anda açık bir ödül dönemi yok.
+  king_only: Sandıkları yalnızca Kral'ın ittifakı (R4/R5) ve Kahyalar işaretleyebilir.
+  king_only_tag: Sandıkları yalnızca Kral'ın ittifakı [{king}] (R4/R5) ve Kahyalar işaretleyebilir.
+  not_listed: "{name} artık [{alliance}] listesinde değil. Sayfayı yenileyin."
+  save_failed: 'Kaydedilemedi: {reason}'
+api_register:
+  guild_id_format: Geçersiz Discord Sunucu Kimliği formatı.
+  token_invalid: Jeton geçersiz veya süresi dolmuş. Discord'da /registerbot komutunu tekrar çalıştırın.
+  alert_channel_needed: Geçerli bir 17-20 haneli Operasyon Uyarı Kanalı Kimliği gereklidir.
+  alert_role_format: Geçersiz Discord Uyarı Rolü Kimliği formatı (17-20 haneli olmalıdır).
+  officer_channel_needed: Geçerli bir 17-20 haneli Yetkili Talep Kanalı Kimliği gereklidir.
+  color_format: 'Geçersiz İttifak Kimlik Rengi formatı (6 haneli #B8975A gibi bir onaltılık kod olmalıdır).'
+  discord_unreachable: 'Discord''a ulaşılamadı: {reason}'
+  already_linked: "{guild} Sunucu Kimliği zaten [{tag}] ittifakına bağlı. Bir Discord sunucusu birden fazla ittifaka kaydedilemez."
+  deploy_failed: Eğik çizgi (slash) komutları sunucunuza dağıtılamadı.
+  save_failed: 'Komutlar dağıtıldı ancak yapılandırma kaydedilemedi: {reason}'
+  bot_not_in_server: Bot bu sunucuda değil. "Botu Yetkilendir"e (1. adım) tıklayın, sunucunuza ekleyin ve ardından kaydolun.
+  server_check_failed: Discord sunucuyu kontrol edemedi ({status}).
+  old_link: Bu bağlantı güvenlik güncellemesinden öncesine ait. /registerbot komutunu tekrar çalıştırın.
+  not_member: '"{server}" üyesi değilsiniz. Yönettiğiniz bir sunucuyu kaydedin.'
+  roles_check_failed: Discord rollerinizi kontrol edemedi ({status}).
+  needs_manage: Bağlamak için "{server}" üzerinde Yönetici veya Sunucuyu Yönet iznine sahip olmalısınız. Sahibine sorun veya /registerbot komutunu çalıştırmasını isteyin.
+  channels_check_failed: Discord sunucunun kanallarını listeleyemedi ({status}).
+  alert_channel_missing: Operasyon Uyarı Kanalı ({id}) "{server}" içinde yok (veya bot bunu göremiyor). Kimliği tekrar kopyalayın.
+  officer_channel_missing: Yetkili Talep Kanalı ({id}) "{server}" içinde yok (veya bot bunu göremiyor). Kimliği tekrar kopyalayın.
+  alert_role_missing: Varsayılan Uyarı Rolü ({id}) "{server}" içinde bir rol değil. Kimliği tekrar kopyalayın veya @everyone için boş bırakın.
+  role_not_found: '"{server}" içinde "{role}" ile eşleşen bir rol henüz yok; biri oluşturulduğunda çalışacaktır.'
+api_proposals:
+  login_required: Öneri göndermek için lütfen tekrar Discord ile giriş yapın.
+  leaders_only: Önerileri yalnızca R4 ve R5 liderleri gönderebilir.
+  limit_check_failed: Günlük öneri limiti şu anda kontrol edilemedi. Lütfen bir dakika sonra tekrar deneyin.
+  daily_limit: 'Günlük limite ulaşıldı: 24 saat içinde {max} öneri. Bir sonrakini {when} sonrasında gönderebilirsiniz.'
+  too_large: Öneri çok uzun.
+  notes_limit: Notlar 500 karakter ile sınırlıdır.
+  image_too_large: Harita görseli çok büyük.
+  pool_limits: 'Havuz limitleri aşıldı: Altın {gold}/{gold_max}, Mor {purple}/{purple_max}, Mavi {blue}/{blue_max}'
+  no_changes: Herhangi bir değişiklik belirtilmedi.
+  week_and_threat: Hedef hafta ve tehdit sunucusu gereklidir.
+api_events:
+  session_invalid: Geçersiz, üzerinde oynanmış veya süresi dolmuş oturum jetonu. Lütfen Discord'da /calendar komutunu tekrar çalıştırın.
+  required_fields: Başlık, Tarih ve Oyun Saati gereklidir.
+  date_format: Tarih YYYY-AA-GG formatında olmalıdır.
+  time_format: Oyun Saati SS:DD formatında (00:00 - 23:59 arası) olmalıdır.
+  time_step: Oyun Saati 5 dakikalık artışlarla olmalıdır (:00, :05, :10, :15 vb.).
+  role_id_needed: Belirli bir Rolü Hedefle seçeneği için 17-20 haneli geçerli bir Discord Rol Kimliği gereklidir.
+  published: '"{title}" operasyonu başarıyla yayınlandı.'
+  not_found: Etkinlik bulunamadı veya zaten silinmiş.
+  out_of_scope: 'Erişim Reddedildi: Atanmış kapsamınız dışındaki etkinlikleri değiştiremez veya silemezsiniz.'
+  deleted: 'Silinen operasyon: {title}'
