@@ -3,25 +3,25 @@
   <div class="map-controls">
     <!-- Left: View Modes (Levels, Alliances, Resources) -->
     <div class="control-group left">
-      <span class="control-label">View:</span>
+      <span class="control-label">{{ "map_planner.view" | t }}</span>
       <div class="segmented-control">
-        <button id="btn-mode-level" class="toggle-btn active" data-mode="level">Levels</button>
-        <button id="btn-mode-alliance" class="toggle-btn" data-mode="alliance">Alliances</button>
-        <button id="btn-mode-resource" class="toggle-btn" data-mode="resource">Resources</button>
+        <button id="btn-mode-level" class="toggle-btn active" data-mode="level">{{ "map_planner.levels" | t }}</button>
+        <button id="btn-mode-alliance" class="toggle-btn" data-mode="alliance">{{ "map_planner.alliances" | t }}</button>
+        <button id="btn-mode-resource" class="toggle-btn" data-mode="resource">{{ "map_planner.resources" | t }}</button>
       </div>
     </div>
 
     <!-- Right: Planner Mode & Submission -->
     <div class="control-group right">
       <!-- Buff Summary Drawer Toggle -->
-      <button id="btn-toggle-buffs" class="draft-btn" type="button" aria-label="Toggle Buff Summary" aria-pressed="false">
+      <button id="btn-toggle-buffs" class="draft-btn" type="button" aria-label="{{ "map_planner.toggle_buff_summary" | t }}" aria-pressed="false">
         <span class="buffs-icon">⚖️</span>
-        <span class="buffs-label">Buff Summary</span>
+        <span class="buffs-label">{{ "map_planner.buff_summary" | t }}</span>
       </button>
 
       <button id="btn-toggle-draft" class="draft-btn" aria-pressed="false">
         <span class="draft-indicator"></span>
-        <span class="draft-text">Planner Mode</span>
+        <span class="draft-text">{{ "map_planner.planner_mode" | t }}</span>
       </button>
 
       <!-- Alliance Override Input -->
@@ -29,20 +29,20 @@
         <input 
           type="text" 
           id="alliance-override" 
-          placeholder="E.G. WLO" 
+          placeholder="{{ "map_planner.override_placeholder" | t }}" 
           maxlength="6" 
           autocomplete="off" 
           spellcheck="false"
-          title="Type a tag to override click assignments. Leave blank to cycle." 
+          title="{{ "map_planner.override_help" | t }}" 
         />
       </div>
       
       <button id="btn-submit-proposal" class="submit-plan-btn hidden" disabled>
-        Submit Plan <span id="change-count-badge" class="badge">0</span>
+        {{ "map_planner.submit_plan" | t }} <span id="change-count-badge" class="badge">0</span>
       </button>
-      <button id="btn-toggle-fullscreen" class="draft-btn" type="button" aria-label="Toggle Fullscreen" aria-pressed="false">
+      <button id="btn-toggle-fullscreen" class="draft-btn" type="button" aria-label="{{ "map_planner.toggle_fullscreen" | t }}" aria-pressed="false">
         <span class="fullscreen-icon">⛶</span>
-        <span class="fullscreen-label">Fullscreen</span>
+        <span class="fullscreen-label">{{ "map_planner.fullscreen" | t }}</span>
       </button>
     </div>
   </div>
@@ -50,14 +50,14 @@
   <!-- Resource Map Legend Strip (Compact Key: Resources Only) -->
   <div id="resource-map-legend" class="resource-legend hidden" aria-hidden="true">
     <div class="legend-group">
-      <span class="legend-chip"><span class="chip-color chip-grain"></span> 🌾 Grain</span>
-      <span class="legend-chip"><span class="chip-color chip-timber"></span> 🪵 Timber</span>
-      <span class="legend-chip"><span class="chip-color chip-herbs"></span> 🌿 Herbs</span>
+      <span class="legend-chip"><span class="chip-color chip-grain"></span> {{ "map_planner.grain" | t }}</span>
+      <span class="legend-chip"><span class="chip-color chip-timber"></span> {{ "map_planner.timber" | t }}</span>
+      <span class="legend-chip"><span class="chip-color chip-herbs"></span> {{ "map_planner.herbs" | t }}</span>
     </div>
     <div class="legend-divider">|</div>
     <div class="legend-group">
-      <span class="legend-chip"><span class="chip-pattern chip-solid"></span> Solid: Gather</span>
-      <span class="legend-chip"><span class="chip-pattern chip-striped"></span> Stripe: Output</span>
+      <span class="legend-chip"><span class="chip-pattern chip-solid"></span> {{ "map_planner.solid_gather" | t }}</span>
+      <span class="legend-chip"><span class="chip-pattern chip-striped"></span> {{ "map_planner.stripe_output" | t }}</span>
     </div>
   </div>
 
@@ -71,13 +71,13 @@
   <!-- Territory Detail Card -->
   <div id="territory-info-card" class="info-card idle">
     <div class="info-header">
-      <span id="city-level-badge" class="badge">Level --</span>
-      <h3 id="city-name">Hover over a territory</h3>
+      <span id="city-level-badge" class="badge">{{ "map_planner.level_unknown" | t }}</span>
+      <h3 id="city-name">{{ "map_planner.hover" | t }}</h3>
     </div>
     <div class="info-details">
-      <span class="info-item"><strong>Owner:</strong> <span id="city-owner">Unclaimed</span></span>
+      <span class="info-item"><strong>{{ "map_planner.owner" | t }}</strong> <span id="city-owner">{{ "map_planner.unclaimed" | t }}</span></span>
       <span class="info-divider" aria-hidden="true">•</span>
-      <span class="info-item"><strong>Buff:</strong> <span id="city-buff">None</span></span>
+      <span class="info-item"><strong>{{ "map_planner.buff" | t }}</strong> <span id="city-buff">{{ "map_planner.none" | t }}</span></span>
     </div>
   </div>
 
@@ -86,12 +86,12 @@
     <div class="buff-drawer-header">
       <div class="drawer-title">
         <span class="drawer-icon">⚖️</span>
-        <h3>Alliance Buff Distribution</h3>
+        <h3>{{ "map_planner.drawer_title" | t }}</h3>
       </div>
-      <button id="btn-close-buffs" class="drawer-close-btn" type="button" aria-label="Close Buff Summary">&times;</button>
+      <button id="btn-close-buffs" class="drawer-close-btn" type="button" aria-label="{{ "map_planner.close_buff_summary" | t }}">&times;</button>
     </div>
     <div class="buff-drawer-subtitle">
-      <span>Dynamic tally based on active map / planner assignments</span>
+      <span>{{ "map_planner.drawer_subtitle" | t }}</span>
     </div>
     <div id="buff-drawer-content" class="buff-drawer-content">
       <!-- Populated dynamically via map.js -->

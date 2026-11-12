@@ -7,6 +7,22 @@ import { submitProposalWithAuth } from './auth-modal.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
+// The page's language (map_planner.* in _data/<lang>/tools.yml, js/i18n.js).
+const tm = (key, vars) => window.t(`map_planner.${key}`, vars);
+// A buff's name in the page's language; one not known to the site shows as written.
+const BUFF_KEYS = new Set([
+  'research_speed',
+  'troop_training_speed',
+  'building_speed',
+  'march_speed',
+  'grain_gathering',
+  'grain_output',
+  'timber_gathering',
+  'timber_output',
+  'herb_gathering',
+  'herb_output',
+]);
+const buffName = (b) => (BUFF_KEYS.has(b.key) ? tm(`buff_${b.key}`) : b.name);
 
 const DRAFT_STORAGE_KEY = 'la_map_planner_draft';
 
@@ -357,6 +373,7 @@ export function calculateAllianceBuffSummary() {
 
       if (!buffMap[parsed.key]) {
         buffMap[parsed.key] = {
+          key: parsed.key, // to show the name in the page's language (buffName)
           name: parsed.name,
           total: 0,
           unit: parsed.unit,
@@ -402,7 +419,7 @@ export function renderBuffSummaryDrawer() {
   });
 
   if (sortedTags.length === 0) {
-    contentEl.innerHTML = '<div class="buff-empty">No alliances currently claim territory.</div>';
+    contentEl.innerHTML = `<div class="buff-empty">${esc(tm('no_claims'))}</div>`;
     return;
   }
 
@@ -419,14 +436,14 @@ export function renderBuffSummaryDrawer() {
           ? data.aggregatedBuffs
               .map(
                 (b) => `
-          <span class="buff-badge" title="${b.count} ${b.count === 1 ? 'City' : 'Cities'}: ${esc(b.cities.join(', '))}">
-            ${esc(b.name)} <strong>+${esc(b.total)}${esc(b.unit)}</strong>
+          <span class="buff-badge" title="${esc(window.tn('map_planner.cities', b.count))}: ${esc(b.cities.join(', '))}">
+            ${esc(buffName(b))} <strong>+${esc(b.total)}${esc(b.unit)}</strong>
             ${b.count > 1 ? `<span class="buff-badge-count">×${b.count}</span>` : ''}
           </span>
         `,
               )
               .join('')
-          : '<span class="buff-none">No active buffs assigned</span>';
+          : `<span class="buff-none">${esc(tm('no_buffs'))}</span>`;
 
       return `
       <tr class="buff-row ${isEditing ? 'is-active-target' : ''}">
@@ -435,7 +452,7 @@ export function renderBuffSummaryDrawer() {
           <strong>[${esc(tag)}]</strong>
         </td>
         <td class="buff-col-count">
-          <span class="city-count-pill">${data.count} ${data.count === 1 ? 'City' : 'Cities'}</span>
+          <span class="city-count-pill">${esc(window.tn('map_planner.cities', data.count))}</span>
         </td>
         <td class="buff-col-buffs">
           <div class="buff-badges-wrap">${buffBadges}</div>
@@ -449,9 +466,9 @@ export function renderBuffSummaryDrawer() {
     <table class="buff-table">
       <thead>
         <tr>
-          <th>Alliance</th>
-          <th>Holdings</th>
-          <th>Active Buffs</th>
+          <th>${esc(tm('col_alliance'))}</th>
+          <th>${esc(tm('col_holdings'))}</th>
+          <th>${esc(tm('col_buffs'))}</th>
         </tr>
       </thead>
       <tbody>
@@ -766,7 +783,7 @@ export async function submitStrategyProposal() {
 
   const payload = generateProposalPayload();
   if (!payload || payload.totalChanges === 0) {
-    alert('No changes detected in your draft plan.');
+    alert(tm('no_changes'));
     return;
   }
 
@@ -797,7 +814,7 @@ export async function submitStrategyProposal() {
 
   submitProposalWithAuth({
     type: 'map',
-    title: '🗺️ Submit Map Territory Proposal',
+    title: tm('proposal_title'),
     payload: payload,
     diffSummaryHtml: `<div class="diff-list">${diffItems}</div>`,
     onSuccess: () => {
@@ -892,7 +909,7 @@ export function syncFullscreenUI(isActive, btn = null) {
   if (!btn) return;
   btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
   const label = btn.querySelector('.fullscreen-label');
-  if (label) label.textContent = isActive ? 'Exit' : 'Fullscreen';
+  if (label) label.textContent = tm(isActive ? 'exit' : 'fullscreen');
 }
 
 export function bindMapControls(svgRoot = null) {
@@ -1330,17 +1347,17 @@ export function enableMapHighlighting(svgRoot = null) {
     if (!card) return;
     if (!cityData) {
       card.classList.add('idle');
-      if (cityNameEl) cityNameEl.textContent = 'Hover over a territory';
-      if (cityLevelEl) cityLevelEl.textContent = 'Level --';
-      if (cityOwnerEl) cityOwnerEl.textContent = 'Unclaimed';
-      if (cityBuffEl) cityBuffEl.textContent = 'None';
+      if (cityNameEl) cityNameEl.textContent = tm('hover');
+      if (cityLevelEl) cityLevelEl.textContent = tm('level_unknown');
+      if (cityOwnerEl) cityOwnerEl.textContent = tm('unclaimed');
+      if (cityBuffEl) cityBuffEl.textContent = tm('none');
       return;
     }
     card.classList.remove('idle');
     if (cityNameEl) cityNameEl.textContent = cityData.name || cityData.id;
     if (cityLevelEl)
       cityLevelEl.textContent =
-        typeof cityData.level === 'number' ? `Level ${cityData.level}` : cityData.level;
+        typeof cityData.level === 'number' ? tm('level', { n: cityData.level }) : cityData.level;
     if (cityOwnerEl) {
       const ownerTag = getCityOwner(cityData.id);
       const alliance = alliances[ownerTag];
@@ -1350,7 +1367,7 @@ export function enableMapHighlighting(svgRoot = null) {
       const buffVal =
         cityData.buff && String(cityData.buff).trim() !== ''
           ? String(cityData.buff).trim()
-          : 'No active buff';
+          : tm('no_active_buff');
       cityBuffEl.textContent = buffVal;
     }
   }

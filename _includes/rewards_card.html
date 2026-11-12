@@ -4,7 +4,7 @@
 {% assign rdata = site.data.rewards_data %}
 
 {% comment %} The planner's own text (rewards_planner.* in _data/<lang>/tools.yml) for js/rewards.js; the card sits inside other pages, so it brings its strings itself. {% endcomment %}
-{% unless page.strings %}<script type="application/json" id="tool-strings">{{ "rewards_planner" | tool_strings_json }}</script>{% endunless %}
+{% unless page.strings %}<script type="application/json" id="tool-strings">{{ "rewards_planner,proposals,live_data" | split: "," | tool_strings_json }}</script>{% endunless %}
 <div id="rewards-container" class="rewards-wrapper">
   <!-- Controls Bar -->
   <div class="map-controls">
