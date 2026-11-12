@@ -602,18 +602,46 @@
       card.classList.add('idle');
       card.innerHTML = `<div class="info-header"><h3>${esc(hint)}</h3></div>`;
     };
+    const HL = ['--hl-line', '--hl-glow', '--hl-soft'];
+    const unlight = () =>
+      el.querySelectorAll('.dw-sel').forEach((x) => {
+        x.classList.remove('dw-sel');
+        HL.forEach((v) => x.style.removeProperty(v));
+      });
+    // The highlight takes the part's own colour (its --dw); a part of several colours (a
+    // whole stacked row, a line-chart week) keeps the theme's.
+    const colourOf = (lit) => {
+      const own = (x) => getComputedStyle(x).getPropertyValue('--dw').trim();
+      for (const x of lit) if (own(x)) return own(x);
+      const inside = new Set(
+        [...lit].flatMap((x) => [...x.querySelectorAll('.dw-bar, i')].map(own)).filter(Boolean),
+      );
+      return inside.size === 1 ? [...inside][0] : '';
+    };
+    const tint = (x, c) => {
+      if (!c) return HL.forEach((v) => x.style.removeProperty(v));
+      x.style.setProperty('--hl-line', `color-mix(in srgb, ${c} 60%, white)`);
+      x.style.setProperty('--hl-glow', c);
+      x.style.setProperty('--hl-soft', `color-mix(in srgb, ${c} 80%, transparent)`);
+    };
     const clear = () => {
-      el.querySelectorAll('.dw-sel').forEach((x) => x.classList.remove('dw-sel'));
+      unlight();
+      tint(card, '');
       current = null;
       pinned = false;
       idle();
     };
     const show = (part) => {
-      el.querySelectorAll('.dw-sel').forEach((x) => x.classList.remove('dw-sel'));
+      unlight();
       current = part;
       const key = part.dataset.key;
       const lit = key ? el.querySelectorAll(`[data-key="${CSS.escape(key)}"]`) : [part];
-      lit.forEach((x) => x.classList.add('dw-sel'));
+      const colour = colourOf(lit);
+      lit.forEach((x) => {
+        x.classList.add('dw-sel');
+        tint(x, colour);
+      });
+      tint(card, colour);
       card.classList.remove('idle');
       card.textContent = '';
       const head = document.createElement('div');
@@ -717,8 +745,7 @@
       b.remove();
     });
     const hint = { bar: 'a bar', line: 'a week', pie: 'a slice', progress: 'a row' }[w.type];
-    if (hint && el.querySelector('[data-tip]'))
-      selectable(el, `Tap or hover over ${hint}`);
+    if (hint && el.querySelector('[data-tip]')) selectable(el, `Tap or hover over ${hint}`);
   }
 
   window.DashboardWidgets = { parseTable, toText, number, short, render, mount };

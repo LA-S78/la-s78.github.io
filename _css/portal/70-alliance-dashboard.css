@@ -959,6 +959,8 @@ html[data-theme='sanctuary'] .dw-s4 {
 .dash-widget-body [data-tip],
 #ed-preview [data-tip] {
   cursor: pointer;
+  /* No grey tap flash on phones: the part's own highlight shows instead. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 [data-tip]:focus {
@@ -970,8 +972,16 @@ html[data-theme='sanctuary'] .dw-s4 {
   outline-offset: 1px;
 }
 
+/* Highlight colours: the selected part's own colour (set by selectable()), or the theme's. */
+.dw-sel,
+.dw-info {
+  --hl-line: rgba(var(--active-theme-vivid), 1);
+  --hl-glow: rgba(var(--active-theme), 1);
+  --hl-soft: rgba(var(--active-theme), 0.8);
+}
+
 .dw-svg rect.dw-sel:not(.dw-hit) {
-  stroke: rgba(var(--active-theme-vivid), 1);
+  stroke: var(--hl-line);
   stroke-width: 3px;
   paint-order: stroke fill;
   vector-effect: non-scaling-stroke;
@@ -979,41 +989,40 @@ html[data-theme='sanctuary'] .dw-s4 {
 
 .dw-svg rect.dw-sel:not(.dw-hit),
 .dw-slice.dw-sel {
-  filter: drop-shadow(0 0 4px rgba(var(--active-theme), 1))
-    drop-shadow(0 0 10px rgba(var(--active-theme), 0.8)) brightness(1.25);
+  filter: drop-shadow(0 0 4px var(--hl-glow)) drop-shadow(0 0 10px var(--hl-soft)) brightness(1.2);
 }
 
 .dw-bar.dw-sel {
   position: relative;
   z-index: 1;
   box-shadow:
-    0 0 0 2px rgba(var(--active-theme-vivid), 1),
-    0 0 4px 2px rgba(var(--active-theme), 1),
-    0 0 10px 2px rgba(var(--active-theme), 0.8);
-  filter: brightness(1.25);
+    0 0 0 2px var(--hl-line),
+    0 0 4px 2px var(--hl-glow),
+    0 0 10px 2px var(--hl-soft);
+  filter: brightness(1.2);
 }
 
 /* Stacked rows clip anything outside a segment, so its outline goes inside. */
 .dw-stack .dw-bar.dw-sel {
   box-shadow:
-    inset 0 0 0 2px rgba(var(--active-theme-vivid), 1),
-    inset 0 0 8px rgba(var(--active-theme), 1);
+    inset 0 0 0 2px var(--hl-line),
+    inset 0 0 8px var(--hl-glow);
 }
 
 li.dw-sel > .dw-bar-label,
 .dw-pie-legend li.dw-sel span {
-  color: rgba(var(--active-theme-vivid), 1);
+  color: var(--hl-line);
 }
 
 li.dw-sel > .dw-bar-track {
   box-shadow:
-    0 0 0 2px rgba(var(--active-theme-vivid), 1),
-    0 0 10px rgba(var(--active-theme), 0.8);
+    0 0 0 2px var(--hl-line),
+    0 0 10px var(--hl-soft);
 }
 
 .dw-pie-legend li.dw-sel i {
-  box-shadow: 0 0 6px 1px rgba(var(--active-theme), 1);
-  filter: brightness(1.25);
+  box-shadow: 0 0 6px 1px var(--hl-glow);
+  filter: brightness(1.2);
 }
 
 .dw-svg rect.dw-hit {
@@ -1031,5 +1040,14 @@ li.dw-sel > .dw-bar-track {
 .dw-info .is-on,
 .dw-info .is-on strong {
   font-weight: 700;
-  color: rgba(var(--active-theme-vivid), 1);
+  color: var(--hl-line);
+}
+
+/* The card's stripe and badge take the selected part's colour too. */
+.dw-info:not(.idle) {
+  border-left-color: var(--hl-glow);
+}
+
+.dw-info .badge {
+  background: var(--hl-glow);
 }
