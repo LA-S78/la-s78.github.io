@@ -6,7 +6,7 @@ common:
   sign_in_again: Iniciar sesión de nuevo
   not_saved: 'No guardado: {error}'
   cancel: Cancelar
-  save: "\U0001F4BE Guardar"
+  save: "💾 Guardar"
   saving: Guardando…
   edit: Editar
   delete: Eliminar
@@ -48,22 +48,22 @@ dashboard:
   add_chart: "➕ Añadir gráfico o tabla"
   editor_label: Editor de gráficos o tablas
   charts_label: Gráficos y tablas de la alianza
-  empty_member: "\U0001F4CA Los líderes de tu alianza aún no han compartido gráficos o tablas aquí."
-  empty_editing: "\U0001F4CA Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”."
-  empty_leader: "\U0001F4CA Aún no hay gráficos o tablas. Usa “Editar Panel” para añadir uno."
-  visible_members: "\U0001F465 Todos los miembros"
-  visible_officers: "\U0001F512 Solo oficiales"
+  empty_member: "📊 Los líderes de tu alianza aún no han compartido gráficos o tablas aquí."
+  empty_editing: "📊 Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”."
+  empty_leader: "📊 Aún no hay gráficos o tablas. Usa “Editar Panel” para añadir uno."
+  visible_members: "👥 Todos los miembros"
+  visible_officers: "🔒 Solo oficiales"
   google_sheet: Google Sheet
   google_doc: Google Doc
   synced: sincronizado {when}
   updated: Actualizado {when}
-  sync_now: "\U0001F504 Sincronizar ahora"
-  syncing: "\U0001F504 Sincronizando…"
+  sync_now: "🔄 Sincronizar ahora"
+  syncing: "🔄 Sincronizando…"
   sync_help: Obtener los números más recientes de la hoja
   confirm_delete: ¿Eliminar "{title}"? Esto no se puede deshacer.
   this_chart: este gráfico
 rewards_card:
-  title: "\U0001F512 Recompensas Semanales"
+  title: "🔒 Recompensas Semanales"
   officers: Oficiales
   open: Abierto
   closed: Cerrado
@@ -72,8 +72,8 @@ rewards_card:
   closes_at: Cierra {when}
   opens_at: Abre {when}, después del evento de capitolio del viernes
   off_week: Semana de descanso
-  kw_won: "\U0001F3C6 KW ganada"
-  kw_lost: "\U0001F6E1️ KW perdida"
+  kw_won: "🏆 KW ganada"
+  kw_lost: "🛡️ KW perdida"
   kw_pending: "⏳ KW pendiente"
   set_one: Encomio del Rey
   set_two: Recompensa del Rey de Batalla
@@ -87,21 +87,21 @@ rewards_card:
   empty_slots: "{n} vacíos"
   list_not_sent: "⚠️ Lista no enviada"
   no_list_closed: Sin lista mientras está cerrado
-  edit_list: "\U0001F4DD Editar"
-  send_list: "\U0001F4DD Enviar lista"
+  edit_list: "📝 Editar"
+  send_list: "📝 Enviar lista"
   ask_r5: R5 o /nominate
   ask_r5_help: Tu R5 puede abrir la página de nominación desde aquí, o ejecutar /nominate en Discord.
-  buyout_bonus: "\U0001F6E1️ Compra: {amount} {chest} en cada set ganado"
+  buyout_bonus: "🛡️ Compra: {amount} {chest} en cada set ganado"
   buyout_bonus_help: Financiado por WLO
   buyout_threat: 'amenaza: {threat}'
   buyout_cost: "⚖️ Compra: {amount} {chest} en cada set"
   buyout_cost_help: Financiando a la alianza desplazada esta semana
 caravan:
-  title: "\U0001F42A Rotor de Caravana"
+  title: "🐪 Rotor de Caravana"
   picked_count: "{picked}/{total} elegidos"
-  members_can_view: "\U0001F465 Los miembros pueden ver"
-  copy_status: "\U0001F4CB Copiar estado"
-  new_week: "\U0001F504 Nueva semana"
+  members_can_view: "👥 Los miembros pueden ver"
+  copy_status: "📋 Copiar estado"
+  new_week: "🔄 Nueva semana"
   member_note: Elegido por tus R4 cuando una caravana está lista.
   search: Buscar nombres…
   around_now: "⏰ Alrededor de ahora"
@@ -109,7 +109,7 @@ caravan:
   available: Disponible esta semana ({n})
   picked: Elegidos esta semana ({n})
   nobody_matches: Nadie coincide.
-  everyone_picked: "Todos han tenido caravana esta semana. \U0001F389"
+  everyone_picked: "Todos han tenido caravana esta semana. 🎉"
   add_players: Añadir jugadores abajo.
   no_players: Aún no hay jugadores.
   flexible: flexible
@@ -125,7 +125,7 @@ caravan:
   add_to_label: Disponible hasta (Game Time, opcional)
   add: "➕ Añadir"
   times_help: Los horarios son Game Time (UTC-2) y son opcionales; déjalos vacíos para jugadores que son flexibles.
-  status_title: "\U0001F42A [{tag}] Rotor de Caravana: {picked}/{total} elegidos"
+  status_title: "🐪 [{tag}] Rotor de Caravana: {picked}/{total} elegidos"
   status_available: 'Disponible: {names}'
   status_picked: 'Elegidos: {names}'
   nobody: nadie
@@ -138,22 +138,22 @@ chart_editor:
   edit_title: "✏️ Editar gráfico o tabla"
   new_title: "➕ Nuevo gráfico o tabla"
   type: Tipo
-  type_bar: "\U0001F4CA Barras"
-  type_line: "\U0001F4C8 Líneas"
-  type_pie: "\U0001F369 Pastel"
-  type_progress: "\U0001F3AF Progreso"
-  type_table: "\U0001F4CB Tabla"
+  type_bar: "📊 Barras"
+  type_line: "📈 Líneas"
+  type_pie: "🍩 Pastel"
+  type_progress: "🎯 Progreso"
+  type_table: "📋 Tabla"
   title: Título
   title_example: ej. Puntuaciones del Duelo de Alianzas
   note: Explicación
   note_example: ej. Mínimo 15M de puntos en Duelo de Alianzas requerido para el reinicio del viernes
   who_sees: Quién puede verlo
-  officers_only: "\U0001F512 Solo oficiales (R4/R5)"
-  all_members: "\U0001F465 Todos los miembros de la alianza"
+  officers_only: "🔒 Solo oficiales (R4/R5)"
+  all_members: "👥 Todos los miembros de la alianza"
   data: Datos
   data_source: Origen de los datos
-  paste: "\U0001F4CB Pegar una tabla"
-  link: "\U0001F517 Enlace de Google Sheet / Doc"
+  paste: "📋 Pegar una tabla"
+  link: "🔗 Enlace de Google Sheet / Doc"
   paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
   range: Rango, ej. A1:D20 (opcional)
@@ -179,10 +179,10 @@ chart_editor:
   stacked_percent: 'Apilado: cada barra al 100%'
   vertical: Barras verticales
   vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
-  traffic_columns: "\U0001F6A6 Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde"
-  traffic_size: "\U0001F6A6 Rojo → amarillo → verde (bajo → alto): por rango, los mejores en verde"
+  traffic_columns: "🚦 Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde"
+  traffic_size: "🚦 Rojo → amarillo → verde (bajo → alto): por rango, los mejores en verde"
   traffic_reverse: "↕️ Invertido: bajo es bueno (verde), alto es malo (rojo)"
-  traffic_target: "\U0001F6A6 Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo"
+  traffic_target: "🚦 Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo"
   traffic_target_reverse: "↕️ Invertido: estar más por debajo del objetivo es mejor"
   donut: Donut (anillo)
   target: Objetivo para todos

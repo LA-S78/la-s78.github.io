@@ -6,7 +6,7 @@ common:
   sign_in_again: Tekrar giriş yap
   not_saved: 'Kaydedilmedi: {error}'
   cancel: İptal
-  save: "\U0001F4BE Kaydet"
+  save: "💾 Kaydet"
   saving: Kaydediliyor…
   edit: Düzenle
   delete: Sil
@@ -48,22 +48,22 @@ dashboard:
   add_chart: "➕ Grafik veya tablo ekle"
   editor_label: Grafik veya tablo düzenleyici
   charts_label: İttifak grafikleri ve tabloları
-  empty_member: "\U0001F4CA İttifak liderleriniz henüz burada herhangi bir grafik veya tablo paylaşmadı."
-  empty_editing: "\U0001F4CA Henüz grafik veya tablo yok: “Grafik veya tablo ekle” seçeneğini kullanın."
-  empty_leader: "\U0001F4CA Henüz grafik veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın."
-  visible_members: "\U0001F465 Tüm üyeler"
-  visible_officers: "\U0001F512 Sadece yetkililer"
+  empty_member: "📊 İttifak liderleriniz henüz burada herhangi bir grafik veya tablo paylaşmadı."
+  empty_editing: "📊 Henüz grafik veya tablo yok: “Grafik veya tablo ekle” seçeneğini kullanın."
+  empty_leader: "📊 Henüz grafik veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın."
+  visible_members: "👥 Tüm üyeler"
+  visible_officers: "🔒 Sadece yetkililer"
   google_sheet: Google E-Tablosu
   google_doc: Google Dokümanı
   synced: "{when} senkronize edildi"
   updated: "{when} güncellendi"
-  sync_now: "\U0001F504 Şimdi senkronize et"
-  syncing: "\U0001F504 Senkronize ediliyor…"
+  sync_now: "🔄 Şimdi senkronize et"
+  syncing: "🔄 Senkronize ediliyor…"
   sync_help: Tablodaki en son verileri getir
   confirm_delete: '"{title}" silinsin mi? Bu işlem geri alınamaz.'
   this_chart: bu grafik
 rewards_card:
-  title: "\U0001F512 Haftalık Ödüller"
+  title: "🔒 Haftalık Ödüller"
   officers: Yetkililer
   open: Açık
   closed: Kapalı
@@ -72,8 +72,8 @@ rewards_card:
   closes_at: "{when} kapanıyor"
   opens_at: "{when}, Cuma günkü başkent etkinliğinden sonra açılır"
   off_week: Ödül Yok Haftası
-  kw_won: "\U0001F3C6 KW kazanıldı"
-  kw_lost: "\U0001F6E1️ KW kaybedildi"
+  kw_won: "🏆 KW kazanıldı"
+  kw_lost: "🛡️ KW kaybedildi"
   kw_pending: "⏳ KW beklemede"
   set_one: Kralın Övgüsü
   set_two: Savaş Kralı Ödülü
@@ -87,21 +87,21 @@ rewards_card:
   empty_slots: "{n} boş slot"
   list_not_sent: "⚠️ Liste gönderilmedi"
   no_list_closed: Kapalıyken liste yok
-  edit_list: "\U0001F4DD Düzenle"
-  send_list: "\U0001F4DD Liste gönder"
+  edit_list: "📝 Düzenle"
+  send_list: "📝 Liste gönder"
   ask_r5: R5 veya /nominate
   ask_r5_help: R5'iniz buradan aday gösterme sayfasını açabilir veya Discord'da /nominate komutunu çalıştırabilir.
-  buyout_bonus: "\U0001F6E1️ Satın alma: Her kazanılan sette {amount} {chest}"
+  buyout_bonus: "🛡️ Satın alma: Her kazanılan sette {amount} {chest}"
   buyout_bonus_help: WLO tarafından finanse edilmektedir
   buyout_threat: 'tehdit: {threat}'
   buyout_cost: "⚖️ Satın alma: Her sette {amount} {chest}"
   buyout_cost_help: Bu hafta yerinden edilen ittifakı finanse etmek için
 caravan:
-  title: "\U0001F42A Kervan Çizelgesi"
+  title: "🐪 Kervan Çizelgesi"
   picked_count: "{picked}/{total} seçildi"
-  members_can_view: "\U0001F465 Üyeler görüntüleyebilir"
-  copy_status: "\U0001F4CB Durumu kopyala"
-  new_week: "\U0001F504 Yeni hafta"
+  members_can_view: "👥 Üyeler görüntüleyebilir"
+  copy_status: "📋 Durumu kopyala"
+  new_week: "🔄 Yeni hafta"
   member_note: Bir kervan hazır olduğunda R4'leriniz tarafından seçilir.
   search: İsim ara…
   around_now: "⏰ Şu sıralar"
@@ -109,7 +109,7 @@ caravan:
   available: Bu hafta uygun ({n})
   picked: Bu hafta seçilen ({n})
   nobody_matches: Kimse eşleşmiyor.
-  everyone_picked: "Bu hafta herkesin kervanı var. \U0001F389"
+  everyone_picked: "Bu hafta herkesin kervanı var. 🎉"
   add_players: Aşağıdan oyuncu ekleyin.
   no_players: Henüz oyuncu yok.
   flexible: esnek
@@ -125,7 +125,7 @@ caravan:
   add_to_label: Müsaitlik bitişi (Game Time, isteğe bağlı)
   add: "➕ Ekle"
   times_help: Saatler Game Time (UTC-2) cinsindendir ve isteğe bağlıdır; esnek olan oyuncular için boş bırakın.
-  status_title: "\U0001F42A [{tag}] Kervan Çizelgesi: {picked}/{total} seçildi"
+  status_title: "🐪 [{tag}] Kervan Çizelgesi: {picked}/{total} seçildi"
   status_available: 'Uygun: {names}'
   status_picked: 'Seçilen: {names}'
   nobody: kimse
@@ -138,22 +138,22 @@ chart_editor:
   edit_title: "✏️ Çizelgeyi veya tabloyu düzenle"
   new_title: "➕ Yeni çizelge veya tablo"
   type: Tür
-  type_bar: "\U0001F4CA Sütun"
-  type_line: "\U0001F4C8 Çizgi"
-  type_pie: "\U0001F369 Pasta"
-  type_progress: "\U0001F3AF İlerleme"
-  type_table: "\U0001F4CB Tablo"
+  type_bar: "📊 Sütun"
+  type_line: "📈 Çizgi"
+  type_pie: "🍩 Pasta"
+  type_progress: "🎯 İlerleme"
+  type_table: "📋 Tablo"
   title: Başlık
   title_example: ör. İttifak Düellosu puanları
   note: Açıklama
   note_example: ör. Cuma sıfırlanmasına kadar en az 15M Düello puanı gerekir
   who_sees: Kimler görebilir
-  officers_only: "\U0001F512 Sadece yetkililer (R4/R5)"
-  all_members: "\U0001F465 Tüm ittifak üyeleri"
+  officers_only: "🔒 Sadece yetkililer (R4/R5)"
+  all_members: "👥 Tüm ittifak üyeleri"
   data: Veri
   data_source: Veri kaynağı
-  paste: "\U0001F4CB Tablo yapıştır"
-  link: "\U0001F517 Google E-tablo / Doküman bağlantısı"
+  paste: "📋 Tablo yapıştır"
+  link: "🔗 Google E-tablo / Doküman bağlantısı"
   paste_help: Google E-tablolar veya Excel'den hücreleri kopyalayın (başlık satırı önce olacak şekilde) ve buraya yapıştırın.
   tab_name: Sekme adı (isteğe bağlı)
   range: Aralık, ör. A1:D20 (isteğe bağlı)
@@ -179,10 +179,10 @@ chart_editor:
   stacked_percent: 'Yığılmış: her çubuk %100''e'
   vertical: Dikey sütunlar
   vertical_leaderboard: Dikey sütunlar (sıralama tablosu yerine)
-  traffic_columns: "\U0001F6A6 Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil"
-  traffic_size: "\U0001F6A6 Kırmızı → sarı → yeşil (düşük → yüksek): sıralamaya göre, en üst yeşil"
+  traffic_columns: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil"
+  traffic_size: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): sıralamaya göre, en üst yeşil"
   traffic_reverse: "↕️ Tersine çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
-  traffic_target: "\U0001F6A6 Hedefe yakınlığa göre kırmızı → sarı → yeşil"
+  traffic_target: "🚦 Hedefe yakınlığa göre kırmızı → sarı → yeşil"
   traffic_target_reverse: "↕️ Tersine çevir: hedefin ne kadar altında kalırsa o kadar iyi"
   donut: Halka (donut)
   target: Herkes için hedef
