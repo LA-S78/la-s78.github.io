@@ -205,7 +205,11 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     if (o.stacked === 'sum' || o.stacked === 'percent') options.stacked = o.stacked;
   }
   // scale: traffic-light colours, red (low) → yellow → green (high).
-  if ((w.type === 'bar' || w.type === 'progress') && o.scale) options.scale = true;
+  if ((w.type === 'bar' || w.type === 'progress') && o.scale) {
+    options.scale = true;
+    // reverse: for numbers where low is good (deaths, losses): green (low) → red (high).
+    if (o.reverse) options.reverse = true;
+  }
   if (w.type === 'pie') options.donut = o.donut !== false;
   if (w.type === 'progress') {
     const target = Number(o.target);

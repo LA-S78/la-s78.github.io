@@ -161,7 +161,8 @@
     const styles = [];
     let cls = extra;
     const f = frac ?? (n > 1 ? k / (n - 1) : undefined);
-    if (w.options?.scale && f !== undefined) styles.push(`--dw: ${ramp(f)}`);
+    if (w.options?.scale && f !== undefined)
+      styles.push(`--dw: ${ramp(w.options.reverse ? 1 - f : f)}`);
     else cls = `${extra ? `${extra} ` : ''}dw-s${k % SERIES}`;
     if (css) styles.push(css);
     return `class="${cls}"${styles.length ? ` style="${styles.join('; ')}"` : ''}`;
@@ -438,10 +439,22 @@
     }
     const total = parts.reduce((t, p) => t + p.v, 0);
     const donut = w.options?.donut !== false;
-    // A donut is a 26-wide ring; a full pie is a ring as wide as its radius (fills to the middle).
-    const R = donut ? 60 : 40;
-    const width = donut ? 26 : 80;
-    const C = 2 * Math.PI * R;
+    // Each slice is a shape (a ring segment, or a wedge for a full pie), so it can be
+    // outlined when selected like a bar. Angles start at the top and go clockwise.
+    const r1 = 72;
+    const r0 = donut ? 46 : 0;
+    const point = (r, a) => [80 + r * Math.sin(a), 80 - r * Math.cos(a)].map((n) => n.toFixed(2));
+    const arcPath = (a0, a1) => {
+      // A whole circle can't be one arc: draw it as two halves.
+      if (a1 - a0 >= Math.PI * 2 - 1e-6) return arcPath(0, Math.PI) + arcPath(Math.PI, Math.PI * 2);
+      const big = a1 - a0 > Math.PI ? 1 : 0;
+      const [ox0, oy0] = point(r1, a0);
+      const [ox1, oy1] = point(r1, a1);
+      if (!r0) return `M80,80L${ox0},${oy0}A${r1},${r1} 0 ${big} 1 ${ox1},${oy1}Z`;
+      const [ix1, iy1] = point(r0, a1);
+      const [ix0, iy0] = point(r0, a0);
+      return `M${ox0},${oy0}A${r1},${r1} 0 ${big} 1 ${ox1},${oy1}L${ix1},${iy1}A${r0},${r0} 0 ${big} 0 ${ix0},${iy0}Z`;
+    };
     let at = 0;
     const pieTip = (p, i) =>
       pick(
@@ -453,16 +466,15 @@
       );
     const rings = parts
       .map((p, i) => {
-        const len = (p.v / total) * C;
-        const seg = `<circle class="dw-slice dw-s${i % SERIES}" ${pieTip(p, i)} r="${R}" cx="80" cy="80" stroke-width="${width}" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-at).toFixed(2)}"><title>${esc(p.label)}: ${short(p.v)} (${Math.round((p.v / total) * 100)}%)</title></circle>`;
-        at += len;
-        return seg;
+        const a0 = at;
+        at += (p.v / total) * Math.PI * 2;
+        return `<path class="dw-slice dw-s${i % SERIES}" ${pieTip(p, i)} d="${arcPath(a0, at)}"><title>${esc(p.label)}: ${short(p.v)} (${Math.round((p.v / total) * 100)}%)</title></path>`;
       })
       .join('');
     const middle = donut
       ? `<text class="dw-total" x="80" y="78" text-anchor="middle">${short(total)}</text><text class="dw-axis" x="80" y="95" text-anchor="middle">${esc(String(s.names[0] || 'total').slice(0, 14))}</text>`
       : '';
-    return `<div class="dw-pie"><svg viewBox="0 0 160 160" role="img" aria-label="${esc(w.title)}"><g transform="rotate(-90 80 80)">${rings}</g>${middle}</svg><ul class="dw-pie-legend">${parts
+    return `<div class="dw-pie"><svg viewBox="0 0 160 160" role="img" aria-label="${esc(w.title)}">${rings}${middle}</svg><ul class="dw-pie-legend">${parts
       .map(
         (p, i) =>
           `<li ${pieTip(p, i)}><i class="dw-s${i % SERIES}"></i><span>${esc(p.label)}</span><b>${Math.round((p.v / total) * 100)}%</b><small>${short(p.v)}</small></li>`,
@@ -603,11 +615,28 @@
       card.innerHTML = `<div class="info-header"><h3>${esc(hint)}</h3></div>`;
     };
     const HL = ['--hl-line', '--hl-glow', '--hl-soft'];
-    const unlight = () =>
+    const unlight = () => {
+      el.querySelectorAll('.dw-overlay').forEach((x) => x.remove());
       el.querySelectorAll('.dw-sel').forEach((x) => {
         x.classList.remove('dw-sel');
         HL.forEach((v) => x.style.removeProperty(v));
       });
+    };
+    // Like the map: a selected shape in a drawing is copied on top of the others, so its
+    // outline and glow aren't hidden under its neighbours.
+    const raise = (x, c) => {
+      const svg = x.ownerSVGElement;
+      if (!svg || x.classList.contains('dw-hit')) return;
+      const copy = x.cloneNode(false);
+      ['data-tip', 'data-lines', 'data-on', 'data-key', 'data-badge', 'tabindex'].forEach((a) =>
+        copy.removeAttribute(a),
+      );
+      copy.classList.remove('dw-sel');
+      copy.classList.add('dw-overlay');
+      copy.setAttribute('aria-hidden', 'true');
+      tint(copy, c);
+      svg.append(copy);
+    };
     // The highlight takes the part's own colour (its --dw); a part of several colours (a
     // whole stacked row, a line-chart week) keeps the theme's.
     const colourOf = (lit) => {
@@ -640,6 +669,7 @@
       lit.forEach((x) => {
         x.classList.add('dw-sel');
         tint(x, colour);
+        raise(x, colour);
       });
       tint(card, colour);
       card.classList.remove('idle');
