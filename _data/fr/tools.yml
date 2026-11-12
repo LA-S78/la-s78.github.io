@@ -352,3 +352,197 @@ register:
   r_color: 'Couleur d''Identité :'
   r_commands: 'Commandes Slash déployées :'
   r_leaders: 'Leadership autorisé :'
+calendar:
+  loading: Chargement du programme du royaume...
+  load_failed: 'Échec du chargement du calendrier : {error}'
+  phase: Phase
+  schedule_title: Programme de la Guerre des Royaumes
+  loading_cycle: Chargement des détails du cycle...
+  badge_closed: "🔒 Récompenses fermées"
+  badge_kob_open: "⚔️ Mêlée Royale ouverte"
+  badge_awaiting: "⏳ En attente du résultat de la Guerre des Royaumes"
+  badge_open: "🎁 Récompenses ouvertes"
+  set2_off_week: Commendation du Roi uniquement (pas de Guerre des Royaumes).
+  set2_won: 'Guerre des Royaumes gagnée : récompense de Mêlée Royale également ouverte.'
+  set2_lost: 'Guerre des Royaumes perdue : Commendation du Roi uniquement.'
+  set2_pending: Récompense de Mêlée Royale si la guerre de samedi est gagnée ; le Roi distribue après le résultat.
+  rewards_open_until: Récompenses {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
+  rewards_closed: Les récompenses sont fermées. Prochaine ouverture vendredi vers 20:00 GT, après l'événement du capitole.
+  capitol_holder: DÉTENTEUR DU CAPITOLE
+  current_holder: DÉTENTEUR ACTUEL DU CAPITOLE
+  next_holder: PROCHAIN DÉTENTEUR DU CAPITOLE
+  rank: 'Rang #{rank}'
+  rank_override: 'Rang #{rank} (Priorité)'
+  rank_override_schedule: 'Rang #{rank} • Priorité au programme'
+  captured_friday: Capturé vendredi
+  captures_today: Captures aujourd'hui
+  captures_friday: Captures vendredi
+  cycle_progress: PROGRESSION DU CYCLE
+  day_of_28: Jour {day} sur 28 ({week})
+  week_n: Semaine {n}
+  next_reset: PROCHAINE RÉINITIALISATION (00:00 GT)
+  next_kw: PROCHAINE BATAILLE DE GUERRE DES ROYAUMES
+  saturday: Samedi
+  today: "🔥 AUJOURD'HUI"
+  none_this_week: Aucun cette semaine
+  perspective: "🔍 PERSPECTIVE :"
+  combined: "🌐 Combiné (Royaume + [{tag}])"
+  internal_only: "🛡️ [{tag}] Interne uniquement"
+  kingdom_only: "👑 Opérations du Royaume uniquement"
+  operations_active: "🛡️ [{tag}] Opérations actives"
+  upcoming: Opérations et jalons à venir
+  times_shown: Heures affichées en {gt} & votre heure locale
+  gt_label: Game Time (UTC-2)
+  no_operations: Aucune opération prévue pour cette perspective.
+  all_day: Toute la journée
+  every_2_days: "🔁 Tous les 2 jours"
+  weekly: "🔁 Hebdomadaire"
+  mandatory: "🚨 Obligatoire"
+  delete: "🗑️ Supprimer"
+  ev_capture_title: "👑 Capture du Capitole — {who}"
+  ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
+  ev_kw_title: "⚔️ Bataille de la Guerre des Royaumes"
+  ev_kw_desc: Début à 12:00 GT, généralement terminée vers 14:00 GT. Une victoire ouvre les coffres de récompense de Mêlée Royale en plus de la Commendation du Roi.
+  ev_open_title: "🎁 Récompenses ouvertes — {week}"
+  ev_open_desc_kw: La Commendation du Roi s'ouvre après l'événement du capitole. La récompense de Mêlée Royale suit si la Guerre des Royaumes du samedi est gagnée ; le Roi distribue après le résultat.
+  ev_open_desc: La Commendation du Roi s'ouvre après l'événement du capitole (pas de Guerre des Royaumes cette semaine).
+  ev_close_title: "⌛ Fermeture des récompenses — {week}"
+  ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette heure.'
+calendar_events:
+  manage_mode: MODE GESTION
+  session_active: Session authentifiée active
+  schedule_operation: "➕ Programmer une opération"
+  create_operation: Créer une opération
+  kingdom_admin: "👑 ADMIN DU ROYAUME"
+  kingdom_desc: Programmation des alertes et opérations à l'échelle du royaume
+  kingdom_heading: Créer une opération du Royaume ([GLOBAL])
+  leadership: "🛡️ [{tag}] DIRECTION"
+  leadership_desc: Gestion des opérations internes pour [{tag}]
+  alliance_heading: Créer une opération [{tag}]
+  preset: Préréglage d'opération
+  preset_custom: "🛠️ Opération personnalisée (Vierge)"
+  preset_crystal_cluster: "🔮 Vallée de Cristal (0,5h)"
+  preset_elixir_scramble: "🧪 Mêlée Royale (0,5h)"
+  preset_survival_battle: "⚔️ Bataille de Survie (4,0h)"
+  preset_kill_event: "🩸 Événement de Tuerie (24,0h)"
+  preset_kvk_battle: "👑 Guerre des Royaumes (1,0h)"
+  preset_gear_event: "🛡️ Événement d'Équipement (48,0h)"
+  preset_cheese_trap: "🧀 Piège à Fromage (0,5h)"
+  title: Titre de l'événement
+  title_example: 'ex: Drill de défense de ruche ou assaut d''avant-poste'
+  date: Date de début (AAAA-MM-JJ)
+  time: Game Time (HH:MM UTC-2)
+  time_hint: Game Time du serveur (s'ajuste par incréments de 5 minutes)
+  duration: Durée (heures)
+  frequency: Fréquence
+  once: Événement unique (ne se répète pas)
+  every_2_days: Se répète tous les 2 jours
+  weekly: Se répète chaque semaine (même jour et heure)
+  alert_level: Niveau d'alerte Discord
+  notify_role: "🔔 Ping le rôle d'alliance par défaut (rebascule sur @everyone)"
+  notify_custom: "🎯 Cibler un ID de rôle spécifique (priorité unique)"
+  notify_everyone: "🚨 Forcer la diffusion à @everyone (Opération obligatoire)"
+  notify_none: "🔕 Silencieux (Calendrier uniquement - Pas de ping Discord)"
+  role_id: ID de rôle spécifique
+  role_id_hint: "(Requis uniquement pour le rôle spécifique ciblé)"
+  role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
+  details: Instructions / Point de ralliement
+  details_example: 'ex: Assemblée à la Ruche Alpha. Les R4 mènent les ralliements. Communications vocales activées.'
+  publish: Publier dans le calendrier
+  publishing: Publication en cours...
+  bad_time: Le Game Time doit être défini par incréments de 5 minutes (:00, :05, :10, etc.)
+  bad_role: Veuillez entrer un ID de rôle Discord valide de 17-20 chiffres pour la cible de l'alerte personnalisée.
+  save_failed: Échec de l'enregistrement de l'événement
+  published: Opération publiée avec succès !
+  confirm_delete: Êtes-vous sûr de vouloir supprimer cette opération du calendrier ?
+  delete_failed: Échec de la suppression de l'événement
+  removed: Opération supprimée.
+kings_scheduler:
+  title: "⚔️ Console de défense et de rotation du Capitole"
+  subtitle: Programme automatisé de défense des matchs et de restitution
+  overrides: 'Priorités : {n}/2'
+  loading: Chargement du programme en direct...
+  off_week: Semaine creuse
+  week_fri: Semaine {n} ven
+  boss_window: Fenêtre Boss {n}
+  kvk_finale: Finale KvK
+  loot_one: "{n} Coffre du Roi"
+  loot_other: "{n} Coffres du Roi"
+  loot_border: 2 Coffres du Roi + Bordure
+  active: ACTIF
+  buyouts_title: "🛡️ Restitution active des rachats en temps de guerre"
+  buyouts_count: "{n} actif"
+  installment: 'Paiement semaine {week} :'
+  payout: "{reg} & {kw}"
+  reg_gold: "+{n} Or régulier"
+  kw_gold: "+{n} Or Guerre des Royaumes"
+  paid: PAYÉ
+  pending: EN ATTENTE
+  beneficiary: 'Bénéficiaire :'
+  threat: "(Menace : {threat})"
+  red_list: Liste rouge
+  wartime_buyout: Rachat en temps de guerre
+  override_title: "🚨 Déclarer une priorité au programme"
+  override_help: Vous avez scouté un serveur dangereux ? Entrez l'ID du serveur adverse
+  target_week: Semaine KvK ciblée
+  week1_option: Semaine 1 vendredi (Match Boss 2)
+  week2_option: Semaine 2 vendredi (Match Boss 3)
+  opponent: Adversaire scouté (Serveur)
+  opponent_example: 'ex: S94, S77'
+  disclaimer: "*Les priorités envoient une proposition au sénat sur Discord à la direction pour vérification."
+  dispatch: Examiner et envoyer la priorité
+  already_scheduled: "{who} Aucune priorité de défense requise."
+  already_scheduled_who: WLO est déjà programmé pour la semaine {n}.
+  step1: 'Étape 1 : Échange de calendrier (Coût : 0 coffre)'
+  step1_text: WLO prendra la semaine {week} pour la défense du royaume contre {threat}.
+  week_label: Semaine {n}
+  opponent_placeholder: "[Adversaire]"
+  week3_finale: 'Finale Semaine 3 :'
+  lose_nothing: "{ally} perd 0 coffre. {wlo} perd 0 coffre."
+  step2: 'Étape 2 : Rachat en temps de guerre (restitution en 2 versements)'
+  step2_text: 'Ceci est le {second} de ce cycle. La semaine 3 a déjà été échangée, donc {ally} ne participe pas et reçoit un rachat avec des coffres :'
+  second_override: deuxième priorité de défense
+  distribution: 'Distribution semaine {n} :'
+  plus_gold: "+1 Or régulier & +1 Or Guerre des Royaumes pour [{tag}]"
+  buyout_perks: "{ally} perd 2 coffres du Roi, gagne 4 coffres en or. {wlo} gagne 2 coffres du Roi, perd 4 coffres en or."
+  proposal_buyout: "🛡️ Déclarer un rachat en temps de guerre"
+  proposal_swap: "⚔️ Déclarer un échange de défense"
+  sum_second: 2e priorité de défense WLO
+  sum_first: 1re priorité de défense WLO
+  sum_vs: Semaine {n} contre {threat}
+  sum_buyout_issued: "[{tag}] Rachat en temps de guerre émis"
+  sum_four_gold: 4 coffres en or au total
+  sum_installment: 'Versement {i} (S{week}) :'
+  sum_installment_chests: 1 Or régulier + 1 Or Guerre des Royaumes
+  sum_swap: Échange de calendrier
+  sum_swap_text: WLO prend le vendredi de la S{n}
+  sum_promoted: "[{tag}] Promu à la finale semaine 3"
+  sum_promoted_text: "(2 coffres du Roi + Objet de buff)"
+  sum_cost: 'Coût des coffres d''alliance WLO : 0'
+rewards_planner:
+  host_week: Semaine d'accueil active
+  planner_mode: Mode planificateur
+  submit_plan: Soumettre le plan
+  loading: Chargement des paliers de récompense...
+  load_failed: Impossible de charger les paliers de récompense.
+  add_tier: Ajouter un palier de récompense
+  remove_bracket: Supprimer la tranche
+  over_capacity: 'Capacité dépassée ! Or : {gold}/{gold_max}, Violet : {purple}/{purple_max}, Bleu : {blue}/{blue_max}'
+  proposal_title: "👑 Soumettre une proposition de distribution des récompenses"
+  rank_single: Rang {n}
+  rank_range: Rang {from}–{to}
+event_presets:
+  crystal_cluster_title: Vallée de Cristal
+  crystal_cluster_desc: Événement Chacun pour soi chaque dimanche
+  elixir_scramble_title: Mêlée Royale
+  elixir_scramble_desc: Événement de combat d'équipe chaque vendredi
+  survival_battle_title: Bataille de Survie
+  survival_battle_desc: Terminez des tâches pour gagner des récompenses
+  kill_event_title: Événement de Tuerie
+  kill_event_desc: Les envahisseurs d'autres serveurs arrivent ! Activez votre bouclier
+  kvk_battle_title: Guerre des Royaumes
+  kvk_battle_desc: La bataille pour le Château Royal commence !
+  gear_event_title: Événement d'Équipement
+  gear_event_desc: Soyez récompensé pour l'amélioration de votre équipement
+  cheese_trap_title: Piège à Fromage
+  cheese_trap_desc: Aidez à repousser le Voleur de Fromage

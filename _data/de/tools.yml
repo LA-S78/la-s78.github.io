@@ -352,3 +352,197 @@ register:
   r_color: 'Identitätsfarbe:'
   r_commands: 'Slash-Befehle bereitgestellt:'
   r_leaders: 'Autorisierte Führungskräfte:'
+calendar:
+  loading: Lade Königreich-Zeitplan...
+  load_failed: 'Laden des Kalenders fehlgeschlagen: {error}'
+  phase: Phase
+  schedule_title: 'Zeitplan: Königreichskrieg'
+  loading_cycle: Lade Zyklusdetails...
+  badge_closed: "🔒 Belohnungen geschlossen"
+  badge_kob_open: "⚔️ König des Kampfes offen"
+  badge_awaiting: "⏳ Erwarte Ergebnis KW"
+  badge_open: "🎁 Belohnungen offen"
+  set2_off_week: Nur Königslob (kein Königreichskrieg).
+  set2_won: 'Königreichskrieg gewonnen: Belohnung „König des Kampfes“ ebenfalls offen.'
+  set2_lost: 'Königreichskrieg verloren: Nur Königslob.'
+  set2_pending: Belohnung „König des Kampfes“, falls der Krieg am Samstag gewonnen wird; der König verteilt sie nach dem Ergebnis.
+  rewards_open_until: "{week} Belohnungen offen bis Dienstag 23:59 GT. {set2}"
+  rewards_closed: Belohnungen geschlossen. Das nächste Mal am Freitag gegen 20:00 GT offen, nach dem Kapitol-Ereignis.
+  capitol_holder: KAPITOL-HALTER
+  current_holder: AKTUELLER KAPITOL-HALTER
+  next_holder: NÄCHSTER KAPITOL-HALTER
+  rank: 'Rang #{rank}'
+  rank_override: 'Rang #{rank} (Überschreiben)'
+  rank_override_schedule: 'Rang #{rank} • Überschreibungsplan'
+  captured_friday: Eingenommen am Freitag
+  captures_today: Einnahmen heute
+  captures_friday: Einnahmen am Freitag
+  cycle_progress: ZYKLUS-FORTSCHRITT
+  day_of_28: Tag {day} von 28 ({week})
+  week_n: Woche {n}
+  next_reset: NÄCHSTER RESET (00:00 GT)
+  next_kw: NÄCHSTE KW-SCHLACHT
+  saturday: Samstag
+  today: "🔥 HEUTE"
+  none_this_week: Keine diese Woche
+  perspective: "🔍 PERSPEKTIVE:"
+  combined: "🌐 Kombiniert (Königreich + [{tag}])"
+  internal_only: "🛡️ [{tag}] Nur intern"
+  kingdom_only: "👑 Nur Königreich-Operationen"
+  operations_active: "🛡️ [{tag}] Operationen aktiv"
+  upcoming: Anstehende Operationen & Meilensteine
+  times_shown: Zeiten angezeigt in {gt} & deiner Ortszeit
+  gt_label: Game Time (UTC-2)
+  no_operations: Keine Operationen für diese Perspektive geplant.
+  all_day: Ganztägig
+  every_2_days: "🔁 Alle 2 Tage"
+  weekly: "🔁 Wöchentlich"
+  mandatory: "🚨 Obligatorisch"
+  delete: "🗑️ Löschen"
+  ev_capture_title: "👑 Kapitol-Einnahme — {who}"
+  ev_capture_desc: "{who} ({rank}) nimmt das Kapitol am Freitag ein."
+  ev_kw_title: "⚔️ Königreichskrieg-Schlacht"
+  ev_kw_desc: Startet 12:00 GT, normalerweise gegen 14:00 GT vorbei. Ein Sieg schaltet die Belohnungstruhen „König des Kampfes“ zusätzlich zum Königslob frei.
+  ev_open_title: "🎁 Belohnungen offen — {week}"
+  ev_open_desc_kw: Königslob öffnet nach dem Kapitol-Ereignis. Belohnung „König des Kampfes“ folgt, wenn der Königreichskrieg am Samstag gewonnen wird; der König verteilt sie nach dem Ergebnis.
+  ev_open_desc: Königslob öffnet nach dem Kapitol-Ereignis (kein Königreichskrieg diese Woche).
+  ev_close_title: "⌛ Belohnungen schließen — {week}"
+  ev_close_desc: 'Truhen laufen Mittwoch um 00:00 GT ab: Alles davor verteilen.'
+calendar_events:
+  manage_mode: VERWALTUNGSMODUS
+  session_active: Authentifizierte Sitzung aktiv
+  schedule_operation: "➕ Operation planen"
+  create_operation: Operation erstellen
+  kingdom_admin: "👑 KÖNIGREICH-ADMIN"
+  kingdom_desc: Plane königreichsweite Warnungen und Operationen
+  kingdom_heading: Königreich-Operation erstellen ([GLOBAL])
+  leadership: "🛡️ [{tag}] FÜHRUNG"
+  leadership_desc: Verwalte interne Operationen für [{tag}]
+  alliance_heading: "[{tag}] Operation erstellen"
+  preset: Operations-Voreinstellung
+  preset_custom: "🛠️ Eigene Operation (Leer)"
+  preset_crystal_cluster: "🔮 Kristalltal (0,5h)"
+  preset_elixir_scramble: "🧪 Elixier-Gerangel (0,5h)"
+  preset_survival_battle: "⚔️ Überlebenskampf (4,0h)"
+  preset_kill_event: "🩸 Tötungs-Event (24,0h)"
+  preset_kvk_battle: "👑 Königreichskrieg (1,0h)"
+  preset_gear_event: "🛡️ Ausrüstungs-Event (48,0h)"
+  preset_cheese_trap: "🧀 Cheese-Falle (0,5h)"
+  title: Event-Titel
+  title_example: z. B. Bienenstock-Verteidigung oder Außenposten-Angriff
+  date: Startdatum (JJJJ-MM-TT)
+  time: Game Time (HH:MM UTC-2)
+  time_hint: Server Game Time (rastet in 5-Minuten-Schritten ein)
+  duration: Dauer (Stunden)
+  frequency: Frequenz
+  once: Einmaliges Event (Wiederholt sich nicht)
+  every_2_days: Wiederholt sich alle 2 Tage
+  weekly: Wiederholt sich wöchentlich (Gleicher Tag & Zeit)
+  alert_level: Discord-Alarmstufe
+  notify_role: "🔔 Standard-Allianz-Rolle pingen (Fallback auf @everyone)"
+  notify_custom: "🎯 Spezifische Rollen-ID anvisieren (einmaliges Überschreiben)"
+  notify_everyone: "🚨 @everyone-Broadcast erzwingen (Obligatorische Operation)"
+  notify_none: "🔕 Lautlos (Nur Kalender - Kein Discord-Ping)"
+  role_id: Spezifische Rollen-ID
+  role_id_hint: "(Nur erforderlich für spezifische Rollenzielvorgabe)"
+  role_id_title: Muss eine gültige 17-20-stellige Discord-Rollen-ID sein
+  details: Anweisungen / Sammelpunkt
+  details_example: z. B. Versammlung bei Hive Alpha. R4 führen Rallies. Voice-Chat aktiv.
+  publish: Im Kalender veröffentlichen
+  publishing: Veröffentliche...
+  bad_time: Game Time muss in 5-Minuten-Schritten eingestellt werden (:00, :05, :10, etc.)
+  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Alarmziel ein.
+  save_failed: Speichern des Events fehlgeschlagen
+  published: Operation erfolgreich veröffentlicht!
+  confirm_delete: Bist du sicher, dass du diese Operation aus dem Kalender entfernen willst?
+  delete_failed: Löschen des Events fehlgeschlagen
+  removed: Operation entfernt.
+kings_scheduler:
+  title: "⚔️ Kapitol-Verteidigungs- & Rotationskonsole"
+  subtitle: Automatisierter Spielabgleich-Verteidigungs- & Entschädigungsplan
+  overrides: 'Überschreibungen: {n}/2'
+  loading: Lade Live-Zeitplan...
+  off_week: Off-Woche
+  week_fri: Woche {n} Fr
+  boss_window: Boss {n} Zeitfenster
+  kvk_finale: KvK-Finale
+  loot_one: "{n} Königstruhe"
+  loot_other: "{n} Königstruhen"
+  loot_border: 2 Königstruhen + Rahmen
+  active: AKTIV
+  buyouts_title: "🛡️ Aktive Kriegskauf-Entschädigung"
+  buyouts_count: "{n} Aktiv"
+  installment: 'Woche {week} Auszahlung:'
+  payout: "{reg} & {kw}"
+  reg_gold: "+{n} Reg-Gold"
+  kw_gold: "+{n} KW-Gold"
+  paid: BEZAHLT
+  pending: AUSSTEHEND
+  beneficiary: 'Begünstigter:'
+  threat: "(Bedrohung: {threat})"
+  red_list: Rote Liste
+  wartime_buyout: Kriegskauf
+  override_title: "🚨 Zeitplan-Überschreibung erklären"
+  override_help: Gefährlichen Server ausgekundschaftet? Gib die Server-ID des Gegners ein
+  target_week: Ziel-KvK-Woche
+  week1_option: Woche 1 Freitag (Boss 2 Abgleich)
+  week2_option: Woche 2 Freitag (Boss 3 Abgleich)
+  opponent: Ausgekundschafteter Gegner (Server)
+  opponent_example: z. B. S94, S77
+  disclaimer: "*Überschreibungen senden einen Senatsvorschlag an die Discord-Führung zur Überprüfung."
+  dispatch: Überschreibung prüfen & absenden
+  already_scheduled: "{who} Keine Verteidigungs-Überschreibung erforderlich."
+  already_scheduled_who: WLO ist bereits für Woche {n} geplant.
+  step1: 'Schritt 1: Kalender-Tausch (0 Truhen-Kosten)'
+  step1_text: WLO übernimmt {week} für die Königreichsverteidigung gegen {threat}.
+  week_label: Woche {n}
+  opponent_placeholder: "[Gegner]"
+  week3_finale: 'Woche 3 Finale:'
+  lose_nothing: "{ally} verliert 0 Truhen. {wlo} verliert 0 Truhen."
+  step2: 'Schritt 2: Kriegskauf (Entschädigung in 2 Raten)'
+  step2_text: 'Dies ist die {second} in diesem Zyklus. Woche 3 wurde bereits getauscht, daher setzt {ally} aus und erhält einen Kauf mit Truhen:'
+  second_override: zweite Verteidigungs-Überschreibung
+  distribution: 'Woche {n} Verteilung:'
+  plus_gold: "+1 Reg-Gold & +1 KW-Gold an [{tag}]"
+  buyout_perks: "{ally} verliert 2 Königstruhen, gewinnt 4 Goldtruhen. {wlo} gewinnt 2 Königstruhen, verliert 4 Goldtruhen."
+  proposal_buyout: "🛡️ Kriegskauf erklären"
+  proposal_swap: "⚔️ Verteidigungs-Tausch erklären"
+  sum_second: WLO 2. Verteidigungs-Überschreibung
+  sum_first: WLO 1. Verteidigungs-Überschreibung
+  sum_vs: Woche {n} vs {threat}
+  sum_buyout_issued: "[{tag}] Kriegskauf ausgestellt"
+  sum_four_gold: 4 Goldtruhen insgesamt
+  sum_installment: 'Rate {i} (W{week}):'
+  sum_installment_chests: 1 Reg-Gold + 1 KW-Gold
+  sum_swap: Kalender-Tausch
+  sum_swap_text: WLO übernimmt W{n} Freitag
+  sum_promoted: "[{tag}] Zum Woche 3 Finale befördert"
+  sum_promoted_text: "(2 Königstruhen + Buff-Gegenstand)"
+  sum_cost: 'WLO Allianz-Truhen-Kosten: 0'
+rewards_planner:
+  host_week: Aktive Hosting-Woche
+  planner_mode: Planungsmodus
+  submit_plan: Plan einreichen
+  loading: Lade Belohnungsstufen…
+  load_failed: Konnte Belohnungsstufen nicht laden.
+  add_tier: Belohnungsstufe hinzufügen
+  remove_bracket: Klammer entfernen
+  over_capacity: 'Kapazität überschritten! Gold: {gold}/{gold_max}, Lila: {purple}/{purple_max}, Blau: {blue}/{blue_max}'
+  proposal_title: "👑 Verteilungsvorschlag für Belohnungen einreichen"
+  rank_single: Rang {n}
+  rank_range: Rang {from}–{to}
+event_presets:
+  crystal_cluster_title: Kristalltal
+  crystal_cluster_desc: Jeden Sonntag Free-For-All-Event
+  elixir_scramble_title: Elixier-Gerangel
+  elixir_scramble_desc: Jeden Freitag Team-Kampf-Event
+  survival_battle_title: Überlebenskampf
+  survival_battle_desc: Erledige Aufgaben, um Belohnungen zu verdienen
+  kill_event_title: Tötungs-Event
+  kill_event_desc: Invasoren von anderen Servern kommen! Schild aktivieren
+  kvk_battle_title: Königreichskrieg
+  kvk_battle_desc: Der Kampf um die Königliche Burg beginnt!
+  gear_event_title: Ausrüstungs-Event
+  gear_event_desc: Erhalte Belohnungen für das Verbessern von Ausrüstung
+  cheese_trap_title: Cheese-Falle
+  cheese_trap_desc: Hilf bei der Abwehr des Cheese-Diebs

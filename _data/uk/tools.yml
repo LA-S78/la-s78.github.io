@@ -7,13 +7,13 @@ common:
   not_saved: 'Не збережено: {error}'
   cancel: Скасувати
   save: "💾 Зберегти"
-  saving: Зберігаю…
+  saving: Збереження…
   edit: Редагувати
   delete: Видалити
   remove: Прибрати
-  undo: Скасувати
-  move_up: Вгору
-  move_down: Вниз
+  undo: Скасувати дію
+  move_up: Перемістити вгору
+  move_down: Перемістити вниз
   copied: "✓ Скопійовано"
   optional: "(необов'язково)"
   now: зараз
@@ -22,13 +22,18 @@ common:
   duration_minutes: "{m}хв"
   game_time: "{time} GT"
   your_time: "{time} ваш час"
+  off_week: Тиждень без подій
+  kw_week: Тиждень Війни Королівств {n}
+  copy: Копіювати
+  set_one: Подяка Короля
+  set_two: Нагорода Короля Битви
   chests:
     commanders_will: Воля Командира
-    loyal_servant: Відданий Слуга
+    loyal_servant: Вірний Слуга
     followers_heart: Серце Послідовника
     honor_vanguard: Авангард Честі
     fearless_hero: Безстрашний Герой
-    logistics_support: Матеріально-технічне забезпечення
+    logistics_support: Логістична підтримка
 dashboard:
   title: Панель Альянсу
   loading: Завантаження панелі вашого альянсу…
@@ -351,3 +356,198 @@ register:
   r_color: 'Колір ідентифікації:'
   r_commands: 'Розгорнуті слеш-команди:'
   r_leaders: 'Авторизоване керівництво:'
+calendar:
+  loading: Завантаження розкладу Королівства...
+  load_failed: 'Не вдалося завантажити календар: {error}'
+  phase: Фаза
+  schedule_title: Розклад Війни Королівств
+  loading_cycle: Завантаження деталей циклу...
+  badge_closed: "🔒 Нагороди закрито"
+  badge_kob_open: "⚔️ Король Битви відкрито"
+  badge_awaiting: "⏳ Очікування результатів ВК"
+  badge_open: "🎁 Нагороди відкрито"
+  set2_off_week: Тільки Подяка Короля (без Війни Королівств).
+  set2_won: 'Війна Королівств виграна: Нагорода Короля Битви також відкрита.'
+  set2_lost: 'Війна Королівств програна: Тільки Подяка Короля.'
+  set2_pending: Нагорода Короля Битви, якщо суботня війна виграна; Король видає її після оголошення результатів.
+  rewards_open_until: Нагороди {week} відкриті до вівторка 23:59 GT. {set2}
+  rewards_closed: Нагороди закрито. Наступне відкриття в п'ятницю близько 20:00 GT, після захоплення Капітолія.
+  capitol_holder: ВЛАСНИК КАПІТОЛІЯ
+  current_holder: ПОТОЧНИЙ ВЛАСНИК КАПІТОЛІЯ
+  next_holder: НАСТУПНИЙ ВЛАСНИК КАПІТОЛІЯ
+  rank: 'Ранг #{rank}'
+  rank_override: 'Ранг #{rank} (Заміщення)'
+  rank_override_schedule: 'Ранг #{rank} • Розклад заміщення'
+  captured_friday: Захоплено у п'ятницю
+  captures_today: Захоплення сьогодні
+  captures_friday: Захоплення у п'ятницю
+  cycle_progress: ПРОГРЕС ЦИКЛУ
+  day_of_28: День {day} з 28 ({week})
+  week_n: Тиждень {n}
+  next_reset: НАСТУПНЕ СКИНУТТЯ (00:00 GT)
+  next_kw: НАСТУПНА БИТВА ВК
+  saturday: Субота
+  today: "🔥 СЬОГОДНІ"
+  none_this_week: Цього тижня немає
+  perspective: "🔍 ПЕРСПЕКТИВА:"
+  combined: "🌐 Об'єднана (Королівство + [{tag}])"
+  internal_only: "🛡️ [{tag}] Тільки для своїх"
+  kingdom_only: "👑 Тільки операції Королівства"
+  operations_active: "🛡️ [{tag}] Операції активні"
+  upcoming: Майбутні операції та етапи
+  times_shown: Час відображається в {gt} та за вашим місцевим часом
+  gt_label: Game Time (UTC-2)
+  no_operations: Для цієї перспективи операцій не заплановано.
+  all_day: Весь день
+  every_2_days: "🔁 Кожні 2 дні"
+  weekly: "🔁 Щотижня"
+  mandatory: "🚨 Обов'язково"
+  delete: "🗑️ Видалити"
+  ev_capture_title: "👑 Захоплення Капітолія — {who}"
+  ev_capture_desc: "{who} ({rank}) захоплює Капітолій у п'ятницю."
+  ev_kw_title: "⚔️ Битва Війни Королівств"
+  ev_kw_desc: Починається о 12:00 GT, зазвичай закінчується близько 14:00 GT. Перемога відкриває скрині Нагороди Короля Битви на додаток до Подяки Короля.
+  ev_open_title: "🎁 Нагороди відкрито — {week}"
+  ev_open_desc_kw: Подяка Короля відкривається після захоплення Капітолія. Нагорода Короля Битви додається, якщо суботня Війна Королівств виграна; Король видає її після результатів.
+  ev_open_desc: Подяка Короля відкривається після захоплення Капітолія (цього тижня немає Війни Королівств).
+  ev_close_title: "⌛ Нагороди закрито — {week}"
+  ev_close_desc: 'Термін дії скринь закінчується в середу о 00:00 GT: видайте все до цього часу.'
+calendar_events:
+  manage_mode: РЕЖИМ КЕРУВАННЯ
+  session_active: Сесію автентифіковано
+  schedule_operation: "➕ Запланувати операцію"
+  create_operation: Створити операцію
+  kingdom_admin: "👑 АДМІНІСТРАЦІЯ КОРОЛІВСТВА"
+  kingdom_desc: Планування сповіщень та операцій для всього Королівства
+  kingdom_heading: Створити операцію Королівства ([GLOBAL])
+  leadership: "🛡️ [{tag}] КЕРІВНИЦТВО"
+  leadership_desc: Керування внутрішніми операціями для [{tag}]
+  alliance_heading: Створити операцію [{tag}]
+  preset: Шаблон операції
+  preset_custom: "🛠️ Своя операція (порожня)"
+  preset_crystal_cluster: "🔮 Кришталева Долина (0.5г)"
+  preset_elixir_scramble: "🧪 Королівська сутичка (0.5г)"
+  preset_survival_battle: "⚔️ Битва за виживання (4.0г)"
+  preset_kill_event: "🩸 Подія вбивств (24.0г)"
+  preset_kvk_battle: "👑 Битва Війни Королівств (1.0г)"
+  preset_gear_event: "🛡️ Подія спорядження (48.0г)"
+  preset_cheese_trap: "🧀 Сирна Пастка (0.5г)"
+  title: Назва події
+  title_example: напр. Тренування захисту вулика або Штурм аванпосту
+  date: Дата початку (РРРР-ММ-ДД)
+  time: Game Time (ГГ:ХХ UTC-2)
+  time_hint: Серверний Game Time (крок 5 хвилин)
+  duration: Тривалість (годин)
+  frequency: Частота
+  once: Одноразова подія (не повторюється)
+  every_2_days: Повторювати кожні 2 дні
+  weekly: Повторювати щотижня (той самий день і час)
+  alert_level: Рівень сповіщень Discord
+  notify_role: "🔔 Сповістити стандартну роль Альянсу (якщо не задано — @everyone)"
+  notify_custom: "🎯 Сповістити конкретну роль (за ID)"
+  notify_everyone: "🚨 Примусова трансляція @everyone (Обов'язкова операція)"
+  notify_none: "🔕 Тихо (Тільки в календарі - без сповіщень Discord)"
+  role_id: ID ролі
+  role_id_hint: "(Необхідно лише для конкретної ролі)"
+  role_id_title: Має бути дійсним ID ролі Discord (17-20 цифр)
+  details: Інструкції / Місце збору
+  details_example: напр. Збір біля вулика Alpha. R4 ведуть збори. Голосовий зв'язок активний.
+  publish: Опублікувати в календар
+  publishing: Публікація...
+  bad_time: Game Time має бути з кроком у 5 хвилин (:00, :05, :10 і т.д.)
+  bad_role: Будь ласка, введіть дійсний 17-20-значний ID ролі Discord для сповіщення.
+  save_failed: Не вдалося зберегти подію
+  published: Операцію успішно опубліковано!
+  confirm_delete: Ви впевнені, що хочете видалити цю операцію з календаря?
+  delete_failed: Не вдалося видалити подію
+  removed: Операцію видалено.
+kings_scheduler:
+  title: "⚔️ Консоль захисту та ротації Капітолія"
+  subtitle: Автоматизований розклад захисту та компенсацій
+  overrides: 'Заміни: {n}/2'
+  loading: Завантаження поточного розкладу...
+  off_week: Тиждень без подій
+  week_fri: Тиждень {n} Пт
+  boss_window: Вікно Боса {n}
+  kvk_finale: Фінал ВК
+  loot_one: "{n} скриня Короля"
+  loot_few: "{n} скрині Короля"
+  loot_other: "{n} скринь Короля"
+  loot_border: 2 скрині Короля + Рамка
+  active: АКТИВНО
+  buyouts_title: "🛡️ Активні компенсації викупу під час війни"
+  buyouts_count: "{n} активних"
+  installment: 'Виплата за тиждень {week}:'
+  payout: "{reg} & {kw}"
+  reg_gold: "+{n} Золото Рег."
+  kw_gold: "+{n} Золото ВК"
+  paid: ОПЛАЧЕНО
+  pending: В ОЧІКУВАННІ
+  beneficiary: 'Отримувач:'
+  threat: "(Загроза: {threat})"
+  red_list: Червоний список
+  wartime_buyout: Викуп під час війни
+  override_title: "🚨 Задекларувати заміну розкладу"
+  override_help: Знайшли небезпечний сервер? Введіть ID сервера опонента
+  target_week: Цільовий тиждень ВК
+  week1_option: Тиждень 1 п'ятниця (матч Бос 2)
+  week2_option: Тиждень 2 п'ятниця (матч Бос 3)
+  opponent: Опонент (Сервер)
+  opponent_example: напр. S94, S77
+  disclaimer: "*Заміни відправляють пропозицію сенату в Discord для перевірки."
+  dispatch: Переглянути та відправити заміну
+  already_scheduled: "{who} Заміна захисту не потрібна."
+  already_scheduled_who: WLO вже заплановано на тиждень {n}.
+  step1: 'Крок 1: Обмін календаря (вартість 0 скринь)'
+  step1_text: WLO візьме {week} для захисту королівства від {threat}.
+  week_label: Тиждень {n}
+  opponent_placeholder: "[Опонент]"
+  week3_finale: 'Фінал тижня 3:'
+  lose_nothing: "{ally} втрачає 0 скринь. {wlo} втрачає 0 скринь."
+  step2: 'Крок 2: Викуп під час війни (компенсація у 2 етапи)'
+  step2_text: 'Це {second} у цьому циклі. Тиждень 3 вже було обміняно, тому {ally} пропускає і отримує викуп зі скринями:'
+  second_override: друга заміна захисту
+  distribution: 'Розподіл тижня {n}:'
+  plus_gold: "+1 Золото Рег. та +1 Золото ВК для [{tag}]"
+  buyout_perks: "{ally} втрачає 2 скрині Короля, отримує 4 золоті скрині. {wlo} отримує 2 скрині Короля, втрачає 4 золоті скрині."
+  proposal_buyout: "🛡️ Оголосити викуп під час війни"
+  proposal_swap: "⚔️ Оголосити обмін захисту"
+  sum_second: 2-га заміна захисту WLO
+  sum_first: 1-ша заміна захисту WLO
+  sum_vs: Тиждень {n} проти {threat}
+  sum_buyout_issued: "[{tag}] Викуп під час війни видано"
+  sum_four_gold: Всього 4 золоті скрині
+  sum_installment: 'Частина {i} (Т{week}):'
+  sum_installment_chests: 1 Золото Рег. + 1 Золото ВК
+  sum_swap: Обмін календаря
+  sum_swap_text: WLO бере Т{n} п'ятниця
+  sum_promoted: "[{tag}] Підвищено до фіналу тижня 3"
+  sum_promoted_text: "(2 скрині Короля + Буст)"
+  sum_cost: 'Вартість скринь Альянсу WLO: 0'
+rewards_planner:
+  host_week: Активний тиждень хостингу
+  planner_mode: Режим планувальника
+  submit_plan: Відправити план
+  loading: Завантаження рівнів винагород…
+  load_failed: Не вдалося завантажити рівні винагород.
+  add_tier: Додати рівень винагороди
+  remove_bracket: Видалити категорію
+  over_capacity: 'Місткість перевищено! Золото: {gold}/{gold_max}, Фіолет: {purple}/{purple_max}, Синє: {blue}/{blue_max}'
+  proposal_title: "👑 Відправити пропозицію розподілу нагород"
+  rank_single: Ранг {n}
+  rank_range: Ранг {from}–{to}
+event_presets:
+  crystal_cluster_title: Кришталева Долина
+  crystal_cluster_desc: Подія «кожен сам за себе» щонеділі
+  elixir_scramble_title: Королівська сутичка
+  elixir_scramble_desc: Командна битва щоп'ятниці
+  survival_battle_title: Битва за виживання
+  survival_battle_desc: Виконуйте завдання, щоб заробити нагороди
+  kill_event_title: Подія вбивств
+  kill_event_desc: Прибувають загарбники з інших серверів! Увімкніть щити
+  kvk_battle_title: Битва Війни Королівств
+  kvk_battle_desc: Битва за Королівський замок починається!
+  gear_event_title: Подія спорядження
+  gear_event_desc: Отримуйте нагороди за покращення спорядження
+  cheese_trap_title: Сирна Пастка
+  cheese_trap_desc: Допоможіть відбитись від Сирного Злодія
