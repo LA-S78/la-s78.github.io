@@ -65,7 +65,6 @@ nav_id: "capitol-rotation"
       <div class="rotation-week{% if forloop.last %} is-off-week{% endif %}">
         <div class="rotation-week-head">{% if forloop.last %}{{ "common.off_week" | t }}{% else %}{{ "common.kw_week" | t_html: "n", forloop.index }}{% endif %}</div>
         <div class="rotation-crown rank-{{ seat }}" aria-hidden="true">{% if seat == "1" %}👑{% elsif seat == "2" %}🥈{% elsif seat == "3" %}🥉{% else %}🛡️{% endif %}</div>
-        <div class="rotation-seat">{{ "capitol_rotation.seat" | t_html: "rank", seat }}</div>
       </div>
     {% endfor %}
   </div>

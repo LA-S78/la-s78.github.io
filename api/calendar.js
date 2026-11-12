@@ -7,6 +7,7 @@ import {
 } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { resolveCohortSchedule } from './_cycle_helper.js';
 import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 
@@ -41,6 +42,17 @@ export default async function handler(req, res) {
 
   const alliances = mapState.alliances || {};
   const activeSchedule = rewardsState.cycle_state?.active_schedule || null;
+  // The plain rotation for this cycle (the 3-cycle wheel of seats; api/_cycle_helper.js). A
+  // week is an override only when the schedule names someone else than this: the wheel moves
+  // seats around, so the holder's rank is not expected to match the week's starting rank.
+  const cycleState = rewardsState.cycle_state || {};
+  const plainSchedule = resolveCohortSchedule(
+    Number(cycleState.macro_cycle) || 1,
+    cycleState.cohort_seats,
+    mapState,
+  ).schedule;
+  const isOverride = (slotKey, tag) =>
+    Boolean(tag && plainSchedule[slotKey] && plainSchedule[slotKey] !== tag);
 
   // Resolve current Capitol Holder from active_schedule first, falling back to static rank
   const currentSlotKey = currentStatus.scheduleSlot;
@@ -53,7 +65,7 @@ export default async function handler(req, res) {
     capitolHolderTag = `[${scheduledHolderTag}]`;
     const actualRank = alliances[scheduledHolderTag]?.rank;
     if (actualRank) {
-      currentStatus.isOverrideWeek = parseInt(actualRank, 10) !== currentStatus.capitolRank;
+      currentStatus.isOverrideWeek = isOverride(currentSlotKey, scheduledHolderTag);
       currentStatus.holderActualRank = parseInt(actualRank, 10);
     }
   } else {
@@ -69,7 +81,13 @@ export default async function handler(req, res) {
   const coloured = sanitizeAlliances(alliances, await getRoleColors());
   const capitolHolderColor = holderTag ? coloured[holderTag]?.color || null : null;
   // The cycle's four weeks for the Capitol Rotation chart on the Rules page.
-  currentStatus.rotation = describeRotation(currentStatus, calConfig, coloured, activeSchedule);
+  currentStatus.rotation = describeRotation(
+    currentStatus,
+    calConfig,
+    coloured,
+    activeSchedule,
+    plainSchedule,
+  );
 
   // 1. Generate System Milestones (Capitol Captures & War Battle Days)
   const cycleMilestones = [];
@@ -90,7 +108,7 @@ export default async function handler(req, res) {
     nextHolderTag = `[${nextScheduledTag}]`;
     const nextActualRank = alliances[nextScheduledTag]?.rank;
     if (nextActualRank) {
-      nextHolderOverride = parseInt(nextActualRank, 10) !== nextWeekConfig?.capitol_rank;
+      nextHolderOverride = isOverride(nextSlotKey, nextScheduledTag);
       nextHolderRank = parseInt(nextActualRank, 10);
       nextHolderRankLabel = nextHolderOverride
         ? `Rank #${nextActualRank} • Override Schedule`
