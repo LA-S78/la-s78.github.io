@@ -58,10 +58,14 @@ function render(board, rotation) {
     <p class="rotation-source">${esc(t('schedule_note'))}</p>`;
 }
 
+// Boards already started (a WeakSet, not a data- attribute: Turbo's back-button copy of the
+// page keeps attributes, and would then never load the live chart; see docs/DECISIONS.md).
+const started = new WeakSet();
+
 async function init() {
   const board = document.getElementById('rotation-board');
-  if (!board || board.dataset.ready) return;
-  board.dataset.ready = '1';
+  if (!board || started.has(board)) return;
+  started.add(board);
   try {
     const res = await fetch('/api/calendar');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
