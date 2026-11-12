@@ -6,7 +6,7 @@ permalink: /architecture.html
 
 <div class="content-pane">
   <h2>System Blueprint</h2>
-  <p>How the site is built and how it runs. The first version of this chart is kept at <a href="/architecture-v1.html">/architecture-v1.html</a>.</p>
+  <p>How the site is built and how it runs.</p>
 
   <h3>Building and publishing</h3>
   <p>Every push to <code>main</code> or <code>dev</code>: new English text is translated, the site is built in 8 languages, checked, and published.</p>
