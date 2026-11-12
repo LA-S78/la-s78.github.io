@@ -11,6 +11,12 @@
 //          --states <regex>  --workers 4  --out tools/visual-diff/output  --quick
 //          --save-all  (keep screenshots of every view, not only the ones that differ)
 //          --ignore-vars  (leave CSS variables out of the style comparison; see README)
+//          --all  (compare every page, even those no changed file can reach)
+//          --no-cache  (rebuild a git ref even if a build of that commit is cached)
+//
+// Speed: only English is built (only /en/ is compared); a build of a commit is kept and
+// reused (by commit id); and pages that no changed file can reach are skipped (see
+// affectedPages below).
 // Exit code 0 = no visible or style difference; 1 = differences (see report.md).
 
 import { chromium } from 'playwright';
@@ -53,14 +59,21 @@ const opt = {
   out: path.resolve(args.out || path.join(HERE, 'output')),
   saveAll: Boolean(args['save-all']),
   ignoreVars: Boolean(args['ignore-vars']),
+  all: Boolean(args.all),
+  cache: !args['no-cache'],
 };
+const T0 = Date.now();
+const took = (t) => `${Math.round((Date.now() - t) / 1000)}s`;
 
 // ---------- getting a built site ----------
 const isSiteDir = (p) =>
   fs.existsSync(path.join(p, 'index.html')) && fs.existsSync(path.join(p, 'en'));
+const CACHE = path.join(os.tmpdir(), 'la-s78-visual-cache');
+const temps = []; // removed at the end
 
+// English only: the comparison only opens /en/ pages, and each language adds a full build.
 function build(cwd) {
-  execFileSync('bundle', ['exec', 'ruby', '_scripts/build.rb', '--no-check'], {
+  execFileSync('bundle', ['exec', 'ruby', '_scripts/build.rb', '--lang=en', '--no-check'], {
     cwd,
     stdio: ['ignore', 'ignore', 'inherit'],
     env: { ...process.env, BUNDLE_GEMFILE: path.join(cwd, 'Gemfile') },
@@ -69,26 +82,140 @@ function build(cwd) {
 
 function siteFor(spec, label) {
   if (spec && spec !== true && isSiteDir(path.resolve(spec))) return path.resolve(spec);
+  const t = Date.now();
   const out = fs.mkdtempSync(path.join(os.tmpdir(), `visual-${label}-`));
+  temps.push(out);
   if (!spec || spec === true) {
+    // The working copy is built from a copy of its files (tracked and new, not ignored), so
+    // the build never changes anything in the real folder (it rewrites parts of _data).
     console.log(`Building ${label}: working copy...`);
-    build(REPO);
-    fs.cpSync(path.join(REPO, '_site'), path.join(out, 'site'), { recursive: true });
-  } else {
-    console.log(`Building ${label}: ${spec}...`);
     const tree = path.join(out, 'tree');
-    execFileSync('git', ['worktree', 'add', '--detach', tree, spec], {
+    const files = execFileSync('git', ['ls-files', '-co', '--exclude-standard', '-z'], {
       cwd: REPO,
-      stdio: 'ignore',
-    });
-    try {
-      build(tree);
-      fs.cpSync(path.join(tree, '_site'), path.join(out, 'site'), { recursive: true });
-    } finally {
-      execFileSync('git', ['worktree', 'remove', '--force', tree], { cwd: REPO, stdio: 'ignore' });
+      maxBuffer: 64 * 1024 * 1024,
+    })
+      .toString()
+      .split('\0')
+      .filter((f) => f && fs.existsSync(path.join(REPO, f)));
+    for (const f of files) {
+      fs.mkdirSync(path.dirname(path.join(tree, f)), { recursive: true });
+      fs.copyFileSync(path.join(REPO, f), path.join(tree, f));
     }
+    build(tree);
+    fs.cpSync(path.join(tree, '_site'), path.join(out, 'site'), { recursive: true });
+    fs.rmSync(tree, { recursive: true, force: true });
+    console.log(`  built in ${took(t)}`);
+    return path.join(out, 'site');
   }
-  return path.join(out, 'site');
+  // A git ref: a build of the same commit is reused.
+  const sha = execFileSync('git', ['rev-parse', `${spec}^{commit}`], { cwd: REPO })
+    .toString()
+    .trim();
+  const cached = path.join(CACHE, `${sha}-en`);
+  if (opt.cache && isSiteDir(cached)) {
+    console.log(`Using the cached build of ${spec} (${sha.slice(0, 7)}).`);
+    return cached;
+  }
+  console.log(`Building ${label}: ${spec} (${sha.slice(0, 7)})...`);
+  const tree = path.join(out, 'tree');
+  execFileSync('git', ['worktree', 'add', '--detach', tree, sha], { cwd: REPO, stdio: 'ignore' });
+  try {
+    build(tree);
+    fs.mkdirSync(CACHE, { recursive: true });
+    fs.rmSync(cached, { recursive: true, force: true });
+    fs.cpSync(path.join(tree, '_site'), cached, { recursive: true });
+  } finally {
+    execFileSync('git', ['worktree', 'remove', '--force', tree], { cwd: REPO, stdio: 'ignore' });
+  }
+  // Keep the 4 newest cached builds.
+  fs.readdirSync(CACHE)
+    .map((d) => ({ d, t: fs.statSync(path.join(CACHE, d)).mtimeMs }))
+    .sort((a, b) => b.t - a.t)
+    .slice(4)
+    .forEach(({ d }) => fs.rmSync(path.join(CACHE, d), { recursive: true, force: true }));
+  console.log(`  built in ${took(t)}`);
+  return cached;
+}
+
+// ---------- which pages can a change reach? ----------
+// A page is compared when its own HTML differs, or when a changed file is reachable from it:
+// named in the page, or in a script/stylesheet/data file the page reaches (followed by file
+// name). Service workers (sw.js) and api/ are left out: both are replaced in these tests.
+// If a changed file isn't named anywhere (a path built in code), every page is compared.
+const TEXT = /\.(html|css|js|mjs|json|webmanifest|svg)$/;
+function listFiles(root) {
+  const out = [];
+  const walk = (d) => {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) walk(p);
+      else out.push(path.relative(root, p).split(path.sep).join('/'));
+    }
+  };
+  walk(root);
+  return out;
+}
+function affectedPages(baseSite, headSite, pages) {
+  const read = (root, f) => {
+    const p = path.join(root, f);
+    return fs.existsSync(p) ? fs.readFileSync(p) : null;
+  };
+  // Left out: service workers (blocked in these tests; they name every file) and api/
+  // (server code: the tests answer /api/ with fixtures/).
+  const files = [...new Set([...listFiles(baseSite), ...listFiles(headSite)])].filter(
+    (f) => !/(^|\/)sw\.js$/.test(f) && !f.startsWith('api/'),
+  );
+  const changed = files.filter((f) => {
+    const a = read(baseSite, f);
+    const b = read(headSite, f);
+    return !a || !b || !a.equals(b);
+  });
+  if (!changed.length) return { pages: [], note: 'the two builds are identical' };
+  const text = new Map(
+    files
+      .filter((f) => TEXT.test(f))
+      .map((f) => [f, (read(headSite, f) || read(baseSite, f)).toString()]),
+  );
+  const byName = new Map();
+  for (const f of files) {
+    const n = path.posix.basename(f);
+    byName.set(n, [...(byName.get(n) || []), f]);
+  }
+  const names = [...byName.keys()];
+  const refs = new Map(); // file -> files it names
+  const refsOf = (f) => {
+    if (!refs.has(f)) {
+      const t = text.get(f) || '';
+      refs.set(
+        f,
+        names.filter((n) => t.includes(n)).flatMap((n) => byName.get(n)),
+      );
+    }
+    return refs.get(f);
+  };
+  const changedAssets = changed.filter((f) => !f.endsWith('.html'));
+  const named = new Set([...text.keys()].flatMap(refsOf));
+  if (changedAssets.some((f) => !named.has(f)))
+    return { pages, note: 'a changed file is not named anywhere, so every page is compared' };
+  const out = pages.filter((page) => {
+    const self = page.slice(1);
+    if (changed.includes(self)) return true;
+    const seen = new Set([self]);
+    const todo = [self];
+    while (todo.length) {
+      for (const g of refsOf(todo.pop())) {
+        if (seen.has(g)) continue;
+        if (changedAssets.includes(g)) return true;
+        seen.add(g);
+        if (TEXT.test(g) && !g.endsWith('.html')) todo.push(g);
+      }
+    }
+    return false;
+  });
+  return {
+    pages: out,
+    note: `${changed.length} changed files reach ${out.length} of ${pages.length} pages`,
+  };
 }
 
 // ---------- static server with correct content types ----------
@@ -429,10 +556,24 @@ const headSite = siteFor(args.head, 'head');
 fs.rmSync(opt.out, { recursive: true, force: true });
 fs.mkdirSync(opt.out, { recursive: true });
 
+let pages = listPages(baseSite);
+let skippedNote = '';
+if (!opt.all) {
+  const all = pages.length;
+  const r = affectedPages(baseSite, headSite, pages);
+  pages = r.pages;
+  console.log(
+    `Pages to compare: ${r.note}${pages.length < all ? ' (--all compares every page)' : ''}.`,
+  );
+  if (pages.length < all)
+    skippedNote = `${all - pages.length} of ${all} pages skipped: no changed file reaches them (${r.note}; \`--all\` compares every page).`;
+}
+
 const [A, B] = await Promise.all([serve(baseSite), serve(headSite)]);
 const browser = await chromium.launch();
 const jobs = [];
-for (const page of listPages(baseSite)) {
+const tCompare = Date.now();
+for (const page of pages) {
   for (const s of await discoverStates(browser, A.origin, page)) {
     for (const theme of opt.themes)
       for (const width of opt.widths) jobs.push({ page, theme, width, ...s });
@@ -572,6 +713,8 @@ await Promise.all(
 await browser.close();
 A.srv.close();
 B.srv.close();
+for (const d of temps) fs.rmSync(d, { recursive: true, force: true });
+console.log(`  compared in ${took(tCompare)} (total ${took(T0)})`);
 
 // ---------- report ----------
 // A real CSS change always changes some element's computed style. Pixel-only differences
@@ -584,6 +727,7 @@ const lines = [
   '',
   `Base: \`${args.base}\` · Head: \`${args.head || 'working copy'}\``,
   `${results.length} page views compared (${opt.themes.join(', ')} × ${opt.widths.join(', ')} px).`,
+  ...(skippedNote ? ['', skippedNote] : []),
   '',
   bad.length
     ? `**${bad.length} page views differ.**`

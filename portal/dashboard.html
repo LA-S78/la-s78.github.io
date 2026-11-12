@@ -637,12 +637,14 @@ lang: "en"
             </select>`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> Vertical bars${o.stacked ? '' : ' (instead of a leaderboard)'}</label>`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> 🚦 Red → yellow → green (low → high): ${(o.valueCols || []).length > 1 ? 'first column red, last green' : 'by size, biggest green'}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ↕️ Reverse: low is good (green), high is bad (red)</label>`;
         }
         if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> Donut (ring)</label>`;
         if (w.type === 'progress') {
           html += `<label for="ed-target">Target for everyone</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="e.g. 15M or 15000000">`;
           html += `<label for="ed-targetcol">…or a column of targets</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: '(use the number above)' })}`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> 🚦 Red → yellow → green by how close each is to the target</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ↕️ Reverse: further below the target is better</label>`;
         }
         if (w.type === 'table') {
           html += `<label for="ed-hlcol">Highlight rows where</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: '(no highlight)' })}`;
@@ -660,6 +662,8 @@ lang: "en"
         if ($('ed-vertical')) o.vertical = $('ed-vertical').checked;
         if ($('ed-stacked')) o.stacked = $('ed-stacked').value || undefined;
         if ($('ed-scale')) o.scale = $('ed-scale').checked;
+        if ($('ed-reverse') && o.scale) o.reverse = $('ed-reverse').checked;
+        else delete o.reverse;
         if ($('ed-donut')) o.donut = $('ed-donut').checked;
         if ($('ed-target')) {
           // Same shorthand as the data: 15M, 50K, 1.2B, 15,000,000

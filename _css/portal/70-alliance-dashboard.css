@@ -494,9 +494,14 @@ html[data-theme='sanctuary'] .dw-s4 {
   flex-shrink: 0;
 }
 
+.dw-pie svg {
+  overflow: visible; /* room for a selected slice's glow */
+}
+
 .dw-slice {
-  fill: none;
-  stroke: var(--dw);
+  fill: var(--dw);
+  stroke: var(--surface-dark);
+  stroke-width: 1;
 }
 
 .dw-total {
@@ -974,21 +979,20 @@ html[data-theme='sanctuary'] .dw-s4 {
 
 /* Highlight colours: the selected part's own colour (set by selectable()), or the theme's. */
 .dw-sel,
+.dw-overlay,
 .dw-info {
   --hl-line: rgba(var(--active-theme-vivid), 1);
   --hl-glow: rgba(var(--active-theme), 1);
   --hl-soft: rgba(var(--active-theme), 0.8);
 }
 
-.dw-svg rect.dw-sel:not(.dw-hit) {
+/* A selected shape in a drawing: its copy on top (.dw-overlay) gets the outline and glow. */
+.dw-overlay {
+  pointer-events: none;
   stroke: var(--hl-line);
   stroke-width: 3px;
   paint-order: stroke fill;
   vector-effect: non-scaling-stroke;
-}
-
-.dw-svg rect.dw-sel:not(.dw-hit),
-.dw-slice.dw-sel {
   filter: drop-shadow(0 0 4px var(--hl-glow)) drop-shadow(0 0 10px var(--hl-soft)) brightness(1.2);
 }
 
@@ -1050,4 +1054,9 @@ li.dw-sel > .dw-bar-track {
 
 .dw-info .badge {
   background: var(--hl-glow);
+}
+
+/* An option that belongs to the one above it (e.g. Reverse under the traffic-light colours). */
+.dash-check.dash-sub {
+  margin-left: 1.6rem;
 }
