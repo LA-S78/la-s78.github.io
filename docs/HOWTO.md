@@ -330,7 +330,7 @@ Sign in (top right), open your account card and choose **🏰 Alliance Dashboard
   charts have **🔄 Sync now** to fetch the latest numbers.
 - **Stacked bars** (e.g. how often each player scored in each Duel band): choose **Bar**,
   tick the columns that make up each bar, and set **Stacked** to *to 100%* (each bar shows
-  the shares) or *totals*. Tick **🚦 Red → yellow → green** when the columns go from low to high (on a single column it colours each bar by size; on a progress chart, by how close it is to the target). Tick **↕️ Reverse** under it when low is good (e.g. troops lost).
+  the shares) or *totals*. Tick **🚦 Red → yellow → green** when the columns go from low to high (on a single column it colours each bar by rank, best green; on a progress chart, by how close it is to the target). Tick **↕️ Reverse** under it when low is good (e.g. troops lost).
   Blank headings under a merged cell are named for you ("3.6m- (2)"), and counts written
   "2/16" are read as 2. Vertical charts turn sideways on phones.
 - **Reading a chart:** as on the map, hover over (or tap) a bar, slice, row or week: it
