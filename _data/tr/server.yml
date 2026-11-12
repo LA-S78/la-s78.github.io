@@ -103,3 +103,114 @@ api_events:
   not_found: Etkinlik bulunamadı veya zaten silinmiş.
   out_of_scope: 'Erişim Reddedildi: Atanmış kapsamınız dışındaki etkinlikleri değiştiremez veya silemezsiniz.'
   deleted: 'Silinen operasyon: {title}'
+bot_common:
+  off_week: Mola Haftası
+  kw_week: Krallık Savaşı Haftası {n}
+  link_expires_4h: Bağlantı özeldir ve 4 saat içinde sona erer.
+  link_expires_24h: Bağlantı özeldir ve 24 saat içinde sona erer.
+  busy: "⚠️ Bağlantı meşgul: {reason}. Lütfen birkaç saniye içinde tekrar deneyin."
+  leaders_denied: "⛔ **Erişim Engellendi:** Sadece **@R5** sahibi üyeler veya liderlik rolleri ({roles}) **[{tag}]** için etkinlikleri yönetebilir."
+  steward_only_kw: "⛔ **Erişim Engellendi:** Sadece görevli Krallık Yöneticileri Krallık Savaşı sonucunu kaydedebilir."
+bot_calendar:
+  global_denied: "⛔ **Erişim Engellendi:** Sadece görevli Krallık Yöneticileri Krallık geneli etkinlikleri yönetebilir."
+  global_title: "👑 Krallık Etkinlik Yönetim Portalı"
+  global_text: |-
+    Takvimi **Genel Yönetim Modunda** açmak için aşağıya tıklayın.
+
+    Krallık geneli duyurular, ateşkes uyarıları planlayabilir veya girişleri silebilirsiniz.
+  global_button: Genel Yönetim Portalını Aç
+  no_alliance: "⚠️ İttifakınız algılanamadı. Bu komutu kayıtlı ittifak sunucunuzda çalıştırın veya NAP sunucusunda ittifak rolünüzün olduğundan emin olun."
+  alliance_title: "🛡️ İttifak Etkinlik Yönetimi — [{tag}]"
+  alliance_text: |-
+    Takvimi **[{tag}]** için **İttifak Yönetim Modunda** açmak için aşağıya tıklayın.
+
+    Dahili baskınlar, kovan hareketleri ve eğitim tatbikatları planlayabilirsiniz.
+  alliance_button: "[{tag}] Yönetim Portalını Aç"
+  rank: 'Sıra #{rank}'
+  captured_friday: Cuma günü ele geçirildi
+  captures_today: bugün ele geçiriyor
+  captures_friday: Cuma günü ele geçiriyor, {when}
+  current_holder: "👑 Mevcut Başkent Sahibi"
+  next_holder: "👑 Sonraki Başkent Sahibi"
+  holder_line: "**{tag}** *(Sıra #{rank})* — {note}"
+  next_reset: "⏰ Sonraki Günlük Sıfırlama (00:00 GT)"
+  reset_line: "**{time}** ({hours}s {minutes}dk içinde)"
+  kw_today: "⚔️ Krallık Savaşı (BUGÜN)"
+  kw_next: "⚔️ Sonraki Krallık Savaşı"
+  kw_active: "🔥 **Aktif Savaş Penceresi:** Başkenti savunun ve fethedin!"
+  kw_scheduled: 'Planlanan: **Cumartesi** ({relative} / {date})'
+  next_phase: "⏭️ Sonraki Rotasyon Aşaması"
+  next_phase_line: |-
+    **{week}**, {when} başlıyor.
+    **{tag}** *(Sıra #{rank})* o Cuma Başkenti ele geçiriyor.
+  open_alliance: Takvimi Aç ([{tag}])
+  open_full: Tam Takvimi Aç
+  title: "📅 Krallık Savaşı Takvimi"
+bot_map:
+  failed: "⚠️ Harita önizlemesi oluşturulamadı."
+  level_title: "🏰 Last Asylum: Bölge Seviyeleri"
+  level_text: Seviyelerine (Sv. 1'den Sv. 8'e kadar) göre kategorize edilmiş bölgeler.
+  alliance_title: "🗺️ Last Asylum: İttifak Bölgeleri"
+  alliance_text: İttifak sahipliğine göre renklendirilmiş bölgeler.
+  resource_title: "🌾 Last Asylum: Kaynaklar & Bölgesel Takviyeler"
+  resource_text: Kaynak verimine ve bölgesel takviyelere göre renklendirilmiş bölgeler.
+  footer: Bakış açısını değiştirmek için aşağıdaki düğmelere tıklayın
+  levels: Seviyeler
+  alliances: İttifaklar
+  resources: Kaynaklar
+bot_nominate:
+  server_only: "⚠️ Bu komut ittifak Discord sunucunuzda veya NAP sunucusunda çalıştırılmalıdır."
+  owner_server: "⛔ **Erişim Engellendi:** Ödül adaylıkları bu sunucudan gönderilemez. Liderler adaylıkları NAP sunucusu veya kendi ittifak sunucuları üzerinden göndermelidir."
+  dedicated_denied: "⛔ **Erişim Engellendi:** Sadece **@R5** sahibi üyeler veya yetkili liderlik rolleri ({roles}) **[{tag}]** için adaylık gönderebilir."
+  r5_only: "⛔ **Erişim Engellendi:** Sadece **@R5** rolüne sahip İttifak Liderleri ödül adaylığı gönderebilir."
+  no_tag_role: "⚠️ İttifak etiketi rolünüz algılanamadı. İttifak rolünüzün (örn. `@{example}`) atandığından emin olun."
+  closed: "🔒 **Ödüller kapalı.** {week} ödülleri {closed} sona erdi.\nSonraki ödüller Cuma günkü başkent etkinliğinden sonra, {opens} açılacak."
+  period_busy: "⚠️ Servis meşgul: yeni ödül dönemi açılamadı. Lütfen birkaç saniye içinde /nominate komutunu tekrar deneyin."
+  no_rank: "⚠️ **[{tag}]** için sıralamada aktif bir derece atanmamış."
+  no_chests: "⚠️ **[{tag}]** için mevcut dağıtımda ayrılan 0 sandık var."
+  no_kw: Bu hafta Krallık Savaşı yok.
+  won: "⚔️ **Kazandı.** Onur Öncüsü ×{gold} · Korkusuz Kahraman ×{purple} · Lojistik Destek ×{blue}"
+  lost: 'Bu hafta değil: Krallık Savaşı kaybedildi.'
+  waiting: "⏳ **Savaş sonucunu bekliyor** (yaklaşık {time}). Eğer kazanılırsa: Onur Öncüsü ×{gold} · Korkusuz Kahraman ×{purple} · Lojistik Destek ×{blue}"
+  commendation: "👑 Kralın Takdiri"
+  commendation_line: Komutanın İradesi ×{gold} · Sadık Hizmetkar ×{purple} · Takipçinin Kalbi ×{blue}
+  battle_reward: "⚔️ Savaş Kralı Ödülü"
+  buyout_title: "🛡️ Savaş Dönemi Geri Ödeme Aktif"
+  buyout_text: 'Bu haftaki savunma geçersiz kılma (Tehdit: `{threat}`) için WLO tarafından finanse edilen **+1 Komutanın İradesi** (ve savaş kazanılırsa **+1 Onur Öncüsü**) dahildir.'
+  buyout_default_threat: Kırmızı Liste
+  funds_title: "⚖️ Savaş Dönemi Geri Ödemesi Finanse Edildi"
+  funds_text: WLO, yerinden edilen ittifakın tazminatını finanse etmek için bu haftanın 1. Sıra tahsisinden **1 Komutanın İradesi** (ve savaş kazanılırsa **1 Onur Öncüsü**) sağlar.
+  how_title: "📝 Nasıl çalışır"
+  how_text: Oyuncularınızı **en iyiden başlayarak** listeleyin. Sandıklar, her iki set genelinde değer sırasına göre listeye dağıtılır; ekstra isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
+  how_waiting: "⏳ Kral dağıtımı savaş sonucundan sonra yapar, bu nedenle kimsenin sandığı değişmez."
+  title: "🎁 {week} Ödülleri — [{tag}]"
+  summary: 'Sıra #{rank} · {until} ({relative}) tarihine kadar açık.'
+  open_page: Adaylık Sayfasını Aç
+bot_rewards:
+  reset_denied: "⛔ **Erişim Engellendi:** Sadece görevli Krallık Yöneticileri adaylıkları temizleyebilir."
+  nothing_to_clear: "🔒 Açık bir ödül dönemi yok, temizlenecek bir şey bulunmuyor."
+  cleared_title: "🔄 Adaylıklar Temizlendi — {week}"
+  cleared_text: |-
+    Bu hafta için tüm ittifakların listeleri **{name}** tarafından temizlendi.
+
+    • Liderler `/nominate` ile yeni listeler gönderebilir.
+    • Ödüller {closes} kapanır.
+    • Krala konsol üzerinde **Kontrol Listesini Sıfırla** düğmesine basmasını hatırlatın.
+  none_eligible: "⚠️ Mevcut ödül planı kapsamında şu anda uygun ittifak bulunmuyor."
+  tag_buyout: " 🛡️ [Geri Ödeme]"
+  tag_funds: " ⚖️ [Fon Geri Ödemesi]"
+  awaiting: "⏳ **[{tag}]** (Sıra #{rank}){buyout} — **Liste bekleniyor** ({total} sandık)"
+  reserves_one: " · {count} yedek"
+  reserves_other: " · {count} yedek"
+  sent: "✅ **[{tag}]** (Sıra #{rank}){buyout} — **{named}/{total}** kişi belirlendi{reserves} ({when})"
+  closed: "🔒 **Kapalı.** Sonraki ödüller {opens} açılacak."
+  open: "🎁 **{week} ödülleri** · {closes} tarihine kadar açık"
+  battle_no_kw: "⚔️ Savaş Kralı Ödülü: Bu hafta Krallık Savaşı yok."
+  battle_won: "⚔️ Savaş Kralı Ödülü: **kazanıldı**, açık."
+  battle_lost: "⚔️ Savaş Kralı Ödülü: kaybedildi, bu hafta değil."
+  battle_waiting: "⚔️ Savaş Kralı Ödülü: ⏳ **savaş sonucu bekleniyor** (yaklaşık {time}). Kral dağıtımı sonrasında yapar."
+  open_console: Kral Konsolunu Aç
+  title: "📋 İttifak Ödül Durumu — {week}"
+  count_line: "**{total} ittifaktan {sent} tanesi liste gönderdi**"
+  footer: Last Asylum Başkent Yönetimi
+  old_button: 'ℹ️ Bu düğme artık kullanılmıyor: ödüller artık her Cuma 20:00 GT''de kendiliğinden açılır. Cumartesi günkü savaştan sonra Krallık Savaşı sonucunu (Kazandı veya Kaybetti) `/rewards` ile kaydedin.'

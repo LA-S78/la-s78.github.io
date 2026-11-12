@@ -103,3 +103,114 @@ api_events:
   not_found: Événement introuvable ou déjà supprimé.
   out_of_scope: 'Accès refusé : vous ne pouvez pas modifier ou supprimer des événements en dehors de votre périmètre assigné.'
   deleted: 'Opération supprimée : {title}'
+bot_common:
+  off_week: Semaine de repos
+  kw_week: Semaine de la Guerre des Royaumes {n}
+  link_expires_4h: Le lien est privé et expire dans 4 heures.
+  link_expires_24h: Le lien est privé et expire dans 24 heures.
+  busy: "⚠️ Connexion occupée : {reason}. Veuillez réessayer dans quelques secondes."
+  leaders_denied: "⛔ **Accès refusé :** Seuls les membres possédant le rôle **@R5** ou des rôles de direction ({roles}) peuvent gérer les événements pour **[{tag}]**."
+  steward_only_kw: "⛔ **Accès refusé :** Seuls les intendants désignés du Royaume peuvent enregistrer le résultat de la Guerre des Royaumes."
+bot_calendar:
+  global_denied: "⛔ **Accès refusé :** Seuls les intendants désignés du Royaume peuvent gérer les événements à l'échelle du Royaume."
+  global_title: "👑 Portail de gestion des événements du Royaume"
+  global_text: |-
+    Cliquez ci-dessous pour ouvrir le calendrier en **Mode de Gestion Globale**.
+
+    Vous pouvez planifier des annonces à l'échelle du Royaume, des alertes de trêve ou supprimer des entrées.
+  global_button: Ouvrir le portail de gestion globale
+  no_alliance: "⚠️ Impossible de détecter votre alliance. Exécutez cette commande dans votre serveur d'alliance enregistré, ou assurez-vous d'avoir votre rôle d'alliance sur le serveur NAP."
+  alliance_title: "🛡️ Gestion des événements d'alliance — [{tag}]"
+  alliance_text: |-
+    Cliquez ci-dessous pour ouvrir le calendrier en **Mode de Gestion d'Alliance** pour **[{tag}]**.
+
+    Vous pouvez planifier des raids internes, des déplacements de ruche et des exercices d'entraînement.
+  alliance_button: Ouvrir le portail de gestion [{tag}]
+  rank: 'Rang #{rank}'
+  captured_friday: capturé vendredi
+  captures_today: captures aujourd'hui
+  captures_friday: captures vendredi, {when}
+  current_holder: "👑 Détenteur actuel du Capitole"
+  next_holder: "👑 Prochain détenteur du Capitole"
+  holder_line: "**{tag}** *(Rang #{rank})* — {note}"
+  next_reset: "⏰ Prochaine réinitialisation quotidienne (00:00 GT)"
+  reset_line: "**{time}** (dans {hours}h {minutes}m)"
+  kw_today: "⚔️ Bataille de la Guerre des Royaumes (AUJOURD'HUI)"
+  kw_next: "⚔️ Prochaine bataille de la Guerre des Royaumes"
+  kw_active: "🔥 **Fenêtre de guerre active :** Défendez et conquérez le Capitole !"
+  kw_scheduled: Prévu pour **samedi** ({relative} / {date})
+  next_phase: "⏭️ Prochaine phase de rotation"
+  next_phase_line: |-
+    **{week}** débute le {when}.
+    **{tag}** *(Rang #{rank})* capture le Capitole ce vendredi.
+  open_alliance: Ouvrir le calendrier ([{tag}])
+  open_full: Ouvrir le calendrier complet
+  title: "📅 Calendrier de la Guerre des Royaumes"
+bot_map:
+  failed: "⚠️ Impossible de générer l'aperçu de la carte."
+  level_title: "🏰 Last Asylum : Niveaux de territoire"
+  level_text: Territoires classés par palier (Niv. 1 à Niv. 8).
+  alliance_title: "🗺️ Last Asylum : Territoires d'alliance"
+  alliance_text: Territoires colorés selon l'appartenance à une alliance.
+  resource_title: "🌾 Last Asylum : Ressources et bonus régionaux"
+  resource_text: Territoires colorés selon les rendements en ressources et les bonus régionaux.
+  footer: Cliquez sur les boutons ci-dessous pour changer de perspective
+  levels: Niveaux
+  alliances: Alliances
+  resources: Ressources
+bot_nominate:
+  server_only: "⚠️ Cette commande doit être exécutée sur votre serveur Discord d'alliance ou sur le serveur NAP."
+  owner_server: "⛔ **Accès refusé :** Les nominations aux récompenses ne peuvent pas être soumises depuis ce serveur. Les chefs doivent soumettre via le serveur NAP ou leur serveur d'alliance."
+  dedicated_denied: "⛔ **Accès refusé :** Seuls les membres possédant le rôle **@R5** ou des rôles de direction autorisés ({roles}) peuvent soumettre des nominations pour **[{tag}]**."
+  r5_only: "⛔ **Accès refusé :** Seuls les chefs d'alliance possédant le rôle **@R5** peuvent soumettre des nominations aux récompenses."
+  no_tag_role: "⚠️ Impossible de détecter votre rôle de tag d'alliance. Assurez-vous d'avoir votre rôle d'alliance (par ex. `@{example}`) attribué."
+  closed: "🔒 **Les récompenses sont fermées.** Les récompenses de la {week} ont expiré le {closed}.\nLes prochaines récompenses ouvrent le {opens}, après l'événement du Capitole de vendredi."
+  period_busy: "⚠️ Service occupé : impossible d'ouvrir la nouvelle période de récompenses. Veuillez réessayer /nominate dans quelques secondes."
+  no_rank: "⚠️ **[{tag}]** n'a aucun rang actif assigné dans le classement."
+  no_chests: "⚠️ **[{tag}]** a 0 coffre alloué selon la distribution actuelle."
+  no_kw: Pas de Guerre des Royaumes cette semaine.
+  won: "⚔️ **Gagné.** Avant-garde d'Honneur ×{gold} · Héros Intrépide ×{purple} · Soutien Logistique ×{blue}"
+  lost: 'Pas cette semaine : la Guerre des Royaumes a été perdue.'
+  waiting: "⏳ **En attente du résultat de la bataille** (environ {time}). Si gagné : Avant-garde d'Honneur ×{gold} · Héros Intrépide ×{purple} · Soutien Logistique ×{blue}"
+  commendation: "👑 Mention du Roi"
+  commendation_line: Volonté du Commandant ×{gold} · Loyal Serviteur ×{purple} · Cœur du Suiveur ×{blue}
+  battle_reward: "⚔️ Récompense du Roi de la Bataille"
+  buyout_title: "🛡️ Restitution par rachat de temps de guerre active"
+  buyout_text: 'Inclut **+1 Volonté du Commandant** (et **+1 Avant-garde d''Honneur** si la guerre est gagnée), financé par WLO pour la priorité de défense de cette semaine (Menace : `{threat}`).'
+  buyout_default_threat: Liste Rouge
+  funds_title: "⚖️ Restitution par rachat de temps de guerre financée"
+  funds_text: 'WLO rapporte **1 Volonté du Commandant** (et **1 Avant-garde d''Honneur** si la guerre est gagnée) de l''allocation du Rang #1 de cette semaine pour financer la restitution de l''alliance déplacée.'
+  how_title: "📝 Comment ça marche"
+  how_text: Listez vos joueurs du **meilleur au moins bon**. Les coffres sont distribués dans l'ordre de la liste selon la valeur des deux ensembles ; les noms supplémentaires sont conservés en réserve et montent si davantage de coffres sont ouverts.
+  how_waiting: "⏳ Le Roi distribue les récompenses après le résultat de la bataille, donc aucun coffre ne change."
+  title: "🎁 Récompenses de la {week} — [{tag}]"
+  summary: 'Rang #{rank} · ouvert jusqu''au {until} ({relative}).'
+  open_page: Ouvrir la page de nomination
+bot_rewards:
+  reset_denied: "⛔ **Accès refusé :** Seuls les intendants désignés du Royaume peuvent effacer les nominations."
+  nothing_to_clear: "🔒 Aucune période de récompense n'est ouverte, il n'y a donc rien à effacer."
+  cleared_title: "🔄 Nominations effacées — {week}"
+  cleared_text: |-
+    Les listes de toutes les alliances pour cette semaine ont été effacées par **{name}**.
+
+    • Les chefs peuvent envoyer de nouvelles listes avec `/nominate`.
+    • Les récompenses ferment le {closes}.
+    • Rappelez au Roi d'appuyer sur **Réinitialiser la liste de contrôle** sur la console.
+  none_eligible: "⚠️ Aucune alliance n'est actuellement éligible selon le plan de récompenses actif."
+  tag_buyout: " 🛡️ [Rachat]"
+  tag_funds: " ⚖️ [Rachat par fonds]"
+  awaiting: "⏳ **[{tag}]** (Rang #{rank}){buyout} — **En attente de la liste** ({total} coffres)"
+  reserves_one: " · {count} réserve"
+  reserves_other: " · {count} réserves"
+  sent: "✅ **[{tag}]** (Rang #{rank}){buyout} — **{named}/{total}** nommés{reserves} ({when})"
+  closed: "🔒 **Fermé.** Les prochaines récompenses ouvrent le {opens}."
+  open: "🎁 **Récompenses de la {week}** · ouvertes jusqu'au {closes}"
+  battle_no_kw: "⚔️ Récompense du Roi de la Bataille : pas de Guerre des Royaumes cette semaine."
+  battle_won: "⚔️ Récompense du Roi de la Bataille : **gagnée**, ouverte."
+  battle_lost: "⚔️ Récompense du Roi de la Bataille : perdue, pas cette semaine."
+  battle_waiting: "⚔️ Récompense du Roi de la Bataille : ⏳ **en attente du résultat de la bataille** (environ {time}). Le Roi distribue après cela."
+  open_console: Ouvrir la console du Roi
+  title: "📋 État des récompenses d'alliance — {week}"
+  count_line: "**{sent} sur {total} alliances ont envoyé une liste**"
+  footer: Administration du Capitole de Last Asylum
+  old_button: 'ℹ️ Ce bouton n''est plus utilisé : les récompenses ouvrent désormais automatiquement chaque vendredi à 20:00 GT. Enregistrez le résultat de la Guerre des Royaumes avec `/rewards` (Gagné ou Perdu) après la bataille du samedi.'

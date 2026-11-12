@@ -103,3 +103,114 @@ api_events:
   not_found: Evento non trovato o già eliminato.
   out_of_scope: 'Accesso negato: non puoi modificare o eliminare eventi al di fuori del tuo ambito assegnato.'
   deleted: 'Operazione eliminata: {title}'
+bot_common:
+  off_week: Settimana di pausa
+  kw_week: Settimana Guerra tra Regni {n}
+  link_expires_4h: Il link è privato e scade tra 4 ore.
+  link_expires_24h: Il link è privato e scade tra 24 ore.
+  busy: "⚠️ Connessione occupata: {reason}. Riprova tra pochi secondi."
+  leaders_denied: "⛔ **Accesso Negato:** Solo i membri con il ruolo **@R5** o ruoli di leadership ({roles}) possono gestire gli eventi per **[{tag}]**."
+  steward_only_kw: "⛔ **Accesso Negato:** Solo gli Steward del Regno designati possono registrare il risultato della Guerra tra Regni."
+bot_calendar:
+  global_denied: "⛔ **Accesso Negato:** Solo gli Steward del Regno designati possono gestire gli eventi per l'intero Regno."
+  global_title: "👑 Portale di Gestione Eventi del Regno"
+  global_text: |-
+    Clicca qui sotto per aprire il calendario in **Modalità di Gestione Globale**.
+
+    Puoi programmare annunci per tutto il regno, avvisi di tregua o eliminare voci.
+  global_button: Apri Portale di Gestione Globale
+  no_alliance: "⚠️ Non è stato possibile rilevare la tua alleanza. Esegui questo comando all'interno del server della tua alleanza registrata o assicurati di avere il ruolo della tua alleanza nel server NAP."
+  alliance_title: "🛡️ Gestione Eventi Alleanza — [{tag}]"
+  alliance_text: |-
+    Clicca qui sotto per aprire il calendario in **Modalità di Gestione Alleanza** per **[{tag}]**.
+
+    Puoi programmare incursioni interne, movimenti dell'alveare ed esercitazioni.
+  alliance_button: Apri Portale di Gestione [{tag}]
+  rank: 'Grado #{rank}'
+  captured_friday: conquistato venerdì
+  captures_today: conquiste oggi
+  captures_friday: conquiste venerdì, {when}
+  current_holder: "👑 Attuale Detentore del Campidoglio"
+  next_holder: "👑 Prossimo Detentore del Campidoglio"
+  holder_line: "**{tag}** *(Grado #{rank})* — {note}"
+  next_reset: "⏰ Prossimo Ripristino Giornaliero (00:00 GT)"
+  reset_line: "**{time}** (tra {hours}h {minutes}m)"
+  kw_today: "⚔️ Battaglia Guerra tra Regni (OGGI)"
+  kw_next: "⚔️ Prossima Battaglia Guerra tra Regni"
+  kw_active: "🔥 **Finestra di Guerra Attiva:** Difendi e conquista il Campidoglio!"
+  kw_scheduled: Programmata per **Sabato** ({relative} / {date})
+  next_phase: "⏭️ Prossima Fase di Rotazione"
+  next_phase_line: |-
+    **{week}** inizia {when}.
+    **{tag}** *(Grado #{rank})* conquista il Campidoglio quel venerdì.
+  open_alliance: Apri Calendario ([{tag}])
+  open_full: Apri Calendario Completo
+  title: "📅 Calendario Guerra tra Regni"
+bot_map:
+  failed: "⚠️ Non è stato possibile generare l'anteprima della mappa."
+  level_title: "🏰 Last Asylum: Livelli Territorio"
+  level_text: Territori categorizzati per livello (Lv. 1 a Lv. 8).
+  alliance_title: "🗺️ Last Asylum: Territori Alleanza"
+  alliance_text: Territori colorati in base all'alleanza proprietaria.
+  resource_title: "🌾 Last Asylum: Risorse e Bonus Regionali"
+  resource_text: Territori colorati in base alla resa delle risorse e ai bonus regionali.
+  footer: Clicca sui pulsanti sottostanti per cambiare prospettiva
+  levels: Livelli
+  alliances: Alleanze
+  resources: Risorse
+bot_nominate:
+  server_only: "⚠️ Questo comando deve essere eseguito all'interno del server Discord della tua alleanza o del server NAP."
+  owner_server: "⛔ **Accesso Negato:** Le candidature alle ricompense non possono essere inviate da questo server. I leader devono inviarle tramite il server NAP o il server della loro alleanza."
+  dedicated_denied: "⛔ **Accesso Negato:** Solo i membri con il ruolo **@R5** o ruoli di leadership autorizzati ({roles}) possono inviare candidature per **[{tag}]**."
+  r5_only: "⛔ **Accesso Negato:** Solo i Leader dell'Alleanza con il ruolo **@R5** possono inviare candidature alle ricompense."
+  no_tag_role: "⚠️ Impossibile rilevare il ruolo con il tag della tua alleanza. Assicurati di avere il ruolo della tua alleanza (es. `@{example}`) assegnato."
+  closed: "🔒 **Le ricompense sono chiuse.** Le ricompense di {week} sono scadute il {closed}.\nLe prossime ricompense aprono il {opens}, dopo l'evento del campidoglio di venerdì."
+  period_busy: "⚠️ Servizio occupato: impossibile aprire il nuovo periodo di ricompense. Riprova con /nominate tra pochi secondi."
+  no_rank: "⚠️ **[{tag}]** non ha un grado attivo assegnato nella classifica."
+  no_chests: "⚠️ **[{tag}]** ha 0 forzieri assegnati in base alla distribuzione attuale."
+  no_kw: Nessuna Guerra tra Regni questa settimana.
+  won: "⚔️ **Vinta.** Avanguardia d'Onore ×{gold} · Eroe Senza Paura ×{purple} · Supporto Logistico ×{blue}"
+  lost: 'Non questa settimana: la Guerra tra Regni è stata persa.'
+  waiting: "⏳ **In attesa del risultato della battaglia** (circa {time}). Se vinta: Avanguardia d'Onore ×{gold} · Eroe Senza Paura ×{purple} · Supporto Logistico ×{blue}"
+  commendation: "👑 Commendazione del Re"
+  commendation_line: Volontà del Comandante ×{gold} · Servitore Leale ×{purple} · Cuore del Seguace ×{blue}
+  battle_reward: "⚔️ Ricompensa Re della Battaglia"
+  buyout_title: "🛡️ Restituzione riscatto in tempo di guerra attiva"
+  buyout_text: 'Include **+1 Volontà del Comandante** (e **+1 Avanguardia d''Onore** se la guerra viene vinta), finanziata da WLO per il superamento della difesa di questa settimana (Minaccia: `{threat}`).'
+  buyout_default_threat: Lista Rossa
+  funds_title: "⚖️ Restituzione riscatto in tempo di guerra finanziata"
+  funds_text: 'WLO fornisce **1 Volontà del Comandante** (e **1 Avanguardia d''Onore** se la guerra viene vinta) dall''assegnazione del Grado #1 di questa settimana per finanziare la restituzione dell''alleanza sfollata.'
+  how_title: "📝 Come funziona"
+  how_text: Elenca i tuoi giocatori **dal migliore al peggiore**. I forzieri vengono distribuiti seguendo la lista per valore in entrambi i set; i nomi extra vengono tenuti come riserve e scalano verso l'alto se vengono aperti più forzieri.
+  how_waiting: "⏳ Il Re distribuisce dopo il risultato della battaglia, quindi il forziere di nessuno cambia."
+  title: "🎁 Ricompense {week} — [{tag}]"
+  summary: 'Grado #{rank} · aperto fino al {until} ({relative}).'
+  open_page: Apri Pagina Candidature
+bot_rewards:
+  reset_denied: "⛔ **Accesso Negato:** Solo gli Steward del Regno designati possono cancellare le candidature."
+  nothing_to_clear: "🔒 Nessun periodo di ricompense è aperto, quindi non c'è nulla da cancellare."
+  cleared_title: "🔄 Candidature Cancellate — {week}"
+  cleared_text: |-
+    Le liste di tutte le alleanze per questa settimana sono state cancellate da **{name}**.
+
+    • I leader possono inviare nuove liste con `/nominate`.
+    • Le ricompense chiudono il {closes}.
+    • Ricorda al Re di premere **Reset Checklist** sulla console.
+  none_eligible: "⚠️ Nessuna alleanza è attualmente idonea secondo il piano di ricompense attivo."
+  tag_buyout: " 🛡️ [Riscatto]"
+  tag_funds: " ⚖️ [Riscatto fondi]"
+  awaiting: "⏳ **[{tag}]** (Grado #{rank}){buyout} — **In attesa della lista** ({total} forzieri)"
+  reserves_one: " · {count} riserva"
+  reserves_other: " · {count} riserve"
+  sent: "✅ **[{tag}]** (Grado #{rank}){buyout} — **{named}/{total}** nominati{reserves} ({when})"
+  closed: "🔒 **Chiuso.** Le prossime ricompense aprono il {opens}."
+  open: "🎁 **Ricompense {week}** · aperte fino al {closes}"
+  battle_no_kw: "⚔️ Ricompensa Re della Battaglia: nessuna Guerra tra Regni questa settimana."
+  battle_won: "⚔️ Ricompensa Re della Battaglia: **vinta**, aperta."
+  battle_lost: "⚔️ Ricompensa Re della Battaglia: persa, non questa settimana."
+  battle_waiting: "⚔️ Ricompensa Re della Battaglia: ⏳ **in attesa del risultato della battaglia** (circa {time}). Il Re distribuisce dopo tale momento."
+  open_console: Apri Console del Re
+  title: "📋 Stato Ricompense Alleanza — {week}"
+  count_line: "**{sent} su {total} alleanze hanno inviato la lista**"
+  footer: Amministrazione Campidoglio Last Asylum
+  old_button: 'ℹ️ Questo pulsante non è più utilizzato: le ricompense ora si aprono automaticamente ogni venerdì alle 20:00 GT. Registra il risultato della Guerra tra Regni con `/rewards` (Vinta o Persa) dopo la battaglia di sabato.'

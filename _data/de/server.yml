@@ -103,3 +103,114 @@ api_events:
   not_found: Ereignis nicht gefunden oder bereits gelöscht.
   out_of_scope: 'Zugriff verweigert: Du kannst Ereignisse außerhalb deines zugewiesenen Bereichs nicht ändern oder löschen.'
   deleted: 'Operation gelöscht: {title}'
+bot_common:
+  off_week: Off-Woche
+  kw_week: Königreichskrieg-Woche {n}
+  link_expires_4h: Link ist privat und läuft in 4 Stunden ab.
+  link_expires_24h: Link ist privat und läuft in 24 Stunden ab.
+  busy: "⚠️ Verbindung ausgelastet: {reason}. Bitte versuche es in wenigen Sekunden erneut."
+  leaders_denied: "⛔ **Zugriff verweigert:** Nur Mitglieder mit **@R5** oder Führungsrollen ({roles}) können Events für **[{tag}]** verwalten."
+  steward_only_kw: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können das Ergebnis vom Königreichskrieg erfassen."
+bot_calendar:
+  global_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Königreichs-Events verwalten."
+  global_title: "👑 Königreich-Event-Verwaltungsportal"
+  global_text: |-
+    Klicke unten, um den Kalender im **Globalen Verwaltungsmodus** zu öffnen.
+
+    Du kannst königreichsweite Ankündigungen, Friedensabkommen-Alarme oder gelöschte Einträge planen.
+  global_button: Globales Verwaltungsportal öffnen
+  no_alliance: "⚠️ Deine Allianz konnte nicht erkannt werden. Führe diesen Befehl in deinem registrierten Allianz-Server aus oder stelle sicher, dass du deine Allianz-Rolle im NAP-Server hast."
+  alliance_title: "🛡️ Allianz-Event-Verwaltung — [{tag}]"
+  alliance_text: |-
+    Klicke unten, um den Kalender im **Allianz-Verwaltungsmodus** für **[{tag}]** zu öffnen.
+
+    Du kannst interne Raids, Schwarm-Bewegungen und Trainingsübungen planen.
+  alliance_button: "[{tag}]-Verwaltungsportal öffnen"
+  rank: 'Rang #{rank}'
+  captured_friday: Freitag erobert
+  captures_today: heutige Eroberungen
+  captures_friday: Freitag erobert, {when}
+  current_holder: "👑 Aktueller Kapitolinhaber"
+  next_holder: "👑 Nächster Kapitolinhaber"
+  holder_line: "**{tag}** *(Rang #{rank})* — {note}"
+  next_reset: "⏰ Nächster täglicher Reset (00:00 GT)"
+  reset_line: "**{time}** (in {hours}h {minutes}m)"
+  kw_today: "⚔️ Königreichskrieg-Kampf (HEUTE)"
+  kw_next: "⚔️ Nächster Königreichskrieg-Kampf"
+  kw_active: "🔥 **Aktives Kriegsfenster:** Verteidige und erobere das Kapitol!"
+  kw_scheduled: Geplant für **Samstag** ({relative} / {date})
+  next_phase: "⏭️ Nächste Rotationsphase"
+  next_phase_line: |-
+    **{week}** beginnt {when}.
+    **{tag}** *(Rang #{rank})* erobert das Kapitol an diesem Freitag.
+  open_alliance: Kalender öffnen ([{tag}])
+  open_full: Vollständigen Kalender öffnen
+  title: "📅 Königreichskrieg-Kalender"
+bot_map:
+  failed: "⚠️ Karten-Vorschau konnte nicht generiert werden."
+  level_title: "🏰 Last Asylum: Gebietslevel"
+  level_text: Gebiete kategorisiert nach Stufe (Lv. 1 bis Lv. 8).
+  alliance_title: "🗺️ Last Asylum: Allianzgebiete"
+  alliance_text: Gebiete farblich markiert nach Allianzbesitz.
+  resource_title: "🌾 Last Asylum: Ressourcen & Regional-Buffs"
+  resource_text: Gebiete farblich markiert nach Ressourcenertrag und Regional-Buffs.
+  footer: Klicke unten auf die Buttons, um die Perspektiven zu wechseln
+  levels: Level
+  alliances: Allianzen
+  resources: Ressourcen
+bot_nominate:
+  server_only: "⚠️ Dieser Befehl muss in deinem Allianz-Discord-Server oder dem NAP-Server ausgeführt werden."
+  owner_server: "⛔ **Zugriff verweigert:** Belohnungsnominierungen können von diesem Server aus nicht eingereicht werden. Führungskräfte müssen diese über den NAP-Server oder ihren Allianz-Server einreichen."
+  dedicated_denied: "⛔ **Zugriff verweigert:** Nur Mitglieder mit **@R5** oder autorisierten Führungsrollen ({roles}) können Nominierungen für **[{tag}]** einreichen."
+  r5_only: "⛔ **Zugriff verweigert:** Nur Allianzführer mit der **@R5**-Rolle können Belohnungsnominierungen einreichen."
+  no_tag_role: "⚠️ Deine Allianz-Tag-Rolle konnte nicht erkannt werden. Stelle sicher, dass du deine Allianz-Rolle (z. B. `@{example}`) zugewiesen hast."
+  closed: "🔒 **Belohnungen sind geschlossen.** Die {week}-Belohnungen liefen am {closed} ab.\nDie nächsten Belohnungen öffnen am {opens}, nach dem Kapitol-Event am Freitag."
+  period_busy: "⚠️ Dienst ausgelastet: Die neue Belohnungsperiode konnte nicht geöffnet werden. Bitte versuche /nominate in wenigen Sekunden erneut."
+  no_rank: "⚠️ **[{tag}]** hat keinen aktiven Rang in der Rangliste zugewiesen."
+  no_chests: "⚠️ **[{tag}]** hat 0 Truhen gemäß der aktuellen Verteilung zugeteilt bekommen."
+  no_kw: Kein Königreichskrieg diese Woche.
+  won: "⚔️ **Gewonnen.** Ehren-Vanguard ×{gold} · Furchtloser Held ×{purple} · Logistik-Unterstützung ×{blue}"
+  lost: 'Nicht diese Woche: Der Königreichskrieg wurde verloren.'
+  waiting: "⏳ **Warten auf das Kampfergebnis** (etwa {time}). Falls gewonnen: Ehren-Vanguard ×{gold} · Furchtloser Held ×{purple} · Logistik-Unterstützung ×{blue}"
+  commendation: "👑 Belobigung des Königs"
+  commendation_line: Wille des Kommandanten ×{gold} · Loyaler Diener ×{purple} · Herz des Anhängers ×{blue}
+  battle_reward: "⚔️ Belohnung des Schlachtkönigs"
+  buyout_title: "🛡️ Kriegsentschädigung aktiv"
+  buyout_text: 'Beinhaltet **+1 Wille des Kommandanten** (und **+1 Ehren-Vanguard**, falls der Krieg gewonnen wurde), finanziert durch WLO für die Verteidigungs-Übersteuerung dieser Woche (Bedrohung: `{threat}`).'
+  buyout_default_threat: Rote Liste
+  funds_title: "⚖️ Kriegsentschädigung finanziert"
+  funds_text: 'WLO stellt **1 Wille des Kommandanten** (und **1 Ehren-Vanguard**, falls der Krieg gewonnen wurde) aus dem Kontingent für Rang #1 dieser Woche bereit, um die Entschädigung der verdrängten Allianz zu finanzieren.'
+  how_title: "📝 So funktioniert es"
+  how_text: Liste deine Spieler **nach Bestleistung** auf. Die Truhen werden der Liste nach entsprechend des Wertes über beide Sets verteilt; zusätzliche Namen werden als Reserve gehalten und rücken nach, falls mehr Truhen geöffnet werden.
+  how_waiting: "⏳ Der König verteilt nach dem Kampfergebnis, daher ändert sich an den Truhen von niemandem etwas."
+  title: "🎁 {week} Belohnungen — [{tag}]"
+  summary: 'Rang #{rank} · geöffnet bis {until} ({relative}).'
+  open_page: Nominierungsseite öffnen
+bot_rewards:
+  reset_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Nominierungen löschen."
+  nothing_to_clear: "🔒 Es ist keine Belohnungsperiode geöffnet, daher gibt es nichts zu löschen."
+  cleared_title: "🔄 Nominierungen gelöscht — {week}"
+  cleared_text: |-
+    Alle Allianzen-Listen für diese Woche wurden von **{name}** gelöscht.
+
+    • Führungskräfte können neue Listen mit `/nominate` senden.
+    • Belohnungen schließen {closes}.
+    • Erinnere den König daran, auf **Reset Checklist** auf der Konsole zu drücken.
+  none_eligible: "⚠️ Keine Allianzen sind derzeit für den aktiven Belohnungsplan berechtigt."
+  tag_buyout: " 🛡️ [Buyout]"
+  tag_funds: " ⚖️ [Finanzierter Buyout]"
+  awaiting: "⏳ **[{tag}]** (Rang #{rank}){buyout} — **Wartet auf Liste** ({total} Truhen)"
+  reserves_one: " · {count} Reserve"
+  reserves_other: " · {count} Reserven"
+  sent: "✅ **[{tag}]** (Rang #{rank}){buyout} — **{named}/{total}** benannt{reserves} ({when})"
+  closed: "🔒 **Geschlossen.** Die nächsten Belohnungen öffnen am {opens}."
+  open: "🎁 **{week} Belohnungen** · geöffnet bis {closes}"
+  battle_no_kw: "⚔️ Belohnung des Schlachtkönigs: Kein Königreichskrieg diese Woche."
+  battle_won: "⚔️ Belohnung des Schlachtkönigs: **gewonnen**, geöffnet."
+  battle_lost: "⚔️ Belohnung des Schlachtkönigs: verloren, nicht diese Woche."
+  battle_waiting: "⚔️ Belohnung des Schlachtkönigs: ⏳ **warten auf das Kampfergebnis** (etwa {time}). Der König verteilt danach."
+  open_console: Königskonsole öffnen
+  title: "📋 Allianz-Belohnungsstatus — {week}"
+  count_line: "**{sent} von {total} Allianzen haben eine Liste gesendet**"
+  footer: Last Asylum Kapitol-Verwaltung
+  old_button: 'ℹ️ Dieser Button wird nicht mehr verwendet: Belohnungen öffnen jetzt jeden Freitag um 20:00 GT von selbst. Erfasse das Königreichskrieg-Ergebnis mit `/rewards` (Won oder Lost) nach dem Kampf am Samstag.'
