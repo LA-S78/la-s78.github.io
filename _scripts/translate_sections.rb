@@ -149,6 +149,7 @@ def yaml_text(data, source)
     "# Don't edit: change the English file (a section is translated again when its English\n" \
     "# changes), or put a fix in #{OVERRIDES_FILE} (kept through re-translations).\n" +
     data.to_yaml(line_width: -1).sub(/\A---\s*\n/, '')
+        .gsub(/\\U([0-9A-Fa-f]{8})/) { [Regexp.last_match(1).hex].pack('U') } # 🔄, not "\U0001F504"
 end
 
 state = File.exist?(STATE_FILE) ? JSON.parse(File.read(STATE_FILE)) : {}
