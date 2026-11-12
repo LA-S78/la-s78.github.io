@@ -3,15 +3,16 @@ layout: portal
 title: Alliance Dashboard
 permalink: /dashboard.html
 lang: "en"
+strings: [dashboard, rewards_card, caravan, chart_editor, charts]
 ---
 
 <div class="content-pane portal-pane-md" id="dashboard-app">
   <div class="portal-header">
-    <div class="alliance-badge-lg" id="dash-alliance">Alliance Dashboard</div>
-    <div class="sub-text" id="dash-subtitle">Loading your alliance dashboard…</div>
+    <div class="alliance-badge-lg" id="dash-alliance">{{ "dashboard.title" | t }}</div>
+    <div class="sub-text" id="dash-subtitle">{{ "dashboard.loading" | t }}</div>
     <!-- Stewards: look at (and help with) any alliance's dashboard -->
     <label class="dash-switcher" id="dash-switcher" hidden>
-      <span>View as</span>
+      <span>{{ "dashboard.view_as" | t }}</span>
       <select id="dash-switcher-select"></select>
     </label>
   </div>
@@ -20,7 +21,7 @@ lang: "en"
 
   <!-- R4/R5, officers and Stewards only (the server sends it only to them) -->
   <section class="dash-card dash-rewards" id="dash-rewards" hidden aria-labelledby="dash-rewards-title">
-    <h3 class="dash-card-title" id="dash-rewards-title">🔒 Weekly Rewards <span class="dash-tag">Officers</span></h3>
+    <h3 class="dash-card-title" id="dash-rewards-title">{{ "rewards_card.title" | t }} <span class="dash-tag">{{ "rewards_card.officers" | t }}</span></h3>
     <div id="dash-rewards-body"></div>
   </section>
 
@@ -29,12 +30,12 @@ lang: "en"
 
   <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
-    <button type="button" class="dash-btn" id="dash-edit-toggle" aria-pressed="false">✏️ Edit Dashboard</button>
-    <button type="button" class="dash-btn" id="dash-add" hidden>➕ Add a chart or table</button>
+    <button type="button" class="dash-btn" id="dash-edit-toggle" aria-pressed="false">{{ "dashboard.edit_dashboard" | t }}</button>
+    <button type="button" class="dash-btn" id="dash-add" hidden>{{ "dashboard.add_chart" | t }}</button>
   </div>
-  <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="Chart or table editor"></section>
+  <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
 
-  <section class="dash-widgets" id="dash-widgets" hidden aria-label="Alliance charts and tables"></section>
+  <section class="dash-widgets" id="dash-widgets" hidden aria-label="{{ "dashboard.charts_label" | t }}"></section>
 </div>
 
 <script src="/js/dashboard-widgets.js"></script>
@@ -42,9 +43,10 @@ lang: "en"
   (function () {
     // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
     const $ = (id) => document.getElementById(id);
+    // The in-game chest names (common.chests in _data/<lang>/tools.yml).
     const CHESTS = {
-      standard: { commanders_will: "Commander's Will", loyal_servant: 'Loyal Servant', followers_heart: "Follower's Heart" },
-      kingdom_war: { commanders_will: 'Honor Vanguard', loyal_servant: 'Fearless Hero', followers_heart: 'Logistics Support' },
+      standard: { commanders_will: t('common.chests.commanders_will'), loyal_servant: t('common.chests.loyal_servant'), followers_heart: t('common.chests.followers_heart') },
+      kingdom_war: { commanders_will: t('common.chests.honor_vanguard'), loyal_servant: t('common.chests.fearless_hero'), followers_heart: t('common.chests.logistics_support') },
     };
     let data = null;
     let countdownTimer = null;
@@ -69,8 +71,8 @@ lang: "en"
       if (!pass) {
         $('dash-subtitle').textContent = '';
         message(
-          '🔐 <strong>Sign in to see your alliance dashboard.</strong><br>Use <strong>Sign In</strong> at the top right (Discord). Your alliance is found from your NAP server role.' +
-            '<br><br><button type="button" class="submit-plan-btn" id="dash-signin">Sign in with Discord</button>',
+          `🔐 <strong>${escapeHtml(t('dashboard.sign_in_title'))}</strong><br>${th('dashboard.sign_in_help', { sign_in: `<strong>${escapeHtml(t('dashboard.sign_in_button'))}</strong>` })}` +
+            `<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_discord'))}</button>`,
         );
         $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
         return;
@@ -83,7 +85,7 @@ lang: "en"
         if (!res.ok) {
           $('dash-subtitle').textContent = '';
           if (body.code === 'login') {
-            message(`🔐 ${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">Sign in again</button>`, 'warning');
+            message(`🔐 ${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_again'))}</button>`, 'warning');
             $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
           } else {
             message(`⚠️ ${escapeHtml(body.error || `HTTP ${res.status}`)}`, 'warning');
@@ -94,7 +96,7 @@ lang: "en"
         $('dash-message').hidden = true;
         render();
       } catch (err) {
-        message(`⚠️ Couldn't load the dashboard. Check your connection and refresh. (${escapeHtml(err.message)})`, 'warning');
+        message(`⚠️ ${escapeHtml(t('dashboard.load_failed', { error: err.message }))}`, 'warning');
       }
     }
 
@@ -103,9 +105,11 @@ lang: "en"
       const badge = $('dash-alliance');
       badge.textContent = `[${a.tag}]`;
       if (a.color && /^#[0-9a-f]{6}$/i.test(a.color)) badge.style.color = a.color;
-      const who = { steward: 'Steward view', leader: 'Leadership view', member: 'Member view' }[data.viewer.tier];
-      $('dash-subtitle').textContent = `Alliance Dashboard${a.rank ? ` · Rank #${a.rank}` : ''} · ${who}`;
-      document.title = `[${a.tag}] Alliance Dashboard | Last Asylum`;
+      const who = t(`dashboard.view_${data.viewer.tier === 'steward' ? 'steward' : data.viewer.tier === 'leader' ? 'leader' : 'member'}`);
+      $('dash-subtitle').textContent = a.rank
+        ? t('dashboard.subtitle_rank', { rank: a.rank, view: who })
+        : t('dashboard.subtitle', { view: who });
+      document.title = `${t('dashboard.page_title', { tag: a.tag })} | Last Asylum`;
 
       // Stewards: alliance switcher
       if (Array.isArray(data.alliances) && data.alliances.length) {
@@ -137,18 +141,18 @@ lang: "en"
     function when(iso) {
       const d = new Date(iso);
       const local = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
-      const gt = new Date(d.getTime() - 2 * 3600000);
-      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      return `${local} (${days[gt.getUTCDay()]} ${String(gt.getUTCHours()).padStart(2, '0')}:${String(gt.getUTCMinutes()).padStart(2, '0')} GT)`;
+      // Game Time is UTC-2 (the "Etc/GMT+2" zone); the day name in the reader's language.
+      const gt = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'Etc/GMT+2' });
+      return `${local} (${t('common.game_time', { time: gt })})`;
     }
 
     function countdown(iso) {
       const ms = new Date(iso).getTime() - Date.now();
-      if (ms <= 0) return 'now';
+      if (ms <= 0) return t('common.now');
       const d = Math.floor(ms / 864e5);
       const h = Math.floor((ms % 864e5) / 36e5);
       const m = Math.floor((ms % 36e5) / 6e4);
-      return d ? `${d}d ${h}h` : h ? `${h}h ${m}m` : `${m}m`;
+      return d ? t('common.duration_days', { d, h }) : h ? t('common.duration_hours', { h, m }) : t('common.duration_minutes', { m });
     }
 
     function renderRewards() {
@@ -159,43 +163,45 @@ lang: "en"
       const n = r.nomination;
 
       // 1. Period and Kingdom War result
+      const clock = (iso) => `<span data-countdown="${escapeHtml(iso)}">${escapeHtml(countdown(iso))}</span>`;
       const status = p.open
-        ? `<span title="Closes ${escapeHtml(when(p.closesAt))}">🟢 <strong>Open</strong> · <span data-countdown="${escapeHtml(p.closesAt)}">${countdown(p.closesAt)}</span> left</span>`
-        : `<span title="Opens ${escapeHtml(when(p.nextOpensAt))}, after Friday's capitol event">⚪ <strong>Closed</strong> · opens in <span data-countdown="${escapeHtml(p.nextOpensAt)}">${countdown(p.nextOpensAt)}</span></span>`;
+        ? `<span title="${escapeHtml(t('rewards_card.closes_at', { when: when(p.closesAt) }))}">🟢 <strong>${escapeHtml(t('rewards_card.open'))}</strong> · ${th('rewards_card.time_left', { time: clock(p.closesAt) })}</span>`
+        : `<span title="${escapeHtml(t('rewards_card.opens_at', { when: when(p.nextOpensAt) }))}">⚪ <strong>${escapeHtml(t('rewards_card.closed'))}</strong> · ${th('rewards_card.opens_in', { time: clock(p.nextOpensAt) })}</span>`;
       const war = !p.kwWeek
-        ? '<span class="dash-pill">Off-Week</span>'
+        ? `<span class="dash-pill">${escapeHtml(t('rewards_card.off_week'))}</span>`
         : p.result === 'won'
-          ? '<span class="dash-pill is-good">🏆 KW won</span>'
+          ? `<span class="dash-pill is-good">${escapeHtml(t('rewards_card.kw_won'))}</span>`
           : p.result === 'lost'
-            ? '<span class="dash-pill">🛡️ KW lost</span>'
-            : '<span class="dash-pill is-wait">⏳ KW pending</span>';
+            ? `<span class="dash-pill">${escapeHtml(t('rewards_card.kw_lost'))}</span>`
+            : `<span class="dash-pill is-wait">${escapeHtml(t('rewards_card.kw_pending'))}</span>`;
 
       // 2. Chests: set 1 always; set 2 when won, greyed "if won" while pending
       let set2 = '';
-      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="King of Battle Reward">⚔️ ${chestIcons(r.chests, 'kingdom_war')}</span>`;
-      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="King of Battle Reward, if the war is won">⚔️ ${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>if won</small></span>`;
+      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_two'))}">⚔️ ${chestIcons(r.chests, 'kingdom_war')}</span>`;
+      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="${escapeHtml(t('rewards_card.set_two_if_won'))}">⚔️ ${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>${escapeHtml(t('rewards_card.if_won'))}</small></span>`;
       const chests = r.rank
-        ? `<span class="dash-set" title="King's Commendation">👑 ${chestIcons(r.chests, 'standard')}</span>${set2}`
-        : '<span class="dash-warn">No rank in the standings: no chests</span>';
+        ? `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_one'))}">👑 ${chestIcons(r.chests, 'standard')}</span>${set2}`
+        : `<span class="dash-warn">${escapeHtml(t('rewards_card.no_rank'))}</span>`;
 
       // 3. The list
       const list = n.submitted
-        ? `<span title="${n.submittedAt ? `Sent ${escapeHtml(when(n.submittedAt))}` : ''}">✅ List sent · ${n.ranked}${n.reserves ? ` <span class="dash-muted">(${n.reserves} reserve${n.reserves === 1 ? '' : 's'})</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${n.unfilled} empty</span>` : ''}</span>`
+        ? `<span title="${n.submittedAt ? escapeHtml(t('rewards_card.sent_at', { when: when(n.submittedAt) })) : ''}">${escapeHtml(t('rewards_card.list_sent', { count: n.ranked }))}${n.reserves ? ` <span class="dash-muted">${escapeHtml(tn('rewards_card.reserves', n.reserves))}</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${escapeHtml(t('rewards_card.empty_slots', { n: n.unfilled }))}</span>` : ''}</span>`
         : p.open
-          ? '<span class="dash-warn">⚠️ List not sent</span>'
-          : '<span class="dash-muted">No list while closed</span>';
+          ? `<span class="dash-warn">${escapeHtml(t('rewards_card.list_not_sent'))}</span>`
+          : `<span class="dash-muted">${escapeHtml(t('rewards_card.no_list_closed'))}</span>`;
       let action = '';
       if (p.open && data.viewer.canNominate) {
-        action = `<button type="button" class="dash-btn" id="dash-nominate">📝 ${n.submitted ? 'Edit' : 'Send list'}</button>`;
+        action = `<button type="button" class="dash-btn" id="dash-nominate">${escapeHtml(t(n.submitted ? 'rewards_card.edit_list' : 'rewards_card.send_list'))}</button>`;
       } else if (p.open) {
-        action = '<span class="dash-muted dash-small" title="Your R5 can open the nomination page from here, or run /nominate in Discord.">R5 or /nominate</span>';
+        action = `<span class="dash-muted dash-small" title="${escapeHtml(t('rewards_card.ask_r5_help'))}">${escapeHtml(t('rewards_card.ask_r5'))}</span>`;
       }
 
       // 4. Buyout, only when it applies
+      const gold = '<span class="chest-glyph gold"></span>';
       const buyout = r.hasBuyoutBonus
-        ? `<div class="dash-line dash-small" title="Funded by WLO${r.buyoutThreat ? ` · threat: ${escapeHtml(r.buyoutThreat)}` : ''}"><span>🛡️ Buyout: <strong>+1</strong> <span class="chest-glyph gold"></span> in each set won</span></div>`
+        ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_bonus_help') + (r.buyoutThreat ? ` · ${t('rewards_card.buyout_threat', { threat: r.buyoutThreat })}` : ''))}"><span>${th('rewards_card.buyout_bonus', { amount: '<strong>+1</strong>', chest: gold })}</span></div>`
         : r.isWloDeducted
-          ? '<div class="dash-line dash-small" title="Funding the displaced alliance this week"><span>⚖️ Buyout: <strong>−1</strong> <span class="chest-glyph gold"></span> in each set</span></div>'
+          ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_cost_help'))}"><span>${th('rewards_card.buyout_cost', { amount: '<strong>−1</strong>', chest: gold })}</span></div>`
           : '';
 
       $('dash-rewards-body').innerHTML =
@@ -252,10 +258,10 @@ lang: "en"
       return h * 60 + m;
     };
     function windowText(p) {
-      if (!p.from) return '<span class="dash-muted">flexible</span>';
+      if (!p.from) return `<span class="dash-muted">${escapeHtml(t('caravan.flexible'))}</span>`;
       const gt = p.to ? `${p.from}–${p.to}` : p.from;
       const local = p.to ? `${gtToLocal(p.from)}–${gtToLocal(p.to)}` : gtToLocal(p.from);
-      return `${gt} GT <span class="dash-muted">(${escapeHtml(local)} your time)</span>`;
+      return `${escapeHtml(t('common.game_time', { time: gt }))} <span class="dash-muted">(${escapeHtml(t('common.your_time', { time: local }))})</span>`;
     }
     /** Available around now: inside their window (or within an hour of a single time); flexible players always. */
     function aroundNow(p) {
@@ -280,24 +286,24 @@ lang: "en"
         .filter((p) => !p.picked)
         .filter((p) => (!q || p.name.toLowerCase().includes(q)) && (!caravanFilter.now || aroundNow(p)));
       const now = nowGtMinutes();
-      const nowText = `${String(Math.floor(now / 60)).padStart(2, '0')}:${String(now % 60).padStart(2, '0')} GT`;
+      const nowText = t('common.game_time', { time: `${String(Math.floor(now / 60)).padStart(2, '0')}:${String(now % 60).padStart(2, '0')}` });
 
       const row = (p) => {
         if (leader && caravanEditing === p.id) {
           return `<li class="dash-cv-row is-editing" data-id="${escapeHtml(p.id)}">
-            <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="Name">
-            <input type="text" class="cv-from" value="${escapeHtml(p.from || '')}" placeholder="18:00" aria-label="From (Game Time)">
-            <input type="text" class="cv-to" value="${escapeHtml(p.to || '')}" placeholder="22:00" aria-label="To (Game Time)">
-            <button type="button" class="dash-icon-btn" data-cv="save-edit">💾</button>
-            <button type="button" class="dash-icon-btn" data-cv="cancel-edit">✕</button>
+            <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="${escapeHtml(t('caravan.name'))}">
+            <input type="text" class="cv-from" value="${escapeHtml(p.from || '')}" placeholder="18:00" aria-label="${escapeHtml(t('caravan.from'))}">
+            <input type="text" class="cv-to" value="${escapeHtml(p.to || '')}" placeholder="22:00" aria-label="${escapeHtml(t('caravan.to'))}">
+            <button type="button" class="dash-icon-btn" data-cv="save-edit" aria-label="${escapeHtml(t('common.save'))}">💾</button>
+            <button type="button" class="dash-icon-btn" data-cv="cancel-edit" aria-label="${escapeHtml(t('common.cancel'))}">✕</button>
           </li>`;
         }
         const tools = leader
           ? p.picked
-            ? '<button type="button" class="dash-icon-btn" data-cv="unpick" title="Back to available">Undo</button>'
-            : `<button type="button" class="dash-btn" data-cv="pick">✓ Picked</button>
-               <button type="button" class="dash-icon-btn" data-cv="edit" title="Edit" aria-label="Edit">✏️</button>
-               <button type="button" class="dash-icon-btn" data-cv="remove" title="Remove" aria-label="Remove">🗑️</button>`
+            ? `<button type="button" class="dash-icon-btn" data-cv="unpick" title="${escapeHtml(t('caravan.back_to_available'))}">${escapeHtml(t('common.undo'))}</button>`
+            : `<button type="button" class="dash-btn" data-cv="pick">${escapeHtml(t('caravan.pick'))}</button>
+               <button type="button" class="dash-icon-btn" data-cv="edit" title="${escapeHtml(t('common.edit'))}" aria-label="${escapeHtml(t('common.edit'))}">✏️</button>
+               <button type="button" class="dash-icon-btn" data-cv="remove" title="${escapeHtml(t('common.remove'))}" aria-label="${escapeHtml(t('common.remove'))}">🗑️</button>`
           : '';
         const pickedText = p.picked
           ? `<span class="dash-muted">✓ ${new Date(p.picked.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}${p.picked.by ? ` · ${escapeHtml(p.picked.by)}` : ''}</span>`
@@ -310,28 +316,28 @@ lang: "en"
       };
 
       el.innerHTML = `
-        <h3 class="dash-card-title" id="dash-caravan-title">🐪 Caravan Rotor <span class="dash-tag">${picked.length}/${all.length} picked</span></h3>
+        <h3 class="dash-card-title" id="dash-caravan-title">${escapeHtml(t('caravan.title'))} <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span></h3>
         ${leader ? `<div class="dash-cv-bar">
-          <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> 👥 Members can view</label>
+          <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${escapeHtml(t('caravan.members_can_view'))}</label>
           <span class="dash-cv-actions">
-            <button type="button" class="dash-icon-btn" data-cv="copy">📋 Copy status</button>
-            <button type="button" class="dash-icon-btn" data-cv="new-week">🔄 New week</button>
+            <button type="button" class="dash-icon-btn" data-cv="copy">${escapeHtml(t('caravan.copy_status'))}</button>
+            <button type="button" class="dash-icon-btn" data-cv="new-week">${escapeHtml(t('caravan.new_week'))}</button>
           </span>
-        </div>` : `<div class="dash-cv-bar"><span class="dash-muted dash-small">Picked by your R4s when a caravan is ready.</span><button type="button" class="dash-icon-btn" data-cv="copy">📋 Copy status</button></div>`}
+        </div>` : `<div class="dash-cv-bar"><span class="dash-muted dash-small">${escapeHtml(t('caravan.member_note'))}</span><button type="button" class="dash-icon-btn" data-cv="copy">${escapeHtml(t('caravan.copy_status'))}</button></div>`}
         <div class="dash-cv-filters">
-          <input type="search" id="cv-search" placeholder="Search names…" value="${escapeHtml(caravanFilter.text)}" aria-label="Search names">
-          <button type="button" class="dash-icon-btn" data-cv="now" aria-pressed="${caravanFilter.now}" title="Only players available around now">⏰ Around now <small>${nowText}</small></button>
+          <input type="search" id="cv-search" placeholder="${escapeHtml(t('caravan.search'))}" value="${escapeHtml(caravanFilter.text)}" aria-label="${escapeHtml(t('caravan.search'))}">
+          <button type="button" class="dash-icon-btn" data-cv="now" aria-pressed="${caravanFilter.now}" title="${escapeHtml(t('caravan.around_now_help'))}">${escapeHtml(t('caravan.around_now'))} <small>${escapeHtml(nowText)}</small></button>
         </div>
-        <div class="dash-cv-head">Available this week (${all.length - picked.length})</div>
-        <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${all.length - picked.length ? 'Nobody matches.' : all.length ? 'Everyone has had a caravan this week. 🎉' : leader ? 'Add players below.' : 'No players yet.'}</li>`}</ul>
-        ${picked.length ? `<details class="dash-cv-picked"${leader ? '' : ' open'}><summary>Picked this week (${picked.length})</summary><ul class="dash-cv-list">${picked.map(row).join('')}</ul></details>` : ''}
+        <div class="dash-cv-head">${escapeHtml(t('caravan.available', { n: all.length - picked.length }))}</div>
+        <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t(all.length - picked.length ? 'caravan.nobody_matches' : all.length ? 'caravan.everyone_picked' : leader ? 'caravan.add_players' : 'caravan.no_players'))}</li>`}</ul>
+        ${picked.length ? `<details class="dash-cv-picked"${leader ? '' : ' open'}><summary>${escapeHtml(t('caravan.picked', { n: picked.length }))}</summary><ul class="dash-cv-list">${picked.map(row).join('')}</ul></details>` : ''}
         ${leader ? `<form class="dash-cv-add" id="cv-add">
-          <input type="text" id="cv-add-name" maxlength="40" placeholder="Player name" aria-label="Player name">
-          <input type="text" id="cv-add-from" placeholder="From 18:00" aria-label="Available from (Game Time, optional)">
-          <input type="text" id="cv-add-to" placeholder="To 22:00" aria-label="Available until (Game Time, optional)">
-          <button type="submit" class="dash-btn">➕ Add</button>
+          <input type="text" id="cv-add-name" maxlength="40" placeholder="${escapeHtml(t('caravan.player_name'))}" aria-label="${escapeHtml(t('caravan.player_name'))}">
+          <input type="text" id="cv-add-from" placeholder="${escapeHtml(t('caravan.add_from'))}" aria-label="${escapeHtml(t('caravan.add_from_label'))}">
+          <input type="text" id="cv-add-to" placeholder="${escapeHtml(t('caravan.add_to'))}" aria-label="${escapeHtml(t('caravan.add_to_label'))}">
+          <button type="submit" class="dash-btn">${escapeHtml(t('caravan.add'))}</button>
         </form>
-        <div class="dash-muted dash-small">Times are Game Time (UTC-2) and optional; leave them empty for players who are flexible.</div>
+        <div class="dash-muted dash-small">${escapeHtml(t('caravan.times_help'))}</div>
         <div class="dash-error" id="cv-error"></div>` : ''}`;
       const search = $('cv-search');
       search.addEventListener('input', () => {
@@ -355,7 +361,7 @@ lang: "en"
       if (error) {
         const box = $('cv-error');
         if (box) box.textContent = error;
-        else alert(`Not saved: ${error}`);
+        else alert(t('common.not_saved', { error }));
         return false;
       }
       return true;
@@ -365,11 +371,11 @@ lang: "en"
       const c = data.dashboard.caravan;
       const left = c.roster.filter((p) => !p.picked);
       const done = c.roster.filter((p) => p.picked);
-      const when = (p) => (p.from ? ` (${p.to ? `${p.from}–${p.to}` : p.from} GT)` : '');
+      const when = (p) => (p.from ? ` (${t('common.game_time', { time: p.to ? `${p.from}–${p.to}` : p.from })})` : '');
       return [
-        `🐪 [${data.alliance.tag}] Caravan Rotor: ${done.length}/${c.roster.length} picked`,
-        `Available: ${left.map((p) => p.name + when(p)).join(', ') || 'nobody'}`,
-        `Picked: ${done.map((p) => p.name).join(', ') || 'nobody yet'}`,
+        t('caravan.status_title', { tag: data.alliance.tag, picked: done.length, total: c.roster.length }),
+        t('caravan.status_available', { names: left.map((p) => p.name + when(p)).join(', ') || t('caravan.nobody') }),
+        t('caravan.status_picked', { names: done.map((p) => p.name).join(', ') || t('caravan.nobody_yet') }),
       ].join('\n');
     }
 
@@ -386,10 +392,10 @@ lang: "en"
         const text = caravanStatusText();
         try {
           await navigator.clipboard.writeText(text);
-          b.textContent = '✓ Copied';
+          b.textContent = t('common.copied');
           setTimeout(() => renderCaravan(), 1200);
         } catch (err) {
-          prompt('Copy the rotor status:', text);
+          prompt(t('caravan.copy_prompt'), text);
         }
         return;
       }
@@ -412,11 +418,11 @@ lang: "en"
       }
       if (act === 'remove') {
         const p = data.dashboard.caravan.roster.find((x) => x.id === id);
-        if (!confirm(`Remove ${p ? p.name : 'this player'} from the rotor?`)) return;
+        if (!confirm(t('caravan.confirm_remove', { name: p ? p.name : t('caravan.this_player') }))) return;
         return caravanChange({ action: 'caravan-remove', id });
       }
       if (act === 'new-week') {
-        if (!confirm('Start a new week? Everyone goes back to available (the names and times stay).')) return;
+        if (!confirm(t('caravan.confirm_new_week'))) return;
         return caravanChange({ action: 'caravan-new-week' });
       }
       b.disabled = true;
@@ -425,13 +431,7 @@ lang: "en"
 
     // ---------- Charts and tables ----------
     const W = window.DashboardWidgets;
-    const TYPES = [
-      ['bar', '📊 Bar'],
-      ['line', '📈 Line'],
-      ['pie', '🍩 Pie'],
-      ['progress', '🎯 Progress'],
-      ['table', '📋 Table'],
-    ];
+    const TYPES = ['bar', 'line', 'pie', 'progress', 'table'].map((type) => [type, t(`chart_editor.type_${type}`)]);
     let editing = false;
 
     function isLeader() {
@@ -439,26 +439,23 @@ lang: "en"
     }
 
     function widgetCard(w, i, count) {
-      const vis = w.visibility === 'members' ? '👥 All members' : '🔒 Officers only';
+      const vis = t(w.visibility === 'members' ? 'dashboard.visible_members' : 'dashboard.visible_officers');
       const linked = w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc');
       const day = (iso) => new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
       const updated = linked
-        ? `🔗 ${w.source.kind === 'doc' ? 'Google Doc' : 'Google Sheet'}${w.syncedAt ? ` · synced ${day(w.syncedAt)}` : ''}`
+        ? `🔗 ${t(w.source.kind === 'doc' ? 'dashboard.google_doc' : 'dashboard.google_sheet')}${w.syncedAt ? ` · ${t('dashboard.synced', { when: day(w.syncedAt) })}` : ''}`
         : w.updatedAt
-          ? `Updated ${new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}`
+          ? t('dashboard.updated', { when: new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) })
           : '';
-      const sync = linked && isLeader() ? '<button type="button" class="dash-sync" data-act="sync" title="Fetch the latest numbers from the sheet">🔄 Sync now</button>' : '';
+      const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
+      const tool = (act, label, glyph, off) =>
+        `<button type="button" class="dash-icon-btn" data-act="${act}" ${off ? 'disabled' : ''} title="${escapeHtml(t(label))}" aria-label="${escapeHtml(t(label))}">${glyph}</button>`;
       const tools = editing
-        ? `<div class="dash-widget-tools">
-            <button type="button" class="dash-icon-btn" data-act="up" ${i === 0 ? 'disabled' : ''} title="Move up" aria-label="Move up">▲</button>
-            <button type="button" class="dash-icon-btn" data-act="down" ${i === count - 1 ? 'disabled' : ''} title="Move down" aria-label="Move down">▼</button>
-            <button type="button" class="dash-icon-btn" data-act="edit" title="Edit" aria-label="Edit">✏️</button>
-            <button type="button" class="dash-icon-btn" data-act="delete" title="Delete" aria-label="Delete">🗑️</button>
-          </div>`
+        ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲', i === 0)}${tool('down', 'common.move_down', '▼', i === count - 1)}${tool('edit', 'common.edit', '✏️')}${tool('delete', 'common.delete', '🗑️')}</div>`
         : '';
       return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}">
         <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
-        <div class="dash-widget-meta">${isLeader() ? `<span>${vis}</span>` : ''}${updated ? `<span>${updated}</span>` : ''}${sync}</div>
+        <div class="dash-widget-meta">${isLeader() ? `<span>${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${escapeHtml(updated)}</span>` : ''}${sync}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
         <div class="dash-widget-body">${W.render(w)}</div>
       </article>`;
@@ -470,16 +467,12 @@ lang: "en"
       el.hidden = false;
       $('dash-edit-bar').hidden = !isLeader();
       $('dash-edit-toggle').setAttribute('aria-pressed', String(editing));
-      $('dash-edit-toggle').textContent = editing ? '✓ Done editing' : '✏️ Edit Dashboard';
+      $('dash-edit-toggle').textContent = t(editing ? 'dashboard.done_editing' : 'dashboard.edit_dashboard');
       $('dash-add').hidden = !editing;
       if (!list.length) {
-        el.innerHTML = `<div class="dash-card dash-empty">${
-          !isLeader()
-            ? "📊 Your alliance's leaders haven't shared any charts or tables here yet."
-            : editing
-              ? '📊 No charts or tables yet: use “Add a chart or table”.'
-              : '📊 No charts or tables yet. Use “Edit Dashboard” to add one.'
-        }</div>`;
+        el.innerHTML = `<div class="dash-card dash-empty">${escapeHtml(
+          t(!isLeader() ? 'dashboard.empty_member' : editing ? 'dashboard.empty_editing' : 'dashboard.empty_leader'),
+        )}</div>`;
         return;
       }
       el.innerHTML = list.map((w, i) => widgetCard(w, i, list.length)).join('');
@@ -503,17 +496,17 @@ lang: "en"
       if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
       if (act === 'sync') {
         b.disabled = true;
-        b.textContent = '🔄 Syncing…';
+        b.textContent = t('dashboard.syncing');
         const error = await save({ action: 'sync-widget', id });
         if (error && document.body.contains(b)) {
           b.disabled = false;
-          b.textContent = '🔄 Sync now';
+          b.textContent = t('dashboard.sync_now');
         }
         return;
       }
       if (act === 'delete') {
         const w = data.dashboard.widgets.find((x) => x.id === id);
-        if (!confirm(`Delete "${w ? w.title : 'this chart'}"? This can't be undone.`)) return;
+        if (!confirm(t('dashboard.confirm_delete', { title: w ? w.title : t('dashboard.this_chart') }))) return;
         return save({ action: 'delete-widget', id });
       }
       return save({ action: 'move-widget', id, by: act === 'up' ? -1 : 1 });
@@ -534,7 +527,7 @@ lang: "en"
         renderWidgets();
         return '';
       } catch (err) {
-        if (!change.widget && !quiet) alert(`Not saved: ${err.message}`);
+        if (!change.widget && !quiet) alert(t('common.not_saved', { error: err.message }));
         return err.message;
       }
     }
@@ -551,47 +544,48 @@ lang: "en"
         : { type: 'bar', title: '', note: '', visibility: 'r4_only', data: { columns: [], rows: [] }, options: {} };
       const ed = $('dash-editor');
       ed.hidden = false;
+      const e = (key) => escapeHtml(t(`chart_editor.${key}`));
       ed.innerHTML = `
-        <h3 class="dash-card-title">${existing ? '✏️ Edit chart or table' : '➕ New chart or table'}</h3>
-        <label>Type</label>
-        <div class="dash-types" id="ed-types" role="group" aria-label="Type">${TYPES.map(([t, name]) => `<button type="button" data-type="${t}" aria-pressed="${w.type === t}">${name}</button>`).join('')}</div>
-        <label for="ed-title">Title</label>
-        <input type="text" id="ed-title" maxlength="80" value="${escapeHtml(w.title)}" placeholder="e.g. Alliance Duel scores">
-        <label for="ed-note">Explanation <span class="dash-muted">(optional)</span></label>
-        <textarea id="ed-note" rows="2" maxlength="400" placeholder="e.g. Minimum 15M Duel points required by Friday reset">${escapeHtml(w.note)}</textarea>
-        <label for="ed-vis">Who can see it</label>
+        <h3 class="dash-card-title">${e(existing ? 'edit_title' : 'new_title')}</h3>
+        <label>${e('type')}</label>
+        <div class="dash-types" id="ed-types" role="group" aria-label="${e('type')}">${TYPES.map(([type, name]) => `<button type="button" data-type="${type}" aria-pressed="${w.type === type}">${escapeHtml(name)}</button>`).join('')}</div>
+        <label for="ed-title">${e('title')}</label>
+        <input type="text" id="ed-title" maxlength="80" value="${escapeHtml(w.title)}" placeholder="${e('title_example')}">
+        <label for="ed-note">${e('note')} <span class="dash-muted">${escapeHtml(t('common.optional'))}</span></label>
+        <textarea id="ed-note" rows="2" maxlength="400" placeholder="${e('note_example')}">${escapeHtml(w.note)}</textarea>
+        <label for="ed-vis">${e('who_sees')}</label>
         <select id="ed-vis">
-          <option value="r4_only"${w.visibility !== 'members' ? ' selected' : ''}>🔒 Officers only (R4/R5)</option>
-          <option value="members"${w.visibility === 'members' ? ' selected' : ''}>👥 All alliance members</option>
+          <option value="r4_only"${w.visibility !== 'members' ? ' selected' : ''}>${e('officers_only')}</option>
+          <option value="members"${w.visibility === 'members' ? ' selected' : ''}>${e('all_members')}</option>
         </select>
-        <label>Data</label>
-        <div class="dash-types dash-src" role="group" aria-label="Where the data comes from">
-          <button type="button" data-src="paste" aria-pressed="true">📋 Paste a table</button>
-          <button type="button" data-src="link" aria-pressed="false">🔗 Google Sheet / Doc link</button>
+        <label>${e('data')}</label>
+        <div class="dash-types dash-src" role="group" aria-label="${e('data_source')}">
+          <button type="button" data-src="paste" aria-pressed="true">${e('paste')}</button>
+          <button type="button" data-src="link" aria-pressed="false">${e('link')}</button>
         </div>
         <div id="ed-src-paste">
-          <div class="dash-muted dash-small">Copy the cells from Google Sheets or Excel (header row first) and paste them here.</div>
+          <div class="dash-muted dash-small">${e('paste_help')}</div>
           <textarea id="ed-paste" class="dash-paste" placeholder="Name&#9;Score&#10;Aria&#9;15200000&#10;Bram&#9;12900000"></textarea>
         </div>
         <div id="ed-src-link" hidden>
           <input type="text" id="ed-url" placeholder="https://docs.google.com/spreadsheets/d/…" value="${escapeHtml((w.source && w.source.url) || '')}">
           <div class="dash-link-opts" id="ed-sheet-opts">
-            <input type="text" id="ed-sheet" placeholder="Tab name (optional)" value="${escapeHtml((w.source && w.source.sheet) || '')}">
-            <input type="text" id="ed-range" placeholder="Range, e.g. A1:D20 (optional)" value="${escapeHtml((w.source && w.source.range) || '')}">
+            <input type="text" id="ed-sheet" placeholder="${e('tab_name')}" value="${escapeHtml((w.source && w.source.sheet) || '')}">
+            <input type="text" id="ed-range" placeholder="${e('range')}" value="${escapeHtml((w.source && w.source.range) || '')}">
           </div>
           <div class="dash-link-opts" id="ed-doc-opts" hidden>
-            <input type="text" inputmode="numeric" id="ed-table" placeholder="Which table in the Doc (1, 2…)" value="${escapeHtml(String((w.source && w.source.table) || ''))}">
+            <input type="text" inputmode="numeric" id="ed-table" placeholder="${e('doc_table')}" value="${escapeHtml(String((w.source && w.source.table) || ''))}">
           </div>
-          <button type="button" class="dash-btn" id="ed-load">⤓ Load from Google</button>
-          <div class="dash-muted dash-small">Sheets: Share → “Anyone with the link can view” (or File → Share → Publish to web). Docs: File → Share → Publish to web. “Sync now” on the card fetches the latest numbers later.</div>
+          <button type="button" class="dash-btn" id="ed-load">${e('load')}</button>
+          <div class="dash-muted dash-small">${e('link_help')}</div>
         </div>
         <div class="dash-muted dash-small" id="ed-parsed"></div>
         <div id="ed-options"></div>
-        <div class="dash-editor-preview"><div class="dash-muted dash-small">Preview</div><div id="ed-preview"></div></div>
+        <div class="dash-editor-preview"><div class="dash-muted dash-small">${e('preview')}</div><div id="ed-preview"></div></div>
         <div class="dash-error" id="ed-error"></div>
         <div class="dash-editor-actions">
-          <button type="button" class="dash-icon-btn" id="ed-cancel">Cancel</button>
-          <button type="button" class="submit-plan-btn" id="ed-save">💾 Save</button>
+          <button type="button" class="dash-icon-btn" id="ed-cancel">${escapeHtml(t('common.cancel'))}</button>
+          <button type="button" class="submit-plan-btn" id="ed-save">${escapeHtml(t('common.save'))}</button>
         </div>`;
       $('ed-paste').value = w.data.columns.length ? W.toText(w.data) : '';
 
@@ -618,9 +612,9 @@ lang: "en"
         }
         let html = '';
         if (w.type !== 'table') {
-          html += `<label for="ed-label">Names (labels)</label>${colSelect('ed-label', o.labelCol)}`;
+          html += `<label for="ed-label">${e('labels')}</label>${colSelect('ed-label', o.labelCol)}`;
           const multi = w.type === 'bar' || w.type === 'line';
-          html += `<label>${multi ? 'Numbers to show' : 'Numbers'}</label><div class="dash-cols">${cols
+          html += `<label>${e(multi ? 'numbers_to_show' : 'numbers')}</label><div class="dash-cols">${cols
             .map((c, i) =>
               i === o.labelCol
                 ? ''
@@ -629,26 +623,26 @@ lang: "en"
             .join('')}</div>`;
         }
         if (w.type === 'bar') {
-          html += `<label for="ed-stacked">Several number columns</label>
+          html += `<label for="ed-stacked">${e('several_columns')}</label>
             <select id="ed-stacked">
-              <option value=""${!o.stacked ? ' selected' : ''}>Side by side</option>
-              <option value="sum"${o.stacked === 'sum' ? ' selected' : ''}>Stacked: totals</option>
-              <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>Stacked: each bar to 100%</option>
+              <option value=""${!o.stacked ? ' selected' : ''}>${e('side_by_side')}</option>
+              <option value="sum"${o.stacked === 'sum' ? ' selected' : ''}>${e('stacked_totals')}</option>
+              <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>${e('stacked_percent')}</option>
             </select>`;
-          html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> Vertical bars${o.stacked ? '' : ' (instead of a leaderboard)'}</label>`;
-          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> 🚦 Red → yellow → green (low → high): ${(o.valueCols || []).length > 1 ? 'first column red, last green' : 'by size, biggest green'}</label>`;
-          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ↕️ Reverse: low is good (green), high is bad (red)</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> ${e(o.stacked ? 'vertical' : 'vertical_leaderboard')}</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${e('traffic_reverse')}</label>`;
         }
-        if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> Donut (ring)</label>`;
+        if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> ${e('donut')}</label>`;
         if (w.type === 'progress') {
-          html += `<label for="ed-target">Target for everyone</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="e.g. 15M or 15000000">`;
-          html += `<label for="ed-targetcol">…or a column of targets</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: '(use the number above)' })}`;
-          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> 🚦 Red → yellow → green by how close each is to the target</label>`;
-          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ↕️ Reverse: further below the target is better</label>`;
+          html += `<label for="ed-target">${e('target')}</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="${e('target_example')}">`;
+          html += `<label for="ed-targetcol">${e('target_column')}</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: e('use_number_above') })}`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${e('traffic_target')}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${e('traffic_target_reverse')}</label>`;
         }
         if (w.type === 'table') {
-          html += `<label for="ed-hlcol">Highlight rows where</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: '(no highlight)' })}`;
-          html += `<label for="ed-hlmin">is at least</label><input type="text" inputmode="decimal" id="ed-hlmin" value="${o.highlightMin ?? ''}" placeholder="e.g. 300M">`;
+          html += `<label for="ed-hlcol">${e('highlight_where')}</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: e('no_highlight') })}`;
+          html += `<label for="ed-hlmin">${e('at_least')}</label><input type="text" inputmode="decimal" id="ed-hlmin" value="${o.highlightMin ?? ''}" placeholder="${e('at_least_example')}">`;
         }
         $('ed-options').innerHTML = html;
       }
@@ -689,7 +683,7 @@ lang: "en"
         w.visibility = $('ed-vis').value;
         const box = $('ed-preview');
         if (!w.data.columns.length) {
-          box.innerHTML = '<div class="dw-empty">Paste a table above to see the chart.</div>';
+          box.innerHTML = `<div class="dw-empty">${e('preview_empty')}</div>`;
           return;
         }
         box.innerHTML = W.render(w);
@@ -722,7 +716,8 @@ lang: "en"
         w.data = parsed;
         if (changed) w.options = { ...w.options, labelCol: 0, valueCols: [] };
         $('ed-parsed').textContent = parsed.columns.length
-          ? `${parsed.rows.length} row${parsed.rows.length === 1 ? '' : 's'} × ${parsed.columns.length} column${parsed.columns.length === 1 ? '' : 's'}${parsed.rows.length > 500 ? ' (500 at most)' : ''}`
+          ? t('chart_editor.size', { rows: tn('chart_editor.rows', parsed.rows.length), columns: tn('chart_editor.columns', parsed.columns.length) }) +
+            (parsed.rows.length > 500 ? ` ${t('chart_editor.at_most_500')}` : '')
           : '';
         drawOptions();
         preview();
@@ -735,7 +730,7 @@ lang: "en"
       $('ed-load').addEventListener('click', async () => {
         const btn = $('ed-load');
         btn.disabled = true;
-        btn.textContent = '⤓ Loading…';
+        btn.textContent = t('chart_editor.loading');
         $('ed-error').textContent = '';
         try {
           const res = await fetch('/api/dashboard', {
@@ -752,7 +747,7 @@ lang: "en"
           $('ed-error').textContent = err.message;
         }
         btn.disabled = false;
-        btn.textContent = '⤓ Load from Google';
+        btn.textContent = t('chart_editor.load');
       });
 
       function readPaste() {
@@ -783,7 +778,7 @@ lang: "en"
         preview();
         if (mode === 'link') {
           if (!w.source || !w.source.url || w.source.url !== $('ed-url').value.trim()) {
-            $('ed-error').textContent = 'Load the sheet first (⤓ Load from Google).';
+            $('ed-error').textContent = t('chart_editor.load_first');
             return;
           }
         } else {
@@ -792,10 +787,10 @@ lang: "en"
         }
         const btn = $('ed-save');
         btn.disabled = true;
-        btn.textContent = 'Saving…';
+        btn.textContent = t('common.saving');
         const error = await save({ action: 'save-widget', widget: w });
         btn.disabled = false;
-        btn.textContent = '💾 Save';
+        btn.textContent = t('common.save');
         if (error) $('ed-error').textContent = error;
         else closeEditor();
       });

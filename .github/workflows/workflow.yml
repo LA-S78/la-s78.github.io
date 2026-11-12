@@ -45,6 +45,14 @@ jobs:
             echo "No English source drafts found. Skipping."
           fi
 
+      # --- TRANSLATE THE TOOLS' TEXT (only the sections whose English changed) ---
+      # _data/en/tools.yml -> _data/<lang>/tools.yml; see _scripts/translate_sections.rb.
+      - name: Translating changed tool text via AI
+        if: github.event_name == 'push'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: bundle exec ruby _scripts/translate_sections.rb
+
       # --- FIXED INTERCEPT STAGE FOR UNTRACKED FILES ---
       - name: Saving master translation files
         if: github.event_name == 'push'
@@ -52,14 +60,16 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # Force stage the directory first so Git registers new untracked files
-          git add _source/
+          # Force stage the directories first so Git registers new untracked files
+          git add _source/ _data/*/tools.yml _scripts/translation_state.json 2>/dev/null || git add _source/
           
           # Safely check the staged index for differences
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Auto-generate master files from AI drafts [skip ci]"
+            git commit -m "Auto-translate new text (guides, data drafts, tool text) [skip ci]"
+            # Translating takes a minute or two: take any commit that landed meanwhile first.
+            git pull --rebase origin "${{ github.ref_name }}"
             git push
           fi
 

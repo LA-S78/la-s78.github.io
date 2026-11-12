@@ -12,6 +12,7 @@ your edits would vanish. Git ignores them, so they never show up as changes.
 - [Change English text that is already translated](#change-english-text-that-is-already-translated)
 - [Add a new guide](#add-a-new-guide)
 - [Add a UI label](#add-a-ui-label)
+- [Add or change text in a tool](#add-or-change-text-in-a-tool)
 - [Change styles (CSS) safely](#change-styles-css-safely)
 - [Add or change an alliance](#add-or-change-an-alliance)
 - [Add a Discord command](#add-a-discord-command)
@@ -177,6 +178,35 @@ translated per push, so add guides one at a time.
    ```
 3. If a language is missing the key, that language shows **nothing** there, so check
    all 8 files. Use `content.yml` instead of `ui.yml` for longer page wording.
+
+---
+
+## Add or change text in a tool
+
+The tools (Alliance Dashboard, editors, cards…) take their words from
+`_data/en/tools.yml`. **Edit only the English file**; the other 7 languages are
+translated automatically when your change reaches `main`.
+
+1. Add or change the text in `_data/en/tools.yml`, in the section it belongs to:
+   ```yaml
+   caravan:
+     title: "🐪 Caravan Rotor"
+     new_week: "🔄 New week"       # ← changed or new
+   ```
+   Keep `{placeholders}` such as `{name}` or `{n}`: the page fills them in. For singular
+   and plural, use two keys ending in `_one` and `_other`.
+2. Use it: in a page `{{ "caravan.new_week" | t }}`; in a script `t('caravan.new_week')`
+   (the page's front matter lists the sections its scripts use: `strings: [caravan]`).
+3. Merge. GitHub sends every changed **section** (the whole `caravan:` block here) to
+   Gemini, saves `_data/<lang>/tools.yml` and builds. Until then, and if a translation
+   fails, that text shows in English.
+
+To fix one translation by hand, add it to `_data/translation_overrides.yml` (language →
+section → key, keeping the same `{placeholders}`); it's applied on the next push and kept
+through every re-translation. Don't edit `_data/<lang>/tools.yml` directly: it's rewritten.
+A game term that should always read the same goes in `_data/terminology.json` instead.
+Keep sections to about 25–60 strings. To see what would be sent, run
+`ruby _scripts/translate_sections.rb --check`.
 
 ---
 

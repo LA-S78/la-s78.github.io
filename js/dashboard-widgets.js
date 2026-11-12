@@ -12,6 +12,8 @@
  */
 (() => {
   const esc = (v) => window.escapeHtml(String(v ?? ''));
+  // The charts' text in the page's language (charts.* in _data/<lang>/tools.yml, js/i18n.js).
+  const say = (key, vars) => window.t(`charts.${key}`, vars);
   const SERIES = 6; // colours .dw-s0 … .dw-s5
   const pct1 = (f) => `${Math.round(f * 1000) / 10}%`;
   const isPercentCell = (cell) => /%\s*$/.test(String(cell ?? ''));
@@ -84,7 +86,7 @@
     for (let i = 0; i < width; i++) {
       const h = String(head[i] ?? '').trim();
       if (h) (out[i] = h), (last = h), (n = 1);
-      else out[i] = last ? `${last} (${++n})` : `Column ${i + 1}`;
+      else out[i] = last ? `${last} (${++n})` : say('column', { n: i + 1 });
     }
     return out;
   }
@@ -184,7 +186,7 @@
     const o = w.options || {};
     const stacked = o.stacked === 'sum' || o.stacked === 'percent' ? o.stacked : '';
     const rows = s.rows.filter((r) => r.values.some(Number.isFinite));
-    if (!rows.length) return empty('No numbers to chart in the chosen column.');
+    if (!rows.length) return empty(say('no_numbers'));
     const total = (r) => r.values.reduce((t, v) => t + (Number.isFinite(v) && v > 0 ? v : 0), 0);
     const n = s.values.length;
     // A segment's tooltip: its share (stacked to 100%) and the cell as written in the sheet.
@@ -223,12 +225,13 @@
           text = exact(v);
           badges.push(text);
           if (!isPercentCell(cell) && colTotal[k] > 0 && v > 0 && rows.length > 1)
-            text += ` · ${pct1(v / colTotal[k])} of all`;
+            text = say('share_of_all', { value: text, share: pct1(v / colTotal[k]) });
         }
         keys.push(k);
         lines.push(n > 1 || stacked ? `${s.names[k]}: ${text}` : text);
       });
-      if (stacked === 'sum' && lines.length > 1) lines.push(`Total: ${exact(total(r))}`);
+      if (stacked === 'sum' && lines.length > 1)
+        lines.push(say('total_value', { value: exact(total(r)) }));
       return {
         lines,
         on: (k) => keys.indexOf(k),
@@ -360,9 +363,9 @@
   function line(w) {
     const s = series(w);
     const rows = s.rows;
-    if (rows.length < 2) return empty('A line needs at least two rows.');
+    if (rows.length < 2) return empty(say('line_two_rows'));
     const all = rows.flatMap((r) => r.values.filter(Number.isFinite));
-    if (!all.length) return empty('No numbers to chart in the chosen column.');
+    if (!all.length) return empty(say('no_numbers'));
     // Trends: the chart spans the data's own range (a little margin), not from zero, so
     // growth from 1.20B to 1.45B is visible.
     let lo = Math.min(...all);
@@ -432,10 +435,10 @@
       .map((r) => ({ label: r.label, v: r.values[0] }))
       .filter((p) => Number.isFinite(p.v) && p.v > 0)
       .sort((a, b) => b.v - a.v);
-    if (!parts.length) return empty('No positive numbers to chart in the chosen column.');
+    if (!parts.length) return empty(say('no_positive'));
     if (parts.length > 7) {
       const other = parts.slice(6).reduce((t, p) => t + p.v, 0);
-      parts = [...parts.slice(0, 6), { label: 'Other', v: other }];
+      parts = [...parts.slice(0, 6), { label: say('other'), v: other }];
     }
     const total = parts.reduce((t, p) => t + p.v, 0);
     const donut = w.options?.donut !== false;
@@ -459,7 +462,10 @@
     const pieTip = (p, i) =>
       pick(
         p.label,
-        [`${s.names[0] || 'Value'}: ${exact(p.v)}`, `Total: ${exact(total)}`],
+        [
+          `${s.names[0] || say('value')}: ${exact(p.v)}`,
+          say('total_value', { value: exact(total) }),
+        ],
         -1,
         `p${i}`,
         pct1(p.v / total),
@@ -472,7 +478,7 @@
       })
       .join('');
     const middle = donut
-      ? `<text class="dw-total" x="80" y="78" text-anchor="middle">${short(total)}</text><text class="dw-axis" x="80" y="95" text-anchor="middle">${esc(String(s.names[0] || 'total').slice(0, 14))}</text>`
+      ? `<text class="dw-total" x="80" y="78" text-anchor="middle">${short(total)}</text><text class="dw-axis" x="80" y="95" text-anchor="middle">${esc(String(s.names[0] || say('total')).slice(0, 14))}</text>`
       : '';
     return `<div class="dw-pie"><svg viewBox="0 0 160 160" role="img" aria-label="${esc(w.title)}">${rings}${middle}</svg><ul class="dw-pie-legend">${parts
       .map(
@@ -494,14 +500,14 @@
       })
       .filter((r) => Number.isFinite(r.pct))
       .sort((a, b) => b.pct - a.pct);
-    if (!rows.length) return empty('No numbers (or targets) to compare.');
+    if (!rows.length) return empty(say('no_targets'));
     const done = rows.filter((r) => r.pct >= 1).length;
     return (
-      `<div class="dw-progress-summary"><b>${done}</b> of ${rows.length} reached the target${o.targetCol === undefined ? ` (${short(Number(o.target))})` : ''}</div>` +
+      `<div class="dw-progress-summary">${window.th('charts.reached_target', { done: `<b>${done}</b>` }, { total: rows.length })}${o.targetCol === undefined ? ` (${short(Number(o.target))})` : ''}</div>` +
       `<ol class="dw-bars dw-progress">${rows
         .map(
           (r, i) =>
-            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}" ${pick(r.label, [`${s.names[0] || 'Value'}: ${exact(r.v)} of ${exact(r.target)}`, r.pct >= 1 ? 'Target reached ✓' : `To go: ${exact(r.target - r.v)}`], -1, '', r.pct >= 1 ? '✓ Done' : `${Math.round(r.pct * 100)}%`)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span ${o.scale ? paint(w, 0, 1, 'dw-bar', `width:${Math.min(100, r.pct * 100).toFixed(1)}%`, r.pct) : `class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%"`} title="${short(r.v)} of ${short(r.target)}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
+            `<li class="${r.pct >= 1 ? 'is-done' : ''}${i >= 25 ? ' dw-extra' : ''}" ${pick(r.label, [`${s.names[0] || say('value')}: ${say('value_of_target', { value: exact(r.v), target: exact(r.target) })}`, r.pct >= 1 ? say('target_reached') : say('to_go', { value: exact(r.target - r.v) })], -1, '', r.pct >= 1 ? say('done') : `${Math.round(r.pct * 100)}%`)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track"><span ${o.scale ? paint(w, 0, 1, 'dw-bar', `width:${Math.min(100, r.pct * 100).toFixed(1)}%`, r.pct) : `class="dw-bar ${r.pct >= 1 ? 'dw-s0' : 'dw-s1'}" style="width:${Math.min(100, r.pct * 100).toFixed(1)}%"`} title="${esc(say('value_of_target', { value: short(r.v), target: short(r.target) }))}"></span></span><span class="dw-bar-value">${r.pct >= 1 ? '✓ ' : ''}${Math.round(r.pct * 100)}%</span></li>`,
         )
         .join('')}</ol>` +
       (rows.length > 25 ? showAll(rows.length) : '')
@@ -511,9 +517,9 @@
   // ---------- table: search, click a heading to sort, optional highlight ----------
   function table(w) {
     const cols = w.data?.columns || [];
-    if (!cols.length) return empty('No table yet.');
+    if (!cols.length) return empty(say('no_table'));
     const many = (w.data?.rows || []).length > 8;
-    return `${many ? '<input type="search" class="dw-search" placeholder="Search…" aria-label="Search this table">' : ''}<div class="dw-table-wrap"><table class="dw-table"><thead><tr>${cols
+    return `${many ? `<input type="search" class="dw-search" placeholder="${esc(say('search'))}" aria-label="${esc(say('search_label'))}">` : ''}<div class="dw-table-wrap"><table class="dw-table"><thead><tr>${cols
       .map((c, i) => `<th><button type="button" data-col="${i}">${esc(c)}</button></th>`)
       .join('')}</tr></thead><tbody></tbody></table></div><div class="dw-table-foot"></div>`;
   }
@@ -553,9 +559,9 @@
         .join('');
       foot.innerHTML =
         rows.length > shown.length
-          ? `<button type="button" class="dw-more">Show all ${rows.length} rows</button>`
+          ? `<button type="button" class="dw-more">${esc(say('show_all_rows', { n: rows.length }))}</button>`
           : q
-            ? `${rows.length} matching`
+            ? esc(say('matching', { n: rows.length }))
             : '';
       el.querySelectorAll('th button').forEach((b) => {
         const on = Number(b.dataset.col) === sortCol;
@@ -579,16 +585,16 @@
 
   const empty = (text) => `<div class="dw-empty">${esc(text)}</div>`;
   const more = (n, cap) =>
-    n > cap ? `<div class="dw-note">Showing the first ${cap} of ${n} rows.</div>` : '';
+    n > cap ? `<div class="dw-note">${esc(say('first_rows', { shown: cap, n }))}</div>` : '';
   const showAll = (n) =>
-    `<button type="button" class="dw-more" data-show-all>Show all ${n}</button>`;
+    `<button type="button" class="dw-more" data-show-all>${esc(say('show_all', { n }))}</button>`;
 
   /** The chart or table for a widget, as HTML (call mount() after inserting it). */
   function render(w) {
     try {
-      return { bar, line, pie, progress, table }[w.type]?.(w) ?? empty('Unknown chart type.');
+      return { bar, line, pie, progress, table }[w.type]?.(w) ?? empty(say('unknown_type'));
     } catch (err) {
-      return empty(`This chart couldn't be drawn (${err.message}).`);
+      return empty(say('draw_failed', { error: err.message }));
     }
   }
 
@@ -774,8 +780,8 @@
       el.classList.add('dw-show-all');
       b.remove();
     });
-    const hint = { bar: 'a bar', line: 'a week', pie: 'a slice', progress: 'a row' }[w.type];
-    if (hint && el.querySelector('[data-tip]')) selectable(el, `Tap or hover over ${hint}`);
+    if (['bar', 'line', 'pie', 'progress'].includes(w.type) && el.querySelector('[data-tip]'))
+      selectable(el, say(`hint_${w.type}`));
   }
 
   window.DashboardWidgets = { parseTable, toText, number, short, render, mount };
