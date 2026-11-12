@@ -78,6 +78,7 @@ const ALLIANCE_COMMANDS = [
           { name: 'Record Kingdom War: Won (Steward)', value: 'won' },
           { name: 'Record Kingdom War: Lost (Steward)', value: 'lost' },
           { name: "Clear this week's nominations (Steward)", value: 'reset' },
+          { name: 'Reset Capitol overrides and buyouts (Steward)', value: 'reset_overrides' },
         ],
       },
     ],
