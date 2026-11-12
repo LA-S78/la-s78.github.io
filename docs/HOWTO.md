@@ -166,7 +166,7 @@ translated per push, so add guides one at a time.
 
 ## Add a UI label
 
-1. Add the same key to **all 8** `_data/<lang>/ui.yml` files, in the section that fits:
+1. Add the key to **`_data/en/ui.yml` only**, in the section that fits:
    ```yaml
    search:
      guides: "Search guides..."
@@ -176,8 +176,15 @@ translated per push, so add guides one at a time.
    ```liquid
    {{ site.data[site.active_lang].ui.search.events }}
    ```
-3. If a language is missing the key, that language shows **nothing** there, so check
-   all 8 files. Use `content.yml` instead of `ui.yml` for longer page wording.
+3. Merge. GitHub translates the changed section (the whole `search:` block here) into the
+   other 7 languages, as for the tools' text ([Add or change text in a tool](#add-or-change-text-in-a-tool)).
+   Until then, other languages show **nothing** for a new key (ui.yml has no English
+   fallback), so preview in English. Use `content.yml` instead of `ui.yml` for longer page
+   wording.
+
+The exceptions are `guides:` and `nav_anchors:`: the guides fill those themselves (guide
+titles and tab names, from their own translations), so a guide card's label is still added
+to all 8 files by hand (see "Add a new guide").
 
 ---
 
