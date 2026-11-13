@@ -7,26 +7,8 @@
   margin: 1.5rem auto;
 }
 
-.rewards-wrapper .map-controls {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.45rem;
-  padding: 0.5rem 0.65rem;
-  min-height: auto;
-}
-
-.rewards-wrapper .map-controls .control-group.left {
-  width: 100%;
-  justify-content: flex-start;
-}
-
-.rewards-wrapper .map-controls .control-group.right {
-  width: 100%;
-  justify-content: flex-start;
-  gap: 0.5rem;
-  padding-top: 0.35rem;
-  border-top: 1px dashed var(--overlay-8);
-}
+/* The controls bar (hosting week, Planner Mode, Submit) uses the shared toolbar layout:
+   _css/style/88-toolbars.css */
 
 .rewards-header {
   text-align: center;
@@ -350,26 +332,6 @@
 }
 
 @media (min-width: 600px) {
-  .rewards-wrapper .map-controls {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.35rem 0.65rem;
-    min-height: 42px;
-  }
-
-  .rewards-wrapper .map-controls .control-group.left {
-    width: auto;
-    justify-content: flex-start;
-  }
-
-  .rewards-wrapper .map-controls .control-group.right {
-    width: auto;
-    justify-content: flex-end;
-    padding-top: 0;
-    border-top: none;
-  }
-
   .rewards-tier-row {
     flex-wrap: nowrap;
     gap: 0;

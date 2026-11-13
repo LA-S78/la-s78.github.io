@@ -1,7 +1,7 @@
 <div id="map-container">
   <!-- Map Bar Controls -->
   <div class="map-controls">
-    <!-- Left: View Modes (Levels, Alliances, Resources) -->
+    <!-- Left: how the map is shown (Levels, Alliances, Resources; buff summary; fullscreen) -->
     <div class="control-group left">
       <span class="control-label">{{ "map_planner.view" | t }}</span>
       <div class="segmented-control">
@@ -9,16 +9,20 @@
         <button id="btn-mode-alliance" class="toggle-btn" data-mode="alliance">{{ "map_planner.alliances" | t }}</button>
         <button id="btn-mode-resource" class="toggle-btn" data-mode="resource">{{ "map_planner.resources" | t }}</button>
       </div>
-    </div>
 
-    <!-- Right: Planner Mode & Submission -->
-    <div class="control-group right">
-      <!-- Buff Summary Drawer Toggle -->
+      <!-- Ways of looking at the map: the buff summary and fullscreen -->
       <button id="btn-toggle-buffs" class="draft-btn" type="button" aria-label="{{ "map_planner.toggle_buff_summary" | t }}" aria-pressed="false">
         <span class="buffs-icon">⚖️</span>
         <span class="buffs-label">{{ "map_planner.buff_summary" | t }}</span>
       </button>
+      <button id="btn-toggle-fullscreen" class="draft-btn" type="button" aria-label="{{ "map_planner.toggle_fullscreen" | t }}" aria-pressed="false">
+        <span class="fullscreen-icon">⛶</span>
+        <span class="fullscreen-label">{{ "map_planner.fullscreen" | t }}</span>
+      </button>
+    </div>
 
+    <!-- Right: Planner Mode, its tag box, and Submit Plan last -->
+    <div class="control-group right">
       <button id="btn-toggle-draft" class="draft-btn" aria-pressed="false">
         <span class="draft-indicator"></span>
         <span class="draft-text">{{ "map_planner.planner_mode" | t }}</span>
@@ -39,10 +43,6 @@
       
       <button id="btn-submit-proposal" class="submit-plan-btn hidden" disabled>
         {{ "map_planner.submit_plan" | t }} <span id="change-count-badge" class="badge">0</span>
-      </button>
-      <button id="btn-toggle-fullscreen" class="draft-btn" type="button" aria-label="{{ "map_planner.toggle_fullscreen" | t }}" aria-pressed="false">
-        <span class="fullscreen-icon">⛶</span>
-        <span class="fullscreen-label">{{ "map_planner.fullscreen" | t }}</span>
       </button>
     </div>
   </div>

@@ -61,13 +61,7 @@
   }
 }
 
-@media (max-width: 480px) {
-  /* Fullscreen as its ⛶ icon alone (the button keeps its name for screen readers), so the
-     map's buttons fit on one row in most languages */
-  .fullscreen-label {
-    display: none;
-  }
-}
+/* (The map's toolbar on phones: _css/style/88-toolbars.css) */
 
 /* The smallest phones (360px): the language button and account badge sat a few pixels
    past the right edge. A little less padding, and the group moved in from the edge (just
