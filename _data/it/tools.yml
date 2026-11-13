@@ -694,8 +694,9 @@ proposals:
   pending_shifts: Cambiamenti in attesa
   server_error: Il server ha risposto con HTTP {status}
 live_data:
-  failed: "⚠️ Impossibile caricare i dati più recenti. Controlla la connessione e aggiorna la pagina."
-  offline: "📴 Offline: visualizzazione dei dati salvati su questo dispositivo ({when})."
+  failed: "⚠️ Impossibile caricare gli ultimi dati. Controlla la connessione e aggiorna la pagina."
+  offline: "📴 Offline: mostrati i dati salvati su questo dispositivo ({when})."
+  updating: "⏳ Aggiornamento in corso…"
 capitol_rotation:
   rank: 'Grado #{rank}'
   this_week: Questa settimana

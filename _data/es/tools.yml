@@ -695,7 +695,8 @@ proposals:
   server_error: El servidor respondió con HTTP {status}
 live_data:
   failed: "⚠️ No se pudieron cargar los datos más recientes. Comprueba tu conexión y actualiza la página."
-  offline: "📴 Desconectado: mostrando los datos guardados en este dispositivo ({when})."
+  offline: "📴 Sin conexión: mostrando los datos guardados en este dispositivo ({when})."
+  updating: "⏳ Actualizando..."
 capitol_rotation:
   rank: 'Rango #{rank}'
   this_week: Esta semana

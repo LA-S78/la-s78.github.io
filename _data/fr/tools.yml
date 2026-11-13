@@ -694,8 +694,9 @@ proposals:
   pending_shifts: Changements en attente
   server_error: Le serveur a répondu avec le code HTTP {status}
 live_data:
-  failed: "⚠️ Impossible de charger les dernières données. Vérifiez votre connexion et rafraîchissez la page."
+  failed: "⚠️ Impossible de charger les données les plus récentes. Vérifiez votre connexion et actualisez la page."
   offline: "📴 Hors ligne : affichage des données enregistrées sur cet appareil ({when})."
+  updating: "⏳ Mise à jour…"
 capitol_rotation:
   rank: 'Rang #{rank}'
   this_week: Cette semaine

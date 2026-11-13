@@ -696,6 +696,7 @@ proposals:
 live_data:
   failed: "⚠️ En güncel veriler yüklenemedi. Bağlantınızı kontrol edin ve sayfayı yenileyin."
   offline: "📴 Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
+  updating: "⏳ Güncelleniyor…"
 capitol_rotation:
   rank: 'Sıra #{rank}'
   this_week: Bu hafta

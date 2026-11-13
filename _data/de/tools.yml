@@ -694,8 +694,9 @@ proposals:
   pending_shifts: Ausstehende Verschiebungen
   server_error: Server antwortete mit HTTP {status}
 live_data:
-  failed: "⚠️ Die neuesten Daten konnten nicht geladen werden. Überprüfe deine Verbindung und aktualisiere die Seite."
+  failed: "⚠️ Die neuesten Daten konnten nicht geladen werden. Überprüfe deine Verbindung und lade die Seite neu."
   offline: "📴 Offline: Zeige die auf diesem Gerät gespeicherten Daten ({when})."
+  updating: "⏳ Aktualisierung…"
 capitol_rotation:
   rank: 'Rang #{rank}'
   this_week: Diese Woche
