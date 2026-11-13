@@ -104,6 +104,9 @@ api_events:
   out_of_scope: 'Accès refusé : Vous ne pouvez pas modifier ou supprimer des événements en dehors de votre périmètre assigné.'
   deleted: 'Opération supprimée : {title}'
   updated: Opération « {title} » mise à jour.
+reminders:
+  title: "⏰ Début bientôt : {title}"
+  starts: Début
 bot_common:
   off_week: Semaine de repos
   kw_week: Semaine de la Guerre des Royaumes {n}

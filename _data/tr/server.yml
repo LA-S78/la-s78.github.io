@@ -104,6 +104,9 @@ api_events:
   out_of_scope: 'Erişim Reddedildi: Atanmış kapsamınız dışındaki etkinlikleri değiştiremez veya silemezsiniz.'
   deleted: 'Silinen operasyon: {title}'
   updated: '"{title}" operasyonu güncellendi.'
+reminders:
+  title: "⏰ Yakında başlıyor: {title}"
+  starts: Başlıyor
 bot_common:
   off_week: Mola Haftası
   kw_week: Krallık Savaşı Haftası {n}
