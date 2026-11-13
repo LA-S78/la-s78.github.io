@@ -64,6 +64,15 @@ pages:
   calendar:
     title: "Event Calendar"
     subtitle: "Alliance & Server Events"
+  map:
+    title: "Kingdom Map"
+    subtitle: "Kingdom Map"
+  rewards:
+    title: "Capitol Rewards"
+    subtitle: "Capitol Rewards"
+  "404":
+    title: "Page Not Found"
+    subtitle: "Area Overrun"
   
   #guide pages
   guide_panes:

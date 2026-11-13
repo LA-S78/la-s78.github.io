@@ -1,7 +1,7 @@
 title: Last Asylum Guide
 description: A strategy compendium for Last Asylum.
 theme: null
-url: "https://la-s78.github.io"
+url: "https://la-s78.app"
 
 plugins:
   - jekyll-optional-front-matter
