@@ -454,11 +454,9 @@ export function updateRewardsProposalUI() {
   const submitBtn = document.getElementById('btn-submit-rewards');
   const badgeEl = document.getElementById('reward-change-badge');
 
+  // Submit Plan stays in the bar, greyed out until there is something to send
   if (!isRewardsPlannerActive) {
-    if (submitBtn) {
-      submitBtn.classList.add('hidden');
-      submitBtn.disabled = true;
-    }
+    if (submitBtn) submitBtn.disabled = true;
     if (badgeEl) badgeEl.textContent = '0';
     return;
   }
@@ -473,7 +471,6 @@ export function updateRewardsProposalUI() {
   if (badgeEl) badgeEl.textContent = hasStructuralChanges ? '!' : '0';
 
   if (submitBtn) {
-    submitBtn.classList.remove('hidden');
     submitBtn.disabled = !hasStructuralChanges || isOverPool;
     if (isOverPool) {
       submitBtn.title = window.t('rewards_planner.over_capacity', {

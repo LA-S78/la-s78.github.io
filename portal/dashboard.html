@@ -32,8 +32,8 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
 
   <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
-    <button type="button" class="dash-btn" id="dash-edit-toggle" aria-pressed="false">{{ "dashboard.edit_dashboard" | t }}</button>
-    <button type="button" class="dash-btn" id="dash-add" hidden>{{ "dashboard.add_chart" | t }}</button>
+    <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
+    <button type="button" class="dash-btn" id="dash-add" disabled>{{ "dashboard.add_chart" | t }}</button>
   </div>
   <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
 
@@ -469,8 +469,8 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       el.hidden = false;
       $('dash-edit-bar').hidden = !isLeader();
       $('dash-edit-toggle').setAttribute('aria-pressed', String(editing));
-      $('dash-edit-toggle').textContent = t(editing ? 'dashboard.done_editing' : 'dashboard.edit_dashboard');
-      $('dash-add').hidden = !editing;
+      // Always beside Edit Dashboard (greyed out until editing), so Edit doesn't shift
+      $('dash-add').disabled = !editing;
       if (!list.length) {
         el.innerHTML = `<div class="dash-card dash-empty">${escapeHtml(
           t(!isLeader() ? 'dashboard.empty_member' : editing ? 'dashboard.empty_editing' : 'dashboard.empty_leader'),

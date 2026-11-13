@@ -117,3 +117,15 @@
   min-height: var(--control-compact);
   border-radius: var(--control-radius);
 }
+
+/* STEADY BUTTONS (step 4): a button whose label changes when pressed keeps its width, so it
+   doesn't move under the finger ("Copy" -> "✓ Copied", "Locked" -> "Unlocked") */
+.t10-toggle {
+  min-width: 9.5em;
+}
+
+/* The map's tag box is always in the bar, greyed out until Planner Mode is on (like Submit) */
+#alliance-override:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

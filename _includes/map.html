@@ -21,43 +21,32 @@
       </button>
     </div>
 
-    <!-- Right: Planner Mode, its tag box, and Submit Plan last -->
+    <!-- Right: the planner: Planner Mode, Submit Plan -->
     <div class="control-group right">
       <button id="btn-toggle-draft" class="draft-btn" aria-pressed="false">
         <span class="draft-indicator"></span>
         <span class="draft-text">{{ "map_planner.planner_mode" | t }}</span>
       </button>
 
-      <!-- Alliance Override Input -->
-      <div id="planner-override-container" class="hidden">
-        <input 
-          type="text" 
-          id="alliance-override" 
-          placeholder="{{ "map_planner.override_placeholder" | t }}" 
-          maxlength="6" 
-          autocomplete="off" 
-          spellcheck="false"
-          title="{{ "map_planner.override_help" | t }}" 
-        />
-      </div>
-      
-      <button id="btn-submit-proposal" class="submit-plan-btn hidden" disabled>
+      <button id="btn-submit-proposal" class="submit-plan-btn" disabled>
         {{ "map_planner.submit_plan" | t }} <span id="change-count-badge" class="badge">0</span>
       </button>
     </div>
-  </div>
 
-  <!-- Resource Map Legend Strip (Compact Key: Resources Only) -->
-  <div id="resource-map-legend" class="resource-legend hidden" aria-hidden="true">
-    <div class="legend-group">
-      <span class="legend-chip"><span class="chip-color chip-grain"></span> {{ "map_planner.grain" | t }}</span>
-      <span class="legend-chip"><span class="chip-color chip-timber"></span> {{ "map_planner.timber" | t }}</span>
-      <span class="legend-chip"><span class="chip-color chip-herbs"></span> {{ "map_planner.herbs" | t }}</span>
-    </div>
-    <div class="legend-divider">|</div>
-    <div class="legend-group">
-      <span class="legend-chip"><span class="chip-pattern chip-solid"></span> {{ "map_planner.solid_gather" | t }}</span>
-      <span class="legend-chip"><span class="chip-pattern chip-striped"></span> {{ "map_planner.stripe_output" | t }}</span>
+    <!-- "Change to:" tag box: always on a line of its own under the bar's buttons, greyed
+         out until Planner Mode is on -->
+    <div id="planner-override-container">
+      <label for="alliance-override" class="override-label">{{ "map_planner.override_label" | t }}</label>
+      <input 
+        type="text" 
+        id="alliance-override" 
+        placeholder="{{ "map_planner.override_placeholder" | t }}" 
+        maxlength="6" 
+        autocomplete="off" 
+        spellcheck="false"
+        title="{{ "map_planner.override_help" | t }}" 
+        disabled
+      />
     </div>
   </div>
 
@@ -78,6 +67,21 @@
       <span class="info-item"><strong>{{ "map_planner.owner" | t }}</strong> <span id="city-owner">{{ "map_planner.unclaimed" | t }}</span></span>
       <span class="info-divider" aria-hidden="true">•</span>
       <span class="info-item"><strong>{{ "map_planner.buff" | t }}</strong> <span id="city-buff">{{ "map_planner.none" | t }}</span></span>
+    </div>
+  </div>
+
+  <!-- Resource Map Legend Strip (Compact Key: Resources Only). Below the map, so choosing
+       "Resources" adds it underneath instead of pushing the map down. -->
+  <div id="resource-map-legend" class="resource-legend hidden" aria-hidden="true">
+    <div class="legend-group">
+      <span class="legend-chip"><span class="chip-color chip-grain"></span> {{ "map_planner.grain" | t }}</span>
+      <span class="legend-chip"><span class="chip-color chip-timber"></span> {{ "map_planner.timber" | t }}</span>
+      <span class="legend-chip"><span class="chip-color chip-herbs"></span> {{ "map_planner.herbs" | t }}</span>
+    </div>
+    <div class="legend-divider">|</div>
+    <div class="legend-group">
+      <span class="legend-chip"><span class="chip-pattern chip-solid"></span> {{ "map_planner.solid_gather" | t }}</span>
+      <span class="legend-chip"><span class="chip-pattern chip-striped"></span> {{ "map_planner.stripe_output" | t }}</span>
     </div>
   </div>
 

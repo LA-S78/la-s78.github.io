@@ -819,7 +819,7 @@ function ensureBlacklistControls() {
       <span class="draft-indicator"></span>
       <span class="draft-text">${esc(tb('edit'))}</span>
     </button>
-    <button id="btn-submit-blacklist" class="submit-plan-btn hidden" disabled type="button">
+    <button id="btn-submit-blacklist" class="submit-plan-btn" disabled type="button">
       ${esc(tb('submit'))} <span class="badge">0</span>
     </button>`;
   section.before(bar);
@@ -843,7 +843,6 @@ function syncBlacklistControls(count = 0) {
     );
   }
   if (submit) {
-    submit.classList.toggle('hidden', !isBlacklistEditing);
     submit.disabled = !isBlacklistEditing || count === 0;
     submit.querySelector('.badge').textContent = String(count);
   }
@@ -854,11 +853,9 @@ export function updateAllianceProposalUI() {
   const badgeEl = document.getElementById('alliance-change-badge');
   syncBlacklistControls(isBlacklistEditing ? calculateBlacklistDiff().length : 0);
 
+  // Submit Plan stays in the bar, greyed out until there is something to send
   if (!isAlliancePlannerActive) {
-    if (submitBtn) {
-      submitBtn.classList.add('hidden');
-      submitBtn.disabled = true;
-    }
+    if (submitBtn) submitBtn.disabled = true;
     if (badgeEl) badgeEl.textContent = '0';
     return;
   }
@@ -868,10 +865,7 @@ export function updateAllianceProposalUI() {
 
   if (badgeEl) badgeEl.textContent = String(count);
 
-  if (submitBtn) {
-    submitBtn.classList.remove('hidden');
-    submitBtn.disabled = count === 0;
-  }
+  if (submitBtn) submitBtn.disabled = count === 0;
 }
 
 export function toggleAlliancePlanner(active) {

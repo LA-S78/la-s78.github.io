@@ -1,20 +1,56 @@
 /* ==========================================================================
-   TOOLBARS: ONE LAYOUT, ONE PLACE FOR EVERYTHING (Look & Feel: tools that fit phones, step 3)
+   TOOLBARS (Look & Feel: tools that fit phones, step 3)
    Every tool's controls bar (.map-controls: the map, the alliance ladder, the rewards
-   planner; the blacklist's bar; the dashboard's edit bar, in
-   _css/portal/70-alliance-dashboard.css) follows the same order:
+   planner) has two parts:
      left / first row:   what you're looking at: view switches and information
-     right / second row: the mode switch (Planner Mode, Edit) first, then its extras, and
-                         the main action (Submit) last, at the far end
-   On phones the two groups become two full-width rows, so the bar keeps the same shape in
+     right / second row: the planner: on a wide screen Planner Mode and Submit together
+                         at the right end of the top row; on phones a line of their own,
+                         Planner Mode on the left and Submit on the right.
+   The blacklist's bar (Edit Blacklist, Submit) follows the same pattern. (The dashboard's
+   edit bar stays centred: _css/portal/70-alliance-dashboard.css.)
+   The map's "Change to:" tag box always has a line of its own under the buttons (greyed
+   out until Planner Mode is on), so it never squeezes the bar or appears and disappears.
+   On phones the two parts become two full-width rows, so the bar keeps the same shape in
    every language instead of wrapping wherever a long word breaks (the map's bar used to
-   spread over three ragged rows in German).
+   spread over three ragged rows in German). On a narrower desktop window, the map's Buff
+   Summary and Fullscreen drop to their icons when the bar would otherwise wrap
+   (js/map.js, fitMapToolbar).
    ========================================================================== */
 
-/* The main action always sits at the far end of its row */
-.map-controls .submit-plan-btn,
-.blacklist-controls .submit-plan-btn {
+/* The planner (Planner Mode with Submit beside it) sits at the right end of the bar, and
+   at the right end of its own row when a narrow window wraps the bar */
+.map-controls .control-group.right {
   margin-left: auto;
+  justify-content: flex-end;
+}
+
+/* The map's tag box: its own line under the buttons, at the right under Planner Mode */
+#planner-override-container {
+  flex: 1 1 100%;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+#planner-override-container #alliance-override {
+  width: 140px;
+}
+
+/* The blacklist's bar: Edit Blacklist and Submit at the right, like a planner */
+.blacklist-controls {
+  justify-content: flex-end;
+}
+
+@media (max-width: 599px) {
+  .blacklist-controls {
+    justify-content: space-between;
+  }
+}
+
+/* The map's bar when it is short of room (set by js/map.js): Buff Summary and Fullscreen as
+   their icons; their names stay for screen readers */
+.map-controls.is-compact .buffs-label,
+.map-controls.is-compact .fullscreen-label {
+  display: none;
 }
 
 @media (max-width: 599px) {
@@ -30,6 +66,12 @@
     width: 100%;
     justify-content: flex-start;
     flex-wrap: wrap;
+  }
+
+  /* On its own line: Planner Mode on the left, Submit on the right (owner decision,
+     2026-11-13; the blacklist bar does the same, below) */
+  .map-controls .control-group.right {
+    justify-content: space-between;
   }
 
   .map-controls .control-group.right {
@@ -75,14 +117,37 @@
     flex-shrink: 0;
   }
 
-  /* Planner Mode's tag box takes the room between the switch and Submit */
+  /* Planner Mode and Submit share one line (a little less padding, so they fit side by
+     side in most languages). Submit is always there, greyed out until there's something
+     to send, so nothing appears or shifts when planning starts. */
+  .map-controls .control-group.right .draft-btn,
+  .map-controls .submit-plan-btn,
+  .blacklist-controls .draft-btn,
+  .blacklist-controls .submit-plan-btn {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  /* The tag box fills its line */
   #planner-override-container {
-    flex: 1 1 60px;
-    min-width: 60px;
-    max-width: 120px;
+    justify-content: flex-start;
   }
 
   #planner-override-container #alliance-override {
-    width: 100%;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
   }
+}
+
+/* "Change to:" before the map's tag box (greyed out with it until Planner Mode is on) */
+.override-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+#planner-override-container:has(#alliance-override:disabled) .override-label {
+  opacity: 0.35;
 }

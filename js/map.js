@@ -646,17 +646,12 @@ export function togglePlannerMode(active, svgRoot = null) {
     btnDraft.classList.toggle('active', active);
   }
 
-  const overrideContainer = document.getElementById('planner-override-container');
-  if (overrideContainer) {
-    if (active) {
-      overrideContainer.classList.remove('hidden');
-      overrideContainer.style.display = 'inline-flex';
-    } else {
-      overrideContainer.classList.add('hidden');
-      overrideContainer.style.display = 'none';
-      const input = document.getElementById('alliance-override');
-      if (input) input.value = '';
-    }
+  // The tag box stays in the bar (greyed out until Planner Mode is on), so turning the
+  // planner on or off doesn't shift the buttons around it
+  const overrideInput = document.getElementById('alliance-override');
+  if (overrideInput) {
+    overrideInput.disabled = !active;
+    if (!active) overrideInput.value = '';
   }
 
   if (isPlannerActive) {
@@ -836,45 +831,15 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
     document.getElementById('change-count-badge') ||
     document.querySelector('.draft-indicator');
 
-  if (!isPlannerActive) {
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.classList.add('hidden');
-      submitBtn.style.display = 'none';
-    }
-    if (badgeEl) {
-      badgeEl.textContent = '0';
-      badgeEl.classList.add('hidden');
-      badgeEl.style.display = 'none';
-    }
-    if (isBuffDrawerOpen) renderBuffSummaryDrawer();
-    return;
+  // Submit Plan and its count always stay in the bar, greyed out until there is something
+  // to send, so nothing appears or shifts while planning (owner decision, 2026-11-13)
+  let count = 0;
+  if (isPlannerActive) {
+    const payload = generateProposalPayload();
+    count = payload ? payload.totalChanges : 0;
   }
-
-  const payload = generateProposalPayload();
-  const count = payload ? payload.totalChanges : 0;
-
-  if (badgeEl) {
-    badgeEl.textContent = String(count);
-    if (count > 0) {
-      badgeEl.classList.remove('hidden');
-      badgeEl.style.display = 'inline-block';
-    } else {
-      badgeEl.classList.add('hidden');
-      badgeEl.style.display = 'none';
-    }
-  }
-
-  if (submitBtn) {
-    submitBtn.disabled = count === 0;
-    if (count > 0) {
-      submitBtn.classList.remove('hidden');
-      submitBtn.style.display = 'inline-flex';
-    } else {
-      submitBtn.classList.add('hidden');
-      submitBtn.style.display = 'none';
-    }
-  }
+  if (badgeEl) badgeEl.textContent = String(count);
+  if (submitBtn) submitBtn.disabled = count === 0;
 
   if (isBuffDrawerOpen) renderBuffSummaryDrawer();
 }
@@ -1462,11 +1427,8 @@ export function checkAndRestoreMapDraft(svgRoot = null) {
         btnDraft.setAttribute('aria-pressed', 'true');
         btnDraft.classList.add('active');
       }
-      const overrideContainer = document.getElementById('planner-override-container');
-      if (overrideContainer) {
-        overrideContainer.classList.remove('hidden');
-        overrideContainer.style.display = 'inline-flex';
-      }
+      const overrideInput = document.getElementById('alliance-override');
+      if (overrideInput) overrideInput.disabled = false;
 
       if (root) setMapColorMode('alliance', root);
       updateProposalUI();
@@ -1578,6 +1540,40 @@ export function initializeMapData(svgRoot) {
   return cities;
 }
 
+// The map's controls bar on a narrower desktop window: when the planner part (tag box,
+// Planner Mode, Submit) would wrap onto a second line, Buff Summary and Fullscreen drop to
+// their icons (.is-compact) to make room. If even that doesn't keep it on one line, the
+// names come back (the bar has two lines anyway). Measured rather than set by width, so a language
+// whose words fit keeps the names. Phones have their own two-row layout
+// (_css/style/88-toolbars.css).
+let toolbarWatcher = null;
+function fitMapToolbar(bar) {
+  const left = bar.querySelector('.control-group.left');
+  const right = bar.querySelector('.control-group.right');
+  bar.classList.remove('is-compact');
+  if (!left || !right || window.matchMedia('(max-width: 599px)').matches) return;
+  const wraps = () => right.getBoundingClientRect().top > left.getBoundingClientRect().top + 4;
+  if (!wraps()) return;
+  bar.classList.add('is-compact');
+  // Still two lines even with icons (a narrow window): then the names may as well stay
+  if (wraps()) bar.classList.remove('is-compact');
+}
+
+function watchMapToolbar(container) {
+  const bar = container.querySelector('.map-controls');
+  if (!bar) return;
+  toolbarWatcher?.disconnect();
+  let lastWidth = 0;
+  toolbarWatcher = new ResizeObserver(() => {
+    const width = Math.round(bar.getBoundingClientRect().width);
+    if (width === lastWidth) return; // only a change of window width calls for a new fit
+    lastWidth = width;
+    fitMapToolbar(bar);
+  });
+  toolbarWatcher.observe(bar);
+  document.fonts?.ready.then(() => fitMapToolbar(bar));
+}
+
 // initMap runs on every page's turbo:load. It sets up the map only where there is one, once
 // per visit: each visit (also the back button's copy of the page) brings a fresh container.
 const startedMaps = new WeakSet();
@@ -1588,6 +1584,7 @@ export function initMap() {
   // A fresh container can be Turbo's back-button copy of the page, which keeps the data-bound
   // marks of the controls wired up last time. Clear them so the controls are wired up again.
   container.querySelectorAll('[data-bound]').forEach((el) => el.removeAttribute('data-bound'));
+  watchMapToolbar(container);
   const svgRoot = getSvgRoot();
   if (svgRoot) {
     initializeMapData(svgRoot);

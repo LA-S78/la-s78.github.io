@@ -654,6 +654,7 @@ map_planner:
   toggle_buff_summary: "Toggle Buff Summary"
   close_buff_summary: "Close Buff Summary"
   planner_mode: "Planner Mode"
+  override_label: "Change to:"
   override_placeholder: "E.G. WLO"
   override_help: "Type a tag to override click assignments. Leave blank to cycle."
   submit_plan: "Submit Plan"
