@@ -450,37 +450,22 @@ export function renderBuffSummaryDrawer() {
               .join('')
           : `<span class="buff-none">${esc(tm('no_buffs'))}</span>`;
 
+      // One card per alliance: its tag and number of cities, then its buffs (they wrap, so
+      // long names in any language fit the panel; the old three-column table was cut off)
       return `
-      <tr class="buff-row ${isEditing ? 'is-active-target' : ''}">
-        <td class="buff-col-tag">
+      <li class="buff-row ${isEditing ? 'is-active-target' : ''}">
+        <div class="buff-row-head">
           <span class="alliance-dot" style="background-color: ${esc(allianceColor)}"></span>
-          <strong>[${esc(tag)}]</strong>
-        </td>
-        <td class="buff-col-count">
+          <strong class="buff-row-tag">[${esc(tag)}]</strong>
           <span class="city-count-pill">${esc(window.tn('map_planner.cities', data.count))}</span>
-        </td>
-        <td class="buff-col-buffs">
-          <div class="buff-badges-wrap">${buffBadges}</div>
-        </td>
-      </tr>
+        </div>
+        <div class="buff-badges-wrap">${buffBadges}</div>
+      </li>
     `;
     })
     .join('');
 
-  contentEl.innerHTML = `
-    <table class="buff-table">
-      <thead>
-        <tr>
-          <th>${esc(tm('col_alliance'))}</th>
-          <th>${esc(tm('col_holdings'))}</th>
-          <th>${esc(tm('col_buffs'))}</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows}
-      </tbody>
-    </table>
-  `;
+  contentEl.innerHTML = `<ul class="buff-list">${rows}</ul>`;
 }
 
 export function toggleBuffSummaryDrawer(forceState = null) {
