@@ -7,7 +7,9 @@
   }
 
   // The phone's status bar (Android: the installed app's top bar; also the browser bar) takes
-  // its colour from <meta name="theme-color">. It used to be a fixed dark brown whatever the
+  // its colour from <meta name="theme-color">. (The navigation bar at the bottom does not: on
+  // Android it takes the installed app's manifest background_color, which a page can't
+  // change while it runs; site.webmanifest picks one that sits under all three footers.) It used to be a fixed dark brown whatever the
   // theme; now it is the colour of the header's top edge in the active theme. Turbo swaps the
   // page's <head> on every visit (bringing back the fixed colour), so it is set again after
   // each visit as well as on a theme change (js/main.js, applyTheme).
@@ -20,11 +22,10 @@
   };
   window.syncThemeColour = function () {
     if (!document.body) return;
-    // The header's top edge: its lighter centre colour, blended a little toward its edges
+    // The header's top edge in this theme (--status-bar, measured: _css/style/05-…themes.css)
     const probe = document.createElement('div');
     probe.style.cssText =
-      'position:absolute;width:0;height:0;visibility:hidden;' +
-      'background-color:color-mix(in srgb, var(--card-bg-solid) 80%, var(--nav-bg))';
+      'position:absolute;width:0;height:0;visibility:hidden;background-color:var(--status-bar)';
     document.body.appendChild(probe);
     const colour = getComputedStyle(probe).backgroundColor;
     probe.remove();

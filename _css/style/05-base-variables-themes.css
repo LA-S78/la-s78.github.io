@@ -140,6 +140,11 @@ html[data-theme="default"] {
   --active-theme-vivid: 85, 190, 95;
   --active-theme-hex: 55, 150, 65;
   --lantern-filter: contrast(1.3) brightness(1) saturate(1.2);
+  /* The phone's status bar (js/theme-init.js puts it in <meta name="theme-color">): the
+     header's top edge as drawn, averaged across its width (the header's glow and gradient
+     can't be worked out from the variables). Measured from the page; measure again if the
+     header's background changes. */
+  --status-bar: #22301c;
 }
 
 /* Theme 2: Sanctuary (Orange) */
@@ -149,6 +154,7 @@ html[data-theme="sanctuary"] {
   --active-theme-vivid: 255, 220, 140;
   --active-theme-hex: 239, 191, 4;
   --lantern-filter: contrast(1.2) brightness(1) saturate(1.2) hue-rotate(270deg);
+  --status-bar: #4e3924;
 }
 
 /* Theme 3: Miasma (Purple) */
@@ -159,5 +165,6 @@ html[data-theme="miasma"] {
   --active-theme-hex: 175, 90, 220;
   --lantern-filter: contrast(1.3) brightness(1.1) saturate(1.2)
     hue-rotate(160deg);
+  --status-bar: #3a203b;
 }
 
