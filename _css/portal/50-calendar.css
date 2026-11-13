@@ -550,3 +550,14 @@
 .btn-edit-event:hover {
   border-color: var(--accent-color);
 }
+
+/* A signed-in Steward's switch: server-wide events or their alliance's */
+#mgmt-scope-switch {
+  display: block;
+  margin-top: 8px;
+  max-width: 260px;
+}
+
+#mgmt-scope-switch[hidden] {
+  display: none;
+}
