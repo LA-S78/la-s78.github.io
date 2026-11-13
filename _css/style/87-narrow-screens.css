@@ -91,3 +91,41 @@
     left: -11px;
   }
 }
+
+/* ROOMIER PHONES (Look & Feel, step 1). On a phone, every tool sat two or three boxes deep,
+   and each box kept its desktop padding: the map got 306 of 390 pixels, a note on the
+   Rules page 287. Narrower page edges and slimmer padding on the inner boxes give the
+   content back about a tenth of the screen. Desktop is unchanged. (Portal pages: see
+   _css/portal/10-app-shell-overrides.css.) */
+@media (max-width: 767px) {
+  main {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  blockquote {
+    padding: 12px 14px !important; /* overrides the desktop !important */
+  }
+
+  .duel-day {
+    padding: 14px;
+  }
+
+  .dir-card {
+    padding: 12px;
+  }
+
+  /* Tools come out of their inner frame: the section box is frame enough, so the map and
+     the T10 tree use its full width */
+  #map-container {
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .tree-container {
+    padding: 0;
+  }
+}
