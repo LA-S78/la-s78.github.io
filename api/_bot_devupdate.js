@@ -6,6 +6,7 @@ import { InteractionResponseType } from 'discord-interactions';
 import { getWaitUntil } from './_after_response.js';
 import { sendEphemeralMessage } from './_bot_common.js';
 import { copyLiveGistToTest } from './_gist.js';
+import { say } from './_messages.js';
 import { isSteward } from './_stewards.js';
 
 const PRIVATE = 64; // Discord's "only you can see this" flag
@@ -14,9 +15,12 @@ const PRIVATE = 64; // Discord's "only you can see this" flag
 async function copyAndDescribe() {
   try {
     const files = await copyLiveGistToTest({ timeoutMs: 20000 });
-    return `✅ **Test data updated.** Copied ${files.length} file(s) from the live data into the test Gist used by dev.la-s78.app: ${files.map((f) => `\`${f}\``).join(', ')}.\nThe live data was only read, not changed.`;
+    return say('bot_admin.dev_done', {
+      count: files.length,
+      files: files.map((f) => `\`${f}\``).join(', '),
+    });
   } catch (err) {
-    return `⚠️ **Test data not updated:** ${err.message}`;
+    return say('bot_admin.dev_failed', { reason: err.message });
   }
 }
 
@@ -24,10 +28,7 @@ async function copyAndDescribe() {
 export async function handleDevUpdateCommand(ctx) {
   const { res, interaction, userId } = ctx;
   if (!isSteward(userId)) {
-    return sendEphemeralMessage(
-      res,
-      '⛔ **Access Denied:** Only Stewards can update the test data.',
-    );
+    return sendEphemeralMessage(res, say('bot_admin.dev_denied'));
   }
 
   // Answer at once (privately), then copy and edit that answer: reading and writing the two

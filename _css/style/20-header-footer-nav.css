@@ -129,12 +129,15 @@
   border-bottom: 2px solid var(--accent-color);
 }
 
+/* The footer reaches down behind the phone's navigation buttons when the browser draws the
+   app edge to edge (Android 15+, iPhone home bar): that strip then takes the theme's
+   colour, with the icons above it. Where the bar is drawn separately, the safe area is 0. */
 footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: calc(60px + env(safe-area-inset-bottom));
   width: 100%;
   z-index: 100;
   border-top: 1px solid var(--border-color);
@@ -143,7 +146,7 @@ footer {
   justify-content: space-around;
   align-items: center;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
 }
 .nav-item {
   display: flex;
@@ -151,12 +154,12 @@ footer {
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
-  font-size: 0.7rem;
+  font-size: 0.75rem; /* 12px: was 11px, hard to read */
   text-decoration: none;
   gap: 3px;
 }
 .nav-item.active {
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 .nav-icon-svg {
   width: 24px;
@@ -241,7 +244,7 @@ footer {
   text-align: center;
 }
 .dropdown-content li a.lang-active {
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-weight: bold;
   pointer-events: none;
   background-color: color-mix(in srgb, var(--accent-color) 5%, transparent);
@@ -291,10 +294,6 @@ footer {
 .id-pill:hover,
 .id-pill-wrap.is-open .id-pill {
   border-color: var(--accent-color);
-}
-.id-pill:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
 }
 .id-pill:disabled {
   cursor: progress;
@@ -394,7 +393,7 @@ footer {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 .id-pop-access {
   margin: 6px 0 0;
@@ -444,6 +443,42 @@ footer {
 }
 .id-btn--primary:hover {
   background: var(--brand-discord-hover);
+}
+/* Link to the alliance dashboard, under the access list */
+.id-pop-link {
+  display: block;
+  margin-top: 10px;
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  color: var(--accent-text);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 45%, var(--border-color));
+  border-radius: 6px;
+}
+.id-pop-link:hover {
+  background: var(--overlay-5);
+}
+/* "Update App": a quiet text button under Refresh Access / Sign Out */
+.id-btn-link {
+  display: block;
+  margin: 8px auto 0;
+  padding: 2px 6px;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.id-btn-link:hover {
+  color: var(--text-main);
+  text-decoration: underline;
+}
+.id-btn-link:disabled {
+  cursor: progress;
+  text-decoration: none;
 }
 
 /* Phones: the collapsed pill shows only the avatar and the rank icon (the full badge is

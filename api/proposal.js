@@ -4,11 +4,12 @@
 // R4/R5 to a few proposals per day.
 import { verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
+import { inLanguage, say, utcTime } from './_messages.js';
 import {
   isGistConfigured,
   readGist,
   gistJson,
-  writeGist,
+  updateGist,
   isTestDeployment,
   TEST_PROPOSAL_FIELD,
 } from './_gist.js';
@@ -32,7 +33,11 @@ const DAILY_LIMIT = 5;
 const DAY_MS = 24 * 3600 * 1000;
 const LOG_FILE = 'proposal-log.json';
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
+  return inLanguage(req, () => respond(req, res));
+}
+
+async function respond(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -47,15 +52,13 @@ export default async function handler(req, res) {
   const session = verifySessionToken(authHeader.replace(/^Bearer\s+/i, ''), botToken);
   if (!session) {
     return res.status(401).json({
-      error: 'Please log in with Discord again to send proposals.',
+      error: say('api_proposals.login_required'),
       code: 'login_required',
     });
   }
   const steward = isSteward(session.uid);
   if (!steward && !PROPOSAL_ROLES.includes(session.role)) {
-    return res
-      .status(403)
-      .json({ error: 'Only R4 and R5 leaders can send proposals.', code: 'not_allowed' });
+    return res.status(403).json({ error: say('api_proposals.leaders_only'), code: 'not_allowed' });
   }
 
   // 2. Size and shape.
@@ -73,14 +76,14 @@ export default async function handler(req, res) {
     } catch (err) {
       console.error('Proposal log could not be read:', err.message);
       return res.status(503).json({
-        error: 'Could not check the daily proposal limit right now. Please try again in a minute.',
+        error: say('api_proposals.limit_check_failed'),
       });
     }
     const mine = log.entries.filter((e) => e.uid === session.uid);
     if (mine.length >= DAILY_LIMIT) {
       const nextAt = Math.floor((Math.min(...mine.map((e) => e.at)) + DAY_MS) / 1000);
       return res.status(429).json({
-        error: `Daily limit reached: ${DAILY_LIMIT} proposals per 24 hours. You can send the next one after ${new Date(nextAt * 1000).toUTCString()}.`,
+        error: say('api_proposals.daily_limit', { max: DAILY_LIMIT, when: utcTime(nextAt * 1000) }),
         code: 'daily_limit',
         nextAt,
       });
@@ -96,8 +99,13 @@ export default async function handler(req, res) {
   // has still gone out; it just isn't counted.
   if (log && result.status === 200) {
     try {
-      log.entries.push({ uid: session.uid, at: Date.now() });
-      await writeGist({ [LOG_FILE]: log }, { description: `Proposal by ${session.name}` });
+      // Added to the log as stored when saving (updateGist): a proposal from someone else at
+      // the same moment must not drop this entry, or the daily limit could be dodged.
+      const entry = { uid: session.uid, at: Date.now() };
+      await updateGist((gist) => ({
+        files: { [LOG_FILE]: { entries: [...recentEntries(gist), entry] } },
+        description: `Proposal by ${session.name}`,
+      }));
     } catch (err) {
       console.error('Proposal sent, but the proposal log could not be saved:', err.message);
     }
@@ -108,12 +116,16 @@ export default async function handler(req, res) {
 /** The proposal log, keeping only the last 24 hours. Throws if the Gist can't be read. */
 async function readProposalLog() {
   if (!isGistConfigured()) return { entries: [] };
-  const stored = gistJson(await readGist({ timeoutMs: 4000 }), LOG_FILE, { entries: [] });
+  return { entries: recentEntries(await readGist({ timeoutMs: 4000 })) };
+}
+
+/** The proposal log's entries from the last 24 hours. */
+function recentEntries(gist) {
+  const stored = gistJson(gist, LOG_FILE, { entries: [] });
   const since = Date.now() - DAY_MS;
-  const entries = Array.isArray(stored.entries)
+  return Array.isArray(stored.entries)
     ? stored.entries.filter((e) => e && e.uid && Number(e.at) > since)
     : [];
-  return { entries };
 }
 
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -128,10 +140,10 @@ const smallInt = (v, min, max) => Number.isInteger(v) && v >= min && v <= max;
 function validateProposal(payload) {
   if (!isObj(payload)) return { status: 400, error: 'Invalid proposal.' };
   if (Buffer.byteLength(JSON.stringify(payload)) > 3.5 * 1024 * 1024) {
-    return { status: 413, error: 'Proposal is too large.' };
+    return { status: 413, error: say('api_proposals.too_large') };
   }
   if (!shortText(payload.notes, 500))
-    return { status: 400, error: 'Notes are limited to 500 characters.' };
+    return { status: 400, error: say('api_proposals.notes_limit') };
 
   const type = payload.type || (payload.changes ? 'map' : null);
   const bad = (what) => ({ status: 400, error: `Invalid ${what}.` });
@@ -163,7 +175,7 @@ function validateProposal(payload) {
       if (typeof payload.image !== 'string' || !payload.image.startsWith('data:image/'))
         return bad('map image');
       if (payload.image.length > 3 * 1024 * 1024)
-        return { status: 413, error: 'Map image is too large.' };
+        return { status: 413, error: say('api_proposals.image_too_large') };
     }
   } else if (type === 'alliance') {
     const a = payload.alliances;
@@ -276,7 +288,14 @@ async function dispatchProposal(payload, botToken, submitter) {
           totals.followers_heart > POOL_LIMITS.followers_heart
         ) {
           return result(400, {
-            error: `Pool limits exceeded: Gold ${totals.commanders_will}/${POOL_LIMITS.commanders_will}, Purple ${totals.loyal_servant}/${POOL_LIMITS.loyal_servant}, Blue ${totals.followers_heart}/${POOL_LIMITS.followers_heart}`,
+            error: say('api_proposals.pool_limits', {
+              gold: totals.commanders_will,
+              gold_max: POOL_LIMITS.commanders_will,
+              purple: totals.loyal_servant,
+              purple_max: POOL_LIMITS.loyal_servant,
+              blue: totals.followers_heart,
+              blue_max: POOL_LIMITS.followers_heart,
+            }),
           });
         }
 
@@ -381,7 +400,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         const { notes, totalChanges, changes, image } = payload;
 
         if (!changes || totalChanges === 0) {
-          return result(400, { error: 'No changes provided.' });
+          return result(400, { error: say('api_proposals.no_changes') });
         }
 
         const changeList = Object.entries(changes)
@@ -663,7 +682,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         const { notes, targetWeek, threatName, displacedAlly, action } = payload;
 
         if (!targetWeek || !threatName) {
-          return result(400, { error: 'Target week and threat server are required.' });
+          return result(400, { error: say('api_proposals.week_and_threat') });
         }
 
         const isBuyout = action === 'buyout';

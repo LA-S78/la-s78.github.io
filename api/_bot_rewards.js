@@ -10,11 +10,15 @@ import {
   resolveUserId,
   sendEphemeralMessage,
   unix,
+  weekName,
 } from './_bot_common.js';
+import { inLocale, say, sayCount } from './_messages.js';
 import { resolveMemberAllianceContext } from './_bot_roles.js';
 import { DEFAULT_CALENDAR_CONFIG, weekLabel } from './_calendar_helper.js';
-import { writeGist } from './_gist.js';
+import { updateGist } from './_gist.js';
+import { getWaitUntil } from './_after_response.js';
 import { chestCounts } from './_nomination_assign.js';
+import { resetOverrides } from './_cycle_helper.js';
 import { reassignAllNominations } from './_nominations.js';
 import {
   describeRewardPeriod,
@@ -32,17 +36,11 @@ export async function handleNominateCommand(ctx) {
   const ownerGuildId = (process.env.DISCORD_GUILD_ID_OWNER || '').trim();
 
   if (!guildId || !member) {
-    return sendEphemeralMessage(
-      res,
-      '⚠️ This command must be executed inside your alliance Discord server or the NAP server.',
-    );
+    return sendEphemeralMessage(res, say('bot_nominate.server_only'));
   }
 
   if (ownerGuildId && guildId === ownerGuildId && !isSteward(userId)) {
-    return sendEphemeralMessage(
-      res,
-      '⛔ **Access Denied:** Reward nominations cannot be submitted from this server. Leaders must submit via the NAP server or their alliance server.',
-    );
+    return sendEphemeralMessage(res, say('bot_nominate.owner_server'));
   }
 
   try {
@@ -69,25 +67,24 @@ export async function handleNominateCommand(ctx) {
       if (!hasDelegatedLeadership && !isSteward(userId)) {
         return sendEphemeralMessage(
           res,
-          `⛔ **Access Denied:** Only members holding **@R5** or authorized leadership roles (${allowedRoles.map((r) => '@' + r).join(', ')}) can submit nominations for **[${matchedAllianceTag}]**.`,
+          say('bot_nominate.dedicated_denied', {
+            roles: allowedRoles.map((r) => '@' + r).join(', '),
+            tag: matchedAllianceTag,
+          }),
         );
       }
     } else {
       if (!isR5 && !isSteward(userId)) {
-        return sendEphemeralMessage(
-          res,
-          '⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can submit reward nominations.',
-        );
+        return sendEphemeralMessage(res, say('bot_nominate.r5_only'));
       }
       if (!matchedAllianceTag) {
         return sendEphemeralMessage(
           res,
-          `⚠️ Could not detect your alliance tag role. Make sure you have your alliance role (e.g. \`@${knownAlliances[0] || 'TAG'}\`) assigned.`,
+          say('bot_nominate.no_tag_role', { example: knownAlliances[0] || 'TAG' }),
         );
       }
     }
 
-    const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
     const calRaw = gistData.files?.['calendar-state.json']?.content;
     const calConfig = calRaw
       ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
@@ -98,59 +95,66 @@ export async function handleNominateCommand(ctx) {
     if (!period.open) {
       return sendEphemeralMessage(
         res,
-        `🔒 **Rewards are closed.** The ${period.weekName} rewards expired <t:${unix(period.closesAt)}:R>.\nThe next rewards open <t:${unix(period.nextOpensAt)}:F>, after Friday's capitol event.`,
+        say('bot_nominate.closed', {
+          week: weekName(period.week),
+          closed: `<t:${unix(period.closesAt)}:R>`,
+          opens: `<t:${unix(period.nextOpensAt)}:F>`,
+        }),
       );
     }
 
     // A new period: move the schedule on and clear last week's nominations. After the
-    // battle, ask leadership once for the Kingdom War result.
-    const synced = syncRewardPeriod(rewardsData, mapState, period);
-    const newPeriod = synced.changed;
-    const askForResult =
-      period.kwWeek &&
-      period.battleOver &&
-      rewardsData.period.result === 'pending' &&
-      !rewardsData.period.prompted;
-    if (askForResult) rewardsData.period.prompted = true;
-    if (newPeriod || askForResult) {
+    // battle, ask leadership once for the Kingdom War result. Saved safely alongside other
+    // saves (updateGist); only a quick second try fits in Discord's 3 seconds.
+    let rewardsData;
+    let askForResult = false;
+    try {
+      ({ rewardsData, askForResult } = await updateGist(
+        (gist) => {
+          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const map = JSON.parse(gist.files['map-state.json']?.content || '{}');
+          const synced = syncRewardPeriod(data, map, period);
+          const ask =
+            period.kwWeek &&
+            period.battleOver &&
+            data.period.result === 'pending' &&
+            !data.period.prompted;
+          if (ask) data.period.prompted = true;
+          if (!synced.changed && !ask) return { rewardsData: data };
+          return {
+            rewardsData: data,
+            askForResult: ask,
+            files: {
+              ...(synced.clearNominations ? { 'rewards-nominations.json': {} } : {}),
+              'rewards-data.json': data,
+            },
+            description: `Reward period ${period.id} (${period.weekName})`,
+          };
+        },
+        { gist: gistData, deadline: Date.now() + 700 },
+      ));
+    } catch (err) {
       // If this can't be saved, stop: never hand out a nomination link for a period that
       // didn't persist (DECISIONS.md, "Data storage").
-      try {
-        await writeGist(
-          {
-            ...(synced.clearNominations ? { 'rewards-nominations.json': {} } : {}),
-            'rewards-data.json': rewardsData,
-          },
-          { description: `Reward period ${period.id} (${period.weekName})` },
-        );
-      } catch (err) {
-        console.error('Reward period could not be saved:', err);
-        return sendEphemeralMessage(
-          res,
-          '⚠️ Service busy: could not open the new reward period. Please retry /nominate in a few seconds.',
-        );
-      }
+      console.error('Reward period could not be saved:', err);
+      return sendEphemeralMessage(res, say('bot_nominate.period_busy'));
     }
-    if (askForResult) await postKingdomWarResultPrompt(rewardsData.period, botToken);
+    // Posted in the shared leadership channel: in English, whoever ran /nominate.
+    if (askForResult)
+      await inLocale('en', () => postKingdomWarResultPrompt(rewardsData.period, botToken));
 
     // 1. The alliance's chests now, and after a win
     const quotaData = getAllianceNominationQuota(matchedAllianceTag, rewardsData, mapState);
     const rank = quotaData.rank;
 
     if (isNaN(rank) || rank > 50) {
-      return sendEphemeralMessage(
-        res,
-        `⚠️ **[${matchedAllianceTag}]** does not have an active rank assigned in the standings.`,
-      );
+      return sendEphemeralMessage(res, say('bot_nominate.no_rank', { tag: matchedAllianceTag }));
     }
 
     const chestsNow = chestCounts(quotaData, quotaData.isKW);
     const chestsIfWon = chestCounts(quotaIfWon(matchedAllianceTag, rewardsData, mapState), true);
     if (countChests(chestsNow) === 0) {
-      return sendEphemeralMessage(
-        res,
-        `⚠️ **[${matchedAllianceTag}]** has 0 chests allocated under the current distribution.`,
-      );
+      return sendEphemeralMessage(res, say('bot_nominate.no_chests', { tag: matchedAllianceTag }));
     }
 
     // 2. A private link for this period (the page reads the chests live, so it stays right
@@ -171,44 +175,56 @@ export async function handleNominateCommand(ctx) {
     const set1 = chestsNow.standard;
     const set2 = chestsIfWon.kingdom_war;
     const result = rewardsData.period?.result;
+    const set2Counts = {
+      gold: set2.commanders_will,
+      purple: set2.loyal_servant,
+      blue: set2.followers_heart,
+    };
     const set2Text = !period.kwWeek
-      ? 'No Kingdom War this week.'
+      ? say('bot_nominate.no_kw')
       : result === 'won'
-        ? `⚔️ **Won.** Honor Vanguard ×${set2.commanders_will} · Fearless Hero ×${set2.loyal_servant} · Logistics Support ×${set2.followers_heart}`
+        ? say('bot_nominate.won', set2Counts)
         : result === 'lost'
-          ? 'Not this week: the Kingdom War was lost.'
-          : `⏳ **Waiting for the battle result** (about <t:${unix(period.battleEndsAt)}:t>). If won: Honor Vanguard ×${set2.commanders_will} · Fearless Hero ×${set2.loyal_servant} · Logistics Support ×${set2.followers_heart}`;
+          ? say('bot_nominate.lost')
+          : say('bot_nominate.waiting', {
+              ...set2Counts,
+              time: `<t:${unix(period.battleEndsAt)}:t>`,
+            });
 
     const fields = [
       {
-        name: "👑 King's Commendation",
-        value: `Commander's Will ×${set1.commanders_will} · Loyal Servant ×${set1.loyal_servant} · Follower's Heart ×${set1.followers_heart}`,
+        name: say('bot_nominate.commendation'),
+        value: say('bot_nominate.commendation_line', {
+          gold: set1.commanders_will,
+          purple: set1.loyal_servant,
+          blue: set1.followers_heart,
+        }),
         inline: false,
       },
-      { name: '⚔️ King of Battle Reward', value: set2Text, inline: false },
+      { name: say('bot_nominate.battle_reward'), value: set2Text, inline: false },
     ];
 
     if (quotaData.hasBuyoutBonus) {
       fields.push({
-        name: '🛡️ Wartime Buyout Restitution Active',
-        value: `Includes **+1 Commander's Will** (and **+1 Honor Vanguard** if the war is won), funded by WLO for this week's defense override (Threat: \`${quotaData.buyoutDetails?.threat || 'Red List'}\`).`,
+        name: say('bot_nominate.buyout_title'),
+        value: say('bot_nominate.buyout_text', {
+          threat: quotaData.buyoutDetails?.threat || say('bot_nominate.buyout_default_threat'),
+        }),
         inline: false,
       });
     } else if (quotaData.isWloDeducted) {
       fields.push({
-        name: '⚖️ Wartime Buyout Restitution Funded',
-        value: `WLO yields **1 Commander's Will** (and **1 Honor Vanguard** if the war is won) from this week's Rank #1 allotment to fund the displaced alliance's restitution.`,
+        name: say('bot_nominate.funds_title'),
+        value: say('bot_nominate.funds_text'),
         inline: false,
       });
     }
 
     fields.push({
-      name: '📝 How it works',
+      name: say('bot_nominate.how_title'),
       value:
-        'List your players **best first**. Chests go down the list in order of value across both sets; extra names are kept as reserves and move up if more chests open.' +
-        (period.kwWeek && result === 'pending'
-          ? "\n⏳ The King hands out after the battle result, so nobody's chest changes."
-          : ''),
+        say('bot_nominate.how_text') +
+        (period.kwWeek && result === 'pending' ? `\n${say('bot_nominate.how_waiting')}` : ''),
       inline: false,
     });
 
@@ -217,17 +233,26 @@ export async function handleNominateCommand(ctx) {
       data: {
         embeds: [
           {
-            title: `🎁 ${period.weekName} Rewards — [${matchedAllianceTag}]`,
+            title: say('bot_nominate.title', {
+              week: weekName(period.week),
+              tag: matchedAllianceTag,
+            }),
             color: quotaData.hasBuyoutBonus ? 0xef4444 : result === 'won' ? 0x8f0000 : 0xb8975a,
-            description: `Rank #${rank} · open until <t:${unix(period.closesAt)}:F> (<t:${unix(period.closesAt)}:R>).`,
+            description: say('bot_nominate.summary', {
+              rank,
+              until: `<t:${unix(period.closesAt)}:F>`,
+              relative: `<t:${unix(period.closesAt)}:R>`,
+            }),
             fields,
-            footer: { text: 'Link is private and expires in 24 hours.' },
+            footer: { text: say('bot_common.link_expires_24h') },
           },
         ],
         components: [
           {
             type: 1,
-            components: [{ type: 2, style: 5, label: 'Open Nomination Page', url: nominateUrl }],
+            components: [
+              { type: 2, style: 5, label: say('bot_nominate.open_page'), url: nominateUrl },
+            ],
           },
         ],
         flags: 64,
@@ -235,10 +260,7 @@ export async function handleNominateCommand(ctx) {
     });
   } catch (err) {
     console.error('Nominate error:', err);
-    return sendEphemeralMessage(
-      res,
-      `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`,
-    );
+    return sendEphemeralMessage(res, say('bot_common.busy', { reason: err.message }));
   }
   return NOT_HANDLED;
 }
@@ -252,17 +274,9 @@ export async function handleRewardsCommand(ctx) {
   // Stewards: record the Kingdom War result (re-sorts every alliance's list)
   if (action === 'won' || action === 'lost') {
     if (!isSteward(userId)) {
-      return sendEphemeralMessage(
-        res,
-        '⛔ **Access Denied:** Only designated Kingdom Stewards can record the Kingdom War result.',
-      );
+      return sendEphemeralMessage(res, say('bot_common.steward_only_kw'));
     }
-    const outcome = await saveKingdomWarResult(action, username);
-    if (outcome.error) return sendEphemeralMessage(res, `⚠️ ${outcome.error}`);
-    return res.status(200).json({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: kingdomWarResultMessage(outcome),
-    });
+    return recordResultAndAnswer(ctx, action, username, null, { button: false });
   }
 
   try {
@@ -279,31 +293,88 @@ export async function handleRewardsCommand(ctx) {
     // Stewards: clear this period's nominations (the result stays)
     if (action === 'reset') {
       if (!isSteward(userId)) {
-        return sendEphemeralMessage(
-          res,
-          '⛔ **Access Denied:** Only designated Kingdom Stewards can clear nominations.',
-        );
+        return sendEphemeralMessage(res, say('bot_rewards.reset_denied'));
       }
       if (!period.open) {
-        return sendEphemeralMessage(
-          res,
-          '🔒 No reward period is open, so there is nothing to clear.',
-        );
+        return sendEphemeralMessage(res, say('bot_rewards.nothing_to_clear'));
       }
-      syncRewardPeriod(rewardsData, mapState, period, username);
-      rewardsData.lastReset = new Date().toISOString(); // a fresh checklist for the King
-      await writeGist(
-        { 'rewards-nominations.json': {}, 'rewards-data.json': rewardsData },
-        { description: `Nominations cleared (${period.weekName}) by ${username}` },
+      await updateGist(
+        (gist) => {
+          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const map = JSON.parse(gist.files['map-state.json']?.content || '{}');
+          syncRewardPeriod(data, map, period, username);
+          data.lastReset = new Date().toISOString(); // a fresh checklist for the King
+          if (data.period) data.period.handed_out = {}; // ...with no chest ticked or locked
+          return {
+            files: { 'rewards-nominations.json': {}, 'rewards-data.json': data },
+            description: `Nominations cleared (${period.weekName}) by ${username}`,
+          };
+        },
+        { gist: gistData, deadline: Date.now() + 700 },
       );
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           embeds: [
             {
-              title: `🔄 Nominations Cleared — ${period.weekName}`,
+              title: say('bot_rewards.cleared_title', { week: weekName(period.week) }),
               color: 0xb8975a,
-              description: `All alliances' lists for this week were cleared by **${username}**.\n\n• Leaders can send new lists with \`/nominate\`.\n• Rewards close <t:${unix(period.closesAt)}:F>.\n• Remind the King to hit **Reset Checklist** on the console.`,
+              description: say('bot_rewards.cleared_text', {
+                name: username,
+                closes: `<t:${unix(period.closesAt)}:F>`,
+              }),
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        },
+      });
+    }
+
+    // Stewards: wipe this cycle's Capitol overrides and wartime buyouts (resetOverrides in
+    // api/_cycle_helper.js), then re-sort every alliance's list for the corrected chests.
+    if (action === 'reset_overrides') {
+      if (!isSteward(userId)) {
+        return sendEphemeralMessage(res, say('bot_rewards.overrides_denied'));
+      }
+      const out = await updateGist(
+        (gist) => {
+          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const map = JSON.parse(gist.files['map-state.json']?.content || '{}');
+          const lists = JSON.parse(gist.files['rewards-nominations.json']?.content || '{}');
+          const reset = resetOverrides(data, map, username);
+          if (!reset.changed) return { reset };
+          return {
+            reset,
+            files: {
+              'rewards-data.json': data,
+              'rewards-nominations.json': reassignAllNominations(lists, data, map),
+            },
+            description: `Capitol overrides reset by ${username}`,
+          };
+        },
+        { gist: gistData, deadline: Date.now() + 700 },
+      );
+      const { reset } = out;
+      if (!reset.changed) {
+        return sendEphemeralMessage(
+          res,
+          say('bot_rewards.overrides_nothing', { schedule: scheduleLine(reset.after) }),
+        );
+      }
+      return res.status(200).json({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          embeds: [
+            {
+              title: say('bot_rewards.overrides_title'),
+              color: 0xb8975a,
+              description: say('bot_rewards.overrides_text', {
+                name: username,
+                after: scheduleLine(reset.after),
+                before: scheduleLine(reset.before),
+                overrides: reset.overrides,
+                buyouts: reset.cancelled,
+              }),
               timestamp: new Date().toISOString(),
             },
           ],
@@ -329,40 +400,55 @@ export async function handleRewardsCommand(ctx) {
       .sort((a, b) => a.rank - b.rank);
 
     if (roster.length === 0) {
-      return sendEphemeralMessage(
-        res,
-        '⚠️ No alliances are currently eligible under the active rewards plan.',
-      );
+      return sendEphemeralMessage(res, say('bot_rewards.none_eligible'));
     }
 
     let submittedCount = 0;
     const statusLines = roster.map((item) => {
       const entry = nominations[item.tag];
       const buyoutTag = item.quota.hasBuyoutBonus
-        ? ' 🛡️ [Buyout]'
+        ? say('bot_rewards.tag_buyout')
         : item.quota.isWloDeducted
-          ? ' ⚖️ [Funds buyout]'
+          ? say('bot_rewards.tag_funds')
           : '';
       if (!entry) {
-        return `⏳ **[${item.tag}]** (Rank #${item.rank})${buyoutTag} — **Awaiting list** (${item.total} chests)`;
+        return say('bot_rewards.awaiting', {
+          tag: item.tag,
+          rank: item.rank,
+          buyout: buyoutTag,
+          total: item.total,
+        });
       }
       submittedCount++;
       const named = item.total - Number(entry.unfilled || 0);
-      const reserves = entry.reserves?.length ? ` · ${entry.reserves.length} reserve(s)` : '';
+      const reserves = entry.reserves?.length
+        ? sayCount('bot_rewards.reserves', entry.reserves.length)
+        : '';
       const submitUnix = Math.floor(new Date(entry.submittedAt).getTime() / 1000);
-      return `✅ **[${item.tag}]** (Rank #${item.rank})${buyoutTag} — **${named}/${item.total}** named${reserves} (<t:${submitUnix}:R>)`;
+      return say('bot_rewards.sent', {
+        tag: item.tag,
+        rank: item.rank,
+        buyout: buyoutTag,
+        named,
+        total: item.total,
+        reserves,
+        when: `<t:${submitUnix}:R>`,
+      });
     });
 
     const header = !period.open
-      ? `🔒 **Closed.** The next rewards open <t:${unix(period.nextOpensAt)}:F>.`
-      : `🎁 **${period.weekName} rewards** · open until <t:${unix(period.closesAt)}:F>`;
+      ? say('bot_rewards.closed', { opens: `<t:${unix(period.nextOpensAt)}:F>` })
+      : say('bot_rewards.open', {
+          week: weekName(period.week),
+          closes: `<t:${unix(period.closesAt)}:F>`,
+        });
     const set2Line = !period.kwWeek
-      ? '⚔️ King of Battle Reward: no Kingdom War this week.'
+      ? say('bot_rewards.battle_no_kw')
       : result === 'won'
-        ? '⚔️ King of Battle Reward: **won**, open.'
+        ? say('bot_rewards.battle_won')
         : result === 'lost'
-          ? '⚔️ King of Battle Reward: lost, not this week.'
-          : `⚔️ King of Battle Reward: ⏳ **waiting for the battle result** (about <t:${unix(period.battleEndsAt)}:t>). The King hands out after it.`;
+          ? say('bot_rewards.battle_lost')
+          : say('bot_rewards.battle_waiting', { time: `<t:${unix(period.battleEndsAt)}:t>` });
 
     const components = [
       {
@@ -371,7 +457,7 @@ export async function handleRewardsCommand(ctx) {
           {
             type: 2,
             style: 5,
-            label: "Open King's Console",
+            label: say('bot_rewards.open_console'),
             url: `https://${resolvedHost}/distribute.html`,
           },
         ],
@@ -386,11 +472,11 @@ export async function handleRewardsCommand(ctx) {
       data: {
         embeds: [
           {
-            title: `📋 Alliance Reward Status — ${period.weekName}`,
+            title: say('bot_rewards.title', { week: weekName(period.week) }),
             color:
               result === 'won' ? 0x8f0000 : submittedCount === roster.length ? 0x22c55e : 0xb8975a,
-            description: `${header}\n${set2Line}\n\n**${submittedCount} of ${roster.length} alliances have sent a list**\n\n${statusLines.join('\n')}`,
-            footer: { text: 'Last Asylum Capitol Administration' },
+            description: `${header}\n${set2Line}\n\n${say('bot_rewards.count_line', { sent: submittedCount, total: roster.length })}\n\n${statusLines.join('\n')}`,
+            footer: { text: say('bot_rewards.footer') },
             timestamp: new Date().toISOString(),
           },
         ],
@@ -399,10 +485,7 @@ export async function handleRewardsCommand(ctx) {
     });
   } catch (err) {
     console.error('Rewards status error:', err);
-    return sendEphemeralMessage(
-      res,
-      `⚠️ Connection busy: ${err.message}. Please retry in a few seconds.`,
-    );
+    return sendEphemeralMessage(res, say('bot_common.busy', { reason: err.message }));
   }
   return NOT_HANDLED;
 }
@@ -413,31 +496,82 @@ export async function handleKingdomWarResultButton(ctx) {
   const userId = resolveUserId(interaction);
   const username = resolveActorName(interaction, 'Steward');
   if (!isSteward(userId)) {
-    return sendEphemeralMessage(
-      res,
-      '⛔ **Access Denied:** Only designated Kingdom Stewards can record the Kingdom War result.',
-    );
+    return sendEphemeralMessage(res, say('bot_common.steward_only_kw'));
   }
   // The period id is a timestamp, which has colons of its own
   const [, result, ...rest] = custom_id.split(':');
   const periodId = rest.join(':');
-  const outcome = await saveKingdomWarResult(result, username, periodId);
-  if (outcome.error) return sendEphemeralMessage(res, `⚠️ ${outcome.error}`);
+  return recordResultAndAnswer(ctx, result, username, periodId, { button: true });
+}
+
+/**
+ * Saves a Kingdom War result and answers Discord. The save re-sorts every alliance's list
+ * and, when nominations land at the same moment, may need extra rounds (updateGist), which
+ * can take longer than Discord's 3 seconds. So, as with Steward approvals, Discord is
+ * answered at once and the message is filled in when the save is done (through this
+ * interaction's own token, valid 15 minutes). Without Vercel's waitUntil (e.g. in tests)
+ * the result is saved first, within the 3 seconds, and then answered as before.
+ */
+async function recordResultAndAnswer(ctx, result, username, periodId, { button }) {
+  const { res, interaction } = ctx;
+  const waitUntil = interaction?.application_id && interaction?.token ? getWaitUntil() : null;
+  if (!waitUntil) {
+    const outcome = await saveKingdomWarResult(result, username, periodId, {
+      deadline: Date.now() + 700,
+    });
+    if (outcome.error) return sendEphemeralMessage(res, `⚠️ ${outcome.error}`);
+    return res.status(200).json({
+      type: button
+        ? InteractionResponseType.UPDATE_MESSAGE
+        : InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: kingdomWarResultMessage(outcome),
+    });
+  }
+
+  const webhook = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}`;
+  const send = (url, method, body) =>
+    fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    }).then((r) => {
+      if (!r.ok) throw new Error(`Discord responded with ${r.status}`);
+    });
+  waitUntil(
+    (async () => {
+      const outcome = await saveKingdomWarResult(result, username, periodId);
+      try {
+        if (outcome.error) {
+          // Privately, as before. A command's public "thinking…" answer is removed first.
+          if (!button) await send(`${webhook}/messages/@original`, 'DELETE').catch(() => {});
+          await send(webhook, 'POST', { content: `⚠️ ${outcome.error}`, flags: 64 });
+        } else {
+          await send(`${webhook}/messages/@original`, 'PATCH', kingdomWarResultMessage(outcome));
+        }
+      } catch (err) {
+        console.error('Kingdom War result: Discord could not be answered:', err.message);
+      }
+    })(),
+  );
   return res.status(200).json({
-    type: InteractionResponseType.UPDATE_MESSAGE,
-    data: kingdomWarResultMessage(outcome),
+    type: button
+      ? InteractionResponseType.DEFERRED_UPDATE_MESSAGE
+      : InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
   });
-  return NOT_HANDLED;
 }
 
 /** Buttons from before reward periods ("Confirm 2x / 1x"): the period now opens by itself. */
 export async function handleOldOutcomeButton(ctx) {
   const { res } = ctx;
-  return sendEphemeralMessage(
-    res,
-    "ℹ️ This button is no longer used: rewards now open every Friday at 20:00 GT by themselves. Record the Kingdom War result with `/rewards` (Won or Lost) after Saturday's battle.",
-  );
+  return sendEphemeralMessage(res, say('bot_rewards.old_button'));
   return NOT_HANDLED;
+}
+
+/** "Off-Week [BOTS] · Kingdom War Week 1 [RÂVN] · …" for a reward schedule. */
+function scheduleLine(schedule = {}) {
+  return ['downtime', 'week_1', 'week_2', 'week_3']
+    .map((key, i) => `${weekName(i)} **[${schedule[key] || '?'}]**`)
+    .join(' · ');
 }
 
 /** Total chests in chestCounts() form. */
@@ -506,32 +640,46 @@ export async function postKingdomWarResultPrompt(stored, botToken) {
  * Records the Kingdom War result for the open period and re-sorts every alliance's list.
  * periodId (from a button) must still be the open period. Returns { error } or the details.
  */
-export async function saveKingdomWarResult(result, actor, periodId = null) {
+export async function saveKingdomWarResult(result, actor, periodId = null, { deadline } = {}) {
   try {
-    const gistData = await getGistData();
-    const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
-    const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
-    let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
-    const calRaw = gistData.files?.['calendar-state.json']?.content;
-    const calConfig = calRaw
-      ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
-      : DEFAULT_CALENDAR_CONFIG;
+    // Re-sorts every alliance's list, so it is saved safely alongside a nomination sent at
+    // the same moment (updateGist).
+    return await updateGist(
+      (gistData) => {
+        const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+        const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+        let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+        const calRaw = gistData.files?.['calendar-state.json']?.content;
+        const calConfig = calRaw
+          ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
+          : DEFAULT_CALENDAR_CONFIG;
 
-    const period = getRewardPeriod(Date.now(), calConfig);
-    if (periodId && periodId !== period.id) {
-      return { error: 'This button is for an earlier week; that result can no longer change.' };
-    }
-    if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominations = {};
-    const previous = rewardsData.period?.result || null;
-    const error = recordKingdomWarResult(rewardsData, period, result, actor);
-    if (error) return { error };
-    nominations = reassignAllNominations(nominations, rewardsData, mapState);
+        const period = getRewardPeriod(Date.now(), calConfig);
+        if (periodId && periodId !== period.id) {
+          return {
+            error: 'This button is for an earlier week; that result can no longer change.',
+          };
+        }
+        if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominations = {};
+        const previous = rewardsData.period?.result || null;
+        const error = recordKingdomWarResult(rewardsData, period, result, actor);
+        if (error) return { error };
+        nominations = reassignAllNominations(nominations, rewardsData, mapState);
 
-    await writeGist(
-      { 'rewards-nominations.json': nominations, 'rewards-data.json': rewardsData },
-      { description: `Kingdom War ${result} (${period.weekName}) recorded by ${actor}` },
+        return {
+          period,
+          result,
+          previous,
+          actor,
+          alliances: Object.keys(nominations).length,
+          files: { 'rewards-nominations.json': nominations, 'rewards-data.json': rewardsData },
+          description: `Kingdom War ${result} (${period.weekName}) recorded by ${actor}`,
+        };
+      },
+      // Answering Discord first (recordResultAndAnswer) leaves time for every repair round;
+      // otherwise Discord's 3 seconds set the `deadline`.
+      { gist: await getGistData(), deadline },
     );
-    return { period, result, previous, actor, alliances: Object.keys(nominations).length };
   } catch (err) {
     console.error('Kingdom War result not saved:', err);
     return { error: `Could not save the result: ${err.message}` };

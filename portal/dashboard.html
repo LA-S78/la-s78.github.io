@@ -1,0 +1,872 @@
+---
+layout: portal
+footer: true
+title: Alliance Dashboard
+title_key: "dashboard.title"
+permalink: /dashboard.html
+lang: "en"
+strings: [dashboard, rewards_card, caravan, chart_editor, charts]
+---
+
+<div class="content-pane portal-pane-md" id="dashboard-app">
+  <div class="portal-header">
+    <div class="alliance-badge-lg" id="dash-alliance">{{ "dashboard.title" | t }}</div>
+    <div class="sub-text" id="dash-subtitle">{{ "dashboard.loading" | t }}</div>
+    <!-- Stewards: look at (and help with) any alliance's dashboard -->
+    <label class="dash-switcher" id="dash-switcher" hidden>
+      <span>{{ "dashboard.view_as" | t }}</span>
+      <select id="dash-switcher-select"></select>
+    </label>
+  </div>
+
+  <div id="dash-message" class="status-banner" hidden></div>
+
+  <!-- R4/R5, officers and Stewards only (the server sends it only to them) -->
+  <section class="dash-card dash-rewards" id="dash-rewards" hidden aria-labelledby="dash-rewards-title">
+    <h3 class="dash-card-title" id="dash-rewards-title">{{ "rewards_card.title" | t }} <span class="dash-tag">{{ "rewards_card.officers" | t }}</span></h3>
+    <div id="dash-rewards-body"></div>
+  </section>
+
+  <!-- Caravan Rotor: run by leaders; members see it read-only when leaders allow -->
+  <section class="dash-card dash-caravan" id="dash-caravan" hidden aria-labelledby="dash-caravan-title"></section>
+
+  <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
+  <div class="dash-edit-bar" id="dash-edit-bar" hidden>
+    <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
+    <button type="button" class="dash-btn" id="dash-add" disabled>{{ "dashboard.add_chart" | t }}</button>
+  </div>
+  <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
+
+  <section class="dash-widgets" id="dash-widgets" hidden aria-label="{{ "dashboard.charts_label" | t }}"></section>
+</div>
+
+<script src="/js/dashboard-widgets.js"></script>
+<script>
+  (function () {
+    // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
+    const $ = (id) => document.getElementById(id);
+    // The in-game chest names (common.chests in _data/<lang>/tools.yml).
+    const CHESTS = {
+      standard: { commanders_will: t('common.chests.commanders_will'), loyal_servant: t('common.chests.loyal_servant'), followers_heart: t('common.chests.followers_heart') },
+      kingdom_war: { commanders_will: t('common.chests.honor_vanguard'), loyal_servant: t('common.chests.fearless_hero'), followers_heart: t('common.chests.logistics_support') },
+    };
+    let data = null;
+    let countdownTimer = null;
+
+    function loginPass() {
+      try {
+        return localStorage.getItem('auth-session') || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function message(html, kind) {
+      const el = $('dash-message');
+      el.className = `status-banner${kind ? ` ${kind}` : ''}`;
+      el.innerHTML = html;
+      el.hidden = false;
+    }
+
+    async function load(alliance) {
+      const pass = loginPass();
+      if (!pass) {
+        $('dash-subtitle').textContent = '';
+        message(
+          `🔐 <strong>${escapeHtml(t('dashboard.sign_in_title'))}</strong><br>${th('dashboard.sign_in_help', { sign_in: `<strong>${escapeHtml(t('dashboard.sign_in_button'))}</strong>` })}` +
+            `<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_discord'))}</button>`,
+        );
+        $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
+        return;
+      }
+      try {
+        const res = await fetch(`/api/dashboard${alliance ? `?alliance=${encodeURIComponent(alliance)}` : ''}`, {
+          headers: { Authorization: `Bearer ${pass}` },
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          $('dash-subtitle').textContent = '';
+          if (body.code === 'login') {
+            message(`🔐 ${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_again'))}</button>`, 'warning');
+            $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
+          } else {
+            message(`⚠️ ${escapeHtml(body.error || `HTTP ${res.status}`)}`, 'warning');
+          }
+          return;
+        }
+        data = body;
+        $('dash-message').hidden = true;
+        render();
+      } catch (err) {
+        message(`⚠️ ${escapeHtml(t('dashboard.load_failed', { error: err.message }))}`, 'warning');
+      }
+    }
+
+    function render() {
+      const a = data.alliance;
+      const badge = $('dash-alliance');
+      badge.textContent = `[${a.tag}]`;
+      if (a.color && /^#[0-9a-f]{6}$/i.test(a.color)) badge.style.color = a.color;
+      const who = t(`dashboard.view_${data.viewer.tier === 'steward' ? 'steward' : data.viewer.tier === 'leader' ? 'leader' : 'member'}`);
+      $('dash-subtitle').textContent = a.rank
+        ? t('dashboard.subtitle_rank', { rank: a.rank, view: who })
+        : t('dashboard.subtitle', { view: who });
+      document.title = `${t('dashboard.page_title', { tag: a.tag })} | Last Asylum`;
+
+      // Stewards: alliance switcher
+      if (Array.isArray(data.alliances) && data.alliances.length) {
+        const select = $('dash-switcher-select');
+        select.innerHTML = data.alliances
+          .map((x) => `<option value="${escapeHtml(x.tag)}"${x.tag === a.tag ? ' selected' : ''}>[${escapeHtml(x.tag)}]${x.rank ? ` · #${x.rank}` : ''}</option>`)
+          .join('');
+        $('dash-switcher').hidden = false;
+      }
+
+      renderRewards();
+      renderCaravan();
+      renderWidgets();
+    }
+
+    /** Chests as coloured icons with counts (names in the tooltip): gold, purple, blue. */
+    function chestIcons(counts, pool) {
+      const c = (counts && counts[pool]) || {};
+      const names = Object.keys(CHESTS[pool]).map((k) => `${CHESTS[pool][k]} ×${Number(c[k] || 0)}`).join(', ');
+      return `<span class="dash-chests" title="${escapeHtml(names)}" aria-label="${escapeHtml(names)}">${[
+        ['commanders_will', 'gold'],
+        ['loyal_servant', 'purple'],
+        ['followers_heart', 'blue'],
+      ]
+        .map(([k, glyph]) => `<span class="dash-chest"><span class="chest-glyph ${glyph}"></span>${Number(c[k] || 0)}</span>`)
+        .join('')}</span>`;
+    }
+
+    function when(iso) {
+      const d = new Date(iso);
+      const local = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      // Game Time is UTC-2 (the "Etc/GMT+2" zone); the day name in the reader's language.
+      const gt = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'Etc/GMT+2' });
+      return `${local} (${t('common.game_time', { time: gt })})`;
+    }
+
+    function countdown(iso) {
+      const ms = new Date(iso).getTime() - Date.now();
+      if (ms <= 0) return t('common.now');
+      const d = Math.floor(ms / 864e5);
+      const h = Math.floor((ms % 864e5) / 36e5);
+      const m = Math.floor((ms % 36e5) / 6e4);
+      return d ? t('common.duration_days', { d, h }) : h ? t('common.duration_hours', { h, m }) : t('common.duration_minutes', { m });
+    }
+
+    function renderRewards() {
+      const r = data.rewards;
+      $('dash-rewards').hidden = !r;
+      if (!r) return;
+      const p = r.period;
+      const n = r.nomination;
+
+      // 1. Period and Kingdom War result
+      const clock = (iso) => `<span data-countdown="${escapeHtml(iso)}">${escapeHtml(countdown(iso))}</span>`;
+      const status = p.open
+        ? `<span title="${escapeHtml(t('rewards_card.closes_at', { when: when(p.closesAt) }))}">🟢 <strong>${escapeHtml(t('rewards_card.open'))}</strong> · ${th('rewards_card.time_left', { time: clock(p.closesAt) })}</span>`
+        : `<span title="${escapeHtml(t('rewards_card.opens_at', { when: when(p.nextOpensAt) }))}">⚪ <strong>${escapeHtml(t('rewards_card.closed'))}</strong> · ${th('rewards_card.opens_in', { time: clock(p.nextOpensAt) })}</span>`;
+      const war = !p.kwWeek
+        ? `<span class="dash-pill">${escapeHtml(t('rewards_card.off_week'))}</span>`
+        : p.result === 'won'
+          ? `<span class="dash-pill is-good">${escapeHtml(t('rewards_card.kw_won'))}</span>`
+          : p.result === 'lost'
+            ? `<span class="dash-pill">${escapeHtml(t('rewards_card.kw_lost'))}</span>`
+            : `<span class="dash-pill is-wait">${escapeHtml(t('rewards_card.kw_pending'))}</span>`;
+
+      // 2. Chests: set 1 always; set 2 when won, greyed "if won" while pending
+      let set2 = '';
+      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_two'))}">⚔️ ${chestIcons(r.chests, 'kingdom_war')}</span>`;
+      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="${escapeHtml(t('rewards_card.set_two_if_won'))}">⚔️ ${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>${escapeHtml(t('rewards_card.if_won'))}</small></span>`;
+      const chests = r.rank
+        ? `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_one'))}">👑 ${chestIcons(r.chests, 'standard')}</span>${set2}`
+        : `<span class="dash-warn">${escapeHtml(t('rewards_card.no_rank'))}</span>`;
+
+      // 3. The list
+      const list = n.submitted
+        ? `<span title="${n.submittedAt ? escapeHtml(t('rewards_card.sent_at', { when: when(n.submittedAt) })) : ''}">${escapeHtml(t('rewards_card.list_sent', { count: n.ranked }))}${n.reserves ? ` <span class="dash-muted">${escapeHtml(tn('rewards_card.reserves', n.reserves))}</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${escapeHtml(t('rewards_card.empty_slots', { n: n.unfilled }))}</span>` : ''}</span>`
+        : p.open
+          ? `<span class="dash-warn">${escapeHtml(t('rewards_card.list_not_sent'))}</span>`
+          : `<span class="dash-muted">${escapeHtml(t('rewards_card.no_list_closed'))}</span>`;
+      let action = '';
+      if (p.open && data.viewer.canNominate) {
+        action = `<button type="button" class="dash-btn" id="dash-nominate">${escapeHtml(t(n.submitted ? 'rewards_card.edit_list' : 'rewards_card.send_list'))}</button>`;
+      } else if (p.open) {
+        action = `<span class="dash-muted dash-small" title="${escapeHtml(t('rewards_card.ask_r5_help'))}">${escapeHtml(t('rewards_card.ask_r5'))}</span>`;
+      }
+
+      // 4. Buyout, only when it applies
+      const gold = '<span class="chest-glyph gold"></span>';
+      const buyout = r.hasBuyoutBonus
+        ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_bonus_help') + (r.buyoutThreat ? ` · ${t('rewards_card.buyout_threat', { threat: r.buyoutThreat })}` : ''))}"><span>${th('rewards_card.buyout_bonus', { amount: '<strong>+1</strong>', chest: gold })}</span></div>`
+        : r.isWloDeducted
+          ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_cost_help'))}"><span>${th('rewards_card.buyout_cost', { amount: '<strong>−1</strong>', chest: gold })}</span></div>`
+          : '';
+
+      $('dash-rewards-body').innerHTML =
+        `<div class="dash-line">${status}${war}</div>` +
+        `<div class="dash-line dash-chest-row">${chests}</div>` +
+        `<div class="dash-line">${list}${action}</div>` +
+        buyout +
+        '<div class="dash-warn dash-small" id="dash-nominate-error"></div>';
+
+      $('dash-nominate')?.addEventListener('click', openNomination);
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        document.querySelectorAll('[data-countdown]').forEach((el) => {
+          el.textContent = countdown(el.getAttribute('data-countdown'));
+        });
+      }, 30000);
+    }
+
+    async function openNomination(e) {
+      const btn = e.currentTarget;
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/dashboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+          body: JSON.stringify({ action: 'nominate-link', alliance: data.alliance.tag }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        window.location.href = body.url;
+      } catch (err) {
+        btn.disabled = false;
+        $('dash-nominate-error').textContent = err.message;
+      }
+    }
+
+    // ---------- Caravan Rotor ----------
+    // Times are Game Time (UTC-2) and shown with the reader's own time beside them.
+    let caravanFilter = { text: '', now: false };
+    let caravanEditing = null; // id of the row being edited
+
+    const gtToLocal = (hhmm) => {
+      const [h, m] = hhmm.split(':').map(Number);
+      const d = new Date();
+      const at = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), h + 2, m));
+      return at.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    };
+    const nowGtMinutes = () => {
+      const d = new Date();
+      return (((d.getUTCHours() - 2) * 60 + d.getUTCMinutes()) % 1440 + 1440) % 1440;
+    };
+    const minutes = (hhmm) => {
+      const [h, m] = hhmm.split(':').map(Number);
+      return h * 60 + m;
+    };
+    function windowText(p) {
+      if (!p.from) return `<span class="dash-muted">${escapeHtml(t('caravan.flexible'))}</span>`;
+      const gt = p.to ? `${p.from}–${p.to}` : p.from;
+      const local = p.to ? `${gtToLocal(p.from)}–${gtToLocal(p.to)}` : gtToLocal(p.from);
+      return `${escapeHtml(t('common.game_time', { time: gt }))} <span class="dash-muted">(${escapeHtml(t('common.your_time', { time: local }))})</span>`;
+    }
+    /** Available around now: inside their window (or within an hour of a single time); flexible players always. */
+    function aroundNow(p) {
+      if (!p.from) return true;
+      const n = nowGtMinutes();
+      const f = minutes(p.from);
+      if (!p.to) return Math.min(Math.abs(n - f), 1440 - Math.abs(n - f)) <= 60;
+      const t = minutes(p.to);
+      return f <= t ? n >= f && n <= t : n >= f || n <= t; // a window past midnight
+    }
+
+    function renderCaravan() {
+      const el = $('dash-caravan');
+      const c = data.dashboard && data.dashboard.caravan;
+      const leader = isLeader();
+      el.hidden = !c;
+      if (!c) return;
+      const all = c.roster || [];
+      const picked = all.filter((p) => p.picked);
+      const q = caravanFilter.text.trim().toLowerCase();
+      const available = all
+        .filter((p) => !p.picked)
+        .filter((p) => (!q || p.name.toLowerCase().includes(q)) && (!caravanFilter.now || aroundNow(p)));
+      const now = nowGtMinutes();
+      const nowText = t('common.game_time', { time: `${String(Math.floor(now / 60)).padStart(2, '0')}:${String(now % 60).padStart(2, '0')}` });
+
+      const row = (p) => {
+        if (leader && caravanEditing === p.id) {
+          return `<li class="dash-cv-row is-editing" data-id="${escapeHtml(p.id)}">
+            <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="${escapeHtml(t('caravan.name'))}">
+            <input type="text" class="cv-from" value="${escapeHtml(p.from || '')}" placeholder="18:00" aria-label="${escapeHtml(t('caravan.from'))}">
+            <input type="text" class="cv-to" value="${escapeHtml(p.to || '')}" placeholder="22:00" aria-label="${escapeHtml(t('caravan.to'))}">
+            <button type="button" class="dash-icon-btn" data-cv="save-edit" aria-label="${escapeHtml(t('common.save'))}">💾</button>
+            <button type="button" class="dash-icon-btn" data-cv="cancel-edit" aria-label="${escapeHtml(t('common.cancel'))}">✕</button>
+          </li>`;
+        }
+        const tools = leader
+          ? p.picked
+            ? `<button type="button" class="dash-icon-btn" data-cv="unpick" title="${escapeHtml(t('caravan.back_to_available'))}">${escapeHtml(t('common.undo'))}</button>`
+            : `<button type="button" class="dash-btn" data-cv="pick">${escapeHtml(t('caravan.pick'))}</button>
+               <button type="button" class="dash-icon-btn" data-cv="edit" title="${escapeHtml(t('common.edit'))}" aria-label="${escapeHtml(t('common.edit'))}">✏️</button>
+               <button type="button" class="dash-icon-btn" data-cv="remove" title="${escapeHtml(t('common.remove'))}" aria-label="${escapeHtml(t('common.remove'))}">🗑️</button>`
+          : '';
+        const pickedText = p.picked
+          ? `<span class="dash-muted">✓ ${new Date(p.picked.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}${p.picked.by ? ` · ${escapeHtml(p.picked.by)}` : ''}</span>`
+          : windowText(p);
+        return `<li class="dash-cv-row${p.picked ? ' is-picked' : ''}" data-id="${escapeHtml(p.id)}">
+          <span class="dash-cv-name">${escapeHtml(p.name)}</span>
+          <span class="dash-cv-when">${pickedText}</span>
+          <span class="dash-cv-tools">${tools}</span>
+        </li>`;
+      };
+
+      el.innerHTML = `
+        <h3 class="dash-card-title" id="dash-caravan-title">${escapeHtml(t('caravan.title'))} <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span></h3>
+        ${leader ? `<div class="dash-cv-bar">
+          <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${escapeHtml(t('caravan.members_can_view'))}</label>
+          <span class="dash-cv-actions">
+            <button type="button" class="dash-icon-btn" data-cv="copy">${escapeHtml(t('caravan.copy_status'))}</button>
+            <button type="button" class="dash-icon-btn" data-cv="new-week">${escapeHtml(t('caravan.new_week'))}</button>
+          </span>
+        </div>` : `<div class="dash-cv-bar"><span class="dash-muted dash-small">${escapeHtml(t('caravan.member_note'))}</span><button type="button" class="dash-icon-btn" data-cv="copy">${escapeHtml(t('caravan.copy_status'))}</button></div>`}
+        <div class="dash-cv-filters">
+          <input type="search" id="cv-search" placeholder="${escapeHtml(t('caravan.search'))}" value="${escapeHtml(caravanFilter.text)}" aria-label="${escapeHtml(t('caravan.search'))}">
+          <button type="button" class="dash-icon-btn" data-cv="now" aria-pressed="${caravanFilter.now}" title="${escapeHtml(t('caravan.around_now_help'))}">${escapeHtml(t('caravan.around_now'))} <small>${escapeHtml(nowText)}</small></button>
+        </div>
+        <div class="dash-cv-head">${escapeHtml(t('caravan.available', { n: all.length - picked.length }))}</div>
+        <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t(all.length - picked.length ? 'caravan.nobody_matches' : all.length ? 'caravan.everyone_picked' : leader ? 'caravan.add_players' : 'caravan.no_players'))}</li>`}</ul>
+        ${picked.length ? `<details class="dash-cv-picked"${leader ? '' : ' open'}><summary>${escapeHtml(t('caravan.picked', { n: picked.length }))}</summary><ul class="dash-cv-list">${picked.map(row).join('')}</ul></details>` : ''}
+        ${leader ? `<form class="dash-cv-add" id="cv-add">
+          <input type="text" id="cv-add-name" maxlength="40" placeholder="${escapeHtml(t('caravan.player_name'))}" aria-label="${escapeHtml(t('caravan.player_name'))}">
+          <input type="text" id="cv-add-from" placeholder="${escapeHtml(t('caravan.add_from'))}" aria-label="${escapeHtml(t('caravan.add_from_label'))}">
+          <input type="text" id="cv-add-to" placeholder="${escapeHtml(t('caravan.add_to'))}" aria-label="${escapeHtml(t('caravan.add_to_label'))}">
+          <button type="submit" class="dash-btn">${escapeHtml(t('caravan.add'))}</button>
+        </form>
+        <div class="dash-muted dash-small">${escapeHtml(t('caravan.times_help'))}</div>
+        <div class="dash-error" id="cv-error"></div>` : ''}`;
+      const search = $('cv-search');
+      search.addEventListener('input', () => {
+        caravanFilter.text = search.value;
+        const pos = search.selectionStart;
+        renderCaravan();
+        const again = $('cv-search');
+        again.focus();
+        again.setSelectionRange(pos, pos);
+      });
+      $('cv-members')?.addEventListener('change', (e) => caravanChange({ action: 'caravan-visibility', membersCanView: e.target.checked }));
+      $('cv-add')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const ok = await caravanChange({ action: 'caravan-add', name: $('cv-add-name').value, from: $('cv-add-from').value, to: $('cv-add-to').value });
+        if (ok) $('cv-add-name')?.focus();
+      });
+    }
+
+    async function caravanChange(change) {
+      const error = await save(change, { quiet: true });
+      if (error) {
+        const box = $('cv-error');
+        if (box) box.textContent = error;
+        else alert(t('common.not_saved', { error }));
+        return false;
+      }
+      return true;
+    }
+
+    function caravanStatusText() {
+      const c = data.dashboard.caravan;
+      const left = c.roster.filter((p) => !p.picked);
+      const done = c.roster.filter((p) => p.picked);
+      const when = (p) => (p.from ? ` (${t('common.game_time', { time: p.to ? `${p.from}–${p.to}` : p.from })})` : '');
+      return [
+        t('caravan.status_title', { tag: data.alliance.tag, picked: done.length, total: c.roster.length }),
+        t('caravan.status_available', { names: left.map((p) => p.name + when(p)).join(', ') || t('caravan.nobody') }),
+        t('caravan.status_picked', { names: done.map((p) => p.name).join(', ') || t('caravan.nobody_yet') }),
+      ].join('\n');
+    }
+
+    $('dash-caravan').addEventListener('click', async (e) => {
+      const b = e.target.closest('[data-cv]');
+      if (!b) return;
+      const act = b.dataset.cv;
+      const id = b.closest('[data-id]')?.dataset.id;
+      if (act === 'now') {
+        caravanFilter.now = !caravanFilter.now;
+        return renderCaravan();
+      }
+      if (act === 'copy') {
+        const text = caravanStatusText();
+        try {
+          await navigator.clipboard.writeText(text);
+          b.textContent = t('common.copied');
+          setTimeout(() => renderCaravan(), 1200);
+        } catch (err) {
+          prompt(t('caravan.copy_prompt'), text);
+        }
+        return;
+      }
+      if (act === 'edit') {
+        caravanEditing = id;
+        return renderCaravan();
+      }
+      if (act === 'cancel-edit') {
+        caravanEditing = null;
+        return renderCaravan();
+      }
+      if (act === 'save-edit') {
+        const li = b.closest('li');
+        const ok = await caravanChange({ action: 'caravan-edit', id, name: li.querySelector('.cv-name').value, from: li.querySelector('.cv-from').value, to: li.querySelector('.cv-to').value });
+        if (ok) {
+          caravanEditing = null;
+          renderCaravan();
+        }
+        return;
+      }
+      if (act === 'remove') {
+        const p = data.dashboard.caravan.roster.find((x) => x.id === id);
+        if (!confirm(t('caravan.confirm_remove', { name: p ? p.name : t('caravan.this_player') }))) return;
+        return caravanChange({ action: 'caravan-remove', id });
+      }
+      if (act === 'new-week') {
+        if (!confirm(t('caravan.confirm_new_week'))) return;
+        return caravanChange({ action: 'caravan-new-week' });
+      }
+      b.disabled = true;
+      return caravanChange({ action: act === 'pick' ? 'caravan-pick' : 'caravan-unpick', id });
+    });
+
+    // ---------- Charts and tables ----------
+    const W = window.DashboardWidgets;
+    const TYPES = ['bar', 'line', 'pie', 'progress', 'table'].map((type) => [type, t(`chart_editor.type_${type}`)]);
+    let editing = false;
+
+    function isLeader() {
+      return data && data.viewer.tier !== 'member';
+    }
+
+    function widgetCard(w, i, count) {
+      const vis = t(w.visibility === 'members' ? 'dashboard.visible_members' : 'dashboard.visible_officers');
+      const linked = w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc');
+      const day = (iso) => new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      const updated = linked
+        ? `🔗 ${t(w.source.kind === 'doc' ? 'dashboard.google_doc' : 'dashboard.google_sheet')}${w.syncedAt ? ` · ${t('dashboard.synced', { when: day(w.syncedAt) })}` : ''}`
+        : w.updatedAt
+          ? t('dashboard.updated', { when: new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) })
+          : '';
+      const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
+      const tool = (act, label, glyph, off) =>
+        `<button type="button" class="dash-icon-btn" data-act="${act}" ${off ? 'disabled' : ''} title="${escapeHtml(t(label))}" aria-label="${escapeHtml(t(label))}">${glyph}</button>`;
+      const tools = editing
+        ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲', i === 0)}${tool('down', 'common.move_down', '▼', i === count - 1)}${tool('edit', 'common.edit', '✏️')}${tool('delete', 'common.delete', '🗑️')}</div>`
+        : '';
+      return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}">
+        <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
+        <div class="dash-widget-meta">${isLeader() ? `<span>${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${escapeHtml(updated)}</span>` : ''}${sync}</div>
+        ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
+        <div class="dash-widget-body">${W.render(w)}</div>
+      </article>`;
+    }
+
+    function renderWidgets() {
+      const list = (data.dashboard && data.dashboard.widgets) || [];
+      const el = $('dash-widgets');
+      el.hidden = false;
+      $('dash-edit-bar').hidden = !isLeader();
+      $('dash-edit-toggle').setAttribute('aria-pressed', String(editing));
+      // Always beside Edit Dashboard (greyed out until editing), so Edit doesn't shift
+      $('dash-add').disabled = !editing;
+      if (!list.length) {
+        el.innerHTML = `<div class="dash-card dash-empty">${escapeHtml(
+          t(!isLeader() ? 'dashboard.empty_member' : editing ? 'dashboard.empty_editing' : 'dashboard.empty_leader'),
+        )}</div>`;
+        return;
+      }
+      el.innerHTML = list.map((w, i) => widgetCard(w, i, list.length)).join('');
+      el.querySelectorAll('.dash-widget').forEach((card) => {
+        const w = list.find((x) => x.id === card.dataset.id);
+        W.mount(card.querySelector('.dash-widget-body'), w);
+      });
+    }
+
+    $('dash-edit-toggle').addEventListener('click', () => {
+      editing = !editing;
+      if (!editing) closeEditor();
+      renderWidgets();
+    });
+    $('dash-add').addEventListener('click', () => openEditor(null));
+    $('dash-widgets').addEventListener('click', async (e) => {
+      const b = e.target.closest('[data-act]');
+      if (!b) return;
+      const id = b.closest('.dash-widget').dataset.id;
+      const act = b.dataset.act;
+      if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
+      if (act === 'sync') {
+        b.disabled = true;
+        b.textContent = t('dashboard.syncing');
+        const error = await save({ action: 'sync-widget', id });
+        if (error && document.body.contains(b)) {
+          b.disabled = false;
+          b.textContent = t('dashboard.sync_now');
+        }
+        return;
+      }
+      if (act === 'delete') {
+        const w = data.dashboard.widgets.find((x) => x.id === id);
+        if (!confirm(t('dashboard.confirm_delete', { title: w ? w.title : t('dashboard.this_chart') }))) return;
+        return save({ action: 'delete-widget', id });
+      }
+      return save({ action: 'move-widget', id, by: act === 'up' ? -1 : 1 });
+    });
+
+    /** Sends a change; on success shows the dashboard as saved. Returns the error text or ''. */
+    async function save(change, { quiet = false } = {}) {
+      try {
+        const res = await fetch('/api/dashboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+          body: JSON.stringify({ ...change, alliance: data.alliance.tag }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        data.dashboard = body.dashboard;
+        renderCaravan();
+        renderWidgets();
+        return '';
+      } catch (err) {
+        if (!change.widget && !quiet) alert(t('common.not_saved', { error: err.message }));
+        return err.message;
+      }
+    }
+
+    // ---------- The editor ----------
+    function closeEditor() {
+      $('dash-editor').hidden = true;
+      $('dash-editor').innerHTML = '';
+    }
+
+    function openEditor(existing) {
+      const w = existing
+        ? JSON.parse(JSON.stringify(existing))
+        : { type: 'bar', title: '', note: '', visibility: 'r4_only', data: { columns: [], rows: [] }, options: {} };
+      const ed = $('dash-editor');
+      ed.hidden = false;
+      const e = (key) => escapeHtml(t(`chart_editor.${key}`));
+      ed.innerHTML = `
+        <h3 class="dash-card-title">${e(existing ? 'edit_title' : 'new_title')}</h3>
+        <label>${e('type')}</label>
+        <div class="dash-types" id="ed-types" role="group" aria-label="${e('type')}">${TYPES.map(([type, name]) => `<button type="button" data-type="${type}" aria-pressed="${w.type === type}">${escapeHtml(name)}</button>`).join('')}</div>
+        <label for="ed-title">${e('title')}</label>
+        <input type="text" id="ed-title" maxlength="80" value="${escapeHtml(w.title)}" placeholder="${e('title_example')}">
+        <label for="ed-note">${e('note')} <span class="dash-muted">${escapeHtml(t('common.optional'))}</span></label>
+        <textarea id="ed-note" rows="2" maxlength="400" placeholder="${e('note_example')}">${escapeHtml(w.note)}</textarea>
+        <label for="ed-vis">${e('who_sees')}</label>
+        <select id="ed-vis">
+          <option value="r4_only"${w.visibility !== 'members' ? ' selected' : ''}>${e('officers_only')}</option>
+          <option value="members"${w.visibility === 'members' ? ' selected' : ''}>${e('all_members')}</option>
+        </select>
+        <label>${e('data')}</label>
+        <div class="dash-types dash-src" role="group" aria-label="${e('data_source')}">
+          <button type="button" data-src="paste" aria-pressed="true">${e('paste')}</button>
+          <button type="button" data-src="link" aria-pressed="false">${e('link')}</button>
+        </div>
+        <div id="ed-src-paste">
+          <div class="dash-muted dash-small">${e('paste_help')}</div>
+          <textarea id="ed-paste" class="dash-paste" placeholder="Name&#9;Score&#10;Aria&#9;15200000&#10;Bram&#9;12900000"></textarea>
+        </div>
+        <div id="ed-src-link" hidden>
+          <input type="text" id="ed-url" placeholder="https://docs.google.com/spreadsheets/d/…" value="${escapeHtml((w.source && w.source.url) || '')}">
+          <div class="dash-link-opts" id="ed-sheet-opts">
+            <input type="text" id="ed-sheet" placeholder="${e('tab_name')}" value="${escapeHtml((w.source && w.source.sheet) || '')}">
+            <input type="text" id="ed-range" placeholder="${e('range')}" value="${escapeHtml((w.source && w.source.range) || '')}">
+          </div>
+          <div class="dash-link-opts" id="ed-doc-opts" hidden>
+            <input type="text" inputmode="numeric" id="ed-table" placeholder="${e('doc_table')}" value="${escapeHtml(String((w.source && w.source.table) || ''))}">
+          </div>
+          <button type="button" class="dash-btn" id="ed-load">${e('load')}</button>
+          <div class="dash-muted dash-small">${e('link_help')}</div>
+        </div>
+        <div class="dash-muted dash-small" id="ed-parsed"></div>
+        <div id="ed-options"></div>
+        <div class="dash-editor-preview"><div class="dash-muted dash-small">${e('preview')}</div><div id="ed-preview"></div></div>
+        <div class="dash-error" id="ed-error"></div>
+        <div class="dash-editor-actions">
+          <button type="button" class="dash-icon-btn" id="ed-cancel">${escapeHtml(t('common.cancel'))}</button>
+          <button type="button" class="submit-plan-btn" id="ed-save">${escapeHtml(t('common.save'))}</button>
+        </div>`;
+      $('ed-paste').value = w.data.columns.length ? W.toText(w.data) : '';
+
+      const colSelect = (id, value, { none } = {}) =>
+        `<select id="${id}">${none ? `<option value="">${none}</option>` : ''}${w.data.columns
+          .map((c, i) => `<option value="${i}"${Number(value) === i && value !== '' && value !== undefined ? ' selected' : ''}>${escapeHtml(c)}</option>`)
+          .join('')}</select>`;
+
+      // Swapped line/bar charts: the text typed to find rows (kept while the options redraw).
+      let rowFilter = '';
+      const numericCols = (o) =>
+        w.data.columns
+          .map((_, i) => i)
+          .filter((i) => i !== o.labelCol && w.data.rows.some((r) => Number.isFinite(W.number(r[i]))));
+      const rowLabels = () => [
+        ...new Set(w.data.rows.map((r) => String(r[w.options.labelCol] ?? '').trim()).filter(Boolean)),
+      ];
+
+      function drawOptions() {
+        const o = w.options;
+        const cols = w.data.columns;
+        if (!cols.length) {
+          $('ed-options').innerHTML = '';
+          return;
+        }
+        if (o.labelCol === undefined || o.labelCol >= cols.length) o.labelCol = 0;
+        if (!o.valueCols || !o.valueCols.length) {
+          // Columns holding numbers: a line chart starts with all of them (trends side by
+          // side), the others with the first.
+          const numeric = cols
+            .map((_, i) => i)
+            .filter((i) => i !== o.labelCol && w.data.rows.some((r) => Number.isFinite(W.number(r[i]))));
+          o.valueCols = o.swap ? numeric : w.type === 'line' ? numeric.slice(0, 6) : numeric.slice(0, 1);
+        }
+        let html = '';
+        if (w.type !== 'table') {
+          const multi = w.type === 'bar' || w.type === 'line';
+          const swap = multi && Boolean(o.swap);
+          html += `<label for="ed-label">${e(swap ? 'labels_swapped' : 'labels')}</label>${colSelect('ed-label', o.labelCol)}`;
+          if (multi) {
+            html += `<label class="dash-check"><input type="checkbox" id="ed-swap"${swap ? ' checked' : ''}> ${e(w.type === 'line' ? 'swap_line' : 'swap_bar')}</label>`;
+            html += `<p class="dash-help">${e('swap_help')}</p>`;
+          }
+          if (swap) {
+            // The rows to draw (by their label), up to 6: one colour each.
+            const chosen = o.rowNames || [];
+            const full = chosen.length >= 6;
+            html += `<label for="ed-rowfilter">${e('rows_to_draw')}</label>
+              <input type="text" id="ed-rowfilter" placeholder="${e('rows_filter')}" value="${escapeHtml(rowFilter)}" autocomplete="off">
+              <div class="dash-cols dash-rows" id="ed-rows">${rowLabels()
+                .map((name) => {
+                  const on = chosen.includes(name);
+                  const hide = rowFilter && !name.toLowerCase().includes(rowFilter.toLowerCase());
+                  return `<label${hide ? ' hidden' : ''}><input type="checkbox" name="ed-row" value="${escapeHtml(name)}"${on ? ' checked' : ''}${full && !on ? ' disabled' : ''}> ${escapeHtml(name)}</label>`;
+                })
+                .join('')}</div>
+              <p class="dash-help">${escapeHtml(t('chart_editor.rows_count', { n: chosen.length }))}</p>`;
+          }
+          html += `<label>${e(swap ? 'columns_along' : multi ? 'numbers_to_show' : 'numbers')}</label><div class="dash-cols">${cols
+            .map((c, i) =>
+              i === o.labelCol
+                ? ''
+                : `<label><input type="${multi ? 'checkbox' : 'radio'}" name="ed-val" value="${i}"${o.valueCols.includes(i) ? ' checked' : ''}> ${escapeHtml(c)}</label>`,
+            )
+            .join('')}</div>`;
+        }
+        if (w.type === 'bar') {
+          html += `<label for="ed-stacked">${e('several_columns')}</label>
+            <select id="ed-stacked">
+              <option value=""${!o.stacked ? ' selected' : ''}>${e('side_by_side')}</option>
+              <option value="sum"${o.stacked === 'sum' ? ' selected' : ''}>${e('stacked_totals')}</option>
+              <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>${e('stacked_percent')}</option>
+            </select>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> ${e(o.stacked ? 'vertical' : 'vertical_leaderboard')}</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${e('traffic_reverse')}</label>`;
+        }
+        if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> ${e('donut')}</label>`;
+        if (w.type === 'progress') {
+          html += `<label for="ed-target">${e('target')}</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="${e('target_example')}">`;
+          html += `<label for="ed-targetcol">${e('target_column')}</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: e('use_number_above') })}`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${e('traffic_target')}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${e('traffic_target_reverse')}</label>`;
+        }
+        if (w.type === 'table') {
+          html += `<label for="ed-hlcol">${e('highlight_where')}</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: e('no_highlight') })}`;
+          html += `<label for="ed-hlmin">${e('at_least')}</label><input type="text" inputmode="decimal" id="ed-hlmin" value="${o.highlightMin ?? ''}" placeholder="${e('at_least_example')}">`;
+        }
+        $('ed-options').innerHTML = html;
+      }
+
+      function readOptions() {
+        const o = w.options;
+        const val = (id) => $(id) && $(id).value;
+        if ($('ed-label')) o.labelCol = Number(val('ed-label'));
+        const checked = [...document.querySelectorAll('input[name="ed-val"]:checked')].map((x) => Number(x.value));
+        if (document.querySelector('input[name="ed-val"]')) o.valueCols = checked;
+        if ($('ed-swap')) {
+          const swap = $('ed-swap').checked;
+          if (swap && !o.swap) {
+            // Switched on: every number column along the bottom, the first 3 rows as lines.
+            o.valueCols = numericCols(o);
+            o.rowNames = rowLabels().slice(0, 3);
+          } else if (!swap && o.swap) {
+            o.valueCols = (o.valueCols || []).slice(0, 6);
+          }
+          if (swap) o.swap = true;
+          else {
+            delete o.swap;
+            delete o.rowNames;
+          }
+        }
+        if (o.swap && document.querySelector('input[name="ed-row"]')) {
+          // Checked rows in the list (in its order), keeping ones hidden by the filter.
+          const shown = [...document.querySelectorAll('input[name="ed-row"]')];
+          const checkedNow = shown.filter((x) => x.checked).map((x) => x.value);
+          const hiddenKept = (o.rowNames || []).filter((n) =>
+            shown.some((x) => x.value === n && x.closest('label').hidden),
+          );
+          o.rowNames = [...new Set([...checkedNow, ...hiddenKept])].slice(0, 6);
+        }
+        if ($('ed-vertical')) o.vertical = $('ed-vertical').checked;
+        if ($('ed-stacked')) o.stacked = $('ed-stacked').value || undefined;
+        if ($('ed-scale')) o.scale = $('ed-scale').checked;
+        if ($('ed-reverse') && o.scale) o.reverse = $('ed-reverse').checked;
+        else delete o.reverse;
+        if ($('ed-donut')) o.donut = $('ed-donut').checked;
+        if ($('ed-target')) {
+          // Same shorthand as the data: 15M, 50K, 1.2B, 15,000,000
+          const t = W.number(val('ed-target'));
+          if (!Number.isFinite(t)) delete o.target;
+          else o.target = t;
+          if (val('ed-targetcol') === '') delete o.targetCol;
+          else o.targetCol = Number(val('ed-targetcol'));
+        }
+        if ($('ed-hlcol')) {
+          // Kept separately until both are set, so choosing the column first isn't lost.
+          const min = W.number(val('ed-hlmin'));
+          if (val('ed-hlcol') === '') delete o.highlightCol;
+          else o.highlightCol = Number(val('ed-hlcol'));
+          if (Number.isFinite(min)) o.highlightMin = min;
+          else delete o.highlightMin;
+        }
+      }
+
+      function preview() {
+        w.title = $('ed-title').value;
+        w.note = $('ed-note').value;
+        w.visibility = $('ed-vis').value;
+        const box = $('ed-preview');
+        if (!w.data.columns.length) {
+          box.innerHTML = `<div class="dw-empty">${e('preview_empty')}</div>`;
+          return;
+        }
+        box.innerHTML = W.render(w);
+        W.mount(box, w);
+      }
+
+      // Where the data comes from: a pasted table, or a Google Sheet / Doc (loaded by the server).
+      let mode = w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc') ? 'link' : 'paste';
+      function setMode(m) {
+        mode = m;
+        ed.querySelectorAll('.dash-src button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.src === m)));
+        $('ed-src-paste').hidden = m !== 'paste';
+        $('ed-src-link').hidden = m !== 'link';
+      }
+      function linkKind() {
+        return /\/document\//.test($('ed-url').value) ? 'doc' : 'sheet';
+      }
+      function showLinkOptions() {
+        $('ed-sheet-opts').hidden = linkKind() !== 'sheet';
+        $('ed-doc-opts').hidden = linkKind() !== 'doc';
+      }
+      function linkSource() {
+        const kind = linkKind();
+        return kind === 'doc'
+          ? { kind, url: $('ed-url').value.trim(), table: Number($('ed-table').value) || 1 }
+          : { kind, url: $('ed-url').value.trim(), sheet: $('ed-sheet').value.trim(), range: $('ed-range').value.trim() };
+      }
+      function useData(parsed) {
+        const changed = parsed.columns.join('\t') !== w.data.columns.join('\t');
+        w.data = parsed;
+        if (changed) w.options = { ...w.options, labelCol: 0, valueCols: [] };
+        $('ed-parsed').textContent = parsed.columns.length
+          ? t('chart_editor.size', { rows: tn('chart_editor.rows', parsed.rows.length), columns: tn('chart_editor.columns', parsed.columns.length) }) +
+            (parsed.rows.length > 500 ? ` ${t('chart_editor.at_most_500')}` : '')
+          : '';
+        drawOptions();
+        preview();
+      }
+      ed.querySelector('.dash-src').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-src]');
+        if (b) setMode(b.dataset.src);
+      });
+      $('ed-url').addEventListener('input', showLinkOptions);
+      $('ed-load').addEventListener('click', async () => {
+        const btn = $('ed-load');
+        btn.disabled = true;
+        btn.textContent = t('chart_editor.loading');
+        $('ed-error').textContent = '';
+        try {
+          const res = await fetch('/api/dashboard', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+            body: JSON.stringify({ action: 'load-source', source: linkSource(), alliance: data.alliance.tag }),
+          });
+          const body = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+          w.source = linkSource();
+          w.syncedAt = body.syncedAt;
+          useData(body.data);
+        } catch (err) {
+          $('ed-error').textContent = err.message;
+        }
+        btn.disabled = false;
+        btn.textContent = t('chart_editor.load');
+      });
+
+      function readPaste() {
+        useData(W.parseTable($('ed-paste').value));
+      }
+
+      $('ed-types').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-type]');
+        if (!b) return;
+        readOptions();
+        w.type = b.dataset.type;
+        ed.querySelectorAll('#ed-types button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        if (w.type === 'pie' || w.type === 'progress') w.options.valueCols = (w.options.valueCols || []).slice(0, 1);
+        if (w.type === 'line' && (w.options.valueCols || []).length <= 1) w.options.valueCols = [];
+        drawOptions();
+        preview();
+      });
+      $('ed-paste').addEventListener('input', readPaste);
+      ['ed-title', 'ed-note', 'ed-vis'].forEach((id) => $(id).addEventListener('input', preview));
+      $('ed-options').addEventListener('input', (ev) => {
+        if (ev.target.id !== 'ed-rowfilter') return;
+        rowFilter = ev.target.value.trim();
+        const q = rowFilter.toLowerCase();
+        document.querySelectorAll('#ed-rows label').forEach((l) => {
+          l.hidden = Boolean(q) && !l.textContent.toLowerCase().includes(q);
+        });
+      });
+      $('ed-options').addEventListener('change', () => {
+        readOptions();
+        drawOptions();
+        preview();
+      });
+      $('ed-cancel').addEventListener('click', closeEditor);
+      $('ed-save').addEventListener('click', async () => {
+        readOptions();
+        preview();
+        if (mode === 'link') {
+          if (!w.source || !w.source.url || w.source.url !== $('ed-url').value.trim()) {
+            $('ed-error').textContent = t('chart_editor.load_first');
+            return;
+          }
+        } else {
+          w.source = { kind: 'paste' };
+          delete w.syncedAt;
+        }
+        const btn = $('ed-save');
+        btn.disabled = true;
+        btn.textContent = t('common.saving');
+        const error = await save({ action: 'save-widget', widget: w });
+        btn.disabled = false;
+        btn.textContent = t('common.save');
+        if (error) $('ed-error').textContent = error;
+        else closeEditor();
+      });
+
+      setMode(mode);
+      showLinkOptions();
+      if (mode === 'link') useData(w.data);
+      else readPaste();
+      ed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    $('dash-switcher-select').addEventListener('change', (e) => load(e.target.value));
+    load(new URLSearchParams(window.location.search).get('alliance'));
+  })();
+</script>

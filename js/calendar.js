@@ -15,6 +15,37 @@ async function initCalendar() {
 
   // Escape data before putting it into HTML (see js/escape-html.js).
   const esc = (value) => window.escapeHtml(value);
+  // The page's language (calendar.* in _data/<lang>/tools.yml, js/i18n.js).
+  const t = window.t;
+  // A week's name from its number, as the server's weekLabel() does (0 = Off-Week).
+  const weekName = (n) => (Number(n) === 0 ? t('common.off_week') : t('common.kw_week', { n }));
+  // "Rank #2" from the server (no alliance scheduled yet) in the page's language.
+  const holderName = (s) => {
+    const m = /^Rank #(\d+)$/.exec(String(s || ''));
+    return m ? t('calendar.rank', { rank: m[1] }) : s;
+  };
+  // The site's own milestones (api/calendar.js sends a key and its values): in the page's language.
+  const MILESTONES = {
+    capture: (v) => {
+      const who = holderName(v.who);
+      const rank = v.rank
+        ? t(v.override ? 'calendar.rank_override_schedule' : 'calendar.rank', { rank: v.rank })
+        : '';
+      return [
+        t('calendar.ev_capture_title', { who }),
+        t('calendar.ev_capture_desc', { who, rank }),
+      ];
+    },
+    kw_battle: () => [t('calendar.ev_kw_title'), t('calendar.ev_kw_desc')],
+    rewards_open: (v) => [
+      t('calendar.ev_open_title', { week: weekName(v.week) }),
+      t(v.kw ? 'calendar.ev_open_desc_kw' : 'calendar.ev_open_desc'),
+    ],
+    rewards_close: (v) => [
+      t('calendar.ev_close_title', { week: weekName(v.week) }),
+      t('calendar.ev_close_desc'),
+    ],
+  };
 
   const elLoading = document.getElementById('loading-state');
   const elError = document.getElementById('error-state');
@@ -51,6 +82,28 @@ async function initCalendar() {
     !isGlobalAdmin && sessionScope ? sessionScope.trim() : allianceParam || null;
 
   let allEvents = [];
+  // Whether reminders have somewhere to go: { alliance, server } (api/calendar.js)
+  let reminderChannels = null;
+  // Set in management mode (step 6): opens the event form to edit an event
+  let openEditForm = null;
+
+  // The hint under "Remind 1 hour before": where the reminder goes, or that it has nowhere
+  // to go yet (an alliance that hasn't run /registerbot; the NAP channel not set up)
+  function updateReminderHint() {
+    const hint = document.getElementById('evt-reminder-hint');
+    if (!hint || !reminderChannels) return;
+    const missing = isGlobalAdmin ? !reminderChannels.server : reminderChannels.alliance === false;
+    hint.textContent = t(
+      missing
+        ? isGlobalAdmin
+          ? 'calendar_events.reminder_no_server_channel'
+          : 'calendar_events.reminder_no_channel'
+        : isGlobalAdmin
+          ? 'calendar_events.reminder_hint_server'
+          : 'calendar_events.reminder_hint',
+    );
+    hint.classList.toggle('is-warning', missing);
+  }
 
   // 2. Fetch Live Calendar Data
   async function loadCalendar() {
@@ -61,6 +114,8 @@ async function initCalendar() {
       const data = await res.json();
 
       allEvents = data.events || [];
+      reminderChannels = data.reminderChannels || null;
+      updateReminderHint();
       renderHero(data.status, data.capitolHolder, data.capitolHolderColor);
       setupFilterOptions();
       applyFilterAndRender();
@@ -68,7 +123,7 @@ async function initCalendar() {
       if (elLoading) elLoading.style.display = 'none';
       if (elError) {
         elError.style.display = 'block';
-        elError.textContent = `Failed to load calendar: ${err.message}`;
+        elError.textContent = t('calendar.load_failed', { error: err.message });
       }
     }
   }
@@ -85,13 +140,13 @@ async function initCalendar() {
     if (heroBadge && rewards) {
       // The title names the week; the badge shows the rewards, so they don't repeat.
       const badge = !rewards.open
-        ? ['🔒 Rewards closed', 'badge-off']
+        ? ['calendar.badge_closed', 'badge-off']
         : rewards.result === 'won'
-          ? ['⚔️ King of Battle open', 'badge-kw']
+          ? ['calendar.badge_kob_open', 'badge-kw']
           : rewards.result === 'pending'
-            ? ['⏳ Awaiting KW result', 'badge-kw']
-            : ['🎁 Rewards open', 'badge-off'];
-      heroBadge.textContent = badge[0];
+            ? ['calendar.badge_awaiting', 'badge-kw']
+            : ['calendar.badge_open', 'badge-off'];
+      heroBadge.textContent = t(badge[0]);
       heroBadge.className = `cal-badge ${badge[1]}`;
     }
 
@@ -102,22 +157,26 @@ async function initCalendar() {
     const cycleProgressEl = document.getElementById('metric-cycle-progress');
 
     // weekName, not the configured phase name, so the site always says "Off-Week".
-    if (titleEl) titleEl.textContent = status.weekName || status.phaseName;
+    if (titleEl) titleEl.textContent = weekName(status.clockWeek);
+    // No reward period in the answer: no line, rather than "Loading…" left showing
+    if (subEl) subEl.hidden = !rewards;
     if (subEl && rewards) {
-      const set2 = !rewards.kwWeek
-        ? "King's Commendation only (no Kingdom War)."
-        : rewards.result === 'won'
-          ? 'Kingdom War won: King of Battle Reward open too.'
-          : rewards.result === 'lost'
-            ? "Kingdom War lost: King's Commendation only."
-            : "King of Battle Reward if Saturday's war is won; the King hands out after the result.";
+      const set2 = t(
+        !rewards.kwWeek
+          ? 'calendar.set2_off_week'
+          : rewards.result === 'won'
+            ? 'calendar.set2_won'
+            : rewards.result === 'lost'
+              ? 'calendar.set2_lost'
+              : 'calendar.set2_pending',
+      );
       subEl.textContent = rewards.open
-        ? `${rewards.weekName} rewards open until Tuesday 23:59 GT. ${set2}`
-        : 'Rewards are closed. The next open Friday at about 20:00 GT, after the capitol event.';
+        ? t('calendar.rewards_open_until', { week: weekName(rewards.week), set2 })
+        : t('calendar.rewards_closed');
     }
 
     if (capHolderEl) {
-      capHolderEl.textContent = capitolHolder;
+      capHolderEl.textContent = holderName(capitolHolder);
       // The holder's own alliance colour; without one, the CSS (theme colour) applies.
       capHolderEl.style.color = capitolHolderColor || '';
     }
@@ -125,25 +184,33 @@ async function initCalendar() {
     // is due to capture it, afterwards who holds it.
     const capLabelEl = document.getElementById('hero-capitol-label');
     if (capLabelEl) {
-      capLabelEl.textContent = status.capitolCaptured
-        ? 'CURRENT CAPITOL HOLDER'
-        : 'NEXT CAPITOL HOLDER';
+      capLabelEl.textContent = t(
+        status.capitolCaptured ? 'calendar.current_holder' : 'calendar.next_holder',
+      );
     }
     if (capRankEl) {
       const rankText =
         status.isOverrideWeek && status.holderActualRank
-          ? `Rank #${status.holderActualRank} (Override)`
-          : `Rank #${status.capitolRank}`;
-      const captureText = status.capitolCaptured
-        ? 'Captured Friday'
-        : status.isCaptureDay
-          ? 'Captures today'
-          : 'Captures Friday';
+          ? t('calendar.rank_override', { rank: status.holderActualRank })
+          : t('calendar.rank', { rank: status.capitolRank });
+      const captureText = t(
+        status.capitolCaptured
+          ? 'calendar.captured_friday'
+          : status.isCaptureDay
+            ? 'calendar.captures_today'
+            : 'calendar.captures_friday',
+      );
       capRankEl.textContent = `${rankText} · ${captureText}`;
     }
     if (cycleProgressEl) {
-      const weekLabel = status.clockWeek === 0 ? 'Off-Week' : `Week ${status.clockWeek}`;
-      cycleProgressEl.textContent = `Day ${status.cycleDay} of 28 (${weekLabel})`;
+      const weekLabel =
+        status.clockWeek === 0
+          ? t('common.off_week')
+          : t('calendar.week_n', { n: status.clockWeek });
+      cycleProgressEl.textContent = t('calendar.day_of_28', {
+        day: status.cycleDay,
+        week: weekLabel,
+      });
     }
 
     // Broadcast live clock week so kvk-scheduler.js stays 100% synced
@@ -159,7 +226,7 @@ async function initCalendar() {
         kwBox.style.opacity = '1';
         const kwDate = new Date(status.kwBattleTimestamp * 1000);
         kwCountdown.textContent = status.isKWBattleDay
-          ? '🔥 TODAY'
+          ? t('calendar.today')
           : kwDate.toLocaleDateString(undefined, {
               weekday: 'short',
               month: 'short',
@@ -167,7 +234,7 @@ async function initCalendar() {
             });
       } else {
         kwBox.style.opacity = '0.5';
-        kwCountdown.textContent = 'None this week';
+        kwCountdown.textContent = t('calendar.none_this_week');
       }
     }
 
@@ -202,17 +269,17 @@ async function initCalendar() {
 
       const optCombined = document.createElement('option');
       optCombined.value = 'combined';
-      optCombined.textContent = `🌐 Combined (Kingdom + [${activeAlliance}])`;
+      optCombined.textContent = t('calendar.combined', { tag: activeAlliance });
       filterSelect.appendChild(optCombined);
 
       const optAlliance = document.createElement('option');
       optAlliance.value = activeAlliance;
-      optAlliance.textContent = `🛡️ [${activeAlliance}] Internal Only`;
+      optAlliance.textContent = t('calendar.internal_only', { tag: activeAlliance });
       filterSelect.appendChild(optAlliance);
 
       const optGlobal = document.createElement('option');
       optGlobal.value = 'global';
-      optGlobal.textContent = '👑 Kingdom Operations Only';
+      optGlobal.textContent = t('calendar.kingdom_only');
       filterSelect.appendChild(optGlobal);
 
       filterSelect.value = 'combined';
@@ -248,7 +315,7 @@ async function initCalendar() {
       });
       if (filterStatusTag) {
         filterStatusTag.style.display = 'block';
-        filterStatusTag.textContent = `🛡️ [${activeAlliance}] Operations Active`;
+        filterStatusTag.textContent = t('calendar.operations_active', { tag: activeAlliance });
       }
     } else {
       filtered = allEvents.filter(
@@ -256,7 +323,7 @@ async function initCalendar() {
       );
       if (filterStatusTag) {
         filterStatusTag.style.display = 'block';
-        filterStatusTag.textContent = `🛡️ [${activeAlliance}] Internal Only`;
+        filterStatusTag.textContent = t('calendar.internal_only', { tag: activeAlliance });
       }
     }
 
@@ -273,8 +340,7 @@ async function initCalendar() {
     if (!timelineContainer) return;
 
     if (!eventsList || eventsList.length === 0) {
-      timelineContainer.innerHTML =
-        '<div class="cal-status-banner">No operations scheduled for this perspective.</div>';
+      timelineContainer.innerHTML = `<div class="cal-status-banner">${esc(t('calendar.no_operations'))}</div>`;
       return;
     }
 
@@ -284,8 +350,8 @@ async function initCalendar() {
         const gtHours = (start.getUTCHours() - 2 + 24) % 24;
         const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
         const gtTimeStr = evt.allDay
-          ? 'All Day'
-          : `${String(gtHours).padStart(2, '0')}:${gtMins} GT`;
+          ? t('calendar.all_day')
+          : t('common.game_time', { time: `${String(gtHours).padStart(2, '0')}:${gtMins}` });
         const localDateStr = start.toLocaleDateString(undefined, {
           weekday: 'short',
           month: 'short',
@@ -297,15 +363,19 @@ async function initCalendar() {
 
         let recurrenceLabel = '';
         if (evt.recurrence === '2days')
-          recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Every 2 Days</span>';
+          recurrenceLabel = `<span class="event-tag-pill pill-recurring">${esc(t('calendar.every_2_days'))}</span>`;
         else if (evt.recurrence === 'weekly')
-          recurrenceLabel = '<span class="event-tag-pill pill-recurring">🔁 Weekly</span>';
+          recurrenceLabel = `<span class="event-tag-pill pill-recurring">${esc(t('calendar.weekly'))}</span>`;
 
         const forceLabel =
           evt.notify_target === 'everyone'
-            ? '<span class="event-tag-pill pill-force">🚨 Mandatory</span>'
+            ? `<span class="event-tag-pill pill-force">${esc(t('calendar.mandatory'))}</span>`
             : '';
         const borderStyle = evt.color ? `border-left-color: ${esc(evt.color)} !important;` : '';
+
+        // The site's own milestones in the page's language; events leaders write stay as written.
+        const own = evt.i18n && MILESTONES[evt.i18n.key];
+        const [title, description] = own ? own(evt.i18n.vars || {}) : [evt.title, evt.description];
 
         const canDelete =
           isManagementSession &&
@@ -319,18 +389,23 @@ async function initCalendar() {
         <div class="timeline-event-row event-${esc(evt.type || 'custom')}" style="${borderStyle}">
           <div class="event-main">
             <div class="event-title-line">
-              <span class="event-title">${esc(evt.title)}</span>
+              <span class="event-title">${esc(title)}</span>
               ${recurrenceLabel}
               ${forceLabel}
             </div>
-            <div class="event-desc">${esc(evt.description || '')}</div>
+            <div class="event-desc">${esc(description || '')}</div>
           </div>
           <div class="event-actions-group">
             <div class="event-time-block">
-              <div class="time-gt">${gtTimeStr}</div>
+              <div class="time-gt">${esc(gtTimeStr)}</div>
               <div>${localDateStr}${localTimeStr}</div>
             </div>
-            ${canDelete ? `<button type="button" class="btn-delete-event" data-event-id="${esc(evt.id)}">🗑️ Delete</button>` : ''}
+            ${
+              canDelete
+                ? `<button type="button" class="btn-edit-event" data-event-id="${esc(evt.id)}">${esc(t('calendar.edit'))}</button>
+                   <button type="button" class="btn-delete-event" data-event-id="${esc(evt.id)}">${esc(t('calendar.delete'))}</button>`
+                : ''
+            }
           </div>
         </div>
       `;
@@ -339,6 +414,9 @@ async function initCalendar() {
 
     timelineContainer.querySelectorAll('.btn-delete-event').forEach((btn) => {
       btn.addEventListener('click', () => handleDeleteEvent(btn.dataset.eventId));
+    });
+    timelineContainer.querySelectorAll('.btn-edit-event').forEach((btn) => {
+      btn.addEventListener('click', () => openEditForm?.(btn.dataset.eventId));
     });
   }
 
@@ -353,15 +431,16 @@ async function initCalendar() {
 
     if (isGlobalAdmin) {
       if (mgmtPanel) mgmtPanel.classList.add('scope-global');
-      if (mgmtScopeTag) mgmtScopeTag.textContent = '👑 KINGDOM ADMIN';
-      if (mgmtScopeDesc)
-        mgmtScopeDesc.textContent = 'Scheduling Kingdom-wide alerts and operations';
-      if (formHeading) formHeading.textContent = 'Create Kingdom Operation ([GLOBAL])';
+      if (mgmtScopeTag) mgmtScopeTag.textContent = t('calendar_events.kingdom_admin');
+      if (mgmtScopeDesc) mgmtScopeDesc.textContent = t('calendar_events.kingdom_desc');
+      if (formHeading) formHeading.textContent = t('calendar_events.kingdom_heading');
     } else {
-      if (mgmtScopeTag) mgmtScopeTag.textContent = `🛡️ [${sessionScope}] LEADERSHIP`;
+      if (mgmtScopeTag)
+        mgmtScopeTag.textContent = t('calendar_events.leadership', { tag: sessionScope });
       if (mgmtScopeDesc)
-        mgmtScopeDesc.textContent = `Managing internal operations for [${sessionScope}]`;
-      if (formHeading) formHeading.textContent = `Create [${sessionScope}] Operation`;
+        mgmtScopeDesc.textContent = t('calendar_events.leadership_desc', { tag: sessionScope });
+      if (formHeading)
+        formHeading.textContent = t('calendar_events.alliance_heading', { tag: sessionScope });
     }
 
     const formEl = document.getElementById('form-create-event');
@@ -372,59 +451,103 @@ async function initCalendar() {
     const presetSelect = document.getElementById('evt-input-preset');
     const submitBtn = document.getElementById('btn-submit-event');
 
+    // Presets fill the form in the page's language (event_presets.* in tools.yml).
     const OPERATION_PRESETS = {
       crystal_cluster: {
-        title: 'Crystal Cluster Valley',
+        title: t('event_presets.crystal_cluster_title'),
         color: '#7946C0',
         duration: 0.5,
         recurrence: 'weekly',
-        description: 'Free For All event every Sunday',
+        description: t('event_presets.crystal_cluster_desc'),
       },
       elixir_scramble: {
-        title: 'Elixir Scramble',
+        title: t('event_presets.elixir_scramble_title'),
         color: '#24523B',
         duration: 0.5,
         recurrence: 'weekly',
-        description: 'Team Battle event every Friday',
+        description: t('event_presets.elixir_scramble_desc'),
       },
       survival_battle: {
-        title: 'Survival Battle',
+        title: t('event_presets.survival_battle_title'),
         color: '#CF6214',
         duration: 4.0,
         recurrence: 'none',
-        description: 'Complete tasks to earn rewards',
+        description: t('event_presets.survival_battle_desc'),
       },
       kill_event: {
-        title: 'Kill Event',
+        title: t('event_presets.kill_event_title'),
         color: '#B12A2A',
         duration: 24.0,
         recurrence: 'none',
-        description: 'Invaders from other servers arrive! Shield up',
+        description: t('event_presets.kill_event_desc'),
       },
       kvk_battle: {
-        title: 'Kingdom vs Kingdom Battle',
+        title: t('event_presets.kvk_battle_title'),
         color: '#8ED2EF',
         duration: 1.0,
         recurrence: 'none',
-        description: 'The battle for the Royal Castle begins!',
+        description: t('event_presets.kvk_battle_desc'),
       },
       gear_event: {
-        title: 'Gear Event',
+        title: t('event_presets.gear_event_title'),
         color: '#303A40',
         duration: 48.0,
         recurrence: 'none',
-        description: 'Get rewarded for upgrading gear',
+        description: t('event_presets.gear_event_desc'),
       },
       cheese_trap: {
-        title: 'Cheese Trap',
+        title: t('event_presets.cheese_trap_title'),
         color: '#FAB22F',
         duration: 0.5,
         recurrence: '2days',
-        description: 'Help fend off the Cheese Thief',
+        description: t('event_presets.cheese_trap_desc'),
       },
     };
 
     let activePresetColor = null;
+    // The event being edited (its id), or null when the form creates a new one
+    let editingEventId = null;
+    const reminderBox = document.getElementById('evt-input-reminder');
+    const createHeading = formHeading ? formHeading.textContent : '';
+
+    // Back to "create": heading, button and reminder default as for a new event
+    function leaveEditMode() {
+      editingEventId = null;
+      if (formHeading) formHeading.textContent = createHeading;
+      if (submitBtn) submitBtn.textContent = t('calendar_events.publish');
+      if (reminderBox) reminderBox.checked = true;
+    }
+
+    openEditForm = (eventId) => {
+      const evt = allEvents.find((e) => e.id === eventId);
+      if (!evt || !formEl) return;
+      editingEventId = eventId;
+      resetPanelTheme();
+      if (presetSelect) presetSelect.value = 'custom';
+      activePresetColor = evt.color || null;
+      // The occurrence shown, in Game Time (UTC-2): a repeating event continues from it
+      const startGt = new Date(new Date(evt.start).getTime() - 2 * 3600000);
+      document.getElementById('evt-input-title').value = String(evt.title || '').replace(
+        /^\[[^\]]+\]\s*/,
+        '',
+      );
+      document.getElementById('evt-input-date').value = startGt.toISOString().split('T')[0];
+      document.getElementById('evt-input-time').value =
+        evt.time_gt || startGt.toISOString().slice(11, 16);
+      document.getElementById('evt-input-duration').value = evt.duration_hours || 1;
+      document.getElementById('evt-input-recurrence').value = evt.recurrence || 'none';
+      document.getElementById('evt-input-details').value = evt.description || '';
+      notifySelect.value = evt.notify_target || 'role';
+      const isCustom = notifySelect.value === 'custom_role';
+      customRoleInput.disabled = !isCustom;
+      customRoleInput.classList.toggle('input-locked', !isCustom);
+      customRoleInput.value = isCustom ? evt.custom_role_id || '' : '';
+      if (reminderBox) reminderBox.checked = evt.reminder === '1h';
+      if (formHeading) formHeading.textContent = t('calendar_events.edit_heading');
+      if (submitBtn) submitBtn.textContent = t('calendar_events.save_changes');
+      formEl.style.display = 'block';
+      formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 
     function resetPanelTheme() {
       activePresetColor = null;
@@ -474,7 +597,11 @@ async function initCalendar() {
 
     if (btnToggle && formEl) {
       btnToggle.addEventListener('click', () => {
-        const isHidden = formEl.style.display === 'none';
+        const isHidden = formEl.style.display === 'none' || editingEventId;
+        if (editingEventId) {
+          formEl.reset();
+          leaveEditMode();
+        }
         formEl.style.display = isHidden ? 'block' : 'none';
         if (isHidden) {
           document.getElementById('evt-input-date').value = new Date().toISOString().split('T')[0];
@@ -486,6 +613,10 @@ async function initCalendar() {
     if (btnCancel && formEl) {
       btnCancel.addEventListener('click', () => {
         formEl.style.display = 'none';
+        if (editingEventId) {
+          formEl.reset();
+          leaveEditMode();
+        }
       });
     }
 
@@ -496,10 +627,7 @@ async function initCalendar() {
         const timeVal = document.getElementById('evt-input-time').value;
         const [, mm] = timeVal.split(':').map(Number);
         if (mm % 5 !== 0) {
-          showNotification(
-            'Game Time must be set in 5-minute increments (:00, :05, :10, etc.)',
-            'error',
-          );
+          showNotification(t('calendar_events.bad_time'), 'error');
           return;
         }
 
@@ -507,20 +635,18 @@ async function initCalendar() {
         const customRoleId = customRoleInput.value.trim();
 
         if (notifyTarget === 'custom_role' && !/^\d{17,20}$/.test(customRoleId)) {
-          showNotification(
-            'Please enter a valid 17-20 digit Discord Role ID for the custom alert target.',
-            'error',
-          );
+          showNotification(t('calendar_events.bad_role'), 'error');
           customRoleInput.focus();
           return;
         }
 
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Publishing...';
+        submitBtn.textContent = t('calendar_events.publishing');
 
         const payload = {
           token: tokenParam,
-          action: 'create',
+          action: editingEventId ? 'edit' : 'create',
+          eventId: editingEventId || undefined,
           eventData: {
             title: document.getElementById('evt-input-title').value,
             date: document.getElementById('evt-input-date').value,
@@ -531,6 +657,7 @@ async function initCalendar() {
             custom_role_id: notifyTarget === 'custom_role' ? customRoleId : null,
             color: activePresetColor,
             description: document.getElementById('evt-input-details').value,
+            reminder: reminderBox?.checked ? '1h' : 'off',
           },
         };
 
@@ -541,20 +668,23 @@ async function initCalendar() {
             body: JSON.stringify(payload),
           });
           const result = await res.json();
-          if (!res.ok) throw new Error(result.error || 'Failed to save event');
+          if (!res.ok) throw new Error(result.error || t('calendar_events.save_failed'));
 
-          showNotification(result.message || 'Operation published successfully!', 'success');
+          showNotification(result.message || t('calendar_events.published'), 'success');
           formEl.reset();
           resetPanelTheme();
           customRoleInput.disabled = true;
           customRoleInput.classList.add('input-locked');
           formEl.style.display = 'none';
+          leaveEditMode();
           await loadCalendar();
         } catch (err) {
           showNotification(err.message, 'error');
         } finally {
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Publish to Calendar';
+          submitBtn.textContent = t(
+            editingEventId ? 'calendar_events.save_changes' : 'calendar_events.publish',
+          );
         }
       });
     }
@@ -562,7 +692,7 @@ async function initCalendar() {
 
   // 7. Delete Event Handler
   async function handleDeleteEvent(eventId) {
-    if (!confirm('Are you sure you want to remove this operation from the calendar?')) return;
+    if (!confirm(t('calendar_events.confirm_delete'))) return;
 
     try {
       const res = await fetch('/api/manage-event', {
@@ -571,9 +701,9 @@ async function initCalendar() {
         body: JSON.stringify({ token: tokenParam, action: 'delete', eventId }),
       });
       const result = await res.json();
-      if (!res.ok) throw new Error(result.error || 'Failed to delete event');
+      if (!res.ok) throw new Error(result.error || t('calendar_events.delete_failed'));
 
-      showNotification(result.message || 'Operation removed.', 'success');
+      showNotification(result.message || t('calendar_events.removed'), 'success');
       await loadCalendar();
     } catch (err) {
       showNotification(err.message, 'error');
@@ -596,6 +726,10 @@ async function initCalendar() {
 // Turbo may run this file again on each visit; the listener is added only once.
 if (!window.__calendarTurboListener) {
   window.__calendarTurboListener = true;
+  // A footer link swaps only the page's main frame: Turbo then fires turbo:frame-render, and
+  // on some routes not turbo:load (the tool stayed blank). Start on both, as js/main.js does;
+  // the once-per-page guard makes the second call a no-op.
   document.addEventListener('turbo:load', () => initCalendar());
+  document.addEventListener('turbo:frame-render', () => initCalendar());
 }
 initCalendar();

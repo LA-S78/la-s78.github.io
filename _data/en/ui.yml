@@ -184,6 +184,7 @@ pwa:
   toast_msg: "New intel acquired."
   update_btn: "Update"
   updating: "Decrypting..."
+  updated_msg: "✅ App updated to the latest version."
 
 #header sign-in pill (js/identity-pill.js)
 identity:
@@ -194,6 +195,9 @@ identity:
   sign_in_again: "Sign In Again"
   refresh: "Refresh Access"
   sign_out: "Sign Out"
+  force_update: "Update App"
+  force_updating: "Updating…"
+  dashboard: "Alliance Dashboard"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

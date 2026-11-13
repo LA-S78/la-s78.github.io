@@ -3,7 +3,13 @@
  */
 
 import { submitProposalWithAuth } from './auth-modal.js';
-import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
+import {
+  markUpdating,
+  offlineCopySavedAt,
+  rememberLiveData,
+  showLiveDataNotice,
+  showSavedWhileLoading,
+} from './live-data-notice.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -108,34 +114,61 @@ export function checkAndRestoreRewardsDraft() {
   return false;
 }
 
-export async function fetchLiveRewardsState() {
-  try {
-    const res = await fetch(`/api/state?scope=rewards&t=${Date.now()}`);
-    if (!res.ok) throw new Error(`State API returned HTTP ${res.status}`);
-    {
-      const data = await res.json();
-      liveState = 'ok';
-      showLiveDataNotice(document.getElementById('rewards-container'), {
-        savedAt: offlineCopySavedAt(res),
-      });
-      if (
-        data.distribution_tiers &&
-        Array.isArray(data.distribution_tiers) &&
-        data.distribution_tiers.length > 0
-      ) {
-        originalTiers = JSON.parse(JSON.stringify(data.distribution_tiers));
+// Draws the reward tiers (the fresh answer, or the saved copy shown while it loads)
+function applyRewardsData(data) {
+  if (
+    data.distribution_tiers &&
+    Array.isArray(data.distribution_tiers) &&
+    data.distribution_tiers.length > 0
+  ) {
+    originalTiers = JSON.parse(JSON.stringify(data.distribution_tiers));
 
-        if (!isRewardsPlannerActive) {
-          draftTiers = JSON.parse(JSON.stringify(originalTiers));
-          renderTierList();
-          updatePayoutTable();
-        }
-      }
+    if (!isRewardsPlannerActive) {
+      draftTiers = JSON.parse(JSON.stringify(originalTiers));
+      renderTierList();
+      updatePayoutTable();
     }
+  }
+}
+
+export async function fetchLiveRewardsState() {
+  const container = document.getElementById('rewards-container');
+  let savedAt = null;
+  try {
+    const fresh = fetch(`/api/state?scope=rewards&t=${Date.now()}`);
+    // Meanwhile, this device's last copy, dimmed with "Updating…". 'saved' draws the tiers
+    // but keeps planning off until the fresh data is in.
+    savedAt = await showSavedWhileLoading(
+      '/api/state?scope=rewards',
+      fresh,
+      container,
+      async (r) => {
+        const data = await r.json();
+        liveState = 'saved';
+        applyRewardsData(data);
+        document.getElementById('rewards-tier-list')?.classList.add('rewards-loaded');
+        document.getElementById('payout-table-body')?.classList.add('rewards-loaded');
+      },
+    );
+    const res = await fresh;
+    if (!res.ok) throw new Error(`State API returned HTTP ${res.status}`);
+    const data = await res.json();
+    // Kept for next time (shown while the page loads), unless this is already an offline copy
+    if (!offlineCopySavedAt(res)) rememberLiveData('/api/state?scope=rewards', data);
+    liveState = 'ok';
+    showLiveDataNotice(container, { savedAt: offlineCopySavedAt(res) });
+    applyRewardsData(data);
   } catch (err) {
     console.warn('Could not fetch live rewards state:', err);
-    liveState = 'failed';
-    showLiveDataNotice(document.getElementById('rewards-container'), { failed: true });
+    if (savedAt) {
+      // The saved copy stays (planning stays off): say how old it is instead of "failed"
+      showLiveDataNotice(container, { savedAt });
+    } else {
+      liveState = 'failed';
+      showLiveDataNotice(container, { failed: true });
+    }
+  } finally {
+    markUpdating(container, false);
   }
 }
 
@@ -268,8 +301,8 @@ export function renderTierList() {
   if (!container) return;
 
   const rankLabel = container.dataset.rankLabel || 'Rank';
-  if (liveState !== 'ok') {
-    container.innerHTML = `<div class="rewards-tier-placeholder">${liveState === 'failed' ? "Couldn't load the reward tiers." : 'Loading the reward tiers…'}</div>`;
+  if (liveState !== 'ok' && liveState !== 'saved') {
+    container.innerHTML = `<div class="rewards-tier-placeholder">${esc(window.t(liveState === 'failed' ? 'rewards_planner.load_failed' : 'rewards_planner.loading'))}</div>`;
     return;
   }
   const activeList = isRewardsPlannerActive ? draftTiers : originalTiers;
@@ -288,7 +321,7 @@ export function renderTierList() {
            data-max-rank="${esc(tier.max_rank)}">
         <div class="tier-label-group">
           <div class="tier-row-controls">
-            ${activeList.length > 1 ? `<button class="btn-tier-del" data-action="del-tier" data-index="${index}" title="Remove Bracket">×</button>` : ''}
+            ${activeList.length > 1 ? `<button class="btn-tier-del" data-action="del-tier" data-index="${index}" title="${esc(window.t('rewards_planner.remove_bracket'))}">×</button>` : ''}
             <span class="range-stepper">
               <span class="range-text">${rankLabel} ${esc(tier.min_rank)}–<span class="range-val">${esc(tier.max_rank)}</span></span>
               <button data-action="dec-range" data-index="${index}" type="button">-</button>
@@ -304,7 +337,7 @@ export function renderTierList() {
           <div class="chest-item ${tier.chests.commanders_will === 0 ? 'is-empty' : ''}" 
                data-chest-type="commanders_will" 
                data-index="${index}"
-               title="Commander's Will">
+               title="${esc(window.t('common.chests.commanders_will'))}">
             <span class="chest-glyph gold"></span>
             <span class="chest-multiplier">×${esc(tier.chests.commanders_will || 0)}</span>
           </div>
@@ -312,7 +345,7 @@ export function renderTierList() {
           <div class="chest-item ${tier.chests.loyal_servant === 0 ? 'is-empty' : ''}" 
                data-chest-type="loyal_servant" 
                data-index="${index}"
-               title="Loyal Servant">
+               title="${esc(window.t('common.chests.loyal_servant'))}">
             <span class="chest-glyph purple"></span>
             <span class="chest-multiplier">×${esc(tier.chests.loyal_servant || 0)}</span>
           </div>
@@ -320,7 +353,7 @@ export function renderTierList() {
           <div class="chest-item ${tier.chests.followers_heart === 0 ? 'is-empty' : ''}" 
                data-chest-type="followers_heart" 
                data-index="${index}"
-               title="Follower's Heart">
+               title="${esc(window.t('common.chests.followers_heart'))}">
             <span class="chest-glyph blue"></span>
             <span class="chest-multiplier">×${esc(tier.chests.followers_heart || 0)}</span>
           </div>
@@ -374,7 +407,7 @@ export function updatePayoutTable() {
 
       return `
         <tr>
-          <td style="font-weight: bold; font-family: var(--font-headers);">${esc(displayLabel)}</td>
+          <td class="td-rank" style="font-weight: bold; font-family: var(--font-headers);">${esc(displayLabel)}</td>
           <td class="td-diamonds">${d.toLocaleString()}</td>
           <td class="td-tickets">${t.toLocaleString()}</td>
         </tr>
@@ -454,11 +487,9 @@ export function updateRewardsProposalUI() {
   const submitBtn = document.getElementById('btn-submit-rewards');
   const badgeEl = document.getElementById('reward-change-badge');
 
+  // Submit Plan stays in the bar, greyed out until there is something to send
   if (!isRewardsPlannerActive) {
-    if (submitBtn) {
-      submitBtn.classList.add('hidden');
-      submitBtn.disabled = true;
-    }
+    if (submitBtn) submitBtn.disabled = true;
     if (badgeEl) badgeEl.textContent = '0';
     return;
   }
@@ -473,10 +504,16 @@ export function updateRewardsProposalUI() {
   if (badgeEl) badgeEl.textContent = hasStructuralChanges ? '!' : '0';
 
   if (submitBtn) {
-    submitBtn.classList.remove('hidden');
     submitBtn.disabled = !hasStructuralChanges || isOverPool;
     if (isOverPool) {
-      submitBtn.title = `Capacity Exceeded! Gold: ${totals.commanders_will}/${POOL_LIMITS.commanders_will}, Purple: ${totals.loyal_servant}/${POOL_LIMITS.loyal_servant}, Blue: ${totals.followers_heart}/${POOL_LIMITS.followers_heart}`;
+      submitBtn.title = window.t('rewards_planner.over_capacity', {
+        gold: totals.commanders_will,
+        gold_max: POOL_LIMITS.commanders_will,
+        purple: totals.loyal_servant,
+        purple_max: POOL_LIMITS.loyal_servant,
+        blue: totals.followers_heart,
+        blue_max: POOL_LIMITS.followers_heart,
+      });
     } else {
       submitBtn.removeAttribute('title');
     }
@@ -527,7 +564,9 @@ export async function submitRewardProposal() {
   const diffItems = draftTiers
     .map((tier) => {
       const isSingle = tier.min_rank === tier.max_rank;
-      const label = isSingle ? `Rank ${tier.min_rank}` : `Rank ${tier.min_rank}–${tier.max_rank}`;
+      const label = isSingle
+        ? window.t('rewards_planner.rank_single', { n: tier.min_rank })
+        : window.t('rewards_planner.rank_range', { from: tier.min_rank, to: tier.max_rank });
       return `
       <div>
         <strong>${esc(label)}</strong>: 
@@ -541,7 +580,7 @@ export async function submitRewardProposal() {
 
   submitProposalWithAuth({
     type: 'rewards',
-    title: '👑 Submit Reward Distribution Proposal',
+    title: window.t('rewards_planner.proposal_title'),
     payload: payload,
     diffSummaryHtml: `<div class="diff-list">${diffItems}</div>`,
     onSuccess: () => {
@@ -647,5 +686,9 @@ if (typeof window !== 'undefined') {
   } else {
     bindRewardsControls();
   }
+  // A footer link swaps only the page's main frame: Turbo then fires turbo:frame-render, and
+  // on some routes not turbo:load (the tool stayed blank). Start on both, as js/main.js does;
+  // the once-per-page guard makes the second call a no-op.
   document.addEventListener('turbo:load', bindRewardsControls);
+  document.addEventListener('turbo:frame-render', bindRewardsControls);
 }

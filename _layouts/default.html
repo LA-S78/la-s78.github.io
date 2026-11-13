@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ site.active_lang | default: 'en' }}">
 
 {% include structure/head.html %}
 
@@ -26,6 +26,8 @@
 
         <div class="lantern-glow-bleed"></div>
 
+        {% comment %} The tools' text for this page's scripts (outside <main>, so no style sees it). {% endcomment %}
+        {% if page.strings %}<script type="application/json" id="tool-strings">{{ page.strings | tool_strings_json }}</script>{% endif %}
         <main data-turbo-permanent="false">
             {{ content }}
         </main>

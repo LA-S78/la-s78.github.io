@@ -59,3 +59,10 @@
   }
 }
 
+
+/* "App updated" note after Force Update or /reset: text only, disappears by itself */
+#pwa-update-toast.is-done {
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: bold;
+}

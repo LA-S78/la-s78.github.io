@@ -3,7 +3,7 @@
 
 {% include structure/head.html %}
 <link rel="stylesheet" href="/css/portal.css">
-<body data-turbo="false" class="portal-body {% if page.hide_header %}has-no-header{% else %}has-header{% endif %}">
+<body data-turbo="false" class="portal-body {% if page.hide_header %}has-no-header{% else %}has-header{% endif %}{% if page.footer %} has-footer{% endif %}">
 
 <!-- Dedicated Fixed Background Canvas -->
 <div class="portal-backdrop" aria-hidden="true"></div>
@@ -18,10 +18,17 @@
             <div class="lantern-glow-bleed" style="pointer-events: none;"></div>
         {% endunless %}
 
+        {% comment %} The tools' text for this page's scripts (outside <main>, so no style sees it). {% endcomment %}
+        {% if page.strings %}<script type="application/json" id="tool-strings">{{ page.strings | tool_strings_json }}</script>{% endif %}
         <main>
             {{ content }}
         </main>
     </div>
+
+    {% comment %} The site's bottom navigation, for portal pages people move between and the rest of the site (front matter footer: true; the dashboard). Pages opened from Discord links don't need it. {% endcomment %}
+    {% if page.footer %}
+        {% include structure/footer.html %}
+    {% endif %}
 </div>
 
 </body>

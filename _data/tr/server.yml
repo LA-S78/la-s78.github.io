@@ -1,0 +1,307 @@
+# Translated automatically from _data/en/server.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+api_dashboard:
+  signed_out: İttifak panelinizi görmek için Discord ile giriş yapın (sağ üst).
+  load_failed: 'Panel yüklenemedi: {reason}'
+  no_alliance: Hangi ittifakta olduğunuzu tespit edemedik. Site, bunu NAP Discord sunucusundaki ittifak rolünüzden veya sunucu takma adınızın başındaki [ETİKET]'ten bulur. Discord'da bunu düzeltin, ardından hesap kartınızdaki (sağ üst) Erişim Yenile butonunu kullanın.
+  leaders_only: Panelde yalnızca ittifakınızın R4 ve R5 yetkilileri değişiklik yapabilir.
+  chart_removed: Bu grafik kaldırıldı.
+  chart_already_removed: Bu grafik zaten kaldırılmıştı.
+  not_linked: Bu grafik bir Google E-Tablo veya Dokümanına bağlı değil.
+  unknown_change: Bilinmeyen değişiklik.
+  save_failed: 'Kaydedilemedi: {reason}'
+  r5_only_nominate: Burada adaylık sayfasını yalnızca R5 yetkiliniz açabilir. Discord'da /nominate komutunu çalıştırın.
+  rewards_closed: Ödüller {when} tarihine kadar kapalıdır.
+  no_rank: "[{tag}] sıralamada yer almıyor."
+  choose_type: Bir grafik veya tablo türü seçin.
+  title_needed: Grafiğe veya tabloya bir başlık verin.
+  too_many_columns: En fazla {max} sütun olabilir (bu tabloda {count} tane var).
+  too_many_rows: En fazla {max} satır olabilir (bu tabloda {count} tane var).
+  column_name: Sütun {n}
+  paste_first: Önce bir tablo yapıştırın (bir başlık satırı, ardından veriler).
+  no_data_rows: Tablonun başlık altında hiç veri satırı yok.
+  needs_numbers: Bir grafiğin gösterilmesi için sayısal bir sütuna ihtiyacı vardır.
+  needs_target: 'Bir ilerleme grafiğinin bir hedefe ihtiyacı vardır: bir sayı veya hedef sütunu.'
+  too_many_widgets: İttifak başına en fazla {max} grafik ve tablo.
+  sheet_unusable: 'Tablonun verileri kullanılamıyor: {reason}'
+  too_big: Bu işlem paneli çok büyük hale getirir ({size} KB / {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
+  player_name_needed: Bir oyuncu adı girin.
+  time_format: Saatler 18:00 gibi Oyun Saati formatındadır (veya boş bırakın).
+  start_time_needed: Başlangıç saatini de verin (veya her ikisini de boş bırakın).
+  rotor_full: Rotasyonda en fazla {max} oyuncu olabilir.
+  already_in_rotor: "{name} zaten rotasyonda."
+  player_removed: Oyuncu kaldırıldı.
+api_sheets:
+  full_link: Tam bağlantıyı yapıştırın (https://docs.google.com/ ile başlayan).
+  google_only: Yalnızca Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.
+  range_format: Aralık A1:D20 gibi görünmelidir (veya boş bırakın).
+  not_sheet_or_doc: Bu bağlantı bir Google E-Tablosu veya Google Dokümanı değil.
+  unexpected_redirect: Google indirme işlemini beklenmedik bir yere yönlendirdi, bu yüzden alınamadı.
+  too_many_redirects: Google'dan çok fazla yönlendirme geldi.
+  too_slow: Google'ın yanıt vermesi çok uzun sürdü. Bir süre sonra tekrar deneyin.
+  unreachable: Google'a ulaşılamadı ({reason}).
+  doc_not_shared: 'Google reddetti: Dokümanı yayınlayın (Dosya → Paylaş → Web''de yayınla), ardından o bağlantıyı kullanın.'
+  sheet_not_shared: 'Google reddetti: Tabloyu "Bağlantıya sahip olan herkes görüntüleyebilir" şeklinde paylaşın veya Dosya → Paylaş → Web''de yayınla yolunu kullanın.'
+  google_error: Google bir hata ile yanıt verdi ({status}). Bağlantıyı kontrol edin.
+  too_large: Bu tablo okunmayacak kadar büyük (2 MB üzeri).
+  empty: Bu tablo (veya aralık) boş.
+  no_such_table_one: Bu Dokümanda {count} tablo var; {table} tablosu bulunamadı.
+  no_such_table_other: Bu Dokümanda {count} tablo var; {table} tablosu bulunamadı.
+  no_table: Bu Dokümanda hiç tablo yok.
+api_nominate:
+  link_invalid: Bu bağlantı geçersiz veya süresi dolmuş.
+  token_invalid: Jeton geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
+  signed_out: Sandıkları işaretlemek için Discord ile giriş yapın (sağ üst).
+  invalid_chest: Geçersiz sandık.
+  no_period: Şu anda açık bir ödül dönemi yok.
+  king_only: Sandıkları yalnızca Kral'ın ittifakı (R4/R5) ve Kahyalar işaretleyebilir.
+  king_only_tag: Sandıkları yalnızca Kral'ın ittifakı [{king}] (R4/R5) ve Kahyalar işaretleyebilir.
+  not_listed: "{name} artık [{alliance}] listesinde değil. Sayfayı yenileyin."
+  save_failed: 'Kaydedilemedi: {reason}'
+api_register:
+  guild_id_format: Geçersiz Discord Sunucu Kimliği formatı.
+  token_invalid: Jeton geçersiz veya süresi dolmuş. Discord'da /registerbot komutunu tekrar çalıştırın.
+  alert_channel_needed: Geçerli bir 17-20 haneli Operasyon Uyarı Kanalı Kimliği gereklidir.
+  alert_role_format: Geçersiz Discord Uyarı Rolü Kimliği formatı (17-20 haneli olmalıdır).
+  officer_channel_needed: Geçerli bir 17-20 haneli Yetkili Talep Kanalı Kimliği gereklidir.
+  color_format: 'Geçersiz İttifak Kimlik Rengi formatı (6 haneli #B8975A gibi bir onaltılık kod olmalıdır).'
+  discord_unreachable: 'Discord''a ulaşılamadı: {reason}'
+  already_linked: "{guild} Sunucu Kimliği zaten [{tag}] ittifakına bağlı. Bir Discord sunucusu birden fazla ittifaka kaydedilemez."
+  deploy_failed: Eğik çizgi (slash) komutları sunucunuza dağıtılamadı.
+  save_failed: 'Komutlar dağıtıldı ancak yapılandırma kaydedilemedi: {reason}'
+  bot_not_in_server: Bot bu sunucuda değil. "Botu Yetkilendir"e (1. adım) tıklayın, sunucunuza ekleyin ve ardından kaydolun.
+  server_check_failed: Discord sunucuyu kontrol edemedi ({status}).
+  old_link: Bu bağlantı güvenlik güncellemesinden öncesine ait. /registerbot komutunu tekrar çalıştırın.
+  not_member: '"{server}" üyesi değilsiniz. Yönettiğiniz bir sunucuyu kaydedin.'
+  roles_check_failed: Discord rollerinizi kontrol edemedi ({status}).
+  needs_manage: Bağlamak için "{server}" üzerinde Yönetici veya Sunucuyu Yönet iznine sahip olmalısınız. Sahibine sorun veya /registerbot komutunu çalıştırmasını isteyin.
+  channels_check_failed: Discord sunucunun kanallarını listeleyemedi ({status}).
+  alert_channel_missing: Operasyon Uyarı Kanalı ({id}) "{server}" içinde yok (veya bot bunu göremiyor). Kimliği tekrar kopyalayın.
+  officer_channel_missing: Yetkili Talep Kanalı ({id}) "{server}" içinde yok (veya bot bunu göremiyor). Kimliği tekrar kopyalayın.
+  alert_role_missing: Varsayılan Uyarı Rolü ({id}) "{server}" içinde bir rol değil. Kimliği tekrar kopyalayın veya @everyone için boş bırakın.
+  role_not_found: '"{server}" içinde "{role}" ile eşleşen bir rol henüz yok; biri oluşturulduğunda çalışacaktır.'
+api_proposals:
+  login_required: Öneri göndermek için lütfen tekrar Discord ile giriş yapın.
+  leaders_only: Önerileri yalnızca R4 ve R5 liderleri gönderebilir.
+  limit_check_failed: Günlük öneri limiti şu anda kontrol edilemedi. Lütfen bir dakika sonra tekrar deneyin.
+  daily_limit: 'Günlük limite ulaşıldı: 24 saat içinde {max} öneri. Bir sonrakini {when} sonrasında gönderebilirsiniz.'
+  too_large: Öneri çok uzun.
+  notes_limit: Notlar 500 karakter ile sınırlıdır.
+  image_too_large: Harita görseli çok büyük.
+  pool_limits: 'Havuz limitleri aşıldı: Altın {gold}/{gold_max}, Mor {purple}/{purple_max}, Mavi {blue}/{blue_max}'
+  no_changes: Herhangi bir değişiklik belirtilmedi.
+  week_and_threat: Hedef hafta ve tehdit sunucusu gereklidir.
+api_events:
+  session_invalid: Geçersiz, kurcalanmış veya süresi dolmuş oturum belirteci. Lütfen Discord'da /calendar komutunu tekrar çalıştırın.
+  required_fields: Başlık, Tarih ve Game Time zorunludur.
+  date_format: Tarih YYYY-AA-GG formatında olmalıdır.
+  time_format: Game Time, SS:DD (00:00 ila 23:59) formatında olmalıdır.
+  time_step: Game Time 5 dakikalık artışlarla olmalıdır (:00, :05, :10, :15 vb.).
+  role_id_needed: Belirli Bir Rolü Hedefle seçeneği için geçerli 17-20 haneli bir Discord Rol Kimliği gereklidir.
+  published: '"{title}" operasyonu başarıyla yayınlandı.'
+  not_found: Etkinlik bulunamadı veya zaten silinmiş.
+  out_of_scope: 'Erişim Reddedildi: Atanmış kapsamınız dışındaki etkinlikleri değiştiremez veya silemezsiniz.'
+  deleted: 'Silinen operasyon: {title}'
+  updated: '"{title}" operasyonu güncellendi.'
+bot_common:
+  off_week: Mola Haftası
+  kw_week: Krallık Savaşı Haftası {n}
+  link_expires_4h: Bağlantı özeldir ve 4 saat içinde sona erer.
+  link_expires_24h: Bağlantı özeldir ve 24 saat içinde sona erer.
+  busy: "⚠️ Bağlantı meşgul: {reason}. Lütfen birkaç saniye içinde tekrar deneyin."
+  leaders_denied: "⛔ **Erişim Engellendi:** Sadece **@R5** sahibi üyeler veya liderlik rolleri ({roles}) **[{tag}]** için etkinlikleri yönetebilir."
+  steward_only_kw: "⛔ **Erişim Engellendi:** Sadece görevli Krallık Yöneticileri Krallık Savaşı sonucunu kaydedebilir."
+bot_calendar:
+  global_denied: "⛔ **Erişim Engellendi:** Sadece görevli Krallık Yöneticileri Krallık geneli etkinlikleri yönetebilir."
+  global_title: "👑 Krallık Etkinlik Yönetim Portalı"
+  global_text: |-
+    Takvimi **Genel Yönetim Modunda** açmak için aşağıya tıklayın.
+
+    Krallık geneli duyurular, ateşkes uyarıları planlayabilir veya girişleri silebilirsiniz.
+  global_button: Genel Yönetim Portalını Aç
+  no_alliance: "⚠️ İttifakınız algılanamadı. Bu komutu kayıtlı ittifak sunucunuzda çalıştırın veya NAP sunucusunda ittifak rolünüzün olduğundan emin olun."
+  alliance_title: "🛡️ İttifak Etkinlik Yönetimi — [{tag}]"
+  alliance_text: |-
+    Takvimi **[{tag}]** için **İttifak Yönetim Modunda** açmak için aşağıya tıklayın.
+
+    Dahili baskınlar, kovan hareketleri ve eğitim tatbikatları planlayabilirsiniz.
+  alliance_button: "[{tag}] Yönetim Portalını Aç"
+  rank: 'Sıra #{rank}'
+  captured_friday: Cuma günü ele geçirildi
+  captures_today: bugün ele geçiriyor
+  captures_friday: Cuma günü ele geçiriyor, {when}
+  current_holder: "👑 Mevcut Başkent Sahibi"
+  next_holder: "👑 Sonraki Başkent Sahibi"
+  holder_line: "**{tag}** *(Sıra #{rank})* — {note}"
+  next_reset: "⏰ Sonraki Günlük Sıfırlama (00:00 GT)"
+  reset_line: "**{time}** ({hours}s {minutes}dk içinde)"
+  kw_today: "⚔️ Krallık Savaşı (BUGÜN)"
+  kw_next: "⚔️ Sonraki Krallık Savaşı"
+  kw_active: "🔥 **Aktif Savaş Penceresi:** Başkenti savunun ve fethedin!"
+  kw_scheduled: 'Planlanan: **Cumartesi** ({relative} / {date})'
+  next_phase: "⏭️ Sonraki Rotasyon Aşaması"
+  next_phase_line: |-
+    **{week}**, {when} başlıyor.
+    **{tag}** *(Sıra #{rank})* o Cuma Başkenti ele geçiriyor.
+  open_alliance: Takvimi Aç ([{tag}])
+  open_full: Tam Takvimi Aç
+  title: "📅 Krallık Savaşı Takvimi"
+bot_map:
+  failed: "⚠️ Harita önizlemesi oluşturulamadı."
+  level_title: "🏰 Last Asylum: Bölge Seviyeleri"
+  level_text: Seviyelerine (Sv. 1'den Sv. 8'e kadar) göre kategorize edilmiş bölgeler.
+  alliance_title: "🗺️ Last Asylum: İttifak Bölgeleri"
+  alliance_text: İttifak sahipliğine göre renklendirilmiş bölgeler.
+  resource_title: "🌾 Last Asylum: Kaynaklar & Bölgesel Takviyeler"
+  resource_text: Kaynak verimine ve bölgesel takviyelere göre renklendirilmiş bölgeler.
+  footer: Bakış açısını değiştirmek için aşağıdaki düğmelere tıklayın
+  levels: Seviyeler
+  alliances: İttifaklar
+  resources: Kaynaklar
+bot_nominate:
+  server_only: "⚠️ Bu komut ittifak Discord sunucunuzda veya NAP sunucusunda çalıştırılmalıdır."
+  owner_server: "⛔ **Erişim Engellendi:** Ödül adaylıkları bu sunucudan gönderilemez. Liderler adaylıkları NAP sunucusu veya kendi ittifak sunucuları üzerinden göndermelidir."
+  dedicated_denied: "⛔ **Erişim Engellendi:** Sadece **@R5** sahibi üyeler veya yetkili liderlik rolleri ({roles}) **[{tag}]** için adaylık gönderebilir."
+  r5_only: "⛔ **Erişim Engellendi:** Sadece **@R5** rolüne sahip İttifak Liderleri ödül adaylığı gönderebilir."
+  no_tag_role: "⚠️ İttifak etiketi rolünüz algılanamadı. İttifak rolünüzün (örn. `@{example}`) atandığından emin olun."
+  closed: "🔒 **Ödüller kapalı.** {week} ödülleri {closed} sona erdi.\nSonraki ödüller Cuma günkü başkent etkinliğinden sonra, {opens} açılacak."
+  period_busy: "⚠️ Servis meşgul: yeni ödül dönemi açılamadı. Lütfen birkaç saniye içinde /nominate komutunu tekrar deneyin."
+  no_rank: "⚠️ **[{tag}]** için sıralamada aktif bir derece atanmamış."
+  no_chests: "⚠️ **[{tag}]** için mevcut dağıtımda ayrılan 0 sandık var."
+  no_kw: Bu hafta Krallık Savaşı yok.
+  won: "⚔️ **Kazandı.** Onur Öncüsü ×{gold} · Korkusuz Kahraman ×{purple} · Lojistik Destek ×{blue}"
+  lost: 'Bu hafta değil: Krallık Savaşı kaybedildi.'
+  waiting: "⏳ **Savaş sonucunu bekliyor** (yaklaşık {time}). Eğer kazanılırsa: Onur Öncüsü ×{gold} · Korkusuz Kahraman ×{purple} · Lojistik Destek ×{blue}"
+  commendation: "👑 Kralın Takdiri"
+  commendation_line: Komutanın İradesi ×{gold} · Sadık Hizmetkar ×{purple} · Takipçinin Kalbi ×{blue}
+  battle_reward: "⚔️ Savaş Kralı Ödülü"
+  buyout_title: "🛡️ Savaş Dönemi Geri Ödeme Aktif"
+  buyout_text: 'Bu haftaki savunma geçersiz kılma (Tehdit: `{threat}`) için WLO tarafından finanse edilen **+1 Komutanın İradesi** (ve savaş kazanılırsa **+1 Onur Öncüsü**) dahildir.'
+  buyout_default_threat: Kırmızı Liste
+  funds_title: "⚖️ Savaş Dönemi Geri Ödemesi Finanse Edildi"
+  funds_text: WLO, yerinden edilen ittifakın tazminatını finanse etmek için bu haftanın 1. Sıra tahsisinden **1 Komutanın İradesi** (ve savaş kazanılırsa **1 Onur Öncüsü**) sağlar.
+  how_title: "📝 Nasıl çalışır"
+  how_text: Oyuncularınızı **en iyiden başlayarak** listeleyin. Sandıklar, her iki set genelinde değer sırasına göre listeye dağıtılır; ekstra isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
+  how_waiting: "⏳ Kral dağıtımı savaş sonucundan sonra yapar, bu nedenle kimsenin sandığı değişmez."
+  title: "🎁 {week} Ödülleri — [{tag}]"
+  summary: 'Sıra #{rank} · {until} ({relative}) tarihine kadar açık.'
+  open_page: Adaylık Sayfasını Aç
+bot_rewards:
+  reset_denied: "⛔ **Erişim Reddedildi:** Adaylıkları yalnızca atanmış Krallık Görevlileri temizleyebilir."
+  nothing_to_clear: "🔒 Açık bir ödül dönemi yok, bu yüzden temizlenecek bir şey yok."
+  cleared_title: "🔄 Adaylıklar Temizlendi — {week}"
+  cleared_text: |-
+    Tüm ittifakların bu haftaki listeleri **{name}** tarafından temizlendi.
+
+    • Liderler `/nominate` komutuyla yeni listeler gönderebilir.
+    • Ödüller {closes} kapanır.
+    • Krala konsoldaki **Reset Checklist** (Kontrol Listesini Sıfırla) düğmesine basmasını hatırlatın.
+  none_eligible: "⚠️ Mevcut ödül planına göre şu anda uygun ittifak yok."
+  tag_buyout: " 🛡️ [Satın Alma]"
+  tag_funds: " ⚖️ [Fon satın alımı]"
+  awaiting: "⏳ **[{tag}]** (Sıra #{rank}){buyout} — **Liste bekleniyor** ({total} sandık)"
+  reserves_one: " · {count} yedek"
+  reserves_other: " · {count} yedek"
+  sent: "✅ **[{tag}]** (Sıra #{rank}){buyout} — **{named}/{total}** isimlendirildi{reserves} ({when})"
+  closed: "🔒 **Kapalı.** Bir sonraki ödüller {opens} açılır."
+  open: "🎁 **{week} ödülleri** · {closes} tarihine kadar açık"
+  battle_no_kw: "⚔️ Savaş Kralı Ödülü: bu hafta Krallık Savaşı yok."
+  battle_won: "⚔️ Savaş Kralı Ödülü: **kazanıldı**, açık."
+  battle_lost: "⚔️ Savaş Kralı Ödülü: kaybedildi, bu hafta değil."
+  battle_waiting: "⚔️ Savaş Kralı Ödülü: ⏳ **savaş sonucunu bekliyor** (yaklaşık {time}). Kral sonuçtan sonra dağıtır."
+  open_console: Kral Konsolunu Aç
+  title: "📋 İttifak Ödül Durumu — {week}"
+  count_line: "**{total} ittifaktan {sent} tanesi liste gönderdi**"
+  footer: Last Asylum Başkent Yönetimi
+  old_button: 'ℹ️ Bu düğme artık kullanılmıyor: ödüller artık her Cuma saat 20:00 GT''de kendiliğinden açılıyor. Cumartesi günkü savaştan sonra `/rewards` (Kazandı veya Kaybetti) ile Krallık Savaşı sonucunu kaydedin.'
+  overrides_denied: "⛔ **Erişim Reddedildi:** Başkent geçersiz kılmalarını yalnızca atanmış Krallık Görevlileri sıfırlayabilir."
+  overrides_nothing: |-
+    ℹ️ Sıfırlanacak bir şey yok: geçersiz kılma veya satın alma yok ve rotasyon zaten standart programda.
+    {schedule}
+  overrides_title: "🧹 Başkent Geçersiz Kılmaları Sıfırlandı"
+  overrides_text: |-
+    Sıfırlayan: **{name}**. Rotasyon standart programa geri döndü:
+    {after}
+
+    Önce: {before}
+
+    • Temizlenen geçersiz kılmalar: {overrides}
+    • Savaş dönemi satın alımları iptal edildi: {buyouts} (geçmişte tutuldu)
+    • Her ittifakın listesi düzeltilmiş sandıklar için yeniden sıralandı.
+bot_admin:
+  rank_none: Mevcut durumda kayıtlı ittifak yok.
+  rank_title: "🛡️ Sunucu NAP Durumları"
+  rank_open: Açık Diplomasi & Durumlar
+  rank_fetch_failed: "⚠️ Sıralamalar alınamadı: {reason}"
+  rank_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Sorumluları ittifak sıralamalarını güncelleyebilir."
+  rank_missing: "⚠️ Gerekli argümanlar eksik: tag ve rank."
+  rank_set_title: "👑 NAP Durumu Güncellendi"
+  rank_set_text: "`[{tag}]` ittifakı **Sıra #{rank}** olarak atandı *(önceki: {previous})*."
+  rank_unranked: Sıralamasız
+  rank_updated_by: "{name} tarafından güncellendi"
+  rank_view: Durumları Görüntüle
+  rank_set_failed: "⚠️ Sıra güncellenemedi: {reason}"
+  dev_done: |-
+    ✅ **Test verileri güncellendi.** {count} dosya canlı verilerden, dev.la-s78.app tarafından kullanılan test Gist'ine kopyalandı: {files}.
+    Canlı veriler sadece okundu, değiştirilmedi.
+  dev_failed: "⚠️ **Test verileri güncellenemedi:** {reason}"
+  dev_denied: "⛔ **Erişim Engellendi:** Sadece Sorumlular test verilerini güncelleyebilir."
+  test_proposal: "🧪 Bu, test sitesinden gelen bir test önerisidir. Test verilerini kullandığı için onaylanamaz veya canlı sistemde hiçbir şeyi değiştiremez."
+  approved_not_updated: "✅ Onaylandı ve kaydedildi ancak bu mesaj güncellenemedi ({reason})."
+bot_register:
+  nap_only: "⚠️ Bu komut sadece resmi NAP sunucusunda çalıştırılabilir."
+  sync_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Sorumluları yayın-senkronizasyon komutlarını kullanabilir."
+  sync_title: "🔄 İttifak Slash Komutları Senkronize Edildi"
+  sync_done: |-
+    En güncel komut şeması şuraya gönderildi:
+
+    {results}
+  sync_none: "⚠️ Mevcut durumda kayıtlı ittifak sunucusu bulunamadı."
+  sync_footer: Last Asylum Bot Dağıtım Yöneticisi
+  sync_failed: "❌ Senkronizasyon başarısız: {reason}"
+  r5_only: "⛔ **Erişim Engellendi:** Sadece **@R5** rolüne sahip İttifak Liderleri ittifak sunucularını kaydedebilir."
+  no_tag_role: "⚠️ İttifak etiketi rolünüz algılanamadı. NAP sunucusunda ittifak rolünüze (örneğin: `@{example}`) sahip olduğunuzdan emin olun."
+  title: "🤖 İttifak Sunucusu Kurulumu — [{tag}]"
+  text: |-
+    Botu yetkilendirmek ve ittifakınızın Discord sunucusunu web sitesine bağlamak için aşağıya tıklayın.
+
+    • Komutları yükler (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).
+    • Yetkili rollerin (örneğin `@HR`) yapılandırılmasına olanak tanır.
+  open_portal: Kayıt Portalı'nı Aç
+  busy: "⚠️ Hizmet meşgul: {reason}. Lütfen kısa süre içinde tekrar deneyin."
+bot_commands:
+  calendar: Etkinlik Takvimini görüntüleyin veya yönetin
+  calendar_kingdom: Krallık Etkinlik Takvimini görüntüleyin veya yönetin
+  calendar_action: Gerçekleştirilecek eylem (takvimi görüntülemek için boş bırakın)
+  calendar_manage_alliance: İttifak Etkinliklerini Yönet (varsayılan R5)
+  calendar_manage_global: Küresel Etkinlikleri Yönet (Sadece Yönetici)
+  nominate: Haftalık sandık adaylıklarını göndermek için bir portal bağlantısı isteyin
+  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimliği doğrulanmış bir portal bağlantısı isteyin
+  rewards: 'Bu haftaki ödüller: durum ve Krallık Savaşı sonucu (Görevliler)'
+  rewards_action: Bu haftaki ödül durumunu görmek için boş bırakın
+  rewards_won: 'Krallık Savaşını kaydet: Kazanıldı (Görevli)'
+  rewards_lost: 'Krallık Savaşını kaydet: Kaybedildi (Görevli)'
+  rewards_reset: Bu haftaki adaylıkları temizle (Görevli)
+  rewards_reset_overrides: Başkent geçersiz kılmalarını ve satın alımları sıfırla (Görevli)
+  rank: İttifak NAP sıralamalarını görüntüleyin veya yönetin
+  rank_set: Bir ittifakın NAP sırasını güncelle (Sadece Yönetici)
+  rank_tag: İttifak etiketi (örneğin ABC)
+  rank_position: Yeni sıra konumu (örneğin 1'den 10'a)
+  rank_list: Mevcut NAP sıralamalarını ve durumlarını görüntüle
+  sb: Hayatta Kalma Savaşı programını görüntüle
+  sb_long: Hayatta Kalma Savaşı silah yarışı programını ve aktif etkinlikleri görüntüle
+  sb_day: Döngü günü (1-7)
+  rules: Sunucu ve Krallık NAP kurallarını görüntüle
+  rules_rule: Görüntülenecek belirli kural numarası
+  map: Canlı bölge haritasını görüntüle
+  map_long: Canlı Last Asylum bölge haritasını görüntüle
+  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Görevliler; yanıtı sadece siz görürsünüz)
+  registerbot: İttifak sunucusunu kaydet veya eğik çizgi komutlarını senkronize et
+  registerbot_action: Gerçekleştirilecek eylem (kayıt portalı bağlantısını almak için boş bırakın)
+  registerbot_sync: Tüm Kayıtlı Sunucuları Senkronize Et (Sadece Yönetici)
+  suggest: Bir kural önerisi gönderin, bir ittifak sorununu bildirin veya bilet durumunuzu kontrol edin
+  suggest_type: Bilet kategorisi seçin veya aktif başvurularınızı kontrol edin
+  suggest_nap: "👑 Krallık / NAP Önerisi (Sunucu Geneli Kural veya Etkinlik Fikri)"
+  suggest_alliance: "🛡️ Dahili İttifak Sorunu (R4/R5'leriniz Tarafından Özel Olarak Ele Alınır)"
+  suggest_status: "📋 Bilet Durumumu Görüntüle (Aktif ve Son Geçmiş)"

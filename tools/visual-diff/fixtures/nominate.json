@@ -11,6 +11,22 @@
           "loyal_servant": ["Bo", "Cy"],
           "followers_heart": ["Di", "Ed", "Fi", "Gu"]
         }
+      },
+      "ranked": ["Josh", "Ana", "Bo", "Cy", "Di", "Ed", "Fi", "Gu", "Hal"],
+      "reserves": ["Hal"]
+    },
+    "MIA": {
+      "alliance": "MIA",
+      "rank": 2,
+      "mode": "standard",
+      "submittedAt": "2026-11-08T15:00:00Z",
+      "ranked": ["Kai", "Lu", "Mo", "Ny"],
+      "recipients": {
+        "standard": {
+          "commanders_will": ["Kai"],
+          "loyal_servant": ["Lu"],
+          "followers_heart": ["Mo", "Ny"]
+        }
       }
     }
   },
@@ -31,5 +47,24 @@
         }
       ]
     }
-  ]
+  ],
+  "period": {
+    "id": "2026-11-06T22:00:00.000Z",
+    "week": 3,
+    "weekName": "Kingdom War Week 3",
+    "kwWeek": true,
+    "open": true,
+    "opensAt": "2026-11-06T22:00:00.000Z",
+    "battleEndsAt": "2026-11-07T16:00:00.000Z",
+    "closesAt": "2026-11-11T02:00:00.000Z",
+    "nextOpensAt": "2026-11-13T22:00:00.000Z",
+    "result": "pending"
+  },
+  "king": "WLO",
+  "handed_out": {
+    "WLO:standard:commanders_will:josh": {
+      "at": "2026-11-08T20:00:00Z",
+      "by": "King"
+    }
+  }
 }

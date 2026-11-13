@@ -1,200 +1,195 @@
+# Translated automatically from _data/en/ui.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 header:
-  title: "LAST ASYLUM"
-  subtitle: "Überlebens-Kompendium"
-
+  title: LAST ASYLUM
+  subtitle: Überlebens-Kompendium
 footer:
-  nav_home: "Startseite"
-  nav_rules: "Regeln"
-  nav_guides: "Guides"
-  nav_alliance: "Allianz"
-  nav_calendar: "Kalender"
-  aria_home: "Zur Startseite gehen"
-  aria_rules: "Zur Serverregeln-Seite gehen"
-  aria_guides: "Zur Guides-Seite gehen"
-  aria_alliance: "Zur Allianz- und Diplomatie-Seite gehen"
-  aria_calendar: "Zur Eventkalender-Seite gehen"
-
+  nav_home: Startseite
+  nav_rules: Regeln
+  nav_guides: Guides
+  nav_alliance: Allianz
+  nav_calendar: Kalender
+  aria_home: Zur Startseite gehen
+  aria_rules: Zur Serverregeln-Seite gehen
+  aria_guides: Zur Guides-Seite gehen
+  aria_alliance: Zur Allianz- und Diplomatie-Seite gehen
+  aria_calendar: Zur Eventkalender-Seite gehen
 guides:
-  heroes: "Helden & Builds"
-  combat: "Kampf"
-  building: "Gebäude & Tech"
-  resources: "Ressourcen-Mgmt"
-  sanctuary: "Sanktuarium-Guide"
-  duel: "Allianz-Duell"
-  survival: "Überlebenskampf"
-  kingdom: "Königreichskrieg"
-  canyon: "Canyon-Eroberung"
-  cheese: "Cheese-Falle"
-  thief: "Diebesjagd"
-  pickaxe: "Zwergenspitzhacke"
-  crystal: "Kristalltal"
-  alliance_shop: "Allianz-Shop"
-  honor_shop: "Ehren-Shop"
-  sanctuary_shop: "Sanktuarium-Shop"
-  campaign_shop: "Kampagnen-Shop"
-  premium_shop: "Premium- & Edelsteinpakete"
-  t10: "T10-Rechner"
-  scramble: "Königliches Gerangel"
-
+  heroes: Helden & Builds
+  combat: Kampf
+  building: Gebäude & Tech
+  resources: Ressourcen-Mgmt
+  sanctuary: Sanktuarium-Guide
+  duel: Allianz-Duell
+  survival: Überlebenskampf
+  kingdom: Königreichskrieg
+  canyon: Canyon-Eroberung
+  cheese: Cheese-Falle
+  thief: Diebesjagd
+  pickaxe: Zwergenspitzhacke
+  crystal: Kristalltal
+  alliance_shop: Allianz-Shop
+  honor_shop: Ehren-Shop
+  sanctuary_shop: Sanktuarium-Shop
+  campaign_shop: Kampagnen-Shop
+  premium_shop: Premium- & Edelsteinpakete
+  t10: T10-Rechner
+  scramble: Königliches Gerangel
 pages:
   home:
-    title: "Startseite"
-    subtitle: "Überlebens-Kompendium"
+    title: Startseite
+    subtitle: Überlebenskompendium
   rules:
-    title: "Regeln"
-    subtitle: "Serverregeln & Rotationen"
+    title: Regeln
+    subtitle: Server-Regeln & Rotation
   guides:
-    title: "Guides"
-    subtitle: "Spiel-Guides"
+    title: Guides
+    subtitle: Spiel-Guides
     writers:
-      title: "Autoren-Leitfaden"
-      subtitle: "Autoren-Leitfaden"
+      title: Schreiber-Guide
+      subtitle: Schreiber-Guide
   alliance:
-    title: "Allianz"
-    subtitle: "Allianz & Diplomatie"
+    title: Allianz
+    subtitle: Allianz & Diplomatie
+  api-test:
+    title: Top-Secret Allianz-Infos
+    subtitle: Top-Secret Allianz-Infos
+  calendar:
+    title: Event-Kalender
+    subtitle: Allianz- & Server-Events
   guide_panes:
     heroes:
-      title: "Helden & Builds"
-      subtitle: "Helden & Builds"
+      title: Helden & Builds
+      subtitle: Helden & Builds
     combat:
-      title: "Kampf"
-      subtitle: "Kampf"
+      title: Kampf
+      subtitle: Kampf
     building:
-      title: "Gebäude & Tech"
-      subtitle: "Gebäude & Tech"
+      title: Gebäude & Tech
+      subtitle: Gebäude & Tech
     resources:
-      title: "Ressourcen-Mgmt"
-      subtitle: "Ressourcen-Mgmt"
+      title: Ressourcen-Mgmt
+      subtitle: Ressourcen-Mgmt
     sanctuary:
-      title: "Sanktuarium-Guide"
-      subtitle: "Sanktuarium-Guide"
+      title: Sanktuarium-Guide
+      subtitle: Sanktuarium-Guide
     duel:
-      title: "Allianz-Duell"
-      subtitle: "Allianz-Duell"
+      title: Allianz-Duell
+      subtitle: Allianz-Duell
     survival:
-      title: "Überlebenskampf"
-      subtitle: "Überlebenskampf"
+      title: Überlebenskampf
+      subtitle: Überlebenskampf
     kingdom:
-      title: "Königreichskrieg"
-      subtitle: "Königreichskrieg"
+      title: Königreichskrieg
+      subtitle: Königreichskrieg
     canyon:
-      title: "Canyon-Eroberung"
-      subtitle: "Canyon-Eroberung"
+      title: Canyon-Eroberung
+      subtitle: Canyon-Eroberung
     cheese:
-      title: "Cheese-Falle"
-      subtitle: "Cheese-Falle"
+      title: Cheese-Falle
+      subtitle: Cheese-Falle
     thief:
-      title: "Diebesjagd"
-      subtitle: "Diebesjagd"
+      title: Diebesjagd
+      subtitle: Diebesjagd
     pickaxe:
-      title: "Zwergenspitzhacke"
-      subtitle: "Zwergenspitzhacke"
+      title: Zwergenspitzhacke
+      subtitle: Zwergenspitzhacke
     crystal:
-      title: "Kristalltal"
-      subtitle: "Kristalltal"
+      title: Kristalltal
+      subtitle: Kristalltal
     alliance_shop:
-      title: "Allianz-Shop"
-      subtitle: "Allianz-Shop"
+      title: Allianz-Shop
+      subtitle: Allianz-Shop
     honor_shop:
-      title: "Ehren-Shop"
-      subtitle: "Ehren-Shop"
+      title: Ehren-Shop
+      subtitle: Ehren-Shop
     sanctuary_shop:
-      title: "Sanktuarium-Shop"
-      subtitle: "Sanktuarium-Shop"
+      title: Sanktuarium-Shop
+      subtitle: Sanktuarium-Shop
     campaign_shop:
-      title: "Kampagnen-Shop"
-      subtitle: "Kampagnen-Shop"
+      title: Kampagnen-Shop
+      subtitle: Kampagnen-Shop
     premium_shop:
-      title: "Premium- & Edelsteinpakete"
-      subtitle: "Premium- & Edelsteinpakete"
+      title: Premium- & Edelsteinpakete
+      subtitle: Premium- & Edelsteinpakete
     t10:
-      title: "T10-Leitfaden"
-      subtitle: "T10-Anforderungen"
+      title: T10-Guide
+      subtitle: T10-Voraussetzungen
     scramble:
-      title: "Königliches Gerangel"
-      subtitle: "Königliches Gerangel"
-    cheese:
-      title: "Käsefalle"
-      subtitle: "Käsefalle"
-
+      title: Königliches Gerangel
+      subtitle: Königliches Gerangel
 nav_anchors:
-  server_rules: "Serverregeln"
-  rotation: "Rotation"
-  rewards: "Belohnungen"
-  nap_alliances: "NAP-Allianzen"
-  nap_academies: "NAP-Akademien"
-  nap_ranks: "NAP-Ränge"
-  nap_territory: "NAP-Gebiet"
-  blacklist: "Blacklist"
-  markdown_usage: "Nutzung"
-  markdown_example: "Beispiel"
-  guide_submissions: "Einreichungen"
-  #guide pages
-  #survival battle
-  survival_explanation: "Erklärung"
-  survival_schedule: "Zeitplan"
-  survival_reference: "Referenz"
-  #kingdom war
-  kingdom_explanation: "Erklärung"
-  kingdom_scoring: "Punkte"
-  kingdom_strategy: "Strategie"
-  #alliance duel
-  duel_schedule: "Zeitplan"
-  duel_rules: "Regeln"
-  #sanctuary guide
-  sanctuary_strategy: "Strategie"
-  sanctuary_chart: "Tabelle"
-  sanctuary_goals: "Ziele"
-  sanctuary_efficiency: "Effizienz"
-  #royal scramble
-  scramble_event: "Event"
-  scramble_points: "Punkte"
-  #cheese trap
-  cheese_event: "Event"
-  cheese_cheese: "Käse"
-  cheese_strategy: "Strategie"
-  cheese_rewards: "Belohnungen"
-
+  server_rules: Serverregeln
+  rotation: Rotation
+  rewards: Belohnungen
+  nap_alliances: NAP-Allianzen
+  nap_academies: NAP-Akademien
+  nap_ranks: NAP-Ränge
+  nap_territory: NAP-Gebiet
+  blacklist: Blacklist
+  markdown_usage: Nutzung
+  markdown_example: Beispiel
+  guide_submissions: Einreichungen
+  survival_explanation: Erklärung
+  survival_schedule: Zeitplan
+  survival_reference: Referenz
+  kingdom_explanation: Erklärung
+  kingdom_scoring: Punkte
+  kingdom_strategy: Strategie
+  duel_schedule: Zeitplan
+  duel_rules: Regeln
+  sanctuary_strategy: Strategie
+  sanctuary_chart: Tabelle
+  sanctuary_goals: Ziele
+  sanctuary_efficiency: Effizienz
+  scramble_event: Event
+  scramble_points: Punkte
+  cheese_event: Event
+  cheese_cheese: Käse
+  cheese_strategy: Strategie
+  cheese_rewards: Belohnungen
 search:
-  guides: "Guides durchsuchen..."
-  home: "Verzeichnisse, Beiträge durchsuchen..."
-  placeholder: "Suchen..."
-
+  guides: Guides durchsuchen...
+  home: Verzeichnisse, Beiträge durchsuchen...
+  placeholder: Suchen...
 pwa:
-  toast_msg: "Neue Informationen erfasst."
-  update_btn: "Aktualisieren"
-  updating: "Entschlüsseln..."
-
-#header sign-in pill (js/identity-pill.js)
+  toast_msg: Neue Informationen erfasst.
+  update_btn: Aktualisieren
+  updating: Entschlüsseln...
+  updated_msg: "✅ App auf die neueste Version aktualisiert."
 identity:
-  account: "Dein Konto"
-  sign_in: "Anmelden"
-  signing_in: "Anmeldung läuft…"
-  sign_in_failed: "Anmeldung fehlgeschlagen, bitte erneut versuchen"
-  sign_in_again: "Erneut anmelden"
-  refresh: "Zugriff aktualisieren"
-  sign_out: "Abmelden"
-  role_steward: "Steward"
-  role_r5: "R5"
-  role_r4: "R4"
-  role_officer: "Offizier"
-  role_member: "Mitglied"
-  role_guest: "Gast"
-  role_expired: "Abgelaufen"
-  alliance_label: "Allianz"
-  alliance_none: "keine"
-  access_title: "Dein Zugriff"
-  access_view: "Live-Karte, Zeitpläne und Ranglisten ansehen"
-  access_draft: "Pläne im Planer-Modus entwerfen"
-  access_join: "Tritt dem NAP-Discord-Server bei, um mehr Zugriff zu erhalten"
-  access_ask_leader: "Bitte deinen R4 oder R5, deine Pläne als Vorschläge einzureichen"
-  access_send: "Vorschläge für Karte, Rangliste, Blacklist und Belohnungen einreichen (5 pro Tag)"
-  access_send_unlimited: "Vorschläge ohne Tageslimit einreichen"
-  access_approve: "Vorschläge in Discord annehmen oder ablehnen"
-  access_expired: "Deine Anmeldung ist abgelaufen. Melde dich erneut an, um Vorschläge einzureichen."
-  expires_days: "Anmeldung läuft in {n} Tagen ab"
-  expires_one: "Anmeldung läuft in 1 Tag ab"
-  expires_today: "Anmeldung läuft heute ab"
-  found_role_id: "per Rollen-ID gefunden"
-  found_role_name: "per Rollenname gefunden"
-  found_nickname: "per Spitzname gefunden"
+  account: Dein Konto
+  sign_in: Anmelden
+  signing_in: Anmeldung läuft…
+  sign_in_failed: Anmeldung fehlgeschlagen, bitte erneut versuchen
+  sign_in_again: Erneut anmelden
+  refresh: Zugriff aktualisieren
+  sign_out: Abmelden
+  force_update: App aktualisieren
+  force_updating: Wird aktualisiert…
+  dashboard: Allianz-Dashboard
+  role_steward: Steward
+  role_r5: R5
+  role_r4: R4
+  role_officer: Offizier
+  role_member: Mitglied
+  role_guest: Gast
+  role_expired: Abgelaufen
+  alliance_label: Allianz
+  alliance_none: keine
+  access_title: Dein Zugriff
+  access_view: Live-Karte, Zeitpläne und Ranglisten ansehen
+  access_draft: Pläne im Planer-Modus entwerfen
+  access_join: Tritt dem NAP-Discord-Server bei, um mehr Zugriff zu erhalten
+  access_ask_leader: Bitte deinen R4 oder R5, deine Pläne als Vorschläge einzureichen
+  access_send: Vorschläge für Karte, Rangliste, Blacklist und Belohnungen einreichen (5 pro Tag)
+  access_send_unlimited: Vorschläge ohne Tageslimit einreichen
+  access_approve: Vorschläge in Discord annehmen oder ablehnen
+  access_expired: Deine Anmeldung ist abgelaufen. Melde dich erneut an, um Vorschläge einzureichen.
+  expires_days: Anmeldung läuft in {n} Tagen ab
+  expires_one: Anmeldung läuft in 1 Tag ab
+  expires_today: Anmeldung läuft heute ab
+  found_role_id: per Rollen-ID gefunden
+  found_role_name: per Rollenname gefunden
+  found_nickname: per Spitzname gefunden

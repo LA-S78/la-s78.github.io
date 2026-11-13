@@ -31,7 +31,7 @@ body::before {
   height: calc(100% - env(safe-area-inset-top) - 150px);
   z-index: -10;
   background-color: var(--surface-dark);
-  background-image: url("/images/background.webp"), url("/images/background.png");
+  background-image: url("/images/background.webp"); /* WebP only: a PNG fallback layer was downloaded too (4.4 MB) */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

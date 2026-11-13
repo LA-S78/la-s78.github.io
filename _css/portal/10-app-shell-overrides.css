@@ -17,7 +17,7 @@
   z-index: -10;
   pointer-events: none;
   background-color: var(--nav-bg);
-  background-image: url("/images/background.webp"), url("/images/background.png");
+  background-image: url("/images/background.webp"); /* WebP only: a PNG fallback layer was downloaded too (4.4 MB) */
   background-position: top center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -30,6 +30,9 @@ html:has(.portal-body) {
   min-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  /* No pull-to-refresh (and no rubber-band bounce), as on the rest of the site: portal
+     pages scroll the whole document, which is where the phone's refresh gesture lives. */
+  overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch !important;
   touch-action: pan-y;
 }
@@ -45,6 +48,7 @@ body.portal-body {
   background: transparent;
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: none;
 }
 
 body.portal-body #mobile-container {
@@ -67,6 +71,12 @@ body.portal-body main {
   background: transparent !important;
   background-color: transparent !important;
   touch-action: pan-y;
+}
+
+/* With the bottom navigation (front matter footer: true): room so it never covers the end
+   of the page. The footer is 60px, plus the phone's safe area on newer phones. */
+body.portal-body.has-footer #mobile-container {
+  padding-bottom: calc(60px + env(safe-area-inset-bottom) + 2rem);
 }
 
 body.portal-body.has-no-header #mobile-container,

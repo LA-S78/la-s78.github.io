@@ -11,6 +11,7 @@ import { handleMapCommand, handleMapViewButton } from './_bot_map.js';
 import { handleProposalButton } from './_bot_proposals.js';
 import { handleRankCommand } from './_bot_rank.js';
 import { handleRegisterBotCommand } from './_bot_register.js';
+import { inLocale } from './_messages.js';
 import {
   handleKingdomWarResultButton,
   handleNominateCommand,
@@ -70,6 +71,15 @@ export default async function handler(req, res) {
     return res.status(200).json({ type: InteractionResponseType.PONG });
   }
 
+  // Replies in the user's Discord language (api/_messages.js say()); shared channels'
+  // posts choose English themselves.
+  const providedLang = interaction.data?.options?.find((opt) => opt.name === 'lang')?.value;
+  return inLocale(resolveUserLocale(interaction, providedLang), () =>
+    answer(req, res, interaction),
+  );
+}
+
+async function answer(req, res, interaction) {
   // ==========================================================================
   // 1. SLASH COMMANDS (APPLICATION_COMMAND)
   // ==========================================================================

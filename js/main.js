@@ -19,8 +19,8 @@
     return true;
   }
 
-  let scrollObserver = null;
   let isNewNavigation = false;
+  let isRestoreVisit = false;
 
   // --- AUTHENTICATION CONFIGURATION ---
   const AUTH_CONFIG = {
@@ -135,7 +135,9 @@
       returnPath &&
       returnPath !== '/' &&
       returnPath !== '/index.html' &&
-      returnPath !== window.location.pathname
+      returnPath !== window.location.pathname &&
+      returnPath.startsWith('/') &&
+      !returnPath.startsWith('//')
     ) {
       if (window.Turbo) window.Turbo.visit(returnPath, { action: 'replace' });
       else window.location.replace(returnPath);
@@ -211,7 +213,11 @@
    * quiet: skip Discord's "Authorize" screen if they already allowed the site (Refresh Access).
    */
   window.triggerDiscordLogin = function ({ quiet = false } = {}) {
-    localStorage.setItem('auth-return-path', window.location.pathname + window.location.hash);
+    // The whole address, query included (portal links carry their ?token=...).
+    localStorage.setItem(
+      'auth-return-path',
+      window.location.pathname + window.location.search + window.location.hash,
+    );
     const discordAuthUrl = `https://discord.com/oauth2/authorize?client_id=${AUTH_CONFIG.clientId}&response_type=code&redirect_uri=${encodeURIComponent(AUTH_CONFIG.redirectUri)}&scope=identify${quiet ? '&prompt=none' : ''}`;
     window.location.href = discordAuthUrl;
   };
@@ -244,6 +250,7 @@
   function applyTheme(themeName) {
     document.documentElement.setAttribute('data-theme', themeName);
     localStorage.setItem('site-theme', themeName);
+    window.syncThemeColour?.(); // the phone's status bar follows the theme (js/theme-init.js)
   }
 
   function initThemeToggle() {
@@ -298,31 +305,75 @@
     });
   }
 
+  // The section tabs under the header (Server Rules / Rotation / Rewards…) follow the page as
+  // it scrolls. The section is the last one whose top has passed a line a third of the way
+  // down the visible area; at the very bottom, the last section (a short last section never
+  // reaches the line). After a tap on a tab, that tab stays lit while the page glides there,
+  // instead of flickering through the sections in between.
+  let stopSectionTracking = null;
+
   function initScrollObserver() {
+    if (stopSectionTracking) stopSectionTracking();
+    stopSectionTracking = null;
     const mainContainer = document.querySelector('main');
-    const sections = document.querySelectorAll('.content-pane');
-    const navLinks = document.querySelectorAll('.anchor-link');
+    const sections = [...document.querySelectorAll('.content-pane[id]')];
+    const navLinks = [...document.querySelectorAll('.anchor-link')];
     if (!mainContainer || sections.length === 0 || navLinks.length === 0) return;
-    if (scrollObserver) scrollObserver.disconnect();
-    const observerOptions = {
-      root: mainContainer,
-      rootMargin: '-50px 0px -50% 0px',
-      threshold: 0,
+
+    const linkFor = (id) => navLinks.find((link) => link.getAttribute('href')?.endsWith(`#${id}`));
+    let current = null;
+    let heldUntil = 0;
+    let frame = 0;
+
+    const setActive = (id) => {
+      if (id === current) return;
+      current = id;
+      const active = linkFor(id);
+      navLinks.forEach((link) => link.classList.toggle('active', link === active));
+      if (active) scrollActiveNavIntoView(active);
     };
-    scrollObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          navLinks.forEach((link) => link.classList.remove('active'));
-          const id = entry.target.getAttribute('id');
-          const activeLink = document.querySelector(`.anchor-link[href$="#${id}"]`);
-          if (activeLink) {
-            activeLink.classList.add('active');
-            scrollActiveNavIntoView(activeLink);
-          }
-        }
-      });
-    }, observerOptions);
-    sections.forEach((section) => scrollObserver.observe(section));
+
+    const pick = () => {
+      frame = 0;
+      if (Date.now() < heldUntil) return;
+      const box = mainContainer.getBoundingClientRect();
+      const nav = document.querySelector('.anchor-nav');
+      const top = nav ? nav.getBoundingClientRect().bottom : box.top;
+      const atBottom =
+        mainContainer.scrollTop + mainContainer.clientHeight >= mainContainer.scrollHeight - 4;
+      if (atBottom) return setActive(sections[sections.length - 1].id);
+      const line = top + (box.bottom - top) / 3;
+      let found = sections[0];
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= line) found = section;
+      }
+      setActive(found.id);
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(pick);
+    };
+    // A tab was tapped: light it now and hold it until the page stops moving
+    const onHold = (event) => {
+      setActive(event.detail);
+      heldUntil = Date.now() + 1500;
+    };
+    // The glide is over: the tapped tab stays lit (near the bottom, the page may not reach
+    // its section's top) until the reader scrolls again
+    const onScrollEnd = () => {
+      heldUntil = 0;
+    };
+
+    mainContainer.addEventListener('scroll', onScroll, { passive: true });
+    mainContainer.addEventListener('scrollend', onScrollEnd);
+    document.addEventListener('anchor-nav:go', onHold);
+    stopSectionTracking = () => {
+      mainContainer.removeEventListener('scroll', onScroll);
+      mainContainer.removeEventListener('scrollend', onScrollEnd);
+      document.removeEventListener('anchor-nav:go', onHold);
+      if (frame) cancelAnimationFrame(frame);
+    };
+    pick();
   }
 
   function initAnchorScrolling() {
@@ -337,6 +388,7 @@
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
           e.preventDefault();
+          document.dispatchEvent(new CustomEvent('anchor-nav:go', { detail: targetId }));
           const anchorNav = document.querySelector('.anchor-nav');
           const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
           mainContainer.scrollTo({
@@ -414,33 +466,56 @@
     if (newSubtitle && headerSubtitle) headerSubtitle.textContent = newSubtitle.textContent;
   }
 
+  // Puts the page back at `target` (pixels down). Live sections (standings, rewards, map) grow
+  // as their data arrives, so a page can be too short at first: the position is applied again
+  // each frame until it holds, for up to 4 seconds. Touching, scrolling or a key stops it at
+  // once, so it never fights the reader.
+  function restoreScroll(scrollContainer, target) {
+    const started = performance.now();
+    let stopped = false;
+    const stop = () => (stopped = true);
+    for (const ev of ['wheel', 'touchstart', 'keydown', 'mousedown']) {
+      scrollContainer.addEventListener(ev, stop, { once: true, passive: true });
+    }
+    const step = () => {
+      if (stopped) return;
+      scrollContainer.scrollTop = target;
+      if (Math.abs(scrollContainer.scrollTop - target) <= 2) return;
+      if (performance.now() - started < 4000) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
   function initScrollMemory() {
     const scrollContainer = document.querySelector('main');
     if (!scrollContainer) return;
     const scrollKey = 'scroll-pos-' + window.location.pathname;
-    requestAnimationFrame(() => {
-      if (isNewNavigation) {
-        scrollContainer.scrollTop = 0;
-        isNewNavigation = false;
-      } else {
-        const navType = performance.getEntriesByType('navigation')[0]?.type;
-        if (navType !== 'navigate') {
-          const savedScroll = sessionStorage.getItem(scrollKey);
-          if (savedScroll) scrollContainer.scrollTop = parseInt(savedScroll, 10);
-        }
-      }
-    });
+    const saved = () => parseInt(sessionStorage.getItem(scrollKey) || '', 10);
+    if (isNewNavigation) {
+      // A new visit (a link): the top of the page
+      isNewNavigation = false;
+      isRestoreVisit = false;
+      requestAnimationFrame(() => (scrollContainer.scrollTop = 0));
+    } else if (isRestoreVisit) {
+      // The back or forward button: where the reader was (Turbo redraws the page from its
+      // snapshot at the top, so the position has to be put back)
+      isRestoreVisit = false;
+      if (saved() > 0) restoreScroll(scrollContainer, saved());
+    } else {
+      const navType = performance.getEntriesByType('navigation')[0]?.type;
+      if (navType !== 'navigate' && saved() > 0) restoreScroll(scrollContainer, saved());
+    }
     if (!firstTime(scrollContainer, 'scroll-memory')) return;
     let scrollTimeout;
     scrollContainer.addEventListener(
       'scroll',
       () => {
         if (scrollTimeout) return;
+        // The page this scroll belongs to (by the time the timer runs, a link may have
+        // moved the address on to the next page)
+        const key = 'scroll-pos-' + window.location.pathname;
         scrollTimeout = setTimeout(() => {
-          sessionStorage.setItem(
-            'scroll-pos-' + window.location.pathname,
-            scrollContainer.scrollTop,
-          );
+          if (scrollContainer.isConnected) sessionStorage.setItem(key, scrollContainer.scrollTop);
           scrollTimeout = null;
         }, 100);
       },
@@ -505,8 +580,12 @@
   // --- EVENTS ---
   document.addEventListener('turbo:load', initApp);
   document.addEventListener('turbo:frame-render', initApp);
-  document.addEventListener('turbo:visit', () => {
-    isNewNavigation = true;
+  // A link is a new visit (top of the page); the back/forward buttons are a "restore" visit
+  // (back to where the reader was). Both used to count as new, so Back always went to the top.
+  document.addEventListener('turbo:visit', (event) => {
+    const restore = event.detail?.action === 'restore';
+    isNewNavigation = !restore;
+    isRestoreVisit = restore;
   });
 
   document.addEventListener('click', (e) => {
@@ -578,7 +657,73 @@
     });
   }
 
+  /**
+   * Force Update (identity pill card, and /reset): drops this site's service worker and
+   * saved files, then loads the page fresh from the network. The login pass, theme and
+   * planner drafts live in localStorage and are kept.
+   */
+  async function clearAppCache() {
+    try {
+      const registrations = (await navigator.serviceWorker?.getRegistrations?.()) || [];
+      await Promise.all(registrations.map((r) => r.unregister()));
+    } catch (e) {
+      /* nothing registered, or not allowed: carry on */
+    }
+    try {
+      if (window.caches) await Promise.all((await caches.keys()).map((k) => caches.delete(k)));
+    } catch (e) {
+      /* no saved files */
+    }
+  }
+  window.forceAppUpdate = async function () {
+    try {
+      sessionStorage.setItem('app-updated', '1'); // "App updated" note after the reload
+    } catch (e) {
+      /* private mode: no note */
+    }
+    // Never wait more than 3 s: reload whatever happens.
+    await Promise.race([clearAppCache(), new Promise((r) => setTimeout(r, 3000))]);
+    window.location.reload();
+  };
+
+  /** A short "App updated" note after Force Update or /reset (/?updated=1). */
+  function showUpdatedNote() {
+    let flagged = false;
+    try {
+      flagged = sessionStorage.getItem('app-updated') === '1';
+      sessionStorage.removeItem('app-updated');
+    } catch (e) {
+      /* no session storage */
+    }
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('updated') === '1') {
+      flagged = true;
+      url.searchParams.delete('updated');
+      history.replaceState(history.state, '', url.pathname + url.search + url.hash);
+    }
+    if (!flagged || document.getElementById('pwa-update-toast')) return;
+    const toast = document.createElement('div');
+    toast.id = 'pwa-update-toast';
+    toast.className = 'is-done';
+    toast.setAttribute('role', 'status');
+    toast.textContent =
+      (window.pwaTranslations && window.pwaTranslations.updatedMsg) ||
+      '✅ App updated to the latest version.';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
+
   if ('serviceWorker' in navigator) {
+    // A new version (sw.js) asks open pages whether they can show the update toast. Pages
+    // too old to answer are updated automatically after 2 s; this one answers, and shows
+    // the toast when the new version is ready (watchForUpdates).
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'SW_UPDATE_AVAILABLE' && event.source) {
+        event.source.postMessage({ type: 'SW_TOAST_SHOWN' });
+      }
+    });
+    window.addEventListener('load', showUpdatedNote);
+
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('/sw.js')

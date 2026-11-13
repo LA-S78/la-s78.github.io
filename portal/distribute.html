@@ -1,15 +1,16 @@
 ---
 layout: portal
 title: King's Distribution Console
+title_key: "kings_console.title"
 permalink: /distribute.html
 lang: "en"
-hide_header: true
+strings: [kings_console]
 ---
 
 <div class="content-pane portal-pane-md">
   <div class="portal-header">
-    <h2 class="portal-title">👑 King's Distribution Console</h2>
-    <div class="sub-text" id="progress-indicator">Loading nominations...</div>
+    <h2 class="portal-title">{{ "kings_console.title" | t }}</h2>
+    <div class="sub-text" id="progress-indicator">{{ "kings_console.loading" | t }}</div>
   </div>
 
   <!-- This week's reward period: open/closed, and whether to wait for the battle result -->
@@ -20,73 +21,101 @@ hide_header: true
 
   <div class="distribute-toolbar">
     <div class="segmented-control">
-      <button type="button" class="toggle-btn active" id="btn-group-chest">By Chest</button>
-      <button type="button" class="toggle-btn" id="btn-group-alliance">By Alliance</button>
+      <button type="button" class="toggle-btn active" id="btn-group-chest">{{ "kings_console.by_chest" | t }}</button>
+      <button type="button" class="toggle-btn" id="btn-group-alliance">{{ "kings_console.by_alliance" | t }}</button>
     </div>
 
-    <button type="button" class="draft-btn btn-reset-checklist" id="btn-reset-progress">
-      Reset Checklist
-    </button>
   </div>
+
+  <!-- Who can tick, and why not (signed out, another alliance) -->
+  <div id="checklist-note" class="sub-text distribute-checklist-note"></div>
 
   <div id="roster-container"></div>
 </div>
 
 <script>
   (function () {
-    let currentStorageKey = 'la_sent_recipients_default';
     let nominationsData = {};
     let wartimeBuyouts = [];
     let groupBy = 'chest';
     let period = null;
+    // The King's checklist, saved on the server for everyone (api/nominate.js):
+    // { key: { alliance, pool, chest, name, by, at } }. A ticked chest is locked.
+    let handedOut = {};
+    let king = null;
 
     const elRoster = document.getElementById('roster-container');
     const elProgress = document.getElementById('progress-indicator');
     const elBuyoutBanner = document.getElementById('buyout-status-banner');
+    const elNote = document.getElementById('checklist-note');
     const btnGroupChest = document.getElementById('btn-group-chest');
     const btnGroupAlliance = document.getElementById('btn-group-alliance');
-    const btnReset = document.getElementById('btn-reset-progress');
 
-    function getSentSet() {
+    const POOL = { REG: 'standard', KW: 'kingdom_war' };
+    const keyOf = (e) => `${e.alliance}:${POOL[e.pool]}:${e.type}:${e.ign.toLowerCase()}`;
+    const fold = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+    // Who may tick (the server checks it again): Stewards, and R4/R5 of the King's alliance.
+    function loginPass() {
       try {
-        return new Set(JSON.parse(localStorage.getItem(currentStorageKey) || '[]'));
+        return localStorage.getItem('auth-session') || '';
       } catch (e) {
-        return new Set();
+        return '';
+      }
+    }
+    function tickAccess() {
+      const stored = (k) => {
+        try {
+          return localStorage.getItem(k) || '';
+        } catch (e) {
+          return '';
+        }
+      };
+      if (!loginPass()) return { can: false, why: 'signed-out' };
+      if (stored('auth-steward') === 'true') return { can: true };
+      const leader = ['R4', 'R5'].includes(stored('auth-role'));
+      if (leader && king && fold(stored('auth-alliance')) === fold(king)) return { can: true };
+      return { can: false, why: 'not-king' };
+    }
+
+    function renderNote() {
+      if (!elNote) return;
+      const access = tickAccess();
+      const kingText = king ? `[${king}]` : t('kings_console.kings_alliance');
+      if (!period || !period.open) {
+        elNote.textContent = '';
+      } else if (access.can) {
+        elNote.textContent = t('kings_console.can_tick');
+      } else if (access.why === 'signed-out') {
+        elNote.textContent = t('kings_console.view_only_signed_out', { king: kingText });
+      } else {
+        elNote.textContent = t('kings_console.view_only', { king: kingText });
       }
     }
 
-    function saveSentSet(set) {
-      localStorage.setItem(currentStorageKey, JSON.stringify(Array.from(set)));
-    }
-
+    let loading = null;
     async function loadNominations() {
-      try {
-        const res = await fetch(`/api/nominate?t=${Date.now()}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-
-        if (data && data.nominations) {
-          nominationsData = data.nominations;
+      if (loading) return loading;
+      loading = (async () => {
+        try {
+          const res = await fetch(`/api/nominate?t=${Date.now()}`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          nominationsData = data.nominations || {};
           wartimeBuyouts = data.wartime_buyouts || [];
           period = data.period || null;
-          if (data.lastReset) {
-            const cycleHash = btoa(data.lastReset).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16);
-            currentStorageKey = `la_sent_recipients_${cycleHash}`;
-          }
-        } else {
-          nominationsData = data || {};
-          const headerCycle = res.headers.get('x-cycle-id');
-          if (headerCycle) {
-            currentStorageKey = `la_sent_recipients_${headerCycle}`;
-          }
+          handedOut = data.handed_out || {};
+          king = data.king || null;
+          render();
+        } catch (err) {
+          elRoster.innerHTML = `<div class="status-banner warning">
+            ${escapeHtml(t('kings_console.load_failed', { error: err.message }))}
+          </div>`;
+        } finally {
+          loading = null;
         }
-
-        render();
-      } catch (err) {
-        elRoster.innerHTML = `<div class="status-banner warning">
-          Failed to load nominations: ${err.message}
-        </div>`;
-      }
+      })();
+      return loading;
     }
 
     // The period (api/_reward_period.js). In a Kingdom War week the King waits for the battle
@@ -95,15 +124,18 @@ hide_header: true
       const el = document.getElementById('period-banner');
       if (!el || !period) return;
       const until = new Date(period.closesAt).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      // The bold lead-in (<strong>) goes wherever the translation puts {title}.
+      const bold = (key, vars) => `<strong>${escapeHtml(t(key, vars))}</strong>`;
+      const week = Number(period.week) === 0 ? t('common.off_week') : t('common.kw_week', { n: period.week });
       let text;
       if (!period.open) {
-        text = '🔒 Rewards are closed. The lists below are from the last week; the next rewards open Friday at about 20:00 GT.';
+        text = escapeHtml(t('kings_console.closed'));
       } else if (period.kwWeek && period.result === 'pending') {
-        text = `⏳ <strong>Hold the chests:</strong> wait for Saturday's battle result before handing out. If the war is won, King of Battle Reward chests open and every list is re-sorted. Rewards close ${until}.`;
+        text = `⏳ ${th('kings_console.hold', { title: bold('kings_console.hold_title') }, { when: until })}`;
       } else if (period.result === 'won') {
-        text = `⚔️ <strong>Kingdom War won:</strong> hand out both sets. Rewards close ${until} (Wednesday 00:00 GT).`;
+        text = `⚔️ ${th('kings_console.won', { title: bold('kings_console.won_title') }, { when: until })}`;
       } else {
-        text = `🎁 <strong>${period.weekName} rewards:</strong> hand out the King's Commendation. Rewards close ${until} (Wednesday 00:00 GT).`;
+        text = `🎁 ${th('kings_console.week', { title: bold('kings_console.week_title', { week }) }, { when: until })}`;
       }
       el.innerHTML = `<span>${text}</span>`; // one block, so the bold words stay inline
       el.style.display = 'flex';
@@ -118,7 +150,7 @@ hide_header: true
         elBuyoutBanner.innerHTML = `
           <span>🛡️</span>
           <div>
-            <strong>Wartime Restitution Active:</strong> ${tags} ${buyoutAlliances.length === 1 ? 'includes' : 'include'} bonus Commander's Will slots funded from WLO's Rank #1 allotment.
+            ${th(buyoutAlliances.length === 1 ? 'kings_console.buyout_one' : 'kings_console.buyout_other', { title: `<strong>${escapeHtml(t('kings_console.buyout_title'))}</strong>`, tags })}
           </div>
         `;
         elBuyoutBanner.style.display = 'flex';
@@ -129,15 +161,15 @@ hide_header: true
     }
 
     function render() {
-      const sentSet = getSentSet();
       const alliances = Object.keys(nominationsData);
 
       renderPeriodBanner();
       renderBuyoutBanner();
+      renderNote();
 
       if (alliances.length === 0) {
-        elRoster.innerHTML = '<div class="sub-text distribute-empty">No nominations submitted yet.</div>';
-        elProgress.textContent = '0 Recipient Entries';
+        elRoster.innerHTML = `<div class="sub-text distribute-empty">${escapeHtml(t('kings_console.no_nominations'))}</div>`;
+        elProgress.textContent = t('kings_console.no_entries');
         return;
       }
 
@@ -174,8 +206,8 @@ hide_header: true
         }
       });
 
-      const sentCount = flatList.filter(e => sentSet.has(`${e.alliance}:${e.pool}:${e.type}:${e.ign}`)).length;
-      elProgress.textContent = `Progress: ${sentCount} / ${flatList.length} Distributed`;
+      const sentCount = flatList.filter(e => handedOut[keyOf(e)]).length;
+      elProgress.textContent = t('kings_console.progress', { sent: sentCount, total: flatList.length });
 
       let html = '';
 
@@ -183,14 +215,14 @@ hide_header: true
         // One set at a time, like the game's two tabs: all of King's Commendation (REG),
         // then all of King of Battle Reward (KW); within a set, most valuable first.
         const tiers = [
-          { pool: 'REG', key: 'commanders_will', title: '🟡 Commander\'s Will', glyph: 'gold' },
-          { pool: 'REG', key: 'loyal_servant', title: '🟣 Loyal Servant', glyph: 'purple' },
-          { pool: 'REG', key: 'followers_heart', title: '🔵 Follower\'s Heart', glyph: 'blue' },
-          { pool: 'KW', key: 'commanders_will', title: '🟡 Honor Vanguard', glyph: 'gold' },
-          { pool: 'KW', key: 'loyal_servant', title: '🟣 Fearless Hero', glyph: 'purple' },
-          { pool: 'KW', key: 'followers_heart', title: '🔵 Logistics Support', glyph: 'blue' }
+          { pool: 'REG', key: 'commanders_will', title: `🟡 ${CHEST_LABEL.standard.commanders_will}`, glyph: 'gold' },
+          { pool: 'REG', key: 'loyal_servant', title: `🟣 ${CHEST_LABEL.standard.loyal_servant}`, glyph: 'purple' },
+          { pool: 'REG', key: 'followers_heart', title: `🔵 ${CHEST_LABEL.standard.followers_heart}`, glyph: 'blue' },
+          { pool: 'KW', key: 'commanders_will', title: `🟡 ${CHEST_LABEL.kingdom_war.commanders_will}`, glyph: 'gold' },
+          { pool: 'KW', key: 'loyal_servant', title: `🟣 ${CHEST_LABEL.kingdom_war.loyal_servant}`, glyph: 'purple' },
+          { pool: 'KW', key: 'followers_heart', title: `🔵 ${CHEST_LABEL.kingdom_war.followers_heart}`, glyph: 'blue' }
         ];
-        const SET_NAMES = { REG: '👑 King\'s Commendation', KW: '⚔️ King of Battle Reward' };
+        const SET_NAMES = { REG: `👑 ${t('common.set_one')}`, KW: `⚔️ ${t('common.set_two')}` };
 
         let currentSet = null;
         tiers.forEach(tier => {
@@ -209,11 +241,11 @@ hide_header: true
           if (tier.pool !== currentSet) {
             currentSet = tier.pool;
             const setCount = flatList.filter(e => e.pool === tier.pool).length;
-            html += `<div class="distribute-set-heading">${SET_NAMES[tier.pool]} (${setCount})</div>`;
+            html += `<div class="distribute-set-heading">${escapeHtml(SET_NAMES[tier.pool])} (${setCount})</div>`;
           }
-          html += `<div class="slot-group-title distribute-group-heading">${tier.title} (${matched.length})</div>`;
+          html += `<div class="slot-group-title distribute-group-heading">${escapeHtml(tier.title)} (${matched.length})</div>`;
           matched.forEach(item => {
-            html += renderRow(item, tier.glyph, sentSet);
+            html += renderRow(item, tier.glyph);
           });
         });
       } else {
@@ -232,10 +264,10 @@ hide_header: true
             return (tierOrder[a.type] || 99) - (tierOrder[b.type] || 99);
           });
 
-          html += `<div class="slot-group-title distribute-group-heading">[${tag}] • Rank ${nominationsData[tag].rank || '-'} (${matched.length})</div>`;
+          html += `<div class="slot-group-title distribute-group-heading">${escapeHtml(t('kings_console.alliance_heading', { tag, rank: nominationsData[tag].rank || '-', n: matched.length }))}</div>`;
           matched.forEach(item => {
             const glyph = item.type === 'commanders_will' ? 'gold' : item.type === 'loyal_servant' ? 'purple' : 'blue';
-            html += renderRow(item, glyph, sentSet);
+            html += renderRow(item, glyph);
           });
         });
       }
@@ -244,41 +276,133 @@ hide_header: true
       bindEvents();
     }
 
-    function renderRow(item, glyph, sentSet) {
-      const id = `${item.alliance}:${item.pool}:${item.type}:${item.ign}`;
-      const isSent = sentSet.has(id);
+    // The in-game chest names (common.chests in _data/<lang>/tools.yml).
+    var CHEST_LABEL = {
+      standard: { commanders_will: t('common.chests.commanders_will'), loyal_servant: t('common.chests.loyal_servant'), followers_heart: t('common.chests.followers_heart') },
+      kingdom_war: { commanders_will: t('common.chests.honor_vanguard'), loyal_servant: t('common.chests.fearless_hero'), followers_heart: t('common.chests.logistics_support') },
+    };
+
+    /** Where `name` is in an alliance's saved list now: "pool.chest", 'reserve' or null. */
+    function chestNow(nominations, alliance, name) {
+      const entry = nominations[alliance];
+      for (const [pool, chests] of Object.entries((entry && entry.recipients) || {})) {
+        for (const [chest, names] of Object.entries(chests || {})) {
+          if ((names || []).includes(name)) return `${pool}.${chest}`;
+        }
+      }
+      return entry && (entry.reserves || []).includes(name) ? 'reserve' : null;
+    }
+
+    async function checkStillDue(row) {
+      const alliance = row.getAttribute('data-alliance');
+      const pool = row.getAttribute('data-pool');
+      const chest = row.getAttribute('data-chest');
+      const name = row.getAttribute('data-name');
+      let fresh;
+      try {
+        const res = await fetch(`/api/nominate?t=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        fresh = await res.json();
+      } catch (err) {
+        return; // can't check (offline): nothing to warn about, the page stays as it is
+      }
+      const now = chestNow(fresh.nominations || {}, alliance, name);
+      if (now === `${pool}.${chest}`) {
+        document.getElementById('copy-warning')?.remove(); // still right
+        return;
+      }
+      const shown = CHEST_LABEL[pool]?.[chest] || chest;
+      let why;
+      if (!now) why = t('kings_console.not_on_list', { name, tag: alliance });
+      else if (now === 'reserve') why = t('kings_console.now_reserve', { name, tag: alliance });
+      else {
+        const [p, c] = now.split('.');
+        why = t('kings_console.now_other_chest', { name, chest: CHEST_LABEL[p]?.[c] || c, shown });
+      }
+      // Show the latest lists, then the warning above them, and say it plainly.
+      nominationsData = fresh.nominations || {};
+      handedOut = fresh.handed_out || {};
+      period = fresh.period || period;
+      king = fresh.king || king;
+      render();
+      showCopyWarning(t('kings_console.stop_warning', { chest: shown, why }));
+      alert(`${t('kings_console.stop_alert')}\n\n${why}\n\n${t('kings_console.lists_refreshed')}`);
+    }
+
+    function showCopyWarning(text) {
+      let el = document.getElementById('copy-warning');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'copy-warning';
+        el.className = 'status-banner warning distribute-copy-warning';
+        el.setAttribute('role', 'alert');
+        elRoster.parentNode.insertBefore(el, elRoster);
+      }
+      el.textContent = text;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+
+    function renderRow(item, glyph) {
+      const key = keyOf(item);
+      const tick = handedOut[key];
       const isKW = item.pool === 'KW';
+      const when = tick ? new Date(tick.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+      const title = tick ? t('kings_console.ticked_by', { name: tick.by, when }) : '';
 
       return `
-        <div class="distribute-item ${isSent ? 'sent' : ''} ${item.isBuyout ? 'is-buyout' : ''}" data-id="${escapeHtml(id)}">
+        <div class="distribute-item ${tick ? 'sent' : ''} ${item.isBuyout ? 'is-buyout' : ''}" data-key="${escapeHtml(key)}"
+          data-alliance="${escapeHtml(item.alliance)}" data-pool="${POOL[item.pool]}" data-chest="${item.type}" data-name="${escapeHtml(item.ign)}"
+          ${title ? `title="${escapeHtml(title)}"` : ''}>
           <span class="chest-glyph ${glyph}"></span>
           <span class="badge badge-alliance-sm">${escapeHtml(item.alliance)}</span>
           <span class="badge ${isKW ? 'badge-pool-kw' : 'badge-pool-reg'}">
-            ${item.pool}
+            ${escapeHtml(t(isKW ? 'kings_console.pool_kw' : 'kings_console.pool_reg'))}
           </span>
-          ${item.isBuyout ? '<span class="badge badge-buyout">BUYOUT</span>' : ''}
+          ${item.isBuyout ? `<span class="badge badge-buyout">${escapeHtml(t('kings_console.buyout_badge'))}</span>` : ''}
           <span class="player-ign">${escapeHtml(item.ign)}</span>
-          <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">Copy</button>
+          <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">${escapeHtml(t('common.copy'))}</button>
         </div>
       `;
     }
 
     function bindEvents() {
       elRoster.querySelectorAll('.distribute-item').forEach(el => {
-        el.addEventListener('click', (e) => {
+        el.addEventListener('click', async (e) => {
           if (e.target.classList.contains('copy-btn')) return;
-          const id = el.getAttribute('data-id');
-          const sentSet = getSentSet();
-
-          if (sentSet.has(id)) {
-            sentSet.delete(id);
-            el.classList.remove('sent');
-          } else {
-            sentSet.add(id);
-            el.classList.add('sent');
+          if (!tickAccess().can || !period || !period.open) {
+            elNote.classList.remove('flash');
+            void elNote.offsetWidth; // restart the highlight
+            elNote.classList.add('flash');
+            return;
           }
-          saveSentSet(sentSet);
-          updateProgressOnly();
+          if (el.classList.contains('saving')) return;
+          const key = el.getAttribute('data-key');
+          const done = !handedOut[key];
+          el.classList.toggle('sent', done); // shown at once, undone if the save fails
+          el.classList.add('saving');
+          try {
+            const res = await fetch('/api/nominate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+              body: JSON.stringify({
+                action: 'handout',
+                alliance: el.getAttribute('data-alliance'),
+                pool: el.getAttribute('data-pool'),
+                chest: el.getAttribute('data-chest'),
+                name: el.getAttribute('data-name'),
+                done,
+              }),
+            });
+            const body = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+            handedOut = body.handed_out || {};
+            render();
+          } catch (err) {
+            el.classList.toggle('sent', !done);
+            el.classList.remove('saving');
+            alert(t('common.not_saved', { error: err.message }));
+            loadNominations(); // the lists may have changed
+          }
         });
       });
 
@@ -288,23 +412,22 @@ hide_header: true
           const text = btn.getAttribute('data-copy');
           try {
             await navigator.clipboard.writeText(text);
-            btn.textContent = '✓ Copied';
+            btn.textContent = t('common.copied');
             btn.classList.add('copied');
             setTimeout(() => {
-              btn.textContent = 'Copy';
+              btn.textContent = t('common.copy');
               btn.classList.remove('copied');
             }, 1200);
           } catch (err) {
-            prompt('Copy recipient name:', text);
+            prompt(t('kings_console.copy_prompt'), text);
           }
+          // Copied at once (phones only allow it straight after a tap), then checked against
+          // the latest lists: an alliance may have corrected or removed this name since the
+          // page loaded. A chest sent in the game can't be taken back, so warn before it is.
+          const row = btn.closest('.distribute-item');
+          if (row) checkStillDue(row);
         });
       });
-    }
-
-    function updateProgressOnly() {
-      const sentSet = getSentSet();
-      const total = elRoster.querySelectorAll('.distribute-item').length;
-      elProgress.textContent = `Progress: ${sentSet.size} / ${total} Distributed`;
     }
 
     // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
@@ -323,12 +446,13 @@ hide_header: true
       render();
     });
 
-    btnReset.addEventListener('click', () => {
-      if (confirm('Reset all sent statuses back to uncompleted for this cycle?')) {
-        localStorage.removeItem(currentStorageKey);
-        render();
-      }
+    // Ticks from other devices: refreshed when the page is shown again, and every 30 s.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') loadNominations();
     });
+    setInterval(() => {
+      if (document.visibilityState === 'visible') loadNominations();
+    }, 30000);
 
     loadNominations();
   })();

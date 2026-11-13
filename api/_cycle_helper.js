@@ -166,3 +166,46 @@ export function advanceCycleState(cycleState = {}, mapState = null, targetClockW
     };
   }
 }
+
+/**
+ * Wipes this cycle's Capitol overrides (Steward reset, /rewards): the schedule goes back to
+ * the plain rotation for the current cycle (the same wheel and seat inheritance the cycle
+ * uses when it moves on), the override count to 0, and active wartime buyouts move to
+ * buyout_history marked 'cancelled'. Changes rewardsState in place.
+ * Returns { changed, before, after, overrides, cancelled }; changed is false when there was
+ * nothing to reset (then nothing was changed).
+ */
+export function resetOverrides(rewardsState, mapState = null, actor = '', now = new Date()) {
+  const cycleState = rewardsState.cycle_state || {};
+  const macroCycle = Number(cycleState.macro_cycle) || 1;
+  const before = { ...(cycleState.active_schedule || {}) };
+  const { cohort, schedule } = resolveCohortSchedule(macroCycle, cycleState.cohort_seats, mapState);
+  const overrides = Number(cycleState.override_count) || 0;
+  const buyouts = Array.isArray(rewardsState.wartime_buyouts) ? rewardsState.wartime_buyouts : [];
+  const same = ['downtime', 'week_1', 'week_2', 'week_3'].every((k) => before[k] === schedule[k]);
+  if (same && overrides === 0 && buyouts.length === 0) {
+    return { changed: false, before, after: schedule, overrides: 0, cancelled: 0 };
+  }
+
+  const stamp = new Date(now).toISOString();
+  if (!Array.isArray(rewardsState.buyout_history)) rewardsState.buyout_history = [];
+  for (const buyout of buyouts) {
+    rewardsState.buyout_history.push({
+      ...buyout,
+      status: 'cancelled',
+      archivedAt: stamp,
+      archivedBy: actor,
+    });
+  }
+  rewardsState.wartime_buyouts = [];
+  rewardsState.cycle_state = {
+    ...cycleState,
+    macro_cycle: macroCycle,
+    override_count: 0,
+    cohort_seats: cohort,
+    active_schedule: schedule,
+  };
+  rewardsState.lastUpdated = stamp;
+  rewardsState.updatedBy = actor;
+  return { changed: true, before, after: schedule, overrides, cancelled: buyouts.length };
+}

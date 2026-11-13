@@ -1,12 +1,15 @@
 require 'digest'
 require 'json'
 
-# Injects a Workbox precache manifest into the root sw.js.
+# Puts the app shell's file list into the root sw.js (`const precacheList = [...]`): each
+# file with a short fingerprint of its contents, so the service worker re-downloads only
+# changed files on an update. (Named workbox_precache.rb until the site's own service
+# worker replaced Workbox, November 2026.)
 #
 # Only the lightweight app shell is precached (HTML pages, stylesheets, scripts,
 # manifest and small images). Large media is left to the runtime CacheFirst image
 # route in sw.js, so a first visit no longer downloads the entire deploy.
-module WorkboxInjector
+module PrecacheList
   EXTENSIONS = '{html,css,js,png,jpg,jpeg,svg,webp,webmanifest}'
 
   # Any single file above this size is never precached (e.g. multi-MB PNGs).
@@ -15,8 +18,13 @@ module WorkboxInjector
   # Paths (relative to the site root) that must never be precached.
   EXCLUDED_PREFIXES = [
     '/api/',                 # Vercel serverless sources, not static assets
-    '/js/mermaid.min.js'     # 3.3 MB, only used by the internal test page
+    '/js/mermaid.min.js',    # 3.3 MB, only used by the internal test page
+    '/images/compendium-desk.webp', # only on /reset, which empties the saved copy anyway
+    '/reset.html'            # must always come from the network (it clears the saved copy)
   ].freeze
+
+  # The multilingual build copies sw.js into each language folder; only /sw.js is used.
+  EXCLUDED_PATTERNS = [%r{\A/[a-z]{2}/sw\.js\z}].freeze
 
   def self.run(dest_path)
     puts "Scanning #{File.expand_path(dest_path)} for precache candidates..."
@@ -36,6 +44,7 @@ module WorkboxInjector
       url = file.sub(/^#{Regexp.escape(dest_path)}/, '')
       url = "/#{url}" unless url.start_with?('/')
       next if EXCLUDED_PREFIXES.any? { |prefix| url.start_with?(prefix) }
+      next if EXCLUDED_PATTERNS.any? { |pattern| url.match?(pattern) }
 
       if File.size(file) > MAX_FILE_BYTES
         skipped_large << url
