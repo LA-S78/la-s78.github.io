@@ -4,7 +4,12 @@
  */
 
 import { submitProposalWithAuth } from './auth-modal.js';
-import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
+import {
+  markUpdating,
+  offlineCopySavedAt,
+  showLiveDataNotice,
+  showSavedWhileLoading,
+} from './live-data-notice.js';
 import { ALLIANCE_COLORS } from './alliance-defaults.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
@@ -214,77 +219,104 @@ export function checkAndRestoreAllianceDraft() {
   return false;
 }
 
+// Draws standings and blacklist data (the fresh answer, or the saved copy shown while it loads)
+function applyAllianceData(data) {
+  if (
+    data.alliances &&
+    typeof data.alliances === 'object' &&
+    Object.keys(data.alliances).length > 0
+  ) {
+    const normalizedLive = {};
+
+    Object.entries(data.alliances).forEach(([tag, allyData]) => {
+      const cleanTag = tag.trim();
+      if (!cleanTag) return;
+
+      const parsedRank =
+        allyData.rank !== null && allyData.rank !== undefined && allyData.rank !== ''
+          ? Number(allyData.rank)
+          : null;
+
+      normalizedLive[cleanTag] = {
+        ...allyData,
+        tag: cleanTag,
+        rank: parsedRank,
+        parent_tag: allyData.parent_tag ? String(allyData.parent_tag).trim() : null,
+        academies: Array.isArray(allyData.academies)
+          ? allyData.academies.map((a) => String(a).trim()).filter(Boolean)
+          : [],
+        color: resolveAllianceColor(cleanTag, allyData.color, parsedRank),
+      };
+    });
+
+    originalAlliances = normalizedLive;
+  }
+
+  if (
+    data.blacklist &&
+    (Array.isArray(data.blacklist.players) || Array.isArray(data.blacklist.alliances))
+  ) {
+    originalBlacklist = normaliseBlacklist(data.blacklist);
+  }
+
+  if (!isAlliancePlannerActive) {
+    draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
+    renderStandingsHierarchy();
+  }
+  if (!isBlacklistEditing) {
+    draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
+    renderBlacklist();
+  }
+}
+
 export async function fetchLiveAllianceState() {
+  const container = document.getElementById('alliance-container');
+  let savedAt = null;
   try {
-    const [stateRes, colorsRes] = await Promise.all([
+    const fresh = Promise.all([
       fetch(`/api/state?scope=alliances&t=${Date.now()}`),
       fetch('/api/colors', { cache: 'no-store' }),
     ]);
+    // Meanwhile, this device's last copy, dimmed with "Updating…". 'saved' draws the lists
+    // but keeps planning off until the fresh data is in.
+    savedAt = await showSavedWhileLoading(
+      '/api/state?scope=alliances',
+      fresh,
+      container,
+      async (res) => {
+        const data = await res.json();
+        liveState = 'saved';
+        applyAllianceData(data);
+      },
+    );
+    // The blacklist (a section of its own) waits dimmed with the standings
+    const blacklistSection = document.querySelector('.blacklist-section');
+    if (savedAt) markUpdating(blacklistSection, true);
+    const [stateRes, colorsRes] = await fresh;
 
     if (colorsRes.ok) {
       liveDiscordColors = await colorsRes.json();
     }
 
     if (!stateRes.ok) throw new Error(`State API returned HTTP ${stateRes.status}`);
-    {
-      const data = await stateRes.json();
-      liveState = 'ok';
-      showLiveDataNotice(document.getElementById('alliance-container'), {
-        savedAt: offlineCopySavedAt(stateRes),
-      });
-      if (
-        data.alliances &&
-        typeof data.alliances === 'object' &&
-        Object.keys(data.alliances).length > 0
-      ) {
-        const normalizedLive = {};
-
-        Object.entries(data.alliances).forEach(([tag, allyData]) => {
-          const cleanTag = tag.trim();
-          if (!cleanTag) return;
-
-          const parsedRank =
-            allyData.rank !== null && allyData.rank !== undefined && allyData.rank !== ''
-              ? Number(allyData.rank)
-              : null;
-
-          normalizedLive[cleanTag] = {
-            ...allyData,
-            tag: cleanTag,
-            rank: parsedRank,
-            parent_tag: allyData.parent_tag ? String(allyData.parent_tag).trim() : null,
-            academies: Array.isArray(allyData.academies)
-              ? allyData.academies.map((a) => String(a).trim()).filter(Boolean)
-              : [],
-            color: resolveAllianceColor(cleanTag, allyData.color, parsedRank),
-          };
-        });
-
-        originalAlliances = normalizedLive;
-      }
-
-      if (
-        data.blacklist &&
-        (Array.isArray(data.blacklist.players) || Array.isArray(data.blacklist.alliances))
-      ) {
-        originalBlacklist = normaliseBlacklist(data.blacklist);
-      }
-
-      if (!isAlliancePlannerActive) {
-        draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
-        renderStandingsHierarchy();
-      }
-      if (!isBlacklistEditing) {
-        draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
-        renderBlacklist();
-      }
-    }
+    const data = await stateRes.json();
+    liveState = 'ok';
+    showLiveDataNotice(container, { savedAt: offlineCopySavedAt(stateRes) });
+    applyAllianceData(data);
   } catch (err) {
     console.warn('Could not fetch live alliance state:', err);
-    liveState = 'failed';
-    showLiveDataNotice(document.getElementById('alliance-container'), { failed: true });
-    renderStandingsHierarchy();
-    renderBlacklist();
+    if (savedAt) {
+      // The saved copy stays (planning stays off): say how old it is instead of "failed"
+      showLiveDataNotice(container, { savedAt });
+    } else {
+      liveState = 'failed';
+      showLiveDataNotice(container, { failed: true });
+      renderStandingsHierarchy();
+      renderBlacklist();
+    }
+  } finally {
+    markUpdating(container, false);
+    markUpdating(document.querySelector('.blacklist-section'), false);
   }
 }
 
@@ -559,7 +591,7 @@ export function renderStandingsHierarchy() {
   if (!container) return;
 
   const countBadge = document.getElementById('alliance-total-count');
-  if (liveState !== 'ok') {
+  if (liveState !== 'ok' && liveState !== 'saved') {
     container.innerHTML = `<div class="blacklist-empty">${esc(ta(liveState === 'failed' ? 'standings_failed' : 'loading_standings'))}</div>`;
     if (countBadge) countBadge.textContent = '…';
     return;
@@ -686,7 +718,7 @@ export function renderBlacklist() {
   if (playerCountBadge) playerCountBadge.textContent = activeBlacklist.players.length;
   if (allianceCountBadge) allianceCountBadge.textContent = activeBlacklist.alliances.length;
 
-  if (liveState !== 'ok') {
+  if (liveState !== 'ok' && liveState !== 'saved') {
     const text = esc(tb(liveState === 'failed' ? 'failed' : 'loading'));
     for (const el of [playersContainer, alliancesContainer]) {
       if (el) el.innerHTML = `<div class="blacklist-empty">${text}</div>`;

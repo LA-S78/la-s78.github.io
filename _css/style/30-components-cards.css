@@ -208,3 +208,31 @@ dialog a.dialog-btn:hover {
   font-style: italic;
   color: var(--text-muted);
 }
+
+/* A tool showing this device's saved copy while the fresh data loads
+   (js/live-data-notice.js, markUpdating): dimmed and not clickable, with "⏳ Updating…" in
+   its top corner. The label floats, so nothing moves when it goes. */
+.is-updating {
+  position: relative;
+}
+
+.is-updating > * {
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.is-updating::after {
+  content: attr(data-updating);
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 5;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--nav-bg);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  pointer-events: none;
+}

@@ -3,7 +3,12 @@
  */
 
 import { submitProposalWithAuth } from './auth-modal.js';
-import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
+import {
+  markUpdating,
+  offlineCopySavedAt,
+  showLiveDataNotice,
+  showSavedWhileLoading,
+} from './live-data-notice.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -108,34 +113,59 @@ export function checkAndRestoreRewardsDraft() {
   return false;
 }
 
-export async function fetchLiveRewardsState() {
-  try {
-    const res = await fetch(`/api/state?scope=rewards&t=${Date.now()}`);
-    if (!res.ok) throw new Error(`State API returned HTTP ${res.status}`);
-    {
-      const data = await res.json();
-      liveState = 'ok';
-      showLiveDataNotice(document.getElementById('rewards-container'), {
-        savedAt: offlineCopySavedAt(res),
-      });
-      if (
-        data.distribution_tiers &&
-        Array.isArray(data.distribution_tiers) &&
-        data.distribution_tiers.length > 0
-      ) {
-        originalTiers = JSON.parse(JSON.stringify(data.distribution_tiers));
+// Draws the reward tiers (the fresh answer, or the saved copy shown while it loads)
+function applyRewardsData(data) {
+  if (
+    data.distribution_tiers &&
+    Array.isArray(data.distribution_tiers) &&
+    data.distribution_tiers.length > 0
+  ) {
+    originalTiers = JSON.parse(JSON.stringify(data.distribution_tiers));
 
-        if (!isRewardsPlannerActive) {
-          draftTiers = JSON.parse(JSON.stringify(originalTiers));
-          renderTierList();
-          updatePayoutTable();
-        }
-      }
+    if (!isRewardsPlannerActive) {
+      draftTiers = JSON.parse(JSON.stringify(originalTiers));
+      renderTierList();
+      updatePayoutTable();
     }
+  }
+}
+
+export async function fetchLiveRewardsState() {
+  const container = document.getElementById('rewards-container');
+  let savedAt = null;
+  try {
+    const fresh = fetch(`/api/state?scope=rewards&t=${Date.now()}`);
+    // Meanwhile, this device's last copy, dimmed with "Updating…". 'saved' draws the tiers
+    // but keeps planning off until the fresh data is in.
+    savedAt = await showSavedWhileLoading(
+      '/api/state?scope=rewards',
+      fresh,
+      container,
+      async (r) => {
+        const data = await r.json();
+        liveState = 'saved';
+        applyRewardsData(data);
+        document.getElementById('rewards-tier-list')?.classList.add('rewards-loaded');
+        document.getElementById('payout-table-body')?.classList.add('rewards-loaded');
+      },
+    );
+    const res = await fresh;
+    if (!res.ok) throw new Error(`State API returned HTTP ${res.status}`);
+    const data = await res.json();
+    liveState = 'ok';
+    showLiveDataNotice(container, { savedAt: offlineCopySavedAt(res) });
+    applyRewardsData(data);
   } catch (err) {
     console.warn('Could not fetch live rewards state:', err);
-    liveState = 'failed';
-    showLiveDataNotice(document.getElementById('rewards-container'), { failed: true });
+    if (savedAt) {
+      // The saved copy stays (planning stays off): say how old it is instead of "failed"
+      showLiveDataNotice(container, { savedAt });
+    } else {
+      liveState = 'failed';
+      showLiveDataNotice(container, { failed: true });
+    }
+  } finally {
+    markUpdating(container, false);
   }
 }
 
@@ -268,7 +298,7 @@ export function renderTierList() {
   if (!container) return;
 
   const rankLabel = container.dataset.rankLabel || 'Rank';
-  if (liveState !== 'ok') {
+  if (liveState !== 'ok' && liveState !== 'saved') {
     container.innerHTML = `<div class="rewards-tier-placeholder">${esc(window.t(liveState === 'failed' ? 'rewards_planner.load_failed' : 'rewards_planner.loading'))}</div>`;
     return;
   }
