@@ -52,7 +52,7 @@ main ol {
 }
 
 main a {
-  color: var(--accent-color);
+  color: var(--accent-text);
   text-decoration: none;
   border-bottom: 1px dotted var(--accent-color);
 }
@@ -110,7 +110,7 @@ td {
 }
 th {
   background: var(--node-bg);
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-family: var(--font-headers);
 }
 tr:nth-child(even) {

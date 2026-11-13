@@ -14,7 +14,7 @@
   display: block;
   font-size: 0.78rem;
   font-weight: bold;
-  color: var(--accent-color);
+  color: var(--accent-text);
   margin-bottom: 4px;
 }
 
@@ -54,7 +54,7 @@
   font-size: 0.85rem;
   font-weight: bold;
   margin-bottom: 4px;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 .portal-section-sub {
@@ -76,7 +76,7 @@
 }
 
 .portal-label-accent {
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 .portal-req {
@@ -106,7 +106,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.45rem;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 .slot-input-row {
@@ -199,7 +199,7 @@
   letter-spacing: 0.05em;
   background: var(--surface-dark);
   border: 2px solid var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   box-shadow: 0 0 12px color-mix(in srgb, var(--accent-color) 25%, transparent);
   transition: all 0.15s ease;
 }

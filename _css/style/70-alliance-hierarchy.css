@@ -59,7 +59,7 @@
   font-family: var(--font-headers);
   font-size: 0.95rem;
   font-weight: 800;
-  color: var(--accent-color);
+  color: var(--accent-text);
   min-width: 28px;
 }
 
@@ -76,7 +76,7 @@
 .ladder-step-btn {
   background: var(--surface-dark);
   border: 1px solid var(--border-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-size: 0.55rem;
   width: 18px;
   height: 14px;
@@ -177,7 +177,7 @@
 .btn-link-acad-prompt {
   background: transparent;
   border: 1px dashed var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-size: 0.65rem;
   font-weight: 700;
   padding: 1px 6px;
@@ -228,7 +228,7 @@
 .btn-ladder-del {
   background: transparent;
   border: 1px solid color-mix(in srgb, var(--status-danger) 40%, transparent);
-  color: var(--status-danger);
+  color: var(--status-danger-hover); /* the lighter red: easier to read on dark cards */
   width: 20px;
   height: 20px;
   border-radius: 3px;
@@ -320,7 +320,7 @@
 .btn-blacklist-del {
   background: transparent;
   border: none;
-  color: var(--status-danger);
+  color: var(--status-danger-hover); /* the lighter red: easier to read on dark cards */
   cursor: pointer;
   font-size: 0.85rem;
   line-height: 1;
