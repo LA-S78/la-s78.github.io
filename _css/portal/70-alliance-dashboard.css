@@ -285,20 +285,13 @@ html[data-theme='sanctuary'] .dw-s4 {
   display: none;
 }
 
-/* Like the planner bars (_css/style/88-toolbars.css): Edit Dashboard and Add chart at the
-   right; on phones Edit on the left, Add chart on the right */
+/* Edit Dashboard and Add chart, centred (owner decision, 2026-11-13) */
 .dash-edit-bar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
   margin-bottom: 1rem;
-}
-
-@media (max-width: 599px) {
-  .dash-edit-bar {
-    justify-content: space-between;
-  }
 }
 
 .dw-empty,
