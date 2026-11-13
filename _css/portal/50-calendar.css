@@ -199,14 +199,11 @@
   cursor: not-allowed;
 }
 
+/* Dark text on the accent colour, like the site's other solid theme-colour controls (active
+   tabs, badges, the update toast); white on the theme colour was unreadable in Sanctuary */
 .btn-primary {
-  background: rgb(var(--active-theme, 35, 120, 45));
-  border-color: rgb(var(--active-theme-bright, 55, 150, 65));
-  color: var(--on-active-theme, var(--white));
-}
-
-.scope-global .btn-primary {
   background: var(--accent-color);
+  border-color: var(--accent-color);
   color: var(--nav-bg);
 }
 
