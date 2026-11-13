@@ -20,6 +20,7 @@
   }
 
   let isNewNavigation = false;
+  let isRestoreVisit = false;
 
   // --- AUTHENTICATION CONFIGURATION ---
   const AUTH_CONFIG = {
@@ -464,33 +465,56 @@
     if (newSubtitle && headerSubtitle) headerSubtitle.textContent = newSubtitle.textContent;
   }
 
+  // Puts the page back at `target` (pixels down). Live sections (standings, rewards, map) grow
+  // as their data arrives, so a page can be too short at first: the position is applied again
+  // each frame until it holds, for up to 4 seconds. Touching, scrolling or a key stops it at
+  // once, so it never fights the reader.
+  function restoreScroll(scrollContainer, target) {
+    const started = performance.now();
+    let stopped = false;
+    const stop = () => (stopped = true);
+    for (const ev of ['wheel', 'touchstart', 'keydown', 'mousedown']) {
+      scrollContainer.addEventListener(ev, stop, { once: true, passive: true });
+    }
+    const step = () => {
+      if (stopped) return;
+      scrollContainer.scrollTop = target;
+      if (Math.abs(scrollContainer.scrollTop - target) <= 2) return;
+      if (performance.now() - started < 4000) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
   function initScrollMemory() {
     const scrollContainer = document.querySelector('main');
     if (!scrollContainer) return;
     const scrollKey = 'scroll-pos-' + window.location.pathname;
-    requestAnimationFrame(() => {
-      if (isNewNavigation) {
-        scrollContainer.scrollTop = 0;
-        isNewNavigation = false;
-      } else {
-        const navType = performance.getEntriesByType('navigation')[0]?.type;
-        if (navType !== 'navigate') {
-          const savedScroll = sessionStorage.getItem(scrollKey);
-          if (savedScroll) scrollContainer.scrollTop = parseInt(savedScroll, 10);
-        }
-      }
-    });
+    const saved = () => parseInt(sessionStorage.getItem(scrollKey) || '', 10);
+    if (isNewNavigation) {
+      // A new visit (a link): the top of the page
+      isNewNavigation = false;
+      isRestoreVisit = false;
+      requestAnimationFrame(() => (scrollContainer.scrollTop = 0));
+    } else if (isRestoreVisit) {
+      // The back or forward button: where the reader was (Turbo redraws the page from its
+      // snapshot at the top, so the position has to be put back)
+      isRestoreVisit = false;
+      if (saved() > 0) restoreScroll(scrollContainer, saved());
+    } else {
+      const navType = performance.getEntriesByType('navigation')[0]?.type;
+      if (navType !== 'navigate' && saved() > 0) restoreScroll(scrollContainer, saved());
+    }
     if (!firstTime(scrollContainer, 'scroll-memory')) return;
     let scrollTimeout;
     scrollContainer.addEventListener(
       'scroll',
       () => {
         if (scrollTimeout) return;
+        // The page this scroll belongs to (by the time the timer runs, a link may have
+        // moved the address on to the next page)
+        const key = 'scroll-pos-' + window.location.pathname;
         scrollTimeout = setTimeout(() => {
-          sessionStorage.setItem(
-            'scroll-pos-' + window.location.pathname,
-            scrollContainer.scrollTop,
-          );
+          if (scrollContainer.isConnected) sessionStorage.setItem(key, scrollContainer.scrollTop);
           scrollTimeout = null;
         }, 100);
       },
@@ -555,8 +579,12 @@
   // --- EVENTS ---
   document.addEventListener('turbo:load', initApp);
   document.addEventListener('turbo:frame-render', initApp);
-  document.addEventListener('turbo:visit', () => {
-    isNewNavigation = true;
+  // A link is a new visit (top of the page); the back/forward buttons are a "restore" visit
+  // (back to where the reader was). Both used to count as new, so Back always went to the top.
+  document.addEventListener('turbo:visit', (event) => {
+    const restore = event.detail?.action === 'restore';
+    isNewNavigation = !restore;
+    isRestoreVisit = restore;
   });
 
   document.addEventListener('click', (e) => {
