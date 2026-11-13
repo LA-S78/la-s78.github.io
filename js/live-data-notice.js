@@ -45,3 +45,58 @@ export function showLiveDataNotice(anchor, { savedAt = null, failed = false } = 
     el.textContent = window.t('live_data.offline', { when });
   }
 }
+
+// ---------- Last known data while loading (Look & Feel step 4, owner idea) ----------
+// sw.js keeps the last good answer of /api/state and /api/calendar on this device (for
+// offline use). While the fresh answer loads, a tool can show that saved copy straight away,
+// dimmed with "⏳ Updating…" in its corner, instead of a blank or "Loading…" that jumps when
+// the data arrives. The label floats over the tool, so nothing moves when it goes.
+
+/** This device's last saved copy of a live-data answer, or null (none, or no service worker). */
+export async function savedLiveCopy(url) {
+  try {
+    if (typeof caches === 'undefined') return null;
+    const key = new URL(url, location.origin);
+    key.searchParams.delete('t');
+    const cache = await caches.open('asylum-live-data');
+    return (await cache.match(key.href)) || null;
+  } catch {
+    return null;
+  }
+}
+
+/** Dims `el` with "⏳ Updating…" in its corner (on), or takes that away (off). */
+export function markUpdating(el, on) {
+  if (!el) return;
+  el.classList.toggle('is-updating', on);
+  if (on) {
+    el.dataset.updating = window.t ? window.t('live_data.updating') : 'Updating…';
+    el.setAttribute('aria-busy', 'true');
+  } else {
+    el.removeAttribute('aria-busy');
+  }
+}
+
+/**
+ * Shows the saved copy of `url` while `fresh` (the request already under way) loads: if the
+ * saved copy is found before the fresh answer, `show(savedResponse)` draws it and `el` is
+ * marked as updating. Returns when the saved copy was saved (ISO text), or null if it wasn't
+ * shown; call markUpdating(el, false) once the fresh answer is drawn.
+ */
+export async function showSavedWhileLoading(url, fresh, el, show) {
+  let answered = false;
+  fresh.then(
+    () => (answered = true),
+    () => (answered = true),
+  );
+  const saved = await savedLiveCopy(url);
+  if (!saved || answered) return null;
+  try {
+    await show(saved);
+  } catch (err) {
+    console.warn('Saved copy not shown:', err);
+    return null;
+  }
+  markUpdating(el, true);
+  return offlineCopySavedAt(saved) || new Date(0).toISOString();
+}

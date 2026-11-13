@@ -2,7 +2,12 @@
  * map.js - Comprehensive Map Data, Parsing, Highlighting, Label, Planner, Fullscreen, and Image Snapshot Utilities
  */
 
-import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
+import {
+  offlineCopySavedAt,
+  showLiveDataNotice,
+  showSavedWhileLoading,
+  markUpdating,
+} from './live-data-notice.js';
 import { submitProposalWithAuth } from './auth-modal.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
@@ -1451,6 +1456,13 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
     alliances[tag] = { ...data };
   });
 
+  // Start every territory unclaimed, so an earlier copy's owners (the saved copy shown while
+  // the fresh one loads) don't linger where the fresh data has none
+  cities.forEach((city) => {
+    city.owner = 'Unclaimed';
+    city.status = null;
+  });
+
   if (state.territory_ownership) {
     Object.entries(state.territory_ownership).forEach(([cityId, data]) => {
       const city = getCityById(cityId);
@@ -1485,12 +1497,23 @@ function noticeAnchor(root) {
 
 export async function loadLiveMapState(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
+  const container = noticeAnchor(root);
+  let savedAt = null;
 
   try {
-    const [stateRes, colorsRes] = await Promise.all([
+    const fresh = Promise.all([
       fetch(`/api/state?scope=map&t=${Date.now()}`),
       fetch('/api/colors'),
     ]);
+    // Meanwhile, this device's last copy of the map, dimmed with "Updating…"
+    savedAt = await showSavedWhileLoading('/api/state?scope=map', fresh, container, async (res) => {
+      applyMapState(await res.json(), root, false);
+      if (root) {
+        setMapColorMode(currentColorMode, root);
+        root.classList.add('map-loaded');
+      }
+    });
+    const [stateRes, colorsRes] = await fresh;
 
     if (stateRes.ok) {
       const liveState = await stateRes.json();
@@ -1509,8 +1532,10 @@ export async function loadLiveMapState(svgRoot = null) {
     }
   } catch (err) {
     console.warn('Could not fetch live map data:', err);
-    showLiveDataNotice(noticeAnchor(root), { failed: true });
+    // The saved copy, if one is showing, stays: say how old it is instead of "failed"
+    showLiveDataNotice(noticeAnchor(root), savedAt ? { savedAt } : { failed: true });
   } finally {
+    markUpdating(container, false);
     if (root) {
       const restored = checkAndRestoreMapDraft(root);
       if (!restored) {

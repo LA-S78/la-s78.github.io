@@ -10,7 +10,12 @@
  * don't jump around. Without the calendar (offline, error) the plain chart stays in that
  * order (or the default one) and a notice says the live data couldn't be loaded.
  */
-import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
+import {
+  markUpdating,
+  offlineCopySavedAt,
+  showLiveDataNotice,
+  showSavedWhileLoading,
+} from './live-data-notice.js';
 
 const esc = (value) => window.escapeHtml(value);
 const t = (key, vars) => window.t(`capitol_rotation.${key}`, vars);
@@ -110,20 +115,35 @@ async function init() {
   started.add(board);
   const remembered = rememberedOrder();
   if (remembered) renderPlain(board, remembered);
+  let savedAt = null;
   try {
-    const res = await fetch('/api/calendar');
+    const fresh = fetch('/api/calendar');
+    // Meanwhile, this device's last copy of the full board, dimmed with "Updating…"
+    savedAt = await showSavedWhileLoading('/api/calendar', fresh, board, async (r) => {
+      const rotation = (await r.json())?.status?.rotation;
+      if (!Array.isArray(rotation) || !rotation.length) throw new Error('no rotation');
+      render(board, rotation);
+    });
+    const res = await fresh;
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     const rotation = data?.status?.rotation;
     if (!Array.isArray(rotation) || !rotation.length) throw new Error('no rotation');
     render(board, rotation);
     rememberOrder(rotation);
+    markUpdating(board, false);
     board.removeAttribute('aria-busy');
     showLiveDataNotice(board, { savedAt: offlineCopySavedAt(res) });
   } catch (err) {
     console.warn('Capitol rotation: live calendar not loaded:', err.message);
-    renderPlain(board, remembered || DEFAULT_ORDER);
+    markUpdating(board, false);
     board.removeAttribute('aria-busy');
+    if (savedAt) {
+      // The saved board stays: say how old it is instead of "failed"
+      showLiveDataNotice(board, { savedAt });
+      return;
+    }
+    renderPlain(board, remembered || DEFAULT_ORDER);
     showLiveDataNotice(board, { failed: true });
   }
 }

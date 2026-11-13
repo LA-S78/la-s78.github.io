@@ -723,6 +723,7 @@ proposals:
 live_data:
   failed: "⚠️ Couldn't load the latest data. Check your connection and refresh the page."
   offline: "📴 Offline: showing the data saved on this device ({when})."
+  updating: "⏳ Updating…"
 
 
 # The Capitol Rotation chart on the Rules page (js/capitol-rotation.js), drawn from the live
