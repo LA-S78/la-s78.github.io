@@ -54,15 +54,6 @@
 }
 
 @media (max-width: 767px) {
-  /* A label on two lines ("Buff-/Zusammenfassung") makes the map's buttons taller, not
-     wider (the rewards planner's buttons keep their own size) */
-  #map-container .draft-btn,
-  #alliance-container .draft-btn {
-    height: auto;
-    min-height: 28px;
-    padding: 3px 0.55rem;
-  }
-
   /* Slightly tighter spacing, so the three map buttons share one row on a 390px phone */
   #map-container .control-group,
   #alliance-container .control-group {
