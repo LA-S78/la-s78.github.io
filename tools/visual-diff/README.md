@@ -92,6 +92,7 @@ where it applies).
 Each entry in `states.mjs` can have:
 - `needs`: a selector; the state runs on every page where it exists.
 - `storage`: localStorage values, e.g. `LEADER` for the logged-in leader view.
+- `query`: added to the page address, e.g. `?token=visual.test` for the nomination page (opened from a /nominate link).
 - `run(page)`: what to click or type before the capture.
 - `api(fixture, data)`: changes the sample data for this state only (e.g. no holder colour,
   or a different reward schedule). `fixture` is the file name in `fixtures/` without `.json`.

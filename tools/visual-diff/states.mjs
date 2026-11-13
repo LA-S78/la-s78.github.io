@@ -55,6 +55,22 @@ const defensePreview = (week) => async (page) => {
   await page.evaluate(() => document.activeElement?.blur());
 };
 
+/** A nominating alliance, as /api/nominate?token=… describes it (api/nominate.js). */
+const NOMINATING = {
+  tag: 'WLO',
+  rank: 1,
+  chests: { standard: { commanders_will: 2, loyal_servant: 2, followers_heart: 4 } },
+  chestsIfWon: {
+    standard: { commanders_will: 2, loyal_servant: 2, followers_heart: 4 },
+    kingdom_war: { commanders_will: 2, loyal_servant: 2, followers_heart: 4 },
+  },
+  hasBuyoutBonus: false,
+  isWloDeducted: false,
+  ranked: ['Josh', 'Ana', 'Bo', 'Cy', 'Di', 'Ed', 'Fi', 'Gu', 'Hal'],
+  submittedAt: '2026-11-08T12:00:00Z',
+  handedOut: [{ pool: 'standard', chest: 'commanders_will', name: 'Josh' }],
+};
+
 export const STATES = [
   { name: 'default' },
   { name: 'leader', storage: LEADER },
@@ -354,6 +370,31 @@ export const STATES = [
       data.rewards.nomination = { submitted: false };
     },
   },
+  // Nomination page (portal/nominate.html) opened from a /nominate link (a token with a dot, as signed links have): the alliance's
+  // ranked list and its chests (the link itself isn't checked: the API is sample data).
+  {
+    name: 'nominate-form',
+    needs: '#nominate-app',
+    query: '?token=visual.test',
+    api: (fixture, data) => {
+      if (fixture === 'nominate') data.alliance = NOMINATING;
+    },
+  },
+  // ...after a Kingdom War win: both chest sets
+  {
+    name: 'nominate-won',
+    needs: '#nominate-app',
+    query: '?token=visual.test',
+    api: (fixture, data) => {
+      if (fixture !== 'nominate') return;
+      data.period = { ...data.period, result: 'won' };
+      data.mode = 'kw';
+      data.alliance = NOMINATING;
+    },
+  },
+  // King's console (portal/distribute.html) as a leader of the King's alliance: the
+  // checklist can be ticked (others see it read-only, the default state).
+  { name: 'kings-console-king', needs: '#roster-container', storage: SIGNED_IN },
   // One state per <dialog> on the page (image zoom dialogs etc.), added automatically.
   {
     name: 'dialog',

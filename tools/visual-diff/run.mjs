@@ -461,7 +461,8 @@ async function openState(browser, origin, job) {
   });
   const page = await context.newPage();
   await page.clock.install({ time: FIXED_TIME });
-  await page.goto(origin + job.page, { waitUntil: 'load' });
+  // A state's `query` opens the page with it (e.g. a /nominate link's ?token=…).
+  await page.goto(origin + job.page + (job.state.query || ''), { waitUntil: 'load' });
   await settle(page, 3000);
   if (job.state.run) {
     await job.state.run(page, job.dialogId);
