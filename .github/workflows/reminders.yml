@@ -1,21 +1,22 @@
-# Calendar reminders: every 10 minutes, asks the site to check for events starting within the
-# hour and post their Discord reminders (api/_reminders.js, through POST /api/calendar). The
-# work and its secrets (Gist, bot token, channels) stay on Vercel; this only proves the call
-# comes from here with REMINDER_SECRET (the same value as Vercel's).
+# Calendar reminders: asks the site to check for events starting within the hour and post
+# their Discord reminders (api/_reminders.js, through POST /api/calendar). The work and its
+# secrets (Gist, bot token, channels) stay on Vercel; this only proves the call comes from
+# here with REMINDER_SECRET (the same value as Vercel's).
+#
+# The every-10-minutes check is NOT run from here: GitHub's schedule never started for this
+# workflow, and is often late or skipped when it does run. cron-job.org calls the site
+# directly instead (owner decision, 2026-11-13; set-up in docs/DECISIONS.md). Two callers at
+# once could post a reminder twice, so this workflow has no schedule: "Run workflow"
+# (Actions tab) runs one check by hand, on either site, as a dry run if wanted; its report is
+# printed in the run's log.
 #
 # Safety: the live site posts nothing until REMINDERS_LIVE=true is set in Vercel (until then
 # it only reports what it would send). dev.la-s78.app uses the test data and posts only to
-# TEST_CHANNEL_ID. "Run workflow" (Actions tab) runs one check by hand, on either site, as a
-# dry run if wanted; its report is printed in the run's log.
-#
-# GitHub runs schedules from the default branch (main), often a few minutes late; reminders
-# allow for that (they post at most an hour before, with a live countdown).
+# TEST_CHANNEL_ID.
 
 name: Calendar reminders
 
 on:
-  schedule:
-    - cron: '*/10 * * * *'
   workflow_dispatch:
     inputs:
       site:
@@ -45,8 +46,8 @@ jobs:
           # dev.la-s78.app is a Vercel preview behind Vercel Authentication; this key (Vercel →
           # Settings → Deployment Protection → Protection Bypass for Automation) lets the check in
           VERCEL_BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-          SITE: ${{ github.event_name == 'workflow_dispatch' && inputs.site || 'both' }}
-          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+          SITE: ${{ inputs.site }}
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
           # A pasted secret often ends with a line break, which curl refuses in a header
           # ("bad argument"); the site ignores spaces and line breaks around it too
@@ -82,6 +83,4 @@ jobs:
             fi
             echo
           done
-          # A scheduled run only warns (a failure would email the owner every 10 minutes while
-          # a site is down); a run started by hand fails, so it shows.
-          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then exit $status; fi
+          exit $status
