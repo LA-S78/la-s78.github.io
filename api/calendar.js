@@ -15,8 +15,9 @@ import { timingSafeEqual } from 'node:crypto';
 
 /** True when the request carries the reminder schedule's secret (compared in constant time). */
 function fromReminderSchedule(req) {
-  const expected = process.env.REMINDER_SECRET || '';
-  const given = String(req.headers?.['x-reminder-secret'] || '');
+  // Spaces or a line break pasted around the secret (in Vercel or GitHub) don't count
+  const expected = String(process.env.REMINDER_SECRET || '').trim();
+  const given = String(req.headers?.['x-reminder-secret'] || '').trim();
   if (!expected || given.length !== expected.length) return false;
   return timingSafeEqual(Buffer.from(given), Buffer.from(expected));
 }
