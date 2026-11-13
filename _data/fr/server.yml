@@ -94,17 +94,17 @@ api_proposals:
   week_and_threat: La semaine cible et le serveur de menace sont requis.
 api_events:
   session_invalid: Votre connexion ou votre lien de calendrier a expiré. Connectez-vous à nouveau avec Discord, ou relancez /calendar sur Discord.
-  not_leader: Seuls les R4 et R5 peuvent gérer les événements de leur alliance (et les intendants ceux à l'échelle du serveur).
+  not_leader: Seuls les R4 et R5 peuvent gérer les événements de leur alliance (et les intendants ceux du serveur).
   required_fields: Le titre, la date et le Game Time sont obligatoires.
   date_format: La date doit être au format AAAA-MM-JJ.
   time_format: Le Game Time doit être au format HH:MM (00:00 à 23:59).
   time_step: Le Game Time doit être par tranches de 5 minutes (:00, :05, :10, :15, etc.).
-  role_id_needed: Cibler un rôle spécifique nécessite un ID de rôle Discord valide de 17 à 20 chiffres.
-  published: Opération "{title}" publiée avec succès.
+  role_id_needed: La cible « Rôle spécifique » nécessite un ID de rôle Discord valide de 17-20 chiffres.
+  published: Opération « {title} » publiée avec succès.
   not_found: Événement introuvable ou déjà supprimé.
   out_of_scope: 'Accès refusé : vous ne pouvez pas modifier ou supprimer des événements en dehors de votre périmètre assigné.'
   deleted: 'Opération supprimée : {title}'
-  updated: Opération "{title}" mise à jour.
+  updated: Opération « {title} » mise à jour.
 reminders:
   title: "⏰ Début bientôt : {title}"
   starts: Début

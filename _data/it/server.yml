@@ -93,13 +93,13 @@ api_proposals:
   no_changes: Nessuna modifica fornita.
   week_and_threat: La settimana di riferimento e il server minaccia sono obbligatori.
 api_events:
-  session_invalid: Il tuo link di accesso o del calendario è scaduto. Accedi di nuovo con Discord o riesegui /calendar in Discord.
+  session_invalid: Il tuo link di accesso o del calendario è scaduto. Accedi di nuovo con Discord o riesegui /calendar su Discord.
   not_leader: Solo R4 e R5 possono gestire gli eventi della propria alleanza (e gli Steward quelli a livello di server).
   required_fields: Titolo, Data e Game Time sono obbligatori.
   date_format: La data deve essere nel formato AAAA-MM-GG.
   time_format: Il Game Time deve essere nel formato HH:MM (da 00:00 a 23:59).
   time_step: Il Game Time deve avere incrementi di 5 minuti (:00, :05, :10, :15, ecc.).
-  role_id_needed: Target Specific Role richiede un ID ruolo Discord valido di 17-20 cifre.
+  role_id_needed: Target Specific Role richiede un ID Ruolo Discord valido di 17-20 cifre.
   published: Operazione "{title}" pubblicata con successo.
   not_found: Evento non trovato o già eliminato.
   out_of_scope: 'Accesso negato: non puoi modificare o eliminare eventi al di fuori del tuo ambito assegnato.'
