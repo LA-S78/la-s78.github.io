@@ -1,0 +1,119 @@
+/* ==========================================================================
+   ONE BUTTON SYSTEM (Look & Feel: tools that fit phones, step 2)
+   Every button and small box in the tools uses one of three heights and one shape, set
+   here (the sizes are in 05-base-variables-themes.css). Before, about 40 styles used some
+   20 different heights (13 to 50px) and 8 corner shapes; the smallest (14px arrows, a 13px
+   ×) were hard to hit with a finger. Colours stay with each button's own rule.
+   Signed-in tools (King's console, dashboard, calendar forms): _css/portal/85-controls.css.
+   ========================================================================== */
+
+/* Shared: text centred, any height. A long translation may wrap onto a second line; the
+   button then grows instead of spilling out. */
+.draft-btn,
+.submit-plan-btn,
+.toggle-btn,
+.id-btn,
+.btn-modal-cancel,
+.btn-modal-action,
+.btn-nap-toggle,
+.btn-link-acad-prompt,
+.ladder-step-btn,
+.btn-ladder-del,
+.btn-tier-del,
+.range-stepper button,
+.auth-modal-close,
+.drawer-close-btn,
+.add-alliance-inline button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  border-radius: var(--control-radius);
+  line-height: 1.15;
+}
+
+/* Compact: buttons inside a row of a list or table */
+.btn-nap-toggle,
+.btn-link-acad-prompt {
+  min-height: var(--control-compact);
+  padding: 2px 8px;
+  font-size: 0.72rem;
+}
+
+/* Compact squares: ×, ▲▼, − + */
+.btn-ladder-del,
+.btn-tier-del,
+.range-stepper button {
+  width: var(--control-compact);
+  min-width: var(--control-compact);
+  min-height: var(--control-compact);
+  padding: 0;
+}
+
+/* The ladder's ▲▼ sit on top of each other: a little shorter, each still easy to hit */
+.ladder-step-btn {
+  width: var(--control-compact);
+  min-height: 24px;
+  padding: 0;
+  font-size: 0.7rem;
+}
+
+/* Standard: toolbars, mode switches, view switches, small boxes beside them */
+.draft-btn,
+.submit-plan-btn,
+.toggle-btn,
+.id-btn,
+.add-alliance-inline button {
+  min-height: var(--control-standard);
+  padding: 4px 0.75rem;
+  font-size: 0.78rem;
+}
+
+#alliance-override,
+.add-alliance-inline input {
+  height: var(--control-standard);
+  border-radius: var(--control-radius);
+}
+
+/* Close buttons (×) of windows and drawers: standard squares */
+.auth-modal-close,
+.drawer-close-btn {
+  width: var(--control-standard);
+  min-height: var(--control-standard);
+  padding: 0;
+}
+
+/* Large: the main action of a window or form */
+.btn-modal-cancel,
+.btn-modal-action {
+  min-height: var(--control-large);
+  padding: 6px 18px;
+  font-size: 0.85rem;
+}
+
+/* The × inside an academy tag: a small square that still takes a fingertip (it sits
+   inside the tag, so it can't be a full compact button) */
+.btn-unlink-acad {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: var(--control-radius);
+}
+
+/* The T10 calculator's buttons are already large; same corners as the rest */
+.level-btn,
+.t10-toggle {
+  border-radius: var(--control-radius);
+}
+
+/* "NAP Protected" / "External" sits in the same row as Revoke NAP and ×: same height, so
+   the row lines up (it's a label, not a button) */
+.nap-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-compact);
+  border-radius: var(--control-radius);
+}

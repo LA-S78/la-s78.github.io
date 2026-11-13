@@ -121,6 +121,14 @@ html[data-theme="default"] {
   --line-color: #4a6c82;
   --node-border: #6495ed;
 
+  /* Buttons and boxes (one button system, _css/style/86-controls.css): three heights, one shape.
+     compact: inside a row (Copy, ×, ▲▼); standard: toolbars and switches; large: the main
+     action of a form or window, and form fields. 28px is the smallest a finger hits reliably. */
+  --control-compact: 28px;
+  --control-standard: 32px;
+  --control-large: 40px;
+  --control-radius: 6px;
+
   /* Typography */
   --font-headers: "Georgia", serif;
   --font-body:
