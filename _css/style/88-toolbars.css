@@ -3,8 +3,11 @@
    Every tool's controls bar (.map-controls: the map, the alliance ladder, the rewards
    planner) has two parts:
      left / first row:   what you're looking at: view switches and information
-     right / second row: the planner: Planner Mode and Submit together at the right
-                         end (on the map on phones: Planner Mode left, Submit right).
+     right / second row: the planner: on a wide screen Planner Mode and Submit together
+                         at the right end of the top row; on phones a line of their own,
+                         Planner Mode on the left and Submit on the right.
+   The blacklist's bar (Edit Blacklist, Submit) and the dashboard's edit bar (Edit
+   Dashboard, Add chart; _css/portal/70-alliance-dashboard.css) follow the same pattern.
    The map's "Change to:" tag box always has a line of its own under the buttons (greyed
    out until Planner Mode is on), so it never squeezes the bar or appears and disappears.
    On phones the two parts become two full-width rows, so the bar keeps the same shape in
@@ -32,6 +35,17 @@
   width: 140px;
 }
 
+/* The blacklist's bar: Edit Blacklist and Submit at the right, like a planner */
+.blacklist-controls {
+  justify-content: flex-end;
+}
+
+@media (max-width: 599px) {
+  .blacklist-controls {
+    justify-content: space-between;
+  }
+}
+
 /* The map's bar when it is short of room (set by js/map.js): Buff Summary and Fullscreen as
    their icons; their names stay for screen readers */
 .map-controls.is-compact .buffs-label,
@@ -54,14 +68,9 @@
     flex-wrap: wrap;
   }
 
-  /* Planner Mode and Submit together at the right end of their row ... */
+  /* On its own line: Planner Mode on the left, Submit on the right (owner decision,
+     2026-11-13; the blacklist and dashboard bars do the same, below) */
   .map-controls .control-group.right {
-    justify-content: flex-end;
-  }
-
-  /* ... except on the map, whose three rows (views; planner; tag box) read best with
-     Planner Mode on the left and Submit on the right (owner decision, 2026-11-13) */
-  #map-container .map-controls .control-group.right {
     justify-content: space-between;
   }
 
