@@ -421,60 +421,63 @@ calendar:
   ev_close_title: "⌛ Belohnungen schließen — {week}"
   ev_close_desc: 'Truhen laufen Mittwoch 00:00 GT ab: verteile alles vor diesem Zeitpunkt.'
 calendar_events:
-  reminder: Auf Discord 1 Stunde vorher erinnern
-  reminder_hint: Gepostet im Warnungskanal deiner Allianz, mit Ping an die oben gewählte Rolle.
-  reminder_hint_server: Gepostet im Warnungskanal des NAP-Discord (und in Allianzen, die zugestimmt haben), mit Ping an die oben gewählte Rolle.
-  reminder_no_channel: 'Deine Allianz hat noch keinen Warnungskanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
-  reminder_no_server_channel: Der NAP-Warnungskanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können Server-Erinnerungen nicht gepostet werden.
+  reminder: 1 Stunde vorher auf Discord erinnern
+  reminder_hint: Im Alarm-Kanal deiner Allianz gepostet, mit Ping auf die oben gewählte Rolle.
+  reminder_hint_server: Im Alarm-Kanal von NAP gepostet (und in Allianzen, die zugestimmt haben), mit Ping auf die oben gewählte Rolle.
+  reminder_no_channel: 'Deine Allianz hat noch keinen Alarm-Kanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
+  reminder_no_server_channel: Der NAP-Alarm-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können keine Server-Erinnerungen gepostet werden.
   edit_heading: Ereignis bearbeiten
+  scope_label: Dessen Ereignisse verwalten
+  scope_server: "🌐 Server-weite Ereignisse"
+  scope_alliance: "🛡️ [{tag}] Ereignisse"
   save_changes: "💾 Änderungen speichern"
   manage_mode: VERWALTUNGSMODUS
   session_active: Authentifizierte Sitzung aktiv
   schedule_operation: "➕ Operation planen"
   create_operation: Operation erstellen
   kingdom_admin: "👑 KÖNIGREICHS-ADMIN"
-  kingdom_desc: Planung von königreichsweiten Warnungen und Operationen
+  kingdom_desc: Königreichsweite Alarme und Operationen planen
   kingdom_heading: Königreichs-Operation erstellen ([GLOBAL])
   leadership: "🛡️ [{tag}] FÜHRUNG"
-  leadership_desc: Verwaltung interner Operationen für [{tag}]
+  leadership_desc: Interne Operationen für [{tag}] verwalten
   alliance_heading: "[{tag}] Operation erstellen"
-  preset: Operations-Voreinstellung
+  preset: Operations-Vorlage
   preset_custom: "🛠️ Benutzerdefinierte Operation (Leer)"
-  preset_crystal_cluster: "🔮 Kristalltal-Cluster (0,5h)"
-  preset_elixir_scramble: "🧪 Elixier-Gerangel (0,5h)"
-  preset_survival_battle: "⚔️ Überlebenskampf (4,0h)"
-  preset_kill_event: "🩸 Kill-Event (24,0h)"
-  preset_kvk_battle: "👑 KvK-Kampf (1,0h)"
-  preset_gear_event: "🛡️ Ausrüstungs-Event (48,0h)"
-  preset_cheese_trap: "🧀 Cheese-Falle (0,5h)"
+  preset_crystal_cluster: "🔮 Kristalltal (0,5 Std.)"
+  preset_elixir_scramble: "🧪 Elixier-Gerangel (0,5 Std.)"
+  preset_survival_battle: "⚔️ Überlebenskampf (4,0 Std.)"
+  preset_kill_event: "🩸 Kill-Event (24,0 Std.)"
+  preset_kvk_battle: "👑 KvK-Kampf (1,0 Std.)"
+  preset_gear_event: "🛡️ Ausrüstungs-Event (48,0 Std.)"
+  preset_cheese_trap: "🧀 Cheese-Falle (0,5 Std.)"
   title: Ereignistitel
-  title_example: z. B. Hive-Verteidigungstraining oder Außenposten-Angriff
+  title_example: z. B. Hive-Verteidigungsübung oder Außenposten-Angriff
   date: Startdatum (JJJJ-MM-TT)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Server Game Time (rastet in 5-Minuten-Schritten ein)
+  time_hint: Server Game Time (wird auf 5-Minuten-Schritte gerundet)
   duration: Dauer (Stunden)
-  frequency: Frequenz
+  frequency: Häufigkeit
   once: Einmaliges Ereignis (wiederholt sich nicht)
   every_2_days: Wiederholt sich alle 2 Tage
-  weekly: Wiederholt sich wöchentlich (gleicher Tag & gleiche Zeit)
-  alert_level: Discord-Warnungsstufe
-  notify_role: "🔔 Standard-Allianzrolle pingen (Fall-back auf @everyone)"
-  notify_custom: "🎯 Spezifische Rollen-ID als Ziel (einmaliges Überschreiben)"
-  notify_everyone: "🚨 @everyone-Broadcast erzwingen (Pflicht-Operation)"
-  notify_none: "🔕 Lautlos (nur Kalender – kein Discord-Ping)"
+  weekly: Wiederholt sich wöchentlich (gleicher Tag & Uhrzeit)
+  alert_level: Discord-Alarmstufe
+  notify_role: "🔔 Standard-Allianzrolle pingen (Fall-back zu @everyone)"
+  notify_custom: "🎯 Spezifische Rollen-ID als Ziel (einmalige Überschreibung)"
+  notify_everyone: "🚨 @everyone-Broadcast erzwingen (verpflichtende Operation)"
+  notify_none: "🔕 Stumm (nur Kalender – kein Discord-Ping)"
   role_id: Spezifische Rollen-ID
-  role_id_hint: "(Nur erforderlich für spezifisches Ziel)"
+  role_id_hint: "(Nur erforderlich für spezifisches Rollenziel)"
   role_id_title: Muss eine gültige 17-20-stellige Discord-Rollen-ID sein
   details: Anweisungen / Sammelpunkt
-  details_example: z. B. Versammlung bei Hive Alpha. R4 führen Rallies. Voice-Chat aktiv.
+  details_example: z. B. Versammlung bei Hive Alpha. R4 leiten Rallies. Voice-Chat aktiv.
   publish: Im Kalender veröffentlichen
   publishing: Wird veröffentlicht...
   bad_time: Game Time muss in 5-Minuten-Schritten eingestellt werden (:00, :05, :10, etc.)
-  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Warnungsziel ein.
-  save_failed: Ereignis konnte nicht gespeichert werden
+  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Alarmziel ein.
+  save_failed: Speichern des Ereignisses fehlgeschlagen
   published: Operation erfolgreich veröffentlicht!
   confirm_delete: Bist du sicher, dass du diese Operation aus dem Kalender entfernen möchtest?
-  delete_failed: Ereignis konnte nicht gelöscht werden
+  delete_failed: Löschen des Ereignisses fehlgeschlagen
   removed: Operation entfernt.
 kings_scheduler:
   title: "⚔️ Kapitol-Verteidigungs- & Rotationskonsole"

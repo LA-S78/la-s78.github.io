@@ -422,55 +422,58 @@ calendar:
   ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette échéance.'
 calendar_events:
   reminder: Rappeler sur Discord 1 heure avant
-  reminder_hint: Publié dans le salon d'alerte de votre alliance, pingant le rôle choisi ci-dessus.
-  reminder_hint_server: Publié dans le salon d'alerte du Discord NAP (et dans les alliances ayant opté pour cela), pingant le rôle choisi ci-dessus.
-  reminder_no_channel: 'Votre alliance n''a pas encore de salon d''alerte : exécutez /registerbot sur votre Discord pour que les rappels puissent être publiés.'
-  reminder_no_server_channel: Le salon d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), donc les rappels du serveur ne peuvent pas être publiés.
+  reminder_hint: Publié dans le canal d'alerte de votre alliance, pingant le rôle choisi ci-dessus.
+  reminder_hint_server: Publié dans le canal d'alerte du Discord NAP (et dans les alliances ayant opté pour), pingant le rôle choisi ci-dessus.
+  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : exécutez /registerbot dans votre Discord pour que les rappels puissent être publiés.'
+  reminder_no_server_channel: Le canal d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), les rappels du serveur ne peuvent donc pas être publiés.
   edit_heading: Modifier l'événement
+  scope_label: Événements à gérer
+  scope_server: "🌐 Événements du serveur"
+  scope_alliance: "🛡️ Événements [{tag}]"
   save_changes: "💾 Enregistrer les modifications"
   manage_mode: MODE GESTION
   session_active: Session authentifiée active
-  schedule_operation: "➕ Planifier une opération"
+  schedule_operation: "➕ Programmer une opération"
   create_operation: Créer une opération
-  kingdom_admin: "👑 ADMINISTRATION DU ROYAUME"
-  kingdom_desc: Programmation des alertes et opérations à l'échelle du Royaume
-  kingdom_heading: Créer une opération du Royaume ([GLOBAL])
-  leadership: "🛡️ DIRECTION DE [{tag}]"
+  kingdom_admin: "👑 ADMIN ROYAUME"
+  kingdom_desc: Programmation des alertes et opérations à l'échelle du royaume
+  kingdom_heading: Créer une opération de royaume ([GLOBAL])
+  leadership: "🛡️ DIRECTION [{tag}]"
   leadership_desc: Gestion des opérations internes pour [{tag}]
-  alliance_heading: Créer une opération pour [{tag}]
+  alliance_heading: Créer une opération [{tag}]
   preset: Préréglage d'opération
-  preset_custom: "🛠️ Opération personnalisée (Vierge)"
-  preset_crystal_cluster: "🔮 Vallée des Cristaux (0,5h)"
+  preset_custom: "🛠️ Opération personnalisée (Vide)"
+  preset_crystal_cluster: "🔮 Vallée de Cristal (0,5h)"
   preset_elixir_scramble: "🧪 Mêlée d'Élixir (0,5h)"
   preset_survival_battle: "⚔️ Bataille de Survie (4,0h)"
   preset_kill_event: "🩸 Événement de Tuerie (24,0h)"
-  preset_kvk_battle: "👑 Bataille de Guerre des Royaumes (1,0h)"
-  preset_gear_event: "🛡️ Événement d'équipement (48,0h)"
+  preset_kvk_battle: "👑 Bataille KvK (1,0h)"
+  preset_gear_event: "🛡️ Événement d'Équipement (48,0h)"
   preset_cheese_trap: "🧀 Piège à Fromage (0,5h)"
   title: Titre de l'événement
-  title_example: 'ex: Exercice de défense de la ruche ou Assaut d''avant-poste'
+  title_example: 'ex: Drill de défense de ruche ou Assaut d''avant-poste'
   date: Date de début (AAAA-MM-JJ)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time du serveur (s'ajuste par tranches de 5 minutes)
+  time_hint: Game Time du serveur (se cale sur des tranches de 5 minutes)
   duration: Durée (Heures)
   frequency: Fréquence
-  once: Événement ponctuel (ne se répète pas)
-  every_2_days: Se répète tous les 2 jours
-  weekly: Se répète chaque semaine (même jour et même heure)
+  once: Événement unique (Ne se répète pas)
+  every_2_days: Répétition tous les 2 jours
+  weekly: Répétition hebdomadaire (Même jour et heure)
   alert_level: Niveau d'alerte Discord
-  notify_role: "🔔 Ping le rôle d'alliance par défaut (redevient @everyone)"
-  notify_custom: "🎯 Cibler un ID de rôle spécifique (priorité unique)"
+  notify_role: "🔔 Ping le rôle d'alliance par défaut (ou @everyone par défaut)"
+  notify_custom: "🎯 Cible un ID de rôle spécifique (remplacement ponctuel)"
   notify_everyone: "🚨 Forcer la diffusion @everyone (Opération obligatoire)"
-  notify_none: "🔕 Silencieux (Calendrier uniquement - Aucun ping Discord)"
+  notify_none: "🔕 Silencieux (Calendrier uniquement - Pas de ping Discord)"
   role_id: ID de rôle spécifique
-  role_id_hint: "(Requis uniquement pour cibler un rôle spécifique)"
-  role_id_title: Doit être un ID de rôle Discord valide de 17 à 20 chiffres
+  role_id_hint: "(Requis uniquement pour Cible un ID de rôle spécifique)"
+  role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
   details: Instructions / Point de ralliement
-  details_example: 'ex: Rassemblement à la Ruche Alpha. Les R4 dirigent les ralliements. Communications vocales activées.'
+  details_example: 'ex: Rassemblement à Hive Alpha. R4 dirigent les ralliements. Communications vocales activées.'
   publish: Publier dans le calendrier
-  publishing: Publication...
-  bad_time: Le Game Time doit être défini par tranches de 5 minutes (:00, :05, :10, etc.)
-  bad_role: Veuillez saisir un ID de rôle Discord valide de 17 à 20 chiffres pour la cible de l'alerte personnalisée.
+  publishing: Publication en cours...
+  bad_time: Le Game Time doit être réglé par tranches de 5 minutes (:00, :05, :10, etc.)
+  bad_role: Veuillez entrer un ID de rôle Discord valide de 17-20 chiffres pour la cible d'alerte personnalisée.
   save_failed: Échec de l'enregistrement de l'événement
   published: Opération publiée avec succès !
   confirm_delete: Êtes-vous sûr de vouloir supprimer cette opération du calendrier ?
