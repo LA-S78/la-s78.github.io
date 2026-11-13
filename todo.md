@@ -61,8 +61,11 @@ _From a measured audit of every page, all three themes, phone and desktop (Novem
 - [ ] **Tools that fit phones** (owner report, 2026-11-13: tools feel "compressed" on phones and stack buttons oddly, worse with each feature and language). From screenshots of every tool at phone width in English and German:
   - [x] **Step 1 — Roomier phones:** narrower page edges (20 → 12px), and tools come out of their inner frames (map, T10 tree, calendar phase card), so the content gets about a tenth more of the screen. Desktop unchanged.
   - [ ] **Step 2 — One button system:** about a dozen button styles (planner switches, Submit, Copy, Revoke NAP, ▲▼, ×…) become a few shared sizes and one shape; the tiny ▲▼ and × buttons (20px) become finger-sized.
-  - [ ] **Step 3 — Tidy toolbars:** the map toolbar (three ragged rows in German), the planner bars and the dashboard edit bar get a fixed phone layout that holds in every language, instead of wrapping wherever a word breaks.
-  - [ ] **Step 4 — Per-tool polish:** the ladder's edit rows, the buff summary table (cut off on phones), the calendar's cards, the King's console rows and the rewards tier editor.
+  - [ ] **Step 3 — Tidy toolbars, one place for everything:** the map toolbar (three ragged rows in German), the planner bars and the dashboard edit bar get a fixed phone layout that holds in every language, instead of wrapping wherever a word breaks. Every tool follows the same order (owner idea; not overkill as a light rule rather than a redesign): title → status line → view switches → mode switch (Planner / Edit) in the same corner → the content → the main action (Submit / Save / Send) at the bottom.
+  - [ ] **Step 4 — Steady screens** (owner ideas):
+    - **No jumping on tap:** space is kept for things that appear or change when a button is pressed (mode labels, the Submit bar, counters, "Saving…" messages), so the page doesn't shift under the finger. Where a jump is unavoidable (a panel opening), it slides instead of snapping.
+    - **Last known data while loading:** the map, standings, rewards, rotation and calendar show this device's last saved copy straight away, dimmed with "Updating…", and swap to the fresh data when it arrives. The copy already exists (it's what offline mode shows); it just isn't used while online yet. Signed-in tools stay as they are (their data can change with who is signed in).
+  - [ ] **Step 5 — Per-tool polish:** the ladder's edit rows, the buff summary table (cut off on phones), the calendar's cards, the King's console rows and the rewards tier editor.
 
 ---
 
