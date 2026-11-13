@@ -150,7 +150,7 @@ dialog.auth-modal[open] {
   padding: 1px 6px;
   border-radius: 3px;
   background: color-mix(in srgb, var(--accent-color) 20%, transparent);
-  color: var(--accent-color);
+  color: var(--accent-text);
   width: fit-content;
 }
 
@@ -166,7 +166,7 @@ dialog.auth-modal[open] {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 /* Diff / Change Summary Box */
@@ -195,7 +195,7 @@ dialog.auth-modal[open] {
   background: var(--overlay-8);
   padding: 1px 5px;
   border-radius: 3px;
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-family: monospace;
 }
 
