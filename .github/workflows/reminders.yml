@@ -45,6 +45,9 @@ jobs:
           SITE: ${{ github.event_name == 'workflow_dispatch' && inputs.site || 'both' }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
         run: |
+          # A pasted secret often ends with a line break, which curl refuses in a header
+          # ("bad argument"); the site ignores spaces and line breaks around it too
+          REMINDER_SECRET="$(printf '%s' "$REMINDER_SECRET" | tr -d '[:space:]')"
           if [ -z "$REMINDER_SECRET" ]; then
             echo "::error::The REMINDER_SECRET secret is not set (Settings → Secrets → Actions)."
             exit 1

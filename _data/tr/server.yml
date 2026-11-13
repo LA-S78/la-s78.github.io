@@ -93,16 +93,16 @@ api_proposals:
   no_changes: Herhangi bir değişiklik belirtilmedi.
   week_and_threat: Hedef hafta ve tehdit sunucusu gereklidir.
 api_events:
-  session_invalid: Oturum açma veya takvim bağlantınızın süresi doldu. Discord ile tekrar giriş yapın veya Discord'da /calendar komutunu tekrar çalıştırın.
-  not_leader: Yalnızca R4 ve R5 yetkilileri kendi ittifaklarının etkinliklerini (ve sunucu genelindeki Sorumlular da kendi etkinliklerini) yönetebilir.
-  required_fields: Başlık, Tarih ve Game Time gereklidir.
-  date_format: Tarih, YYYY-AA-GG biçiminde olmalıdır.
-  time_format: Game Time, SS:DD (00:00 - 23:59 arası) biçiminde olmalıdır.
-  time_step: Game Time, 5 dakikalık artışlarla (:00, :05, :10, :15 vb.) girilmelidir.
-  role_id_needed: Belirli Rolü Hedefle seçeneği için geçerli bir 17-20 haneli Discord Rol Kimliği gereklidir.
+  session_invalid: Oturumunuz veya takvim bağlantınızın süresi doldu. Discord ile tekrar giriş yapın veya Discord'da /calendar komutunu yeniden çalıştırın.
+  not_leader: Sadece R4 ve R5 yetkilileri kendi ittifaklarının etkinliklerini (ve sunucu genelindeki Sorumlular da kendi etkinliklerini) yönetebilir.
+  required_fields: Başlık, Tarih ve Game Time zorunludur.
+  date_format: Tarih YYYY-AA-GG formatında olmalıdır.
+  time_format: Game Time, SS:DD (00:00 ila 23:59) formatında olmalıdır.
+  time_step: Game Time 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10, :15 vb.).
+  role_id_needed: Belirli Rolü Hedefle özelliği için geçerli 17-20 haneli bir Discord Rol Kimliği gereklidir.
   published: '"{title}" operasyonu başarıyla yayınlandı.'
   not_found: Etkinlik bulunamadı veya zaten silinmiş.
-  out_of_scope: 'Erişim Reddedildi: Atanan kapsamınız dışındaki etkinlikleri değiştiremez veya silemezsiniz.'
+  out_of_scope: 'Erişim Reddedildi: Size atanan kapsam dışındaki etkinlikleri değiştiremez veya silemezsiniz.'
   deleted: 'Silinen operasyon: {title}'
   updated: '"{title}" operasyonu güncellendi.'
 reminders:

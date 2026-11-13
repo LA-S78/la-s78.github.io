@@ -424,11 +424,11 @@ calendar_events:
   reminder: 1 saat önce Discord'da hatırlat
   reminder_hint: İttifakınızın uyarı kanalında yayınlanır ve yukarıda seçilen rolü etiketler.
   reminder_hint_server: NAP Discord'un uyarı kanalında (ve kabul eden ittifaklarda) yayınlanır ve yukarıda seçilen rolü etiketler.
-  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların gönderilebilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
-  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu nedenle sunucu hatırlatıcıları gönderilemiyor.
+  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların yayınlanabilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
+  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları yayınlanamıyor.
   edit_heading: Etkinliği düzenle
   scope_label: Hangi etkinliklerin yönetileceği
-  scope_server: "🌐 Sunucu genelindeki etkinlikler"
+  scope_server: "🌐 Sunucu geneli etkinlikler"
   scope_alliance: "🛡️ [{tag}] etkinlikleri"
   save_changes: "💾 Değişiklikleri kaydet"
   manage_mode: YÖNETİM MODU
@@ -438,45 +438,45 @@ calendar_events:
   kingdom_admin: "👑 KRALLIK YÖNETİMİ"
   kingdom_desc: Krallık çapında uyarıları ve operasyonları planlama
   kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
-  leadership: "🛡️ [{tag}] LİDERLİK"
-  leadership_desc: "[{tag}] için iç operasyonları yönetme"
+  leadership: "🛡️ [{tag}] YÖNETİMİ"
+  leadership_desc: "[{tag}] için dahili operasyonları yönetme"
   alliance_heading: "[{tag}] Operasyonu Oluştur"
-  preset: Operasyon Ön Ayarı
+  preset: Operasyon Hazır Ayarı
   preset_custom: "🛠️ Özel Operasyon (Boş)"
-  preset_crystal_cluster: "🔮 Kristal Vadisi (0.5s)"
+  preset_crystal_cluster: "🔮 Kristal Küme Vadisi (0.5s)"
   preset_elixir_scramble: "🧪 İksir Mücadelesi (0.5s)"
   preset_survival_battle: "⚔️ Hayatta Kalma Savaşı (4.0s)"
   preset_kill_event: "🩸 Öldürme Etkinliği (24.0s)"
-  preset_kvk_battle: "👑 Krallık Savaşı (1.0s)"
+  preset_kvk_battle: "👑 KvK Savaşı (1.0s)"
   preset_gear_event: "🛡️ Ekipman Etkinliği (48.0s)"
   preset_cheese_trap: "🧀 Peynir Tuzağı (0.5s)"
   title: Etkinlik Başlığı
   title_example: ör. Kovan Savunma Tatbikatı veya Karakol Saldırısı
   date: Başlangıç Tarihi (YYYY-AA-GG)
   time: Game Time (SS:DD UTC-2)
-  time_hint: Sunucu Game Time (5 dakikalık artışlara yuvarlanır)
+  time_hint: Sunucu Game Time (5 dakikalık artışlarla ayarlanır)
   duration: Süre (Saat)
   frequency: Sıklık
   once: Tek Seferlik Etkinlik (Tekrarlanmaz)
   every_2_days: Her 2 Günde Bir Tekrarlanır
-  weekly: Haftalık Tekrarlanır (Aynı gün ve saatte)
-  alert_level: Discord Uyarı Düzeyi
-  notify_role: "🔔 Varsayılan İttifak Rolünü Etiketle (@everyone olarak varsayılır)"
-  notify_custom: "🎯 Belirli Rol ID'sini Hedefle (Tek seferlik geçersiz kılma)"
-  notify_everyone: "🚨 Zorunlu @everyone Yayını (Zorunlu Operasyon)"
-  notify_none: "🔕 Sessiz (Yalnızca Takvim - Discord etiketlemesi yok)"
+  weekly: Haftalık Tekrarlanır (Aynı gün ve saat)
+  alert_level: Discord Uyarı Seviyesi
+  notify_role: "🔔 Varsayılan İttifak Rolünü Etiketle (@everyone varsayılanı)"
+  notify_custom: "🎯 Belirli Bir Rol ID'sini Hedefle (Tek seferlik geçersiz kılma)"
+  notify_everyone: "🚨 Zorunlu @everyone Duyurusu (Zorunlu Operasyon)"
+  notify_none: "🔕 Sessiz (Yalnızca Takvim - Discord Etiketi Yok)"
   role_id: Belirli Rol ID'si
   role_id_hint: "(Yalnızca Belirli Rolü Hedefle için gereklidir)"
   role_id_title: Geçerli bir 17-20 haneli Discord Rol ID'si olmalıdır
   details: Talimatlar / Toplanma Noktası
-  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere liderlik eder. Sesli iletişim açık.
+  details_example: ör. Kovan Alfa'da toplanın. R4'ler rallileri yönetecek. Sesli iletişim açık.
   publish: Takvimde Yayınla
   publishing: Yayınlanıyor...
   bad_time: Game Time 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10 vb.)
-  bad_role: Özel uyarı hedefi için lütfen geçerli bir 17-20 haneli Discord Rol ID'si girin.
+  bad_role: Lütfen özel uyarı hedefi için geçerli bir 17-20 haneli Discord Rol ID'si girin.
   save_failed: Etkinlik kaydedilemedi
   published: Operasyon başarıyla yayınlandı!
-  confirm_delete: Bu operasyonu takvimden silmek istediğinizden emin misiniz?
+  confirm_delete: Bu operasyonu takvimden kaldırmak istediğinizden emin misiniz?
   delete_failed: Etkinlik silinemedi
   removed: Operasyon kaldırıldı.
 kings_scheduler:

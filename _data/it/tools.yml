@@ -422,12 +422,12 @@ calendar:
   ev_close_desc: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
 calendar_events:
   reminder: Promemoria su Discord 1 ora prima
-  reminder_hint: Pubblicato nel canale alert della tua alleanza, menzionando il ruolo scelto sopra.
-  reminder_hint_server: Pubblicato nel canale alert NAP (e nelle alleanze che hanno aderito), menzionando il ruolo scelto sopra.
-  reminder_no_channel: 'La tua alleanza non ha ancora un canale alert: digita /registerbot nel tuo Discord per attivare i promemoria.'
-  reminder_no_server_channel: Il canale alert NAP non è ancora configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
+  reminder_hint: Pubblicato nel canale avvisi della tua alleanza, con notifica al ruolo scelto sopra.
+  reminder_hint_server: Pubblicato nel canale avvisi Discord del NAP (e nelle alleanze che hanno aderito), con notifica al ruolo scelto sopra.
+  reminder_no_channel: 'La tua alleanza non ha ancora un canale avvisi: esegui /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
+  reminder_no_server_channel: Il canale avvisi NAP non è ancora impostato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
   edit_heading: Modifica evento
-  scope_label: Gestione eventi
+  scope_label: Di chi gestire gli eventi
   scope_server: "🌐 Eventi del server"
   scope_alliance: "🛡️ Eventi [{tag}]"
   save_changes: "💾 Salva modifiche"
@@ -436,46 +436,46 @@ calendar_events:
   schedule_operation: "➕ Pianifica operazione"
   create_operation: Crea operazione
   kingdom_admin: "👑 AMMINISTRAZIONE REGNO"
-  kingdom_desc: Pianificazione di alert e operazioni per l'intero Regno
+  kingdom_desc: Pianificazione di avvisi e operazioni per tutto il Regno
   kingdom_heading: Crea operazione Regno ([GLOBAL])
   leadership: "🛡️ LEADERSHIP [{tag}]"
-  leadership_desc: Gestione operazioni interne per [{tag}]
+  leadership_desc: Gestione delle operazioni interne per [{tag}]
   alliance_heading: Crea operazione [{tag}]
-  preset: Preset operazione
+  preset: Preimpostazione operazione
   preset_custom: "🛠️ Operazione personalizzata (Vuota)"
   preset_crystal_cluster: "🔮 Valle di Cristallo (0.5h)"
   preset_elixir_scramble: "🧪 Mischia Reale (0.5h)"
   preset_survival_battle: "⚔️ Battaglia di Sopravvivenza (4.0h)"
-  preset_kill_event: "🩸 Kill Event (24.0h)"
-  preset_kvk_battle: "👑 Guerra tra Regni (KvK) (1.0h)"
-  preset_gear_event: "🛡️ Evento Equipaggiamento (48.0h)"
+  preset_kill_event: "🩸 Evento uccisioni (24.0h)"
+  preset_kvk_battle: "👑 Battaglia KvK (1.0h)"
+  preset_gear_event: "🛡️ Evento equipaggiamento (48.0h)"
   preset_cheese_trap: "🧀 Trappola Cheese (0.5h)"
   title: Titolo evento
-  title_example: es. Difesa Alveare o Assalto all'Avamposto
-  date: Data di inizio (YYYY-MM-DD)
+  title_example: es. Difesa alveare o Assalto avamposto
+  date: Data di inizio (AAAA-MM-GG)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Server Game Time (arrotondato a intervalli di 5 minuti)
+  time_hint: Game Time del server (si arrotonda a intervalli di 5 minuti)
   duration: Durata (Ore)
   frequency: Frequenza
-  once: Evento singolo (Non si ripete)
+  once: Evento una tantum (Non si ripete)
   every_2_days: Si ripete ogni 2 giorni
-  weekly: Si ripete settimanalmente (Stesso giorno e ora)
-  alert_level: Livello alert Discord
-  notify_role: "🔔 Pinga ruolo Alleanza predefinito (Fallback su @everyone)"
-  notify_custom: "🎯 Punta a un ID ruolo specifico (Override singolo)"
+  weekly: Si ripete settimanalmente (Stesso giorno e orario)
+  alert_level: Livello avviso Discord
+  notify_role: "🔔 Notifica ruolo alleanza predefinito (Passa a @everyone in mancanza)"
+  notify_custom: "🎯 Destina a ID ruolo specifico (Sovrascrittura singola)"
   notify_everyone: "🚨 Forza broadcast @everyone (Operazione obbligatoria)"
-  notify_none: "🔕 Silenzioso (Solo calendario - Nessun ping Discord)"
+  notify_none: "🔕 Silenzioso (Solo calendario - Nessuna notifica Discord)"
   role_id: ID ruolo specifico
-  role_id_hint: "(Richiesto solo per ID ruolo specifico)"
+  role_id_hint: "(Richiesto solo per il target ruolo specifico)"
   role_id_title: Deve essere un ID ruolo Discord valido di 17-20 cifre
-  details: Istruzioni / Punto di ritrovo
-  details_example: es. Raduno all'Alveare Alpha. R4 guidano i rally. Canale vocale attivo.
+  details: Istruzioni / Punto di raduno
+  details_example: es. Raduno all'alveare Alfa. R4 guidano i rally. Comunicazioni vocali attive.
   publish: Pubblica nel calendario
   publishing: Pubblicazione in corso...
   bad_time: Il Game Time deve essere impostato a intervalli di 5 minuti (:00, :05, :10, ecc.)
-  bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per l'alert personalizzato.
+  bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per il target avviso personalizzato.
   save_failed: Impossibile salvare l'evento
-  published: Operazione pubblicata correttamente!
+  published: Operazione pubblicata con successo!
   confirm_delete: Sei sicuro di voler rimuovere questa operazione dal calendario?
   delete_failed: Impossibile eliminare l'evento
   removed: Operazione rimossa.
