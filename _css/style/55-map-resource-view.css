@@ -2,7 +2,7 @@
    WAR ROOM: RESOURCE VIEW & LEGEND STYLING
    ========================================================================== */
 
-/* Resource View Legend Bar (Compact Identification Key) */
+/* Resource View Legend Bar (Compact Identification Key): under the territory card */
 .resource-legend {
   display: flex;
   align-items: center;
@@ -13,7 +13,7 @@
   background: var(--surface-dark);
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  margin-bottom: 0.6rem;
+  margin-top: 0.5rem;
   font-size: 0.72rem;
   color: var(--text-muted);
 }

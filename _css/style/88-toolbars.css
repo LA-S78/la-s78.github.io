@@ -11,6 +11,13 @@
    spread over three ragged rows in German).
    ========================================================================== */
 
+/* The mode switch's group fills the rest of the bar (or its own row, when the bar wraps on
+   a narrow window): the mode switch at its start, the main action at the far end */
+.map-controls .control-group.right {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+}
+
 /* The main action always sits at the far end of its row */
 .map-controls .submit-plan-btn,
 .blacklist-controls .submit-plan-btn {
@@ -75,14 +82,48 @@
     flex-shrink: 0;
   }
 
-  /* Planner Mode's tag box takes the room between the switch and Submit */
+  /* The mode switch and Submit share one line (a little less padding, so they fit side
+     by side in most languages). Submit is always there, greyed out until there's
+     something to send, so nothing appears or shifts when planning starts. */
+  .map-controls .control-group.right .draft-btn,
+  .map-controls .submit-plan-btn,
+  .blacklist-controls .draft-btn,
+  .blacklist-controls .submit-plan-btn {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  /* The map's tag box gets a line of its own under them, only while Planner Mode is on
+     (on desktop it waits greyed out in the bar). It opens below the buttons, so they stay
+     where they are. */
   #planner-override-container {
-    flex: 1 1 60px;
-    min-width: 60px;
-    max-width: 120px;
+    order: 3;
+    flex: 1 1 100%;
+  }
+
+  #planner-override-container:has(#alliance-override:disabled) {
+    display: none;
   }
 
   #planner-override-container #alliance-override {
-    width: 100%;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
   }
+}
+
+/* "Change to:" before the map's tag box (greyed out with it until Planner Mode is on) */
+#planner-override-container {
+  gap: 0.4rem;
+}
+
+.override-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+#planner-override-container:has(#alliance-override:disabled) .override-label {
+  opacity: 0.35;
 }

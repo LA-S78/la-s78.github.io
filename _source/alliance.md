@@ -40,7 +40,7 @@ nav_id: "nap-ranks"
         <span class="draft-indicator"></span>
         <span class="draft-text">{{ "alliance_planner.planner_mode" | t }}</span>
       </button>
-      <button id="btn-submit-alliance" class="submit-plan-btn hidden" disabled type="button">
+      <button id="btn-submit-alliance" class="submit-plan-btn" disabled type="button">
         {{ "alliance_planner.submit_plan" | t }} <span id="alliance-change-badge" class="badge">0</span>
       </button>
     </div>

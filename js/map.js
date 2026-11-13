@@ -646,17 +646,12 @@ export function togglePlannerMode(active, svgRoot = null) {
     btnDraft.classList.toggle('active', active);
   }
 
-  const overrideContainer = document.getElementById('planner-override-container');
-  if (overrideContainer) {
-    if (active) {
-      overrideContainer.classList.remove('hidden');
-      overrideContainer.style.display = 'inline-flex';
-    } else {
-      overrideContainer.classList.add('hidden');
-      overrideContainer.style.display = 'none';
-      const input = document.getElementById('alliance-override');
-      if (input) input.value = '';
-    }
+  // The tag box stays in the bar (greyed out until Planner Mode is on), so turning the
+  // planner on or off doesn't shift the buttons around it
+  const overrideInput = document.getElementById('alliance-override');
+  if (overrideInput) {
+    overrideInput.disabled = !active;
+    if (!active) overrideInput.value = '';
   }
 
   if (isPlannerActive) {
@@ -836,45 +831,15 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
     document.getElementById('change-count-badge') ||
     document.querySelector('.draft-indicator');
 
-  if (!isPlannerActive) {
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.classList.add('hidden');
-      submitBtn.style.display = 'none';
-    }
-    if (badgeEl) {
-      badgeEl.textContent = '0';
-      badgeEl.classList.add('hidden');
-      badgeEl.style.display = 'none';
-    }
-    if (isBuffDrawerOpen) renderBuffSummaryDrawer();
-    return;
+  // Submit Plan and its count always stay in the bar, greyed out until there is something
+  // to send, so nothing appears or shifts while planning (owner decision, 2026-11-13)
+  let count = 0;
+  if (isPlannerActive) {
+    const payload = generateProposalPayload();
+    count = payload ? payload.totalChanges : 0;
   }
-
-  const payload = generateProposalPayload();
-  const count = payload ? payload.totalChanges : 0;
-
-  if (badgeEl) {
-    badgeEl.textContent = String(count);
-    if (count > 0) {
-      badgeEl.classList.remove('hidden');
-      badgeEl.style.display = 'inline-block';
-    } else {
-      badgeEl.classList.add('hidden');
-      badgeEl.style.display = 'none';
-    }
-  }
-
-  if (submitBtn) {
-    submitBtn.disabled = count === 0;
-    if (count > 0) {
-      submitBtn.classList.remove('hidden');
-      submitBtn.style.display = 'inline-flex';
-    } else {
-      submitBtn.classList.add('hidden');
-      submitBtn.style.display = 'none';
-    }
-  }
+  if (badgeEl) badgeEl.textContent = String(count);
+  if (submitBtn) submitBtn.disabled = count === 0;
 
   if (isBuffDrawerOpen) renderBuffSummaryDrawer();
 }
@@ -1462,11 +1427,8 @@ export function checkAndRestoreMapDraft(svgRoot = null) {
         btnDraft.setAttribute('aria-pressed', 'true');
         btnDraft.classList.add('active');
       }
-      const overrideContainer = document.getElementById('planner-override-container');
-      if (overrideContainer) {
-        overrideContainer.classList.remove('hidden');
-        overrideContainer.style.display = 'inline-flex';
-      }
+      const overrideInput = document.getElementById('alliance-override');
+      if (overrideInput) overrideInput.disabled = false;
 
       if (root) setMapColorMode('alliance', root);
       updateProposalUI();

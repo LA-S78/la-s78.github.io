@@ -51,3 +51,8 @@
   height: var(--control-large);
   padding: 0 12px;
 }
+
+/* "Copy" -> "✓ Copied" keeps the button's width (step 4: nothing moves under the finger) */
+.copy-btn {
+  min-width: 6.5em;
+}
