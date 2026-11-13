@@ -1,0 +1,88 @@
+/* ==========================================================================
+   TOOLBARS: ONE LAYOUT, ONE PLACE FOR EVERYTHING (Look & Feel: tools that fit phones, step 3)
+   Every tool's controls bar (.map-controls: the map, the alliance ladder, the rewards
+   planner; the blacklist's bar; the dashboard's edit bar, in
+   _css/portal/70-alliance-dashboard.css) follows the same order:
+     left / first row:   what you're looking at: view switches and information
+     right / second row: the mode switch (Planner Mode, Edit) first, then its extras, and
+                         the main action (Submit) last, at the far end
+   On phones the two groups become two full-width rows, so the bar keeps the same shape in
+   every language instead of wrapping wherever a long word breaks (the map's bar used to
+   spread over three ragged rows in German).
+   ========================================================================== */
+
+/* The main action always sits at the far end of its row */
+.map-controls .submit-plan-btn,
+.blacklist-controls .submit-plan-btn {
+  margin-left: auto;
+}
+
+@media (max-width: 599px) {
+  .map-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.45rem;
+    padding: 0.5rem 0.6rem;
+    min-height: auto;
+  }
+
+  .map-controls .control-group {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .map-controls .control-group.right {
+    padding-top: 0.45rem;
+    border-top: 1px dashed var(--overlay-8);
+  }
+
+  /* The map's view row: the three views share the row equally, with the buff summary and
+     fullscreen as icons at its end (their names stay for screen readers and on desktop).
+     "View:" is left out: the switch says it. */
+  #map-container .control-group.left {
+    flex-wrap: nowrap;
+  }
+
+  #map-container .control-group.left > .control-label,
+  .buffs-label,
+  .fullscreen-label {
+    display: none;
+  }
+
+  /* View switches (the map's views, the King's By Chest / By Alliance) span the row,
+     their choices sharing it equally */
+  .segmented-control {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #map-container .segmented-control {
+    flex: 1 1 auto;
+  }
+
+  .segmented-control .toggle-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  #btn-toggle-buffs,
+  #btn-toggle-fullscreen {
+    width: var(--control-standard);
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  /* Planner Mode's tag box takes the room between the switch and Submit */
+  #planner-override-container {
+    flex: 1 1 60px;
+    min-width: 60px;
+    max-width: 120px;
+  }
+
+  #planner-override-container #alliance-override {
+    width: 100%;
+  }
+}
