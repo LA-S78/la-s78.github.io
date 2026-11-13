@@ -407,7 +407,7 @@ export function updatePayoutTable() {
 
       return `
         <tr>
-          <td style="font-weight: bold; font-family: var(--font-headers);">${esc(displayLabel)}</td>
+          <td class="td-rank" style="font-weight: bold; font-family: var(--font-headers);">${esc(displayLabel)}</td>
           <td class="td-diamonds">${d.toLocaleString()}</td>
           <td class="td-tickets">${t.toLocaleString()}</td>
         </tr>
