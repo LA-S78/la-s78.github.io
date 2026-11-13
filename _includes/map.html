@@ -21,23 +21,8 @@
       </button>
     </div>
 
-    <!-- Right: the planner: its tag box, Planner Mode, Submit Plan -->
+    <!-- Right: the planner: Planner Mode, Submit Plan -->
     <div class="control-group right">
-      <!-- "Change to:" tag box: greyed out until Planner Mode is on -->
-      <div id="planner-override-container">
-        <label for="alliance-override" class="override-label">{{ "map_planner.override_label" | t }}</label>
-        <input 
-          type="text" 
-          id="alliance-override" 
-          placeholder="{{ "map_planner.override_placeholder" | t }}" 
-          maxlength="6" 
-          autocomplete="off" 
-          spellcheck="false"
-          title="{{ "map_planner.override_help" | t }}" 
-          disabled
-        />
-      </div>
-
       <button id="btn-toggle-draft" class="draft-btn" aria-pressed="false">
         <span class="draft-indicator"></span>
         <span class="draft-text">{{ "map_planner.planner_mode" | t }}</span>
@@ -46,6 +31,22 @@
       <button id="btn-submit-proposal" class="submit-plan-btn" disabled>
         {{ "map_planner.submit_plan" | t }} <span id="change-count-badge" class="badge">0</span>
       </button>
+    </div>
+
+    <!-- "Change to:" tag box: always on a line of its own under the bar's buttons, greyed
+         out until Planner Mode is on -->
+    <div id="planner-override-container">
+      <label for="alliance-override" class="override-label">{{ "map_planner.override_label" | t }}</label>
+      <input 
+        type="text" 
+        id="alliance-override" 
+        placeholder="{{ "map_planner.override_placeholder" | t }}" 
+        maxlength="6" 
+        autocomplete="off" 
+        spellcheck="false"
+        title="{{ "map_planner.override_help" | t }}" 
+        disabled
+      />
     </div>
   </div>
 

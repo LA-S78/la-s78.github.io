@@ -3,8 +3,10 @@
    Every tool's controls bar (.map-controls: the map, the alliance ladder, the rewards
    planner) has two parts:
      left / first row:   what you're looking at: view switches and information
-     right / second row: the planner: Planner Mode with Submit beside it, at the right
-                         end (the map's "Change to:" tag box just before them)
+     right / second row: the planner: Planner Mode and Submit together at the right
+                         end (on the map on phones: Planner Mode left, Submit right).
+   The map's "Change to:" tag box always has a line of its own under the buttons (greyed
+   out until Planner Mode is on), so it never squeezes the bar or appears and disappears.
    On phones the two parts become two full-width rows, so the bar keeps the same shape in
    every language instead of wrapping wherever a long word breaks (the map's bar used to
    spread over three ragged rows in German). On a narrower desktop window, the map's Buff
@@ -13,10 +15,21 @@
    ========================================================================== */
 
 /* The planner (Planner Mode with Submit beside it) sits at the right end of the bar, and
-   at the right end of its own row when the bar wraps (narrow windows, phones) */
+   at the right end of its own row when a narrow window wraps the bar */
 .map-controls .control-group.right {
   margin-left: auto;
   justify-content: flex-end;
+}
+
+/* The map's tag box: its own line under the buttons, at the right under Planner Mode */
+#planner-override-container {
+  flex: 1 1 100%;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+#planner-override-container #alliance-override {
+  width: 140px;
 }
 
 /* The map's bar when it is short of room (set by js/map.js): Buff Summary and Fullscreen as
@@ -41,8 +54,15 @@
     flex-wrap: wrap;
   }
 
+  /* Planner Mode and Submit together at the right end of their row ... */
   .map-controls .control-group.right {
     justify-content: flex-end;
+  }
+
+  /* ... except on the map, whose three rows (views; planner; tag box) read best with
+     Planner Mode on the left and Submit on the right (owner decision, 2026-11-13) */
+  #map-container .map-controls .control-group.right {
+    justify-content: space-between;
   }
 
   .map-controls .control-group.right {
@@ -99,16 +119,9 @@
     padding-right: 8px;
   }
 
-  /* The map's tag box gets a line of its own under them, only while Planner Mode is on
-     (on desktop it waits greyed out in the bar, just before Planner Mode). It opens below
-     the buttons, so they stay where they are. */
+  /* The tag box fills its line */
   #planner-override-container {
-    order: 3;
-    flex: 1 1 100%;
-  }
-
-  #planner-override-container:has(#alliance-override:disabled) {
-    display: none;
+    justify-content: flex-start;
   }
 
   #planner-override-container #alliance-override {
@@ -119,10 +132,6 @@
 }
 
 /* "Change to:" before the map's tag box (greyed out with it until Planner Mode is on) */
-#planner-override-container {
-  gap: 0.4rem;
-}
-
 .override-label {
   font-size: 0.72rem;
   font-weight: 600;
