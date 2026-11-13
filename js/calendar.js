@@ -73,10 +73,45 @@ async function initCalendar() {
     }
   }
 
-  const isManagementSession =
-    (tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp)) || isDevPreview;
-  const sessionScope = isManagementSession ? tokenPayload?.scope || 'WLO' : null;
+  // Two ways to manage events: a link from /calendar in Discord (?token=…), or being signed in
+  // on the site with Discord as an R4/R5 (your alliance's events) or a Steward (also
+  // server-wide events; owner decision, 2026-11-13). The server checks either again
+  // (api/manage-event.js); these only decide what the page shows.
+  const viaLink = Boolean(tokenPayload && (!tokenPayload.exp || Date.now() < tokenPayload.exp));
+  const loginPass = localStorage.getItem('auth-session');
+  const signedInAlliance = (localStorage.getItem('auth-alliance') || '').trim();
+  const signedInSteward = localStorage.getItem('auth-steward') === 'true';
+  const signedInLeader = ['R4', 'R5'].includes(localStorage.getItem('auth-role'));
+  const viaSignIn =
+    !viaLink && Boolean(loginPass) && ((signedInLeader && signedInAlliance) || signedInSteward);
+  // A Steward chooses between server events and their alliance's (kept for this tab)
+  const SCOPE_KEY = 'cal-manage-scope';
+  let signInScope = null;
+  if (viaSignIn) {
+    const chosen = sessionStorage.getItem(SCOPE_KEY);
+    signInScope =
+      signedInSteward && (chosen === 'global' || !signedInAlliance) ? 'global' : signedInAlliance;
+  }
+  const isManagementSession = viaLink || viaSignIn || isDevPreview;
+  const sessionScope = viaLink
+    ? tokenPayload.scope
+    : viaSignIn
+      ? signInScope
+      : isDevPreview
+        ? 'WLO'
+        : null;
   const isGlobalAdmin = sessionScope?.toLowerCase() === 'global';
+
+  /** Sends a change to api/manage-event.js with whichever proof this page has. */
+  function manageEvents(body) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (viaLink) body = { token: tokenParam, ...body };
+    else {
+      headers.Authorization = `Bearer ${loginPass || ''}`;
+      body = { scope: sessionScope, ...body };
+    }
+    return fetch('/api/manage-event', { method: 'POST', headers, body: JSON.stringify(body) });
+  }
 
   const activeAlliance =
     !isGlobalAdmin && sessionScope ? sessionScope.trim() : allianceParam || null;
@@ -443,6 +478,25 @@ async function initCalendar() {
         formHeading.textContent = t('calendar_events.alliance_heading', { tag: sessionScope });
     }
 
+    // A signed-in Steward with an alliance: switch between server events and the alliance's
+    const scopeSwitch = document.getElementById('mgmt-scope-switch');
+    if (scopeSwitch && viaSignIn && signedInSteward && signedInAlliance) {
+      scopeSwitch.hidden = false;
+      scopeSwitch.innerHTML = [
+        ['global', t('calendar_events.scope_server')],
+        [signedInAlliance, t('calendar_events.scope_alliance', { tag: signedInAlliance })],
+      ]
+        .map(
+          ([value, label]) =>
+            `<option value="${esc(value)}"${value === sessionScope ? ' selected' : ''}>${esc(label)}</option>`,
+        )
+        .join('');
+      scopeSwitch.addEventListener('change', () => {
+        sessionStorage.setItem(SCOPE_KEY, scopeSwitch.value === 'global' ? 'global' : 'alliance');
+        window.location.reload();
+      });
+    }
+
     const formEl = document.getElementById('form-create-event');
     const btnToggle = document.getElementById('btn-toggle-event-form');
     const btnCancel = document.getElementById('btn-cancel-event-form');
@@ -644,7 +698,6 @@ async function initCalendar() {
         submitBtn.textContent = t('calendar_events.publishing');
 
         const payload = {
-          token: tokenParam,
           action: editingEventId ? 'edit' : 'create',
           eventId: editingEventId || undefined,
           eventData: {
@@ -662,11 +715,7 @@ async function initCalendar() {
         };
 
         try {
-          const res = await fetch('/api/manage-event', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          });
+          const res = await manageEvents(payload);
           const result = await res.json();
           if (!res.ok) throw new Error(result.error || t('calendar_events.save_failed'));
 
@@ -695,11 +744,7 @@ async function initCalendar() {
     if (!confirm(t('calendar_events.confirm_delete'))) return;
 
     try {
-      const res = await fetch('/api/manage-event', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: tokenParam, action: 'delete', eventId }),
-      });
+      const res = await manageEvents({ action: 'delete', eventId });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || t('calendar_events.delete_failed'));
 
