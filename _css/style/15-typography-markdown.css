@@ -68,6 +68,8 @@ blockquote {
   margin: 20px 0;
 }
 blockquote h4 {
+  /* A touch lighter than other headings: it sits on the box's tinted background */
+  color: color-mix(in srgb, var(--accent-color) 88%, var(--white));
   margin: 0 0 10px 0;
   text-transform: uppercase;
   font-size: 0.9rem;

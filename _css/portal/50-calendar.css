@@ -202,7 +202,7 @@
 .btn-primary {
   background: rgb(var(--active-theme, 35, 120, 45));
   border-color: rgb(var(--active-theme-bright, 55, 150, 65));
-  color: var(--white);
+  color: var(--on-active-theme, var(--white));
 }
 
 .scope-global .btn-primary {

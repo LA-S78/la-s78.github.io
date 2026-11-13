@@ -37,7 +37,7 @@ order: 1
 Through construction you can level up your Sanctuary which unlocks room upgrades inside. Copper Coins are earned idly and should be collected every 8 hours. They can be used at the Sanctuary Shop.
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop2.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop2.png" alt="Sanctuary Copper Coins" class="blueprint-img">
 </div>
 </div>
 
@@ -157,7 +157,7 @@ order: 1
 Durch das Bauen kannst du deine Zuflucht aufleveln, wodurch Raum-Upgrades im Inneren freigeschaltet werden. Kupfermünzen werden passiv generiert und sollten alle 8 Stunden eingesammelt werden. Sie können im Zuflucht-Shop ausgegeben werden.
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop2.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop2.png" alt="Sanctuary Copper Coins" class="blueprint-img">
 </div>
 </div>
 
@@ -277,7 +277,7 @@ order: 1
 A través de la construcción puedes subir de nivel tu Santuario, lo que desbloquea mejoras de habitaciones en su interior. Las monedas de cobre se ganan de forma pasiva y deben recogerse cada 8 horas. Se pueden usar en la Tienda del Santuario.
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop2.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop2.png" alt="Sanctuary Copper Coins" class="blueprint-img">
 </div>
 </div>
 
@@ -397,7 +397,7 @@ order: 1
 Grâce à la construction, vous pouvez améliorer votre Sanctuaire, ce qui débloque des améliorations de pièces à l'intérieur. Les pièces de cuivre sont générées passivement et doivent être récupérées toutes les 8 heures. Elles peuvent être utilisées dans la Boutique du Sanctuaire.
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop2.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop2.png" alt="Sanctuary Copper Coins" class="blueprint-img">
 </div>
 </div>
 
@@ -517,7 +517,7 @@ order: 1
 С помощью строительства вы можете повышать уровень своего Убежища, что открывает улучшения комнат внутри. Медные монеты накапливаются пассивно, их следует собирать каждые 8 часов. Их можно потратить в Магазине Убежища.
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop2.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop2.png" alt="Sanctuary Copper Coins" class="blueprint-img">
 </div>
 </div>
 
@@ -637,7 +637,7 @@ order: 1
 İnşaat yaparak Sığınak seviyenizi yükseltebilir ve içerideki oda geliştirmelerinin kilidini açabilirsiniz. Bakır Sikkeler pasif olarak kazanılır ve her 8 saatte bir toplanmalıdır. Sığınak Mağazasında kullanılabilirler.
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop2.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop2.png" alt="Sanctuary Copper Coins" class="blueprint-img">
 </div>
 </div>
 
@@ -757,7 +757,7 @@ order: 1
 Завдяки будівництву ви можете підвищувати рівень свого Сховища, що відкриває покращення кімнат усередині. Мідні монети накопичуються пасивно, і їх слід збирати кожні 8 годин. Їх можна використовувати в Магазині Сховища.
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop2.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop2.png" alt="Sanctuary Copper Coins" class="blueprint-img">
 </div>
 </div>
 
@@ -877,7 +877,7 @@ order: 1
 Attraverso la costruzione puoi far salire di livello il tuo Santuario, sbloccando i potenziamenti delle stanze al suo interno. Le monete di rame si guadagnano passivamente e dovrebbero essere raccolte ogni 8 ore. Possono essere utilizzate nel Negozio del Santuario.
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop2.png" class="blueprint-img">
+<img src="/images/guides/sanctuary-shop2.png" alt="Sanctuary Copper Coins" class="blueprint-img">
 </div>
 </div>
 

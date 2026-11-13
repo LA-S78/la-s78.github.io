@@ -14,6 +14,9 @@
 /* Core Variables & Default Theme (Plague) */
 :root,
 html[data-theme="default"] {
+  /* Text on a solid theme-colour background (buttons): white, or dark where the theme
+     colour is light (Sanctuary) */
+  --on-active-theme: var(--white);
   /* Base UI Colors.
      The accent, borders and surfaces follow the theme (owner decision, idea D option "3c"):
      each mixes the theme colour (--active-theme*, set per theme below) into the original
@@ -153,6 +156,7 @@ html[data-theme="sanctuary"] {
   --active-theme-bright: 250, 190, 100;
   --active-theme-vivid: 255, 220, 140;
   --active-theme-hex: 239, 191, 4;
+  --on-active-theme: var(--nav-bg);
   --lantern-filter: contrast(1.2) brightness(1) saturate(1.2) hue-rotate(270deg);
   --status-bar: #4e3924;
 }
