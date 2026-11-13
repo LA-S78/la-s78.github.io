@@ -39,7 +39,7 @@ permalink: /architecture.html
         B2[" sync_ui_data.rb<br>(guide titles and anchors) "]
         B3[" build_translations.rb<br>(text for the API and bot) "]
         B4[" Jekyll<br>(English site, then /de /es /fr /it /ru /tr /uk) "]
-        B5[" workbox_precache.rb<br>(offline cache list) "]
+        B5[" precache_list.rb<br>(offline cache list) "]
         B6[" check_build.rb + Prettier<br>(build and code checks) "]
     end
 

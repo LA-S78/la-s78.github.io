@@ -174,8 +174,8 @@ if options[:lang] && !File.exist?(File.join(SITE, 'sw.js'))
 end
 
 step 'Injecting service-worker precache list'
-require_relative 'workbox_precache'
-WorkboxInjector.run(SITE)
+require_relative 'precache_list'
+PrecacheList.run(SITE)
 
 # ---------------------------------------------------------------------------
 # The serverless functions can't read repo files at runtime, so data they need is

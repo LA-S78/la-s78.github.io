@@ -46,8 +46,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 - [ ] **Map Plan Import / Export**
   - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.
 
-- [ ] **Workbox upgrade (`sw.js`)**
-  - The service worker loads Workbox 4.3.1 from Google's CDN. Bundle a current version with the site instead (see `docs/HOWTO.md`).
+- [x] **Own service worker (`sw.js`)** (owner decision, 2026-11-13): replaced Workbox 4.3.1, which every visitor's browser downloaded from Google's servers unchecked, with the site's own plain worker (no outside script; a build check keeps it that way). Same jobs: offline app shell (only changed files re-downloaded on an update; Workbox's saved copy reused on the switch, so phones don't download the site again), image store, live data, offline Home fallback, update toast. Pages are saved under their plain address, so `?__WB_REVISION__=…` no longer appears in the address bar.
 
 ---
 
@@ -96,7 +95,7 @@ _From a measured audit of every page, all three themes, phone and desktop (Novem
 - [x] **Weekly reward periods** — King's Commendation every week; King of Battle Reward after a Steward records a Won; ranked nomination lists; King's console hands out one set at a time. (#59)
 - [x] **Test site with its own data** — dev.la-s78.app uses a separate test Gist; Stewards refresh it with `/devupdate`. (#61–#65)
 - [x] **One alliance list & live data only** — `_data/alliances.yml` is the single list of alliance colours and starting rotation; pages show live data, with clear notices when loading, failed or offline. (#69)
-- [x] **Installed app (PWA)** — update notice, app shortcuts, iPhone icon, offline fallback to the home page, old caches cleaned up (#69); stuck old versions take over by themselves, `/reset` link and Update App in the pill (#76). Workbox upgrade still open above.
+- [x] **Installed app (PWA)** — update notice, app shortcuts, iPhone icon, offline fallback to the home page, old caches cleaned up (#69); stuck old versions take over by themselves, `/reset` link and Update App in the pill (#76); the site's own service worker replaced Workbox (2026-11-13).
 - [x] **Safe saves** — every Gist save checks the revision history afterwards and repairs any save it overwrote, so nominations, the Won/Lost result, approvals, `/rank`, events and the proposal log made at the same moment are all kept. (#73)
 - [x] **King's checklist on the server** — ticks saved for everyone, by the King's alliance R4/R5 and Stewards; a handed-out chest is locked through any re-sort. (#74)
 - [x] **Alliance registration hardening** — the alliance comes from the signed `/registerbot` link (R5 + alliance role checked); the portal checks the bot is in the server, the person can manage it, and the channels and role belong to it. (#75)
