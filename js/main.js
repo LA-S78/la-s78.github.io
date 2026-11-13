@@ -19,7 +19,6 @@
     return true;
   }
 
-  let scrollObserver = null;
   let isNewNavigation = false;
 
   // --- AUTHENTICATION CONFIGURATION ---
@@ -304,31 +303,75 @@
     });
   }
 
+  // The section tabs under the header (Server Rules / Rotation / Rewards…) follow the page as
+  // it scrolls. The section is the last one whose top has passed a line a third of the way
+  // down the visible area; at the very bottom, the last section (a short last section never
+  // reaches the line). After a tap on a tab, that tab stays lit while the page glides there,
+  // instead of flickering through the sections in between.
+  let stopSectionTracking = null;
+
   function initScrollObserver() {
+    if (stopSectionTracking) stopSectionTracking();
+    stopSectionTracking = null;
     const mainContainer = document.querySelector('main');
-    const sections = document.querySelectorAll('.content-pane');
-    const navLinks = document.querySelectorAll('.anchor-link');
+    const sections = [...document.querySelectorAll('.content-pane[id]')];
+    const navLinks = [...document.querySelectorAll('.anchor-link')];
     if (!mainContainer || sections.length === 0 || navLinks.length === 0) return;
-    if (scrollObserver) scrollObserver.disconnect();
-    const observerOptions = {
-      root: mainContainer,
-      rootMargin: '-50px 0px -50% 0px',
-      threshold: 0,
+
+    const linkFor = (id) => navLinks.find((link) => link.getAttribute('href')?.endsWith(`#${id}`));
+    let current = null;
+    let heldUntil = 0;
+    let frame = 0;
+
+    const setActive = (id) => {
+      if (id === current) return;
+      current = id;
+      const active = linkFor(id);
+      navLinks.forEach((link) => link.classList.toggle('active', link === active));
+      if (active) scrollActiveNavIntoView(active);
     };
-    scrollObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          navLinks.forEach((link) => link.classList.remove('active'));
-          const id = entry.target.getAttribute('id');
-          const activeLink = document.querySelector(`.anchor-link[href$="#${id}"]`);
-          if (activeLink) {
-            activeLink.classList.add('active');
-            scrollActiveNavIntoView(activeLink);
-          }
-        }
-      });
-    }, observerOptions);
-    sections.forEach((section) => scrollObserver.observe(section));
+
+    const pick = () => {
+      frame = 0;
+      if (Date.now() < heldUntil) return;
+      const box = mainContainer.getBoundingClientRect();
+      const nav = document.querySelector('.anchor-nav');
+      const top = nav ? nav.getBoundingClientRect().bottom : box.top;
+      const atBottom =
+        mainContainer.scrollTop + mainContainer.clientHeight >= mainContainer.scrollHeight - 4;
+      if (atBottom) return setActive(sections[sections.length - 1].id);
+      const line = top + (box.bottom - top) / 3;
+      let found = sections[0];
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= line) found = section;
+      }
+      setActive(found.id);
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(pick);
+    };
+    // A tab was tapped: light it now and hold it until the page stops moving
+    const onHold = (event) => {
+      setActive(event.detail);
+      heldUntil = Date.now() + 1500;
+    };
+    // The glide is over: the tapped tab stays lit (near the bottom, the page may not reach
+    // its section's top) until the reader scrolls again
+    const onScrollEnd = () => {
+      heldUntil = 0;
+    };
+
+    mainContainer.addEventListener('scroll', onScroll, { passive: true });
+    mainContainer.addEventListener('scrollend', onScrollEnd);
+    document.addEventListener('anchor-nav:go', onHold);
+    stopSectionTracking = () => {
+      mainContainer.removeEventListener('scroll', onScroll);
+      mainContainer.removeEventListener('scrollend', onScrollEnd);
+      document.removeEventListener('anchor-nav:go', onHold);
+      if (frame) cancelAnimationFrame(frame);
+    };
+    pick();
   }
 
   function initAnchorScrolling() {
@@ -343,6 +386,7 @@
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
           e.preventDefault();
+          document.dispatchEvent(new CustomEvent('anchor-nav:go', { detail: targetId }));
           const anchorNav = document.querySelector('.anchor-nav');
           const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
           mainContainer.scrollTo({

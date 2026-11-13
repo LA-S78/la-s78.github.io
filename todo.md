@@ -57,6 +57,7 @@ _From a measured audit of every page, all three themes, phone and desktop (Novem
 
 - [x] **Lighter pages** — a first visit downloaded ~5 MB, mostly a background picture fetched twice (WebP and a 4.4 MB PNG fallback). WebP only now, a 48px tab icon instead of the 452 KB app icon, and right-sized lantern, link-preview banner and 404 picture: ~0.7 MB.
 - [ ] **Keyboard focus & readability** — a clear focus ring in the theme's accent for keyboard users (most controls show only the browser's thin default outline); a lighter red for error text and a check of small accent-coloured labels (both just under the 4.5 contrast standard); footer labels 11 → 12px.
+- [x] **Section tabs follow the page** — the tabs under the header (Server Rules / Rotation / Rewards, guide sections) now always light the section being read: scrolling back up, a short last section, and a tapped tab no longer flicker through the sections in between.
 - [ ] **One look for buttons and spacing** — the site has grown about a dozen button styles (planner, dashboard, icon, submit, steppers…) with small differences, and 112 `!important` overrides. A shared button style and spacing scale, done step by step with the visual diff checking each step.
 
 ---
