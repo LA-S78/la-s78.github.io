@@ -1,12 +1,13 @@
 // api/_reminders.js
-// Calendar reminders on Discord ("_" files are helpers, not endpoints). A GitHub Actions
-// schedule (.github/workflows/reminders.yml) calls POST /api/calendar every 10 minutes with
-// { action: 'check-reminders' } and the REMINDER_SECRET header; api/calendar.js hands the
-// request here. Owner design, 2026-11-13:
+// Calendar reminders on Discord ("_" files are helpers, not endpoints). cron-job.org calls
+// POST /api/calendar every 10 minutes with { action: 'check-reminders' } and the
+// REMINDER_SECRET header (GitHub's schedule never started; "Run workflow" on
+// .github/workflows/reminders.yml runs one by hand); api/calendar.js hands the request here.
+// Owner design, 2026-11-13:
 //   - Only events whose `reminder` is '1h' (set on the event form). Events made before
 //     reminders existed have none, so they never fire.
-//   - Posted once per occurrence, at most an hour before it starts. GitHub's schedule often
-//     runs 5-15 minutes late, so the message shows the start as a Discord timestamp (each
+//   - Posted once per occurrence, at most an hour before it starts. A check can come a few
+//     minutes late, so the message shows the start as a Discord timestamp (each
 //     reader's own time, with a live countdown) rather than "in 1 hour".
 //   - Alliance events go to that alliance's alert channel (from /registerbot). Server-wide
 //     (Steward) events go to the NAP Discord (NAP_ALERT_CHANNEL_ID) and to the alert channel
