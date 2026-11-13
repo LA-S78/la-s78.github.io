@@ -38,6 +38,8 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         <div class="mgmt-badge-group">
           <span class="mgmt-tag" id="mgmt-scope-tag">{{ "calendar_events.manage_mode" | t }}</span>
           <span class="mgmt-desc" id="mgmt-scope-desc">{{ "calendar_events.session_active" | t }}</span>
+          <!-- A signed-in Steward: server events or their alliance's (js/calendar.js) -->
+          <select id="mgmt-scope-switch" class="cal-form-select" hidden aria-label="{{ "calendar_events.scope_label" | t }}"></select>
         </div>
         <button
           type="button"
