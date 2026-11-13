@@ -67,6 +67,7 @@ _From a measured audit of every page, all three themes, phone and desktop (Novem
     - [x] **Last known data while loading:** the map, alliance standings and blacklist, rewards tiers and the Capitol rotation board show this device's last saved copy straight away (the one sw.js keeps for offline use), dimmed and not clickable, with "⏳ Updating…" floating in a corner (it takes no space, so nothing moves when it goes), and swap to the fresh data when it arrives. Planner Mode stays off until the fresh data is in. If the fresh data can't be loaded, the saved copy stays with a note saying when it was saved. The calendar page is left as it is: its data depends on who is signed in. (`js/live-data-notice.js`)
   - [ ] **Step 5 — Per-tool polish:** the ladder's edit rows, the buff summary table (cut off on phones), the calendar's cards, the King's console rows and the rewards tier editor.
     - [x] **Buff summary** (the map's ⚖️ panel): one card per alliance — tag and number of cities on top, its buffs below, wrapping — instead of a three-column table that was cut off on the right (phones, and desktop in German); on phones the panel takes nearly the map's whole width.
+    - [x] **Ladder rows in Planner Mode** (phones): the rank and its ▲▼ sit at the top left beside the tag, name and academies; the NAP line runs the full width below, with the × (remove alliance) on its own at the far right, away from Revoke NAP. A little shorter than before (German: 1158 → 1122px for the list).
 
 ---
 

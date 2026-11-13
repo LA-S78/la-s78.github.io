@@ -385,3 +385,42 @@
   font-style: italic;
 }
 
+
+/* LADDER ROWS IN PLANNER MODE ON PHONES (Look & Feel step 5). The planner adds ▲▼, academy
+   links and NAP controls to each row, which then wrapped into three ragged lines: the rank
+   floated in the middle of the row and the NAP controls drifted to the right. Now the rank
+   and its ▲▼ sit at the top left with the tag, name and academies in a column beside
+   them; below, across the whole row, the NAP status and its switch, with the × (remove)
+   at the far end, away from the other buttons. Outside Planner Mode a row keeps its
+   one-line layout. */
+@media (max-width: 599px) {
+  #alliance-container.planner-active .alliance-ladder-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: 10px;
+    row-gap: 6px;
+  }
+
+  #alliance-container.planner-active .ladder-rank-col {
+    min-width: 0;
+  }
+
+  #alliance-container.planner-active .ladder-identity-col {
+    grid-column: 2;
+  }
+
+  /* The NAP line runs the row's full width (under the rank too), so it stays on one line */
+  #alliance-container.planner-active .ladder-status-col {
+    grid-column: 1 / -1;
+  }
+
+  #alliance-container.planner-active .ladder-status-col {
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+
+  #alliance-container.planner-active .btn-ladder-del {
+    margin-left: auto;
+  }
+}
