@@ -1540,6 +1540,40 @@ export function initializeMapData(svgRoot) {
   return cities;
 }
 
+// The map's controls bar on a narrower desktop window: when the planner part (tag box,
+// Planner Mode, Submit) would wrap onto a second line, Buff Summary and Fullscreen drop to
+// their icons (.is-compact) to make room. If even that doesn't keep it on one line, the
+// names come back (the bar has two lines anyway). Measured rather than set by width, so a language
+// whose words fit keeps the names. Phones have their own two-row layout
+// (_css/style/88-toolbars.css).
+let toolbarWatcher = null;
+function fitMapToolbar(bar) {
+  const left = bar.querySelector('.control-group.left');
+  const right = bar.querySelector('.control-group.right');
+  bar.classList.remove('is-compact');
+  if (!left || !right || window.matchMedia('(max-width: 599px)').matches) return;
+  const wraps = () => right.getBoundingClientRect().top > left.getBoundingClientRect().top + 4;
+  if (!wraps()) return;
+  bar.classList.add('is-compact');
+  // Still two lines even with icons (a narrow window): then the names may as well stay
+  if (wraps()) bar.classList.remove('is-compact');
+}
+
+function watchMapToolbar(container) {
+  const bar = container.querySelector('.map-controls');
+  if (!bar) return;
+  toolbarWatcher?.disconnect();
+  let lastWidth = 0;
+  toolbarWatcher = new ResizeObserver(() => {
+    const width = Math.round(bar.getBoundingClientRect().width);
+    if (width === lastWidth) return; // only a change of window width calls for a new fit
+    lastWidth = width;
+    fitMapToolbar(bar);
+  });
+  toolbarWatcher.observe(bar);
+  document.fonts?.ready.then(() => fitMapToolbar(bar));
+}
+
 // initMap runs on every page's turbo:load. It sets up the map only where there is one, once
 // per visit: each visit (also the back button's copy of the page) brings a fresh container.
 const startedMaps = new WeakSet();
@@ -1550,6 +1584,7 @@ export function initMap() {
   // A fresh container can be Turbo's back-button copy of the page, which keeps the data-bound
   // marks of the controls wired up last time. Clear them so the controls are wired up again.
   container.querySelectorAll('[data-bound]').forEach((el) => el.removeAttribute('data-bound'));
+  watchMapToolbar(container);
   const svgRoot = getSvgRoot();
   if (svgRoot) {
     initializeMapData(svgRoot);

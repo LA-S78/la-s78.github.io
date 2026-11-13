@@ -285,19 +285,12 @@ html[data-theme='sanctuary'] .dw-s4 {
   display: none;
 }
 
-/* The shared toolbar order (_css/style/88-toolbars.css): the mode switch (Edit Dashboard)
-   first, the main action (Add chart) at the far end */
 .dash-edit-bar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: center;
   gap: 8px;
   margin-bottom: 1rem;
-}
-
-.dash-edit-bar #dash-add {
-  margin-left: auto;
 }
 
 .dw-empty,

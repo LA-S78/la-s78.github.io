@@ -21,14 +21,9 @@
       </button>
     </div>
 
-    <!-- Right: Planner Mode, its tag box, and Submit Plan last -->
+    <!-- Right: the planner: its tag box, Planner Mode, Submit Plan -->
     <div class="control-group right">
-      <button id="btn-toggle-draft" class="draft-btn" aria-pressed="false">
-        <span class="draft-indicator"></span>
-        <span class="draft-text">{{ "map_planner.planner_mode" | t }}</span>
-      </button>
-
-      <!-- Alliance Override Input -->
+      <!-- "Change to:" tag box: greyed out until Planner Mode is on -->
       <div id="planner-override-container">
         <label for="alliance-override" class="override-label">{{ "map_planner.override_label" | t }}</label>
         <input 
@@ -42,7 +37,12 @@
           disabled
         />
       </div>
-      
+
+      <button id="btn-toggle-draft" class="draft-btn" aria-pressed="false">
+        <span class="draft-indicator"></span>
+        <span class="draft-text">{{ "map_planner.planner_mode" | t }}</span>
+      </button>
+
       <button id="btn-submit-proposal" class="submit-plan-btn" disabled>
         {{ "map_planner.submit_plan" | t }} <span id="change-count-badge" class="badge">0</span>
       </button>
