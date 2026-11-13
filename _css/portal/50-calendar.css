@@ -348,6 +348,7 @@
 }
 
 .filter-label {
+  white-space: nowrap;
   font-size: 0.78rem;
   font-weight: 800;
   color: var(--text-muted);
@@ -355,6 +356,7 @@
 }
 
 .cal-filter-select {
+  max-width: 100%;
   background: var(--surface-dark);
   border: 1px solid var(--accent-color);
   color: var(--text-main);
