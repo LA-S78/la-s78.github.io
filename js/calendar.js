@@ -638,6 +638,10 @@ async function initCalendar() {
 // Turbo may run this file again on each visit; the listener is added only once.
 if (!window.__calendarTurboListener) {
   window.__calendarTurboListener = true;
+  // A footer link swaps only the page's main frame: Turbo then fires turbo:frame-render, and
+  // on some routes not turbo:load (the tool stayed blank). Start on both, as js/main.js does;
+  // the once-per-page guard makes the second call a no-op.
   document.addEventListener('turbo:load', () => initCalendar());
+  document.addEventListener('turbo:frame-render', () => initCalendar());
 }
 initCalendar();

@@ -151,6 +151,10 @@ async function init() {
   }
 }
 
+// A footer link swaps only the page's main frame: Turbo then fires turbo:frame-render, and
+// on some routes not turbo:load (the tool stayed blank). Start on both, as js/main.js does;
+// the once-per-page guard makes the second call a no-op.
 document.addEventListener('turbo:load', init);
+document.addEventListener('turbo:frame-render', init);
 if (document.readyState !== 'loading') init();
 else document.addEventListener('DOMContentLoaded', init);
