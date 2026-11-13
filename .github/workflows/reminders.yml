@@ -42,12 +42,16 @@ jobs:
       - name: Ask the site to check reminders
         env:
           REMINDER_SECRET: ${{ secrets.REMINDER_SECRET }}
+          # dev.la-s78.app is a Vercel preview behind Vercel Authentication; this key (Vercel →
+          # Settings → Deployment Protection → Protection Bypass for Automation) lets the check in
+          VERCEL_BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           SITE: ${{ github.event_name == 'workflow_dispatch' && inputs.site || 'both' }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
         run: |
           # A pasted secret often ends with a line break, which curl refuses in a header
           # ("bad argument"); the site ignores spaces and line breaks around it too
           REMINDER_SECRET="$(printf '%s' "$REMINDER_SECRET" | tr -d '[:space:]')"
+          VERCEL_BYPASS="$(printf '%s' "$VERCEL_BYPASS" | tr -d '[:space:]')"
           if [ -z "$REMINDER_SECRET" ]; then
             echo "::error::The REMINDER_SECRET secret is not set (Settings → Secrets → Actions)."
             exit 1
@@ -60,7 +64,16 @@ jobs:
           status=0
           for url in $urls; do
             echo "== $url (dry run: $DRY_RUN)"
+            bypass=()
+            if [ "$url" = "https://dev.la-s78.app" ]; then
+              if [ -n "$VERCEL_BYPASS" ]; then
+                bypass=(-H "x-vercel-protection-bypass: $VERCEL_BYPASS")
+              else
+                echo "::warning::No VERCEL_AUTOMATION_BYPASS_SECRET secret: Vercel will refuse the dev site (Protected deployment)."
+              fi
+            fi
             if ! curl -sS --fail-with-body --max-time 40 -X POST "$url/api/calendar" \
+                "${bypass[@]}" \
                 -H "Content-Type: application/json" \
                 -H "x-reminder-secret: $REMINDER_SECRET" \
                 -d "{\"action\":\"check-reminders\",\"dryRun\":$DRY_RUN}"; then
