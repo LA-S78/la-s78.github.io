@@ -10,8 +10,9 @@ permalink: /sw.js
    The site's own service worker: no outside library. (Until November 2026 it used
    Google's Workbox, downloaded from storage.googleapis.com every time the worker started,
    which a browser cannot check; owner decision to replace it.) It does five jobs:
-     1. keeps the app shell (pages, styles, scripts, small images) for offline use, and on
-        an update downloads only the files whose fingerprint changed;
+     1. keeps the app shell for offline use: the shared styles, scripts and small images, the
+        pages of the reader's language, and any other page the reader opens; on an update it
+        downloads only the files whose fingerprint changed;
      2. keeps up to 100 other images for 30 days;
      3. live data (/api/state, /api/calendar): always fresh when online, last good copy offline;
      4. offline, a page that was never saved opens the Home page in the reader's language;
@@ -33,6 +34,12 @@ const shellList = typeof precacheList !== 'undefined' ? precacheList : [];
 // Saved under its plain address (no ?__WB_REVISION__=… as Workbox did, which could end up in
 // the address bar); the fingerprint rides along in a header.
 const SHELL_URLS = new Set(shellList.map((e) => e.url));
+const REVISIONS = new Map(shellList.map((e) => [e.url, e.revision]));
+// Which languages this phone reads, kept in the shell copy (for an update with no page open)
+const LANGUAGES_KEY = '/__asylum/languages';
+
+/** The language folder of a path ('de' for /de/rules.html), or null for shared files. */
+const langOf = (path) => (path.match(LANGS) || [])[1] || null;
 
 // ---------- 1. The app shell ----------
 
@@ -60,12 +67,49 @@ async function putShell(cache, url, revision, response) {
   await cache.put(url, new Response(await response.blob(), { status: 200, headers }));
 }
 
+/**
+ * What this version saves on install. The list has every file in all eight languages, but a
+ * phone only needs:
+ *   - the shared files (styles, scripts, images, files outside the language folders);
+ *   - every page of the reader's language: the language of the open page(s), else the one
+ *     remembered from last time, else English;
+ *   - any other page this phone already saved (a page of another language it visited), so
+ *     an update refreshes it too and it never goes stale.
+ * Workbox (before November 2026) saved all languages: its copy is only used to avoid
+ * downloading files again, not to decide what to keep.
+ */
+async function installList() {
+  const langs = new Set();
+  for (const page of await self.clients.matchAll({ type: 'window', includeUncontrolled: true })) {
+    const lang = langOf(new URL(page.url).pathname);
+    if (lang) langs.add(lang);
+  }
+  const alreadySaved = new Set();
+  for (const name of await caches.keys()) {
+    if (!name.startsWith('asylum-shell-') || name === SHELL_CACHE) continue;
+    const cache = await caches.open(name);
+    for (const request of await cache.keys()) alreadySaved.add(new URL(request.url).pathname);
+    if (!langs.size) {
+      const remembered = await cache.match(LANGUAGES_KEY);
+      if (remembered) (await remembered.json()).forEach((lang) => langs.add(lang));
+    }
+  }
+  if (!langs.size) langs.add('en');
+  const list = shellList.filter(({ url }) => {
+    const lang = langOf(url);
+    return !lang || langs.has(lang) || alreadySaved.has(url);
+  });
+  return { list, langs: [...langs] };
+}
+
 /** Fills the new shell copy: unchanged files are copied from the device, changed ones are
  *  downloaded (bypassing the browser's own cache). Six at a time. Any failure fails the
  *  install, so a half-saved version never takes over (the browser retries later). */
 async function fillShell() {
   const cache = await caches.open(SHELL_CACHE);
-  const queue = [...shellList];
+  const { list, langs } = await installList();
+  await cache.put(LANGUAGES_KEY, new Response(JSON.stringify(langs), { headers: { 'content-type': 'application/json' } }));
+  const queue = [...list];
   const worker = async () => {
     for (let entry = queue.shift(); entry; entry = queue.shift()) {
       const { url, revision } = entry;
@@ -199,8 +243,17 @@ self.addEventListener('fetch', (event) => {
   if (shellUrl) {
     event.respondWith(
       (async () => {
-        const saved = await caches.match(shellUrl, { cacheName: SHELL_CACHE });
-        return saved || fetch(request); // not saved yet (first visit, still installing)
+        const cache = await caches.open(SHELL_CACHE);
+        const saved = await cache.match(shellUrl);
+        if (saved) return saved;
+        // Not saved yet (a page of another language, or the first visit while installing):
+        // from the network, and saved with its fingerprint, so it works offline next time
+        // and the next update refreshes it
+        const response = await fetch(request);
+        if (response.ok && REVISIONS.has(shellUrl)) {
+          event.waitUntil(putShell(cache, shellUrl, REVISIONS.get(shellUrl), response.clone()));
+        }
+        return response;
       })(),
     );
     return;
