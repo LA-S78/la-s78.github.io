@@ -686,5 +686,9 @@ if (typeof window !== 'undefined') {
   } else {
     bindRewardsControls();
   }
+  // A footer link swaps only the page's main frame: Turbo then fires turbo:frame-render, and
+  // on some routes not turbo:load (the tool stayed blank). Start on both, as js/main.js does;
+  // the once-per-page guard makes the second call a no-op.
   document.addEventListener('turbo:load', bindRewardsControls);
+  document.addEventListener('turbo:frame-render', bindRewardsControls);
 }
