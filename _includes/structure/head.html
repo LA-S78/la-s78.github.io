@@ -29,7 +29,7 @@
   <meta property="og:title" content="{{ meta_title | default: site.title }}">
   <meta property="og:description" content="{{ meta_desc | default: site.data[site.active_lang].ui.header.subtitle }}">
   <meta property="og:url" content="{{ page.url | absolute_url }}">
-  <meta property="og:image" content="{{ page.image | default: '/images/default-social-banner.png' | absolute_url }}">
+  <meta property="og:image" content="{{ page.image | default: '/images/default-social-banner.jpg' | absolute_url }}">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#110d0b">
   <meta name="turbo-refresh-method" content="morph">
@@ -38,7 +38,7 @@
   <title>{% if meta_title %}{{ meta_title | strip_html | strip }} | {% endif %}{{ site.title }}</title>
   
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="icon" href="/images/favicon.png">
+  <link rel="icon" href="/images/favicon-48.png" sizes="48x48">
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <script type="module" src="/js/turbo.js"></script>

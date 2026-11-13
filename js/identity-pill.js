@@ -86,8 +86,8 @@
   function avatarImg(src, className) {
     const img = el('img', className);
     img.alt = '';
-    img.src = src || '/images/favicon.png';
-    img.addEventListener('error', () => (img.src = '/images/favicon.png'), { once: true });
+    img.src = src || '/images/favicon-48.png';
+    img.addEventListener('error', () => (img.src = '/images/favicon-48.png'), { once: true });
     return img;
   }
 
