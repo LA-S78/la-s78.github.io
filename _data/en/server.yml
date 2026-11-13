@@ -101,7 +101,8 @@ api_proposals:
   week_and_threat: "Target week and threat server are required."
 
 api_events:
-  session_invalid: "Invalid, tampered, or expired session token. Please re-run /calendar in Discord."
+  session_invalid: "Your sign-in or calendar link has expired. Sign in with Discord again, or re-run /calendar in Discord."
+  not_leader: "Only R4 and R5 can manage their alliance's events (and Stewards server-wide ones)."
   required_fields: "Title, Date, and Game Time are required."
   date_format: "Date must be formatted as YYYY-MM-DD."
   time_format: "Game Time must be formatted as HH:MM (00:00 to 23:59)."

@@ -2,7 +2,8 @@
 
 // Handles creating, editing and deleting calendar events
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
-import { verifyToken } from './_tokens.js';
+import { verifyToken, verifySessionToken } from './_tokens.js';
+import { isSteward } from './_stewards.js';
 import { inLanguage, say } from './_messages.js';
 
 export default function handler(req, res) {
@@ -20,17 +21,31 @@ async function respond(req, res) {
     return res.status(500).json({ error: 'Server configuration error: missing credentials' });
   }
 
-  const { token, action, eventData, eventId } = req.body || {};
+  const { token, action, eventData, eventId, scope: askedScope } = req.body || {};
 
-  // 1. Verify Cryptographic Token
-  const tokenPayload = verifyToken(token, botSecret, { action: 'manage_events' });
-  if (!tokenPayload) {
-    return res.status(401).json({
-      error: say('api_events.session_invalid'),
-    });
+  // 1. Who is asking, and whose events they may manage ('global' = server-wide events):
+  //    - a link from /calendar in Discord (its token carries the scope), or
+  //    - the site's Discord sign-in (login pass in the Authorization header): R4 and R5
+  //      manage their own alliance's events, Stewards also server-wide ones (owner decision,
+  //      2026-11-13). The scope is always decided here, never taken from the page as is.
+  let callerScope = null;
+  const tokenPayload = token ? verifyToken(token, botSecret, { action: 'manage_events' }) : null;
+  if (tokenPayload) {
+    callerScope = tokenPayload.scope;
+  } else {
+    const pass = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '');
+    const session = verifySessionToken(pass, botSecret);
+    if (!session) {
+      return res.status(401).json({ error: say('api_events.session_invalid') });
+    }
+    const steward = isSteward(session.uid);
+    const leader = ['R4', 'R5'].includes(session.role);
+    if (askedScope === 'global') callerScope = steward ? 'global' : null;
+    else if (session.alliance && (leader || steward)) callerScope = String(session.alliance);
+    if (!callerScope) {
+      return res.status(403).json({ error: say('api_events.not_leader') });
+    }
   }
-
-  const callerScope = tokenPayload.scope; // e.g., 'global' or 'WLO'
   const isGlobalAdmin = callerScope === 'global';
 
   try {
