@@ -43,7 +43,7 @@
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--accent-color);
+  color: var(--accent-text);
   background: var(--surface-elevated);
   border-bottom: 1px solid var(--border-color);
 }

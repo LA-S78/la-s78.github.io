@@ -124,3 +124,12 @@
   }
 }
 
+
+/* Keyboard focus: a clear ring in the theme's accent (the colour of a selected tab) on
+   whatever Tab has reached (links, buttons, tabs, menus). Only for keyboard use: a tap or
+   click shows nothing. Text boxes keep their own highlighted border (their rules set
+   outline: none). */
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}

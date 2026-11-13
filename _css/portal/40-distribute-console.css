@@ -93,7 +93,7 @@
 .badge-pool-reg {
   font-size: 0.62rem;
   background: var(--card-bg-solid);
-  color: var(--accent-color);
+  color: var(--accent-text);
   border: 1px solid var(--border-color);
 }
 
@@ -111,7 +111,7 @@
 .badge-buyout {
   font-size: 0.62rem;
   background: color-mix(in srgb, var(--accent-color) 20%, transparent);
-  color: var(--accent-color);
+  color: var(--accent-text);
   border: 1px solid var(--accent-color);
 }
 

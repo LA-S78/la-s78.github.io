@@ -115,7 +115,7 @@
   border-top: 1px dashed var(--overlay-8);
   padding-top: 6px;
   font-size: 0.72rem;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 /* Active Buyouts Tracker */

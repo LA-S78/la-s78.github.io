@@ -84,7 +84,7 @@
 
 .scope-global .mgmt-tag {
   border-color: var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   background: color-mix(in srgb, var(--accent-color) 15%, transparent);
 }
 
@@ -129,7 +129,7 @@
 }
 
 .form-group .req {
-  color: var(--status-danger);
+  color: var(--status-danger-hover); /* the lighter red: easier to read on dark cards */
 }
 
 .form-group input,
@@ -281,7 +281,7 @@
 .cal-capitol-label {
   font-size: 0.65rem;
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 .cal-capitol-holder {
@@ -460,7 +460,7 @@
 
 .pill-recurring {
   border-color: var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   background: color-mix(in srgb, var(--accent-color) 14%, transparent);
 }
 
