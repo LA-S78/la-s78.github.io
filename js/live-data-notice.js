@@ -47,19 +47,50 @@ export function showLiveDataNotice(anchor, { savedAt = null, failed = false } = 
 }
 
 // ---------- Last known data while loading (Look & Feel step 4, owner idea) ----------
-// sw.js keeps the last good answer of /api/state and /api/calendar on this device (for
-// offline use). While the fresh answer loads, a tool can show that saved copy straight away,
-// dimmed with "⏳ Updating…" in its corner, instead of a blank or "Loading…" that jumps when
-// the data arrives. The label floats over the tool, so nothing moves when it goes.
+// While the fresh answer loads, a tool shows this device's last copy straight away, dimmed
+// with "⏳ Updating…" in its corner, instead of a blank or "Loading…" that jumps when the
+// data arrives. The label floats over the tool, so nothing moves when it goes.
+// Each tool keeps its own copy in localStorage (rememberLiveData, after every fresh answer):
+// that works the same on every device. The copy sw.js keeps for offline use is the fallback
+// (on a phone it wasn't always found: owner report, 2026-11-13).
 
-/** This device's last saved copy of a live-data answer, or null (none, or no service worker). */
+const STORE_PREFIX = 'la_live_';
+
+/** The address without the changing ?t=… the tools add to dodge stale copies. */
+function liveKey(url) {
+  const key = new URL(url, location.origin);
+  key.searchParams.delete('t');
+  return key.pathname + key.search;
+}
+
+/** Keeps a fresh answer on this device, to show next time while the page loads. */
+export function rememberLiveData(url, data) {
+  try {
+    localStorage.setItem(
+      STORE_PREFIX + liveKey(url),
+      JSON.stringify({ at: new Date().toISOString(), data }),
+    );
+  } catch {
+    // Storage full or blocked (private browsing): the next visit just shows "Loading…"
+  }
+}
+
+/** This device's last copy of a live-data answer (as a Response), or null. */
 export async function savedLiveCopy(url) {
   try {
+    const kept = JSON.parse(localStorage.getItem(STORE_PREFIX + liveKey(url)) || 'null');
+    if (kept && kept.data) {
+      return new Response(JSON.stringify(kept.data), {
+        headers: { 'content-type': 'application/json', 'X-Offline-Copy': kept.at },
+      });
+    }
+  } catch {
+    // Unreadable: try the service worker's copy
+  }
+  try {
     if (typeof caches === 'undefined') return null;
-    const key = new URL(url, location.origin);
-    key.searchParams.delete('t');
     const cache = await caches.open('asylum-live-data');
-    return (await cache.match(key.href)) || null;
+    return (await cache.match(new URL(liveKey(url), location.origin).href)) || null;
   } catch {
     return null;
   }

@@ -3,10 +3,11 @@
  */
 
 import {
+  markUpdating,
   offlineCopySavedAt,
+  rememberLiveData,
   showLiveDataNotice,
   showSavedWhileLoading,
-  markUpdating,
 } from './live-data-notice.js';
 import { submitProposalWithAuth } from './auth-modal.js';
 
@@ -1502,6 +1503,8 @@ export async function loadLiveMapState(svgRoot = null) {
 
     if (stateRes.ok) {
       const liveState = await stateRes.json();
+      // Kept for next time (shown while the page loads), unless this is already an offline copy
+      if (!offlineCopySavedAt(stateRes)) rememberLiveData('/api/state?scope=map', liveState);
       applyMapState(liveState, root, false);
       showLiveDataNotice(noticeAnchor(root), { savedAt: offlineCopySavedAt(stateRes) });
     } else {
