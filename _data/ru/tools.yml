@@ -630,22 +630,23 @@ map_planner:
   toggle_buff_summary: Переключить сводку баффов
   close_buff_summary: Закрыть сводку баффов
   planner_mode: Режим планировщика
+  override_label: 'Изменить на:'
   override_placeholder: НАПР. WLO
-  override_help: Введите тег для переопределения назначений. Оставьте пустым для перебора.
+  override_help: Введите тег, чтобы переопределить назначения. Оставьте пустым для переключения.
   submit_plan: Отправить план
   fullscreen: Полноэкранный режим
   toggle_fullscreen: Переключить полноэкранный режим
-  exit: Выход
+  exit: Выйти
   grain: "🌾 Зерно"
   timber: "🪵 Древесина"
   herbs: "🌿 Травы"
   solid_gather: 'Сплошной: Сбор'
-  stripe_output: 'Полоса: Выход'
+  stripe_output: 'Полоса: Производство'
   level_unknown: Уровень --
   level: Уровень {n}
-  hover: Наведите на территорию
+  hover: Наведите курсор на территорию
   owner: 'Владелец:'
-  unclaimed: Ничейная
+  unclaimed: Ничья
   buff: 'Бафф:'
   none: Нет
   no_active_buff: Нет активного баффа
@@ -660,17 +661,17 @@ map_planner:
   col_holdings: Владения
   col_buffs: Активные баффы
   buff_research_speed: Скорость исследования
-  buff_troop_training_speed: Скорость обучения войск
+  buff_troop_training_speed: Скорость подготовки войск
   buff_building_speed: Скорость строительства
   buff_march_speed: Скорость марша
   buff_grain_gathering: Сбор зерна
-  buff_grain_output: Добыча зерна
+  buff_grain_output: Производство зерна
   buff_timber_gathering: Сбор древесины
-  buff_timber_output: Добыча древесины
+  buff_timber_output: Производство древесины
   buff_herb_gathering: Сбор трав
-  buff_herb_output: Добыча трав
-  no_changes: В вашем черновике плана не обнаружено изменений.
-  proposal_title: "🗺️ Отправить предложение по территориям на карте"
+  buff_herb_output: Производство трав
+  no_changes: В вашем черновике плана изменений не обнаружено.
+  proposal_title: "🗺️ Отправить предложение по территории карты"
 proposals:
   title: Отправить предложение
   close: Закрыть

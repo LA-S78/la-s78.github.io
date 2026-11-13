@@ -626,54 +626,55 @@ blacklist_planner:
   what_player: гравець
   sent: Пропозицію щодо чорного списку надіслано керівництву в Discord. Вона набуде чинності після схвалення офіцером.
 map_planner:
-  view: 'Вигляд:'
+  view: 'Перегляд:'
   levels: Рівні
   alliances: Альянси
   resources: Ресурси
-  buff_summary: Зведення бонусів
-  toggle_buff_summary: Перемкнути зведення бонусів
-  close_buff_summary: Закрити зведення бонусів
-  planner_mode: Режим планування
-  override_placeholder: НАПРИКЛАД WLO
-  override_help: Введіть тег, щоб змінити призначення за кліком. Залиште порожнім для циклічного вибору.
+  buff_summary: Підсумок бафів
+  toggle_buff_summary: Перемкнути підсумок бафів
+  close_buff_summary: Закрити підсумок бафів
+  planner_mode: Режим планувальника
+  override_label: 'Змінити на:'
+  override_placeholder: НАПР. WLO
+  override_help: Введіть тег, щоб змінити призначення за кліком. Залиште порожнім для циклічної зміни.
   submit_plan: Надіслати план
-  fullscreen: На весь екран
-  toggle_fullscreen: Перемкнути повноекранний режим
-  exit: Вийти
+  fullscreen: Повний екран
+  toggle_fullscreen: Перемкнути повний екран
+  exit: Вихід
   grain: "🌾 Зерно"
   timber: "🪵 Деревина"
   herbs: "🌿 Трави"
-  solid_gather: 'Суцільне: Збір'
-  stripe_output: 'Смуга: Виробництво'
+  solid_gather: 'Суцільний: Збір'
+  stripe_output: 'Смуга: Видобуток'
   level_unknown: Рівень --
   level: Рівень {n}
   hover: Наведіть на територію
   owner: 'Власник:'
   unclaimed: Нічийна
-  buff: 'Бонус:'
+  buff: 'Баф:'
   none: Немає
-  no_active_buff: Немає активних бонусів
-  drawer_title: Розподіл бонусів альянсу
-  drawer_subtitle: Динамічний підрахунок на основі активної карти / призначень планувальника
-  no_claims: Наразі жоден альянс не претендує на територію.
-  no_buffs: Немає призначених активних бонусів
-  cities_one: "{n} місто"
-  cities_few: "{n} міста"
-  cities_other: "{n} міст"
+  no_active_buff: Немає активних бафів
+  drawer_title: Розподіл бафів альянсу
+  drawer_subtitle: Динамічний підрахунок на основі активної карти / призначень у планувальнику
+  no_claims: Жоден альянс наразі не володіє територією.
+  no_buffs: Немає призначених активних бафів
+  cities_one: "{n} Місто"
+  cities_few: "{n} Міста"
+  cities_other: "{n} Міст"
   col_alliance: Альянс
   col_holdings: Володіння
-  col_buffs: Активні бонуси
+  col_buffs: Активні бафи
   buff_research_speed: Швидкість досліджень
   buff_troop_training_speed: Швидкість тренування військ
   buff_building_speed: Швидкість будівництва
   buff_march_speed: Швидкість маршу
   buff_grain_gathering: Збір зерна
-  buff_grain_output: Виробництво зерна
+  buff_grain_output: Видобуток зерна
   buff_timber_gathering: Збір деревини
-  buff_timber_output: Виробництво деревини
+  buff_timber_output: Видобуток деревини
   buff_herb_gathering: Збір трав
-  buff_herb_output: Виробництво трав
-  no_changes: У вашому проекті плану не виявлено змін.
+  buff_herb_output: Видобуток трав
+  no_changes: Зміни у вашому проекті плану не виявлені.
   proposal_title: "🗺️ Надіслати пропозицію щодо території на карті"
 proposals:
   title: Надіслати пропозицію

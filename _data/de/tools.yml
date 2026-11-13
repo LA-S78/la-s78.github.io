@@ -625,12 +625,13 @@ map_planner:
   levels: Level
   alliances: Allianzen
   resources: Ressourcen
-  buff_summary: Buff-Zusammenfassung
-  toggle_buff_summary: Buff-Zusammenfassung umschalten
-  close_buff_summary: Buff-Zusammenfassung schließen
-  planner_mode: Planer-Modus
+  buff_summary: Buff-Übersicht
+  toggle_buff_summary: Buff-Übersicht umschalten
+  close_buff_summary: Buff-Übersicht schließen
+  planner_mode: Planungsmodus
+  override_label: 'Ändern zu:'
   override_placeholder: Z. B. WLO
-  override_help: Gib ein TAG ein, um Klick-Zuweisungen zu überschreiben. Leer lassen zum Durchwechseln.
+  override_help: Gib ein Tag ein, um Klick-Zuweisungen zu überschreiben. Leer lassen, um durchzuwechseln.
   submit_plan: Plan einreichen
   fullscreen: Vollbild
   toggle_fullscreen: Vollbild umschalten
@@ -638,8 +639,8 @@ map_planner:
   grain: "🌾 Getreide"
   timber: "🪵 Holz"
   herbs: "🌿 Kräuter"
-  solid_gather: 'Solid: Sammeln'
-  stripe_output: 'Stripe: Produktion'
+  solid_gather: 'Voll: Sammeln'
+  stripe_output: 'Streifen: Produktion'
   level_unknown: Level --
   level: Level {n}
   hover: Über ein Gebiet fahren
@@ -649,8 +650,8 @@ map_planner:
   none: Keiner
   no_active_buff: Kein aktiver Buff
   drawer_title: Allianz-Buff-Verteilung
-  drawer_subtitle: Dynamische Übersicht basierend auf aktiven Karten-/Planer-Zuweisungen
-  no_claims: Aktuell beanspruchen keine Allianzen Gebiete.
+  drawer_subtitle: Dynamische Zählung basierend auf aktiven Karten- / Planungszuweisungen
+  no_claims: Keine Allianzen beanspruchen derzeit Gebiete.
   no_buffs: Keine aktiven Buffs zugewiesen
   cities_one: "{n} Stadt"
   cities_other: "{n} Städte"
@@ -658,7 +659,7 @@ map_planner:
   col_holdings: Besitztümer
   col_buffs: Aktive Buffs
   buff_research_speed: Forschungsgeschwindigkeit
-  buff_troop_training_speed: Truppenausbildungstempo
+  buff_troop_training_speed: Truppenausbildungsgeschwindigkeit
   buff_building_speed: Baugeschwindigkeit
   buff_march_speed: Marschgeschwindigkeit
   buff_grain_gathering: Getreidesammeln
@@ -668,7 +669,7 @@ map_planner:
   buff_herb_gathering: Kräutersammeln
   buff_herb_output: Kräuterproduktion
   no_changes: Keine Änderungen in deinem Planentwurf erkannt.
-  proposal_title: "🗺️ Vorschlag für Kartengebiet einreichen"
+  proposal_title: "🗺️ Gebietsvorschlag für Karte einreichen"
 proposals:
   title: Vorschlag einreichen
   close: Schließen

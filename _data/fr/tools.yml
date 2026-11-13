@@ -626,11 +626,12 @@ map_planner:
   alliances: Alliances
   resources: Ressources
   buff_summary: Résumé des buffs
-  toggle_buff_summary: Afficher/Masquer le résumé des buffs
+  toggle_buff_summary: Basculer le résumé des buffs
   close_buff_summary: Fermer le résumé des buffs
   planner_mode: Mode planificateur
-  override_placeholder: EX. WLO
-  override_help: Tapez un tag pour remplacer les attributions de clic. Laissez vide pour faire défiler.
+  override_label: 'Changer en :'
+  override_placeholder: 'EX : WLO'
+  override_help: Tapez une balise pour remplacer les attributions. Laissez vide pour faire défiler.
   submit_plan: Soumettre le plan
   fullscreen: Plein écran
   toggle_fullscreen: Basculer en plein écran
@@ -638,7 +639,7 @@ map_planner:
   grain: "🌾 Grain"
   timber: "🪵 Bois"
   herbs: "🌿 Herbes"
-  solid_gather: 'Plein : Récolte'
+  solid_gather: 'Solide : Récolte'
   stripe_output: 'Rayé : Production'
   level_unknown: Niveau --
   level: Niveau {n}
@@ -649,11 +650,11 @@ map_planner:
   none: Aucun
   no_active_buff: Aucun buff actif
   drawer_title: Distribution des buffs d'alliance
-  drawer_subtitle: Calcul dynamique basé sur les attributions actives de la carte / du planificateur
+  drawer_subtitle: Calcul dynamique basé sur la carte active / les attributions du planificateur
   no_claims: Aucune alliance ne réclame actuellement de territoire.
-  no_buffs: Aucun buff actif assigné
-  cities_one: "{n} ville"
-  cities_other: "{n} villes"
+  no_buffs: Aucun buff actif attribué
+  cities_one: "{n} Ville"
+  cities_other: "{n} Villes"
   col_alliance: Alliance
   col_holdings: Possessions
   col_buffs: Buffs actifs
@@ -667,7 +668,7 @@ map_planner:
   buff_timber_output: Production de bois
   buff_herb_gathering: Récolte d'herbes
   buff_herb_output: Production d'herbes
-  no_changes: Aucun changement détecté dans votre brouillon de plan.
+  no_changes: Aucun changement détecté dans votre projet de plan.
   proposal_title: "🗺️ Soumettre une proposition de territoire sur la carte"
 proposals:
   title: Soumettre une proposition

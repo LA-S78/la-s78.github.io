@@ -625,50 +625,51 @@ map_planner:
   levels: Seviyeler
   alliances: İttifaklar
   resources: Kaynaklar
-  buff_summary: Takviye Özeti
-  toggle_buff_summary: Takviye Özetini Aç/Kapat
-  close_buff_summary: Takviye Özetini Kapat
+  buff_summary: Güçlendirme Özeti
+  toggle_buff_summary: Güçlendirme Özetini Aç/Kapat
+  close_buff_summary: Güçlendirme Özetini Kapat
   planner_mode: Planlayıcı Modu
-  override_placeholder: Ör. WLO
-  override_help: Tıklama atamalarını geçersiz kılmak için bir etiket yazın. Döngüye almak için boş bırakın.
+  override_label: 'Şununla değiştir:'
+  override_placeholder: Örn. WLO
+  override_help: Atamaları geçersiz kılmak için bir etiket yazın. Döngüye almak için boş bırakın.
   submit_plan: Planı Gönder
   fullscreen: Tam Ekran
   toggle_fullscreen: Tam Ekranı Aç/Kapat
   exit: Çıkış
   grain: "🌾 Tahıl"
-  timber: "🪵 Odun"
-  herbs: "🌿 Otlar"
-  solid_gather: 'Sabit: Toplama'
+  timber: "🪵 Kereste"
+  herbs: "🌿 Bitki"
+  solid_gather: 'Dolu: Topla'
   stripe_output: 'Çizgili: Üretim'
   level_unknown: Seviye --
   level: Seviye {n}
   hover: Bir bölgenin üzerine gelin
   owner: 'Sahibi:'
   unclaimed: Sahipsiz
-  buff: 'Takviye:'
+  buff: 'Güçlendirme:'
   none: Yok
-  no_active_buff: Aktif takviye yok
-  drawer_title: İttifak Takviye Dağıtımı
-  drawer_subtitle: Aktif harita / planlayıcı atamalarına dayalı dinamik liste
-  no_claims: Şu anda hiçbir ittifak bölge talep etmiyor.
-  no_buffs: Atanmış aktif takviye yok
+  no_active_buff: Aktif güçlendirme yok
+  drawer_title: İttifak Güçlendirme Dağılımı
+  drawer_subtitle: Aktif harita / planlayıcı atamalarına dayalı dinamik döküm
+  no_claims: Şu anda bölge iddia eden ittifak yok.
+  no_buffs: Atanmış aktif güçlendirme yok
   cities_one: "{n} Şehir"
   cities_other: "{n} Şehir"
   col_alliance: İttifak
   col_holdings: Mülkler
-  col_buffs: Aktif Takviyeler
+  col_buffs: Aktif Güçlendirmeler
   buff_research_speed: Araştırma Hızı
   buff_troop_training_speed: Birlik Eğitim Hızı
   buff_building_speed: İnşaat Hızı
   buff_march_speed: Yürüyüş Hızı
   buff_grain_gathering: Tahıl Toplama
   buff_grain_output: Tahıl Üretimi
-  buff_timber_gathering: Odun Toplama
-  buff_timber_output: Odun Üretimi
-  buff_herb_gathering: Ot Toplama
-  buff_herb_output: Ot Üretimi
+  buff_timber_gathering: Kereste Toplama
+  buff_timber_output: Kereste Üretimi
+  buff_herb_gathering: Bitki Toplama
+  buff_herb_output: Bitki Üretimi
   no_changes: Taslak planınızda değişiklik algılanmadı.
-  proposal_title: "🗺️ Harita Bölgesi Teklifini Gönder"
+  proposal_title: "🗺️ Harita Bölge Teklifi Gönder"
 proposals:
   title: Teklif Gönder
   close: Kapat

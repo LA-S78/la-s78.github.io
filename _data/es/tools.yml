@@ -628,9 +628,10 @@ map_planner:
   buff_summary: Resumen de buffs
   toggle_buff_summary: Alternar resumen de buffs
   close_buff_summary: Cerrar resumen de buffs
-  planner_mode: Modo Planificador
-  override_placeholder: EJ. WLO
-  override_help: Escribe un tag para anular las asignaciones de clic. Déjalo en blanco para ciclar.
+  planner_mode: Modo planificador
+  override_label: 'Cambiar a:'
+  override_placeholder: P. EJ. WLO
+  override_help: Escribe una etiqueta para anular las asignaciones. Déjalo en blanco para rotar.
   submit_plan: Enviar plan
   fullscreen: Pantalla completa
   toggle_fullscreen: Alternar pantalla completa
@@ -638,7 +639,7 @@ map_planner:
   grain: "🌾 Grano"
   timber: "🪵 Madera"
   herbs: "🌿 Hierbas"
-  solid_gather: 'Sólido: Recolección'
+  solid_gather: 'Sólido: Recolectar'
   stripe_output: 'Franja: Producción'
   level_unknown: Nivel --
   level: Nivel {n}
@@ -647,18 +648,18 @@ map_planner:
   unclaimed: Sin reclamar
   buff: 'Buff:'
   none: Ninguno
-  no_active_buff: Sin buff activo
+  no_active_buff: Ningún buff activo
   drawer_title: Distribución de buffs de alianza
-  drawer_subtitle: Recuento dinámico basado en el mapa activo / asignaciones del planificador
+  drawer_subtitle: Recuento dinámico basado en las asignaciones activas del mapa/planificador
   no_claims: Ninguna alianza reclama territorio actualmente.
-  no_buffs: Sin buffs activos asignados
-  cities_one: "{n} ciudad"
-  cities_other: "{n} ciudades"
+  no_buffs: No hay buffs activos asignados
+  cities_one: "{n} Ciudad"
+  cities_other: "{n} Ciudades"
   col_alliance: Alianza
-  col_holdings: Propiedades
+  col_holdings: Posesiones
   col_buffs: Buffs activos
   buff_research_speed: Velocidad de investigación
-  buff_troop_training_speed: Velocidad de entrenamiento
+  buff_troop_training_speed: Velocidad de entrenamiento de tropas
   buff_building_speed: Velocidad de construcción
   buff_march_speed: Velocidad de marcha
   buff_grain_gathering: Recolección de grano

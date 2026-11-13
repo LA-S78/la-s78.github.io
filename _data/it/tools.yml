@@ -625,15 +625,16 @@ map_planner:
   levels: Livelli
   alliances: Alleanze
   resources: Risorse
-  buff_summary: Riepilogo buff
-  toggle_buff_summary: Attiva/disattiva riepilogo buff
-  close_buff_summary: Chiudi riepilogo buff
-  planner_mode: Modalità pianificatore
+  buff_summary: Riepilogo Buff
+  toggle_buff_summary: Attiva/Disattiva Riepilogo Buff
+  close_buff_summary: Chiudi Riepilogo Buff
+  planner_mode: Modalità Pianificatore
+  override_label: 'Cambia in:'
   override_placeholder: ES. WLO
-  override_help: Digita un tag per sovrascrivere le assegnazioni. Lascia vuoto per scorrere.
-  submit_plan: Invia piano
+  override_help: Digita un tag per sovrascrivere le assegnazioni dei clic. Lascia vuoto per scorrere.
+  submit_plan: Invia Piano
   fullscreen: Schermo intero
-  toggle_fullscreen: Attiva/disattiva schermo intero
+  toggle_fullscreen: Attiva/Disattiva Schermo intero
   exit: Esci
   grain: "🌾 Grano"
   timber: "🪵 Legname"
@@ -642,33 +643,33 @@ map_planner:
   stripe_output: 'Striscia: Produzione'
   level_unknown: Livello --
   level: Livello {n}
-  hover: Passa sopra un territorio
+  hover: Passa il mouse sopra un territorio
   owner: 'Proprietario:'
   unclaimed: Non reclamato
   buff: 'Buff:'
   none: Nessuno
   no_active_buff: Nessun buff attivo
-  drawer_title: Distribuzione buff alleanza
+  drawer_title: Distribuzione Buff Alleanza
   drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni pianificate
-  no_claims: Nessuna alleanza reclama attualmente il territorio.
-  no_buffs: Nessun buff attivo assegnato
-  cities_one: "{n} città"
-  cities_other: "{n} città"
+  no_claims: Nessuna alleanza reclama territori al momento.
+  no_buffs: Nessun buff assegnato attivo
+  cities_one: "{n} Città"
+  cities_other: "{n} Città"
   col_alliance: Alleanza
   col_holdings: Possedimenti
-  col_buffs: Buff attivi
-  buff_research_speed: Velocità ricerca
-  buff_troop_training_speed: Velocità addestramento truppe
-  buff_building_speed: Velocità costruzione
-  buff_march_speed: Velocità marcia
-  buff_grain_gathering: Raccolta grano
-  buff_grain_output: Produzione grano
-  buff_timber_gathering: Raccolta legname
-  buff_timber_output: Produzione legname
-  buff_herb_gathering: Raccolta erbe
-  buff_herb_output: Produzione erbe
-  no_changes: Nessuna modifica rilevata nella bozza del piano.
-  proposal_title: "🗺️ Invia proposta territori mappa"
+  col_buffs: Buff Attivi
+  buff_research_speed: Velocità Ricerca
+  buff_troop_training_speed: Velocità Addestramento Truppe
+  buff_building_speed: Velocità Costruzione
+  buff_march_speed: Velocità Marcia
+  buff_grain_gathering: Raccolta Grano
+  buff_grain_output: Produzione Grano
+  buff_timber_gathering: Raccolta Legname
+  buff_timber_output: Produzione Legname
+  buff_herb_gathering: Raccolta Erbe
+  buff_herb_output: Produzione Erbe
+  no_changes: Nessuna modifica rilevata nella tua bozza di piano.
+  proposal_title: "🗺️ Invia Proposta Territorio Mappa"
 proposals:
   title: Invia proposta
   close: Chiudi
