@@ -236,3 +236,20 @@ dialog a.dialog-btn:hover {
   font-size: 0.72rem;
   pointer-events: none;
 }
+
+/* An alliance tag written in its alliance's colour (scripts set --ally to that colour).
+   Dark colours (e.g. a deep purple) were hard to read on the dark pages, so the text uses
+   the same hue with its lightness raised to at least 0.72 (OKLCH); a colour that is already
+   light enough stays as it is. The alliance's own colour is untouched everywhere else (dots,
+   swatches, the map) and any change to it carries through here. !important as the colour
+   was an inline style before, which no other rule could override.
+   Browsers without relative colours (before 2024) show the colour as it is. */
+.ally-text {
+  color: var(--ally) !important;
+}
+
+@supports (color: oklch(from red l c h)) {
+  .ally-text {
+    color: oklch(from var(--ally) max(l, 0.72) c h) !important;
+  }
+}

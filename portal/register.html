@@ -250,11 +250,13 @@ strings: [register]
       colorPicker.value = cleanHex.toLowerCase();
       colorHexInput.value = cleanHex;
 
-      previewBadge.style.color = cleanHex;
+      previewBadge.classList.add('ally-text');
+      previewBadge.style.setProperty('--ally', cleanHex);
       previewBadge.style.borderColor = cleanHex;
       previewBadge.style.boxShadow = `0 0 12px ${cleanHex}40`;
 
-      topAllianceBadge.style.color = cleanHex;
+      topAllianceBadge.classList.add('ally-text');
+      topAllianceBadge.style.setProperty('--ally', cleanHex);
     }
 
     // Initialize default or token-provided color
@@ -341,7 +343,7 @@ strings: [register]
         const server = result.serverName
           ? `<strong>${escapeHtml(result.serverName)}</strong> (${code(guildId)})`
           : th("register.server_id", { id: code(guildId) });
-        const tag = `<strong style="color: ${escapeHtml(allianceColor)};">[${escapeHtml(payload.alliance)}]</strong>`;
+        const tag = `<strong class="ally-text" style="--ally: ${escapeHtml(allianceColor)};">[${escapeHtml(payload.alliance)}]</strong>`;
         elSuccess.innerHTML = `
           <strong>${escapeHtml(t("register.success"))}</strong><br><br>
           ${th("register.linked", { server, tag })}<br><br>

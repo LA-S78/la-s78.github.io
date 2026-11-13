@@ -213,7 +213,8 @@ async function initCalendar() {
     if (capHolderEl) {
       capHolderEl.textContent = holderName(capitolHolder);
       // The holder's own alliance colour; without one, the CSS (theme colour) applies.
-      capHolderEl.style.color = capitolHolderColor || '';
+      capHolderEl.classList.toggle('ally-text', Boolean(capitolHolderColor));
+      capHolderEl.style.setProperty('--ally', capitolHolderColor || '');
     }
     // The week's alliance captures the Capitol on Friday: before that the card shows who
     // is due to capture it, afterwards who holds it.

@@ -7,6 +7,7 @@
 
     <a href="{{ localized_url }}" 
        class="guide-card searchable-item {% if item.status == 'unavailable' %}unavailable{% endif %}" 
+       {% if item.status == 'unavailable' %}aria-disabled="true" tabindex="-1"{% endif %}
        {% if item.span %}style="grid-column: span {{ item.span }};"{% endif %}
        {% if item.tooltip %}title="{{ item.tooltip }}"{% endif %}>
         
@@ -14,6 +15,9 @@
             {{ item.icon }}
         </svg>
         <span>{{ site.data[current_lang].ui.guides[item.key] }}</span>
+        {% if item.status == 'unavailable' %}
+        <small class="guide-card-soon">{{ site.data[current_lang].ui.status.coming_soon | default: site.data.en.ui.status.coming_soon }}</small>
+        {% endif %}
     </a>
     {% endfor %}
 </div>

@@ -487,14 +487,28 @@ dialog.auth-modal[open] {
   padding: 0 10px;
 }
 
-.unavailable {
-  background-color: #4a0404;
-  color: #8b8b8b;
-  border: 1px solid var(--danger-deep) !important;
-  cursor: not-allowed;
+/* A guide that isn't written yet: a quiet, dimmed card with a "Coming soon" label (it was a
+   red block with its title struck through, the loudest thing on the guides page) */
+.guide-card.unavailable {
+  border-style: dashed !important;
+  cursor: default;
   pointer-events: none;
-  opacity: 0.7;
-  text-decoration: line-through;
+  opacity: 0.55;
+  filter: grayscale(0.6);
+}
+
+.guide-card-soon {
+  display: block;
+  width: fit-content;
+  margin: 6px auto 0;
+  padding: 1px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 .list-table {
   width: 100%;

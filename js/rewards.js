@@ -459,7 +459,7 @@ export function syncAllianceTagsFromMapState() {
       container.innerHTML = matching
         .map(
           (a) =>
-            `<span class="alliance-badge" style="color: ${esc(a.color)}; font-weight: bold;">[${esc(a.tag)}]</span>`,
+            `<span class="alliance-badge ally-text" style="--ally: ${esc(a.color)}; font-weight: bold;">[${esc(a.tag)}]</span>`,
         )
         .join(' ');
     } else {

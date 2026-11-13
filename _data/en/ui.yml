@@ -183,6 +183,10 @@ nav_anchors:
   sanctuary_shop_extra: "Extra Bonuses"
 
 #search bar text
+# A guide card for a guide that isn't written yet (guides index)
+status:
+  coming_soon: "Coming soon"
+
 search:
   guides: "Search guides..."
   home: "Search directories, posts..."

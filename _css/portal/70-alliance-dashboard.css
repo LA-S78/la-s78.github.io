@@ -1080,3 +1080,22 @@ li.dw-sel > .dw-bar-track {
 .dash-check.dash-sub {
   margin-left: 1.6rem;
 }
+
+/* Desktop: the dashboard uses the wide portal layout (like the main site's pages), with
+   charts two to a row; tables keep the full width. Phones and narrow windows: one column. */
+@media (min-width: 900px) {
+  .dash-widgets:not([hidden]) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+  .dash-widgets > .dash-card {
+    margin-bottom: 0;
+  }
+  .dash-widgets > .dash-widget[data-type="table"],
+  .dash-widgets > :only-child {
+    grid-column: 1 / -1;
+  }
+}
