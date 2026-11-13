@@ -104,6 +104,9 @@ api_events:
   out_of_scope: 'Accesso negato: non puoi modificare o eliminare eventi al di fuori dell''ambito assegnato.'
   deleted: 'Operazione eliminata: {title}'
   updated: Operazione "{title}" aggiornata.
+reminders:
+  title: "⏰ Inizio imminente: {title}"
+  starts: Inizia
 bot_common:
   off_week: Settimana di pausa
   kw_week: Settimana Guerra tra Regni {n}

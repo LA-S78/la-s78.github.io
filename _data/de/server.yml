@@ -104,6 +104,9 @@ api_events:
   out_of_scope: 'Zugriff verweigert: Du kannst keine Events außerhalb deines zugewiesenen Bereichs bearbeiten oder löschen.'
   deleted: 'Operation gelöscht: {title}'
   updated: Operation „{title}“ aktualisiert.
+reminders:
+  title: "⏰ Beginnt bald: {title}"
+  starts: Startet
 bot_common:
   off_week: Off-Woche
   kw_week: Königreichskrieg-Woche {n}
