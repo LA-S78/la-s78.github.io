@@ -44,3 +44,60 @@
     padding: 10px;
   }
 }
+
+/* CALENDAR ON PHONES (Look & Feel step 5) */
+@media (max-width: 767px) {
+  /* Cycle progress, next reset and next KW battle: one box with a line each (label left,
+     value right) instead of three full-width boxes stacked (about 100px shorter) */
+  .cal-hero-metrics {
+    gap: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .metric-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid var(--overlay-5);
+  }
+
+  .metric-item:first-child {
+    border-top: none;
+  }
+
+  .metric-item {
+    flex-wrap: wrap;
+  }
+
+  /* A label stays on one line; a long value moves under it (still on the right) */
+  .metric-label {
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  .metric-val {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.92rem;
+  }
+
+  /* Event cards: the title, then its time straight under it (a 1.5rem gap and an empty
+     description line used to sit between them) */
+  .timeline-event-row {
+    gap: 0.4rem;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .event-actions-group {
+    margin-top: 0;
+  }
+
+  .event-desc:empty {
+    display: none;
+  }
+}
