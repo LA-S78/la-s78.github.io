@@ -134,6 +134,8 @@ async function initCalendar() {
 
     // weekName, not the configured phase name, so the site always says "Off-Week".
     if (titleEl) titleEl.textContent = weekName(status.clockWeek);
+    // No reward period in the answer: no line, rather than "Loading…" left showing
+    if (subEl) subEl.hidden = !rewards;
     if (subEl && rewards) {
       const set2 = t(
         !rewards.kwWeek
