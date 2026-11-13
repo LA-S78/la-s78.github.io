@@ -82,6 +82,28 @@ async function initCalendar() {
     !isGlobalAdmin && sessionScope ? sessionScope.trim() : allianceParam || null;
 
   let allEvents = [];
+  // Whether reminders have somewhere to go: { alliance, server } (api/calendar.js)
+  let reminderChannels = null;
+  // Set in management mode (step 6): opens the event form to edit an event
+  let openEditForm = null;
+
+  // The hint under "Remind 1 hour before": where the reminder goes, or that it has nowhere
+  // to go yet (an alliance that hasn't run /registerbot; the NAP channel not set up)
+  function updateReminderHint() {
+    const hint = document.getElementById('evt-reminder-hint');
+    if (!hint || !reminderChannels) return;
+    const missing = isGlobalAdmin ? !reminderChannels.server : reminderChannels.alliance === false;
+    hint.textContent = t(
+      missing
+        ? isGlobalAdmin
+          ? 'calendar_events.reminder_no_server_channel'
+          : 'calendar_events.reminder_no_channel'
+        : isGlobalAdmin
+          ? 'calendar_events.reminder_hint_server'
+          : 'calendar_events.reminder_hint',
+    );
+    hint.classList.toggle('is-warning', missing);
+  }
 
   // 2. Fetch Live Calendar Data
   async function loadCalendar() {
@@ -92,6 +114,8 @@ async function initCalendar() {
       const data = await res.json();
 
       allEvents = data.events || [];
+      reminderChannels = data.reminderChannels || null;
+      updateReminderHint();
       renderHero(data.status, data.capitolHolder, data.capitolHolderColor);
       setupFilterOptions();
       applyFilterAndRender();
@@ -376,7 +400,12 @@ async function initCalendar() {
               <div class="time-gt">${esc(gtTimeStr)}</div>
               <div>${localDateStr}${localTimeStr}</div>
             </div>
-            ${canDelete ? `<button type="button" class="btn-delete-event" data-event-id="${esc(evt.id)}">${esc(t('calendar.delete'))}</button>` : ''}
+            ${
+              canDelete
+                ? `<button type="button" class="btn-edit-event" data-event-id="${esc(evt.id)}">${esc(t('calendar.edit'))}</button>
+                   <button type="button" class="btn-delete-event" data-event-id="${esc(evt.id)}">${esc(t('calendar.delete'))}</button>`
+                : ''
+            }
           </div>
         </div>
       `;
@@ -385,6 +414,9 @@ async function initCalendar() {
 
     timelineContainer.querySelectorAll('.btn-delete-event').forEach((btn) => {
       btn.addEventListener('click', () => handleDeleteEvent(btn.dataset.eventId));
+    });
+    timelineContainer.querySelectorAll('.btn-edit-event').forEach((btn) => {
+      btn.addEventListener('click', () => openEditForm?.(btn.dataset.eventId));
     });
   }
 
@@ -473,6 +505,49 @@ async function initCalendar() {
     };
 
     let activePresetColor = null;
+    // The event being edited (its id), or null when the form creates a new one
+    let editingEventId = null;
+    const reminderBox = document.getElementById('evt-input-reminder');
+    const createHeading = formHeading ? formHeading.textContent : '';
+
+    // Back to "create": heading, button and reminder default as for a new event
+    function leaveEditMode() {
+      editingEventId = null;
+      if (formHeading) formHeading.textContent = createHeading;
+      if (submitBtn) submitBtn.textContent = t('calendar_events.publish');
+      if (reminderBox) reminderBox.checked = true;
+    }
+
+    openEditForm = (eventId) => {
+      const evt = allEvents.find((e) => e.id === eventId);
+      if (!evt || !formEl) return;
+      editingEventId = eventId;
+      resetPanelTheme();
+      if (presetSelect) presetSelect.value = 'custom';
+      activePresetColor = evt.color || null;
+      // The occurrence shown, in Game Time (UTC-2): a repeating event continues from it
+      const startGt = new Date(new Date(evt.start).getTime() - 2 * 3600000);
+      document.getElementById('evt-input-title').value = String(evt.title || '').replace(
+        /^\[[^\]]+\]\s*/,
+        '',
+      );
+      document.getElementById('evt-input-date').value = startGt.toISOString().split('T')[0];
+      document.getElementById('evt-input-time').value =
+        evt.time_gt || startGt.toISOString().slice(11, 16);
+      document.getElementById('evt-input-duration').value = evt.duration_hours || 1;
+      document.getElementById('evt-input-recurrence').value = evt.recurrence || 'none';
+      document.getElementById('evt-input-details').value = evt.description || '';
+      notifySelect.value = evt.notify_target || 'role';
+      const isCustom = notifySelect.value === 'custom_role';
+      customRoleInput.disabled = !isCustom;
+      customRoleInput.classList.toggle('input-locked', !isCustom);
+      customRoleInput.value = isCustom ? evt.custom_role_id || '' : '';
+      if (reminderBox) reminderBox.checked = evt.reminder === '1h';
+      if (formHeading) formHeading.textContent = t('calendar_events.edit_heading');
+      if (submitBtn) submitBtn.textContent = t('calendar_events.save_changes');
+      formEl.style.display = 'block';
+      formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 
     function resetPanelTheme() {
       activePresetColor = null;
@@ -522,7 +597,11 @@ async function initCalendar() {
 
     if (btnToggle && formEl) {
       btnToggle.addEventListener('click', () => {
-        const isHidden = formEl.style.display === 'none';
+        const isHidden = formEl.style.display === 'none' || editingEventId;
+        if (editingEventId) {
+          formEl.reset();
+          leaveEditMode();
+        }
         formEl.style.display = isHidden ? 'block' : 'none';
         if (isHidden) {
           document.getElementById('evt-input-date').value = new Date().toISOString().split('T')[0];
@@ -534,6 +613,10 @@ async function initCalendar() {
     if (btnCancel && formEl) {
       btnCancel.addEventListener('click', () => {
         formEl.style.display = 'none';
+        if (editingEventId) {
+          formEl.reset();
+          leaveEditMode();
+        }
       });
     }
 
@@ -562,7 +645,8 @@ async function initCalendar() {
 
         const payload = {
           token: tokenParam,
-          action: 'create',
+          action: editingEventId ? 'edit' : 'create',
+          eventId: editingEventId || undefined,
           eventData: {
             title: document.getElementById('evt-input-title').value,
             date: document.getElementById('evt-input-date').value,
@@ -573,6 +657,7 @@ async function initCalendar() {
             custom_role_id: notifyTarget === 'custom_role' ? customRoleId : null,
             color: activePresetColor,
             description: document.getElementById('evt-input-details').value,
+            reminder: reminderBox?.checked ? '1h' : 'off',
           },
         };
 
@@ -591,12 +676,15 @@ async function initCalendar() {
           customRoleInput.disabled = true;
           customRoleInput.classList.add('input-locked');
           formEl.style.display = 'none';
+          leaveEditMode();
           await loadCalendar();
         } catch (err) {
           showNotification(err.message, 'error');
         } finally {
           submitBtn.disabled = false;
-          submitBtn.textContent = t('calendar_events.publish');
+          submitBtn.textContent = t(
+            editingEventId ? 'calendar_events.save_changes' : 'calendar_events.publish',
+          );
         }
       });
     }

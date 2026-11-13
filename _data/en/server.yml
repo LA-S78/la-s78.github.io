@@ -111,6 +111,7 @@ api_events:
   not_found: "Event not found or already deleted."
   out_of_scope: "Access Denied: You cannot modify or delete events outside your assigned scope."
   deleted: "Deleted operation: {title}"
+  updated: "Operation \"{title}\" updated."
 
 # The Discord bot's replies (api/_bot_*.js), in the user's Discord language. Keep Discord
 # codes as they are: **bold**, `/commands`, and {time}-style placeholders that become

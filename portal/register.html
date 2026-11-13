@@ -93,6 +93,15 @@ strings: [register]
             <div class="portal-hint" data-th="register.alert_role_help" data-th-strong="copy:register.copy_role_id" data-th-code="example:@War-Alerts everyone:@everyone"></div>
           </div>
 
+          <!-- Opt-in: reminders of server-wide (Steward) events in this alert channel too -->
+          <div class="portal-field">
+            <label class="cal-check-label" for="reg-server-alerts">
+              <input type="checkbox" id="reg-server-alerts" name="server_event_alerts" />
+              {{ "register.server_alerts" | t }}
+            </label>
+            <div class="portal-hint">{{ "register.server_alerts_help" | t }}</div>
+          </div>
+
           <!-- Officer Triage / Ticket Channel ID -->
           <div class="portal-field">
             <label for="reg-officer-channel" class="portal-label">
@@ -313,6 +322,7 @@ strings: [register]
             delegatedRoles: delegatedRoles,
             alert_channel_id: alertChannelId,
             alert_role_id: alertRoleId,
+            server_event_alerts: document.getElementById("reg-server-alerts").checked,
             officer_channel_id: officerChannelId,
             alliance_color: allianceColor,
           }),

@@ -74,3 +74,16 @@
 .dash-two-labels:not([aria-pressed='true']) > .when-on {
   visibility: hidden;
 }
+
+/* The calendar's Edit and Delete on an event: compact, side by side */
+.btn-edit-event,
+.btn-delete-event {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-compact);
+  padding: 2px 10px;
+  border-radius: var(--control-radius);
+  white-space: nowrap;
+}
+

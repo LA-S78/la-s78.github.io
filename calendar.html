@@ -146,6 +146,15 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
             />
           </div>
 
+          <!-- Discord reminder before the start (posted by the reminder check, api/calendar.js) -->
+          <div class="form-group form-col-full">
+            <label class="cal-check-label" for="evt-input-reminder">
+              <input type="checkbox" id="evt-input-reminder" checked />
+              {{ "calendar_events.reminder" | t }}
+            </label>
+            <small class="form-hint" id="evt-reminder-hint">{{ "calendar_events.reminder_hint" | t }}</small>
+          </div>
+
           <!-- Instructions / Rally Point -->
           <div class="form-group form-col-full">
             <label for="evt-input-details">{{ "calendar_events.details" | t }}</label>

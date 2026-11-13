@@ -268,10 +268,23 @@ export default async function handler(req, res) {
     (a, b) => new Date(a.start) - new Date(b.start),
   );
 
+  // Whether event reminders have somewhere to go (the event form says so when they don't):
+  // an alliance's registered alert channel, and the NAP Discord's channel for server events.
+  // Only yes/no: the channel IDs themselves stay on the server.
+  const reminderChannels = {
+    alliance: requestedAlliance
+      ? Object.entries(alliances).some(
+          ([tag, a]) => tag.toUpperCase() === requestedAlliance && a?.alert_channel_id,
+        )
+      : null,
+    server: Boolean(process.env.NAP_ALERT_CHANNEL_ID),
+  };
+
   return res.status(200).json({
     status: currentStatus,
     capitolHolder: capitolHolderTag,
     capitolHolderColor,
     events: allEvents,
+    reminderChannels,
   });
 }

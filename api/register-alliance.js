@@ -23,6 +23,7 @@ async function respond(req, res) {
     alert_role_id,
     officer_channel_id,
     alliance_color,
+    server_event_alerts,
   } = req.body || {};
 
   const botToken = process.env.DISCORD_BOT_TOKEN;
@@ -168,6 +169,8 @@ async function respond(req, res) {
       allianceRecord.delegated_roles = cleanRoles;
       allianceRecord.alert_channel_id = cleanChannelId;
       allianceRecord.alert_role_id = cleanRoleId;
+      // Opt-in: reminders of server-wide (Steward) events also go to this alert channel
+      allianceRecord.server_event_alerts = server_event_alerts === true;
       allianceRecord.officer_channel_id = cleanOfficerChannelId;
       allianceRecord.color = cleanColor;
 
