@@ -1,0 +1,46 @@
+/* ==========================================================================
+   ROOMIER PHONES (Look & Feel, step 1): the signed-in tool pages
+   The same idea as _css/style/87-narrow-screens.css: on a phone, the tools sat in a page
+   box with desktop padding, and inside it more boxes with their own. Slimmer padding
+   gives the content more of the screen. Last in this stylesheet, so it wins over each
+   box's desktop size. Desktop is unchanged.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  body.portal-body .content-pane {
+    padding: 0.75rem;
+  }
+
+  .status-banner {
+    padding: 0.7rem 0.8rem;
+  }
+
+  /* Calendar: the phase card and the panels inside it */
+  .cal-status-banner {
+    padding: 1rem;
+  }
+
+  /* The phase card comes out of its frame: the page box is frame enough */
+  .cal-hero-card {
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+  }
+
+  .cal-capitol-card {
+    padding: 0.75rem 0.9rem;
+  }
+
+  .metric-item {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .cal-management-panel {
+    padding: 0.9rem;
+  }
+
+  .ops-buyout-section {
+    padding: 10px;
+  }
+}

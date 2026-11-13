@@ -58,7 +58,11 @@ _From a measured audit of every page, all three themes, phone and desktop (Novem
 - [x] **Lighter pages** — a first visit downloaded ~5 MB, mostly a background picture fetched twice (WebP and a 4.4 MB PNG fallback). WebP only now, a 48px tab icon instead of the 452 KB app icon, and right-sized lantern, link-preview banner and 404 picture: ~0.7 MB.
 - [x] **Keyboard focus & readability** — a clear ring in the theme's colour shows where the keyboard is (Tab); small accent-coloured text (links, table headings, labels, badges) uses a slightly paler accent that reads clearly in every theme; red text uses the lighter red; footer labels 11 → 12px.
 - [x] **Section tabs follow the page** — the tabs under the header (Server Rules / Rotation / Rewards, guide sections) now always light the section being read: scrolling back up, a short last section, and a tapped tab no longer flicker through the sections in between.
-- [ ] **One look for buttons and spacing** — the site has grown about a dozen button styles (planner, dashboard, icon, submit, steppers…) with small differences, and 112 `!important` overrides. A shared button style and spacing scale, done step by step with the visual diff checking each step.
+- [ ] **Tools that fit phones** (owner report, 2026-11-13: tools feel "compressed" on phones and stack buttons oddly, worse with each feature and language). From screenshots of every tool at phone width in English and German:
+  - [x] **Step 1 — Roomier phones:** narrower page edges (20 → 12px), and tools come out of their inner frames (map, T10 tree, calendar phase card), so the content gets about a tenth more of the screen. Desktop unchanged.
+  - [ ] **Step 2 — One button system:** about a dozen button styles (planner switches, Submit, Copy, Revoke NAP, ▲▼, ×…) become a few shared sizes and one shape; the tiny ▲▼ and × buttons (20px) become finger-sized.
+  - [ ] **Step 3 — Tidy toolbars:** the map toolbar (three ragged rows in German), the planner bars and the dashboard edit bar get a fixed phone layout that holds in every language, instead of wrapping wherever a word breaks.
+  - [ ] **Step 4 — Per-tool polish:** the ladder's edit rows, the buff summary table (cut off on phones), the calendar's cards, the King's console rows and the rewards tier editor.
 
 ---
 
