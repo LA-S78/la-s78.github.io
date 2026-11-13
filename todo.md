@@ -41,7 +41,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - [x] Discord bot replies: `/calendar`, `/map`, `/nominate`, `/rewards` (shared leadership-channel posts stay English)
   - [x] Discord command picker descriptions (`bot_commands`; alliance servers update on `/registerbot` sync)
   - [x] `/registerbot`, `/rank`, `/devupdate` and the proposal-review buttons' private replies (the shared war-room post stays English)
-  - [ ] `/suggest` is in the alliance servers' command list but the bot has no handler for it (fails in Discord): add it or remove it
+  - [ ] `/suggest` (later, once most other work is done): it's in the alliance servers' command list but the bot has no handler for it yet
 
 - [ ] **Map Plan Import / Export**
   - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.
@@ -56,9 +56,9 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 - [ ] **Building Prerequisite Interactive Tree** — dependency viewer for Keep levels 1–30+.
 - [x] **Interactive Capitol Rotation Tool (`rules.html`)** — the static picture is replaced by a live 4-week chart from the calendar (`js/capitol-rotation.js`).
 - [ ] **T10 Calculator Mobile Polish** — node scaling, connector alignment and touch targets on narrow screens.
-- [ ] **Distinct page titles** — every page currently has the same browser-tab title ("Last Asylum Guide" twice).
-- [ ] **Visual-diff coverage** — add the nomination page and the King's console to `tools/visual-diff`.
-- [ ] **GitHub Actions Node warning** — GitHub is retiring Node 20 for actions; update the workflow actions (and `node-version: 20` in `discord_commands.yml`) when newer versions are out.
+- [x] **Distinct page titles** — each tab shows its page's name in its language ("Regeln | Last Asylum Guide"); the home page is the site name alone.
+- [x] **Visual-diff coverage** — the nomination page (its list, and after a win) and the King's console (as the King's alliance) are checked with real sample data.
+- [x] **GitHub Actions Node warning** — every workflow step now runs on Node 24 (`setup-node@v5`, `upload-artifact@v6`, `cache@v5`), and the command deploy uses Node 24.
 - [ ] **Test Discord bot (optional)** — a second bot for dev.la-s78.app, so test proposals never touch the live bot's servers.
 
 ---

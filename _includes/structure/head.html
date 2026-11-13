@@ -1,5 +1,23 @@
 <head>
   <meta charset="UTF-8">
+  {% comment %}
+    The page's own name for the browser tab, bookmarks and link previews, in its language:
+    a portal page's tool title (title_key), a guide's title, the page's name in ui.yml
+    (page_key), else its front matter title. The home page is just the site's name.
+  {% endcomment %}
+  {% assign ui_pages = site.data[site.active_lang].ui.pages %}
+  {% assign meta_title = nil %}
+  {% if page.title_key %}
+    {% assign meta_title = page.title_key | t %}
+  {% elsif page.guide_id and page.title %}
+    {% assign meta_title = page.title %}
+  {% elsif page.page_key == 'home' %}
+    {% assign meta_title = nil %}
+  {% elsif page.page_key and ui_pages[page.page_key].title %}
+    {% assign meta_title = ui_pages[page.page_key].title %}
+  {% elsif page.title %}
+    {% assign meta_title = page.title %}
+  {% endif %}
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,7 +35,7 @@
   <meta name="turbo-refresh-method" content="morph">
   <meta name="turbo-refresh-scroll" content="preserve">
 
-  <title>{{ meta_title | default: site.title }} | {{ site.title }}</title>
+  <title>{% if meta_title %}{{ meta_title | strip_html | strip }} | {% endif %}{{ site.title }}</title>
   
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" href="/images/favicon.png">
