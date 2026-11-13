@@ -32,6 +32,22 @@
   letter-spacing: 0.04em;
 }
 
+/* Each chest of the weekly allocation stays whole; "|" ends an item, so a wrapped line
+   starts with a chest, not with "|" */
+.pool-item {
+  white-space: nowrap;
+}
+
+.pool-item:not(:last-child)::after {
+  content: ' |';
+}
+
+/* The totals table's rank ("Rank 2–3") stays on one line */
+.schedule-table .td-rank {
+  white-space: nowrap;
+  padding: 0 6px;
+}
+
 .toggle-switch {
   display: inline-flex;
   align-items: center;

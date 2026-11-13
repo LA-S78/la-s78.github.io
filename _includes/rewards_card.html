@@ -30,11 +30,12 @@
   <div class="content-pane">
     <div class="rewards-header">
       <h2 class="rewards-title">{{ t.ui.title | default: "Alliance Reward Distribution" }}</h2>
+      {% comment %} Each chest stays whole on a narrow screen; the "|" ends an item, so no line starts with one {% endcomment %}
       <span class="rewards-pool-text">
-        {{ t.ui.subtitle | default: "Weekly Allocation" }}: 
-        {{ rdata.weekly_pool.commanders_will }} {{ t.chests.commanders_will | default: "Commander's Will" }} | 
-        {{ rdata.weekly_pool.loyal_servant }} {{ t.chests.loyal_servant | default: "Loyal Servant" }} | 
-        {{ rdata.weekly_pool.followers_heart }} {{ t.chests.followers_heart | default: "Follower's Heart" }}
+        {{ t.ui.subtitle | default: "Weekly Allocation" }}:
+        <span class="pool-item">{{ rdata.weekly_pool.commanders_will }} {{ t.chests.commanders_will | default: "Commander's Will" }}</span>
+        <span class="pool-item">{{ rdata.weekly_pool.loyal_servant }} {{ t.chests.loyal_servant | default: "Loyal Servant" }}</span>
+        <span class="pool-item">{{ rdata.weekly_pool.followers_heart }} {{ t.chests.followers_heart | default: "Follower's Heart" }}</span>
       </span>
     </div>
 
