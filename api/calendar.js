@@ -10,8 +10,35 @@ import { sanitizeAlliances } from './_alliances.js';
 import { resolveCohortSchedule } from './_cycle_helper.js';
 import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
+import { checkReminders } from './_reminders.js';
+import { timingSafeEqual } from 'node:crypto';
+
+/** True when the request carries the reminder schedule's secret (compared in constant time). */
+function fromReminderSchedule(req) {
+  const expected = process.env.REMINDER_SECRET || '';
+  const given = String(req.headers?.['x-reminder-secret'] || '');
+  if (!expected || given.length !== expected.length) return false;
+  return timingSafeEqual(Buffer.from(given), Buffer.from(expected));
+}
 
 export default async function handler(req, res) {
+  // The reminder check (api/_reminders.js), called by .github/workflows/reminders.yml. It
+  // lives here rather than in a function of its own: the plan allows 12 and the site uses 11.
+  if (req.method === 'POST' && req.body?.action === 'check-reminders') {
+    if (!process.env.REMINDER_SECRET) {
+      return res.status(503).json({ error: 'REMINDER_SECRET is not set on this deployment.' });
+    }
+    if (!fromReminderSchedule(req)) return res.status(401).json({ error: 'Not allowed.' });
+    if (!isGistConfigured()) return res.status(503).json({ error: 'No Gist on this deployment.' });
+    try {
+      const report = await checkReminders({ dryRun: req.body?.dryRun === true });
+      return res.status(200).json(report);
+    } catch (err) {
+      console.error('Reminder check failed:', err);
+      return res.status(500).json({ error: err.message || 'Reminder check failed.' });
+    }
+  }
+
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

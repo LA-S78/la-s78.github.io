@@ -23,7 +23,8 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 
 - [ ] **Kingdom Calendar Reminders** (owner answers, 2026-11-13): set per event by the alliance (its events) or a Steward (server events); one reminder 1 hour before to start with; alliance events to the alliance's alert channel, server events to the NAP Discord (NAP_ALERT_CHANNEL_ID) plus alliances that opt in; pings the role chosen on the event; can be switched off per event. A GitHub Actions schedule (every 10 min) calls the site, which does the work with the variables Vercel already has (REMINDER_SECRET proves the call). Built-in KvK/Capitol events: later, as a Steward setting. Messages in English first.
   - [x] **Part 1 — event settings:** "Remind on Discord 1 hour before" on the event form (on by default for new events), editing events (Edit next to Delete; same scope rule as delete), a hint when there is no alert channel, and the registration opt-in for server-event reminders.
-  - [ ] **Part 2 — the reminder check:** in `api/calendar.js` (no new function), the GitHub schedule, a test mode posting to the test channel.
+  - [x] **Part 2 — the reminder check:** `api/_reminders.js`, reached through `POST /api/calendar` (no new function) with REMINDER_SECRET; `.github/workflows/reminders.yml` calls dev and live every 10 minutes (or by hand: Actions → Calendar reminders → Run workflow, dry run by default). The live site posts nothing until `REMINDERS_LIVE=true` is set in Vercel; dev.la-s78.app posts only to TEST_CHANNEL_ID, pinging nobody.
+  - [ ] **Go live (owner):** test on dev (bring dev up to date, an event with a reminder in the test data), then set `REMINDERS_LIVE=true` on the live site.
 - [ ] **Alliance Might & Scoreboard OCR**
   - Read player and alliance Might from in-game Duel/Rank screenshots (Gemini Flash vision).
 

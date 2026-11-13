@@ -113,6 +113,11 @@ api_events:
   deleted: "Deleted operation: {title}"
   updated: "Operation \"{title}\" updated."
 
+# Calendar reminders posted on Discord (api/_reminders.js). Discord codes stay as they are.
+reminders:
+  title: "⏰ Starting soon: {title}"
+  starts: "Starts"
+
 # The Discord bot's replies (api/_bot_*.js), in the user's Discord language. Keep Discord
 # codes as they are: **bold**, `/commands`, and {time}-style placeholders that become
 # Discord timestamps. (The older /sb, /rules and /map texts are in _source/bot.md.)
