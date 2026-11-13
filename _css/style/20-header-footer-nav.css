@@ -129,12 +129,15 @@
   border-bottom: 2px solid var(--accent-color);
 }
 
+/* The footer reaches down behind the phone's navigation buttons when the browser draws the
+   app edge to edge (Android 15+, iPhone home bar): that strip then takes the theme's
+   colour, with the icons above it. Where the bar is drawn separately, the safe area is 0. */
 footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: calc(60px + env(safe-area-inset-bottom));
   width: 100%;
   z-index: 100;
   border-top: 1px solid var(--border-color);
@@ -143,7 +146,7 @@ footer {
   justify-content: space-around;
   align-items: center;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
 }
 .nav-item {
   display: flex;

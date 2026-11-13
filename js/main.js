@@ -250,6 +250,7 @@
   function applyTheme(themeName) {
     document.documentElement.setAttribute('data-theme', themeName);
     localStorage.setItem('site-theme', themeName);
+    window.syncThemeColour?.(); // the phone's status bar follows the theme (js/theme-init.js)
   }
 
   function initThemeToggle() {
