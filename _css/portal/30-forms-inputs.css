@@ -365,3 +365,11 @@
 .nominate-assign-row:has(> :nth-child(4)) .nominate-chest {
   font-size: 0.68rem;
 }
+
+/* A chest name that is one long word ("Logistikunterstützung") breaks with a hyphen (or
+   anywhere, as a last resort) instead of running out of its column on a phone */
+.nominate-chest > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}

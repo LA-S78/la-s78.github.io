@@ -69,6 +69,7 @@ _From a measured audit of every page, all three themes, phone and desktop (Novem
     - [x] **Buff summary** (the map's ⚖️ panel): one card per alliance — tag and number of cities on top, its buffs below, wrapping — instead of a three-column table that was cut off on the right (phones, and desktop in German); on phones the panel takes nearly the map's whole width.
     - [x] **Ladder rows in Planner Mode** (phones): the rank and its ▲▼ sit at the top left beside the tag, name and academies; the NAP line runs the full width below, with the × (remove alliance) on its own at the far right, away from Revoke NAP. A little shorter than before (German: 1158 → 1122px for the list).
     - [x] **Calendar** (phones): cycle progress, next reset and next KW battle share one box, a line each (label left, value right; a long value moves under its label), instead of three full-width boxes; event cards show their time straight under the title (a large gap and an empty line sat between). The phase card's "Loading cycle details…" no longer stays when the answer has no reward period. About 150px shorter in German.
+    - [x] **King's console & nomination page** (phones): the console's rows needed nothing more after the button system (step 2). On the nomination page, the "Who gets what" list's "If won" column was cut off where a chest name is one long word (German "Logistikunterstützung"); chest names now break with a hyphen inside their column.
 
 ---
 
