@@ -55,7 +55,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 
 - [ ] **Building Prerequisite Interactive Tree** — dependency viewer for Keep levels 1–30+.
 - [x] **Interactive Capitol Rotation Tool (`rules.html`)** — the static picture is replaced by a live 4-week chart from the calendar (`js/capitol-rotation.js`).
-- [ ] **T10 Calculator Mobile Polish** — node scaling, connector alignment and touch targets on narrow screens.
+- [x] **T10 Calculator Mobile Polish** — the Health/Attack row shrinks with the screen (brackets still meet the hexagon centres), 40px buttons on phones, a real "−" with spoken labels, totals in three columns that stay in view, billions as B.
 - [x] **Distinct page titles** — each tab shows its page's name in its language ("Regeln | Last Asylum Guide"); the home page is the site name alone.
 - [x] **Visual-diff coverage** — the nomination page (its list, and after a win) and the King's console (as the King's alliance) are checked with real sample data.
 - [x] **GitHub Actions Node warning** — every workflow step now runs on Node 24 (`setup-node@v5`, `upload-artifact@v6`, `cache@v5`), and the command deploy uses Node 24.
