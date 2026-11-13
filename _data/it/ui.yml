@@ -42,22 +42,31 @@ pages:
     subtitle: Compendio di Sopravvivenza
   rules:
     title: Regole
-    subtitle: Regole del Server & Rotazione
+    subtitle: Regole del Server e Rotazione
   guides:
     title: Guide
     subtitle: Guide di Gioco
     writers:
-      title: Guida per Scrittori
-      subtitle: Guida per Scrittori
+      title: Guida per gli Autori
+      subtitle: Guida per gli Autori
   alliance:
     title: Alleanza
-    subtitle: Alleanza & Diplomazia
+    subtitle: Alleanza e Diplomazia
   api-test:
     title: Intelligence Segreta Alleanza
     subtitle: Intelligence Segreta Alleanza
   calendar:
     title: Calendario Eventi
-    subtitle: Eventi di Alleanza & Server
+    subtitle: Eventi dell'Alleanza e del Server
+  map:
+    title: Mappa del Regno
+    subtitle: Mappa del Regno
+  rewards:
+    title: Ricompense del Campidoglio
+    subtitle: Ricompense del Campidoglio
+  '404':
+    title: Pagina non trovata
+    subtitle: Area invasa
   guide_panes:
     heroes:
       title: Eroi & Build
@@ -111,8 +120,8 @@ pages:
       title: Negozio Campagna
       subtitle: Negozio Campagna
     premium_shop:
-      title: Pacchetti Premium & Gemme
-      subtitle: Pacchetti Premium & Gemme
+      title: Pacchetti Premium e Gemme
+      subtitle: Pacchetti Premium e Gemme
     t10:
       title: Guida T10
       subtitle: Requisiti T10

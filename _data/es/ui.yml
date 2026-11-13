@@ -42,22 +42,31 @@ pages:
     subtitle: Compendio de Supervivencia
   rules:
     title: Reglas
-    subtitle: Reglas y rotación del servidor
+    subtitle: Reglas del Servidor y Rotación
   guides:
     title: Guías
-    subtitle: Guías del juego
+    subtitle: Guías del Juego
     writers:
-      title: Guía del escritor
-      subtitle: Guía del escritor
+      title: Guía del Escritor
+      subtitle: Guía del Escritor
   alliance:
     title: Alianza
-    subtitle: Alianza y diplomacia
+    subtitle: Alianza y Diplomacia
   api-test:
-    title: Inteligencia secreta de la alianza
-    subtitle: Inteligencia secreta de la alianza
+    title: Inteligencia de Alianza Ultrasecreta
+    subtitle: Inteligencia de Alianza Ultrasecreta
   calendar:
-    title: Calendario de eventos
-    subtitle: Eventos de alianza y servidor
+    title: Calendario de Eventos
+    subtitle: Eventos de Alianza y Servidor
+  map:
+    title: Mapa del Reino
+    subtitle: Mapa del Reino
+  rewards:
+    title: Recompensas del Capitolio
+    subtitle: Recompensas del Capitolio
+  '404':
+    title: Página no encontrada
+    subtitle: Área invadida
   guide_panes:
     heroes:
       title: Héroes y Builds
@@ -111,8 +120,8 @@ pages:
       title: Tienda de Campaña
       subtitle: Tienda de Campaña
     premium_shop:
-      title: Paquetes Premium y Gemas
-      subtitle: Paquetes Premium y Gemas
+      title: Paquetes Premium y de Gemas
+      subtitle: Paquetes Premium y de Gemas
     t10:
       title: Guía T10
       subtitle: Requisitos T10

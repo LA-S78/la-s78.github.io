@@ -58,6 +58,15 @@ pages:
   calendar:
     title: Event-Kalender
     subtitle: Allianz- & Server-Events
+  map:
+    title: Königreichskarte
+    subtitle: Königreichskarte
+  rewards:
+    title: Kapitol-Belohnungen
+    subtitle: Kapitol-Belohnungen
+  '404':
+    title: Seite nicht gefunden
+    subtitle: Bereich überrannt
   guide_panes:
     heroes:
       title: Helden & Builds
@@ -111,11 +120,11 @@ pages:
       title: Kampagnen-Shop
       subtitle: Kampagnen-Shop
     premium_shop:
-      title: Premium- & Edelsteinpakete
-      subtitle: Premium- & Edelsteinpakete
+      title: Premium- & Juwelen-Pakete
+      subtitle: Premium- & Juwelen-Pakete
     t10:
       title: T10-Guide
-      subtitle: T10-Voraussetzungen
+      subtitle: T10-Anforderungen
     scramble:
       title: Königliches Gerangel
       subtitle: Königliches Gerangel

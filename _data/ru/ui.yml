@@ -39,16 +39,16 @@ guides:
 pages:
   home:
     title: Главная
-    subtitle: Сборник выживания
+    subtitle: Сборник выжившего
   rules:
     title: Правила
     subtitle: Правила сервера и ротация
   guides:
     title: Гайды
-    subtitle: Гайды по игре
+    subtitle: Игровые гайды
     writers:
-      title: Руководство для авторов
-      subtitle: Руководство для авторов
+      title: Гайд для авторов
+      subtitle: Гайд для авторов
   alliance:
     title: Альянс
     subtitle: Альянс и дипломатия
@@ -58,6 +58,15 @@ pages:
   calendar:
     title: Календарь событий
     subtitle: События альянса и сервера
+  map:
+    title: Карта королевства
+    subtitle: Карта королевства
+  rewards:
+    title: Награды Капитолия
+    subtitle: Награды Капитолия
+  '404':
+    title: Страница не найдена
+    subtitle: Зона захвачена
   guide_panes:
     heroes:
       title: Герои и Билды

@@ -45,7 +45,7 @@ pages:
     subtitle: Правила сервера та ротація
   guides:
     title: Гайди
-    subtitle: Гайди по грі
+    subtitle: Гайди до гри
     writers:
       title: Гайд для авторів
       subtitle: Гайд для авторів
@@ -53,11 +53,20 @@ pages:
     title: Альянс
     subtitle: Альянс та дипломатія
   api-test:
-    title: Цілком таємна розвідка альянсу
-    subtitle: Цілком таємна розвідка альянсу
+    title: Цілком таємна розвідка Альянсу
+    subtitle: Цілком таємна розвідка Альянсу
   calendar:
     title: Календар подій
-    subtitle: Події альянсу та сервера
+    subtitle: Події Альянсу та сервера
+  map:
+    title: Карта Королівства
+    subtitle: Карта Королівства
+  rewards:
+    title: Нагороди Капітолія
+    subtitle: Нагороди Капітолія
+  '404':
+    title: Сторінку не знайдено
+    subtitle: Територію захоплено
   guide_panes:
     heroes:
       title: Герої та Білди

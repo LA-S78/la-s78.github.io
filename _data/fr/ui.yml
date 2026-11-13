@@ -53,11 +53,20 @@ pages:
     title: Alliance
     subtitle: Alliance & Diplomatie
   api-test:
-    title: Infos Top-Secrètes de l'Alliance
-    subtitle: Infos Top-Secrètes de l'Alliance
+    title: Renseignements Top-Secret de l'Alliance
+    subtitle: Renseignements Top-Secret de l'Alliance
   calendar:
     title: Calendrier des Événements
-    subtitle: Événements d'Alliance & du Serveur
+    subtitle: Événements de l'Alliance & du Serveur
+  map:
+    title: Carte du Royaume
+    subtitle: Carte du Royaume
+  rewards:
+    title: Récompenses du Capitole
+    subtitle: Récompenses du Capitole
+  '404':
+    title: Page Non Trouvée
+    subtitle: Zone Envahie
   guide_panes:
     heroes:
       title: Héros & Builds

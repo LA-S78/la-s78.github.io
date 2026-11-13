@@ -53,11 +53,20 @@ pages:
     title: İttifak
     subtitle: İttifak & Diplomasi
   api-test:
-    title: Çok Gizli İttifak İstihbaratı
-    subtitle: Çok Gizli İttifak İstihbaratı
+    title: Çok Gizli İttifak Bilgileri
+    subtitle: Çok Gizli İttifak Bilgileri
   calendar:
     title: Etkinlik Takvimi
     subtitle: İttifak & Sunucu Etkinlikleri
+  map:
+    title: Krallık Haritası
+    subtitle: Krallık Haritası
+  rewards:
+    title: Başkent Ödülleri
+    subtitle: Başkent Ödülleri
+  '404':
+    title: Sayfa Bulunamadı
+    subtitle: Bölge İstila Edildi
   guide_panes:
     heroes:
       title: Kahramanlar & Dizilimler
