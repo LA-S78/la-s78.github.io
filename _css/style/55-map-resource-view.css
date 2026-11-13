@@ -2,7 +2,7 @@
    WAR ROOM: RESOURCE VIEW & LEGEND STYLING
    ========================================================================== */
 
-/* Resource View Legend Bar (Compact Identification Key) */
+/* Resource View Legend Bar (Compact Identification Key): under the territory card */
 .resource-legend {
   display: flex;
   align-items: center;
@@ -13,7 +13,7 @@
   background: var(--surface-dark);
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  margin-bottom: 0.6rem;
+  margin-top: 0.5rem;
   font-size: 0.72rem;
   color: var(--text-muted);
 }
@@ -76,28 +76,61 @@
   );
 }
 
-/* Scoped Buff Matrix Table */
-.buff-table {
+/* Buff summary: one card per alliance (js/map.js, renderBuffSummaryDrawer). The tag and
+   number of cities on top, the buffs below; the buffs wrap, so long names in any language
+   fit the panel (the old three-column table was cut off on the right). */
+.buff-list {
+  list-style: none;
   margin: 0;
-  font-size: 0.8rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.buff-table th,
-.buff-table td {
-  padding: 6px 8px;
+.buff-row {
+  margin: 0;
+  padding: 8px 10px;
   border: 1px solid var(--overlay-5);
-  vertical-align: middle;
+  border-radius: var(--control-radius);
+  background: var(--overlay-3);
 }
 
-.buff-table th {
-  font-size: 0.68rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+.buff-row::marker {
+  content: none;
 }
 
 .buff-row.is-active-target {
   background: rgba(var(--active-theme), 0.15);
   border-left: 3px solid var(--accent-color);
+}
+
+.buff-row-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+.buff-row-head .city-count-pill {
+  margin-left: auto;
+}
+
+.buff-row-head .alliance-dot {
+  margin-right: 0;
+}
+
+/* On phones the panel takes nearly the map's whole width (and no more than its height) */
+@media (max-width: 599px) {
+  .buff-drawer {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: auto;
+    max-width: none;
+    max-height: min(480px, calc(100% - 16px));
+  }
 }
 
 .alliance-dot {
@@ -132,11 +165,13 @@
   line-height: 1.3;
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 5px;
-  white-space: nowrap;
+  max-width: 100%;
 }
 
 .buff-badge strong {
+  white-space: nowrap;
   color: var(--white);
 }
 
@@ -145,7 +180,7 @@
   padding: 0 4px;
   background: var(--shade-50);
   border-radius: 3px;
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-weight: bold;
 }
 

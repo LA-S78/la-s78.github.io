@@ -1,86 +1,105 @@
 <div class="content-pane" style="max-width: 560px;" markdown="1">
 
-# 📋 Todo
+# 📋 Roadmap
 
-## 🔴 High Priority (Immediate Architecture & Core Overhaul)
+_Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIONS.md`._
 
-- [ ] **1. Unified Read Proxy & Data Sanitizer (`api/state.js`)**
-  - Consolidate `/api/alliance`, `/api/map-state`, and `/api/rewards-state` into a single `GET` proxy endpoint.
-  - Implement server-side projection and data minimization: strip sensitive Discord guild IDs, alert channel/role IDs, and author tags before serving public data.
-  - Configure Edge caching (`s-maxage=60, stale-while-revalidate=300`) with scoped query support (`?scope=all|alliances|map|rewards`).
+## 🔴 High Priority
 
-- [ ] **2. Unified Portal Architecture (Deferred Auth & Proposal Pipeline)**
-  - **Client (`assets/js/auth-modal.js`):** Create the reusable "Sandbox → LocalStorage Auto-Stash → Deferred Discord Auth / Token Fallback" modal.
-  - **Proposal Engine (`api/proposal.js`):** Add `type: 'alliance'` payload handler that attaches `diplomacy-blueprint.dat` binary attachments to the review message.
-  - **Execution Engine (`api/accept-proposal.js`):** Add `type: 'alliance'` handler to perform atomic Gist writes updating `alliances` and `blacklist` in `map-state.json`.
-  - **Discord Interactions (`api/interactions.js`):** Wire button interaction handlers for `approve_alliance_proposal` and `reject_alliance_proposal`.
+- [x] **Alliance Dashboard (`portal/dashboard.html`, `api/dashboard.js`)** — spec agreed 2026-11-11, built in four steps:
+  - [x] Foundation: page, who sees what (server-side), Steward switcher, pill link, officers-only reward card, R5 nomination link. (#78)
+  - [x] Widgets: edit mode, paste-in tables, 5 themed chart types, visibility per widget, size limits. (#79)
+  - [x] Google Sheets / Docs sync (Google hosts only, Sync Now). (#80)
+  - [x] Caravan Rotor (R4-managed pick list, Undo, New Week, game time + local time, copy status). (#81)
 
-- [ ] **3. Interactive NAP Ranks & Diplomacy Tool (`alliance.html`)**
-  - Merge Section 01 (NAP Alliances), Section 02 (NAP Academies), and Section 03 (NAP Ranks) into a single cohesive hierarchy card.
-  - Implement client-side hydration via `/api/state?scope=alliances`.
-  - Build interactive Sandbox mode: drag-and-drop ladder sorting, mobile step controls (`[▲][▼]`), nested academy management, and integrated blacklist maintenance.
-  - Connect submission action to `api/proposal.js`.
-
-- [ ] **4. Alliance Registration Hardening (`register.html`)**
-  - Replace raw tag text input with a council-controlled dropdown sourced from `map-state.json`.
-  - Enforce the 4-way validation check:
-    1. Caller holds `@R5` role on the primary NAP server.
-    2. Caller holds the corresponding `@<TAG>` alliance role on the primary NAP server.
-    3. Caller holds `ADMINISTRATOR` or `MANAGE_GUILD` in the target Discord server.
-    4. Discord bot is verified present in the target Discord server (`GET /guilds/{guild_id}`).
-  - Add real-time visual brand preview card (colors, crest, tags).
-
-- [ ] **5. Alliance Dashboard (`dashboard.html` & `/api/dashboard`)**
-  - Server-side Google Doc rendering with container shields (mobile table scroll wrappers, max-width image constraints) and fallback Gist blocks.
-  - Add `[ 🔒 Officers Only ]` block visibility filters.
-
-- [ ] **6. Stateless Discord Verification (`api/auth.js`)**
-  - Implement Discord OAuth2 flow and live REST role validation to issue 14-day HMAC session cookies.
-  - Provide fallback validation for signed admin/officer URL tokens.
-
-- [ ] **7. GDPR & Gist Security Hardening**
-  - Implement field-level AES-256 encryption for author IDs and sensitive administrative notes.
-  - Add self-service nomination withdrawal.
-  - Establish monthly Gist commit squash routine to prevent long-term log leakage.
-
-- [ ] **8. Modularization of `api/interactions.js`**
-  - Refactor large slash-command blocks into specialized helpers (`_calendar_helper.js`, `_ticket_helper.js`, `_diplomacy_helper.js`) to safeguard serverless function execution times and syntax clarity.
+- [ ] **GDPR & Gist Security Hardening**
+  - Field-level AES-256 encryption for author IDs and sensitive admin notes.
+  - Self-service nomination withdrawal.
+  - Monthly Gist history squash, so old revisions don't keep personal data forever.
 
 ---
 
 ## 🟡 Mid Priority (Automation, Tools & Pipelines)
 
-- [ ] **9. Kingdom Calendar Automation Engine (`api/cron/check-reminders.js`)**
-  - Set up 5-minute cron worker to query upcoming operations and dispatch webhook notifications to alliance-specific Discord channels.
-  - Support instant direct-publishing for internal alliance operations by verified R4/R5 officers, while routing Kingdom-wide events to Council review.
+- [ ] **Kingdom Calendar Reminders** (owner answers, 2026-11-13): set per event by the alliance (its events) or a Steward (server events); one reminder 1 hour before to start with; alliance events to the alliance's alert channel, server events to the NAP Discord (NAP_ALERT_CHANNEL_ID) plus alliances that opt in; pings the role chosen on the event; can be switched off per event. A GitHub Actions schedule (every 10 min) calls the site, which does the work with the variables Vercel already has (REMINDER_SECRET proves the call). Built-in KvK/Capitol events: later, as a Steward setting. Messages in English first.
+  - [x] **Part 1 — event settings:** "Remind on Discord 1 hour before" on the event form (on by default for new events), editing events (Edit next to Delete; same scope rule as delete), a hint when there is no alert channel, and the registration opt-in for server-event reminders.
+  - [x] **Part 2 — the reminder check:** `api/_reminders.js`, reached through `POST /api/calendar` (no new function) with REMINDER_SECRET; `.github/workflows/reminders.yml` calls dev and live every 10 minutes (or by hand: Actions → Calendar reminders → Run workflow, dry run by default). The live site posts nothing until `REMINDERS_LIVE=true` is set in Vercel; dev.la-s78.app posts only to TEST_CHANNEL_ID, pinging nobody.
+  - [ ] **Go live (owner):** test on dev (bring dev up to date, an event with a reminder in the test data), then set `REMINDERS_LIVE=true` on the live site.
+- [ ] **Alliance Might & Scoreboard OCR**
+  - Read player and alliance Might from in-game Duel/Rank screenshots (Gemini Flash vision).
 
-- [ ] **10. Alliance Might & Scoreboard OCR Pipeline**
-  - Integrate Gemini Flash vision pipeline to extract player and alliance Might scores from in-game Duel/Rank screenshots.
+- [x] **Infographics** (decided 2026-11-12): the designed pictures were replaced by live, translated components. The Capitol Rotation chart is drawn from the calendar; the reward-distribution and territory-map pictures were removed (the rewards card and the live map replace them). Game screenshots in the guides stay as they are (players see the game in their own language).
 
-- [ ] **11. Infographic Translation Pipeline**
-  - Build Canva SVG XML automation script to replace text nodes across all 8 supported languages.
+- [ ] **Tool Translations** (in progress, leaders' tools first)
+  - Tool text lives in `_data/en/tools.yml`; changed sections are translated by Gemini on push (`_scripts/translate_sections.rb`, see HOWTO "Add or change text in a tool").
+  - [x] System + Alliance Dashboard (charts, editor, Caravan Rotor, reward card)
+  - [x] Nomination page, King's console, registration
+  - [x] Calendar, King's scheduler, rewards
+  - [x] Alliance page and map planners (incl. the proposal pop-up and live-data notices)
+  - [x] `ui.yml` through the same system (hand translations kept; `guides`/`nav_anchors` left to the guides)
+  - [x] Server messages (`api/`, `_data/en/server.yml`; technical admin messages stay English)
+  - [x] Discord bot replies: `/calendar`, `/map`, `/nominate`, `/rewards` (shared leadership-channel posts stay English)
+  - [x] Discord command picker descriptions (`bot_commands`; alliance servers update on `/registerbot` sync)
+  - [x] `/registerbot`, `/rank`, `/devupdate` and the proposal-review buttons' private replies (the shared war-room post stays English)
+  - [ ] `/suggest` (later, once most other work is done): it's in the alliance servers' command list but the bot has no handler for it yet
 
-- [ ] **12. Portal Localization & Discord Bot String i18n**
-  - Centralize embed strings and response messages in `_data/<lang>/`.
-  - Connect client-side dynamic tools to the site language switcher.
+- [ ] **Map Plan Import / Export**
+  - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.
 
-- [ ] **13. Map Plan Import / Export**
-  - Add base64 URL hash serialization (`map.html#plan=...`) to allow war-room tacticians to share and load map marker drawings without database writes.
+- [x] **Own service worker (`sw.js`)** (owner decision, 2026-11-13): replaced Workbox 4.3.1, which every visitor's browser downloaded from Google's servers unchecked, with the site's own plain worker (no outside script; a build check keeps it that way). Same jobs: offline app shell (only changed files re-downloaded on an update; Workbox's saved copy reused on the switch, so phones don't download the site again), image store, live data, offline Home fallback, update toast. Pages are saved under their plain address, so `?__WB_REVISION__=…` no longer appears in the address bar. A phone saves only its reader's language plus the pages it opens (first visit 10.9 → 5.1 MB); an update refreshes every saved page, including visited pages in other languages.
+- [ ] **Retire the old-page rescue in `sw.js`** (section 6, about 40 lines) a few weeks after November 2026, once no phone runs pages from before the update toast.
 
 ---
 
-## 🟢 Low Priority (Reference Tools & Interface Polish)
+## 🎨 Look & Feel (site-wide)
 
-- [ ] **14. Building Prerequisite Interactive Tree**
-  - Build dependency graph viewer for Keep levels 1–30+.
+_From a measured audit of every page, all three themes, phone and desktop (November 2026)._
 
-- [ ] **15. Interactive Capitol Rotation Tool (`rules.html`)**
-  - Replace static blueprint graphic with a dynamic 3-week rotation simulator driven by live NAP ranks from `map-state.json`.
+- [x] **Lighter pages** — a first visit downloaded ~5 MB, mostly a background picture fetched twice (WebP and a 4.4 MB PNG fallback). WebP only now, a 48px tab icon instead of the 452 KB app icon, and right-sized lantern, link-preview banner and 404 picture: ~0.7 MB.
+- [x] **Keyboard focus & readability** — a clear ring in the theme's colour shows where the keyboard is (Tab); small accent-coloured text (links, table headings, labels, badges) uses a slightly paler accent that reads clearly in every theme; red text uses the lighter red; footer labels 11 → 12px.
+- [x] **Section tabs follow the page** — the tabs under the header (Server Rules / Rotation / Rewards, guide sections) now always light the section being read: scrolling back up, a short last section, and a tapped tab no longer flicker through the sections in between.
+- [x] **Tools that fit phones** (owner report, 2026-11-13: tools feel "compressed" on phones and stack buttons oddly, worse with each feature and language). From screenshots of every tool at phone width in English and German:
+  - [x] **Step 1 — Roomier phones:** narrower page edges (20 → 12px), and tools come out of their inner frames (map, T10 tree, calendar phase card), so the content gets about a tenth more of the screen. Desktop unchanged.
+  - [x] **Step 2 — One button system:** about 40 button and box styles (13–50px high, 8 corner shapes) now use three heights — compact 28px inside rows, standard 32px in toolbars, large 40px for main actions and form fields — and one corner shape, set in `_css/style/86-controls.css` and `_css/portal/85-controls.css`. The tiny ▲▼, × and "+ Link Academy" buttons are finger-sized.
+  - [x] **Step 3 — Tidy toolbars:** every tool's controls bar has two parts — what you're looking at (view switches, information) on the left, then the planner: Planner Mode and Submit together at the right of the top row on desktop, and on phones a line of their own with Planner Mode on the left and Submit on the right (the blacklist bar too; the dashboard's Edit / Add chart pair stays centred). On phones the two parts are full-width rows that hold in every language (the map's bar was three ragged rows in German); view switches span the row. The map's "Change to:" tag box always has a line of its own under the buttons, so on phones the map's bar is three steady rows (views; planner; tag box), and on a narrower desktop window Buff Summary and Fullscreen drop to their icons when the bar would otherwise wrap. Set in `_css/style/88-toolbars.css`. (A "mode switch first, Submit at the far end" rule was tried and dropped: it made the bars look odd — owner, 2026-11-13.)
+  - [x] **Step 4 — Steady screens** (owner ideas):
+    - [x] **No jumping on tap:** Submit Plan and its count are always in the bar, greyed out until there is something to send (owner decision); the map's "Change to:" tag box is always on its own line, greyed out until Planner Mode is on; the resource key sits under the map instead of pushing it down; "Copy" → "✓ Copied", the T10 unlock buttons and Edit Dashboard keep their width; the dashboard's Add chart waits greyed out beside Edit. Measured by tapping every tool button: the tapped button no longer moves (switching a planner or editor on still opens its tools below the button, as it must).
+    - [x] **Last known data while loading:** the map, alliance standings and blacklist, rewards tiers and the Capitol rotation board show this device's last saved copy straight away (the one sw.js keeps for offline use), dimmed and not clickable, with "⏳ Updating…" floating in a corner (it takes no space, so nothing moves when it goes), and swap to the fresh data when it arrives. Planner Mode stays off until the fresh data is in. If the fresh data can't be loaded, the saved copy stays with a note saying when it was saved. The calendar page is left as it is: its data depends on who is signed in. (`js/live-data-notice.js`)
+  - [x] **Step 5 — Per-tool polish:** the ladder's edit rows, the buff summary table (cut off on phones), the calendar's cards, the King's console rows and the rewards tier editor.
+    - [x] **Buff summary** (the map's ⚖️ panel): one card per alliance — tag and number of cities on top, its buffs below, wrapping — instead of a three-column table that was cut off on the right (phones, and desktop in German); on phones the panel takes nearly the map's whole width.
+    - [x] **Ladder rows in Planner Mode** (phones): the rank and its ▲▼ sit at the top left beside the tag, name and academies; the NAP line runs the full width below, with the × (remove alliance) on its own at the far right, away from Revoke NAP. A little shorter than before (German: 1158 → 1122px for the list).
+    - [x] **Calendar** (phones): cycle progress, next reset and next KW battle share one box, a line each (label left, value right; a long value moves under its label), instead of three full-width boxes; event cards show their time straight under the title (a large gap and an empty line sat between). The phase card's "Loading cycle details…" no longer stays when the answer has no reward period. About 150px shorter in German.
+    - [x] **King's console & nomination page** (phones): the console's rows needed nothing more after the button system (step 2). On the nomination page, the "Who gets what" list's "If won" column was cut off where a chest name is one long word (German "Logistikunterstützung"); chest names now break with a hyphen inside their column.
+    - [x] **Rewards card** (phones): the tier editor itself needed nothing more after steps 2–3. The weekly allocation line keeps each chest whole (no line starts with "|"), and the totals table keeps "Rank 2–3" on one line; the card is about 45px shorter.
 
-- [ ] **16. T10 Calculator Mobile Polish**
-  - Refine node scaling, tree connector alignment, and touch targets on narrow viewports.
+---
 
-- [ ] **17. Progressive Web App (PWA) & Cache Audit**
-  - Configure service worker caching policies for map assets, fonts, and stylesheets, with automatic update notifications.
+## 🟢 Low Priority (Reference Tools & Polish)
+
+- [ ] **Building Prerequisite Interactive Tree** — dependency viewer for Keep levels 1–30+.
+- [x] **Interactive Capitol Rotation Tool (`rules.html`)** — the static picture is replaced by a live 4-week chart from the calendar (`js/capitol-rotation.js`).
+- [x] **T10 Calculator Mobile Polish** — the Health/Attack row shrinks with the screen (brackets still meet the hexagon centres), 40px buttons on phones, a real "−" with spoken labels, totals in three columns that stay in view, billions as B.
+- [x] **Distinct page titles** — each tab shows its page's name in its language ("Regeln | Last Asylum Guide"); the home page is the site name alone.
+- [x] **Visual-diff coverage** — the nomination page (its list, and after a win) and the King's console (as the King's alliance) are checked with real sample data.
+- [x] **GitHub Actions Node warning** — every workflow step now runs on Node 24 (`setup-node@v5`, `upload-artifact@v6`, `cache@v5`), and the command deploy uses Node 24.
+- [ ] **Test Discord bot (optional)** — a second bot for dev.la-s78.app, so test proposals never touch the live bot's servers.
+
+---
+
+## ✅ Done
+
+- [x] **Unified read API (`api/state.js`)** — one `GET /api/state?scope=all|alliances|map|rewards`, public data only, edge-cached.
+- [x] **Proposal pipeline** — sandbox planners on the site save a draft, ask for a login pass and send a proposal to Discord; Stewards approve in Discord and the change is saved (map, alliance ladder, blacklist each have their own proposal). R4/R5 only, 5 a day; Stewards unlimited. (#53–#55, #58)
+- [x] **Interactive NAP ranks & diplomacy tool (`alliance.html`)** — one hierarchy card, live data, drag-and-drop and ▲/▼ ordering, academies, a separate Edit Blacklist mode.
+- [x] **Discord login (`api/verify.js`)** — Discord sign-in with a signed 30-day login pass; alliance found by role ID, NAP role name, then `[TAG]` nickname; officers named with /registerbot get R4 access; header sign-in pill. (#56, #57, #67; alliances from `_data/alliances.yml` role settings only, so BOTS and NAVI are found by role ID: #72)
+- [x] **Split the Discord bot (`api/interactions.js`)** — now only checks and routes; each command lives in an `api/_bot_*.js` module. (#60)
+- [x] **Weekly reward periods** — King's Commendation every week; King of Battle Reward after a Steward records a Won; ranked nomination lists; King's console hands out one set at a time. (#59)
+- [x] **Test site with its own data** — dev.la-s78.app uses a separate test Gist; Stewards refresh it with `/devupdate`. (#61–#65)
+- [x] **One alliance list & live data only** — `_data/alliances.yml` is the single list of alliance colours and starting rotation; pages show live data, with clear notices when loading, failed or offline. (#69)
+- [x] **Installed app (PWA)** — update notice, app shortcuts, iPhone icon, offline fallback to the home page, old caches cleaned up (#69); stuck old versions take over by themselves, `/reset` link and Update App in the pill (#76); the site's own service worker replaced Workbox (2026-11-13).
+- [x] **Safe saves** — every Gist save checks the revision history afterwards and repairs any save it overwrote, so nominations, the Won/Lost result, approvals, `/rank`, events and the proposal log made at the same moment are all kept. (#73)
+- [x] **King's checklist on the server** — ticks saved for everyone, by the King's alliance R4/R5 and Stewards; a handed-out chest is locked through any re-sort. (#74)
+- [x] **Alliance registration hardening** — the alliance comes from the signed `/registerbot` link (R5 + alliance role checked); the portal checks the bot is in the server, the person can manage it, and the channels and role belong to it. (#75)
+- [x] **Theme colours** — accent, borders and surfaces follow the chosen theme. (#50–#52)
 
 </div>

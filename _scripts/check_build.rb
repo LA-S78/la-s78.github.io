@@ -60,10 +60,14 @@ list_json = sw[/precacheList = (\[.*?\]);/m, 1]
 if list_json
   kb = JSON.parse(list_json).sum { |e| File.size?(File.join(SITE, e['url'])).to_i } / 1024
   puts "Service-worker precache: #{kb} KB"
-  fail!("Precache is #{kb} KB (limit #{MAX_PRECACHE_KB} KB). Check _scripts/workbox_precache.rb.") if kb > MAX_PRECACHE_KB
+  fail!("Precache is #{kb} KB (limit #{MAX_PRECACHE_KB} KB). Check _scripts/precache_list.rb.") if kb > MAX_PRECACHE_KB
 else
   fail!('No precache list found in _site/sw.js')
 end
+
+# 6. The service worker loads nothing from other sites (it once loaded Workbox from Google's
+#    servers, which a browser cannot check; replaced by the site's own worker, November 2026).
+fail!('sw.js loads an outside script (importScripts)') if sw.include?('importScripts')
 
 if @failures.zero?
   puts 'All build checks passed.'

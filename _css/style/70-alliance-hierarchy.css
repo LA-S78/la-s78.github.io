@@ -59,7 +59,7 @@
   font-family: var(--font-headers);
   font-size: 0.95rem;
   font-weight: 800;
-  color: var(--accent-color);
+  color: var(--accent-text);
   min-width: 28px;
 }
 
@@ -76,7 +76,7 @@
 .ladder-step-btn {
   background: var(--surface-dark);
   border: 1px solid var(--border-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-size: 0.55rem;
   width: 18px;
   height: 14px;
@@ -177,7 +177,7 @@
 .btn-link-acad-prompt {
   background: transparent;
   border: 1px dashed var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   font-size: 0.65rem;
   font-weight: 700;
   padding: 1px 6px;
@@ -228,7 +228,7 @@
 .btn-ladder-del {
   background: transparent;
   border: 1px solid color-mix(in srgb, var(--status-danger) 40%, transparent);
-  color: var(--status-danger);
+  color: var(--status-danger-hover); /* the lighter red: easier to read on dark cards */
   width: 20px;
   height: 20px;
   border-radius: 3px;
@@ -320,7 +320,7 @@
 .btn-blacklist-del {
   background: transparent;
   border: none;
-  color: var(--status-danger);
+  color: var(--status-danger-hover); /* the lighter red: easier to read on dark cards */
   cursor: pointer;
   font-size: 0.85rem;
   line-height: 1;
@@ -385,3 +385,42 @@
   font-style: italic;
 }
 
+
+/* LADDER ROWS IN PLANNER MODE ON PHONES (Look & Feel step 5). The planner adds ▲▼, academy
+   links and NAP controls to each row, which then wrapped into three ragged lines: the rank
+   floated in the middle of the row and the NAP controls drifted to the right. Now the rank
+   and its ▲▼ sit at the top left with the tag, name and academies in a column beside
+   them; below, across the whole row, the NAP status and its switch, with the × (remove)
+   at the far end, away from the other buttons. Outside Planner Mode a row keeps its
+   one-line layout. */
+@media (max-width: 599px) {
+  #alliance-container.planner-active .alliance-ladder-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: 10px;
+    row-gap: 6px;
+  }
+
+  #alliance-container.planner-active .ladder-rank-col {
+    min-width: 0;
+  }
+
+  #alliance-container.planner-active .ladder-identity-col {
+    grid-column: 2;
+  }
+
+  /* The NAP line runs the row's full width (under the rank too), so it stays on one line */
+  #alliance-container.planner-active .ladder-status-col {
+    grid-column: 1 / -1;
+  }
+
+  #alliance-container.planner-active .ladder-status-col {
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+
+  #alliance-container.planner-active .btn-ladder-del {
+    margin-left: auto;
+  }
+}

@@ -12,6 +12,7 @@ your edits would vanish. Git ignores them, so they never show up as changes.
 - [Change English text that is already translated](#change-english-text-that-is-already-translated)
 - [Add a new guide](#add-a-new-guide)
 - [Add a UI label](#add-a-ui-label)
+- [Add or change text in a tool](#add-or-change-text-in-a-tool)
 - [Change styles (CSS) safely](#change-styles-css-safely)
 - [Add or change an alliance](#add-or-change-an-alliance)
 - [Add a Discord command](#add-a-discord-command)
@@ -165,7 +166,7 @@ translated per push, so add guides one at a time.
 
 ## Add a UI label
 
-1. Add the same key to **all 8** `_data/<lang>/ui.yml` files, in the section that fits:
+1. Add the key to **`_data/en/ui.yml` only**, in the section that fits:
    ```yaml
    search:
      guides: "Search guides..."
@@ -175,8 +176,57 @@ translated per push, so add guides one at a time.
    ```liquid
    {{ site.data[site.active_lang].ui.search.events }}
    ```
-3. If a language is missing the key, that language shows **nothing** there, so check
-   all 8 files. Use `content.yml` instead of `ui.yml` for longer page wording.
+3. Merge. GitHub translates the changed section (the whole `search:` block here) into the
+   other 7 languages, as for the tools' text ([Add or change text in a tool](#add-or-change-text-in-a-tool)).
+   Until then, other languages show **nothing** for a new key (ui.yml has no English
+   fallback), so preview in English. Use `content.yml` instead of `ui.yml` for longer page
+   wording.
+
+The exceptions are `guides:` and `nav_anchors:`: the guides fill those themselves (guide
+titles and tab names, from their own translations), so a guide card's label is still added
+to all 8 files by hand (see "Add a new guide").
+
+---
+
+## Add or change text in a tool
+
+The tools (Alliance Dashboard, editors, cards…) take their words from
+`_data/en/tools.yml`. **Edit only the English file**; the other 7 languages are
+translated automatically when your change reaches `main`.
+
+1. Add or change the text in `_data/en/tools.yml`, in the section it belongs to:
+   ```yaml
+   caravan:
+     title: "🐪 Caravan Rotor"
+     new_week: "🔄 New week"       # ← changed or new
+   ```
+   Keep `{placeholders}` such as `{name}` or `{n}`: the page fills them in. For singular
+   and plural, use two keys ending in `_one` and `_other`.
+2. Use it: in a page `{{ "caravan.new_week" | t }}`; in a script `t('caravan.new_week')`
+   (the page's front matter lists the sections its scripts use: `strings: [caravan]`).
+3. Merge. GitHub sends every changed **section** (the whole `caravan:` block here) to
+   Gemini, saves `_data/<lang>/tools.yml` and builds. Until then, and if a translation
+   fails, that text shows in English.
+
+To fix one translation by hand, add it to `_data/translation_overrides.yml` (language →
+section → key, keeping the same `{placeholders}`); it's applied on the next push and kept
+through every re-translation. Don't edit `_data/<lang>/tools.yml` directly: it's rewritten.
+A game term that should always read the same goes in `_data/terminology.json` instead.
+Keep sections to about 25–60 strings. To see what would be sent, run
+`ruby _scripts/translate_sections.rb --check`.
+
+**Messages from the server** (errors and confirmations the site's `api/` sends back, such
+as "Sign in with Discord…") work the same way, from `_data/en/server.yml` (sections start
+with `api_`). In the code, write `say('api_dashboard.chart_removed')` (or
+`say('api_dashboard.no_rank', { tag })`) from `api/_messages.js`, and wrap a new endpoint's
+handler in `inLanguage(req, …)` so it answers in the page's language (the page sends it
+in an `X-Site-Lang` header, added by `js/i18n.js`). Technical messages for administrators
+(server set-up, raw Discord errors) can stay as plain English text. The Discord bot works the same way:
+its text is in `server.yml` sections starting `bot_`, and `api/interactions.js` already
+answers in the user's Discord language, so a bot module only needs `say()`. A new slash command's description,
+option descriptions and choice names also go in `server.yml` under `bot_commands` (word for
+word as in `.github/discord.json` or `api/_bot_schema.js`), so the command picker shows
+them translated; keep them under 100 characters.
 
 ---
 
@@ -286,6 +336,42 @@ site). Discord commands themselves always use live data.
 Pushing to `dev` publishes a test copy at https://dev.la-s78.app instead.
 
 ---
+
+## Use the Alliance Dashboard (for alliance leaders)
+
+Sign in (top right), open your account card and choose **🏰 Alliance Dashboard**.
+
+- **Weekly Rewards** (officers only): whether rewards are open, your chests, the Kingdom
+  War result, and whether your list was sent. R5s can open the nomination page from here.
+- **Charts and tables:** press **✏️ Edit Dashboard**, then **➕ Add a chart or table**.
+  Paste cells from Google Sheets or Excel (header row first), or use **🔗 Google Sheet /
+  Doc link** for a sheet shared as "Anyone with the link can view" and press **Load**.
+  Choose the type, who can see it (officers only, or all members), and **Save**. Linked
+  charts have **🔄 Sync now** to fetch the latest numbers.
+- **Stacked bars** (e.g. how often each player scored in each Duel band): choose **Bar**,
+  tick the columns that make up each bar, and set **Stacked** to *to 100%* (each bar shows
+  the shares) or *totals*. Tick **🚦 Red → yellow → green** when the columns go from low to high (on a single column it colours each bar by rank, best green; on a progress chart, by how close it is to the target). Tick **↕️ Reverse** under it when low is good (e.g. troops lost).
+  Blank headings under a merged cell are named for you ("3.6m- (2)"), and counts written
+  "2/16" are read as 2. Vertical charts turn sideways on phones.
+- **Reading a chart:** as on the map, hover over (or tap) a bar, slice, row or week: it
+  lights up and the card under the chart shows its numbers and percentages. A tap keeps it
+  until you tap it again or anywhere else.
+- **Caravan Rotor:** add players (Game Time windows optional), tap **✓ Picked** when one
+  gets a caravan, **🔄 New week** to start again. Tick **👥 Members can view** to let
+  members see it.
+
+Stewards can look at (and help with) any alliance's dashboard with **View as**.
+
+## Help a player stuck on an old version
+
+If someone sees an old page, a missing feature, or no "Update" toast, send them:
+
+**https://la-s78.app/reset**
+
+It clears the site's saved copy on their device and opens the newest version; their login
+and theme are kept. Signed-in players (and guests) can also tap their account pill in the
+header, then **🔄 Update App**. Since November 2026 an installed app normally updates
+itself; this is for anyone who doesn't.
 
 ## When the build check fails
 

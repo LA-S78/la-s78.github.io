@@ -2,11 +2,33 @@
  * map.js - Comprehensive Map Data, Parsing, Highlighting, Label, Planner, Fullscreen, and Image Snapshot Utilities
  */
 
-import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
+import {
+  markUpdating,
+  offlineCopySavedAt,
+  rememberLiveData,
+  showLiveDataNotice,
+  showSavedWhileLoading,
+} from './live-data-notice.js';
 import { submitProposalWithAuth } from './auth-modal.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
+// The page's language (map_planner.* in _data/<lang>/tools.yml, js/i18n.js).
+const tm = (key, vars) => window.t(`map_planner.${key}`, vars);
+// A buff's name in the page's language; one not known to the site shows as written.
+const BUFF_KEYS = new Set([
+  'research_speed',
+  'troop_training_speed',
+  'building_speed',
+  'march_speed',
+  'grain_gathering',
+  'grain_output',
+  'timber_gathering',
+  'timber_output',
+  'herb_gathering',
+  'herb_output',
+]);
+const buffName = (b) => (BUFF_KEYS.has(b.key) ? tm(`buff_${b.key}`) : b.name);
 
 const DRAFT_STORAGE_KEY = 'la_map_planner_draft';
 
@@ -357,6 +379,7 @@ export function calculateAllianceBuffSummary() {
 
       if (!buffMap[parsed.key]) {
         buffMap[parsed.key] = {
+          key: parsed.key, // to show the name in the page's language (buffName)
           name: parsed.name,
           total: 0,
           unit: parsed.unit,
@@ -402,7 +425,7 @@ export function renderBuffSummaryDrawer() {
   });
 
   if (sortedTags.length === 0) {
-    contentEl.innerHTML = '<div class="buff-empty">No alliances currently claim territory.</div>';
+    contentEl.innerHTML = `<div class="buff-empty">${esc(tm('no_claims'))}</div>`;
     return;
   }
 
@@ -419,46 +442,31 @@ export function renderBuffSummaryDrawer() {
           ? data.aggregatedBuffs
               .map(
                 (b) => `
-          <span class="buff-badge" title="${b.count} ${b.count === 1 ? 'City' : 'Cities'}: ${esc(b.cities.join(', '))}">
-            ${esc(b.name)} <strong>+${esc(b.total)}${esc(b.unit)}</strong>
+          <span class="buff-badge" title="${esc(window.tn('map_planner.cities', b.count))}: ${esc(b.cities.join(', '))}">
+            ${esc(buffName(b))} <strong>+${esc(b.total)}${esc(b.unit)}</strong>
             ${b.count > 1 ? `<span class="buff-badge-count">×${b.count}</span>` : ''}
           </span>
         `,
               )
               .join('')
-          : '<span class="buff-none">No active buffs assigned</span>';
+          : `<span class="buff-none">${esc(tm('no_buffs'))}</span>`;
 
+      // One card per alliance: its tag and number of cities, then its buffs (they wrap, so
+      // long names in any language fit the panel; the old three-column table was cut off)
       return `
-      <tr class="buff-row ${isEditing ? 'is-active-target' : ''}">
-        <td class="buff-col-tag">
+      <li class="buff-row ${isEditing ? 'is-active-target' : ''}">
+        <div class="buff-row-head">
           <span class="alliance-dot" style="background-color: ${esc(allianceColor)}"></span>
-          <strong>[${esc(tag)}]</strong>
-        </td>
-        <td class="buff-col-count">
-          <span class="city-count-pill">${data.count} ${data.count === 1 ? 'City' : 'Cities'}</span>
-        </td>
-        <td class="buff-col-buffs">
-          <div class="buff-badges-wrap">${buffBadges}</div>
-        </td>
-      </tr>
+          <strong class="buff-row-tag">[${esc(tag)}]</strong>
+          <span class="city-count-pill">${esc(window.tn('map_planner.cities', data.count))}</span>
+        </div>
+        <div class="buff-badges-wrap">${buffBadges}</div>
+      </li>
     `;
     })
     .join('');
 
-  contentEl.innerHTML = `
-    <table class="buff-table">
-      <thead>
-        <tr>
-          <th>Alliance</th>
-          <th>Holdings</th>
-          <th>Active Buffs</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows}
-      </tbody>
-    </table>
-  `;
+  contentEl.innerHTML = `<ul class="buff-list">${rows}</ul>`;
 }
 
 export function toggleBuffSummaryDrawer(forceState = null) {
@@ -629,17 +637,12 @@ export function togglePlannerMode(active, svgRoot = null) {
     btnDraft.classList.toggle('active', active);
   }
 
-  const overrideContainer = document.getElementById('planner-override-container');
-  if (overrideContainer) {
-    if (active) {
-      overrideContainer.classList.remove('hidden');
-      overrideContainer.style.display = 'inline-flex';
-    } else {
-      overrideContainer.classList.add('hidden');
-      overrideContainer.style.display = 'none';
-      const input = document.getElementById('alliance-override');
-      if (input) input.value = '';
-    }
+  // The tag box stays in the bar (greyed out until Planner Mode is on), so turning the
+  // planner on or off doesn't shift the buttons around it
+  const overrideInput = document.getElementById('alliance-override');
+  if (overrideInput) {
+    overrideInput.disabled = !active;
+    if (!active) overrideInput.value = '';
   }
 
   if (isPlannerActive) {
@@ -766,7 +769,7 @@ export async function submitStrategyProposal() {
 
   const payload = generateProposalPayload();
   if (!payload || payload.totalChanges === 0) {
-    alert('No changes detected in your draft plan.');
+    alert(tm('no_changes'));
     return;
   }
 
@@ -797,7 +800,7 @@ export async function submitStrategyProposal() {
 
   submitProposalWithAuth({
     type: 'map',
-    title: '🗺️ Submit Map Territory Proposal',
+    title: tm('proposal_title'),
     payload: payload,
     diffSummaryHtml: `<div class="diff-list">${diffItems}</div>`,
     onSuccess: () => {
@@ -819,45 +822,15 @@ export function updateProposalUI(btnSubmit = null, badge = null) {
     document.getElementById('change-count-badge') ||
     document.querySelector('.draft-indicator');
 
-  if (!isPlannerActive) {
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.classList.add('hidden');
-      submitBtn.style.display = 'none';
-    }
-    if (badgeEl) {
-      badgeEl.textContent = '0';
-      badgeEl.classList.add('hidden');
-      badgeEl.style.display = 'none';
-    }
-    if (isBuffDrawerOpen) renderBuffSummaryDrawer();
-    return;
+  // Submit Plan and its count always stay in the bar, greyed out until there is something
+  // to send, so nothing appears or shifts while planning (owner decision, 2026-11-13)
+  let count = 0;
+  if (isPlannerActive) {
+    const payload = generateProposalPayload();
+    count = payload ? payload.totalChanges : 0;
   }
-
-  const payload = generateProposalPayload();
-  const count = payload ? payload.totalChanges : 0;
-
-  if (badgeEl) {
-    badgeEl.textContent = String(count);
-    if (count > 0) {
-      badgeEl.classList.remove('hidden');
-      badgeEl.style.display = 'inline-block';
-    } else {
-      badgeEl.classList.add('hidden');
-      badgeEl.style.display = 'none';
-    }
-  }
-
-  if (submitBtn) {
-    submitBtn.disabled = count === 0;
-    if (count > 0) {
-      submitBtn.classList.remove('hidden');
-      submitBtn.style.display = 'inline-flex';
-    } else {
-      submitBtn.classList.add('hidden');
-      submitBtn.style.display = 'none';
-    }
-  }
+  if (badgeEl) badgeEl.textContent = String(count);
+  if (submitBtn) submitBtn.disabled = count === 0;
 
   if (isBuffDrawerOpen) renderBuffSummaryDrawer();
 }
@@ -892,7 +865,7 @@ export function syncFullscreenUI(isActive, btn = null) {
   if (!btn) return;
   btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
   const label = btn.querySelector('.fullscreen-label');
-  if (label) label.textContent = isActive ? 'Exit' : 'Fullscreen';
+  if (label) label.textContent = tm(isActive ? 'exit' : 'fullscreen');
 }
 
 export function bindMapControls(svgRoot = null) {
@@ -1330,17 +1303,17 @@ export function enableMapHighlighting(svgRoot = null) {
     if (!card) return;
     if (!cityData) {
       card.classList.add('idle');
-      if (cityNameEl) cityNameEl.textContent = 'Hover over a territory';
-      if (cityLevelEl) cityLevelEl.textContent = 'Level --';
-      if (cityOwnerEl) cityOwnerEl.textContent = 'Unclaimed';
-      if (cityBuffEl) cityBuffEl.textContent = 'None';
+      if (cityNameEl) cityNameEl.textContent = tm('hover');
+      if (cityLevelEl) cityLevelEl.textContent = tm('level_unknown');
+      if (cityOwnerEl) cityOwnerEl.textContent = tm('unclaimed');
+      if (cityBuffEl) cityBuffEl.textContent = tm('none');
       return;
     }
     card.classList.remove('idle');
     if (cityNameEl) cityNameEl.textContent = cityData.name || cityData.id;
     if (cityLevelEl)
       cityLevelEl.textContent =
-        typeof cityData.level === 'number' ? `Level ${cityData.level}` : cityData.level;
+        typeof cityData.level === 'number' ? tm('level', { n: cityData.level }) : cityData.level;
     if (cityOwnerEl) {
       const ownerTag = getCityOwner(cityData.id);
       const alliance = alliances[ownerTag];
@@ -1350,7 +1323,7 @@ export function enableMapHighlighting(svgRoot = null) {
       const buffVal =
         cityData.buff && String(cityData.buff).trim() !== ''
           ? String(cityData.buff).trim()
-          : 'No active buff';
+          : tm('no_active_buff');
       cityBuffEl.textContent = buffVal;
     }
   }
@@ -1445,11 +1418,8 @@ export function checkAndRestoreMapDraft(svgRoot = null) {
         btnDraft.setAttribute('aria-pressed', 'true');
         btnDraft.classList.add('active');
       }
-      const overrideContainer = document.getElementById('planner-override-container');
-      if (overrideContainer) {
-        overrideContainer.classList.remove('hidden');
-        overrideContainer.style.display = 'inline-flex';
-      }
+      const overrideInput = document.getElementById('alliance-override');
+      if (overrideInput) overrideInput.disabled = false;
 
       if (root) setMapColorMode('alliance', root);
       updateProposalUI();
@@ -1470,6 +1440,13 @@ export function applyMapState(state, svgRoot = null, autoRender = true) {
   alliances = {};
   Object.entries(state.alliances || {}).forEach(([tag, data]) => {
     alliances[tag] = { ...data };
+  });
+
+  // Start every territory unclaimed, so an earlier copy's owners (the saved copy shown while
+  // the fresh one loads) don't linger where the fresh data has none
+  cities.forEach((city) => {
+    city.owner = 'Unclaimed';
+    city.status = null;
   });
 
   if (state.territory_ownership) {
@@ -1506,15 +1483,28 @@ function noticeAnchor(root) {
 
 export async function loadLiveMapState(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
+  const container = noticeAnchor(root);
+  let savedAt = null;
 
   try {
-    const [stateRes, colorsRes] = await Promise.all([
+    const fresh = Promise.all([
       fetch(`/api/state?scope=map&t=${Date.now()}`),
       fetch('/api/colors'),
     ]);
+    // Meanwhile, this device's last copy of the map, dimmed with "Updating…"
+    savedAt = await showSavedWhileLoading('/api/state?scope=map', fresh, container, async (res) => {
+      applyMapState(await res.json(), root, false);
+      if (root) {
+        setMapColorMode(currentColorMode, root);
+        root.classList.add('map-loaded');
+      }
+    });
+    const [stateRes, colorsRes] = await fresh;
 
     if (stateRes.ok) {
       const liveState = await stateRes.json();
+      // Kept for next time (shown while the page loads), unless this is already an offline copy
+      if (!offlineCopySavedAt(stateRes)) rememberLiveData('/api/state?scope=map', liveState);
       applyMapState(liveState, root, false);
       showLiveDataNotice(noticeAnchor(root), { savedAt: offlineCopySavedAt(stateRes) });
     } else {
@@ -1530,8 +1520,10 @@ export async function loadLiveMapState(svgRoot = null) {
     }
   } catch (err) {
     console.warn('Could not fetch live map data:', err);
-    showLiveDataNotice(noticeAnchor(root), { failed: true });
+    // The saved copy, if one is showing, stays: say how old it is instead of "failed"
+    showLiveDataNotice(noticeAnchor(root), savedAt ? { savedAt } : { failed: true });
   } finally {
+    markUpdating(container, false);
     if (root) {
       const restored = checkAndRestoreMapDraft(root);
       if (!restored) {
@@ -1561,6 +1553,40 @@ export function initializeMapData(svgRoot) {
   return cities;
 }
 
+// The map's controls bar on a narrower desktop window: when the planner part (tag box,
+// Planner Mode, Submit) would wrap onto a second line, Buff Summary and Fullscreen drop to
+// their icons (.is-compact) to make room. If even that doesn't keep it on one line, the
+// names come back (the bar has two lines anyway). Measured rather than set by width, so a language
+// whose words fit keeps the names. Phones have their own two-row layout
+// (_css/style/88-toolbars.css).
+let toolbarWatcher = null;
+function fitMapToolbar(bar) {
+  const left = bar.querySelector('.control-group.left');
+  const right = bar.querySelector('.control-group.right');
+  bar.classList.remove('is-compact');
+  if (!left || !right || window.matchMedia('(max-width: 599px)').matches) return;
+  const wraps = () => right.getBoundingClientRect().top > left.getBoundingClientRect().top + 4;
+  if (!wraps()) return;
+  bar.classList.add('is-compact');
+  // Still two lines even with icons (a narrow window): then the names may as well stay
+  if (wraps()) bar.classList.remove('is-compact');
+}
+
+function watchMapToolbar(container) {
+  const bar = container.querySelector('.map-controls');
+  if (!bar) return;
+  toolbarWatcher?.disconnect();
+  let lastWidth = 0;
+  toolbarWatcher = new ResizeObserver(() => {
+    const width = Math.round(bar.getBoundingClientRect().width);
+    if (width === lastWidth) return; // only a change of window width calls for a new fit
+    lastWidth = width;
+    fitMapToolbar(bar);
+  });
+  toolbarWatcher.observe(bar);
+  document.fonts?.ready.then(() => fitMapToolbar(bar));
+}
+
 // initMap runs on every page's turbo:load. It sets up the map only where there is one, once
 // per visit: each visit (also the back button's copy of the page) brings a fresh container.
 const startedMaps = new WeakSet();
@@ -1571,6 +1597,7 @@ export function initMap() {
   // A fresh container can be Turbo's back-button copy of the page, which keeps the data-bound
   // marks of the controls wired up last time. Clear them so the controls are wired up again.
   container.querySelectorAll('[data-bound]').forEach((el) => el.removeAttribute('data-bound'));
+  watchMapToolbar(container);
   const svgRoot = getSvgRoot();
   if (svgRoot) {
     initializeMapData(svgRoot);
@@ -1585,5 +1612,9 @@ if (typeof window !== 'undefined') {
   } else {
     initMap();
   }
+  // A footer link swaps only the page's main frame: Turbo then fires turbo:frame-render, and
+  // on some routes not turbo:load (the tool stayed blank). Start on both, as js/main.js does;
+  // the once-per-page guard makes the second call a no-op.
   document.addEventListener('turbo:load', initMap);
+  document.addEventListener('turbo:frame-render', initMap);
 }

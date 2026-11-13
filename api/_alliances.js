@@ -9,25 +9,57 @@ export const DEFAULT_FALLBACK_COLORS = ALLIANCES.colors;
 /** The Vercel setting name (DISCORD_<name>) holding each alliance's NAP role ID. */
 export const ALLIANCE_ROLE_SETTINGS = ALLIANCES.role_settings || {};
 
+/**
+ * The alliance whose NAP role (set in Vercel as DISCORD_<name>, listed in role_settings)
+ * a member holds, by its real tag (e.g. "RÂVN", not "RAVN"); null if none matches.
+ * Only these settings are checked, so other DISCORD_* settings (bot token, server IDs,
+ * the R4/R5 roles) can never be taken for an alliance.
+ * @param {string[]} roleIds the member's role IDs in the NAP server
+ */
+export function allianceFromRoleIds(roleIds = [], env = process.env) {
+  for (const [tag, name] of Object.entries(ALLIANCE_ROLE_SETTINGS)) {
+    // Trimmed: a value pasted into Vercel with a stray space or line break still matches.
+    const roleId = String(env[`DISCORD_${name}`] || '').trim();
+    if (roleId && roleIds.includes(roleId)) return tag;
+  }
+  return null;
+}
+
 /** Rank #1's tag and the three rotation seats [A, B, C] before any live schedule exists. */
 export const STARTING_ROTATION = ALLIANCES.starting_rotation;
+
+/** An alliance's role colour, by its exact tag or the same letters without accents (RAVN/RÂVN). */
+export function roleColorFor(tag, roleColors = {}) {
+  if (roleColors[tag]) return roleColors[tag];
+  const fold = (t) =>
+    String(t)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toUpperCase();
+  const key = Object.keys(roleColors).find((k) => fold(k) === fold(tag));
+  return key ? roleColors[key] : null;
+}
 
 /**
  * Strips private Discord bot configuration fields before sending alliance data to public clients.
  * Preserves exact tag capitalization and diacritics (e.g., RÂVN, RâvN, râvn, HeKi).
  */
-export function sanitizeAlliances(rawAlliances = {}) {
+export function sanitizeAlliances(rawAlliances = {}, roleColors = {}) {
   const sanitized = {};
 
   Object.entries(rawAlliances).forEach(([tag, data]) => {
     const cleanTag = tag.trim();
     if (!cleanTag) return;
 
+    // The same order as the Alliance page (js/alliance.js resolveAllianceColor): the
+    // alliance's Discord role colour (getRoleColors in _role_colors.js), then a colour chosen
+    // on the site (the gold #b8975a counts as none), then _data/alliances.yml.
     const storedColor = data?.color;
     const resolvedColor =
-      storedColor && storedColor !== '#b8975a'
+      roleColorFor(cleanTag, roleColors) ||
+      (storedColor && storedColor !== '#b8975a'
         ? storedColor
-        : DEFAULT_FALLBACK_COLORS[cleanTag] || storedColor || null;
+        : DEFAULT_FALLBACK_COLORS[cleanTag] || storedColor || null);
 
     sanitized[cleanTag] = {
       tag: cleanTag,

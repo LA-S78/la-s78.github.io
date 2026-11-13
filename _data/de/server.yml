@@ -1,0 +1,307 @@
+# Translated automatically from _data/en/server.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+api_dashboard:
+  signed_out: Melde dich mit Discord an (oben rechts), um dein Allianz-Dashboard zu sehen.
+  load_failed: 'Das Dashboard konnte nicht geladen werden: {reason}'
+  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite findet dies über deine Allianz-Rolle im NAP Discord-Server oder ein [TAG] am Anfang deines Server-Spitznamens. Korrigiere dies in Discord und verwende dann „Zugriff aktualisieren“ in deiner Account-Karte (oben rechts).
+  leaders_only: Nur die R4- und R5-Mitglieder deiner Allianz können das Dashboard ändern.
+  chart_removed: Dieses Diagramm wurde entfernt.
+  chart_already_removed: Dieses Diagramm wurde bereits entfernt.
+  not_linked: Dieses Diagramm ist nicht mit einem Google Sheet oder Doc verknüpft.
+  unknown_change: Unbekannte Änderung.
+  save_failed: 'Speichern fehlgeschlagen: {reason}'
+  r5_only_nominate: Nur dein R5 kann hier die Nominierungsseite öffnen. Führe /nominate in Discord aus.
+  rewards_closed: Belohnungen sind geschlossen bis {when}.
+  no_rank: "[{tag}] hat keinen Rang in der Tabelle."
+  choose_type: Wähle einen Diagramm- oder Tabellentyp.
+  title_needed: Gib dem Diagramm oder der Tabelle einen Titel.
+  too_many_columns: Maximal {max} Spalten (diese Tabelle hat {count}).
+  too_many_rows: Maximal {max} Zeilen (diese Tabelle hat {count}).
+  column_name: Spalte {n}
+  paste_first: Füge zuerst eine Tabelle ein (eine Kopfzeile, dann die Daten).
+  no_data_rows: Die Tabelle enthält keine Datenzeilen unter ihrer Kopfzeile.
+  needs_numbers: Ein Diagramm benötigt eine Spalte mit Zahlen zur Anzeige.
+  needs_target: 'Ein Fortschrittsdiagramm benötigt ein Ziel: eine Zahl oder eine Spalte mit Zielen.'
+  too_many_widgets: Maximal {max} Diagramme und Tabellen pro Allianz.
+  sheet_unusable: 'Die Daten des Sheets können nicht verwendet werden: {reason}'
+  too_big: Das würde dieses Dashboard zu groß machen ({size} KB von {max} KB). Verwende weniger Zeilen oder entferne eine Tabelle.
+  player_name_needed: Gib einen Spielernamen ein.
+  time_format: Zeiten sind Game Time wie 18:00 (oder lasse sie leer).
+  start_time_needed: Gib auch die Startzeit an (oder lasse beides leer).
+  rotor_full: Maximal {max} Spieler im Rotor.
+  already_in_rotor: "{name} ist bereits im Rotor."
+  player_removed: Der Spieler wurde entfernt.
+api_sheets:
+  full_link: Füge den vollständigen Link ein (beginnend mit https://docs.google.com/…).
+  google_only: Nur Links zu Google Sheets und Google Docs (docs.google.com) können verwendet werden.
+  range_format: Der Bereich sollte wie A1:D20 aussehen (oder lasse ihn leer).
+  not_sheet_or_doc: Dieser Link ist kein Google Sheet oder Google Doc.
+  unexpected_redirect: Google hat den Download an einen unerwarteten Ort geleitet, daher wurde er nicht abgerufen.
+  too_many_redirects: Zu viele Weiterleitungen von Google.
+  too_slow: Google hat zu lange geantwortet. Versuche es in einem Moment erneut.
+  unreachable: Google konnte nicht erreicht werden ({reason}).
+  doc_not_shared: 'Google sagte nein: Veröffentliche das Dokument (Datei → Teilen → Im Web veröffentlichen) und verwende dann diesen Link.'
+  sheet_not_shared: 'Google sagte nein: Teile das Sheet als „Jeder mit dem Link kann ansehen“ oder verwende Datei → Teilen → Im Web veröffentlichen.'
+  google_error: Google antwortete mit einem Fehler ({status}). Überprüfe den Link.
+  too_large: Dieses Sheet ist zu groß zum Lesen (über 2 MB).
+  empty: Dieses Sheet (oder der Bereich) ist leer.
+  no_such_table_one: Dieses Doc hat {count} Tabelle; es gibt keine Tabelle {table}.
+  no_such_table_other: Dieses Doc hat {count} Tabellen; es gibt keine Tabelle {table}.
+  no_table: Dieses Doc enthält keine Tabelle.
+api_nominate:
+  link_invalid: Dieser Link ist ungültig oder abgelaufen.
+  token_invalid: Token ist ungültig oder abgelaufen. Führe /nominate erneut aus.
+  signed_out: Melde dich mit Discord an (oben rechts), um Truhen zu markieren.
+  invalid_chest: Ungültige Truhe.
+  no_period: Derzeit ist kein Belohnungszeitraum offen.
+  king_only: Nur die Allianz des Königs (R4/R5) und Stewards können Truhen markieren.
+  king_only_tag: Nur die Allianz des Königs [{king}] (R4/R5) und Stewards können Truhen markieren.
+  not_listed: "{name} steht nicht mehr auf der Liste von [{alliance}]. Aktualisiere die Seite."
+  save_failed: 'Speichern fehlgeschlagen: {reason}'
+api_register:
+  guild_id_format: Ungültiges Discord Guild ID-Format.
+  token_invalid: Token ist ungültig oder abgelaufen. Führe /registerbot erneut in Discord aus.
+  alert_channel_needed: Eine gültige 17-20-stellige Operations-Alarmkanal-ID ist erforderlich.
+  alert_role_format: Ungültiges Discord-Alarmrollen-ID-Format (muss 17-20 Stellen haben).
+  officer_channel_needed: Eine gültige 17-20-stellige Offiziers-Ticket-Kanal-ID ist erforderlich.
+  color_format: 'Ungültiges Allianz-Identitätsfarben-Format (muss ein 6-stelliger Hex-Code wie #B8975A sein).'
+  discord_unreachable: 'Discord konnte nicht erreicht werden: {reason}'
+  already_linked: Server-ID {guild} ist bereits mit der Allianz [{tag}] verknüpft. Ein Discord-Server kann nicht mit mehreren Allianzen verknüpft sein.
+  deploy_failed: Bereitstellung der Slash-Befehle auf deinem Server fehlgeschlagen.
+  save_failed: 'Befehle bereitgestellt, aber Konfiguration konnte nicht gespeichert werden: {reason}'
+  bot_not_in_server: Der Bot ist nicht auf diesem Server. Klicke auf „Bot autorisieren“ (Schritt 1), füge ihn deinem Server hinzu und registriere ihn dann.
+  server_check_failed: Discord konnte den Server nicht überprüfen ({status}).
+  old_link: Dieser Link stammt von vor einem Sicherheitsupdate. Führe /registerbot erneut aus.
+  not_member: Du bist kein Mitglied von „{server}“. Registriere einen Server, den du verwaltest.
+  roles_check_failed: Discord konnte deine Rollen nicht überprüfen ({status}).
+  needs_manage: Du benötigst Administrator- oder Server-Verwalten-Rechte in „{server}“, um ihn zu verknüpfen. Frage den Eigentümer oder lass ihn /registerbot ausführen.
+  channels_check_failed: Discord konnte die Kanäle des Servers nicht auflisten ({status}).
+  alert_channel_missing: Der Operations-Alarmkanal ({id}) ist nicht in „{server}“ (oder der Bot kann ihn nicht sehen). Kopiere die ID erneut.
+  officer_channel_missing: Der Offiziers-Ticket-Kanal ({id}) ist nicht in „{server}“ (oder der Bot kann ihn nicht sehen). Kopiere die ID erneut.
+  alert_role_missing: Die Standard-Alarmrolle ({id}) ist keine Rolle in „{server}“. Kopiere die ID erneut oder lasse sie für @everyone leer.
+  role_not_found: Keine Rolle in „{server}“ entspricht bisher „{role}“; es wird funktionieren, sobald eine existiert.
+api_proposals:
+  login_required: Bitte melde dich erneut mit Discord an, um Vorschläge zu senden.
+  leaders_only: Nur R4- und R5-Anführer können Vorschläge senden.
+  limit_check_failed: Das tägliche Vorschlagslimit konnte nicht überprüft werden. Bitte versuche es in einer Minute erneut.
+  daily_limit: 'Tägliches Limit erreicht: {max} Vorschläge pro 24 Stunden. Du kannst den nächsten nach {when} senden.'
+  too_large: Der Vorschlag ist zu groß.
+  notes_limit: Notizen sind auf 500 Zeichen begrenzt.
+  image_too_large: Kartenbild ist zu groß.
+  pool_limits: 'Pool-Limits überschritten: Gold {gold}/{gold_max}, Lila {purple}/{purple_max}, Blau {blue}/{blue_max}'
+  no_changes: Keine Änderungen angegeben.
+  week_and_threat: Zielwoche und Bedrohungsserver sind erforderlich.
+api_events:
+  session_invalid: Ungültiger, manipulierter oder abgelaufener Session-Token. Bitte führe /calendar in Discord erneut aus.
+  required_fields: Titel, Datum und Game Time sind erforderlich.
+  date_format: Das Datum muss im Format YYYY-MM-DD vorliegen.
+  time_format: Game Time muss im Format HH:MM (00:00 bis 23:59) vorliegen.
+  time_step: Game Time muss in 5-Minuten-Schritten angegeben werden (:00, :05, :10, :15, usw.).
+  role_id_needed: Für „Spezifische Rolle“ ist eine gültige 17-20-stellige Discord-Rollen-ID erforderlich.
+  published: Operation „{title}“ erfolgreich veröffentlicht.
+  not_found: Event nicht gefunden oder bereits gelöscht.
+  out_of_scope: 'Zugriff verweigert: Du kannst keine Events außerhalb deines zugewiesenen Bereichs bearbeiten oder löschen.'
+  deleted: 'Operation gelöscht: {title}'
+  updated: Operation „{title}“ aktualisiert.
+bot_common:
+  off_week: Off-Woche
+  kw_week: Königreichskrieg-Woche {n}
+  link_expires_4h: Link ist privat und läuft in 4 Stunden ab.
+  link_expires_24h: Link ist privat und läuft in 24 Stunden ab.
+  busy: "⚠️ Verbindung ausgelastet: {reason}. Bitte versuche es in wenigen Sekunden erneut."
+  leaders_denied: "⛔ **Zugriff verweigert:** Nur Mitglieder mit **@R5** oder Führungsrollen ({roles}) können Events für **[{tag}]** verwalten."
+  steward_only_kw: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können das Ergebnis vom Königreichskrieg erfassen."
+bot_calendar:
+  global_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Königreichs-Events verwalten."
+  global_title: "👑 Königreich-Event-Verwaltungsportal"
+  global_text: |-
+    Klicke unten, um den Kalender im **Globalen Verwaltungsmodus** zu öffnen.
+
+    Du kannst königreichsweite Ankündigungen, Friedensabkommen-Alarme oder gelöschte Einträge planen.
+  global_button: Globales Verwaltungsportal öffnen
+  no_alliance: "⚠️ Deine Allianz konnte nicht erkannt werden. Führe diesen Befehl in deinem registrierten Allianz-Server aus oder stelle sicher, dass du deine Allianz-Rolle im NAP-Server hast."
+  alliance_title: "🛡️ Allianz-Event-Verwaltung — [{tag}]"
+  alliance_text: |-
+    Klicke unten, um den Kalender im **Allianz-Verwaltungsmodus** für **[{tag}]** zu öffnen.
+
+    Du kannst interne Raids, Schwarm-Bewegungen und Trainingsübungen planen.
+  alliance_button: "[{tag}]-Verwaltungsportal öffnen"
+  rank: 'Rang #{rank}'
+  captured_friday: Freitag erobert
+  captures_today: heutige Eroberungen
+  captures_friday: Freitag erobert, {when}
+  current_holder: "👑 Aktueller Kapitolinhaber"
+  next_holder: "👑 Nächster Kapitolinhaber"
+  holder_line: "**{tag}** *(Rang #{rank})* — {note}"
+  next_reset: "⏰ Nächster täglicher Reset (00:00 GT)"
+  reset_line: "**{time}** (in {hours}h {minutes}m)"
+  kw_today: "⚔️ Königreichskrieg-Kampf (HEUTE)"
+  kw_next: "⚔️ Nächster Königreichskrieg-Kampf"
+  kw_active: "🔥 **Aktives Kriegsfenster:** Verteidige und erobere das Kapitol!"
+  kw_scheduled: Geplant für **Samstag** ({relative} / {date})
+  next_phase: "⏭️ Nächste Rotationsphase"
+  next_phase_line: |-
+    **{week}** beginnt {when}.
+    **{tag}** *(Rang #{rank})* erobert das Kapitol an diesem Freitag.
+  open_alliance: Kalender öffnen ([{tag}])
+  open_full: Vollständigen Kalender öffnen
+  title: "📅 Königreichskrieg-Kalender"
+bot_map:
+  failed: "⚠️ Karten-Vorschau konnte nicht generiert werden."
+  level_title: "🏰 Last Asylum: Gebietslevel"
+  level_text: Gebiete kategorisiert nach Stufe (Lv. 1 bis Lv. 8).
+  alliance_title: "🗺️ Last Asylum: Allianzgebiete"
+  alliance_text: Gebiete farblich markiert nach Allianzbesitz.
+  resource_title: "🌾 Last Asylum: Ressourcen & Regional-Buffs"
+  resource_text: Gebiete farblich markiert nach Ressourcenertrag und Regional-Buffs.
+  footer: Klicke unten auf die Buttons, um die Perspektiven zu wechseln
+  levels: Level
+  alliances: Allianzen
+  resources: Ressourcen
+bot_nominate:
+  server_only: "⚠️ Dieser Befehl muss in deinem Allianz-Discord-Server oder dem NAP-Server ausgeführt werden."
+  owner_server: "⛔ **Zugriff verweigert:** Belohnungsnominierungen können von diesem Server aus nicht eingereicht werden. Führungskräfte müssen diese über den NAP-Server oder ihren Allianz-Server einreichen."
+  dedicated_denied: "⛔ **Zugriff verweigert:** Nur Mitglieder mit **@R5** oder autorisierten Führungsrollen ({roles}) können Nominierungen für **[{tag}]** einreichen."
+  r5_only: "⛔ **Zugriff verweigert:** Nur Allianzführer mit der **@R5**-Rolle können Belohnungsnominierungen einreichen."
+  no_tag_role: "⚠️ Deine Allianz-Tag-Rolle konnte nicht erkannt werden. Stelle sicher, dass du deine Allianz-Rolle (z. B. `@{example}`) zugewiesen hast."
+  closed: "🔒 **Belohnungen sind geschlossen.** Die {week}-Belohnungen liefen am {closed} ab.\nDie nächsten Belohnungen öffnen am {opens}, nach dem Kapitol-Event am Freitag."
+  period_busy: "⚠️ Dienst ausgelastet: Die neue Belohnungsperiode konnte nicht geöffnet werden. Bitte versuche /nominate in wenigen Sekunden erneut."
+  no_rank: "⚠️ **[{tag}]** hat keinen aktiven Rang in der Rangliste zugewiesen."
+  no_chests: "⚠️ **[{tag}]** hat 0 Truhen gemäß der aktuellen Verteilung zugeteilt bekommen."
+  no_kw: Kein Königreichskrieg diese Woche.
+  won: "⚔️ **Gewonnen.** Ehren-Vanguard ×{gold} · Furchtloser Held ×{purple} · Logistik-Unterstützung ×{blue}"
+  lost: 'Nicht diese Woche: Der Königreichskrieg wurde verloren.'
+  waiting: "⏳ **Warten auf das Kampfergebnis** (etwa {time}). Falls gewonnen: Ehren-Vanguard ×{gold} · Furchtloser Held ×{purple} · Logistik-Unterstützung ×{blue}"
+  commendation: "👑 Belobigung des Königs"
+  commendation_line: Wille des Kommandanten ×{gold} · Loyaler Diener ×{purple} · Herz des Anhängers ×{blue}
+  battle_reward: "⚔️ Belohnung des Schlachtkönigs"
+  buyout_title: "🛡️ Kriegsentschädigung aktiv"
+  buyout_text: 'Beinhaltet **+1 Wille des Kommandanten** (und **+1 Ehren-Vanguard**, falls der Krieg gewonnen wurde), finanziert durch WLO für die Verteidigungs-Übersteuerung dieser Woche (Bedrohung: `{threat}`).'
+  buyout_default_threat: Rote Liste
+  funds_title: "⚖️ Kriegsentschädigung finanziert"
+  funds_text: 'WLO stellt **1 Wille des Kommandanten** (und **1 Ehren-Vanguard**, falls der Krieg gewonnen wurde) aus dem Kontingent für Rang #1 dieser Woche bereit, um die Entschädigung der verdrängten Allianz zu finanzieren.'
+  how_title: "📝 So funktioniert es"
+  how_text: Liste deine Spieler **nach Bestleistung** auf. Die Truhen werden der Liste nach entsprechend des Wertes über beide Sets verteilt; zusätzliche Namen werden als Reserve gehalten und rücken nach, falls mehr Truhen geöffnet werden.
+  how_waiting: "⏳ Der König verteilt nach dem Kampfergebnis, daher ändert sich an den Truhen von niemandem etwas."
+  title: "🎁 {week} Belohnungen — [{tag}]"
+  summary: 'Rang #{rank} · geöffnet bis {until} ({relative}).'
+  open_page: Nominierungsseite öffnen
+bot_rewards:
+  reset_denied: "⛔ **Zugriff verweigert:** Nur ernannte Königreich-Verwalter können Nominierungen löschen."
+  nothing_to_clear: "🔒 Es ist kein Belohnungszeitraum offen, daher gibt es nichts zu löschen."
+  cleared_title: "🔄 Nominierungen gelöscht — {week}"
+  cleared_text: |-
+    Die Listen aller Allianzen für diese Woche wurden von **{name}** gelöscht.
+
+    • Anführer können neue Listen mit `/nominate` senden.
+    • Belohnungen schließen {closes}.
+    • Erinnere den König daran, **Checkliste zurücksetzen** auf der Konsole zu drücken.
+  none_eligible: "⚠️ Momentan sind keine Allianzen gemäß dem aktiven Belohnungsplan berechtigt."
+  tag_buyout: " 🛡️ [Ausgleich]"
+  tag_funds: " ⚖️ [Fonds-Ausgleich]"
+  awaiting: "⏳ **[{tag}]** (Rang #{rank}){buyout} — **Warte auf Liste** ({total} Truhen)"
+  reserves_one: " · {count} Reserve"
+  reserves_other: " · {count} Reserven"
+  sent: "✅ **[{tag}]** (Rang #{rank}){buyout} — **{named}/{total}** benannt{reserves} ({when})"
+  closed: "🔒 **Geschlossen.** Die nächsten Belohnungen öffnen {opens}."
+  open: "🎁 **{week} Belohnungen** · offen bis {closes}"
+  battle_no_kw: "⚔️ Kampf-um-den-König-Belohnung: kein Königreichskrieg diese Woche."
+  battle_won: "⚔️ Kampf-um-den-König-Belohnung: **gewonnen**, offen."
+  battle_lost: "⚔️ Kampf-um-den-König-Belohnung: verloren, nicht diese Woche."
+  battle_waiting: "⚔️ Kampf-um-den-König-Belohnung: ⏳ **warte auf Kampfergebnis** (etwa {time}). Der König verteilt sie danach."
+  open_console: Königskonsole öffnen
+  title: "📋 Allianz-Belohnungsstatus — {week}"
+  count_line: "**{sent} von {total} Allianzen haben eine Liste gesendet**"
+  footer: Last Asylum Kapitol-Verwaltung
+  old_button: 'ℹ️ Dieser Knopf wird nicht mehr verwendet: Belohnungen öffnen jetzt jeden Freitag um 20:00 GT von selbst. Zeichne das Königreichskrieg-Ergebnis mit `/rewards` (Gewonnen oder Verloren) nach dem Kampf am Samstag auf.'
+  overrides_denied: "⛔ **Zugriff verweigert:** Nur ernannte Königreich-Verwalter können die Kapitol-Überschreibungen zurücksetzen."
+  overrides_nothing: |-
+    ℹ️ Nichts zurückzusetzen: keine Überschreibungen oder Ausgleiche, und die Rotation entspricht bereits dem Standard-Zeitplan.
+    {schedule}
+  overrides_title: "🧹 Kapitol-Überschreibungen zurücksetzen"
+  overrides_text: |-
+    Zurückgesetzt von **{name}**. Die Rotation ist zurück beim Standard-Zeitplan:
+    {after}
+
+    Vorher: {before}
+
+    • Überschreibungen gelöscht: {overrides}
+    • Kriegszeit-Ausgleiche storniert: {buyouts} (in der Historie behalten)
+    • Die Liste jeder Allianz wurde für die korrigierten Truhen neu sortiert.
+bot_admin:
+  rank_none: Keine Allianzen im aktuellen Staat registriert.
+  rank_title: "🛡️ Server NAP-Rangliste"
+  rank_open: Offene Diplomatie & Rangliste
+  rank_fetch_failed: "⚠️ Abrufen der Rangliste fehlgeschlagen: {reason}"
+  rank_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Allianz-Ranglisten aktualisieren."
+  rank_missing: "⚠️ Erforderliche Argumente fehlen: Tag und Rang."
+  rank_set_title: "👑 NAP-Rangliste aktualisiert"
+  rank_set_text: 'Allianz `[{tag}]` wurde **Rang #{rank}** zugewiesen *(zuvor: {previous})*.'
+  rank_unranked: Nicht gelistet
+  rank_updated_by: Aktualisiert von {name}
+  rank_view: Rangliste anzeigen
+  rank_set_failed: "⚠️ Aktualisierung des Rangs fehlgeschlagen: {reason}"
+  dev_done: |-
+    ✅ **Testdaten aktualisiert.** {count} Datei(en) von den Live-Daten in das von dev.la-s78.app verwendete Test-Gist kopiert: {files}.
+    Die Live-Daten wurden nur gelesen, nicht verändert.
+  dev_failed: "⚠️ **Testdaten nicht aktualisiert:** {reason}"
+  dev_denied: "⛔ **Zugriff verweigert:** Nur Verwalter können Testdaten aktualisieren."
+  test_proposal: "🧪 Dies ist ein Testvorschlag von der Test-Website. Er verwendet Testdaten und kann daher weder genehmigt werden noch Live-Änderungen vornehmen."
+  approved_not_updated: "✅ Genehmigt und gespeichert, aber diese Nachricht konnte nicht aktualisiert werden ({reason})."
+bot_register:
+  nap_only: "⚠️ Dieser Befehl kann nur auf dem offiziellen NAP-Server ausgeführt werden."
+  sync_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Broadcast-Sync-Befehle ausführen."
+  sync_title: "🔄 Allianz Slash-Befehle Broad-Synced"
+  sync_done: |-
+    Neuestes Befehlsschema übertragen an:
+
+    {results}
+  sync_none: "⚠️ Keine registrierten Allianz-Server im Staat gefunden."
+  sync_footer: Last Asylum Bot Deployment Manager
+  sync_failed: "❌ Synchronisierung fehlgeschlagen: {reason}"
+  r5_only: "⛔ **Zugriff verweigert:** Nur Allianz-Anführer mit der Rolle **@R5** können Allianz-Server registrieren."
+  no_tag_role: "⚠️ Dein Allianz-Tag konnte nicht ermittelt werden. Stelle sicher, dass du auf dem NAP-Server deine Allianz-Rolle (z. B. `@{example}`) besitzt."
+  title: "🤖 Allianz-Server-Setup — [{tag}]"
+  text: |-
+    Klicke unten, um den Bot zu autorisieren und den Discord-Server deiner Allianz mit der Website zu verknüpfen.
+
+    • Installiert Befehle (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).
+    • Ermöglicht die Konfiguration delegierter Rollen (z. B. `@HR`).
+  open_portal: Registrierungsportal öffnen
+  busy: "⚠️ Dienst ausgelastet: {reason}. Bitte versuche es in wenigen Momenten erneut."
+bot_commands:
+  calendar: Veranstaltungskalender anzeigen oder verwalten
+  calendar_kingdom: Königreich-Veranstaltungskalender anzeigen oder verwalten
+  calendar_action: Auszuführende Aktion (leer lassen, um den Kalender anzuzeigen)
+  calendar_manage_alliance: Allianz-Veranstaltungen verwalten (standardmäßig R5)
+  calendar_manage_global: Globale Veranstaltungen verwalten (nur Admins)
+  nominate: Portal-Link für die Einreichung wöchentlicher Truhen-Nominierungen anfordern
+  nominate_authenticated: Authentifizierten Portal-Link für die Einreichung wöchentlicher Truhen-Nominierungen anfordern
+  rewards: 'Belohnungen dieser Woche: Status und Königreichskrieg-Ergebnis (Verwalter)'
+  rewards_action: Leer lassen, um den Belohnungsstatus dieser Woche zu sehen
+  rewards_won: 'Königreichskrieg aufzeichnen: Gewonnen (Verwalter)'
+  rewards_lost: 'Königreichskrieg aufzeichnen: Verloren (Verwalter)'
+  rewards_reset: Nominierungen dieser Woche löschen (Verwalter)
+  rewards_reset_overrides: Kapitol-Überschreibungen und Ausgleiche zurücksetzen (Verwalter)
+  rank: NAP-Ranglisten der Allianz anzeigen oder verwalten
+  rank_set: NAP-Rang einer Allianz aktualisieren (nur Admins)
+  rank_tag: Allianz-Tag (z. B. ABC)
+  rank_position: Neue Rangposition (z. B. 1 bis 10)
+  rank_list: Aktuelle NAP-Ranglisten und Standings anzeigen
+  sb: Überlebenskampf-Zeitplan anzeigen
+  sb_long: Überlebenskampf-Rüstungswettlauf-Zeitplan und aktive Veranstaltungen anzeigen
+  sb_day: Tag des Zyklus (1-7)
+  rules: Server- und Königreich-NAP-Regeln anzeigen
+  rules_rule: Spezifische Regelnummer zum Anzeigen
+  map: Live-Gebietskarte anzeigen
+  map_long: Last Asylum Live-Gebietskarte anzeigen
+  devupdate: Live-Daten in die Testseite kopieren (nur Verwalter; nur du siehst die Antwort)
+  registerbot: Allianz-Server registrieren oder Slash-Befehle synchronisieren
+  registerbot_action: Auszuführende Aktion (leer lassen, um Registrierungs-Portal-Link zu erhalten)
+  registerbot_sync: Alle registrierten Server synchronisieren (nur Admins)
+  suggest: Regelvorschlag einreichen, Allianz-Problem melden oder Ticketstatus prüfen
+  suggest_type: Ticketkategorie wählen oder aktive Einreichungen prüfen
+  suggest_nap: "👑 Königreich- / NAP-Vorschlag (Serverweite Regel oder Veranstaltungsidee)"
+  suggest_alliance: "🛡️ Internes Allianz-Problem (wird privat durch deine R4/R5s behandelt)"
+  suggest_status: "📋 Meinen Ticketstatus anzeigen (aktiv & letzte Historie)"

@@ -55,6 +55,22 @@ const defensePreview = (week) => async (page) => {
   await page.evaluate(() => document.activeElement?.blur());
 };
 
+/** A nominating alliance, as /api/nominate?token=… describes it (api/nominate.js). */
+const NOMINATING = {
+  tag: 'WLO',
+  rank: 1,
+  chests: { standard: { commanders_will: 2, loyal_servant: 2, followers_heart: 4 } },
+  chestsIfWon: {
+    standard: { commanders_will: 2, loyal_servant: 2, followers_heart: 4 },
+    kingdom_war: { commanders_will: 2, loyal_servant: 2, followers_heart: 4 },
+  },
+  hasBuyoutBonus: false,
+  isWloDeducted: false,
+  ranked: ['Josh', 'Ana', 'Bo', 'Cy', 'Di', 'Ed', 'Fi', 'Gu', 'Hal'],
+  submittedAt: '2026-11-08T12:00:00Z',
+  handedOut: [{ pool: 'standard', chest: 'commanders_will', name: 'Josh' }],
+};
+
 export const STATES = [
   { name: 'default' },
   { name: 'leader', storage: LEADER },
@@ -171,6 +187,214 @@ export const STATES = [
     ),
     run: defensePreview(1),
   },
+  // Alliance Dashboard (portal/dashboard.html). Its normal view (no login) asks to sign in.
+  { name: 'dashboard-leader', needs: '#dashboard-app', storage: SIGNED_IN },
+  // All five chart types (js/dashboard-widgets.js), as a leader sees them.
+  {
+    name: 'dashboard-widgets',
+    needs: '#dashboard-app',
+    storage: SIGNED_IN,
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      const table = (columns, rows) => ({ columns, rows });
+      const widget = (type, title, d, options = {}, visibility = 'members') => ({
+        id: `w_${type}`,
+        type,
+        title,
+        note: '',
+        visibility,
+        data: d,
+        options: { labelCol: 0, valueCols: [1], ...options },
+        updatedAt: '2026-11-09T12:00:00.000Z',
+      });
+      const players = table(
+        ['Player', 'Score', 'Last week'],
+        [
+          ['Aria', '15.2M', '14M'],
+          ['Bram', '12.9M', '13.5M'],
+          ['Cato', '9.8M', '9M'],
+        ],
+      );
+      data.dashboard.widgets = [
+        widget('bar', 'Duel scores', players, { valueCols: [1, 2] }, 'r4_only'),
+        widget('bar', 'Duel scores (vertical)', players, { vertical: true }),
+        widget(
+          'line',
+          'Might',
+          table(
+            ['Week', 'WLO', 'MIA'],
+            [
+              ['W1', '1.2B', '1.05B'],
+              ['W2', '1.26B', '1.08B'],
+              ['W3', '1.31B', '1.15B'],
+            ],
+          ),
+          { valueCols: [1, 2] },
+        ),
+        widget(
+          'pie',
+          'Troops',
+          table(
+            ['Tier', 'Troops'],
+            [
+              ['T10', '420K'],
+              ['T9', '610K'],
+              ['T8', '380K'],
+            ],
+          ),
+        ),
+        widget(
+          'progress',
+          'Donations',
+          table(
+            ['Player', 'Given'],
+            [
+              ['Aria', '52K'],
+              ['Bram', '31K'],
+            ],
+          ),
+          { target: 50000 },
+        ),
+        widget(
+          'table',
+          'Roster',
+          table(
+            ['Player', 'Power'],
+            [
+              ['Aria', '312M'],
+              ['Bram', '298M'],
+            ],
+          ),
+          { highlightCol: 1, highlightMin: 300000000 },
+        ),
+      ];
+    },
+  },
+  // Stacked bar to 100% with scale colours (Duel score bands), as on a phone it turns sideways.
+  {
+    name: 'dashboard-stacked',
+    needs: '#dashboard-app',
+    storage: SIGNED_IN,
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      data.dashboard.widgets = [
+        {
+          id: 'w_bands',
+          type: 'bar',
+          title: 'Alliance Duel bands',
+          note: '',
+          visibility: 'members',
+          data: {
+            columns: ['User', '3.6m-', '3.6m+', '7.2m+'],
+            rows: [
+              ['Aria', '18.75%', '68.75%', '12.50%'],
+              ['Bram', '6.25%', '37.50%', '56.25%'],
+              ['Cato', '100%', '0', '0'],
+              ['Dax', '0', '33.33%', '66.67%'],
+            ],
+          },
+          options: {
+            labelCol: 0,
+            valueCols: [1, 2, 3],
+            stacked: 'percent',
+            vertical: true,
+            scale: true,
+          },
+          updatedAt: '2026-11-09T12:00:00.000Z',
+        },
+        {
+          id: 'w_totals',
+          type: 'bar',
+          title: 'Duel weeks (totals)',
+          note: '',
+          visibility: 'members',
+          data: {
+            columns: ['User', 'Low', 'Mid', 'High'],
+            rows: [
+              ['Aria', '2/16', '11/16', '2/16'],
+              ['Bram', '1/16', '6/16', '9/16'],
+            ],
+          },
+          options: { labelCol: 0, valueCols: [1, 2, 3], stacked: 'sum' },
+          updatedAt: '2026-11-09T12:00:00.000Z',
+        },
+      ];
+    },
+  },
+  // Caravan Rotor (leader view): available players with Game Time windows, one picked.
+  {
+    name: 'dashboard-caravan',
+    needs: '#dashboard-app',
+    storage: SIGNED_IN,
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      data.dashboard.caravan = {
+        membersCanView: true,
+        weekStartedAt: '2026-11-09T00:00:00.000Z',
+        roster: [
+          { id: 'p_aria', name: 'Aria', from: '18:00', to: '22:00', picked: null },
+          { id: 'p_bram', name: 'Bram', from: '06:00', to: '', picked: null },
+          { id: 'p_cato', name: 'Cato', from: '', to: '', picked: null },
+          {
+            id: 'p_dax',
+            name: 'Dax',
+            from: '20:00',
+            to: '23:00',
+            picked: { at: '2026-11-10T10:00:00.000Z', by: 'Visual Test' },
+          },
+        ],
+      };
+    },
+  },
+  {
+    name: 'dashboard-member',
+    needs: '#dashboard-app',
+    storage: SIGNED_IN,
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      data.viewer = { ...data.viewer, tier: 'member', canNominate: false };
+      delete data.rewards;
+    },
+  },
+  {
+    name: 'dashboard-steward',
+    needs: '#dashboard-app',
+    storage: { ...SIGNED_IN, 'auth-steward': 'true' },
+    api: (fixture, data) => {
+      if (fixture !== 'dashboard') return;
+      data.viewer = { ...data.viewer, tier: 'steward' };
+      data.alliances = [
+        { tag: 'WLO', rank: 1 },
+        { tag: 'MIA', rank: 2 },
+      ];
+      data.rewards.nomination = { submitted: false };
+    },
+  },
+  // Nomination page (portal/nominate.html) opened from a /nominate link (a token with a dot, as signed links have): the alliance's
+  // ranked list and its chests (the link itself isn't checked: the API is sample data).
+  {
+    name: 'nominate-form',
+    needs: '#nominate-app',
+    query: '?token=visual.test',
+    api: (fixture, data) => {
+      if (fixture === 'nominate') data.alliance = NOMINATING;
+    },
+  },
+  // ...after a Kingdom War win: both chest sets
+  {
+    name: 'nominate-won',
+    needs: '#nominate-app',
+    query: '?token=visual.test',
+    api: (fixture, data) => {
+      if (fixture !== 'nominate') return;
+      data.period = { ...data.period, result: 'won' };
+      data.mode = 'kw';
+      data.alliance = NOMINATING;
+    },
+  },
+  // King's console (portal/distribute.html) as a leader of the King's alliance: the
+  // checklist can be ticked (others see it read-only, the default state).
+  { name: 'kings-console-king', needs: '#roster-container', storage: SIGNED_IN },
   // One state per <dialog> on the page (image zoom dialogs etc.), added automatically.
   {
     name: 'dialog',

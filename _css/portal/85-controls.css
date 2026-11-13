@@ -1,0 +1,89 @@
+/* ==========================================================================
+   ONE BUTTON SYSTEM: the signed-in tools
+   The same three heights and shape as _css/style/86-controls.css (sizes in
+   05-base-variables-themes.css), for the King's console, the dashboard and the calendar's
+   forms. Colours stay with each button's own rule.
+   ========================================================================== */
+
+.copy-btn,
+.dash-btn,
+.dash-icon-btn,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  border-radius: var(--control-radius);
+  line-height: 1.15;
+}
+
+/* Compact: "Copy" on each of the King's rows, the icons on a dashboard card */
+.copy-btn {
+  min-height: var(--control-compact);
+  padding: 2px 10px;
+  font-size: 0.72rem;
+}
+
+.dash-icon-btn {
+  min-width: var(--control-compact);
+  min-height: var(--control-compact);
+}
+
+/* Standard: the dashboard's toolbar buttons and its alliance switcher */
+.dash-btn {
+  min-height: var(--control-standard);
+  padding: 4px 0.75rem;
+  font-size: 0.78rem;
+}
+
+.dash-switcher select {
+  height: var(--control-standard);
+}
+
+/* Large: the calendar forms' main buttons and their fields */
+.btn {
+  min-height: var(--control-large);
+  padding: 6px 16px;
+}
+
+.ops-select,
+.ops-input {
+  height: var(--control-large);
+  padding: 0 12px;
+}
+
+/* "Copy" -> "✓ Copied" keeps the button's width (step 4: nothing moves under the finger) */
+.copy-btn {
+  min-width: 6.5em;
+}
+
+/* A button whose label changes when pressed (Edit Dashboard / Done editing) holds both
+   labels in the same spot and shows one: it keeps the width of the longer, so it doesn't
+   move under the finger. aria-pressed picks the label. */
+.dash-two-labels {
+  display: inline-grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.dash-two-labels > span {
+  grid-area: 1 / 1;
+}
+
+.dash-two-labels[aria-pressed='true'] > .when-off,
+.dash-two-labels:not([aria-pressed='true']) > .when-on {
+  visibility: hidden;
+}
+
+/* The calendar's Edit and Delete on an event: compact, side by side */
+.btn-edit-event,
+.btn-delete-event {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-compact);
+  padding: 2px 10px;
+  border-radius: var(--control-radius);
+  white-space: nowrap;
+}
+

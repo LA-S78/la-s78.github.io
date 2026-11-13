@@ -1,0 +1,719 @@
+# Translated automatically from _data/en/tools.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+common:
+  sign_in_discord: Discord ile giriş yap
+  sign_in_again: Tekrar giriş yap
+  not_saved: 'Kaydedilmedi: {error}'
+  cancel: İptal
+  save: "💾 Kaydet"
+  saving: Kaydediliyor...
+  edit: Düzenle
+  delete: Sil
+  remove: Kaldır
+  undo: Geri al
+  move_up: Yukarı taşı
+  move_down: Aşağı taşı
+  copied: "✓ Kopyalandı"
+  optional: "(isteğe bağlı)"
+  now: şimdi
+  duration_days: "{d}g {h}s"
+  duration_hours: "{h}s {m}d"
+  duration_minutes: "{m}d"
+  game_time: "{time} GT"
+  your_time: "{time} yerel saatiniz"
+  off_week: Boş Hafta
+  kw_week: Krallık Savaşı Haftası {n}
+  copy: Kopyala
+  set_one: Kralın Övgüsü
+  set_two: Savaş Kralı Ödülü
+  chests:
+    commanders_will: Komutanın İradesi
+    loyal_servant: Sadık Hizmetkar
+    followers_heart: Takipçinin Kalbi
+    honor_vanguard: Onur Öncüsü
+    fearless_hero: Korkusuz Kahraman
+    logistics_support: Lojistik Destek
+dashboard:
+  title: İttifak Paneli
+  loading: İttifak paneliniz yükleniyor…
+  view_as: Görünüm
+  page_title: "[{tag}] İttifak Paneli"
+  subtitle: İttifak Paneli · {view}
+  subtitle_rank: 'İttifak Paneli · Sıra #{rank} · {view}'
+  view_steward: Görevli görünümü
+  view_leader: Yönetim görünümü
+  view_member: Üye görünümü
+  sign_in_title: İttifak panelinizi görmek için giriş yapın.
+  sign_in_help: Sağ üstteki {sign_in} (Discord) seçeneğini kullanın. İttifakınız NAP sunucu rolünüzden bulunur.
+  sign_in_button: Giriş Yap
+  load_failed: Panel yüklenemedi. Bağlantınızı kontrol edip sayfayı yenileyin. ({error})
+  edit_dashboard: "✏️ Paneli Düzenle"
+  done_editing: "✓ Düzenlemeyi bitir"
+  add_chart: "➕ Grafik veya tablo ekle"
+  editor_label: Grafik veya tablo düzenleyici
+  charts_label: İttifak grafikleri ve tabloları
+  empty_member: "📊 İttifak liderleriniz henüz burada herhangi bir grafik veya tablo paylaşmadı."
+  empty_editing: "📊 Henüz grafik veya tablo yok: “Grafik veya tablo ekle” seçeneğini kullanın."
+  empty_leader: "📊 Henüz grafik veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın."
+  visible_members: "👥 Tüm üyeler"
+  visible_officers: "🔒 Sadece yetkililer"
+  google_sheet: Google E-Tablosu
+  google_doc: Google Dokümanı
+  synced: "{when} senkronize edildi"
+  updated: "{when} güncellendi"
+  sync_now: "🔄 Şimdi senkronize et"
+  syncing: "🔄 Senkronize ediliyor…"
+  sync_help: Tablodaki en son verileri getir
+  confirm_delete: '"{title}" silinsin mi? Bu işlem geri alınamaz.'
+  this_chart: bu grafik
+rewards_card:
+  title: "🔒 Haftalık Ödüller"
+  officers: Yetkililer
+  open: Açık
+  closed: Kapalı
+  time_left: "{time} kaldı"
+  opens_in: "{time} içinde açılacak"
+  closes_at: "{when} kapanıyor"
+  opens_at: "{when}, Cuma günkü başkent etkinliğinden sonra açılır"
+  off_week: Ödül Yok Haftası
+  kw_won: "🏆 KW kazanıldı"
+  kw_lost: "🛡️ KW kaybedildi"
+  kw_pending: "⏳ KW beklemede"
+  set_one: Kralın Övgüsü
+  set_two: Savaş Kralı Ödülü
+  set_two_if_won: Savaş Kralı Ödülü, eğer savaş kazanılırsa
+  if_won: eğer kazanılırsa
+  no_rank: 'Sıralamada derece yok: sandık verilmez'
+  list_sent: "✅ Liste gönderildi · {count}"
+  sent_at: "{when} gönderildi"
+  reserves_one: "({n} yedek)"
+  reserves_other: "({n} yedek)"
+  empty_slots: "{n} boş slot"
+  list_not_sent: "⚠️ Liste gönderilmedi"
+  no_list_closed: Kapalıyken liste yok
+  edit_list: "📝 Düzenle"
+  send_list: "📝 Liste gönder"
+  ask_r5: R5 veya /nominate
+  ask_r5_help: R5'iniz buradan aday gösterme sayfasını açabilir veya Discord'da /nominate komutunu çalıştırabilir.
+  buyout_bonus: "🛡️ Satın alma: Her kazanılan sette {amount} {chest}"
+  buyout_bonus_help: WLO tarafından finanse edilmektedir
+  buyout_threat: 'tehdit: {threat}'
+  buyout_cost: "⚖️ Satın alma: Her sette {amount} {chest}"
+  buyout_cost_help: Bu hafta yerinden edilen ittifakı finanse etmek için
+caravan:
+  title: "🐪 Kervan Çizelgesi"
+  picked_count: "{picked}/{total} seçildi"
+  members_can_view: "👥 Üyeler görüntüleyebilir"
+  copy_status: "📋 Durumu kopyala"
+  new_week: "🔄 Yeni hafta"
+  member_note: Bir kervan hazır olduğunda R4'leriniz tarafından seçilir.
+  search: İsim ara…
+  around_now: "⏰ Şu sıralar"
+  around_now_help: Sadece şu sıralar uygun olan oyuncular
+  available: Bu hafta uygun ({n})
+  picked: Bu hafta seçilen ({n})
+  nobody_matches: Kimse eşleşmiyor.
+  everyone_picked: "Bu hafta herkesin kervanı var. 🎉"
+  add_players: Aşağıdan oyuncu ekleyin.
+  no_players: Henüz oyuncu yok.
+  flexible: esnek
+  pick: "✓ Seçildi"
+  back_to_available: Uygun olanlara geri taşı
+  name: İsim
+  from: Başlangıç (Game Time)
+  to: Bitiş (Game Time)
+  player_name: Oyuncu ismi
+  add_from: 18:00'den
+  add_to: 22:00'ye kadar
+  add_from_label: Müsaitlik başlangıcı (Game Time, isteğe bağlı)
+  add_to_label: Müsaitlik bitişi (Game Time, isteğe bağlı)
+  add: "➕ Ekle"
+  times_help: Saatler Game Time (UTC-2) cinsindendir ve isteğe bağlıdır; esnek olan oyuncular için boş bırakın.
+  status_title: "🐪 [{tag}] Kervan Çizelgesi: {picked}/{total} seçildi"
+  status_available: 'Uygun: {names}'
+  status_picked: 'Seçilen: {names}'
+  nobody: kimse
+  nobody_yet: henüz kimse yok
+  copy_prompt: 'Çizelge durumunu kopyala:'
+  confirm_remove: "{name} çizelgeden kaldırılsın mı?"
+  this_player: bu oyuncu
+  confirm_new_week: Yeni bir hafta başlasın mı? Herkes uygun olanlara dönecek (isimler ve saatler aynı kalır).
+chart_editor:
+  edit_title: "✏️ Grafik veya tabloyu düzenle"
+  new_title: "➕ Yeni grafik veya tablo"
+  type: Tür
+  type_bar: "📊 Sütun"
+  type_line: "📈 Çizgi"
+  type_pie: "🍩 Pasta"
+  type_progress: "🎯 İlerleme"
+  type_table: "📋 Tablo"
+  title: Başlık
+  title_example: ör. İttifak Düellosu puanları
+  note: Açıklama
+  note_example: ör. Cuma sıfırlamasına kadar minimum 15M Düello puanı gerekir
+  who_sees: Kimler görebilir
+  officers_only: "🔒 Sadece yetkililer (R4/R5)"
+  all_members: "👥 Tüm ittifak üyeleri"
+  data: Veri
+  data_source: Veri kaynağı
+  paste: "📋 Tablo yapıştır"
+  link: "🔗 Google E-Tablo / Doküman bağlantısı"
+  paste_help: Google E-Tablolar veya Excel'den hücreleri kopyalayın (başlık satırı önce olacak şekilde) ve buraya yapıştırın.
+  tab_name: Sekme adı (isteğe bağlı)
+  range: Aralık, ör. A1:D20 (isteğe bağlı)
+  doc_table: Dokümandaki hangi tablo (1, 2...)
+  load: "⤓ Google'dan yükle"
+  loading: "⤓ Yükleniyor…"
+  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi senkronize et” özelliği daha sonra en güncel sayıları çeker.'
+  load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
+  preview: Önizleme
+  preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
+  size: "{rows} × {columns}"
+  rows_one: "{n} satır"
+  rows_other: "{n} satır"
+  columns_one: "{n} sütun"
+  columns_other: "{n} sütun"
+  at_most_500: "(en fazla 500)"
+  labels: İsimler (etiketler)
+  numbers_to_show: Gösterilecek sayılar
+  labels_swapped: İsimler (her biri bir satır veya çubukta)
+  swap_line: "⇄ Satır ve sütunları değiştir: satır başına bir çizgi, altta sütunlar"
+  swap_bar: "⇄ Satır ve sütunları değiştir: sütunlar çubuk olarak, satır başına bir renk"
+  swap_help: 'Satır başına bir oyuncu ve sütun başına bir hafta olan tablolar için: oyuncuları haftalar boyunca takip etmek için bunu işaretleyin.'
+  rows_to_draw: Çizilecek satırlar (en fazla 6)
+  rows_filter: İsim ara…
+  rows_count: "{n} / 6 seçildi"
+  columns_along: Alttaki sütunlar (tablo sırasına göre)
+  numbers: Sayılar
+  several_columns: Birden fazla sayı sütunu
+  side_by_side: Yan yana
+  stacked_totals: 'Yığılmış: toplamlar'
+  stacked_percent: 'Yığılmış: her çubuk %100''e'
+  vertical: Dikey sütunlar
+  vertical_leaderboard: Dikey sütunlar (sıralama tablosu yerine)
+  traffic_columns: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil"
+  traffic_size: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): dereceye göre, en üsttekiler yeşil"
+  traffic_reverse: "↕️ Ters çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
+  traffic_target: "🚦 Her birinin hedefe yakınlığına göre kırmızı → sarı → yeşil"
+  traffic_target_reverse: "↕️ Ters çevir: hedefin ne kadar altında kalırsa o kadar iyidir"
+  donut: Halka (donut)
+  target: Herkes için hedef
+  target_example: ör. 15M veya 15000000
+  target_column: "…veya hedef sütunu"
+  use_number_above: "(yukarıdaki sayıyı kullan)"
+  highlight_where: 'Satırları vurgula:'
+  no_highlight: "(vurgulama yok)"
+  at_least: en az
+  at_least_example: ör. 300M
+charts:
+  column: Sütun {n}
+  no_numbers: Seçilen sütunda grafiklenecek sayı yok.
+  line_two_rows: Bir çizgi grafiği için en az iki satır gerekir.
+  line_two_columns: Bir çizgi grafiği için altta en az iki sütun gerekir.
+  no_positive: Seçilen sütunda grafiklenecek pozitif sayı yok.
+  no_targets: Karşılaştırılacak sayı (veya hedef) yok.
+  no_table: Henüz tablo yok.
+  unknown_type: Bilinmeyen grafik türü.
+  draw_failed: Bu grafik çizilemedi ({error}).
+  other: Diğer
+  value: Değer
+  total: Toplam
+  total_value: 'Toplam: {value}'
+  share_of_all: "{value} · tamamının %{share}'i"
+  value_of_target: "{target} hedefinin {value}'si"
+  to_go: 'Kalan: {value}'
+  target_reached: Hedefe ulaşıldı ✓
+  done: "✓ Tamamlandı"
+  reached_target: "{total} kişiden {done} tanesi hedefe ulaştı"
+  search: Ara…
+  search_label: Bu tabloda ara
+  matching: "{n} eşleşme"
+  show_all: Tüm {n} taneyi göster
+  show_all_rows: Tüm {n} satırı göster
+  first_rows: "{n} satırın ilk {shown} tanesi gösteriliyor."
+  hint_bar: Bir sütuna dokunun veya üzerine gelin
+  hint_line: Bir haftaya dokunun veya üzerine gelin
+  hint_pie: Bir dilime dokunun veya üzerine gelin
+  hint_progress: Bir satıra dokunun veya üzerine gelin
+nominate:
+  page_title: Ödül Adaylıkları
+  loading: Adaylık sayfası yükleniyor...
+  players_label: "📋 Oyuncularınız, en iyiden başlayarak"
+  players_help: Her satıra bir isim (veya virgülle ayırarak), en iyi oyuncunuzu başa yazın. Sandıklar, her iki setteki değer sırasına göre listeden aşağıya doğru dağıtılır; sandık sayısını aşan isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
+  players_placeholder: Oyun içi tam isimler, en iyisi başta olacak şekilde...
+  who_gets_what: Kim ne alıyor
+  save: Listeyi Kaydet
+  saving: Kaydediliyor...
+  link_incomplete: Bu bağlantı eksik. Yeni bir tane için Discord'da /nominate komutunu çalıştırın.
+  load_failed: "{error} Yeni bir bağlantı için Discord'da /nominate komutunu çalıştırın."
+  closed: Ödül dönemi kapandı. Bir sonraki dönem Cuma günkü başkent etkinliğinden sonra {when} açılacak.
+  header: Sıra {rank} · {week} ödülleri · {when} tarihine kadar açık
+  banner_off_week: "👑 Bu hafta sadece Kralın Övgüsü var (Krallık Savaşı yok)."
+  banner_won: "⚔️ Krallık Savaşı kazanıldı: Savaş Kralı Ödülü sandıkları da açık."
+  banner_lost: "🛡️ Krallık Savaşı kaybedildi: Bu hafta sadece Kralın Övgüsü var."
+  banner_pending: "⏳ Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Eğer kazanılırsa, Savaş Kralı Ödülü sandıkları da açılır ve listeniz yeniden sıralanır. Kral ödülleri sonuçlandıktan sonra dağıtır, bu yüzden kimsenin sandığı değişmez."
+  handed_out_title: "✓ Kral tarafından halihazırda dağıtıldı ({n})"
+  handed_out_help: Bu sandıklar oyunda verildiği için, listeniz ne derse desin bu oyuncularda kalır. Aşağıdaki liste geri kalanını paylaştırır.
+  reserve: Yedek
+  col_player: Oyuncu
+  col_chest: Sandık
+  col_now: Şu an
+  col_if_won: Kazanılırsa
+  chests_now: şu an {n} sandık
+  chests_if_won: kazanılırsa {n}
+  named: "{n} kişi adlandırıldı"
+  still_need_name: "{n} isme hala ihtiyaç var"
+  reserves_one: "{n} yedek"
+  reserves_other: "{n} yedek"
+  listed_twice: "{name} iki kez listelenmiş"
+  saved: "✅ Kaydedildi. Kral listenizi görüyor. {when} tarihine kadar değiştirebilirsiniz."
+  save_failed: 'Kaydedilemedi: {error}'
+kings_console:
+  page_title: Kralın Dağıtım Konsolu
+  title: "👑 Kralın Dağıtım Konsolu"
+  loading: Adaylıklar yükleniyor...
+  by_chest: Sandıka Göre
+  by_alliance: İttifaka Göre
+  can_tick: "✅ Sandık oyunda dağıtıldığında oyuncuya dokunun. İşaretler herkes için kaydedilir ve listeler yeniden sıralanırsa işaretlenmiş bir sandık o oyuncuda kalır."
+  view_only_signed_out: "👀 Sadece görüntüleme. Kralın kontrol listesi {king} R4/R5 ve Kâhyalar tarafından işaretlenebilir: Discord ile giriş yapın (sağ üst)."
+  view_only: "👀 Sadece görüntüleme: Kontrol listesi {king} R4/R5 ve Kâhyalar tarafından işaretlenir."
+  kings_alliance: Kralın ittifakı
+  load_failed: 'Adaylıklar yüklenemedi: {error}'
+  closed: "🔒 Ödüller kapalı. Aşağıdaki listeler son haftaya aittir; bir sonraki ödüller Cuma günü yaklaşık 20:00 GT'de açılır."
+  hold_title: 'Sandıkları beklet:'
+  hold: "{title} dağıtım için Cumartesi günkü savaş sonucunu bekliyor. Savaş kazanılırsa, Savaş Kralı Ödülü sandıkları açılır ve her liste yeniden sıralanır. Ödüller {when} tarihinde kapanır."
+  won_title: 'Krallık Savaşı kazanıldı:'
+  won: "{title} her iki seti de dağıtıyor. Ödüller {when} tarihinde (Çarşamba 00:00 GT) kapanır."
+  week_title: "{week} ödülleri:"
+  week: "{title} Kralın Övgüsü'nü dağıtıyor. Ödüller {when} tarihinde (Çarşamba 00:00 GT) kapanır."
+  buyout_title: 'Savaş Zamanı Tazminatı Aktif:'
+  buyout_one: "{title} {tags} WLO'nun 1. Sıra tahsisinden finanse edilen bonus Komutanın İradesi yuvaları içerir."
+  buyout_other: "{title} {tags} WLO'nun 1. Sıra tahsisinden finanse edilen bonus Komutanın İradesi yuvaları içerir."
+  no_nominations: Henüz adaylık gönderilmedi.
+  no_entries: 0 Alıcı Kaydı
+  progress: 'İlerleme: {sent} / {total} Dağıtıldı'
+  alliance_heading: "[{tag}] • Sıra {rank} ({n})"
+  ticked_by: Dağıtıldı (kilitli) · {name} tarafından işaretlendi · {when}
+  buyout_badge: SATIN ALIM
+  pool_reg: NORMAL
+  pool_kw: KS
+  copy_prompt: 'Alıcı ismini kopyala:'
+  not_on_list: "{name} artık [{tag}] listesinde değil (ittifak değiştirdi)."
+  now_reserve: "{name} artık [{tag}] listesinde yedek: sandık yok."
+  now_other_chest: "{name} artık {shown} yerine {chest} alıyor."
+  stop_warning: "⚠️ Dur: o {chest} sandığını gönderme. {why} Listeler yenilendi: ismi aşağıdaki listeden tekrar kopyalayın."
+  stop_alert: Gönderme!
+  lists_refreshed: Listeler yenilendi.
+register:
+  page_title: İttifak Sunucusu Kaydı
+  loading: Kayıt portalı yükleniyor...
+  subtitle: İttifak Sunucusu Entegrasyon Portalı
+  step_invite: 1. Botu Sunucunuza Davet Edin
+  invite_help: Kaydı tamamlamadan önce botu ittifak Discord'unuza eklemelisiniz.
+  authorize: "🤖 Botu Yetkilendirmek İçin Tıklayın"
+  step_credentials: 2. Sunucu & Rol Kimlik Bilgileri
+  guild_id: Discord Sunucu Kimliği (Sunucu ID)
+  example: ör. {id}
+  guild_help: 'Discord''da: Geliştirici Modunu Etkinleştirin → Sunucu simgenize sağ tıklayın → {copy}. O sunucunun sahibi olmalı ya da {admin} veya {manage} yetkisine sahip olmalısınız. Aşağıdaki kanal ve rol buna göre kontrol edilir.'
+  copy_server_id: Sunucu Kimliğini Kopyala
+  administrator: Yönetici
+  manage_server: Sunucuyu Yönet
+  routing_heading: "📢 Operasyonlar & Bilet Yönlendirme"
+  routing_help: Botun genel operasyon uyarılarını nerede paylaşacağını ve özel üye önerilerini/biletlerini nereye yönlendireceğini yapılandırın.
+  alert_channel: Operasyon Uyarı Kanalı Kimliği
+  channel_id_title: Geçerli bir 17-20 haneli Discord Kanal Kimliği olmalıdır
+  role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
+  alert_channel_help: Duyuru/uyarı kanalınıza sağ tıklayın → {copy}.
+  copy_channel_id: Kanal Kimliğini Kopyala
+  alert_role: Varsayılan Uyarı Rolü Kimliği
+  optional: "(İsteğe bağlı)"
+  alert_role_placeholder: Boş bırakırsanız @everyone olarak ayarlanır
+  alert_role_help: Bildirim rolünüze sağ tıklayın (ör. {example}) → {copy}. Boş bırakılırsa {everyone} kullanılır.
+  server_alerts: Sunucu çapındaki etkinlik hatırlatıcılarını da burada paylaş
+  server_alerts_help: Steward'lar tarafından ayarlanan NAP çapındaki etkinlik hatırlatıcıları NAP Discord'una gider; bunları bu uyarı kanalında da almak için işaretleyin.
+  copy_role_id: Rol Kimliğini Kopyala
+  officer_channel: Subay Bilet Alım Kanalı Kimliği
+  officer_channel_help: "{channel} ögenize sağ tıklayın → {copy}. {suggest} üzerinden gelen üye önerileri ve ittifak biletleri yönetim incelemesi için buraya yönlendirilecektir."
+  private_channel: özel R4/R5 bilet kanalı
+  delegated_roles: Yetkili Liderlik Rolleri
+  delegated_roles_help: Biletleri triyajlayabilen, etkinlikleri yönetebilen ve sandık adaylıklarını gönderebilen virgülle ayrılmış rol isimleri ({r5} her zaman yetkilidir).
+  color: İttifak Kimlik Rengi
+  preview: 'Önizleme:'
+  color_help: Operasyon takviminize, dahili bilet kartlarınıza ve onaylı NAP Konseyi önerilerine uygulanır.
+  submit: Sunucuyu Kaydet & Komutları Dağıt
+  submitting: Sunucu Doğrulanıyor & Kaydediliyor...
+  bad_token: Geçersiz veya eksik kayıt belirteci. NAP sunucusunda /registerbot çalıştırın.
+  malformed_token: Hatalı biçimlendirilmiş belirteç. Lütfen Discord'dan yeni bir bağlantı isteyin.
+  expired: Bu kayıt bağlantısının süresi doldu (24 saat sınırı). /registerbot komutunu tekrar çalıştırın.
+  bad_guild: Geçersiz Discord Sunucu Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
+  bad_alert_channel: Geçersiz Operasyon Uyarı Kanalı Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
+  bad_alert_role: Geçersiz Uyarı Rolü Kimliği formatı. 17-20 haneli bir sayı olmalıdır (veya @everyone için boş bırakılmalıdır).
+  bad_officer_channel: Geçersiz Subay Bilet Alım Kanalı Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
+  failed: Kayıt başarısız
+  error: 'Kayıt Hatası: {error}'
+  success: "✅ Kayıt Başarılı!"
+  linked: "{server} artık {tag} ile bağlantılı."
+  server_id: Sunucu ID {id}
+  r_alert_channel: 'Operasyon Uyarı Kanalı:'
+  r_target: 'Bildirim Hedefi:'
+  r_role: Rol {id}
+  r_default: "(Varsayılan)"
+  r_officer_channel: 'Subay Bilet Kanalı:'
+  r_color: 'Kimlik Rengi:'
+  r_commands: 'Slash Komutları Dağıtıldı:'
+  r_leaders: 'Yetkili Liderlik:'
+calendar:
+  loading: Krallık programı yükleniyor...
+  load_failed: 'Takvim yüklenemedi: {error}'
+  phase: Aşama
+  schedule_title: Krallık Savaşı Programı
+  loading_cycle: Döngü detayları yükleniyor...
+  badge_closed: "🔒 Ödüller kapalı"
+  badge_kob_open: "⚔️ Savaş Kralı açık"
+  badge_awaiting: "⏳ KS sonucu bekleniyor"
+  badge_open: "🎁 Ödüller açık"
+  set2_off_week: Sadece Kral Takdirnamesi (Krallık Savaşı yok).
+  set2_won: 'Krallık Savaşı kazanıldı: Savaş Kralı Ödülü de açık.'
+  set2_lost: 'Krallık Savaşı kaybedildi: Sadece Kral Takdirnamesi.'
+  set2_pending: Cumartesi günkü savaş kazanılırsa Savaş Kralı Ödülü verilir; Kral sonuçtan sonra dağıtır.
+  rewards_open_until: "{week} ödülleri Salı 23:59 GT'ye kadar açık. {set2}"
+  rewards_closed: Ödüller kapalı. Bir sonraki açılış Cuma yaklaşık 20:00 GT'de, başkent etkinliğinden sonra gerçekleşir.
+  capitol_holder: BAŞKENT SAHİBİ
+  current_holder: MEVCUT BAŞKENT SAHİBİ
+  next_holder: SONRAKİ BAŞKENT SAHİBİ
+  rank: 'Sıra #{rank}'
+  rank_override: 'Sıra #{rank} (Geçersiz Kılma)'
+  rank_override_schedule: 'Sıra #{rank} • Geçersiz Kılma Programı'
+  captured_friday: Cuma ele geçirildi
+  captures_today: Bugünkü ele geçirmeler
+  captures_friday: Cuma ele geçirmeleri
+  cycle_progress: DÖNGÜ İLERLEMESİ
+  day_of_28: 28'in {day}. günü ({week})
+  week_n: Hafta {n}
+  next_reset: SONRAKİ SIFIRLAMA (00:00 GT)
+  next_kw: SONRAKİ KS SAVAŞI
+  saturday: Cumartesi
+  today: "🔥 BUGÜN"
+  none_this_week: Bu hafta yok
+  perspective: "🔍 BAKIŞ AÇISI:"
+  combined: "🌐 Birleşik (Krallık + [{tag}])"
+  internal_only: "🛡️ [{tag}] Sadece Dahili"
+  kingdom_only: "👑 Sadece Krallık Operasyonları"
+  operations_active: "🛡️ [{tag}] Operasyonlar Aktif"
+  upcoming: Yaklaşan Operasyonlar & Kilometre Taşları
+  times_shown: Zamanlar {gt} ve Yerel Saatinizde görüntülenir
+  gt_label: Oyun Zamanı (UTC-2)
+  no_operations: Bu bakış açısı için planlanmış operasyon yok.
+  all_day: Tüm Gün
+  every_2_days: "🔁 2 Günde Bir"
+  weekly: "🔁 Haftalık"
+  mandatory: "🚨 Zorunlu"
+  edit: "✏️ Düzenle"
+  delete: "🗑️ Sil"
+  ev_capture_title: "👑 Başkent Ele Geçirme — {who}"
+  ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçiriyor."
+  ev_kw_title: "⚔️ Krallık Savaşı"
+  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarı biter. Kazanmak, Kral Takdirnamesine ek olarak Savaş Kralı Ödül sandıklarını açar.
+  ev_open_title: "🎁 Ödüller Açık — {week}"
+  ev_open_desc_kw: Kral Takdirnamesi başkent etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Savaş Kralı Ödülü de açılır; Kral sonuçtan sonra dağıtır.
+  ev_open_desc: Kral Takdirnamesi başkent etkinliğinden sonra açılır (bu hafta Krallık Savaşı yok).
+  ev_close_title: "⌛ Ödüller Kapanıyor — {week}"
+  ev_close_desc: 'Sandıkların süresi Çarşamba 00:00 GT''de dolar: o zamandan önce her şeyi dağıtın.'
+calendar_events:
+  reminder: Discord'da 1 saat önce hatırlat
+  reminder_hint: İttifakınızın uyarı kanalında paylaşılır ve yukarıda seçilen rol etiketlenir.
+  reminder_hint_server: NAP Discord'unun uyarı kanalında (ve katılan ittifaklarda) paylaşılır ve yukarıda seçilen rol etiketlenir.
+  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların paylaşılabilmesi için Discord''unuzda /registerbot çalıştırın.'
+  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmamış (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları paylaşılamaz.
+  edit_heading: Etkinliği düzenle
+  save_changes: "💾 Değişiklikleri kaydet"
+  manage_mode: YÖNETİM MODU
+  session_active: Kimlik Doğrulanmış Oturum Aktif
+  schedule_operation: "➕ Operasyon Planla"
+  create_operation: Operasyon Oluştur
+  kingdom_admin: "👑 KRALLIK YÖNETİMİ"
+  kingdom_desc: Krallık çapında uyarıları ve operasyonları planlama
+  kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
+  leadership: "🛡️ [{tag}] LİDERLİK"
+  leadership_desc: "[{tag}] için dahili operasyonları yönetme"
+  alliance_heading: "[{tag}] Operasyonu Oluştur"
+  preset: Operasyon Hazır Ayarı
+  preset_custom: "🛠️ Özel Operasyon (Boş)"
+  preset_crystal_cluster: "🔮 Kristal Küme Vadisi (0.5s)"
+  preset_elixir_scramble: "🧪 İksir Mücadelesi (0.5s)"
+  preset_survival_battle: "⚔️ Hayatta Kalma Savaşı (4.0s)"
+  preset_kill_event: "🩸 Öldürme Etkinliği (24.0s)"
+  preset_kvk_battle: "👑 Krallık vs Krallık Savaşı (1.0s)"
+  preset_gear_event: "🛡️ Ekipman Etkinliği (48.0s)"
+  preset_cheese_trap: "🧀 Peynir Tuzağı (0.5s)"
+  title: Etkinlik Başlığı
+  title_example: ör. Kovan Savunma Tatbikatı veya Karakol Saldırısı
+  date: Başlangıç Tarihi (YYYY-AA-GG)
+  time: Oyun Zamanı (SS:DD UTC-2)
+  time_hint: Sunucu Oyun Zamanı (5 dakikalık artışlara yuvarlanır)
+  duration: Süre (Saat)
+  frequency: Sıklık
+  once: Tek Seferlik Etkinlik (Tekrarlanmaz)
+  every_2_days: 2 Günde Bir Tekrarlanır
+  weekly: Haftalık Tekrarlanır (Aynı gün ve saat)
+  alert_level: Discord Uyarı Seviyesi
+  notify_role: "🔔 Varsayılan İttifak Rolünü Etiketle (@everyone'a döner)"
+  notify_custom: "🎯 Belirli Rol Kimliğini Etiketle (Tek seferlik geçersiz kılma)"
+  notify_everyone: "🚨 @everyone Yayınını Zorla (Zorunlu Operasyon)"
+  notify_none: "🔕 Sessiz (Sadece Takvim - Discord Etiketi Yok)"
+  role_id: Belirli Rol Kimliği
+  role_id_hint: "(Sadece Belirli Rolü Etiketle için gereklidir)"
+  role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
+  details: Talimatlar / Toplanma Noktası
+  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere liderlik eder. Sesli iletişim aktif.
+  publish: Takvimde Yayınla
+  publishing: Yayınlanıyor...
+  bad_time: Oyun Zamanı 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10, vb.)
+  bad_role: Lütfen özel uyarı hedefi için geçerli bir 17-20 haneli Discord Rol Kimliği girin.
+  save_failed: Etkinlik kaydedilemedi
+  published: Operasyon başarıyla yayınlandı!
+  confirm_delete: Bu operasyonu takvimden kaldırmak istediğinizden emin misiniz?
+  delete_failed: Etkinlik silinemedi
+  removed: Operasyon kaldırıldı.
+kings_scheduler:
+  title: "⚔️ Başkent Savunma & Rotasyon Konsolu"
+  subtitle: Otomatik Eşleşme Savunması & Tazminat Programı
+  overrides: 'Geçersiz Kılmalar: {n}/2'
+  loading: Canlı program yükleniyor...
+  off_week: Boş Hafta
+  week_fri: "{n}. Hafta Cuma"
+  boss_window: Patron {n} Penceresi
+  kvk_finale: Krallık Savaşı Finali
+  loot_one: "{n} Kral Sandığı"
+  loot_other: "{n} Kral Sandığı"
+  loot_border: 2 Kral Sandığı + Çerçeve
+  active: AKTİF
+  buyouts_title: "🛡️ Aktif Savaş Dönemi Geri Ödemesi"
+  buyouts_count: "{n} Aktif"
+  installment: "{week}. Hafta Ödemesi:"
+  payout: "{reg} & {kw}"
+  reg_gold: "+{n} Normal Altın"
+  kw_gold: "+{n} KS Altını"
+  paid: ÖDENDİ
+  pending: BEKLİYOR
+  beneficiary: 'Lehtar:'
+  threat: "(Tehdit: {threat})"
+  red_list: Kırmızı Liste
+  wartime_buyout: Savaş Dönemi Geri Ödemesi
+  override_title: "🚨 Programı Geçersiz Kıl"
+  override_help: Tehlikeli bir sunucu mu keşfettiniz? Rakibin sunucu kimliğini girin
+  target_week: Hedef Krallık Savaşı Haftası
+  week1_option: 1. Hafta Cuma (Patron 2 Eşleşmesi)
+  week2_option: 2. Hafta Cuma (Patron 3 Eşleşmesi)
+  opponent: Keşfedilen Rakip (Sunucu)
+  opponent_example: ör. S94, S77
+  disclaimer: "*Geçersiz kılmalar, doğrulama için Discord yönetimine bir senato teklifi gönderir."
+  dispatch: Geçersiz Kılmayı İncele & Gönder
+  already_scheduled: "{who} Savunma geçersiz kılmaya gerek yok."
+  already_scheduled_who: WLO, {n}. Hafta için zaten planlandı.
+  step1: 'Adım 1: Takvim Değişimi (0 Sandık Maliyeti)'
+  step1_text: WLO, {threat}'e karşı krallık savunması için {week}. haftayı alacak.
+  week_label: "{n}. Hafta"
+  opponent_placeholder: "[Rakip]"
+  week3_finale: '3. Hafta Finali:'
+  lose_nothing: "{ally} 0 sandık kaybeder. {wlo} 0 sandık kaybeder."
+  step2: 'Adım 2: Savaş Dönemi Geri Ödemesi (2 Taksitli Tazminat)'
+  step2_text: 'Bu, bu döngüdeki {second}. 3. hafta zaten takas edildiğinden, {ally} kenara çekilir ve sandıklarla bir geri ödeme alır:'
+  second_override: ikinci savunma geçersiz kılma
+  distribution: "{n}. Hafta Dağıtımı:"
+  plus_gold: "+1 Normal Altın & +1 KS Altını, [{tag}] için"
+  buyout_perks: "{ally} 2 Kral sandığı kaybeder, 4 altın sandık kazanır. {wlo} 2 Kral sandığı kazanır, 4 altın sandık kaybeder."
+  proposal_buyout: "🛡️ Savaş Dönemi Geri Ödemesi Bildir"
+  proposal_swap: "⚔️ Savunma Değişimi Bildir"
+  sum_second: WLO 2. Savunma Geçersiz Kılma
+  sum_first: WLO 1. Savunma Geçersiz Kılma
+  sum_vs: "{n}. Hafta vs {threat}"
+  sum_buyout_issued: "[{tag}] Savaş Dönemi Geri Ödemesi Yayınlandı"
+  sum_four_gold: Toplam 4 Altın Sandık
+  sum_installment: 'Taksit {i} (H{week}):'
+  sum_installment_chests: 1 Normal Altın + 1 KS Altını
+  sum_swap: Takvim Değişimi
+  sum_swap_text: WLO H{n} Cuma gününü alır
+  sum_promoted: "[{tag}] 3. Hafta Finaline Yükseltildi"
+  sum_promoted_text: "(2 Kral Sandığı + Güçlendirme Ögesi)"
+  sum_cost: 'WLO İttifak Sandığı Maliyeti: 0'
+rewards_planner:
+  host_week: Aktif Ev Sahipliği Haftası
+  planner_mode: Planlayıcı Modu
+  submit_plan: Planı Gönder
+  loading: Ödül kademeleri yükleniyor…
+  load_failed: Ödül kademeleri yüklenemedi.
+  add_tier: Ödül Kademesi Ekle
+  remove_bracket: Parantezi Kaldır
+  over_capacity: 'Kapasite Aşıldı! Altın: {gold}/{gold_max}, Mor: {purple}/{purple_max}, Mavi: {blue}/{blue_max}'
+  proposal_title: "👑 Ödül Dağıtım Teklifi Gönder"
+  rank_single: Sıra {n}
+  rank_range: Sıra {from}–{to}
+event_presets:
+  crystal_cluster_title: Kristal Vadisi
+  crystal_cluster_desc: Her Pazar düzenlenen Herkes İçin Serbest etkinlik
+  elixir_scramble_title: Kraliyet Mücadelesi
+  elixir_scramble_desc: Her Cuma düzenlenen Takım Savaşı etkinliği
+  survival_battle_title: Hayatta Kalma Savaşı
+  survival_battle_desc: Ödüller kazanmak için görevleri tamamlayın
+  kill_event_title: Öldürme Etkinliği
+  kill_event_desc: Diğer sunuculardan işgalciler geliyor! Kalkanınızı açın
+  kvk_battle_title: Krallık Savaşı
+  kvk_battle_desc: Kraliyet Kalesi için savaş başlıyor!
+  gear_event_title: Ekipman Etkinliği
+  gear_event_desc: Ekipman yükselttiğiniz için ödüller kazanın
+  cheese_trap_title: Peynir Tuzağı
+  cheese_trap_desc: Peynir Hırsızını uzaklaştırmaya yardım edin
+alliance_planner:
+  roster: 'NAP Kadrosu:'
+  roster_loading: "-- İttifaklar"
+  nap_alliances: "{n} NAP İttifakı"
+  planner_mode: Planlayıcı Modu
+  submit_plan: Planı Gönder
+  tag_placeholder: ETİKET (ör. WLO)
+  name_placeholder: Tam İttifak Adı
+  add_contender: "+ Aday Ekle"
+  loading_standings: Sıralamalar yükleniyor…
+  standings_failed: Sıralamalar yüklenemedi.
+  protected_academy: Korumalı Akademi
+  change_color: "[{tag}] Rengini Değiştir"
+  academy_of: "[{tag}] Akademisi"
+  link_academy: "+ Akademi Bağla"
+  nap_protected: NAP Korumalı
+  external: Harici
+  revoke_nap: NAP'ı İptal Et
+  grant_nap: NAP Ver
+  remove_alliance: İttifakı Kaldır
+  academy_prompt: "[{tag}] altında Akademi olarak bağlamak için tam ittifak etiketini girin (büyük/küçük harf duyarlı, ör. RâvN veya râvn):"
+  academy_available: 'Mevcut: {tags}'
+  academy_new: 'Veya oluşturmak için yeni bir akademi etiketi yazın:'
+  already_exists: "[{tag}] ittifakı aynı büyük/küçük harf düzeniyle zaten mevcut."
+  no_changes: Mevcut sıralamalarda herhangi bir değişiklik algılanmadı.
+  proposal_title: "👑 NAP Sıralamalarını ve Diplomasi Teklifini Gönder"
+  diff_rank: "{tag}: Sıra {from} ➔ {to}"
+  diff_academy: "{tag}: {parent} Akademisi olarak atandı"
+  diff_nap: "{tag}: NAP Durumu {status}"
+  nap_status_protected: Korumalı
+  nap_status_revoked: İptal Edildi
+  diff_color: "{tag}: Renk {color} olarak güncellendi"
+  diff_added: "{added}: Sıra #{rank} ({name})"
+  added_tag: "[{tag}] eklendi"
+  diff_removed: Sıralamalardan {removed} çıkarıldı
+  removed_tag: "[{tag}] çıkarıldı"
+  diff_modified: "[{tag}] değiştirildi"
+  unknown: Bilinmiyor
+blacklist_planner:
+  players_title: "🚫 Kara Listeye Alınan Oyuncular"
+  alliances_title: "⚠️ Kara Listeye Alınan İttifaklar"
+  player_placeholder: Oyuncu IGN
+  alliance_placeholder: İttifak ETİKETİ
+  add: "+ Ekle"
+  edit: Kara Listeyi Düzenle
+  stop_editing: Düzenlemeyi Durdur
+  submit: Kara Listeyi Gönder
+  loading: Yükleniyor…
+  failed: Kara liste yüklenemedi.
+  no_players: Kara listede hiçbir asi komutan yok.
+  no_alliances: Kara listede hiçbir düşman ittifak yok.
+  added: "{name} planınıza eklendi. Henüz gönderilmedi: onay için yönetime iletmek üzere kara listenin üzerindeki {submit} düğmesine basın."
+  removed: "{name} planınızdan kaldırıldı. Henüz gönderilmedi: onay için yönetime iletmek üzere kara listenin üzerindeki {submit} düğmesine basın."
+  duplicate: "{name} zaten kara listede."
+  press_edit: Önce {edit} düğmesine basın.
+  add_failed: "{name} eklenemedi: {error}"
+  no_changes: Gönderilecek kara liste değişikliği yok.
+  proposal_title: "🚫 NAP Kara Liste Teklifini Gönder"
+  diff_add: "{add} {what} {name}"
+  diff_remove: "{remove} {what} {name}"
+  add_word: Ekle
+  remove_word: Kaldır
+  what_alliance: ittifak
+  what_player: oyuncu
+  sent: Kara liste teklifi Discord üzerinden yönetime gönderildi. Bir yönetici onayladığında geçerli olacaktır.
+map_planner:
+  view: 'Görünüm:'
+  levels: Seviyeler
+  alliances: İttifaklar
+  resources: Kaynaklar
+  buff_summary: Güçlendirme Özeti
+  toggle_buff_summary: Güçlendirme Özetini Aç/Kapat
+  close_buff_summary: Güçlendirme Özetini Kapat
+  planner_mode: Planlayıcı Modu
+  override_label: 'Şununla değiştir:'
+  override_placeholder: Örn. WLO
+  override_help: Atamaları geçersiz kılmak için bir etiket yazın. Döngüye almak için boş bırakın.
+  submit_plan: Planı Gönder
+  fullscreen: Tam Ekran
+  toggle_fullscreen: Tam Ekranı Aç/Kapat
+  exit: Çıkış
+  grain: "🌾 Tahıl"
+  timber: "🪵 Kereste"
+  herbs: "🌿 Bitki"
+  solid_gather: 'Dolu: Topla'
+  stripe_output: 'Çizgili: Üretim'
+  level_unknown: Seviye --
+  level: Seviye {n}
+  hover: Bir bölgenin üzerine gelin
+  owner: 'Sahibi:'
+  unclaimed: Sahipsiz
+  buff: 'Güçlendirme:'
+  none: Yok
+  no_active_buff: Aktif güçlendirme yok
+  drawer_title: İttifak Güçlendirme Dağılımı
+  drawer_subtitle: Aktif harita / planlayıcı atamalarına dayalı dinamik döküm
+  no_claims: Şu anda bölge iddia eden ittifak yok.
+  no_buffs: Atanmış aktif güçlendirme yok
+  cities_one: "{n} Şehir"
+  cities_other: "{n} Şehir"
+  col_alliance: İttifak
+  col_holdings: Mülkler
+  col_buffs: Aktif Güçlendirmeler
+  buff_research_speed: Araştırma Hızı
+  buff_troop_training_speed: Birlik Eğitim Hızı
+  buff_building_speed: İnşaat Hızı
+  buff_march_speed: Yürüyüş Hızı
+  buff_grain_gathering: Tahıl Toplama
+  buff_grain_output: Tahıl Üretimi
+  buff_timber_gathering: Kereste Toplama
+  buff_timber_output: Kereste Üretimi
+  buff_herb_gathering: Bitki Toplama
+  buff_herb_output: Bitki Üretimi
+  no_changes: Taslak planınızda değişiklik algılanmadı.
+  proposal_title: "🗺️ Harita Bölge Teklifi Gönder"
+proposals:
+  title: Teklif Gönder
+  close: Kapat
+  summary: Teklif Özeti
+  notes: Yönetim Notları (İsteğe Bağlı)
+  notes_placeholder: Bu teklifin içeriğini veya stratejik nedenini açıklayın...
+  transmit: Teklifi İlet
+  user_avatar: Kullanıcı Avatarı
+  submitting_as: "{name} olarak gönderiliyor"
+  auth_required: Yönetim Doğrulaması Gerekli
+  auth_reason: Tekliflerin iletilmesi için doğrulanmış Discord yönetimi veya subay statüsü gerekir.
+  log_in: Göndermek için Discord ile Giriş Yapın
+  oauth_unreachable: Discord OAuth hizmetine ulaşılamıyor. Lütfen sayfayı yenileyip tekrar deneyin.
+  transmit_discord: Discord'a İlet
+  leaders_only_note: Sadece R4 ve R5 liderleri teklif gönderebilir. Bu planı göndermesi için ittifak liderinizden rica edin.
+  leaders_only: Sadece Liderler
+  login_expired: Girişiniz sona erdi. Bu teklifi göndermek için Discord ile tekrar giriş yapın.
+  transmitted: "✅ Teklif, Discord üzerinden NAP Yönetimine başarıyla iletildi!"
+  transmitting: İletiliyor...
+  resume: "{type} Teklifine Devam Et"
+  draft_restored: Taslak önceki oturumdan geri yüklendi.
+  pending_shifts: Bekleyen değişiklikler
+  server_error: Sunucu HTTP {status} yanıtı verdi
+live_data:
+  failed: "⚠️ En güncel veriler yüklenemedi. Bağlantınızı kontrol edin ve sayfayı yenileyin."
+  offline: "📴 Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
+  updating: "⏳ Güncelleniyor…"
+capitol_rotation:
+  rank: 'Sıra #{rank}'
+  this_week: Bu hafta
+  captures: Ele geçirme {date}
+  captured: Ele geçirildi {date}
+  override: 'Geçersiz kılma: bu hafta [{replaced}] yerine geçer'
+  no_alliance: Bu sırada henüz ittifak yok
+  off_week_note: 'Bu hafta Krallık Savaşı yok: [{tag}] Başkenti elinde tutuyor.'
+  kw_note: 'Krallık Savaşı haftası: savaş Cumartesi günü.'
+  schedule_note: Canlı takvim ve NAP durumuna göre. Stewardlar tarafından ayarlanan geçersiz kılmalar kaydedildikleri anda burada gösterilir.

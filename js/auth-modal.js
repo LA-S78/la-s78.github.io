@@ -5,6 +5,8 @@
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
+// The pop-up's text in the page's language (proposals.* in _data/<lang>/tools.yml, js/i18n.js).
+const t = (key, vars) => window.t(`proposals.${key}`, vars);
 
 const STASH_KEY = 'la_pending_proposal_stash';
 
@@ -34,9 +36,9 @@ function ensureModalDOM() {
         <div class="auth-modal-header">
           <div class="auth-modal-title-wrap">
             <span class="auth-modal-icon">👑</span>
-            <h3 id="auth-modal-title" class="auth-modal-title">Submit Proposal</h3>
+            <h3 id="auth-modal-title" class="auth-modal-title">${esc(t('title'))}</h3>
           </div>
-          <button type="button" class="auth-modal-close" id="auth-modal-close-btn" aria-label="Close">&times;</button>
+          <button type="button" class="auth-modal-close" id="auth-modal-close-btn" aria-label="${esc(t('close'))}">&times;</button>
         </div>
 
         <div class="auth-modal-body">
@@ -45,18 +47,18 @@ function ensureModalDOM() {
           </div>
 
           <div class="auth-modal-section">
-            <label class="auth-modal-label">Proposal Summary</label>
+            <label class="auth-modal-label">${esc(t('summary'))}</label>
             <div id="auth-modal-diff-summary" class="auth-diff-box">
               <!-- Diff list injected here -->
             </div>
           </div>
 
           <div class="auth-modal-section">
-            <label for="auth-modal-notes" class="auth-modal-label">Leadership Notes (Optional)</label>
+            <label for="auth-modal-notes" class="auth-modal-label">${esc(t('notes'))}</label>
             <textarea 
               id="auth-modal-notes" 
               class="auth-modal-textarea" 
-              placeholder="Explain the context or strategic reason for this proposal..."
+              placeholder="${esc(t('notes_placeholder'))}"
               rows="3"
               maxlength="500"
             ></textarea>
@@ -66,10 +68,10 @@ function ensureModalDOM() {
         </div>
 
         <div class="auth-modal-footer">
-          <button type="button" class="btn-modal-cancel" id="auth-modal-cancel-btn">Cancel</button>
+          <button type="button" class="btn-modal-cancel" id="auth-modal-cancel-btn">${esc(window.t('common.cancel'))}</button>
           <button type="button" class="btn-modal-action" id="auth-modal-action-btn">
             <span id="auth-btn-spinner" class="spinner hidden"></span>
-            <span id="auth-btn-text">Transmit Proposal</span>
+            <span id="auth-btn-text">${esc(t('transmit'))}</span>
           </button>
         </div>
       </div>
@@ -148,9 +150,9 @@ export function clearStashedProposal() {
  */
 export async function submitProposalWithAuth({
   type, // 'map' | 'rewards' | 'alliance'
-  title = 'Submit Proposal',
+  title = t('title'),
   payload, // Object matching proposal schema
-  diffSummaryHtml = '<p>Pending shifts</p>',
+  diffSummaryHtml = `<p>${esc(t('pending_shifts'))}</p>`,
   onSuccess = () => {},
   onError = () => {},
 }) {
@@ -192,9 +194,9 @@ export async function submitProposalWithAuth({
   function showSignedIn(noteHtml = '') {
     userStrip.innerHTML = `
       <div class="auth-logged-in">
-        <img src="${esc(currentAvatar || '/images/default-avatar.png')}" class="auth-avatar-mini" alt="User Avatar" />
+        <img src="${esc(currentAvatar || '/images/default-avatar.png')}" class="auth-avatar-mini" alt="${esc(t('user_avatar'))}" />
         <div class="auth-user-meta">
-          <span class="auth-username-label">Submitting as <strong>${esc(currentUser)}</strong></span>
+          <span class="auth-username-label">${window.th('proposals.submitting_as', { name: `<strong>${esc(currentUser)}</strong>` })}</span>
           <span class="auth-badge-role ${esc(currentRole.toLowerCase())}">${esc(currentRole.toUpperCase())}${currentAlliance ? ` • [${esc(currentAlliance)}]` : ''}</span>
         </div>
       </div>
@@ -208,13 +210,13 @@ export async function submitProposalWithAuth({
       <div class="auth-guest-notice">
         <span class="auth-guest-icon">⚠️</span>
         <div>
-          <strong>Leadership Authentication Required</strong>
-          <p>${esc(reason || 'Proposals require verified Discord leadership or officer status to dispatch.')}</p>
+          <strong>${esc(t('auth_required'))}</strong>
+          <p>${esc(reason || t('auth_reason'))}</p>
         </div>
       </div>
     `;
     actionBtn.disabled = false;
-    btnText.textContent = 'Log In via Discord to Submit';
+    btnText.textContent = t('log_in');
     actionBtn.onclick = () => {
       // Stash draft and payload first; the proposal reopens after logging in.
       payload.notes = notesInput.value.trim();
@@ -224,7 +226,7 @@ export async function submitProposalWithAuth({
       if (typeof window.triggerDiscordLogin === 'function') {
         window.triggerDiscordLogin();
       } else {
-        alert('Discord OAuth service is unreachable. Please refresh and try again.');
+        alert(t('oauth_unreachable'));
       }
     };
   }
@@ -232,23 +234,17 @@ export async function submitProposalWithAuth({
   if (mode === 'send') {
     showSignedIn();
     actionBtn.disabled = false;
-    btnText.textContent = 'Transmit to Discord';
+    btnText.textContent = t('transmit_discord');
     actionBtn.onclick = async () => {
       await performTransmission();
     };
   } else if (mode === 'leaders-only') {
-    showSignedIn(
-      '<p class="auth-modal-note">Only R4 and R5 leaders can send proposals. Ask your alliance leader to submit this plan.</p>',
-    );
+    showSignedIn(`<p class="auth-modal-note">${esc(t('leaders_only_note'))}</p>`);
     actionBtn.disabled = true;
-    btnText.textContent = 'Leaders Only';
+    btnText.textContent = t('leaders_only');
     actionBtn.onclick = null;
   } else {
-    showLogin(
-      currentUser && currentRole !== 'public'
-        ? 'Your login has expired. Log in with Discord again to send this proposal.'
-        : '',
-    );
+    showLogin(currentUser && currentRole !== 'public' ? t('login_expired') : '');
   }
 
   dialog.showModal();
@@ -281,13 +277,13 @@ export async function submitProposalWithAuth({
         return;
       }
       if (!res.ok) {
-        throw new Error(resData.error || `Server responded with HTTP ${res.status}`);
+        throw new Error(resData.error || t('server_error', { status: res.status }));
       }
 
       clearStashedProposal();
       localStorage.removeItem('la_map_planner_draft'); // Clean up map draft
       closeModal();
-      alert('✅ Proposal successfully transmitted to NAP Leadership on Discord!');
+      alert(t('transmitted'));
       onSuccess(resData);
     } catch (err) {
       console.error('Proposal dispatch error:', err);
@@ -303,11 +299,11 @@ export async function submitProposalWithAuth({
     actionBtn.disabled = isLoading;
     btnSpinner.classList.toggle('hidden', !isLoading);
     if (isLoading) {
-      btnText.textContent = 'Transmitting...';
+      btnText.textContent = t('transmitting');
     } else if (mode === 'send') {
-      btnText.textContent = 'Transmit to Discord';
+      btnText.textContent = t('transmit_discord');
     } else if (mode === 'login') {
-      btnText.textContent = 'Log In via Discord to Submit';
+      btnText.textContent = t('log_in');
     }
   }
 }
@@ -338,10 +334,9 @@ export function checkAndResumePendingProposal(handlers = {}) {
       setTimeout(() => {
         submitProposalWithAuth({
           type: stashed.type,
-          title: `Resume ${stashed.type.toUpperCase()} Proposal`,
+          title: t('resume', { type: stashed.type.toUpperCase() }),
           payload: stashed.payload,
-          diffSummaryHtml:
-            stashed.diffSummaryHtml || '<p>Draft restored from previous session.</p>',
+          diffSummaryHtml: stashed.diffSummaryHtml || `<p>${esc(t('draft_restored'))}</p>`,
           onSuccess: () => clearStashedProposal(),
         });
       }, 350);

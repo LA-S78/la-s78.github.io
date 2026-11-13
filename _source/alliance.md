@@ -10,8 +10,7 @@ nav_links:
     url: "#nap-territory"
   - name_key: "blacklist"
     url: "#blacklist"
-dialogs:
-  - dialogs/alliance.html
+strings: [alliance_planner, blacklist_planner, map_planner, proposals, live_data]
 ---
 
 {% for section in site.alliance %}
@@ -33,16 +32,16 @@ nav_id: "nap-ranks"
   <!-- Controls Bar -->
   <div class="map-controls">
     <div class="control-group left">
-      <span class="control-label">NAP Roster:</span>
-      <span id="alliance-total-count" class="badge">-- Alliances</span>
+      <span class="control-label">{{ "alliance_planner.roster" | t }}</span>
+      <span id="alliance-total-count" class="badge">{{ "alliance_planner.roster_loading" | t }}</span>
     </div>
     <div class="control-group right">
       <button id="btn-toggle-alliance-planner" class="draft-btn" aria-pressed="false" type="button">
         <span class="draft-indicator"></span>
-        <span class="draft-text">Planner Mode</span>
+        <span class="draft-text">{{ "alliance_planner.planner_mode" | t }}</span>
       </button>
-      <button id="btn-submit-alliance" class="submit-plan-btn hidden" disabled type="button">
-        Submit Plan <span id="alliance-change-badge" class="badge">0</span>
+      <button id="btn-submit-alliance" class="submit-plan-btn" disabled type="button">
+        {{ "alliance_planner.submit_plan" | t }} <span id="alliance-change-badge" class="badge">0</span>
       </button>
     </div>
   </div>
@@ -59,9 +58,9 @@ nav_id: "nap-ranks"
     <!-- Planner Action: Add Contender Row -->
     <div id="planner-add-alliance-container" class="planner-actions hidden">
       <div class="add-alliance-inline">
-        <input type="text" id="input-new-tag" placeholder="TAG (e.g. WLO)" maxlength="6" />
-        <input type="text" id="input-new-name" placeholder="Full Alliance Name" />
-        <button id="btn-add-alliance" class="draft-btn" type="button">+ Add Contender</button>
+        <input type="text" id="input-new-tag" placeholder="{{ "alliance_planner.tag_placeholder" | t }}" maxlength="6" />
+        <input type="text" id="input-new-name" placeholder="{{ "alliance_planner.name_placeholder" | t }}" />
+        <button id="btn-add-alliance" class="draft-btn" type="button">{{ "alliance_planner.add_contender" | t }}</button>
       </div>
     </div>
   </div>
@@ -94,15 +93,15 @@ nav_id: "blacklist"
 <div class="blacklist-section">
   <div class="blacklist-group">
     <div class="blacklist-header">
-      <h3>🚫 Blacklisted Players</h3>
+      <h3>{{ "blacklist_planner.players_title" | t }}</h3>
       <span id="blacklist-player-count" class="badge">0</span>
     </div>
     <div id="blacklist-players-container" class="blacklist-card-list">
       <!-- Injected by js/alliance.js -->
     </div>
     <div id="planner-add-player-box" class="planner-blacklist-add hidden">
-      <input type="text" id="input-new-player" placeholder="Player IGN" />
-      <button id="btn-add-blacklist-player" class="draft-btn" type="button">+ Add</button>
+      <input type="text" id="input-new-player" placeholder="{{ "blacklist_planner.player_placeholder" | t }}" />
+      <button id="btn-add-blacklist-player" class="draft-btn" type="button">{{ "blacklist_planner.add" | t }}</button>
     </div>
   </div>
 
@@ -110,15 +109,15 @@ nav_id: "blacklist"
 
   <div class="blacklist-group">
     <div class="blacklist-header">
-      <h3>⚠️ Blacklisted Alliances</h3>
+      <h3>{{ "blacklist_planner.alliances_title" | t }}</h3>
       <span id="blacklist-alliance-count" class="badge">0</span>
     </div>
     <div id="blacklist-alliances-container" class="blacklist-card-list">
       <!-- Injected by js/alliance.js -->
     </div>
     <div id="planner-add-blacklist-alliance-box" class="planner-blacklist-add hidden">
-      <input type="text" id="input-new-blacklist-alliance" placeholder="Alliance TAG" maxlength="6" />
-      <button id="btn-add-blacklist-alliance" class="draft-btn" type="button">+ Add</button>
+      <input type="text" id="input-new-blacklist-alliance" placeholder="{{ "blacklist_planner.alliance_placeholder" | t }}" maxlength="6" />
+      <button id="btn-add-blacklist-alliance" class="draft-btn" type="button">{{ "blacklist_planner.add" | t }}</button>
     </div>
   </div>
 </div>

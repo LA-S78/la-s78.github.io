@@ -1,0 +1,307 @@
+# Translated automatically from _data/en/server.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
+api_dashboard:
+  signed_out: Inicia sesión con Discord (arriba a la derecha) para ver el panel de tu alianza.
+  load_failed: 'No se pudo cargar el panel: {reason}'
+  no_alliance: No pudimos identificar a qué alianza perteneces. El sitio la detecta a partir de tu rol de alianza en el servidor de NAP de Discord, o mediante un [TAG] al principio de tu apodo en el servidor. Corrige eso en Discord y usa Refrescar Acceso en tu tarjeta de cuenta (arriba a la derecha).
+  leaders_only: Solo los R4 y R5 de tu alianza pueden cambiar el panel.
+  chart_removed: Ese gráfico fue eliminado.
+  chart_already_removed: Ese gráfico ya había sido eliminado.
+  not_linked: Este gráfico no está vinculado a una hoja o documento de Google.
+  unknown_change: Cambio desconocido.
+  save_failed: 'No se pudo guardar: {reason}'
+  r5_only_nominate: Solo tu R5 puede abrir la página de nominaciones aquí. Ejecuta /nominate en Discord.
+  rewards_closed: Las recompensas están cerradas hasta las {when}.
+  no_rank: "[{tag}] no tiene rango en la clasificación."
+  choose_type: Elige un tipo de gráfico o tabla.
+  title_needed: Dale un título al gráfico o a la tabla.
+  too_many_columns: Máximo {max} columnas (esta tabla tiene {count}).
+  too_many_rows: Máximo {max} filas (esta tabla tiene {count}).
+  column_name: Columna {n}
+  paste_first: Pega primero una tabla (una fila de encabezado y luego los datos).
+  no_data_rows: La tabla no tiene filas de datos bajo su encabezado.
+  needs_numbers: Un gráfico necesita una columna de números para mostrarse.
+  needs_target: 'Un gráfico de progreso necesita un objetivo: un número o una columna de objetivos.'
+  too_many_widgets: Máximo {max} gráficos y tablas por alianza.
+  sheet_unusable: 'No se pueden usar los datos de la hoja: {reason}'
+  too_big: Eso haría que el panel fuera demasiado grande ({size} KB de {max} KB). Usa menos filas o elimina una tabla.
+  player_name_needed: Introduce un nombre de jugador.
+  time_format: Los horarios son Game Time como 18:00 (o déjalos vacíos).
+  start_time_needed: Indica también la hora de inicio (o deja ambos vacíos).
+  rotor_full: Máximo {max} jugadores en la rotación.
+  already_in_rotor: "{name} ya está en la rotación."
+  player_removed: Ese jugador fue eliminado.
+api_sheets:
+  full_link: Pega el enlace completo (que empiece por https://docs.google.com/…).
+  google_only: Solo se pueden usar enlaces de Google Sheets y Google Docs (docs.google.com).
+  range_format: El rango debe verse como A1:D20 (o déjalo vacío).
+  not_sheet_or_doc: Ese enlace no es una hoja ni un documento de Google.
+  unexpected_redirect: Google envió la descarga a un lugar inesperado, por lo que no se pudo obtener.
+  too_many_redirects: Demasiadas redirecciones desde Google.
+  too_slow: Google tardó demasiado en responder. Inténtalo de nuevo en un momento.
+  unreachable: No se pudo contactar con Google ({reason}).
+  doc_not_shared: 'Google dijo que no: publica el documento (Archivo → Compartir → Publicar en la web) y usa ese enlace.'
+  sheet_not_shared: 'Google dijo que no: comparte la hoja como "Cualquier persona con el enlace puede ver" o usa Archivo → Compartir → Publicar en la web.'
+  google_error: Google respondió con un error ({status}). Revisa el enlace.
+  too_large: Esa hoja es demasiado grande para leerla (más de 2 MB).
+  empty: Esa hoja (o rango) está vacía.
+  no_such_table_one: Ese documento tiene {count} tabla; no existe la tabla {table}.
+  no_such_table_other: Ese documento tiene {count} tablas; no existe la tabla {table}.
+  no_table: Ese documento no contiene ninguna tabla.
+api_nominate:
+  link_invalid: Este enlace no es válido o ha caducado.
+  token_invalid: El token no es válido o ha caducado. Ejecuta /nominate de nuevo.
+  signed_out: Inicia sesión con Discord (arriba a la derecha) para marcar cofres.
+  invalid_chest: Cofre no válido.
+  no_period: No hay ningún periodo de recompensa abierto en este momento.
+  king_only: Solo la alianza del Rey (R4/R5) y los Delegados pueden marcar cofres.
+  king_only_tag: Solo la alianza del Rey [{king}] (R4/R5) y los Delegados pueden marcar cofres.
+  not_listed: "{name} ya no está en la lista de [{alliance}]. Refresca la página."
+  save_failed: 'No se pudo guardar: {reason}'
+api_register:
+  guild_id_format: Formato de ID de servidor de Discord no válido.
+  token_invalid: El token no es válido o ha caducado. Ejecuta /registerbot de nuevo en Discord.
+  alert_channel_needed: Se requiere un ID de canal de alertas de operaciones válido de 17-20 dígitos.
+  alert_role_format: Formato de ID de rol de alerta de Discord no válido (debe tener 17-20 dígitos).
+  officer_channel_needed: Se requiere un ID de canal de recepción de tickets de oficiales válido de 17-20 dígitos.
+  color_format: 'Formato de color de identidad de alianza no válido (debe ser un código hexadecimal de 6 dígitos como #B8975A).'
+  discord_unreachable: 'No se pudo contactar con Discord: {reason}'
+  already_linked: El ID de servidor {guild} ya está vinculado a la alianza [{tag}]. Un servidor de Discord no puede estar registrado en varias alianzas.
+  deploy_failed: Error al implementar comandos de barra en tu servidor.
+  save_failed: 'Comandos implementados, pero no se pudo guardar la configuración: {reason}'
+  bot_not_in_server: El bot no está en este servidor. Haz clic en "Autorizar Bot" (paso 1), añádelo a tu servidor y regístrate.
+  server_check_failed: Discord no pudo verificar el servidor ({status}).
+  old_link: Este enlace es anterior a una actualización de seguridad. Ejecuta /registerbot de nuevo.
+  not_member: No eres miembro de "{server}". Registra un servidor que administres.
+  roles_check_failed: Discord no pudo verificar tus roles ({status}).
+  needs_manage: Necesitas el permiso Administrador o Gestionar Servidor en "{server}" para vincularlo. Pídeselo al propietario o haz que ejecuten /registerbot.
+  channels_check_failed: Discord no pudo listar los canales del servidor ({status}).
+  alert_channel_missing: El canal de alertas de operaciones ({id}) no está en "{server}" (o el bot no puede verlo). Copia su ID de nuevo.
+  officer_channel_missing: El canal de recepción de tickets de oficiales ({id}) no está en "{server}" (o el bot no puede verlo). Copia su ID de nuevo.
+  alert_role_missing: El rol de alerta predeterminado ({id}) no es un rol en "{server}". Copia su ID de nuevo, o déjalo vacío para @everyone.
+  role_not_found: Todavía ningún rol en "{server}" coincide con "{role}"; funcionará cuando exista uno.
+api_proposals:
+  login_required: Por favor, inicia sesión con Discord de nuevo para enviar propuestas.
+  leaders_only: Solo los líderes R4 y R5 pueden enviar propuestas.
+  limit_check_failed: No se pudo verificar el límite diario de propuestas en este momento. Inténtalo de nuevo en un minuto.
+  daily_limit: 'Límite diario alcanzado: {max} propuestas cada 24 horas. Puedes enviar la siguiente después de las {when}.'
+  too_large: La propuesta es demasiado grande.
+  notes_limit: Las notas están limitadas a 500 caracteres.
+  image_too_large: La imagen del mapa es demasiado grande.
+  pool_limits: 'Límites del fondo excedidos: Oro {gold}/{gold_max}, Morado {purple}/{purple_max}, Azul {blue}/{blue_max}'
+  no_changes: No se han proporcionado cambios.
+  week_and_threat: La semana objetivo y el servidor de amenaza son obligatorios.
+api_events:
+  session_invalid: Token de sesión no válido, manipulado o caducado. Por favor, vuelve a ejecutar /calendar en Discord.
+  required_fields: El Título, la Fecha y la Game Time son obligatorios.
+  date_format: La fecha debe tener el formato YYYY-MM-DD.
+  time_format: La Game Time debe tener el formato HH:MM (00:00 a 23:59).
+  time_step: La Game Time debe estar en incrementos de 5 minutos (:00, :05, :10, :15, etc.).
+  role_id_needed: El Rol Específico de Destino requiere un ID de Rol de Discord válido de 17-20 dígitos.
+  published: Operación "{title}" publicada con éxito.
+  not_found: Evento no encontrado o ya eliminado.
+  out_of_scope: 'Acceso denegado: No puedes modificar ni eliminar eventos fuera de tu ámbito asignado.'
+  deleted: 'Operación eliminada: {title}'
+  updated: Operación "{title}" actualizada.
+bot_common:
+  off_week: Semana de Descanso
+  kw_week: Semana de Guerra de Reinos {n}
+  link_expires_4h: El enlace es privado y caduca en 4 horas.
+  link_expires_24h: El enlace es privado y caduca en 24 horas.
+  busy: "⚠️ Conexión ocupada: {reason}. Por favor, inténtalo de nuevo en unos segundos."
+  leaders_denied: "⛔ **Acceso denegado:** Solo los miembros con **@R5** o roles de liderazgo ({roles}) pueden gestionar eventos para **[{tag}]**."
+  steward_only_kw: "⛔ **Acceso denegado:** Solo los Administradores de Reino designados pueden registrar el resultado de la Guerra de Reinos."
+bot_calendar:
+  global_denied: "⛔ **Acceso denegado:** Solo los Administradores de Reino designados pueden gestionar eventos de todo el reino."
+  global_title: "👑 Portal de Gestión de Eventos del Reino"
+  global_text: |-
+    Haz clic abajo para abrir el calendario en **Modo de Gestión Global**.
+
+    Puedes programar anuncios para todo el reino, alertas de tregua o borrar entradas.
+  global_button: Abrir Portal de Gestión Global
+  no_alliance: "⚠️ No se ha podido detectar tu alianza. Ejecuta este comando dentro del servidor de tu alianza registrada o asegúrate de tener tu rol de alianza en el servidor NAP."
+  alliance_title: "🛡️ Gestión de Eventos de Alianza — [{tag}]"
+  alliance_text: |-
+    Haz clic abajo para abrir el calendario en **Modo de Gestión de Alianza** para **[{tag}]**.
+
+    Puedes programar incursiones internas, movimientos de colmena y sesiones de entrenamiento.
+  alliance_button: Abrir Portal de Gestión de [{tag}]
+  rank: 'Rango #{rank}'
+  captured_friday: capturado el viernes
+  captures_today: capturas hoy
+  captures_friday: capturas el viernes, {when}
+  current_holder: "👑 Poseedor actual del Capitolio"
+  next_holder: "👑 Próximo poseedor del Capitolio"
+  holder_line: "**{tag}** *(Rango #{rank})* — {note}"
+  next_reset: "⏰ Próximo reinicio diario (00:00 GT)"
+  reset_line: "**{time}** (en {hours}h {minutes}m)"
+  kw_today: "⚔️ Batalla de Guerra de Reinos (HOY)"
+  kw_next: "⚔️ Próxima Batalla de Guerra de Reinos"
+  kw_active: "🔥 **Ventana de guerra activa:** ¡Defiende y conquista el Capitolio!"
+  kw_scheduled: Programado para el **sábado** ({relative} / {date})
+  next_phase: "⏭️ Próxima fase de rotación"
+  next_phase_line: |-
+    **{week}** comienza el {when}.
+    **{tag}** *(Rango #{rank})* captura el Capitolio ese viernes.
+  open_alliance: Abrir Calendario ([{tag}])
+  open_full: Abrir Calendario Completo
+  title: "📅 Calendario de Guerra de Reinos"
+bot_map:
+  failed: "⚠️ No se ha podido generar la vista previa del mapa."
+  level_title: "🏰 Last Asylum: Niveles de Territorio"
+  level_text: Territorios categorizados por nivel (Niv. 1 a Niv. 8).
+  alliance_title: "🗺️ Last Asylum: Territorios de Alianza"
+  alliance_text: Territorios coloreados según la alianza propietaria.
+  resource_title: "🌾 Last Asylum: Recursos y Buffs Regionales"
+  resource_text: Territorios coloreados por rendimiento de recursos y buffs regionales.
+  footer: Haz clic en los botones de abajo para cambiar la perspectiva
+  levels: Niveles
+  alliances: Alianzas
+  resources: Recursos
+bot_nominate:
+  server_only: "⚠️ Este comando debe ejecutarse dentro del servidor de Discord de tu alianza o en el servidor NAP."
+  owner_server: "⛔ **Acceso denegado:** Las nominaciones de recompensas no pueden enviarse desde este servidor. Los líderes deben enviarlas a través del servidor NAP o el servidor de su alianza."
+  dedicated_denied: "⛔ **Acceso denegado:** Solo los miembros con **@R5** o roles de liderazgo autorizados ({roles}) pueden enviar nominaciones para **[{tag}]**."
+  r5_only: "⛔ **Acceso denegado:** Solo los Líderes de Alianza que poseen el rol **@R5** pueden enviar nominaciones de recompensa."
+  no_tag_role: "⚠️ No se ha podido detectar tu rol de etiqueta de alianza. Asegúrate de tener asignado tu rol de alianza (p. ej., `@{example}`)."
+  closed: "🔒 **Las recompensas están cerradas.** Las recompensas de la {week} caducaron el {closed}.\nLas próximas recompensas abren el {opens}, después del evento del Capitolio del viernes."
+  period_busy: "⚠️ Servicio ocupado: no se ha podido abrir el nuevo periodo de recompensas. Por favor, intenta /nominate de nuevo en unos segundos."
+  no_rank: "⚠️ **[{tag}]** no tiene un rango activo asignado en la clasificación."
+  no_chests: "⚠️ **[{tag}]** tiene 0 cofres asignados bajo la distribución actual."
+  no_kw: No hay Guerra de Reinos esta semana.
+  won: "⚔️ **Ganada.** Vanguardia de Honor ×{gold} · Héroe Intrépido ×{purple} · Apoyo Logístico ×{blue}"
+  lost: 'No esta semana: la Guerra de Reinos se perdió.'
+  waiting: "⏳ **Esperando el resultado de la batalla** (aprox. {time}). Si se gana: Vanguardia de Honor ×{gold} · Héroe Intrépido ×{purple} · Apoyo Logístico ×{blue}"
+  commendation: "👑 Condecoración del Rey"
+  commendation_line: Voluntad del Comandante ×{gold} · Servidor Leal ×{purple} · Corazón de Seguidor ×{blue}
+  battle_reward: "⚔️ Recompensa Rey de la Batalla"
+  buyout_title: "🛡️ Restitución por Compra en Tiempo de Guerra activa"
+  buyout_text: 'Incluye **+1 Voluntad del Comandante** (y **+1 Vanguardia de Honor** si se gana la guerra), financiado por WLO para la anulación de defensa de esta semana (Amenaza: `{threat}`).'
+  buyout_default_threat: Lista Roja
+  funds_title: "⚖️ Restitución por Compra en Tiempo de Guerra financiada"
+  funds_text: 'WLO rinde **1 Voluntad del Comandante** (y **1 Vanguardia de Honor** si se gana la guerra) de la asignación del Rango #1 de esta semana para financiar la restitución de la alianza desplazada.'
+  how_title: "📝 Cómo funciona"
+  how_text: Enumera a tus jugadores **empezando por el mejor**. Los cofres se reparten bajando por la lista en orden de valor en ambos conjuntos; los nombres extra se mantienen como reserva y suben si se abren más cofres.
+  how_waiting: "⏳ El Rey entrega las recompensas después del resultado de la batalla, por lo que el cofre de nadie cambia."
+  title: "🎁 Recompensas {week} — [{tag}]"
+  summary: 'Rango #{rank} · abierto hasta el {until} ({relative}).'
+  open_page: Abrir página de nominación
+bot_rewards:
+  reset_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden borrar las nominaciones."
+  nothing_to_clear: "🔒 No hay un periodo de recompensas abierto, por lo que no hay nada que borrar."
+  cleared_title: "🔄 Nominaciones borradas — {week}"
+  cleared_text: |-
+    Las listas de todas las alianzas de esta semana fueron borradas por **{name}**.
+
+    • Los líderes pueden enviar nuevas listas con `/nominate`.
+    • Las recompensas cierran {closes}.
+    • Recuérdale al Rey que presione **Reset Checklist** en la consola.
+  none_eligible: "⚠️ Ninguna alianza es elegible bajo el plan de recompensas activo actualmente."
+  tag_buyout: " 🛡️ [Compra]"
+  tag_funds: " ⚖️ [Compra de fondos]"
+  awaiting: "⏳ **[{tag}]** (Rango #{rank}){buyout} — **Esperando lista** ({total} cofres)"
+  reserves_one: " · {count} reserva"
+  reserves_other: " · {count} reservas"
+  sent: "✅ **[{tag}]** (Rango #{rank}){buyout} — **{named}/{total}** nombrados{reserves} ({when})"
+  closed: "🔒 **Cerrado.** Las próximas recompensas abren {opens}."
+  open: "🎁 **Recompensas de {week}** · abiertas hasta {closes}"
+  battle_no_kw: "⚔️ Recompensa Rey de Batalla: no hay Guerra de Reinos esta semana."
+  battle_won: "⚔️ Recompensa Rey de Batalla: **ganada**, abierta."
+  battle_lost: "⚔️ Recompensa Rey de Batalla: perdida, no esta semana."
+  battle_waiting: "⚔️ Recompensa Rey de Batalla: ⏳ **esperando el resultado de la batalla** (aprox. {time}). El Rey las reparte después."
+  open_console: Abrir Consola del Rey
+  title: "📋 Estado de las recompensas de la alianza — {week}"
+  count_line: "**{sent} de {total} alianzas han enviado una lista**"
+  footer: Administración del Capitolio de Last Asylum
+  old_button: 'ℹ️ Este botón ya no se utiliza: las recompensas se abren automáticamente todos los viernes a las 20:00 GT. Registra el resultado de la Guerra de Reinos con `/rewards` (Won o Lost) después de la batalla del sábado.'
+  overrides_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden restablecer los reemplazos del Capitolio."
+  overrides_nothing: |-
+    ℹ️ Nada que restablecer: no hay reemplazos ni compras, y la rotación ya sigue el cronograma estándar.
+    {schedule}
+  overrides_title: "🧹 Restablecer reemplazos del Capitolio"
+  overrides_text: |-
+    Restablecido por **{name}**. La rotación ha vuelto al cronograma estándar:
+    {after}
+
+    Antes: {before}
+
+    • Reemplazos borrados: {overrides}
+    • Compras en tiempo de guerra canceladas: {buyouts} (mantenidas en el historial)
+    • La lista de cada alianza fue reordenada para los cofres corregidos.
+bot_admin:
+  rank_none: No hay alianzas registradas en el estado actual.
+  rank_title: "🛡️ Clasificación de NAP del servidor"
+  rank_open: Diplomacia y clasificación abiertas
+  rank_fetch_failed: "⚠️ Error al obtener la clasificación: {reason}"
+  rank_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden actualizar la clasificación de las alianzas."
+  rank_missing: "⚠️ Faltan argumentos requeridos: tag y rank."
+  rank_set_title: "👑 Clasificación NAP actualizada"
+  rank_set_text: 'La alianza `[{tag}]` ha sido asignada al **Puesto #{rank}** *(anteriormente: {previous})*.'
+  rank_unranked: Sin clasificación
+  rank_updated_by: Actualizado por {name}
+  rank_view: Ver clasificación
+  rank_set_failed: "⚠️ Error al actualizar la clasificación: {reason}"
+  dev_done: |-
+    ✅ **Datos de prueba actualizados.** Se copiaron {count} archivo(s) de los datos reales al Gist de prueba usado por dev.la-s78.app: {files}.
+    Los datos reales solo fueron leídos, no modificados.
+  dev_failed: "⚠️ **Datos de prueba no actualizados:** {reason}"
+  dev_denied: "⛔ **Acceso denegado:** Solo los administradores pueden actualizar los datos de prueba."
+  test_proposal: "🧪 Esta es una propuesta de prueba desde el sitio de prueba. Utiliza datos de prueba, por lo que no se puede aprobar ni cambiar nada en tiempo real."
+  approved_not_updated: "✅ Aprobado y guardado, pero este mensaje no pudo ser actualizado ({reason})."
+bot_register:
+  nap_only: "⚠️ Este comando solo puede ser ejecutado en el servidor oficial de NAP."
+  sync_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden sincronizar comandos por transmisión."
+  sync_title: "🔄 Comandos de barra de alianza sincronizados"
+  sync_done: |-
+    Se envió el esquema de comandos más reciente a:
+
+    {results}
+  sync_none: "⚠️ No se encontraron servidores de alianza registrados en el estado."
+  sync_footer: Administrador de despliegue del bot de Last Asylum
+  sync_failed: "❌ Error de sincronización: {reason}"
+  r5_only: "⛔ **Acceso denegado:** Solo los líderes de alianza con el rol **@R5** pueden registrar servidores de alianza."
+  no_tag_role: "⚠️ No se pudo detectar el rol de tu tag de alianza. Asegúrate de tener el rol de tu alianza (ej. `@{example}`) en el servidor de NAP."
+  title: "🤖 Configuración del servidor de alianza — [{tag}]"
+  text: |-
+    Haz clic abajo para autorizar al bot y vincular el servidor de Discord de tu alianza con el sitio web.
+
+    • Instala comandos (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).
+    • Permite configurar roles delegados (ej. `@HR`).
+  open_portal: Abrir portal de registro
+  busy: "⚠️ Servicio ocupado: {reason}. Por favor, inténtalo de nuevo en unos momentos."
+bot_commands:
+  calendar: Ver o gestionar el Calendario de Eventos
+  calendar_kingdom: Ver o gestionar el Calendario de Eventos del Reino
+  calendar_action: Acción a realizar (dejar en blanco para ver el calendario)
+  calendar_manage_alliance: Gestionar Eventos de la Alianza (R5 por defecto)
+  calendar_manage_global: Gestionar Eventos Globales (Solo Administradores)
+  nominate: Solicitar un enlace al portal para enviar nominaciones semanales de cofres
+  nominate_authenticated: Solicitar un enlace al portal autenticado para enviar nominaciones semanales de cofres
+  rewards: 'Recompensas de esta semana: estado y resultado de la Guerra de Reinos (Administradores)'
+  rewards_action: Dejar en blanco para ver el estado de las recompensas de esta semana
+  rewards_won: 'Registrar Guerra de Reinos: Ganada (Administrador)'
+  rewards_lost: 'Registrar Guerra de Reinos: Perdida (Administrador)'
+  rewards_reset: Borrar las nominaciones de esta semana (Administrador)
+  rewards_reset_overrides: Restablecer reemplazos y compras del Capitolio (Administrador)
+  rank: Ver o gestionar rangos NAP de la alianza
+  rank_set: Actualizar el rango NAP de una alianza (Solo Administradores)
+  rank_tag: Etiqueta de la alianza (ej. ABC)
+  rank_position: Nueva posición de rango (ej. 1 al 10)
+  rank_list: Mostrar rangos y posiciones NAP actuales
+  sb: Mostrar el cronograma de Batalla de Supervivencia
+  sb_long: Mostrar el cronograma de carrera armamentista de Batalla de Supervivencia y eventos activos
+  sb_day: Día del ciclo (1-7)
+  rules: Mostrar las reglas del servidor y las reglas NAP del Reino
+  rules_rule: Número de regla específica para ver
+  map: Ver el mapa de territorio en tiempo real
+  map_long: Ver el mapa de territorio de Last Asylum en tiempo real
+  devupdate: Copiar los datos en vivo a los datos del sitio de prueba (Solo Administradores; solo tú ves la respuesta)
+  registerbot: Registrar el servidor de la alianza o sincronizar comandos slash
+  registerbot_action: Acción a realizar (dejar en blanco para obtener el enlace del portal de registro)
+  registerbot_sync: Sincronizar todos los servidores registrados (Solo Administradores)
+  suggest: Enviar una propuesta de regla, informar un problema de la alianza o verificar el estado de tu ticket
+  suggest_type: Seleccionar categoría de ticket o verificar tus envíos activos
+  suggest_nap: "👑 Propuesta de Reino / NAP (Regla para todo el servidor o idea de evento)"
+  suggest_alliance: "🛡️ Problema interno de la alianza (Gestionado de forma privada por tus R4/R5s)"
+  suggest_status: "📋 Ver el estado de mi ticket (Activo y historial reciente)"

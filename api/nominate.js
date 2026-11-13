@@ -3,15 +3,32 @@
 // list of players; the chests are worked out from it (api/_nomination_assign.js), here and
 // again whenever the Kingdom War result changes what's available.
 
-import { isGistConfigured, readGist, gistJson, writeGist } from './_gist.js';
-import { verifyToken } from './_tokens.js';
+import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
+import { verifySessionToken, verifyToken } from './_tokens.js';
+import { isSteward } from './_stewards.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { describeRewardPeriod, getRewardPeriod, syncRewardPeriod } from './_reward_period.js';
 import { getAllianceNominationQuota, quotaIfWon } from './_rewards_helper.js';
-import { chestCounts, cleanRankedList, rankedFromSlots } from './_nomination_assign.js';
-import { buildNomination, recordBuyoutNominees } from './_nominations.js';
+import {
+  CHEST_TYPES,
+  chestCounts,
+  cleanRankedList,
+  rankedFromSlots,
+} from './_nomination_assign.js';
+import {
+  buildNomination,
+  handedOutFor,
+  handedOutKey,
+  kingAlliance,
+  reassignAllNominations,
+} from './_nominations.js';
+import { inLanguage, say } from './_messages.js';
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
+  return inLanguage(req, () => respond(req, res));
+}
+
+async function respond(req, res) {
   if (!isGistConfigured()) {
     return res.status(500).json({ error: 'Gist configuration is missing.' });
   }
@@ -44,6 +61,9 @@ export default async function handler(req, res) {
         mode: view.mode || 'standard',
         period: describeRewardPeriod(period, rewardsData),
         wartime_buyouts: rewardsData.wartime_buyouts || [],
+        // The King's checklist: chests ticked as handed out, and whose leaders may tick
+        handed_out: current ? rewardsData.period?.handed_out || {} : {},
+        king: current ? kingAlliance(rewardsData, period) : null,
       };
 
       const token = req.query?.token;
@@ -51,7 +71,7 @@ export default async function handler(req, res) {
         const payload = verifyToken(String(token), process.env.DISCORD_BOT_TOKEN, {
           action: 'nominate',
         });
-        if (!payload) return res.status(403).json({ error: 'This link is invalid or expired.' });
+        if (!payload) return res.status(403).json({ error: say('api_nominate.link_invalid') });
         const tag = String(payload.alliance || '').trim();
         const now = getAllianceNominationQuota(tag, view, mapState);
         body.alliance = {
@@ -63,6 +83,10 @@ export default async function handler(req, res) {
           isWloDeducted: now.isWloDeducted,
           ranked: nominations[tag]?.ranked || rankedFromSlots(nominations[tag]?.recipients || {}),
           submittedAt: nominations[tag]?.submittedAt || null,
+          // Already handed out by the King: locked, kept whatever the list says
+          handedOut: current
+            ? handedOutFor(rewardsData, tag).map(({ pool, chest, name }) => ({ pool, chest, name }))
+            : [],
         };
       }
       return res.status(200).json(body);
@@ -76,6 +100,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  if (req.body?.action === 'handout') return handleHandout(req, res);
+
   const { token } = req.body || {};
   const botToken = process.env.DISCORD_BOT_TOKEN;
   if (!token || !botToken) {
@@ -86,7 +112,7 @@ export default async function handler(req, res) {
   // management) are signed the same way and also name an alliance.
   const payload = verifyToken(token, botToken, { action: 'nominate' });
   if (!payload) {
-    return res.status(403).json({ error: 'Token is invalid or expired. Run /nominate again.' });
+    return res.status(403).json({ error: say('api_nominate.token_invalid') });
   }
   const tag = String(payload.alliance || '').trim();
 
@@ -95,45 +121,49 @@ export default async function handler(req, res) {
     ? req.body.ranked
     : rankedFromSlots(req.body.nominations || {});
   const { names, error } = cleanRankedList(raw);
+  const refuse = (status, message) => ({ refused: { status, error: message } });
   if (error) return res.status(400).json({ error });
 
   try {
-    const gist = await readGist();
-    const rewardsData = gistJson(gist, 'rewards-data.json');
-    const mapState = gistJson(gist, 'map-state.json');
-    let nominationsStore = gistJson(gist, 'rewards-nominations.json');
+    // Worked out from the stored data and saved; redone on newer data if another save (e.g.
+    // another alliance's list, or the Kingdom War result) lands at the same moment.
+    const saved = await updateGist((gist) => {
+      const rewardsData = gistJson(gist, 'rewards-data.json');
+      const mapState = gistJson(gist, 'map-state.json');
+      let nominationsStore = gistJson(gist, 'rewards-nominations.json');
 
-    const period = getRewardPeriod(Date.now(), calendarConfig(gist));
-    if (!period.open) {
-      return res.status(409).json({
-        error: `Rewards are closed until ${new Date(period.nextOpensAt).toUTCString()}.`,
-      });
-    }
-    if (payload.period && payload.period !== period.id) {
-      return res
-        .status(409)
-        .json({ error: 'This link is for an earlier week. Run /nominate again for a new one.' });
-    }
-    if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominationsStore = {};
+      const period = getRewardPeriod(Date.now(), calendarConfig(gist));
+      if (!period.open) {
+        return refuse(
+          409,
+          `Rewards are closed until ${new Date(period.nextOpensAt).toUTCString()}.`,
+        );
+      }
+      if (payload.period && payload.period !== period.id) {
+        return refuse(409, 'This link is for an earlier week. Run /nominate again for a new one.');
+      }
+      if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominationsStore = {};
 
-    const entry = buildNomination(tag, names, rewardsData, mapState, new Date().toISOString());
-    if (entry.rank > 50) {
-      return res.status(400).json({ error: `[${tag}] has no rank in the standings.` });
-    }
-    const chests = names.length - entry.reserves.length + entry.unfilled;
-    if (chests === 0) {
-      return res.status(400).json({ error: `[${tag}] has no chests this week.` });
-    }
-    nominationsStore[tag] = entry;
-    recordBuyoutNominees(rewardsData, entry);
+      const entry = buildNomination(tag, names, rewardsData, mapState, new Date().toISOString());
+      if (entry.rank > 50) return refuse(400, `[${tag}] has no rank in the standings.`);
+      const chests = names.length - entry.reserves.length + entry.unfilled;
+      if (chests === 0) return refuse(400, `[${tag}] has no chests this week.`);
+      nominationsStore[tag] = entry;
+      // Every list is sorted again from its names, so all chests match the stored result
+      // even if this save had to be merged with a Kingdom War result saved at the same moment.
+      nominationsStore = reassignAllNominations(nominationsStore, rewardsData, mapState);
 
-    await writeGist(
-      {
-        'rewards-nominations.json': nominationsStore,
-        'rewards-data.json': rewardsData,
-      },
-      { description: `Nominations updated: [${tag}] at ${new Date().toISOString()}` },
-    );
+      return {
+        entry: nominationsStore[tag],
+        files: {
+          'rewards-nominations.json': nominationsStore,
+          'rewards-data.json': rewardsData,
+        },
+        description: `Nominations updated: [${tag}] at ${new Date().toISOString()}`,
+      };
+    });
+    if (saved.refused) return res.status(saved.refused.status).json({ error: saved.refused.error });
+    const { entry } = saved;
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     return res.status(200).json({
@@ -151,6 +181,130 @@ export default async function handler(req, res) {
 }
 
 /** The calendar settings (calendar-state.json), over the defaults. */
+/** Tags compared without letter case or accents (RÂVN = ravn). */
+const sameTag = (a, b) =>
+  Boolean(a && b) &&
+  String(a)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase() ===
+    String(b)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+/**
+ * POST { action: 'handout', alliance, pool, chest, name, done } with the login pass
+ * (Authorization: Bearer): ticks (done: true) or unticks a chest on the King's checklist.
+ * Allowed for the R4/R5 of this period's King's alliance (kingAlliance) and Stewards. A
+ * ticked chest is locked: later re-sorts keep it with that player (assignChests).
+ */
+async function handleHandout(req, res) {
+  const botToken = process.env.DISCORD_BOT_TOKEN;
+  const pass = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '');
+  const session = verifySessionToken(pass, botToken);
+  if (!session) {
+    return res.status(401).json({ error: say('api_nominate.signed_out'), code: 'login' });
+  }
+  const { alliance, pool, chest, name, done } = req.body || {};
+  if (
+    typeof alliance !== 'string' ||
+    !['standard', 'kingdom_war'].includes(pool) ||
+    !CHEST_TYPES.includes(chest) ||
+    typeof name !== 'string' ||
+    !name.trim() ||
+    name.length > 60
+  ) {
+    return res.status(400).json({ error: say('api_nominate.invalid_chest') });
+  }
+  const steward = isSteward(session.uid);
+
+  try {
+    const saved = await updateGist((gist) => {
+      const rewardsData = gistJson(gist, 'rewards-data.json');
+      const period = getRewardPeriod(Date.now(), calendarConfig(gist));
+      if (!period.open || rewardsData.period?.id !== period.id) {
+        return { refused: { status: 409, error: say('api_nominate.no_period') } };
+      }
+      const king = kingAlliance(rewardsData, period);
+      const leader = ['R4', 'R5'].includes(session.role) && sameTag(session.alliance, king);
+      if (!steward && !leader) {
+        return {
+          refused: {
+            status: 403,
+            error: king
+              ? say('api_nominate.king_only_tag', { king })
+              : say('api_nominate.king_only'),
+          },
+        };
+      }
+
+      const handed = { ...(rewardsData.period.handed_out || {}) };
+      const key = handedOutKey(alliance, pool, chest, name);
+      const nominations = gistJson(gist, 'rewards-nominations.json');
+      if (done) {
+        // The King ticks what the console showed: that chest is given in the game, so the
+        // tick stands even if the list was re-sorted meanwhile (the lock then puts the player
+        // back in that chest). Only a player who isn't on the alliance's list is refused.
+        const entry = nominations[alliance];
+        const listed = [
+          ...(entry?.ranked || []),
+          ...Object.values(entry?.recipients || {}).flatMap((p) => Object.values(p).flat()),
+        ];
+        const holder = listed.find((n) => n.toLowerCase() === name.trim().toLowerCase());
+        if (!holder && !handed[key]) {
+          return {
+            refused: {
+              status: 409,
+              error: say('api_nominate.not_listed', { name, alliance }),
+            },
+          };
+        }
+        if (handed[key]) return { handedOut: handed }; // already ticked
+        // One chest per player: a tick for another chest (from a page not yet refreshed) is replaced.
+        for (const [k, h] of Object.entries(handed)) {
+          if (h.alliance === alliance && h.name.toLowerCase() === holder.toLowerCase())
+            delete handed[k];
+        }
+        handed[key] = {
+          alliance,
+          pool,
+          chest,
+          name: holder,
+          by: session.name || 'Unknown',
+          at: new Date().toISOString(),
+        };
+      } else {
+        if (!handed[key]) return { handedOut: handed }; // not ticked
+        delete handed[key];
+      }
+      rewardsData.period.handed_out = handed;
+      // The lists sorted again with the lock (or without it), so the saved chests always
+      // match the checklist, even if a list was re-sent at the same moment.
+      const sorted = reassignAllNominations(
+        nominations,
+        rewardsData,
+        gistJson(gist, 'map-state.json'),
+      );
+      return {
+        handedOut: handed,
+        files: { 'rewards-data.json': rewardsData, 'rewards-nominations.json': sorted },
+        description: `King's checklist: ${done ? 'handed out' : 'unticked'} ${name} [${alliance}] by ${session.name}`,
+      };
+    });
+    if (saved.refused) {
+      return res.status(saved.refused.status).json({ error: saved.refused.error });
+    }
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(200).json({ success: true, handed_out: saved.handedOut });
+  } catch (err) {
+    console.error("King's checklist not saved:", err);
+    return res
+      .status(500)
+      .json({ error: say('api_nominate.save_failed', { reason: err.message }) });
+  }
+}
+
 function calendarConfig(gist) {
   return { ...DEFAULT_CALENDAR_CONFIG, ...gistJson(gist, 'calendar-state.json', {}) };
 }

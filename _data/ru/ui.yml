@@ -1,200 +1,195 @@
+# Translated automatically from _data/en/ui.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 header:
-  title: "LAST ASYLUM"
-  subtitle: "Сборник по выживанию"
-
+  title: LAST ASYLUM
+  subtitle: Сборник по выживанию
 footer:
-  nav_home: "Главная"
-  nav_rules: "Правила"
-  nav_guides: "Гайды"
-  nav_alliance: "Альянс"
-  nav_calendar: "Календарь"
-  aria_home: "Перейти на Главную страницу"
-  aria_rules: "Перейти на страницу Правил сервера"
-  aria_guides: "Перейти на страницу Гайдов"
-  aria_alliance: "Перейти на страницу Альянса и Дипломатии"
-  aria_calendar: "Перейти на страницу календаря событий"
-
+  nav_home: Главная
+  nav_rules: Правила
+  nav_guides: Гайды
+  nav_alliance: Альянс
+  nav_calendar: Календарь
+  aria_home: Перейти на Главную страницу
+  aria_rules: Перейти на страницу Правил сервера
+  aria_guides: Перейти на страницу Гайдов
+  aria_alliance: Перейти на страницу Альянса и Дипломатии
+  aria_calendar: Перейти на страницу календаря событий
 guides:
-  heroes: "Герои и Билды"
-  combat: "Сражение"
-  building: "Здания и Технологии"
-  resources: "Управление ресурсами"
-  sanctuary: "Гайд по Убежищу"
-  duel: "Дуэль Альянсов"
-  survival: "Битва за выживание"
-  kingdom: "Война Королевств"
-  canyon: "Покорение Каньона"
-  cheese: "Сырная Ловушка"
-  thief: "Охота на Воров"
-  pickaxe: "Гномья Кирка"
-  crystal: "Кристальная Долина"
-  alliance_shop: "Магазин Альянса"
-  honor_shop: "Магазин Чести"
-  sanctuary_shop: "Магазин Убежища"
-  campaign_shop: "Магазин Кампании"
-  premium_shop: "Премиум и Наборы самоцветов"
-  t10: "Калькулятор T10"
-  scramble: "Королевская схватка"
-
+  heroes: Герои и Билды
+  combat: Сражение
+  building: Здания и Технологии
+  resources: Управление ресурсами
+  sanctuary: Гайд по Убежищу
+  duel: Дуэль Альянсов
+  survival: Битва за выживание
+  kingdom: Война Королевств
+  canyon: Покорение Каньона
+  cheese: Сырная Ловушка
+  thief: Охота на Воров
+  pickaxe: Гномья Кирка
+  crystal: Кристальная Долина
+  alliance_shop: Магазин Альянса
+  honor_shop: Магазин Чести
+  sanctuary_shop: Магазин Убежища
+  campaign_shop: Магазин Кампании
+  premium_shop: Премиум и Наборы самоцветов
+  t10: Калькулятор T10
+  scramble: Королевская схватка
 pages:
   home:
-    title: "Главная"
-    subtitle: "Сборник по выживанию"
+    title: Главная
+    subtitle: Сборник выживания
   rules:
-    title: "Правила"
-    subtitle: "Правила сервера и Ротация"
+    title: Правила
+    subtitle: Правила сервера и ротация
   guides:
-    title: "Гайды"
-    subtitle: "Гайды по игре"
+    title: Гайды
+    subtitle: Гайды по игре
     writers:
-      title: "Руководство для авторов"
-      subtitle: "Руководство для авторов"
+      title: Руководство для авторов
+      subtitle: Руководство для авторов
   alliance:
-    title: "Альянс"
-    subtitle: "Альянс и Дипломатия"
+    title: Альянс
+    subtitle: Альянс и дипломатия
+  api-test:
+    title: Секретные данные альянса
+    subtitle: Секретные данные альянса
+  calendar:
+    title: Календарь событий
+    subtitle: События альянса и сервера
   guide_panes:
     heroes:
-      title: "Герои и Билды"
-      subtitle: "Герои и Билды"
+      title: Герои и Билды
+      subtitle: Герои и Билды
     combat:
-      title: "Сражение"
-      subtitle: "Сражение"
+      title: Сражение
+      subtitle: Сражение
     building:
-      title: "Здания и Технологии"
-      subtitle: "Здания и Технологии"
+      title: Здания и Технологии
+      subtitle: Здания и Технологии
     resources:
-      title: "Управление ресурсами"
-      subtitle: "Управление ресурсами"
+      title: Управление ресурсами
+      subtitle: Управление ресурсами
     sanctuary:
-      title: "Гайд по Убежищу"
-      subtitle: "Гайд по Убежищу"
+      title: Гайд по Убежищу
+      subtitle: Гайд по Убежищу
     duel:
-      title: "Дуэль Альянсов"
-      subtitle: "Дуэль Альянсов"
+      title: Дуэль Альянсов
+      subtitle: Дуэль Альянсов
     survival:
-      title: "Битва за выживание"
-      subtitle: "Битва за выживание"
+      title: Битва за выживание
+      subtitle: Битва за выживание
     kingdom:
-      title: "Война Королевств"
-      subtitle: "Война Королевств"
+      title: Война Королевств
+      subtitle: Война Королевств
     canyon:
-      title: "Покорение Каньона"
-      subtitle: "Покорение Каньона"
+      title: Покорение Каньона
+      subtitle: Покорение Каньона
     cheese:
-      title: "Сырная Ловушка"
-      subtitle: "Сырная Ловушка"
+      title: Сырная Ловушка
+      subtitle: Сырная Ловушка
     thief:
-      title: "Охота на Воров"
-      subtitle: "Охота на Воров"
+      title: Охота на Воров
+      subtitle: Охота на Воров
     pickaxe:
-      title: "Гномья Кирка"
-      subtitle: "Гномья Кирка"
+      title: Гномья Кирка
+      subtitle: Гномья Кирка
     crystal:
-      title: "Кристальная Долина"
-      subtitle: "Кристальная Долина"
+      title: Кристальная Долина
+      subtitle: Кристальная Долина
     alliance_shop:
-      title: "Магазин Альянса"
-      subtitle: "Магазин Альянса"
+      title: Магазин Альянса
+      subtitle: Магазин Альянса
     honor_shop:
-      title: "Магазин Чести"
-      subtitle: "Магазин Чести"
+      title: Магазин Чести
+      subtitle: Магазин Чести
     sanctuary_shop:
-      title: "Магазин Убежища"
-      subtitle: "Магазин Убежища"
+      title: Магазин Убежища
+      subtitle: Магазин Убежища
     campaign_shop:
-      title: "Магазин Кампании"
-      subtitle: "Магазин Кампании"
+      title: Магазин Кампании
+      subtitle: Магазин Кампании
     premium_shop:
-      title: "Премиум и Наборы самоцветов"
-      subtitle: "Премиум и Наборы самоцветов"
+      title: Премиум и наборы самоцветов
+      subtitle: Премиум и наборы самоцветов
     t10:
-      title: "Гайд по T10"
-      subtitle: "Требования Т10"
+      title: Гайд по T10
+      subtitle: Требования для T10
     scramble:
-      title: "Королевская схватка"
-      subtitle: "Королевская схватка"
-    cheese:
-      title: "Сырная ловушка"
-      subtitle: "Сырная ловушка"
-
+      title: Королевская схватка
+      subtitle: Королевская схватка
 nav_anchors:
-  server_rules: "Правила сервера"
-  rotation: "Ротация"
-  rewards: "Награды"
-  nap_alliances: "NAP Альянсы"
-  nap_academies: "NAP Академии"
-  nap_ranks: "Ранги NAP"
-  nap_territory: "Территория NAP"
-  blacklist: "Черный список"
-  markdown_usage: "Использование"
-  markdown_example: "Пример"
-  guide_submissions: "Отправка"
-  #guide pages
-  #survival battle
-  survival_explanation: "Объяснение"
-  survival_schedule: "Расписание"
-  survival_reference: "Справка"
-  #kingdom war
-  kingdom_explanation: "Объяснение"
-  kingdom_scoring: "Очки"
-  kingdom_strategy: "Стратегия"
-  #alliance duel
-  duel_schedule: "Расписание"
-  duel_rules: "Правила"
-  #sanctuary guide
-  sanctuary_strategy: "Стратегия"
-  sanctuary_chart: "Таблица"
-  sanctuary_goals: "Цели"
-  sanctuary_efficiency: "Эффективность"
-  #royal scramble
-  scramble_event: "Событие"
-  scramble_points: "Очки"
-  #cheese trap
-  cheese_event: "Событие"
-  cheese_cheese: "Сыр"
-  cheese_strategy: "Стратегия"
-  cheese_rewards: "Награды"
-
+  server_rules: Правила сервера
+  rotation: Ротация
+  rewards: Награды
+  nap_alliances: NAP Альянсы
+  nap_academies: NAP Академии
+  nap_ranks: Ранги NAP
+  nap_territory: Территория NAP
+  blacklist: Черный список
+  markdown_usage: Использование
+  markdown_example: Пример
+  guide_submissions: Отправка
+  survival_explanation: Объяснение
+  survival_schedule: Расписание
+  survival_reference: Справка
+  kingdom_explanation: Объяснение
+  kingdom_scoring: Очки
+  kingdom_strategy: Стратегия
+  duel_schedule: Расписание
+  duel_rules: Правила
+  sanctuary_strategy: Стратегия
+  sanctuary_chart: Таблица
+  sanctuary_goals: Цели
+  sanctuary_efficiency: Эффективность
+  scramble_event: Событие
+  scramble_points: Очки
+  cheese_event: Событие
+  cheese_cheese: Сыр
+  cheese_strategy: Стратегия
+  cheese_rewards: Награды
 search:
-  guides: "Поиск по гайдам..."
-  home: "Поиск по каталогам, постам..."
-  placeholder: "Поиск..."
-
+  guides: Поиск по гайдам...
+  home: Поиск по каталогам, постам...
+  placeholder: Поиск...
 pwa:
-  toast_msg: "Получены новые разведданные."
-  update_btn: "Обновить"
-  updating: "Расшифровка..."
-
-#header sign-in pill (js/identity-pill.js)
+  toast_msg: Получены новые разведданные.
+  update_btn: Обновить
+  updating: Расшифровка...
+  updated_msg: "✅ Приложение обновлено до последней версии."
 identity:
-  account: "Ваш аккаунт"
-  sign_in: "Войти"
-  signing_in: "Вход…"
-  sign_in_failed: "Не удалось войти, попробуйте снова"
-  sign_in_again: "Войти снова"
-  refresh: "Обновить доступ"
-  sign_out: "Выйти"
-  role_steward: "Steward"
-  role_r5: "R5"
-  role_r4: "R4"
-  role_officer: "Офицер"
-  role_member: "Участник"
-  role_guest: "Гость"
-  role_expired: "Истёк"
-  alliance_label: "Альянс"
-  alliance_none: "нет"
-  access_title: "Ваш доступ"
-  access_view: "Просмотр карты, расписаний и рейтингов"
-  access_draft: "Черновики планов в режиме планировщика"
-  access_join: "Вступите в Discord-сервер NAP, чтобы получить больше доступа"
-  access_ask_leader: "Попросите своего R4 или R5 отправить ваши планы как предложения"
-  access_send: "Отправка предложений по карте, рейтингу, чёрному списку и наградам (5 в день)"
-  access_send_unlimited: "Отправка предложений без дневного лимита"
-  access_approve: "Одобрение и отклонение предложений в Discord"
-  access_expired: "Срок входа истёк. Войдите снова, чтобы отправлять предложения."
-  expires_days: "Вход истекает через {n} дн."
-  expires_one: "Вход истекает через 1 день"
-  expires_today: "Вход истекает сегодня"
-  found_role_id: "найден по ID роли"
-  found_role_name: "найден по названию роли"
-  found_nickname: "найден по нику"
+  account: Ваш аккаунт
+  sign_in: Войти
+  signing_in: Вход…
+  sign_in_failed: Не удалось войти, попробуйте снова
+  sign_in_again: Войти снова
+  refresh: Обновить доступ
+  sign_out: Выйти
+  force_update: Обновить приложение
+  force_updating: Обновление…
+  dashboard: Панель альянса
+  role_steward: Steward
+  role_r5: R5
+  role_r4: R4
+  role_officer: Офицер
+  role_member: Участник
+  role_guest: Гость
+  role_expired: Истёк
+  alliance_label: Альянс
+  alliance_none: нет
+  access_title: Ваш доступ
+  access_view: Просмотр карты, расписаний и рейтингов
+  access_draft: Черновики планов в режиме планировщика
+  access_join: Вступите в Discord-сервер NAP, чтобы получить больше доступа
+  access_ask_leader: Попросите своего R4 или R5 отправить ваши планы как предложения
+  access_send: Отправка предложений по карте, рейтингу, чёрному списку и наградам (5 в день)
+  access_send_unlimited: Отправка предложений без дневного лимита
+  access_approve: Одобрение и отклонение предложений в Discord
+  access_expired: Срок входа истёк. Войдите снова, чтобы отправлять предложения.
+  expires_days: Вход истекает через {n} дн.
+  expires_one: Вход истекает через 1 день
+  expires_today: Вход истекает сегодня
+  found_role_id: найден по ID роли
+  found_role_name: найден по названию роли
+  found_nickname: найден по нику

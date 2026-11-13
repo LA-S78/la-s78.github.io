@@ -8,6 +8,7 @@ import { resolveMemberAllianceContext } from './_bot_roles.js';
 import { ALLIANCE_COMMANDS_SCHEMA } from './_bot_schema.js';
 import { isSteward } from './_stewards.js';
 import { createToken } from './_tokens.js';
+import { say } from './_messages.js';
 
 /** --- /registerbot COMMAND (NAP Server Only) --- */
 export async function handleRegisterBotCommand(ctx) {
@@ -22,19 +23,13 @@ export async function handleRegisterBotCommand(ctx) {
   const requestedAction = options?.find((opt) => opt.name === 'action')?.value;
 
   if (!napGuildId || guildId !== napGuildId) {
-    return sendEphemeralMessage(
-      res,
-      '⚠️ This command can only be executed in the official NAP server.',
-    );
+    return sendEphemeralMessage(res, say('bot_register.nap_only'));
   }
 
   // SUB-ACTION: Broad-sync all registered alliance servers (Steward only)
   if (requestedAction === 'sync') {
     if (!isSteward(userId)) {
-      return sendEphemeralMessage(
-        res,
-        '⛔ **Access Denied:** Only designated Kingdom Stewards can broadcast-sync commands.',
-      );
+      return sendEphemeralMessage(res, say('bot_register.sync_denied'));
     }
 
     try {
@@ -66,12 +61,12 @@ export async function handleRegisterBotCommand(ctx) {
         data: {
           embeds: [
             {
-              title: '🔄 Alliance Slash Commands Broad-Synced',
+              title: say('bot_register.sync_title'),
               color: 0x22c55e,
               description: results.length
-                ? `Pushed latest command schema to:\n\n${results.join('\n')}`
-                : '⚠️ No registered alliance servers found in state.',
-              footer: { text: 'Last Asylum Bot Deployment Manager' },
+                ? say('bot_register.sync_done', { results: results.join('\n') })
+                : say('bot_register.sync_none'),
+              footer: { text: say('bot_register.sync_footer') },
               timestamp: new Date().toISOString(),
             },
           ],
@@ -79,7 +74,7 @@ export async function handleRegisterBotCommand(ctx) {
         },
       });
     } catch (err) {
-      return sendEphemeralMessage(res, `❌ Sync failed: ${err.message}`);
+      return sendEphemeralMessage(res, say('bot_register.sync_failed', { reason: err.message }));
     }
   }
 
@@ -98,22 +93,20 @@ export async function handleRegisterBotCommand(ctx) {
     });
 
     if (!isR5 && !isSteward(userId)) {
-      return sendEphemeralMessage(
-        res,
-        '⛔ **Access Denied:** Only Alliance Leaders holding the **@R5** role can register alliance servers.',
-      );
+      return sendEphemeralMessage(res, say('bot_register.r5_only'));
     }
 
     if (!matchedAllianceTag) {
       return sendEphemeralMessage(
         res,
-        `⚠️ Could not detect your alliance tag role. Ensure you hold your alliance role (e.g. \`@${knownAlliances[0] || 'TAG'}\`) in the NAP server.`,
+        say('bot_register.no_tag_role', { example: knownAlliances[0] || 'TAG' }),
       );
     }
 
     const tokenPayload = {
       alliance: matchedAllianceTag,
       action: 'register',
+      uid: userId, // the portal checks this person may manage the server being linked
       client_id: clientId,
       exp: Date.now() + 24 * 60 * 60 * 1000,
     };
@@ -125,11 +118,10 @@ export async function handleRegisterBotCommand(ctx) {
       data: {
         embeds: [
           {
-            title: `🤖 Alliance Server Setup — [${matchedAllianceTag}]`,
+            title: say('bot_register.title', { tag: matchedAllianceTag }),
             color: 0xb8975a,
-            description:
-              "Click below to authorize the bot and link your alliance's Discord server to the website.\n\n• Installs commands (`/calendar`, `/suggest`, `/nominate`, `/rewards`, `/map`, `/sb`, `/rules`).\n• Allows configuring delegated roles (e.g. `@HR`).",
-            footer: { text: 'Link is private and expires in 24 hours.' },
+            description: say('bot_register.text'),
+            footer: { text: say('bot_common.link_expires_24h') },
           },
         ],
         components: [
@@ -139,7 +131,7 @@ export async function handleRegisterBotCommand(ctx) {
               {
                 type: 2,
                 style: 5,
-                label: 'Open Registration Portal',
+                label: say('bot_register.open_portal'),
                 url: registerUrl,
               },
             ],
@@ -150,10 +142,7 @@ export async function handleRegisterBotCommand(ctx) {
     });
   } catch (err) {
     console.error('Registerbot error:', err);
-    return sendEphemeralMessage(
-      res,
-      `⚠️ Service busy: ${err.message}. Please retry in a few moments.`,
-    );
+    return sendEphemeralMessage(res, say('bot_register.busy', { reason: err.message }));
   }
   return NOT_HANDLED;
 }

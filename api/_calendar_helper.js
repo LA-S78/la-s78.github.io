@@ -178,3 +178,72 @@ export function generateCycleEvents(startDate, endDate, customConfig = {}) {
 
   return events;
 }
+
+/**
+ * The four weeks of the current cycle for the Capitol Rotation chart (Rules page), in
+ * calendar order: who captures the Capitol each week, with live ranks and overrides.
+ *
+ * - seat: the rank that week's rotation gives the Capitol to (capitol_rotation).
+ * - tag: the alliance the reward schedule names for that week (active_schedule, which
+ *   includes Steward overrides), else the plain rotation's, else whoever holds that rank.
+ * - rank: that alliance's live rank.
+ * - override: the schedule names a different alliance than the plain rotation for this
+ *   cycle (plainSchedule, the 3-cycle wheel); replaced: who the plain rotation has there.
+ *   (The wheel moves seats round, so a holder's rank differing from the seat is normal.)
+ * - captureAt: that week's Friday capture (unix seconds) in the current cycle.
+ * - state: 'done' (an earlier week of this cycle), 'current' (this week) or 'upcoming';
+ *   captured: this week's Friday capture has happened.
+ *
+ * @param {object} status getCycleState() for now
+ * @param {object} config the calendar settings
+ * @param {object} alliances map-state alliances with their display colours
+ * @param {object|null} activeSchedule rewards-data cycle_state.active_schedule
+ * @param {object|null} plainSchedule the cycle's plain rotation (resolveCohortSchedule)
+ */
+export function describeRotation(
+  status,
+  config,
+  alliances = {},
+  activeSchedule = null,
+  plainSchedule = null,
+) {
+  const cfg = { ...DEFAULT_CALENDAR_CONFIG, ...config };
+  const rotation = Array.isArray(cfg.capitol_rotation) ? cfg.capitol_rotation : [];
+  return [...rotation]
+    .sort((a, b) => Number(a.week) - Number(b.week))
+    .map((w) => {
+      const { clockWeek, slotKey } = getScheduleSlot(w.week, cfg);
+      const seat = Number(w.capitol_rank);
+      const scheduled = String(activeSchedule?.[slotKey] || '').trim();
+      const byRank = Object.entries(alliances).find(([, a]) => Number(a?.rank) === seat)?.[0];
+      const tag = scheduled || plainSchedule?.[slotKey] || byRank || null;
+      const rank =
+        tag && Number.isFinite(Number(alliances[tag]?.rank)) ? Number(alliances[tag].rank) : null;
+      const weekNumber = Number(w.week);
+      const state =
+        weekNumber < status.currentWeekNumber
+          ? 'done'
+          : weekNumber === status.currentWeekNumber
+            ? 'current'
+            : 'upcoming';
+      return {
+        week: weekNumber,
+        clockWeek,
+        isKW: Boolean(w.is_kw),
+        seat,
+        tag,
+        rank,
+        override: Boolean(
+          scheduled && plainSchedule?.[slotKey] && plainSchedule[slotKey] !== scheduled,
+        ),
+        replaced:
+          scheduled && plainSchedule?.[slotKey] && plainSchedule[slotKey] !== scheduled
+            ? plainSchedule[slotKey]
+            : null,
+        color: (tag && alliances[tag]?.color) || null,
+        captureAt: status.captureTimestamp + (weekNumber - status.currentWeekNumber) * 7 * 86400,
+        state,
+        captured: state === 'done' || (state === 'current' && Boolean(status.capitolCaptured)),
+      };
+    });
+}

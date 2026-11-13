@@ -112,7 +112,7 @@ as a warning; it never blocks publishing.
 | `split_masters.rb`      | Splits `_source/*.md` into the files Jekyll reads               |
 | `sync_ui_data.rb`       | Adds missing guide titles and nav labels to `ui.yml`            |
 | `build_translations.rb` | Packages bot/rules text for the Discord bot                     |
-| `workbox_precache.rb`   | Lists the files the offline service worker stores              |
+| `precache_list.rb`      | Lists the files the offline service worker stores              |
 | `check_build.rb`        | Sanity checks on the finished `_site/`                          |
 | `generate_master.rb`    | Gemini translation of `_en` drafts (CI only)                    |
 | `deploy_commands.mjs`   | Registers Discord slash commands (CI only)                      |

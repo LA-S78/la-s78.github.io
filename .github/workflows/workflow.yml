@@ -24,7 +24,13 @@ jobs:
       contents: write
 
     steps:
+      # A push builds the branch as it is now, not the commit that started the run: a run
+      # that waited in the queue (concurrency, above) then starts from the previous run's
+      # translation commit, instead of translating the same sections again and clashing
+      # with it when saving (this failed the run after #95). Pull requests build their commit.
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event_name == 'push' && github.ref || '' }}
 
       - name: Setting up Ruby environment
         uses: ruby/setup-ruby@v1
@@ -45,6 +51,18 @@ jobs:
             echo "No English source drafts found. Skipping."
           fi
 
+      # --- TRANSLATE THE TOOLS' TEXT AND ui.yml (only the sections whose English changed) ---
+      # _data/en/{tools,ui}.yml -> _data/<lang>/...; see _scripts/translate_sections.rb.
+      - name: Translating changed tool text via AI
+        if: github.event_name == 'push'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        # --adopt first: a section that already has every English key and no record yet (e.g.
+        # ui.yml's hand translations, the first time) is kept as it is, not sent to Gemini.
+        run: |
+          bundle exec ruby _scripts/translate_sections.rb --adopt
+          bundle exec ruby _scripts/translate_sections.rb
+
       # --- FIXED INTERCEPT STAGE FOR UNTRACKED FILES ---
       - name: Saving master translation files
         if: github.event_name == 'push'
@@ -52,14 +70,16 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # Force stage the directory first so Git registers new untracked files
-          git add _source/
+          # Force stage the directories first so Git registers new untracked files
+          git add _source/ _data/*/tools.yml _data/*/ui.yml _data/*/server.yml _scripts/translation_state.json 2>/dev/null || git add _source/
           
           # Safely check the staged index for differences
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Auto-generate master files from AI drafts [skip ci]"
+            git commit -m "Auto-translate new text (guides, data drafts, tool text) [skip ci]"
+            # Translating takes a minute or two: take any commit that landed meanwhile first.
+            git pull --rebase origin "${{ github.ref_name }}"
             git push
           fi
 
@@ -85,7 +105,7 @@ jobs:
           npm run format:check
 
       - name: Uploading build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: compiled-site
           path: _site/
@@ -102,7 +122,7 @@ jobs:
 
       - name: Caching deployment state
         if: github.event_name == 'push'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.local/share/com.vercel.cli
           key: ${{ runner.os }}-vercel-${{ hashFiles('**/_site/**') }}

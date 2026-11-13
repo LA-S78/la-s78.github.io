@@ -1,200 +1,195 @@
+# Translated automatically from _data/en/ui.yml by _scripts/translate_sections.rb.
+# Don't edit: change the English file (a section is translated again when its English
+# changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 header:
-  title: "LAST ASYLUM"
-  subtitle: "Compendium de Survie"
-
+  title: LAST ASYLUM
+  subtitle: Compendium de Survie
 footer:
-  nav_home: "Accueil"
-  nav_rules: "Règles"
-  nav_guides: "Guides"
-  nav_alliance: "Alliance"
-  nav_calendar: "Calendrier"
-  aria_home: "Aller à la page d'Accueil"
-  aria_rules: "Aller à la page des Règles du Serveur"
-  aria_guides: "Aller à la page des Guides"
-  aria_alliance: "Aller à la page Alliance et Diplomatie"
-  aria_calendar: "Aller à la page du Calendrier des événements"
-
+  nav_home: Accueil
+  nav_rules: Règles
+  nav_guides: Guides
+  nav_alliance: Alliance
+  nav_calendar: Calendrier
+  aria_home: Aller à la page d'Accueil
+  aria_rules: Aller à la page des Règles du Serveur
+  aria_guides: Aller à la page des Guides
+  aria_alliance: Aller à la page Alliance et Diplomatie
+  aria_calendar: Aller à la page du Calendrier des événements
 guides:
-  heroes: "Héros & Builds"
-  combat: "Combat"
-  building: "Bâtiments & Tech"
-  resources: "Gestion des Ressources"
-  sanctuary: "Guide du Sanctuaire"
-  duel: "Duel d'Alliances"
-  survival: "Bataille de Survie"
-  kingdom: "Guerre des Royaumes"
-  canyon: "Conquête du Canyon"
-  cheese: "Piège à Fromage"
-  thief: "Chasse aux Voleurs"
-  pickaxe: "Pioche Naine"
-  crystal: "Vallée de Cristal"
-  alliance_shop: "Boutique d'Alliance"
-  honor_shop: "Boutique d'Honneur"
-  sanctuary_shop: "Boutique du Sanctuaire"
-  campaign_shop: "Boutique de Campagne"
-  premium_shop: "Packs Premium & Gemmes"
-  t10: "Calculateur T10"
-  scramble: "Mêlée Royale"
-
+  heroes: Héros & Builds
+  combat: Combat
+  building: Bâtiments & Tech
+  resources: Gestion des Ressources
+  sanctuary: Guide du Sanctuaire
+  duel: Duel d'Alliances
+  survival: Bataille de Survie
+  kingdom: Guerre des Royaumes
+  canyon: Conquête du Canyon
+  cheese: Piège à Fromage
+  thief: Chasse aux Voleurs
+  pickaxe: Pioche Naine
+  crystal: Vallée de Cristal
+  alliance_shop: Boutique d'Alliance
+  honor_shop: Boutique d'Honneur
+  sanctuary_shop: Boutique du Sanctuaire
+  campaign_shop: Boutique de Campagne
+  premium_shop: Packs Premium & Gemmes
+  t10: Calculateur T10
+  scramble: Mêlée Royale
 pages:
   home:
-    title: "Accueil"
-    subtitle: "Compendium de Survie"
+    title: Accueil
+    subtitle: Compendium de Survie
   rules:
-    title: "Règles"
-    subtitle: "Règles du Serveur & Rotation"
+    title: Règles
+    subtitle: Règles du Serveur & Rotation
   guides:
-    title: "Guides"
-    subtitle: "Guides de Jeu"
+    title: Guides
+    subtitle: Guides de Jeu
     writers:
-      title: "Guide des Auteurs"
-      subtitle: "Guide des Auteurs"
+      title: Guide du Rédacteur
+      subtitle: Guide du Rédacteur
   alliance:
-    title: "Alliance"
-    subtitle: "Alliance & Diplomatie"
+    title: Alliance
+    subtitle: Alliance & Diplomatie
+  api-test:
+    title: Infos Top-Secrètes de l'Alliance
+    subtitle: Infos Top-Secrètes de l'Alliance
+  calendar:
+    title: Calendrier des Événements
+    subtitle: Événements d'Alliance & du Serveur
   guide_panes:
     heroes:
-      title: "Héros & Builds"
-      subtitle: "Héros & Builds"
+      title: Héros & Builds
+      subtitle: Héros & Builds
     combat:
-      title: "Combat"
-      subtitle: "Combat"
+      title: Combat
+      subtitle: Combat
     building:
-      title: "Bâtiments & Tech"
-      subtitle: "Bâtiments & Tech"
+      title: Bâtiments & Tech
+      subtitle: Bâtiments & Tech
     resources:
-      title: "Gestion des Ressources"
-      subtitle: "Gestion des Ressources"
+      title: Gestion des Ressources
+      subtitle: Gestion des Ressources
     sanctuary:
-      title: "Guide du Sanctuaire"
-      subtitle: "Guide du Sanctuaire"
+      title: Guide du Sanctuaire
+      subtitle: Guide du Sanctuaire
     duel:
-      title: "Duel d'Alliances"
-      subtitle: "Duel d'Alliances"
+      title: Duel d'Alliances
+      subtitle: Duel d'Alliances
     survival:
-      title: "Bataille de Survie"
-      subtitle: "Bataille de Survie"
+      title: Bataille de Survie
+      subtitle: Bataille de Survie
     kingdom:
-      title: "Guerre des Royaumes"
-      subtitle: "Guerre des Royaumes"
+      title: Guerre des Royaumes
+      subtitle: Guerre des Royaumes
     canyon:
-      title: "Conquête du Canyon"
-      subtitle: "Conquête du Canyon"
+      title: Conquête du Canyon
+      subtitle: Conquête du Canyon
     cheese:
-      title: "Piège à Fromage"
-      subtitle: "Piège à Fromage"
+      title: Piège à Fromage
+      subtitle: Piège à Fromage
     thief:
-      title: "Chasse aux Voleurs"
-      subtitle: "Chasse aux Voleurs"
+      title: Chasse aux Voleurs
+      subtitle: Chasse aux Voleurs
     pickaxe:
-      title: "Pioche Naine"
-      subtitle: "Pioche Naine"
+      title: Pioche Naine
+      subtitle: Pioche Naine
     crystal:
-      title: "Vallée de Cristal"
-      subtitle: "Vallée de Cristal"
+      title: Vallée de Cristal
+      subtitle: Vallée de Cristal
     alliance_shop:
-      title: "Boutique d'Alliance"
-      subtitle: "Boutique d'Alliance"
+      title: Boutique d'Alliance
+      subtitle: Boutique d'Alliance
     honor_shop:
-      title: "Boutique d'Honneur"
-      subtitle: "Boutique d'Honneur"
+      title: Boutique d'Honneur
+      subtitle: Boutique d'Honneur
     sanctuary_shop:
-      title: "Boutique du Sanctuaire"
-      subtitle: "Boutique du Sanctuaire"
+      title: Boutique du Sanctuaire
+      subtitle: Boutique du Sanctuaire
     campaign_shop:
-      title: "Boutique de Campagne"
-      subtitle: "Boutique de Campagne"
+      title: Boutique de Campagne
+      subtitle: Boutique de Campagne
     premium_shop:
-      title: "Packs Premium & Gemmes"
-      subtitle: "Packs Premium & Gemmes"
+      title: Packs Premium & Gemmes
+      subtitle: Packs Premium & Gemmes
     t10:
-      title: "Guide T10"
-      subtitle: "Prérequis T10"
+      title: Guide T10
+      subtitle: Prérequis T10
     scramble:
-      title: "Mêlée Royale"
-      subtitle: "Mêlée Royale"
-    cheese:
-      title: "Piège à Fromage"
-      subtitle: "Piège à Fromage"
-
+      title: Mêlée Royale
+      subtitle: Mêlée Royale
 nav_anchors:
-  server_rules: "Règles du Serveur"
-  rotation: "Rotation"
-  rewards: "Récompenses"
-  nap_alliances: "Alliances NAP"
-  nap_academies: "Académies NAP"
-  nap_ranks: "Rangs NAP"
-  nap_territory: "Territoire NAP"
-  blacklist: "Liste Noire"
-  markdown_usage: "Utilisation"
-  markdown_example: "Exemple"
-  guide_submissions: "Soumissions"
-  #guide pages
-  #survival battle
-  survival_explanation: "Explication"
-  survival_schedule: "Calendrier"
-  survival_reference: "Référence"
-  #kingdom war
-  kingdom_explanation: "Explication"
-  kingdom_scoring: "Scores"
-  kingdom_strategy: "Stratégie"
-  #alliance duel
-  duel_schedule: "Calendrier"
-  duel_rules: "Règles"
-  #sanctuary guide
-  sanctuary_strategy: "Stratégie"
-  sanctuary_chart: "Tableau"
-  sanctuary_goals: "Objectifs"
-  sanctuary_efficiency: "Efficacité"
-  #royal scramble
-  scramble_event: "Événement"
-  scramble_points: "Points"
-  #cheese trap
-  cheese_event: "Événement"
-  cheese_cheese: "Fromage"
-  cheese_strategy: "Stratégie"
-  cheese_rewards: "Récompenses"
-
+  server_rules: Règles du Serveur
+  rotation: Rotation
+  rewards: Récompenses
+  nap_alliances: Alliances NAP
+  nap_academies: Académies NAP
+  nap_ranks: Rangs NAP
+  nap_territory: Territoire NAP
+  blacklist: Liste Noire
+  markdown_usage: Utilisation
+  markdown_example: Exemple
+  guide_submissions: Soumissions
+  survival_explanation: Explication
+  survival_schedule: Calendrier
+  survival_reference: Référence
+  kingdom_explanation: Explication
+  kingdom_scoring: Scores
+  kingdom_strategy: Stratégie
+  duel_schedule: Calendrier
+  duel_rules: Règles
+  sanctuary_strategy: Stratégie
+  sanctuary_chart: Tableau
+  sanctuary_goals: Objectifs
+  sanctuary_efficiency: Efficacité
+  scramble_event: Événement
+  scramble_points: Points
+  cheese_event: Événement
+  cheese_cheese: Fromage
+  cheese_strategy: Stratégie
+  cheese_rewards: Récompenses
 search:
-  guides: "Rechercher dans les guides..."
-  home: "Rechercher dans les répertoires, posts..."
-  placeholder: "Rechercher..."
-
+  guides: Rechercher dans les guides...
+  home: Rechercher dans les répertoires, posts...
+  placeholder: Rechercher...
 pwa:
-  toast_msg: "Nouvelles informations acquises."
-  update_btn: "Mettre à jour"
-  updating: "Déchiffrement..."
-
-#header sign-in pill (js/identity-pill.js)
+  toast_msg: Nouvelles informations acquises.
+  update_btn: Mettre à jour
+  updating: Déchiffrement...
+  updated_msg: "✅ Application mise à jour vers la dernière version."
 identity:
-  account: "Votre compte"
-  sign_in: "Se connecter"
-  signing_in: "Connexion…"
-  sign_in_failed: "Échec de la connexion, réessayez"
-  sign_in_again: "Se reconnecter"
-  refresh: "Actualiser l’accès"
-  sign_out: "Se déconnecter"
-  role_steward: "Steward"
-  role_r5: "R5"
-  role_r4: "R4"
-  role_officer: "Officier"
-  role_member: "Membre"
-  role_guest: "Invité"
-  role_expired: "Expirée"
-  alliance_label: "Alliance"
-  alliance_none: "aucune"
-  access_title: "Votre accès"
-  access_view: "Voir la carte en direct, les horaires et les classements"
-  access_draft: "Préparer des plans en Mode Planificateur"
-  access_join: "Rejoignez le serveur Discord du NAP pour plus d’accès"
-  access_ask_leader: "Demandez à votre R4 ou R5 d’envoyer vos plans comme propositions"
-  access_send: "Envoyer des propositions pour la carte, le classement, la liste noire et les récompenses (5 par jour)"
-  access_send_unlimited: "Envoyer des propositions sans limite quotidienne"
-  access_approve: "Approuver ou refuser les propositions sur Discord"
-  access_expired: "Votre connexion a expiré. Reconnectez-vous pour envoyer des propositions."
-  expires_days: "La connexion expire dans {n} jours"
-  expires_one: "La connexion expire dans 1 jour"
-  expires_today: "La connexion expire aujourd’hui"
-  found_role_id: "trouvée par ID de rôle"
-  found_role_name: "trouvée par nom de rôle"
-  found_nickname: "trouvée par pseudo"
+  account: Votre compte
+  sign_in: Se connecter
+  signing_in: Connexion…
+  sign_in_failed: Échec de la connexion, réessayez
+  sign_in_again: Se reconnecter
+  refresh: Actualiser l’accès
+  sign_out: Se déconnecter
+  force_update: Mettre à jour l’app
+  force_updating: Mise à jour…
+  dashboard: Tableau de bord de l’alliance
+  role_steward: Steward
+  role_r5: R5
+  role_r4: R4
+  role_officer: Officier
+  role_member: Membre
+  role_guest: Invité
+  role_expired: Expirée
+  alliance_label: Alliance
+  alliance_none: aucune
+  access_title: Votre accès
+  access_view: Voir la carte en direct, les horaires et les classements
+  access_draft: Préparer des plans en Mode Planificateur
+  access_join: Rejoignez le serveur Discord du NAP pour plus d’accès
+  access_ask_leader: Demandez à votre R4 ou R5 d’envoyer vos plans comme propositions
+  access_send: Envoyer des propositions pour la carte, le classement, la liste noire et les récompenses (5 par jour)
+  access_send_unlimited: Envoyer des propositions sans limite quotidienne
+  access_approve: Approuver ou refuser les propositions sur Discord
+  access_expired: Votre connexion a expiré. Reconnectez-vous pour envoyer des propositions.
+  expires_days: La connexion expire dans {n} jours
+  expires_one: La connexion expire dans 1 jour
+  expires_today: La connexion expire aujourd’hui
+  found_role_id: trouvée par ID de rôle
+  found_role_name: trouvée par nom de rôle
+  found_nickname: trouvée par pseudo

@@ -3,6 +3,7 @@ import { createSessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { findAllianceTag, findOfficerRole } from './_officer_roles.js';
 import { gistJson, isGistConfigured, readGist } from './_gist.js';
+import { allianceFromRoleIds } from './_alliances.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -103,21 +104,9 @@ export default async function handler(req, res) {
     const avatarUrl = avatarFor(avatarHash);
 
     // --- DYNAMIC ALLIANCE SCANNER ---
-    let allianceName = 'Independent';
-    let allianceSource = null; // how it was found (see alliance_source below)
-    const excludeList = ['R5', 'R4', 'BOTS', 'MEMBER', 'MEMBER_ROLE_ID'];
-
-    for (const [envKey, envValue] of Object.entries(process.env)) {
-      // Trimmed: a value pasted into Vercel with a stray space or line break still matches.
-      if (envKey.startsWith('DISCORD_') && userRoles.includes(String(envValue).trim())) {
-        const identifier = envKey.replace('DISCORD_', '');
-        if (!excludeList.includes(identifier)) {
-          allianceName = identifier;
-          allianceSource = 'role-id';
-          break;
-        }
-      }
-    }
+    // First the alliance role IDs set in Vercel (the settings listed in _data/alliances.yml).
+    let allianceName = allianceFromRoleIds(userRoles) || 'Independent';
+    let allianceSource = allianceName === 'Independent' ? null : 'role-id'; // see alliance_source below
 
     // The registered alliances (map-state.json), read once and only when needed below.
     let alliances = null;

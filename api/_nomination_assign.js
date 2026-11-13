@@ -19,6 +19,9 @@ export const CHEST_ORDER = [
   ['standard', 'followers_heart'],
 ];
 
+/** The three chest kinds of a set (stored keys). */
+export const CHEST_TYPES = ['commanders_will', 'loyal_servant', 'followers_heart'];
+
 /** Most names one list may hold (every chest of both sets, plus reserves). */
 export const MAX_RANKED_NAMES = 80;
 /** Longest player name accepted. */
@@ -78,27 +81,53 @@ export function cleanRankedList(raw) {
 
 /**
  * Assigns chests to a ranked list, best chest to the first name.
+ * Chests the King has already handed out in the game (`locked`) can't move: those players
+ * keep exactly that chest, even if it is no longer available (e.g. a result corrected from
+ * Won to Lost after a set-2 chest was given), and the other names are sorted around them.
  * @param {string[]} ranked cleaned names, best first
  * @param {{standard: object, kingdom_war?: object}} counts from chestCounts()
+ * @param {{pool: string, chest: string, name: string}[]} [locked] handed-out chests
  * @returns {{ recipients: object, reserves: string[], unfilled: number }}
  *   recipients mirrors the stored shape: { standard: {commanders_will: [...], ...},
  *   kingdom_war?: {...} }, each list in ranking order; unfilled = chests with no name yet
  */
-export function assignChests(ranked, counts) {
+export function assignChests(ranked, counts, locked = []) {
   const recipients = {};
-  for (const pool of Object.keys(counts)) {
+  const left = {};
+  const lockedOk = locked.filter(
+    (l) =>
+      ['standard', 'kingdom_war'].includes(l?.pool) && CHEST_TYPES.includes(l?.chest) && l.name,
+  );
+  for (const pool of new Set([...Object.keys(counts), ...lockedOk.map((l) => l.pool)])) {
     recipients[pool] = { commanders_will: [], loyal_servant: [], followers_heart: [] };
+    left[pool] = { ...(counts[pool] || {}) };
   }
+  const lockedNames = new Set();
+  for (const { pool, chest, name } of lockedOk) {
+    if (lockedNames.has(name.toLowerCase())) continue; // one chest per player
+    lockedNames.add(name.toLowerCase());
+    recipients[pool][chest].push(name);
+    left[pool][chest] = Math.max(0, (left[pool][chest] || 0) - 1);
+  }
+
+  const free = ranked.filter((name) => !lockedNames.has(name.toLowerCase()));
   let next = 0;
   let unfilled = 0;
   for (const [pool, chest] of CHEST_ORDER) {
-    const n = counts[pool]?.[chest] || 0;
+    const n = left[pool]?.[chest] || 0;
     for (let i = 0; i < n; i++) {
-      if (next < ranked.length) recipients[pool][chest].push(ranked[next++]);
+      if (next < free.length) recipients[pool][chest].push(free[next++]);
       else unfilled++;
     }
   }
-  return { recipients, reserves: ranked.slice(next), unfilled };
+
+  // Each chest's names in the order of the list (handed-out names not in it come first).
+  const position = new Map(ranked.map((name, i) => [name.toLowerCase(), i]));
+  const at = (name) => position.get(name.toLowerCase()) ?? -1;
+  for (const pool of Object.values(recipients)) {
+    for (const names of Object.values(pool)) names.sort((x, y) => at(x) - at(y));
+  }
+  return { recipients, reserves: free.slice(next), unfilled };
 }
 
 /**

@@ -1,5 +1,5 @@
 // api/_rank_helper.js
-import { readGist, gistJson, writeGist } from './_gist.js';
+import { readGist, gistJson, updateGist } from './_gist.js';
 
 async function getMapState() {
   const state = gistJson(await readGist(), 'map-state.json', null);
@@ -31,26 +31,32 @@ export async function setAllianceRank({ tag, rank, updatedBy = 'Discord Bot' }) 
     throw new Error('Rank must be a positive number.');
   }
 
-  const state = await getMapState();
-  state.alliances = state.alliances || {};
+  // Saved safely alongside other saves at the same moment (updateGist).
+  const { targetKey, previousRank } = await updateGist((gist) => {
+    const state = gistJson(gist, 'map-state.json', null);
+    if (!state) throw new Error('map-state.json missing from target Gist');
+    state.alliances = state.alliances || {};
 
-  const matchingKey = Object.keys(state.alliances).find((k) => k.toUpperCase() === cleanTag);
-  const targetKey = matchingKey || cleanTag;
-  const previousRank = state.alliances[targetKey]?.rank ?? 'Unranked';
+    const matchingKey = Object.keys(state.alliances).find((k) => k.toUpperCase() === cleanTag);
+    const key = matchingKey || cleanTag;
+    const before = state.alliances[key]?.rank ?? 'Unranked';
 
-  if (!state.alliances[targetKey]) {
-    state.alliances[targetKey] = { rank: newRank };
-  } else {
-    state.alliances[targetKey].rank = newRank;
-  }
+    if (!state.alliances[key]) {
+      state.alliances[key] = { rank: newRank };
+    } else {
+      state.alliances[key].rank = newRank;
+    }
 
-  state.lastUpdated = new Date().toISOString();
-  state.updatedBy = updatedBy;
+    state.lastUpdated = new Date().toISOString();
+    state.updatedBy = updatedBy;
 
-  await writeGist(
-    { 'map-state.json': state },
-    { description: `Rank updated: [${targetKey}] -> #${newRank}` },
-  );
+    return {
+      targetKey: key,
+      previousRank: before,
+      files: { 'map-state.json': state },
+      description: `Rank updated: [${key}] -> #${newRank}`,
+    };
+  });
 
   return { tag: targetKey, previousRank, newRank };
 }

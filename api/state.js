@@ -1,6 +1,7 @@
 // api/state.js
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 // Unified Read-Only State Proxy for Map, Rewards, and Alliance Hierarchy
@@ -41,11 +42,11 @@ export default async function handler(req, res) {
   const scope = String(req.query.scope || 'all').toLowerCase();
 
   try {
-    const gist = await readGist();
+    const [gist, roleColors] = await Promise.all([readGist(), getRoleColors()]);
     const mapState = gistJson(gist, 'map-state.json');
     const rewardsState = gistJson(gist, 'rewards-data.json');
 
-    const cleanAlliances = sanitizeAlliances(mapState.alliances || {});
+    const cleanAlliances = sanitizeAlliances(mapState.alliances || {}, roleColors);
     const blacklist = mapState.blacklist || { players: [], alliances: [] };
     const resolvedCycleState = resolveCycleState(rewardsState.cycle_state);
     // This week's reward period, from the clock (api/_reward_period.js)

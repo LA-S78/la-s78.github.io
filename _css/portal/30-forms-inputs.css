@@ -14,7 +14,7 @@
   display: block;
   font-size: 0.78rem;
   font-weight: bold;
-  color: var(--accent-color);
+  color: var(--accent-text);
   margin-bottom: 4px;
 }
 
@@ -54,7 +54,7 @@
   font-size: 0.85rem;
   font-weight: bold;
   margin-bottom: 4px;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 .portal-section-sub {
@@ -76,7 +76,7 @@
 }
 
 .portal-label-accent {
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 .portal-req {
@@ -106,7 +106,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.45rem;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 .slot-input-row {
@@ -199,7 +199,7 @@
   letter-spacing: 0.05em;
   background: var(--surface-dark);
   border: 2px solid var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   box-shadow: 0 0 12px color-mix(in srgb, var(--accent-color) 25%, transparent);
   transition: all 0.15s ease;
 }
@@ -342,6 +342,20 @@
   flex-shrink: 0;
 }
 
+/* Chests the King has already handed out: locked */
+.nominate-locked {
+  margin-bottom: 0.9rem;
+}
+
+.nominate-locked .sub-text {
+  margin: 0.2rem 0 0.45rem;
+}
+
+.nominate-assign-row.is-locked {
+  background: var(--shade-40);
+  border-color: var(--overlay-5);
+}
+
 .nominate-reserve {
   color: var(--text-muted);
   font-style: italic;
@@ -350,4 +364,12 @@
 /* Two chest columns ("Now" and "If won") on a phone: a little smaller so the names fit */
 .nominate-assign-row:has(> :nth-child(4)) .nominate-chest {
   font-size: 0.68rem;
+}
+
+/* A chest name that is one long word ("Logistikunterstützung") breaks with a hyphen (or
+   anywhere, as a last resort) instead of running out of its column on a phone */
+.nominate-chest > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }

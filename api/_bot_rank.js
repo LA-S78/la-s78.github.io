@@ -4,6 +4,7 @@
 
 import { InteractionResponseType } from 'discord-interactions';
 import { NOT_HANDLED, resolveActorName, sendEphemeralMessage } from './_bot_common.js';
+import { say } from './_messages.js';
 import { listAllianceRanks, setAllianceRank } from './_rank_helper.js';
 import { isSteward } from './_stewards.js';
 
@@ -17,14 +18,14 @@ export async function handleRankCommand(ctx) {
       const ranks = await listAllianceRanks();
       const desc = ranks.length
         ? ranks.map((a) => `**#${a.rank}** — \`[${a.tag}]\``).join('\n')
-        : 'No alliances registered in current state.';
+        : say('bot_admin.rank_none');
 
       return res.status(200).json({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           embeds: [
             {
-              title: '🛡️ Server NAP Standings',
+              title: say('bot_admin.rank_title'),
               color: 0xb8975a,
               description: desc,
               footer: { text: 'la-s78.app' },
@@ -38,7 +39,7 @@ export async function handleRankCommand(ctx) {
                 {
                   type: 2,
                   style: 5,
-                  label: 'Open Diplomacy & Standings',
+                  label: say('bot_admin.rank_open'),
                   url: `https://${resolvedHost}/${lang}/alliance.html`,
                 },
               ],
@@ -47,23 +48,20 @@ export async function handleRankCommand(ctx) {
         },
       });
     } catch (err) {
-      return sendEphemeralMessage(res, `⚠️ Failed to fetch rankings: ${err.message}`);
+      return sendEphemeralMessage(res, say('bot_admin.rank_fetch_failed', { reason: err.message }));
     }
   }
 
   if (sub?.name === 'set') {
     if (!isSteward(userId)) {
-      return sendEphemeralMessage(
-        res,
-        '⛔ **Access Denied:** Only designated Kingdom Stewards can update alliance rankings.',
-      );
+      return sendEphemeralMessage(res, say('bot_admin.rank_denied'));
     }
 
     const tagOption = sub.options?.find((o) => o.name === 'tag');
     const rankOption = sub.options?.find((o) => o.name === 'rank');
 
     if (!tagOption || !rankOption) {
-      return sendEphemeralMessage(res, '⚠️ Missing required arguments: tag and rank.');
+      return sendEphemeralMessage(res, say('bot_admin.rank_missing'));
     }
 
     const author = resolveActorName(interaction, 'Leadership');
@@ -80,10 +78,17 @@ export async function handleRankCommand(ctx) {
         data: {
           embeds: [
             {
-              title: '👑 NAP Standing Updated',
+              title: say('bot_admin.rank_set_title'),
               color: 0x22c55e,
-              description: `Alliance \`[${result.tag}]\` has been assigned to **Rank #${result.newRank}** *(previously: ${result.previousRank === 'Unranked' ? 'Unranked' : `#${result.previousRank}`})*.`,
-              footer: { text: `Updated by ${author}` },
+              description: say('bot_admin.rank_set_text', {
+                tag: result.tag,
+                rank: result.newRank,
+                previous:
+                  result.previousRank === 'Unranked'
+                    ? say('bot_admin.rank_unranked')
+                    : `#${result.previousRank}`,
+              }),
+              footer: { text: say('bot_admin.rank_updated_by', { name: author }) },
               timestamp: new Date().toISOString(),
             },
           ],
@@ -94,7 +99,7 @@ export async function handleRankCommand(ctx) {
                 {
                   type: 2,
                   style: 5,
-                  label: 'View Standings',
+                  label: say('bot_admin.rank_view'),
                   url: `https://${resolvedHost}/${lang}/alliance.html`,
                 },
               ],
@@ -103,7 +108,7 @@ export async function handleRankCommand(ctx) {
         },
       });
     } catch (err) {
-      return sendEphemeralMessage(res, `⚠️ Failed to update rank: ${err.message}`);
+      return sendEphemeralMessage(res, say('bot_admin.rank_set_failed', { reason: err.message }));
     }
   }
   return NOT_HANDLED;

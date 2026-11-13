@@ -26,6 +26,10 @@ html[data-theme="default"] {
   --card-bg-solid: color-mix(in srgb, rgb(var(--active-theme)) 8%, #2a221e);
   --card-bg: color-mix(in srgb, var(--card-bg-solid) 85%, transparent);
   --text-main: #d9cbb8;
+  /* The accent for small text (links, table headings, labels, badges): a fifth of the text
+     colour mixed in, so it reads clearly in every theme (contrast 4.7+ on cards, 4.0-4.2
+     before). Big headings and icons keep --accent-color. */
+  --accent-text: color-mix(in srgb, var(--accent-color) 80%, var(--text-main));
   --text-muted: #a8a19b;
 
   /* Shared Surface & Palette Variables (the darkest surfaces get a little less tint) */
@@ -117,6 +121,14 @@ html[data-theme="default"] {
   --line-color: #4a6c82;
   --node-border: #6495ed;
 
+  /* Buttons and boxes (one button system, _css/style/86-controls.css): three heights, one shape.
+     compact: inside a row (Copy, ×, ▲▼); standard: toolbars and switches; large: the main
+     action of a form or window, and form fields. 28px is the smallest a finger hits reliably. */
+  --control-compact: 28px;
+  --control-standard: 32px;
+  --control-large: 40px;
+  --control-radius: 6px;
+
   /* Typography */
   --font-headers: "Georgia", serif;
   --font-body:
@@ -128,6 +140,11 @@ html[data-theme="default"] {
   --active-theme-vivid: 85, 190, 95;
   --active-theme-hex: 55, 150, 65;
   --lantern-filter: contrast(1.3) brightness(1) saturate(1.2);
+  /* The phone's status bar (js/theme-init.js puts it in <meta name="theme-color">): the
+     header's top edge as drawn, averaged across its width (the header's glow and gradient
+     can't be worked out from the variables). Measured from the page; measure again if the
+     header's background changes. */
+  --status-bar: #22301c;
 }
 
 /* Theme 2: Sanctuary (Orange) */
@@ -137,6 +154,7 @@ html[data-theme="sanctuary"] {
   --active-theme-vivid: 255, 220, 140;
   --active-theme-hex: 239, 191, 4;
   --lantern-filter: contrast(1.2) brightness(1) saturate(1.2) hue-rotate(270deg);
+  --status-bar: #4e3924;
 }
 
 /* Theme 3: Miasma (Purple) */
@@ -147,5 +165,6 @@ html[data-theme="miasma"] {
   --active-theme-hex: 175, 90, 220;
   --lantern-filter: contrast(1.3) brightness(1.1) saturate(1.2)
     hue-rotate(160deg);
+  --status-bar: #3a203b;
 }
 

@@ -4,11 +4,22 @@
  */
 
 import { submitProposalWithAuth } from './auth-modal.js';
-import { offlineCopySavedAt, showLiveDataNotice } from './live-data-notice.js';
+import {
+  markUpdating,
+  offlineCopySavedAt,
+  rememberLiveData,
+  showLiveDataNotice,
+  showSavedWhileLoading,
+} from './live-data-notice.js';
 import { ALLIANCE_COLORS } from './alliance-defaults.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
+// The page's language (alliance_planner.* / blacklist_planner.* in _data/<lang>/tools.yml).
+const ta = (key, vars) => window.t(`alliance_planner.${key}`, vars);
+const tb = (key, vars) => window.t(`blacklist_planner.${key}`, vars);
+const tbh = (key, html, vars) => window.th(`blacklist_planner.${key}`, html, vars);
+const bold = (text) => `<strong>${esc(text)}</strong>`;
 
 // Planner Mode (standings, top of the page) and Edit Blacklist (bottom) are separate modes,
 // each with its own saved draft, so switching one on or off never touches the other.
@@ -209,77 +220,106 @@ export function checkAndRestoreAllianceDraft() {
   return false;
 }
 
+// Draws standings and blacklist data (the fresh answer, or the saved copy shown while it loads)
+function applyAllianceData(data) {
+  if (
+    data.alliances &&
+    typeof data.alliances === 'object' &&
+    Object.keys(data.alliances).length > 0
+  ) {
+    const normalizedLive = {};
+
+    Object.entries(data.alliances).forEach(([tag, allyData]) => {
+      const cleanTag = tag.trim();
+      if (!cleanTag) return;
+
+      const parsedRank =
+        allyData.rank !== null && allyData.rank !== undefined && allyData.rank !== ''
+          ? Number(allyData.rank)
+          : null;
+
+      normalizedLive[cleanTag] = {
+        ...allyData,
+        tag: cleanTag,
+        rank: parsedRank,
+        parent_tag: allyData.parent_tag ? String(allyData.parent_tag).trim() : null,
+        academies: Array.isArray(allyData.academies)
+          ? allyData.academies.map((a) => String(a).trim()).filter(Boolean)
+          : [],
+        color: resolveAllianceColor(cleanTag, allyData.color, parsedRank),
+      };
+    });
+
+    originalAlliances = normalizedLive;
+  }
+
+  if (
+    data.blacklist &&
+    (Array.isArray(data.blacklist.players) || Array.isArray(data.blacklist.alliances))
+  ) {
+    originalBlacklist = normaliseBlacklist(data.blacklist);
+  }
+
+  if (!isAlliancePlannerActive) {
+    draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
+    renderStandingsHierarchy();
+  }
+  if (!isBlacklistEditing) {
+    draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
+    renderBlacklist();
+  }
+}
+
 export async function fetchLiveAllianceState() {
+  const container = document.getElementById('alliance-container');
+  let savedAt = null;
   try {
-    const [stateRes, colorsRes] = await Promise.all([
+    const fresh = Promise.all([
       fetch(`/api/state?scope=alliances&t=${Date.now()}`),
       fetch('/api/colors', { cache: 'no-store' }),
     ]);
+    // Meanwhile, this device's last copy, dimmed with "Updating…". 'saved' draws the lists
+    // but keeps planning off until the fresh data is in.
+    savedAt = await showSavedWhileLoading(
+      '/api/state?scope=alliances',
+      fresh,
+      container,
+      async (res) => {
+        const data = await res.json();
+        liveState = 'saved';
+        applyAllianceData(data);
+      },
+    );
+    // The blacklist (a section of its own) waits dimmed with the standings
+    const blacklistSection = document.querySelector('.blacklist-section');
+    if (savedAt) markUpdating(blacklistSection, true);
+    const [stateRes, colorsRes] = await fresh;
 
     if (colorsRes.ok) {
       liveDiscordColors = await colorsRes.json();
     }
 
     if (!stateRes.ok) throw new Error(`State API returned HTTP ${stateRes.status}`);
-    {
-      const data = await stateRes.json();
-      liveState = 'ok';
-      showLiveDataNotice(document.getElementById('alliance-container'), {
-        savedAt: offlineCopySavedAt(stateRes),
-      });
-      if (
-        data.alliances &&
-        typeof data.alliances === 'object' &&
-        Object.keys(data.alliances).length > 0
-      ) {
-        const normalizedLive = {};
-
-        Object.entries(data.alliances).forEach(([tag, allyData]) => {
-          const cleanTag = tag.trim();
-          if (!cleanTag) return;
-
-          const parsedRank =
-            allyData.rank !== null && allyData.rank !== undefined && allyData.rank !== ''
-              ? Number(allyData.rank)
-              : null;
-
-          normalizedLive[cleanTag] = {
-            ...allyData,
-            tag: cleanTag,
-            rank: parsedRank,
-            parent_tag: allyData.parent_tag ? String(allyData.parent_tag).trim() : null,
-            academies: Array.isArray(allyData.academies)
-              ? allyData.academies.map((a) => String(a).trim()).filter(Boolean)
-              : [],
-            color: resolveAllianceColor(cleanTag, allyData.color, parsedRank),
-          };
-        });
-
-        originalAlliances = normalizedLive;
-      }
-
-      if (
-        data.blacklist &&
-        (Array.isArray(data.blacklist.players) || Array.isArray(data.blacklist.alliances))
-      ) {
-        originalBlacklist = normaliseBlacklist(data.blacklist);
-      }
-
-      if (!isAlliancePlannerActive) {
-        draftAlliances = JSON.parse(JSON.stringify(originalAlliances));
-        renderStandingsHierarchy();
-      }
-      if (!isBlacklistEditing) {
-        draftBlacklist = JSON.parse(JSON.stringify(originalBlacklist));
-        renderBlacklist();
-      }
-    }
+    const data = await stateRes.json();
+    // Kept for next time (shown while the page loads), unless this is already an offline copy
+    if (!offlineCopySavedAt(stateRes)) rememberLiveData('/api/state?scope=alliances', data);
+    liveState = 'ok';
+    showLiveDataNotice(container, { savedAt: offlineCopySavedAt(stateRes) });
+    applyAllianceData(data);
   } catch (err) {
     console.warn('Could not fetch live alliance state:', err);
-    liveState = 'failed';
-    showLiveDataNotice(document.getElementById('alliance-container'), { failed: true });
-    renderStandingsHierarchy();
-    renderBlacklist();
+    if (savedAt) {
+      // The saved copy stays (planning stays off): say how old it is instead of "failed"
+      showLiveDataNotice(container, { savedAt });
+    } else {
+      liveState = 'failed';
+      showLiveDataNotice(container, { failed: true });
+      renderStandingsHierarchy();
+      renderBlacklist();
+    }
+  } finally {
+    markUpdating(container, false);
+    markUpdating(document.querySelector('.blacklist-section'), false);
   }
 }
 
@@ -366,8 +406,8 @@ export function linkAcademyPrompt(parentTag) {
 
   const promptOptions = availableAcademies.map((a) => `[${a.tag}]`).join(', ');
   const selectedInput = prompt(
-    `Enter exact alliance tag to link as an Academy under [${parentTag}] (case-sensitive, e.g. RâvN or râvn):\n${
-      promptOptions ? `Available: ${promptOptions}` : 'Or type a new academy tag to create it:'
+    `${ta('academy_prompt', { tag: parentTag })}\n${
+      promptOptions ? ta('academy_available', { tags: promptOptions }) : ta('academy_new')
     }`,
   );
   if (!selectedInput) return;
@@ -414,7 +454,7 @@ export function addContender(tag, name) {
 
   // Exact case-sensitive check ONLY so RÂVN and RâvN never conflict
   if (draftAlliances[cleanTag]) {
-    alert(`Alliance [${cleanTag}] already exists with that exact capitalization.`);
+    alert(ta('already_exists', { tag: cleanTag }));
     return;
   }
 
@@ -514,20 +554,17 @@ function addFromInput(type, inputId) {
     if (result === 'added') {
       input.value = '';
       showBlacklistStatus(
-        `<strong>${esc(label)}</strong> added to your plan. It isn't sent yet: press <strong>Submit Blacklist</strong> above the blacklist to send it to leadership for approval.`,
+        tbh('added', { name: bold(label), submit: bold(tb('submit')) }),
         'success',
       );
     } else if (result === 'duplicate') {
-      showBlacklistStatus(`<strong>${esc(label)}</strong> is already on the blacklist.`, 'warning');
+      showBlacklistStatus(tbh('duplicate', { name: bold(label) }), 'warning');
     } else if (result === 'inactive') {
-      showBlacklistStatus('Press <strong>Edit Blacklist</strong> first.', 'warning');
+      showBlacklistStatus(tbh('press_edit', { edit: bold(tb('edit')) }), 'warning');
     }
   } catch (err) {
     console.error('Blacklist add failed:', err);
-    showBlacklistStatus(
-      `Could not add <strong>${esc(label)}</strong>: ${esc(err.message)}`,
-      'error',
-    );
+    showBlacklistStatus(tbh('add_failed', { name: bold(label) }, { error: err.message }), 'error');
   }
 }
 
@@ -542,7 +579,7 @@ export function removeBlacklistEntry(type, index) {
     updateAllianceProposalUI();
     const label = type === 'players' ? removed : `[${removed}]`;
     showBlacklistStatus(
-      `<strong>${esc(label)}</strong> removed from your plan. It isn't sent yet: press <strong>Submit Blacklist</strong> above the blacklist to send it to leadership for approval.`,
+      tbh('removed', { name: bold(label), submit: bold(tb('submit')) }),
       'success',
     );
   }
@@ -557,8 +594,8 @@ export function renderStandingsHierarchy() {
   if (!container) return;
 
   const countBadge = document.getElementById('alliance-total-count');
-  if (liveState !== 'ok') {
-    container.innerHTML = `<div class="blacklist-empty">${liveState === 'failed' ? "Couldn't load the standings." : 'Loading the standings…'}</div>`;
+  if (liveState !== 'ok' && liveState !== 'saved') {
+    container.innerHTML = `<div class="blacklist-empty">${esc(ta(liveState === 'failed' ? 'standings_failed' : 'loading_standings'))}</div>`;
     if (countBadge) countBadge.textContent = '…';
     return;
   }
@@ -570,7 +607,7 @@ export function renderStandingsHierarchy() {
   );
 
   const totalNap = Object.values(activeAlliances).filter((a) => a.is_nap).length;
-  if (countBadge) countBadge.textContent = `${totalNap} NAP Alliances`;
+  if (countBadge) countBadge.textContent = ta('nap_alliances', { n: totalNap });
 
   const playerAlliance = (localStorage.getItem('auth-alliance') || '').trim();
 
@@ -591,7 +628,7 @@ export function renderStandingsHierarchy() {
       const academyPills = (alliance.academies || [])
         .map(
           (acadTag) => `
-      <span class="academy-pill" title="Protected Academy">
+      <span class="academy-pill" title="${esc(ta('protected_academy'))}">
         🎓 [${esc(acadTag)}]
         ${isAlliancePlannerActive ? `<button type="button" class="btn-unlink-acad" data-action="unlink-acad" data-parent="${esc(alliance.tag)}" data-acad="${esc(acadTag)}">&times;</button>` : ''}
       </span>
@@ -628,7 +665,7 @@ export function renderStandingsHierarchy() {
                 data-action="pick-color"
                 data-tag="${esc(alliance.tag)}"
                 value="${esc(displayColor.startsWith('#') ? displayColor : '#b8975a')}"
-                title="Change [${esc(alliance.tag)}] Color"
+                title="${esc(ta('change_color', { tag: alliance.tag }))}"
               />
             `
                 : `
@@ -637,7 +674,7 @@ export function renderStandingsHierarchy() {
             }
             <strong class="ladder-tag" style="color: ${esc(displayColor)}">[${esc(alliance.tag)}]</strong>
             <span class="ladder-name">${esc(alliance.name)}</span>
-            ${alliance.parent_tag ? `<span class="academy-child-badge">Academy of [${esc(alliance.parent_tag)}]</span>` : ''}
+            ${alliance.parent_tag ? `<span class="academy-child-badge">${esc(ta('academy_of', { tag: alliance.parent_tag }))}</span>` : ''}
           </div>
 
           <div class="ladder-sub-line">
@@ -645,7 +682,7 @@ export function renderStandingsHierarchy() {
             ${
               isAlliancePlannerActive && !alliance.parent_tag
                 ? `
-              <button type="button" class="btn-link-acad-prompt" data-action="link-acad-prompt" data-parent="${esc(alliance.tag)}">+ Link Academy</button>
+              <button type="button" class="btn-link-acad-prompt" data-action="link-acad-prompt" data-parent="${esc(alliance.tag)}">${esc(ta('link_academy'))}</button>
             `
                 : ''
             }
@@ -654,15 +691,15 @@ export function renderStandingsHierarchy() {
 
         <div class="ladder-status-col">
           <span class="nap-badge ${alliance.is_nap ? 'nap-active' : 'nap-inactive'}">
-            ${alliance.is_nap ? 'NAP Protected' : 'External'}
+            ${esc(ta(alliance.is_nap ? 'nap_protected' : 'external'))}
           </span>
           ${
             isAlliancePlannerActive
               ? `
             <button type="button" class="btn-nap-toggle" data-action="toggle-nap" data-tag="${esc(alliance.tag)}">
-              ${alliance.is_nap ? 'Revoke NAP' : 'Grant NAP'}
+              ${esc(ta(alliance.is_nap ? 'revoke_nap' : 'grant_nap'))}
             </button>
-            <button type="button" class="btn-ladder-del" data-action="del-alliance" data-tag="${esc(alliance.tag)}" title="Remove Alliance">&times;</button>
+            <button type="button" class="btn-ladder-del" data-action="del-alliance" data-tag="${esc(alliance.tag)}" title="${esc(ta('remove_alliance'))}">&times;</button>
           `
               : ''
           }
@@ -684,8 +721,8 @@ export function renderBlacklist() {
   if (playerCountBadge) playerCountBadge.textContent = activeBlacklist.players.length;
   if (allianceCountBadge) allianceCountBadge.textContent = activeBlacklist.alliances.length;
 
-  if (liveState !== 'ok') {
-    const text = liveState === 'failed' ? "Couldn't load the blacklist." : 'Loading…';
+  if (liveState !== 'ok' && liveState !== 'saved') {
+    const text = esc(tb(liveState === 'failed' ? 'failed' : 'loading'));
     for (const el of [playersContainer, alliancesContainer]) {
       if (el) el.innerHTML = `<div class="blacklist-empty">${text}</div>`;
     }
@@ -697,8 +734,7 @@ export function renderBlacklist() {
 
   if (playersContainer) {
     if (activeBlacklist.players.length === 0) {
-      playersContainer.innerHTML =
-        '<div class="blacklist-empty">No rogue commanders blacklisted.</div>';
+      playersContainer.innerHTML = `<div class="blacklist-empty">${esc(tb('no_players'))}</div>`;
     } else {
       playersContainer.innerHTML = activeBlacklist.players
         .map(
@@ -715,8 +751,7 @@ export function renderBlacklist() {
 
   if (alliancesContainer) {
     if (activeBlacklist.alliances.length === 0) {
-      alliancesContainer.innerHTML =
-        '<div class="blacklist-empty">No hostile alliances blacklisted.</div>';
+      alliancesContainer.innerHTML = `<div class="blacklist-empty">${esc(tb('no_alliances'))}</div>`;
     } else {
       alliancesContainer.innerHTML = activeBlacklist.alliances
         .map(
@@ -817,10 +852,10 @@ function ensureBlacklistControls() {
   bar.innerHTML = `
     <button id="btn-edit-blacklist" class="draft-btn" aria-pressed="false" type="button">
       <span class="draft-indicator"></span>
-      <span class="draft-text">Edit Blacklist</span>
+      <span class="draft-text">${esc(tb('edit'))}</span>
     </button>
-    <button id="btn-submit-blacklist" class="submit-plan-btn hidden" disabled type="button">
-      Submit Blacklist <span class="badge">0</span>
+    <button id="btn-submit-blacklist" class="submit-plan-btn" disabled type="button">
+      ${esc(tb('submit'))} <span class="badge">0</span>
     </button>`;
   section.before(bar);
   bar
@@ -838,12 +873,11 @@ function syncBlacklistControls(count = 0) {
   if (edit) {
     edit.setAttribute('aria-pressed', isBlacklistEditing ? 'true' : 'false');
     edit.classList.toggle('active', isBlacklistEditing);
-    edit.querySelector('.draft-text').textContent = isBlacklistEditing
-      ? 'Stop Editing'
-      : 'Edit Blacklist';
+    edit.querySelector('.draft-text').textContent = tb(
+      isBlacklistEditing ? 'stop_editing' : 'edit',
+    );
   }
   if (submit) {
-    submit.classList.toggle('hidden', !isBlacklistEditing);
     submit.disabled = !isBlacklistEditing || count === 0;
     submit.querySelector('.badge').textContent = String(count);
   }
@@ -854,11 +888,9 @@ export function updateAllianceProposalUI() {
   const badgeEl = document.getElementById('alliance-change-badge');
   syncBlacklistControls(isBlacklistEditing ? calculateBlacklistDiff().length : 0);
 
+  // Submit Plan stays in the bar, greyed out until there is something to send
   if (!isAlliancePlannerActive) {
-    if (submitBtn) {
-      submitBtn.classList.add('hidden');
-      submitBtn.disabled = true;
-    }
+    if (submitBtn) submitBtn.disabled = true;
     if (badgeEl) badgeEl.textContent = '0';
     return;
   }
@@ -868,10 +900,7 @@ export function updateAllianceProposalUI() {
 
   if (badgeEl) badgeEl.textContent = String(count);
 
-  if (submitBtn) {
-    submitBtn.classList.remove('hidden');
-    submitBtn.disabled = count === 0;
-  }
+  if (submitBtn) submitBtn.disabled = count === 0;
 }
 
 export function toggleAlliancePlanner(active) {
@@ -926,7 +955,7 @@ export async function submitAllianceProposal() {
 
   const diff = calculateStandingsDiff();
   if (diff.length === 0) {
-    alert('No modifications detected in current standings.');
+    alert(ta('no_changes'));
     return;
   }
 
@@ -940,27 +969,31 @@ export async function submitAllianceProposal() {
 
   const diffHtml = diff
     .map((d) => {
+      // Text in the page's language; tags, ranks and colours as HTML in their placeholders.
+      const tag = `<strong>[${esc(d.tag)}]</strong>`;
+      const code = (v) => `<code>${esc(v)}</code>`;
+      const line = (key, html, vars) => window.th(`alliance_planner.${key}`, html, vars);
       if (d.type === 'rank')
-        return `<div>• <strong>[${esc(d.tag)}]</strong>: Rank <code>#${esc(d.from)}</code> ➔ <code>#${esc(d.to)}</code></div>`;
+        return `<div>• ${line('diff_rank', { tag, from: code(`#${d.from}`), to: code(`#${d.to}`) })}</div>`;
       if (d.type === 'academy')
-        return `<div>• <strong>[${esc(d.tag)}]</strong>: Assigned as Academy of <strong>[${esc(d.parent)}]</strong></div>`;
+        return `<div>• ${line('diff_academy', { tag, parent: `<strong>[${esc(d.parent)}]</strong>` })}</div>`;
       if (d.type === 'nap')
-        return `<div>• <strong>[${esc(d.tag)}]</strong>: NAP Status <code>${esc(d.status)}</code></div>`;
+        return `<div>• ${line('diff_nap', { tag, status: code(ta(d.status === 'Protected' ? 'nap_status_protected' : 'nap_status_revoked')) })}</div>`;
       if (d.type === 'color')
-        return `<div>• 🎨 <strong>[${esc(d.tag)}]</strong>: Color updated to <code>${esc(d.to)}</code></div>`;
+        return `<div>• 🎨 ${line('diff_color', { tag, color: code(d.to) })}</div>`;
       if (d.type === 'blacklist')
         return `<div>• ⚠️ <strong>Blacklist ${esc(d.action.toUpperCase())}</strong>: [${esc(d.target)}] (${esc(d.category)})</div>`;
       if (d.type === 'added')
-        return `<div>• ➕ <strong>Added [${esc(d.tag)}]</strong>: Rank #${esc(d.rank)} (${esc(d.name)})</div>`;
+        return `<div>• ➕ ${line('diff_added', { added: bold(ta('added_tag', { tag: d.tag })) }, { rank: d.rank, name: d.name })}</div>`;
       if (d.type === 'removed')
-        return `<div>• ➖ <strong>Removed [${esc(d.tag)}]</strong> from standings</div>`;
-      return `<div>• Modified [${esc(d.tag || 'Unknown')}]</div>`;
+        return `<div>• ➖ ${line('diff_removed', { removed: bold(ta('removed_tag', { tag: d.tag })) })}</div>`;
+      return `<div>• ${esc(ta('diff_modified', { tag: d.tag || ta('unknown') }))}</div>`;
     })
     .join('');
 
   submitProposalWithAuth({
     type: 'alliance',
-    title: '👑 Submit NAP Standings & Diplomacy Proposal',
+    title: ta('proposal_title'),
     payload: payload,
     diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
     onSuccess: () => {
@@ -976,32 +1009,29 @@ export async function submitBlacklistProposal() {
 
   const diff = calculateBlacklistDiff();
   if (diff.length === 0) {
-    showBlacklistStatus('No blacklist changes to send.', 'warning');
+    showBlacklistStatus(esc(tb('no_changes')), 'warning');
     return;
   }
 
   const diffHtml = diff
     .map((d) => {
-      const label = d.category === 'alliances' ? `[${esc(d.target)}]` : esc(d.target);
-      const what = d.category === 'alliances' ? 'alliance' : 'player';
+      const label = bold(d.category === 'alliances' ? `[${d.target}]` : d.target);
+      const what = tb(d.category === 'alliances' ? 'what_alliance' : 'what_player');
       return d.action === 'add'
-        ? `<div>• ⚠️ <strong>Add</strong> ${what} <strong>${label}</strong></div>`
-        : `<div>• ✅ <strong>Remove</strong> ${what} <strong>${label}</strong></div>`;
+        ? `<div>• ⚠️ ${tbh('diff_add', { add: bold(tb('add_word')), name: label }, { what })}</div>`
+        : `<div>• ✅ ${tbh('diff_remove', { remove: bold(tb('remove_word')), name: label }, { what })}</div>`;
     })
     .join('');
 
   submitProposalWithAuth({
     type: 'blacklist',
-    title: '🚫 Submit NAP Blacklist Proposal',
+    title: tb('proposal_title'),
     payload: { type: 'blacklist', timestamp: new Date().toISOString(), diff },
     diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
     onSuccess: () => {
       originalBlacklist = JSON.parse(JSON.stringify(draftBlacklist));
       toggleBlacklistEditing(false);
-      showBlacklistStatus(
-        'Blacklist proposal sent to leadership on Discord. It applies once a Steward approves it.',
-        'success',
-      );
+      showBlacklistStatus(esc(tb('sent')), 'success');
     },
   });
 }
@@ -1172,5 +1202,9 @@ if (typeof window !== 'undefined') {
   } else {
     bindAllianceControls();
   }
+  // A footer link swaps only the page's main frame: Turbo then fires turbo:frame-render, and
+  // on some routes not turbo:load (the tool stayed blank). Start on both, as js/main.js does;
+  // the once-per-page guard makes the second call a no-op.
   document.addEventListener('turbo:load', bindAllianceControls);
+  document.addEventListener('turbo:frame-render', bindAllianceControls);
 }

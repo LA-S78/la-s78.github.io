@@ -1,0 +1,71 @@
+# Calendar reminders: every 10 minutes, asks the site to check for events starting within the
+# hour and post their Discord reminders (api/_reminders.js, through POST /api/calendar). The
+# work and its secrets (Gist, bot token, channels) stay on Vercel; this only proves the call
+# comes from here with REMINDER_SECRET (the same value as Vercel's).
+#
+# Safety: the live site posts nothing until REMINDERS_LIVE=true is set in Vercel (until then
+# it only reports what it would send). dev.la-s78.app uses the test data and posts only to
+# TEST_CHANNEL_ID. "Run workflow" (Actions tab) runs one check by hand, on either site, as a
+# dry run if wanted; its report is printed in the run's log.
+#
+# GitHub runs schedules from the default branch (main), often a few minutes late; reminders
+# allow for that (they post at most an hour before, with a live countdown).
+
+name: Calendar reminders
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Which site checks'
+        type: choice
+        options: [dev, live, both]
+        default: dev
+      dry_run:
+        description: 'Only report what would be sent'
+        type: boolean
+        default: true
+
+permissions: {}
+
+concurrency:
+  group: calendar-reminders
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ask the site to check reminders
+        env:
+          REMINDER_SECRET: ${{ secrets.REMINDER_SECRET }}
+          SITE: ${{ github.event_name == 'workflow_dispatch' && inputs.site || 'both' }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+        run: |
+          if [ -z "$REMINDER_SECRET" ]; then
+            echo "::error::The REMINDER_SECRET secret is not set (Settings → Secrets → Actions)."
+            exit 1
+          fi
+          case "$SITE" in
+            dev) urls="https://dev.la-s78.app" ;;
+            live) urls="https://la-s78.app" ;;
+            *) urls="https://dev.la-s78.app https://la-s78.app" ;;
+          esac
+          status=0
+          for url in $urls; do
+            echo "== $url (dry run: $DRY_RUN)"
+            if ! curl -sS --fail-with-body --max-time 40 -X POST "$url/api/calendar" \
+                -H "Content-Type: application/json" \
+                -H "x-reminder-secret: $REMINDER_SECRET" \
+                -d "{\"action\":\"check-reminders\",\"dryRun\":$DRY_RUN}"; then
+              echo "::warning::$url did not complete the reminder check."
+              status=1
+            fi
+            echo
+          done
+          # A scheduled run only warns (a failure would email the owner every 10 minutes while
+          # a site is down); a run started by hand fails, so it shows.
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then exit $status; fi

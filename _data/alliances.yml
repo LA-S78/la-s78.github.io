@@ -18,7 +18,8 @@ colors:
   HeKi: "#d69e2e"
 
 # The Vercel setting that holds each alliance's role ID in the NAP server, as
-# DISCORD_<name> (used for the map colours from Discord, api/colors.js).
+# DISCORD_<name>. Used for the map colours from Discord (api/colors.js) and to find a
+# member's alliance at sign-in (api/verify.js); only the settings listed here count.
 role_settings:
   WLO: WLO
   RÂVN: RAVN
@@ -27,6 +28,7 @@ role_settings:
   SVN: SVN
   PHNX: PHNX
   HMDA: HMDA
+  NAVI: NAVI
   HeKi: HEKI
 
 # The Capitol rotation before any live schedule exists: rank #1 holds Week 3, and the

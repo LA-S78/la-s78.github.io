@@ -84,7 +84,7 @@
 
 .scope-global .mgmt-tag {
   border-color: var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   background: color-mix(in srgb, var(--accent-color) 15%, transparent);
 }
 
@@ -129,7 +129,7 @@
 }
 
 .form-group .req {
-  color: var(--status-danger);
+  color: var(--status-danger-hover); /* the lighter red: easier to read on dark cards */
 }
 
 .form-group input,
@@ -281,7 +281,7 @@
 .cal-capitol-label {
   font-size: 0.65rem;
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--accent-text);
 }
 
 .cal-capitol-holder {
@@ -460,7 +460,7 @@
 
 .pill-recurring {
   border-color: var(--accent-color);
-  color: var(--accent-color);
+  color: var(--accent-text);
   background: color-mix(in srgb, var(--accent-color) 14%, transparent);
 }
 
@@ -511,3 +511,42 @@
 }
 /* hide language selector on portal pages */
 
+
+/* "Remind on Discord 1 hour before" (event form) and the server-reminder opt-in
+   (registration page): a checkbox with its label beside it */
+.cal-check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.cal-check-label input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+/* The reminder has nowhere to go yet (no alert channel) */
+.form-hint.is-warning {
+  color: var(--status-warning);
+}
+
+/* Edit, next to Delete on events this leader can manage */
+.btn-edit-event {
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.btn-edit-event:hover {
+  border-color: var(--accent-color);
+}

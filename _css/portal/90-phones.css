@@ -1,0 +1,103 @@
+/* ==========================================================================
+   ROOMIER PHONES (Look & Feel, step 1): the signed-in tool pages
+   The same idea as _css/style/87-narrow-screens.css: on a phone, the tools sat in a page
+   box with desktop padding, and inside it more boxes with their own. Slimmer padding
+   gives the content more of the screen. Last in this stylesheet, so it wins over each
+   box's desktop size. Desktop is unchanged.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  body.portal-body .content-pane {
+    padding: 0.75rem;
+  }
+
+  .status-banner {
+    padding: 0.7rem 0.8rem;
+  }
+
+  /* Calendar: the phase card and the panels inside it */
+  .cal-status-banner {
+    padding: 1rem;
+  }
+
+  /* The phase card comes out of its frame: the page box is frame enough */
+  .cal-hero-card {
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+  }
+
+  .cal-capitol-card {
+    padding: 0.75rem 0.9rem;
+  }
+
+  .metric-item {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .cal-management-panel {
+    padding: 0.9rem;
+  }
+
+  .ops-buyout-section {
+    padding: 10px;
+  }
+}
+
+/* CALENDAR ON PHONES (Look & Feel step 5) */
+@media (max-width: 767px) {
+  /* Cycle progress, next reset and next KW battle: one box with a line each (label left,
+     value right) instead of three full-width boxes stacked (about 100px shorter) */
+  .cal-hero-metrics {
+    gap: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .metric-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid var(--overlay-5);
+  }
+
+  .metric-item:first-child {
+    border-top: none;
+  }
+
+  .metric-item {
+    flex-wrap: wrap;
+  }
+
+  /* A label stays on one line; a long value moves under it (still on the right) */
+  .metric-label {
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  .metric-val {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.92rem;
+  }
+
+  /* Event cards: the title, then its time straight under it (a 1.5rem gap and an empty
+     description line used to sit between them) */
+  .timeline-event-row {
+    gap: 0.4rem;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .event-actions-group {
+    margin-top: 0;
+  }
+
+  .event-desc:empty {
+    display: none;
+  }
+}

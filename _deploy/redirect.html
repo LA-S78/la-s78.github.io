@@ -35,7 +35,9 @@
         // App shortcuts (site.webmanifest) open a page directly: /?to=map, alliance, calendar, rules
         const shortcutPages = { map: "map/", alliance: "alliance.html", calendar: "calendar.html", rules: "rules.html" };
         const shortcut = shortcutPages[new URLSearchParams(window.location.search).get("to")] || "";
-        window.location.href = directPath + shortcut;
+        // After /reset (or Force Update): /?updated=1 shows a short "App updated" note
+        const updated = new URLSearchParams(window.location.search).get("updated") === "1" ? "?updated=1" : "";
+        window.location.href = directPath + shortcut + updated;
     </script>
 </head>
 <body style="font-family: sans-serif; background-color: #110d0b; color: #e6dfd5; text-align: center; padding-top: 20%;">
