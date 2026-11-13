@@ -28,10 +28,13 @@
   display: flex;
   justify-content: center;
   position: relative;
-  width: 185px;
+  /* The split, the Health/Attack row and the merge share one width, so the brackets always
+     meet the two hexagons' centres (a quarter and three quarters across). 360px keeps the
+     hexagons 180px apart as before; on a small phone the row shrinks with the screen. */
+  width: min(360px, 100%);
 }
 .branch-top {
-  width: 100%;
+  width: calc(50% + 4px); /* centre to centre, plus the 4px line */
   height: 15px;
   border-top: 4px solid var(--line-color);
   border-left: 4px solid var(--line-color);
@@ -39,12 +42,31 @@
   border-radius: 8px 8px 0 0;
 }
 .branch-bottom {
-  width: 100%;
+  width: calc(50% + 4px);
   height: 15px;
   border-bottom: 4px solid var(--line-color);
   border-left: 4px solid var(--line-color);
   border-right: 4px solid var(--line-color);
   border-radius: 0 0 8px 8px;
+}
+
+/* Health and Attack side by side: each takes half the row and its box fits inside it */
+.t10-split-row {
+  justify-content: space-between;
+  margin-top: 0;
+}
+.t10-split-row .node-wrapper {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+}
+.t10-split-row .node-controls {
+  width: auto;
+  min-width: min(140px, calc(100% - 4px)); /* 140px wide as before, less on a small phone */
+  max-width: calc(100% - 4px);
+}
+.t10-split-row .node-title {
+  white-space: normal;
 }
 
 .hex-node {
@@ -222,3 +244,46 @@
   opacity: 0.5;
 }
 
+/* Phones: bigger buttons for thumbs, and the totals kept in view while you scroll through
+   the tree (they stick to the bottom of the screen until the calculator ends) */
+@media (max-width: 767px) {
+  .level-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .t10-toggle {
+    min-height: 40px;
+    padding: 6px 14px;
+  }
+  /* The panel clips its corners with overflow: hidden, which stops anything inside it
+     sticking; clip does the same clipping without that */
+  .content-pane:has(.totals-banner) {
+    overflow: clip;
+  }
+  .totals-banner {
+    position: sticky;
+    bottom: calc(60px + env(safe-area-inset-bottom) + 8px); /* above the bottom navigation */
+    margin-top: 16px;
+    padding: 10px 0;
+  }
+  .totals-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end; /* numbers on one line, whatever the labels' length */
+    gap: 6px;
+    padding: 0 6px;
+  }
+  .total-item {
+    min-width: 0;
+    gap: 3px;
+  }
+  .total-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.5px;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+  .total-value {
+    font-size: 1rem;
+  }
+}

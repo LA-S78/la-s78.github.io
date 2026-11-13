@@ -15,9 +15,9 @@
             <!-- PULLING THE TITLE -->
             <div class="node-title">{{ t.adv_protection }}</div>
             <div class="level-stepper">
-                <button class="level-btn" data-action="adjust-level" data-type="advProt" data-change="-1">-</button>
+                <button type="button" class="level-btn" data-action="adjust-level" data-type="advProt" data-change="-1" aria-label="{{ t.adv_protection }} −1">−</button>
                 <div class="level-display" id="disp-advProt">10/10</div>
-                <button class="level-btn" data-action="adjust-level" data-type="advProt" data-change="1">+</button>
+                <button type="button" class="level-btn" data-action="adjust-level" data-type="advProt" data-change="1" aria-label="{{ t.adv_protection }} +1">+</button>
             </div>
         </div>
     </div>
@@ -30,10 +30,10 @@
     </div>
 
     <!-- Node 2 & 3: Health & Attack -->
-    <div class="branch-container" style="justify-content: space-between; margin-top: 0; width: 320px;">
+    <div class="branch-container t10-split-row">
         
         <!-- Health Node -->
-        <div class="node-wrapper" style="margin: 0;">
+        <div class="node-wrapper">
             <div class="hex-node" id="node-health">
                 <div class="icon-placeholder">
                     <!-- Heart Icon -->
@@ -43,15 +43,15 @@
             <div class="node-controls">
                 <div class="node-title">{{ t.health }}</div>
                 <div class="level-stepper">
-                    <button class="level-btn" data-action="adjust-level" data-type="health" data-change="-1">-</button>
+                    <button type="button" class="level-btn" data-action="adjust-level" data-type="health" data-change="-1" aria-label="{{ t.health }} −1">−</button>
                     <div class="level-display" id="disp-health">6/10</div>
-                    <button class="level-btn" data-action="adjust-level" data-type="health" data-change="1">+</button>
+                    <button type="button" class="level-btn" data-action="adjust-level" data-type="health" data-change="1" aria-label="{{ t.health }} +1">+</button>
                 </div>
             </div>
         </div>
 
         <!-- Attack Node -->
-        <div class="node-wrapper" style="margin: 0;">
+        <div class="node-wrapper">
             <div class="hex-node" id="node-attack">
                 <div class="icon-placeholder">
                     <!-- Broadsword Icon -->
@@ -61,9 +61,9 @@
             <div class="node-controls">
                 <div class="node-title">{{ t.attack }}</div>
                 <div class="level-stepper">
-                    <button class="level-btn" data-action="adjust-level" data-type="attack" data-change="-1">-</button>
+                    <button type="button" class="level-btn" data-action="adjust-level" data-type="attack" data-change="-1" aria-label="{{ t.attack }} −1">−</button>
                     <div class="level-display" id="disp-attack">7/10</div>
-                    <button class="level-btn" data-action="adjust-level" data-type="attack" data-change="1">+</button>
+                    <button type="button" class="level-btn" data-action="adjust-level" data-type="attack" data-change="1" aria-label="{{ t.attack }} +1">+</button>
                 </div>
             </div>
         </div>
@@ -88,9 +88,9 @@
         <div class="node-controls">
             <div class="node-title">{{ t.defense }}</div>
             <div class="level-stepper">
-                <button class="level-btn" data-action="adjust-level" data-type="defense" data-change="-1">-</button>
+                <button type="button" class="level-btn" data-action="adjust-level" data-type="defense" data-change="-1" aria-label="{{ t.defense }} −1">−</button>
                 <div class="level-display" id="disp-defense">3/10</div>
-                <button class="level-btn" data-action="adjust-level" data-type="defense" data-change="1">+</button>
+                <button type="button" class="level-btn" data-action="adjust-level" data-type="defense" data-change="1" aria-label="{{ t.defense }} +1">+</button>
             </div>
         </div>
     </div>
@@ -107,7 +107,7 @@
         </div>
         <div class="node-controls">
             <div class="node-title" style="color: var(--accent-bright);">{{ t.elite_troop }}</div>
-            <button class="t10-toggle" id="btn-t10" 
+            <button type="button" class="t10-toggle" id="btn-t10" 
                     data-locked="{{ t.locked }}" 
                     data-unlocked="{{ t.unlocked }}">
                 {{ t.locked }} (0/1)
