@@ -310,49 +310,51 @@ register:
   loading: Kayıt portalı yükleniyor...
   subtitle: İttifak Sunucusu Entegrasyon Portalı
   step_invite: 1. Botu Sunucunuza Davet Edin
-  invite_help: Kaydı tamamlamadan önce botu ittifak Discord sunucunuza eklemelisiniz.
-  authorize: "🤖 Botu Yetkilendirmek için Tıklayın"
-  step_credentials: 2. Sunucu ve Rol Kimlik Bilgileri
-  guild_id: Discord Sunucu Kimliği (Guild ID)
+  invite_help: Kaydı tamamlamadan önce botu ittifak Discord'unuza eklemelisiniz.
+  authorize: "🤖 Botu Yetkilendirmek İçin Tıklayın"
+  step_credentials: 2. Sunucu & Rol Kimlik Bilgileri
+  guild_id: Discord Sunucu Kimliği (Sunucu ID)
   example: ör. {id}
-  guild_help: 'Discord''da: Geliştirici Modunu Etkinleştir → Sunucu simgenize sağ tıklayın → {copy}. O sunucunun sahibi olmalı veya {admin} veya {manage} yetkisine sahip olmalısınız. Aşağıdaki kanallar ve rol bu sunucuya göre kontrol edilir.'
+  guild_help: 'Discord''da: Geliştirici Modunu Etkinleştirin → Sunucu simgenize sağ tıklayın → {copy}. O sunucunun sahibi olmalı ya da {admin} veya {manage} yetkisine sahip olmalısınız. Aşağıdaki kanal ve rol buna göre kontrol edilir.'
   copy_server_id: Sunucu Kimliğini Kopyala
   administrator: Yönetici
   manage_server: Sunucuyu Yönet
-  routing_heading: "📢 Operasyonlar ve Bilet Yönlendirme"
-  routing_help: Botun herkese açık operasyon uyarılarını nerede paylaşacağını ve özel üye önerilerini/biletlerini nereye yönlendireceğini yapılandırın.
+  routing_heading: "📢 Operasyonlar & Bilet Yönlendirme"
+  routing_help: Botun genel operasyon uyarılarını nerede paylaşacağını ve özel üye önerilerini/biletlerini nereye yönlendireceğini yapılandırın.
   alert_channel: Operasyon Uyarı Kanalı Kimliği
   channel_id_title: Geçerli bir 17-20 haneli Discord Kanal Kimliği olmalıdır
   role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
   alert_channel_help: Duyuru/uyarı kanalınıza sağ tıklayın → {copy}.
   copy_channel_id: Kanal Kimliğini Kopyala
   alert_role: Varsayılan Uyarı Rolü Kimliği
-  optional: "(İsteğe Bağlı)"
-  alert_role_placeholder: Varsayılan @everyone olması için boş bırakın
-  alert_role_help: Ping rolünüze sağ tıklayın (ör. {example}) → {copy}. Boş bırakılırsa {everyone} olarak varsayılır.
+  optional: "(İsteğe bağlı)"
+  alert_role_placeholder: Boş bırakırsanız @everyone olarak ayarlanır
+  alert_role_help: Bildirim rolünüze sağ tıklayın (ör. {example}) → {copy}. Boş bırakılırsa {everyone} kullanılır.
+  server_alerts: Sunucu çapındaki etkinlik hatırlatıcılarını da burada paylaş
+  server_alerts_help: Steward'lar tarafından ayarlanan NAP çapındaki etkinlik hatırlatıcıları NAP Discord'una gider; bunları bu uyarı kanalında da almak için işaretleyin.
   copy_role_id: Rol Kimliğini Kopyala
-  officer_channel: Subay Bilet Kabul Kanalı Kimliği
-  officer_channel_help: "{channel} kanalınıza sağ tıklayın → {copy}. {suggest} üzerinden gelen üye teklifleri ve ittifak biletleri, liderlik değerlendirmesi için buraya yönlendirilecektir."
+  officer_channel: Subay Bilet Alım Kanalı Kimliği
+  officer_channel_help: "{channel} ögenize sağ tıklayın → {copy}. {suggest} üzerinden gelen üye önerileri ve ittifak biletleri yönetim incelemesi için buraya yönlendirilecektir."
   private_channel: özel R4/R5 bilet kanalı
-  delegated_roles: Yetkilendirilmiş Liderlik Rolleri
-  delegated_roles_help: Biletleri ayıklayabilen, etkinlikleri yönetebilen ve sandık adaylıklarını gönderebilen virgülle ayrılmış rol isimleri ({r5} her zaman yetkilidir).
+  delegated_roles: Yetkili Liderlik Rolleri
+  delegated_roles_help: Biletleri triyajlayabilen, etkinlikleri yönetebilen ve sandık adaylıklarını gönderebilen virgülle ayrılmış rol isimleri ({r5} her zaman yetkilidir).
   color: İttifak Kimlik Rengi
   preview: 'Önizleme:'
-  color_help: Operasyon takviminize, dahili bilet kartlarınıza ve onaylı NAP Konseyi tekliflerine uygulanır.
-  submit: Sunucuyu Kaydet ve Komutları Dağıt
-  submitting: Sunucu Doğrulanıyor ve Kaydediliyor...
+  color_help: Operasyon takviminize, dahili bilet kartlarınıza ve onaylı NAP Konseyi önerilerine uygulanır.
+  submit: Sunucuyu Kaydet & Komutları Dağıt
+  submitting: Sunucu Doğrulanıyor & Kaydediliyor...
   bad_token: Geçersiz veya eksik kayıt belirteci. NAP sunucusunda /registerbot çalıştırın.
-  malformed_token: Hatalı belirteç. Lütfen Discord'dan yeni bir bağlantı isteyin.
+  malformed_token: Hatalı biçimlendirilmiş belirteç. Lütfen Discord'dan yeni bir bağlantı isteyin.
   expired: Bu kayıt bağlantısının süresi doldu (24 saat sınırı). /registerbot komutunu tekrar çalıştırın.
   bad_guild: Geçersiz Discord Sunucu Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
   bad_alert_channel: Geçersiz Operasyon Uyarı Kanalı Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
-  bad_alert_role: Geçersiz Uyarı Rolü Kimliği formatı. 17-20 haneli bir sayı olmalıdır (@everyone için boş bırakılabilir).
-  bad_officer_channel: Geçersiz Subay Bilet Kabul Kanalı Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
+  bad_alert_role: Geçersiz Uyarı Rolü Kimliği formatı. 17-20 haneli bir sayı olmalıdır (veya @everyone için boş bırakılmalıdır).
+  bad_officer_channel: Geçersiz Subay Bilet Alım Kanalı Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
   failed: Kayıt başarısız
   error: 'Kayıt Hatası: {error}'
   success: "✅ Kayıt Başarılı!"
   linked: "{server} artık {tag} ile bağlantılı."
-  server_id: Sunucu Kimliği {id}
+  server_id: Sunucu ID {id}
   r_alert_channel: 'Operasyon Uyarı Kanalı:'
   r_target: 'Bildirim Hedefi:'
   r_role: Rol {id}
@@ -374,21 +376,21 @@ calendar:
   set2_off_week: Sadece Kral Takdirnamesi (Krallık Savaşı yok).
   set2_won: 'Krallık Savaşı kazanıldı: Savaş Kralı Ödülü de açık.'
   set2_lost: 'Krallık Savaşı kaybedildi: Sadece Kral Takdirnamesi.'
-  set2_pending: Cumartesi günkü savaş kazanılırsa Savaş Kralı Ödülü; sonuçtan sonra Kral tarafından dağıtılır.
+  set2_pending: Cumartesi günkü savaş kazanılırsa Savaş Kralı Ödülü verilir; Kral sonuçtan sonra dağıtır.
   rewards_open_until: "{week} ödülleri Salı 23:59 GT'ye kadar açık. {set2}"
-  rewards_closed: Ödüller kapalı. Bir sonraki açılış Cuma günü, başkent etkinliğinden sonra yaklaşık 20:00 GT'de.
+  rewards_closed: Ödüller kapalı. Bir sonraki açılış Cuma yaklaşık 20:00 GT'de, başkent etkinliğinden sonra gerçekleşir.
   capitol_holder: BAŞKENT SAHİBİ
   current_holder: MEVCUT BAŞKENT SAHİBİ
   next_holder: SONRAKİ BAŞKENT SAHİBİ
   rank: 'Sıra #{rank}'
   rank_override: 'Sıra #{rank} (Geçersiz Kılma)'
-  rank_override_schedule: 'Sıra #{rank} • Programı Geçersiz Kıl'
-  captured_friday: Cuma günü ele geçirildi
-  captures_today: Bugün ele geçirmeler
-  captures_friday: Cuma günü ele geçirmeler
+  rank_override_schedule: 'Sıra #{rank} • Geçersiz Kılma Programı'
+  captured_friday: Cuma ele geçirildi
+  captures_today: Bugünkü ele geçirmeler
+  captures_friday: Cuma ele geçirmeleri
   cycle_progress: DÖNGÜ İLERLEMESİ
   day_of_28: 28'in {day}. günü ({week})
-  week_n: "{n}. Hafta"
+  week_n: Hafta {n}
   next_reset: SONRAKİ SIFIRLAMA (00:00 GT)
   next_kw: SONRAKİ KS SAVAŞI
   saturday: Cumartesi
@@ -396,28 +398,36 @@ calendar:
   none_this_week: Bu hafta yok
   perspective: "🔍 BAKIŞ AÇISI:"
   combined: "🌐 Birleşik (Krallık + [{tag}])"
-  internal_only: "🛡️ [{tag}] Sadece İç"
+  internal_only: "🛡️ [{tag}] Sadece Dahili"
   kingdom_only: "👑 Sadece Krallık Operasyonları"
-  operations_active: "🛡️ [{tag}] Aktif Operasyonlar"
-  upcoming: Yaklaşan Operasyonlar ve Kilometre Taşları
+  operations_active: "🛡️ [{tag}] Operasyonlar Aktif"
+  upcoming: Yaklaşan Operasyonlar & Kilometre Taşları
   times_shown: Zamanlar {gt} ve Yerel Saatinizde görüntülenir
   gt_label: Oyun Zamanı (UTC-2)
   no_operations: Bu bakış açısı için planlanmış operasyon yok.
   all_day: Tüm Gün
-  every_2_days: "🔁 Her 2 Günde Bir"
+  every_2_days: "🔁 2 Günde Bir"
   weekly: "🔁 Haftalık"
   mandatory: "🚨 Zorunlu"
+  edit: "✏️ Düzenle"
   delete: "🗑️ Sil"
   ev_capture_title: "👑 Başkent Ele Geçirme — {who}"
   ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçiriyor."
   ev_kw_title: "⚔️ Krallık Savaşı"
-  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarında biter. Bir galibiyet, Kral Takdirnamesine ek olarak Savaş Kralı Ödül sandıklarını açar.
+  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarı biter. Kazanmak, Kral Takdirnamesine ek olarak Savaş Kralı Ödül sandıklarını açar.
   ev_open_title: "🎁 Ödüller Açık — {week}"
-  ev_open_desc_kw: Kral Takdirnamesi başkent etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Savaş Kralı Ödülü takip eder; sonuçtan sonra Kral tarafından dağıtılır.
+  ev_open_desc_kw: Kral Takdirnamesi başkent etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Savaş Kralı Ödülü de açılır; Kral sonuçtan sonra dağıtır.
   ev_open_desc: Kral Takdirnamesi başkent etkinliğinden sonra açılır (bu hafta Krallık Savaşı yok).
   ev_close_title: "⌛ Ödüller Kapanıyor — {week}"
   ev_close_desc: 'Sandıkların süresi Çarşamba 00:00 GT''de dolar: o zamandan önce her şeyi dağıtın.'
 calendar_events:
+  reminder: Discord'da 1 saat önce hatırlat
+  reminder_hint: İttifakınızın uyarı kanalında paylaşılır ve yukarıda seçilen rol etiketlenir.
+  reminder_hint_server: NAP Discord'unun uyarı kanalında (ve katılan ittifaklarda) paylaşılır ve yukarıda seçilen rol etiketlenir.
+  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların paylaşılabilmesi için Discord''unuzda /registerbot çalıştırın.'
+  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmamış (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları paylaşılamaz.
+  edit_heading: Etkinliği düzenle
+  save_changes: "💾 Değişiklikleri kaydet"
   manage_mode: YÖNETİM MODU
   session_active: Kimlik Doğrulanmış Oturum Aktif
   schedule_operation: "➕ Operasyon Planla"
@@ -425,16 +435,16 @@ calendar_events:
   kingdom_admin: "👑 KRALLIK YÖNETİMİ"
   kingdom_desc: Krallık çapında uyarıları ve operasyonları planlama
   kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
-  leadership: "🛡️ [{tag}] YÖNETİM"
-  leadership_desc: "[{tag}] için iç operasyonları yönetme"
+  leadership: "🛡️ [{tag}] LİDERLİK"
+  leadership_desc: "[{tag}] için dahili operasyonları yönetme"
   alliance_heading: "[{tag}] Operasyonu Oluştur"
-  preset: Operasyon Ön Ayarı
+  preset: Operasyon Hazır Ayarı
   preset_custom: "🛠️ Özel Operasyon (Boş)"
-  preset_crystal_cluster: "🔮 Kristal Vadisi (0.5s)"
-  preset_elixir_scramble: "🧪 Kraliyet Mücadelesi (0.5s)"
+  preset_crystal_cluster: "🔮 Kristal Küme Vadisi (0.5s)"
+  preset_elixir_scramble: "🧪 İksir Mücadelesi (0.5s)"
   preset_survival_battle: "⚔️ Hayatta Kalma Savaşı (4.0s)"
   preset_kill_event: "🩸 Öldürme Etkinliği (24.0s)"
-  preset_kvk_battle: "👑 Krallık Savaşı (1.0s)"
+  preset_kvk_battle: "👑 Krallık vs Krallık Savaşı (1.0s)"
   preset_gear_event: "🛡️ Ekipman Etkinliği (48.0s)"
   preset_cheese_trap: "🧀 Peynir Tuzağı (0.5s)"
   title: Etkinlik Başlığı
@@ -444,23 +454,23 @@ calendar_events:
   time_hint: Sunucu Oyun Zamanı (5 dakikalık artışlara yuvarlanır)
   duration: Süre (Saat)
   frequency: Sıklık
-  once: Tek Seferlik Etkinlik (Tekrar etmez)
-  every_2_days: Her 2 Günde Bir Tekrar Eder
-  weekly: Haftalık Tekrar Eder (Aynı gün ve saat)
+  once: Tek Seferlik Etkinlik (Tekrarlanmaz)
+  every_2_days: 2 Günde Bir Tekrarlanır
+  weekly: Haftalık Tekrarlanır (Aynı gün ve saat)
   alert_level: Discord Uyarı Seviyesi
   notify_role: "🔔 Varsayılan İttifak Rolünü Etiketle (@everyone'a döner)"
-  notify_custom: "🎯 Belirli Rol Kimliğini Hedefle (Tek seferlik geçersiz kılma)"
+  notify_custom: "🎯 Belirli Rol Kimliğini Etiketle (Tek seferlik geçersiz kılma)"
   notify_everyone: "🚨 @everyone Yayınını Zorla (Zorunlu Operasyon)"
-  notify_none: "🔕 Sessiz (Sadece Takvim - Discord Ping'i yok)"
+  notify_none: "🔕 Sessiz (Sadece Takvim - Discord Etiketi Yok)"
   role_id: Belirli Rol Kimliği
-  role_id_hint: "(Sadece Belirli Rolü Hedefle için gereklidir)"
+  role_id_hint: "(Sadece Belirli Rolü Etiketle için gereklidir)"
   role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
   details: Talimatlar / Toplanma Noktası
-  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere liderlik eder. Sesli iletişim açık.
+  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere liderlik eder. Sesli iletişim aktif.
   publish: Takvimde Yayınla
   publishing: Yayınlanıyor...
   bad_time: Oyun Zamanı 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10, vb.)
-  bad_role: Özel uyarı hedefi için lütfen geçerli bir 17-20 haneli Discord Rol Kimliği girin.
+  bad_role: Lütfen özel uyarı hedefi için geçerli bir 17-20 haneli Discord Rol Kimliği girin.
   save_failed: Etkinlik kaydedilemedi
   published: Operasyon başarıyla yayınlandı!
   confirm_delete: Bu operasyonu takvimden kaldırmak istediğinizden emin misiniz?

@@ -93,16 +93,17 @@ api_proposals:
   no_changes: Keine Änderungen angegeben.
   week_and_threat: Zielwoche und Bedrohungsserver sind erforderlich.
 api_events:
-  session_invalid: Ungültiges, manipuliertes oder abgelaufenes Session-Token. Bitte führe /calendar erneut in Discord aus.
+  session_invalid: Ungültiger, manipulierter oder abgelaufener Session-Token. Bitte führe /calendar in Discord erneut aus.
   required_fields: Titel, Datum und Game Time sind erforderlich.
-  date_format: Das Datum muss im Format JJJJ-MM-TT sein.
-  time_format: Game Time muss im Format HH:MM (00:00 bis 23:59) sein.
-  time_step: Game Time muss in 5-Minuten-Schritten erfolgen (:00, :05, :10, :15, etc.).
-  role_id_needed: Für eine rollenspezifische Zielvorgabe ist eine gültige 17-20-stellige Discord-Rollen-ID erforderlich.
+  date_format: Das Datum muss im Format YYYY-MM-DD vorliegen.
+  time_format: Game Time muss im Format HH:MM (00:00 bis 23:59) vorliegen.
+  time_step: Game Time muss in 5-Minuten-Schritten angegeben werden (:00, :05, :10, :15, usw.).
+  role_id_needed: Für „Spezifische Rolle“ ist eine gültige 17-20-stellige Discord-Rollen-ID erforderlich.
   published: Operation „{title}“ erfolgreich veröffentlicht.
-  not_found: Ereignis nicht gefunden oder bereits gelöscht.
-  out_of_scope: 'Zugriff verweigert: Du kannst Ereignisse außerhalb deines zugewiesenen Bereichs nicht ändern oder löschen.'
+  not_found: Event nicht gefunden oder bereits gelöscht.
+  out_of_scope: 'Zugriff verweigert: Du kannst keine Events außerhalb deines zugewiesenen Bereichs bearbeiten oder löschen.'
   deleted: 'Operation gelöscht: {title}'
+  updated: Operation „{title}“ aktualisiert.
 bot_common:
   off_week: Off-Woche
   kw_week: Königreichskrieg-Woche {n}

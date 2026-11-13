@@ -306,83 +306,85 @@ kings_console:
   stop_alert: "¡No lo envíes!"
   lists_refreshed: Las listas se han actualizado.
 register:
-  page_title: Registro del Servidor de Alianza
+  page_title: Registro de Servidor de Alianza
   loading: Cargando portal de registro...
   subtitle: Portal de Integración de Servidor de Alianza
-  step_invite: 1. Invitar Bot a tu Servidor
-  invite_help: Debes añadir el bot a tu Discord de alianza antes de completar el registro.
-  authorize: "🤖 Haz clic para Autorizar el Bot"
+  step_invite: 1. Invita al bot a tu servidor
+  invite_help: Debes añadir el bot al Discord de tu alianza antes de completar el registro.
+  authorize: "🤖 Haz clic para autorizar al bot"
   step_credentials: 2. Credenciales de Servidor y Rol
-  guild_id: ID del Servidor de Discord (Guild ID)
-  example: ej. {id}
-  guild_help: 'En Discord: Habilitar modo desarrollador → Clic derecho en el icono de tu servidor → {copy}. Debes ser el propietario de ese servidor o tener permisos de {admin} o {manage} allí. Los canales y el rol de abajo se verifican contra él.'
-  copy_server_id: Copiar ID de Servidor
+  guild_id: ID del Servidor de Discord (ID de Gremio)
+  example: p. ej. {id}
+  guild_help: 'En Discord: Activa el Modo de Desarrollador → Clic derecho en el icono de tu servidor → {copy}. Debes ser el dueño del servidor o tener permisos de {admin} o {manage} en él. Los canales y el rol a continuación se verificarán en función de esto.'
+  copy_server_id: Copiar ID de servidor
   administrator: Administrador
-  manage_server: Gestionar Servidor
-  routing_heading: "📢 Operaciones y Enrutamiento de Tickets"
-  routing_help: Configura dónde publica el bot las alertas de operaciones públicas y enruta las sugerencias/tickets privados de miembros.
+  manage_server: Gestionar servidor
+  routing_heading: "📢 Operaciones y Gestión de Tickets"
+  routing_help: Configura dónde publica el bot las alertas públicas de operaciones y gestiona las sugerencias/tickets privados de los miembros.
   alert_channel: ID del canal de Alertas de Operaciones
   channel_id_title: Debe ser un ID de canal de Discord válido de 17-20 dígitos
   role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
   alert_channel_help: Clic derecho en tu canal de anuncios/alertas → {copy}.
   copy_channel_id: Copiar ID de canal
-  alert_role: ID del rol de Alerta por defecto
+  alert_role: ID del Rol de Alerta predeterminado
   optional: "(Opcional)"
-  alert_role_placeholder: Deja en blanco para usar @everyone por defecto
-  alert_role_help: Clic derecho en tu rol de ping (ej. {example}) → {copy}. Se usa {everyone} si se deja en blanco.
+  alert_role_placeholder: Déjalo en blanco para usar @everyone por defecto
+  alert_role_help: Clic derecho en tu rol de mención (p. ej. {example}) → {copy}. Si se deja en blanco, será {everyone}.
+  server_alerts: Publicar también recordatorios de eventos de todo el servidor aquí
+  server_alerts_help: Los recordatorios de eventos a nivel NAP establecidos por los Administradores van al Discord NAP; marca esto para recibirlos también en este canal de alertas.
   copy_role_id: Copiar ID de rol
   officer_channel: ID del canal de Recepción de Tickets de Oficiales
-  officer_channel_help: Clic derecho en tu {channel} → {copy}. Las propuestas de miembros y tickets de alianza de {suggest} se dirigirán aquí para revisión del liderazgo.
+  officer_channel_help: Clic derecho en tu {channel} → {copy}. Las propuestas de los miembros y los tickets de alianza de {suggest} se enviarán aquí para su revisión por parte del liderazgo.
   private_channel: canal privado de tickets R4/R5
-  delegated_roles: Roles de Liderazgo Delegado
-  delegated_roles_help: Nombres de roles separados por comas que pueden triar tickets, gestionar eventos y enviar nominaciones de cofres ({r5} siempre está autorizado).
-  color: Color de Identidad de Alianza
+  delegated_roles: Roles de Liderazgo Delegados
+  delegated_roles_help: Nombres de roles separados por comas que pueden clasificar tickets, gestionar eventos y enviar nominaciones de cofres ({r5} siempre está autorizado).
+  color: Color de Identidad de la Alianza
   preview: 'Vista previa:'
-  color_help: Aplicado a tu calendario de operaciones, tarjetas internas de tickets y propuestas del Consejo NAP respaldadas.
-  submit: Registrar Servidor y Desplegar Comandos
-  submitting: Verificando Servidor y Registrando...
-  bad_token: Token de registro no válido o faltante. Ejecuta /registerbot en el servidor NAP.
-  malformed_token: Token mal formado. Por favor, solicita un nuevo enlace desde Discord.
+  color_help: Aplicado a tu calendario de operaciones, tarjetas de tickets internas y propuestas respaldadas por el Consejo NAP.
+  submit: Registrar servidor y desplegar comandos
+  submitting: Verificando servidor y registrando...
+  bad_token: Token de registro inválido o ausente. Ejecuta /registerbot en el servidor NAP.
+  malformed_token: Token mal formado. Por favor solicita un nuevo enlace desde Discord.
   expired: Este enlace de registro ha caducado (límite de 24h). Ejecuta /registerbot de nuevo.
-  bad_guild: Formato de ID de Servidor de Discord no válido. Debe ser un número de 17-20 dígitos.
-  bad_alert_channel: Formato de ID de canal de Alertas de Operaciones no válido. Debe ser un número de 17-20 dígitos.
-  bad_alert_role: Formato de ID de rol de Alerta no válido. Debe ser un número de 17-20 dígitos (o dejar vacío para @everyone).
-  bad_officer_channel: Formato de ID de canal de Recepción de Tickets de Oficiales no válido. Debe ser un número de 17-20 dígitos.
-  failed: Registro fallido
+  bad_guild: Formato de ID de Servidor de Discord inválido. Debe ser un número de 17-20 dígitos.
+  bad_alert_channel: Formato de ID de canal de Alertas de Operaciones inválido. Debe ser un número de 17-20 dígitos.
+  bad_alert_role: Formato de ID de rol de Alerta inválido. Debe ser un número de 17-20 dígitos (o dejar vacío para @everyone).
+  bad_officer_channel: Formato de ID de canal de Recepción de Tickets de Oficiales inválido. Debe ser un número de 17-20 dígitos.
+  failed: Error en el registro
   error: 'Error de registro: {error}'
   success: "✅ ¡Registro exitoso!"
-  linked: "{server} está ahora vinculado a {tag}."
+  linked: "{server} ahora está vinculado a {tag}."
   server_id: ID de Servidor {id}
   r_alert_channel: 'Canal de Alertas de Operaciones:'
   r_target: 'Destino de la notificación:'
   r_role: Rol {id}
-  r_default: "(Por defecto)"
+  r_default: "(Predeterminado)"
   r_officer_channel: 'Canal de Tickets de Oficiales:'
   r_color: 'Color de identidad:'
   r_commands: 'Comandos de barra desplegados:'
   r_leaders: 'Liderazgo autorizado:'
 calendar:
-  loading: Cargando el horario del Reino...
-  load_failed: 'Error al cargar el calendario: {error}'
+  loading: Cargando horario del Reino...
+  load_failed: 'Error al cargar calendario: {error}'
   phase: Fase
   schedule_title: Horario de Guerra de Reinos
   loading_cycle: Cargando detalles del ciclo...
   badge_closed: "🔒 Recompensas cerradas"
-  badge_kob_open: "⚔️ Pelea Real abierta"
-  badge_awaiting: "⏳ Esperando resultado de KW"
+  badge_kob_open: "⚔️ Batalla de Supervivencia abierta"
+  badge_awaiting: "⏳ Esperando resultado de Guerra de Reinos"
   badge_open: "🎁 Recompensas abiertas"
-  set2_off_week: Solo Reconocimiento del Rey (sin Guerra de Reinos).
-  set2_won: 'Guerra de Reinos ganada: Recompensa de Pelea Real también abierta.'
-  set2_lost: 'Guerra de Reinos perdida: Solo Reconocimiento del Rey.'
-  set2_pending: Recompensa de Pelea Real si se gana la guerra del sábado; el Rey reparte tras el resultado.
+  set2_off_week: Solo Condecoración del Rey (sin Guerra de Reinos).
+  set2_won: 'Guerra de Reinos ganada: Recompensa de Batalla de Supervivencia también abierta.'
+  set2_lost: 'Guerra de Reinos perdida: Solo Condecoración del Rey.'
+  set2_pending: Recompensa de Batalla de Supervivencia si se gana la guerra del sábado; el Rey reparte después del resultado.
   rewards_open_until: Recompensas de {week} abiertas hasta el martes 23:59 GT. {set2}
-  rewards_closed: Las recompensas están cerradas. Las próximas abren el viernes alrededor de las 20:00 GT, tras el evento del capitolio.
+  rewards_closed: Las recompensas están cerradas. Las próximas abren el viernes alrededor de las 20:00 GT, después del evento del capitolio.
   capitol_holder: POSEEDOR DEL CAPITOLIO
   current_holder: POSEEDOR ACTUAL DEL CAPITOLIO
-  next_holder: PRÓXIMO POSEEDOR DEL CAPITOLIO
+  next_holder: SIGUIENTE POSEEDOR DEL CAPITOLIO
   rank: 'Rango #{rank}'
-  rank_override: 'Rango #{rank} (Anulado)'
-  rank_override_schedule: 'Rango #{rank} • Horario anulado'
+  rank_override: 'Rango #{rank} (Anulación)'
+  rank_override_schedule: 'Rango #{rank} • Horario de anulación'
   captured_friday: Capturado el viernes
   captures_today: Capturas hoy
   captures_friday: Capturas el viernes
@@ -390,7 +392,7 @@ calendar:
   day_of_28: Día {day} de 28 ({week})
   week_n: Semana {n}
   next_reset: PRÓXIMO REINICIO (00:00 GT)
-  next_kw: PRÓXIMA BATALLA KW
+  next_kw: PRÓXIMA BATALLA DE GUERRA DE REINOS
   saturday: Sábado
   today: "🔥 HOY"
   none_this_week: Ninguno esta semana
@@ -398,7 +400,7 @@ calendar:
   combined: "🌐 Combinado (Reino + [{tag}])"
   internal_only: "🛡️ [{tag}] Solo interno"
   kingdom_only: "👑 Solo operaciones del Reino"
-  operations_active: "🛡️ [{tag}] Operaciones activas"
+  operations_active: "🛡️ Operaciones [{tag}] activas"
   upcoming: Próximas operaciones y hitos
   times_shown: Horarios mostrados en {gt} y tu hora local
   gt_label: Game Time (UTC-2)
@@ -407,62 +409,70 @@ calendar:
   every_2_days: "🔁 Cada 2 días"
   weekly: "🔁 Semanal"
   mandatory: "🚨 Obligatorio"
+  edit: "✏️ Editar"
   delete: "🗑️ Eliminar"
   ev_capture_title: "👑 Captura del Capitolio — {who}"
   ev_capture_desc: "{who} ({rank}) captura el Capitolio el viernes."
   ev_kw_title: "⚔️ Batalla de Guerra de Reinos"
-  ev_kw_desc: Comienza a las 12:00 GT, usualmente termina alrededor de las 14:00 GT. Ganar abre los cofres de Recompensa de Pelea Real además del Reconocimiento del Rey.
+  ev_kw_desc: Comienza a las 12:00 GT, generalmente termina alrededor de las 14:00 GT. Una victoria abre los cofres de Recompensa de Batalla de Supervivencia además de la Condecoración del Rey.
   ev_open_title: "🎁 Recompensas abiertas — {week}"
-  ev_open_desc_kw: El Reconocimiento del Rey abre tras el evento del capitolio. La Recompensa de Pelea Real sigue si se gana la Guerra de Reinos del sábado; el Rey reparte tras el resultado.
-  ev_open_desc: El Reconocimiento del Rey abre tras el evento del capitolio (no hay Guerra de Reinos esta semana).
-  ev_close_title: "⌛ Recompensas cierran — {week}"
-  ev_close_desc: 'Los cofres caducan el miércoles a las 00:00 GT: reparte todo antes de esa hora.'
+  ev_open_desc_kw: La Condecoración del Rey abre después del evento del capitolio. La Recompensa de Batalla de Supervivencia sigue si se gana la Guerra de Reinos del sábado; el Rey reparte después del resultado.
+  ev_open_desc: La Condecoración del Rey abre después del evento del capitolio (no hay Guerra de Reinos esta semana).
+  ev_close_title: "⌛ Cierre de recompensas — {week}"
+  ev_close_desc: 'Los cofres expiran el miércoles a las 00:00 GT: reparte todo antes de esa hora.'
 calendar_events:
-  manage_mode: MODO DE GESTIÓN
+  reminder: Recordar en Discord 1 hora antes
+  reminder_hint: Publicado en el canal de alertas de tu alianza, mencionando el rol elegido anteriormente.
+  reminder_hint_server: Publicado en el canal de alertas de NAP Discord (y en las alianzas que se hayan suscrito), mencionando el rol elegido anteriormente.
+  reminder_no_channel: 'Tu alianza aún no tiene un canal de alertas: ejecuta /registerbot en tu Discord para que se puedan publicar los recordatorios.'
+  reminder_no_server_channel: El canal de alertas NAP aún no está configurado (NAP_ALERT_CHANNEL_ID), por lo que no se pueden publicar recordatorios del servidor.
+  edit_heading: Editar evento
+  save_changes: "💾 Guardar cambios"
+  manage_mode: MODO GESTIÓN
   session_active: Sesión autenticada activa
   schedule_operation: "➕ Programar operación"
   create_operation: Crear operación
-  kingdom_admin: "👑 ADMIN DEL REINO"
+  kingdom_admin: "👑 ADMINISTRACIÓN DEL REINO"
   kingdom_desc: Programación de alertas y operaciones para todo el Reino
   kingdom_heading: Crear operación del Reino ([GLOBAL])
-  leadership: "🛡️ [{tag}] LIDERAZGO"
+  leadership: "🛡️ LIDERAZGO DE [{tag}]"
   leadership_desc: Gestión de operaciones internas para [{tag}]
-  alliance_heading: Crear operación de [{tag}]
+  alliance_heading: Crear operación [{tag}]
   preset: Preajuste de operación
   preset_custom: "🛠️ Operación personalizada (Vacío)"
   preset_crystal_cluster: "🔮 Valle de Cristal (0.5h)"
-  preset_elixir_scramble: "🧪 Pelea de Elixir (0.5h)"
+  preset_elixir_scramble: "🧪 Pelea Real (0.5h)"
   preset_survival_battle: "⚔️ Batalla de Supervivencia (4.0h)"
-  preset_kill_event: "🩸 Evento de Matanza (24.0h)"
-  preset_kvk_battle: "👑 Batalla de Guerra de Reinos (1.0h)"
-  preset_gear_event: "🛡️ Evento de Equipamiento (48.0h)"
+  preset_kill_event: "🩸 Evento de matanza (24.0h)"
+  preset_kvk_battle: "👑 Guerra de Reinos (1.0h)"
+  preset_gear_event: "🛡️ Evento de equipo (48.0h)"
   preset_cheese_trap: "🧀 Trampa de Queso (0.5h)"
   title: Título del evento
-  title_example: p. ej., Entrenamiento de defensa de colmena o Asalto a puesto avanzado
+  title_example: p. ej. Entrenamiento de Defensa de Colmena o Asalto a Puesto
   date: Fecha de inicio (AAAA-MM-DD)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time del servidor (se ajusta a intervalos de 5 minutos)
-  duration: Duración (horas)
+  time_hint: Game Time del servidor (se ajusta a incrementos de 5 minutos)
+  duration: Duración (Horas)
   frequency: Frecuencia
   once: Evento único (no se repite)
   every_2_days: Se repite cada 2 días
   weekly: Se repite semanalmente (mismo día y hora)
   alert_level: Nivel de alerta de Discord
-  notify_role: "🔔 Avisar al rol de alianza predeterminado (o @everyone si no hay)"
-  notify_custom: "🎯 Apuntar a un ID de rol específico (anulación única)"
-  notify_everyone: "🚨 Forzar difusión a @everyone (Operación obligatoria)"
-  notify_none: "🔕 Silencioso (Solo calendario - Sin aviso en Discord)"
+  notify_role: "🔔 Mencionar rol de alianza predeterminado (usa @everyone si no hay)"
+  notify_custom: "🎯 Apuntar a ID de rol específico (anulación única)"
+  notify_everyone: "🚨 Forzar transmisión a @everyone (Operación obligatoria)"
+  notify_none: "🔕 Silencioso (solo calendario - sin mención en Discord)"
   role_id: ID de rol específico
-  role_id_hint: "(Requerido solo para Apuntar a un rol específico)"
+  role_id_hint: "(Requerido solo para Apuntar a rol específico)"
   role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
   details: Instrucciones / Punto de reunión
-  details_example: p. ej., Reunión en Colmena Alfa. R4s dirigen los rallies. Comunicaciones de voz activas.
+  details_example: p. ej. Reunión en Colmena Alfa. R4 lideran los rallies. Comunicación por voz activa.
   publish: Publicar en el calendario
   publishing: Publicando...
-  bad_time: El Game Time debe establecerse en intervalos de 5 minutos (:00, :05, :10, etc.)
-  bad_role: Por favor, ingresa un ID de rol de Discord válido de 17-20 dígitos para el aviso personalizado.
+  bad_time: El Game Time debe establecerse en incrementos de 5 minutos (:00, :05, :10, etc.)
+  bad_role: Por favor, introduce un ID de rol de Discord válido de 17-20 dígitos para el objetivo de alerta personalizado.
   save_failed: Error al guardar el evento
-  published: "¡Operación publicada correctamente!"
+  published: "¡Operación publicada con éxito!"
   confirm_delete: "¿Estás seguro de que quieres eliminar esta operación del calendario?"
   delete_failed: Error al eliminar el evento
   removed: Operación eliminada.

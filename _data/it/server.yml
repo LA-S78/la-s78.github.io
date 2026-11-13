@@ -93,16 +93,17 @@ api_proposals:
   no_changes: Nessuna modifica fornita.
   week_and_threat: La settimana di riferimento e il server minaccia sono obbligatori.
 api_events:
-  session_invalid: Token di sessione non valido, manomesso o scaduto. Per favore esegui di nuovo /calendar su Discord.
+  session_invalid: Token di sessione non valido, manomesso o scaduto. Riesegui /calendar su Discord.
   required_fields: Titolo, Data e Game Time sono obbligatori.
   date_format: La data deve essere formattata come AAAA-MM-GG.
   time_format: Il Game Time deve essere formattato come HH:MM (da 00:00 a 23:59).
-  time_step: Il Game Time deve essere impostato con incrementi di 5 minuti (:00, :05, :10, :15, ecc.).
-  role_id_needed: Il ruolo specifico per l'obiettivo richiede un ID ruolo Discord valido di 17-20 cifre.
+  time_step: Il Game Time deve essere in incrementi di 5 minuti (:00, :05, :10, :15, ecc.).
+  role_id_needed: Target Specific Role richiede un ID Ruolo Discord valido di 17-20 cifre.
   published: Operazione "{title}" pubblicata con successo.
   not_found: Evento non trovato o già eliminato.
-  out_of_scope: 'Accesso negato: non puoi modificare o eliminare eventi al di fuori del tuo ambito assegnato.'
+  out_of_scope: 'Accesso negato: non puoi modificare o eliminare eventi al di fuori dell''ambito assegnato.'
   deleted: 'Operazione eliminata: {title}'
+  updated: Operazione "{title}" aggiornata.
 bot_common:
   off_week: Settimana di pausa
   kw_week: Settimana Guerra tra Regni {n}

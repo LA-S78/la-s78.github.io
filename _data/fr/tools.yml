@@ -306,83 +306,85 @@ kings_console:
   stop_alert: Ne l'envoyez pas !
   lists_refreshed: Les listes ont été actualisées.
 register:
-  page_title: Enregistrement de Serveur d'Alliance
+  page_title: Enregistrement du serveur de l'Alliance
   loading: Chargement du portail d'enregistrement...
-  subtitle: Portail d'Intégration du Serveur d'Alliance
-  step_invite: 1. Inviter le Bot sur votre Serveur
-  invite_help: Vous devez ajouter le bot à votre Discord d'alliance avant de terminer l'enregistrement.
-  authorize: "🤖 Cliquer pour Autoriser le Bot"
-  step_credentials: 2. Identifiants Serveur & Rôle
-  guild_id: ID du Serveur Discord (ID de Guilde)
-  example: ex. {id}
-  guild_help: 'Dans Discord : Activez le Mode Développeur → Clic droit sur l''icône de votre serveur → {copy}. Vous devez posséder ce serveur ou avoir les permissions {admin} ou {manage} dessus. Les salons et le rôle ci-dessous seront vérifiés par rapport à cela.'
-  copy_server_id: Copier l'ID du Serveur
+  subtitle: Portail d'intégration du serveur de l'Alliance
+  step_invite: 1. Invitez le bot sur votre serveur
+  invite_help: Vous devez ajouter le bot sur le Discord de votre alliance avant de terminer l'enregistrement.
+  authorize: "🤖 Cliquer pour autoriser le bot"
+  step_credentials: 2. Identifiants du serveur et des rôles
+  guild_id: ID du serveur Discord (ID de la guilde)
+  example: 'ex: {id}'
+  guild_help: 'Sur Discord : Activez le mode développeur → Clic droit sur l''icône de votre serveur → {copy}. Vous devez être propriétaire de ce serveur ou y avoir les droits {admin} ou {manage}. Les salons et le rôle ci-dessous sont vérifiés à partir de là.'
+  copy_server_id: Copier l'ID du serveur
   administrator: Administrateur
   manage_server: Gérer le serveur
-  routing_heading: "📢 Opérations & Routage des Tickets"
-  routing_help: Configurez où le bot publie les alertes d'opérations publiques et achemine les suggestions/tickets privés des membres.
-  alert_channel: ID du Salon d'Alerte des Opérations
-  channel_id_title: Doit être un ID de Salon Discord valide de 17-20 chiffres
-  role_id_title: Doit être un ID de Rôle Discord valide de 17-20 chiffres
+  routing_heading: "📢 Opérations et routage des tickets"
+  routing_help: Configurez l'endroit où le bot publie les alertes d'opérations publiques et dirige les suggestions/tickets privés des membres.
+  alert_channel: ID du salon d'alerte des opérations
+  channel_id_title: Doit être un ID de salon Discord valide de 17 à 20 chiffres
+  role_id_title: Doit être un ID de rôle Discord valide de 17 à 20 chiffres
   alert_channel_help: Clic droit sur votre salon d'annonces/alertes → {copy}.
-  copy_channel_id: Copier l'ID du Salon
-  alert_role: ID du Rôle d'Alerte par défaut
-  optional: "(Optionnel)"
-  alert_role_placeholder: Laissez vide pour @everyone par défaut
-  alert_role_help: Clic droit sur votre rôle de ping (ex. {example}) → {copy}. Par défaut {everyone} si vide.
-  copy_role_id: Copier l'ID du Rôle
-  officer_channel: ID du Salon de Réception des Tickets Officiers
-  officer_channel_help: Clic droit sur votre {channel} → {copy}. Les propositions des membres et les tickets d'alliance de {suggest} seront acheminés ici pour examen par les dirigeants.
-  private_channel: salon privé des R4/R5
-  delegated_roles: Rôles de Leadership Délégués
-  delegated_roles_help: Noms de rôles séparés par des virgules pouvant trier les tickets, gérer les événements et soumettre des nominations de coffres ({r5} est toujours autorisé).
-  color: Couleur d'Identité de l'Alliance
+  copy_channel_id: Copier l'ID du salon
+  alert_role: ID du rôle d'alerte par défaut
+  optional: "(Facultatif)"
+  alert_role_placeholder: Laisser vide pour utiliser @everyone par défaut
+  alert_role_help: 'Clic droit sur votre rôle de ping (ex: {example}) → {copy}. Utilise {everyone} si laissé vide.'
+  server_alerts: Publier également les rappels d'événements à l'échelle du serveur ici
+  server_alerts_help: Les rappels des événements NAP définis par les intendants vont sur le Discord NAP ; cochez ceci pour les recevoir aussi dans ce salon d'alerte.
+  copy_role_id: Copier l'ID du rôle
+  officer_channel: ID du salon de réception des tickets des officiers
+  officer_channel_help: Clic droit sur votre {channel} → {copy}. Les propositions des membres et les tickets de l'alliance issus de {suggest} seront routés ici pour examen par la direction.
+  private_channel: salon de tickets privé R4/R5
+  delegated_roles: Rôles de direction délégués
+  delegated_roles_help: Noms des rôles séparés par des virgules pouvant trier les tickets, gérer les événements et soumettre des nominations de coffres ({r5} est toujours autorisé).
+  color: Couleur d'identité de l'Alliance
   preview: 'Aperçu :'
-  color_help: Appliqué à votre calendrier des opérations, cartes de tickets internes et propositions du Conseil NAP approuvées.
-  submit: Enregistrer le Serveur & Déployer les Commandes
-  submitting: Vérification du Serveur & Enregistrement...
-  bad_token: Jeton d'enregistrement invalide ou manquant. Utilisez /registerbot dans le serveur NAP.
+  color_help: Appliquée à votre calendrier d'opérations, aux cartes de tickets internes et aux propositions du conseil NAP approuvées.
+  submit: Enregistrer le serveur et déployer les commandes
+  submitting: Vérification du serveur et enregistrement...
+  bad_token: Jeton d'enregistrement invalide ou manquant. Exécutez /registerbot sur le serveur NAP.
   malformed_token: Jeton mal formé. Veuillez demander un nouveau lien sur Discord.
-  expired: Ce lien d'enregistrement a expiré (limite de 24h). Utilisez /registerbot à nouveau.
-  bad_guild: Format d'ID de Serveur Discord invalide. Doit être un nombre de 17-20 chiffres.
-  bad_alert_channel: Format d'ID de Salon d'Alerte invalide. Doit être un nombre de 17-20 chiffres.
-  bad_alert_role: Format d'ID de Rôle d'Alerte invalide. Doit être un nombre de 17-20 chiffres (ou laissé vide pour @everyone).
-  bad_officer_channel: Format d'ID de Salon des Officiers invalide. Doit être un nombre de 17-20 chiffres.
+  expired: Ce lien d'enregistrement a expiré (limite de 24h). Exécutez /registerbot à nouveau.
+  bad_guild: Format d'ID de serveur Discord invalide. Doit être un nombre de 17 à 20 chiffres.
+  bad_alert_channel: Format d'ID de salon d'alerte des opérations invalide. Doit être un nombre de 17 à 20 chiffres.
+  bad_alert_role: Format d'ID de rôle d'alerte invalide. Doit être un nombre de 17 à 20 chiffres (ou laissé vide pour @everyone).
+  bad_officer_channel: Format d'ID de salon de réception des tickets des officiers invalide. Doit être un nombre de 17 à 20 chiffres.
   failed: Échec de l'enregistrement
   error: 'Erreur d''enregistrement : {error}'
   success: "✅ Enregistrement réussi !"
   linked: "{server} est maintenant lié à {tag}."
-  server_id: ID Serveur {id}
-  r_alert_channel: 'Salon d''Alerte des Opérations :'
+  server_id: ID du serveur {id}
+  r_alert_channel: 'Salon d''alerte des opérations :'
   r_target: 'Cible de la notification :'
   r_role: Rôle {id}
-  r_default: "(Défaut)"
-  r_officer_channel: 'Salon des Tickets Officiers :'
-  r_color: 'Couleur d''Identité :'
-  r_commands: 'Commandes Slash déployées :'
-  r_leaders: 'Leadership autorisé :'
+  r_default: "(Par défaut)"
+  r_officer_channel: 'Salon de tickets des officiers :'
+  r_color: 'Couleur d''identité :'
+  r_commands: 'Commandes slash déployées :'
+  r_leaders: 'Direction autorisée :'
 calendar:
-  loading: Chargement du programme du royaume...
+  loading: Chargement du planning du Royaume...
   load_failed: 'Échec du chargement du calendrier : {error}'
   phase: Phase
-  schedule_title: Programme de la Guerre des Royaumes
+  schedule_title: Planning de la Guerre des Royaumes
   loading_cycle: Chargement des détails du cycle...
   badge_closed: "🔒 Récompenses fermées"
-  badge_kob_open: "⚔️ Mêlée Royale ouverte"
+  badge_kob_open: "⚔️ Roi de la Bataille ouvert"
   badge_awaiting: "⏳ En attente du résultat de la Guerre des Royaumes"
   badge_open: "🎁 Récompenses ouvertes"
-  set2_off_week: Commendation du Roi uniquement (pas de Guerre des Royaumes).
-  set2_won: 'Guerre des Royaumes gagnée : récompense de Mêlée Royale également ouverte.'
-  set2_lost: 'Guerre des Royaumes perdue : Commendation du Roi uniquement.'
-  set2_pending: Récompense de Mêlée Royale si la guerre de samedi est gagnée ; le Roi distribue après le résultat.
-  rewards_open_until: Récompenses {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
-  rewards_closed: Les récompenses sont fermées. Prochaine ouverture vendredi vers 20:00 GT, après l'événement du capitole.
+  set2_off_week: Recommandation du Roi uniquement (pas de Guerre des Royaumes).
+  set2_won: 'Guerre des Royaumes remportée : Récompense du Roi de la Bataille également ouverte.'
+  set2_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement.'
+  set2_pending: Récompense du Roi de la Bataille si la guerre du samedi est gagnée ; le Roi distribue après le résultat.
+  rewards_open_until: Récompenses de la {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
+  rewards_closed: Les récompenses sont fermées. Prochaine ouverture vendredi vers 20:00 GT, après l'événement du Capitole.
   capitol_holder: DÉTENTEUR DU CAPITOLE
   current_holder: DÉTENTEUR ACTUEL DU CAPITOLE
   next_holder: PROCHAIN DÉTENTEUR DU CAPITOLE
   rank: 'Rang #{rank}'
   rank_override: 'Rang #{rank} (Priorité)'
-  rank_override_schedule: 'Rang #{rank} • Priorité au programme'
+  rank_override_schedule: 'Rang #{rank} • Planning prioritaire'
   captured_friday: Capturé vendredi
   captures_today: Captures aujourd'hui
   captures_friday: Captures vendredi
@@ -400,67 +402,75 @@ calendar:
   kingdom_only: "👑 Opérations du Royaume uniquement"
   operations_active: "🛡️ [{tag}] Opérations actives"
   upcoming: Opérations et jalons à venir
-  times_shown: Heures affichées en {gt} & votre heure locale
+  times_shown: Heures affichées selon le {gt} et votre heure locale
   gt_label: Game Time (UTC-2)
   no_operations: Aucune opération prévue pour cette perspective.
   all_day: Toute la journée
   every_2_days: "🔁 Tous les 2 jours"
   weekly: "🔁 Hebdomadaire"
   mandatory: "🚨 Obligatoire"
+  edit: "✏️ Modifier"
   delete: "🗑️ Supprimer"
   ev_capture_title: "👑 Capture du Capitole — {who}"
   ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
   ev_kw_title: "⚔️ Bataille de la Guerre des Royaumes"
-  ev_kw_desc: Début à 12:00 GT, généralement terminée vers 14:00 GT. Une victoire ouvre les coffres de récompense de Mêlée Royale en plus de la Commendation du Roi.
+  ev_kw_desc: Début à 12:00 GT, se termine généralement vers 14:00 GT. Une victoire ouvre les coffres de récompense du Roi de la Bataille en plus de la Recommandation du Roi.
   ev_open_title: "🎁 Récompenses ouvertes — {week}"
-  ev_open_desc_kw: La Commendation du Roi s'ouvre après l'événement du capitole. La récompense de Mêlée Royale suit si la Guerre des Royaumes du samedi est gagnée ; le Roi distribue après le résultat.
-  ev_open_desc: La Commendation du Roi s'ouvre après l'événement du capitole (pas de Guerre des Royaumes cette semaine).
+  ev_open_desc_kw: La Recommandation du Roi s'ouvre après l'événement du Capitole. La récompense du Roi de la Bataille suit si la Guerre des Royaumes du samedi est remportée ; le Roi distribue après le résultat.
+  ev_open_desc: La Recommandation du Roi s'ouvre après l'événement du Capitole (pas de Guerre des Royaumes cette semaine).
   ev_close_title: "⌛ Fermeture des récompenses — {week}"
-  ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette heure.'
+  ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette échéance.'
 calendar_events:
+  reminder: Rappeler sur Discord 1 heure avant
+  reminder_hint: Publié dans le salon d'alerte de votre alliance, pingant le rôle choisi ci-dessus.
+  reminder_hint_server: Publié dans le salon d'alerte du Discord NAP (et dans les alliances ayant opté pour cela), pingant le rôle choisi ci-dessus.
+  reminder_no_channel: 'Votre alliance n''a pas encore de salon d''alerte : exécutez /registerbot sur votre Discord pour que les rappels puissent être publiés.'
+  reminder_no_server_channel: Le salon d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), donc les rappels du serveur ne peuvent pas être publiés.
+  edit_heading: Modifier l'événement
+  save_changes: "💾 Enregistrer les modifications"
   manage_mode: MODE GESTION
   session_active: Session authentifiée active
-  schedule_operation: "➕ Programmer une opération"
+  schedule_operation: "➕ Planifier une opération"
   create_operation: Créer une opération
-  kingdom_admin: "👑 ADMIN DU ROYAUME"
-  kingdom_desc: Programmation des alertes et opérations à l'échelle du royaume
+  kingdom_admin: "👑 ADMINISTRATION DU ROYAUME"
+  kingdom_desc: Programmation des alertes et opérations à l'échelle du Royaume
   kingdom_heading: Créer une opération du Royaume ([GLOBAL])
-  leadership: "🛡️ [{tag}] DIRECTION"
+  leadership: "🛡️ DIRECTION DE [{tag}]"
   leadership_desc: Gestion des opérations internes pour [{tag}]
-  alliance_heading: Créer une opération [{tag}]
+  alliance_heading: Créer une opération pour [{tag}]
   preset: Préréglage d'opération
   preset_custom: "🛠️ Opération personnalisée (Vierge)"
-  preset_crystal_cluster: "🔮 Vallée de Cristal (0,5h)"
-  preset_elixir_scramble: "🧪 Mêlée Royale (0,5h)"
+  preset_crystal_cluster: "🔮 Vallée des Cristaux (0,5h)"
+  preset_elixir_scramble: "🧪 Mêlée d'Élixir (0,5h)"
   preset_survival_battle: "⚔️ Bataille de Survie (4,0h)"
   preset_kill_event: "🩸 Événement de Tuerie (24,0h)"
-  preset_kvk_battle: "👑 Guerre des Royaumes (1,0h)"
-  preset_gear_event: "🛡️ Événement d'Équipement (48,0h)"
+  preset_kvk_battle: "👑 Bataille de Guerre des Royaumes (1,0h)"
+  preset_gear_event: "🛡️ Événement d'équipement (48,0h)"
   preset_cheese_trap: "🧀 Piège à Fromage (0,5h)"
   title: Titre de l'événement
-  title_example: 'ex: Drill de défense de ruche ou assaut d''avant-poste'
+  title_example: 'ex: Exercice de défense de la ruche ou Assaut d''avant-poste'
   date: Date de début (AAAA-MM-JJ)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time du serveur (s'ajuste par incréments de 5 minutes)
-  duration: Durée (heures)
+  time_hint: Game Time du serveur (s'ajuste par tranches de 5 minutes)
+  duration: Durée (Heures)
   frequency: Fréquence
-  once: Événement unique (ne se répète pas)
+  once: Événement ponctuel (ne se répète pas)
   every_2_days: Se répète tous les 2 jours
-  weekly: Se répète chaque semaine (même jour et heure)
+  weekly: Se répète chaque semaine (même jour et même heure)
   alert_level: Niveau d'alerte Discord
-  notify_role: "🔔 Ping le rôle d'alliance par défaut (rebascule sur @everyone)"
+  notify_role: "🔔 Ping le rôle d'alliance par défaut (redevient @everyone)"
   notify_custom: "🎯 Cibler un ID de rôle spécifique (priorité unique)"
-  notify_everyone: "🚨 Forcer la diffusion à @everyone (Opération obligatoire)"
-  notify_none: "🔕 Silencieux (Calendrier uniquement - Pas de ping Discord)"
+  notify_everyone: "🚨 Forcer la diffusion @everyone (Opération obligatoire)"
+  notify_none: "🔕 Silencieux (Calendrier uniquement - Aucun ping Discord)"
   role_id: ID de rôle spécifique
-  role_id_hint: "(Requis uniquement pour le rôle spécifique ciblé)"
-  role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
+  role_id_hint: "(Requis uniquement pour cibler un rôle spécifique)"
+  role_id_title: Doit être un ID de rôle Discord valide de 17 à 20 chiffres
   details: Instructions / Point de ralliement
-  details_example: 'ex: Assemblée à la Ruche Alpha. Les R4 mènent les ralliements. Communications vocales activées.'
+  details_example: 'ex: Rassemblement à la Ruche Alpha. Les R4 dirigent les ralliements. Communications vocales activées.'
   publish: Publier dans le calendrier
-  publishing: Publication en cours...
-  bad_time: Le Game Time doit être défini par incréments de 5 minutes (:00, :05, :10, etc.)
-  bad_role: Veuillez entrer un ID de rôle Discord valide de 17-20 chiffres pour la cible de l'alerte personnalisée.
+  publishing: Publication...
+  bad_time: Le Game Time doit être défini par tranches de 5 minutes (:00, :05, :10, etc.)
+  bad_role: Veuillez saisir un ID de rôle Discord valide de 17 à 20 chiffres pour la cible de l'alerte personnalisée.
   save_failed: Échec de l'enregistrement de l'événement
   published: Opération publiée avec succès !
   confirm_delete: Êtes-vous sûr de vouloir supprimer cette opération du calendrier ?

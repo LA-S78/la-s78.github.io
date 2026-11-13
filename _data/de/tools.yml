@@ -309,162 +309,172 @@ register:
   page_title: Allianz-Server-Registrierung
   loading: Registrierungsportal wird geladen...
   subtitle: Allianz-Server-Integrationsportal
-  step_invite: 1. Bot zum Server einladen
+  step_invite: 1. Bot in deinen Server einladen
   invite_help: Du musst den Bot zu deinem Allianz-Discord hinzufügen, bevor du die Registrierung abschließt.
-  authorize: "🤖 Zum Autorisieren des Bots klicken"
+  authorize: "🤖 Klicken, um Bot zu autorisieren"
   step_credentials: 2. Server- & Rollen-Anmeldedaten
-  guild_id: Discord-Server-ID (Guild ID)
+  guild_id: Discord-Server-ID (Gilden-ID)
   example: z. B. {id}
-  guild_help: 'In Discord: Entwicklermodus aktivieren → Rechtsklick auf dein Serversymbol → {copy}. Du musst Besitzer des Servers sein oder über {admin} oder {manage} verfügen. Die Kanäle und die Rolle unten werden damit abgeglichen.'
+  guild_help: 'In Discord: Entwicklermodus aktivieren → Rechtsklick auf dein Server-Symbol → {copy}. Du musst Besitzer des Servers sein oder über {admin} oder {manage} verfügen. Die Kanäle und Rollen unten werden dagegen geprüft.'
   copy_server_id: Server-ID kopieren
   administrator: Administrator
   manage_server: Server verwalten
   routing_heading: "📢 Operationen & Ticket-Routing"
-  routing_help: Konfiguriere, wo der Bot öffentliche Operationsalarme postet und private Mitgliedervorschläge/Tickets weiterleitet.
-  alert_channel: Operations-Alarmkanal-ID
+  routing_help: Konfiguriere, wo der Bot öffentliche Operations-Warnungen postet und private Mitgliedervorschläge/Tickets hinleitet.
+  alert_channel: ID des Warnungskanals für Operationen
   channel_id_title: Muss eine gültige 17-20-stellige Discord-Kanal-ID sein
   role_id_title: Muss eine gültige 17-20-stellige Discord-Rollen-ID sein
-  alert_channel_help: Rechtsklick auf deinen Ankündigungs-/Alarmkanal → {copy}.
+  alert_channel_help: Rechtsklick auf deinen Ankündigungs-/Warnungskanal → {copy}.
   copy_channel_id: Kanal-ID kopieren
-  alert_role: Standard-Alarmrollen-ID
+  alert_role: Standard-ID der Warnungsrolle
   optional: "(Optional)"
   alert_role_placeholder: Leer lassen für Standard @everyone
-  alert_role_help: Rechtsklick auf deine Ping-Rolle (z. B. {example}) → {copy}. Standard ist {everyone}, wenn leer.
+  alert_role_help: Rechtsklick auf deine Ping-Rolle (z. B. {example}) → {copy}. Standard ist {everyone}, falls leer gelassen.
+  server_alerts: Hier auch serverweite Ereigniserinnerungen posten
+  server_alerts_help: Erinnerungen an NAP-weite Ereignisse der Stewards gehen an den NAP-Discord; aktiviere dies, um sie auch in diesem Warnungskanal zu erhalten.
   copy_role_id: Rollen-ID kopieren
-  officer_channel: Offizier-Ticket-Eingangskanal-ID
-  officer_channel_help: Rechtsklick auf deinen {channel} → {copy}. Mitgliedervorschläge und Allianz-Tickets aus {suggest} werden zur Führungskräfteprüfung hierher weitergeleitet.
-  private_channel: privater R4/R5-Ticketkanal
+  officer_channel: ID des Offiziers-Ticket-Eingangskanals
+  officer_channel_help: Rechtsklick auf deinen {channel} → {copy}. Mitgliedervorschläge und Allianz-Tickets von {suggest} werden zur Überprüfung durch die Führung hierher geleitet.
+  private_channel: privater R4/R5-Ticket-Kanal
   delegated_roles: Delegierte Führungsrollen
-  delegated_roles_help: Kommagetrennte Rollennamen, die Tickets bearbeiten, Events verwalten und Truhen-Nominierungen einreichen können ({r5} ist immer autorisiert).
+  delegated_roles_help: Kommagetrennte Rollennamen, die Tickets triagieren, Ereignisse verwalten und Truhennominierungen einreichen können ({r5} ist immer autorisiert).
   color: Allianz-Identitätsfarbe
   preview: 'Vorschau:'
-  color_help: Wird auf deinen Operationskalender, interne Ticketkarten und bestätigte NAP-Rat-Vorschläge angewendet.
+  color_help: Wird auf deinen Operationskalender, interne Ticket-Karten und unterstützte NAP-Ratsvorschläge angewendet.
   submit: Server registrieren & Befehle bereitstellen
   submitting: Server wird verifiziert & registriert...
-  bad_token: Ungültiger oder fehlender Registrierungstoken. Nutze /registerbot im NAP-Server.
-  malformed_token: Fehlerhafter Token. Bitte fordere einen neuen Link von Discord an.
-  expired: Dieser Registrierungslink ist abgelaufen (24h-Limit). Nutze /registerbot erneut.
+  bad_token: Ungültiges oder fehlendes Registrierungs-Token. Führe /registerbot im NAP-Server aus.
+  malformed_token: Fehlerhaftes Token. Bitte fordere einen neuen Link von Discord an.
+  expired: Dieser Registrierungslink ist abgelaufen (24h-Limit). Führe /registerbot erneut aus.
   bad_guild: Ungültiges Discord-Server-ID-Format. Muss eine 17-20-stellige Zahl sein.
-  bad_alert_channel: Ungültiges Operations-Alarmkanal-ID-Format. Muss eine 17-20-stellige Zahl sein.
-  bad_alert_role: Ungültiges Alarmrollen-ID-Format. Muss eine 17-20-stellige Zahl sein (oder leer für @everyone).
-  bad_officer_channel: Ungültiges Offizier-Ticket-Eingangskanal-ID-Format. Muss eine 17-20-stellige Zahl sein.
+  bad_alert_channel: Ungültiges ID-Format für den Warnungskanal für Operationen. Muss eine 17-20-stellige Zahl sein.
+  bad_alert_role: Ungültiges ID-Format für die Warnungsrolle. Muss eine 17-20-stellige Zahl sein (oder für @everyone leer gelassen werden).
+  bad_officer_channel: Ungültiges ID-Format für den Offiziers-Ticket-Eingangskanal. Muss eine 17-20-stellige Zahl sein.
   failed: Registrierung fehlgeschlagen
   error: 'Registrierungsfehler: {error}'
   success: "✅ Registrierung erfolgreich!"
   linked: "{server} ist jetzt mit {tag} verknüpft."
   server_id: Server-ID {id}
-  r_alert_channel: 'Operations-Alarmkanal:'
+  r_alert_channel: 'Warnungskanal für Operationen:'
   r_target: 'Benachrichtigungsziel:'
   r_role: Rolle {id}
   r_default: "(Standard)"
-  r_officer_channel: 'Offizier-Ticketkanal:'
+  r_officer_channel: 'Offiziers-Ticket-Kanal:'
   r_color: 'Identitätsfarbe:'
   r_commands: 'Slash-Befehle bereitgestellt:'
-  r_leaders: 'Autorisierte Führungskräfte:'
+  r_leaders: 'Autorisierte Führung:'
 calendar:
-  loading: Lade Königreich-Zeitplan...
-  load_failed: 'Laden des Kalenders fehlgeschlagen: {error}'
+  loading: Königreichs-Zeitplan wird geladen...
+  load_failed: 'Kalender konnte nicht geladen werden: {error}'
   phase: Phase
-  schedule_title: 'Zeitplan: Königreichskrieg'
-  loading_cycle: Lade Zyklusdetails...
+  schedule_title: Zeitplan für den Königreichskrieg
+  loading_cycle: Zyklusdetails werden geladen...
   badge_closed: "🔒 Belohnungen geschlossen"
-  badge_kob_open: "⚔️ König des Kampfes offen"
-  badge_awaiting: "⏳ Erwarte Ergebnis KW"
+  badge_kob_open: "⚔️ Königliches Gerangel offen"
+  badge_awaiting: "⏳ Warten auf KW-Ergebnis"
   badge_open: "🎁 Belohnungen offen"
-  set2_off_week: Nur Königslob (kein Königreichskrieg).
-  set2_won: 'Königreichskrieg gewonnen: Belohnung „König des Kampfes“ ebenfalls offen.'
-  set2_lost: 'Königreichskrieg verloren: Nur Königslob.'
-  set2_pending: Belohnung „König des Kampfes“, falls der Krieg am Samstag gewonnen wird; der König verteilt sie nach dem Ergebnis.
+  set2_off_week: Nur Königliche Belobigung (kein Königreichskrieg).
+  set2_won: 'Königreichskrieg gewonnen: Königliches Gerangel ebenfalls offen.'
+  set2_lost: 'Königreichskrieg verloren: Nur Königliche Belobigung.'
+  set2_pending: Belohnung für Königliches Gerangel bei Sieg am Samstag; der König verteilt diese nach dem Ergebnis.
   rewards_open_until: "{week} Belohnungen offen bis Dienstag 23:59 GT. {set2}"
-  rewards_closed: Belohnungen geschlossen. Das nächste Mal am Freitag gegen 20:00 GT offen, nach dem Kapitol-Ereignis.
+  rewards_closed: Belohnungen sind geschlossen. Die nächsten öffnen am Freitag gegen 20:00 GT, nach dem Kapitol-Ereignis.
   capitol_holder: KAPITOL-HALTER
   current_holder: AKTUELLER KAPITOL-HALTER
   next_holder: NÄCHSTER KAPITOL-HALTER
   rank: 'Rang #{rank}'
   rank_override: 'Rang #{rank} (Überschreiben)'
-  rank_override_schedule: 'Rang #{rank} • Überschreibungsplan'
+  rank_override_schedule: 'Rang #{rank} • Überschreibungs-Zeitplan'
   captured_friday: Eingenommen am Freitag
   captures_today: Einnahmen heute
   captures_friday: Einnahmen am Freitag
-  cycle_progress: ZYKLUS-FORTSCHRITT
+  cycle_progress: ZYKLUSFORTSCHRITT
   day_of_28: Tag {day} von 28 ({week})
   week_n: Woche {n}
   next_reset: NÄCHSTER RESET (00:00 GT)
-  next_kw: NÄCHSTE KW-SCHLACHT
+  next_kw: NÄCHSTER KW-KAMPF
   saturday: Samstag
   today: "🔥 HEUTE"
   none_this_week: Keine diese Woche
   perspective: "🔍 PERSPEKTIVE:"
   combined: "🌐 Kombiniert (Königreich + [{tag}])"
   internal_only: "🛡️ [{tag}] Nur intern"
-  kingdom_only: "👑 Nur Königreich-Operationen"
+  kingdom_only: "👑 Nur Königreichs-Operationen"
   operations_active: "🛡️ [{tag}] Operationen aktiv"
   upcoming: Anstehende Operationen & Meilensteine
-  times_shown: Zeiten angezeigt in {gt} & deiner Ortszeit
+  times_shown: Zeiten angezeigt in {gt} & deiner Lokalzeit
   gt_label: Game Time (UTC-2)
   no_operations: Keine Operationen für diese Perspektive geplant.
   all_day: Ganztägig
   every_2_days: "🔁 Alle 2 Tage"
   weekly: "🔁 Wöchentlich"
-  mandatory: "🚨 Obligatorisch"
+  mandatory: "🚨 Pflicht"
+  edit: "✏️ Bearbeiten"
   delete: "🗑️ Löschen"
   ev_capture_title: "👑 Kapitol-Einnahme — {who}"
   ev_capture_desc: "{who} ({rank}) nimmt das Kapitol am Freitag ein."
-  ev_kw_title: "⚔️ Königreichskrieg-Schlacht"
-  ev_kw_desc: Startet 12:00 GT, normalerweise gegen 14:00 GT vorbei. Ein Sieg schaltet die Belohnungstruhen „König des Kampfes“ zusätzlich zum Königslob frei.
+  ev_kw_title: "⚔️ Königreichskrieg-Kampf"
+  ev_kw_desc: Beginnt um 12:00 GT, normalerweise gegen 14:00 GT beendet. Ein Sieg öffnet die Belohnungstruhen für das Königliche Gerangel zusätzlich zur Königlichen Belobigung.
   ev_open_title: "🎁 Belohnungen offen — {week}"
-  ev_open_desc_kw: Königslob öffnet nach dem Kapitol-Ereignis. Belohnung „König des Kampfes“ folgt, wenn der Königreichskrieg am Samstag gewonnen wird; der König verteilt sie nach dem Ergebnis.
-  ev_open_desc: Königslob öffnet nach dem Kapitol-Ereignis (kein Königreichskrieg diese Woche).
+  ev_open_desc_kw: Königliche Belobigung öffnet nach dem Kapitol-Ereignis. Belohnung für Königliches Gerangel folgt bei Sieg im Königreichskrieg am Samstag; der König verteilt diese nach dem Ergebnis.
+  ev_open_desc: Königliche Belobigung öffnet nach dem Kapitol-Ereignis (kein Königreichskrieg diese Woche).
   ev_close_title: "⌛ Belohnungen schließen — {week}"
-  ev_close_desc: 'Truhen laufen Mittwoch um 00:00 GT ab: Alles davor verteilen.'
+  ev_close_desc: 'Truhen laufen Mittwoch 00:00 GT ab: verteile alles vor diesem Zeitpunkt.'
 calendar_events:
+  reminder: Auf Discord 1 Stunde vorher erinnern
+  reminder_hint: Gepostet im Warnungskanal deiner Allianz, mit Ping an die oben gewählte Rolle.
+  reminder_hint_server: Gepostet im Warnungskanal des NAP-Discord (und in Allianzen, die zugestimmt haben), mit Ping an die oben gewählte Rolle.
+  reminder_no_channel: 'Deine Allianz hat noch keinen Warnungskanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
+  reminder_no_server_channel: Der NAP-Warnungskanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können Server-Erinnerungen nicht gepostet werden.
+  edit_heading: Ereignis bearbeiten
+  save_changes: "💾 Änderungen speichern"
   manage_mode: VERWALTUNGSMODUS
   session_active: Authentifizierte Sitzung aktiv
   schedule_operation: "➕ Operation planen"
   create_operation: Operation erstellen
-  kingdom_admin: "👑 KÖNIGREICH-ADMIN"
-  kingdom_desc: Plane königreichsweite Warnungen und Operationen
-  kingdom_heading: Königreich-Operation erstellen ([GLOBAL])
+  kingdom_admin: "👑 KÖNIGREICHS-ADMIN"
+  kingdom_desc: Planung von königreichsweiten Warnungen und Operationen
+  kingdom_heading: Königreichs-Operation erstellen ([GLOBAL])
   leadership: "🛡️ [{tag}] FÜHRUNG"
-  leadership_desc: Verwalte interne Operationen für [{tag}]
+  leadership_desc: Verwaltung interner Operationen für [{tag}]
   alliance_heading: "[{tag}] Operation erstellen"
   preset: Operations-Voreinstellung
-  preset_custom: "🛠️ Eigene Operation (Leer)"
-  preset_crystal_cluster: "🔮 Kristalltal (0,5h)"
+  preset_custom: "🛠️ Benutzerdefinierte Operation (Leer)"
+  preset_crystal_cluster: "🔮 Kristalltal-Cluster (0,5h)"
   preset_elixir_scramble: "🧪 Elixier-Gerangel (0,5h)"
   preset_survival_battle: "⚔️ Überlebenskampf (4,0h)"
-  preset_kill_event: "🩸 Tötungs-Event (24,0h)"
-  preset_kvk_battle: "👑 Königreichskrieg (1,0h)"
+  preset_kill_event: "🩸 Kill-Event (24,0h)"
+  preset_kvk_battle: "👑 KvK-Kampf (1,0h)"
   preset_gear_event: "🛡️ Ausrüstungs-Event (48,0h)"
   preset_cheese_trap: "🧀 Cheese-Falle (0,5h)"
-  title: Event-Titel
-  title_example: z. B. Bienenstock-Verteidigung oder Außenposten-Angriff
+  title: Ereignistitel
+  title_example: z. B. Hive-Verteidigungstraining oder Außenposten-Angriff
   date: Startdatum (JJJJ-MM-TT)
   time: Game Time (HH:MM UTC-2)
   time_hint: Server Game Time (rastet in 5-Minuten-Schritten ein)
   duration: Dauer (Stunden)
   frequency: Frequenz
-  once: Einmaliges Event (Wiederholt sich nicht)
+  once: Einmaliges Ereignis (wiederholt sich nicht)
   every_2_days: Wiederholt sich alle 2 Tage
-  weekly: Wiederholt sich wöchentlich (Gleicher Tag & Zeit)
-  alert_level: Discord-Alarmstufe
-  notify_role: "🔔 Standard-Allianz-Rolle pingen (Fallback auf @everyone)"
-  notify_custom: "🎯 Spezifische Rollen-ID anvisieren (einmaliges Überschreiben)"
-  notify_everyone: "🚨 @everyone-Broadcast erzwingen (Obligatorische Operation)"
-  notify_none: "🔕 Lautlos (Nur Kalender - Kein Discord-Ping)"
+  weekly: Wiederholt sich wöchentlich (gleicher Tag & gleiche Zeit)
+  alert_level: Discord-Warnungsstufe
+  notify_role: "🔔 Standard-Allianzrolle pingen (Fall-back auf @everyone)"
+  notify_custom: "🎯 Spezifische Rollen-ID als Ziel (einmaliges Überschreiben)"
+  notify_everyone: "🚨 @everyone-Broadcast erzwingen (Pflicht-Operation)"
+  notify_none: "🔕 Lautlos (nur Kalender – kein Discord-Ping)"
   role_id: Spezifische Rollen-ID
-  role_id_hint: "(Nur erforderlich für spezifische Rollenzielvorgabe)"
+  role_id_hint: "(Nur erforderlich für spezifisches Ziel)"
   role_id_title: Muss eine gültige 17-20-stellige Discord-Rollen-ID sein
   details: Anweisungen / Sammelpunkt
   details_example: z. B. Versammlung bei Hive Alpha. R4 führen Rallies. Voice-Chat aktiv.
   publish: Im Kalender veröffentlichen
-  publishing: Veröffentliche...
+  publishing: Wird veröffentlicht...
   bad_time: Game Time muss in 5-Minuten-Schritten eingestellt werden (:00, :05, :10, etc.)
-  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Alarmziel ein.
-  save_failed: Speichern des Events fehlgeschlagen
+  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Warnungsziel ein.
+  save_failed: Ereignis konnte nicht gespeichert werden
   published: Operation erfolgreich veröffentlicht!
-  confirm_delete: Bist du sicher, dass du diese Operation aus dem Kalender entfernen willst?
-  delete_failed: Löschen des Events fehlgeschlagen
+  confirm_delete: Bist du sicher, dass du diese Operation aus dem Kalender entfernen möchtest?
+  delete_failed: Ereignis konnte nicht gelöscht werden
   removed: Operation entfernt.
 kings_scheduler:
   title: "⚔️ Kapitol-Verteidigungs- & Rotationskonsole"

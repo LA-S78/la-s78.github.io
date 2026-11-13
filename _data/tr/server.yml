@@ -93,16 +93,17 @@ api_proposals:
   no_changes: Herhangi bir değişiklik belirtilmedi.
   week_and_threat: Hedef hafta ve tehdit sunucusu gereklidir.
 api_events:
-  session_invalid: Geçersiz, üzerinde oynanmış veya süresi dolmuş oturum jetonu. Lütfen Discord'da /calendar komutunu tekrar çalıştırın.
-  required_fields: Başlık, Tarih ve Oyun Saati gereklidir.
+  session_invalid: Geçersiz, kurcalanmış veya süresi dolmuş oturum belirteci. Lütfen Discord'da /calendar komutunu tekrar çalıştırın.
+  required_fields: Başlık, Tarih ve Game Time zorunludur.
   date_format: Tarih YYYY-AA-GG formatında olmalıdır.
-  time_format: Oyun Saati SS:DD formatında (00:00 - 23:59 arası) olmalıdır.
-  time_step: Oyun Saati 5 dakikalık artışlarla olmalıdır (:00, :05, :10, :15 vb.).
-  role_id_needed: Belirli bir Rolü Hedefle seçeneği için 17-20 haneli geçerli bir Discord Rol Kimliği gereklidir.
+  time_format: Game Time, SS:DD (00:00 ila 23:59) formatında olmalıdır.
+  time_step: Game Time 5 dakikalık artışlarla olmalıdır (:00, :05, :10, :15 vb.).
+  role_id_needed: Belirli Bir Rolü Hedefle seçeneği için geçerli 17-20 haneli bir Discord Rol Kimliği gereklidir.
   published: '"{title}" operasyonu başarıyla yayınlandı.'
   not_found: Etkinlik bulunamadı veya zaten silinmiş.
   out_of_scope: 'Erişim Reddedildi: Atanmış kapsamınız dışındaki etkinlikleri değiştiremez veya silemezsiniz.'
   deleted: 'Silinen operasyon: {title}'
+  updated: '"{title}" operasyonu güncellendi.'
 bot_common:
   off_week: Mola Haftası
   kw_week: Krallık Savaşı Haftası {n}
