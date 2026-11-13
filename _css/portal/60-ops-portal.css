@@ -400,6 +400,19 @@
   .cal-filter-toolbar {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+  /* Label above a full-width menu (side by side, the menu ran off the card) */
+  .cal-filter-toolbar .filter-controls-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+    width: 100%;
+  }
+  .cal-filter-toolbar .cal-filter-select {
+    width: 100%;
+    padding: 10px 12px;
   }
   .timeline-event-row {
     flex-direction: column;
