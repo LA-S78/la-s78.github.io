@@ -93,15 +93,16 @@ api_proposals:
   no_changes: No se han proporcionado cambios.
   week_and_threat: La semana objetivo y el servidor de amenaza son obligatorios.
 api_events:
-  session_invalid: Token de sesión no válido, manipulado o caducado. Por favor, vuelve a ejecutar /calendar en Discord.
-  required_fields: El Título, la Fecha y la Game Time son obligatorios.
-  date_format: La fecha debe tener el formato YYYY-MM-DD.
-  time_format: La Game Time debe tener el formato HH:MM (00:00 a 23:59).
-  time_step: La Game Time debe estar en incrementos de 5 minutos (:00, :05, :10, :15, etc.).
-  role_id_needed: El Rol Específico de Destino requiere un ID de Rol de Discord válido de 17-20 dígitos.
+  session_invalid: Tu inicio de sesión o enlace de calendario ha caducado. Inicia sesión con Discord de nuevo o vuelve a ejecutar /calendar en Discord.
+  not_leader: Solo R4 y R5 pueden gestionar los eventos de su alianza (y los Stewards los de todo el servidor).
+  required_fields: Título, Fecha y Game Time son obligatorios.
+  date_format: La fecha debe tener el formato AAAA-MM-DD.
+  time_format: Game Time debe tener el formato HH:MM (00:00 a 23:59).
+  time_step: Game Time debe estar en incrementos de 5 minutos (:00, :05, :10, :15, etc.).
+  role_id_needed: Target Specific Role requiere una ID de rol de Discord válida de 17-20 dígitos.
   published: Operación "{title}" publicada con éxito.
   not_found: Evento no encontrado o ya eliminado.
-  out_of_scope: 'Acceso denegado: No puedes modificar ni eliminar eventos fuera de tu ámbito asignado.'
+  out_of_scope: 'Acceso denegado: No puedes modificar o eliminar eventos fuera de tu ámbito asignado.'
   deleted: 'Operación eliminada: {title}'
   updated: Operación "{title}" actualizada.
 reminders:
