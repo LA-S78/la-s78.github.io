@@ -7,6 +7,7 @@ import { submitProposalWithAuth } from './auth-modal.js';
 import {
   markUpdating,
   offlineCopySavedAt,
+  rememberLiveData,
   showLiveDataNotice,
   showSavedWhileLoading,
 } from './live-data-notice.js';
@@ -300,6 +301,8 @@ export async function fetchLiveAllianceState() {
 
     if (!stateRes.ok) throw new Error(`State API returned HTTP ${stateRes.status}`);
     const data = await stateRes.json();
+    // Kept for next time (shown while the page loads), unless this is already an offline copy
+    if (!offlineCopySavedAt(stateRes)) rememberLiveData('/api/state?scope=alliances', data);
     liveState = 'ok';
     showLiveDataNotice(container, { savedAt: offlineCopySavedAt(stateRes) });
     applyAllianceData(data);

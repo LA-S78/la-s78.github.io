@@ -6,6 +6,7 @@ import { submitProposalWithAuth } from './auth-modal.js';
 import {
   markUpdating,
   offlineCopySavedAt,
+  rememberLiveData,
   showLiveDataNotice,
   showSavedWhileLoading,
 } from './live-data-notice.js';
@@ -152,6 +153,8 @@ export async function fetchLiveRewardsState() {
     const res = await fresh;
     if (!res.ok) throw new Error(`State API returned HTTP ${res.status}`);
     const data = await res.json();
+    // Kept for next time (shown while the page loads), unless this is already an offline copy
+    if (!offlineCopySavedAt(res)) rememberLiveData('/api/state?scope=rewards', data);
     liveState = 'ok';
     showLiveDataNotice(container, { savedAt: offlineCopySavedAt(res) });
     applyRewardsData(data);

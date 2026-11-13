@@ -13,6 +13,7 @@
 import {
   markUpdating,
   offlineCopySavedAt,
+  rememberLiveData,
   showLiveDataNotice,
   showSavedWhileLoading,
 } from './live-data-notice.js';
@@ -127,6 +128,8 @@ async function init() {
     const res = await fresh;
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+    // Kept for next time (shown while the page loads), unless this is already an offline copy
+    if (!offlineCopySavedAt(res)) rememberLiveData('/api/calendar', data);
     const rotation = data?.status?.rotation;
     if (!Array.isArray(rotation) || !rotation.length) throw new Error('no rotation');
     render(board, rotation);
