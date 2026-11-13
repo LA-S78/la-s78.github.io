@@ -153,7 +153,16 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
     const alliances = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
     const due = dueReminders(events, now);
 
-    const report = { mode, checked: events.length, due: [] };
+    // Which settings this deployment has (yes/no only, never the values), so a report shows
+    // at once when a variable is missing from it (e.g. not ticked for Preview, or no redeploy)
+    const settings = {
+      deployment: process.env.VERCEL_ENV || 'unknown',
+      napChannel: Boolean(process.env.NAP_ALERT_CHANNEL_ID),
+      testChannel: Boolean(testChannel),
+      botToken: Boolean(botToken),
+      remindersLive: process.env.REMINDERS_LIVE === 'true',
+    };
+    const report = { mode, settings, checked: events.length, due: [] };
     const sent = []; // { id, occurrence } of reminders actually posted
     for (const { evt, start, occurrence } of due) {
       const targets = targetsFor(evt, alliances, process.env.NAP_ALERT_CHANNEL_ID);
