@@ -158,6 +158,8 @@ nav_anchors:
   cheese_cheese: Fromage
   cheese_strategy: Stratégie
   cheese_rewards: Récompenses
+status:
+  coming_soon: Bientôt disponible
 search:
   guides: Rechercher dans les guides...
   home: Rechercher dans les répertoires, posts...

@@ -158,6 +158,8 @@ nav_anchors:
   cheese_cheese: Peynir
   cheese_strategy: Strateji
   cheese_rewards: Ödüller
+status:
+  coming_soon: Yakında
 search:
   guides: Rehberlerde ara...
   home: Dizinleri, gönderileri ara...

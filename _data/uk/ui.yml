@@ -158,6 +158,8 @@ nav_anchors:
   cheese_cheese: Сир
   cheese_strategy: Стратегія
   cheese_rewards: Нагороди
+status:
+  coming_soon: Незабаром
 search:
   guides: Пошук по гайдах...
   home: Пошук по каталогах, дописах...

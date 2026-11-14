@@ -158,6 +158,8 @@ nav_anchors:
   cheese_cheese: Queso
   cheese_strategy: Estrategia
   cheese_rewards: Recompensas
+status:
+  coming_soon: Próximamente
 search:
   guides: Buscar guías...
   home: Buscar directorios, publicaciones...
