@@ -25,6 +25,65 @@
   outline: none;
   box-shadow: 0 0 10px color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
+/* The browser's own "clear" cross in a search box: hidden (Escape or deleting clears it) */
+.search-bar::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Site search results, under the search box (js/main.js initSearchEngine) */
+.search-results {
+  max-width: 1000px;
+  margin: 0.6rem auto 0;
+  text-align: left;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.search-result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.search-result-list li + li {
+  border-top: 1px solid var(--border-color);
+}
+.search-result {
+  display: block;
+  padding: 0.7rem 1rem;
+  color: var(--text-main);
+  text-decoration: none;
+}
+.search-result:hover,
+.search-result:focus-visible {
+  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+}
+.search-result-where {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--accent-color);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.search-result-text {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+.search-result-text mark {
+  background: color-mix(in srgb, var(--accent-color) 28%, transparent);
+  color: var(--text-main);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.search-result-none {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
 
 .blueprint-img {
   display: block;
@@ -252,4 +311,9 @@ dialog a.dialog-btn:hover {
   .ally-text {
     color: oklch(from var(--ally) max(l, 0.72) c h) !important;
   }
+}
+
+/* A box of cards with no matches while searching (js/main.js initSearchEngine) */
+.content-pane[hidden] {
+  display: none;
 }

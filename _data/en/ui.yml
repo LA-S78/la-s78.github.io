@@ -189,8 +189,12 @@ status:
 
 search:
   guides: "Search guides..."
-  home: "Search directories, posts..."
+  home: "Search guides and rules..."
   placeholder: "Search..."
+  # Results from every guide and the Rules and Alliance pages, under the search box
+  results_label: "Search results"
+  no_results: "Nothing found for “{query}”."
+  unavailable: "Search isn't available right now. Try again when you're online."
 
 #PWA update text
 pwa:
