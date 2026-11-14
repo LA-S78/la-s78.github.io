@@ -99,7 +99,7 @@ Here are the calculated item purchase priorities to clear out the shop efficient
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.webp" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
 
@@ -219,7 +219,7 @@ Hier sind die berechneten Prioritäten für den Kauf von Gegenständen, um den S
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.webp" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
 
@@ -339,7 +339,7 @@ Aquí están las prioridades de compra calculadas para vaciar la tienda de maner
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.webp" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
 
@@ -459,7 +459,7 @@ Voici les priorités d'achat calculées pour vider efficacement la boutique afin
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.webp" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
 
@@ -579,7 +579,7 @@ order: 2
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.webp" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
 
@@ -699,7 +699,7 @@ Gelişiminizi en üst düzeye çıkarmak amacıyla mağazayı verimli bir şekil
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.webp" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
 
@@ -819,7 +819,7 @@ order: 2
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.webp" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
 
@@ -939,7 +939,7 @@ Di seguito sono elencate le priorità di acquisto calcolate per svuotare il nego
 </table>
 </div>
 <div>
-<img src="/images/guides/sanctuary-shop.png" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/sanctuary-shop.webp" alt="Sanctuary Shop" class="blueprint-img" onclick="document.getElementById('sanctuary-shopZoom').showModal()" style="cursor: pointer;">
 </div>
 </div>
 
