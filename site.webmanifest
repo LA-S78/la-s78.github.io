@@ -17,16 +17,16 @@
   ],
   "screenshots": [
     {
-      "src": "/images/screenshot-desktop.png",
+      "src": "/images/screenshot-desktop.webp",
       "sizes": "2560x1440",
-      "type": "image/png",
+      "type": "image/webp",
       "form_factor": "wide",
       "label": "Desktop View"
     },
     {
-      "src": "/images/screenshot-mobile.png",
+      "src": "/images/screenshot-mobile.webp",
       "sizes": "1440x2813",
-      "type": "image/png",
+      "type": "image/webp",
       "form_factor": "narrow",
       "label": "Mobile View"
     }
