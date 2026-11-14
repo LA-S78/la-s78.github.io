@@ -15,7 +15,7 @@ const esc = (value) => window.escapeHtml(value);
 const t = (key, vars) => window.t(`kings_scheduler.${key}`, vars);
 const th = (key, html, vars) => window.th(`kings_scheduler.${key}`, html, vars);
 const tag = (name, color) =>
-  `<strong${color ? ` style="color: ${esc(color)}"` : ''}>[${esc(name)}]</strong>`;
+  `<strong${color ? ` class="ally-text" style="--ally: ${esc(color)}"` : ''}>[${esc(name)}]</strong>`;
 
 let cycleState = {
   macro_cycle: 1,
@@ -124,7 +124,7 @@ function renderScheduleGrid() {
           ${isCurrent ? `<span class="badge">${esc(t('active'))}</span>` : ''}
         </div>
         <div class="ops-week-body">
-          <span class="ops-week-tag" style="color: ${esc(color)}">[${esc(w.seat)}]</span>
+          <span class="ops-week-tag ally-text" style="--ally: ${esc(color)}">[${esc(w.seat)}]</span>
           <span class="ops-week-sub">${esc(w.sub)}</span>
         </div>
         <div class="ops-week-loot">
@@ -182,7 +182,7 @@ function renderActiveBuyouts() {
       <div class="ops-buyout-card">
         <div class="ops-buyout-card-header">
           <div>
-            <strong>${esc(t('beneficiary'))}</strong> <span style="color: ${esc(color)}">[${esc(buyout.beneficiary)}]</span>
+            <strong>${esc(t('beneficiary'))}</strong> <span class="ally-text" style="--ally: ${esc(color)}">[${esc(buyout.beneficiary)}]</span>
             <small class="text-muted">${esc(t('threat', { threat: buyout.threat || t('red_list') }))}</small>
           </div>
           <span class="badge badge-warning">${esc(t('wartime_buyout'))}</span>

@@ -82,7 +82,7 @@ function renderWeek(w) {
   const current = w.state === 'current';
   const date = captureDate(w.captureAt);
   const tag = w.tag
-    ? `<span class="rotation-tag"${w.color ? ` style="color: ${esc(w.color)}"` : ''}>[${esc(w.tag)}]</span>`
+    ? `<span class="rotation-tag${w.color ? ' ally-text' : ''}"${w.color ? ` style="--ally: ${esc(w.color)}"` : ''}>[${esc(w.tag)}]</span>`
     : `<span class="rotation-tag is-empty">${esc(t('no_alliance'))}</span>`;
   return `
     <div class="rotation-week${current ? ' is-current' : ''}${w.state === 'done' ? ' is-done' : ''}${w.isKW ? '' : ' is-off-week'}">

@@ -8,7 +8,7 @@ lang: "en"
 strings: [dashboard, rewards_card, caravan, chart_editor, charts]
 ---
 
-<div class="content-pane portal-pane-md" id="dashboard-app">
+<div class="content-pane portal-pane-lg" id="dashboard-app">
   <div class="portal-header">
     <div class="alliance-badge-lg" id="dash-alliance">{{ "dashboard.title" | t }}</div>
     <div class="sub-text" id="dash-subtitle">{{ "dashboard.loading" | t }}</div>
@@ -106,7 +106,10 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       const a = data.alliance;
       const badge = $('dash-alliance');
       badge.textContent = `[${a.tag}]`;
-      if (a.color && /^#[0-9a-f]{6}$/i.test(a.color)) badge.style.color = a.color;
+      if (a.color && /^#[0-9a-f]{6}$/i.test(a.color)) {
+        badge.classList.add('ally-text');
+        badge.style.setProperty('--ally', a.color);
+      }
       const who = t(`dashboard.view_${data.viewer.tier === 'steward' ? 'steward' : data.viewer.tier === 'leader' ? 'leader' : 'member'}`);
       $('dash-subtitle').textContent = a.rank
         ? t('dashboard.subtitle_rank', { rank: a.rank, view: who })
@@ -455,7 +458,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       const tools = editing
         ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲', i === 0)}${tool('down', 'common.move_down', '▼', i === count - 1)}${tool('edit', 'common.edit', '✏️')}${tool('delete', 'common.delete', '🗑️')}</div>`
         : '';
-      return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}">
+      return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}" data-type="${escapeHtml(w.type || '')}">
         <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
         <div class="dash-widget-meta">${isLeader() ? `<span>${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${escapeHtml(updated)}</span>` : ''}${sync}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
