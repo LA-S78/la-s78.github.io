@@ -1,12 +1,28 @@
 <div class="search">
-    {% comment %} 
-      Define the placeholder based on the type passed in. 
-      You will need to add these keys to your ui.yml files.
+    {% comment %}
+      The page's search box. It filters the cards on its own page (Home, the guides index) and,
+      from two letters, lists matching sections from every guide and the Rules and Alliance
+      pages (js/main.js initSearchEngine, reading /<lang>/search-index.json, built by
+      _scripts/search_index.rb).
     {% endcomment %}
-    {% assign placeholder_text = site.data[site.active_lang].ui.search[include.search_type] %}
-    
-    <input type="text" 
-           id="searchInput" 
-           class="search-bar" 
+    {% assign search_ui = site.data[site.active_lang].ui.search %}
+    {% assign search_en = site.data.en.ui.search %}
+    {% assign placeholder_text = search_ui[include.search_type] %}
+
+    <input type="search"
+           id="searchInput"
+           class="search-bar"
+           autocomplete="off"
+           enterkeyhint="search"
+           aria-controls="searchResults"
+           aria-label="{{ placeholder_text }}"
            placeholder="{{ placeholder_text }}">
+    <div class="search-results"
+         id="searchResults"
+         role="region"
+         aria-live="polite"
+         aria-label="{{ search_ui.results_label | default: search_en.results_label }}"
+         data-no-results="{{ search_ui.no_results | default: search_en.no_results }}"
+         data-unavailable="{{ search_ui.unavailable | default: search_en.unavailable }}"
+         hidden></div>
 </div>
