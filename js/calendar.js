@@ -27,6 +27,8 @@ async function initCalendar() {
   // The site's own milestones (api/calendar.js sends a key and its values): in the page's language.
   const MILESTONES = {
     capture: (v) => {
+      // A week of another cycle: its seat is decided at that cycle's reset
+      if (!v.who) return [t('calendar.ev_capture_title_open'), t('calendar.ev_capture_desc_open')];
       const who = holderName(v.who);
       const rank = v.rank
         ? t(v.override ? 'calendar.rank_override_schedule' : 'calendar.rank', { rank: v.rank })
@@ -50,9 +52,6 @@ async function initCalendar() {
   const elLoading = document.getElementById('loading-state');
   const elError = document.getElementById('error-state');
   const elNotification = document.getElementById('action-notification');
-  const filterSelect = document.getElementById('cal-scope-filter');
-  const filterStatusTag = document.getElementById('filter-status-tag');
-  const filterToolbar = document.getElementById('cal-filter-toolbar');
 
   // 1. Parse URL Parameters & Session Context
   const urlParams = new URLSearchParams(window.location.search);
@@ -152,8 +151,7 @@ async function initCalendar() {
       reminderChannels = data.reminderChannels || null;
       updateReminderHint();
       renderHero(data.status, data.capitolHolder, data.capitolHolderColor);
-      setupFilterOptions();
-      applyFilterAndRender();
+      renderEvents(data.status);
     } catch (err) {
       if (elLoading) elLoading.style.display = 'none';
       if (elError) {
@@ -295,51 +293,34 @@ async function initCalendar() {
     window.__calendarResetClock = setInterval(updateResetClock, 1000);
   }
 
-  // 4. Filter Toolbar
-  function setupFilterOptions() {
-    if (!filterSelect || !filterToolbar) return;
-    filterSelect.innerHTML = '';
+  // 4. The events "at a glance" (js/calendar-views.js): a week view and a cycle view, with
+  // chips for the event types and "Find an event". The chips replace the old Perspective
+  // menu: an alliance's page shows the server's events and the alliance's own (its chip
+  // hides or shows them).
+  const eventsView =
+    window.CalendarViews && document.getElementById('events-timeline-container')
+      ? window.CalendarViews.create(document.getElementById('events-timeline-container'), {
+          t,
+          tn: window.tn,
+          esc,
+          hasAlliance: () => Boolean(activeAlliance),
+          // Leaders edit and delete their own events (and Stewards server-wide ones)
+          canEdit: (evt) =>
+            isManagementSession &&
+            evt.id &&
+            evt.id.startsWith('evt-') &&
+            sessionScope &&
+            evt.scope &&
+            evt.scope.toLowerCase() === sessionScope.toLowerCase(),
+          onEdit: (id) => openEditForm?.(id),
+          onDelete: (id) => handleDeleteEvent(id),
+        })
+      : null;
 
-    if (activeAlliance) {
-      filterToolbar.style.display = 'flex';
-
-      const optCombined = document.createElement('option');
-      optCombined.value = 'combined';
-      optCombined.textContent = t('calendar.combined', { tag: activeAlliance });
-      filterSelect.appendChild(optCombined);
-
-      const optAlliance = document.createElement('option');
-      optAlliance.value = activeAlliance;
-      optAlliance.textContent = t('calendar.internal_only', { tag: activeAlliance });
-      filterSelect.appendChild(optAlliance);
-
-      const optGlobal = document.createElement('option');
-      optGlobal.value = 'global';
-      optGlobal.textContent = t('calendar.kingdom_only');
-      filterSelect.appendChild(optGlobal);
-
-      filterSelect.value = 'combined';
-    } else {
-      filterToolbar.style.display = 'none';
-    }
-  }
-
-  function applyFilterAndRender() {
-    if (!filterSelect) return;
-    const selected = filterSelect.value || 'global';
-    let filtered = [];
-
-    if (!activeAlliance || selected === 'global') {
-      filtered = allEvents.filter(
-        (e) =>
-          !e.scope ||
-          e.scope.toLowerCase() === 'global' ||
-          e.type === 'war' ||
-          e.type === 'rotation',
-      );
-      if (filterStatusTag) filterStatusTag.style.display = 'none';
-    } else if (selected === 'combined') {
-      filtered = allEvents.filter((e) => {
+  function renderEvents(status) {
+    if (!eventsView) return;
+    const shown = allEvents
+      .filter((e) => {
         if (
           !e.scope ||
           e.scope.toLowerCase() === 'global' ||
@@ -347,113 +328,18 @@ async function initCalendar() {
           e.type === 'rotation'
         )
           return true;
-        return e.scope.trim().toLowerCase() === activeAlliance.toLowerCase();
-      });
-      if (filterStatusTag) {
-        filterStatusTag.style.display = 'block';
-        filterStatusTag.textContent = t('calendar.operations_active', { tag: activeAlliance });
-      }
-    } else {
-      filtered = allEvents.filter(
-        (e) => e.scope && e.scope.trim().toLowerCase() === activeAlliance.toLowerCase(),
-      );
-      if (filterStatusTag) {
-        filterStatusTag.style.display = 'block';
-        filterStatusTag.textContent = t('calendar.internal_only', { tag: activeAlliance });
-      }
-    }
-
-    renderTimeline(filtered);
-  }
-
-  if (filterSelect) {
-    filterSelect.addEventListener('change', applyFilterAndRender);
-  }
-
-  // 5. Render Timeline
-  function renderTimeline(eventsList) {
-    const timelineContainer = document.getElementById('events-timeline-container');
-    if (!timelineContainer) return;
-
-    if (!eventsList || eventsList.length === 0) {
-      timelineContainer.innerHTML = `<div class="cal-status-banner">${esc(t('calendar.no_operations'))}</div>`;
-      return;
-    }
-
-    timelineContainer.innerHTML = eventsList
-      .map((evt) => {
-        const start = new Date(evt.start);
-        const gtHours = (start.getUTCHours() - 2 + 24) % 24;
-        const gtMins = String(start.getUTCMinutes()).padStart(2, '0');
-        const gtTimeStr = evt.allDay
-          ? t('calendar.all_day')
-          : t('common.game_time', { time: `${String(gtHours).padStart(2, '0')}:${gtMins}` });
-        const localDateStr = start.toLocaleDateString(undefined, {
-          weekday: 'short',
-          month: 'short',
-          day: 'numeric',
-        });
-        const localTimeStr = evt.allDay
-          ? ''
-          : ` • ${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-
-        let recurrenceLabel = '';
-        if (evt.recurrence === '2days')
-          recurrenceLabel = `<span class="event-tag-pill pill-recurring">${esc(t('calendar.every_2_days'))}</span>`;
-        else if (evt.recurrence === 'weekly')
-          recurrenceLabel = `<span class="event-tag-pill pill-recurring">${esc(t('calendar.weekly'))}</span>`;
-
-        const forceLabel =
-          evt.notify_target === 'everyone'
-            ? `<span class="event-tag-pill pill-force">${esc(t('calendar.mandatory'))}</span>`
-            : '';
-        const borderStyle = evt.color ? `border-left-color: ${esc(evt.color)} !important;` : '';
-
-        // The site's own milestones in the page's language; events leaders write stay as written.
-        const own = evt.i18n && MILESTONES[evt.i18n.key];
-        const [title, description] = own ? own(evt.i18n.vars || {}) : [evt.title, evt.description];
-
-        const canDelete =
-          isManagementSession &&
-          evt.id &&
-          evt.id.startsWith('evt-') &&
-          sessionScope &&
-          evt.scope &&
-          evt.scope.toLowerCase() === sessionScope.toLowerCase();
-
-        return `
-        <div class="timeline-event-row event-${esc(evt.type || 'custom')}" style="${borderStyle}">
-          <div class="event-main">
-            <div class="event-title-line">
-              <span class="event-title">${esc(title)}</span>
-              ${recurrenceLabel}
-              ${forceLabel}
-            </div>
-            <div class="event-desc">${esc(description || '')}</div>
-          </div>
-          <div class="event-actions-group">
-            <div class="event-time-block">
-              <div class="time-gt">${esc(gtTimeStr)}</div>
-              <div>${localDateStr}${localTimeStr}</div>
-            </div>
-            ${
-              canDelete
-                ? `<button type="button" class="btn-edit-event" data-event-id="${esc(evt.id)}">${esc(t('calendar.edit'))}</button>
-                   <button type="button" class="btn-delete-event" data-event-id="${esc(evt.id)}">${esc(t('calendar.delete'))}</button>`
-                : ''
-            }
-          </div>
-        </div>
-      `;
+        return (
+          Boolean(activeAlliance) && e.scope.trim().toLowerCase() === activeAlliance.toLowerCase()
+        );
       })
-      .join('');
-
-    timelineContainer.querySelectorAll('.btn-delete-event').forEach((btn) => {
-      btn.addEventListener('click', () => handleDeleteEvent(btn.dataset.eventId));
-    });
-    timelineContainer.querySelectorAll('.btn-edit-event').forEach((btn) => {
-      btn.addEventListener('click', () => openEditForm?.(btn.dataset.eventId));
-    });
+      .map((e) => {
+        // The site's own milestones in the page's language; events leaders write stay as written.
+        const own = e.i18n && MILESTONES[e.i18n.key];
+        if (!own) return e;
+        const [title, description] = own(e.i18n.vars || {});
+        return { ...e, title, description };
+      });
+    eventsView.render(shown, status);
   }
 
   // 6. Management Mode UI Setup

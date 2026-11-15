@@ -324,56 +324,6 @@
   color: var(--text-main);
 }
 
-/* Perspective Filter Toolbar */
-.cal-filter-toolbar {
-  background: var(--nav-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 0.85rem 1.25rem;
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.filter-controls-group {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.filter-label {
-  white-space: nowrap;
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-}
-
-.cal-filter-select {
-  max-width: 100%;
-  background: var(--surface-dark);
-  border: 1px solid var(--accent-color);
-  color: var(--text-main);
-  padding: 7px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.filter-active-badge {
-  background: rgba(var(--active-theme, 35, 120, 45), 0.2);
-  border: 1px solid rgb(var(--active-theme-bright, 55, 150, 65));
-  color: rgb(var(--active-theme-vivid, 85, 190, 95));
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 4px;
-}
-
 .cal-section {
   margin-bottom: 2.25rem;
 }
@@ -559,4 +509,532 @@
 
 #mgmt-scope-switch[hidden] {
   display: none;
+}
+
+/* ==========================================================================
+   The events at a glance (js/calendar-views.js): week and cycle views, type chips, find.
+   Event type colours: server green, alliance blue (or the event's own colour), Kingdom War
+   red, Capitol gold (fixed gold so it stays distinct in every theme).
+   ========================================================================== */
+#events-timeline-container {
+  --k-server: var(--event-custom);
+  --k-alliance: var(--event-alliance);
+  --k-war: var(--status-danger);
+  --k-rotation: var(--gold);
+}
+#events-timeline-container .k-server {
+  --k: var(--k-server);
+}
+#events-timeline-container .k-alliance {
+  --k: var(--k-alliance);
+}
+#events-timeline-container .k-war {
+  --k: var(--k-war);
+}
+#events-timeline-container .k-rotation {
+  --k: var(--k-rotation);
+}
+.cal-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--k);
+}
+.cal-dots {
+  display: flex;
+  gap: 3px;
+  min-height: 7px;
+}
+
+.cal-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+.cal-view-switch {
+  display: inline-flex;
+  width: auto;
+}
+.cal-find {
+  flex: 1 1 180px;
+  min-width: 0;
+  padding: 0.45rem 0.7rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+.cal-find:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+.cal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+.cal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cal-chip[aria-pressed='true'] {
+  border-color: var(--k);
+  background: color-mix(in srgb, var(--k) 14%, var(--card-bg));
+}
+.cal-chip[aria-pressed='false'] {
+  opacity: 0.5;
+}
+.cal-chip[aria-pressed='false'] .cal-dot {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--k);
+}
+.cal-chip[hidden] {
+  display: none;
+}
+.cal-matches {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Week view */
+.wk-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+.wk-arrow {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.wk-arrow:hover:not(:disabled) {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+.wk-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.wk-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  text-align: center;
+  line-height: 1.3;
+}
+.wk-label b {
+  color: var(--accent-color);
+  font-size: 0.95rem;
+}
+.wk-label > span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.cal-king {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.cal-king.is-unknown {
+  font-weight: 500;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.wk-strip,
+.cy-cells {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.wk-strip {
+  gap: 6px;
+  margin-bottom: 0.9rem;
+}
+.wk-day,
+.cy-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+.wk-day {
+  padding: 8px 2px 6px;
+  border-radius: 10px;
+}
+.wk-day:hover,
+.cy-day:hover {
+  border-color: var(--accent-color);
+}
+.wk-name {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.wk-num {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.wk-count {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  min-height: 0.8em;
+}
+.wk-day.has-war:not(.is-today),
+.cy-day.has-war:not(.is-today) {
+  border-color: color-mix(in srgb, var(--status-danger) 55%, var(--border-color));
+}
+.wk-day.is-today,
+.cy-day.is-today {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--nav-bg);
+}
+.wk-day.is-today .wk-name,
+.wk-day.is-today .wk-count {
+  color: var(--nav-bg);
+  letter-spacing: 0;
+}
+.wk-day.is-today .cal-dot,
+.cy-day.is-today .cal-dot {
+  box-shadow: 0 0 0 1.5px var(--nav-bg);
+}
+.wk-day.is-past:not(.is-today),
+.cy-day.is-past:not(.is-today) {
+  opacity: 0.45;
+}
+
+/* Cycle view */
+.cal-range {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.cal-range b {
+  color: var(--accent-color);
+}
+.cy-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+.cy-head,
+.cy-row {
+  display: grid;
+  grid-template-columns: 3.6rem minmax(0, 1fr);
+  gap: 6px;
+  align-items: stretch;
+}
+.cy-cells {
+  gap: 4px;
+}
+.cy-head .cy-cells span {
+  text-align: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.cy-week {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.15;
+}
+.cy-week b {
+  font-size: 0.72rem;
+}
+.cy-week .cal-king {
+  font-size: 0.66rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cy-week .cal-king.is-unknown {
+  white-space: normal;
+}
+.cy-row.is-current .cy-week b {
+  color: var(--accent-color);
+}
+.cy-row.is-current .cy-cells {
+  padding: 3px;
+  margin: -3px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent-color) 8%, transparent);
+}
+.cy-day {
+  padding: 6px 0 5px;
+  border-radius: 8px;
+}
+.cy-num {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+.cy-day.is-selected:not(.is-today) {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+/* The day-by-day list */
+.ag-day {
+  margin-bottom: 1.2rem;
+  scroll-margin-top: 1rem;
+}
+.ag-day-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 0.45rem;
+  padding: 0.4rem 0.1rem;
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+}
+.ag-day-title b {
+  color: var(--text-main);
+}
+.ag-day.is-today .ag-day-title b {
+  color: var(--accent-color);
+}
+.ag-count {
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.ag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ag-empty {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.ag-day.is-pastday .ag-list {
+  opacity: 0.55;
+}
+.ag-event {
+  display: grid;
+  grid-template-columns: 4.6rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.65rem 0.8rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--k);
+  border-radius: 8px;
+}
+.ag-time {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.ag-time b {
+  font-size: 1.05rem;
+  color: var(--text-main);
+}
+.ag-time small {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+.ag-time span {
+  margin-top: 3px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+.ag-body {
+  min-width: 0;
+}
+.ag-title {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 0.92rem;
+  overflow-wrap: anywhere;
+}
+.ag-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 3px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.ag-kind {
+  color: var(--k);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ag-pill {
+  padding: 0 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+}
+.ag-pill.is-must {
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+.ag-desc {
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.ag-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.ag-event.is-past {
+  opacity: 0.45;
+}
+.ag-event.is-live {
+  background: color-mix(in srgb, var(--k) 14%, var(--card-bg));
+  border-color: var(--k);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--k) 25%, transparent);
+}
+.ag-event.is-next {
+  border-color: color-mix(in srgb, var(--accent-color) 60%, var(--border-color));
+  border-left-color: var(--k);
+}
+.ag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+.ag-badge.is-live {
+  background: var(--k);
+  color: var(--nav-bg);
+}
+.ag-badge.is-live i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nav-bg);
+  animation: agPulse 1.6s ease-in-out infinite;
+}
+.ag-badge.is-next {
+  background: color-mix(in srgb, var(--accent-color) 18%, transparent);
+  color: var(--accent-color);
+  border: 1px solid color-mix(in srgb, var(--accent-color) 45%, transparent);
+}
+@keyframes agPulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ag-badge.is-live i {
+    animation: none;
+  }
+}
+.ag-now {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0;
+  color: var(--status-danger);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.ag-now::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--status-danger);
+}
+.ag-now::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--status-danger);
+  border-radius: 2px;
+}
+
+@media (min-width: 900px) {
+  .wk-day {
+    padding: 10px 4px 8px;
+  }
+  .wk-num {
+    font-size: 1.4rem;
+  }
+  .cy-day {
+    padding: 10px 0 8px;
+  }
+  .cy-num {
+    font-size: 1.15rem;
+  }
+  .cy-head,
+  .cy-row {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+  }
+  .cy-week {
+    font-size: 0.75rem;
+  }
+  .cy-week b {
+    font-size: 0.8rem;
+  }
+  .cy-week .cal-king {
+    font-size: 0.72rem;
+  }
+  .ag-event {
+    grid-template-columns: 6rem minmax(0, 1fr);
+  }
 }

@@ -215,18 +215,18 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         </div>
       </section>
 
-      <!-- Scoped Filter Toolbar (Shown only when alliance context exists) -->
-      <div
-        class="cal-filter-toolbar"
-        id="cal-filter-toolbar"
-        style="display: none"
-      >
-        <div class="filter-controls-group">
-          <label for="cal-scope-filter" class="filter-label">{{ "calendar.perspective" | t }}</label>
-          <select id="cal-scope-filter" class="cal-filter-select"></select>
+      <!-- The events at a glance: week and cycle views (js/calendar-views.js) -->
+      <section class="cal-section">
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-heading">{{ "calendar.upcoming" | t }}</h2>
+            {% capture gt %}<strong>{{ "calendar.gt_label" | t }}</strong>{% endcapture %}
+            <div class="cal-tz-notice">{{ "calendar.times_shown" | t_html: "gt", gt }}</div>
+          </div>
         </div>
-        <div id="filter-status-tag" class="filter-active-badge"></div>
-      </div>
+
+        <div class="events-timeline" id="events-timeline-container"></div>
+      </section>
 
       <!-- ======================================================================
            CAPITOL DEFENSE & ROTATION OPERATIONS CONSOLE
@@ -314,22 +314,11 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         </div>
       </section>
 
-      <!-- Operations Timeline Section -->
-      <section class="cal-section">
-        <div class="section-header-row">
-          <div>
-            <h2 class="section-heading">{{ "calendar.upcoming" | t }}</h2>
-            {% capture gt %}<strong>{{ "calendar.gt_label" | t }}</strong>{% endcapture %}
-            <div class="cal-tz-notice">{{ "calendar.times_shown" | t_html: "gt", gt }}</div>
-          </div>
-        </div>
-
-        <div class="events-timeline" id="events-timeline-container"></div>
-      </section>
     </div>
   </div>
 </div>
 
 <!-- Modular Scripts -->
+<script src="/js/calendar-views.js"></script>
 <script src="/js/calendar.js"></script>
 <script type="module" src="/js/kvk-scheduler.js"></script>
