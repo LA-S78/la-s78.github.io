@@ -376,9 +376,21 @@
     pick();
   }
 
+  /** Scrolls the page so a section starts just under the section tabs (or the header). */
+  function scrollToSection(targetElement, behavior = 'smooth') {
+    const mainContainer = document.querySelector('main');
+    if (!mainContainer) return;
+    const anchorNav = document.querySelector('.anchor-nav');
+    const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
+    mainContainer.scrollTo({
+      top:
+        mainContainer.scrollTop + targetElement.getBoundingClientRect().top - offsetBoundary - 15,
+      behavior,
+    });
+  }
+
   function initAnchorScrolling() {
     const navLinks = document.querySelectorAll('.anchor-link');
-    const mainContainer = document.querySelector('main');
     navLinks.forEach((link) => {
       if (!firstTime(link, 'anchor-scroll')) return;
       link.addEventListener('click', function (e) {
@@ -389,30 +401,170 @@
         if (targetElement) {
           e.preventDefault();
           document.dispatchEvent(new CustomEvent('anchor-nav:go', { detail: targetId }));
-          const anchorNav = document.querySelector('.anchor-nav');
-          const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
-          mainContainer.scrollTo({
-            top:
-              mainContainer.scrollTop +
-              targetElement.getBoundingClientRect().top -
-              offsetBoundary -
-              15,
-            behavior: 'smooth',
-          });
+          scrollToSection(targetElement);
         }
       });
     });
   }
 
+  // ---------- Site search ----------
+  // The search box on Home and the guides index: it filters that page's cards as you type
+  // and, from two letters, lists matching sections from every guide and the Rules and
+  // Alliance pages. The list comes from /<lang>/search-index.json (built by
+  // _scripts/search_index.rb from the finished pages; the service worker keeps the reader's
+  // language for offline use). Every word typed must appear; letter case and accents don't
+  // matter. A section whose name or page title matches comes first.
+  const searchIndexes = {}; // language -> Promise of the index (fetched once per visit)
+  const MAX_RESULTS = 8;
+  const fold = (text) => String(text).toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
+
+  function loadSearchIndex(lang) {
+    if (!searchIndexes[lang]) {
+      searchIndexes[lang] = fetch(`/${lang}/search-index.json`)
+        .then((r) => {
+          if (!r.ok) throw new Error(`search index: HTTP ${r.status}`);
+          return r.json();
+        })
+        .then((entries) =>
+          entries.map((e) => ({ ...e, key: fold(`${e.p} ${e.s}`), body: fold(e.x) })),
+        )
+        .catch((err) => {
+          delete searchIndexes[lang]; // try again next time (e.g. back online)
+          throw err;
+        });
+    }
+    return searchIndexes[lang];
+  }
+
+  function searchSections(index, query) {
+    const words = fold(query).split(/\s+/).filter(Boolean);
+    if (!words.length) return [];
+    const scored = [];
+    for (const e of index) {
+      let score = 0;
+      for (const w of words) {
+        const inKey = e.key.includes(w);
+        const hits = e.body.split(w).length - 1;
+        if (!inKey && !hits) {
+          score = -1;
+          break;
+        }
+        score += (inKey ? 10 : 0) + Math.min(hits, 5);
+      }
+      if (score > 0) scored.push({ e, score });
+    }
+    return scored.sort((a, b) => b.score - a.score).slice(0, MAX_RESULTS);
+  }
+
+  /** The text folded like fold(), with where each folded character came from in the original
+   *  (folding can drop characters: accents, and the variation mark after an emoji like ⚠️). */
+  function foldWithMap(text) {
+    let folded = '';
+    const from = [];
+    let i = 0;
+    for (const ch of text) {
+      const f = fold(ch);
+      folded += f;
+      for (let k = 0; k < f.length; k++) from.push(i);
+      i += ch.length;
+    }
+    from.push(text.length);
+    return { folded, from };
+  }
+
+  /** About 150 characters of the section around the first word found, words highlighted. */
+  function searchSnippet(text, query) {
+    const words = fold(query).split(/\s+/).filter(Boolean);
+    const all = foldWithMap(text);
+    const found = words.map((w) => all.folded.indexOf(w)).filter((i) => i >= 0);
+    const at = found.length ? all.from[Math.min(...found)] : 0; // else only the name matched
+    const start = Math.max(0, at - 50);
+    let snippet = text.slice(start, start + 150);
+    if (start > 0) snippet = '…' + snippet.replace(/^\S*\s/, '');
+    if (start + 150 < text.length) snippet = snippet.replace(/\s\S*$/, '') + '…';
+    // Highlight: escape everything, wrapping each match (found in the folded text, mapped
+    // back to the original characters) in <mark>
+    const { folded, from } = foldWithMap(snippet);
+    const marks = [];
+    for (const w of words) {
+      for (let i = folded.indexOf(w); i >= 0; i = folded.indexOf(w, i + w.length)) {
+        marks.push([from[i], from[i + w.length]]);
+      }
+    }
+    marks.sort((a, b) => a[0] - b[0]);
+    let html = '';
+    let pos = 0;
+    for (const [a, b] of marks) {
+      if (a < pos) continue;
+      html += esc(snippet.slice(pos, a)) + '<mark>' + esc(snippet.slice(a, b)) + '</mark>';
+      pos = b;
+    }
+    return html + esc(snippet.slice(pos));
+  }
+
   function initSearchEngine() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput || !firstTime(searchInput, 'search')) return;
+    const results = document.getElementById('searchResults');
+    const lang = document.documentElement.lang || 'en';
+    let latest = 0;
+
+    const show = async (query) => {
+      const ticket = ++latest;
+      if (!results) return;
+      if (query.trim().length < 2) {
+        results.hidden = true;
+        results.innerHTML = '';
+        return;
+      }
+      let html;
+      try {
+        const found = searchSections(await loadSearchIndex(lang), query);
+        html = found.length
+          ? '<ul class="search-result-list">' +
+            found
+              .map(
+                ({ e }) => `<li><a class="search-result" href="${esc(e.u)}" data-turbo-frame="_top">
+                  <span class="search-result-where">${esc(e.p)}${e.s && e.s !== e.p ? ` <span aria-hidden="true">›</span> ${esc(e.s)}` : ''}</span>
+                  <span class="search-result-text">${searchSnippet(e.x, query)}</span>
+                </a></li>`,
+              )
+              .join('') +
+            '</ul>'
+          : `<p class="search-result-none">${esc(results.dataset.noResults.replace('{query}', query.trim()))}</p>`;
+      } catch (err) {
+        console.warn(err.message);
+        html = `<p class="search-result-none">${esc(results.dataset.unavailable)}</p>`;
+      }
+      if (ticket !== latest) return; // a newer search has started
+      results.innerHTML = html;
+      results.hidden = false;
+    };
+
     searchInput.addEventListener('input', function (e) {
       const query = e.target.value.toLowerCase();
       const items = document.querySelectorAll('.searchable-item');
       items.forEach((item) => {
         item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
       });
+      // A box of cards (Critical Intel, Directories, a guides category) with none left is
+      // hidden rather than left empty under the results
+      document.querySelectorAll('.content-pane').forEach((pane) => {
+        const cards = [...pane.querySelectorAll('.searchable-item')];
+        if (!cards.length) return;
+        pane.hidden = Boolean(query) && cards.every((c) => c.style.display === 'none');
+      });
+      show(e.target.value);
+    });
+    // Fetch the index when the box is first used, so typing feels instant
+    searchInput.addEventListener('focus', () => loadSearchIndex(lang).catch(() => {}), {
+      once: true,
+    });
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && searchInput.value) {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+      }
     });
   }
 
@@ -492,10 +644,16 @@
     const scrollKey = 'scroll-pos-' + window.location.pathname;
     const saved = () => parseInt(sessionStorage.getItem(scrollKey) || '', 10);
     if (isNewNavigation) {
-      // A new visit (a link): the top of the page
+      // A new visit (a link): the top of the page, or the section its address names
+      // (/en/guides/thief.html#coins, e.g. from a search result)
       isNewNavigation = false;
       isRestoreVisit = false;
-      requestAnimationFrame(() => (scrollContainer.scrollTop = 0));
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      const section = id && document.getElementById(id);
+      requestAnimationFrame(() => {
+        if (section) scrollToSection(section, 'auto');
+        else scrollContainer.scrollTop = 0;
+      });
     } else if (isRestoreVisit) {
       // The back or forward button: where the reader was (Turbo redraws the page from its
       // snapshot at the top, so the position has to be put back)

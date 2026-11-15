@@ -31,6 +31,9 @@ module PrecacheList
     puts "Scanning #{File.expand_path(dest_path)} for precache candidates..."
 
     files = Dir.glob(File.join(dest_path, '**', "*.#{EXTENSIONS}"))
+    # Each language's site search index (search_index.rb); other .json files (Vercel and
+    # npm settings) are not part of the app
+    files += Dir.glob(File.join(dest_path, '*', 'search-index.json'))
     if files.empty?
       puts "WARNING: No files found to cache! Check your _site path."
       return

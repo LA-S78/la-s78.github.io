@@ -173,6 +173,11 @@ if options[:lang] && !File.exist?(File.join(SITE, 'sw.js'))
   FileUtils.cp(File.join(SITE, options[:lang], 'sw.js'), SITE)
 end
 
+# Before the precache list, so each language's index is saved for offline use
+step 'Writing the site search indexes (/<lang>/search-index.json)'
+require_relative 'search_index'
+SearchIndex.run(SITE, options[:lang] ? [options[:lang]] : LANGS)
+
 step 'Injecting service-worker precache list'
 require_relative 'precache_list'
 PrecacheList.run(SITE)
