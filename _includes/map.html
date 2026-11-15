@@ -47,6 +47,13 @@
         title="{{ "map_planner.override_help" | t }}" 
         disabled
       />
+      <!-- Planner Mode only (greyed out otherwise): compare the plan with the live map, and
+           throw the plan away. Turning the planner off keeps the plan. -->
+      <div class="segmented-control planner-compare" role="group" aria-label="{{ "map_planner.compare_label" | t }}">
+        <button id="btn-plan-live" class="toggle-btn" type="button" aria-pressed="false" disabled>{{ "map_planner.show_live" | t }}</button>
+        <button id="btn-plan-mine" class="toggle-btn" type="button" aria-pressed="false" disabled>{{ "map_planner.show_plan" | t }}</button>
+      </div>
+      <button id="btn-discard-plan" class="draft-btn discard-plan-btn" type="button" disabled>{{ "map_planner.discard" | t }}</button>
     </div>
   </div>
 

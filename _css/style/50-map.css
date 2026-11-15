@@ -329,6 +329,29 @@ svg #layer1 path:hover {
   display: none !important;
 }
 
+/* Planner Mode's Live / My plan and Discard, on the "Change to:" line (greyed out until the
+   planner is on, so nothing moves when it's turned on) */
+#planner-override-container {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.planner-compare .toggle-btn:disabled,
+.discard-plan-btn:disabled,
+.segmented-control .toggle-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.discard-plan-btn:not(:disabled):hover {
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+/* Planner Mode off with a saved plan: the indicator glows, the theme colour at half strength */
+.draft-btn.has-plan .draft-indicator {
+  background-color: rgba(var(--active-theme), 0.6);
+  box-shadow: 0 0 6px rgba(var(--active-theme), 0.6);
+}
+
 #alliance-override {
   background-color: var(--surface-dark);
   color: var(--text-main);
