@@ -8,7 +8,9 @@
  *   - Cycle: the cycle's four weeks as a grid (a row per week, named, with its Capitol seat,
  *     the week's "king"); tap a day for its events.
  * Chips for the event types (Server, Alliance, Kingdom War, Capitol) show or hide each type
- * (they replace the old Perspective menu), in every view.
+ * (they replace the old Perspective menu), and a dropdown keeps one event type (Cheese Trap,
+ * Crystal Cluster Valley…: the types on the calendar), in every view. Each event shows its
+ * type's line icon and, when the type names a guide, a link to it (_data/event_types.yml).
  *
  * Days are Game Time days (UTC-2; the game resets at 00:00 GT). Times show Game Time first,
  * then the reader's own time. The events come from /api/calendar (via js/calendar.js), which
@@ -58,6 +60,60 @@
     return evt.scope && String(evt.scope).toLowerCase() !== 'global' ? 'alliance' : 'server';
   }
 
+  // ---------- the event types (_data/event_types.yml, put in the page by calendar.html) ----------
+  let pool = null;
+  const norm = (text) =>
+    String(text || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/\p{M}/gu, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  /** { types, icons, byId, byTitle }: the types, the other icons, and lookups. */
+  function eventTypes() {
+    if (pool) return pool;
+    const read = (id) => {
+      try {
+        return JSON.parse(document.getElementById(id)?.textContent || 'null');
+      } catch (e) {
+        return null;
+      }
+    };
+    const data = read('event-types') || {};
+    const names = read('event-type-names') || {}; // { lang: { <id>_title: name, ... } }
+    const types = data.types || [];
+    const byTitle = new Map();
+    for (const type of types) {
+      for (const lang of Object.values(names)) {
+        const name = lang?.[`${type.id}_title`];
+        if (name) byTitle.set(norm(name), type.id);
+      }
+      for (const old of type.match || []) byTitle.set(norm(old), type.id);
+    }
+    pool = {
+      types,
+      icons: data.icons || {},
+      byId: Object.fromEntries(types.map((x) => [x.id, x])),
+      byTitle,
+    };
+    return pool;
+  }
+  /**
+   * An event's type: the one it stores (events made from a form preset, and the site's own
+   * milestones), else the type whose name (in any language) or older name is its title
+   * (without "[TAG] "), else none.
+   */
+  function typeOf(evt) {
+    const { byId, byTitle } = eventTypes();
+    if (evt.event_type && byId[evt.event_type]) return evt.event_type;
+    return byTitle.get(norm(String(evt.title || '').replace(/^\[[^\]]+\]\s*/, ''))) || null;
+  }
+  /** A line icon (the SVG inside a 24x24 icon, from the event types file). */
+  const svgIcon = (inner, cls = 'cal-ic') =>
+    inner
+      ? `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${inner}</svg>`
+      : '';
+
   function create(container, opts) {
     const { t, tn, esc } = opts;
     // The page's language, in the reader's own regional style when it matches (en-GB: 16 Nov,
@@ -89,6 +145,7 @@
       week: 0, // -1, 0, 1: last, this, next week
       day: null, // the day picked in the cycle view (00:00 GT, ms)
       kinds: new Set(KINDS),
+      type: '', // the event type picked in the dropdown: '' all, 'other' events of no type
       events: [],
       status: null,
     };
@@ -100,6 +157,7 @@
           <button type="button" class="toggle-btn" data-view="week" aria-pressed="false">${esc(t('calendar.view_week'))}</button>
           <button type="button" class="toggle-btn" data-view="cycle" aria-pressed="false">${esc(t('calendar.view_cycle'))}</button>
         </div>
+        <select class="cal-type-select" aria-label="${esc(t('calendar.type_label'))}"></select>
       </div>
       <div class="cal-chips" role="group" aria-label="${esc(t('calendar.show_label'))}">
         ${KINDS.map(
@@ -109,6 +167,29 @@
       </div>
       <div class="cal-view" aria-live="polite"></div>`;
     const viewEl = container.querySelector('.cal-view');
+    const typeSelect = container.querySelector('.cal-type-select');
+    typeSelect.addEventListener('change', () => {
+      state.type = typeSelect.value;
+      draw();
+    });
+    const typeName = (id) => t(`event_presets.${id}_title`);
+    /** The dropdown: the types on the calendar (by name), then "Other events". */
+    function fillTypes() {
+      const present = new Set(state.events.map((e) => e.type || 'other'));
+      const ids = [...present]
+        .filter((id) => id !== 'other')
+        .sort((a, b) => typeName(a).localeCompare(typeName(b), lang));
+      if (present.has('other')) ids.push('other');
+      if (state.type && !present.has(state.type)) state.type = '';
+      typeSelect.innerHTML = [
+        `<option value="">${esc(t('calendar.type_all'))}</option>`,
+        ...ids.map(
+          (id) =>
+            `<option value="${esc(id)}">${esc(id === 'other' ? t('calendar.type_other') : typeName(id))}</option>`,
+        ),
+      ].join('');
+      typeSelect.value = state.type;
+    }
 
     container.querySelectorAll('[data-view]').forEach((btn) =>
       btn.addEventListener('click', () => {
@@ -157,7 +238,9 @@
 
     // ---------- drawing ----------
     function visible(evt) {
-      return state.kinds.has(evt.kind);
+      if (!state.kinds.has(evt.kind)) return false;
+      if (!state.type) return true;
+      return state.type === 'other' ? !evt.type : evt.type === state.type;
     }
 
     function draw() {
@@ -198,19 +281,21 @@
         if (!r) return '';
         return r.isKW ? t('calendar.kvk_short', { n: r.clockWeek }) : t('calendar.off_short');
       };
+      const { icons, byId } = eventTypes();
+      const crown = svgIcon(icons.crown, 'cal-ic is-crown');
       const kingHtml = (w0, compact) => {
         const { seat } = slot(w0);
         // Another cycle: a past week's seat isn't sent; a coming one is decided at its reset
         if (!seat) {
           if (w0 < cycle0) return '';
-          return `<span class="cal-king is-unknown">👑 ${esc(t('calendar.king_unknown'))}</span>`;
+          return `<span class="cal-king is-unknown">${crown}${esc(t('calendar.king_unknown'))}</span>`;
         }
         const who = seat.tag
           ? `<span class="ally-text"${seat.color ? ` style="--ally: ${esc(seat.color)}"` : ''}>[${esc(seat.tag)}]</span>`
           : esc(t('calendar.rank', { rank: seat.seat }));
-        if (compact) return `<span class="cal-king">👑 ${who}</span>`;
+        if (compact) return `<span class="cal-king">${crown}${who}</span>`;
         const when = seat.captured ? t('calendar.captured_friday') : t('calendar.captures_friday');
-        return `<span class="cal-king">👑 ${who} · ${esc(when)}</span>`;
+        return `<span class="cal-king">${crown}${who} · ${esc(when)}</span>`;
       };
       const dots = (list) =>
         [...new Set(list.map((e) => e.kind))]
@@ -229,16 +314,22 @@
             : '';
         const pills = [
           e.recurrence === '2days'
-            ? `<span class="ag-pill">${esc(t('calendar.every_2_days'))}</span>`
+            ? `<span class="ag-pill">${svgIcon(icons.repeats, 'cal-ic xs')}${esc(t('calendar.every_2_days'))}</span>`
             : '',
           e.recurrence === 'weekly'
-            ? `<span class="ag-pill">${esc(t('calendar.weekly'))}</span>`
+            ? `<span class="ag-pill">${svgIcon(icons.repeats, 'cal-ic xs')}${esc(t('calendar.weekly'))}</span>`
             : '',
           e.notify_target === 'everyone'
-            ? `<span class="ag-pill is-must">${esc(t('calendar.mandatory'))}</span>`
+            ? `<span class="ag-pill is-must">${svgIcon(icons.mandatory, 'cal-ic xs')}${esc(t('calendar.mandatory'))}</span>`
             : '',
         ].join('');
         const color = e.kind === 'alliance' && e.color ? ` style="--k: ${esc(e.color)}"` : '';
+        // Its type's icon (else an alliance shield or the server flag) and guide link
+        const type = e.type ? byId[e.type] : null;
+        const icon = svgIcon(type?.icon || (e.kind === 'alliance' ? icons.alliance : icons.server));
+        const guide = type?.guide
+          ? `<a class="ag-guide" href="/${esc(lang)}/guides/${esc(type.guide)}.html">${svgIcon(icons.guide, 'cal-ic xs')}${esc(t('calendar.read_guide'))}</a>`
+          : '';
         const actions = opts.canEdit?.(e)
           ? `<div class="ag-actions"><button type="button" class="btn-edit-event" data-event-id="${esc(e.id)}">${esc(t('calendar.edit'))}</button>
              <button type="button" class="btn-delete-event" data-event-id="${esc(e.id)}">${esc(t('calendar.delete'))}</button></div>`
@@ -250,10 +341,10 @@
               : `<b>${gtTime(e.s)}</b><small>GT</small><span>${esc(t('calendar.local_time', { time: localTime(e.s) }))}</span>`
           }</div>
           <div class="ag-body">${badge}
-            <div class="ag-title">${esc(e.title)}</div>
+            <div class="ag-title"><span class="ag-ic">${icon}</span><span>${esc(e.title)}</span></div>
             <div class="ag-meta"><span class="ag-kind">${esc(KIND_LABEL[e.kind])}</span>${
               e.allDay ? '' : `<span>${gtTime(e.s)}–${gtTime(e.e)} GT</span>`
-            }${pills}</div>
+            }${pills}${guide}</div>
             ${e.description ? `<div class="ag-desc">${esc(e.description)}</div>` : ''}
             ${actions}
           </div></li>`;
@@ -376,14 +467,16 @@
               s,
               e: Number.isFinite(end) ? end : s,
               kind: kindOf(e),
+              type: typeOf(e),
             };
           })
           .filter((e) => Number.isFinite(e.s))
           .sort((a, b) => a.s - b.s);
+        fillTypes();
         draw();
       },
     };
   }
 
-  window.CalendarViews = { create, kindOf };
+  window.CalendarViews = { create, kindOf, eventTypes, typeOf };
 })();

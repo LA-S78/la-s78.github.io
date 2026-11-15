@@ -64,13 +64,10 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
             <label for="evt-input-preset">{{ "calendar_events.preset" | t }}</label>
             <select id="evt-input-preset" class="cal-form-select">
               <option value="custom">{{ "calendar_events.preset_custom" | t }}</option>
-              <option value="crystal_cluster">{{ "calendar_events.preset_crystal_cluster" | t }}</option>
-              <option value="elixir_scramble">{{ "calendar_events.preset_elixir_scramble" | t }}</option>
-              <option value="survival_battle">{{ "calendar_events.preset_survival_battle" | t }}</option>
-              <option value="kill_event">{{ "calendar_events.preset_kill_event" | t }}</option>
-              <option value="kvk_battle">{{ "calendar_events.preset_kvk_battle" | t }}</option>
-              <option value="gear_event">{{ "calendar_events.preset_gear_event" | t }}</option>
-              <option value="cheese_trap">{{ "calendar_events.preset_cheese_trap" | t }}</option>
+              {%- comment -%} The event types the form offers (_data/event_types.yml) {%- endcomment -%}
+              {%- for type in site.data.event_types.types -%}{%- if type.preset %}
+              <option value="{{ type.id }}">{{ "calendar_events.preset_" | append: type.id | t }}</option>
+              {%- endif -%}{%- endfor %}
             </select>
           </div>
 
@@ -319,6 +316,12 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
 </div>
 
 <!-- Modular Scripts -->
+<!-- The event types (_data/event_types.yml), and their names in every language: older events
+     are matched to a type by title (js/calendar-views.js) -->
+<script type="application/json" id="event-types">{{ site.data.event_types | jsonify }}</script>
+<script type="application/json" id="event-type-names">{
+{%- for lang in site.languages %}"{{ lang }}": {{ site.data[lang].tools.event_presets | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor -%}
+}</script>
 <script src="/js/calendar-views.js"></script>
 <script src="/js/calendar.js"></script>
 <script type="module" src="/js/kvk-scheduler.js"></script>

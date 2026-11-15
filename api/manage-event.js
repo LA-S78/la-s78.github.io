@@ -3,6 +3,10 @@
 // Handles creating, editing and deleting calendar events
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken, verifySessionToken } from './_tokens.js';
+// The event types the form offers (generated from _data/event_types.yml by _scripts/build.rb)
+import EVENT_TYPES from './_event_types.js';
+
+const PRESET_TYPES = EVENT_TYPES.filter((t) => t.preset).map((t) => t.id);
 import { isSteward } from './_stewards.js';
 import { inLanguage, say } from './_messages.js';
 
@@ -86,6 +90,7 @@ async function respond(req, res) {
         },
         type: isGlobalAdmin ? 'custom' : 'alliance',
         color: f.color,
+        event_type: f.event_type,
         allDay: false,
         createdAt: new Date().toISOString(),
       };
@@ -135,6 +140,7 @@ async function respond(req, res) {
         custom_role_id: f.custom_role_id,
         reminder: f.reminder,
         color: f.color,
+        event_type: f.event_type,
         updatedAt: new Date().toISOString(),
       };
 
@@ -232,6 +238,7 @@ function cleanEventFields(eventData, isGlobalAdmin) {
     reminder = 'off',
     color = null,
     description = '',
+    event_type = null,
   } = eventData || {};
 
   if (!title || !date || !time_gt) return { error: say('api_events.required_fields') };
@@ -268,6 +275,9 @@ function cleanEventFields(eventData, isGlobalAdmin) {
     cleanColor = String(color).trim();
   }
 
+  // The event type it was made from (_data/event_types.yml, a form preset): known ones only
+  const cleanEventType = PRESET_TYPES.includes(event_type) ? event_type : null;
+
   // Game Time is UTC-2 => UTC = GT + 2 hours
   const [year, month, day] = date.split('-').map(Number);
   const startUtc = new Date(Date.UTC(year, month - 1, day, hh + 2, mm, 0));
@@ -288,6 +298,7 @@ function cleanEventFields(eventData, isGlobalAdmin) {
       custom_role_id: cleanCustomRoleId,
       reminder: cleanReminder,
       color: cleanColor,
+      event_type: cleanEventType,
     },
   };
 }

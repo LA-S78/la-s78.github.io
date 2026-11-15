@@ -392,57 +392,27 @@ async function initCalendar() {
     const presetSelect = document.getElementById('evt-input-preset');
     const submitBtn = document.getElementById('btn-submit-event');
 
-    // Presets fill the form in the page's language (event_presets.* in tools.yml).
-    const OPERATION_PRESETS = {
-      crystal_cluster: {
-        title: t('event_presets.crystal_cluster_title'),
-        color: '#7946C0',
-        duration: 0.5,
-        recurrence: 'weekly',
-        description: t('event_presets.crystal_cluster_desc'),
-      },
-      elixir_scramble: {
-        title: t('event_presets.elixir_scramble_title'),
-        color: '#24523B',
-        duration: 0.5,
-        recurrence: 'weekly',
-        description: t('event_presets.elixir_scramble_desc'),
-      },
-      survival_battle: {
-        title: t('event_presets.survival_battle_title'),
-        color: '#CF6214',
-        duration: 4.0,
-        recurrence: 'none',
-        description: t('event_presets.survival_battle_desc'),
-      },
-      kill_event: {
-        title: t('event_presets.kill_event_title'),
-        color: '#B12A2A',
-        duration: 24.0,
-        recurrence: 'none',
-        description: t('event_presets.kill_event_desc'),
-      },
-      kvk_battle: {
-        title: t('event_presets.kvk_battle_title'),
-        color: '#8ED2EF',
-        duration: 1.0,
-        recurrence: 'none',
-        description: t('event_presets.kvk_battle_desc'),
-      },
-      gear_event: {
-        title: t('event_presets.gear_event_title'),
-        color: '#303A40',
-        duration: 48.0,
-        recurrence: 'none',
-        description: t('event_presets.gear_event_desc'),
-      },
-      cheese_trap: {
-        title: t('event_presets.cheese_trap_title'),
-        color: '#FAB22F',
-        duration: 0.5,
-        recurrence: '2days',
-        description: t('event_presets.cheese_trap_desc'),
-      },
+    // Presets fill the form in the page's language (event_presets.* in tools.yml), from the
+    // shared list of event types (_data/event_types.yml, put in the page by calendar.html)
+    const OPERATION_PRESETS = Object.fromEntries(
+      (window.CalendarViews?.eventTypes().types || [])
+        .filter((type) => type.preset)
+        .map((type) => [
+          type.id,
+          {
+            title: t(`event_presets.${type.id}_title`),
+            color: type.color,
+            duration: type.duration,
+            recurrence: type.recurrence || 'none',
+            description: t(`event_presets.${type.id}_desc`),
+          },
+        ]),
+    );
+    /** Dark text on a light preset colour, white on a dark one. */
+    const textOn = (hex) => {
+      const n = parseInt(String(hex).replace('#', ''), 16);
+      const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+      return 0.299 * r + 0.587 * g + 0.114 * b > 150 ? '#0b0d11' : '#ffffff';
     };
 
     let activePresetColor = null;
@@ -464,7 +434,12 @@ async function initCalendar() {
       if (!evt || !formEl) return;
       editingEventId = eventId;
       resetPanelTheme();
-      if (presetSelect) presetSelect.value = 'custom';
+      // The event's type (stored, or matched by title for an older event), without refilling
+      // the fields from it
+      if (presetSelect) {
+        const type = window.CalendarViews?.typeOf(evt);
+        presetSelect.value = type && OPERATION_PRESETS[type] ? type : 'custom';
+      }
       activePresetColor = evt.color || null;
       // The occurrence shown, in Game Time (UTC-2): a repeating event continues from it
       const startGt = new Date(new Date(evt.start).getTime() - 2 * 3600000);
@@ -517,8 +492,7 @@ async function initCalendar() {
             mgmtPanel.style.boxShadow = `0 4px 20px ${selected.color}22`;
             submitBtn.style.background = selected.color;
             submitBtn.style.borderColor = selected.color;
-            submitBtn.style.color =
-              selected.color === '#FAB22F' || selected.color === '#8ED2EF' ? '#0b0d11' : '#ffffff';
+            submitBtn.style.color = textOn(selected.color);
           }
         } else {
           resetPanelTheme();
@@ -596,6 +570,9 @@ async function initCalendar() {
             notify_target: notifyTarget,
             custom_role_id: notifyTarget === 'custom_role' ? customRoleId : null,
             color: activePresetColor,
+            // The event type picked (stored, so the calendar can filter, show its icon and
+            // link its guide); none for a custom event
+            event_type: OPERATION_PRESETS[presetSelect?.value] ? presetSelect.value : null,
             description: document.getElementById('evt-input-details').value,
             reminder: reminderBox?.checked ? '1h' : 'off',
           },

@@ -1018,3 +1018,75 @@
     grid-template-columns: 6rem minmax(0, 1fr);
   }
 }
+
+/* Event types (_data/event_types.yml): the type dropdown, line icons, guide links */
+.cal-type-select {
+  flex: 1 1 180px;
+  min-width: 0;
+  max-width: 320px;
+  padding: 0.45rem 0.6rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+
+.cal-type-select:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.cal-ic {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.cal-ic.xs {
+  width: 12px;
+  height: 12px;
+}
+
+.cal-ic.is-crown {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  color: var(--gold);
+  vertical-align: -2px;
+}
+
+.ag-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ag-ic {
+  display: inline-flex;
+  color: var(--k);
+}
+
+.ag-pill,
+.ag-guide {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ag-guide {
+  color: var(--accent-color);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ag-guide:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 599px) {
+  .cal-type-select {
+    max-width: none;
+  }
+}

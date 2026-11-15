@@ -193,6 +193,12 @@ cities = (YAML.load_file('_data/cities.yml') rescue {}) || {}
 File.write('api/_cities_data.js', "export default #{JSON.generate(cities)};\n")
 puts "Generated api/_cities_data.js (#{cities.size} cities)"
 
+# The event types' ids and whether the form offers them (api/manage-event.js checks a saved
+# event's type against them)
+event_types = (YAML.load_file('_data/event_types.yml')['types'] || []).map { |t| { 'id' => t['id'], 'preset' => t['preset'] == true } }
+File.write('api/_event_types.js', "export default #{JSON.generate(event_types)};\n")
+puts "Generated api/_event_types.js (#{event_types.size} event types)"
+
 alliances = YAML.load_file('_data/alliances.yml')
 File.write('api/_alliances_data.js', "export default #{JSON.generate(alliances)};\n")
 puts "Generated api/_alliances_data.js (#{alliances['colors'].size} alliance colours)"
