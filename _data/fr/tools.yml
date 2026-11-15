@@ -374,16 +374,16 @@ calendar:
   badge_awaiting: "⏳ En attente du résultat de la Guerre des Royaumes"
   badge_open: "🎁 Récompenses ouvertes"
   set2_off_week: Recommandation du Roi uniquement (pas de Guerre des Royaumes).
-  set2_won: 'Guerre des Royaumes remportée : récompense du Roi de la Bataille également ouverte.'
+  set2_won: 'Guerre des Royaumes gagnée : récompense du Roi de la Bataille également ouverte.'
   set2_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement.'
-  set2_pending: Récompense du Roi de la Bataille si la guerre de samedi est remportée ; le Roi distribue les prix après le résultat.
-  rewards_open_until: Récompenses de {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
-  rewards_closed: Les récompenses sont fermées. Les prochaines s'ouvrent le vendredi vers 20:00 GT, après l'événement du capitole.
+  set2_pending: Récompense du Roi de la Bataille si la guerre de samedi est gagnée ; le Roi distribue après le résultat.
+  rewards_open_until: Récompenses {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
+  rewards_closed: Les récompenses sont fermées. Ouverture suivante vendredi vers 20:00 GT, après l'événement du Capitole.
   capitol_holder: DÉTENTEUR DU CAPITOLE
   current_holder: DÉTENTEUR ACTUEL DU CAPITOLE
   next_holder: PROCHAIN DÉTENTEUR DU CAPITOLE
   rank: 'Rang #{rank}'
-  rank_override: 'Rang #{rank} (Prioritaire)'
+  rank_override: 'Rang #{rank} (Priorité)'
   rank_override_schedule: 'Rang #{rank} • Planning prioritaire'
   captured_friday: Capturé vendredi
   captures_today: Captures aujourd'hui
@@ -396,10 +396,14 @@ calendar:
   saturday: Samedi
   today: "🔥 AUJOURD'HUI"
   none_this_week: Aucun cette semaine
-  upcoming: Opérations et jalons à venir
-  times_shown: Horaires affichés en {gt} & votre heure locale
+  upcoming: Opérations & Jalons à venir
+  times_shown: Heures affichées en {gt} & votre heure locale
   gt_label: Game Time (UTC-2)
   view_label: Vue calendrier
+  type_label: Type d'événement
+  type_all: Tous les événements
+  type_other: Autres événements
+  read_guide: Guide
   view_week: Semaine
   view_cycle: Cycle
   show_label: Afficher les types d'événements
@@ -414,8 +418,8 @@ calendar:
   next_week_aria: Semaine suivante
   this_cycle: Ce cycle
   kvk_short: KvK {n}
-  off_short: 'Off'
-  king_unknown: Décidé à la réinitialisation
+  off_short: Repos
+  king_unknown: Décidé lors de la réinitialisation
   day_today: Aujourd'hui
   day_tomorrow: Demain
   day_yesterday: Hier
@@ -424,35 +428,36 @@ calendar:
   nothing_planned: Rien de prévu
   now_line: Maintenant · {time} GT
   local_time: "{time} locale"
-  happening_now: En cours · se termine dans {time}
-  next_up: À suivre · dans {time}
+  until: jusqu'à {when} GT
+  happening_now: En cours · fin dans {time}
+  next_up: Suivant · dans {time}
   dur_m: "{m}m"
   dur_h: "{h}h"
   dur_hm: "{h}h {m}m"
   dur_dh: "{d}j {h}h"
-  ev_capture_title_open: "👑 Capture du Capitole"
-  ev_capture_desc_open: Les sièges de ce cycle sont décidés lors de sa réinitialisation.
+  ev_capture_title_open: Capture du Capitole
+  ev_capture_desc_open: Les sièges de ce cycle sont décidés à sa réinitialisation.
   all_day: Toute la journée
-  every_2_days: "🔁 Tous les 2 jours"
-  weekly: "🔁 Hebdomadaire"
-  mandatory: "🚨 Obligatoire"
+  every_2_days: Tous les 2 jours
+  weekly: Hebdomadaire
+  mandatory: Obligatoire
   edit: "✏️ Modifier"
   delete: "🗑️ Supprimer"
-  ev_capture_title: "👑 Capture du Capitole — {who}"
-  ev_capture_desc: "{who} ({rank}) capture le Capitole le vendredi."
-  ev_kw_title: "⚔️ Bataille de la Guerre des Royaumes"
+  ev_capture_title: Capture du Capitole — {who}
+  ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
+  ev_kw_title: Bataille de Guerre des Royaumes
   ev_kw_desc: Début à 12:00 GT, se termine généralement vers 14:00 GT. Une victoire débloque les coffres de récompense du Roi de la Bataille en plus de la Recommandation du Roi.
-  ev_open_title: "🎁 Récompenses ouvertes — {week}"
-  ev_open_desc_kw: La Recommandation du Roi s'ouvre après l'événement du capitole. La récompense du Roi de la Bataille suit si la Guerre des Royaumes de samedi est gagnée ; le Roi distribue les prix après le résultat.
-  ev_open_desc: La Recommandation du Roi s'ouvre après l'événement du capitole (pas de Guerre des Royaumes cette semaine).
-  ev_close_title: "⌛ Fermeture des récompenses — {week}"
-  ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette heure.'
+  ev_open_title: Récompenses ouvertes — {week}
+  ev_open_desc_kw: La Recommandation du Roi s'ouvre après l'événement du Capitole. La récompense du Roi de la Bataille suit si la Guerre des Royaumes de samedi est gagnée ; le Roi distribue après le résultat.
+  ev_open_desc: La Recommandation du Roi s'ouvre après l'événement du Capitole (pas de Guerre des Royaumes cette semaine).
+  ev_close_title: Récompenses fermées — {week}
+  ev_close_desc: 'Les coffres expirent mercredi à 00:00 GT : distribuez tout avant.'
 calendar_events:
-  reminder: Rappeler sur Discord 1 heure avant
-  reminder_hint: Publié dans le canal d'alerte de votre alliance, pingant le rôle choisi ci-dessus.
-  reminder_hint_server: Publié dans le canal d'alerte du Discord NAP (et dans les alliances ayant opté pour), pingant le rôle choisi ci-dessus.
-  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : exécutez /registerbot dans votre Discord pour que les rappels puissent être publiés.'
-  reminder_no_server_channel: Le canal d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), les rappels du serveur ne peuvent donc pas être publiés.
+  reminder: Rappel sur Discord 1 heure avant
+  reminder_hint: Publié dans le canal d'alerte de votre alliance, en pingant le rôle choisi ci-dessus.
+  reminder_hint_server: Publié dans le canal d'alerte Discord du NAP (et dans les alliances qui ont choisi cette option), en pingant le rôle choisi ci-dessus.
+  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : lancez /registerbot dans votre Discord pour que les rappels puissent être publiés.'
+  reminder_no_server_channel: Le canal d'alerte du NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), donc les rappels du serveur ne peuvent pas être publiés.
   edit_heading: Modifier l'événement
   scope_label: Événements à gérer
   scope_server: "🌐 Événements du serveur"
@@ -460,47 +465,51 @@ calendar_events:
   save_changes: "💾 Enregistrer les modifications"
   manage_mode: MODE GESTION
   session_active: Session authentifiée active
-  schedule_operation: "➕ Programmer une opération"
+  schedule_operation: "➕ Planifier une opération"
   create_operation: Créer une opération
   kingdom_admin: "👑 ADMIN ROYAUME"
-  kingdom_desc: Programmation des alertes et opérations à l'échelle du royaume
-  kingdom_heading: Créer une opération de royaume ([GLOBAL])
+  kingdom_desc: Planification d'alertes et d'opérations pour tout le Royaume
+  kingdom_heading: Créer une opération pour le Royaume ([GLOBAL])
   leadership: "🛡️ DIRECTION [{tag}]"
   leadership_desc: Gestion des opérations internes pour [{tag}]
   alliance_heading: Créer une opération [{tag}]
-  preset: Préréglage d'opération
-  preset_custom: "🛠️ Opération personnalisée (Vide)"
+  preset: Type d'événement
+  type_custom: Personnalisé
+  type_custom_hint: Formulaire vierge
+  duration_h: "{n}h"
+  preset_custom: "🛠️ Opération personnalisée (Vierge)"
   preset_crystal_cluster: "🔮 Vallée de Cristal (0,5h)"
-  preset_elixir_scramble: "🧪 Mêlée d'Élixir (0,5h)"
+  preset_elixir_scramble: "🧪 Mêlée Royale (0,5h)"
   preset_survival_battle: "⚔️ Bataille de Survie (4,0h)"
-  preset_kill_event: "🩸 Événement de Tuerie (24,0h)"
+  preset_kill_event: "🩸 Événement de kills (24,0h)"
   preset_kvk_battle: "👑 Bataille KvK (1,0h)"
-  preset_gear_event: "🛡️ Événement d'Équipement (48,0h)"
+  preset_undead_siege: "💀 Siège des Morts-Vivants (1,0h)"
+  preset_gear_upgrade: "🛡️ Amélioration d'équipement (48,0h)"
   preset_cheese_trap: "🧀 Piège à Fromage (0,5h)"
   title: Titre de l'événement
-  title_example: 'ex: Drill de défense de ruche ou Assaut d''avant-poste'
+  title_example: 'ex: Défense de ruche ou Assaut d''avant-poste'
   date: Date de début (AAAA-MM-JJ)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time du serveur (se cale sur des tranches de 5 minutes)
+  time_hint: Game Time du serveur (s'ajuste par tranches de 5 minutes)
   duration: Durée (Heures)
   frequency: Fréquence
   once: Événement unique (Ne se répète pas)
   every_2_days: Répétition tous les 2 jours
-  weekly: Répétition hebdomadaire (Même jour et heure)
+  weekly: Répétition hebdomadaire (Même jour & heure)
   alert_level: Niveau d'alerte Discord
-  notify_role: "🔔 Ping le rôle d'alliance par défaut (ou @everyone par défaut)"
-  notify_custom: "🎯 Cible un ID de rôle spécifique (remplacement ponctuel)"
+  notify_role: "🔔 Pinger le rôle d'alliance par défaut (Joker vers @everyone)"
+  notify_custom: "🎯 Cibler un ID de rôle spécifique (Priorité unique)"
   notify_everyone: "🚨 Forcer la diffusion @everyone (Opération obligatoire)"
   notify_none: "🔕 Silencieux (Calendrier uniquement - Pas de ping Discord)"
   role_id: ID de rôle spécifique
-  role_id_hint: "(Requis uniquement pour Cible un ID de rôle spécifique)"
+  role_id_hint: "(Requis uniquement pour la cible spécifique)"
   role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
   details: Instructions / Point de ralliement
-  details_example: 'ex: Rassemblement à Hive Alpha. R4 dirigent les ralliements. Communications vocales activées.'
+  details_example: 'ex: Rassemblement à la ruche Alpha. Les R4 lancent les ralliements. Communications vocales activées.'
   publish: Publier dans le calendrier
   publishing: Publication en cours...
-  bad_time: Le Game Time doit être réglé par tranches de 5 minutes (:00, :05, :10, etc.)
-  bad_role: Veuillez entrer un ID de rôle Discord valide de 17-20 chiffres pour la cible d'alerte personnalisée.
+  bad_time: Le Game Time doit être défini par tranches de 5 minutes (:00, :05, :10, etc.)
+  bad_role: Veuillez entrer un ID de rôle Discord valide de 17-20 chiffres pour la cible de l'alerte personnalisée.
   save_failed: Échec de l'enregistrement de l'événement
   published: Opération publiée avec succès !
   confirm_delete: Êtes-vous sûr de vouloir supprimer cette opération du calendrier ?
@@ -584,15 +593,20 @@ event_presets:
   crystal_cluster_title: Vallée de Cristal
   crystal_cluster_desc: Événement Chacun pour soi chaque dimanche
   elixir_scramble_title: Mêlée Royale
-  elixir_scramble_desc: Événement de combat d'équipe chaque vendredi
+  elixir_scramble_desc: Événement de bataille en équipe chaque vendredi
   survival_battle_title: Bataille de Survie
   survival_battle_desc: Terminez des tâches pour gagner des récompenses
-  kill_event_title: Événement de Tuerie
-  kill_event_desc: Les envahisseurs d'autres serveurs arrivent ! Activez votre bouclier
-  kvk_battle_title: Guerre des Royaumes
+  kill_event_title: Événement de Kills
+  kill_event_desc: Des envahisseurs d'autres serveurs arrivent ! Activez vos boucliers
+  kvk_battle_title: Bataille KvK
   kvk_battle_desc: La bataille pour le Château Royal commence !
-  gear_event_title: Événement d'Équipement
-  gear_event_desc: Soyez récompensé pour l'amélioration de votre équipement
+  gear_upgrade_title: Amélioration d'équipement
+  gear_upgrade_desc: Soyez récompensé pour l'amélioration de votre équipement
+  undead_siege_title: Siège des Morts-Vivants
+  undead_siege_desc: 'Les morts-vivants font le siège : tenez la position'
+  capitol_capture_title: Capture du Capitole
+  rewards_open_title: Récompenses ouvertes
+  rewards_close_title: Récompenses fermées
   cheese_trap_title: Piège à Fromage
   cheese_trap_desc: Aidez à repousser le Voleur de Fromage
 alliance_planner:
