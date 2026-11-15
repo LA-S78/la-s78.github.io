@@ -21,6 +21,7 @@ module PrecacheList
     '/js/mermaid.min.js',    # 3.3 MB, only used by the internal test page
     '/images/compendium-desk.webp', # only on /reset, which empties the saved copy anyway
     '/images/screenshot-',   # only the browser's "Install app" screen uses them (site.webmanifest)
+    '/images/events/',       # the calendar's event pictures: downloaded when the calendar shows them
     '/reset.html'            # must always come from the network (it clears the saved copy)
   ].freeze
 

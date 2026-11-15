@@ -1018,3 +1018,119 @@
     grid-template-columns: 6rem minmax(0, 1fr);
   }
 }
+
+/* Event types (_data/event_types.yml): the type dropdown, line icons, guide links */
+/* The upgraded dropdown's box takes the toolbar room (js/site-select.js) */
+.cal-toolbar .site-select {
+  flex: 1 1 180px;
+  max-width: 320px;
+}
+
+.cal-type-select {
+  flex: 1 1 180px;
+  min-width: 0;
+  max-width: 320px;
+  padding: 0.45rem 0.6rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+
+.cal-type-select:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.cal-ic {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.cal-ic.xs {
+  width: 12px;
+  height: 12px;
+}
+
+.cal-ic.is-crown {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  color: var(--gold);
+  vertical-align: -2px;
+}
+
+.ag-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ag-ic {
+  display: inline-flex;
+  color: var(--k);
+}
+
+.ag-pill,
+.ag-guide {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ag-guide {
+  color: var(--accent-color);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ag-guide:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 599px) {
+  .cal-type-select,
+  .cal-toolbar .site-select {
+    max-width: none;
+  }
+}
+
+/* An event type's picture behind its card (_data/event_types.yml `picture`): the scene on
+   the right, faded into the theme's card colour towards the left where the time and title
+   sit, so text stays readable in every theme */
+.ag-event.has-pic {
+  --pic-fade: var(--card-bg-solid, #1b1714);
+  background:
+    linear-gradient(
+      90deg,
+      var(--pic-fade) 0%,
+      var(--pic-fade) 22%,
+      color-mix(in srgb, var(--pic-fade) 82%, transparent) 45%,
+      color-mix(in srgb, var(--pic-fade) 55%, transparent) 75%,
+      color-mix(in srgb, var(--pic-fade) 40%, transparent) 100%
+    ),
+    var(--pic) right center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.ag-event.has-pic.is-live {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 0%,
+      color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 22%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 82%, transparent) 45%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 55%, transparent) 75%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 40%, transparent) 100%
+    ),
+    var(--pic) right center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.ag-event.has-pic .ag-desc,
+.ag-event.has-pic .ag-meta {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}

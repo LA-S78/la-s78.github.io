@@ -59,18 +59,16 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         <h3 class="form-title" id="form-heading">{{ "calendar_events.create_operation" | t }}</h3>
 
         <div class="form-grid">
-          <!-- Preset Selector -->
+          <!-- The event type: the site's dropdown (js/site-select.js) with each type's icon and
+               usual length, from _data/event_types.yml. Picking one fills in the form; "Custom"
+               leaves it blank. -->
           <div class="form-group form-col-full">
             <label for="evt-input-preset">{{ "calendar_events.preset" | t }}</label>
-            <select id="evt-input-preset" class="cal-form-select">
-              <option value="custom">{{ "calendar_events.preset_custom" | t }}</option>
-              <option value="crystal_cluster">{{ "calendar_events.preset_crystal_cluster" | t }}</option>
-              <option value="elixir_scramble">{{ "calendar_events.preset_elixir_scramble" | t }}</option>
-              <option value="survival_battle">{{ "calendar_events.preset_survival_battle" | t }}</option>
-              <option value="kill_event">{{ "calendar_events.preset_kill_event" | t }}</option>
-              <option value="kvk_battle">{{ "calendar_events.preset_kvk_battle" | t }}</option>
-              <option value="gear_event">{{ "calendar_events.preset_gear_event" | t }}</option>
-              <option value="cheese_trap">{{ "calendar_events.preset_cheese_trap" | t }}</option>
+            <select id="evt-input-preset" class="cal-form-select" data-site-select>
+              <option value="custom" data-icon='<path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>' data-hint="{{ "calendar_events.type_custom_hint" | t }}">{{ "calendar_events.type_custom" | t }}</option>
+              {%- for type in site.data.event_types.types -%}{%- if type.preset %}
+              <option value="{{ type.id }}" data-icon="{{ type.icon | escape }}" data-hint="{{ "calendar_events.duration_h" | t: "n", type.duration }}">{{ "event_presets." | append: type.id | append: "_title" | t }}</option>
+              {%- endif -%}{%- endfor %}
             </select>
           </div>
 
@@ -319,6 +317,12 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
 </div>
 
 <!-- Modular Scripts -->
+<!-- The event types (_data/event_types.yml), and their names in every language: older events
+     are matched to a type by title (js/calendar-views.js) -->
+<script type="application/json" id="event-types">{{ site.data.event_types | jsonify }}</script>
+<script type="application/json" id="event-type-names">{
+{%- for lang in site.languages %}"{{ lang }}": {{ site.data[lang].tools.event_presets | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor -%}
+}</script>
 <script src="/js/calendar-views.js"></script>
 <script src="/js/calendar.js"></script>
 <script type="module" src="/js/kvk-scheduler.js"></script>

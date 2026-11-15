@@ -165,6 +165,7 @@ export default async function handler(req, res) {
       start: new Date(week.captureTimestamp * 1000).toISOString(),
       end: new Date((week.captureTimestamp + 86400) * 1000).toISOString(),
       type: 'rotation',
+      event_type: 'capitol_capture',
       allDay: true,
     });
 
@@ -181,6 +182,7 @@ export default async function handler(req, res) {
         start: new Date(battleStart).toISOString(),
         end: new Date(battleStart + 2 * 3600000).toISOString(),
         type: 'war',
+        event_type: 'kvk_battle',
         allDay: false,
       });
     }
@@ -199,6 +201,7 @@ export default async function handler(req, res) {
         ? "King's Commendation opens after the capitol event. King of Battle Reward follows if Saturday's Kingdom War is won; the King hands out after the result."
         : "King's Commendation opens after the capitol event (no Kingdom War this week).",
       i18n: { key: 'rewards_open', vars: { week: p.week, kw: p.kwWeek } },
+      event_type: 'rewards_open',
       start: new Date(p.opensAt).toISOString(),
       end: new Date(p.opensAt + 3600000).toISOString(),
       type: 'rotation',
@@ -210,6 +213,7 @@ export default async function handler(req, res) {
       title: `⌛ Rewards Close — ${p.weekName}`,
       description: 'Chests expire at Wednesday 00:00 GT: hand out everything before then.',
       i18n: { key: 'rewards_close', vars: { week: p.week } },
+      event_type: 'rewards_close',
       start: new Date(p.closesAt - 3600000).toISOString(),
       end: new Date(p.closesAt).toISOString(),
       type: 'rotation',
