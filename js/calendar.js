@@ -389,7 +389,16 @@ async function initCalendar() {
     const btnCancel = document.getElementById('btn-cancel-event-form');
     const notifySelect = document.getElementById('evt-input-notify');
     const customRoleInput = document.getElementById('evt-input-role-id');
-    const presetSelect = document.getElementById('evt-input-preset');
+    // The event type tiles (radio buttons; calendar.html): read and set the one picked
+    const presetTiles = document.getElementById('evt-input-preset');
+    const presetValue = () =>
+      presetTiles?.querySelector('input[name="evt-type"]:checked')?.value || 'custom';
+    const setPreset = (id) => {
+      const input =
+        presetTiles?.querySelector(`input[name="evt-type"][value="${CSS.escape(id)}"]`) ||
+        presetTiles?.querySelector('input[name="evt-type"][value="custom"]');
+      if (input) input.checked = true;
+    };
     const submitBtn = document.getElementById('btn-submit-event');
 
     // Presets fill the form in the page's language (event_presets.* in tools.yml), from the
@@ -436,10 +445,8 @@ async function initCalendar() {
       resetPanelTheme();
       // The event's type (stored, or matched by title for an older event), without refilling
       // the fields from it
-      if (presetSelect) {
-        const type = window.CalendarViews?.typeOf(evt);
-        presetSelect.value = type && OPERATION_PRESETS[type] ? type : 'custom';
-      }
+      const type = window.CalendarViews?.typeOf(evt);
+      setPreset(type && OPERATION_PRESETS[type] ? type : 'custom');
       activePresetColor = evt.color || null;
       // The occurrence shown, in Game Time (UTC-2): a repeating event continues from it
       const startGt = new Date(new Date(evt.start).getTime() - 2 * 3600000);
@@ -476,9 +483,9 @@ async function initCalendar() {
       submitBtn.style.color = '';
     }
 
-    if (presetSelect) {
-      presetSelect.addEventListener('change', () => {
-        const selected = OPERATION_PRESETS[presetSelect.value];
+    if (presetTiles) {
+      presetTiles.addEventListener('change', () => {
+        const selected = OPERATION_PRESETS[presetValue()];
         if (selected) {
           document.getElementById('evt-input-title').value = selected.title;
           document.getElementById('evt-input-duration').value = selected.duration;
@@ -572,7 +579,7 @@ async function initCalendar() {
             color: activePresetColor,
             // The event type picked (stored, so the calendar can filter, show its icon and
             // link its guide); none for a custom event
-            event_type: OPERATION_PRESETS[presetSelect?.value] ? presetSelect.value : null,
+            event_type: OPERATION_PRESETS[presetValue()] ? presetValue() : null,
             description: document.getElementById('evt-input-details').value,
             reminder: reminderBox?.checked ? '1h' : 'off',
           },

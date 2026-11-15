@@ -323,9 +323,14 @@
             ? `<span class="ag-pill is-must">${svgIcon(icons.mandatory, 'cal-ic xs')}${esc(t('calendar.mandatory'))}</span>`
             : '',
         ].join('');
-        const color = e.kind === 'alliance' && e.color ? ` style="--k: ${esc(e.color)}"` : '';
-        // Its type's icon (else an alliance shield or the server flag) and guide link
         const type = e.type ? byId[e.type] : null;
+        // The event's colour (alliance events) and its type's picture behind the card
+        const styles = [
+          e.kind === 'alliance' && e.color ? `--k: ${esc(e.color)}` : '',
+          type?.picture ? `--pic: url('/images/events/${esc(type.picture)}')` : '',
+        ].filter(Boolean);
+        const color = styles.length ? ` style="${styles.join('; ')}"` : '';
+        // Its type's icon (else an alliance shield or the server flag) and guide link
         const icon = svgIcon(type?.icon || (e.kind === 'alliance' ? icons.alliance : icons.server));
         const guide = type?.guide
           ? `<a class="ag-guide" href="/${esc(lang)}/guides/${esc(type.guide)}.html">${svgIcon(icons.guide, 'cal-ic xs')}${esc(t('calendar.read_guide'))}</a>`
@@ -334,7 +339,7 @@
           ? `<div class="ag-actions"><button type="button" class="btn-edit-event" data-event-id="${esc(e.id)}">${esc(t('calendar.edit'))}</button>
              <button type="button" class="btn-delete-event" data-event-id="${esc(e.id)}">${esc(t('calendar.delete'))}</button></div>`
           : '';
-        return `<li class="ag-event k-${e.kind}${isLive ? ' is-live' : ''}${isNext ? ' is-next' : ''}${past ? ' is-past' : ''}"${color}>
+        return `<li class="ag-event k-${e.kind}${type?.picture ? ' has-pic' : ''}${isLive ? ' is-live' : ''}${isNext ? ' is-next' : ''}${past ? ' is-past' : ''}"${color}>
           <div class="ag-time">${
             e.allDay
               ? `<b>${esc(t('calendar.all_day'))}</b>`
@@ -343,7 +348,11 @@
           <div class="ag-body">${badge}
             <div class="ag-title"><span class="ag-ic">${icon}</span><span>${esc(e.title)}</span></div>
             <div class="ag-meta"><span class="ag-kind">${esc(KIND_LABEL[e.kind])}</span>${
-              e.allDay ? '' : `<span>${gtTime(e.s)}–${gtTime(e.e)} GT</span>`
+              e.allDay
+                ? ''
+                : e.e - e.s >= DAY
+                  ? `<span>${esc(t('calendar.until', { when: `${dateText(e.e, { weekday: 'short' })} ${gtTime(e.e)}` }))}</span>`
+                  : `<span>${gtTime(e.s)}–${gtTime(e.e)} GT</span>`
             }${pills}${guide}</div>
             ${e.description ? `<div class="ag-desc">${esc(e.description)}</div>` : ''}
             ${actions}

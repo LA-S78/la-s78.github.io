@@ -1090,3 +1090,126 @@
     max-width: none;
   }
 }
+
+/* An event type's picture behind its card (_data/event_types.yml `picture`): the scene on
+   the right, faded into the theme's card colour towards the left where the time and title
+   sit, so text stays readable in every theme */
+.ag-event.has-pic {
+  --pic-fade: var(--card-bg-solid, #1b1714);
+  background:
+    linear-gradient(
+      90deg,
+      var(--pic-fade) 0%,
+      var(--pic-fade) 22%,
+      color-mix(in srgb, var(--pic-fade) 82%, transparent) 45%,
+      color-mix(in srgb, var(--pic-fade) 55%, transparent) 75%,
+      color-mix(in srgb, var(--pic-fade) 40%, transparent) 100%
+    ),
+    var(--pic) right center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.ag-event.has-pic.is-live {
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 0%,
+      color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 22%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 82%, transparent) 45%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 55%, transparent) 75%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 40%, transparent) 100%
+    ),
+    var(--pic) right center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.ag-event.has-pic .ag-desc,
+.ag-event.has-pic .ag-meta {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* The scheduling form's event type tiles (radio buttons, calendar.html) */
+.type-tiles {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+/* The heading reads like the form's other labels */
+.type-tiles legend {
+  padding: 0;
+  margin-bottom: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.type-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 6px;
+}
+
+.type-tiles .type-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 4px 8px;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin: 0;
+  color: var(--text-main);
+  font-size: inherit;
+  font-weight: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* The radio itself is hidden; the tile shows its state (and keeps keyboard focus) */
+.type-tile input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.type-tile-ic {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-color);
+}
+
+.type-tile-name {
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.type-tile-len {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+}
+
+.type-tile:hover {
+  border-color: var(--accent-color);
+}
+
+.type-tile:has(input:checked) {
+  border-color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color) 16%, var(--surface-dark));
+  box-shadow: 0 0 0 1px var(--accent-color);
+}
+
+.type-tile:has(input:focus-visible) {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+@media (max-width: 599px) {
+  .type-tile-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
