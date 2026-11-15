@@ -2,7 +2,6 @@
 import {
   describeRotation,
   getCycleState,
-  getScheduleSlot,
   DEFAULT_CALENDAR_CONFIG,
 } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
@@ -122,91 +121,76 @@ export default async function handler(req, res) {
   // 1. Generate System Milestones (Capitol Captures & War Battle Days)
   const cycleMilestones = [];
 
-  const nextWeekNum = (currentStatus.currentWeekNumber % 4) + 1;
-  const nextWeekConfig = calConfig.capitol_rotation.find((w) => w.week === nextWeekNum);
+  // Every week the calendar can show (owner decision, 2026-11-15: a week view with last and
+  // next week, and the whole cycle as a grid): from the week before this one (or the cycle's
+  // start, if earlier) to the week after this one (or the cycle's end, if later). Each week
+  // gets its Friday Capitol capture (with the alliance in this cycle's rotation; another
+  // cycle's seat is decided at its reset, so none is named), its Saturday Kingdom War battle
+  // (KvK weeks), and its reward period (opens Friday ~20:00 GT, closes Wednesday 00:00 GT).
+  const DAY_MS = 86400 * 1000;
+  const WEEK_MS = 7 * DAY_MS;
+  const anchorMs = new Date(calConfig.cycle_anchor).getTime();
+  const cycleMs = (Number(calConfig.cycle_length_days) || 28) * DAY_MS;
+  const cycleOf = (ms) => Math.floor((ms - anchorMs) / cycleMs);
+  const todayStartMs = anchorMs + Math.floor((now.getTime() - anchorMs) / DAY_MS) * DAY_MS;
+  const thisWeekStartMs = todayStartMs - (currentStatus.dayOfWeekNumber - 1) * DAY_MS;
+  const thisCycleStartMs = todayStartMs - (currentStatus.cycleDay - 1) * DAY_MS;
+  const rangeStartMs = Math.min(thisWeekStartMs - WEEK_MS, thisCycleStartMs);
+  const rangeEndMs = Math.max(thisWeekStartMs + 2 * WEEK_MS, thisCycleStartMs + cycleMs);
+  const seatOf = Object.fromEntries((currentStatus.rotation || []).map((r) => [r.week, r]));
 
-  const nextSlotKey = getScheduleSlot(nextWeekNum, calConfig).slotKey;
-  const nextScheduledTag = activeSchedule?.[nextSlotKey]?.trim();
-
-  let nextHolderTag = `Rank #${nextWeekConfig?.capitol_rank}`;
-  let nextHolderRankLabel = `Rank #${nextWeekConfig?.capitol_rank}`;
-  // The same as numbers, for the page to word in its own language (js/calendar.js).
-  let nextHolderRank = nextWeekConfig?.capitol_rank ?? null;
-  let nextHolderOverride = false;
-
-  if (nextScheduledTag) {
-    nextHolderTag = `[${nextScheduledTag}]`;
-    const nextActualRank = alliances[nextScheduledTag]?.rank;
-    if (nextActualRank) {
-      nextHolderOverride = isOverride(nextSlotKey, nextScheduledTag);
-      nextHolderRank = parseInt(nextActualRank, 10);
-      nextHolderRankLabel = nextHolderOverride
-        ? `Rank #${nextActualRank} • Override Schedule`
-        : `Rank #${nextActualRank}`;
-    }
-  } else {
-    const nextHolderEntry = Object.entries(alliances).find(
-      ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank,
-    );
-    if (nextHolderEntry) nextHolderTag = `[${nextHolderEntry[0]}]`;
-  }
-
-  // The upcoming Capitol capture. The week's alliance captures it on Friday: until then
-  // that is this week's alliance, afterwards next week's.
-  const upcomingIsNextWeek = currentStatus.capitolCaptured;
-  const captureTs = currentStatus.captureTimestamp + (upcomingIsNextWeek ? 7 * 86400 : 0);
-  const capturerTag = upcomingIsNextWeek ? nextHolderTag : capitolHolderTag;
-  let capturerRankLabel = nextHolderRankLabel;
-  let capturerRank = nextHolderRank;
-  let capturerOverride = nextHolderOverride;
-  if (!upcomingIsNextWeek) {
-    capturerRankLabel = currentStatus.isOverrideWeek
-      ? `Rank #${currentStatus.holderActualRank} • Override Schedule`
-      : `Rank #${currentStatus.holderActualRank || currentStatus.capitolRank}`;
-    capturerRank = currentStatus.isOverrideWeek
-      ? currentStatus.holderActualRank
-      : currentStatus.holderActualRank || currentStatus.capitolRank;
-    capturerOverride = Boolean(currentStatus.isOverrideWeek);
-  }
-
-  cycleMilestones.push({
-    id: `sys-capture-w${upcomingIsNextWeek ? nextWeekNum : currentStatus.currentWeekNumber}`,
-    scope: 'global',
-    title: `👑 Capitol Capture — ${capturerTag}`,
-    description: `${capturerTag} (${capturerRankLabel}) captures the Capitol on Friday.`,
-    // The site's own milestones carry a key and values, so each page can word them in its
-    // language (js/calendar.js); title/description stay in English for anything else.
-    i18n: {
-      key: 'capture',
-      vars: { who: capturerTag, rank: capturerRank, override: capturerOverride },
-    },
-    start: new Date(captureTs * 1000).toISOString(),
-    end: new Date((captureTs + 86400) * 1000).toISOString(),
-    type: 'rotation',
-    allDay: true,
-  });
-
-  // Kingdom War battle: Saturday from 12:00 GT, usually over by about 14:00 GT
-  if (currentStatus.isKW) {
-    const battleStart = currentStatus.kwBattleTimestamp * 1000 + 12 * 3600000;
+  for (let weekStart = rangeStartMs; weekStart < rangeEndMs; weekStart += WEEK_MS) {
+    const week = getCycleState(new Date(weekStart + 3600000), calConfig);
+    const seat =
+      cycleOf(weekStart) === cycleOf(now.getTime()) ? seatOf[week.currentWeekNumber] : null;
+    const who = seat ? (seat.tag ? `[${seat.tag}]` : `Rank #${seat.seat}`) : null;
+    const rankLabel = seat?.rank
+      ? seat.override
+        ? `Rank #${seat.rank} • Override Schedule`
+        : `Rank #${seat.rank}`
+      : null;
     cycleMilestones.push({
-      id: `sys-kw-battle-w${currentStatus.currentWeekNumber}`,
+      id: `sys-capture-${new Date(week.captureTimestamp * 1000).toISOString()}`,
       scope: 'global',
-      title: '⚔️ Kingdom War Battle',
-      description:
-        "Starts 12:00 GT, usually over by about 14:00 GT. A win opens the King of Battle Reward chests on top of the King's Commendation.",
-      i18n: { key: 'kw_battle', vars: {} },
-      start: new Date(battleStart).toISOString(),
-      end: new Date(battleStart + 2 * 3600000).toISOString(),
-      type: 'war',
-      allDay: false,
+      title: who ? `👑 Capitol Capture — ${who}` : '👑 Capitol Capture',
+      description: who
+        ? `${who}${rankLabel ? ` (${rankLabel})` : ''} captures the Capitol on Friday.`
+        : "This cycle's seats are decided at its reset.",
+      // The site's own milestones carry a key and values, so each page can word them in its
+      // language (js/calendar.js); title/description stay in English for anything else.
+      i18n: {
+        key: 'capture',
+        vars: { who, rank: seat?.rank ?? null, override: Boolean(seat?.override) },
+      },
+      start: new Date(week.captureTimestamp * 1000).toISOString(),
+      end: new Date((week.captureTimestamp + 86400) * 1000).toISOString(),
+      type: 'rotation',
+      allDay: true,
     });
+
+    // Kingdom War battle: Saturday from 12:00 GT, usually over by about 14:00 GT
+    if (week.isKW) {
+      const battleStart = week.kwBattleTimestamp * 1000 + 12 * 3600000;
+      cycleMilestones.push({
+        id: `sys-kw-battle-${new Date(battleStart).toISOString()}`,
+        scope: 'global',
+        title: '⚔️ Kingdom War Battle',
+        description:
+          "Starts 12:00 GT, usually over by about 14:00 GT. A win opens the King of Battle Reward chests on top of the King's Commendation.",
+        i18n: { key: 'kw_battle', vars: {} },
+        start: new Date(battleStart).toISOString(),
+        end: new Date(battleStart + 2 * 3600000).toISOString(),
+        type: 'war',
+        allDay: false,
+      });
+    }
   }
 
   // Reward periods: open Friday ~20:00 GT (after the capitol event), close Wednesday 00:00 GT.
-  // The current or last period, and the next one.
-  for (const opensAt of [rewardPeriod.opensAt, rewardPeriod.nextOpensAt]) {
-    const p = getRewardPeriod(opensAt, calConfig);
+  // Every period that overlaps the weeks above.
+  for (let k = -6; k <= 6; k++) {
+    const p = getRewardPeriod(rewardPeriod.opensAt + k * WEEK_MS, calConfig);
+    if (p.closesAt < rangeStartMs || p.opensAt >= rangeEndMs) continue;
     cycleMilestones.push({
       id: `sys-rewards-open-${p.id}`,
       scope: 'global',
@@ -244,8 +228,10 @@ export default async function handler(req, res) {
   });
 
   // 3. Project Recurring Events Forward Across the 28-Day Cycle Horizon
-  const windowStartMs = now.getTime() - 24 * 3600 * 1000;
-  const windowEndMs = now.getTime() + 28 * 86400 * 1000;
+  // The same weeks as the milestones above (last week and the whole cycle, for the week and
+  // cycle views), and at least four weeks ahead
+  const windowStartMs = rangeStartMs;
+  const windowEndMs = Math.max(rangeEndMs, now.getTime() + 28 * 86400 * 1000);
 
   const projectedEvents = [];
 

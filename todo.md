@@ -43,6 +43,8 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - [x] `/registerbot`, `/rank`, `/devupdate` and the proposal-review buttons' private replies (the shared war-room post stays English)
   - [ ] `/suggest` (later, once most other work is done): it's in the alliance servers' command list but the bot has no handler for it yet
 
+- [ ] **Calendar event pictures (owner idea, 2026-11-15)** — a faded picture behind each event card by event type (Bear Trap, Crystal Cluster, Kingdom War…); needs a picture per type.
+- [ ] **Your alliance highlighted across the site (owner idea, 2026-11-15)** — recognise the signed-in reader's alliance and mark it with the header's pulsing glow (or similar) in key places: the calendar's Capitol rotation, the Alliance page's standings, the rewards tool…; to be proposed element by element.
 - [ ] **Map Plan Import / Export**
   - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.
 
