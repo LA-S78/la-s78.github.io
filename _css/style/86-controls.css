@@ -139,6 +139,9 @@
   position: relative;
   display: block;
   min-width: 0;
+  /* Takes the width its layout gives it; a long option's name is shortened with "…" rather
+     than widening the form around it (it wraps in the open list) */
+  contain: inline-size;
 }
 
 .site-select-native {

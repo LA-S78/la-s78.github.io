@@ -39,7 +39,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
           <span class="mgmt-tag" id="mgmt-scope-tag">{{ "calendar_events.manage_mode" | t }}</span>
           <span class="mgmt-desc" id="mgmt-scope-desc">{{ "calendar_events.session_active" | t }}</span>
           <!-- A signed-in Steward: server events or their alliance's (js/calendar.js) -->
-          <select id="mgmt-scope-switch" class="cal-form-select" hidden aria-label="{{ "calendar_events.scope_label" | t }}"></select>
+          <select id="mgmt-scope-switch" class="cal-form-select" data-site-select hidden aria-label="{{ "calendar_events.scope_label" | t }}"></select>
         </div>
         <button
           type="button"
@@ -113,7 +113,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
           <!-- Recurrence Mode -->
           <div class="form-group">
             <label for="evt-input-recurrence">{{ "calendar_events.frequency" | t }}</label>
-            <select id="evt-input-recurrence" class="cal-form-select">
+            <select id="evt-input-recurrence" class="cal-form-select" data-site-select>
               <option value="none">{{ "calendar_events.once" | t }}</option>
               <option value="2days">{{ "calendar_events.every_2_days" | t }}</option>
               <option value="weekly">{{ "calendar_events.weekly" | t }}</option>
@@ -123,7 +123,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
           <!-- Discord Notification Target -->
           <div class="form-group form-col-full">
             <label for="evt-input-notify">{{ "calendar_events.alert_level" | t }}</label>
-            <select id="evt-input-notify" class="cal-form-select">
+            <select id="evt-input-notify" class="cal-form-select" data-site-select>
               <option value="role">{{ "calendar_events.notify_role" | t }}</option>
               <option value="custom_role">{{ "calendar_events.notify_custom" | t }}</option>
               <option value="everyone">{{ "calendar_events.notify_everyone" | t }}</option>
@@ -271,6 +271,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
               <select
                 id="ops-input-target-week"
                 class="ops-select cal-form-select"
+                data-site-select
               >
                 <option value="1">{{ "kings_scheduler.week1_option" | t }}</option>
                 <option value="2">{{ "kings_scheduler.week2_option" | t }}</option>
