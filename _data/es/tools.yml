@@ -644,8 +644,15 @@ map_planner:
   planner_mode: Modo planificador
   override_label: 'Cambiar a:'
   override_placeholder: P. EJ. WLO
-  override_help: Escribe una etiqueta para anular las asignaciones. Déjalo en blanco para rotar.
+  override_help: Escribe una etiqueta para anular las asignaciones de clic. Déjalo en blanco para alternar.
   submit_plan: Enviar plan
+  compare_label: Comparar el plan con el mapa en vivo
+  show_live: En vivo
+  show_plan: Mi plan
+  discard: Descartar
+  discard_confirm: "¿Descartar tus cambios planificados ({n})? Esto no se puede deshacer."
+  view_locked: Desactiva el modo planificador para cambiar la vista
+  plan_saved: Tu plan se ha guardado ({n} cambios). Activa el modo planificador para continuar.
   fullscreen: Pantalla completa
   toggle_fullscreen: Alternar pantalla completa
   exit: Salir
@@ -656,14 +663,14 @@ map_planner:
   stripe_output: 'Franja: Producción'
   level_unknown: Nivel --
   level: Nivel {n}
-  hover: Pasa el ratón sobre un territorio
+  hover: Pasa el cursor sobre un territorio
   owner: 'Propietario:'
   unclaimed: Sin reclamar
   buff: 'Buff:'
   none: Ninguno
   no_active_buff: Ningún buff activo
-  drawer_title: Distribución de buffs de alianza
-  drawer_subtitle: Recuento dinámico basado en las asignaciones activas del mapa/planificador
+  drawer_title: Distribución de buffs de la alianza
+  drawer_subtitle: Recuento dinámico basado en las asignaciones activas del mapa / planificador
   no_claims: Ninguna alianza reclama territorio actualmente.
   no_buffs: No hay buffs activos asignados
   cities_one: "{n} Ciudad"
@@ -681,8 +688,8 @@ map_planner:
   buff_timber_output: Producción de madera
   buff_herb_gathering: Recolección de hierbas
   buff_herb_output: Producción de hierbas
-  no_changes: No se detectaron cambios en tu borrador.
-  proposal_title: "🗺️ Enviar propuesta de territorio del mapa"
+  no_changes: No se detectaron cambios en tu borrador de plan.
+  proposal_title: "🗺️ Enviar propuesta de territorio en el mapa"
 proposals:
   title: Enviar propuesta
   close: Cerrar

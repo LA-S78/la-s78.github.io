@@ -638,39 +638,46 @@ map_planner:
   levels: Niveaux
   alliances: Alliances
   resources: Ressources
-  buff_summary: Résumé des buffs
-  toggle_buff_summary: Basculer le résumé des buffs
-  close_buff_summary: Fermer le résumé des buffs
+  buff_summary: Résumé des bonus
+  toggle_buff_summary: Basculer le résumé des bonus
+  close_buff_summary: Fermer le résumé des bonus
   planner_mode: Mode planificateur
   override_label: 'Changer en :'
-  override_placeholder: 'EX : WLO'
-  override_help: Tapez une balise pour remplacer les attributions. Laissez vide pour faire défiler.
+  override_placeholder: EX. WLO
+  override_help: Saisissez un tag pour remplacer les affectations par clic. Laissez vide pour alterner.
   submit_plan: Soumettre le plan
+  compare_label: Comparer le plan avec la carte en direct
+  show_live: En direct
+  show_plan: Mon plan
+  discard: Abandonner
+  discard_confirm: Abandonner vos modifications prévues ({n}) ? Cette action est irréversible.
+  view_locked: Désactivez le mode planificateur pour changer la vue
+  plan_saved: Votre plan est enregistré ({n} modifications). Activez le mode planificateur pour continuer.
   fullscreen: Plein écran
   toggle_fullscreen: Basculer en plein écran
   exit: Quitter
   grain: "🌾 Grain"
   timber: "🪵 Bois"
   herbs: "🌿 Herbes"
-  solid_gather: 'Solide : Récolte'
+  solid_gather: 'Plein : Récolte'
   stripe_output: 'Rayé : Production'
   level_unknown: Niveau --
   level: Niveau {n}
   hover: Survolez un territoire
   owner: 'Propriétaire :'
   unclaimed: Non réclamé
-  buff: 'Buff :'
+  buff: 'Bonus :'
   none: Aucun
-  no_active_buff: Aucun buff actif
-  drawer_title: Distribution des buffs d'alliance
-  drawer_subtitle: Calcul dynamique basé sur la carte active / les attributions du planificateur
-  no_claims: Aucune alliance ne réclame actuellement de territoire.
-  no_buffs: Aucun buff actif attribué
+  no_active_buff: Aucun bonus actif
+  drawer_title: Distribution des bonus d'Alliance
+  drawer_subtitle: Décompte dynamique basé sur la carte active / les affectations du plan
+  no_claims: Aucune alliance ne réclame de territoire actuellement.
+  no_buffs: Aucun bonus actif assigné
   cities_one: "{n} Ville"
   cities_other: "{n} Villes"
   col_alliance: Alliance
-  col_holdings: Possessions
-  col_buffs: Buffs actifs
+  col_holdings: Propriétés
+  col_buffs: Bonus actifs
   buff_research_speed: Vitesse de recherche
   buff_troop_training_speed: Vitesse d'entraînement des troupes
   buff_building_speed: Vitesse de construction
@@ -681,7 +688,7 @@ map_planner:
   buff_timber_output: Production de bois
   buff_herb_gathering: Récolte d'herbes
   buff_herb_output: Production d'herbes
-  no_changes: Aucun changement détecté dans votre projet de plan.
+  no_changes: Aucune modification détectée dans votre brouillon de plan.
   proposal_title: "🗺️ Soumettre une proposition de territoire sur la carte"
 proposals:
   title: Soumettre une proposition

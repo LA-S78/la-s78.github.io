@@ -644,42 +644,49 @@ map_planner:
   levels: Уровни
   alliances: Альянсы
   resources: Ресурсы
-  buff_summary: Сводка баффов
-  toggle_buff_summary: Переключить сводку баффов
-  close_buff_summary: Закрыть сводку баффов
+  buff_summary: Сводка бонусов
+  toggle_buff_summary: Переключить сводку бонусов
+  close_buff_summary: Закрыть сводку бонусов
   planner_mode: Режим планировщика
   override_label: 'Изменить на:'
   override_placeholder: НАПР. WLO
-  override_help: Введите тег, чтобы переопределить назначения. Оставьте пустым для переключения.
+  override_help: Введите тег, чтобы переопределить назначения при клике. Оставьте пустым для циклического выбора.
   submit_plan: Отправить план
-  fullscreen: Полноэкранный режим
+  compare_label: Сравнить план с текущей картой
+  show_live: Текущая
+  show_plan: Мой план
+  discard: Отменить
+  discard_confirm: Отменить внесенные изменения ({n})? Это действие нельзя будет отменить.
+  view_locked: Выключите режим планировщика, чтобы сменить вид
+  plan_saved: План сохранен ({n} изм.). Включите режим планировщика, чтобы продолжить.
+  fullscreen: На весь экран
   toggle_fullscreen: Переключить полноэкранный режим
-  exit: Выйти
+  exit: Выход
   grain: "🌾 Зерно"
   timber: "🪵 Древесина"
   herbs: "🌿 Травы"
-  solid_gather: 'Сплошной: Сбор'
-  stripe_output: 'Полоса: Производство'
+  solid_gather: 'Сплошная: Сбор'
+  stripe_output: 'Полосатая: Производство'
   level_unknown: Уровень --
   level: Уровень {n}
-  hover: Наведите курсор на территорию
+  hover: Наведите на территорию
   owner: 'Владелец:'
   unclaimed: Ничья
-  buff: 'Бафф:'
+  buff: 'Бонус:'
   none: Нет
-  no_active_buff: Нет активного баффа
-  drawer_title: Распределение баффов альянса
-  drawer_subtitle: Динамический подсчет на основе активной карты / назначений планировщика
-  no_claims: Ни один альянс в данный момент не претендует на территорию.
-  no_buffs: Нет назначенных активных баффов
+  no_active_buff: Нет активных бонусов
+  drawer_title: Распределение бонусов альянса
+  drawer_subtitle: Динамический подсчет на основе текущей карты / назначений планировщика
+  no_claims: Ни один альянс сейчас не владеет территорией.
+  no_buffs: Нет назначенных активных бонусов
   cities_one: "{n} город"
   cities_few: "{n} города"
   cities_other: "{n} городов"
   col_alliance: Альянс
   col_holdings: Владения
-  col_buffs: Активные баффы
-  buff_research_speed: Скорость исследования
-  buff_troop_training_speed: Скорость подготовки войск
+  col_buffs: Активные бонусы
+  buff_research_speed: Скорость исследований
+  buff_troop_training_speed: Скорость обучения войск
   buff_building_speed: Скорость строительства
   buff_march_speed: Скорость марша
   buff_grain_gathering: Сбор зерна
@@ -688,7 +695,7 @@ map_planner:
   buff_timber_output: Производство древесины
   buff_herb_gathering: Сбор трав
   buff_herb_output: Производство трав
-  no_changes: В вашем черновике плана изменений не обнаружено.
+  no_changes: В проекте плана не обнаружено изменений.
   proposal_title: "🗺️ Отправить предложение по территории карты"
 proposals:
   title: Отправить предложение

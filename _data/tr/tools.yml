@@ -644,15 +644,22 @@ map_planner:
   planner_mode: Planlayıcı Modu
   override_label: 'Şununla değiştir:'
   override_placeholder: Örn. WLO
-  override_help: Atamaları geçersiz kılmak için bir etiket yazın. Döngüye almak için boş bırakın.
+  override_help: Tıklama atamalarını geçersiz kılmak için bir etiket girin. Döngü için boş bırakın.
   submit_plan: Planı Gönder
+  compare_label: Planı canlı haritayla karşılaştır
+  show_live: Canlı
+  show_plan: Planım
+  discard: Vazgeç
+  discard_confirm: Planladığınız değişiklikleri ({n}) silmek istiyor musunuz? Bu işlem geri alınamaz.
+  view_locked: Görünümü değiştirmek için Planlayıcı Modunu kapatın
+  plan_saved: Planınız kaydedildi ({n} değişiklik). Devam etmek için Planlayıcı Modunu açın.
   fullscreen: Tam Ekran
   toggle_fullscreen: Tam Ekranı Aç/Kapat
   exit: Çıkış
   grain: "🌾 Tahıl"
   timber: "🪵 Kereste"
-  herbs: "🌿 Bitki"
-  solid_gather: 'Dolu: Topla'
+  herbs: "🌿 Otlar"
+  solid_gather: 'Dolu: Toplama'
   stripe_output: 'Çizgili: Üretim'
   level_unknown: Seviye --
   level: Seviye {n}
@@ -663,8 +670,8 @@ map_planner:
   none: Yok
   no_active_buff: Aktif güçlendirme yok
   drawer_title: İttifak Güçlendirme Dağılımı
-  drawer_subtitle: Aktif harita / planlayıcı atamalarına dayalı dinamik döküm
-  no_claims: Şu anda bölge iddia eden ittifak yok.
+  drawer_subtitle: Aktif harita/planlayıcı atamalarına dayalı dinamik çetele
+  no_claims: Şu anda hiçbir ittifakın hak iddia ettiği bölge yok.
   no_buffs: Atanmış aktif güçlendirme yok
   cities_one: "{n} Şehir"
   cities_other: "{n} Şehir"
@@ -679,8 +686,8 @@ map_planner:
   buff_grain_output: Tahıl Üretimi
   buff_timber_gathering: Kereste Toplama
   buff_timber_output: Kereste Üretimi
-  buff_herb_gathering: Bitki Toplama
-  buff_herb_output: Bitki Üretimi
+  buff_herb_gathering: Ot Toplama
+  buff_herb_output: Ot Üretimi
   no_changes: Taslak planınızda değişiklik algılanmadı.
   proposal_title: "🗺️ Harita Bölge Teklifi Gönder"
 proposals:

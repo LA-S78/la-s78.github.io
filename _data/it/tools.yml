@@ -644,10 +644,17 @@ map_planner:
   planner_mode: Modalità Pianificatore
   override_label: 'Cambia in:'
   override_placeholder: ES. WLO
-  override_help: Digita un tag per sovrascrivere le assegnazioni dei clic. Lascia vuoto per scorrere.
+  override_help: Digita un tag per sovrascrivere le assegnazioni. Lascia vuoto per ciclare.
   submit_plan: Invia Piano
+  compare_label: Confronta il piano con la mappa live
+  show_live: Live
+  show_plan: Il mio piano
+  discard: Scarta
+  discard_confirm: Scartare le modifiche pianificate ({n})? L'azione è irreversibile.
+  view_locked: Disattiva la Modalità Pianificatore per cambiare vista
+  plan_saved: Piano salvato ({n} modifiche). Attiva la Modalità Pianificatore per continuare.
   fullscreen: Schermo intero
-  toggle_fullscreen: Attiva/Disattiva Schermo intero
+  toggle_fullscreen: Attiva/Disattiva schermo intero
   exit: Esci
   grain: "🌾 Grano"
   timber: "🪵 Legname"
@@ -656,16 +663,16 @@ map_planner:
   stripe_output: 'Striscia: Produzione'
   level_unknown: Livello --
   level: Livello {n}
-  hover: Passa il mouse sopra un territorio
+  hover: Passa il mouse su un territorio
   owner: 'Proprietario:'
   unclaimed: Non reclamato
   buff: 'Buff:'
   none: Nessuno
   no_active_buff: Nessun buff attivo
   drawer_title: Distribuzione Buff Alleanza
-  drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni pianificate
+  drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni pianificatore
   no_claims: Nessuna alleanza reclama territori al momento.
-  no_buffs: Nessun buff assegnato attivo
+  no_buffs: Nessun buff attivo assegnato
   cities_one: "{n} Città"
   cities_other: "{n} Città"
   col_alliance: Alleanza
@@ -681,7 +688,7 @@ map_planner:
   buff_timber_output: Produzione Legname
   buff_herb_gathering: Raccolta Erbe
   buff_herb_output: Produzione Erbe
-  no_changes: Nessuna modifica rilevata nella tua bozza di piano.
+  no_changes: Nessuna modifica rilevata nella tua bozza.
   proposal_title: "🗺️ Invia Proposta Territorio Mappa"
 proposals:
   title: Invia proposta
