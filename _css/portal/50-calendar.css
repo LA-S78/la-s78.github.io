@@ -1020,6 +1020,12 @@
 }
 
 /* Event types (_data/event_types.yml): the type dropdown, line icons, guide links */
+/* The upgraded dropdown's box takes the toolbar room (js/site-select.js) */
+.cal-toolbar .site-select {
+  flex: 1 1 180px;
+  max-width: 320px;
+}
+
 .cal-type-select {
   flex: 1 1 180px;
   min-width: 0;
@@ -1086,7 +1092,8 @@
 }
 
 @media (max-width: 599px) {
-  .cal-type-select {
+  .cal-type-select,
+  .cal-toolbar .site-select {
     max-width: none;
   }
 }
@@ -1126,90 +1133,4 @@
 .ag-event.has-pic .ag-desc,
 .ag-event.has-pic .ag-meta {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-/* The scheduling form's event type tiles (radio buttons, calendar.html) */
-.type-tiles {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  min-width: 0;
-}
-
-/* The heading reads like the form's other labels */
-.type-tiles legend {
-  padding: 0;
-  margin-bottom: 6px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.type-tile-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
-  gap: 6px;
-}
-
-.type-tiles .type-tile {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 10px 4px 8px;
-  background: var(--surface-dark);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  margin: 0;
-  color: var(--text-main);
-  font-size: inherit;
-  font-weight: inherit;
-  text-align: center;
-  cursor: pointer;
-}
-
-/* The radio itself is hidden; the tile shows its state (and keeps keyboard focus) */
-.type-tile input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.type-tile-ic {
-  width: 24px;
-  height: 24px;
-  color: var(--accent-color);
-}
-
-.type-tile-name {
-  font-size: 0.76rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.type-tile-len {
-  font-size: 0.66rem;
-  color: var(--text-muted);
-}
-
-.type-tile:hover {
-  border-color: var(--accent-color);
-}
-
-.type-tile:has(input:checked) {
-  border-color: var(--accent-color);
-  background: color-mix(in srgb, var(--accent-color) 16%, var(--surface-dark));
-  box-shadow: 0 0 0 1px var(--accent-color);
-}
-
-.type-tile:has(input:focus-visible) {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
-@media (max-width: 599px) {
-  .type-tile-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }

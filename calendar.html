@@ -59,27 +59,18 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         <h3 class="form-title" id="form-heading">{{ "calendar_events.create_operation" | t }}</h3>
 
         <div class="form-grid">
-          <!-- The event type, as tiles (radio buttons): its icon, name and usual length, from
-               _data/event_types.yml. Picking one fills in the form; "Custom" leaves it blank. -->
-          <fieldset class="form-group form-col-full type-tiles" id="evt-input-preset">
-            <legend>{{ "calendar_events.preset" | t }}</legend>
-            <div class="type-tile-grid">
-              <label class="type-tile">
-                <input type="radio" name="evt-type" value="custom" checked>
-                <svg class="type-tile-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                <span class="type-tile-name">{{ "calendar_events.type_custom" | t }}</span>
-                <span class="type-tile-len">{{ "calendar_events.type_custom_hint" | t }}</span>
-              </label>
+          <!-- The event type: the site's dropdown (js/site-select.js) with each type's icon and
+               usual length, from _data/event_types.yml. Picking one fills in the form; "Custom"
+               leaves it blank. -->
+          <div class="form-group form-col-full">
+            <label for="evt-input-preset">{{ "calendar_events.preset" | t }}</label>
+            <select id="evt-input-preset" class="cal-form-select" data-site-select>
+              <option value="custom" data-icon='<path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>' data-hint="{{ "calendar_events.type_custom_hint" | t }}">{{ "calendar_events.type_custom" | t }}</option>
               {%- for type in site.data.event_types.types -%}{%- if type.preset %}
-              <label class="type-tile">
-                <input type="radio" name="evt-type" value="{{ type.id }}">
-                <svg class="type-tile-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ type.icon }}</svg>
-                <span class="type-tile-name">{{ "event_presets." | append: type.id | append: "_title" | t }}</span>
-                <span class="type-tile-len">{{ "calendar_events.duration_h" | t: "n", type.duration }}</span>
-              </label>
+              <option value="{{ type.id }}" data-icon="{{ type.icon | escape }}" data-hint="{{ "calendar_events.duration_h" | t: "n", type.duration }}">{{ "event_presets." | append: type.id | append: "_title" | t }}</option>
               {%- endif -%}{%- endfor %}
-            </div>
-          </fieldset>
+            </select>
+          </div>
 
           <!-- Title -->
           <div class="form-group form-col-full">

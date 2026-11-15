@@ -389,15 +389,14 @@ async function initCalendar() {
     const btnCancel = document.getElementById('btn-cancel-event-form');
     const notifySelect = document.getElementById('evt-input-notify');
     const customRoleInput = document.getElementById('evt-input-role-id');
-    // The event type tiles (radio buttons; calendar.html): read and set the one picked
-    const presetTiles = document.getElementById('evt-input-preset');
-    const presetValue = () =>
-      presetTiles?.querySelector('input[name="evt-type"]:checked')?.value || 'custom';
+    // The event type (the site's dropdown, js/site-select.js): read and set the one picked
+    const presetSelect = document.getElementById('evt-input-preset');
+    const presetValue = () => presetSelect?.value || 'custom';
     const setPreset = (id) => {
-      const input =
-        presetTiles?.querySelector(`input[name="evt-type"][value="${CSS.escape(id)}"]`) ||
-        presetTiles?.querySelector('input[name="evt-type"][value="custom"]');
-      if (input) input.checked = true;
+      if (!presetSelect) return;
+      presetSelect.value = id;
+      if (presetSelect.value !== id) presetSelect.value = 'custom';
+      window.SiteSelect?.sync(presetSelect);
     };
     const submitBtn = document.getElementById('btn-submit-event');
 
@@ -483,8 +482,8 @@ async function initCalendar() {
       submitBtn.style.color = '';
     }
 
-    if (presetTiles) {
-      presetTiles.addEventListener('change', () => {
+    if (presetSelect) {
+      presetSelect.addEventListener('change', () => {
         const selected = OPERATION_PRESETS[presetValue()];
         if (selected) {
           document.getElementById('evt-input-title').value = selected.title;

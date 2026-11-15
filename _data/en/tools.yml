@@ -494,7 +494,7 @@ calendar_events:
   leadership_desc: "Managing internal operations for [{tag}]"
   alliance_heading: "Create [{tag}] Operation"
   preset: "Event type"
-  # The event type tiles (calendar.html): "Custom" (a blank form) and each type's usual length
+  # The event type dropdown (calendar.html): "Custom" (a blank form) and each type's usual length
   type_custom: "Custom"
   type_custom_hint: "Blank form"
   duration_h: "{n}h"

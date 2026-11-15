@@ -157,7 +157,7 @@
           <button type="button" class="toggle-btn" data-view="week" aria-pressed="false">${esc(t('calendar.view_week'))}</button>
           <button type="button" class="toggle-btn" data-view="cycle" aria-pressed="false">${esc(t('calendar.view_cycle'))}</button>
         </div>
-        <select class="cal-type-select" aria-label="${esc(t('calendar.type_label'))}"></select>
+        <select class="cal-type-select" data-site-select aria-label="${esc(t('calendar.type_label'))}"></select>
       </div>
       <div class="cal-chips" role="group" aria-label="${esc(t('calendar.show_label'))}">
         ${KINDS.map(
@@ -168,6 +168,8 @@
       <div class="cal-view" aria-live="polite"></div>`;
     const viewEl = container.querySelector('.cal-view');
     const typeSelect = container.querySelector('.cal-type-select');
+    // The site's dropdown (js/site-select.js): each type with its icon
+    window.SiteSelect?.enhance(typeSelect);
     typeSelect.addEventListener('change', () => {
       state.type = typeSelect.value;
       draw();
@@ -181,14 +183,17 @@
         .sort((a, b) => typeName(a).localeCompare(typeName(b), lang));
       if (present.has('other')) ids.push('other');
       if (state.type && !present.has(state.type)) state.type = '';
+      const { byId, icons } = eventTypes();
+      const iconOf = (id) => esc(id === 'other' ? icons.server || '' : byId[id]?.icon || '');
       typeSelect.innerHTML = [
         `<option value="">${esc(t('calendar.type_all'))}</option>`,
         ...ids.map(
           (id) =>
-            `<option value="${esc(id)}">${esc(id === 'other' ? t('calendar.type_other') : typeName(id))}</option>`,
+            `<option value="${esc(id)}" data-icon="${iconOf(id)}">${esc(id === 'other' ? t('calendar.type_other') : typeName(id))}</option>`,
         ),
       ].join('');
       typeSelect.value = state.type;
+      window.SiteSelect?.sync(typeSelect);
     }
 
     container.querySelectorAll('[data-view]').forEach((btn) =>
