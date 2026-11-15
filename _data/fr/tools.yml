@@ -374,16 +374,16 @@ calendar:
   badge_awaiting: "⏳ En attente du résultat de la Guerre des Royaumes"
   badge_open: "🎁 Récompenses ouvertes"
   set2_off_week: Recommandation du Roi uniquement (pas de Guerre des Royaumes).
-  set2_won: 'Guerre des Royaumes remportée : Récompense du Roi de la Bataille également ouverte.'
+  set2_won: 'Guerre des Royaumes remportée : récompense du Roi de la Bataille également ouverte.'
   set2_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement.'
-  set2_pending: Récompense du Roi de la Bataille si la guerre du samedi est gagnée ; le Roi distribue après le résultat.
-  rewards_open_until: Récompenses de la {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
-  rewards_closed: Les récompenses sont fermées. Prochaine ouverture vendredi vers 20:00 GT, après l'événement du Capitole.
+  set2_pending: Récompense du Roi de la Bataille si la guerre de samedi est remportée ; le Roi distribue les prix après le résultat.
+  rewards_open_until: Récompenses de {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
+  rewards_closed: Les récompenses sont fermées. Les prochaines s'ouvrent le vendredi vers 20:00 GT, après l'événement du capitole.
   capitol_holder: DÉTENTEUR DU CAPITOLE
   current_holder: DÉTENTEUR ACTUEL DU CAPITOLE
   next_holder: PROCHAIN DÉTENTEUR DU CAPITOLE
   rank: 'Rang #{rank}'
-  rank_override: 'Rang #{rank} (Priorité)'
+  rank_override: 'Rang #{rank} (Prioritaire)'
   rank_override_schedule: 'Rang #{rank} • Planning prioritaire'
   captured_friday: Capturé vendredi
   captures_today: Captures aujourd'hui
@@ -396,15 +396,42 @@ calendar:
   saturday: Samedi
   today: "🔥 AUJOURD'HUI"
   none_this_week: Aucun cette semaine
-  perspective: "🔍 PERSPECTIVE :"
-  combined: "🌐 Combiné (Royaume + [{tag}])"
-  internal_only: "🛡️ [{tag}] Interne uniquement"
-  kingdom_only: "👑 Opérations du Royaume uniquement"
-  operations_active: "🛡️ [{tag}] Opérations actives"
   upcoming: Opérations et jalons à venir
-  times_shown: Heures affichées selon le {gt} et votre heure locale
+  times_shown: Horaires affichés en {gt} & votre heure locale
   gt_label: Game Time (UTC-2)
-  no_operations: Aucune opération prévue pour cette perspective.
+  view_label: Vue calendrier
+  view_week: Semaine
+  view_cycle: Cycle
+  show_label: Afficher les types d'événements
+  kind_server: Serveur
+  kind_alliance: Alliance
+  kind_war: Guerre des Royaumes
+  kind_capitol: Capitole
+  this_week: Cette semaine
+  last_week: Semaine dernière
+  next_week: Semaine prochaine
+  prev_week: Semaine précédente
+  next_week_aria: Semaine suivante
+  this_cycle: Ce cycle
+  kvk_short: KvK {n}
+  off_short: 'Off'
+  king_unknown: Décidé à la réinitialisation
+  day_today: Aujourd'hui
+  day_tomorrow: Demain
+  day_yesterday: Hier
+  events_count_one: "{n} événement"
+  events_count_other: "{n} événements"
+  nothing_planned: Rien de prévu
+  now_line: Maintenant · {time} GT
+  local_time: "{time} locale"
+  happening_now: En cours · se termine dans {time}
+  next_up: À suivre · dans {time}
+  dur_m: "{m}m"
+  dur_h: "{h}h"
+  dur_hm: "{h}h {m}m"
+  dur_dh: "{d}j {h}h"
+  ev_capture_title_open: "👑 Capture du Capitole"
+  ev_capture_desc_open: Les sièges de ce cycle sont décidés lors de sa réinitialisation.
   all_day: Toute la journée
   every_2_days: "🔁 Tous les 2 jours"
   weekly: "🔁 Hebdomadaire"
@@ -412,14 +439,14 @@ calendar:
   edit: "✏️ Modifier"
   delete: "🗑️ Supprimer"
   ev_capture_title: "👑 Capture du Capitole — {who}"
-  ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
+  ev_capture_desc: "{who} ({rank}) capture le Capitole le vendredi."
   ev_kw_title: "⚔️ Bataille de la Guerre des Royaumes"
-  ev_kw_desc: Début à 12:00 GT, se termine généralement vers 14:00 GT. Une victoire ouvre les coffres de récompense du Roi de la Bataille en plus de la Recommandation du Roi.
+  ev_kw_desc: Début à 12:00 GT, se termine généralement vers 14:00 GT. Une victoire débloque les coffres de récompense du Roi de la Bataille en plus de la Recommandation du Roi.
   ev_open_title: "🎁 Récompenses ouvertes — {week}"
-  ev_open_desc_kw: La Recommandation du Roi s'ouvre après l'événement du Capitole. La récompense du Roi de la Bataille suit si la Guerre des Royaumes du samedi est remportée ; le Roi distribue après le résultat.
-  ev_open_desc: La Recommandation du Roi s'ouvre après l'événement du Capitole (pas de Guerre des Royaumes cette semaine).
+  ev_open_desc_kw: La Recommandation du Roi s'ouvre après l'événement du capitole. La récompense du Roi de la Bataille suit si la Guerre des Royaumes de samedi est gagnée ; le Roi distribue les prix après le résultat.
+  ev_open_desc: La Recommandation du Roi s'ouvre après l'événement du capitole (pas de Guerre des Royaumes cette semaine).
   ev_close_title: "⌛ Fermeture des récompenses — {week}"
-  ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette échéance.'
+  ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette heure.'
 calendar_events:
   reminder: Rappeler sur Discord 1 heure avant
   reminder_hint: Publié dans le canal d'alerte de votre alliance, pingant le rôle choisi ci-dessus.

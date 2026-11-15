@@ -364,27 +364,27 @@ register:
   r_commands: 'Comandi Slash Distribuiti:'
   r_leaders: 'Leadership Autorizzata:'
 calendar:
-  loading: Caricamento pianificazione del Regno...
+  loading: Caricamento programmazione Regno...
   load_failed: 'Impossibile caricare il calendario: {error}'
   phase: Fase
-  schedule_title: Pianificazione Guerra tra Regni
+  schedule_title: Programma Guerra tra Regni
   loading_cycle: Caricamento dettagli ciclo...
   badge_closed: "🔒 Ricompense chiuse"
-  badge_kob_open: "⚔️ King of Battle aperto"
+  badge_kob_open: "⚔️ Re della Battaglia aperto"
   badge_awaiting: "⏳ In attesa del risultato KW"
   badge_open: "🎁 Ricompense aperte"
-  set2_off_week: Solo Commendazione del Re (niente Guerra tra Regni).
-  set2_won: 'Guerra tra Regni vinta: anche la Ricompensa King of Battle è aperta.'
-  set2_lost: 'Guerra tra Regni persa: solo Commendazione del Re.'
-  set2_pending: Ricompensa King of Battle se la guerra di sabato è vinta; il Re distribuisce dopo il risultato.
-  rewards_open_until: Le ricompense {week} sono aperte fino a martedì 23:59 GT. {set2}
+  set2_off_week: Solo Commenda del Re (niente Guerra tra Regni).
+  set2_won: 'Guerra tra Regni vinta: aperto anche il Re della Battaglia.'
+  set2_lost: 'Guerra tra Regni persa: solo Commenda del Re.'
+  set2_pending: Ricompensa Re della Battaglia se la guerra di sabato viene vinta; il Re distribuisce dopo il risultato.
+  rewards_open_until: Ricompense {week} aperte fino a martedì 23:59 GT. {set2}
   rewards_closed: Le ricompense sono chiuse. Le prossime apriranno venerdì verso le 20:00 GT, dopo l'evento del Campidoglio.
   capitol_holder: DETENTORE CAMPIDOGLIO
   current_holder: ATTUALE DETENTORE CAMPIDOGLIO
   next_holder: PROSSIMO DETENTORE CAMPIDOGLIO
   rank: 'Rango #{rank}'
-  rank_override: 'Rango #{rank} (Sovrascrivi)'
-  rank_override_schedule: 'Rango #{rank} • Pianificazione sovrascritta'
+  rank_override: 'Rango #{rank} (Sovrascritto)'
+  rank_override_schedule: 'Rango #{rank} • Programma sovrascritto'
   captured_friday: Catturato venerdì
   captures_today: Catture oggi
   captures_friday: Catture venerdì
@@ -395,16 +395,43 @@ calendar:
   next_kw: PROSSIMA BATTAGLIA KW
   saturday: Sabato
   today: "🔥 OGGI"
-  none_this_week: Nessuna questa settimana
-  perspective: "🔍 PROSPETTIVA:"
-  combined: "🌐 Combinata (Regno + [{tag}])"
-  internal_only: "🛡️ [{tag}] Solo Interno"
-  kingdom_only: "👑 Solo Operazioni Regno"
-  operations_active: "🛡️ [{tag}] Operazioni Attive"
-  upcoming: Prossime Operazioni e Traguardi
-  times_shown: Orari mostrati in {gt} e nel tuo Orario Locale
+  none_this_week: Nessuno questa settimana
+  upcoming: Prossime operazioni e traguardi
+  times_shown: Orari mostrati in {gt} & il tuo orario locale
   gt_label: Game Time (UTC-2)
-  no_operations: Nessuna operazione pianificata per questa prospettiva.
+  view_label: Visualizzazione calendario
+  view_week: Settimana
+  view_cycle: Ciclo
+  show_label: Mostra tipi di evento
+  kind_server: Server
+  kind_alliance: Alleanza
+  kind_war: Guerra tra Regni
+  kind_capitol: Campidoglio
+  this_week: Questa settimana
+  last_week: Settimana scorsa
+  next_week: Settimana prossima
+  prev_week: Settimana precedente
+  next_week_aria: Settimana successiva
+  this_cycle: Questo ciclo
+  kvk_short: KvK {n}
+  off_short: 'Off'
+  king_unknown: Deciso al reset
+  day_today: Oggi
+  day_tomorrow: Domani
+  day_yesterday: Ieri
+  events_count_one: "{n} evento"
+  events_count_other: "{n} eventi"
+  nothing_planned: Nulla in programma
+  now_line: Ora · {time} GT
+  local_time: "{time} locale"
+  happening_now: In corso · termina tra {time}
+  next_up: Prossimo · tra {time}
+  dur_m: "{m}m"
+  dur_h: "{h}h"
+  dur_hm: "{h}h {m}m"
+  dur_dh: "{d}g {h}h"
+  ev_capture_title_open: "👑 Cattura Campidoglio"
+  ev_capture_desc_open: I posti di questo ciclo vengono decisi al suo reset.
   all_day: Tutto il giorno
   every_2_days: "🔁 Ogni 2 giorni"
   weekly: "🔁 Settimanale"
@@ -414,11 +441,11 @@ calendar:
   ev_capture_title: "👑 Cattura Campidoglio — {who}"
   ev_capture_desc: "{who} ({rank}) cattura il Campidoglio venerdì."
   ev_kw_title: "⚔️ Battaglia Guerra tra Regni"
-  ev_kw_desc: Inizia alle 12:00 GT, di solito termina verso le 14:00 GT. Una vittoria apre i forzieri Ricompensa King of Battle oltre alla Commendazione del Re.
+  ev_kw_desc: Inizia alle 12:00 GT, di solito finisce verso le 14:00 GT. Una vittoria apre i forzieri Ricompensa Re della Battaglia oltre alla Commenda del Re.
   ev_open_title: "🎁 Ricompense Aperte — {week}"
-  ev_open_desc_kw: La Commendazione del Re si apre dopo l'evento del Campidoglio. La Ricompensa King of Battle segue se la Guerra tra Regni di sabato viene vinta; il Re distribuisce dopo il risultato.
-  ev_open_desc: La Commendazione del Re si apre dopo l'evento del Campidoglio (niente Guerra tra Regni questa settimana).
-  ev_close_title: "⌛ Chiusura Ricompense — {week}"
+  ev_open_desc_kw: La Commenda del Re apre dopo l'evento del Campidoglio. Segue la Ricompensa Re della Battaglia se la Guerra tra Regni di sabato viene vinta; il Re distribuisce dopo il risultato.
+  ev_open_desc: La Commenda del Re apre dopo l'evento del Campidoglio (niente Guerra tra Regni questa settimana).
+  ev_close_title: "⌛ Ricompense Chiuse — {week}"
   ev_close_desc: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
 calendar_events:
   reminder: Promemoria su Discord 1 ora prima

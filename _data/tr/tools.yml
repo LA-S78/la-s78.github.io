@@ -364,60 +364,87 @@ register:
   r_commands: 'Slash Komutları Dağıtıldı:'
   r_leaders: 'Yetkili Liderlik:'
 calendar:
-  loading: Krallık programı yükleniyor...
+  loading: Krallık takvimi yükleniyor...
   load_failed: 'Takvim yüklenemedi: {error}'
   phase: Aşama
-  schedule_title: Krallık Savaşı Programı
+  schedule_title: Krallık Savaşı Takvimi
   loading_cycle: Döngü detayları yükleniyor...
   badge_closed: "🔒 Ödüller kapalı"
-  badge_kob_open: "⚔️ Savaş Kralı açık"
-  badge_awaiting: "⏳ KS sonucu bekleniyor"
+  badge_kob_open: "⚔️ Kraliyet Mücadelesi açık"
+  badge_awaiting: "⏳ Krallık Savaşı sonucu bekleniyor"
   badge_open: "🎁 Ödüller açık"
   set2_off_week: Sadece Kral Takdirnamesi (Krallık Savaşı yok).
-  set2_won: 'Krallık Savaşı kazanıldı: Savaş Kralı Ödülü de açık.'
+  set2_won: 'Krallık Savaşı kazanıldı: Kraliyet Mücadelesi Ödülü de açık.'
   set2_lost: 'Krallık Savaşı kaybedildi: Sadece Kral Takdirnamesi.'
-  set2_pending: Cumartesi günkü savaş kazanılırsa Savaş Kralı Ödülü verilir; Kral sonuçtan sonra dağıtır.
+  set2_pending: Cumartesi günkü savaş kazanılırsa Kraliyet Mücadelesi Ödülü verilir; Kral sonuçtan sonra dağıtır.
   rewards_open_until: "{week} ödülleri Salı 23:59 GT'ye kadar açık. {set2}"
-  rewards_closed: Ödüller kapalı. Bir sonraki açılış Cuma yaklaşık 20:00 GT'de, başkent etkinliğinden sonra gerçekleşir.
-  capitol_holder: BAŞKENT SAHİBİ
-  current_holder: MEVCUT BAŞKENT SAHİBİ
-  next_holder: SONRAKİ BAŞKENT SAHİBİ
+  rewards_closed: Ödüller kapalı. Bir sonraki açılış, capitol etkinliğinden sonra Cuma günü yaklaşık 20:00 GT'de gerçekleşir.
+  capitol_holder: CAPITOL SAHİBİ
+  current_holder: MEVCUT CAPITOL SAHİBİ
+  next_holder: SONRAKİ CAPITOL SAHİBİ
   rank: 'Sıra #{rank}'
   rank_override: 'Sıra #{rank} (Geçersiz Kılma)'
-  rank_override_schedule: 'Sıra #{rank} • Geçersiz Kılma Programı'
-  captured_friday: Cuma ele geçirildi
-  captures_today: Bugünkü ele geçirmeler
-  captures_friday: Cuma ele geçirmeleri
+  rank_override_schedule: 'Sıra #{rank} • Geçersiz Kılma Takvimi'
+  captured_friday: Cuma günü ele geçirildi
+  captures_today: Bugün ele geçirilenler
+  captures_friday: Cuma günü ele geçirilenler
   cycle_progress: DÖNGÜ İLERLEMESİ
-  day_of_28: 28'in {day}. günü ({week})
-  week_n: Hafta {n}
+  day_of_28: 28 günden {day}. gün ({week})
+  week_n: "{n}. Hafta"
   next_reset: SONRAKİ SIFIRLAMA (00:00 GT)
-  next_kw: SONRAKİ KS SAVAŞI
+  next_kw: SONRAKİ KW SAVAŞI
   saturday: Cumartesi
   today: "🔥 BUGÜN"
   none_this_week: Bu hafta yok
-  perspective: "🔍 BAKIŞ AÇISI:"
-  combined: "🌐 Birleşik (Krallık + [{tag}])"
-  internal_only: "🛡️ [{tag}] Sadece Dahili"
-  kingdom_only: "👑 Sadece Krallık Operasyonları"
-  operations_active: "🛡️ [{tag}] Operasyonlar Aktif"
   upcoming: Yaklaşan Operasyonlar & Kilometre Taşları
-  times_shown: Zamanlar {gt} ve Yerel Saatinizde görüntülenir
-  gt_label: Oyun Zamanı (UTC-2)
-  no_operations: Bu bakış açısı için planlanmış operasyon yok.
+  times_shown: Zamanlar {gt} & Yerel Saatinizde gösterilir
+  gt_label: Game Time (UTC-2)
+  view_label: Takvim görünümü
+  view_week: Hafta
+  view_cycle: Döngü
+  show_label: Etkinlik türlerini göster
+  kind_server: Sunucu
+  kind_alliance: İttifak
+  kind_war: Krallık Savaşı
+  kind_capitol: Capitol
+  this_week: Bu hafta
+  last_week: Geçen hafta
+  next_week: Gelecek hafta
+  prev_week: Önceki hafta
+  next_week_aria: Takip eden hafta
+  this_cycle: Bu döngü
+  kvk_short: KvK {n}
+  off_short: Kapalı
+  king_unknown: Sıfırlamada belirlenecek
+  day_today: Bugün
+  day_tomorrow: Yarın
+  day_yesterday: Dün
+  events_count_one: "{n} etkinlik"
+  events_count_other: "{n} etkinlik"
+  nothing_planned: Planlanan bir şey yok
+  now_line: Şimdi · {time} GT
+  local_time: "{time} yerel saat"
+  happening_now: Şu an gerçekleşiyor · {time} içinde biter
+  next_up: Sırada · {time} içinde
+  dur_m: "{m}dk"
+  dur_h: "{h}s"
+  dur_hm: "{h}s {m}dk"
+  dur_dh: "{d}g {h}s"
+  ev_capture_title_open: "👑 Capitol Ele Geçirme"
+  ev_capture_desc_open: Bu döngünün koltukları sıfırlama anında belirlenir.
   all_day: Tüm Gün
   every_2_days: "🔁 2 Günde Bir"
   weekly: "🔁 Haftalık"
   mandatory: "🚨 Zorunlu"
   edit: "✏️ Düzenle"
   delete: "🗑️ Sil"
-  ev_capture_title: "👑 Başkent Ele Geçirme — {who}"
-  ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçiriyor."
+  ev_capture_title: "👑 Capitol Ele Geçirme — {who}"
+  ev_capture_desc: "{who} ({rank}) Cuma günü Capitol'ü ele geçirir."
   ev_kw_title: "⚔️ Krallık Savaşı"
-  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarı biter. Kazanmak, Kral Takdirnamesine ek olarak Savaş Kralı Ödül sandıklarını açar.
+  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarında biter. Kazanılması durumunda, Kral Takdirnamesine ek olarak Kraliyet Mücadelesi Ödül sandıkları açılır.
   ev_open_title: "🎁 Ödüller Açık — {week}"
-  ev_open_desc_kw: Kral Takdirnamesi başkent etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Savaş Kralı Ödülü de açılır; Kral sonuçtan sonra dağıtır.
-  ev_open_desc: Kral Takdirnamesi başkent etkinliğinden sonra açılır (bu hafta Krallık Savaşı yok).
+  ev_open_desc_kw: Kral Takdirnamesi capitol etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Kraliyet Mücadelesi Ödülü takip eder; Kral sonuçtan sonra dağıtır.
+  ev_open_desc: Kral Takdirnamesi capitol etkinliğinden sonra açılır (bu hafta Krallık Savaşı yok).
   ev_close_title: "⌛ Ödüller Kapanıyor — {week}"
   ev_close_desc: 'Sandıkların süresi Çarşamba 00:00 GT''de dolar: o zamandan önce her şeyi dağıtın.'
 calendar_events:

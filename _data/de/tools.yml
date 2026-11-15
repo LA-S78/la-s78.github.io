@@ -364,62 +364,89 @@ register:
   r_commands: 'Slash-Befehle bereitgestellt:'
   r_leaders: 'Autorisierte Führung:'
 calendar:
-  loading: Königreichs-Zeitplan wird geladen...
-  load_failed: 'Kalender konnte nicht geladen werden: {error}'
+  loading: Königreich-Zeitplan wird geladen...
+  load_failed: 'Laden des Kalenders fehlgeschlagen: {error}'
   phase: Phase
-  schedule_title: Zeitplan für den Königreichskrieg
+  schedule_title: Zeitplan für Königreichskrieg
   loading_cycle: Zyklusdetails werden geladen...
   badge_closed: "🔒 Belohnungen geschlossen"
-  badge_kob_open: "⚔️ Königliches Gerangel offen"
-  badge_awaiting: "⏳ Warten auf KW-Ergebnis"
+  badge_kob_open: "⚔️ King of Battle offen"
+  badge_awaiting: "⏳ Warte auf KW-Ergebnis"
   badge_open: "🎁 Belohnungen offen"
   set2_off_week: Nur Königliche Belobigung (kein Königreichskrieg).
-  set2_won: 'Königreichskrieg gewonnen: Königliches Gerangel ebenfalls offen.'
+  set2_won: 'Königreichskrieg gewonnen: King of Battle Belohnung ebenfalls offen.'
   set2_lost: 'Königreichskrieg verloren: Nur Königliche Belobigung.'
-  set2_pending: Belohnung für Königliches Gerangel bei Sieg am Samstag; der König verteilt diese nach dem Ergebnis.
-  rewards_open_until: "{week} Belohnungen offen bis Dienstag 23:59 GT. {set2}"
-  rewards_closed: Belohnungen sind geschlossen. Die nächsten öffnen am Freitag gegen 20:00 GT, nach dem Kapitol-Ereignis.
-  capitol_holder: KAPITOL-HALTER
-  current_holder: AKTUELLER KAPITOL-HALTER
-  next_holder: NÄCHSTER KAPITOL-HALTER
+  set2_pending: King of Battle Belohnung, falls der Krieg am Samstag gewonnen wird; der König verteilt diese nach dem Ergebnis.
+  rewards_open_until: Belohnungen für {week} offen bis Dienstag 23:59 GT. {set2}
+  rewards_closed: Belohnungen sind geschlossen. Das nächste Mal am Freitag gegen 20:00 GT offen, nach dem Capitol-Event.
+  capitol_holder: CAPITOL-HALTER
+  current_holder: AKTUELLER CAPITOL-HALTER
+  next_holder: NÄCHSTER CAPITOL-HALTER
   rank: 'Rang #{rank}'
   rank_override: 'Rang #{rank} (Überschreiben)'
-  rank_override_schedule: 'Rang #{rank} • Überschreibungs-Zeitplan'
-  captured_friday: Eingenommen am Freitag
-  captures_today: Einnahmen heute
-  captures_friday: Einnahmen am Freitag
+  rank_override_schedule: 'Rang #{rank} • Zeitplan überschreiben'
+  captured_friday: Erobert am Freitag
+  captures_today: Eroberungen heute
+  captures_friday: Eroberungen am Freitag
   cycle_progress: ZYKLUSFORTSCHRITT
   day_of_28: Tag {day} von 28 ({week})
   week_n: Woche {n}
   next_reset: NÄCHSTER RESET (00:00 GT)
-  next_kw: NÄCHSTER KW-KAMPF
+  next_kw: NÄCHSTE KW-SCHLACHT
   saturday: Samstag
   today: "🔥 HEUTE"
-  none_this_week: Keine diese Woche
-  perspective: "🔍 PERSPEKTIVE:"
-  combined: "🌐 Kombiniert (Königreich + [{tag}])"
-  internal_only: "🛡️ [{tag}] Nur intern"
-  kingdom_only: "👑 Nur Königreichs-Operationen"
-  operations_active: "🛡️ [{tag}] Operationen aktiv"
+  none_this_week: Nichts diese Woche
   upcoming: Anstehende Operationen & Meilensteine
   times_shown: Zeiten angezeigt in {gt} & deiner Lokalzeit
   gt_label: Game Time (UTC-2)
-  no_operations: Keine Operationen für diese Perspektive geplant.
+  view_label: Kalenderansicht
+  view_week: Woche
+  view_cycle: Zyklus
+  show_label: Event-Typen anzeigen
+  kind_server: Server
+  kind_alliance: Allianz
+  kind_war: Königreichskrieg
+  kind_capitol: Capitol
+  this_week: Diese Woche
+  last_week: Letzte Woche
+  next_week: Nächste Woche
+  prev_week: Vorherige Woche
+  next_week_aria: Folgende Woche
+  this_cycle: Dieser Zyklus
+  kvk_short: KvK {n}
+  off_short: Aus
+  king_unknown: Wird beim Reset entschieden
+  day_today: Heute
+  day_tomorrow: Morgen
+  day_yesterday: Gestern
+  events_count_one: "{n} Event"
+  events_count_other: "{n} Events"
+  nothing_planned: Nichts geplant
+  now_line: Jetzt · {time} GT
+  local_time: "{time} lokal"
+  happening_now: Läuft gerade · endet in {time}
+  next_up: Als Nächstes · in {time}
+  dur_m: "{m}m"
+  dur_h: "{h}h"
+  dur_hm: "{h}h {m}m"
+  dur_dh: "{d}d {h}h"
+  ev_capture_title_open: "👑 Capitol-Eroberung"
+  ev_capture_desc_open: Die Sitze dieses Zyklus werden beim Reset entschieden.
   all_day: Ganztägig
   every_2_days: "🔁 Alle 2 Tage"
   weekly: "🔁 Wöchentlich"
   mandatory: "🚨 Pflicht"
   edit: "✏️ Bearbeiten"
   delete: "🗑️ Löschen"
-  ev_capture_title: "👑 Kapitol-Einnahme — {who}"
-  ev_capture_desc: "{who} ({rank}) nimmt das Kapitol am Freitag ein."
-  ev_kw_title: "⚔️ Königreichskrieg-Kampf"
-  ev_kw_desc: Beginnt um 12:00 GT, normalerweise gegen 14:00 GT beendet. Ein Sieg öffnet die Belohnungstruhen für das Königliche Gerangel zusätzlich zur Königlichen Belobigung.
+  ev_capture_title: "👑 Capitol-Eroberung — {who}"
+  ev_capture_desc: "{who} ({rank}) erobert am Freitag das Capitol."
+  ev_kw_title: "⚔️ Königreichskrieg-Schlacht"
+  ev_kw_desc: Startet 12:00 GT, normalerweise gegen 14:00 GT beendet. Ein Sieg öffnet die King of Battle Belohnungstruhen zusätzlich zur Königlichen Belobigung.
   ev_open_title: "🎁 Belohnungen offen — {week}"
-  ev_open_desc_kw: Königliche Belobigung öffnet nach dem Kapitol-Ereignis. Belohnung für Königliches Gerangel folgt bei Sieg im Königreichskrieg am Samstag; der König verteilt diese nach dem Ergebnis.
-  ev_open_desc: Königliche Belobigung öffnet nach dem Kapitol-Ereignis (kein Königreichskrieg diese Woche).
+  ev_open_desc_kw: Königliche Belobigung öffnet nach dem Capitol-Event. King of Battle Belohnung folgt, falls der Königreichskrieg am Samstag gewonnen wird; der König verteilt diese nach dem Ergebnis.
+  ev_open_desc: Königliche Belobigung öffnet nach dem Capitol-Event (kein Königreichskrieg diese Woche).
   ev_close_title: "⌛ Belohnungen schließen — {week}"
-  ev_close_desc: 'Truhen laufen Mittwoch 00:00 GT ab: verteile alles vor diesem Zeitpunkt.'
+  ev_close_desc: 'Truhen laufen am Mittwoch um 00:00 GT ab: Alles davor verteilen.'
 calendar_events:
   reminder: 1 Stunde vorher auf Discord erinnern
   reminder_hint: Im Alarm-Kanal deiner Allianz gepostet, mit Ping auf die oben gewählte Rolle.
