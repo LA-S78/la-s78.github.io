@@ -417,11 +417,10 @@ calendar:
   upcoming: "Upcoming Operations & Milestones"
   times_shown: "Times displayed in {gt} & your Local Time"
   gt_label: "Game Time (UTC-2)"
-  # The events at a glance (js/calendar-views.js): week and cycle views, type chips, find
+  # The events at a glance (js/calendar-views.js): week and cycle views, type chips
   view_label: "Calendar view"
   view_week: "Week"
   view_cycle: "Cycle"
-  find_placeholder: "Find an event…"
   show_label: "Show event types"
   kind_server: "Server"
   kind_alliance: "Alliance"
@@ -441,8 +440,6 @@ calendar:
   day_yesterday: "Yesterday"
   events_count_one: "{n} event"
   events_count_other: "{n} events"
-  matches_week_one: "{n} match this week"
-  matches_week_other: "{n} matches this week"
   nothing_planned: "Nothing planned"
   now_line: "Now · {time} GT"
   local_time: "{time} local"

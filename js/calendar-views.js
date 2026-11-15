@@ -8,8 +8,7 @@
  *   - Cycle: the cycle's four weeks as a grid (a row per week, named, with its Capitol seat,
  *     the week's "king"); tap a day for its events.
  * Chips for the event types (Server, Alliance, Kingdom War, Capitol) show or hide each type
- * (they replace the old Perspective menu), and "Find an event…" keeps only events whose
- * title or description has the words typed. Both apply to every view.
+ * (they replace the old Perspective menu), in every view.
  *
  * Days are Game Time days (UTC-2; the game resets at 00:00 GT). Times show Game Time first,
  * then the reader's own time. The events come from /api/calendar (via js/calendar.js), which
@@ -51,12 +50,6 @@
   };
   const pad = (n) => String(n).padStart(2, '0');
   const gtTime = (ms) => `${pad(gt(ms).getUTCHours())}:${pad(gt(ms).getUTCMinutes())}`;
-  /** Lower case without accents, for "Find an event" (as the site search does). */
-  const fold = (text) =>
-    String(text || '')
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/\p{M}/gu, '');
 
   /** Which colour and chip an event belongs to. */
   function kindOf(evt) {
@@ -96,7 +89,6 @@
       week: 0, // -1, 0, 1: last, this, next week
       day: null, // the day picked in the cycle view (00:00 GT, ms)
       kinds: new Set(KINDS),
-      query: '',
       events: [],
       status: null,
     };
@@ -108,8 +100,6 @@
           <button type="button" class="toggle-btn" data-view="week" aria-pressed="false">${esc(t('calendar.view_week'))}</button>
           <button type="button" class="toggle-btn" data-view="cycle" aria-pressed="false">${esc(t('calendar.view_cycle'))}</button>
         </div>
-        <input type="search" class="cal-find" autocomplete="off" enterkeyhint="search"
-               placeholder="${esc(t('calendar.find_placeholder'))}" aria-label="${esc(t('calendar.find_placeholder'))}">
       </div>
       <div class="cal-chips" role="group" aria-label="${esc(t('calendar.show_label'))}">
         ${KINDS.map(
@@ -119,7 +109,6 @@
       </div>
       <div class="cal-view" aria-live="polite"></div>`;
     const viewEl = container.querySelector('.cal-view');
-    const find = container.querySelector('.cal-find');
 
     container.querySelectorAll('[data-view]').forEach((btn) =>
       btn.addEventListener('click', () => {
@@ -138,21 +127,6 @@
         draw();
       }),
     );
-    let findTimer = 0;
-    find.addEventListener('input', () => {
-      clearTimeout(findTimer);
-      findTimer = setTimeout(() => {
-        state.query = find.value;
-        draw();
-      }, 150);
-    });
-    find.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && find.value) {
-        find.value = '';
-        state.query = '';
-        draw();
-      }
-    });
     // Clicks inside the view: week arrows, a day, Edit/Delete
     viewEl.addEventListener('click', (e) => {
       const nav = e.target.closest('[data-week-step]');
@@ -183,9 +157,7 @@
 
     // ---------- drawing ----------
     function visible(evt) {
-      if (!state.kinds.has(evt.kind)) return false;
-      const words = fold(state.query).split(/\s+/).filter(Boolean);
-      return words.every((w) => evt.search.includes(w));
+      return state.kinds.has(evt.kind);
     }
 
     function draw() {
@@ -372,14 +344,6 @@
               <span class="wk-count">${c.list.length || ''}</span></button>`;
           })
           .join('');
-        const matches = state.query.trim()
-          ? `<p class="cal-matches">${esc(
-              tn(
-                'calendar.matches_week',
-                days.reduce((n, d) => n + onDay(d).length, 0),
-              ),
-            )}</p>`
-          : '';
         html = `<div class="wk-nav">
             <button type="button" class="wk-arrow" data-week-step="-1" ${state.week <= -1 ? 'disabled' : ''} aria-label="${esc(t('calendar.prev_week'))}">‹</button>
             <div class="wk-label"><b>${esc(label)}</b>
@@ -387,7 +351,7 @@
               ${kingHtml(w0, false)}</div>
             <button type="button" class="wk-arrow" data-week-step="1" ${state.week >= 1 ? 'disabled' : ''} aria-label="${esc(t('calendar.next_week_aria'))}">›</button>
           </div>
-          <div class="wk-strip">${strip}</div>${matches}
+          <div class="wk-strip">${strip}</div>
           <div class="ag">${days.map(dayBlock).join('')}</div>`;
       }
       viewEl.innerHTML = html;
@@ -412,7 +376,6 @@
               s,
               e: Number.isFinite(end) ? end : s,
               kind: kindOf(e),
-              search: fold(`${e.title} ${e.description || ''}`),
             };
           })
           .filter((e) => Number.isFinite(e.s))
