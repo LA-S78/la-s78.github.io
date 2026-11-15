@@ -138,6 +138,18 @@
     width: auto;
     min-width: 0;
   }
+
+  /* Live / My plan and Discard share the line under the tag box */
+  #planner-override-container .planner-compare {
+    flex: 1 1 auto;
+    width: auto;
+  }
+  #planner-override-container .planner-compare .toggle-btn {
+    flex: 1 1 0;
+  }
+  #planner-override-container .discard-plan-btn {
+    flex: 0 0 auto;
+  }
 }
 
 /* "Change to:" before the map's tag box (greyed out with it until Planner Mode is on) */
