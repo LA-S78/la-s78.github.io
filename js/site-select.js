@@ -15,9 +15,9 @@
  *            the site's own data (e.g. _data/event_types.yml): it's put into the page as is.
  * data-hint: a short second line, shown smaller beside the name.
  *
- * Options added or replaced later (select.innerHTML = …) are picked up automatically. After
- * setting select.value in code (which fires no event), call SiteSelect.sync(select) so the
- * button shows it. Keyboard: arrows, Home/End, typing a letter, Enter/Space to pick, Escape
+ * Options added or replaced later (select.innerHTML = …), a value set in code (select.value =
+ * …, which fires no event), the select hidden or disabled, and dropdowns added to the page
+ * later are all picked up by themselves. (SiteSelect.sync(select) still redraws on demand.) Keyboard: arrows, Home/End, typing a letter, Enter/Space to pick, Escape
  * to close; screen readers get a button and a listbox.
  */
 (function () {
@@ -65,13 +65,18 @@
     button.setAttribute('aria-controls', list.id);
     wrap.append(button, list);
 
-    // Its name: the <label for>, else the select's aria-label
-    const label = document.querySelector(`label[for="${CSS.escape(id)}"]`);
+    // Its name: the <label for>, or a <label> around it, else the select's aria-label
+    const label = document.querySelector(`label[for="${CSS.escape(id)}"]`) || wrap.closest('label');
     if (label) {
       if (!label.id) label.id = `${id}-label`;
-      button.setAttribute('aria-labelledby', `${label.id} ${button.id}`);
-      list.setAttribute('aria-labelledby', label.id);
+      // A label around it: name it by the label's own text, not the whole label
+      const own = label.contains(wrap) ? label.querySelector(':scope > span') : null;
+      if (own && !own.id) own.id = `${id}-label-text`;
+      const nameId = own ? own.id : label.id;
+      button.setAttribute('aria-labelledby', `${nameId} ${button.id}`);
+      list.setAttribute('aria-labelledby', nameId);
       label.addEventListener('click', (e) => {
+        if (wrap.contains(e.target)) return; // a click on the dropdown itself
         e.preventDefault();
         button.focus();
       });
@@ -104,6 +109,7 @@
       const chosen = select.options[select.selectedIndex];
       button.innerHTML = `<span class="site-select-value">${chosen ? content(chosen) : ''}</span><svg class="site-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>`;
       button.disabled = select.disabled;
+      wrap.hidden = select.hidden; // a dropdown hidden until it's needed hides its button too
       const opts = options();
       list.querySelectorAll('[role="option"]').forEach((li) => {
         li.setAttribute(
@@ -219,6 +225,22 @@
       attributeFilter: ['disabled', 'hidden', 'data-icon', 'data-hint'],
     });
 
+    // A value set in code fires no event: the select's own value and selectedIndex are watched
+    // on this select, so the button follows whatever sets them
+    for (const prop of ['value', 'selectedIndex']) {
+      const native = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, prop);
+      Object.defineProperty(select, prop, {
+        configurable: true,
+        get() {
+          return native.get.call(this);
+        },
+        set(v) {
+          native.set.call(this, v);
+          sync();
+        },
+      });
+    }
+
     build();
     const api = { sync, build, open, close };
     upgraded.set(select, api);
@@ -243,4 +265,15 @@
   else enhanceAll();
   document.addEventListener('turbo:load', () => enhanceAll());
   document.addEventListener('turbo:frame-render', () => enhanceAll());
+  // Dropdowns a script adds later (an editor drawn on demand): upgraded as they arrive
+  let pending = false;
+  new MutationObserver((records) => {
+    if (pending) return;
+    if (!records.some((r) => [...r.addedNodes].some((n) => n.nodeType === 1))) return;
+    pending = true;
+    queueMicrotask(() => {
+      pending = false;
+      enhanceAll();
+    });
+  }).observe(document.documentElement, { childList: true, subtree: true });
 })();

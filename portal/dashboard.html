@@ -15,7 +15,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
     <!-- Stewards: look at (and help with) any alliance's dashboard -->
     <label class="dash-switcher" id="dash-switcher" hidden>
       <span>{{ "dashboard.view_as" | t }}</span>
-      <select id="dash-switcher-select"></select>
+      <select id="dash-switcher-select" data-site-select></select>
     </label>
   </div>
 
@@ -559,7 +559,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         <label for="ed-note">${e('note')} <span class="dash-muted">${escapeHtml(t('common.optional'))}</span></label>
         <textarea id="ed-note" rows="2" maxlength="400" placeholder="${e('note_example')}">${escapeHtml(w.note)}</textarea>
         <label for="ed-vis">${e('who_sees')}</label>
-        <select id="ed-vis">
+        <select id="ed-vis" data-site-select>
           <option value="r4_only"${w.visibility !== 'members' ? ' selected' : ''}>${e('officers_only')}</option>
           <option value="members"${w.visibility === 'members' ? ' selected' : ''}>${e('all_members')}</option>
         </select>
@@ -595,7 +595,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       $('ed-paste').value = w.data.columns.length ? W.toText(w.data) : '';
 
       const colSelect = (id, value, { none } = {}) =>
-        `<select id="${id}">${none ? `<option value="">${none}</option>` : ''}${w.data.columns
+        `<select id="${id}" data-site-select>${none ? `<option value="">${none}</option>` : ''}${w.data.columns
           .map((c, i) => `<option value="${i}"${Number(value) === i && value !== '' && value !== undefined ? ' selected' : ''}>${escapeHtml(c)}</option>`)
           .join('')}</select>`;
 
@@ -659,7 +659,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         }
         if (w.type === 'bar') {
           html += `<label for="ed-stacked">${e('several_columns')}</label>
-            <select id="ed-stacked">
+            <select id="ed-stacked" data-site-select>
               <option value=""${!o.stacked ? ' selected' : ''}>${e('side_by_side')}</option>
               <option value="sum"${o.stacked === 'sum' ? ' selected' : ''}>${e('stacked_totals')}</option>
               <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>${e('stacked_percent')}</option>
