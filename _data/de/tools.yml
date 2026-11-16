@@ -443,6 +443,8 @@ calendar:
   mandatory: Obligatorisch
   edit: "✏️ Bearbeiten"
   delete: "🗑️ Löschen"
+  edit_events: "Events bearbeiten"
+  edit_done: "Fertig"
   ev_capture_title: Kapitol-Einnahme — {who}
   ev_capture_desc: "{who} ({rank}) nimmt das Kapitol am Freitag ein."
   ev_kw_title: Königreichskrieg-Schlacht
@@ -512,7 +514,10 @@ calendar_events:
   bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Ziel an.
   save_failed: Event konnte nicht gespeichert werden
   published: Operation erfolgreich veröffentlicht!
-  confirm_delete: Bist du sicher, dass du diese Operation aus dem Kalender entfernen willst?
+  delete_heading: "Dieses Event löschen?"
+  delete_repeats: "Es wiederholt sich ({repeat}): Alle Wiederholungen werden entfernt, nicht nur diese."
+  delete_final: "Das kann nicht rückgängig gemacht werden."
+  delete_confirm: "Löschen"
   delete_failed: Event konnte nicht gelöscht werden
   removed: Operation entfernt.
 kings_scheduler:

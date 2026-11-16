@@ -443,6 +443,8 @@ calendar:
   mandatory: Zorunlu
   edit: "✏️ Düzenle"
   delete: "🗑️ Sil"
+  edit_events: "Etkinlikleri düzenle"
+  edit_done: "Bitti"
   ev_capture_title: Başkent Ele Geçirme — {who}
   ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçiriyor."
   ev_kw_title: Krallık Savaşı
@@ -512,7 +514,10 @@ calendar_events:
   bad_role: Lütfen özel uyarı hedefi için geçerli bir 17-20 haneli Discord Rol Kimliği girin.
   save_failed: Etkinlik kaydedilemedi
   published: Operasyon başarıyla yayınlandı!
-  confirm_delete: Bu operasyonu takvimden kaldırmak istediğinizden emin misiniz?
+  delete_heading: "Bu etkinlik silinsin mi?"
+  delete_repeats: "Tekrarlanıyor ({repeat}): yalnızca bu değil, tüm tekrarlar silinecek."
+  delete_final: "Bu işlem geri alınamaz."
+  delete_confirm: "Sil"
   delete_failed: Etkinlik silinemedi
   removed: Operasyon kaldırıldı.
 kings_scheduler:

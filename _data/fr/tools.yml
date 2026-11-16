@@ -443,6 +443,8 @@ calendar:
   mandatory: Obligatoire
   edit: "✏️ Modifier"
   delete: "🗑️ Supprimer"
+  edit_events: "Modifier les événements"
+  edit_done: "Terminé"
   ev_capture_title: Capture du Capitole — {who}
   ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
   ev_kw_title: Bataille de Guerre des Royaumes
@@ -512,7 +514,10 @@ calendar_events:
   bad_role: Veuillez entrer un ID de rôle Discord valide de 17-20 chiffres pour la cible de l'alerte personnalisée.
   save_failed: Échec de l'enregistrement de l'événement
   published: Opération publiée avec succès !
-  confirm_delete: Êtes-vous sûr de vouloir supprimer cette opération du calendrier ?
+  delete_heading: "Supprimer cet événement ?"
+  delete_repeats: "Il se répète ({repeat}) : toutes les répétitions seront supprimées, pas seulement celle-ci."
+  delete_final: "Cette action est irréversible."
+  delete_confirm: "Supprimer"
   delete_failed: Échec de la suppression de l'événement
   removed: Opération supprimée.
 kings_scheduler:

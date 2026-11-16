@@ -449,6 +449,8 @@ calendar:
   mandatory: Обязательно
   edit: "✏️ Редактировать"
   delete: "🗑️ Удалить"
+  edit_events: "Редактировать события"
+  edit_done: "Готово"
   ev_capture_title: Захват Капитолия — {who}
   ev_capture_desc: "{who} ({rank}) захватывает Капитолий в пятницу."
   ev_kw_title: Битва Войны Королевств
@@ -518,7 +520,10 @@ calendar_events:
   bad_role: Пожалуйста, введите валидный ID роли Discord из 17-20 цифр.
   save_failed: Не удалось сохранить событие
   published: Операция успешно опубликована!
-  confirm_delete: Вы уверены, что хотите удалить эту операцию из календаря?
+  delete_heading: "Удалить это событие?"
+  delete_repeats: "Оно повторяется ({repeat}): будут удалены все повторы, а не только этот."
+  delete_final: "Это действие нельзя отменить."
+  delete_confirm: "Удалить"
   delete_failed: Не удалось удалить событие
   removed: Операция удалена.
 kings_scheduler:
