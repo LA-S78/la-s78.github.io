@@ -114,17 +114,18 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
           </div>
 
           <!-- The Discord reminder, one choice (owner, 2026-11-16): none, or posted 1 hour before
+               (each option with a line icon: bell off, bell, target, megaphone, message)
                the start pinging the alert role, a specific role, @everyone or nobody
                (api/_reminders.js). It replaced a "Remind 1 hour before" tick box that sat apart
                from the ping, which made "Silent" look like "no reminder". -->
           <div class="form-group form-col-full">
             <label for="evt-input-notify">{{ "calendar_events.alert_level" | t }}</label>
             <select id="evt-input-notify" class="cal-form-select" data-site-select>
-              <option value="off">{{ "calendar_events.notify_off" | t }}</option>
-              <option value="role" selected>{{ "calendar_events.notify_role" | t }}</option>
-              <option value="custom_role">{{ "calendar_events.notify_custom" | t }}</option>
-              <option value="everyone">{{ "calendar_events.notify_everyone" | t }}</option>
-              <option value="none">{{ "calendar_events.notify_none" | t }}</option>
+              <option value="off" data-icon='<path d="M8.7 3A6 6 0 0 1 18 8c0 2.3.3 4 .7 5.3"/><path d="M17 17H3s3-2 3-9c0-.6.1-1.2.3-1.7"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/><path d="m2 2 20 20"/>'>{{ "calendar_events.notify_off" | t }}</option>
+              <option value="role" data-icon='<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>' selected>{{ "calendar_events.notify_role" | t }}</option>
+              <option value="custom_role" data-icon='<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>'>{{ "calendar_events.notify_custom" | t }}</option>
+              <option value="everyone" data-icon='<path d="m3 11 18-5v12L3 14z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>'>{{ "calendar_events.notify_everyone" | t }}</option>
+              <option value="none" data-icon='<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'>{{ "calendar_events.notify_none" | t }}</option>
             </select>
             <small class="form-hint" id="evt-reminder-hint">{{ "calendar_events.reminder_hint" | t }}</small>
           </div>

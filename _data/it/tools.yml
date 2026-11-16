@@ -153,8 +153,8 @@ chart_editor:
   note: Spiegazione
   note_example: es. Minimo 15M di punti Duello richiesti entro il reset di venerdì
   who_sees: Chi può vederlo
-  officers_only: "🔒 Solo ufficiali (R4/R5)"
-  all_members: "👥 Tutti i membri dell'alleanza"
+  officers_only: "Solo ufficiali (R4/R5)"
+  all_members: "Tutti i membri dell'alleanza"
   data: Dati
   data_source: Da dove provengono i dati
   paste: "📋 Incolla una tabella"
@@ -462,8 +462,8 @@ calendar_events:
   reminder_no_server_channel: Il canale avvisi NAP non è ancora configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
   edit_heading: Modifica evento
   scope_label: Eventi da gestire
-  scope_server: "🌐 Eventi del server"
-  scope_alliance: "🛡️ Eventi di [{tag}]"
+  scope_server: "Eventi del server"
+  scope_alliance: "Eventi di [{tag}]"
   save_changes: "💾 Salva modifiche"
   manage_mode: MODALITÀ GESTIONE
   session_active: Sessione autenticata attiva
@@ -498,11 +498,11 @@ calendar_events:
   every_2_days: Si ripete ogni 2 giorni
   weekly: Si ripete settimanalmente (stesso giorno e orario)
   alert_level: Promemoria Discord (1 ora prima)
-  notify_off: "📵 Nessun promemoria"
-  notify_role: "🔔 Notifica il ruolo avvisi dell'alleanza"
-  notify_custom: "🎯 Notifica un ruolo specifico"
-  notify_everyone: "🚨 Notifica @everyone"
-  notify_none: "🔕 Pubblica senza notifica"
+  notify_off: "Nessun promemoria"
+  notify_role: "Notifica il ruolo avvisi dell'alleanza"
+  notify_custom: "Notifica un ruolo specifico"
+  notify_everyone: "Notifica @everyone"
+  notify_none: "Pubblica senza notifica"
   role_id: ID ruolo specifico
   role_id_hint: "(solo per “Notifica un ruolo specifico”)"
   role_id_title: Deve essere un ID ruolo Discord valido di 17-20 cifre

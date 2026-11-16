@@ -154,8 +154,8 @@ chart_editor:
   note: Пояснение
   note_example: 'например: Минимум 15 млн очков Дуэли к сбросу в пятницу'
   who_sees: Кто может видеть
-  officers_only: "🔒 Только офицеры (R4/R5)"
-  all_members: "👥 Все участники альянса"
+  officers_only: "Только офицеры (R4/R5)"
+  all_members: "Все участники альянса"
   data: Данные
   data_source: Источник данных
   paste: "📋 Вставить таблицу"
@@ -468,8 +468,8 @@ calendar_events:
   reminder_no_server_channel: Канал оповещений NAP еще не настроен (NAP_ALERT_CHANNEL_ID), поэтому серверные напоминания не могут быть опубликованы.
   edit_heading: Редактировать событие
   scope_label: Чьи события управлять
-  scope_server: "🌐 События всего сервера"
-  scope_alliance: "🛡️ События [{tag}]"
+  scope_server: "События всего сервера"
+  scope_alliance: "События [{tag}]"
   save_changes: "💾 Сохранить изменения"
   manage_mode: РЕЖИМ УПРАВЛЕНИЯ
   session_active: Активная сессия аутентификации
@@ -504,11 +504,11 @@ calendar_events:
   every_2_days: Повторять каждые 2 дня
   weekly: Повторять еженедельно (тот же день и время)
   alert_level: Напоминание в Discord (за 1 час)
-  notify_off: "📵 Без напоминания"
-  notify_role: "🔔 Пинг роли оповещений альянса"
-  notify_custom: "🎯 Пинг указанной роли"
-  notify_everyone: "🚨 Пинг @everyone"
-  notify_none: "🔕 Опубликовать без пинга"
+  notify_off: "Без напоминания"
+  notify_role: "Пинг роли оповещений альянса"
+  notify_custom: "Пинг указанной роли"
+  notify_everyone: "Пинг @everyone"
+  notify_none: "Опубликовать без пинга"
   role_id: ID указанной роли
   role_id_hint: "(только для «Пинг указанной роли»)"
   role_id_title: Должен быть действительный ID роли Discord из 17-20 цифр

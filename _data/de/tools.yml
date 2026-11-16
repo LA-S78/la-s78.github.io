@@ -153,8 +153,8 @@ chart_editor:
   note: Erklärung
   note_example: z. B. Mindestens 15M Duell-Punkte bis Freitag-Reset
   who_sees: Wer darf es sehen
-  officers_only: "🔒 Nur Offiziere (R4/R5)"
-  all_members: "👥 Alle Allianzmitglieder"
+  officers_only: "Nur Offiziere (R4/R5)"
+  all_members: "Alle Allianzmitglieder"
   data: Daten
   data_source: Datenquelle
   paste: "📋 Tabelle einfügen"
@@ -462,8 +462,8 @@ calendar_events:
   reminder_no_server_channel: Der NAP Alert-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können keine Server-Erinnerungen gepostet werden.
   edit_heading: Event bearbeiten
   scope_label: Dessen Events verwaltet werden
-  scope_server: "🌐 Serverweite Events"
-  scope_alliance: "🛡️ [{tag}] Events"
+  scope_server: "Serverweite Events"
+  scope_alliance: "[{tag}] Events"
   save_changes: "💾 Änderungen speichern"
   manage_mode: VERWALTUNGSMODUS
   session_active: Authentifizierte Sitzung aktiv
@@ -498,11 +498,11 @@ calendar_events:
   every_2_days: Wiederholt sich alle 2 Tage
   weekly: Wiederholt sich wöchentlich (gleicher Tag & gleiche Zeit)
   alert_level: Discord-Erinnerung (1 Stunde vorher)
-  notify_off: "📵 Keine Erinnerung"
-  notify_role: "🔔 Alert-Rolle der Allianz pingen"
-  notify_custom: "🎯 Spezifische Rolle pingen"
-  notify_everyone: "🚨 @everyone pingen"
-  notify_none: "🔕 Posten ohne Ping"
+  notify_off: "Keine Erinnerung"
+  notify_role: "Alert-Rolle der Allianz pingen"
+  notify_custom: "Spezifische Rolle pingen"
+  notify_everyone: "@everyone pingen"
+  notify_none: "Posten ohne Ping"
   role_id: Spezifische Rollen-ID
   role_id_hint: "(nur für „Spezifische Rolle pingen“)"
   role_id_title: Muss eine gültige 17-20-stellige Discord-Rollen-ID sein

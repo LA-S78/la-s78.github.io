@@ -425,13 +425,17 @@ async function initCalendar() {
     const scopeSwitch = document.getElementById('mgmt-scope-switch');
     if (scopeSwitch && viaSignIn && signedInSteward && signedInAlliance) {
       scopeSwitch.hidden = false;
+      // Line icons (js/site-select.js): a globe for the server, a shield for the alliance
+      const GLOBE =
+        '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/>';
+      const SHIELD = '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>';
       scopeSwitch.innerHTML = [
-        ['global', t('calendar_events.scope_server')],
-        [signedInAlliance, t('calendar_events.scope_alliance', { tag: signedInAlliance })],
+        ['global', t('calendar_events.scope_server'), GLOBE],
+        [signedInAlliance, t('calendar_events.scope_alliance', { tag: signedInAlliance }), SHIELD],
       ]
         .map(
-          ([value, label]) =>
-            `<option value="${esc(value)}"${value === sessionScope ? ' selected' : ''}>${esc(label)}</option>`,
+          ([value, label, icon]) =>
+            `<option value="${esc(value)}" data-icon="${esc(icon)}"${value === sessionScope ? ' selected' : ''}>${esc(label)}</option>`,
         )
         .join('');
       scopeSwitch.addEventListener('change', () => {
