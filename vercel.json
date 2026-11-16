@@ -7,6 +7,10 @@
     {
       "source": "/reset",
       "destination": "/reset.html"
+    },
+    {
+      "source": "/alliance-images/:file",
+      "destination": "/api/proposal?alliance_image=:file"
     }
   ],
   "headers": [

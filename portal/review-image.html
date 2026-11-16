@@ -1,0 +1,133 @@
+---
+layout: portal
+title: Review Alliance Image
+title_key: "image_review.page_title"
+permalink: /review-image.html
+lang: "en"
+strings: [image_review]
+---
+
+<!-- Opened from the review post in Discord. The image is fetched only after the server has
+     checked the Steward's sign-in (api/_alliance_images.js); it never sits in Discord. -->
+<div class="content-pane portal-pane-sm" id="image-review-app">
+  <div class="portal-header">
+    <div class="alliance-badge-lg" id="ir-alliance">{{ "image_review.page_title" | t }}</div>
+    <div class="sub-text" id="ir-kind"></div>
+  </div>
+
+  <div id="ir-message" class="status-banner">{{ "image_review.loading" | t }}</div>
+  <div class="ir-sign-in" id="ir-sign-in" hidden>
+    <button type="button" class="btn btn-primary" id="ir-sign-in-btn">{{ "image_review.sign_in" | t }}</button>
+  </div>
+
+  <div id="ir-review" hidden>
+    <figure class="ir-figure">
+      <img id="ir-image" alt="" />
+      <figcaption class="sub-text" id="ir-sent-by"></figcaption>
+    </figure>
+    <p class="ir-note" id="ir-replaces" hidden>{{ "image_review.replaces" | t }}</p>
+    <p class="ir-note">{{ "image_review.checklist" | t }}</p>
+    <div class="form-group">
+      <label for="ir-reason">{{ "image_review.reason_label" | t }}</label>
+      <textarea id="ir-reason" rows="2" maxlength="300"></textarea>
+    </div>
+    <div class="form-actions ir-actions">
+      <button type="button" class="btn btn-secondary" id="ir-reject">{{ "image_review.reject" | t }}</button>
+      <button type="button" class="btn btn-primary" id="ir-approve">{{ "image_review.approve" | t }}</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const id = new URLSearchParams(location.search).get('id') || '';
+    const $ = (s) => document.getElementById(s);
+    const message = $('ir-message');
+    const show = (text, kind = '') => {
+      message.hidden = false;
+      message.className = `status-banner${kind ? ` ${kind}` : ''}`;
+      message.textContent = text;
+    };
+    const pass = () => localStorage.getItem('auth-session') || '';
+    const ask = (query, init = {}) =>
+      fetch(`/api/proposal${query}`, {
+        ...init,
+        headers: { ...(init.headers || {}), Authorization: `Bearer ${pass()}` },
+        cache: 'no-store',
+      });
+    const signIn = (text) => {
+      show(text, 'warning');
+      $('ir-sign-in').hidden = false;
+    };
+    $('ir-sign-in-btn').addEventListener('click', () => window.triggerDiscordLogin?.());
+
+    const decidedText = (d) =>
+      ({
+        approved: t('image_review.decided_approved'),
+        rejected: t('image_review.decided_rejected'),
+        replaced: t('image_review.decided_replaced'),
+        expired: t('image_review.decided_expired'),
+      })[d?.status];
+
+    async function load() {
+      if (!/^[a-f0-9]{24}$/.test(id)) return show(t('image_review.no_id'), 'error');
+      if (!pass()) return signIn(t('image_review.sign_in_needed'));
+      let res = await ask(`?image_review=${id}`);
+      let data = await res.json().catch(() => ({}));
+      if (res.status === 401) return signIn(t('image_review.sign_in_needed'));
+      if (res.status === 403) return show(t('image_review.stewards_only'), 'error');
+      if (!res.ok) return show(decidedText(data.decided) || data.error || res.statusText, 'warning');
+
+      $('ir-alliance').textContent = `[${data.alliance}]`;
+      $('ir-kind').textContent = t(`image_review.${data.kind}`);
+      const when = new Date(data.at).toLocaleString(document.documentElement.lang, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      });
+      $('ir-sent-by').textContent = t('image_review.sent_by', { name: data.submittedBy, when });
+      $('ir-replaces').hidden = !data.current;
+      const img = $('ir-image');
+      img.width = data.width;
+      img.height = data.height;
+      img.alt = `[${data.alliance}] ${t(`image_review.${data.kind}`)}`;
+      img.classList.add(`ir-${data.kind}`);
+
+      res = await ask(`?image_review=${id}&file=1`);
+      if (!res.ok) {
+        data = await res.json().catch(() => ({}));
+        return show(data.error || res.statusText, 'error');
+      }
+      img.src = URL.createObjectURL(await res.blob());
+      message.hidden = true;
+      $('ir-review').hidden = false;
+    }
+
+    async function decide(decision) {
+      const buttons = [$('ir-approve'), $('ir-reject')];
+      buttons.forEach((b) => (b.disabled = true));
+      show(t('image_review.working'));
+      try {
+        const res = await ask('', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'alliance_image_review',
+            id,
+            decision,
+            reason: $('ir-reason').value.trim(),
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || res.statusText);
+        show(t(decision === 'approve' ? 'image_review.done_approved' : 'image_review.done_rejected'), 'status-success');
+        $('ir-review').hidden = true;
+      } catch (err) {
+        show(`❌ ${err.message}`, 'error');
+        buttons.forEach((b) => (b.disabled = false));
+      }
+    }
+    $('ir-approve').addEventListener('click', () => decide('approve'));
+    $('ir-reject').addEventListener('click', () => decide('reject'));
+    load().catch((err) => show(`❌ ${err.message}`, 'error'));
+  })();
+</script>

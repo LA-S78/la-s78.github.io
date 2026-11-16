@@ -799,3 +799,28 @@ live_data:
 # The Rules page's Capitol Rotation section: a link to the rotation on the calendar.
 capitol_rotation:
   calendar_link: "See this cycle's rotation on the calendar →"
+
+# The Steward review page for alliance images (portal/review-image.html), opened from the
+# review post in Discord.
+image_review:
+  page_title: "Review Alliance Image"
+  loading: "Loading the image…"
+  sign_in_needed: "Sign in with Discord to review this image. Only Stewards can see it."
+  sign_in: "Sign in with Discord"
+  stewards_only: "Only Stewards can review alliance images."
+  no_id: "This link is missing the image's ID. Open it again from the Discord post."
+  wide: "Wide banner (NAP Ranks)"
+  square: "Square card (Capitol Rotation)"
+  sent_by: "Sent by {name}, {when}"
+  replaces: "Approving replaces the alliance's current image."
+  checklist: "Check before approving: the alliance's own art or in-game art; no other alliance's branding; nothing offensive; no personal information."
+  reason_label: "Reason (optional, shown in the Discord post if you reject)"
+  approve: "✅ Approve"
+  reject: "❌ Reject"
+  working: "Saving…"
+  decided_approved: "Already approved."
+  decided_rejected: "Already rejected."
+  decided_replaced: "Replaced by a newer image from the alliance."
+  decided_expired: "Expired: not reviewed within 7 days."
+  done_approved: "Approved. The image is now live, and the Discord post is updated."
+  done_rejected: "Rejected. The image was deleted, and the Discord post is updated."
