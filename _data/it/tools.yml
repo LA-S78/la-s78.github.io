@@ -364,30 +364,30 @@ register:
   r_commands: 'Comandi Slash Distribuiti:'
   r_leaders: 'Leadership Autorizzata:'
 calendar:
-  loading: Caricamento programma del Regno...
+  loading: Caricamento pianificazione del Regno...
   load_failed: 'Impossibile caricare il calendario: {error}'
   phase: Fase
-  schedule_title: Programma Guerra tra Regni
-  loading_cycle: Caricamento dettagli ciclo...
+  schedule_title: Pianificazione Guerra tra Regni
+  loading_cycle: Caricamento dettagli del ciclo...
   badge_closed: "🔒 Ricompense chiuse"
-  badge_kob_open: "⚔️ King of Battle aperto"
-  badge_awaiting: "⏳ In attesa risultato KW"
+  badge_kob_open: "⚔️ Re della Battaglia aperto"
+  badge_awaiting: "⏳ In attesa del risultato della Guerra tra Regni"
   badge_open: "🎁 Ricompense aperte"
   set2_off_week: Solo Encomio del Re (nessuna Guerra tra Regni).
-  set2_won: 'Guerra tra Regni vinta: aperto anche il premio King of Battle.'
+  set2_won: 'Guerra tra Regni vinta: anche la ricompensa Re della Battaglia è aperta.'
   set2_lost: 'Guerra tra Regni persa: solo Encomio del Re.'
-  set2_pending: Premio King of Battle se la guerra di sabato viene vinta; il Re distribuisce dopo il risultato.
-  rewards_open_until: Ricompense della {week} aperte fino a martedì 23:59 GT. {set2}
-  rewards_closed: Ricompense chiuse. Le prossime apriranno venerdì verso le 20:00 GT, dopo l'evento del Campidoglio.
+  set2_pending: Ricompensa Re della Battaglia se la guerra di sabato viene vinta; il Re distribuisce dopo il risultato.
+  rewards_open_until: Ricompense {week} aperte fino a martedì 23:59 GT. {set2}
+  rewards_closed: Le ricompense sono chiuse. Si riaprono venerdì verso le 20:00 GT, dopo l'evento del Campidoglio.
   capitol_holder: DETENTORE CAMPIDOGLIO
   current_holder: ATTUALE DETENTORE CAMPIDOGLIO
   next_holder: PROSSIMO DETENTORE CAMPIDOGLIO
-  rank: 'Grado #{rank}'
-  rank_override: 'Grado #{rank} (Override)'
-  rank_override_schedule: 'Grado #{rank} • Programma Override'
-  captured_friday: Conquistato venerdì
-  captures_today: Conquiste oggi
-  captures_friday: Conquiste venerdì
+  rank: 'Rango #{rank}'
+  rank_override: 'Rango #{rank} (Sovrascritto)'
+  rank_override_schedule: 'Rango #{rank} • Pianificazione Sovrascritta'
+  captured_friday: Catturato venerdì
+  captures_today: Catture oggi
+  captures_friday: Catture venerdì
   cycle_progress: AVANZAMENTO CICLO
   day_of_28: Giorno {day} di 28 ({week})
   week_n: Settimana {n}
@@ -396,11 +396,11 @@ calendar:
   saturday: Sabato
   today: "🔥 OGGI"
   none_this_week: Nessuno questa settimana
-  upcoming: Prossimi eventi
-  times_shown: Orari mostrati in {gt} e nel tuo Orario Locale
+  upcoming: Prossimi Eventi
+  times_shown: Orari visualizzati in {gt} & tuo Orario Locale
   gt_label: Game Time (UTC-2)
-  view_label: Visualizzazione calendario
-  type_label: Tipo di evento
+  view_label: Vista calendario
+  type_label: Tipo evento
   type_all: Tutti gli eventi
   type_other: Altri eventi
   read_guide: Guida
@@ -428,15 +428,15 @@ calendar:
   nothing_planned: Nulla di pianificato
   now_line: Ora · {time} GT
   local_time: "{time} locale"
-  until: fino a {when} GT
+  until: fino alle {when} GT
   happening_now: In corso · termina tra {time}
   next_up: Prossimo · tra {time}
   dur_m: "{m}m"
   dur_h: "{h}h"
   dur_hm: "{h}h {m}m"
   dur_dh: "{d}g {h}h"
-  ev_capture_title_open: Conquista del Campidoglio
-  ev_capture_desc_open: I posti di questo ciclo vengono decisi al reset.
+  ev_capture_title_open: Cattura Campidoglio
+  ev_capture_desc_open: I posti di questo ciclo vengono decisi al suo reset.
   all_day: Tutto il giorno
   every_2_days: Ogni 2 giorni
   weekly: Settimanale
@@ -444,81 +444,81 @@ calendar:
   edit: "✏️ Modifica"
   delete: "🗑️ Elimina"
   edit_events: "✏️ Modifica eventi"
-  edit_done: "✓ Modifiche completate"
-  ev_capture_title: Conquista del Campidoglio — {who}
-  ev_capture_desc: "{who} ({rank}) conquista il Campidoglio venerdì."
+  edit_done: "✓ Fine modifica"
+  ev_capture_title: Cattura Campidoglio — {who}
+  ev_capture_desc: "{who} ({rank}) cattura il Campidoglio venerdì."
   ev_kw_title: Battaglia Guerra tra Regni
-  ev_kw_desc: Inizia alle 12:00 GT, solitamente termina verso le 14:00 GT. Una vittoria apre i forzieri premio King of Battle oltre all'Encomio del Re.
+  ev_kw_desc: Inizia alle 12:00 GT, solitamente termina verso le 14:00 GT. Una vittoria apre i forzieri della ricompensa Re della Battaglia oltre all'Encomio del Re.
   ev_open_title: Ricompense aperte — {week}
-  ev_open_desc_kw: L'Encomio del Re apre dopo l'evento del Campidoglio. Segue il premio King of Battle se la Guerra tra Regni di sabato è vinta; il Re distribuisce dopo il risultato.
-  ev_open_desc: L'Encomio del Re apre dopo l'evento del Campidoglio (nessuna Guerra tra Regni questa settimana).
+  ev_open_desc_kw: L'Encomio del Re si apre dopo l'evento del Campidoglio. La ricompensa Re della Battaglia segue se la Guerra tra Regni di sabato viene vinta; il Re distribuisce dopo il risultato.
+  ev_open_desc: L'Encomio del Re si apre dopo l'evento del Campidoglio (nessuna Guerra tra Regni questa settimana).
   ev_close_title: Ricompense chiuse — {week}
   ev_close_desc: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
 calendar_events:
-  reminder: Promemoria su Discord 1 ora prima
-  reminder_hint: Pubblicato nel canale avvisi della tua alleanza, menzionando il ruolo scelto sopra.
-  reminder_hint_server: Pubblicato nel canale avvisi Discord del NAP (e nelle alleanze che hanno aderito), menzionando il ruolo scelto sopra.
-  reminder_no_channel: 'La tua alleanza non ha ancora un canale avvisi: esegui /registerbot sul tuo Discord affinché i promemoria possano essere pubblicati.'
-  reminder_no_server_channel: Il canale avvisi NAP non è ancora configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
+  reminder: Ricorda su Discord 1 ora prima
+  reminder_hint: Pubblicato nel canale di avviso della tua alleanza, notificando il ruolo scelto sopra.
+  reminder_hint_server: Pubblicato nel canale di avviso NAP Discord (e nelle alleanze che hanno aderito), notificando il ruolo scelto sopra.
+  reminder_no_channel: 'La tua alleanza non ha ancora un canale di avviso: esegui /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
+  reminder_no_server_channel: Il canale di avviso NAP non è ancora configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
   edit_heading: Modifica evento
   scope_label: Di chi gestire gli eventi
-  scope_server: "🌐 Eventi del server"
+  scope_server: "🌐 Eventi dell'intero server"
   scope_alliance: "🛡️ Eventi [{tag}]"
   save_changes: "💾 Salva modifiche"
   manage_mode: MODALITÀ GESTIONE
   session_active: Sessione autenticata attiva
-  schedule_operation: "➕ Pianifica operazione"
-  create_operation: Crea operazione
-  kingdom_admin: "👑 AMMINISTRAZIONE REGNO"
-  kingdom_desc: Pianificazione avvisi e operazioni per tutto il Regno
-  kingdom_heading: Crea operazione del Regno ([GLOBAL])
-  leadership: "🛡️ COMANDO [{tag}]"
+  schedule_operation: "➕ Pianifica Operazione"
+  create_operation: Crea Operazione
+  kingdom_admin: "👑 AMMINISTRATORE REGNO"
+  kingdom_desc: Pianificazione di avvisi e operazioni per tutto il Regno
+  kingdom_heading: Crea Operazione Regno ([GLOBAL])
+  leadership: "🛡️ LEADERSHIP [{tag}]"
   leadership_desc: Gestione operazioni interne per [{tag}]
-  alliance_heading: Crea operazione [{tag}]
-  preset: Tipo di evento
+  alliance_heading: Crea Operazione [{tag}]
+  preset: Tipo evento
   type_custom: Personalizzato
   type_custom_hint: Modulo vuoto
   duration_h: "{n}h"
-  preset_custom: "🛠️ Operazione personalizzata (Vuota)"
-  preset_crystal_cluster: "🔮 Valle di Cristallo (0.5h)"
-  preset_elixir_scramble: "🧪 Mischia Reale (0.5h)"
+  preset_custom: "🛠️ Operazione Personalizzata (Vuota)"
+  preset_crystal_cluster: "🔮 Valle Cristallo (0.5h)"
+  preset_elixir_scramble: "🧪 Mischia Elisir (0.5h)"
   preset_survival_battle: "⚔️ Battaglia di Sopravvivenza (4.0h)"
-  preset_kill_event: "🩸 Evento di uccisione (24.0h)"
-  preset_kvk_battle: "👑 Battaglia Guerra tra Regni (1.0h)"
-  preset_undead_siege: "💀 Assedio non morti (1.0h)"
-  preset_gear_upgrade: "🛡️ Miglioramento equipaggiamento (48.0h)"
+  preset_kill_event: "🩸 Evento Uccisioni (24.0h)"
+  preset_kvk_battle: "👑 Battaglia Regno vs Regno (1.0h)"
+  preset_undead_siege: "💀 Assedio Non Morti (1.0h)"
+  preset_gear_upgrade: "🛡️ Aggiornamento Equipaggiamento (48.0h)"
   preset_cheese_trap: "🧀 Trappola Cheese (0.5h)"
-  title: Titolo evento
-  title_example: es. Difesa alveare o Assalto avamposto
+  title: Titolo Evento
+  title_example: es. Difesa Alveare o Assalto Avamposto
   date: Data di inizio (AAAA-MM-GG)
   time: Game Time (HH:MM UTC-2)
   time_hint: Game Time del server (si aggancia a incrementi di 5 minuti)
-  duration: Durata (ore)
+  duration: Durata (Ore)
   frequency: Frequenza
-  once: Evento una tantum (Non si ripete)
+  once: Evento Singolo (Non si ripete)
   every_2_days: Si ripete ogni 2 giorni
   weekly: Si ripete settimanalmente (stesso giorno & orario)
-  alert_level: Livello avviso Discord
-  notify_role: "🔔 Meniona ruolo alleanza predefinito (Fallback su @everyone)"
-  notify_custom: "🎯 Obiettivo ID ruolo specifico (Override singolo)"
-  notify_everyone: "🚨 Forza broadcast @everyone (Operazione obbligatoria)"
-  notify_none: "🔕 Silenzioso (Solo calendario - Nessun avviso Discord)"
-  role_id: ID ruolo specifico
-  role_id_hint: "(Richiesto solo per ruolo specifico obiettivo)"
-  role_id_title: Deve essere un ID ruolo Discord valido di 17-20 cifre
+  alert_level: Livello Avviso Discord
+  notify_role: "🔔 Notifica Ruolo Alleanza Predefinito (ripiega su @everyone)"
+  notify_custom: "🎯 Punta a un ID Ruolo Specifico (sovrascrittura singola)"
+  notify_everyone: "🚨 Forza broadcast @everyone (Operazione Obbligatoria)"
+  notify_none: "🔕 Silenzioso (Solo Calendario - Nessuna notifica Discord)"
+  role_id: ID Ruolo Specifico
+  role_id_hint: "(Richiesto solo per Target Ruolo Specifico)"
+  role_id_title: Deve essere un ID Ruolo Discord valido di 17-20 cifre
   details: Istruzioni / Punto di raduno
-  details_example: es. Raduno all'alveare Alpha. R4 guidano i rally. Comunicazioni vocali attive.
-  publish: Pubblica nel calendario
+  details_example: es. Raduno all'Alveare Alpha. R4 guidano i raduni. Comunicazioni vocali attive.
+  publish: Pubblica nel Calendario
   publishing: Pubblicazione in corso...
   bad_time: Il Game Time deve essere impostato con incrementi di 5 minuti (:00, :05, :10, ecc.)
-  bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per l'obiettivo avviso personalizzato.
-  save_failed: Salvataggio evento fallito
+  bad_role: Inserisci un ID Ruolo Discord valido di 17-20 cifre per il target di avviso personalizzato.
+  save_failed: Impossibile salvare l'evento
   published: Operazione pubblicata con successo!
-  delete_heading: "Eliminare questo evento?"
-  delete_repeats: "Si ripete ({repeat}): verranno rimosse tutte le ripetizioni, non solo questa."
-  delete_final: "L'operazione non si può annullare."
-  delete_confirm: "Elimina"
-  delete_failed: Eliminazione evento fallita
+  delete_heading: Eliminare questo evento?
+  delete_repeats: 'Si ripete ({repeat}): ogni ripetizione verrà rimossa, non solo questa.'
+  delete_final: L'operazione è irreversibile.
+  delete_confirm: Elimina
+  delete_failed: Impossibile eliminare l'evento
   removed: Operazione rimossa.
 kings_scheduler:
   title: Rotazione Campidoglio
