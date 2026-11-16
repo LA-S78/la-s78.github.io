@@ -364,27 +364,27 @@ register:
   r_commands: 'Commandes slash déployées :'
   r_leaders: 'Direction autorisée :'
 calendar:
-  loading: Chargement du planning du Royaume...
+  loading: Chargement du programme du royaume...
   load_failed: 'Échec du chargement du calendrier : {error}'
   phase: Phase
-  schedule_title: Planning de la Guerre des Royaumes
+  schedule_title: Programme de la Guerre des Royaumes
   loading_cycle: Chargement des détails du cycle...
   badge_closed: "🔒 Récompenses fermées"
-  badge_kob_open: "⚔️ Roi de la Bataille ouvert"
-  badge_awaiting: "⏳ En attente du résultat de la Guerre des Royaumes"
+  badge_kob_open: "⚔️ Roi du Combat ouvert"
+  badge_awaiting: "⏳ En attente du résultat de la guerre"
   badge_open: "🎁 Récompenses ouvertes"
-  set2_off_week: Recommandation du Roi uniquement (pas de Guerre des Royaumes).
-  set2_won: 'Guerre des Royaumes gagnée : récompense du Roi de la Bataille également ouverte.'
-  set2_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement.'
-  set2_pending: Récompense du Roi de la Bataille si la guerre de samedi est gagnée ; le Roi distribue après le résultat.
-  rewards_open_until: Récompenses {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
-  rewards_closed: Les récompenses sont fermées. Ouverture suivante vendredi vers 20:00 GT, après l'événement du Capitole.
+  set2_off_week: Récompense du Roi uniquement (pas de Guerre des Royaumes).
+  set2_won: 'Guerre des Royaumes gagnée : Récompense du Roi du Combat également ouverte.'
+  set2_lost: 'Guerre des Royaumes perdue : Récompense du Roi uniquement.'
+  set2_pending: Récompense du Roi du Combat si la guerre de samedi est gagnée ; le Roi distribue après le résultat.
+  rewards_open_until: Récompenses de la {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
+  rewards_closed: Les récompenses sont fermées. Prochaine ouverture le vendredi vers 20:00 GT, après l'événement du capitole.
   capitol_holder: DÉTENTEUR DU CAPITOLE
   current_holder: DÉTENTEUR ACTUEL DU CAPITOLE
   next_holder: PROCHAIN DÉTENTEUR DU CAPITOLE
   rank: 'Rang #{rank}'
   rank_override: 'Rang #{rank} (Priorité)'
-  rank_override_schedule: 'Rang #{rank} • Planning prioritaire'
+  rank_override_schedule: 'Rang #{rank} • Priorité de Programme'
   captured_friday: Capturé vendredi
   captures_today: Captures aujourd'hui
   captures_friday: Captures vendredi
@@ -396,8 +396,8 @@ calendar:
   saturday: Samedi
   today: "🔥 AUJOURD'HUI"
   none_this_week: Aucun cette semaine
-  upcoming: "Événements à venir"
-  times_shown: Heures affichées en {gt} & votre heure locale
+  upcoming: Événements à venir
+  times_shown: Heures affichées en {gt} & votre Heure Locale
   gt_label: Game Time (UTC-2)
   view_label: Vue calendrier
   type_label: Type d'événement
@@ -418,8 +418,8 @@ calendar:
   next_week_aria: Semaine suivante
   this_cycle: Ce cycle
   kvk_short: KvK {n}
-  off_short: Repos
-  king_unknown: Décidé lors de la réinitialisation
+  off_short: 'Off'
+  king_unknown: Décidé à la réinitialisation
   day_today: Aujourd'hui
   day_tomorrow: Demain
   day_yesterday: Hier
@@ -429,14 +429,14 @@ calendar:
   now_line: Maintenant · {time} GT
   local_time: "{time} locale"
   until: jusqu'à {when} GT
-  happening_now: En cours · fin dans {time}
+  happening_now: En cours · se termine dans {time}
   next_up: Suivant · dans {time}
   dur_m: "{m}m"
   dur_h: "{h}h"
   dur_hm: "{h}h {m}m"
   dur_dh: "{d}j {h}h"
   ev_capture_title_open: Capture du Capitole
-  ev_capture_desc_open: Les sièges de ce cycle sont décidés à sa réinitialisation.
+  ev_capture_desc_open: Les sièges de ce cycle sont décidés lors de sa réinitialisation.
   all_day: Toute la journée
   every_2_days: Tous les 2 jours
   weekly: Hebdomadaire
@@ -446,12 +446,12 @@ calendar:
   ev_capture_title: Capture du Capitole — {who}
   ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
   ev_kw_title: Bataille de Guerre des Royaumes
-  ev_kw_desc: Début à 12:00 GT, se termine généralement vers 14:00 GT. Une victoire débloque les coffres de récompense du Roi de la Bataille en plus de la Recommandation du Roi.
-  ev_open_title: Récompenses ouvertes — {week}
-  ev_open_desc_kw: La Recommandation du Roi s'ouvre après l'événement du Capitole. La récompense du Roi de la Bataille suit si la Guerre des Royaumes de samedi est gagnée ; le Roi distribue après le résultat.
-  ev_open_desc: La Recommandation du Roi s'ouvre après l'événement du Capitole (pas de Guerre des Royaumes cette semaine).
-  ev_close_title: Récompenses fermées — {week}
-  ev_close_desc: 'Les coffres expirent mercredi à 00:00 GT : distribuez tout avant.'
+  ev_kw_desc: Début à 12:00 GT, se termine généralement vers 14:00 GT. Une victoire débloque les coffres de récompense du Roi du Combat en plus de la Récompense du Roi.
+  ev_open_title: Récompenses Ouvertes — {week}
+  ev_open_desc_kw: La Récompense du Roi s'ouvre après l'événement du capitole. La Récompense du Roi du Combat suit si la Guerre des Royaumes de samedi est gagnée ; le Roi distribue après le résultat.
+  ev_open_desc: La Récompense du Roi s'ouvre après l'événement du capitole (pas de Guerre des Royaumes cette semaine).
+  ev_close_title: Récompenses Fermées — {week}
+  ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette date.'
 calendar_events:
   reminder: Rappel sur Discord 1 heure avant
   reminder_hint: Publié dans le canal d'alerte de votre alliance, en pingant le rôle choisi ci-dessus.
@@ -516,67 +516,67 @@ calendar_events:
   delete_failed: Échec de la suppression de l'événement
   removed: Opération supprimée.
 kings_scheduler:
-  title: "Rotation du Capitole"
-  subtitle: Programme automatisé de défense des matchs et de restitution
+  title: Rotation du Capitole
+  subtitle: Programme automatisé de défense et restitution des matchs
   overrides: 'Priorités : {n}/2'
   loading: Chargement du programme en direct...
-  off_week: Semaine creuse
-  week_fri: Semaine {n} ven
+  off_week: Semaine Off
+  week_fri: Semaine {n} Ven
   boss_window: Fenêtre Boss {n}
   kvk_finale: Finale KvK
   loot_one: "{n} Coffre du Roi"
   loot_other: "{n} Coffres du Roi"
   loot_border: 2 Coffres du Roi + Bordure
   active: ACTIF
-  buyouts_title: "🛡️ Restitution active des rachats en temps de guerre"
-  buyouts_count: "{n} actif"
+  buyouts_title: "🛡️ Restitution de rachat en temps de guerre active"
+  buyouts_count: "{n} Actif"
   installment: 'Paiement semaine {week} :'
   payout: "{reg} & {kw}"
-  reg_gold: "+{n} Or régulier"
-  kw_gold: "+{n} Or Guerre des Royaumes"
+  reg_gold: "+{n} Or Rég."
+  kw_gold: "+{n} Or KvK"
   paid: PAYÉ
   pending: EN ATTENTE
   beneficiary: 'Bénéficiaire :'
   threat: "(Menace : {threat})"
-  red_list: Liste rouge
+  red_list: Liste Rouge
   wartime_buyout: Rachat en temps de guerre
-  override_title: "🚨 Déclarer une priorité au programme"
-  override_help: Vous avez scouté un serveur dangereux ? Entrez l'ID du serveur adverse
-  target_week: Semaine KvK ciblée
-  week1_option: Semaine 1 vendredi (Match Boss 2)
-  week2_option: Semaine 2 vendredi (Match Boss 3)
-  opponent: Adversaire scouté (Serveur)
-  opponent_example: 'ex: S94, S77'
-  disclaimer: "*Les priorités envoient une proposition au sénat sur Discord à la direction pour vérification."
-  dispatch: Examiner et envoyer la priorité
+  override_title: "🚨 Déclarer une priorité de programme"
+  override_help: Serveur dangereux repéré ? Entrez l'ID du serveur adverse
+  target_week: Semaine KvK cible
+  week1_option: Vendredi Semaine 1 (Matchup Boss 2)
+  week2_option: Vendredi Semaine 2 (Matchup Boss 3)
+  opponent: Adversaire repéré (Serveur)
+  opponent_example: ex. S94, S77
+  disclaimer: "*Les priorités envoient une proposition au sénat sur Discord pour vérification par les dirigeants."
+  dispatch: Réviser & Envoyer la priorité
   already_scheduled: "{who} Aucune priorité de défense requise."
-  already_scheduled_who: WLO est déjà programmé pour la semaine {n}.
-  step1: 'Étape 1 : Échange de calendrier (Coût : 0 coffre)'
-  step1_text: WLO prendra la semaine {week} pour la défense du royaume contre {threat}.
+  already_scheduled_who: WLO est déjà programmé pour la Semaine {n}.
+  step1: 'Étape 1 : Échange de calendrier (Coût 0 coffre)'
+  step1_text: WLO prendra la {week} pour la défense du royaume contre {threat}.
   week_label: Semaine {n}
   opponent_placeholder: "[Adversaire]"
   week3_finale: 'Finale Semaine 3 :'
   lose_nothing: "{ally} perd 0 coffre. {wlo} perd 0 coffre."
-  step2: 'Étape 2 : Rachat en temps de guerre (restitution en 2 versements)'
-  step2_text: 'Ceci est le {second} de ce cycle. La semaine 3 a déjà été échangée, donc {ally} ne participe pas et reçoit un rachat avec des coffres :'
-  second_override: deuxième priorité de défense
-  distribution: 'Distribution semaine {n} :'
-  plus_gold: "+1 Or régulier & +1 Or Guerre des Royaumes pour [{tag}]"
-  buyout_perks: "{ally} perd 2 coffres du Roi, gagne 4 coffres en or. {wlo} gagne 2 coffres du Roi, perd 4 coffres en or."
+  step2: 'Étape 2 : Rachat en temps de guerre (Restitution en 2 fois)'
+  step2_text: 'Ceci est la {second} de ce cycle. La semaine 3 ayant déjà été échangée, {ally} se retire et reçoit un rachat avec des coffres :'
+  second_override: seconde priorité de défense
+  distribution: 'Distribution Semaine {n} :'
+  plus_gold: "+1 Or Régulier & +1 Or KvK pour [{tag}]"
+  buyout_perks: "{ally} perd 2 coffres du Roi, gagne 4 coffres d'or. {wlo} gagne 2 coffres du Roi, perd 4 coffres d'or."
   proposal_buyout: "🛡️ Déclarer un rachat en temps de guerre"
   proposal_swap: "⚔️ Déclarer un échange de défense"
-  sum_second: 2e priorité de défense WLO
-  sum_first: 1re priorité de défense WLO
-  sum_vs: Semaine {n} contre {threat}
+  sum_second: 2ème priorité de défense WLO
+  sum_first: 1ère priorité de défense WLO
+  sum_vs: Semaine {n} vs {threat}
   sum_buyout_issued: "[{tag}] Rachat en temps de guerre émis"
-  sum_four_gold: 4 coffres en or au total
+  sum_four_gold: 4 Coffres d'Or au total
   sum_installment: 'Versement {i} (S{week}) :'
-  sum_installment_chests: 1 Or régulier + 1 Or Guerre des Royaumes
+  sum_installment_chests: 1 Or Rég. + 1 Or KvK
   sum_swap: Échange de calendrier
   sum_swap_text: WLO prend le vendredi de la S{n}
-  sum_promoted: "[{tag}] Promu à la finale semaine 3"
-  sum_promoted_text: "(2 coffres du Roi + Objet de buff)"
-  sum_cost: 'Coût des coffres d''alliance WLO : 0'
+  sum_promoted: "[{tag}] Promu à la Finale Semaine 3"
+  sum_promoted_text: "(2 Coffres du Roi + Objet de buff)"
+  sum_cost: 'Coût en coffres d''alliance WLO : 0'
 rewards_planner:
   host_week: Semaine d'accueil active
   planner_mode: Mode planificateur
@@ -759,4 +759,4 @@ live_data:
   offline: "📴 Hors ligne : affichage des données enregistrées sur cet appareil ({when})."
   updating: "⏳ Mise à jour…"
 capitol_rotation:
-  calendar_link: "Voir la rotation de ce cycle dans le calendrier →"
+  calendar_link: Voir la rotation de ce cycle sur le calendrier →

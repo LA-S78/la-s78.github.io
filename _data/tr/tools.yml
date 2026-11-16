@@ -364,40 +364,40 @@ register:
   r_commands: 'Slash Komutları Dağıtıldı:'
   r_leaders: 'Yetkili Liderlik:'
 calendar:
-  loading: Krallık takvimi yükleniyor...
+  loading: Krallık programı yükleniyor...
   load_failed: 'Takvim yüklenemedi: {error}'
   phase: Aşama
-  schedule_title: Krallık Savaşı Takvimi
+  schedule_title: Krallık Savaşı Programı
   loading_cycle: Döngü detayları yükleniyor...
   badge_closed: "🔒 Ödüller kapalı"
   badge_kob_open: "⚔️ Savaş Kralı açık"
   badge_awaiting: "⏳ KS sonucu bekleniyor"
   badge_open: "🎁 Ödüller açık"
-  set2_off_week: Sadece Kralın Takdiri (Krallık Savaşı yok).
+  set2_off_week: Sadece Kral Takdiri (Krallık Savaşı yok).
   set2_won: 'Krallık Savaşı kazanıldı: Savaş Kralı Ödülü de açık.'
-  set2_lost: 'Krallık Savaşı kaybedildi: Sadece Kralın Takdiri.'
-  set2_pending: Cumartesi günkü savaş kazanılırsa Savaş Kralı Ödülü; sonuçtan sonra Kral dağıtımı yapar.
+  set2_lost: 'Krallık Savaşı kaybedildi: Sadece Kral Takdiri.'
+  set2_pending: Cumartesi günkü savaş kazanılırsa Savaş Kralı Ödülü verilir; sonuçtan sonra Kral tarafından dağıtılır.
   rewards_open_until: "{week} ödülleri Salı 23:59 GT'ye kadar açık. {set2}"
-  rewards_closed: Ödüller kapalı. Bir sonraki açılış, başkent etkinliğinden sonra Cuma günü yaklaşık 20:00 GT'de.
+  rewards_closed: Ödüller kapalı. Bir sonraki açılış, başkent etkinliğinden sonra Cuma günü yaklaşık 20:00 GT'de gerçekleşecektir.
   capitol_holder: BAŞKENT SAHİBİ
   current_holder: MEVCUT BAŞKENT SAHİBİ
-  next_holder: SONRAKİ BAŞKENT SAHİBİ
+  next_holder: SIRADAKİ BAŞKENT SAHİBİ
   rank: 'Sıra #{rank}'
   rank_override: 'Sıra #{rank} (Geçersiz Kılma)'
-  rank_override_schedule: 'Sıra #{rank} • Geçersiz Kılma Takvimi'
+  rank_override_schedule: 'Sıra #{rank} • Programı Geçersiz Kıl'
   captured_friday: Cuma günü ele geçirildi
-  captures_today: Bugün ele geçirmeler
+  captures_today: Bugünkü ele geçirmeler
   captures_friday: Cuma günü ele geçirmeler
   cycle_progress: DÖNGÜ İLERLEMESİ
-  day_of_28: 28 günün {day}. günü ({week})
+  day_of_28: 28'in {day}. günü ({week})
   week_n: "{n}. Hafta"
-  next_reset: SONRAKİ SIFIRLAMA (00:00 GT)
-  next_kw: SONRAKİ KS SAVAŞI
+  next_reset: SIRADAKİ SIFIRLANMA (00:00 GT)
+  next_kw: SIRADAKİ KS SAVAŞI
   saturday: Cumartesi
   today: "🔥 BUGÜN"
   none_this_week: Bu hafta yok
-  upcoming: "Yaklaşan Etkinlikler"
-  times_shown: Zamanlar {gt} & Yerel Saatinizde gösteriliyor
+  upcoming: Yaklaşan Etkinlikler
+  times_shown: Zamanlar {gt} & Yerel Saatinize göre gösterilir
   gt_label: Oyun Saati (UTC-2)
   view_label: Takvim görünümü
   type_label: Etkinlik türü
@@ -419,7 +419,7 @@ calendar:
   this_cycle: Bu döngü
   kvk_short: KvK {n}
   off_short: Kapalı
-  king_unknown: Sıfırlamada belirlenir
+  king_unknown: Sıfırlamada belirlenecek
   day_today: Bugün
   day_tomorrow: Yarın
   day_yesterday: Dün
@@ -429,29 +429,29 @@ calendar:
   now_line: Şimdi · {time} GT
   local_time: "{time} yerel"
   until: "{when} GT'ye kadar"
-  happening_now: Şu an gerçekleşiyor · {time} içinde biter
+  happening_now: Şimdi gerçekleşiyor · {time} içinde biter
   next_up: Sırada · {time} içinde
   dur_m: "{m}dk"
   dur_h: "{h}s"
   dur_hm: "{h}s {m}dk"
   dur_dh: "{d}g {h}s"
   ev_capture_title_open: Başkent Ele Geçirme
-  ev_capture_desc_open: Bu döngünün koltukları sıfırlamada belirlenir.
+  ev_capture_desc_open: Bu döngünün koltukları sıfırlanma anında belirlenir.
   all_day: Tüm Gün
-  every_2_days: 2 Günde Bir
+  every_2_days: Her 2 günde bir
   weekly: Haftalık
   mandatory: Zorunlu
   edit: "✏️ Düzenle"
   delete: "🗑️ Sil"
   ev_capture_title: Başkent Ele Geçirme — {who}
-  ev_capture_desc: "{who} ({rank}), Cuma günü Başkenti ele geçiriyor."
+  ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçiriyor."
   ev_kw_title: Krallık Savaşı
-  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarı biter. Galibiyet, Kralın Takdiri'nin yanı sıra Savaş Kralı Ödül sandıklarını açar.
-  ev_open_title: Ödüller Açık — {week}
-  ev_open_desc_kw: Kralın Takdiri başkent etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Savaş Kralı Ödülü gelir; sonuçtan sonra Kral dağıtır.
-  ev_open_desc: Kralın Takdiri başkent etkinliğinden sonra açılır (bu hafta Krallık Savaşı yok).
-  ev_close_title: Ödüller Kapalı — {week}
-  ev_close_desc: 'Sandıklar Çarşamba 00:00 GT''de sona erer: o zamana kadar her şeyi dağıtın.'
+  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarında biter. Kazanılması durumunda Kral Takdiri'ne ek olarak Savaş Kralı Ödül sandıkları açılır.
+  ev_open_title: Ödüller Açıldı — {week}
+  ev_open_desc_kw: Kral Takdiri başkent etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Savaş Kralı Ödülü açılır; sonuçtan sonra Kral tarafından dağıtılır.
+  ev_open_desc: Kral Takdiri başkent etkinliğinden sonra açılır (bu hafta Krallık Savaşı yok).
+  ev_close_title: Ödüller Kapandı — {week}
+  ev_close_desc: 'Sandıkların süresi Çarşamba 00:00 GT''de dolar: her şeyi ondan önce dağıtın.'
 calendar_events:
   reminder: Discord'da 1 saat önce hatırlat
   reminder_hint: İttifakınızın uyarı kanalında yayınlanır, yukarıda seçilen rol etiketlenir.
@@ -516,19 +516,19 @@ calendar_events:
   delete_failed: Etkinlik silinemedi
   removed: Operasyon kaldırıldı.
 kings_scheduler:
-  title: "Kapitol Rotasyonu"
-  subtitle: Otomatik Eşleşme Savunması & Tazminat Programı
+  title: Başkent Rotasyonu
+  subtitle: Otomatik Eşleşme Savunması & İade Programı
   overrides: 'Geçersiz Kılmalar: {n}/2'
   loading: Canlı program yükleniyor...
   off_week: Boş Hafta
-  week_fri: "{n}. Hafta Cuma"
+  week_fri: "{n}. Hafta Cum"
   boss_window: Patron {n} Penceresi
-  kvk_finale: Krallık Savaşı Finali
+  kvk_finale: KvK Finali
   loot_one: "{n} Kral Sandığı"
   loot_other: "{n} Kral Sandığı"
   loot_border: 2 Kral Sandığı + Çerçeve
   active: AKTİF
-  buyouts_title: "🛡️ Aktif Savaş Dönemi Geri Ödemesi"
+  buyouts_title: "🛡️ Aktif Savaş Zamanı Telafisi"
   buyouts_count: "{n} Aktif"
   installment: "{week}. Hafta Ödemesi:"
   payout: "{reg} & {kw}"
@@ -539,43 +539,43 @@ kings_scheduler:
   beneficiary: 'Lehtar:'
   threat: "(Tehdit: {threat})"
   red_list: Kırmızı Liste
-  wartime_buyout: Savaş Dönemi Geri Ödemesi
+  wartime_buyout: Savaş Zamanı Telafisi
   override_title: "🚨 Programı Geçersiz Kıl"
-  override_help: Tehlikeli bir sunucu mu keşfettiniz? Rakibin sunucu kimliğini girin
-  target_week: Hedef Krallık Savaşı Haftası
+  override_help: Tehlikeli bir sunucu mu keşfedildi? Rakip sunucu ID'sini girin
+  target_week: Hedef KvK Haftası
   week1_option: 1. Hafta Cuma (Patron 2 Eşleşmesi)
   week2_option: 2. Hafta Cuma (Patron 3 Eşleşmesi)
   opponent: Keşfedilen Rakip (Sunucu)
   opponent_example: ör. S94, S77
   disclaimer: "*Geçersiz kılmalar, doğrulama için Discord yönetimine bir senato teklifi gönderir."
-  dispatch: Geçersiz Kılmayı İncele & Gönder
+  dispatch: İncele & Gönder
   already_scheduled: "{who} Savunma geçersiz kılmaya gerek yok."
-  already_scheduled_who: WLO, {n}. Hafta için zaten planlandı.
+  already_scheduled_who: WLO zaten {n}. Hafta için planlandı.
   step1: 'Adım 1: Takvim Değişimi (0 Sandık Maliyeti)'
-  step1_text: WLO, {threat}'e karşı krallık savunması için {week}. haftayı alacak.
+  step1_text: WLO, {threat} tehdidine karşı krallık savunması için {week} haftasını alacak.
   week_label: "{n}. Hafta"
   opponent_placeholder: "[Rakip]"
   week3_finale: '3. Hafta Finali:'
   lose_nothing: "{ally} 0 sandık kaybeder. {wlo} 0 sandık kaybeder."
-  step2: 'Adım 2: Savaş Dönemi Geri Ödemesi (2 Taksitli Tazminat)'
-  step2_text: 'Bu, bu döngüdeki {second}. 3. hafta zaten takas edildiğinden, {ally} kenara çekilir ve sandıklarla bir geri ödeme alır:'
+  step2: 'Adım 2: Savaş Zamanı Telafisi (2 Taksitli İade)'
+  step2_text: 'Bu, bu döngüdeki {second}. 3. Hafta zaten takas edildiği için {ally} dışarıda kalır ve sandıklarla bir telafi alır:'
   second_override: ikinci savunma geçersiz kılma
   distribution: "{n}. Hafta Dağıtımı:"
-  plus_gold: "+1 Normal Altın & +1 KS Altını, [{tag}] için"
+  plus_gold: "+1 Normal Altın & +1 KS Altını [{tag}]'a"
   buyout_perks: "{ally} 2 Kral sandığı kaybeder, 4 altın sandık kazanır. {wlo} 2 Kral sandığı kazanır, 4 altın sandık kaybeder."
-  proposal_buyout: "🛡️ Savaş Dönemi Geri Ödemesi Bildir"
-  proposal_swap: "⚔️ Savunma Değişimi Bildir"
+  proposal_buyout: "🛡️ Savaş Zamanı Telafisi Bildir"
+  proposal_swap: "⚔️ Savunma Takası Bildir"
   sum_second: WLO 2. Savunma Geçersiz Kılma
   sum_first: WLO 1. Savunma Geçersiz Kılma
   sum_vs: "{n}. Hafta vs {threat}"
-  sum_buyout_issued: "[{tag}] Savaş Dönemi Geri Ödemesi Yayınlandı"
+  sum_buyout_issued: "[{tag}] Savaş Zamanı Telafisi Verildi"
   sum_four_gold: Toplam 4 Altın Sandık
   sum_installment: 'Taksit {i} (H{week}):'
   sum_installment_chests: 1 Normal Altın + 1 KS Altını
-  sum_swap: Takvim Değişimi
-  sum_swap_text: WLO H{n} Cuma gününü alır
-  sum_promoted: "[{tag}] 3. Hafta Finaline Yükseltildi"
-  sum_promoted_text: "(2 Kral Sandığı + Güçlendirme Ögesi)"
+  sum_swap: Takvim Takası
+  sum_swap_text: WLO, H{n} Cuma gününü alır
+  sum_promoted: "[{tag}] 3. Hafta Finaline Terfi Etti"
+  sum_promoted_text: "(2 Kral Sandığı + Buff Eşyası)"
   sum_cost: 'WLO İttifak Sandığı Maliyeti: 0'
 rewards_planner:
   host_week: Aktif Ev Sahipliği Haftası
@@ -759,4 +759,4 @@ live_data:
   offline: "📴 Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
   updating: "⏳ Güncelleniyor…"
 capitol_rotation:
-  calendar_link: "Bu döngünün rotasyonunu takvimde görün →"
+  calendar_link: Bu döngünün rotasyonunu takvimde görün →
