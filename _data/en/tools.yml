@@ -829,6 +829,8 @@ image_review:
 # the alliance's Capitol Rotation card and NAP Ranks row; a Steward approves it first.
 alliance_images:
   title: "🖼️ Alliance images"
+  edit: "✏️ Edit images"
+  done: "✓ Done editing"
   help: "Add a picture behind your alliance's Capitol Rotation card and NAP Ranks row. A Steward checks each one before anyone else sees it."
   rules: "Use your alliance's own art or in-game art: no other alliance's branding, nothing offensive, no personal information."
   left_today: "{left} of {max} images left today for your alliance."

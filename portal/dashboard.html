@@ -36,10 +36,12 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
     <button type="button" class="dash-btn" id="dash-add" disabled>{{ "dashboard.add_chart" | t }}</button>
   </div>
   <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
-  <!-- Leaders, while editing: the alliance's card pictures (js/alliance-images.js) -->
-  <section class="dash-card ai-section" id="dash-images" hidden aria-label="{{ "alliance_images.title" | t }}"></section>
 
   <section class="dash-widgets" id="dash-widgets" hidden aria-label="{{ "dashboard.charts_label" | t }}"></section>
+
+  <!-- Leaders: the alliance's card pictures (js/alliance-images.js), after the charts and
+       with their own "Edit images" button: folded to the current pictures until opened -->
+  <section class="dash-card ai-section" id="dash-images" hidden aria-label="{{ "alliance_images.title" | t }}"></section>
 </div>
 
 <script src="/js/dashboard-widgets.js"></script>
@@ -588,10 +590,10 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       });
     }
 
-    // The alliance's card pictures: part of edit mode, like adding a chart
+    // The alliance's card pictures: their own section and Edit button, after the charts
     function renderImages() {
       const el = $('dash-images');
-      const show = editing && isLeader() && Boolean(data.images) && Boolean(window.AllianceImages);
+      const show = isLeader() && Boolean(data.images) && Boolean(window.AllianceImages);
       el.hidden = !show;
       if (!show) return window.AllianceImages?.close(el);
       window.AllianceImages.render(el, {

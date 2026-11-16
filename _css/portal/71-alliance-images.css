@@ -51,6 +51,17 @@
   font-size: 0.75rem;
 }
 
+/* Folded, with no picture yet: one line, not an empty picture-sized box */
+.ai-thumb.is-empty {
+  justify-content: flex-start;
+  padding: 0.4rem 0.6rem;
+}
+
+/* The section's own Edit button, centred like the dashboard's */
+.ai-edit-bar {
+  margin: 0.4rem 0 0.6rem;
+}
+
 /* The card's thumbnail stays card-sized (a 3:2 box across a whole desktop slot is huge) */
 .ai-slot[data-kind='card'] .ai-thumb {
   max-width: 260px;

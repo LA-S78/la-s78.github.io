@@ -6,6 +6,8 @@
 // the exact size the server expects; saving it again drops hidden data such as a phone
 // photo's GPS position.
 // Used by portal/dashboard.html: AllianceImages.render(section, ctx) / .close(section).
+// Under the charts and on its own (owner request): folded to the current pictures until
+// "Edit images" opens the tools, so the dashboard's main tools come first.
 (function () {
   'use strict';
 
@@ -47,15 +49,25 @@
     }
     close(section);
     section._ai = { ctx, crop: null };
+    // Open for this alliance until "Done editing" (kept through the dashboard's redraws)
+    const open = section._aiOpen === ctx.alliance.tag;
     const st = ctx.images;
     const steward = ctx.steward;
     const canSend = st.ready && (steward || st.left > 0);
+    section.classList.toggle('is-editing', open);
     section.innerHTML = `
       <h3 class="dash-card-title">${esc(t('title'))}</h3>
-      <p class="ai-help">${esc(t('help'))}</p>
+      <div class="dash-edit-bar ai-edit-bar">
+        <button type="button" class="dash-btn dash-two-labels" data-ai="toggle" aria-pressed="${open}"><span class="when-off">${esc(t('edit'))}</span><span class="when-on">${esc(t('done'))}</span></button>
+      </div>
+      ${
+        open
+          ? `<p class="ai-help">${esc(t('help'))}</p>
       <p class="ai-rules">${esc(t('rules'))}</p>
-      <p class="ai-left dash-muted">${esc(st.ready ? (steward ? '' : t('left_today', { left: st.left, max: st.dailyLimit })) : t('not_ready'))}</p>
-      <div class="ai-slots">${KINDS.map((kind) => slotHtml(kind, st.slots[kind], ctx, canSend)).join('')}</div>
+      <p class="ai-left dash-muted">${esc(st.ready ? (steward ? '' : t('left_today', { left: st.left, max: st.dailyLimit })) : t('not_ready'))}</p>`
+          : '<p class="ai-left" hidden></p>'
+      }
+      <div class="ai-slots">${KINDS.map((kind) => slotHtml(kind, st.slots[kind], ctx, canSend, open)).join('')}</div>
       <div class="ai-crop" hidden></div>
       <p class="ai-message" role="status" hidden></p>
       <input type="file" class="ai-file" accept="image/*" hidden>`;
@@ -69,7 +81,7 @@
     section.querySelector('.ai-file').addEventListener('change', onFile);
   }
 
-  function slotHtml(kind, slot, ctx, canSend) {
+  function slotHtml(kind, slot, ctx, canSend, open) {
     const lines = [];
     if (slot.live) lines.push(t('live', { when: when(slot.live.at) }));
     if (slot.pending) lines.push(t('pending', { when: when(slot.pending.at) }));
@@ -84,17 +96,21 @@
         );
     }
     return `<div class="ai-slot" data-kind="${kind}">
-      <div class="ai-slot-head"><strong>${esc(t(kind))}</strong><span class="dash-muted">${slot.width}×${slot.height}</span></div>
-      <div class="ai-thumb" style="aspect-ratio: ${slot.width} / ${slot.height}">${
+      <div class="ai-slot-head"><strong>${esc(t(kind))}</strong>${open ? `<span class="dash-muted">${slot.width}×${slot.height}</span>` : ''}</div>
+      <div class="ai-thumb${!open && !slot.live ? ' is-empty' : ''}"${open || slot.live ? ` style="aspect-ratio: ${slot.width} / ${slot.height}"` : ''}>${
         slot.live
           ? `<img src="${esc(slot.live.url)}" alt="${esc(`[${ctx.alliance.tag}] ${t(kind)}`)}" loading="lazy">`
           : `<span class="dash-muted">${esc(t('none'))}</span>`
       }</div>
       ${lines.map((l) => `<p class="ai-status">${esc(l)}</p>`).join('')}
-      <div class="ai-slot-actions">
+      ${
+        open
+          ? `<div class="ai-slot-actions">
         <button type="button" class="dash-btn" data-ai="choose" ${canSend ? '' : 'disabled'}>${esc(t(slot.live ? 'replace' : 'choose'))}</button>
         ${slot.live && ctx.images.canRemove ? `<button type="button" class="dash-btn" data-ai="remove">${esc(t('remove'))}</button>` : ''}
-      </div>
+      </div>`
+          : ''
+      }
     </div>`;
   }
 
@@ -111,7 +127,13 @@
     if (!b) return;
     const act = b.dataset.ai;
     const kind = b.closest('[data-kind]')?.dataset.kind;
-    if (act === 'choose') {
+    if (act === 'toggle') {
+      const tag = section._ai.ctx.alliance.tag;
+      section._aiOpen = section._aiOpen === tag ? null : tag;
+      const ctx = section._ai.ctx;
+      closeCrop(section);
+      render(section, ctx);
+    } else if (act === 'choose') {
       section._ai.pickFor = kind;
       const input = section.querySelector('.ai-file');
       input.value = '';
