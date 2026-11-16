@@ -150,6 +150,7 @@
       day: null, // the day picked in the cycle view (00:00 GT, ms)
       kinds: new Set(KINDS),
       type: '', // the event type picked in the dropdown: '' all, 'other' events of no type
+      editing: false, // leaders: Edit / Delete shown on the cards (the "Edit events" button)
       events: [],
       status: null,
     };
@@ -263,10 +264,34 @@
         }
         return;
       }
+      if (e.target.closest('.ag-edit-toggle')) {
+        state.editing = !state.editing;
+        draw();
+        return;
+      }
       const edit = e.target.closest('.btn-edit-event');
       if (edit) opts.onEdit?.(edit.dataset.eventId);
       const del = e.target.closest('.btn-delete-event');
-      if (del) opts.onDelete?.(del.dataset.eventId);
+      if (del) {
+        // What the confirmation names: the event, the day and time it was tapped on, and
+        // whether it repeats (deleting removes every repeat)
+        const id = del.dataset.eventId;
+        const start = Number(del.dataset.start);
+        const ev =
+          state.events.find((x) => x.id === id && x.s === start) ||
+          state.events.find((x) => x.id === id);
+        const day = ev ? dateText(ev.s, { weekday: 'short', day: 'numeric', month: 'short' }) : '';
+        opts.onDelete?.(id, {
+          title: ev?.title || '',
+          when: ev ? (ev.allDay ? day : `${day} · ${gtTime(ev.s)} GT`) : '',
+          repeat:
+            ev?.recurrence === '2days'
+              ? t('calendar.every_2_days')
+              : ev?.recurrence === 'weekly'
+                ? t('calendar.weekly')
+                : '',
+        });
+      }
     });
 
     // ---------- drawing ----------
@@ -394,10 +419,13 @@
         const guide = type?.guide
           ? `<a class="ag-guide" href="/${esc(lang)}/guides/${esc(type.guide)}.html">${svgIcon(icons.guide, 'cal-ic xs')}${esc(t('calendar.read_guide'))}</a>`
           : '';
-        const actions = opts.canEdit?.(e)
-          ? `<div class="ag-actions"><button type="button" class="btn-edit-event" data-event-id="${esc(e.id)}">${esc(t('calendar.edit'))}</button>
-             <button type="button" class="btn-delete-event" data-event-id="${esc(e.id)}">${esc(t('calendar.delete'))}</button></div>`
-          : '';
+        // Leaders' Edit / Delete: only while "Edit events" is on (owner, 2026-11-16: a stray
+        // tap while browsing deleted events too easily)
+        const actions =
+          state.editing && opts.canEdit?.(e)
+            ? `<div class="ag-actions"><button type="button" class="btn-edit-event" data-event-id="${esc(e.id)}">${esc(t('calendar.edit'))}</button>
+             <button type="button" class="btn-delete-event" data-event-id="${esc(e.id)}" data-start="${e.s}">${esc(t('calendar.delete'))}</button></div>`
+            : '';
         return `<li class="ag-event k-${e.kind}${type?.picture ? ' has-pic' : ''}${isLive ? ' is-live' : ''}${isNext ? ' is-next' : ''}${past ? ' is-past' : ''}"${color}>
           <div class="ag-time">${
             e.allDay
@@ -445,6 +473,13 @@
           ${list.length ? `<ol class="ag-list">${items.join('')}</ol>` : `<p class="ag-empty">${esc(t('calendar.nothing_planned'))}</p>`}
         </section>`;
       };
+      // Leaders (opts.canManage): the button that shows Edit / Delete on their events, just
+      // above the list. Off on every visit. The same button as the dashboard's Edit Dashboard
+      // (dash-btn, both labels in one size, centred): edit modes look alike across the site.
+      const editBar = () =>
+        opts.canManage?.()
+          ? `<div class="ag-editbar"><button type="button" class="dash-btn dash-two-labels ag-edit-toggle" aria-pressed="${state.editing}"><span class="when-off">${esc(t('calendar.edit_events'))}</span><span class="when-on">${esc(t('calendar.edit_done'))}</span></button></div>`
+          : '';
       const dayCell = (d0, cls) => {
         const list = onDay(d0);
         const war = list.some((e) => e.kind === 'war');
@@ -487,7 +522,7 @@
           .join('');
         html = `<div class="cal-range"><b>${esc(t('calendar.this_cycle'))}</b><span>${esc(dateText(cycle0, { day: 'numeric', month: 'short' }))} – ${esc(dateText(cycle0 + 27 * DAY, { day: 'numeric', month: 'short' }))}</span></div>
           <div class="cy-grid"><div class="cy-head"><span></span><div class="cy-cells">${head}</div></div>${rows}</div>
-          <div class="ag">${dayBlock(state.day)}</div>`;
+          ${editBar()}<div class="ag">${dayBlock(state.day)}</div>`;
       } else {
         // Just switched from the cycle view: the week of the day picked there, if it's one the
         // week view shows (last, this or next week); else this week
@@ -529,7 +564,7 @@
             <button type="button" class="wk-arrow" data-week-step="1" ${state.week >= 1 ? 'disabled' : ''} aria-label="${esc(t('calendar.next_week_aria'))}">›</button>
           </div>
           <div class="wk-strip">${strip}</div>
-          <div class="ag">${dayBlock(state.day)}</div>`;
+          ${editBar()}<div class="ag">${dayBlock(state.day)}</div>`;
       }
       viewEl.innerHTML = html;
     }

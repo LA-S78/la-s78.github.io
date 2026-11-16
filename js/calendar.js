@@ -345,8 +345,10 @@ async function initCalendar() {
             sessionScope &&
             evt.scope &&
             evt.scope.toLowerCase() === sessionScope.toLowerCase(),
+          // Leaders get the "Edit events" button that shows Edit / Delete on their events
+          canManage: () => isManagementSession,
           onEdit: (id) => openEditForm?.(id),
-          onDelete: (id) => handleDeleteEvent(id),
+          onDelete: (id, info) => handleDeleteEvent(id, info),
         })
       : null;
 
@@ -643,8 +645,61 @@ async function initCalendar() {
   }
 
   // 7. Delete Event Handler
-  async function handleDeleteEvent(eventId) {
-    if (!confirm(t('calendar_events.confirm_delete'))) return;
+  // The confirmation before deleting, in the site's style (it was the browser's own box,
+  // which named no event): the event, its day and time, a warning when it repeats (every
+  // repeat goes), Cancel first, Delete in red. Resolves true for Delete.
+  function confirmDelete({ title = '', when = '', repeat = '' } = {}) {
+    let dialog = document.getElementById('cal-delete-dialog');
+    if (!dialog) {
+      dialog = document.createElement('dialog');
+      dialog.id = 'cal-delete-dialog';
+      dialog.className = 'auth-modal cal-confirm';
+      dialog.setAttribute('aria-labelledby', 'cal-delete-heading');
+      document.body.appendChild(dialog);
+    }
+    dialog.innerHTML = `
+      <div class="auth-modal-frame">
+        <div class="auth-modal-header">
+          <div class="auth-modal-title-wrap">
+            <span class="auth-modal-icon" aria-hidden="true">🗑️</span>
+            <h3 id="cal-delete-heading" class="auth-modal-title">${esc(t('calendar_events.delete_heading'))}</h3>
+          </div>
+        </div>
+        <div class="auth-modal-body">
+          <p class="cal-confirm-what"><strong>${esc(title)}</strong>${when ? `<br><span>${esc(when)}</span>` : ''}</p>
+          ${repeat ? `<p class="cal-confirm-warn">⚠️ ${esc(t('calendar_events.delete_repeats', { repeat }))}</p>` : ''}
+          <p class="cal-confirm-final">${esc(t('calendar_events.delete_final'))}</p>
+        </div>
+        <div class="auth-modal-footer">
+          <button type="button" class="btn-modal-cancel" data-answer="no" autofocus>${esc(t('common.cancel'))}</button>
+          <button type="button" class="btn-modal-action is-danger" data-answer="yes">${esc(t('calendar_events.delete_confirm'))}</button>
+        </div>
+      </div>`;
+    return new Promise((resolve) => {
+      const done = (yes) => {
+        dialog.removeEventListener('click', onClick);
+        dialog.removeEventListener('cancel', onCancel);
+        if (dialog.open) dialog.close();
+        resolve(yes);
+      };
+      const onClick = (e) => {
+        const b = e.target.closest('[data-answer]');
+        if (b) done(b.dataset.answer === 'yes');
+        else if (e.target === dialog) done(false); // a tap outside the box
+      };
+      const onCancel = (e) => {
+        e.preventDefault();
+        done(false); // Escape
+      };
+      dialog.addEventListener('click', onClick);
+      dialog.addEventListener('cancel', onCancel);
+      dialog.showModal();
+      dialog.querySelector('[data-answer="no"]').focus();
+    });
+  }
+
+  async function handleDeleteEvent(eventId, info) {
+    if (!(await confirmDelete(info))) return;
 
     try {
       const res = await manageEvents({ action: 'delete', eventId });
