@@ -63,14 +63,13 @@
   window.addEventListener('storage', (e) => {
     if (e.key === 'auth-alliance' || e.key === null) mark();
   });
-  // Tags drawn later: checked once per frame, at most
-  let pending = false;
-  new MutationObserver(() => {
-    if (pending) return;
-    pending = true;
-    requestAnimationFrame(() => {
-      pending = false;
-      mark();
-    });
-  }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+  // Tags drawn later: marked as soon as they're added, before the browser paints them (the
+  // observer runs once for each batch of changes), so a redrawn card never shows a frame
+  // without its highlight. Only classes and styles change here, which the observer doesn't
+  // watch, so it doesn't call itself.
+  new MutationObserver(() => mark()).observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
 })();

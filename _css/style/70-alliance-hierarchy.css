@@ -25,7 +25,12 @@
   background: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  transition: all 0.2s ease;
+  /* Only what hovering changes: with "all", your alliance's highlight (an outline,
+     js/my-alliance.js) faded in from the text colour each time the rows were drawn, a white
+     flash on every load */
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .alliance-ladder-row:hover {
