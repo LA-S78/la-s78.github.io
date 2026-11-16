@@ -490,10 +490,10 @@ calendar_events:
   session_active: "Authenticated Session Active"
   create_operation: "Create Operation"
   kingdom_admin: "👑 KINGDOM ADMIN"
-  kingdom_desc: "Scheduling Kingdom-wide alerts and operations"
+  kingdom_desc: "Managing server events"
   kingdom_heading: "Create Kingdom Operation ([GLOBAL])"
   leadership: "🛡️ [{tag}] LEADERSHIP"
-  leadership_desc: "Managing internal operations for [{tag}]"
+  leadership_desc: "Managing [{tag}] events"
   alliance_heading: "Create [{tag}] Operation"
   preset: "Event type"
   # The event type dropdown (calendar.html): "Custom" (a blank form) and each type's usual length

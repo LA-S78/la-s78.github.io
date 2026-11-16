@@ -470,10 +470,10 @@ calendar_events:
   session_active: Session authentifiée active
   create_operation: Créer une opération
   kingdom_admin: "👑 ADMIN DU ROYAUME"
-  kingdom_desc: Planification des alertes et opérations à l'échelle du royaume
+  kingdom_desc: "Gestion des événements du serveur"
   kingdom_heading: Créer une opération du Royaume ([GLOBAL])
   leadership: "🛡️ DIRECTION DE [{tag}]"
-  leadership_desc: Gestion des opérations internes pour [{tag}]
+  leadership_desc: "Gestion des événements de [{tag}]"
   alliance_heading: Créer une opération pour [{tag}]
   preset: Type d'événement
   type_custom: Personnalisé

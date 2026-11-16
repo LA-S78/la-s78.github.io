@@ -142,6 +142,7 @@
       rotation: t('calendar.kind_capitol'),
     };
 
+    const SPLIT = '<!--ag-split-->'; // where the kept middle part goes, between top and list
     const state = {
       view: store.get(VIEW_KEY) === 'cycle' ? 'cycle' : 'week',
       week: 0, // -1, 0, 1: last, this, next week
@@ -188,8 +189,25 @@
             `<button type="button" class="cal-chip k-${k}" data-kind="${k}" aria-pressed="true"><i class="cal-dot" aria-hidden="true"></i>${esc(KIND_LABEL[k])}</button>`,
         ).join('')}
       </div>
-      <div class="cal-view" aria-live="polite"></div>`;
+      <div class="cal-view">
+        <div class="cal-view-top" aria-live="polite"></div>
+        <div class="ag-manage" hidden>
+          <div class="ag-editbar">
+            <button type="button" class="dash-btn dash-two-labels ag-edit-toggle" aria-pressed="false"><span class="when-off">${esc(t('calendar.edit_events'))}</span><span class="when-on">${esc(t('calendar.edit_done'))}</span></button>
+            <button type="button" class="dash-btn ag-add-event" disabled>${esc(t('calendar.add_event'))}</button>
+          </div>
+        </div>
+        <div class="cal-view-list" aria-live="polite"></div>
+      </div>`;
+    // The view in three parts: the week (or cycle) on top and the day's events below are
+    // redrawn; between them, leaders' "Edit events" / "Add an event" and their management
+    // controls and event form (opts.managePanel) stay put, so a redraw (a day picked, the
+    // minute ticking over) never clears what a leader is typing.
     const viewEl = container.querySelector('.cal-view');
+    const topEl = viewEl.querySelector('.cal-view-top');
+    const manageEl = viewEl.querySelector('.ag-manage');
+    const listEl = viewEl.querySelector('.cal-view-list');
+    if (opts.managePanel) manageEl.appendChild(opts.managePanel);
     const typeSelect = container.querySelector('.cal-type-select');
     // The site's dropdown (js/site-select.js): each type with its icon
     window.SiteSelect?.enhance(typeSelect);
@@ -266,6 +284,7 @@
       }
       if (e.target.closest('.ag-edit-toggle')) {
         state.editing = !state.editing;
+        if (!state.editing) opts.onStopEditing?.(); // "Done editing": the form closes too
         draw();
         return;
       }
@@ -482,14 +501,6 @@
           ${list.length ? `<ol class="ag-list">${items.join('')}</ol>` : `<p class="ag-empty">${esc(t('calendar.nothing_planned'))}</p>`}
         </section>`;
       };
-      // Leaders (opts.canManage): the button that shows Edit / Delete on their events, just
-      // above the list, and "Add an event" beside it (greyed out until editing is on). Off on
-      // every visit. The dashboard's Edit Dashboard and Add a chart buttons (dash-btn, both
-      // labels in one size, centred): edit modes look alike across the site.
-      const editBar = () =>
-        opts.canManage?.()
-          ? `<div class="ag-editbar"><button type="button" class="dash-btn dash-two-labels ag-edit-toggle" aria-pressed="${state.editing}"><span class="when-off">${esc(t('calendar.edit_events'))}</span><span class="when-on">${esc(t('calendar.edit_done'))}</span></button><button type="button" class="dash-btn ag-add-event"${state.editing ? '' : ' disabled'}>${esc(t('calendar.add_event'))}</button></div>`
-          : '';
       const dayCell = (d0, cls) => {
         const list = onDay(d0);
         const war = list.some((e) => e.kind === 'war');
@@ -532,7 +543,7 @@
           .join('');
         html = `<div class="cal-range"><b>${esc(t('calendar.this_cycle'))}</b><span>${esc(dateText(cycle0, { day: 'numeric', month: 'short' }))} – ${esc(dateText(cycle0 + 27 * DAY, { day: 'numeric', month: 'short' }))}</span></div>
           <div class="cy-grid"><div class="cy-head"><span></span><div class="cy-cells">${head}</div></div>${rows}</div>
-          ${editBar()}<div class="ag">${dayBlock(state.day)}</div>`;
+          ${SPLIT}<div class="ag">${dayBlock(state.day)}</div>`;
       } else {
         // Just switched from the cycle view: the week of the day picked there, if it's one the
         // week view shows (last, this or next week); else this week
@@ -574,9 +585,18 @@
             <button type="button" class="wk-arrow" data-week-step="1" ${state.week >= 1 ? 'disabled' : ''} aria-label="${esc(t('calendar.next_week_aria'))}">›</button>
           </div>
           <div class="wk-strip">${strip}</div>
-          ${editBar()}<div class="ag">${dayBlock(state.day)}</div>`;
+          ${SPLIT}<div class="ag">${dayBlock(state.day)}</div>`;
       }
-      viewEl.innerHTML = html;
+      const [top, list] = html.split(SPLIT);
+      topEl.innerHTML = top;
+      listEl.innerHTML = list;
+      // Leaders' bar and panel (kept, not redrawn): shown to leaders; the panel (scope,
+      // the form) only while "Edit events" is on
+      manageEl.hidden = !opts.canManage?.();
+      const toggle = manageEl.querySelector('.ag-edit-toggle');
+      toggle.setAttribute('aria-pressed', String(state.editing));
+      manageEl.querySelector('.ag-add-event').disabled = !state.editing;
+      if (opts.managePanel) opts.managePanel.style.display = state.editing ? '' : 'none';
     }
 
     // Redraw each minute: the "Now" line, the countdowns, what is past

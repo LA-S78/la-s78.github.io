@@ -135,6 +135,12 @@
    button and list whose options can show a line icon and a short second line. The <select>
    stays underneath as the value (hidden here).
    ========================================================================== */
+/* Hidden with its select (js/site-select.js sets [hidden] on the box): display: block below
+   would otherwise win and leave an empty box (the calendar's Steward switch for leaders) */
+.site-select[hidden] {
+  display: none !important;
+}
+
 .site-select {
   position: relative;
   display: block;
