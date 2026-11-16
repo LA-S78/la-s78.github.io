@@ -242,7 +242,6 @@
     container.querySelectorAll('[data-view]').forEach((btn) =>
       btn.addEventListener('click', () => {
         if (state.view !== btn.dataset.view && btn.dataset.view === 'week') state.fromCycle = true;
-        state.keepHeight = 0;
         state.view = btn.dataset.view;
         store.set(VIEW_KEY, state.view);
         draw();
@@ -264,24 +263,29 @@
       if (nav && !nav.disabled) {
         state.week = Math.max(-1, Math.min(1, state.week + Number(nav.dataset.weekStep)));
         state.day = null; // today if it's in that week, else the same weekday (see draw)
-        state.keepHeight = 0;
         draw();
         return;
       }
       const dayBtn = e.target.closest('button[data-day]'); // a day in the strip or grid
       if (dayBtn) {
-        // Both views list the day picked; the page doesn't move (owner, 2026-11-15). A day
-        // with fewer events would make the page shorter and the browser pull it up, so the
-        // list keeps at least the height it had while days are picked (reset by a new week
-        // or view)
-        const was = viewEl.querySelector('.ag')?.offsetHeight || 0;
+        // Both views list the day picked, and the page doesn't move (owner, 2026-11-15). The
+        // list takes the new day's height, so a quieter day leaves no empty space (owner,
+        // 2026-11-16): what's below it moves up. Only when the page would end above where the
+        // reader is (scrolled to the very bottom) does the browser pull the whole page up;
+        // then, and only then, the list keeps just the height that stops that.
+        const scroller = document.querySelector('main') || document.scrollingElement;
+        const before = scroller.scrollTop;
         state.day = Number(dayBtn.dataset.day);
         draw();
+        // How much page is missing below to stay where the reader was (none, almost always);
+        // checked again after adding it, as other parts can change height with the day too
         const ag = viewEl.querySelector('.ag');
-        if (ag) {
-          state.keepHeight = Math.max(state.keepHeight || 0, was);
-          ag.style.minHeight = `${state.keepHeight}px`;
+        for (let i = 0; ag && i < 3; i++) {
+          const short = before - (scroller.scrollHeight - scroller.clientHeight);
+          if (short <= 0) break;
+          ag.style.minHeight = `${ag.offsetHeight + short}px`;
         }
+        if (scroller.scrollTop !== before) scroller.scrollTop = before;
         return;
       }
       if (e.target.closest('.ag-edit-toggle')) {
