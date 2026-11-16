@@ -26,6 +26,24 @@ let cycleState = {
 
 let activeBuyouts = [];
 let alliancesData = {};
+let allianceImages = {};
+
+/** The style attribute that puts an alliance's card picture behind its card, or ''. */
+function cardStyle(tag) {
+  // The tag as stored, or written another way (RAVN for RÂVN, any letter case)
+  const fold = (x) =>
+    String(x || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  const pics =
+    allianceImages[tag] ||
+    Object.entries(allianceImages).find(([key]) => fold(key) === fold(tag))?.[1];
+  const url = pics?.card;
+  return typeof url === 'string' && /^\/alliance-images\/[A-Za-z0-9.-]+$/.test(url)
+    ? ` style="--ally-pic: url('${url}')"`
+    : '';
+}
 
 // Colours for alliances with none of their own: _data/alliances.yml (via js/alliance-defaults.js)
 const DEFAULT_ALLIANCE_COLORS = ALLIANCE_COLORS;
@@ -55,6 +73,11 @@ export async function fetchOperationsState() {
     if (data.map?.alliances) {
       alliancesData = data.map.alliances;
     }
+    // Approved alliance pictures (api/_alliance_images.js): { TAG: { card, wide } }
+    allianceImages =
+      data.map?.alliance_images && typeof data.map.alliance_images === 'object'
+        ? data.map.alliance_images
+        : {};
 
     if (data.rewards?.cycle_state) {
       cycleState = data.rewards.cycle_state;
@@ -116,7 +139,7 @@ function renderScheduleGrid() {
       // Three rows (week, tag + ACTIVE, loot), lined up across the cards
       // (CSS subgrid): every card the same height, the tags on one line
       return `
-      <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}">
+      <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}${cardStyle(w.seat) ? ' has-ally-pic' : ''}"${cardStyle(w.seat)}>
         <div class="ops-week-header">
           <span class="ops-week-num">${esc(w.label)}</span>
         </div>
