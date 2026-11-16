@@ -792,6 +792,7 @@
   font-size: 0.95rem;
   font-weight: 800;
 }
+.wk-day.is-selected:not(.is-today),
 .cy-day.is-selected:not(.is-today) {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 1px var(--accent-color);
