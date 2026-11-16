@@ -139,20 +139,45 @@ async function initCalendar() {
     hint.classList.toggle('is-warning', missing);
   }
 
-  // 2. Fetch Live Calendar Data
-  async function loadCalendar() {
+  // 2. Fetch Live Calendar Data. While the fresh answer loads, this device's last copy is
+  // shown straight away, dimmed with "⏳ Updating…", as the other tools do
+  // (js/live-data-notice.js); without a connection that copy stays, with a note saying how
+  // old it is. After a change the leader made (useSaved: false), only the fresh answer.
+  let liveData = null; // js/live-data-notice.js, loaded once
+  const apply = (data) => {
+    allEvents = data.events || [];
+    reminderChannels = data.reminderChannels || null;
+    updateReminderHint();
+    renderHero(data.status, data.capitolHolder, data.capitolHolderColor);
+    renderEvents(data.status);
+  };
+  async function loadCalendar({ useSaved = true } = {}) {
+    const query = activeAlliance ? `?alliance=${encodeURIComponent(activeAlliance)}` : '';
+    const url = `/api/calendar${query}`;
+    liveData ||= await import('/js/live-data-notice.js').catch(() => null);
+    let savedAt = null;
     try {
-      const query = activeAlliance ? `?alliance=${encodeURIComponent(activeAlliance)}` : '';
-      const res = await fetch(`/api/calendar${query}`);
+      const fresh = fetch(url);
+      if (useSaved && liveData)
+        savedAt = await liveData.showSavedWhileLoading(url, fresh, elContent, async (saved) =>
+          apply(await saved.json()),
+        );
+      const res = await fresh;
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-
-      allEvents = data.events || [];
-      reminderChannels = data.reminderChannels || null;
-      updateReminderHint();
-      renderHero(data.status, data.capitolHolder, data.capitolHolderColor);
-      renderEvents(data.status);
+      const offlineAt = liveData?.offlineCopySavedAt(res) || null;
+      // Kept for next time, unless this is already the offline copy (sw.js)
+      if (!offlineAt) liveData?.rememberLiveData(url, data);
+      apply(data);
+      liveData?.markUpdating(elContent, false);
+      liveData?.showLiveDataNotice(elContent, { savedAt: offlineAt });
     } catch (err) {
+      liveData?.markUpdating(elContent, false);
+      if (savedAt) {
+        // The saved copy stays: say how old it is instead of "failed"
+        liveData.showLiveDataNotice(elContent, { savedAt });
+        return;
+      }
       if (elLoading) elLoading.style.display = 'none';
       if (elError) {
         elError.style.display = 'block';
@@ -599,7 +624,7 @@ async function initCalendar() {
           customRoleInput.classList.add('input-locked');
           formEl.style.display = 'none';
           leaveEditMode();
-          await loadCalendar();
+          await loadCalendar({ useSaved: false });
         } catch (err) {
           showNotification(err.message, 'error');
         } finally {
@@ -622,7 +647,7 @@ async function initCalendar() {
       if (!res.ok) throw new Error(result.error || t('calendar_events.delete_failed'));
 
       showNotification(result.message || t('calendar_events.removed'), 'success');
-      await loadCalendar();
+      await loadCalendar({ useSaved: false });
     } catch (err) {
       showNotification(err.message, 'error');
     }
