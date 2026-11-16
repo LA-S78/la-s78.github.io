@@ -42,15 +42,18 @@
     });
     root.querySelectorAll(CARDS).forEach((card) => {
       const yes = cards.has(card);
-      if (card.classList.contains('is-my-ally-card') !== yes) card.classList.toggle('is-my-ally-card', yes);
+      if (card.classList.contains('is-my-ally-card') !== yes)
+        card.classList.toggle('is-my-ally-card', yes);
       const colour = cards.get(card) || '';
-      if (card.style.getPropertyValue('--my-ally') !== colour) card.style.setProperty('--my-ally', colour);
+      if (card.style.getPropertyValue('--my-ally') !== colour)
+        card.style.setProperty('--my-ally', colour);
     });
   }
 
   window.MyAlliance = { refresh: () => mark() };
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => mark());
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', () => mark());
   else mark();
   document.addEventListener('turbo:load', () => mark());
   document.addEventListener('turbo:frame-render', () => mark());
