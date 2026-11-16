@@ -1,5 +1,5 @@
 // api/_alliance_images.js
-// Alliance images (owner request, 2026-11-16): R4/R5 send a wide and a square picture for
+// Alliance images (owner request, 2026-11-16): R4/R5 send a card picture and a wide banner for
 // their alliance's cards; a Steward approves each one before anyone else can see it.
 // Reached through api/proposal.js (Vercel's free plan allows 12 server functions):
 //   POST type 'alliance_image'         R4/R5 (own alliance) or a Steward sends an image
@@ -25,10 +25,15 @@ import {
   TEST_PROPOSAL_FIELD,
 } from './_gist.js';
 
-/** The two pictures an alliance can have, and their exact size in pixels. */
+/**
+ * The two pictures an alliance can have, and their exact size in pixels. Shaped after the
+ * cards they go on (measured 2026-11-16): the Capitol Rotation cards are about 1.4:1 on
+ * phones and 1.9:1 on desktops, so 3:2; the NAP Ranks rows about 3.5:1 on phones and much
+ * wider on desktops, so 4:1 (the upload form previews what each screen shows).
+ */
 export const IMAGE_KINDS = Object.freeze({
-  wide: { width: 1200, height: 400, label: 'Wide banner (NAP Ranks)' },
-  square: { width: 600, height: 600, label: 'Square card (Capitol Rotation)' },
+  card: { width: 600, height: 400, label: 'Card (Capitol Rotation)' },
+  wide: { width: 1200, height: 300, label: 'Banner (NAP Ranks)' },
 });
 /** Largest file accepted. The upload form saves about 150 KB; this leaves room. */
 export const MAX_IMAGE_BYTES = 250 * 1024;
@@ -69,6 +74,45 @@ export function readImages(gist) {
     decided: obj(d.decided),
     sent: Array.isArray(d.sent) ? d.sent : [],
     missing: obj(d.missing),
+  };
+}
+
+/**
+ * What an alliance's leaders see in the dashboard's image section: per slot, the live
+ * picture (its address), one waiting for review, and the last refusal or expiry of the past
+ * 7 days (with the Steward's reason); and how many of today's images are left.
+ */
+export function imageStatus(gist, tag) {
+  const images = readImages(gist);
+  const slug = allianceSlug(tag);
+  const now = Date.now();
+  const slots = {};
+  for (const kind of Object.keys(IMAGE_KINDS)) {
+    const live = images.live[slug]?.[kind];
+    const pending = Object.values(images.pending)
+      .filter((p) => p.slug === slug && p.kind === kind && p.at > now - KEEP_DAYS * DAY_MS)
+      .sort((a, b) => b.at - a.at)[0];
+    const last = Object.values(images.decided)
+      .filter((d) => d.slug === slug && d.kind === kind && d.at > now - KEEP_DAYS * DAY_MS)
+      .sort((a, b) => b.at - a.at)[0];
+    slots[kind] = {
+      width: IMAGE_KINDS[kind].width,
+      height: IMAGE_KINDS[kind].height,
+      live: live?.file ? { url: `/alliance-images/${live.file}`, at: live.at } : null,
+      pending: pending ? { at: pending.at, by: pending.name } : null,
+      // Only news the leaders need: a refusal or an expiry newer than what is live now
+      last:
+        last && ['rejected', 'expired'].includes(last.status) && !(live && live.at > last.at)
+          ? { status: last.status, at: last.at, ...(last.reason ? { reason: last.reason } : {}) }
+          : null,
+    };
+  }
+  const used = images.sent.filter((x) => x.slug === slug && x.at > now - DAY_MS).length;
+  return {
+    slots,
+    left: Math.max(0, DAILY_LIMIT - used),
+    dailyLimit: DAILY_LIMIT,
+    ready: blobConfigured(),
   };
 }
 
@@ -616,7 +660,7 @@ async function reviewDetails(req, id, wantFile) {
 
 /** An approved picture, for everyone. File names are never reused, so it can be cached. */
 async function serveLive(file) {
-  if (!/^[A-Z0-9]{1,24}-(wide|square)-[a-f0-9]{24}\.(webp|jpg|png)$/.test(file)) {
+  if (!/^[A-Z0-9]{1,24}-(wide|card)-[a-f0-9]{24}\.(webp|jpg|png)$/.test(file)) {
     return reply(404, { error: 'Not found' });
   }
   if (!blobConfigured()) return reply(404, { error: 'Not found' });

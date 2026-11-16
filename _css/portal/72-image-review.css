@@ -28,8 +28,8 @@
   background: var(--card-bg-solid);
 }
 
-/* The square one is shown smaller, as on its card */
-.ir-figure img.ir-square {
+/* The card one is shown smaller, as on its card */
+.ir-figure img.ir-card {
   max-width: 320px;
 }
 

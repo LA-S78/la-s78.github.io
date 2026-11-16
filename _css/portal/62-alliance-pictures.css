@@ -1,0 +1,26 @@
+/* ==========================================================================
+   ALLIANCE PICTURES ON THE CAPITOL ROTATION CARDS (owner request, 2026-11-16)
+   An alliance's approved card picture (api/_alliance_images.js) behind its card, as
+   --ally-pic: darker at the top (the week) and the bottom (the chests), lighter in the
+   middle, so the picture shows without drowning the tag's colour. The week being played
+   keeps its accent tint and outline. The NAP Ranks rows: _css/style/72-alliance-pictures.css.
+   ========================================================================== */
+
+.ops-week-card.has-ally-pic {
+  --pic-fade: var(--surface-dark);
+  --pic-tint: transparent;
+  background:
+    linear-gradient(180deg, var(--pic-tint) 0%, transparent 100%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--pic-fade) 85%, transparent) 0%,
+      color-mix(in srgb, var(--pic-fade) 55%, transparent) 45%,
+      color-mix(in srgb, var(--pic-fade) 90%, transparent) 100%
+    ),
+    var(--ally-pic) center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.ops-week-card.is-active-week.has-ally-pic {
+  --pic-tint: color-mix(in srgb, var(--accent-color) 12%, transparent);
+}
