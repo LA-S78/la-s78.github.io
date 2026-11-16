@@ -8,10 +8,11 @@
 
   // The phone's status bar (Android: the installed app's top bar; also the browser bar) takes
   // its colour from <meta name="theme-color">. (The navigation bar at the bottom does not: on
-  // Android it takes the installed app's manifest background_color, which a page can't
-  // change while it runs. site.webmanifest has #1a1513, the average of the three themes'
-  // footers as drawn (#12160e, #221911, #1b1019): neutral between them, owner decision
-  // 2026-11-16; #110d0b was darker than every footer.) It used to be a fixed dark brown whatever the
+  // the owner's Android phone it keeps the installed app's manifest theme_color, whatever the
+  // page sets, so a page can't change it while it runs. site.webmanifest has #1a1513 for
+  // theme_color and background_color, the average of the three themes' footers as drawn
+  // (#12160e, #221911, #1b1019): neutral between them, owner decision 2026-11-16. theme_color
+  // was #22301c, Lantern's header green, which showed as a green bar in every theme.) It used to be a fixed dark brown whatever the
   // theme; now it is the colour of the header's top edge in the active theme. Turbo swaps the
   // page's <head> on every visit (bringing back the fixed colour), so it is set again after
   // each visit as well as on a theme change (js/main.js, applyTheme).
