@@ -511,6 +511,7 @@ export async function captureMapImage(svgRoot = null) {
     const height = viewBox?.height || root.clientHeight || 800;
 
     const clonedSvg = root.cloneNode(true);
+    clonedSvg.querySelector('#my-territory')?.remove(); // the viewer's own outline: not in a plan's image
     clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     clonedSvg.setAttribute('width', width);
     clonedSvg.setAttribute('height', height);
@@ -1243,6 +1244,93 @@ export function setMapColorMode(mode, svgRoot) {
   });
 
   renderTerritoryLabels(root);
+  renderMyTerritory(root);
+}
+
+// ==========================================================================
+// YOUR ALLIANCE'S CITIES: one outline around each group of touching cities
+// ==========================================================================
+
+const normTag = (s) =>
+  String(s || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[[\]\s]/g, '')
+    .toLowerCase();
+
+/**
+ * Signed in with an alliance (as js/my-alliance.js does elsewhere on the site): its cities
+ * get one still outline, around each group of touching cities rather than each city, in a
+ * pale tint of the alliance's colour with a dark edge, so it shows on any colour in every
+ * view. Still, not pulsing: cities at war already pulse. In Planner Mode it follows the plan.
+ *
+ * How: copies of the cities in a layer above the map, drawn through an SVG filter that
+ * makes their shape solid (some cities are partly see-through), widens it and keeps only
+ * the band outside the original shape. Where cities touch, their shapes merge, so the
+ * shared borders get no line. Not in the image sent with a plan (captureMapImage).
+ */
+function renderMyTerritory(svgRoot) {
+  const root = svgRoot || getSvgRoot();
+  if (!root) return;
+  root.querySelector('#my-territory')?.remove();
+  let mine = '';
+  try {
+    mine = normTag(localStorage.getItem('auth-alliance'));
+  } catch {
+    /* storage blocked: nothing to outline */
+  }
+  if (!mine) return;
+  const ids = cities.filter((c) => normTag(getCityOwner(c.id)) === mine).map((c) => c.id);
+  if (!ids.length) return;
+
+  const NS = 'http://www.w3.org/2000/svg';
+  let defs = root.querySelector('defs');
+  if (!defs) defs = root.insertBefore(document.createElementNS(NS, 'defs'), root.firstChild);
+  if (!defs.querySelector('#my-territory-outline')) {
+    const filter = document.createElementNS(NS, 'filter');
+    filter.id = 'my-territory-outline';
+    filter.setAttribute('x', '-5%');
+    filter.setAttribute('y', '-5%');
+    filter.setAttribute('width', '110%');
+    filter.setAttribute('height', '110%');
+    filter.innerHTML = `
+      <feComponentTransfer in="SourceAlpha" result="shape"><feFuncA type="discrete" tableValues="0 1"/></feComponentTransfer>
+      <feMorphology in="shape" operator="dilate" radius="9" result="wide"/>
+      <feComposite in="wide" in2="shape" operator="out" result="band"/>
+      <feMorphology in="shape" operator="dilate" radius="13" result="wider"/>
+      <feComposite in="wider" in2="wide" operator="out" result="edge"/>
+      <feFlood class="my-territory-colour" result="colour"/>
+      <feComposite in="colour" in2="band" operator="in" result="bandColour"/>
+      <feFlood flood-color="#000" flood-opacity="0.75" result="dark"/>
+      <feComposite in="dark" in2="edge" operator="in" result="edgeColour"/>
+      <feMerge><feMergeNode in="edgeColour"/><feMergeNode in="bandColour"/></feMerge>`;
+    defs.appendChild(filter);
+  }
+  // A pale tint of the alliance's colour (the plain colour vanishes on its own cities)
+  const colour = getAllianceColor(getCityOwner(ids[0]));
+  defs.querySelector('.my-territory-colour').style.floodColor =
+    `color-mix(in srgb, ${colour} 35%, white)`;
+
+  const group = document.createElementNS(NS, 'g');
+  group.id = 'my-territory';
+  group.setAttribute('filter', 'url(#my-territory-outline)');
+  group.setAttribute('aria-hidden', 'true');
+  group.style.pointerEvents = 'none';
+  const toRoot = root.getCTM()?.inverse();
+  ids.forEach((id) => {
+    const el = root.getElementById(id);
+    if (!el) return;
+    const copy = el.cloneNode(true);
+    [copy, ...copy.querySelectorAll('*')].forEach((n) => n.removeAttribute('id'));
+    // In the map's own coordinates, whatever groups the city sits in
+    const m = toRoot && el.getCTM() ? toRoot.multiply(el.getCTM()) : null;
+    if (m) copy.setAttribute('transform', `matrix(${m.a},${m.b},${m.c},${m.d},${m.e},${m.f})`);
+    group.appendChild(copy);
+  });
+  // Under the labels and the tapped city's highlight
+  const above = root.querySelector('#highlight-overlay') || root.querySelector('#territory-labels');
+  if (above && above.parentNode === root) root.insertBefore(group, above);
+  else root.appendChild(group);
 }
 
 export function renderTerritoryLabels(svgRoot) {
@@ -1427,7 +1515,12 @@ export function enableMapHighlighting(svgRoot = null) {
 
   const elements = root.querySelectorAll('path, rect, circle, polygon');
   elements.forEach((el) => {
-    if (el.closest('#territory-labels') || el.closest('#highlight-overlay') || el.closest('defs'))
+    if (
+      el.closest('#territory-labels') ||
+      el.closest('#highlight-overlay') ||
+      el.closest('#my-territory') ||
+      el.closest('defs')
+    )
       return;
 
     if (el.dataset.bound) return;

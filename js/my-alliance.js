@@ -3,9 +3,11 @@
  *
  * Signed in with an alliance (localStorage "auth-alliance", set at sign-in), its tag glows
  * wherever an alliance tag is shown: the calendar (Capitol card, the week's king, the cycle
- * grid), the Capitol rotation, the alliance standings, the rewards tiers and the King's
- * console. The card holding it (a rotation week, a standings row) glows softly too, in the
- * alliance's colour, like the header's lantern. CSS: _css/style/30-components-cards.css (.is-my-ally, .is-my-ally-card).
+ * grid), the Capitol rotation, the alliance standings, the rewards tiers, the map's buff
+ * summary and the King's console. The card holding it (a rotation week, a standings row, a
+ * buff summary row) glows softly too, in the alliance's colour, like the header's lantern.
+ * CSS: _css/style/30-components-cards.css (.is-my-ally, .is-my-ally-card). On the map
+ * itself, your cities get an outline (js/map.js renderMyTerritory).
  *
  * Tags are recognised by their text ("[WLO]" or "WLO"), accents and case ignored, so the
  * pages that draw them need no changes. Tags drawn later (data arriving, a view switched)
@@ -13,14 +15,15 @@
  */
 (function () {
   // Where a tag is shown (each holds just the tag, e.g. "[WLO]")
-  const TAGS = '.ally-text, .rotation-tag, .ladder-tag, .alliance-badge, #hero-capitol-holder';
+  const TAGS =
+    '.ally-text, .rotation-tag, .ladder-tag, .alliance-badge, .buff-row-tag, #hero-capitol-holder';
   // The card around a tag that glows with it
-  const CARDS = '.rotation-week, .alliance-ladder-row, .ops-week-card';
+  const CARDS = '.rotation-week, .alliance-ladder-row, .ops-week-card, .buff-row';
 
   const norm = (s) =>
     String(s || '')
       .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
+      .replace(/[\u0300-\u036f]/g, '')
       .replace(/[[\]\s]/g, '')
       .toLowerCase();
   const mine = () => {
