@@ -298,10 +298,9 @@
   font-size: 1.35rem;
   font-weight: 800;
   color: rgb(var(--active-theme-vivid, 254, 240, 138));
-  /* Soft halo in the tag's own colour (the holder's alliance colour, set by js/calendar.js). */
-  text-shadow:
-    0 0 14px color-mix(in srgb, currentColor 55%, transparent),
-    0 0 28px color-mix(in srgb, currentColor 30%, transparent);
+  /* No halo of its own (owner, 2026-11-16): a glow on a tag means "your alliance" across the
+     site (js/my-alliance.js, .is-my-ally), so the holder glows only for its own members. Its
+     size, weight and the alliance's colour (js/calendar.js) make it stand out already. */
 }
 
 .cal-capitol-rank {

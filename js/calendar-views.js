@@ -151,7 +151,9 @@
       day: null, // the day picked in the cycle view (00:00 GT, ms)
       kinds: new Set(KINDS),
       type: '', // the event type picked in the dropdown: '' all, 'other' events of no type
-      editing: false, // leaders: Edit / Delete shown on the cards (the "Edit events" button)
+      // leaders: Edit / Delete shown on the cards (the "Edit events" button); on from the start
+      // after a Steward's switch between server and alliance events (opts.startEditing)
+      editing: Boolean(opts.startEditing),
       events: [],
       status: null,
     };

@@ -328,6 +328,15 @@ async function initCalendar() {
   // chips for the event types and "Find an event". The chips replace the old Perspective
   // menu: an alliance's page shows the server's events and the alliance's own (its chip
   // hides or shows them).
+  // Set just before a Steward's scope switch reloads the page (step 6), read once
+  const SWITCHED_KEY = 'cal-scope-switched';
+  let switchedScope = false;
+  try {
+    switchedScope = sessionStorage.getItem(SWITCHED_KEY) === '1';
+    sessionStorage.removeItem(SWITCHED_KEY);
+  } catch {
+    /* storage blocked: the reload starts afresh */
+  }
   const eventsView =
     window.CalendarViews && document.getElementById('events-timeline-container')
       ? window.CalendarViews.create(document.getElementById('events-timeline-container'), {
@@ -339,7 +348,9 @@ async function initCalendar() {
           // had, not today (js/calendar-views.js remember); per address, so an alliance's
           // calendar has its own
           memoryKey: `cal-place:${location.pathname}${location.search}`,
-          restore: Boolean(window.__cameBack),
+          restore: Boolean(window.__cameBack) || switchedScope,
+          // A Steward who switched between server and alliance events: still editing
+          startEditing: switchedScope,
           // Leaders edit and delete their own events (and Stewards server-wide ones)
           canEdit: (evt) =>
             isManagementSession &&
@@ -422,6 +433,8 @@ async function initCalendar() {
         .join('');
       scopeSwitch.addEventListener('change', () => {
         sessionStorage.setItem(SCOPE_KEY, scopeSwitch.value === 'global' ? 'global' : 'alliance');
+        // The reload comes back as it was: editing on, the same view, week and day
+        sessionStorage.setItem(SWITCHED_KEY, '1');
         window.location.reload();
       });
     }
