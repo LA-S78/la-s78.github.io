@@ -333,3 +333,9 @@ dialog a.dialog-btn:hover {
 .content-pane[hidden] {
   display: none;
 }
+
+/* The Rules page's link to the Capitol rotation on the calendar */
+.rotation-link {
+  margin-top: 1rem;
+  font-weight: 600;
+}

@@ -396,7 +396,7 @@ calendar:
   saturday: Samedi
   today: "🔥 AUJOURD'HUI"
   none_this_week: Aucun cette semaine
-  upcoming: Opérations & Jalons à venir
+  upcoming: "Événements à venir"
   times_shown: Heures affichées en {gt} & votre heure locale
   gt_label: Game Time (UTC-2)
   view_label: Vue calendrier
@@ -516,7 +516,7 @@ calendar_events:
   delete_failed: Échec de la suppression de l'événement
   removed: Opération supprimée.
 kings_scheduler:
-  title: "⚔️ Console de défense et de rotation du Capitole"
+  title: "Rotation du Capitole"
   subtitle: Programme automatisé de défense des matchs et de restitution
   overrides: 'Priorités : {n}/2'
   loading: Chargement du programme en direct...
@@ -759,12 +759,4 @@ live_data:
   offline: "📴 Hors ligne : affichage des données enregistrées sur cet appareil ({when})."
   updating: "⏳ Mise à jour…"
 capitol_rotation:
-  rank: 'Rang #{rank}'
-  this_week: Cette semaine
-  captures: Captures {date}
-  captured: Capturé {date}
-  override: 'Remplacement : remplace [{replaced}] cette semaine'
-  no_alliance: Aucune alliance à ce rang pour le moment
-  off_week_note: 'Pas de Guerre des Royaumes cette semaine : [{tag}] détient le Capitole.'
-  kw_note: 'Semaine de Guerre des Royaumes : la bataille a lieu samedi.'
-  schedule_note: Basé sur le calendrier en direct et le classement NAP. Les remplacements définis par les intendants sont affichés ici dès leur enregistrement.
+  calendar_link: "Voir la rotation de ce cycle dans le calendrier →"

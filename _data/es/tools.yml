@@ -396,7 +396,7 @@ calendar:
   saturday: Sábado
   today: "🔥 HOY"
   none_this_week: Ninguno esta semana
-  upcoming: Operaciones y hitos próximos
+  upcoming: "Próximos eventos"
   times_shown: Horarios mostrados en {gt} y tu hora local
   gt_label: Game Time (UTC-2)
   view_label: Vista de calendario
@@ -516,7 +516,7 @@ calendar_events:
   delete_failed: Error al eliminar el evento
   removed: Operación eliminada.
 kings_scheduler:
-  title: "⚔️ Consola de Defensa y Rotación del Capitolio"
+  title: "Rotación del Capitolio"
   subtitle: Programación automatizada de defensa de enfrentamientos y restitución
   overrides: 'Anulaciones: {n}/2'
   loading: Cargando horario en vivo...
@@ -759,12 +759,4 @@ live_data:
   offline: "📴 Sin conexión: mostrando los datos guardados en este dispositivo ({when})."
   updating: "⏳ Actualizando..."
 capitol_rotation:
-  rank: 'Rango #{rank}'
-  this_week: Esta semana
-  captures: Capturas {date}
-  captured: Capturado {date}
-  override: 'Anular: reemplaza a [{replaced}] esta semana'
-  no_alliance: Aún no hay alianza en este rango
-  off_week_note: 'No hay Guerra de Reinos esta semana: [{tag}] mantiene el Capitolio.'
-  kw_note: 'Semana de Guerra de Reinos: la batalla es el sábado.'
-  schedule_note: Basado en el calendario en vivo y las clasificaciones NAP. Las anulaciones establecidas por los administradores se muestran aquí tan pronto como se guardan.
+  calendar_link: "Ver la rotación de este ciclo en el calendario →"

@@ -10,7 +10,7 @@ nav_links:
     url: "#capitol-rotation"
   - name_key: "rewards"
     url: "#capitol-rewards"
-strings: [capitol_rotation, rewards_planner, proposals, live_data]
+strings: [rewards_planner, proposals, live_data]
 ---
 
 {% for section in site.rules %}
@@ -57,18 +57,8 @@ nav_id: "capitol-rotation"
   {{ p.note }}
 </small>
 
-{% comment %} The rotation from the live calendar (js/capitol-rotation.js, /api/calendar). The week order comes from the calendar's settings, so the page starts with four blank cards of the same size, and the script fills them in (in the order remembered from the last visit, then live). {% endcomment %}
-<div id="rotation-board" class="rotation-board" aria-live="polite" aria-busy="true">
-  <div class="rotation-grid">
-    <div class="rotation-week is-loading"></div>
-    <div class="rotation-week is-loading"></div>
-    <div class="rotation-week is-loading"></div>
-    <div class="rotation-week is-loading"></div>
-  </div>
-  <p class="rotation-note">&nbsp;</p>
-  <p class="rotation-source">{{ "capitol_rotation.schedule_note" | t }}</p>
-</div>
-<script type="module" src="/js/capitol-rotation.js"></script>
+{% comment %} The rotation itself is on the calendar (its Capitol console), which shows every week's alliance and the active week; a board here repeated it (removed 2026-11-16, owner). {% endcomment %}
+<p class="rotation-link"><a href="/{{ site.active_lang }}/calendar.html#operations-portal">{{ "capitol_rotation.calendar_link" | t }}</a></p>
 
 === collection--rules--03 ===
 ---

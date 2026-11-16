@@ -396,7 +396,7 @@ calendar:
   saturday: Sabato
   today: "🔥 OGGI"
   none_this_week: Nessuno questa settimana
-  upcoming: Operazioni & Milestone imminenti
+  upcoming: "Prossimi eventi"
   times_shown: Orari visualizzati in {gt} & tuo Orario Locale
   gt_label: Game Time (UTC-2)
   view_label: Visualizzazione calendario
@@ -516,7 +516,7 @@ calendar_events:
   delete_failed: Eliminazione evento fallita
   removed: Operazione rimossa.
 kings_scheduler:
-  title: "⚔️ Console Difesa & Rotazione Campidoglio"
+  title: "Rotazione del Campidoglio"
   subtitle: Programma di difesa e restituzione automatizzato
   overrides: 'Override: {n}/2'
   loading: Caricamento programma in tempo reale...
@@ -759,12 +759,4 @@ live_data:
   offline: "📴 Offline: mostrati i dati salvati su questo dispositivo ({when})."
   updating: "⏳ Aggiornamento in corso…"
 capitol_rotation:
-  rank: 'Grado #{rank}'
-  this_week: Questa settimana
-  captures: Catture {date}
-  captured: Catturato {date}
-  override: 'Sovrascrivi: sostituisce [{replaced}] questa settimana'
-  no_alliance: Nessuna alleanza a questo grado ancora
-  off_week_note: 'Nessuna Guerra tra Regni questa settimana: [{tag}] detiene il Campidoglio.'
-  kw_note: 'Settimana di Guerra tra Regni: la battaglia è sabato.'
-  schedule_note: Dal calendario in tempo reale e dalle classifiche NAP. Le sostituzioni impostate dagli Steward sono mostrate qui non appena salvate.
+  calendar_link: "Vedi la rotazione di questo ciclo nel calendario →"

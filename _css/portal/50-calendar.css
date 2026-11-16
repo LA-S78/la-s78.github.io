@@ -232,8 +232,21 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+/* The week's name with the rewards' badge beside it (wraps under it if there's no room) */
+.cal-hero-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0.25rem 0;
+}
+
+.cal-hero-title-row .cal-badge[hidden] {
+  display: none;
+}
+
 .cal-hero-title {
-  margin: 0.5rem 0 0.25rem 0 !important;
+  margin: 0 !important;
   font-size: 1.5rem !important;
   font-weight: 700;
   border-bottom: none !important;
@@ -1101,7 +1114,10 @@
 
 /* An event type's picture behind its card (_data/event_types.yml `picture`): the scene on
    the right, faded into the theme's card colour towards the left where the time and title
-   sit, so text stays readable in every theme */
+   sit, so text stays readable in every theme. Pinned at 55% across, not by its right edge:
+   on a phone's narrow card only part of the picture fits, and this moves it right (cut on
+   the right, never leaving a gap) so its subject, about two-thirds across every picture,
+   stays in frame. Wider cards show the picture's full width, so they don't change. */
 .ag-event.has-pic {
   --pic-fade: var(--card-bg-solid, #1b1714);
   background:
@@ -1113,7 +1129,7 @@
       color-mix(in srgb, var(--pic-fade) 55%, transparent) 75%,
       color-mix(in srgb, var(--pic-fade) 40%, transparent) 100%
     ),
-    var(--pic) right center / cover no-repeat,
+    var(--pic) 55% center / cover no-repeat,
     var(--pic-fade);
 }
 
@@ -1127,7 +1143,7 @@
       color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 55%, transparent) 75%,
       color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 40%, transparent) 100%
     ),
-    var(--pic) right center / cover no-repeat,
+    var(--pic) 55% center / cover no-repeat,
     var(--pic-fade);
 }
 

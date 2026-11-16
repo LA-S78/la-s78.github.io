@@ -171,7 +171,7 @@ async function initCalendar() {
     const rewards = status.rewards || null;
     const heroBadge = document.getElementById('hero-phase-badge');
     if (heroBadge && rewards) {
-      // The title names the week; the badge shows the rewards, so they don't repeat.
+      // The title names the week; the badge beside it shows the rewards (hidden until known).
       const badge = !rewards.open
         ? ['calendar.badge_closed', 'badge-off']
         : rewards.result === 'won'
@@ -181,6 +181,7 @@ async function initCalendar() {
             : ['calendar.badge_open', 'badge-off'];
       heroBadge.textContent = t(badge[0]);
       heroBadge.className = `cal-badge ${badge[1]}`;
+      heroBadge.hidden = false;
     }
 
     const titleEl = document.getElementById('hero-phase-title');
@@ -189,8 +190,13 @@ async function initCalendar() {
     const capRankEl = document.getElementById('hero-capitol-rank');
     const cycleProgressEl = document.getElementById('metric-cycle-progress');
 
-    // weekName, not the configured phase name, so the site always says "Off-Week".
-    if (titleEl) titleEl.textContent = weekName(status.clockWeek);
+    // "Week 1" (short, to keep the title on one line on phones) or "Off-Week"; not the
+    // configured phase name, so the site always says "Off-Week".
+    if (titleEl)
+      titleEl.textContent =
+        Number(status.clockWeek) === 0
+          ? t('common.off_week')
+          : t('calendar.week_n', { n: status.clockWeek });
     // No reward period in the answer: no line, rather than "Loading…" left showing
     if (subEl) subEl.hidden = !rewards;
     if (subEl && rewards) {
@@ -222,19 +228,16 @@ async function initCalendar() {
         status.capitolCaptured ? 'calendar.current_holder' : 'calendar.next_holder',
       );
     }
+    // When the holder captures (or captured) the Capitol; no rank: the order changes every
+    // Kingdom War, so a rank here was more confusing than useful (owner, 2026-11-16)
     if (capRankEl) {
-      const rankText =
-        status.isOverrideWeek && status.holderActualRank
-          ? t('calendar.rank_override', { rank: status.holderActualRank })
-          : t('calendar.rank', { rank: status.capitolRank });
-      const captureText = t(
+      capRankEl.textContent = t(
         status.capitolCaptured
           ? 'calendar.captured_friday'
           : status.isCaptureDay
             ? 'calendar.captures_today'
             : 'calendar.captures_friday',
       );
-      capRankEl.textContent = `${rankText} · ${captureText}`;
     }
     if (cycleProgressEl) {
       const weekLabel =

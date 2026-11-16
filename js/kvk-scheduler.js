@@ -84,28 +84,24 @@ function renderScheduleGrid() {
     {
       key: 'downtime',
       label: t('off_week'),
-      sub: t('boss_window', { n: 1 }),
       seat: schedule.downtime || startingSchedule().downtime,
       loot: window.tn('kings_scheduler.loot', 1),
     },
     {
       key: 'week_1',
       label: t('week_fri', { n: 1 }),
-      sub: t('boss_window', { n: 2 }),
       seat: schedule.week_1 || startingSchedule().week_1,
       loot: window.tn('kings_scheduler.loot', 2),
     },
     {
       key: 'week_2',
       label: t('week_fri', { n: 2 }),
-      sub: t('boss_window', { n: 3 }),
       seat: schedule.week_2 || startingSchedule().week_2,
       loot: window.tn('kings_scheduler.loot', 2),
     },
     {
       key: 'week_3',
       label: t('week_fri', { n: 3 }),
-      sub: t('kvk_finale'),
       seat: schedule.week_3 || startingSchedule().week_3,
       loot: t('loot_border'),
     },
@@ -117,15 +113,16 @@ function renderScheduleGrid() {
         (w.key === 'downtime' && currentWeek === 0) || w.key === `week_${currentWeek}`;
       const color = getAllianceColor(w.seat);
 
+      // Three rows (week, tag + ACTIVE, loot), lined up across the cards
+      // (CSS subgrid): every card the same height, the tags on one line
       return `
       <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}">
         <div class="ops-week-header">
           <span class="ops-week-num">${esc(w.label)}</span>
-          ${isCurrent ? `<span class="badge">${esc(t('active'))}</span>` : ''}
         </div>
-        <div class="ops-week-body">
+        <div class="ops-week-tag-row">
           <span class="ops-week-tag ally-text" style="--ally: ${esc(color)}">[${esc(w.seat)}]</span>
-          <span class="ops-week-sub">${esc(w.sub)}</span>
+          ${isCurrent ? `<span class="badge">${esc(t('active'))}</span>` : ''}
         </div>
         <div class="ops-week-loot">
           <small>${esc(w.loot)}</small>

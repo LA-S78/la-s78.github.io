@@ -77,10 +77,7 @@
 
 .ops-week-header {
   display: flex;
-  flex-wrap: wrap; /* on narrow cards the ACTIVE badge goes below the label */
-  gap: 4px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .ops-week-num {
@@ -94,21 +91,26 @@
   overflow-wrap: anywhere;
 }
 
-.ops-week-body {
+/* The alliance on the left, ACTIVE on the right of the same line */
+.ops-week-tag-row {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-wrap: wrap; /* no room beside a long tag (narrow phones): ACTIVE goes below it */
+  align-items: center;
+  align-self: start;
+  justify-content: space-between;
+  gap: 2px 6px;
+  min-width: 0;
+}
+
+.ops-week-tag-row .badge {
+  flex-shrink: 0;
 }
 
 .ops-week-tag {
+  min-width: 0;
   font-family: var(--font-headers);
   font-size: 1.15rem;
   font-weight: 800;
-}
-
-.ops-week-sub {
-  font-size: 0.72rem;
-  color: var(--text-muted);
 }
 
 .ops-week-loot {
@@ -116,6 +118,22 @@
   padding-top: 6px;
   font-size: 0.72rem;
   color: var(--accent-text);
+}
+
+/* The cards line their rows up (week, tag, loot): one height for all, the
+   tags on one line. Browsers without subgrid keep the plain column. */
+@supports (grid-template-rows: subgrid) {
+  .ops-week-card {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 6px;
+    align-content: start;
+  }
+
+  .ops-week-loot {
+    align-self: end;
+  }
 }
 
 /* Active Buyouts Tracker */

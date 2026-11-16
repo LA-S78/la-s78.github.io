@@ -396,7 +396,7 @@ calendar:
   saturday: Cumartesi
   today: "🔥 BUGÜN"
   none_this_week: Bu hafta yok
-  upcoming: Yaklaşan Operasyonlar & Kilometre Taşları
+  upcoming: "Yaklaşan Etkinlikler"
   times_shown: Zamanlar {gt} & Yerel Saatinizde gösteriliyor
   gt_label: Oyun Saati (UTC-2)
   view_label: Takvim görünümü
@@ -516,7 +516,7 @@ calendar_events:
   delete_failed: Etkinlik silinemedi
   removed: Operasyon kaldırıldı.
 kings_scheduler:
-  title: "⚔️ Başkent Savunma & Rotasyon Konsolu"
+  title: "Kapitol Rotasyonu"
   subtitle: Otomatik Eşleşme Savunması & Tazminat Programı
   overrides: 'Geçersiz Kılmalar: {n}/2'
   loading: Canlı program yükleniyor...
@@ -759,12 +759,4 @@ live_data:
   offline: "📴 Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
   updating: "⏳ Güncelleniyor…"
 capitol_rotation:
-  rank: 'Sıra #{rank}'
-  this_week: Bu hafta
-  captures: Ele geçirme {date}
-  captured: Ele geçirildi {date}
-  override: 'Geçersiz kılma: bu hafta [{replaced}] yerine geçer'
-  no_alliance: Bu sırada henüz ittifak yok
-  off_week_note: 'Bu hafta Krallık Savaşı yok: [{tag}] Başkenti elinde tutuyor.'
-  kw_note: 'Krallık Savaşı haftası: savaş Cumartesi günü.'
-  schedule_note: Canlı takvim ve NAP durumuna göre. Stewardlar tarafından ayarlanan geçersiz kılmalar kaydedildikleri anda burada gösterilir.
+  calendar_link: "Bu döngünün rotasyonunu takvimde görün →"

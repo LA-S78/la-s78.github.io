@@ -3,10 +3,10 @@
  *
  * Signed in with an alliance (localStorage "auth-alliance", set at sign-in), its tag glows
  * wherever an alliance tag is shown: the calendar (Capitol card, the week's king, the cycle
- * grid), the Capitol rotation, the alliance standings, the rewards tiers, the map's buff
- * summary and the King's console. The card holding it (a rotation week, a standings row, a
- * buff summary row) is picked out too, in the alliance's colour. Both are still: a pulse
- * was distracting.
+ * grid, the Capitol Rotation cards), the alliance standings, the rewards tiers and the map's
+ * buff summary. The card holding it (a Capitol Rotation week, a standings row, a buff
+ * summary row) is picked out too, in the alliance's colour. Both are still: a pulse was
+ * distracting.
  * CSS: _css/style/30-components-cards.css (.is-my-ally, .is-my-ally-card).
  *
  * Tags are recognised by their text ("[WLO]" or "WLO"), accents and case ignored, so the
@@ -15,10 +15,9 @@
  */
 (function () {
   // Where a tag is shown (each holds just the tag, e.g. "[WLO]")
-  const TAGS =
-    '.ally-text, .rotation-tag, .ladder-tag, .alliance-badge, .buff-row-tag, #hero-capitol-holder';
+  const TAGS = '.ally-text, .ladder-tag, .alliance-badge, .buff-row-tag, #hero-capitol-holder';
   // The card around a tag that glows with it
-  const CARDS = '.rotation-week, .alliance-ladder-row, .ops-week-card, .buff-row';
+  const CARDS = '.alliance-ladder-row, .ops-week-card, .buff-row';
 
   const norm = (s) =>
     String(s || '')

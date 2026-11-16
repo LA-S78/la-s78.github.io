@@ -414,7 +414,7 @@ calendar:
   saturday: "Saturday"
   today: "🔥 TODAY"
   none_this_week: "None this week"
-  upcoming: "Upcoming Operations & Milestones"
+  upcoming: "Upcoming Events"
   times_shown: "Times displayed in {gt} & your Local Time"
   gt_label: "Game Time (UTC-2)"
   # The events at a glance (js/calendar-views.js): week and cycle views, type chips
@@ -538,7 +538,7 @@ calendar_events:
   removed: "Operation removed."
 
 kings_scheduler:
-  title: "⚔️ Capitol Defense & Rotation Console"
+  title: "Capitol Rotation"
   subtitle: "Automated Matchup Defense & Restitution Schedule"
   overrides: "Overrides: {n}/2"
   loading: "Loading live schedule..."
@@ -791,15 +791,6 @@ live_data:
   updating: "⏳ Updating…"
 
 
-# The Capitol Rotation chart on the Rules page (js/capitol-rotation.js), drawn from the live
-# calendar: which alliance captures the Capitol each week of the 4-week cycle.
+# The Rules page's Capitol Rotation section: a link to the rotation on the calendar.
 capitol_rotation:
-  rank: "Rank #{rank}"
-  this_week: "This week"
-  captures: "Captures {date}"
-  captured: "Captured {date}"
-  override: "Override: replaces [{replaced}] this week"
-  no_alliance: "No alliance at this rank yet"
-  off_week_note: "No Kingdom War this week: [{tag}] holds the Capitol."
-  kw_note: "Kingdom War week: the battle is on Saturday."
-  schedule_note: "From the live calendar and NAP standings. Overrides set by the Stewards are shown here as soon as they're saved."
+  calendar_link: "See this cycle's rotation on the calendar →"
