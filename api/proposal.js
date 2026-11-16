@@ -13,6 +13,7 @@ import {
   isTestDeployment,
   TEST_PROPOSAL_FIELD,
 } from './_gist.js';
+import { isImageRequest, handleImageRequest } from './_alliance_images.js';
 
 const POOL_LIMITS = {
   commanders_will: 5,
@@ -38,6 +39,25 @@ export default function handler(req, res) {
 }
 
 async function respond(req, res) {
+  // Alliance images (api/_alliance_images.js) share this endpoint.
+  if (isImageRequest(req)) {
+    try {
+      const out = await handleImageRequest(req);
+      if (out.image) {
+        res.setHeader('Content-Type', out.contentType);
+        res.setHeader('Cache-Control', out.cache);
+        if (out.cdnCache) res.setHeader('Vercel-CDN-Cache-Control', out.cdnCache);
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        return res.status(out.status).send(out.image);
+      }
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(out.status).json(out.json);
+    } catch (err) {
+      console.error('Alliance images failed:', err);
+      return res.status(500).json({ error: say('api_alliance_images.failed') });
+    }
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

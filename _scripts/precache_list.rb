@@ -26,7 +26,11 @@ module PrecacheList
   ].freeze
 
   # The multilingual build copies sw.js into each language folder; only /sw.js is used.
-  EXCLUDED_PATTERNS = [%r{\A/[a-z]{2}/sw\.js\z}].freeze
+  EXCLUDED_PATTERNS = [
+    %r{\A/[a-z]{2}/sw\.js\z},
+    # The Steward image review page (every language's copy): it only works online anyway.
+    %r{\A(?:/[a-z]{2})?/review-image\.html\z}
+  ].freeze
 
   def self.run(dest_path)
     puts "Scanning #{File.expand_path(dest_path)} for precache candidates..."

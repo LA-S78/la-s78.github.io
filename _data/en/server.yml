@@ -88,6 +88,28 @@ api_register:
   alert_role_missing: "The Default Alert Role ({id}) isn't a role in \"{server}\". Copy its ID again, or leave it empty for @everyone."
   role_not_found: "No role in \"{server}\" matches \"{role}\" yet; it will work once one does."
 
+api_alliance_images:
+  not_set_up: "Alliance images aren't set up on the server yet."
+  failed: "Something went wrong with the alliance image. Please try again."
+  bad_image: "That file isn't a picture the site can use. Please use the upload form."
+  too_big: "The image is too large (over {kb} KB). Please use the upload form, which shrinks it."
+  wrong_size: "The image must be exactly {width}×{height} pixels. Please use the upload form."
+  has_metadata: "The image still carries hidden data (such as where a photo was taken). Please use the upload form, which removes it."
+  leaders_only: "Only R4 and R5 leaders can send alliance images."
+  own_alliance_only: "You can only send images for your own alliance."
+  unknown_alliance: "That alliance isn't in the NAP."
+  daily_limit: "Daily limit reached: {max} images per alliance per 24 hours. You can send the next one after {when}."
+  post_failed: "The image couldn't be sent to the Stewards on Discord. Please try again later."
+  sent: "Sent to the Stewards for review. It will appear once approved."
+  stewards_only: "Only Stewards can review alliance images."
+  not_found: "That image wasn't found. It may have expired."
+  already_decided: "That image has already been reviewed (or replaced by a newer one)."
+  approved: "Approved: the image is now live."
+  rejected: "Rejected: the image was deleted."
+  remove_not_allowed: "Only the alliance's R5 or a Steward can remove its images."
+  nothing_to_remove: "There's no image there to remove."
+  removed: "Image removed."
+
 api_proposals:
   login_required: "Please log in with Discord again to send proposals."
   leaders_only: "Only R4 and R5 leaders can send proposals."
