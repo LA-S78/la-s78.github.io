@@ -672,6 +672,10 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
     }
 
     // ---------- The editor ----------
+    // Line icons for "Who can see it" (js/site-select.js): a lock, and a group of people
+    const ICON_LOCK = '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>';
+    const ICON_MEMBERS =
+      '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>';
     function closeEditor() {
       $('dash-editor').hidden = true;
       $('dash-editor').innerHTML = '';
@@ -694,8 +698,8 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         <textarea id="ed-note" rows="2" maxlength="400" placeholder="${e('note_example')}">${escapeHtml(w.note)}</textarea>
         <label for="ed-vis">${e('who_sees')}</label>
         <select id="ed-vis" data-site-select>
-          <option value="r4_only"${w.visibility !== 'members' ? ' selected' : ''}>${e('officers_only')}</option>
-          <option value="members"${w.visibility === 'members' ? ' selected' : ''}>${e('all_members')}</option>
+          <option value="r4_only" data-icon="${escapeHtml(ICON_LOCK)}"${w.visibility !== 'members' ? ' selected' : ''}>${e('officers_only')}</option>
+          <option value="members" data-icon="${escapeHtml(ICON_MEMBERS)}"${w.visibility === 'members' ? ' selected' : ''}>${e('all_members')}</option>
         </select>
         <label>${e('data')}</label>
         <div class="dash-types dash-src" role="group" aria-label="${e('data_source')}">

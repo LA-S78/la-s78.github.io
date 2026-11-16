@@ -153,8 +153,8 @@ chart_editor:
   note: Açıklama
   note_example: ör. Cuma sıfırlamasına kadar minimum 15M Düello puanı gerekir
   who_sees: Kimler görebilir
-  officers_only: "🔒 Sadece yetkililer (R4/R5)"
-  all_members: "👥 Tüm ittifak üyeleri"
+  officers_only: "Sadece yetkililer (R4/R5)"
+  all_members: "Tüm ittifak üyeleri"
   data: Veri
   data_source: Veri kaynağı
   paste: "📋 Tablo yapıştır"
@@ -462,8 +462,8 @@ calendar_events:
   reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları paylaşılamaz.
   edit_heading: Etkinliği düzenle
   scope_label: Hangi etkinliklerin yönetileceği
-  scope_server: "🌐 Sunucu geneli etkinlikler"
-  scope_alliance: "🛡️ [{tag}] etkinlikleri"
+  scope_server: "Sunucu geneli etkinlikler"
+  scope_alliance: "[{tag}] etkinlikleri"
   save_changes: "💾 Değişiklikleri kaydet"
   manage_mode: YÖNETİM MODU
   session_active: Oturum Doğrulandı ve Aktif
@@ -498,11 +498,11 @@ calendar_events:
   every_2_days: Her 2 Günde Bir Tekrarlanır
   weekly: Haftalık Tekrarlanır (Aynı gün ve saat)
   alert_level: Discord hatırlatıcısı (1 saat önce)
-  notify_off: "📵 Hatırlatıcı yok"
-  notify_role: "🔔 İttifakın uyarı rolünü etiketle"
-  notify_custom: "🎯 Belirli bir rolü etiketle"
-  notify_everyone: "🚨 @everyone etiketle"
-  notify_none: "🔕 Etiketlemeden paylaş"
+  notify_off: "Hatırlatıcı yok"
+  notify_role: "İttifakın uyarı rolünü etiketle"
+  notify_custom: "Belirli bir rolü etiketle"
+  notify_everyone: "@everyone etiketle"
+  notify_none: "Etiketlemeden paylaş"
   role_id: Belirli Rol Kimliği (ID)
   role_id_hint: "(sadece “Belirli bir rolü etiketle” için)"
   role_id_title: 17-20 haneli geçerli bir Discord Rol Kimliği olmalıdır

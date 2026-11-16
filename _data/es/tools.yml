@@ -153,8 +153,8 @@ chart_editor:
   note: Explicación
   note_example: p. ej. Mínimo 15M puntos de Duelo requeridos para el reset del viernes
   who_sees: Quién puede verlo
-  officers_only: "🔒 Solo oficiales (R4/R5)"
-  all_members: "👥 Todos los miembros de la alianza"
+  officers_only: "Solo oficiales (R4/R5)"
+  all_members: "Todos los miembros de la alianza"
   data: Datos
   data_source: De dónde provienen los datos
   paste: "📋 Pegar una tabla"
@@ -462,8 +462,8 @@ calendar_events:
   reminder_no_server_channel: El canal de alertas de NAP aún no está configurado (NAP_ALERT_CHANNEL_ID), por lo que no se pueden publicar recordatorios del servidor.
   edit_heading: Editar evento
   scope_label: Eventos a gestionar
-  scope_server: "🌐 Eventos del servidor"
-  scope_alliance: "🛡️ Eventos de [{tag}]"
+  scope_server: "Eventos del servidor"
+  scope_alliance: "Eventos de [{tag}]"
   save_changes: "💾 Guardar cambios"
   manage_mode: MODO GESTIÓN
   session_active: Sesión autenticada activa
@@ -498,11 +498,11 @@ calendar_events:
   every_2_days: Se repite cada 2 días
   weekly: Se repite semanalmente (mismo día y hora)
   alert_level: Recordatorio de Discord (1 hora antes)
-  notify_off: "📵 Sin recordatorio"
-  notify_role: "🔔 Mencionar al rol de alertas de la alianza"
-  notify_custom: "🎯 Mencionar un rol específico"
-  notify_everyone: "🚨 Mencionar a @everyone"
-  notify_none: "🔕 Publicar sin mención"
+  notify_off: "Sin recordatorio"
+  notify_role: "Mencionar al rol de alertas de la alianza"
+  notify_custom: "Mencionar un rol específico"
+  notify_everyone: "Mencionar a @everyone"
+  notify_none: "Publicar sin mención"
   role_id: ID de rol específico
   role_id_hint: "(solo para “Mencionar un rol específico”)"
   role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos

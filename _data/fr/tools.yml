@@ -153,8 +153,8 @@ chart_editor:
   note: Explication
   note_example: ex. Minimum 15M de points de Duel requis avant la réinitialisation du vendredi
   who_sees: Qui peut le voir
-  officers_only: "🔒 Officiers uniquement (R4/R5)"
-  all_members: "👥 Tous les membres de l'alliance"
+  officers_only: "Officiers uniquement (R4/R5)"
+  all_members: "Tous les membres de l'alliance"
   data: Données
   data_source: Source des données
   paste: "📋 Coller un tableau"
@@ -462,8 +462,8 @@ calendar_events:
   reminder_no_server_channel: Le canal d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), les rappels du serveur ne peuvent donc pas être publiés.
   edit_heading: Modifier l'événement
   scope_label: Gérer les événements de
-  scope_server: "🌐 Événements du serveur"
-  scope_alliance: "🛡️ Événements de [{tag}]"
+  scope_server: "Événements du serveur"
+  scope_alliance: "Événements de [{tag}]"
   save_changes: "💾 Enregistrer les modifications"
   manage_mode: MODE GESTION
   session_active: Session authentifiée active
@@ -498,11 +498,11 @@ calendar_events:
   every_2_days: Se répète tous les 2 jours
   weekly: Se répète chaque semaine (Même jour et heure)
   alert_level: Rappel Discord (1 heure avant)
-  notify_off: "📵 Aucun rappel"
-  notify_role: "🔔 Notifier le rôle d'alerte de l'alliance"
-  notify_custom: "🎯 Notifier un rôle spécifique"
-  notify_everyone: "🚨 Notifier @everyone"
-  notify_none: "🔕 Publier sans notification"
+  notify_off: "Aucun rappel"
+  notify_role: "Notifier le rôle d'alerte de l'alliance"
+  notify_custom: "Notifier un rôle spécifique"
+  notify_everyone: "Notifier @everyone"
+  notify_none: "Publier sans notification"
   role_id: ID du rôle spécifique
   role_id_hint: "(uniquement pour « Notifier un rôle spécifique »)"
   role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
