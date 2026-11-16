@@ -531,7 +531,10 @@
   function initSearchEngine() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput || !firstTime(searchInput, 'search')) return;
-    const results = document.getElementById('searchResults');
+    // The home page's box also searches every guide and page; the guides page's box only
+    // filters its own guides (data-search-type, _includes/structure/search.html)
+    const fullSearch = searchInput.dataset.searchType === 'home';
+    const results = fullSearch ? document.getElementById('searchResults') : null;
     const lang = document.documentElement.lang || 'en';
     let latest = 0;
 
@@ -583,9 +586,10 @@
       show(e.target.value);
     });
     // Fetch the index when the box is first used, so typing feels instant
-    searchInput.addEventListener('focus', () => loadSearchIndex(lang).catch(() => {}), {
-      once: true,
-    });
+    if (fullSearch)
+      searchInput.addEventListener('focus', () => loadSearchIndex(lang).catch(() => {}), {
+        once: true,
+      });
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && searchInput.value) {
         searchInput.value = '';
@@ -791,6 +795,37 @@
     isNewNavigation = !restore;
     isRestoreVisit = restore;
   });
+
+  // The language picker (_includes/structure/language-switcher.html): opens and closes on
+  // click; the current language, Escape, a click elsewhere or a page change closes it.
+  const setLangOpen = (dropdown, open) => {
+    dropdown.classList.toggle('is-open', open);
+    dropdown.querySelector('.lang-trigger')?.setAttribute('aria-expanded', String(open));
+  };
+  const closeLangPickers = (except = null) =>
+    document.querySelectorAll('.lang-dropdown.is-open').forEach((d) => {
+      if (d !== except) setLangOpen(d, false);
+    });
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest?.('.lang-trigger');
+    const dropdown = e.target.closest?.('.lang-dropdown');
+    if (trigger) {
+      closeLangPickers(dropdown);
+      setLangOpen(dropdown, !dropdown.classList.contains('is-open'));
+      return;
+    }
+    const current = e.target.closest?.('.dropdown-content a.lang-active');
+    if (current) e.preventDefault(); // already this language: just close
+    if (current || !dropdown) closeLangPickers();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = document.querySelector('.lang-dropdown.is-open');
+    if (!open) return;
+    setLangOpen(open, false);
+    open.querySelector('.lang-trigger')?.focus();
+  });
+  document.addEventListener('turbo:visit', () => closeLangPickers());
 
   document.addEventListener('click', (e) => {
     const toggleBtn = e.target.closest('#theme-toggle');

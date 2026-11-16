@@ -7,15 +7,25 @@ body.map-fullscreen-active {
   touch-action: none;
 }
 
+/* Anything on the map's wrappers that would make the fixed map sit inside them instead of
+   covering the screen (the fallback when the browser refuses real fullscreen, e.g. iPhone):
+   a transform, filter, backdrop-filter (the panes' frosted glass), perspective, contain,
+   will-change. And no clipping by the pane around it. */
 body.map-fullscreen-active main,
 body.map-fullscreen-active .content-pane,
 body.map-fullscreen-active turbo-frame {
   transform: none !important;
-  will-change: auto;
+  will-change: auto !important;
   animation: none !important;
-  filter: none;
-  perspective: none;
-  contain: none;
+  filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  perspective: none !important;
+  contain: none !important;
+}
+
+body.map-fullscreen-active .content-pane:has(#map-container.is-fullscreen) {
+  overflow: visible !important;
 }
 
 #map-container.is-fullscreen {
@@ -82,3 +92,23 @@ body.map-fullscreen-active turbo-frame {
   flex: 0 0 auto;
 }
 
+
+/* A short screen (a phone held sideways): less spacing around the map, so it keeps most of
+   the height (it was left about 150px of 390). "body." makes these outrank the desktop
+   fullscreen spacing (90-media-queries.css), which comes later in the stylesheet */
+@media (min-width: 768px) and (max-height: 520px) {
+  body.map-fullscreen-active #map-container.is-fullscreen {
+    padding: max(6px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+      max(6px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important;
+  }
+
+  body.map-fullscreen-active #map-container.is-fullscreen .map-controls {
+    margin-bottom: 6px !important;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  body.map-fullscreen-active #map-container.is-fullscreen .info-card {
+    margin-top: 6px !important;
+  }
+}

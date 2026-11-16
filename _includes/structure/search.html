@@ -1,9 +1,10 @@
 <div class="search">
     {% comment %}
-      The page's search box. It filters the cards on its own page (Home, the guides index) and,
-      from two letters, lists matching sections from every guide and the Rules and Alliance
-      pages (js/main.js initSearchEngine, reading /<lang>/search-index.json, built by
-      _scripts/search_index.rb).
+      The page's search box (search_type: "home" or "guides"). It filters the cards on its own
+      page; on the home page it also lists, from two letters, matching sections from every
+      guide and the Rules and Alliance pages (js/main.js initSearchEngine, reading
+      /<lang>/search-index.json, built by _scripts/search_index.rb). The guides page only
+      filters its guides (owner, 2026-11-16).
     {% endcomment %}
     {% assign search_ui = site.data[site.active_lang].ui.search %}
     {% assign search_en = site.data.en.ui.search %}
@@ -11,6 +12,7 @@
 
     <input type="search"
            id="searchInput"
+           data-search-type="{{ include.search_type }}"
            class="search-bar"
            autocomplete="off"
            enterkeyhint="search"

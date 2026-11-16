@@ -175,10 +175,10 @@ footer {
   font-size: 0.8rem;
   z-index: 300;
 }
+/* The current language: clickable, so a tap on it closes the picker (js/main.js) */
 .lang-active {
   font-weight: bold;
   color: var(--white);
-  pointer-events: none;
 }
 
 .lang-trigger {
@@ -246,13 +246,15 @@ footer {
 .dropdown-content li a.lang-active {
   color: var(--accent-text);
   font-weight: bold;
-  pointer-events: none;
+  cursor: default;
   background-color: color-mix(in srgb, var(--accent-color) 5%, transparent);
 }
 .dropdown-content li a:hover {
   background-color: var(--border-color);
 }
-.lang-dropdown:hover .dropdown-content {
+/* Open on click (js/main.js), not on hover: a tap on a phone counts as a hover that nothing
+   ends, so the list stayed half-open */
+.lang-dropdown.is-open .dropdown-content {
   visibility: visible;
   opacity: 1;
   pointer-events: auto;

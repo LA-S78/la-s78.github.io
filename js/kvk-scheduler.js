@@ -230,12 +230,12 @@ export function updateOverridePreview() {
           ${th('step1_text', { week: `<strong>${esc(t('week_label', { n: targetWeek }))}</strong>`, threat: `<strong>${esc(threatName || t('opponent_placeholder'))}</strong>` })}
         </p>
         <div class="preview-swap-row">
-          <span>${esc(t('week_label', { n: targetWeek }))}: ${tag('WLO', ALLIANCE_COLORS.WLO)}</span>
+          <span>${esc(t('week_label', { n: targetWeek }))}: ${tag('WLO', getAllianceColor('WLO'))}</span>
           <span class="swap-arrow">⇄</span>
           <span>${esc(t('week3_finale'))} ${tag(currentScheduledAlly, allyColor)}</span>
         </div>
         <div class="preview-perks">
-          🎁 ${th('lose_nothing', { ally: tag(currentScheduledAlly), wlo: tag('WLO') })}
+          🎁 ${th('lose_nothing', { ally: tag(currentScheduledAlly, allyColor), wlo: tag('WLO', getAllianceColor('WLO')) })}
         </div>
       </div>
     `;
@@ -252,7 +252,7 @@ export function updateOverridePreview() {
           <div class="p-item">• <strong>${esc(t('distribution', { n: 3 }))}</strong> ${esc(t('plus_gold', { tag: currentScheduledAlly }))}</div>
         </div>
         <div class="preview-perks">
-          🎁 ${th('buyout_perks', { ally: tag(currentScheduledAlly), wlo: tag('WLO') })}
+          🎁 ${th('buyout_perks', { ally: tag(currentScheduledAlly, allyColor), wlo: tag('WLO', getAllianceColor('WLO')) })}
         </div>
       </div>
     `;
