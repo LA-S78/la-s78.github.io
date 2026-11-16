@@ -185,6 +185,7 @@
     highlightAllianceRow('nap-alliance-table');
     highlightAllianceRow('nap-ranks-table');
     window.renderIdentityPill?.();
+    window.MyAlliance?.refresh();
   }
 
   function highlightAllianceRow(tableId) {
