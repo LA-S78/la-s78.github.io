@@ -269,6 +269,15 @@
         draw();
         return;
       }
+      const add = e.target.closest('.ag-add-event');
+      if (add && !add.disabled) {
+        // The form opens on the day being looked at (today if that day has passed), as
+        // YYYY-MM-DD in Game Time
+        const today0 = dayStart(Date.now());
+        const day = state.day !== null && state.day >= today0 ? state.day : today0;
+        opts.onAdd?.(gt(day).toISOString().slice(0, 10));
+        return;
+      }
       const edit = e.target.closest('.btn-edit-event');
       if (edit) opts.onEdit?.(edit.dataset.eventId);
       const del = e.target.closest('.btn-delete-event');
@@ -474,11 +483,12 @@
         </section>`;
       };
       // Leaders (opts.canManage): the button that shows Edit / Delete on their events, just
-      // above the list. Off on every visit. The same button as the dashboard's Edit Dashboard
-      // (dash-btn, both labels in one size, centred): edit modes look alike across the site.
+      // above the list, and "Add an event" beside it (greyed out until editing is on). Off on
+      // every visit. The dashboard's Edit Dashboard and Add a chart buttons (dash-btn, both
+      // labels in one size, centred): edit modes look alike across the site.
       const editBar = () =>
         opts.canManage?.()
-          ? `<div class="ag-editbar"><button type="button" class="dash-btn dash-two-labels ag-edit-toggle" aria-pressed="${state.editing}"><span class="when-off">${esc(t('calendar.edit_events'))}</span><span class="when-on">${esc(t('calendar.edit_done'))}</span></button></div>`
+          ? `<div class="ag-editbar"><button type="button" class="dash-btn dash-two-labels ag-edit-toggle" aria-pressed="${state.editing}"><span class="when-off">${esc(t('calendar.edit_events'))}</span><span class="when-on">${esc(t('calendar.edit_done'))}</span></button><button type="button" class="dash-btn ag-add-event"${state.editing ? '' : ' disabled'}>${esc(t('calendar.add_event'))}</button></div>`
           : '';
       const dayCell = (d0, cls) => {
         const list = onDay(d0);

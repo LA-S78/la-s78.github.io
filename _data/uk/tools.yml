@@ -450,6 +450,7 @@ calendar:
   delete: "🗑️ Видалити"
   edit_events: "✏️ Редагувати події"
   edit_done: "✓ Завершити редагування"
+  add_event: "➕ Додати подію"
   ev_capture_title: Захоплення Капітолія — {who}
   ev_capture_desc: "{who} ({rank}) захоплює Капітолій у п'ятницю."
   ev_kw_title: Битва Війни Королівств
@@ -472,7 +473,6 @@ calendar_events:
   save_changes: "💾 Зберегти зміни"
   manage_mode: РЕЖИМ КЕРУВАННЯ
   session_active: Сесію автентифіковано
-  schedule_operation: "➕ Запланувати операцію"
   create_operation: Створити операцію
   kingdom_admin: "👑 АДМІНІСТРАЦІЯ КОРОЛІВСТВА"
   kingdom_desc: Планування сповіщень та операцій для всього Королівства

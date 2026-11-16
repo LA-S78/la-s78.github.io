@@ -445,6 +445,7 @@ calendar:
   delete: "🗑️ Elimina"
   edit_events: "✏️ Modifica eventi"
   edit_done: "✓ Fine modifica"
+  add_event: "➕ Aggiungi un evento"
   ev_capture_title: Cattura Campidoglio — {who}
   ev_capture_desc: "{who} ({rank}) cattura il Campidoglio venerdì."
   ev_kw_title: Battaglia Guerra tra Regni
@@ -467,7 +468,6 @@ calendar_events:
   save_changes: "💾 Salva modifiche"
   manage_mode: MODALITÀ GESTIONE
   session_active: Sessione autenticata attiva
-  schedule_operation: "➕ Pianifica Operazione"
   create_operation: Crea Operazione
   kingdom_admin: "👑 AMMINISTRATORE REGNO"
   kingdom_desc: Pianificazione di avvisi e operazioni per tutto il Regno

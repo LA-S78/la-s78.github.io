@@ -445,6 +445,7 @@ calendar:
   delete: "🗑️ Löschen"
   edit_events: "✏️ Events bearbeiten"
   edit_done: "✓ Bearbeitung abgeschlossen"
+  add_event: "➕ Event hinzufügen"
   ev_capture_title: Kapitol-Einnahme — {who}
   ev_capture_desc: "{who} ({rank}) nimmt das Kapitol am Freitag ein."
   ev_kw_title: Königreichskrieg
@@ -467,7 +468,6 @@ calendar_events:
   save_changes: "💾 Änderungen speichern"
   manage_mode: VERWALTUNGSMODUS
   session_active: Authentifizierte Sitzung aktiv
-  schedule_operation: "➕ Operation planen"
   create_operation: Operation erstellen
   kingdom_admin: "👑 KÖNIGREICH-ADMIN"
   kingdom_desc: Planung von königreichsweiten Alerts und Operationen
