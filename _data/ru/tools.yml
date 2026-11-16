@@ -449,8 +449,8 @@ calendar:
   mandatory: Обязательно
   edit: "✏️ Редактировать"
   delete: "🗑️ Удалить"
-  edit_events: "Редактировать события"
-  edit_done: "Готово"
+  edit_events: "✏️ Редактировать события"
+  edit_done: "✓ Завершить редактирование"
   ev_capture_title: Захват Капитолия — {who}
   ev_capture_desc: "{who} ({rank}) захватывает Капитолий в пятницу."
   ev_kw_title: Битва Войны Королевств

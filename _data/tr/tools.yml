@@ -443,8 +443,8 @@ calendar:
   mandatory: Zorunlu
   edit: "✏️ Düzenle"
   delete: "🗑️ Sil"
-  edit_events: "Etkinlikleri düzenle"
-  edit_done: "Bitti"
+  edit_events: "✏️ Etkinlikleri düzenle"
+  edit_done: "✓ Düzenlemeyi bitir"
   ev_capture_title: Başkent Ele Geçirme — {who}
   ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçiriyor."
   ev_kw_title: Krallık Savaşı

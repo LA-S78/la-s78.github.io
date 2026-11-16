@@ -1153,34 +1153,12 @@
 }
 
 /* Leaders: "Edit events" above the day's list, showing Edit / Delete on their events while on
-   (js/calendar-views.js). A quiet outline button; filled with the accent while editing. */
+   (js/calendar-views.js). The dashboard's edit button (dash-btn dash-two-labels), centred like
+   its edit bar, so edit modes look alike across the site (owner, 2026-11-16). */
 .ag-editbar {
   display: flex;
-  justify-content: flex-end;
-  margin: 0 0 8px;
-}
-
-.ag-edit-toggle {
-  min-height: 32px;
-  padding: 4px 12px;
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-main);
-  background: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.ag-edit-toggle:hover {
-  border-color: var(--accent-color);
-}
-
-.ag-edit-toggle[aria-pressed="true"] {
-  color: var(--nav-bg);
-  background: var(--accent-color);
-  border-color: var(--accent-color);
+  justify-content: center;
+  margin: 0 0 10px;
 }
 
 /* The delete confirmation (js/calendar.js confirmDelete): the event, a warning for repeats,

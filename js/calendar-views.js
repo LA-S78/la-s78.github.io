@@ -474,10 +474,11 @@
         </section>`;
       };
       // Leaders (opts.canManage): the button that shows Edit / Delete on their events, just
-      // above the list. Off on every visit.
+      // above the list. Off on every visit. The same button as the dashboard's Edit Dashboard
+      // (dash-btn, both labels in one size, centred): edit modes look alike across the site.
       const editBar = () =>
         opts.canManage?.()
-          ? `<div class="ag-editbar"><button type="button" class="ag-edit-toggle" aria-pressed="${state.editing}">${esc(t(state.editing ? 'calendar.edit_done' : 'calendar.edit_events'))}</button></div>`
+          ? `<div class="ag-editbar"><button type="button" class="dash-btn dash-two-labels ag-edit-toggle" aria-pressed="${state.editing}"><span class="when-off">${esc(t('calendar.edit_events'))}</span><span class="when-on">${esc(t('calendar.edit_done'))}</span></button></div>`
           : '';
       const dayCell = (d0, cls) => {
         const list = onDay(d0);

@@ -443,8 +443,8 @@ calendar:
   mandatory: Obligatorio
   edit: "✏️ Editar"
   delete: "🗑️ Eliminar"
-  edit_events: "Editar eventos"
-  edit_done: "Listo"
+  edit_events: "✏️ Editar eventos"
+  edit_done: "✓ Finalizar edición"
   ev_capture_title: Captura del Capitolio — {who}
   ev_capture_desc: "{who} ({rank}) captura el Capitolio el viernes."
   ev_kw_title: Batalla de Guerra de Reinos

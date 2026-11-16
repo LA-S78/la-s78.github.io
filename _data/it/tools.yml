@@ -443,8 +443,8 @@ calendar:
   mandatory: Obbligatorio
   edit: "✏️ Modifica"
   delete: "🗑️ Elimina"
-  edit_events: "Modifica eventi"
-  edit_done: "Fatto"
+  edit_events: "✏️ Modifica eventi"
+  edit_done: "✓ Modifiche completate"
   ev_capture_title: Conquista del Campidoglio — {who}
   ev_capture_desc: "{who} ({rank}) conquista il Campidoglio venerdì."
   ev_kw_title: Battaglia Guerra tra Regni

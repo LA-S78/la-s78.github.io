@@ -443,8 +443,8 @@ calendar:
   mandatory: Obligatorisch
   edit: "✏️ Bearbeiten"
   delete: "🗑️ Löschen"
-  edit_events: "Events bearbeiten"
-  edit_done: "Fertig"
+  edit_events: "✏️ Events bearbeiten"
+  edit_done: "✓ Bearbeitung beenden"
   ev_capture_title: Kapitol-Einnahme — {who}
   ev_capture_desc: "{who} ({rank}) nimmt das Kapitol am Freitag ein."
   ev_kw_title: Königreichskrieg-Schlacht
