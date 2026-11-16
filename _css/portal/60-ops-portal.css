@@ -113,11 +113,6 @@
   font-weight: 800;
 }
 
-.ops-week-sub {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-}
-
 .ops-week-loot {
   border-top: 1px dashed var(--overlay-8);
   padding-top: 6px;
@@ -125,12 +120,12 @@
   color: var(--accent-text);
 }
 
-/* The cards line their rows up (week, tag, what's at stake, loot): one height for all, the
+/* The cards line their rows up (week, tag, loot): one height for all, the
    tags on one line. Browsers without subgrid keep the plain column. */
 @supports (grid-template-rows: subgrid) {
   .ops-week-card {
     display: grid;
-    grid-row: span 4;
+    grid-row: span 3;
     grid-template-rows: subgrid;
     row-gap: 6px;
     align-content: start;

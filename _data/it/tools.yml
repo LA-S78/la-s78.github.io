@@ -759,13 +759,4 @@ live_data:
   offline: "📴 Offline: mostrati i dati salvati su questo dispositivo ({when})."
   updating: "⏳ Aggiornamento in corso…"
 capitol_rotation:
-  rank: 'Grado #{rank}'
-  week_fri: Settimana {n} Ven
-  active: ATTIVO
-  captures: Catture {date}
-  captured: Catturato {date}
-  override: 'Sovrascrivi: sostituisce [{replaced}] questa settimana'
-  no_alliance: Nessuna alleanza a questo grado ancora
-  off_week_note: 'Nessuna Guerra tra Regni questa settimana: [{tag}] detiene il Campidoglio.'
-  kw_note: 'Settimana di Guerra tra Regni: la battaglia è sabato.'
-  schedule_note: Dal calendario in tempo reale e dalle classifiche NAP. Le sostituzioni impostate dagli Steward sono mostrate qui non appena salvate.
+  calendar_link: "Vedi la rotazione di questo ciclo nel calendario →"

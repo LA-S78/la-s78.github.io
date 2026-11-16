@@ -759,13 +759,4 @@ live_data:
   offline: "📴 Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
   updating: "⏳ Güncelleniyor…"
 capitol_rotation:
-  rank: 'Sıra #{rank}'
-  week_fri: "{n}. Hafta Cuma"
-  active: AKTİF
-  captures: Ele geçirme {date}
-  captured: Ele geçirildi {date}
-  override: 'Geçersiz kılma: bu hafta [{replaced}] yerine geçer'
-  no_alliance: Bu sırada henüz ittifak yok
-  off_week_note: 'Bu hafta Krallık Savaşı yok: [{tag}] Başkenti elinde tutuyor.'
-  kw_note: 'Krallık Savaşı haftası: savaş Cumartesi günü.'
-  schedule_note: Canlı takvim ve NAP durumuna göre. Stewardlar tarafından ayarlanan geçersiz kılmalar kaydedildikleri anda burada gösterilir.
+  calendar_link: "Bu döngünün rotasyonunu takvimde görün →"

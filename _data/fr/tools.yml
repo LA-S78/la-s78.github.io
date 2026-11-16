@@ -759,13 +759,4 @@ live_data:
   offline: "📴 Hors ligne : affichage des données enregistrées sur cet appareil ({when})."
   updating: "⏳ Mise à jour…"
 capitol_rotation:
-  rank: 'Rang #{rank}'
-  week_fri: Semaine {n} ven
-  active: ACTIF
-  captures: Captures {date}
-  captured: Capturé {date}
-  override: 'Remplacement : remplace [{replaced}] cette semaine'
-  no_alliance: Aucune alliance à ce rang pour le moment
-  off_week_note: 'Pas de Guerre des Royaumes cette semaine : [{tag}] détient le Capitole.'
-  kw_note: 'Semaine de Guerre des Royaumes : la bataille a lieu samedi.'
-  schedule_note: Basé sur le calendrier en direct et le classement NAP. Les remplacements définis par les intendants sont affichés ici dès leur enregistrement.
+  calendar_link: "Voir la rotation de ce cycle dans le calendrier →"

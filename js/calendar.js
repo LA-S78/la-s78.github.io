@@ -189,8 +189,13 @@ async function initCalendar() {
     const capRankEl = document.getElementById('hero-capitol-rank');
     const cycleProgressEl = document.getElementById('metric-cycle-progress');
 
-    // weekName, not the configured phase name, so the site always says "Off-Week".
-    if (titleEl) titleEl.textContent = weekName(status.clockWeek);
+    // "Week 1" (short, to keep the title on one line on phones) or "Off-Week"; not the
+    // configured phase name, so the site always says "Off-Week".
+    if (titleEl)
+      titleEl.textContent =
+        Number(status.clockWeek) === 0
+          ? t('common.off_week')
+          : t('calendar.week_n', { n: status.clockWeek });
     // No reward period in the answer: no line, rather than "Loading…" left showing
     if (subEl) subEl.hidden = !rewards;
     if (subEl && rewards) {

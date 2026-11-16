@@ -759,13 +759,4 @@ live_data:
   offline: "📴 Offline: Zeige die auf diesem Gerät gespeicherten Daten ({when})."
   updating: "⏳ Aktualisierung…"
 capitol_rotation:
-  rank: 'Rang #{rank}'
-  week_fri: Woche {n} Fr
-  active: AKTIV
-  captures: Eroberungen {date}
-  captured: Erobert am {date}
-  override: 'Überschreiben: Ersetzt [{replaced}] diese Woche'
-  no_alliance: Noch keine Allianz auf diesem Rang
-  off_week_note: 'Kein Königreichskrieg diese Woche: [{tag}] hält das Kapitol.'
-  kw_note: 'Königreichskrieg-Woche: Die Schlacht ist am Samstag.'
-  schedule_note: Basierend auf dem Live-Kalender und den NAP-Platzierungen. Von den Stewards festgelegte Überschreibungen werden hier angezeigt, sobald sie gespeichert wurden.
+  calendar_link: "Die Rotation dieses Zyklus im Kalender ansehen →"

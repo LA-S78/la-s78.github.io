@@ -21,6 +21,10 @@
 
   let isNewNavigation = false;
   let isRestoreVisit = false;
+  // The section a link to another page names (/en/rules.html#capitol-rewards): links inside
+  // the page frame lose the "#…" on the way (Turbo keeps the fetched address), so it's noted
+  // on the click and used when the page arrives.
+  let pendingSection = '';
 
   // --- AUTHENTICATION CONFIGURATION ---
   const AUTH_CONFIG = {
@@ -390,6 +394,27 @@
     });
   }
 
+  // A section still hidden while its page loads its data (the calendar shows its content
+  // once loaded): scrolled to as soon as it's shown, for up to 8 seconds; the page stays at
+  // the top meanwhile. Scrolling by hand first cancels it.
+  function scrollWhenShown(section) {
+    const main = document.querySelector('main');
+    if (section.getClientRects().length) return scrollToSection(section, 'auto');
+    if (main) main.scrollTop = 0;
+    const until = Date.now() + 8000;
+    let cancelled = false;
+    const cancel = () => (cancelled = true);
+    ['wheel', 'touchmove', 'keydown'].forEach((t) =>
+      window.addEventListener(t, cancel, { once: true, passive: true }),
+    );
+    const check = () => {
+      if (cancelled || !section.isConnected || Date.now() > until) return;
+      if (section.getClientRects().length) return scrollToSection(section, 'auto');
+      requestAnimationFrame(check);
+    };
+    requestAnimationFrame(check);
+  }
+
   function initAnchorScrolling() {
     const navLinks = document.querySelectorAll('.anchor-link');
     navLinks.forEach((link) => {
@@ -649,10 +674,18 @@
       // (/en/guides/thief.html#coins, e.g. from a search result)
       isNewNavigation = false;
       isRestoreVisit = false;
-      const id = decodeURIComponent(window.location.hash.slice(1));
+      const id = decodeURIComponent(window.location.hash.slice(1)) || pendingSection;
+      pendingSection = '';
       const section = id && document.getElementById(id);
+      // The address names the section again, as the link did
+      if (section && !window.location.hash)
+        history.replaceState(
+          history.state,
+          '',
+          `${window.location.pathname}${window.location.search}#${encodeURIComponent(id)}`,
+        );
       requestAnimationFrame(() => {
-        if (section) scrollToSection(section, 'auto');
+        if (section) scrollWhenShown(section);
         else scrollContainer.scrollTop = 0;
       });
     } else if (isRestoreVisit) {
@@ -741,6 +774,18 @@
   document.addEventListener('turbo:frame-render', initApp);
   // A link is a new visit (top of the page); the back/forward buttons are a "restore" visit
   // (back to where the reader was). Both used to count as new, so Back always went to the top.
+  document.addEventListener(
+    'click',
+    (e) => {
+      const link = e.target.closest?.('a[href*="#"]');
+      if (!link || link.target || e.defaultPrevented) return;
+      const url = new URL(link.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname === window.location.pathname)
+        return;
+      pendingSection = decodeURIComponent(url.hash.slice(1));
+    },
+    true,
+  );
   document.addEventListener('turbo:visit', (event) => {
     const restore = event.detail?.action === 'restore';
     isNewNavigation = !restore;
