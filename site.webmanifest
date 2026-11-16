@@ -17,18 +17,60 @@
   ],
   "screenshots": [
     {
-      "src": "/images/screenshot-desktop.webp",
+      "src": "/images/screenshot-phone-1-home.webp",
+      "sizes": "1236x2676",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Home: guides, rules and tools"
+    },
+    {
+      "src": "/images/screenshot-phone-2-guides.webp",
+      "sizes": "1236x2676",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Game guides"
+    },
+    {
+      "src": "/images/screenshot-phone-3-calendar.webp",
+      "sizes": "1236x2676",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Event calendar"
+    },
+    {
+      "src": "/images/screenshot-phone-4-rules.webp",
+      "sizes": "1236x2676",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Server rules and Capitol rewards"
+    },
+    {
+      "src": "/images/screenshot-desktop-1-home.webp",
       "sizes": "2560x1440",
       "type": "image/webp",
       "form_factor": "wide",
-      "label": "Desktop View"
+      "label": "Home: guides, rules and tools"
     },
     {
-      "src": "/images/screenshot-mobile.webp",
-      "sizes": "1440x2813",
+      "src": "/images/screenshot-desktop-2-guides.webp",
+      "sizes": "2560x1440",
       "type": "image/webp",
-      "form_factor": "narrow",
-      "label": "Mobile View"
+      "form_factor": "wide",
+      "label": "Game guides"
+    },
+    {
+      "src": "/images/screenshot-desktop-3-calendar.webp",
+      "sizes": "2560x1440",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Event calendar"
+    },
+    {
+      "src": "/images/screenshot-desktop-4-rules.webp",
+      "sizes": "2560x1440",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Server rules and Capitol rewards"
     }
   ],
   "shortcuts": [
