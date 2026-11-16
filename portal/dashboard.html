@@ -5,7 +5,7 @@ title: Alliance Dashboard
 title_key: "dashboard.title"
 permalink: /dashboard.html
 lang: "en"
-strings: [dashboard, rewards_card, caravan, chart_editor, charts]
+strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data]
 ---
 
 <div class="content-pane portal-pane-lg" id="dashboard-app">
@@ -68,6 +68,71 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       el.hidden = false;
     }
 
+    // ---------- This device's last copy (like the calendar and the other tools) ----------
+    // Shown straight away, dimmed with "Updating…", while the fresh dashboard loads; kept
+    // (with a note) when there's no connection. It's private alliance data, so:
+    // - it belongs to this sign-in: stored under a fingerprint of the sign-in pass (never the
+    //   pass itself), so someone else signing in on the device never sees it;
+    // - it's only to look at: no editing, Caravan Rotor or nomination until the server has
+    //   answered (readOnly);
+    // - any refusal from the server (signed out, pass expired, left the alliance, no longer
+    //   allowed) deletes every saved dashboard on the device and hides what was shown, as
+    //   does signing out (js/main.js triggerLogout).
+    const SAVED_PREFIX = 'la_dash_';
+    let readOnly = false;
+    async function passPrint(pass) {
+      try {
+        const bytes = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass)));
+        return [...bytes.slice(0, 8)].map((b) => b.toString(16).padStart(2, '0')).join('');
+      } catch (e) {
+        return null; // no crypto (very old browser): no saved copy
+      }
+    }
+    let savedKey = null; // the key for what's on screen now
+    function readSaved(key) {
+      try {
+        const kept = JSON.parse(localStorage.getItem(key) || 'null');
+        return kept && kept.data ? kept : null;
+      } catch (e) {
+        return null;
+      }
+    }
+    function remember() {
+      if (!savedKey || !data) return;
+      try {
+        localStorage.setItem(savedKey, JSON.stringify({ at: new Date().toISOString(), data }));
+      } catch (e) {
+        // Storage full or blocked: next time it just loads
+      }
+    }
+    function forgetAllSaved() {
+      try {
+        Object.keys(localStorage)
+          .filter((k) => k.startsWith(SAVED_PREFIX))
+          .forEach((k) => localStorage.removeItem(k));
+      } catch (e) {
+        // Storage blocked: nothing was saved
+      }
+    }
+    function setUpdating(on) {
+      const app = $('dashboard-app');
+      app.classList.toggle('is-updating', on);
+      if (on) app.dataset.updating = t('live_data.updating');
+    }
+    // Takes away a dashboard drawn from a saved copy (after the server refused)
+    function hideDashboard() {
+      data = null;
+      ['dash-rewards', 'dash-caravan', 'dash-edit-bar', 'dash-editor', 'dash-widgets', 'dash-switcher'].forEach((id) => ($(id).hidden = true));
+      const badge = $('dash-alliance');
+      badge.textContent = t('dashboard.title');
+      badge.classList.remove('ally-text');
+      badge.style.removeProperty('--ally');
+    }
+    function savedNote(at) {
+      const when = new Date(at).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      message(escapeHtml(t('live_data.offline', { when })), 'warning');
+    }
+
     async function load(alliance) {
       const pass = loginPass();
       if (!pass) {
@@ -79,12 +144,30 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
         return;
       }
+      const print = await passPrint(pass);
+      savedKey = print ? `${SAVED_PREFIX}${print}_${alliance || ''}` : null;
+      const fresh = fetch(`/api/dashboard${alliance ? `?alliance=${encodeURIComponent(alliance)}` : ''}`, {
+        headers: { Authorization: `Bearer ${pass}` },
+      });
+      // This sign-in's last copy, while the fresh one loads
+      const saved = savedKey && readSaved(savedKey);
+      if (saved) {
+        data = saved.data;
+        readOnly = true;
+        editing = false;
+        render();
+        setUpdating(true);
+      }
       try {
-        const res = await fetch(`/api/dashboard${alliance ? `?alliance=${encodeURIComponent(alliance)}` : ''}`, {
-          headers: { Authorization: `Bearer ${pass}` },
-        });
+        const res = await fresh;
         const body = await res.json().catch(() => ({}));
+        if (!res.ok && res.status >= 500 && saved) throw new Error(body.error || `HTTP ${res.status}`);
+        setUpdating(false);
         if (!res.ok) {
+          // The server refused (signed out, pass expired, no alliance, not allowed): no
+          // saved dashboard stays on this device
+          forgetAllSaved();
+          hideDashboard();
           $('dash-subtitle').textContent = '';
           if (body.code === 'login') {
             message(`🔐 ${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_again'))}</button>`, 'warning');
@@ -95,10 +178,15 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
           return;
         }
         data = body;
+        readOnly = false;
         $('dash-message').hidden = true;
         render();
+        remember();
       } catch (err) {
-        message(`⚠️ ${escapeHtml(t('dashboard.load_failed', { error: err.message }))}`, 'warning');
+        setUpdating(false);
+        // No connection (or the server is down): the saved copy stays, to look at only
+        if (saved) savedNote(saved.at);
+        else message(`⚠️ ${escapeHtml(t('dashboard.load_failed', { error: err.message }))}`, 'warning');
       }
     }
 
@@ -196,7 +284,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
           : `<span class="dash-muted">${escapeHtml(t('rewards_card.no_list_closed'))}</span>`;
       let action = '';
       if (p.open && data.viewer.canNominate) {
-        action = `<button type="button" class="dash-btn" id="dash-nominate">${escapeHtml(t(n.submitted ? 'rewards_card.edit_list' : 'rewards_card.send_list'))}</button>`;
+        action = readOnly ? '' : `<button type="button" class="dash-btn" id="dash-nominate">${escapeHtml(t(n.submitted ? 'rewards_card.edit_list' : 'rewards_card.send_list'))}</button>`;
       } else if (p.open) {
         action = `<span class="dash-muted dash-small" title="${escapeHtml(t('rewards_card.ask_r5_help'))}">${escapeHtml(t('rewards_card.ask_r5'))}</span>`;
       }
@@ -439,8 +527,9 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
     const TYPES = ['bar', 'line', 'pie', 'progress', 'table'].map((type) => [type, t(`chart_editor.type_${type}`)]);
     let editing = false;
 
+    // Leader tools; none on a saved copy (readOnly) until the server has answered
     function isLeader() {
-      return data && data.viewer.tier !== 'member';
+      return Boolean(data) && !readOnly && data.viewer.tier !== 'member';
     }
 
     function widgetCard(w, i, count) {
@@ -530,6 +619,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         data.dashboard = body.dashboard;
         renderCaravan();
         renderWidgets();
+        remember();
         return '';
       } catch (err) {
         if (!change.widget && !quiet) alert(t('common.not_saved', { error: err.message }));

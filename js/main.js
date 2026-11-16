@@ -236,6 +236,10 @@
     localStorage.removeItem('auth-steward');
     localStorage.removeItem('auth-officer');
     localStorage.removeItem('auth-alliance-source');
+    // Saved copies of private alliance dashboards (portal/dashboard.html): not left behind
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith('la_dash_'))
+      .forEach((k) => localStorage.removeItem(k));
     window.location.reload();
   };
 
