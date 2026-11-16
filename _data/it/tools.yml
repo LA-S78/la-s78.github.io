@@ -456,9 +456,8 @@ calendar:
   ev_close_title: Ricompense Chiuse — {week}
   ev_close_desc: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
 calendar_events:
-  reminder: Promemoria su Discord 1 ora prima
-  reminder_hint: Pubblicato nel canale avvisi della tua alleanza, menzionando il ruolo scelto sopra.
-  reminder_hint_server: Pubblicato nel canale avvisi Discord NAP (e nelle alleanze che hanno aderito), menzionando il ruolo scelto sopra.
+  reminder_hint: "Pubblicato nel canale avvisi della tua alleanza."
+  reminder_hint_server: "Pubblicato nel canale avvisi del Discord del NAP e nelle alleanze che hanno aderito."
   reminder_no_channel: 'La tua alleanza non ha ancora un canale avvisi: esegui /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
   reminder_no_server_channel: Il canale avvisi NAP non è ancora configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
   edit_heading: Modifica evento
@@ -498,13 +497,14 @@ calendar_events:
   once: Evento singolo (Non si ripete)
   every_2_days: Si ripete ogni 2 giorni
   weekly: Si ripete settimanalmente (stesso giorno e orario)
-  alert_level: Livello avviso Discord
-  notify_role: "🔔 Pinga ruolo alleanza predefinito (ripiega su @everyone)"
-  notify_custom: "🎯 Punta a uno specifico ID ruolo (sovrascrittura singola)"
-  notify_everyone: "🚨 Forza trasmissione @everyone (Operazione obbligatoria)"
-  notify_none: "🔕 Silenzioso (Solo calendario - Nessun ping Discord)"
+  alert_level: "Promemoria su Discord (1 ora prima)"
+  notify_off: "📵 Nessun promemoria"
+  notify_role: "🔔 Menziona il ruolo di avviso dell'alleanza"
+  notify_custom: "🎯 Menziona un ruolo specifico"
+  notify_everyone: "🚨 Menziona @everyone"
+  notify_none: "🔕 Pubblica senza menzioni"
   role_id: ID ruolo specifico
-  role_id_hint: "(Richiesto solo per il target ruolo specifico)"
+  role_id_hint: "(solo per «Menziona un ruolo specifico»)"
   role_id_title: Deve essere un ID ruolo Discord valido di 17-20 cifre
   details: Istruzioni / Punto di ritrovo
   details_example: es. Raduno all'Alveare Alpha. R4 guidano i rally. Chat vocale attiva.

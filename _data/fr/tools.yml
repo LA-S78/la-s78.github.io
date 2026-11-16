@@ -456,9 +456,8 @@ calendar:
   ev_close_title: Récompenses fermées — {week}
   ev_close_desc: 'Les coffres expirent mercredi à 00:00 GT : distribuez tout avant cette échéance.'
 calendar_events:
-  reminder: Rappeler sur Discord 1 heure avant
-  reminder_hint: Publié dans le canal d'alerte de votre alliance, en mentionnant le rôle choisi ci-dessus.
-  reminder_hint_server: Publié dans le canal d'alerte du NAP Discord (et dans les alliances ayant opté pour cette option), en mentionnant le rôle choisi ci-dessus.
+  reminder_hint: "Publié dans le salon d'alertes de ton alliance."
+  reminder_hint_server: "Publié dans le salon d'alertes du Discord du NAP, et dans les alliances qui l'ont activé."
   reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : exécutez /registerbot dans votre Discord pour que les rappels puissent être publiés.'
   reminder_no_server_channel: Le canal d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), les rappels du serveur ne peuvent donc pas être publiés.
   edit_heading: Modifier l'événement
@@ -498,13 +497,14 @@ calendar_events:
   once: Événement unique (ne se répète pas)
   every_2_days: Répétition tous les 2 jours
   weekly: Répétition hebdomadaire (même jour et heure)
-  alert_level: Niveau d'alerte Discord
-  notify_role: "🔔 Mentionner le rôle d'alliance par défaut (redevient @everyone)"
-  notify_custom: "🎯 Cibler un ID de rôle spécifique (remplacement ponctuel)"
-  notify_everyone: "🚨 Forcer la diffusion @everyone (Opération obligatoire)"
-  notify_none: "🔕 Silencieux (Calendrier seulement - pas de mention Discord)"
+  alert_level: "Rappel Discord (1 heure avant)"
+  notify_off: "📵 Pas de rappel"
+  notify_role: "🔔 Mentionner le rôle d'alerte de l'alliance"
+  notify_custom: "🎯 Mentionner un rôle précis"
+  notify_everyone: "🚨 Mentionner @everyone"
+  notify_none: "🔕 Publier sans mention"
   role_id: ID de rôle spécifique
-  role_id_hint: "(Requis uniquement pour le rôle cible spécifique)"
+  role_id_hint: "(uniquement pour « Mentionner un rôle précis »)"
   role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
   details: Instructions / Point de ralliement
   details_example: ex. Rassemblement à la Ruche Alpha. Les R4 dirigent les ralliements. Communication vocale active.

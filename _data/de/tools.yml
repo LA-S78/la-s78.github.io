@@ -456,9 +456,8 @@ calendar:
   ev_close_title: Belohnungen schließen — {week}
   ev_close_desc: 'Truhen verfallen am Mittwoch um 00:00 GT: Alles davor verteilen.'
 calendar_events:
-  reminder: 1 Stunde vorher auf Discord erinnern
-  reminder_hint: Im Alarm-Kanal deiner Allianz gepostet, mit Ping auf die oben gewählte Rolle.
-  reminder_hint_server: Im Alarm-Kanal des NAP-Discord gepostet (und in Allianzen, die zugestimmt haben), mit Ping auf die oben gewählte Rolle.
+  reminder_hint: "Wird im Alarm-Kanal deiner Allianz gepostet."
+  reminder_hint_server: "Wird im Alarm-Kanal des NAP-Discords gepostet und bei Allianzen, die sich angemeldet haben."
   reminder_no_channel: 'Deine Allianz hat noch keinen Alarm-Kanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
   reminder_no_server_channel: Der NAP-Alarm-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können keine Server-Erinnerungen gepostet werden.
   edit_heading: Event bearbeiten
@@ -498,13 +497,14 @@ calendar_events:
   once: Einmaliges Event (Wiederholt sich nicht)
   every_2_days: Wiederholt sich alle 2 Tage
   weekly: Wiederholt sich wöchentlich (Gleicher Tag & Zeit)
-  alert_level: Discord-Alarmstufe
-  notify_role: "🔔 Standard-Allianzrolle pingen (Fallback auf @everyone)"
-  notify_custom: "🎯 Spezifische Rollen-ID (Einmaliger Override)"
-  notify_everyone: "🚨 @everyone-Broadcast erzwingen (Verpflichtende Operation)"
-  notify_none: "🔕 Lautlos (Nur Kalender - Kein Discord-Ping)"
+  alert_level: "Discord-Erinnerung (1 Stunde vorher)"
+  notify_off: "📵 Keine Erinnerung"
+  notify_role: "🔔 Die Alarm-Rolle der Allianz pingen"
+  notify_custom: "🎯 Eine bestimmte Rolle pingen"
+  notify_everyone: "🚨 @everyone pingen"
+  notify_none: "🔕 Ohne Ping posten"
   role_id: Spezifische Rollen-ID
-  role_id_hint: "(Nur für spezifische Zielrolle erforderlich)"
+  role_id_hint: "(nur für „Eine bestimmte Rolle pingen“)"
   role_id_title: Muss eine gültige 17-20 stellige Discord-Rollen-ID sein
   details: Anweisungen / Sammelpunkt
   details_example: z. B. Treffen bei Hive Alpha. R4 leiten Rallys. Voice-Chat aktiv.
