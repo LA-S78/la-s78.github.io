@@ -120,6 +120,8 @@ async function initCalendar() {
   let reminderChannels = null;
   // Set in management mode (step 6): opens the event form to edit an event
   let openEditForm = null;
+  // Set in management mode too: opens the empty event form ("Add an event")
+  let openAddForm = null;
 
   // The hint under "Remind 1 hour before": where the reminder goes, or that it has nowhere
   // to go yet (an alliance that hasn't run /registerbot; the NAP channel not set up)
@@ -348,6 +350,7 @@ async function initCalendar() {
           // Leaders get the "Edit events" button that shows Edit / Delete on their events
           canManage: () => isManagementSession,
           onEdit: (id) => openEditForm?.(id),
+          onAdd: (date) => openAddForm?.(date),
           onDelete: (id, info) => handleDeleteEvent(id, info),
         })
       : null;
@@ -420,7 +423,6 @@ async function initCalendar() {
     }
 
     const formEl = document.getElementById('form-create-event');
-    const btnToggle = document.getElementById('btn-toggle-event-form');
     const btnCancel = document.getElementById('btn-cancel-event-form');
     const notifySelect = document.getElementById('evt-input-notify');
     const customRoleInput = document.getElementById('evt-input-role-id');
@@ -503,7 +505,7 @@ async function initCalendar() {
       if (formHeading) formHeading.textContent = t('calendar_events.edit_heading');
       if (submitBtn) submitBtn.textContent = t('calendar_events.save_changes');
       formEl.style.display = 'block';
-      formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showForm();
     };
 
     function resetPanelTheme() {
@@ -551,20 +553,33 @@ async function initCalendar() {
       });
     }
 
-    if (btnToggle && formEl) {
-      btnToggle.addEventListener('click', () => {
-        const isHidden = formEl.style.display === 'none' || editingEventId;
-        if (editingEventId) {
-          formEl.reset();
-          leaveEditMode();
-        }
-        formEl.style.display = isHidden ? 'block' : 'none';
-        if (isHidden) {
-          document.getElementById('evt-input-date').value = new Date().toISOString().split('T')[0];
-          document.getElementById('evt-input-time').value = '19:00';
-        }
+    // The form brought into view just under the site's header (scrolling it to the very top
+    // put its heading behind the header)
+    function showForm() {
+      const main = document.querySelector('main');
+      const header = document.querySelector('header')?.getBoundingClientRect().bottom || 0;
+      if (!main) return formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      main.scrollTo({
+        top: main.scrollTop + formEl.getBoundingClientRect().top - header - 12,
+        behavior: 'smooth',
       });
     }
+
+    // "Add an event" (beside "Edit events", js/calendar-views.js): the empty form, on the day
+    // being looked at, 19:00 GT. It replaced the "Schedule Operation" button at the top of the
+    // panel (owner, 2026-11-16), so adding and editing sit together like on the dashboard.
+    openAddForm = (date) => {
+      if (!formEl) return;
+      if (editingEventId) {
+        formEl.reset();
+        leaveEditMode();
+      }
+      formEl.style.display = 'block';
+      document.getElementById('evt-input-date').value =
+        date || new Date().toISOString().split('T')[0];
+      document.getElementById('evt-input-time').value = '19:00';
+      showForm();
+    };
 
     if (btnCancel && formEl) {
       btnCancel.addEventListener('click', () => {

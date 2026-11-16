@@ -445,6 +445,7 @@ calendar:
   delete: "🗑️ Sil"
   edit_events: "✏️ Etkinlikleri düzenle"
   edit_done: "✓ Düzenlemeyi bitir"
+  add_event: "➕ Etkinlik ekle"
   ev_capture_title: Başkent Ele Geçirme — {who}
   ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçirir."
   ev_kw_title: Krallık Savaşı
@@ -467,7 +468,6 @@ calendar_events:
   save_changes: "💾 Değişiklikleri kaydet"
   manage_mode: YÖNETİM MODU
   session_active: Doğrulanmış Oturum Aktif
-  schedule_operation: "➕ Operasyon Planla"
   create_operation: Operasyon Oluştur
   kingdom_admin: "👑 KRALLIK YÖNETİCİSİ"
   kingdom_desc: Krallık çapında uyarıları ve operasyonları planlama

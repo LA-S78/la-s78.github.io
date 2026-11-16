@@ -445,6 +445,7 @@ calendar:
   delete: "🗑️ Supprimer"
   edit_events: "✏️ Modifier les événements"
   edit_done: "✓ Terminer"
+  add_event: "➕ Ajouter un événement"
   ev_capture_title: Capture du Capitole — {who}
   ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
   ev_kw_title: Bataille de la Guerre des Royaumes
@@ -467,7 +468,6 @@ calendar_events:
   save_changes: "💾 Enregistrer les modifications"
   manage_mode: MODE GESTION
   session_active: Session authentifiée active
-  schedule_operation: "➕ Programmer une opération"
   create_operation: Créer une opération
   kingdom_admin: "👑 ADMINISTRATION DU ROYAUME"
   kingdom_desc: Programmation des alertes et opérations du royaume
