@@ -456,21 +456,21 @@ calendar:
   ev_close_title: Ricompense Chiuse — {week}
   ev_close_desc: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
 calendar_events:
-  reminder_hint: "Pubblicato nel canale avvisi della tua alleanza."
-  reminder_hint_server: "Pubblicato nel canale avvisi del Discord del NAP e nelle alleanze che hanno aderito."
+  reminder_hint: Pubblicato nel canale avvisi della tua alleanza.
+  reminder_hint_server: Pubblicato nel canale avvisi NAP e nelle alleanze che hanno aderito.
   reminder_no_channel: 'La tua alleanza non ha ancora un canale avvisi: esegui /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
   reminder_no_server_channel: Il canale avvisi NAP non è ancora configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
   edit_heading: Modifica evento
-  scope_label: Di quali eventi gestire
+  scope_label: Eventi da gestire
   scope_server: "🌐 Eventi del server"
-  scope_alliance: "🛡️ Eventi [{tag}]"
+  scope_alliance: "🛡️ Eventi di [{tag}]"
   save_changes: "💾 Salva modifiche"
   manage_mode: MODALITÀ GESTIONE
   session_active: Sessione autenticata attiva
   create_operation: Crea operazione
   kingdom_admin: "👑 AMMINISTRATORE REGNO"
-  kingdom_desc: Gestione eventi server
-  kingdom_heading: Crea operazione Regno ([GLOBAL])
+  kingdom_desc: Gestione eventi del server
+  kingdom_heading: Crea operazione regno ([GLOBAL])
   leadership: "🛡️ LEADERSHIP [{tag}]"
   leadership_desc: Gestione eventi [{tag}]
   alliance_heading: Crea operazione [{tag}]
@@ -479,44 +479,44 @@ calendar_events:
   type_custom_hint: Modulo vuoto
   duration_h: "{n}h"
   preset_custom: "🛠️ Operazione personalizzata (Vuota)"
-  preset_crystal_cluster: "🔮 Valle di Cristallo (0,5h)"
-  preset_elixir_scramble: "🧪 Mischia dell'Elisir (0,5h)"
-  preset_survival_battle: "⚔️ Battaglia di Sopravvivenza (4,0h)"
-  preset_kill_event: "🩸 Evento Uccisioni (24,0h)"
-  preset_kvk_battle: "👑 Battaglia KvK (1,0h)"
-  preset_undead_siege: "💀 Assedio dei Non Morti (1,0h)"
-  preset_gear_upgrade: "🛡️ Miglioramento Equipaggiamento (48,0h)"
-  preset_cheese_trap: "🧀 Trappola Cheese (0,5h)"
+  preset_crystal_cluster: "🔮 Valle di Cristallo (0.5h)"
+  preset_elixir_scramble: "🧪 Mischia Reale (0.5h)"
+  preset_survival_battle: "⚔️ Battaglia di Sopravvivenza (4.0h)"
+  preset_kill_event: "🩸 Evento uccisioni (24.0h)"
+  preset_kvk_battle: "👑 Battaglia Kingdom War (1.0h)"
+  preset_undead_siege: "💀 Assedio non morto (1.0h)"
+  preset_gear_upgrade: "🛡️ Potenziamento equipaggiamento (48.0h)"
+  preset_cheese_trap: "🧀 Trappola Cheese (0.5h)"
   title: Titolo evento
-  title_example: es. Difesa Alveare o Assalto all'Avamposto
+  title_example: es. Esercitazione difesa alveare o Assalto avamposto
   date: Data di inizio (AAAA-MM-GG)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time del server (arrotondato a scatti di 5 minuti)
-  duration: Durata (Ore)
+  time_hint: Game Time del server (arrotondato a blocchi di 5 minuti)
+  duration: Durata (ore)
   frequency: Frequenza
-  once: Evento singolo (Non si ripete)
+  once: Evento singolo (non si ripete)
   every_2_days: Si ripete ogni 2 giorni
   weekly: Si ripete settimanalmente (stesso giorno e orario)
-  alert_level: "Promemoria su Discord (1 ora prima)"
+  alert_level: Promemoria Discord (1 ora prima)
   notify_off: "📵 Nessun promemoria"
-  notify_role: "🔔 Menziona il ruolo di avviso dell'alleanza"
-  notify_custom: "🎯 Menziona un ruolo specifico"
-  notify_everyone: "🚨 Menziona @everyone"
-  notify_none: "🔕 Pubblica senza menzioni"
+  notify_role: "🔔 Notifica il ruolo avvisi dell'alleanza"
+  notify_custom: "🎯 Notifica un ruolo specifico"
+  notify_everyone: "🚨 Notifica @everyone"
+  notify_none: "🔕 Pubblica senza notifica"
   role_id: ID ruolo specifico
-  role_id_hint: "(solo per «Menziona un ruolo specifico»)"
+  role_id_hint: "(solo per “Notifica un ruolo specifico”)"
   role_id_title: Deve essere un ID ruolo Discord valido di 17-20 cifre
   details: Istruzioni / Punto di ritrovo
-  details_example: es. Raduno all'Alveare Alpha. R4 guidano i rally. Chat vocale attiva.
-  publish: Pubblica su calendario
+  details_example: es. Raduno all'Alveare Alpha. R4 guidano i rally. Comunicazioni vocali attive.
+  publish: Pubblica nel calendario
   publishing: Pubblicazione in corso...
-  bad_time: Il Game Time deve essere impostato con incrementi di 5 minuti (:00, :05, :10, ecc.)
-  bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per il target dell'avviso personalizzato.
+  bad_time: Il Game Time deve essere impostato a intervalli di 5 minuti (:00, :05, :10, ecc.)
+  bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per il destinatario dell'avviso personalizzato.
   save_failed: Salvataggio evento fallito
-  published: Operazione pubblicata correttamente!
+  published: Operazione pubblicata con successo!
   delete_heading: Eliminare questo evento?
   delete_repeats: 'Si ripete ({repeat}): ogni ripetizione verrà rimossa, non solo questa.'
-  delete_final: Questa azione non può essere annullata.
+  delete_final: Questa operazione non può essere annullata.
   delete_confirm: Elimina
   delete_failed: Eliminazione evento fallita
   removed: Operazione rimossa.

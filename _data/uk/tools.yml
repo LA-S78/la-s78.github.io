@@ -461,13 +461,13 @@ calendar:
   ev_close_title: Нагороди закрито — {week}
   ev_close_desc: 'Термін дії скринь закінчується у середу о 00:00 GT: роздайте все до цього часу.'
 calendar_events:
-  reminder_hint: "Публікується в каналі сповіщень вашого альянсу."
-  reminder_hint_server: "Публікується в каналі сповіщень Discord NAP і в альянсах, що підписалися."
-  reminder_no_channel: 'У вашому альянсі ще немає каналу сповіщень: виконайте /registerbot у вашому Discord, щоб можна було публікувати нагадування.'
+  reminder_hint: Опубліковано в каналі сповіщень вашого альянсу.
+  reminder_hint_server: Опубліковано в каналі сповіщень Discord NAP, а також в альянсах, що підписалися.
+  reminder_no_channel: 'У вашого альянсу ще немає каналу сповіщень: виконайте /registerbot у вашому Discord, щоб можна було публікувати нагадування.'
   reminder_no_server_channel: Канал сповіщень NAP ще не налаштований (NAP_ALERT_CHANNEL_ID), тому серверні нагадування не можуть бути опубліковані.
   edit_heading: Редагувати подію
   scope_label: Чиї події керувати
-  scope_server: "🌐 Події всього сервера"
+  scope_server: "🌐 Події сервера"
   scope_alliance: "🛡️ Події [{tag}]"
   save_changes: "💾 Зберегти зміни"
   manage_mode: РЕЖИМ КЕРУВАННЯ
@@ -484,43 +484,43 @@ calendar_events:
   type_custom_hint: Порожня форма
   duration_h: "{n}г"
   preset_custom: "🛠️ Власна операція (Порожня)"
-  preset_crystal_cluster: "🔮 Кришталева Долина (0.5г)"
+  preset_crystal_cluster: "🔮 Долина кристалічних скупчень (0.5г)"
   preset_elixir_scramble: "🧪 Еліксирна сутичка (0.5г)"
   preset_survival_battle: "⚔️ Битва за виживання (4.0г)"
   preset_kill_event: "🩸 Подія вбивств (24.0г)"
-  preset_kvk_battle: "👑 Битва KvK (1.0г)"
-  preset_undead_siege: "💀 Облога нежиті (1.0г)"
+  preset_kvk_battle: "👑 Битва Королівство проти Королівства (1.0г)"
+  preset_undead_siege: "💀 Облога мерців (1.0г)"
   preset_gear_upgrade: "🛡️ Покращення спорядження (48.0г)"
   preset_cheese_trap: "🧀 Сирна Пастка (0.5г)"
   title: Назва події
-  title_example: напр. Тренування захисту вулика або Штурм аванпосту
+  title_example: напр. Навчання оборони вулика або Штурм аванпосту
   date: Дата початку (РРРР-ММ-ДД)
   time: Game Time (ГГ:ХХ UTC-2)
-  time_hint: Серверний Game Time (з кроком 5 хвилин)
+  time_hint: Серверний Game Time (крок 5 хвилин)
   duration: Тривалість (годин)
-  frequency: Частота
-  once: Одноразова подія (Не повторюється)
+  frequency: Періодичність
+  once: Разова подія (Не повторюється)
   every_2_days: Повторювати кожні 2 дні
-  weekly: Повторювати щотижня (той самий день і час)
-  alert_level: "Нагадування в Discord (за 1 годину)"
+  weekly: Щотижнева (той самий день і час)
+  alert_level: Нагадування в Discord (за 1 годину)
   notify_off: "📵 Без нагадування"
-  notify_role: "🔔 Згадати роль сповіщень альянсу"
-  notify_custom: "🎯 Згадати конкретну роль"
-  notify_everyone: "🚨 Згадати @everyone"
-  notify_none: "🔕 Опублікувати без згадки"
-  role_id: Конкретний ID ролі
-  role_id_hint: "(лише для «Згадати конкретну роль»)"
-  role_id_title: Має бути дійсним ID ролі Discord з 17-20 цифр
+  notify_role: "🔔 Сповістити роль нагадувань альянсу"
+  notify_custom: "🎯 Сповістити конкретну роль"
+  notify_everyone: "🚨 Сповістити @everyone"
+  notify_none: "🔕 Опублікувати без сповіщення"
+  role_id: ID конкретної ролі
+  role_id_hint: "(тільки для «Сповістити конкретну роль»)"
+  role_id_title: Має бути дійсним 17-20-значним Discord Role ID
   details: Інструкції / Точка збору
-  details_example: напр. Збір у Вулику Альфа. R4 ведуть ралі. Голосовий зв'язок активний.
+  details_example: напр. Збір у Вулику Альфа. R4 ведуть збори. Голосовий зв'язок обов'язковий.
   publish: Опублікувати в календарі
   publishing: Публікація...
-  bad_time: Game Time має бути встановлений з 5-хвилинним кроком (:00, :05, :10 тощо)
-  bad_role: Будь ласка, введіть дійсний ID ролі Discord з 17-20 цифр для сповіщення.
+  bad_time: Game Time має встановлюватися з кроком 5 хвилин (:00, :05, :10 тощо)
+  bad_role: Будь ласка, введіть дійсний 17-20-значний Discord Role ID для налаштування сповіщення.
   save_failed: Не вдалося зберегти подію
   published: Операцію успішно опубліковано!
   delete_heading: Видалити цю подію?
-  delete_repeats: 'Вона повторюється ({repeat}): всі повтори будуть видалені, а не лише цей.'
+  delete_repeats: 'Подія повторюється ({repeat}): усі повторення буде видалено, а не лише це.'
   delete_final: Цю дію не можна скасувати.
   delete_confirm: Видалити
   delete_failed: Не вдалося видалити подію
