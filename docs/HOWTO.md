@@ -304,8 +304,10 @@ or Claude) before merging. The pieces:
 Alliance images are kept in a private Vercel Blob store. To switch them on:
 
 1. In Vercel, open the project → **Storage** → **Create** → **Blob**. Choose **Private** if asked.
-2. Connect it to the project for **Production** and **Preview** (Preview is dev.la-s78.app).
-   Vercel adds the `BLOB_READ_WRITE_TOKEN` setting itself; nothing to copy.
+2. Connect it to the project for **Production** and **Preview** (Preview is dev.la-s78.app),
+   with **Add a read-write token** ticked (Sensitive on is fine). The store is connected with the
+   prefix `ALLIANCE_CARD_IMAGES`, so Vercel adds `ALLIANCE_CARD_IMAGES_READ_WRITE_TOKEN` itself;
+   nothing to copy. (A store connected without a prefix, `BLOB_READ_WRITE_TOKEN`, works too.)
 3. Redeploy (or wait for the next deploy). Until then, uploads answer "Alliance images aren't set
    up on the server yet."
 

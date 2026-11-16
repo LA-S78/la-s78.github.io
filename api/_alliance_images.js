@@ -53,7 +53,11 @@ export const allianceSlug = (tag) =>
   foldTag(tag)
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, '') || 'UNKNOWN';
-const blobConfigured = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+// The store's key. Connected in Vercel with the prefix ALLIANCE_CARD_IMAGES (owner's
+// set-up); Vercel's default name is accepted too.
+const blobToken = () =>
+  process.env.ALLIANCE_CARD_IMAGES_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN || '';
+const blobConfigured = () => Boolean(blobToken());
 
 /** The stored list, filled in with defaults. */
 export function readImages(gist) {
@@ -254,7 +258,9 @@ const livePath = (file) => `${prefix()}/live/${file}`;
 const removeBlobs = async (paths) => {
   const list = paths.filter(Boolean);
   if (!list.length) return;
-  await del(list).catch((err) => console.error('Could not delete old images:', err.message));
+  await del(list, { token: blobToken() }).catch((err) =>
+    console.error('Could not delete old images:', err.message),
+  );
 };
 
 /**
@@ -394,6 +400,7 @@ async function submit(session, body) {
   };
   await put(pendingPath(entry), upload.buf, {
     access: 'private',
+    token: blobToken(),
     contentType: upload.info.type,
     addRandomSuffix: false,
     // Deleted by the store itself a day after the review window, even if nothing else runs.
@@ -464,6 +471,7 @@ async function review(session, body) {
   if (approve) {
     await copy(pendingPath(entry), livePath(file), {
       access: 'private',
+      token: blobToken(),
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType: { webp: 'image/webp', jpg: 'image/jpeg', png: 'image/png' }[entry.ext],
@@ -596,7 +604,7 @@ async function reviewDetails(req, id, wantFile) {
       current: images.live[entry.slug]?.[entry.kind] ? true : false,
     });
   }
-  const blob = await get(pendingPath(entry), { access: 'private' });
+  const blob = await get(pendingPath(entry), { access: 'private', token: blobToken() });
   if (!blob) return reply(404, { error: say('api_alliance_images.not_found') });
   return {
     status: 200,
@@ -612,7 +620,7 @@ async function serveLive(file) {
     return reply(404, { error: 'Not found' });
   }
   if (!blobConfigured()) return reply(404, { error: 'Not found' });
-  const blob = await get(livePath(file), { access: 'private' });
+  const blob = await get(livePath(file), { access: 'private', token: blobToken() });
   if (!blob) return reply(404, { error: 'Not found' });
   const ext = file.split('.').pop();
   return {
