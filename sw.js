@@ -26,6 +26,7 @@ const SW_VERSION = '{{ site.time | date: "%s" }}';
 const SHELL_CACHE = `asylum-shell-${SW_VERSION}`;
 const IMAGE_CACHE = 'asylum-image-cache';
 const LIVE_CACHE = 'asylum-live-data';
+const LIVE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // older offline copies aren't used
 const IMAGE_MAX_ENTRIES = 100;
 const IMAGE_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 const LANGS = /^\/(en|de|es|fr|it|ru|tr|uk)\//;
@@ -203,7 +204,10 @@ async function liveData(request) {
     return response;
   } catch (err) {
     const saved = await cache.match(key.href);
-    if (saved) return saved;
+    // Not a copy more than 7 days old (js/live-data-notice.js has the same limit)
+    const savedAt = Date.parse(saved?.headers.get('X-Offline-Copy') || '');
+    if (saved && Date.now() - savedAt < LIVE_MAX_AGE_MS) return saved;
+    if (saved) await cache.delete(key.href);
     throw err;
   }
 }

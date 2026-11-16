@@ -75,6 +75,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data]
     //   pass itself), so someone else signing in on the device never sees it;
     // - it's only to look at: no editing, Caravan Rotor or nomination until the server has
     //   answered (readOnly);
+    // - it's kept for 7 days at most;
     // - any refusal from the server (signed out, pass expired, left the alliance, no longer
     //   allowed) deletes every saved dashboard on the device and hides what was shown, as
     //   does signing out (js/main.js triggerLogout).
@@ -89,9 +90,15 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data]
       }
     }
     let savedKey = null; // the key for what's on screen now
+    // Older than 7 days: not shown, and deleted (a phone left offline, lost or handed on)
+    const SAVED_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
     function readSaved(key) {
       try {
         const kept = JSON.parse(localStorage.getItem(key) || 'null');
+        if (kept && !(Date.now() - Date.parse(kept.at) < SAVED_MAX_AGE_MS)) {
+          localStorage.removeItem(key);
+          return null;
+        }
         return kept && kept.data ? kept : null;
       } catch (e) {
         return null;

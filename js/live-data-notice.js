@@ -55,6 +55,11 @@ export function showLiveDataNotice(anchor, { savedAt = null, failed = false } = 
 // (on a phone it wasn't always found: owner report, 2026-11-13).
 
 const STORE_PREFIX = 'la_live_';
+// A copy older than this isn't shown, and is deleted when found (owner, 2026-11-16): a phone
+// left offline, lost or handed on stops showing old data after a week. The same limit is in
+// sw.js (its offline copies) and portal/dashboard.html (saved dashboards).
+const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+const tooOld = (iso) => !iso || !(Date.now() - Date.parse(iso) < MAX_AGE_MS);
 
 /** The address without the changing ?t=… the tools add to dodge stale copies. */
 function liveKey(url) {
@@ -79,7 +84,8 @@ export function rememberLiveData(url, data) {
 export async function savedLiveCopy(url) {
   try {
     const kept = JSON.parse(localStorage.getItem(STORE_PREFIX + liveKey(url)) || 'null');
-    if (kept && kept.data) {
+    if (kept && tooOld(kept.at)) localStorage.removeItem(STORE_PREFIX + liveKey(url));
+    else if (kept && kept.data) {
       return new Response(JSON.stringify(kept.data), {
         headers: { 'content-type': 'application/json', 'X-Offline-Copy': kept.at },
       });
@@ -90,7 +96,13 @@ export async function savedLiveCopy(url) {
   try {
     if (typeof caches === 'undefined') return null;
     const cache = await caches.open('asylum-live-data');
-    return (await cache.match(new URL(liveKey(url), location.origin).href)) || null;
+    const href = new URL(liveKey(url), location.origin).href;
+    const saved = await cache.match(href);
+    if (saved && tooOld(offlineCopySavedAt(saved))) {
+      await cache.delete(href);
+      return null;
+    }
+    return saved || null;
   } catch {
     return null;
   }
