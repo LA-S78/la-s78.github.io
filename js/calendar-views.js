@@ -2,11 +2,13 @@
  * js/calendar-views.js - the calendar's events "at a glance" (owner design, 2026-11-15).
  *
  * Two views over the same events, with a switch (remembered on this device):
- *   - Week: a cycle week (Monday-Sunday, Game Time) as a strip of days, then every day's
- *     events. ‹ › go one week back or one week ahead. Today has a "Now" line; an event under
- *     way says "Happening now · ends in …", the next one "Next up · in …".
+ *   - Week: a cycle week (Monday-Sunday, Game Time) as a strip of days; ‹ › go one week back
+ *     or one week ahead (keeping the weekday; the week with today opens on today).
  *   - Cycle: the cycle's four weeks as a grid (a row per week, named, with its Capitol seat,
- *     the week's "king"); tap a day for its events.
+ *     the week's "king").
+ *   In both, tapping a day lists that day's events underneath (today at first) and the page
+ *     stays where it is (owner, 2026-11-15: a whole week listed was too long). Today has a "Now"
+ *     line; an event under way says "Happening now · ends in …", the next one "Next up · in …".
  * Chips for the event types (Server, Alliance, Kingdom War, Capitol) show or hide each type
  * (they replace the old Perspective menu), and a dropdown keeps one event type (Cheese Trap,
  * Crystal Cluster Valley…: the types on the calendar), in every view. Each event shows its
@@ -143,6 +145,8 @@
     const state = {
       view: store.get(VIEW_KEY) === 'cycle' ? 'cycle' : 'week',
       week: 0, // -1, 0, 1: last, this, next week
+      weekday: null, // the weekday last picked in the week view (0 = Monday), kept across weeks
+      fromCycle: false, // just switched to the week view: show the week of the day picked
       day: null, // the day picked in the cycle view (00:00 GT, ms)
       kinds: new Set(KINDS),
       type: '', // the event type picked in the dropdown: '' all, 'other' events of no type
@@ -198,6 +202,8 @@
 
     container.querySelectorAll('[data-view]').forEach((btn) =>
       btn.addEventListener('click', () => {
+        if (state.view !== btn.dataset.view && btn.dataset.view === 'week') state.fromCycle = true;
+        state.keepHeight = 0;
         state.view = btn.dataset.view;
         store.set(VIEW_KEY, state.view);
         draw();
@@ -218,20 +224,24 @@
       const nav = e.target.closest('[data-week-step]');
       if (nav && !nav.disabled) {
         state.week = Math.max(-1, Math.min(1, state.week + Number(nav.dataset.weekStep)));
+        state.day = null; // today if it's in that week, else the same weekday (see draw)
+        state.keepHeight = 0;
         draw();
         return;
       }
       const dayBtn = e.target.closest('button[data-day]'); // a day in the strip or grid
       if (dayBtn) {
-        const d = Number(dayBtn.dataset.day);
-        if (state.view === 'cycle') {
-          state.day = d;
-          draw();
-          viewEl.querySelector('.ag-day')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        } else {
-          viewEl
-            .querySelector(`.ag-day[data-day="${d}"]`)
-            ?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        // Both views list the day picked; the page doesn't move (owner, 2026-11-15). A day
+        // with fewer events would make the page shorter and the browser pull it up, so the
+        // list keeps at least the height it had while days are picked (reset by a new week
+        // or view)
+        const was = viewEl.querySelector('.ag')?.offsetHeight || 0;
+        state.day = Number(dayBtn.dataset.day);
+        draw();
+        const ag = viewEl.querySelector('.ag');
+        if (ag) {
+          state.keepHeight = Math.max(state.keepHeight || 0, was);
+          ag.style.minHeight = `${state.keepHeight}px`;
         }
         return;
       }
@@ -399,7 +409,7 @@
           d0 === today0 && 'is-today',
           d0 < today0 && 'is-past',
           war && 'has-war',
-          d0 === state.day && state.view === 'cycle' && 'is-selected',
+          d0 === state.day && 'is-selected',
         ]
           .filter(Boolean)
           .join(' ');
@@ -435,7 +445,25 @@
           <div class="cy-grid"><div class="cy-head"><span></span><div class="cy-cells">${head}</div></div>${rows}</div>
           <div class="ag">${dayBlock(state.day)}</div>`;
       } else {
+        // Just switched from the cycle view: the week of the day picked there, if it's one the
+        // week view shows (last, this or next week); else this week
+        if (state.fromCycle) {
+          state.fromCycle = false;
+          const off = state.day === null ? 0 : Math.floor((state.day - thisWeek0) / WEEK);
+          state.week = off >= -1 && off <= 1 ? off : 0;
+          if (off < -1 || off > 1) state.day = null;
+        }
         const w0 = thisWeek0 + state.week * WEEK;
+        // The day listed: the one picked in this week, else today (when it's in this week),
+        // else the weekday picked before (moving between weeks keeps it), else Monday
+        if (state.day === null || state.day < w0 || state.day >= w0 + WEEK) {
+          const weekday = state.weekday ?? 0;
+          state.day =
+            today0 >= w0 && today0 < w0 + WEEK
+              ? today0
+              : w0 + Math.max(0, Math.min(6, weekday)) * DAY;
+        }
+        state.weekday = Math.round((state.day - w0) / DAY);
         const days = [...Array(7)].map((_, i) => w0 + i * DAY);
         const label = t(
           ['calendar.last_week', 'calendar.this_week', 'calendar.next_week'][state.week + 1],
@@ -457,7 +485,7 @@
             <button type="button" class="wk-arrow" data-week-step="1" ${state.week >= 1 ? 'disabled' : ''} aria-label="${esc(t('calendar.next_week_aria'))}">›</button>
           </div>
           <div class="wk-strip">${strip}</div>
-          <div class="ag">${days.map(dayBlock).join('')}</div>`;
+          <div class="ag">${dayBlock(state.day)}</div>`;
       }
       viewEl.innerHTML = html;
     }
