@@ -459,13 +459,14 @@ export function renderBuffSummaryDrawer() {
               .join('')
           : `<span class="buff-none">${esc(tm('no_buffs'))}</span>`;
 
-      // One card per alliance: its tag and number of cities, then its buffs (they wrap, so
-      // long names in any language fit the panel; the old three-column table was cut off)
+      // One card per alliance: its tag (in its colour) and number of cities, then its buffs
+      // (they wrap, so long names in any language fit the panel; the old three-column table
+      // was cut off)
       return `
       <li class="buff-row ${isEditing ? 'is-active-target' : ''}">
         <div class="buff-row-head">
           <span class="alliance-dot" style="background-color: ${esc(allianceColor)}"></span>
-          <strong class="buff-row-tag">[${esc(tag)}]</strong>
+          <strong class="buff-row-tag ally-text" style="--ally: ${esc(allianceColor)}">[${esc(tag)}]</strong>
           <span class="city-count-pill">${esc(window.tn('map_planner.cities', data.count))}</span>
         </div>
         <div class="buff-badges-wrap">${buffBadges}</div>
