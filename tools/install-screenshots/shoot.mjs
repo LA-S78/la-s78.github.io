@@ -5,9 +5,9 @@
  *
  * Run by hand from GitHub (Actions → "Update install screenshots", which opens a pull
  * request with the result) or locally:
- *   node tools/install-screenshots/shoot.mjs [--site https://la-s78.app] [--theme default]
+ *   node tools/install-screenshots/shoot.mjs [--site https://la-s78.app]
  *
- * Signed out, English, the chosen theme (default = Lantern). Chrome's rules for these:
+ * Signed out, in English; each page in its own theme (PAGES). Chrome's rules for these:
  * each side 320–3840px, the long side at most 2.3× the short one, up to 8 per form factor
  * ("narrow" for phones, "wide" for desktops).
  */
@@ -24,73 +24,56 @@ const arg = (name, fallback) => {
   return i > -1 && process.argv[i + 1] ? process.argv[i + 1] : fallback;
 };
 const SITE = arg('site', 'https://la-s78.app').replace(/\/$/, '');
-const THEME = arg('theme', 'default');
 const OUT = path.join(ROOT, 'images');
 const MANIFEST = path.join(ROOT, 'site.webmanifest');
 
-// What's photographed. `ready`: shown once the page has its live data. `then`: buttons
-// clicked before the photo (the map's Alliances view, then fullscreen so the whole map
-// fits). `prepare`: a step in the page (PREPARE below). `scroll`: a part of the page brought
-// to the top, just under the site's header (the calendar's events).
+// What's photographed. `ready`: shown once the page has its live data. `prepare`: a step in
+// the page (PREPARE below). `scroll`: a part of the page brought to the top, just under the
+// site's header (the calendar's events). `theme`: default (Lantern), sanctuary or miasma
+// (Plague).
 const PHONE = { viewport: { width: 412, height: 892 }, scale: 3, form: 'narrow' }; // 1236x2676
 const DESKTOP = { viewport: { width: 1280, height: 720 }, scale: 2, form: 'wide' }; // 2560x1440
-const SHOTS = [
+// The same four pages on both, each in a theme of its own, so the pictures show what the
+// site has and that it has three looks (owner, 2026-11-16).
+const PAGES = [
   {
-    file: 'screenshot-phone-1-home',
-    device: PHONE,
+    name: 'home',
     url: '/en/index.html',
     ready: '.pinned-card',
+    theme: 'default',
     label: 'Home: guides, rules and tools',
   },
   {
-    file: 'screenshot-phone-2-calendar',
-    device: PHONE,
+    name: 'guides',
+    url: '/en/guides/index.html',
+    ready: '.guide-card',
+    theme: 'sanctuary',
+    label: 'Game guides',
+  },
+  {
+    name: 'calendar',
     url: '/en/calendar.html',
     ready: '.cal-view .ag-day',
     prepare: 'busyDay',
     scroll: '.cal-section',
+    theme: 'miasma',
     label: 'Event calendar',
   },
   {
-    file: 'screenshot-phone-3-map',
-    device: PHONE,
-    url: '/en/map/',
-    ready: '.game-map svg',
-    then: ['#btn-mode-alliance', '#btn-toggle-fullscreen'],
-    label: 'Kingdom map',
-  },
-  {
-    file: 'screenshot-phone-4-rules',
-    device: PHONE,
+    name: 'rules',
     url: '/en/rules.html',
     ready: '.content-pane',
+    theme: 'default',
     label: 'Server rules and Capitol rewards',
   },
-  {
-    file: 'screenshot-desktop-1-home',
-    device: DESKTOP,
-    url: '/en/index.html',
-    ready: '.pinned-card',
-    label: 'Home: guides, rules and tools',
-  },
-  {
-    file: 'screenshot-desktop-2-map',
-    device: DESKTOP,
-    url: '/en/map/',
-    ready: '.game-map svg',
-    then: ['#btn-mode-alliance', '#btn-toggle-fullscreen'],
-    label: 'Kingdom map',
-  },
-  {
-    file: 'screenshot-desktop-3-calendar',
-    device: DESKTOP,
-    url: '/en/calendar.html',
-    ready: '.cal-view .ag-day',
-    prepare: 'busyDay',
-    scroll: '.cal-section',
-    label: 'Event calendar',
-  },
 ];
+const SHOTS = [PHONE, DESKTOP].flatMap((device) =>
+  PAGES.map((p, i) => ({
+    ...p,
+    device,
+    file: `screenshot-${device.form === 'narrow' ? 'phone' : 'desktop'}-${i + 1}-${p.name}`,
+  })),
+);
 
 // Steps run in the page before the photo
 const PREPARE = {
@@ -148,17 +131,13 @@ try {
       } catch {
         /* storage blocked: the default theme */
       }
-    }, THEME);
+    }, shot.theme);
     const page = await ctx.newPage();
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(SITE + shot.url, { waitUntil: 'networkidle', timeout: 60000 });
     await page.addStyleTag({ content: STILL });
     await page.waitForSelector(shot.ready, { timeout: 30000 });
-    for (const button of shot.then || []) {
-      await page.click(button);
-      await page.waitForTimeout(500);
-    }
     if (shot.prepare) {
       await page.evaluate(PREPARE[shot.prepare]);
       await page.waitForTimeout(300);

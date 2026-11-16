@@ -91,9 +91,10 @@ Pushing to `main` (production) or `dev` (preview at dev.la-s78.app) runs
 Pull requests run steps 2 and 3 only, so you can see whether a change builds before merging.
 
 The screenshots on the browser's "Install app" screen are updated by hand, when the site's
-look has changed: **Actions → Update install screenshots → Run workflow**. It photographs the
-live site on a phone and a desktop (`tools/install-screenshots/shoot.mjs`) and opens a pull
-request with the new pictures, to check before merging.
+look has changed: **Actions → Update install screenshots → Run workflow**. It photographs four
+pages of the live site (home, guides, calendar, rules, each in its own theme) on a phone and a
+desktop (`tools/install-screenshots/shoot.mjs`) and opens a pull request with the new
+pictures, to check before merging.
 
 ## Code formatting
 

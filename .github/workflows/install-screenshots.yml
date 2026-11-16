@@ -2,8 +2,9 @@ name: Update install screenshots
 
 # The screenshots on the browser's "Install app" screen (site.webmanifest). Run by hand
 # (Actions → "Update install screenshots" → Run workflow) when the site's look has changed:
-# it photographs the live site on a phone and a desktop and opens a pull request with the
-# new pictures and the manifest's list of them, to check before merging. Not part of the
+# it photographs the same four pages of the live site (each in its own theme) on a phone
+# and a desktop, and opens a pull request with the new pictures and the manifest's list of
+# them, to check before merging. Not part of the
 # build: starting a browser for every deploy would slow every deploy down for pictures that
 # rarely need to change. tools/install-screenshots/shoot.mjs does the work.
 
@@ -14,11 +15,6 @@ on:
         description: 'Site to photograph'
         default: 'https://la-s78.app'
         required: true
-      theme:
-        description: 'Theme'
-        type: choice
-        options: [default, sanctuary, miasma]
-        default: default
 
 permissions:
   contents: write
@@ -50,8 +46,7 @@ jobs:
       - name: Take the screenshots
         env:
           SITE: ${{ inputs.site }}
-          THEME: ${{ inputs.theme }}
-        run: node tools/install-screenshots/shoot.mjs --site "$SITE" --theme "$THEME"
+        run: node tools/install-screenshots/shoot.mjs --site "$SITE"
 
       # Also downloadable from the run's page, whatever happens to the pull request
       - name: Keep the pictures with the run
@@ -63,7 +58,6 @@ jobs:
       - name: Open a pull request
         env:
           GH_TOKEN: ${{ github.token }}
-          THEME: ${{ inputs.theme }}
         run: |
           git add -A images/ site.webmanifest
           if git diff --cached --quiet; then
@@ -74,9 +68,9 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$branch"
-          git commit -q -m "Install screenshots from the live site (${THEME} theme)"
+          git commit -q -m "Install screenshots from the live site"
           git push -q origin "$branch"
-          body="New screenshots for the browser's Install app screen, taken from the live site (${THEME} theme) by the \"Update install screenshots\" workflow. Check the pictures under Files changed before merging."
+          body="New screenshots for the browser's Install app screen, taken from the live site by the \"Update install screenshots\" workflow. Check the pictures under Files changed before merging."
           if url=$(gh pr create --base main --head "$branch" --title "Install screenshots: update from the live site" --body "$body"); then
             echo "Pull request: $url" | tee -a "$GITHUB_STEP_SUMMARY"
           else
