@@ -332,6 +332,11 @@ async function initCalendar() {
           tn: window.tn,
           esc,
           hasAlliance: () => Boolean(activeAlliance),
+          // Back / Forward (e.g. from an event's guide): the view, week and day the reader
+          // had, not today (js/calendar-views.js remember); per address, so an alliance's
+          // calendar has its own
+          memoryKey: `cal-place:${location.pathname}${location.search}`,
+          restore: Boolean(window.__cameBack),
           // Leaders edit and delete their own events (and Stewards server-wide ones)
           canEdit: (evt) =>
             isManagementSession &&

@@ -154,6 +154,24 @@
       status: null,
     };
 
+    // Coming back with Back / Forward: where the reader was (see remember)
+    if (opts.restore && opts.memoryKey) {
+      try {
+        const was = JSON.parse(sessionStorage.getItem(opts.memoryKey) || 'null');
+        if (was) {
+          if (was.view === 'week' || was.view === 'cycle') state.view = was.view;
+          if ([-1, 0, 1].includes(was.week)) state.week = was.week;
+          if (Number.isInteger(was.weekday)) state.weekday = was.weekday;
+          if (Number.isFinite(was.day)) state.day = was.day;
+          if (Array.isArray(was.kinds) && was.kinds.length)
+            state.kinds = new Set(was.kinds.filter((k) => KINDS.includes(k)));
+          if (typeof was.type === 'string') state.type = was.type;
+        }
+      } catch (e) {
+        /* unreadable: today */
+      }
+    }
+
     // ---------- the controls (drawn once) ----------
     container.innerHTML = `
       <div class="cal-toolbar">
@@ -258,7 +276,33 @@
       return state.type === 'other' ? !evt.type : evt.type === state.type;
     }
 
+    // Where the reader is (view, week, day, chips, type), kept for this tab after every draw
+    // (sessionStorage, per page address). Used only when the reader comes back to the page
+    // with Back / Forward (opts.restore, js/calendar.js), e.g. after opening an event's
+    // guide; a new visit or a reload starts on today (owner, 2026-11-16).
+    function remember() {
+      if (!opts.memoryKey) return;
+      try {
+        sessionStorage.setItem(
+          opts.memoryKey,
+          JSON.stringify({
+            view: state.view,
+            week: state.week,
+            weekday: state.weekday,
+            day: state.day,
+            kinds: [...state.kinds],
+            type: state.type,
+          }),
+        );
+      } catch (e) {
+        /* storage blocked: Back opens on today */
+      }
+    }
     function draw() {
+      drawView();
+      remember();
+    }
+    function drawView() {
       if (!container.isConnected || !state.status) return;
       const now = Date.now();
       const today0 = dayStart(now);
