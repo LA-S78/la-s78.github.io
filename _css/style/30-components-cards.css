@@ -313,56 +313,20 @@ dialog a.dialog-btn:hover {
   }
 }
 
-/* Your own alliance (js/my-alliance.js): its tag glows softly in its own colour, and the card
-   holding it (a rotation week, a standings row, a console week) in the same colour, slowly
-   breathing like the header's lantern. Still, not pulsing, for those who turn motion down. */
+/* Your own alliance (js/my-alliance.js): its tag has a soft, steady glow in its own colour,
+   and the card holding it (a rotation week, a standings row, a console week, a buff summary
+   row) a thin edge and a faint wash of the same colour. Both still: a pulse was distracting
+   (owner, 2026-11-16). */
 .is-my-ally {
-  text-shadow:
-    0 0 6px color-mix(in srgb, currentColor 55%, transparent),
-    0 0 1px color-mix(in srgb, currentColor 60%, transparent);
-  animation: my-ally-glow 3.2s ease-in-out infinite;
+  text-shadow: 0 0 6px color-mix(in srgb, currentColor 45%, transparent);
 }
 
+/* An outline, not a border or shadow: the cards' own borders, backgrounds (the gold top 3)
+   and glows (this week's card) stay as they are */
 .is-my-ally-card {
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--my-ally, var(--accent-color)) 70%, transparent),
-    0 0 14px color-mix(in srgb, var(--my-ally, var(--accent-color)) 30%, transparent);
-  animation: my-ally-card-glow 3.2s ease-in-out infinite;
-}
-
-@keyframes my-ally-glow {
-  0%,
-  100% {
-    text-shadow:
-      0 0 3px color-mix(in srgb, currentColor 35%, transparent),
-      0 0 1px color-mix(in srgb, currentColor 40%, transparent);
-  }
-  50% {
-    text-shadow:
-      0 0 10px color-mix(in srgb, currentColor 80%, transparent),
-      0 0 2px color-mix(in srgb, currentColor 70%, transparent);
-  }
-}
-
-@keyframes my-ally-card-glow {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--my-ally, var(--accent-color)) 45%, transparent),
-      0 0 6px color-mix(in srgb, var(--my-ally, var(--accent-color)) 15%, transparent);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px var(--my-ally, var(--accent-color)),
-      0 0 20px color-mix(in srgb, var(--my-ally, var(--accent-color)) 45%, transparent);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .is-my-ally,
-  .is-my-ally-card {
-    animation: none;
-  }
+  outline: 1px solid color-mix(in srgb, var(--my-ally, var(--accent-color)) 70%, transparent);
+  outline-offset: -1px;
+  box-shadow: inset 0 0 28px color-mix(in srgb, var(--my-ally, var(--accent-color)) 14%, transparent);
 }
 
 /* A box of cards with no matches while searching (js/main.js initSearchEngine) */
