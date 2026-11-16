@@ -128,7 +128,10 @@ async function initCalendar() {
   // to go yet (an alliance that hasn't run /registerbot; the NAP channel not set up)
   function updateReminderHint() {
     const hint = document.getElementById('evt-reminder-hint');
-    if (!hint || !reminderChannels) return;
+    if (!hint) return;
+    // Where the reminder goes: only said when there is one
+    hint.hidden = document.getElementById('evt-input-notify')?.value === 'off';
+    if (!reminderChannels) return;
     const missing = isGlobalAdmin ? !reminderChannels.server : reminderChannels.alliance === false;
     hint.textContent = t(
       missing
@@ -480,7 +483,9 @@ async function initCalendar() {
     let activePresetColor = null;
     // The event being edited (its id), or null when the form creates a new one
     let editingEventId = null;
-    const reminderBox = document.getElementById('evt-input-reminder');
+    // An event being edited: who it pinged, kept when "No reminder" is chosen (so an older
+    // event's @everyone, which marks it Mandatory, isn't lost)
+    let editingNotifyTarget = null;
     const createHeading = formHeading ? formHeading.textContent : '';
 
     // Back to "create": heading, button and reminder default as for a new event
@@ -488,7 +493,9 @@ async function initCalendar() {
       editingEventId = null;
       if (formHeading) formHeading.textContent = createHeading;
       if (submitBtn) submitBtn.textContent = t('calendar_events.publish');
-      if (reminderBox) reminderBox.checked = true;
+      editingNotifyTarget = null;
+      window.SiteSelect?.sync(notifySelect);
+      updateReminderHint();
     }
 
     openEditForm = (eventId) => {
@@ -513,12 +520,14 @@ async function initCalendar() {
       document.getElementById('evt-input-duration').value = evt.duration_hours || 1;
       document.getElementById('evt-input-recurrence').value = evt.recurrence || 'none';
       document.getElementById('evt-input-details').value = evt.description || '';
-      notifySelect.value = evt.notify_target || 'role';
+      // One choice for the reminder: none, or who it pings
+      editingNotifyTarget = evt.notify_target || 'role';
+      notifySelect.value = evt.reminder === '1h' ? editingNotifyTarget : 'off';
+      updateReminderHint();
       const isCustom = notifySelect.value === 'custom_role';
       customRoleInput.disabled = !isCustom;
       customRoleInput.classList.toggle('input-locked', !isCustom);
       customRoleInput.value = isCustom ? evt.custom_role_id || '' : '';
-      if (reminderBox) reminderBox.checked = evt.reminder === '1h';
       if (formHeading) formHeading.textContent = t('calendar_events.edit_heading');
       if (submitBtn) submitBtn.textContent = t('calendar_events.save_changes');
       formEl.style.display = 'block';
@@ -563,6 +572,7 @@ async function initCalendar() {
     if (notifySelect && customRoleInput) {
       notifySelect.addEventListener('change', () => {
         const isCustom = notifySelect.value === 'custom_role';
+        updateReminderHint();
         customRoleInput.disabled = !isCustom;
         customRoleInput.classList.toggle('input-locked', !isCustom);
         if (isCustom) customRoleInput.focus();
@@ -633,7 +643,10 @@ async function initCalendar() {
           return;
         }
 
-        const notifyTarget = notifySelect.value;
+        // "No reminder": no Discord post; the stored ping stays as it was (or the default)
+        const remind = notifySelect.value !== 'off';
+        const kept = editingNotifyTarget === 'custom_role' ? 'role' : editingNotifyTarget;
+        const notifyTarget = remind ? notifySelect.value : kept || 'role';
         const customRoleId = customRoleInput.value.trim();
 
         if (notifyTarget === 'custom_role' && !/^\d{17,20}$/.test(customRoleId)) {
@@ -661,7 +674,7 @@ async function initCalendar() {
             // link its guide); none for a custom event
             event_type: OPERATION_PRESETS[presetValue()] ? presetValue() : null,
             description: document.getElementById('evt-input-details').value,
-            reminder: reminderBox?.checked ? '1h' : 'off',
+            reminder: remind ? '1h' : 'off',
           },
         };
 

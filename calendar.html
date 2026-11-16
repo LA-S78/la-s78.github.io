@@ -113,15 +113,20 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
             </select>
           </div>
 
-          <!-- Discord Notification Target -->
+          <!-- The Discord reminder, one choice (owner, 2026-11-16): none, or posted 1 hour before
+               the start pinging the alert role, a specific role, @everyone or nobody
+               (api/_reminders.js). It replaced a "Remind 1 hour before" tick box that sat apart
+               from the ping, which made "Silent" look like "no reminder". -->
           <div class="form-group form-col-full">
             <label for="evt-input-notify">{{ "calendar_events.alert_level" | t }}</label>
             <select id="evt-input-notify" class="cal-form-select" data-site-select>
-              <option value="role">{{ "calendar_events.notify_role" | t }}</option>
+              <option value="off">{{ "calendar_events.notify_off" | t }}</option>
+              <option value="role" selected>{{ "calendar_events.notify_role" | t }}</option>
               <option value="custom_role">{{ "calendar_events.notify_custom" | t }}</option>
               <option value="everyone">{{ "calendar_events.notify_everyone" | t }}</option>
               <option value="none">{{ "calendar_events.notify_none" | t }}</option>
             </select>
+            <small class="form-hint" id="evt-reminder-hint">{{ "calendar_events.reminder_hint" | t }}</small>
           </div>
 
           <!-- Non-Jumping Custom Role Input -->
@@ -137,15 +142,6 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
               title="{{ "calendar_events.role_id_title" | t }}"
               disabled
             />
-          </div>
-
-          <!-- Discord reminder before the start (posted by the reminder check, api/calendar.js) -->
-          <div class="form-group form-col-full">
-            <label class="cal-check-label" for="evt-input-reminder">
-              <input type="checkbox" id="evt-input-reminder" checked />
-              {{ "calendar_events.reminder" | t }}
-            </label>
-            <small class="form-hint" id="evt-reminder-hint">{{ "calendar_events.reminder_hint" | t }}</small>
           </div>
 
           <!-- Instructions / Rally Point -->

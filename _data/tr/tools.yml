@@ -456,9 +456,8 @@ calendar:
   ev_close_title: Ödüller Kapanıyor — {week}
   ev_close_desc: 'Sandıklar Çarşamba 00:00 GT''de sona erer: her şeyi o zamandan önce dağıtın.'
 calendar_events:
-  reminder: Discord'da 1 saat önce hatırlat
-  reminder_hint: İttifakınızın uyarı kanalında yayınlanır ve yukarıda seçilen rol etiketlenir.
-  reminder_hint_server: NAP Discord'un uyarı kanalında (ve katılan ittifaklarda) yayınlanır ve yukarıda seçilen rol etiketlenir.
+  reminder_hint: "İttifakının uyarı kanalında paylaşılır."
+  reminder_hint_server: "NAP Discord'unun uyarı kanalında ve katılmayı seçen ittifaklarda paylaşılır."
   reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların gönderilebilmesi için Discord''unuzda /registerbot çalıştırın.'
   reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu nedenle sunucu hatırlatıcıları gönderilemiyor.
   edit_heading: Etkinliği düzenle
@@ -498,13 +497,14 @@ calendar_events:
   once: Tek Seferlik Etkinlik (Tekrar etmez)
   every_2_days: Her 2 Günde Bir Tekrarla
   weekly: Haftalık Tekrarla (Aynı gün ve saat)
-  alert_level: Discord Uyarı Seviyesi
-  notify_role: "🔔 Varsayılan İttifak Rolünü Etiketle (@everyone'a döner)"
-  notify_custom: "🎯 Belirli Rol Kimliğini Hedefle (Tek seferlik geçersiz kılma)"
-  notify_everyone: "🚨 Zorunlu @everyone Yayını (Zorunlu Operasyon)"
-  notify_none: "🔕 Sessiz (Yalnızca Takvim - Discord Ping'i yok)"
+  alert_level: "Discord hatırlatması (1 saat önce)"
+  notify_off: "📵 Hatırlatma yok"
+  notify_role: "🔔 İttifakın uyarı rolünü etiketle"
+  notify_custom: "🎯 Belirli bir rolü etiketle"
+  notify_everyone: "🚨 @everyone etiketle"
+  notify_none: "🔕 Etiketlemeden paylaş"
   role_id: Belirli Rol Kimliği
-  role_id_hint: "(Yalnızca Belirli Rolü Hedefle için gereklidir)"
+  role_id_hint: "(yalnızca “Belirli bir rolü etiketle” için)"
   role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
   details: Talimatlar / Toplanma Noktası
   details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere öncülük eder. Sesli iletişim açık.

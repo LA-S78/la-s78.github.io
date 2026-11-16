@@ -456,9 +456,8 @@ calendar:
   ev_close_title: Cierre de recompensas — {week}
   ev_close_desc: 'Los cofres caducan el miércoles a las 00:00 GT: reparte todo antes de eso.'
 calendar_events:
-  reminder: Recordar en Discord 1 hora antes
-  reminder_hint: Publicado en el canal de alertas de tu alianza, mencionando el rol elegido arriba.
-  reminder_hint_server: Publicado en el canal de alertas de NAP (y en alianzas que se unieron), mencionando el rol elegido arriba.
+  reminder_hint: "Se publica en el canal de alertas de tu alianza."
+  reminder_hint_server: "Se publica en el canal de alertas del Discord del NAP y en las alianzas que se apuntaron."
   reminder_no_channel: 'Tu alianza aún no tiene canal de alertas: ejecuta /registerbot en tu Discord para que los recordatorios puedan publicarse.'
   reminder_no_server_channel: El canal de alertas NAP aún no está configurado (NAP_ALERT_CHANNEL_ID), por lo que los recordatorios del servidor no pueden publicarse.
   edit_heading: Editar evento
@@ -498,13 +497,14 @@ calendar_events:
   once: Evento único (No se repite)
   every_2_days: Se repite cada 2 días
   weekly: Se repite semanalmente (mismo día y hora)
-  alert_level: Nivel de alerta de Discord
-  notify_role: "🔔 Mencionar rol de alianza predeterminado (usa @everyone si no hay)"
-  notify_custom: "🎯 Rol específico (anulación única)"
-  notify_everyone: "🚨 Forzar @everyone (Operación obligatoria)"
-  notify_none: "🔕 Silencioso (Solo calendario - Sin mención en Discord)"
+  alert_level: "Recordatorio en Discord (1 hora antes)"
+  notify_off: "📵 Sin recordatorio"
+  notify_role: "🔔 Mencionar el rol de alertas de la alianza"
+  notify_custom: "🎯 Mencionar un rol concreto"
+  notify_everyone: "🚨 Mencionar a @everyone"
+  notify_none: "🔕 Publicar sin mencionar a nadie"
   role_id: ID de rol específico
-  role_id_hint: "(Requerido solo para Rol específico)"
+  role_id_hint: "(solo para «Mencionar un rol concreto»)"
   role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
   details: Instrucciones / Punto de reunión
   details_example: ej. Asamblea en Hive Alpha. R4s lideran rallies. Chat de voz activo.
