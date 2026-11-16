@@ -470,10 +470,10 @@ calendar_events:
   session_active: Kimlik Doğrulamalı Oturum Aktif
   create_operation: Operasyon Oluştur
   kingdom_admin: "👑 KRALLIK YÖNETİCİSİ"
-  kingdom_desc: Krallık genelinde uyarılar ve operasyonlar planlama
+  kingdom_desc: "Sunucu etkinlikleri yönetiliyor"
   kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
   leadership: "🛡️ [{tag}] LİDERLİK"
-  leadership_desc: "[{tag}] için dahili operasyonları yönetme"
+  leadership_desc: "[{tag}] etkinlikleri yönetiliyor"
   alliance_heading: "[{tag}] Operasyonu Oluştur"
   preset: Etkinlik türü
   type_custom: Özel

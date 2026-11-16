@@ -120,8 +120,9 @@ async function initCalendar() {
   let reminderChannels = null;
   // Set in management mode (step 6): opens the event form to edit an event
   let openEditForm = null;
-  // Set in management mode too: opens the empty event form ("Add an event")
+  // Set in management mode too: opens the empty event form ("Add an event"), closes it
   let openAddForm = null;
+  let closeEventForm = null;
 
   // The hint under "Remind 1 hour before": where the reminder goes, or that it has nowhere
   // to go yet (an alliance that hasn't run /registerbot; the NAP channel not set up)
@@ -347,10 +348,13 @@ async function initCalendar() {
             sessionScope &&
             evt.scope &&
             evt.scope.toLowerCase() === sessionScope.toLowerCase(),
-          // Leaders get the "Edit events" button that shows Edit / Delete on their events
+          // Leaders get the "Edit events" button that shows Edit / Delete on their events,
+          // and their management controls and event form just under it (shown while editing)
           canManage: () => isManagementSession,
+          managePanel: document.getElementById('management-panel'),
           onEdit: (id) => openEditForm?.(id),
           onAdd: (date) => openAddForm?.(date),
+          onStopEditing: () => closeEventForm?.(),
           onDelete: (id, info) => handleDeleteEvent(id, info),
         })
       : null;
@@ -553,17 +557,31 @@ async function initCalendar() {
       });
     }
 
-    // The form brought into view just under the site's header (scrolling it to the very top
-    // put its heading behind the header)
+    // The form opens where it is, under "Edit events" / "Add an event". The page only moves
+    // when the form's top would be out of sight (below the middle of the screen, or under the
+    // site's header), and then just enough to bring those buttons to the top, so the reader
+    // keeps their place: the buttons, the controls and the start of the form in view.
     function showForm() {
       const main = document.querySelector('main');
       const header = document.querySelector('header')?.getBoundingClientRect().bottom || 0;
-      if (!main) return formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const top = formEl.getBoundingClientRect().top;
+      if (top >= header && top <= window.innerHeight * 0.6) return;
+      const anchor = formEl.closest('.ag-manage')?.querySelector('.ag-editbar') || formEl;
+      if (!main) return anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
       main.scrollTo({
-        top: main.scrollTop + formEl.getBoundingClientRect().top - header - 12,
+        top: main.scrollTop + anchor.getBoundingClientRect().top - header - 12,
         behavior: 'smooth',
       });
     }
+
+    // "Done editing": the form closes (an edit in progress is dropped)
+    closeEventForm = () => {
+      formEl.style.display = 'none';
+      if (editingEventId) {
+        formEl.reset();
+        leaveEditMode();
+      }
+    };
 
     // "Add an event" (beside "Edit events", js/calendar-views.js): the empty form, on the day
     // being looked at, 19:00 GT. It replaced the "Schedule Operation" button at the top of the

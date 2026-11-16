@@ -476,10 +476,10 @@ calendar_events:
   session_active: Активная аутентифицированная сессия
   create_operation: Создать операцию
   kingdom_admin: "👑 АДМИНИСТРАЦИЯ КОРОЛЕВСТВА"
-  kingdom_desc: Планирование оповещений и операций Королевства
+  kingdom_desc: "Управление событиями сервера"
   kingdom_heading: Создать операцию Королевства ([GLOBAL])
   leadership: "🛡️ РУКОВОДСТВО [{tag}]"
-  leadership_desc: Управление внутренними операциями для [{tag}]
+  leadership_desc: "Управление событиями [{tag}]"
   alliance_heading: Создать операцию [{tag}]
   preset: Тип события
   type_custom: Пользовательское
