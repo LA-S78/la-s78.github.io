@@ -17,6 +17,7 @@ import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
@@ -108,6 +109,13 @@ async function respond(req, res) {
   };
   if (steward) body.alliances = allianceList(alliances);
   if (access.leader) {
+    // The alliance's card pictures (api/_alliance_images.js): R4/R5 send, the R5 or a
+    // Steward may take a live one down.
+    body.images = {
+      ...imageStatus(gist, tag),
+      canRemove:
+        steward || (session.role === 'R5' && findAllianceKey(alliances, session.alliance) === tag),
+    };
     body.rewards = rewardStatus({
       tag,
       rewardsData: gistJson(gist, 'rewards-data.json'),

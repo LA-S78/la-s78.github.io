@@ -5,7 +5,7 @@ title: Alliance Dashboard
 title_key: "dashboard.title"
 permalink: /dashboard.html
 lang: "en"
-strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data]
+strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, alliance_images]
 ---
 
 <div class="content-pane portal-pane-lg" id="dashboard-app">
@@ -36,11 +36,14 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data]
     <button type="button" class="dash-btn" id="dash-add" disabled>{{ "dashboard.add_chart" | t }}</button>
   </div>
   <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
+  <!-- Leaders, while editing: the alliance's card pictures (js/alliance-images.js) -->
+  <section class="dash-card ai-section" id="dash-images" hidden aria-label="{{ "alliance_images.title" | t }}"></section>
 
   <section class="dash-widgets" id="dash-widgets" hidden aria-label="{{ "dashboard.charts_label" | t }}"></section>
 </div>
 
 <script src="/js/dashboard-widgets.js"></script>
+<script src="/js/alliance-images.js"></script>
 <script>
   (function () {
     // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
@@ -129,7 +132,8 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data]
     // Takes away a dashboard drawn from a saved copy (after the server refused)
     function hideDashboard() {
       data = null;
-      ['dash-rewards', 'dash-caravan', 'dash-edit-bar', 'dash-editor', 'dash-widgets', 'dash-switcher'].forEach((id) => ($(id).hidden = true));
+      ['dash-rewards', 'dash-caravan', 'dash-edit-bar', 'dash-editor', 'dash-images', 'dash-widgets', 'dash-switcher'].forEach((id) => ($(id).hidden = true));
+      window.AllianceImages?.close($('dash-images'));
       const badge = $('dash-alliance');
       badge.textContent = t('dashboard.title');
       badge.classList.remove('ally-text');
@@ -570,6 +574,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data]
       $('dash-edit-toggle').setAttribute('aria-pressed', String(editing));
       // Always beside Edit Dashboard (greyed out until editing), so Edit doesn't shift
       $('dash-add').disabled = !editing;
+      renderImages();
       if (!list.length) {
         el.innerHTML = `<div class="dash-card dash-empty">${escapeHtml(
           t(!isLeader() ? 'dashboard.empty_member' : editing ? 'dashboard.empty_editing' : 'dashboard.empty_leader'),
@@ -581,6 +586,36 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data]
         const w = list.find((x) => x.id === card.dataset.id);
         W.mount(card.querySelector('.dash-widget-body'), w);
       });
+    }
+
+    // The alliance's card pictures: part of edit mode, like adding a chart
+    function renderImages() {
+      const el = $('dash-images');
+      const show = editing && isLeader() && Boolean(data.images) && Boolean(window.AllianceImages);
+      el.hidden = !show;
+      if (!show) return window.AllianceImages?.close(el);
+      window.AllianceImages.render(el, {
+        alliance: data.alliance,
+        images: data.images,
+        steward: data.viewer.tier === 'steward',
+        pass: loginPass,
+        onChange: refresh,
+      });
+    }
+
+    /** Fetches the dashboard again without leaving edit mode (after an image change). */
+    async function refresh() {
+      try {
+        const res = await fetch(`/api/dashboard?alliance=${encodeURIComponent(data.alliance.tag)}`, {
+          headers: { Authorization: `Bearer ${loginPass()}` },
+        });
+        if (!res.ok) return;
+        data = await res.json();
+        render();
+        remember();
+      } catch (e) {
+        // No connection: what's shown stays; the next visit loads it
+      }
     }
 
     $('dash-edit-toggle').addEventListener('click', () => {
