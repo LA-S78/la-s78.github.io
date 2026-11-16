@@ -766,18 +766,18 @@ live_data:
 capitol_rotation:
   calendar_link: Ver la rotación de este ciclo en el calendario →
 image_review:
-  page_title: Revisar imagen de la Alianza
+  page_title: Revisar imagen de la alianza
   loading: Cargando la imagen…
   sign_in_needed: Inicia sesión con Discord para revisar esta imagen. Solo los Stewards pueden verla.
   sign_in: Iniciar sesión con Discord
-  stewards_only: Solo los Stewards pueden revisar las imágenes de la alianza.
+  stewards_only: Solo los Stewards pueden revisar imágenes de alianzas.
   no_id: A este enlace le falta el ID de la imagen. Ábrelo de nuevo desde la publicación de Discord.
-  wide: Banner ancho (Rangos NAP)
-  square: Tarjeta cuadrada (Rotación del Capitolio)
+  wide: Banner (Rangos NAP)
+  card: Tarjeta (Rotación del Capitolio)
   sent_by: Enviado por {name}, {when}
-  replaces: Aprobar reemplazará la imagen actual de la alianza.
-  checklist: 'Comprobar antes de aprobar: arte propio de la alianza o arte del juego; sin marcas de otras alianzas; nada ofensivo; sin información personal.'
-  reason_label: Motivo (opcional, se muestra en la publicación de Discord si rechazas)
+  replaces: Aprobar reemplaza la imagen actual de la alianza.
+  checklist: 'Verifica antes de aprobar: arte propio de la alianza o arte del juego; sin marcas de otras alianzas; nada ofensivo; sin información personal.'
+  reason_label: Motivo (opcional, se mostrará en la publicación de Discord si rechazas)
   approve: "✅ Aprobar"
   reject: "❌ Rechazar"
   working: Guardando…
@@ -787,3 +787,39 @@ image_review:
   decided_expired: 'Caducado: no se revisó en un plazo de 7 días.'
   done_approved: Aprobado. La imagen ya está activa y la publicación de Discord ha sido actualizada.
   done_rejected: Rechazado. La imagen fue eliminada y la publicación de Discord ha sido actualizada.
+alliance_images:
+  title: "🖼️ Imágenes de la alianza"
+  edit: "✏️ Editar imágenes"
+  done: "✓ Terminar de editar"
+  help: Añade una imagen detrás de la tarjeta de Rotación del Capitolio y la fila de Rangos NAP de tu alianza. Un Steward revisará cada una antes de que otros puedan verla.
+  rules: 'Usa arte propio de la alianza o arte del juego: sin marcas de otras alianzas, nada ofensivo, sin información personal.'
+  left_today: "{left} de {max} imágenes restantes hoy para tu alianza."
+  not_ready: Las subidas de imágenes aún no están activadas.
+  card: Tarjeta de Rotación del Capitolio
+  wide: Banner de Rangos NAP
+  none: Sin imagen todavía
+  live: "✅ Activa desde {when}"
+  pending: "⏳ Esperando a un Steward desde {when}"
+  rejected: "❌ Rechazada {when}"
+  rejected_reason: "❌ Rechazada {when}: “{reason}”"
+  expired: "⌛ No se revisó a tiempo ({when}). Envíala de nuevo."
+  choose: "📷 Elegir una imagen"
+  replace: "📷 Elegir una imagen nueva"
+  remove: "🗑️ Eliminar"
+  confirm_remove: "¿Eliminar {slot}? Desaparecerá para todos inmediatamente."
+  crop_title: Posicionar {slot}
+  crop_help: Arrastra para mover. Pellizca, desplaza o usa el control deslizante para hacer zoom. Solo se enviará lo que esté dentro del marco.
+  zoom: Zoom
+  preview_title: Cómo se verá
+  preview_phone: Teléfono
+  preview_desktop: Escritorio
+  preview_week: Semana 1 Vie
+  preview_loot: 2 Cofres del Rey
+  preview_status: NAP Protegido
+  send: Enviar para revisión
+  sending: Enviando…
+  cancel: Cancelar
+  sent: Enviado. Un Steward la revisará; aparecerá una vez aprobada.
+  not_image: Ese archivo no es una imagen que este navegador pueda abrir. Prueba con un JPEG o PNG.
+  too_small: Esa imagen es bastante pequeña ({width}×{height}); podría verse borrosa. Aún puedes enviarla.
+  load_failed: No se pudo abrir la imagen.

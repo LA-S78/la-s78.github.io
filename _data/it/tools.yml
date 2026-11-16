@@ -766,18 +766,18 @@ live_data:
 capitol_rotation:
   calendar_link: Vedi la rotazione di questo ciclo sul calendario →
 image_review:
-  page_title: Revisione Immagine Alleanza
-  loading: Caricamento immagine…
+  page_title: Revisione immagine dell'Alleanza
+  loading: Caricamento dell'immagine…
   sign_in_needed: Accedi con Discord per revisionare questa immagine. Solo gli Steward possono vederla.
   sign_in: Accedi con Discord
-  stewards_only: Solo gli Steward possono revisionare le immagini dell'alleanza.
-  no_id: A questo link manca l'ID dell'immagine. Aprilo di nuovo dal post su Discord.
-  wide: Banner largo (Classifiche NAP)
-  square: Scheda quadrata (Rotazione Campidoglio)
+  stewards_only: Solo gli Steward possono revisionare le immagini dell'Alleanza.
+  no_id: Questo link non contiene l'ID dell'immagine. Aprilo di nuovo dal post di Discord.
+  wide: Banner (Classifiche NAP)
+  card: Scheda (Rotazione Campidoglio)
   sent_by: Inviato da {name}, {when}
-  replaces: L'approvazione sostituisce l'attuale immagine dell'alleanza.
-  checklist: 'Controlla prima di approvare: arte dell''alleanza o arte del gioco; nessun marchio di altre alleanze; nulla di offensivo; nessuna informazione personale.'
-  reason_label: Motivo (opzionale, mostrato nel post su Discord se rifiuti)
+  replaces: L'approvazione sostituirà l'immagine attuale dell'alleanza.
+  checklist: 'Controlla prima di approvare: arte dell''alleanza o arte di gioco; nessun marchio di altre alleanze; nulla di offensivo; nessuna informazione personale.'
+  reason_label: Motivazione (facoltativo, mostrato nel post di Discord se rifiuti)
   approve: "✅ Approva"
   reject: "❌ Rifiuta"
   working: Salvataggio…
@@ -785,5 +785,41 @@ image_review:
   decided_rejected: Già rifiutata.
   decided_replaced: Sostituita da un'immagine più recente dell'alleanza.
   decided_expired: 'Scaduta: non revisionata entro 7 giorni.'
-  done_approved: Approvata. L'immagine è ora online e il post su Discord è aggiornato.
-  done_rejected: Rifiutata. L'immagine è stata eliminata e il post su Discord è aggiornato.
+  done_approved: Approvata. L'immagine è ora online e il post di Discord è stato aggiornato.
+  done_rejected: Rifiutata. L'immagine è stata eliminata e il post di Discord è stato aggiornato.
+alliance_images:
+  title: "🖼️ Immagini dell'Alleanza"
+  edit: "✏️ Modifica immagini"
+  done: "✓ Fine modifica"
+  help: Aggiungi un'immagine dietro la scheda Rotazione Campidoglio e la riga Classifiche NAP della tua alleanza. Uno Steward controllerà ogni immagine prima che chiunque altro possa vederla.
+  rules: 'Usa l''arte della tua alleanza o arte di gioco: nessun marchio di altre alleanze, nulla di offensivo, nessuna informazione personale.'
+  left_today: "{left} di {max} immagini rimanenti oggi per la tua alleanza."
+  not_ready: Il caricamento delle immagini non è ancora attivo.
+  card: Scheda Rotazione Campidoglio
+  wide: Banner Classifiche NAP
+  none: Nessuna immagine ancora
+  live: "✅ Online dal {when}"
+  pending: "⏳ In attesa di uno Steward dal {when}"
+  rejected: "❌ Rifiutata il {when}"
+  rejected_reason: "❌ Rifiutata il {when}: “{reason}”"
+  expired: "⌛ Non revisionata in tempo ({when}). Inviala di nuovo."
+  choose: "📷 Scegli un'immagine"
+  replace: "📷 Scegli una nuova immagine"
+  remove: "🗑️ Rimuovi"
+  confirm_remove: Rimuovere {slot}? Scomparirà immediatamente per tutti.
+  crop_title: Posiziona {slot}
+  crop_help: Trascina per spostare. Pizzica, scorri o usa il cursore per ingrandire. Viene inviato solo ciò che è all'interno della cornice.
+  zoom: Zoom
+  preview_title: Come apparirà
+  preview_phone: Telefono
+  preview_desktop: Desktop
+  preview_week: Ven Settimana 1
+  preview_loot: 2 Bauli Reali
+  preview_status: NAP Protetta
+  send: Invia per revisione
+  sending: Invio in corso…
+  cancel: Annulla
+  sent: Inviato. Uno Steward la revisionerà; apparirà una volta approvata.
+  not_image: Quel file non è un'immagine che questo browser può aprire. Prova con un JPEG o PNG.
+  too_small: L'immagine è piuttosto piccola ({width}×{height}); potrebbe apparire sfuocata. Puoi comunque inviarla.
+  load_failed: Impossibile aprire l'immagine.

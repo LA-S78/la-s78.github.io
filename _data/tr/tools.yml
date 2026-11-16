@@ -772,18 +772,54 @@ image_review:
   sign_in: Discord ile giriş yap
   stewards_only: Sadece Yetkililer ittifak görsellerini inceleyebilir.
   no_id: Bu bağlantıda görselin kimliği eksik. Discord gönderisinden tekrar açın.
-  wide: Geniş afiş (NAP Sıralamaları)
-  square: Kare kart (Başkent Rotasyonu)
+  wide: Afiş (NAP Sıralamaları)
+  card: Kart (Capitol Rotasyonu)
   sent_by: "{name} tarafından gönderildi, {when}"
-  replaces: Onaylamak, ittifakın mevcut görselinin yerini alır.
-  checklist: 'Onaylamadan önce kontrol edin: ittifakın kendi tasarımı veya oyun içi görsel mi; başka bir ittifakın markasını içeriyor mu; saldırgan içerik var mı; kişisel bilgi içeriyor mu.'
+  replaces: Onaylamak, ittifakın mevcut görselini değiştirir.
+  checklist: 'Onaylamadan önce kontrol edin: ittifakın kendi sanatı veya oyun içi sanat; başka ittifak markası yok; saldırgan bir içerik yok; kişisel bilgi yok.'
   reason_label: Sebep (isteğe bağlı, reddederseniz Discord gönderisinde gösterilir)
   approve: "✅ Onayla"
   reject: "❌ Reddet"
   working: Kaydediliyor…
-  decided_approved: Zaten onaylanmış.
-  decided_rejected: Zaten reddedilmiş.
+  decided_approved: Zaten onaylandı.
+  decided_rejected: Zaten reddedildi.
   decided_replaced: İttifaktan gelen daha yeni bir görselle değiştirildi.
   decided_expired: 'Süresi doldu: 7 gün içinde incelenmedi.'
   done_approved: Onaylandı. Görsel artık yayında ve Discord gönderisi güncellendi.
   done_rejected: Reddedildi. Görsel silindi ve Discord gönderisi güncellendi.
+alliance_images:
+  title: "🖼️ İttifak görselleri"
+  edit: "✏️ Görselleri düzenle"
+  done: "✓ Düzenlemeyi bitir"
+  help: İttifakınızın Capitol Rotasyonu kartının ve NAP Sıralamaları satırının arkasına bir resim ekleyin. Bir Yetkili, başkaları görmeden önce her birini kontrol eder.
+  rules: 'İttifakınızın kendi sanatını veya oyun içi sanatı kullanın: başka ittifak markası yok, saldırgan içerik yok, kişisel bilgi yok.'
+  left_today: İttifakınız için bugün {max} görselden {left} tane kaldı.
+  not_ready: Görsel yüklemeleri henüz açık değil.
+  card: Capitol Rotasyonu kartı
+  wide: NAP Sıralamaları afişi
+  none: Henüz görsel yok
+  live: "✅ {when} tarihinden beri yayında"
+  pending: "⏳ {when} tarihinden beri bir Yetkili tarafından bekleniyor"
+  rejected: "❌ {when} tarihinde reddedildi"
+  rejected_reason: "❌ {when} tarihinde reddedildi: “{reason}”"
+  expired: "⌛ Zamanında incelenmedi ({when}). Tekrar gönderin."
+  choose: "📷 Bir resim seç"
+  replace: "📷 Yeni bir resim seç"
+  remove: "🗑️ Kaldır"
+  confirm_remove: "{slot} öğesini kaldırmak istiyor musunuz? Hemen herkes için kaybolur."
+  crop_title: "{slot} konumunu ayarla"
+  crop_help: Taşımak için sürükleyin. Yakınlaştırmak için çimdikleyin, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindekiler gönderilir.
+  zoom: Yakınlaştır
+  preview_title: Nasıl görünecek
+  preview_phone: Telefon
+  preview_desktop: Masaüstü
+  preview_week: 1. Hafta Cum
+  preview_loot: 2 Kral Sandığı
+  preview_status: NAP Korumalı
+  send: İncelemeye gönder
+  sending: Gönderiliyor…
+  cancel: İptal
+  sent: Gönderildi. Bir Yetkili inceleyecek; onaylandığında görünecektir.
+  not_image: Bu dosya, tarayıcının açabileceği bir resim değil. JPEG veya PNG deneyin.
+  too_small: Bu resim oldukça küçük ({width}×{height}); bulanık görünebilir. Yine de gönderebilirsiniz.
+  load_failed: Resim açılamadı.

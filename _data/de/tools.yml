@@ -768,22 +768,58 @@ capitol_rotation:
 image_review:
   page_title: Allianz-Bild überprüfen
   loading: Lade das Bild…
-  sign_in_needed: Melde dich mit Discord an, um dieses Bild zu überprüfen. Nur Verwalter können es sehen.
+  sign_in_needed: Melde dich mit Discord an, um dieses Bild zu überprüfen. Nur Stewards können es sehen.
   sign_in: Mit Discord anmelden
-  stewards_only: Nur Verwalter können Allianz-Bilder überprüfen.
-  no_id: Diesem Link fehlt die Bild-ID. Öffne ihn erneut über den Discord-Beitrag.
-  wide: Breites Banner (NAP-Ränge)
-  square: Quadratische Karte (Kapitol-Rotation)
+  stewards_only: Nur Stewards können Allianz-Bilder überprüfen.
+  no_id: Diesem Link fehlt die Bild-ID. Öffne ihn erneut über den Discord-Post.
+  wide: Banner (NAP-Ränge)
+  card: Karte (Kapitol-Rotation)
   sent_by: Gesendet von {name}, {when}
-  replaces: Das Genehmigen ersetzt das aktuelle Bild der Allianz.
-  checklist: 'Vor der Genehmigung prüfen: Eigene Kunst der Allianz oder In-Game-Kunst; kein Branding einer anderen Allianz; nichts Anstößiges; keine persönlichen Informationen.'
-  reason_label: Grund (optional, wird im Discord-Beitrag bei Ablehnung angezeigt)
+  replaces: Das Genehmigen ersetzt das aktuelle Allianz-Bild.
+  checklist: 'Vor der Genehmigung prüfen: Eigene Allianz-Kunst oder Spiel-Grafik; kein Branding anderer Allianzen; nichts Anstößiges; keine persönlichen Informationen.'
+  reason_label: Grund (optional, wird bei Ablehnung im Discord-Post angezeigt)
   approve: "✅ Genehmigen"
   reject: "❌ Ablehnen"
-  working: Speichern…
+  working: Speichere…
   decided_approved: Bereits genehmigt.
   decided_rejected: Bereits abgelehnt.
   decided_replaced: Durch ein neueres Bild der Allianz ersetzt.
   decided_expired: 'Abgelaufen: Nicht innerhalb von 7 Tagen überprüft.'
-  done_approved: Genehmigt. Das Bild ist jetzt live und der Discord-Beitrag wurde aktualisiert.
-  done_rejected: Abgelehnt. Das Bild wurde gelöscht und der Discord-Beitrag wurde aktualisiert.
+  done_approved: Genehmigt. Das Bild ist jetzt live und der Discord-Post wurde aktualisiert.
+  done_rejected: Abgelehnt. Das Bild wurde gelöscht und der Discord-Post wurde aktualisiert.
+alliance_images:
+  title: "🖼️ Allianz-Bilder"
+  edit: "✏️ Bilder bearbeiten"
+  done: "✓ Bearbeitung beendet"
+  help: Füge ein Bild hinter die Kapitol-Rotations-Karte und die NAP-Ränge-Zeile deiner Allianz ein. Ein Steward prüft jedes Bild, bevor es für andere sichtbar wird.
+  rules: 'Verwende eigene Allianz-Kunst oder In-Game-Grafiken: Kein Branding anderer Allianzen, nichts Anstößiges, keine persönlichen Informationen.'
+  left_today: "{left} von {max} Bildern heute für deine Allianz übrig."
+  not_ready: Bild-Uploads sind noch nicht aktiviert.
+  card: Kapitol-Rotations-Karte
+  wide: NAP-Ränge-Banner
+  none: Noch kein Bild
+  live: "✅ Live seit {when}"
+  pending: "⏳ Wartet seit {when} auf einen Steward"
+  rejected: "❌ Abgelehnt {when}"
+  rejected_reason: "❌ Abgelehnt {when}: „{reason}“"
+  expired: "⌛ Nicht rechtzeitig überprüft ({when}). Sende es erneut."
+  choose: "📷 Bild auswählen"
+  replace: "📷 Neues Bild auswählen"
+  remove: "🗑️ Entfernen"
+  confirm_remove: "{slot} entfernen? Es verschwindet sofort für alle."
+  crop_title: "{slot} positionieren"
+  crop_help: Zum Verschieben ziehen. Zum Zoomen kneifen, scrollen oder den Schieberegler verwenden. Nur der Inhalt innerhalb des Rahmens wird gesendet.
+  zoom: Zoom
+  preview_title: Vorschau
+  preview_phone: Handy
+  preview_desktop: Desktop
+  preview_week: Woche 1 Fr
+  preview_loot: 2 Königs-Truhen
+  preview_status: NAP-geschützt
+  send: Zur Überprüfung senden
+  sending: Sende…
+  cancel: Abbrechen
+  sent: Gesendet. Ein Steward wird es überprüfen; es erscheint nach der Genehmigung.
+  not_image: Diese Datei ist kein Bild, das dieser Browser öffnen kann. Versuche es mit JPEG oder PNG.
+  too_small: Das Bild ist ziemlich klein ({width}×{height}); es könnte unscharf wirken. Du kannst es trotzdem senden.
+  load_failed: Das Bild konnte nicht geöffnet werden.
