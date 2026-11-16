@@ -1,6 +1,7 @@
 // api/state.js
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { liveImages } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
@@ -48,6 +49,8 @@ export default async function handler(req, res) {
 
     const cleanAlliances = sanitizeAlliances(mapState.alliances || {}, roleColors);
     const blacklist = mapState.blacklist || { players: [], alliances: [] };
+    // Approved card pictures (api/_alliance_images.js): { TAG: { card, wide } }
+    const allianceImages = liveImages(gist, mapState.alliances || {});
     const resolvedCycleState = resolveCycleState(rewardsState.cycle_state);
     // This week's reward period, from the clock (api/_reward_period.js)
     const rewardPeriod = describeRewardPeriod(
@@ -73,6 +76,7 @@ export default async function handler(req, res) {
       case 'alliances':
         return res.status(200).json({
           alliances: cleanAlliances,
+          alliance_images: allianceImages,
           blacklist,
           revision: mapState.revision || 'initial',
           lastUpdated: mapState.lastUpdated || null,
@@ -95,6 +99,7 @@ export default async function handler(req, res) {
         return res.status(200).json({
           map: {
             alliances: cleanAlliances,
+            alliance_images: allianceImages,
             territory_ownership: mapState.territory_ownership || {},
             blacklist,
             revision: mapState.revision || 'initial',

@@ -53,6 +53,25 @@ export let draftBlacklist = { players: [], alliances: [] };
 export let liveDiscordColors = {};
 /** 'loading' | 'ok' | 'failed': whether the live standings and blacklist have arrived. */
 let liveState = 'loading';
+/** Approved alliance pictures from /api/state: { TAG: { card, wide } } (api/_alliance_images.js) */
+let allianceImages = {};
+
+/** The style attribute that puts an alliance's banner behind its row, or ''. */
+function bannerStyle(tag) {
+  // The tag as stored, or written another way (RAVN for RÂVN, any letter case)
+  const fold = (x) =>
+    String(x || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  const pics =
+    allianceImages[tag] ||
+    Object.entries(allianceImages).find(([key]) => fold(key) === fold(tag))?.[1];
+  const url = pics?.wide;
+  return typeof url === 'string' && /^\/alliance-images\/[A-Za-z0-9.-]+$/.test(url)
+    ? ` style="--ally-pic: url('${url}')"`
+    : '';
+}
 
 // ============================================================================
 // 1. COLOR & CASE-SENSITIVE TAG HELPERS
@@ -222,6 +241,8 @@ export function checkAndRestoreAllianceDraft() {
 
 // Draws standings and blacklist data (the fresh answer, or the saved copy shown while it loads)
 function applyAllianceData(data) {
+  allianceImages =
+    data.alliance_images && typeof data.alliance_images === 'object' ? data.alliance_images : {};
   if (
     data.alliances &&
     typeof data.alliances === 'object' &&
@@ -637,7 +658,7 @@ export function renderStandingsHierarchy() {
         .join('');
 
       return `
-      <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}" data-tag="${esc(alliance.tag)}">
+      <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}${bannerStyle(alliance.tag) ? ' has-ally-pic' : ''}" data-tag="${esc(alliance.tag)}"${bannerStyle(alliance.tag)}>
         <div class="ladder-rank-col">
           <span class="ladder-rank-badge ${rankTier}">
             ${isRanked ? `#${esc(alliance.rank)}` : '--'}

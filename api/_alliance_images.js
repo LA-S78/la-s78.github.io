@@ -116,6 +116,25 @@ export function imageStatus(gist, tag) {
   };
 }
 
+/**
+ * Every alliance's approved pictures, for the public pages (/api/state): { TAG: { card, wide } }
+ * with the addresses they are served at, keyed by the tags in `alliances` (map-state.json).
+ */
+export function liveImages(gist, alliances = {}) {
+  const live = readImages(gist).live;
+  const out = {};
+  for (const tag of Object.keys(alliances)) {
+    const entry = live[allianceSlug(tag)];
+    if (!entry) continue;
+    const urls = {};
+    for (const kind of Object.keys(IMAGE_KINDS)) {
+      if (entry[kind]?.file) urls[kind] = `/alliance-images/${entry[kind].file}`;
+    }
+    if (Object.keys(urls).length) out[tag] = urls;
+  }
+  return out;
+}
+
 // ---------------------------------------------------------------------------------------
 // Checking the picture itself
 // ---------------------------------------------------------------------------------------
