@@ -414,7 +414,7 @@ calendar:
   saturday: "Saturday"
   today: "🔥 TODAY"
   none_this_week: "None this week"
-  upcoming: "Upcoming Operations & Milestones"
+  upcoming: "Upcoming Events"
   times_shown: "Times displayed in {gt} & your Local Time"
   gt_label: "Game Time (UTC-2)"
   # The events at a glance (js/calendar-views.js): week and cycle views, type chips
@@ -538,7 +538,7 @@ calendar_events:
   removed: "Operation removed."
 
 kings_scheduler:
-  title: "⚔️ Capitol Defense & Rotation Console"
+  title: "Capitol Rotation"
   subtitle: "Automated Matchup Defense & Restitution Schedule"
   overrides: "Overrides: {n}/2"
   loading: "Loading live schedule..."

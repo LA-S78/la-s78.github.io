@@ -400,7 +400,7 @@ calendar:
   saturday: Субота
   today: "🔥 СЬОГОДНІ"
   none_this_week: Немає цього тижня
-  upcoming: Майбутні операції та етапи
+  upcoming: "Найближчі події"
   times_shown: Час вказано за {gt} та ваш місцевий час
   gt_label: Ігровий час (UTC-2)
   view_label: Вигляд календаря
@@ -521,7 +521,7 @@ calendar_events:
   delete_failed: Не вдалося видалити подію
   removed: Операцію видалено.
 kings_scheduler:
-  title: "⚔️ Консоль захисту та ротації Капітолія"
+  title: "Ротація Капітолію"
   subtitle: Автоматизований розклад захисту та компенсацій
   overrides: 'Заміни: {n}/2'
   loading: Завантаження поточного розкладу...

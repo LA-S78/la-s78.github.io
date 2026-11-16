@@ -232,8 +232,21 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+/* The week's name with the rewards' badge beside it (wraps under it if there's no room) */
+.cal-hero-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0.25rem 0;
+}
+
+.cal-hero-title-row .cal-badge[hidden] {
+  display: none;
+}
+
 .cal-hero-title {
-  margin: 0.5rem 0 0.25rem 0 !important;
+  margin: 0 !important;
   font-size: 1.5rem !important;
   font-weight: 700;
   border-bottom: none !important;

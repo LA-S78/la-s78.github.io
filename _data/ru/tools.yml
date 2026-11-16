@@ -401,7 +401,7 @@ calendar:
   saturday: Суббота
   today: "🔥 СЕГОДНЯ"
   none_this_week: На этой неделе нет
-  upcoming: Предстоящие операции и вехи
+  upcoming: "Предстоящие события"
   times_shown: Время указано по {gt} и вашему местному времени
   gt_label: Game Time (UTC-2)
   view_label: Вид календаря
@@ -522,7 +522,7 @@ calendar_events:
   delete_failed: Не удалось удалить событие
   removed: Операция удалена.
 kings_scheduler:
-  title: "⚔️ Консоль обороны и ротации Капитолия"
+  title: "Ротация Капитолия"
   subtitle: Автоматизированное расписание обороны и компенсаций
   overrides: 'Замены: {n}/2'
   loading: Загрузка актуального расписания...

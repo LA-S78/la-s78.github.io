@@ -396,7 +396,7 @@ calendar:
   saturday: Sabato
   today: "🔥 OGGI"
   none_this_week: Nessuno questa settimana
-  upcoming: Operazioni & Milestone imminenti
+  upcoming: "Prossimi eventi"
   times_shown: Orari visualizzati in {gt} & tuo Orario Locale
   gt_label: Game Time (UTC-2)
   view_label: Visualizzazione calendario
@@ -516,7 +516,7 @@ calendar_events:
   delete_failed: Eliminazione evento fallita
   removed: Operazione rimossa.
 kings_scheduler:
-  title: "⚔️ Console Difesa & Rotazione Campidoglio"
+  title: "Rotazione del Campidoglio"
   subtitle: Programma di difesa e restituzione automatizzato
   overrides: 'Override: {n}/2'
   loading: Caricamento programma in tempo reale...
