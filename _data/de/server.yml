@@ -81,6 +81,27 @@ api_register:
   officer_channel_missing: Der Offiziers-Ticket-Kanal ({id}) ist nicht in „{server}“ (oder der Bot kann ihn nicht sehen). Kopiere die ID erneut.
   alert_role_missing: Die Standard-Alarmrolle ({id}) ist keine Rolle in „{server}“. Kopiere die ID erneut oder lasse sie für @everyone leer.
   role_not_found: Keine Rolle in „{server}“ entspricht bisher „{role}“; es wird funktionieren, sobald eine existiert.
+api_alliance_images:
+  not_set_up: Allianz-Bilder sind auf dem Server noch nicht eingerichtet.
+  failed: Beim Allianz-Bild ist etwas schiefgelaufen. Bitte versuche es erneut.
+  bad_image: Die Datei ist kein Bild, das die Seite verwenden kann. Bitte verwende das Upload-Formular.
+  too_big: Das Bild ist zu groß (über {kb} KB). Bitte verwende das Upload-Formular, da es die Größe verkleinert.
+  wrong_size: Das Bild muss genau {width}×{height} Pixel groß sein. Bitte verwende das Upload-Formular.
+  has_metadata: Das Bild enthält noch versteckte Daten (wie z. B. den Aufnahmeort). Bitte verwende das Upload-Formular, da es diese entfernt.
+  leaders_only: Nur R4- und R5-Anführer können Allianz-Bilder senden.
+  own_alliance_only: Du kannst nur Bilder für deine eigene Allianz senden.
+  unknown_alliance: Diese Allianz ist nicht im NAP.
+  daily_limit: 'Tägliches Limit erreicht: {max} Bilder pro Allianz alle 24 Stunden. Du kannst das nächste nach {when} senden.'
+  post_failed: Das Bild konnte nicht an die Stewards auf Discord gesendet werden. Bitte versuche es später erneut.
+  sent: Zur Überprüfung an die Stewards gesendet. Es erscheint, sobald es genehmigt wurde.
+  stewards_only: Nur Stewards können Allianz-Bilder überprüfen.
+  not_found: Das Bild wurde nicht gefunden. Es könnte abgelaufen sein.
+  already_decided: Das Bild wurde bereits überprüft (oder durch ein neueres ersetzt).
+  approved: 'Genehmigt: Das Bild ist jetzt live.'
+  rejected: 'Abgelehnt: Das Bild wurde gelöscht.'
+  remove_not_allowed: Nur der R5 der Allianz oder ein Steward kann dessen Bilder entfernen.
+  nothing_to_remove: Es gibt kein Bild, das entfernt werden könnte.
+  removed: Bild entfernt.
 api_proposals:
   login_required: Bitte melde dich erneut mit Discord an, um Vorschläge zu senden.
   leaders_only: Nur R4- und R5-Anführer können Vorschläge senden.

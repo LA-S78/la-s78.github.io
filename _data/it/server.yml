@@ -81,6 +81,27 @@ api_register:
   officer_channel_missing: Il canale ticket ufficiali ({id}) non è in "{server}" (o il bot non può vederlo). Copia di nuovo l'ID.
   alert_role_missing: Il ruolo avvisi predefinito ({id}) non è un ruolo in "{server}". Copia di nuovo l'ID, oppure lascialo vuoto per @everyone.
   role_not_found: Nessun ruolo in "{server}" corrisponde a "{role}" al momento; funzionerà una volta che ne verrà creato uno.
+api_alliance_images:
+  not_set_up: Le immagini dell'alleanza non sono ancora configurate sul server.
+  failed: Qualcosa è andato storto con l'immagine dell'alleanza. Riprova.
+  bad_image: Il file non è un'immagine utilizzabile dal sito. Usa il modulo di caricamento.
+  too_big: L'immagine è troppo grande (oltre {kb} KB). Usa il modulo di caricamento, che la ridimensiona.
+  wrong_size: L'immagine deve essere esattamente di {width}×{height} pixel. Usa il modulo di caricamento.
+  has_metadata: L'immagine contiene ancora dati nascosti (come la posizione dello scatto). Usa il modulo di caricamento, che li rimuove.
+  leaders_only: Solo i leader R4 e R5 possono inviare immagini dell'alleanza.
+  own_alliance_only: Puoi inviare immagini solo per la tua alleanza.
+  unknown_alliance: Quell'alleanza non è nel NAP.
+  daily_limit: 'Limite giornaliero raggiunto: {max} immagini per alleanza ogni 24 ore. Puoi inviarne un''altra dopo le {when}.'
+  post_failed: Impossibile inviare l'immagine agli Steward su Discord. Riprova più tardi.
+  sent: Inviata agli Steward per la revisione. Apparirà una volta approvata.
+  stewards_only: Solo gli Steward possono revisionare le immagini dell'alleanza.
+  not_found: Immagine non trovata. Potrebbe essere scaduta.
+  already_decided: L'immagine è già stata revisionata (o sostituita da una più recente).
+  approved: 'Approvata: l''immagine è ora online.'
+  rejected: 'Respinta: l''immagine è stata eliminata.'
+  remove_not_allowed: Solo l'R5 dell'alleanza o uno Steward possono rimuovere le sue immagini.
+  nothing_to_remove: Non c'è nessuna immagine da rimuovere.
+  removed: Immagine rimossa.
 api_proposals:
   login_required: Per favore accedi di nuovo con Discord per inviare proposte.
   leaders_only: Solo i leader R4 e R5 possono inviare proposte.

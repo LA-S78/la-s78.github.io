@@ -765,3 +765,25 @@ live_data:
   updating: "⏳ Actualizando..."
 capitol_rotation:
   calendar_link: Ver la rotación de este ciclo en el calendario →
+image_review:
+  page_title: Revisar imagen de la Alianza
+  loading: Cargando la imagen…
+  sign_in_needed: Inicia sesión con Discord para revisar esta imagen. Solo los Stewards pueden verla.
+  sign_in: Iniciar sesión con Discord
+  stewards_only: Solo los Stewards pueden revisar las imágenes de la alianza.
+  no_id: A este enlace le falta el ID de la imagen. Ábrelo de nuevo desde la publicación de Discord.
+  wide: Banner ancho (Rangos NAP)
+  square: Tarjeta cuadrada (Rotación del Capitolio)
+  sent_by: Enviado por {name}, {when}
+  replaces: Aprobar reemplazará la imagen actual de la alianza.
+  checklist: 'Comprobar antes de aprobar: arte propio de la alianza o arte del juego; sin marcas de otras alianzas; nada ofensivo; sin información personal.'
+  reason_label: Motivo (opcional, se muestra en la publicación de Discord si rechazas)
+  approve: "✅ Aprobar"
+  reject: "❌ Rechazar"
+  working: Guardando…
+  decided_approved: Ya aprobado.
+  decided_rejected: Ya rechazado.
+  decided_replaced: Reemplazado por una imagen más reciente de la alianza.
+  decided_expired: 'Caducado: no se revisó en un plazo de 7 días.'
+  done_approved: Aprobado. La imagen ya está activa y la publicación de Discord ha sido actualizada.
+  done_rejected: Rechazado. La imagen fue eliminada y la publicación de Discord ha sido actualizada.

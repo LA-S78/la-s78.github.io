@@ -765,3 +765,25 @@ live_data:
   updating: "⏳ Aktualisierung…"
 capitol_rotation:
   calendar_link: Rotation dieses Zyklus im Kalender ansehen →
+image_review:
+  page_title: Allianz-Bild überprüfen
+  loading: Lade das Bild…
+  sign_in_needed: Melde dich mit Discord an, um dieses Bild zu überprüfen. Nur Verwalter können es sehen.
+  sign_in: Mit Discord anmelden
+  stewards_only: Nur Verwalter können Allianz-Bilder überprüfen.
+  no_id: Diesem Link fehlt die Bild-ID. Öffne ihn erneut über den Discord-Beitrag.
+  wide: Breites Banner (NAP-Ränge)
+  square: Quadratische Karte (Kapitol-Rotation)
+  sent_by: Gesendet von {name}, {when}
+  replaces: Das Genehmigen ersetzt das aktuelle Bild der Allianz.
+  checklist: 'Vor der Genehmigung prüfen: Eigene Kunst der Allianz oder In-Game-Kunst; kein Branding einer anderen Allianz; nichts Anstößiges; keine persönlichen Informationen.'
+  reason_label: Grund (optional, wird im Discord-Beitrag bei Ablehnung angezeigt)
+  approve: "✅ Genehmigen"
+  reject: "❌ Ablehnen"
+  working: Speichern…
+  decided_approved: Bereits genehmigt.
+  decided_rejected: Bereits abgelehnt.
+  decided_replaced: Durch ein neueres Bild der Allianz ersetzt.
+  decided_expired: 'Abgelaufen: Nicht innerhalb von 7 Tagen überprüft.'
+  done_approved: Genehmigt. Das Bild ist jetzt live und der Discord-Beitrag wurde aktualisiert.
+  done_rejected: Abgelehnt. Das Bild wurde gelöscht und der Discord-Beitrag wurde aktualisiert.

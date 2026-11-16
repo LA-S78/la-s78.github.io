@@ -81,6 +81,27 @@ api_register:
   officer_channel_missing: Yetkili Talep Kanalı ({id}) "{server}" içinde yok (veya bot bunu göremiyor). Kimliği tekrar kopyalayın.
   alert_role_missing: Varsayılan Uyarı Rolü ({id}) "{server}" içinde bir rol değil. Kimliği tekrar kopyalayın veya @everyone için boş bırakın.
   role_not_found: '"{server}" içinde "{role}" ile eşleşen bir rol henüz yok; biri oluşturulduğunda çalışacaktır.'
+api_alliance_images:
+  not_set_up: İttifak görselleri sunucuda henüz ayarlanmadı.
+  failed: İttifak görseliyle ilgili bir sorun oluştu. Lütfen tekrar deneyin.
+  bad_image: Bu dosya sitenin kullanabileceği bir resim değil. Lütfen yükleme formunu kullanın.
+  too_big: Görsel çok büyük ({kb} KB üzeri). Lütfen görseli küçülten yükleme formunu kullanın.
+  wrong_size: Görsel tam olarak {width}×{height} piksel olmalıdır. Lütfen yükleme formunu kullanın.
+  has_metadata: Görsel hala gizli veriler (fotoğrafın çekildiği yer gibi) içeriyor. Lütfen bu verileri temizleyen yükleme formunu kullanın.
+  leaders_only: Sadece R4 ve R5 liderleri ittifak görselleri gönderebilir.
+  own_alliance_only: Sadece kendi ittifakınız için görsel gönderebilirsiniz.
+  unknown_alliance: Bu ittifak NAP listesinde bulunmuyor.
+  daily_limit: 'Günlük sınıra ulaşıldı: 24 saat içinde ittifak başına en fazla {max} görsel. Bir sonrakini {when} sonrasında gönderebilirsiniz.'
+  post_failed: Görsel Discord üzerindeki Görevlilere gönderilemedi. Lütfen daha sonra tekrar deneyin.
+  sent: İnceleme için Görevlilere gönderildi. Onaylandıktan sonra görünecektir.
+  stewards_only: Sadece Görevliler ittifak görsellerini inceleyebilir.
+  not_found: Görsel bulunamadı. Süresi dolmuş olabilir.
+  already_decided: Görsel zaten incelenmiş (veya daha yenisiyle değiştirilmiş).
+  approved: 'Onaylandı: görsel şu an yayında.'
+  rejected: 'Reddedildi: görsel silindi.'
+  remove_not_allowed: Sadece ittifakın R5'i veya bir Görevli görselleri kaldırabilir.
+  nothing_to_remove: Kaldırılacak bir görsel bulunmuyor.
+  removed: Görsel kaldırıldı.
 api_proposals:
   login_required: Öneri göndermek için lütfen tekrar Discord ile giriş yapın.
   leaders_only: Önerileri yalnızca R4 ve R5 liderleri gönderebilir.

@@ -765,3 +765,25 @@ live_data:
   updating: "⏳ Güncelleniyor…"
 capitol_rotation:
   calendar_link: Bu döngünün rotasyonunu takvimde görün →
+image_review:
+  page_title: İttifak Görselini İncele
+  loading: Görsel yükleniyor…
+  sign_in_needed: Bu görseli incelemek için Discord ile giriş yapın. Sadece Yetkililer görebilir.
+  sign_in: Discord ile giriş yap
+  stewards_only: Sadece Yetkililer ittifak görsellerini inceleyebilir.
+  no_id: Bu bağlantıda görselin kimliği eksik. Discord gönderisinden tekrar açın.
+  wide: Geniş afiş (NAP Sıralamaları)
+  square: Kare kart (Başkent Rotasyonu)
+  sent_by: "{name} tarafından gönderildi, {when}"
+  replaces: Onaylamak, ittifakın mevcut görselinin yerini alır.
+  checklist: 'Onaylamadan önce kontrol edin: ittifakın kendi tasarımı veya oyun içi görsel mi; başka bir ittifakın markasını içeriyor mu; saldırgan içerik var mı; kişisel bilgi içeriyor mu.'
+  reason_label: Sebep (isteğe bağlı, reddederseniz Discord gönderisinde gösterilir)
+  approve: "✅ Onayla"
+  reject: "❌ Reddet"
+  working: Kaydediliyor…
+  decided_approved: Zaten onaylanmış.
+  decided_rejected: Zaten reddedilmiş.
+  decided_replaced: İttifaktan gelen daha yeni bir görselle değiştirildi.
+  decided_expired: 'Süresi doldu: 7 gün içinde incelenmedi.'
+  done_approved: Onaylandı. Görsel artık yayında ve Discord gönderisi güncellendi.
+  done_rejected: Reddedildi. Görsel silindi ve Discord gönderisi güncellendi.

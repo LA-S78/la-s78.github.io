@@ -765,3 +765,25 @@ live_data:
   updating: "⏳ Aggiornamento in corso…"
 capitol_rotation:
   calendar_link: Vedi la rotazione di questo ciclo sul calendario →
+image_review:
+  page_title: Revisione Immagine Alleanza
+  loading: Caricamento immagine…
+  sign_in_needed: Accedi con Discord per revisionare questa immagine. Solo gli Steward possono vederla.
+  sign_in: Accedi con Discord
+  stewards_only: Solo gli Steward possono revisionare le immagini dell'alleanza.
+  no_id: A questo link manca l'ID dell'immagine. Aprilo di nuovo dal post su Discord.
+  wide: Banner largo (Classifiche NAP)
+  square: Scheda quadrata (Rotazione Campidoglio)
+  sent_by: Inviato da {name}, {when}
+  replaces: L'approvazione sostituisce l'attuale immagine dell'alleanza.
+  checklist: 'Controlla prima di approvare: arte dell''alleanza o arte del gioco; nessun marchio di altre alleanze; nulla di offensivo; nessuna informazione personale.'
+  reason_label: Motivo (opzionale, mostrato nel post su Discord se rifiuti)
+  approve: "✅ Approva"
+  reject: "❌ Rifiuta"
+  working: Salvataggio…
+  decided_approved: Già approvata.
+  decided_rejected: Già rifiutata.
+  decided_replaced: Sostituita da un'immagine più recente dell'alleanza.
+  decided_expired: 'Scaduta: non revisionata entro 7 giorni.'
+  done_approved: Approvata. L'immagine è ora online e il post su Discord è aggiornato.
+  done_rejected: Rifiutata. L'immagine è stata eliminata e il post su Discord è aggiornato.
