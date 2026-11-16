@@ -760,7 +760,8 @@ live_data:
   updating: "⏳ Mise à jour…"
 capitol_rotation:
   rank: 'Rang #{rank}'
-  this_week: Cette semaine
+  week_fri: Semaine {n} ven
+  active: ACTIF
   captures: Captures {date}
   captured: Capturé {date}
   override: 'Remplacement : remplace [{replaced}] cette semaine'

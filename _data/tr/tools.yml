@@ -760,7 +760,8 @@ live_data:
   updating: "⏳ Güncelleniyor…"
 capitol_rotation:
   rank: 'Sıra #{rank}'
-  this_week: Bu hafta
+  week_fri: "{n}. Hafta Cuma"
+  active: AKTİF
   captures: Ele geçirme {date}
   captured: Ele geçirildi {date}
   override: 'Geçersiz kılma: bu hafta [{replaced}] yerine geçer'

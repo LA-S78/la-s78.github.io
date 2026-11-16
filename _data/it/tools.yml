@@ -760,7 +760,8 @@ live_data:
   updating: "⏳ Aggiornamento in corso…"
 capitol_rotation:
   rank: 'Grado #{rank}'
-  this_week: Questa settimana
+  week_fri: Settimana {n} Ven
+  active: ATTIVO
   captures: Catture {date}
   captured: Catturato {date}
   override: 'Sovrascrivi: sostituisce [{replaced}] questa settimana'

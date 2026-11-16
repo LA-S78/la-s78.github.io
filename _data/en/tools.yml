@@ -795,7 +795,8 @@ live_data:
 # calendar: which alliance captures the Capitol each week of the 4-week cycle.
 capitol_rotation:
   rank: "Rank #{rank}"
-  this_week: "This week"
+  week_fri: "Week {n} Fri"
+  active: "ACTIVE"
   captures: "Captures {date}"
   captured: "Captured {date}"
   override: "Override: replaces [{replaced}] this week"

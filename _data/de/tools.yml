@@ -760,7 +760,8 @@ live_data:
   updating: "⏳ Aktualisierung…"
 capitol_rotation:
   rank: 'Rang #{rank}'
-  this_week: Diese Woche
+  week_fri: Woche {n} Fr
+  active: AKTIV
   captures: Eroberungen {date}
   captured: Erobert am {date}
   override: 'Überschreiben: Ersetzt [{replaced}] diese Woche'

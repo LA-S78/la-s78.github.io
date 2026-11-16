@@ -35,8 +35,10 @@ function captureDate(unixSeconds) {
   });
 }
 
+// The week's name as the calendar's Capitol console has it ("Week 1 Fri": the capture is on
+// Friday), so both boards use the same words
 function weekName(w) {
-  return w.isKW ? window.t('common.kw_week', { n: w.clockWeek }) : window.t('common.off_week');
+  return w.isKW ? t('week_fri', { n: w.clockWeek }) : window.t('common.off_week');
 }
 
 // The order of the weeks last seen (this browser only): { isKW, clockWeek, seat } per card.
@@ -64,12 +66,20 @@ function rememberOrder(rotation) {
   }
 }
 
+/**
+ * Every card has the same six rows, empty where there's nothing to show (head, crown, rank,
+ * tag, override, date): the cards line their rows up with each other (CSS subgrid), so the
+ * heads share a height and the tags sit on one line, whatever a card holds.
+ */
+const ROWS = 6;
+
 /** A card with only the week's name and crown (before the live data, or without it). */
 function renderPlainWeek(w) {
   return `
     <div class="rotation-week is-plain${w.isKW ? '' : ' is-off-week'}">
       <div class="rotation-week-head"><span>${esc(weekName(w))}</span></div>
       <div class="rotation-crown rank-${esc(w.seat)}" aria-hidden="true">${CROWNS[w.seat] || '🛡️'}</div>
+      ${'<div></div>'.repeat(ROWS - 2)}
     </div>`;
 }
 // Only the cards and the one-line note change; the note under them is part of the page, so
@@ -86,14 +96,11 @@ function renderWeek(w) {
     : `<span class="rotation-tag is-empty">${esc(t('no_alliance'))}</span>`;
   return `
     <div class="rotation-week${current ? ' is-current' : ''}${w.state === 'done' ? ' is-done' : ''}${w.isKW ? '' : ' is-off-week'}">
-      <div class="rotation-week-head">
-        <span>${esc(weekName(w))}</span>
-        ${current ? `<span class="badge">${esc(t('this_week'))}</span>` : ''}
-      </div>
+      <div class="rotation-week-head"><span>${esc(weekName(w))}</span></div>
       <div class="rotation-crown rank-${esc(w.seat)}" aria-hidden="true">${CROWNS[w.seat] || '🛡️'}</div>
-      ${w.rank ? `<div class="rotation-seat">${esc(t('rank', { rank: w.rank }))}</div>` : ''}
-      ${tag}
-      ${w.override ? `<div class="rotation-override">${esc(t('override', { replaced: w.replaced }))}</div>` : ''}
+      <div class="rotation-seat">${w.rank ? esc(t('rank', { rank: w.rank })) : ''}</div>
+      <div class="rotation-tag-row">${tag}${current ? `<span class="badge">${esc(t('active'))}</span>` : ''}</div>
+      <div class="rotation-override">${w.override ? esc(t('override', { replaced: w.replaced })) : ''}</div>
       <div class="rotation-date">${esc(t(w.captured ? 'captured' : 'captures', { date }))}</div>
     </div>`;
 }

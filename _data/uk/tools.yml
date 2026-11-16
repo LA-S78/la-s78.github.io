@@ -767,7 +767,8 @@ live_data:
   updating: "⏳ Оновлення…"
 capitol_rotation:
   rank: 'Ранг #{rank}'
-  this_week: Цей тиждень
+  week_fri: Тиждень {n} Пт
+  active: АКТИВНО
   captures: Захоплення {date}
   captured: Захоплено {date}
   override: 'Заміна: замінює [{replaced}] цього тижня'

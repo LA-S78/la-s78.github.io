@@ -117,16 +117,18 @@ function renderScheduleGrid() {
         (w.key === 'downtime' && currentWeek === 0) || w.key === `week_${currentWeek}`;
       const color = getAllianceColor(w.seat);
 
+      // Four rows (week, tag + ACTIVE, what's at stake, loot), lined up across the cards
+      // (CSS subgrid): every card the same height, the tags on one line
       return `
       <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}">
         <div class="ops-week-header">
           <span class="ops-week-num">${esc(w.label)}</span>
+        </div>
+        <div class="ops-week-tag-row">
+          <span class="ops-week-tag ally-text" style="--ally: ${esc(color)}">[${esc(w.seat)}]</span>
           ${isCurrent ? `<span class="badge">${esc(t('active'))}</span>` : ''}
         </div>
-        <div class="ops-week-body">
-          <span class="ops-week-tag ally-text" style="--ally: ${esc(color)}">[${esc(w.seat)}]</span>
-          <span class="ops-week-sub">${esc(w.sub)}</span>
-        </div>
+        <span class="ops-week-sub">${esc(w.sub)}</span>
         <div class="ops-week-loot">
           <small>${esc(w.loot)}</small>
         </div>
