@@ -25,6 +25,10 @@
   // the page frame lose the "#…" on the way (Turbo keeps the fetched address), so it's noted
   // on the click and used when the page arrives.
   let pendingSection = '';
+  // Whether the page now showing was reached with Back / Forward (a Turbo "restore" visit,
+  // or a full page load from the browser's history): pages use it to put the reader back
+  // where they were (the calendar's day, js/calendar.js)
+  window.__cameBack = performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
 
   // --- AUTHENTICATION CONFIGURATION ---
   const AUTH_CONFIG = {
@@ -798,6 +802,7 @@
     const restore = event.detail?.action === 'restore';
     isNewNavigation = !restore;
     isRestoreVisit = restore;
+    window.__cameBack = restore;
   });
 
   // The language picker (_includes/structure/language-switcher.html): opens and closes on
