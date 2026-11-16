@@ -5,9 +5,9 @@
  * wherever an alliance tag is shown: the calendar (Capitol card, the week's king, the cycle
  * grid), the Capitol rotation, the alliance standings, the rewards tiers, the map's buff
  * summary and the King's console. The card holding it (a rotation week, a standings row, a
- * buff summary row) glows softly too, in the alliance's colour, like the header's lantern.
- * CSS: _css/style/30-components-cards.css (.is-my-ally, .is-my-ally-card). On the map
- * itself, your cities get an outline (js/map.js renderMyTerritory).
+ * buff summary row) is picked out too, in the alliance's colour. Both are still: a pulse
+ * was distracting.
+ * CSS: _css/style/30-components-cards.css (.is-my-ally, .is-my-ally-card).
  *
  * Tags are recognised by their text ("[WLO]" or "WLO"), accents and case ignored, so the
  * pages that draw them need no changes. Tags drawn later (data arriving, a view switched)
