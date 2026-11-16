@@ -40,6 +40,13 @@
 
   function enhance(select) {
     if (!select || upgraded.has(select)) return upgraded.get(select);
+    // Back/forward: the page loader (Turbo) shows its saved copy of the page, dropdown
+    // already drawn but not wired up. Take the old one apart and build it afresh.
+    const stale = select.parentElement;
+    if (stale?.classList.contains('site-select')) {
+      stale.parentNode.insertBefore(select, stale);
+      stale.remove();
+    }
     const id = select.id || `site-select-${++uid}`;
     if (!select.id) select.id = id;
     const wrap = document.createElement('div');
