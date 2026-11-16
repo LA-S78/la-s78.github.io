@@ -457,23 +457,23 @@ calendar:
   ev_close_desc: 'Sandıklar Çarşamba 00:00 GT''de sona erer: her şeyi o zamandan önce dağıtın.'
 calendar_events:
   reminder: Discord'da 1 saat önce hatırlat
-  reminder_hint: İttifakınızın uyarı kanalında yayınlanır ve yukarıda seçilen rolü etiketler.
-  reminder_hint_server: NAP Discord uyarı kanalında (ve katılan ittifaklarda) yayınlanır, yukarıda seçilen rolü etiketler.
-  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların gönderilebilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
-  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları gönderilemiyor.
+  reminder_hint: İttifakınızın uyarı kanalında yayınlanır ve yukarıda seçilen rol etiketlenir.
+  reminder_hint_server: NAP Discord'un uyarı kanalında (ve katılan ittifaklarda) yayınlanır ve yukarıda seçilen rol etiketlenir.
+  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların gönderilebilmesi için Discord''unuzda /registerbot çalıştırın.'
+  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu nedenle sunucu hatırlatıcıları gönderilemiyor.
   edit_heading: Etkinliği düzenle
   scope_label: Hangi etkinliklerin yönetileceği
   scope_server: "🌐 Sunucu geneli etkinlikler"
   scope_alliance: "🛡️ [{tag}] etkinlikleri"
   save_changes: "💾 Değişiklikleri kaydet"
   manage_mode: YÖNETİM MODU
-  session_active: Kimlik Doğrulamalı Oturum Aktif
+  session_active: Kimlik Doğrulanmış Oturum Aktif
   create_operation: Operasyon Oluştur
   kingdom_admin: "👑 KRALLIK YÖNETİCİSİ"
-  kingdom_desc: "Sunucu etkinlikleri yönetiliyor"
+  kingdom_desc: Sunucu etkinliklerini yönetme
   kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
-  leadership: "🛡️ [{tag}] LİDERLİK"
-  leadership_desc: "[{tag}] etkinlikleri yönetiliyor"
+  leadership: "🛡️ [{tag}] YÖNETİMİ"
+  leadership_desc: "[{tag}] etkinliklerini yönetme"
   alliance_heading: "[{tag}] Operasyonu Oluştur"
   preset: Etkinlik türü
   type_custom: Özel
@@ -486,36 +486,36 @@ calendar_events:
   preset_kill_event: "🩸 Öldürme Etkinliği (24.0s)"
   preset_kvk_battle: "👑 Krallık Savaşı (1.0s)"
   preset_undead_siege: "💀 Ölümsüz Kuşatması (1.0s)"
-  preset_gear_upgrade: "🛡️ Ekipman Geliştirme (48.0s)"
+  preset_gear_upgrade: "🛡️ Ekipman Yükseltme (48.0s)"
   preset_cheese_trap: "🧀 Peynir Tuzağı (0.5s)"
   title: Etkinlik Başlığı
   title_example: ör. Kovan Savunma Tatbikatı veya Karakol Saldırısı
   date: Başlangıç Tarihi (YYYY-AA-GG)
-  time: Oyun Zamanı (SS:DD UTC-2)
-  time_hint: Sunucu Oyun Zamanı (5 dakikalık artışlara yuvarlanır)
+  time: Game Time (SS:DD UTC-2)
+  time_hint: Sunucu Game Time (5 dakikalık artışlara yuvarlanır)
   duration: Süre (Saat)
   frequency: Sıklık
   once: Tek Seferlik Etkinlik (Tekrar etmez)
-  every_2_days: 2 Günde Bir Tekrarlar
-  weekly: Haftalık Tekrarlar (Aynı gün ve saat)
+  every_2_days: Her 2 Günde Bir Tekrarla
+  weekly: Haftalık Tekrarla (Aynı gün ve saat)
   alert_level: Discord Uyarı Seviyesi
   notify_role: "🔔 Varsayılan İttifak Rolünü Etiketle (@everyone'a döner)"
-  notify_custom: "🎯 Hedef Belirli Rol ID'si (Tek seferlik geçersiz kılma)"
-  notify_everyone: "🚨 @everyone Yayınını Zorla (Zorunlu Operasyon)"
-  notify_none: "🔕 Sessiz (Sadece Takvim - Discord Bildirimi Yok)"
-  role_id: Belirli Rol ID'si
-  role_id_hint: "(Sadece Belirli Role Hedefleme için gereklidir)"
-  role_id_title: Geçerli bir 17-20 haneli Discord Rol ID'si olmalıdır
+  notify_custom: "🎯 Belirli Rol Kimliğini Hedefle (Tek seferlik geçersiz kılma)"
+  notify_everyone: "🚨 Zorunlu @everyone Yayını (Zorunlu Operasyon)"
+  notify_none: "🔕 Sessiz (Yalnızca Takvim - Discord Ping'i yok)"
+  role_id: Belirli Rol Kimliği
+  role_id_hint: "(Yalnızca Belirli Rolü Hedefle için gereklidir)"
+  role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
   details: Talimatlar / Toplanma Noktası
-  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere liderlik eder. Sesli iletişim açık.
+  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere öncülük eder. Sesli iletişim açık.
   publish: Takvimde Yayınla
   publishing: Yayınlanıyor...
-  bad_time: Oyun Zamanı 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10, vb.)
-  bad_role: Lütfen özel uyarı hedefi için geçerli bir 17-20 haneli Discord Rol ID'si girin.
+  bad_time: Game Time 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10, vb.)
+  bad_role: Lütfen özel uyarı hedefi için geçerli bir 17-20 haneli Discord Rol Kimliği girin.
   save_failed: Etkinlik kaydedilemedi
   published: Operasyon başarıyla yayınlandı!
   delete_heading: Bu etkinliği sil?
-  delete_repeats: 'Bu etkinlik tekrarlanıyor ({repeat}): Sadece bu değil, tüm tekrarlar kaldırılacak.'
+  delete_repeats: 'Bu etkinlik tekrarlanıyor ({repeat}): sadece bu değil, tüm tekrarlar kaldırılacak.'
   delete_final: Bu işlem geri alınamaz.
   delete_confirm: Sil
   delete_failed: Etkinlik silinemedi

@@ -456,67 +456,67 @@ calendar:
   ev_close_title: Belohnungen schließen — {week}
   ev_close_desc: 'Truhen verfallen am Mittwoch um 00:00 GT: Alles davor verteilen.'
 calendar_events:
-  reminder: Auf Discord 1 Stunde vorher erinnern
-  reminder_hint: Gepostet im Alarm-Kanal deiner Allianz, mit Erwähnung der oben gewählten Rolle.
-  reminder_hint_server: Gepostet im Alarm-Kanal des NAP-Discords (und in Allianzen, die zugestimmt haben), mit Erwähnung der oben gewählten Rolle.
+  reminder: 1 Stunde vorher auf Discord erinnern
+  reminder_hint: Im Alarm-Kanal deiner Allianz gepostet, mit Ping auf die oben gewählte Rolle.
+  reminder_hint_server: Im Alarm-Kanal des NAP-Discord gepostet (und in Allianzen, die zugestimmt haben), mit Ping auf die oben gewählte Rolle.
   reminder_no_channel: 'Deine Allianz hat noch keinen Alarm-Kanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
-  reminder_no_server_channel: Der NAP-Alarm-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können Server-Erinnerungen nicht gepostet werden.
+  reminder_no_server_channel: Der NAP-Alarm-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können keine Server-Erinnerungen gepostet werden.
   edit_heading: Event bearbeiten
-  scope_label: Wessen Events verwalten
+  scope_label: Dessen Events verwalten
   scope_server: "🌐 Serverweite Events"
   scope_alliance: "🛡️ [{tag}] Events"
   save_changes: "💾 Änderungen speichern"
-  manage_mode: VERWALTUNGSMODUS
+  manage_mode: VERWALTUNGS-MODUS
   session_active: Authentifizierte Sitzung aktiv
   create_operation: Operation erstellen
   kingdom_admin: "👑 KÖNIGREICH-ADMIN"
-  kingdom_desc: "Server-Events verwalten"
-  kingdom_heading: Königreich-Operation erstellen ([GLOBAL])
+  kingdom_desc: Server-Events verwalten
+  kingdom_heading: Königreichs-Operation erstellen ([GLOBAL])
   leadership: "🛡️ [{tag}] FÜHRUNG"
-  leadership_desc: "[{tag}]-Events verwalten"
+  leadership_desc: "[{tag}] Events verwalten"
   alliance_heading: "[{tag}] Operation erstellen"
   preset: Event-Typ
   type_custom: Benutzerdefiniert
   type_custom_hint: Leeres Formular
   duration_h: "{n}h"
   preset_custom: "🛠️ Benutzerdefinierte Operation (Leer)"
-  preset_crystal_cluster: "🔮 Kristalltal (0.5h)"
-  preset_elixir_scramble: "🧪 Königliches Gerangel (0.5h)"
-  preset_survival_battle: "⚔️ Überlebenskampf (4.0h)"
-  preset_kill_event: "🩸 Kill-Event (24.0h)"
-  preset_kvk_battle: "👑 Königreichskrieg (1.0h)"
-  preset_undead_siege: "💀 Untoten-Belagerung (1.0h)"
-  preset_gear_upgrade: "🛡️ Ausrüstungs-Upgrade (48.0h)"
-  preset_cheese_trap: "🧀 Cheese-Falle (0.5h)"
+  preset_crystal_cluster: "🔮 Kristalltal (0,5h)"
+  preset_elixir_scramble: "🧪 Königliches Gerangel (0,5h)"
+  preset_survival_battle: "⚔️ Überlebenskampf (4,0h)"
+  preset_kill_event: "🩸 Kill-Event (24,0h)"
+  preset_kvk_battle: "👑 KvK-Kampf (1,0h)"
+  preset_undead_siege: "💀 Untoten-Belagerung (1,0h)"
+  preset_gear_upgrade: "🛡️ Ausrüstungs-Upgrade (48,0h)"
+  preset_cheese_trap: "🧀 Cheese-Falle (0,5h)"
   title: Event-Titel
-  title_example: z.B. Hive-Verteidigungsübung oder Außenposten-Angriff
+  title_example: z. B. Hive-Verteidigung oder Außenposten-Angriff
   date: Startdatum (JJJJ-MM-TT)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Server-Spielzeit (rastet in 5-Minuten-Schritten ein)
+  time_hint: Server Game Time (rastet in 5-Minuten-Schritten ein)
   duration: Dauer (Stunden)
   frequency: Häufigkeit
-  once: Einmaliges Event (wiederholt sich nicht)
+  once: Einmaliges Event (Wiederholt sich nicht)
   every_2_days: Wiederholt sich alle 2 Tage
-  weekly: Wiederholt sich wöchentlich (gleicher Tag & Uhrzeit)
+  weekly: Wiederholt sich wöchentlich (Gleicher Tag & Zeit)
   alert_level: Discord-Alarmstufe
-  notify_role: "🔔 Standard-Allianzrolle erwähnen (Fallback auf @everyone)"
-  notify_custom: "🎯 Zielspezifische Rollen-ID (Einmaliges Überschreiben)"
+  notify_role: "🔔 Standard-Allianzrolle pingen (Fallback auf @everyone)"
+  notify_custom: "🎯 Spezifische Rollen-ID (Einmaliger Override)"
   notify_everyone: "🚨 @everyone-Broadcast erzwingen (Verpflichtende Operation)"
-  notify_none: "🔕 Lautlos (nur Kalender - kein Discord-Ping)"
+  notify_none: "🔕 Lautlos (Nur Kalender - Kein Discord-Ping)"
   role_id: Spezifische Rollen-ID
-  role_id_hint: "(Nur für zielspezifische Rollen erforderlich)"
-  role_id_title: Muss eine gültige 17-20-stellige Discord-Rollen-ID sein
-  details: Anweisungen / Treffpunkt
-  details_example: z.B. Versammlung bei Hive Alpha. R4 leiten Rallyes. Voice-Chat aktiv.
+  role_id_hint: "(Nur für spezifische Zielrolle erforderlich)"
+  role_id_title: Muss eine gültige 17-20 stellige Discord-Rollen-ID sein
+  details: Anweisungen / Sammelpunkt
+  details_example: z. B. Treffen bei Hive Alpha. R4 leiten Rallys. Voice-Chat aktiv.
   publish: Im Kalender veröffentlichen
-  publishing: Wird veröffentlicht...
-  bad_time: Die Game Time muss in 5-Minuten-Schritten festgelegt werden (:00, :05, :10, usw.)
-  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Alarmziel ein.
+  publishing: Veröffentliche...
+  bad_time: Die Game Time muss in 5-Minuten-Schritten eingestellt sein (:00, :05, :10, usw.)
+  bad_role: Bitte gib eine gültige 17-20 stellige Discord-Rollen-ID für das benutzerdefinierte Alarmziel ein.
   save_failed: Speichern des Events fehlgeschlagen
   published: Operation erfolgreich veröffentlicht!
   delete_heading: Dieses Event löschen?
-  delete_repeats: 'Es wiederholt sich ({repeat}): jede Wiederholung wird entfernt, nicht nur diese eine.'
-  delete_final: Das kann nicht rückgängig gemacht werden.
+  delete_repeats: 'Es wiederholt sich ({repeat}): Jede Wiederholung wird entfernt, nicht nur diese.'
+  delete_final: Dies kann nicht rückgängig gemacht werden.
   delete_confirm: Löschen
   delete_failed: Löschen des Events fehlgeschlagen
   removed: Operation entfernt.
