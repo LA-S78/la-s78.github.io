@@ -140,7 +140,7 @@ caravan:
   this_player: ce joueur
   confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde revient en disponible (les noms et heures sont conservés).
 chart_editor:
-  edit_title: "✏️ Modifier le graphique ou tableau"
+  edit_title: "✏️ Modifier le graphique ou le tableau"
   new_title: "➕ Nouveau graphique ou tableau"
   type: Type
   type_bar: "📊 Barres"
@@ -151,10 +151,10 @@ chart_editor:
   title: Titre
   title_example: ex. Scores du Duel d'Alliances
   note: Explication
-  note_example: ex. Minimum 15M de points de Duel requis avant la réinitialisation du vendredi
-  who_sees: Qui peut le voir
-  officers_only: "Officiers uniquement (R4/R5)"
-  all_members: "Tous les membres de l'alliance"
+  note_example: ex. 15M de points de Duel minimum requis avant la réinitialisation de vendredi
+  who_sees: Qui peut voir ceci
+  officers_only: Officiers uniquement (R4/R5)
+  all_members: Tous les membres de l'alliance
   data: Données
   data_source: Source des données
   paste: "📋 Coller un tableau"
@@ -165,9 +165,9 @@ chart_editor:
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la carte permet de récupérer les chiffres les plus récents plus tard.'
-  load_first: Chargez d'abord la feuille (⤓ Charger depuis Google).
-  preview: Prévisualiser
+  link_help: 'Sheets : Partager → « Toute personne disposant du lien peut consulter » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupère les derniers chiffres plus tard.'
+  load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
+  preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
   rows_one: "{n} ligne"
@@ -176,34 +176,34 @@ chart_editor:
   columns_other: "{n} colonnes"
   at_most_500: "(500 maximum)"
   labels: Noms (étiquettes)
-  numbers_to_show: Chiffres à afficher
+  numbers_to_show: Nombres à afficher
   labels_swapped: Noms (une ligne ou barre chacun)
-  swap_line: "⇄ Inverser les lignes et colonnes : une ligne par rangée, les colonnes en bas"
-  swap_bar: "⇄ Inverser les lignes et colonnes : les colonnes en barres, une couleur par rangée"
+  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
   swap_help: 'Pour les feuilles avec une rangée par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
-  rows_count: "{n} sur 6 choisis"
-  columns_along: Colonnes le long du bas (dans l'ordre de la feuille)
-  numbers: Chiffres
-  several_columns: Plusieurs colonnes de chiffres
+  rows_count: "{n} sur 6 choisi(e)s"
+  columns_along: Colonnes en bas (dans l'ordre de la feuille)
+  numbers: Nombres
+  several_columns: Plusieurs colonnes de nombres
   side_by_side: Côte à côte
-  stacked_totals: 'Empilés : totaux'
-  stacked_percent: 'Empilés : chaque barre à 100%'
+  stacked_totals: 'Empilé : totaux'
+  stacked_percent: 'Empilé : chaque barre à 100%'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: "🚦 Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte"
-  traffic_size: "🚦 Rouge → jaune → vert (bas → haut) : par rang, les meilleurs en vert"
-  traffic_reverse: "↕️ Inverser : bas est bon (vert), haut est mauvais (rouge)"
+  traffic_size: "🚦 Rouge → jaune → vert (bas → haut) : par rang, haut en vert"
+  traffic_reverse: "↕️ Inverser : le bas est bon (vert), le haut est mauvais (rouge)"
   traffic_target: "🚦 Rouge → jaune → vert selon la proximité de la cible"
   traffic_target_reverse: "↕️ Inverser : plus on est loin en dessous de la cible, mieux c'est"
   donut: Donut (anneau)
-  target: Cible pour tout le monde
+  target: Cible pour tous
   target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le chiffre ci-dessus)"
-  highlight_where: Surligner les lignes où
-  no_highlight: "(aucun surlignage)"
+  use_number_above: "(utiliser le nombre ci-dessus)"
+  highlight_where: Mettre en évidence les lignes où
+  no_highlight: "(aucune mise en évidence)"
   at_least: est au moins
   at_least_example: ex. 300M
 charts:
@@ -457,65 +457,65 @@ calendar:
   ev_close_desc: 'Les coffres expirent mercredi à 00:00 GT : distribuez tout avant cette échéance.'
 calendar_events:
   reminder_hint: Publié dans le canal d'alerte de votre alliance.
-  reminder_hint_server: Publié dans le canal d'alerte du Discord NAP, et dans les alliances ayant opté pour cette option.
-  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : utilisez /registerbot sur votre Discord pour que les rappels puissent être publiés.'
-  reminder_no_server_channel: Le canal d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), les rappels du serveur ne peuvent donc pas être publiés.
+  reminder_hint_server: Publié dans le canal d'alerte Discord du NAP et dans les alliances ayant opté pour.
+  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : exécutez /registerbot sur votre Discord pour que les rappels puissent être publiés.'
+  reminder_no_server_channel: Le canal d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), donc les rappels du serveur ne peuvent pas être publiés.
   edit_heading: Modifier l'événement
-  scope_label: Gérer les événements de
-  scope_server: "Événements du serveur"
-  scope_alliance: "Événements de [{tag}]"
+  scope_label: Gérer les événements de qui
+  scope_server: Événements à l'échelle du serveur
+  scope_alliance: Événements [{tag}]
   save_changes: "💾 Enregistrer les modifications"
   manage_mode: MODE GESTION
   session_active: Session authentifiée active
   create_operation: Créer une Opération
   kingdom_admin: "👑 ADMIN ROYAUME"
-  kingdom_desc: Gestion des événements du serveur
-  kingdom_heading: Créer une opération du Royaume ([GLOBAL])
-  leadership: "🛡️ LEADERSHIP [{tag}]"
+  kingdom_desc: Gestion des événements serveur
+  kingdom_heading: Créer une Opération de Royaume ([GLOBAL])
+  leadership: "🛡️ DIRECTION [{tag}]"
   leadership_desc: Gestion des événements [{tag}]
-  alliance_heading: Créer une opération [{tag}]
+  alliance_heading: Créer une Opération [{tag}]
   preset: Type d'événement
   type_custom: Personnalisé
-  type_custom_hint: Formulaire vierge
+  type_custom_hint: Formulaire vide
   duration_h: "{n}h"
-  preset_custom: "🛠️ Opération personnalisée (Vierge)"
+  preset_custom: "🛠️ Opération personnalisée (Vide)"
   preset_crystal_cluster: "🔮 Vallée de Cristal (0.5h)"
   preset_elixir_scramble: "🧪 Mêlée Royale (0.5h)"
   preset_survival_battle: "⚔️ Bataille de Survie (4.0h)"
-  preset_kill_event: "🩸 Kill Event (24.0h)"
+  preset_kill_event: "🩸 Événement de meurtre (24.0h)"
   preset_kvk_battle: "👑 Bataille KvK (1.0h)"
   preset_undead_siege: "💀 Siège des Morts-Vivants (1.0h)"
   preset_gear_upgrade: "🛡️ Amélioration d'équipement (48.0h)"
   preset_cheese_trap: "🧀 Piège à Fromage (0.5h)"
   title: Titre de l'événement
-  title_example: ex. Entraînement défense de ruche ou Assaut d'avant-poste
-  date: Date de début (AAAA-JJ-MM)
+  title_example: ex. Exercice de Défense de Ruche ou Assaut d'Avant-poste
+  date: Date de début (AAAA-MM-JJ)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time du serveur (par tranches de 5 minutes)
+  time_hint: Game Time du serveur (s'ajuste par incréments de 5 minutes)
   duration: Durée (Heures)
   frequency: Fréquence
-  once: Événement unique (Ne se répète pas)
-  every_2_days: Se répète tous les 2 jours
-  weekly: Se répète chaque semaine (Même jour et heure)
+  once: Événement unique (ne se répète pas)
+  every_2_days: Répétition tous les 2 jours
+  weekly: Répétition hebdomadaire (même jour et heure)
   alert_level: Rappel Discord (1 heure avant)
-  notify_off: "Aucun rappel"
-  notify_role: "Notifier le rôle d'alerte de l'alliance"
-  notify_custom: "Notifier un rôle spécifique"
-  notify_everyone: "Notifier @everyone"
-  notify_none: "Publier sans notification"
+  notify_off: Aucun rappel
+  notify_role: Pinger le rôle d'alerte de l'alliance
+  notify_custom: Pinger un rôle spécifique
+  notify_everyone: Pinger @everyone
+  notify_none: Publier sans ping
   role_id: ID du rôle spécifique
-  role_id_hint: "(uniquement pour « Notifier un rôle spécifique »)"
+  role_id_hint: "(uniquement pour « Pinger un rôle spécifique »)"
   role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
   details: Instructions / Point de ralliement
-  details_example: ex. Rassemblement à la Ruche Alpha. R4 dirigent les ralliements. Communication vocale activée.
+  details_example: ex. Rassemblement à la Ruche Alpha. R4s mènent les ralliements. Chat vocal actif.
   publish: Publier dans le calendrier
   publishing: Publication en cours...
   bad_time: Le Game Time doit être défini par tranches de 5 minutes (:00, :05, :10, etc.)
-  bad_role: Veuillez saisir un ID de rôle Discord valide de 17-20 chiffres pour la cible de l'alerte personnalisée.
+  bad_role: Veuillez entrer un ID de rôle Discord valide de 17-20 chiffres pour la cible de l'alerte personnalisée.
   save_failed: Échec de l'enregistrement de l'événement
   published: Opération publiée avec succès !
   delete_heading: Supprimer cet événement ?
-  delete_repeats: 'Il se répète ({repeat}) : chaque répétition sera supprimée, pas seulement celle-ci.'
+  delete_repeats: 'Il se répète ({repeat}) : toutes les répétitions seront supprimées, pas seulement celle-ci.'
   delete_final: Ceci ne peut pas être annulé.
   delete_confirm: Supprimer
   delete_failed: Échec de la suppression de l'événement

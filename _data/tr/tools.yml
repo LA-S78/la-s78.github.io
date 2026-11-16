@@ -140,8 +140,8 @@ caravan:
   this_player: bu oyuncu
   confirm_new_week: Yeni bir hafta başlasın mı? Herkes uygun olanlara dönecek (isimler ve saatler aynı kalır).
 chart_editor:
-  edit_title: "✏️ Grafik veya tabloyu düzenle"
-  new_title: "➕ Yeni grafik veya tablo"
+  edit_title: "✏️ Çizelgeyi veya tabloyu düzenle"
+  new_title: "➕ Yeni çizelge veya tablo"
   type: Tür
   type_bar: "📊 Sütun"
   type_line: "📈 Çizgi"
@@ -149,26 +149,26 @@ chart_editor:
   type_progress: "🎯 İlerleme"
   type_table: "📋 Tablo"
   title: Başlık
-  title_example: ör. İttifak Düellosu puanları
+  title_example: ör. İttifak Düellosu skorları
   note: Açıklama
-  note_example: ör. Cuma sıfırlamasına kadar minimum 15M Düello puanı gerekir
+  note_example: ör. Cuma sıfırlamasına kadar en az 15M Düello puanı gerekli
   who_sees: Kimler görebilir
-  officers_only: "Sadece yetkililer (R4/R5)"
-  all_members: "Tüm ittifak üyeleri"
+  officers_only: Sadece yöneticiler (R4/R5)
+  all_members: Tüm ittifak üyeleri
   data: Veri
   data_source: Veri kaynağı
   paste: "📋 Tablo yapıştır"
-  link: "🔗 Google E-Tablo / Doküman bağlantısı"
-  paste_help: Google E-Tablolar veya Excel'den hücreleri kopyalayın (başlık satırı önce olacak şekilde) ve buraya yapıştırın.
+  link: "🔗 Google Sayfası / Doküman bağlantısı"
+  paste_help: Google Sheets veya Excel'den hücreleri kopyalayın (önce başlık satırı) ve buraya yapıştırın.
   tab_name: Sekme adı (isteğe bağlı)
   range: Aralık, ör. A1:D20 (isteğe bağlı)
-  doc_table: Dokümandaki hangi tablo (1, 2...)
+  doc_table: Dokümandaki tablo (1, 2…)
   load: "⤓ Google'dan yükle"
   loading: "⤓ Yükleniyor…"
-  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi senkronize et” özelliği daha sonra en güncel sayıları çeker.'
-  load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
+  link_help: 'Sheets: Paylaş → “Bağlantıya sahip herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Docs: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi eşitle” butonuna basarak en son verileri daha sonra çekebilirsiniz.'
+  load_first: Önce sayfayı yükleyin (⤓ Google'dan yükle).
   preview: Önizleme
-  preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
+  preview_empty: Çizelgeyi görmek için yukarıya bir tablo yapıştırın.
   size: "{rows} × {columns}"
   rows_one: "{n} satır"
   rows_other: "{n} satır"
@@ -177,34 +177,34 @@ chart_editor:
   at_most_500: "(en fazla 500)"
   labels: İsimler (etiketler)
   numbers_to_show: Gösterilecek sayılar
-  labels_swapped: İsimler (her biri bir satır veya çubukta)
-  swap_line: "⇄ Satır ve sütunları değiştir: satır başına bir çizgi, altta sütunlar"
-  swap_bar: "⇄ Satır ve sütunları değiştir: sütunlar çubuk olarak, satır başına bir renk"
-  swap_help: 'Satır başına bir oyuncu ve sütun başına bir hafta olan tablolar için: oyuncuları haftalar boyunca takip etmek için bunu işaretleyin.'
+  labels_swapped: İsimler (her biri bir satır veya sütun)
+  swap_line: "⇄ Satır ve sütunları değiştir: satır başına bir çizgi, sütunlar altta"
+  swap_bar: "⇄ Satır ve sütunları değiştir: sütunlar sütun grafiği olarak, satır başına bir renk"
+  swap_help: 'Oyuncu başına bir satır ve hafta başına bir sütun içeren sayfalar için: oyuncuları haftalar boyunca takip etmek için bunu işaretleyin.'
   rows_to_draw: Çizilecek satırlar (en fazla 6)
   rows_filter: İsim ara…
-  rows_count: "{n} / 6 seçildi"
-  columns_along: Alttaki sütunlar (tablo sırasına göre)
+  rows_count: 6'da {n} seçildi
+  columns_along: Alttaki sütunlar (sayfa sırasına göre)
   numbers: Sayılar
   several_columns: Birden fazla sayı sütunu
   side_by_side: Yan yana
-  stacked_totals: 'Yığılmış: toplamlar'
-  stacked_percent: 'Yığılmış: her çubuk %100''e'
+  stacked_totals: 'Yığın: toplamlar'
+  stacked_percent: 'Yığın: her sütun %100''e'
   vertical: Dikey sütunlar
-  vertical_leaderboard: Dikey sütunlar (sıralama tablosu yerine)
+  vertical_leaderboard: Dikey sütunlar (skor tablosu yerine)
   traffic_columns: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil"
-  traffic_size: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): dereceye göre, en üsttekiler yeşil"
-  traffic_reverse: "↕️ Ters çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
-  traffic_target: "🚦 Her birinin hedefe yakınlığına göre kırmızı → sarı → yeşil"
-  traffic_target_reverse: "↕️ Ters çevir: hedefin ne kadar altında kalırsa o kadar iyidir"
+  traffic_size: "🚦 Kırmızı → sarı → yeşil (düşük → yüksek): dereceye göre, en üst yeşil"
+  traffic_reverse: "↕️ Tersine çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
+  traffic_target: "🚦 Hedefe yakınlığa göre kırmızı → sarı → yeşil"
+  traffic_target_reverse: "↕️ Tersine çevir: hedefin ne kadar altında kalırsa o kadar iyi"
   donut: Halka (donut)
   target: Herkes için hedef
   target_example: ör. 15M veya 15000000
-  target_column: "…veya hedef sütunu"
+  target_column: "…veya bir hedef sütunu"
   use_number_above: "(yukarıdaki sayıyı kullan)"
-  highlight_where: 'Satırları vurgula:'
-  no_highlight: "(vurgulama yok)"
-  at_least: en az
+  highlight_where: Şu satırları vurgula
+  no_highlight: "(vurgu yok)"
+  at_least: en az şu kadar
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}
@@ -456,22 +456,22 @@ calendar:
   ev_close_title: Ödüller Kapanıyor — {week}
   ev_close_desc: 'Sandıklar Çarşamba 00:00 GT''de sona erer: her şeyi o zamandan önce dağıtın.'
 calendar_events:
-  reminder_hint: İttifakınızın uyarı kanalında paylaşıldı.
-  reminder_hint_server: NAP Discord'un uyarı kanalında ve bildirimleri açan ittifaklarda paylaşıldı.
-  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: Hatırlatıcıların paylaşılabilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
-  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları paylaşılamaz.
+  reminder_hint: İttifakınızın uyarı kanalında yayınlandı.
+  reminder_hint_server: NAP Discord'un uyarı kanalında ve bildirimleri açan ittifaklarda yayınlandı.
+  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların yayınlanabilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
+  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadığı (NAP_ALERT_CHANNEL_ID) için sunucu hatırlatıcıları gönderilemiyor.
   edit_heading: Etkinliği düzenle
   scope_label: Hangi etkinliklerin yönetileceği
-  scope_server: "Sunucu geneli etkinlikler"
+  scope_server: Sunucu genelindeki etkinlikler
   scope_alliance: "[{tag}] etkinlikleri"
   save_changes: "💾 Değişiklikleri kaydet"
   manage_mode: YÖNETİM MODU
-  session_active: Oturum Doğrulandı ve Aktif
+  session_active: Doğrulanmış Oturum Aktif
   create_operation: Operasyon Oluştur
   kingdom_admin: "👑 KRALLIK YÖNETİCİSİ"
   kingdom_desc: Sunucu etkinliklerini yönetme
   kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
-  leadership: "🛡️ [{tag}] LİDERLİĞİ"
+  leadership: "🛡️ [{tag}] YÖNETİMİ"
   leadership_desc: "[{tag}] etkinliklerini yönetme"
   alliance_heading: "[{tag}] Operasyonu Oluştur"
   preset: Etkinlik türü
@@ -488,34 +488,34 @@ calendar_events:
   preset_gear_upgrade: "🛡️ Ekipman Yükseltme (48.0s)"
   preset_cheese_trap: "🧀 Peynir Tuzağı (0.5s)"
   title: Etkinlik Başlığı
-  title_example: 'Örn: Kovan Savunma Tatbikatı veya Karakol Saldırısı'
+  title_example: ör. Kovan Savunma Tatbikatı veya Karakol Saldırısı
   date: Başlangıç Tarihi (YYYY-AA-GG)
   time: Game Time (SS:DD UTC-2)
-  time_hint: Sunucu Game Time (5 dakikalık artışlara yuvarlanır)
+  time_hint: Sunucu Game Time (5 dakikalık artışlarla ayarlanır)
   duration: Süre (Saat)
   frequency: Sıklık
   once: Tek Seferlik Etkinlik (Tekrarlanmaz)
   every_2_days: Her 2 Günde Bir Tekrarlanır
-  weekly: Haftalık Tekrarlanır (Aynı gün ve saat)
+  weekly: Haftalık Tekrarlanır (Aynı gün ve saatte)
   alert_level: Discord hatırlatıcısı (1 saat önce)
-  notify_off: "Hatırlatıcı yok"
-  notify_role: "İttifakın uyarı rolünü etiketle"
-  notify_custom: "Belirli bir rolü etiketle"
-  notify_everyone: "@everyone etiketle"
-  notify_none: "Etiketlemeden paylaş"
-  role_id: Belirli Rol Kimliği (ID)
-  role_id_hint: "(sadece “Belirli bir rolü etiketle” için)"
-  role_id_title: 17-20 haneli geçerli bir Discord Rol Kimliği olmalıdır
+  notify_off: Hatırlatıcı yok
+  notify_role: İttifakın uyarı rolünü etiketle
+  notify_custom: Belirli bir rolü etiketle
+  notify_everyone: "@everyone'u etiketle"
+  notify_none: Etiketlemeden gönder
+  role_id: Belirli Rol Kimliği
+  role_id_hint: "(yalnızca “Belirli bir rolü etiketle” için)"
+  role_id_title: Geçerli 17-20 haneli bir Discord Rol Kimliği olmalıdır
   details: Talimatlar / Toplanma Noktası
-  details_example: 'Örn: Kovan Alfa''da toplanın. R4''ler rallileri yönetecek. Sesli iletişim açık.'
+  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere liderlik eder. Sesli iletişim açık.
   publish: Takvimde Yayınla
   publishing: Yayınlanıyor...
-  bad_time: Game Time 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10, vb.)
-  bad_role: Özel uyarı hedefi için lütfen 17-20 haneli geçerli bir Discord Rol Kimliği girin.
+  bad_time: Game Time 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10 vb.)
+  bad_role: Özel uyarı hedefi için lütfen geçerli 17-20 haneli bir Discord Rol Kimliği girin.
   save_failed: Etkinlik kaydedilemedi
   published: Operasyon başarıyla yayınlandı!
   delete_heading: Bu etkinlik silinsin mi?
-  delete_repeats: 'Bu etkinlik tekrarlanıyor ({repeat}): sadece bu değil, tüm tekrarları silinecektir.'
+  delete_repeats: 'Bu etkinlik tekrarlanıyor ({repeat}): sadece bu değil, tüm tekrarları silinecek.'
   delete_final: Bu işlem geri alınamaz.
   delete_confirm: Sil
   delete_failed: Etkinlik silinemedi
