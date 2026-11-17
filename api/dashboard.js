@@ -91,7 +91,7 @@ async function respond(req, res) {
     if (req.body?.action === 'nominate-link') {
       return nominateLink(req, res, { gist, mapState, tag, access });
     }
-    return editDashboard(req, res, { gist, tag, access, session });
+    return editDashboard(req, res, { gist, tag, access, session, alliances });
   }
 
   const body = {
@@ -103,7 +103,7 @@ async function respond(req, res) {
       color: sanitizeAlliances({ [tag]: alliances[tag] || {} }, await getRoleColors())[tag].color,
     },
     dashboard: visibleDashboard(
-      readDashboard(gistJson(gist, dashboardFile(tag), {}), tag),
+      readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag),
       access.leader,
     ),
   };
@@ -131,12 +131,12 @@ async function respond(req, res) {
  * Leaders' edits to their alliance's dashboard (Stewards: any alliance): save, delete or move
  * a chart or table. Saved with updateGist, so edits made at the same moment are all kept.
  */
-async function editDashboard(req, res, { gist, tag, access, session }) {
+async function editDashboard(req, res, { gist, tag, access, session, alliances }) {
   if (!access.leader) {
     return res.status(403).json({ error: say('api_dashboard.leaders_only') });
   }
   const body = req.body || {};
-  const file = dashboardFile(tag);
+  const file = dashboardFile(tag, alliances);
 
   // Read a Google Sheet / Doc for the editor's preview (nothing is saved).
   if (body.action === 'load-source') {

@@ -8,6 +8,19 @@
 // brings fresh page elements, and the ones already set up are remembered here. (Not a
 // data- attribute: Turbo's back-button copy of the page would keep it.)
 window.__calendarStarted = window.__calendarStarted || new WeakSet();
+
+/**
+ * The same alliance: the same letters, accents aside (RÂVN = RAVN), letter case kept (RâvN
+ * and RÂVN are two alliances; owner, 2026-11-17). As js/tags.js, for this classic script.
+ */
+function sameAllianceTag(a, b) {
+  const letters = (t) =>
+    String(t || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  return Boolean(letters(a)) && letters(a) === letters(b);
+}
 async function initCalendar() {
   const elContent = document.getElementById('calendar-content');
   if (!elContent || window.__calendarStarted.has(elContent)) return;
@@ -378,7 +391,9 @@ async function initCalendar() {
             evt.id.startsWith('evt-') &&
             sessionScope &&
             evt.scope &&
-            evt.scope.toLowerCase() === sessionScope.toLowerCase(),
+            (evt.scope.toLowerCase() === 'global'
+              ? sessionScope.toLowerCase() === 'global'
+              : sameAllianceTag(evt.scope, sessionScope)),
           // Leaders get the "Edit events" button that shows Edit / Delete on their events,
           // and their management controls and event form just under it (shown while editing)
           canManage: () => isManagementSession,
@@ -401,9 +416,7 @@ async function initCalendar() {
           e.type === 'rotation'
         )
           return true;
-        return (
-          Boolean(activeAlliance) && e.scope.trim().toLowerCase() === activeAlliance.toLowerCase()
-        );
+        return Boolean(activeAlliance) && sameAllianceTag(e.scope, activeAlliance);
       })
       .map((e) => {
         // The site's own milestones in the page's language; events leaders write stay as written.

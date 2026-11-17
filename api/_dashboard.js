@@ -11,32 +11,22 @@ import { chestCounts } from './_nomination_assign.js';
 import { describeRewardPeriod } from './_reward_period.js';
 import { sourceRequest } from './_google_source.js';
 import { say } from './_messages.js';
+import { findTag, tagSlug } from './_alliances.js';
 
 /** Most bytes one alliance's dashboard file may hold (thousands of table rows). */
 export const MAX_DASHBOARD_BYTES = 150 * 1024;
 
-/** Tags compared without letter case or accents (RÂVN = ravn). */
-export function foldTag(tag) {
-  return String(tag || '')
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .trim()
-    .toLowerCase();
-}
-
-/** The alliance's key in map-state.json for a tag written any way, or null. */
+/** The alliance's key in map-state.json for a tag written another way, or null (findTag). */
 export function findAllianceKey(alliances = {}, tag) {
-  const want = foldTag(tag);
-  if (!want) return null;
-  return Object.keys(alliances).find((key) => foldTag(key) === want) || null;
+  return findTag(Object.keys(alliances || {}), tag);
 }
 
-/** The Gist file holding an alliance's dashboard (letters and digits only: RÂVN -> RAVN). */
-export function dashboardFile(tag) {
-  const slug = foldTag(tag)
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, '');
-  return `dashboard-${slug || 'UNKNOWN'}.json`;
+/**
+ * The Gist file holding an alliance's dashboard: its letters and digits (RÂVN -> RAVN;
+ * RavN for RâvN, beside RÂVN: tagSlug). `alliances` is map-state.json's list.
+ */
+export function dashboardFile(tag, alliances = {}) {
+  return `dashboard-${tagSlug(tag, Object.keys(alliances || {}))}.json`;
 }
 
 /**

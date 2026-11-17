@@ -10,6 +10,7 @@ import {
   showSavedWhileLoading,
 } from './live-data-notice.js';
 import { submitProposalWithAuth } from './auth-modal.js';
+import { findTag } from './tags.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -437,13 +438,13 @@ export function renderBuffSummaryDrawer() {
     return;
   }
 
-  const activeOverride = document.getElementById('alliance-override')?.value.trim().toLowerCase();
+  const activeOverride = document.getElementById('alliance-override')?.value.trim();
 
   const rows = sortedTags
     .map((tag) => {
       const data = summary[tag];
       const allianceColor = getAllianceColor(tag);
-      const isEditing = activeOverride && tag.toLowerCase() === activeOverride;
+      const isEditing = activeOverride && findTag(sortedTags, activeOverride) === tag;
 
       const buffBadges =
         data.aggregatedBuffs && data.aggregatedBuffs.length > 0
@@ -824,10 +825,8 @@ export function promptTerritoryAssignment(cityId, svgRoot = null) {
   if (overrideInput && overrideInput.value.trim() !== '') {
     let customOwner = overrideInput.value.trim();
 
-    const existingTag = Object.keys(alliances).find(
-      (tag) => tag.toLowerCase() === customOwner.toLowerCase(),
-    );
-    customOwner = existingTag ? existingTag : customOwner.toUpperCase();
+    // The alliance meant (findTag: RâvN isn't RÂVN); a new tag is kept as typed
+    customOwner = findTag(Object.keys(alliances), customOwner) || customOwner;
 
     setDraftTerritoryOwner(cityId, customOwner, root);
     return;

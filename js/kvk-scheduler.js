@@ -7,6 +7,7 @@
 
 import { ALLIANCE_COLORS, startingSchedule } from './alliance-defaults.js';
 import { submitProposalWithAuth } from './auth-modal.js';
+import { sameTag } from './tags.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -32,15 +33,10 @@ let allianceImages = {};
 
 /** The style attribute that puts an alliance's card picture behind its card, or ''. */
 function cardStyle(tag) {
-  // The tag as stored, or written another way (RAVN for RÂVN, any letter case)
-  const fold = (x) =>
-    String(x || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
+  // The tag as stored, or without its accents (RAVN for RÂVN). Letter case counts: RâvN
+  // and RÂVN are two alliances (owner, 2026-11-17), so RâvN never borrows RÂVN's picture.
   const pics =
-    allianceImages[tag] ||
-    Object.entries(allianceImages).find(([key]) => fold(key) === fold(tag))?.[1];
+    allianceImages[tag] || Object.entries(allianceImages).find(([key]) => sameTag(key, tag))?.[1];
   const url = pics?.card;
   return typeof url === 'string' && /^\/alliance-images\/[A-Za-z0-9.-]+$/.test(url)
     ? ` style="--ally-pic: url('${url}')"`
