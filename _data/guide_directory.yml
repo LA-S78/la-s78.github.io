@@ -53,6 +53,8 @@ strategy:
       <path d="M20 2h2v2a4 4 0 0 1-4 4h-2V6a4 4 0 0 1 4-4z" />
   - key: "sanctuary"
     url: /LANG_CODE/guides/sanctuary.html
+    # owner's picture (sanctuary.webp is the wide version, for a guide header later)
+    picture: sanctuary_card.webp
     # a temple
     icon: |
       <path d="M3 10h18L12 3.5z" />
@@ -61,6 +63,8 @@ strategy:
       <path d="M2.5 21h19" />
   - key: "t10"
     url: /LANG_CODE/guides/t10.html
+    # owner's picture (t10.webp is the wide version, for a guide header later)
+    picture: t10_card.webp
     icon: |
       <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
       <polyline points="7 10 9 8 9 16" />
