@@ -6,7 +6,7 @@ common:
   sign_in_again: Iniciar sesión de nuevo
   not_saved: 'No guardado: {error}'
   cancel: Cancelar
-  save: "💾 Guardar"
+  save: "Guardar"
   saving: Guardando...
   edit: Editar
   delete: Eliminar
@@ -48,27 +48,27 @@ dashboard:
   sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra a través de tu rol NAP en el servidor.
   sign_in_button: Iniciar sesión
   load_failed: No se pudo cargar el panel. Comprueba tu conexión y actualiza. ({error})
-  edit_dashboard: "✏️ Editar Panel"
+  edit_dashboard: "Editar Panel"
   done_editing: "✓ Finalizar edición"
-  add_chart: "➕ Añadir gráfico o tabla"
+  add_chart: "Añadir gráfico o tabla"
   editor_label: Editor de gráficos o tablas
   charts_label: Gráficos y tablas de la alianza
-  empty_member: "📊 Los líderes de tu alianza aún no han compartido gráficos o tablas aquí."
-  empty_editing: "📊 Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”."
-  empty_leader: "📊 Aún no hay gráficos o tablas. Usa “Editar Panel” para añadir uno."
-  visible_members: "👥 Todos los miembros"
-  visible_officers: "🔒 Solo oficiales"
+  empty_member: "Los líderes de tu alianza aún no han compartido gráficos o tablas aquí."
+  empty_editing: "Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”."
+  empty_leader: "Aún no hay gráficos o tablas. Usa “Editar Panel” para añadir uno."
+  visible_members: "Todos los miembros"
+  visible_officers: "Solo oficiales"
   google_sheet: Google Sheet
   google_doc: Google Doc
   synced: sincronizado {when}
   updated: Actualizado {when}
-  sync_now: "🔄 Sincronizar ahora"
-  syncing: "🔄 Sincronizando…"
+  sync_now: "Sincronizar ahora"
+  syncing: "Sincronizando…"
   sync_help: Obtener los números más recientes de la hoja
   confirm_delete: ¿Eliminar "{title}"? Esto no se puede deshacer.
   this_chart: este gráfico
 rewards_card:
-  title: "🔒 Recompensas Semanales"
+  title: "Recompensas Semanales"
   officers: Oficiales
   open: Abierto
   closed: Cerrado
@@ -77,44 +77,44 @@ rewards_card:
   closes_at: Cierra {when}
   opens_at: Abre {when}, después del evento de capitolio del viernes
   off_week: Semana de descanso
-  kw_won: "🏆 KW ganada"
-  kw_lost: "🛡️ KW perdida"
-  kw_pending: "⏳ KW pendiente"
+  kw_won: "KW ganada"
+  kw_lost: "KW perdida"
+  kw_pending: "KW pendiente"
   set_one: Encomio del Rey
   set_two: Recompensa del Rey de Batalla
   set_two_if_won: Recompensa del Rey de Batalla, si la guerra se gana
   if_won: si se gana
   no_rank: 'Sin rango en la clasificación: sin cofres'
-  list_sent: "✅ Lista enviada · {count}"
+  list_sent: "Lista enviada · {count}"
   sent_at: Enviada {when}
   reserves_one: "({n} reserva)"
   reserves_other: "({n} reservas)"
   empty_slots: "{n} vacíos"
-  list_not_sent: "⚠️ Lista no enviada"
+  list_not_sent: "Lista no enviada"
   no_list_closed: Sin lista mientras está cerrado
-  edit_list: "📝 Editar"
-  send_list: "📝 Enviar lista"
+  edit_list: "Editar"
+  send_list: "Enviar lista"
   ask_r5: R5 o /nominate
   ask_r5_help: Tu R5 puede abrir la página de nominación desde aquí, o ejecutar /nominate en Discord.
-  buyout_bonus: "🛡️ Compra: {amount} {chest} en cada set ganado"
+  buyout_bonus: "Compra: {amount} {chest} en cada set ganado"
   buyout_bonus_help: Financiado por WLO
   buyout_threat: 'amenaza: {threat}'
-  buyout_cost: "⚖️ Compra: {amount} {chest} en cada set"
+  buyout_cost: "Compra: {amount} {chest} en cada set"
   buyout_cost_help: Financiando a la alianza desplazada esta semana
 caravan:
-  title: "🐪 Rotor de Caravana"
+  title: "Rotor de Caravana"
   picked_count: "{picked}/{total} elegidos"
-  members_can_view: "👥 Los miembros pueden ver"
-  copy_status: "📋 Copiar estado"
-  new_week: "🔄 Nueva semana"
+  members_can_view: "Los miembros pueden ver"
+  copy_status: "Copiar estado"
+  new_week: "Nueva semana"
   member_note: Elegido por tus R4 cuando una caravana está lista.
   search: Buscar nombres…
-  around_now: "⏰ Alrededor de ahora"
+  around_now: "Alrededor de ahora"
   around_now_help: Solo jugadores disponibles alrededor de ahora
   available: Disponible esta semana ({n})
   picked: Elegidos esta semana ({n})
   nobody_matches: Nadie coincide.
-  everyone_picked: "Todos han tenido caravana esta semana. 🎉"
+  everyone_picked: "Todos han tenido caravana esta semana."
   add_players: Añadir jugadores abajo.
   no_players: Aún no hay jugadores.
   flexible: flexible
@@ -128,7 +128,7 @@ caravan:
   add_to: Hasta las 22:00
   add_from_label: Disponible desde (Game Time, opcional)
   add_to_label: Disponible hasta (Game Time, opcional)
-  add: "➕ Añadir"
+  add: "Añadir"
   times_help: Los horarios son Game Time (UTC-2) y son opcionales; déjalos vacíos para jugadores que son flexibles.
   status_title: "🐪 [{tag}] Rotor de Caravana: {picked}/{total} elegidos"
   status_available: 'Disponible: {names}'
@@ -140,14 +140,14 @@ caravan:
   this_player: este jugador
   confirm_new_week: "¿Iniciar una nueva semana? Todos vuelven a estar disponibles (los nombres y horarios se mantienen)."
 chart_editor:
-  edit_title: "✏️ Editar gráfico o tabla"
-  new_title: "➕ Nuevo gráfico o tabla"
+  edit_title: "Editar gráfico o tabla"
+  new_title: "Nuevo gráfico o tabla"
   type: Tipo
-  type_bar: "📊 Barras"
-  type_line: "📈 Líneas"
-  type_pie: "🍩 Circular"
-  type_progress: "🎯 Progreso"
-  type_table: "📋 Tabla"
+  type_bar: "Barras"
+  type_line: "Líneas"
+  type_pie: "Circular"
+  type_progress: "Progreso"
+  type_table: "Tabla"
   title: Título
   title_example: p. ej. Puntuaciones del Duelo de Alianzas
   note: Explicación
@@ -157,8 +157,8 @@ chart_editor:
   all_members: Todos los miembros de la alianza
   data: Datos
   data_source: Origen de los datos
-  paste: "📋 Pegar una tabla"
-  link: "🔗 Enlace a Google Sheet / Doc"
+  paste: "Pegar una tabla"
+  link: "Enlace a Google Sheet / Doc"
   paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
   range: Rango, p. ej. A1:D20 (opcional)
@@ -192,11 +192,11 @@ chart_editor:
   stacked_percent: 'Apilado: cada barra al 100%'
   vertical: Barras verticales
   vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
-  traffic_columns: "🚦 Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde"
-  traffic_size: "🚦 Rojo → amarillo → verde (bajo → alto): por rango, el mejor en verde"
-  traffic_reverse: "↕️ Invertir: lo bajo es bueno (verde), lo alto es malo (rojo)"
-  traffic_target: "🚦 Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo"
-  traffic_target_reverse: "↕️ Invertir: cuanto más por debajo del objetivo, mejor"
+  traffic_columns: "Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde"
+  traffic_size: "Rojo → amarillo → verde (bajo → alto): por rango, el mejor en verde"
+  traffic_reverse: "Invertir: lo bajo es bueno (verde), lo alto es malo (rojo)"
+  traffic_target: "Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo"
+  traffic_target_reverse: "Invertir: cuanto más por debajo del objetivo, mejor"
   donut: Donut (anillo)
   target: Objetivo para todos
   target_example: p. ej. 15M o 15000000
@@ -778,8 +778,8 @@ image_review:
   replaces: Aprobar reemplaza la imagen actual de la alianza.
   checklist: 'Verifica antes de aprobar: arte propio de la alianza o arte del juego; sin marcas de otras alianzas; nada ofensivo; sin información personal.'
   reason_label: Motivo (opcional, se mostrará en la publicación de Discord si rechazas)
-  approve: "✅ Aprobar"
-  reject: "❌ Rechazar"
+  approve: "Aprobar"
+  reject: "Rechazar"
   working: Guardando…
   decided_approved: Ya aprobado.
   decided_rejected: Ya rechazado.
@@ -788,8 +788,8 @@ image_review:
   done_approved: Aprobado. La imagen ya está activa y la publicación de Discord ha sido actualizada.
   done_rejected: Rechazado. La imagen fue eliminada y la publicación de Discord ha sido actualizada.
 alliance_images:
-  title: "🖼️ Imágenes de la alianza"
-  edit: "✏️ Editar imágenes"
+  title: "Imágenes de la alianza"
+  edit: "Editar imágenes"
   done: "✓ Terminar de editar"
   help: Añade una imagen detrás de la tarjeta de Rotación del Capitolio y la fila de Rangos NAP de tu alianza. Un Steward revisará cada una antes de que otros puedan verla.
   rules: 'Usa arte propio de la alianza o arte del juego: sin marcas de otras alianzas, nada ofensivo, sin información personal.'
@@ -798,14 +798,14 @@ alliance_images:
   card: Tarjeta de Rotación del Capitolio
   wide: Banner de Rangos NAP
   none: Sin imagen todavía
-  live: "✅ Activa desde {when}"
-  pending: "⏳ Esperando a un Steward desde {when}"
-  rejected: "❌ Rechazada {when}"
-  rejected_reason: "❌ Rechazada {when}: “{reason}”"
-  expired: "⌛ No se revisó a tiempo ({when}). Envíala de nuevo."
-  choose: "📷 Elegir una imagen"
-  replace: "📷 Elegir una imagen nueva"
-  remove: "🗑️ Eliminar"
+  live: "Activa desde {when}"
+  pending: "Esperando a un Steward desde {when}"
+  rejected: "Rechazada {when}"
+  rejected_reason: "Rechazada {when}: “{reason}”"
+  expired: "No se revisó a tiempo ({when}). Envíala de nuevo."
+  choose: "Elegir una imagen"
+  replace: "Elegir una imagen nueva"
+  remove: "Eliminar"
   confirm_remove: "¿Eliminar {slot}? Desaparecerá para todos inmediatamente."
   crop_title: Posicionar {slot}
   crop_help: Arrastra para mover. Pellizca, desplaza o usa el control deslizante para hacer zoom. Solo se enviará lo que esté dentro del marco.

@@ -23,7 +23,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
 
   <!-- R4/R5, officers and Stewards only (the server sends it only to them) -->
   <section class="dash-card dash-rewards" id="dash-rewards" hidden aria-labelledby="dash-rewards-title">
-    <h3 class="dash-card-title" id="dash-rewards-title">{{ "rewards_card.title" | t }} <span class="dash-tag">{{ "rewards_card.officers" | t }}</span></h3>
+    <h3 class="dash-card-title" id="dash-rewards-title">{% include ui-icon.html name="lock" %}{{ "rewards_card.title" | t }} <span class="dash-tag">{{ "rewards_card.officers" | t }}</span></h3>
     <div id="dash-rewards-body"></div>
   </section>
 
@@ -32,8 +32,8 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
 
   <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
-    <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
-    <button type="button" class="dash-btn" id="dash-add" disabled>{{ "dashboard.add_chart" | t }}</button>
+    <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="pencil" %}{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
+    <button type="button" class="dash-btn" id="dash-add" disabled>{% include ui-icon.html name="plus" %}{{ "dashboard.add_chart" | t }}</button>
   </div>
   <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
 
@@ -65,6 +65,9 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         return '';
       }
     }
+
+    /** An interface icon (js/ui-icons.js) for the start of a label. */
+    const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
 
     function message(html, kind) {
       const el = $('dash-message');
@@ -151,7 +154,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       if (!pass) {
         $('dash-subtitle').textContent = '';
         message(
-          `🔐 <strong>${escapeHtml(t('dashboard.sign_in_title'))}</strong><br>${th('dashboard.sign_in_help', { sign_in: `<strong>${escapeHtml(t('dashboard.sign_in_button'))}</strong>` })}` +
+          `${ic('lock')}<strong>${escapeHtml(t('dashboard.sign_in_title'))}</strong><br>${th('dashboard.sign_in_help', { sign_in: `<strong>${escapeHtml(t('dashboard.sign_in_button'))}</strong>` })}` +
             `<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_discord'))}</button>`,
         );
         $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
@@ -183,10 +186,10 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
           hideDashboard();
           $('dash-subtitle').textContent = '';
           if (body.code === 'login') {
-            message(`🔐 ${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_again'))}</button>`, 'warning');
+            message(`${ic('lock')}${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_again'))}</button>`, 'warning');
             $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
           } else {
-            message(`⚠️ ${escapeHtml(body.error || `HTTP ${res.status}`)}`, 'warning');
+            message(`${ic('warning', 'warn')}${escapeHtml(body.error || `HTTP ${res.status}`)}`, 'warning');
           }
           return;
         }
@@ -199,7 +202,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         setUpdating(false);
         // No connection (or the server is down): the saved copy stays, to look at only
         if (saved) savedNote(saved.at);
-        else message(`⚠️ ${escapeHtml(t('dashboard.load_failed', { error: err.message }))}`, 'warning');
+        else message(`${ic('warning', 'warn')}${escapeHtml(t('dashboard.load_failed', { error: err.message }))}`, 'warning');
       }
     }
 
@@ -271,33 +274,33 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       // 1. Period and Kingdom War result
       const clock = (iso) => `<span data-countdown="${escapeHtml(iso)}">${escapeHtml(countdown(iso))}</span>`;
       const status = p.open
-        ? `<span title="${escapeHtml(t('rewards_card.closes_at', { when: when(p.closesAt) }))}">🟢 <strong>${escapeHtml(t('rewards_card.open'))}</strong> · ${th('rewards_card.time_left', { time: clock(p.closesAt) })}</span>`
-        : `<span title="${escapeHtml(t('rewards_card.opens_at', { when: when(p.nextOpensAt) }))}">⚪ <strong>${escapeHtml(t('rewards_card.closed'))}</strong> · ${th('rewards_card.opens_in', { time: clock(p.nextOpensAt) })}</span>`;
+        ? `<span title="${escapeHtml(t('rewards_card.closes_at', { when: when(p.closesAt) }))}">${ic('dot', 'ok')}<strong>${escapeHtml(t('rewards_card.open'))}</strong> · ${th('rewards_card.time_left', { time: clock(p.closesAt) })}</span>`
+        : `<span title="${escapeHtml(t('rewards_card.opens_at', { when: when(p.nextOpensAt) }))}">${ic('dot', 'wait')}<strong>${escapeHtml(t('rewards_card.closed'))}</strong> · ${th('rewards_card.opens_in', { time: clock(p.nextOpensAt) })}</span>`;
       const war = !p.kwWeek
         ? `<span class="dash-pill">${escapeHtml(t('rewards_card.off_week'))}</span>`
         : p.result === 'won'
-          ? `<span class="dash-pill is-good">${escapeHtml(t('rewards_card.kw_won'))}</span>`
+          ? `<span class="dash-pill is-good">${ic('trophy')}${escapeHtml(t('rewards_card.kw_won'))}</span>`
           : p.result === 'lost'
-            ? `<span class="dash-pill">${escapeHtml(t('rewards_card.kw_lost'))}</span>`
-            : `<span class="dash-pill is-wait">${escapeHtml(t('rewards_card.kw_pending'))}</span>`;
+            ? `<span class="dash-pill">${ic('shield')}${escapeHtml(t('rewards_card.kw_lost'))}</span>`
+            : `<span class="dash-pill is-wait">${ic('hourglass')}${escapeHtml(t('rewards_card.kw_pending'))}</span>`;
 
       // 2. Chests: set 1 always; set 2 when won, greyed "if won" while pending
       let set2 = '';
-      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_two'))}">⚔️ ${chestIcons(r.chests, 'kingdom_war')}</span>`;
-      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="${escapeHtml(t('rewards_card.set_two_if_won'))}">⚔️ ${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>${escapeHtml(t('rewards_card.if_won'))}</small></span>`;
+      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_two'))}">${ic('swords')}${chestIcons(r.chests, 'kingdom_war')}</span>`;
+      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="${escapeHtml(t('rewards_card.set_two_if_won'))}">${ic('swords')}${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>${escapeHtml(t('rewards_card.if_won'))}</small></span>`;
       const chests = r.rank
-        ? `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_one'))}">👑 ${chestIcons(r.chests, 'standard')}</span>${set2}`
+        ? `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_one'))}">${ic('crown')}${chestIcons(r.chests, 'standard')}</span>${set2}`
         : `<span class="dash-warn">${escapeHtml(t('rewards_card.no_rank'))}</span>`;
 
       // 3. The list
       const list = n.submitted
-        ? `<span title="${n.submittedAt ? escapeHtml(t('rewards_card.sent_at', { when: when(n.submittedAt) })) : ''}">${escapeHtml(t('rewards_card.list_sent', { count: n.ranked }))}${n.reserves ? ` <span class="dash-muted">${escapeHtml(tn('rewards_card.reserves', n.reserves))}</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${escapeHtml(t('rewards_card.empty_slots', { n: n.unfilled }))}</span>` : ''}</span>`
+        ? `<span title="${n.submittedAt ? escapeHtml(t('rewards_card.sent_at', { when: when(n.submittedAt) })) : ''}">${ic('check', 'ok')}${escapeHtml(t('rewards_card.list_sent', { count: n.ranked }))}${n.reserves ? ` <span class="dash-muted">${escapeHtml(tn('rewards_card.reserves', n.reserves))}</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${escapeHtml(t('rewards_card.empty_slots', { n: n.unfilled }))}</span>` : ''}</span>`
         : p.open
-          ? `<span class="dash-warn">${escapeHtml(t('rewards_card.list_not_sent'))}</span>`
+          ? `<span class="dash-warn">${ic('warning', 'warn')}${escapeHtml(t('rewards_card.list_not_sent'))}</span>`
           : `<span class="dash-muted">${escapeHtml(t('rewards_card.no_list_closed'))}</span>`;
       let action = '';
       if (p.open && data.viewer.canNominate) {
-        action = readOnly ? '' : `<button type="button" class="dash-btn" id="dash-nominate">${escapeHtml(t(n.submitted ? 'rewards_card.edit_list' : 'rewards_card.send_list'))}</button>`;
+        action = readOnly ? '' : `<button type="button" class="dash-btn" id="dash-nominate">${ic('pencil')}${escapeHtml(t(n.submitted ? 'rewards_card.edit_list' : 'rewards_card.send_list'))}</button>`;
       } else if (p.open) {
         action = `<span class="dash-muted dash-small" title="${escapeHtml(t('rewards_card.ask_r5_help'))}">${escapeHtml(t('rewards_card.ask_r5'))}</span>`;
       }
@@ -305,9 +308,9 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       // 4. Buyout, only when it applies
       const gold = '<span class="chest-glyph gold"></span>';
       const buyout = r.hasBuyoutBonus
-        ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_bonus_help') + (r.buyoutThreat ? ` · ${t('rewards_card.buyout_threat', { threat: r.buyoutThreat })}` : ''))}"><span>${th('rewards_card.buyout_bonus', { amount: '<strong>+1</strong>', chest: gold })}</span></div>`
+        ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_bonus_help') + (r.buyoutThreat ? ` · ${t('rewards_card.buyout_threat', { threat: r.buyoutThreat })}` : ''))}"><span>${ic('shield')}${th('rewards_card.buyout_bonus', { amount: '<strong>+1</strong>', chest: gold })}</span></div>`
         : r.isWloDeducted
-          ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_cost_help'))}"><span>${th('rewards_card.buyout_cost', { amount: '<strong>−1</strong>', chest: gold })}</span></div>`
+          ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_cost_help'))}"><span>${ic('scale')}${th('rewards_card.buyout_cost', { amount: '<strong>−1</strong>', chest: gold })}</span></div>`
           : '';
 
       $('dash-rewards-body').innerHTML =
@@ -400,7 +403,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
             <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="${escapeHtml(t('caravan.name'))}">
             <input type="text" class="cv-from" value="${escapeHtml(p.from || '')}" placeholder="18:00" aria-label="${escapeHtml(t('caravan.from'))}">
             <input type="text" class="cv-to" value="${escapeHtml(p.to || '')}" placeholder="22:00" aria-label="${escapeHtml(t('caravan.to'))}">
-            <button type="button" class="dash-icon-btn" data-cv="save-edit" aria-label="${escapeHtml(t('common.save'))}">💾</button>
+            <button type="button" class="dash-icon-btn" data-cv="save-edit" aria-label="${escapeHtml(t('common.save'))}">${ic('save', 'solo')}</button>
             <button type="button" class="dash-icon-btn" data-cv="cancel-edit" aria-label="${escapeHtml(t('common.cancel'))}">✕</button>
           </li>`;
         }
@@ -408,8 +411,8 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
           ? p.picked
             ? `<button type="button" class="dash-icon-btn" data-cv="unpick" title="${escapeHtml(t('caravan.back_to_available'))}">${escapeHtml(t('common.undo'))}</button>`
             : `<button type="button" class="dash-btn" data-cv="pick">${escapeHtml(t('caravan.pick'))}</button>
-               <button type="button" class="dash-icon-btn" data-cv="edit" title="${escapeHtml(t('common.edit'))}" aria-label="${escapeHtml(t('common.edit'))}">✏️</button>
-               <button type="button" class="dash-icon-btn" data-cv="remove" title="${escapeHtml(t('common.remove'))}" aria-label="${escapeHtml(t('common.remove'))}">🗑️</button>`
+               <button type="button" class="dash-icon-btn" data-cv="edit" title="${escapeHtml(t('common.edit'))}" aria-label="${escapeHtml(t('common.edit'))}">${ic('pencil', 'solo')}</button>
+               <button type="button" class="dash-icon-btn" data-cv="remove" title="${escapeHtml(t('common.remove'))}" aria-label="${escapeHtml(t('common.remove'))}">${ic('trash', 'solo')}</button>`
           : '';
         const pickedText = p.picked
           ? `<span class="dash-muted">✓ ${new Date(p.picked.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}${p.picked.by ? ` · ${escapeHtml(p.picked.by)}` : ''}</span>`
@@ -422,26 +425,26 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       };
 
       el.innerHTML = `
-        <h3 class="dash-card-title" id="dash-caravan-title">${escapeHtml(t('caravan.title'))} <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span></h3>
+        <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))} <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span></h3>
         ${leader ? `<div class="dash-cv-bar">
-          <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${escapeHtml(t('caravan.members_can_view'))}</label>
+          <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${ic('users')}${escapeHtml(t('caravan.members_can_view'))}</label>
           <span class="dash-cv-actions">
-            <button type="button" class="dash-icon-btn" data-cv="copy">${escapeHtml(t('caravan.copy_status'))}</button>
-            <button type="button" class="dash-icon-btn" data-cv="new-week">${escapeHtml(t('caravan.new_week'))}</button>
+            <button type="button" class="dash-icon-btn" data-cv="copy">${ic('clipboard')}${escapeHtml(t('caravan.copy_status'))}</button>
+            <button type="button" class="dash-icon-btn" data-cv="new-week">${ic('refresh')}${escapeHtml(t('caravan.new_week'))}</button>
           </span>
-        </div>` : `<div class="dash-cv-bar"><span class="dash-muted dash-small">${escapeHtml(t('caravan.member_note'))}</span><button type="button" class="dash-icon-btn" data-cv="copy">${escapeHtml(t('caravan.copy_status'))}</button></div>`}
+        </div>` : `<div class="dash-cv-bar"><span class="dash-muted dash-small">${escapeHtml(t('caravan.member_note'))}</span><button type="button" class="dash-icon-btn" data-cv="copy">${ic('clipboard')}${escapeHtml(t('caravan.copy_status'))}</button></div>`}
         <div class="dash-cv-filters">
           <input type="search" id="cv-search" placeholder="${escapeHtml(t('caravan.search'))}" value="${escapeHtml(caravanFilter.text)}" aria-label="${escapeHtml(t('caravan.search'))}">
-          <button type="button" class="dash-icon-btn" data-cv="now" aria-pressed="${caravanFilter.now}" title="${escapeHtml(t('caravan.around_now_help'))}">${escapeHtml(t('caravan.around_now'))} <small>${escapeHtml(nowText)}</small></button>
+          <button type="button" class="dash-icon-btn" data-cv="now" aria-pressed="${caravanFilter.now}" title="${escapeHtml(t('caravan.around_now_help'))}">${ic('clock')}${escapeHtml(t('caravan.around_now'))} <small>${escapeHtml(nowText)}</small></button>
         </div>
         <div class="dash-cv-head">${escapeHtml(t('caravan.available', { n: all.length - picked.length }))}</div>
-        <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t(all.length - picked.length ? 'caravan.nobody_matches' : all.length ? 'caravan.everyone_picked' : leader ? 'caravan.add_players' : 'caravan.no_players'))}</li>`}</ul>
+        <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${!(all.length - picked.length) && all.length ? ic('sparkles', 'ok') : ''}${escapeHtml(t(all.length - picked.length ? 'caravan.nobody_matches' : all.length ? 'caravan.everyone_picked' : leader ? 'caravan.add_players' : 'caravan.no_players'))}</li>`}</ul>
         ${picked.length ? `<details class="dash-cv-picked"${leader ? '' : ' open'}><summary>${escapeHtml(t('caravan.picked', { n: picked.length }))}</summary><ul class="dash-cv-list">${picked.map(row).join('')}</ul></details>` : ''}
         ${leader ? `<form class="dash-cv-add" id="cv-add">
           <input type="text" id="cv-add-name" maxlength="40" placeholder="${escapeHtml(t('caravan.player_name'))}" aria-label="${escapeHtml(t('caravan.player_name'))}">
           <input type="text" id="cv-add-from" placeholder="${escapeHtml(t('caravan.add_from'))}" aria-label="${escapeHtml(t('caravan.add_from_label'))}">
           <input type="text" id="cv-add-to" placeholder="${escapeHtml(t('caravan.add_to'))}" aria-label="${escapeHtml(t('caravan.add_to_label'))}">
-          <button type="submit" class="dash-btn">${escapeHtml(t('caravan.add'))}</button>
+          <button type="submit" class="dash-btn">${ic('plus')}${escapeHtml(t('caravan.add'))}</button>
         </form>
         <div class="dash-muted dash-small">${escapeHtml(t('caravan.times_help'))}</div>
         <div class="dash-error" id="cv-error"></div>` : ''}`;
@@ -538,6 +541,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
     // ---------- Charts and tables ----------
     const W = window.DashboardWidgets;
     const TYPES = ['bar', 'line', 'pie', 'progress', 'table'].map((type) => [type, t(`chart_editor.type_${type}`)]);
+    const TYPE_ICONS = { bar: 'bar_chart', line: 'line_chart', pie: 'pie_chart', progress: 'target', table: 'table' };
     let editing = false;
 
     // Leader tools; none on a saved copy (readOnly) until the server has answered
@@ -547,22 +551,23 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
 
     function widgetCard(w, i, count) {
       const vis = t(w.visibility === 'members' ? 'dashboard.visible_members' : 'dashboard.visible_officers');
+      const visIcon = ic(w.visibility === 'members' ? 'users' : 'lock');
       const linked = w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc');
       const day = (iso) => new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
       const updated = linked
-        ? `🔗 ${t(w.source.kind === 'doc' ? 'dashboard.google_doc' : 'dashboard.google_sheet')}${w.syncedAt ? ` · ${t('dashboard.synced', { when: day(w.syncedAt) })}` : ''}`
+        ? `${t(w.source.kind === 'doc' ? 'dashboard.google_doc' : 'dashboard.google_sheet')}${w.syncedAt ? ` · ${t('dashboard.synced', { when: day(w.syncedAt) })}` : ''}`
         : w.updatedAt
           ? t('dashboard.updated', { when: new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) })
           : '';
-      const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
+      const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${ic('refresh')}${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
       const tool = (act, label, glyph, off) =>
         `<button type="button" class="dash-icon-btn" data-act="${act}" ${off ? 'disabled' : ''} title="${escapeHtml(t(label))}" aria-label="${escapeHtml(t(label))}">${glyph}</button>`;
       const tools = editing
-        ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲', i === 0)}${tool('down', 'common.move_down', '▼', i === count - 1)}${tool('edit', 'common.edit', '✏️')}${tool('delete', 'common.delete', '🗑️')}</div>`
+        ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲', i === 0)}${tool('down', 'common.move_down', '▼', i === count - 1)}${tool('edit', 'common.edit', ic('pencil', 'solo'))}${tool('delete', 'common.delete', ic('trash', 'solo'))}</div>`
         : '';
       return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}" data-type="${escapeHtml(w.type || '')}">
         <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
-        <div class="dash-widget-meta">${isLeader() ? `<span>${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${escapeHtml(updated)}</span>` : ''}${sync}</div>
+        <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}${sync}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
         <div class="dash-widget-body">${W.render(w)}</div>
       </article>`;
@@ -578,7 +583,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       $('dash-add').disabled = !editing;
       renderImages();
       if (!list.length) {
-        el.innerHTML = `<div class="dash-card dash-empty">${escapeHtml(
+        el.innerHTML = `<div class="dash-card dash-empty">${ic('bar_chart')}${escapeHtml(
           t(!isLeader() ? 'dashboard.empty_member' : editing ? 'dashboard.empty_editing' : 'dashboard.empty_leader'),
         )}</div>`;
         return;
@@ -634,11 +639,11 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
       if (act === 'sync') {
         b.disabled = true;
-        b.textContent = t('dashboard.syncing');
+        b.innerHTML = ic('refresh') + escapeHtml(t('dashboard.syncing'));
         const error = await save({ action: 'sync-widget', id });
         if (error && document.body.contains(b)) {
           b.disabled = false;
-          b.textContent = t('dashboard.sync_now');
+          b.innerHTML = ic('refresh') + escapeHtml(t('dashboard.sync_now'));
         }
         return;
       }
@@ -689,9 +694,9 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       ed.hidden = false;
       const e = (key) => escapeHtml(t(`chart_editor.${key}`));
       ed.innerHTML = `
-        <h3 class="dash-card-title">${e(existing ? 'edit_title' : 'new_title')}</h3>
+        <h3 class="dash-card-title">${ic(existing ? 'pencil' : 'plus')}${e(existing ? 'edit_title' : 'new_title')}</h3>
         <label>${e('type')}</label>
-        <div class="dash-types" id="ed-types" role="group" aria-label="${e('type')}">${TYPES.map(([type, name]) => `<button type="button" data-type="${type}" aria-pressed="${w.type === type}">${escapeHtml(name)}</button>`).join('')}</div>
+        <div class="dash-types" id="ed-types" role="group" aria-label="${e('type')}">${TYPES.map(([type, name]) => `<button type="button" data-type="${type}" aria-pressed="${w.type === type}">${ic(TYPE_ICONS[type])}${escapeHtml(name)}</button>`).join('')}</div>
         <label for="ed-title">${e('title')}</label>
         <input type="text" id="ed-title" maxlength="80" value="${escapeHtml(w.title)}" placeholder="${e('title_example')}">
         <label for="ed-note">${e('note')} <span class="dash-muted">${escapeHtml(t('common.optional'))}</span></label>
@@ -703,8 +708,8 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         </select>
         <label>${e('data')}</label>
         <div class="dash-types dash-src" role="group" aria-label="${e('data_source')}">
-          <button type="button" data-src="paste" aria-pressed="true">${e('paste')}</button>
-          <button type="button" data-src="link" aria-pressed="false">${e('link')}</button>
+          <button type="button" data-src="paste" aria-pressed="true">${ic('clipboard')}${e('paste')}</button>
+          <button type="button" data-src="link" aria-pressed="false">${ic('link')}${e('link')}</button>
         </div>
         <div id="ed-src-paste">
           <div class="dash-muted dash-small">${e('paste_help')}</div>
@@ -728,7 +733,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         <div class="dash-error" id="ed-error"></div>
         <div class="dash-editor-actions">
           <button type="button" class="dash-icon-btn" id="ed-cancel">${escapeHtml(t('common.cancel'))}</button>
-          <button type="button" class="submit-plan-btn" id="ed-save">${escapeHtml(t('common.save'))}</button>
+          <button type="button" class="submit-plan-btn" id="ed-save">${ic('save')}${escapeHtml(t('common.save'))}</button>
         </div>`;
       $('ed-paste').value = w.data.columns.length ? W.toText(w.data) : '';
 
@@ -803,15 +808,15 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
               <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>${e('stacked_percent')}</option>
             </select>`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> ${e(o.stacked ? 'vertical' : 'vertical_leaderboard')}</label>`;
-          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
-          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${e('traffic_reverse')}</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${ic('traffic')}${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${ic('updown')}${e('traffic_reverse')}</label>`;
         }
         if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> ${e('donut')}</label>`;
         if (w.type === 'progress') {
           html += `<label for="ed-target">${e('target')}</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="${e('target_example')}">`;
           html += `<label for="ed-targetcol">${e('target_column')}</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: e('use_number_above') })}`;
-          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${e('traffic_target')}</label>`;
-          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${e('traffic_target_reverse')}</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${ic('traffic')}${e('traffic_target')}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${ic('updown')}${e('traffic_target_reverse')}</label>`;
         }
         if (w.type === 'table') {
           html += `<label for="ed-hlcol">${e('highlight_where')}</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: e('no_highlight') })}`;
@@ -995,7 +1000,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         btn.textContent = t('common.saving');
         const error = await save({ action: 'save-widget', widget: w });
         btn.disabled = false;
-        btn.textContent = t('common.save');
+        btn.innerHTML = ic('save') + escapeHtml(t('common.save'));
         if (error) $('ed-error').textContent = error;
         else closeEditor();
       });

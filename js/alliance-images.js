@@ -17,6 +17,8 @@
       (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
     );
   const t = (key, vars) => window.t(`alliance_images.${key}`, vars);
+  /** An interface icon (js/ui-icons.js) for the start of a label. */
+  const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
   const KINDS = ['card', 'wide'];
   // Card sizes measured on the live pages (2026-11-16): what each screen really shows
   const PREVIEWS = {
@@ -56,9 +58,9 @@
     const canSend = st.ready && (steward || st.left > 0);
     section.classList.toggle('is-editing', open);
     section.innerHTML = `
-      <h3 class="dash-card-title">${esc(t('title'))}</h3>
+      <h3 class="dash-card-title">${ic('image')}${esc(t('title'))}</h3>
       <div class="dash-edit-bar ai-edit-bar">
-        <button type="button" class="dash-btn dash-two-labels" data-ai="toggle" aria-pressed="${open}"><span class="when-off">${esc(t('edit'))}</span><span class="when-on">${esc(t('done'))}</span></button>
+        <button type="button" class="dash-btn dash-two-labels" data-ai="toggle" aria-pressed="${open}"><span class="when-off">${ic('pencil')}${esc(t('edit'))}</span><span class="when-on">${esc(t('done'))}</span></button>
       </div>
       ${
         open
@@ -83,17 +85,22 @@
 
   function slotHtml(kind, slot, ctx, canSend, open) {
     const lines = [];
-    if (slot.live) lines.push(t('live', { when: when(slot.live.at) }));
-    if (slot.pending) lines.push(t('pending', { when: when(slot.pending.at) }));
+    // [icon, its tone, text]
+    if (slot.live) lines.push(['check', 'ok', t('live', { when: when(slot.live.at) })]);
+    if (slot.pending)
+      lines.push(['hourglass', 'wait', t('pending', { when: when(slot.pending.at) })]);
     if (slot.last) {
       const w = when(slot.last.at);
-      if (slot.last.status === 'expired') lines.push(t('expired', { when: w }));
+      if (slot.last.status === 'expired')
+        lines.push(['hourglass', 'warn', t('expired', { when: w })]);
       else
-        lines.push(
+        lines.push([
+          'cross',
+          'bad',
           slot.last.reason
             ? t('rejected_reason', { when: w, reason: slot.last.reason })
             : t('rejected', { when: w }),
-        );
+        ]);
     }
     return `<div class="ai-slot" data-kind="${kind}">
       <div class="ai-slot-head"><strong>${esc(t(kind))}</strong>${open ? `<span class="dash-muted">${slot.width}×${slot.height}</span>` : ''}</div>
@@ -102,12 +109,12 @@
           ? `<img src="${esc(slot.live.url)}" alt="${esc(`[${ctx.alliance.tag}] ${t(kind)}`)}" loading="lazy">`
           : `<span class="dash-muted">${esc(t('none'))}</span>`
       }</div>
-      ${lines.map((l) => `<p class="ai-status">${esc(l)}</p>`).join('')}
+      ${lines.map(([icon, tone, text]) => `<p class="ai-status">${ic(icon, tone)}${esc(text)}</p>`).join('')}
       ${
         open
           ? `<div class="ai-slot-actions">
-        <button type="button" class="dash-btn" data-ai="choose" ${canSend ? '' : 'disabled'}>${esc(t(slot.live ? 'replace' : 'choose'))}</button>
-        ${slot.live && ctx.images.canRemove ? `<button type="button" class="dash-btn" data-ai="remove">${esc(t('remove'))}</button>` : ''}
+        <button type="button" class="dash-btn" data-ai="choose" ${canSend ? '' : 'disabled'}>${ic('camera')}${esc(t(slot.live ? 'replace' : 'choose'))}</button>
+        ${slot.live && ctx.images.canRemove ? `<button type="button" class="dash-btn" data-ai="remove">${ic('trash')}${esc(t('remove'))}</button>` : ''}
       </div>`
           : ''
       }
@@ -118,7 +125,9 @@
     const el = section.querySelector('.ai-message');
     el.hidden = !text;
     el.className = `ai-message${kind ? ` is-${kind}` : ''}`;
-    el.textContent = text || '';
+    // Errors with a red cross, good news with a green tick
+    const icon = kind === 'error' ? ic('cross', 'bad') : kind === 'ok' ? ic('check', 'ok') : '';
+    el.innerHTML = text ? icon + esc(text) : '';
   }
 
   async function onClick(e) {
@@ -472,7 +481,7 @@
       section._aiNote = { text: t('sent'), kind: 'ok' };
       section._ai.ctx.onChange?.();
     } catch (err) {
-      if (err.message) say(section, `❌ ${err.message}`, 'error');
+      if (err.message) say(section, err.message, 'error');
       button.disabled = false;
       button.textContent = t('send');
     }
@@ -490,12 +499,12 @@
       });
       const out = await res.json().catch(() => ({}));
       if (!res.ok) {
-        say(section, `❌ ${out.error || `HTTP ${res.status}`}`, 'error');
+        say(section, out.error || `HTTP ${res.status}`, 'error');
         return { ok: false, out };
       }
       return { ok: true, out };
     } catch (err) {
-      say(section, `❌ ${err.message}`, 'error');
+      say(section, err.message, 'error');
       return { ok: false };
     }
   }

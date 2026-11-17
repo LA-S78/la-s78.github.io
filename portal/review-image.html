@@ -32,8 +32,8 @@ strings: [image_review]
       <textarea id="ir-reason" rows="2" maxlength="300"></textarea>
     </div>
     <div class="form-actions ir-actions">
-      <button type="button" class="btn btn-secondary" id="ir-reject">{{ "image_review.reject" | t }}</button>
-      <button type="button" class="btn btn-primary" id="ir-approve">{{ "image_review.approve" | t }}</button>
+      <button type="button" class="btn btn-secondary" id="ir-reject">{% include ui-icon.html name="cross" %}{{ "image_review.reject" | t }}</button>
+      <button type="button" class="btn btn-primary" id="ir-approve">{% include ui-icon.html name="check" %}{{ "image_review.approve" | t }}</button>
     </div>
   </div>
 </div>
@@ -46,7 +46,9 @@ strings: [image_review]
     const show = (text, kind = '') => {
       message.hidden = false;
       message.className = `status-banner${kind ? ` ${kind}` : ''}`;
-      message.textContent = text;
+      // Errors with a red cross, done with a green tick (js/ui-icons.js)
+      const icon = !window.uiIcon ? '' : kind === 'error' ? uiIcon('cross', 'bad') : kind === 'status-success' ? uiIcon('check', 'ok') : '';
+      message.innerHTML = icon + window.escapeHtml(text);
     };
     const pass = () => localStorage.getItem('auth-session') || '';
     const ask = (query, init = {}) =>
@@ -122,12 +124,12 @@ strings: [image_review]
         show(t(decision === 'approve' ? 'image_review.done_approved' : 'image_review.done_rejected'), 'status-success');
         $('ir-review').hidden = true;
       } catch (err) {
-        show(`❌ ${err.message}`, 'error');
+        show(err.message, 'error');
         buttons.forEach((b) => (b.disabled = false));
       }
     }
     $('ir-approve').addEventListener('click', () => decide('approve'));
     $('ir-reject').addEventListener('click', () => decide('reject'));
-    load().catch((err) => show(`❌ ${err.message}`, 'error'));
+    load().catch((err) => show(err.message, 'error'));
   })();
 </script>

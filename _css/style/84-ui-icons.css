@@ -1,0 +1,37 @@
+/* ==========================================================================
+   INTERFACE ICONS (_data/ui_icons.yml; owner request, 2026-11-16): line icons at the start of
+   labels, buttons and messages, where emojis were. They sit on the text's line at the text's
+   size and colour; tones colour status icons by meaning, so a green tick or a red cross still
+   reads at a glance. Drawn by {% include ui-icon.html %} and uiIcon() (js/ui-icons.js).
+   ========================================================================== */
+
+.ui-ic {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
+  margin-inline-end: 0.35em;
+  vertical-align: -0.2em;
+}
+
+/* Alone (an icon-only button: uiIcon(name, 'solo')): no gap after it. (Not :only-child,
+   which ignores the text beside an icon.) */
+.ui-ic.ui-ic-solo {
+  margin-inline-end: 0;
+}
+
+.ui-ic-ok {
+  color: var(--status-success);
+}
+
+.ui-ic-bad {
+  color: var(--status-danger);
+}
+
+.ui-ic-warn {
+  color: var(--status-warning);
+}
+
+.ui-ic-wait {
+  color: var(--text-muted);
+}
