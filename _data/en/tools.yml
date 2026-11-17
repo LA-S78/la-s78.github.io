@@ -514,7 +514,7 @@ calendar_events:
   remind_at_start: "When it starts"
   remind_minutes: "{n} minutes before"
   remind_hour: "1 hour before"
-  remind_when_hint: "Reminders are checked every 10 minutes, so it can arrive a few minutes early."
+  remind_when_hint: "Reminders are checked every 5 minutes, so it can arrive a few minutes early."
   notify_off: "No reminder"
   notify_role: "Ping the alliance's alert role"
   notify_custom: "Ping a specific role"

@@ -1,6 +1,6 @@
 // api/_reminders.js
 // Calendar reminders on Discord ("_" files are helpers, not endpoints). cron-job.org calls
-// POST /api/calendar every 10 minutes with { action: 'check-reminders' } and the
+// POST /api/calendar every 5 minutes (since 2026-11-17; 10 before) with { action: 'check-reminders' } and the
 // REMINDER_SECRET header (GitHub's schedule never started; "Run workflow" on
 // .github/workflows/reminders.yml runs one by hand); api/calendar.js hands the request here.
 // Owner design, 2026-11-13:
@@ -8,8 +8,8 @@
 //     from when an hour was the only choice). Events made before reminders existed have none,
 //     so they never fire.
 //   - When (owner request, 2026-11-17): `reminder_minutes`, 0 to 60 in steps of 10, how long
-//     before the start (events from before it: 60). The check runs every 10 minutes, so a
-//     reminder is posted within the 10 minutes before that time. 0 ("when it starts") is
+//     before the start (events from before it: 60). The check runs every 5 minutes, so a
+//     reminder is posted within the 5 minutes before that time. 0 ("when it starts") is
 //     posted by the first check after the start, up to 15 minutes late, and says "Starting now".
 //   - Posted once per occurrence. A check can come a few minutes late, so the message shows
 //     the start as a Discord timestamp (each reader's own time, with a live countdown) rather

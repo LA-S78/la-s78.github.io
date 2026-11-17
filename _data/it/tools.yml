@@ -493,7 +493,7 @@ calendar_events:
   remind_at_start: All'inizio
   remind_minutes: "{n} minuti prima"
   remind_hour: 1 ora prima
-  remind_when_hint: I promemoria vengono controllati ogni 10 minuti, quindi possono arrivare con un leggero anticipo.
+  remind_when_hint: I promemoria vengono controllati ogni 5 minuti, quindi possono arrivare con un leggero anticipo.
   notify_off: Nessun promemoria
   notify_role: Notifica il ruolo avvisi dell'alleanza
   notify_custom: Notifica un ruolo specifico
