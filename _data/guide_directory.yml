@@ -197,8 +197,7 @@ events:
       <path d="M18.4 3.4a1.2 1.2 0 0 0-1.7 0l-5.3 5.3a1.2 1.2 0 0 0 0 1.7l2.3 2.3a1.2 1.2 0 0 0 1.7 0l5.3-5.3a1.2 1.2 0 0 0 0-1.7z" />
   - key: "crystal"
     event: crystal_cluster
-    url: /LANG_CODE/guides/crystal-valley.html
-    status: unavailable
+    url: /LANG_CODE/guides/crystal.html
     # the calendar's Crystal Cluster: a gem
     icon: |
       <path d="M6 3h12l4 6-10 13L2 9Z" />
