@@ -256,6 +256,13 @@ bot_rewards:
 # Stewards' and leaders' admin commands: /rank, /registerbot, /devupdate, and the private
 # replies to the proposal review buttons. (The reviewed proposal message itself is in the
 # shared war-room channel and stays in English.)
+# The Top 4 race's results post (api/_bot_ascension.js): private replies to a Steward's click
+bot_ascension:
+  stewards_only: "⛔ Only Kingdom Stewards can apply or keep the Top 4 order."
+  no_race: "This race's results are no longer stored."
+  already: "{name} has already decided this race."
+  cannot_apply: "The Top 4 can't be applied: {reason}. Use /rank instead."
+
 bot_admin:
   rank_none: "No alliances registered in current state."
   rank_title: "🛡️ Server NAP Standings"

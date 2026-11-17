@@ -822,7 +822,7 @@ ascension:
   title: "Top 4 race"
   week_of: "Kingdom War Week 1, week of {date}"
   in_progress: "In progress: measured so far on {days}."
-  finished: "Final: the four highest totals take the Top 4 seats from the next cycle, once a Steward confirms."
+  finished: "Final: the NAP ranks follow these totals once a Steward confirms; the Top 4 take their seats from the next cycle."
   col_alliance: "Alliance"
   col_day: "Day {n}"
   col_total: "Total"

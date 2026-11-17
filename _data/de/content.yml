@@ -4,7 +4,7 @@ rules_page:
     text: "Die folgenden Richtlinien sind obligatorisch, um Fairplay und Serverstabilität zu gewährleisten."
   rotation:
     title: "Kapitol-Rotation"
-    text: "Die Top 4 werden nach Macht bestimmt: Die Macht jeder NAP-Allianz, Akademien eingeschlossen, wird über die Allianz-Duell-Tage 3, 4 und 5 der Königreichskrieg-Woche 1 addiert. Die vier höchsten Summen erhalten ab dem nächsten Zyklus die Top-4-Plätze, sobald ein Steward bestätigt."
+    text: "Die NAP-Ränge werden nach Macht bestimmt: Jede NAP-Allianz, Akademien eingeschlossen, wird nach der Summe ihrer Macht an den Allianz-Duell-Tagen 3, 4 und 5 der Königreichskrieg-Woche 1 gereiht. Die vier höchsten erhalten ab dem nächsten Zyklus die Top-4-Plätze. Die neuen Ränge gelten, sobald ein Steward bestätigt."
     note: "*Hinweis: Die Macht wird an jedem der drei Tage automatisch 10 Minuten vor dem Reset (23:50 GT) gemessen.*"
   rewards:
     title: "Kapitol-Belohnungen"

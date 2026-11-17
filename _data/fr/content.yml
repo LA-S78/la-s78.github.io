@@ -4,7 +4,7 @@ rules_page:
     text: "Les directives suivantes sont obligatoires pour garantir le fair-play et la stabilité du serveur."
   rotation:
     title: "Rotation du Capitole"
-    text: "Le Top 4 est décidé par la Puissance : la Puissance de chaque alliance du PNA, académies comprises, est additionnée sur les jours 3, 4 et 5 du Duel d'Alliances de la Semaine 1 de la Guerre des Royaumes. Les quatre totaux les plus élevés occupent les places du Top 4 dès le cycle suivant, après confirmation d'un Steward."
+    text: "Les rangs du PNA sont décidés par la Puissance : chaque alliance du PNA, académies comprises, est classée selon le total de sa Puissance sur les jours 3, 4 et 5 du Duel d'Alliances de la Semaine 1 de la Guerre des Royaumes. Les quatre plus élevées occupent les places du Top 4 dès le cycle suivant. Les nouveaux rangs s'appliquent après confirmation d'un Steward."
     note: "*Remarque : la Puissance est mesurée automatiquement 10 minutes avant la réinitialisation (23:50 GT) chacun des trois jours.*"
   rewards:
     title: "Récompenses du Capitole"
