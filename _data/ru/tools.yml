@@ -15,18 +15,18 @@ common:
   move_up: Вверх
   move_down: Вниз
   copied: "✓ Скопировано"
-  optional: "(опционально)"
+  optional: "(необязательно)"
   now: сейчас
   duration_days: "{d}д {h}ч"
   duration_hours: "{h}ч {m}м"
   duration_minutes: "{m}м"
   game_time: "{time} GT"
   your_time: "{time} по вашему времени"
-  off_week: Неделя без событий
+  off_week: Неделя перерыва
   kw_week: Неделя Войны Королевств {n}
   copy: Скопировать
-  set_one: Комендация короля
-  set_two: Награда короля битвы
+  set_one: Награда Короля
+  set_two: Награда Короля битвы
   chests:
     commanders_will: Воля командира
     loyal_servant: Верный слуга
@@ -76,17 +76,17 @@ rewards_card:
   opens_in: откроется через {time}
   closes_at: Закрывается {when}
   opens_at: Открывается {when}, после пятничного события Капитолия
-  off_week: Неделя отдыха
-  kw_won: KW победа
-  kw_lost: KW поражение
-  kw_pending: KW ожидание
-  set_one: Похвала короля
-  set_two: Награда короля сражения
-  set_two_if_won: Награда короля сражения, при условии победы в войне
-  if_won: если победа
-  no_rank: 'Нет ранга в таблице: нет сундуков'
+  off_week: Неделя перерыва
+  kw_won: KW выиграна
+  kw_lost: KW проиграна
+  kw_pending: KW ожидается
+  set_one: Награда Короля
+  set_two: Награда Короля битвы
+  set_two_if_won: Награда Короля битвы, если война выиграна
+  if_won: если выиграна
+  no_rank: 'Нет рейтинга: сундуков нет'
   list_sent: Список отправлен · {count}
-  sent_at: Отправлен {when}
+  sent_at: Отправлено {when}
   reserves_one: "({n} резерв)"
   reserves_few: "({n} резерва)"
   reserves_other: "({n} резервов)"
@@ -96,7 +96,7 @@ rewards_card:
   edit_list: Редактировать
   send_list: Отправить список
   ask_r5: R5 или /nominate
-  ask_r5_help: Ваш R5 может открыть страницу номинаций отсюда или использовать команду /nominate в Discord.
+  ask_r5_help: Ваш R5 может открыть страницу номинаций отсюда или использовать /nominate в Discord.
   buyout_bonus: 'Выкуп: {amount} {chest} в каждом выигранном наборе'
   buyout_bonus_help: Финансируется WLO
   buyout_threat: 'угроза: {threat}'
