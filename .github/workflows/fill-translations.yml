@@ -2,10 +2,11 @@ name: Fill missing translations
 
 # For a guide that's already translated (_source/<guide>.md) but still has English in its
 # other languages' section titles (which also label the nav tabs), subtitle or picture
-# descriptions (alt text). Run by hand: Actions → "Fill missing translations" → Run
+# descriptions (alt text), or a section that doesn't match the English (a wrong section in
+# its place, or missing). Run by hand: Actions → "Fill missing translations" → Run
 # workflow, and type the guide's id (the file name without .md, e.g. kill_event). Gemini
-# translates only those leftover texts, nothing else in the guide changes, and a pull
-# request opens to check before merging. New guides get the same check automatically when
+# translates those sections again from the English and the leftover texts; nothing else in
+# the guide changes, and a pull request opens to check before merging. New guides get the same check automatically when
 # their _en draft is translated (_scripts/generate_master.rb, _scripts/guide_text_check.rb).
 
 on:
@@ -49,17 +50,17 @@ jobs:
         run: |
           git add -A _source/
           if git diff --cached --quiet; then
-            echo "Nothing left in English in $GUIDE." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "Nothing to fix in $GUIDE." | tee -a "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           branch="fill-translations/${GUIDE}-$(date -u +%Y%m%d-%H%M)"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$branch"
-          git commit -q -m "Translate the leftover English in the $GUIDE guide"
+          git commit -q -m "Fix the $GUIDE guide's translations"
           git push -q origin "$branch"
-          body="Section titles, subtitle and picture descriptions of the \`$GUIDE\` guide that were still in English in other languages, translated by the \"Fill missing translations\" workflow. Check them under Files changed before merging."
-          if url=$(gh pr create --base main --head "$branch" --title "Translations: fill leftover English in $GUIDE" --body "$body"); then
+          body="Fixes to the \`$GUIDE\` guide's translations by the \"Fill missing translations\" workflow: sections that didn't match the English translated again, and section titles, subtitle and picture descriptions still in English translated. Check them under Files changed before merging."
+          if url=$(gh pr create --base main --head "$branch" --title "Translations: fix $GUIDE" --body "$body"); then
             echo "Pull request: $url" | tee -a "$GITHUB_STEP_SUMMARY"
           else
             # Repositories can stop workflows opening pull requests (Settings → Actions →
