@@ -6,23 +6,23 @@ common:
   sign_in_again: Se reconnecter
   not_saved: 'Non enregistré : {error}'
   cancel: Annuler
-  save: "Enregistrer"
+  save: Enregistrer
   saving: Enregistrement…
   edit: Modifier
   delete: Supprimer
   remove: Retirer
   undo: Annuler
-  move_up: Monter
-  move_down: Descendre
+  move_up: Déplacer vers le haut
+  move_down: Déplacer vers le bas
   copied: "✓ Copié"
-  optional: "(optionnel)"
+  optional: "(facultatif)"
   now: maintenant
   duration_days: "{d}j {h}h"
   duration_hours: "{h}h {m}m"
   duration_minutes: "{m}m"
   game_time: "{time} GT"
   your_time: "{time} heure locale"
-  off_week: Semaine de pause
+  off_week: Semaine Off
   kw_week: Semaine de Guerre des Royaumes {n}
   copy: Copier
   set_one: Mention du Roi
@@ -30,7 +30,7 @@ common:
   chests:
     commanders_will: Volonté du Commandant
     loyal_servant: Serviteur Loyal
-    followers_heart: Cœur du Disciple
+    followers_heart: Cœur du Suiveur
     honor_vanguard: Avant-garde d'Honneur
     fearless_hero: Héros Intrépide
     logistics_support: Soutien Logistique
@@ -47,125 +47,125 @@ dashboard:
   sign_in_title: Connectez-vous pour voir le tableau de bord de votre alliance.
   sign_in_help: Utilisez {sign_in} en haut à droite (Discord). Votre alliance est identifiée via votre rôle NAP sur le serveur.
   sign_in_button: Se connecter
-  load_failed: Impossible de charger le tableau de bord. Vérifiez votre connexion et actualisez. ({error})
-  edit_dashboard: "Modifier le tableau de bord"
-  done_editing: "✓ Fin de modification"
-  add_chart: "Ajouter un graphique ou un tableau"
+  load_failed: Impossible de charger le tableau de bord. Vérifiez votre connexion et rafraîchissez. ({error})
+  edit_dashboard: Modifier le tableau de bord
+  done_editing: "✓ Modification terminée"
+  add_chart: Ajouter un graphique ou tableau
   editor_label: Éditeur de graphique ou tableau
   charts_label: Graphiques et tableaux de l'alliance
-  empty_member: "Les leaders de votre alliance n'ont pas encore partagé de graphiques ou de tableaux ici."
-  empty_editing: "Aucun graphique ou tableau pour le moment : utilisez « Ajouter un graphique ou un tableau »."
-  empty_leader: "Aucun graphique ou tableau pour le moment. Utilisez « Modifier le tableau de bord » pour en ajouter un."
-  visible_members: "Tous les membres"
-  visible_officers: "Officiers uniquement"
+  empty_member: Les leaders de votre alliance n'ont encore partagé aucun graphique ou tableau ici.
+  empty_editing: 'Aucun graphique ou tableau pour le moment : utilisez « Ajouter un graphique ou tableau ».'
+  empty_leader: Aucun graphique ou tableau. Utilisez « Modifier le tableau de bord » pour en ajouter un.
+  visible_members: Tous les membres
+  visible_officers: Officiers uniquement
   google_sheet: Google Sheet
   google_doc: Google Doc
   synced: synchronisé {when}
   updated: Mis à jour {when}
-  sync_now: "Synchroniser maintenant"
-  syncing: "Synchronisation…"
-  sync_help: Récupérer les dernières données depuis la feuille
+  sync_now: Synchroniser maintenant
+  syncing: Synchronisation…
+  sync_help: Récupérer les dernières données de la feuille
   confirm_delete: Supprimer « {title} » ? Cette action est irréversible.
   this_chart: ce graphique
 rewards_card:
-  title: "Récompenses Hebdomadaires"
+  title: Récompenses Hebdomadaires
   officers: Officiers
   open: Ouvert
   closed: Fermé
   time_left: "{time} restant"
   opens_in: ouvre dans {time}
-  closes_at: Ferme le {when}
-  opens_at: Ouvre le {when}, après l'événement du capitole du vendredi
-  off_week: Semaine de repos
-  kw_won: "KW gagnée"
-  kw_lost: "KW perdue"
-  kw_pending: "KW en attente"
+  closes_at: Ferme {when}
+  opens_at: Ouvre {when}, après l'événement du Capitole du vendredi
+  off_week: Semaine Off
+  kw_won: Guerre des Royaumes gagnée
+  kw_lost: Guerre des Royaumes perdue
+  kw_pending: Guerre des Royaumes en attente
   set_one: Mention du Roi
   set_two: Récompense du Roi de la Bataille
   set_two_if_won: Récompense du Roi de la Bataille, si la guerre est gagnée
   if_won: si gagnée
-  no_rank: 'Aucun classement : pas de coffres'
-  list_sent: "Liste envoyée · {count}"
-  sent_at: Envoyé le {when}
+  no_rank: 'Pas de rang au classement : pas de coffres'
+  list_sent: Liste envoyée · {count}
+  sent_at: Envoyé {when}
   reserves_one: "({n} réserve)"
   reserves_other: "({n} réserves)"
   empty_slots: "{n} vide(s)"
-  list_not_sent: "Liste non envoyée"
-  no_list_closed: Pas de liste pendant la fermeture
-  edit_list: "Modifier"
-  send_list: "Envoyer la liste"
+  list_not_sent: Liste non envoyée
+  no_list_closed: Pas de liste en mode fermé
+  edit_list: Modifier
+  send_list: Envoyer la liste
   ask_r5: R5 ou /nominate
   ask_r5_help: Votre R5 peut ouvrir la page de nomination depuis ici, ou utiliser /nominate sur Discord.
-  buyout_bonus: "Rachat : {amount} {chest} dans chaque ensemble gagné"
+  buyout_bonus: 'Rachat : {amount} {chest} dans chaque ensemble gagné'
   buyout_bonus_help: Financé par WLO
   buyout_threat: 'menace : {threat}'
-  buyout_cost: "Rachat : {amount} {chest} dans chaque ensemble"
+  buyout_cost: 'Rachat : {amount} {chest} dans chaque ensemble'
   buyout_cost_help: Financement de l'alliance déplacée cette semaine
 caravan:
-  title: "Rotor de Caravane"
+  title: Rotation de Caravane
   picked_count: "{picked}/{total} sélectionné(s)"
-  members_can_view: "Les membres peuvent voir"
-  copy_status: "Copier le statut"
-  new_week: "Nouvelle semaine"
+  members_can_view: Visible par les membres
+  copy_status: Copier le statut
+  new_week: Nouvelle semaine
   member_note: Sélectionné par vos R4 lorsqu'une caravane est prête.
   search: Rechercher des noms…
-  around_now: "Vers maintenant"
-  around_now_help: Uniquement les joueurs disponibles vers maintenant
+  around_now: Disponibles maintenant
+  around_now_help: Uniquement les joueurs disponibles autour de maintenant
   available: Disponible cette semaine ({n})
   picked: Sélectionné cette semaine ({n})
   nobody_matches: Aucun résultat.
-  everyone_picked: "Tout le monde a eu une caravane cette semaine."
+  everyone_picked: Tout le monde a eu une caravane cette semaine.
   add_players: Ajouter des joueurs ci-dessous.
   no_players: Aucun joueur pour le moment.
   flexible: flexible
-  pick: "✓ Sélectionné"
+  pick: "✓ Sélectionner"
   back_to_available: Retour aux disponibles
   name: Nom
-  from: De (Heure du Jeu)
-  to: À (Heure du Jeu)
+  from: De (Game Time)
+  to: À (Game Time)
   player_name: Nom du joueur
   add_from: De 18:00
   add_to: À 22:00
-  add_from_label: Disponible à partir de (Heure du Jeu, facultatif)
-  add_to_label: Disponible jusqu'à (Heure du Jeu, facultatif)
-  add: "Ajouter"
-  times_help: Les heures sont à l'Heure du Jeu (UTC-2) et facultatives ; laissez-les vides pour les joueurs flexibles.
-  status_title: "🐪 [{tag}] Rotor de Caravane : {picked}/{total} sélectionné(s)"
+  add_from_label: Disponible à partir de (Game Time, facultatif)
+  add_to_label: Disponible jusqu'à (Game Time, facultatif)
+  add: Ajouter
+  times_help: Les horaires sont au format Game Time (UTC-2) et facultatifs ; laissez vide pour les joueurs flexibles.
+  status_title: "🐪 [{tag}] Rotation de Caravane : {picked}/{total} sélectionné(s)"
   status_available: 'Disponible : {names}'
   status_picked: 'Sélectionné : {names}'
   nobody: personne
   nobody_yet: personne pour l'instant
-  copy_prompt: 'Copier le statut du rotor :'
-  confirm_remove: Retirer {name} du rotor ?
+  copy_prompt: 'Copier le statut de la rotation :'
+  confirm_remove: Retirer {name} de la rotation ?
   this_player: ce joueur
-  confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde revient en disponible (les noms et heures sont conservés).
+  confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde repasse en disponible (les noms et horaires sont conservés).
 chart_editor:
-  edit_title: "Modifier le graphique ou le tableau"
-  new_title: "Nouveau graphique ou tableau"
+  edit_title: Modifier le graphique ou tableau
+  new_title: Nouveau graphique ou tableau
   type: Type
-  type_bar: "Barres"
-  type_line: "Lignes"
-  type_pie: "Secteurs"
-  type_progress: "Progression"
-  type_table: "Tableau"
+  type_bar: Barres
+  type_line: Ligne
+  type_pie: Secteurs
+  type_progress: Progression
+  type_table: Tableau
   title: Titre
-  title_example: ex. Scores du Duel d'Alliances
+  title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: ex. 15M de points de Duel minimum requis avant la réinitialisation de vendredi
-  who_sees: Qui peut voir ceci
+  note_example: ex. Minimum 15M de points de duel requis pour la réinitialisation de vendredi
+  who_sees: Visibilité
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
   data: Données
   data_source: Source des données
-  paste: "Coller un tableau"
-  link: "Lien Google Sheet / Doc"
-  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
-  tab_name: Nom de l'onglet (optionnel)
-  range: Plage, ex. A1:D20 (optionnel)
+  paste: Coller un tableau
+  link: Lien Google Sheet / Doc
+  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête en premier) et collez-les ici.
+  tab_name: Nom de l'onglet (facultatif)
+  range: Plage, ex. A1:D20 (facultatif)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → « Toute personne disposant du lien peut consulter » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupère les derniers chiffres plus tard.'
+  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent voir » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupérera les dernières données plus tard.'
   load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
   preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
@@ -178,12 +178,12 @@ chart_editor:
   labels: Noms (étiquettes)
   numbers_to_show: Nombres à afficher
   labels_swapped: Noms (une ligne ou barre chacun)
-  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
-  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
-  swap_help: 'Pour les feuilles avec une rangée par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
+  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : colonnes en barres, une couleur par ligne"
+  swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs à travers les semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
-  rows_count: "{n} sur 6 choisi(e)s"
+  rows_count: "{n} sur 6 choisis"
   columns_along: Colonnes en bas (dans l'ordre de la feuille)
   numbers: Nombres
   several_columns: Plusieurs colonnes de nombres
@@ -192,18 +192,18 @@ chart_editor:
   stacked_percent: 'Empilé : chaque barre à 100%'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
-  traffic_columns: "Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte"
-  traffic_size: "Rouge → jaune → vert (bas → haut) : par rang, haut en vert"
-  traffic_reverse: "Inverser : le bas est bon (vert), le haut est mauvais (rouge)"
-  traffic_target: "Rouge → jaune → vert selon la proximité de la cible"
-  traffic_target_reverse: "Inverser : plus on est loin en dessous de la cible, mieux c'est"
+  traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
+  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, top en vert'
+  traffic_reverse: 'Inversé : bas est bon (vert), haut est mauvais (rouge)'
+  traffic_target: Rouge → jaune → vert selon la proximité avec la cible
+  traffic_target_reverse: 'Inversé : plus loin en dessous de la cible est meilleur'
   donut: Donut (anneau)
-  target: Cible pour tous
+  target: Cible pour tout le monde
   target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le nombre ci-dessus)"
-  highlight_where: Mettre en évidence les lignes où
-  no_highlight: "(aucune mise en évidence)"
+  use_number_above: "(utiliser le nombre au-dessus)"
+  highlight_where: Surligner les lignes où
+  no_highlight: "(aucun surlignage)"
   at_least: est au moins
   at_least_example: ex. 300M
 charts:
@@ -766,60 +766,60 @@ live_data:
 capitol_rotation:
   calendar_link: Voir la rotation de ce cycle sur le calendrier →
 image_review:
-  page_title: Réviser l'image d'alliance
+  page_title: Réviser l'image de l'Alliance
   loading: Chargement de l'image…
-  sign_in_needed: Connectez-vous avec Discord pour réviser cette image. Seuls les Stewards peuvent la voir.
+  sign_in_needed: Connectez-vous avec Discord pour réviser cette image. Seuls les Intendants peuvent la voir.
   sign_in: Se connecter avec Discord
-  stewards_only: Seuls les Stewards peuvent réviser les images d'alliance.
-  no_id: L'ID de l'image est manquant dans ce lien. Ouvrez-le à nouveau depuis le message Discord.
+  stewards_only: Seuls les Intendants peuvent réviser les images d'alliance.
+  no_id: Il manque l'ID de l'image. Ouvrez-la à nouveau depuis le post Discord.
   wide: Bannière (Rangs NAP)
   card: Carte (Rotation du Capitole)
   sent_by: Envoyé par {name}, {when}
-  replaces: L'approbation remplacera l'image actuelle de l'alliance.
-  checklist: 'Vérifiez avant d''approuver : illustration propre à l''alliance ou au jeu ; pas de branding d''une autre alliance ; rien d''offensant ; pas d''informations personnelles.'
-  reason_label: Raison (optionnel, affichée dans le message Discord si vous refusez)
-  approve: "Approuver"
-  reject: "Rejeter"
+  replaces: L'approbation remplace l'image actuelle de l'alliance.
+  checklist: 'Vérifiez avant d''approuver : art original de l''alliance ou du jeu ; pas de marque d''une autre alliance ; rien d''offensant ; pas d''informations personnelles.'
+  reason_label: Raison (facultatif, affichée dans le post Discord si vous rejetez)
+  approve: Approuver
+  reject: Rejeter
   working: Enregistrement…
   decided_approved: Déjà approuvé.
   decided_rejected: Déjà rejeté.
-  decided_replaced: Remplacé par une image plus récente de l'alliance.
+  decided_replaced: Remplacé par une nouvelle image de l'alliance.
   decided_expired: 'Expiré : non révisé sous 7 jours.'
-  done_approved: Approuvé. L'image est maintenant en ligne et le message Discord est mis à jour.
-  done_rejected: Rejeté. L'image a été supprimée et le message Discord est mis à jour.
+  done_approved: Approuvé. L'image est maintenant en ligne et le post Discord est mis à jour.
+  done_rejected: Rejeté. L'image a été supprimée et le post Discord est mis à jour.
 alliance_images:
-  title: "Images d'alliance"
-  edit: "Modifier les images"
-  done: "✓ Fin de modification"
-  help: Ajoutez une image derrière la carte de Rotation du Capitole et la ligne des Rangs NAP de votre alliance. Un Steward vérifie chaque image avant que quiconque ne puisse la voir.
-  rules: 'Utilisez une illustration propre à votre alliance ou au jeu : pas de branding d''une autre alliance, rien d''offensant, pas d''informations personnelles.'
+  title: Images de l'Alliance
+  edit: Modifier les images
+  done: "✓ Modification terminée"
+  help: Ajoutez une image derrière la carte de Rotation du Capitole et la ligne de Rangs NAP. Un Intendant vérifie chaque image avant qu'elle ne soit visible.
+  rules: 'Utilisez l''art de votre alliance ou du jeu : pas de marque d''une autre alliance, rien d''offensant, pas d''informations personnelles.'
   left_today: "{left} sur {max} images restantes aujourd'hui pour votre alliance."
-  not_ready: Les téléchargements d'images ne sont pas encore activés.
+  not_ready: Le téléchargement d'images n'est pas encore activé.
   card: Carte de Rotation du Capitole
-  wide: Bannière des Rangs NAP
+  wide: Bannière de Rangs NAP
   none: Aucune image pour le moment
-  live: "En ligne depuis {when}"
-  pending: "En attente d'un Steward depuis {when}"
-  rejected: "Rejeté {when}"
-  rejected_reason: "Rejeté {when} : « {reason} »"
-  expired: "Non révisé à temps ({when}). Envoyez-le à nouveau."
-  choose: "Choisir une image"
-  replace: "Choisir une nouvelle image"
-  remove: "Supprimer"
-  confirm_remove: Supprimer le {slot} ? L'image disparaîtra immédiatement pour tout le monde.
-  crop_title: Positionner le {slot}
-  crop_help: Faites glisser pour déplacer. Pincez, faites défiler ou utilisez le curseur pour zoomer. Seule la partie à l'intérieur du cadre sera envoyée.
+  live: En ligne depuis {when}
+  pending: En attente d'un Intendant depuis {when}
+  rejected: Rejeté {when}
+  rejected_reason: 'Rejeté {when} : « {reason} »'
+  expired: Non révisé à temps ({when}). Envoyez-la à nouveau.
+  choose: Choisir une image
+  replace: Choisir une nouvelle image
+  remove: Retirer
+  confirm_remove: Retirer {slot} ? Elle disparaîtra immédiatement pour tout le monde.
+  crop_title: Positionner {slot}
+  crop_help: Glissez pour déplacer. Pincez, faites défiler ou utilisez le curseur pour zoomer. Seul ce qui est dans le cadre sera envoyé.
   zoom: Zoom
-  preview_title: Aperçu
+  preview_title: Apparence finale
   preview_phone: Téléphone
-  preview_desktop: Ordinateur
+  preview_desktop: Bureau
   preview_week: Semaine 1 Ven
-  preview_loot: 2 Coffres de Roi
-  preview_status: Protégé par NAP
+  preview_loot: 2 Coffres du Roi
+  preview_status: NAP Protégé
   send: Envoyer pour révision
-  sending: Envoi en cours…
+  sending: Envoi…
   cancel: Annuler
-  sent: Envoyé. Un Steward va le réviser ; il apparaîtra une fois approuvé.
-  not_image: Ce fichier n'est pas une image que ce navigateur peut ouvrir. Essayez un JPEG ou PNG.
-  too_small: Cette image est assez petite ({width}×{height}) ; elle pourrait paraître floue. Vous pouvez tout de même l'envoyer.
+  sent: Envoyé. Un Intendant la révisera ; elle apparaîtra une fois approuvée.
+  not_image: Ce fichier n'est pas une image lisible par ce navigateur. Essayez un JPEG ou PNG.
+  too_small: Cette image est assez petite ({width}×{height}) ; elle pourrait être floue. Vous pouvez quand même l'envoyer.
   load_failed: L'image n'a pas pu être ouverte.

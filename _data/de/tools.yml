@@ -6,8 +6,8 @@ common:
   sign_in_again: Erneut anmelden
   not_saved: 'Nicht gespeichert: {error}'
   cancel: Abbrechen
-  save: "Speichern"
-  saving: Speichern...
+  save: Speichern
+  saving: Speichern…
   edit: Bearbeiten
   delete: Löschen
   remove: Entfernen
@@ -22,18 +22,18 @@ common:
   duration_minutes: "{m}m"
   game_time: "{time} GT"
   your_time: "{time} deine Zeit"
-  off_week: Off-Woche
+  off_week: Off-Week
   kw_week: Königreichskrieg-Woche {n}
   copy: Kopieren
   set_one: Belobigung des Königs
   set_two: Belohnung des Schlachtkönigs
   chests:
     commanders_will: Wille des Kommandanten
-    loyal_servant: Treuer Diener
-    followers_heart: Herz der Gefolgschaft
-    honor_vanguard: Ehrenvorhut
+    loyal_servant: Loyaler Diener
+    followers_heart: Herz des Gefolgsmanns
+    honor_vanguard: Ehren-Vorhut
     fearless_hero: Furchtloser Held
-    logistics_support: Logistikunterstützung
+    logistics_support: Logistik-Unterstützung
 dashboard:
   title: Allianz-Dashboard
   loading: Allianz-Dashboard wird geladen…
@@ -41,80 +41,80 @@ dashboard:
   page_title: "[{tag}] Allianz-Dashboard"
   subtitle: Allianz-Dashboard · {view}
   subtitle_rank: 'Allianz-Dashboard · Rang #{rank} · {view}'
-  view_steward: Verwalter-Ansicht
+  view_steward: Steward-Ansicht
   view_leader: Führungs-Ansicht
   view_member: Mitglieder-Ansicht
   sign_in_title: Melde dich an, um dein Allianz-Dashboard zu sehen.
-  sign_in_help: Nutze {sign_in} oben rechts (Discord). Deine Allianz wird anhand deiner NAP-Serverrolle gefunden.
+  sign_in_help: Verwende {sign_in} oben rechts (Discord). Deine Allianz wird über deine NAP-Serverrolle gefunden.
   sign_in_button: Anmelden
-  load_failed: Dashboard konnte nicht geladen werden. Überprüfe die Verbindung und aktualisiere. ({error})
-  edit_dashboard: "Dashboard bearbeiten"
-  done_editing: "✓ Bearbeitung beenden"
-  add_chart: "Diagramm oder Tabelle hinzufügen"
+  load_failed: Das Dashboard konnte nicht geladen werden. Überprüfe deine Verbindung und aktualisiere die Seite. ({error})
+  edit_dashboard: Dashboard bearbeiten
+  done_editing: "✓ Bearbeitung beendet"
+  add_chart: Diagramm oder Tabelle hinzufügen
   editor_label: Diagramm- oder Tabellen-Editor
-  charts_label: Allianz-Diagramme und -Tabellen
-  empty_member: "Die Führung deiner Allianz hat hier noch keine Diagramme oder Tabellen geteilt."
-  empty_editing: "Noch keine Diagramme oder Tabellen: Nutze „Diagramm oder Tabelle hinzufügen“."
-  empty_leader: "Noch keine Diagramme oder Tabellen. Nutze „Dashboard bearbeiten“, um eine hinzuzufügen."
-  visible_members: "Alle Mitglieder"
-  visible_officers: "Nur Offiziere"
+  charts_label: Allianz-Diagramme und Tabellen
+  empty_member: Die Führung deiner Allianz hat hier noch keine Diagramme oder Tabellen geteilt.
+  empty_editing: 'Noch keine Diagramme oder Tabellen: Nutze „Diagramm oder Tabelle hinzufügen“.'
+  empty_leader: Noch keine Diagramme oder Tabellen. Nutze „Dashboard bearbeiten“, um eines hinzuzufügen.
+  visible_members: Alle Mitglieder
+  visible_officers: Nur Offiziere
   google_sheet: Google Tabelle
   google_doc: Google Dokument
   synced: synchronisiert {when}
   updated: Aktualisiert {when}
-  sync_now: "Jetzt synchronisieren"
-  syncing: "Synchronisiere…"
+  sync_now: Jetzt synchronisieren
+  syncing: Synchronisiere…
   sync_help: Die neuesten Zahlen aus der Tabelle abrufen
-  confirm_delete: "„{title}“ löschen? Dies kann nicht rückgängig gemacht werden."
+  confirm_delete: '"{title}" löschen? Dies kann nicht rückgängig gemacht werden.'
   this_chart: dieses Diagramm
 rewards_card:
-  title: "Wöchentliche Belohnungen"
+  title: Wöchentliche Belohnungen
   officers: Offiziere
   open: Offen
   closed: Geschlossen
   time_left: "{time} verbleibend"
   opens_in: öffnet in {time}
   closes_at: Schließt {when}
-  opens_at: Öffnet {when}, nach dem Kapitol-Event am Freitag
-  off_week: Woche ohne Belohnungen
-  kw_won: "KW gewonnen"
-  kw_lost: "KW verloren"
-  kw_pending: "KW ausstehend"
+  opens_at: Öffnet {when}, nach dem Event am Freitag
+  off_week: Off-Week
+  kw_won: KW gewonnen
+  kw_lost: KW verloren
+  kw_pending: KW ausstehend
   set_one: Belobigung des Königs
   set_two: Belohnung des Schlachtkönigs
   set_two_if_won: Belohnung des Schlachtkönigs, wenn der Krieg gewonnen wurde
-  if_won: falls gewonnen
-  no_rank: 'Kein Rang in der Wertung: keine Truhen'
-  list_sent: "Liste gesendet · {count}"
+  if_won: wenn gewonnen
+  no_rank: 'Kein Rang in der Rangliste: keine Truhen'
+  list_sent: Liste gesendet · {count}
   sent_at: Gesendet {when}
   reserves_one: "({n} Reserve)"
   reserves_other: "({n} Reserven)"
-  empty_slots: "{n} leer"
-  list_not_sent: "Liste nicht gesendet"
-  no_list_closed: Keine Liste während der Schließung
-  edit_list: "Bearbeiten"
-  send_list: "Liste senden"
+  empty_slots: "{n} frei"
+  list_not_sent: Liste nicht gesendet
+  no_list_closed: Keine Liste bei geschlossenem Event
+  edit_list: Bearbeiten
+  send_list: Liste senden
   ask_r5: R5 oder /nominate
-  ask_r5_help: Dein R5 kann hier die Nominierungsseite öffnen oder /nominate in Discord nutzen.
-  buyout_bonus: "Auszahlung: {amount} {chest} in jedem gewonnenen Set"
+  ask_r5_help: Dein R5 kann hier die Nominierungsseite öffnen oder /nominate in Discord ausführen.
+  buyout_bonus: 'Ablöse: {amount} {chest} in jedem gewonnenen Set'
   buyout_bonus_help: Finanziert durch WLO
   buyout_threat: 'Bedrohung: {threat}'
-  buyout_cost: "Auszahlung: {amount} {chest} in jedem Set"
+  buyout_cost: 'Ablöse: {amount} {chest} in jedem Set'
   buyout_cost_help: Finanzierung der verdrängten Allianz diese Woche
 caravan:
-  title: "Karawanen-Rotation"
+  title: Karawanen-Rotor
   picked_count: "{picked}/{total} ausgewählt"
-  members_can_view: "Mitglieder können dies sehen"
-  copy_status: "Status kopieren"
-  new_week: "Neue Woche"
+  members_can_view: Mitglieder können ansehen
+  copy_status: Status kopieren
+  new_week: Neue Woche
   member_note: Wird von deinen R4s ausgewählt, wenn eine Karawane bereit ist.
   search: Namen suchen…
-  around_now: "Ungefähr jetzt"
+  around_now: Ungefähr jetzt
   around_now_help: Nur Spieler, die ungefähr jetzt verfügbar sind
   available: Diese Woche verfügbar ({n})
   picked: Diese Woche ausgewählt ({n})
   nobody_matches: Niemand gefunden.
-  everyone_picked: "Jeder hatte diese Woche eine Karawane."
+  everyone_picked: Jeder hatte diese Woche bereits eine Karawane.
   add_players: Spieler unten hinzufügen.
   no_players: Noch keine Spieler.
   flexible: flexibel
@@ -124,49 +124,49 @@ caravan:
   from: Von (Game Time)
   to: Bis (Game Time)
   player_name: Spielername
-  add_from: Von 18:00
+  add_from: Ab 18:00
   add_to: Bis 22:00
   add_from_label: Verfügbar ab (Game Time, optional)
   add_to_label: Verfügbar bis (Game Time, optional)
-  add: "Hinzufügen"
-  times_help: Die Zeiten sind Game Time (UTC-2) und optional; lass sie leer für Spieler, die flexibel sind.
-  status_title: "🐪 [{tag}] Karawanen-Rotation: {picked}/{total} ausgewählt"
+  add: Hinzufügen
+  times_help: Zeiten sind Game Time (UTC-2) und optional; lass sie für flexible Spieler leer.
+  status_title: "🐪 [{tag}] Karawanen-Rotor: {picked}/{total} ausgewählt"
   status_available: 'Verfügbar: {names}'
   status_picked: 'Ausgewählt: {names}'
   nobody: niemand
   nobody_yet: noch niemand
-  copy_prompt: 'Rotationsstatus kopieren:'
-  confirm_remove: "{name} aus der Rotation entfernen?"
-  this_player: dieser Spieler
-  confirm_new_week: Eine neue Woche starten? Jeder wird wieder auf verfügbar gesetzt (die Namen und Zeiten bleiben erhalten).
+  copy_prompt: 'Rotor-Status kopieren:'
+  confirm_remove: "{name} aus dem Rotor entfernen?"
+  this_player: diesen Spieler
+  confirm_new_week: Neue Woche starten? Alle kehren zu „verfügbar“ zurück (die Namen und Zeiten bleiben erhalten).
 chart_editor:
-  edit_title: "Diagramm oder Tabelle bearbeiten"
-  new_title: "Neues Diagramm oder neue Tabelle"
+  edit_title: Diagramm oder Tabelle bearbeiten
+  new_title: Neues Diagramm oder Tabelle
   type: Typ
-  type_bar: "Balken"
-  type_line: "Linie"
-  type_pie: "Tortendiagramm"
-  type_progress: "Fortschritt"
-  type_table: "Tabelle"
+  type_bar: Balken
+  type_line: Linie
+  type_pie: Kreis
+  type_progress: Fortschritt
+  type_table: Tabelle
   title: Titel
-  title_example: z. B. Allianz-Duell Punktzahlen
+  title_example: z. B. Allianz-Duell Punktzahl
   note: Erklärung
-  note_example: z. B. Mindestens 15M Duell-Punkte bis zum Reset am Freitag erforderlich
-  who_sees: Wer kann dies sehen
+  note_example: z. B. Mindestens 15M Duell-Punkte bis zum Freitag-Reset erforderlich
+  who_sees: Wer darf es sehen
   officers_only: Nur Offiziere (R4/R5)
-  all_members: Alle Allianzmitglieder
+  all_members: Alle Allianz-Mitglieder
   data: Daten
-  data_source: Woher die Daten stammen
-  paste: "Tabelle einfügen"
-  link: "Google Sheet / Doc Link"
-  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
+  data_source: Woher stammen die Daten
+  paste: Tabelle einfügen
+  link: Google Tabelle / Dokument Link
+  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst Kopfzeile) und füge sie hier ein.
   tab_name: Tab-Name (optional)
   range: Bereich, z. B. A1:D20 (optional)
-  doc_table: Welche Tabelle im Doc (1, 2…)
+  doc_table: Welche Tabelle im Dokument (1, 2…)
   load: "⤓ Von Google laden"
-  loading: "⤓ Lade..."
-  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte lädt später die neuesten Zahlen.'
-  load_first: Lade zuerst das Tabellenblatt (⤓ Von Google laden).
+  loading: "⤓ Lade…"
+  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
+  load_first: Lade zuerst die Tabelle (⤓ Von Google laden).
   preview: Vorschau
   preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
   size: "{rows} × {columns}"
@@ -177,31 +177,31 @@ chart_editor:
   at_most_500: "(maximal 500)"
   labels: Namen (Beschriftungen)
   numbers_to_show: Anzuzeigende Zahlen
-  labels_swapped: Namen (eine Zeile oder ein Balken pro Person)
+  labels_swapped: Namen (eine Zeile oder ein Balken je)
   swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten entlang der Unterseite"
   swap_bar: "⇄ Zeilen und Spalten tauschen: die Spalten als Balken, eine Farbe pro Zeile"
-  swap_help: 'Für Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
+  swap_help: 'Für Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen zu verfolgen.'
   rows_to_draw: Zeilen zum Zeichnen (bis zu 6)
-  rows_filter: Namen suchen...
+  rows_filter: Name suchen…
   rows_count: "{n} von 6 ausgewählt"
   columns_along: Spalten entlang der Unterseite (in Tabellenreihenfolge)
   numbers: Zahlen
   several_columns: Mehrere Zahlenspalten
   side_by_side: Nebeneinander
-  stacked_totals: 'Gestapelt: Gesamtsummen'
-  stacked_percent: 'Gestapelt: jeder Balken bis 100%'
+  stacked_totals: 'Gestapelt: Summen'
+  stacked_percent: 'Gestapelt: jeder Balken auf 100%'
   vertical: Vertikale Balken
   vertical_leaderboard: Vertikale Balken (statt einer Rangliste)
-  traffic_columns: "Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün"
-  traffic_size: "Rot → gelb → grün (niedrig → hoch): nach Rang, oben grün"
-  traffic_reverse: "Umkehren: niedrig ist gut (grün), hoch ist schlecht (rot)"
-  traffic_target: "Rot → gelb → grün basierend darauf, wie nah jeder am Ziel ist"
-  traffic_target_reverse: "Umkehren: je weiter unter dem Ziel, desto besser"
+  traffic_columns: 'Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün'
+  traffic_size: 'Rot → gelb → grün (niedrig → hoch): nach Rang, Top-Rang grün'
+  traffic_reverse: 'Umgekehrt: niedrig ist gut (grün), hoch ist schlecht (rot)'
+  traffic_target: Rot → gelb → grün danach, wie nah jeder am Ziel ist
+  traffic_target_reverse: 'Umgekehrt: weiter unter dem Ziel ist besser'
   donut: Donut (Ring)
   target: Ziel für alle
   target_example: z. B. 15M oder 15000000
   target_column: "…oder eine Spalte mit Zielen"
-  use_number_above: "(die Zahl oben verwenden)"
+  use_number_above: "(verwende die Zahl oben)"
   highlight_where: Zeilen hervorheben, wo
   no_highlight: "(keine Hervorhebung)"
   at_least: mindestens ist
@@ -767,59 +767,59 @@ capitol_rotation:
   calendar_link: Rotation dieses Zyklus im Kalender ansehen →
 image_review:
   page_title: Allianz-Bild überprüfen
-  loading: Lade das Bild…
+  loading: Bild wird geladen…
   sign_in_needed: Melde dich mit Discord an, um dieses Bild zu überprüfen. Nur Stewards können es sehen.
   sign_in: Mit Discord anmelden
   stewards_only: Nur Stewards können Allianz-Bilder überprüfen.
-  no_id: Diesem Link fehlt die Bild-ID. Öffne ihn erneut über den Discord-Post.
+  no_id: Diesem Link fehlt die Bild-ID. Öffne ihn erneut aus dem Discord-Beitrag.
   wide: Banner (NAP-Ränge)
   card: Karte (Kapitol-Rotation)
   sent_by: Gesendet von {name}, {when}
   replaces: Das Genehmigen ersetzt das aktuelle Allianz-Bild.
-  checklist: 'Vor der Genehmigung prüfen: Eigene Allianz-Kunst oder Spiel-Grafik; kein Branding anderer Allianzen; nichts Anstößiges; keine persönlichen Informationen.'
-  reason_label: Grund (optional, wird bei Ablehnung im Discord-Post angezeigt)
-  approve: "Genehmigen"
-  reject: "Ablehnen"
-  working: Speichere…
+  checklist: 'Prüfung vor Genehmigung: eigene Allianz-Kunst oder In-Game-Kunst; kein Branding anderer Allianzen; nichts Anstößiges; keine persönlichen Informationen.'
+  reason_label: Grund (optional, wird im Discord-Beitrag bei Ablehnung angezeigt)
+  approve: Genehmigen
+  reject: Ablehnen
+  working: Speichern…
   decided_approved: Bereits genehmigt.
   decided_rejected: Bereits abgelehnt.
   decided_replaced: Durch ein neueres Bild der Allianz ersetzt.
-  decided_expired: 'Abgelaufen: Nicht innerhalb von 7 Tagen überprüft.'
-  done_approved: Genehmigt. Das Bild ist jetzt live und der Discord-Post wurde aktualisiert.
-  done_rejected: Abgelehnt. Das Bild wurde gelöscht und der Discord-Post wurde aktualisiert.
+  decided_expired: 'Abgelaufen: nicht innerhalb von 7 Tagen überprüft.'
+  done_approved: Genehmigt. Das Bild ist jetzt live und der Discord-Beitrag wurde aktualisiert.
+  done_rejected: Abgelehnt. Das Bild wurde gelöscht und der Discord-Beitrag wurde aktualisiert.
 alliance_images:
-  title: "Allianz-Bilder"
-  edit: "Bilder bearbeiten"
+  title: Allianz-Bilder
+  edit: Bilder bearbeiten
   done: "✓ Bearbeitung beendet"
-  help: Füge ein Bild hinter die Kapitol-Rotations-Karte und die NAP-Ränge-Zeile deiner Allianz ein. Ein Steward prüft jedes Bild, bevor es für andere sichtbar wird.
-  rules: 'Verwende eigene Allianz-Kunst oder In-Game-Grafiken: Kein Branding anderer Allianzen, nichts Anstößiges, keine persönlichen Informationen.'
+  help: Füge ein Bild hinter deiner Kapitol-Rotationskarte und der NAP-Rangzeile hinzu. Ein Steward überprüft jedes Bild, bevor es jemand anderes sieht.
+  rules: 'Verwende eigene Allianz-Kunst oder In-Game-Kunst: kein Branding anderer Allianzen, nichts Anstößiges, keine persönlichen Informationen.'
   left_today: "{left} von {max} Bildern heute für deine Allianz übrig."
   not_ready: Bild-Uploads sind noch nicht aktiviert.
-  card: Kapitol-Rotations-Karte
-  wide: NAP-Ränge-Banner
+  card: Kapitol-Rotationskarte
+  wide: NAP-Ränge Banner
   none: Noch kein Bild
-  live: "Live seit {when}"
-  pending: "Wartet seit {when} auf einen Steward"
-  rejected: "Abgelehnt {when}"
-  rejected_reason: "Abgelehnt {when}: „{reason}“"
-  expired: "Nicht rechtzeitig überprüft ({when}). Sende es erneut."
-  choose: "Bild auswählen"
-  replace: "Neues Bild auswählen"
-  remove: "Entfernen"
+  live: Live seit {when}
+  pending: Wartet seit {when} auf einen Steward
+  rejected: Abgelehnt {when}
+  rejected_reason: 'Abgelehnt {when}: „{reason}“'
+  expired: Nicht rechtzeitig überprüft ({when}). Sende es erneut.
+  choose: Bild auswählen
+  replace: Neues Bild auswählen
+  remove: Entfernen
   confirm_remove: "{slot} entfernen? Es verschwindet sofort für alle."
   crop_title: "{slot} positionieren"
-  crop_help: Zum Verschieben ziehen. Zum Zoomen kneifen, scrollen oder den Schieberegler verwenden. Nur der Inhalt innerhalb des Rahmens wird gesendet.
+  crop_help: Zum Verschieben ziehen. Zum Zoomen drücken, scrollen oder den Schieberegler verwenden. Nur der Inhalt innerhalb des Rahmens wird gesendet.
   zoom: Zoom
-  preview_title: Vorschau
-  preview_phone: Handy
+  preview_title: Wie es aussehen wird
+  preview_phone: Telefon
   preview_desktop: Desktop
   preview_week: Woche 1 Fr
   preview_loot: 2 Königs-Truhen
-  preview_status: NAP-geschützt
+  preview_status: NAP Geschützt
   send: Zur Überprüfung senden
   sending: Sende…
   cancel: Abbrechen
   sent: Gesendet. Ein Steward wird es überprüfen; es erscheint nach der Genehmigung.
   not_image: Diese Datei ist kein Bild, das dieser Browser öffnen kann. Versuche es mit JPEG oder PNG.
-  too_small: Das Bild ist ziemlich klein ({width}×{height}); es könnte unscharf wirken. Du kannst es trotzdem senden.
+  too_small: Dieses Bild ist ziemlich klein ({width}×{height}); es könnte unscharf aussehen. Du kannst es trotzdem senden.
   load_failed: Das Bild konnte nicht geöffnet werden.

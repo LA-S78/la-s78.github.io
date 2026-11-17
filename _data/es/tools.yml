@@ -6,7 +6,7 @@ common:
   sign_in_again: Iniciar sesión de nuevo
   not_saved: 'No guardado: {error}'
   cancel: Cancelar
-  save: "Guardar"
+  save: Guardar
   saving: Guardando...
   edit: Editar
   delete: Eliminar
@@ -21,22 +21,22 @@ common:
   duration_hours: "{h}h {m}m"
   duration_minutes: "{m}m"
   game_time: "{time} GT"
-  your_time: "{time} tu hora"
+  your_time: "{time} tu hora local"
   off_week: Semana de descanso
   kw_week: Semana de Guerra de Reinos {n}
   copy: Copiar
   set_one: Encomio del Rey
-  set_two: Recompensa del Rey de Batalla
+  set_two: Recompensa de Rey de Batalla
   chests:
     commanders_will: Voluntad del Comandante
-    loyal_servant: Siervo Leal
+    loyal_servant: Sirviente Leal
     followers_heart: Corazón del Seguidor
     honor_vanguard: Vanguardia de Honor
-    fearless_hero: Héroe Intrépido
+    fearless_hero: Héroe Temerario
     logistics_support: Apoyo Logístico
 dashboard:
   title: Panel de Alianza
-  loading: Cargando el panel de tu alianza…
+  loading: Cargando el panel de tu alianza...
   view_as: Ver como
   page_title: "[{tag}] Panel de Alianza"
   subtitle: Panel de Alianza · {view}
@@ -45,128 +45,128 @@ dashboard:
   view_leader: Vista de liderazgo
   view_member: Vista de miembro
   sign_in_title: Inicia sesión para ver el panel de tu alianza.
-  sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra a través de tu rol NAP en el servidor.
+  sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra mediante tu rol de servidor NAP.
   sign_in_button: Iniciar sesión
-  load_failed: No se pudo cargar el panel. Comprueba tu conexión y actualiza. ({error})
-  edit_dashboard: "Editar Panel"
-  done_editing: "✓ Finalizar edición"
-  add_chart: "Añadir gráfico o tabla"
-  editor_label: Editor de gráficos o tablas
-  charts_label: Gráficos y tablas de la alianza
-  empty_member: "Los líderes de tu alianza aún no han compartido gráficos o tablas aquí."
-  empty_editing: "Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”."
-  empty_leader: "Aún no hay gráficos o tablas. Usa “Editar Panel” para añadir uno."
-  visible_members: "Todos los miembros"
-  visible_officers: "Solo oficiales"
-  google_sheet: Google Sheet
-  google_doc: Google Doc
+  load_failed: No se pudo cargar el panel. Comprueba tu conexión y vuelve a intentarlo. ({error})
+  edit_dashboard: Editar panel
+  done_editing: "✓ Edición finalizada"
+  add_chart: Añadir un gráfico o tabla
+  editor_label: Editor de gráfico o tabla
+  charts_label: Gráficos y tablas de alianza
+  empty_member: Los líderes de tu alianza aún no han compartido gráficos o tablas aquí.
+  empty_editing: 'Aún no hay gráficos ni tablas: usa “Añadir un gráfico o tabla”.'
+  empty_leader: Aún no hay gráficos ni tablas. Usa “Editar panel” para añadir uno.
+  visible_members: Todos los miembros
+  visible_officers: Solo oficiales
+  google_sheet: Hoja de cálculo de Google
+  google_doc: Documento de Google
   synced: sincronizado {when}
   updated: Actualizado {when}
-  sync_now: "Sincronizar ahora"
-  syncing: "Sincronizando…"
-  sync_help: Obtener los números más recientes de la hoja
+  sync_now: Sincronizar ahora
+  syncing: Sincronizando...
+  sync_help: Obtener los últimos datos de la hoja
   confirm_delete: ¿Eliminar "{title}"? Esto no se puede deshacer.
   this_chart: este gráfico
 rewards_card:
-  title: "Recompensas Semanales"
+  title: Recompensas semanales
   officers: Oficiales
   open: Abierto
   closed: Cerrado
-  time_left: "{time} restante"
+  time_left: "{time} restantes"
   opens_in: abre en {time}
   closes_at: Cierra {when}
-  opens_at: Abre {when}, después del evento de capitolio del viernes
+  opens_at: Abre {when}, después del evento del capitolio del viernes
   off_week: Semana de descanso
-  kw_won: "KW ganada"
-  kw_lost: "KW perdida"
-  kw_pending: "KW pendiente"
+  kw_won: Guerra de Reinos ganada
+  kw_lost: Guerra de Reinos perdida
+  kw_pending: Guerra de Reinos pendiente
   set_one: Encomio del Rey
-  set_two: Recompensa del Rey de Batalla
-  set_two_if_won: Recompensa del Rey de Batalla, si la guerra se gana
+  set_two: Recompensa de Rey de Batalla
+  set_two_if_won: Recompensa de Rey de Batalla, si se gana la guerra
   if_won: si se gana
   no_rank: 'Sin rango en la clasificación: sin cofres'
-  list_sent: "Lista enviada · {count}"
+  list_sent: Lista enviada · {count}
   sent_at: Enviada {when}
   reserves_one: "({n} reserva)"
   reserves_other: "({n} reservas)"
   empty_slots: "{n} vacíos"
-  list_not_sent: "Lista no enviada"
+  list_not_sent: Lista no enviada
   no_list_closed: Sin lista mientras está cerrado
-  edit_list: "Editar"
-  send_list: "Enviar lista"
+  edit_list: Editar
+  send_list: Enviar lista
   ask_r5: R5 o /nominate
-  ask_r5_help: Tu R5 puede abrir la página de nominación desde aquí, o ejecutar /nominate en Discord.
-  buyout_bonus: "Compra: {amount} {chest} en cada set ganado"
+  ask_r5_help: Tu R5 puede abrir la página de nominación desde aquí o ejecutar /nominate en Discord.
+  buyout_bonus: 'Compra: {amount} {chest} en cada set ganado'
   buyout_bonus_help: Financiado por WLO
   buyout_threat: 'amenaza: {threat}'
-  buyout_cost: "Compra: {amount} {chest} en cada set"
+  buyout_cost: 'Compra: {amount} {chest} en cada set'
   buyout_cost_help: Financiando a la alianza desplazada esta semana
 caravan:
-  title: "Rotor de Caravana"
+  title: Rotor de caravanas
   picked_count: "{picked}/{total} elegidos"
-  members_can_view: "Los miembros pueden ver"
-  copy_status: "Copiar estado"
-  new_week: "Nueva semana"
+  members_can_view: Los miembros pueden ver
+  copy_status: Copiar estado
+  new_week: Nueva semana
   member_note: Elegido por tus R4 cuando una caravana está lista.
-  search: Buscar nombres…
-  around_now: "Alrededor de ahora"
-  around_now_help: Solo jugadores disponibles alrededor de ahora
+  search: Buscar nombres...
+  around_now: Ahora mismo
+  around_now_help: Solo jugadores disponibles ahora
   available: Disponible esta semana ({n})
-  picked: Elegidos esta semana ({n})
-  nobody_matches: Nadie coincide.
-  everyone_picked: "Todos han tenido caravana esta semana."
+  picked: Elegido esta semana ({n})
+  nobody_matches: No hay coincidencias.
+  everyone_picked: Todos han tenido una caravana esta semana.
   add_players: Añadir jugadores abajo.
   no_players: Aún no hay jugadores.
   flexible: flexible
   pick: "✓ Elegir"
-  back_to_available: Volver a disponibles
+  back_to_available: Volver a disponible
   name: Nombre
-  from: Desde (Game Time)
-  to: Hasta (Game Time)
+  from: Desde (GT)
+  to: Hasta (GT)
   player_name: Nombre del jugador
-  add_from: Desde las 18:00
-  add_to: Hasta las 22:00
-  add_from_label: Disponible desde (Game Time, opcional)
-  add_to_label: Disponible hasta (Game Time, opcional)
-  add: "Añadir"
-  times_help: Los horarios son Game Time (UTC-2) y son opcionales; déjalos vacíos para jugadores que son flexibles.
-  status_title: "🐪 [{tag}] Rotor de Caravana: {picked}/{total} elegidos"
+  add_from: Desde 18:00
+  add_to: Hasta 22:00
+  add_from_label: Disponible desde (GT, opcional)
+  add_to_label: Disponible hasta (GT, opcional)
+  add: Añadir
+  times_help: Los horarios son según el horario del juego (UTC-2) y son opcionales; déjalos vacíos para jugadores flexibles.
+  status_title: "🐪 [{tag}] Rotor de caravanas: {picked}/{total} elegidos"
   status_available: 'Disponible: {names}'
-  status_picked: 'Elegidos: {names}'
+  status_picked: 'Elegido: {names}'
   nobody: nadie
   nobody_yet: nadie todavía
-  copy_prompt: 'Copiar el estado del rotor:'
-  confirm_remove: "¿Quitar a {name} del rotor?"
+  copy_prompt: 'Copiar estado del rotor:'
+  confirm_remove: "¿Eliminar a {name} del rotor?"
   this_player: este jugador
-  confirm_new_week: "¿Iniciar una nueva semana? Todos vuelven a estar disponibles (los nombres y horarios se mantienen)."
+  confirm_new_week: "¿Empezar una nueva semana? Todos vuelven a estar disponibles (se conservan los nombres y horarios)."
 chart_editor:
-  edit_title: "Editar gráfico o tabla"
-  new_title: "Nuevo gráfico o tabla"
+  edit_title: Editar gráfico o tabla
+  new_title: Nuevo gráfico o tabla
   type: Tipo
-  type_bar: "Barras"
-  type_line: "Líneas"
-  type_pie: "Circular"
-  type_progress: "Progreso"
-  type_table: "Tabla"
+  type_bar: Barras
+  type_line: Líneas
+  type_pie: Circular
+  type_progress: Progreso
+  type_table: Tabla
   title: Título
-  title_example: p. ej. Puntuaciones del Duelo de Alianzas
+  title_example: ej. Puntuaciones del Duelo de Alianzas
   note: Explicación
-  note_example: p. ej. Mínimo 15M de puntos de Duelo requeridos para el reinicio del viernes
+  note_example: ej. Mínimo 15M de puntos de Duelo requeridos para el reinicio del viernes
   who_sees: Quién puede verlo
   officers_only: Solo oficiales (R4/R5)
   all_members: Todos los miembros de la alianza
   data: Datos
   data_source: Origen de los datos
-  paste: "Pegar una tabla"
-  link: "Enlace a Google Sheet / Doc"
+  paste: Pegar una tabla
+  link: Enlace a Google Sheet / Doc
   paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
-  range: Rango, p. ej. A1:D20 (opcional)
-  doc_table: Qué tabla del documento (1, 2…)
-  load: "⤓ Cargar desde Google"
-  loading: "⤓ Cargando…"
-  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede leer” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtendrá los números más recientes más tarde.'
-  load_first: Carga la hoja primero (⤓ Cargar desde Google).
+  range: Rango, ej. A1:D20 (opcional)
+  doc_table: Qué tabla del documento (1, 2...)
+  load: "⤓ Cargar de Google"
+  loading: "⤓ Cargando..."
+  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede ver” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene las últimas cifras más adelante.'
+  load_first: Carga la hoja primero (⤓ Cargar de Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
   size: "{rows} × {columns}"
@@ -178,34 +178,34 @@ chart_editor:
   labels: Nombres (etiquetas)
   numbers_to_show: Números a mostrar
   labels_swapped: Nombres (una línea o barra cada uno)
-  swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas en la parte inferior"
+  swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas a lo largo de la parte inferior"
   swap_bar: "⇄ Intercambiar filas y columnas: las columnas como barras, un color por fila"
-  swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a través de las semanas.'
+  swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a lo largo de las semanas.'
   rows_to_draw: Filas a dibujar (hasta 6)
-  rows_filter: Buscar un nombre…
+  rows_filter: Buscar nombre...
   rows_count: "{n} de 6 elegidos"
-  columns_along: Columnas en la parte inferior (en el orden de la hoja)
+  columns_along: Columnas a lo largo de la parte inferior (en orden de hoja)
   numbers: Números
   several_columns: Varias columnas numéricas
   side_by_side: Lado a lado
-  stacked_totals: 'Apilado: totales'
-  stacked_percent: 'Apilado: cada barra al 100%'
+  stacked_totals: 'Apiladas: totales'
+  stacked_percent: 'Apiladas: cada barra al 100%'
   vertical: Barras verticales
   vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
-  traffic_columns: "Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde"
-  traffic_size: "Rojo → amarillo → verde (bajo → alto): por rango, el mejor en verde"
-  traffic_reverse: "Invertir: lo bajo es bueno (verde), lo alto es malo (rojo)"
-  traffic_target: "Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo"
-  traffic_target_reverse: "Invertir: cuanto más por debajo del objetivo, mejor"
-  donut: Donut (anillo)
+  traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde'
+  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, el primero verde'
+  traffic_reverse: 'Invertir: bajo es bueno (verde), alto es malo (rojo)'
+  traffic_target: Rojo → amarillo → verde según la cercanía al objetivo
+  traffic_target_reverse: 'Invertir: cuanto más lejos del objetivo, mejor'
+  donut: Dona (anillo)
   target: Objetivo para todos
-  target_example: p. ej. 15M o 15000000
+  target_example: ej. 15M o 15000000
   target_column: "…o una columna de objetivos"
-  use_number_above: "(usa el número de arriba)"
+  use_number_above: "(usar el número de arriba)"
   highlight_where: Resaltar filas donde
-  no_highlight: "(sin resaltar)"
-  at_least: es al menos
-  at_least_example: p. ej. 300M
+  no_highlight: "(sin resaltado)"
+  at_least: sea al menos
+  at_least_example: ej. 300M
 charts:
   column: Columna {n}
   no_numbers: No hay números que graficar en la columna elegida.
@@ -766,60 +766,60 @@ live_data:
 capitol_rotation:
   calendar_link: Ver la rotación de este ciclo en el calendario →
 image_review:
-  page_title: Revisar imagen de la alianza
-  loading: Cargando la imagen…
-  sign_in_needed: Inicia sesión con Discord para revisar esta imagen. Solo los Stewards pueden verla.
+  page_title: Revisar imagen de alianza
+  loading: Cargando la imagen...
+  sign_in_needed: Inicia sesión con Discord para revisar esta imagen. Solo los administradores pueden verla.
   sign_in: Iniciar sesión con Discord
-  stewards_only: Solo los Stewards pueden revisar imágenes de alianzas.
+  stewards_only: Solo los administradores pueden revisar las imágenes de la alianza.
   no_id: A este enlace le falta el ID de la imagen. Ábrelo de nuevo desde la publicación de Discord.
   wide: Banner (Rangos NAP)
   card: Tarjeta (Rotación del Capitolio)
-  sent_by: Enviado por {name}, {when}
+  sent_by: Enviada por {name}, {when}
   replaces: Aprobar reemplaza la imagen actual de la alianza.
-  checklist: 'Verifica antes de aprobar: arte propio de la alianza o arte del juego; sin marcas de otras alianzas; nada ofensivo; sin información personal.'
-  reason_label: Motivo (opcional, se mostrará en la publicación de Discord si rechazas)
-  approve: "Aprobar"
-  reject: "Rechazar"
-  working: Guardando…
-  decided_approved: Ya aprobado.
-  decided_rejected: Ya rechazado.
-  decided_replaced: Reemplazado por una imagen más reciente de la alianza.
-  decided_expired: 'Caducado: no se revisó en un plazo de 7 días.'
-  done_approved: Aprobado. La imagen ya está activa y la publicación de Discord ha sido actualizada.
-  done_rejected: Rechazado. La imagen fue eliminada y la publicación de Discord ha sido actualizada.
+  checklist: 'Verifica antes de aprobar: arte propio de la alianza o arte del juego; ninguna marca de otra alianza; nada ofensivo; sin información personal.'
+  reason_label: Motivo (opcional, mostrado en la publicación de Discord si rechazas)
+  approve: Aprobar
+  reject: Rechazar
+  working: Guardando...
+  decided_approved: Ya aprobada.
+  decided_rejected: Ya rechazada.
+  decided_replaced: Reemplazada por una imagen más reciente de la alianza.
+  decided_expired: 'Expirada: no revisada en 7 días.'
+  done_approved: Aprobada. La imagen ya está activa y la publicación de Discord ha sido actualizada.
+  done_rejected: Rechazada. La imagen fue eliminada y la publicación de Discord ha sido actualizada.
 alliance_images:
-  title: "Imágenes de la alianza"
-  edit: "Editar imágenes"
-  done: "✓ Terminar de editar"
-  help: Añade una imagen detrás de la tarjeta de Rotación del Capitolio y la fila de Rangos NAP de tu alianza. Un Steward revisará cada una antes de que otros puedan verla.
+  title: Imágenes de alianza
+  edit: Editar imágenes
+  done: "✓ Edición finalizada"
+  help: Añade una imagen detrás de la tarjeta de Rotación del Capitolio de tu alianza y la fila de Rangos NAP. Un administrador revisa cada una antes de que alguien más la vea.
   rules: 'Usa arte propio de la alianza o arte del juego: sin marcas de otras alianzas, nada ofensivo, sin información personal.'
   left_today: "{left} de {max} imágenes restantes hoy para tu alianza."
-  not_ready: Las subidas de imágenes aún no están activadas.
+  not_ready: Las cargas de imágenes aún no están habilitadas.
   card: Tarjeta de Rotación del Capitolio
   wide: Banner de Rangos NAP
-  none: Sin imagen todavía
-  live: "Activa desde {when}"
-  pending: "Esperando a un Steward desde {when}"
-  rejected: "Rechazada {when}"
-  rejected_reason: "Rechazada {when}: “{reason}”"
-  expired: "No se revisó a tiempo ({when}). Envíala de nuevo."
-  choose: "Elegir una imagen"
-  replace: "Elegir una imagen nueva"
-  remove: "Eliminar"
-  confirm_remove: "¿Eliminar {slot}? Desaparecerá para todos inmediatamente."
-  crop_title: Posicionar {slot}
-  crop_help: Arrastra para mover. Pellizca, desplaza o usa el control deslizante para hacer zoom. Solo se enviará lo que esté dentro del marco.
+  none: Sin imagen aún
+  live: Activa desde {when}
+  pending: Esperando a un administrador desde {when}
+  rejected: Rechazada {when}
+  rejected_reason: 'Rechazada {when}: “{reason}”'
+  expired: No revisada a tiempo ({when}). Envíala de nuevo.
+  choose: Elegir una imagen
+  replace: Elegir una nueva imagen
+  remove: Quitar
+  confirm_remove: "¿Quitar la {slot}? Desaparecerá para todos inmediatamente."
+  crop_title: Posiciona la {slot}
+  crop_help: Arrastra para mover. Pellizca, desplázate o usa el deslizador para hacer zoom. Solo se enviará lo que está dentro del marco.
   zoom: Zoom
   preview_title: Cómo se verá
   preview_phone: Teléfono
   preview_desktop: Escritorio
-  preview_week: Semana 1 Vie
-  preview_loot: 2 Cofres del Rey
+  preview_week: Viernes de Semana 1
+  preview_loot: 2 Cofres de Rey
   preview_status: NAP Protegido
   send: Enviar para revisión
-  sending: Enviando…
+  sending: Enviando...
   cancel: Cancelar
-  sent: Enviado. Un Steward la revisará; aparecerá una vez aprobada.
-  not_image: Ese archivo no es una imagen que este navegador pueda abrir. Prueba con un JPEG o PNG.
-  too_small: Esa imagen es bastante pequeña ({width}×{height}); podría verse borrosa. Aún puedes enviarla.
+  sent: Enviada. Un administrador la revisará; aparecerá una vez aprobada.
+  not_image: Ese archivo no es una imagen que este navegador pueda abrir. Intenta con un JPEG o PNG.
+  too_small: La imagen es pequeña ({width}×{height}); puede verse borrosa. Aún puedes enviarla.
   load_failed: No se pudo abrir la imagen.

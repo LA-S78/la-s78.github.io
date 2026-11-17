@@ -6,8 +6,8 @@ common:
   sign_in_again: Tekrar giriş yap
   not_saved: 'Kaydedilmedi: {error}'
   cancel: İptal
-  save: "Kaydet"
-  saving: Kaydediliyor...
+  save: Kaydet
+  saving: Kaydediliyor…
   edit: Düzenle
   delete: Sil
   remove: Kaldır
@@ -37,138 +37,138 @@ common:
 dashboard:
   title: İttifak Paneli
   loading: İttifak paneliniz yükleniyor…
-  view_as: Görünüm
+  view_as: Görüntüleme modu
   page_title: "[{tag}] İttifak Paneli"
   subtitle: İttifak Paneli · {view}
   subtitle_rank: 'İttifak Paneli · Sıra #{rank} · {view}'
-  view_steward: Görevli görünümü
-  view_leader: Yönetim görünümü
+  view_steward: Steward görünümü
+  view_leader: Liderlik görünümü
   view_member: Üye görünümü
   sign_in_title: İttifak panelinizi görmek için giriş yapın.
   sign_in_help: Sağ üstteki {sign_in} (Discord) seçeneğini kullanın. İttifakınız NAP sunucu rolünüzden bulunur.
   sign_in_button: Giriş Yap
-  load_failed: Panel yüklenemedi. Bağlantınızı kontrol edip sayfayı yenileyin. ({error})
-  edit_dashboard: "Paneli Düzenle"
-  done_editing: "✓ Düzenlemeyi bitir"
-  add_chart: "Grafik veya tablo ekle"
+  load_failed: Panel yüklenemedi. Bağlantınızı kontrol edin ve yenileyin. ({error})
+  edit_dashboard: Paneli Düzenle
+  done_editing: "✓ Düzenleme bitti"
+  add_chart: Grafik veya tablo ekle
   editor_label: Grafik veya tablo düzenleyici
   charts_label: İttifak grafikleri ve tabloları
-  empty_member: "İttifak liderleriniz henüz burada herhangi bir grafik veya tablo paylaşmadı."
-  empty_editing: "Henüz grafik veya tablo yok: “Grafik veya tablo ekle” seçeneğini kullanın."
-  empty_leader: "Henüz grafik veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın."
-  visible_members: "Tüm üyeler"
-  visible_officers: "Sadece yetkililer"
+  empty_member: İttifak liderleriniz henüz burada herhangi bir grafik veya tablo paylaşmadı.
+  empty_editing: 'Henüz grafik veya tablo yok: “Grafik veya tablo ekle” seçeneğini kullanın.'
+  empty_leader: Henüz grafik veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın.
+  visible_members: Tüm üyeler
+  visible_officers: Sadece subaylar
   google_sheet: Google E-Tablosu
   google_doc: Google Dokümanı
-  synced: "{when} senkronize edildi"
-  updated: "{when} güncellendi"
-  sync_now: "Şimdi senkronize et"
-  syncing: "Senkronize ediliyor…"
-  sync_help: Tablodaki en son verileri getir
+  synced: "{when} tarihinde eşitlendi"
+  updated: "{when} tarihinde güncellendi"
+  sync_now: Şimdi eşitle
+  syncing: Eşitleniyor…
+  sync_help: Tablodaki en son verileri çek
   confirm_delete: '"{title}" silinsin mi? Bu işlem geri alınamaz.'
   this_chart: bu grafik
 rewards_card:
-  title: "Haftalık Ödüller"
-  officers: Yetkililer
+  title: Haftalık Ödüller
+  officers: Subaylar
   open: Açık
   closed: Kapalı
   time_left: "{time} kaldı"
-  opens_in: "{time} içinde açılacak"
-  closes_at: "{when} kapanıyor"
-  opens_at: "{when}, Cuma günkü başkent etkinliğinden sonra açılır"
-  off_week: Ödül Yok Haftası
-  kw_won: "KW kazanıldı"
-  kw_lost: "KW kaybedildi"
-  kw_pending: "KW beklemede"
+  opens_in: "{time} içinde açılır"
+  closes_at: "{when} kapanır"
+  opens_at: Cuma günkü başkent etkinliğinden sonra {when} açılır
+  off_week: Boş Hafta
+  kw_won: KS kazanıldı
+  kw_lost: KS kaybedildi
+  kw_pending: KS bekleniyor
   set_one: Kralın Övgüsü
   set_two: Savaş Kralı Ödülü
-  set_two_if_won: Savaş Kralı Ödülü, eğer savaş kazanılırsa
-  if_won: eğer kazanılırsa
-  no_rank: 'Sıralamada derece yok: sandık verilmez'
-  list_sent: "Liste gönderildi · {count}"
-  sent_at: "{when} gönderildi"
+  set_two_if_won: Savaş kazanılırsa Savaş Kralı Ödülü
+  if_won: kazanılırsa
+  no_rank: 'Sıralamada derece yok: sandık yok'
+  list_sent: Liste gönderildi · {count}
+  sent_at: "{when} tarihinde gönderildi"
   reserves_one: "({n} yedek)"
   reserves_other: "({n} yedek)"
-  empty_slots: "{n} boş slot"
-  list_not_sent: "Liste gönderilmedi"
+  empty_slots: "{n} boş"
+  list_not_sent: Liste gönderilmedi
   no_list_closed: Kapalıyken liste yok
-  edit_list: "Düzenle"
-  send_list: "Liste gönder"
+  edit_list: Düzenle
+  send_list: Listeyi gönder
   ask_r5: R5 veya /nominate
-  ask_r5_help: R5'iniz buradan aday gösterme sayfasını açabilir veya Discord'da /nominate komutunu çalıştırabilir.
-  buyout_bonus: "Satın alma: Her kazanılan sette {amount} {chest}"
+  ask_r5_help: R5'iniz adaylık sayfasını buradan açabilir veya Discord'da /nominate komutunu kullanabilir.
+  buyout_bonus: 'Satın Alma: kazanılan her sette {amount} {chest}'
   buyout_bonus_help: WLO tarafından finanse edilmektedir
   buyout_threat: 'tehdit: {threat}'
-  buyout_cost: "Satın alma: Her sette {amount} {chest}"
-  buyout_cost_help: Bu hafta yerinden edilen ittifakı finanse etmek için
+  buyout_cost: 'Satın Alma: her sette {amount} {chest}'
+  buyout_cost_help: Bu hafta yerinden edilen ittifakı finanse ediyor
 caravan:
-  title: "Kervan Çizelgesi"
+  title: Kervan Rotasyonu
   picked_count: "{picked}/{total} seçildi"
-  members_can_view: "Üyeler görüntüleyebilir"
-  copy_status: "Durumu kopyala"
-  new_week: "Yeni hafta"
-  member_note: Bir kervan hazır olduğunda R4'leriniz tarafından seçilir.
-  search: İsim ara…
-  around_now: "Şu sıralar"
+  members_can_view: Üyeler görüntüleyebilir
+  copy_status: Durumu kopyala
+  new_week: Yeni hafta
+  member_note: Kervan hazır olduğunda R4'leriniz tarafından seçilir.
+  search: İsimleri ara…
+  around_now: Şu sıralar
   around_now_help: Sadece şu sıralar uygun olan oyuncular
-  available: Bu hafta uygun ({n})
-  picked: Bu hafta seçilen ({n})
+  available: Bu hafta müsait ({n})
+  picked: Bu hafta seçilenler ({n})
   nobody_matches: Kimse eşleşmiyor.
-  everyone_picked: "Bu hafta herkesin kervanı var."
-  add_players: Aşağıdan oyuncu ekleyin.
+  everyone_picked: Bu hafta herkes kervanını aldı.
+  add_players: Aşağıdan oyuncu ekle.
   no_players: Henüz oyuncu yok.
   flexible: esnek
   pick: "✓ Seçildi"
-  back_to_available: Uygun olanlara geri taşı
+  back_to_available: Müsaitlere geri gönder
   name: İsim
-  from: Başlangıç (Game Time)
-  to: Bitiş (Game Time)
+  from: Başlangıç (Oyun Saati)
+  to: Bitiş (Oyun Saati)
   player_name: Oyuncu ismi
-  add_from: 18:00'den
-  add_to: 22:00'ye kadar
-  add_from_label: Müsaitlik başlangıcı (Game Time, isteğe bağlı)
-  add_to_label: Müsaitlik bitişi (Game Time, isteğe bağlı)
-  add: "Ekle"
-  times_help: Saatler Game Time (UTC-2) cinsindendir ve isteğe bağlıdır; esnek olan oyuncular için boş bırakın.
-  status_title: "🐪 [{tag}] Kervan Çizelgesi: {picked}/{total} seçildi"
-  status_available: 'Uygun: {names}'
-  status_picked: 'Seçilen: {names}'
+  add_from: Başlangıç 18:00
+  add_to: Bitiş 22:00
+  add_from_label: Müsaitlik başlangıcı (Oyun Saati, isteğe bağlı)
+  add_to_label: Müsaitlik bitişi (Oyun Saati, isteğe bağlı)
+  add: Ekle
+  times_help: Saatler Oyun Saati (UTC-2) cinsindendir ve isteğe bağlıdır; esnek olan oyuncular için boş bırakın.
+  status_title: "🐪 [{tag}] Kervan Rotasyonu: {picked}/{total} seçildi"
+  status_available: 'Müsait: {names}'
+  status_picked: 'Seçilenler: {names}'
   nobody: kimse
   nobody_yet: henüz kimse yok
-  copy_prompt: 'Çizelge durumunu kopyala:'
-  confirm_remove: "{name} çizelgeden kaldırılsın mı?"
+  copy_prompt: 'Rotasyon durumunu kopyala:'
+  confirm_remove: "{name} rotasyondan çıkarılsın mı?"
   this_player: bu oyuncu
-  confirm_new_week: Yeni bir hafta başlasın mı? Herkes uygun olanlara dönecek (isimler ve saatler aynı kalır).
+  confirm_new_week: Yeni haftaya başlansın mı? Herkes tekrar müsait duruma geçer (isimler ve saatler kalır).
 chart_editor:
-  edit_title: "Çizelgeyi veya tabloyu düzenle"
-  new_title: "Yeni çizelge veya tablo"
+  edit_title: Grafik veya tabloyu düzenle
+  new_title: Yeni grafik veya tablo
   type: Tür
-  type_bar: "Sütun"
-  type_line: "Çizgi"
-  type_pie: "Pasta"
-  type_progress: "İlerleme"
-  type_table: "Tablo"
+  type_bar: Sütun
+  type_line: Çizgi
+  type_pie: Pasta
+  type_progress: İlerleme
+  type_table: Tablo
   title: Başlık
   title_example: ör. İttifak Düellosu skorları
   note: Açıklama
-  note_example: ör. Cuma sıfırlamasına kadar en az 15M Düello puanı gerekli
+  note_example: ör. Cuma sıfırlamasına kadar minimum 15M Düello puanı gereklidir
   who_sees: Kimler görebilir
-  officers_only: Sadece yöneticiler (R4/R5)
+  officers_only: Sadece subaylar (R4/R5)
   all_members: Tüm ittifak üyeleri
   data: Veri
   data_source: Veri kaynağı
-  paste: "Tablo yapıştır"
-  link: "Google Sayfası / Doküman bağlantısı"
-  paste_help: Google Sheets veya Excel'den hücreleri kopyalayın (önce başlık satırı) ve buraya yapıştırın.
+  paste: Tablo yapıştır
+  link: Google E-Tablo / Doküman bağlantısı
+  paste_help: Google E-Tablolar veya Excel'den hücreleri kopyalayın (önce başlık satırı) ve buraya yapıştırın.
   tab_name: Sekme adı (isteğe bağlı)
   range: Aralık, ör. A1:D20 (isteğe bağlı)
-  doc_table: Dokümandaki tablo (1, 2…)
+  doc_table: Dokümandaki tablo numarası (1, 2…)
   load: "⤓ Google'dan yükle"
   loading: "⤓ Yükleniyor…"
-  link_help: 'Sheets: Paylaş → “Bağlantıya sahip herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Docs: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi eşitle” butonuna basarak en son verileri daha sonra çekebilirsiniz.'
-  load_first: Önce sayfayı yükleyin (⤓ Google'dan yükle).
+  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Karttaki “Şimdi eşitle” butonu en son sayıları çeker.'
+  load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
   preview: Önizleme
-  preview_empty: Çizelgeyi görmek için yukarıya bir tablo yapıştırın.
+  preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
   size: "{rows} × {columns}"
   rows_one: "{n} satır"
   rows_other: "{n} satır"
@@ -177,34 +177,34 @@ chart_editor:
   at_most_500: "(en fazla 500)"
   labels: İsimler (etiketler)
   numbers_to_show: Gösterilecek sayılar
-  labels_swapped: İsimler (her biri bir satır veya sütun)
-  swap_line: "⇄ Satır ve sütunları değiştir: satır başına bir çizgi, sütunlar altta"
-  swap_bar: "⇄ Satır ve sütunları değiştir: sütunlar sütun grafiği olarak, satır başına bir renk"
-  swap_help: 'Oyuncu başına bir satır ve hafta başına bir sütun içeren sayfalar için: oyuncuları haftalar boyunca takip etmek için bunu işaretleyin.'
+  labels_swapped: İsimler (her biri bir satır veya çubuk)
+  swap_line: "⇄ Satır ve sütunları değiştir: her satır için bir çizgi, sütunlar altta"
+  swap_bar: "⇄ Satır ve sütunları değiştir: sütunlar çubuk olarak, her satır için bir renk"
+  swap_help: 'Her oyuncu için bir satır ve her hafta için bir sütun olan tablolar için: oyuncuları haftalar boyunca takip etmek için bunu işaretleyin.'
   rows_to_draw: Çizilecek satırlar (en fazla 6)
-  rows_filter: İsim ara…
-  rows_count: 6'da {n} seçildi
-  columns_along: Alttaki sütunlar (sayfa sırasına göre)
+  rows_filter: İsim bul…
+  rows_count: 6'dan {n} seçildi
+  columns_along: Alttaki sütunlar (tablo sırasına göre)
   numbers: Sayılar
   several_columns: Birden fazla sayı sütunu
   side_by_side: Yan yana
-  stacked_totals: 'Yığın: toplamlar'
-  stacked_percent: 'Yığın: her sütun %100''e'
-  vertical: Dikey sütunlar
-  vertical_leaderboard: Dikey sütunlar (skor tablosu yerine)
-  traffic_columns: "Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil"
-  traffic_size: "Kırmızı → sarı → yeşil (düşük → yüksek): dereceye göre, en üst yeşil"
-  traffic_reverse: "Tersine çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)"
-  traffic_target: "Hedefe yakınlığa göre kırmızı → sarı → yeşil"
-  traffic_target_reverse: "Tersine çevir: hedefin ne kadar altında kalırsa o kadar iyi"
+  stacked_totals: 'Yığılmış: toplamlar'
+  stacked_percent: 'Yığılmış: her çubuk %100''e'
+  vertical: Dikey çubuklar
+  vertical_leaderboard: Dikey çubuklar (sıralama tablosu yerine)
+  traffic_columns: 'Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil'
+  traffic_size: 'Kırmızı → sarı → yeşil (düşük → yüksek): dereceye göre, en üst yeşil'
+  traffic_reverse: 'Ters: düşük iyi (yeşil), yüksek kötü (kırmızı)'
+  traffic_target: Her birinin hedefe ne kadar yakın olduğuna göre kırmızı → sarı → yeşil
+  traffic_target_reverse: 'Ters: hedefin ne kadar altında kalırsa o kadar iyi'
   donut: Halka (donut)
   target: Herkes için hedef
   target_example: ör. 15M veya 15000000
-  target_column: "…veya bir hedef sütunu"
+  target_column: "…veya hedef sütunu"
   use_number_above: "(yukarıdaki sayıyı kullan)"
-  highlight_where: Şu satırları vurgula
+  highlight_where: Şu koşullardaki satırları vurgula
   no_highlight: "(vurgu yok)"
-  at_least: en az şu kadar
+  at_least: en az
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}
@@ -768,18 +768,18 @@ capitol_rotation:
 image_review:
   page_title: İttifak Görselini İncele
   loading: Görsel yükleniyor…
-  sign_in_needed: Bu görseli incelemek için Discord ile giriş yapın. Sadece Yetkililer görebilir.
+  sign_in_needed: Bu görseli incelemek için Discord ile giriş yapın. Sadece Stewardlar görebilir.
   sign_in: Discord ile giriş yap
-  stewards_only: Sadece Yetkililer ittifak görsellerini inceleyebilir.
+  stewards_only: Sadece Stewardlar ittifak görsellerini inceleyebilir.
   no_id: Bu bağlantıda görselin kimliği eksik. Discord gönderisinden tekrar açın.
-  wide: Afiş (NAP Sıralamaları)
-  card: Kart (Capitol Rotasyonu)
+  wide: Afiş (NAP Dereceleri)
+  card: Kart (Başkent Rotasyonu)
   sent_by: "{name} tarafından gönderildi, {when}"
   replaces: Onaylamak, ittifakın mevcut görselini değiştirir.
-  checklist: 'Onaylamadan önce kontrol edin: ittifakın kendi sanatı veya oyun içi sanat; başka ittifak markası yok; saldırgan bir içerik yok; kişisel bilgi yok.'
-  reason_label: Sebep (isteğe bağlı, reddederseniz Discord gönderisinde gösterilir)
-  approve: "Onayla"
-  reject: "Reddet"
+  checklist: 'Onaylamadan önce kontrol edin: ittifakın kendi sanatı veya oyun içi sanat; başka ittifakın markası yok; rahatsız edici içerik yok; kişisel bilgi yok.'
+  reason_label: Neden (isteğe bağlı, reddederseniz Discord gönderisinde gösterilir)
+  approve: Onayla
+  reject: Reddet
   working: Kaydediliyor…
   decided_approved: Zaten onaylandı.
   decided_rejected: Zaten reddedildi.
@@ -788,38 +788,38 @@ image_review:
   done_approved: Onaylandı. Görsel artık yayında ve Discord gönderisi güncellendi.
   done_rejected: Reddedildi. Görsel silindi ve Discord gönderisi güncellendi.
 alliance_images:
-  title: "İttifak görselleri"
-  edit: "Görselleri düzenle"
-  done: "✓ Düzenlemeyi bitir"
-  help: İttifakınızın Capitol Rotasyonu kartının ve NAP Sıralamaları satırının arkasına bir resim ekleyin. Bir Yetkili, başkaları görmeden önce her birini kontrol eder.
-  rules: 'İttifakınızın kendi sanatını veya oyun içi sanatı kullanın: başka ittifak markası yok, saldırgan içerik yok, kişisel bilgi yok.'
-  left_today: İttifakınız için bugün {max} görselden {left} tane kaldı.
-  not_ready: Görsel yüklemeleri henüz açık değil.
-  card: Capitol Rotasyonu kartı
-  wide: NAP Sıralamaları afişi
+  title: İttifak görselleri
+  edit: Görselleri düzenle
+  done: "✓ Düzenleme bitti"
+  help: İttifakınızın Başkent Rotasyonu kartının ve NAP Dereceleri satırının arkasına bir resim ekleyin. Bir Steward, kimse görmeden önce her birini kontrol eder.
+  rules: 'İttifakınızın kendi sanatını veya oyun içi sanatını kullanın: başka ittifakın markası yok, rahatsız edici içerik yok, kişisel bilgi yok.'
+  left_today: İttifakınızın bugün için {max} görselden {left} hakkı kaldı.
+  not_ready: Görsel yüklemeleri henüz açılmadı.
+  card: Başkent Rotasyonu kartı
+  wide: NAP Dereceleri afişi
   none: Henüz görsel yok
   live: "{when} tarihinden beri yayında"
-  pending: "{when} tarihinden beri bir Yetkili tarafından bekleniyor"
+  pending: "{when} tarihinden beri Steward bekleniyor"
   rejected: "{when} tarihinde reddedildi"
   rejected_reason: "{when} tarihinde reddedildi: “{reason}”"
-  expired: "Zamanında incelenmedi ({when}). Tekrar gönderin."
-  choose: "Bir resim seç"
-  replace: "Yeni bir resim seç"
-  remove: "Kaldır"
-  confirm_remove: "{slot} öğesini kaldırmak istiyor musunuz? Hemen herkes için kaybolur."
-  crop_title: "{slot} konumunu ayarla"
-  crop_help: Taşımak için sürükleyin. Yakınlaştırmak için çimdikleyin, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindekiler gönderilir.
+  expired: Zamanında incelenmedi ({when}). Tekrar gönderin.
+  choose: Bir resim seçin
+  replace: Yeni bir resim seçin
+  remove: Kaldır
+  confirm_remove: "{slot} kaldırılsın mı? Hemen herkes için kaybolur."
+  crop_title: "{slot} yerleşimi"
+  crop_help: Hareket ettirmek için sürükleyin. Yakınlaştırmak için çimdikleyin, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindekiler gönderilir.
   zoom: Yakınlaştır
   preview_title: Nasıl görünecek
   preview_phone: Telefon
   preview_desktop: Masaüstü
-  preview_week: 1. Hafta Cum
+  preview_week: 1. Hafta Cuma
   preview_loot: 2 Kral Sandığı
   preview_status: NAP Korumalı
   send: İncelemeye gönder
   sending: Gönderiliyor…
   cancel: İptal
-  sent: Gönderildi. Bir Yetkili inceleyecek; onaylandığında görünecektir.
-  not_image: Bu dosya, tarayıcının açabileceği bir resim değil. JPEG veya PNG deneyin.
+  sent: Gönderildi. Bir Steward inceleyecek; onaylandığında görünecek.
+  not_image: Bu dosya tarayıcının açabileceği bir resim değil. JPEG veya PNG deneyin.
   too_small: Bu resim oldukça küçük ({width}×{height}); bulanık görünebilir. Yine de gönderebilirsiniz.
   load_failed: Resim açılamadı.
