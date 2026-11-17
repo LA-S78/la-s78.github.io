@@ -38,6 +38,8 @@ guides:
   scramble: Pelea Real
   elixir: "Pelea de Elixir"
   undead_siege: "Asedio de los No Muertos"
+  kill_event: "Evento de Kills"
+  gear_upgrade: "Mejora de Equipo"
 pages:
   home:
     title: Inicio

@@ -97,6 +97,22 @@ events:
       <circle cx="9" cy="11.5" r="1.6" />
       <circle cx="15" cy="11.5" r="1.6" />
       <path d="M10 21v-2.5M14 21v-2.5M11.2 15.6l.8-1.4.8 1.4" />
+  - key: "kill_event"
+    url: /LANG_CODE/guides/kill-event.html
+    status: unavailable
+    # the calendar's Kill Event: a crosshair
+    icon: |
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M22 12h-4M6 12H2M12 6V2M12 22v-4" />
+  - key: "gear_upgrade"
+    url: /LANG_CODE/guides/gear-upgrade.html
+    status: unavailable
+    # the calendar's Gear Upgrade: armour
+    icon: |
+      <path d="M8 3 4.5 5 3 9.5l2.5 1.5V19a2 2 0 0 0 1.2 1.8L12 22l5.3-1.2A2 2 0 0 0 18.5 19v-8L21 9.5 19.5 5 16 3c-.6 1.8-2.2 3-4 3S8.6 4.8 8 3z" />
+      <path d="M12 6v16" />
+      <path d="M8 12.5c1.3.6 2.6.9 4 .9s2.7-.3 4-.9" />
   - key: "canyon"
     url: /LANG_CODE/guides/canyon.html
     status: unavailable

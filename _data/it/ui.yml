@@ -38,6 +38,8 @@ guides:
   scramble: Mischia Reale
   elixir: "Mischia d'elisir"
   undead_siege: "Assedio non morti"
+  kill_event: "Evento di uccisione"
+  gear_upgrade: "Miglioramento equipaggiamento"
 pages:
   home:
     title: Home

@@ -38,6 +38,8 @@ guides:
   scramble: Mêlée Royale
   elixir: "Mêlée d'élixir"
   undead_siege: "Siège des Morts-Vivants"
+  kill_event: "Événement de Kills"
+  gear_upgrade: "Amélioration d'équipement"
 pages:
   home:
     title: Accueil

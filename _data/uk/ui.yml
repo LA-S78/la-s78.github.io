@@ -38,6 +38,8 @@ guides:
   scramble: Королівська сутичка
   elixir: "Еліксирна сутичка"
   undead_siege: "Облога мерців"
+  kill_event: "Подія вбивств"
+  gear_upgrade: "Покращення спорядження"
 pages:
   home:
     title: Головна
