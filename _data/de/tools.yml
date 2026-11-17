@@ -36,23 +36,24 @@ common:
     logistics_support: Logistik-Unterstützung
 dashboard:
   title: Allianz-Dashboard
-  loading: Allianz-Dashboard wird geladen…
+  loading: Lade dein Allianz-Dashboard…
   view_as: Anzeigen als
   page_title: "[{tag}] Allianz-Dashboard"
   subtitle: Allianz-Dashboard · {view}
   subtitle_rank: 'Allianz-Dashboard · Rang #{rank} · {view}'
-  view_steward: Steward-Ansicht
+  not_in_nap: Nicht im NAP
+  view_steward: Verwalter-Ansicht
   view_leader: Führungs-Ansicht
   view_member: Mitglieder-Ansicht
   sign_in_title: Melde dich an, um dein Allianz-Dashboard zu sehen.
-  sign_in_help: Verwende {sign_in} oben rechts (Discord). Deine Allianz wird über deine NAP-Serverrolle gefunden.
+  sign_in_help: Nutze {sign_in} oben rechts (Discord). Deine Allianz wird über deine NAP-Serverrolle gefunden.
   sign_in_button: Anmelden
-  load_failed: Das Dashboard konnte nicht geladen werden. Überprüfe deine Verbindung und aktualisiere die Seite. ({error})
+  load_failed: Das Dashboard konnte nicht geladen werden. Prüfe deine Verbindung und lade es neu. ({error})
   edit_dashboard: Dashboard bearbeiten
-  done_editing: "✓ Bearbeitung beendet"
+  done_editing: "✓ Bearbeitung abgeschlossen"
   add_chart: Diagramm oder Tabelle hinzufügen
   editor_label: Diagramm- oder Tabellen-Editor
-  charts_label: Allianz-Diagramme und Tabellen
+  charts_label: Allianz-Diagramme und -Tabellen
   empty_member: Die Führung deiner Allianz hat hier noch keine Diagramme oder Tabellen geteilt.
   empty_editing: 'Noch keine Diagramme oder Tabellen: Nutze „Diagramm oder Tabelle hinzufügen“.'
   empty_leader: Noch keine Diagramme oder Tabellen. Nutze „Dashboard bearbeiten“, um eines hinzuzufügen.
@@ -65,7 +66,7 @@ dashboard:
   sync_now: Jetzt synchronisieren
   syncing: Synchronisiere…
   sync_help: Die neuesten Zahlen aus der Tabelle abrufen
-  confirm_delete: '"{title}" löschen? Dies kann nicht rückgängig gemacht werden.'
+  confirm_delete: "„{title}“ löschen? Dies kann nicht rückgängig gemacht werden."
   this_chart: dieses Diagramm
 rewards_card:
   title: Wöchentliche Belohnungen

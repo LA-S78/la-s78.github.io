@@ -37,36 +37,37 @@ common:
 dashboard:
   title: İttifak Paneli
   loading: İttifak paneliniz yükleniyor…
-  view_as: Görüntüleme modu
+  view_as: Görüntüleme
   page_title: "[{tag}] İttifak Paneli"
   subtitle: İttifak Paneli · {view}
   subtitle_rank: 'İttifak Paneli · Sıra #{rank} · {view}'
-  view_steward: Steward görünümü
+  not_in_nap: NAP içinde değil
+  view_steward: Yönetici görünümü
   view_leader: Liderlik görünümü
   view_member: Üye görünümü
   sign_in_title: İttifak panelinizi görmek için giriş yapın.
-  sign_in_help: Sağ üstteki {sign_in} (Discord) seçeneğini kullanın. İttifakınız NAP sunucu rolünüzden bulunur.
+  sign_in_help: Sağ üstteki {sign_in} (Discord) seçeneğini kullanın. İttifakınız, NAP sunucu rolünüzden bulunur.
   sign_in_button: Giriş Yap
   load_failed: Panel yüklenemedi. Bağlantınızı kontrol edin ve yenileyin. ({error})
   edit_dashboard: Paneli Düzenle
-  done_editing: "✓ Düzenleme bitti"
-  add_chart: Grafik veya tablo ekle
-  editor_label: Grafik veya tablo düzenleyici
-  charts_label: İttifak grafikleri ve tabloları
-  empty_member: İttifak liderleriniz henüz burada herhangi bir grafik veya tablo paylaşmadı.
-  empty_editing: 'Henüz grafik veya tablo yok: “Grafik veya tablo ekle” seçeneğini kullanın.'
-  empty_leader: Henüz grafik veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın.
+  done_editing: "✓ Düzenleme tamamlandı"
+  add_chart: Çizelge veya tablo ekle
+  editor_label: Çizelge veya tablo düzenleyici
+  charts_label: İttifak çizelgeleri ve tabloları
+  empty_member: İttifakınızın liderleri henüz burada herhangi bir çizelge veya tablo paylaşmadı.
+  empty_editing: 'Henüz çizelge veya tablo yok: “Çizelge veya tablo ekle” seçeneğini kullanın.'
+  empty_leader: Henüz çizelge veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın.
   visible_members: Tüm üyeler
-  visible_officers: Sadece subaylar
+  visible_officers: Sadece yetkililer
   google_sheet: Google E-Tablosu
   google_doc: Google Dokümanı
-  synced: "{when} tarihinde eşitlendi"
-  updated: "{when} tarihinde güncellendi"
-  sync_now: Şimdi eşitle
-  syncing: Eşitleniyor…
-  sync_help: Tablodaki en son verileri çek
+  synced: eşlendi {when}
+  updated: Güncellendi {when}
+  sync_now: Şimdi eşle
+  syncing: Eşleniyor…
+  sync_help: En güncel rakamları tablodan çek
   confirm_delete: '"{title}" silinsin mi? Bu işlem geri alınamaz.'
-  this_chart: bu grafik
+  this_chart: bu çizelge
 rewards_card:
   title: Haftalık Ödüller
   officers: Subaylar

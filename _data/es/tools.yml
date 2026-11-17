@@ -35,27 +35,28 @@ common:
     fearless_hero: Héroe Temerario
     logistics_support: Apoyo Logístico
 dashboard:
-  title: Panel de Alianza
-  loading: Cargando el panel de tu alianza...
+  title: Panel de la Alianza
+  loading: Cargando el panel de tu alianza…
   view_as: Ver como
-  page_title: "[{tag}] Panel de Alianza"
-  subtitle: Panel de Alianza · {view}
-  subtitle_rank: 'Panel de Alianza · Rango #{rank} · {view}'
+  page_title: "[{tag}] Panel de la Alianza"
+  subtitle: Panel de la Alianza · {view}
+  subtitle_rank: 'Panel de la Alianza · Rango #{rank} · {view}'
+  not_in_nap: No está en el NAP
   view_steward: Vista de administrador
-  view_leader: Vista de liderazgo
+  view_leader: Vista de líder
   view_member: Vista de miembro
   sign_in_title: Inicia sesión para ver el panel de tu alianza.
   sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra mediante tu rol de servidor NAP.
   sign_in_button: Iniciar sesión
   load_failed: No se pudo cargar el panel. Comprueba tu conexión y vuelve a intentarlo. ({error})
   edit_dashboard: Editar panel
-  done_editing: "✓ Edición finalizada"
-  add_chart: Añadir un gráfico o tabla
-  editor_label: Editor de gráfico o tabla
-  charts_label: Gráficos y tablas de alianza
+  done_editing: "✓ Edición terminada"
+  add_chart: Añadir gráfico o tabla
+  editor_label: Editor de gráficos o tablas
+  charts_label: Gráficos y tablas de la alianza
   empty_member: Los líderes de tu alianza aún no han compartido gráficos o tablas aquí.
-  empty_editing: 'Aún no hay gráficos ni tablas: usa “Añadir un gráfico o tabla”.'
-  empty_leader: Aún no hay gráficos ni tablas. Usa “Editar panel” para añadir uno.
+  empty_editing: 'Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”.'
+  empty_leader: Aún no hay gráficos o tablas. Usa “Editar panel” para añadir uno.
   visible_members: Todos los miembros
   visible_officers: Solo oficiales
   google_sheet: Hoja de cálculo de Google
@@ -63,8 +64,8 @@ dashboard:
   synced: sincronizado {when}
   updated: Actualizado {when}
   sync_now: Sincronizar ahora
-  syncing: Sincronizando...
-  sync_help: Obtener los últimos datos de la hoja
+  syncing: Sincronizando…
+  sync_help: Obtener los números más recientes de la hoja
   confirm_delete: ¿Eliminar "{title}"? Esto no se puede deshacer.
   this_chart: este gráfico
 rewards_card:

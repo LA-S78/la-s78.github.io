@@ -36,35 +36,36 @@ common:
     logistics_support: Supporto logistico
 dashboard:
   title: Dashboard Alleanza
-  loading: Caricamento dashboard alleanza…
+  loading: Caricamento della dashboard della tua alleanza…
   view_as: Visualizza come
-  page_title: "[{tag}] Dashboard Alleanza"
+  page_title: Dashboard Alleanza [{tag}]
   subtitle: Dashboard Alleanza · {view}
-  subtitle_rank: 'Dashboard Alleanza · Posizione #{rank} · {view}'
-  view_steward: Vista steward
-  view_leader: Vista leadership
-  view_member: Vista membro
-  sign_in_title: Accedi per visualizzare la dashboard della tua alleanza.
-  sign_in_help: Usa {sign_in} in alto a destra (Discord). La tua alleanza viene trovata tramite il tuo ruolo NAP sul server.
+  subtitle_rank: 'Dashboard Alleanza · Grado #{rank} · {view}'
+  not_in_nap: Non nel NAP
+  view_steward: Visuale Steward
+  view_leader: Visuale Leadership
+  view_member: Visuale Membro
+  sign_in_title: Accedi per vedere la dashboard della tua alleanza.
+  sign_in_help: Usa {sign_in} in alto a destra (Discord). La tua alleanza viene individuata tramite il tuo ruolo server NAP.
   sign_in_button: Accedi
   load_failed: Impossibile caricare la dashboard. Controlla la connessione e aggiorna. ({error})
-  edit_dashboard: Modifica dashboard
-  done_editing: "✓ Modifiche completate"
+  edit_dashboard: Modifica Dashboard
+  done_editing: "✓ Fine modifica"
   add_chart: Aggiungi un grafico o una tabella
-  editor_label: Editor grafico o tabella
+  editor_label: Editor di grafici o tabelle
   charts_label: Grafici e tabelle alleanza
   empty_member: I leader della tua alleanza non hanno ancora condiviso grafici o tabelle qui.
-  empty_editing: 'Nessun grafico o tabella: usa “Aggiungi un grafico o una tabella”.'
-  empty_leader: Nessun grafico o tabella. Usa “Modifica dashboard” per aggiungerne uno.
+  empty_editing: 'Nessun grafico o tabella ancora: usa "Aggiungi un grafico o una tabella".'
+  empty_leader: Nessun grafico o tabella ancora. Usa "Modifica Dashboard" per aggiungerne uno.
   visible_members: Tutti i membri
   visible_officers: Solo ufficiali
-  google_sheet: Foglio Google
-  google_doc: Documento Google
+  google_sheet: Google Sheet
+  google_doc: Google Doc
   synced: sincronizzato {when}
   updated: Aggiornato {when}
   sync_now: Sincronizza ora
   syncing: Sincronizzazione…
-  sync_help: Recupera i dati più recenti dal foglio
+  sync_help: Recupera gli ultimi dati dal foglio
   confirm_delete: Eliminare "{title}"? L'operazione non può essere annullata.
   this_chart: questo grafico
 rewards_card:

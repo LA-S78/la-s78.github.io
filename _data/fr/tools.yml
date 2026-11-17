@@ -36,26 +36,27 @@ common:
     logistics_support: Soutien Logistique
 dashboard:
   title: Tableau de bord de l'Alliance
-  loading: Chargement du tableau de bord de votre alliance…
+  loading: Chargement de votre tableau de bord d'alliance…
   view_as: Voir en tant que
   page_title: "[{tag}] Tableau de bord de l'Alliance"
   subtitle: Tableau de bord de l'Alliance · {view}
   subtitle_rank: 'Tableau de bord de l''Alliance · Rang #{rank} · {view}'
+  not_in_nap: Non inclus dans le NAP
   view_steward: Vue intendant
   view_leader: Vue leadership
   view_member: Vue membre
   sign_in_title: Connectez-vous pour voir le tableau de bord de votre alliance.
   sign_in_help: Utilisez {sign_in} en haut à droite (Discord). Votre alliance est identifiée via votre rôle NAP sur le serveur.
   sign_in_button: Se connecter
-  load_failed: Impossible de charger le tableau de bord. Vérifiez votre connexion et rafraîchissez. ({error})
+  load_failed: Impossible de charger le tableau de bord. Vérifiez votre connexion et actualisez. ({error})
   edit_dashboard: Modifier le tableau de bord
-  done_editing: "✓ Modification terminée"
-  add_chart: Ajouter un graphique ou tableau
-  editor_label: Éditeur de graphique ou tableau
-  charts_label: Graphiques et tableaux de l'alliance
-  empty_member: Les leaders de votre alliance n'ont encore partagé aucun graphique ou tableau ici.
-  empty_editing: 'Aucun graphique ou tableau pour le moment : utilisez « Ajouter un graphique ou tableau ».'
-  empty_leader: Aucun graphique ou tableau. Utilisez « Modifier le tableau de bord » pour en ajouter un.
+  done_editing: "✓ Fin de modification"
+  add_chart: Ajouter un graphique ou un tableau
+  editor_label: Éditeur de graphique ou de tableau
+  charts_label: Graphiques et tableaux de l'Alliance
+  empty_member: Les chefs de votre alliance n'ont encore partagé aucun graphique ou tableau ici.
+  empty_editing: 'Aucun graphique ou tableau pour l''instant : utilisez « Ajouter un graphique ou un tableau ».'
+  empty_leader: Aucun graphique ou tableau pour l'instant. Utilisez « Modifier le tableau de bord » pour en ajouter un.
   visible_members: Tous les membres
   visible_officers: Officiers uniquement
   google_sheet: Google Sheet
@@ -64,7 +65,7 @@ dashboard:
   updated: Mis à jour {when}
   sync_now: Synchroniser maintenant
   syncing: Synchronisation…
-  sync_help: Récupérer les dernières données de la feuille
+  sync_help: Récupérer les derniers chiffres depuis la feuille
   confirm_delete: Supprimer « {title} » ? Cette action est irréversible.
   this_chart: ce graphique
 rewards_card:
