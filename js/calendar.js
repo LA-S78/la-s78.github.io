@@ -275,7 +275,7 @@ async function initCalendar() {
 
     // The holder's banner behind the card (js/ally-pics.js, a module: loaded on demand from
     // this classic script), faded in once loaded
-    const heroCard = document.querySelector('.cal-hero-card');
+    const heroCard = document.querySelector('.cal-capitol-card');
     if (heroCard && (capitolHolderImage || heroCard.classList.contains('has-ally-pic'))) {
       import('/js/ally-pics.js')
         .then(({ showAllyPic }) => showAllyPic(heroCard, capitolHolderImage))

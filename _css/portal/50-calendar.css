@@ -1240,3 +1240,21 @@ dialog.cal-confirm {
   border-color: color-mix(in srgb, var(--status-danger) 85%, black) !important;
   box-shadow: 0 6px 18px color-mix(in srgb, var(--status-danger) 45%, transparent) !important;
 }
+
+/* Variant B: the holder's banner in the Capitol holder box only */
+.cal-capitol-card.has-ally-pic {
+  --pic-fade: var(--surface-dark);
+  background:
+    linear-gradient(
+      270deg,
+      color-mix(in srgb, var(--pic-fade) 80%, transparent) 0%,
+      color-mix(in srgb, var(--pic-fade) 55%, transparent) 60%,
+      color-mix(in srgb, var(--pic-fade) 35%, transparent) 100%
+    ),
+    var(--ally-pic) center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.cal-capitol-card.has-ally-pic > div {
+  text-shadow: 0 1px 3px color-mix(in srgb, var(--pic-fade) 95%, transparent);
+}
