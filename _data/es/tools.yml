@@ -458,10 +458,10 @@ calendar:
 calendar_events:
   reminder_hint: Publicado en el canal de alertas de tu alianza.
   reminder_hint_server: Publicado en el canal de alertas de NAP Discord y en las alianzas que se inscribieron.
-  reminder_no_channel: 'Tu alianza aún no tiene un canal de alertas: usa /registerbot en tu Discord para que se puedan publicar los recordatorios.'
-  reminder_no_server_channel: El canal de alertas NAP aún no está configurado (NAP_ALERT_CHANNEL_ID), por lo que no se pueden publicar recordatorios del servidor.
+  reminder_no_channel: 'Tu alianza aún no tiene un canal de alertas: ejecuta /registerbot en tu Discord para que se puedan publicar los recordatorios.'
+  reminder_no_server_channel: El canal de alertas de NAP aún no está configurado (NAP_ALERT_CHANNEL_ID), por lo que no se pueden publicar recordatorios del servidor.
   edit_heading: Editar evento
-  scope_label: Eventos de quién gestionar
+  scope_label: Qué eventos gestionar
   scope_server: Eventos del servidor
   scope_alliance: Eventos de [{tag}]
   save_changes: Guardar cambios
@@ -476,34 +476,34 @@ calendar_events:
   alliance_heading: Crear operación de [{tag}]
   preset: Tipo de evento
   type_custom: Personalizado
-  type_custom_hint: Formulario vacío
+  type_custom_hint: Formulario en blanco
   duration_h: "{n}h"
   title: Título del evento
-  title_example: ej. Ejercicio de defensa de colmena o Asalto a puesto avanzado
+  title_example: p. ej. Entrenamiento de Defensa de Colmena o Asalto a Puesto Avanzado
   date: Fecha de inicio (AAAA-MM-DD)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time del servidor (se ajusta a incrementos de 5 minutos)
-  duration: Duración (horas)
+  time_hint: Game Time del servidor (se ajusta a intervalos de 5 minutos)
+  duration: Duración (Horas)
   frequency: Frecuencia
-  once: Evento único (no se repite)
+  once: Evento único (No se repite)
   every_2_days: Se repite cada 2 días
   weekly: Se repite semanalmente (mismo día y hora)
-  alert_level: "Recordatorio de Discord"
-  remind_when: "Cuándo publicarlo"
-  remind_at_start: "Al empezar"
+  alert_level: Recordatorio de Discord
+  remind_when: Cuándo publicarlo
+  remind_at_start: Cuando comienza
   remind_minutes: "{n} minutos antes"
-  remind_hour: "1 hora antes"
-  remind_when_hint: "Los recordatorios se comprueban cada 10 minutos, así que puede llegar unos minutos antes."
+  remind_hour: 1 hora antes
+  remind_when_hint: Los recordatorios se revisan cada 10 minutos, por lo que pueden llegar unos minutos antes.
   notify_off: Sin recordatorio
-  notify_role: Mencionar el rol de alertas de la alianza
-  notify_custom: Mencionar un rol específico
+  notify_role: Mencionar al rol de alertas de la alianza
+  notify_custom: Mencionar a un rol específico
   notify_everyone: Mencionar a @everyone
-  notify_none: Publicar sin mencionar
+  notify_none: Publicar sin mención
   role_id: ID de rol específico
-  role_id_hint: "(solo para “Mencionar un rol específico”)"
+  role_id_hint: "(solo para “Mencionar a un rol específico”)"
   role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
-  details: Instrucciones / Punto de reunión
-  details_example: ej. Reunión en Colmena Alfa. R4s lideran los ataques. Comunicaciones por voz activas.
+  details: Instrucciones / Punto de encuentro
+  details_example: p. ej. Reunión en Colmena Alfa. R4 lideran los rallies. Chat de voz activo.
   publish: Publicar en el calendario
   publishing: Publicando...
   bad_time: El Game Time debe establecerse en incrementos de 5 minutos (:00, :05, :10, etc.)
@@ -511,7 +511,7 @@ calendar_events:
   save_failed: Error al guardar el evento
   published: "¡Operación publicada con éxito!"
   delete_heading: "¿Eliminar este evento?"
-  delete_repeats: 'Se repite ({repeat}): todas las repeticiones serán eliminadas, no solo esta.'
+  delete_repeats: 'Se repite ({repeat}): cada repetición será eliminada, no solo esta.'
   delete_final: Esto no se puede deshacer.
   delete_confirm: Eliminar
   delete_failed: Error al eliminar el evento

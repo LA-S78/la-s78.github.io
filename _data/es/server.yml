@@ -128,7 +128,8 @@ api_events:
   updated: Operación "{title}" actualizada.
 reminders:
   title: "⏰ Empieza pronto: {title}"
-  starts: Comenzar
+  title_now: "🔔 Empieza ahora: {title}"
+  starts: Empezar
 bot_common:
   off_week: Semana de Descanso
   kw_week: Semana de Guerra de Reinos {n}

@@ -129,6 +129,7 @@ api_events:
   updated: Операцію "{title}" оновлено.
 reminders:
   title: "⏰ Скоро розпочнеться: {title}"
+  title_now: "🔔 Розпочинається зараз: {title}"
   starts: Розпочинається
 bot_common:
   off_week: Тиждень відпочинку

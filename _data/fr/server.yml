@@ -127,7 +127,8 @@ api_events:
   deleted: 'Opération supprimée : {title}'
   updated: Opération « {title} » mise à jour.
 reminders:
-  title: "⏰ Début bientôt : {title}"
+  title: "⏰ Début imminent : {title}"
+  title_now: "🔔 Commence maintenant : {title}"
   starts: Début
 bot_common:
   off_week: Semaine de repos

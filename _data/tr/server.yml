@@ -128,6 +128,7 @@ api_events:
   updated: '"{title}" operasyonu güncellendi.'
 reminders:
   title: "⏰ Yakında başlıyor: {title}"
+  title_now: "🔔 Şimdi başlıyor: {title}"
   starts: Başlıyor
 bot_common:
   off_week: Mola Haftası

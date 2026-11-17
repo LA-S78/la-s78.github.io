@@ -128,6 +128,7 @@ api_events:
   updated: Operation "{title}" aktualisiert.
 reminders:
   title: "⏰ Beginnt bald: {title}"
+  title_now: "🔔 Beginnt jetzt: {title}"
   starts: Startet
 bot_common:
   off_week: Off-Woche
