@@ -10,7 +10,7 @@ nav_links:
     url: "#capitol-rotation"
   - name_key: "rewards"
     url: "#capitol-rewards"
-strings: [rewards_planner, proposals, live_data]
+strings: [rewards_planner, proposals, live_data, ascension]
 ---
 
 {% for section in site.rules %}
@@ -59,6 +59,10 @@ nav_id: "capitol-rotation"
 
 {% comment %} The rotation itself is on the calendar (its Capitol console), which shows every week's alliance and the active week; a board here repeated it (removed 2026-11-16, owner). {% endcomment %}
 <p class="rotation-link"><a href="/{{ site.active_lang }}/calendar.html#operations-portal">{{ "capitol_rotation.calendar_link" | t }}</a></p>
+
+{% comment %} The Top 4 race's latest results (api/_ascension.js, js/ascension.js): hidden until a Kingdom War Week 1 has been measured. {% endcomment %}
+<div class="ascension-race" id="ascension-race" hidden></div>
+<script type="module" src="/js/ascension.js"></script>
 
 === collection--rules--03 ===
 ---

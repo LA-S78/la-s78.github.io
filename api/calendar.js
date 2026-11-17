@@ -7,6 +7,7 @@ import { resolveCohortSchedule } from './_cycle_helper.js';
 import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 import { checkReminders } from './_reminders.js';
+import { checkAscension, latestRace } from './_ascension.js';
 import { timingSafeEqual } from 'node:crypto';
 
 /** True when the request carries the reminder schedule's secret (compared in constant time). */
@@ -34,7 +35,19 @@ export default async function handler(req, res) {
     if (!fromReminderSchedule(req)) return res.status(401).json({ error: 'Not allowed.' });
     if (!isGistConfigured()) return res.status(503).json({ error: 'No Gist on this deployment.' });
     try {
-      const report = await checkReminders({ dryRun: req.body?.dryRun === true });
+      const dryRun = req.body?.dryRun === true;
+      const report = await checkReminders({ dryRun });
+      // The Top 4 race's snapshots (api/_ascension.js), on the same 5-minute check; a
+      // failure here never hides the reminders' report
+      try {
+        report.ascension = await checkAscension({
+          gist: await readGist({ timeoutMs: 4000 }),
+          dryRun,
+        });
+      } catch (err) {
+        console.error('Top 4 race check failed:', err);
+        report.ascension = { error: err.message };
+      }
       return res.status(200).json(report);
     } catch (err) {
       console.error('Reminder check failed:', err);
@@ -312,6 +325,8 @@ export default async function handler(req, res) {
     capitolHolder: capitolHolderTag,
     capitolHolderColor,
     capitolHolderImage,
+    // The Top 4 race's latest results (api/_ascension.js): the Rules page shows them
+    ascension: gist ? latestRace(gist) : null,
     events: allEvents,
     reminderChannels,
   });

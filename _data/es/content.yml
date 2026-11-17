@@ -4,8 +4,8 @@ rules_page:
     text: "Las siguientes pautas son obligatorias para garantizar el juego limpio y la estabilidad del servidor."
   rotation:
     title: "Rotación del Capitolio"
-    text: "Para ascender al estatus de Top 3, el contendiente debe superar el Poder de un titular actual durante los días 3-5 del Duelo de Alianzas en la Semana 1 de la Guerra de Reinos."
-    note: "*Nota: Las capturas de poder se toman 10 minutos antes del reinicio diario.*"
+    text: "El Top 4 se decide por Poder: el Poder de cada alianza del NAP, academias incluidas, se suma durante los días 3, 4 y 5 del Duelo de Alianzas de la Semana 1 de la Guerra de Reinos. Los cuatro totales más altos ocupan los puestos del Top 4 desde el siguiente ciclo, una vez que un Steward lo confirma."
+    note: "*Nota: el Poder se mide automáticamente 10 minutos antes del reinicio (23:50 GT) en cada uno de los tres días.*"
   rewards:
     title: "Recompensas del Capitolio"
 alliance_page:

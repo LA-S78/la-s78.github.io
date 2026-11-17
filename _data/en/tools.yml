@@ -817,6 +817,18 @@ live_data:
 capitol_rotation:
   calendar_link: "See this cycle's rotation on the calendar →"
 
+# The Top 4 race on the Rules page (js/ascension.js; api/_ascension.js)
+ascension:
+  title: "Top 4 race"
+  week_of: "Kingdom War Week 1, week of {date}"
+  in_progress: "In progress: measured so far on {days}."
+  finished: "Final: the four highest totals take the Top 4 seats from the next cycle, once a Steward confirms."
+  col_alliance: "Alliance"
+  col_day: "Day {n}"
+  col_total: "Total"
+  missing_day: "Missing a day"
+  source: "Might from the Last Asylum Tracker, measured 10 minutes before reset."
+
 # The Steward review page for alliance images (portal/review-image.html), opened from the
 # review post in Discord.
 image_review:
