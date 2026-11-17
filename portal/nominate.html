@@ -29,6 +29,10 @@ strings: [nominate]
       <!-- Chests the King has already handed out in the game: locked, kept whatever the list says -->
       <div id="locked-box" class="nominate-locked" style="display: none;"></div>
 
+      <!-- Names checked against the alliance's member list (js/name-check.js, Last Asylum
+           Tracker): only advice, the list is saved as written -->
+      <div id="name-check" class="nominate-name-check" hidden></div>
+
       <div class="slot-group-title" id="assign-title">{{ "nominate.who_gets_what" | t }}</div>
       <div class="sub-text" id="assign-summary"></div>
       <div id="assign-list" class="nominate-assign-list"></div>
@@ -39,6 +43,7 @@ strings: [nominate]
   </div>
 </div>
 
+<script type="module" src="/js/name-check.js"></script>
 <script>
   (function () {
     /** An interface icon (js/ui-icons.js) for the start of a label. */
@@ -185,16 +190,26 @@ strings: [nominate]
       let html = `<div class="nominate-assign-row nominate-assign-head">
           <span>#</span><span>${escapeHtml(t('nominate.col_player'))}</span><span>${escapeHtml(t(pending ? 'nominate.col_now' : 'nominate.col_chest'))}</span>${pending ? `<span>${escapeHtml(t('nominate.col_if_won'))}</span>` : ''}
         </div>`;
+      const checks = names.map((n) =>
+        window.NameCheck ? window.NameCheck.checkName(n, data.alliance.members) : null,
+      );
+      const mark = (c) =>
+        !c
+          ? ''
+          : c.status === 'ok'
+            ? ` <span class="name-mark" title="${escapeHtml(t('nominate.name_ok', { tag: data.alliance.tag }))}">${ic('check', 'ok')}</span>`
+            : ` <span class="name-mark" title="${escapeHtml(c.status === 'spelling' ? t('nominate.name_spelling', { name: c.match }) : t('nominate.name_unknown', { tag: data.alliance.tag }))}">${ic('warning', 'warn')}</span>`;
       for (let i = 0; i < rows; i++) {
         const name = names[i];
         html += `<div class="nominate-assign-row${name ? '' : ' is-empty'}">
           <span class="slot-num">${i + 1}.</span>
-          <span class="player-ign">${name ? escapeHtml(name) : '—'}</span>
+          <span class="player-ign">${name ? escapeHtml(name) + mark(checks[i]) : '—'}</span>
           <span class="nominate-chest">${cell(now[i])}</span>
           ${pending ? `<span class="nominate-chest">${cell(ifWon[i])}</span>` : ''}
         </div>`;
       }
       document.getElementById('assign-list').innerHTML = html;
+      renderNameCheck(names, checks);
 
       const open = now.length;
       const missing = Math.max(0, open - names.length);
@@ -216,6 +231,57 @@ strings: [nominate]
     }
 
     input.addEventListener('input', render);
+
+    /**
+     * The summary above the list: names written differently in the game (with a button to
+     * use the game's spelling) and names not in the alliance (with close names). Hidden
+     * without a member list or when every name matches.
+     */
+    function renderNameCheck(names, checks) {
+      const box = document.getElementById('name-check');
+      const spelling = [];
+      const unknown = [];
+      names.forEach((n, i) => {
+        const c = checks[i];
+        if (c && c.status === 'spelling') spelling.push([n, c.match]);
+        if (c && c.status === 'unknown') unknown.push([n, c.suggestions]);
+      });
+      box.hidden = !spelling.length && !unknown.length;
+      if (box.hidden) return (box.innerHTML = '');
+      const tag = data.alliance.tag;
+      box.innerHTML =
+        (spelling.length
+          ? `<p>${ic('pencil', 'warn')}${escapeHtml(tn('nominate.names_spelling', spelling.length))}
+               ${spelling.map(([n, m]) => `<span class="name-pair">${escapeHtml(n)} → <strong>${escapeHtml(m)}</strong></span>`).join(' ')}
+             </p>
+             <button type="button" class="name-fix-btn" id="btn-fix-names">${escapeHtml(t('nominate.use_game_spellings'))}</button>`
+          : '') +
+        (unknown.length
+          ? `<p>${ic('warning', 'warn')}${escapeHtml(tn('nominate.names_unknown', unknown.length, { tag }))}</p>
+             <ul>${unknown
+               .map(
+                 ([n, s]) =>
+                   `<li><strong>${escapeHtml(n)}</strong>${s.length ? ` · ${escapeHtml(t('nominate.did_you_mean'))} ${s.map((x) => escapeHtml(x)).join(', ')}` : ''}</li>`,
+               )
+               .join('')}</ul>`
+          : '');
+      document.getElementById('btn-fix-names')?.addEventListener('click', () => {
+        const fix = new Map(spelling);
+        input.value = input.value
+          .split('\n')
+          .map((line) =>
+            line
+              .split(',')
+              .map((part) => {
+                const n = part.trim();
+                return fix.has(n) ? part.replace(n, fix.get(n)) : part;
+              })
+              .join(','),
+          )
+          .join('\n');
+        render();
+      });
+    }
 
     document.getElementById('nomination-form').addEventListener('submit', async (e) => {
       e.preventDefault();

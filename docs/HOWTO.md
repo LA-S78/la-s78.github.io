@@ -16,6 +16,7 @@ your edits would vanish. Git ignores them, so they never show up as changes.
 - [Change styles (CSS) safely](#change-styles-css-safely)
 - [Add or change an alliance](#add-or-change-an-alliance)
 - [Add a Discord command](#add-a-discord-command)
+- [The Last Asylum Tracker key](#the-last-asylum-tracker-key)
 - [Set up alliance images (once)](#set-up-alliance-images-once)
 - [Get a change onto the live site](#get-a-change-onto-the-live-site)
 - [When the build check fails](#when-the-build-check-fails)
@@ -319,6 +320,14 @@ or Claude) before merging. The pieces:
    blocks) and read it via `getBotStrings(lang)`.
 
 ---
+
+## The Last Asylum Tracker key
+
+The name checks (and, later, the Top 4 Might snapshots) read alliances from the Last
+Asylum Tracker. Its key is yours: log in with Patreon at https://api.lastasylumtracker.com/docs,
+create a key under **API keys**, and add it in Vercel as the environment variable
+`LAT_API_KEY` (Production). Without it the site works as before, just without the checks.
+A free account allows 1,000 requests a day; the site uses a few dozen.
 
 ## Set up alliance images (once)
 

@@ -44,6 +44,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
   <section class="dash-card ai-section" id="dash-images" hidden aria-label="{{ "alliance_images.title" | t }}"></section>
 </div>
 
+<script type="module" src="/js/name-check.js"></script>
 <script src="/js/dashboard-widgets.js"></script>
 <script src="/js/alliance-images.js"></script>
 <script>
@@ -389,6 +390,41 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       return f <= t ? n >= f && n <= t : n >= f || n <= t; // a window past midnight
     }
 
+    /**
+     * A typed player name checked against the alliance's member list (js/name-check.js,
+     * from the Last Asylum Tracker): the line under the name box. Only advice: an unknown
+     * name is still saved. '' when there is no list or no name.
+     */
+    function nameHint(name) {
+      const r = window.NameCheck && window.NameCheck.checkName(name, data.members);
+      if (!r) return '';
+      const tag = data.alliance.tag;
+      if (r.status === 'ok') return `<span class="name-ok">${ic('check', 'ok')}${escapeHtml(t('caravan.name_ok', { tag }))}</span>`;
+      const pick = (n) => `<button type="button" class="dash-link-btn" data-cv-name="${escapeHtml(n)}">${escapeHtml(n)}</button>`;
+      if (r.status === 'spelling') return `<span class="name-warn">${ic('pencil', 'warn')}${escapeHtml(t('caravan.name_spelling'))} ${pick(r.match)}</span>`;
+      return `<span class="name-warn">${ic('warning', 'warn')}${escapeHtml(t('caravan.name_unknown', { tag }))}${r.suggestions.length ? ` ${escapeHtml(t('caravan.name_did_you_mean'))} ${r.suggestions.map(pick).join(', ')}` : ''}</span>`;
+    }
+
+    /** The name boxes' hints, and a tap on a suggested name puts it in its box. */
+    function wireNameHints(root) {
+      root.querySelectorAll('input[data-name-hint]').forEach((box) => {
+        const hint = root.querySelector(`#${box.dataset.nameHint}`);
+        if (!hint) return;
+        const show = () => {
+          hint.innerHTML = nameHint(box.value);
+        };
+        box.addEventListener('input', show);
+        hint.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-cv-name]');
+          if (!b) return;
+          box.value = b.dataset.cvName;
+          show();
+          box.focus();
+        });
+        if (box.value) show();
+      });
+    }
+
     function renderCaravan() {
       const el = $('dash-caravan');
       const c = data.dashboard && data.dashboard.caravan;
@@ -407,11 +443,12 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       const row = (p) => {
         if (leader && caravanEditing === p.id) {
           return `<li class="dash-cv-row is-editing" data-id="${escapeHtml(p.id)}">
-            <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="${escapeHtml(t('caravan.name'))}">
+            <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="${escapeHtml(t('caravan.name'))}" list="cv-member-names" data-name-hint="cv-edit-hint" autocomplete="off">
             <input type="text" class="cv-from" value="${escapeHtml(p.from || '')}" placeholder="18:00" aria-label="${escapeHtml(t('caravan.from'))}">
             <input type="text" class="cv-to" value="${escapeHtml(p.to || '')}" placeholder="22:00" aria-label="${escapeHtml(t('caravan.to'))}">
             <button type="button" class="dash-icon-btn" data-cv="save-edit" aria-label="${escapeHtml(t('common.save'))}">${ic('save', 'solo')}</button>
             <button type="button" class="dash-icon-btn" data-cv="cancel-edit" aria-label="${escapeHtml(t('common.cancel'))}">✕</button>
+            <div class="dash-cv-hint dash-small" id="cv-edit-hint" aria-live="polite"></div>
           </li>`;
         }
         const tools = leader
@@ -424,8 +461,14 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         const pickedText = p.picked
           ? `<span class="dash-muted">✓ ${new Date(p.picked.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}${p.picked.by ? ` · ${escapeHtml(p.picked.by)}` : ''}</span>`
           : windowText(p);
+        // Leaders: a mark on a name the member list doesn't have exactly
+        const check = leader && window.NameCheck ? window.NameCheck.checkName(p.name, data.members) : null;
+        const flag =
+          check && check.status !== 'ok'
+            ? ` <span class="name-flag" title="${escapeHtml(check.status === 'spelling' ? t('caravan.name_flag_spelling', { name: check.match }) : t('caravan.name_unknown', { tag: data.alliance.tag }))}">${ic('warning', 'warn')}</span>`
+            : '';
         return `<li class="dash-cv-row${p.picked ? ' is-picked' : ''}" data-id="${escapeHtml(p.id)}">
-          <span class="dash-cv-name">${escapeHtml(p.name)}</span>
+          <span class="dash-cv-name">${escapeHtml(p.name)}${flag}</span>
           <span class="dash-cv-when">${pickedText}</span>
           <span class="dash-cv-tools">${tools}</span>
         </li>`;
@@ -448,13 +491,16 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${!(all.length - picked.length) && all.length ? ic('sparkles', 'ok') : ''}${escapeHtml(t(all.length - picked.length ? 'caravan.nobody_matches' : all.length ? 'caravan.everyone_picked' : leader ? 'caravan.add_players' : 'caravan.no_players'))}</li>`}</ul>
         ${picked.length ? `<details class="dash-cv-picked"${leader ? '' : ' open'}><summary>${escapeHtml(t('caravan.picked', { n: picked.length }))}</summary><ul class="dash-cv-list">${picked.map(row).join('')}</ul></details>` : ''}
         ${leader ? `<form class="dash-cv-add" id="cv-add">
-          <input type="text" id="cv-add-name" maxlength="40" placeholder="${escapeHtml(t('caravan.player_name'))}" aria-label="${escapeHtml(t('caravan.player_name'))}">
+          <input type="text" id="cv-add-name" maxlength="40" placeholder="${escapeHtml(t('caravan.player_name'))}" aria-label="${escapeHtml(t('caravan.player_name'))}" list="cv-member-names" data-name-hint="cv-add-hint" autocomplete="off">
           <input type="text" id="cv-add-from" placeholder="${escapeHtml(t('caravan.add_from'))}" aria-label="${escapeHtml(t('caravan.add_from_label'))}">
           <input type="text" id="cv-add-to" placeholder="${escapeHtml(t('caravan.add_to'))}" aria-label="${escapeHtml(t('caravan.add_to_label'))}">
           <button type="submit" class="dash-btn">${ic('plus')}${escapeHtml(t('caravan.add'))}</button>
         </form>
+        <div class="dash-cv-hint dash-small" id="cv-add-hint" aria-live="polite"></div>
         <div class="dash-muted dash-small">${escapeHtml(t('caravan.times_help'))}</div>
-        <div class="dash-error" id="cv-error"></div>` : ''}`;
+        <div class="dash-error" id="cv-error"></div>
+        ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}`;
+      if (leader) wireNameHints(el);
       const search = $('cv-search');
       search.addEventListener('input', () => {
         caravanFilter.text = search.value;

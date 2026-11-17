@@ -24,6 +24,7 @@ import {
 } from './_nominations.js';
 import { inLanguage, say } from './_messages.js';
 import { sameTag } from './_alliances.js'; // RâvN ≠ RÂVN; RAVN = RÂVN
+import { memberNames } from './_tracker.js';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -88,6 +89,9 @@ async function respond(req, res) {
           handedOut: current
             ? handedOutFor(rewardsData, tag).map(({ pool, chest, name }) => ({ pool, chest, name }))
             : [],
+          // The alliance's member names from the Last Asylum Tracker, for the page's name
+          // check (js/name-check.js); null without the tracker or when it's slow
+          members: await memberNames(tag, { timeoutMs: 2500 }),
         };
       }
       return res.status(200).json(body);

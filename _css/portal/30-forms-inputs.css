@@ -373,3 +373,53 @@
   overflow-wrap: anywhere;
   hyphens: auto;
 }
+
+/* The nomination list's name check (js/name-check.js, against the alliance's member list
+   from the Last Asylum Tracker): a mark beside each name, and this summary above the list
+   with a button to use the game's spellings. Advice only. */
+.nominate-name-check {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--status-warning) 45%, var(--border-color));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--status-warning) 8%, transparent);
+  font-size: 0.85rem;
+}
+
+.nominate-name-check p {
+  margin: 0 0 6px;
+}
+
+.nominate-name-check ul {
+  margin: 0 0 4px;
+  padding-left: 1.2em;
+}
+
+.nominate-name-check .name-pair {
+  display: inline-block;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+.name-mark {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.name-fix-btn {
+  min-height: 32px;
+  margin: 2px 0 8px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.name-fix-btn:hover {
+  background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+}

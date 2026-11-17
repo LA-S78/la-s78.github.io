@@ -117,6 +117,12 @@ rewards_card:
 
 caravan:
   title: "Caravan Rotor"
+  # The name check against the alliance's member list (Last Asylum Tracker; js/name-check.js)
+  name_ok: "In [{tag}]'s member list"
+  name_spelling: "In the game it's written:"
+  name_unknown: "Not in [{tag}]'s member list."
+  name_did_you_mean: "Did you mean:"
+  name_flag_spelling: "In the game it's written {name}"
   picked_count: "{picked}/{total} picked"
   members_can_view: "Members can view"
   copy_status: "Copy status"
@@ -255,6 +261,16 @@ charts:
 
 nominate:
   page_title: "Reward Nominations"
+  # The name check against the alliance's member list (Last Asylum Tracker; js/name-check.js)
+  name_ok: "In [{tag}]'s member list"
+  name_spelling: "In the game it's written {name}"
+  name_unknown: "Not in [{tag}]'s member list"
+  names_spelling_one: "1 name is written differently in the game:"
+  names_spelling_other: "{n} names are written differently in the game:"
+  use_game_spellings: "Use the game's spellings"
+  names_unknown_one: "1 name isn't in [{tag}]'s member list. It will still be saved; check it's right:"
+  names_unknown_other: "{n} names aren't in [{tag}]'s member list. They will still be saved; check they're right:"
+  did_you_mean: "did you mean"
   loading: "Loading nomination page..."
   players_label: "Your players, best first"
   players_help: "One name per line (or separated by commas), your best player first. Chests go down the list in order of value across both sets; names beyond the chests are kept as reserves and move up if more chests open."
