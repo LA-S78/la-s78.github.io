@@ -680,6 +680,7 @@ blacklist_planner:
   sent: Blacklist-Vorschlag wurde auf Discord an die Führung gesendet. Er tritt in Kraft, sobald ein Steward ihn genehmigt.
 map_planner:
   view: 'Ansicht:'
+  tag_ambiguous: "[{tag}] könnte mehr als eine Allianz bedeuten ({options}). Gib den Tag exakt ein, inklusive Großschreibung."
   levels: Level
   alliances: Allianzen
   resources: Ressourcen
@@ -688,8 +689,8 @@ map_planner:
   close_buff_summary: Buff-Zusammenfassung schließen
   planner_mode: Planer-Modus
   override_label: 'Ändern zu:'
-  override_placeholder: Z. B. WLO
-  override_help: Gib ein TAG ein, um Klick-Zuweisungen zu überschreiben. Leer lassen zum Durchwechseln.
+  override_placeholder: Z.B. WLO
+  override_help: Gib einen Tag ein, um Klick-Zuweisungen zu überschreiben. Leer lassen, um durchzuschalten.
   submit_plan: Plan einreichen
   compare_label: Plan mit der Live-Karte vergleichen
   show_live: Live
@@ -704,24 +705,24 @@ map_planner:
   grain: Getreide
   timber: Holz
   herbs: Kräuter
-  solid_gather: 'Solid: Sammeln'
+  solid_gather: 'Durchgehend: Sammeln'
   stripe_output: 'Gestreift: Ertrag'
   level_unknown: Level --
   level: Level {n}
-  hover: Über ein Gebiet fahren
+  hover: Fahre mit der Maus über ein Gebiet
   owner: 'Besitzer:'
   unclaimed: Nicht beansprucht
   buff: 'Buff:'
   none: Keiner
   no_active_buff: Kein aktiver Buff
   drawer_title: Allianz-Buff-Verteilung
-  drawer_subtitle: Dynamische Übersicht basierend auf aktiven Karten- / Planer-Zuweisungen
-  no_claims: Keine Allianzen beanspruchen derzeit Gebiete.
+  drawer_subtitle: Dynamische Aufstellung basierend auf aktiver Karte / Planer-Zuweisungen
+  no_claims: Derzeit beanspruchen keine Allianzen Gebiete.
   no_buffs: Keine aktiven Buffs zugewiesen
   cities_one: "{n} Stadt"
   cities_other: "{n} Städte"
   col_alliance: Allianz
-  col_holdings: Besitztümer
+  col_holdings: Besitzungen
   col_buffs: Aktive Buffs
   buff_research_speed: Forschungsgeschwindigkeit
   buff_troop_training_speed: Truppenausbildungsgeschwindigkeit
@@ -733,7 +734,7 @@ map_planner:
   buff_timber_output: Holzertrag
   buff_herb_gathering: Kräutersammeln
   buff_herb_output: Kräuterertrag
-  no_changes: Keine Änderungen in deinem Planentwurf festgestellt.
+  no_changes: Keine Änderungen in deinem Planentwurf erkannt.
   proposal_title: Gebietsvorschlag für die Karte einreichen
 proposals:
   title: Vorschlag einreichen

@@ -679,7 +679,8 @@ blacklist_planner:
   what_player: giocatore
   sent: Proposta di blacklist inviata alla leadership su Discord. Sarà applicata una volta approvata da uno Steward.
 map_planner:
-  view: 'Vista:'
+  view: 'Visualizza:'
+  tag_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}). Inserisci il tag esattamente, rispettando le maiuscole."
   levels: Livelli
   alliances: Alleanze
   resources: Risorse
@@ -689,14 +690,14 @@ map_planner:
   planner_mode: Modalità Pianificatore
   override_label: 'Cambia in:'
   override_placeholder: ES. WLO
-  override_help: Digita un tag per sovrascrivere le assegnazioni. Lascia vuoto per ciclarle.
-  submit_plan: Invia piano
-  compare_label: Confronta il piano con la mappa live
+  override_help: Digita un tag per sovrascrivere le assegnazioni dei clic. Lascia vuoto per scorrere.
+  submit_plan: Invia Piano
+  compare_label: Confronta il piano con la mappa in tempo reale
   show_live: Live
   show_plan: Il mio piano
   discard: Scarta
   discard_confirm: Scartare le modifiche pianificate ({n})? Questa operazione non può essere annullata.
-  view_locked: Disattiva la Modalità Pianificatore per cambiare vista
+  view_locked: Disattiva la Modalità Pianificatore per cambiare visualizzazione
   plan_saved: Piano salvato ({n} modifiche). Attiva la Modalità Pianificatore per continuare.
   fullscreen: Schermo intero
   toggle_fullscreen: Attiva/Disattiva Schermo intero
@@ -704,28 +705,28 @@ map_planner:
   grain: Grano
   timber: Legname
   herbs: Erbe
-  solid_gather: 'Pieno: Raccolta'
+  solid_gather: 'Solido: Raccolta'
   stripe_output: 'Striscia: Produzione'
   level_unknown: Livello --
   level: Livello {n}
-  hover: Passa il mouse su un territorio
+  hover: Passa sopra un territorio
   owner: 'Proprietario:'
   unclaimed: Non reclamato
   buff: 'Buff:'
   none: Nessuno
   no_active_buff: Nessun buff attivo
   drawer_title: Distribuzione Buff Alleanza
-  drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni pianificate
-  no_claims: Nessuna alleanza reclama territori al momento.
+  drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni pianificatore
+  no_claims: Nessuna alleanza reclama attualmente il territorio.
   no_buffs: Nessun buff attivo assegnato
   cities_one: "{n} Città"
   cities_other: "{n} Città"
   col_alliance: Alleanza
   col_holdings: Possedimenti
-  col_buffs: Buff attivi
+  col_buffs: Buff Attivi
   buff_research_speed: Velocità Ricerca
   buff_troop_training_speed: Velocità Addestramento Truppe
-  buff_building_speed: Velocità Edifici
+  buff_building_speed: Velocità Costruzione
   buff_march_speed: Velocità Marcia
   buff_grain_gathering: Raccolta Grano
   buff_grain_output: Produzione Grano
@@ -734,7 +735,7 @@ map_planner:
   buff_herb_gathering: Raccolta Erbe
   buff_herb_output: Produzione Erbe
   no_changes: Nessuna modifica rilevata nella tua bozza di piano.
-  proposal_title: Invia proposta Territorio Mappa
+  proposal_title: Invia Proposta Territorio Mappa
 proposals:
   title: Invia proposta
   close: Chiudi

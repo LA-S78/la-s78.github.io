@@ -686,51 +686,52 @@ blacklist_planner:
   what_player: гравець
   sent: Пропозицію до чорного списку надіслано керівництву в Discord. Вона набуде чинності після схвалення Стюардом.
 map_planner:
-  view: 'Перегляд:'
+  view: 'Вигляд:'
+  tag_ambiguous: "[{tag}] може означати більше одного альянсу ({options}). Введіть тег точно, з урахуванням регістру."
   levels: Рівні
   alliances: Альянси
   resources: Ресурси
-  buff_summary: Підсумок баффів
-  toggle_buff_summary: Перемкнути підсумок баффів
-  close_buff_summary: Закрити підсумок баффів
+  buff_summary: Зведення бафів
+  toggle_buff_summary: Перемкнути зведення бафів
+  close_buff_summary: Закрити зведення бафів
   planner_mode: Режим планувальника
   override_label: 'Змінити на:'
-  override_placeholder: НАПР. WLO
-  override_help: Введіть тег для перезапису призначень. Залиште порожнім для циклічного вибору.
+  override_placeholder: Напр. WLO
+  override_help: Введіть тег, щоб перепризначити кліки. Залиште порожнім, щоб перемикати.
   submit_plan: Надіслати план
-  compare_label: Порівняти план з поточною картою
-  show_live: Поточне
+  compare_label: Порівняти план з актуальною мапою
+  show_live: Актуальна
   show_plan: Мій план
-  discard: Відхилити
-  discard_confirm: Відхилити ваші заплановані зміни ({n})? Це неможливо скасувати.
-  view_locked: Вимкніть режим планувальника, щоб змінити вигляд
-  plan_saved: Ваш план збережено ({n} змін). Увімкніть режим планувальника, щоб продовжити.
+  discard: Відкинути
+  discard_confirm: Відкинути заплановані зміни ({n})? Це неможливо скасувати.
+  view_locked: Вимкніть Режим планувальника, щоб змінити вигляд
+  plan_saved: План збережено ({n} змін). Увімкніть Режим планувальника, щоб продовжити.
   fullscreen: На весь екран
   toggle_fullscreen: Перемкнути повноекранний режим
   exit: Вихід
   grain: Зерно
   timber: Деревина
   herbs: Трави
-  solid_gather: 'Суцільно: Збір'
-  stripe_output: 'Смуга: Видобуток'
+  solid_gather: 'Суцільний: Збір'
+  stripe_output: 'Смугастий: Видобуток'
   level_unknown: Рівень --
   level: Рівень {n}
   hover: Наведіть на територію
   owner: 'Власник:'
-  unclaimed: Нічиє
-  buff: 'Бафф:'
-  none: Відсутній
-  no_active_buff: Немає активних баффів
-  drawer_title: Розподіл баффів альянсу
-  drawer_subtitle: Динамічний підрахунок на основі активних завдань карти / планувальника
-  no_claims: Жоден альянс наразі не володіє територією.
-  no_buffs: Немає активних баффів
+  unclaimed: Нічийна
+  buff: 'Баф:'
+  none: Немає
+  no_active_buff: Немає активних бафів
+  drawer_title: Розподіл бафів альянсу
+  drawer_subtitle: Динамічний підрахунок на основі мапи / призначень планувальника
+  no_claims: Зараз жоден альянс не претендує на територію.
+  no_buffs: Активні бафи не призначені
   cities_one: "{n} місто"
   cities_few: "{n} міста"
   cities_other: "{n} міст"
   col_alliance: Альянс
   col_holdings: Володіння
-  col_buffs: Активні баффи
+  col_buffs: Активні бафи
   buff_research_speed: Швидкість досліджень
   buff_troop_training_speed: Швидкість тренування військ
   buff_building_speed: Швидкість будівництва
@@ -741,8 +742,8 @@ map_planner:
   buff_timber_output: Видобуток деревини
   buff_herb_gathering: Збір трав
   buff_herb_output: Видобуток трав
-  no_changes: Змін у вашому чорновому плані не виявлено.
-  proposal_title: Надіслати пропозицію щодо території карти
+  no_changes: Змін у чернетці плану не виявлено.
+  proposal_title: Надіслати пропозицію щодо території на мапі
 proposals:
   title: Надіслати пропозицію
   close: Закрити

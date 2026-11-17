@@ -679,25 +679,26 @@ blacklist_planner:
   what_player: jugador
   sent: Propuesta de lista negra enviada al liderazgo en Discord. Se aplica una vez que un Steward la apruebe.
 map_planner:
-  view: 'Vista:'
+  view: 'Ver:'
+  tag_ambiguous: "[{tag}] podría referirse a más de una alianza ({options}). Escribe la etiqueta exactamente, incluyendo mayúsculas."
   levels: Niveles
   alliances: Alianzas
   resources: Recursos
   buff_summary: Resumen de Buffs
-  toggle_buff_summary: Alternar Resumen de Buffs
-  close_buff_summary: Cerrar Resumen de Buffs
+  toggle_buff_summary: Alternar resumen de buffs
+  close_buff_summary: Cerrar resumen de buffs
   planner_mode: Modo Planificador
   override_label: 'Cambiar a:'
-  override_placeholder: P. ej., WLO
-  override_help: Escribe un tag para anular las asignaciones de clic. Déjalo en blanco para rotar.
-  submit_plan: Enviar Plan
+  override_placeholder: P. EJ. WLO
+  override_help: Escribe una etiqueta para reemplazar las asignaciones al hacer clic. Déjalo en blanco para rotar.
+  submit_plan: Enviar plan
   compare_label: Comparar el plan con el mapa en vivo
   show_live: En vivo
   show_plan: Mi plan
   discard: Descartar
-  discard_confirm: "¿Descartar tus cambios planificados ({n})? Esto no se puede deshacer."
+  discard_confirm: "¿Descartar los cambios planeados ({n})? Esto no se puede deshacer."
   view_locked: Desactiva el Modo Planificador para cambiar la vista
-  plan_saved: Tu plan está guardado ({n} cambios). Activa el Modo Planificador para continuar.
+  plan_saved: Tu plan ha sido guardado ({n} cambios). Activa el Modo Planificador para continuar.
   fullscreen: Pantalla completa
   toggle_fullscreen: Alternar pantalla completa
   exit: Salir
@@ -705,36 +706,36 @@ map_planner:
   timber: Madera
   herbs: Hierbas
   solid_gather: 'Sólido: Recolectar'
-  stripe_output: 'Rayado: Producción'
+  stripe_output: 'Franja: Producción'
   level_unknown: Nivel --
   level: Nivel {n}
-  hover: Pasa el mouse sobre un territorio
-  owner: 'Propietario:'
+  hover: Pasa el cursor sobre un territorio
+  owner: 'Dueño:'
   unclaimed: Sin reclamar
   buff: 'Buff:'
   none: Ninguno
   no_active_buff: Sin buff activo
   drawer_title: Distribución de Buffs de Alianza
-  drawer_subtitle: Recuento dinámico basado en las asignaciones activas del mapa / planificador
+  drawer_subtitle: Recuento dinámico basado en el mapa activo / asignaciones del planificador
   no_claims: Ninguna alianza reclama territorio actualmente.
-  no_buffs: No hay buffs activos asignados
+  no_buffs: Sin buffs activos asignados
   cities_one: "{n} Ciudad"
   cities_other: "{n} Ciudades"
   col_alliance: Alianza
-  col_holdings: Propiedades
+  col_holdings: Posesiones
   col_buffs: Buffs Activos
-  buff_research_speed: Velocidad de Investigación
-  buff_troop_training_speed: Velocidad de Entrenamiento de Tropas
-  buff_building_speed: Velocidad de Construcción
-  buff_march_speed: Velocidad de Marcha
-  buff_grain_gathering: Recolección de Grano
-  buff_grain_output: Producción de Grano
-  buff_timber_gathering: Recolección de Madera
-  buff_timber_output: Producción de Madera
-  buff_herb_gathering: Recolección de Hierbas
-  buff_herb_output: Producción de Hierbas
-  no_changes: No se detectaron cambios en tu plan borrador.
-  proposal_title: Enviar Propuesta de Territorio del Mapa
+  buff_research_speed: Velocidad de investigación
+  buff_troop_training_speed: Velocidad de entrenamiento de tropas
+  buff_building_speed: Velocidad de construcción
+  buff_march_speed: Velocidad de marcha
+  buff_grain_gathering: Recolección de grano
+  buff_grain_output: Producción de grano
+  buff_timber_gathering: Recolección de madera
+  buff_timber_output: Producción de madera
+  buff_herb_gathering: Recolección de hierbas
+  buff_herb_output: Producción de hierbas
+  no_changes: No se detectaron cambios en tu borrador de plan.
+  proposal_title: Enviar propuesta de territorio en el mapa
 proposals:
   title: Enviar propuesta
   close: Cerrar

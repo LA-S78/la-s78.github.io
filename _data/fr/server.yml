@@ -260,7 +260,7 @@ bot_admin:
   rank_title: "🛡️ Classement NAP du serveur"
   rank_open: Diplomatie ouverte et classement
   rank_fetch_failed: "⚠️ Échec de la récupération du classement : {reason}"
-  rank_denied: "⛔ **Accès refusé :** Seuls les intendants du Royaume désignés peuvent mettre à jour le classement des alliances."
+  rank_denied: "⛔ **Accès refusé :** Seuls les intendants du royaume désignés peuvent mettre à jour le classement des alliances."
   rank_missing: "⚠️ Arguments requis manquants : tag et rang."
   rank_set_title: "👑 Classement NAP mis à jour"
   rank_set_text: 'L''alliance `[{tag}]` a été assignée au **Rang #{rank}** *(précédemment : {previous})*.'
@@ -268,12 +268,13 @@ bot_admin:
   rank_updated_by: Mis à jour par {name}
   rank_view: Voir le classement
   rank_set_failed: "⚠️ Échec de la mise à jour du rang : {reason}"
+  rank_ambiguous: "[{tag}] peut désigner plus d'une alliance ({options}) : veuillez saisir le tag exactement, avec ses majuscules."
   dev_done: |-
-    ✅ **Données de test mises à jour.** {count} fichier(s) copié(s) depuis les données en direct vers le Gist de test utilisé par dev.la-s78.app : {files}.
-    Les données en direct ont été uniquement lues, et non modifiées.
+    ✅ **Données de test mises à jour.** {count} fichier(s) copié(s) depuis les données réelles vers le Gist de test utilisé par dev.la-s78.app : {files}.
+    Les données réelles ont seulement été lues, pas modifiées.
   dev_failed: "⚠️ **Données de test non mises à jour :** {reason}"
   dev_denied: "⛔ **Accès refusé :** Seuls les intendants peuvent mettre à jour les données de test."
-  test_proposal: "🧪 Ceci est une proposition de test depuis le site de test. Elle utilise des données de test, elle ne peut donc pas être approuvée ni modifier quoi que ce soit en direct."
+  test_proposal: "🧪 Ceci est une proposition de test depuis le site de test. Elle utilise des données de test, elle ne peut donc pas être approuvée ni modifier quoi que ce soit en temps réel."
   approved_not_updated: "✅ Approuvé et enregistré, mais ce message n'a pas pu être mis à jour ({reason})."
 bot_register:
   nap_only: "⚠️ Cette commande peut uniquement être exécutée sur le serveur NAP officiel."

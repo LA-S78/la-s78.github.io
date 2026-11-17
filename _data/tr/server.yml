@@ -257,24 +257,25 @@ bot_rewards:
     • Her ittifakın listesi düzeltilmiş sandıklar için yeniden sıralandı.
 bot_admin:
   rank_none: Mevcut durumda kayıtlı ittifak yok.
-  rank_title: "🛡️ Sunucu NAP Durumları"
-  rank_open: Açık Diplomasi & Durumlar
+  rank_title: "🛡️ Sunucu NAP Sıralaması"
+  rank_open: Açık Diplomasi & Sıralama
   rank_fetch_failed: "⚠️ Sıralamalar alınamadı: {reason}"
-  rank_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Sorumluları ittifak sıralamalarını güncelleyebilir."
-  rank_missing: "⚠️ Gerekli argümanlar eksik: tag ve rank."
-  rank_set_title: "👑 NAP Durumu Güncellendi"
-  rank_set_text: "`[{tag}]` ittifakı **Sıra #{rank}** olarak atandı *(önceki: {previous})*."
+  rank_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Yöneticileri ittifak sıralamalarını güncelleyebilir."
+  rank_missing: "⚠️ Eksik gerekli argümanlar: tag ve rank."
+  rank_set_title: "👑 NAP Sıralaması Güncellendi"
+  rank_set_text: "`[{tag}]` ittifakı **Sıralama #{rank}** olarak atandı *(önceki: {previous})*."
   rank_unranked: Sıralamasız
   rank_updated_by: "{name} tarafından güncellendi"
-  rank_view: Durumları Görüntüle
-  rank_set_failed: "⚠️ Sıra güncellenemedi: {reason}"
+  rank_view: Sıralamayı Görüntüle
+  rank_set_failed: "⚠️ Sıralama güncellenemedi: {reason}"
+  rank_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}): lütfen etiketi, büyük harfleriyle tam olarak yazın."
   dev_done: |-
-    ✅ **Test verileri güncellendi.** {count} dosya canlı verilerden, dev.la-s78.app tarafından kullanılan test Gist'ine kopyalandı: {files}.
-    Canlı veriler sadece okundu, değiştirilmedi.
+    ✅ **Test verileri güncellendi.** {count} dosya, canlı verilerden dev.la-s78.app tarafından kullanılan test Gist'ine kopyalandı: {files}.
+    Canlı veriler yalnızca okundu, değiştirilmedi.
   dev_failed: "⚠️ **Test verileri güncellenemedi:** {reason}"
-  dev_denied: "⛔ **Erişim Engellendi:** Sadece Sorumlular test verilerini güncelleyebilir."
-  test_proposal: "🧪 Bu, test sitesinden gelen bir test önerisidir. Test verilerini kullandığı için onaylanamaz veya canlı sistemde hiçbir şeyi değiştiremez."
-  approved_not_updated: "✅ Onaylandı ve kaydedildi ancak bu mesaj güncellenemedi ({reason})."
+  dev_denied: "⛔ **Erişim Engellendi:** Sadece Yöneticiler test verilerini güncelleyebilir."
+  test_proposal: "🧪 Bu, test sitesinden gelen bir test teklifidir. Test verilerini kullandığı için onaylanamaz veya canlı sistemde herhangi bir değişiklik yapamaz."
+  approved_not_updated: "✅ Onaylandı ve kaydedildi, ancak bu mesaj güncellenemedi ({reason})."
 bot_register:
   nap_only: "⚠️ Bu komut sadece resmi NAP sunucusunda çalıştırılabilir."
   sync_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Sorumluları yayın-senkronizasyon komutlarını kullanabilir."

@@ -680,61 +680,62 @@ blacklist_planner:
   sent: Kara liste teklifi Discord'da liderliğe gönderildi. Bir Kâhya onayladığında geçerli olur.
 map_planner:
   view: 'Görünüm:'
+  tag_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}). Etiketi, büyük harflerine dikkat ederek tam olarak yazın."
   levels: Seviyeler
   alliances: İttifaklar
   resources: Kaynaklar
-  buff_summary: Güçlendirme Özeti
-  toggle_buff_summary: Güçlendirme Özetini Aç/Kapat
-  close_buff_summary: Güçlendirme Özetini Kapat
+  buff_summary: Takviye Özeti
+  toggle_buff_summary: Takviye Özetini Aç/Kapat
+  close_buff_summary: Takviye Özetini Kapat
   planner_mode: Planlayıcı Modu
-  override_label: 'Değiştir:'
-  override_placeholder: ÖR. WLO
-  override_help: Tıklama atamalarını geçersiz kılmak için bir etiket yazın. Döngü için boş bırakın.
+  override_label: 'Şununla değiştir:'
+  override_placeholder: 'Örn: WLO'
+  override_help: Tıklama atamalarını geçersiz kılmak için bir etiket yazın. Döngüye almak için boş bırakın.
   submit_plan: Planı Gönder
   compare_label: Planı canlı harita ile karşılaştır
   show_live: Canlı
   show_plan: Planım
   discard: Vazgeç
-  discard_confirm: Planlanan değişikliklerinizden ({n}) vazgeçilsin mi? Bu geri alınamaz.
+  discard_confirm: Planladığınız değişiklikleri ({n}) iptal etmek istiyor musunuz? Bu işlem geri alınamaz.
   view_locked: Görünümü değiştirmek için Planlayıcı Modunu kapatın
   plan_saved: Planınız kaydedildi ({n} değişiklik). Devam etmek için Planlayıcı Modunu açın.
   fullscreen: Tam Ekran
   toggle_fullscreen: Tam Ekranı Aç/Kapat
   exit: Çıkış
   grain: Tahıl
-  timber: Kereste
-  herbs: Otlar
-  solid_gather: 'Sabit: Toplama'
+  timber: Odun
+  herbs: Bitki
+  solid_gather: 'Dolu: Toplama'
   stripe_output: 'Çizgili: Üretim'
   level_unknown: Seviye --
   level: Seviye {n}
   hover: Bir bölgenin üzerine gelin
   owner: 'Sahibi:'
   unclaimed: Sahipsiz
-  buff: 'Güçlendirme:'
+  buff: 'Takviye:'
   none: Yok
-  no_active_buff: Aktif güçlendirme yok
-  drawer_title: İttifak Güçlendirme Dağıtımı
+  no_active_buff: Aktif takviye yok
+  drawer_title: İttifak Takviyesi Dağılımı
   drawer_subtitle: Aktif harita / planlayıcı atamalarına dayalı dinamik çetele
-  no_claims: Şu an hiçbir ittifak bölge talep etmiyor.
-  no_buffs: Atanmış aktif güçlendirme yok
+  no_claims: Şu anda hiçbir ittifakın hak iddia ettiği bölge yok.
+  no_buffs: Atanmış aktif takviye yok
   cities_one: "{n} Şehir"
   cities_other: "{n} Şehir"
   col_alliance: İttifak
-  col_holdings: Varlıklar
-  col_buffs: Aktif Güçlendirmeler
+  col_holdings: Mülkler
+  col_buffs: Aktif Takviyeler
   buff_research_speed: Araştırma Hızı
   buff_troop_training_speed: Birlik Eğitim Hızı
   buff_building_speed: İnşaat Hızı
   buff_march_speed: Yürüyüş Hızı
   buff_grain_gathering: Tahıl Toplama
   buff_grain_output: Tahıl Üretimi
-  buff_timber_gathering: Kereste Toplama
-  buff_timber_output: Kereste Üretimi
-  buff_herb_gathering: Ot Toplama
-  buff_herb_output: Ot Üretimi
-  no_changes: Taslak planınızda değişiklik algılanmadı.
-  proposal_title: Harita Bölgesi Teklifi Sun
+  buff_timber_gathering: Odun Toplama
+  buff_timber_output: Odun Üretimi
+  buff_herb_gathering: Bitki Toplama
+  buff_herb_output: Bitki Üretimi
+  no_changes: Taslak planınızda hiçbir değişiklik algılanmadı.
+  proposal_title: Harita Bölgesi Önerisi Gönder
 proposals:
   title: Öneri Gönder
   close: Kapat
