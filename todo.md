@@ -2,7 +2,7 @@
 
 # 📋 Roadmap
 
-_Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIONS.md`._
+_Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECISIONS.md`; what changed since the maintainer's last review (#71–#87) is summed up in `docs/REVIEW_BRIEF.md`._
 
 ## 🔴 High Priority
 
@@ -21,7 +21,7 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
 
 ## 🟡 Mid Priority (Automation, Tools & Pipelines)
 
-- [x] **Kingdom Calendar Reminders** (owner answers, 2026-11-13; live since 2026-11-13): set per event by the alliance (its events) or a Steward (server events); one reminder 1 hour before to start with; alliance events to the alliance's alert channel, server events to the NAP Discord (NAP_ALERT_CHANNEL_ID) plus alliances that opt in; pings the role chosen on the event; can be switched off per event. cron-job.org (every 10 min) calls the site, which does the work with the variables Vercel already has (REMINDER_SECRET proves the call). Built-in KvK/Capitol events: later, as a Steward setting. Messages in English first.
+- [x] **Kingdom Calendar Reminders** (owner answers, 2026-11-13; live since 2026-11-13): set per event by the alliance (its events) or a Steward (server events); one reminder per event, posted when it starts or 10–60 minutes before, as the event chooses (#185); alliance events to the alliance's alert channel, server events to the NAP Discord (NAP_ALERT_CHANNEL_ID) plus alliances that opt in; pings the role chosen on the event; can be switched off per event. cron-job.org (every 5 min, #187) calls the site, which does the work with the variables Vercel already has (REMINDER_SECRET proves the call). Built-in KvK/Capitol events: later, as a Steward setting. Reminder messages are in English (shared channels).
   - [x] **Part 1 — event settings:** "Remind on Discord 1 hour before" on the event form (on by default for new events), editing events (Edit next to Delete; same scope rule as delete), a hint when there is no alert channel, and the registration opt-in for server-event reminders.
   - [x] **Part 2 — the reminder check:** `api/_reminders.js`, reached through `POST /api/calendar` (no new function) with REMINDER_SECRET; cron-job.org calls dev and live every 10 minutes (GitHub's schedule never started; by hand: Actions → Calendar reminders → Run workflow, dry run by default). The live site posts nothing until `REMINDERS_LIVE=true` is set in Vercel; dev.la-s78.app posts only to TEST_CHANNEL_ID, pinging nobody.
   - [x] **Go live (owner):** tested on dev (reminder posted to the test channel), then `REMINDERS_LIVE=true` set on the live site. Leaders can also manage events by signing in (R4/R5, Stewards).
@@ -41,15 +41,26 @@ _Last tidied: November 2026. Decisions behind finished work are in `docs/DECISIO
   - [x] Discord bot replies: `/calendar`, `/map`, `/nominate`, `/rewards` (shared leadership-channel posts stay English)
   - [x] Discord command picker descriptions (`bot_commands`; alliance servers update on `/registerbot` sync)
   - [x] `/registerbot`, `/rank`, `/devupdate` and the proposal-review buttons' private replies (the shared war-room post stays English)
+  - [x] Guides: section titles, subtitles and picture descriptions are checked after translation and filled if left in English; a guide whose sections don't match the English is rebuilt from it; **Actions → Fill missing translations** fixes older guides and opens a checked pull request (#190–#192, #198)
   - [ ] `/suggest` (later, once most other work is done): it's in the alliance servers' command list but the bot has no handler for it yet
 
-- [ ] **Calendar event pictures (owner idea, 2026-11-15)** — a faded picture behind each event card by event type (Bear Trap, Crystal Cluster, Kingdom War…); needs a picture per type.
-- [ ] **Your alliance highlighted across the site (owner idea, 2026-11-15)** — recognise the signed-in reader's alliance and mark it with the header's pulsing glow (or similar) in key places: the calendar's Capitol rotation, the Alliance page's standings, the rewards tool…; to be proposed element by element.
+- [x] **Calendar event pictures (owner idea, 2026-11-15)** — a faded picture behind each event card by event type, in `_data/event_types.yml` (#156); the same picture behind the event's guide card (#196). Pictures so far: Crystal Cluster, Elixir Scramble, Undead Siege, Gear Upgrade, Cheese Trap, Kingdom War, Kill Event, Hunt Battle (#200).
+- [ ] **Pictures still to come (owner, waiting on Gemini image limits)** — guide cards for Survival Battle, Royal Scramble, Canyon Conquest, Thief Hunt, Dwarven Pickaxe, Honor Shop, Campaign Shop, Premium Shop. Survival Battle is also a calendar event, so its picture would show there too.
+- [x] **Your alliance highlighted across the site (owner idea, 2026-11-15)** — the signed-in reader's alliance glows in the calendar's rotation, the Alliance standings, the rewards tool and the map's buff summary (#160, #161, #171).
+- [x] **Alliance pictures** — R4/R5 send a card picture and a banner from the dashboard (crop with drag and zoom, 3 a day); a Steward approves them privately from Discord; approved pictures show on the Capitol Rotation cards, the NAP Ranks rows and the calendar's Capitol holder box, fading in once loaded (#178–#180, #207, #209, #210). Stored privately in Vercel Blob.
+- [x] **Telling alliances apart** — letter case counts, accents don't: RâvN and RÂVN are two alliances everywhere (pictures, dashboards, calendar scopes, reminders, sign-in, `/rank`, map, blacklist), while RAVN is still RÂVN (#199).
 - [ ] **Map Plan Import / Export**
   - Share map marker drawings as a link (`map.html#plan=...`), with no database writes.
 
 - [x] **Own service worker (`sw.js`)** (owner decision, 2026-11-13): replaced Workbox 4.3.1, which every visitor's browser downloaded from Google's servers unchecked, with the site's own plain worker (no outside script; a build check keeps it that way). Same jobs: offline app shell (only changed files re-downloaded on an update; Workbox's saved copy reused on the switch, so phones don't download the site again), image store, live data, offline Home fallback, update toast. Pages are saved under their plain address, so `?__WB_REVISION__=…` no longer appears in the address bar. A phone saves only its reader's language plus the pages it opens (first visit 10.9 → 5.1 MB); an update refreshes every saved page, including visited pages in other languages.
 - [ ] **Retire the old-page rescue in `sw.js`** (section 6, about 40 lines) a few weeks after November 2026, once no phone runs pages from before the update toast.
+
+- [ ] **Guides from the owner's English graphics** — each graphic cut into its pictures, with the words as text so every language can read it, one guide per pull request. Done: Kill Event (#188), Frozen Era (#197). More to come from the owner.
+- [ ] **Open questions for the owner**
+  - How long Undead Siege and Hunt Battle last, and whether they repeat (both default to 1 hour, no repeat), and whether Hunt Battle gets a guide.
+  - The Crystal Valley guide (a placeholder for now; the calendar's Crystal Cluster events link to it).
+  - The Thief Hunt guide's "Store" placeholder, and the home page credits.
+- [ ] **Delete the branch `claude/calendar-capitol-box-picture`** (owner, on GitHub): a comparison branch, no longer needed (#210 took its style).
 
 ---
 
@@ -66,7 +77,7 @@ _From a measured audit of every page, all three themes, phone and desktop (Novem
   - [x] **Step 3 — Tidy toolbars:** every tool's controls bar has two parts — what you're looking at (view switches, information) on the left, then the planner: Planner Mode and Submit together at the right of the top row on desktop, and on phones a line of their own with Planner Mode on the left and Submit on the right (the blacklist bar too; the dashboard's Edit / Add chart pair stays centred). On phones the two parts are full-width rows that hold in every language (the map's bar was three ragged rows in German); view switches span the row. The map's "Change to:" tag box always has a line of its own under the buttons, so on phones the map's bar is three steady rows (views; planner; tag box), and on a narrower desktop window Buff Summary and Fullscreen drop to their icons when the bar would otherwise wrap. Set in `_css/style/88-toolbars.css`. (A "mode switch first, Submit at the far end" rule was tried and dropped: it made the bars look odd — owner, 2026-11-13.)
   - [x] **Step 4 — Steady screens** (owner ideas):
     - [x] **No jumping on tap:** Submit Plan and its count are always in the bar, greyed out until there is something to send (owner decision); the map's "Change to:" tag box is always on its own line, greyed out until Planner Mode is on; the resource key sits under the map instead of pushing it down; "Copy" → "✓ Copied", the T10 unlock buttons and Edit Dashboard keep their width; the dashboard's Add chart waits greyed out beside Edit. Measured by tapping every tool button: the tapped button no longer moves (switching a planner or editor on still opens its tools below the button, as it must).
-    - [x] **Last known data while loading:** the map, alliance standings and blacklist, rewards tiers and the Capitol rotation board show this device's last saved copy straight away (the one sw.js keeps for offline use), dimmed and not clickable, with "⏳ Updating…" floating in a corner (it takes no space, so nothing moves when it goes), and swap to the fresh data when it arrives. Planner Mode stays off until the fresh data is in. If the fresh data can't be loaded, the saved copy stays with a note saying when it was saved. The calendar page is left as it is: its data depends on who is signed in. (`js/live-data-notice.js`)
+    - [x] **Last known data while loading:** the map, alliance standings and blacklist, rewards tiers and the Capitol rotation board show this device's last saved copy straight away (the one sw.js keeps for offline use), dimmed and not clickable, with "⏳ Updating…" floating in a corner (it takes no space, so nothing moves when it goes), and swap to the fresh data when it arrives. Planner Mode stays off until the fresh data is in. If the fresh data can't be loaded, the saved copy stays with a note saying when it was saved. The calendar and the Alliance Dashboard joined later (#168, #169); saved copies are dropped after 7 days. (`js/live-data-notice.js`)
   - [x] **Step 5 — Per-tool polish:** the ladder's edit rows, the buff summary table (cut off on phones), the calendar's cards, the King's console rows and the rewards tier editor.
     - [x] **Buff summary** (the map's ⚖️ panel): one card per alliance — tag and number of cities on top, its buffs below, wrapping — instead of a three-column table that was cut off on the right (phones, and desktop in German); on phones the panel takes nearly the map's whole width.
     - [x] **Ladder rows in Planner Mode** (phones): the rank and its ▲▼ sit at the top left beside the tag, name and academies; the NAP line runs the full width below, with the × (remove alliance) on its own at the far right, away from Revoke NAP. A little shorter than before (German: 1158 → 1122px for the list).
@@ -103,5 +114,10 @@ _From a measured audit of every page, all three themes, phone and desktop (Novem
 - [x] **King's checklist on the server** — ticks saved for everyone, by the King's alliance R4/R5 and Stewards; a handed-out chest is locked through any re-sort. (#74)
 - [x] **Alliance registration hardening** — the alliance comes from the signed `/registerbot` link (R5 + alliance role checked); the portal checks the bot is in the server, the person can manage it, and the channels and role belong to it. (#75)
 - [x] **Theme colours** — accent, borders and surfaces follow the chosen theme. (#50–#52)
+- [x] **Site search** — the search box finds any section of the guides, Rules and Alliance pages, in the reader's language (#153).
+- [x] **Calendar redesign** — week and cycle views, event types with icons and pictures, a type filter, the week's king, one Capitol rotation board; leaders add, edit and delete events from the page after signing in; Back keeps the reader's place (#155–#158, #162, #170, #172–#177).
+- [x] **Line icons instead of emojis** — one SVG icon set (`_data/ui_icons.yml`) across dropdowns, the dashboard, the calendar and every other tool (#181–#184); new footer and guide icons, Pinned Pages and an Event Calendar directory on the home page (#186).
+- [x] **Installed app look** — neutral theme and bottom-bar colours, install screenshots taken from the live site by a hand-run workflow (#164–#167).
+- [x] **Stewards' dashboard switcher** — every alliance, academies included, in the Alliance page's standings order; alliances outside the NAP last (#201).
 
 </div>
