@@ -64,6 +64,19 @@ export function findTag(tags = [], tag) {
 }
 
 /**
+ * The alliances a tag typed in another letter case could mean, when findTag can't choose
+ * (maintainer review, 2026-11-17): "ravn" with both RâvN and RÂVN registered gives
+ * ['RÂVN', 'RâvN']; [] when findTag finds one or none is close. A caller that would
+ * otherwise create a new alliance from the typed text asks the person to type it exactly.
+ */
+export function ambiguousTags(tags = [], tag) {
+  const want = tagLetters(tag).toLowerCase();
+  if (!want || findTag(tags, tag)) return [];
+  const loose = [...tags].filter((t) => tagLetters(t).toLowerCase() === want);
+  return loose.length > 1 ? loose : [];
+}
+
+/**
  * An alliance's file-safe name for its stored files (dashboard, pictures): its letters and
  * digits in capitals (RÂVN -> RAVN, HeKi -> HEKI), as before. When another alliance in
  * `tags` already has those capitals (RâvN beside RÂVN), the letter case is kept instead

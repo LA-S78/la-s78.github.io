@@ -129,3 +129,11 @@ data or the deploy.
 - The Crystal Valley guide placeholder, the Thief Hunt "Store" placeholder, and the home
   page credits.
 - Pictures for the remaining guide cards, waiting on Gemini image limits.
+
+## Review outcome (maintainer, 2026-11-17)
+
+- Picture file names, pending-picture caching, the tag identity rule and the reminder route:
+  confirmed sound. The file-name check was tested against the listed tricks.
+- Follow-ups: tags typed in a letter case that could mean two alliances are now refused by
+  `/rank` and the map planner instead of becoming a new alliance; the reminder secret is
+  compared by bytes. Details in `docs/DECISIONS.md`.

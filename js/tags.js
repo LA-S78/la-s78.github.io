@@ -31,3 +31,16 @@ export function findTag(tags, tag) {
   const loose = list.filter((t) => tagLetters(t).toLowerCase() === want.toLowerCase());
   return loose.length === 1 ? loose[0] : null;
 }
+
+/**
+ * The alliances a tag typed in another letter case could mean, when findTag can't choose
+ * (maintainer review, 2026-11-17): "ravn" with both RâvN and RÂVN registered gives
+ * ['RÂVN', 'RâvN']; [] when findTag finds one or none is close. A caller that would
+ * otherwise create a new alliance from the typed text asks the person to type it exactly.
+ */
+export function ambiguousTags(tags = [], tag) {
+  const want = tagLetters(tag).toLowerCase();
+  if (!want || findTag(tags, tag)) return [];
+  const loose = [...tags].filter((t) => tagLetters(t).toLowerCase() === want);
+  return loose.length > 1 ? loose : [];
+}

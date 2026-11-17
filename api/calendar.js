@@ -16,8 +16,12 @@ function fromReminderSchedule(req) {
   const clean = (v) => String(v || '').replace(/\s+/g, '');
   const expected = clean(process.env.REMINDER_SECRET);
   const given = clean(req.headers?.['x-reminder-secret']);
-  if (!expected || given.length !== expected.length) return false;
-  return timingSafeEqual(Buffer.from(given), Buffer.from(expected));
+  if (!expected) return false;
+  // Compared as bytes: a header with accented or emoji characters has more bytes than
+  // characters, and timingSafeEqual throws on different lengths (maintainer review)
+  const a = Buffer.from(given);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
 }
 
 export default async function handler(req, res) {

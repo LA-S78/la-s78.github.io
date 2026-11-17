@@ -709,6 +709,7 @@ blacklist_planner:
 
 map_planner:
   view: "View:"
+  tag_ambiguous: "[{tag}] could mean more than one alliance ({options}). Type the tag exactly, with its capitals."
   levels: "Levels"
   alliances: "Alliances"
   resources: "Resources"
