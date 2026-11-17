@@ -228,12 +228,31 @@ function nominateLink(req, res, { gist, mapState, tag, access }) {
   return res.status(200).json({ url: `/nominate.html?token=${token}` });
 }
 
-/** The alliances a Steward can switch between, best rank first. */
+/**
+ * The alliances a Steward can switch between: the NAP members best rank first, each followed
+ * by its academies (owner, 2026-11-17: academies such as RâvN and Ghst have dashboards too,
+ * and were missing). An academy whose main alliance isn't listed comes last.
+ */
 function allianceList(alliances) {
-  return Object.entries(alliances)
-    .filter(([, a]) => a && a.type !== 'academy')
-    .map(([tag, a]) => ({ tag, rank: Number.isFinite(Number(a.rank)) ? Number(a.rank) : null }))
-    .sort((x, y) => (x.rank ?? 999) - (y.rank ?? 999) || x.tag.localeCompare(y.tag));
+  const rank = (a) => (Number.isFinite(Number(a?.rank)) ? Number(a.rank) : null);
+  const entries = Object.entries(alliances).filter(([, a]) => a);
+  const isAcademy = (a) => a.type === 'academy' || Boolean(a.parent_tag);
+  const byRank = (x, y) => (x.rank ?? 999) - (y.rank ?? 999) || x.tag.localeCompare(y.tag);
+  const mains = entries
+    .filter(([, a]) => !isAcademy(a))
+    .map(([tag, a]) => ({ tag, rank: rank(a) }))
+    .sort(byRank);
+  const academies = entries
+    .filter(([, a]) => isAcademy(a))
+    .map(([tag, a]) => ({ tag, rank: rank(a), parent: findAllianceKey(alliances, a.parent_tag) }))
+    .sort(byRank);
+  const list = [];
+  for (const main of mains) {
+    list.push(main);
+    list.push(...academies.filter((x) => x.parent === main.tag));
+  }
+  list.push(...academies.filter((x) => !mains.some((m) => m.tag === x.parent)));
+  return list;
 }
 
 function firstByRank(alliances) {

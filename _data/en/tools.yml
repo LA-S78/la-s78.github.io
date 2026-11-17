@@ -51,6 +51,8 @@ dashboard:
   page_title: "[{tag}] Alliance Dashboard"
   subtitle: "Alliance Dashboard · {view}"
   subtitle_rank: "Alliance Dashboard · Rank #{rank} · {view}"
+  # The Stewards' alliance switcher: an academy, under its main alliance
+  academy_of: "academy of [{tag}]"
   view_steward: "Steward view"
   view_leader: "Leadership view"
   view_member: "Member view"
