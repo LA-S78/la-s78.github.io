@@ -7,6 +7,7 @@
 #   GuideTextCheck.structure_matches?(english, translated)  same blocks, ids and order?
 #   GuideTextCheck.untranslated(english, translated, lang)  { "0" => "Getting There", ... }
 #   GuideTextCheck.apply(translated, { "0" => "So kommst du hin" })  the fixed text
+#   GuideTextCheck.repair(english, translated) { |key, en_block| … }  wrong/missing blocks redone
 #
 # Only the '=== guide--<lang>--… ===' / '=== pane--<lang>--… ===' master format is handled.
 
@@ -119,6 +120,49 @@ module GuideTextCheck
       v = v.gsub('\\"', '"')
     end
     v
+  end
+
+  # The text split into its blocks: [[key, text], ...], key without the language
+  # ('pane--events--duel--02--rules'); text from the '=== … ===' line to the next one.
+  def blocks(text)
+    out = []
+    text.each_line do |line|
+      if (m = line.match(MARKER))
+        out << [m[1] + m[3], +'']
+      end
+      out.last[1] << line if out.any?
+    end
+    out
+  end
+
+  # Rebuilds a language's text in the English order of blocks (owner request, 2026-11-17:
+  # the Italian Duel guide's "Golden Rules" block held a second copy of the schedule). A
+  # block is kept when the translation has it with the same ids and order as the English;
+  # every other English block is passed to the block given (which returns its translation,
+  # or nil to keep what's there). Blocks the English doesn't have are dropped.
+  # Returns [text, keys of the blocks redone].
+  def repair(english, translated)
+    have = blocks(translated)
+    redone = []
+    out = blocks(english).map do |key, en_text|
+      ok = have.find { |k, t| k == key && structure(t) == structure(en_text) }
+      next ok[1] if ok
+
+      fresh = yield(key, en_text)
+      if fresh
+        redone << key
+        fresh
+      else
+        (have.find { |k, _| k == key } || [nil, ''])[1]
+      end
+    end
+    [out.join, redone]
+  end
+
+  # An English block made ready for another language (its '=== … ===' line and lang:)
+  def for_language(block, lang)
+    block.sub(/^(=== (?:guide|pane)--)en--/) { "#{Regexp.last_match(1)}#{lang}--" }
+         .gsub(/^lang:\s*["']?en["']?\s*$/, %(lang: "#{lang}"))
   end
 
   # A master file's text for one language (its guide and pane blocks)

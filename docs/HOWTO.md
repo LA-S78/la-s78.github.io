@@ -174,9 +174,11 @@ The translation also checks that the section titles (which label the tabs), the
 subtitle and the pictures' `alt` descriptions came back translated; anything still in
 English is sent to Gemini again on its own.
 
-**Titles still in English in an older guide?** Open **Actions → Fill missing
-translations → Run workflow**, type the guide's id (e.g. `kill_event`) and run it.
-It translates only the leftover English and opens a pull request to check and merge.
+**Titles still in English in an older guide, or a section wrong in one language?**
+Open **Actions → Fill missing translations → Run workflow**, type the guide's id
+(e.g. `kill_event`) and run it. Sections that don't match the English (a different
+section in their place, or missing) are translated again from the English, leftover
+English is translated, and a pull request opens to check and merge.
 
 ---
 
