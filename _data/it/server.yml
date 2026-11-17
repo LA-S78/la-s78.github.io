@@ -263,17 +263,18 @@ bot_admin:
   rank_denied: "⛔ **Accesso Negato:** Solo i Kingdom Steward designati possono aggiornare le classifiche delle alleanze."
   rank_missing: "⚠️ Argomenti richiesti mancanti: tag e rank."
   rank_set_title: "👑 Classifica NAP Aggiornata"
-  rank_set_text: 'L''alleanza `[{tag}]` è stata assegnata al **Rank #{rank}** *(precedentemente: {previous})*.'
+  rank_set_text: 'L''alleanza `[{tag}]` è stata assegnata al **Rango #{rank}** *(precedentemente: {previous})*.'
   rank_unranked: Senza rango
   rank_updated_by: Aggiornato da {name}
-  rank_view: Visualizza Classifiche
+  rank_view: Visualizza classifiche
   rank_set_failed: "⚠️ Impossibile aggiornare il rango: {reason}"
+  rank_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}): digita il tag esattamente, con le maiuscole."
   dev_done: |-
-    ✅ **Dati di test aggiornati.** Copiati {count} file dai dati live al Gist di test usato da dev.la-s78.app: {files}.
+    ✅ **Dati di test aggiornati.** Copiati {count} file dai dati live nel Gist di test usato da dev.la-s78.app: {files}.
     I dati live sono stati solo letti, non modificati.
   dev_failed: "⚠️ **Dati di test non aggiornati:** {reason}"
   dev_denied: "⛔ **Accesso Negato:** Solo gli Steward possono aggiornare i dati di test."
-  test_proposal: "🧪 Questa è una proposta di test dal sito di test. Usa dati di test, quindi non può essere approvata né modificare nulla di live."
+  test_proposal: "🧪 Questa è una proposta di test dal sito di test. Utilizza dati di test, quindi non può essere approvata né modificare nulla di live."
   approved_not_updated: "✅ Approvato e salvato, ma questo messaggio non ha potuto essere aggiornato ({reason})."
 bot_register:
   nap_only: "⚠️ Questo comando può essere eseguito solo nel server NAP ufficiale."

@@ -779,6 +779,16 @@ live_data:
   updating: Aggiornamento…
 capitol_rotation:
   calendar_link: Vedi la rotazione di questo ciclo sul calendario →
+ascension:
+  title: Gara delle Top 4
+  week_of: Guerra tra Regni Settimana 1, settimana del {date}
+  in_progress: 'In corso: misurato finora in {days}.'
+  finished: 'Finale: i quattro totali più alti occupano i posti Top 4 per il ciclo successivo, una volta confermato da uno Steward.'
+  col_alliance: Alleanza
+  col_day: Giorno {n}
+  col_total: Totale
+  missing_day: Giorno mancante
+  source: Potenza dal Last Asylum Tracker, misurata 10 minuti prima del reset.
 image_review:
   page_title: Revisione immagine alleanza
   loading: Caricamento immagine…

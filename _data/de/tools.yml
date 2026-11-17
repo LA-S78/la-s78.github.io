@@ -779,6 +779,16 @@ live_data:
   updating: Aktualisiere…
 capitol_rotation:
   calendar_link: Rotation dieses Zyklus im Kalender ansehen →
+ascension:
+  title: Top-4-Rennen
+  week_of: Königreichskrieg Woche 1, Woche vom {date}
+  in_progress: 'Laufend: bisher gemessen an {days}.'
+  finished: 'Abschluss: Die vier höchsten Summen belegen die Top-4-Plätze für den nächsten Zyklus, sobald ein Verwalter dies bestätigt.'
+  col_alliance: Allianz
+  col_day: Tag {n}
+  col_total: Gesamt
+  missing_day: Tag fehlt
+  source: Macht aus dem Last Asylum Tracker, gemessen 10 Minuten vor dem Reset.
 image_review:
   page_title: Allianz-Bild überprüfen
   loading: Bild wird geladen…
