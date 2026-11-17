@@ -12,6 +12,8 @@ strategy:
   - key: "heroes"
     url: /LANG_CODE/guides/heroes.html
     status: unavailable
+    # owner's picture (heroes.webp is the wide version, for a guide header later)
+    picture: heroes_card.webp
     # a knight's helmet
     icon: |
       <path d="M12 3C7.6 3 4 6.6 4 11v5h4l1.2 5h5.6l1.2-5h4v-5c0-4.4-3.6-8-8-8z" />
@@ -40,6 +42,8 @@ strategy:
   - key: "resources"
     url: /LANG_CODE/guides/resources.html
     status: unavailable
+    # owner's picture (resources.webp is the wide version, for a guide header later)
+    picture: resources_card.webp
     # a sheaf of wheat
     icon: |
       <path d="M2 22 16 8" />
