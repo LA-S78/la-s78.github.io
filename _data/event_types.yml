@@ -50,6 +50,7 @@ types:
     color: '#B12A2A'
     duration: 24
     recurrence: none
+    guide: kill_event
     icon: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M22 12h-4M6 12H2M12 6V2M12 22v-4"/>'
 
   # Owner, 2026-11-15: its own event. Length and repeat not known yet: 1 hour, no repeat.

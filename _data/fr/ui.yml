@@ -171,6 +171,11 @@ search:
   results_label: Résultats de recherche
   no_results: Aucun résultat pour « {query} ».
   unavailable: La recherche n'est pas disponible pour le moment. Réessayez une fois en ligne.
+# The picture viewer: a guide picture opened full size (js/main.js)
+image_viewer:
+  close: "Fermer"
+  download: "Télécharger"
+
 pwa:
   toast_msg: Nouveaux renseignements acquis.
   update_btn: Mettre à jour

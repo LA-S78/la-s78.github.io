@@ -129,7 +129,14 @@ What to change:
 - Each pane (section) needs its own marker, `nav_id`, and `order` (1, 2, 3…).
 - Each `nav_links` entry is a tab in the guide's top menu: `name_key` is
   `<id>_<nav_id>`, and `url` is `#` plus that pane's `nav_id`.
-- Images go in `images/guides/`. Keep them under 500 KB (save as `.jpg` or `.webp`).
+- Images go in `images/guides/`. Keep them under 500 KB (save as `.jpg` or `.webp`). Give
+  them `class="blueprint-img"`: tapping one then opens it full size (the site's shared picture
+  viewer, with Close and Download), with nothing else to add. Several side by side:
+  `<div class="guide-shots">` around them.
+- A guide made from an English graphic: cut the game screenshots out (no words in them) and
+  write the words as text, so every language can read them. Map markers can be shown in their
+  colours with `<span class="map-pin is-red" aria-hidden="true"></span>` (also `is-bright-red`,
+  `is-light-red`, `is-blue`, `is-white`, `is-yellow`).
 - Don't use code blocks (lines starting with three backticks): the build removes them.
 
 **2. Add a card to the Guides page** in `_data/guide_directory.yml`, under the same

@@ -65,8 +65,8 @@ lang: "en"
 order: 4
 ---
 <div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Alliance Cheese Trap Rewards" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Personal Cheese Trap Rewards" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-alliance.jpg" alt="Alliance Cheese Trap Rewards" class="blueprint-img">
+<img src="/images/guides/cheese-personal.jpg" alt="Personal Cheese Trap Rewards" class="blueprint-img">
 </div>
 
 === guide--de--events--cheese ===
@@ -136,8 +136,8 @@ lang: "de"
 order: 4
 ---
 <div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Allianz Käsefalle Belohnungen" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Persönliche Käsefalle Belohnungen" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-alliance.jpg" alt="Allianz Käsefalle Belohnungen" class="blueprint-img">
+<img src="/images/guides/cheese-personal.jpg" alt="Persönliche Käsefalle Belohnungen" class="blueprint-img">
 </div>
 
 === guide--es--events--cheese ===
@@ -207,8 +207,8 @@ lang: "es"
 order: 4
 ---
 <div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Recompensas de Trampa de Queso de Alianza" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Recompensas de Trampa de Queso Personales" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-alliance.jpg" alt="Recompensas de Trampa de Queso de Alianza" class="blueprint-img">
+<img src="/images/guides/cheese-personal.jpg" alt="Recompensas de Trampa de Queso Personales" class="blueprint-img">
 </div>
 
 === guide--fr--events--cheese ===
@@ -278,8 +278,8 @@ lang: "fr"
 order: 4
 ---
 <div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Récompenses d'Alliance du Piège à Fromage" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Récompenses Personnelles du Piège à Fromage" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-alliance.jpg" alt="Récompenses d'Alliance du Piège à Fromage" class="blueprint-img">
+<img src="/images/guides/cheese-personal.jpg" alt="Récompenses Personnelles du Piège à Fromage" class="blueprint-img">
 </div>
 
 === guide--it--events--cheese ===
@@ -349,8 +349,8 @@ lang: "it"
 order: 4
 ---
 <div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Ricompense Alleanza Trappola di Formaggio" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Ricompense Personali Trappola di Formaggio" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-alliance.jpg" alt="Ricompense Alleanza Trappola di Formaggio" class="blueprint-img">
+<img src="/images/guides/cheese-personal.jpg" alt="Ricompense Personali Trappola di Formaggio" class="blueprint-img">
 </div>
 
 === guide--ru--events--cheese ===
@@ -420,8 +420,8 @@ lang: "ru"
 order: 4
 ---
 <div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Награды альянса за Сырную ловушку" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Личные награды за Сырную ловушку" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-alliance.jpg" alt="Награды альянса за Сырную ловушку" class="blueprint-img">
+<img src="/images/guides/cheese-personal.jpg" alt="Личные награды за Сырную ловушку" class="blueprint-img">
 </div>
 
 === guide--tr--events--cheese ===
@@ -491,8 +491,8 @@ lang: "tr"
 order: 4
 ---
 <div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="İttifak Peynir Tuzağı Ödülleri" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Kişisel Peynir Tuzağı Ödülleri" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-alliance.jpg" alt="İttifak Peynir Tuzağı Ödülleri" class="blueprint-img">
+<img src="/images/guides/cheese-personal.jpg" alt="Kişisel Peynir Tuzağı Ödülleri" class="blueprint-img">
 </div>
 
 === guide--uk--events--cheese ===
@@ -562,6 +562,6 @@ lang: "uk"
 order: 4
 ---
 <div class="guide-grid">
-<img src="/images/guides/cheese-alliance.jpg" alt="Нагороди альянсу за Сирну пастку" class="blueprint-img" onclick="document.getElementById('cheese-allianceZoom').showModal()" style="cursor: pointer;">
-<img src="/images/guides/cheese-personal.jpg" alt="Особисті Нагороди за Сирну пастку" class="blueprint-img" onclick="document.getElementById('cheese-personalZoom').showModal()" style="cursor: pointer;">
+<img src="/images/guides/cheese-alliance.jpg" alt="Нагороди альянсу за Сирну пастку" class="blueprint-img">
+<img src="/images/guides/cheese-personal.jpg" alt="Особисті Нагороди за Сирну пастку" class="blueprint-img">
 </div>
