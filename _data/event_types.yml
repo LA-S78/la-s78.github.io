@@ -14,6 +14,8 @@
 #   icon:       the SVG inside a 24x24 line icon (stroke, no fill), as the guide icons are
 #   picture:    a scene behind the event's card: images/events/<file>, 1600x400 WebP, subject
 #               right of centre, calm left third (the card fades it into the theme's colour)
+#   card_picture: the same scene at 3:2 (720x483 WebP), for the guide's card on the Guides
+#               page and Pinned Pages, which are nearer square; without it they use `picture`
 #
 # Names and descriptions are translated: event_presets.<id>_title / <id>_desc and the form's
 # label calendar_events.preset_<id> (_data/en/tools.yml). The site's own milestones (Capitol
@@ -51,7 +53,21 @@ types:
     duration: 24
     recurrence: none
     guide: kill_event
+    picture: kill_event.webp
+    card_picture: kill_event_card.webp
     icon: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M22 12h-4M6 12H2M12 6V2M12 22v-4"/>'
+
+  # Owner, 2026-11-17: its own event (a behemoth hunt). Length and repeat not known yet:
+  # 1 hour, no repeat. No guide yet.
+  - id: hunt_battle
+    preset: true
+    color: '#8C3B1F'
+    duration: 1
+    recurrence: none
+    picture: hunt_battle.webp
+    card_picture: hunt_battle_card.webp
+    # claw marks
+    icon: '<path d="M7 3c1.2 5 .4 11.5-3 17"/><path d="M12.5 2c1.2 6 .3 13-3 20"/><path d="M18 3c1.2 5 .4 11.5-3 17"/>'
 
   # Owner, 2026-11-15: its own event. Length and repeat not known yet: 1 hour, no repeat.
   - id: undead_siege
@@ -69,6 +85,8 @@ types:
     duration: 1
     recurrence: none
     guide: kingdom
+    picture: kvk_battle.webp
+    card_picture: kvk_battle_card.webp
     icon: '<path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6M16 16l4 4M19 21l2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/><path d="m5 14 4 4M7 17l-3 3M3 19l2 2"/>'
 
   # "Gear Upgrade" (owner, 2026-11-15; was "Gear Event"): gear as in armour and weapons

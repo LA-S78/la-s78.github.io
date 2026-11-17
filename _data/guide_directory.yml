@@ -6,8 +6,8 @@
 #   event:    the guide's event on the calendar (an id in _data/event_types.yml). Its card
 #             shows that event's picture behind it, dimmed, as the calendar does (owner
 #             request, 2026-11-17), so a picture added to the event shows here too.
-#   picture:  a picture for a guide with no event: a file in images/events/ (same rules as
-#             event_types.yml `picture`)
+#   picture:  a picture for a guide with no event: a file in images/events/ (a 3:2 one suits
+#             the card best, like event_types.yml `card_picture`)
 strategy:
   - key: "heroes"
     url: /LANG_CODE/guides/heroes.html
@@ -72,6 +72,9 @@ strategy:
 
 events:
   - key: "duel"
+    # Alliance Duel isn't a calendar event: its own picture (images/events/alliance_duel.webp
+    # is the wide version, ready if it ever becomes one)
+    picture: alliance_duel_card.webp
     url: /LANG_CODE/guides/duel.html
     # "VS": alliance against alliance
     icon: |

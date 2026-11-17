@@ -627,6 +627,8 @@ event_presets:
   kvk_battle_desc: "The battle for the Royal Castle begins!"
   gear_upgrade_title: "Gear Upgrade"
   gear_upgrade_desc: "Get rewarded for upgrading gear"
+  hunt_battle_title: "Hunt Battle"
+  hunt_battle_desc: "Hunt down the behemoths for rewards"
   undead_siege_title: "Undead Siege"
   undead_siege_desc: "The undead lay siege: hold the line"
   # The site's own milestones, as event types (the calendar's type filter)
