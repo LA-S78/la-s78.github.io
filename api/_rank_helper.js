@@ -1,6 +1,7 @@
 // api/_rank_helper.js
 import { readGist, gistJson, updateGist } from './_gist.js';
-import { findTag } from './_alliances.js';
+import { ambiguousTags, findTag } from './_alliances.js';
+import { say } from './_messages.js';
 
 async function getMapState() {
   const state = gistJson(await readGist(), 'map-state.json', null);
@@ -40,6 +41,17 @@ export async function setAllianceRank({ tag, rank, updatedBy = 'Discord Bot' }) 
 
     // The alliance meant (findTag: exact, accents aside, or the only one in another letter
     // case); a new tag is kept as typed, so RâvN isn't turned into RÂVN
+    // A tag that could mean two alliances (ravn: RâvN or RÂVN) is refused, never made into
+    // a new alliance (maintainer review, 2026-11-17)
+    const unsure = ambiguousTags(Object.keys(state.alliances), cleanTag);
+    if (unsure.length) {
+      throw new Error(
+        say('bot_admin.rank_ambiguous', {
+          tag: cleanTag,
+          options: unsure.map((t) => `[${t}]`).join(', '),
+        }),
+      );
+    }
     const key = findTag(Object.keys(state.alliances), cleanTag) || cleanTag;
     const before = state.alliances[key]?.rank ?? 'Unranked';
 

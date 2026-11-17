@@ -269,6 +269,7 @@ bot_admin:
   rank_updated_by: "Updated by {name}"
   rank_view: "View Standings"
   rank_set_failed: "⚠️ Failed to update rank: {reason}"
+  rank_ambiguous: "[{tag}] could mean more than one alliance ({options}): type the tag exactly, with its capitals."
   dev_done: "✅ **Test data updated.** Copied {count} file(s) from the live data into the test Gist used by dev.la-s78.app: {files}.\nThe live data was only read, not changed."
   dev_failed: "⚠️ **Test data not updated:** {reason}"
   dev_denied: "⛔ **Access Denied:** Only Stewards can update the test data."

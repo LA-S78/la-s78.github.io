@@ -10,7 +10,7 @@ import {
   showSavedWhileLoading,
 } from './live-data-notice.js';
 import { submitProposalWithAuth } from './auth-modal.js';
-import { findTag } from './tags.js';
+import { ambiguousTags, findTag } from './tags.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -825,7 +825,15 @@ export function promptTerritoryAssignment(cityId, svgRoot = null) {
   if (overrideInput && overrideInput.value.trim() !== '') {
     let customOwner = overrideInput.value.trim();
 
-    // The alliance meant (findTag: RâvN isn't RÂVN); a new tag is kept as typed
+    // The alliance meant (findTag: RâvN isn't RÂVN); a new tag is kept as typed. One that
+    // could mean two alliances (ravn: RâvN or RÂVN) assigns nothing: type it exactly.
+    const unsure = ambiguousTags(Object.keys(alliances), customOwner);
+    if (unsure.length) {
+      alert(
+        tm('tag_ambiguous', { tag: customOwner, options: unsure.map((t) => `[${t}]`).join(', ') }),
+      );
+      return;
+    }
     customOwner = findTag(Object.keys(alliances), customOwner) || customOwner;
 
     setDraftTerritoryOwner(cityId, customOwner, root);
