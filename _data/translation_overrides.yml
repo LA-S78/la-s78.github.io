@@ -21,6 +21,8 @@ de:
 fr:
   event_presets:
     elixir_scramble_title: "Mêlée d'élixir"
+    # "Chasse aux Voleurs" (Gemini, 2026-11-17) is Thief Hunt, a different event
+    hunt_battle_title: "Bataille de chasse"
 it:
   event_presets:
     elixir_scramble_title: "Mischia d'elisir"

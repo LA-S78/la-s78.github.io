@@ -20,6 +20,8 @@ strategy:
   - key: "combat"
     url: /LANG_CODE/guides/combat.html
     status: unavailable
+    # owner's picture (combat.webp is the wide version, for a guide header later)
+    picture: combat_card.webp
     # a shield with a sword across it
     icon: |
       <path d="M12 22s7-3.5 7-9V6l-7-3-7 3v7c0 5.5 7 9 7 9z" />
@@ -28,6 +30,8 @@ strategy:
   - key: "building"
     url: /LANG_CODE/guides/building.html
     status: unavailable
+    # owner's picture (building.webp is the wide version, for a guide header later)
+    picture: building_card.webp
     # a hammer
     icon: |
       <path d="m15 12-8.4 8.4a1.4 1.4 0 0 1-2-2L13 10" />
@@ -122,6 +126,15 @@ events:
       <circle cx="9" cy="11.5" r="1.6" />
       <circle cx="15" cy="11.5" r="1.6" />
       <path d="M10 21v-2.5M14 21v-2.5M11.2 15.6l.8-1.4.8 1.4" />
+  - key: "hunt_battle"
+    event: hunt_battle
+    url: /LANG_CODE/guides/hunt-battle.html
+    status: unavailable
+    # the calendar's Hunt Battle: claw marks
+    icon: |
+      <path d="M7 3c1.2 5 .4 11.5-3 17" />
+      <path d="M12.5 2c1.2 6 .3 13-3 20" />
+      <path d="M18 3c1.2 5 .4 11.5-3 17" />
   - key: "kill_event"
     event: kill_event
     url: /LANG_CODE/guides/kill_event.html
