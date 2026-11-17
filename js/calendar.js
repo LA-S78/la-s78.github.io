@@ -176,7 +176,7 @@ async function initCalendar() {
     allEvents = data.events || [];
     reminderChannels = data.reminderChannels || null;
     updateReminderHint();
-    renderHero(data.status, data.capitolHolder, data.capitolHolderColor);
+    renderHero(data.status, data.capitolHolder, data.capitolHolderColor, data.capitolHolderImage);
     renderEvents(data.status);
   };
   async function loadCalendar({ useSaved = true } = {}) {
@@ -215,7 +215,7 @@ async function initCalendar() {
   }
 
   // 3. Render Hero & Reset Clock
-  function renderHero(status, capitolHolder, capitolHolderColor) {
+  function renderHero(status, capitolHolder, capitolHolderColor, capitolHolderImage) {
     if (elLoading) elLoading.style.display = 'none';
     if (elContent) elContent.style.display = 'block';
 
@@ -271,6 +271,15 @@ async function initCalendar() {
       subEl.textContent = rewards.open
         ? t('calendar.rewards_open_until', { week: weekName(rewards.week), set2 })
         : t('calendar.rewards_closed');
+    }
+
+    // The holder's banner behind the card (js/ally-pics.js, a module: loaded on demand from
+    // this classic script), faded in once loaded
+    const heroCard = document.querySelector('.cal-hero-card');
+    if (heroCard && (capitolHolderImage || heroCard.classList.contains('has-ally-pic'))) {
+      import('/js/ally-pics.js')
+        .then(({ showAllyPic }) => showAllyPic(heroCard, capitolHolderImage))
+        .catch(() => {});
     }
 
     if (capHolderEl) {

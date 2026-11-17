@@ -1,7 +1,8 @@
 // api/calendar.js
 import { describeRotation, getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
-import { sameScope, sameTag, sanitizeAlliances } from './_alliances.js';
+import { findTag, sameScope, sameTag, sanitizeAlliances } from './_alliances.js';
+import { liveImages } from './_alliance_images.js';
 import { resolveCohortSchedule } from './_cycle_helper.js';
 import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
@@ -44,10 +45,11 @@ export default async function handler(req, res) {
   let calConfig = DEFAULT_CALENDAR_CONFIG;
   let mapState = { alliances: {} };
   let rewardsState = {};
+  let gist = null;
 
   try {
     if (isGistConfigured()) {
-      const gist = await readGist({ timeoutMs: 3000 });
+      gist = await readGist({ timeoutMs: 3000 });
       calConfig = { ...calConfig, ...gistJson(gist, 'calendar-state.json') };
       mapState = gistJson(gist, 'map-state.json', mapState);
       rewardsState = gistJson(gist, 'rewards-data.json', rewardsState);
@@ -105,6 +107,11 @@ export default async function handler(req, res) {
   // Same colour the rest of the site shows for this alliance (/api/state's resolution).
   const coloured = sanitizeAlliances(alliances, await getRoleColors());
   const capitolHolderColor = holderTag ? coloured[holderTag]?.color || null : null;
+  // The holder's approved banner (api/_alliance_images.js), behind the hero card (owner,
+  // 2026-11-17): the alliance the card names, before Friday's capture as after it.
+  const holderKey = holderTag ? findTag(Object.keys(alliances), holderTag) : null;
+  const capitolHolderImage =
+    gist && holderKey ? liveImages(gist, alliances)[holderKey]?.wide || null : null;
   // The cycle's four weeks for the Capitol Rotation chart on the Rules page.
   currentStatus.rotation = describeRotation(
     currentStatus,
@@ -300,6 +307,7 @@ export default async function handler(req, res) {
     status: currentStatus,
     capitolHolder: capitolHolderTag,
     capitolHolderColor,
+    capitolHolderImage,
     events: allEvents,
     reminderChannels,
   });
