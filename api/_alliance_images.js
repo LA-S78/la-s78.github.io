@@ -15,7 +15,8 @@ import { put, get, copy, del } from '@vercel/blob';
 import { verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { say, utcTime } from './_messages.js';
-import { foldTag, findAllianceKey } from './_dashboard.js';
+import { findAllianceKey } from './_dashboard.js';
+import { sameTag, tagSlug } from './_alliances.js';
 import {
   isGistConfigured,
   readGist,
@@ -53,11 +54,12 @@ const TYPES = {
 const reply = (status, json) => ({ status, json });
 const prefix = () => (isTestDeployment() ? 'test/alliance-images' : 'alliance-images');
 const siteOrigin = () => (isTestDeployment() ? 'https://dev.la-s78.app' : 'https://la-s78.app');
-/** An alliance's file-safe name: letters and digits only (RÂVN -> RAVN). */
-export const allianceSlug = (tag) =>
-  foldTag(tag)
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, '') || 'UNKNOWN';
+/**
+ * An alliance's file-safe name: its letters and digits (RÂVN -> RAVN; RavN for RâvN beside
+ * RÂVN, so the two never share pictures: tagSlug). `alliances` is map-state.json's list.
+ */
+export const allianceSlug = (tag, alliances = {}) => tagSlug(tag, Object.keys(alliances || {}));
+const mapAlliances = (gist) => gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
 // The store's key. Connected in Vercel with the prefix ALLIANCE_CARD_IMAGES (owner's
 // set-up); Vercel's default name is accepted too.
 const blobToken = () =>
@@ -84,7 +86,7 @@ export function readImages(gist) {
  */
 export function imageStatus(gist, tag) {
   const images = readImages(gist);
-  const slug = allianceSlug(tag);
+  const slug = allianceSlug(tag, mapAlliances(gist));
   const now = Date.now();
   const slots = {};
   for (const kind of Object.keys(IMAGE_KINDS)) {
@@ -124,7 +126,7 @@ export function liveImages(gist, alliances = {}) {
   const live = readImages(gist).live;
   const out = {};
   for (const tag of Object.keys(alliances)) {
-    const entry = live[allianceSlug(tag)];
+    const entry = live[allianceSlug(tag, alliances)];
     if (!entry) continue;
     const urls = {};
     for (const kind of Object.keys(IMAGE_KINDS)) {
@@ -352,7 +354,7 @@ export function sweep(images, alliances, now = Date.now()) {
   }
   out.sent = images.sent.filter((s) => s.at > now - DAY_MS);
   if (alliances && Object.keys(alliances).length) {
-    const present = new Set(Object.keys(alliances).map(allianceSlug));
+    const present = new Set(Object.keys(alliances).map((t) => allianceSlug(t, alliances)));
     out.live = {};
     for (const [slug, entry] of Object.entries(images.live)) {
       if (present.has(slug)) {
@@ -424,7 +426,7 @@ async function submit(session, body) {
   if (!steward && !SENDER_ROLES.includes(session.role)) {
     return reply(403, { error: say('api_alliance_images.leaders_only'), code: 'not_allowed' });
   }
-  if (!steward && foldTag(session.alliance) !== foldTag(body.alliance)) {
+  if (!steward && !sameTag(session.alliance, body.alliance)) {
     return reply(403, { error: say('api_alliance_images.own_alliance_only'), code: 'not_allowed' });
   }
   if (!IMAGE_KINDS[body.kind]) return reply(400, { error: say('api_alliance_images.bad_image') });
@@ -438,9 +440,9 @@ async function submit(session, body) {
     console.error('Alliance images: Gist could not be read:', err.message);
     return reply(503, { error: say('api_proposals.limit_check_failed') });
   }
-  const { key } = allianceIn(gist, body.alliance);
+  const { key, alliances } = allianceIn(gist, body.alliance);
   if (!key) return reply(400, { error: say('api_alliance_images.unknown_alliance') });
-  const slug = allianceSlug(key);
+  const slug = allianceSlug(key, alliances);
   const recent = readImages(gist).sent.filter((s) => s.slug === slug && s.at > Date.now() - DAY_MS);
   if (!steward && recent.length >= DAILY_LIMIT) {
     const next = Math.min(...recent.map((s) => s.at)) + DAY_MS;
@@ -602,19 +604,20 @@ async function review(session, body) {
 
 async function remove(session, body) {
   const steward = isSteward(session.uid);
-  if (
-    !steward &&
-    !(session.role === 'R5' && foldTag(session.alliance) === foldTag(body.alliance))
-  ) {
+  if (!steward && !(session.role === 'R5' && sameTag(session.alliance, body.alliance))) {
     return reply(403, {
       error: say('api_alliance_images.remove_not_allowed'),
       code: 'not_allowed',
     });
   }
   if (!IMAGE_KINDS[body.kind]) return reply(400, { error: 'Unknown image.' });
-  const slug = allianceSlug(body.alliance);
   let file = null;
   await updateGist((g) => {
+    const alliances = mapAlliances(g);
+    const slug = allianceSlug(
+      findAllianceKey(alliances, body.alliance) || body.alliance,
+      alliances,
+    );
     const images = readImages(g);
     const live = images.live[slug];
     file = live?.[body.kind]?.file || null;

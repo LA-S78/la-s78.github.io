@@ -28,6 +28,7 @@
 
 import { readGist, gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { inLocale, say } from './_messages.js';
+import { findTag } from './_alliances.js';
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
@@ -71,11 +72,10 @@ export function dueReminders(events, now) {
   return due;
 }
 
-/** The alliance record for a tag, whatever its letter case (tags like RâvN). */
+/** The alliance record for an event's tag (findTag: RâvN and RÂVN are two alliances). */
 function allianceFor(alliances, tag) {
-  const wanted = String(tag || '').toUpperCase();
-  const entry = Object.entries(alliances || {}).find(([t]) => t.toUpperCase() === wanted);
-  return entry ? { tag: entry[0], ...entry[1] } : null;
+  const key = findTag(Object.keys(alliances || {}), tag);
+  return key ? { tag: key, ...alliances[key] } : null;
 }
 
 /** Who to ping in a channel: a role ID, 'everyone', or null (nobody). */

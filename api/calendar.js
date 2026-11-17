@@ -1,11 +1,7 @@
 // api/calendar.js
-import {
-  describeRotation,
-  getCycleState,
-  DEFAULT_CALENDAR_CONFIG,
-} from './_calendar_helper.js';
+import { describeRotation, getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
-import { sanitizeAlliances } from './_alliances.js';
+import { sameScope, sameTag, sanitizeAlliances } from './_alliances.js';
 import { resolveCohortSchedule } from './_cycle_helper.js';
 import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
@@ -222,13 +218,13 @@ export default async function handler(req, res) {
   }
 
   // 2. Strict Privacy Filtering for Custom Events
-  const requestedAlliance = req.query?.alliance?.trim()?.toUpperCase() || null;
+  // Letter case counts (RâvN and RÂVN are two alliances); accents don't (sameScope)
+  const requestedAlliance = req.query?.alliance?.trim() || null;
   const customEvents = calConfig.custom_events || [];
 
   const sanitizedCustomEvents = customEvents.filter((evt) => {
-    const scope = (evt.scope || 'global').trim().toUpperCase();
-    if (scope === 'GLOBAL') return true;
-    return requestedAlliance && scope === requestedAlliance;
+    if (sameScope(evt.scope, 'global')) return true;
+    return Boolean(requestedAlliance) && sameScope(evt.scope, requestedAlliance);
   });
 
   // 3. Project Recurring Events Forward Across the 28-Day Cycle Horizon
@@ -294,7 +290,7 @@ export default async function handler(req, res) {
   const reminderChannels = {
     alliance: requestedAlliance
       ? Object.entries(alliances).some(
-          ([tag, a]) => tag.toUpperCase() === requestedAlliance && a?.alert_channel_id,
+          ([tag, a]) => sameTag(tag, requestedAlliance) && a?.alert_channel_id,
         )
       : null,
     server: Boolean(process.env.NAP_ALERT_CHANNEL_ID),

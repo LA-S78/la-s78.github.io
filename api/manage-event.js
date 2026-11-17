@@ -9,6 +9,7 @@ import EVENT_TYPES from './_event_types.js';
 const PRESET_TYPES = EVENT_TYPES.filter((t) => t.preset).map((t) => t.id);
 import { isSteward } from './_stewards.js';
 import { inLanguage, say } from './_messages.js';
+import { sameScope } from './_alliances.js'; // RâvN's events aren't RÂVN's
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -122,7 +123,7 @@ async function respond(req, res) {
       if (!eventId) return res.status(400).json({ error: 'Missing eventId to edit.' });
       const existing = calendarState.custom_events.find((e) => e.id === eventId);
       if (!existing) return res.status(404).json({ error: say('api_events.not_found') });
-      if ((existing.scope || 'global').toLowerCase() !== callerScope.toLowerCase()) {
+      if (!sameScope(existing.scope, callerScope)) {
         return res.status(403).json({ error: say('api_events.out_of_scope') });
       }
       const checked = cleanEventFields(eventData, isGlobalAdmin);
@@ -190,13 +191,11 @@ async function respond(req, res) {
       }
 
       const targetEvt = calendarState.custom_events[targetIndex];
-      const targetScope = (targetEvt.scope || 'global').toLowerCase();
-      const currentCallerScope = callerScope.toLowerCase();
 
       // Zero-Crossover Silo:
       // Global Admins can ONLY delete global events.
       // Alliance Leaders can ONLY delete events matching their exact alliance tag.
-      if (targetScope !== currentCallerScope) {
+      if (!sameScope(targetEvt.scope, callerScope)) {
         return res.status(403).json({
           error: say('api_events.out_of_scope'),
         });

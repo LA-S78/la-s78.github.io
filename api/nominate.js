@@ -23,6 +23,7 @@ import {
   reassignAllNominations,
 } from './_nominations.js';
 import { inLanguage, say } from './_messages.js';
+import { sameTag } from './_alliances.js'; // RâvN ≠ RÂVN; RAVN = RÂVN
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -179,19 +180,6 @@ async function respond(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
-
-/** The calendar settings (calendar-state.json), over the defaults. */
-/** Tags compared without letter case or accents (RÂVN = ravn). */
-const sameTag = (a, b) =>
-  Boolean(a && b) &&
-  String(a)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase() ===
-    String(b)
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
 
 /**
  * POST { action: 'handout', alliance, pool, chest, name, done } with the login pass
