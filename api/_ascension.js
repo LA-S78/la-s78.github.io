@@ -14,6 +14,7 @@
 import { gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { fetchAlliance, trackerConfigured } from './_tracker.js';
+import { ascensionButtons } from './_bot_ascension.js';
 
 export const ASCENSION_FILE = 'ascension.json';
 export const DUEL_DAYS = [3, 4, 5]; // Wednesday, Thursday, Friday
@@ -117,14 +118,15 @@ function resultsMessage(runId, rows, testNote) {
         description:
           `Might totals of Alliance Duel Days 3–5 (week of ${runId}), measured 10 minutes before reset.\n\n` +
           `${lines.join('\n')}\n\n` +
-          'The four highest totals hold the Top 4 seats from the **next** cycle. A Steward confirms ' +
-          'the new order with `/rank`.',
+          'The four highest totals hold the Top 4 seats from the **next** cycle. A Steward applies ' +
+          'it below (newcomers take the rank of the alliance they replace) or keeps the current order.',
         color: 0xd4af37,
         footer: { text: 'Might from the Last Asylum Tracker' },
         timestamp: new Date().toISOString(),
       },
     ],
     allowed_mentions: { parse: [] },
+    components: ascensionButtons(runId),
   };
 }
 
@@ -187,7 +189,7 @@ export async function checkAscension({ gist, now = Date.now(), dryRun = false } 
     const live = !test && process.env.REMINDERS_LIVE === 'true';
     const channelId = test
       ? process.env.TEST_CHANNEL_ID
-      : process.env.DISCORD_CHANNEL_ID_NAP_LEADERSHIP || process.env.WAR_ROOM_CHANNEL_ID;
+      : process.env.DISCORD_CHANNEL_ID_NAP_LEADERSHIP || process.env.DISCORD_WEBHOOK_CHANNEL_ID;
     const token = process.env.DISCORD_BOT_TOKEN;
     if ((test || live) && channelId && token) {
       try {

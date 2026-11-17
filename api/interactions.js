@@ -18,6 +18,7 @@ import {
   handleOldOutcomeButton,
   handleRewardsCommand,
 } from './_bot_rewards.js';
+import { handleAscensionButton } from './_bot_ascension.js';
 
 export const config = { api: { bodyParser: false } };
 
@@ -39,6 +40,7 @@ const BUTTONS = [
   ['map_view:', handleMapViewButton],
   ['kw_result:', handleKingdomWarResultButton],
   ['confirm_kvk_reset:', handleOldOutcomeButton],
+  ['ascension:', handleAscensionButton],
 ];
 
 async function getRawBody(req) {
