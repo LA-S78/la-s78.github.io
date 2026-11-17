@@ -373,10 +373,10 @@ calendar:
   phase: Фаза
   schedule_title: Розклад Війни Королівств
   loading_cycle: Завантаження деталей циклу...
-  badge_closed: "🔒 Нагороди закрито"
-  badge_kob_open: "⚔️ Королівська сутичка відкрита"
-  badge_awaiting: "⏳ Очікування результатів ВК"
-  badge_open: "🎁 Нагороди відкрито"
+  badge_closed: "Нагороди закрито"
+  badge_kob_open: "Королівська сутичка відкрита"
+  badge_awaiting: "Очікування результатів ВК"
+  badge_open: "Нагороди відкрито"
   set2_off_week: Тільки Подяка Короля (без Війни Королівств).
   set2_won: 'Війна Королівств виграна: Нагорода Королівської сутички також відкрита.'
   set2_lost: 'Війна Королівств програна: Тільки Подяка Короля.'
@@ -398,7 +398,7 @@ calendar:
   next_reset: НАСТУПНЕ СКИНУТТЯ (00:00 GT)
   next_kw: НАСТУПНА БИТВА ВК
   saturday: Субота
-  today: "🔥 СЬОГОДНІ"
+  today: "СЬОГОДНІ"
   none_this_week: Цього тижня немає
   upcoming: Майбутні події
   times_shown: Час відображається у {gt} та вашому місцевому часі
@@ -446,11 +446,11 @@ calendar:
   every_2_days: Кожні 2 дні
   weekly: Щотижня
   mandatory: Обов'язково
-  edit: "✏️ Редагувати"
-  delete: "🗑️ Видалити"
-  edit_events: "✏️ Редагувати події"
+  edit: "Редагувати"
+  delete: "Видалити"
+  edit_events: "Редагувати події"
   edit_done: "✓ Завершити редагування"
-  add_event: "➕ Додати подію"
+  add_event: "Додати подію"
   ev_capture_title: Захоплення Капітолію — {who}
   ev_capture_desc: "{who} ({rank}) захоплює Капітолій у п'ятницю."
   ev_kw_title: Битва Війни Королівств
@@ -469,29 +469,20 @@ calendar_events:
   scope_label: Керування чиїми подіями
   scope_server: Події всього королівства
   scope_alliance: Події [{tag}]
-  save_changes: "💾 Зберегти зміни"
+  save_changes: "Зберегти зміни"
   manage_mode: РЕЖИМ КЕРУВАННЯ
   session_active: Активна сесія аутентифікації
   create_operation: Створити операцію
-  kingdom_admin: "👑 АДМІНІСТРАЦІЯ КОРОЛІВСТВА"
+  kingdom_admin: "АДМІНІСТРАЦІЯ КОРОЛІВСТВА"
   kingdom_desc: Керування подіями сервера
   kingdom_heading: Створити операцію Королівства ([GLOBAL])
-  leadership: "🛡️ КЕРІВНИЦТВО [{tag}]"
+  leadership: "КЕРІВНИЦТВО [{tag}]"
   leadership_desc: Керування подіями [{tag}]
   alliance_heading: Створити операцію [{tag}]
   preset: Тип події
   type_custom: Власна
   type_custom_hint: Порожня форма
   duration_h: "{n}год"
-  preset_custom: "🛠️ Власна операція (порожня)"
-  preset_crystal_cluster: "🔮 Долина кришталевих кластерів (0.5год)"
-  preset_elixir_scramble: "🧪 Еліксирна сутичка (0.5год)"
-  preset_survival_battle: "⚔️ Битва за виживання (4.0год)"
-  preset_kill_event: "🩸 Подія вбивств (24.0год)"
-  preset_kvk_battle: "👑 Битва KvK (1.0год)"
-  preset_undead_siege: "💀 Облога нежиті (1.0год)"
-  preset_gear_upgrade: "🛡️ Покращення спорядження (48.0год)"
-  preset_cheese_trap: "🧀 Сирна Пастка (0.5год)"
   title: Назва події
   title_example: напр. Тренування захисту вулика або Штурм аванпосту
   date: Дата початку (РРРР-ММ-ДД)
@@ -539,7 +530,7 @@ kings_scheduler:
   loot_other: "{n} Скринь Короля"
   loot_border: 2 Скрині Короля + Рамка
   active: АКТИВНО
-  buyouts_title: "🛡️ Активна компенсація військового викупу"
+  buyouts_title: "Активна компенсація військового викупу"
   buyouts_count: "{n} Активно"
   installment: 'Виплата за тиждень {week}:'
   payout: "{reg} & {kw}"
@@ -551,7 +542,7 @@ kings_scheduler:
   threat: "(Загроза: {threat})"
   red_list: Червоний список
   wartime_buyout: Військовий викуп
-  override_title: "🚨 Оголосити заміну в розкладі"
+  override_title: "Оголосити заміну в розкладі"
   override_help: Розвідали небезпечний сервер? Введіть ID сервера суперника
   target_week: Цільовий тиждень KvK
   week1_option: Тиждень 1 п'ятниця (Матч боса 2)
@@ -574,8 +565,8 @@ kings_scheduler:
   distribution: 'Розподіл за тиждень {n}:'
   plus_gold: "+1 Звичайне золото & +1 Золото ВК для [{tag}]"
   buyout_perks: "{ally} втрачає 2 Скрині Короля, отримує 4 золоті скрині. {wlo} отримує 2 Скрині Короля, втрачає 4 золоті скрині."
-  proposal_buyout: "🛡️ Оголосити військовий викуп"
-  proposal_swap: "⚔️ Оголосити обмін захисту"
+  proposal_buyout: "Оголосити військовий викуп"
+  proposal_swap: "Оголосити обмін захисту"
   sum_second: 2-га заміна захисту WLO
   sum_first: 1-ша заміна захисту WLO
   sum_vs: Тиждень {n} проти {threat}
@@ -760,16 +751,16 @@ proposals:
   leaders_only_note: Тільки лідери R4 та R5 можуть надсилати пропозиції. Попросіть вашого лідера альянсу подати цей план.
   leaders_only: Тільки для лідерів
   login_expired: Ваш сеанс закінчився. Увійдіть через Discord ще раз, щоб надіслати цю пропозицію.
-  transmitted: "✅ Пропозицію успішно передано керівництву NAP у Discord!"
+  transmitted: "Пропозицію успішно передано керівництву NAP у Discord!"
   transmitting: Передача...
   resume: Відновити пропозицію {type}
   draft_restored: Чернетку відновлено з попереднього сеансу.
   pending_shifts: Зміни на розгляді
   server_error: Сервер відповів помилкою HTTP {status}
 live_data:
-  failed: "⚠️ Не вдалося завантажити останні дані. Перевірте з'єднання та оновіть сторінку."
-  offline: "📴 Офлайн: відображаються дані, збережені на цьому пристрої ({when})."
-  updating: "⏳ Оновлення…"
+  failed: "Не вдалося завантажити останні дані. Перевірте з'єднання та оновіть сторінку."
+  offline: "Офлайн: відображаються дані, збережені на цьому пристрої ({when})."
+  updating: "Оновлення…"
 capitol_rotation:
   calendar_link: Переглянути ротацію цього циклу в календарі →
 image_review:

@@ -369,10 +369,10 @@ calendar:
   phase: Fase
   schedule_title: Programma Guerra tra Regni
   loading_cycle: Caricamento dettagli ciclo...
-  badge_closed: "🔒 Ricompense chiuse"
-  badge_kob_open: "⚔️ King of Battle aperto"
-  badge_awaiting: "⏳ In attesa del risultato KW"
-  badge_open: "🎁 Ricompense aperte"
+  badge_closed: "Ricompense chiuse"
+  badge_kob_open: "King of Battle aperto"
+  badge_awaiting: "In attesa del risultato KW"
+  badge_open: "Ricompense aperte"
   set2_off_week: Solo Commenda del Re (niente Guerra tra Regni).
   set2_won: 'Guerra tra Regni vinta: aperto anche il premio King of Battle.'
   set2_lost: 'Guerra tra Regni persa: solo Commenda del Re.'
@@ -394,7 +394,7 @@ calendar:
   next_reset: PROSSIMO RESET (00:00 GT)
   next_kw: PROSSIMA BATTAGLIA KW
   saturday: Sabato
-  today: "🔥 OGGI"
+  today: "OGGI"
   none_this_week: Niente questa settimana
   upcoming: Eventi imminenti
   times_shown: Orari visualizzati in {gt} e nel tuo orario locale
@@ -441,11 +441,11 @@ calendar:
   every_2_days: Ogni 2 giorni
   weekly: Settimanale
   mandatory: Obbligatorio
-  edit: "✏️ Modifica"
-  delete: "🗑️ Elimina"
-  edit_events: "✏️ Modifica eventi"
+  edit: "Modifica"
+  delete: "Elimina"
+  edit_events: "Modifica eventi"
   edit_done: "✓ Fine modifica"
-  add_event: "➕ Aggiungi un evento"
+  add_event: "Aggiungi un evento"
   ev_capture_title: Cattura Campidoglio — {who}
   ev_capture_desc: "{who} ({rank}) cattura il Campidoglio venerdì."
   ev_kw_title: Battaglia Guerra tra Regni
@@ -464,29 +464,20 @@ calendar_events:
   scope_label: Gestione eventi di chi
   scope_server: Eventi di tutto il server
   scope_alliance: Eventi [{tag}]
-  save_changes: "💾 Salva modifiche"
+  save_changes: "Salva modifiche"
   manage_mode: MODALITÀ GESTIONE
   session_active: Sessione autenticata attiva
   create_operation: Crea operazione
-  kingdom_admin: "👑 ADMIN DEL REGNO"
+  kingdom_admin: "ADMIN DEL REGNO"
   kingdom_desc: Gestione eventi server
   kingdom_heading: Crea operazione del Regno ([GLOBAL])
-  leadership: "🛡️ LEADERSHIP [{tag}]"
+  leadership: "LEADERSHIP [{tag}]"
   leadership_desc: Gestione eventi [{tag}]
   alliance_heading: Crea operazione [{tag}]
   preset: Tipo di evento
   type_custom: Personalizzato
   type_custom_hint: Modulo vuoto
   duration_h: "{n}h"
-  preset_custom: "🛠️ Operazione personalizzata (vuota)"
-  preset_crystal_cluster: "🔮 Valle di Cristallo (0.5h)"
-  preset_elixir_scramble: "🧪 Mischia Reale (0.5h)"
-  preset_survival_battle: "⚔️ Battaglia di Sopravvivenza (4.0h)"
-  preset_kill_event: "🩸 Evento uccisioni (24.0h)"
-  preset_kvk_battle: "👑 Battaglia Guerra tra Regni (1.0h)"
-  preset_undead_siege: "💀 Assedio non morto (1.0h)"
-  preset_gear_upgrade: "🛡️ Aggiornamento equipaggiamento (48.0h)"
-  preset_cheese_trap: "🧀 Trappola Cheese (0.5h)"
   title: Titolo dell'evento
   title_example: es. Difesa dell'alveare o Assalto all'avamposto
   date: Data di inizio (YYYY-MM-DD)
@@ -533,7 +524,7 @@ kings_scheduler:
   loot_other: "{n} Forzieri del Re"
   loot_border: 2 Forzieri del Re + Bordo
   active: ATTIVO
-  buyouts_title: "🛡️ Restituzione Risarcimento Wartime"
+  buyouts_title: "Restituzione Risarcimento Wartime"
   buyouts_count: "{n} Attivo"
   installment: 'Pagamento Settimana {week}:'
   payout: "{reg} & {kw}"
@@ -545,7 +536,7 @@ kings_scheduler:
   threat: "(Minaccia: {threat})"
   red_list: Lista Rossa
   wartime_buyout: Risarcimento Wartime
-  override_title: "🚨 Dichiarare Override Programma"
+  override_title: "Dichiarare Override Programma"
   override_help: Scoutato un server pericoloso? Inserisci l'ID del server avversario
   target_week: Settimana KvK obiettivo
   week1_option: Venerdì Settimana 1 (Matchup Boss 2)
@@ -568,8 +559,8 @@ kings_scheduler:
   distribution: 'Distribuzione Settimana {n}:'
   plus_gold: "+1 Oro Regolare & +1 Oro KW a [{tag}]"
   buyout_perks: "{ally} perde 2 forzieri del Re, guadagna 4 forzieri d'oro. {wlo} guadagna 2 forzieri del Re, perde 4 forzieri d'oro."
-  proposal_buyout: "🛡️ Dichiarare Risarcimento Wartime"
-  proposal_swap: "⚔️ Dichiarare Scambio Difesa"
+  proposal_buyout: "Dichiarare Risarcimento Wartime"
+  proposal_swap: "Dichiarare Scambio Difesa"
   sum_second: 2° Override Difesa WLO
   sum_first: 1° Override Difesa WLO
   sum_vs: Settimana {n} vs {threat}
@@ -753,16 +744,16 @@ proposals:
   leaders_only_note: Solo i leader R4 e R5 possono inviare proposte. Chiedi al tuo leader dell'alleanza di inviare questo piano.
   leaders_only: Solo leader
   login_expired: Il tuo accesso è scaduto. Accedi di nuovo con Discord per inviare questa proposta.
-  transmitted: "✅ Proposta trasmessa con successo alla leadership NAP su Discord!"
+  transmitted: "Proposta trasmessa con successo alla leadership NAP su Discord!"
   transmitting: Trasmissione in corso...
   resume: Riprendi proposta {type}
   draft_restored: Bozza ripristinata dalla sessione precedente.
   pending_shifts: Cambiamenti in attesa
   server_error: Il server ha risposto con HTTP {status}
 live_data:
-  failed: "⚠️ Impossibile caricare gli ultimi dati. Controlla la connessione e aggiorna la pagina."
-  offline: "📴 Offline: mostrati i dati salvati su questo dispositivo ({when})."
-  updating: "⏳ Aggiornamento in corso…"
+  failed: "Impossibile caricare gli ultimi dati. Controlla la connessione e aggiorna la pagina."
+  offline: "Offline: mostrati i dati salvati su questo dispositivo ({when})."
+  updating: "Aggiornamento in corso…"
 capitol_rotation:
   calendar_link: Vedi la rotazione di questo ciclo sul calendario →
 image_review:

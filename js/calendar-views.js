@@ -118,6 +118,8 @@
 
   function create(container, opts) {
     const { t, tn, esc } = opts;
+    /** An interface icon (js/ui-icons.js) for the start of a label. */
+    const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
     // The page's language, in the reader's own regional style when it matches (en-GB: 16 Nov,
     // 16:30; en-US: Nov 16, 4:30 PM)
     const lang = document.documentElement.lang || 'en';
@@ -195,8 +197,8 @@
         <div class="cal-view-top" aria-live="polite"></div>
         <div class="ag-manage" hidden>
           <div class="ag-editbar">
-            <button type="button" class="dash-btn dash-two-labels ag-edit-toggle" aria-pressed="false"><span class="when-off">${esc(t('calendar.edit_events'))}</span><span class="when-on">${esc(t('calendar.edit_done'))}</span></button>
-            <button type="button" class="dash-btn ag-add-event" disabled>${esc(t('calendar.add_event'))}</button>
+            <button type="button" class="dash-btn dash-two-labels ag-edit-toggle" aria-pressed="false"><span class="when-off">${ic('pencil')}${esc(t('calendar.edit_events'))}</span><span class="when-on">${esc(t('calendar.edit_done'))}</span></button>
+            <button type="button" class="dash-btn ag-add-event" disabled>${ic('plus')}${esc(t('calendar.add_event'))}</button>
           </div>
         </div>
         <div class="cal-view-list" aria-live="polite"></div>
@@ -457,8 +459,8 @@
         // tap while browsing deleted events too easily)
         const actions =
           state.editing && opts.canEdit?.(e)
-            ? `<div class="ag-actions"><button type="button" class="btn-edit-event" data-event-id="${esc(e.id)}">${esc(t('calendar.edit'))}</button>
-             <button type="button" class="btn-delete-event" data-event-id="${esc(e.id)}" data-start="${e.s}">${esc(t('calendar.delete'))}</button></div>`
+            ? `<div class="ag-actions"><button type="button" class="btn-edit-event" data-event-id="${esc(e.id)}">${ic('pencil')}${esc(t('calendar.edit'))}</button>
+             <button type="button" class="btn-delete-event" data-event-id="${esc(e.id)}" data-start="${e.s}">${ic('trash')}${esc(t('calendar.delete'))}</button></div>`
             : '';
         return `<li class="ag-event k-${e.kind}${type?.picture ? ' has-pic' : ''}${isLive ? ' is-live' : ''}${isNext ? ' is-next' : ''}${past ? ' is-past' : ''}"${color}>
           <div class="ag-time">${

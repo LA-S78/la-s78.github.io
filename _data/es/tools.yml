@@ -369,10 +369,10 @@ calendar:
   phase: Fase
   schedule_title: Programación de Guerra de Reinos
   loading_cycle: Cargando detalles del ciclo...
-  badge_closed: "🔒 Recompensas cerradas"
-  badge_kob_open: "⚔️ Pelea Real abierta"
-  badge_awaiting: "⏳ Esperando resultado de Guerra de Reinos"
-  badge_open: "🎁 Recompensas abiertas"
+  badge_closed: "Recompensas cerradas"
+  badge_kob_open: "Pelea Real abierta"
+  badge_awaiting: "Esperando resultado de Guerra de Reinos"
+  badge_open: "Recompensas abiertas"
   set2_off_week: Solo Mención del Rey (sin Guerra de Reinos).
   set2_won: 'Guerra de Reinos ganada: Recompensa de Pelea Real también abierta.'
   set2_lost: 'Guerra de Reinos perdida: Solo Mención del Rey.'
@@ -394,7 +394,7 @@ calendar:
   next_reset: PRÓXIMO REINICIO (00:00 GT)
   next_kw: PRÓXIMA BATALLA DE Guerra de Reinos
   saturday: Sábado
-  today: "🔥 HOY"
+  today: "HOY"
   none_this_week: Nada esta semana
   upcoming: Próximos eventos
   times_shown: Horarios mostrados en {gt} y tu hora local
@@ -441,11 +441,11 @@ calendar:
   every_2_days: Cada 2 días
   weekly: Semanal
   mandatory: Obligatorio
-  edit: "✏️ Editar"
-  delete: "🗑️ Eliminar"
-  edit_events: "✏️ Editar eventos"
+  edit: "Editar"
+  delete: "Eliminar"
+  edit_events: "Editar eventos"
   edit_done: "✓ Terminar edición"
-  add_event: "➕ Añadir evento"
+  add_event: "Añadir evento"
   ev_capture_title: Captura del Capitolio — {who}
   ev_capture_desc: "{who} ({rank}) captura el Capitolio el viernes."
   ev_kw_title: Batalla de Guerra de Reinos
@@ -464,29 +464,20 @@ calendar_events:
   scope_label: Eventos de quién gestionar
   scope_server: Eventos de todo el servidor
   scope_alliance: Eventos de [{tag}]
-  save_changes: "💾 Guardar cambios"
+  save_changes: "Guardar cambios"
   manage_mode: MODO GESTIÓN
   session_active: Sesión autenticada activa
   create_operation: Crear Operación
-  kingdom_admin: "👑 ADMINISTRADOR DEL REINO"
+  kingdom_admin: "ADMINISTRADOR DEL REINO"
   kingdom_desc: Gestionando eventos del servidor
   kingdom_heading: Crear Operación del Reino ([GLOBAL])
-  leadership: "🛡️ LIDERAZGO [{tag}]"
+  leadership: "LIDERAZGO [{tag}]"
   leadership_desc: Gestionando eventos de [{tag}]
   alliance_heading: Crear Operación de [{tag}]
   preset: Tipo de evento
   type_custom: Personalizado
   type_custom_hint: Formulario vacío
   duration_h: "{n}h"
-  preset_custom: "🛠️ Operación personalizada (Vacía)"
-  preset_crystal_cluster: "🔮 Valle de Cristal (0.5h)"
-  preset_elixir_scramble: "🧪 Pelea Real (0.5h)"
-  preset_survival_battle: "⚔️ Batalla de Supervivencia (4.0h)"
-  preset_kill_event: "🩸 Evento de matanza (24.0h)"
-  preset_kvk_battle: "👑 Batalla de Guerra de Reinos (1.0h)"
-  preset_undead_siege: "💀 Asedio de no muertos (1.0h)"
-  preset_gear_upgrade: "🛡️ Mejora de equipo (48.0h)"
-  preset_cheese_trap: "🧀 Trampa de Queso (0.5h)"
   title: Título del evento
   title_example: p. ej. Simulacro de defensa de colmena o Asalto a puesto avanzado
   date: Fecha de inicio (AAAA-MM-DD)
@@ -533,7 +524,7 @@ kings_scheduler:
   loot_other: "{n} Cofres del Rey"
   loot_border: 2 Cofres del Rey + Borde
   active: ACTIVO
-  buyouts_title: "🛡️ Restitución por compra en tiempo de guerra"
+  buyouts_title: "Restitución por compra en tiempo de guerra"
   buyouts_count: "{n} Activo"
   installment: 'Pago de la semana {week}:'
   payout: "{reg} y {kw}"
@@ -545,7 +536,7 @@ kings_scheduler:
   threat: "(Amenaza: {threat})"
   red_list: Lista roja
   wartime_buyout: Compra en tiempo de guerra
-  override_title: "🚨 Declarar anulación de horario"
+  override_title: "Declarar anulación de horario"
   override_help: "¿Has explorado un servidor peligroso? Ingresa el ID del servidor oponente"
   target_week: Semana de KvK objetivo
   week1_option: Viernes de la semana 1 (Emparejamiento del Jefe 2)
@@ -568,8 +559,8 @@ kings_scheduler:
   distribution: 'Distribución de la semana {n}:'
   plus_gold: "+1 Oro Regular y +1 Oro KW para [{tag}]"
   buyout_perks: "{ally} pierde 2 cofres del Rey, gana 4 cofres de oro. {wlo} gana 2 cofres del Rey, pierde 4 cofres de oro."
-  proposal_buyout: "🛡️ Declarar compra en tiempo de guerra"
-  proposal_swap: "⚔️ Declarar intercambio de defensa"
+  proposal_buyout: "Declarar compra en tiempo de guerra"
+  proposal_swap: "Declarar intercambio de defensa"
   sum_second: 2.ª Anulación de defensa de WLO
   sum_first: 1.ª Anulación de defensa de WLO
   sum_vs: Semana {n} vs {threat}
@@ -753,16 +744,16 @@ proposals:
   leaders_only_note: Solo los líderes R4 y R5 pueden enviar propuestas. Pide a tu líder de alianza que envíe este plan.
   leaders_only: Solo líderes
   login_expired: Tu sesión ha expirado. Inicia sesión con Discord de nuevo para enviar esta propuesta.
-  transmitted: "✅ ¡Propuesta transmitida con éxito al liderazgo NAP en Discord!"
+  transmitted: "¡Propuesta transmitida con éxito al liderazgo NAP en Discord!"
   transmitting: Transmitiendo...
   resume: Reanudar propuesta de {type}
   draft_restored: Borrador restaurado de la sesión anterior.
   pending_shifts: Cambios pendientes
   server_error: El servidor respondió con HTTP {status}
 live_data:
-  failed: "⚠️ No se pudieron cargar los datos más recientes. Comprueba tu conexión y actualiza la página."
-  offline: "📴 Sin conexión: mostrando los datos guardados en este dispositivo ({when})."
-  updating: "⏳ Actualizando..."
+  failed: "No se pudieron cargar los datos más recientes. Comprueba tu conexión y actualiza la página."
+  offline: "Sin conexión: mostrando los datos guardados en este dispositivo ({when})."
+  updating: "Actualizando..."
 capitol_rotation:
   calendar_link: Ver la rotación de este ciclo en el calendario →
 image_review:

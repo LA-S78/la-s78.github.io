@@ -13,6 +13,8 @@ const esc = (value) => window.escapeHtml(value);
 // The page's language (kings_scheduler.* in _data/<lang>/tools.yml, js/i18n.js): text, and
 // text around trusted HTML (bold tags, coloured alliance tags).
 const t = (key, vars) => window.t(`kings_scheduler.${key}`, vars);
+/** An interface icon (js/ui-icons.js) for the start of a label. */
+const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
 const th = (key, html, vars) => window.th(`kings_scheduler.${key}`, html, vars);
 const tag = (name, color) =>
   `<strong${color ? ` class="ally-text" style="--ally: ${esc(color)}"` : ''}>[${esc(name)}]</strong>`;
@@ -237,7 +239,7 @@ export function updateOverridePreview() {
   if (currentScheduledAlly === 'WLO') {
     previewBox.innerHTML = `
       <div class="preview-notice warning">
-        ⚠️ ${th('already_scheduled', { who: `<strong>${esc(t('already_scheduled_who', { n: targetWeek }))}</strong>` })}
+        ${ic('warning', 'warn')}${th('already_scheduled', { who: `<strong>${esc(t('already_scheduled_who', { n: targetWeek }))}</strong>` })}
       </div>
     `;
     submitBtn.disabled = true;
@@ -258,7 +260,7 @@ export function updateOverridePreview() {
           <span>${esc(t('week3_finale'))} ${tag(currentScheduledAlly, allyColor)}</span>
         </div>
         <div class="preview-perks">
-          🎁 ${th('lose_nothing', { ally: tag(currentScheduledAlly, allyColor), wlo: tag('WLO', getAllianceColor('WLO')) })}
+          ${ic('gift')}${th('lose_nothing', { ally: tag(currentScheduledAlly, allyColor), wlo: tag('WLO', getAllianceColor('WLO')) })}
         </div>
       </div>
     `;
@@ -275,7 +277,7 @@ export function updateOverridePreview() {
           <div class="p-item">• <strong>${esc(t('distribution', { n: 3 }))}</strong> ${esc(t('plus_gold', { tag: currentScheduledAlly }))}</div>
         </div>
         <div class="preview-perks">
-          🎁 ${th('buyout_perks', { ally: tag(currentScheduledAlly, allyColor), wlo: tag('WLO', getAllianceColor('WLO')) })}
+          ${ic('gift')}${th('buyout_perks', { ally: tag(currentScheduledAlly, allyColor), wlo: tag('WLO', getAllianceColor('WLO')) })}
         </div>
       </div>
     `;
@@ -312,24 +314,25 @@ export async function submitOverrideProposal() {
   const b = (key, vars) => `<strong>${esc(t(key, vars))}</strong>`;
   const vs = th('sum_vs', { threat: `<code>${esc(threatName)}</code>` }, { n: targetWeek });
   const installment = (i, week) =>
-    `<div>• 📦 <em>${esc(t('sum_installment', { i, week }))}</em> ${esc(t('sum_installment_chests'))}</div>`;
+    `<div>${ic('package')}<em>${esc(t('sum_installment', { i, week }))}</em> ${esc(t('sum_installment_chests'))}</div>`;
   const diffSummaryHtml = isBuyout
     ? `
-      <div>• 🚨 ${b('sum_second')}: ${vs}</div>
-      <div>• 🛡️ ${b('sum_buyout_issued', { tag: displacedAlly })}: ${esc(t('sum_four_gold'))}</div>
+      <div>${ic('siren')}${b('sum_second')}: ${vs}</div>
+      <div>${ic('shield')}${b('sum_buyout_issued', { tag: displacedAlly })}: ${esc(t('sum_four_gold'))}</div>
       ${installment(1, targetWeek)}
       ${installment(2, 3)}
     `
     : `
-      <div>• ⚔️ ${b('sum_first')}: ${vs}</div>
-      <div>• ⇄ ${b('sum_swap')}: ${esc(t('sum_swap_text', { n: targetWeek }))}</div>
-      <div>• 👑 ${b('sum_promoted', { tag: displacedAlly })} ${esc(t('sum_promoted_text'))}</div>
-      <div>• 💰 ${b('sum_cost')}</div>
+      <div>${ic('swords')}${b('sum_first')}: ${vs}</div>
+      <div>${ic('swap')}${b('sum_swap')}: ${esc(t('sum_swap_text', { n: targetWeek }))}</div>
+      <div>${ic('crown')}${b('sum_promoted', { tag: displacedAlly })} ${esc(t('sum_promoted_text'))}</div>
+      <div>${ic('coins')}${b('sum_cost')}</div>
     `;
 
   submitProposalWithAuth({
     type: 'override',
     title: t(isBuyout ? 'proposal_buyout' : 'proposal_swap'),
+    icon: isBuyout ? 'shield' : 'swords',
     payload,
     diffSummaryHtml,
     onSuccess: () => {

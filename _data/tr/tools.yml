@@ -369,10 +369,10 @@ calendar:
   phase: Aşama
   schedule_title: Krallık Savaşı Programı
   loading_cycle: Döngü detayları yükleniyor...
-  badge_closed: "🔒 Ödüller kapalı"
-  badge_kob_open: "⚔️ Kraliyet Mücadelesi açık"
-  badge_awaiting: "⏳ Krallık Savaşı sonucu bekleniyor"
-  badge_open: "🎁 Ödüller açık"
+  badge_closed: "Ödüller kapalı"
+  badge_kob_open: "Kraliyet Mücadelesi açık"
+  badge_awaiting: "Krallık Savaşı sonucu bekleniyor"
+  badge_open: "Ödüller açık"
   set2_off_week: Sadece Kral Takdirnamesi (Krallık Savaşı yok).
   set2_won: 'Krallık Savaşı kazanıldı: Kraliyet Mücadelesi ödülleri de açık.'
   set2_lost: 'Krallık Savaşı kaybedildi: Sadece Kral Takdirnamesi.'
@@ -394,7 +394,7 @@ calendar:
   next_reset: SONRAKİ SIFIRLAMA (00:00 GT)
   next_kw: SONRAKİ KW SAVAŞI
   saturday: Cumartesi
-  today: "🔥 BUGÜN"
+  today: "BUGÜN"
   none_this_week: Bu hafta yok
   upcoming: Yaklaşan Etkinlikler
   times_shown: Zamanlar {gt} & Yerel Saatinize göre gösterilir
@@ -441,11 +441,11 @@ calendar:
   every_2_days: 2 Günde Bir
   weekly: Haftalık
   mandatory: Zorunlu
-  edit: "✏️ Düzenle"
-  delete: "🗑️ Sil"
-  edit_events: "✏️ Etkinlikleri düzenle"
+  edit: "Düzenle"
+  delete: "Sil"
+  edit_events: "Etkinlikleri düzenle"
   edit_done: "✓ Düzenleme tamamlandı"
-  add_event: "➕ Etkinlik ekle"
+  add_event: "Etkinlik ekle"
   ev_capture_title: Başkent Ele Geçirme — {who}
   ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçiriyor."
   ev_kw_title: Krallık Savaşı
@@ -464,29 +464,20 @@ calendar_events:
   scope_label: Hangi etkinliklerin yönetileceği
   scope_server: Sunucu genelindeki etkinlikler
   scope_alliance: "[{tag}] etkinlikleri"
-  save_changes: "💾 Değişiklikleri kaydet"
+  save_changes: "Değişiklikleri kaydet"
   manage_mode: YÖNETİM MODU
   session_active: Doğrulanmış Oturum Aktif
   create_operation: Operasyon Oluştur
-  kingdom_admin: "👑 KRALLIK YÖNETİCİSİ"
+  kingdom_admin: "KRALLIK YÖNETİCİSİ"
   kingdom_desc: Sunucu etkinliklerini yönetme
   kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
-  leadership: "🛡️ [{tag}] YÖNETİMİ"
+  leadership: "[{tag}] YÖNETİMİ"
   leadership_desc: "[{tag}] etkinliklerini yönetme"
   alliance_heading: "[{tag}] Operasyonu Oluştur"
   preset: Etkinlik türü
   type_custom: Özel
   type_custom_hint: Boş form
   duration_h: "{n}s"
-  preset_custom: "🛠️ Özel Operasyon (Boş)"
-  preset_crystal_cluster: "🔮 Kristal Vadisi (0.5s)"
-  preset_elixir_scramble: "🧪 İksir Mücadelesi (0.5s)"
-  preset_survival_battle: "⚔️ Hayatta Kalma Savaşı (4.0s)"
-  preset_kill_event: "🩸 Öldürme Etkinliği (24.0s)"
-  preset_kvk_battle: "👑 Krallık Savaşı (1.0s)"
-  preset_undead_siege: "💀 Ölümsüz Kuşatması (1.0s)"
-  preset_gear_upgrade: "🛡️ Ekipman Yükseltme (48.0s)"
-  preset_cheese_trap: "🧀 Peynir Tuzağı (0.5s)"
   title: Etkinlik Başlığı
   title_example: ör. Kovan Savunma Tatbikatı veya Karakol Saldırısı
   date: Başlangıç Tarihi (YYYY-AA-GG)
@@ -533,7 +524,7 @@ kings_scheduler:
   loot_other: "{n} Kral Sandığı"
   loot_border: 2 Kral Sandığı + Çerçeve
   active: AKTİF
-  buyouts_title: "🛡️ Aktif Savaş Zamanı Telafisi"
+  buyouts_title: "Aktif Savaş Zamanı Telafisi"
   buyouts_count: "{n} Aktif"
   installment: "{week}. Hafta Ödemesi:"
   payout: "{reg} & {kw}"
@@ -545,7 +536,7 @@ kings_scheduler:
   threat: "(Tehdit: {threat})"
   red_list: Kırmızı Liste
   wartime_buyout: Savaş Zamanı Telafisi
-  override_title: "🚨 Programı Geçersiz Kıl"
+  override_title: "Programı Geçersiz Kıl"
   override_help: Tehlikeli bir sunucu mu keşfedildi? Rakip sunucu ID'sini girin
   target_week: Hedef KvK Haftası
   week1_option: 1. Hafta Cuma (Patron 2 Eşleşmesi)
@@ -568,8 +559,8 @@ kings_scheduler:
   distribution: "{n}. Hafta Dağıtımı:"
   plus_gold: "+1 Normal Altın & +1 KS Altını [{tag}]'a"
   buyout_perks: "{ally} 2 Kral sandığı kaybeder, 4 altın sandık kazanır. {wlo} 2 Kral sandığı kazanır, 4 altın sandık kaybeder."
-  proposal_buyout: "🛡️ Savaş Zamanı Telafisi Bildir"
-  proposal_swap: "⚔️ Savunma Takası Bildir"
+  proposal_buyout: "Savaş Zamanı Telafisi Bildir"
+  proposal_swap: "Savunma Takası Bildir"
   sum_second: WLO 2. Savunma Geçersiz Kılma
   sum_first: WLO 1. Savunma Geçersiz Kılma
   sum_vs: "{n}. Hafta vs {threat}"
@@ -753,16 +744,16 @@ proposals:
   leaders_only_note: Sadece R4 ve R5 liderleri teklif gönderebilir. Bu planı göndermesi için ittifak liderinizden rica edin.
   leaders_only: Sadece Liderler
   login_expired: Girişiniz sona erdi. Bu teklifi göndermek için Discord ile tekrar giriş yapın.
-  transmitted: "✅ Teklif, Discord üzerinden NAP Yönetimine başarıyla iletildi!"
+  transmitted: "Teklif, Discord üzerinden NAP Yönetimine başarıyla iletildi!"
   transmitting: İletiliyor...
   resume: "{type} Teklifine Devam Et"
   draft_restored: Taslak önceki oturumdan geri yüklendi.
   pending_shifts: Bekleyen değişiklikler
   server_error: Sunucu HTTP {status} yanıtı verdi
 live_data:
-  failed: "⚠️ En güncel veriler yüklenemedi. Bağlantınızı kontrol edin ve sayfayı yenileyin."
-  offline: "📴 Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
-  updating: "⏳ Güncelleniyor…"
+  failed: "En güncel veriler yüklenemedi. Bağlantınızı kontrol edin ve sayfayı yenileyin."
+  offline: "Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
+  updating: "Güncelleniyor…"
 capitol_rotation:
   calendar_link: Bu döngünün rotasyonunu takvimde görün →
 image_review:
