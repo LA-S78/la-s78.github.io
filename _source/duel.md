@@ -227,16 +227,16 @@ Il Duello dell'Alleanza è il battito dell'attività del server. Usa il programm
 
 === pane--it--events--duel--02--rules ===
 ---
-title: "Programma del Duello"
-nav_id: "schedule"
+title: "Regole d'oro"
+nav_id: "rules"
 parent_guide: "duel"
 lang: "it"
-order: 1 
+order: 2
 ---
 
-Il Duello dell'Alleanza è il battito dell'attività del server. Usa il programma qui sotto per sincronizzare la spesa delle risorse e massimizzare le ricompense. **Nota:** I giorni sono fissi; assicurati che le tue attività siano allineate con la fase attuale.
-
-{% include duel_schedule.html lang=page.lang %}
+> #### ⚠️ Avviso di conformità
+> 
+> **La regola del "Falco":** Non riscuotere mai le tue missioni del Falco al di fuori dei giorni designati. Questa è la causa principale della perdita di potenziali punti durante il Duello tra Alleanze.
 
 === guide--ru--events--duel ===
 ---
