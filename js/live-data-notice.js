@@ -8,6 +8,9 @@
  * The pages have no built-in snapshot to fall back on, so this is how a reader knows.
  */
 
+/** An interface icon (js/ui-icons.js) for the start of the notice. */
+const icon = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
+
 /** When an answer is an offline copy, the time it was saved (ISO text); otherwise null. */
 export function offlineCopySavedAt(response) {
   return response?.headers?.get?.('X-Offline-Copy') || null;
@@ -33,7 +36,7 @@ export function showLiveDataNotice(anchor, { savedAt = null, failed = false } = 
     anchor.parentNode.insertBefore(el, anchor);
   }
   if (failed) {
-    el.textContent = window.t('live_data.failed');
+    el.innerHTML = icon('warning', 'warn') + window.escapeHtml(window.t('live_data.failed'));
   } else {
     const when = new Date(savedAt).toLocaleString(undefined, {
       weekday: 'short',
@@ -42,7 +45,7 @@ export function showLiveDataNotice(anchor, { savedAt = null, failed = false } = 
       hour: '2-digit',
       minute: '2-digit',
     });
-    el.textContent = window.t('live_data.offline', { when });
+    el.innerHTML = icon('offline') + window.escapeHtml(window.t('live_data.offline', { when }));
   }
 }
 
@@ -108,7 +111,7 @@ export async function savedLiveCopy(url) {
   }
 }
 
-/** Dims `el` with "⏳ Updating…" in its corner (on), or takes that away (off). */
+/** Dims `el` with "Updating…" in its corner (on), or takes that away (off). */
 export function markUpdating(el, on) {
   if (!el) return;
   el.classList.toggle('is-updating', on);

@@ -269,7 +269,7 @@ dialog a.dialog-btn:hover {
 }
 
 /* A tool showing this device's saved copy while the fresh data loads
-   (js/live-data-notice.js, markUpdating): dimmed and not clickable, with "⏳ Updating…" in
+   (js/live-data-notice.js, markUpdating): dimmed and not clickable, with "Updating…" in
    its top corner. The label floats, so nothing moves when it goes. */
 .is-updating {
   position: relative;

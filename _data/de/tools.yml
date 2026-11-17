@@ -369,10 +369,10 @@ calendar:
   phase: Phase
   schedule_title: Zeitplan Königreichskrieg
   loading_cycle: Zyklusdetails werden geladen...
-  badge_closed: "🔒 Belohnungen geschlossen"
-  badge_kob_open: "⚔️ King of Battle offen"
-  badge_awaiting: "⏳ Warte auf KW-Ergebnis"
-  badge_open: "🎁 Belohnungen offen"
+  badge_closed: "Belohnungen geschlossen"
+  badge_kob_open: "King of Battle offen"
+  badge_awaiting: "Warte auf KW-Ergebnis"
+  badge_open: "Belohnungen offen"
   set2_off_week: Nur Königliche Belobigung (kein Königreichskrieg).
   set2_won: 'Königreichskrieg gewonnen: King of Battle-Belohnung ebenfalls offen.'
   set2_lost: 'Königreichskrieg verloren: Nur Königliche Belobigung.'
@@ -394,7 +394,7 @@ calendar:
   next_reset: NÄCHSTER RESET (00:00 GT)
   next_kw: NÄCHSTE KW-SCHLACHT
   saturday: Samstag
-  today: "🔥 HEUTE"
+  today: "HEUTE"
   none_this_week: Keine diese Woche
   upcoming: Anstehende Events
   times_shown: Zeiten werden in {gt} & deiner Ortszeit angezeigt
@@ -441,11 +441,11 @@ calendar:
   every_2_days: Alle 2 Tage
   weekly: Wöchentlich
   mandatory: Verpflichtend
-  edit: "✏️ Bearbeiten"
-  delete: "🗑️ Löschen"
-  edit_events: "✏️ Events bearbeiten"
+  edit: "Bearbeiten"
+  delete: "Löschen"
+  edit_events: "Events bearbeiten"
   edit_done: "✓ Bearbeitung fertig"
-  add_event: "➕ Event hinzufügen"
+  add_event: "Event hinzufügen"
   ev_capture_title: Kapitol-Einnahme — {who}
   ev_capture_desc: "{who} ({rank}) nimmt das Kapitol am Freitag ein."
   ev_kw_title: Königreichskrieg
@@ -464,29 +464,20 @@ calendar_events:
   scope_label: Wessen Events verwalten
   scope_server: Serverweite Events
   scope_alliance: "[{tag}] Events"
-  save_changes: "💾 Änderungen speichern"
+  save_changes: "Änderungen speichern"
   manage_mode: VERWALTUNGSMODUS
   session_active: Authentifizierte Sitzung aktiv
   create_operation: Operation erstellen
-  kingdom_admin: "👑 KÖNIGREICH-ADMIN"
+  kingdom_admin: "KÖNIGREICH-ADMIN"
   kingdom_desc: Server-Events verwalten
   kingdom_heading: Königreichs-Operation erstellen ([GLOBAL])
-  leadership: "🛡️ [{tag}] FÜHRUNG"
+  leadership: "[{tag}] FÜHRUNG"
   leadership_desc: "[{tag}] Events verwalten"
   alliance_heading: "[{tag}] Operation erstellen"
   preset: Event-Typ
   type_custom: Benutzerdefiniert
   type_custom_hint: Leeres Formular
   duration_h: "{n}h"
-  preset_custom: "🛠️ Benutzerdefinierte Operation (leer)"
-  preset_crystal_cluster: "🔮 Kristalltal-Cluster (0.5h)"
-  preset_elixir_scramble: "🧪 Elixier-Gerangel (0.5h)"
-  preset_survival_battle: "⚔️ Überlebenskampf (4.0h)"
-  preset_kill_event: "🩸 Kill-Event (24.0h)"
-  preset_kvk_battle: "👑 KvK-Kampf (1.0h)"
-  preset_undead_siege: "💀 Untoten-Belagerung (1.0h)"
-  preset_gear_upgrade: "🛡️ Ausrüstungs-Upgrade (48.0h)"
-  preset_cheese_trap: "🧀 Cheese-Falle (0.5h)"
   title: Event-Titel
   title_example: z. B. Nest-Verteidigungsübung oder Außenposten-Angriff
   date: Startdatum (JJJJ-MM-TT)
@@ -533,7 +524,7 @@ kings_scheduler:
   loot_other: "{n} Königstruhen"
   loot_border: 2 Königstruhen + Rahmen
   active: AKTIV
-  buyouts_title: "🛡️ Aktive Kriegskauf-Entschädigung"
+  buyouts_title: "Aktive Kriegskauf-Entschädigung"
   buyouts_count: "{n} Aktiv"
   installment: 'Woche {week} Auszahlung:'
   payout: "{reg} & {kw}"
@@ -545,7 +536,7 @@ kings_scheduler:
   threat: "(Bedrohung: {threat})"
   red_list: Rote Liste
   wartime_buyout: Kriegskauf
-  override_title: "🚨 Zeitplan-Überschreibung erklären"
+  override_title: "Zeitplan-Überschreibung erklären"
   override_help: Gefährlichen Server gescoutet? Gib die Server-ID des Gegners ein
   target_week: Ziel KvK-Woche
   week1_option: Woche 1 Freitag (Boss 2 Matchup)
@@ -568,8 +559,8 @@ kings_scheduler:
   distribution: 'Woche {n} Verteilung:'
   plus_gold: "+1 Reguläres Gold & +1 KW Gold an [{tag}]"
   buyout_perks: "{ally} verlieren 2 Königstruhen, erhalten 4 Goldtruhen. {wlo} erhält 2 Königstruhen, verliert 4 Goldtruhen."
-  proposal_buyout: "🛡️ Kriegskauf erklären"
-  proposal_swap: "⚔️ Verteidigungstausch erklären"
+  proposal_buyout: "Kriegskauf erklären"
+  proposal_swap: "Verteidigungstausch erklären"
   sum_second: WLO 2. Verteidigungs-Überschreibung
   sum_first: WLO 1. Verteidigungs-Überschreibung
   sum_vs: Woche {n} gegen {threat}
@@ -753,16 +744,16 @@ proposals:
   leaders_only_note: Nur R4- und R5-Führungskräfte können Vorschläge senden. Bitte deinen Allianzführer, diesen Plan einzureichen.
   leaders_only: Nur für Führung
   login_expired: Deine Anmeldung ist abgelaufen. Melde dich erneut mit Discord an, um diesen Vorschlag zu senden.
-  transmitted: "✅ Vorschlag erfolgreich an die NAP-Führung auf Discord übermittelt!"
+  transmitted: "Vorschlag erfolgreich an die NAP-Führung auf Discord übermittelt!"
   transmitting: Übermittlung läuft...
   resume: "{type}-Vorschlag fortsetzen"
   draft_restored: Entwurf aus vorheriger Sitzung wiederhergestellt.
   pending_shifts: Ausstehende Verschiebungen
   server_error: Server antwortete mit HTTP {status}
 live_data:
-  failed: "⚠️ Die neuesten Daten konnten nicht geladen werden. Überprüfe deine Verbindung und lade die Seite neu."
-  offline: "📴 Offline: Zeige die auf diesem Gerät gespeicherten Daten ({when})."
-  updating: "⏳ Aktualisierung…"
+  failed: "Die neuesten Daten konnten nicht geladen werden. Überprüfe deine Verbindung und lade die Seite neu."
+  offline: "Offline: Zeige die auf diesem Gerät gespeicherten Daten ({when})."
+  updating: "Aktualisierung…"
 capitol_rotation:
   calendar_link: Rotation dieses Zyklus im Kalender ansehen →
 image_review:

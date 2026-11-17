@@ -245,7 +245,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
           style="display: none"
         >
           <div class="ops-section-header">
-            <h3 class="ops-section-title">{{ "kings_scheduler.buyouts_title" | t }}</h3>
+            <h3 class="ops-section-title">{% include ui-icon.html name="shield" %}{{ "kings_scheduler.buyouts_title" | t }}</h3>
             <span class="badge" id="ops-buyout-count-badge">{{ "kings_scheduler.buyouts_count" | t: "n", 0 }}</span>
           </div>
           <div class="ops-buyout-list" id="ops-buyout-list"></div>
@@ -254,7 +254,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
         <!-- Threat Assessment & Override Simulator -->
         <div class="ops-override-box">
           <div class="ops-section-header">
-            <h3 class="ops-section-title">{{ "kings_scheduler.override_title" | t }}</h3>
+            <h3 class="ops-section-title">{% include ui-icon.html name="siren" %}{{ "kings_scheduler.override_title" | t }}</h3>
             <span class="sub-text">{{ "kings_scheduler.override_help" | t }}</span>
           </div>
 

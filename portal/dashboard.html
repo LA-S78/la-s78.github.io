@@ -146,7 +146,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
     }
     function savedNote(at) {
       const when = new Date(at).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-      message(escapeHtml(t('live_data.offline', { when })), 'warning');
+      message(ic('offline') + escapeHtml(t('live_data.offline', { when })), 'warning');
     }
 
     async function load(alliance) {

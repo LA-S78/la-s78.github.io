@@ -369,10 +369,10 @@ calendar:
   phase: Phase
   schedule_title: Programme de la Guerre des Royaumes
   loading_cycle: Chargement des détails du cycle...
-  badge_closed: "🔒 Récompenses fermées"
-  badge_kob_open: "⚔️ Mêlée Royale ouverte"
-  badge_awaiting: "⏳ En attente du résultat de la Guerre des Royaumes"
-  badge_open: "🎁 Récompenses ouvertes"
+  badge_closed: "Récompenses fermées"
+  badge_kob_open: "Mêlée Royale ouverte"
+  badge_awaiting: "En attente du résultat de la Guerre des Royaumes"
+  badge_open: "Récompenses ouvertes"
   set2_off_week: Commendation du Roi uniquement (pas de Guerre des Royaumes).
   set2_won: 'Guerre des Royaumes gagnée : Récompense de Mêlée Royale également ouverte.'
   set2_lost: 'Guerre des Royaumes perdue : Commendation du Roi uniquement.'
@@ -394,7 +394,7 @@ calendar:
   next_reset: PROCHAINE RÉINITIALISATION (00:00 GT)
   next_kw: PROCHAINE BATAILLE DE GUERRE DES ROYAUMES
   saturday: Samedi
-  today: "🔥 AUJOURD'HUI"
+  today: "AUJOURD'HUI"
   none_this_week: Aucun cette semaine
   upcoming: Événements à venir
   times_shown: Heures affichées en {gt} & votre heure locale
@@ -441,11 +441,11 @@ calendar:
   every_2_days: Tous les 2 jours
   weekly: Hebdomadaire
   mandatory: Obligatoire
-  edit: "✏️ Modifier"
-  delete: "🗑️ Supprimer"
-  edit_events: "✏️ Modifier les événements"
+  edit: "Modifier"
+  delete: "Supprimer"
+  edit_events: "Modifier les événements"
   edit_done: "✓ Terminer la modification"
-  add_event: "➕ Ajouter un événement"
+  add_event: "Ajouter un événement"
   ev_capture_title: Capture du Capitole — {who}
   ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
   ev_kw_title: Bataille de Guerre des Royaumes
@@ -464,29 +464,20 @@ calendar_events:
   scope_label: Gérer les événements de qui
   scope_server: Événements à l'échelle du serveur
   scope_alliance: Événements [{tag}]
-  save_changes: "💾 Enregistrer les modifications"
+  save_changes: "Enregistrer les modifications"
   manage_mode: MODE GESTION
   session_active: Session authentifiée active
   create_operation: Créer une Opération
-  kingdom_admin: "👑 ADMIN ROYAUME"
+  kingdom_admin: "ADMIN ROYAUME"
   kingdom_desc: Gestion des événements serveur
   kingdom_heading: Créer une Opération de Royaume ([GLOBAL])
-  leadership: "🛡️ DIRECTION [{tag}]"
+  leadership: "DIRECTION [{tag}]"
   leadership_desc: Gestion des événements [{tag}]
   alliance_heading: Créer une Opération [{tag}]
   preset: Type d'événement
   type_custom: Personnalisé
   type_custom_hint: Formulaire vide
   duration_h: "{n}h"
-  preset_custom: "🛠️ Opération personnalisée (Vide)"
-  preset_crystal_cluster: "🔮 Vallée de Cristal (0.5h)"
-  preset_elixir_scramble: "🧪 Mêlée Royale (0.5h)"
-  preset_survival_battle: "⚔️ Bataille de Survie (4.0h)"
-  preset_kill_event: "🩸 Événement de meurtre (24.0h)"
-  preset_kvk_battle: "👑 Bataille KvK (1.0h)"
-  preset_undead_siege: "💀 Siège des Morts-Vivants (1.0h)"
-  preset_gear_upgrade: "🛡️ Amélioration d'équipement (48.0h)"
-  preset_cheese_trap: "🧀 Piège à Fromage (0.5h)"
   title: Titre de l'événement
   title_example: ex. Exercice de Défense de Ruche ou Assaut d'Avant-poste
   date: Date de début (AAAA-MM-JJ)
@@ -533,7 +524,7 @@ kings_scheduler:
   loot_other: "{n} Coffres du Roi"
   loot_border: 2 Coffres du Roi + Bordure
   active: ACTIF
-  buyouts_title: "🛡️ Restitution de rachat en temps de guerre active"
+  buyouts_title: "Restitution de rachat en temps de guerre active"
   buyouts_count: "{n} Actif"
   installment: 'Paiement semaine {week} :'
   payout: "{reg} & {kw}"
@@ -545,7 +536,7 @@ kings_scheduler:
   threat: "(Menace : {threat})"
   red_list: Liste Rouge
   wartime_buyout: Rachat en temps de guerre
-  override_title: "🚨 Déclarer une priorité de programme"
+  override_title: "Déclarer une priorité de programme"
   override_help: Serveur dangereux repéré ? Entrez l'ID du serveur adverse
   target_week: Semaine KvK cible
   week1_option: Vendredi Semaine 1 (Matchup Boss 2)
@@ -568,8 +559,8 @@ kings_scheduler:
   distribution: 'Distribution Semaine {n} :'
   plus_gold: "+1 Or Régulier & +1 Or KvK pour [{tag}]"
   buyout_perks: "{ally} perd 2 coffres du Roi, gagne 4 coffres d'or. {wlo} gagne 2 coffres du Roi, perd 4 coffres d'or."
-  proposal_buyout: "🛡️ Déclarer un rachat en temps de guerre"
-  proposal_swap: "⚔️ Déclarer un échange de défense"
+  proposal_buyout: "Déclarer un rachat en temps de guerre"
+  proposal_swap: "Déclarer un échange de défense"
   sum_second: 2ème priorité de défense WLO
   sum_first: 1ère priorité de défense WLO
   sum_vs: Semaine {n} vs {threat}
@@ -753,16 +744,16 @@ proposals:
   leaders_only_note: Seuls les dirigeants R4 et R5 peuvent envoyer des propositions. Demandez à votre chef d'alliance de soumettre ce plan.
   leaders_only: Dirigeants uniquement
   login_expired: Votre session a expiré. Connectez-vous à nouveau avec Discord pour envoyer cette proposition.
-  transmitted: "✅ Proposition transmise avec succès à la direction NAP sur Discord !"
+  transmitted: "Proposition transmise avec succès à la direction NAP sur Discord !"
   transmitting: Transmission en cours...
   resume: Reprendre la proposition {type}
   draft_restored: Brouillon restauré à partir de la session précédente.
   pending_shifts: Changements en attente
   server_error: Le serveur a répondu avec le code HTTP {status}
 live_data:
-  failed: "⚠️ Impossible de charger les données les plus récentes. Vérifiez votre connexion et actualisez la page."
-  offline: "📴 Hors ligne : affichage des données enregistrées sur cet appareil ({when})."
-  updating: "⏳ Mise à jour…"
+  failed: "Impossible de charger les données les plus récentes. Vérifiez votre connexion et actualisez la page."
+  offline: "Hors ligne : affichage des données enregistrées sur cet appareil ({when})."
+  updating: "Mise à jour…"
 capitol_rotation:
   calendar_link: Voir la rotation de ce cycle sur le calendrier →
 image_review:

@@ -35,7 +35,7 @@ function ensureModalDOM() {
       <div class="auth-modal-frame">
         <div class="auth-modal-header">
           <div class="auth-modal-title-wrap">
-            <span class="auth-modal-icon">👑</span>
+            <span class="auth-modal-icon" aria-hidden="true"></span>
             <h3 id="auth-modal-title" class="auth-modal-title">${esc(t('title'))}</h3>
           </div>
           <button type="button" class="auth-modal-close" id="auth-modal-close-btn" aria-label="${esc(t('close'))}">&times;</button>
@@ -151,6 +151,7 @@ export function clearStashedProposal() {
 export async function submitProposalWithAuth({
   type, // 'map' | 'rewards' | 'alliance'
   title = t('title'),
+  icon = 'crown', // the line icon beside the title (_data/ui_icons.yml)
   payload, // Object matching proposal schema
   diffSummaryHtml = `<p>${esc(t('pending_shifts'))}</p>`,
   onSuccess = () => {},
@@ -170,6 +171,8 @@ export async function submitProposalWithAuth({
 
   // Populate static fields
   modalTitle.textContent = title;
+  const iconBox = dialog.querySelector('.auth-modal-icon');
+  if (iconBox) iconBox.innerHTML = window.uiIcon ? window.uiIcon(icon, 'solo') : '';
   diffBox.innerHTML = diffSummaryHtml; // HTML built by the caller; callers must escape data in it
   notesInput.value = payload.notes || '';
   errorBox.classList.add('hidden');
@@ -208,7 +211,7 @@ export async function submitProposalWithAuth({
     mode = 'login';
     userStrip.innerHTML = `
       <div class="auth-guest-notice">
-        <span class="auth-guest-icon">⚠️</span>
+        <span class="auth-guest-icon">${window.uiIcon ? window.uiIcon('warning', 'warn') : ''}</span>
         <div>
           <strong>${esc(t('auth_required'))}</strong>
           <p>${esc(reason || t('auth_reason'))}</p>
@@ -287,7 +290,7 @@ export async function submitProposalWithAuth({
       onSuccess(resData);
     } catch (err) {
       console.error('Proposal dispatch error:', err);
-      errorBox.textContent = `❌ ${err.message}`;
+      errorBox.innerHTML = (window.uiIcon ? window.uiIcon('cross', 'bad') : '') + esc(err.message);
       errorBox.classList.remove('hidden');
       onError(err);
     } finally {

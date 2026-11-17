@@ -15,6 +15,8 @@ async function initCalendar() {
 
   // Escape data before putting it into HTML (see js/escape-html.js).
   const esc = (value) => window.escapeHtml(value);
+  /** An interface icon (js/ui-icons.js) for the start of a label. */
+  const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
   // The page's language (calendar.* in _data/<lang>/tools.yml, js/i18n.js).
   const t = window.t;
   // A week's name from its number, as the server's weekLabel() does (0 = Off-Week).
@@ -210,7 +212,13 @@ async function initCalendar() {
           : rewards.result === 'pending'
             ? ['calendar.badge_awaiting', 'badge-kw']
             : ['calendar.badge_open', 'badge-off'];
-      heroBadge.textContent = t(badge[0]);
+      const badgeIcon = {
+        'calendar.badge_closed': 'lock',
+        'calendar.badge_kob_open': 'swords',
+        'calendar.badge_awaiting': 'hourglass',
+        'calendar.badge_open': 'gift',
+      }[badge[0]];
+      heroBadge.innerHTML = ic(badgeIcon) + esc(t(badge[0]));
       heroBadge.className = `cal-badge ${badge[1]}`;
       heroBadge.hidden = false;
     }
@@ -293,13 +301,15 @@ async function initCalendar() {
       if (status.isKW) {
         kwBox.style.opacity = '1';
         const kwDate = new Date(status.kwBattleTimestamp * 1000);
-        kwCountdown.textContent = status.isKWBattleDay
-          ? t('calendar.today')
-          : kwDate.toLocaleDateString(undefined, {
-              weekday: 'short',
-              month: 'short',
-              day: 'numeric',
-            });
+        kwCountdown.innerHTML = status.isKWBattleDay
+          ? ic('flame') + esc(t('calendar.today'))
+          : esc(
+              kwDate.toLocaleDateString(undefined, {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+              }),
+            );
       } else {
         kwBox.style.opacity = '0.5';
         kwCountdown.textContent = t('calendar.none_this_week');
@@ -409,12 +419,14 @@ async function initCalendar() {
 
     if (isGlobalAdmin) {
       if (mgmtPanel) mgmtPanel.classList.add('scope-global');
-      if (mgmtScopeTag) mgmtScopeTag.textContent = t('calendar_events.kingdom_admin');
+      if (mgmtScopeTag)
+        mgmtScopeTag.innerHTML = ic('crown') + esc(t('calendar_events.kingdom_admin'));
       if (mgmtScopeDesc) mgmtScopeDesc.textContent = t('calendar_events.kingdom_desc');
       if (formHeading) formHeading.textContent = t('calendar_events.kingdom_heading');
     } else {
       if (mgmtScopeTag)
-        mgmtScopeTag.textContent = t('calendar_events.leadership', { tag: sessionScope });
+        mgmtScopeTag.innerHTML =
+          ic('shield') + esc(t('calendar_events.leadership', { tag: sessionScope }));
       if (mgmtScopeDesc)
         mgmtScopeDesc.textContent = t('calendar_events.leadership_desc', { tag: sessionScope });
       if (formHeading)
@@ -533,7 +545,7 @@ async function initCalendar() {
       customRoleInput.classList.toggle('input-locked', !isCustom);
       customRoleInput.value = isCustom ? evt.custom_role_id || '' : '';
       if (formHeading) formHeading.textContent = t('calendar_events.edit_heading');
-      if (submitBtn) submitBtn.textContent = t('calendar_events.save_changes');
+      if (submitBtn) submitBtn.innerHTML = ic('save') + esc(t('calendar_events.save_changes'));
       formEl.style.display = 'block';
       showForm();
     };
@@ -699,9 +711,9 @@ async function initCalendar() {
           showNotification(err.message, 'error');
         } finally {
           submitBtn.disabled = false;
-          submitBtn.textContent = t(
-            editingEventId ? 'calendar_events.save_changes' : 'calendar_events.publish',
-          );
+          submitBtn.innerHTML = editingEventId
+            ? ic('save') + esc(t('calendar_events.save_changes'))
+            : esc(t('calendar_events.publish'));
         }
       });
     }
@@ -724,13 +736,13 @@ async function initCalendar() {
       <div class="auth-modal-frame">
         <div class="auth-modal-header">
           <div class="auth-modal-title-wrap">
-            <span class="auth-modal-icon" aria-hidden="true">🗑️</span>
+            <span class="auth-modal-icon" aria-hidden="true">${ic('trash', 'solo')}</span>
             <h3 id="cal-delete-heading" class="auth-modal-title">${esc(t('calendar_events.delete_heading'))}</h3>
           </div>
         </div>
         <div class="auth-modal-body">
           <p class="cal-confirm-what"><strong>${esc(title)}</strong>${when ? `<br><span>${esc(when)}</span>` : ''}</p>
-          ${repeat ? `<p class="cal-confirm-warn">⚠️ ${esc(t('calendar_events.delete_repeats', { repeat }))}</p>` : ''}
+          ${repeat ? `<p class="cal-confirm-warn">${ic('warning', 'warn')}${esc(t('calendar_events.delete_repeats', { repeat }))}</p>` : ''}
           <p class="cal-confirm-final">${esc(t('calendar_events.delete_final'))}</p>
         </div>
         <div class="auth-modal-footer">
