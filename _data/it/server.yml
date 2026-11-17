@@ -255,6 +255,11 @@ bot_rewards:
     • Override cancellati: {overrides}
     • Buyout in tempo di guerra annullati: {buyouts} (mantenuti nella cronologia)
     • L'elenco di ogni alleanza è stato riordinato per le casse corrette.
+bot_ascension:
+  stewards_only: "⛔ Solo gli Steward del Regno possono applicare o mantenere l'ordine dei primi 4."
+  no_race: I risultati di questa gara non sono più memorizzati.
+  already: "{name} ha già deciso questa gara."
+  cannot_apply: 'I primi 4 non possono essere applicati: {reason}. Usa /rank.'
 bot_admin:
   rank_none: Nessuna alleanza registrata nello stato attuale.
   rank_title: "🛡️ Classifiche NAP del Server"

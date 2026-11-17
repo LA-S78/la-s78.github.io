@@ -783,12 +783,12 @@ ascension:
   title: Top-4-Rennen
   week_of: Königreichskrieg Woche 1, Woche vom {date}
   in_progress: 'Laufend: bisher gemessen an {days}.'
-  finished: 'Abschluss: Die vier höchsten Summen belegen die Top-4-Plätze für den nächsten Zyklus, sobald ein Verwalter dies bestätigt.'
+  finished: 'Endstand: Die NAP-Ränge folgen diesen Summen, sobald ein Steward dies bestätigt; die Top 4 nehmen ihre Plätze ab dem nächsten Zyklus ein.'
   col_alliance: Allianz
   col_day: Tag {n}
   col_total: Gesamt
   missing_day: Tag fehlt
-  source: Macht aus dem Last Asylum Tracker, gemessen 10 Minuten vor dem Reset.
+  source: Macht laut Last Asylum Tracker, gemessen 10 Minuten vor dem Reset.
 image_review:
   page_title: Allianz-Bild überprüfen
   loading: Bild wird geladen…

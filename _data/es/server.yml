@@ -255,6 +255,11 @@ bot_rewards:
     • Reemplazos borrados: {overrides}
     • Compras en tiempo de guerra canceladas: {buyouts} (mantenidas en el historial)
     • La lista de cada alianza fue reordenada para los cofres corregidos.
+bot_ascension:
+  stewards_only: "⛔ Solo los Administradores del Reino pueden aplicar o mantener el orden de los 4 Mejores."
+  no_race: Los resultados de esta carrera ya no están almacenados.
+  already: "{name} ya ha decidido esta carrera."
+  cannot_apply: 'No se pueden aplicar los 4 Mejores: {reason}. Usa /rank.'
 bot_admin:
   rank_none: No hay alianzas registradas en el estado actual.
   rank_title: "🛡️ Clasificación NAP del servidor"

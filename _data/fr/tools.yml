@@ -783,12 +783,12 @@ ascension:
   title: Course au Top 4
   week_of: Guerre des Royaumes Semaine 1, semaine du {date}
   in_progress: 'En cours : mesuré jusqu''à présent sur {days}.'
-  finished: 'Final : les quatre totaux les plus élevés occupent les places du Top 4 pour le cycle suivant, une fois confirmés par un Intendant.'
+  finished: 'Final : les rangs NAP suivent ces totaux une fois confirmés par un Steward ; le Top 4 prendra ses places à partir du prochain cycle.'
   col_alliance: Alliance
   col_day: Jour {n}
   col_total: Total
   missing_day: Jour manquant
-  source: Puissance du Last Asylum Tracker, mesurée 10 minutes avant la réinitialisation.
+  source: Puissance issue du Last Asylum Tracker, mesurée 10 minutes avant la réinitialisation.
 image_review:
   page_title: Réviser l'image de l'Alliance
   loading: Chargement de l'image…

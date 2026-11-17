@@ -255,6 +255,11 @@ bot_rewards:
     • Überschreibungen gelöscht: {overrides}
     • Kriegszeit-Ausgleiche storniert: {buyouts} (in der Historie behalten)
     • Die Liste jeder Allianz wurde für die korrigierten Truhen neu sortiert.
+bot_ascension:
+  stewards_only: "⛔ Nur Königreichsverwalter können die Top 4 Reihenfolge anwenden oder beibehalten."
+  no_race: Die Ergebnisse dieses Rennens werden nicht mehr gespeichert.
+  already: "{name} hat dieses Rennen bereits entschieden."
+  cannot_apply: 'Die Top 4 können nicht angewendet werden: {reason}. Nutze /rank.'
 bot_admin:
   rank_none: Keine Allianzen im aktuellen Staat registriert.
   rank_title: "🛡️ Server-NAP-Rangliste"

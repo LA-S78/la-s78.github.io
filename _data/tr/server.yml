@@ -255,6 +255,11 @@ bot_rewards:
     • Temizlenen geçersiz kılmalar: {overrides}
     • Savaş dönemi satın alımları iptal edildi: {buyouts} (geçmişte tutuldu)
     • Her ittifakın listesi düzeltilmiş sandıklar için yeniden sıralandı.
+bot_ascension:
+  stewards_only: "⛔ Sadece Krallık Vekilleri başvuru yapabilir veya İlk 4 sıralamasını koruyabilir."
+  no_race: Bu yarışın sonuçları artık saklanmıyor.
+  already: "{name} bu yarış hakkında çoktan karar verdi."
+  cannot_apply: 'İlk 4 uygulanamıyor: {reason}. /rank kullanın.'
 bot_admin:
   rank_none: Mevcut durumda kayıtlı ittifak yok.
   rank_title: "🛡️ Sunucu NAP Sıralaması"

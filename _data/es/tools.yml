@@ -780,15 +780,15 @@ live_data:
 capitol_rotation:
   calendar_link: Ver la rotación de este ciclo en el calendario →
 ascension:
-  title: Carrera al Top 4
-  week_of: Semana 1 de Guerra de Reinos, semana del {date}
+  title: Carrera del Top 4
+  week_of: Guerra de Reinos Semana 1, semana del {date}
   in_progress: 'En progreso: medido hasta ahora en {days}.'
-  finished: 'Final: los cuatro totales más altos ocupan los asientos del Top 4 para el siguiente ciclo, una vez que un Administrador lo confirme.'
+  finished: 'Final: los rangos NAP siguen estos totales una vez que un Steward confirma; el Top 4 toma sus puestos a partir del siguiente ciclo.'
   col_alliance: Alianza
   col_day: Día {n}
   col_total: Total
-  missing_day: Falta un día
-  source: Poder del rastreador de Last Asylum, medido 10 minutos antes del reinicio.
+  missing_day: Día faltante
+  source: Poder del Last Asylum Tracker, medido 10 minutos antes del reinicio.
 image_review:
   page_title: Revisar imagen de alianza
   loading: Cargando la imagen...

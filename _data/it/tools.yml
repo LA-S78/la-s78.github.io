@@ -780,10 +780,10 @@ live_data:
 capitol_rotation:
   calendar_link: Vedi la rotazione di questo ciclo sul calendario →
 ascension:
-  title: Gara delle Top 4
+  title: Gara delle prime 4
   week_of: Guerra tra Regni Settimana 1, settimana del {date}
   in_progress: 'In corso: misurato finora in {days}.'
-  finished: 'Finale: i quattro totali più alti occupano i posti Top 4 per il ciclo successivo, una volta confermato da uno Steward.'
+  finished: 'Finale: le classifiche NAP seguono questi totali una volta confermati da uno Steward; le prime 4 occuperanno i loro posti dal ciclo successivo.'
   col_alliance: Alleanza
   col_day: Giorno {n}
   col_total: Totale

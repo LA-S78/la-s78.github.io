@@ -782,13 +782,13 @@ capitol_rotation:
 ascension:
   title: İlk 4 yarışı
   week_of: Krallık Savaşı 1. Hafta, {date} haftası
-  in_progress: 'Devam ediyor: şu ana kadar {days} üzerinden ölçüldü.'
-  finished: 'Final: Bir Vekil onayladığında, en yüksek dört puana sahip olanlar bir sonraki döngüde İlk 4 koltuğunu alır.'
+  in_progress: 'Devam ediyor: şu ana kadar {days} gün üzerinden ölçüldü.'
+  finished: 'Final: Bir Kahya onayladıktan sonra NAP sıralamaları bu toplamları takip eder; İlk 4, bir sonraki döngüden itibaren yerlerini alır.'
   col_alliance: İttifak
   col_day: "{n}. Gün"
   col_total: Toplam
-  missing_day: Eksik gün
-  source: Last Asylum Tracker'dan alınan Güç verisi, sıfırlamadan 10 dakika önce ölçülmüştür.
+  missing_day: Bir gün eksik
+  source: Last Asylum Tracker'dan alınan güç, sıfırlamadan 10 dakika önce ölçülmüştür.
 image_review:
   page_title: İttifak Görselini İncele
   loading: Görsel yükleniyor…

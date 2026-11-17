@@ -255,6 +255,11 @@ bot_rewards:
     • Priorités effacées : {overrides}
     • Rachats en temps de guerre annulés : {buyouts} (gardés dans l'historique)
     • La liste de chaque alliance a été retriée pour les coffres corrigés.
+bot_ascension:
+  stewards_only: "⛔ Seuls les Intendants du Royaume peuvent appliquer ou conserver l'ordre du Top 4."
+  no_race: Les résultats de cette course ne sont plus enregistrés.
+  already: "{name} a déjà tranché cette course."
+  cannot_apply: 'Le Top 4 ne peut pas être appliqué : {reason}. Utilisez /rank.'
 bot_admin:
   rank_none: Aucune alliance enregistrée dans l'état actuel.
   rank_title: "🛡️ Classement NAP du serveur"
