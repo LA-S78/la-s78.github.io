@@ -13,6 +13,7 @@ import {
 } from './live-data-notice.js';
 import { ALLIANCE_COLORS } from './alliance-defaults.js';
 import { sameTag } from './tags.js';
+import { allyPicMarkup, revealAllyPics } from './ally-pics.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -59,16 +60,13 @@ let liveState = 'loading';
 /** Approved alliance pictures from /api/state: { TAG: { card, wide } } (api/_alliance_images.js) */
 let allianceImages = {};
 
-/** The style attribute that puts an alliance's banner behind its row, or ''. */
-function bannerStyle(tag) {
+/** The banner behind an alliance's row: { cls, attrs } (js/ally-pics.js), '' when none. */
+function bannerPic(tag) {
   // The tag as stored, or without its accents (RAVN for RÂVN). Letter case counts: RâvN
   // and RÂVN are two alliances (owner, 2026-11-17), so RâvN never borrows RÂVN's picture.
   const pics =
     allianceImages[tag] || Object.entries(allianceImages).find(([key]) => sameTag(key, tag))?.[1];
-  const url = pics?.wide;
-  return typeof url === 'string' && /^\/alliance-images\/[A-Za-z0-9.-]+$/.test(url)
-    ? ` style="--ally-pic: url('${url}')"`
-    : '';
+  return allyPicMarkup(pics?.wide);
 }
 
 // ============================================================================
@@ -646,6 +644,7 @@ export function renderStandingsHierarchy() {
         : '';
       const isSelf = playerAlliance && alliance.tag === playerAlliance;
       const displayColor = resolveAllianceColor(alliance.tag, alliance.color, alliance.rank);
+      const pic = bannerPic(alliance.tag);
 
       const academyPills = (alliance.academies || [])
         .map(
@@ -659,7 +658,7 @@ export function renderStandingsHierarchy() {
         .join('');
 
       return `
-      <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}${bannerStyle(alliance.tag) ? ' has-ally-pic' : ''}" data-tag="${esc(alliance.tag)}"${bannerStyle(alliance.tag)}>
+      <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}${pic.cls}" data-tag="${esc(alliance.tag)}"${pic.attrs}>
         <div class="ladder-rank-col">
           <span class="ladder-rank-badge ${rankTier}">
             ${isRanked ? `#${esc(alliance.rank)}` : '--'}
@@ -730,6 +729,8 @@ export function renderStandingsHierarchy() {
     `;
     })
     .join('');
+  // Pictures that weren't loaded yet fade in once they are (js/ally-pics.js)
+  revealAllyPics(container);
 }
 
 export function renderBlacklist() {

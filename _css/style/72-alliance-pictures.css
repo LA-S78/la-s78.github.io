@@ -34,3 +34,37 @@
 .alliance-ladder-row.rank-bronze.has-ally-pic {
   --pic-tint: color-mix(in srgb, var(--ladder-bronze) 12%, transparent);
 }
+
+/* A picture that finished loading after its row or card was drawn fades in instead of
+   popping in (js/ally-pics.js; owner, 2026-11-17): a layer of the row's own background
+   colour, under the text, fades away over the picture. Also the Capitol Rotation cards. */
+.ally-pic-in {
+  position: relative;
+  isolation: isolate;
+}
+
+.ally-pic-in::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--pic-fade, var(--bg-color));
+  pointer-events: none;
+  animation: ally-pic-in 0.35s ease-out forwards;
+}
+
+@keyframes ally-pic-in {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ally-pic-in::after {
+    animation-duration: 1ms;
+  }
+}
