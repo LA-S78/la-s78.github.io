@@ -273,12 +273,12 @@ async function initCalendar() {
         : t('calendar.rewards_closed');
     }
 
-    // The holder's banner behind the card (js/ally-pics.js, a module: loaded on demand from
-    // this classic script), faded in once loaded
-    const heroCard = document.querySelector('.cal-hero-card');
-    if (heroCard && (capitolHolderImage || heroCard.classList.contains('has-ally-pic'))) {
+    // The holder's banner in the Capitol holder box (js/ally-pics.js, a module: loaded on
+    // demand from this classic script), faded in once loaded
+    const capCard = document.querySelector('.cal-capitol-card');
+    if (capCard && (capitolHolderImage || capCard.classList.contains('has-ally-pic'))) {
       import('/js/ally-pics.js')
-        .then(({ showAllyPic }) => showAllyPic(heroCard, capitolHolderImage))
+        .then(({ showAllyPic }) => showAllyPic(capCard, capitolHolderImage))
         .catch(() => {});
     }
 

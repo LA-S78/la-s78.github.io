@@ -228,41 +228,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* The Capitol holder's banner behind the card (api/calendar.js capitolHolderImage; owner,
-   2026-11-17): faded into the page colour on the left, where the week and the rewards sit,
-   showing on the right behind the holder's box, and darker along the bottom under the
-   countdowns. A phone stacks everything, so it is dimmer all over there. Fades in once
-   loaded (js/ally-pics.js, .ally-pic-in). */
-.cal-hero-card.has-ally-pic {
-  --pic-fade: var(--bg-color);
-  background:
-    linear-gradient(
-      90deg,
-      var(--pic-fade) 0%,
-      color-mix(in srgb, var(--pic-fade) 90%, transparent) 30%,
-      color-mix(in srgb, var(--pic-fade) 55%, transparent) 70%,
-      color-mix(in srgb, var(--pic-fade) 40%, transparent) 100%
-    ),
-    linear-gradient(0deg, color-mix(in srgb, var(--pic-fade) 75%, transparent), transparent 60%),
-    var(--ally-pic) center / cover no-repeat,
-    var(--pic-fade);
-}
-
-.cal-hero-card.has-ally-pic .cal-hero-title,
-.cal-hero-card.has-ally-pic .cal-hero-subtitle,
-.cal-hero-card.has-ally-pic .metric-val {
-  text-shadow: 0 1px 3px color-mix(in srgb, var(--pic-fade) 90%, transparent);
-}
-
-@media (max-width: 599px) {
-  .cal-hero-card.has-ally-pic {
-    background:
-      linear-gradient(color-mix(in srgb, var(--pic-fade) 72%, transparent), color-mix(in srgb, var(--pic-fade) 72%, transparent)),
-      var(--ally-pic) center / cover no-repeat,
-      var(--pic-fade);
-  }
-}
-
 .cal-hero-header {
   display: flex;
   justify-content: space-between;
@@ -327,6 +292,27 @@
   padding: 0.9rem 1.4rem;
   text-align: right;
   min-width: 180px;
+}
+
+/* The Capitol holder's banner in the holder box (api/calendar.js capitolHolderImage; owner,
+   2026-11-17, chosen over the whole top card: more of the picture shows, beside the tag it
+   belongs to, and it suits the phone layout, where the top card has no frame). Darker on
+   the side the text is on (the right on desktop); fades in once loaded (js/ally-pics.js). */
+.cal-capitol-card.has-ally-pic {
+  --pic-fade: var(--surface-dark);
+  background:
+    linear-gradient(
+      270deg,
+      color-mix(in srgb, var(--pic-fade) 80%, transparent) 0%,
+      color-mix(in srgb, var(--pic-fade) 55%, transparent) 60%,
+      color-mix(in srgb, var(--pic-fade) 35%, transparent) 100%
+    ),
+    var(--ally-pic) center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.cal-capitol-card.has-ally-pic > div {
+  text-shadow: 0 1px 3px color-mix(in srgb, var(--pic-fade) 95%, transparent);
 }
 
 .cal-capitol-label {
