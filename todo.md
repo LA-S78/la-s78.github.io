@@ -55,10 +55,9 @@ _Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECI
 - [x] **Own service worker (`sw.js`)** (owner decision, 2026-11-13): replaced Workbox 4.3.1, which every visitor's browser downloaded from Google's servers unchecked, with the site's own plain worker (no outside script; a build check keeps it that way). Same jobs: offline app shell (only changed files re-downloaded on an update; Workbox's saved copy reused on the switch, so phones don't download the site again), image store, live data, offline Home fallback, update toast. Pages are saved under their plain address, so `?__WB_REVISION__=…` no longer appears in the address bar. A phone saves only its reader's language plus the pages it opens (first visit 10.9 → 5.1 MB); an update refreshes every saved page, including visited pages in other languages.
 - [ ] **Retire the old-page rescue in `sw.js`** (section 6, about 40 lines) a few weeks after November 2026, once no phone runs pages from before the update toast.
 
-- [ ] **Guides from the owner's English graphics** — each graphic cut into its pictures, with the words as text so every language can read it, one guide per pull request. Done: Kill Event (#188), Frozen Era (#197). More to come from the owner.
+- [ ] **Guides from the owner's English graphics** — each graphic cut into its pictures, with the words as text so every language can read it, one guide per pull request. Done: Kill Event (#188), Frozen Era (#197), Alliance Duel (#212), Crystal Cluster Valley. More to come from the owner.
 - [ ] **Open questions for the owner**
   - How long Undead Siege and Hunt Battle last, and whether they repeat (both default to 1 hour, no repeat), and whether Hunt Battle gets a guide.
-  - The Crystal Valley guide (a placeholder for now; the calendar's Crystal Cluster events link to it).
   - The Thief Hunt guide's "Store" placeholder, and the home page credits.
 - [ ] **Delete the branch `claude/calendar-capitol-box-picture`** (owner, on GitHub): a comparison branch, no longer needed (#210 took its style).
 
