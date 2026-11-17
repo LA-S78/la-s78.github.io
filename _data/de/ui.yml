@@ -168,10 +168,10 @@ search:
   no_results: Nichts gefunden für „{query}“.
   unavailable: Die Suche ist momentan nicht verfügbar. Versuche es erneut, wenn du online bist.
 pwa:
-  toast_msg: Neue Informationen erfasst.
+  toast_msg: Neue Informationen erhalten.
   update_btn: Aktualisieren
   updating: Entschlüsseln...
-  updated_msg: "App auf die neueste Version aktualisiert."
+  updated_msg: App auf die neueste Version aktualisiert.
 identity:
   account: Dein Konto
   sign_in: Anmelden

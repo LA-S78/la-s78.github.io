@@ -170,8 +170,8 @@ search:
 pwa:
   toast_msg: Nuove informazioni acquisite.
   update_btn: Aggiorna
-  updating: Decrittazione...
-  updated_msg: "App aggiornata all’ultima versione."
+  updating: Decodifica in corso...
+  updated_msg: App aggiornata all'ultima versione.
 identity:
   account: Il tuo account
   sign_in: Accedi

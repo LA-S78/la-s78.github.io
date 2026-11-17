@@ -168,10 +168,10 @@ search:
   no_results: "“{query}” için hiçbir şey bulunamadı."
   unavailable: Arama şu anda kullanılamıyor. Çevrimiçi olduğunda tekrar dene.
 pwa:
-  toast_msg: Yeni istihbarat alındı.
+  toast_msg: Yeni istihbarat elde edildi.
   update_btn: Güncelle
-  updating: Şifre çözülüyor...
-  updated_msg: "Uygulama en son sürüme güncellendi."
+  updating: Şifresi çözülüyor...
+  updated_msg: Uygulama en son sürüme güncellendi.
 identity:
   account: Hesabın
   sign_in: Giriş Yap

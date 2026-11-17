@@ -170,8 +170,8 @@ search:
 pwa:
   toast_msg: Отримано нові розвіддані.
   update_btn: Оновити
-  updating: Розшифрування...
-  updated_msg: "Застосунок оновлено до останньої версії."
+  updating: Дешифрування...
+  updated_msg: Застосунок оновлено до останньої версії.
 identity:
   account: Ваш акаунт
   sign_in: Увійти

@@ -238,22 +238,22 @@ charts:
   hint_progress: Toca o mantén el puntero sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas
-  loading: Cargando página de nominaciones...
-  players_label: "Tus jugadores, mejor primero"
-  players_help: Un nombre por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor entre ambos conjuntos; los nombres que queden fuera de los cofres se mantienen como reserva y ascienden si se abren más cofres.
-  players_placeholder: Nombres exactos en el juego, mejor primero...
-  who_gets_what: Quién recibe qué
+  loading: Cargando página de nominación...
+  players_label: Tus jugadores, los mejores primero
+  players_help: Un nombre por línea (o separados por comas), tu mejor jugador primero. Los cofres se reparten bajando por la lista según su valor en ambos conjuntos; los nombres después de los cofres quedan como reserva y suben si se abren más cofres.
+  players_placeholder: Nombres exactos en el juego, los mejores primero...
+  who_gets_what: Quién obtiene qué
   save: Guardar Lista
   saving: Guardando...
-  link_incomplete: Este enlace está incompleto. Usa /nominate en Discord para obtener uno nuevo.
-  load_failed: "{error} Usa /nominate en Discord para obtener un nuevo enlace."
-  closed: Las recompensas están cerradas. Las próximas se abren {when}, después del evento del capitolio del viernes.
-  header: Rango {rank} · recompensas {week} · abierto hasta {when}
-  banner_off_week: "Solo Encomio del Rey esta semana (sin Guerra de Reinos)."
-  banner_won: "Guerra de Reinos ganada: Los cofres de Recompensa del Rey de Batalla también están abiertos."
-  banner_lost: "Guerra de Reinos perdida: Solo Encomio del Rey esta semana."
-  banner_pending: "Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte tras el resultado, por lo que el cofre de nadie cambia."
-  handed_out_title: "✓ Ya repartido por el Rey ({n})"
+  link_incomplete: Este enlace está incompleto. Ejecuta /nominate en Discord para obtener uno nuevo.
+  load_failed: "{error} Ejecuta /nominate en Discord para obtener un nuevo enlace."
+  closed: Las recompensas están cerradas. Se abren el próximo {when}, después del evento del capitolio del viernes.
+  header: Rango {rank} · {week} recompensas · abierto hasta {when}
+  banner_off_week: Solo Condecoración del Rey esta semana (sin Guerra de Reinos).
+  banner_won: 'Guerra de Reinos ganada: Los cofres de Recompensa Rey de la Batalla también están abiertos.'
+  banner_lost: 'Guerra de Reinos perdida: Solo Condecoración del Rey esta semana.'
+  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa Rey de la Batalla se abren también y tu lista se reordena. El Rey reparte después del resultado, así que el cofre de nadie cambia.
+  handed_out_title: "✓ Ya entregado por el Rey ({n})"
   handed_out_help: Estos cofres se entregan en el juego, por lo que permanecen con estos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
   reserve: Reserva
   col_player: Jugador
@@ -267,32 +267,32 @@ nominate:
   reserves_one: "{n} reserva"
   reserves_other: "{n} reservas"
   listed_twice: "{name} está listado dos veces"
-  saved: "Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta {when}."
+  saved: Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta el {when}.
   save_failed: 'No se pudo guardar: {error}'
 kings_console:
   page_title: Consola de Distribución del Rey
-  title: "Consola de Distribución del Rey"
+  title: Consola de Distribución del Rey
   loading: Cargando nominaciones...
   by_chest: Por Cofre
   by_alliance: Por Alianza
-  can_tick: "Marca al jugador una vez que su cofre se haya entregado en el juego. Las marcas se guardan para todos, y un cofre marcado permanece con ese jugador si las listas se reordenan."
-  view_only_signed_out: "Solo vista. La lista del Rey puede ser marcada por {king} R4/R5 y Stewards: inicia sesión con Discord (arriba a la derecha)."
-  view_only: "Solo vista: la lista es marcada por {king} R4/R5 y Stewards."
+  can_tick: Marca a un jugador una vez que su cofre sea entregado en el juego. Las marcas se guardan para todos, y un cofre marcado permanece con ese jugador si las listas se reordenan.
+  view_only_signed_out: 'Solo lectura. La lista de verificación del Rey puede ser marcada por R4/R5 de {king} y Stewards: inicia sesión con Discord (arriba a la derecha).'
+  view_only: 'Solo lectura: la lista de verificación es marcada por R4/R5 de {king} y Stewards.'
   kings_alliance: la alianza del Rey
-  load_failed: 'Error al cargar las nominaciones: {error}'
-  closed: "Las recompensas están cerradas. Las listas de abajo son de la última semana; las próximas recompensas se abren el viernes alrededor de las 20:00 GT."
-  hold_title: 'Retener cofres:'
-  hold: "{title} esperar al resultado de la batalla del sábado antes de repartir. Si se gana la guerra, los cofres de Recompensa del Rey de Batalla se abrirán y todas las listas se reordenarán. Las recompensas cierran {when}."
+  load_failed: 'Error al cargar nominaciones: {error}'
+  closed: Las recompensas están cerradas. Las listas de abajo son de la última semana; las próximas recompensas se abren el viernes a las 20:00 GT aproximadamente.
+  hold_title: 'Retener los cofres:'
+  hold: "{title} esperar al resultado de la batalla del sábado antes de repartir. Si se gana la guerra, los cofres de Recompensa Rey de la Batalla se abren y cada lista se reordena. Las recompensas cierran el {when}."
   won_title: 'Guerra de Reinos ganada:'
-  won: "{title} repartir ambos conjuntos. Las recompensas cierran {when} (miércoles 00:00 GT)."
-  week_title: 'Recompensas {week}:'
-  week: "{title} repartir el Encomio del Rey. Las recompensas cierran {when} (miércoles 00:00 GT)."
+  won: "{title} repartir ambos conjuntos. Las recompensas cierran el {when} (miércoles 00:00 GT)."
+  week_title: 'Recompensas de {week}:'
+  week: "{title} repartir la Condecoración del Rey. Las recompensas cierran el {when} (miércoles 00:00 GT)."
   buyout_title: 'Restitución en tiempo de guerra activa:'
-  buyout_one: "{title} {tags} incluye espacios extra de Voluntad del Comandante financiados desde la asignación del Rango n.º 1 de WLO."
-  buyout_other: "{title} {tags} incluyen espacios extra de Voluntad del Comandante financiados desde la asignación del Rango n.º 1 de WLO."
-  no_nominations: Aún no se han enviado nominaciones.
-  no_entries: 0 entradas de destinatarios
-  progress: 'Progreso: {sent} / {total} distribuidos'
+  buyout_one: "{title} {tags} incluye espacios adicionales de Voluntad del Comandante financiados por la asignación de Rango #1 de WLO."
+  buyout_other: "{title} {tags} incluyen espacios adicionales de Voluntad del Comandante financiados por la asignación de Rango #1 de WLO."
+  no_nominations: No hay nominaciones enviadas todavía.
+  no_entries: 0 Entradas de Destinatario
+  progress: 'Progreso: {sent} / {total} Distribuido'
   alliance_heading: "[{tag}] • Rango {rank} ({n})"
   ticked_by: Entregado (bloqueado) · marcado por {name} · {when}
   buyout_badge: BUYOUT
@@ -301,68 +301,68 @@ kings_console:
   copy_prompt: 'Copiar nombre del destinatario:'
   not_on_list: "{name} ya no está en la lista de [{tag}] (la alianza lo cambió)."
   now_reserve: "{name} ahora es reserva en la lista de [{tag}]: sin cofre."
-  now_other_chest: "{name} ahora recibe {chest}, no {shown}."
-  stop_warning: "Detente: no envíes ese {chest}. {why} Las listas se han actualizado: copia el nombre de nuevo de la lista de abajo."
+  now_other_chest: "{name} ahora obtiene {chest}, no {shown}."
+  stop_warning: 'Alto: no envíes ese {chest}. {why} Las listas se han actualizado: copia el nombre de nuevo de la lista de abajo.'
   stop_alert: "¡No lo envíes!"
   lists_refreshed: Las listas se han actualizado.
 register:
-  page_title: Registro de Servidor de Alianza
+  page_title: Registro del Servidor de Alianza
   loading: Cargando portal de registro...
-  subtitle: Portal de Integración de Servidor de Alianza
-  step_invite: 1. Invita al bot a tu servidor
-  invite_help: Debes añadir el bot al Discord de tu alianza antes de completar el registro.
-  authorize: "Haz clic para autorizar al bot"
-  step_credentials: 2. Credenciales de Servidor y Rol
-  guild_id: ID del Servidor de Discord (ID de Gremio)
-  example: p. ej. {id}
-  guild_help: 'En Discord: Activa el Modo de Desarrollador → Clic derecho en el icono de tu servidor → {copy}. Debes ser el dueño del servidor o tener permisos de {admin} o {manage} en él. Los canales y el rol a continuación se verificarán en función de esto.'
-  copy_server_id: Copiar ID de servidor
+  subtitle: Portal de Integración del Servidor de Alianza
+  step_invite: 1. Invita al Bot a tu Servidor
+  invite_help: Debes añadir el bot a tu Discord de alianza antes de completar el registro.
+  authorize: Haz clic para autorizar al Bot
+  step_credentials: 2. Credenciales de Servidor y Roles
+  guild_id: ID del Servidor de Discord (Guild ID)
+  example: p. ej., {id}
+  guild_help: 'En Discord: Activa el Modo Desarrollador → Clic derecho en el icono de tu servidor → {copy}. Debes ser dueño de ese servidor o tener {admin} o {manage} allí. Los canales y el rol de abajo se verifican contra esto.'
+  copy_server_id: Copiar ID del Servidor
   administrator: Administrador
-  manage_server: Gestionar servidor
-  routing_heading: "Operaciones y Gestión de Tickets"
-  routing_help: Configura dónde publica el bot las alertas públicas de operaciones y gestiona las sugerencias/tickets privados de los miembros.
-  alert_channel: ID del canal de Alertas de Operaciones
-  channel_id_title: Debe ser un ID de canal de Discord válido de 17-20 dígitos
-  role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
+  manage_server: Gestionar Servidor
+  routing_heading: Enrutamiento de Operaciones y Tickets
+  routing_help: Configura dónde publica el bot alertas públicas de operaciones y enruta sugerencias/tickets privados de miembros.
+  alert_channel: ID del Canal de Alertas de Operaciones
+  channel_id_title: Debe ser un ID de Canal de Discord válido de 17-20 dígitos
+  role_id_title: Debe ser un ID de Rol de Discord válido de 17-20 dígitos
   alert_channel_help: Clic derecho en tu canal de anuncios/alertas → {copy}.
-  copy_channel_id: Copiar ID de canal
-  alert_role: ID del Rol de Alerta predeterminado
+  copy_channel_id: Copiar ID del Canal
+  alert_role: ID del Rol de Alerta Predeterminado
   optional: "(Opcional)"
-  alert_role_placeholder: Déjalo en blanco para usar @everyone por defecto
-  alert_role_help: Clic derecho en tu rol de mención (p. ej. {example}) → {copy}. Si se deja en blanco, será {everyone}.
-  server_alerts: Publicar también recordatorios de eventos de todo el servidor aquí
-  server_alerts_help: Los recordatorios de eventos a nivel NAP establecidos por los Administradores van al Discord NAP; marca esto para recibirlos también en este canal de alertas.
-  copy_role_id: Copiar ID de rol
-  officer_channel: ID del canal de Recepción de Tickets de Oficiales
-  officer_channel_help: Clic derecho en tu {channel} → {copy}. Las propuestas de los miembros y los tickets de alianza de {suggest} se enviarán aquí para su revisión por parte del liderazgo.
-  private_channel: canal privado de tickets R4/R5
+  alert_role_placeholder: Déjalo en blanco para usar @everyone
+  alert_role_help: Clic derecho en tu rol de mención (p. ej., {example}) → {copy}. Si está en blanco, se usa {everyone}.
+  server_alerts: Publicar también recordatorios de eventos del servidor aquí
+  server_alerts_help: Los recordatorios de eventos de toda la NAP establecidos por los Stewards van al Discord NAP; marca esto para recibirlos también en este canal de alertas.
+  copy_role_id: Copiar ID del Rol
+  officer_channel: ID del Canal de Recepción de Tickets de Oficiales
+  officer_channel_help: Clic derecho en tu {channel} → {copy}. Las propuestas de los miembros y los tickets de alianza de {suggest} se enrutarán aquí para revisión de liderazgo.
+  private_channel: canal privado de tickets para R4/R5
   delegated_roles: Roles de Liderazgo Delegados
   delegated_roles_help: Nombres de roles separados por comas que pueden clasificar tickets, gestionar eventos y enviar nominaciones de cofres ({r5} siempre está autorizado).
   color: Color de Identidad de la Alianza
   preview: 'Vista previa:'
-  color_help: Aplicado a tu calendario de operaciones, tarjetas de tickets internas y propuestas respaldadas por el Consejo NAP.
-  submit: Registrar servidor y desplegar comandos
-  submitting: Verificando servidor y registrando...
-  bad_token: Token de registro inválido o ausente. Ejecuta /registerbot en el servidor NAP.
-  malformed_token: Token mal formado. Por favor solicita un nuevo enlace desde Discord.
-  expired: Este enlace de registro ha caducado (límite de 24h). Ejecuta /registerbot de nuevo.
+  color_help: Aplicado a tu calendario de operaciones, tarjetas de tickets internos y propuestas respaldadas del Consejo NAP.
+  submit: Registrar Servidor y Desplegar Comandos
+  submitting: Verificando Servidor y Registrando...
+  bad_token: Token de registro inválido o faltante. Ejecuta /registerbot en el servidor NAP.
+  malformed_token: Token mal formado. Solicita un nuevo enlace desde Discord.
+  expired: Este enlace de registro ha expirado (límite de 24h). Ejecuta /registerbot de nuevo.
   bad_guild: Formato de ID de Servidor de Discord inválido. Debe ser un número de 17-20 dígitos.
-  bad_alert_channel: Formato de ID de canal de Alertas de Operaciones inválido. Debe ser un número de 17-20 dígitos.
-  bad_alert_role: Formato de ID de rol de Alerta inválido. Debe ser un número de 17-20 dígitos (o dejar vacío para @everyone).
-  bad_officer_channel: Formato de ID de canal de Recepción de Tickets de Oficiales inválido. Debe ser un número de 17-20 dígitos.
-  failed: Error en el registro
-  error: 'Error de registro: {error}'
-  success: "¡Registro exitoso!"
-  linked: "{server} ahora está vinculado a {tag}."
-  server_id: ID de Servidor {id}
+  bad_alert_channel: Formato de ID de Canal de Alertas de Operaciones inválido. Debe ser un número de 17-20 dígitos.
+  bad_alert_role: Formato de ID de Rol de Alerta inválido. Debe ser un número de 17-20 dígitos (o dejar vacío para @everyone).
+  bad_officer_channel: Formato de ID de Canal de Recepción de Tickets inválido. Debe ser un número de 17-20 dígitos.
+  failed: Error de registro
+  error: 'Error de Registro: {error}'
+  success: "¡Registro Exitoso!"
+  linked: "{server} está ahora vinculado a {tag}."
+  server_id: ID del Servidor {id}
   r_alert_channel: 'Canal de Alertas de Operaciones:'
-  r_target: 'Destino de la notificación:'
+  r_target: 'Destinatario de Notificaciones:'
   r_role: Rol {id}
   r_default: "(Predeterminado)"
   r_officer_channel: 'Canal de Tickets de Oficiales:'
-  r_color: 'Color de identidad:'
-  r_commands: 'Comandos de barra desplegados:'
-  r_leaders: 'Liderazgo autorizado:'
+  r_color: 'Color de Identidad:'
+  r_commands: 'Comandos de Barra Desplegados:'
+  r_leaders: 'Liderazgo Autorizado:'
 calendar:
   loading: Cargando el horario del reino...
   load_failed: 'Error al cargar el calendario: {error}'
@@ -574,15 +574,15 @@ kings_scheduler:
   sum_promoted_text: "(2 cofres del Rey + Objeto de mejora)"
   sum_cost: 'Costo de cofres de la alianza WLO: 0'
 rewards_planner:
-  host_week: Semana de anfitrión activa
-  planner_mode: Modo planificador
-  submit_plan: Enviar plan
+  host_week: Semana de Alojamiento Activa
+  planner_mode: Modo Planificador
+  submit_plan: Enviar Plan
   loading: Cargando niveles de recompensa…
   load_failed: No se pudieron cargar los niveles de recompensa.
-  add_tier: Añadir nivel de recompensa
-  remove_bracket: Eliminar rango
-  over_capacity: "¡Capacidad excedida! Oro: {gold}/{gold_max}, Morado: {purple}/{purple_max}, Azul: {blue}/{blue_max}"
-  proposal_title: "Enviar propuesta de distribución de recompensas"
+  add_tier: Añadir Nivel de Recompensa
+  remove_bracket: Eliminar Grupo
+  over_capacity: "¡Capacidad Excedida! Oro: {gold}/{gold_max}, Morado: {purple}/{purple_max}, Azul: {blue}/{blue_max}"
+  proposal_title: Enviar Propuesta de Distribución de Recompensas
   rank_single: Rango {n}
   rank_range: Rango {from}–{to}
 event_presets:
@@ -610,123 +610,123 @@ alliance_planner:
   roster_loading: "-- Alianzas"
   nap_alliances: "{n} Alianzas NAP"
   planner_mode: Modo Planificador
-  submit_plan: Enviar plan
-  tag_placeholder: TAG (ej. WLO)
-  name_placeholder: Nombre completo de la alianza
-  add_contender: "+ Añadir competidor"
-  loading_standings: Cargando la clasificación...
-  standings_failed: No se pudo cargar la clasificación.
-  protected_academy: Academia protegida
-  change_color: Cambiar color de [{tag}]
+  submit_plan: Enviar Plan
+  tag_placeholder: TAG (p. ej., WLO)
+  name_placeholder: Nombre Completo de la Alianza
+  add_contender: "+ Añadir Contendiente"
+  loading_standings: Cargando clasificaciones…
+  standings_failed: No se pudieron cargar las clasificaciones.
+  protected_academy: Academia Protegida
+  change_color: Cambiar Color de [{tag}]
   academy_of: Academia de [{tag}]
-  link_academy: "+ Vincular academia"
-  nap_protected: Protegido por NAP
-  external: Externo
+  link_academy: "+ Vincular Academia"
+  nap_protected: NAP Protegida
+  external: Externa
   revoke_nap: Revocar NAP
   grant_nap: Conceder NAP
-  remove_alliance: Eliminar alianza
-  academy_prompt: 'Introduce el tag exacto de la alianza para vincularla como academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, ej. RâvN o râvn):'
+  remove_alliance: Eliminar Alianza
+  academy_prompt: 'Ingresa el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, p. ej., RâvN o râvn):'
   academy_available: 'Disponible: {tags}'
-  academy_new: 'O escribe un nuevo tag de academia para crearla:'
-  already_exists: La alianza [{tag}] ya existe con esa capitalización exacta.
-  no_changes: No se detectaron modificaciones en la clasificación actual.
-  proposal_title: "Enviar clasificación NAP y propuesta diplomática"
+  academy_new: 'O escribe un nuevo tag de academia para crearlo:'
+  already_exists: La Alianza [{tag}] ya existe con esa capitalización exacta.
+  no_changes: No se detectaron modificaciones en las clasificaciones actuales.
+  proposal_title: Enviar Propuesta de Clasificaciones y Diplomacia NAP
   diff_rank: "{tag}: Rango {from} ➔ {to}"
-  diff_academy: "{tag}: Asignada como academia de {parent}"
+  diff_academy: "{tag}: Asignada como Academia de {parent}"
   diff_nap: "{tag}: Estado NAP {status}"
-  nap_status_protected: Protegido
-  nap_status_revoked: Revocado
+  nap_status_protected: Protegida
+  nap_status_revoked: Revocada
   diff_color: "{tag}: Color actualizado a {color}"
   diff_added: "{added}: Rango #{rank} ({name})"
   added_tag: Añadido [{tag}]
-  diff_removed: "{removed} de la clasificación"
+  diff_removed: "{removed} de las clasificaciones"
   removed_tag: Eliminado [{tag}]
   diff_modified: Modificado [{tag}]
   unknown: Desconocido
 blacklist_planner:
-  players_title: "Jugadores en lista negra"
-  alliances_title: "Alianzas en lista negra"
-  player_placeholder: IGN del jugador
-  alliance_placeholder: TAG de la alianza
+  players_title: Jugadores en Lista Negra
+  alliances_title: Alianzas en Lista Negra
+  player_placeholder: IGN del Jugador
+  alliance_placeholder: TAG de Alianza
   add: "+ Añadir"
-  edit: Editar lista negra
-  stop_editing: Dejar de editar
-  submit: Enviar lista negra
-  loading: Cargando...
+  edit: Editar Lista Negra
+  stop_editing: Dejar de Editar
+  submit: Enviar Lista Negra
+  loading: Cargando…
   failed: No se pudo cargar la lista negra.
-  no_players: No hay comandantes rebeldes en la lista negra.
-  no_alliances: No hay alianzas hostiles en la lista negra.
+  no_players: No hay comandantes rebeldes en lista negra.
+  no_alliances: No hay alianzas hostiles en lista negra.
   added: "{name} añadido a tu plan. Aún no se ha enviado: presiona {submit} sobre la lista negra para enviarlo al liderazgo para su aprobación."
   removed: "{name} eliminado de tu plan. Aún no se ha enviado: presiona {submit} sobre la lista negra para enviarlo al liderazgo para su aprobación."
   duplicate: "{name} ya está en la lista negra."
   press_edit: Presiona {edit} primero.
   add_failed: 'No se pudo añadir {name}: {error}'
   no_changes: No hay cambios en la lista negra para enviar.
-  proposal_title: "Enviar propuesta de lista negra NAP"
+  proposal_title: Enviar Propuesta de Lista Negra NAP
   diff_add: "{add} {what} {name}"
   diff_remove: "{remove} {what} {name}"
   add_word: Añadir
   remove_word: Eliminar
   what_alliance: alianza
   what_player: jugador
-  sent: Propuesta de lista negra enviada al liderazgo en Discord. Se aplicará una vez que un R5 la apruebe.
+  sent: Propuesta de lista negra enviada al liderazgo en Discord. Se aplica una vez que un Steward la apruebe.
 map_planner:
-  view: 'Ver:'
+  view: 'Vista:'
   levels: Niveles
   alliances: Alianzas
   resources: Recursos
-  buff_summary: Resumen de buffs
-  toggle_buff_summary: Alternar resumen de buffs
-  close_buff_summary: Cerrar resumen de buffs
-  planner_mode: Modo planificador
+  buff_summary: Resumen de Buffs
+  toggle_buff_summary: Alternar Resumen de Buffs
+  close_buff_summary: Cerrar Resumen de Buffs
+  planner_mode: Modo Planificador
   override_label: 'Cambiar a:'
-  override_placeholder: P. EJ. WLO
-  override_help: Escribe una etiqueta para anular las asignaciones de clic. Déjalo en blanco para alternar.
-  submit_plan: Enviar plan
+  override_placeholder: P. ej., WLO
+  override_help: Escribe un tag para anular las asignaciones de clic. Déjalo en blanco para rotar.
+  submit_plan: Enviar Plan
   compare_label: Comparar el plan con el mapa en vivo
   show_live: En vivo
   show_plan: Mi plan
   discard: Descartar
   discard_confirm: "¿Descartar tus cambios planificados ({n})? Esto no se puede deshacer."
-  view_locked: Desactiva el modo planificador para cambiar la vista
-  plan_saved: Tu plan se ha guardado ({n} cambios). Activa el modo planificador para continuar.
+  view_locked: Desactiva el Modo Planificador para cambiar la vista
+  plan_saved: Tu plan está guardado ({n} cambios). Activa el Modo Planificador para continuar.
   fullscreen: Pantalla completa
   toggle_fullscreen: Alternar pantalla completa
   exit: Salir
-  grain: "Grano"
-  timber: "Madera"
-  herbs: "Hierbas"
+  grain: Grano
+  timber: Madera
+  herbs: Hierbas
   solid_gather: 'Sólido: Recolectar'
-  stripe_output: 'Franja: Producción'
+  stripe_output: 'Rayado: Producción'
   level_unknown: Nivel --
   level: Nivel {n}
-  hover: Pasa el cursor sobre un territorio
+  hover: Pasa el mouse sobre un territorio
   owner: 'Propietario:'
   unclaimed: Sin reclamar
   buff: 'Buff:'
   none: Ninguno
-  no_active_buff: Ningún buff activo
-  drawer_title: Distribución de buffs de la alianza
+  no_active_buff: Sin buff activo
+  drawer_title: Distribución de Buffs de Alianza
   drawer_subtitle: Recuento dinámico basado en las asignaciones activas del mapa / planificador
   no_claims: Ninguna alianza reclama territorio actualmente.
   no_buffs: No hay buffs activos asignados
   cities_one: "{n} Ciudad"
   cities_other: "{n} Ciudades"
   col_alliance: Alianza
-  col_holdings: Posesiones
-  col_buffs: Buffs activos
-  buff_research_speed: Velocidad de investigación
-  buff_troop_training_speed: Velocidad de entrenamiento de tropas
-  buff_building_speed: Velocidad de construcción
-  buff_march_speed: Velocidad de marcha
-  buff_grain_gathering: Recolección de grano
-  buff_grain_output: Producción de grano
-  buff_timber_gathering: Recolección de madera
-  buff_timber_output: Producción de madera
-  buff_herb_gathering: Recolección de hierbas
-  buff_herb_output: Producción de hierbas
-  no_changes: No se detectaron cambios en tu borrador de plan.
-  proposal_title: "Enviar propuesta de territorio en el mapa"
+  col_holdings: Propiedades
+  col_buffs: Buffs Activos
+  buff_research_speed: Velocidad de Investigación
+  buff_troop_training_speed: Velocidad de Entrenamiento de Tropas
+  buff_building_speed: Velocidad de Construcción
+  buff_march_speed: Velocidad de Marcha
+  buff_grain_gathering: Recolección de Grano
+  buff_grain_output: Producción de Grano
+  buff_timber_gathering: Recolección de Madera
+  buff_timber_output: Producción de Madera
+  buff_herb_gathering: Recolección de Hierbas
+  buff_herb_output: Producción de Hierbas
+  no_changes: No se detectaron cambios en tu plan borrador.
+  proposal_title: Enviar Propuesta de Territorio del Mapa
 proposals:
   title: Enviar propuesta
   close: Cerrar
