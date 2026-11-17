@@ -38,6 +38,7 @@ repomix-output.xml
 /api/_alliances_data.js
 /api/_event_types.js
 /js/alliance-defaults.js
+/js/ui-icons.js
 /api/_font_data.js
 # Root pages generated from _source/ "page--" blocks
 /index.md
