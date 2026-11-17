@@ -134,7 +134,9 @@ What to change:
   viewer, with Close and Download), with nothing else to add. Several side by side:
   `<div class="guide-shots">` around them.
 - A guide made from an English graphic: cut the game screenshots out (no words in them) and
-  write the words as text, so every language can read them. Map markers can be shown in their
+  write the words as text, so every language can read them. Where the sheet's arrows or
+  handwriting touch a screenshot, `tools/guide-graphics/clean_annotations.py` shows how to
+  remove them by colour and shape instead of cropping into the picture. Map markers can be shown in their
   colours with `<span class="map-pin is-red" aria-hidden="true"></span>` (also `is-bright-red`,
   `is-light-red`, `is-blue`, `is-white`, `is-yellow`).
 - Don't use code blocks (lines starting with three backticks): the build removes them.

@@ -56,7 +56,7 @@ order: 2
 ---
 
 <div class="guide-shots">
-<img src="/images/guides/crystal-tree.webp" alt="The skill tree: five levels, with a skill on the left and one on the right" class="blueprint-img" width="252" height="443" loading="lazy">
+<img src="/images/guides/crystal-tree.webp" alt="The skill tree: five levels, with a skill on the left and one on the right" class="blueprint-img" width="268" height="443" loading="lazy">
 </div>
 
 The skill tree has five levels, with a choice of two skills on each. Unlocking every level takes **2,300 skill crystals**. Pick by how you play: gathering or fighting.
@@ -115,6 +115,7 @@ order: 3
 
 <div class="guide-shots">
 <img src="/images/guides/crystal-guardian.webp" alt="A level 1 Crystal Cluster, not occupied, with a Lv.1 Crystal Guardian" class="blueprint-img" width="174" height="195" loading="lazy">
+<img src="/images/guides/crystal-victory.webp" alt="A cluster just taken (Victory), with three crystals popping out around it" class="blueprint-img" width="214" height="202" loading="lazy">
 </div>
 
 * A **Crystal Guardian** (level 1, 2 or 3) under a cluster means nobody has occupied it yet. When you reach it, **3 crystals pop out** that your scouts can gather.
