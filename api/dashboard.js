@@ -17,6 +17,7 @@ import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { memberNames } from './_tracker.js';
 import { imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
@@ -116,6 +117,9 @@ async function respond(req, res) {
       canRemove:
         steward || (session.role === 'R5' && findAllianceKey(alliances, session.alliance) === tag),
     };
+    // The alliance's member names from the Last Asylum Tracker, for the Caravan Rotor's name
+    // check (js/name-check.js); null without the tracker or when it's slow
+    body.members = await memberNames(tag, { timeoutMs: 2500 });
     body.rewards = rewardStatus({
       tag,
       rewardsData: gistJson(gist, 'rewards-data.json'),

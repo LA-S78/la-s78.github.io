@@ -25,8 +25,9 @@ _Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECI
   - [x] **Part 1 — event settings:** "Remind on Discord 1 hour before" on the event form (on by default for new events), editing events (Edit next to Delete; same scope rule as delete), a hint when there is no alert channel, and the registration opt-in for server-event reminders.
   - [x] **Part 2 — the reminder check:** `api/_reminders.js`, reached through `POST /api/calendar` (no new function) with REMINDER_SECRET; cron-job.org calls dev and live every 10 minutes (GitHub's schedule never started; by hand: Actions → Calendar reminders → Run workflow, dry run by default). The live site posts nothing until `REMINDERS_LIVE=true` is set in Vercel; dev.la-s78.app posts only to TEST_CHANNEL_ID, pinging nobody.
   - [x] **Go live (owner):** tested on dev (reminder posted to the test channel), then `REMINDERS_LIVE=true` set on the live site. Leaders can also manage events by signing in (R4/R5, Stewards).
-- [ ] **Alliance Might & Scoreboard OCR**
-  - Read player and alliance Might from in-game Duel/Rank screenshots (Gemini Flash vision).
+- [ ] **Last Asylum Tracker API** (owner, 2026-11-17): alliance Might and member lists for our server, from `api.lastasylumtracker.com` (key in Vercel as `LAT_API_KEY`).
+  - [x] Name checks in the nomination list and the Caravan Rotor: game spellings, unknown names, close matches.
+  - [ ] Top 4 by Might: live snapshots 10 minutes before reset on Duel Days 3–5 of Kingdom War Week 1; NAP alliances and academies ranked by their three-day total; a Steward confirms; seats change at the next cycle.
 
 - [x] **Infographics** (decided 2026-11-12): the designed pictures were replaced by live, translated components. The Capitol Rotation chart is drawn from the calendar; the reward-distribution and territory-map pictures were removed (the rewards card and the live map replace them). Game screenshots in the guides stay as they are (players see the game in their own language).
 

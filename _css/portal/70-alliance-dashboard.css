@@ -1099,3 +1099,39 @@ li.dw-sel > .dw-bar-track {
     grid-column: 1 / -1;
   }
 }
+
+/* The player-name check under the Caravan Rotor's name boxes (js/name-check.js, against the
+   alliance's member list from the Last Asylum Tracker): advice only, never blocks a save */
+.dash-cv-hint {
+  min-height: 1.2em;
+  margin: 4px 0 2px;
+}
+
+.dash-cv-row.is-editing .dash-cv-hint {
+  grid-column: 1 / -1;
+  flex-basis: 100%;
+}
+
+.name-ok {
+  color: var(--status-success-text);
+}
+
+.name-warn {
+  color: var(--status-warning-text, var(--text-main));
+}
+
+.name-flag {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.dash-link-btn {
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--accent-text);
+  background: none;
+  border: none;
+  text-decoration: underline dotted;
+  cursor: pointer;
+}
