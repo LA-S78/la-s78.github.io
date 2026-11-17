@@ -43,6 +43,18 @@ jobs:
           GUIDE: ${{ inputs.guide }}
         run: bundle exec ruby _scripts/generate_master.rb --fill "$GUIDE"
 
+      # The same build and checks as a deploy, before the pull request opens (owner request,
+      # 2026-11-17). GitHub doesn't run the usual pull request check for a pull request this
+      # workflow opens (it shows as failed, with no jobs), so this is that check: a broken
+      # translation stops here, and no pull request opens.
+      - name: Check the site still builds
+        env:
+          JEKYLL_ENV: production
+          BUILD_LOG: ${{ runner.temp }}/jekyll-build.log
+        run: |
+          bundle exec ruby _scripts/build.rb --no-check
+          bundle exec ruby _scripts/check_build.rb
+
       - name: Open a pull request
         env:
           GH_TOKEN: ${{ github.token }}
@@ -59,7 +71,7 @@ jobs:
           git switch -c "$branch"
           git commit -q -m "Fix the $GUIDE guide's translations"
           git push -q origin "$branch"
-          body="Fixes to the \`$GUIDE\` guide's translations by the \"Fill missing translations\" workflow: sections that didn't match the English translated again, and section titles, subtitle and picture descriptions still in English translated. Check them under Files changed before merging."
+          body="Fixes to the \`$GUIDE\` guide's translations by the \"Fill missing translations\" workflow: sections that didn't match the English translated again, and section titles, subtitle and picture descriptions still in English translated. The site was built and checked with them by the workflow (the usual pull request check doesn't run for pull requests a workflow opens, and shows as failed). Check them under Files changed before merging."
           if url=$(gh pr create --base main --head "$branch" --title "Translations: fix $GUIDE" --body "$body"); then
             echo "Pull request: $url" | tee -a "$GITHUB_STEP_SUMMARY"
           else
