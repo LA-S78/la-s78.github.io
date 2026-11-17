@@ -570,9 +570,9 @@ export async function submitRewardProposal() {
       return `
       <div>
         <strong>${esc(label)}</strong>: 
-        🟡 ×${esc(tier.chests.commanders_will || 0)} | 
-        🟣 ×${esc(tier.chests.loyal_servant || 0)} | 
-        🔵 ×${esc(tier.chests.followers_heart || 0)}
+        <span class="chest-glyph gold"></span>×${esc(tier.chests.commanders_will || 0)} |
+        <span class="chest-glyph purple"></span>×${esc(tier.chests.loyal_servant || 0)} |
+        <span class="chest-glyph blue"></span>×${esc(tier.chests.followers_heart || 0)}
       </div>
     `;
     })

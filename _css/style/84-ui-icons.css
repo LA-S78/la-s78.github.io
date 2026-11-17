@@ -35,3 +35,14 @@
 .ui-ic-wait {
   color: var(--text-muted);
 }
+
+/* The chests' own colour marks (.chest-glyph, 65-rewards.css) where 🟡🟣🔵 were, inside a line
+   of text: the King's console group headings and the rewards proposal summary. Text-sized
+   there; the rows keep their full-size marks. */
+.distribute-group-heading .chest-glyph,
+.auth-modal .chest-glyph {
+  width: 1em;
+  height: 0.8em;
+  margin-inline-end: 0.2em;
+  vertical-align: -0.05em;
+}

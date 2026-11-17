@@ -17,6 +17,8 @@ import { ALLIANCE_COLORS } from './alliance-defaults.js';
 const esc = (value) => window.escapeHtml(value);
 // The page's language (alliance_planner.* / blacklist_planner.* in _data/<lang>/tools.yml).
 const ta = (key, vars) => window.t(`alliance_planner.${key}`, vars);
+/** An interface icon (js/ui-icons.js) for the start of a label. */
+const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
 const tb = (key, vars) => window.t(`blacklist_planner.${key}`, vars);
 const tbh = (key, html, vars) => window.th(`blacklist_planner.${key}`, html, vars);
 const bold = (text) => `<strong>${esc(text)}</strong>`;
@@ -650,7 +652,7 @@ export function renderStandingsHierarchy() {
         .map(
           (acadTag) => `
       <span class="academy-pill" title="${esc(ta('protected_academy'))}">
-        🎓 [${esc(acadTag)}]
+        ${ic('academy')}[${esc(acadTag)}]
         ${isAlliancePlannerActive ? `<button type="button" class="btn-unlink-acad" data-action="unlink-acad" data-parent="${esc(alliance.tag)}" data-acad="${esc(acadTag)}">&times;</button>` : ''}
       </span>
     `,
@@ -995,20 +997,20 @@ export async function submitAllianceProposal() {
       const code = (v) => `<code>${esc(v)}</code>`;
       const line = (key, html, vars) => window.th(`alliance_planner.${key}`, html, vars);
       if (d.type === 'rank')
-        return `<div>• ${line('diff_rank', { tag, from: code(`#${d.from}`), to: code(`#${d.to}`) })}</div>`;
+        return `<div>${ic('updown')}${line('diff_rank', { tag, from: code(`#${d.from}`), to: code(`#${d.to}`) })}</div>`;
       if (d.type === 'academy')
-        return `<div>• ${line('diff_academy', { tag, parent: `<strong>[${esc(d.parent)}]</strong>` })}</div>`;
+        return `<div>${ic('academy')}${line('diff_academy', { tag, parent: `<strong>[${esc(d.parent)}]</strong>` })}</div>`;
       if (d.type === 'nap')
-        return `<div>• ${line('diff_nap', { tag, status: code(ta(d.status === 'Protected' ? 'nap_status_protected' : 'nap_status_revoked')) })}</div>`;
+        return `<div>${ic('shield')}${line('diff_nap', { tag, status: code(ta(d.status === 'Protected' ? 'nap_status_protected' : 'nap_status_revoked')) })}</div>`;
       if (d.type === 'color')
-        return `<div>• 🎨 ${line('diff_color', { tag, color: code(d.to) })}</div>`;
+        return `<div>${ic('palette')}${line('diff_color', { tag, color: code(d.to) })}</div>`;
       if (d.type === 'blacklist')
-        return `<div>• ⚠️ <strong>Blacklist ${esc(d.action.toUpperCase())}</strong>: [${esc(d.target)}] (${esc(d.category)})</div>`;
+        return `<div>${ic('ban', 'bad')}<strong>Blacklist ${esc(d.action.toUpperCase())}</strong>: [${esc(d.target)}] (${esc(d.category)})</div>`;
       if (d.type === 'added')
-        return `<div>• ➕ ${line('diff_added', { added: bold(ta('added_tag', { tag: d.tag })) }, { rank: d.rank, name: d.name })}</div>`;
+        return `<div>${ic('plus', 'ok')}${line('diff_added', { added: bold(ta('added_tag', { tag: d.tag })) }, { rank: d.rank, name: d.name })}</div>`;
       if (d.type === 'removed')
-        return `<div>• ➖ ${line('diff_removed', { removed: bold(ta('removed_tag', { tag: d.tag })) })}</div>`;
-      return `<div>• ${esc(ta('diff_modified', { tag: d.tag || ta('unknown') }))}</div>`;
+        return `<div>${ic('minus', 'bad')}${line('diff_removed', { removed: bold(ta('removed_tag', { tag: d.tag })) })}</div>`;
+      return `<div>${ic('pencil')}${esc(ta('diff_modified', { tag: d.tag || ta('unknown') }))}</div>`;
     })
     .join('');
 
@@ -1039,14 +1041,15 @@ export async function submitBlacklistProposal() {
       const label = bold(d.category === 'alliances' ? `[${d.target}]` : d.target);
       const what = tb(d.category === 'alliances' ? 'what_alliance' : 'what_player');
       return d.action === 'add'
-        ? `<div>• ⚠️ ${tbh('diff_add', { add: bold(tb('add_word')), name: label }, { what })}</div>`
-        : `<div>• ✅ ${tbh('diff_remove', { remove: bold(tb('remove_word')), name: label }, { what })}</div>`;
+        ? `<div>${ic('ban', 'bad')}${tbh('diff_add', { add: bold(tb('add_word')), name: label }, { what })}</div>`
+        : `<div>${ic('check', 'ok')}${tbh('diff_remove', { remove: bold(tb('remove_word')), name: label }, { what })}</div>`;
     })
     .join('');
 
   submitProposalWithAuth({
     type: 'blacklist',
     title: tb('proposal_title'),
+    icon: 'ban',
     payload: { type: 'blacklist', timestamp: new Date().toISOString(), diff },
     diffSummaryHtml: `<div class="diff-list">${diffHtml}</div>`,
     onSuccess: () => {

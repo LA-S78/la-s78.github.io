@@ -239,7 +239,7 @@ charts:
 nominate:
   page_title: Nominaciones de Recompensas
   loading: Cargando página de nominaciones...
-  players_label: "📋 Tus jugadores, mejor primero"
+  players_label: "Tus jugadores, mejor primero"
   players_help: Un nombre por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor entre ambos conjuntos; los nombres que queden fuera de los cofres se mantienen como reserva y ascienden si se abren más cofres.
   players_placeholder: Nombres exactos en el juego, mejor primero...
   who_gets_what: Quién recibe qué
@@ -249,10 +249,10 @@ nominate:
   load_failed: "{error} Usa /nominate en Discord para obtener un nuevo enlace."
   closed: Las recompensas están cerradas. Las próximas se abren {when}, después del evento del capitolio del viernes.
   header: Rango {rank} · recompensas {week} · abierto hasta {when}
-  banner_off_week: "👑 Solo Encomio del Rey esta semana (sin Guerra de Reinos)."
-  banner_won: "⚔️ Guerra de Reinos ganada: Los cofres de Recompensa del Rey de Batalla también están abiertos."
-  banner_lost: "🛡️ Guerra de Reinos perdida: Solo Encomio del Rey esta semana."
-  banner_pending: "⏳ Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte tras el resultado, por lo que el cofre de nadie cambia."
+  banner_off_week: "Solo Encomio del Rey esta semana (sin Guerra de Reinos)."
+  banner_won: "Guerra de Reinos ganada: Los cofres de Recompensa del Rey de Batalla también están abiertos."
+  banner_lost: "Guerra de Reinos perdida: Solo Encomio del Rey esta semana."
+  banner_pending: "Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte tras el resultado, por lo que el cofre de nadie cambia."
   handed_out_title: "✓ Ya repartido por el Rey ({n})"
   handed_out_help: Estos cofres se entregan en el juego, por lo que permanecen con estos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
   reserve: Reserva
@@ -267,20 +267,20 @@ nominate:
   reserves_one: "{n} reserva"
   reserves_other: "{n} reservas"
   listed_twice: "{name} está listado dos veces"
-  saved: "✅ Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta {when}."
+  saved: "Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta {when}."
   save_failed: 'No se pudo guardar: {error}'
 kings_console:
   page_title: Consola de Distribución del Rey
-  title: "👑 Consola de Distribución del Rey"
+  title: "Consola de Distribución del Rey"
   loading: Cargando nominaciones...
   by_chest: Por Cofre
   by_alliance: Por Alianza
-  can_tick: "✅ Marca al jugador una vez que su cofre se haya entregado en el juego. Las marcas se guardan para todos, y un cofre marcado permanece con ese jugador si las listas se reordenan."
-  view_only_signed_out: "👀 Solo vista. La lista del Rey puede ser marcada por {king} R4/R5 y Stewards: inicia sesión con Discord (arriba a la derecha)."
-  view_only: "👀 Solo vista: la lista es marcada por {king} R4/R5 y Stewards."
+  can_tick: "Marca al jugador una vez que su cofre se haya entregado en el juego. Las marcas se guardan para todos, y un cofre marcado permanece con ese jugador si las listas se reordenan."
+  view_only_signed_out: "Solo vista. La lista del Rey puede ser marcada por {king} R4/R5 y Stewards: inicia sesión con Discord (arriba a la derecha)."
+  view_only: "Solo vista: la lista es marcada por {king} R4/R5 y Stewards."
   kings_alliance: la alianza del Rey
   load_failed: 'Error al cargar las nominaciones: {error}'
-  closed: "🔒 Las recompensas están cerradas. Las listas de abajo son de la última semana; las próximas recompensas se abren el viernes alrededor de las 20:00 GT."
+  closed: "Las recompensas están cerradas. Las listas de abajo son de la última semana; las próximas recompensas se abren el viernes alrededor de las 20:00 GT."
   hold_title: 'Retener cofres:'
   hold: "{title} esperar al resultado de la batalla del sábado antes de repartir. Si se gana la guerra, los cofres de Recompensa del Rey de Batalla se abrirán y todas las listas se reordenarán. Las recompensas cierran {when}."
   won_title: 'Guerra de Reinos ganada:'
@@ -302,7 +302,7 @@ kings_console:
   not_on_list: "{name} ya no está en la lista de [{tag}] (la alianza lo cambió)."
   now_reserve: "{name} ahora es reserva en la lista de [{tag}]: sin cofre."
   now_other_chest: "{name} ahora recibe {chest}, no {shown}."
-  stop_warning: "⚠️ Detente: no envíes ese {chest}. {why} Las listas se han actualizado: copia el nombre de nuevo de la lista de abajo."
+  stop_warning: "Detente: no envíes ese {chest}. {why} Las listas se han actualizado: copia el nombre de nuevo de la lista de abajo."
   stop_alert: "¡No lo envíes!"
   lists_refreshed: Las listas se han actualizado.
 register:
@@ -311,7 +311,7 @@ register:
   subtitle: Portal de Integración de Servidor de Alianza
   step_invite: 1. Invita al bot a tu servidor
   invite_help: Debes añadir el bot al Discord de tu alianza antes de completar el registro.
-  authorize: "🤖 Haz clic para autorizar al bot"
+  authorize: "Haz clic para autorizar al bot"
   step_credentials: 2. Credenciales de Servidor y Rol
   guild_id: ID del Servidor de Discord (ID de Gremio)
   example: p. ej. {id}
@@ -319,7 +319,7 @@ register:
   copy_server_id: Copiar ID de servidor
   administrator: Administrador
   manage_server: Gestionar servidor
-  routing_heading: "📢 Operaciones y Gestión de Tickets"
+  routing_heading: "Operaciones y Gestión de Tickets"
   routing_help: Configura dónde publica el bot las alertas públicas de operaciones y gestiona las sugerencias/tickets privados de los miembros.
   alert_channel: ID del canal de Alertas de Operaciones
   channel_id_title: Debe ser un ID de canal de Discord válido de 17-20 dígitos
@@ -352,7 +352,7 @@ register:
   bad_officer_channel: Formato de ID de canal de Recepción de Tickets de Oficiales inválido. Debe ser un número de 17-20 dígitos.
   failed: Error en el registro
   error: 'Error de registro: {error}'
-  success: "✅ ¡Registro exitoso!"
+  success: "¡Registro exitoso!"
   linked: "{server} ahora está vinculado a {tag}."
   server_id: ID de Servidor {id}
   r_alert_channel: 'Canal de Alertas de Operaciones:'
@@ -582,7 +582,7 @@ rewards_planner:
   add_tier: Añadir nivel de recompensa
   remove_bracket: Eliminar rango
   over_capacity: "¡Capacidad excedida! Oro: {gold}/{gold_max}, Morado: {purple}/{purple_max}, Azul: {blue}/{blue_max}"
-  proposal_title: "👑 Enviar propuesta de distribución de recompensas"
+  proposal_title: "Enviar propuesta de distribución de recompensas"
   rank_single: Rango {n}
   rank_range: Rango {from}–{to}
 event_presets:
@@ -630,7 +630,7 @@ alliance_planner:
   academy_new: 'O escribe un nuevo tag de academia para crearla:'
   already_exists: La alianza [{tag}] ya existe con esa capitalización exacta.
   no_changes: No se detectaron modificaciones en la clasificación actual.
-  proposal_title: "👑 Enviar clasificación NAP y propuesta diplomática"
+  proposal_title: "Enviar clasificación NAP y propuesta diplomática"
   diff_rank: "{tag}: Rango {from} ➔ {to}"
   diff_academy: "{tag}: Asignada como academia de {parent}"
   diff_nap: "{tag}: Estado NAP {status}"
@@ -644,8 +644,8 @@ alliance_planner:
   diff_modified: Modificado [{tag}]
   unknown: Desconocido
 blacklist_planner:
-  players_title: "🚫 Jugadores en lista negra"
-  alliances_title: "⚠️ Alianzas en lista negra"
+  players_title: "Jugadores en lista negra"
+  alliances_title: "Alianzas en lista negra"
   player_placeholder: IGN del jugador
   alliance_placeholder: TAG de la alianza
   add: "+ Añadir"
@@ -662,7 +662,7 @@ blacklist_planner:
   press_edit: Presiona {edit} primero.
   add_failed: 'No se pudo añadir {name}: {error}'
   no_changes: No hay cambios en la lista negra para enviar.
-  proposal_title: "🚫 Enviar propuesta de lista negra NAP"
+  proposal_title: "Enviar propuesta de lista negra NAP"
   diff_add: "{add} {what} {name}"
   diff_remove: "{remove} {what} {name}"
   add_word: Añadir
@@ -693,9 +693,9 @@ map_planner:
   fullscreen: Pantalla completa
   toggle_fullscreen: Alternar pantalla completa
   exit: Salir
-  grain: "🌾 Grano"
-  timber: "🪵 Madera"
-  herbs: "🌿 Hierbas"
+  grain: "Grano"
+  timber: "Madera"
+  herbs: "Hierbas"
   solid_gather: 'Sólido: Recolectar'
   stripe_output: 'Franja: Producción'
   level_unknown: Nivel --
@@ -726,7 +726,7 @@ map_planner:
   buff_herb_gathering: Recolección de hierbas
   buff_herb_output: Producción de hierbas
   no_changes: No se detectaron cambios en tu borrador de plan.
-  proposal_title: "🗺️ Enviar propuesta de territorio en el mapa"
+  proposal_title: "Enviar propuesta de territorio en el mapa"
 proposals:
   title: Enviar propuesta
   close: Cerrar

@@ -57,12 +57,13 @@
   }
 
   const BADGES = {
-    steward: ['👑', 'role_steward'],
-    R5: ['🛡️', 'role_r5'],
-    R4: ['⚔️', 'role_r4'],
-    member: ['👤', 'role_member'],
-    guest: ['👤', 'role_guest'],
-    expired: ['⚠️', 'role_expired'],
+    // [line icon (_data/ui_icons.yml), its label]
+    steward: ['crown', 'role_steward'],
+    R5: ['shield', 'role_r5'],
+    R4: ['swords', 'role_r4'],
+    member: ['user', 'role_member'],
+    guest: ['user', 'role_guest'],
+    expired: ['warning', 'role_expired'],
   };
 
   /** What each rank can do on the website (kept in line with api/proposal.js). */
@@ -76,6 +77,9 @@
     steward: ['access_view', 'access_draft', 'access_send_unlimited', 'access_approve'],
   };
 
+  /** A line icon (js/ui-icons.js) and escaped text. */
+  const withIcon = (name, text) =>
+    (window.uiIcon ? window.uiIcon(name) : '') + window.escapeHtml(text);
   const el = (tag, className, text) => {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -95,7 +99,9 @@
   function badge(tier, t, { officer, iconOnly } = {}) {
     const [icon, key] = BADGES[tier];
     const b = el('span', `id-badge id-badge--${tier.toLowerCase()}`);
-    b.append(el('span', 'id-badge-icon', icon));
+    const glyph = el('span', 'id-badge-icon');
+    glyph.innerHTML = window.uiIcon ? window.uiIcon(icon, 'solo') : '';
+    b.append(glyph);
     if (iconOnly) {
       b.classList.add('id-badge--icon-only');
       b.title = t[key];
@@ -191,7 +197,8 @@
     // The alliance's dashboard (portal/dashboard.html): for signed-in members of an alliance,
     // and Stewards (who can look at any alliance's).
     if ((id.alliance || id.steward) && id.tier !== 'guest' && id.tier !== 'expired') {
-      const dash = el('a', 'id-pop-link', `🏰 ${t.dashboard || 'Alliance Dashboard'}`);
+      const dash = el('a', 'id-pop-link');
+      dash.innerHTML = withIcon('castle', t.dashboard || 'Alliance Dashboard');
       dash.href = '/dashboard.html';
       dash.setAttribute('data-turbo', 'false');
       pop.append(dash);
@@ -214,7 +221,8 @@
     actions.append(refresh, out);
     foot.append(actions);
     // Stuck on an old version of the site or app: drop the saved copy and load it fresh.
-    const update = el('button', 'id-btn-link', `🔄 ${t.force_update || 'Update App'}`);
+    const update = el('button', 'id-btn-link');
+    update.innerHTML = withIcon('refresh', t.force_update || 'Update App');
     update.type = 'button';
     update.dataset.idAction = 'force-update';
     foot.append(update);
@@ -252,7 +260,7 @@
       if (action === 'force-update') {
         const btn = e.target.closest('[data-id-action]');
         btn.disabled = true;
-        btn.textContent = `🔄 ${root._strings.force_updating || 'Updating…'}`;
+        btn.innerHTML = withIcon('refresh', root._strings.force_updating || 'Updating…');
         window.forceAppUpdate?.();
       }
     });

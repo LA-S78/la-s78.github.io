@@ -21,7 +21,7 @@ strings: [nominate]
 
     <form id="nomination-form">
       <div class="smart-paste-box">
-        <label for="ranked-input">{{ "nominate.players_label" | t }}</label>
+        <label for="ranked-input">{% include ui-icon.html name="clipboard" %}{{ "nominate.players_label" | t }}</label>
         <p class="smart-paste-desc">{{ "nominate.players_help" | t }}</p>
         <textarea id="ranked-input" rows="10" placeholder="{{ "nominate.players_placeholder" | t }}"></textarea>
       </div>
@@ -41,6 +41,8 @@ strings: [nominate]
 
 <script>
   (function () {
+    /** An interface icon (js/ui-icons.js) for the start of a label. */
+    const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
     const token = new URLSearchParams(window.location.search).get('token');
     const elLoading = document.getElementById('loading-state');
     const elError = document.getElementById('error-state');
@@ -136,13 +138,13 @@ strings: [nominate]
 
       const banner = document.getElementById('set2-banner');
       if (!p.kwWeek) {
-        banner.textContent = t('nominate.banner_off_week');
+        banner.innerHTML = ic('crown') + escapeHtml(t('nominate.banner_off_week'));
       } else if (p.result === 'won') {
-        banner.textContent = t('nominate.banner_won');
+        banner.innerHTML = ic('swords') + escapeHtml(t('nominate.banner_won'));
       } else if (p.result === 'lost') {
-        banner.textContent = t('nominate.banner_lost');
+        banner.innerHTML = ic('shield') + escapeHtml(t('nominate.banner_lost'));
       } else {
-        banner.textContent = t('nominate.banner_pending', { when: formatTime(p.battleEndsAt) });
+        banner.innerHTML = ic('hourglass', 'wait') + escapeHtml(t('nominate.banner_pending', { when: formatTime(p.battleEndsAt) }));
       }
 
       locked = data.alliance.handedOut || [];
@@ -166,7 +168,7 @@ strings: [nominate]
           locked
             .map(
               (l) => `<div class="nominate-assign-row is-locked">
-                <span class="slot-num">🔒</span>
+                <span class="slot-num">${ic('lock', 'solo')}</span>
                 <span class="player-ign">${escapeHtml(l.name)}</span>
                 <span class="nominate-chest"><span class="chest-glyph ${GLYPH[l.chest]}"></span><span>${escapeHtml(CHEST_NAMES[l.pool][l.chest])}</span></span>
               </div>`,
@@ -230,7 +232,7 @@ strings: [nominate]
         const result = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
         status.className = 'status-banner status-success';
-        status.textContent = t('nominate.saved', { when: formatTime(data.period.closesAt) });
+        status.innerHTML = ic('check', 'ok') + escapeHtml(t('nominate.saved', { when: formatTime(data.period.closesAt) }));
       } catch (err) {
         status.className = 'status-banner warning';
         status.textContent = t('nominate.save_failed', { error: err.message });

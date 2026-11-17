@@ -127,7 +127,7 @@
       console.error('Auth Error:', error);
       const errorBanner = document.getElementById('gate-error');
       if (errorBanner) {
-        errorBanner.textContent = '❌ Decryption Failed. Check your connection or alliance status.';
+        errorBanner.textContent = 'Decryption Failed. Check your connection or alliance status.';
         errorBanner.style.display = 'block';
       }
       if (loginBtn) loginBtn.textContent = 'Log In via Discord';
@@ -956,7 +956,7 @@
     toast.setAttribute('role', 'status');
     toast.textContent =
       (window.pwaTranslations && window.pwaTranslations.updatedMsg) ||
-      '✅ App updated to the latest version.';
+      'App updated to the latest version.';
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 4000);
   }
