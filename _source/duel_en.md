@@ -75,6 +75,7 @@ order: 2
 * **Collect your Falcon Quests** (completed the day before).
 * Consume Raven Fruit and Essence.
 * Consume Stamina.
+* Use Antitoxins if needed.
 * Consume Hero XP.
 * **Gather resources:** send your gatherers out the day before. Wood and grain give the most points.
 * Open Epigraph Chests.
@@ -195,3 +196,6 @@ order: 7
 * Consume Training Speed-Ups.
 * Consume Construction Speed-Ups.
 * Consume Research Speed-Ups.
+
+> #### ⚠️ Losing soldiers
+> Losing soldiers earns you points too, but don't throw troops away on purpose: your opponent scores more for killing them than you get for losing them, so it's a trade you lose.
