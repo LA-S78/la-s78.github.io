@@ -178,7 +178,9 @@ English is sent to Gemini again on its own.
 Open **Actions → Fill missing translations → Run workflow**, type the guide's id
 (e.g. `kill_event`) and run it. Sections that don't match the English (a different
 section in their place, or missing) are translated again from the English, leftover
-English is translated, and a pull request opens to check and merge.
+English is translated, the site is built and checked, and a pull request opens to check and
+merge. That pull request's usual check shows as failed with no jobs: GitHub doesn't run it
+for pull requests a workflow opens. The workflow's own build check stands in for it.
 
 ---
 
