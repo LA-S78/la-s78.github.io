@@ -72,13 +72,13 @@ order: 2
 
 **Monday: Raven Enhancement**
 
-* **Collect your Falcon Quests** (completed the day before).
-* Consume Raven Fruit and Essence.
-* Consume Stamina.
+* <img src="/images/guides/duel-d1-falcon.webp" alt="" class="task-item-img" width="38" height="38" loading="lazy"> **Collect your Falcon Quests** (completed the day before).
+* <img src="/images/guides/duel-d1-fruit.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Consume Raven Fruit and Essence.
+* <img src="/images/guides/duel-d1-stamina.webp" alt="" class="task-item-img" width="41" height="40" loading="lazy"> Consume Stamina.
 * Use Antitoxins if needed.
-* Consume Hero XP.
-* **Gather resources:** send your gatherers out the day before. Wood and grain give the most points.
-* Open Epigraph Chests.
+* <img src="/images/guides/duel-d1-heroxp.webp" alt="" class="task-item-img" width="38" height="37" loading="lazy"> Consume Hero XP.
+* <img src="/images/guides/duel-d1-gather.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Gather resources:** send your gatherers out the day before. Wood and grain give the most points.
+* <img src="/images/guides/duel-d1-epigraph.webp" alt="" class="task-item-img" width="38" height="40" loading="lazy"> Open Epigraph Chests.
 
 === pane--en--events--duel--03--day2 ===
 ---
@@ -95,11 +95,11 @@ order: 3
 
 **Tuesday: Territory Enhancement**
 
-* Use UR Caravans and UR Covert Ops.
-* Recruit Survivors.
-* Consume Weapon Shards.
-* Use Construction Speed-Ups.
-* Increase your Build Might.
+* <img src="/images/guides/duel-d2-caravan.webp" alt="" class="task-item-img" width="68" height="40" loading="lazy"> Use UR Caravans and UR Covert Ops.
+* <img src="/images/guides/duel-d2-survivors.webp" alt="" class="task-item-img" width="84" height="40" loading="lazy"> Recruit Survivors.
+* <img src="/images/guides/duel-d2-weaponshards.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> Consume Weapon Shards.
+* <img src="/images/guides/duel-d2-construction.webp" alt="" class="task-item-img" width="56" height="31" loading="lazy"> Use Construction Speed-Ups.
+* <img src="/images/guides/duel-d2-buildmight.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Increase your Build Might.
 
 > #### ⚠️ No Falcon Quests today
 > Complete them today, but collect them tomorrow.
@@ -119,11 +119,11 @@ order: 4
 
 **Wednesday: Tech Research**
 
-* **Collect your Falcon Quests** (completed the day before).
-* Use Study Scrolls.
-* Open Raven Gear Chests.
-* Use Research Speed-Ups.
-* Increase your Tech Might.
+* <img src="/images/guides/duel-d3-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Collect your Falcon Quests** (completed the day before).
+* <img src="/images/guides/duel-d3-scrolls.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Use Study Scrolls.
+* <img src="/images/guides/duel-d3-gearchests.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Open Raven Gear Chests.
+* <img src="/images/guides/duel-d3-research.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Use Research Speed-Ups.
+* <img src="/images/guides/duel-d3-techmight.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Increase your Tech Might.
 
 === pane--en--events--duel--05--day4 ===
 ---
@@ -140,11 +140,11 @@ order: 5
 
 **Thursday: Hero Enhancement**
 
-* Consume Awakening Shards.
-* Consume Skill Badges.
-* Consume Hero Shards.
-* Consume Hero XP.
-* Recruit Heroes with your recruitment tickets.
+* <img src="/images/guides/duel-d4-awakening.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Consume Awakening Shards.
+* <img src="/images/guides/duel-d4-skillbadges.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consume Skill Badges.
+* <img src="/images/guides/duel-d4-heroshards.webp" alt="" class="task-item-img" width="37" height="40" loading="lazy"> Consume Hero Shards.
+* <img src="/images/guides/duel-d4-heroxp.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Consume Hero XP.
+* <img src="/images/guides/duel-d4-recruit.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Recruit Heroes with your recruitment tickets.
 
 > #### ⚠️ No Falcon Quests today
 > Complete them today, but collect them tomorrow.
@@ -166,14 +166,14 @@ order: 6
 
 #### High priority
 
-* **Collect your Falcon Quests** (completed the day before).
-* **Train troops:** promote them in a waterfall, 6 → 7 → 8 → 9, matched to your troop levels.
-* Consume Training Speed-Ups.
+* <img src="/images/guides/duel-d5-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Collect your Falcon Quests** (completed the day before).
+* <img src="/images/guides/duel-d5-train.webp" alt="" class="task-item-img" width="28" height="40" loading="lazy"> **Train troops:** promote them in a waterfall, 6 → 7 → 8 → 9, matched to your troop levels.
+* <img src="/images/guides/duel-d5-trainspeed.webp" alt="" class="task-item-img" width="48" height="40" loading="lazy"> Consume Training Speed-Ups.
 
 #### Low priority
 
-* Consume Research Speed-Ups.
-* Consume Construction Speed-Ups.
+* <img src="/images/guides/duel-d5-researchspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consume Research Speed-Ups.
+* <img src="/images/guides/duel-d5-constructspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consume Construction Speed-Ups.
 
 === pane--en--events--duel--07--day6 ===
 ---
@@ -190,12 +190,12 @@ order: 7
 
 **Saturday: Invasion Day.** Kill everything!
 
-* Use UR Caravans and Covert Ops.
-* **Kill enemies.** The [Kill Event guide](kill_event.html) shows how to reach your opponent's server and who to hit.
-* Consume Healing Speed-Ups.
-* Consume Training Speed-Ups.
-* Consume Construction Speed-Ups.
-* Consume Research Speed-Ups.
+* <img src="/images/guides/duel-d6-caravan.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Use UR Caravans and Covert Ops.
+* <img src="/images/guides/duel-d6-kill.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Kill enemies.** The [Kill Event guide](kill_event.html) shows how to reach your opponent's server and who to hit.
+* <img src="/images/guides/duel-d6-healing.webp" alt="" class="task-item-img" width="38" height="29" loading="lazy"> Consume Healing Speed-Ups.
+* <img src="/images/guides/duel-d6-training.webp" alt="" class="task-item-img" width="41" height="34" loading="lazy"> Consume Training Speed-Ups.
+* <img src="/images/guides/duel-d6-construction.webp" alt="" class="task-item-img" width="50" height="35" loading="lazy"> Consume Construction Speed-Ups.
+* <img src="/images/guides/duel-d6-research.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Consume Research Speed-Ups.
 
 > #### ⚠️ Losing soldiers
 > Losing soldiers earns you points too, but don't throw troops away on purpose: your opponent scores more for killing them than you get for losing them, so it's a trade you lose.
@@ -275,13 +275,13 @@ order: 2
 
 **Montag: Raben-Verbesserung**
 
-* **Löse deine Falken-Quests ein** (am Vortag abgeschlossen).
-* Verbrauche Rabenfrüchte und Essenz.
-* Verbrauche Ausdauer.
+* <img src="/images/guides/duel-d1-falcon.webp" alt="" class="task-item-img" width="38" height="38" loading="lazy"> **Löse deine Falken-Quests ein** (am Vortag abgeschlossen).
+* <img src="/images/guides/duel-d1-fruit.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Verbrauche Rabenfrüchte und Essenz.
+* <img src="/images/guides/duel-d1-stamina.webp" alt="" class="task-item-img" width="41" height="40" loading="lazy"> Verbrauche Ausdauer.
 * Verwende bei Bedarf Antitoxine.
-* Verbrauche Helden-EP.
-* **Ressourcen sammeln:** Sende deine Sammler am Vortag aus. Holz und Getreide bringen die meisten Punkte.
-* Öffne Epigraph-Truhen.
+* <img src="/images/guides/duel-d1-heroxp.webp" alt="" class="task-item-img" width="38" height="37" loading="lazy"> Verbrauche Helden-EP.
+* <img src="/images/guides/duel-d1-gather.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Ressourcen sammeln:** Sende deine Sammler am Vortag aus. Holz und Getreide bringen die meisten Punkte.
+* <img src="/images/guides/duel-d1-epigraph.webp" alt="" class="task-item-img" width="38" height="40" loading="lazy"> Öffne Epigraph-Truhen.
 
 === pane--de--events--duel--03--day2 ===
 ---
@@ -298,11 +298,11 @@ order: 3
 
 **Dienstag: Gebiets-Verbesserung**
 
-* Verwende UR-Karawanen und UR-Covert-Ops.
-* Rekrutiere Überlebende.
-* Verbrauche Waffenseelensteine.
-* Verwende Bau-Beschleuniger.
-* Erhöhe deine Bau-Stärke.
+* <img src="/images/guides/duel-d2-caravan.webp" alt="" class="task-item-img" width="68" height="40" loading="lazy"> Verwende UR-Karawanen und UR-Covert-Ops.
+* <img src="/images/guides/duel-d2-survivors.webp" alt="" class="task-item-img" width="84" height="40" loading="lazy"> Rekrutiere Überlebende.
+* <img src="/images/guides/duel-d2-weaponshards.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> Verbrauche Waffenseelensteine.
+* <img src="/images/guides/duel-d2-construction.webp" alt="" class="task-item-img" width="56" height="31" loading="lazy"> Verwende Bau-Beschleuniger.
+* <img src="/images/guides/duel-d2-buildmight.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Erhöhe deine Bau-Stärke.
 
 > #### ⚠️ Heute keine Falken-Quests einlösen
 > Schließe sie heute ab, aber löse sie erst morgen ein.
@@ -322,11 +322,11 @@ order: 4
 
 **Mittwoch: Tech-Forschung**
 
-* **Löse deine Falken-Quests ein** (am Vortag abgeschlossen).
-* Verwende Studienrollen.
-* Öffne Rabenausrüstungs-Truhen.
-* Verwende Forschungs-Beschleuniger.
-* Erhöhe deine Tech-Stärke.
+* <img src="/images/guides/duel-d3-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Löse deine Falken-Quests ein** (am Vortag abgeschlossen).
+* <img src="/images/guides/duel-d3-scrolls.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Verwende Studienrollen.
+* <img src="/images/guides/duel-d3-gearchests.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Öffne Rabenausrüstungs-Truhen.
+* <img src="/images/guides/duel-d3-research.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Verwende Forschungs-Beschleuniger.
+* <img src="/images/guides/duel-d3-techmight.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Erhöhe deine Tech-Stärke.
 
 === pane--de--events--duel--05--day4 ===
 ---
@@ -343,11 +343,11 @@ order: 5
 
 **Donnerstag: Helden-Verbesserung**
 
-* Verbrauche Erweckungs-Seelensteine.
-* Verbrauche Skill-Abzeichen.
-* Verbrauche Helden-Seelensteine.
-* Verbrauche Helden-EP.
-* Rekrutiere Helden mit deinen Rekrutierungstickets.
+* <img src="/images/guides/duel-d4-awakening.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Verbrauche Erweckungs-Seelensteine.
+* <img src="/images/guides/duel-d4-skillbadges.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Verbrauche Skill-Abzeichen.
+* <img src="/images/guides/duel-d4-heroshards.webp" alt="" class="task-item-img" width="37" height="40" loading="lazy"> Verbrauche Helden-Seelensteine.
+* <img src="/images/guides/duel-d4-heroxp.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Verbrauche Helden-EP.
+* <img src="/images/guides/duel-d4-recruit.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Rekrutiere Helden mit deinen Rekrutierungstickets.
 
 > #### ⚠️ Heute keine Falken-Quests einlösen
 > Schließe sie heute ab, aber löse sie erst morgen ein.
@@ -369,14 +369,14 @@ order: 6
 
 #### Hohe Priorität
 
-* **Löse deine Falken-Quests ein** (am Vortag abgeschlossen).
-* **Truppen trainieren:** Befördere sie kaskadierend, 6 → 7 → 8 → 9, passend zu deinen Truppenstufen.
-* Verbrauche Trainings-Beschleuniger.
+* <img src="/images/guides/duel-d5-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Löse deine Falken-Quests ein** (am Vortag abgeschlossen).
+* <img src="/images/guides/duel-d5-train.webp" alt="" class="task-item-img" width="28" height="40" loading="lazy"> **Truppen trainieren:** Befördere sie kaskadierend, 6 → 7 → 8 → 9, passend zu deinen Truppenstufen.
+* <img src="/images/guides/duel-d5-trainspeed.webp" alt="" class="task-item-img" width="48" height="40" loading="lazy"> Verbrauche Trainings-Beschleuniger.
 
 #### Niedrige Priorität
 
-* Verbrauche Forschungs-Beschleuniger.
-* Verbrauche Bau-Beschleuniger.
+* <img src="/images/guides/duel-d5-researchspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Verbrauche Forschungs-Beschleuniger.
+* <img src="/images/guides/duel-d5-constructspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Verbrauche Bau-Beschleuniger.
 
 === pane--de--events--duel--07--day6 ===
 ---
@@ -393,12 +393,12 @@ order: 7
 
 **Samstag: Invasionstag.** Töte alles!
 
-* Verwende UR-Karawanen und Covert-Ops.
-* **Töte Feinde.** Der [Kill-Event-Guide](kill_event.html) zeigt, wie du den Server deines Gegners erreichst und wen du angreifen solltest.
-* Verbrauche Heilungs-Beschleuniger.
-* Verbrauche Trainings-Beschleuniger.
-* Verbrauche Bau-Beschleuniger.
-* Verbrauche Forschungs-Beschleuniger.
+* <img src="/images/guides/duel-d6-caravan.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Verwende UR-Karawanen und Covert-Ops.
+* <img src="/images/guides/duel-d6-kill.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Töte Feinde.** Der [Kill-Event-Guide](kill_event.html) zeigt, wie du den Server deines Gegners erreichst und wen du angreifen solltest.
+* <img src="/images/guides/duel-d6-healing.webp" alt="" class="task-item-img" width="38" height="29" loading="lazy"> Verbrauche Heilungs-Beschleuniger.
+* <img src="/images/guides/duel-d6-training.webp" alt="" class="task-item-img" width="41" height="34" loading="lazy"> Verbrauche Trainings-Beschleuniger.
+* <img src="/images/guides/duel-d6-construction.webp" alt="" class="task-item-img" width="50" height="35" loading="lazy"> Verbrauche Bau-Beschleuniger.
+* <img src="/images/guides/duel-d6-research.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Verbrauche Forschungs-Beschleuniger.
 
 > #### ⚠️ Verlust von Soldaten
 > Der Verlust von Soldaten bringt dir ebenfalls Punkte, aber verschwende deine Truppen nicht absichtlich: Dein Gegner erhält mehr Punkte für das Töten deiner Truppen, als du für deren Verlust bekommst – ein Tausch, bei dem du verlierst.
@@ -477,13 +477,13 @@ order: 2
 
 **Lunes: Mejora de Cuervo**
 
-* **Recoge tus Misiones de Halcón** (completadas el día anterior).
-* Consume Fruta y Esencia de Cuervo.
-* Consume Energía.
+* <img src="/images/guides/duel-d1-falcon.webp" alt="" class="task-item-img" width="38" height="38" loading="lazy"> **Recoge tus Misiones de Halcón** (completadas el día anterior).
+* <img src="/images/guides/duel-d1-fruit.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Consume Fruta y Esencia de Cuervo.
+* <img src="/images/guides/duel-d1-stamina.webp" alt="" class="task-item-img" width="41" height="40" loading="lazy"> Consume Energía.
 * Usa Antitoxinas si es necesario.
-* Consume EXP de Héroe.
-* **Recolecta recursos:** envía a tus recolectores el día anterior. La madera y el grano son los que más puntos dan.
-* Abre cofres de Epígrafe.
+* <img src="/images/guides/duel-d1-heroxp.webp" alt="" class="task-item-img" width="38" height="37" loading="lazy"> Consume EXP de Héroe.
+* <img src="/images/guides/duel-d1-gather.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Recolecta recursos:** envía a tus recolectores el día anterior. La madera y el grano son los que más puntos dan.
+* <img src="/images/guides/duel-d1-epigraph.webp" alt="" class="task-item-img" width="38" height="40" loading="lazy"> Abre cofres de Epígrafe.
 
 === pane--es--events--duel--03--day2 ===
 ---
@@ -500,11 +500,11 @@ order: 3
 
 **Martes: Mejora de Territorio**
 
-* Usa Caravanas UR y Operaciones Encubiertas UR.
-* Recluta supervivientes.
-* Consume Fragmentos de Arma.
-* Usa aceleradores de construcción.
-* Aumenta tu Poder de Construcción.
+* <img src="/images/guides/duel-d2-caravan.webp" alt="" class="task-item-img" width="68" height="40" loading="lazy"> Usa Caravanas UR y Operaciones Encubiertas UR.
+* <img src="/images/guides/duel-d2-survivors.webp" alt="" class="task-item-img" width="84" height="40" loading="lazy"> Recluta supervivientes.
+* <img src="/images/guides/duel-d2-weaponshards.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> Consume Fragmentos de Arma.
+* <img src="/images/guides/duel-d2-construction.webp" alt="" class="task-item-img" width="56" height="31" loading="lazy"> Usa aceleradores de construcción.
+* <img src="/images/guides/duel-d2-buildmight.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Aumenta tu Poder de Construcción.
 
 > #### ⚠️ No hay Misiones de Halcón hoy
 > Complétalas hoy, pero recógelas mañana.
@@ -524,11 +524,11 @@ order: 4
 
 **Miércoles: Investigación Tecnológica**
 
-* **Recoge tus Misiones de Halcón** (completadas el día anterior).
-* Usa Pergaminos de Estudio.
-* Abre cofres de Equipo de Cuervo.
-* Usa aceleradores de investigación.
-* Aumenta tu Poder Tecnológico.
+* <img src="/images/guides/duel-d3-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Recoge tus Misiones de Halcón** (completadas el día anterior).
+* <img src="/images/guides/duel-d3-scrolls.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Usa Pergaminos de Estudio.
+* <img src="/images/guides/duel-d3-gearchests.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Abre cofres de Equipo de Cuervo.
+* <img src="/images/guides/duel-d3-research.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Usa aceleradores de investigación.
+* <img src="/images/guides/duel-d3-techmight.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Aumenta tu Poder Tecnológico.
 
 === pane--es--events--duel--05--day4 ===
 ---
@@ -545,11 +545,11 @@ order: 5
 
 **Jueves: Mejora de Héroes**
 
-* Consume Fragmentos de Despertar.
-* Consume Insignias de Habilidad.
-* Consume Fragmentos de Héroe.
-* Consume EXP de Héroe.
-* Recluta héroes con tus boletos de reclutamiento.
+* <img src="/images/guides/duel-d4-awakening.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Consume Fragmentos de Despertar.
+* <img src="/images/guides/duel-d4-skillbadges.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consume Insignias de Habilidad.
+* <img src="/images/guides/duel-d4-heroshards.webp" alt="" class="task-item-img" width="37" height="40" loading="lazy"> Consume Fragmentos de Héroe.
+* <img src="/images/guides/duel-d4-heroxp.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Consume EXP de Héroe.
+* <img src="/images/guides/duel-d4-recruit.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Recluta héroes con tus boletos de reclutamiento.
 
 > #### ⚠️ No hay Misiones de Halcón hoy
 > Complétalas hoy, pero recógelas mañana.
@@ -571,14 +571,14 @@ order: 6
 
 #### Prioridad alta
 
-* **Recoge tus Misiones de Halcón** (completadas el día anterior).
-* **Entrena tropas:** promuévelas en cascada, 6 → 7 → 8 → 9, según tus niveles de tropa.
-* Consume aceleradores de entrenamiento.
+* <img src="/images/guides/duel-d5-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Recoge tus Misiones de Halcón** (completadas el día anterior).
+* <img src="/images/guides/duel-d5-train.webp" alt="" class="task-item-img" width="28" height="40" loading="lazy"> **Entrena tropas:** promuévelas en cascada, 6 → 7 → 8 → 9, según tus niveles de tropa.
+* <img src="/images/guides/duel-d5-trainspeed.webp" alt="" class="task-item-img" width="48" height="40" loading="lazy"> Consume aceleradores de entrenamiento.
 
 #### Prioridad baja
 
-* Consume aceleradores de investigación.
-* Consume aceleradores de construcción.
+* <img src="/images/guides/duel-d5-researchspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consume aceleradores de investigación.
+* <img src="/images/guides/duel-d5-constructspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consume aceleradores de construcción.
 
 === pane--es--events--duel--07--day6 ===
 ---
@@ -595,12 +595,12 @@ order: 7
 
 **Sábado: Día de Invasión.** ¡Acaba con todo!
 
-* Usa Caravanas UR y Operaciones Encubiertas.
-* **Mata enemigos.** La [guía del Evento de Matanza](kill_event.html) muestra cómo llegar al servidor de tu oponente y a quién atacar.
-* Consume aceleradores de curación.
-* Consume aceleradores de entrenamiento.
-* Consume aceleradores de construcción.
-* Consume aceleradores de investigación.
+* <img src="/images/guides/duel-d6-caravan.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Usa Caravanas UR y Operaciones Encubiertas.
+* <img src="/images/guides/duel-d6-kill.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Mata enemigos.** La [guía del Evento de Matanza](kill_event.html) muestra cómo llegar al servidor de tu oponente y a quién atacar.
+* <img src="/images/guides/duel-d6-healing.webp" alt="" class="task-item-img" width="38" height="29" loading="lazy"> Consume aceleradores de curación.
+* <img src="/images/guides/duel-d6-training.webp" alt="" class="task-item-img" width="41" height="34" loading="lazy"> Consume aceleradores de entrenamiento.
+* <img src="/images/guides/duel-d6-construction.webp" alt="" class="task-item-img" width="50" height="35" loading="lazy"> Consume aceleradores de construcción.
+* <img src="/images/guides/duel-d6-research.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Consume aceleradores de investigación.
 
 > #### ⚠️ Perder soldados
 > Perder soldados también te da puntos, pero no sacrifiques tropas a propósito: tu oponente gana más puntos por matarlas que tú por perderlas, así que es un intercambio en el que pierdes.
@@ -679,13 +679,13 @@ order: 2
 
 **Lundi : Amélioration du Corbeau**
 
-* **Validez vos Quêtes de Faucon** (accomplies la veille).
-* Consommez du Fruit et de l'Essence de Corbeau.
-* Consommez de l'Endurance.
+* <img src="/images/guides/duel-d1-falcon.webp" alt="" class="task-item-img" width="38" height="38" loading="lazy"> **Validez vos Quêtes de Faucon** (accomplies la veille).
+* <img src="/images/guides/duel-d1-fruit.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Consommez du Fruit et de l'Essence de Corbeau.
+* <img src="/images/guides/duel-d1-stamina.webp" alt="" class="task-item-img" width="41" height="40" loading="lazy"> Consommez de l'Endurance.
 * Utilisez des Antitoxines si nécessaire.
-* Consommez de l'XP de Héros.
-* **Collectez des ressources :** envoyez vos collecteurs la veille. Le bois et le grain rapportent le plus de points.
-* Ouvrez les Coffres d'Épigraphe.
+* <img src="/images/guides/duel-d1-heroxp.webp" alt="" class="task-item-img" width="38" height="37" loading="lazy"> Consommez de l'XP de Héros.
+* <img src="/images/guides/duel-d1-gather.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Collectez des ressources :** envoyez vos collecteurs la veille. Le bois et le grain rapportent le plus de points.
+* <img src="/images/guides/duel-d1-epigraph.webp" alt="" class="task-item-img" width="38" height="40" loading="lazy"> Ouvrez les Coffres d'Épigraphe.
 
 === pane--fr--events--duel--03--day2 ===
 ---
@@ -702,11 +702,11 @@ order: 3
 
 **Mardi : Amélioration du Territoire**
 
-* Utilisez les Caravanes UR et les Opérations Secrètes UR.
-* Recrutez des Survivants.
-* Consommez des Fragments d'Arme.
-* Utilisez des accélérations de Construction.
-* Augmentez votre Puissance de Bâtiment.
+* <img src="/images/guides/duel-d2-caravan.webp" alt="" class="task-item-img" width="68" height="40" loading="lazy"> Utilisez les Caravanes UR et les Opérations Secrètes UR.
+* <img src="/images/guides/duel-d2-survivors.webp" alt="" class="task-item-img" width="84" height="40" loading="lazy"> Recrutez des Survivants.
+* <img src="/images/guides/duel-d2-weaponshards.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> Consommez des Fragments d'Arme.
+* <img src="/images/guides/duel-d2-construction.webp" alt="" class="task-item-img" width="56" height="31" loading="lazy"> Utilisez des accélérations de Construction.
+* <img src="/images/guides/duel-d2-buildmight.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Augmentez votre Puissance de Bâtiment.
 
 > #### ⚠️ Pas de Quêtes de Faucon aujourd'hui
 > Accomplissez-les aujourd'hui, mais validez-les demain.
@@ -726,11 +726,11 @@ order: 4
 
 **Mercredi : Recherche technologique**
 
-* **Validez vos Quêtes de Faucon** (accomplies la veille).
-* Utilisez des Parchemins d'Étude.
-* Ouvrez les Coffres d'Équipement du Corbeau.
-* Utilisez des accélérations de Recherche.
-* Augmentez votre Puissance technologique.
+* <img src="/images/guides/duel-d3-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Validez vos Quêtes de Faucon** (accomplies la veille).
+* <img src="/images/guides/duel-d3-scrolls.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Utilisez des Parchemins d'Étude.
+* <img src="/images/guides/duel-d3-gearchests.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Ouvrez les Coffres d'Équipement du Corbeau.
+* <img src="/images/guides/duel-d3-research.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Utilisez des accélérations de Recherche.
+* <img src="/images/guides/duel-d3-techmight.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Augmentez votre Puissance technologique.
 
 === pane--fr--events--duel--05--day4 ===
 ---
@@ -747,11 +747,11 @@ order: 5
 
 **Jeudi : Amélioration des Héros**
 
-* Consommez des Fragments d'Éveil.
-* Consommez des Badges de Compétence.
-* Consommez des Fragments de Héros.
-* Consommez de l'XP de Héros.
-* Recrutez des Héros avec vos tickets de recrutement.
+* <img src="/images/guides/duel-d4-awakening.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Consommez des Fragments d'Éveil.
+* <img src="/images/guides/duel-d4-skillbadges.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consommez des Badges de Compétence.
+* <img src="/images/guides/duel-d4-heroshards.webp" alt="" class="task-item-img" width="37" height="40" loading="lazy"> Consommez des Fragments de Héros.
+* <img src="/images/guides/duel-d4-heroxp.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Consommez de l'XP de Héros.
+* <img src="/images/guides/duel-d4-recruit.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Recrutez des Héros avec vos tickets de recrutement.
 
 > #### ⚠️ Pas de Quêtes de Faucon aujourd'hui
 > Accomplissez-les aujourd'hui, mais validez-les demain.
@@ -773,14 +773,14 @@ order: 6
 
 #### Priorité haute
 
-* **Validez vos Quêtes de Faucon** (accomplies la veille).
-* **Entraînez des troupes :** promouvez-les en cascade, 6 → 7 → 8 → 9, en fonction de vos niveaux de troupes.
-* Consommez des accélérations d'Entraînement.
+* <img src="/images/guides/duel-d5-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Validez vos Quêtes de Faucon** (accomplies la veille).
+* <img src="/images/guides/duel-d5-train.webp" alt="" class="task-item-img" width="28" height="40" loading="lazy"> **Entraînez des troupes :** promouvez-les en cascade, 6 → 7 → 8 → 9, en fonction de vos niveaux de troupes.
+* <img src="/images/guides/duel-d5-trainspeed.webp" alt="" class="task-item-img" width="48" height="40" loading="lazy"> Consommez des accélérations d'Entraînement.
 
 #### Priorité basse
 
-* Consommez des accélérations de Recherche.
-* Consommez des accélérations de Construction.
+* <img src="/images/guides/duel-d5-researchspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consommez des accélérations de Recherche.
+* <img src="/images/guides/duel-d5-constructspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consommez des accélérations de Construction.
 
 === pane--fr--events--duel--07--day6 ===
 ---
@@ -797,12 +797,12 @@ order: 7
 
 **Samedi : Journée d'Invasion.** Tuez tout !
 
-* Utilisez les Caravanes UR et les Opérations Secrètes.
-* **Tuez des ennemis.** Le [Guide de l'événement de mort](kill_event.html) montre comment atteindre le serveur de votre adversaire et qui attaquer.
-* Consommez des accélérations de Soin.
-* Consommez des accélérations d'Entraînement.
-* Consommez des accélérations de Construction.
-* Consommez des accélérations de Recherche.
+* <img src="/images/guides/duel-d6-caravan.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Utilisez les Caravanes UR et les Opérations Secrètes.
+* <img src="/images/guides/duel-d6-kill.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Tuez des ennemis.** Le [Guide de l'événement de mort](kill_event.html) montre comment atteindre le serveur de votre adversaire et qui attaquer.
+* <img src="/images/guides/duel-d6-healing.webp" alt="" class="task-item-img" width="38" height="29" loading="lazy"> Consommez des accélérations de Soin.
+* <img src="/images/guides/duel-d6-training.webp" alt="" class="task-item-img" width="41" height="34" loading="lazy"> Consommez des accélérations d'Entraînement.
+* <img src="/images/guides/duel-d6-construction.webp" alt="" class="task-item-img" width="50" height="35" loading="lazy"> Consommez des accélérations de Construction.
+* <img src="/images/guides/duel-d6-research.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Consommez des accélérations de Recherche.
 
 > #### ⚠️ Perte de soldats
 > Perdre des soldats vous rapporte également des points, mais ne sacrifiez pas vos troupes volontairement : votre adversaire marque plus de points en les tuant que vous n'en gagnez en les perdant ; c'est donc un échange perdant.
@@ -881,13 +881,13 @@ order: 2
 
 **Понедельник: Усиление Воронов**
 
-* **Заберите награды за задания Сокола** (выполненные накануне).
-* Тратьте Плоды и Эссенцию Воронов.
-* Тратьте энергию.
+* <img src="/images/guides/duel-d1-falcon.webp" alt="" class="task-item-img" width="38" height="38" loading="lazy"> **Заберите награды за задания Сокола** (выполненные накануне).
+* <img src="/images/guides/duel-d1-fruit.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Тратьте Плоды и Эссенцию Воронов.
+* <img src="/images/guides/duel-d1-stamina.webp" alt="" class="task-item-img" width="41" height="40" loading="lazy"> Тратьте энергию.
 * Используйте антитоксины, если необходимо.
-* Тратьте опыт героев.
-* **Сбор ресурсов:** отправляйте собирателей накануне. Дерево и зерно дают больше всего очков.
-* Открывайте сундуки эпиграфов.
+* <img src="/images/guides/duel-d1-heroxp.webp" alt="" class="task-item-img" width="38" height="37" loading="lazy"> Тратьте опыт героев.
+* <img src="/images/guides/duel-d1-gather.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Сбор ресурсов:** отправляйте собирателей накануне. Дерево и зерно дают больше всего очков.
+* <img src="/images/guides/duel-d1-epigraph.webp" alt="" class="task-item-img" width="38" height="40" loading="lazy"> Открывайте сундуки эпиграфов.
 
 === pane--ru--events--duel--03--day2 ===
 ---
@@ -904,11 +904,11 @@ order: 3
 
 **Вторник: Развитие территории**
 
-* Используйте UR-караваны и UR-тайные операции.
-* Нанимайте выживших.
-* Тратьте осколки оружия.
-* Используйте ускорения строительства.
-* Увеличивайте мощь зданий.
+* <img src="/images/guides/duel-d2-caravan.webp" alt="" class="task-item-img" width="68" height="40" loading="lazy"> Используйте UR-караваны и UR-тайные операции.
+* <img src="/images/guides/duel-d2-survivors.webp" alt="" class="task-item-img" width="84" height="40" loading="lazy"> Нанимайте выживших.
+* <img src="/images/guides/duel-d2-weaponshards.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> Тратьте осколки оружия.
+* <img src="/images/guides/duel-d2-construction.webp" alt="" class="task-item-img" width="56" height="31" loading="lazy"> Используйте ускорения строительства.
+* <img src="/images/guides/duel-d2-buildmight.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Увеличивайте мощь зданий.
 
 > #### ⚠️ Сегодня заданий Сокола нет
 > Выполняйте их сегодня, но забирайте завтра.
@@ -928,11 +928,11 @@ order: 4
 
 **Среда: Исследования технологий**
 
-* **Заберите награды за задания Сокола** (выполненные накануне).
-* Используйте свитки изучения.
-* Открывайте сундуки снаряжения Воронов.
-* Используйте ускорения исследований.
-* Увеличивайте мощь технологий.
+* <img src="/images/guides/duel-d3-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Заберите награды за задания Сокола** (выполненные накануне).
+* <img src="/images/guides/duel-d3-scrolls.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Используйте свитки изучения.
+* <img src="/images/guides/duel-d3-gearchests.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Открывайте сундуки снаряжения Воронов.
+* <img src="/images/guides/duel-d3-research.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Используйте ускорения исследований.
+* <img src="/images/guides/duel-d3-techmight.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Увеличивайте мощь технологий.
 
 === pane--ru--events--duel--05--day4 ===
 ---
@@ -949,11 +949,11 @@ order: 5
 
 **Четверг: Усиление героев**
 
-* Тратьте осколки пробуждения.
-* Тратьте значки навыков.
-* Тратьте осколки героев.
-* Тратьте опыт героев.
-* Нанимайте героев с помощью билетов найма.
+* <img src="/images/guides/duel-d4-awakening.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Тратьте осколки пробуждения.
+* <img src="/images/guides/duel-d4-skillbadges.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Тратьте значки навыков.
+* <img src="/images/guides/duel-d4-heroshards.webp" alt="" class="task-item-img" width="37" height="40" loading="lazy"> Тратьте осколки героев.
+* <img src="/images/guides/duel-d4-heroxp.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Тратьте опыт героев.
+* <img src="/images/guides/duel-d4-recruit.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Нанимайте героев с помощью билетов найма.
 
 > #### ⚠️ Сегодня заданий Сокола нет
 > Выполняйте их сегодня, но забирайте завтра.
@@ -975,14 +975,14 @@ order: 6
 
 #### Высокий приоритет
 
-* **Заберите награды за задания Сокола** (выполненные накануне).
-* **Тренируйте войска:** улучшайте их каскадом, 6 → 7 → 8 → 9, в соответствии с вашими уровнями войск.
-* Тратьте ускорения тренировки.
+* <img src="/images/guides/duel-d5-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Заберите награды за задания Сокола** (выполненные накануне).
+* <img src="/images/guides/duel-d5-train.webp" alt="" class="task-item-img" width="28" height="40" loading="lazy"> **Тренируйте войска:** улучшайте их каскадом, 6 → 7 → 8 → 9, в соответствии с вашими уровнями войск.
+* <img src="/images/guides/duel-d5-trainspeed.webp" alt="" class="task-item-img" width="48" height="40" loading="lazy"> Тратьте ускорения тренировки.
 
 #### Низкий приоритет
 
-* Тратьте ускорения исследований.
-* Тратьте ускорения строительства.
+* <img src="/images/guides/duel-d5-researchspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Тратьте ускорения исследований.
+* <img src="/images/guides/duel-d5-constructspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Тратьте ускорения строительства.
 
 === pane--ru--events--duel--07--day6 ===
 ---
@@ -999,12 +999,12 @@ order: 7
 
 **Суббота: День вторжения.** Убейте всех!
 
-* Используйте UR-караваны и тайные операции.
-* **Убивайте врагов.** В [гайде по Событию Убийств](kill_event.html) показано, как попасть на сервер противника и кого атаковать.
-* Тратьте ускорения лечения.
-* Тратьте ускорения тренировки.
-* Тратьте ускорения строительства.
-* Тратьте ускорения исследований.
+* <img src="/images/guides/duel-d6-caravan.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Используйте UR-караваны и тайные операции.
+* <img src="/images/guides/duel-d6-kill.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Убивайте врагов.** В [гайде по Событию Убийств](kill_event.html) показано, как попасть на сервер противника и кого атаковать.
+* <img src="/images/guides/duel-d6-healing.webp" alt="" class="task-item-img" width="38" height="29" loading="lazy"> Тратьте ускорения лечения.
+* <img src="/images/guides/duel-d6-training.webp" alt="" class="task-item-img" width="41" height="34" loading="lazy"> Тратьте ускорения тренировки.
+* <img src="/images/guides/duel-d6-construction.webp" alt="" class="task-item-img" width="50" height="35" loading="lazy"> Тратьте ускорения строительства.
+* <img src="/images/guides/duel-d6-research.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Тратьте ускорения исследований.
 
 > #### ⚠️ Потеря солдат
 > Потеря солдат также приносит очки, но не тратьте войска намеренно: ваш противник получит больше очков за их убийство, чем вы за их потерю, так что это невыгодная сделка.
@@ -1083,13 +1083,13 @@ order: 2
 
 **Pazartesi: Kuzgun Geliştirme**
 
-* **Şahin Görevlerinizi toplayın** (bir önceki gün tamamladıklarınız).
-* Kuzgun Meyvesi ve Özü tüketin.
-* Dayanıklılık harcayın.
+* <img src="/images/guides/duel-d1-falcon.webp" alt="" class="task-item-img" width="38" height="38" loading="lazy"> **Şahin Görevlerinizi toplayın** (bir önceki gün tamamladıklarınız).
+* <img src="/images/guides/duel-d1-fruit.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Kuzgun Meyvesi ve Özü tüketin.
+* <img src="/images/guides/duel-d1-stamina.webp" alt="" class="task-item-img" width="41" height="40" loading="lazy"> Dayanıklılık harcayın.
 * Gerekirse Antitoksin kullanın.
-* Kahraman TP tüketin.
-* **Kaynak toplayın:** toplayıcılarınızı bir önceki günden gönderin. Odun ve tahıl en çok puanı verir.
-* Epigraf Sandıkları açın.
+* <img src="/images/guides/duel-d1-heroxp.webp" alt="" class="task-item-img" width="38" height="37" loading="lazy"> Kahraman TP tüketin.
+* <img src="/images/guides/duel-d1-gather.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Kaynak toplayın:** toplayıcılarınızı bir önceki günden gönderin. Odun ve tahıl en çok puanı verir.
+* <img src="/images/guides/duel-d1-epigraph.webp" alt="" class="task-item-img" width="38" height="40" loading="lazy"> Epigraf Sandıkları açın.
 
 === pane--tr--events--duel--03--day2 ===
 ---
@@ -1106,11 +1106,11 @@ order: 3
 
 **Salı: Bölge Geliştirme**
 
-* UR Kervanları ve UR Gizli Operasyonları kullanın.
-* Kurtulanları askere alın.
-* Silah Parçaları tüketin.
-* İnşaat Hızlandırmaları kullanın.
-* Bina Gücünüzü artırın.
+* <img src="/images/guides/duel-d2-caravan.webp" alt="" class="task-item-img" width="68" height="40" loading="lazy"> UR Kervanları ve UR Gizli Operasyonları kullanın.
+* <img src="/images/guides/duel-d2-survivors.webp" alt="" class="task-item-img" width="84" height="40" loading="lazy"> Kurtulanları askere alın.
+* <img src="/images/guides/duel-d2-weaponshards.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> Silah Parçaları tüketin.
+* <img src="/images/guides/duel-d2-construction.webp" alt="" class="task-item-img" width="56" height="31" loading="lazy"> İnşaat Hızlandırmaları kullanın.
+* <img src="/images/guides/duel-d2-buildmight.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Bina Gücünüzü artırın.
 
 > #### ⚠️ Bugün Şahin Görevi yok
 > Bunları bugün tamamlayın, ancak yarın toplayın.
@@ -1130,11 +1130,11 @@ order: 4
 
 **Çarşamba: Teknoloji Araştırması**
 
-* **Şahin Görevlerinizi toplayın** (bir önceki gün tamamladıklarınız).
-* Çalışma Parşömenleri kullanın.
-* Kuzgun Ekipman Sandıkları açın.
-* Araştırma Hızlandırmaları kullanın.
-* Teknoloji Gücünüzü artırın.
+* <img src="/images/guides/duel-d3-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Şahin Görevlerinizi toplayın** (bir önceki gün tamamladıklarınız).
+* <img src="/images/guides/duel-d3-scrolls.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Çalışma Parşömenleri kullanın.
+* <img src="/images/guides/duel-d3-gearchests.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Kuzgun Ekipman Sandıkları açın.
+* <img src="/images/guides/duel-d3-research.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Araştırma Hızlandırmaları kullanın.
+* <img src="/images/guides/duel-d3-techmight.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Teknoloji Gücünüzü artırın.
 
 === pane--tr--events--duel--05--day4 ===
 ---
@@ -1151,11 +1151,11 @@ order: 5
 
 **Perşembe: Kahraman Geliştirme**
 
-* Uyanış Parçaları tüketin.
-* Beceri Rozetleri tüketin.
-* Kahraman Parçaları tüketin.
-* Kahraman TP tüketin.
-* Asker alım biletlerinizle Kahramanlar alın.
+* <img src="/images/guides/duel-d4-awakening.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Uyanış Parçaları tüketin.
+* <img src="/images/guides/duel-d4-skillbadges.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Beceri Rozetleri tüketin.
+* <img src="/images/guides/duel-d4-heroshards.webp" alt="" class="task-item-img" width="37" height="40" loading="lazy"> Kahraman Parçaları tüketin.
+* <img src="/images/guides/duel-d4-heroxp.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Kahraman TP tüketin.
+* <img src="/images/guides/duel-d4-recruit.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Asker alım biletlerinizle Kahramanlar alın.
 
 > #### ⚠️ Bugün Şahin Görevi yok
 > Bunları bugün tamamlayın, ancak yarın toplayın.
@@ -1177,14 +1177,14 @@ order: 6
 
 #### Yüksek öncelik
 
-* **Şahin Görevlerinizi toplayın** (bir önceki gün tamamladıklarınız).
-* **Asker eğitin:** asker seviyelerinize uygun şekilde 6 → 7 → 8 → 9 basamaklı bir şekilde terfi ettirin.
-* Eğitim Hızlandırmaları tüketin.
+* <img src="/images/guides/duel-d5-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Şahin Görevlerinizi toplayın** (bir önceki gün tamamladıklarınız).
+* <img src="/images/guides/duel-d5-train.webp" alt="" class="task-item-img" width="28" height="40" loading="lazy"> **Asker eğitin:** asker seviyelerinize uygun şekilde 6 → 7 → 8 → 9 basamaklı bir şekilde terfi ettirin.
+* <img src="/images/guides/duel-d5-trainspeed.webp" alt="" class="task-item-img" width="48" height="40" loading="lazy"> Eğitim Hızlandırmaları tüketin.
 
 #### Düşük öncelik
 
-* Araştırma Hızlandırmaları tüketin.
-* İnşaat Hızlandırmaları tüketin.
+* <img src="/images/guides/duel-d5-researchspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Araştırma Hızlandırmaları tüketin.
+* <img src="/images/guides/duel-d5-constructspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> İnşaat Hızlandırmaları tüketin.
 
 === pane--tr--events--duel--07--day6 ===
 ---
@@ -1201,12 +1201,12 @@ order: 7
 
 **Cumartesi: İstilâ Günü.** Her şeyi yok et!
 
-* UR Kervanları ve Gizli Operasyonlar kullanın.
-* **Düşmanları öldürün.** [Öldürme Etkinliği rehberi](kill_event.html), rakibinizin sunucusuna nasıl ulaşacağınızı ve kime vuracağınızı gösterir.
-* İyileştirme Hızlandırmaları tüketin.
-* Eğitim Hızlandırmaları tüketin.
-* İnşaat Hızlandırmaları tüketin.
-* Araştırma Hızlandırmaları tüketin.
+* <img src="/images/guides/duel-d6-caravan.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> UR Kervanları ve Gizli Operasyonlar kullanın.
+* <img src="/images/guides/duel-d6-kill.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Düşmanları öldürün.** [Öldürme Etkinliği rehberi](kill_event.html), rakibinizin sunucusuna nasıl ulaşacağınızı ve kime vuracağınızı gösterir.
+* <img src="/images/guides/duel-d6-healing.webp" alt="" class="task-item-img" width="38" height="29" loading="lazy"> İyileştirme Hızlandırmaları tüketin.
+* <img src="/images/guides/duel-d6-training.webp" alt="" class="task-item-img" width="41" height="34" loading="lazy"> Eğitim Hızlandırmaları tüketin.
+* <img src="/images/guides/duel-d6-construction.webp" alt="" class="task-item-img" width="50" height="35" loading="lazy"> İnşaat Hızlandırmaları tüketin.
+* <img src="/images/guides/duel-d6-research.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Araştırma Hızlandırmaları tüketin.
 
 > #### ⚠️ Asker kaybetmek
 > Asker kaybetmek de size puan kazandırır, ancak birliklerinizi kasten harcamayın: rakibiniz onları öldürdüğü için siz kaybettiklerinizden daha fazla puan alır, yani bu kaybettiğiniz bir takas olur.
@@ -1285,13 +1285,13 @@ order: 2
 
 **Понеділок: Посилення Ворона**
 
-* **Заберіть нагороди за квести Сокола** (виконані попереднього дня).
-* Використовуйте фрукти та есенцію Ворона.
-* Витрачайте витривалість.
+* <img src="/images/guides/duel-d1-falcon.webp" alt="" class="task-item-img" width="38" height="38" loading="lazy"> **Заберіть нагороди за квести Сокола** (виконані попереднього дня).
+* <img src="/images/guides/duel-d1-fruit.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Використовуйте фрукти та есенцію Ворона.
+* <img src="/images/guides/duel-d1-stamina.webp" alt="" class="task-item-img" width="41" height="40" loading="lazy"> Витрачайте витривалість.
 * За потреби використовуйте антидоти.
-* Витрачайте досвід героїв.
-* **Збір ресурсів:** відправте збирачів за день до цього. Деревина та зерно дають найбільше балів.
-* Відкривайте скрині з епіграфами.
+* <img src="/images/guides/duel-d1-heroxp.webp" alt="" class="task-item-img" width="38" height="37" loading="lazy"> Витрачайте досвід героїв.
+* <img src="/images/guides/duel-d1-gather.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Збір ресурсів:** відправте збирачів за день до цього. Деревина та зерно дають найбільше балів.
+* <img src="/images/guides/duel-d1-epigraph.webp" alt="" class="task-item-img" width="38" height="40" loading="lazy"> Відкривайте скрині з епіграфами.
 
 === pane--uk--events--duel--03--day2 ===
 ---
@@ -1308,11 +1308,11 @@ order: 3
 
 **Вівторок: Посилення території**
 
-* Використовуйте UR-каравани та UR-таємні операції.
-* Наймайте вцілілих.
-* Витрачайте уламки зброї.
-* Використовуйте прискорювачі будівництва.
-* Збільшуйте міць будівництва.
+* <img src="/images/guides/duel-d2-caravan.webp" alt="" class="task-item-img" width="68" height="40" loading="lazy"> Використовуйте UR-каравани та UR-таємні операції.
+* <img src="/images/guides/duel-d2-survivors.webp" alt="" class="task-item-img" width="84" height="40" loading="lazy"> Наймайте вцілілих.
+* <img src="/images/guides/duel-d2-weaponshards.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> Витрачайте уламки зброї.
+* <img src="/images/guides/duel-d2-construction.webp" alt="" class="task-item-img" width="56" height="31" loading="lazy"> Використовуйте прискорювачі будівництва.
+* <img src="/images/guides/duel-d2-buildmight.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Збільшуйте міць будівництва.
 
 > #### ⚠️ У ці дні немає квестів Сокола
 > Виконуйте їх сьогодні, але забирайте нагороди завтра.
@@ -1332,11 +1332,11 @@ order: 4
 
 **Середа: Дослідження технологій**
 
-* **Заберіть нагороди за квести Сокола** (виконані попереднього дня).
-* Використовуйте сувої навчання.
-* Відкривайте скрині спорядження Ворона.
-* Використовуйте прискорювачі досліджень.
-* Збільшуйте міць технологій.
+* <img src="/images/guides/duel-d3-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Заберіть нагороди за квести Сокола** (виконані попереднього дня).
+* <img src="/images/guides/duel-d3-scrolls.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Використовуйте сувої навчання.
+* <img src="/images/guides/duel-d3-gearchests.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Відкривайте скрині спорядження Ворона.
+* <img src="/images/guides/duel-d3-research.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Використовуйте прискорювачі досліджень.
+* <img src="/images/guides/duel-d3-techmight.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Збільшуйте міць технологій.
 
 === pane--uk--events--duel--05--day4 ===
 ---
@@ -1353,11 +1353,11 @@ order: 5
 
 **Четвер: Посилення героїв**
 
-* Витрачайте уламки пробудження.
-* Витрачайте значки навичок.
-* Витрачайте уламки героїв.
-* Витрачайте досвід героїв.
-* Наймайте героїв за допомогою квитків найму.
+* <img src="/images/guides/duel-d4-awakening.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Витрачайте уламки пробудження.
+* <img src="/images/guides/duel-d4-skillbadges.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Витрачайте значки навичок.
+* <img src="/images/guides/duel-d4-heroshards.webp" alt="" class="task-item-img" width="37" height="40" loading="lazy"> Витрачайте уламки героїв.
+* <img src="/images/guides/duel-d4-heroxp.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Витрачайте досвід героїв.
+* <img src="/images/guides/duel-d4-recruit.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Наймайте героїв за допомогою квитків найму.
 
 > #### ⚠️ У ці дні немає квестів Сокола
 > Виконуйте їх сьогодні, але забирайте нагороди завтра.
@@ -1379,14 +1379,14 @@ order: 6
 
 #### Високий пріоритет
 
-* **Заберіть нагороди за квести Сокола** (виконані попереднього дня).
-* **Тренуйте війська:** просувайте їх ланцюжком, 6 → 7 → 8 → 9, відповідно до рівнів ваших військ.
-* Використовуйте прискорювачі тренувань.
+* <img src="/images/guides/duel-d5-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Заберіть нагороди за квести Сокола** (виконані попереднього дня).
+* <img src="/images/guides/duel-d5-train.webp" alt="" class="task-item-img" width="28" height="40" loading="lazy"> **Тренуйте війська:** просувайте їх ланцюжком, 6 → 7 → 8 → 9, відповідно до рівнів ваших військ.
+* <img src="/images/guides/duel-d5-trainspeed.webp" alt="" class="task-item-img" width="48" height="40" loading="lazy"> Використовуйте прискорювачі тренувань.
 
 #### Низький пріоритет
 
-* Використовуйте прискорювачі досліджень.
-* Використовуйте прискорювачі будівництва.
+* <img src="/images/guides/duel-d5-researchspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Використовуйте прискорювачі досліджень.
+* <img src="/images/guides/duel-d5-constructspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Використовуйте прискорювачі будівництва.
 
 === pane--uk--events--duel--07--day6 ===
 ---
@@ -1403,12 +1403,12 @@ order: 7
 
 **Субота: День вторгнення.** Знищуйте всіх!
 
-* Використовуйте UR-каравани та таємні операції.
-* **Знищуйте ворогів.** [Гайд щодо події знищення](kill_event.html) показує, як дістатися до сервера противника і кого атакувати.
-* Використовуйте прискорювачі лікування.
-* Використовуйте прискорювачі тренувань.
-* Використовуйте прискорювачі будівництва.
-* Використовуйте прискорювачі досліджень.
+* <img src="/images/guides/duel-d6-caravan.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Використовуйте UR-каравани та таємні операції.
+* <img src="/images/guides/duel-d6-kill.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Знищуйте ворогів.** [Гайд щодо події знищення](kill_event.html) показує, як дістатися до сервера противника і кого атакувати.
+* <img src="/images/guides/duel-d6-healing.webp" alt="" class="task-item-img" width="38" height="29" loading="lazy"> Використовуйте прискорювачі лікування.
+* <img src="/images/guides/duel-d6-training.webp" alt="" class="task-item-img" width="41" height="34" loading="lazy"> Використовуйте прискорювачі тренувань.
+* <img src="/images/guides/duel-d6-construction.webp" alt="" class="task-item-img" width="50" height="35" loading="lazy"> Використовуйте прискорювачі будівництва.
+* <img src="/images/guides/duel-d6-research.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Використовуйте прискорювачі досліджень.
 
 > #### ⚠️ Втрата солдатів
 > Втрата солдатів також приносить бали, але не жертвуйте військами навмисно: противник отримує більше балів за їх знищення, ніж ви за саму втрату, тому це невигідний обмін.
@@ -1487,13 +1487,13 @@ order: 2
 
 **Lunedì: Potenziamento Corvo**
 
-* **Riscuoti le tue Missioni Falco** (completate il giorno precedente).
-* Consuma Frutti ed Essenza del Corvo.
-* Consuma Vigore.
+* <img src="/images/guides/duel-d1-falcon.webp" alt="" class="task-item-img" width="38" height="38" loading="lazy"> **Riscuoti le tue Missioni Falco** (completate il giorno precedente).
+* <img src="/images/guides/duel-d1-fruit.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Consuma Frutti ed Essenza del Corvo.
+* <img src="/images/guides/duel-d1-stamina.webp" alt="" class="task-item-img" width="41" height="40" loading="lazy"> Consuma Vigore.
 * Usa le antitossine se necessario.
-* Consuma XP Eroe.
-* **Raccogli risorse:** invia i tuoi raccoglitori il giorno prima. Legno e grano danno più punti.
-* Apri i Forzieri Epigrafici.
+* <img src="/images/guides/duel-d1-heroxp.webp" alt="" class="task-item-img" width="38" height="37" loading="lazy"> Consuma XP Eroe.
+* <img src="/images/guides/duel-d1-gather.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Raccogli risorse:** invia i tuoi raccoglitori il giorno prima. Legno e grano danno più punti.
+* <img src="/images/guides/duel-d1-epigraph.webp" alt="" class="task-item-img" width="38" height="40" loading="lazy"> Apri i Forzieri Epigrafici.
 
 === pane--it--events--duel--03--day2 ===
 ---
@@ -1510,11 +1510,11 @@ order: 3
 
 **Martedì: Potenziamento Territorio**
 
-* Usa Carovane UR e Operazioni Segrete UR.
-* Recluta Sopravvissuti.
-* Consuma Frammenti di Arma.
-* Usa accelerazioni di costruzione.
-* Aumenta la tua Potenza di Edificio.
+* <img src="/images/guides/duel-d2-caravan.webp" alt="" class="task-item-img" width="68" height="40" loading="lazy"> Usa Carovane UR e Operazioni Segrete UR.
+* <img src="/images/guides/duel-d2-survivors.webp" alt="" class="task-item-img" width="84" height="40" loading="lazy"> Recluta Sopravvissuti.
+* <img src="/images/guides/duel-d2-weaponshards.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> Consuma Frammenti di Arma.
+* <img src="/images/guides/duel-d2-construction.webp" alt="" class="task-item-img" width="56" height="31" loading="lazy"> Usa accelerazioni di costruzione.
+* <img src="/images/guides/duel-d2-buildmight.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Aumenta la tua Potenza di Edificio.
 
 > #### ⚠️ Nessuna Missione Falco oggi
 > Completale oggi, ma riscuotile domani.
@@ -1534,11 +1534,11 @@ order: 4
 
 **Mercoledì: Ricerca tecnologica**
 
-* **Riscuoti le tue Missioni Falco** (completate il giorno precedente).
-* Usa Pergamene di Studio.
-* Apri i Forzieri Equipaggiamento Corvo.
-* Usa accelerazioni di ricerca.
-* Aumenta la tua Potenza Tech.
+* <img src="/images/guides/duel-d3-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Riscuoti le tue Missioni Falco** (completate il giorno precedente).
+* <img src="/images/guides/duel-d3-scrolls.webp" alt="" class="task-item-img" width="43" height="40" loading="lazy"> Usa Pergamene di Studio.
+* <img src="/images/guides/duel-d3-gearchests.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> Apri i Forzieri Equipaggiamento Corvo.
+* <img src="/images/guides/duel-d3-research.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Usa accelerazioni di ricerca.
+* <img src="/images/guides/duel-d3-techmight.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Aumenta la tua Potenza Tech.
 
 === pane--it--events--duel--05--day4 ===
 ---
@@ -1555,11 +1555,11 @@ order: 5
 
 **Giovedì: Potenziamento Eroi**
 
-* Consuma Frammenti di Risveglio.
-* Consuma Distintivi Abilità.
-* Consuma Frammenti di Eroe.
-* Consuma XP Eroe.
-* Recluta Eroi con i tuoi biglietti di reclutamento.
+* <img src="/images/guides/duel-d4-awakening.webp" alt="" class="task-item-img" width="36" height="40" loading="lazy"> Consuma Frammenti di Risveglio.
+* <img src="/images/guides/duel-d4-skillbadges.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consuma Distintivi Abilità.
+* <img src="/images/guides/duel-d4-heroshards.webp" alt="" class="task-item-img" width="37" height="40" loading="lazy"> Consuma Frammenti di Eroe.
+* <img src="/images/guides/duel-d4-heroxp.webp" alt="" class="task-item-img" width="44" height="40" loading="lazy"> Consuma XP Eroe.
+* <img src="/images/guides/duel-d4-recruit.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Recluta Eroi con i tuoi biglietti di reclutamento.
 
 > #### ⚠️ Nessuna Missione Falco oggi
 > Completale oggi, ma riscuotile domani.
@@ -1581,14 +1581,14 @@ order: 6
 
 #### Alta priorità
 
-* **Riscuoti le tue Missioni Falco** (completate il giorno precedente).
-* **Addestra truppe:** promuovile a cascata, 6 → 7 → 8 → 9, in base ai livelli delle tue truppe.
-* Consuma accelerazioni di addestramento.
+* <img src="/images/guides/duel-d5-falcon.webp" alt="" class="task-item-img" width="40" height="40" loading="lazy"> **Riscuoti le tue Missioni Falco** (completate il giorno precedente).
+* <img src="/images/guides/duel-d5-train.webp" alt="" class="task-item-img" width="28" height="40" loading="lazy"> **Addestra truppe:** promuovile a cascata, 6 → 7 → 8 → 9, in base ai livelli delle tue truppe.
+* <img src="/images/guides/duel-d5-trainspeed.webp" alt="" class="task-item-img" width="48" height="40" loading="lazy"> Consuma accelerazioni di addestramento.
 
 #### Bassa priorità
 
-* Consuma accelerazioni di ricerca.
-* Consuma accelerazioni di costruzione.
+* <img src="/images/guides/duel-d5-researchspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consuma accelerazioni di ricerca.
+* <img src="/images/guides/duel-d5-constructspeed.webp" alt="" class="task-item-img" width="46" height="40" loading="lazy"> Consuma accelerazioni di costruzione.
 
 === pane--it--events--duel--07--day6 ===
 ---
@@ -1605,12 +1605,12 @@ order: 7
 
 **Sabato: Giorno dell'Invasione.** Uccidi tutti!
 
-* Usa Carovane UR e Operazioni Segrete.
-* **Uccidi i nemici.** La [guida all'Evento di Uccisione](kill_event.html) mostra come raggiungere il server del tuo avversario e chi attaccare.
-* Consuma accelerazioni di guarigione.
-* Consuma accelerazioni di addestramento.
-* Consuma accelerazioni di costruzione.
-* Consuma accelerazioni di ricerca.
+* <img src="/images/guides/duel-d6-caravan.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Usa Carovane UR e Operazioni Segrete.
+* <img src="/images/guides/duel-d6-kill.webp" alt="" class="task-item-img" width="42" height="40" loading="lazy"> **Uccidi i nemici.** La [guida all'Evento di Uccisione](kill_event.html) mostra come raggiungere il server del tuo avversario e chi attaccare.
+* <img src="/images/guides/duel-d6-healing.webp" alt="" class="task-item-img" width="38" height="29" loading="lazy"> Consuma accelerazioni di guarigione.
+* <img src="/images/guides/duel-d6-training.webp" alt="" class="task-item-img" width="41" height="34" loading="lazy"> Consuma accelerazioni di addestramento.
+* <img src="/images/guides/duel-d6-construction.webp" alt="" class="task-item-img" width="50" height="35" loading="lazy"> Consuma accelerazioni di costruzione.
+* <img src="/images/guides/duel-d6-research.webp" alt="" class="task-item-img" width="56" height="40" loading="lazy"> Consuma accelerazioni di ricerca.
 
 > #### ⚠️ Perdere soldati
 > Anche perdere soldati ti fa guadagnare punti, ma non sacrificare truppe di proposito: il tuo avversario ottiene più punti uccidendole di quanti ne ottieni tu perdendole, quindi è uno scambio in cui perdi.
