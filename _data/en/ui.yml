@@ -201,6 +201,11 @@ search:
   unavailable: "Search isn't available right now. Try again when you're online."
 
 #PWA update text
+# The picture viewer: a guide picture opened full size (js/main.js)
+image_viewer:
+  close: "Close"
+  download: "Download"
+
 pwa:
   toast_msg: "New intel acquired."
   update_btn: "Update"

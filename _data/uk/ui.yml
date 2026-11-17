@@ -171,6 +171,11 @@ search:
   results_label: Результати пошуку
   no_results: Нічого не знайдено за запитом “{query}”.
   unavailable: Пошук зараз недоступний. Спробуйте ще раз, коли будете онлайн.
+# The picture viewer: a guide picture opened full size (js/main.js)
+image_viewer:
+  close: "Закрити"
+  download: "Завантажити"
+
 pwa:
   toast_msg: Отримано нові розвіддані.
   update_btn: Оновити

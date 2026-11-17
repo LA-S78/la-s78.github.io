@@ -260,6 +260,44 @@
     );
   };
 
+  // The picture viewer (owner request, 2026-11-17): tap a picture in a guide or the rules
+  // (img.blueprint-img in a content pane) to see it full size, with Close and Download. One
+  // shared window for every picture, so a guide needs no window of its own per picture.
+  // Esc, Close or a tap outside the picture closes it.
+  document.addEventListener('click', (e) => {
+    const img = e.target.closest('.content-pane img.blueprint-img');
+    // Pictures with a window of their own (Sanctuary guides: onclick) keep it
+    if (!img || e.defaultPrevented || img.hasAttribute('onclick')) return;
+    let viewer = document.getElementById('image-viewer');
+    if (!viewer) {
+      viewer = document.createElement('dialog');
+      viewer.id = 'image-viewer';
+      viewer.className = 'image-viewer';
+      viewer.innerHTML = `<img alt="">
+        <div class="dialog-controls">
+          <a class="dialog-btn" data-viewer="download"></a>
+          <button type="button" data-viewer="close"></button>
+        </div>`;
+      viewer.addEventListener('click', (ev) => {
+        if (ev.target === viewer || ev.target.closest('[data-viewer="close"]')) {
+          window.closeDialogGracefully(viewer);
+        }
+      });
+      document.body.appendChild(viewer);
+    }
+    const text = window.imageViewerText || {};
+    const big = viewer.querySelector('img');
+    big.src = img.currentSrc || img.src;
+    big.alt = img.alt;
+    viewer.setAttribute('aria-label', img.alt || '');
+    const link = viewer.querySelector('[data-viewer="download"]');
+    link.href = big.src;
+    link.download = `LastAsylum-${(big.src.split('/').pop() || 'image').split('?')[0]}`;
+    link.textContent = text.download || 'Download';
+    viewer.querySelector('[data-viewer="close"]').textContent = text.close || 'Close';
+    if (!viewer.open) viewer.showModal();
+  });
+
   function applyTheme(themeName) {
     document.documentElement.setAttribute('data-theme', themeName);
     localStorage.setItem('site-theme', themeName);

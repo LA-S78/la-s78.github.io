@@ -98,8 +98,7 @@ events:
       <circle cx="15" cy="11.5" r="1.6" />
       <path d="M10 21v-2.5M14 21v-2.5M11.2 15.6l.8-1.4.8 1.4" />
   - key: "kill_event"
-    url: /LANG_CODE/guides/kill-event.html
-    status: unavailable
+    url: /LANG_CODE/guides/kill_event.html
     # the calendar's Kill Event: a crosshair
     icon: |
       <circle cx="12" cy="12" r="9" />
