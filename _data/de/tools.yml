@@ -457,11 +457,11 @@ calendar:
   ev_close_desc: 'Truhen laufen Mittwoch um 00:00 GT ab: Vorher alles verteilen.'
 calendar_events:
   reminder_hint: Im Alarm-Kanal deiner Allianz gepostet.
-  reminder_hint_server: Im Alarm-Kanal des NAP Discord gepostet, sowie in Allianzen, die sich angemeldet haben.
-  reminder_no_channel: 'Deine Allianz hat noch keinen Alarm-Kanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
-  reminder_no_server_channel: Der NAP Alarm-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können Server-Erinnerungen nicht gepostet werden.
+  reminder_hint_server: Im Alarm-Kanal des NAP Discord gepostet, sowie in Allianzen, die zugestimmt haben.
+  reminder_no_channel: 'Deine Allianz hat noch keinen Alarm-Kanal: Nutze /registerbot in deinem Discord, damit Erinnerungen gepostet werden können.'
+  reminder_no_server_channel: Der NAP-Alarm-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können keine Server-Erinnerungen gepostet werden.
   edit_heading: Event bearbeiten
-  scope_label: Wessen Events verwalten
+  scope_label: Wessen Events sollen verwaltet werden
   scope_server: Serverweite Events
   scope_alliance: "[{tag}] Events"
   save_changes: Änderungen speichern
@@ -479,39 +479,39 @@ calendar_events:
   type_custom_hint: Leeres Formular
   duration_h: "{n}h"
   title: Event-Titel
-  title_example: z. B. Bienenstock-Verteidigung oder Außenposten-Angriff
-  date: Startdatum (YYYY-MM-DD)
+  title_example: z. B. Bienenstock-Verteidigungstraining oder Außenpostenangriff
+  date: Startdatum (JJJJ-MM-TT)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Server Game Time (wird auf 5-Minuten-Schritte gerundet)
+  time_hint: Server Game Time (wird auf 5-Minuten-Intervalle gerundet)
   duration: Dauer (Stunden)
   frequency: Häufigkeit
   once: Einmaliges Event (Wiederholt sich nicht)
   every_2_days: Wiederholt sich alle 2 Tage
-  weekly: Wiederholt sich wöchentlich (Gleicher Tag & Zeit)
+  weekly: Wiederholt sich wöchentlich (Gleicher Tag & Uhrzeit)
   alert_level: Discord-Erinnerung
-  remind_when: Wann gepostet werden soll
-  remind_at_start: Wenn es startet
+  remind_when: Wann soll es gepostet werden
+  remind_at_start: Wenn es beginnt
   remind_minutes: "{n} Minuten vorher"
   remind_hour: 1 Stunde vorher
   remind_when_hint: Erinnerungen werden alle 5 Minuten überprüft, daher kann sie ein paar Minuten früher eintreffen.
   notify_off: Keine Erinnerung
-  notify_role: Alarm-Rolle der Allianz pingen
-  notify_custom: Bestimmte Rolle pingen
-  notify_everyone: "@everyone pingen"
-  notify_none: Ohne Ping posten
+  notify_role: Allianz-Alarmrolle benachrichtigen
+  notify_custom: Bestimmte Rolle benachrichtigen
+  notify_everyone: "@everyone benachrichtigen"
+  notify_none: Posten ohne Benachrichtigung
   role_id: Spezifische Rollen-ID
-  role_id_hint: "(nur für „Bestimmte Rolle pingen“)"
+  role_id_hint: "(nur für „Bestimmte Rolle benachrichtigen“)"
   role_id_title: Muss eine gültige 17-20-stellige Discord-Rollen-ID sein
   details: Anweisungen / Sammelpunkt
   details_example: z. B. Versammlung bei Hive Alpha. R4s führen Rallies an. Voice-Chat aktiv.
   publish: Im Kalender veröffentlichen
-  publishing: Veröffentliche...
-  bad_time: Game Time muss in 5-Minuten-Schritten eingestellt werden (:00, :05, :10, etc.)
-  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Alarm-Ziel ein.
+  publishing: Wird veröffentlicht...
+  bad_time: Die Game Time muss in 5-Minuten-Intervallen angegeben werden (:00, :05, :10, etc.)
+  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Alarmziel ein.
   save_failed: Speichern des Events fehlgeschlagen
   published: Operation erfolgreich veröffentlicht!
   delete_heading: Dieses Event löschen?
-  delete_repeats: 'Es wiederholt sich ({repeat}): Jede Wiederholung wird entfernt, nicht nur diese.'
+  delete_repeats: 'Es wiederholt sich ({repeat}): Jede Wiederholung wird gelöscht, nicht nur diese eine.'
   delete_final: Dies kann nicht rückgängig gemacht werden.
   delete_confirm: Löschen
   delete_failed: Löschen des Events fehlgeschlagen

@@ -456,65 +456,65 @@ calendar:
   ev_close_title: Ricompense chiuse — {week}
   ev_close_desc: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
 calendar_events:
-  reminder_hint: Pubblicato nel canale di avvisi della tua alleanza.
-  reminder_hint_server: Pubblicato nel canale di avvisi del Discord NAP e nelle alleanze che hanno aderito.
-  reminder_no_channel: 'La tua alleanza non ha ancora un canale di avvisi: usa /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
-  reminder_no_server_channel: Il canale di avvisi NAP non è ancora stato configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
+  reminder_hint: Pubblicato nel canale avvisi della tua alleanza.
+  reminder_hint_server: Pubblicato nel canale avvisi Discord del NAP e nelle alleanze che hanno aderito.
+  reminder_no_channel: 'La tua alleanza non ha ancora un canale avvisi: esegui /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
+  reminder_no_server_channel: Il canale avvisi del NAP non è ancora stato impostato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
   edit_heading: Modifica evento
-  scope_label: Gestione eventi
+  scope_label: Di chi gestire gli eventi
   scope_server: Eventi del server
   scope_alliance: Eventi [{tag}]
   save_changes: Salva modifiche
   manage_mode: MODALITÀ GESTIONE
   session_active: Sessione autenticata attiva
-  create_operation: Crea operazione
+  create_operation: Crea Operazione
   kingdom_admin: AMMINISTRAZIONE REGNO
   kingdom_desc: Gestione eventi server
-  kingdom_heading: Crea operazione Regno ([GLOBAL])
+  kingdom_heading: Crea Operazione Regno ([GLOBAL])
   leadership: LEADERSHIP [{tag}]
   leadership_desc: Gestione eventi [{tag}]
-  alliance_heading: Crea operazione [{tag}]
+  alliance_heading: Crea Operazione [{tag}]
   preset: Tipo di evento
   type_custom: Personalizzato
   type_custom_hint: Modulo vuoto
   duration_h: "{n}h"
   title: Titolo dell'evento
-  title_example: es. Difesa Alveare o Assalto all'Avamposto
+  title_example: es. Esercitazione Difesa Alveare o Assalto all'Avamposto
   date: Data di inizio (AAAA-MM-GG)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time del server (arrotondato a intervalli di 5 minuti)
+  time_hint: Game Time del server (si aggancia a incrementi di 5 minuti)
   duration: Durata (ore)
   frequency: Frequenza
-  once: Evento singolo (non ripetibile)
-  every_2_days: Ripeti ogni 2 giorni
-  weekly: Ripeti settimanalmente (stesso giorno e orario)
+  once: Evento una tantum (non si ripete)
+  every_2_days: Si ripete ogni 2 giorni
+  weekly: Si ripete settimanalmente (stesso giorno e orario)
   alert_level: Promemoria Discord
-  remind_when: Quando pubblicare
+  remind_when: Quando pubblicarlo
   remind_at_start: All'inizio
   remind_minutes: "{n} minuti prima"
   remind_hour: 1 ora prima
-  remind_when_hint: I promemoria vengono controllati ogni 5 minuti, quindi possono arrivare con un leggero anticipo.
+  remind_when_hint: I promemoria vengono controllati ogni 5 minuti, quindi potrebbero arrivare con qualche minuto di anticipo.
   notify_off: Nessun promemoria
   notify_role: Notifica il ruolo avvisi dell'alleanza
   notify_custom: Notifica un ruolo specifico
   notify_everyone: Notifica @everyone
-  notify_none: Pubblica senza notifiche
-  role_id: ID ruolo specifico
-  role_id_hint: "(solo per “Notifica un ruolo specifico”)"
+  notify_none: Pubblica senza notifica
+  role_id: ID Ruolo specifico
+  role_id_hint: (solo per "Notifica un ruolo specifico")
   role_id_title: Deve essere un ID ruolo Discord valido di 17-20 cifre
-  details: Istruzioni / Punto di raduno
-  details_example: es. Raduno all'Alveare Alpha. R4 guidano i rally. Chat vocale attiva.
-  publish: Pubblica nel calendario
+  details: Istruzioni / Punto di ritrovo
+  details_example: es. Raduno all'Alveare Alpha. R4 guidano i rally. Canale vocale attivo.
+  publish: Pubblica sul Calendario
   publishing: Pubblicazione in corso...
   bad_time: Il Game Time deve essere impostato con incrementi di 5 minuti (:00, :05, :10, ecc.)
   bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per il destinatario dell'avviso personalizzato.
-  save_failed: Impossibile salvare l'evento
+  save_failed: Salvataggio evento fallito
   published: Operazione pubblicata con successo!
   delete_heading: Eliminare questo evento?
-  delete_repeats: 'È un evento ricorrente ({repeat}): tutte le occorrenze saranno rimosse, non solo questa.'
+  delete_repeats: 'Si ripete ({repeat}): ogni ripetizione verrà rimossa, non solo questa.'
   delete_final: Questa azione non può essere annullata.
   delete_confirm: Elimina
-  delete_failed: Impossibile eliminare l'evento
+  delete_failed: Eliminazione evento fallita
   removed: Operazione rimossa.
 kings_scheduler:
   title: Rotazione Campidoglio
