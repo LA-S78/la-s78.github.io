@@ -4,11 +4,16 @@
     {% for item in site.data.guide_directory[include.category] %}
     
     {% assign localized_url = item.url | replace: "LANG_CODE", current_lang %}
+    {% include guide-picture.html item=item %}
+    {%- capture card_style -%}
+      {%- if item.span -%}grid-column: span {{ item.span }};{%- endif -%}
+      {%- if guide_pic != "" %} --pic: url('/images/events/{{ guide_pic }}');{%- endif -%}
+    {%- endcapture %}
 
     <a href="{{ localized_url }}" 
-       class="guide-card searchable-item {% if item.status == 'unavailable' %}unavailable{% endif %}" 
+       class="guide-card searchable-item{% if guide_pic != '' %} has-pic{% endif %}{% if item.status == 'unavailable' %} unavailable{% endif %}" 
        {% if item.status == 'unavailable' %}aria-disabled="true" tabindex="-1"{% endif %}
-       {% if item.span %}style="grid-column: span {{ item.span }};"{% endif %}
+       {% if card_style != "" %}style="{{ card_style | strip }}"{% endif %}
        {% if item.tooltip %}title="{{ item.tooltip }}"{% endif %}>
         
         <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px auto; width: 32px; height: 32px; display: block;">

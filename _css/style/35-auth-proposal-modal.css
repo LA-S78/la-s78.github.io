@@ -487,6 +487,34 @@ dialog.auth-modal[open] {
   padding: 0 10px;
 }
 
+/* A guide's event picture behind its card (owner request, 2026-11-17), as on the calendar's
+   event cards (_css/portal/50-calendar.css): dimmed into the theme's card colour so the
+   icon and name stay readable in every theme, darkest at the bottom where the name sits.
+   Placed at 66% across, where every event picture has its subject. */
+.guide-card.has-pic,
+.pinned-card.has-pic {
+  --pic-fade: var(--card-bg-solid, #1b1714);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--pic-fade) 55%, transparent) 0%,
+      color-mix(in srgb, var(--pic-fade) 70%, transparent) 50%,
+      color-mix(in srgb, var(--pic-fade) 88%, transparent) 100%
+    ),
+    var(--pic) 66% center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.guide-card.has-pic > span,
+.pinned-card.has-pic > span {
+  text-shadow: 0 1px 3px color-mix(in srgb, var(--pic-fade) 90%, transparent);
+}
+
+.guide-card.has-pic .nav-icon-svg,
+.pinned-card.has-pic .nav-icon-svg {
+  filter: drop-shadow(0 1px 2px color-mix(in srgb, var(--pic-fade) 90%, transparent));
+}
+
 /* A guide that isn't written yet: a quiet, dimmed card with a "Coming soon" label (it was a
    red block with its title struck through, the loudest thing on the guides page) */
 .guide-card.unavailable {
