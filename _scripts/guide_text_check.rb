@@ -159,10 +159,41 @@ module GuideTextCheck
     [out.join, redone]
   end
 
-  # An English block made ready for another language (its '=== … ===' line and lang:)
-  def for_language(block, lang)
-    block.sub(/^(=== (?:guide|pane)--)en--/) { "#{Regexp.last_match(1)}#{lang}--" }
-         .gsub(/^lang:\s*["']?en["']?\s*$/, %(lang: "#{lang}"))
+  # A block's parts: its texts to translate ({ "title" => …, "subtitle" => … }, from its
+  # front matter) and its body (everything after the front matter).
+  def parts(block)
+    m = block.match(/\A(.*?^---\s*\n.*?^---\s*\n)(.*)\z/m) or return nil
+    fields = {}
+    m[1].each_line { |l| (f = l.match(TEXT_FIELD)) && fields[f[1]] = unquote(f[2]) }
+    [fields, m[2]]
+  end
+
+  # Things in a body that must come through a translation unchanged: Liquid tags and the
+  # HTML attributes that aren't text (links, pictures, ids, classes, scripts)
+  PROTECTED = /\{%.*?%\}|\{\{.*?\}\}|\b(?:src|href|class|id|onclick|style|width|height|loading)="[^"]*"/m
+
+  def protected_parts(body)
+    body.scan(PROTECTED).sort
+  end
+
+  # The English block rebuilt in another language: the same '=== … ===' line and front
+  # matter (language, translated title/subtitle) with the translated body. Only the texts
+  # are translated, so its ids and order can't change. nil if the body lost a link,
+  # picture or Liquid tag.
+  def rebuild(en_block, lang, fields, body)
+    _, en_body = parts(en_block)
+    return nil unless body.is_a?(String) && !body.strip.empty?
+    return nil unless protected_parts(body) == protected_parts(en_body)
+
+    head = en_block[0, en_block.length - en_body.length]
+    head = head.sub(/^(=== (?:guide|pane)--)en--/) { "#{Regexp.last_match(1)}#{lang}--" }
+               .gsub(/^lang:\s*["']?en["']?\s*$/, %(lang: "#{lang}"))
+               .gsub(/^(title|subtitle):[ \t]*(.*?)[ \t]*$/) do
+                 key = Regexp.last_match(1)
+                 value = fields[key]
+                 value.is_a?(String) && !value.strip.empty? ? "#{key}: #{JSON.generate(value)}" : Regexp.last_match(0)
+               end
+    "#{head}#{body.rstrip}\n\n"
   end
 
   # A master file's text for one language (its guide and pane blocks)

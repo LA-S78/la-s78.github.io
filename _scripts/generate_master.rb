@@ -49,17 +49,39 @@ end
 LEGACY_STRUCTURE = "- Legacy Delimiters: Use '=== guide--[lang]--... ==='."
 
 # A block whose ids or order differ from the English, or that is missing, translated again
-# from the English block alone (two tries). nil if both replies came back wrong.
+# from the English block alone (two tries). Only its texts go to Gemini, as JSON (title,
+# subtitle, body); the block's '=== … ===' line and ids are rebuilt from the English, so
+# they can't come back changed (owner request, 2026-11-17: asked for the whole block,
+# Gemini changed its structure). nil if both replies lost a link, picture or Liquid tag.
 def translate_block(key, en_block, lang)
   puts "--> [#{lang}] #{key} doesn't match the English: translating it again"
-  source = GuideTextCheck.for_language(en_block, lang)
+  fields, body = GuideTextCheck.parts(en_block)
+  return nil unless fields
+
+  todo = fields.merge('body' => body)
+  prompt = <<~PROMPT
+    Translate the values of this JSON object from English into the language with the code
+    "#{lang}". They are one section of a game guide: "title" and "subtitle" are headings,
+    "body" is Markdown with some HTML.
+    In "body": translate the readable text and the text of alt="..." attributes. Keep the
+    Markdown markup, HTML tags and their other attributes, URLs, emoji and Liquid tags
+    ({% ... %} and {{ ... }}) exactly as they are.
+    Keep the keys. Reply with the JSON object only.
+    Use this glossary of game terms: #{GLOSSARY.to_json}
+
+    #{JSON.pretty_generate(todo)}
+  PROMPT
   2.times do |try|
     sleep(5) if try.positive?
-    reply = call_gemini_api(guide_prompt(source, lang, LEGACY_STRUCTURE), lang).to_s
-    reply = reply.gsub(/\A```\w*\n|```\s*\z/, '').strip + "\n\n"
-    return reply if GuideTextCheck.structure_matches?(en_block, reply)
+    reply = call_gemini_api(prompt, lang, json: true)
+    answers = JSON.parse(reply.to_s.gsub(/\A```(?:json)?|```\z/, '').strip) rescue {}
+    answers = {} unless answers.is_a?(Hash)
+    block = GuideTextCheck.rebuild(en_block, lang, answers, answers['body'])
+    return block if block
+
+    puts "--> [#{lang}] the reply lost a link, picture or Liquid tag#{try.zero? ? ': asking again' : ''}"
   end
-  puts "::warning::#{key} [#{lang}]: the new translation didn't match the English either; left as it was"
+  puts "::warning::#{key} [#{lang}]: couldn't translate it again; left as it was"
   nil
 end
 
