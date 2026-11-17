@@ -228,12 +228,18 @@ function nominateLink(req, res, { gist, mapState, tag, access }) {
   return res.status(200).json({ url: `/nominate.html?token=${token}` });
 }
 
-/** The alliances a Steward can switch between, best rank first. */
+/**
+ * The alliances a Steward can switch between, in the Alliance page's standings order (owner,
+ * 2026-11-17): NAP alliances (`is_nap`, on unless switched off) by rank, then by tag, the
+ * academies (RâvN, Ghst) among them; then the alliances outside the NAP, in the same order.
+ */
 function allianceList(alliances) {
-  return Object.entries(alliances)
-    .filter(([, a]) => a && a.type !== 'academy')
-    .map(([tag, a]) => ({ tag, rank: Number.isFinite(Number(a.rank)) ? Number(a.rank) : null }))
-    .sort((x, y) => (x.rank ?? 999) - (y.rank ?? 999) || x.tag.localeCompare(y.tag));
+  const rank = (a) => (Number.isFinite(Number(a?.rank)) && a.rank !== null ? Number(a.rank) : null);
+  const byRank = (x, y) => (x.rank ?? 999) - (y.rank ?? 999) || x.tag.localeCompare(y.tag);
+  const list = Object.entries(alliances)
+    .filter(([, a]) => a)
+    .map(([tag, a]) => ({ tag, rank: rank(a), nap: a.is_nap !== false }));
+  return [...list.filter((x) => x.nap).sort(byRank), ...list.filter((x) => !x.nap).sort(byRank)];
 }
 
 function firstByRank(alliances) {
