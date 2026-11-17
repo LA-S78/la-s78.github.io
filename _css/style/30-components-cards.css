@@ -339,3 +339,91 @@ dialog a.dialog-btn:hover {
   margin-top: 1rem;
   font-weight: 600;
 }
+
+/* The Top 4 race on the Rules page (js/ascension.js): Might on Duel Days 3–5 of Kingdom War
+   Week 1 and the total, best first; the Top 4 marked with the accent colour */
+.ascension-race {
+  margin-top: 1.5rem;
+}
+
+.ascension-race h3 {
+  margin: 0 0 0.3rem;
+}
+
+.ascension-meta,
+.ascension-source {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.ascension-scroll {
+  overflow-x: auto;
+}
+
+.ascension-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ascension-table th,
+.ascension-table td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ascension-table th:nth-child(2),
+.ascension-table td:nth-child(2) {
+  text-align: left;
+}
+
+.ascension-table th {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ascension-table tr.is-top4 td {
+  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+  font-weight: 700;
+}
+
+.ascension-table tr.is-top4 td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent-color);
+}
+
+.ascension-table tr.is-incomplete td {
+  color: var(--text-muted);
+}
+
+.ascension-total {
+  font-weight: 700;
+}
+
+/* Phones: the three days fold into a small line under the alliance, so the table fits */
+.ascension-days {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .ascension-table th:nth-child(3),
+  .ascension-table th:nth-child(4),
+  .ascension-table th:nth-child(5),
+  .ascension-table td:nth-child(3),
+  .ascension-table td:nth-child(4),
+  .ascension-table td:nth-child(5) {
+    display: none;
+  }
+
+  .ascension-days {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+}

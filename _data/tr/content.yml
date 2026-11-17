@@ -4,8 +4,8 @@ rules_page:
     text: "Adil oyun ve sunucu istikrarını sağlamak için aşağıdaki kurallar zorunludur."
   rotation:
     title: "Kapitol Rotasyonu"
-    text: "İlk 3'e girmek için, aday Krallık Savaşı 1. Hafta, İttifak Düellosu 3-5. Günlerde mevcut tutucunun Gücünü aşmalıdır."
-    note: "*Not: Güç snapshot'ları günlük sıfırlamadan 10 dakika önce alınır.*"
+    text: "İlk 4, Güç ile belirlenir: her NAP ittifakının Gücü, akademiler dahil, Krallık Savaşı 1. Hafta'nın İttifak Düellosu 3., 4. ve 5. günlerinde toplanır. En yüksek dört toplam, bir Steward onayladıktan sonra bir sonraki döngüden itibaren İlk 4 yerlerini alır."
+    note: "*Not: Güç, üç günün her birinde sıfırlamadan 10 dakika önce (23:50 GT) otomatik olarak ölçülür.*"
   rewards:
     title: "Kapitol Ödülleri"
 alliance_page:

@@ -4,8 +4,8 @@ rules_page:
     text: "The following guidelines are mandatory to ensure fair play and server stability."
   rotation:
     title: "Capitol Rotation"
-    text: "To ascend to Top 3 status, the contender must surpass a current holder's Might for Alliance Duel Days 3-5 of Kingdom War Week 1."
-    note: "*Note: Snapshots will be taken 10 minutes before reset.*"
+    text: "The Top 4 is decided by Might: each NAP alliance's Might, academies included, is added up over Alliance Duel Days 3, 4 and 5 of Kingdom War Week 1. The four highest totals hold the Top 4 seats from the next cycle, once a Steward confirms."
+    note: "*Note: Might is measured automatically 10 minutes before reset (23:50 GT) on each of the three days.*"
   rewards:
     title: "Capitol Rewards"
 alliance_page:

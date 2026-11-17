@@ -4,8 +4,8 @@ rules_page:
     text: "Les directives suivantes sont obligatoires pour garantir le fair-play et la stabilité du serveur."
   rotation:
     title: "Rotation du Capitole"
-    text: "Pour atteindre le statut Top 3, le prétendant doit surpasser la Puissance d'un détenteur actuel lors des jours 3 à 5 du Duel d'Alliances de la Semaine 1 de la Guerre des Royaumes."
-    note: "*Note : Les captures de puissance sont prises 10 minutes avant la réinitialisation quotidienne.*"
+    text: "Le Top 4 est décidé par la Puissance : la Puissance de chaque alliance du PNA, académies comprises, est additionnée sur les jours 3, 4 et 5 du Duel d'Alliances de la Semaine 1 de la Guerre des Royaumes. Les quatre totaux les plus élevés occupent les places du Top 4 dès le cycle suivant, après confirmation d'un Steward."
+    note: "*Remarque : la Puissance est mesurée automatiquement 10 minutes avant la réinitialisation (23:50 GT) chacun des trois jours.*"
   rewards:
     title: "Récompenses du Capitole"
 alliance_page:

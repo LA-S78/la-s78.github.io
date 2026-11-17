@@ -4,8 +4,8 @@ rules_page:
     text: "Die folgenden Richtlinien sind obligatorisch, um Fairplay und Serverstabilität zu gewährleisten."
   rotation:
     title: "Kapitol-Rotation"
-    text: "Um den Top-3-Status zu erreichen, muss der Anwärter die Macht eines aktuellen Inhabers an den Duelltagen 3-5 der Kingdom War-Woche 1 übertreffen."
-    note: "*Hinweis: Macht-Snapshots werden 10 Minuten vor dem täglichen Reset gemacht.*"
+    text: "Die Top 4 werden nach Macht bestimmt: Die Macht jeder NAP-Allianz, Akademien eingeschlossen, wird über die Allianz-Duell-Tage 3, 4 und 5 der Königreichskrieg-Woche 1 addiert. Die vier höchsten Summen erhalten ab dem nächsten Zyklus die Top-4-Plätze, sobald ein Steward bestätigt."
+    note: "*Hinweis: Die Macht wird an jedem der drei Tage automatisch 10 Minuten vor dem Reset (23:50 GT) gemessen.*"
   rewards:
     title: "Kapitol-Belohnungen"
 alliance_page:
