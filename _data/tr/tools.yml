@@ -488,7 +488,12 @@ calendar_events:
   once: Tek Seferlik Etkinlik (Tekrarlanmaz)
   every_2_days: Her 2 Günde Bir Tekrarlanır
   weekly: Haftalık Tekrarlanır (Aynı gün & saat)
-  alert_level: Discord hatırlatıcısı (1 saat önce)
+  alert_level: "Discord hatırlatıcısı"
+  remind_when: "Ne zaman gönderilsin"
+  remind_at_start: "Başladığında"
+  remind_minutes: "{n} dakika önce"
+  remind_hour: "1 saat önce"
+  remind_when_hint: "Hatırlatıcılar her 10 dakikada bir kontrol edilir, bu yüzden birkaç dakika erken gelebilir."
   notify_off: Hatırlatıcı yok
   notify_role: İttifakın uyarı rolünü etiketle
   notify_custom: Belirli bir rolü etiketle

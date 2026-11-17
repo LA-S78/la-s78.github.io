@@ -166,6 +166,12 @@
   margin-top: 3px;
 }
 
+/* A hint the form hides (e.g. the reminder's, with "No reminder"): display above would
+   otherwise keep it on screen */
+.form-hint[hidden] {
+  display: none;
+}
+
 .form-hint-inline {
   font-size: 0.72rem;
   color: var(--text-muted);

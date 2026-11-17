@@ -488,7 +488,12 @@ calendar_events:
   once: Evento unico (non si ripete)
   every_2_days: Si ripete ogni 2 giorni
   weekly: Si ripete settimanalmente (stesso giorno e ora)
-  alert_level: Promemoria Discord (1 ora prima)
+  alert_level: "Promemoria Discord"
+  remind_when: "Quando pubblicarlo"
+  remind_at_start: "All'inizio"
+  remind_minutes: "{n} minuti prima"
+  remind_hour: "1 ora prima"
+  remind_when_hint: "I promemoria vengono controllati ogni 10 minuti, quindi può arrivare qualche minuto prima."
   notify_off: Nessun promemoria
   notify_role: Notifica il ruolo avvisi dell'alleanza
   notify_custom: Notifica un ruolo specifico

@@ -139,6 +139,7 @@ api_events:
 # Calendar reminders posted on Discord (api/_reminders.js). Discord codes stay as they are.
 reminders:
   title: "⏰ Starting soon: {title}"
+  title_now: "🔔 Starting now: {title}"
   starts: "Starts"
 
 # The Discord bot's replies (api/_bot_*.js), in the user's Discord language. Keep Discord

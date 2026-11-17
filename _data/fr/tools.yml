@@ -488,7 +488,12 @@ calendar_events:
   once: Événement unique (ne se répète pas)
   every_2_days: Répétition tous les 2 jours
   weekly: Répétition hebdomadaire (même jour et heure)
-  alert_level: Rappel Discord (1 heure avant)
+  alert_level: "Rappel Discord"
+  remind_when: "Quand le publier"
+  remind_at_start: "Au début"
+  remind_minutes: "{n} minutes avant"
+  remind_hour: "1 heure avant"
+  remind_when_hint: "Les rappels sont vérifiés toutes les 10 minutes : il peut arriver quelques minutes plus tôt."
   notify_off: Pas de rappel
   notify_role: Notifier le rôle d'alerte de l'alliance
   notify_custom: Notifier un rôle spécifique
