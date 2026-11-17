@@ -68,3 +68,34 @@ dialog.image-viewer img {
   max-height: 75vh;
   object-fit: contain;
 }
+
+/* An item's picture before a task in a guide's list (the Alliance Duel days: caravan,
+   weapon shards…), cut from the owner's graphics with the parchment made transparent.
+   Decorative (alt=""): the task's text names the item. In a list with item pictures, every
+   task starts at the same place: the picture sits in a fixed column on the left (a task
+   without one just leaves it empty), and the text wraps beside it. No frame: the pictures
+   have no background. */
+.content-pane ul:has(> li > .task-item-img) {
+  list-style: none;
+  padding-left: 0;
+}
+
+.content-pane ul:has(> li > .task-item-img) > li {
+  position: relative;
+  min-height: 2.6em;
+  padding: 0.15em 0 0.15em 3.9em;
+}
+
+main .content-pane img.task-item-img {
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  width: 3.3em;
+  height: 2.4em;
+  object-fit: contain;
+  object-position: center;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.5));
+}
