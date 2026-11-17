@@ -36,6 +36,10 @@ guides:
   premium_shop: Paquetes Premium y Gemas
   t10: Calculadora T10
   scramble: Pelea Real
+  elixir: "Pelea de Elixir"
+  undead_siege: "Asedio de los No Muertos"
+  kill_event: "Evento de Kills"
+  gear_upgrade: "Mejora de Equipo"
 pages:
   home:
     title: Inicio

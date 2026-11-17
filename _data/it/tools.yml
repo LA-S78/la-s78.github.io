@@ -593,7 +593,7 @@ rewards_planner:
 event_presets:
   crystal_cluster_title: Valle di Cristallo
   crystal_cluster_desc: Evento tutti contro tutti ogni domenica
-  elixir_scramble_title: Mischia Reale
+  elixir_scramble_title: "Mischia d'elisir"
   elixir_scramble_desc: Evento battaglia a squadre ogni venerdì
   survival_battle_title: Battaglia di Sopravvivenza
   survival_battle_desc: Completa le attività per guadagnare ricompense

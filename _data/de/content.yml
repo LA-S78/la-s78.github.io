@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Wichtige Infos"
-    t10: "T10-Rechner"
-    survival: "Überlebenskampf"
-    server_rules: "Serverregeln"
-    capitol_rotation: "Kapitol-Rotation"
-    capitol_rewards: "Kapitol-Belohnungen"
-    nap_alliances: "NAP-Allianzen"
-    blacklist: "Blacklist"
+    title: "Angeheftete Seiten"
   directories:
     title: "Verzeichnisse"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "Allianz & Diplomatie"
       sub: "Ränge, Diplomatie-Status & Gebietsabkommen"
+    calendar:
+      title: "Ereigniskalender"
+      sub: "Allianz- & Server-Events und die Kapitol-Rotation"
 writers_page:
   usage:
     title: "Markdown-Nutzung"

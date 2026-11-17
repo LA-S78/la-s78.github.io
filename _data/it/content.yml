@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Info Critiche"
-    t10: "Calcolatore T10"
-    survival: "Battaglia di Sopravvivenza"
-    server_rules: "Regole del Server"
-    capitol_rotation: "Rotazione del Campidoglio"
-    capitol_rewards: "Ricompense del Campidoglio"
-    nap_alliances: "Alleanze NAP"
-    blacklist: "Lista Nera"
+    title: "Pagine fissate"
   directories:
     title: "Directory"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "Alleanza & Diplomazia"
       sub: "Gradi, stato diplomatico & accordi territoriali"
+    calendar:
+      title: "Calendario eventi"
+      sub: "Eventi di alleanza e del server, e la rotazione del Campidoglio"
 writers_page:
   usage:
     title: "Utilizzo di Markdown"

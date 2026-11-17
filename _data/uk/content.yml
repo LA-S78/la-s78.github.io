@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Важлива інформація"
-    t10: "Калькулятор T10"
-    survival: "Битва за Виживання"
-    server_rules: "Правила сервера"
-    capitol_rotation: "Ротація Капітолію"
-    capitol_rewards: "Нагороди Капітолію"
-    nap_alliances: "NAP Альянси"
-    blacklist: "Чорний список"
+    title: "Закріплені сторінки"
   directories:
     title: "Каталоги"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "Альянс та Дипломатія"
       sub: "Ранги, статус дипломатії та територіальні угоди"
+    calendar:
+      title: "Календар подій"
+      sub: "Події альянсу та сервера, ротація Капітолію"
 writers_page:
   usage:
     title: "Використання Markdown"

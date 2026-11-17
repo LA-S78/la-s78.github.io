@@ -18,8 +18,8 @@ active_nav: home
 
 === collection--home--01 ===
 ---
-title: "Critical Intel"
-nav_id: "critical-intel"
+title: "Pinned Pages"
+nav_id: "pinned-pages"
 ---
 
 {% assign p = site.data[site.active_lang].content.home_page.pinned %}

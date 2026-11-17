@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Critical Intel"
-    t10: "T10 Calculator"
-    survival: "Survival Battle"
-    server_rules: "Server Rules"
-    capitol_rotation: "Capitol Rotation"
-    capitol_rewards: "Capitol Rewards"
-    nap_alliances: "NAP Alliances"
-    blacklist: "Blacklist"
+    title: "Pinned Pages"
   directories:
     title: "Directories"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "Alliance & Diplomacy"
       sub: "Ranks, diplomatic status, & territory agreements"
+    calendar:
+      title: "Event Calendar"
+      sub: "Alliance & server events, and the Capitol rotation"
 writers_page:
   usage:
     title: "Markdown Usage"

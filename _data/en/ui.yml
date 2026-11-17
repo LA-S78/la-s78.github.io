@@ -38,6 +38,10 @@ guides:
   premium_shop: "Premium & Gem Packs"
   t10: "T10 Calculator"
   scramble: "Royal Scramble"
+  elixir: "Elixir Scramble"
+  undead_siege: "Undead Siege"
+  kill_event: "Kill Event"
+  gear_upgrade: "Gear Upgrade"
 
 #page title and subtitles
 pages:

@@ -36,6 +36,10 @@ guides:
   premium_shop: Премиум и Наборы самоцветов
   t10: Калькулятор T10
   scramble: Королевская схватка
+  elixir: "Схватка за эликсир"
+  undead_siege: "Осада нежити"
+  kill_event: "Событие убийств"
+  gear_upgrade: "Улучшение снаряжения"
 pages:
   home:
     title: Главная
