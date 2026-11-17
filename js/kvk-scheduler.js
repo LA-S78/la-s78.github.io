@@ -8,6 +8,7 @@
 import { ALLIANCE_COLORS, startingSchedule } from './alliance-defaults.js';
 import { submitProposalWithAuth } from './auth-modal.js';
 import { sameTag } from './tags.js';
+import { allyPicMarkup, revealAllyPics } from './ally-pics.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -31,16 +32,13 @@ let activeBuyouts = [];
 let alliancesData = {};
 let allianceImages = {};
 
-/** The style attribute that puts an alliance's card picture behind its card, or ''. */
-function cardStyle(tag) {
+/** The picture behind an alliance's card: { cls, attrs } (js/ally-pics.js), '' when none. */
+function cardPic(tag) {
   // The tag as stored, or without its accents (RAVN for RÂVN). Letter case counts: RâvN
   // and RÂVN are two alliances (owner, 2026-11-17), so RâvN never borrows RÂVN's picture.
   const pics =
     allianceImages[tag] || Object.entries(allianceImages).find(([key]) => sameTag(key, tag))?.[1];
-  const url = pics?.card;
-  return typeof url === 'string' && /^\/alliance-images\/[A-Za-z0-9.-]+$/.test(url)
-    ? ` style="--ally-pic: url('${url}')"`
-    : '';
+  return allyPicMarkup(pics?.card);
 }
 
 // Colours for alliances with none of their own: _data/alliances.yml (via js/alliance-defaults.js)
@@ -133,11 +131,12 @@ function renderScheduleGrid() {
       const isCurrent =
         (w.key === 'downtime' && currentWeek === 0) || w.key === `week_${currentWeek}`;
       const color = getAllianceColor(w.seat);
+      const pic = cardPic(w.seat);
 
       // Three rows (week, tag + ACTIVE, loot), lined up across the cards
       // (CSS subgrid): every card the same height, the tags on one line
       return `
-      <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}${cardStyle(w.seat) ? ' has-ally-pic' : ''}"${cardStyle(w.seat)}>
+      <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}${pic.cls}"${pic.attrs}>
         <div class="ops-week-header">
           <span class="ops-week-num">${esc(w.label)}</span>
         </div>
@@ -152,6 +151,8 @@ function renderScheduleGrid() {
     `;
     })
     .join('');
+  // Pictures that weren't loaded yet fade in once they are (js/ally-pics.js)
+  revealAllyPics(container);
 }
 
 /**
