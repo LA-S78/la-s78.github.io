@@ -1,5 +1,6 @@
-{%- comment -%} The bottom navigation. Icons: set A (owner choice, 2026-11-17): a keep, a scroll, an open book, a
-     banner and a calendar with a tick; the home page's Directories cards use the same. {%- endcomment -%}
+{%- comment -%} The bottom navigation. Icons (owner choice, 2026-11-17): a keep (Home), a scroll (Rules), a map
+     (Guides), two shields (Alliance) and a calendar with a clock (Calendar); the home page's
+     Directories cards use the same. {%- endcomment -%}
 <footer>
     <a href="/{{ site.active_lang }}/index.html" class="nav-item {% if page.active_nav == 'home' %}active{% endif %}" aria-label="{{ site.data[site.active_lang].ui.footer.aria_home }}" data-turbo-frame="main-content">
         <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -23,25 +24,27 @@
 
     <a href="/{{ site.active_lang }}/guides/index.html" class="nav-item {% if page.active_nav == 'guides' %}active{% endif %}" aria-label="{{ site.data[site.active_lang].ui.footer.aria_guides }}" data-turbo-frame="main-content">
         <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/>
-            <path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>
+            <path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/>
+            <path d="M9 3v15"/>
+            <path d="M15 6v15"/>
         </svg>
         <span>{{ site.data[site.active_lang].ui.footer.nav_guides }}</span>
     </a>
 
     <a href="/{{ site.active_lang }}/alliance.html" class="nav-item {% if page.active_nav == 'alliance' %}active{% endif %}" aria-label="{{ site.data[site.active_lang].ui.footer.aria_alliance }}" data-turbo-frame="main-content">
         <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 22V3"/>
-            <path d="M5 4h13l-2.5 4.5L18 13H5"/>
+            <path d="M9 20s-6-3-6-8V6l6-2 6 2v6c0 5-6 8-6 8z"/>
+            <path d="M15.5 4.2 21 6v6c0 4.2-3.6 6.9-5.6 7.8"/>
         </svg>
         <span>{{ site.data[site.active_lang].ui.footer.nav_alliance }}</span>
     </a>
 
     <a href="/{{ site.active_lang }}/calendar.html" class="nav-item {% if page.active_nav == 'calendar' %}active{% endif %}" aria-label="{{ site.data[site.active_lang].ui.footer.aria_calendar }}" data-turbo-frame="main-content">
         <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="17" rx="2"/>
-            <path d="M16 2v4M8 2v4M3 10h18"/>
-            <path d="m9 15.5 2 2 4-4"/>
+            <path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/>
+            <path d="M16 2v4M8 2v4M3 10h6"/>
+            <circle cx="16.5" cy="16.5" r="5.5"/>
+            <path d="M16.5 14.5v2l1.3 1.3"/>
         </svg>
         <span>{{ site.data[site.active_lang].ui.footer.nav_calendar }}</span>
     </a>
