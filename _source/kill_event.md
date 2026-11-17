@@ -88,8 +88,8 @@ Every player on the map has a coloured marker. The banner at the top shows which
 === guide--de--events--kill_event ===
 ---
 layout: guides
-title: "Kill Event"
-subtitle: "Raiding your Alliance Duel opponent"
+title: "Kill-Event"
+subtitle: "Überfall auf deinen Allianz-Duell-Gegner"
 active_nav: guides
 guide_id: "kill_event"
 nav_links:
@@ -103,7 +103,7 @@ nav_links:
 
 === pane--de--events--kill_event--01--travel ===
 ---
-title: "Getting There"
+title: "Ankunft"
 nav_id: "travel"
 parent_guide: "kill_event"
 lang: "de"
@@ -117,13 +117,13 @@ Das Kill Event wird auf dem Server deines **Allianz-Duell**-Gegners ausgetragen.
 3. Tippe auf **Los**. Du wirst zum Server deines Gegners teleportiert.
 
 <div class="guide-shots">
-<img src="/images/guides/kill-event-travel-map.webp" alt="The Alliance Duel event icon on the city view" class="blueprint-img" width="302" height="304" loading="lazy">
-<img src="/images/guides/kill-event-travel-raid.webp" alt="The Raid tab of the Alliance Duel, with the Go button" class="blueprint-img" width="161" height="304" loading="lazy">
+<img src="/images/guides/kill-event-travel-map.webp" alt="Das Allianz-Duell-Event-Symbol in der Stadtansicht" class="blueprint-img" width="302" height="304" loading="lazy">
+<img src="/images/guides/kill-event-travel-raid.webp" alt="Der Reiter für Überfälle im Allianz-Duell mit der Los-Schaltfläche" class="blueprint-img" width="161" height="304" loading="lazy">
 </div>
 
 === pane--de--events--kill_event--02--home ===
 ---
-title: "Getting Home"
+title: "Heimkehr"
 nav_id: "home"
 parent_guide: "kill_event"
 lang: "de"
@@ -133,7 +133,7 @@ order: 2
 Der **blaue Pfeil** neben dem **!** oben auf dem Bildschirm teleportiert dich zurück auf deinen eigenen Server.
 
 <div class="guide-shots">
-<img src="/images/guides/kill-event-home-bar.webp" alt="The server bar, with the blue arrow next to the exclamation mark" class="blueprint-img" width="375" height="53" loading="lazy">
+<img src="/images/guides/kill-event-home-bar.webp" alt="Die Server-Leiste mit dem blauen Pfeil neben dem Ausrufezeichen" class="blueprint-img" width="375" height="53" loading="lazy">
 </div>
 
 > #### ⚠️ Teleport-Limit
@@ -141,7 +141,7 @@ Der **blaue Pfeil** neben dem **!** oben auf dem Bildschirm teleportiert dich zu
 
 === pane--de--events--kill_event--03--targets ===
 ---
-title: "Who to Hit"
+title: "Wen man angreifen sollte"
 nav_id: "targets"
 parent_guide: "kill_event"
 lang: "de"
@@ -156,7 +156,7 @@ Jeder Spieler auf der Karte hat eine farbige Markierung. Das Banner oben zeigt a
 * <span class="map-pin is-light-red" aria-hidden="true"></span> **Lichtrot:** ein Spieler vom Server deines Gegners, aber nicht dein Gegner.
 
 <div class="guide-shots">
-<img src="/images/guides/kill-event-targets-enemy.webp" alt="Bright red and light red markers on the opponent's server" class="blueprint-img" width="192" height="257" loading="lazy">
+<img src="/images/guides/kill-event-targets-enemy.webp" alt="Hellrote und leuchtend rote Markierungen auf dem gegnerischen Server" class="blueprint-img" width="192" height="257" loading="lazy">
 </div>
 
 #### Auf deinem Heimatserver
@@ -167,8 +167,8 @@ Jeder Spieler auf der Karte hat eine farbige Markierung. Das Banner oben zeigt a
 * <span class="map-pin is-yellow" aria-hidden="true"></span> **Gelb:** dringt in deinen Server ein. Greife sie an, wenn ihr Standort geteilt wird.
 
 <div class="guide-shots">
-<img src="/images/guides/kill-event-targets-home.webp" alt="Blue and red markers on your home server" class="blueprint-img" width="200" height="257" loading="lazy">
-<img src="/images/guides/kill-event-targets-home-2.webp" alt="White and yellow markers on your home server" class="blueprint-img" width="206" height="257" loading="lazy">
+<img src="/images/guides/kill-event-targets-home.webp" alt="Blaue und rote Markierungen auf deinem Heimatserver" class="blueprint-img" width="200" height="257" loading="lazy">
+<img src="/images/guides/kill-event-targets-home-2.webp" alt="Weiße und gelbe Markierungen auf deinem Heimatserver" class="blueprint-img" width="206" height="257" loading="lazy">
 </div>
 
 === guide--es--events--kill_event ===
@@ -346,7 +346,7 @@ Chaque joueur sur la carte possède un marqueur coloré. La bannière en haut in
 === guide--ru--events--kill_event ===
 ---
 layout: guides
-title: "Kill Event"
+title: "Событие на убийство"
 subtitle: "Нападение на противника в Дуэли Альянсов"
 active_nav: guides
 guide_id: "kill_event"
@@ -518,8 +518,8 @@ Haritadaki her oyuncunun renkli bir işaretçisi vardır. Üstteki başlık, han
 === guide--uk--events--kill_event ===
 ---
 layout: guides
-title: "Kill Event"
-subtitle: "Raiding your Alliance Duel opponent"
+title: "Подія вбивств"
+subtitle: "Рейди на вашого супротивника по Дуелі Альянсів"
 active_nav: guides
 guide_id: "kill_event"
 nav_links:
@@ -533,7 +533,7 @@ nav_links:
 
 === pane--uk--events--kill_event--01--travel ===
 ---
-title: "Getting There"
+title: "Як дістатися"
 nav_id: "travel"
 parent_guide: "kill_event"
 lang: "uk"
@@ -553,7 +553,7 @@ Kill Event (Подія вбивства) відбувається на серв�
 
 === pane--uk--events--kill_event--02--home ===
 ---
-title: "Getting Home"
+title: "Повернення додому"
 nav_id: "home"
 parent_guide: "kill_event"
 lang: "uk"
@@ -571,7 +571,7 @@ order: 2
 
 === pane--uk--events--kill_event--03--targets ===
 ---
-title: "Who to Hit"
+title: "Кого атакувати"
 nav_id: "targets"
 parent_guide: "kill_event"
 lang: "uk"
