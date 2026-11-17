@@ -201,7 +201,7 @@ pwa:
   toast_msg: "New intel acquired."
   update_btn: "Update"
   updating: "Decrypting..."
-  updated_msg: "✅ App updated to the latest version."
+  updated_msg: "App updated to the latest version."
 
 #header sign-in pill (js/identity-pill.js)
 identity:

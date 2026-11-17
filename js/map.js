@@ -905,6 +905,7 @@ export async function submitStrategyProposal() {
   submitProposalWithAuth({
     type: 'map',
     title: tm('proposal_title'),
+    icon: 'map',
     payload: payload,
     diffSummaryHtml: `<div class="diff-list">${diffItems}</div>`,
     onSuccess: () => {

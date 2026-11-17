@@ -93,7 +93,7 @@ nav_id: "blacklist"
 <div class="blacklist-section">
   <div class="blacklist-group">
     <div class="blacklist-header">
-      <h3>{{ "blacklist_planner.players_title" | t }}</h3>
+      <h3>{% include ui-icon.html name="ban" %}{{ "blacklist_planner.players_title" | t }}</h3>
       <span id="blacklist-player-count" class="badge">0</span>
     </div>
     <div id="blacklist-players-container" class="blacklist-card-list">
@@ -109,7 +109,7 @@ nav_id: "blacklist"
 
   <div class="blacklist-group">
     <div class="blacklist-header">
-      <h3>{{ "blacklist_planner.alliances_title" | t }}</h3>
+      <h3>{% include ui-icon.html name="warning" tone="warn" %}{{ "blacklist_planner.alliances_title" | t }}</h3>
       <span id="blacklist-alliance-count" class="badge">0</span>
     </div>
     <div id="blacklist-alliances-container" class="blacklist-card-list">

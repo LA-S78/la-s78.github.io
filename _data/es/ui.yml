@@ -171,7 +171,7 @@ pwa:
   toast_msg: Nueva información adquirida.
   update_btn: Actualizar
   updating: Descifrando...
-  updated_msg: "✅ App actualizada a la última versión."
+  updated_msg: "App actualizada a la última versión."
 identity:
   account: Tu cuenta
   sign_in: Iniciar sesión

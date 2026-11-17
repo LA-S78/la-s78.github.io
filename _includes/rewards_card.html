@@ -57,8 +57,8 @@
       <thead>
         <tr>
           <th>{{ t.ui.rank | default: "RANK" | upcase }}</th>
-          <th>{{ t.ui.total_diamonds | default: "TOTAL DIAMONDS" | upcase }} 💎</th>
-          <th>{{ t.ui.total_tickets | default: "TOTAL TICKETS" | upcase }} 🎫</th>
+          <th>{% include ui-icon.html name="gem" %}{{ t.ui.total_diamonds | default: "TOTAL DIAMONDS" | upcase }}</th>
+          <th>{% include ui-icon.html name="ticket" %}{{ t.ui.total_tickets | default: "TOTAL TICKETS" | upcase }}</th>
         </tr>
       </thead>
       <tbody id="payout-table-body">

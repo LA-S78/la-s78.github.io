@@ -239,7 +239,7 @@ charts:
 nominate:
   page_title: Nominations aux Récompenses
   loading: Chargement de la page de nomination...
-  players_label: "📋 Vos joueurs, les meilleurs en premier"
+  players_label: "Vos joueurs, les meilleurs en premier"
   players_help: Un nom par ligne (ou séparé par des virgules), le meilleur joueur en premier. Les coffres sont distribués selon l'ordre de la liste pour les deux ensembles ; les noms au-delà des coffres sont conservés comme réserve et remontent si d'autres coffres sont ouverts.
   players_placeholder: Noms exacts en jeu, les meilleurs d'abord...
   who_gets_what: Qui reçoit quoi
@@ -249,10 +249,10 @@ nominate:
   load_failed: "{error} Utilisez /nominate sur Discord pour obtenir un nouveau lien."
   closed: Les récompenses sont closes. Les prochaines s'ouvrent {when}, après l'événement du capitole du vendredi.
   header: Rang {rank} · récompenses {week} · ouvert jusqu'au {when}
-  banner_off_week: "👑 Mention du Roi uniquement cette semaine (pas de Guerre des Royaumes)."
-  banner_won: "⚔️ Guerre des Royaumes gagnée : les coffres de Récompense du Roi de la Bataille sont également ouverts."
-  banner_lost: "🛡️ Guerre des Royaumes perdue : Mention du Roi uniquement cette semaine."
-  banner_pending: "⏳ En attente du résultat de la bataille de samedi (environ {when}). Si elle est gagnée, les coffres de Récompense du Roi de la Bataille s'ouvriront et votre liste sera réordonnée. Le Roi distribue après le résultat, donc le coffre de personne n'est modifié."
+  banner_off_week: "Mention du Roi uniquement cette semaine (pas de Guerre des Royaumes)."
+  banner_won: "Guerre des Royaumes gagnée : les coffres de Récompense du Roi de la Bataille sont également ouverts."
+  banner_lost: "Guerre des Royaumes perdue : Mention du Roi uniquement cette semaine."
+  banner_pending: "En attente du résultat de la bataille de samedi (environ {when}). Si elle est gagnée, les coffres de Récompense du Roi de la Bataille s'ouvriront et votre liste sera réordonnée. Le Roi distribue après le résultat, donc le coffre de personne n'est modifié."
   handed_out_title: "✓ Déjà distribué par le Roi ({n})"
   handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc avec ces joueurs, quoi que dise votre liste. La liste ci-dessous répartit le reste.
   reserve: Réserve
@@ -267,20 +267,20 @@ nominate:
   reserves_one: "{n} réserve"
   reserves_other: "{n} réserves"
   listed_twice: "{name} est listé deux fois"
-  saved: "✅ Enregistré. Le Roi peut voir votre liste. Vous pouvez la modifier jusqu'au {when}."
+  saved: "Enregistré. Le Roi peut voir votre liste. Vous pouvez la modifier jusqu'au {when}."
   save_failed: 'Échec de l''enregistrement : {error}'
 kings_console:
   page_title: Console de Distribution du Roi
-  title: "👑 Console de Distribution du Roi"
+  title: "Console de Distribution du Roi"
   loading: Chargement des nominations...
   by_chest: Par Coffre
   by_alliance: Par Alliance
-  can_tick: "✅ Cochez un joueur une fois son coffre remis en jeu. Les coches sont enregistrées pour tout le monde, et un coffre coché reste avec ce joueur si les listes sont réordonnées."
-  view_only_signed_out: "👀 Lecture seule. La liste de contrôle du Roi peut être cochée par les R4/R5 du {king} et les Intendants : connectez-vous avec Discord (en haut à droite)."
-  view_only: "👀 Lecture seule : la liste de contrôle est gérée par les R4/R5 du {king} et les Intendants."
+  can_tick: "Cochez un joueur une fois son coffre remis en jeu. Les coches sont enregistrées pour tout le monde, et un coffre coché reste avec ce joueur si les listes sont réordonnées."
+  view_only_signed_out: "Lecture seule. La liste de contrôle du Roi peut être cochée par les R4/R5 du {king} et les Intendants : connectez-vous avec Discord (en haut à droite)."
+  view_only: "Lecture seule : la liste de contrôle est gérée par les R4/R5 du {king} et les Intendants."
   kings_alliance: l'alliance du Roi
   load_failed: 'Échec du chargement des nominations : {error}'
-  closed: "🔒 Les récompenses sont closes. Les listes ci-dessous datent de la semaine dernière ; les prochaines récompenses s'ouvriront vendredi vers 20:00 GT."
+  closed: "Les récompenses sont closes. Les listes ci-dessous datent de la semaine dernière ; les prochaines récompenses s'ouvriront vendredi vers 20:00 GT."
   hold_title: 'Retenir les coffres :'
   hold: "{title} attendez le résultat de la bataille de samedi avant de distribuer. Si la guerre est gagnée, les coffres de Récompense du Roi de la Bataille s'ouvrent et chaque liste est réordonnée. Les récompenses ferment le {when}."
   won_title: 'Guerre des Royaumes gagnée :'
@@ -302,7 +302,7 @@ kings_console:
   not_on_list: "{name} n'est plus sur la liste de [{tag}] (l'alliance a modifié la liste)."
   now_reserve: "{name} est maintenant en réserve sur la liste de [{tag}] : aucun coffre."
   now_other_chest: "{name} reçoit désormais {chest}, et non {shown}."
-  stop_warning: "⚠️ Stop : n'envoyez pas ce {chest}. {why} Les listes ont été actualisées : copiez à nouveau le nom depuis la liste ci-dessous."
+  stop_warning: "Stop : n'envoyez pas ce {chest}. {why} Les listes ont été actualisées : copiez à nouveau le nom depuis la liste ci-dessous."
   stop_alert: Ne l'envoyez pas !
   lists_refreshed: Les listes ont été actualisées.
 register:
@@ -311,7 +311,7 @@ register:
   subtitle: Portail d'intégration du serveur de l'Alliance
   step_invite: 1. Invitez le bot sur votre serveur
   invite_help: Vous devez ajouter le bot sur le Discord de votre alliance avant de terminer l'enregistrement.
-  authorize: "🤖 Cliquer pour autoriser le bot"
+  authorize: "Cliquer pour autoriser le bot"
   step_credentials: 2. Identifiants du serveur et des rôles
   guild_id: ID du serveur Discord (ID de la guilde)
   example: 'ex: {id}'
@@ -319,7 +319,7 @@ register:
   copy_server_id: Copier l'ID du serveur
   administrator: Administrateur
   manage_server: Gérer le serveur
-  routing_heading: "📢 Opérations et routage des tickets"
+  routing_heading: "Opérations et routage des tickets"
   routing_help: Configurez l'endroit où le bot publie les alertes d'opérations publiques et dirige les suggestions/tickets privés des membres.
   alert_channel: ID du salon d'alerte des opérations
   channel_id_title: Doit être un ID de salon Discord valide de 17 à 20 chiffres
@@ -352,7 +352,7 @@ register:
   bad_officer_channel: Format d'ID de salon de réception des tickets des officiers invalide. Doit être un nombre de 17 à 20 chiffres.
   failed: Échec de l'enregistrement
   error: 'Erreur d''enregistrement : {error}'
-  success: "✅ Enregistrement réussi !"
+  success: "Enregistrement réussi !"
   linked: "{server} est maintenant lié à {tag}."
   server_id: ID du serveur {id}
   r_alert_channel: 'Salon d''alerte des opérations :'
@@ -582,7 +582,7 @@ rewards_planner:
   add_tier: Ajouter un palier de récompense
   remove_bracket: Supprimer la tranche
   over_capacity: 'Capacité dépassée ! Or : {gold}/{gold_max}, Violet : {purple}/{purple_max}, Bleu : {blue}/{blue_max}'
-  proposal_title: "👑 Soumettre une proposition de distribution des récompenses"
+  proposal_title: "Soumettre une proposition de distribution des récompenses"
   rank_single: Rang {n}
   rank_range: Rang {from}–{to}
 event_presets:
@@ -630,7 +630,7 @@ alliance_planner:
   academy_new: 'Ou tapez un nouveau tag d''académie pour le créer :'
   already_exists: L'alliance [{tag}] existe déjà avec cette capitalisation exacte.
   no_changes: Aucune modification détectée dans le classement actuel.
-  proposal_title: "👑 Soumettre le classement NAP et la proposition diplomatique"
+  proposal_title: "Soumettre le classement NAP et la proposition diplomatique"
   diff_rank: "{tag} : Rang {from} ➔ {to}"
   diff_academy: "{tag} : Assignée comme académie de {parent}"
   diff_nap: "{tag} : Statut NAP {status}"
@@ -644,8 +644,8 @@ alliance_planner:
   diff_modified: Modifié [{tag}]
   unknown: Inconnu
 blacklist_planner:
-  players_title: "🚫 Joueurs sur liste noire"
-  alliances_title: "⚠️ Alliances sur liste noire"
+  players_title: "Joueurs sur liste noire"
+  alliances_title: "Alliances sur liste noire"
   player_placeholder: Pseudo du joueur
   alliance_placeholder: TAG de l'alliance
   add: "+ Ajouter"
@@ -662,7 +662,7 @@ blacklist_planner:
   press_edit: Appuyez d'abord sur {edit}.
   add_failed: 'Impossible d''ajouter {name} : {error}'
   no_changes: Aucun changement de liste noire à envoyer.
-  proposal_title: "🚫 Soumettre une proposition de liste noire NAP"
+  proposal_title: "Soumettre une proposition de liste noire NAP"
   diff_add: "{add} {what} {name}"
   diff_remove: "{remove} {what} {name}"
   add_word: Ajouter
@@ -693,9 +693,9 @@ map_planner:
   fullscreen: Plein écran
   toggle_fullscreen: Basculer en plein écran
   exit: Quitter
-  grain: "🌾 Grain"
-  timber: "🪵 Bois"
-  herbs: "🌿 Herbes"
+  grain: "Grain"
+  timber: "Bois"
+  herbs: "Herbes"
   solid_gather: 'Plein : Récolte'
   stripe_output: 'Rayé : Production'
   level_unknown: Niveau --
@@ -726,7 +726,7 @@ map_planner:
   buff_herb_gathering: Récolte d'herbes
   buff_herb_output: Production d'herbes
   no_changes: Aucune modification détectée dans votre brouillon de plan.
-  proposal_title: "🗺️ Soumettre une proposition de territoire sur la carte"
+  proposal_title: "Soumettre une proposition de territoire sur la carte"
 proposals:
   title: Soumettre une proposition
   close: Fermer

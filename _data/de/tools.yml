@@ -239,7 +239,7 @@ charts:
 nominate:
   page_title: Belohnungs-Nominierungen
   loading: Nominierungsseite wird geladen...
-  players_label: "📋 Deine Spieler, die Besten zuerst"
+  players_label: "Deine Spieler, die Besten zuerst"
   players_help: Ein Name pro Zeile (oder durch Kommas getrennt), dein bester Spieler zuerst. Die Truhen werden der Liste nach absteigend verteilt; Namen, die nach den Truhen kommen, gelten als Reserve und rücken nach, falls weitere Truhen geöffnet werden.
   players_placeholder: Exakte Spielernamen, die Besten zuerst...
   who_gets_what: Wer bekommt was
@@ -249,10 +249,10 @@ nominate:
   load_failed: "{error} Nutze /nominate in Discord für einen neuen Link."
   closed: Die Belohnungen sind geschlossen. Die nächsten öffnen {when}, nach dem Kapitol-Event am Freitag.
   header: Rang {rank} · {week} Belohnungen · offen bis {when}
-  banner_off_week: "👑 Diese Woche nur Belobigung des Königs (kein Königreichskrieg)."
-  banner_won: "⚔️ Königreichskrieg gewonnen: Belohnungen der Schlachtkönigs-Truhen sind ebenfalls offen."
-  banner_lost: "🛡️ Königreichskrieg verloren: Diese Woche nur Belobigung des Königs."
-  banner_pending: "⏳ Warte auf das Kampfergebnis vom Samstag (etwa {when}). Falls gewonnen, öffnen sich auch die Belohnungen der Schlachtkönigs-Truhen und deine Liste wird neu sortiert. Der König verteilt nach dem Ergebnis, daher ändert sich für niemanden die Truhe."
+  banner_off_week: "Diese Woche nur Belobigung des Königs (kein Königreichskrieg)."
+  banner_won: "Königreichskrieg gewonnen: Belohnungen der Schlachtkönigs-Truhen sind ebenfalls offen."
+  banner_lost: "Königreichskrieg verloren: Diese Woche nur Belobigung des Königs."
+  banner_pending: "Warte auf das Kampfergebnis vom Samstag (etwa {when}). Falls gewonnen, öffnen sich auch die Belohnungen der Schlachtkönigs-Truhen und deine Liste wird neu sortiert. Der König verteilt nach dem Ergebnis, daher ändert sich für niemanden die Truhe."
   handed_out_title: "✓ Bereits vom König verteilt ({n})"
   handed_out_help: Diese Truhen wurden bereits im Spiel vergeben und bleiben bei diesen Spielern, egal was deine Liste sagt. Die Liste unten verteilt den Rest.
   reserve: Reserve
@@ -267,20 +267,20 @@ nominate:
   reserves_one: "{n} Reserve"
   reserves_other: "{n} Reserven"
   listed_twice: "{name} ist doppelt aufgeführt"
-  saved: "✅ Gespeichert. Der König sieht deine Liste. Du kannst sie bis {when} ändern."
+  saved: "Gespeichert. Der König sieht deine Liste. Du kannst sie bis {when} ändern."
   save_failed: 'Speichern nicht möglich: {error}'
 kings_console:
   page_title: Konsole zur Königsverteilung
-  title: "👑 Konsole zur Königsverteilung"
+  title: "Konsole zur Königsverteilung"
   loading: Nominierungen werden geladen...
   by_chest: Nach Truhe
   by_alliance: Nach Allianz
-  can_tick: "✅ Klicke auf einen Spieler, sobald die Truhe im Spiel übergeben wurde. Die Häkchen werden für alle gespeichert, und eine markierte Truhe bleibt bei diesem Spieler, auch wenn die Listen neu sortiert werden."
-  view_only_signed_out: "👀 Nur Ansicht. Die Checkliste des Königs kann von {king} R4/R5 und Stewards abgehakt werden: mit Discord anmelden (oben rechts)."
-  view_only: "👀 Nur Ansicht: die Checkliste wird vom {king} R4/R5 und den Stewards abgehakt."
+  can_tick: "Klicke auf einen Spieler, sobald die Truhe im Spiel übergeben wurde. Die Häkchen werden für alle gespeichert, und eine markierte Truhe bleibt bei diesem Spieler, auch wenn die Listen neu sortiert werden."
+  view_only_signed_out: "Nur Ansicht. Die Checkliste des Königs kann von {king} R4/R5 und Stewards abgehakt werden: mit Discord anmelden (oben rechts)."
+  view_only: "Nur Ansicht: die Checkliste wird vom {king} R4/R5 und den Stewards abgehakt."
   kings_alliance: die Allianz des Königs
   load_failed: 'Laden der Nominierungen fehlgeschlagen: {error}'
-  closed: "🔒 Belohnungen geschlossen. Die Listen unten stammen aus der letzten Woche; die nächsten Belohnungen öffnen Freitag gegen 20:00 GT."
+  closed: "Belohnungen geschlossen. Die Listen unten stammen aus der letzten Woche; die nächsten Belohnungen öffnen Freitag gegen 20:00 GT."
   hold_title: 'Truhen zurückhalten:'
   hold: "{title} warte auf das Kampfergebnis vom Samstag vor der Vergabe. Wenn der Krieg gewonnen wurde, öffnen sich die Belohnungen der Schlachtkönigs-Truhen und jede Liste wird neu sortiert. Belohnungen schließen {when}."
   won_title: 'Königreichskrieg gewonnen:'
@@ -302,7 +302,7 @@ kings_console:
   not_on_list: "{name} steht nicht mehr auf der Liste von [{tag}] (die Allianz hat sie geändert)."
   now_reserve: "{name} ist jetzt eine Reserve auf der Liste von [{tag}]: keine Truhe."
   now_other_chest: "{name} erhält jetzt {chest}, nicht {shown}."
-  stop_warning: "⚠️ Stopp: Sende nicht {chest}. {why} Die Listen wurden aktualisiert: kopiere den Namen erneut aus der Liste unten."
+  stop_warning: "Stopp: Sende nicht {chest}. {why} Die Listen wurden aktualisiert: kopiere den Namen erneut aus der Liste unten."
   stop_alert: Nicht senden!
   lists_refreshed: Die Listen wurden aktualisiert.
 register:
@@ -311,7 +311,7 @@ register:
   subtitle: Allianz-Server-Integrationsportal
   step_invite: 1. Bot in deinen Server einladen
   invite_help: Du musst den Bot zu deinem Allianz-Discord hinzufügen, bevor du die Registrierung abschließt.
-  authorize: "🤖 Klicken, um Bot zu autorisieren"
+  authorize: "Klicken, um Bot zu autorisieren"
   step_credentials: 2. Server- & Rollen-Anmeldedaten
   guild_id: Discord-Server-ID (Gilden-ID)
   example: z. B. {id}
@@ -319,7 +319,7 @@ register:
   copy_server_id: Server-ID kopieren
   administrator: Administrator
   manage_server: Server verwalten
-  routing_heading: "📢 Operationen & Ticket-Routing"
+  routing_heading: "Operationen & Ticket-Routing"
   routing_help: Konfiguriere, wo der Bot öffentliche Operations-Warnungen postet und private Mitgliedervorschläge/Tickets hinleitet.
   alert_channel: ID des Warnungskanals für Operationen
   channel_id_title: Muss eine gültige 17-20-stellige Discord-Kanal-ID sein
@@ -352,7 +352,7 @@ register:
   bad_officer_channel: Ungültiges ID-Format für den Offiziers-Ticket-Eingangskanal. Muss eine 17-20-stellige Zahl sein.
   failed: Registrierung fehlgeschlagen
   error: 'Registrierungsfehler: {error}'
-  success: "✅ Registrierung erfolgreich!"
+  success: "Registrierung erfolgreich!"
   linked: "{server} ist jetzt mit {tag} verknüpft."
   server_id: Server-ID {id}
   r_alert_channel: 'Warnungskanal für Operationen:'
@@ -582,7 +582,7 @@ rewards_planner:
   add_tier: Belohnungsstufe hinzufügen
   remove_bracket: Klammer entfernen
   over_capacity: 'Kapazität überschritten! Gold: {gold}/{gold_max}, Lila: {purple}/{purple_max}, Blau: {blue}/{blue_max}'
-  proposal_title: "👑 Verteilungsvorschlag für Belohnungen einreichen"
+  proposal_title: "Verteilungsvorschlag für Belohnungen einreichen"
   rank_single: Rang {n}
   rank_range: Rang {from}–{to}
 event_presets:
@@ -630,7 +630,7 @@ alliance_planner:
   academy_new: 'Oder gib ein neues Akademie-TAG ein, um es zu erstellen:'
   already_exists: Die Allianz [{tag}] existiert bereits unter genau dieser Schreibweise.
   no_changes: Keine Änderungen in der aktuellen Rangliste erkannt.
-  proposal_title: "👑 NAP-Rangliste & Diplomatievorschlag einreichen"
+  proposal_title: "NAP-Rangliste & Diplomatievorschlag einreichen"
   diff_rank: "{tag}: Rang {from} ➔ {to}"
   diff_academy: "{tag}: Zugewiesen als Akademie von {parent}"
   diff_nap: "{tag}: NAP-Status {status}"
@@ -644,8 +644,8 @@ alliance_planner:
   diff_modified: "[{tag}] geändert"
   unknown: Unbekannt
 blacklist_planner:
-  players_title: "🚫 Blacklist Spieler"
-  alliances_title: "⚠️ Blacklist Allianzen"
+  players_title: "Blacklist Spieler"
+  alliances_title: "Blacklist Allianzen"
   player_placeholder: Spieler IGN
   alliance_placeholder: Allianz-TAG
   add: "+ Hinzufügen"
@@ -662,7 +662,7 @@ blacklist_planner:
   press_edit: Drücke zuerst {edit}.
   add_failed: "{name} konnte nicht hinzugefügt werden: {error}"
   no_changes: Keine Blacklist-Änderungen zum Senden vorhanden.
-  proposal_title: "🚫 NAP-Blacklist-Vorschlag einreichen"
+  proposal_title: "NAP-Blacklist-Vorschlag einreichen"
   diff_add: "{add} {what} {name}"
   diff_remove: "{remove} {what} {name}"
   add_word: Hinzufügen
@@ -693,9 +693,9 @@ map_planner:
   fullscreen: Vollbild
   toggle_fullscreen: Vollbild umschalten
   exit: Beenden
-  grain: "🌾 Getreide"
-  timber: "🪵 Holz"
-  herbs: "🌿 Kräuter"
+  grain: "Getreide"
+  timber: "Holz"
+  herbs: "Kräuter"
   solid_gather: 'Solid: Sammeln'
   stripe_output: 'Streifen: Ertrag'
   level_unknown: Level --
@@ -726,7 +726,7 @@ map_planner:
   buff_herb_gathering: Kräutersammeln
   buff_herb_output: Kräuterertrag
   no_changes: Keine Änderungen in deinem Entwurf gefunden.
-  proposal_title: "🗺️ Gebietsvorschlag für Karte einreichen"
+  proposal_title: "Gebietsvorschlag für Karte einreichen"
 proposals:
   title: Vorschlag einreichen
   close: Schließen
