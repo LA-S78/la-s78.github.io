@@ -1,0 +1,11 @@
+# The home page's Pinned Pages (_includes/home_pinned.html; owner request, 2026-11-17): key
+# pages that aren't top-level pages and aren't tools, i.e. the guides people open most during
+# the week. Each is a guide key from _data/guide_directory.yml; its icon, link and translated
+# name come from there (and _data/<lang>/ui.yml `guides:`). Guides marked unavailable are
+# skipped. Change the order or the list here.
+- kingdom
+- survival
+- duel
+- scramble
+- thief
+- sanctuary

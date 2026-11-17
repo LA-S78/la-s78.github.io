@@ -584,7 +584,7 @@
       items.forEach((item) => {
         item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
       });
-      // A box of cards (Critical Intel, Directories, a guides category) with none left is
+      // A box of cards (Pinned Pages, Directories, a guides category) with none left is
       // hidden rather than left empty under the results
       document.querySelectorAll('.content-pane').forEach((pane) => {
         const cards = [...pane.querySelectorAll('.searchable-item')];

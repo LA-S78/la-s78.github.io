@@ -42,11 +42,11 @@ events:
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
   - key: "survival"
     url: /LANG_CODE/guides/survival.html
+    # The shield-and-heart of the calendar's Survival Battle (_data/event_types.yml), so it
+    # doesn't share Alliance Duel's people icon
     icon: |
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      <path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z" />
+      <path d="M8.8 11.2a1.9 1.9 0 0 1 3.2-1.2 1.9 1.9 0 0 1 3.2 1.2c0 1.8-3.2 3.8-3.2 3.8s-3.2-2-3.2-3.8" />
   - key: "kingdom"
     url: /LANG_CODE/guides/kingdom.html
     icon: |
