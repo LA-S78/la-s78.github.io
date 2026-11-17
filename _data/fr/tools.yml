@@ -593,7 +593,7 @@ rewards_planner:
 event_presets:
   crystal_cluster_title: Vallée de Cristal
   crystal_cluster_desc: Événement Chacun pour soi chaque dimanche
-  elixir_scramble_title: "Mêlée d'élixir"
+  elixir_scramble_title: Mêlée d'élixir
   elixir_scramble_desc: Événement de bataille en équipe chaque vendredi
   survival_battle_title: Bataille de Survie
   survival_battle_desc: Terminez des tâches pour gagner des récompenses

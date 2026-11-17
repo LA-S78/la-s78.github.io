@@ -36,10 +36,10 @@ guides:
   premium_shop: Premium & Elmas Paketleri
   t10: T10 Hesap Makinesi
   scramble: Kraliyet Mücadelesi
-  elixir: "İksir Mücadelesi"
-  undead_siege: "Ölümsüz Kuşatması"
-  kill_event: "Öldürme Etkinliği"
-  gear_upgrade: "Ekipman Yükseltme"
+  elixir: İksir Mücadelesi
+  undead_siege: Ölümsüz Kuşatması
+  kill_event: Öldürme Etkinliği
+  gear_upgrade: Ekipman Yükseltme
 pages:
   home:
     title: Ana Sayfa

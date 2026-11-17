@@ -36,10 +36,10 @@ guides:
   premium_shop: Premium- & Edelsteinpakete
   t10: T10-Rechner
   scramble: Königliches Gerangel
-  elixir: "Elixier-Gerangel"
-  undead_siege: "Untoten-Belagerung"
-  kill_event: "Kill-Event"
-  gear_upgrade: "Ausrüstungs-Upgrade"
+  elixir: Elixier-Gerangel
+  undead_siege: Untoten-Belagerung
+  kill_event: Kill-Event
+  gear_upgrade: Ausrüstungs-Upgrade
 pages:
   home:
     title: Startseite
