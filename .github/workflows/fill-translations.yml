@@ -1,0 +1,69 @@
+name: Fill missing translations
+
+# For a guide that's already translated (_source/<guide>.md) but still has English in its
+# other languages' section titles (which also label the nav tabs), subtitle or picture
+# descriptions (alt text). Run by hand: Actions → "Fill missing translations" → Run
+# workflow, and type the guide's id (the file name without .md, e.g. kill_event). Gemini
+# translates only those leftover texts, nothing else in the guide changes, and a pull
+# request opens to check before merging. New guides get the same check automatically when
+# their _en draft is translated (_scripts/generate_master.rb, _scripts/guide_text_check.rb).
+
+on:
+  workflow_dispatch:
+    inputs:
+      guide:
+        description: "Guide id (file name in _source without .md, e.g. kill_event)"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: fill-translations
+  cancel-in-progress: false
+
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setting up Ruby environment
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Translate the leftover English
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GUIDE: ${{ inputs.guide }}
+        run: bundle exec ruby _scripts/generate_master.rb --fill "$GUIDE"
+
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GUIDE: ${{ inputs.guide }}
+        run: |
+          git add -A _source/
+          if git diff --cached --quiet; then
+            echo "Nothing left in English in $GUIDE." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch="fill-translations/${GUIDE}-$(date -u +%Y%m%d-%H%M)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$branch"
+          git commit -q -m "Translate the leftover English in the $GUIDE guide"
+          git push -q origin "$branch"
+          body="Section titles, subtitle and picture descriptions of the \`$GUIDE\` guide that were still in English in other languages, translated by the \"Fill missing translations\" workflow. Check them under Files changed before merging."
+          if url=$(gh pr create --base main --head "$branch" --title "Translations: fill leftover English in $GUIDE" --body "$body"); then
+            echo "Pull request: $url" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            # Repositories can stop workflows opening pull requests (Settings → Actions →
+            # General → "Allow GitHub Actions to create and approve pull requests")
+            compare="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"
+            echo "Couldn't open the pull request automatically. Open it here: $compare" | tee -a "$GITHUB_STEP_SUMMARY"
+          fi

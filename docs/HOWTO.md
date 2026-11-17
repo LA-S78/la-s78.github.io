@@ -170,6 +170,14 @@ reaches `main`, GitHub Actions translates the draft into all 8 languages, saves 
 `_source/farming.md` and deletes `farming_en.md`. Only **one** `_en` draft is
 translated per push, so add guides one at a time.
 
+The translation also checks that the section titles (which label the tabs), the
+subtitle and the pictures' `alt` descriptions came back translated; anything still in
+English is sent to Gemini again on its own.
+
+**Titles still in English in an older guide?** Open **Actions → Fill missing
+translations → Run workflow**, type the guide's id (e.g. `kill_event`) and run it.
+It translates only the leftover English and opens a pull request to check and merge.
+
 ---
 
 ## Add a UI label
