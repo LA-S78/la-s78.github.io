@@ -4,7 +4,7 @@ rules_page:
     text: "Las siguientes pautas son obligatorias para garantizar el juego limpio y la estabilidad del servidor."
   rotation:
     title: "Rotación del Capitolio"
-    text: "El Top 4 se decide por Poder: el Poder de cada alianza del NAP, academias incluidas, se suma durante los días 3, 4 y 5 del Duelo de Alianzas de la Semana 1 de la Guerra de Reinos. Los cuatro totales más altos ocupan los puestos del Top 4 desde el siguiente ciclo, una vez que un Steward lo confirma."
+    text: "Los rangos del NAP se deciden por Poder: cada alianza del NAP, academias incluidas, se clasifica por el total de su Poder durante los días 3, 4 y 5 del Duelo de Alianzas de la Semana 1 de la Guerra de Reinos. Las cuatro más altas ocupan los puestos del Top 4 desde el siguiente ciclo. Los nuevos rangos se aplican cuando un Steward lo confirma."
     note: "*Nota: el Poder se mide automáticamente 10 minutos antes del reinicio (23:50 GT) en cada uno de los tres días.*"
   rewards:
     title: "Recompensas del Capitolio"

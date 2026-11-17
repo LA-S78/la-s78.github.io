@@ -27,7 +27,7 @@ _Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECI
   - [x] **Go live (owner):** tested on dev (reminder posted to the test channel), then `REMINDERS_LIVE=true` set on the live site. Leaders can also manage events by signing in (R4/R5, Stewards).
 - [ ] **Last Asylum Tracker API** (owner, 2026-11-17): alliance Might and member lists for our server, from `api.lastasylumtracker.com` (key in Vercel as `LAT_API_KEY`).
   - [x] Name checks in the nomination list and the Caravan Rotor: game spellings, unknown names, close matches.
-  - [x] Top 4 race: live snapshots 10 minutes before reset on Duel Days 3–5 of Kingdom War Week 1; NAP alliances and academies ranked by their three-day total on the Rules page; results posted to NAP leadership with Apply Top 4 / Keep current order buttons for Stewards; seats change at the next cycle.
+  - [x] Top 4 race: live snapshots 10 minutes before reset on Duel Days 3–5 of Kingdom War Week 1; NAP alliances and academies ranked by their three-day total on the Rules page; results posted to NAP leadership with Apply new ranks / Keep current order buttons for Stewards: applying re-ranks the whole NAP list by total, academies included; seats change at the next cycle.
 
 - [x] **Infographics** (decided 2026-11-12): the designed pictures were replaced by live, translated components. The Capitol Rotation chart is drawn from the calendar; the reward-distribution and territory-map pictures were removed (the rewards card and the live map replace them). Game screenshots in the guides stay as they are (players see the game in their own language).
 

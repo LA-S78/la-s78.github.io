@@ -118,8 +118,8 @@ function resultsMessage(runId, rows, testNote) {
         description:
           `Might totals of Alliance Duel Days 3–5 (week of ${runId}), measured 10 minutes before reset.\n\n` +
           `${lines.join('\n')}\n\n` +
-          'The four highest totals hold the Top 4 seats from the **next** cycle. A Steward applies ' +
-          'it below (newcomers take the rank of the alliance they replace) or keeps the current order.',
+          'Applying re-ranks the whole NAP list by these totals (academies included); the Top 4 ' +
+          'take their Capitol seats from the **next** cycle. A Steward applies or keeps the current order below.',
         color: 0xd4af37,
         footer: { text: 'Might from the Last Asylum Tracker' },
         timestamp: new Date().toISOString(),

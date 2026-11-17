@@ -1,12 +1,11 @@
 // api/_bot_ascension.js
 // The Top 4 race's results post in NAP leadership (api/_ascension.js) carries two buttons for
-// Stewards (owner request, 2026-11-17): "Apply Top 4" and "Keep current order".
+// Stewards (owner request, 2026-11-17): "Apply new ranks" and "Keep current order".
 //
-// Applying changes only who is in the Top 4, as the calendar's seat inheritance does (Option A,
-// docs/DECISIONS.md): an alliance entering the Top 4 takes the rank of the one leaving it
-// (best newcomer, best vacated rank), and the one leaving takes the newcomer's old rank (the
-// end of the ranked list when the newcomer had none, e.g. an academy). Rank #1 and the order
-// inside the Top 4 are left as they are. Seats move at the next 4-week cycle, as they always do.
+// Applying re-ranks the whole NAP list by the race (owner decision, 2026-11-17), academies
+// included: alliances measured on all three days take ranks 1, 2, 3… by their total Might,
+// the rest follow (planRanks). Ranks also set each alliance's reward chests (distribution
+// tiers by rank), and a new Top 4 takes its Capitol seats at the next 4-week cycle (Option A).
 // The post is shared, so it stays in English whoever clicks; private replies follow the
 // Steward's Discord language.
 
@@ -38,43 +37,31 @@ export function ascensionButtons(runId) {
 }
 
 /**
- * What applying would change: { top4: [tags], changes: [{ tag, from, to }] } or { error }.
+ * What applying would change (owner, 2026-11-17: the whole NAP list follows the race, academies
+ * included): { order: [tags], changes: [{ tag, from, to }] } or { error }.
+ * - NAP alliances measured on all three days take ranks 1, 2, 3… by their total;
+ * - NAP alliances missing a day follow, in their current order (ranked first, then by tag);
+ * - alliances outside the NAP that have a rank keep their order, after all of them.
  * `alliances` is map-state.json's list; `rows` the race's standings.
  */
-export function planTop4(alliances = {}, rows = []) {
-  const nap = new Set(napTags(alliances));
+export function planRanks(alliances = {}, rows = []) {
+  const nap = napTags(alliances);
   const rankOf = (tag) => {
     const r = Number(alliances[tag]?.rank);
     return Number.isFinite(r) && r > 0 ? r : null;
   };
-  const top4 = rows
-    .filter((r) => r.complete && nap.has(r.tag))
-    .slice(0, 4)
-    .map((r) => r.tag);
-  if (top4.length < 4) return { error: 'fewer than four alliances were measured on every day' };
-  const current = [...nap]
-    .filter((t) => rankOf(t) !== null && rankOf(t) <= 4)
-    .sort((a, b) => rankOf(a) - rankOf(b));
-  const entering = top4.filter((t) => !current.includes(t));
-  const leaving = current.filter((t) => !top4.includes(t));
-  let end = Math.max(0, ...Object.keys(alliances).map((t) => rankOf(t) || 0));
-  const changes = [];
-  entering.forEach((tag, i) => {
-    const out = leaving[i];
-    if (!out) return; // fewer than four ranked today: the newcomer takes a free rank below
-    const was = rankOf(tag);
-    changes.push({ tag, from: was, to: rankOf(out) });
-    changes.push({ tag: out, from: rankOf(out), to: was ?? ++end });
-  });
-  // Ranks 1–4 not held by anyone (a Top 4 of fewer than four): newcomers fill them in order
-  const taken = new Set(current.filter((t) => top4.includes(t)).map(rankOf));
-  for (const c of changes) if (c.to <= 4) taken.add(c.to);
-  for (const tag of entering.slice(leaving.length)) {
-    const free = [1, 2, 3, 4].find((r) => !taken.has(r));
-    taken.add(free);
-    changes.push({ tag, from: rankOf(tag), to: free });
-  }
-  return { top4, changes };
+  const byOldRank = (a, b) => (rankOf(a) ?? 999) - (rankOf(b) ?? 999) || a.localeCompare(b);
+  const measured = rows.filter((r) => r.complete && nap.includes(r.tag)).map((r) => r.tag);
+  if (measured.length < 4) return { error: 'fewer than four alliances were measured on every day' };
+  const unmeasured = nap.filter((t) => !measured.includes(t)).sort(byOldRank);
+  const others = Object.keys(alliances)
+    .filter((t) => !nap.includes(t) && rankOf(t) !== null)
+    .sort(byOldRank);
+  const order = [...measured, ...unmeasured, ...others];
+  const changes = order
+    .map((tag, i) => ({ tag, from: rankOf(tag), to: i + 1 }))
+    .filter((c) => c.from !== c.to);
+  return { order, changes };
 }
 
 /** "[PHNX] #5 → #4 · [MIA] #4 → #5" */
@@ -103,7 +90,7 @@ async function decide(runId, apply, by) {
     const files = {};
     let changes = [];
     if (apply) {
-      const plan = planTop4(state.alliances || {}, standings(run, napTags(state.alliances || {})));
+      const plan = planRanks(state.alliances || {}, standings(run, napTags(state.alliances || {})));
       if (plan.error) {
         outcome = { error: say('bot_ascension.cannot_apply', { reason: plan.error }) };
         return {};
@@ -134,8 +121,8 @@ function decidedMessage(message, apply, by, changes) {
   const embed = { ...((message && message.embeds && message.embeds[0]) || {}) };
   const done = apply
     ? changes.length
-      ? `✅ **Applied by ${by}:** ${changeLine(changes)}. The new Top 4 take their seats at the next cycle.`
-      : `✅ **Applied by ${by}:** the Top 4 is unchanged.`
+      ? `✅ **Applied by ${by}:** ${changeLine(changes)}. New Top 4 seats start at the next cycle.`
+      : `✅ **Applied by ${by}:** the NAP ranks already matched.`
     : `↩️ **Current order kept by ${by}.**`;
   embed.description = `${(embed.description || '').replace(/\n\n[^\n]*$/, '')}\n\n${done}`;
   return { embeds: [embed], components: [] };
