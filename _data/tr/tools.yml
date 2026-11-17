@@ -103,43 +103,48 @@ rewards_card:
   buyout_cost: 'Satın Alma: her sette {amount} {chest}'
   buyout_cost_help: Bu hafta yerinden edilen ittifakı finanse ediyor
 caravan:
-  title: Kervan Rotasyonu
+  title: Kervan Çizelgesi
+  name_ok: "[{tag}] üye listesinde"
+  name_spelling: 'Oyunda şu şekilde yazılı:'
+  name_unknown: "[{tag}] üye listesinde değil."
+  name_did_you_mean: 'Şunu mu demek istediniz:'
+  name_flag_spelling: Oyunda {name} olarak yazılı
   picked_count: "{picked}/{total} seçildi"
   members_can_view: Üyeler görüntüleyebilir
   copy_status: Durumu kopyala
   new_week: Yeni hafta
   member_note: Kervan hazır olduğunda R4'leriniz tarafından seçilir.
-  search: İsimleri ara…
+  search: İsimleri ara...
   around_now: Şu sıralar
-  around_now_help: Sadece şu sıralar uygun olan oyuncular
+  around_now_help: Sadece şu sıralar müsait olan oyuncular
   available: Bu hafta müsait ({n})
-  picked: Bu hafta seçilenler ({n})
-  nobody_matches: Kimse eşleşmiyor.
-  everyone_picked: Bu hafta herkes kervanını aldı.
-  add_players: Aşağıdan oyuncu ekle.
+  picked: Bu hafta seçildi ({n})
+  nobody_matches: Eşleşen kimse yok.
+  everyone_picked: Bu hafta herkesin kervanı var.
+  add_players: Aşağıya oyuncu ekleyin.
   no_players: Henüz oyuncu yok.
   flexible: esnek
   pick: "✓ Seçildi"
-  back_to_available: Müsaitlere geri gönder
+  back_to_available: Müsait listesine geri al
   name: İsim
-  from: Başlangıç (Oyun Saati)
-  to: Bitiş (Oyun Saati)
+  from: Başlangıç (Game Time)
+  to: Bitiş (Game Time)
   player_name: Oyuncu ismi
-  add_from: Başlangıç 18:00
-  add_to: Bitiş 22:00
-  add_from_label: Müsaitlik başlangıcı (Oyun Saati, isteğe bağlı)
-  add_to_label: Müsaitlik bitişi (Oyun Saati, isteğe bağlı)
+  add_from: 18:00'den itibaren
+  add_to: 22:00'ye kadar
+  add_from_label: Müsaitlik başlangıcı (Game Time, isteğe bağlı)
+  add_to_label: Müsaitlik bitişi (Game Time, isteğe bağlı)
   add: Ekle
-  times_help: Saatler Oyun Saati (UTC-2) cinsindendir ve isteğe bağlıdır; esnek olan oyuncular için boş bırakın.
-  status_title: "🐪 [{tag}] Kervan Rotasyonu: {picked}/{total} seçildi"
+  times_help: Saatler Game Time (UTC-2) cinsindendir ve isteğe bağlıdır; esnek olan oyuncular için boş bırakın.
+  status_title: "🐪 [{tag}] Kervan Çizelgesi: {picked}/{total} seçildi"
   status_available: 'Müsait: {names}'
-  status_picked: 'Seçilenler: {names}'
+  status_picked: 'Seçildi: {names}'
   nobody: kimse
   nobody_yet: henüz kimse yok
-  copy_prompt: 'Rotasyon durumunu kopyala:'
-  confirm_remove: "{name} rotasyondan çıkarılsın mı?"
+  copy_prompt: 'Çizelge durumunu kopyala:'
+  confirm_remove: "{name} çizelgeden kaldırılsın mı?"
   this_player: bu oyuncu
-  confirm_new_week: Yeni haftaya başlansın mı? Herkes tekrar müsait duruma geçer (isimler ve saatler kalır).
+  confirm_new_week: Yeni bir hafta başlatılsın mı? Herkes müsait listesine geri döner (isimler ve saatler kalır).
 chart_editor:
   edit_title: Grafik veya tabloyu düzenle
   new_title: Yeni grafik veya tablo
@@ -239,23 +244,32 @@ charts:
   hint_progress: Bir satıra dokunun veya üzerine gelin
 nominate:
   page_title: Ödül Adaylıkları
+  name_ok: "[{tag}] üye listesinde"
+  name_spelling: Oyunda {name} olarak yazılı
+  name_unknown: "[{tag}] üye listesinde değil"
+  names_spelling_one: '1 isim oyunda farklı yazılmış:'
+  names_spelling_other: "{n} isim oyunda farklı yazılmış:"
+  use_game_spellings: Oyun içi yazımları kullan
+  names_unknown_one: '1 isim [{tag}] üye listesinde yok. Yine de kaydedilecek; doğru olduğundan emin olun:'
+  names_unknown_other: "{n} isim [{tag}] üye listesinde yok. Yine de kaydedilecek; doğru olduklarından emin olun:"
+  did_you_mean: şunu mu demek istediniz
   loading: Adaylık sayfası yükleniyor...
-  players_label: Oyuncularınız, en iyisi başta
-  players_help: Satır başına bir isim (veya virgülle ayrılmış), en iyi oyuncunuz başta olacak şekilde. Sandıklar her iki sette de değer sırasına göre aşağı doğru dağıtılır; sandıkların ötesindeki isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
-  players_placeholder: Oyun içi tam isimler, en iyi oyuncu başta...
-  who_gets_what: Kime ne verilecek
+  players_label: Oyuncularınız, en iyisi en başta
+  players_help: Her satıra bir isim (veya virgülle ayırarak), en iyi oyuncunuz en başta olacak şekilde yazın. Sandıklar, her iki sette de değer sırasına göre aşağıya doğru dağıtılır; sandık sayısını aşan isimler yedek olarak tutulur ve daha fazla sandık açılırsa listeye dahil edilirler.
+  players_placeholder: Tam oyun içi isimler, en iyisi en başta...
+  who_gets_what: Kim ne alacak
   save: Listeyi Kaydet
   saving: Kaydediliyor...
   link_incomplete: Bu bağlantı eksik. Yeni bir tane için Discord'da /nominate komutunu çalıştırın.
   load_failed: "{error} Yeni bir bağlantı için Discord'da /nominate komutunu çalıştırın."
-  closed: Ödüller kapalı. Bir sonraki açılış {when}, Cuma günkü capitol etkinliğinden sonra.
+  closed: Ödüller kapalı. Bir sonraki açılış {when}, Cuma günü başkent etkinliğinden sonra.
   header: Sıra {rank} · {week} ödülleri · {when} tarihine kadar açık
-  banner_off_week: Bu hafta sadece Kraliyet Takdirnamesi (Kingdom War yok).
-  banner_won: 'Kingdom War kazanıldı: Savaşın Kralı Ödül sandıkları da açık.'
-  banner_lost: 'Kingdom War kaybedildi: Bu hafta sadece Kraliyet Takdirnamesi.'
-  banner_pending: Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Kazanılırsa, Savaşın Kralı Ödül sandıkları açılacak ve listeniz yeniden sıralanacaktır. Kral sonuçtan sonra dağıtım yapar, bu yüzden kimsenin sandığı değişmez.
+  banner_off_week: Bu hafta sadece Kralın Takdir Ödülü var (Krallık Savaşı yok).
+  banner_won: 'Krallık Savaşı kazanıldı: Savaş Kralı Ödül sandıkları da açık.'
+  banner_lost: 'Krallık Savaşı kaybedildi: Bu hafta sadece Kralın Takdir Ödülü var.'
+  banner_pending: Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Eğer kazanılırsa, Savaş Kralı Ödül sandıkları açılacak ve listeniz yeniden sıralanacaktır. Kral ödülleri sonuçtan sonra dağıttığı için kimsenin sandığı değişmez.
   handed_out_title: "✓ Kral tarafından çoktan dağıtıldı ({n})"
-  handed_out_help: Bu sandıklar oyun içinde verildiğinden, listeniz ne derse desin bu oyuncularda kalırlar. Aşağıdaki liste geri kalanları paylaştırır.
+  handed_out_help: Bu sandıklar oyun içinde verildiği için listeniz ne derse desin bu oyuncularda kalır. Aşağıdaki liste kalanları paylaştırır.
   reserve: Yedek
   col_player: Oyuncu
   col_chest: Sandık
@@ -263,11 +277,11 @@ nominate:
   col_if_won: Kazanılırsa
   chests_now: Şu an {n} sandık
   chests_if_won: Kazanılırsa {n}
-  named: "{n} kişi belirlendi"
-  still_need_name: "{n} kişinin daha isme ihtiyacı var"
+  named: "{n} isim belirlendi"
+  still_need_name: "{n} isme daha ihtiyaç var"
   reserves_one: "{n} yedek"
   reserves_other: "{n} yedek"
-  listed_twice: "{name} listede iki kez yer alıyor"
+  listed_twice: "{name} iki kez listelenmiş"
   saved: Kaydedildi. Kral listenizi görüyor. {when} tarihine kadar değiştirebilirsiniz.
   save_failed: 'Kaydedilemedi: {error}'
 kings_console:

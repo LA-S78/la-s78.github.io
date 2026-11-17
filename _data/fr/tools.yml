@@ -103,23 +103,28 @@ rewards_card:
   buyout_cost: 'Rachat : {amount} {chest} dans chaque ensemble'
   buyout_cost_help: Financement de l'alliance déplacée cette semaine
 caravan:
-  title: Rotation de Caravane
+  title: Gestionnaire de Caravane
+  name_ok: Dans la liste des membres de [{tag}]
+  name_spelling: 'Dans le jeu, il est écrit :'
+  name_unknown: Pas dans la liste des membres de [{tag}].
+  name_did_you_mean: 'Vouliez-vous dire :'
+  name_flag_spelling: Dans le jeu, il est écrit {name}
   picked_count: "{picked}/{total} sélectionné(s)"
-  members_can_view: Visible par les membres
+  members_can_view: Les membres peuvent voir
   copy_status: Copier le statut
   new_week: Nouvelle semaine
   member_note: Sélectionné par vos R4 lorsqu'une caravane est prête.
-  search: Rechercher des noms…
+  search: Rechercher des noms...
   around_now: Disponibles maintenant
-  around_now_help: Uniquement les joueurs disponibles autour de maintenant
+  around_now_help: Uniquement les joueurs disponibles maintenant
   available: Disponible cette semaine ({n})
   picked: Sélectionné cette semaine ({n})
   nobody_matches: Aucun résultat.
-  everyone_picked: Tout le monde a eu une caravane cette semaine.
+  everyone_picked: Tout le monde a déjà eu une caravane cette semaine.
   add_players: Ajouter des joueurs ci-dessous.
   no_players: Aucun joueur pour le moment.
   flexible: flexible
-  pick: "✓ Sélectionner"
+  pick: "✓ Sélectionné"
   back_to_available: Retour aux disponibles
   name: Nom
   from: De (Game Time)
@@ -130,16 +135,16 @@ caravan:
   add_from_label: Disponible à partir de (Game Time, facultatif)
   add_to_label: Disponible jusqu'à (Game Time, facultatif)
   add: Ajouter
-  times_help: Les horaires sont au format Game Time (UTC-2) et facultatifs ; laissez vide pour les joueurs flexibles.
-  status_title: "🐪 [{tag}] Rotation de Caravane : {picked}/{total} sélectionné(s)"
+  times_help: Les heures sont en Game Time (UTC-2) et sont facultatives ; laissez-les vides pour les joueurs flexibles.
+  status_title: "🐪 [{tag}] Gestionnaire de Caravane : {picked}/{total} sélectionné(s)"
   status_available: 'Disponible : {names}'
   status_picked: 'Sélectionné : {names}'
   nobody: personne
   nobody_yet: personne pour l'instant
-  copy_prompt: 'Copier le statut de la rotation :'
-  confirm_remove: Retirer {name} de la rotation ?
+  copy_prompt: 'Copier le statut du roulement :'
+  confirm_remove: Supprimer {name} du roulement ?
   this_player: ce joueur
-  confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde repasse en disponible (les noms et horaires sont conservés).
+  confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde repasse en disponible (les noms et heures sont conservés).
 chart_editor:
   edit_title: Modifier le graphique ou tableau
   new_title: Nouveau graphique ou tableau
@@ -238,38 +243,47 @@ charts:
   hint_pie: Appuyez ou survolez une part
   hint_progress: Appuyez ou survolez une ligne
 nominate:
-  page_title: Nominations de récompenses
+  page_title: Nominations aux Récompenses
+  name_ok: Dans la liste des membres de [{tag}]
+  name_spelling: Dans le jeu, il est écrit {name}
+  name_unknown: Pas dans la liste des membres de [{tag}]
+  names_spelling_one: '1 nom est écrit différemment dans le jeu :'
+  names_spelling_other: "{n} noms sont écrits différemment dans le jeu :"
+  use_game_spellings: Utiliser l'orthographe du jeu
+  names_unknown_one: '1 nom n''est pas dans la liste des membres de [{tag}]. Il sera quand même enregistré ; vérifiez qu''il est correct :'
+  names_unknown_other: "{n} noms ne sont pas dans la liste des membres de [{tag}]. Ils seront quand même enregistrés ; vérifiez qu'ils sont corrects :"
+  did_you_mean: vouliez-vous dire
   loading: Chargement de la page de nomination...
-  players_label: Vos joueurs, les meilleurs en premier
-  players_help: Un nom par ligne (ou séparé par des virgules), le meilleur joueur en premier. Les coffres sont distribués selon l'ordre de la liste pour les deux ensembles ; les noms au-delà des coffres sont conservés en réserve et remontent si d'autres coffres sont ouverts.
-  players_placeholder: Noms exacts en jeu, les meilleurs en premier...
+  players_label: Vos joueurs, du meilleur au moins bon
+  players_help: Un nom par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres sont distribués dans l'ordre de la liste ; les noms au-delà des coffres sont gardés en réserve et remontent si des coffres supplémentaires s'ouvrent.
+  players_placeholder: Noms exacts du jeu, le meilleur en premier...
   who_gets_what: Qui reçoit quoi
   save: Enregistrer la liste
   saving: Enregistrement...
-  link_incomplete: Ce lien est incomplet. Tapez /nominate sur Discord pour en obtenir un nouveau.
-  load_failed: "{error} Tapez /nominate sur Discord pour un nouveau lien."
-  closed: Les récompenses sont closes. La prochaine ouverture est {when}, après l'événement du capitole du vendredi.
-  header: Rang {rank} · récompenses de {week} · ouvert jusqu'à {when}
-  banner_off_week: Uniquement la Mention du Roi cette semaine (pas de Guerre des Royaumes).
-  banner_won: 'Guerre des Royaumes gagnée : les coffres de Récompense de Roi de Bataille sont aussi ouverts.'
-  banner_lost: 'Guerre des Royaumes perdue : uniquement la Mention du Roi cette semaine.'
-  banner_pending: En attente du résultat de la bataille de samedi (vers {when}). Si elle est gagnée, les coffres de Récompense de Roi de Bataille s'ouvriront également et votre liste sera retriée. Le Roi distribue après le résultat, donc le coffre de personne ne change.
+  link_incomplete: Ce lien est incomplet. Lancez /nominate sur Discord pour en obtenir un nouveau.
+  load_failed: "{error} Lancez /nominate sur Discord pour un nouveau lien."
+  closed: Les récompenses sont clôturées. La prochaine ouverture est le {when}, après l'événement du Capitole de vendredi.
+  header: Rang {rank} · Récompenses de {week} · ouvert jusqu'au {when}
+  banner_off_week: Recommandation du Roi uniquement cette semaine (pas de Guerre des Royaumes).
+  banner_won: 'Guerre des Royaumes gagnée : les coffres de Récompense du Roi de la Bataille sont également ouverts.'
+  banner_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement cette semaine.'
+  banner_pending: En attente du résultat de la bataille de samedi (environ {when}). Si gagnée, les coffres de Récompense du Roi de la Bataille s'ouvriront aussi et votre liste sera retriée. Le Roi distribue les récompenses après le résultat, donc le coffre de personne ne change.
   handed_out_title: "✓ Déjà distribué par le Roi ({n})"
-  handed_out_help: Ces coffres sont donnés en jeu, ils restent donc avec ces joueurs, peu importe ce que dit votre liste. La liste ci-dessous répartit le reste.
+  handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc à ces joueurs quoi que dise votre liste. La liste ci-dessous répartit le reste.
   reserve: Réserve
   col_player: Joueur
   col_chest: Coffre
   col_now: Maintenant
-  col_if_won: Si victoire
+  col_if_won: Si gagné
   chests_now: "{n} coffres maintenant"
-  chests_if_won: "{n} si victoire"
-  named: "{n} nommés"
-  still_need_name: "{n} nom(s) encore nécessaire(s)"
+  chests_if_won: "{n} si gagné"
+  named: "{n} nommé(s)"
+  still_need_name: "{n} ont encore besoin d'un nom"
   reserves_one: "{n} réserve"
   reserves_other: "{n} réserves"
   listed_twice: "{name} est listé deux fois"
-  saved: Enregistré. Le Roi voit votre liste. Vous pouvez la modifier jusqu'à {when}.
-  save_failed: 'Impossible d''enregistrer : {error}'
+  saved: Enregistré. Le Roi voit votre liste. Vous pouvez la modifier jusqu'au {when}.
+  save_failed: 'Échec de l''enregistrement : {error}'
 kings_console:
   page_title: Console de distribution du Roi
   title: Console de distribution du Roi

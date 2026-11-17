@@ -103,43 +103,48 @@ rewards_card:
   buyout_cost: 'Compra: {amount} {chest} en cada set'
   buyout_cost_help: Financiando a la alianza desplazada esta semana
 caravan:
-  title: Rotor de caravanas
-  picked_count: "{picked}/{total} elegidos"
+  title: Rotativo de Caravanas
+  name_ok: En la lista de miembros de [{tag}]
+  name_spelling: 'En el juego se escribe:'
+  name_unknown: No está en la lista de miembros de [{tag}].
+  name_did_you_mean: "¿Quisiste decir:"
+  name_flag_spelling: En el juego se escribe {name}
+  picked_count: "{picked}/{total} seleccionados"
   members_can_view: Los miembros pueden ver
   copy_status: Copiar estado
   new_week: Nueva semana
-  member_note: Elegido por tus R4 cuando una caravana está lista.
-  search: Buscar nombres...
-  around_now: Ahora mismo
-  around_now_help: Solo jugadores disponibles ahora
+  member_note: Seleccionado por tus R4 cuando una caravana está lista.
+  search: Buscar nombres…
+  around_now: Más o menos ahora
+  around_now_help: Solo jugadores disponibles ahora mismo
   available: Disponible esta semana ({n})
-  picked: Elegido esta semana ({n})
-  nobody_matches: No hay coincidencias.
-  everyone_picked: Todos han tenido una caravana esta semana.
+  picked: Seleccionado esta semana ({n})
+  nobody_matches: Nadie coincide.
+  everyone_picked: Todos han tenido caravana esta semana.
   add_players: Añadir jugadores abajo.
   no_players: Aún no hay jugadores.
   flexible: flexible
-  pick: "✓ Elegir"
+  pick: "✓ Seleccionado"
   back_to_available: Volver a disponible
   name: Nombre
-  from: Desde (GT)
-  to: Hasta (GT)
+  from: Desde (Game Time)
+  to: Hasta (Game Time)
   player_name: Nombre del jugador
-  add_from: Desde 18:00
-  add_to: Hasta 22:00
-  add_from_label: Disponible desde (GT, opcional)
-  add_to_label: Disponible hasta (GT, opcional)
+  add_from: Desde las 18:00
+  add_to: Hasta las 22:00
+  add_from_label: Disponible desde (Game Time, opcional)
+  add_to_label: Disponible hasta (Game Time, opcional)
   add: Añadir
-  times_help: Los horarios son según el horario del juego (UTC-2) y son opcionales; déjalos vacíos para jugadores flexibles.
-  status_title: "🐪 [{tag}] Rotor de caravanas: {picked}/{total} elegidos"
+  times_help: Los horarios son Game Time (UTC-2) y son opcionales; déjalos vacíos para jugadores que son flexibles.
+  status_title: "🐪 [{tag}] Rotativo de Caravanas: {picked}/{total} seleccionados"
   status_available: 'Disponible: {names}'
-  status_picked: 'Elegido: {names}'
+  status_picked: 'Seleccionado: {names}'
   nobody: nadie
   nobody_yet: nadie todavía
-  copy_prompt: 'Copiar estado del rotor:'
-  confirm_remove: "¿Eliminar a {name} del rotor?"
+  copy_prompt: 'Copiar el estado del rotativo:'
+  confirm_remove: "¿Eliminar a {name} del rotativo?"
   this_player: este jugador
-  confirm_new_week: "¿Empezar una nueva semana? Todos vuelven a estar disponibles (se conservan los nombres y horarios)."
+  confirm_new_week: "¿Empezar una nueva semana? Todos vuelven a disponible (los nombres y horarios se mantienen)."
 chart_editor:
   edit_title: Editar gráfico o tabla
   new_title: Nuevo gráfico o tabla
@@ -239,23 +244,32 @@ charts:
   hint_progress: Toca o mantén el puntero sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas
-  loading: Cargando página de nominación...
-  players_label: Tus jugadores, los mejores primero
-  players_help: Un nombre por línea (o separados por comas), tu mejor jugador primero. Los cofres se reparten bajando por la lista según su valor en ambos conjuntos; los nombres después de los cofres quedan como reserva y suben si se abren más cofres.
-  players_placeholder: Nombres exactos en el juego, los mejores primero...
+  name_ok: En la lista de miembros de [{tag}]
+  name_spelling: En el juego se escribe {name}
+  name_unknown: No está en la lista de miembros de [{tag}]
+  names_spelling_one: '1 nombre se escribe de forma diferente en el juego:'
+  names_spelling_other: "{n} nombres se escriben de forma diferente en el juego:"
+  use_game_spellings: Usar la escritura del juego
+  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todas formas; comprueba que sea correcto:'
+  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todas formas; comprueba que sean correctos:"
+  did_you_mean: quisiste decir
+  loading: Cargando página de nominaciones...
+  players_label: Tus jugadores, primero los mejores
+  players_help: Un nombre por línea (o separados por comas), tu mejor jugador primero. Los cofres bajan por la lista en orden de valor en ambos conjuntos; los nombres más allá de los cofres se mantienen como reserva y suben si se abren más cofres.
+  players_placeholder: Nombres exactos del juego, mejor primero...
   who_gets_what: Quién obtiene qué
-  save: Guardar Lista
+  save: Guardar lista
   saving: Guardando...
   link_incomplete: Este enlace está incompleto. Ejecuta /nominate en Discord para obtener uno nuevo.
   load_failed: "{error} Ejecuta /nominate en Discord para obtener un nuevo enlace."
-  closed: Las recompensas están cerradas. Se abren el próximo {when}, después del evento del capitolio del viernes.
-  header: Rango {rank} · {week} recompensas · abierto hasta {when}
-  banner_off_week: Solo Condecoración del Rey esta semana (sin Guerra de Reinos).
-  banner_won: 'Guerra de Reinos ganada: Los cofres de Recompensa Rey de la Batalla también están abiertos.'
-  banner_lost: 'Guerra de Reinos perdida: Solo Condecoración del Rey esta semana.'
-  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa Rey de la Batalla se abren también y tu lista se reordena. El Rey reparte después del resultado, así que el cofre de nadie cambia.
+  closed: Las recompensas están cerradas. La próxima abre el {when}, después del evento de capitolio del viernes.
+  header: Rango {rank} · recompensas de {week} · abierto hasta el {when}
+  banner_off_week: Solo mención del Rey esta semana (sin Guerra de Reinos).
+  banner_won: 'Guerra de Reinos ganada: los cofres de recompensa del Rey de la Batalla también están abiertos.'
+  banner_lost: 'Guerra de Reinos perdida: solo mención del Rey esta semana.'
+  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de recompensa del Rey de la Batalla también se abrirán y tu lista será reordenada. El Rey reparte después del resultado, por lo que el cofre de nadie cambia.
   handed_out_title: "✓ Ya entregado por el Rey ({n})"
-  handed_out_help: Estos cofres se entregan en el juego, por lo que permanecen con estos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
+  handed_out_help: Estos cofres se entregan en el juego, así que se quedan con estos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
   reserve: Reserva
   col_player: Jugador
   col_chest: Cofre
@@ -264,11 +278,11 @@ nominate:
   chests_now: "{n} cofres ahora"
   chests_if_won: "{n} si se gana"
   named: "{n} nombrado"
-  still_need_name: "{n} aún necesita nombre"
+  still_need_name: "{n} todavía necesita un nombre"
   reserves_one: "{n} reserva"
   reserves_other: "{n} reservas"
   listed_twice: "{name} está listado dos veces"
-  saved: Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta el {when}.
+  saved: Guardado. El Rey ve tu lista. Puedes cambiarla hasta el {when}.
   save_failed: 'No se pudo guardar: {error}'
 kings_console:
   page_title: Consola de Distribución del Rey

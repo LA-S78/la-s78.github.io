@@ -104,23 +104,28 @@ rewards_card:
   buyout_cost_help: Finanzierung der verdrängten Allianz diese Woche
 caravan:
   title: Karawanen-Rotor
+  name_ok: In der Mitgliederliste von [{tag}]
+  name_spelling: 'Im Spiel steht es so geschrieben:'
+  name_unknown: Nicht in der Mitgliederliste von [{tag}].
+  name_did_you_mean: 'Meintest du:'
+  name_flag_spelling: 'Im Spiel steht es so geschrieben: {name}'
   picked_count: "{picked}/{total} ausgewählt"
-  members_can_view: Mitglieder können ansehen
+  members_can_view: Mitglieder können dies ansehen
   copy_status: Status kopieren
   new_week: Neue Woche
-  member_note: Wird von deinen R4s ausgewählt, wenn eine Karawane bereit ist.
+  member_note: Wird von deinen R4s ausgewählt, sobald eine Karawane bereit ist.
   search: Namen suchen…
-  around_now: Ungefähr jetzt
-  around_now_help: Nur Spieler, die ungefähr jetzt verfügbar sind
-  available: Diese Woche verfügbar ({n})
+  around_now: Gerade jetzt
+  around_now_help: Nur Spieler, die gerade verfügbar sind
+  available: Verfügbar diese Woche ({n})
   picked: Diese Woche ausgewählt ({n})
-  nobody_matches: Niemand gefunden.
+  nobody_matches: Keine Übereinstimmung.
   everyone_picked: Jeder hatte diese Woche bereits eine Karawane.
   add_players: Spieler unten hinzufügen.
   no_players: Noch keine Spieler.
   flexible: flexibel
   pick: "✓ Ausgewählt"
-  back_to_available: Zurück zur Verfügbarkeit
+  back_to_available: Zurück zu verfügbar
   name: Name
   from: Von (Game Time)
   to: Bis (Game Time)
@@ -130,7 +135,7 @@ caravan:
   add_from_label: Verfügbar ab (Game Time, optional)
   add_to_label: Verfügbar bis (Game Time, optional)
   add: Hinzufügen
-  times_help: Zeiten sind Game Time (UTC-2) und optional; lass sie für flexible Spieler leer.
+  times_help: Die Zeiten basieren auf Game Time (UTC-2) und sind optional; für flexible Spieler leer lassen.
   status_title: "🐪 [{tag}] Karawanen-Rotor: {picked}/{total} ausgewählt"
   status_available: 'Verfügbar: {names}'
   status_picked: 'Ausgewählt: {names}'
@@ -139,7 +144,7 @@ caravan:
   copy_prompt: 'Rotor-Status kopieren:'
   confirm_remove: "{name} aus dem Rotor entfernen?"
   this_player: diesen Spieler
-  confirm_new_week: Neue Woche starten? Alle kehren zu „verfügbar“ zurück (die Namen und Zeiten bleiben erhalten).
+  confirm_new_week: Neue Woche starten? Alle werden wieder auf verfügbar gesetzt (die Namen und Zeiten bleiben erhalten).
 chart_editor:
   edit_title: Diagramm oder Tabelle bearbeiten
   new_title: Neues Diagramm oder Tabelle
@@ -238,31 +243,40 @@ charts:
   hint_pie: Tippe oder bewege die Maus über ein Tortenstück
   hint_progress: Tippe oder bewege die Maus über eine Zeile
 nominate:
-  page_title: Belohnungsnominierungen
-  loading: Nominierungsseite wird geladen...
+  page_title: Belohnungs-Nominierungen
+  name_ok: In der Mitgliederliste von [{tag}]
+  name_spelling: 'Im Spiel steht es so geschrieben: {name}'
+  name_unknown: Nicht in der Mitgliederliste von [{tag}]
+  names_spelling_one: '1 Name wird im Spiel anders geschrieben:'
+  names_spelling_other: "{n} Namen werden im Spiel anders geschrieben:"
+  use_game_spellings: Spiel-Schreibweisen verwenden
+  names_unknown_one: '1 Name ist nicht in der Mitgliederliste von [{tag}]. Er wird trotzdem gespeichert; prüfe, ob er korrekt ist:'
+  names_unknown_other: "{n} Namen sind nicht in der Mitgliederliste von [{tag}]. Sie werden trotzdem gespeichert; prüfe, ob sie korrekt sind:"
+  did_you_mean: meintest du
+  loading: Lade Nominierungsseite...
   players_label: Deine Spieler, die besten zuerst
-  players_help: Ein Name pro Zeile (oder durch Kommas getrennt), dein bester Spieler zuerst. Die Truhen werden der Liste nach gemäß ihrem Wert über beide Sets verteilt; Namen unterhalb der Truhenanzahl gelten als Reserve und rücken nach, falls weitere Truhen freigeschaltet werden.
-  players_placeholder: Genaue Spielernamen, die besten zuerst...
+  players_help: Ein Name pro Zeile (oder durch Kommas getrennt), dein bester Spieler zuerst. Truhen werden in der Reihenfolge ihres Werts über beide Sets verteilt; Namen nach den Truhen gelten als Reserve und rücken nach, wenn mehr Truhen geöffnet werden.
+  players_placeholder: Exakte Spielnamen, beste zuerst...
   who_gets_what: Wer bekommt was
   save: Liste speichern
-  saving: Wird gespeichert...
-  link_incomplete: Dieser Link ist unvollständig. Nutze /nominate in Discord für einen neuen.
-  load_failed: "{error} Nutze /nominate in Discord für einen neuen Link."
-  closed: Belohnungen sind geschlossen. Die nächsten öffnen {when}, nach dem Kapitol-Event am Freitag.
-  header: Rang {rank} · {week} Belohnungen · offen bis {when}
-  banner_off_week: Diese Woche nur die Anerkennung des Königs (kein Königreichskrieg).
-  banner_won: 'Königreichskrieg gewonnen: Belohnungstruhen des Schlachtkönigs sind auch offen.'
-  banner_lost: 'Königreichskrieg verloren: Diese Woche nur die Anerkennung des Königs.'
-  banner_pending: Warten auf das Schlacht-Ergebnis vom Samstag (ca. {when}). Wenn gewonnen, öffnen sich auch die Belohnungstruhen des Schlachtkönigs und deine Liste wird neu sortiert. Der König verteilt nach dem Ergebnis, also ändert sich die Truhe für niemanden.
+  saving: Speichere...
+  link_incomplete: Dieser Link ist unvollständig. Führe /nominate in Discord aus, um einen neuen zu erhalten.
+  load_failed: "{error} Führe /nominate in Discord aus, um einen neuen Link zu erhalten."
+  closed: Die Belohnungen sind geschlossen. Die nächste Öffnung ist am {when}, nach dem Kapitol-Event am Freitag.
+  header: Rang {rank} · {week} Belohnungen · geöffnet bis {when}
+  banner_off_week: Diese Woche nur Belobigung des Königs (kein Königreichskrieg).
+  banner_won: 'Königreichskrieg gewonnen: Belohnungstruhen des Schlachtkönigs sind ebenfalls offen.'
+  banner_lost: 'Königreichskrieg verloren: Diese Woche nur Belobigung des Königs.'
+  banner_pending: Warte auf das Ergebnis der Schlacht am Samstag (etwa {when}). Falls gewonnen, öffnen sich auch die Belohnungstruhen des Schlachtkönigs und deine Liste wird neu sortiert. Der König verteilt die Belohnungen nach dem Ergebnis, also ändert sich die Truhe für niemanden.
   handed_out_title: "✓ Bereits vom König verteilt ({n})"
-  handed_out_help: Diese Truhen wurden bereits im Spiel vergeben und bleiben bei diesen Spielern, egal was deine Liste sagt. Die Liste unten verteilt den Rest.
+  handed_out_help: Diese Truhen wurden im Spiel bereits vergeben, sie bleiben also bei diesen Spielern, egal was deine Liste sagt. Die Liste unten verteilt den Rest.
   reserve: Reserve
   col_player: Spieler
   col_chest: Truhe
   col_now: Jetzt
-  col_if_won: Falls gewonnen
+  col_if_won: Wenn gewonnen
   chests_now: "{n} Truhen jetzt"
-  chests_if_won: "{n} falls gewonnen"
+  chests_if_won: "{n} wenn gewonnen"
   named: "{n} benannt"
   still_need_name: "{n} benötigen noch einen Namen"
   reserves_one: "{n} Reserve"
