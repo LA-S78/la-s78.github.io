@@ -131,3 +131,29 @@ main img {
   color: var(--status-danger-hover);
 }
 
+
+/* Markdown task lists ("- [x]", e.g. the roadmap): the browser's own disabled checkbox drew a
+   grey box with a faint tick either way (owner, 2026-11-17: ticked and unticked looked alike).
+   Unticked: an empty outline. Ticked: filled with the theme's accent colour, with a dark
+   tick, so the two read apart at a glance in every theme. */
+.task-list-item-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-block;
+  width: 1.05em;
+  height: 1.05em;
+  margin: 0 0.45em 0 0;
+  vertical-align: -0.15em;
+  border: 2px solid var(--text-muted);
+  border-radius: 4px;
+  background: transparent;
+  opacity: 0.75;
+}
+
+.task-list-item-checkbox:checked {
+  border-color: var(--accent-color);
+  background: var(--accent-color)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23161210' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 85% no-repeat;
+  opacity: 1;
+}
