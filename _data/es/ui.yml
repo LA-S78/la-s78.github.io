@@ -171,11 +171,9 @@ search:
   results_label: Resultados de búsqueda
   no_results: No se encontró nada para “{query}”.
   unavailable: La búsqueda no está disponible en este momento. Inténtalo de nuevo cuando estés en línea.
-# The picture viewer: a guide picture opened full size (js/main.js)
 image_viewer:
-  close: "Cerrar"
-  download: "Descargar"
-
+  close: Cerrar
+  download: Descargar
 pwa:
   toast_msg: Nueva información obtenida.
   update_btn: Actualizar
