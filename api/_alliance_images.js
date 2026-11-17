@@ -680,9 +680,13 @@ async function reviewDetails(req, id, wantFile) {
   };
 }
 
-/** An approved picture, for everyone. File names are never reused, so it can be cached. */
+/**
+ * An approved picture, for everyone. File names are never reused, so it can be cached. The
+ * name starts with the alliance's tagSlug: capitals as a rule, letter case kept beside an
+ * alliance with the same capitals (RavN for RâvN), so lowercase letters are allowed too.
+ */
 async function serveLive(file) {
-  if (!/^[A-Z0-9]{1,24}-(wide|card)-[a-f0-9]{24}\.(webp|jpg|png)$/.test(file)) {
+  if (!/^[A-Za-z0-9]{1,24}-(wide|card)-[a-f0-9]{24}\.(webp|jpg|png)$/.test(file)) {
     return reply(404, { error: 'Not found' });
   }
   if (!blobConfigured()) return reply(404, { error: 'Not found' });
