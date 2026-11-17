@@ -36,6 +36,8 @@ guides:
   premium_shop: Paquetes Premium y Gemas
   t10: Calculadora T10
   scramble: Pelea Real
+  elixir: "Pelea de Elixir"
+  undead_siege: "Asedio de los No Muertos"
 pages:
   home:
     title: Inicio

@@ -36,6 +36,8 @@ guides:
   premium_shop: Pacchetti Premium & Gemme
   t10: Calcolatore T10
   scramble: Mischia Reale
+  elixir: "Mischia d'elisir"
+  undead_siege: "Assedio non morti"
 pages:
   home:
     title: Home

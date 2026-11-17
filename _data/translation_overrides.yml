@@ -13,4 +13,14 @@
 #
 # For a game term that should read the same everywhere, add it to _data/terminology.json
 # instead (Gemini then uses it in every translation).
-{}
+# Elixir Scramble and Royal Scramble are different events: the automatic translation gave
+# them the same name in these languages (2026-11-17).
+de:
+  event_presets:
+    elixir_scramble_title: "Elixier-Gerangel"
+fr:
+  event_presets:
+    elixir_scramble_title: "Mêlée d'élixir"
+it:
+  event_presets:
+    elixir_scramble_title: "Mischia d'elisir"

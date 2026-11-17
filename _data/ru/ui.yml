@@ -36,6 +36,8 @@ guides:
   premium_shop: Премиум и Наборы самоцветов
   t10: Калькулятор T10
   scramble: Королевская схватка
+  elixir: "Схватка за эликсир"
+  undead_siege: "Осада нежити"
 pages:
   home:
     title: Главная

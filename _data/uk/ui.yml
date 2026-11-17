@@ -36,6 +36,8 @@ guides:
   premium_shop: Преміум і Набори самоцвітів
   t10: Калькулятор T10
   scramble: Королівська сутичка
+  elixir: "Еліксирна сутичка"
+  undead_siege: "Облога мерців"
 pages:
   home:
     title: Головна

@@ -36,6 +36,8 @@ guides:
   premium_shop: Packs Premium & Gemmes
   t10: Calculateur T10
   scramble: Mêlée Royale
+  elixir: "Mêlée d'élixir"
+  undead_siege: "Siège des Morts-Vivants"
 pages:
   home:
     title: Accueil

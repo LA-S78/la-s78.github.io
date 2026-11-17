@@ -593,7 +593,7 @@ rewards_planner:
 event_presets:
   crystal_cluster_title: Kristalltal
   crystal_cluster_desc: Jeden Sonntag Offenes Event
-  elixir_scramble_title: Königliches Gerangel
+  elixir_scramble_title: "Elixier-Gerangel"
   elixir_scramble_desc: Jeden Freitag Team-Kampf-Event
   survival_battle_title: Überlebenskampf
   survival_battle_desc: Erfülle Aufgaben, um Belohnungen zu erhalten
