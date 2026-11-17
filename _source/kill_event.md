@@ -89,7 +89,7 @@ Every player on the map has a coloured marker. The banner at the top shows which
 ---
 layout: guides
 title: "Kill Event"
-subtitle: "Raiding your Alliance Duel opponent"
+subtitle: "Den Gegner im Allianz-Duell überfallen"
 active_nav: guides
 guide_id: "kill_event"
 nav_links:
@@ -103,7 +103,7 @@ nav_links:
 
 === pane--de--events--kill_event--01--travel ===
 ---
-title: "Getting There"
+title: "So kommst du hin"
 nav_id: "travel"
 parent_guide: "kill_event"
 lang: "de"
@@ -123,7 +123,7 @@ Das Kill Event wird auf dem Server deines **Allianz-Duell**-Gegners ausgetragen.
 
 === pane--de--events--kill_event--02--home ===
 ---
-title: "Getting Home"
+title: "So kommst du zurück"
 nav_id: "home"
 parent_guide: "kill_event"
 lang: "de"
@@ -141,7 +141,7 @@ Der **blaue Pfeil** neben dem **!** oben auf dem Bildschirm teleportiert dich zu
 
 === pane--de--events--kill_event--03--targets ===
 ---
-title: "Who to Hit"
+title: "Wen du angreifst"
 nav_id: "targets"
 parent_guide: "kill_event"
 lang: "de"
@@ -519,7 +519,7 @@ Haritadaki her oyuncunun renkli bir işaretçisi vardır. Üstteki başlık, han
 ---
 layout: guides
 title: "Kill Event"
-subtitle: "Raiding your Alliance Duel opponent"
+subtitle: "Набіг на суперника в Дуелі альянсів"
 active_nav: guides
 guide_id: "kill_event"
 nav_links:
@@ -533,7 +533,7 @@ nav_links:
 
 === pane--uk--events--kill_event--01--travel ===
 ---
-title: "Getting There"
+title: "Як дістатися"
 nav_id: "travel"
 parent_guide: "kill_event"
 lang: "uk"
@@ -553,7 +553,7 @@ Kill Event (Подія вбивства) відбувається на серв�
 
 === pane--uk--events--kill_event--02--home ===
 ---
-title: "Getting Home"
+title: "Як повернутися додому"
 nav_id: "home"
 parent_guide: "kill_event"
 lang: "uk"
@@ -571,7 +571,7 @@ order: 2
 
 === pane--uk--events--kill_event--03--targets ===
 ---
-title: "Who to Hit"
+title: "Кого атакувати"
 nav_id: "targets"
 parent_guide: "kill_event"
 lang: "uk"
