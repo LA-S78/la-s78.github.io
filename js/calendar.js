@@ -126,13 +126,20 @@ async function initCalendar() {
   let openAddForm = null;
   let closeEventForm = null;
 
-  // The hint under "Remind 1 hour before": where the reminder goes, or that it has nowhere
+  // The hints under the reminder choice: where it goes, or that it has nowhere
   // to go yet (an alliance that hasn't run /registerbot; the NAP channel not set up)
   function updateReminderHint() {
     const hint = document.getElementById('evt-reminder-hint');
     if (!hint) return;
     // Where the reminder goes: only said when there is one
-    hint.hidden = document.getElementById('evt-input-notify')?.value === 'off';
+    const off = document.getElementById('evt-input-notify')?.value === 'off';
+    hint.hidden = off;
+    // When it's posted: nothing to choose without a reminder
+    const when = document.getElementById('evt-input-remind-time');
+    if (when) {
+      when.disabled = off;
+      document.getElementById('evt-remind-time-hint').hidden = off;
+    }
     if (!reminderChannels) return;
     const missing = isGlobalAdmin ? !reminderChannels.server : reminderChannels.alliance === false;
     hint.textContent = t(
@@ -511,6 +518,11 @@ async function initCalendar() {
       if (submitBtn) submitBtn.textContent = t('calendar_events.publish');
       editingNotifyTarget = null;
       window.SiteSelect?.sync(notifySelect);
+      const remindTime = document.getElementById('evt-input-remind-time');
+      if (remindTime) {
+        remindTime.value = '60';
+        window.SiteSelect?.sync(remindTime);
+      }
       updateReminderHint();
     }
 
@@ -539,6 +551,14 @@ async function initCalendar() {
       // One choice for the reminder: none, or who it pings
       editingNotifyTarget = evt.notify_target || 'role';
       notifySelect.value = evt.reminder === '1h' ? editingNotifyTarget : 'off';
+      // How long before (events from before the choice existed: an hour)
+      const remindTime = document.getElementById('evt-input-remind-time');
+      if (remindTime) {
+        const m = Number(evt.reminder_minutes);
+        remindTime.value =
+          Number.isInteger(m) && m >= 0 && m <= 60 && m % 10 === 0 ? String(m) : '60';
+        window.SiteSelect?.sync(remindTime);
+      }
       updateReminderHint();
       const isCustom = notifySelect.value === 'custom_role';
       customRoleInput.disabled = !isCustom;
@@ -691,6 +711,7 @@ async function initCalendar() {
             event_type: OPERATION_PRESETS[presetValue()] ? presetValue() : null,
             description: document.getElementById('evt-input-details').value,
             reminder: remind ? '1h' : 'off',
+            reminder_minutes: Number(document.getElementById('evt-input-remind-time')?.value ?? 60),
           },
         };
 

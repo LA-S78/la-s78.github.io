@@ -81,6 +81,7 @@ async function respond(req, res) {
         notify_target: f.notify_target,
         custom_role_id: f.custom_role_id,
         reminder: f.reminder,
+        reminder_minutes: f.reminder_minutes,
         notification_status: {
           reminder_15m_sent: false,
           start_sent: false,
@@ -139,6 +140,7 @@ async function respond(req, res) {
         notify_target: f.notify_target,
         custom_role_id: f.custom_role_id,
         reminder: f.reminder,
+        reminder_minutes: f.reminder_minutes,
         color: f.color,
         event_type: f.event_type,
         updatedAt: new Date().toISOString(),
@@ -236,6 +238,7 @@ function cleanEventFields(eventData, isGlobalAdmin) {
     notify_target = 'role',
     custom_role_id = null,
     reminder = 'off',
+    reminder_minutes = 60,
     color = null,
     description = '',
     event_type = null,
@@ -266,8 +269,12 @@ function cleanEventFields(eventData, isGlobalAdmin) {
     cleanCustomRoleId = rawRole;
   }
 
-  // Discord reminder before the start: '1h' or 'off' (more choices can come later)
+  // Discord reminder: '1h' (on) or 'off', and how long before the start: 0 (when it starts)
+  // to 60 minutes, in tens (api/_reminders.js)
   const cleanReminder = ['1h', 'off'].includes(reminder) ? reminder : 'off';
+  const minutes = Number(reminder_minutes);
+  const cleanReminderMinutes =
+    Number.isInteger(minutes) && minutes >= 0 && minutes <= 60 && minutes % 10 === 0 ? minutes : 60;
 
   // Sanitize Accent Color Hex
   let cleanColor = isGlobalAdmin ? '#10b981' : '#3b82f6';
@@ -297,6 +304,7 @@ function cleanEventFields(eventData, isGlobalAdmin) {
       notify_target: cleanNotifyTarget,
       custom_role_id: cleanCustomRoleId,
       reminder: cleanReminder,
+      reminder_minutes: cleanReminderMinutes,
       color: cleanColor,
       event_type: cleanEventType,
     },

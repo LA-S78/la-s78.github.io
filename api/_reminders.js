@@ -4,11 +4,16 @@
 // REMINDER_SECRET header (GitHub's schedule never started; "Run workflow" on
 // .github/workflows/reminders.yml runs one by hand); api/calendar.js hands the request here.
 // Owner design, 2026-11-13:
-//   - Only events whose `reminder` is '1h' (set on the event form). Events made before
-//     reminders existed have none, so they never fire.
-//   - Posted once per occurrence, at most an hour before it starts. A check can come a few
-//     minutes late, so the message shows the start as a Discord timestamp (each
-//     reader's own time, with a live countdown) rather than "in 1 hour".
+//   - Only events whose `reminder` is '1h' (set on the event form: '1h' means "on"; the name is
+//     from when an hour was the only choice). Events made before reminders existed have none,
+//     so they never fire.
+//   - When (owner request, 2026-11-17): `reminder_minutes`, 0 to 60 in steps of 10, how long
+//     before the start (events from before it: 60). The check runs every 10 minutes, so a
+//     reminder is posted within the 10 minutes before that time. 0 ("when it starts") is
+//     posted by the first check after the start, up to 15 minutes late, and says "Starting now".
+//   - Posted once per occurrence. A check can come a few minutes late, so the message shows
+//     the start as a Discord timestamp (each reader's own time, with a live countdown) rather
+//     than "in 1 hour".
 //   - Alliance events go to that alliance's alert channel (from /registerbot). Server-wide
 //     (Steward) events go to the NAP Discord (NAP_ALERT_CHANNEL_ID) and to the alert channel
 //     of alliances that opted in (server_event_alerts).
@@ -24,7 +29,16 @@
 import { readGist, gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { inLocale, say } from './_messages.js';
 
-const HOUR = 3600 * 1000;
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+/** How long after the start a "when it starts" reminder may still be posted. */
+const START_GRACE = 15 * MINUTE;
+
+/** Minutes before the start the event's reminder goes out: 0 to 60 in tens (default 60). */
+export function reminderLead(evt) {
+  const m = evt?.reminder_minutes;
+  return Number.isInteger(m) && m >= 0 && m <= 60 && m % 10 === 0 ? m : 60;
+}
 const STEPS = { '2days': 2 * 24 * HOUR, weekly: 7 * 24 * HOUR };
 
 /** The start (ms) of the event's next occurrence from `now` (repeating events step forward). */
@@ -36,13 +50,20 @@ export function nextOccurrence(evt, now) {
   return base + Math.ceil((now - base) / step) * step;
 }
 
-/** Events due for a reminder: reminder on, next occurrence within the hour, not yet reminded. */
+/**
+ * Events due for a reminder: reminder on, the next occurrence within its lead time
+ * (reminderLead), not yet reminded. A "when it starts" reminder (lead 0) is due from the
+ * start until START_GRACE after it, so the occurrence that just began still counts.
+ */
 export function dueReminders(events, now) {
   const due = [];
   for (const evt of events || []) {
     if (evt?.reminder !== '1h') continue;
-    const start = nextOccurrence(evt, now);
-    if (start === null || start <= now || start - now > HOUR) continue;
+    const lead = reminderLead(evt) * MINUTE;
+    const grace = lead === 0 ? START_GRACE : 0;
+    const start = nextOccurrence(evt, now - grace);
+    if (start === null || start <= now - grace || start - now > lead) continue;
+    if (lead > 0 && start <= now) continue; // started already: too late for "before"
     const occurrence = new Date(start).toISOString();
     if (evt.notification_status?.reminded_occurrence === occurrence) continue;
     due.push({ evt, start, occurrence });
@@ -110,7 +131,7 @@ function reminderMessage(evt, start, ping, testNote) {
   const mention = ping === 'everyone' ? '@everyone' : ping ? `<@&${ping}>` : '';
   const title = String(evt.title || '').slice(0, 240);
   const embed = {
-    title: say('reminders.title', { title }),
+    title: say(reminderLead(evt) === 0 ? 'reminders.title_now' : 'reminders.title', { title }),
     description: String(evt.description || '').slice(0, 1000) || undefined,
     color:
       Number.parseInt(

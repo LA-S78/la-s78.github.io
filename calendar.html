@@ -130,6 +130,22 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
             <small class="form-hint" id="evt-reminder-hint">{{ "calendar_events.reminder_hint" | t }}</small>
           </div>
 
+          <!-- When the reminder goes (owner request, 2026-11-17): from the start to an hour before,
+               in tens (reminder_minutes, api/_reminders.js). Greyed out with "No reminder". -->
+          <div class="form-group form-col-full" id="group-remind-time">
+            <label for="evt-input-remind-time">{{ "calendar_events.remind_when" | t }}</label>
+            <select id="evt-input-remind-time" class="cal-form-select" data-site-select>
+              <option value="0">{{ "calendar_events.remind_at_start" | t }}</option>
+              <option value="10">{{ "calendar_events.remind_minutes" | t_html: "n", 10 }}</option>
+              <option value="20">{{ "calendar_events.remind_minutes" | t_html: "n", 20 }}</option>
+              <option value="30">{{ "calendar_events.remind_minutes" | t_html: "n", 30 }}</option>
+              <option value="40">{{ "calendar_events.remind_minutes" | t_html: "n", 40 }}</option>
+              <option value="50">{{ "calendar_events.remind_minutes" | t_html: "n", 50 }}</option>
+              <option value="60" selected>{{ "calendar_events.remind_hour" | t }}</option>
+            </select>
+            <small class="form-hint" id="evt-remind-time-hint">{{ "calendar_events.remind_when_hint" | t }}</small>
+          </div>
+
           <!-- Non-Jumping Custom Role Input -->
           <div class="form-group form-col-full" id="group-custom-role">
             <label for="evt-input-role-id">{{ "calendar_events.role_id" | t }}

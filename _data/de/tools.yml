@@ -488,7 +488,12 @@ calendar_events:
   once: Einmaliges Event (Wiederholt sich nicht)
   every_2_days: Wiederholt sich alle 2 Tage
   weekly: Wiederholt sich wöchentlich (Gleicher Tag & Zeit)
-  alert_level: Discord-Erinnerung (1 Stunde vorher)
+  alert_level: "Discord-Erinnerung"
+  remind_when: "Wann posten"
+  remind_at_start: "Zum Start"
+  remind_minutes: "{n} Minuten vorher"
+  remind_hour: "1 Stunde vorher"
+  remind_when_hint: "Erinnerungen werden alle 10 Minuten geprüft, sie können also ein paar Minuten früher kommen."
   notify_off: Keine Erinnerung
   notify_role: Allianz-Alarm-Rolle pingen
   notify_custom: Spezifische Rolle pingen

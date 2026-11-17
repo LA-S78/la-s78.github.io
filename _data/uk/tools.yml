@@ -493,7 +493,12 @@ calendar_events:
   once: Разова подія (не повторюється)
   every_2_days: Повторюється кожні 2 дні
   weekly: Повторюється щотижня (той самий день і час)
-  alert_level: Сповіщення Discord (за 1 годину до)
+  alert_level: "Нагадування в Discord"
+  remind_when: "Коли надіслати"
+  remind_at_start: "На початку"
+  remind_minutes: "За {n} хвилин"
+  remind_hour: "За 1 годину"
+  remind_when_hint: "Нагадування перевіряються кожні 10 хвилин, тож воно може прийти на кілька хвилин раніше."
   notify_off: Без сповіщення
   notify_role: Сповістити роль сповіщень альянсу
   notify_custom: Сповістити конкретну роль
