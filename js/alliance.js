@@ -696,7 +696,7 @@ export function renderStandingsHierarchy() {
             }
             <strong class="ladder-tag ally-text" style="--ally: ${esc(displayColor)}">[${esc(alliance.tag)}]</strong>
             <span class="ladder-name">${esc(alliance.name)}</span>
-            ${alliance.parent_tag ? `<span class="academy-child-badge">${esc(ta('academy_of', { tag: alliance.parent_tag }))}</span>` : ''}
+            ${alliance.parent_tag ? `<span class="academy-child-badge">${ic('academy')}${esc(ta('academy_of', { tag: alliance.parent_tag }))}</span>` : ''}
           </div>
 
           <div class="ladder-sub-line">
