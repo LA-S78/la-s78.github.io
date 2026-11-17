@@ -493,7 +493,7 @@ calendar_events:
   remind_at_start: Wenn es startet
   remind_minutes: "{n} Minuten vorher"
   remind_hour: 1 Stunde vorher
-  remind_when_hint: Erinnerungen werden alle 10 Minuten überprüft, daher kann sie ein paar Minuten früher eintreffen.
+  remind_when_hint: Erinnerungen werden alle 5 Minuten überprüft, daher kann sie ein paar Minuten früher eintreffen.
   notify_off: Keine Erinnerung
   notify_role: Alarm-Rolle der Allianz pingen
   notify_custom: Bestimmte Rolle pingen

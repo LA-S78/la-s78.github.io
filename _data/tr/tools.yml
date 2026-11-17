@@ -493,7 +493,7 @@ calendar_events:
   remind_at_start: Başladığında
   remind_minutes: "{n} dakika önce"
   remind_hour: 1 saat önce
-  remind_when_hint: Hatırlatıcılar her 10 dakikada bir kontrol edilir, bu yüzden birkaç dakika erken gelebilir.
+  remind_when_hint: Hatırlatıcılar her 5 dakikada bir kontrol edilir, bu yüzden birkaç dakika erken gelebilir.
   notify_off: Hatırlatıcı yok
   notify_role: İttifakın uyarı rolünü etiketle
   notify_custom: Belirli bir rolü etiketle

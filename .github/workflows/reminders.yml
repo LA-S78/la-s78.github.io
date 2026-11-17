@@ -3,7 +3,7 @@
 # secrets (Gist, bot token, channels) stay on Vercel; this only proves the call comes from
 # here with REMINDER_SECRET (the same value as Vercel's).
 #
-# The every-10-minutes check is NOT run from here: GitHub's schedule never started for this
+# The every-5-minutes check (10 until 2026-11-17) is NOT run from here: GitHub's schedule never started for this
 # workflow, and is often late or skipped when it does run. cron-job.org calls the site
 # directly instead (owner decision, 2026-11-13; set-up in docs/DECISIONS.md). Two callers at
 # once could post a reminder twice, so this workflow has no schedule: "Run workflow"

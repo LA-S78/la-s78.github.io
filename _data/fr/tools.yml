@@ -493,7 +493,7 @@ calendar_events:
   remind_at_start: À son démarrage
   remind_minutes: "{n} minutes avant"
   remind_hour: 1 heure avant
-  remind_when_hint: Les rappels sont vérifiés toutes les 10 minutes, il peut donc arriver avec quelques minutes d'avance.
+  remind_when_hint: Les rappels sont vérifiés toutes les 5 minutes, il peut donc arriver avec quelques minutes d'avance.
   notify_off: Aucun rappel
   notify_role: Mentionner le rôle d'alerte de l'alliance
   notify_custom: Mentionner un rôle spécifique
