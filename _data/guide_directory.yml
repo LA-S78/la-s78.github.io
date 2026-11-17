@@ -209,6 +209,8 @@ shops:
   - key: "alliance_shop"
     url: /LANG_CODE/guides/alliance.html
     status: unavailable
+    # owner's picture (alliance_shop.webp is the wide version, for a guide header later)
+    picture: alliance_shop_card.webp
     tooltip: Under Construction - Check back later!
     # a shop bag with a shield
     icon: |
@@ -226,6 +228,8 @@ shops:
       <path d="m12 12.3.9 1.8 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" />
   - key: "sanctuary_shop"
     url: /LANG_CODE/guides/sanctuary_shop.html
+    # owner's picture (sanctuary_shop.webp is the wide version, for a guide header later)
+    picture: sanctuary_shop_card.webp
     # a shop bag with the temple
     icon: |
       <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
