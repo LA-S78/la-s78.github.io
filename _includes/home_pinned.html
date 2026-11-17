@@ -12,7 +12,8 @@
         {%- for category in site.data.guide_directory %}
         {%- for item in category[1] %}
         {%- if item.key == key and item.status != 'unavailable' %}
-        <a href="{{ item.url | replace: 'LANG_CODE', current_lang }}" class="pinned-card searchable-item">
+        {% include guide-picture.html item=item %}
+        <a href="{{ item.url | replace: 'LANG_CODE', current_lang }}" class="pinned-card searchable-item{% if guide_pic != '' %} has-pic{% endif %}"{% if guide_pic != '' %} style="--pic: url('/images/events/{{ guide_pic }}')"{% endif %}>
             <svg class="nav-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 {{ item.icon }}
             </svg>

@@ -2,6 +2,12 @@
 # Icons (owner request, 2026-11-17) are 24x24 line drawings that show what the guide is about;
 # a guide with an event on the calendar uses that event's icon (_data/event_types.yml), so the
 # same event looks the same everywhere.
+#
+#   event:    the guide's event on the calendar (an id in _data/event_types.yml). Its card
+#             shows that event's picture behind it, dimmed, as the calendar does (owner
+#             request, 2026-11-17), so a picture added to the event shows here too.
+#   picture:  a picture for a guide with no event: a file in images/events/ (same rules as
+#             event_types.yml `picture`)
 strategy:
   - key: "heroes"
     url: /LANG_CODE/guides/heroes.html
@@ -61,12 +67,14 @@ events:
       <path d="M20.5 7.2C19.6 6.1 18.3 5.6 17 5.8c-1.6.3-2.3 1.7-1.6 2.9.6 1 1.9 1.4 3.1 2 1.4.7 2 2.1 1.2 3.4-.9 1.4-3.3 1.6-5 .2" />
       <path d="M3 19.5h18" />
   - key: "survival"
+    event: survival_battle
     url: /LANG_CODE/guides/survival.html
     # the calendar's Survival Battle: a shield and heart
     icon: |
       <path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z" />
       <path d="M8.8 11.2a1.9 1.9 0 0 1 3.2-1.2 1.9 1.9 0 0 1 3.2 1.2c0 1.8-3.2 3.8-3.2 3.8s-3.2-2-3.2-3.8" />
   - key: "kingdom"
+    event: kvk_battle
     url: /LANG_CODE/guides/kingdom.html
     # the calendar's Kingdom War: crossed swords
     icon: |
@@ -81,6 +89,7 @@ events:
       <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7z" />
       <path d="M5 20h14" />
   - key: "elixir"
+    event: elixir_scramble
     url: /LANG_CODE/guides/elixir.html
     status: unavailable
     # the calendar's Elixir Scramble: a flask
@@ -89,6 +98,7 @@ events:
       <path d="M8.5 2h7" />
       <path d="M7 16h10" />
   - key: "undead_siege"
+    event: undead_siege
     url: /LANG_CODE/guides/undead-siege.html
     status: unavailable
     # the calendar's Undead Siege: a skull
@@ -98,6 +108,7 @@ events:
       <circle cx="15" cy="11.5" r="1.6" />
       <path d="M10 21v-2.5M14 21v-2.5M11.2 15.6l.8-1.4.8 1.4" />
   - key: "kill_event"
+    event: kill_event
     url: /LANG_CODE/guides/kill_event.html
     # the calendar's Kill Event: a crosshair
     icon: |
@@ -105,6 +116,7 @@ events:
       <circle cx="12" cy="12" r="3" />
       <path d="M22 12h-4M6 12H2M12 6V2M12 22v-4" />
   - key: "gear_upgrade"
+    event: gear_upgrade
     url: /LANG_CODE/guides/gear-upgrade.html
     status: unavailable
     # the calendar's Gear Upgrade: armour
@@ -122,6 +134,7 @@ events:
       <path d="M22 21V6l-3 2-2-2-2 2v13" />
       <path d="M9 21c1.5-2 4.5-2 6 0" />
   - key: "cheese"
+    event: cheese_trap
     url: /LANG_CODE/guides/cheese.html
     # the calendar's Cheese Trap: a cheese wedge
     icon: |
@@ -147,6 +160,7 @@ events:
       <path d="M16 12a19.9 19.9 0 0 1 3 5.8c.4 1.4 2.3 1.7 2.6.3A13 13 0 0 0 20 8" />
       <path d="M18.4 3.4a1.2 1.2 0 0 0-1.7 0l-5.3 5.3a1.2 1.2 0 0 0 0 1.7l2.3 2.3a1.2 1.2 0 0 0 1.7 0l5.3-5.3a1.2 1.2 0 0 0 0-1.7z" />
   - key: "crystal"
+    event: crystal_cluster
     url: /LANG_CODE/guides/crystal-valley.html
     status: unavailable
     # the calendar's Crystal Cluster: a gem
