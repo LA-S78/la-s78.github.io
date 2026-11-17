@@ -209,6 +209,8 @@ shops:
   - key: "alliance_shop"
     url: /LANG_CODE/guides/alliance.html
     status: unavailable
+    # owner's picture (alliance_shop.webp is the wide version, for a guide header later)
+    picture: alliance_shop_card.webp
     tooltip: Under Construction - Check back later!
     # a shop bag with a shield
     icon: |
