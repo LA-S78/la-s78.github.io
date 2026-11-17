@@ -57,6 +57,18 @@ strategy:
       <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
       <polyline points="7 10 9 8 9 16" />
       <rect x="13" y="8" width="4" height="8" rx="1" />
+  - key: "frozen_era"
+    url: /LANG_CODE/guides/frozen_era.html
+    # a season guide with no calendar event: its own picture (the graphic's header art)
+    picture: frozen_era.webp
+    # a snowflake
+    icon: |
+      <path d="M2 12h20" />
+      <path d="M12 2v20" />
+      <path d="m20 16-4-4 4-4" />
+      <path d="m4 8 4 4-4 4" />
+      <path d="m16 4-4 4-4-4" />
+      <path d="m8 20 4-4 4 4" />
 
 events:
   - key: "duel"
