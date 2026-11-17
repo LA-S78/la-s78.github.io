@@ -43,6 +43,40 @@ export function allyPicMarkup(url) {
   return { cls: '', attrs: ` data-ally-pic="${url}"` };
 }
 
+/**
+ * Puts `url` behind one element that stays on the page (the calendar's hero card): at once
+ * when it is ready, else faded in once loaded; no url takes the picture away.
+ */
+export function showAllyPic(el, url) {
+  if (!el) return;
+  const safe = typeof url === 'string' && SAFE.test(url) ? url : null;
+  if ((el.dataset.allyPicShown || null) === safe) return; // already showing it
+  el.dataset.allyPicShown = safe || '';
+  if (!safe) {
+    el.classList.remove('has-ally-pic', 'ally-pic-in');
+    el.style.removeProperty('--ally-pic');
+    delete el.dataset.allyPicShown;
+    return;
+  }
+  const wasReady = ready.has(safe);
+  loadAllyPic(safe)
+    .then(() => {
+      if (el.dataset.allyPicShown !== safe) return; // another picture was asked for meanwhile
+      el.style.setProperty('--ally-pic', `url('${safe}')`);
+      el.classList.add('has-ally-pic');
+      if (!wasReady) {
+        el.classList.add('ally-pic-in');
+        const end = (e) => {
+          if (e.target !== el || e.animationName !== 'ally-pic-in') return;
+          el.classList.remove('ally-pic-in');
+          el.removeEventListener('animationend', end);
+        };
+        el.addEventListener('animationend', end);
+      }
+    })
+    .catch(() => {});
+}
+
 /** Fades in each picture under `root` that wasn't ready when it was drawn. */
 export function revealAllyPics(root) {
   if (!root) return;
