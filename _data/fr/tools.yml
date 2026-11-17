@@ -369,22 +369,22 @@ calendar:
   phase: Phase
   schedule_title: Programme de la Guerre des Royaumes
   loading_cycle: Chargement des détails du cycle...
-  badge_closed: "Récompenses fermées"
-  badge_kob_open: "Mêlée Royale ouverte"
-  badge_awaiting: "En attente du résultat de la Guerre des Royaumes"
-  badge_open: "Récompenses ouvertes"
-  set2_off_week: Commendation du Roi uniquement (pas de Guerre des Royaumes).
-  set2_won: 'Guerre des Royaumes gagnée : Récompense de Mêlée Royale également ouverte.'
-  set2_lost: 'Guerre des Royaumes perdue : Commendation du Roi uniquement.'
-  set2_pending: Récompense de Mêlée Royale si la guerre de samedi est gagnée ; le Roi distribue les récompenses après le résultat.
-  rewards_open_until: Récompenses {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
+  badge_closed: Récompenses fermées
+  badge_kob_open: Mêlée Royale ouverte
+  badge_awaiting: En attente du résultat de la Guerre des Royaumes
+  badge_open: Récompenses ouvertes
+  set2_off_week: Recommandation du Roi uniquement (pas de Guerre des Royaumes).
+  set2_won: 'Guerre des Royaumes remportée : Mêlée Royale également ouverte.'
+  set2_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement.'
+  set2_pending: Mêlée Royale si la guerre de samedi est remportée ; le Roi distribue après le résultat.
+  rewards_open_until: Récompenses de {week} ouvertes jusqu'au mardi 23:59 GT. {set2}
   rewards_closed: Les récompenses sont fermées. Prochaine ouverture vendredi vers 20:00 GT, après l'événement du capitole.
   capitol_holder: DÉTENTEUR DU CAPITOLE
   current_holder: DÉTENTEUR ACTUEL DU CAPITOLE
   next_holder: PROCHAIN DÉTENTEUR DU CAPITOLE
   rank: 'Rang #{rank}'
-  rank_override: 'Rang #{rank} (Priorité)'
-  rank_override_schedule: 'Rang #{rank} • Programme Prioritaire'
+  rank_override: 'Rang #{rank} (Remplacé)'
+  rank_override_schedule: 'Rang #{rank} • Calendrier de remplacement'
   captured_friday: Capturé vendredi
   captures_today: Captures aujourd'hui
   captures_friday: Captures vendredi
@@ -392,9 +392,9 @@ calendar:
   day_of_28: Jour {day} sur 28 ({week})
   week_n: Semaine {n}
   next_reset: PROCHAINE RÉINITIALISATION (00:00 GT)
-  next_kw: PROCHAINE BATAILLE DE GUERRE DES ROYAUMES
+  next_kw: PROCHAINE BATAILLE KW
   saturday: Samedi
-  today: "AUJOURD'HUI"
+  today: AUJOURD'HUI
   none_this_week: Aucun cette semaine
   upcoming: Événements à venir
   times_shown: Heures affichées en {gt} & votre heure locale
@@ -418,8 +418,8 @@ calendar:
   next_week_aria: Semaine suivante
   this_cycle: Ce cycle
   kvk_short: KvK {n}
-  off_short: Repos
-  king_unknown: Décidé lors de la réinitialisation
+  off_short: 'Off'
+  king_unknown: Décidé à la réinitialisation
   day_today: Aujourd'hui
   day_tomorrow: Demain
   day_yesterday: Hier
@@ -441,64 +441,64 @@ calendar:
   every_2_days: Tous les 2 jours
   weekly: Hebdomadaire
   mandatory: Obligatoire
-  edit: "Modifier"
-  delete: "Supprimer"
-  edit_events: "Modifier les événements"
-  edit_done: "✓ Terminer la modification"
-  add_event: "Ajouter un événement"
+  edit: Modifier
+  delete: Supprimer
+  edit_events: Modifier les événements
+  edit_done: "✓ Terminé"
+  add_event: Ajouter un événement
   ev_capture_title: Capture du Capitole — {who}
   ev_capture_desc: "{who} ({rank}) capture le Capitole vendredi."
-  ev_kw_title: Bataille de Guerre des Royaumes
-  ev_kw_desc: Début à 12:00 GT, généralement terminé vers 14:00 GT. Une victoire ouvre les coffres de Récompense de Mêlée Royale en plus de la Commendation du Roi.
+  ev_kw_title: Bataille de la Guerre des Royaumes
+  ev_kw_desc: Début à 12:00 GT, se termine généralement vers 14:00 GT. Une victoire ouvre les coffres de Mêlée Royale en plus de la Recommandation du Roi.
   ev_open_title: Récompenses ouvertes — {week}
-  ev_open_desc_kw: La Commendation du Roi ouvre après l'événement du capitole. La Récompense de Mêlée Royale suit si la Guerre des Royaumes de samedi est gagnée ; le Roi distribue les récompenses après le résultat.
-  ev_open_desc: La Commendation du Roi ouvre après l'événement du capitole (pas de Guerre des Royaumes cette semaine).
+  ev_open_desc_kw: La Recommandation du Roi s'ouvre après l'événement du capitole. La Mêlée Royale suit si la Guerre des Royaumes de samedi est remportée ; le Roi distribue après le résultat.
+  ev_open_desc: La Recommandation du Roi s'ouvre après l'événement du capitole (pas de Guerre des Royaumes cette semaine).
   ev_close_title: Récompenses fermées — {week}
-  ev_close_desc: 'Les coffres expirent mercredi à 00:00 GT : distribuez tout avant cette échéance.'
+  ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette heure.'
 calendar_events:
   reminder_hint: Publié dans le canal d'alerte de votre alliance.
-  reminder_hint_server: Publié dans le canal d'alerte Discord du NAP et dans les alliances ayant opté pour.
-  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : exécutez /registerbot sur votre Discord pour que les rappels puissent être publiés.'
+  reminder_hint_server: Publié dans le canal d'alerte du Discord NAP, et dans les alliances ayant opté pour cette option.
+  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : lancez /registerbot dans votre Discord pour que les rappels puissent être publiés.'
   reminder_no_server_channel: Le canal d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), donc les rappels du serveur ne peuvent pas être publiés.
   edit_heading: Modifier l'événement
-  scope_label: Gérer les événements de qui
-  scope_server: Événements à l'échelle du serveur
+  scope_label: Gérer les événements de
+  scope_server: Événements du serveur
   scope_alliance: Événements [{tag}]
-  save_changes: "Enregistrer les modifications"
+  save_changes: Enregistrer les modifications
   manage_mode: MODE GESTION
   session_active: Session authentifiée active
-  create_operation: Créer une Opération
-  kingdom_admin: "ADMIN ROYAUME"
-  kingdom_desc: Gestion des événements serveur
-  kingdom_heading: Créer une Opération de Royaume ([GLOBAL])
-  leadership: "DIRECTION [{tag}]"
+  create_operation: Créer une opération
+  kingdom_admin: ADMIN DU ROYAUME
+  kingdom_desc: Gestion des événements du serveur
+  kingdom_heading: Créer une opération du Royaume ([GLOBAL])
+  leadership: DIRECTION [{tag}]
   leadership_desc: Gestion des événements [{tag}]
-  alliance_heading: Créer une Opération [{tag}]
+  alliance_heading: Créer une opération [{tag}]
   preset: Type d'événement
   type_custom: Personnalisé
-  type_custom_hint: Formulaire vide
+  type_custom_hint: Formulaire vierge
   duration_h: "{n}h"
   title: Titre de l'événement
-  title_example: ex. Exercice de Défense de Ruche ou Assaut d'Avant-poste
+  title_example: 'ex: Défense de ruche ou Assaut d''avant-poste'
   date: Date de début (AAAA-MM-JJ)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time du serveur (s'ajuste par incréments de 5 minutes)
+  time_hint: Game Time du serveur (s'ajuste par tranches de 5 minutes)
   duration: Durée (Heures)
   frequency: Fréquence
   once: Événement unique (ne se répète pas)
   every_2_days: Répétition tous les 2 jours
   weekly: Répétition hebdomadaire (même jour et heure)
   alert_level: Rappel Discord (1 heure avant)
-  notify_off: Aucun rappel
-  notify_role: Pinger le rôle d'alerte de l'alliance
-  notify_custom: Pinger un rôle spécifique
-  notify_everyone: Pinger @everyone
-  notify_none: Publier sans ping
+  notify_off: Pas de rappel
+  notify_role: Notifier le rôle d'alerte de l'alliance
+  notify_custom: Notifier un rôle spécifique
+  notify_everyone: Notifier @everyone
+  notify_none: Publier sans notification
   role_id: ID du rôle spécifique
-  role_id_hint: "(uniquement pour « Pinger un rôle spécifique »)"
+  role_id_hint: "(seulement pour « Notifier un rôle spécifique »)"
   role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
   details: Instructions / Point de ralliement
-  details_example: ex. Rassemblement à la Ruche Alpha. R4s mènent les ralliements. Chat vocal actif.
+  details_example: 'ex: Rassemblement à la Ruche Alpha. R4 dirigent les ralliements. Communications vocales activées.'
   publish: Publier dans le calendrier
   publishing: Publication en cours...
   bad_time: Le Game Time doit être défini par tranches de 5 minutes (:00, :05, :10, etc.)
@@ -506,17 +506,17 @@ calendar_events:
   save_failed: Échec de l'enregistrement de l'événement
   published: Opération publiée avec succès !
   delete_heading: Supprimer cet événement ?
-  delete_repeats: 'Il se répète ({repeat}) : toutes les répétitions seront supprimées, pas seulement celle-ci.'
-  delete_final: Ceci ne peut pas être annulé.
+  delete_repeats: 'Il se répète ({repeat}) : chaque répétition sera supprimée, pas seulement celle-ci.'
+  delete_final: Ceci est irréversible.
   delete_confirm: Supprimer
   delete_failed: Échec de la suppression de l'événement
   removed: Opération supprimée.
 kings_scheduler:
   title: Rotation du Capitole
-  subtitle: Programme automatisé de défense et restitution des matchs
-  overrides: 'Priorités : {n}/2'
+  subtitle: Calendrier automatisé de défense des matchups et restitution
+  overrides: 'Remplacements : {n}/2'
   loading: Chargement du programme en direct...
-  off_week: Semaine Off
+  off_week: Semaine off
   week_fri: Semaine {n} Ven
   boss_window: Fenêtre Boss {n}
   kvk_finale: Finale KvK
@@ -524,28 +524,28 @@ kings_scheduler:
   loot_other: "{n} Coffres du Roi"
   loot_border: 2 Coffres du Roi + Bordure
   active: ACTIF
-  buyouts_title: "Restitution de rachat en temps de guerre active"
+  buyouts_title: Restitution active des rachats de guerre
   buyouts_count: "{n} Actif"
   installment: 'Paiement semaine {week} :'
   payout: "{reg} & {kw}"
-  reg_gold: "+{n} Or Rég."
-  kw_gold: "+{n} Or KvK"
+  reg_gold: "+{n} Or Rétro"
+  kw_gold: "+{n} Or KW"
   paid: PAYÉ
   pending: EN ATTENTE
   beneficiary: 'Bénéficiaire :'
   threat: "(Menace : {threat})"
-  red_list: Liste Rouge
-  wartime_buyout: Rachat en temps de guerre
-  override_title: "Déclarer une priorité de programme"
-  override_help: Serveur dangereux repéré ? Entrez l'ID du serveur adverse
+  red_list: Liste rouge
+  wartime_buyout: Rachat de guerre
+  override_title: Déclarer un remplacement de calendrier
+  override_help: Vous avez scouté un serveur dangereux ? Entrez l'ID du serveur adverse
   target_week: Semaine KvK cible
-  week1_option: Vendredi Semaine 1 (Matchup Boss 2)
-  week2_option: Vendredi Semaine 2 (Matchup Boss 3)
-  opponent: Adversaire repéré (Serveur)
-  opponent_example: ex. S94, S77
-  disclaimer: "*Les priorités envoient une proposition au sénat sur Discord pour vérification par les dirigeants."
-  dispatch: Réviser & Envoyer la priorité
-  already_scheduled: "{who} Aucune priorité de défense requise."
+  week1_option: Semaine 1 Vendredi (Matchup Boss 2)
+  week2_option: Semaine 2 Vendredi (Matchup Boss 3)
+  opponent: Adversaire scouté (Serveur)
+  opponent_example: 'ex: S94, S77'
+  disclaimer: "*Les remplacements envoient une proposition au sénat sur Discord pour vérification par la direction."
+  dispatch: Vérifier et envoyer le remplacement
+  already_scheduled: "{who} Aucun remplacement de défense nécessaire."
   already_scheduled_who: WLO est déjà programmé pour la Semaine {n}.
   step1: 'Étape 1 : Échange de calendrier (Coût 0 coffre)'
   step1_text: WLO prendra la {week} pour la défense du royaume contre {threat}.
@@ -553,26 +553,26 @@ kings_scheduler:
   opponent_placeholder: "[Adversaire]"
   week3_finale: 'Finale Semaine 3 :'
   lose_nothing: "{ally} perd 0 coffre. {wlo} perd 0 coffre."
-  step2: 'Étape 2 : Rachat en temps de guerre (Restitution en 2 fois)'
-  step2_text: 'Ceci est la {second} de ce cycle. La semaine 3 ayant déjà été échangée, {ally} se retire et reçoit un rachat avec des coffres :'
-  second_override: seconde priorité de défense
-  distribution: 'Distribution Semaine {n} :'
-  plus_gold: "+1 Or Régulier & +1 Or KvK pour [{tag}]"
-  buyout_perks: "{ally} perd 2 coffres du Roi, gagne 4 coffres d'or. {wlo} gagne 2 coffres du Roi, perd 4 coffres d'or."
-  proposal_buyout: "Déclarer un rachat en temps de guerre"
-  proposal_swap: "Déclarer un échange de défense"
-  sum_second: 2ème priorité de défense WLO
-  sum_first: 1ère priorité de défense WLO
+  step2: 'Étape 2 : Rachat de guerre (Restitution en 2 fois)'
+  step2_text: 'Ceci est le {second} de ce cycle. La Semaine 3 a déjà été échangée, donc {ally} se désiste et reçoit un rachat avec des coffres :'
+  second_override: deuxième remplacement de défense
+  distribution: 'Distribution semaine {n} :'
+  plus_gold: "+1 Or Rétro & +1 Or KW pour [{tag}]"
+  buyout_perks: "{ally} perd 2 coffres du Roi, gagne 4 coffres en or. {wlo} gagne 2 coffres du Roi, perd 4 coffres en or."
+  proposal_buyout: Déclarer un Rachat de guerre
+  proposal_swap: Déclarer un Échange de défense
+  sum_second: 2ème remplacement de défense WLO
+  sum_first: 1er remplacement de défense WLO
   sum_vs: Semaine {n} vs {threat}
-  sum_buyout_issued: "[{tag}] Rachat en temps de guerre émis"
-  sum_four_gold: 4 Coffres d'Or au total
+  sum_buyout_issued: Rachat de guerre [{tag}] émis
+  sum_four_gold: 4 coffres en or au total
   sum_installment: 'Versement {i} (S{week}) :'
-  sum_installment_chests: 1 Or Rég. + 1 Or KvK
+  sum_installment_chests: 1 Or Rétro + 1 Or KW
   sum_swap: Échange de calendrier
-  sum_swap_text: WLO prend le vendredi de la S{n}
-  sum_promoted: "[{tag}] Promu à la Finale Semaine 3"
-  sum_promoted_text: "(2 Coffres du Roi + Objet de buff)"
-  sum_cost: 'Coût en coffres d''alliance WLO : 0'
+  sum_swap_text: WLO prend S{n} Vendredi
+  sum_promoted: "[{tag}] Promu à la finale Semaine 3"
+  sum_promoted_text: "(2 Coffres du Roi + Objet bonus)"
+  sum_cost: 'Coût en coffres alliance WLO : 0'
 rewards_planner:
   host_week: Semaine d'accueil active
   planner_mode: Mode planificateur
@@ -737,23 +737,23 @@ proposals:
   user_avatar: Avatar utilisateur
   submitting_as: Soumission en tant que {name}
   auth_required: Authentification de la direction requise
-  auth_reason: Les propositions nécessitent un statut de dirigeant ou d'officier vérifié sur Discord pour être envoyées.
+  auth_reason: Les propositions nécessitent une direction Discord vérifiée ou un statut d'officier pour être envoyées.
   log_in: Connectez-vous via Discord pour soumettre
-  oauth_unreachable: Le service OAuth Discord est injoignable. Veuillez rafraîchir et réessayer.
-  transmit_discord: Transmettre sur Discord
-  leaders_only_note: Seuls les dirigeants R4 et R5 peuvent envoyer des propositions. Demandez à votre chef d'alliance de soumettre ce plan.
-  leaders_only: Dirigeants uniquement
-  login_expired: Votre session a expiré. Connectez-vous à nouveau avec Discord pour envoyer cette proposition.
-  transmitted: "Proposition transmise avec succès à la direction NAP sur Discord !"
+  oauth_unreachable: Le service Discord OAuth est injoignable. Veuillez rafraîchir et réessayer.
+  transmit_discord: Transmettre vers Discord
+  leaders_only_note: Seuls les leaders R4 et R5 peuvent envoyer des propositions. Demandez à votre chef d'alliance de soumettre ce plan.
+  leaders_only: Leaders uniquement
+  login_expired: Votre connexion a expiré. Connectez-vous à nouveau avec Discord pour envoyer cette proposition.
+  transmitted: Proposition transmise avec succès à la direction NAP sur Discord !
   transmitting: Transmission en cours...
   resume: Reprendre la proposition {type}
   draft_restored: Brouillon restauré à partir de la session précédente.
   pending_shifts: Changements en attente
-  server_error: Le serveur a répondu avec le code HTTP {status}
+  server_error: Le serveur a répondu avec l'erreur HTTP {status}
 live_data:
-  failed: "Impossible de charger les données les plus récentes. Vérifiez votre connexion et actualisez la page."
-  offline: "Hors ligne : affichage des données enregistrées sur cet appareil ({when})."
-  updating: "Mise à jour…"
+  failed: Impossible de charger les dernières données. Vérifiez votre connexion et rafraîchissez la page.
+  offline: 'Hors ligne : affichage des données enregistrées sur cet appareil ({when}).'
+  updating: Mise à jour...
 capitol_rotation:
   calendar_link: Voir la rotation de ce cycle sur le calendrier →
 image_review:

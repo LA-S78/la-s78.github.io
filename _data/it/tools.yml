@@ -364,26 +364,26 @@ register:
   r_commands: 'Comandi Slash Distribuiti:'
   r_leaders: 'Leadership Autorizzata:'
 calendar:
-  loading: Caricamento programma del Regno...
-  load_failed: 'Caricamento calendario fallito: {error}'
+  loading: Caricamento del programma del Regno...
+  load_failed: 'Impossibile caricare il calendario: {error}'
   phase: Fase
   schedule_title: Programma Guerra tra Regni
-  loading_cycle: Caricamento dettagli ciclo...
-  badge_closed: "Ricompense chiuse"
-  badge_kob_open: "King of Battle aperto"
-  badge_awaiting: "In attesa del risultato KW"
-  badge_open: "Ricompense aperte"
-  set2_off_week: Solo Commenda del Re (niente Guerra tra Regni).
-  set2_won: 'Guerra tra Regni vinta: aperto anche il premio King of Battle.'
-  set2_lost: 'Guerra tra Regni persa: solo Commenda del Re.'
-  set2_pending: Premio King of Battle se la guerra di sabato viene vinta; il Re distribuisce dopo il risultato.
+  loading_cycle: Caricamento dettagli del ciclo...
+  badge_closed: Ricompense chiuse
+  badge_kob_open: King of Battle aperto
+  badge_awaiting: In attesa del risultato KW
+  badge_open: Ricompense aperte
+  set2_off_week: Solo Commendazione del Re (nessuna Guerra tra Regni).
+  set2_won: 'Guerra tra Regni vinta: anche la ricompensa King of Battle è aperta.'
+  set2_lost: 'Guerra tra Regni persa: solo Commendazione del Re.'
+  set2_pending: Ricompensa King of Battle se la guerra di sabato viene vinta; il Re la distribuisce dopo il risultato.
   rewards_open_until: Ricompense {week} aperte fino a martedì 23:59 GT. {set2}
-  rewards_closed: Ricompense chiuse. Le prossime apriranno venerdì verso le 20:00 GT, dopo l'evento del Campidoglio.
+  rewards_closed: Le ricompense sono chiuse. Si riapriranno il prossimo venerdì verso le 20:00 GT, dopo l'evento del Campidoglio.
   capitol_holder: DETENTORE CAMPIDOGLIO
   current_holder: ATTUALE DETENTORE CAMPIDOGLIO
   next_holder: PROSSIMO DETENTORE CAMPIDOGLIO
   rank: 'Grado #{rank}'
-  rank_override: 'Grado #{rank} (Sovrascrivi)'
+  rank_override: 'Grado #{rank} (Sovrascritto)'
   rank_override_schedule: 'Grado #{rank} • Programma sovrascritto'
   captured_friday: Catturato venerdì
   captures_today: Catture oggi
@@ -394,10 +394,10 @@ calendar:
   next_reset: PROSSIMO RESET (00:00 GT)
   next_kw: PROSSIMA BATTAGLIA KW
   saturday: Sabato
-  today: "OGGI"
-  none_this_week: Niente questa settimana
-  upcoming: Eventi imminenti
-  times_shown: Orari visualizzati in {gt} e nel tuo orario locale
+  today: OGGI
+  none_this_week: Nessuno questa settimana
+  upcoming: Prossimi Eventi
+  times_shown: Orari visualizzati in {gt} e nel tuo fuso orario
   gt_label: Game Time (UTC-2)
   view_label: Vista calendario
   type_label: Tipo di evento
@@ -425,8 +425,8 @@ calendar:
   day_yesterday: Ieri
   events_count_one: "{n} evento"
   events_count_other: "{n} eventi"
-  nothing_planned: Niente in programma
-  now_line: Ora · {time} GT
+  nothing_planned: Nulla in programma
+  now_line: Adesso · {time} GT
   local_time: "{time} locale"
   until: fino alle {when} GT
   happening_now: In corso · termina tra {time}
@@ -435,88 +435,88 @@ calendar:
   dur_h: "{h}h"
   dur_hm: "{h}h {m}m"
   dur_dh: "{d}g {h}h"
-  ev_capture_title_open: Cattura Campidoglio
-  ev_capture_desc_open: I posti di questo ciclo vengono decisi al suo reset.
+  ev_capture_title_open: Cattura del Campidoglio
+  ev_capture_desc_open: I seggi di questo ciclo vengono decisi al ripristino.
   all_day: Tutto il giorno
   every_2_days: Ogni 2 giorni
   weekly: Settimanale
   mandatory: Obbligatorio
-  edit: "Modifica"
-  delete: "Elimina"
-  edit_events: "Modifica eventi"
-  edit_done: "✓ Fine modifica"
-  add_event: "Aggiungi un evento"
-  ev_capture_title: Cattura Campidoglio — {who}
+  edit: Modifica
+  delete: Elimina
+  edit_events: Modifica eventi
+  edit_done: "✓ Modifica completata"
+  add_event: Aggiungi un evento
+  ev_capture_title: Cattura del Campidoglio — {who}
   ev_capture_desc: "{who} ({rank}) cattura il Campidoglio venerdì."
   ev_kw_title: Battaglia Guerra tra Regni
-  ev_kw_desc: Inizia alle 12:00 GT, di solito finisce verso le 14:00 GT. Una vittoria apre i forzieri premio King of Battle oltre alla Commenda del Re.
-  ev_open_title: Ricompense Aperte — {week}
-  ev_open_desc_kw: La Commenda del Re apre dopo l'evento del Campidoglio. Segue il premio King of Battle se la Guerra tra Regni di sabato è vinta; il Re distribuisce dopo il risultato.
-  ev_open_desc: La Commenda del Re apre dopo l'evento del Campidoglio (nessuna Guerra tra Regni questa settimana).
-  ev_close_title: Ricompense Chiuse — {week}
+  ev_kw_desc: Inizia alle 12:00 GT, di solito finisce verso le 14:00 GT. Una vittoria apre i forzieri ricompensa King of Battle oltre alla Commendazione del Re.
+  ev_open_title: Ricompense aperte — {week}
+  ev_open_desc_kw: La Commendazione del Re si apre dopo l'evento del Campidoglio. La ricompensa King of Battle segue se la Guerra tra Regni di sabato viene vinta; il Re la distribuisce dopo il risultato.
+  ev_open_desc: La Commendazione del Re si apre dopo l'evento del Campidoglio (nessuna Guerra tra Regni questa settimana).
+  ev_close_title: Ricompense chiuse — {week}
   ev_close_desc: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
 calendar_events:
-  reminder_hint: Pubblicato nel canale di avviso della tua alleanza.
-  reminder_hint_server: Pubblicato nel canale di avviso Discord NAP e nelle alleanze che hanno aderito.
-  reminder_no_channel: 'La tua alleanza non ha ancora un canale di avviso: esegui /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
-  reminder_no_server_channel: Il canale di avviso NAP non è ancora configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
+  reminder_hint: Pubblicato nel canale avvisi della tua alleanza.
+  reminder_hint_server: Pubblicato nel canale avvisi NAP Discord e nelle alleanze che hanno aderito.
+  reminder_no_channel: 'La tua alleanza non ha ancora un canale avvisi: esegui /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
+  reminder_no_server_channel: Il canale avvisi NAP non è ancora configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
   edit_heading: Modifica evento
-  scope_label: Gestione eventi di chi
+  scope_label: Di chi gestire gli eventi
   scope_server: Eventi di tutto il server
   scope_alliance: Eventi [{tag}]
-  save_changes: "Salva modifiche"
+  save_changes: Salva modifiche
   manage_mode: MODALITÀ GESTIONE
   session_active: Sessione autenticata attiva
   create_operation: Crea operazione
-  kingdom_admin: "ADMIN DEL REGNO"
+  kingdom_admin: AMMINISTRAZIONE REGNO
   kingdom_desc: Gestione eventi server
-  kingdom_heading: Crea operazione del Regno ([GLOBAL])
-  leadership: "LEADERSHIP [{tag}]"
+  kingdom_heading: Crea operazione Regno ([GLOBAL])
+  leadership: LEADERSHIP [{tag}]
   leadership_desc: Gestione eventi [{tag}]
   alliance_heading: Crea operazione [{tag}]
-  preset: Tipo di evento
+  preset: Tipo evento
   type_custom: Personalizzato
   type_custom_hint: Modulo vuoto
   duration_h: "{n}h"
-  title: Titolo dell'evento
-  title_example: es. Difesa dell'alveare o Assalto all'avamposto
-  date: Data di inizio (YYYY-MM-DD)
+  title: Titolo evento
+  title_example: es. Esercitazione Difesa Alveare o Assalto Avamposto
+  date: Data di inizio (AAAA-MM-GG)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time del server (si arrotonda a intervalli di 5 minuti)
-  duration: Durata (ore)
+  time_hint: Game Time del server (si aggancia a incrementi di 5 minuti)
+  duration: Durata (Ore)
   frequency: Frequenza
-  once: Evento singolo (non si ripete)
+  once: Evento unico (non si ripete)
   every_2_days: Si ripete ogni 2 giorni
   weekly: Si ripete settimanalmente (stesso giorno e ora)
   alert_level: Promemoria Discord (1 ora prima)
   notify_off: Nessun promemoria
-  notify_role: Notifica il ruolo di avviso dell'alleanza
+  notify_role: Notifica il ruolo avvisi dell'alleanza
   notify_custom: Notifica un ruolo specifico
   notify_everyone: Notifica @everyone
   notify_none: Pubblica senza notifica
   role_id: ID ruolo specifico
   role_id_hint: "(solo per “Notifica un ruolo specifico”)"
   role_id_title: Deve essere un ID ruolo Discord valido di 17-20 cifre
-  details: Istruzioni / Punto di raduno
+  details: Istruzioni / Punto di ritrovo
   details_example: es. Raduno all'Alveare Alpha. R4 guidano i rally. Comunicazioni vocali attive.
   publish: Pubblica sul calendario
   publishing: Pubblicazione in corso...
   bad_time: Il Game Time deve essere impostato con incrementi di 5 minuti (:00, :05, :10, ecc.)
-  bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per il target di avviso personalizzato.
+  bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per il destinatario dell'avviso personalizzato.
   save_failed: Impossibile salvare l'evento
   published: Operazione pubblicata con successo!
   delete_heading: Eliminare questo evento?
   delete_repeats: 'Si ripete ({repeat}): ogni ripetizione verrà rimossa, non solo questa.'
-  delete_final: L'operazione non può essere annullata.
+  delete_final: Questa operazione non può essere annullata.
   delete_confirm: Elimina
   delete_failed: Impossibile eliminare l'evento
   removed: Operazione rimossa.
 kings_scheduler:
   title: Rotazione Campidoglio
-  subtitle: Programma automatizzato di Difesa e Restituzione
-  overrides: 'Override: {n}/2'
-  loading: Caricamento programma live...
-  off_week: Settimana Off
+  subtitle: Programma automatizzato di difesa dagli scontri e restituzione
+  overrides: 'Sovrascritture: {n}/2'
+  loading: Caricamento programma in tempo reale...
+  off_week: Settimana di riposo
   week_fri: Settimana {n} Ven
   boss_window: Finestra Boss {n}
   kvk_finale: Finale KvK
@@ -524,8 +524,8 @@ kings_scheduler:
   loot_other: "{n} Forzieri del Re"
   loot_border: 2 Forzieri del Re + Bordo
   active: ATTIVO
-  buyouts_title: "Restituzione Risarcimento Wartime"
-  buyouts_count: "{n} Attivo"
+  buyouts_title: Restituzione riscatto in tempo di guerra attiva
+  buyouts_count: "{n} Attivi"
   installment: 'Pagamento Settimana {week}:'
   payout: "{reg} & {kw}"
   reg_gold: "+{n} Oro Reg"
@@ -535,44 +535,44 @@ kings_scheduler:
   beneficiary: 'Beneficiario:'
   threat: "(Minaccia: {threat})"
   red_list: Lista Rossa
-  wartime_buyout: Risarcimento Wartime
-  override_title: "Dichiarare Override Programma"
-  override_help: Scoutato un server pericoloso? Inserisci l'ID del server avversario
-  target_week: Settimana KvK obiettivo
-  week1_option: Venerdì Settimana 1 (Matchup Boss 2)
-  week2_option: Venerdì Settimana 2 (Matchup Boss 3)
-  opponent: Avversario Scoutato (Server)
+  wartime_buyout: Riscatto in tempo di guerra
+  override_title: Dichiara sovrascrittura programma
+  override_help: Esplorato un server pericoloso? Inserisci l'ID del server avversario
+  target_week: Settimana KvK target
+  week1_option: Venerdì Settimana 1 (Scontro Boss 2)
+  week2_option: Venerdì Settimana 2 (Scontro Boss 3)
+  opponent: Avversario esplorato (Server)
   opponent_example: es. S94, S77
-  disclaimer: "*Gli override inviano una proposta al senato su Discord per la verifica della leadership."
-  dispatch: Revisiona e Invia Override
-  already_scheduled: "{who} Nessun override di difesa richiesto."
-  already_scheduled_who: WLO è già programmata per la Settimana {n}.
-  step1: 'Passo 1: Scambio Calendario (Costo 0 Forzieri)'
-  step1_text: WLO affronterà la {week} per la difesa del regno contro {threat}.
+  disclaimer: "*Le sovrascritture inviano una proposta al senato alla leadership di Discord per la verifica."
+  dispatch: Revisiona e invia sovrascrittura
+  already_scheduled: "{who} Nessuna sovrascrittura di difesa richiesta."
+  already_scheduled_who: WLO è già programmato per la Settimana {n}.
+  step1: 'Passaggio 1: Scambio calendario (Costo 0 forzieri)'
+  step1_text: WLO prenderà la {week} per la difesa del regno contro {threat}.
   week_label: Settimana {n}
   opponent_placeholder: "[Avversario]"
   week3_finale: 'Finale Settimana 3:'
   lose_nothing: "{ally} perde 0 forzieri. {wlo} perde 0 forzieri."
-  step2: 'Passo 2: Risarcimento Wartime (Restituzione in 2 rate)'
-  step2_text: 'Questo è il {second} in questo ciclo. La Settimana 3 era già stata scambiata, quindi {ally} resta fuori e riceve un risarcimento con forzieri:'
-  second_override: secondo override di difesa
+  step2: 'Passaggio 2: Riscatto in tempo di guerra (Restituzione a 2 rate)'
+  step2_text: 'Questa è la {second} in questo ciclo. La Settimana 3 è già stata scambiata, quindi {ally} resta fuori e riceve un riscatto con forzieri:'
+  second_override: seconda sovrascrittura di difesa
   distribution: 'Distribuzione Settimana {n}:'
   plus_gold: "+1 Oro Regolare & +1 Oro KW a [{tag}]"
   buyout_perks: "{ally} perde 2 forzieri del Re, guadagna 4 forzieri d'oro. {wlo} guadagna 2 forzieri del Re, perde 4 forzieri d'oro."
-  proposal_buyout: "Dichiarare Risarcimento Wartime"
-  proposal_swap: "Dichiarare Scambio Difesa"
-  sum_second: 2° Override Difesa WLO
-  sum_first: 1° Override Difesa WLO
+  proposal_buyout: Dichiara riscatto in tempo di guerra
+  proposal_swap: Dichiara scambio di difesa
+  sum_second: 2ª Sovrascrittura Difesa WLO
+  sum_first: 1ª Sovrascrittura Difesa WLO
   sum_vs: Settimana {n} vs {threat}
-  sum_buyout_issued: "[{tag}] Risarcimento Wartime Emesso"
-  sum_four_gold: 4 Forzieri Oro totali
-  sum_installment: 'Rata {i} (S{week}):'
+  sum_buyout_issued: "[{tag}] Riscatto in tempo di guerra emesso"
+  sum_four_gold: 4 Forzieri d'oro totali
+  sum_installment: 'Rata {i} (W{week}):'
   sum_installment_chests: 1 Oro Reg + 1 Oro KW
-  sum_swap: Scambio Calendario
-  sum_swap_text: WLO prende la S{n} venerdì
-  sum_promoted: "[{tag}] Promossa a Finale Settimana 3"
-  sum_promoted_text: "(2 Forzieri del Re + Oggetto Buff)"
-  sum_cost: 'Costo Forzieri Alleanza WLO: 0'
+  sum_swap: Scambio calendario
+  sum_swap_text: WLO prende W{n} venerdì
+  sum_promoted: "[{tag}] Promosso alla finale della Settimana 3"
+  sum_promoted_text: "(2 Forzieri del Re + Oggetto buff)"
+  sum_cost: 'Costo forzieri Alleanza WLO: 0'
 rewards_planner:
   host_week: Settimana di hosting attiva
   planner_mode: Modalità pianificatore
@@ -731,29 +731,29 @@ proposals:
   title: Invia proposta
   close: Chiudi
   summary: Riepilogo proposta
-  notes: Note della leadership (opzionale)
+  notes: Note della leadership (Opzionale)
   notes_placeholder: Spiega il contesto o la ragione strategica di questa proposta...
   transmit: Trasmetti proposta
   user_avatar: Avatar utente
   submitting_as: Invio come {name}
   auth_required: Richiesta autenticazione leadership
-  auth_reason: Le proposte richiedono uno status verificato di leadership o ufficiale su Discord per essere inviate.
+  auth_reason: Le proposte richiedono una leadership Discord verificata o lo stato di ufficiale per essere inviate.
   log_in: Accedi tramite Discord per inviare
-  oauth_unreachable: Servizio Discord OAuth non raggiungibile. Aggiorna e riprova.
-  transmit_discord: Trasmetti su Discord
-  leaders_only_note: Solo i leader R4 e R5 possono inviare proposte. Chiedi al tuo leader dell'alleanza di inviare questo piano.
+  oauth_unreachable: Il servizio Discord OAuth non è raggiungibile. Aggiorna e riprova.
+  transmit_discord: Trasmetti a Discord
+  leaders_only_note: Solo i leader R4 e R5 possono inviare proposte. Chiedi al leader della tua alleanza di inviare questo piano.
   leaders_only: Solo leader
   login_expired: Il tuo accesso è scaduto. Accedi di nuovo con Discord per inviare questa proposta.
-  transmitted: "Proposta trasmessa con successo alla leadership NAP su Discord!"
+  transmitted: Proposta trasmessa con successo alla leadership NAP su Discord!
   transmitting: Trasmissione in corso...
   resume: Riprendi proposta {type}
   draft_restored: Bozza ripristinata dalla sessione precedente.
-  pending_shifts: Cambiamenti in attesa
+  pending_shifts: Turni in sospeso
   server_error: Il server ha risposto con HTTP {status}
 live_data:
-  failed: "Impossibile caricare gli ultimi dati. Controlla la connessione e aggiorna la pagina."
-  offline: "Offline: mostrati i dati salvati su questo dispositivo ({when})."
-  updating: "Aggiornamento in corso…"
+  failed: Impossibile caricare gli ultimi dati. Controlla la connessione e aggiorna la pagina.
+  offline: 'Offline: visualizzazione dei dati salvati su questo dispositivo ({when}).'
+  updating: Aggiornamento…
 capitol_rotation:
   calendar_link: Vedi la rotazione di questo ciclo sul calendario →
 image_review:

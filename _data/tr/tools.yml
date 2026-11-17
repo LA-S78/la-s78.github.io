@@ -364,24 +364,24 @@ register:
   r_commands: 'Slash Komutları Dağıtıldı:'
   r_leaders: 'Yetkili Liderlik:'
 calendar:
-  loading: Krallık takvimi yükleniyor...
+  loading: Krallık programı yükleniyor...
   load_failed: 'Takvim yüklenemedi: {error}'
   phase: Aşama
   schedule_title: Krallık Savaşı Programı
   loading_cycle: Döngü detayları yükleniyor...
-  badge_closed: "Ödüller kapalı"
-  badge_kob_open: "Kraliyet Mücadelesi açık"
-  badge_awaiting: "Krallık Savaşı sonucu bekleniyor"
-  badge_open: "Ödüller açık"
+  badge_closed: Ödüller kapalı
+  badge_kob_open: Kraliyet Mücadelesi açık
+  badge_awaiting: KW sonucu bekleniyor
+  badge_open: Ödüller açık
   set2_off_week: Sadece Kral Takdirnamesi (Krallık Savaşı yok).
-  set2_won: 'Krallık Savaşı kazanıldı: Kraliyet Mücadelesi ödülleri de açık.'
+  set2_won: 'Krallık Savaşı kazanıldı: Kraliyet Mücadelesi Ödülü de açık.'
   set2_lost: 'Krallık Savaşı kaybedildi: Sadece Kral Takdirnamesi.'
-  set2_pending: Cumartesi günkü savaş kazanılırsa Kraliyet Mücadelesi ödülü verilir; sonuçtan sonra Kral tarafından dağıtılır.
+  set2_pending: Cumartesi günkü savaş kazanılırsa Kraliyet Mücadelesi Ödülü; sonuçtan sonra Kral tarafından dağıtılır.
   rewards_open_until: "{week} ödülleri Salı 23:59 GT'ye kadar açık. {set2}"
   rewards_closed: Ödüller kapalı. Bir sonraki açılış, başkent etkinliğinden sonra Cuma günü yaklaşık 20:00 GT'de gerçekleşir.
   capitol_holder: BAŞKENT SAHİBİ
   current_holder: MEVCUT BAŞKENT SAHİBİ
-  next_holder: SONRAKİ BAŞKENT SAHİBİ
+  next_holder: GELECEK BAŞKENT SAHİBİ
   rank: 'Sıra #{rank}'
   rank_override: 'Sıra #{rank} (Geçersiz Kılma)'
   rank_override_schedule: 'Sıra #{rank} • Geçersiz Kılma Programı'
@@ -389,15 +389,15 @@ calendar:
   captures_today: Bugünkü ele geçirmeler
   captures_friday: Cuma günü ele geçirmeler
   cycle_progress: DÖNGÜ İLERLEMESİ
-  day_of_28: 28 günün {day}. günü ({week})
+  day_of_28: 28'in {day}. günü ({week})
   week_n: "{n}. Hafta"
   next_reset: SONRAKİ SIFIRLAMA (00:00 GT)
   next_kw: SONRAKİ KW SAVAŞI
   saturday: Cumartesi
-  today: "BUGÜN"
+  today: BUGÜN
   none_this_week: Bu hafta yok
   upcoming: Yaklaşan Etkinlikler
-  times_shown: Zamanlar {gt} & Yerel Saatinize göre gösterilir
+  times_shown: Zamanlar {gt} & Yerel Saatinizde gösterilmektedir
   gt_label: Oyun Zamanı (UTC-2)
   view_label: Takvim görünümü
   type_label: Etkinlik türü
@@ -415,7 +415,7 @@ calendar:
   last_week: Geçen hafta
   next_week: Gelecek hafta
   prev_week: Önceki hafta
-  next_week_aria: Takip eden hafta
+  next_week_aria: Sonraki hafta
   this_cycle: Bu döngü
   kvk_short: KvK {n}
   off_short: Kapalı
@@ -429,94 +429,94 @@ calendar:
   now_line: Şimdi · {time} GT
   local_time: "{time} yerel saat"
   until: "{when} GT'ye kadar"
-  happening_now: 'Şu an gerçekleşiyor · bitiş: {time}'
+  happening_now: Şu an gerçekleşiyor · {time} içinde biter
   next_up: Sırada · {time} içinde
   dur_m: "{m}dk"
-  dur_h: "{h}s"
-  dur_hm: "{h}s {m}dk"
-  dur_dh: "{d}g {h}s"
+  dur_h: "{h}sa"
+  dur_hm: "{h}sa {m}dk"
+  dur_dh: "{d}g {h}sa"
   ev_capture_title_open: Başkent Ele Geçirme
-  ev_capture_desc_open: Bu döngünün koltukları sıfırlama sırasında belirlenir.
+  ev_capture_desc_open: Bu döngünün koltukları sıfırlanma anında belirlenir.
   all_day: Tüm Gün
-  every_2_days: 2 Günde Bir
+  every_2_days: Her 2 Günde Bir
   weekly: Haftalık
   mandatory: Zorunlu
-  edit: "Düzenle"
-  delete: "Sil"
-  edit_events: "Etkinlikleri düzenle"
-  edit_done: "✓ Düzenleme tamamlandı"
-  add_event: "Etkinlik ekle"
+  edit: Düzenle
+  delete: Sil
+  edit_events: Etkinlikleri düzenle
+  edit_done: "✓ Düzenleme bitti"
+  add_event: Etkinlik ekle
   ev_capture_title: Başkent Ele Geçirme — {who}
   ev_capture_desc: "{who} ({rank}) Cuma günü Başkenti ele geçiriyor."
   ev_kw_title: Krallık Savaşı
-  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarı biter. Galibiyet, Kral Takdirnamesine ek olarak Kraliyet Mücadelesi ödül sandıklarını açar.
-  ev_open_title: Ödüller Açıldı — {week}
-  ev_open_desc_kw: Kral Takdirnamesi başkent etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Kraliyet Mücadelesi ödülü takip eder; sonuçtan sonra Kral tarafından dağıtılır.
+  ev_kw_desc: 12:00 GT'de başlar, genellikle 14:00 GT civarında biter. Kazanılması durumunda Kral Takdirnamesine ek olarak Kraliyet Mücadelesi Ödül sandıkları açılır.
+  ev_open_title: Ödüller Açık — {week}
+  ev_open_desc_kw: Kral Takdirnamesi başkent etkinliğinden sonra açılır. Cumartesi günkü Krallık Savaşı kazanılırsa Kraliyet Mücadelesi Ödülü de takip eder; sonuçtan sonra Kral tarafından dağıtılır.
   ev_open_desc: Kral Takdirnamesi başkent etkinliğinden sonra açılır (bu hafta Krallık Savaşı yok).
-  ev_close_title: Ödüller Kapanıyor — {week}
-  ev_close_desc: 'Sandıklar Çarşamba 00:00 GT''de sona erer: her şeyi o zamandan önce dağıtın.'
+  ev_close_title: Ödüller Kapandı — {week}
+  ev_close_desc: 'Sandıkların süresi Çarşamba 00:00 GT''de dolar: o zamandan önce her şeyi dağıtın.'
 calendar_events:
-  reminder_hint: İttifakınızın uyarı kanalında yayınlandı.
-  reminder_hint_server: NAP Discord'un uyarı kanalında ve bildirimleri açan ittifaklarda yayınlandı.
-  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların yayınlanabilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
-  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadığı (NAP_ALERT_CHANNEL_ID) için sunucu hatırlatıcıları gönderilemiyor.
+  reminder_hint: İttifakınızın uyarı kanalında paylaşıldı.
+  reminder_hint_server: NAP Discord'un uyarı kanalında ve bildirimleri açan ittifaklarda paylaşıldı.
+  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların gönderilebilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
+  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları gönderilemiyor.
   edit_heading: Etkinliği düzenle
   scope_label: Hangi etkinliklerin yönetileceği
   scope_server: Sunucu genelindeki etkinlikler
   scope_alliance: "[{tag}] etkinlikleri"
-  save_changes: "Değişiklikleri kaydet"
+  save_changes: Değişiklikleri kaydet
   manage_mode: YÖNETİM MODU
-  session_active: Doğrulanmış Oturum Aktif
+  session_active: Kimlik Doğrulamalı Oturum Aktif
   create_operation: Operasyon Oluştur
-  kingdom_admin: "KRALLIK YÖNETİCİSİ"
+  kingdom_admin: KRALLIK YÖNETİMİ
   kingdom_desc: Sunucu etkinliklerini yönetme
   kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
-  leadership: "[{tag}] YÖNETİMİ"
+  leadership: "[{tag}] LİDERLİK"
   leadership_desc: "[{tag}] etkinliklerini yönetme"
   alliance_heading: "[{tag}] Operasyonu Oluştur"
   preset: Etkinlik türü
   type_custom: Özel
   type_custom_hint: Boş form
-  duration_h: "{n}s"
+  duration_h: "{n}sa"
   title: Etkinlik Başlığı
   title_example: ör. Kovan Savunma Tatbikatı veya Karakol Saldırısı
   date: Başlangıç Tarihi (YYYY-AA-GG)
-  time: Game Time (SS:DD UTC-2)
-  time_hint: Sunucu Game Time (5 dakikalık artışlarla ayarlanır)
+  time: Oyun Zamanı (SS:DD UTC-2)
+  time_hint: Sunucu Oyun Zamanı (5 dakikalık artışlara yuvarlanır)
   duration: Süre (Saat)
   frequency: Sıklık
   once: Tek Seferlik Etkinlik (Tekrarlanmaz)
   every_2_days: Her 2 Günde Bir Tekrarlanır
-  weekly: Haftalık Tekrarlanır (Aynı gün ve saatte)
+  weekly: Haftalık Tekrarlanır (Aynı gün & saat)
   alert_level: Discord hatırlatıcısı (1 saat önce)
   notify_off: Hatırlatıcı yok
   notify_role: İttifakın uyarı rolünü etiketle
   notify_custom: Belirli bir rolü etiketle
-  notify_everyone: "@everyone'u etiketle"
+  notify_everyone: "@everyone etiketle"
   notify_none: Etiketlemeden gönder
-  role_id: Belirli Rol Kimliği
-  role_id_hint: "(yalnızca “Belirli bir rolü etiketle” için)"
-  role_id_title: Geçerli 17-20 haneli bir Discord Rol Kimliği olmalıdır
+  role_id: Belirli Rol Kimliği (ID)
+  role_id_hint: "(sadece “Belirli bir rolü etiketle” için)"
+  role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
   details: Talimatlar / Toplanma Noktası
-  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere liderlik eder. Sesli iletişim açık.
-  publish: Takvimde Yayınla
+  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere liderlik eder. Sesli sohbet aktif.
+  publish: Takvime Yayınla
   publishing: Yayınlanıyor...
-  bad_time: Game Time 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10 vb.)
-  bad_role: Özel uyarı hedefi için lütfen geçerli 17-20 haneli bir Discord Rol Kimliği girin.
+  bad_time: Oyun Zamanı 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10, vb.)
+  bad_role: Özel uyarı hedefi için lütfen geçerli bir 17-20 haneli Discord Rol Kimliği girin.
   save_failed: Etkinlik kaydedilemedi
   published: Operasyon başarıyla yayınlandı!
-  delete_heading: Bu etkinlik silinsin mi?
-  delete_repeats: 'Bu etkinlik tekrarlanıyor ({repeat}): sadece bu değil, tüm tekrarları silinecek.'
+  delete_heading: Bu etkinliği sil?
+  delete_repeats: 'Tekrarlanıyor ({repeat}): sadece bu değil, tüm tekrarlar kaldırılacak.'
   delete_final: Bu işlem geri alınamaz.
   delete_confirm: Sil
   delete_failed: Etkinlik silinemedi
   removed: Operasyon kaldırıldı.
 kings_scheduler:
   title: Başkent Rotasyonu
-  subtitle: Otomatik Eşleşme Savunması & İade Programı
+  subtitle: Otomatik Eşleşme Savunma & Tazminat Programı
   overrides: 'Geçersiz Kılmalar: {n}/2'
   loading: Canlı program yükleniyor...
-  off_week: Boş Hafta
+  off_week: Kapalı Hafta
   week_fri: "{n}. Hafta Cum"
   boss_window: Patron {n} Penceresi
   kvk_finale: KvK Finali
@@ -524,55 +524,55 @@ kings_scheduler:
   loot_other: "{n} Kral Sandığı"
   loot_border: 2 Kral Sandığı + Çerçeve
   active: AKTİF
-  buyouts_title: "Aktif Savaş Zamanı Telafisi"
+  buyouts_title: Aktif Savaş Zamanı Satın Alma Tazminatı
   buyouts_count: "{n} Aktif"
   installment: "{week}. Hafta Ödemesi:"
   payout: "{reg} & {kw}"
-  reg_gold: "+{n} Normal Altın"
-  kw_gold: "+{n} KS Altını"
+  reg_gold: "+{n} Standart Altın"
+  kw_gold: "+{n} KW Altın"
   paid: ÖDENDİ
   pending: BEKLİYOR
   beneficiary: 'Lehtar:'
   threat: "(Tehdit: {threat})"
   red_list: Kırmızı Liste
-  wartime_buyout: Savaş Zamanı Telafisi
-  override_title: "Programı Geçersiz Kıl"
-  override_help: Tehlikeli bir sunucu mu keşfedildi? Rakip sunucu ID'sini girin
+  wartime_buyout: Savaş Zamanı Satın Alma
+  override_title: Program Geçersiz Kılma Bildir
+  override_help: Tehlikeli bir sunucu mu keşfettiniz? Rakibin sunucu kimliğini girin
   target_week: Hedef KvK Haftası
-  week1_option: 1. Hafta Cuma (Patron 2 Eşleşmesi)
-  week2_option: 2. Hafta Cuma (Patron 3 Eşleşmesi)
+  week1_option: 1. Hafta Cuması (Patron 2 Eşleşmesi)
+  week2_option: 2. Hafta Cuması (Patron 3 Eşleşmesi)
   opponent: Keşfedilen Rakip (Sunucu)
   opponent_example: ör. S94, S77
-  disclaimer: "*Geçersiz kılmalar, doğrulama için Discord yönetimine bir senato teklifi gönderir."
-  dispatch: İncele & Gönder
-  already_scheduled: "{who} Savunma geçersiz kılmaya gerek yok."
-  already_scheduled_who: WLO zaten {n}. Hafta için planlandı.
-  step1: 'Adım 1: Takvim Değişimi (0 Sandık Maliyeti)'
-  step1_text: WLO, {threat} tehdidine karşı krallık savunması için {week} haftasını alacak.
+  disclaimer: "*Geçersiz kılmalar, doğrulama için Discord liderliğine bir senato önerisi gönderir."
+  dispatch: Geçersiz Kılmayı Gözden Geçir & Gönder
+  already_scheduled: "{who} Savunma geçersiz kılma gerekmiyor."
+  already_scheduled_who: WLO, {n}. Hafta için zaten planlandı.
+  step1: '1. Adım: Takvim Değişimi (0 Sandık Maliyeti)'
+  step1_text: WLO, {threat} karşı krallık savunması için {week} alacak.
   week_label: "{n}. Hafta"
   opponent_placeholder: "[Rakip]"
   week3_finale: '3. Hafta Finali:'
   lose_nothing: "{ally} 0 sandık kaybeder. {wlo} 0 sandık kaybeder."
-  step2: 'Adım 2: Savaş Zamanı Telafisi (2 Taksitli İade)'
-  step2_text: 'Bu, bu döngüdeki {second}. 3. Hafta zaten takas edildiği için {ally} dışarıda kalır ve sandıklarla bir telafi alır:'
+  step2: '2. Adım: Savaş Zamanı Satın Alma (2 Taksitli Tazminat)'
+  step2_text: 'Bu döngüdeki {second}. 3. Hafta zaten takas edildiği için {ally} dışarıda kalır ve sandıklarla bir satın alma bedeli alır:'
   second_override: ikinci savunma geçersiz kılma
   distribution: "{n}. Hafta Dağıtımı:"
-  plus_gold: "+1 Normal Altın & +1 KS Altını [{tag}]'a"
+  plus_gold: "+1 Standart Altın & +1 KW Altın [{tag}] birimine"
   buyout_perks: "{ally} 2 Kral sandığı kaybeder, 4 altın sandık kazanır. {wlo} 2 Kral sandığı kazanır, 4 altın sandık kaybeder."
-  proposal_buyout: "Savaş Zamanı Telafisi Bildir"
-  proposal_swap: "Savunma Takası Bildir"
+  proposal_buyout: Savaş Zamanı Satın Alma Bildir
+  proposal_swap: Savunma Takası Bildir
   sum_second: WLO 2. Savunma Geçersiz Kılma
   sum_first: WLO 1. Savunma Geçersiz Kılma
   sum_vs: "{n}. Hafta vs {threat}"
-  sum_buyout_issued: "[{tag}] Savaş Zamanı Telafisi Verildi"
+  sum_buyout_issued: "[{tag}] Savaş Zamanı Satın Alma Düzenlendi"
   sum_four_gold: Toplam 4 Altın Sandık
   sum_installment: 'Taksit {i} (H{week}):'
-  sum_installment_chests: 1 Normal Altın + 1 KS Altını
+  sum_installment_chests: 1 Standart Altın + 1 KW Altın
   sum_swap: Takvim Takası
-  sum_swap_text: WLO, H{n} Cuma gününü alır
-  sum_promoted: "[{tag}] 3. Hafta Finaline Terfi Etti"
-  sum_promoted_text: "(2 Kral Sandığı + Buff Eşyası)"
-  sum_cost: 'WLO İttifak Sandığı Maliyeti: 0'
+  sum_swap_text: WLO H{n} Cumasını alır
+  sum_promoted: "[{tag}] 3. Hafta Finaline Yükseltildi"
+  sum_promoted_text: "(2 Kral Sandığı + Güçlendirme Öğesi)"
+  sum_cost: 'WLO İttifak Sandık Maliyeti: 0'
 rewards_planner:
   host_week: Aktif Ev Sahipliği Haftası
   planner_mode: Planlayıcı Modu
@@ -728,32 +728,32 @@ map_planner:
   no_changes: Taslak planınızda değişiklik algılanmadı.
   proposal_title: "🗺️ Harita Bölge Teklifi Gönder"
 proposals:
-  title: Teklif Gönder
+  title: Öneri Gönder
   close: Kapat
-  summary: Teklif Özeti
-  notes: Yönetim Notları (İsteğe Bağlı)
-  notes_placeholder: Bu teklifin içeriğini veya stratejik nedenini açıklayın...
-  transmit: Teklifi İlet
+  summary: Öneri Özeti
+  notes: Liderlik Notları (İsteğe bağlı)
+  notes_placeholder: Bu önerinin bağlamını veya stratejik nedenini açıklayın...
+  transmit: Öneriyi İlet
   user_avatar: Kullanıcı Avatarı
   submitting_as: "{name} olarak gönderiliyor"
-  auth_required: Yönetim Doğrulaması Gerekli
-  auth_reason: Tekliflerin iletilmesi için doğrulanmış Discord yönetimi veya subay statüsü gerekir.
-  log_in: Göndermek için Discord ile Giriş Yapın
-  oauth_unreachable: Discord OAuth hizmetine ulaşılamıyor. Lütfen sayfayı yenileyip tekrar deneyin.
+  auth_required: Liderlik Kimlik Doğrulaması Gerekli
+  auth_reason: Önerilerin gönderilmesi için doğrulanmış Discord liderliği veya subay statüsü gereklidir.
+  log_in: Göndermek için Discord ile Giriş Yap
+  oauth_unreachable: Discord OAuth hizmetine ulaşılamıyor. Lütfen yenileyin ve tekrar deneyin.
   transmit_discord: Discord'a İlet
-  leaders_only_note: Sadece R4 ve R5 liderleri teklif gönderebilir. Bu planı göndermesi için ittifak liderinizden rica edin.
+  leaders_only_note: Sadece R4 ve R5 liderleri öneri gönderebilir. Bu planı göndermesi için ittifak liderinizden rica edin.
   leaders_only: Sadece Liderler
-  login_expired: Girişiniz sona erdi. Bu teklifi göndermek için Discord ile tekrar giriş yapın.
-  transmitted: "Teklif, Discord üzerinden NAP Yönetimine başarıyla iletildi!"
+  login_expired: Oturumunuzun süresi doldu. Bu öneriyi göndermek için tekrar Discord ile giriş yapın.
+  transmitted: Öneri, Discord'daki NAP Liderliğine başarıyla iletildi!
   transmitting: İletiliyor...
-  resume: "{type} Teklifine Devam Et"
+  resume: "{type} Önerisine devam et"
   draft_restored: Taslak önceki oturumdan geri yüklendi.
-  pending_shifts: Bekleyen değişiklikler
+  pending_shifts: Bekleyen değişimler
   server_error: Sunucu HTTP {status} yanıtı verdi
 live_data:
-  failed: "En güncel veriler yüklenemedi. Bağlantınızı kontrol edin ve sayfayı yenileyin."
-  offline: "Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when})."
-  updating: "Güncelleniyor…"
+  failed: En son veriler yüklenemedi. Bağlantınızı kontrol edin ve sayfayı yenileyin.
+  offline: 'Çevrimdışı: bu cihazda kayıtlı veriler gösteriliyor ({when}).'
+  updating: Güncelleniyor…
 capitol_rotation:
   calendar_link: Bu döngünün rotasyonunu takvimde görün →
 image_review:

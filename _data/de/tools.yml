@@ -364,27 +364,27 @@ register:
   r_commands: 'Slash-Befehle bereitgestellt:'
   r_leaders: 'Autorisierte Führung:'
 calendar:
-  loading: Königreich-Zeitplan wird geladen...
+  loading: Lade Königreich-Zeitplan...
   load_failed: 'Laden des Kalenders fehlgeschlagen: {error}'
   phase: Phase
   schedule_title: Zeitplan Königreichskrieg
-  loading_cycle: Zyklusdetails werden geladen...
-  badge_closed: "Belohnungen geschlossen"
-  badge_kob_open: "King of Battle offen"
-  badge_awaiting: "Warte auf KW-Ergebnis"
-  badge_open: "Belohnungen offen"
-  set2_off_week: Nur Königliche Belobigung (kein Königreichskrieg).
-  set2_won: 'Königreichskrieg gewonnen: King of Battle-Belohnung ebenfalls offen.'
-  set2_lost: 'Königreichskrieg verloren: Nur Königliche Belobigung.'
-  set2_pending: King of Battle-Belohnung bei Sieg im Krieg am Samstag; der König verteilt diese nach dem Ergebnis.
+  loading_cycle: Lade Zyklusdetails...
+  badge_closed: Belohnungen geschlossen
+  badge_kob_open: König des Kampfes offen
+  badge_awaiting: Warte auf Ergebnis des Königreichskriegs
+  badge_open: Belohnungen offen
+  set2_off_week: Nur Königsempfehlung (kein Königreichskrieg).
+  set2_won: 'Königreichskrieg gewonnen: Belohnung „König des Kampfes“ ebenfalls offen.'
+  set2_lost: 'Königreichskrieg verloren: Nur Königsempfehlung.'
+  set2_pending: Belohnung „König des Kampfes“ bei Sieg im Krieg am Samstag; der König verteilt sie nach dem Ergebnis.
   rewards_open_until: Belohnungen für {week} offen bis Dienstag 23:59 GT. {set2}
-  rewards_closed: Belohnungen sind geschlossen. Das nächste Mal offen Freitag ca. 20:00 GT, nach dem Kapitol-Event.
+  rewards_closed: Belohnungen sind geschlossen. Die nächste Öffnung ist am Freitag gegen 20:00 GT, nach dem Kapitol-Event.
   capitol_holder: KAPITOL-HALTER
   current_holder: AKTUELLER KAPITOL-HALTER
   next_holder: NÄCHSTER KAPITOL-HALTER
   rank: 'Rang #{rank}'
-  rank_override: 'Rang #{rank} (Überschreiben)'
-  rank_override_schedule: 'Rang #{rank} • Überschreibungs-Zeitplan'
+  rank_override: 'Rang #{rank} (Überschrieben)'
+  rank_override_schedule: 'Rang #{rank} • Überschriebener Zeitplan'
   captured_friday: Eingenommen am Freitag
   captures_today: Einnahmen heute
   captures_friday: Einnahmen am Freitag
@@ -392,11 +392,11 @@ calendar:
   day_of_28: Tag {day} von 28 ({week})
   week_n: Woche {n}
   next_reset: NÄCHSTER RESET (00:00 GT)
-  next_kw: NÄCHSTE KW-SCHLACHT
+  next_kw: NÄCHSTE SCHLACHT (Königreichskrieg)
   saturday: Samstag
-  today: "HEUTE"
-  none_this_week: Keine diese Woche
-  upcoming: Anstehende Events
+  today: HEUTE
+  none_this_week: Diese Woche keine
+  upcoming: Bevorstehende Events
   times_shown: Zeiten werden in {gt} & deiner Ortszeit angezeigt
   gt_label: Game Time (UTC-2)
   view_label: Kalenderansicht
@@ -427,124 +427,124 @@ calendar:
   events_count_other: "{n} Events"
   nothing_planned: Nichts geplant
   now_line: Jetzt · {time} GT
-  local_time: "{time} lokal"
+  local_time: "{time} Ortszeit"
   until: bis {when} GT
-  happening_now: Läuft gerade · endet in {time}
+  happening_now: Findet jetzt statt · endet in {time}
   next_up: Als Nächstes · in {time}
-  dur_m: "{m}m"
-  dur_h: "{h}h"
-  dur_hm: "{h}h {m}m"
-  dur_dh: "{d}d {h}h"
+  dur_m: "{m} Min."
+  dur_h: "{h} Std."
+  dur_hm: "{h} Std. {m} Min."
+  dur_dh: "{d} T. {h} Std."
   ev_capture_title_open: Kapitol-Einnahme
-  ev_capture_desc_open: Die Sitze dieses Zyklus werden bei dessen Reset entschieden.
+  ev_capture_desc_open: Die Plätze dieses Zyklus werden beim Reset entschieden.
   all_day: Ganztägig
   every_2_days: Alle 2 Tage
   weekly: Wöchentlich
   mandatory: Verpflichtend
-  edit: "Bearbeiten"
-  delete: "Löschen"
-  edit_events: "Events bearbeiten"
-  edit_done: "✓ Bearbeitung fertig"
-  add_event: "Event hinzufügen"
+  edit: Bearbeiten
+  delete: Löschen
+  edit_events: Events bearbeiten
+  edit_done: "✓ Bearbeitung abgeschlossen"
+  add_event: Event hinzufügen
   ev_capture_title: Kapitol-Einnahme — {who}
-  ev_capture_desc: "{who} ({rank}) nimmt das Kapitol am Freitag ein."
-  ev_kw_title: Königreichskrieg
-  ev_kw_desc: Start 12:00 GT, endet normalerweise gegen 14:00 GT. Ein Sieg öffnet zusätzlich zur Königlichen Belobigung die King of Battle-Belohnungstruhen.
+  ev_capture_desc: "{who} ({rank}) nimmt am Freitag das Kapitol ein."
+  ev_kw_title: Königreichskrieg-Schlacht
+  ev_kw_desc: Startet um 12:00 GT, endet meist gegen 14:00 GT. Ein Sieg öffnet zusätzlich zur Königsempfehlung die Belohnungstruhen für „König des Kampfes“.
   ev_open_title: Belohnungen offen — {week}
-  ev_open_desc_kw: Die Königliche Belobigung öffnet nach dem Kapitol-Event. Die King of Battle-Belohnung folgt bei Sieg im Königreichskrieg am Samstag; der König verteilt diese nach dem Ergebnis.
-  ev_open_desc: Die Königliche Belobigung öffnet nach dem Kapitol-Event (kein Königreichskrieg diese Woche).
+  ev_open_desc_kw: Königsempfehlung öffnet nach dem Kapitol-Event. Belohnung „König des Kampfes“ folgt bei Sieg im Königreichskrieg am Samstag; der König verteilt sie nach dem Ergebnis.
+  ev_open_desc: Königsempfehlung öffnet nach dem Kapitol-Event (diese Woche kein Königreichskrieg).
   ev_close_title: Belohnungen schließen — {week}
-  ev_close_desc: 'Truhen verfallen am Mittwoch um 00:00 GT: Alles davor verteilen.'
+  ev_close_desc: 'Truhen laufen Mittwoch um 00:00 GT ab: Vorher alles verteilen.'
 calendar_events:
-  reminder_hint: Im Alarm-Kanal deiner Allianz gepostet.
-  reminder_hint_server: Im Alarm-Kanal des NAP Discord und bei Allianzen, die sich angemeldet haben, gepostet.
-  reminder_no_channel: 'Deine Allianz hat noch keinen Alarm-Kanal: Nutze /registerbot in deinem Discord, damit Erinnerungen gepostet werden können.'
+  reminder_hint: Gepostet im Alarm-Kanal deiner Allianz.
+  reminder_hint_server: Gepostet im NAP-Discord-Alarm-Kanal und in den Alianzen, die sich angemeldet haben.
+  reminder_no_channel: 'Deine Allianz hat noch keinen Alarm-Kanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
   reminder_no_server_channel: Der NAP-Alarm-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können keine Server-Erinnerungen gepostet werden.
   edit_heading: Event bearbeiten
-  scope_label: Wessen Events verwalten
+  scope_label: Dessen Events verwalten
   scope_server: Serverweite Events
   scope_alliance: "[{tag}] Events"
-  save_changes: "Änderungen speichern"
+  save_changes: Änderungen speichern
   manage_mode: VERWALTUNGSMODUS
   session_active: Authentifizierte Sitzung aktiv
   create_operation: Operation erstellen
-  kingdom_admin: "KÖNIGREICH-ADMIN"
+  kingdom_admin: KÖNIGREICH-ADMIN
   kingdom_desc: Server-Events verwalten
-  kingdom_heading: Königreichs-Operation erstellen ([GLOBAL])
+  kingdom_heading: Königreich-Operation erstellen ([GLOBAL])
   leadership: "[{tag}] FÜHRUNG"
   leadership_desc: "[{tag}] Events verwalten"
   alliance_heading: "[{tag}] Operation erstellen"
   preset: Event-Typ
   type_custom: Benutzerdefiniert
   type_custom_hint: Leeres Formular
-  duration_h: "{n}h"
+  duration_h: "{n} Std."
   title: Event-Titel
-  title_example: z. B. Nest-Verteidigungsübung oder Außenposten-Angriff
+  title_example: z.B. Nest-Verteidigungsübung oder Außenposten-Angriff
   date: Startdatum (JJJJ-MM-TT)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Server Game Time (wird auf 5-Minuten-Schritte gerundet)
+  time_hint: Server Game Time (rastet in 5-Minuten-Schritten ein)
   duration: Dauer (Stunden)
   frequency: Häufigkeit
-  once: Einmaliges Event (wiederholt sich nicht)
+  once: Einmaliges Event (Wiederholt sich nicht)
   every_2_days: Wiederholt sich alle 2 Tage
-  weekly: Wiederholt sich wöchentlich (gleicher Tag & Zeit)
+  weekly: Wiederholt sich wöchentlich (Gleicher Tag & Zeit)
   alert_level: Discord-Erinnerung (1 Stunde vorher)
   notify_off: Keine Erinnerung
-  notify_role: Die Alarm-Rolle der Allianz pingen
-  notify_custom: Eine bestimmte Rolle pingen
+  notify_role: Allianz-Alarm-Rolle pingen
+  notify_custom: Spezifische Rolle pingen
   notify_everyone: "@everyone pingen"
   notify_none: Posten ohne Ping
-  role_id: Bestimmte Rollen-ID
-  role_id_hint: "(nur für „Eine bestimmte Rolle pingen“)"
-  role_id_title: Muss eine gültige 17-20-stellige Discord Rollen-ID sein
+  role_id: Spezifische Rollen-ID
+  role_id_hint: "(nur für „Spezifische Rolle pingen“)"
+  role_id_title: Muss eine gültige 17-20 stellige Discord-Rollen-ID sein
   details: Anweisungen / Sammelpunkt
-  details_example: z. B. Versammlung bei Nest Alpha. R4s führen Rallies an. Voice-Chat aktiv.
+  details_example: z.B. Versammlung an Hive Alpha. R4s führen Rallies an. Voice-Chat aktiv.
   publish: Im Kalender veröffentlichen
-  publishing: Wird veröffentlicht...
-  bad_time: Game Time muss in 5-Minuten-Schritten eingestellt werden (:00, :05, :10, etc.)
-  bad_role: Bitte gib eine gültige 17-20-stellige Discord Rollen-ID für das benutzerdefinierte Alarmziel ein.
+  publishing: Veröffentliche...
+  bad_time: Die Game Time muss in 5-Minuten-Schritten eingestellt sein (:00, :05, :10, etc.)
+  bad_role: Bitte gib eine gültige 17-20 stellige Discord-Rollen-ID für das benutzerdefinierte Alarmziel ein.
   save_failed: Speichern des Events fehlgeschlagen
   published: Operation erfolgreich veröffentlicht!
   delete_heading: Dieses Event löschen?
-  delete_repeats: 'Es wiederholt sich ({repeat}): jede Wiederholung wird entfernt, nicht nur diese.'
-  delete_final: Dies kann nicht rückgängig gemacht werden.
+  delete_repeats: 'Es wiederholt sich ({repeat}): Jede Wiederholung wird entfernt, nicht nur diese.'
+  delete_final: Das kann nicht rückgängig gemacht werden.
   delete_confirm: Löschen
   delete_failed: Löschen des Events fehlgeschlagen
   removed: Operation entfernt.
 kings_scheduler:
   title: Kapitol-Rotation
-  subtitle: Automatisierter Matchup-Verteidigungs- & Entschädigungs-Zeitplan
+  subtitle: Automatisierter Matchup-Verteidigungs- & Rückzahlungsplan
   overrides: 'Überschreibungen: {n}/2'
   loading: Lade Live-Zeitplan...
-  off_week: Freie Woche
+  off_week: Woche frei
   week_fri: Woche {n} Fr
-  boss_window: Boss {n} Zeitfenster
-  kvk_finale: KvK Finale
+  boss_window: Boss {n} Fenster
+  kvk_finale: KvK-Finale
   loot_one: "{n} Königstruhe"
   loot_other: "{n} Königstruhen"
   loot_border: 2 Königstruhen + Rahmen
   active: AKTIV
-  buyouts_title: "Aktive Kriegskauf-Entschädigung"
+  buyouts_title: Aktive Rückzahlung für Kriegsausfälle
   buyouts_count: "{n} Aktiv"
-  installment: 'Woche {week} Auszahlung:'
+  installment: 'Auszahlung Woche {week}:'
   payout: "{reg} & {kw}"
-  reg_gold: "+{n} Reg Gold"
-  kw_gold: "+{n} KW Gold"
+  reg_gold: "+{n} Reg.-Gold"
+  kw_gold: "+{n} KW-Gold"
   paid: BEZAHLT
   pending: AUSSTEHEND
   beneficiary: 'Begünstigter:'
   threat: "(Bedrohung: {threat})"
   red_list: Rote Liste
-  wartime_buyout: Kriegskauf
-  override_title: "Zeitplan-Überschreibung erklären"
+  wartime_buyout: Kriegsausfall-Abfindung
+  override_title: Zeitplan-Überschreibung deklarieren
   override_help: Gefährlichen Server gescoutet? Gib die Server-ID des Gegners ein
-  target_week: Ziel KvK-Woche
+  target_week: Ziel-KvK-Woche
   week1_option: Woche 1 Freitag (Boss 2 Matchup)
   week2_option: Woche 2 Freitag (Boss 3 Matchup)
   opponent: Gescouteter Gegner (Server)
   opponent_example: z.B. S94, S77
-  disclaimer: "*Überschreibungen senden einen Senatsvorschlag an die Discord-Führung zur Überprüfung."
-  dispatch: Überprüfen & Überschreibung absenden
+  disclaimer: "*Überschreibungen senden einen Senatsvorschlag zur Überprüfung an die Discord-Führung."
+  dispatch: Überschreibung prüfen & senden
   already_scheduled: "{who} Keine Verteidigungs-Überschreibung erforderlich."
   already_scheduled_who: WLO ist bereits für Woche {n} geplant.
   step1: 'Schritt 1: Kalendertausch (0 Truhen Kosten)'
@@ -552,27 +552,27 @@ kings_scheduler:
   week_label: Woche {n}
   opponent_placeholder: "[Gegner]"
   week3_finale: 'Woche 3 Finale:'
-  lose_nothing: "{ally} verlieren 0 Truhen. {wlo} verlieren 0 Truhen."
-  step2: 'Schritt 2: Kriegskauf (Entschädigung in 2 Raten)'
-  step2_text: 'Dies ist die {second} in diesem Zyklus. Woche 3 wurde bereits getauscht, daher setzt {ally} aus und erhält einen Kriegskauf mit Truhen:'
+  lose_nothing: "{ally} verliert 0 Truhen. {wlo} verliert 0 Truhen."
+  step2: 'Schritt 2: Kriegsausfall-Abfindung (Rückzahlung in 2 Raten)'
+  step2_text: 'Dies ist die {second} in diesem Zyklus. Woche 3 wurde bereits getauscht, daher setzt {ally} aus und erhält eine Abfindung mit Truhen:'
   second_override: zweite Verteidigungs-Überschreibung
-  distribution: 'Woche {n} Verteilung:'
-  plus_gold: "+1 Reguläres Gold & +1 KW Gold an [{tag}]"
-  buyout_perks: "{ally} verlieren 2 Königstruhen, erhalten 4 Goldtruhen. {wlo} erhält 2 Königstruhen, verliert 4 Goldtruhen."
-  proposal_buyout: "Kriegskauf erklären"
-  proposal_swap: "Verteidigungstausch erklären"
+  distribution: 'Verteilung Woche {n}:'
+  plus_gold: "+1 Reg.-Gold & +1 KW-Gold an [{tag}]"
+  buyout_perks: "{ally} verliert 2 Königstruhen, gewinnt 4 Goldtruhen. {wlo} gewinnt 2 Königstruhen, verliert 4 Goldtruhen."
+  proposal_buyout: Kriegsausfall-Abfindung deklarieren
+  proposal_swap: Verteidigungstausch deklarieren
   sum_second: WLO 2. Verteidigungs-Überschreibung
   sum_first: WLO 1. Verteidigungs-Überschreibung
-  sum_vs: Woche {n} gegen {threat}
-  sum_buyout_issued: "[{tag}] Kriegskauf ausgestellt"
+  sum_vs: Woche {n} vs {threat}
+  sum_buyout_issued: "[{tag}] Kriegsausfall-Abfindung ausgegeben"
   sum_four_gold: 4 Goldtruhen insgesamt
   sum_installment: 'Rate {i} (W{week}):'
-  sum_installment_chests: 1 Reg Gold + 1 KW Gold
+  sum_installment_chests: 1 Reg.-Gold + 1 KW-Gold
   sum_swap: Kalendertausch
   sum_swap_text: WLO übernimmt W{n} Freitag
-  sum_promoted: "[{tag}] Befördert zu Woche 3 Finale"
-  sum_promoted_text: "(2 Königstruhen + Buff-Gegenstand)"
-  sum_cost: 'WLO Allianz-Truhen Kosten: 0'
+  sum_promoted: "[{tag}] Befördert zum Woche 3 Finale"
+  sum_promoted_text: "(2 Königstruhen + Buff-Item)"
+  sum_cost: 'WLO Allianz-Truhen-Kosten: 0'
 rewards_planner:
   host_week: Aktive Hosting-Woche
   planner_mode: Planungsmodus
@@ -730,30 +730,30 @@ map_planner:
 proposals:
   title: Vorschlag einreichen
   close: Schließen
-  summary: Zusammenfassung des Vorschlags
+  summary: Vorschlag zusammenfassen
   notes: Anmerkungen der Führung (Optional)
   notes_placeholder: Erkläre den Kontext oder den strategischen Grund für diesen Vorschlag...
   transmit: Vorschlag übermitteln
   user_avatar: Benutzer-Avatar
   submitting_as: Einreichen als {name}
-  auth_required: Führungs-Authentifizierung erforderlich
-  auth_reason: Vorschläge erfordern eine verifizierte Discord-Führungsrolle oder Offiziersstatus zum Senden.
+  auth_required: Authentifizierung der Führung erforderlich
+  auth_reason: Vorschläge erfordern eine verifizierte Discord-Führungs- oder Offiziersrolle zum Senden.
   log_in: Über Discord anmelden zum Einreichen
-  oauth_unreachable: Discord OAuth-Dienst ist nicht erreichbar. Bitte neu laden und erneut versuchen.
+  oauth_unreachable: Discord OAuth-Dienst nicht erreichbar. Bitte aktualisieren und erneut versuchen.
   transmit_discord: An Discord übermitteln
-  leaders_only_note: Nur R4- und R5-Führungskräfte können Vorschläge senden. Bitte deinen Allianzführer, diesen Plan einzureichen.
-  leaders_only: Nur für Führung
+  leaders_only_note: Nur R4 und R5 Anführer können Vorschläge senden. Bitte deinen Allianzführer, diesen Plan einzureichen.
+  leaders_only: Nur Anführer
   login_expired: Deine Anmeldung ist abgelaufen. Melde dich erneut mit Discord an, um diesen Vorschlag zu senden.
-  transmitted: "Vorschlag erfolgreich an die NAP-Führung auf Discord übermittelt!"
-  transmitting: Übermittlung läuft...
-  resume: "{type}-Vorschlag fortsetzen"
+  transmitted: Vorschlag erfolgreich an NAP-Führung auf Discord übermittelt!
+  transmitting: Übermittle...
+  resume: "{type} Vorschlag fortsetzen"
   draft_restored: Entwurf aus vorheriger Sitzung wiederhergestellt.
   pending_shifts: Ausstehende Verschiebungen
   server_error: Server antwortete mit HTTP {status}
 live_data:
-  failed: "Die neuesten Daten konnten nicht geladen werden. Überprüfe deine Verbindung und lade die Seite neu."
-  offline: "Offline: Zeige die auf diesem Gerät gespeicherten Daten ({when})."
-  updating: "Aktualisierung…"
+  failed: Die neuesten Daten konnten nicht geladen werden. Überprüfe deine Verbindung und aktualisiere die Seite.
+  offline: 'Offline: Zeige die auf diesem Gerät gespeicherten Daten ({when}).'
+  updating: Aktualisiere…
 capitol_rotation:
   calendar_link: Rotation dieses Zyklus im Kalender ansehen →
 image_review:
