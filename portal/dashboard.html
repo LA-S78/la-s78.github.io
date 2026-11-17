@@ -223,17 +223,16 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
       // Stewards: alliance switcher
       if (Array.isArray(data.alliances) && data.alliances.length) {
         const select = $('dash-switcher-select');
-        select.innerHTML = data.alliances
-          .map((x) => {
-            // An academy: under its main alliance, and named as its academy
-            const what = x.parent
-              ? ` · ${t('dashboard.academy_of', { tag: x.parent })}`
-              : x.rank
-                ? ` · #${x.rank}`
-                : '';
-            return `<option value="${escapeHtml(x.tag)}"${x.tag === a.tag ? ' selected' : ''}>[${escapeHtml(x.tag)}]${escapeHtml(what)}</option>`;
-          })
-          .join('');
+        // The Alliance page's standings order: NAP alliances by rank, then the others apart
+        const option = (x) =>
+          `<option value="${escapeHtml(x.tag)}"${x.tag === a.tag ? ' selected' : ''}>[${escapeHtml(x.tag)}]${x.rank ? ` · #${x.rank}` : ''}</option>`;
+        const nap = data.alliances.filter((x) => x.nap !== false);
+        const others = data.alliances.filter((x) => x.nap === false);
+        select.innerHTML =
+          nap.map(option).join('') +
+          (others.length
+            ? `<optgroup label="${escapeHtml(t('dashboard.not_in_nap'))}">${others.map(option).join('')}</optgroup>`
+            : '');
         $('dash-switcher').hidden = false;
       }
 
