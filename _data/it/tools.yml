@@ -594,22 +594,24 @@ event_presets:
   crystal_cluster_title: Valle di Cristallo
   crystal_cluster_desc: Evento tutti contro tutti ogni domenica
   elixir_scramble_title: Mischia d'elisir
-  elixir_scramble_desc: Evento battaglia a squadre ogni venerdì
+  elixir_scramble_desc: Evento di battaglia a squadre ogni venerdì
   survival_battle_title: Battaglia di Sopravvivenza
-  survival_battle_desc: Completa le attività per guadagnare ricompense
-  kill_event_title: Evento di uccisione
+  survival_battle_desc: Completa le attività per ottenere ricompense
+  kill_event_title: Evento Uccisioni
   kill_event_desc: Arrivano invasori da altri server! Attiva lo scudo
-  kvk_battle_title: Battaglia Guerra tra Regni
-  kvk_battle_desc: La battaglia per il Castello Reale inizia!
-  gear_upgrade_title: Miglioramento equipaggiamento
-  gear_upgrade_desc: Ricevi ricompense migliorando l'equipaggiamento
-  undead_siege_title: Assedio non morti
+  kvk_battle_title: Guerra tra Regni
+  kvk_battle_desc: La battaglia per il Castello Reale ha inizio!
+  gear_upgrade_title: Potenziamento Equipaggiamento
+  gear_upgrade_desc: Ottieni ricompense potenziando l'equipaggiamento
+  hunt_battle_title: Battaglia di Caccia
+  hunt_battle_desc: Caccia i behemoth per ottenere ricompense
+  undead_siege_title: Assedio dei Non Morti
   undead_siege_desc: 'I non morti assediano: tieni la posizione'
-  capitol_capture_title: Cattura Campidoglio
-  rewards_open_title: Ricompense Aperte
-  rewards_close_title: Ricompense Chiuse
+  capitol_capture_title: Conquista del Campidoglio
+  rewards_open_title: Apertura Ricompense
+  rewards_close_title: Chiusura Ricompense
   cheese_trap_title: Trappola Cheese
-  cheese_trap_desc: Aiuta a respingere il ladro di Cheese
+  cheese_trap_desc: Aiuta a respingere il Ladro di Cheese
 alliance_planner:
   roster: 'Elenco NAP:'
   roster_loading: "-- Alleanze"

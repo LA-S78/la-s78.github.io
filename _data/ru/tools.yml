@@ -598,25 +598,27 @@ rewards_planner:
   rank_single: Ранг {n}
   rank_range: Ранг {from}–{to}
 event_presets:
-  crystal_cluster_title: Долина кристальных скоплений
-  crystal_cluster_desc: Событие каждый Free For All в воскресенье
-  elixir_scramble_title: Схватка за эликсир
-  elixir_scramble_desc: Командное событие каждую пятницу
+  crystal_cluster_title: Кристальная Долина
+  crystal_cluster_desc: Событие «каждый сам за себя» каждое воскресенье
+  elixir_scramble_title: Королевская схватка
+  elixir_scramble_desc: Командное сражение каждую пятницу
   survival_battle_title: Битва за выживание
-  survival_battle_desc: Выполняйте задания, чтобы заработать награды
-  kill_event_title: Событие убийств
-  kill_event_desc: Прибывают захватчики с других серверов! Включите щиты
-  kvk_battle_title: Битва Королевство против Королевства
-  kvk_battle_desc: Битва за Королевский замок начинается!
+  survival_battle_desc: Выполняйте задания, чтобы получить награды
+  kill_event_title: Событие «Убийство»
+  kill_event_desc: Прибывают захватчики с других серверов! Включите щит
+  kvk_battle_title: Война Королевств
+  kvk_battle_desc: Начинается битва за Королевский Замок!
   gear_upgrade_title: Улучшение снаряжения
   gear_upgrade_desc: Получайте награды за улучшение снаряжения
-  undead_siege_title: Осада нежити
-  undead_siege_desc: 'Нежить начинает осаду: держите оборону'
+  hunt_battle_title: Охота на монстров
+  hunt_battle_desc: Охотьтесь на бегемотов ради наград
+  undead_siege_title: Осада мертвецов
+  undead_siege_desc: 'Мертвецы осаждают: держите оборону'
   capitol_capture_title: Захват Капитолия
   rewards_open_title: Награды открыты
   rewards_close_title: Награды закрыты
   cheese_trap_title: Сырная Ловушка
-  cheese_trap_desc: Помогите отбиться от Сырного вора
+  cheese_trap_desc: Помогите отразить атаку Сырного Вора
 alliance_planner:
   roster: 'Состав NAP:'
   roster_loading: "-- Альянсы"

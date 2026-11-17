@@ -591,25 +591,27 @@ rewards_planner:
   rank_single: Sıra {n}
   rank_range: Sıra {from}–{to}
 event_presets:
-  crystal_cluster_title: Kristal Küme Vadisi
-  crystal_cluster_desc: Her Pazar herkese açık etkinlik
+  crystal_cluster_title: Kristal Vadisi Kümesi
+  crystal_cluster_desc: Her Pazar düzenlenen Herkese Açık etkinlik
   elixir_scramble_title: İksir Mücadelesi
-  elixir_scramble_desc: Her Cuma takım savaşı etkinliği
+  elixir_scramble_desc: Her Cuma düzenlenen Takım Savaşı etkinliği
   survival_battle_title: Hayatta Kalma Savaşı
   survival_battle_desc: Ödül kazanmak için görevleri tamamlayın
   kill_event_title: Öldürme Etkinliği
   kill_event_desc: Diğer sunuculardan istilacılar geliyor! Kalkanınızı açın
-  kvk_battle_title: Krallık Savaşı
+  kvk_battle_title: Krallık Savaşı (KvK)
   kvk_battle_desc: Kraliyet Kalesi için savaş başlıyor!
   gear_upgrade_title: Ekipman Yükseltme
-  gear_upgrade_desc: Ekipman yükselterek ödül kazanın
+  gear_upgrade_desc: Ekipman yükselterek ödüller kazanın
+  hunt_battle_title: Av Savaşı
+  hunt_battle_desc: Ödüller için dev yaratıkları avlayın
   undead_siege_title: Ölümsüz Kuşatması
-  undead_siege_desc: 'Ölümsüzler kuşatıyor: hattı tutun'
+  undead_siege_desc: 'Ölümsüzler kuşatıyor: hattı koruyun'
   capitol_capture_title: Başkent Ele Geçirme
-  rewards_open_title: Ödüller Açık
-  rewards_close_title: Ödüller Kapalı
+  rewards_open_title: Ödüller Açıldı
+  rewards_close_title: Ödüller Kapandı
   cheese_trap_title: Peynir Tuzağı
-  cheese_trap_desc: Peynir Hırsızını defetmeye yardım edin
+  cheese_trap_desc: Peynir Hırsızını defetmeye yardımcı olun
 alliance_planner:
   roster: 'NAP Kadrosu:'
   roster_loading: "-- İttifaklar"

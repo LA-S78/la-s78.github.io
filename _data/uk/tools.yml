@@ -599,19 +599,21 @@ rewards_planner:
   rank_range: Ранг {from}–{to}
 event_presets:
   crystal_cluster_title: Кришталева Долина
-  crystal_cluster_desc: Подія «кожен сам за себе» щонеділі
-  elixir_scramble_title: Еліксирна сутичка
+  crystal_cluster_desc: Подія "кожен сам за себе" щонеділі
+  elixir_scramble_title: Королівська сутичка
   elixir_scramble_desc: Командна битва щоп'ятниці
   survival_battle_title: Битва за виживання
   survival_battle_desc: Виконуйте завдання, щоб отримати нагороди
-  kill_event_title: Подія вбивств
-  kill_event_desc: Прибувають загарбники з інших серверів! Вмикайте щити
-  kvk_battle_title: Битва Війни Королівств
-  kvk_battle_desc: Починається битва за Королівський замок!
+  kill_event_title: Подія вбивства
+  kill_event_desc: Прибувають загарбники з інших серверів! Увімкніть щит
+  kvk_battle_title: Війна Королівств
+  kvk_battle_desc: Битва за Королівський замок починається!
   gear_upgrade_title: Покращення спорядження
   gear_upgrade_desc: Отримуйте нагороди за покращення спорядження
-  undead_siege_title: Облога мерців
-  undead_siege_desc: 'Мерці в облозі: тримайте оборону'
+  hunt_battle_title: Полювання на монстрів
+  hunt_battle_desc: Полюйте на бегемотів заради нагород
+  undead_siege_title: Облога нежиті
+  undead_siege_desc: 'Нежить проводить облогу: тримайте оборону'
   capitol_capture_title: Захоплення Капітолію
   rewards_open_title: Нагороди відкрито
   rewards_close_title: Нагороди закрито

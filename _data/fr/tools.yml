@@ -592,22 +592,24 @@ rewards_planner:
   rank_range: Rang {from}–{to}
 event_presets:
   crystal_cluster_title: Vallée de Cristal
-  crystal_cluster_desc: Événement Chacun pour soi chaque dimanche
+  crystal_cluster_desc: Événement chacun pour soi tous les dimanches
   elixir_scramble_title: Mêlée d'élixir
-  elixir_scramble_desc: Événement de bataille en équipe chaque vendredi
+  elixir_scramble_desc: Événement de combat en équipe tous les vendredis
   survival_battle_title: Bataille de Survie
-  survival_battle_desc: Terminez des tâches pour gagner des récompenses
-  kill_event_title: Événement de Kills
+  survival_battle_desc: Terminez des tâches pour obtenir des récompenses
+  kill_event_title: Événement d'Élimination
   kill_event_desc: Des envahisseurs d'autres serveurs arrivent ! Activez vos boucliers
-  kvk_battle_title: Bataille KvK
+  kvk_battle_title: Guerre des Royaumes
   kvk_battle_desc: La bataille pour le Château Royal commence !
-  gear_upgrade_title: Amélioration d'équipement
+  gear_upgrade_title: Amélioration d'Équipement
   gear_upgrade_desc: Soyez récompensé pour l'amélioration de votre équipement
-  undead_siege_title: Siège des Morts-Vivants
-  undead_siege_desc: 'Les morts-vivants font le siège : tenez la position'
+  hunt_battle_title: Chasse aux Voleurs
+  hunt_battle_desc: Traquez les colosses pour obtenir des récompenses
+  undead_siege_title: Siège des Morts-vivants
+  undead_siege_desc: 'Les morts-vivants lancent un siège : tenez vos positions'
   capitol_capture_title: Capture du Capitole
-  rewards_open_title: Récompenses ouvertes
-  rewards_close_title: Récompenses fermées
+  rewards_open_title: Récompenses Ouvertes
+  rewards_close_title: Récompenses Fermées
   cheese_trap_title: Piège à Fromage
   cheese_trap_desc: Aidez à repousser le Voleur de Fromage
 alliance_planner:

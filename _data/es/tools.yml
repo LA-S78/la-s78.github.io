@@ -593,23 +593,25 @@ rewards_planner:
 event_presets:
   crystal_cluster_title: Valle de Cristal
   crystal_cluster_desc: Evento todos contra todos cada domingo
-  elixir_scramble_title: Pelea de Elixir
+  elixir_scramble_title: Pelea Real
   elixir_scramble_desc: Evento de batalla por equipos cada viernes
   survival_battle_title: Batalla de Supervivencia
   survival_battle_desc: Completa tareas para ganar recompensas
-  kill_event_title: Evento de Kills
+  kill_event_title: Evento de Caza
   kill_event_desc: "¡Llegan invasores de otros servidores! Activa tu escudo"
-  kvk_battle_title: Batalla de Guerra de Reinos
+  kvk_battle_title: Guerra de Reinos
   kvk_battle_desc: "¡La batalla por el Castillo Real comienza!"
   gear_upgrade_title: Mejora de Equipo
-  gear_upgrade_desc: Obtén recompensas por mejorar tu equipo
-  undead_siege_title: Asedio de los No Muertos
+  gear_upgrade_desc: Recibe recompensas por mejorar tu equipo
+  hunt_battle_title: Batalla de Caza
+  hunt_battle_desc: Caza a los gigantes para obtener recompensas
+  undead_siege_title: Asedio No Muerto
   undead_siege_desc: 'Los no muertos asedian: mantén la línea'
   capitol_capture_title: Captura del Capitolio
-  rewards_open_title: Recompensas abiertas
-  rewards_close_title: Recompensas cerradas
+  rewards_open_title: Recompensas Disponibles
+  rewards_close_title: Cierre de Recompensas
   cheese_trap_title: Trampa de Queso
-  cheese_trap_desc: Ayuda a defenderse del Ladrón de Queso
+  cheese_trap_desc: Ayuda a defenderte del Ladrón de Queso
 alliance_planner:
   roster: 'Lista NAP:'
   roster_loading: "-- Alianzas"

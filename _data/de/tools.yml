@@ -592,24 +592,26 @@ rewards_planner:
   rank_range: Rang {from}–{to}
 event_presets:
   crystal_cluster_title: Kristalltal
-  crystal_cluster_desc: Jeden Sonntag Offenes Event
+  crystal_cluster_desc: 'Jeden Sonntag: Jeder gegen Jeden'
   elixir_scramble_title: Elixier-Gerangel
-  elixir_scramble_desc: Jeden Freitag Team-Kampf-Event
+  elixir_scramble_desc: 'Jeden Freitag: Teamkampf-Event'
   survival_battle_title: Überlebenskampf
-  survival_battle_desc: Erfülle Aufgaben, um Belohnungen zu erhalten
+  survival_battle_desc: Erfülle Aufgaben und erhalte Belohnungen
   kill_event_title: Kill-Event
-  kill_event_desc: Invasoren von anderen Servern kommen! Schild hoch
+  kill_event_desc: Eindringlinge von anderen Servern kommen! Aktiviere deinen Schild
   kvk_battle_title: Königreichskrieg
   kvk_battle_desc: Der Kampf um das Königsschloss beginnt!
   gear_upgrade_title: Ausrüstungs-Upgrade
-  gear_upgrade_desc: Erhalte Belohnungen für das Aufrüsten von Ausrüstung
+  gear_upgrade_desc: Werde für das Verbessern deiner Ausrüstung belohnt
+  hunt_battle_title: Jagd-Event
+  hunt_battle_desc: Jage die Giganten für Belohnungen
   undead_siege_title: Untoten-Belagerung
   undead_siege_desc: 'Die Untoten belagern uns: Halte die Stellung'
   capitol_capture_title: Kapitol-Eroberung
-  rewards_open_title: Belohnungen offen
+  rewards_open_title: Belohnungen verfügbar
   rewards_close_title: Belohnungen schließen
   cheese_trap_title: Cheese-Falle
-  cheese_trap_desc: Helfe, den Cheese-Dieb abzuwehren
+  cheese_trap_desc: Hilf dabei, den Käsedieb abzuwehren
 alliance_planner:
   roster: 'NAP-Roster:'
   roster_loading: "-- Allianzen"
