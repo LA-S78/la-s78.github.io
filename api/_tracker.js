@@ -6,8 +6,9 @@
 // - The key is the owner's, in Vercel as LAT_API_KEY (1,000 requests a day on a free
 //   account; every call counts). Without it, everything here answers null and the site
 //   works as before.
-// - Only what the site needs leaves this file: names, ids and Might. The tracker also sends
-//   map positions and online times; those are dropped here and never stored or shown.
+// - Only what the site needs leaves this file: names, ids, Might, in-game rank, Sanctuary
+//   level, join date and pictures (the roster view). The tracker also sends map positions,
+//   online times and daily activity; those are dropped here and never stored or shown.
 // - Unofficial and run by one person: a slow or failed answer is null, never an error, so
 //   no page or save depends on it.
 
@@ -21,6 +22,23 @@ const cache = new Map();
 export const trackerConfigured = (env = process.env) =>
   Boolean(String(env.LAT_API_KEY || '').trim());
 
+const GAME_IMAGES = 'https://phs-image.globallap.com/';
+
+/**
+ * A member's picture as the site shows it: a player's own picture stays on the game's image
+ * server (its address changes whenever they change it); a default portrait or a frame, which
+ * the tracker hosts, becomes our own copy under /game-art/ (api/_game_art.js), so pages
+ * never load files from the tracker's server. null for anything else.
+ */
+export function pictureUrl(value) {
+  const v = String(value || '');
+  if (v.startsWith(GAME_IMAGES) && /^[\w./-]+$/.test(v.slice(GAME_IMAGES.length))) return v;
+  const art = v.match(
+    /^(?:https:\/\/(?:api\.)?lastasylumtracker\.com)?\/static\/(avatars\/head_\d{1,7}|frames\/frame_\d{1,7})\.png$/,
+  );
+  return art ? `/game-art/${art[1]}.png` : null;
+}
+
 /** What the site keeps of an alliance answer. */
 function slim(d) {
   return {
@@ -33,6 +51,13 @@ function slim(d) {
         uid: String(m.uid ?? m.player_id ?? ''),
         name: String(m.nick_name ?? m.name ?? ''),
         power: Number(m.power) || 0,
+        // For the roster view (owner request, 2026-11-18): the in-game rank and title
+        // ("R4 · Diplomat"), Sanctuary level, when they joined, and their pictures
+        rank: String(m.rank_label || '').slice(0, 40),
+        level: Number(m.lv ?? m.level) || null,
+        joinedAt: m.joined_at || null,
+        avatar: pictureUrl(m.avatar_url),
+        frame: pictureUrl(m.frame_url),
       }))
       .filter((m) => m.name),
     ageSeconds: Number(d.age_seconds) || 0,

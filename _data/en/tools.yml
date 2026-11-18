@@ -115,6 +115,21 @@ rewards_card:
   buyout_cost: "Buyout: {amount} {chest} in each set"
   buyout_cost_help: "Funding the displaced alliance this week"
 
+# The alliance roster on the dashboard (Last Asylum Tracker; portal/dashboard.html renderRoster)
+roster:
+  title: "Alliance roster"
+  summary: "{n} members · {might} Might"
+  search: "Search names or IDs..."
+  sort_label: "Sort by"
+  sort_power: "Might"
+  sort_name: "Name"
+  sort_rank: "Rank"
+  sanctuary_lv: "Sanctuary {n}"
+  copy_id: "Copy this player ID"
+  copied: "Copied"
+  unavailable: "The member list can't be loaded right now. Try again later."
+  credit_before: "Player data from the"
+
 caravan:
   title: "Caravan Rotor"
   # The name check against the alliance's member list (Last Asylum Tracker; js/name-check.js)

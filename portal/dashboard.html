@@ -5,7 +5,7 @@ title: Alliance Dashboard
 title_key: "dashboard.title"
 permalink: /dashboard.html
 lang: "en"
-strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, alliance_images]
+strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_data, alliance_images]
 ---
 
 <div class="content-pane portal-pane-lg" id="dashboard-app">
@@ -29,6 +29,10 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
 
   <!-- Caravan Rotor: run by leaders; members see it read-only when leaders allow -->
   <section class="dash-card dash-caravan" id="dash-caravan" hidden aria-labelledby="dash-caravan-title"></section>
+
+  <!-- The alliance's members from the Last Asylum Tracker (owner request, 2026-11-18): leaders
+       always, members when leaders switch it on (renderRoster) -->
+  <section class="dash-card dash-roster" id="dash-roster" hidden aria-labelledby="dash-roster-title"></section>
 
   <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
@@ -239,6 +243,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
 
       renderRewards();
       renderCaravan();
+      renderRoster();
       renderWidgets();
     }
 
@@ -497,6 +502,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
           <button type="submit" class="dash-btn">${ic('plus')}${escapeHtml(t('caravan.add'))}</button>
         </form>
         <div class="dash-cv-hint dash-small" id="cv-add-hint" aria-live="polite"></div>
+        ${Array.isArray(data.members) ? trackerCredit() : ''}
         <div class="dash-muted dash-small">${escapeHtml(t('caravan.times_help'))}</div>
         <div class="dash-error" id="cv-error"></div>
         ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}`;
@@ -516,6 +522,106 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         const ok = await caravanChange({ action: 'caravan-add', name: $('cv-add-name').value, from: $('cv-add-from').value, to: $('cv-add-to').value });
         if (ok) $('cv-add-name')?.focus();
       });
+    }
+
+    /** "Player data from the Last Asylum Tracker" (owner request: wherever its data shows). */
+    function trackerCredit() {
+      return `<p class="tracker-credit">${ic('users')}${escapeHtml(t('roster.credit_before'))} <a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a></p>`;
+    }
+
+    /**
+     * A player's picture in its frame: their own picture from the game's image server (no
+     * referrer sent), or our copy of a default portrait, with our copy of their frame on top.
+     * Addresses come from the server (api/_tracker.js pictureUrl), which only lets those two
+     * kinds through; without a picture, the name's first letter.
+     */
+    function portrait(m, size = 'md') {
+      const pic = m.avatar
+        ? `<img class="pf-pic" src="${escapeHtml(m.avatar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+        : `<span class="pf-pic pf-initial">${escapeHtml((m.name || '?').trim().charAt(0).toUpperCase())}</span>`;
+      const frame = m.frame
+        ? `<img class="pf-frame" src="${escapeHtml(m.frame)}" alt="" loading="lazy" decoding="async">`
+        : '';
+      return `<span class="player-portrait pf-${size}" aria-hidden="true">${pic}${frame}</span>`;
+    }
+
+    let rosterView = { text: '', sort: 'power' };
+    const ROSTER_SORTS = {
+      power: (a, b) => b.power - a.power,
+      name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+      rank: (a, b) => (b.rank || '').localeCompare(a.rank || '') || b.power - a.power,
+    };
+
+    /** Might as players read it: 1.23B, 456.7M */
+    function might(n) {
+      if (!Number.isFinite(n)) return '—';
+      return n >= 1e9 ? `${(n / 1e9).toFixed(2)}B` : `${(n / 1e6).toFixed(1)}M`;
+    }
+
+    function renderRoster() {
+      const el = $('dash-roster');
+      const r = data.roster;
+      el.hidden = !r;
+      if (!r) return;
+      const leader = isLeader();
+      const open = leader ? Boolean(data.dashboard.settings && data.dashboard.settings.rosterMembersCanView) : true;
+      const all = r.members || [];
+      const q = rosterView.text.trim().toLowerCase();
+      const shown = all
+        .filter((m) => !q || m.name.toLowerCase().includes(q) || String(m.uid).includes(q))
+        .sort(ROSTER_SORTS[rosterView.sort]);
+      const row = (m) => `<li class="dash-roster-row">
+          ${portrait(m)}
+          <span class="dash-roster-who">
+            <span class="dash-roster-name">${escapeHtml(m.name)}</span>
+            <span class="dash-muted dash-small">${m.rank ? `${escapeHtml(m.rank)} · ` : ''}<button type="button" class="dash-link-btn dash-roster-id" data-roster-id="${escapeHtml(m.uid)}" title="${escapeHtml(t('roster.copy_id'))}">ID ${escapeHtml(m.uid)}</button></span>
+          </span>
+          <span class="dash-roster-stats">
+            <span class="dash-roster-might">${might(m.power)}</span>
+            ${m.level ? `<span class="dash-muted dash-small">${escapeHtml(t('roster.sanctuary_lv', { n: m.level }))}</span>` : ''}
+          </span>
+        </li>`;
+      const sorts = ['power', 'name', 'rank']
+        .map((k) => `<button type="button" class="dash-icon-btn" data-roster-sort="${k}" aria-pressed="${rosterView.sort === k}">${escapeHtml(t(`roster.sort_${k}`))}</button>`)
+        .join('');
+      el.innerHTML = `
+        <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}${r.members ? ` <span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span>` : ''}</h3>
+        ${leader ? `<div class="dash-cv-bar"><label class="dash-check"><input type="checkbox" id="roster-members"${open ? ' checked' : ''}> ${ic('users')}${escapeHtml(t('caravan.members_can_view'))}</label></div>` : ''}
+        ${r.members
+          ? `<div class="dash-cv-filters">
+              <input type="search" id="roster-search" placeholder="${escapeHtml(t('roster.search'))}" value="${escapeHtml(rosterView.text)}" aria-label="${escapeHtml(t('roster.search'))}">
+              <span class="dash-roster-sorts" role="group" aria-label="${escapeHtml(t('roster.sort_label'))}">${sorts}</span>
+            </div>
+            <ul class="dash-roster-list">${shown.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t('caravan.nobody_matches'))}</li>`}</ul>`
+          : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>`}
+        ${trackerCredit()}`;
+      const search = $('roster-search');
+      search?.addEventListener('input', () => {
+        rosterView.text = search.value;
+        const pos = search.selectionStart;
+        renderRoster();
+        const again = $('roster-search');
+        again.focus();
+        again.setSelectionRange(pos, pos);
+      });
+      el.querySelectorAll('[data-roster-sort]').forEach((b) =>
+        b.addEventListener('click', () => {
+          rosterView.sort = b.dataset.rosterSort;
+          renderRoster();
+        }),
+      );
+      el.querySelectorAll('[data-roster-id]').forEach((b) =>
+        b.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(b.dataset.rosterId);
+            b.textContent = t('roster.copied');
+            setTimeout(() => (b.textContent = `ID ${b.dataset.rosterId}`), 1200);
+          } catch {
+            // No clipboard (an old browser): the ID stays visible to copy by hand
+          }
+        }),
+      );
+      $('roster-members')?.addEventListener('change', (e) => save({ action: 'roster-visibility', membersCanView: e.target.checked }, { quiet: true }));
     }
 
     async function caravanChange(change) {
@@ -720,6 +826,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts, live_data, all
         if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
         data.dashboard = body.dashboard;
         renderCaravan();
+        renderRoster();
         renderWidgets();
         remember();
         return '';

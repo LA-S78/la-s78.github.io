@@ -17,7 +17,7 @@ import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { sanitizeAlliances } from './_alliances.js';
-import { memberNames } from './_tracker.js';
+import { fetchAlliance } from './_tracker.js';
 import { imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
@@ -109,6 +109,23 @@ async function respond(req, res) {
     ),
   };
   if (steward) body.alliances = allianceList(alliances);
+
+  // The roster view (owner request, 2026-11-18): the alliance's members from the Last Asylum
+  // Tracker, for leaders always and for members when leaders switch it on. One lookup serves
+  // the roster and the leaders' name checks; null without the tracker or when it's slow.
+  const settings = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag).settings;
+  const membersMayView = Boolean(settings.rosterMembersCanView);
+  if (access.leader || membersMayView) {
+    const live = await fetchAlliance(tag, { timeoutMs: 2500 });
+    body.roster = {
+      membersCanView: membersMayView,
+      members: live ? live.members : null,
+      power: live ? live.power : null,
+      ageSeconds: live ? live.ageSeconds : null,
+    };
+    if (access.leader) body.members = live ? live.members.map((m) => m.name) : null;
+  }
+
   if (access.leader) {
     // The alliance's card pictures (api/_alliance_images.js): R4/R5 send, the R5 or a
     // Steward may take a live one down.
@@ -117,9 +134,6 @@ async function respond(req, res) {
       canRemove:
         steward || (session.role === 'R5' && findAllianceKey(alliances, session.alliance) === tag),
     };
-    // The alliance's member names from the Last Asylum Tracker, for the Caravan Rotor's name
-    // check (js/name-check.js); null without the tracker or when it's slow
-    body.members = await memberNames(tag, { timeoutMs: 2500 });
     body.rewards = rewardStatus({
       tag,
       rewardsData: gistJson(gist, 'rewards-data.json'),
