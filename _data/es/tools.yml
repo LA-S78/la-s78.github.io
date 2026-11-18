@@ -102,6 +102,19 @@ rewards_card:
   buyout_threat: 'amenaza: {threat}'
   buyout_cost: 'Compra: {amount} {chest} en cada set'
   buyout_cost_help: Financiando a la alianza desplazada esta semana
+roster:
+  title: Lista de la alianza
+  summary: "{n} miembros · {might} Poder"
+  search: Buscar nombres o IDs...
+  sort_label: Ordenar por
+  sort_power: Poder
+  sort_name: Nombre
+  sort_rank: Rango
+  sanctuary_lv: Santuario {n}
+  copy_id: Copiar ID de jugador
+  copied: Copiado
+  unavailable: No se puede cargar la lista de miembros en este momento. Inténtalo de nuevo más tarde.
+  credit_before: Datos del jugador de
 caravan:
   title: Rotativo de Caravanas
   name_ok: En la lista de miembros de [{tag}]

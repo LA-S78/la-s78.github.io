@@ -102,6 +102,19 @@ rewards_card:
   buyout_threat: 'Bedrohung: {threat}'
   buyout_cost: 'Ablöse: {amount} {chest} in jedem Set'
   buyout_cost_help: Finanzierung der verdrängten Allianz diese Woche
+roster:
+  title: Allianz-Mitglieder
+  summary: "{n} Mitglieder · {might} Stärke"
+  search: Namen oder IDs suchen...
+  sort_label: Sortieren nach
+  sort_power: Stärke
+  sort_name: Name
+  sort_rank: Rang
+  sanctuary_lv: Sanktuarium {n}
+  copy_id: Spieler-ID kopieren
+  copied: Kopiert
+  unavailable: Die Mitgliederliste kann aktuell nicht geladen werden. Versuche es später erneut.
+  credit_before: Spielerdaten von
 caravan:
   title: Karawanen-Rotor
   name_ok: In der Mitgliederliste von [{tag}]

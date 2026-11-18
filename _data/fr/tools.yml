@@ -102,6 +102,19 @@ rewards_card:
   buyout_threat: 'menace : {threat}'
   buyout_cost: 'Rachat : {amount} {chest} dans chaque ensemble'
   buyout_cost_help: Financement de l'alliance déplacée cette semaine
+roster:
+  title: Liste des membres de l'alliance
+  summary: "{n} membres · {might} Puissance"
+  search: Rechercher des noms ou IDs...
+  sort_label: Trier par
+  sort_power: Puissance
+  sort_name: Nom
+  sort_rank: Rang
+  sanctuary_lv: Sanctuaire {n}
+  copy_id: Copier cet ID de joueur
+  copied: Copié
+  unavailable: La liste des membres ne peut pas être chargée pour le moment. Réessayez plus tard.
+  credit_before: Données joueur provenant du
 caravan:
   title: Gestionnaire de Caravane
   name_ok: Dans la liste des membres de [{tag}]

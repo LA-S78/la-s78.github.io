@@ -103,6 +103,19 @@ rewards_card:
   buyout_threat: 'угроза: {threat}'
   buyout_cost: 'Выкуп: {amount} {chest} в каждом наборе'
   buyout_cost_help: Финансирование перемещенного альянса на этой неделе
+roster:
+  title: Состав альянса
+  summary: "{n} участников · {might} Мощи"
+  search: Поиск по имени или ID...
+  sort_label: Сортировать по
+  sort_power: Мощь
+  sort_name: Имя
+  sort_rank: Ранг
+  sanctuary_lv: Убежище {n}
+  copy_id: Скопировать ID игрока
+  copied: Скопировано
+  unavailable: Не удалось загрузить список участников. Попробуйте позже.
+  credit_before: Данные игрока из
 caravan:
   title: Ротатор караванов
   name_ok: В списке участников [{tag}]

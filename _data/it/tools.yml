@@ -102,6 +102,19 @@ rewards_card:
   buyout_threat: 'minaccia: {threat}'
   buyout_cost: 'Acquisizione: {amount} {chest} in ogni set'
   buyout_cost_help: Finanziamento dell'alleanza sfollata questa settimana
+roster:
+  title: Lista membri Alleanza
+  summary: "{n} membri · {might} Forza"
+  search: Cerca nomi o ID...
+  sort_label: Ordina per
+  sort_power: Forza
+  sort_name: Nome
+  sort_rank: Rango
+  sanctuary_lv: Santuario {n}
+  copy_id: Copia questo ID giocatore
+  copied: Copiato
+  unavailable: L'elenco dei membri non può essere caricato al momento. Riprova più tardi.
+  credit_before: Dati giocatore dal
 caravan:
   title: Rotazione Carovana
   name_ok: Nella lista membri di [{tag}]

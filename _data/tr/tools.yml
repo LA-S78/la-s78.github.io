@@ -102,6 +102,19 @@ rewards_card:
   buyout_threat: 'tehdit: {threat}'
   buyout_cost: 'Satın Alma: her sette {amount} {chest}'
   buyout_cost_help: Bu hafta yerinden edilen ittifakı finanse ediyor
+roster:
+  title: İttifak kadrosu
+  summary: "{n} üye · {might} Güç"
+  search: İsim veya kimlikleri ara...
+  sort_label: Sıralama ölçütü
+  sort_power: Güç
+  sort_name: İsim
+  sort_rank: Rütbe
+  sanctuary_lv: Sığınak {n}
+  copy_id: Bu oyuncu kimliğini kopyala
+  copied: Kopyalandı
+  unavailable: Üye listesi şu anda yüklenemiyor. Lütfen daha sonra tekrar deneyin.
+  credit_before: 'Oyuncu verilerinin kaynağı:'
 caravan:
   title: Kervan Çizelgesi
   name_ok: "[{tag}] üye listesinde"
