@@ -256,7 +256,7 @@ charts:
   hint_pie: Appuyez ou survolez une part
   hint_progress: Appuyez ou survolez une ligne
 nominate:
-  page_title: Nominations aux Récompenses
+  page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]
   name_spelling: Dans le jeu, il est écrit {name}
   name_unknown: Pas dans la liste des membres de [{tag}]
@@ -267,71 +267,75 @@ nominate:
   names_unknown_other: "{n} noms ne sont pas dans la liste des membres de [{tag}]. Ils seront quand même enregistrés ; vérifiez qu'ils sont corrects :"
   did_you_mean: vouliez-vous dire
   loading: Chargement de la page de nomination...
-  players_label: Vos joueurs, du meilleur au moins bon
-  players_help: Un nom par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres sont distribués dans l'ordre de la liste ; les noms au-delà des coffres sont gardés en réserve et remontent si des coffres supplémentaires s'ouvrent.
-  players_placeholder: Noms exacts du jeu, le meilleur en premier...
+  players_label: Vos joueurs, les meilleurs en premier
+  players_help: Un nom ou ID de joueur par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres sont distribués en suivant la liste par ordre de valeur entre les deux jeux ; les noms au-delà des coffres sont conservés en réserve et remontent si d'autres coffres s'ouvrent.
+  players_placeholder: Noms exacts en jeu ou ID de joueur, les meilleurs en premier...
+  id_found: Saisi comme ID de joueur {id}
+  id_unknown: Aucun membre de [{tag}] n'a l'ID {id}
   who_gets_what: Qui reçoit quoi
   save: Enregistrer la liste
   saving: Enregistrement...
-  link_incomplete: Ce lien est incomplet. Lancez /nominate sur Discord pour en obtenir un nouveau.
-  load_failed: "{error} Lancez /nominate sur Discord pour un nouveau lien."
-  closed: Les récompenses sont clôturées. La prochaine ouverture est le {when}, après l'événement du Capitole de vendredi.
-  header: Rang {rank} · Récompenses de {week} · ouvert jusqu'au {when}
-  banner_off_week: Recommandation du Roi uniquement cette semaine (pas de Guerre des Royaumes).
+  link_incomplete: Ce lien est incomplet. Exécutez /nominate sur Discord pour en obtenir un nouveau.
+  load_failed: "{error} Exécutez /nominate sur Discord pour un nouveau lien."
+  closed: Les récompenses sont closes. La prochaine ouverture aura lieu {when}, après l'événement du Capitole du vendredi.
+  header: Rang {rank} · récompenses de {week} · ouvert jusqu'au {when}
+  banner_off_week: Uniquement la Recommandation du Roi cette semaine (pas de Guerre des Royaumes).
   banner_won: 'Guerre des Royaumes gagnée : les coffres de Récompense du Roi de la Bataille sont également ouverts.'
-  banner_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement cette semaine.'
-  banner_pending: En attente du résultat de la bataille de samedi (environ {when}). Si gagnée, les coffres de Récompense du Roi de la Bataille s'ouvriront aussi et votre liste sera retriée. Le Roi distribue les récompenses après le résultat, donc le coffre de personne ne change.
+  banner_lost: 'Guerre des Royaumes perdue : uniquement la Recommandation du Roi cette semaine.'
+  banner_pending: En attente du résultat de la bataille de samedi (vers {when}). S'il est gagné, les coffres de Récompense du Roi de la Bataille s'ouvriront également et votre liste sera retriée. Le Roi distribue après le résultat, donc le coffre de personne ne change.
   handed_out_title: "✓ Déjà distribué par le Roi ({n})"
-  handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc à ces joueurs quoi que dise votre liste. La liste ci-dessous répartit le reste.
+  handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc avec ces joueurs quelle que soit votre liste. La liste ci-dessous répartit le reste.
   reserve: Réserve
   col_player: Joueur
   col_chest: Coffre
   col_now: Maintenant
-  col_if_won: Si gagné
+  col_if_won: Si victoire
   chests_now: "{n} coffres maintenant"
-  chests_if_won: "{n} si gagné"
-  named: "{n} nommé(s)"
-  still_need_name: "{n} ont encore besoin d'un nom"
+  chests_if_won: "{n} si victoire"
+  named: "{n} nommés"
+  still_need_name: "{n} nécessitent encore un nom"
   reserves_one: "{n} réserve"
   reserves_other: "{n} réserves"
   listed_twice: "{name} est listé deux fois"
   saved: Enregistré. Le Roi voit votre liste. Vous pouvez la modifier jusqu'au {when}.
   save_failed: 'Échec de l''enregistrement : {error}'
 kings_console:
-  page_title: Console de distribution du Roi
-  title: Console de distribution du Roi
+  page_title: Console de Distribution du Roi
+  title: Console de Distribution du Roi
   loading: Chargement des nominations...
-  by_chest: Par coffre
-  by_alliance: Par alliance
-  can_tick: Cochez un joueur une fois son coffre remis en jeu. Les coches sont enregistrées pour tout le monde, et un coffre coché reste avec ce joueur si les listes sont retriées.
-  view_only_signed_out: 'Lecture seule. La liste de vérification du Roi peut être cochée par le/la {king} R4/R5 et les Intendants : connectez-vous avec Discord (en haut à droite).'
-  view_only: 'Lecture seule : la liste de vérification est cochée par le/la {king} R4/R5 et les Intendants.'
+  by_chest: Par Coffre
+  by_alliance: Par Alliance
+  can_tick: Appuyez sur un joueur une fois son coffre distribué en jeu. Les coches sont enregistrées pour tout le monde, et un coffre coché reste avec ce joueur si les listes sont retriées.
+  view_only_signed_out: 'Lecture seule. La liste de vérification du Roi peut être cochée par les R4/R5 et Intendants de {king} : connectez-vous avec Discord (en haut à droite).'
+  view_only: 'Lecture seule : la liste de vérification est cochée par les R4/R5 et Intendants du {king}.'
   kings_alliance: l'alliance du Roi
   load_failed: 'Échec du chargement des nominations : {error}'
-  closed: Les récompenses sont closes. Les listes ci-dessous datent de la semaine dernière ; les prochaines récompenses ouvriront vendredi vers 20:00 GT.
-  hold_title: 'Retenir les coffres :'
-  hold: "{title} attendent le résultat de la bataille de samedi avant de distribuer. Si la guerre est gagnée, les coffres de Récompense de Roi de Bataille s'ouvrent et chaque liste est retriée. Les récompenses ferment le {when}."
+  closed: Les récompenses sont closes. Les listes ci-dessous proviennent de la semaine dernière ; les prochaines récompenses ouvriront vendredi vers 20:00 GT.
+  hold_title: 'Mise en attente des coffres :'
+  hold: "{title} attendent le résultat de la bataille de samedi avant de distribuer. Si la guerre est gagnée, les coffres de Récompense du Roi de la Bataille ouvrent et chaque liste est retriée. Les récompenses ferment le {when}."
   won_title: 'Guerre des Royaumes gagnée :'
-  won: "{title} distribue les deux ensembles. Les récompenses ferment le {when} (mercredi 00:00 GT)."
+  won: "{title} distribue les deux séries. Les récompenses ferment le {when} (mercredi 00:00 GT)."
   week_title: 'Récompenses de {week} :'
-  week: "{title} distribue la Mention du Roi. Les récompenses ferment le {when} (mercredi 00:00 GT)."
-  buyout_title: 'Restitution en temps de guerre active :'
-  buyout_one: "{title} {tags} inclut des emplacements bonus de Volonté du Commandant financés par l'allocation de Rang #1 de WLO."
-  buyout_other: "{title} {tags} incluent des emplacements bonus de Volonté du Commandant financés par l'allocation de Rang #1 de WLO."
-  no_nominations: Aucune nomination soumise pour le moment.
+  week: "{title} distribue la Recommandation du Roi. Les récompenses ferment le {when} (mercredi 00:00 GT)."
+  buyout_title: 'Restitution de Guerre active :'
+  buyout_one: "{title} {tags} inclut des emplacements bonus Volonté du Commandant financés par la dotation de Rang #1 de WLO."
+  buyout_other: "{title} {tags} incluent des emplacements bonus Volonté du Commandant financés par la dotation de Rang #1 de WLO."
+  no_nominations: Aucune nomination soumise pour l'instant.
   no_entries: 0 Entrée de bénéficiaire
-  progress: 'Progression : {sent} / {total} Distribué(s)'
+  progress: 'Progression : {sent} / {total} Distribué'
   alliance_heading: "[{tag}] • Rang {rank} ({n})"
+  was_named: listé en tant que {name}
+  left_alliance: Plus dans [{tag}]
   ticked_by: Distribué (verrouillé) · coché par {name} · {when}
   buyout_badge: RACHAT
   pool_reg: REG
-  pool_kw: GR
+  pool_kw: KW
   copy_prompt: 'Copier le nom du bénéficiaire :'
-  not_on_list: "{name} n'est plus sur la liste de [{tag}] (l'alliance l'a modifié)."
-  now_reserve: "{name} est maintenant en réserve sur la liste de [{tag}] : pas de coffre."
-  now_other_chest: "{name} reçoit maintenant {chest}, pas {shown}."
-  stop_warning: 'Arrêt : n''envoyez pas ce {chest}. {why} Les listes ont été actualisées : copiez à nouveau le nom depuis la liste ci-dessous.'
-  stop_alert: Ne l'envoyez pas !
+  not_on_list: "{name} n'est plus sur la liste de [{tag}] (l'alliance a modifié)."
+  now_reserve: "{name} est maintenant en réserve sur la liste de [{tag}] : aucun coffre."
+  now_other_chest: "{name} reçoit maintenant {chest}, non {shown}."
+  stop_warning: 'Arrêt : ne pas envoyer ce {chest}. {why} Les listes ont été actualisées : copiez à nouveau le nom depuis la liste ci-dessous.'
+  stop_alert: Ne pas envoyer !
   lists_refreshed: Les listes ont été actualisées.
 register:
   page_title: Enregistrement de serveur d'alliance

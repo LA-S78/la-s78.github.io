@@ -256,40 +256,42 @@ charts:
   hint_pie: Tippe oder bewege die Maus über ein Tortenstück
   hint_progress: Tippe oder bewege die Maus über eine Zeile
 nominate:
-  page_title: Belohnungs-Nominierungen
+  page_title: Belohnungsnominierungen
   name_ok: In der Mitgliederliste von [{tag}]
-  name_spelling: 'Im Spiel steht es so geschrieben: {name}'
+  name_spelling: Im Spiel wird es {name} geschrieben
   name_unknown: Nicht in der Mitgliederliste von [{tag}]
   names_spelling_one: '1 Name wird im Spiel anders geschrieben:'
   names_spelling_other: "{n} Namen werden im Spiel anders geschrieben:"
-  use_game_spellings: Spiel-Schreibweisen verwenden
+  use_game_spellings: Spielschreibweisen verwenden
   names_unknown_one: '1 Name ist nicht in der Mitgliederliste von [{tag}]. Er wird trotzdem gespeichert; prüfe, ob er korrekt ist:'
   names_unknown_other: "{n} Namen sind nicht in der Mitgliederliste von [{tag}]. Sie werden trotzdem gespeichert; prüfe, ob sie korrekt sind:"
   did_you_mean: meintest du
-  loading: Lade Nominierungsseite...
-  players_label: Deine Spieler, die besten zuerst
-  players_help: Ein Name pro Zeile (oder durch Kommas getrennt), dein bester Spieler zuerst. Truhen werden in der Reihenfolge ihres Werts über beide Sets verteilt; Namen nach den Truhen gelten als Reserve und rücken nach, wenn mehr Truhen geöffnet werden.
-  players_placeholder: Exakte Spielnamen, beste zuerst...
+  loading: Nomierungsseite wird geladen...
+  players_label: Deine Spieler, die Besten zuerst
+  players_help: Ein Name oder eine Spieler-ID pro Zeile (oder durch Kommas getrennt), dein bester Spieler zuerst. Truhen werden in der Reihenfolge ihres Wertes über beide Sets verteilt; Namen hinter den Truhen bleiben als Reserve und rücken nach, falls weitere Truhen geöffnet werden.
+  players_placeholder: Exakte Spielernamen oder Spieler-IDs, die besten zuerst...
+  id_found: Eingegeben als Spieler-ID {id}
+  id_unknown: Kein Mitglied von [{tag}] hat die ID {id}
   who_gets_what: Wer bekommt was
   save: Liste speichern
-  saving: Speichere...
-  link_incomplete: Dieser Link ist unvollständig. Führe /nominate in Discord aus, um einen neuen zu erhalten.
-  load_failed: "{error} Führe /nominate in Discord aus, um einen neuen Link zu erhalten."
-  closed: Die Belohnungen sind geschlossen. Die nächste Öffnung ist am {when}, nach dem Kapitol-Event am Freitag.
-  header: Rang {rank} · {week} Belohnungen · geöffnet bis {when}
+  saving: Wird gespeichert...
+  link_incomplete: Dieser Link ist unvollständig. Führe /nominate in Discord für einen neuen aus.
+  load_failed: "{error} Führe /nominate in Discord für einen neuen Link aus."
+  closed: Belohnungen sind geschlossen. Die nächste Runde öffnet {when}, nach dem Kapitol-Event am Freitag.
+  header: Rang {rank} · {week} Belohnungen · offen bis {when}
   banner_off_week: Diese Woche nur Belobigung des Königs (kein Königreichskrieg).
-  banner_won: 'Königreichskrieg gewonnen: Belohnungstruhen des Schlachtkönigs sind ebenfalls offen.'
+  banner_won: 'Königreichskrieg gewonnen: Truhen der „König der Schlacht“-Belohnung sind ebenfalls offen.'
   banner_lost: 'Königreichskrieg verloren: Diese Woche nur Belobigung des Königs.'
-  banner_pending: Warte auf das Ergebnis der Schlacht am Samstag (etwa {when}). Falls gewonnen, öffnen sich auch die Belohnungstruhen des Schlachtkönigs und deine Liste wird neu sortiert. Der König verteilt die Belohnungen nach dem Ergebnis, also ändert sich die Truhe für niemanden.
+  banner_pending: Warte auf das Kampfergebnis vom Samstag (ca. {when}). Falls gewonnen, werden die „König der Schlacht“-Truhen ebenfalls geöffnet und deine Liste neu sortiert. Der König verteilt nach dem Ergebnis, also ändert sich die Truhe von niemandem.
   handed_out_title: "✓ Bereits vom König verteilt ({n})"
-  handed_out_help: Diese Truhen wurden im Spiel bereits vergeben, sie bleiben also bei diesen Spielern, egal was deine Liste sagt. Die Liste unten verteilt den Rest.
+  handed_out_help: Diese Truhen wurden bereits im Spiel vergeben und bleiben bei diesen Spielern, egal was in deiner Liste steht. Die Liste unten verteilt den Rest.
   reserve: Reserve
   col_player: Spieler
   col_chest: Truhe
   col_now: Jetzt
-  col_if_won: Wenn gewonnen
+  col_if_won: Falls gewonnen
   chests_now: "{n} Truhen jetzt"
-  chests_if_won: "{n} wenn gewonnen"
+  chests_if_won: "{n} falls gewonnen"
   named: "{n} benannt"
   still_need_name: "{n} benötigen noch einen Namen"
   reserves_one: "{n} Reserve"
@@ -303,32 +305,34 @@ kings_console:
   loading: Nominierungen werden geladen...
   by_chest: Nach Truhe
   by_alliance: Nach Allianz
-  can_tick: Tippe auf einen Spieler, sobald dessen Truhe im Spiel übergeben wurde. Haken werden für alle gespeichert, und eine abgehakte Truhe bleibt bei diesem Spieler, auch wenn die Listen neu sortiert werden.
-  view_only_signed_out: 'Nur Ansicht. Die Checkliste des Königs kann von {king} R4/R5 und Stewards abgehakt werden: Melde dich mit Discord an (oben rechts).'
-  view_only: 'Nur Ansicht: Die Checkliste wird von {king} R4/R5 und Stewards abgehakt.'
+  can_tick: Markiere einen Spieler, sobald seine Truhe im Spiel vergeben wurde. Haken werden für alle gespeichert, und eine markierte Truhe bleibt bei diesem Spieler, auch wenn Listen neu sortiert werden.
+  view_only_signed_out: 'Nur Ansicht. Die Checkliste des Königs kann von {king} R4/R5 und Verwaltern markiert werden: Melde dich mit Discord an (oben rechts).'
+  view_only: 'Nur Ansicht: Die Checkliste wird von {king} R4/R5 und Verwaltern markiert.'
   kings_alliance: die Allianz des Königs
   load_failed: 'Laden der Nominierungen fehlgeschlagen: {error}'
-  closed: Belohnungen sind geschlossen. Die Listen unten stammen aus der letzten Woche; die nächsten Belohnungen öffnen Freitag gegen 20:00 GT.
+  closed: Belohnungen sind geschlossen. Die folgenden Listen stammen aus der letzten Woche; die nächste Runde öffnet Freitag gegen 20:00 GT.
   hold_title: 'Truhen zurückhalten:'
-  hold: "{title} warte auf das Schlacht-Ergebnis am Samstag vor der Verteilung. Wenn der Krieg gewonnen wird, öffnen sich die Belohnungstruhen des Schlachtkönigs und jede Liste wird neu sortiert. Belohnungen schließen am {when}."
+  hold: "{title} warte auf das Kampfergebnis vom Samstag vor der Vergabe. Falls der Krieg gewonnen wurde, öffnen sich die „König der Schlacht“-Truhen und jede Liste wird neu sortiert. Belohnungen schließen {when}."
   won_title: 'Königreichskrieg gewonnen:'
-  won: "{title} verteile beide Sets. Belohnungen schließen am {when} (Mittwoch 00:00 GT)."
+  won: "{title} verteile beide Sets. Belohnungen schließen {when} (Mittwoch 00:00 GT)."
   week_title: "{week} Belohnungen:"
-  week: "{title} verteile die Anerkennung des Königs. Belohnungen schließen am {when} (Mittwoch 00:00 GT)."
-  buyout_title: 'Kriegsentschädigung aktiv:'
-  buyout_one: "{title} {tags} enthält Bonus-Plätze für den Willen des Kommandanten, finanziert aus WLOs Zuteilung für Rang #1."
-  buyout_other: "{title} {tags} enthalten Bonus-Plätze für den Willen des Kommandanten, finanziert aus WLOs Zuteilung für Rang #1."
+  week: "{title} verteile die Belobigung des Königs. Belohnungen schließen {when} (Mittwoch 00:00 GT)."
+  buyout_title: 'Kriegszeit-Entschädigung aktiv:'
+  buyout_one: "{title} {tags} enthält zusätzliche Plätze für den Willen des Kommandanten, finanziert aus der Zuteilung von Rang Nr. 1 von WLO."
+  buyout_other: "{title} {tags} enthalten zusätzliche Plätze für den Willen des Kommandanten, finanziert aus der Zuteilung von Rang Nr. 1 von WLO."
   no_nominations: Noch keine Nominierungen eingereicht.
-  no_entries: 0 Empfänger-Einträge
+  no_entries: 0 Empfängereinträge
   progress: 'Fortschritt: {sent} / {total} verteilt'
   alliance_heading: "[{tag}] • Rang {rank} ({n})"
-  ticked_by: Verteilt (gesperrt) · abgehakt von {name} · {when}
-  buyout_badge: BUYOUT
+  was_named: gelistet als {name}
+  left_alliance: Nicht mehr in [{tag}]
+  ticked_by: Vergeben (gesperrt) · markiert von {name} · {when}
+  buyout_badge: AUSKAUF
   pool_reg: REG
   pool_kw: KW
   copy_prompt: 'Empfängername kopieren:'
-  not_on_list: "{name} steht nicht mehr auf der Liste von [{tag}] (die Allianz hat sie geändert)."
-  now_reserve: "{name} ist jetzt eine Reserve auf der Liste von [{tag}]: keine Truhe."
+  not_on_list: "{name} ist nicht mehr auf der Liste von [{tag}] (die Allianz hat sie geändert)."
+  now_reserve: "{name} ist jetzt Reserve auf der Liste von [{tag}]: keine Truhe."
   now_other_chest: "{name} erhält jetzt {chest}, nicht {shown}."
   stop_warning: 'Stopp: Sende diese {chest} nicht. {why} Die Listen wurden aktualisiert: Kopiere den Namen erneut aus der Liste unten.'
   stop_alert: Nicht senden!

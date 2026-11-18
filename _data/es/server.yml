@@ -55,9 +55,12 @@ api_nominate:
   signed_out: Inicia sesión con Discord (arriba a la derecha) para marcar cofres.
   invalid_chest: Cofre no válido.
   no_period: No hay ningún periodo de recompensa abierto en este momento.
-  king_only: Solo la alianza del Rey (R4/R5) y los Delegados pueden marcar cofres.
-  king_only_tag: Solo la alianza del Rey [{king}] (R4/R5) y los Delegados pueden marcar cofres.
+  king_only: Solo la alianza del Rey (R4/R5) y los Administradores pueden marcar cofres.
+  king_only_tag: Solo la alianza del Rey [{king}] (R4/R5) y los Administradores pueden marcar cofres.
   not_listed: "{name} ya no está en la lista de [{alliance}]. Refresca la página."
+  id_not_found: Ningún miembro de [{alliance}] tiene el ID de jugador {id}. Comprueba el número o escribe el nombre.
+  ids_unavailable: Los IDs de jugador no se pueden buscar ahora mismo ({id}). Escribe el nombre en su lugar.
+  listed_twice: "{name} está en la lista dos veces."
   save_failed: 'No se pudo guardar: {reason}'
 api_register:
   guild_id_format: Formato de ID de servidor de Discord no válido.

@@ -258,79 +258,83 @@ charts:
 nominate:
   page_title: Ödül Adaylıkları
   name_ok: "[{tag}] üye listesinde"
-  name_spelling: Oyunda {name} olarak yazılı
+  name_spelling: Oyunda {name} olarak yazılıyor
   name_unknown: "[{tag}] üye listesinde değil"
-  names_spelling_one: '1 isim oyunda farklı yazılmış:'
-  names_spelling_other: "{n} isim oyunda farklı yazılmış:"
+  names_spelling_one: '1 isim oyunda farklı yazılıyor:'
+  names_spelling_other: "{n} isim oyunda farklı yazılıyor:"
   use_game_spellings: Oyun içi yazımları kullan
-  names_unknown_one: '1 isim [{tag}] üye listesinde yok. Yine de kaydedilecek; doğru olduğundan emin olun:'
-  names_unknown_other: "{n} isim [{tag}] üye listesinde yok. Yine de kaydedilecek; doğru olduklarından emin olun:"
-  did_you_mean: şunu mu demek istediniz
+  names_unknown_one: '1 isim [{tag}] üye listesinde değil. Yine de kaydedilecek; doğru olduğundan emin olun:'
+  names_unknown_other: "{n} isim [{tag}] üye listesinde değil. Yine de kaydedilecek; doğru olduklarından emin olun:"
+  did_you_mean: şunu mu kastettiniz
   loading: Adaylık sayfası yükleniyor...
-  players_label: Oyuncularınız, en iyisi en başta
-  players_help: Her satıra bir isim (veya virgülle ayırarak), en iyi oyuncunuz en başta olacak şekilde yazın. Sandıklar, her iki sette de değer sırasına göre aşağıya doğru dağıtılır; sandık sayısını aşan isimler yedek olarak tutulur ve daha fazla sandık açılırsa listeye dahil edilirler.
-  players_placeholder: Tam oyun içi isimler, en iyisi en başta...
-  who_gets_what: Kim ne alacak
+  players_label: Oyuncularınız, en iyiden başlayarak
+  players_help: Her satıra bir isim veya oyuncu kimliği (ya da virgülle ayrılmış şekilde), en iyi oyuncunuzu en başa gelecek şekilde yazın. Sandıklar, değer sırasına göre her iki sette de listeyi aşağıya doğru takip eder; sandıkların ötesindeki isimler yedek olarak tutulur ve daha fazla sandık açılırsa üst sıralara geçerler.
+  players_placeholder: Tam oyun içi isimler veya oyuncu kimlikleri, en iyisi en başta...
+  id_found: "{id} oyuncu kimliği olarak yazıldı"
+  id_unknown: "[{tag}] içinde {id} kimliğine sahip üye yok"
+  who_gets_what: Kime ne verilecek
   save: Listeyi Kaydet
   saving: Kaydediliyor...
   link_incomplete: Bu bağlantı eksik. Yeni bir tane için Discord'da /nominate komutunu çalıştırın.
   load_failed: "{error} Yeni bir bağlantı için Discord'da /nominate komutunu çalıştırın."
-  closed: Ödüller kapalı. Bir sonraki açılış {when}, Cuma günü başkent etkinliğinden sonra.
+  closed: Ödüller kapalı. Bir sonraki açılış {when}, Cuma günkü başkent etkinliğinden sonra.
   header: Sıra {rank} · {week} ödülleri · {when} tarihine kadar açık
-  banner_off_week: Bu hafta sadece Kralın Takdir Ödülü var (Krallık Savaşı yok).
+  banner_off_week: Bu hafta sadece Kral'ın Takdir Belgesi var (Krallık Savaşı yok).
   banner_won: 'Krallık Savaşı kazanıldı: Savaş Kralı Ödül sandıkları da açık.'
-  banner_lost: 'Krallık Savaşı kaybedildi: Bu hafta sadece Kralın Takdir Ödülü var.'
-  banner_pending: Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Eğer kazanılırsa, Savaş Kralı Ödül sandıkları açılacak ve listeniz yeniden sıralanacaktır. Kral ödülleri sonuçtan sonra dağıttığı için kimsenin sandığı değişmez.
+  banner_lost: 'Krallık Savaşı kaybedildi: Bu hafta sadece Kral''ın Takdir Belgesi var.'
+  banner_pending: Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Kazanılırsa Savaş Kralı Ödül sandıkları da açılır ve listeniz yeniden sıralanır. Kral dağıtımı sonuçtan sonra yaptığı için kimsenin sandığı değişmez.
   handed_out_title: "✓ Kral tarafından çoktan dağıtıldı ({n})"
-  handed_out_help: Bu sandıklar oyun içinde verildiği için listeniz ne derse desin bu oyuncularda kalır. Aşağıdaki liste kalanları paylaştırır.
+  handed_out_help: Bu sandıklar oyun içinde verildiği için, listeniz ne derse desin bu oyuncularda kalırlar. Aşağıdaki liste geri kalanları paylaştırır.
   reserve: Yedek
   col_player: Oyuncu
   col_chest: Sandık
   col_now: Şimdi
   col_if_won: Kazanılırsa
-  chests_now: Şu an {n} sandık
+  chests_now: Şimdi {n} sandık
   chests_if_won: Kazanılırsa {n}
-  named: "{n} isim belirlendi"
-  still_need_name: "{n} isme daha ihtiyaç var"
+  named: "{n} isimlendirildi"
+  still_need_name: "{n} isme hala ihtiyaç var"
   reserves_one: "{n} yedek"
   reserves_other: "{n} yedek"
   listed_twice: "{name} iki kez listelenmiş"
   saved: Kaydedildi. Kral listenizi görüyor. {when} tarihine kadar değiştirebilirsiniz.
   save_failed: 'Kaydedilemedi: {error}'
 kings_console:
-  page_title: Kralın Dağıtım Konsolu
-  title: Kralın Dağıtım Konsolu
+  page_title: Kral'ın Dağıtım Konsolu
+  title: Kral'ın Dağıtım Konsolu
   loading: Adaylıklar yükleniyor...
   by_chest: Sandığa Göre
   by_alliance: İttifaka Göre
-  can_tick: Sandıkları oyun içinde dağıtıldığında oyuncuya dokunarak işaretleyin. İşaretler herkes için kaydedilir ve listeler yeniden sıralanırsa işaretli sandık o oyuncuda kalır.
-  view_only_signed_out: 'Sadece görüntüleme. Kralın kontrol listesi {king} R4/R5 ve Kâhyalar tarafından işaretlenebilir: Discord ile giriş yapın (sağ üst).'
-  view_only: 'Sadece görüntüleme: kontrol listesi {king} R4/R5 ve Kâhyalar tarafından işaretlenir.'
-  kings_alliance: Kralın ittifakı
+  can_tick: Sandık oyun içinde teslim edildikten sonra oyuncunun yanındaki kutucuğa tıklayın. İşaretler herkes için kaydedilir ve listeler yeniden sıralanırsa işaretlenmiş bir sandık o oyuncuda kalır.
+  view_only_signed_out: 'Sadece görüntüleme. Kral''ın kontrol listesi {king} R4/R5 ve Yetkililer tarafından işaretlenebilir: Discord ile giriş yapın (sağ üst).'
+  view_only: 'Sadece görüntüleme: kontrol listesi {king} R4/R5 ve Yetkililer tarafından işaretlenir.'
+  kings_alliance: Kral'ın ittifakı
   load_failed: 'Adaylıklar yüklenemedi: {error}'
-  closed: Ödüller kapalı. Aşağıdaki listeler son haftaya aittir; bir sonraki ödüller Cuma günü yaklaşık 20:00 GT'de açılır.
-  hold_title: 'Sandıkları beklet:'
-  hold: "{title}, dağıtım yapmadan önce Cumartesi günkü savaş sonucunu bekler. Savaş kazanılırsa, Savaşın Kralı Ödül sandıkları açılır ve her liste yeniden sıralanır. Ödüller {when} tarihinde kapanır."
-  won_title: 'Kingdom War kazanıldı:'
-  won: "{title} her iki seti de dağıtır. Ödüller {when} tarihinde kapanır (Çarşamba 00:00 GT)."
+  closed: Ödüller kapalı. Aşağıdaki listeler geçen haftadan kalmadır; bir sonraki ödüller Cuma günü yaklaşık 20:00 GT'de açılır.
+  hold_title: 'Sandıkları tutun:'
+  hold: "{title} dağıtımı yapmadan önce Cumartesi günkü savaş sonucunu bekleyin. Savaş kazanılırsa, Savaş Kralı Ödül sandıkları açılır ve her liste yeniden sıralanır. Ödüller {when} tarihinde kapanır."
+  won_title: 'Krallık Savaşı kazanıldı:'
+  won: "{title} her iki seti de dağıtın. Ödüller {when} (Çarşamba 00:00 GT) tarihinde kapanır."
   week_title: "{week} ödülleri:"
-  week: "{title} Kraliyet Takdirnamesini dağıtır. Ödüller {when} tarihinde kapanır (Çarşamba 00:00 GT)."
+  week: "{title} Kral'ın Takdir Belgesi'ni dağıtın. Ödüller {when} (Çarşamba 00:00 GT) tarihinde kapanır."
   buyout_title: 'Savaş Zamanı Tazminatı Aktif:'
-  buyout_one: "{title} {tags}, WLO'nun 1. Sıra tahsisinden finanse edilen bonus Komutanın İradesi yuvaları içerir."
-  buyout_other: "{title} {tags}, WLO'nun 1. Sıra tahsisinden finanse edilen bonus Komutanın İradesi yuvaları içerir."
-  no_nominations: Henüz aday gösterilmedi.
+  buyout_one: "{title} {tags}, WLO'nun 1. Sıra tahsisinden finanse edilen bonus Komutanın İradesi yuvalarını içerir."
+  buyout_other: "{title} {tags}, WLO'nun 1. Sıra tahsisinden finanse edilen bonus Komutanın İradesi yuvalarını içerir."
+  no_nominations: Henüz adaylık gönderilmedi.
   no_entries: 0 Alıcı Girişi
   progress: 'İlerleme: {sent} / {total} Dağıtıldı'
   alliance_heading: "[{tag}] • Sıra {rank} ({n})"
-  ticked_by: Dağıtıldı (kilitli) · {name} tarafından işaretlendi · {when}
-  buyout_badge: SATIN ALMA
+  was_named: "{name} olarak listelendi"
+  left_alliance: Artık [{tag}] içinde değil
+  ticked_by: Teslim edildi (kilitli) · {name} tarafından işaretlendi · {when}
+  buyout_badge: SATIN ALIM
   pool_reg: REG
   pool_kw: KW
-  copy_prompt: 'Alıcı ismini kopyala:'
-  not_on_list: "{name}, [{tag}] listesinde artık yok (ittifak değiştirdi)."
-  now_reserve: "{name}, şu an [{tag}] listesinde yedek: sandık yok."
+  copy_prompt: 'Alıcı adını kopyala:'
+  not_on_list: "{name} artık [{tag}] listesinde değil (ittifak değiştirdi)."
+  now_reserve: "{name} artık [{tag}] listesinde yedek: sandık yok."
   now_other_chest: "{name} artık {shown} değil, {chest} alıyor."
-  stop_warning: 'Dur: o {chest} sandığını gönderme. {why} Listeler yenilendi: ismi aşağıdaki listeden tekrar kopyalayın.'
+  stop_warning: 'Dur: o {chest} sandığını göndermeyin. {why} Listeler yenilendi: ismi aşağıdaki listeden tekrar kopyalayın.'
   stop_alert: Gönderme!
   lists_refreshed: Listeler yenilendi.
 register:

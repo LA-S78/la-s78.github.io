@@ -263,26 +263,28 @@ nominate:
   names_spelling_one: '1 nombre se escribe de forma diferente en el juego:'
   names_spelling_other: "{n} nombres se escriben de forma diferente en el juego:"
   use_game_spellings: Usar la escritura del juego
-  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todas formas; comprueba que sea correcto:'
-  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todas formas; comprueba que sean correctos:"
-  did_you_mean: quisiste decir
+  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todos modos; comprueba que sea correcto:'
+  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todos modos; comprueba que sean correctos:"
+  did_you_mean: "¿quisiste decir"
   loading: Cargando página de nominaciones...
-  players_label: Tus jugadores, primero los mejores
-  players_help: Un nombre por línea (o separados por comas), tu mejor jugador primero. Los cofres bajan por la lista en orden de valor en ambos conjuntos; los nombres más allá de los cofres se mantienen como reserva y suben si se abren más cofres.
-  players_placeholder: Nombres exactos del juego, mejor primero...
-  who_gets_what: Quién obtiene qué
+  players_label: Tus jugadores, los mejores primero
+  players_help: Un nombre o ID de jugador por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor en ambos grupos; los nombres más allá de los cofres se mantienen como reservas y subirán de puesto si se abren más cofres.
+  players_placeholder: Nombres exactos del juego o IDs de jugador, los mejores primero...
+  id_found: Escrito como ID de jugador {id}
+  id_unknown: Ningún miembro de [{tag}] tiene el ID {id}
+  who_gets_what: Quién recibe qué
   save: Guardar lista
   saving: Guardando...
   link_incomplete: Este enlace está incompleto. Ejecuta /nominate en Discord para obtener uno nuevo.
   load_failed: "{error} Ejecuta /nominate en Discord para obtener un nuevo enlace."
-  closed: Las recompensas están cerradas. La próxima abre el {when}, después del evento de capitolio del viernes.
-  header: Rango {rank} · recompensas de {week} · abierto hasta el {when}
-  banner_off_week: Solo mención del Rey esta semana (sin Guerra de Reinos).
-  banner_won: 'Guerra de Reinos ganada: los cofres de recompensa del Rey de la Batalla también están abiertos.'
-  banner_lost: 'Guerra de Reinos perdida: solo mención del Rey esta semana.'
-  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de recompensa del Rey de la Batalla también se abrirán y tu lista será reordenada. El Rey reparte después del resultado, por lo que el cofre de nadie cambia.
-  handed_out_title: "✓ Ya entregado por el Rey ({n})"
-  handed_out_help: Estos cofres se entregan en el juego, así que se quedan con estos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
+  closed: Las recompensas están cerradas. La próxima abre {when}, después del evento del capitolio del viernes.
+  header: Rango {rank} · recompensas de {week} · abierto hasta {when}
+  banner_off_week: Solo Condecoración del Rey esta semana (sin Guerra de Reinos).
+  banner_won: 'Guerra de Reinos ganada: los cofres de Recompensa del Rey de Batalla también están abiertos.'
+  banner_lost: 'Guerra de Reinos perdida: solo Condecoración del Rey esta semana.'
+  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte tras el resultado, así que el cofre de nadie cambia.
+  handed_out_title: "✓ Ya repartido por el Rey ({n})"
+  handed_out_help: Estos cofres se entregan en el juego, así que se quedan con esos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
   reserve: Reserva
   col_player: Jugador
   col_chest: Cofre
@@ -290,47 +292,49 @@ nominate:
   col_if_won: Si se gana
   chests_now: "{n} cofres ahora"
   chests_if_won: "{n} si se gana"
-  named: "{n} nombrado"
-  still_need_name: "{n} todavía necesita un nombre"
+  named: "{n} nombrados"
+  still_need_name: "{n} aún necesitan un nombre"
   reserves_one: "{n} reserva"
   reserves_other: "{n} reservas"
   listed_twice: "{name} está listado dos veces"
-  saved: Guardado. El Rey ve tu lista. Puedes cambiarla hasta el {when}.
+  saved: Guardado. El Rey ve tu lista. Puedes cambiarla hasta {when}.
   save_failed: 'No se pudo guardar: {error}'
 kings_console:
   page_title: Consola de Distribución del Rey
   title: Consola de Distribución del Rey
   loading: Cargando nominaciones...
-  by_chest: Por Cofre
-  by_alliance: Por Alianza
-  can_tick: Marca a un jugador una vez que su cofre sea entregado en el juego. Las marcas se guardan para todos, y un cofre marcado permanece con ese jugador si las listas se reordenan.
-  view_only_signed_out: 'Solo lectura. La lista de verificación del Rey puede ser marcada por R4/R5 de {king} y Stewards: inicia sesión con Discord (arriba a la derecha).'
-  view_only: 'Solo lectura: la lista de verificación es marcada por R4/R5 de {king} y Stewards.'
+  by_chest: Por cofre
+  by_alliance: Por alianza
+  can_tick: Toca a un jugador una vez que su cofre se entregue en el juego. Las marcas se guardan para todos, y un cofre marcado se queda con ese jugador si las listas se reordenan.
+  view_only_signed_out: 'Solo lectura. La lista de control del Rey puede ser marcada por el R4/R5 y oficiales de {king}: inicia sesión con Discord (arriba a la derecha).'
+  view_only: 'Solo lectura: la lista de control es marcada por el R4/R5 y oficiales de {king}.'
   kings_alliance: la alianza del Rey
-  load_failed: 'Error al cargar nominaciones: {error}'
-  closed: Las recompensas están cerradas. Las listas de abajo son de la última semana; las próximas recompensas se abren el viernes a las 20:00 GT aproximadamente.
+  load_failed: 'Error al cargar las nominaciones: {error}'
+  closed: Las recompensas están cerradas. Las listas de abajo son de la última semana; las próximas recompensas abren el viernes alrededor de las 20:00 GT.
   hold_title: 'Retener los cofres:'
-  hold: "{title} esperar al resultado de la batalla del sábado antes de repartir. Si se gana la guerra, los cofres de Recompensa Rey de la Batalla se abren y cada lista se reordena. Las recompensas cierran el {when}."
+  hold: "{title} espera al resultado de la batalla del sábado antes de repartir. Si se gana la guerra, se abren los cofres de Recompensa del Rey de Batalla y toda lista se reordena. Las recompensas cierran {when}."
   won_title: 'Guerra de Reinos ganada:'
-  won: "{title} repartir ambos conjuntos. Las recompensas cierran el {when} (miércoles 00:00 GT)."
+  won: "{title} reparte ambos grupos. Las recompensas cierran {when} (miércoles 00:00 GT)."
   week_title: 'Recompensas de {week}:'
-  week: "{title} repartir la Condecoración del Rey. Las recompensas cierran el {when} (miércoles 00:00 GT)."
-  buyout_title: 'Restitución en tiempo de guerra activa:'
-  buyout_one: "{title} {tags} incluye espacios adicionales de Voluntad del Comandante financiados por la asignación de Rango #1 de WLO."
-  buyout_other: "{title} {tags} incluyen espacios adicionales de Voluntad del Comandante financiados por la asignación de Rango #1 de WLO."
-  no_nominations: No hay nominaciones enviadas todavía.
-  no_entries: 0 Entradas de Destinatario
-  progress: 'Progreso: {sent} / {total} Distribuido'
+  week: "{title} reparte la Condecoración del Rey. Las recompensas cierran {when} (miércoles 00:00 GT)."
+  buyout_title: 'Restitución de tiempos de guerra activa:'
+  buyout_one: "{title} {tags} incluye espacios extra de Voluntad del Comandante financiados por la cuota del Rango #1 de WLO."
+  buyout_other: "{title} {tags} incluyen espacios extra de Voluntad del Comandante financiados por la cuota del Rango #1 de WLO."
+  no_nominations: Aún no se han enviado nominaciones.
+  no_entries: 0 registros de destinatarios
+  progress: 'Progreso: {sent} / {total} distribuidos'
   alliance_heading: "[{tag}] • Rango {rank} ({n})"
-  ticked_by: Entregado (bloqueado) · marcado por {name} · {when}
-  buyout_badge: BUYOUT
+  was_named: listado como {name}
+  left_alliance: Ya no está en [{tag}]
+  ticked_by: Repartido (bloqueado) · marcado por {name} · {when}
+  buyout_badge: COMPRA
   pool_reg: REG
   pool_kw: KW
   copy_prompt: 'Copiar nombre del destinatario:'
-  not_on_list: "{name} ya no está en la lista de [{tag}] (la alianza lo cambió)."
+  not_on_list: "{name} ya no está en la lista de [{tag}] (la alianza la cambió)."
   now_reserve: "{name} ahora es reserva en la lista de [{tag}]: sin cofre."
-  now_other_chest: "{name} ahora obtiene {chest}, no {shown}."
-  stop_warning: 'Alto: no envíes ese {chest}. {why} Las listas se han actualizado: copia el nombre de nuevo de la lista de abajo.'
+  now_other_chest: "{name} ahora recibe {chest}, no {shown}."
+  stop_warning: 'Detente: no envíes ese {chest}. {why} Las listas se han actualizado: copia el nombre de nuevo desde la lista de abajo.'
   stop_alert: "¡No lo envíes!"
   lists_refreshed: Las listas se han actualizado.
 register:

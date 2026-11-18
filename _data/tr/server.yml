@@ -51,13 +51,16 @@ api_sheets:
   no_table: Bu Dokümanda hiç tablo yok.
 api_nominate:
   link_invalid: Bu bağlantı geçersiz veya süresi dolmuş.
-  token_invalid: Jeton geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
+  token_invalid: Belirteç geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
   signed_out: Sandıkları işaretlemek için Discord ile giriş yapın (sağ üst).
   invalid_chest: Geçersiz sandık.
   no_period: Şu anda açık bir ödül dönemi yok.
-  king_only: Sandıkları yalnızca Kral'ın ittifakı (R4/R5) ve Kahyalar işaretleyebilir.
-  king_only_tag: Sandıkları yalnızca Kral'ın ittifakı [{king}] (R4/R5) ve Kahyalar işaretleyebilir.
-  not_listed: "{name} artık [{alliance}] listesinde değil. Sayfayı yenileyin."
+  king_only: Sadece Kral'ın ittifakı (R4/R5) ve Vekiller sandıkları işaretleyebilir.
+  king_only_tag: Sadece Kral'ın ittifakı [{king}] (R4/R5) ve Vekiller sandıkları işaretleyebilir.
+  not_listed: "{name}, [{alliance}] listesinde artık yok. Sayfayı yenileyin."
+  id_not_found: "[{alliance}] üyelerinden hiçbirinin oyuncu kimliği {id} değil. Numarayı kontrol edin veya ismi yazın."
+  ids_unavailable: Oyuncu kimliklerine şu anda bakılamıyor ({id}). Bunun yerine ismi yazın.
+  listed_twice: "{name} listede iki kez var."
   save_failed: 'Kaydedilemedi: {reason}'
 api_register:
   guild_id_format: Geçersiz Discord Sunucu Kimliği formatı.

@@ -51,13 +51,16 @@ api_sheets:
   no_table: Quel documento non contiene tabelle.
 api_nominate:
   link_invalid: Questo link non è valido o è scaduto.
-  token_invalid: Il token non è valido o è scaduto. Esegui /nominate di nuovo.
+  token_invalid: Il token non è valido o è scaduto. Esegui di nuovo /nominate.
   signed_out: Accedi con Discord (in alto a destra) per spuntare i forzieri.
   invalid_chest: Forziere non valido.
-  no_period: Nessun periodo di ricompense è attivo al momento.
+  no_period: Nessun periodo di ricompensa è attualmente aperto.
   king_only: Solo l'alleanza del Re (R4/R5) e gli Steward possono spuntare i forzieri.
   king_only_tag: Solo l'alleanza del Re [{king}] (R4/R5) e gli Steward possono spuntare i forzieri.
-  not_listed: "{name} non è più nell'elenco di [{alliance}]. Aggiorna la pagina."
+  not_listed: "{name} non è più nella lista di [{alliance}]. Aggiorna la pagina."
+  id_not_found: Nessun membro di [{alliance}] ha l'ID giocatore {id}. Controlla il numero o digita il nome.
+  ids_unavailable: Gli ID giocatore non possono essere cercati al momento ({id}). Digita invece il nome.
+  listed_twice: "{name} è presente due volte nella lista."
   save_failed: 'Impossibile salvare: {reason}'
 api_register:
   guild_id_format: Formato ID server Discord non valido.

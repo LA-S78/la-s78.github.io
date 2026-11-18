@@ -256,33 +256,35 @@ charts:
   hint_pie: Tocca o passa sopra una fetta
   hint_progress: Tocca o passa sopra una riga
 nominate:
-  page_title: Nomine Ricompense
+  page_title: Nomine per le Ricompense
   name_ok: Nella lista membri di [{tag}]
   name_spelling: Nel gioco è scritto {name}
   name_unknown: Non nella lista membri di [{tag}]
   names_spelling_one: '1 nome è scritto diversamente nel gioco:'
   names_spelling_other: "{n} nomi sono scritti diversamente nel gioco:"
-  use_game_spellings: Usa lo spelling del gioco
-  names_unknown_one: '1 nome non è nella lista membri di [{tag}]. Sarà comunque salvato; controlla che sia corretto:'
-  names_unknown_other: "{n} nomi non sono nella lista membri di [{tag}]. Saranno comunque salvati; controlla che siano corretti:"
+  use_game_spellings: Usa la grafia del gioco
+  names_unknown_one: '1 nome non è nella lista membri di [{tag}]. Sarà comunque salvato; controlla se è corretto:'
+  names_unknown_other: "{n} nomi non sono nella lista membri di [{tag}]. Saranno comunque salvati; controlla se sono corretti:"
   did_you_mean: intendevi
   loading: Caricamento pagina nomine...
   players_label: I tuoi giocatori, i migliori per primi
-  players_help: Un nome per riga (o separati da virgole), il tuo miglior giocatore per primo. I forzieri seguono la lista in ordine di valore tra entrambi i set; i nomi oltre i forzieri sono tenuti come riserve e avanzano se si aprono più forzieri.
-  players_placeholder: Nomi esatti nel gioco, i migliori per primi...
+  players_help: Un nome o ID giocatore per riga (o separati da virgole), il tuo miglior giocatore per primo. I forzieri scendono lungo la lista in ordine di valore in entrambi i set; i nomi oltre i forzieri vengono tenuti come riserve e avanzano se si aprono più forzieri.
+  players_placeholder: Nomi esatti nel gioco o ID giocatore, migliori per primi...
+  id_found: Digitato come ID giocatore {id}
+  id_unknown: Nessun membro di [{tag}] ha l'ID {id}
   who_gets_what: Chi riceve cosa
   save: Salva Lista
   saving: Salvataggio...
-  link_incomplete: Questo link è incompleto. Esegui /nominate su Discord per averne uno nuovo.
-  load_failed: "{error} Esegui /nominate su Discord per un nuovo link."
-  closed: Le ricompense sono chiuse. Il prossimo {when}, dopo l'evento del capitolio di venerdì.
-  header: Rango {rank} · ricompense {week} · aperte fino al {when}
-  banner_off_week: Solo Commendazione del Re questa settimana (nessuna Guerra tra Regni).
-  banner_won: 'Guerra tra Regni vinta: anche i forzieri Ricompensa Re della Battaglia sono aperti.'
-  banner_lost: 'Guerra tra Regni persa: solo Commendazione del Re questa settimana.'
-  banner_pending: In attesa del risultato della battaglia di sabato (circa {when}). Se vinta, anche i forzieri Ricompensa Re della Battaglia si apriranno e la tua lista verrà riordinata. Il Re distribuisce dopo il risultato, quindi il forziere di nessuno cambia.
-  handed_out_title: "✓ Già distribuito dal Re ({n})"
-  handed_out_help: Questi forzieri sono assegnati nel gioco, quindi rimangono a questi giocatori a prescindere dalla tua lista. La lista qui sotto distribuisce il resto.
+  link_incomplete: Questo link è incompleto. Esegui /nominate in Discord per averne uno nuovo.
+  load_failed: "{error} Esegui /nominate in Discord per averne uno nuovo."
+  closed: Le ricompense sono chiuse. La prossima apertura è {when}, dopo l'evento del Campidoglio di venerdì.
+  header: Grado {rank} · Ricompense {week} · aperte fino a {when}
+  banner_off_week: Questa settimana solo Commenda del Re (niente Guerra tra Regni).
+  banner_won: 'Guerra tra Regni vinta: aperti anche i forzieri Ricompensa Re della Battaglia.'
+  banner_lost: 'Guerra tra Regni persa: questa settimana solo Commenda del Re.'
+  banner_pending: In attesa del risultato della battaglia di sabato (circa {when}). Se vinta, si apriranno anche i forzieri Ricompensa Re della Battaglia e la tua lista verrà riordinata. Il Re distribuisce dopo il risultato, quindi il forziere di nessuno cambia.
+  handed_out_title: "✓ Già distribuiti dal Re ({n})"
+  handed_out_help: Questi forzieri vengono assegnati nel gioco, quindi restano a questi giocatori a prescindere dalla tua lista. La lista sottostante distribuisce il resto.
   reserve: Riserva
   col_player: Giocatore
   col_chest: Forziere
@@ -291,44 +293,46 @@ nominate:
   chests_now: "{n} forzieri ora"
   chests_if_won: "{n} se vinta"
   named: "{n} nominati"
-  still_need_name: "{n} necessitano ancora di un nome"
+  still_need_name: "{n} devono ancora ricevere un nome"
   reserves_one: "{n} riserva"
   reserves_other: "{n} riserve"
   listed_twice: "{name} è elencato due volte"
-  saved: Salvato. Il Re vede la tua lista. Puoi modificarla fino al {when}.
+  saved: Salvato. Il Re può vedere la tua lista. Puoi modificarla fino a {when}.
   save_failed: 'Impossibile salvare: {error}'
 kings_console:
   page_title: Console di Distribuzione del Re
   title: Console di Distribuzione del Re
   loading: Caricamento nomine...
-  by_chest: Per forziere
-  by_alliance: Per alleanza
-  can_tick: Tocca un giocatore una volta che il suo forziere è stato distribuito nel gioco. Le spunte vengono salvate per tutti, e un forziere spuntato rimane a quel giocatore se le liste vengono riordinate.
-  view_only_signed_out: 'Solo visualizzazione. La checklist del Re può essere spuntata da {king} R4/R5 e Steward: accedi con Discord (in alto a destra).'
-  view_only: 'Solo visualizzazione: la checklist è spuntata da {king} R4/R5 e Steward.'
+  by_chest: Per Forziere
+  by_alliance: Per Alleanza
+  can_tick: Tocca un giocatore una volta che il suo forziere è stato consegnato nel gioco. Le spunte vengono salvate per tutti e un forziere spuntato resta a quel giocatore se le liste vengono riordinate.
+  view_only_signed_out: 'Solo visualizzazione. La lista di controllo del Re può essere spuntata da {king} R4/R5 e Steward: accedi con Discord (in alto a destra).'
+  view_only: 'Solo visualizzazione: la lista di controllo viene spuntata da {king} R4/R5 e Steward.'
   kings_alliance: l'alleanza del Re
   load_failed: 'Caricamento nomine fallito: {error}'
-  closed: Le ricompense sono chiuse. Le liste sottostanti sono della scorsa settimana; le prossime ricompense apriranno venerdì verso le 20:00 GT.
-  hold_title: 'Forzieri in attesa:'
-  hold: "{title} attendono il risultato della battaglia di sabato prima della distribuzione. Se la guerra è vinta, i forzieri Ricompensa Re della Battaglia si aprono e ogni lista viene riordinata. Le ricompense chiudono {when}."
+  closed: Le ricompense sono chiuse. Le liste sottostanti sono della scorsa settimana; le prossime ricompense aprono venerdì verso le 20:00 GT.
+  hold_title: 'Tieni i forzieri:'
+  hold: "{title} attendi il risultato della battaglia di sabato prima di distribuire. Se la guerra è vinta, si aprono i forzieri Ricompensa Re della Battaglia e ogni lista viene riordinata. Le ricompense chiudono {when}."
   won_title: 'Guerra tra Regni vinta:'
-  won: "{title} distribuiscono entrambi i set. Le ricompense chiudono {when} (mercoledì 00:00 GT)."
+  won: "{title} distribuisci entrambi i set. Le ricompense chiudono {when} (mercoledì 00:00 GT)."
   week_title: 'Ricompense {week}:'
-  week: "{title} distribuiscono l'Encomio del Re. Le ricompense chiudono {when} (mercoledì 00:00 GT)."
-  buyout_title: 'Restituzione di Guerra Attiva:'
-  buyout_one: "{title} {tags} include slot bonus Volontà del Comandante finanziati dalla quota Rango #1 della WLO."
-  buyout_other: "{title} {tags} includono slot bonus Volontà del Comandante finanziati dalla quota Rango #1 della WLO."
+  week: "{title} distribuisci la Commenda del Re. Le ricompense chiudono {when} (mercoledì 00:00 GT)."
+  buyout_title: 'Restituzione in tempo di guerra attiva:'
+  buyout_one: "{title} {tags} include slot bonus Volontà del Comandante finanziati dalla quota di Grado #1 di WLO."
+  buyout_other: "{title} {tags} includono slot bonus Volontà del Comandante finanziati dalla quota di Grado #1 di WLO."
   no_nominations: Nessuna nomina ancora inviata.
-  no_entries: 0 voci destinatario
-  progress: 'Progresso: {sent} / {total} distribuiti'
-  alliance_heading: "[{tag}] • Rango {rank} ({n})"
-  ticked_by: Distribuito (bloccato) · spuntato da {name} · {when}
+  no_entries: 0 Destinatari Inseriti
+  progress: 'Progresso: {sent} / {total} Distribuiti'
+  alliance_heading: "[{tag}] • Grado {rank} ({n})"
+  was_named: elencato come {name}
+  left_alliance: Non più in [{tag}]
+  ticked_by: Consegnato (bloccato) · spuntato da {name} · {when}
   buyout_badge: BUYOUT
   pool_reg: REG
   pool_kw: KW
-  copy_prompt: 'Copia nome destinatario:'
-  not_on_list: "{name} non è più sulla lista di [{tag}] (l'alleanza l'ha modificata)."
-  now_reserve: "{name} ora è una riserva sulla lista di [{tag}]: nessun forziere."
+  copy_prompt: 'Copia nome del destinatario:'
+  not_on_list: "{name} non è più nella lista di [{tag}] (l'alleanza l'ha modificata)."
+  now_reserve: "{name} ora è una riserva nella lista di [{tag}]: nessun forziere."
   now_other_chest: "{name} ora riceve {chest}, non {shown}."
   stop_warning: 'Stop: non inviare quel {chest}. {why} Le liste sono state aggiornate: copia nuovamente il nome dalla lista sottostante.'
   stop_alert: Non inviarlo!

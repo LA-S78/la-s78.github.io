@@ -54,10 +54,13 @@ api_nominate:
   token_invalid: Token ist ungültig oder abgelaufen. Führe /nominate erneut aus.
   signed_out: Melde dich mit Discord an (oben rechts), um Truhen zu markieren.
   invalid_chest: Ungültige Truhe.
-  no_period: Derzeit ist kein Belohnungszeitraum offen.
+  no_period: Derzeit ist kein Belohnungszeitraum aktiv.
   king_only: Nur die Allianz des Königs (R4/R5) und Stewards können Truhen markieren.
   king_only_tag: Nur die Allianz des Königs [{king}] (R4/R5) und Stewards können Truhen markieren.
-  not_listed: "{name} steht nicht mehr auf der Liste von [{alliance}]. Aktualisiere die Seite."
+  not_listed: "{name} ist nicht mehr auf der Liste von [{alliance}]. Lade die Seite neu."
+  id_not_found: Kein Mitglied von [{alliance}] hat die Spieler-ID {id}. Überprüfe die Nummer oder gib den Namen ein.
+  ids_unavailable: Spieler-IDs können derzeit nicht abgerufen werden ({id}). Gib stattdessen den Namen ein.
+  listed_twice: "{name} steht doppelt auf der Liste."
   save_failed: 'Speichern fehlgeschlagen: {reason}'
 api_register:
   guild_id_format: Ungültiges Discord Guild ID-Format.

@@ -51,14 +51,17 @@ api_sheets:
   no_table: Ce Doc ne contient aucun tableau.
 api_nominate:
   link_invalid: Ce lien est invalide ou a expiré.
-  token_invalid: Le jeton est invalide ou a expiré. Tapez /nominate à nouveau.
+  token_invalid: Le jeton est invalide ou a expiré. Exécutez /nominate à nouveau.
   signed_out: Connectez-vous avec Discord (en haut à droite) pour cocher les coffres.
   invalid_chest: Coffre invalide.
   no_period: Aucune période de récompense n'est ouverte pour le moment.
-  king_only: Seuls l'alliance du Roi (R4/R5) et les intendants peuvent cocher les coffres.
-  king_only_tag: Seuls l'alliance du Roi [{king}] (R4/R5) et les intendants peuvent cocher les coffres.
+  king_only: Seule l'alliance du Roi (R4/R5) et les intendants peuvent cocher les coffres.
+  king_only_tag: Seule l'alliance du Roi [{king}] (R4/R5) et les intendants peuvent cocher les coffres.
   not_listed: "{name} ne figure plus sur la liste de [{alliance}]. Actualisez la page."
-  save_failed: 'Impossible d''enregistrer : {reason}'
+  id_not_found: Aucun membre de [{alliance}] ne possède l'ID joueur {id}. Vérifiez le numéro ou saisissez le nom.
+  ids_unavailable: Les ID joueurs ne peuvent pas être recherchés pour le moment ({id}). Saisissez le nom à la place.
+  listed_twice: "{name} est présent deux fois dans la liste."
+  save_failed: 'Échec de la sauvegarde : {reason}'
 api_register:
   guild_id_format: Format d'ID de serveur Discord invalide.
   token_invalid: Le jeton est invalide ou a expiré. Tapez /registerbot à nouveau sur Discord.
