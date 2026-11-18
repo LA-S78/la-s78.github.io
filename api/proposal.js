@@ -14,6 +14,7 @@ import {
   TEST_PROPOSAL_FIELD,
 } from './_gist.js';
 import { isImageRequest, handleImageRequest } from './_alliance_images.js';
+import { serveGameArt } from './_game_art.js';
 
 const POOL_LIMITS = {
   commanders_will: 5,
@@ -39,10 +40,12 @@ export default function handler(req, res) {
 }
 
 async function respond(req, res) {
-  // Alliance images (api/_alliance_images.js) share this endpoint.
-  if (isImageRequest(req)) {
+  // Alliance images (api/_alliance_images.js) and our copies of the game's frames and
+  // default portraits (api/_game_art.js) share this endpoint.
+  const gameArt = req.method === 'GET' && req.query?.game_art;
+  if (gameArt || isImageRequest(req)) {
     try {
-      const out = await handleImageRequest(req);
+      const out = gameArt ? await serveGameArt(String(gameArt)) : await handleImageRequest(req);
       if (out.image) {
         res.setHeader('Content-Type', out.contentType);
         res.setHeader('Cache-Control', out.cache);

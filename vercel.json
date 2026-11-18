@@ -11,6 +11,10 @@
     {
       "source": "/alliance-images/:file",
       "destination": "/api/proposal?alliance_image=:file"
+    },
+    {
+      "source": "/game-art/:dir/:file",
+      "destination": "/api/proposal?game_art=:dir/:file"
     }
   ],
   "headers": [
