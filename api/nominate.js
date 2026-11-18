@@ -24,7 +24,7 @@ import {
 } from './_nominations.js';
 import { inLanguage, say } from './_messages.js';
 import { sameTag } from './_alliances.js'; // RâvN ≠ RÂVN; RAVN = RÂVN
-import { memberNames } from './_tracker.js';
+import { fetchAlliance, memberPictures } from './_tracker.js';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -52,6 +52,22 @@ async function respond(req, res) {
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');
 
+      // ?pictures=1: the nominated players' pictures for the King's console, loaded after
+      // its list so a slow tracker never holds it up (owner request, 2026-11-18). The same
+      // for everyone and public on the tracker, so Vercel may keep it a few minutes.
+      if (req.query?.pictures) {
+        const tags = Object.keys(nominations || {}).slice(0, 30);
+        const found = await Promise.all(
+          tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000 }).then(memberPictures)),
+        );
+        const pictures = {};
+        tags.forEach((tag, i) => {
+          if (found[i]) pictures[tag] = found[i];
+        });
+        res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
+        return res.status(200).json({ pictures });
+      }
+
       const lastReset = current ? rewardsData.lastReset || null : period.id;
       if (lastReset) {
         res.setHeader('X-Cycle-Id', Buffer.from(lastReset).toString('hex').slice(0, 12));
@@ -76,6 +92,7 @@ async function respond(req, res) {
         if (!payload) return res.status(403).json({ error: say('api_nominate.link_invalid') });
         const tag = String(payload.alliance || '').trim();
         const now = getAllianceNominationQuota(tag, view, mapState);
+        const tracker = await fetchAlliance(tag, { timeoutMs: 2500 });
         body.alliance = {
           tag,
           rank: now.rank,
@@ -89,9 +106,11 @@ async function respond(req, res) {
           handedOut: current
             ? handedOutFor(rewardsData, tag).map(({ pool, chest, name }) => ({ pool, chest, name }))
             : [],
-          // The alliance's member names from the Last Asylum Tracker, for the page's name
-          // check (js/name-check.js); null without the tracker or when it's slow
-          members: await memberNames(tag, { timeoutMs: 2500 }),
+          // The alliance's member names and pictures from the Last Asylum Tracker, for the
+          // page's name check (js/name-check.js) and portraits; null without the tracker or
+          // when it's slow
+          members: tracker ? tracker.members.map((m) => m.name) : null,
+          pictures: memberPictures(tracker),
         };
       }
       return res.status(200).json(body);

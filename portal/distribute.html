@@ -31,7 +31,11 @@ strings: [kings_console]
   <div id="checklist-note" class="sub-text distribute-checklist-note"></div>
 
   <div id="roster-container"></div>
+  <p class="tracker-credit" id="tracker-credit" hidden>{% include ui-icon.html name="users" %}{{ "roster.credit_before" | t }} <a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a></p>
 </div>
+
+<script type="module" src="/js/name-check.js"></script>
+<script type="module" src="/js/player-portrait.js"></script>
 
 <script>
   (function () {
@@ -109,6 +113,7 @@ strings: [kings_console]
           handedOut = data.handed_out || {};
           king = data.king || null;
           render();
+          if (Object.keys(nominationsData).length) loadPictures();
         } catch (err) {
           elRoster.innerHTML = `<div class="status-banner warning">
             ${escapeHtml(t('kings_console.load_failed', { error: err.message }))}
@@ -346,6 +351,32 @@ strings: [kings_console]
       el.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
 
+    // Players' pictures from the Last Asylum Tracker (owner request, 2026-11-18):
+    // { TAG: { name: { avatar, frame } } }, loaded after the list so it never waits for them
+    let pictures = null;
+    let picturesAsked = false;
+    // (an alliance the tracker didn't find shows initials, so the names stay lined up)
+    const face = (item) =>
+      pictures && window.PlayerPortrait
+        ? window.PlayerPortrait.portraitFor(item.ign, pictures[item.alliance] || {}, 'sm')
+        : '';
+
+    async function loadPictures() {
+      if (picturesAsked) return;
+      picturesAsked = true;
+      try {
+        const res = await fetch('/api/nominate?pictures=1');
+        if (!res.ok) return;
+        const found = (await res.json()).pictures || {};
+        if (!Object.keys(found).length) return;
+        pictures = found;
+        document.getElementById('tracker-credit').hidden = false;
+        render();
+      } catch {
+        // No pictures: the names show as before
+      }
+    }
+
     function renderRow(item, glyph) {
       const key = keyOf(item);
       const tick = handedOut[key];
@@ -363,7 +394,7 @@ strings: [kings_console]
             ${escapeHtml(t(isKW ? 'kings_console.pool_kw' : 'kings_console.pool_reg'))}
           </span>
           ${item.isBuyout ? `<span class="badge badge-buyout">${escapeHtml(t('kings_console.buyout_badge'))}</span>` : ''}
-          <span class="player-ign">${escapeHtml(item.ign)}</span>
+          <span class="player-ign">${face(item)}${escapeHtml(item.ign)}</span>
           <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">${escapeHtml(t('common.copy'))}</button>
         </div>
       `;

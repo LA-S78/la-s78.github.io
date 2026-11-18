@@ -17,7 +17,7 @@ import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { sanitizeAlliances } from './_alliances.js';
-import { fetchAlliance } from './_tracker.js';
+import { fetchAlliance, memberPictures } from './_tracker.js';
 import { imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
@@ -113,17 +113,22 @@ async function respond(req, res) {
   // The roster view (owner request, 2026-11-18): the alliance's members from the Last Asylum
   // Tracker, for leaders always and for members when leaders switch it on. One lookup serves
   // the roster and the leaders' name checks; null without the tracker or when it's slow.
-  const settings = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag).settings;
-  const membersMayView = Boolean(settings.rosterMembersCanView);
-  if (access.leader || membersMayView) {
+  const saved = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag);
+  const membersMayView = Boolean(saved.settings.rosterMembersCanView);
+  // The Caravan Rotor shows players' pictures too (step 2), for whoever can see it
+  const caravanShown = Boolean(body.dashboard.caravan);
+  if (access.leader || membersMayView || caravanShown) {
     const live = await fetchAlliance(tag, { timeoutMs: 2500 });
-    body.roster = {
-      membersCanView: membersMayView,
-      members: live ? live.members : null,
-      power: live ? live.power : null,
-      ageSeconds: live ? live.ageSeconds : null,
-    };
+    if (access.leader || membersMayView) {
+      body.roster = {
+        membersCanView: membersMayView,
+        members: live ? live.members : null,
+        power: live ? live.power : null,
+        ageSeconds: live ? live.ageSeconds : null,
+      };
+    }
     if (access.leader) body.members = live ? live.members.map((m) => m.name) : null;
+    if (caravanShown) body.pictures = memberPictures(live);
   }
 
   if (access.leader) {

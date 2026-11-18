@@ -109,6 +109,20 @@ export async function fetchAlliance(
   }
 }
 
+/**
+ * Members' pictures by name, for pages that show players by the name a leader typed (Caravan
+ * Rotor, nomination list, King's console): { name: { avatar, frame } }. Members with neither
+ * are left out; the page shows their initial.
+ */
+export function memberPictures(alliance) {
+  if (!alliance) return null;
+  const out = {};
+  for (const m of alliance.members) {
+    if (m.avatar || m.frame) out[m.name] = { avatar: m.avatar, frame: m.frame };
+  }
+  return out;
+}
+
 /** Just the member names of an alliance (for the name checks), or null. */
 export async function memberNames(tag, options) {
   const a = await fetchAlliance(tag, options);
