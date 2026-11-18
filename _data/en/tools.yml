@@ -288,8 +288,11 @@ nominate:
   did_you_mean: "did you mean"
   loading: "Loading nomination page..."
   players_label: "Your players, best first"
-  players_help: "One name per line (or separated by commas), your best player first. Chests go down the list in order of value across both sets; names beyond the chests are kept as reserves and move up if more chests open."
-  players_placeholder: "Exact in-game names, best first..."
+  players_help: "One name or player ID per line (or separated by commas), your best player first. Chests go down the list in order of value across both sets; names beyond the chests are kept as reserves and move up if more chests open."
+  players_placeholder: "Exact in-game names or player IDs, best first..."
+  # Player IDs typed in the list (matched to the alliance's members)
+  id_found: "Typed as player ID {id}"
+  id_unknown: "No member of [{tag}] has the ID {id}"
   who_gets_what: "Who gets what"
   save: "Save List"
   saving: "Saving..."
@@ -343,6 +346,9 @@ kings_console:
   no_entries: "0 Recipient Entries"
   progress: "Progress: {sent} / {total} Distributed"
   alliance_heading: "[{tag}] • Rank {rank} ({n})"
+  # Players found by their ID (Last Asylum Tracker): renamed since the list, or gone
+  was_named: "listed as {name}"
+  left_alliance: "Not in [{tag}] any more"
   ticked_by: "Handed out (locked) · ticked by {name} · {when}"
   buyout_badge: "BUYOUT"
   pool_reg: "REG"

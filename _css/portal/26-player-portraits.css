@@ -92,6 +92,14 @@ main .player-portrait img.pf-pic:only-child {
   }
 }
 
+/* A renamed player's name as listed (King's console) */
+.name-was {
+  margin-left: 4px;
+  font-size: 0.72em;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
 /* "Player data from the Last Asylum Tracker", wherever its data shows */
 .tracker-credit {
   display: flex;

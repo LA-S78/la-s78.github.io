@@ -99,12 +99,31 @@ strings: [nominate, roster]
       return left;
     }
 
+    // Player IDs (owner request, 2026-11-18): a line may be a player ID; with the alliance's
+    // member list (data.alliance.players, { uid: name }) it shows as that player's name, and
+    // the server saves it so (api/_nominations.js resolvePlayers).
+    const looksLikeId = (s) => /^\d{5,12}$/.test(s);
+
+    /** One typed line: { name, id } (id: the player ID it was typed as), or null if empty. */
+    function resolveLine(raw) {
+      const typed = raw.trim();
+      if (!typed) return null;
+      const players = data && data.alliance.players;
+      if (players && looksLikeId(typed) && players[typed] && !Object.values(players).includes(typed)) {
+        return { name: players[typed], id: typed };
+      }
+      return { name: typed, id: null };
+    }
+
+    function linesFromInput() {
+      return input.value.split(/[\n,]+/).map(resolveLine).filter(Boolean);
+    }
+
     function namesFromInput() {
       const seen = new Set();
       const names = [];
-      for (const raw of input.value.split(/[\n,]+/)) {
-        const name = raw.trim();
-        if (!name || seen.has(name.toLowerCase()) || isLocked(name)) continue;
+      for (const { name } of linesFromInput()) {
+        if (seen.has(name.toLowerCase()) || isLocked(name)) continue;
         seen.add(name.toLowerCase());
         names.push(name);
       }
@@ -114,13 +133,18 @@ strings: [nominate, roster]
     function duplicatesInInput() {
       const seen = new Set();
       const dupes = [];
-      for (const raw of input.value.split(/[\n,]+/)) {
-        const name = raw.trim();
-        if (!name) continue;
+      for (const { name } of linesFromInput()) {
         if (seen.has(name.toLowerCase())) dupes.push(name);
         seen.add(name.toLowerCase());
       }
       return dupes;
+    }
+
+    /** A typed ID that no member has (the server would refuse the list). */
+    function unknownId() {
+      if (!data || !data.alliance.players) return null;
+      const line = linesFromInput().find((l) => !l.id && looksLikeId(l.name) && !Object.values(data.alliance.players).includes(l.name));
+      return line ? line.name : null;
     }
 
     let data = null;
@@ -197,9 +221,14 @@ strings: [nominate, roster]
       let html = `<div class="nominate-assign-row nominate-assign-head">
           <span>#</span><span>${escapeHtml(t('nominate.col_player'))}</span><span>${escapeHtml(t(pending ? 'nominate.col_now' : 'nominate.col_chest'))}</span>${pending ? `<span>${escapeHtml(t('nominate.col_if_won'))}</span>` : ''}
         </div>`;
-      const checks = names.map((n) =>
-        window.NameCheck ? window.NameCheck.checkName(n, data.alliance.members) : null,
-      );
+      const typedIds = new Map(linesFromInput().filter((l) => l.id).map((l) => [l.name, l.id]));
+      const checks = names.map((n) => {
+        // A saved name whose player has since renamed: offered as a spelling fix
+        const uid = (data.alliance.ids || {})[n];
+        const now = uid && data.alliance.players ? data.alliance.players[uid] : null;
+        if (now && now !== n) return { status: 'spelling', match: now };
+        return window.NameCheck ? window.NameCheck.checkName(n, data.alliance.members) : null;
+      });
       const mark = (c) =>
         !c
           ? ''
@@ -210,7 +239,7 @@ strings: [nominate, roster]
         const name = names[i];
         html += `<div class="nominate-assign-row${name ? '' : ' is-empty'}">
           <span class="slot-num">${i + 1}.</span>
-          <span class="player-ign">${name ? face(name) + escapeHtml(name) + mark(checks[i]) : '—'}</span>
+          <span class="player-ign">${name ? face(checks[i] && checks[i].status === 'spelling' ? checks[i].match : name) + escapeHtml(name) + (typedIds.has(name) ? ` <span class="name-mark" title="${escapeHtml(t('nominate.id_found', { id: typedIds.get(name) }))}">${ic('check', 'ok')}</span>` : mark(checks[i])) : '—'}</span>
           <span class="nominate-chest">${cell(now[i])}</span>
           ${pending ? `<span class="nominate-chest">${cell(ifWon[i])}</span>` : ''}
         </div>`;
@@ -233,9 +262,14 @@ strings: [nominate, roster]
         .join(' · ');
 
       const dupes = duplicatesInInput();
+      const badId = unknownId();
       const btn = document.getElementById('btn-submit');
-      btn.disabled = names.length === 0 || dupes.length > 0;
-      btn.textContent = dupes.length ? t('nominate.listed_twice', { name: dupes[0] }) : t('nominate.save');
+      btn.disabled = names.length === 0 || dupes.length > 0 || Boolean(badId);
+      btn.textContent = dupes.length
+        ? t('nominate.listed_twice', { name: dupes[0] })
+        : badId
+          ? t('nominate.id_unknown', { id: badId, tag: data.alliance.tag })
+          : t('nominate.save');
     }
 
     input.addEventListener('input', render);
@@ -252,7 +286,7 @@ strings: [nominate, roster]
       names.forEach((n, i) => {
         const c = checks[i];
         if (c && c.status === 'spelling') spelling.push([n, c.match]);
-        if (c && c.status === 'unknown') unknown.push([n, c.suggestions]);
+        if (c && c.status === 'unknown' && !looksLikeId(n)) unknown.push([n, c.suggestions]);
       });
       box.hidden = !spelling.length && !unknown.length;
       if (box.hidden) return (box.innerHTML = '');
