@@ -63,6 +63,9 @@ api_nominate:
   king_only: "Only the King's alliance (R4/R5) and Stewards can tick chests."
   king_only_tag: "Only the King's alliance [{king}] (R4/R5) and Stewards can tick chests."
   not_listed: "{name} is no longer on [{alliance}]'s list. Refresh the page."
+  id_not_found: "No member of [{alliance}] has the player ID {id}. Check the number, or type the name."
+  ids_unavailable: "Player IDs can't be looked up right now ({id}). Type the name instead."
+  listed_twice: "{name} is in the list twice."
   save_failed: "Could not save: {reason}"
 
 api_register:

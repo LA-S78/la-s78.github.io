@@ -123,8 +123,33 @@ export function memberPictures(alliance) {
   return out;
 }
 
-/** Just the member names of an alliance (for the name checks), or null. */
-export async function memberNames(tag, options) {
-  const a = await fetchAlliance(tag, options);
-  return a ? a.members.map((m) => m.name) : null;
+/** A name's letters and digits, lower case (as js/name-check.js): "•FENRIR•" = "fenrir". */
+export function foldName(name) {
+  return String(name || '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]/gu, '');
+}
+
+/** Does a typed line look like a player ID rather than a name? (the game's IDs: digits) */
+export const looksLikeId = (typed) => /^\d{5,12}$/.test(String(typed || '').trim());
+
+/**
+ * The member a leader means by what they typed (owner request, 2026-11-18): exactly their
+ * name, else their player ID, else the one member whose name reads the same (letter case,
+ * decorations). null if none, or without a member list.
+ */
+export function findMember(typed, members) {
+  const t = String(typed || '').trim();
+  if (!t || !Array.isArray(members)) return null;
+  const exact = members.find((m) => m.name === t);
+  if (exact) return exact;
+  if (looksLikeId(t)) {
+    const byId = members.find((m) => m.uid === t);
+    if (byId) return byId;
+  }
+  const folded = foldName(t);
+  const same = folded ? members.filter((m) => foldName(m.name) === folded) : [];
+  return same.length === 1 ? same[0] : null;
 }

@@ -18,13 +18,14 @@ import {
 import {
   buildNomination,
   handedOutFor,
+  resolvePlayers,
   handedOutKey,
   kingAlliance,
   reassignAllNominations,
 } from './_nominations.js';
 import { inLanguage, say } from './_messages.js';
 import { sameTag } from './_alliances.js'; // RâvN ≠ RÂVN; RAVN = RÂVN
-import { fetchAlliance, memberPictures } from './_tracker.js';
+import { fetchAlliance, findMember, looksLikeId, memberPictures } from './_tracker.js';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -57,15 +58,17 @@ async function respond(req, res) {
       // for everyone and public on the tracker, so Vercel may keep it a few minutes.
       if (req.query?.pictures) {
         const tags = Object.keys(nominations || {}).slice(0, 30);
-        const found = await Promise.all(
-          tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000 }).then(memberPictures)),
-        );
+        const found = await Promise.all(tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000 })));
         const pictures = {};
+        // Current names by player ID, so a renamed player shows their new name
+        const players = {};
         tags.forEach((tag, i) => {
-          if (found[i]) pictures[tag] = found[i];
+          if (!found[i]) return;
+          pictures[tag] = memberPictures(found[i]);
+          players[tag] = Object.fromEntries(found[i].members.map((m) => [m.uid, m.name]));
         });
         res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
-        return res.status(200).json({ pictures });
+        return res.status(200).json({ pictures, players });
       }
 
       const lastReset = current ? rewardsData.lastReset || null : period.id;
@@ -111,6 +114,10 @@ async function respond(req, res) {
           // when it's slow
           members: tracker ? tracker.members.map((m) => m.name) : null,
           pictures: memberPictures(tracker),
+          // Player IDs: the saved list's ({ name: uid }) and the members' ({ uid: name }),
+          // so officers can type an ID and see who it is
+          ids: nominations[tag]?.ids || {},
+          players: tracker ? Object.fromEntries(tracker.members.map((m) => [m.uid, m.name])) : null,
         };
       }
       return res.status(200).json(body);
@@ -144,9 +151,11 @@ async function respond(req, res) {
   const raw = Array.isArray(req.body.ranked)
     ? req.body.ranked
     : rankedFromSlots(req.body.nominations || {});
-  const { names, error } = cleanRankedList(raw);
+  const { names: typed, error } = cleanRankedList(raw);
   const refuse = (status, message) => ({ refused: { status, error: message } });
   if (error) return res.status(400).json({ error });
+  // Player IDs and names are matched to the alliance's members (one cached lookup)
+  const tracker = await fetchAlliance(tag, { timeoutMs: 3000 });
 
   try {
     // Worked out from the stored data and saved; redone on newer data if another save (e.g.
@@ -168,7 +177,28 @@ async function respond(req, res) {
       }
       if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominationsStore = {};
 
-      const entry = buildNomination(tag, names, rewardsData, mapState, new Date().toISOString());
+      const players = resolvePlayers(
+        typed,
+        tracker ? tracker.members : null,
+        nominationsStore[tag],
+        handedOutFor(rewardsData, tag),
+        { findMember, looksLikeId },
+      );
+      if (players.error) {
+        return refuse(
+          400,
+          say(`api_nominate.${players.error.key}`, { ...players.error.vars, alliance: tag }),
+        );
+      }
+      const { names, ids } = players;
+      const entry = buildNomination(
+        tag,
+        names,
+        rewardsData,
+        mapState,
+        new Date().toISOString(),
+        ids,
+      );
       if (entry.rank > 50) return refuse(400, `[${tag}] has no rank in the standings.`);
       const chests = names.length - entry.reserves.length + entry.unfilled;
       if (chests === 0) return refuse(400, `[${tag}] has no chests this week.`);

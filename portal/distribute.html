@@ -354,11 +354,27 @@ strings: [kings_console]
     // Players' pictures from the Last Asylum Tracker (owner request, 2026-11-18):
     // { TAG: { name: { avatar, frame } } }, loaded after the list so it never waits for them
     let pictures = null;
+    let players = {}; // { TAG: { uid: current name } }
     let picturesAsked = false;
+
+    /**
+     * Who a listed player is now (step 3, owner request 2026-11-18): lists save each player's
+     * ID with their name, so a player who renamed shows their current name (the one to type
+     * in the game), and one who left the alliance is marked. { name, renamed, left }.
+     */
+    function playerNow(item) {
+      const uid = nominationsData[item.alliance]?.ids?.[item.ign];
+      const members = players[item.alliance];
+      if (!uid || !members) return { name: item.ign, renamed: false, left: false };
+      const now = members[uid];
+      if (!now) return { name: item.ign, renamed: false, left: true };
+      return { name: now, renamed: now !== item.ign, left: false };
+    }
+
     // (an alliance the tracker didn't find shows initials, so the names stay lined up)
-    const face = (item) =>
+    const face = (item, name) =>
       pictures && window.PlayerPortrait
-        ? window.PlayerPortrait.portraitFor(item.ign, pictures[item.alliance] || {}, 'sm')
+        ? window.PlayerPortrait.portraitFor(name, pictures[item.alliance] || {}, 'sm')
         : '';
 
     async function loadPictures() {
@@ -367,9 +383,11 @@ strings: [kings_console]
       try {
         const res = await fetch('/api/nominate?pictures=1');
         if (!res.ok) return;
-        const found = (await res.json()).pictures || {};
+        const body = await res.json();
+        const found = body.pictures || {};
         if (!Object.keys(found).length) return;
         pictures = found;
+        players = body.players || {};
         document.getElementById('tracker-credit').hidden = false;
         render();
       } catch {
@@ -382,7 +400,14 @@ strings: [kings_console]
       const tick = handedOut[key];
       const isKW = item.pool === 'KW';
       const when = tick ? new Date(tick.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-      const title = tick ? t('kings_console.ticked_by', { name: tick.by, when }) : '';
+      const now = playerNow(item);
+      const title = tick
+        ? t('kings_console.ticked_by', { name: tick.by, when })
+        : now.left
+          ? t('kings_console.left_alliance', { tag: item.alliance })
+          : now.renamed
+            ? t('kings_console.was_named', { name: item.ign })
+            : '';
 
       return `
         <div class="distribute-item ${tick ? 'sent' : ''} ${item.isBuyout ? 'is-buyout' : ''}" data-key="${escapeHtml(key)}"
@@ -394,8 +419,8 @@ strings: [kings_console]
             ${escapeHtml(t(isKW ? 'kings_console.pool_kw' : 'kings_console.pool_reg'))}
           </span>
           ${item.isBuyout ? `<span class="badge badge-buyout">${escapeHtml(t('kings_console.buyout_badge'))}</span>` : ''}
-          <span class="player-ign">${face(item)}${escapeHtml(item.ign)}</span>
-          <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">${escapeHtml(t('common.copy'))}</button>
+          <span class="player-ign">${face(item, now.name)}${now.left ? `<span class="name-flag" title="${escapeHtml(t('kings_console.left_alliance', { tag: item.alliance }))}">${ic('warning', 'warn')}</span> ` : ''}${escapeHtml(now.name)}${now.renamed ? ` <small class="name-was">${escapeHtml(t('kings_console.was_named', { name: item.ign }))}</small>` : ''}</span>
+          <button type="button" class="copy-btn" data-copy="${escapeHtml(now.name)}">${escapeHtml(t('common.copy'))}</button>
         </div>
       `;
     }
