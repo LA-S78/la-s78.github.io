@@ -49,6 +49,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
 </div>
 
 <script type="module" src="/js/name-check.js"></script>
+<script type="module" src="/js/player-portrait.js"></script>
 <script src="/js/dashboard-widgets.js"></script>
 <script src="/js/alliance-images.js"></script>
 <script>
@@ -473,7 +474,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
             ? ` <span class="name-flag" title="${escapeHtml(check.status === 'spelling' ? t('caravan.name_flag_spelling', { name: check.match }) : t('caravan.name_unknown', { tag: data.alliance.tag }))}">${ic('warning', 'warn')}</span>`
             : '';
         return `<li class="dash-cv-row${p.picked ? ' is-picked' : ''}" data-id="${escapeHtml(p.id)}">
-          <span class="dash-cv-name">${escapeHtml(p.name)}${flag}</span>
+          <span class="dash-cv-name">${window.PlayerPortrait ? window.PlayerPortrait.portraitFor(p.name, data.pictures) : ''}${escapeHtml(p.name)}${flag}</span>
           <span class="dash-cv-when">${pickedText}</span>
           <span class="dash-cv-tools">${tools}</span>
         </li>`;
@@ -502,7 +503,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           <button type="submit" class="dash-btn">${ic('plus')}${escapeHtml(t('caravan.add'))}</button>
         </form>
         <div class="dash-cv-hint dash-small" id="cv-add-hint" aria-live="polite"></div>
-        ${Array.isArray(data.members) ? trackerCredit() : ''}
+        ${Array.isArray(data.members) || data.pictures ? trackerCredit() : ''}
         <div class="dash-muted dash-small">${escapeHtml(t('caravan.times_help'))}</div>
         <div class="dash-error" id="cv-error"></div>
         ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}`;
@@ -536,13 +537,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
      * kinds through; without a picture, the name's first letter.
      */
     function portrait(m, size = 'md') {
-      const pic = m.avatar
-        ? `<img class="pf-pic" src="${escapeHtml(m.avatar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
-        : `<span class="pf-pic pf-initial">${escapeHtml((m.name || '?').trim().charAt(0).toUpperCase())}</span>`;
-      const frame = m.frame
-        ? `<img class="pf-frame" src="${escapeHtml(m.frame)}" alt="" loading="lazy" decoding="async">`
-        : '';
-      return `<span class="player-portrait pf-${size}" aria-hidden="true">${pic}${frame}</span>`;
+      return window.PlayerPortrait ? window.PlayerPortrait.portrait(m, size) : '';
     }
 
     let rosterView = { text: '', sort: 'power' };

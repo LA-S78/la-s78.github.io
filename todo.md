@@ -29,7 +29,7 @@ _Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECI
   - [x] Name checks in the nomination list and the Caravan Rotor: game spellings, unknown names, close matches.
   - [x] Top 4 race: live snapshots 10 minutes before reset on Duel Days 3–5 of Kingdom War Week 1; NAP alliances and academies ranked by their three-day total on the Rules page; results posted to NAP leadership with Apply new ranks / Keep current order buttons for Stewards: applying re-ranks the whole NAP list by total, academies included; seats change at the next cycle.
   - [x] Alliance roster on the dashboard: pictures in frames, rank, ID, Might, Sanctuary level; search and sort; Members can view toggle; tracker credit.
-  - [ ] Pictures in the Caravan Rotor, nomination list and King's console.
+  - [x] Pictures in the Caravan Rotor, nomination list and King's console.
   - [ ] Player IDs in nominations: officers type an ID or a name; the King's console shows the current name and picture.
 
 - [x] **Infographics** (decided 2026-11-12): the designed pictures were replaced by live, translated components. The Capitol Rotation chart is drawn from the calendar; the reward-distribution and territory-map pictures were removed (the rewards card and the live map replace them). Game screenshots in the guides stay as they are (players see the game in their own language).

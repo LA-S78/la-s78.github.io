@@ -46,6 +46,7 @@ strings: [nominate, roster]
 </div>
 
 <script type="module" src="/js/name-check.js"></script>
+<script type="module" src="/js/player-portrait.js"></script>
 <script>
   (function () {
     /** An interface icon (js/ui-icons.js) for the start of a label. */
@@ -161,6 +162,10 @@ strings: [nominate, roster]
       render();
     }
 
+    /** The player's picture from the tracker (js/player-portrait.js), when there is a list. */
+    const face = (name) =>
+      window.PlayerPortrait ? window.PlayerPortrait.portraitFor(name, data.alliance.pictures) : '';
+
     function render() {
       const names = namesFromInput();
       const pending = data.period.kwWeek && data.period.result === 'pending';
@@ -176,7 +181,7 @@ strings: [nominate, roster]
             .map(
               (l) => `<div class="nominate-assign-row is-locked">
                 <span class="slot-num">${ic('lock', 'solo')}</span>
-                <span class="player-ign">${escapeHtml(l.name)}</span>
+                <span class="player-ign">${face(l.name)}${escapeHtml(l.name)}</span>
                 <span class="nominate-chest"><span class="chest-glyph ${GLYPH[l.chest]}"></span><span>${escapeHtml(CHEST_NAMES[l.pool][l.chest])}</span></span>
               </div>`,
             )
@@ -205,14 +210,14 @@ strings: [nominate, roster]
         const name = names[i];
         html += `<div class="nominate-assign-row${name ? '' : ' is-empty'}">
           <span class="slot-num">${i + 1}.</span>
-          <span class="player-ign">${name ? escapeHtml(name) + mark(checks[i]) : '—'}</span>
+          <span class="player-ign">${name ? face(name) + escapeHtml(name) + mark(checks[i]) : '—'}</span>
           <span class="nominate-chest">${cell(now[i])}</span>
           ${pending ? `<span class="nominate-chest">${cell(ifWon[i])}</span>` : ''}
         </div>`;
       }
       document.getElementById('assign-list').innerHTML = html;
       renderNameCheck(names, checks);
-      document.getElementById('tracker-credit').hidden = !Array.isArray(data.alliance.members);
+      document.getElementById('tracker-credit').hidden = !Array.isArray(data.alliance.members) && !data.alliance.pictures;
 
       const open = now.length;
       const missing = Math.max(0, open - names.length);
