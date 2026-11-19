@@ -90,16 +90,17 @@ api_register:
   alert_role_missing: Le rôle d'alerte par défaut ({id}) n'est pas un rôle dans "{server}". Copiez à nouveau son ID, ou laissez vide pour @everyone.
   role_not_found: Aucun rôle dans "{server}" ne correspond à "{role}" pour l'instant ; cela fonctionnera une fois que ce sera le cas.
 api_alliance_images:
-  not_set_up: Les images de l'alliance ne sont pas encore configurées sur le serveur.
-  failed: Une erreur est survenue avec l'image de l'alliance. Veuillez réessayer.
+  frame_png: Un cadre d'avatar doit être un PNG avec un fond transparent (un JPEG masquerait les photos de vos membres).
+  not_set_up: Les images d'alliance ne sont pas encore configurées sur le serveur.
+  failed: Une erreur est survenue avec l'image d'alliance. Veuillez réessayer.
   bad_image: Ce fichier n'est pas une image utilisable par le site. Veuillez utiliser le formulaire de téléchargement.
-  too_big: L'image est trop volumineuse (plus de {kb} Ko). Veuillez utiliser le formulaire de téléchargement qui la compressera.
+  too_big: L'image est trop volumineuse (plus de {kb} Ko). Veuillez utiliser le formulaire de téléchargement pour la compresser.
   wrong_size: L'image doit mesurer exactement {width}×{height} pixels. Veuillez utiliser le formulaire de téléchargement.
-  has_metadata: L'image contient encore des données cachées (comme le lieu de prise de vue). Veuillez utiliser le formulaire de téléchargement qui les supprimera.
-  leaders_only: Seuls les chefs R4 et R5 peuvent envoyer des images d'alliance.
-  own_alliance_only: Vous ne pouvez envoyer des images que pour votre propre alliance.
+  has_metadata: L'image contient toujours des données cachées (comme le lieu de prise de vue). Veuillez utiliser le formulaire de téléchargement pour les supprimer.
+  leaders_only: Seuls les membres R4 et R5 peuvent envoyer des images d'alliance.
+  own_alliance_only: Vous pouvez uniquement envoyer des images pour votre propre alliance.
   unknown_alliance: Cette alliance ne figure pas dans le NAP.
-  daily_limit: 'Limite quotidienne atteinte : {max} images par alliance toutes les 24 heures. Vous pourrez envoyer la prochaine après {when}.'
+  daily_limit: 'Limite quotidienne atteinte : {max} images par alliance toutes les 24 heures. Vous pourrez en envoyer une nouvelle après {when}.'
   post_failed: L'image n'a pas pu être envoyée aux intendants sur Discord. Veuillez réessayer plus tard.
   sent: Envoyé aux intendants pour examen. L'image apparaîtra une fois approuvée.
   stewards_only: Seuls les intendants peuvent examiner les images d'alliance.
@@ -108,7 +109,7 @@ api_alliance_images:
   approved: 'Approuvée : l''image est maintenant en ligne.'
   rejected: 'Rejetée : l''image a été supprimée.'
   remove_not_allowed: Seul le R5 de l'alliance ou un intendant peut supprimer ses images.
-  nothing_to_remove: Il n'y a aucune image à supprimer ici.
+  nothing_to_remove: Aucune image à supprimer.
   removed: Image supprimée.
 api_proposals:
   login_required: Veuillez vous reconnecter avec Discord pour envoyer des propositions.

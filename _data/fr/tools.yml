@@ -838,60 +838,76 @@ ascension:
   missing_day: Jour manquant
   source: Puissance issue du Last Asylum Tracker, mesurée 10 minutes avant la réinitialisation.
 image_review:
-  page_title: Réviser l'image de l'Alliance
+  page_title: Réviser l'image d'alliance
   loading: Chargement de l'image…
-  sign_in_needed: Connectez-vous avec Discord pour réviser cette image. Seuls les Intendants peuvent la voir.
+  sign_in_needed: Connectez-vous avec Discord pour réviser cette image. Seuls les Stewards peuvent la voir.
   sign_in: Se connecter avec Discord
-  stewards_only: Seuls les Intendants peuvent réviser les images d'alliance.
-  no_id: Il manque l'ID de l'image. Ouvrez-la à nouveau depuis le post Discord.
+  stewards_only: Seuls les Stewards peuvent réviser les images d'alliance.
+  no_id: L'ID de l'image est absent de ce lien. Ouvrez-le à nouveau depuis la publication Discord.
   wide: Bannière (Rangs NAP)
   card: Carte (Rotation du Capitole)
+  frame: Cadre d'avatar (autour des photos des membres)
   sent_by: Envoyé par {name}, {when}
   replaces: L'approbation remplace l'image actuelle de l'alliance.
-  checklist: 'Vérifiez avant d''approuver : art original de l''alliance ou du jeu ; pas de marque d''une autre alliance ; rien d''offensant ; pas d''informations personnelles.'
-  reason_label: Raison (facultatif, affichée dans le post Discord si vous rejetez)
+  checklist: 'Vérifier avant d''approuver : art original de l''alliance ou art du jeu ; pas de marquage d''une autre alliance ; rien d''offensant ; aucune information personnelle.'
+  reason_label: Raison (optionnel, affiché dans la publication Discord si vous rejetez)
   approve: Approuver
   reject: Rejeter
   working: Enregistrement…
   decided_approved: Déjà approuvé.
   decided_rejected: Déjà rejeté.
-  decided_replaced: Remplacé par une nouvelle image de l'alliance.
-  decided_expired: 'Expiré : non révisé sous 7 jours.'
-  done_approved: Approuvé. L'image est maintenant en ligne et le post Discord est mis à jour.
-  done_rejected: Rejeté. L'image a été supprimée et le post Discord est mis à jour.
+  decided_replaced: Remplacé par une image plus récente de l'alliance.
+  decided_expired: 'Expiré : non révisé dans les 7 jours.'
+  done_approved: Approuvé. L'image est maintenant en ligne et la publication Discord est mise à jour.
+  done_rejected: Rejeté. L'image a été supprimée et la publication Discord est mise à jour.
 alliance_images:
-  title: Images de l'Alliance
+  title: Images d'alliance
   edit: Modifier les images
-  done: "✓ Modification terminée"
-  help: Ajoutez une image derrière la carte de Rotation du Capitole et la ligne de Rangs NAP. Un Intendant vérifie chaque image avant qu'elle ne soit visible.
-  rules: 'Utilisez l''art de votre alliance ou du jeu : pas de marque d''une autre alliance, rien d''offensant, pas d''informations personnelles.'
+  done: "✓ Terminer l'édition"
+  help: Ajoutez une image derrière la carte de Rotation du Capitole et la ligne des Rangs NAP de votre alliance, ainsi qu'un cadre pour les photos de vos membres. Un Steward vérifie chaque image avant que quiconque ne puisse la voir.
+  rules: 'Utilisez l''art original de votre alliance ou l''art du jeu : pas de marquage d''une autre alliance, rien d''offensant, aucune information personnelle.'
   left_today: "{left} sur {max} images restantes aujourd'hui pour votre alliance."
   not_ready: Le téléchargement d'images n'est pas encore activé.
   card: Carte de Rotation du Capitole
-  wide: Bannière de Rangs NAP
-  none: Aucune image pour le moment
+  wide: Bannière des Rangs NAP
+  frame: Cadre d'avatar d'alliance
+  frame_spec: 'Une bordure dessinée autour des photos de vos membres sur ce site. Créez un PNG carré avec un fond transparent, 380×380 pixels (au moins 190×190) : laissez le carré central transparent (de 72 à 308 pixels, comme les cadres du jeu) et décorez autour, jusqu''aux bords.'
+  use_frame: Utiliser pour nos membres
+  use_frame_on: Affiché autour de la photo de chaque membre sur le site, à la place de leur cadre en jeu.
+  use_frame_off: 'Désactivé : les membres conservent leur cadre en jeu sur le site.'
+  frame_title: Vérifier le cadre d'avatar
+  frame_check_ok: 'Correct : le centre est transparent. Voici à quoi cela ressemblera autour des photos de vos membres.'
+  frame_big: Grand
+  frame_roster: Effectif
+  frame_lists: Listes
+  frame_not_square: Un cadre doit être carré ; cette image fait {width}×{height}.
+  frame_too_small: Cette image fait seulement {width}×{height}. Un cadre nécessite au moins 190×190 pixels (380×380 est idéal).
+  frame_opening: Le centre de cette image n'est pas transparent, il recouvrirait donc les photos de vos membres. Utilisez un PNG avec un carré transparent au milieu (de 72 à 308 pixels à 380×380).
+  frame_empty: 'Cette image est presque entièrement transparente : il n''y a pas de cadre à afficher.'
+  frame_too_big: Ce cadre pèse {kb} Ko une fois enregistré ; le maximum est de 500 Ko. Essayez moins de couleurs ou moins de détails.
+  none: Pas encore d'image
   live: En ligne depuis {when}
-  pending: En attente d'un Intendant depuis {when}
-  rejected: Rejeté {when}
-  rejected_reason: 'Rejeté {when} : « {reason} »'
-  expired: Non révisé à temps ({when}). Envoyez-la à nouveau.
+  pending: En attente d'un Steward depuis {when}
+  rejected: Rejeté le {when}
+  rejected_reason: 'Rejeté le {when} : “{reason}”'
+  expired: Non révisé à temps ({when}). Envoyez-le à nouveau.
   choose: Choisir une image
   replace: Choisir une nouvelle image
-  remove: Retirer
-  confirm_remove: Retirer {slot} ? Elle disparaîtra immédiatement pour tout le monde.
-  crop_title: Positionner {slot}
-  crop_help: Glissez pour déplacer. Pincez, faites défiler ou utilisez le curseur pour zoomer. Seul ce qui est dans le cadre sera envoyé.
+  remove: Supprimer
+  confirm_remove: Supprimer le {slot} ? Il disparaîtra immédiatement pour tout le monde.
+  crop_title: Positionner le {slot}
+  crop_help: Faites glisser pour déplacer. Pincez, faites défiler ou utilisez le curseur pour zoomer. Seul ce qui est à l'intérieur du cadre est envoyé.
   zoom: Zoom
-  preview_title: Apparence finale
+  preview_title: À quoi cela ressemblera
   preview_phone: Téléphone
   preview_desktop: Bureau
   preview_week: Semaine 1 Ven
-  preview_loot: 2 Coffres du Roi
+  preview_loot: 2 Coffres de Roi
   preview_status: NAP Protégé
   send: Envoyer pour révision
-  sending: Envoi…
+  sending: Envoi en cours…
   cancel: Annuler
-  sent: Envoyé. Un Intendant la révisera ; elle apparaîtra une fois approuvée.
-  not_image: Ce fichier n'est pas une image lisible par ce navigateur. Essayez un JPEG ou PNG.
-  too_small: Cette image est assez petite ({width}×{height}) ; elle pourrait être floue. Vous pouvez quand même l'envoyer.
+  sent: Envoyé. Un Steward va le réviser ; il apparaîtra une fois approuvé.
+  not_image: Ce fichier n'est pas une image que ce navigateur peut ouvrir. Essayez un JPEG ou un PNG.
+  too_small: Cette image est assez petite ({width}×{height}) ; elle peut paraître floue. Vous pouvez tout de même l'envoyer.
   load_failed: L'image n'a pas pu être ouverte.

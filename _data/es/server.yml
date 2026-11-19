@@ -90,25 +90,26 @@ api_register:
   alert_role_missing: El rol de alerta predeterminado ({id}) no es un rol en "{server}". Copia su ID de nuevo, o déjalo vacío para @everyone.
   role_not_found: Todavía ningún rol en "{server}" coincide con "{role}"; funcionará cuando exista uno.
 api_alliance_images:
+  frame_png: Un marco de avatar debe ser un PNG con fondo transparente (un JPEG cubriría las imágenes de tus miembros).
   not_set_up: Las imágenes de la alianza aún no están configuradas en el servidor.
-  failed: Algo salió mal con la imagen de la alianza. Inténtalo de nuevo.
+  failed: Algo salió mal con la imagen de la alianza. Por favor, inténtalo de nuevo.
   bad_image: Ese archivo no es una imagen que el sitio pueda usar. Por favor, usa el formulario de carga.
   too_big: La imagen es demasiado grande (más de {kb} KB). Por favor, usa el formulario de carga, que la reduce.
   wrong_size: La imagen debe ser exactamente de {width}×{height} píxeles. Por favor, usa el formulario de carga.
-  has_metadata: La imagen todavía contiene datos ocultos (como dónde se tomó la foto). Por favor, usa el formulario de carga, que los elimina.
+  has_metadata: La imagen aún contiene datos ocultos (como dónde se tomó una foto). Por favor, usa el formulario de carga, que los elimina.
   leaders_only: Solo los líderes R4 y R5 pueden enviar imágenes de la alianza.
   own_alliance_only: Solo puedes enviar imágenes para tu propia alianza.
   unknown_alliance: Esa alianza no está en el NAP.
   daily_limit: 'Límite diario alcanzado: {max} imágenes por alianza cada 24 horas. Puedes enviar la siguiente después de {when}.'
-  post_failed: La imagen no pudo enviarse a los Stewards en Discord. Inténtalo de nuevo más tarde.
-  sent: Enviada a los Stewards para su revisión. Aparecerá una vez aprobada.
-  stewards_only: Solo los Stewards pueden revisar las imágenes de la alianza.
-  not_found: Esa imagen no se encontró. Puede haber caducado.
-  already_decided: Esa imagen ya ha sido revisada (o reemplazada por una más reciente).
-  approved: 'Aprobada: la imagen ya está en vivo.'
-  rejected: 'Rechazada: la imagen fue eliminada.'
-  remove_not_allowed: Solo el R5 de la alianza o un Steward puede eliminar sus imágenes.
-  nothing_to_remove: No hay ninguna imagen ahí para eliminar.
+  post_failed: La imagen no pudo ser enviada a los Administradores en Discord. Por favor, inténtalo de nuevo más tarde.
+  sent: Enviado a los Administradores para su revisión. Aparecerá una vez que sea aprobado.
+  stewards_only: Solo los Administradores pueden revisar las imágenes de la alianza.
+  not_found: Esa imagen no se encontró. Puede haber expirado.
+  already_decided: Esa imagen ya ha sido revisada (o reemplazada por una nueva).
+  approved: 'Aprobado: la imagen ya está activa.'
+  rejected: 'Rechazado: la imagen fue eliminada.'
+  remove_not_allowed: Solo el R5 de la alianza o un Administrador puede eliminar sus imágenes.
+  nothing_to_remove: No hay ninguna imagen allí para eliminar.
   removed: Imagen eliminada.
 api_proposals:
   login_required: Por favor, inicia sesión con Discord de nuevo para enviar propuestas.
