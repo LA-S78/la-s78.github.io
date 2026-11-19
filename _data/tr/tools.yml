@@ -864,42 +864,44 @@ alliance_images:
   title: İttifak görselleri
   edit: Görselleri düzenle
   done: "✓ Düzenleme tamamlandı"
-  help: İttifakınızın Başkent Rotasyon kartının ve NAP Ranks satırının arkasına bir resim ve üyelerinizin resimleri için bir çerçeve ekleyin. Bir Yetkili, başkaları görmeden önce her birini kontrol eder.
-  rules: 'İttifakınızın kendi sanatını veya oyun içi sanatı kullanın: başka bir ittifakın markası, saldırgan içerik veya kişisel bilgiler olmamalıdır.'
-  left_today: İttifakınız için bugün {left} / {max} görsel hakkınız kaldı.
-  not_ready: Görsel yüklemeleri henüz açılmadı.
+  help: İttifakınızın Başkent Rotasyon kartı ve NAP Sıralaması satırının arkasına bir resim ve üyelerinizin resimleri için bir çerçeve ekleyin. Her bir görsel, başkaları görmeden önce bir Yetkili tarafından kontrol edilir.
+  rules: 'İttifakınızın kendi çizimlerini veya oyun içi çizimleri kullanın: başka bir ittifakın markasını, rahatsız edici içerikleri veya kişisel bilgileri kullanmayın.'
+  left_today: Bugün ittifakınız için {left} / {max} görsel hakkı kaldı.
+  not_ready: Görsel yüklemeleri henüz açık değil.
   card: Başkent Rotasyon kartı
-  wide: NAP Ranks başlığı
+  wide: NAP Sıralaması başlığı
   frame: İttifak avatar çerçevesi
-  frame_spec: 'Bu sitede üyelerinizin resimleri etrafına çizilen bir kenarlık. Şeffaf arka plana sahip 380×380 piksellik (en az 190×190) kare bir PNG yapın: orta kareyi (oyunun kendi çerçeveleri gibi 72 ila 308 piksel arası) şeffaf bırakın ve etrafını kenarlara kadar süsleyin. Ortasının üzerinde küçük bir süsleme (örneğin bir çelenk) olabilir.'
+  frame_spec: 'Bu sitede üyelerinizin resimlerinin etrafına çizilen bir kenarlık. Şeffaf arka plana sahip 380×380 piksellik (en az 190×190) kare bir PNG dosyası oluşturun: orta kareyi şeffaf bırakın (oyunun kendi çerçevelerindeki gibi 72 ile 308 piksel arası) ve çevresini kenarlara kadar süsleyin. Ortasının üzerine küçük bir süsleme (örneğin bir çelenk) ekleyebilirsiniz.'
   use_frame: Üyelerimiz için kullan
-  use_frame_on: Sitede her üyenin resminin etrafında, oyun içi çerçevelerinin yerine gösterilir.
-  use_frame_off: 'Kapalı: Üyeler sitede oyun içi çerçevelerini kullanmaya devam eder.'
+  use_frame_on: Sitede her üyenin resminin etrafında, oyun içi çerçevesinin yerine gösterilir.
+  use_frame_off: 'Kapalı: üyeler sitede oyun içi çerçevelerini kullanmaya devam eder.'
   frame_title: Avatar çerçevesini kontrol et
   frame_check_ok: 'Doğru görünüyor: orta kısım şeffaf. Üyelerinizin resimlerinin etrafında bu şekilde görünecek.'
   frame_big: Büyük
   frame_roster: Kadro
   frame_lists: Listeler
-  frame_not_square: Bir çerçeve kare olmalıdır; bu resim {width}×{height} boyutlarında.
-  frame_too_small: Bu resim sadece {width}×{height} boyutlarında. Bir çerçevenin en az 190×190 piksel olması gerekir (380×380 en iyisidir).
-  frame_covers: 'Bu çerçeve, üyelerin resimlerinin göründüğü orta kısmın yaklaşık %{percent}''ini kaplıyor. Eğer amaç buysa (örneğin bir çelenk) sorun değil: göndermeden önce aşağıdaki önizlemeleri kontrol edin.'
-  frame_covers_most: 'Bu çerçeve orta kısmın yaklaşık %{percent}''ini kaplıyor, dolayısıyla her üyenin resminin büyük bir kısmı gizlenecek. Aşağıdaki önizlemeleri kontrol edin: yalnızca istediğiniz buysa gönderin.'
+  frame_not_square: Çerçeve kare olmalıdır; bu resim {width}×{height} boyutlarında.
+  frame_too_small: Bu resim sadece {width}×{height} boyutunda. Çerçeve için en az 190×190 piksel gerekir (380×380 en iyisidir).
+  frame_covers: 'Bu çerçeve orta kısmın yaklaşık %{percent}''ini kaplıyor, yani üyelerin resimlerinin göründüğü alan. Eğer amaç buysa (örneğin bir çelenk ise) sorun değil: göndermeden önce aşağıdaki önizlemeleri kontrol edin.'
+  frame_covers_most: 'Bu çerçeve orta kısmın yaklaşık %{percent}''ini kaplıyor, yani her üyenin resminin çoğu gizlenebilir. Aşağıdaki önizlemeleri kontrol edin: yalnızca istediğiniz buysa gönderin.'
+  frame_not_png: Avatar çerçevesi, şeffaf arka plana sahip bir PNG (veya WebP) olmalıdır. JPEG resimler şeffaf olamaz, bu yüzden üyelerinizin resimlerini kapatırlar.
+  frame_no_transparency: Bu resimde şeffaf kısım yok, bu yüzden üyelerinizin resimlerinin üzerinde düz bir kare olarak görünür. Şeffaf arka planlı bir PNG olarak kaydedin.
   frame_empty: 'Bu resim neredeyse tamamen şeffaf: gösterilecek bir çerçeve yok.'
-  frame_too_big: Bu çerçeve kaydedildiğinde {kb} KB; sınır 500 KB. Daha az renk veya daha az ince detay kullanmayı deneyin.
+  frame_too_big: Bu çerçeve kaydedildiğinde {kb} KB boyutunda; sınır 500 KB'tır. Daha az renk veya daha az ince detay deneyin.
   none: Henüz görsel yok
   live: "{when} tarihinden beri yayında"
-  pending: "{when} tarihinden beri bir Yetkili tarafından incelenmeyi bekliyor"
+  pending: "{when} tarihinden beri Yetkili onayı bekleniyor"
   rejected: "{when} tarihinde reddedildi"
   rejected_reason: "{when} tarihinde reddedildi: “{reason}”"
   expired: Zamanında incelenmedi ({when}). Tekrar gönderin.
-  choose: Bir resim seçin
-  replace: Yeni bir resim seçin
+  choose: Bir resim seç
+  replace: Yeni bir resim seç
   remove: Kaldır
-  confirm_remove: "{slot} öğesini kaldırmak istiyor musunuz? Hemen herkes için kaybolacaktır."
-  crop_title: "{slot} öğesini konumlandırın"
-  crop_help: Taşımak için sürükleyin. Yakınlaştırmak için çimdikleyin, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindeki kısım gönderilir.
+  confirm_remove: "{slot} öğesini kaldırmak istiyor musunuz? Herkes için anında kaybolacaktır."
+  crop_title: "{slot} yerleşimini ayarla"
+  crop_help: Taşımak için sürükleyin. Yakınlaştırmak için sıkıştırın, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindeki kısım gönderilir.
   zoom: Yakınlaştır
-  preview_title: Nasıl görüneceği
+  preview_title: Nasıl görünecek
   preview_phone: Telefon
   preview_desktop: Masaüstü
   preview_week: 1. Hafta Cum
