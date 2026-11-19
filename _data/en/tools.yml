@@ -129,6 +129,14 @@ roster:
   copied: "Copied"
   unavailable: "The member list can't be loaded right now. Try again later."
   credit_before: "Player data from the"
+  # Leaders only: today's alliance research donations and help to members' construction/research
+  sort_tech: "Research"
+  sort_help: "Help"
+  tech_title: "Alliance research donated today"
+  help_title: "Help given to members' construction and research today"
+  daily_as_of: "Research and help since today's reset (00:00 GT), as of {time}"
+  daily_old: "Research and help from before today's reset: last read {time}"
+  daily_unknown: "Research and help: time of reading unknown"
 
 caravan:
   title: "Caravan Rotor"

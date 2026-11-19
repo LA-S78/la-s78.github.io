@@ -545,12 +545,29 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       power: (a, b) => b.power - a.power,
       name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
       rank: (a, b) => (b.rank || '').localeCompare(a.rank || '') || b.power - a.power,
+      // Leaders: today's research donations and help (missing counts last)
+      tech: (a, b) => (b.tech ?? -1) - (a.tech ?? -1) || b.power - a.power,
+      help: (a, b) => (b.help ?? -1) - (a.help ?? -1) || b.power - a.power,
     };
 
     /** Might as players read it: 1.23B, 456.7M */
     function might(n) {
       if (!Number.isFinite(n)) return '—';
       return n >= 1e9 ? `${(n / 1e9).toFixed(2)}B` : `${(n / 1e6).toFixed(1)}M`;
+    }
+
+    /**
+     * How current today's numbers are: they count from the game's daily reset (00:00 GT,
+     * 02:00 UTC), and the tracker's copy of the roster can be hours old.
+     */
+    function dailyNote(takenAt) {
+      const at = Date.parse(takenAt);
+      if (!Number.isFinite(at)) return t('roster.daily_unknown');
+      const now = new Date();
+      let reset = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 2);
+      if (reset > now.getTime()) reset -= 86400000;
+      const time = new Date(at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      return t(at >= reset ? 'roster.daily_as_of' : 'roster.daily_old', { time });
     }
 
     function renderRoster() {
@@ -561,6 +578,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       const leader = isLeader();
       const open = leader ? Boolean(data.dashboard.settings && data.dashboard.settings.rosterMembersCanView) : true;
       const all = r.members || [];
+      // Today's research donations and help: leaders only (the server sends them only to them)
+      const giving = leader && all.some((m) => m.tech !== undefined);
+      if (!giving && (rosterView.sort === 'tech' || rosterView.sort === 'help')) rosterView.sort = 'power';
+      const amount = (n) => (Number.isFinite(n) ? escapeHtml(n.toLocaleString()) : '—');
       const q = rosterView.text.trim().toLowerCase();
       const shown = all
         .filter((m) => !q || m.name.toLowerCase().includes(q) || String(m.uid).includes(q))
@@ -574,9 +595,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           <span class="dash-roster-stats">
             <span class="dash-roster-might">${might(m.power)}</span>
             ${m.level ? `<span class="dash-muted dash-small">${escapeHtml(t('roster.sanctuary_lv', { n: m.level }))}</span>` : ''}
+            ${giving ? `<span class="dash-roster-giving dash-small"><span title="${escapeHtml(t('roster.tech_title'))}">${ic('flask')}${amount(m.tech)}</span><span title="${escapeHtml(t('roster.help_title'))}">${ic('helping')}${amount(m.help)}</span></span>` : ''}
           </span>
         </li>`;
-      const sorts = ['power', 'name', 'rank']
+      const sorts = ['power', 'name', 'rank', ...(giving ? ['tech', 'help'] : [])]
         .map((k) => `<button type="button" class="dash-icon-btn" data-roster-sort="${k}" aria-pressed="${rosterView.sort === k}">${escapeHtml(t(`roster.sort_${k}`))}</button>`)
         .join('');
       el.innerHTML = `
@@ -587,7 +609,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
               <input type="search" id="roster-search" placeholder="${escapeHtml(t('roster.search'))}" value="${escapeHtml(rosterView.text)}" aria-label="${escapeHtml(t('roster.search'))}">
               <span class="dash-roster-sorts" role="group" aria-label="${escapeHtml(t('roster.sort_label'))}">${sorts}</span>
             </div>
-            <ul class="dash-roster-list">${shown.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t('caravan.nobody_matches'))}</li>`}</ul>`
+            <ul class="dash-roster-list">${shown.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t('caravan.nobody_matches'))}</li>`}</ul>
+            ${giving ? `<p class="dash-muted dash-small dash-roster-daily">${ic('clock')}${escapeHtml(dailyNote(r.takenAt))}</p>` : ''}`
           : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>`}
         ${trackerCredit()}`;
       const search = $('roster-search');
