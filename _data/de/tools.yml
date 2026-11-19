@@ -731,6 +731,17 @@ blacklist_planner:
   sent: Blacklist-Vorschlag wurde auf Discord an die Führung gesendet. Er tritt in Kraft, sobald ein Steward ihn genehmigt.
 map_planner:
   view: 'Ansicht:'
+  members_toggle: Meine Mitglieder
+  members_search: Mitglied finden (Name oder ID)...
+  members_loading: Lade deine Mitglieder...
+  members_count: "{n} Mitglieder von [{tag}]"
+  members_as_of: Positionen von {time}
+  members_failed: 'Mitglieder können nicht angezeigt werden: {error}'
+  members_none: Kein Mitglied gefunden
+  members_here: "{n} Mitglieder hier:"
+  member_coords: X {x} · Y {y}
+  member_in: in {place}
+  member_close: Schließen
   tag_ambiguous: "[{tag}] könnte mehr als eine Allianz bedeuten ({options}). Gib den Tag exakt ein, inklusive Großschreibung."
   levels: Level
   alliances: Allianzen
@@ -738,55 +749,55 @@ map_planner:
   buff_summary: Buff-Zusammenfassung
   toggle_buff_summary: Buff-Zusammenfassung umschalten
   close_buff_summary: Buff-Zusammenfassung schließen
-  planner_mode: Planer-Modus
+  planner_mode: Planungsmodus
   override_label: 'Ändern zu:'
   override_placeholder: Z.B. WLO
-  override_help: Gib einen Tag ein, um Klick-Zuweisungen zu überschreiben. Leer lassen, um durchzuschalten.
+  override_help: Gib einen Tag ein, um Zuweisungen zu überschreiben. Leer lassen zum Durchwechseln.
   submit_plan: Plan einreichen
-  compare_label: Plan mit der Live-Karte vergleichen
+  compare_label: Plan mit Live-Karte vergleichen
   show_live: Live
   show_plan: Mein Plan
   discard: Verwerfen
-  discard_confirm: Deine geplanten Änderungen ({n}) verwerfen? Dies kann nicht rückgängig gemacht werden.
-  view_locked: Schalte den Planer-Modus aus, um die Ansicht zu ändern
-  plan_saved: Dein Plan wurde gespeichert ({n} Änderungen). Schalte den Planer-Modus ein, um fortzufahren.
+  discard_confirm: Geplante Änderungen ({n}) verwerfen? Dies kann nicht rückgängig gemacht werden.
+  view_locked: Planungsmodus deaktivieren, um die Ansicht zu ändern
+  plan_saved: Dein Plan wurde gespeichert ({n} Änderungen). Aktiviere den Planungsmodus zum Fortfahren.
   fullscreen: Vollbild
   toggle_fullscreen: Vollbild umschalten
   exit: Beenden
   grain: Getreide
   timber: Holz
   herbs: Kräuter
-  solid_gather: 'Durchgehend: Sammeln'
-  stripe_output: 'Gestreift: Ertrag'
+  solid_gather: 'Solid: Sammeln'
+  stripe_output: 'Stripe: Produktion'
   level_unknown: Level --
   level: Level {n}
-  hover: Fahre mit der Maus über ein Gebiet
+  hover: Über ein Gebiet fahren
   owner: 'Besitzer:'
   unclaimed: Nicht beansprucht
   buff: 'Buff:'
   none: Keiner
   no_active_buff: Kein aktiver Buff
   drawer_title: Allianz-Buff-Verteilung
-  drawer_subtitle: Dynamische Aufstellung basierend auf aktiver Karte / Planer-Zuweisungen
-  no_claims: Derzeit beanspruchen keine Allianzen Gebiete.
+  drawer_subtitle: Dynamische Übersicht basierend auf aktiver Karte / Planungszuweisungen
+  no_claims: Keine Allianz beansprucht aktuell Gebiete.
   no_buffs: Keine aktiven Buffs zugewiesen
   cities_one: "{n} Stadt"
   cities_other: "{n} Städte"
   col_alliance: Allianz
-  col_holdings: Besitzungen
+  col_holdings: Besitztümer
   col_buffs: Aktive Buffs
   buff_research_speed: Forschungsgeschwindigkeit
   buff_troop_training_speed: Truppenausbildungsgeschwindigkeit
   buff_building_speed: Baugeschwindigkeit
   buff_march_speed: Marschgeschwindigkeit
   buff_grain_gathering: Getreidesammeln
-  buff_grain_output: Getreideertrag
+  buff_grain_output: Getreideproduktion
   buff_timber_gathering: Holzsammeln
-  buff_timber_output: Holzertrag
+  buff_timber_output: Holzproduktion
   buff_herb_gathering: Kräutersammeln
-  buff_herb_output: Kräuterertrag
-  no_changes: Keine Änderungen in deinem Planentwurf erkannt.
-  proposal_title: Gebietsvorschlag für die Karte einreichen
+  buff_herb_output: Kräuterproduktion
+  no_changes: Keine Änderungen in deinem Entwurf erkannt.
+  proposal_title: Gebietsvorschlag für Karte einreichen
 proposals:
   title: Vorschlag einreichen
   close: Schließen

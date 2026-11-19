@@ -2,36 +2,38 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  refresh_limit: Keine Roster-Aktualisierungen mehr für heute übrig. Sie beginnen wieder beim täglichen Reset (00:00 GT).
-  refresh_wait: Der Roster wurde vor einem Moment aktualisiert. Versuche es in {n} Min. erneut.
-  refresh_failed: Das Spiel konnte nicht erreicht werden. Versuche es in ein paar Minuten erneut.
-  signed_out: Melde dich mit Discord (oben rechts) an, um dein Allianz-Dashboard zu sehen.
-  load_failed: 'Das Dashboard konnte nicht geladen werden: {reason}'
-  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite findet dies über deine Allianz-Rolle im NAP Discord-Server oder ein [TAG] am Anfang deines Server-Spitznamens. Korrigiere das in Discord und verwende dann „Zugriff aktualisieren“ in deiner Account-Karte (oben rechts).
-  leaders_only: Nur die R4 und R5 deiner Allianz können das Dashboard ändern.
-  chart_removed: Dieses Diagramm wurde entfernt.
-  chart_already_removed: Dieses Diagramm wurde bereits entfernt.
+  positions_leaders_only: Nur R4 und R5 (sowie Stewards) deiner Allianz können Mitglieder auf der Karte sehen.
+  positions_unavailable: Mitgliederpositionen können momentan nicht geladen werden. Versuche es in wenigen Minuten erneut.
+  refresh_limit: Heute sind keine Aktualisierungen der Mitgliederliste mehr möglich. Sie werden zum täglichen Reset (00:00 GT) zurückgesetzt.
+  refresh_wait: Die Mitgliederliste wurde gerade erst aktualisiert. Versuche es in {n} Min. erneut.
+  refresh_failed: Das Spiel war nicht erreichbar. Versuche es in wenigen Minuten erneut.
+  signed_out: Melde dich mit Discord an (oben rechts), um dein Allianz-Dashboard zu sehen.
+  load_failed: 'Dashboard konnte nicht geladen werden: {reason}'
+  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite ermittelt dies über deine Allianz-Rolle im NAP Discord-Server oder durch ein [TAG] am Anfang deines Server-Spitznamens. Korrigiere dies in Discord und verwende dann „Zugriff aktualisieren“ in deiner Benutzerkarte (oben rechts).
+  leaders_only: Nur R4 und R5 deiner Allianz können das Dashboard ändern.
+  chart_removed: Das Diagramm wurde entfernt.
+  chart_already_removed: Das Diagramm wurde bereits entfernt.
   not_linked: Dieses Diagramm ist nicht mit einem Google Sheet oder Doc verknüpft.
   unknown_change: Unbekannte Änderung.
   save_failed: 'Speichern fehlgeschlagen: {reason}'
   r5_only_nominate: Nur dein R5 kann die Nominierungsseite hier öffnen. Nutze /nominate in Discord.
   rewards_closed: Belohnungen sind geschlossen bis {when}.
-  no_rank: "[{tag}] hat keinen Rang in der Rangliste."
+  no_rank: "[{tag}] hat keinen Rang in der Wertung."
   choose_type: Wähle einen Diagramm- oder Tabellentyp.
   title_needed: Gib dem Diagramm oder der Tabelle einen Titel.
   too_many_columns: Maximal {max} Spalten (diese Tabelle hat {count}).
   too_many_rows: Maximal {max} Zeilen (diese Tabelle hat {count}).
   column_name: Spalte {n}
   paste_first: Füge zuerst eine Tabelle ein (eine Kopfzeile, dann die Daten).
-  no_data_rows: Die Tabelle hat keine Datenzeilen unter der Kopfzeile.
-  needs_numbers: Ein Diagramm benötigt eine Spalte mit Zahlen zur Darstellung.
-  needs_target: 'Ein Fortschrittsdiagramm benötigt ein Ziel: eine Zahl oder eine Spalte mit Zielen.'
+  no_data_rows: Die Tabelle enthält unter der Kopfzeile keine Datenzeilen.
+  needs_numbers: Ein Diagramm benötigt eine Zahlenspalte zur Anzeige.
+  needs_target: 'Ein Fortschrittsdiagramm benötigt ein Ziel: eine Zahl oder eine Zielspalte.'
   too_many_widgets: Maximal {max} Diagramme und Tabellen pro Allianz.
   sheet_unusable: 'Die Daten des Sheets können nicht verwendet werden: {reason}'
   too_big: Das würde dieses Dashboard zu groß machen ({size} KB von {max} KB). Verwende weniger Zeilen oder entferne eine Tabelle.
   player_name_needed: Gib einen Spielernamen ein.
-  time_format: Zeiten sind Game Time wie 18:00 (oder lasse sie leer).
-  start_time_needed: Gib auch die Startzeit an (oder lasse beide leer).
+  time_format: Zeiten sind Game Time wie 18:00 (oder lass sie leer).
+  start_time_needed: Gib auch die Startzeit an (oder lass beides leer).
   rotor_full: Maximal {max} Spieler im Rotor.
   already_in_rotor: "{name} ist bereits im Rotor."
   player_removed: Dieser Spieler wurde entfernt.

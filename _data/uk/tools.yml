@@ -738,64 +738,75 @@ blacklist_planner:
   what_player: гравець
   sent: Пропозицію до чорного списку надіслано керівництву в Discord. Вона набуде чинності після схвалення Стюардом.
 map_planner:
-  view: 'Вигляд:'
-  tag_ambiguous: "[{tag}] може означати більше одного альянсу ({options}). Введіть тег точно, з урахуванням регістру."
+  view: 'Перегляд:'
+  members_toggle: Мої учасники
+  members_search: Знайти учасника (ім'я або ID)...
+  members_loading: Завантаження учасників...
+  members_count: "{n} учасників з [{tag}]"
+  members_as_of: позиції станом на {time}
+  members_failed: 'Учасників неможливо відобразити: {error}'
+  members_none: Учасників не знайдено
+  members_here: "{n} учасників тут:"
+  member_coords: X {x} · Y {y}
+  member_in: у {place}
+  member_close: Закрити
+  tag_ambiguous: "[{tag}] може означати більше одного альянсу ({options}). Введіть тег точно, враховуючи великі літери."
   levels: Рівні
   alliances: Альянси
   resources: Ресурси
-  buff_summary: Зведення бафів
-  toggle_buff_summary: Перемкнути зведення бафів
-  close_buff_summary: Закрити зведення бафів
+  buff_summary: Зведення баффів
+  toggle_buff_summary: Перемкнути зведення баффів
+  close_buff_summary: Закрити зведення баффів
   planner_mode: Режим планувальника
   override_label: 'Змінити на:'
-  override_placeholder: Напр. WLO
-  override_help: Введіть тег, щоб перепризначити кліки. Залиште порожнім, щоб перемикати.
+  override_placeholder: НАПР. WLO
+  override_help: Введіть тег для зміни призначень кліків. Залиште порожнім, щоб прокрутити.
   submit_plan: Надіслати план
-  compare_label: Порівняти план з актуальною мапою
-  show_live: Актуальна
+  compare_label: Порівняти план з поточною картою
+  show_live: Наживо
   show_plan: Мій план
   discard: Відкинути
-  discard_confirm: Відкинути заплановані зміни ({n})? Це неможливо скасувати.
-  view_locked: Вимкніть Режим планувальника, щоб змінити вигляд
-  plan_saved: План збережено ({n} змін). Увімкніть Режим планувальника, щоб продовжити.
+  discard_confirm: Відкинути ваші заплановані зміни ({n})? Цю дію неможливо скасувати.
+  view_locked: Вимкніть режим планувальника, щоб змінити перегляд
+  plan_saved: Ваш план збережено ({n} змін). Увімкніть режим планувальника, щоб продовжити.
   fullscreen: На весь екран
-  toggle_fullscreen: Перемкнути повноекранний режим
+  toggle_fullscreen: Перемкнути повний екран
   exit: Вихід
   grain: Зерно
   timber: Деревина
   herbs: Трави
-  solid_gather: 'Суцільний: Збір'
-  stripe_output: 'Смугастий: Видобуток'
+  solid_gather: 'Суцільне: Збір'
+  stripe_output: 'Смуга: Виробництво'
   level_unknown: Рівень --
   level: Рівень {n}
-  hover: Наведіть на територію
+  hover: Наведіть курсор на територію
   owner: 'Власник:'
   unclaimed: Нічийна
-  buff: 'Баф:'
+  buff: 'Бафф:'
   none: Немає
-  no_active_buff: Немає активних бафів
-  drawer_title: Розподіл бафів альянсу
-  drawer_subtitle: Динамічний підрахунок на основі мапи / призначень планувальника
-  no_claims: Зараз жоден альянс не претендує на територію.
-  no_buffs: Активні бафи не призначені
-  cities_one: "{n} місто"
-  cities_few: "{n} міста"
-  cities_other: "{n} міст"
+  no_active_buff: Немає активних баффів
+  drawer_title: Розподіл баффів альянсу
+  drawer_subtitle: Динамічний підрахунок на основі активної карти / призначень планувальника
+  no_claims: Жоден альянс наразі не претендує на територію.
+  no_buffs: Немає призначених активних баффів
+  cities_one: "{n} Місто"
+  cities_few: "{n} Міста"
+  cities_other: "{n} Міст"
   col_alliance: Альянс
   col_holdings: Володіння
-  col_buffs: Активні бафи
+  col_buffs: Активні баффи
   buff_research_speed: Швидкість досліджень
   buff_troop_training_speed: Швидкість тренування військ
   buff_building_speed: Швидкість будівництва
   buff_march_speed: Швидкість маршу
   buff_grain_gathering: Збір зерна
-  buff_grain_output: Видобуток зерна
+  buff_grain_output: Виробництво зерна
   buff_timber_gathering: Збір деревини
-  buff_timber_output: Видобуток деревини
+  buff_timber_output: Виробництво деревини
   buff_herb_gathering: Збір трав
-  buff_herb_output: Видобуток трав
-  no_changes: Змін у чернетці плану не виявлено.
-  proposal_title: Надіслати пропозицію щодо території на мапі
+  buff_herb_output: Виробництво трав
+  no_changes: Змін у вашому чернетковому плані не виявлено.
+  proposal_title: Надіслати пропозицію щодо території на карті
 proposals:
   title: Надіслати пропозицію
   close: Закрити

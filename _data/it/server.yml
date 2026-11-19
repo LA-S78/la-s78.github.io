@@ -2,39 +2,41 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  refresh_limit: Nessun aggiornamento del roster rimasto per oggi. Ricominceranno al ripristino giornaliero (00:00 GT).
-  refresh_wait: Il roster è stato aggiornato poco fa. Riprova tra {n} min.
-  refresh_failed: Impossibile contattare il gioco. Riprova tra qualche minuto.
+  positions_leaders_only: Solo gli R4 e R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
+  positions_unavailable: Le posizioni dei membri non possono essere caricate al momento. Riprova tra qualche minuto.
+  refresh_limit: Nessun aggiornamento del roster disponibile oggi. Si ripristinano al reset giornaliero (00:00 GT).
+  refresh_wait: Il roster è stato appena aggiornato. Riprova tra {n} min.
+  refresh_failed: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
   signed_out: Accedi con Discord (in alto a destra) per vedere la dashboard della tua alleanza.
   load_failed: 'Impossibile caricare la dashboard: {reason}'
-  no_alliance: Non siamo riusciti a identificare la tua alleanza. Il sito la rileva dal tuo ruolo alleanza nel server Discord NAP, o da un [TAG] all'inizio del tuo nickname sul server. Correggilo su Discord, poi usa Aggiorna Accesso nella tua scheda account (in alto a destra).
+  no_alliance: Non siamo riusciti a identificare la tua alleanza. Il sito la rileva dal tuo ruolo alleanza nel server Discord NAP, o da un [TAG] all'inizio del tuo nickname sul server. Correggi su Discord, quindi usa Aggiorna Accesso nella scheda del tuo account (in alto a destra).
   leaders_only: Solo gli R4 e R5 della tua alleanza possono modificare la dashboard.
-  chart_removed: Quel grafico è stato rimosso.
-  chart_already_removed: Quel grafico era già stato rimosso.
-  not_linked: Questo grafico non è collegato a un foglio Google o Doc.
+  chart_removed: Grafico rimosso.
+  chart_already_removed: Il grafico era già stato rimosso.
+  not_linked: Questo grafico non è collegato a un foglio o documento Google.
   unknown_change: Modifica sconosciuta.
   save_failed: 'Impossibile salvare: {reason}'
   r5_only_nominate: Solo il tuo R5 può aprire la pagina delle nomine qui. Usa /nominate su Discord.
   rewards_closed: Le ricompense sono chiuse fino a {when}.
-  no_rank: "[{tag}] non ha una posizione in classifica."
+  no_rank: "[{tag}] non ha alcun rango in classifica."
   choose_type: Scegli un tipo di grafico o tabella.
   title_needed: Dai un titolo al grafico o alla tabella.
-  too_many_columns: Al massimo {max} colonne (questa tabella ne ha {count}).
-  too_many_rows: Al massimo {max} righe (questa tabella ne ha {count}).
+  too_many_columns: Massimo {max} colonne (questa tabella ne ha {count}).
+  too_many_rows: Massimo {max} righe (questa tabella ne ha {count}).
   column_name: Colonna {n}
   paste_first: Incolla prima una tabella (una riga di intestazione, poi i dati).
   no_data_rows: La tabella non ha righe di dati sotto l'intestazione.
-  needs_numbers: Un grafico ha bisogno di una colonna di numeri da mostrare.
+  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere visualizzato.
   needs_target: 'Un grafico di avanzamento ha bisogno di un obiettivo: un numero o una colonna di obiettivi.'
-  too_many_widgets: Al massimo {max} grafici e tabelle per alleanza.
+  too_many_widgets: Massimo {max} grafici e tabelle per alleanza.
   sheet_unusable: 'I dati del foglio non possono essere utilizzati: {reason}'
-  too_big: Ciò renderebbe questa dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
-  player_name_needed: Inserisci un nome giocatore.
+  too_big: Questo renderebbe la dashboard troppo pesante ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
+  player_name_needed: Inserisci il nome di un giocatore.
   time_format: Gli orari sono in Game Time come 18:00 (o lasciali vuoti).
-  start_time_needed: Indica anche l'orario di inizio (o lasciali entrambi vuoti).
-  rotor_full: Al massimo {max} giocatori nel rotor.
-  already_in_rotor: "{name} è già nel rotor."
-  player_removed: Quel giocatore è stato rimosso.
+  start_time_needed: Inserisci anche l'orario di inizio (o lasciali entrambi vuoti).
+  rotor_full: Massimo {max} giocatori nel rotore.
+  already_in_rotor: "{name} è già nel rotore."
+  player_removed: Giocatore rimosso.
 api_sheets:
   full_link: Incolla il link completo (che inizia con https://docs.google.com/…).
   google_only: Si possono usare solo link di Google Sheets e Google Docs (docs.google.com).

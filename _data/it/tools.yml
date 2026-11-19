@@ -731,7 +731,18 @@ blacklist_planner:
   sent: Proposta di blacklist inviata alla leadership su Discord. Sarà applicata una volta approvata da uno Steward.
 map_planner:
   view: 'Visualizza:'
-  tag_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}). Inserisci il tag esattamente, rispettando le maiuscole."
+  members_toggle: Miei membri
+  members_search: Trova un membro (nome o ID)...
+  members_loading: Caricamento membri in corso...
+  members_count: "{n} membri di [{tag}]"
+  members_as_of: posizioni al {time}
+  members_failed: 'Impossibile mostrare i membri: {error}'
+  members_none: Nessun membro trovato
+  members_here: "{n} membri qui:"
+  member_coords: X {x} · Y {y}
+  member_in: a {place}
+  member_close: Chiudi
+  tag_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}). Inserisci il tag esattamente, incluse le maiuscole."
   levels: Livelli
   alliances: Alleanze
   resources: Risorse
@@ -745,9 +756,9 @@ map_planner:
   submit_plan: Invia Piano
   compare_label: Confronta il piano con la mappa in tempo reale
   show_live: Live
-  show_plan: Il mio piano
+  show_plan: Mio piano
   discard: Scarta
-  discard_confirm: Scartare le modifiche pianificate ({n})? Questa operazione non può essere annullata.
+  discard_confirm: Scartare le modifiche pianificate ({n})? L'operazione non può essere annullata.
   view_locked: Disattiva la Modalità Pianificatore per cambiare visualizzazione
   plan_saved: Piano salvato ({n} modifiche). Attiva la Modalità Pianificatore per continuare.
   fullscreen: Schermo intero
@@ -767,8 +778,8 @@ map_planner:
   none: Nessuno
   no_active_buff: Nessun buff attivo
   drawer_title: Distribuzione Buff Alleanza
-  drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni pianificatore
-  no_claims: Nessuna alleanza reclama attualmente il territorio.
+  drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni pianificate
+  no_claims: Nessuna alleanza rivendica territori al momento.
   no_buffs: Nessun buff attivo assegnato
   cities_one: "{n} Città"
   cities_other: "{n} Città"
@@ -785,7 +796,7 @@ map_planner:
   buff_timber_output: Produzione Legname
   buff_herb_gathering: Raccolta Erbe
   buff_herb_output: Produzione Erbe
-  no_changes: Nessuna modifica rilevata nella tua bozza di piano.
+  no_changes: Nessuna modifica rilevata nel tuo piano.
   proposal_title: Invia Proposta Territorio Mappa
 proposals:
   title: Invia proposta

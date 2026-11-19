@@ -731,62 +731,73 @@ blacklist_planner:
   sent: Proposition de liste noire envoyée à la direction sur Discord. Elle s'applique dès qu'un Intendant l'approuve.
 map_planner:
   view: 'Vue :'
-  tag_ambiguous: "[{tag}] peut correspondre à plus d'une alliance ({options}). Veuillez saisir le tag exactement, en respectant les majuscules."
+  members_toggle: Mes membres
+  members_search: Trouver un membre (nom ou ID)...
+  members_loading: Chargement de vos membres...
+  members_count: "{n} membres de [{tag}]"
+  members_as_of: positions au {time}
+  members_failed: 'Les membres ne peuvent pas être affichés : {error}'
+  members_none: Aucun membre ne correspond
+  members_here: "{n} membres ici :"
+  member_coords: X {x} · Y {y}
+  member_in: dans {place}
+  member_close: Fermer
+  tag_ambiguous: "[{tag}] pourrait correspondre à plus d'une alliance ({options}). Tapez le tag exactement, avec ses majuscules."
   levels: Niveaux
   alliances: Alliances
   resources: Ressources
-  buff_summary: Résumé des bonus
-  toggle_buff_summary: Basculer le résumé des bonus
-  close_buff_summary: Fermer le résumé des bonus
-  planner_mode: Mode planificateur
-  override_label: 'Changer pour :'
+  buff_summary: Résumé des Buffs
+  toggle_buff_summary: Activer/Désactiver le résumé des Buffs
+  close_buff_summary: Fermer le résumé des Buffs
+  planner_mode: Mode Planificateur
+  override_label: 'Changer en :'
   override_placeholder: EX. WLO
-  override_help: Saisissez un tag pour remplacer les assignations au clic. Laissez vide pour faire défiler.
+  override_help: Tapez un tag pour remplacer les affectations de clic. Laissez vide pour faire défiler.
   submit_plan: Soumettre le plan
   compare_label: Comparer le plan avec la carte en direct
   show_live: En direct
   show_plan: Mon plan
   discard: Abandonner
-  discard_confirm: Abandonner vos modifications prévues ({n}) ? Cette action est irréversible.
-  view_locked: Désactivez le mode planificateur pour changer la vue
-  plan_saved: Votre plan est enregistré ({n} modifications). Activez le mode planificateur pour continuer.
+  discard_confirm: Abandonner vos changements prévus ({n}) ? Cette action est irréversible.
+  view_locked: Désactivez le Mode Planificateur pour changer la vue
+  plan_saved: Votre plan est enregistré ({n} changements). Activez le Mode Planificateur pour continuer.
   fullscreen: Plein écran
-  toggle_fullscreen: Basculer en plein écran
+  toggle_fullscreen: Activer/Désactiver le plein écran
   exit: Quitter
-  grain: Céréales
+  grain: Grain
   timber: Bois
   herbs: Herbes
-  solid_gather: 'Plein : Récolte'
+  solid_gather: 'Solide : Collecte'
   stripe_output: 'Rayé : Production'
   level_unknown: Niveau --
   level: Niveau {n}
   hover: Survoler un territoire
   owner: 'Propriétaire :'
   unclaimed: Non réclamé
-  buff: 'Bonus :'
+  buff: 'Buff :'
   none: Aucun
-  no_active_buff: Aucun bonus actif
-  drawer_title: Distribution des bonus d'alliance
-  drawer_subtitle: Décompte dynamique basé sur la carte active / les assignations du planificateur
-  no_claims: Aucune alliance ne réclame de territoire actuellement.
-  no_buffs: Aucun bonus actif assigné
-  cities_one: "{n} ville"
-  cities_other: "{n} villes"
+  no_active_buff: Aucun buff actif
+  drawer_title: Distribution des Buffs d'Alliance
+  drawer_subtitle: Calcul dynamique basé sur les affectations actives de la carte / du planificateur
+  no_claims: Aucune alliance ne réclame actuellement de territoire.
+  no_buffs: Aucun buff actif assigné
+  cities_one: "{n} Ville"
+  cities_other: "{n} Villes"
   col_alliance: Alliance
   col_holdings: Possessions
-  col_buffs: Bonus actifs
+  col_buffs: Buffs actifs
   buff_research_speed: Vitesse de recherche
   buff_troop_training_speed: Vitesse d'entraînement des troupes
   buff_building_speed: Vitesse de construction
   buff_march_speed: Vitesse de marche
-  buff_grain_gathering: Récolte de céréales
-  buff_grain_output: Production de céréales
-  buff_timber_gathering: Récolte de bois
+  buff_grain_gathering: Collecte de grain
+  buff_grain_output: Production de grain
+  buff_timber_gathering: Collecte de bois
   buff_timber_output: Production de bois
-  buff_herb_gathering: Récolte d'herbes
+  buff_herb_gathering: Collecte d'herbes
   buff_herb_output: Production d'herbes
-  no_changes: Aucun changement détecté dans votre brouillon de plan.
-  proposal_title: Soumettre une proposition de territoire
+  no_changes: Aucun changement détecté dans votre projet de plan.
+  proposal_title: Soumettre une proposition de territoire sur la carte
 proposals:
   title: Soumettre une proposition
   close: Fermer
