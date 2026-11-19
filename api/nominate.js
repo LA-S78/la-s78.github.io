@@ -26,6 +26,7 @@ import {
 import { inLanguage, say } from './_messages.js';
 import { sameTag } from './_alliances.js'; // RâvN ≠ RÂVN; RAVN = RÂVN
 import { fetchAlliance, findMember, looksLikeId, memberPictures } from './_tracker.js';
+import { allianceFrame } from './_alliance_images.js';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -64,7 +65,7 @@ async function respond(req, res) {
         const players = {};
         tags.forEach((tag, i) => {
           if (!found[i]) return;
-          pictures[tag] = memberPictures(found[i]);
+          pictures[tag] = memberPictures(found[i], allianceFrame(gist, tag));
           players[tag] = Object.fromEntries(found[i].members.map((m) => [m.uid, m.name]));
         });
         res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
@@ -113,7 +114,7 @@ async function respond(req, res) {
           // page's name check (js/name-check.js) and portraits; null without the tracker or
           // when it's slow
           members: tracker ? tracker.members.map((m) => m.name) : null,
-          pictures: memberPictures(tracker),
+          pictures: memberPictures(tracker, allianceFrame(gist, tag)),
           // Player IDs: the saved list's ({ name: uid }) and the members' ({ uid: name }),
           // so officers can type an ID and see who it is
           ids: nominations[tag]?.ids || {},

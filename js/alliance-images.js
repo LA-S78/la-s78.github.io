@@ -19,7 +19,11 @@
   const t = (key, vars) => window.t(`alliance_images.${key}`, vars);
   /** An interface icon (js/ui-icons.js) for the start of a label. */
   const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
-  const KINDS = ['card', 'wide'];
+  const KINDS = ['card', 'wide', 'frame'];
+  // The avatar frame (owner request, 2026-11-19): a transparent PNG drawn around members'
+  // pictures. Like the game's 190×190 frames, at twice the size, with a see-through square
+  // in the middle 62% wide (72 to 308 px at 380). Checked here before sending.
+  const FRAME = { size: 380, hole: [72, 308], minSource: 190, maxBytes: 500 * 1024 };
   // Card sizes measured on the live pages (2026-11-16): what each screen really shows
   const PREVIEWS = {
     card: [
@@ -106,9 +110,18 @@
       <div class="ai-slot-head"><strong>${esc(t(kind))}</strong>${open ? `<span class="dash-muted">${slot.width}×${slot.height}</span>` : ''}</div>
       <div class="ai-thumb${!open && !slot.live ? ' is-empty' : ''}"${open || slot.live ? ` style="aspect-ratio: ${slot.width} / ${slot.height}"` : ''}>${
         slot.live
-          ? `<img src="${esc(slot.live.url)}" alt="${esc(`[${ctx.alliance.tag}] ${t(kind)}`)}" loading="lazy">`
+          ? kind === 'frame'
+            ? framedSample(slot.live.url, 'lg')
+            : `<img src="${esc(slot.live.url)}" alt="${esc(`[${ctx.alliance.tag}] ${t(kind)}`)}" loading="lazy">`
           : `<span class="dash-muted">${esc(t('none'))}</span>`
       }</div>
+      ${
+        kind === 'frame' && slot.live
+          ? `<label class="dash-check ai-use-frame"><input type="checkbox" data-ai="use-frame"${ctx.images.frameOn ? ' checked' : ''}> ${esc(t('use_frame'))}</label>
+      <p class="dash-muted dash-small">${esc(t(ctx.images.frameOn ? 'use_frame_on' : 'use_frame_off'))}</p>`
+          : ''
+      }
+      ${kind === 'frame' && open ? `<p class="dash-muted dash-small ai-frame-spec">${esc(t('frame_spec'))}</p>` : ''}
       ${lines.map(([icon, tone, text]) => `<p class="ai-status">${ic(icon, tone)}${esc(text)}</p>`).join('')}
       ${
         open
@@ -119,6 +132,11 @@
           : ''
       }
     </div>`;
+  }
+
+  /** A sample player's picture inside a frame, as the site draws members (player portraits). */
+  function framedSample(url, size) {
+    return `<span class="player-portrait ai-frame-sample pf-${size}" aria-hidden="true"><span class="pf-pic pf-initial">A</span><img class="pf-frame" src="${esc(url)}" alt=""></span>`;
   }
 
   function say(section, text, kind = '') {
@@ -157,10 +175,24 @@
       });
       if (r.ok) section._ai.ctx.onChange?.();
       else b.disabled = false;
+    } else if (act === 'use-frame') {
+      b.disabled = true;
+      const r = await post(section, {
+        type: 'alliance_image_frame',
+        alliance: section._ai.ctx.alliance.tag,
+        on: b.checked,
+      });
+      if (r.ok) section._ai.ctx.onChange?.();
+      else {
+        b.checked = !b.checked;
+        b.disabled = false;
+      }
     } else if (act === 'cancel') {
       closeCrop(section);
     } else if (act === 'send') {
       send(section, b);
+    } else if (act === 'send-frame') {
+      sendFrame(section, b);
     }
   }
 
@@ -173,7 +205,8 @@
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.decoding = 'async';
-    img.onload = () => openCrop(section, kind, img, url);
+    img.onload = () =>
+      kind === 'frame' ? openFrame(section, img, url) : openCrop(section, kind, img, url);
     img.onerror = () => {
       URL.revokeObjectURL(url);
       say(section, t('not_image'), 'error');
@@ -433,6 +466,95 @@
     g.setTransform(c.s * k, 0, 0, c.s * k, c.x * k, c.y * k);
     g.drawImage(c.img, 0, 0);
     return canvas;
+  }
+
+  // ---------- The avatar frame: checked, previewed and sent as it is ----------
+
+  /**
+   * What's wrong with a frame picture, or '' if it's fine: square, at least 190 px, a
+   * see-through middle (nine in ten pixels of the opening) and something drawn around it.
+   */
+  function frameProblem(img, g) {
+    const w = img.naturalWidth;
+    const h = img.naturalHeight;
+    if (Math.abs(w - h) > 1) return t('frame_not_square', { width: w, height: h });
+    if (w < FRAME.minSource) return t('frame_too_small', { width: w, height: h });
+    const [a, b] = FRAME.hole;
+    const inner = g.getImageData(a, a, b - a, b - a).data;
+    let clear = 0;
+    for (let i = 3; i < inner.length; i += 4) if (inner[i] < 40) clear++;
+    if (clear / (inner.length / 4) < 0.9) return t('frame_opening');
+    const all = g.getImageData(0, 0, FRAME.size, FRAME.size).data;
+    let solid = 0;
+    for (let i = 3; i < all.length; i += 4) if (all[i] > 100) solid++;
+    if (solid / (all.length / 4) < 0.03) return t('frame_empty');
+    return '';
+  }
+
+  function openFrame(section, img, url) {
+    closeCrop(section);
+    const canvas = document.createElement('canvas');
+    canvas.width = FRAME.size;
+    canvas.height = FRAME.size;
+    const g = canvas.getContext('2d', { willReadFrequently: true });
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(img, 0, 0, FRAME.size, FRAME.size);
+    URL.revokeObjectURL(url);
+    const problem = frameProblem(img, g);
+    if (problem) return say(section, problem, 'error');
+    canvas.toBlob((blob) => {
+      if (!blob) return say(section, t('load_failed'), 'error');
+      if (blob.size > FRAME.maxBytes) {
+        return say(section, t('frame_too_big', { kb: Math.round(blob.size / 1024) }), 'error');
+      }
+      const preview = URL.createObjectURL(blob);
+      section._ai.crop = {
+        kind: 'frame',
+        blob,
+        url: preview,
+        previewUrls: [],
+        onResize: () => {},
+      };
+      const box = section.querySelector('.ai-crop');
+      box.hidden = false;
+      box.innerHTML = `
+        <h4 class="ai-crop-title">${esc(t('frame_title'))}</h4>
+        <p class="dash-muted ai-crop-help">${esc(t('frame_check_ok'))}</p>
+        <div class="ai-frame-previews">
+          <figure>${framedSample(preview, 'lg')}<figcaption class="dash-muted">${esc(t('frame_big'))}</figcaption></figure>
+          <figure>${framedSample(preview, 'md')}<figcaption class="dash-muted">${esc(t('frame_roster'))}</figcaption></figure>
+          <figure>${framedSample(preview, 'sm')}<figcaption class="dash-muted">${esc(t('frame_lists'))}</figcaption></figure>
+        </div>
+        <div class="dash-editor-actions">
+          <button type="button" class="dash-icon-btn" data-ai="cancel">${esc(t('cancel'))}</button>
+          <button type="button" class="submit-plan-btn" data-ai="send-frame">${esc(t('send'))}</button>
+        </div>`;
+    }, 'image/png');
+  }
+
+  async function sendFrame(section, button) {
+    const c = section._ai.crop;
+    if (!c || c.kind !== 'frame') return;
+    button.disabled = true;
+    button.textContent = t('sending');
+    try {
+      const r = await post(section, {
+        type: 'alliance_image',
+        alliance: section._ai.ctx.alliance.tag,
+        kind: 'frame',
+        image: await dataUrl(c.blob),
+      });
+      if (!r.ok) throw new Error('');
+      closeCrop(section);
+      say(section, t('sent'), 'ok');
+      section._aiNote = { text: t('sent'), kind: 'ok' };
+      section._ai.ctx.onChange?.();
+    } catch (err) {
+      if (err.message) say(section, err.message, 'error');
+      button.disabled = false;
+      button.textContent = t('send');
+    }
   }
 
   // ---------- Sending ----------

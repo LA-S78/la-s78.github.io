@@ -35,9 +35,18 @@ import {
 export const IMAGE_KINDS = Object.freeze({
   card: { width: 600, height: 400, label: 'Card (Capitol Rotation)' },
   wide: { width: 1200, height: 300, label: 'Banner (NAP Ranks)' },
+  // The alliance's avatar frame (owner request, 2026-11-19): drawn around its members'
+  // pictures on the site when the alliance switches it on. Twice the game's 190×190 frames,
+  // a transparent PNG with a see-through square in the middle (62% of the width, as the
+  // game's), checked in the browser before sending.
+  frame: { width: 380, height: 380, label: 'Avatar frame (members’ pictures)', png: true },
 });
 /** Largest file accepted. The upload form saves about 150 KB; this leaves room. */
 export const MAX_IMAGE_BYTES = 250 * 1024;
+/** A frame is a detailed transparent PNG: it may be bigger. */
+export const MAX_FRAME_BYTES = 500 * 1024;
+/** The kinds shown behind the alliance's cards (the frame is shown around members' pictures). */
+const CARD_KINDS = ['card', 'wide'];
 /** Images an alliance may send per 24 hours (Stewards: no limit). */
 export const DAILY_LIMIT = 3;
 /** An image nobody reviewed is deleted after this; decisions are remembered as long. */
@@ -76,7 +85,22 @@ export function readImages(gist) {
     decided: obj(d.decided),
     sent: Array.isArray(d.sent) ? d.sent : [],
     missing: obj(d.missing),
+    // Alliances that switched their avatar frame on: { slug: true }
+    useFrame: obj(d.useFrame),
   };
+}
+
+/**
+ * The alliance's avatar frame, when it has one and switched it on: its address, else null.
+ * Drawn around every member's picture on the site, in place of their in-game frame (owner,
+ * 2026-11-19: all members, everywhere their pictures appear).
+ */
+export function allianceFrame(gist, tag) {
+  if (!tag) return null;
+  const images = readImages(gist);
+  const slug = allianceSlug(tag, mapAlliances(gist));
+  const file = images.live[slug]?.frame?.file;
+  return file && images.useFrame[slug] ? `/alliance-images/${file}` : null;
 }
 
 /**
@@ -112,6 +136,7 @@ export function imageStatus(gist, tag) {
   const used = images.sent.filter((x) => x.slug === slug && x.at > now - DAY_MS).length;
   return {
     slots,
+    frameOn: Boolean(images.useFrame[slug]),
     left: Math.max(0, DAILY_LIMIT - used),
     dailyLimit: DAILY_LIMIT,
     ready: blobConfigured(),
@@ -129,7 +154,7 @@ export function liveImages(gist, alliances = {}) {
     const entry = live[allianceSlug(tag, alliances)];
     if (!entry) continue;
     const urls = {};
-    for (const kind of Object.keys(IMAGE_KINDS)) {
+    for (const kind of CARD_KINDS) {
       if (entry[kind]?.file) urls[kind] = `/alliance-images/${entry[kind].file}`;
     }
     if (Object.keys(urls).length) out[tag] = urls;
@@ -152,18 +177,23 @@ export function inspectImage(buf) {
   if (buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
     if (buf.toString('latin1', 12, 16) !== 'IHDR') return null;
     let metadata = false;
+    let transparent = false;
     for (let at = 8; at + 8 <= buf.length; ) {
       const len = buf.readUInt32BE(at);
       const name = buf.toString('latin1', at + 4, at + 8);
       if (['eXIf', 'tEXt', 'iTXt', 'zTXt'].includes(name)) metadata = true;
+      if (name === 'tRNS') transparent = true;
       if (name === 'IEND') break;
       at += 12 + len;
     }
+    // See-through: colour type 4 or 6 (with alpha), or a tRNS chunk
+    const colourType = buf[25];
     return {
       type: 'image/png',
       width: buf.readUInt32BE(16),
       height: buf.readUInt32BE(20),
       metadata,
+      alpha: colourType === 4 || colourType === 6 || transparent,
     };
   }
   // JPEG
@@ -218,13 +248,18 @@ export function readUpload(dataUrl, kind) {
     typeof dataUrl === 'string' && /^data:image\/[a-z]+;base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl);
   if (!spec || !m) return { error: say('api_alliance_images.bad_image') };
   const buf = Buffer.from(m[1], 'base64');
-  if (buf.length > MAX_IMAGE_BYTES) {
+  const max = spec.png ? MAX_FRAME_BYTES : MAX_IMAGE_BYTES;
+  if (buf.length > max) {
     return {
-      error: say('api_alliance_images.too_big', { kb: Math.round(MAX_IMAGE_BYTES / 1024) }),
+      error: say('api_alliance_images.too_big', { kb: Math.round(max / 1024) }),
     };
   }
   const info = inspectImage(buf);
   if (!info || !TYPES[info.type]) return { error: say('api_alliance_images.bad_image') };
+  // A frame must be a PNG that can be see-through (else it would cover the picture)
+  if (spec.png && (info.type !== 'image/png' || !info.alpha)) {
+    return { error: say('api_alliance_images.frame_png') };
+  }
   if (info.width !== spec.width || info.height !== spec.height) {
     return {
       error: say('api_alliance_images.wrong_size', { width: spec.width, height: spec.height }),
@@ -412,6 +447,7 @@ export async function handleImageRequest(req) {
   if (body.type === 'alliance_image') return submit(session, body);
   if (body.type === 'alliance_image_review') return review(session, body);
   if (body.type === 'alliance_image_remove') return remove(session, body);
+  if (body.type === 'alliance_image_frame') return frameSwitch(session, body);
   return reply(400, { error: 'Unknown request.' });
 }
 
@@ -636,6 +672,40 @@ async function remove(session, body) {
   return reply(200, { success: true, message: say('api_alliance_images.removed') });
 }
 
+/**
+ * The avatar frame's switch ("Use for our members"): the alliance's R4/R5s and Stewards.
+ * Kept even when the frame is replaced or removed, so a new frame shows once approved.
+ */
+async function frameSwitch(session, body) {
+  const steward = isSteward(session.uid);
+  if (!steward && !SENDER_ROLES.includes(session.role)) {
+    return reply(403, { error: say('api_alliance_images.leaders_only'), code: 'not_allowed' });
+  }
+  if (!steward && !sameTag(session.alliance, body.alliance)) {
+    return reply(403, { error: say('api_alliance_images.own_alliance_only'), code: 'not_allowed' });
+  }
+  const on = Boolean(body.on);
+  let known = true;
+  await updateGist((g) => {
+    const { key, alliances } = allianceIn(g, body.alliance);
+    if (!key) {
+      known = false;
+      return {};
+    }
+    const images = readImages(g);
+    const slug = allianceSlug(key, alliances);
+    if (Boolean(images.useFrame[slug]) === on) return {};
+    if (on) images.useFrame[slug] = true;
+    else delete images.useFrame[slug];
+    return {
+      files: { [IMAGES_FILE]: images },
+      description: `Alliance avatar frame ${on ? 'on' : 'off'} for [${key}] by ${session.name}`,
+    };
+  });
+  if (!known) return reply(400, { error: say('api_alliance_images.unknown_alliance') });
+  return reply(200, { success: true, on });
+}
+
 /** The Steward review page: what is waiting, and the picture itself (Stewards only). */
 async function reviewDetails(req, id, wantFile) {
   if (!blobConfigured() || !isGistConfigured()) {
@@ -686,7 +756,7 @@ async function reviewDetails(req, id, wantFile) {
  * alliance with the same capitals (RavN for RâvN), so lowercase letters are allowed too.
  */
 async function serveLive(file) {
-  if (!/^[A-Za-z0-9]{1,24}-(wide|card)-[a-f0-9]{24}\.(webp|jpg|png)$/.test(file)) {
+  if (!/^[A-Za-z0-9]{1,24}-(wide|card|frame)-[a-f0-9]{24}\.(webp|jpg|png)$/.test(file)) {
     return reply(404, { error: 'Not found' });
   }
   if (!blobConfigured()) return reply(404, { error: 'Not found' });
