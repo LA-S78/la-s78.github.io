@@ -928,17 +928,33 @@ stats:
   title: Статистика NAP
   views_label: Что показать
   view_growth: Рост NAP
-  view_players: Топ игроков
-  list_label: Какой список
+  view_players: Топ игроки
+  view_achievements: Достижения
+  ach_strongest: Могущественные
+  ach_gain_week: Лидеры роста за неделю
+  ach_kills: Больше всех убийств
+  ach_kills_week: Больше всех убийств за неделю
+  ach_climb_month: Лидер по росту Убежища за месяц
+  ach_away: Далеко от улья
+  ach_away_help: Количество дней в этом месяце, проведенных на расстоянии более 50 клеток от улья альянса (где находится большинство участников).
+  ach_none: Данных еще недостаточно.
+  value_kills: "{n} убийств"
+  value_levels_one: "+1 уровень"
+  value_levels_few: "+{n} уровня"
+  value_levels_other: "+{n} уровней"
+  value_days_one: 1 день
+  value_days_few: "{n} дня"
+  value_days_other: "{n} дней"
+  list_label: Список
   list_strongest: Сильнейшие
   list_week: Прирост за неделю
   list_month: Прирост за месяц
   filter_label: Альянс
   filter_all: Все альянсы NAP
-  players_none: Игроков пока нет.
-  players_wait_week: Данные за неделю появятся после сбора статистики в течение 7 дней.
-  players_wait_month: Данные за месяц появятся после сбора статистики в течение 30 дней.
-  players_as_of: По состоянию на момент снимка перед сбросом {date}.
+  players_none: Игроки пока не найдены.
+  players_wait_week: Статистика за неделю появится после сбора данных в течение недели.
+  players_wait_month: Статистика за месяц появится после сбора данных в течение месяца.
+  players_as_of: По состоянию на момент до сброса {date}.
   col_player: Игрок
   col_gain: Прирост
   show_more: Показать все {n}
@@ -947,14 +963,14 @@ stats:
   range_month: 1 месяц
   range_all: Все время
   loading: Загрузка статистики...
-  failed: Сейчас статистика недоступна.
+  failed: В данный момент статистика недоступна.
   collecting: Статистика собирается раз в день перед ежедневным сбросом (00:00 GT). Графики заполняются ежедневно.
   since: Собирается ежедневно с {date}.
-  one_day: 'Пока собраны данные только за один день: график появится после второго дня.'
+  one_day: 'Собран только один день данных: график начнется после накопления двух дней.'
   col_alliance: Альянс
   col_might: Мощь
   col_week: 7 дней
   col_month: 30 дней
   no_number: "—"
   show_hide: Нажмите на альянс, чтобы показать или скрыть его линию.
-  credit_before: Данные из
+  credit_before: Данные от

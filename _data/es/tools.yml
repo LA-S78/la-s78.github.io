@@ -919,32 +919,46 @@ stats:
   views_label: Qué mostrar
   view_growth: Crecimiento NAP
   view_players: Jugadores destacados
+  view_achievements: Logros
+  ach_strongest: Más poderoso
+  ach_gain_week: Mayor ganancia esta semana
+  ach_kills: Más bajas
+  ach_kills_week: Más bajas esta semana
+  ach_climb_month: Mayor ascenso en el Santuario este mes
+  ach_away: Lejos de la colmena
+  ach_away_help: Más días este mes a más de 50 casillas de la colmena de su alianza (donde está la mayoría de sus miembros).
+  ach_none: Aún no hay suficientes días recopilados.
+  value_kills: "{n} bajas"
+  value_levels_one: "+1 nivel"
+  value_levels_other: "+{n} niveles"
+  value_days_one: 1 día
+  value_days_other: "{n} días"
   list_label: Qué lista
   list_strongest: Más fuerte
   list_week: Ganado esta semana
   list_month: Ganado este mes
   filter_label: Alianza
   filter_all: Todas las alianzas NAP
-  players_none: No hay jugadores que mostrar todavía.
-  players_wait_week: Las ganancias semanales se mostrarán una vez que se hayan recopilado los datos de una semana completa.
-  players_wait_month: Las ganancias mensuales se mostrarán una vez que se hayan recopilado los datos de un mes completo.
-  players_as_of: A partir de la instantánea antes del reinicio del {date}.
+  players_none: Aún no hay jugadores que mostrar.
+  players_wait_week: Las ganancias semanales se muestran una vez que se ha recopilado una semana de días.
+  players_wait_month: Las ganancias mensuales se muestran una vez que se ha recopilado un mes de días.
+  players_as_of: Según la instantánea anterior al reinicio del {date}.
   col_player: Jugador
   col_gain: Ganado
-  show_more: Mostrar todos {n}
-  range_label: Periodo de tiempo
+  show_more: Mostrar todos los {n}
+  range_label: Intervalo de tiempo
   range_week: 1 semana
   range_month: 1 mes
   range_all: Todo
   loading: Cargando estadísticas...
-  failed: Las estadísticas no se pueden cargar en este momento.
-  collecting: Las estadísticas se recopilan una vez al día, justo antes del reinicio diario (00:00 GT). Los gráficos se llenan día a día.
-  since: Recopilado diariamente desde {date}.
-  one_day: 'Solo se ha recopilado un día hasta ahora: el gráfico comienza una vez que haya dos.'
+  failed: Las estadísticas no pueden cargarse en este momento.
+  collecting: Las estadísticas se recopilan una vez al día, justo antes del reinicio diario (00:00 GT). Los gráficos se completan día a día.
+  since: Recopilado diariamente desde el {date}.
+  one_day: 'Solo se ha recopilado un día hasta ahora: el gráfico comienza cuando hay dos.'
   col_alliance: Alianza
   col_might: Poder
   col_week: 7 días
   col_month: 30 días
   no_number: "—"
   show_hide: Toca una alianza para mostrar u ocultar su línea.
-  credit_before: Cifras de
+  credit_before: Números del

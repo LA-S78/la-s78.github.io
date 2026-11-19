@@ -916,19 +916,33 @@ alliance_images:
   load_failed: Das Bild konnte nicht geöffnet werden.
 stats:
   title: NAP-Statistiken
-  views_label: Was anzeigen
+  views_label: Was soll angezeigt werden
   view_growth: NAP-Wachstum
   view_players: Top-Spieler
+  view_achievements: Erfolge
+  ach_strongest: Stärkste
+  ach_gain_week: Größter Zuwachs diese Woche
+  ach_kills: Meiste Kills
+  ach_kills_week: Meiste Kills diese Woche
+  ach_climb_month: Größter Aufstieg im Sanktuarium diesen Monat
+  ach_away: Abseits des Hives
+  ach_away_help: Die meisten Tage diesen Monat mehr als 50 Felder vom Hive der Allianz entfernt (wo sich die meisten Mitglieder aufhalten).
+  ach_none: Noch nicht genug Tage erfasst.
+  value_kills: "{n} Kills"
+  value_levels_one: "+1 Stufe"
+  value_levels_other: "+{n} Stufen"
+  value_days_one: 1 Tag
+  value_days_other: "{n} Tage"
   list_label: Welche Liste
   list_strongest: Stärkste
   list_week: Zuwachs diese Woche
   list_month: Zuwachs diesen Monat
   filter_label: Allianz
   filter_all: Alle NAP-Allianzen
-  players_none: Noch keine Spieler zum Anzeigen.
+  players_none: Noch keine Spieler zum Anzeigen vorhanden.
   players_wait_week: Wochenzuwächse werden angezeigt, sobald eine Woche an Daten gesammelt wurde.
   players_wait_month: Monatszuwächse werden angezeigt, sobald ein Monat an Daten gesammelt wurde.
-  players_as_of: Stand der Momentaufnahme vor dem {date}-Reset.
+  players_as_of: Stand der Momentaufnahme vor dem Reset am {date}.
   col_player: Spieler
   col_gain: Zuwachs
   show_more: Alle {n} anzeigen
@@ -939,12 +953,12 @@ stats:
   loading: Statistiken werden geladen...
   failed: Statistiken können derzeit nicht geladen werden.
   collecting: Statistiken werden einmal täglich kurz vor dem täglichen Reset (00:00 GT) gesammelt. Die Diagramme füllen sich Tag für Tag.
-  since: Täglich gesammelt seit {date}.
-  one_day: 'Bisher nur ein Tag gesammelt: Das Diagramm beginnt, sobald zwei Tage vorliegen.'
+  since: Täglich erfasst seit {date}.
+  one_day: 'Bisher nur ein Tag erfasst: Das Diagramm beginnt, sobald zwei Tage vorliegen.'
   col_alliance: Allianz
   col_might: Macht
   col_week: 7 Tage
   col_month: 30 Tage
   no_number: "—"
-  show_hide: Tippe auf eine Allianz, um ihre Linie anzuzeigen oder auszublenden.
-  credit_before: Zahlen vom
+  show_hide: Tippe auf eine Allianz, um deren Linie ein- oder auszublenden.
+  credit_before: Zahlen von dem
