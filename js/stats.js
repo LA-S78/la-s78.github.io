@@ -158,15 +158,141 @@ function growthView(box, data, range, hidden) {
     </table>`;
 }
 
+// ---------- Top players ----------
+
+/** A small line of a player's Might over the month (millions per day; gaps skipped). */
+function sparkline(series) {
+  const pts = (series || []).map((v, i) => [i, v]).filter(([, v]) => Number.isFinite(v));
+  if (pts.length < 2) return '<span class="stats-spark"></span>';
+  const W = 72;
+  const H = 22;
+  const vs = pts.map(([, v]) => v);
+  const lo = Math.min(...vs);
+  const hi = Math.max(...vs);
+  const n = series.length - 1 || 1;
+  const x = (i) => (i / n) * (W - 2) + 1;
+  const y = (v) => (hi === lo ? H / 2 : H - 2 - ((v - lo) / (hi - lo)) * (H - 4));
+  const d = pts
+    .map(([i, v], k) => `${k ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`)
+    .join('');
+  const up = vs[vs.length - 1] >= vs[0];
+  return `<svg class="stats-spark ${up ? 'is-up' : 'is-down'}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="${d}"></path></svg>`;
+}
+
+/** A player's picture: their own (from the game, no referrer) or their initial. */
+function face(p) {
+  return p.avatar
+    ? `<img class="stats-face" src="${esc(p.avatar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+    : `<span class="stats-face stats-initial">${esc((p.name || '?').charAt(0).toUpperCase())}</span>`;
+}
+
+/** Rows shown before "Show more" (the tab stays compact). */
+const FIRST_ROWS = 25;
+
+function playersView(box, top, nap, list, tag, expanded) {
+  const lists = [
+    ['strongest', t('list_strongest')],
+    ['week', t('list_week')],
+    ['month', t('list_month')],
+  ];
+  const all = top.lists || {};
+  const tags = nap.filter((a) => all[a.tag]);
+  // The alliance's own list when one is picked (each alliance has its top 15)
+  const ids = (all[tag || 'all'] || {})[list] || [];
+  const rows = ids
+    .map((entry) => {
+      const [uid, gain] = Array.isArray(entry) ? entry : [entry, null];
+      const p = top.players?.[uid];
+      return p ? { ...p, uid, change: gain } : null;
+    })
+    .filter(Boolean);
+  const empty =
+    list === 'week' && !(all.all?.week || []).length
+      ? t('players_wait_week')
+      : list === 'month' && !(all.all?.month || []).length
+        ? t('players_wait_month')
+        : t('players_none');
+  const gain = list !== 'strongest';
+  box.innerHTML = `
+    <div class="stats-bar stats-subbar">
+      <div class="segmented-control" role="group" aria-label="${esc(t('list_label'))}">
+        ${lists.map(([k, label]) => `<button type="button" class="toggle-btn${k === list ? ' active' : ''}" data-stats-list="${k}" aria-pressed="${k === list}">${esc(label)}</button>`).join('')}
+      </div>
+      <label class="stats-filter"><span>${esc(t('filter_label'))}</span>
+        <select data-stats-filter>
+          <option value="">${esc(t('filter_all'))}</option>
+          ${tags.map((a) => `<option value="${esc(a.tag)}"${a.tag === tag ? ' selected' : ''}>[${esc(a.tag)}]</option>`).join('')}
+        </select>
+      </label>
+    </div>
+    ${top.day ? `<p class="stats-note">${esc(t('players_as_of', { date: dateLabel(top.day) }))}</p>` : ''}
+    ${
+      rows.length
+        ? `<ol class="stats-players">${rows
+            .slice(0, expanded ? rows.length : FIRST_ROWS)
+            .map(
+              (p, i) => `<li class="stats-player">
+                <span class="stats-place">${i + 1}</span>
+                ${face(p)}
+                <span class="stats-who"><strong>${esc(p.name)}</strong><small>[${esc(p.tag)}]</small></span>
+                ${sparkline(p.series)}
+                <span class="stats-num"><strong>${esc(gain ? change(p.change) : might(p.power))}</strong><small>${esc(gain ? might(p.power) : '')}</small></span>
+              </li>`,
+            )
+            .join('')}</ol>${
+            !expanded && rows.length > FIRST_ROWS
+              ? `<button type="button" class="draft-btn stats-more" data-stats-more>${esc(t('show_more', { n: rows.length }))}</button>`
+              : ''
+          }`
+        : `<p class="stats-note">${esc(empty)}</p>`
+    }`;
+  // A picture that doesn't load (changed, or the game's server is slow) shows the initial
+  box.querySelectorAll('img.stats-face').forEach((img) =>
+    img.addEventListener(
+      'error',
+      () => {
+        const span = document.createElement('span');
+        span.className = 'stats-face stats-initial';
+        span.textContent = (
+          img.closest('.stats-player')?.querySelector('strong')?.textContent || '?'
+        )
+          .charAt(0)
+          .toUpperCase();
+        img.replaceWith(span);
+      },
+      { once: true },
+    ),
+  );
+}
+
 async function start() {
   const app = document.getElementById('stats-app');
   if (!app || app.dataset.started) return;
   app.dataset.started = '1';
   const box = app.querySelector('#stats-body');
   const state = { view: 'growth', range: '30', hidden: new Set(), data: null };
-  const draw = () => {
+  state.list = 'strongest';
+  state.tag = '';
+  state.top = null;
+  const rangeBar = app.querySelector('.stats-range');
+  const draw = async () => {
     if (!state.data) return;
-    if (state.view === 'growth') growthView(box, state.data, state.range, state.hidden);
+    // The time span is the growth view's; the players view has its own lists
+    if (rangeBar) rangeBar.hidden = state.view !== 'growth';
+    if (state.view === 'growth') return growthView(box, state.data, state.range, state.hidden);
+    if (!state.top) {
+      box.innerHTML = `<p class="stats-note">${esc(t('loading'))}</p>`;
+      try {
+        const res = await fetch('/api/state?scope=stats-players');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        state.top = await res.json();
+      } catch {
+        box.innerHTML = `<p class="stats-note">${esc(t('failed'))}</p>`;
+        return;
+      }
+    }
+    if (state.view === 'players')
+      playersView(box, state.top, state.data.nap || [], state.list, state.tag, state.more);
   };
   const press = (sel, attr, value) =>
     app.querySelectorAll(sel).forEach((b) => {
@@ -178,7 +304,14 @@ async function start() {
     const range = e.target.closest('[data-stats-range]');
     const view = e.target.closest('[data-stats-view]');
     const chip = e.target.closest('[data-stats-tag]');
-    if (range) {
+    const list = e.target.closest('[data-stats-list]');
+    const more = e.target.closest('[data-stats-more]');
+    if (more) {
+      state.more = true;
+    } else if (list) {
+      state.list = list.dataset.statsList;
+      state.more = false;
+    } else if (range) {
       state.range = range.dataset.statsRange;
       press('[data-stats-range]', 'data-stats-range', state.range);
     } else if (view) {
@@ -189,6 +322,12 @@ async function start() {
       if (state.hidden.has(tag)) state.hidden.delete(tag);
       else state.hidden.add(tag);
     } else return;
+    draw();
+  });
+  app.addEventListener('change', (e) => {
+    if (!e.target.matches('[data-stats-filter]')) return;
+    state.tag = e.target.value;
+    state.more = false;
     draw();
   });
   try {

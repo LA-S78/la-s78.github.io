@@ -12,7 +12,7 @@ Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 
 - [x] **Live stats on the Alliance standings cards** — each NAP alliance's in-game badge on its card, and Might, members (99/100) and level behind an arrow; every card one line high outside planner mode (academies move into the details too). Not the game's kingdom ranking: ranks stay with our rules.
 - [ ] **Stats tab on the Alliance page** (owner, 2026-11-19: one tab with view modes, to keep it compact). A daily snapshot of every NAP alliance's roster just before reset (in the Blob store) feeds the views.
   - [x] Daily snapshot and the **NAP growth** view: each alliance's Might as a line (1 week, 1 month, all), and Might today with the change over 7 and 30 days.
-  - [ ] **Top players** view: strongest players across the NAP, and the biggest Might gains this week and month, with growth lines and an alliance filter.
+  - [x] **Top players** view: strongest players across the NAP, and the biggest Might gains this week and month, with growth lines and an alliance filter.
   - [ ] **Achievements** view: highest Might, biggest gain this week, most kills and most kills gained this week, highest Sanctuary, and most days away from the hive (furthest from their alliance's cluster this month). No donations (owner: they stay off the public stats).
   - [ ] Player lookup by ID (perhaps a view here).
 - [x] **Members on the territory map (leaders only)** — "My members" on the territory map: a dot for each member of the signed-in leader's own alliance, a search box (name or ID) and a card with their Might, coordinates and territory. Positions lined up from five cities the owner read in the game.

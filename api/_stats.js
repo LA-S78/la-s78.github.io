@@ -14,6 +14,13 @@
 //       [[uid, name, power, kills, sanctuaryLevel, x, y], …] } } }
 //   stats/summary.json         what the NAP growth view needs, small:
 //     { days: [dates], alliances: { TAG: { <date>: power } }, updatedAt }
+//   stats/player-series.json   each NAP player's Might per day for 31 days (server only):
+//     { days: [dates], p: { uid: { <date>: Might in millions } } }
+//   stats/top.json             the Top players view, worked out at each snapshot (small):
+//     { day, days, players: { uid: { name, tag, power, avatar, frame, series } },
+//       lists: { all: { strongest: [uid…100], week: [[uid, gain]…50], month: […50] },
+//                TAG: { strongest: […15], week: […15], month: […15] } } }
+//     Each player is kept once; every alliance has its own lists, so the filter shows them.
 // Research donations and help are not kept (owner: they stay off the public stats).
 
 import { get, put } from '@vercel/blob';
@@ -32,6 +39,13 @@ const blobToken = () =>
   process.env.ALLIANCE_CARD_IMAGES_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN || '';
 const prefix = () => (isTestDeployment() ? 'test/stats' : 'stats');
 const SUMMARY = () => `${prefix()}/summary.json`;
+const PLAYER_SERIES = () => `${prefix()}/player-series.json`;
+const TOP = () => `${prefix()}/top.json`;
+/** Days of each player's Might kept for the Top players view (its month and growth lines). */
+const PLAYER_DAYS = 31;
+const TOP_SIZES = { strongest: 100, week: 50, month: 50 };
+/** Each alliance's own lists (the view's alliance filter). */
+const TOP_PER_ALLIANCE = 15;
 const dayFile = (day) => `${prefix()}/days/${day}.json`;
 
 /** The GT date (YYYY-MM-DD) of a moment. */
@@ -65,6 +79,12 @@ async function writeJson(path, data) {
   });
 }
 
+/** The Top players view, as the Stats tab reads it (null when nothing is saved yet). */
+export async function readTopPlayers() {
+  if (!blobToken()) return null;
+  return readJson(TOP());
+}
+
 /** The growth summary, as the Stats tab reads it (null when nothing is saved yet). */
 export async function readStatsSummary() {
   if (!blobToken()) return null;
@@ -96,8 +116,108 @@ function dayEntry(a) {
     power: a.power,
     members: a.memberCount,
     level: a.level,
-    players: a.members.map((m) => [m.uid, m.name, m.power, m.kills ?? null, m.level, m.x, m.y]),
+    // [uid, name, Might, kills, Sanctuary level, x, y, picture, frame]
+    players: a.members.map((m) => [
+      m.uid,
+      m.name,
+      m.power,
+      m.kills ?? null,
+      m.level,
+      m.x,
+      m.y,
+      m.avatar || null,
+      m.frame || null,
+    ]),
   };
+}
+
+const millions = (n) => Math.round(n / 1e5) / 10;
+
+/** The day `n` days before `day` (YYYY-MM-DD). */
+const daysBefore = (day, n) =>
+  new Date(Date.parse(`${day}T12:00:00Z`) - n * 86400000).toISOString().slice(0, 10);
+
+/**
+ * Adds the day's players to `series` (changed in place: last PLAYER_DAYS days only) and
+ * works out the Top players lists. A gain counts only players seen on both days (the latest
+ * day on or before 7 / 30 days ago, up to 3 days earlier); a player keeps their ID when they
+ * move alliance, and shows their current name and alliance.
+ */
+export function topPlayers(series, today, day) {
+  const players = [];
+  for (const [tag, a] of Object.entries(today.alliances)) {
+    for (const [uid, name, power, , , , , avatar, frame] of a.players) {
+      if (!uid || !Number.isFinite(power)) continue;
+      players.push({
+        uid: String(uid),
+        name,
+        tag,
+        power,
+        avatar: avatar || null,
+        frame: frame || null,
+      });
+    }
+  }
+  if (!series.days.includes(day)) series.days.push(day);
+  series.days.sort();
+  series.days = series.days.slice(-PLAYER_DAYS);
+  const keep = new Set(series.days);
+  for (const p of players)
+    series.p[p.uid] = { ...(series.p[p.uid] || {}), [day]: millions(p.power) };
+  for (const [uid, s] of Object.entries(series.p)) {
+    for (const d of Object.keys(s)) if (!keep.has(d)) delete s[d];
+    if (!Object.keys(s).length) delete series.p[uid];
+  }
+
+  const at = (uid, target) => {
+    const s = series.p[uid] || {};
+    const d = series.days.filter((x) => x <= target && x >= daysBefore(target, 3)).pop();
+    return d && Number.isFinite(s[d]) ? s[d] * 1e6 : null;
+  };
+  const line = (uid) => series.days.map((d) => series.p[uid]?.[d] ?? null);
+  const gains = (list, n) =>
+    list
+      .map((p) => {
+        const then = at(p.uid, daysBefore(day, n));
+        return then === null ? null : { ...p, change: Math.round(p.power - then) };
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.change - a.change);
+  const used = new Map();
+  const ids = (list, size, withGain) =>
+    list.slice(0, size).map((p) => {
+      used.set(p.uid, p);
+      return withGain ? [p.uid, p.change] : p.uid;
+    });
+  const listsFor = (list, sizes) => ({
+    strongest: ids(
+      [...list].sort((a, b) => b.power - a.power),
+      sizes.strongest,
+      false,
+    ),
+    week: ids(gains(list, 7), sizes.week, true),
+    month: ids(gains(list, 30), sizes.month, true),
+  });
+  const lists = { all: listsFor(players, TOP_SIZES) };
+  const small = { strongest: TOP_PER_ALLIANCE, week: TOP_PER_ALLIANCE, month: TOP_PER_ALLIANCE };
+  for (const tag of Object.keys(today.alliances)) {
+    lists[tag] = listsFor(
+      players.filter((p) => p.tag === tag),
+      small,
+    );
+  }
+  const out = {};
+  for (const [uid, p] of used) {
+    out[uid] = {
+      name: p.name,
+      tag: p.tag,
+      power: p.power,
+      avatar: p.avatar,
+      frame: p.frame,
+      series: line(uid),
+    };
+  }
+  return { day, days: series.days, players: out, lists };
 }
 
 async function inBatches(items, size, fn) {
@@ -178,6 +298,12 @@ export async function checkStatsSnapshot({
   }
   summary.updatedAt = new Date(now).toISOString();
   await store.write(SUMMARY(), summary);
+
+  // Each player's Might over the last month, and the Top players lists from it
+  const series = (await store.read(PLAYER_SERIES())) || { days: [], p: {} };
+  const top = topPlayers(series, today, due.day);
+  await store.write(PLAYER_SERIES(), series);
+  await store.write(TOP(), top);
   report.saved = true;
   return report;
 }

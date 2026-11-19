@@ -139,6 +139,7 @@ nav_id: "nap-stats"
   <div class="stats-bar">
     <div class="segmented-control stats-views" role="group" aria-label="{{ "stats.views_label" | t }}">
       <button type="button" class="toggle-btn active" data-stats-view="growth" aria-pressed="true">{{ "stats.view_growth" | t }}</button>
+      <button type="button" class="toggle-btn" data-stats-view="players" aria-pressed="false">{{ "stats.view_players" | t }}</button>
     </div>
     <div class="segmented-control stats-range" role="group" aria-label="{{ "stats.range_label" | t }}">
       <button type="button" class="toggle-btn" data-stats-range="7" aria-pressed="false">{{ "stats.range_week" | t }}</button>
