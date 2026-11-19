@@ -9,7 +9,7 @@ _Last tidied: 19 November 2026. Decisions behind finished work are in `docs/DECI
 Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 1,000 requests a day; today the site uses about one per alliance per hour, only when a page is opened.
 
 - [x] **Research and help in the dashboard roster (leaders only)** — today's alliance research donations (tracker `daily_tech`) and help given to members' construction and research (`daily_honor`), with Research and Help sorts and a note of how current they are. No extra requests. Not the game's weekly activity score (owner: it weighs Survival Battle like Alliance Duel, so it misjudges players).
-- [ ] **Live stats on the Alliance standings cards** — Might, members (99/100) and level for each NAP alliance, refreshed on their own. Not the game's kingdom ranking: ranks stay with our rules. Idea: give the cards one height, with an expand button for the extra details, so they don't grow.
+- [x] **Live stats on the Alliance standings cards** — each NAP alliance's in-game badge on its card, and Might, members (99/100) and level behind an arrow; every card one line high outside planner mode (academies move into the details too). Not the game's kingdom ranking: ranks stay with our rules.
 - [ ] **Stats page** — new page for numbers over time:
   - Might history: every NAP alliance's Might saved once a day (about 10 requests a day, stored like the Top 4 race), drawn as growth charts here and on the dashboard.
   - Kill Event and Kingdom War stats: kills by alliance, and the change in kills before and after an event.

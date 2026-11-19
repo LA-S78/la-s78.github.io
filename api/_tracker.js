@@ -34,7 +34,7 @@ export function pictureUrl(value) {
   const v = String(value || '');
   if (v.startsWith(GAME_IMAGES) && /^[\w./-]+$/.test(v.slice(GAME_IMAGES.length))) return v;
   const art = v.match(
-    /^(?:https:\/\/(?:api\.)?lastasylumtracker\.com)?\/static\/(avatars\/head_\d{1,7}|frames\/frame_\d{1,7})\.png$/,
+    /^(?:https:\/\/(?:api\.)?lastasylumtracker\.com)?\/static\/(avatars\/head_\d{1,7}|frames\/frame_\d{1,7}|alliance\/badge_\d{1,7})\.png$/,
   );
   return art ? `/game-art/${art[1]}.png` : null;
 }
@@ -50,6 +50,11 @@ function slim(d) {
     name: String(d.name || ''),
     power: Number(d.power) || 0,
     memberCount: Number(d.member_count) || (Array.isArray(d.members) ? d.members.length : 0),
+    // For the Alliance standings cards (owner request, 2026-11-19): room, level and the
+    // alliance's in-game badge (our copy under /game-art/alliance/)
+    capacity: Number(d.capacity) || null,
+    level: Number(d.level) || null,
+    badge: pictureUrl(d.badge_url),
     members: (Array.isArray(d.members) ? d.members : [])
       .map((m) => ({
         uid: String(m.uid ?? m.player_id ?? ''),

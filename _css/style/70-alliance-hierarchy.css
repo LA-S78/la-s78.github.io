@@ -432,3 +432,141 @@
     margin-left: auto;
   }
 }
+
+/* ==========================================================================
+   Live numbers on the standings cards (owner request, 2026-11-19): the alliance's in-game
+   badge, and Might, members and level behind an arrow, so every card stays one line high
+   (outside planner mode). From the Last Asylum Tracker; ranks never come from it.
+   ========================================================================== */
+
+/* One line: the name gives way (ellipsis) rather than pushing the badge and arrow below.
+   Opened, the details take the full width under it. */
+.alliance-ladder-row.is-compact {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  column-gap: 10px;
+  row-gap: 0;
+}
+
+.alliance-ladder-row.is-compact .ladder-details {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--overlay-5);
+}
+
+/* A card without details keeps its badge in line with the others */
+.ladder-expand-spacer {
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.alliance-ladder-row.is-compact .nap-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Phones: the NAP badge becomes its shield, so names have room */
+@media (max-width: 560px) {
+  .alliance-ladder-row.is-compact .nap-badge-text {
+    display: none;
+  }
+
+  .alliance-ladder-row.is-compact .nap-badge {
+    padding: 3px 5px;
+  }
+}
+
+.alliance-ladder-row.is-compact .ladder-rank-col {
+  min-width: 34px;
+}
+
+.alliance-ladder-row.is-compact .ladder-primary-line {
+  flex-wrap: nowrap;
+  min-height: 28px;
+}
+
+.alliance-ladder-row.is-compact .ladder-tag,
+.alliance-ladder-row.is-compact .academy-child-badge {
+  flex-shrink: 0;
+}
+
+.alliance-ladder-row.is-compact .ladder-name {
+  min-width: 0;
+}
+
+main .ladder-badge,
+.ladder-badge {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  object-fit: contain;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.ladder-expand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ladder-expand:hover {
+  color: var(--accent-text);
+  border-color: var(--accent-color);
+}
+
+.ladder-expand svg {
+  transition: transform 0.15s ease;
+}
+
+.alliance-ladder-row.is-open .ladder-expand svg {
+  transform: rotate(180deg);
+}
+
+.ladder-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.ladder-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ladder-stat strong {
+  color: var(--text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+/* "Badges and numbers from the Last Asylum Tracker" */
+.ladder-credit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 8px 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.ladder-credit a {
+  color: inherit;
+  text-decoration: underline dotted;
+}

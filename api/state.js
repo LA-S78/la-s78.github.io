@@ -8,6 +8,7 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 // Unified Read-Only State Proxy for Map, Rewards, and Alliance Hierarchy
 
 import { BASELINE_SCHEDULES } from './_cycle_helper.js';
+import { fetchAlliance } from './_tracker.js';
 
 /**
  * Ensures cycle_state always returns valid numbers and never has an empty active_schedule.
@@ -81,6 +82,39 @@ export default async function handler(req, res) {
           revision: mapState.revision || 'initial',
           lastUpdated: mapState.lastUpdated || null,
         });
+
+      // The Alliance standings cards' live numbers (owner request, 2026-11-19): each NAP
+      // alliance's Might, members, level and in-game badge from the Last Asylum Tracker. Loaded
+      // after the standings, so a slow tracker never holds them up. Kept 2 hours by Vercel (and
+      // an hour on each server), so the tracker is asked at most about 10 times every 2 hours.
+      case 'tracker': {
+        const tags = Object.entries(mapState.alliances || {})
+          .filter(([, a]) => a && a.is_nap !== false)
+          .map(([tag]) => tag)
+          .slice(0, 30);
+        const found = await Promise.all(tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000 })));
+        const stats = {};
+        tags.forEach((tag, i) => {
+          const a = found[i];
+          if (!a) return;
+          stats[tag] = {
+            power: a.power,
+            members: a.memberCount,
+            capacity: a.capacity,
+            level: a.level,
+            badge: a.badge,
+          };
+        });
+        // Only a full answer is kept long: one with gaps (a slow lookup) is asked again soon
+        const complete = Object.keys(stats).length === tags.length;
+        res.setHeader(
+          'Cache-Control',
+          complete
+            ? 'public, s-maxage=7200, stale-while-revalidate=86400'
+            : 's-maxage=300, stale-while-revalidate=600',
+        );
+        return res.status(200).json({ stats });
+      }
 
       case 'rewards':
         return res.status(200).json({
