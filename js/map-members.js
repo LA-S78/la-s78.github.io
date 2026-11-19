@@ -192,7 +192,12 @@ function start() {
     const picked = state.members.find((m) => m.uid === state.selected);
     if (picked) {
       const { cx, cy } = toMap(picked.x, picked.y);
-      html += `${square(cx, cy, SIZE.picked, perPx, 'map-member-dot is-selected', `data-uid="${esc(picked.uid)}"`, color)}><title>${esc(picked.name)}</title></rect>`;
+      // A pulsing halo, a dark outline and a thick white edge: it stands out on any colour
+      const halo = (SIZE.picked / 2 + 5) * perPx;
+      html += `<rect class="map-member-halo" x="${(cx - halo).toFixed(1)}" y="${(cy - halo).toFixed(1)}" width="${(2 * halo).toFixed(1)}" height="${(2 * halo).toFixed(1)}" rx="${(3 * perPx).toFixed(1)}" stroke-width="${(2 * perPx).toFixed(1)}"></rect>`;
+      const edge = (SIZE.picked / 2 + 1.5) * perPx;
+      html += `<rect class="map-member-outline" x="${(cx - edge).toFixed(1)}" y="${(cy - edge).toFixed(1)}" width="${(2 * edge).toFixed(1)}" height="${(2 * edge).toFixed(1)}" rx="${(2 * perPx).toFixed(1)}"></rect>`;
+      html += `${square(cx, cy, SIZE.picked, perPx, 'map-member-dot is-selected', `data-uid="${esc(picked.uid)}"`, color).replace(/stroke-width="[^"]*"/, `stroke-width="${(2 * perPx).toFixed(2)}"`)}><title>${esc(picked.name)}</title></rect>`;
     }
     layer.innerHTML = html;
   }
