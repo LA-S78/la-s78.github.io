@@ -146,7 +146,7 @@ export default async function handler(req, res) {
         res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
         return res
           .status(200)
-          .json(top || { day: null, days: [], strongest: [], week: [], month: [] });
+          .json(top || { day: null, days: [], players: {}, lists: {}, achievements: {} });
       }
 
       case 'rewards':

@@ -246,16 +246,18 @@ function playersView(box, top, nap, list, tag, expanded) {
           }`
         : `<p class="stats-note">${esc(empty)}</p>`
     }`;
-  // A picture that doesn't load (changed, or the game's server is slow) shows the initial
+  fallbackFaces(box);
+}
+
+/** A picture that doesn't load (changed, or the game's server is slow) shows the initial. */
+function fallbackFaces(box) {
   box.querySelectorAll('img.stats-face').forEach((img) =>
     img.addEventListener(
       'error',
       () => {
         const span = document.createElement('span');
         span.className = 'stats-face stats-initial';
-        span.textContent = (
-          img.closest('.stats-player')?.querySelector('strong')?.textContent || '?'
-        )
+        span.textContent = (img.closest('li')?.querySelector('strong')?.textContent || '?')
           .charAt(0)
           .toUpperCase();
         img.replaceWith(span);
@@ -263,6 +265,69 @@ function playersView(box, top, nap, list, tag, expanded) {
       { once: true },
     ),
   );
+}
+
+// ---------- Achievements ----------
+
+/** 47368659 → "47.4M", 950000 → "950K" */
+function count(n) {
+  if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
+  if (n >= 1e3) return `${Math.round(n / 1e3)}K`;
+  return String(n);
+}
+
+const plural = (key, n) => t(`${key}_${n === 1 ? 'one' : 'other'}`, { n });
+
+// Each record: its icon and how its number reads (api/_stats.js topPlayers achievements)
+const RECORDS = [
+  ['strongest', 'crown', (v) => might(v)],
+  ['gain_week', 'line_chart', (v) => change(v)],
+  ['kills', 'swords', (v) => t('value_kills', { n: count(v) })],
+  ['kills_week', 'flame', (v) => `+${t('value_kills', { n: count(v) })}`],
+  ['climb_month', 'castle', (v) => plural('value_levels', v)],
+  ['away', 'map', (v) => plural('value_days', v)],
+];
+
+function achievementsView(box, top, nap, tag) {
+  const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
+  const all = top.achievements || {};
+  const tags = nap.filter((a) => all[a.tag]);
+  const board = all[tag || 'all'] || {};
+  const medal = ['gold', 'silver', 'bronze'];
+  box.innerHTML = `
+    <div class="stats-bar stats-subbar">
+      <label class="stats-filter"><span>${esc(t('filter_label'))}</span>
+        <select data-stats-filter>
+          <option value="">${esc(t('filter_all'))}</option>
+          ${tags.map((a) => `<option value="${esc(a.tag)}"${a.tag === tag ? ' selected' : ''}>[${esc(a.tag)}]</option>`).join('')}
+        </select>
+      </label>
+    </div>
+    ${top.day ? `<p class="stats-note">${esc(t('players_as_of', { date: dateLabel(top.day) }))}</p>` : ''}
+    <div class="stats-records">${RECORDS.map(([key, icon, show]) => {
+      const rows = (board[key] || [])
+        .map(([uid, v]) => (top.players?.[uid] ? { ...top.players[uid], v } : null))
+        .filter(Boolean);
+      return `<section class="stats-record">
+        <h3>${ic(icon)}${esc(t(`ach_${key}`))}</h3>
+        ${key === 'away' ? `<p class="stats-note">${esc(t('ach_away_help'))}</p>` : ''}
+        ${
+          rows.length
+            ? `<ol>${rows
+                .map(
+                  (p, i) => `<li class="stats-podium is-${medal[i]}">
+                    <span class="stats-medal">${i + 1}</span>
+                    ${face(p)}
+                    <span class="stats-who"><strong>${esc(p.name)}</strong><small>[${esc(p.tag)}]</small></span>
+                    <span class="stats-value">${esc(show(p.v))}</span>
+                  </li>`,
+                )
+                .join('')}</ol>`
+            : `<p class="stats-note">${esc(t('ach_none'))}</p>`
+        }
+      </section>`;
+    }).join('')}</div>`;
+  fallbackFaces(box);
 }
 
 async function start() {
@@ -291,6 +356,8 @@ async function start() {
         return;
       }
     }
+    if (state.view === 'achievements')
+      return achievementsView(box, state.top, state.data.nap || [], state.tag);
     if (state.view === 'players')
       playersView(box, state.top, state.data.nap || [], state.list, state.tag, state.more);
   };
