@@ -659,33 +659,39 @@ event_presets:
   cheese_trap_title: Piège à Fromage
   cheese_trap_desc: Aidez à repousser le Voleur de Fromage
 alliance_planner:
-  roster: 'Roster NAP :'
+  roster: 'Liste NAP :'
   roster_loading: "-- Alliances"
   nap_alliances: "{n} Alliances NAP"
-  planner_mode: Mode planificateur
+  planner_mode: Mode Planificateur
   submit_plan: Soumettre le plan
   tag_placeholder: TAG (ex. WLO)
   name_placeholder: Nom complet de l'alliance
   add_contender: "+ Ajouter un concurrent"
-  loading_standings: Chargement du classement…
-  standings_failed: Impossible de charger le classement.
+  loading_standings: Chargement des classements…
+  standings_failed: Impossible de charger les classements.
   protected_academy: Académie protégée
   change_color: Changer la couleur de [{tag}]
   academy_of: Académie de [{tag}]
   link_academy: "+ Lier une académie"
   nap_protected: NAP Protégé
+  show_details: Afficher les détails
+  hide_details: Masquer les détails
+  stat_might: Puissance
+  stat_members: membres
+  stat_level: Niveau {n}
+  tracker_credit_before: Badges et numéros provenant du
   external: Externe
-  revoke_nap: Révoquer le NAP
-  grant_nap: Accorder le NAP
+  revoke_nap: Révoquer NAP
+  grant_nap: Accorder NAP
   remove_alliance: Supprimer l'alliance
-  academy_prompt: 'Entrez le tag d''alliance exact à lier en tant qu''Académie sous [{tag}] (sensible à la casse, ex. RâvN ou râvn) :'
+  academy_prompt: 'Saisissez le tag d''alliance exact à lier comme académie sous [{tag}] (sensible à la casse, ex. RâvN ou râvn) :'
   academy_available: 'Disponible : {tags}'
-  academy_new: 'Ou tapez un nouveau tag d''académie pour le créer :'
-  already_exists: L'alliance [{tag}] existe déjà avec cette capitalisation exacte.
-  no_changes: Aucune modification détectée dans le classement actuel.
-  proposal_title: Soumettre une proposition de classement NAP & Diplomatie
+  academy_new: 'Ou saisissez un nouveau tag d''académie pour le créer :'
+  already_exists: L'alliance [{tag}] existe déjà avec cette casse exacte.
+  no_changes: Aucune modification détectée dans les classements actuels.
+  proposal_title: Soumettre les classements NAP et la proposition diplomatique
   diff_rank: "{tag} : Rang {from} ➔ {to}"
-  diff_academy: "{tag} : Assigné comme Académie de {parent}"
+  diff_academy: "{tag} : Assigné comme académie de {parent}"
   diff_nap: "{tag} : Statut NAP {status}"
   nap_status_protected: Protégé
   nap_status_revoked: Révoqué

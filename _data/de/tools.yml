@@ -662,39 +662,45 @@ alliance_planner:
   roster: 'NAP-Roster:'
   roster_loading: "-- Allianzen"
   nap_alliances: "{n} NAP-Allianzen"
-  planner_mode: Planer-Modus
+  planner_mode: Planungsmodus
   submit_plan: Plan einreichen
   tag_placeholder: TAG (z. B. WLO)
   name_placeholder: Vollständiger Allianzname
   add_contender: "+ Anwärter hinzufügen"
-  loading_standings: Rangliste wird geladen...
+  loading_standings: Rangliste wird geladen…
   standings_failed: Rangliste konnte nicht geladen werden.
   protected_academy: Geschützte Akademie
-  change_color: "[{tag}] Farbe ändern"
+  change_color: "[{tag}]-Farbe ändern"
   academy_of: Akademie von [{tag}]
   link_academy: "+ Akademie verknüpfen"
-  nap_protected: NAP-geschützt
+  nap_protected: NAP geschützt
+  show_details: Details anzeigen
+  hide_details: Details ausblenden
+  stat_might: Macht
+  stat_members: Mitglieder
+  stat_level: Level {n}
+  tracker_credit_before: Abzeichen und Zahlen vom
   external: Extern
   revoke_nap: NAP widerrufen
   grant_nap: NAP gewähren
   remove_alliance: Allianz entfernen
-  academy_prompt: 'Gib das exakte Allianz-TAG ein, um es als Akademie unter [{tag}] zu verknüpfen (Groß-/Kleinschreibung beachten, z. B. RâvN oder râvn):'
+  academy_prompt: 'Exaktes Allianz-Tag eingeben, um es als Akademie unter [{tag}] zu verknüpfen (Groß-/Kleinschreibung beachten, z. B. RâvN oder râvn):'
   academy_available: 'Verfügbar: {tags}'
-  academy_new: 'Oder gib ein neues Akademie-TAG ein, um es zu erstellen:'
+  academy_new: 'Oder neues Akademie-Tag eingeben, um es zu erstellen:'
   already_exists: Allianz [{tag}] existiert bereits mit dieser exakten Schreibweise.
-  no_changes: Keine Änderungen in der aktuellen Rangliste festgestellt.
-  proposal_title: NAP-Rangliste & Diplomatie-Vorschlag einreichen
+  no_changes: Keine Änderungen in der aktuellen Rangliste erkannt.
+  proposal_title: NAP-Rangliste & Diplomatievorschlag einreichen
   diff_rank: "{tag}: Rang {from} ➔ {to}"
   diff_academy: "{tag}: Zugewiesen als Akademie von {parent}"
   diff_nap: "{tag}: NAP-Status {status}"
   nap_status_protected: Geschützt
   nap_status_revoked: Widerrufen
-  diff_color: "{tag}: Farbe auf {color} aktualisiert"
+  diff_color: "{tag}: Farbe aktualisiert auf {color}"
   diff_added: "{added}: Rang #{rank} ({name})"
-  added_tag: "[{tag}] hinzugefügt"
+  added_tag: Hinzugefügt [{tag}]
   diff_removed: "{removed} aus Rangliste"
-  removed_tag: "[{tag}] entfernt"
-  diff_modified: "[{tag}] modifiziert"
+  removed_tag: Entfernt [{tag}]
+  diff_modified: Geändert [{tag}]
   unknown: Unbekannt
 blacklist_planner:
   players_title: Blacklist-Spieler

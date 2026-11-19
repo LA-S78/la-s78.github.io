@@ -672,32 +672,38 @@ alliance_planner:
   nap_alliances: "{n} альянсів NAP"
   planner_mode: Режим планувальника
   submit_plan: Надіслати план
-  tag_placeholder: TAG (напр. WLO)
+  tag_placeholder: ТЕГ (напр. WLO)
   name_placeholder: Повна назва альянсу
   add_contender: "+ Додати претендента"
-  loading_standings: Завантаження таблиці...
+  loading_standings: Завантаження таблиці…
   standings_failed: Не вдалося завантажити таблицю.
-  protected_academy: Захищена академія
+  protected_academy: Академія під захистом
   change_color: Змінити колір [{tag}]
   academy_of: Академія [{tag}]
   link_academy: "+ Додати академію"
   nap_protected: Під захистом NAP
+  show_details: Показати деталі
+  hide_details: Приховати деталі
+  stat_might: Сила
+  stat_members: учасників
+  stat_level: Рівень {n}
+  tracker_credit_before: Значки та цифри з
   external: Зовнішній
   revoke_nap: Скасувати NAP
   grant_nap: Надати NAP
   remove_alliance: Видалити альянс
-  academy_prompt: 'Введіть точний тег альянсу для зв''язку як Академія під [{tag}] (чутливо до регістру, напр. RâvN або râvn):'
+  academy_prompt: 'Введіть точний тег альянсу для зв''язку як академії під [{tag}] (чутливо до регістру, напр. RâvN або râvn):'
   academy_available: 'Доступно: {tags}'
   academy_new: 'Або введіть новий тег академії, щоб створити її:'
-  already_exists: Альянс [{tag}] вже існує з таким регістром.
-  no_changes: Змін у поточній таблиці не виявлено.
-  proposal_title: Надіслати пропозицію щодо таблиці NAP та дипломатії
+  already_exists: Альянс [{tag}] вже існує з такою ж великою/малою літерою.
+  no_changes: Немає змін у поточній таблиці.
+  proposal_title: Надіслати таблицю NAP та пропозицію дипломатії
   diff_rank: "{tag}: Ранг {from} ➔ {to}"
-  diff_academy: "{tag}: Призначено як академія {parent}"
+  diff_academy: "{tag}: Призначено як академію {parent}"
   diff_nap: "{tag}: Статус NAP {status}"
-  nap_status_protected: Захищено
+  nap_status_protected: Під захистом
   nap_status_revoked: Скасовано
-  diff_color: "{tag}: Колір оновлено до {color}"
+  diff_color: "{tag}: Колір оновлено на {color}"
   diff_added: "{added}: Ранг #{rank} ({name})"
   added_tag: Додано [{tag}]
   diff_removed: "{removed} з таблиці"

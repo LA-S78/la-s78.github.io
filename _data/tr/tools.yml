@@ -659,40 +659,46 @@ event_presets:
   cheese_trap_title: Peynir Tuzağı
   cheese_trap_desc: Peynir Hırsızını defetmeye yardımcı olun
 alliance_planner:
-  roster: 'NAP Kadrosu:'
+  roster: 'NAP Listesi:'
   roster_loading: "-- İttifaklar"
   nap_alliances: "{n} NAP İttifakı"
   planner_mode: Planlayıcı Modu
   submit_plan: Planı Gönder
-  tag_placeholder: ETİKET (ör. WLO)
-  name_placeholder: Tam İttifak İsmi
-  add_contender: "+ Aday Ekle"
+  tag_placeholder: TAG (ör. WLO)
+  name_placeholder: İttifakın Tam Adı
+  add_contender: "+ Katılımcı Ekle"
   loading_standings: Sıralamalar yükleniyor…
   standings_failed: Sıralamalar yüklenemedi.
-  protected_academy: Korumalı Akademi
+  protected_academy: Korunan Akademi
   change_color: "[{tag}] Rengini Değiştir"
   academy_of: "[{tag}] Akademisi"
   link_academy: "+ Akademi Bağla"
   nap_protected: NAP Korumalı
+  show_details: Detayları göster
+  hide_details: Detayları gizle
+  stat_might: Güç
+  stat_members: üye
+  stat_level: "{n}. Seviye"
+  tracker_credit_before: 'Rozetler ve numaralar şuradan alınmıştır:'
   external: Harici
   revoke_nap: NAP'ı İptal Et
   grant_nap: NAP Ver
   remove_alliance: İttifakı Kaldır
-  academy_prompt: "[{tag}] altında Akademi olarak bağlamak için tam ittifak etiketini girin (büyük/küçük harf duyarlı, ör. RâvN veya râvn):"
+  academy_prompt: "[{tag}] altında Akademi olarak bağlamak için tam ittifak etiketini girin (büyük/küçük harfe duyarlıdır, ör. RâvN veya râvn):"
   academy_available: 'Mevcut: {tags}'
   academy_new: 'Veya oluşturmak için yeni bir akademi etiketi yazın:'
-  already_exists: İttifak [{tag}] tam olarak bu büyük/küçük harf dizilimiyle zaten mevcut.
+  already_exists: "[{tag}] ittifakı aynı büyük/küçük harf düzeniyle zaten mevcut."
   no_changes: Mevcut sıralamalarda değişiklik algılanmadı.
-  proposal_title: NAP Sıralamaları ve Diplomasi Teklifi Sun
+  proposal_title: NAP Sıralamasını ve Diplomasi Teklifini Gönder
   diff_rank: "{tag}: Sıra {from} ➔ {to}"
   diff_academy: "{tag}: {parent} Akademisi olarak atandı"
   diff_nap: "{tag}: NAP Durumu {status}"
   nap_status_protected: Korumalı
   nap_status_revoked: İptal Edildi
   diff_color: "{tag}: Renk {color} olarak güncellendi"
-  diff_added: "{added}: Sıra #{rank} ({name})"
+  diff_added: "{added}: {rank}. Sıra ({name})"
   added_tag: "[{tag}] Eklendi"
-  diff_removed: "{removed} sıralamalardan çıkarıldı"
+  diff_removed: "{removed} sıralamadan çıkarıldı"
   removed_tag: "[{tag}] Kaldırıldı"
   diff_modified: "[{tag}] Değiştirildi"
   unknown: Bilinmiyor

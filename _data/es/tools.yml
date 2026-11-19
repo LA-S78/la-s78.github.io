@@ -663,36 +663,42 @@ alliance_planner:
   roster_loading: "-- Alianzas"
   nap_alliances: "{n} Alianzas NAP"
   planner_mode: Modo Planificador
-  submit_plan: Enviar Plan
-  tag_placeholder: TAG (p. ej., WLO)
-  name_placeholder: Nombre Completo de la Alianza
-  add_contender: "+ Añadir Contendiente"
-  loading_standings: Cargando clasificaciones…
-  standings_failed: No se pudieron cargar las clasificaciones.
-  protected_academy: Academia Protegida
-  change_color: Cambiar Color de [{tag}]
+  submit_plan: Enviar plan
+  tag_placeholder: TAG (ej. WLO)
+  name_placeholder: Nombre completo de la alianza
+  add_contender: "+ Añadir competidor"
+  loading_standings: Cargando la clasificación…
+  standings_failed: No se pudo cargar la clasificación.
+  protected_academy: Academia protegida
+  change_color: Cambiar color de [{tag}]
   academy_of: Academia de [{tag}]
-  link_academy: "+ Vincular Academia"
-  nap_protected: NAP Protegida
-  external: Externa
+  link_academy: "+ Vincular academia"
+  nap_protected: NAP protegido
+  show_details: Mostrar detalles
+  hide_details: Ocultar detalles
+  stat_might: Poder
+  stat_members: miembros
+  stat_level: Nivel {n}
+  tracker_credit_before: Insignias y números de
+  external: Externo
   revoke_nap: Revocar NAP
-  grant_nap: Conceder NAP
-  remove_alliance: Eliminar Alianza
-  academy_prompt: 'Ingresa el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, p. ej., RâvN o râvn):'
+  grant_nap: Otorgar NAP
+  remove_alliance: Eliminar alianza
+  academy_prompt: 'Introduce el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue mayúsculas/minúsculas, ej. RâvN o râvn):'
   academy_available: 'Disponible: {tags}'
-  academy_new: 'O escribe un nuevo tag de academia para crearlo:'
-  already_exists: La Alianza [{tag}] ya existe con esa capitalización exacta.
-  no_changes: No se detectaron modificaciones en las clasificaciones actuales.
-  proposal_title: Enviar Propuesta de Clasificaciones y Diplomacia NAP
+  academy_new: 'O escribe un nuevo tag de academia para crearla:'
+  already_exists: La alianza [{tag}] ya existe con esa capitalización exacta.
+  no_changes: No se detectaron modificaciones en la clasificación actual.
+  proposal_title: Enviar clasificación NAP y propuesta diplomática
   diff_rank: "{tag}: Rango {from} ➔ {to}"
   diff_academy: "{tag}: Asignada como Academia de {parent}"
   diff_nap: "{tag}: Estado NAP {status}"
-  nap_status_protected: Protegida
-  nap_status_revoked: Revocada
+  nap_status_protected: Protegido
+  nap_status_revoked: Revocado
   diff_color: "{tag}: Color actualizado a {color}"
   diff_added: "{added}: Rango #{rank} ({name})"
   added_tag: Añadido [{tag}]
-  diff_removed: "{removed} de las clasificaciones"
+  diff_removed: "{removed} de la clasificación"
   removed_tag: Eliminado [{tag}]
   diff_modified: Modificado [{tag}]
   unknown: Desconocido
