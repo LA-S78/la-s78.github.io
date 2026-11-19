@@ -777,6 +777,7 @@ map_planner:
   members_as_of: "positions as of {time}"
   members_failed: "Members can't be shown: {error}"
   members_none: "No member matches"
+  members_here: "{n} members here:"
   member_coords: "X {x} · Y {y}"
   member_in: "in {place}"
   member_close: "Close"

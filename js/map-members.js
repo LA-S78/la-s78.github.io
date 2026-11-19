@@ -83,12 +83,65 @@ function start() {
   let resize = null;
   const root = () => getSvgRoot();
 
-  function radius() {
+  /** Map units per screen pixel at the map's current size. */
+  function unitsPerPx() {
     const svg = root();
     const vb = svg?.viewBox?.baseVal;
     const w = svg?.getBoundingClientRect().width || 0;
-    const perPx = vb && w ? vb.width / w : 3;
-    return { r: 5 * perPx, ring: 1.5 * perPx };
+    return vb && w ? vb.width / w : 3;
+  }
+
+  // Marker sizes on screen, in pixels (owner, 2026-11-19: small squares; members whose
+  // markers would overlap share one square with their number)
+  const SIZE = { one: 6, group: 14, picked: 11, ring: 1 };
+
+  /**
+   * Members grouped by where they fall on screen, so no two markers overlap: a member joins
+   * the nearest group within a group marker's size, then groups that still touch merge. The
+   * chosen member always has a marker of their own, on top.
+   */
+  function groupsOnScreen(perPx) {
+    const reach = SIZE.group * perPx;
+    let list = [];
+    for (const m of state.members) {
+      if (m.uid === state.selected) continue;
+      const { cx, cy } = toMap(m.x, m.y);
+      const near = list.find((g) => Math.hypot(g.cx - cx, g.cy - cy) < reach);
+      if (near) {
+        near.members.push(m);
+        near.sx += cx;
+        near.sy += cy;
+        near.cx = near.sx / near.members.length;
+        near.cy = near.sy / near.members.length;
+      } else list.push({ members: [m], sx: cx, sy: cy, cx, cy });
+    }
+    // Groups that moved into each other while growing are merged
+    for (let merged = true; merged; ) {
+      merged = false;
+      outer: for (let i = 0; i < list.length; i++) {
+        for (let j = i + 1; j < list.length; j++) {
+          const a = list[i];
+          const b = list[j];
+          if (Math.hypot(a.cx - b.cx, a.cy - b.cy) >= reach) continue;
+          a.members.push(...b.members);
+          a.sx += b.sx;
+          a.sy += b.sy;
+          a.cx = a.sx / a.members.length;
+          a.cy = a.sy / a.members.length;
+          list.splice(j, 1);
+          merged = true;
+          break outer;
+        }
+      }
+    }
+    return list;
+  }
+
+  let groups = [];
+
+  function square(cx, cy, px, perPx, cls, attrs, fill) {
+    const h = (px / 2) * perPx;
+    return `<rect class="${cls}" ${attrs} x="${(cx - h).toFixed(1)}" y="${(cy - h).toFixed(1)}" width="${(2 * h).toFixed(1)}" height="${(2 * h).toFixed(1)}" rx="${(perPx * 1.5).toFixed(1)}" fill="${esc(fill)}" stroke-width="${(SIZE.ring * perPx).toFixed(2)}"`;
   }
 
   function draw() {
@@ -98,46 +151,66 @@ function start() {
       layer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       layer.setAttribute('class', 'map-member-dots');
       layer.addEventListener('click', (e) => {
-        const dot = e.target.closest('[data-uid]');
-        if (!dot) return;
+        const one = e.target.closest('[data-uid]');
+        const many = e.target.closest('[data-group]');
+        if (!one && !many) return;
         e.stopPropagation();
-        select(dot.dataset.uid);
+        if (one) select(one.dataset.uid);
+        else showGroup(groups[Number(many.dataset.group)]);
       });
-      // Clicks and hovers on a dot are the dot's, not the territory's under it
+      // Clicks and hovers on a marker are the marker's, not the territory's under it
       ['pointerdown', 'mousemove', 'mouseover'].forEach((type) =>
         layer.addEventListener(type, (e) => e.stopPropagation()),
       );
     }
     if (layer.parentNode !== svg || svg.lastElementChild !== layer) svg.appendChild(layer);
     if (!observer) {
-      // The map redraws its own layers (labels, highlights): the dots go back on top
+      // The map redraws its own layers (labels, highlights): the markers go back on top
       observer = new MutationObserver(() => {
         if (state.on && layer && svg.lastElementChild !== layer) svg.appendChild(layer);
       });
       observer.observe(svg, { childList: true });
     }
     if (!resize && 'ResizeObserver' in window) {
-      resize = new ResizeObserver(() => state.on && sizeDots());
+      // A bigger map (fullscreen, a wider window) splits groups apart
+      resize = new ResizeObserver(() => state.on && draw());
       resize.observe(svg);
     }
     const color = getAllianceColor(state.tag);
-    layer.innerHTML = state.members
-      .map((m) => {
-        const { cx, cy } = toMap(m.x, m.y);
-        return `<circle class="map-member-dot${state.selected === m.uid ? ' is-selected' : ''}" data-uid="${esc(m.uid)}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" fill="${esc(color)}"><title>${esc(m.name)}</title></circle>`;
+    const perPx = unitsPerPx();
+    groups = groupsOnScreen(perPx);
+    let html = groups
+      .map((g, i) => {
+        if (g.members.length === 1) {
+          const m = g.members[0];
+          return `${square(g.cx, g.cy, SIZE.one, perPx, 'map-member-dot', `data-uid="${esc(m.uid)}"`, color)}><title>${esc(m.name)}</title></rect>`;
+        }
+        const names = g.members.map((m) => m.name).join(', ');
+        return `<g class="map-member-group" data-group="${i}">${square(g.cx, g.cy, SIZE.group, perPx, 'map-member-dot', '', color)}><title>${esc(names)}</title></rect><text x="${g.cx.toFixed(1)}" y="${g.cy.toFixed(1)}" font-size="${(8 * perPx).toFixed(1)}" dy="0.35em">${g.members.length}</text></g>`;
       })
       .join('');
-    sizeDots();
+    const picked = state.members.find((m) => m.uid === state.selected);
+    if (picked) {
+      const { cx, cy } = toMap(picked.x, picked.y);
+      html += `${square(cx, cy, SIZE.picked, perPx, 'map-member-dot is-selected', `data-uid="${esc(picked.uid)}"`, color)}><title>${esc(picked.name)}</title></rect>`;
+    }
+    layer.innerHTML = html;
   }
 
-  function sizeDots() {
-    if (!layer) return;
-    const { r, ring } = radius();
-    layer.querySelectorAll('circle').forEach((c) => {
-      const big = c.classList.contains('is-selected');
-      c.setAttribute('r', (big ? r * 1.8 : r).toFixed(1));
-      c.setAttribute('stroke-width', (big ? ring * 2 : ring).toFixed(1));
-    });
+  /** A shared marker tapped: its members as buttons to pick from. */
+  function showGroup(group) {
+    if (!group) return;
+    results.hidden = false;
+    results.innerHTML =
+      `<span class="map-members-none">${esc(tm('members_here', { n: group.members.length }))}</span>` +
+      group.members
+        .slice()
+        .sort((a, b) => b.power - a.power)
+        .map(
+          (m) =>
+            `<button type="button" class="map-members-hit" data-uid="${esc(m.uid)}">${esc(m.name)} <small>${esc(might(m.power))}</small></button>`,
+        )
+        .join('');
   }
 
   function clear() {

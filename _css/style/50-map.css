@@ -506,6 +506,8 @@ svg #layer1 path:hover {
   flex-wrap: wrap;
   gap: 4px;
   margin-top: 6px;
+  max-height: 9.5rem; /* a big group's list scrolls instead of pushing the map down */
+  overflow-y: auto;
 }
 
 .map-members-hit {
@@ -582,13 +584,29 @@ main .map-member-pic,
   cursor: pointer;
 }
 
-/* The dots: the alliance's colour, ringed so they show on any territory */
+/* The markers: small squares in the alliance's colour, ringed so they show on any territory;
+   members close together share one with their number */
 .game-map .map-member-dot {
   stroke: #fff;
   cursor: pointer;
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.9));
 }
 
 .game-map .map-member-dot.is-selected {
   stroke: var(--gold, #ffd54a);
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.9));
+}
+
+.game-map .map-member-group {
+  cursor: pointer;
+}
+
+.game-map .map-member-group text {
+  fill: #fff;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.75);
+  stroke-width: 0.25em;
 }
