@@ -103,18 +103,25 @@ rewards_card:
   buyout_cost: 'Acquisizione: {amount} {chest} in ogni set'
   buyout_cost_help: Finanziamento dell'alleanza sfollata questa settimana
 roster:
-  title: Lista membri Alleanza
-  summary: "{n} membri · {might} Forza"
+  title: Rosa dell'Alleanza
+  summary: "{n} membri · {might} Potenza"
   search: Cerca nomi o ID...
   sort_label: Ordina per
-  sort_power: Forza
+  sort_power: Potenza
   sort_name: Nome
-  sort_rank: Rango
+  sort_rank: Grado
   sanctuary_lv: Santuario {n}
   copy_id: Copia questo ID giocatore
   copied: Copiato
-  unavailable: L'elenco dei membri non può essere caricato al momento. Riprova più tardi.
+  unavailable: Impossibile caricare la lista membri in questo momento. Riprova più tardi.
   credit_before: Dati giocatore dal
+  sort_tech: Ricerca
+  sort_help: Aiuto
+  tech_title: Ricerca dell'Alleanza donata oggi
+  help_title: Aiuto fornito alle costruzioni e ricerche dei membri oggi
+  daily_as_of: Ricerca e aiuto dal reset di oggi (00:00 GT), aggiornato alle {time}
+  daily_old: 'Ricerca e aiuto prima del reset di oggi: ultima lettura {time}'
+  daily_unknown: 'Ricerca e aiuto: orario di lettura sconosciuto'
 caravan:
   title: Rotazione Carovana
   name_ok: Nella lista membri di [{tag}]

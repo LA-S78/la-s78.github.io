@@ -103,18 +103,25 @@ rewards_card:
   buyout_cost: 'Ablöse: {amount} {chest} in jedem Set'
   buyout_cost_help: Finanzierung der verdrängten Allianz diese Woche
 roster:
-  title: Allianz-Mitglieder
-  summary: "{n} Mitglieder · {might} Stärke"
+  title: Allianz-Mitgliederliste
+  summary: "{n} Mitglieder · {might} Macht"
   search: Namen oder IDs suchen...
   sort_label: Sortieren nach
-  sort_power: Stärke
+  sort_power: Macht
   sort_name: Name
   sort_rank: Rang
   sanctuary_lv: Sanktuarium {n}
   copy_id: Spieler-ID kopieren
   copied: Kopiert
   unavailable: Die Mitgliederliste kann aktuell nicht geladen werden. Versuche es später erneut.
-  credit_before: Spielerdaten von
+  credit_before: Spieldaten vom
+  sort_tech: Forschung
+  sort_help: Hilfe
+  tech_title: Heute gespendete Allianz-Forschung
+  help_title: Heute bei Bau und Forschung geholfen
+  daily_as_of: 'Forschung und Hilfe seit dem heutigen Reset (00:00 GT), Stand: {time}'
+  daily_old: 'Forschung und Hilfe vor dem heutigen Reset: zuletzt gelesen {time}'
+  daily_unknown: 'Forschung und Hilfe: Zeitpunkt des Lesens unbekannt'
 caravan:
   title: Karawanen-Rotor
   name_ok: In der Mitgliederliste von [{tag}]

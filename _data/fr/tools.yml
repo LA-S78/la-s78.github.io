@@ -103,7 +103,7 @@ rewards_card:
   buyout_cost: 'Rachat : {amount} {chest} dans chaque ensemble'
   buyout_cost_help: Financement de l'alliance déplacée cette semaine
 roster:
-  title: Liste des membres de l'alliance
+  title: Effectif de l'Alliance
   summary: "{n} membres · {might} Puissance"
   search: Rechercher des noms ou IDs...
   sort_label: Trier par
@@ -111,10 +111,17 @@ roster:
   sort_name: Nom
   sort_rank: Rang
   sanctuary_lv: Sanctuaire {n}
-  copy_id: Copier cet ID de joueur
+  copy_id: Copier cet ID joueur
   copied: Copié
   unavailable: La liste des membres ne peut pas être chargée pour le moment. Réessayez plus tard.
-  credit_before: Données joueur provenant du
+  credit_before: Données des joueurs issues du
+  sort_tech: Recherche
+  sort_help: Aide
+  tech_title: Recherche d'Alliance effectuée aujourd'hui
+  help_title: Aide apportée aux constructions et recherches des membres aujourd'hui
+  daily_as_of: Recherche et aide depuis la réinitialisation d'aujourd'hui (00:00 GT), au {time}
+  daily_old: 'Recherche et aide avant la réinitialisation d''aujourd''hui : dernière lecture à {time}'
+  daily_unknown: 'Recherche et aide : heure de lecture inconnue'
 caravan:
   title: Gestionnaire de Caravane
   name_ok: Dans la liste des membres de [{tag}]
