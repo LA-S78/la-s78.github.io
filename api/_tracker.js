@@ -81,6 +81,10 @@ function slim(d) {
         // as much as Alliance Duel, so it misjudges players).
         tech: count(m.daily_tech),
         help: count(m.daily_honor),
+        // Where their Sanctuary is (game X/Y, 0–1000): leaders only, on the territory map
+        // (owner request, 2026-11-19; api/dashboard.js ?positions=1)
+        x: count(m.x),
+        y: count(m.y),
       }))
       .filter((m) => m.name),
     ageSeconds: Number(d.age_seconds) || 0,

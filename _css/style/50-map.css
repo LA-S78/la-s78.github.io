@@ -451,3 +451,194 @@ svg #layer1 path:hover {
   padding: 8px 12px;
 }
 
+
+/* ==========================================================================
+   "My members" (leaders only, owner request 2026-11-19; js/map-members.js): a dot for each
+   member of the leader's own alliance, a search box and a card for the chosen member.
+   ========================================================================== */
+
+.map-members {
+  margin: 0 0 0.6rem;
+}
+
+.map-members-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.map-members-bar [aria-pressed='true'] {
+  color: var(--accent-text);
+  border-color: var(--accent-color);
+}
+
+#map-members-search {
+  flex: 1 1 180px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.map-members-status {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.map-members-status a {
+  color: inherit;
+  text-decoration: underline dotted;
+}
+
+.map-members-results[hidden],
+#map-members-search[hidden] {
+  display: none;
+}
+
+.map-members-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  max-height: 9.5rem; /* a big group's list scrolls instead of pushing the map down */
+  overflow-y: auto;
+}
+
+.map-members-hit {
+  padding: 3px 8px;
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--text-main);
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.map-members-hit small,
+.map-members-none {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.map-member-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -0.4rem 0 1rem;
+  padding: 8px 10px;
+  background: var(--surface-card);
+  border: 1px solid var(--accent-color);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.map-member-card[hidden] {
+  display: none;
+}
+
+main .map-member-pic,
+.map-member-pic {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  object-fit: cover;
+  border: none;
+  border-radius: 6px;
+}
+
+.map-member-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--overlay-5);
+}
+
+.map-member-who {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  color: var(--text-muted);
+}
+
+.map-member-who strong {
+  color: var(--text-main);
+}
+
+.map-member-close {
+  display: inline-flex;
+  padding: 4px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* The markers: small squares in the alliance's colour, ringed so they show on any territory;
+   members close together share one with their number */
+.game-map .map-member-dot {
+  stroke: #fff;
+  cursor: pointer;
+}
+
+.game-map .map-member-dot.is-selected {
+  stroke: #fff;
+}
+
+/* The chosen member: a dark outline under the white edge, and a slow white pulse around it */
+.game-map .map-member-outline {
+  fill: #000;
+  pointer-events: none;
+}
+
+.game-map .map-member-halo {
+  fill: none;
+  stroke: #fff;
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: map-member-pulse 1.6s ease-out infinite;
+}
+
+@keyframes map-member-pulse {
+  0% {
+    opacity: 0.95;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-map .map-member-halo {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
+.game-map .map-member-group {
+  cursor: pointer;
+}
+
+.game-map .map-member-group text {
+  fill: #fff;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.75);
+  stroke-width: 0.25em;
+}
