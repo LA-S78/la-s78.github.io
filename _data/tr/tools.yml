@@ -105,21 +105,28 @@ rewards_card:
 roster:
   title: İttifak kadrosu
   summary: "{n} üye · {might} Güç"
-  search: İsimleri veya ID'leri ara...
-  sort_label: Sıralama ölçütü
+  search: İsim veya ID ara...
+  sort_label: Sıralama
   sort_power: Güç
   sort_name: İsim
   sort_rank: Rütbe
   sanctuary_lv: Sığınak {n}
   copy_id: Bu oyuncu ID'sini kopyala
   copied: Kopyalandı
-  unavailable: Üye listesi şu an yüklenemiyor. Daha sonra tekrar deneyin.
+  unavailable: Üye listesi şu an yüklenemiyor. Lütfen daha sonra tekrar deneyin.
   credit_before: 'Oyuncu verileri şuradan:'
   sort_tech: Araştırma
   sort_help: Yardım
   tech_title: Bugün yapılan ittifak araştırması bağışları
-  help_title: Üyelerin inşaat ve araştırmalarına bugün verilen yardım
-  daily_as_of: 'Bugünkü sıfırlamadan (00:00 GT) bu yana araştırma ve yardım, güncel saat: {time}'
+  help_title: Bugün üyelerin inşaat ve araştırmalarına yapılan yardımlar
+  help_capped: Günlük yardım sınırına ulaşıldı (1.000)
+  refresh: Yenile
+  refresh_left: "{n} kaldı"
+  refreshing: Yenileniyor...
+  refresh_help: 'Oyundan canlı verileri alın. İttifak liderleriniz tarafından paylaşılır: Bugün {n} / {max} hak kaldı, her 10 dakikada bir yenilenir.'
+  refresh_wait: 'Az önce yenilendi: bir sonraki yenileme {n} dk. içinde.'
+  refresh_none: Bugün başka yenileme hakkı kalmadı. Günlük sıfırlama (00:00 GT) ile tekrar başlar.
+  daily_as_of: 'Bugünkü sıfırlamadan (00:00 GT) bu yana araştırma ve yardım, veriler: {time}'
   daily_old: 'Bugünkü sıfırlamadan önceki araştırma ve yardım: son okuma {time}'
   daily_unknown: 'Araştırma ve yardım: okuma zamanı bilinmiyor'
 caravan:

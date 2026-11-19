@@ -2,36 +2,39 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  signed_out: Melde dich mit Discord an (oben rechts), um dein Allianz-Dashboard zu sehen.
+  refresh_limit: Keine Roster-Aktualisierungen mehr für heute übrig. Sie beginnen wieder beim täglichen Reset (00:00 GT).
+  refresh_wait: Der Roster wurde vor einem Moment aktualisiert. Versuche es in {n} Min. erneut.
+  refresh_failed: Das Spiel konnte nicht erreicht werden. Versuche es in ein paar Minuten erneut.
+  signed_out: Melde dich mit Discord (oben rechts) an, um dein Allianz-Dashboard zu sehen.
   load_failed: 'Das Dashboard konnte nicht geladen werden: {reason}'
-  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite findet dies über deine Allianz-Rolle im NAP Discord-Server oder ein [TAG] am Anfang deines Server-Spitznamens. Korrigiere dies in Discord und verwende dann „Zugriff aktualisieren“ in deiner Account-Karte (oben rechts).
-  leaders_only: Nur die R4- und R5-Mitglieder deiner Allianz können das Dashboard ändern.
+  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite findet dies über deine Allianz-Rolle im NAP Discord-Server oder ein [TAG] am Anfang deines Server-Spitznamens. Korrigiere das in Discord und verwende dann „Zugriff aktualisieren“ in deiner Account-Karte (oben rechts).
+  leaders_only: Nur die R4 und R5 deiner Allianz können das Dashboard ändern.
   chart_removed: Dieses Diagramm wurde entfernt.
   chart_already_removed: Dieses Diagramm wurde bereits entfernt.
   not_linked: Dieses Diagramm ist nicht mit einem Google Sheet oder Doc verknüpft.
   unknown_change: Unbekannte Änderung.
   save_failed: 'Speichern fehlgeschlagen: {reason}'
-  r5_only_nominate: Nur dein R5 kann hier die Nominierungsseite öffnen. Führe /nominate in Discord aus.
+  r5_only_nominate: Nur dein R5 kann die Nominierungsseite hier öffnen. Nutze /nominate in Discord.
   rewards_closed: Belohnungen sind geschlossen bis {when}.
-  no_rank: "[{tag}] hat keinen Rang in der Tabelle."
+  no_rank: "[{tag}] hat keinen Rang in der Rangliste."
   choose_type: Wähle einen Diagramm- oder Tabellentyp.
   title_needed: Gib dem Diagramm oder der Tabelle einen Titel.
   too_many_columns: Maximal {max} Spalten (diese Tabelle hat {count}).
   too_many_rows: Maximal {max} Zeilen (diese Tabelle hat {count}).
   column_name: Spalte {n}
   paste_first: Füge zuerst eine Tabelle ein (eine Kopfzeile, dann die Daten).
-  no_data_rows: Die Tabelle enthält keine Datenzeilen unter ihrer Kopfzeile.
-  needs_numbers: Ein Diagramm benötigt eine Spalte mit Zahlen zur Anzeige.
+  no_data_rows: Die Tabelle hat keine Datenzeilen unter der Kopfzeile.
+  needs_numbers: Ein Diagramm benötigt eine Spalte mit Zahlen zur Darstellung.
   needs_target: 'Ein Fortschrittsdiagramm benötigt ein Ziel: eine Zahl oder eine Spalte mit Zielen.'
   too_many_widgets: Maximal {max} Diagramme und Tabellen pro Allianz.
   sheet_unusable: 'Die Daten des Sheets können nicht verwendet werden: {reason}'
   too_big: Das würde dieses Dashboard zu groß machen ({size} KB von {max} KB). Verwende weniger Zeilen oder entferne eine Tabelle.
   player_name_needed: Gib einen Spielernamen ein.
   time_format: Zeiten sind Game Time wie 18:00 (oder lasse sie leer).
-  start_time_needed: Gib auch die Startzeit an (oder lasse beides leer).
+  start_time_needed: Gib auch die Startzeit an (oder lasse beide leer).
   rotor_full: Maximal {max} Spieler im Rotor.
   already_in_rotor: "{name} ist bereits im Rotor."
-  player_removed: Der Spieler wurde entfernt.
+  player_removed: Dieser Spieler wurde entfernt.
 api_sheets:
   full_link: Füge den vollständigen Link ein (beginnend mit https://docs.google.com/…).
   google_only: Nur Links zu Google Sheets und Google Docs (docs.google.com) können verwendet werden.

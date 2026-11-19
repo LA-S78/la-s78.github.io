@@ -114,13 +114,20 @@ roster:
   copy_id: Copiar este ID de jugador
   copied: Copiado
   unavailable: La lista de miembros no se puede cargar en este momento. Inténtalo de nuevo más tarde.
-  credit_before: Datos del jugador de
+  credit_before: Datos del jugador desde
   sort_tech: Investigación
   sort_help: Ayuda
   tech_title: Investigación de alianza donada hoy
   help_title: Ayuda dada a la construcción e investigación de los miembros hoy
+  help_capped: Límite diario de ayuda alcanzado (1,000)
+  refresh: Actualizar
+  refresh_left: "{n} restantes"
+  refreshing: Actualizando...
+  refresh_help: 'Obtén datos en vivo del juego. Compartidos por los líderes de tu alianza: {n} de {max} restantes hoy, uno cada 10 minutos.'
+  refresh_wait: 'Actualizado hace un momento: siguiente en {n} min.'
+  refresh_none: Sin actualizaciones restantes hoy. Se reinician en el reinicio diario (00:00 GT).
   daily_as_of: Investigación y ayuda desde el reinicio de hoy (00:00 GT), a las {time}
-  daily_old: 'Investigación y ayuda antes del reinicio de hoy: última lectura {time}'
+  daily_old: 'Investigación y ayuda desde antes del reinicio de hoy: última lectura {time}'
   daily_unknown: 'Investigación y ayuda: hora de lectura desconocida'
 caravan:
   title: Rotativo de Caravanas

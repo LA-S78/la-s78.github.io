@@ -103,23 +103,30 @@ rewards_card:
   buyout_cost: 'Acquisizione: {amount} {chest} in ogni set'
   buyout_cost_help: Finanziamento dell'alleanza sfollata questa settimana
 roster:
-  title: Rosa dell'Alleanza
+  title: Rosa dell'alleanza
   summary: "{n} membri · {might} Potenza"
   search: Cerca nomi o ID...
   sort_label: Ordina per
   sort_power: Potenza
   sort_name: Nome
-  sort_rank: Grado
+  sort_rank: Rango
   sanctuary_lv: Santuario {n}
-  copy_id: Copia questo ID giocatore
+  copy_id: Copia ID giocatore
   copied: Copiato
-  unavailable: Impossibile caricare la lista membri in questo momento. Riprova più tardi.
+  unavailable: L'elenco dei membri non può essere caricato al momento. Riprova più tardi.
   credit_before: Dati giocatore dal
   sort_tech: Ricerca
   sort_help: Aiuto
-  tech_title: Ricerca dell'Alleanza donata oggi
-  help_title: Aiuto fornito alle costruzioni e ricerche dei membri oggi
-  daily_as_of: Ricerca e aiuto dal reset di oggi (00:00 GT), aggiornato alle {time}
+  tech_title: Ricerca alleanza donata oggi
+  help_title: Aiuto fornito oggi alle costruzioni e ricerche dei membri
+  help_capped: Limite giornaliero di aiuto raggiunto (1.000)
+  refresh: Aggiorna
+  refresh_left: "{n} rimanenti"
+  refreshing: Aggiornamento in corso...
+  refresh_help: 'Ottieni dati in tempo reale dal gioco. Condiviso dai leader della tua alleanza: {n} di {max} rimanenti oggi, uno ogni 10 minuti.'
+  refresh_wait: 'Aggiornato poco fa: prossimo tra {n} min.'
+  refresh_none: Nessun aggiornamento rimasto oggi. Ricominciano al reset giornaliero (00:00 GT).
+  daily_as_of: Ricerca e aiuto dal reset di oggi (00:00 GT), alle ore {time}
   daily_old: 'Ricerca e aiuto prima del reset di oggi: ultima lettura {time}'
   daily_unknown: 'Ricerca e aiuto: orario di lettura sconosciuto'
 caravan:
