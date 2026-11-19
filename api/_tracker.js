@@ -39,6 +39,10 @@ export function pictureUrl(value) {
   return art ? `/game-art/${art[1]}.png` : null;
 }
 
+/** A count the roster may leave out: a number, or null when missing. */
+const count = (v) =>
+  v === null || v === undefined || v === '' || !Number.isFinite(Number(v)) ? null : Number(v);
+
 /** What the site keeps of an alliance answer. */
 function slim(d) {
   return {
@@ -58,6 +62,13 @@ function slim(d) {
         joinedAt: m.joined_at || null,
         avatar: pictureUrl(m.avatar_url),
         frame: pictureUrl(m.frame_url),
+        // Today's giving (owner request, 2026-11-19; leaders only, api/dashboard.js):
+        // alliance research donations (daily_tech) and help with members' construction and
+        // research (daily_honor). null when the roster didn't include them. The game's
+        // weekly "activity" score is left out on purpose (owner: it counts Survival Battle
+        // as much as Alliance Duel, so it misjudges players).
+        tech: count(m.daily_tech),
+        help: count(m.daily_honor),
       }))
       .filter((m) => m.name),
     ageSeconds: Number(d.age_seconds) || 0,

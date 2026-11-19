@@ -1139,6 +1139,7 @@ li.dw-sel > .dw-bar-track {
 /* ===== Alliance roster (owner request, 2026-11-18; Last Asylum Tracker) ===== */
 .dash-roster-sorts {
   display: inline-flex;
+  flex-wrap: wrap;
   gap: 4px;
 }
 
@@ -1188,6 +1189,36 @@ li.dw-sel > .dw-bar-track {
 .dash-roster-might {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+/* The roster's search keeps a usable width: the sort buttons go under it when short of room */
+.dash-roster .dash-cv-filters {
+  flex-wrap: wrap;
+}
+
+.dash-roster .dash-cv-filters input {
+  flex: 1 1 180px;
+}
+
+/* Leaders: today's research donations and help */
+.dash-roster-giving {
+  display: inline-flex;
+  gap: 8px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.dash-roster-giving > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dash-roster-daily {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0 0;
 }
 
 .dash-roster-id {

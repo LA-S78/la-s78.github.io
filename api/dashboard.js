@@ -122,9 +122,16 @@ async function respond(req, res) {
     if (access.leader || membersMayView) {
       body.roster = {
         membersCanView: membersMayView,
-        members: live ? live.members : null,
+        // Today's donations and help are for leaders only (owner, 2026-11-19)
+        members: live
+          ? access.leader
+            ? live.members
+            : live.members.map(({ tech, help, ...m }) => m)
+          : null,
         power: live ? live.power : null,
         ageSeconds: live ? live.ageSeconds : null,
+        // When the game sent this copy: daily numbers count from the 00:00 GT reset
+        takenAt: live ? new Date(live.at - live.ageSeconds * 1000).toISOString() : null,
       };
     }
     if (access.leader) body.members = live ? live.members.map((m) => m.name) : null;
