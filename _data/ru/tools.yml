@@ -668,40 +668,46 @@ event_presets:
   cheese_trap_title: Сырная Ловушка
   cheese_trap_desc: Помогите отразить атаку Сырного Вора
 alliance_planner:
-  roster: 'Состав NAP:'
+  roster: 'Список NAP:'
   roster_loading: "-- Альянсы"
-  nap_alliances: "{n} альянсов NAP"
+  nap_alliances: "{n} NAP альянсов"
   planner_mode: Режим планировщика
   submit_plan: Отправить план
   tag_placeholder: ТЕГ (напр. WLO)
   name_placeholder: Полное название альянса
-  add_contender: "+ Добавить претендента"
-  loading_standings: Загрузка таблицы лидеров...
-  standings_failed: Не удалось загрузить таблицу лидеров.
+  add_contender: "+ Добавить участника"
+  loading_standings: Загрузка позиций…
+  standings_failed: Не удалось загрузить позиции.
   protected_academy: Защищенная академия
   change_color: Изменить цвет [{tag}]
   academy_of: Академия [{tag}]
   link_academy: "+ Привязать академию"
   nap_protected: Под защитой NAP
+  show_details: Показать детали
+  hide_details: Скрыть детали
+  stat_might: Мощь
+  stat_members: участники
+  stat_level: Уровень {n}
+  tracker_credit_before: Значки и цифры от
   external: Внешний
   revoke_nap: Отозвать NAP
   grant_nap: Предоставить NAP
   remove_alliance: Удалить альянс
-  academy_prompt: 'Введите точный тег альянса для привязки как академии к [{tag}] (регистр имеет значение):'
+  academy_prompt: 'Введите точный тег альянса для привязки в качестве Академии под [{tag}] (регистр важен, напр. RâvN или râvn):'
   academy_available: 'Доступно: {tags}'
   academy_new: 'Или введите новый тег академии для создания:'
-  already_exists: Альянс [{tag}] уже существует с таким написанием.
-  no_changes: Изменений в текущей таблице не обнаружено.
-  proposal_title: Отправить предложение по таблице и дипломатии NAP
+  already_exists: Альянс [{tag}] уже существует с таким регистром.
+  no_changes: Изменения в текущих позициях не обнаружены.
+  proposal_title: Отправить позиции NAP и предложение по дипломатии
   diff_rank: "{tag}: Ранг {from} ➔ {to}"
   diff_academy: "{tag}: Назначен академией {parent}"
   diff_nap: "{tag}: Статус NAP {status}"
   nap_status_protected: Защищен
   nap_status_revoked: Отозван
-  diff_color: "{tag}: Цвет обновлен на {color}"
+  diff_color: "{tag}: Цвет изменен на {color}"
   diff_added: "{added}: Ранг #{rank} ({name})"
   added_tag: Добавлен [{tag}]
-  diff_removed: "{removed} из таблицы"
+  diff_removed: "{removed} из позиций"
   removed_tag: Удален [{tag}]
   diff_modified: Изменен [{tag}]
   unknown: Неизвестно
