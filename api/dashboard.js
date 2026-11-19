@@ -18,7 +18,7 @@ import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { fetchAlliance, memberPictures } from './_tracker.js';
-import { imageStatus } from './_alliance_images.js';
+import { allianceFrame, imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
@@ -128,12 +128,14 @@ async function respond(req, res) {
     // After a leader's refresh, a copy older than it isn't used (the tracker has the new one)
     const refreshedAt = Date.parse(saved.settings.rosterRefresh?.lastAt || '') || 0;
     const live = await fetchAlliance(tag, { timeoutMs: 2500, newerThan: refreshedAt });
+    // The alliance's own avatar frame, when switched on, replaces members' in-game frames
+    const frame = allianceFrame(gist, tag);
     if (access.leader) {
-      body.roster = rosterBody(live);
+      body.roster = rosterBody(live, frame);
       body.roster.refresh = refreshState(saved.settings);
     }
     if (access.leader) body.members = live ? live.members.map((m) => m.name) : null;
-    if (caravanShown) body.pictures = memberPictures(live);
+    if (caravanShown) body.pictures = memberPictures(live, frame);
   }
 
   if (access.leader) {
@@ -181,9 +183,9 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
 }
 
 /** The roster card's data from a tracker lookup (leaders only; null fields when there is none). */
-function rosterBody(live) {
+function rosterBody(live, frame = null) {
   return {
-    members: live ? live.members : null,
+    members: live ? (frame ? live.members.map((m) => ({ ...m, frame })) : live.members) : null,
     power: live ? live.power : null,
     ageSeconds: live ? live.ageSeconds : null,
     // When the game sent this copy: daily numbers count from the 00:00 GT reset
@@ -225,7 +227,7 @@ async function refreshRoster(res, { gist, tag, alliances, session }) {
     console.warn(`Roster refresh [${tag}] not counted:`, err.message);
   }
   const stored = readDashboard(gistJson(gist, file, {}), tag).settings;
-  const roster = rosterBody(live);
+  const roster = rosterBody(live, allianceFrame(gist, tag));
   roster.refresh = refreshState(settings || countRefresh(stored));
   return res.status(200).json({ roster, members: live.members.map((m) => m.name) });
 }

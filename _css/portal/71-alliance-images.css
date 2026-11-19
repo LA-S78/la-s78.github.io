@@ -194,3 +194,52 @@
 .ai-scale-inner .alliance-ladder-row:hover {
   border-color: var(--border-color);
 }
+
+/* ==========================================================================
+   The alliance avatar frame (owner request, 2026-11-19): shown around a sample picture
+   at the sizes the site uses (player portraits, _css/portal/26-player-portraits.css).
+   ========================================================================== */
+
+.ai-slot[data-kind='frame'] .ai-thumb {
+  max-width: 160px;
+  /* A light and dark check under the frame shows its see-through parts */
+  background: repeating-conic-gradient(var(--overlay-5) 0 25%, transparent 0 50%) 0 0 / 16px 16px;
+}
+
+.player-portrait.pf-lg {
+  width: 120px;
+  height: 120px;
+}
+
+.ai-frame-sample .pf-initial {
+  font-size: 1.6em;
+}
+
+.ai-frame-sample.pf-md .pf-initial,
+.ai-frame-sample.pf-sm .pf-initial {
+  font-size: 0.85em;
+}
+
+.ai-frame-previews {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.2rem;
+  margin: 0.6rem 0 0.8rem;
+}
+
+.ai-frame-previews figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+
+.ai-use-frame {
+  margin-top: 0.4rem;
+}
+
+.ai-frame-spec {
+  margin-top: 0.4rem;
+}

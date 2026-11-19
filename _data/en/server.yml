@@ -97,6 +97,7 @@ api_register:
   role_not_found: "No role in \"{server}\" matches \"{role}\" yet; it will work once one does."
 
 api_alliance_images:
+  frame_png: "An avatar frame must be a PNG with a see-through background (a JPEG would cover your members' pictures)."
   not_set_up: "Alliance images aren't set up on the server yet."
   failed: "Something went wrong with the alliance image. Please try again."
   bad_image: "That file isn't a picture the site can use. Please use the upload form."

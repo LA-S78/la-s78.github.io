@@ -150,13 +150,16 @@ export async function fetchAlliance(
 /**
  * Members' pictures by name, for pages that show players by the name a leader typed (Caravan
  * Rotor, nomination list, King's console): { name: { avatar, frame } }. Members with neither
- * are left out; the page shows their initial.
+ * are left out; the page shows their initial. `allianceFrame`: the alliance's own avatar frame
+ * (api/_alliance_images.js allianceFrame), used for everyone when given.
  */
-export function memberPictures(alliance) {
+export function memberPictures(alliance, allianceFrame = null) {
   if (!alliance) return null;
   const out = {};
   for (const m of alliance.members) {
-    if (m.avatar || m.frame) out[m.name] = { avatar: m.avatar, frame: m.frame };
+    // The alliance's own avatar frame, when switched on, replaces every in-game frame
+    const frame = allianceFrame || m.frame;
+    if (m.avatar || frame) out[m.name] = { avatar: m.avatar, frame };
   }
   return out;
 }
