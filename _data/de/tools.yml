@@ -914,3 +914,23 @@ alliance_images:
   not_image: Diese Datei ist kein Bild, das dieser Browser öffnen kann. Versuche es mit einem JPEG oder PNG.
   too_small: Dieses Bild ist recht klein ({width}×{height}); es könnte verschwommen aussehen. Du kannst es trotzdem senden.
   load_failed: Das Bild konnte nicht geöffnet werden.
+stats:
+  title: NAP-Statistiken
+  views_label: Anzeige wählen
+  view_growth: NAP-Wachstum
+  range_label: Zeitraum
+  range_week: 1 Woche
+  range_month: 1 Monat
+  range_all: Alle
+  loading: Statistiken werden geladen...
+  failed: Statistiken können aktuell nicht geladen werden.
+  collecting: Die Statistiken werden einmal täglich kurz vor dem täglichen Reset (00:00 GT) erhoben. Die Diagramme füllen sich Tag für Tag.
+  since: Tägliche Erhebung seit {date}.
+  one_day: 'Bisher liegt nur ein Datentag vor: Das Diagramm beginnt, sobald zwei Tage erfasst sind.'
+  col_alliance: Allianz
+  col_might: Macht
+  col_week: 7 Tage
+  col_month: 30 Tage
+  no_number: "—"
+  show_hide: Tippe auf eine Allianz, um ihre Linie ein- oder auszublenden.
+  credit_before: Zahlen vom
