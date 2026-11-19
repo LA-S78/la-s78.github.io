@@ -937,6 +937,8 @@ alliance_images:
   frame_too_small: "This picture is only {width}×{height}. A frame needs at least 190×190 pixels (380×380 is best)."
   frame_covers: "This frame covers about {percent}% of the middle, where members' pictures show. That's fine if it's meant to (a garland, say): check the previews below before sending."
   frame_covers_most: "This frame covers about {percent}% of the middle, so most of each member's picture would be hidden. Check the previews below: send it only if that's what you want."
+  frame_not_png: "An avatar frame must be a PNG (or WebP) with a see-through background. JPEG pictures can't be see-through, so they would cover your members' pictures."
+  frame_no_transparency: "This picture has no see-through parts, so it would show as a solid square over your members' pictures. Save it as a PNG with a transparent background."
   frame_empty: "This picture is almost all see-through: there's no frame to show."
   frame_too_big: "This frame is {kb} KB once saved; the most is 500 KB. Try fewer colours or less fine detail."
   none: "No image yet"
