@@ -14,8 +14,9 @@
 //       [[uid, name, power, kills, sanctuaryLevel, x, y], …] } } }
 //   stats/summary.json         what the NAP growth view needs, small:
 //     { days: [dates], alliances: { TAG: { <date>: power } }, updatedAt }
-//   stats/player-series.json   each NAP player's Might per day for 31 days (server only):
-//     { days: [dates], p: { uid: { <date>: Might in millions } } }
+//   stats/player-series.json   each NAP player's numbers per day for 31 days (server only):
+//     { days: [dates], p: { uid: { <date>: Might in millions } }, k: kills, l: Sanctuary
+//       level, a: 1 when away from their alliance's hive that day }
 //   stats/top.json             the Top players view, worked out at each snapshot (small):
 //     { day, days, players: { uid: { name, tag, power, avatar, frame, series } },
 //       lists: { all: { strongest: [uid…100], week: [[uid, gain]…50], month: […50] },
@@ -133,6 +134,16 @@ function dayEntry(a) {
 
 const millions = (n) => Math.round(n / 1e5) / 10;
 
+/** A member more than this many tiles from their alliance's hive counts as away. Measured on
+ *  the real rosters (2026-11-19): members sit within a few tiles of the middle or far off. */
+const HIVE_TILES = 50;
+
+function median(values) {
+  const v = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(v.length / 2);
+  return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
+}
+
 /** The day `n` days before `day` (YYYY-MM-DD). */
 const daysBefore = (day, n) =>
   new Date(Date.parse(`${day}T12:00:00Z`) - n * 86400000).toISOString().slice(0, 10);
@@ -146,13 +157,25 @@ const daysBefore = (day, n) =>
 export function topPlayers(series, today, day) {
   const players = [];
   for (const [tag, a] of Object.entries(today.alliances)) {
-    for (const [uid, name, power, , , , , avatar, frame] of a.players) {
+    // The alliance's hive: the middle of where its members are (half are on each side,
+    // both ways); a member more than HIVE_TILES from it is away
+    const xs = a.players.map((m) => m[5]).filter(Number.isFinite);
+    const ys = a.players.map((m) => m[6]).filter(Number.isFinite);
+    const hive = xs.length ? { x: median(xs), y: median(ys) } : null;
+    for (const [uid, name, power, kills, level, x, y, avatar, frame] of a.players) {
       if (!uid || !Number.isFinite(power)) continue;
+      const away =
+        hive && Number.isFinite(x) && Number.isFinite(y)
+          ? Math.max(Math.abs(x - hive.x), Math.abs(y - hive.y)) > HIVE_TILES
+          : null;
       players.push({
         uid: String(uid),
         name,
         tag,
         power,
+        kills: Number.isFinite(kills) ? kills : null,
+        level: Number.isFinite(level) ? level : null,
+        away,
         avatar: avatar || null,
         frame: frame || null,
       });
@@ -162,17 +185,36 @@ export function topPlayers(series, today, day) {
   series.days.sort();
   series.days = series.days.slice(-PLAYER_DAYS);
   const keep = new Set(series.days);
-  for (const p of players)
-    series.p[p.uid] = { ...(series.p[p.uid] || {}), [day]: millions(p.power) };
-  for (const [uid, s] of Object.entries(series.p)) {
-    for (const d of Object.keys(s)) if (!keep.has(d)) delete s[d];
-    if (!Object.keys(s).length) delete series.p[uid];
+  // Each player's Might (p, millions), kills (k), Sanctuary level (l) and away days (a)
+  for (const key of ['p', 'k', 'l', 'a']) series[key] = series[key] || {};
+  const record = (key, uid, value) => {
+    if (value === null || value === undefined) return;
+    series[key][uid] = { ...(series[key][uid] || {}), [day]: value };
+  };
+  for (const p of players) {
+    record('p', p.uid, millions(p.power));
+    record('k', p.uid, p.kills);
+    record('l', p.uid, p.level);
+    record('a', p.uid, p.away === null ? null : p.away ? 1 : 0);
+  }
+  for (const key of ['p', 'k', 'l', 'a']) {
+    for (const [uid, s] of Object.entries(series[key])) {
+      for (const d of Object.keys(s)) if (!keep.has(d)) delete s[d];
+      if (!Object.keys(s).length) delete series[key][uid];
+    }
   }
 
+  // A value on the latest kept day on or before `target` (up to 3 days earlier)
+  const valueAt = (key, uid, target) => {
+    const s = series[key][uid] || {};
+    const d = series.days
+      .filter((x) => x <= target && x >= daysBefore(target, 3) && Number.isFinite(s[x]))
+      .pop();
+    return d ? s[d] : null;
+  };
   const at = (uid, target) => {
-    const s = series.p[uid] || {};
-    const d = series.days.filter((x) => x <= target && x >= daysBefore(target, 3)).pop();
-    return d && Number.isFinite(s[d]) ? s[d] * 1e6 : null;
+    const v = valueAt('p', uid, target);
+    return v === null ? null : v * 1e6;
   };
   const line = (uid) => series.days.map((d) => series.p[uid]?.[d] ?? null);
   const gains = (list, n) =>
@@ -206,6 +248,49 @@ export function topPlayers(series, today, day) {
       small,
     );
   }
+  // Achievements (owner request, 2026-11-19): a podium of three per record, NAP-wide and per
+  // alliance. No donations (owner: they stay off the public stats).
+  const ACHIEVEMENTS = {
+    strongest: (p) => p.power,
+    gain_week: (p) => {
+      const then = at(p.uid, daysBefore(day, 7));
+      return then === null ? null : Math.round(p.power - then);
+    },
+    kills: (p) => p.kills,
+    kills_week: (p) => {
+      const then = valueAt('k', p.uid, daysBefore(day, 7));
+      return then === null || p.kills === null ? null : p.kills - then;
+    },
+    climb_month: (p) => {
+      const then = valueAt('l', p.uid, daysBefore(day, 30));
+      return then === null || p.level === null ? null : p.level - then;
+    },
+    away: (p) => {
+      const s = series.a[p.uid] || {};
+      const n = Object.values(s).reduce((sum, v) => sum + v, 0);
+      return n || null;
+    },
+  };
+  const podium = (list) => {
+    const out = {};
+    for (const [key, value] of Object.entries(ACHIEVEMENTS)) {
+      out[key] = list
+        .map((p) => ({ p, v: value(p) }))
+        .filter(({ v }) => Number.isFinite(v) && v > 0)
+        .sort((a, b) => b.v - a.v || b.p.power - a.p.power)
+        .slice(0, 3)
+        .map(({ p, v }) => {
+          used.set(p.uid, p);
+          return [p.uid, v];
+        });
+    }
+    return out;
+  };
+  const achievements = { all: podium(players) };
+  for (const tag of Object.keys(today.alliances)) {
+    achievements[tag] = podium(players.filter((p) => p.tag === tag));
+  }
+
   const out = {};
   for (const [uid, p] of used) {
     out[uid] = {
@@ -217,7 +302,7 @@ export function topPlayers(series, today, day) {
       series: line(uid),
     };
   }
-  return { day, days: series.days, players: out, lists };
+  return { day, days: series.days, players: out, lists, achievements };
 }
 
 async function inBatches(items, size, fn) {
