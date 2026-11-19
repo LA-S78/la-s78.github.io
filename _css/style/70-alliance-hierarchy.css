@@ -570,3 +570,138 @@ main .ladder-badge,
   color: inherit;
   text-decoration: underline dotted;
 }
+
+/* ==========================================================================
+   The Stats tab (owner request, 2026-11-19; js/stats.js): one view at a time, with a
+   time span switch, a line chart and a table.
+   ========================================================================== */
+
+.stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.stats-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.stats-chart {
+  display: block;
+  width: 100%;
+  max-width: 760px; /* wide screens: a readable chart, not a huge one */
+  height: auto;
+  margin: 0.4rem auto;
+}
+
+.stats-table {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.stats-legend {
+  justify-content: center;
+}
+
+.stats-grid {
+  stroke: var(--overlay-5);
+  stroke-width: 1;
+}
+
+.stats-axis {
+  fill: var(--text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.stats-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.stats-chip.is-off {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.stats-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  border-radius: 2px;
+  vertical-align: baseline;
+}
+
+.stats-chip .stats-swatch {
+  margin-right: 0;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 5px 6px;
+  text-align: right;
+  border-bottom: 1px solid var(--overlay-5);
+}
+
+.stats-table th:first-child,
+.stats-table td:first-child {
+  text-align: left;
+  font-weight: 700;
+}
+
+.stats-table th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stats-change.is-up {
+  color: var(--status-success-text);
+}
+
+.stats-change.is-down {
+  color: var(--status-danger-text);
+}
+
+.stats-credit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0.8rem 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.stats-credit a {
+  color: inherit;
+  text-decoration: underline dotted;
+}

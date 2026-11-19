@@ -83,6 +83,8 @@ function slim(d) {
         help: count(m.daily_honor),
         // Where their Sanctuary is (game X/Y, 0–1000): leaders only, on the territory map
         // (owner request, 2026-11-19; api/dashboard.js ?positions=1)
+        // Total kills (the Stats tab's achievements)
+        kills: count(m.kills),
         x: count(m.x),
         y: count(m.y),
       }))
@@ -101,7 +103,14 @@ function slim(d) {
  */
 export async function fetchAlliance(
   tag,
-  { fresh = false, timeoutMs = 4000, newerThan = 0, env = process.env, fetchImpl = fetch } = {},
+  {
+    fresh = false,
+    timeoutMs = 4000,
+    newerThan = 0,
+    freshWithinMs = 0,
+    env = process.env,
+    fetchImpl = fetch,
+  } = {},
 ) {
   const key = String(env.LAT_API_KEY || '').trim();
   const clean = String(tag || '').trim();
@@ -109,6 +118,9 @@ export async function fetchAlliance(
   const hit = cache.get(clean);
   // `newerThan`: a copy kept here from before that time is not used (a leader refreshed the
   // roster on another server instance since; the tracker has the newer copy)
+  // `freshWithinMs`: a live answer this recent counts as live (two daily snapshots asking at
+  // the same minute share one request)
+  if (fresh && freshWithinMs && hit && hit.live && Date.now() - hit.at < freshWithinMs) return hit;
   if (!fresh && hit && Date.now() - hit.at < CACHE_MS && hit.at >= newerThan) {
     return hit.missing ? null : hit;
   }

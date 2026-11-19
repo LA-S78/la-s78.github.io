@@ -8,6 +8,7 @@ import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 import { checkReminders } from './_reminders.js';
 import { checkAscension, latestRace } from './_ascension.js';
+import { checkStatsSnapshot } from './_stats.js';
 import { timingSafeEqual } from 'node:crypto';
 
 /** True when the request carries the reminder schedule's secret (compared in constant time). */
@@ -47,6 +48,17 @@ export default async function handler(req, res) {
       } catch (err) {
         console.error('Top 4 race check failed:', err);
         report.ascension = { error: err.message };
+      }
+      // The Stats tab's daily snapshot (api/_stats.js), just before each reset; after the
+      // race, so on race days it reuses the race's answers
+      try {
+        report.stats = await checkStatsSnapshot({
+          gist: await readGist({ timeoutMs: 4000 }),
+          dryRun,
+        });
+      } catch (err) {
+        console.error('Stats snapshot failed:', err);
+        report.stats = { error: err.message };
       }
       return res.status(200).json(report);
     } catch (err) {
