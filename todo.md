@@ -2,7 +2,29 @@
 
 # 📋 Roadmap
 
-_Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECISIONS.md`; what changed since the maintainer's last review (#71–#87) is summed up in `docs/REVIEW_BRIEF.md`._
+_Last tidied: 19 November 2026. Decisions behind finished work are in `docs/DECISIONS.md`; what changed since the maintainer's last review (#71–#87) is summed up in `docs/REVIEW_BRIEF.md`._
+
+## 🚧 Active (next up)
+
+Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 1,000 requests a day; today the site uses about one per alliance per hour, only when a page is opened.
+
+- [ ] **Activity in the dashboard roster (leaders only)** — weekly activity, tech donated today, help given today (the tracker's "daily honor": points for helping members' construction and research; owner, 2026-11-19) and kills, with sorting to find inactive members, top donors and top helpers. No extra requests: the roster's lookup already has them (we drop them today).
+- [ ] **Live stats on the Alliance standings cards** — Might, members (99/100) and level for each NAP alliance, refreshed on their own. Not the game's kingdom ranking: ranks stay with our rules. Idea: give the cards one height, with an expand button for the extra details, so they don't grow.
+- [ ] **Stats page** — new page for numbers over time:
+  - Might history: every NAP alliance's Might saved once a day (about 10 requests a day, stored like the Top 4 race), drawn as growth charts here and on the dashboard.
+  - Kill Event and Kingdom War stats: kills by alliance, and the change in kills before and after an event.
+- [ ] **Members on the territory map (leaders only)** — a toggle that shows where the signed-in officer's own alliance members' Sanctuaries are, and a search box to find one of them. Positions are the most sensitive data, so only the officer's own alliance.
+- [ ] **Player lookup by ID** — look up any player (name, Might, kills, Sanctuary level, alliance). Good idea, but no home yet: maybe the Stats page, or a Steward tool.
+- ~~NAP checks from alliance declarations~~ — dropped (owner): declarations are free text and too unreliable.
+
+## 🙋 Owner to-dos
+
+- [ ] **HMDA** — the tracker can't find it. If it has left the server or renamed, switch it off as a NAP alliance (or tell me its new tag).
+- [ ] **Delete the branch `claude/calendar-capitol-box-picture`** (on GitHub): a comparison branch, no longer needed (#210 took its style).
+- [ ] **Undead Siege and Hunt Battle** — how long they last and whether they repeat (both default to 1 hour, no repeat), and whether Hunt Battle gets a guide.
+- [ ] **Pictures still to come (waiting on Gemini image limits)** — guide cards for Survival Battle, Royal Scramble, Canyon Conquest, Thief Hunt, Dwarven Pickaxe, Honor Shop, Campaign Shop, Premium Shop. Survival Battle is also a calendar event, so its picture would show there too.
+- [ ] **Thief Hunt guide** — the "Store" placeholder.
+- [ ] **Home page credits** — what they should say.
 
 ## 🔴 High Priority
 
@@ -25,7 +47,7 @@ _Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECI
   - [x] **Part 1 — event settings:** "Remind on Discord 1 hour before" on the event form (on by default for new events), editing events (Edit next to Delete; same scope rule as delete), a hint when there is no alert channel, and the registration opt-in for server-event reminders.
   - [x] **Part 2 — the reminder check:** `api/_reminders.js`, reached through `POST /api/calendar` (no new function) with REMINDER_SECRET; cron-job.org calls dev and live every 10 minutes (GitHub's schedule never started; by hand: Actions → Calendar reminders → Run workflow, dry run by default). The live site posts nothing until `REMINDERS_LIVE=true` is set in Vercel; dev.la-s78.app posts only to TEST_CHANNEL_ID, pinging nobody.
   - [x] **Go live (owner):** tested on dev (reminder posted to the test channel), then `REMINDERS_LIVE=true` set on the live site. Leaders can also manage events by signing in (R4/R5, Stewards).
-- [ ] **Last Asylum Tracker API** (owner, 2026-11-17): alliance Might and member lists for our server, from `api.lastasylumtracker.com` (key in Vercel as `LAT_API_KEY`).
+- [x] **Last Asylum Tracker API** (owner, 2026-11-17; more ideas under Active): alliance Might and member lists for our server, from `api.lastasylumtracker.com` (key in Vercel as `LAT_API_KEY`).
   - [x] Name checks in the nomination list and the Caravan Rotor: game spellings, unknown names, close matches.
   - [x] Top 4 race: live snapshots 10 minutes before reset on Duel Days 3–5 of Kingdom War Week 1; NAP alliances and academies ranked by their three-day total on the Rules page; results posted to NAP leadership with Apply new ranks / Keep current order buttons for Stewards: applying re-ranks the whole NAP list by total, academies included; seats change at the next cycle.
   - [x] Alliance roster on the dashboard: pictures in frames, rank, ID, Might, Sanctuary level; search and sort; Members can view toggle; tracker credit.
@@ -49,7 +71,6 @@ _Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECI
   - [ ] `/suggest` (later, once most other work is done): it's in the alliance servers' command list but the bot has no handler for it yet
 
 - [x] **Calendar event pictures (owner idea, 2026-11-15)** — a faded picture behind each event card by event type, in `_data/event_types.yml` (#156); the same picture behind the event's guide card (#196). Pictures so far: Crystal Cluster, Elixir Scramble, Undead Siege, Gear Upgrade, Cheese Trap, Kingdom War, Kill Event, Hunt Battle (#200).
-- [ ] **Pictures still to come (owner, waiting on Gemini image limits)** — guide cards for Survival Battle, Royal Scramble, Canyon Conquest, Thief Hunt, Dwarven Pickaxe, Honor Shop, Campaign Shop, Premium Shop. Survival Battle is also a calendar event, so its picture would show there too.
 - [x] **Your alliance highlighted across the site (owner idea, 2026-11-15)** — the signed-in reader's alliance glows in the calendar's rotation, the Alliance standings, the rewards tool and the map's buff summary (#160, #161, #171).
 - [x] **Alliance pictures** — R4/R5 send a card picture and a banner from the dashboard (crop with drag and zoom, 3 a day); a Steward approves them privately from Discord; approved pictures show on the Capitol Rotation cards, the NAP Ranks rows and the calendar's Capitol holder box, fading in once loaded (#178–#180, #207, #209, #210). Stored privately in Vercel Blob.
 - [x] **Telling alliances apart** — letter case counts, accents don't: RâvN and RÂVN are two alliances everywhere (pictures, dashboards, calendar scopes, reminders, sign-in, `/rank`, map, blacklist), while RAVN is still RÂVN (#199).
@@ -60,10 +81,6 @@ _Last tidied: 17 November 2026. Decisions behind finished work are in `docs/DECI
 - [ ] **Retire the old-page rescue in `sw.js`** (section 6, about 40 lines) a few weeks after November 2026, once no phone runs pages from before the update toast.
 
 - [ ] **Guides from the owner's English graphics** — each graphic cut into its pictures, with the words as text so every language can read it, one guide per pull request. Done: Kill Event (#188), Frozen Era (#197), Alliance Duel (#212), Crystal Cluster Valley. More to come from the owner.
-- [ ] **Open questions for the owner**
-  - How long Undead Siege and Hunt Battle last, and whether they repeat (both default to 1 hour, no repeat), and whether Hunt Battle gets a guide.
-  - The Thief Hunt guide's "Store" placeholder, and the home page credits.
-- [ ] **Delete the branch `claude/calendar-capitol-box-picture`** (owner, on GitHub): a comparison branch, no longer needed (#210 took its style).
 
 ---
 
