@@ -13,13 +13,13 @@ Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 
 - [ ] **Stats page** — new page for numbers over time:
   - Might history: every NAP alliance's Might saved once a day (about 10 requests a day, stored like the Top 4 race), drawn as growth charts here and on the dashboard.
   - Kill Event and Kingdom War stats: kills by alliance, and the change in kills before and after an event.
-- [ ] **Members on the territory map (leaders only)** — a toggle that shows where the signed-in officer's own alliance members' Sanctuaries are, and a search box to find one of them. Positions are the most sensitive data, so only the officer's own alliance.
+- [x] **Members on the territory map (leaders only)** — "My members" on the territory map: a dot for each member of the signed-in leader's own alliance, a search box (name or ID) and a card with their Might, coordinates and territory. Positions lined up from five cities the owner read in the game.
 - [ ] **Player lookup by ID** — look up any player (name, Might, kills, Sanctuary level, alliance). Good idea, but no home yet: maybe the Stats page, or a Steward tool.
 - ~~NAP checks from alliance declarations~~ — dropped (owner): declarations are free text and too unreliable.
 
 ## 🙋 Owner to-dos
 
-- [ ] **HMDA** — the tracker can't find it. If it has left the server or renamed, switch it off as a NAP alliance (or tell me its new tag).
+- [ ] **HMDA** — now tagged "Arch" in the game (owner, 2026-11-19; maybe temporary). If it sticks, change the tag in the Alliance planner so the tracker's numbers and badge show for it.
 - [ ] **Delete the branch `claude/calendar-capitol-box-picture`** (on GitHub): a comparison branch, no longer needed (#210 took its style).
 - [ ] **Undead Siege and Hunt Battle** — how long they last and whether they repeat (both default to 1 hour, no repeat), and whether Hunt Battle gets a guide.
 - [ ] **Pictures still to come (waiting on Gemini image limits)** — guide cards for Survival Battle, Royal Scramble, Canyon Conquest, Thief Hunt, Dwarven Pickaxe, Honor Shop, Campaign Shop, Premium Shop. Survival Battle is also a calendar event, so its picture would show there too.

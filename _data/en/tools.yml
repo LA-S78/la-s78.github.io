@@ -769,6 +769,17 @@ blacklist_planner:
 
 map_planner:
   view: "View:"
+  # "My members" (leaders only): where your own alliance's members are, from the Last Asylum Tracker
+  members_toggle: "My members"
+  members_search: "Find a member (name or ID)..."
+  members_loading: "Loading your members..."
+  members_count: "{n} members of [{tag}]"
+  members_as_of: "positions as of {time}"
+  members_failed: "Members can't be shown: {error}"
+  members_none: "No member matches"
+  member_coords: "X {x} · Y {y}"
+  member_in: "in {place}"
+  member_close: "Close"
   tag_ambiguous: "[{tag}] could mean more than one alliance ({options}). Type the tag exactly, with its capitals."
   levels: "Levels"
   alliances: "Alliances"

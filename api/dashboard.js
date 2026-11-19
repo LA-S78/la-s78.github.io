@@ -97,6 +97,11 @@ async function respond(req, res) {
     return editDashboard(req, res, { gist, tag, access, session, alliances });
   }
 
+  // The territory map's "My members" (owner request, 2026-11-19): where the leader's own
+  // alliance members' Sanctuaries are. Leaders only, their own alliance only (Stewards: the
+  // alliance asked for); from the roster's lookup, so no extra tracker requests.
+  if (req.query?.positions) return memberPositions(res, { gist, tag, alliances, access });
+
   const body = {
     viewer: { name: session.name || '', tier: access.tier, canNominate: access.canNominate },
     alliance: {
@@ -148,6 +153,31 @@ async function respond(req, res) {
     });
   }
   return res.status(200).json(body);
+}
+
+async function memberPositions(res, { gist, tag, alliances, access }) {
+  if (!access.leader) {
+    return res.status(403).json({ error: say('api_dashboard.positions_leaders_only') });
+  }
+  const settings = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag).settings;
+  const refreshedAt = Date.parse(settings.rosterRefresh?.lastAt || '') || 0;
+  const live = await fetchAlliance(tag, { timeoutMs: 3000, newerThan: refreshedAt });
+  if (!live) return res.status(502).json({ error: say('api_dashboard.positions_unavailable') });
+  return res.status(200).json({
+    tag,
+    takenAt: new Date(live.at - live.ageSeconds * 1000).toISOString(),
+    members: live.members
+      .filter((m) => Number.isFinite(m.x) && Number.isFinite(m.y))
+      .map(({ uid, name, power, rank, x, y, avatar }) => ({
+        uid,
+        name,
+        power,
+        rank,
+        x,
+        y,
+        avatar,
+      })),
+  });
 }
 
 /** The roster card's data from a tracker lookup (leaders only; null fields when there is none). */
