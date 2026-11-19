@@ -8,7 +8,7 @@ _Last tidied: 19 November 2026. Decisions behind finished work are in `docs/DECI
 
 Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 1,000 requests a day; today the site uses about one per alliance per hour, only when a page is opened.
 
-- [ ] **Activity in the dashboard roster (leaders only)** — weekly activity, tech donated today and kills, with sorting to find inactive members and top donors. No extra requests: the roster's lookup already has them (we drop them today). The tracker also has a "daily honor" number; left out until we know which game number it is (owner to compare with the in-game member list).
+- [ ] **Activity in the dashboard roster (leaders only)** — weekly activity, tech donated today, help given today (the tracker's "daily honor": points for helping members' construction and research; owner, 2026-11-19) and kills, with sorting to find inactive members, top donors and top helpers. No extra requests: the roster's lookup already has them (we drop them today).
 - [ ] **Live stats on the Alliance standings cards** — Might, members (99/100) and level for each NAP alliance, refreshed on their own. Not the game's kingdom ranking: ranks stay with our rules. Idea: give the cards one height, with an expand button for the extra details, so they don't grow.
 - [ ] **Stats page** — new page for numbers over time:
   - Might history: every NAP alliance's Might saved once a day (about 10 requests a day, stored like the Top 4 race), drawn as growth charts here and on the dashboard.
@@ -25,7 +25,6 @@ Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 
 - [ ] **Pictures still to come (waiting on Gemini image limits)** — guide cards for Survival Battle, Royal Scramble, Canyon Conquest, Thief Hunt, Dwarven Pickaxe, Honor Shop, Campaign Shop, Premium Shop. Survival Battle is also a calendar event, so its picture would show there too.
 - [ ] **Thief Hunt guide** — the "Store" placeholder.
 - [ ] **Home page credits** — what they should say.
-- [ ] **"Daily honor"** — which in-game number the tracker's daily honor is (see the roster activity idea above).
 
 ## 🔴 High Priority
 
