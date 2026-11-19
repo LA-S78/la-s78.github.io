@@ -60,6 +60,44 @@ let liveState = 'loading';
 /** Approved alliance pictures from /api/state: { TAG: { card, wide } } (api/_alliance_images.js) */
 let allianceImages = {};
 
+/**
+ * Live numbers for the standings cards (owner request, 2026-11-19): { TAG: { power, members,
+ * capacity, level, badge } } from the Last Asylum Tracker (/api/state?scope=tracker), loaded
+ * after the standings. Ranks never come from it: they follow the NAP's own rules.
+ */
+let trackerStats = {};
+let trackerAsked = false;
+/** Cards opened to show their details (kept while the list is drawn again) */
+const openRows = new Set();
+
+async function loadTrackerStats() {
+  if (trackerAsked) return;
+  trackerAsked = true;
+  try {
+    const res = await fetch('/api/state?scope=tracker');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.stats || !Object.keys(data.stats).length) return;
+    trackerStats = data.stats;
+    renderStandingsHierarchy();
+  } catch {
+    // No live numbers: the cards show as before
+  }
+}
+
+/** The tracker's numbers for a tag (letter case counts; accents don't), or null. */
+function statsFor(tag) {
+  return (
+    trackerStats[tag] || Object.entries(trackerStats).find(([k]) => sameTag(k, tag))?.[1] || null
+  );
+}
+
+/** 9474605284 → "9.47B" */
+function mightText(n) {
+  if (!Number.isFinite(n)) return '—';
+  return n >= 1e9 ? `${(n / 1e9).toFixed(2)}B` : `${(n / 1e6).toFixed(0)}M`;
+}
+
 /** The banner behind an alliance's row: { cls, attrs } (js/ally-pics.js), '' when none. */
 function bannerPic(tag) {
   // The tag as stored, or without its accents (RAVN for RÂVN). Letter case counts: RâvN
@@ -323,6 +361,7 @@ export async function fetchLiveAllianceState() {
     liveState = 'ok';
     showLiveDataNotice(container, { savedAt: offlineCopySavedAt(stateRes) });
     applyAllianceData(data);
+    loadTrackerStats();
   } catch (err) {
     console.warn('Could not fetch live alliance state:', err);
     if (savedAt) {
@@ -631,34 +670,41 @@ export function renderStandingsHierarchy() {
 
   const playerAlliance = (localStorage.getItem('auth-alliance') || '').trim();
 
-  container.innerHTML = ladder
-    .map((alliance, index) => {
-      const isRanked = alliance.rank !== null && alliance.rank !== undefined;
-      const isTop3 = isRanked && alliance.rank <= 3;
-      const rankTier = isTop3
-        ? alliance.rank === 1
-          ? 'rank-gold'
-          : alliance.rank === 2
-            ? 'rank-silver'
-            : 'rank-bronze'
-        : '';
-      const isSelf = playerAlliance && alliance.tag === playerAlliance;
-      const displayColor = resolveAllianceColor(alliance.tag, alliance.color, alliance.rank);
-      const pic = bannerPic(alliance.tag);
+  container.innerHTML =
+    ladder
+      .map((alliance, index) => {
+        const isRanked = alliance.rank !== null && alliance.rank !== undefined;
+        const isTop3 = isRanked && alliance.rank <= 3;
+        const rankTier = isTop3
+          ? alliance.rank === 1
+            ? 'rank-gold'
+            : alliance.rank === 2
+              ? 'rank-silver'
+              : 'rank-bronze'
+          : '';
+        const isSelf = playerAlliance && alliance.tag === playerAlliance;
+        const displayColor = resolveAllianceColor(alliance.tag, alliance.color, alliance.rank);
+        const pic = bannerPic(alliance.tag);
+        const stats = statsFor(alliance.tag);
+        // Outside planner mode every card is one line high; its details open with the arrow
+        const compact = !isAlliancePlannerActive;
+        const open = compact && openRows.has(alliance.tag);
+        const hasDetails =
+          Boolean(stats) || (alliance.academies || []).length > 0 || Boolean(alliance.parent_tag);
 
-      const academyPills = (alliance.academies || [])
-        .map(
-          (acadTag) => `
+        const academyPills = (alliance.academies || [])
+          .map(
+            (acadTag) => `
       <span class="academy-pill" title="${esc(ta('protected_academy'))}">
         ${ic('academy')}[${esc(acadTag)}]
         ${isAlliancePlannerActive ? `<button type="button" class="btn-unlink-acad" data-action="unlink-acad" data-parent="${esc(alliance.tag)}" data-acad="${esc(acadTag)}">&times;</button>` : ''}
       </span>
     `,
-        )
-        .join('');
+          )
+          .join('');
 
-      return `
-      <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}${pic.cls}" data-tag="${esc(alliance.tag)}"${pic.attrs}>
+        return `
+      <div class="alliance-ladder-row ${rankTier} ${isSelf ? 'highlight-alliance' : ''}${compact ? ' is-compact' : ''}${open ? ' is-open' : ''}${pic.cls}" data-tag="${esc(alliance.tag)}"${pic.attrs}>
         <div class="ladder-rank-col">
           <span class="ladder-rank-badge ${rankTier}">
             ${isRanked ? `#${esc(alliance.rank)}` : '--'}
@@ -689,16 +735,27 @@ export function renderStandingsHierarchy() {
                 title="${esc(ta('change_color', { tag: alliance.tag }))}"
               />
             `
-                : `
+                : stats && stats.badge
+                  ? `<img class="ladder-badge" src="${esc(stats.badge)}" alt="" loading="lazy" decoding="async">`
+                  : `
               <span class="alliance-color-indicator" style="background-color: ${esc(displayColor)}"></span>
             `
             }
             <strong class="ladder-tag ally-text" style="--ally: ${esc(displayColor)}">[${esc(alliance.tag)}]</strong>
             <span class="ladder-name">${esc(alliance.name)}</span>
-            ${alliance.parent_tag ? `<span class="academy-child-badge">${ic('academy')}${esc(ta('academy_of', { tag: alliance.parent_tag }))}</span>` : ''}
+            ${
+              alliance.parent_tag
+                ? compact
+                  ? `<span class="academy-child-badge" title="${esc(ta('academy_of', { tag: alliance.parent_tag }))}">${ic('academy')}</span>`
+                  : `<span class="academy-child-badge">${ic('academy')}${esc(ta('academy_of', { tag: alliance.parent_tag }))}</span>`
+                : ''
+            }
           </div>
 
-          <div class="ladder-sub-line">
+          ${
+            compact
+              ? ''
+              : `<div class="ladder-sub-line">
             ${academyPills}
             ${
               isAlliancePlannerActive && !alliance.parent_tag
@@ -707,13 +764,21 @@ export function renderStandingsHierarchy() {
             `
                 : ''
             }
-          </div>
+          </div>`
+          }
         </div>
 
         <div class="ladder-status-col">
-          <span class="nap-badge ${alliance.is_nap ? 'nap-active' : 'nap-inactive'}">
-            ${esc(ta(alliance.is_nap ? 'nap_protected' : 'external'))}
+          <span class="nap-badge ${alliance.is_nap ? 'nap-active' : 'nap-inactive'}" title="${esc(ta(alliance.is_nap ? 'nap_protected' : 'external'))}">
+            ${compact ? ic('shield') : ''}<span class="nap-badge-text">${esc(ta(alliance.is_nap ? 'nap_protected' : 'external'))}</span>
           </span>
+          ${
+            compact && hasDetails
+              ? `<button type="button" class="ladder-expand" data-action="expand" data-tag="${esc(alliance.tag)}" aria-expanded="${open}" aria-controls="ladder-details-${esc(alliance.tag)}" title="${esc(ta(open ? 'hide_details' : 'show_details'))}" aria-label="${esc(ta(open ? 'hide_details' : 'show_details'))}">${ic('chevron', 'solo')}</button>`
+              : compact
+                ? '<span class="ladder-expand-spacer"></span>'
+                : ''
+          }
           ${
             isAlliancePlannerActive
               ? `
@@ -725,10 +790,29 @@ export function renderStandingsHierarchy() {
               : ''
           }
         </div>
+        ${
+          open
+            ? `<div class="ladder-details" id="ladder-details-${esc(alliance.tag)}">
+              ${
+                stats
+                  ? `<span class="ladder-stat">${ic('swords')}<strong>${esc(mightText(stats.power))}</strong> ${esc(ta('stat_might'))}</span>
+              <span class="ladder-stat">${ic('users')}<strong>${esc(stats.capacity ? `${stats.members}/${stats.capacity}` : String(stats.members))}</strong> ${esc(ta('stat_members'))}</span>
+              ${stats.level ? `<span class="ladder-stat">${ic('trophy')}${esc(ta('stat_level', { n: stats.level }))}</span>` : ''}`
+                  : ''
+              }
+              ${alliance.parent_tag ? `<span class="academy-child-badge">${ic('academy')}${esc(ta('academy_of', { tag: alliance.parent_tag }))}</span>` : ''}
+              ${academyPills}
+            </div>`
+            : ''
+        }
       </div>
     `;
-    })
-    .join('');
+      })
+      .join('') +
+    // Where the live numbers and badges come from (owner: credit the tracker wherever its data shows)
+    (Object.keys(trackerStats).length && !isAlliancePlannerActive
+      ? `<p class="tracker-credit ladder-credit">${ic('users')}${esc(ta('tracker_credit_before'))} <a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a></p>`
+      : '');
   // Pictures that weren't loaded yet fade in once they are (js/ally-pics.js)
   revealAllyPics(container);
 }
@@ -1106,6 +1190,15 @@ export function bindAllianceControls() {
     hierarchyList.dataset.bound = 'true';
 
     hierarchyList.addEventListener('click', (e) => {
+      // A card's details (live numbers, academies): opened and closed outside planner mode
+      const expandBtn = e.target.closest('[data-action="expand"]');
+      if (expandBtn) {
+        const tag = expandBtn.dataset.tag;
+        if (openRows.has(tag)) openRows.delete(tag);
+        else openRows.add(tag);
+        renderStandingsHierarchy();
+        return;
+      }
       if (!isAlliancePlannerActive) return;
 
       const upBtn = e.target.closest('[data-action="rank-up"]');

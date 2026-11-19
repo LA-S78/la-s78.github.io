@@ -1,6 +1,7 @@
 // api/_game_art.js
 // Our own copies of the game's profile frames and default portraits (owner request,
-// 2026-11-18), for the roster view and the other pages that show players' pictures.
+// 2026-11-18), for the roster view and the other pages that show players' pictures, and of
+// alliance badges (2026-11-19, the Alliance standings cards).
 // The Last Asylum Tracker hosts these files; rather than loading them from its server on
 // every page, each one is fetched from it once, kept in our Vercel Blob store
 // (game-art/…, private like the alliance pictures), and served from la-s78.app as
@@ -12,7 +13,7 @@
 import { get, put } from '@vercel/blob';
 
 const SOURCE = 'https://lastasylumtracker.com/static/';
-const PATH = /^(frames\/frame_\d{1,7}|avatars\/head_\d{1,7})\.png$/;
+const PATH = /^(frames\/frame_\d{1,7}|avatars\/head_\d{1,7}|alliance\/badge_\d{1,7})\.png$/;
 const MAX_BYTES = 600 * 1024;
 const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 

@@ -709,6 +709,13 @@ alliance_planner:
   academy_of: "Academy of [{tag}]"
   link_academy: "+ Link Academy"
   nap_protected: "NAP Protected"
+  # The standings cards' details: live numbers from the Last Asylum Tracker (not used for ranks)
+  show_details: "Show details"
+  hide_details: "Hide details"
+  stat_might: "Might"
+  stat_members: "members"
+  stat_level: "Level {n}"
+  tracker_credit_before: "Badges and numbers from the"
   external: "External"
   revoke_nap: "Revoke NAP"
   grant_nap: "Grant NAP"
