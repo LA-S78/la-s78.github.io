@@ -918,19 +918,33 @@ stats:
   title: Statistiche NAP
   views_label: Cosa mostrare
   view_growth: Crescita NAP
-  range_label: Intervallo temporale
+  view_players: Migliori giocatori
+  list_label: Quale lista
+  list_strongest: Più forti
+  list_week: Guadagnati questa settimana
+  list_month: Guadagnati questo mese
+  filter_label: Alleanza
+  filter_all: Tutte le alleanze NAP
+  players_none: Ancora nessun giocatore da mostrare.
+  players_wait_week: I guadagni settimanali verranno mostrati una volta raccolta una settimana di dati.
+  players_wait_month: I guadagni mensili verranno mostrati una volta raccolto un mese di dati.
+  players_as_of: Aggiornato all'istantanea prima del reset del {date}.
+  col_player: Giocatore
+  col_gain: Guadagnati
+  show_more: Mostra tutti i {n}
+  range_label: Intervallo di tempo
   range_week: 1 settimana
   range_month: 1 mese
-  range_all: Tutto
+  range_all: Tutti
   loading: Caricamento statistiche...
   failed: Impossibile caricare le statistiche al momento.
   collecting: Le statistiche vengono raccolte una volta al giorno, appena prima del reset giornaliero (00:00 GT). I grafici si riempiono giorno dopo giorno.
-  since: Raccolte giornalmente dal {date}.
-  one_day: 'Raccolto solo un giorno finora: il grafico inizierà quando ce ne saranno due.'
+  since: Raccolti quotidianamente dal {date}.
+  one_day: 'Raccolto solo un giorno finora: il grafico inizierà una volta che ce ne saranno due.'
   col_alliance: Alleanza
   col_might: Potenza
   col_week: 7 giorni
   col_month: 30 giorni
   no_number: "—"
-  show_hide: Tocca un'alleanza per mostrare o nascondere la sua linea.
+  show_hide: Tocca un'alleanza per mostrare o nascondere la sua riga.
   credit_before: Numeri dal

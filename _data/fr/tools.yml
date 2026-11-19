@@ -918,6 +918,20 @@ stats:
   title: Stats NAP
   views_label: Que montrer
   view_growth: Croissance NAP
+  view_players: Meilleurs joueurs
+  list_label: Quelle liste
+  list_strongest: Les plus forts
+  list_week: Gain de la semaine
+  list_month: Gain du mois
+  filter_label: Alliance
+  filter_all: Toutes les alliances NAP
+  players_none: Aucun joueur à afficher pour le moment.
+  players_wait_week: Les gains hebdomadaires s'affichent une fois qu'une semaine de données a été collectée.
+  players_wait_month: Les gains mensuels s'affichent une fois qu'un mois de données a été collecté.
+  players_as_of: D'après l'instantané avant la réinitialisation du {date}.
+  col_player: Joueur
+  col_gain: Gain
+  show_more: Afficher les {n}
   range_label: Période
   range_week: 1 semaine
   range_month: 1 mois
@@ -926,7 +940,7 @@ stats:
   failed: Les stats ne peuvent pas être chargées pour le moment.
   collecting: Les stats sont collectées une fois par jour, juste avant la réinitialisation quotidienne (00:00 GT). Les graphiques se remplissent jour après jour.
   since: Collectées quotidiennement depuis le {date}.
-  one_day: 'Un seul jour collecté jusqu''à présent : le graphique commence une fois qu''il y en a deux.'
+  one_day: 'Un seul jour collecté pour le moment : le graphique démarre une fois qu''il y en a deux.'
   col_alliance: Alliance
   col_might: Puissance
   col_week: 7 jours
