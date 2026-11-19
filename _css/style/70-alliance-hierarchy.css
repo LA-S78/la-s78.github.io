@@ -705,3 +705,139 @@ main .ladder-badge,
   color: inherit;
   text-decoration: underline dotted;
 }
+
+/* The Top players view: a list with each player's picture, a month's growth line and Might */
+.stats-range[hidden] {
+  display: none;
+}
+
+.stats-subbar {
+  align-items: center;
+  margin-top: 0;
+}
+
+.stats-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.stats-filter select {
+  padding: 3px 6px;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.stats-players {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.stats-player {
+  display: grid;
+  grid-template-columns: 1.8rem 32px minmax(0, 1fr) 72px auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--overlay-5);
+  font-size: 0.82rem;
+}
+
+.stats-place {
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+main .stats-face,
+.stats-face {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  object-fit: cover;
+  border: none;
+  border-radius: 6px;
+}
+
+.stats-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--overlay-5);
+}
+
+.stats-who,
+.stats-num {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stats-who strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats-who small,
+.stats-num small {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.stats-num {
+  align-items: flex-end;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-spark {
+  width: 72px;
+  height: 22px;
+}
+
+.stats-spark path {
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.stats-spark.is-up path {
+  stroke: var(--status-success-text);
+}
+
+.stats-spark.is-down path {
+  stroke: var(--status-danger-text);
+}
+
+/* Phones: the growth line gives way to the names */
+@media (max-width: 420px) {
+  .stats-player {
+    grid-template-columns: 1.5rem 28px minmax(0, 1fr) 52px auto;
+    gap: 6px;
+  }
+
+  .stats-spark {
+    width: 52px;
+  }
+
+  main .stats-face,
+  .stats-face {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.stats-more {
+  display: flex;
+  margin: 0.8rem auto 0;
+}

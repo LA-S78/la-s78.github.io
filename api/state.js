@@ -9,7 +9,7 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 
 import { BASELINE_SCHEDULES } from './_cycle_helper.js';
 import { fetchAlliance, knownMissing } from './_tracker.js';
-import { readStatsSummary } from './_stats.js';
+import { readStatsSummary, readTopPlayers } from './_stats.js';
 
 /**
  * Ensures cycle_state always returns valid numbers and never has an empty active_schedule.
@@ -138,6 +138,15 @@ export default async function handler(req, res) {
           nap,
           updatedAt: summary?.updatedAt || null,
         });
+      }
+
+      // The Stats tab's Top players view (api/_stats.js topPlayers), worked out daily
+      case 'stats-players': {
+        const top = await readTopPlayers();
+        res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+        return res
+          .status(200)
+          .json(top || { day: null, days: [], strongest: [], week: [], month: [] });
       }
 
       case 'rewards':
