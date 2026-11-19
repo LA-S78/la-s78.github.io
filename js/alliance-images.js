@@ -202,11 +202,11 @@
     const kind = section._ai?.pickFor;
     if (!file || !section._ai?.ctx.images.slots[kind]) return; // only after "Choose a picture"
     say(section, '');
+    if (kind === 'frame') return checkFrameFile(section, file);
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.decoding = 'async';
-    img.onload = () =>
-      kind === 'frame' ? openFrame(section, img, url) : openCrop(section, kind, img, url);
+    img.onload = () => openCrop(section, kind, img, url);
     img.onerror = () => {
       URL.revokeObjectURL(url);
       say(section, t('not_image'), 'error');
@@ -482,8 +482,14 @@
     if (w < FRAME.minSource) return { error: t('frame_too_small', { width: w, height: h }) };
     const all = g.getImageData(0, 0, FRAME.size, FRAME.size).data;
     let solid = 0;
-    for (let i = 3; i < all.length; i += 4) if (all[i] > 100) solid++;
+    let clear = 0;
+    for (let i = 3; i < all.length; i += 4) {
+      if (all[i] > 100) solid++;
+      if (all[i] < 40) clear++;
+    }
     if (solid / (all.length / 4) < 0.03) return { error: t('frame_empty') };
+    // A frame needs see-through parts somewhere (a PNG with no transparency would be a square)
+    if (clear / (all.length / 4) < 0.05) return { error: t('frame_no_transparency') };
     const [a, b] = FRAME.hole;
     const inner = g.getImageData(a, a, b - a, b - a).data;
     let covered = 0;
@@ -497,6 +503,34 @@
       };
     }
     return {};
+  }
+
+  /**
+   * A frame file must be a PNG or WebP, read from its first bytes (not its name): the browser
+   * saves every frame again as a PNG, so a JPEG would otherwise arrive looking like one, with
+   * nothing see-through (found in the owner's testing, 2026-11-19).
+   */
+  async function checkFrameFile(section, file) {
+    let head;
+    try {
+      head = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+    } catch {
+      return say(section, t('load_failed'), 'error');
+    }
+    const png = [0x89, 0x50, 0x4e, 0x47].every((b, i) => head[i] === b);
+    const webp =
+      String.fromCharCode(...head.slice(0, 4)) === 'RIFF' &&
+      String.fromCharCode(...head.slice(8, 12)) === 'WEBP';
+    if (!png && !webp) return say(section, t('frame_not_png'), 'error');
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => openFrame(section, img, url);
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      say(section, t('not_image'), 'error');
+    };
+    img.src = url;
   }
 
   function openFrame(section, img, url) {
