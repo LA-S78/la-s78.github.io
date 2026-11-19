@@ -471,24 +471,32 @@
   // ---------- The avatar frame: checked, previewed and sent as it is ----------
 
   /**
-   * What's wrong with a frame picture, or '' if it's fine: square, at least 190 px, a
-   * see-through middle (nine in ten pixels of the opening) and something drawn around it.
+   * A frame picture checked: { error } stops it (not square, too small, nothing drawn);
+   * { warning } only tells (owner, 2026-11-19: a design may cover the picture on purpose,
+   * like a winter garland), with how much of the middle it covers; {} when it's fine.
    */
-  function frameProblem(img, g) {
+  function frameCheck(img, g) {
     const w = img.naturalWidth;
     const h = img.naturalHeight;
-    if (Math.abs(w - h) > 1) return t('frame_not_square', { width: w, height: h });
-    if (w < FRAME.minSource) return t('frame_too_small', { width: w, height: h });
-    const [a, b] = FRAME.hole;
-    const inner = g.getImageData(a, a, b - a, b - a).data;
-    let clear = 0;
-    for (let i = 3; i < inner.length; i += 4) if (inner[i] < 40) clear++;
-    if (clear / (inner.length / 4) < 0.9) return t('frame_opening');
+    if (Math.abs(w - h) > 1) return { error: t('frame_not_square', { width: w, height: h }) };
+    if (w < FRAME.minSource) return { error: t('frame_too_small', { width: w, height: h }) };
     const all = g.getImageData(0, 0, FRAME.size, FRAME.size).data;
     let solid = 0;
     for (let i = 3; i < all.length; i += 4) if (all[i] > 100) solid++;
-    if (solid / (all.length / 4) < 0.03) return t('frame_empty');
-    return '';
+    if (solid / (all.length / 4) < 0.03) return { error: t('frame_empty') };
+    const [a, b] = FRAME.hole;
+    const inner = g.getImageData(a, a, b - a, b - a).data;
+    let covered = 0;
+    for (let i = 3; i < inner.length; i += 4) if (inner[i] >= 40) covered++;
+    const share = covered / (inner.length / 4);
+    if (share > 0.1) {
+      return {
+        warning: t(share > 0.6 ? 'frame_covers_most' : 'frame_covers', {
+          percent: Math.round(share * 100),
+        }),
+      };
+    }
+    return {};
   }
 
   function openFrame(section, img, url) {
@@ -501,8 +509,8 @@
     g.imageSmoothingQuality = 'high';
     g.drawImage(img, 0, 0, FRAME.size, FRAME.size);
     URL.revokeObjectURL(url);
-    const problem = frameProblem(img, g);
-    if (problem) return say(section, problem, 'error');
+    const check = frameCheck(img, g);
+    if (check.error) return say(section, check.error, 'error');
     canvas.toBlob((blob) => {
       if (!blob) return say(section, t('load_failed'), 'error');
       if (blob.size > FRAME.maxBytes) {
@@ -520,7 +528,11 @@
       box.hidden = false;
       box.innerHTML = `
         <h4 class="ai-crop-title">${esc(t('frame_title'))}</h4>
-        <p class="dash-muted ai-crop-help">${esc(t('frame_check_ok'))}</p>
+        ${
+          check.warning
+            ? `<p class="ai-status ai-frame-warning">${ic('warning', 'warn')}${esc(check.warning)}</p>`
+            : `<p class="dash-muted ai-crop-help">${esc(t('frame_check_ok'))}</p>`
+        }
         <div class="ai-frame-previews">
           <figure>${framedSample(preview, 'lg')}<figcaption class="dash-muted">${esc(t('frame_big'))}</figcaption></figure>
           <figure>${framedSample(preview, 'md')}<figcaption class="dash-muted">${esc(t('frame_roster'))}</figcaption></figure>
