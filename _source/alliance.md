@@ -10,7 +10,9 @@ nav_links:
     url: "#nap-territory"
   - name_key: "blacklist"
     url: "#blacklist"
-strings: [alliance_planner, blacklist_planner, map_planner, proposals, live_data]
+  - name_key: "nap_stats"
+    url: "#nap-stats"
+strings: [alliance_planner, blacklist_planner, map_planner, proposals, live_data, stats]
 ---
 
 {% for section in site.alliance %}
@@ -123,3 +125,29 @@ nav_id: "blacklist"
 </div>
 
 <script type="module" src="/js/alliance.js" defer></script>
+
+=== collection--alliance--04 ===
+---
+title: "Stats"
+nav_id: "nap-stats"
+---
+
+<!-- The Stats tab (owner request, 2026-11-19): views of the NAP's numbers over time, from a
+     daily snapshot of the Last Asylum Tracker (api/_stats.js). Drawn by js/stats.js. -->
+<h2>{{ "stats.title" | t }}</h2>
+<div class="stats-app" id="stats-app">
+  <div class="stats-bar">
+    <div class="segmented-control stats-views" role="group" aria-label="{{ "stats.views_label" | t }}">
+      <button type="button" class="toggle-btn active" data-stats-view="growth" aria-pressed="true">{{ "stats.view_growth" | t }}</button>
+    </div>
+    <div class="segmented-control stats-range" role="group" aria-label="{{ "stats.range_label" | t }}">
+      <button type="button" class="toggle-btn" data-stats-range="7" aria-pressed="false">{{ "stats.range_week" | t }}</button>
+      <button type="button" class="toggle-btn active" data-stats-range="30" aria-pressed="true">{{ "stats.range_month" | t }}</button>
+      <button type="button" class="toggle-btn" data-stats-range="all" aria-pressed="false">{{ "stats.range_all" | t }}</button>
+    </div>
+  </div>
+  <div class="stats-body" id="stats-body"><p class="stats-note">{{ "stats.loading" | t }}</p></div>
+  <p class="stats-credit">{% include ui-icon.html name="users" %}{{ "stats.credit_before" | t }} <a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a></p>
+</div>
+
+<script type="module" src="/js/stats.js" defer></script>

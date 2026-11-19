@@ -9,6 +9,7 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 
 import { BASELINE_SCHEDULES } from './_cycle_helper.js';
 import { fetchAlliance, knownMissing } from './_tracker.js';
+import { readStatsSummary } from './_stats.js';
 
 /**
  * Ensures cycle_state always returns valid numbers and never has an empty active_schedule.
@@ -115,6 +116,28 @@ export default async function handler(req, res) {
             : 's-maxage=300, stale-while-revalidate=600',
         );
         return res.status(200).json({ stats });
+      }
+
+      // The Stats tab (api/_stats.js): each NAP alliance's Might per day, with today's NAP
+      // list (in rank order) and colours. Changes once a day: Vercel keeps it an hour.
+      case 'stats': {
+        const summary = await readStatsSummary();
+        const nap = Object.entries(cleanAlliances)
+          .filter(([, a]) => a && a.is_nap !== false)
+          .sort(([, a], [, b]) => (Number(a.rank) || 999) - (Number(b.rank) || 999))
+          .map(([tag, a]) => ({
+            tag,
+            name: a.name || '',
+            color: a.color || null,
+            rank: a.rank ?? null,
+          }));
+        res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+        return res.status(200).json({
+          days: summary?.days || [],
+          alliances: summary?.alliances || {},
+          nap,
+          updatedAt: summary?.updatedAt || null,
+        });
       }
 
       case 'rewards':

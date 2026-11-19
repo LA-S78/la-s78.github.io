@@ -967,3 +967,26 @@ alliance_images:
   not_image: "That file isn't a picture this browser can open. Try a JPEG or PNG."
   too_small: "That picture is quite small ({width}×{height}); it may look blurry. You can still send it."
   load_failed: "The picture couldn't be opened."
+
+# The Alliance page's Stats tab (js/stats.js; daily snapshots of the Last Asylum Tracker)
+stats:
+  title: "NAP Stats"
+  views_label: "What to show"
+  view_growth: "NAP growth"
+  range_label: "Time span"
+  range_week: "1 week"
+  range_month: "1 month"
+  range_all: "All"
+  loading: "Loading stats..."
+  failed: "Stats can't be loaded right now."
+  collecting: "Stats are collected once a day, just before the daily reset (00:00 GT). The charts fill in day by day."
+  since: "Collected daily since {date}."
+  one_day: "Only one day collected so far: the chart starts once there are two."
+  col_alliance: "Alliance"
+  col_might: "Might"
+  col_week: "7 days"
+  col_month: "30 days"
+  no_number: "—"
+  show_hide: "Tap an alliance to show or hide its line."
+  credit_before: "Numbers from the"
+

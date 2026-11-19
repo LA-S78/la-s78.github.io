@@ -10,9 +10,11 @@ Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 
 
 - [x] **Research and help in the dashboard roster (leaders only)** — today's alliance research donations (tracker `daily_tech`) and help given to members' construction and research (`daily_honor`), with Research and Help sorts and a note of how current they are. No extra requests. Not the game's weekly activity score (owner: it weighs Survival Battle like Alliance Duel, so it misjudges players).
 - [x] **Live stats on the Alliance standings cards** — each NAP alliance's in-game badge on its card, and Might, members (99/100) and level behind an arrow; every card one line high outside planner mode (academies move into the details too). Not the game's kingdom ranking: ranks stay with our rules.
-- [ ] **Stats page** — new page for numbers over time:
-  - Might history: every NAP alliance's Might saved once a day (about 10 requests a day, stored like the Top 4 race), drawn as growth charts here and on the dashboard.
-  - Kill Event and Kingdom War stats: kills by alliance, and the change in kills before and after an event.
+- [ ] **Stats tab on the Alliance page** (owner, 2026-11-19: one tab with view modes, to keep it compact). A daily snapshot of every NAP alliance's roster just before reset (in the Blob store) feeds the views.
+  - [x] Daily snapshot and the **NAP growth** view: each alliance's Might as a line (1 week, 1 month, all), and Might today with the change over 7 and 30 days.
+  - [ ] **Top players** view: strongest players across the NAP, and the biggest Might gains this week and month, with growth lines and an alliance filter.
+  - [ ] **Achievements** view: highest Might, biggest gain this week, most kills and most kills gained this week, highest Sanctuary, and most days away from the hive (furthest from their alliance's cluster this month). No donations (owner: they stay off the public stats).
+  - [ ] Player lookup by ID (perhaps a view here).
 - [x] **Members on the territory map (leaders only)** — "My members" on the territory map: a dot for each member of the signed-in leader's own alliance, a search box (name or ID) and a card with their Might, coordinates and territory. Positions lined up from five cities the owner read in the game.
 - [ ] **Player lookup by ID** — look up any player (name, Might, kills, Sanctuary level, alliance). Good idea, but no home yet: maybe the Stats page, or a Steward tool.
 - ~~NAP checks from alliance declarations~~ — dropped (owner): declarations are free text and too unreliable.
