@@ -1214,6 +1214,12 @@ li.dw-sel > .dw-bar-track {
   gap: 2px;
 }
 
+/* The roster's Refresh button: how many are left today */
+#roster-refresh small {
+  margin-left: 4px;
+  opacity: 0.75;
+}
+
 /* Reached the game's daily help limit */
 .dash-roster-giving .is-capped {
   font-weight: 700;

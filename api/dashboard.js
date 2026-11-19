@@ -25,9 +25,11 @@ import { getRewardPeriod } from './_reward_period.js';
 import { fetchSourceTable } from './_google_source.js';
 import {
   applyDashboardEdit,
+  countRefresh,
   dashboardFile,
   findAllianceKey,
   readDashboard,
+  refreshState,
   rewardStatus,
   viewerAccess,
   visibleDashboard,
@@ -118,21 +120,12 @@ async function respond(req, res) {
   // The Caravan Rotor shows players' pictures too (step 2), for whoever can see it
   const caravanShown = Boolean(body.dashboard.caravan);
   if (access.leader || membersMayView || caravanShown) {
-    const live = await fetchAlliance(tag, { timeoutMs: 2500 });
+    // After a leader's refresh, a copy older than it isn't used (the tracker has the new one)
+    const refreshedAt = Date.parse(saved.settings.rosterRefresh?.lastAt || '') || 0;
+    const live = await fetchAlliance(tag, { timeoutMs: 2500, newerThan: refreshedAt });
     if (access.leader || membersMayView) {
-      body.roster = {
-        membersCanView: membersMayView,
-        // Today's donations and help are for leaders only (owner, 2026-11-19)
-        members: live
-          ? access.leader
-            ? live.members
-            : live.members.map(({ tech, help, ...m }) => m)
-          : null,
-        power: live ? live.power : null,
-        ageSeconds: live ? live.ageSeconds : null,
-        // When the game sent this copy: daily numbers count from the 00:00 GT reset
-        takenAt: live ? new Date(live.at - live.ageSeconds * 1000).toISOString() : null,
-      };
+      body.roster = rosterBody(live, access.leader, membersMayView);
+      if (access.leader) body.roster.refresh = refreshState(saved.settings);
     }
     if (access.leader) body.members = live ? live.members.map((m) => m.name) : null;
     if (caravanShown) body.pictures = memberPictures(live);
@@ -157,6 +150,58 @@ async function respond(req, res) {
   return res.status(200).json(body);
 }
 
+/** The roster card's data from a tracker lookup (null fields when there is none). */
+function rosterBody(live, leader, membersMayView) {
+  return {
+    membersCanView: membersMayView,
+    // Today's donations and help are for leaders only (owner, 2026-11-19)
+    members: live ? (leader ? live.members : live.members.map(({ tech, help, ...m }) => m)) : null,
+    power: live ? live.power : null,
+    ageSeconds: live ? live.ageSeconds : null,
+    // When the game sent this copy: daily numbers count from the 00:00 GT reset
+    takenAt: live ? new Date(live.at - live.ageSeconds * 1000).toISOString() : null,
+  };
+}
+
+/**
+ * The roster's Refresh button (leaders): a live lookup from the game, within the alliance's
+ * daily allowance and cooldown (api/_dashboard.js refreshState). Counted only when it worked.
+ */
+async function refreshRoster(res, { gist, tag, alliances, session }) {
+  const file = dashboardFile(tag, alliances);
+  const before = refreshState(readDashboard(gistJson(gist, file, {}), tag).settings);
+  if (!before.left) return res.status(429).json({ error: say('api_dashboard.refresh_limit') });
+  if (before.waitMinutes) {
+    return res
+      .status(429)
+      .json({ error: say('api_dashboard.refresh_wait', { n: before.waitMinutes }) });
+  }
+  const live = await fetchAlliance(tag, { fresh: true, timeoutMs: 6000 });
+  if (!live) return res.status(502).json({ error: say('api_dashboard.refresh_failed') });
+  let settings = null;
+  try {
+    await updateGist(
+      (fresh) => {
+        const stored = readDashboard(gistJson(fresh, file, {}), tag);
+        stored.settings = countRefresh(stored.settings);
+        settings = stored.settings;
+        return {
+          files: { [file]: stored },
+          description: `Dashboard [${tag}]: roster refreshed by ${session.name || 'a leader'}`,
+        };
+      },
+      { gist },
+    );
+  } catch (err) {
+    // The lookup worked: the leader still gets it, the count just wasn't saved
+    console.warn(`Roster refresh [${tag}] not counted:`, err.message);
+  }
+  const stored = readDashboard(gistJson(gist, file, {}), tag).settings;
+  const roster = rosterBody(live, true, Boolean(stored.rosterMembersCanView));
+  roster.refresh = refreshState(settings || countRefresh(stored));
+  return res.status(200).json({ roster, members: live.members.map((m) => m.name) });
+}
+
 /**
  * Leaders' edits to their alliance's dashboard (Stewards: any alliance): save, delete or move
  * a chart or table. Saved with updateGist, so edits made at the same moment are all kept.
@@ -167,6 +212,10 @@ async function editDashboard(req, res, { gist, tag, access, session, alliances }
   }
   const body = req.body || {};
   const file = dashboardFile(tag, alliances);
+
+  if (body.action === 'roster-refresh') {
+    return refreshRoster(res, { gist, tag, alliances, session });
+  }
 
   // Read a Google Sheet / Doc for the editor's preview (nothing is saved).
   if (body.action === 'load-source') {
