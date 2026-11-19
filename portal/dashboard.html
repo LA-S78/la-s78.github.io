@@ -540,14 +540,17 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       return window.PlayerPortrait ? window.PlayerPortrait.portrait(m, size) : '';
     }
 
+    // The game's daily limit on helps (owner, 2026-11-19): reaching it is marked in the roster
+    const HELP_CAP = 1000;
+
     let rosterView = { text: '', sort: 'power' };
     const ROSTER_SORTS = {
       power: (a, b) => b.power - a.power,
       name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
       rank: (a, b) => (b.rank || '').localeCompare(a.rank || '') || b.power - a.power,
-      // Leaders: today's research donations and help (missing counts last)
-      tech: (a, b) => (b.tech ?? -1) - (a.tech ?? -1) || b.power - a.power,
-      help: (a, b) => (b.help ?? -1) - (a.help ?? -1) || b.power - a.power,
+      // Leaders: today's research donations and help
+      tech: (a, b) => (b.tech || 0) - (a.tech || 0) || b.power - a.power,
+      help: (a, b) => (b.help || 0) - (a.help || 0) || b.power - a.power,
     };
 
     /** Might as players read it: 1.23B, 456.7M */
@@ -581,7 +584,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       // Today's research donations and help: leaders only (the server sends them only to them)
       const giving = leader && all.some((m) => m.tech !== undefined);
       if (!giving && (rosterView.sort === 'tech' || rosterView.sort === 'help')) rosterView.sort = 'power';
-      const amount = (n) => (Number.isFinite(n) ? escapeHtml(n.toLocaleString()) : '—');
+      // The game leaves out a member who hasn't donated or helped yet today: that's 0
+      // (checked 2026-11-19: just after reset most members have no number, and none has 0)
+      const amount = (n) => escapeHtml((Number.isFinite(n) ? n : 0).toLocaleString());
       const q = rosterView.text.trim().toLowerCase();
       const shown = all
         .filter((m) => !q || m.name.toLowerCase().includes(q) || String(m.uid).includes(q))
@@ -595,7 +600,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           <span class="dash-roster-stats">
             <span class="dash-roster-might">${might(m.power)}</span>
             ${m.level ? `<span class="dash-muted dash-small">${escapeHtml(t('roster.sanctuary_lv', { n: m.level }))}</span>` : ''}
-            ${giving ? `<span class="dash-roster-giving dash-small"><span title="${escapeHtml(t('roster.tech_title'))}">${ic('flask')}${amount(m.tech)}</span><span title="${escapeHtml(t('roster.help_title'))}">${ic('helping')}${amount(m.help)}</span></span>` : ''}
+            ${giving ? `<span class="dash-roster-giving dash-small"><span title="${escapeHtml(t('roster.tech_title'))}">${ic('flask')}${amount(m.tech)}</span>${m.help >= HELP_CAP ? `<span class="is-capped" title="${escapeHtml(t('roster.help_capped'))}">${ic('helping', 'ok')}${amount(m.help)}</span>` : `<span title="${escapeHtml(t('roster.help_title'))}">${ic('helping')}${amount(m.help)}</span>`}</span>` : ''}
           </span>
         </li>`;
       const sorts = ['power', 'name', 'rank', ...(giving ? ['tech', 'help'] : [])]

@@ -1214,6 +1214,12 @@ li.dw-sel > .dw-bar-track {
   gap: 2px;
 }
 
+/* Reached the game's daily help limit */
+.dash-roster-giving .is-capped {
+  font-weight: 700;
+  color: var(--status-success-text, var(--text-main));
+}
+
 .dash-roster-daily {
   display: flex;
   align-items: center;

@@ -64,7 +64,8 @@ function slim(d) {
         frame: pictureUrl(m.frame_url),
         // Today's giving (owner request, 2026-11-19; leaders only, api/dashboard.js):
         // alliance research donations (daily_tech) and help with members' construction and
-        // research (daily_honor). null when the roster didn't include them. The game's
+        // research (daily_honor). null when missing: the game leaves out a member who
+        // hasn't donated or helped since the daily reset, so pages show that as 0. The game's
         // weekly "activity" score is left out on purpose (owner: it counts Survival Battle
         // as much as Alliance Duel, so it misjudges players).
         tech: count(m.daily_tech),
