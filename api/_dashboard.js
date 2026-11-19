@@ -339,9 +339,6 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     if (error)
       return { error: say('api_dashboard.sheet_unusable', { reason: error }), status: 400 };
     d.widgets[at] = widget;
-  } else if (edit.action === 'roster-visibility') {
-    // The roster view's "Members can view" (owner request, 2026-11-18)
-    d.settings = { ...d.settings, rosterMembersCanView: Boolean(edit.membersCanView) };
   } else if (String(edit.action || '').startsWith('caravan-')) {
     const result = applyCaravanEdit(d.caravan, edit, { actor, now });
     if (result.error) return { error: result.error, status: 400 };

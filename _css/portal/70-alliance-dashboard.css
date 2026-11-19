@@ -1214,6 +1214,34 @@ li.dw-sel > .dw-bar-track {
   gap: 2px;
 }
 
+/* The roster's head: title, then Refresh on the right; members and Might centred below */
+.dash-roster-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0.4rem;
+}
+
+.dash-roster-head .dash-card-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+#roster-refresh {
+  flex-shrink: 0;
+}
+
+.dash-roster-summary {
+  margin: 0 0 0.6rem;
+  text-align: center;
+}
+
+.dash-roster-summary .dash-tag {
+  display: inline-block;
+  margin-left: 0;
+}
+
 /* The roster's Refresh button: how many are left today */
 #roster-refresh small {
   margin-left: 4px;

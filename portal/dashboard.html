@@ -620,7 +620,6 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       el.hidden = !r;
       if (!r) return;
       const leader = isLeader();
-      const open = leader ? Boolean(data.dashboard.settings && data.dashboard.settings.rosterMembersCanView) : true;
       const all = r.members || [];
       // Today's research donations and help: leaders only (the server sends them only to them)
       const giving = leader && all.some((m) => m.tech !== undefined);
@@ -648,8 +647,11 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         .map((k) => `<button type="button" class="dash-icon-btn" data-roster-sort="${k}" aria-pressed="${rosterView.sort === k}">${escapeHtml(t(`roster.sort_${k}`))}</button>`)
         .join('');
       el.innerHTML = `
-        <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}${r.members ? ` <span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span>` : ''}</h3>
-        ${leader ? `<div class="dash-cv-bar"><label class="dash-check"><input type="checkbox" id="roster-members"${open ? ' checked' : ''}> ${ic('users')}${escapeHtml(t('caravan.members_can_view'))}</label>${refreshButton(r.refresh)}</div>` : ''}
+        <div class="dash-roster-head">
+          <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}</h3>
+          ${refreshButton(r.refresh)}
+        </div>
+        ${r.members ? `<p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span></p>` : ''}
         ${r.members
           ? `<div class="dash-cv-filters">
               <input type="search" id="roster-search" placeholder="${escapeHtml(t('roster.search'))}" value="${escapeHtml(rosterView.text)}" aria-label="${escapeHtml(t('roster.search'))}">
@@ -686,7 +688,6 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         }),
       );
       $('roster-refresh')?.addEventListener('click', refreshRoster);
-      $('roster-members')?.addEventListener('change', (e) => save({ action: 'roster-visibility', membersCanView: e.target.checked }, { quiet: true }));
     }
 
     async function caravanChange(change) {
