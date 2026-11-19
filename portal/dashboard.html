@@ -540,6 +540,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       return window.PlayerPortrait ? window.PlayerPortrait.portrait(m, size) : '';
     }
 
+    // The game's daily limit on helps (owner, 2026-11-19): reaching it is marked in the roster
+    const HELP_CAP = 1000;
+
     let rosterView = { text: '', sort: 'power' };
     const ROSTER_SORTS = {
       power: (a, b) => b.power - a.power,
@@ -595,7 +598,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           <span class="dash-roster-stats">
             <span class="dash-roster-might">${might(m.power)}</span>
             ${m.level ? `<span class="dash-muted dash-small">${escapeHtml(t('roster.sanctuary_lv', { n: m.level }))}</span>` : ''}
-            ${giving ? `<span class="dash-roster-giving dash-small"><span title="${escapeHtml(t('roster.tech_title'))}">${ic('flask')}${amount(m.tech)}</span><span title="${escapeHtml(t('roster.help_title'))}">${ic('helping')}${amount(m.help)}</span></span>` : ''}
+            ${giving ? `<span class="dash-roster-giving dash-small"><span title="${escapeHtml(t('roster.tech_title'))}">${ic('flask')}${amount(m.tech)}</span>${m.help >= HELP_CAP ? `<span class="is-capped" title="${escapeHtml(t('roster.help_capped'))}">${ic('helping', 'ok')}${amount(m.help)}</span>` : `<span title="${escapeHtml(t('roster.help_title'))}">${ic('helping')}${amount(m.help)}</span>`}</span>` : ''}
           </span>
         </li>`;
       const sorts = ['power', 'name', 'rank', ...(giving ? ['tech', 'help'] : [])]

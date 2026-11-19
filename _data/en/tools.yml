@@ -134,6 +134,7 @@ roster:
   sort_help: "Help"
   tech_title: "Alliance research donated today"
   help_title: "Help given to members' construction and research today"
+  help_capped: "Daily help limit reached (1,000)"
   daily_as_of: "Research and help since today's reset (00:00 GT), as of {time}"
   daily_old: "Research and help from before today's reset: last read {time}"
   daily_unknown: "Research and help: time of reading unknown"
