@@ -86,13 +86,15 @@ function slim(d) {
  */
 export async function fetchAlliance(
   tag,
-  { fresh = false, timeoutMs = 4000, env = process.env, fetchImpl = fetch } = {},
+  { fresh = false, timeoutMs = 4000, newerThan = 0, env = process.env, fetchImpl = fetch } = {},
 ) {
   const key = String(env.LAT_API_KEY || '').trim();
   const clean = String(tag || '').trim();
   if (!key || !clean) return null;
   const hit = cache.get(clean);
-  if (!fresh && hit && Date.now() - hit.at < CACHE_MS) return hit;
+  // `newerThan`: a copy kept here from before that time is not used (a leader refreshed the
+  // roster on another server instance since; the tracker has the newer copy)
+  if (!fresh && hit && Date.now() - hit.at < CACHE_MS && hit.at >= newerThan) return hit;
   try {
     const url = `${BASE}/alliances/${TRACKER_SERVER}/${encodeURIComponent(clean)}${fresh ? '?fresh=1' : ''}`;
     const res = await fetchImpl(url, {

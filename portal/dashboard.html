@@ -542,6 +542,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
 
     // The game's daily limit on helps (owner, 2026-11-19): reaching it is marked in the roster
     const HELP_CAP = 1000;
+    // Minutes between two roster refreshes (as api/_dashboard.js REFRESH_COOLDOWN_MIN)
+    const REFRESH_COOLDOWN_MIN = 10;
 
     let rosterView = { text: '', sort: 'power' };
     const ROSTER_SORTS = {
@@ -573,13 +575,51 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       return t(at >= reset ? 'roster.daily_as_of' : 'roster.daily_old', { time });
     }
 
+    /**
+     * The roster's Refresh button (leaders): live numbers from the game, shared by the
+     * alliance's leaders: a few a day, one every few minutes (api/dashboard.js refreshRoster).
+     */
+    function refreshButton(state) {
+      if (!state) return '';
+      const last = Date.parse(state.lastAt || '');
+      const waitMin = Number.isFinite(last) ? Math.ceil((last + REFRESH_COOLDOWN_MIN * 60000 - Date.now()) / 60000) : 0;
+      const why = !state.left
+        ? t('roster.refresh_none')
+        : waitMin > 0
+          ? t('roster.refresh_wait', { n: waitMin })
+          : t('roster.refresh_help', { n: state.left, max: state.max });
+      const off = !state.left || waitMin > 0;
+      return `<button type="button" class="dash-icon-btn" id="roster-refresh"${off ? ' disabled' : ''} title="${escapeHtml(why)}">${ic('refresh')}${escapeHtml(t('roster.refresh'))} <small>${escapeHtml(t('roster.refresh_left', { n: state.left }))}</small></button>`;
+    }
+
+    async function refreshRoster() {
+      const btn = $('roster-refresh');
+      btn.disabled = true;
+      btn.innerHTML = ic('refresh') + escapeHtml(t('roster.refreshing'));
+      try {
+        const res = await fetch('/api/dashboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+          body: JSON.stringify({ action: 'roster-refresh', alliance: data.alliance.tag }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        data.roster = body.roster;
+        data.members = body.members;
+        renderRoster();
+        renderCaravan();
+      } catch (err) {
+        alert(err.message);
+        renderRoster();
+      }
+    }
+
     function renderRoster() {
       const el = $('dash-roster');
       const r = data.roster;
       el.hidden = !r;
       if (!r) return;
       const leader = isLeader();
-      const open = leader ? Boolean(data.dashboard.settings && data.dashboard.settings.rosterMembersCanView) : true;
       const all = r.members || [];
       // Today's research donations and help: leaders only (the server sends them only to them)
       const giving = leader && all.some((m) => m.tech !== undefined);
@@ -607,8 +647,11 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         .map((k) => `<button type="button" class="dash-icon-btn" data-roster-sort="${k}" aria-pressed="${rosterView.sort === k}">${escapeHtml(t(`roster.sort_${k}`))}</button>`)
         .join('');
       el.innerHTML = `
-        <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}${r.members ? ` <span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span>` : ''}</h3>
-        ${leader ? `<div class="dash-cv-bar"><label class="dash-check"><input type="checkbox" id="roster-members"${open ? ' checked' : ''}> ${ic('users')}${escapeHtml(t('caravan.members_can_view'))}</label></div>` : ''}
+        <div class="dash-roster-head">
+          <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}</h3>
+          ${refreshButton(r.refresh)}
+        </div>
+        ${r.members ? `<p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span></p>` : ''}
         ${r.members
           ? `<div class="dash-cv-filters">
               <input type="search" id="roster-search" placeholder="${escapeHtml(t('roster.search'))}" value="${escapeHtml(rosterView.text)}" aria-label="${escapeHtml(t('roster.search'))}">
@@ -644,7 +687,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           }
         }),
       );
-      $('roster-members')?.addEventListener('change', (e) => save({ action: 'roster-visibility', membersCanView: e.target.checked }, { quiet: true }));
+      $('roster-refresh')?.addEventListener('click', refreshRoster);
     }
 
     async function caravanChange(change) {

@@ -50,7 +50,7 @@ Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 
 - [x] **Last Asylum Tracker API** (owner, 2026-11-17; more ideas under Active): alliance Might and member lists for our server, from `api.lastasylumtracker.com` (key in Vercel as `LAT_API_KEY`).
   - [x] Name checks in the nomination list and the Caravan Rotor: game spellings, unknown names, close matches.
   - [x] Top 4 race: live snapshots 10 minutes before reset on Duel Days 3–5 of Kingdom War Week 1; NAP alliances and academies ranked by their three-day total on the Rules page; results posted to NAP leadership with Apply new ranks / Keep current order buttons for Stewards: applying re-ranks the whole NAP list by total, academies included; seats change at the next cycle.
-  - [x] Alliance roster on the dashboard: pictures in frames, rank, ID, Might, Sanctuary level; search and sort; Members can view toggle; tracker credit.
+  - [x] Alliance roster on the dashboard: pictures in frames, rank, ID, Might, Sanctuary level; search and sort; tracker credit. Leaders only (the Members can view option was removed, 2026-11-19).
   - [x] Pictures in the Caravan Rotor, nomination list and King's console.
   - [x] Player IDs in nominations: officers type an ID or a name; the King's console shows the current name and picture.
 

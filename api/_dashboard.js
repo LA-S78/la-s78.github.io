@@ -30,6 +30,40 @@ export function dashboardFile(tag, alliances = {}) {
 }
 
 /**
+ * The roster's Refresh button (owner, 2026-11-19): a live lookup from the game, shared by the
+ * alliance's leaders, at most REFRESH_PER_DAY a day (from the 00:00 GT reset) and one every
+ * REFRESH_COOLDOWN_MIN minutes, so the tracker's 1,000 requests a day are never at risk.
+ * Kept in the dashboard file as settings.rosterRefresh = { day, count, lastAt }.
+ */
+export const REFRESH_PER_DAY = 15;
+export const REFRESH_COOLDOWN_MIN = 10;
+
+/** The game day (GT, UTC-2) of a time, as YYYY-MM-DD. */
+const gameDay = (ms) => new Date(ms - 2 * 3600000).toISOString().slice(0, 10);
+
+/** Where the alliance stands: { left, waitMinutes, lastAt }. */
+export function refreshState(settings = {}, now = Date.now()) {
+  const r = settings.rosterRefresh || {};
+  const used = r.day === gameDay(now) ? Number(r.count) || 0 : 0;
+  const last = Date.parse(r.lastAt || '');
+  const waitMs = Number.isFinite(last) ? last + REFRESH_COOLDOWN_MIN * 60000 - now : 0;
+  return {
+    left: Math.max(0, REFRESH_PER_DAY - used),
+    max: REFRESH_PER_DAY,
+    waitMinutes: waitMs > 0 ? Math.ceil(waitMs / 60000) : 0,
+    lastAt: Number.isFinite(last) ? r.lastAt : null,
+  };
+}
+
+/** The settings after one more refresh at `now`. */
+export function countRefresh(settings = {}, now = Date.now()) {
+  const r = settings.rosterRefresh || {};
+  const day = gameDay(now);
+  const count = (r.day === day ? Number(r.count) || 0 : 0) + 1;
+  return { ...settings, rosterRefresh: { day, count, lastAt: new Date(now).toISOString() } };
+}
+
+/**
  * An alliance's stored dashboard, filled in with defaults. `settings` and `tickets` are kept
  * for later features (e.g. help tickets) so they can be added without changing the format.
  */
@@ -305,9 +339,6 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     if (error)
       return { error: say('api_dashboard.sheet_unusable', { reason: error }), status: 400 };
     d.widgets[at] = widget;
-  } else if (edit.action === 'roster-visibility') {
-    // The roster view's "Members can view" (owner request, 2026-11-18)
-    d.settings = { ...d.settings, rosterMembersCanView: Boolean(edit.membersCanView) };
   } else if (String(edit.action || '').startsWith('caravan-')) {
     const result = applyCaravanEdit(d.caravan, edit, { actor, now });
     if (result.error) return { error: result.error, status: 400 };

@@ -135,6 +135,13 @@ roster:
   tech_title: "Alliance research donated today"
   help_title: "Help given to members' construction and research today"
   help_capped: "Daily help limit reached (1,000)"
+  # Leaders: live numbers from the game, a few times a day for the whole alliance
+  refresh: "Refresh"
+  refresh_left: "{n} left"
+  refreshing: "Refreshing..."
+  refresh_help: "Get live numbers from the game. Shared by your alliance's leaders: {n} of {max} left today, one every 10 minutes."
+  refresh_wait: "Refreshed a moment ago: next one in {n} min."
+  refresh_none: "No refreshes left today. They start again at the daily reset (00:00 GT)."
   daily_as_of: "Research and help since today's reset (00:00 GT), as of {time}"
   daily_old: "Research and help from before today's reset: last read {time}"
   daily_unknown: "Research and help: time of reading unknown"
