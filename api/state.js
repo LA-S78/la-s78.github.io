@@ -8,7 +8,7 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 // Unified Read-Only State Proxy for Map, Rewards, and Alliance Hierarchy
 
 import { BASELINE_SCHEDULES } from './_cycle_helper.js';
-import { fetchAlliance } from './_tracker.js';
+import { fetchAlliance, knownMissing } from './_tracker.js';
 
 /**
  * Ensures cycle_state always returns valid numbers and never has an empty active_schedule.
@@ -105,8 +105,9 @@ export default async function handler(req, res) {
             badge: a.badge,
           };
         });
-        // Only a full answer is kept long: one with gaps (a slow lookup) is asked again soon
-        const complete = Object.keys(stats).length === tags.length;
+        // Only a full answer is kept long: one with gaps (a slow lookup) is asked again soon.
+        // An alliance the tracker doesn't have (HMDA, 2026-11-19) isn't a gap.
+        const complete = tags.every((tag) => stats[tag] || knownMissing(tag));
         res.setHeader(
           'Cache-Control',
           complete

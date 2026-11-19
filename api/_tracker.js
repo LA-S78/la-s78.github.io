@@ -39,6 +39,12 @@ export function pictureUrl(value) {
   return art ? `/game-art/${art[1]}.png` : null;
 }
 
+/** Was this tag looked up in the last hour and not found? (so its gap is expected) */
+export function knownMissing(tag) {
+  const hit = cache.get(String(tag || '').trim());
+  return Boolean(hit && hit.missing && Date.now() - hit.at < CACHE_MS);
+}
+
 /** A count the roster may leave out: a number, or null when missing. */
 const count = (v) =>
   v === null || v === undefined || v === '' || !Number.isFinite(Number(v)) ? null : Number(v);
@@ -99,7 +105,9 @@ export async function fetchAlliance(
   const hit = cache.get(clean);
   // `newerThan`: a copy kept here from before that time is not used (a leader refreshed the
   // roster on another server instance since; the tracker has the newer copy)
-  if (!fresh && hit && Date.now() - hit.at < CACHE_MS && hit.at >= newerThan) return hit;
+  if (!fresh && hit && Date.now() - hit.at < CACHE_MS && hit.at >= newerThan) {
+    return hit.missing ? null : hit;
+  }
   try {
     const url = `${BASE}/alliances/${TRACKER_SERVER}/${encodeURIComponent(clean)}${fresh ? '?fresh=1' : ''}`;
     const res = await fetchImpl(url, {
@@ -115,11 +123,18 @@ export async function fetchAlliance(
       // 409: the tag could mean more than one alliance; 404: not on the server; 429: out of
       // today's requests. All mean "no list" here.
       console.warn(`Tracker: [${clean}] answered HTTP ${res.status}`);
+      // An alliance the tracker doesn't have (or can't tell apart) is remembered for the hour
+      // too, so pages don't ask again and again (each ask counts against the day's 1,000)
+      if (res.status === 404 || res.status === 409)
+        cache.set(clean, { missing: true, at: Date.now() });
       return null;
     }
     const data = slim(await res.json());
     // Only the alliance asked for (the tracker matches tags by letter case too)
-    if (data.tag !== clean) return null;
+    if (data.tag !== clean) {
+      cache.set(clean, { missing: true, at: Date.now() });
+      return null;
+    }
     cache.set(clean, data);
     return data;
   } catch (err) {
