@@ -861,53 +861,54 @@ image_review:
   done_approved: Approvata. L'immagine è ora live e il post su Discord è aggiornato.
   done_rejected: Rifiutata. L'immagine è stata eliminata e il post su Discord è aggiornato.
 alliance_images:
-  title: Immagini alleanza
+  title: Immagini dell'Alleanza
   edit: Modifica immagini
-  done: "✓ Fine modifica"
-  help: Aggiungi un'immagine dietro la scheda di Rotazione Campidoglio della tua alleanza e alla riga delle Classifiche NAP, e una cornice per le immagini dei tuoi membri. Uno Steward controlla ogni elemento prima che sia visibile agli altri.
-  rules: 'Usa arte dell''alleanza o arte di gioco: nessun branding di altre alleanze, nulla di offensivo, nessuna informazione personale.'
-  left_today: "{left} di {max} immagini rimanenti oggi per la tua alleanza."
+  done: "✓ Modifica completata"
+  help: Aggiungi un'immagine dietro la scheda di Rotazione Campidoglio della tua alleanza e la riga dei Gradi NAP, e una cornice per le immagini dei tuoi membri. Uno Steward controllerà ogni immagine prima che chiunque altro possa vederla.
+  rules: 'Usa la grafica della tua alleanza o quella del gioco: niente loghi di altre alleanze, niente contenuti offensivi, niente informazioni personali.'
+  left_today: "{left} di {max} immagini rimaste oggi per la tua alleanza."
   not_ready: Il caricamento delle immagini non è ancora attivo.
   card: Scheda Rotazione Campidoglio
-  wide: Banner Classifiche NAP
-  frame: Cornice avatar alleanza
-  frame_spec: 'Un bordo disegnato attorno alle immagini dei tuoi membri su questo sito. Crea un PNG quadrato con sfondo trasparente, 380×380 pixel (almeno 190×190): lascia il quadrato centrale trasparente (da 72 a 308 pixel, come le cornici del gioco) e decora attorno, fino ai bordi.'
-  use_frame: Usa per i membri
+  wide: Banner Gradi NAP
+  frame: Cornice avatar Alleanza
+  frame_spec: 'Un bordo disegnato attorno alle immagini dei tuoi membri su questo sito. Crea un PNG quadrato con sfondo trasparente, 380×380 pixel (almeno 190×190): lascia il quadrato centrale trasparente (da 72 a 308 pixel, come le cornici del gioco) e decora attorno ad esso, fino ai bordi. Una piccola decorazione sopra il centro (una ghirlanda, ad esempio) va bene.'
+  use_frame: Usa per i nostri membri
   use_frame_on: Mostrata attorno all'immagine di ogni membro sul sito, al posto della loro cornice di gioco.
-  use_frame_off: 'Disattivato: i membri mantengono la loro cornice di gioco sul sito.'
-  frame_title: Controlla la cornice avatar
-  frame_check_ok: 'Sembra corretto: il centro è trasparente. Ecco come apparirà attorno alle immagini dei tuoi membri.'
+  use_frame_off: 'Disattivata: i membri mantengono le loro cornici di gioco sul sito.'
+  frame_title: Controlla la cornice dell'avatar
+  frame_check_ok: 'Sembra corretta: il centro è trasparente. Ecco come apparirà attorno alle immagini dei tuoi membri.'
   frame_big: Grande
   frame_roster: Roster
-  frame_lists: Elenchi
+  frame_lists: Liste
   frame_not_square: Una cornice deve essere quadrata; questa immagine è {width}×{height}.
-  frame_too_small: Questa immagine è solo {width}×{height}. Una cornice necessita di almeno 190×190 pixel (380×380 è l'ideale).
-  frame_opening: Il centro di questa immagine non è trasparente, quindi coprirebbe le immagini dei membri. Usa un PNG con un quadrato trasparente al centro (da 72 a 308 pixel a 380×380).
-  frame_empty: 'Questa immagine è quasi interamente trasparente: non c''è una cornice da mostrare.'
-  frame_too_big: Questa cornice pesa {kb} KB una volta salvata; il massimo è 500 KB. Prova meno colori o dettagli meno fini.
-  none: Nessuna immagine
-  live: Live dal {when}
+  frame_too_small: Questa immagine è solo {width}×{height}. Una cornice richiede almeno 190×190 pixel (380×380 è l'ideale).
+  frame_covers: 'Questa cornice copre circa il {percent}% del centro, dove appaiono le immagini dei membri. Va bene se è intenzionale (una ghirlanda, ad esempio): controlla le anteprime qui sotto prima di inviare.'
+  frame_covers_most: 'Questa cornice copre circa il {percent}% del centro, quindi gran parte dell''immagine di ogni membro verrebbe nascosta. Controlla le anteprime qui sotto: inviala solo se è quello che vuoi.'
+  frame_empty: 'Questa immagine è quasi tutta trasparente: non c''è una cornice da mostrare.'
+  frame_too_big: Questa cornice pesa {kb} KB una volta salvata; il limite è 500 KB. Prova con meno colori o meno dettagli.
+  none: Nessuna immagine ancora
+  live: Pubblicata dal {when}
   pending: In attesa di uno Steward dal {when}
   rejected: Rifiutata il {when}
   rejected_reason: 'Rifiutata il {when}: “{reason}”'
-  expired: Non revisionata in tempo ({when}). Invia di nuovo.
+  expired: Non revisionata in tempo ({when}). Inviala di nuovo.
   choose: Scegli un'immagine
   replace: Scegli una nuova immagine
   remove: Rimuovi
   confirm_remove: Rimuovere {slot}? Scomparirà immediatamente per tutti.
   crop_title: Posiziona {slot}
-  crop_help: Trascina per muovere. Pizzica, scorri o usa lo slider per zoomare. Solo ciò che è dentro la cornice verrà inviato.
+  crop_help: Trascina per spostare. Pizzica, scorri o usa lo slider per ingrandire. Solo ciò che si trova all'interno della cornice verrà inviato.
   zoom: Zoom
   preview_title: Come apparirà
   preview_phone: Telefono
   preview_desktop: Desktop
   preview_week: Settimana 1 Ven
-  preview_loot: 2 Bauli Re
-  preview_status: Protetto da NAP
+  preview_loot: 2 Bauli Reali
+  preview_status: Protetto NAP
   send: Invia per revisione
   sending: Invio in corso...
   cancel: Annulla
-  sent: Inviato. Uno Steward la revisionerà; apparirà una volta approvata.
-  not_image: Quel file non è un'immagine che questo browser può aprire. Prova un JPEG o PNG.
-  too_small: Quell'immagine è piuttosto piccola ({width}×{height}); potrebbe risultare sfocata. Puoi comunque inviarla.
-  load_failed: L'immagine non può essere aperta.
+  sent: Inviata. Uno Steward la revisionerà; apparirà una volta approvata.
+  not_image: Quel file non è un'immagine che questo browser può aprire. Prova con un JPEG o PNG.
+  too_small: Quell'immagine è piuttosto piccola ({width}×{height}); potrebbe apparire sfuocata. Puoi comunque inviarla.
+  load_failed: Impossibile aprire l'immagine.

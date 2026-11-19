@@ -863,51 +863,52 @@ image_review:
 alliance_images:
   title: Allianz-Bilder
   edit: Bilder bearbeiten
-  done: "✓ Bearbeitung fertig"
-  help: Füge ein Bild hinter deine Capitol Rotation-Karte und die NAP Ranks-Zeile ein sowie einen Rahmen für die Bilder deiner Mitglieder. Ein Steward prüft jedes Bild, bevor es jemand anderes sieht.
-  rules: 'Verwende eigene Kunst der Allianz oder In-Game-Kunst: kein Branding anderer Allianzen, nichts Anstößiges, keine persönlichen Daten.'
-  left_today: "{left} von {max} Bildern für heute für deine Allianz übrig."
+  done: "✓ Bearbeitung abgeschlossen"
+  help: Füge ein Bild hinter die Capitol-Rotationskarte deiner Allianz und die NAP Ranks-Zeile ein sowie einen Rahmen für die Bilder deiner Mitglieder. Ein Steward prüft jedes Bild, bevor es für andere sichtbar wird.
+  rules: 'Verwende eigene Bilder deiner Allianz oder In-Game-Grafiken: kein Branding anderer Allianzen, keine beleidigenden Inhalte, keine persönlichen Daten.'
+  left_today: "{left} von {max} Bildern heute für deine Allianz übrig."
   not_ready: Bild-Uploads sind noch nicht aktiviert.
-  card: Capitol Rotation-Karte
+  card: Capitol-Rotationskarte
   wide: NAP Ranks-Banner
-  frame: Allianz-Avatar-Rahmen
-  frame_spec: 'Ein Rahmen, der auf dieser Website um die Bilder deiner Mitglieder gezeichnet wird. Erstelle ein quadratisches PNG mit transparentem Hintergrund, 380×380 Pixel (mindestens 190×190): Lass das mittlere Quadrat transparent (von 72 bis 308 Pixel, wie die eigenen Rahmen des Spiels) und verziere den Bereich drumherum bis zu den Rändern.'
+  frame: Allianz-Avatarrahmen
+  frame_spec: 'Ein Rand um die Bilder deiner Mitglieder auf dieser Seite. Erstelle ein quadratisches PNG mit transparentem Hintergrund, 380×380 Pixel (mindestens 190×190): Lass das mittlere Quadrat transparent (von 72 bis 308 Pixel, wie die eigenen Rahmen des Spiels) und dekoriere den Bereich drumherum bis zum Rand. Eine kleine Verzierung über der Mitte (z. B. eine Girlande) ist in Ordnung.'
   use_frame: Für unsere Mitglieder verwenden
   use_frame_on: Wird auf der Seite um jedes Mitgliedsbild anstelle des In-Game-Rahmens angezeigt.
   use_frame_off: 'Aus: Mitglieder behalten ihre In-Game-Rahmen auf der Seite.'
-  frame_title: Avatar-Rahmen prüfen
-  frame_check_ok: 'Sieht richtig aus: Die Mitte ist transparent. So wird es um die Bilder deiner Mitglieder aussehen.'
+  frame_title: Avatarrahmen prüfen
+  frame_check_ok: 'Sieht gut aus: Die Mitte ist transparent. So wird es um die Bilder deiner Mitglieder aussehen.'
   frame_big: Groß
   frame_roster: Kader
   frame_lists: Listen
   frame_not_square: Ein Rahmen muss quadratisch sein; dieses Bild ist {width}×{height}.
-  frame_too_small: Dieses Bild ist nur {width}×{height}. Ein Rahmen benötigt mindestens 190×190 Pixel (380×380 ist am besten).
-  frame_opening: Die Mitte dieses Bildes ist nicht transparent, daher würde es die Bilder deiner Mitglieder verdecken. Verwende ein PNG mit einem transparenten Quadrat in der Mitte (von 72 bis 308 Pixel bei 380×380).
-  frame_empty: 'Dieses Bild ist fast vollständig transparent: Es gibt keinen Rahmen zum Anzeigen.'
-  frame_too_big: Dieser Rahmen ist nach dem Speichern {kb} KB groß; das Maximum sind 500 KB. Probiere es mit weniger Farben oder weniger feinen Details.
+  frame_too_small: Dieses Bild ist nur {width}×{height}. Ein Rahmen benötigt mindestens 190×190 Pixel (380×380 ist ideal).
+  frame_covers: 'Dieser Rahmen verdeckt etwa {percent}% der Mitte, wo die Bilder der Mitglieder zu sehen sind. Das ist in Ordnung, falls es so beabsichtigt ist (z. B. eine Girlande): Prüfe die Vorschauen unten, bevor du es abschickst.'
+  frame_covers_most: 'Dieser Rahmen verdeckt etwa {percent}% der Mitte, sodass der Großteil des Bildes jedes Mitglieds verborgen wäre. Prüfe die Vorschauen unten: Sende es nur ab, wenn das so gewollt ist.'
+  frame_empty: 'Dieses Bild ist fast vollständig transparent: Es gibt keinen Rahmen, der angezeigt werden könnte.'
+  frame_too_big: Dieser Rahmen ist gespeichert {kb} KB groß; das Limit liegt bei 500 KB. Versuche es mit weniger Farben oder weniger feinen Details.
   none: Noch kein Bild
   live: Live seit {when}
-  pending: Wartet auf einen Steward seit {when}
-  rejected: Abgelehnt am {when}
-  rejected_reason: 'Abgelehnt am {when}: „{reason}“'
-  expired: Nicht rechtzeitig überprüft ({when}). Sende es erneut.
-  choose: Bild wählen
-  replace: Neues Bild wählen
+  pending: Wartet seit {when} auf einen Steward
+  rejected: Abgelehnt {when}
+  rejected_reason: 'Abgelehnt {when}: „{reason}“'
+  expired: Nicht rechtzeitig geprüft ({when}). Sende es erneut.
+  choose: Bild auswählen
+  replace: Neues Bild auswählen
   remove: Entfernen
-  confirm_remove: "{slot} entfernen? Es verschwindet sofort für alle."
+  confirm_remove: Den {slot} entfernen? Er verschwindet sofort für alle.
   crop_title: "{slot} positionieren"
-  crop_help: Ziehen zum Bewegen. Zoomen durch Spreizen, Scrollen oder den Schieberegler. Nur was sich innerhalb des Rahmens befindet, wird gesendet.
+  crop_help: Zum Bewegen ziehen. Zoome per Pinch-Geste, Scrollen oder Schieberegler. Nur der Bereich innerhalb des Rahmens wird gesendet.
   zoom: Zoomen
-  preview_title: Vorschau
+  preview_title: So sieht es aus
   preview_phone: Handy
   preview_desktop: Desktop
   preview_week: Woche 1 Fr
   preview_loot: 2 Königstruhen
   preview_status: NAP Geschützt
-  send: Zur Überprüfung senden
-  sending: Wird gesendet…
+  send: Zur Prüfung senden
+  sending: Sende…
   cancel: Abbrechen
-  sent: Gesendet. Ein Steward wird es überprüfen; es erscheint nach der Genehmigung.
-  not_image: Diese Datei ist kein Bild, das dieser Browser öffnen kann. Versuche es mit einem JPEG oder PNG.
-  too_small: Dieses Bild ist recht klein ({width}×{height}); es könnte unscharf aussehen. Du kannst es trotzdem senden.
+  sent: Gesendet. Ein Steward wird es prüfen; es erscheint nach der Genehmigung.
+  not_image: Diese Datei ist kein Bild, das dieser Browser öffnen kann. Versuche ein JPEG oder PNG.
+  too_small: Dieses Bild ist recht klein ({width}×{height}); es könnte verschwommen wirken. Du kannst es trotzdem senden.
   load_failed: Das Bild konnte nicht geöffnet werden.
