@@ -14,9 +14,10 @@ Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 
   - [x] Daily snapshot and the **NAP growth** view: each alliance's Might as a line (1 week, 1 month, all), and Might today with the change over 7 and 30 days.
   - [x] **Top players** view: strongest players across the NAP, and the biggest Might gains this week and month, with growth lines and an alliance filter.
   - [x] **Achievements** view: mightiest, biggest gain this week, most kills, most kills this week, biggest Sanctuary climb this month (most players are already at level 30, so the climb replaces "highest Sanctuary"), and away from the hive (most days this month more than 50 tiles from their alliance's hive). A podium of three each, NAP-wide or per alliance. No donations (owner: they stay off the public stats).
-  - [ ] Player lookup by ID (perhaps a view here).
+  - [x] **Player lookup** view: search NAP players by name or ID; their Might, kills, Sanctuary, place in the NAP, gains this week / last 30 days / kills this week, and a month's Might chart. From the daily snapshot only (never asks the tracker).
+  - [x] **Alliance growth** card on the dashboard: the alliance's Might and members over the last 30 days, from the same snapshot.
 - [x] **Members on the territory map (leaders only)** — "My members" on the territory map: a dot for each member of the signed-in leader's own alliance, a search box (name or ID) and a card with their Might, coordinates and territory. Positions lined up from five cities the owner read in the game.
-- [ ] **Player lookup by ID** — look up any player (name, Might, kills, Sanctuary level, alliance). Good idea, but no home yet: maybe the Stats page, or a Steward tool.
+- [x] **Player lookup by ID** — now a view on the Stats tab (NAP players). A live lookup of players outside the NAP could be a Steward tool later.
 - ~~NAP checks from alliance declarations~~ — dropped (owner): declarations are free text and too unreliable.
 
 ## 🙋 Owner to-dos

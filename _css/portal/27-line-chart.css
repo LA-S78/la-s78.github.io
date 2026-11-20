@@ -1,0 +1,34 @@
+/* ==========================================================================
+   The shared line chart (js/line-chart.js) on portal pages: the dashboard's alliance
+   growth card (owner request, 2026-11-20). The Alliance page has the same rules in
+   _css/style/70-alliance-hierarchy.css.
+   ========================================================================== */
+
+.lc-chart {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  margin: 0.2rem auto;
+}
+
+.lc-grid {
+  stroke: var(--overlay-5);
+  stroke-width: 1;
+}
+
+.lc-axis {
+  fill: var(--text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.dash-growth-now {
+  margin: 0 0 0.3rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.dash-growth-now strong {
+  color: var(--text-main);
+}

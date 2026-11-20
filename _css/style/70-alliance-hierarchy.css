@@ -916,3 +916,122 @@ main .stats-face,
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+/* The Player lookup view: a search box, matches, and the chosen player's card */
+.stats-lookup {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+#stats-lookup-q {
+  width: 100%;
+  padding: 7px 10px;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.stats-lk-results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.stats-lk-hit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  text-align: left;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.stats-lk-hit:hover {
+  border-color: var(--accent-color);
+}
+
+.stats-lk-card {
+  padding: 0.8rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+}
+
+.stats-lk-card header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+.stats-lk-card header .stats-face {
+  width: 48px;
+  height: 48px;
+}
+
+.stats-lk-place {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0.5rem 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.stats-lk-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 0.6rem;
+}
+
+.stats-lk-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px;
+  background: var(--overlay-5);
+  border-radius: 6px;
+}
+
+.stats-lk-stat small {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.stats-lk-stat strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-lk-card h4 {
+  margin: 0.4rem 0 0.2rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* The shared line chart (js/line-chart.js) */
+.lc-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lc-grid {
+  stroke: var(--overlay-5);
+  stroke-width: 1;
+}
+
+.lc-axis {
+  fill: var(--text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}

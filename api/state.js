@@ -9,7 +9,7 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 
 import { BASELINE_SCHEDULES } from './_cycle_helper.js';
 import { fetchAlliance, knownMissing } from './_tracker.js';
-import { readStatsSummary, readTopPlayers } from './_stats.js';
+import { lookupPlayer, readStatsSummary, readTopPlayers } from './_stats.js';
 
 /**
  * Ensures cycle_state always returns valid numbers and never has an empty active_schedule.
@@ -135,9 +135,22 @@ export default async function handler(req, res) {
         return res.status(200).json({
           days: summary?.days || [],
           alliances: summary?.alliances || {},
+          members: summary?.members || {},
           nap,
           updatedAt: summary?.updatedAt || null,
         });
+      }
+
+      // The Stats tab's Player lookup (api/_stats.js lookupPlayer): ?q= to search, ?uid= for
+      // one player. NAP players from the daily snapshot only: never asks the tracker.
+      case 'stats-player': {
+        const answer = await lookupPlayer(
+          req.query.uid !== undefined
+            ? { uid: String(req.query.uid).slice(0, 20) }
+            : { q: String(req.query.q || '').slice(0, 40) },
+        );
+        res.setHeader('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=86400');
+        return res.status(200).json(answer);
       }
 
       // The Stats tab's Top players view (api/_stats.js topPlayers), worked out daily

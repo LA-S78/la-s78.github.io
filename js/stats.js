@@ -4,6 +4,8 @@
 // First view: NAP growth, each NAP alliance's Might as a line, and a table of Might today
 // with the change over 7 and 30 days. Runs on the full page load and on Turbo visits.
 
+import { lineChart } from './line-chart.js';
+
 const esc = (v) => window.escapeHtml(v);
 const t = (key, vars) => (window.t ? window.t(`stats.${key}`, vars) : key);
 
@@ -182,7 +184,7 @@ function sparkline(series) {
 /** A player's picture: their own (from the game, no referrer) or their initial. */
 function face(p) {
   return p.avatar
-    ? `<img class="stats-face" src="${esc(p.avatar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+    ? `<img class="stats-face" src="${esc(p.avatar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-initial="${esc((p.name || '?').charAt(0).toUpperCase())}">`
     : `<span class="stats-face stats-initial">${esc((p.name || '?').charAt(0).toUpperCase())}</span>`;
 }
 
@@ -257,9 +259,7 @@ function fallbackFaces(box) {
       () => {
         const span = document.createElement('span');
         span.className = 'stats-face stats-initial';
-        span.textContent = (img.closest('li')?.querySelector('strong')?.textContent || '?')
-          .charAt(0)
-          .toUpperCase();
+        span.textContent = img.dataset.initial || '?';
         img.replaceWith(span);
       },
       { once: true },
@@ -330,6 +330,106 @@ function achievementsView(box, top, nap, tag) {
   fallbackFaces(box);
 }
 
+// ---------- Player lookup ----------
+
+/** The theme's accent colour (an SVG line can't use a CSS variable as its colour). */
+const accentColour = () =>
+  getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#6abf4b';
+
+/** The search box and the chosen player's card (NAP players, from the daily snapshot). */
+function lookupView(box, state, redraw) {
+  const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
+  const L = state.lookup;
+  const p = L.player;
+  const stat = (label, value, cls = '') =>
+    `<div class="stats-lk-stat"><small>${esc(label)}</small><strong class="${cls}">${esc(value)}</strong></div>`;
+  const sign = (n) => (Number.isFinite(n) ? (n >= 0 ? ' is-up' : ' is-down') : '');
+  box.innerHTML = `
+    <div class="stats-lookup">
+      <input type="search" id="stats-lookup-q" placeholder="${esc(t('lookup_search'))}" aria-label="${esc(t('lookup_search'))}" value="${esc(L.q)}" autocomplete="off">
+      <p class="stats-note">${esc(t('lookup_hint'))}</p>
+      <div class="stats-lk-results">${
+        L.matches === null
+          ? ''
+          : L.matches.length
+            ? L.matches
+                .map(
+                  (m) =>
+                    `<button type="button" class="stats-lk-hit" data-stats-uid="${esc(m.uid)}">${face(m)}<span class="stats-who"><strong>${esc(m.name)}</strong><small>[${esc(m.tag)}] · ${esc(might(m.power))}</small></span></button>`,
+                )
+                .join('')
+            : `<p class="stats-note">${esc(t('lookup_none'))}</p>`
+      }</div>
+      ${
+        p
+          ? `<article class="stats-lk-card">
+        <header>${face(p)}<span class="stats-who"><strong>${esc(p.name)}</strong><small>[${esc(p.tag)}] · ID ${esc(p.uid)}</small></span></header>
+        <p class="stats-lk-place">${ic('trophy')}${esc(t('lookup_place', { place: p.place, of: p.of }))}</p>
+        <div class="stats-lk-stats">
+          ${stat(t('col_might'), might(p.power))}
+          ${stat(t('lookup_kills'), Number.isFinite(p.kills) ? count(p.kills) : t('no_number'))}
+          ${stat(t('lookup_level'), Number.isFinite(p.level) ? String(p.level) : t('no_number'))}
+          ${stat(t('lookup_week'), change(p.week), `stats-change${sign(p.week)}`)}
+          ${stat(t('lookup_month'), change(p.month), `stats-change${sign(p.month)}`)}
+          ${stat(t('lookup_kills_week'), Number.isFinite(p.killsWeek) ? `+${count(p.killsWeek)}` : t('no_number'))}
+        </div>
+        <h4>${esc(t('lookup_history'))}</h4>
+        ${
+          lineChart({
+            days: p.days,
+            lines: [
+              {
+                color: accentColour(),
+                values: p.might.map((v) => (Number.isFinite(v) ? v * 1e6 : null)),
+              },
+            ],
+            format: might,
+            label: t('lookup_history'),
+          }) || `<p class="stats-note">${esc(t('one_day'))}</p>`
+        }
+      </article>`
+          : ''
+      }
+    </div>`;
+  fallbackFaces(box);
+  const input = box.querySelector('#stats-lookup-q');
+  if (L.focus) {
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+    L.focus = false;
+  }
+  input.addEventListener('input', () => {
+    L.q = input.value;
+    clearTimeout(L.timer);
+    L.timer = setTimeout(async () => {
+      const q = L.q.trim();
+      if (q.length < 2 && !/^\d+$/.test(q)) {
+        L.matches = null;
+      } else {
+        try {
+          const res = await fetch(`/api/state?scope=stats-player&q=${encodeURIComponent(q)}`);
+          L.matches = res.ok ? (await res.json()).matches || [] : [];
+        } catch {
+          L.matches = [];
+        }
+      }
+      L.focus = true;
+      redraw();
+    }, 250);
+  });
+}
+
+async function pickPlayer(state, uid, redraw) {
+  try {
+    const res = await fetch(`/api/state?scope=stats-player&uid=${encodeURIComponent(uid)}`);
+    state.lookup.player = res.ok ? (await res.json()).player : null;
+  } catch {
+    state.lookup.player = null;
+  }
+  state.lookup.matches = null;
+  redraw();
+}
+
 async function start() {
   const app = document.getElementById('stats-app');
   if (!app || app.dataset.started) return;
@@ -337,6 +437,7 @@ async function start() {
   const box = app.querySelector('#stats-body');
   const state = { view: 'growth', range: '30', hidden: new Set(), data: null };
   state.list = 'strongest';
+  state.lookup = { q: '', matches: null, player: null, focus: false, timer: null };
   state.tag = '';
   state.top = null;
   const rangeBar = app.querySelector('.stats-range');
@@ -345,6 +446,7 @@ async function start() {
     // The time span is the growth view's; the players view has its own lists
     if (rangeBar) rangeBar.hidden = state.view !== 'growth';
     if (state.view === 'growth') return growthView(box, state.data, state.range, state.hidden);
+    if (state.view === 'lookup') return lookupView(box, state, draw);
     if (!state.top) {
       box.innerHTML = `<p class="stats-note">${esc(t('loading'))}</p>`;
       try {
@@ -356,6 +458,7 @@ async function start() {
         return;
       }
     }
+    if (state.view === 'lookup') return lookupView(box, state, draw);
     if (state.view === 'achievements')
       return achievementsView(box, state.top, state.data.nap || [], state.tag);
     if (state.view === 'players')
@@ -373,6 +476,11 @@ async function start() {
     const chip = e.target.closest('[data-stats-tag]');
     const list = e.target.closest('[data-stats-list]');
     const more = e.target.closest('[data-stats-more]');
+    const hit = e.target.closest('[data-stats-uid]');
+    if (hit) {
+      pickPlayer(state, hit.dataset.statsUid, draw);
+      return;
+    }
     if (more) {
       state.more = true;
     } else if (list) {
