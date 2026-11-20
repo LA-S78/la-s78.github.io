@@ -11,6 +11,8 @@ api_dashboard:
   player_unavailable: "The game couldn't be reached. Try again in a few minutes."
   positions_leaders_only: "Only your alliance's R4s and R5s (and Stewards) can see members on the map."
   positions_unavailable: "Members' positions can't be loaded right now. Try again in a few minutes."
+  positions_used: "Today's map refreshes are used up. They start again at the daily reset (00:00 GT)."
+  positions_wait: "The map was refreshed a moment ago. Try again in {minutes} min."
   refresh_limit: "No roster refreshes left today. They start again at the daily reset (00:00 GT)."
   refresh_wait: "The roster was refreshed a moment ago. Try again in {n} min."
   refresh_failed: "The game couldn't be reached. Try again in a few minutes."

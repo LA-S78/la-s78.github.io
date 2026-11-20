@@ -8,6 +8,11 @@
 //                              one tracker request, at most LOOKUPS_PER_DAY a day between all
 //                              Stewards (counted in the Gist, steward-tools.json)
 //   ?steward=quota             the tracker's requests used today (costs one request itself)
+//   ?steward=positions         every NAP player's Sanctuary for the territory map's "All NAP
+//                              players" (from the daily snapshot or the last Refresh: free)
+//   ?steward=positions&refresh=1   asks the game again for every NAP alliance (one request
+//                              each), at most POSITIONS_PER_DAY a day between all Stewards
+//                              and one every POSITIONS_COOLDOWN_MIN minutes
 // The overview also shows the day's tracker usage without asking the tracker: the latest
 // figure any of its answers gave (with its time) and what made the requests (tracker-usage.json,
 // kept by api/_tracker.js).
@@ -18,6 +23,7 @@ import { readImages, IMAGE_KINDS } from './_alliance_images.js';
 import { latestRace } from './_ascension.js';
 import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_tracker.js';
 import { say } from './_messages.js';
+import { readNapPositions, refreshNapPositions } from './_stats.js';
 
 export const LOOKUPS_PER_DAY = 30;
 const FILE = 'steward-tools.json';
@@ -39,6 +45,64 @@ export function trackerUsage(gist) {
     }
   }
   return { day, by, last };
+}
+
+export const POSITIONS_PER_DAY = 8;
+export const POSITIONS_COOLDOWN_MIN = 15;
+
+/** The map's Refresh: { left, max, waitMinutes, lastAt }. */
+export function positionsRefreshState(gist, now = Date.now()) {
+  const r = gistJson(gist, FILE, {}).positions || {};
+  const used = r.day === gameDay(now) ? Number(r.count) || 0 : 0;
+  const last = Date.parse(r.lastAt || '');
+  const waitMs = Number.isFinite(last) ? last + POSITIONS_COOLDOWN_MIN * 60000 - now : 0;
+  return {
+    left: Math.max(0, POSITIONS_PER_DAY - used),
+    max: POSITIONS_PER_DAY,
+    waitMinutes: waitMs > 0 ? Math.ceil(waitMs / 60000) : 0,
+    lastAt: Number.isFinite(last) ? r.lastAt : null,
+  };
+}
+
+async function napPositions(req, res, { gist, session }) {
+  const before = positionsRefreshState(gist);
+  if (!req.query.refresh) {
+    return res.status(200).json({ ...(await readNapPositions({ gist })), refresh: before });
+  }
+  if (!before.left || before.waitMinutes) {
+    return res.status(429).json({
+      error: say(before.left ? 'api_dashboard.positions_wait' : 'api_dashboard.positions_used', {
+        minutes: before.waitMinutes,
+      }),
+      refresh: before,
+    });
+  }
+  // Counted first (a slow refresh can't be started twice meanwhile)
+  let refresh = before;
+  try {
+    await updateGist(
+      (fresh) => {
+        const d = gistJson(fresh, FILE, {});
+        const today = gameDay();
+        const count = (d.positions?.day === today ? Number(d.positions.count) || 0 : 0) + 1;
+        d.positions = { day: today, count, lastAt: new Date().toISOString() };
+        refresh = positionsRefreshState({ files: { [FILE]: { content: JSON.stringify(d) } } });
+        return {
+          files: { [FILE]: d },
+          description: `NAP positions refreshed by ${session.name || 'a Steward'}`,
+        };
+      },
+      { gist },
+    );
+  } catch (err) {
+    console.warn('Positions refresh not counted:', err.message);
+  }
+  try {
+    const out = await refreshNapPositions({ gist });
+    return res.status(200).json({ ...out, refresh });
+  } catch (err) {
+    return res.status(502).json({ error: err.message, refresh });
+  }
 }
 
 function lookupsLeft(gist) {
@@ -81,6 +145,8 @@ export async function stewardTools(req, res, { gist, session }) {
       usage: trackerUsage(gist),
     });
   }
+
+  if (what === 'positions') return napPositions(req, res, { gist, session });
 
   if (what === 'quota') {
     const quota = await fetchQuota();

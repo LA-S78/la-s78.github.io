@@ -4,6 +4,11 @@
 // through /api/dashboard?positions=1, which checks the sign-in and sends the leader's own
 // alliance only (the roster's lookup: no extra tracker requests).
 //
+// Stewards also get "All NAP players" (owner request, 2026-11-20): every NAP alliance's
+// members at once, coloured by alliance, from /api/dashboard?steward=positions. Those
+// positions come from the daily Stats snapshot (free); the Refresh button asks the game again
+// (one tracker request per NAP alliance, a few times a day between all Stewards).
+//
 // Game X/Y become map positions through js/map-coords.js: a smooth warp through reference
 // points read in the game (five cities, 2026-11-19, and the Capitol area's corners,
 // 2026-11-20), so members near the Capitol land on the right side of its edge.
@@ -28,6 +33,20 @@ function isLeader() {
   }
 }
 
+function isSteward() {
+  try {
+    return (
+      Boolean(localStorage.getItem('auth-session')) &&
+      localStorage.getItem('auth-steward') === 'true'
+    );
+  } catch {
+    return false;
+  }
+}
+
+/** A shared marker with members of several alliances: a neutral colour. */
+const MIXED = '#d8d2c4';
+
 function loginPass() {
   try {
     return localStorage.getItem('auth-session') || '';
@@ -49,12 +68,15 @@ function start() {
   if (!container || started.has(container) || !isLeader()) return;
   started.add(container);
 
-  const state = { on: false, members: [], tag: '', takenAt: null, selected: null };
+  // mode: 'mine' (My members) or 'nap' (All NAP players, Stewards)
+  const state = { on: false, mode: 'mine', members: [], tag: '', takenAt: null, selected: null };
+  const steward = isSteward();
   const bar = document.createElement('div');
   bar.className = 'map-members';
   bar.innerHTML = `
     <div class="map-members-bar">
       <button type="button" class="draft-btn" id="btn-map-members" aria-pressed="false">${ic('users')}<span>${esc(tm('members_toggle'))}</span></button>
+      ${steward ? `<button type="button" class="draft-btn" id="btn-map-nap" aria-pressed="false">${ic('map')}<span>${esc(tm('nap_toggle'))}</span></button>` : ''}
       <input type="search" id="map-members-search" placeholder="${esc(tm('members_search'))}" aria-label="${esc(tm('members_search'))}" autocomplete="off" hidden>
       <span class="map-members-status" id="map-members-status"></span>
     </div>
@@ -75,6 +97,7 @@ function start() {
   (container.querySelector('.game-map') || bar).after(resultsBox, cardBox);
 
   const btn = bar.querySelector('#btn-map-members');
+  const btnNap = bar.querySelector('#btn-map-nap');
   const search = bar.querySelector('#map-members-search');
   const status = bar.querySelector('#map-members-status');
   const results = resultsBox;
@@ -141,6 +164,10 @@ function start() {
   }
 
   let groups = [];
+  /** "Name" (My members) or "[TAG] Name" (All NAP players). */
+  const label = (m) => (state.mode === 'nap' && m.tag ? `[${m.tag}] ${m.name}` : m.name);
+  const hit = (m) =>
+    `<button type="button" class="map-members-hit" data-uid="${esc(m.uid)}">${esc(label(m))} <small>${esc(might(m.power))}</small></button>`;
 
   function square(cx, cy, px, perPx, cls, attrs, fill) {
     const h = (px / 2) * perPx;
@@ -192,17 +219,19 @@ function start() {
           });
         });
     }
-    const color = getAllianceColor(state.tag);
+    const colorOf = (m) => getAllianceColor(m.tag || state.tag);
     const perPx = unitsPerPx();
     groups = groupsOnScreen(perPx);
     let html = groups
       .map((g, i) => {
         if (g.members.length === 1) {
           const m = g.members[0];
-          return `${square(g.cx, g.cy, SIZE.one, perPx, 'map-member-dot', `data-uid="${esc(m.uid)}"`, color)}><title>${esc(m.name)}</title></rect>`;
+          return `${square(g.cx, g.cy, SIZE.one, perPx, 'map-member-dot', `data-uid="${esc(m.uid)}"`, colorOf(m))}><title>${esc(label(m))}</title></rect>`;
         }
-        const names = g.members.map((m) => m.name).join(', ');
-        return `<g class="map-member-group" data-group="${i}">${square(g.cx, g.cy, SIZE.group, perPx, 'map-member-dot', '', color)}><title>${esc(names)}</title></rect><text x="${g.cx.toFixed(1)}" y="${g.cy.toFixed(1)}" font-size="${(8 * perPx).toFixed(1)}" dy="0.35em">${g.members.length}</text></g>`;
+        const names = g.members.map(label).join(', ');
+        const tags = new Set(g.members.map((m) => m.tag || state.tag));
+        const fill = tags.size === 1 ? colorOf(g.members[0]) : MIXED;
+        return `<g class="map-member-group" data-group="${i}">${square(g.cx, g.cy, SIZE.group, perPx, 'map-member-dot', '', fill)}><title>${esc(names)}</title></rect><text x="${g.cx.toFixed(1)}" y="${g.cy.toFixed(1)}" font-size="${(8 * perPx).toFixed(1)}" dy="0.35em">${g.members.length}</text></g>`;
       })
       .join('');
     const picked = state.members.find((m) => m.uid === state.selected);
@@ -213,7 +242,7 @@ function start() {
       html += `<rect class="map-member-halo" x="${(cx - halo).toFixed(1)}" y="${(cy - halo).toFixed(1)}" width="${(2 * halo).toFixed(1)}" height="${(2 * halo).toFixed(1)}" rx="${(3 * perPx).toFixed(1)}" stroke-width="${(2 * perPx).toFixed(1)}"></rect>`;
       const edge = (SIZE.picked / 2 + 1.5) * perPx;
       html += `<rect class="map-member-outline" x="${(cx - edge).toFixed(1)}" y="${(cy - edge).toFixed(1)}" width="${(2 * edge).toFixed(1)}" height="${(2 * edge).toFixed(1)}" rx="${(2 * perPx).toFixed(1)}"></rect>`;
-      html += `${square(cx, cy, SIZE.picked, perPx, 'map-member-dot is-selected', `data-uid="${esc(picked.uid)}"`, color).replace(/stroke-width="[^"]*"/, `stroke-width="${(2 * perPx).toFixed(2)}"`)}><title>${esc(picked.name)}</title></rect>`;
+      html += `${square(cx, cy, SIZE.picked, perPx, 'map-member-dot is-selected', `data-uid="${esc(picked.uid)}"`, colorOf(picked)).replace(/stroke-width="[^"]*"/, `stroke-width="${(2 * perPx).toFixed(2)}"`)}><title>${esc(picked.name)}</title></rect>`;
     }
     layer.innerHTML = html;
   }
@@ -235,14 +264,11 @@ function start() {
     }
     results.hidden = false;
     results.innerHTML =
-      `<span class="map-members-none">${esc(tm('members_here', { n: group.members.length }))}</span>` +
+      `<span class="map-members-none">${esc(tm(state.mode === 'nap' ? 'nap_here' : 'members_here', { n: group.members.length }))}</span>` +
       group.members
         .slice()
         .sort((a, b) => b.power - a.power)
-        .map(
-          (m) =>
-            `<button type="button" class="map-members-hit" data-uid="${esc(m.uid)}">${esc(m.name)} <small>${esc(might(m.power))}</small></button>`,
-        )
+        .map(hit)
         .join('');
   }
 
@@ -288,7 +314,7 @@ function start() {
       ${m.avatar ? `<img class="map-member-pic" src="${esc(m.avatar)}" alt="" referrerpolicy="no-referrer" loading="lazy">` : `<span class="map-member-pic map-member-initial">${esc((m.name || '?').charAt(0).toUpperCase())}</span>`}
       <span class="map-member-who">
         <strong>${esc(m.name)}</strong>
-        <span>${m.rank ? `${esc(m.rank)} · ` : ''}${esc(might(m.power))}</span>
+        <span>${state.mode === 'nap' && m.tag ? `[${esc(m.tag)}] · ` : ''}${m.rank ? `${esc(m.rank)} · ` : ''}${esc(might(m.power))}</span>
         <span>${esc(tm('member_coords', { x: m.x, y: m.y }))}${where ? ` · ${esc(tm('member_in', { place: where }))}` : ''}</span>
       </span>
       <button type="button" class="map-member-close" aria-label="${esc(tm('member_close'))}">${ic('cross', 'solo')}</button>`;
@@ -305,20 +331,20 @@ function start() {
     const q = text.trim().toLowerCase();
     if (!q) return [];
     return state.members
-      .filter((m) => m.name.toLowerCase().includes(q) || String(m.uid).includes(q))
-      .slice(0, 6);
+      .filter(
+        (m) =>
+          m.name.toLowerCase().includes(q) ||
+          String(m.uid).includes(q) ||
+          (state.mode === 'nap' && m.tag && `[${m.tag}]`.toLowerCase().includes(q)),
+      )
+      .slice(0, state.mode === 'nap' ? 10 : 6);
   }
 
   search.addEventListener('input', () => {
     const found = findMatches(search.value);
     results.hidden = !search.value.trim();
     results.innerHTML = found.length
-      ? found
-          .map(
-            (m) =>
-              `<button type="button" class="map-members-hit" data-uid="${esc(m.uid)}">${esc(m.name)} <small>${esc(might(m.power))}</small></button>`,
-          )
-          .join('')
+      ? found.map(hit).join('')
       : `<span class="map-members-none">${esc(tm('members_none'))}</span>`;
   });
   search.addEventListener('keydown', (e) => {
@@ -343,46 +369,107 @@ function start() {
     }
   }
 
-  // ---- The switch ----
-  async function turnOn() {
-    btn.disabled = true;
-    status.textContent = tm('members_loading');
+  // ---- The switches ----
+  const when = (iso) =>
+    iso
+      ? new Date(iso).toLocaleString(undefined, {
+          weekday: 'short',
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      : '';
+  const tracker =
+    '<a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a>';
+
+  /** The line under the buttons for All NAP players, with its Refresh button. */
+  function napStatus(body) {
+    const r = body.refresh || {};
+    const oldest = (body.alliances || []).map((a) => a.at).sort()[0];
+    const parts = [];
+    parts.push(
+      body.alliances?.length
+        ? esc(tm('nap_count', { n: state.members.length, a: body.alliances.length }))
+        : esc(tm('nap_empty')),
+    );
+    if (oldest) parts.push(esc(tm('members_as_of', { time: when(oldest) })));
+    if (body.missing?.length)
+      parts.push(esc(tm('nap_missing', { tags: body.missing.map((t) => `[${t}]`).join(', ') })));
+    const wait = r.waitMinutes ? tm('nap_refresh_wait', { minutes: r.waitMinutes }) : '';
+    const left = tm('nap_refresh_left', { left: r.left ?? 0, max: r.max ?? 0 });
+    status.innerHTML = `${parts.join(' · ')} · ${tracker}
+      <span class="map-nap-refresh"><button type="button" class="draft-btn" id="btn-map-nap-refresh" ${!r.left || r.waitMinutes ? 'disabled' : ''}>${ic('refresh')}<span>${esc(tm('nap_refresh'))}</span></button><small>${esc(wait || left)}</small></span>`;
+    status
+      .querySelector('#btn-map-nap-refresh')
+      ?.addEventListener('click', () => turnOn('nap', true));
+  }
+
+  async function turnOn(mode, refresh = false) {
+    if (state.on && state.mode !== mode) turnOff();
+    const button = mode === 'nap' ? btnNap : btn;
+    button.disabled = true;
+    status.textContent = tm(
+      refresh ? 'nap_refreshing' : mode === 'nap' ? 'nap_loading' : 'members_loading',
+    );
     try {
-      const res = await fetch('/api/dashboard?positions=1', {
+      const url =
+        mode === 'nap'
+          ? `/api/dashboard?steward=positions${refresh ? '&refresh=1' : ''}`
+          : '/api/dashboard?positions=1';
+      const res = await fetch(url, {
         headers: { Authorization: `Bearer ${loginPass()}` },
         cache: 'no-store',
       });
       const body = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+      if (!res.ok) {
+        // A refresh that wasn't allowed keeps the positions already shown
+        if (refresh && state.on) {
+          napStatus({ ...lastNap, refresh: body.refresh || lastNap.refresh });
+          status.insertAdjacentHTML(
+            'afterbegin',
+            `<span class="map-members-none">${esc(body.error || `HTTP ${res.status}`)}</span> `,
+          );
+          return;
+        }
+        throw new Error(body.error || `HTTP ${res.status}`);
+      }
+      state.mode = mode;
       state.members = body.members || [];
       state.tag = body.tag || '';
-      state.takenAt = body.takenAt;
+      state.takenAt = body.takenAt || null;
       state.on = true;
+      if (state.selected && !state.members.some((m) => m.uid === state.selected)) {
+        state.selected = null;
+        card.hidden = true;
+      }
       // Territories don't respond while the markers are shown (owner: fewer stray taps)
       root()?.classList.add('members-on');
-      btn.setAttribute('aria-pressed', 'true');
+      button.setAttribute('aria-pressed', 'true');
+      search.placeholder = tm(mode === 'nap' ? 'nap_search' : 'members_search');
+      search.setAttribute('aria-label', search.placeholder);
       search.hidden = false;
-      const when = state.takenAt
-        ? new Date(state.takenAt).toLocaleString(undefined, {
-            weekday: 'short',
-            hour: '2-digit',
-            minute: '2-digit',
-          })
-        : '';
-      status.innerHTML = `${esc(tm('members_count', { n: state.members.length, tag: state.tag }))}${when ? ` · ${esc(tm('members_as_of', { time: when }))}` : ''} · <a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a>`;
+      if (mode === 'nap') {
+        lastNap = body;
+        napStatus(body);
+      } else {
+        const t = when(state.takenAt);
+        status.innerHTML = `${esc(tm('members_count', { n: state.members.length, tag: state.tag }))}${t ? ` · ${esc(tm('members_as_of', { time: t }))}` : ''} · ${tracker}`;
+      }
       draw();
+      if (state.selected) select(state.selected);
     } catch (err) {
       status.textContent = tm('members_failed', { error: err.message });
     } finally {
-      btn.disabled = false;
+      button.disabled = false;
     }
   }
+  let lastNap = {};
 
   function turnOff() {
     state.on = false;
     root()?.classList.remove('members-on');
     state.selected = null;
     btn.setAttribute('aria-pressed', 'false');
+    btnNap?.setAttribute('aria-pressed', 'false');
     search.hidden = true;
     search.value = '';
     results.hidden = true;
@@ -391,7 +478,12 @@ function start() {
     clear();
   }
 
-  btn.addEventListener('click', () => (state.on ? turnOff() : turnOn()));
+  btn.addEventListener('click', () =>
+    state.on && state.mode === 'mine' ? turnOff() : turnOn('mine'),
+  );
+  btnNap?.addEventListener('click', () =>
+    state.on && state.mode === 'nap' ? turnOff() : turnOn('nap'),
+  );
 }
 
 if (typeof window !== 'undefined') {
