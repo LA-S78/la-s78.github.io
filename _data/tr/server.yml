@@ -283,23 +283,28 @@ bot_ascension:
 bot_admin:
   rank_none: Mevcut durumda kayıtlı ittifak yok.
   rank_title: "🛡️ Sunucu NAP Sıralaması"
-  rank_open: Açık Diplomasi & Sıralama
-  rank_fetch_failed: "⚠️ Sıralamalar alınamadı: {reason}"
-  rank_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Yöneticileri ittifak sıralamalarını güncelleyebilir."
-  rank_missing: "⚠️ Eksik gerekli argümanlar: tag ve rank."
+  rank_open: Diplomasi ve Sıralamayı Aç
+  rank_fetch_failed: "⚠️ Sıralamalar getirilemedi: {reason}"
+  rank_denied: "⛔ **Erişim Engellendi:** Yalnızca belirlenmiş Krallık Yöneticileri ittifak sıralamalarını güncelleyebilir."
+  rank_missing: "⚠️ Gerekli argümanlar eksik: etiket ve sıralama."
   rank_set_title: "👑 NAP Sıralaması Güncellendi"
-  rank_set_text: "`[{tag}]` ittifakı **Sıralama #{rank}** olarak atandı *(önceki: {previous})*."
+  rank_set_text: "`[{tag}]` ittifakı **{rank}. Sıraya** atandı *(önceki: {previous})*."
   rank_unranked: Sıralamasız
   rank_updated_by: "{name} tarafından güncellendi"
   rank_view: Sıralamayı Görüntüle
   rank_set_failed: "⚠️ Sıralama güncellenemedi: {reason}"
-  rank_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}): lütfen etiketi, büyük harfleriyle tam olarak yazın."
+  rank_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}): etiketi büyük/küçük harflerine dikkat ederek tam olarak yazın."
   dev_done: |-
-    ✅ **Test verileri güncellendi.** {count} dosya, canlı verilerden dev.la-s78.app tarafından kullanılan test Gist'ine kopyalandı: {files}.
-    Canlı veriler yalnızca okundu, değiştirilmedi.
+    ✅ **Test verileri güncellendi.** Canlı verilerden dev.la-s78.app tarafından kullanılan test Gist'ine {count} dosya kopyalandı: {files}.
+    Canlı veriler sadece okundu, değiştirilmedi.
+  dev_removed: 'Test Gist''inden kaldırıldı (canlı verilerde yok): {files}.'
+  dev_scrubbed: 'Dahil edilmedi: öneri günlüğü. Temizlendi: her ittifakın Discord sunucusu, kanal ve rol kimlikleri.'
+  dev_blobs: 'Ayrıca test sitesinin kendi dosyalarına kopyalandı: {stats} İstatistik dosyası, son {days} günün anlık görüntüleri ve {pictures} ittifak resmi.'
+  dev_blobs_failed: "⚠️ {count} dosya kopyalanamadı (günlüklere bakın); diğerleri kopyalandı."
+  dev_blobs_skipped: "⚠️ İstatistikler ve resimler kopyalanmadı: {reason}"
   dev_failed: "⚠️ **Test verileri güncellenemedi:** {reason}"
-  dev_denied: "⛔ **Erişim Engellendi:** Sadece Yöneticiler test verilerini güncelleyebilir."
-  test_proposal: "🧪 Bu, test sitesinden gelen bir test teklifidir. Test verilerini kullandığı için onaylanamaz veya canlı sistemde herhangi bir değişiklik yapamaz."
+  dev_denied: "⛔ **Erişim Engellendi:** Yalnızca Yöneticiler test verilerini güncelleyebilir."
+  test_proposal: "🧪 Bu, test sitesinden gelen bir test önerisidir. Test verilerini kullandığı için onaylanamaz veya canlı verilerde herhangi bir değişiklik yapamaz."
   approved_not_updated: "✅ Onaylandı ve kaydedildi, ancak bu mesaj güncellenemedi ({reason})."
 bot_register:
   nap_only: "⚠️ Bu komut sadece resmi NAP sunucusunda çalıştırılabilir."

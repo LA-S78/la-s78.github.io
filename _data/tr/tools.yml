@@ -996,19 +996,19 @@ stats:
   credit_before: 'Veriler şuradan:'
 steward:
   page_title: Yönetici Araçları
-  intro: 'Krallık Yöneticileri için araçlar: sizi neler bekliyor ve canlı oyuncu sorgulama.'
+  intro: 'Krallık Yöneticileri için araçlar: sizi neyin beklediği ve canlı oyuncu sorgulama.'
   loading: Yükleniyor…
   sign_in: Discord ile giriş yap
   sign_in_needed: Yönetici araçlarını açmak için Discord ile giriş yapın.
-  stewards_only: Yönetici araçlarını yalnızca Krallık Yöneticileri açabilir.
+  stewards_only: Yönetici araçlarını sadece Krallık Yöneticileri açabilir.
   lookup_title: Oyuncu sorgulama
-  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, değerleri, eski isimleri ve ittifakları. Bir oyuncu ID''si girin veya bir NAP oyuncusunun ID''sini bulmak için bir isim yazın.'
+  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, sayıları ve önceki isimleri ile ittifakları. Bir oyuncu ID''si girin ya da NAP oyuncusunun ID''sini bulmak için bir isim yazın.'
   lookup_placeholder: Oyuncu ID'si veya NAP oyuncu ismi
   lookup_go: Sorgula
-  lookup_id_needed: Bir oyuncu ID'si (profilindeki numara) girin veya bulunan isimlerden bir NAP oyuncusu seçin.
-  lookups_left: Bugün kalan {left} / {max} canlı sorgulama (tüm Yöneticilerle paylaşılır).
+  lookup_id_needed: Bir oyuncu ID'si (profilindeki numara) girin ya da bulunan isimlerden bir NAP oyuncusu seçin.
+  lookups_left: Bugün kalan {left}/{max} canlı sorgulama (tüm Yöneticilerle paylaşılır).
   looking: Oyuna soruluyor…
-  name_none: Bu isimde NAP oyuncusu yok. Diğerleri için oyuncu ID'sini kullanın.
+  name_none: Bu isimde bir NAP oyuncusu yok. Başkaları için oyuncu ID'sini kullanın.
   no_alliance: İttifak yok
   server: Sunucu {n}
   online: Şu an çevrimiçi
@@ -1020,30 +1020,32 @@ steward:
   vip: VIP
   position: Konum (X, Y)
   language: Dil
-  ranks: 'Krallık sıralaması: #{might} Güç · #{kills} leş · #{heroes} kahraman'
+  ranks: 'Krallık sıralamaları: #{might} Güç · #{kills} leş · #{heroes} kahraman'
   history_title: İsimler ve ittifaklar
   history_none: Daha önce görülen isim veya ittifak yok.
   seen_from: "{when} tarihinden beri"
   first_seen: Takipçi tarafından ilk görülme {when}.
-  renamed: "{old} oyunda artık {now}. Hala oyunun kendi numarasıyla ölçülüyor (İstatistikler ve İlk 4 yarışı), ancak site onu hala {old} olarak adlandırıyor."
-  renamed_fix: İttifak planlayıcısında yeniden adlandır
+  renamed: "{old} oyunda artık {now}. Oyunun kendi numarasıyla hala ölçülmeye (İstatistikler ve İlk 4 yarışı) devam ediyor ancak site hala {old} olarak adlandırıyor."
+  renamed_fix: İttifak planlayıcısında yeniden adlandırın
+  test_copy: "🧪 Test sitesi: verileri {when} tarihinde canlı siteden kopyalandı (Discord'da /devupdate ile taze bir kopya oluşturulur)."
+  test_copy_none: "🧪 Test sitesi: verileri henüz canlı siteden kopyalanmadı. Taze bir kopya için Discord'da /devupdate komutunu çalıştırın."
   unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Eğer oyunda etiketini değiştirdiyse, yenisini yazın ve site onu takip edecektir."
   unfound_now: Oyundaki güncel etiketi
-  unfound_placeholder: ör. Arch
+  unfound_placeholder: örn. Arch
   unfound_link: Bağla
   unfound_checking: Oyunla kontrol ediliyor...
-  unfound_left: Bugün kalan {left} / {max} bağlantı (her biri oyuna bir kez sorar)
-  pending_title: İnceleme bekleniyor
+  unfound_left: Bugün kalan {left}/{max} bağlantı (her biri oyuna bir kez sorar)
+  pending_title: İnceleme bekliyor
   pending_none: Bekleyen ittifak resmi yok.
   sent_by: "{name} tarafından gönderildi, {when}"
   race_title: İlk 4 yarışı
   race_none: Henüz ölçülen bir yarış yok.
-  race_progress: Şimdiye kadar 3 Düello gününden {n} kadarı ölçüldü.
-  race_finished: '3 günün tamamı ölçüldü: sonuçlar NAP yönetiminde.'
+  race_progress: Şu ana kadar 3 Düello gününden {n} kadarı ölçüldü.
+  race_finished: '3 günün tamamı ölçüldü: sonuçlar NAP liderliğinde.'
   race_missing: 'Ölçülmedi: {tags}'
-  race_more: Kurallar sayfasında tam tablo
+  race_more: Tam tablo Kurallar sayfasında
   quota_title: Takipçi istekleri
-  quota_help: Last Asylum Takipçisi, UTC-2 saatine göre 00:00'da sıfırlanmak üzere günde 1.000 isteğe izin verir. Aşağıdaki rakam takipçinin siteye verdiği son veridir, bu yüzden göstermesi ücretsizdir; şu an kontrol etmek bir istek harcar.
+  quota_help: Last Asylum Takipçisi, 00:00 UTC'de sıfırlanmak üzere günde 1.000 isteğe izin verir. Aşağıdaki rakam takipçinin siteye verdiği son veridir, bu yüzden göstermek ücretsizdir; şimdi kontrol etmek bir istek harcar.
   quota_check: Şimdi kontrol et
   quota_used: bugün kullanılan
   quota_failed: Takipçiye ulaşılamadı.
@@ -1061,6 +1063,6 @@ steward:
   usage_steward_help: Oyuncu sorgulamaları, harita yenilemeleri ve kullanım kontrolleri
   usage_other: Diğer
   usage_other_help: Etiketlenmemiş her şey
-  usage_unrecorded: Kaydedilmemiş
-  usage_unrecorded_help: Takipçi tarafından sayılan ancak henüz buraya kaydedilmeyenler (her sunucu birkaç dakikada bir kaydeder)
+  usage_unrecorded: Kaydedilmedi
+  usage_unrecorded_help: Takipçi tarafından sayıldı, henüz buraya kaydedilmedi (her sunucu birkaç dakikada bir kaydeder)
   usage_none: Bugün henüz kaydedilen bir istek yok.

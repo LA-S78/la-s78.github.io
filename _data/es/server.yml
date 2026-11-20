@@ -282,24 +282,29 @@ bot_ascension:
   cannot_apply: 'No se pueden aplicar los 4 Mejores: {reason}. Usa /rank.'
 bot_admin:
   rank_none: No hay alianzas registradas en el estado actual.
-  rank_title: "🛡️ Clasificación NAP del servidor"
-  rank_open: Diplomacia abierta y clasificaciones
-  rank_fetch_failed: "⚠️ Error al obtener las clasificaciones: {reason}"
-  rank_denied: "⛔ **Acceso denegado:** Solo los administradores del Reino designados pueden actualizar las clasificaciones de las alianzas."
-  rank_missing: "⚠️ Faltan argumentos obligatorios: tag y rank."
-  rank_set_title: "👑 Clasificación NAP actualizada"
+  rank_title: "🛡️ Clasificación NAP del Servidor"
+  rank_open: Diplomacia y Clasificación Abierta
+  rank_fetch_failed: "⚠️ Error al obtener la clasificación: {reason}"
+  rank_denied: "⛔ **Acceso Denegado:** Solo los Administradores del Reino designados pueden actualizar la clasificación de las alianzas."
+  rank_missing: "⚠️ Faltan argumentos requeridos: tag y rank."
+  rank_set_title: "👑 Clasificación NAP Actualizada"
   rank_set_text: 'La alianza `[{tag}]` ha sido asignada al **Rango #{rank}** *(anteriormente: {previous})*.'
   rank_unranked: Sin rango
   rank_updated_by: Actualizado por {name}
-  rank_view: Ver clasificaciones
+  rank_view: Ver Clasificación
   rank_set_failed: "⚠️ Error al actualizar el rango: {reason}"
   rank_ambiguous: "[{tag}] podría referirse a más de una alianza ({options}): escribe el tag exactamente, respetando las mayúsculas."
   dev_done: |-
     ✅ **Datos de prueba actualizados.** Se copiaron {count} archivo(s) de los datos en vivo al Gist de prueba utilizado por dev.la-s78.app: {files}.
-    Los datos en vivo solo se leyeron, no se modificaron.
+    Los datos en vivo solo fueron leídos, no modificados.
+  dev_removed: 'Eliminado del Gist de prueba (no está en los datos en vivo): {files}.'
+  dev_scrubbed: 'Excluido: el registro de propuestas. Borrado: todos los IDs de servidor, canal y rol de Discord de las alianzas.'
+  dev_blobs: 'También copiado a los archivos propios del sitio de prueba: {stats} archivo(s) de estadísticas, los últimos {days} día(s) de instantáneas y {pictures} imagen(es) de alianzas.'
+  dev_blobs_failed: "⚠️ {count} archivo(s) no pudieron ser copiados (revisa los logs); el resto sí se copió."
+  dev_blobs_skipped: "⚠️ Estadísticas e imágenes no copiadas: {reason}"
   dev_failed: "⚠️ **Datos de prueba no actualizados:** {reason}"
-  dev_denied: "⛔ **Acceso denegado:** Solo los administradores pueden actualizar los datos de prueba."
-  test_proposal: "🧪 Esta es una propuesta de prueba desde el sitio de pruebas. Utiliza datos de prueba, por lo que no puede aprobarse ni cambiar nada en vivo."
+  dev_denied: "⛔ **Acceso Denegado:** Solo los Administradores pueden actualizar los datos de prueba."
+  test_proposal: "🧪 Esta es una propuesta de prueba desde el sitio de pruebas. Utiliza datos de prueba, por lo que no puede ser aprobada ni cambiar nada en vivo."
   approved_not_updated: "✅ Aprobado y guardado, pero este mensaje no pudo ser actualizado ({reason})."
 bot_register:
   nap_only: "⚠️ Este comando solo puede ser ejecutado en el servidor oficial de NAP."
