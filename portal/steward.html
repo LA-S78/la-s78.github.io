@@ -54,6 +54,7 @@ strings: [steward]
       <h3>{% include ui-icon.html name="bar_chart" %}{{ "steward.quota_title" | t }}</h3>
       <p class="sub-text">{{ "steward.quota_help" | t }}</p>
       <div id="st-quota"></div>
+      <div id="st-usage"></div>
       <button type="button" class="btn btn-secondary" id="st-quota-btn">{{ "steward.quota_check" | t }}</button>
     </section>
   </div>
@@ -121,7 +122,7 @@ strings: [steward]
         <p class="st-small"><a href="/${lang || 'en'}/rules.html">${esc(t('steward.race_more'))}</a></p>`;
     }
 
-    function player(p, quota) {
+    function player(p) {
       const pic = p.avatar
         ? `<img class="st-face" src="${esc(p.avatar)}" alt="" referrerpolicy="no-referrer" data-initial="${esc((p.name || '?').charAt(0).toUpperCase())}">`
         : `<span class="st-face st-initial">${esc((p.name || '?').charAt(0).toUpperCase())}</span>`;
@@ -155,11 +156,40 @@ strings: [steward]
           img.replaceWith(span);
         }, { once: true }),
       );
-      if (quota) $('st-quota').innerHTML = quotaText(quota);
     }
 
     const quotaText = (q) =>
       `<p class="st-quota"><strong>${esc(count(q.used))}</strong> / ${esc(count(q.limit))} <small>${esc(t('steward.quota_used'))}</small></p>`;
+
+    // Today's usage without asking the tracker: its latest figure, and what made the requests
+    const USES = ['automation', 'alliance', 'public', 'steward', 'other'];
+    function untilReset() {
+      const now = new Date();
+      const next = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
+      const mins = Math.max(1, Math.round((next - now) / 60000));
+      return mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins}m`;
+    }
+    function usage(u) {
+      if (!u) return;
+      const last = u.last;
+      $('st-quota').innerHTML = last
+        ? `${quotaText(last)}<p class="st-small">${esc(t('steward.quota_as_of', { when: when(last.at) }))} · ${esc(t('steward.quota_resets', { time: untilReset() }))}</p>`
+        : `<p class="sub-text">${esc(t('steward.quota_none'))}</p>`;
+      const rows = USES.filter((k) => u.by?.[k]).map((k) => [k, u.by[k]]);
+      const noted = rows.reduce((sum, [, n]) => sum + n, 0);
+      const gap = last ? last.used - noted : 0;
+      if (gap > 0) rows.push(['unrecorded', gap]);
+      const top = Math.max(1, ...rows.map(([, n]) => n));
+      $('st-usage').innerHTML = `<h4>${esc(t('steward.usage_title'))}</h4>${
+        rows.length
+          ? `<ul class="st-usage">${rows
+              .map(
+                ([k, n]) => `<li class="st-use-${k}"><span><strong>${esc(t(`steward.usage_${k}`))}</strong><small>${esc(t(`steward.usage_${k}_help`))}</small></span><b>${esc(count(n))}</b><i style="width:${Math.round((n / top) * 100)}%"></i></li>`,
+              )
+              .join('')}</ul>`
+          : `<p class="st-small">${esc(t('steward.usage_none'))}</p>`
+      }`;
+    }
 
     // Names search NAP players in the Stats tab's daily data (free); an ID asks the game
     let timer = null;
@@ -200,7 +230,8 @@ strings: [steward]
         const data = await res.json().catch(() => ({}));
         if (data.lookups) lookups = data.lookups;
         if (!res.ok) throw new Error(data.error || res.statusText);
-        player(data.player, data.quota);
+        player(data.player);
+        usage(data.usage);
       } catch (err) {
         $('st-player').innerHTML = `<p class="st-small">${ic('cross', 'bad')}${esc(err.message)}</p>`;
       }
@@ -216,7 +247,8 @@ strings: [steward]
       try {
         const res = await ask('steward=quota');
         const data = await res.json().catch(() => ({}));
-        $('st-quota').innerHTML = data.quota ? quotaText(data.quota) : `<p class="st-small">${esc(t('steward.quota_failed'))}</p>`;
+        if (data.usage) usage(data.usage);
+        if (!data.quota) $('st-quota').insertAdjacentHTML('beforeend', `<p class="st-small">${esc(t('steward.quota_failed'))}</p>`);
       } finally {
         $('st-quota-btn').disabled = false;
       }
@@ -235,6 +267,7 @@ strings: [steward]
       showLeft();
       pending(data.pending || []);
       race(data.race);
+      usage(data.usage);
     }
     load().catch((err) => show(err.message, 'error'));
   })();

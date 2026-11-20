@@ -150,7 +150,7 @@ export async function checkAscension({ gist, now = Date.now(), dryRun = false } 
 
   if (todo.length) {
     const results = await inBatches(todo, 4, (tag) =>
-      fetchAlliance(tag, { fresh: true, timeoutMs: 6000 }),
+      fetchAlliance(tag, { fresh: true, timeoutMs: 6000, use: 'automation' }),
     );
     todo.forEach((tag, i) => {
       if (results[i]) report.measured[tag] = results[i].power;

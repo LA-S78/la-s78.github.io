@@ -93,7 +93,9 @@ export default async function handler(req, res) {
           .filter(([, a]) => a && a.is_nap !== false)
           .map(([tag]) => tag)
           .slice(0, 30);
-        const found = await Promise.all(tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000 })));
+        const found = await Promise.all(
+          tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000, use: 'public' })),
+        );
         const stats = {};
         tags.forEach((tag, i) => {
           const a = found[i];

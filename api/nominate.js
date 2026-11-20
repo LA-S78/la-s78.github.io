@@ -59,7 +59,9 @@ async function respond(req, res) {
       // for everyone and public on the tracker, so Vercel may keep it a few minutes.
       if (req.query?.pictures) {
         const tags = Object.keys(nominations || {}).slice(0, 30);
-        const found = await Promise.all(tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000 })));
+        const found = await Promise.all(
+          tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000, use: 'alliance' })),
+        );
         const pictures = {};
         // Current names by player ID, so a renamed player shows their new name
         const players = {};
@@ -96,7 +98,7 @@ async function respond(req, res) {
         if (!payload) return res.status(403).json({ error: say('api_nominate.link_invalid') });
         const tag = String(payload.alliance || '').trim();
         const now = getAllianceNominationQuota(tag, view, mapState);
-        const tracker = await fetchAlliance(tag, { timeoutMs: 2500 });
+        const tracker = await fetchAlliance(tag, { timeoutMs: 2500, use: 'alliance' });
         body.alliance = {
           tag,
           rank: now.rank,
@@ -156,7 +158,7 @@ async function respond(req, res) {
   const refuse = (status, message) => ({ refused: { status, error: message } });
   if (error) return res.status(400).json({ error });
   // Player IDs and names are matched to the alliance's members (one cached lookup)
-  const tracker = await fetchAlliance(tag, { timeoutMs: 3000 });
+  const tracker = await fetchAlliance(tag, { timeoutMs: 3000, use: 'alliance' });
 
   try {
     // Worked out from the stored data and saved; redone on newer data if another save (e.g.

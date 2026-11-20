@@ -471,6 +471,7 @@ export async function checkStatsSnapshot({
       fresh: true,
       timeoutMs: 6000,
       freshWithinMs: 10 * 60000,
+      use: 'automation',
       ...(fetchImpl ? { fetchImpl } : {}),
     }),
   );

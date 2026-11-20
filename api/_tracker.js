@@ -95,6 +95,100 @@ function slim(d) {
   };
 }
 
+// ---------------------------------------------------------------------------------------
+// Where the day's tracker requests go (owner request, 2026-11-20; the Steward tools page)
+// ---------------------------------------------------------------------------------------
+// Every request is labelled by what made it (`use`): automation (the daily Stats snapshot,
+// the Top 4 race), alliance (dashboards, nominations, the King's console), public (the
+// standings cards), steward (the Steward tools). Each server counts them, with the latest
+// usage the tracker reported (every answer carries it), and saves its counts to the Gist
+// (tracker-usage.json) every few minutes. A server shut down before saving loses its count:
+// the Steward page shows the tracker's own total beside them, the gap as "Not recorded".
+
+export const USAGE_FILE = 'tracker-usage.json';
+const FLUSH_MS = 5 * 60000;
+const KEEP_USAGE_DAYS = 7;
+/** The tracker's day: its 1,000 requests start again at 00:00 UTC. */
+export const usageDay = (ms = Date.now()) => new Date(ms).toISOString().slice(0, 10);
+const usage = { day: usageDay(), counts: {}, last: null, savedLast: null, flushedAt: Date.now() };
+
+function noteRequest(use, quota) {
+  const today = usageDay();
+  if (usage.day !== today) {
+    usage.day = today;
+    usage.counts = {};
+  }
+  usage.counts[use] = (usage.counts[use] || 0) + 1;
+  if (quota && Number.isFinite(Number(quota.used))) {
+    usage.last = {
+      used: Number(quota.used),
+      limit: Number(quota.limit) || null,
+      at: new Date().toISOString(),
+    };
+  }
+  if (Date.now() - usage.flushedAt > FLUSH_MS) {
+    usage.flushedAt = Date.now();
+    const saving = flushTrackerUsage().catch((err) =>
+      console.warn('Tracker usage not saved:', err.message),
+    );
+    // Kept alive after the page's answer has gone (Vercel freezes the function otherwise)
+    import('./_after_response.js')
+      .then(({ getWaitUntil }) => getWaitUntil()?.(saving))
+      .catch(() => {});
+  }
+}
+
+/** This server's counts not saved yet, and its latest usage: { day, counts, last }. */
+export function unsavedUsage() {
+  return { day: usage.day, counts: { ...usage.counts }, last: usage.last };
+}
+
+/** Adds this server's counts to the Gist's (and its latest usage), then starts again. */
+export async function flushTrackerUsage() {
+  const pending = unsavedUsage();
+  // Nothing new since the last save: no Gist write
+  if (!Object.keys(pending.counts).length && pending.last === usage.savedLast) return;
+  const { updateGist, gistJson } = await import('./_gist.js');
+  await updateGist((gist) => {
+    const d = gistJson(gist, USAGE_FILE, { days: {} });
+    d.days = d.days || {};
+    const day = (d.days[pending.day] = d.days[pending.day] || { by: {}, last: null });
+    for (const [use, n] of Object.entries(pending.counts)) day.by[use] = (day.by[use] || 0) + n;
+    if (pending.last && (!day.last || pending.last.used >= day.last.used)) day.last = pending.last;
+    for (const old of Object.keys(d.days).sort().slice(0, -KEEP_USAGE_DAYS)) delete d.days[old];
+    return { files: { [USAGE_FILE]: d }, description: 'Tracker usage' };
+  });
+  usage.savedLast = pending.last;
+  // Only what was saved is taken off (requests made meanwhile stay counted here)
+  if (usage.day === pending.day) {
+    for (const [use, n] of Object.entries(pending.counts)) {
+      usage.counts[use] = Math.max(0, (usage.counts[use] || 0) - n);
+      if (!usage.counts[use]) delete usage.counts[use];
+    }
+  }
+}
+
+/** One request to the tracker, noted under `use`: { ok, status, data } (data may be null). */
+async function trackerGet(path, { key, use = 'other', timeoutMs = 4000, fetchImpl = fetch }) {
+  const res = await fetchImpl(`${BASE}${path}`, {
+    headers: {
+      Authorization: `Bearer ${key}`,
+      Accept: 'application/json',
+      // The tracker's Cloudflare refuses requests without a normal user agent
+      'User-Agent': 'Mozilla/5.0 (compatible; la-s78.app)',
+    },
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    data = null;
+  }
+  noteRequest(use, data && data.quota);
+  return { ok: res.ok, status: res.status, data };
+}
+
 /**
  * An alliance on our server by its exact tag (letter case counts, as on the site), or null.
  * `fresh: true` asks the game itself (about a second; the tracker's own copy can be days
@@ -108,6 +202,7 @@ export async function fetchAlliance(
     timeoutMs = 4000,
     newerThan = 0,
     freshWithinMs = 0,
+    use = 'other',
     env = process.env,
     fetchImpl = fetch,
   } = {},
@@ -125,16 +220,8 @@ export async function fetchAlliance(
     return hit.missing ? null : hit;
   }
   try {
-    const url = `${BASE}/alliances/${TRACKER_SERVER}/${encodeURIComponent(clean)}${fresh ? '?fresh=1' : ''}`;
-    const res = await fetchImpl(url, {
-      headers: {
-        Authorization: `Bearer ${key}`,
-        Accept: 'application/json',
-        // The tracker's Cloudflare refuses requests without a normal user agent
-        'User-Agent': 'Mozilla/5.0 (compatible; la-s78.app)',
-      },
-      signal: AbortSignal.timeout(timeoutMs),
-    });
+    const path = `/alliances/${TRACKER_SERVER}/${encodeURIComponent(clean)}${fresh ? '?fresh=1' : ''}`;
+    const res = await trackerGet(path, { key, use, timeoutMs, fetchImpl });
     if (!res.ok) {
       // 409: the tag could mean more than one alliance; 404: not on the server; 429: out of
       // today's requests. All mean "no list" here.
@@ -145,7 +232,8 @@ export async function fetchAlliance(
         cache.set(clean, { missing: true, at: Date.now() });
       return null;
     }
-    const data = slim(await res.json());
+    if (!res.data) return null;
+    const data = slim(res.data);
     // Only the alliance asked for (the tracker matches tags by letter case too)
     if (data.tag !== clean) {
       cache.set(clean, { missing: true, at: Date.now() });
@@ -214,23 +302,24 @@ export function findMember(typed, members) {
  * `history` keeps only the changes that matter when checking a player: earlier names and
  * alliances, newest first.
  */
-export async function fetchPlayer(uid, { env = process.env, fetchImpl = fetch } = {}) {
+export async function fetchPlayer(
+  uid,
+  { use = 'steward', env = process.env, fetchImpl = fetch } = {},
+) {
   const key = String(env.LAT_API_KEY || '').trim();
   const id = String(uid || '').trim();
   if (!key) return { error: 'unavailable' };
   if (!/^\d{5,15}$/.test(id)) return { error: 'not_found' };
   try {
-    const res = await fetchImpl(`${BASE}/players/${id}?fresh=1`, {
-      headers: {
-        Authorization: `Bearer ${key}`,
-        Accept: 'application/json',
-        'User-Agent': 'Mozilla/5.0 (compatible; la-s78.app)',
-      },
-      signal: AbortSignal.timeout(8000),
+    const res = await trackerGet(`/players/${id}?fresh=1`, {
+      key,
+      use,
+      timeoutMs: 8000,
+      fetchImpl,
     });
     if (res.status === 404 || res.status === 422) return { error: 'not_found' };
-    if (!res.ok) return { error: 'unavailable', status: res.status };
-    const d = await res.json();
+    if (!res.ok || !res.data) return { error: 'unavailable', status: res.status };
+    const d = res.data;
     const changes = [];
     let last = null;
     // Oldest first, so each name or alliance change is kept once, with when it was first seen
@@ -282,19 +371,12 @@ export async function fetchPlayer(uid, { env = process.env, fetchImpl = fetch } 
 }
 
 /** Today's tracker requests ({ limit, used, remaining, … }): costs one request itself. */
-export async function fetchQuota({ env = process.env, fetchImpl = fetch } = {}) {
+export async function fetchQuota({ use = 'steward', env = process.env, fetchImpl = fetch } = {}) {
   const key = String(env.LAT_API_KEY || '').trim();
   if (!key) return null;
   try {
-    const res = await fetchImpl(`${BASE}/quota`, {
-      headers: {
-        Authorization: `Bearer ${key}`,
-        'User-Agent': 'Mozilla/5.0 (compatible; la-s78.app)',
-      },
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!res.ok) return null;
-    return (await res.json()).quota || null;
+    const res = await trackerGet('/quota', { key, use, timeoutMs: 5000, fetchImpl });
+    return (res.ok && res.data && res.data.quota) || null;
   } catch {
     return null;
   }
