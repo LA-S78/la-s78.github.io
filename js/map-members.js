@@ -227,6 +227,12 @@ function start() {
       zoom.focus(group.cx, group.cy, Math.min(zoom.maxZoom, zoom.zoom() * 2.5));
       return;
     }
+    // …and a group's list replaces the member's card
+    if (state.selected || !card.hidden) {
+      state.selected = null;
+      card.hidden = true;
+      draw();
+    }
     results.hidden = false;
     results.innerHTML =
       `<span class="map-members-none">${esc(tm('members_here', { n: group.members.length }))}</span>` +
@@ -267,6 +273,9 @@ function start() {
   }
 
   function select(uid) {
+    // One thing under the map at a time: a member's card replaces a group's list (owner,
+    // 2026-11-20: they overlapped)
+    results.hidden = true;
     state.selected = uid;
     const m = state.members.find((x) => x.uid === uid);
     draw();
