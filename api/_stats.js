@@ -17,6 +17,8 @@
 //   stats/player-series.json   each NAP player's numbers per day for 31 days (server only):
 //     { days: [dates], p: { uid: { <date>: Might in millions } }, k: kills, l: Sanctuary
 //       level, a: 1 when away from their alliance's hive that day }
+//   stats/player-index.json    today's NAP players, for the Player lookup view:
+//     { day, players: { uid: [name, tag, Might, kills, Sanctuary level, picture, frame] } }
 //   stats/top.json             the Top players view, worked out at each snapshot (small):
 //     { day, days, players: { uid: { name, tag, power, avatar, frame, series } },
 //       lists: { all: { strongest: [uid…100], week: [[uid, gain]…50], month: […50] },
@@ -27,7 +29,7 @@
 import { get, put } from '@vercel/blob';
 import { gistJson, isTestDeployment } from './_gist.js';
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
-import { fetchAlliance, knownMissing, trackerConfigured } from './_tracker.js';
+import { fetchAlliance, foldName, knownMissing, trackerConfigured } from './_tracker.js';
 import { ASCENSION_FILE, napTags } from './_ascension.js';
 
 /** Snapshots are taken between 12 and 2 minutes before reset: the 5-minute check lands twice. */
@@ -42,6 +44,7 @@ const prefix = () => (isTestDeployment() ? 'test/stats' : 'stats');
 const SUMMARY = () => `${prefix()}/summary.json`;
 const PLAYER_SERIES = () => `${prefix()}/player-series.json`;
 const TOP = () => `${prefix()}/top.json`;
+const PLAYER_INDEX = () => `${prefix()}/player-index.json`;
 /** Days of each player's Might kept for the Top players view (its month and growth lines). */
 const PLAYER_DAYS = 31;
 const TOP_SIZES = { strongest: 100, week: 50, month: 50 };
@@ -84,6 +87,110 @@ async function writeJson(path, data) {
 export async function readTopPlayers() {
   if (!blobToken()) return null;
   return readJson(TOP());
+}
+
+/** Today's NAP players, for the Player lookup view. */
+export function playerIndex(today, day) {
+  const players = {};
+  for (const [tag, a] of Object.entries(today.alliances)) {
+    for (const [uid, name, power, kills, level, , , avatar, frame] of a.players) {
+      if (uid)
+        players[String(uid)] = [
+          name,
+          tag,
+          power,
+          kills ?? null,
+          level ?? null,
+          avatar || null,
+          frame || null,
+        ];
+    }
+  }
+  return { day, players };
+}
+
+// The lookup reads two files; a server keeps them 10 minutes (they change once a day)
+let lookupCache = null;
+async function lookupFiles(store) {
+  if (lookupCache && Date.now() - lookupCache.at < 10 * 60000 && store === blobStore) {
+    return lookupCache;
+  }
+  const [index, series] = await Promise.all([
+    store.read(PLAYER_INDEX()),
+    store.read(PLAYER_SERIES()),
+  ]);
+  const files = { index, series, at: Date.now() };
+  if (store === blobStore) lookupCache = files;
+  return files;
+}
+
+/**
+ * The Player lookup view (owner request, 2026-11-20): NAP players only, from the daily
+ * snapshot, so a search never asks the tracker (a public page can't use up its requests).
+ *   { q }   → { matches: [{ uid, name, tag, power, avatar }] } (up to 8, strongest first):
+ *             a player ID exactly, or names containing the letters typed (case, accents and
+ *             decorations ignored, as the name checks)
+ *   { uid } → { player: { uid, name, tag, power, kills, level, avatar, frame, place, of,
+ *             days, might: [millions…], kills: […], week, month, killsWeek } } or null
+ */
+export async function lookupPlayer({ q, uid }, { store = blobStore } = {}) {
+  if (store === blobStore && !blobToken()) return { day: null, matches: [], player: null };
+  const { index, series } = await lookupFiles(store);
+  const all = index?.players || {};
+  const day = index?.day || null;
+  if (uid !== undefined) {
+    const id = String(uid);
+    const row = all[id];
+    if (!row) return { day, player: null };
+    const [name, tag, power, kills, level, avatar, frame] = row;
+    const days = series?.days || [];
+    const line = (key) => days.map((d) => series?.[key]?.[id]?.[d] ?? null);
+    const value = (key, target) => {
+      const s = series?.[key]?.[id] || {};
+      const d = days
+        .filter((x) => x <= target && x >= daysBefore(target, 3) && Number.isFinite(s[x]))
+        .pop();
+      return d ? s[d] : null;
+    };
+    // Gains compare the stored numbers on both days (kept to 0.1M), so a player who didn't
+    // grow shows no change rather than a rounding difference
+    const nowP = day ? value('p', day) : null;
+    const weekP = day ? value('p', lastWeekEnd(day)) : null;
+    const monthP = day ? value('p', daysBefore(day, 30)) : null;
+    const weekK = day ? value('k', lastWeekEnd(day)) : null;
+    const place =
+      Object.values(all).filter((r) => Number.isFinite(r[2]) && r[2] > power).length + 1;
+    return {
+      day,
+      player: {
+        uid: id,
+        name,
+        tag,
+        power,
+        kills,
+        level,
+        avatar,
+        frame,
+        place,
+        of: Object.keys(all).length,
+        days,
+        might: line('p'),
+        kills_line: line('k'),
+        week: weekP === null || nowP === null ? null : Math.round((nowP - weekP) * 1e6),
+        month: monthP === null || nowP === null ? null : Math.round((nowP - monthP) * 1e6),
+        killsWeek: weekK === null || kills === null ? null : kills - weekK,
+      },
+    };
+  }
+  const typed = String(q || '').trim();
+  const folded = foldName(typed);
+  if (!typed || (folded.length < 2 && !/^\d+$/.test(typed))) return { day, matches: [] };
+  const matches = Object.entries(all)
+    .filter(([id, [name]]) => id === typed || (folded && foldName(name).includes(folded)))
+    .sort(([, a], [, b]) => (b[2] || 0) - (a[2] || 0))
+    .slice(0, 8)
+    .map(([id, [name, tag, power, , , avatar]]) => ({ uid: id, name, tag, power, avatar }));
+  return { day, matches };
 }
 
 /** The growth summary, as the Stats tab reads it (null when nothing is saved yet). */
@@ -384,13 +491,16 @@ export async function checkStatsSnapshot({
   if (!summary.days.length) seedFromRace(summary, gist);
   if (!summary.days.includes(due.day)) summary.days.push(due.day);
   summary.days.sort();
+  summary.members = summary.members || {};
   for (const [tag, a] of Object.entries(today.alliances)) {
     summary.alliances[tag] = { ...(summary.alliances[tag] || {}), [due.day]: a.power };
+    // Member counts too (the dashboard's growth card)
+    summary.members[tag] = { ...(summary.members[tag] || {}), [due.day]: a.members };
   }
   // Only about a year of points
   const keep = new Set(summary.days.slice(-KEEP_DAYS));
   summary.days = summary.days.filter((d) => keep.has(d));
-  for (const series of Object.values(summary.alliances)) {
+  for (const series of [...Object.values(summary.alliances), ...Object.values(summary.members)]) {
     for (const d of Object.keys(series)) if (!keep.has(d)) delete series[d];
   }
   summary.updatedAt = new Date(now).toISOString();
@@ -401,6 +511,7 @@ export async function checkStatsSnapshot({
   const top = topPlayers(series, today, due.day);
   await store.write(PLAYER_SERIES(), series);
   await store.write(TOP(), top);
+  await store.write(PLAYER_INDEX(), playerIndex(today, due.day));
   report.saved = true;
   return report;
 }

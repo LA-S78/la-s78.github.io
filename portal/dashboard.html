@@ -5,7 +5,7 @@ title: Alliance Dashboard
 title_key: "dashboard.title"
 permalink: /dashboard.html
 lang: "en"
-strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_data, alliance_images]
+strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_data, alliance_images, stats]
 ---
 
 <div class="content-pane portal-pane-lg" id="dashboard-app">
@@ -33,6 +33,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
   <!-- The alliance's members from the Last Asylum Tracker (owner request, 2026-11-18): leaders
        always, members when leaders switch it on (renderRoster) -->
   <section class="dash-card dash-roster" id="dash-roster" hidden aria-labelledby="dash-roster-title"></section>
+  <!-- The alliance's Might and members over time, from the Stats tab's daily snapshot -->
+  <section class="dash-card dash-growth" id="dash-growth" hidden aria-labelledby="dash-growth-title"></section>
 
   <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
@@ -50,6 +52,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
 
 <script type="module" src="/js/name-check.js"></script>
 <script type="module" src="/js/player-portrait.js"></script>
+<script type="module" src="/js/line-chart.js"></script>
 <script src="/js/dashboard-widgets.js"></script>
 <script src="/js/alliance-images.js"></script>
 <script>
@@ -245,7 +248,53 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       renderRewards();
       renderCaravan();
       renderRoster();
+      renderGrowth();
       renderWidgets();
+    }
+
+    /**
+     * The alliance's growth (owner request, 2026-11-20): Might and members per day from the
+     * Stats tab's daily snapshot (/api/state?scope=stats, public and kept an hour by Vercel),
+     * for everyone who sees the dashboard. Hidden until two days are collected.
+     */
+    let growthData = null;
+    async function renderGrowth() {
+      const el = $('dash-growth');
+      const tag = data.alliance.tag;
+      if (!growthData) {
+        try {
+          const res = await fetch('/api/state?scope=stats');
+          growthData = res.ok ? await res.json() : { days: [] };
+        } catch {
+          growthData = { days: [] };
+        }
+      }
+      const days = (growthData.days || []).slice(-30);
+      // The same key as the NAP list (letter case counts: RâvN and RÂVN are two alliances)
+      const key = Object.keys(growthData.alliances || {}).find((k) => k === tag);
+      const power = key ? growthData.alliances[key] : null;
+      const members = key ? (growthData.members || {})[key] || {} : {};
+      const chart = window.LineChart && power
+        ? window.LineChart.lineChart({
+            days,
+            lines: [{ color: data.alliance.color || '#6abf4b', values: days.map((d) => power[d] ?? null) }],
+            format: might,
+            height: 150,
+            label: t('stats.growth_title'),
+          })
+        : '';
+      el.hidden = !chart;
+      if (!chart) return;
+      const last = days[days.length - 1];
+      const weekAgo = days.filter((d) => d <= new Date(Date.parse(`${last}T12:00:00Z`) - 7 * 86400000).toISOString().slice(0, 10)).pop();
+      const change = (a, b) => (Number.isFinite(a) && Number.isFinite(b) ? a - b : null);
+      const week = change(power[last], weekAgo ? power[weekAgo] : null);
+      const memberLine = days.map((d) => members[d] ?? null).filter(Number.isFinite);
+      el.innerHTML = `
+        <h3 class="dash-card-title" id="dash-growth-title">${ic('line_chart')}${escapeHtml(t('stats.growth_title'))}</h3>
+        <p class="dash-growth-now"><strong>${escapeHtml(might(power[last]))}</strong> ${escapeHtml(t('stats.col_might'))}${Number.isFinite(week) ? ` · <span class="${week >= 0 ? 'name-ok' : 'name-warn'}">${week >= 0 ? '+' : '−'}${escapeHtml(might(Math.abs(week)))}</span> ${escapeHtml(t('stats.col_week'))}` : ''}${memberLine.length ? ` · ${escapeHtml(t('stats.growth_members', { n: memberLine[memberLine.length - 1] }))}` : ''}</p>
+        ${chart}
+        <p class="tracker-credit">${ic('users')}${escapeHtml(t('stats.growth_more'))} <a href="/${document.documentElement.lang || 'en'}/alliance.html#nap-stats">${escapeHtml(t('stats.growth_link'))}</a></p>`;
     }
 
     /** Chests as coloured icons with counts (names in the tooltip): gold, purple, blue. */
