@@ -23,8 +23,10 @@ strings: [steward]
     <button type="button" class="btn btn-primary" id="st-sign-in-btn">{{ "steward.sign_in" | t }}</button>
   </div>
 
-  <!-- NAP alliances renamed in the game (api/_alliance_ids.js) -->
+  <!-- NAP alliances renamed in the game (api/_alliance_ids.js), and ones the game didn't find
+       that a Steward can link to their new tag -->
   <div id="st-renamed" class="st-renamed" hidden></div>
+  <div id="st-unfound" class="st-renamed" hidden></div>
 
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
@@ -138,6 +140,49 @@ strings: [steward]
         )
         .join('');
     }
+
+    // A NAP alliance the game didn't find (no number to follow): a Steward types its tag now
+    function unfound(list, links) {
+      const box = $('st-unfound');
+      box.hidden = !list.length;
+      box.innerHTML = list
+        .map((a) => {
+          const colour = /^#[0-9a-f]{3,8}$/i.test(a.color || '') ? a.color : '';
+          const tag = `<strong>${colour ? `<span class="ally-text" style="--ally: ${colour}">[${esc(a.tag)}]</span>` : `[${esc(a.tag)}]`}${a.name ? ` ${esc(a.name)}` : ''}</strong>`;
+          return `<form class="st-link" data-tag="${esc(a.tag)}">
+            <p>${ic('warning', 'warn')}<span>${esc(t('steward.unfound', { tag: '\u0000' })).replace('\u0000', tag)}</span></p>
+            <label><span>${esc(t('steward.unfound_now'))}</span><input type="text" name="now" maxlength="24" autocomplete="off" placeholder="${esc(t('steward.unfound_placeholder'))}" required></label>
+            <button type="submit" class="btn btn-secondary">${esc(t('steward.unfound_link'))}</button>
+            <small class="st-small" data-result>${links ? esc(t('steward.unfound_left', { left: links.left, max: links.max })) : ''}</small>
+          </form>`;
+        })
+        .join('');
+    }
+    $('st-unfound').addEventListener('submit', async (e) => {
+      const form = e.target.closest('form.st-link');
+      if (!form) return;
+      e.preventDefault();
+      const out = form.querySelector('[data-result]');
+      const btn = form.querySelector('button');
+      btn.disabled = true;
+      out.textContent = t('steward.unfound_checking');
+      try {
+        const res = await ask(`steward=link&tag=${encodeURIComponent(form.dataset.tag)}&now=${encodeURIComponent(form.elements.now.value.trim())}`);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          // The error, and how many links are left today (none left: the button stays off)
+          const links = data.links;
+          out.textContent = `${data.error || res.statusText}${links ? ` · ${t('steward.unfound_left', { left: links.left, max: links.max })}` : ''}`;
+          btn.disabled = Boolean(links && !links.left);
+          return;
+        }
+        // Linked: the overview now shows it as renamed (with the rename notice)
+        await load();
+      } catch (err) {
+        out.textContent = err.message;
+        btn.disabled = false;
+      }
+    });
 
     function race(r) {
       if (!r) return ($('st-race').innerHTML = `<p class="sub-text">${esc(t('steward.race_none'))}</p>`);
@@ -292,6 +337,7 @@ strings: [steward]
       race(data.race);
       usage(data.usage);
       renamed(data.renamed || []);
+      unfound(data.unfound || [], data.links);
     }
     load().catch((err) => show(err.message, 'error'));
   })();

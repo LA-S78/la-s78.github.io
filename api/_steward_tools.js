@@ -25,7 +25,9 @@ import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_
 import { say } from './_messages.js';
 import { readNapPositions, refreshNapPositions } from './_stats.js';
 import { noteSkin } from './_skins.js';
-import { renamedAlliances } from './_alliance_ids.js';
+import { renamedAlliances, readAllianceIds, linkAlliance } from './_alliance_ids.js';
+import { readStatsSummary } from './_stats.js';
+import { fetchAlliance as fetchAllianceByTag } from './_tracker.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { getRoleColors } from './_role_colors.js';
 import { napTags } from './_ascension.js';
@@ -110,6 +112,36 @@ async function napPositions(req, res, { gist, session }) {
   }
 }
 
+/** Alliance links a day between all Stewards (each costs a tracker request, found or not). */
+export const LINKS_PER_DAY = 10;
+
+function linksLeft(gist) {
+  const d = gistJson(gist, FILE, {});
+  const used = d.links?.day === gameDay() ? Number(d.links.count) || 0 : 0;
+  return { used, left: Math.max(0, LINKS_PER_DAY - used), max: LINKS_PER_DAY };
+}
+
+/** Counts one alliance link attempt (it asked the tracker). */
+async function countLink(gist, session) {
+  try {
+    await updateGist(
+      (fresh) => {
+        const d = gistJson(fresh, FILE, {});
+        const today = gameDay();
+        const count = (d.links?.day === today ? Number(d.links.count) || 0 : 0) + 1;
+        d.links = { day: today, count };
+        return {
+          files: { [FILE]: d },
+          description: `Alliance link by ${session.name || 'a Steward'}`,
+        };
+      },
+      { gist },
+    );
+  } catch (err) {
+    console.warn('Alliance link not counted:', err.message);
+  }
+}
+
 function lookupsLeft(gist) {
   const d = gistJson(gist, FILE, {});
   const used = d.lookups?.day === gameDay() ? Number(d.lookups.count) || 0 : 0;
@@ -123,6 +155,71 @@ async function renamedWithColours(gist) {
   if (!list.length) return list;
   const colours = sanitizeAlliances(raw, await getRoleColors().catch(() => ({})));
   return list.map((r) => ({ ...r, color: colours[r.tag]?.color || null }));
+}
+
+/**
+ * NAP alliances the latest Top 4 race day or Stats snapshot couldn't find, with no game
+ * number saved for them and not already followed as renamed: [{ tag, name, color }].
+ */
+async function unfoundAlliances(gist) {
+  const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+  const tags = napTags(raw);
+  const missing = new Set();
+  const race = latestRace(gist);
+  const raceDays = Object.entries(race?.taken || {})
+    .filter(([, at]) => at)
+    .map(([d]) => d);
+  if (raceDays.length) {
+    for (const row of race.rows) {
+      if (tags.includes(row.tag) && raceDays.every((d) => !Number.isFinite(row.days?.[d])))
+        missing.add(row.tag);
+    }
+  }
+  const summary = await readStatsSummary().catch(() => null);
+  const lastDay = summary?.days?.[summary.days.length - 1];
+  if (lastDay) {
+    for (const t of tags) if (!Number.isFinite(summary.alliances?.[t]?.[lastDay])) missing.add(t);
+  }
+  if (!missing.size) return [];
+  const { ids, renamed } = await readAllianceIds();
+  const colours = sanitizeAlliances(raw, await getRoleColors().catch(() => ({})));
+  return [...missing]
+    .filter((t) => !ids[t]?.aid && !renamed[t])
+    .map((t) => ({ tag: t, name: raw[t]?.name || '', color: colours[t]?.color || null }));
+}
+
+/** ?steward=link&tag=HMDA&now=Arch: the alliance the site calls `tag` is `now` in the game. */
+async function linkRenamed(req, res, { gist, session }) {
+  const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+  const tag = String(req.query.tag || '').trim();
+  const now = String(req.query.now || '')
+    .trim()
+    .replace(/^\[|\]$/g, '')
+    .slice(0, 24);
+  if (!napTags(raw).includes(tag) || !now) {
+    return res.status(400).json({ error: say('api_dashboard.link_bad') });
+  }
+  if (now === tag) return res.status(400).json({ error: say('api_dashboard.link_same') });
+  // Another alliance the site already has: not this one under a new name
+  if (Object.keys(raw).includes(now)) {
+    return res.status(409).json({ error: say('api_dashboard.link_taken', { tag: `[${now}]` }) });
+  }
+  // At most LINKS_PER_DAY a day: a stuck page or repeated typos can't use up requests
+  const before = linksLeft(gist);
+  if (!before.left) {
+    return res.status(429).json({ error: say('api_dashboard.links_used'), links: before });
+  }
+  const found = await fetchAllianceByTag(now, { fresh: true, timeoutMs: 7000, use: 'steward' });
+  await countLink(gist, session);
+  const links = { ...before, used: before.used + 1, left: before.left - 1 };
+  if (!found) {
+    return res
+      .status(404)
+      .json({ error: say('api_dashboard.link_not_found', { tag: `[${now}]` }), links });
+  }
+  if (!found.aid) return res.status(502).json({ error: say('api_dashboard.player_unavailable') });
+  await linkAlliance(tag, found);
+  return res.status(200).json({ linked: { tag, now: found.tag, name: found.name }, links });
 }
 
 export async function stewardTools(req, res, { gist, session }) {
@@ -160,10 +257,14 @@ export async function stewardTools(req, res, { gist, session }) {
       // NAP alliances renamed in the game, still measured by their game number meanwhile,
       // with the alliance's colour (as on the rest of the site)
       renamed: await renamedWithColours(gist).catch(() => []),
+      // NAP alliances the game didn't find, with no number to follow: a Steward can link them
+      unfound: await unfoundAlliances(gist).catch(() => []),
+      links: linksLeft(gist),
     });
   }
 
   if (what === 'positions') return napPositions(req, res, { gist, session });
+  if (what === 'link') return linkRenamed(req, res, { gist, session });
 
   if (what === 'quota') {
     const quota = await fetchQuota();
