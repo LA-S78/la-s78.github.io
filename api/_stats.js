@@ -27,6 +27,7 @@
 // Research donations and help are not kept (owner: they stay off the public stats).
 
 import { get, put } from '@vercel/blob';
+import { createHmac } from 'node:crypto';
 import { gistJson, isTestDeployment } from './_gist.js';
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { fetchAlliance, foldName, knownMissing, trackerConfigured } from './_tracker.js';
@@ -135,11 +136,15 @@ async function lookupFiles(store) {
  *   { uid } → { player: { uid, name, tag, power, kills, level, avatar, frame, place, of,
  *             days, might: [millions…], kills: […], week, month, killsWeek } } or null
  */
-export async function lookupPlayer({ q, uid }, { store = blobStore } = {}) {
+export async function lookupPlayer({ q, uid, pid }, { store = blobStore, steward = false } = {}) {
   if (store === blobStore && !blobToken()) return { day: null, matches: [], player: null };
   const { index, series } = await lookupFiles(store);
   const all = index?.players || {};
   const day = index?.day || null;
+  // A public stand-in (publicId) picks a player; a real ID only for Stewards
+  if (pid !== undefined && uid === undefined) {
+    uid = Object.keys(all).find((id) => publicId(id) === String(pid)) ?? '';
+  } else if (uid !== undefined && !steward) uid = '';
   if (uid !== undefined) {
     const id = String(uid);
     const row = all[id];
@@ -165,7 +170,8 @@ export async function lookupPlayer({ q, uid }, { store = blobStore } = {}) {
     return {
       day,
       player: {
-        uid: id,
+        ...(steward ? { uid: id } : {}),
+        id: publicId(id),
         name,
         tag,
         power,
@@ -188,11 +194,67 @@ export async function lookupPlayer({ q, uid }, { store = blobStore } = {}) {
   const folded = foldName(typed);
   if (!typed || (folded.length < 2 && !/^\d+$/.test(typed))) return { day, matches: [] };
   const matches = Object.entries(all)
-    .filter(([id, [name]]) => id === typed || (folded && foldName(name).includes(folded)))
+    // An exact player ID finds them for Stewards only (it isn't shown to others)
+    .filter(
+      ([id, [name]]) => (steward && id === typed) || (folded && foldName(name).includes(folded)),
+    )
     .sort(([, a], [, b]) => (b[2] || 0) - (a[2] || 0))
     .slice(0, 8)
-    .map(([id, [name, tag, power, , , avatar]]) => ({ uid: id, name, tag, power, avatar }));
+    .map(([id, [name, tag, power, , , avatar]]) => ({
+      ...(steward ? { uid: id } : {}),
+      id: publicId(id),
+      name,
+      tag,
+      power,
+      avatar,
+    }));
   return { day, matches };
+}
+
+// ---------------------------------------------------------------------------------------
+// Players' IDs stay private (owner, 2026-11-20): the public Stats answers name players by a
+// stand-in instead, the same every day (so a chosen player stays chosen) but not the ID and
+// not reversible: a keyed hash with a server-only secret. Stewards get the real IDs.
+// ---------------------------------------------------------------------------------------
+const ID_SECRET = () =>
+  process.env.STATS_ID_SECRET || process.env.DISCORD_BOT_TOKEN || 'la-s78-stats';
+const idCache = new Map();
+export function publicId(uid) {
+  const key = String(uid);
+  let id = idCache.get(key);
+  if (!id) {
+    id = createHmac('sha256', ID_SECRET()).update(`stats-player:${key}`).digest('hex').slice(0, 14);
+    if (idCache.size > 5000) idCache.clear();
+    idCache.set(key, id);
+  }
+  return id;
+}
+
+/** The Top players view with every player ID swapped for its stand-in. */
+export function withPublicIds(top) {
+  if (!top?.players) return top;
+  const ids = new Set(Object.keys(top.players));
+  const swap = (v) => {
+    if (typeof v === 'string' || typeof v === 'number') {
+      return ids.has(String(v)) ? publicId(v) : v;
+    }
+    if (Array.isArray(v)) return v.map(swap);
+    if (v && typeof v === 'object') {
+      const out = {};
+      for (const [k, x] of Object.entries(v)) {
+        if (k === 'uid') continue;
+        out[k] = swap(x);
+      }
+      return out;
+    }
+    return v;
+  };
+  const players = {};
+  for (const [uid, p] of Object.entries(top.players)) {
+    const { uid: _drop, ...rest } = p || {};
+    players[publicId(uid)] = rest;
+  }
+  return { ...top, players, lists: swap(top.lists), achievements: swap(top.achievements) };
 }
 
 /** The growth summary, as the Stats tab reads it (null when nothing is saved yet). */

@@ -5,9 +5,8 @@
 // don't have it), so skins are collected a few at a time and remembered:
 //   - every night before the tracker's day ends (00:00 UTC), with half of the day's spare
 //     requests (always keeping 100 spare; at least 50 a night): checkSkins, from the 5-minute
-//     check in api/calendar.js. Who goes first: players never checked; then players whose
-//     Sanctuary level or position changed since their check (the nightly roster shows it
-//     free); then everyone else, the longest unchecked first. So everyone is checked in turn.
+//     check in api/calendar.js. Straight through the list: players never checked first,
+//     then the longest since their last check, so everyone is checked in turn.
 //   - every Steward player lookup (it has the skin anyway): noteSkin.
 // One Blob file, stats/skins.json: { players: { uid: [skin, checkedAt, level, x, y] },
 // night: { day, budget, used } }. skin is our /game-art/hq/skin_N.png copy, or null for the
@@ -45,18 +44,12 @@ export function skinsDue(now = Date.now()) {
  * `known`: the skins file's players.
  */
 export function skinQueue(players, known) {
-  const rank = (p) => {
-    const k = known[p.uid];
-    if (!k) return [0, 0];
-    const [, checkedAt, level, x, y] = k;
-    const changed =
-      (Number.isFinite(p.level) && p.level !== level) ||
-      (Number.isFinite(p.x) && (p.x !== x || p.y !== y));
-    return [changed ? 1 : 2, Date.parse(checkedAt) || 0];
-  };
+  // Straight through the list (owner, 2026-11-20): never checked first, then the longest
+  // since their last check. Level and position changes aren't used to jump the queue.
+  const checkedAt = (p) => (known[p.uid] ? Date.parse(known[p.uid][1]) || 0 : -1);
   return players
-    .map((p) => ({ p, r: rank(p) }))
-    .sort((a, b) => a.r[0] - b.r[0] || a.r[1] - b.r[1])
+    .map((p) => ({ p, at: checkedAt(p) }))
+    .sort((a, b) => a.at - b.at)
     .map((e) => e.p);
 }
 

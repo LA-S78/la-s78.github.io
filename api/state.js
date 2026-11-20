@@ -9,7 +9,17 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 
 import { BASELINE_SCHEDULES } from './_cycle_helper.js';
 import { fetchAlliance, knownMissing } from './_tracker.js';
-import { lookupPlayer, readStatsSummary, readTopPlayers } from './_stats.js';
+import { lookupPlayer, readStatsSummary, readTopPlayers, withPublicIds } from './_stats.js';
+import { verifySessionToken } from './_tokens.js';
+import { isSteward } from './_stewards.js';
+
+/** Is this request from a signed-in Steward? (their pass in the Authorization header) */
+function stewardSession(req) {
+  const pass = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '');
+  if (!pass || !process.env.DISCORD_BOT_TOKEN) return false;
+  const session = verifySessionToken(pass, process.env.DISCORD_BOT_TOKEN);
+  return Boolean(session && isSteward(session.uid));
+}
 
 /**
  * Ensures cycle_state always returns valid numbers and never has an empty active_schedule.
@@ -143,21 +153,30 @@ export default async function handler(req, res) {
         });
       }
 
-      // The Stats tab's Player lookup (api/_stats.js lookupPlayer): ?q= to search, ?uid= for
+      // The Stats tab's Player lookup (api/_stats.js lookupPlayer): ?q= to search, ?id= (a
+      // player's stand-in; ?uid= for Stewards) for
       // one player. NAP players from the daily snapshot only: never asks the tracker.
       case 'stats-player': {
-        const answer = await lookupPlayer(
-          req.query.uid !== undefined
-            ? { uid: String(req.query.uid).slice(0, 20) }
-            : { q: String(req.query.q || '').slice(0, 40) },
+        // Players' real IDs only for a signed-in Steward (the Steward tools page asks with
+        // steward=1), never kept in a shared cache; everyone else gets stand-ins
+        const steward = Boolean(req.query.steward) && stewardSession(req);
+        const ask =
+          req.query.id !== undefined
+            ? { pid: String(req.query.id).slice(0, 20) }
+            : req.query.uid !== undefined
+              ? { uid: String(req.query.uid).slice(0, 20) }
+              : { q: String(req.query.q || '').slice(0, 40) };
+        const answer = await lookupPlayer(ask, { steward });
+        res.setHeader(
+          'Cache-Control',
+          steward ? 'private, no-store' : 'public, s-maxage=1800, stale-while-revalidate=86400',
         );
-        res.setHeader('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=86400');
         return res.status(200).json(answer);
       }
 
       // The Stats tab's Top players view (api/_stats.js topPlayers), worked out daily
       case 'stats-players': {
-        const top = await readTopPlayers();
+        const top = withPublicIds(await readTopPlayers());
         res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
         return res
           .status(200)

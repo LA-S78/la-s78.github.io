@@ -199,7 +199,11 @@ strings: [steward]
       if (/^\d+$/.test(q) || q.length < 2) return ($('st-matches').innerHTML = '');
       timer = setTimeout(async () => {
         try {
-          const res = await fetch(`/api/state?scope=stats-player&q=${encodeURIComponent(q)}`);
+          // As a Steward: real player IDs come back (others get stand-ins)
+          const res = await fetch(`/api/state?scope=stats-player&steward=1&q=${encodeURIComponent(q)}`, {
+            headers: { Authorization: `Bearer ${pass()}` },
+            cache: 'no-store',
+          });
           const found = res.ok ? (await res.json()).matches || [] : [];
           $('st-matches').innerHTML = found.length
             ? found.map((m) => `<button type="button" class="st-match" data-uid="${esc(m.uid)}">${esc(m.name)} <small>[${esc(m.tag)}] · ${esc(might(m.power))}</small></button>`).join('')
