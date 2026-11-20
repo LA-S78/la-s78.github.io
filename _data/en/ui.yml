@@ -37,7 +37,13 @@ guides:
   campaign_shop: "Campaign Shop"
   premium_shop: "Premium & Gem Packs"
   t10: "T10 Calculator"
+  frozen_era: "Frozen Era"
   scramble: "Royal Scramble"
+  elixir: "Elixir Scramble"
+  undead_siege: "Undead Siege"
+  hunt_battle: "Hunt Battle"
+  kill_event: "Kill Event"
+  gear_upgrade: "Gear Upgrade"
 
 #page title and subtitles
 pages:
@@ -64,6 +70,15 @@ pages:
   calendar:
     title: "Event Calendar"
     subtitle: "Alliance & Server Events"
+  map:
+    title: "Kingdom Map"
+    subtitle: "Kingdom Map"
+  rewards:
+    title: "Capitol Rewards"
+    subtitle: "Capitol Rewards"
+  "404":
+    title: "Page Not Found"
+    subtitle: "Area Overrun"
   
   #guide pages
   guide_panes:
@@ -141,6 +156,7 @@ nav_anchors:
   nap_ranks: "NAP Ranks"
   nap_territory: "NAP Territory"
   blacklist: "Blacklist"
+  nap_stats: "Stats"
   markdown_usage: "Usage"
   markdown_example: "Example"
   guide_submissions: "Submissions"
@@ -174,17 +190,30 @@ nav_anchors:
   sanctuary_shop_extra: "Extra Bonuses"
 
 #search bar text
+# A guide card for a guide that isn't written yet (guides index)
+status:
+  coming_soon: "Coming soon"
+
 search:
   guides: "Search guides..."
-  home: "Search directories, posts..."
+  home: "Search guides and rules..."
   placeholder: "Search..."
+  # Results from every guide and the Rules and Alliance pages, under the search box
+  results_label: "Search results"
+  no_results: "Nothing found for “{query}”."
+  unavailable: "Search isn't available right now. Try again when you're online."
 
 #PWA update text
+# The picture viewer: a guide picture opened full size (js/main.js)
+image_viewer:
+  close: "Close"
+  download: "Download"
+
 pwa:
   toast_msg: "New intel acquired."
   update_btn: "Update"
   updating: "Decrypting..."
-  updated_msg: "✅ App updated to the latest version."
+  updated_msg: "App updated to the latest version."
 
 #header sign-in pill (js/identity-pill.js)
 identity:
@@ -198,6 +227,7 @@ identity:
   force_update: "Update App"
   force_updating: "Updating…"
   dashboard: "Alliance Dashboard"
+  steward_tools: "Steward Tools"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"

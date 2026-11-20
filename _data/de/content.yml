@@ -4,8 +4,8 @@ rules_page:
     text: "Die folgenden Richtlinien sind obligatorisch, um Fairplay und Serverstabilität zu gewährleisten."
   rotation:
     title: "Kapitol-Rotation"
-    text: "Um den Top-3-Status zu erreichen, muss der Anwärter die Macht eines aktuellen Inhabers an den Duelltagen 3-5 der Kingdom War-Woche 1 übertreffen."
-    note: "*Hinweis: Macht-Snapshots werden 10 Minuten vor dem täglichen Reset gemacht.*"
+    text: "Die NAP-Ränge werden nach Macht bestimmt: Jede NAP-Allianz, Akademien eingeschlossen, wird nach der Summe ihrer Macht an den Allianz-Duell-Tagen 3, 4 und 5 der Königreichskrieg-Woche 1 gereiht. Die vier höchsten erhalten ab dem nächsten Zyklus die Top-4-Plätze. Die neuen Ränge gelten, sobald ein Steward bestätigt."
+    note: "*Hinweis: Die Macht wird an jedem der drei Tage automatisch 10 Minuten vor dem Reset (23:50 GT) gemessen.*"
   rewards:
     title: "Kapitol-Belohnungen"
 alliance_page:
@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Wichtige Infos"
-    t10: "T10-Rechner"
-    survival: "Überlebenskampf"
-    server_rules: "Serverregeln"
-    capitol_rotation: "Kapitol-Rotation"
-    capitol_rewards: "Kapitol-Belohnungen"
-    nap_alliances: "NAP-Allianzen"
-    blacklist: "Blacklist"
+    title: "Angeheftete Seiten"
   directories:
     title: "Verzeichnisse"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "Allianz & Diplomatie"
       sub: "Ränge, Diplomatie-Status & Gebietsabkommen"
+    calendar:
+      title: "Ereigniskalender"
+      sub: "Allianz- & Server-Events und die Kapitol-Rotation"
 writers_page:
   usage:
     title: "Markdown-Nutzung"

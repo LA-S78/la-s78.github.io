@@ -1,0 +1,353 @@
+---
+layout: portal
+footer: true
+title: Steward Tools
+title_key: "steward.page_title"
+permalink: /steward.html
+lang: "en"
+strings: [steward]
+---
+
+<!-- The Stewards' own page (owner request, 2026-11-20): what's waiting for them, and a live
+     player lookup. Linked from the account card for Stewards. Everything is checked on the
+     server (api/_steward_tools.js through /api/dashboard?steward=…): the page alone shows
+     nothing to anyone else. -->
+<div class="content-pane portal-pane-lg" id="steward-app">
+  <div class="portal-header">
+    <h2 class="portal-title">{% include ui-icon.html name="shield" %}{{ "steward.page_title" | t }}</h2>
+    <div class="sub-text">{{ "steward.intro" | t }}</div>
+  </div>
+
+  <div id="st-message" class="status-banner">{{ "steward.loading" | t }}</div>
+  <div class="st-sign-in" id="st-sign-in" hidden>
+    <button type="button" class="btn btn-primary" id="st-sign-in-btn">{{ "steward.sign_in" | t }}</button>
+  </div>
+
+  <!-- The test site only: how fresh its copy of the live data is (/devupdate) -->
+  <p id="st-test-copy" class="st-test-copy" hidden></p>
+
+  <!-- NAP alliances renamed in the game (api/_alliance_ids.js), and ones the game didn't find
+       that a Steward can link to their new tag -->
+  <div id="st-renamed" class="st-renamed" hidden></div>
+  <div id="st-unfound" class="st-renamed" hidden></div>
+
+  <div class="st-grid" id="st-tools" hidden>
+    <!-- Player lookup: live from the game, any player -->
+    <section class="st-card st-lookup">
+      <h3>{% include ui-icon.html name="user" %}{{ "steward.lookup_title" | t }}</h3>
+      <p class="sub-text">{{ "steward.lookup_help" | t }}</p>
+      <form id="st-lookup-form" class="st-lookup-form" autocomplete="off">
+        <input type="search" id="st-q" placeholder="{{ "steward.lookup_placeholder" | t }}" aria-label="{{ "steward.lookup_placeholder" | t }}">
+        <button type="submit" class="btn btn-primary" id="st-go">{{ "steward.lookup_go" | t }}</button>
+      </form>
+      <p class="st-small" id="st-left"></p>
+      <div id="st-matches" class="st-matches"></div>
+      <div id="st-player"></div>
+    </section>
+
+    <!-- Waiting for a Steward: alliance pictures sent for review -->
+    <section class="st-card">
+      <h3>{% include ui-icon.html name="image" %}{{ "steward.pending_title" | t }}</h3>
+      <div id="st-pending"></div>
+    </section>
+
+    <!-- The Top 4 race this cycle -->
+    <section class="st-card">
+      <h3>{% include ui-icon.html name="crown" %}{{ "steward.race_title" | t }}</h3>
+      <div id="st-race"></div>
+    </section>
+
+    <!-- The tracker's requests used today -->
+    <section class="st-card">
+      <h3>{% include ui-icon.html name="bar_chart" %}{{ "steward.quota_title" | t }}</h3>
+      <p class="sub-text">{{ "steward.quota_help" | t }}</p>
+      <div id="st-quota"></div>
+      <div id="st-usage"></div>
+      <button type="button" class="btn btn-secondary" id="st-quota-btn">{{ "steward.quota_check" | t }}</button>
+    </section>
+  </div>
+</div>
+
+<script type="module" src="/js/player-portrait.js"></script>
+<script>
+  (function () {
+    const $ = (s) => document.getElementById(s);
+    const esc = (v) => window.escapeHtml(v);
+    const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
+    const message = $('st-message');
+    const show = (text, kind = '') => {
+      message.hidden = !text;
+      message.className = `status-banner${kind ? ` ${kind}` : ''}`;
+      message.innerHTML = (kind === 'error' ? ic('cross', 'bad') : '') + esc(text || '');
+    };
+    const pass = () => {
+      try {
+        return localStorage.getItem('auth-session') || '';
+      } catch {
+        return '';
+      }
+    };
+    const ask = (query) =>
+      fetch(`/api/dashboard?${query}`, { headers: { Authorization: `Bearer ${pass()}` }, cache: 'no-store' });
+    const signIn = (text) => {
+      show(text, 'warning');
+      $('st-sign-in').hidden = false;
+    };
+    $('st-sign-in-btn').addEventListener('click', () => window.triggerDiscordLogin?.());
+
+    const lang = document.documentElement.lang || undefined;
+    const when = (v) =>
+      v ? new Date(v).toLocaleString(lang, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
+    const day = (v) => (v ? new Date(v).toLocaleDateString(lang, { day: 'numeric', month: 'short', year: 'numeric' }) : '—');
+    function might(n) {
+      if (!Number.isFinite(n)) return '—';
+      return n >= 1e9 ? `${(n / 1e9).toFixed(2)}B` : `${(n / 1e6).toFixed(1)}M`;
+    }
+    const count = (n) => (Number.isFinite(n) ? n.toLocaleString(lang) : '—');
+
+    let lookups = null;
+    const showLeft = () => {
+      $('st-left').textContent = lookups ? t('steward.lookups_left', { left: lookups.left, max: lookups.max }) : '';
+      $('st-go').disabled = Boolean(lookups && !lookups.left);
+    };
+
+    function pending(list) {
+      $('st-pending').innerHTML = list.length
+        ? `<ul class="st-list">${list
+            .map(
+              (p) => `<li><a href="/review-image.html?id=${encodeURIComponent(p.id)}">[${esc(p.tag)}] ${esc(p.label)}</a><small>${esc(t('steward.sent_by', { name: p.by, when: when(p.at) }))}</small></li>`,
+            )
+            .join('')}</ul>`
+        : `<p class="sub-text">${ic('check', 'ok')}${esc(t('steward.pending_none'))}</p>`;
+    }
+
+    // An alliance whose tag changed in the game: rename it in the Alliance planner
+    function renamed(list) {
+      $('st-renamed').hidden = !list.length;
+      $('st-renamed').innerHTML = list
+        .map(
+          (r) => {
+            // Both tags in the alliance's colour (it's the same alliance), as elsewhere on the site;
+            // the game's new name for it in bold so it stands out from the sentence
+            const colour = /^#[0-9a-f]{3,8}$/i.test(r.color || '') ? r.color : '';
+            const tag = (text) =>
+              colour ? `<span class="ally-text" style="--ally: ${colour}">${text}</span>` : text;
+            const now = `<strong>${tag(`[${esc(r.now)}]`)}${r.name ? ` ${esc(r.name)}` : ''}</strong>`;
+            const old = `<strong>${tag(`[${esc(r.tag)}]`)}</strong>`;
+            const text = esc(t('steward.renamed', { old: '\u0001', now: '\u0000' }))
+              .replace('\u0000', now)
+              .split('\u0001')
+              .join(old);
+            return `<p>${ic('warning', 'warn')}<span>${text} <a href="/${lang || 'en'}/alliance.html#nap-ranks">${esc(t('steward.renamed_fix'))}</a></span></p>`;
+          },
+        )
+        .join('');
+    }
+
+    // A NAP alliance the game didn't find (no number to follow): a Steward types its tag now
+    function unfound(list, links) {
+      const box = $('st-unfound');
+      box.hidden = !list.length;
+      box.innerHTML = list
+        .map((a) => {
+          const colour = /^#[0-9a-f]{3,8}$/i.test(a.color || '') ? a.color : '';
+          const tag = `<strong>${colour ? `<span class="ally-text" style="--ally: ${colour}">[${esc(a.tag)}]</span>` : `[${esc(a.tag)}]`}${a.name ? ` ${esc(a.name)}` : ''}</strong>`;
+          return `<form class="st-link" data-tag="${esc(a.tag)}">
+            <p>${ic('warning', 'warn')}<span>${esc(t('steward.unfound', { tag: '\u0000' })).replace('\u0000', tag)}</span></p>
+            <label><span>${esc(t('steward.unfound_now'))}</span><input type="text" name="now" maxlength="24" autocomplete="off" placeholder="${esc(t('steward.unfound_placeholder'))}" required></label>
+            <button type="submit" class="btn btn-secondary">${esc(t('steward.unfound_link'))}</button>
+            <small class="st-small" data-result>${links ? esc(t('steward.unfound_left', { left: links.left, max: links.max })) : ''}</small>
+          </form>`;
+        })
+        .join('');
+    }
+    $('st-unfound').addEventListener('submit', async (e) => {
+      const form = e.target.closest('form.st-link');
+      if (!form) return;
+      e.preventDefault();
+      const out = form.querySelector('[data-result]');
+      const btn = form.querySelector('button');
+      btn.disabled = true;
+      out.textContent = t('steward.unfound_checking');
+      try {
+        const res = await ask(`steward=link&tag=${encodeURIComponent(form.dataset.tag)}&now=${encodeURIComponent(form.elements.now.value.trim())}`);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          // The error, and how many links are left today (none left: the button stays off)
+          const links = data.links;
+          out.textContent = `${data.error || res.statusText}${links ? ` · ${t('steward.unfound_left', { left: links.left, max: links.max })}` : ''}`;
+          btn.disabled = Boolean(links && !links.left);
+          return;
+        }
+        // Linked: the overview now shows it as renamed (with the rename notice)
+        await load();
+      } catch (err) {
+        out.textContent = err.message;
+        btn.disabled = false;
+      }
+    });
+
+    function race(r) {
+      if (!r) return ($('st-race').innerHTML = `<p class="sub-text">${esc(t('steward.race_none'))}</p>`);
+      const taken = [3, 4, 5].filter((d) => r.taken[d]).length;
+      $('st-race').innerHTML = `
+        <p class="sub-text">${esc(t(r.finished ? 'steward.race_finished' : 'steward.race_progress', { n: taken }))}</p>
+        <ol class="st-race">${r.top.map((row) => `<li class="${row.top4 ? 'is-top4' : ''}">[${esc(row.tag)}] <small>${esc(might(row.total))}</small></li>`).join('')}</ol>
+        ${r.missing.length ? `<p class="st-small">${ic('warning', 'warn')}${esc(t('steward.race_missing', { tags: r.missing.map((x) => `[${x}]`).join(', ') }))}</p>` : ''}
+        <p class="st-small"><a href="/${lang || 'en'}/rules.html">${esc(t('steward.race_more'))}</a></p>`;
+    }
+
+    function player(p) {
+      // Their picture in their frame (js/player-portrait.js)
+      const pic = window.PlayerPortrait
+        ? window.PlayerPortrait.portrait(p, 'card')
+        : `<span class="st-face st-initial">${esc((p.name || '?').charAt(0).toUpperCase())}</span>`;
+      const row = (label, value) => `<div><small>${esc(label)}</small><strong>${value}</strong></div>`;
+      const history = (p.history || [])
+        .map((h) => `<li><strong>${esc(h.name)}</strong> ${h.tag ? `[${esc(h.tag)}]` : esc(t('steward.no_alliance'))}<small>${esc(t('steward.seen_from', { when: day(h.at) }))}</small></li>`)
+        .join('');
+      $('st-player').innerHTML = `
+        <article class="st-player">
+          <header>${pic}<span><strong>${esc(p.name)}</strong><small>${p.tag ? `[${esc(p.tag)}] ${esc(p.allianceName)}` : esc(t('steward.no_alliance'))} · ID ${esc(p.uid)}${p.server && p.server !== 78 ? ` · ${esc(t('steward.server', { n: p.server }))}` : ''}</small></span></header>
+          <p class="st-small">${p.online ? `${ic('dot', 'ok')}${esc(t('steward.online'))}` : esc(t('steward.last_seen', { when: when(p.lastSeen) }))}${p.shielded ? ` · ${ic('shield')}${esc(t('steward.shielded'))}` : ''}</p>
+          <div class="st-stats">
+            ${row(t('steward.might'), esc(might(p.power)))}
+            ${row(t('steward.kills'), esc(count(p.kills)))}
+            ${row(t('steward.sanctuary'), esc(p.level ?? '—'))}
+            ${row(t('steward.vip'), esc(p.vip ?? '—'))}
+            ${row(t('steward.position'), Number.isFinite(p.x) ? esc(`${p.x}, ${p.y}`) : '—')}
+            ${row(t('steward.language'), esc(p.language || '—'))}
+          </div>
+          <p class="st-small">${esc(t('steward.ranks', { might: p.ranks?.might ?? '—', kills: p.ranks?.kills ?? '—', heroes: p.ranks?.heroes ?? '—' }))}</p>
+          <h4>${esc(t('steward.history_title'))}</h4>
+          ${history ? `<ul class="st-list st-history">${history}</ul>` : `<p class="sub-text">${esc(t('steward.history_none'))}</p>`}
+          <p class="st-small">${esc(t('steward.first_seen', { when: day(p.firstSeen) }))}</p>
+        </article>`;
+    }
+
+    const quotaText = (q) =>
+      `<p class="st-quota"><strong>${esc(count(q.used))}</strong> / ${esc(count(q.limit))} <small>${esc(t('steward.quota_used'))}</small></p>`;
+
+    // Today's usage without asking the tracker: its latest figure, and what made the requests
+    const USES = ['automation', 'alliance', 'public', 'steward', 'other'];
+    function untilReset() {
+      const now = new Date();
+      const next = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
+      const mins = Math.max(1, Math.round((next - now) / 60000));
+      return mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins}m`;
+    }
+    function usage(u) {
+      if (!u) return;
+      const last = u.last;
+      $('st-quota').innerHTML = last
+        ? `${quotaText(last)}<p class="st-small">${esc(t('steward.quota_as_of', { when: when(last.at) }))} · ${esc(t('steward.quota_resets', { time: untilReset() }))}</p>`
+        : `<p class="sub-text">${esc(t('steward.quota_none'))}</p>`;
+      const rows = USES.filter((k) => u.by?.[k]).map((k) => [k, u.by[k]]);
+      const noted = rows.reduce((sum, [, n]) => sum + n, 0);
+      const gap = last ? last.used - noted : 0;
+      if (gap > 0) rows.push(['unrecorded', gap]);
+      const top = Math.max(1, ...rows.map(([, n]) => n));
+      $('st-usage').innerHTML = `<h4>${esc(t('steward.usage_title'))}</h4>${
+        rows.length
+          ? `<ul class="st-usage">${rows
+              .map(
+                ([k, n]) => `<li class="st-use-${k}"><span><strong>${esc(t(`steward.usage_${k}`))}</strong><small>${esc(t(`steward.usage_${k}_help`))}</small></span><b>${esc(count(n))}</b><i style="width:${Math.round((n / top) * 100)}%"></i></li>`,
+              )
+              .join('')}</ul>`
+          : `<p class="st-small">${esc(t('steward.usage_none'))}</p>`
+      }`;
+    }
+
+    // Names search NAP players in the Stats tab's daily data (free); an ID asks the game
+    let timer = null;
+    $('st-q').addEventListener('input', () => {
+      clearTimeout(timer);
+      const q = $('st-q').value.trim();
+      if (/^\d+$/.test(q) || q.length < 2) return ($('st-matches').innerHTML = '');
+      timer = setTimeout(async () => {
+        try {
+          // As a Steward: real player IDs come back (others get stand-ins)
+          const res = await fetch(`/api/state?scope=stats-player&steward=1&q=${encodeURIComponent(q)}`, {
+            headers: { Authorization: `Bearer ${pass()}` },
+            cache: 'no-store',
+          });
+          const found = res.ok ? (await res.json()).matches || [] : [];
+          $('st-matches').innerHTML = found.length
+            ? found.map((m) => `<button type="button" class="st-match" data-uid="${esc(m.uid)}">${esc(m.name)} <small>[${esc(m.tag)}] · ${esc(might(m.power))}</small></button>`).join('')
+            : `<p class="st-small">${esc(t('steward.name_none'))}</p>`;
+        } catch {
+          $('st-matches').innerHTML = '';
+        }
+      }, 250);
+    });
+    $('st-matches').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-uid]');
+      if (!b) return;
+      $('st-q').value = b.dataset.uid;
+      $('st-matches').innerHTML = '';
+      lookup();
+    });
+
+    async function lookup() {
+      const uid = $('st-q').value.trim();
+      if (!/^\d{5,15}$/.test(uid)) {
+        $('st-player').innerHTML = `<p class="st-small">${ic('warning', 'warn')}${esc(t('steward.lookup_id_needed'))}</p>`;
+        return;
+      }
+      $('st-go').disabled = true;
+      $('st-player').innerHTML = `<p class="sub-text">${esc(t('steward.looking'))}</p>`;
+      try {
+        const res = await ask(`steward=player&uid=${encodeURIComponent(uid)}`);
+        const data = await res.json().catch(() => ({}));
+        if (data.lookups) lookups = data.lookups;
+        if (!res.ok) throw new Error(data.error || res.statusText);
+        player(data.player);
+        usage(data.usage);
+      } catch (err) {
+        $('st-player').innerHTML = `<p class="st-small">${ic('cross', 'bad')}${esc(err.message)}</p>`;
+      }
+      showLeft();
+    }
+    $('st-lookup-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      lookup();
+    });
+
+    $('st-quota-btn').addEventListener('click', async () => {
+      $('st-quota-btn').disabled = true;
+      try {
+        const res = await ask('steward=quota');
+        const data = await res.json().catch(() => ({}));
+        if (data.usage) usage(data.usage);
+        if (!data.quota) $('st-quota').insertAdjacentHTML('beforeend', `<p class="st-small">${esc(t('steward.quota_failed'))}</p>`);
+      } finally {
+        $('st-quota-btn').disabled = false;
+      }
+    });
+
+    async function load() {
+      if (!pass()) return signIn(t('steward.sign_in_needed'));
+      const res = await ask('steward=overview');
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) return signIn(t('steward.sign_in_needed'));
+      if (res.status === 403) return show(t('steward.stewards_only'), 'error');
+      if (!res.ok) return show(data.error || res.statusText, 'error');
+      show('');
+      $('st-tools').hidden = false;
+      lookups = data.lookups;
+      showLeft();
+      pending(data.pending || []);
+      race(data.race);
+      usage(data.usage);
+      if (data.testCopy !== null && data.testCopy !== undefined) {
+        $('st-test-copy').hidden = false;
+        $('st-test-copy').textContent = data.testCopy
+          ? t('steward.test_copy', { when: when(data.testCopy) })
+          : t('steward.test_copy_none');
+      }
+            renamed(data.renamed || []);
+      unfound(data.unfound || [], data.links);
+    }
+    load().catch((err) => show(err.message, 'error'));
+  })();
+</script>

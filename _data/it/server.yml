@@ -2,35 +2,51 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
+  stewards_only: Solo gli Steward possono usare gli strumenti Steward.
+  lookups_used: Hai terminato le ricerche dei giocatori per oggi. Si azzerano al ripristino giornaliero (00:00 GT).
+  player_not_found: Nessun giocatore ha quell'ID.
+  player_unavailable: Impossibile contattare il gioco. Riprova tra qualche minuto.
+  positions_leaders_only: Solo gli R4 e gli R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
+  positions_unavailable: Impossibile caricare le posizioni dei membri al momento. Riprova tra qualche minuto.
+  links_used: Hai terminato i collegamenti all'alleanza per oggi. Si azzerano al ripristino giornaliero (00:00 GT).
+  link_bad: Scegli un'alleanza e digita il tag che usa nel gioco adesso.
+  link_same: Questo è il tag che il sito sta già usando.
+  link_taken: "{tag} è già un'altra alleanza sul sito."
+  link_not_found: Il gioco non ha alcuna alleanza con tag {tag} (le maiuscole contano).
+  positions_used: Hai terminato gli aggiornamenti della mappa per oggi. Si azzerano al ripristino giornaliero (00:00 GT).
+  positions_wait: La mappa è stata aggiornata poco fa. Riprova tra {minutes} min.
+  refresh_limit: Nessun aggiornamento della lista rimasto per oggi. Si azzerano al ripristino giornaliero (00:00 GT).
+  refresh_wait: La lista è stata aggiornata poco fa. Riprova tra {n} min.
+  refresh_failed: Impossibile contattare il gioco. Riprova tra qualche minuto.
   signed_out: Accedi con Discord (in alto a destra) per vedere la dashboard della tua alleanza.
   load_failed: 'Impossibile caricare la dashboard: {reason}'
-  no_alliance: Non siamo riusciti a determinare a quale alleanza appartieni. Il sito la individua dal tuo ruolo alleanza nel server Discord NAP, o da un [TAG] all'inizio del tuo soprannome nel server. Correggi questo su Discord, poi usa Aggiorna Accesso nella tua scheda account (in alto a destra).
-  leaders_only: Solo gli R4 e R5 della tua alleanza possono modificare la dashboard.
+  no_alliance: Non siamo riusciti a determinare la tua alleanza. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP, o da un [TAG] all'inizio del tuo nickname sul server. Correggilo su Discord, poi usa Aggiorna Accesso nella tua scheda account (in alto a destra).
+  leaders_only: Solo gli R4 e gli R5 della tua alleanza possono modificare la dashboard.
   chart_removed: Quel grafico è stato rimosso.
   chart_already_removed: Quel grafico era già stato rimosso.
-  not_linked: Questo grafico non è collegato a un foglio o un documento Google.
+  not_linked: Questo grafico non è collegato a un foglio o documento Google.
   unknown_change: Modifica sconosciuta.
   save_failed: 'Impossibile salvare: {reason}'
-  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate su Discord.
-  rewards_closed: Le ricompense sono chiuse fino a {when}.
-  no_rank: "[{tag}] non ha un rango nella classifica."
+  r5_only_nominate: Solo il tuo R5 può aprire la pagina delle candidature qui. Digita /nominate su Discord.
+  rewards_closed: Le ricompense sono chiuse fino alle {when}.
+  no_rank: "[{tag}] non ha un rango nelle classifiche."
   choose_type: Scegli un tipo di grafico o tabella.
   title_needed: Dai un titolo al grafico o alla tabella.
-  too_many_columns: Massimo {max} colonne (questa tabella ne ha {count}).
-  too_many_rows: Massimo {max} righe (questa tabella ne ha {count}).
+  too_many_columns: Al massimo {max} colonne (questa tabella ne ha {count}).
+  too_many_rows: Al massimo {max} righe (questa tabella ne ha {count}).
   column_name: Colonna {n}
   paste_first: Incolla prima una tabella (una riga di intestazione, poi i dati).
   no_data_rows: La tabella non ha righe di dati sotto l'intestazione.
-  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere visualizzato.
+  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere mostrato.
   needs_target: 'Un grafico di progresso ha bisogno di un obiettivo: un numero, o una colonna di obiettivi.'
-  too_many_widgets: Massimo {max} grafici e tabelle per alleanza.
-  sheet_unusable: 'I dati del foglio non possono essere utilizzati: {reason}'
+  too_many_widgets: Al massimo {max} grafici e tabelle per alleanza.
+  sheet_unusable: 'I dati del foglio non possono essere usati: {reason}'
   too_big: Ciò renderebbe questa dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
-  player_name_needed: Inserisci un nome giocatore.
-  time_format: Gli orari sono in Game Time come 18:00 (oppure lasciali vuoti).
-  start_time_needed: Inserisci anche l'orario di inizio (oppure lasciali entrambi vuoti).
-  rotor_full: Massimo {max} giocatori nel rotore.
-  already_in_rotor: "{name} è già nel rotore."
+  player_name_needed: Inserisci il nome di un giocatore.
+  time_format: Gli orari seguono il Game Time (es. 18:00) (o lasciali vuoti).
+  start_time_needed: Inserisci anche l'orario di inizio (o lasciali entrambi vuoti).
+  rotor_full: Al massimo {max} giocatori nel rotatore.
+  already_in_rotor: "{name} è già nel rotatore."
   player_removed: Quel giocatore è stato rimosso.
 api_sheets:
   full_link: Incolla il link completo (che inizia con https://docs.google.com/…).
@@ -51,13 +67,16 @@ api_sheets:
   no_table: Quel documento non contiene tabelle.
 api_nominate:
   link_invalid: Questo link non è valido o è scaduto.
-  token_invalid: Il token non è valido o è scaduto. Esegui /nominate di nuovo.
+  token_invalid: Il token non è valido o è scaduto. Esegui di nuovo /nominate.
   signed_out: Accedi con Discord (in alto a destra) per spuntare i forzieri.
   invalid_chest: Forziere non valido.
-  no_period: Nessun periodo di ricompense è attivo al momento.
+  no_period: Nessun periodo di ricompensa è attualmente aperto.
   king_only: Solo l'alleanza del Re (R4/R5) e gli Steward possono spuntare i forzieri.
   king_only_tag: Solo l'alleanza del Re [{king}] (R4/R5) e gli Steward possono spuntare i forzieri.
-  not_listed: "{name} non è più nell'elenco di [{alliance}]. Aggiorna la pagina."
+  not_listed: "{name} non è più nella lista di [{alliance}]. Aggiorna la pagina."
+  id_not_found: Nessun membro di [{alliance}] ha l'ID giocatore {id}. Controlla il numero o digita il nome.
+  ids_unavailable: Gli ID giocatore non possono essere cercati al momento ({id}). Digita invece il nome.
+  listed_twice: "{name} è presente due volte nella lista."
   save_failed: 'Impossibile salvare: {reason}'
 api_register:
   guild_id_format: Formato ID server Discord non valido.
@@ -81,6 +100,28 @@ api_register:
   officer_channel_missing: Il canale ticket ufficiali ({id}) non è in "{server}" (o il bot non può vederlo). Copia di nuovo l'ID.
   alert_role_missing: Il ruolo avvisi predefinito ({id}) non è un ruolo in "{server}". Copia di nuovo l'ID, oppure lascialo vuoto per @everyone.
   role_not_found: Nessun ruolo in "{server}" corrisponde a "{role}" al momento; funzionerà una volta che ne verrà creato uno.
+api_alliance_images:
+  frame_png: Una cornice avatar deve essere un PNG con sfondo trasparente (un JPEG coprirebbe le immagini dei tuoi membri).
+  not_set_up: Le immagini dell'alleanza non sono ancora configurate sul server.
+  failed: Qualcosa è andato storto con l'immagine dell'alleanza. Riprova.
+  bad_image: Quel file non è un'immagine utilizzabile dal sito. Usa il modulo di caricamento.
+  too_big: L'immagine è troppo grande (oltre {kb} KB). Usa il modulo di caricamento, che la ridimensionerà.
+  wrong_size: L'immagine deve essere esattamente di {width}×{height} pixel. Usa il modulo di caricamento.
+  has_metadata: L'immagine contiene ancora dati nascosti (come il luogo in cui è stata scattata). Usa il modulo di caricamento per rimuoverli.
+  leaders_only: Solo i leader R4 e R5 possono inviare immagini dell'alleanza.
+  own_alliance_only: Puoi inviare immagini solo per la tua alleanza.
+  unknown_alliance: Quell'alleanza non è nel NAP.
+  daily_limit: 'Limite giornaliero raggiunto: {max} immagini per alleanza ogni 24 ore. Puoi inviarne un''altra dopo le {when}.'
+  post_failed: L'immagine non può essere inviata agli Steward su Discord. Riprova più tardi.
+  sent: Inviata agli Steward per la revisione. Apparirà una volta approvata.
+  stewards_only: Solo gli Steward possono revisionare le immagini dell'alleanza.
+  not_found: Immagine non trovata. Potrebbe essere scaduta.
+  already_decided: L'immagine è già stata revisionata (o sostituita da una più recente).
+  approved: 'Approvata: l''immagine è ora live.'
+  rejected: 'Respinta: l''immagine è stata eliminata.'
+  remove_not_allowed: Solo l'R5 dell'alleanza o uno Steward può rimuovere le sue immagini.
+  nothing_to_remove: Non c'è alcuna immagine da rimuovere.
+  removed: Immagine rimossa.
 api_proposals:
   login_required: Per favore accedi di nuovo con Discord per inviare proposte.
   leaders_only: Solo i leader R4 e R5 possono inviare proposte.
@@ -106,7 +147,8 @@ api_events:
   deleted: 'Operazione eliminata: {title}'
   updated: Operazione "{title}" aggiornata.
 reminders:
-  title: "⏰ Inizio a breve: {title}"
+  title: "⏰ Inizia presto: {title}"
+  title_now: "🔔 Inizia ora: {title}"
   starts: Inizia
 bot_common:
   off_week: Settimana di pausa
@@ -233,6 +275,11 @@ bot_rewards:
     • Override cancellati: {overrides}
     • Buyout in tempo di guerra annullati: {buyouts} (mantenuti nella cronologia)
     • L'elenco di ogni alleanza è stato riordinato per le casse corrette.
+bot_ascension:
+  stewards_only: "⛔ Solo gli Steward del Regno possono applicare o mantenere l'ordine dei primi 4."
+  no_race: I risultati di questa gara non sono più memorizzati.
+  already: "{name} ha già deciso questa gara."
+  cannot_apply: 'I primi 4 non possono essere applicati: {reason}. Usa /rank.'
 bot_admin:
   rank_none: Nessuna alleanza registrata nello stato attuale.
   rank_title: "🛡️ Classifiche NAP del Server"
@@ -241,17 +288,18 @@ bot_admin:
   rank_denied: "⛔ **Accesso Negato:** Solo i Kingdom Steward designati possono aggiornare le classifiche delle alleanze."
   rank_missing: "⚠️ Argomenti richiesti mancanti: tag e rank."
   rank_set_title: "👑 Classifica NAP Aggiornata"
-  rank_set_text: 'L''alleanza `[{tag}]` è stata assegnata al **Rank #{rank}** *(precedentemente: {previous})*.'
+  rank_set_text: 'L''alleanza `[{tag}]` è stata assegnata al **Rango #{rank}** *(precedentemente: {previous})*.'
   rank_unranked: Senza rango
   rank_updated_by: Aggiornato da {name}
-  rank_view: Visualizza Classifiche
+  rank_view: Visualizza classifiche
   rank_set_failed: "⚠️ Impossibile aggiornare il rango: {reason}"
+  rank_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}): digita il tag esattamente, con le maiuscole."
   dev_done: |-
-    ✅ **Dati di test aggiornati.** Copiati {count} file dai dati live al Gist di test usato da dev.la-s78.app: {files}.
+    ✅ **Dati di test aggiornati.** Copiati {count} file dai dati live nel Gist di test usato da dev.la-s78.app: {files}.
     I dati live sono stati solo letti, non modificati.
   dev_failed: "⚠️ **Dati di test non aggiornati:** {reason}"
   dev_denied: "⛔ **Accesso Negato:** Solo gli Steward possono aggiornare i dati di test."
-  test_proposal: "🧪 Questa è una proposta di test dal sito di test. Usa dati di test, quindi non può essere approvata né modificare nulla di live."
+  test_proposal: "🧪 Questa è una proposta di test dal sito di test. Utilizza dati di test, quindi non può essere approvata né modificare nulla di live."
   approved_not_updated: "✅ Approvato e salvato, ma questo messaggio non ha potuto essere aggiornato ({reason})."
 bot_register:
   nap_only: "⚠️ Questo comando può essere eseguito solo nel server NAP ufficiale."

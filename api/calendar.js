@@ -1,16 +1,16 @@
 // api/calendar.js
-import {
-  describeRotation,
-  getCycleState,
-  getScheduleSlot,
-  DEFAULT_CALENDAR_CONFIG,
-} from './_calendar_helper.js';
+import { describeRotation, getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
-import { sanitizeAlliances } from './_alliances.js';
+import { findTag, sameScope, sameTag, sanitizeAlliances } from './_alliances.js';
+import { liveImages } from './_alliance_images.js';
 import { resolveCohortSchedule } from './_cycle_helper.js';
 import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 import { checkReminders } from './_reminders.js';
+import { checkAscension, latestRace } from './_ascension.js';
+import { checkStatsSnapshot } from './_stats.js';
+import { flushTrackerUsage } from './_tracker.js';
+import { checkSkins } from './_skins.js';
 import { timingSafeEqual } from 'node:crypto';
 
 /** True when the request carries the reminder schedule's secret (compared in constant time). */
@@ -20,8 +20,12 @@ function fromReminderSchedule(req) {
   const clean = (v) => String(v || '').replace(/\s+/g, '');
   const expected = clean(process.env.REMINDER_SECRET);
   const given = clean(req.headers?.['x-reminder-secret']);
-  if (!expected || given.length !== expected.length) return false;
-  return timingSafeEqual(Buffer.from(given), Buffer.from(expected));
+  if (!expected) return false;
+  // Compared as bytes: a header with accented or emoji characters has more bytes than
+  // characters, and timingSafeEqual throws on different lengths (maintainer review)
+  const a = Buffer.from(given);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
 }
 
 export default async function handler(req, res) {
@@ -34,7 +38,40 @@ export default async function handler(req, res) {
     if (!fromReminderSchedule(req)) return res.status(401).json({ error: 'Not allowed.' });
     if (!isGistConfigured()) return res.status(503).json({ error: 'No Gist on this deployment.' });
     try {
-      const report = await checkReminders({ dryRun: req.body?.dryRun === true });
+      const dryRun = req.body?.dryRun === true;
+      const report = await checkReminders({ dryRun });
+      // The Top 4 race's snapshots (api/_ascension.js), on the same 5-minute check; a
+      // failure here never hides the reminders' report
+      try {
+        report.ascension = await checkAscension({
+          gist: await readGist({ timeoutMs: 4000 }),
+          dryRun,
+        });
+      } catch (err) {
+        console.error('Top 4 race check failed:', err);
+        report.ascension = { error: err.message };
+      }
+      // The Stats tab's daily snapshot (api/_stats.js), just before each reset; after the
+      // race, so on race days it reuses the race's answers
+      try {
+        report.stats = await checkStatsSnapshot({
+          gist: await readGist({ timeoutMs: 4000 }),
+          dryRun,
+        });
+      } catch (err) {
+        console.error('Stats snapshot failed:', err);
+        report.stats = { error: err.message };
+      }
+      // Sanctuary skins for the map's game view (api/_skins.js): before the tracker's day
+      // ends, with half of its spare requests
+      try {
+        report.skins = await checkSkins({ dryRun });
+      } catch (err) {
+        console.error('Skin check failed:', err);
+        report.skins = { error: err.message };
+      }
+      // The requests those made, saved for the Steward tools page before this server stops
+      if (!dryRun) await flushTrackerUsage().catch((err) => console.warn(err.message));
       return res.status(200).json(report);
     } catch (err) {
       console.error('Reminder check failed:', err);
@@ -49,10 +86,11 @@ export default async function handler(req, res) {
   let calConfig = DEFAULT_CALENDAR_CONFIG;
   let mapState = { alliances: {} };
   let rewardsState = {};
+  let gist = null;
 
   try {
     if (isGistConfigured()) {
-      const gist = await readGist({ timeoutMs: 3000 });
+      gist = await readGist({ timeoutMs: 3000 });
       calConfig = { ...calConfig, ...gistJson(gist, 'calendar-state.json') };
       mapState = gistJson(gist, 'map-state.json', mapState);
       rewardsState = gistJson(gist, 'rewards-data.json', rewardsState);
@@ -110,6 +148,11 @@ export default async function handler(req, res) {
   // Same colour the rest of the site shows for this alliance (/api/state's resolution).
   const coloured = sanitizeAlliances(alliances, await getRoleColors());
   const capitolHolderColor = holderTag ? coloured[holderTag]?.color || null : null;
+  // The holder's approved banner (api/_alliance_images.js), behind the hero card (owner,
+  // 2026-11-17): the alliance the card names, before Friday's capture as after it.
+  const holderKey = holderTag ? findTag(Object.keys(alliances), holderTag) : null;
+  const capitolHolderImage =
+    gist && holderKey ? liveImages(gist, alliances)[holderKey]?.wide || null : null;
   // The cycle's four weeks for the Capitol Rotation chart on the Rules page.
   currentStatus.rotation = describeRotation(
     currentStatus,
@@ -122,91 +165,78 @@ export default async function handler(req, res) {
   // 1. Generate System Milestones (Capitol Captures & War Battle Days)
   const cycleMilestones = [];
 
-  const nextWeekNum = (currentStatus.currentWeekNumber % 4) + 1;
-  const nextWeekConfig = calConfig.capitol_rotation.find((w) => w.week === nextWeekNum);
+  // Every week the calendar can show (owner decision, 2026-11-15: a week view with last and
+  // next week, and the whole cycle as a grid): from the week before this one (or the cycle's
+  // start, if earlier) to the week after this one (or the cycle's end, if later). Each week
+  // gets its Friday Capitol capture (with the alliance in this cycle's rotation; another
+  // cycle's seat is decided at its reset, so none is named), its Saturday Kingdom War battle
+  // (KvK weeks), and its reward period (opens Friday ~20:00 GT, closes Wednesday 00:00 GT).
+  const DAY_MS = 86400 * 1000;
+  const WEEK_MS = 7 * DAY_MS;
+  const anchorMs = new Date(calConfig.cycle_anchor).getTime();
+  const cycleMs = (Number(calConfig.cycle_length_days) || 28) * DAY_MS;
+  const cycleOf = (ms) => Math.floor((ms - anchorMs) / cycleMs);
+  const todayStartMs = anchorMs + Math.floor((now.getTime() - anchorMs) / DAY_MS) * DAY_MS;
+  const thisWeekStartMs = todayStartMs - (currentStatus.dayOfWeekNumber - 1) * DAY_MS;
+  const thisCycleStartMs = todayStartMs - (currentStatus.cycleDay - 1) * DAY_MS;
+  const rangeStartMs = Math.min(thisWeekStartMs - WEEK_MS, thisCycleStartMs);
+  const rangeEndMs = Math.max(thisWeekStartMs + 2 * WEEK_MS, thisCycleStartMs + cycleMs);
+  const seatOf = Object.fromEntries((currentStatus.rotation || []).map((r) => [r.week, r]));
 
-  const nextSlotKey = getScheduleSlot(nextWeekNum, calConfig).slotKey;
-  const nextScheduledTag = activeSchedule?.[nextSlotKey]?.trim();
-
-  let nextHolderTag = `Rank #${nextWeekConfig?.capitol_rank}`;
-  let nextHolderRankLabel = `Rank #${nextWeekConfig?.capitol_rank}`;
-  // The same as numbers, for the page to word in its own language (js/calendar.js).
-  let nextHolderRank = nextWeekConfig?.capitol_rank ?? null;
-  let nextHolderOverride = false;
-
-  if (nextScheduledTag) {
-    nextHolderTag = `[${nextScheduledTag}]`;
-    const nextActualRank = alliances[nextScheduledTag]?.rank;
-    if (nextActualRank) {
-      nextHolderOverride = isOverride(nextSlotKey, nextScheduledTag);
-      nextHolderRank = parseInt(nextActualRank, 10);
-      nextHolderRankLabel = nextHolderOverride
-        ? `Rank #${nextActualRank} • Override Schedule`
-        : `Rank #${nextActualRank}`;
-    }
-  } else {
-    const nextHolderEntry = Object.entries(alliances).find(
-      ([_, data]) => parseInt(data.rank, 10) === nextWeekConfig?.capitol_rank,
-    );
-    if (nextHolderEntry) nextHolderTag = `[${nextHolderEntry[0]}]`;
-  }
-
-  // The upcoming Capitol capture. The week's alliance captures it on Friday: until then
-  // that is this week's alliance, afterwards next week's.
-  const upcomingIsNextWeek = currentStatus.capitolCaptured;
-  const captureTs = currentStatus.captureTimestamp + (upcomingIsNextWeek ? 7 * 86400 : 0);
-  const capturerTag = upcomingIsNextWeek ? nextHolderTag : capitolHolderTag;
-  let capturerRankLabel = nextHolderRankLabel;
-  let capturerRank = nextHolderRank;
-  let capturerOverride = nextHolderOverride;
-  if (!upcomingIsNextWeek) {
-    capturerRankLabel = currentStatus.isOverrideWeek
-      ? `Rank #${currentStatus.holderActualRank} • Override Schedule`
-      : `Rank #${currentStatus.holderActualRank || currentStatus.capitolRank}`;
-    capturerRank = currentStatus.isOverrideWeek
-      ? currentStatus.holderActualRank
-      : currentStatus.holderActualRank || currentStatus.capitolRank;
-    capturerOverride = Boolean(currentStatus.isOverrideWeek);
-  }
-
-  cycleMilestones.push({
-    id: `sys-capture-w${upcomingIsNextWeek ? nextWeekNum : currentStatus.currentWeekNumber}`,
-    scope: 'global',
-    title: `👑 Capitol Capture — ${capturerTag}`,
-    description: `${capturerTag} (${capturerRankLabel}) captures the Capitol on Friday.`,
-    // The site's own milestones carry a key and values, so each page can word them in its
-    // language (js/calendar.js); title/description stay in English for anything else.
-    i18n: {
-      key: 'capture',
-      vars: { who: capturerTag, rank: capturerRank, override: capturerOverride },
-    },
-    start: new Date(captureTs * 1000).toISOString(),
-    end: new Date((captureTs + 86400) * 1000).toISOString(),
-    type: 'rotation',
-    allDay: true,
-  });
-
-  // Kingdom War battle: Saturday from 12:00 GT, usually over by about 14:00 GT
-  if (currentStatus.isKW) {
-    const battleStart = currentStatus.kwBattleTimestamp * 1000 + 12 * 3600000;
+  for (let weekStart = rangeStartMs; weekStart < rangeEndMs; weekStart += WEEK_MS) {
+    const week = getCycleState(new Date(weekStart + 3600000), calConfig);
+    const seat =
+      cycleOf(weekStart) === cycleOf(now.getTime()) ? seatOf[week.currentWeekNumber] : null;
+    const who = seat ? (seat.tag ? `[${seat.tag}]` : `Rank #${seat.seat}`) : null;
+    const rankLabel = seat?.rank
+      ? seat.override
+        ? `Rank #${seat.rank} • Override Schedule`
+        : `Rank #${seat.rank}`
+      : null;
     cycleMilestones.push({
-      id: `sys-kw-battle-w${currentStatus.currentWeekNumber}`,
+      id: `sys-capture-${new Date(week.captureTimestamp * 1000).toISOString()}`,
       scope: 'global',
-      title: '⚔️ Kingdom War Battle',
-      description:
-        "Starts 12:00 GT, usually over by about 14:00 GT. A win opens the King of Battle Reward chests on top of the King's Commendation.",
-      i18n: { key: 'kw_battle', vars: {} },
-      start: new Date(battleStart).toISOString(),
-      end: new Date(battleStart + 2 * 3600000).toISOString(),
-      type: 'war',
-      allDay: false,
+      title: who ? `👑 Capitol Capture — ${who}` : '👑 Capitol Capture',
+      description: who
+        ? `${who}${rankLabel ? ` (${rankLabel})` : ''} captures the Capitol on Friday.`
+        : "This cycle's seats are decided at its reset.",
+      // The site's own milestones carry a key and values, so each page can word them in its
+      // language (js/calendar.js); title/description stay in English for anything else.
+      i18n: {
+        key: 'capture',
+        vars: { who, rank: seat?.rank ?? null, override: Boolean(seat?.override) },
+      },
+      start: new Date(week.captureTimestamp * 1000).toISOString(),
+      end: new Date((week.captureTimestamp + 86400) * 1000).toISOString(),
+      type: 'rotation',
+      event_type: 'capitol_capture',
+      allDay: true,
     });
+
+    // Kingdom War battle: Saturday from 12:00 GT, usually over by about 14:00 GT
+    if (week.isKW) {
+      const battleStart = week.kwBattleTimestamp * 1000 + 12 * 3600000;
+      cycleMilestones.push({
+        id: `sys-kw-battle-${new Date(battleStart).toISOString()}`,
+        scope: 'global',
+        title: '⚔️ Kingdom War Battle',
+        description:
+          "Starts 12:00 GT, usually over by about 14:00 GT. A win opens the King of Battle Reward chests on top of the King's Commendation.",
+        i18n: { key: 'kw_battle', vars: {} },
+        start: new Date(battleStart).toISOString(),
+        end: new Date(battleStart + 2 * 3600000).toISOString(),
+        type: 'war',
+        event_type: 'kvk_battle',
+        allDay: false,
+      });
+    }
   }
 
   // Reward periods: open Friday ~20:00 GT (after the capitol event), close Wednesday 00:00 GT.
-  // The current or last period, and the next one.
-  for (const opensAt of [rewardPeriod.opensAt, rewardPeriod.nextOpensAt]) {
-    const p = getRewardPeriod(opensAt, calConfig);
+  // Every period that overlaps the weeks above.
+  for (let k = -6; k <= 6; k++) {
+    const p = getRewardPeriod(rewardPeriod.opensAt + k * WEEK_MS, calConfig);
+    if (p.closesAt < rangeStartMs || p.opensAt >= rangeEndMs) continue;
     cycleMilestones.push({
       id: `sys-rewards-open-${p.id}`,
       scope: 'global',
@@ -215,6 +245,7 @@ export default async function handler(req, res) {
         ? "King's Commendation opens after the capitol event. King of Battle Reward follows if Saturday's Kingdom War is won; the King hands out after the result."
         : "King's Commendation opens after the capitol event (no Kingdom War this week).",
       i18n: { key: 'rewards_open', vars: { week: p.week, kw: p.kwWeek } },
+      event_type: 'rewards_open',
       start: new Date(p.opensAt).toISOString(),
       end: new Date(p.opensAt + 3600000).toISOString(),
       type: 'rotation',
@@ -226,6 +257,7 @@ export default async function handler(req, res) {
       title: `⌛ Rewards Close — ${p.weekName}`,
       description: 'Chests expire at Wednesday 00:00 GT: hand out everything before then.',
       i18n: { key: 'rewards_close', vars: { week: p.week } },
+      event_type: 'rewards_close',
       start: new Date(p.closesAt - 3600000).toISOString(),
       end: new Date(p.closesAt).toISOString(),
       type: 'rotation',
@@ -234,18 +266,20 @@ export default async function handler(req, res) {
   }
 
   // 2. Strict Privacy Filtering for Custom Events
-  const requestedAlliance = req.query?.alliance?.trim()?.toUpperCase() || null;
+  // Letter case counts (RâvN and RÂVN are two alliances); accents don't (sameScope)
+  const requestedAlliance = req.query?.alliance?.trim() || null;
   const customEvents = calConfig.custom_events || [];
 
   const sanitizedCustomEvents = customEvents.filter((evt) => {
-    const scope = (evt.scope || 'global').trim().toUpperCase();
-    if (scope === 'GLOBAL') return true;
-    return requestedAlliance && scope === requestedAlliance;
+    if (sameScope(evt.scope, 'global')) return true;
+    return Boolean(requestedAlliance) && sameScope(evt.scope, requestedAlliance);
   });
 
   // 3. Project Recurring Events Forward Across the 28-Day Cycle Horizon
-  const windowStartMs = now.getTime() - 24 * 3600 * 1000;
-  const windowEndMs = now.getTime() + 28 * 86400 * 1000;
+  // The same weeks as the milestones above (last week and the whole cycle, for the week and
+  // cycle views), and at least four weeks ahead
+  const windowStartMs = rangeStartMs;
+  const windowEndMs = Math.max(rangeEndMs, now.getTime() + 28 * 86400 * 1000);
 
   const projectedEvents = [];
 
@@ -304,7 +338,7 @@ export default async function handler(req, res) {
   const reminderChannels = {
     alliance: requestedAlliance
       ? Object.entries(alliances).some(
-          ([tag, a]) => tag.toUpperCase() === requestedAlliance && a?.alert_channel_id,
+          ([tag, a]) => sameTag(tag, requestedAlliance) && a?.alert_channel_id,
         )
       : null,
     server: Boolean(process.env.NAP_ALERT_CHANNEL_ID),
@@ -314,6 +348,9 @@ export default async function handler(req, res) {
     status: currentStatus,
     capitolHolder: capitolHolderTag,
     capitolHolderColor,
+    capitolHolderImage,
+    // The Top 4 race's latest results (api/_ascension.js): the Rules page shows them
+    ascension: gist ? latestRace(gist) : null,
     events: allEvents,
     reminderChannels,
   });

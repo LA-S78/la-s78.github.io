@@ -86,7 +86,7 @@ permalink: /architecture.html
   </pre>
 
   <h3>The live site</h3>
-  <p>What happens when people use the site and the Discord bot. Every page and the bot use the same functions and the same stored data.</p>
+  <p>What happens when people use the site and the Discord bot. Every page and the bot use the same functions and the same stored data. Calendar reminders: every 10 minutes cron-job.org asks the site (with a shared secret) to post a Discord reminder for each event starting within the hour; the dev site posts them only to the test channel.</p>
   <pre class="mermaid">
     flowchart TD
     U((" Players and leaders "))
@@ -103,6 +103,7 @@ permalink: /architecture.html
     end
 
     DC((" Discord<br>(login, roles,<br>channels, bot) "))
+    CJ((" cron-job.org<br>(every 10 minutes) "))
 
     %% ===========================================================
     %% 2. Vercel serverless functions (/api)
@@ -111,7 +112,8 @@ permalink: /architecture.html
         direction LR
         A1[" Public data<br>(state, calendar,<br>colors, map-image) "]
         A2[" Sign-in<br>(verify: Discord login,<br>signed pass) "]
-        A3[" Leader actions<br>(dashboard, nominate, proposal,<br>manage-event, register-alliance) "]
+        A3[" Leader actions<br>(dashboard, nominate, proposal,<br>register-alliance, manage-event:<br>R4/R5 and Stewards signed in,<br>or a /calendar link) "]
+        A6[" Calendar reminders<br>(inside calendar: events<br>starting within the hour) "]
         A4[" Discord bot<br>(interactions: slash<br>commands and buttons) "]
         A5[" Shared helpers<br>(translated messages, safe saves,<br>reward periods, sheet reader) "]
     end
@@ -129,7 +131,8 @@ permalink: /architecture.html
     U -- slash commands --> DC
     Browser -- "requests /api (with the page's language)" --> API
     DC -- commands and buttons --> API
-    API -- "login check, proposals, alerts" --> DC
+    CJ -- "reminder check (shared secret)" --> API
+    API -- "login check, proposals, alerts, reminders" --> DC
     API -- "reads and safe saves" --> X1
     API -- reads shared sheets --> X3
 
@@ -141,9 +144,9 @@ permalink: /architecture.html
 
     class P1,P2,P3 asset;
     class P4,A5 script;
-    class A1,A2,A3,A4 jekyll;
+    class A1,A2,A3,A4,A6 jekyll;
     class X1 source;
-    class U,DC,X3 outside;
+    class U,DC,CJ,X3 outside;
   </pre>
 </div>
 

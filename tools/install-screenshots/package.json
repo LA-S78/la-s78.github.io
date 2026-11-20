@@ -1,0 +1,12 @@
+{
+  "name": "install-screenshots",
+  "private": true,
+  "type": "module",
+  "description": "Photographs the live site for the browser's Install app screen (site.webmanifest screenshots).",
+  "scripts": {
+    "shoot": "node shoot.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

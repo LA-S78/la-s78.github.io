@@ -4,8 +4,8 @@ rules_page:
     text: "Las siguientes pautas son obligatorias para garantizar el juego limpio y la estabilidad del servidor."
   rotation:
     title: "Rotación del Capitolio"
-    text: "Para ascender al estatus de Top 3, el contendiente debe superar el Poder de un titular actual durante los días 3-5 del Duelo de Alianzas en la Semana 1 de la Guerra de Reinos."
-    note: "*Nota: Las capturas de poder se toman 10 minutos antes del reinicio diario.*"
+    text: "Los rangos del NAP se deciden por Poder: cada alianza del NAP, academias incluidas, se clasifica por el total de su Poder durante los días 3, 4 y 5 del Duelo de Alianzas de la Semana 1 de la Guerra de Reinos. Las cuatro más altas ocupan los puestos del Top 4 desde el siguiente ciclo. Los nuevos rangos se aplican cuando un Steward lo confirma."
+    note: "*Nota: el Poder se mide automáticamente 10 minutos antes del reinicio (23:50 GT) en cada uno de los tres días.*"
   rewards:
     title: "Recompensas del Capitolio"
 alliance_page:
@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Información Crítica"
-    t10: "Calculadora T10"
-    survival: "Batalla de Supervivencia"
-    server_rules: "Reglas del Servidor"
-    capitol_rotation: "Rotación del Capitolio"
-    capitol_rewards: "Recompensas del Capitolio"
-    nap_alliances: "Alianzas NAP"
-    blacklist: "Lista Negra"
+    title: "Páginas fijadas"
   directories:
     title: "Directorios"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "Alianza y Diplomacia"
       sub: "Rangos, estado diplomático y acuerdos territoriales"
+    calendar:
+      title: "Calendario de eventos"
+      sub: "Eventos de alianza y del servidor, y la rotación del Capitolio"
 writers_page:
   usage:
     title: "Uso de Markdown"

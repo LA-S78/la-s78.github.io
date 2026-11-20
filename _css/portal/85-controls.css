@@ -87,3 +87,33 @@
   white-space: nowrap;
 }
 
+
+/* The site's dropdown (js/site-select.js) in the portal tools: the same size and spacing the
+   plain dropdowns had there (their layout rules now apply to the dropdown's box) */
+.form-group .site-select-btn,
+.ops-form-group .site-select-btn {
+  min-height: var(--control-large);
+  padding: 8px 12px;
+}
+
+.site-select:has(> #mgmt-scope-switch) {
+  margin-top: 8px;
+  max-width: 260px;
+}
+
+.dash-switcher .site-select {
+  min-width: 170px;
+}
+
+.dash-switcher .site-select-btn {
+  min-height: var(--control-standard);
+  padding: 4px 8px;
+  font-size: 0.78rem;
+}
+
+.dash-editor .site-select-btn {
+  min-height: var(--control-standard);
+  padding: 6px 8px;
+  background: var(--overlay-5);
+  font-size: 0.82rem;
+}

@@ -21,6 +21,14 @@
 
   let isNewNavigation = false;
   let isRestoreVisit = false;
+  // The section a link to another page names (/en/rules.html#capitol-rewards): links inside
+  // the page frame lose the "#…" on the way (Turbo keeps the fetched address), so it's noted
+  // on the click and used when the page arrives.
+  let pendingSection = '';
+  // Whether the page now showing was reached with Back / Forward (a Turbo "restore" visit,
+  // or a full page load from the browser's history): pages use it to put the reader back
+  // where they were (the calendar's day, js/calendar.js)
+  window.__cameBack = performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
 
   // --- AUTHENTICATION CONFIGURATION ---
   const AUTH_CONFIG = {
@@ -119,7 +127,7 @@
       console.error('Auth Error:', error);
       const errorBanner = document.getElementById('gate-error');
       if (errorBanner) {
-        errorBanner.textContent = '❌ Decryption Failed. Check your connection or alliance status.';
+        errorBanner.textContent = 'Decryption Failed. Check your connection or alliance status.';
         errorBanner.style.display = 'block';
       }
       if (loginBtn) loginBtn.textContent = 'Log In via Discord';
@@ -185,6 +193,7 @@
     highlightAllianceRow('nap-alliance-table');
     highlightAllianceRow('nap-ranks-table');
     window.renderIdentityPill?.();
+    window.MyAlliance?.refresh();
   }
 
   function highlightAllianceRow(tableId) {
@@ -231,6 +240,10 @@
     localStorage.removeItem('auth-steward');
     localStorage.removeItem('auth-officer');
     localStorage.removeItem('auth-alliance-source');
+    // Saved copies of private alliance dashboards (portal/dashboard.html): not left behind
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith('la_dash_'))
+      .forEach((k) => localStorage.removeItem(k));
     window.location.reload();
   };
 
@@ -246,6 +259,44 @@
       { once: true },
     );
   };
+
+  // The picture viewer (owner request, 2026-11-17): tap a picture in a guide or the rules
+  // (img.blueprint-img in a content pane) to see it full size, with Close and Download. One
+  // shared window for every picture, so a guide needs no window of its own per picture.
+  // Esc, Close or a tap outside the picture closes it.
+  document.addEventListener('click', (e) => {
+    const img = e.target.closest('.content-pane img.blueprint-img');
+    // Pictures with a window of their own (Sanctuary guides: onclick) keep it
+    if (!img || e.defaultPrevented || img.hasAttribute('onclick')) return;
+    let viewer = document.getElementById('image-viewer');
+    if (!viewer) {
+      viewer = document.createElement('dialog');
+      viewer.id = 'image-viewer';
+      viewer.className = 'image-viewer';
+      viewer.innerHTML = `<img alt="">
+        <div class="dialog-controls">
+          <a class="dialog-btn" data-viewer="download"></a>
+          <button type="button" data-viewer="close"></button>
+        </div>`;
+      viewer.addEventListener('click', (ev) => {
+        if (ev.target === viewer || ev.target.closest('[data-viewer="close"]')) {
+          window.closeDialogGracefully(viewer);
+        }
+      });
+      document.body.appendChild(viewer);
+    }
+    const text = window.imageViewerText || {};
+    const big = viewer.querySelector('img');
+    big.src = img.currentSrc || img.src;
+    big.alt = img.alt;
+    viewer.setAttribute('aria-label', img.alt || '');
+    const link = viewer.querySelector('[data-viewer="download"]');
+    link.href = big.src;
+    link.download = `LastAsylum-${(big.src.split('/').pop() || 'image').split('?')[0]}`;
+    link.textContent = text.download || 'Download';
+    viewer.querySelector('[data-viewer="close"]').textContent = text.close || 'Close';
+    if (!viewer.open) viewer.showModal();
+  });
 
   function applyTheme(themeName) {
     document.documentElement.setAttribute('data-theme', themeName);
@@ -376,9 +427,42 @@
     pick();
   }
 
+  /** Scrolls the page so a section starts just under the section tabs (or the header). */
+  function scrollToSection(targetElement, behavior = 'smooth') {
+    const mainContainer = document.querySelector('main');
+    if (!mainContainer) return;
+    const anchorNav = document.querySelector('.anchor-nav');
+    const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
+    mainContainer.scrollTo({
+      top:
+        mainContainer.scrollTop + targetElement.getBoundingClientRect().top - offsetBoundary - 15,
+      behavior,
+    });
+  }
+
+  // A section still hidden while its page loads its data (the calendar shows its content
+  // once loaded): scrolled to as soon as it's shown, for up to 8 seconds; the page stays at
+  // the top meanwhile. Scrolling by hand first cancels it.
+  function scrollWhenShown(section) {
+    const main = document.querySelector('main');
+    if (section.getClientRects().length) return scrollToSection(section, 'auto');
+    if (main) main.scrollTop = 0;
+    const until = Date.now() + 8000;
+    let cancelled = false;
+    const cancel = () => (cancelled = true);
+    ['wheel', 'touchmove', 'keydown'].forEach((t) =>
+      window.addEventListener(t, cancel, { once: true, passive: true }),
+    );
+    const check = () => {
+      if (cancelled || !section.isConnected || Date.now() > until) return;
+      if (section.getClientRects().length) return scrollToSection(section, 'auto');
+      requestAnimationFrame(check);
+    };
+    requestAnimationFrame(check);
+  }
+
   function initAnchorScrolling() {
     const navLinks = document.querySelectorAll('.anchor-link');
-    const mainContainer = document.querySelector('main');
     navLinks.forEach((link) => {
       if (!firstTime(link, 'anchor-scroll')) return;
       link.addEventListener('click', function (e) {
@@ -389,30 +473,174 @@
         if (targetElement) {
           e.preventDefault();
           document.dispatchEvent(new CustomEvent('anchor-nav:go', { detail: targetId }));
-          const anchorNav = document.querySelector('.anchor-nav');
-          const offsetBoundary = anchorNav ? anchorNav.getBoundingClientRect().bottom : 90;
-          mainContainer.scrollTo({
-            top:
-              mainContainer.scrollTop +
-              targetElement.getBoundingClientRect().top -
-              offsetBoundary -
-              15,
-            behavior: 'smooth',
-          });
+          scrollToSection(targetElement);
         }
       });
     });
   }
 
+  // ---------- Site search ----------
+  // The search box on Home and the guides index: it filters that page's cards as you type
+  // and, from two letters, lists matching sections from every guide and the Rules and
+  // Alliance pages. The list comes from /<lang>/search-index.json (built by
+  // _scripts/search_index.rb from the finished pages; the service worker keeps the reader's
+  // language for offline use). Every word typed must appear; letter case and accents don't
+  // matter. A section whose name or page title matches comes first.
+  const searchIndexes = {}; // language -> Promise of the index (fetched once per visit)
+  const MAX_RESULTS = 8;
+  const fold = (text) => String(text).toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
+
+  function loadSearchIndex(lang) {
+    if (!searchIndexes[lang]) {
+      searchIndexes[lang] = fetch(`/${lang}/search-index.json`)
+        .then((r) => {
+          if (!r.ok) throw new Error(`search index: HTTP ${r.status}`);
+          return r.json();
+        })
+        .then((entries) =>
+          entries.map((e) => ({ ...e, key: fold(`${e.p} ${e.s}`), body: fold(e.x) })),
+        )
+        .catch((err) => {
+          delete searchIndexes[lang]; // try again next time (e.g. back online)
+          throw err;
+        });
+    }
+    return searchIndexes[lang];
+  }
+
+  function searchSections(index, query) {
+    const words = fold(query).split(/\s+/).filter(Boolean);
+    if (!words.length) return [];
+    const scored = [];
+    for (const e of index) {
+      let score = 0;
+      for (const w of words) {
+        const inKey = e.key.includes(w);
+        const hits = e.body.split(w).length - 1;
+        if (!inKey && !hits) {
+          score = -1;
+          break;
+        }
+        score += (inKey ? 10 : 0) + Math.min(hits, 5);
+      }
+      if (score > 0) scored.push({ e, score });
+    }
+    return scored.sort((a, b) => b.score - a.score).slice(0, MAX_RESULTS);
+  }
+
+  /** The text folded like fold(), with where each folded character came from in the original
+   *  (folding can drop characters: accents, and the variation mark after an emoji like ⚠️). */
+  function foldWithMap(text) {
+    let folded = '';
+    const from = [];
+    let i = 0;
+    for (const ch of text) {
+      const f = fold(ch);
+      folded += f;
+      for (let k = 0; k < f.length; k++) from.push(i);
+      i += ch.length;
+    }
+    from.push(text.length);
+    return { folded, from };
+  }
+
+  /** About 150 characters of the section around the first word found, words highlighted. */
+  function searchSnippet(text, query) {
+    const words = fold(query).split(/\s+/).filter(Boolean);
+    const all = foldWithMap(text);
+    const found = words.map((w) => all.folded.indexOf(w)).filter((i) => i >= 0);
+    const at = found.length ? all.from[Math.min(...found)] : 0; // else only the name matched
+    const start = Math.max(0, at - 50);
+    let snippet = text.slice(start, start + 150);
+    if (start > 0) snippet = '…' + snippet.replace(/^\S*\s/, '');
+    if (start + 150 < text.length) snippet = snippet.replace(/\s\S*$/, '') + '…';
+    // Highlight: escape everything, wrapping each match (found in the folded text, mapped
+    // back to the original characters) in <mark>
+    const { folded, from } = foldWithMap(snippet);
+    const marks = [];
+    for (const w of words) {
+      for (let i = folded.indexOf(w); i >= 0; i = folded.indexOf(w, i + w.length)) {
+        marks.push([from[i], from[i + w.length]]);
+      }
+    }
+    marks.sort((a, b) => a[0] - b[0]);
+    let html = '';
+    let pos = 0;
+    for (const [a, b] of marks) {
+      if (a < pos) continue;
+      html += esc(snippet.slice(pos, a)) + '<mark>' + esc(snippet.slice(a, b)) + '</mark>';
+      pos = b;
+    }
+    return html + esc(snippet.slice(pos));
+  }
+
   function initSearchEngine() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput || !firstTime(searchInput, 'search')) return;
+    // The home page's box also searches every guide and page; the guides page's box only
+    // filters its own guides (data-search-type, _includes/structure/search.html)
+    const fullSearch = searchInput.dataset.searchType === 'home';
+    const results = fullSearch ? document.getElementById('searchResults') : null;
+    const lang = document.documentElement.lang || 'en';
+    let latest = 0;
+
+    const show = async (query) => {
+      const ticket = ++latest;
+      if (!results) return;
+      if (query.trim().length < 2) {
+        results.hidden = true;
+        results.innerHTML = '';
+        return;
+      }
+      let html;
+      try {
+        const found = searchSections(await loadSearchIndex(lang), query);
+        html = found.length
+          ? '<ul class="search-result-list">' +
+            found
+              .map(
+                ({ e }) => `<li><a class="search-result" href="${esc(e.u)}" data-turbo-frame="_top">
+                  <span class="search-result-where">${esc(e.p)}${e.s && e.s !== e.p ? ` <span aria-hidden="true">›</span> ${esc(e.s)}` : ''}</span>
+                  <span class="search-result-text">${searchSnippet(e.x, query)}</span>
+                </a></li>`,
+              )
+              .join('') +
+            '</ul>'
+          : `<p class="search-result-none">${esc(results.dataset.noResults.replace('{query}', query.trim()))}</p>`;
+      } catch (err) {
+        console.warn(err.message);
+        html = `<p class="search-result-none">${esc(results.dataset.unavailable)}</p>`;
+      }
+      if (ticket !== latest) return; // a newer search has started
+      results.innerHTML = html;
+      results.hidden = false;
+    };
+
     searchInput.addEventListener('input', function (e) {
       const query = e.target.value.toLowerCase();
       const items = document.querySelectorAll('.searchable-item');
       items.forEach((item) => {
         item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
       });
+      // A box of cards (Pinned Pages, Directories, a guides category) with none left is
+      // hidden rather than left empty under the results
+      document.querySelectorAll('.content-pane').forEach((pane) => {
+        const cards = [...pane.querySelectorAll('.searchable-item')];
+        if (!cards.length) return;
+        pane.hidden = Boolean(query) && cards.every((c) => c.style.display === 'none');
+      });
+      show(e.target.value);
+    });
+    // Fetch the index when the box is first used, so typing feels instant
+    if (fullSearch)
+      searchInput.addEventListener('focus', () => loadSearchIndex(lang).catch(() => {}), {
+        once: true,
+      });
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && searchInput.value) {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+      }
     });
   }
 
@@ -492,10 +720,24 @@
     const scrollKey = 'scroll-pos-' + window.location.pathname;
     const saved = () => parseInt(sessionStorage.getItem(scrollKey) || '', 10);
     if (isNewNavigation) {
-      // A new visit (a link): the top of the page
+      // A new visit (a link): the top of the page, or the section its address names
+      // (/en/guides/thief.html#coins, e.g. from a search result)
       isNewNavigation = false;
       isRestoreVisit = false;
-      requestAnimationFrame(() => (scrollContainer.scrollTop = 0));
+      const id = decodeURIComponent(window.location.hash.slice(1)) || pendingSection;
+      pendingSection = '';
+      const section = id && document.getElementById(id);
+      // The address names the section again, as the link did
+      if (section && !window.location.hash)
+        history.replaceState(
+          history.state,
+          '',
+          `${window.location.pathname}${window.location.search}#${encodeURIComponent(id)}`,
+        );
+      requestAnimationFrame(() => {
+        if (section) scrollWhenShown(section);
+        else scrollContainer.scrollTop = 0;
+      });
     } else if (isRestoreVisit) {
       // The back or forward button: where the reader was (Turbo redraws the page from its
       // snapshot at the top, so the position has to be put back)
@@ -582,11 +824,55 @@
   document.addEventListener('turbo:frame-render', initApp);
   // A link is a new visit (top of the page); the back/forward buttons are a "restore" visit
   // (back to where the reader was). Both used to count as new, so Back always went to the top.
+  document.addEventListener(
+    'click',
+    (e) => {
+      const link = e.target.closest?.('a[href*="#"]');
+      if (!link || link.target || e.defaultPrevented) return;
+      const url = new URL(link.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname === window.location.pathname)
+        return;
+      pendingSection = decodeURIComponent(url.hash.slice(1));
+    },
+    true,
+  );
   document.addEventListener('turbo:visit', (event) => {
     const restore = event.detail?.action === 'restore';
     isNewNavigation = !restore;
     isRestoreVisit = restore;
+    window.__cameBack = restore;
   });
+
+  // The language picker (_includes/structure/language-switcher.html): opens and closes on
+  // click; the current language, Escape, a click elsewhere or a page change closes it.
+  const setLangOpen = (dropdown, open) => {
+    dropdown.classList.toggle('is-open', open);
+    dropdown.querySelector('.lang-trigger')?.setAttribute('aria-expanded', String(open));
+  };
+  const closeLangPickers = (except = null) =>
+    document.querySelectorAll('.lang-dropdown.is-open').forEach((d) => {
+      if (d !== except) setLangOpen(d, false);
+    });
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest?.('.lang-trigger');
+    const dropdown = e.target.closest?.('.lang-dropdown');
+    if (trigger) {
+      closeLangPickers(dropdown);
+      setLangOpen(dropdown, !dropdown.classList.contains('is-open'));
+      return;
+    }
+    const current = e.target.closest?.('.dropdown-content a.lang-active');
+    if (current) e.preventDefault(); // already this language: just close
+    if (current || !dropdown) closeLangPickers();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = document.querySelector('.lang-dropdown.is-open');
+    if (!open) return;
+    setLangOpen(open, false);
+    open.querySelector('.lang-trigger')?.focus();
+  });
+  document.addEventListener('turbo:visit', () => closeLangPickers());
 
   document.addEventListener('click', (e) => {
     const toggleBtn = e.target.closest('#theme-toggle');
@@ -708,7 +994,7 @@
     toast.setAttribute('role', 'status');
     toast.textContent =
       (window.pwaTranslations && window.pwaTranslations.updatedMsg) ||
-      '✅ App updated to the latest version.';
+      'App updated to the latest version.';
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 4000);
   }

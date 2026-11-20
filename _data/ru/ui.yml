@@ -35,20 +35,26 @@ guides:
   campaign_shop: Магазин Кампании
   premium_shop: Премиум и Наборы самоцветов
   t10: Калькулятор T10
+  frozen_era: Ледяная эра
   scramble: Королевская схватка
+  elixir: Схватка за эликсир
+  undead_siege: Осада нежити
+  hunt_battle: Охота на монстров
+  kill_event: Событие убийств
+  gear_upgrade: Улучшение снаряжения
 pages:
   home:
     title: Главная
-    subtitle: Сборник выживания
+    subtitle: Сборник выжившего
   rules:
     title: Правила
     subtitle: Правила сервера и ротация
   guides:
     title: Гайды
-    subtitle: Гайды по игре
+    subtitle: Игровые гайды
     writers:
-      title: Руководство для авторов
-      subtitle: Руководство для авторов
+      title: Гайд для авторов
+      subtitle: Гайд для авторов
   alliance:
     title: Альянс
     subtitle: Альянс и дипломатия
@@ -58,6 +64,15 @@ pages:
   calendar:
     title: Календарь событий
     subtitle: События альянса и сервера
+  map:
+    title: Карта королевства
+    subtitle: Карта королевства
+  rewards:
+    title: Награды Капитолия
+    subtitle: Награды Капитолия
+  '404':
+    title: Страница не найдена
+    subtitle: Зона захвачена
   guide_panes:
     heroes:
       title: Герои и Билды
@@ -128,6 +143,7 @@ nav_anchors:
   nap_ranks: Ранги NAP
   nap_territory: Территория NAP
   blacklist: Черный список
+  nap_stats: Статистика
   markdown_usage: Использование
   markdown_example: Пример
   guide_submissions: Отправка
@@ -149,15 +165,23 @@ nav_anchors:
   cheese_cheese: Сыр
   cheese_strategy: Стратегия
   cheese_rewards: Награды
+status:
+  coming_soon: Скоро
 search:
-  guides: Поиск по гайдам...
-  home: Поиск по каталогам, постам...
+  guides: Поиск гайдов...
+  home: Поиск гайдов и правил...
   placeholder: Поиск...
+  results_label: Результаты поиска
+  no_results: Ничего не найдено по запросу “{query}”.
+  unavailable: Поиск сейчас недоступен. Попробуйте снова, когда будете в сети.
+image_viewer:
+  close: Закрыть
+  download: Скачать
 pwa:
   toast_msg: Получены новые разведданные.
   update_btn: Обновить
   updating: Расшифровка...
-  updated_msg: "✅ Приложение обновлено до последней версии."
+  updated_msg: Приложение обновлено до последней версии.
 identity:
   account: Ваш аккаунт
   sign_in: Войти
@@ -169,6 +193,7 @@ identity:
   force_update: Обновить приложение
   force_updating: Обновление…
   dashboard: Панель альянса
+  steward_tools: Инструменты Steward
   role_steward: Steward
   role_r5: R5
   role_r4: R4

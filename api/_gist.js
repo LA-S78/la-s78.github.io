@@ -308,12 +308,41 @@ export async function updateGist(
   }
 }
 
+/** Files the test copy leaves out (history, not needed to rehearse anything). */
+const NOT_COPIED = new Set(['proposal-log.json', 'last-save.json']);
+/** Discord IDs in an alliance's record (from /registerbot), blanked in the test copy. */
+const DISCORD_FIELDS = [
+  'guild_id',
+  'delegated_roles',
+  'alert_channel_id',
+  'alert_role_id',
+  'officer_channel_id',
+  'officer_roles',
+];
+/** Stamped into the test Gist: when it was copied (shown on the test site). */
+export const TEST_COPY_FILE = 'test-copy.json';
+
+/** An alliance list without the Discord IDs that point at live servers and channels. */
+export function scrubMapState(text) {
+  const state = JSON.parse(text);
+  for (const a of Object.values(state.alliances || {})) {
+    if (!a || typeof a !== 'object') continue;
+    for (const f of DISCORD_FIELDS) delete a[f];
+    if ('server_event_alerts' in a) a.server_event_alerts = false;
+  }
+  return JSON.stringify(state, null, 2);
+}
+
 /**
- * Copies every file of the live Gist (GIST_ID) into the test Gist (TEST_GIST_ID) used by the
- * test site, for /devupdate. Only reads the live Gist and only writes the test one. Runs on
- * the live site, which can see the real values (Vercel never hands out values marked
- * Sensitive to anything else).
- * @returns {Promise<string[]>} the names of the files copied
+ * Copies the live Gist (GIST_ID) into the test Gist (TEST_GIST_ID) used by the test site, for
+ * /devupdate. Only reads the live Gist and only writes the test one. Runs on the live site,
+ * which can see the real values (Vercel never hands out values marked Sensitive to anything
+ * else), so no token leaves Vercel. The copy (plan for alliance IDs, 2026-11-20):
+ *   - leaves out the proposal log and the last-save note (history, not needed);
+ *   - blanks every alliance's Discord server, channel and role IDs (scrubMapState);
+ *   - removes files the test Gist has that the live one doesn't (a clean copy);
+ *   - is stamped with when it was made (test-copy.json).
+ * @returns {Promise<{ copied: string[], removed: string[], copiedAt: string }>}
  * @throws {Error} with a message for the person running it (missing or same test Gist, …)
  */
 export async function copyLiveGistToTest({ timeoutMs } = {}) {
@@ -321,33 +350,61 @@ export async function copyLiveGistToTest({ timeoutMs } = {}) {
   const testId = (process.env.TEST_GIST_ID || '').trim();
   const liveToken = process.env.GIST_TOKEN;
   const testToken = process.env.TEST_GIST_TOKEN || liveToken;
+  if (isTestDeployment()) throw new Error('This runs on the live site only.');
   if (!liveId || !liveToken) throw new Error('The live Gist (GIST_ID, GIST_TOKEN) is not set.');
   if (!testId) throw new Error('TEST_GIST_ID is not set for Production in Vercel.');
   if (testId === liveId)
     throw new Error('TEST_GIST_ID is the live Gist. It must be a separate Gist.');
 
   const signal = () => (timeoutMs ? { signal: AbortSignal.timeout(timeoutMs) } : {});
-  const res = await fetch(`${GIST_API}/${liveId}`, {
-    headers: headers(liveToken),
-    cache: 'no-store',
-    ...signal(),
-  });
-  if (!res.ok) throw new Error(`Could not read the live Gist (${res.status}).`);
+  const read = async (id, token) => {
+    const res = await fetch(`${GIST_API}/${id}`, {
+      headers: headers(token),
+      cache: 'no-store',
+      ...signal(),
+    });
+    if (!res.ok)
+      throw new Error(
+        `Could not read the ${id === liveId ? 'live' : 'test'} Gist (${res.status}).`,
+      );
+    return (await res.json()).files || {};
+  };
+  const live = await read(liveId, liveToken);
+  const test = await read(testId, testToken);
+
   const files = {};
-  for (const [name, file] of Object.entries((await res.json()).files || {})) {
+  for (const [name, file] of Object.entries(live)) {
+    if (NOT_COPIED.has(name)) continue;
     if (file.truncated) throw new Error(`${name} is too large to copy this way.`);
-    files[name] = { content: file.content };
+    files[name] = {
+      content: name === 'map-state.json' ? scrubMapState(file.content) : file.content,
+    };
   }
+  const copiedAt = new Date().toISOString();
+  files[TEST_COPY_FILE] = {
+    content: JSON.stringify(
+      { copiedAt, files: Object.keys(files), left_out: [...NOT_COPIED], discord_ids: 'blanked' },
+      null,
+      2,
+    ),
+  };
+  // A clean copy: what only the test Gist has goes (a file set to null is deleted)
+  const removed = Object.keys(test).filter((name) => !(name in files));
+  for (const name of removed) files[name] = null;
 
   const out = await fetch(`${GIST_API}/${testId}`, {
     method: 'PATCH',
     headers: headers(testToken, { 'Content-Type': 'application/json' }),
     body: JSON.stringify({
-      description: `Test data, copied from the live data at ${new Date().toISOString()}`,
+      description: `Test data, copied from the live data at ${copiedAt}`,
       files,
     }),
     ...signal(),
   });
   if (!out.ok) throw new Error(`Could not write the test Gist (${out.status}).`);
-  return Object.keys(files);
+  return {
+    copied: Object.keys(files).filter((n) => files[n] && n !== TEST_COPY_FILE),
+    removed,
+    copiedAt,
+  };
 }

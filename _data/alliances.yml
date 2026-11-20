@@ -4,7 +4,8 @@
 # the Alliance page come from the live data (map-state.json), not from here.
 
 # Colour used when an alliance has none of its own (the gold #b8975a counts as none).
-# RAVN is RÂVN written without the accent.
+# RAVN is RÂVN written without the accent. RâvN is a different alliance: tags are told
+# apart by letter case, not by accents (api/_alliances.js sameTag).
 colors:
   WLO: "#25bb00"
   RÂVN: "#cece00"
@@ -30,6 +31,8 @@ role_settings:
   HMDA: HMDA
   NAVI: NAVI
   HeKi: HEKI
+  RâvN: RavN # a different alliance from RÂVN (letter case counts)
+  Ghst: GHST
 
 # The Capitol rotation before any live schedule exists: rank #1 holds Week 3, and the
 # three seats take turns over the 3 cycles (see "Option A" in docs/DECISIONS.md).

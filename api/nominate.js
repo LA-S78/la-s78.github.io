@@ -18,11 +18,15 @@ import {
 import {
   buildNomination,
   handedOutFor,
+  resolvePlayers,
   handedOutKey,
   kingAlliance,
   reassignAllNominations,
 } from './_nominations.js';
 import { inLanguage, say } from './_messages.js';
+import { sameTag } from './_alliances.js'; // RâvN ≠ RÂVN; RAVN = RÂVN
+import { fetchAlliance, findMember, looksLikeId, memberPictures } from './_tracker.js';
+import { allianceFrame } from './_alliance_images.js';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -50,6 +54,26 @@ async function respond(req, res) {
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');
 
+      // ?pictures=1: the nominated players' pictures for the King's console, loaded after
+      // its list so a slow tracker never holds it up (owner request, 2026-11-18). The same
+      // for everyone and public on the tracker, so Vercel may keep it a few minutes.
+      if (req.query?.pictures) {
+        const tags = Object.keys(nominations || {}).slice(0, 30);
+        const found = await Promise.all(
+          tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000, use: 'alliance' })),
+        );
+        const pictures = {};
+        // Current names by player ID, so a renamed player shows their new name
+        const players = {};
+        tags.forEach((tag, i) => {
+          if (!found[i]) return;
+          pictures[tag] = memberPictures(found[i], allianceFrame(gist, tag));
+          players[tag] = Object.fromEntries(found[i].members.map((m) => [m.uid, m.name]));
+        });
+        res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
+        return res.status(200).json({ pictures, players });
+      }
+
       const lastReset = current ? rewardsData.lastReset || null : period.id;
       if (lastReset) {
         res.setHeader('X-Cycle-Id', Buffer.from(lastReset).toString('hex').slice(0, 12));
@@ -74,6 +98,7 @@ async function respond(req, res) {
         if (!payload) return res.status(403).json({ error: say('api_nominate.link_invalid') });
         const tag = String(payload.alliance || '').trim();
         const now = getAllianceNominationQuota(tag, view, mapState);
+        const tracker = await fetchAlliance(tag, { timeoutMs: 2500, use: 'alliance' });
         body.alliance = {
           tag,
           rank: now.rank,
@@ -87,6 +112,15 @@ async function respond(req, res) {
           handedOut: current
             ? handedOutFor(rewardsData, tag).map(({ pool, chest, name }) => ({ pool, chest, name }))
             : [],
+          // The alliance's member names and pictures from the Last Asylum Tracker, for the
+          // page's name check (js/name-check.js) and portraits; null without the tracker or
+          // when it's slow
+          members: tracker ? tracker.members.map((m) => m.name) : null,
+          pictures: memberPictures(tracker, allianceFrame(gist, tag)),
+          // Player IDs: the saved list's ({ name: uid }) and the members' ({ uid: name }),
+          // so officers can type an ID and see who it is
+          ids: nominations[tag]?.ids || {},
+          players: tracker ? Object.fromEntries(tracker.members.map((m) => [m.uid, m.name])) : null,
         };
       }
       return res.status(200).json(body);
@@ -120,9 +154,11 @@ async function respond(req, res) {
   const raw = Array.isArray(req.body.ranked)
     ? req.body.ranked
     : rankedFromSlots(req.body.nominations || {});
-  const { names, error } = cleanRankedList(raw);
+  const { names: typed, error } = cleanRankedList(raw);
   const refuse = (status, message) => ({ refused: { status, error: message } });
   if (error) return res.status(400).json({ error });
+  // Player IDs and names are matched to the alliance's members (one cached lookup)
+  const tracker = await fetchAlliance(tag, { timeoutMs: 3000, use: 'alliance' });
 
   try {
     // Worked out from the stored data and saved; redone on newer data if another save (e.g.
@@ -144,7 +180,28 @@ async function respond(req, res) {
       }
       if (syncRewardPeriod(rewardsData, mapState, period).clearNominations) nominationsStore = {};
 
-      const entry = buildNomination(tag, names, rewardsData, mapState, new Date().toISOString());
+      const players = resolvePlayers(
+        typed,
+        tracker ? tracker.members : null,
+        nominationsStore[tag],
+        handedOutFor(rewardsData, tag),
+        { findMember, looksLikeId },
+      );
+      if (players.error) {
+        return refuse(
+          400,
+          say(`api_nominate.${players.error.key}`, { ...players.error.vars, alliance: tag }),
+        );
+      }
+      const { names, ids } = players;
+      const entry = buildNomination(
+        tag,
+        names,
+        rewardsData,
+        mapState,
+        new Date().toISOString(),
+        ids,
+      );
       if (entry.rank > 50) return refuse(400, `[${tag}] has no rank in the standings.`);
       const chests = names.length - entry.reserves.length + entry.unfilled;
       if (chests === 0) return refuse(400, `[${tag}] has no chests this week.`);
@@ -179,19 +236,6 @@ async function respond(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
-
-/** The calendar settings (calendar-state.json), over the defaults. */
-/** Tags compared without letter case or accents (RÂVN = ravn). */
-const sameTag = (a, b) =>
-  Boolean(a && b) &&
-  String(a)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase() ===
-    String(b)
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
 
 /**
  * POST { action: 'handout', alliance, pool, chest, name, done } with the login pass

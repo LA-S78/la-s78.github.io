@@ -35,29 +35,44 @@ guides:
   campaign_shop: Negozio Campagna
   premium_shop: Pacchetti Premium & Gemme
   t10: Calcolatore T10
+  frozen_era: Era Glaciale
   scramble: Mischia Reale
+  elixir: Mischia d'elisir
+  undead_siege: Assedio non morti
+  hunt_battle: Battaglia di Caccia
+  kill_event: Evento di uccisione
+  gear_upgrade: Miglioramento equipaggiamento
 pages:
   home:
     title: Home
     subtitle: Compendio di Sopravvivenza
   rules:
     title: Regole
-    subtitle: Regole del Server & Rotazione
+    subtitle: Regole del Server e Rotazione
   guides:
     title: Guide
     subtitle: Guide di Gioco
     writers:
-      title: Guida per Scrittori
-      subtitle: Guida per Scrittori
+      title: Guida per gli Autori
+      subtitle: Guida per gli Autori
   alliance:
     title: Alleanza
-    subtitle: Alleanza & Diplomazia
+    subtitle: Alleanza e Diplomazia
   api-test:
     title: Intelligence Segreta Alleanza
     subtitle: Intelligence Segreta Alleanza
   calendar:
     title: Calendario Eventi
-    subtitle: Eventi di Alleanza & Server
+    subtitle: Eventi dell'Alleanza e del Server
+  map:
+    title: Mappa del Regno
+    subtitle: Mappa del Regno
+  rewards:
+    title: Ricompense del Campidoglio
+    subtitle: Ricompense del Campidoglio
+  '404':
+    title: Pagina non trovata
+    subtitle: Area invasa
   guide_panes:
     heroes:
       title: Eroi & Build
@@ -111,8 +126,8 @@ pages:
       title: Negozio Campagna
       subtitle: Negozio Campagna
     premium_shop:
-      title: Pacchetti Premium & Gemme
-      subtitle: Pacchetti Premium & Gemme
+      title: Pacchetti Premium e Gemme
+      subtitle: Pacchetti Premium e Gemme
     t10:
       title: Guida T10
       subtitle: Requisiti T10
@@ -128,6 +143,7 @@ nav_anchors:
   nap_ranks: Gradi NAP
   nap_territory: Territorio NAP
   blacklist: Lista Nera
+  nap_stats: Statistiche
   markdown_usage: Utilizzo
   markdown_example: Esempio
   guide_submissions: Invii
@@ -149,26 +165,35 @@ nav_anchors:
   cheese_cheese: Formaggio
   cheese_strategy: Strategia
   cheese_rewards: Ricompense
+status:
+  coming_soon: In arrivo
 search:
-  guides: Cerca nelle guide...
-  home: Cerca in directory, post...
+  guides: Cerca guide...
+  home: Cerca guide e regole...
   placeholder: Cerca...
+  results_label: Risultati della ricerca
+  no_results: Nessun risultato trovato per “{query}”.
+  unavailable: La ricerca non è disponibile al momento. Riprova quando sei online.
+image_viewer:
+  close: Chiudi
+  download: Scarica
 pwa:
   toast_msg: Nuove informazioni acquisite.
   update_btn: Aggiorna
-  updating: Decrittazione...
-  updated_msg: "✅ App aggiornata all’ultima versione."
+  updating: Decodifica in corso...
+  updated_msg: App aggiornata all'ultima versione.
 identity:
   account: Il tuo account
   sign_in: Accedi
   signing_in: Accesso in corso…
-  sign_in_failed: Accesso non riuscito, riprova
+  sign_in_failed: Accesso fallito, riprova
   sign_in_again: Accedi di nuovo
   refresh: Aggiorna accesso
   sign_out: Esci
   force_update: Aggiorna app
   force_updating: Aggiornamento…
-  dashboard: Dashboard dell’alleanza
+  dashboard: Dashboard Alleanza
+  steward_tools: Strumenti Steward
   role_steward: Steward
   role_r5: R5
   role_r4: R4
@@ -179,17 +204,17 @@ identity:
   alliance_label: Alleanza
   alliance_none: nessuna
   access_title: Il tuo accesso
-  access_view: Vedere la mappa dal vivo, gli orari e le classifiche
-  access_draft: Preparare piani in Modalità Pianificatore
-  access_join: Unisciti al server Discord del NAP per avere più accesso
+  access_view: Visualizza la mappa live, gli orari e le classifiche
+  access_draft: Crea piani in Modalità Pianificatore
+  access_join: Unisciti al server Discord NAP per ulteriori accessi
   access_ask_leader: Chiedi al tuo R4 o R5 di inviare i tuoi piani come proposte
-  access_send: Inviare proposte per mappa, classifica, lista nera e ricompense (5 al giorno)
-  access_send_unlimited: Inviare proposte senza limite giornaliero
-  access_approve: Approvare o rifiutare le proposte su Discord
+  access_send: Invia proposte per la mappa, classifiche, blacklist e ricompense (5 al giorno)
+  access_send_unlimited: Invia proposte senza limiti giornalieri
+  access_approve: Approva o rifiuta le proposte su Discord
   access_expired: Il tuo accesso è scaduto. Accedi di nuovo per inviare proposte.
-  expires_days: L’accesso scade tra {n} giorni
-  expires_one: L’accesso scade tra 1 giorno
-  expires_today: L’accesso scade oggi
-  found_role_id: trovata tramite ID ruolo
-  found_role_name: trovata tramite nome ruolo
-  found_nickname: trovata tramite soprannome
+  expires_days: Accesso in scadenza tra {n} giorni
+  expires_one: Accesso in scadenza tra 1 giorno
+  expires_today: Accesso in scadenza oggi
+  found_role_id: trovato tramite ID ruolo
+  found_role_name: trovato tramite nome ruolo
+  found_nickname: trovato tramite nickname

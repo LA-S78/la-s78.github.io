@@ -25,7 +25,12 @@
   background: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  transition: all 0.2s ease;
+  /* Only what hovering changes: with "all", your alliance's highlight (an outline,
+     js/my-alliance.js) faded in from the text colour each time the rows were drawn, a white
+     flash on every load */
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .alliance-ladder-row:hover {
@@ -159,6 +164,9 @@
 }
 
 .academy-child-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.68rem;
   color: var(--badge-slate);
   font-style: italic;
@@ -423,4 +431,581 @@
   #alliance-container.planner-active .btn-ladder-del {
     margin-left: auto;
   }
+}
+
+/* ==========================================================================
+   Live numbers on the standings cards (owner request, 2026-11-19): the alliance's in-game
+   badge, and Might, members and level behind an arrow, so every card stays one line high
+   (outside planner mode). From the Last Asylum Tracker; ranks never come from it.
+   ========================================================================== */
+
+/* One line: the name gives way (ellipsis) rather than pushing the badge and arrow below.
+   Opened, the details take the full width under it. */
+.alliance-ladder-row.is-compact {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  column-gap: 10px;
+  row-gap: 0;
+}
+
+.alliance-ladder-row.is-compact .ladder-details {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--overlay-5);
+}
+
+/* A card without details keeps its badge in line with the others */
+.ladder-expand-spacer {
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.alliance-ladder-row.is-compact .nap-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Phones: the NAP badge becomes its shield, so names have room */
+@media (max-width: 560px) {
+  .alliance-ladder-row.is-compact .nap-badge-text {
+    display: none;
+  }
+
+  .alliance-ladder-row.is-compact .nap-badge {
+    padding: 3px 5px;
+  }
+}
+
+.alliance-ladder-row.is-compact .ladder-rank-col {
+  min-width: 34px;
+}
+
+.alliance-ladder-row.is-compact .ladder-primary-line {
+  flex-wrap: nowrap;
+  min-height: 28px;
+}
+
+.alliance-ladder-row.is-compact .ladder-tag,
+.alliance-ladder-row.is-compact .academy-child-badge {
+  flex-shrink: 0;
+}
+
+.alliance-ladder-row.is-compact .ladder-name {
+  min-width: 0;
+}
+
+main .ladder-badge,
+.ladder-badge {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  object-fit: contain;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.ladder-expand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ladder-expand:hover {
+  color: var(--accent-text);
+  border-color: var(--accent-color);
+}
+
+.ladder-expand svg {
+  transition: transform 0.15s ease;
+}
+
+.alliance-ladder-row.is-open .ladder-expand svg {
+  transform: rotate(180deg);
+}
+
+.ladder-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.ladder-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ladder-stat strong {
+  color: var(--text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+/* "Badges and numbers from the Last Asylum Tracker" */
+.ladder-credit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 8px 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.ladder-credit a {
+  color: inherit;
+  text-decoration: underline dotted;
+}
+
+/* ==========================================================================
+   The Stats tab (owner request, 2026-11-19; js/stats.js): one view at a time, with a
+   time span switch, a line chart and a table.
+   ========================================================================== */
+
+.stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.stats-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.stats-chart {
+  display: block;
+  width: 100%;
+  max-width: 760px; /* wide screens: a readable chart, not a huge one */
+  height: auto;
+  margin: 0.4rem auto;
+}
+
+.stats-table {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.stats-legend {
+  justify-content: center;
+}
+
+.stats-grid {
+  stroke: var(--overlay-5);
+  stroke-width: 1;
+}
+
+.stats-axis {
+  fill: var(--text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.stats-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.stats-chip.is-off {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.stats-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  border-radius: 2px;
+  vertical-align: baseline;
+}
+
+.stats-chip .stats-swatch {
+  margin-right: 0;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 5px 6px;
+  text-align: right;
+  border-bottom: 1px solid var(--overlay-5);
+}
+
+.stats-table th:first-child,
+.stats-table td:first-child {
+  text-align: left;
+  font-weight: 700;
+}
+
+.stats-table th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stats-change.is-up {
+  color: var(--status-success-text);
+}
+
+.stats-change.is-down {
+  color: var(--status-danger-text);
+}
+
+.stats-credit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0.8rem 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.stats-credit a {
+  color: inherit;
+  text-decoration: underline dotted;
+}
+
+/* The Top players view: a list with each player's picture, a month's growth line and Might */
+.stats-range[hidden] {
+  display: none;
+}
+
+.stats-subbar {
+  align-items: center;
+  margin-top: 0;
+}
+
+.stats-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.stats-filter select {
+  padding: 3px 6px;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.stats-players {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.stats-player {
+  display: grid;
+  grid-template-columns: 1.8rem 32px minmax(0, 1fr) 72px auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--overlay-5);
+  font-size: 0.82rem;
+}
+
+.stats-place {
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Players' pictures: their portrait in its frame (_css/style/27-player-portraits.css) */
+
+.stats-who,
+.stats-num {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stats-who strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats-who small,
+.stats-num small {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.stats-num {
+  align-items: flex-end;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-spark {
+  width: 72px;
+  height: 22px;
+}
+
+.stats-spark path {
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.stats-spark.is-up path {
+  stroke: var(--status-success-text);
+}
+
+.stats-spark.is-down path {
+  stroke: var(--status-danger-text);
+}
+
+/* Phones: the growth line gives way to the names */
+@media (max-width: 420px) {
+  .stats-player {
+    grid-template-columns: 1.5rem 28px minmax(0, 1fr) 52px auto;
+    gap: 6px;
+  }
+
+  .stats-spark {
+    width: 52px;
+  }
+
+}
+
+.stats-more {
+  display: flex;
+  margin: 0.8rem auto 0;
+}
+
+/* The Achievements view: a card per record, each a podium of three */
+.stats-records {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.8rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.stats-record {
+  padding: 0.6rem 0.75rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.stats-record h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+  color: var(--accent-text);
+}
+
+.stats-record .stats-note {
+  margin: 0 0 0.4rem;
+  font-size: 0.72rem;
+}
+
+.stats-record ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stats-podium {
+  display: grid;
+  grid-template-columns: 1.4rem 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.82rem;
+}
+
+.stats-medal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  border-radius: 50%;
+}
+
+.stats-podium.is-gold .stats-medal {
+  background: var(--gold, #d4af37);
+}
+
+.stats-podium.is-silver .stats-medal {
+  background: #c0c7d0;
+}
+
+.stats-podium.is-bronze .stats-medal {
+  background: #c98a4b;
+}
+
+.stats-value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The Player lookup view: a search box, matches, and the chosen player's card */
+.stats-lookup {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+#stats-lookup-q {
+  width: 100%;
+  padding: 7px 10px;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.stats-lk-results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.stats-lk-hit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--text-main);
+  text-align: left;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.stats-lk-hit:hover {
+  border-color: var(--accent-color);
+}
+
+.stats-lk-card {
+  padding: 0.8rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+}
+
+.stats-lk-card header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+
+.stats-lk-place {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0.5rem 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.stats-lk-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 0.6rem;
+}
+
+.stats-lk-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 8px;
+  background: var(--overlay-5);
+  border-radius: 6px;
+}
+
+.stats-lk-stat small {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.stats-lk-stat strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-lk-card h4 {
+  margin: 0.4rem 0 0.2rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* The shared line chart (js/line-chart.js) */
+.lc-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lc-grid {
+  stroke: var(--overlay-5);
+  stroke-width: 1;
+}
+
+.lc-axis {
+  fill: var(--text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }

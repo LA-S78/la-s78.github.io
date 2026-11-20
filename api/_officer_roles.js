@@ -3,6 +3,8 @@
 // (resolveMemberAllianceContext in interactions.js); the website login uses the same rule
 // here, so an officer also gets R4 access on the site.
 
+import { findTag } from './_alliances.js';
+
 /** Default officer roles when an alliance hasn't chosen its own (same as the bot). */
 const DEFAULT_OFFICER_ROLES = ['hr', 'officer', 'leader'];
 /** Discord's Administrator permission bit. */
@@ -40,9 +42,7 @@ export function leadershipRoles(allianceData) {
  * WLO's server from the environment (as in the bot).
  */
 function allianceServer(alliance, alliances = {}) {
-  const key = Object.keys(alliances).find(
-    (k) => k.toLowerCase() === String(alliance).toLowerCase(),
-  );
+  const key = findTag(Object.keys(alliances), alliance);
   const record = key ? alliances[key] : null;
   if (record?.guild_id) return { guildId: String(record.guild_id).trim(), record };
   const wloGuildId = (process.env.DISCORD_GUILD_ID_WLO || process.env.DISCORD_WLO || '').trim();
@@ -102,7 +102,9 @@ export async function findAllianceTag({
 }) {
   const tags = Object.keys(alliances || {});
   if (!tags.length) return null;
-  const byLower = new Map(tags.map((tag) => [tag.toLowerCase(), tag]));
+  // The tag a role name or nickname means (findTag: RâvN and RÂVN are two alliances; a
+  // name in another letter case only counts when it can mean just one of them)
+  const byName = (name) => findTag(tags, name);
 
   if (guildId && botToken && roleIds?.length) {
     try {
@@ -113,11 +115,9 @@ export async function findAllianceTag({
       const roles = res.ok ? await res.json() : [];
       for (const role of Array.isArray(roles) ? roles : []) {
         if (!roleIds.includes(role.id)) continue;
-        const name = String(role.name || '')
-          .toLowerCase()
-          .trim();
+        const name = String(role.name || '').trim();
         const bare = name.replace(/^@/, '').replace(/^\[(.*)\]$/, '$1');
-        if (byLower.has(bare)) return { tag: byLower.get(bare), via: 'role-name' };
+        if (byName(bare)) return { tag: byName(bare), via: 'role-name' };
       }
     } catch {
       // Discord slow or down: try the nickname
@@ -125,6 +125,6 @@ export async function findAllianceTag({
   }
 
   const fromNick = /^\s*\[([^\]]{1,10})\]/.exec(nickname || '');
-  const nickTag = fromNick ? byLower.get(fromNick[1].trim().toLowerCase()) : null;
+  const nickTag = fromNick ? byName(fromNick[1].trim()) : null;
   return nickTag ? { tag: nickTag, via: 'nickname' } : null;
 }

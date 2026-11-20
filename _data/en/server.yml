@@ -5,6 +5,22 @@
 # Technical messages for administrators (set-up, raw Discord errors) aren't here.
 
 api_dashboard:
+  stewards_only: "Only Stewards can use the Steward tools."
+  lookups_used: "Today's player lookups are used up. They start again at the daily reset (00:00 GT)."
+  player_not_found: "No player has that ID."
+  player_unavailable: "The game couldn't be reached. Try again in a few minutes."
+  positions_leaders_only: "Only your alliance's R4s and R5s (and Stewards) can see members on the map."
+  positions_unavailable: "Members' positions can't be loaded right now. Try again in a few minutes."
+  links_used: "Today's alliance links are used up. They start again at the daily reset (00:00 GT)."
+  link_bad: "Choose an alliance and type the tag it uses in the game now."
+  link_same: "That's the tag the site already uses."
+  link_taken: "{tag} is already another alliance on the site."
+  link_not_found: "The game has no alliance tagged {tag} (letter case counts)."
+  positions_used: "Today's map refreshes are used up. They start again at the daily reset (00:00 GT)."
+  positions_wait: "The map was refreshed a moment ago. Try again in {minutes} min."
+  refresh_limit: "No roster refreshes left today. They start again at the daily reset (00:00 GT)."
+  refresh_wait: "The roster was refreshed a moment ago. Try again in {n} min."
+  refresh_failed: "The game couldn't be reached. Try again in a few minutes."
   signed_out: "Sign in with Discord (top right) to see your alliance dashboard."
   load_failed: "Could not load the dashboard: {reason}"
   no_alliance: "We couldn't tell which alliance you're in. The site finds it from your alliance role in the NAP Discord server, or a [TAG] at the start of your server nickname. Fix that in Discord, then use Refresh Access in your account card (top right)."
@@ -63,6 +79,9 @@ api_nominate:
   king_only: "Only the King's alliance (R4/R5) and Stewards can tick chests."
   king_only_tag: "Only the King's alliance [{king}] (R4/R5) and Stewards can tick chests."
   not_listed: "{name} is no longer on [{alliance}]'s list. Refresh the page."
+  id_not_found: "No member of [{alliance}] has the player ID {id}. Check the number, or type the name."
+  ids_unavailable: "Player IDs can't be looked up right now ({id}). Type the name instead."
+  listed_twice: "{name} is in the list twice."
   save_failed: "Could not save: {reason}"
 
 api_register:
@@ -87,6 +106,29 @@ api_register:
   officer_channel_missing: "The Officer Ticket Intake Channel ({id}) isn't in \"{server}\" (or the bot can't see it). Copy its ID again."
   alert_role_missing: "The Default Alert Role ({id}) isn't a role in \"{server}\". Copy its ID again, or leave it empty for @everyone."
   role_not_found: "No role in \"{server}\" matches \"{role}\" yet; it will work once one does."
+
+api_alliance_images:
+  frame_png: "An avatar frame must be a PNG with a see-through background (a JPEG would cover your members' pictures)."
+  not_set_up: "Alliance images aren't set up on the server yet."
+  failed: "Something went wrong with the alliance image. Please try again."
+  bad_image: "That file isn't a picture the site can use. Please use the upload form."
+  too_big: "The image is too large (over {kb} KB). Please use the upload form, which shrinks it."
+  wrong_size: "The image must be exactly {width}×{height} pixels. Please use the upload form."
+  has_metadata: "The image still carries hidden data (such as where a photo was taken). Please use the upload form, which removes it."
+  leaders_only: "Only R4 and R5 leaders can send alliance images."
+  own_alliance_only: "You can only send images for your own alliance."
+  unknown_alliance: "That alliance isn't in the NAP."
+  daily_limit: "Daily limit reached: {max} images per alliance per 24 hours. You can send the next one after {when}."
+  post_failed: "The image couldn't be sent to the Stewards on Discord. Please try again later."
+  sent: "Sent to the Stewards for review. It will appear once approved."
+  stewards_only: "Only Stewards can review alliance images."
+  not_found: "That image wasn't found. It may have expired."
+  already_decided: "That image has already been reviewed (or replaced by a newer one)."
+  approved: "Approved: the image is now live."
+  rejected: "Rejected: the image was deleted."
+  remove_not_allowed: "Only the alliance's R5 or a Steward can remove its images."
+  nothing_to_remove: "There's no image there to remove."
+  removed: "Image removed."
 
 api_proposals:
   login_required: "Please log in with Discord again to send proposals."
@@ -117,6 +159,7 @@ api_events:
 # Calendar reminders posted on Discord (api/_reminders.js). Discord codes stay as they are.
 reminders:
   title: "⏰ Starting soon: {title}"
+  title_now: "🔔 Starting now: {title}"
   starts: "Starts"
 
 # The Discord bot's replies (api/_bot_*.js), in the user's Discord language. Keep Discord
@@ -233,6 +276,13 @@ bot_rewards:
 # Stewards' and leaders' admin commands: /rank, /registerbot, /devupdate, and the private
 # replies to the proposal review buttons. (The reviewed proposal message itself is in the
 # shared war-room channel and stays in English.)
+# The Top 4 race's results post (api/_bot_ascension.js): private replies to a Steward's click
+bot_ascension:
+  stewards_only: "⛔ Only Kingdom Stewards can apply or keep the Top 4 order."
+  no_race: "This race's results are no longer stored."
+  already: "{name} has already decided this race."
+  cannot_apply: "The Top 4 can't be applied: {reason}. Use /rank instead."
+
 bot_admin:
   rank_none: "No alliances registered in current state."
   rank_title: "🛡️ Server NAP Standings"
@@ -246,7 +296,13 @@ bot_admin:
   rank_updated_by: "Updated by {name}"
   rank_view: "View Standings"
   rank_set_failed: "⚠️ Failed to update rank: {reason}"
+  rank_ambiguous: "[{tag}] could mean more than one alliance ({options}): type the tag exactly, with its capitals."
   dev_done: "✅ **Test data updated.** Copied {count} file(s) from the live data into the test Gist used by dev.la-s78.app: {files}.\nThe live data was only read, not changed."
+  dev_removed: "Removed from the test Gist (not in the live data): {files}."
+  dev_scrubbed: "Left out: the proposal log. Blanked: every alliance's Discord server, channel and role IDs."
+  dev_blobs: "Also copied to the test site's own files: {stats} Stats file(s), the last {days} day(s) of snapshots and {pictures} alliance picture(s)."
+  dev_blobs_failed: "⚠️ {count} file(s) couldn't be copied (see the logs); the rest were."
+  dev_blobs_skipped: "⚠️ Stats and pictures not copied: {reason}"
   dev_failed: "⚠️ **Test data not updated:** {reason}"
   dev_denied: "⛔ **Access Denied:** Only Stewards can update the test data."
   test_proposal: "🧪 This is a test proposal from the test site. It uses test data, so it can't be approved or change anything live."

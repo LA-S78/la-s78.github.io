@@ -25,6 +25,65 @@
   outline: none;
   box-shadow: 0 0 10px color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
+/* The browser's own "clear" cross in a search box: hidden (Escape or deleting clears it) */
+.search-bar::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Site search results, under the search box (js/main.js initSearchEngine) */
+.search-results {
+  max-width: 1000px;
+  margin: 0.6rem auto 0;
+  text-align: left;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.search-result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.search-result-list li + li {
+  border-top: 1px solid var(--border-color);
+}
+.search-result {
+  display: block;
+  padding: 0.7rem 1rem;
+  color: var(--text-main);
+  text-decoration: none;
+}
+.search-result:hover,
+.search-result:focus-visible {
+  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+}
+.search-result-where {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--accent-color);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.search-result-text {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+.search-result-text mark {
+  background: color-mix(in srgb, var(--accent-color) 28%, transparent);
+  color: var(--text-main);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.search-result-none {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
 
 .blueprint-img {
   display: block;
@@ -210,7 +269,7 @@ dialog a.dialog-btn:hover {
 }
 
 /* A tool showing this device's saved copy while the fresh data loads
-   (js/live-data-notice.js, markUpdating): dimmed and not clickable, with "⏳ Updating…" in
+   (js/live-data-notice.js, markUpdating): dimmed and not clickable, with "Updating…" in
    its top corner. The label floats, so nothing moves when it goes. */
 .is-updating {
   position: relative;
@@ -235,4 +294,136 @@ dialog a.dialog-btn:hover {
   color: var(--text-muted);
   font-size: 0.72rem;
   pointer-events: none;
+}
+
+/* An alliance tag written in its alliance's colour (scripts set --ally to that colour).
+   Dark colours (e.g. a deep purple) were hard to read on the dark pages, so the text uses
+   the same hue with its lightness raised to at least 0.72 (OKLCH); a colour that is already
+   light enough stays as it is. The alliance's own colour is untouched everywhere else (dots,
+   swatches, the map) and any change to it carries through here. !important as the colour
+   was an inline style before, which no other rule could override.
+   Browsers without relative colours (before 2024) show the colour as it is. */
+.ally-text {
+  color: var(--ally) !important;
+}
+
+@supports (color: oklch(from red l c h)) {
+  .ally-text {
+    color: oklch(from var(--ally) max(l, 0.72) c h) !important;
+  }
+}
+
+/* Your own alliance (js/my-alliance.js): its tag has a soft, steady glow in its own colour,
+   and the card holding it (a rotation week, a standings row, a console week, a buff summary
+   row) a thin edge and a faint wash of the same colour. Both still: a pulse was distracting
+   (owner, 2026-11-16). */
+.is-my-ally {
+  text-shadow: 0 0 6px color-mix(in srgb, currentColor 45%, transparent);
+}
+
+/* An outline, not a border or shadow: the cards' own borders, backgrounds (the gold top 3)
+   and glows (this week's card) stay as they are */
+.is-my-ally-card {
+  outline: 1px solid color-mix(in srgb, var(--my-ally, var(--accent-color)) 70%, transparent);
+  outline-offset: -1px;
+  box-shadow: inset 0 0 28px color-mix(in srgb, var(--my-ally, var(--accent-color)) 14%, transparent);
+}
+
+/* A box of cards with no matches while searching (js/main.js initSearchEngine) */
+.content-pane[hidden] {
+  display: none;
+}
+
+/* The Rules page's link to the Capitol rotation on the calendar */
+.rotation-link {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+/* The Top 4 race on the Rules page (js/ascension.js): Might on Duel Days 3–5 of Kingdom War
+   Week 1 and the total, best first; the Top 4 marked with the accent colour */
+.ascension-race {
+  margin-top: 1.5rem;
+}
+
+.ascension-race h3 {
+  margin: 0 0 0.3rem;
+}
+
+.ascension-meta,
+.ascension-source {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.ascension-scroll {
+  overflow-x: auto;
+}
+
+.ascension-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ascension-table th,
+.ascension-table td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ascension-table th:nth-child(2),
+.ascension-table td:nth-child(2) {
+  text-align: left;
+}
+
+.ascension-table th {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.ascension-table tr.is-top4 td {
+  background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+  font-weight: 700;
+}
+
+.ascension-table tr.is-top4 td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent-color);
+}
+
+.ascension-table tr.is-incomplete td {
+  color: var(--text-muted);
+}
+
+.ascension-total {
+  font-weight: 700;
+}
+
+/* Phones: the three days fold into a small line under the alliance, so the table fits */
+.ascension-days {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .ascension-table th:nth-child(3),
+  .ascension-table th:nth-child(4),
+  .ascension-table th:nth-child(5),
+  .ascension-table td:nth-child(3),
+  .ascension-table td:nth-child(4),
+  .ascension-table td:nth-child(5) {
+    display: none;
+  }
+
+  .ascension-days {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
 }

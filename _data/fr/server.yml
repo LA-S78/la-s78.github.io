@@ -2,33 +2,49 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  signed_out: Connectez-vous avec Discord (en haut à droite) pour voir votre tableau de bord d'alliance.
+  stewards_only: Seuls les intendants (Stewards) peuvent utiliser les outils d'intendant.
+  lookups_used: Les recherches de joueurs d'aujourd'hui sont épuisées. Elles seront réinitialisées lors de la réinitialisation quotidienne (00:00 GT).
+  player_not_found: Aucun joueur ne possède cet identifiant.
+  player_unavailable: Le jeu est injoignable. Réessayez dans quelques minutes.
+  positions_leaders_only: Seuls les R4 et R5 (ainsi que les intendants) de votre alliance peuvent voir les membres sur la carte.
+  positions_unavailable: Les positions des membres ne peuvent pas être chargées pour le moment. Réessayez dans quelques minutes.
+  links_used: Les liens d'alliance d'aujourd'hui sont épuisés. Ils seront réinitialisés lors de la réinitialisation quotidienne (00:00 GT).
+  link_bad: Choisissez une alliance et tapez le tag qu'elle utilise actuellement dans le jeu.
+  link_same: C'est déjà le tag utilisé par le site.
+  link_taken: "{tag} appartient déjà à une autre alliance sur le site."
+  link_not_found: Le jeu ne contient aucune alliance avec le tag {tag} (la casse est importante).
+  positions_used: Les rafraîchissements de carte d'aujourd'hui sont épuisés. Ils seront réinitialisés lors de la réinitialisation quotidienne (00:00 GT).
+  positions_wait: La carte a été rafraîchie il y a un instant. Réessayez dans {minutes} min.
+  refresh_limit: Plus aucun rafraîchissement de liste d'effectif disponible aujourd'hui. Ils seront réinitialisés lors de la réinitialisation quotidienne (00:00 GT).
+  refresh_wait: La liste a été rafraîchie il y a un instant. Réessayez dans {n} min.
+  refresh_failed: Le jeu est injoignable. Réessayez dans quelques minutes.
+  signed_out: Connectez-vous via Discord (en haut à droite) pour voir le tableau de bord de votre alliance.
   load_failed: 'Impossible de charger le tableau de bord : {reason}'
-  no_alliance: Nous n'avons pas pu identifier votre alliance. Le site la détecte via votre rôle d'alliance sur le serveur Discord NAP, ou via un [TAG] au début de votre pseudo sur le serveur. Corrigez cela sur Discord, puis utilisez "Actualiser l'accès" dans votre carte de compte (en haut à droite).
+  no_alliance: Nous n'avons pas pu déterminer à quelle alliance vous appartenez. Le site l'identifie à partir de votre rôle d'alliance sur le serveur Discord NAP, ou d'un [TAG] au début de votre surnom sur le serveur. Corrigez cela sur Discord, puis utilisez "Actualiser l'accès" sur votre fiche de compte (en haut à droite).
   leaders_only: Seuls les R4 et R5 de votre alliance peuvent modifier le tableau de bord.
   chart_removed: Ce graphique a été supprimé.
   chart_already_removed: Ce graphique avait déjà été supprimé.
-  not_linked: Ce graphique n'est pas lié à un Google Sheet ou un Google Doc.
+  not_linked: Ce graphique n'est pas lié à une feuille Google ou à un document.
   unknown_change: Changement inconnu.
   save_failed: 'Impossible d''enregistrer : {reason}'
-  r5_only_nominate: Seul votre R5 peut ouvrir la page de nomination ici. Tapez /nominate sur Discord.
-  rewards_closed: Les récompenses sont fermées jusqu'au {when}.
-  no_rank: "[{tag}] n'a pas de classement dans les résultats."
+  r5_only_nominate: Seul votre R5 peut ouvrir la page de nomination ici. Utilisez la commande /nominate dans Discord.
+  rewards_closed: Les récompenses sont fermées jusqu'à {when}.
+  no_rank: "[{tag}] n'a pas de rang dans le classement."
   choose_type: Choisissez un type de graphique ou de tableau.
   title_needed: Donnez un titre au graphique ou au tableau.
-  too_many_columns: Maximum {max} colonnes (ce tableau en a {count}).
-  too_many_rows: Maximum {max} lignes (ce tableau en a {count}).
+  too_many_columns: Maximum {max} colonnes (ce tableau en contient {count}).
+  too_many_rows: Maximum {max} lignes (ce tableau en contient {count}).
   column_name: Colonne {n}
   paste_first: Collez d'abord un tableau (une ligne d'en-tête, puis les données).
-  no_data_rows: Le tableau n'a pas de lignes de données sous son en-tête.
+  no_data_rows: Le tableau ne contient aucune ligne de données sous son en-tête.
   needs_numbers: Un graphique a besoin d'une colonne de chiffres pour s'afficher.
-  needs_target: 'Un graphique de progression a besoin d''un objectif : un nombre, ou une colonne d''objectifs.'
+  needs_target: 'Un graphique de progression nécessite une cible : un nombre ou une colonne de cibles.'
   too_many_widgets: Maximum {max} graphiques et tableaux par alliance.
   sheet_unusable: 'Les données de la feuille ne peuvent pas être utilisées : {reason}'
   too_big: Cela rendrait ce tableau de bord trop volumineux ({size} Ko sur {max} Ko). Utilisez moins de lignes ou supprimez un tableau.
   player_name_needed: Entrez un nom de joueur.
-  time_format: Les heures sont au format Game Time comme 18:00 (ou laissez vide).
-  start_time_needed: Donnez aussi l'heure de début (ou laissez les deux vides).
+  time_format: Les heures sont au format Game Time comme 18:00 (ou laissez-les vides).
+  start_time_needed: Indiquez également l'heure de début (ou laissez les deux vides).
   rotor_full: Maximum {max} joueurs dans le rotor.
   already_in_rotor: "{name} est déjà dans le rotor."
   player_removed: Ce joueur a été supprimé.
@@ -51,14 +67,17 @@ api_sheets:
   no_table: Ce Doc ne contient aucun tableau.
 api_nominate:
   link_invalid: Ce lien est invalide ou a expiré.
-  token_invalid: Le jeton est invalide ou a expiré. Tapez /nominate à nouveau.
+  token_invalid: Le jeton est invalide ou a expiré. Exécutez /nominate à nouveau.
   signed_out: Connectez-vous avec Discord (en haut à droite) pour cocher les coffres.
   invalid_chest: Coffre invalide.
   no_period: Aucune période de récompense n'est ouverte pour le moment.
-  king_only: Seuls l'alliance du Roi (R4/R5) et les intendants peuvent cocher les coffres.
-  king_only_tag: Seuls l'alliance du Roi [{king}] (R4/R5) et les intendants peuvent cocher les coffres.
+  king_only: Seule l'alliance du Roi (R4/R5) et les intendants peuvent cocher les coffres.
+  king_only_tag: Seule l'alliance du Roi [{king}] (R4/R5) et les intendants peuvent cocher les coffres.
   not_listed: "{name} ne figure plus sur la liste de [{alliance}]. Actualisez la page."
-  save_failed: 'Impossible d''enregistrer : {reason}'
+  id_not_found: Aucun membre de [{alliance}] ne possède l'ID joueur {id}. Vérifiez le numéro ou saisissez le nom.
+  ids_unavailable: Les ID joueurs ne peuvent pas être recherchés pour le moment ({id}). Saisissez le nom à la place.
+  listed_twice: "{name} est présent deux fois dans la liste."
+  save_failed: 'Échec de la sauvegarde : {reason}'
 api_register:
   guild_id_format: Format d'ID de serveur Discord invalide.
   token_invalid: Le jeton est invalide ou a expiré. Tapez /registerbot à nouveau sur Discord.
@@ -81,6 +100,28 @@ api_register:
   officer_channel_missing: Le canal de tickets des officiers ({id}) n'est pas dans "{server}" (ou le bot ne peut pas le voir). Copiez à nouveau son ID.
   alert_role_missing: Le rôle d'alerte par défaut ({id}) n'est pas un rôle dans "{server}". Copiez à nouveau son ID, ou laissez vide pour @everyone.
   role_not_found: Aucun rôle dans "{server}" ne correspond à "{role}" pour l'instant ; cela fonctionnera une fois que ce sera le cas.
+api_alliance_images:
+  frame_png: Un cadre d'avatar doit être un PNG avec un fond transparent (un JPEG masquerait les photos de vos membres).
+  not_set_up: Les images d'alliance ne sont pas encore configurées sur le serveur.
+  failed: Une erreur est survenue avec l'image d'alliance. Veuillez réessayer.
+  bad_image: Ce fichier n'est pas une image utilisable par le site. Veuillez utiliser le formulaire de téléchargement.
+  too_big: L'image est trop volumineuse (plus de {kb} Ko). Veuillez utiliser le formulaire de téléchargement pour la compresser.
+  wrong_size: L'image doit mesurer exactement {width}×{height} pixels. Veuillez utiliser le formulaire de téléchargement.
+  has_metadata: L'image contient toujours des données cachées (comme le lieu de prise de vue). Veuillez utiliser le formulaire de téléchargement pour les supprimer.
+  leaders_only: Seuls les membres R4 et R5 peuvent envoyer des images d'alliance.
+  own_alliance_only: Vous pouvez uniquement envoyer des images pour votre propre alliance.
+  unknown_alliance: Cette alliance ne figure pas dans le NAP.
+  daily_limit: 'Limite quotidienne atteinte : {max} images par alliance toutes les 24 heures. Vous pourrez en envoyer une nouvelle après {when}.'
+  post_failed: L'image n'a pas pu être envoyée aux intendants sur Discord. Veuillez réessayer plus tard.
+  sent: Envoyé aux intendants pour examen. L'image apparaîtra une fois approuvée.
+  stewards_only: Seuls les intendants peuvent examiner les images d'alliance.
+  not_found: Image introuvable. Elle a peut-être expiré.
+  already_decided: Cette image a déjà été examinée (ou remplacée par une plus récente).
+  approved: 'Approuvée : l''image est maintenant en ligne.'
+  rejected: 'Rejetée : l''image a été supprimée.'
+  remove_not_allowed: Seul le R5 de l'alliance ou un intendant peut supprimer ses images.
+  nothing_to_remove: Aucune image à supprimer.
+  removed: Image supprimée.
 api_proposals:
   login_required: Veuillez vous reconnecter avec Discord pour envoyer des propositions.
   leaders_only: Seuls les leaders R4 et R5 peuvent envoyer des propositions.
@@ -106,7 +147,8 @@ api_events:
   deleted: 'Opération supprimée : {title}'
   updated: Opération « {title} » mise à jour.
 reminders:
-  title: "⏰ Début bientôt : {title}"
+  title: "⏰ Début imminent : {title}"
+  title_now: "🔔 Commence maintenant : {title}"
   starts: Début
 bot_common:
   off_week: Semaine de repos
@@ -233,12 +275,17 @@ bot_rewards:
     • Priorités effacées : {overrides}
     • Rachats en temps de guerre annulés : {buyouts} (gardés dans l'historique)
     • La liste de chaque alliance a été retriée pour les coffres corrigés.
+bot_ascension:
+  stewards_only: "⛔ Seuls les Intendants du Royaume peuvent appliquer ou conserver l'ordre du Top 4."
+  no_race: Les résultats de cette course ne sont plus enregistrés.
+  already: "{name} a déjà tranché cette course."
+  cannot_apply: 'Le Top 4 ne peut pas être appliqué : {reason}. Utilisez /rank.'
 bot_admin:
   rank_none: Aucune alliance enregistrée dans l'état actuel.
   rank_title: "🛡️ Classement NAP du serveur"
   rank_open: Diplomatie ouverte et classement
   rank_fetch_failed: "⚠️ Échec de la récupération du classement : {reason}"
-  rank_denied: "⛔ **Accès refusé :** Seuls les intendants du Royaume désignés peuvent mettre à jour le classement des alliances."
+  rank_denied: "⛔ **Accès refusé :** Seuls les intendants du royaume désignés peuvent mettre à jour le classement des alliances."
   rank_missing: "⚠️ Arguments requis manquants : tag et rang."
   rank_set_title: "👑 Classement NAP mis à jour"
   rank_set_text: 'L''alliance `[{tag}]` a été assignée au **Rang #{rank}** *(précédemment : {previous})*.'
@@ -246,12 +293,13 @@ bot_admin:
   rank_updated_by: Mis à jour par {name}
   rank_view: Voir le classement
   rank_set_failed: "⚠️ Échec de la mise à jour du rang : {reason}"
+  rank_ambiguous: "[{tag}] peut désigner plus d'une alliance ({options}) : veuillez saisir le tag exactement, avec ses majuscules."
   dev_done: |-
-    ✅ **Données de test mises à jour.** {count} fichier(s) copié(s) depuis les données en direct vers le Gist de test utilisé par dev.la-s78.app : {files}.
-    Les données en direct ont été uniquement lues, et non modifiées.
+    ✅ **Données de test mises à jour.** {count} fichier(s) copié(s) depuis les données réelles vers le Gist de test utilisé par dev.la-s78.app : {files}.
+    Les données réelles ont seulement été lues, pas modifiées.
   dev_failed: "⚠️ **Données de test non mises à jour :** {reason}"
   dev_denied: "⛔ **Accès refusé :** Seuls les intendants peuvent mettre à jour les données de test."
-  test_proposal: "🧪 Ceci est une proposition de test depuis le site de test. Elle utilise des données de test, elle ne peut donc pas être approuvée ni modifier quoi que ce soit en direct."
+  test_proposal: "🧪 Ceci est une proposition de test depuis le site de test. Elle utilise des données de test, elle ne peut donc pas être approuvée ni modifier quoi que ce soit en temps réel."
   approved_not_updated: "✅ Approuvé et enregistré, mais ce message n'a pas pu être mis à jour ({reason})."
 bot_register:
   nap_only: "⚠️ Cette commande peut uniquement être exécutée sur le serveur NAP officiel."

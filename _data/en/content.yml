@@ -4,8 +4,8 @@ rules_page:
     text: "The following guidelines are mandatory to ensure fair play and server stability."
   rotation:
     title: "Capitol Rotation"
-    text: "To ascend to Top 3 status, the contender must surpass a current holder's Might for Alliance Duel Days 3-5 of Kingdom War Week 1."
-    note: "*Note: Snapshots will be taken 10 minutes before reset.*"
+    text: "The NAP ranks are decided by Might: every NAP alliance, academies included, is ranked by the total of its Might over Alliance Duel Days 3, 4 and 5 of Kingdom War Week 1. The four highest hold the Top 4 seats from the next cycle. The new ranks apply once a Steward confirms."
+    note: "*Note: Might is measured automatically 10 minutes before reset (23:50 GT) on each of the three days.*"
   rewards:
     title: "Capitol Rewards"
 alliance_page:
@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Critical Intel"
-    t10: "T10 Calculator"
-    survival: "Survival Battle"
-    server_rules: "Server Rules"
-    capitol_rotation: "Capitol Rotation"
-    capitol_rewards: "Capitol Rewards"
-    nap_alliances: "NAP Alliances"
-    blacklist: "Blacklist"
+    title: "Pinned Pages"
   directories:
     title: "Directories"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "Alliance & Diplomacy"
       sub: "Ranks, diplomatic status, & territory agreements"
+    calendar:
+      title: "Event Calendar"
+      sub: "Alliance & server events, and the Capitol rotation"
 writers_page:
   usage:
     title: "Markdown Usage"

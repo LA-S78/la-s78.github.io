@@ -20,16 +20,25 @@ module PrecacheList
     '/api/',                 # Vercel serverless sources, not static assets
     '/js/mermaid.min.js',    # 3.3 MB, only used by the internal test page
     '/images/compendium-desk.webp', # only on /reset, which empties the saved copy anyway
+    '/images/screenshot-',   # only the browser's "Install app" screen uses them (site.webmanifest)
+    '/images/events/',       # the calendar's event pictures: downloaded when the calendar shows them
     '/reset.html'            # must always come from the network (it clears the saved copy)
   ].freeze
 
   # The multilingual build copies sw.js into each language folder; only /sw.js is used.
-  EXCLUDED_PATTERNS = [%r{\A/[a-z]{2}/sw\.js\z}].freeze
+  EXCLUDED_PATTERNS = [
+    %r{\A/[a-z]{2}/sw\.js\z},
+    # The Steward image review page (every language's copy): it only works online anyway.
+    %r{\A(?:/[a-z]{2})?/review-image\.html\z}
+  ].freeze
 
   def self.run(dest_path)
     puts "Scanning #{File.expand_path(dest_path)} for precache candidates..."
 
     files = Dir.glob(File.join(dest_path, '**', "*.#{EXTENSIONS}"))
+    # Each language's site search index (search_index.rb); other .json files (Vercel and
+    # npm settings) are not part of the app
+    files += Dir.glob(File.join(dest_path, '*', 'search-index.json'))
     if files.empty?
       puts "WARNING: No files found to cache! Check your _site path."
       return

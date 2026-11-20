@@ -1,0 +1,70 @@
+/* ==========================================================================
+   ALLIANCE PICTURES ON THE NAP RANKS ROWS (owner request, 2026-11-16)
+   An alliance's approved banner (api/_alliance_images.js) behind its row, as --ally-pic.
+   Like the event pictures on the calendar, it fades into the theme's colour where the text
+   sits: solid behind the rank on the left, lighter towards the right, never bright enough
+   to drown the tag's own colour. The rank tiers keep their tint on top.
+   The Capitol Rotation cards: _css/portal/62-alliance-pictures.css.
+   ========================================================================== */
+
+.alliance-ladder-row.has-ally-pic {
+  --pic-fade: var(--bg-color);
+  --pic-tint: transparent;
+  background:
+    linear-gradient(90deg, var(--pic-tint), transparent),
+    linear-gradient(
+      90deg,
+      var(--pic-fade) 0%,
+      color-mix(in srgb, var(--pic-fade) 88%, transparent) 15%,
+      color-mix(in srgb, var(--pic-fade) 62%, transparent) 50%,
+      color-mix(in srgb, var(--pic-fade) 72%, transparent) 100%
+    ),
+    var(--ally-pic) center / cover no-repeat,
+    var(--pic-fade);
+}
+
+.alliance-ladder-row.rank-gold.has-ally-pic {
+  --pic-tint: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+.alliance-ladder-row.rank-silver.has-ally-pic {
+  --pic-tint: color-mix(in srgb, var(--badge-slate) 12%, transparent);
+}
+
+.alliance-ladder-row.rank-bronze.has-ally-pic {
+  --pic-tint: color-mix(in srgb, var(--ladder-bronze) 12%, transparent);
+}
+
+/* A picture that finished loading after its row or card was drawn fades in instead of
+   popping in (js/ally-pics.js; owner, 2026-11-17): a layer of the row's own background
+   colour, under the text, fades away over the picture. Also the Capitol Rotation cards. */
+.ally-pic-in {
+  position: relative;
+  isolation: isolate;
+}
+
+.ally-pic-in::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--pic-fade, var(--bg-color));
+  pointer-events: none;
+  animation: ally-pic-in 0.35s ease-out forwards;
+}
+
+@keyframes ally-pic-in {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ally-pic-in::after {
+    animation-duration: 1ms;
+  }
+}

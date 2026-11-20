@@ -35,7 +35,13 @@ guides:
   campaign_shop: Boutique de Campagne
   premium_shop: Packs Premium & Gemmes
   t10: Calculateur T10
+  frozen_era: Ère glaciaire
   scramble: Mêlée Royale
+  elixir: Mêlée d'élixir
+  undead_siege: Siège des Morts-Vivants
+  hunt_battle: Bataille de chasse
+  kill_event: Événement de Kills
+  gear_upgrade: Amélioration d'équipement
 pages:
   home:
     title: Accueil
@@ -53,11 +59,20 @@ pages:
     title: Alliance
     subtitle: Alliance & Diplomatie
   api-test:
-    title: Infos Top-Secrètes de l'Alliance
-    subtitle: Infos Top-Secrètes de l'Alliance
+    title: Renseignements Top-Secret de l'Alliance
+    subtitle: Renseignements Top-Secret de l'Alliance
   calendar:
     title: Calendrier des Événements
-    subtitle: Événements d'Alliance & du Serveur
+    subtitle: Événements de l'Alliance & du Serveur
+  map:
+    title: Carte du Royaume
+    subtitle: Carte du Royaume
+  rewards:
+    title: Récompenses du Capitole
+    subtitle: Récompenses du Capitole
+  '404':
+    title: Page Non Trouvée
+    subtitle: Zone Envahie
   guide_panes:
     heroes:
       title: Héros & Builds
@@ -128,6 +143,7 @@ nav_anchors:
   nap_ranks: Rangs NAP
   nap_territory: Territoire NAP
   blacklist: Liste Noire
+  nap_stats: Statistiques
   markdown_usage: Utilisation
   markdown_example: Exemple
   guide_submissions: Soumissions
@@ -149,47 +165,56 @@ nav_anchors:
   cheese_cheese: Fromage
   cheese_strategy: Stratégie
   cheese_rewards: Récompenses
+status:
+  coming_soon: Bientôt disponible
 search:
-  guides: Rechercher dans les guides...
-  home: Rechercher dans les répertoires, posts...
+  guides: Rechercher des guides...
+  home: Rechercher des guides et des règles...
   placeholder: Rechercher...
+  results_label: Résultats de recherche
+  no_results: Aucun résultat pour « {query} ».
+  unavailable: La recherche n'est pas disponible pour le moment. Réessayez une fois en ligne.
+image_viewer:
+  close: Fermer
+  download: Télécharger
 pwa:
-  toast_msg: Nouvelles informations acquises.
+  toast_msg: Nouveaux renseignements acquis.
   update_btn: Mettre à jour
   updating: Déchiffrement...
-  updated_msg: "✅ Application mise à jour vers la dernière version."
+  updated_msg: Application mise à jour vers la dernière version.
 identity:
   account: Votre compte
   sign_in: Se connecter
   signing_in: Connexion…
   sign_in_failed: Échec de la connexion, réessayez
   sign_in_again: Se reconnecter
-  refresh: Actualiser l’accès
+  refresh: Actualiser l'accès
   sign_out: Se déconnecter
-  force_update: Mettre à jour l’app
+  force_update: Mettre à jour l'app
   force_updating: Mise à jour…
-  dashboard: Tableau de bord de l’alliance
-  role_steward: Steward
+  dashboard: Tableau de bord de l'Alliance
+  steward_tools: Outils de l'Intendant
+  role_steward: Intendant
   role_r5: R5
   role_r4: R4
   role_officer: Officier
   role_member: Membre
   role_guest: Invité
-  role_expired: Expirée
+  role_expired: Expiré
   alliance_label: Alliance
   alliance_none: aucune
   access_title: Votre accès
-  access_view: Voir la carte en direct, les horaires et les classements
-  access_draft: Préparer des plans en Mode Planificateur
-  access_join: Rejoignez le serveur Discord du NAP pour plus d’accès
-  access_ask_leader: Demandez à votre R4 ou R5 d’envoyer vos plans comme propositions
-  access_send: Envoyer des propositions pour la carte, le classement, la liste noire et les récompenses (5 par jour)
+  access_view: Voir la carte en direct, les plannings et les classements
+  access_draft: Ébaucher des plans en mode Planificateur
+  access_join: Rejoindre le serveur Discord NAP pour plus d'accès
+  access_ask_leader: Demander à votre R4 ou R5 d'envoyer vos plans en tant que propositions
+  access_send: Envoyer des propositions pour la carte, les classements, la liste noire et les récompenses (5 par jour)
   access_send_unlimited: Envoyer des propositions sans limite quotidienne
-  access_approve: Approuver ou refuser les propositions sur Discord
-  access_expired: Votre connexion a expiré. Reconnectez-vous pour envoyer des propositions.
+  access_approve: Approuver ou rejeter les propositions sur Discord
+  access_expired: Votre connexion a expiré. Connectez-vous à nouveau pour envoyer des propositions.
   expires_days: La connexion expire dans {n} jours
   expires_one: La connexion expire dans 1 jour
-  expires_today: La connexion expire aujourd’hui
-  found_role_id: trouvée par ID de rôle
-  found_role_name: trouvée par nom de rôle
-  found_nickname: trouvée par pseudo
+  expires_today: La connexion expire aujourd'hui
+  found_role_id: trouvé par ID de rôle
+  found_role_name: trouvé par nom de rôle
+  found_nickname: trouvé par pseudo

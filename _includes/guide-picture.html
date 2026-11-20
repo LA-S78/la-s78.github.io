@@ -1,0 +1,11 @@
+{%- comment -%}
+  A guide card's picture (owner request, 2026-11-17): the guide's own `picture`, else its
+  calendar event's 3:2 `card_picture`, else the event's wide `picture`
+  (_data/guide_directory.yml `event` → _data/event_types.yml).
+  Sets guide_pic to the file name in images/events/, or "" when there's none.
+{%- endcomment -%}
+{%- assign guide_pic = include.item.picture | default: "" -%}
+{%- if guide_pic == "" and include.item.event -%}
+  {%- assign guide_event = site.data.event_types.types | where: "id", include.item.event | first -%}
+  {%- assign guide_pic = guide_event.card_picture | default: guide_event.picture | default: "" -%}
+{%- endif -%}

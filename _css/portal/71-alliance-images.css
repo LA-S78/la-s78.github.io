@@ -1,0 +1,245 @@
+/* ==========================================================================
+   ALLIANCE IMAGES IN THE DASHBOARD (js/alliance-images.js): leaders choose a picture for
+   the alliance's Capitol Rotation card and NAP Ranks row, move and zoom it in a frame, see
+   it on the cards, and send it to the Stewards.
+   ========================================================================== */
+
+.ai-help,
+.ai-rules,
+.ai-left {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+}
+
+.ai-rules {
+  color: var(--text-muted);
+}
+
+.ai-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+}
+
+.ai-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-dark);
+}
+
+.ai-slot-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.ai-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+/* Folded, with no picture yet: one line, not an empty picture-sized box */
+.ai-thumb.is-empty {
+  justify-content: flex-start;
+  padding: 0.4rem 0.6rem;
+}
+
+/* The section's own Edit button, centred like the dashboard's */
+.ai-edit-bar {
+  margin: 0.4rem 0 0.6rem;
+}
+
+/* The card's thumbnail stays card-sized (a 3:2 box across a whole desktop slot is huge) */
+.ai-slot[data-kind='card'] .ai-thumb {
+  max-width: 260px;
+}
+
+.ai-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ai-status {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+.ai-slot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.ai-message {
+  margin: 0.6rem 0 0;
+  font-size: 0.8rem;
+}
+
+.ai-message.is-error {
+  color: var(--status-danger-text);
+}
+
+.ai-message.is-ok {
+  color: var(--accent-text);
+}
+
+/* Positioning the picture */
+.ai-crop {
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.ai-crop-title {
+  margin: 0.6rem 0 0.3rem;
+  font-size: 0.85rem;
+}
+
+.ai-crop-help {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* The frame: the picture's exact shape; it is moved with a finger or the mouse, so the
+   page mustn't scroll or zoom instead */
+.ai-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid var(--accent-color);
+  border-radius: 6px;
+  background: var(--surface-dark);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.ai-frame:active {
+  cursor: grabbing;
+}
+
+.ai-frame:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+
+.ai-frame-card {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.ai-frame img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.ai-zoom {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.6rem 0;
+  font-size: 0.8rem;
+}
+
+.ai-zoom input {
+  flex: 1;
+  accent-color: var(--accent-color);
+}
+
+/* The previews: real cards at their real width, shrunk to fit */
+.ai-previews {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ai-preview {
+  margin: 0;
+  min-width: 0;
+}
+
+.ai-preview figcaption {
+  font-size: 0.72rem;
+  margin-bottom: 0.25rem;
+}
+
+.ai-scale {
+  overflow: hidden;
+}
+
+.ai-scale-inner {
+  transform-origin: 0 0;
+}
+
+.ai-scale-inner .alliance-ladder-row:hover {
+  border-color: var(--border-color);
+}
+
+/* ==========================================================================
+   The alliance avatar frame (owner request, 2026-11-19): shown around a sample picture
+   at the sizes the site uses (player portraits, _css/portal/26-player-portraits.css).
+   ========================================================================== */
+
+.ai-slot[data-kind='frame'] .ai-thumb {
+  max-width: 160px;
+  /* A light and dark check under the frame shows its see-through parts */
+  background: repeating-conic-gradient(var(--overlay-5) 0 25%, transparent 0 50%) 0 0 / 16px 16px;
+}
+
+.player-portrait.pf-lg {
+  width: 120px;
+  height: 120px;
+}
+
+.ai-frame-sample .pf-initial {
+  font-size: 1.6em;
+}
+
+.ai-frame-sample.pf-md .pf-initial,
+.ai-frame-sample.pf-sm .pf-initial {
+  font-size: 0.85em;
+}
+
+.ai-frame-previews {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.2rem;
+  margin: 0.6rem 0 0.8rem;
+}
+
+.ai-frame-previews figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+
+.ai-use-frame {
+  margin-top: 0.4rem;
+}
+
+.ai-frame-spec {
+  margin-top: 0.4rem;
+}

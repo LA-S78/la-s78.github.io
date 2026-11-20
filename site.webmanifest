@@ -5,8 +5,8 @@
   "description": "Rules, guides, and more",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#110d0b",
-  "theme_color": "#22301c",
+  "background_color": "#1a1513",
+  "theme_color": "#1a1513",
   "icons": [
     {
       "src": "/images/favicon.png",
@@ -17,18 +17,60 @@
   ],
   "screenshots": [
     {
-      "src": "/images/screenshot-desktop.png",
-      "sizes": "2560x1440",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Desktop View"
+      "src": "/images/screenshot-phone-1-home.webp",
+      "sizes": "1236x2676",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Home: guides, rules and tools"
     },
     {
-      "src": "/images/screenshot-mobile.png",
-      "sizes": "1440x2813",
-      "type": "image/png",
+      "src": "/images/screenshot-phone-2-guides.webp",
+      "sizes": "1236x2676",
+      "type": "image/webp",
       "form_factor": "narrow",
-      "label": "Mobile View"
+      "label": "Game guides"
+    },
+    {
+      "src": "/images/screenshot-phone-3-calendar.webp",
+      "sizes": "1236x2676",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Event calendar"
+    },
+    {
+      "src": "/images/screenshot-phone-4-rules.webp",
+      "sizes": "1236x2676",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Server rules and Capitol rewards"
+    },
+    {
+      "src": "/images/screenshot-desktop-1-home.webp",
+      "sizes": "2560x1440",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Home: guides, rules and tools"
+    },
+    {
+      "src": "/images/screenshot-desktop-2-guides.webp",
+      "sizes": "2560x1440",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Game guides"
+    },
+    {
+      "src": "/images/screenshot-desktop-3-calendar.webp",
+      "sizes": "2560x1440",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Event calendar"
+    },
+    {
+      "src": "/images/screenshot-desktop-4-rules.webp",
+      "sizes": "2560x1440",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Server rules and Capitol rewards"
     }
   ],
   "shortcuts": [

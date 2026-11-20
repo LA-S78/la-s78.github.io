@@ -35,7 +35,13 @@ guides:
   campaign_shop: Магазин Кампанії
   premium_shop: Преміум і Набори самоцвітів
   t10: Калькулятор T10
+  frozen_era: Крижана ера
   scramble: Королівська сутичка
+  elixir: Еліксирна сутичка
+  undead_siege: Облога мерців
+  hunt_battle: Полювання на монстрів
+  kill_event: Подія вбивств
+  gear_upgrade: Покращення спорядження
 pages:
   home:
     title: Головна
@@ -45,7 +51,7 @@ pages:
     subtitle: Правила сервера та ротація
   guides:
     title: Гайди
-    subtitle: Гайди по грі
+    subtitle: Гайди до гри
     writers:
       title: Гайд для авторів
       subtitle: Гайд для авторів
@@ -53,11 +59,20 @@ pages:
     title: Альянс
     subtitle: Альянс та дипломатія
   api-test:
-    title: Цілком таємна розвідка альянсу
-    subtitle: Цілком таємна розвідка альянсу
+    title: Цілком таємна розвідка Альянсу
+    subtitle: Цілком таємна розвідка Альянсу
   calendar:
     title: Календар подій
-    subtitle: Події альянсу та сервера
+    subtitle: Події Альянсу та сервера
+  map:
+    title: Карта Королівства
+    subtitle: Карта Королівства
+  rewards:
+    title: Нагороди Капітолія
+    subtitle: Нагороди Капітолія
+  '404':
+    title: Сторінку не знайдено
+    subtitle: Територію захоплено
   guide_panes:
     heroes:
       title: Герої та Білди
@@ -128,6 +143,7 @@ nav_anchors:
   nap_ranks: Ранги NAP
   nap_territory: Територія NAP
   blacklist: Чорний список
+  nap_stats: Статистика
   markdown_usage: Використання
   markdown_example: Приклад
   guide_submissions: Відправлення
@@ -149,15 +165,23 @@ nav_anchors:
   cheese_cheese: Сир
   cheese_strategy: Стратегія
   cheese_rewards: Нагороди
+status:
+  coming_soon: Незабаром
 search:
-  guides: Пошук по гайдах...
-  home: Пошук по каталогах, дописах...
+  guides: Пошук гайдів...
+  home: Пошук гайдів та правил...
   placeholder: Пошук...
+  results_label: Результати пошуку
+  no_results: Нічого не знайдено за запитом “{query}”.
+  unavailable: Пошук зараз недоступний. Спробуйте ще раз, коли будете онлайн.
+image_viewer:
+  close: Закрити
+  download: Завантажити
 pwa:
   toast_msg: Отримано нові розвіддані.
   update_btn: Оновити
-  updating: Розшифрування...
-  updated_msg: "✅ Застосунок оновлено до останньої версії."
+  updating: Дешифрування...
+  updated_msg: Застосунок оновлено до останньої версії.
 identity:
   account: Ваш акаунт
   sign_in: Увійти
@@ -169,6 +193,7 @@ identity:
   force_update: Оновити застосунок
   force_updating: Оновлення…
   dashboard: Панель альянсу
+  steward_tools: Інструменти Steward
   role_steward: Steward
   role_r5: R5
   role_r4: R4
