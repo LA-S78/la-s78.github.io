@@ -2,44 +2,46 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  stewards_only: Solo los Administradores pueden usar las herramientas de Administrador.
-  lookups_used: Se han agotado las búsquedas de jugadores de hoy. Se reinician en el reinicio diario (00:00 GT).
-  player_not_found: Ningún jugador tiene esa ID.
-  player_unavailable: No se pudo contactar con el juego. Inténtalo de nuevo en unos minutos.
-  positions_leaders_only: Solo los R4 y R5 (y Administradores) de tu alianza pueden ver a los miembros en el mapa.
-  positions_unavailable: No se pueden cargar las posiciones de los miembros en este momento. Inténtalo de nuevo en unos minutos.
-  refresh_limit: No quedan actualizaciones de lista hoy. Se reinician en el reinicio diario (00:00 GT).
-  refresh_wait: La lista se actualizó hace un momento. Inténtalo de nuevo en {n} min.
-  refresh_failed: No se pudo contactar con el juego. Inténtalo de nuevo en unos minutos.
+  stewards_only: Solo los Administradores pueden usar las herramientas de administrador.
+  lookups_used: Las consultas de jugadores de hoy se han agotado. Se reiniciarán en el reinicio diario (00:00 GT).
+  player_not_found: Ningún jugador tiene ese ID.
+  player_unavailable: No se pudo conectar con el juego. Inténtalo de nuevo en unos minutos.
+  positions_leaders_only: Solo los R4 y R5 de tu alianza (y Administradores) pueden ver a los miembros en el mapa.
+  positions_unavailable: Las posiciones de los miembros no se pueden cargar en este momento. Inténtalo de nuevo en unos minutos.
+  positions_used: Las actualizaciones de mapa de hoy se han agotado. Se reiniciarán en el reinicio diario (00:00 GT).
+  positions_wait: El mapa se actualizó hace un momento. Inténtalo de nuevo en {minutes} min.
+  refresh_limit: No quedan actualizaciones de plantilla hoy. Se reiniciarán en el reinicio diario (00:00 GT).
+  refresh_wait: La plantilla se actualizó hace un momento. Inténtalo de nuevo en {n} min.
+  refresh_failed: No se pudo conectar con el juego. Inténtalo de nuevo en unos minutos.
   signed_out: Inicia sesión con Discord (arriba a la derecha) para ver el panel de tu alianza.
   load_failed: 'No se pudo cargar el panel: {reason}'
-  no_alliance: No pudimos determinar en qué alianza estás. El sitio la encuentra según tu rol de alianza en el servidor NAP de Discord, o mediante un [TAG] al principio de tu apodo en el servidor. Corrige eso en Discord, luego usa Actualizar Acceso en tu tarjeta de cuenta (arriba a la derecha).
+  no_alliance: No pudimos determinar en qué alianza estás. El sitio lo detecta a partir de tu rol de alianza en el servidor NAP de Discord, o de un [TAG] al comienzo de tu apodo en el servidor. Corrígelo en Discord, luego usa Refrescar Acceso en tu tarjeta de cuenta (arriba a la derecha).
   leaders_only: Solo los R4 y R5 de tu alianza pueden cambiar el panel.
   chart_removed: Ese gráfico fue eliminado.
   chart_already_removed: Ese gráfico ya fue eliminado.
   not_linked: Este gráfico no está vinculado a una Hoja de cálculo o Documento de Google.
   unknown_change: Cambio desconocido.
   save_failed: 'No se pudo guardar: {reason}'
-  r5_only_nominate: Solo tu R5 puede abrir la página de nominaciones aquí. Ejecuta /nominate en Discord.
+  r5_only_nominate: Solo tu R5 puede abrir la página de nominación aquí. Usa /nominate en Discord.
   rewards_closed: Las recompensas están cerradas hasta {when}.
   no_rank: "[{tag}] no tiene rango en la clasificación."
   choose_type: Elige un tipo de gráfico o tabla.
   title_needed: Dale un título al gráfico o tabla.
-  too_many_columns: Como máximo {max} columnas (esta tabla tiene {count}).
-  too_many_rows: Como máximo {max} filas (esta tabla tiene {count}).
+  too_many_columns: Máximo {max} columnas (esta tabla tiene {count}).
+  too_many_rows: Máximo {max} filas (esta tabla tiene {count}).
   column_name: Columna {n}
-  paste_first: Pega primero una tabla (una fila de encabezado y luego los datos).
-  no_data_rows: La tabla no tiene filas de datos debajo de su encabezado.
+  paste_first: Pega una tabla primero (una fila de encabezado, luego los datos).
+  no_data_rows: La tabla no tiene filas de datos bajo su encabezado.
   needs_numbers: Un gráfico necesita una columna de números para mostrarse.
   needs_target: 'Un gráfico de progreso necesita un objetivo: un número o una columna de objetivos.'
-  too_many_widgets: Como máximo {max} gráficos y tablas por alianza.
+  too_many_widgets: Máximo {max} gráficos y tablas por alianza.
   sheet_unusable: 'Los datos de la hoja no se pueden usar: {reason}'
-  too_big: Eso haría que este panel sea demasiado grande ({size} KB de {max} KB). Usa menos filas o elimina una tabla.
-  player_name_needed: Introduce un nombre de jugador.
-  time_format: Las horas son según Game Time, como 18:00 (o déjalas vacías).
-  start_time_needed: Indica también la hora de inicio (o deja ambas vacías).
-  rotor_full: Como máximo {max} jugadores en la rotación.
-  already_in_rotor: "{name} ya está en la rotación."
+  too_big: Eso haría que este panel fuera demasiado grande ({size} KB de {max} KB). Usa menos filas o elimina una tabla.
+  player_name_needed: Ingresa el nombre de un jugador.
+  time_format: Los horarios son Game Time como 18:00 (o déjalos vacíos).
+  start_time_needed: Proporciona también la hora de inicio (o deja ambos vacíos).
+  rotor_full: Máximo {max} jugadores en el rotor.
+  already_in_rotor: "{name} ya está en el rotor."
   player_removed: Ese jugador fue eliminado.
 api_sheets:
   full_link: Pega el enlace completo (que empiece por https://docs.google.com/…).

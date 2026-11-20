@@ -745,44 +745,55 @@ map_planner:
   member_coords: X {x} · Y {y}
   member_in: dans {place}
   member_close: Fermer
+  nap_toggle: Tous les joueurs NAP
+  nap_search: Trouver un joueur (nom, ID ou [TAG])...
+  nap_loading: Chargement des joueurs NAP...
+  nap_refreshing: Demande de toutes les alliances NAP au jeu...
+  nap_count: "{n} joueurs dans {a} alliances NAP"
+  nap_empty: 'Aucune position enregistrée pour le moment : actualisez pour les charger'
+  nap_missing: 'Non chargé : {tags}'
+  nap_here: "{n} joueurs ici :"
+  nap_refresh: Actualiser
+  nap_refresh_left: "{left} sur {max} actualisations restantes aujourd'hui (une requête de suivi par alliance)"
+  nap_refresh_wait: 'Actualisé il y a un instant : de nouveau dans {minutes} min'
   tag_ambiguous: "[{tag}] pourrait désigner plusieurs alliances ({options}). Saisissez le tag exactement, avec ses majuscules."
   levels: Niveaux
   alliances: Alliances
   resources: Ressources
   buff_summary: Résumé des buffs
-  toggle_buff_summary: Activer/Désactiver le résumé des buffs
+  toggle_buff_summary: Basculer le résumé des buffs
   close_buff_summary: Fermer le résumé des buffs
-  planner_mode: Mode planificateur
-  override_label: 'Changer en :'
+  planner_mode: Mode Planificateur
+  override_label: 'Changer pour :'
   override_placeholder: EX. WLO
-  override_help: Saisissez un tag pour remplacer les affectations de clic. Laissez vide pour faire défiler.
+  override_help: Saisissez un tag pour remplacer les affectations par clic. Laissez vide pour faire défiler.
   submit_plan: Soumettre le plan
   compare_label: Comparer le plan avec la carte en direct
   show_live: En direct
   show_plan: Mon plan
   discard: Abandonner
-  discard_confirm: Abandonner vos modifications planifiées ({n}) ? Cette action est irréversible.
-  view_locked: Désactivez le Mode planificateur pour changer la vue
-  plan_saved: Votre plan est enregistré ({n} modifications). Activez le Mode planificateur pour continuer.
+  discard_confirm: Abandonner vos changements prévus ({n}) ? Cette action est irréversible.
+  view_locked: Désactivez le Mode Planificateur pour changer la vue
+  plan_saved: Votre plan est enregistré ({n} changements). Activez le Mode Planificateur pour continuer.
   fullscreen: Plein écran
   toggle_fullscreen: Basculer en plein écran
   exit: Quitter
   grain: Grain
   timber: Bois
   herbs: Herbes
-  solid_gather: 'Plein : Récolte'
+  solid_gather: 'Solide : Récolte'
   stripe_output: 'Rayé : Production'
   level_unknown: Niveau --
   level: Niveau {n}
-  hover: Survoler un territoire
+  hover: Survolez un territoire
   owner: 'Propriétaire :'
   unclaimed: Non réclamé
   buff: 'Buff :'
   none: Aucun
   no_active_buff: Aucun buff actif
-  drawer_title: Distribution des buffs d'alliance
+  drawer_title: Distribution des buffs d'Alliance
   drawer_subtitle: Décompte dynamique basé sur les affectations actives de la carte / du planificateur
-  no_claims: Aucune alliance ne réclame actuellement de territoire.
+  no_claims: Aucune alliance ne revendique de territoire actuellement.
   no_buffs: Aucun buff actif assigné
   cities_one: "{n} Ville"
   cities_other: "{n} Villes"
@@ -793,14 +804,14 @@ map_planner:
   buff_troop_training_speed: Vitesse d'entraînement des troupes
   buff_building_speed: Vitesse de construction
   buff_march_speed: Vitesse de marche
-  buff_grain_gathering: Récolte de grain
-  buff_grain_output: Production de grain
-  buff_timber_gathering: Récolte de bois
-  buff_timber_output: Production de bois
-  buff_herb_gathering: Récolte d'herbes
-  buff_herb_output: Production d'herbes
-  no_changes: Aucun changement détecté dans votre brouillon.
-  proposal_title: Soumettre une proposition de territoire
+  buff_grain_gathering: Récolte de Grain
+  buff_grain_output: Production de Grain
+  buff_timber_gathering: Récolte de Bois
+  buff_timber_output: Production de Bois
+  buff_herb_gathering: Récolte d'Herbes
+  buff_herb_output: Production d'Herbes
+  no_changes: Aucun changement détecté dans votre brouillon de plan.
+  proposal_title: Soumettre une proposition de territoire sur la carte
 proposals:
   title: Soumettre une proposition
   close: Fermer
@@ -983,23 +994,23 @@ stats:
   credit_before: Chiffres issus du
 steward:
   page_title: Outils de l'Intendant
-  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et recherche de joueur en direct.'
-  loading: Chargement…
+  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et une recherche de joueur en direct.'
+  loading: Chargement...
   sign_in: Se connecter avec Discord
   sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils de l'Intendant.
   stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils de l'Intendant.
   lookup_title: Recherche de joueur
-  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses statistiques, ses anciens noms et alliances. Tapez un ID de joueur, ou un nom pour trouver l''ID d''un joueur NAP.'
-  lookup_placeholder: ID de joueur, ou nom d'un joueur NAP
+  lookup_help: 'N''importe quel joueur, en direct depuis le jeu : son alliance, ses statistiques, ainsi que ses noms et alliances précédents. Saisissez un ID de joueur ou un nom pour trouver l''ID d''un joueur NAP.'
+  lookup_placeholder: ID du joueur ou nom d'un joueur NAP
   lookup_go: Rechercher
-  lookup_id_needed: Tapez un ID de joueur (le numéro sur son profil), ou choisissez un joueur NAP parmi les noms trouvés.
+  lookup_id_needed: Saisissez un ID de joueur (le nombre sur son profil) ou choisissez un joueur NAP parmi les noms trouvés.
   lookups_left: "{left} sur {max} recherches en direct restantes aujourd'hui (partagées par tous les Intendants)."
-  looking: Interrogation du jeu…
-  name_none: Aucun joueur NAP avec ce nom. Pour tout autre joueur, utilisez son ID de joueur.
+  looking: Demande au jeu...
+  name_none: Aucun joueur NAP avec ce nom. Pour toute autre personne, utilisez son ID de joueur.
   no_alliance: Aucune alliance
   server: Serveur {n}
-  online: En ligne
-  last_seen: Dernière connexion {when}
+  online: En ligne maintenant
+  last_seen: Vu pour la dernière fois {when}
   shielded: Bouclier actif
   might: Puissance
   kills: Éliminations
@@ -1007,39 +1018,39 @@ steward:
   vip: VIP
   position: Position (X, Y)
   language: Langue
-  ranks: 'Rangs du Royaume : #{might} Puissance · #{kills} Éliminations · #{heroes} Héros'
+  ranks: 'Rangs du Royaume : #{might} Puissance · #{kills} Éliminations · #{heroes} héros'
   history_title: Noms et alliances
-  history_none: Aucun nom ou alliance précédent détecté.
+  history_none: Aucun nom ou alliance précédent n'a été trouvé.
   seen_from: depuis {when}
-  first_seen: Première détection par le tracker {when}.
+  first_seen: Vu pour la première fois par le traqueur {when}.
   pending_title: En attente de révision
   pending_none: Aucune image d'alliance en attente.
   sent_by: Envoyé par {name}, {when}
-  race_title: Course du Top 4
-  race_none: Aucune course mesurée pour l'instant.
+  race_title: Course au Top 4
+  race_none: Aucune course mesurée pour le moment.
   race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
-  race_finished: 'Les 3 jours sont mesurés : les résultats sont entre les mains des dirigeants NAP.'
+  race_finished: 'Les 3 jours sont mesurés : les résultats sont dans la direction du NAP.'
   race_missing: 'Non mesuré : {tags}'
   race_more: Tableau complet sur la page des Règles
-  quota_title: Requêtes du tracker
-  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le tracker au site ; le consulter ne coûte donc rien. Vérifier maintenant consomme une requête.
+  quota_title: Requêtes du traqueur
+  quota_help: Le traqueur de Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le traqueur au site, il ne coûte donc rien à afficher ; vérifier maintenant coûte une requête.
   quota_check: Vérifier maintenant
-  quota_used: utilisés aujourd'hui
-  quota_failed: Le tracker est injoignable.
+  quota_used: utilisé aujourd'hui
+  quota_failed: Le traqueur n'a pas pu être contacté.
   quota_as_of: Au {when}
-  quota_none: Le site n'a encore rien demandé au tracker aujourd'hui.
-  quota_resets: Redémarre dans {time}
+  quota_none: Le site n'a encore rien demandé au traqueur aujourd'hui.
+  quota_resets: Recommence dans {time}
   usage_title: Utilisation
   usage_automation: Automatisation
-  usage_automation_help: Instantané des statistiques quotidiennes et course du Top 4
+  usage_automation_help: Instantané des statistiques quotidiennes et course au Top 4
   usage_alliance: Outils d'alliance
-  usage_alliance_help: Tableaux de bord, liste des membres, nominations
+  usage_alliance_help: Tableaux de bord, roster, nominations
   usage_public: Pages publiques
   usage_public_help: Cartes de classement sur la page Alliance
   usage_steward: Outils de l'Intendant
-  usage_steward_help: Recherches de joueurs et vérifications d'utilisation
+  usage_steward_help: Recherches de joueurs, actualisations de carte et vérifications d'utilisation
   usage_other: Autre
   usage_other_help: Tout ce qui n'est pas étiqueté
   usage_unrecorded: Non enregistré
-  usage_unrecorded_help: Compté par le tracker, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
+  usage_unrecorded_help: Compté par le traqueur, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
   usage_none: Aucune requête notée aujourd'hui.

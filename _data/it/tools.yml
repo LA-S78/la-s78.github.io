@@ -730,40 +730,51 @@ blacklist_planner:
   what_player: giocatore
   sent: Proposta di blacklist inviata alla leadership su Discord. Sarà applicata una volta approvata da uno Steward.
 map_planner:
-  view: 'Visualizza:'
+  view: 'Vista:'
   zoom_in: Ingrandisci
-  zoom_out: Riduci
+  zoom_out: Rimpicciolisci
   zoom_reset: Mostra l'intera mappa
   members_toggle: I miei membri
   members_search: Trova un membro (nome o ID)...
-  members_loading: Caricamento membri...
+  members_loading: Caricamento membri in corso...
   members_count: "{n} membri di [{tag}]"
-  members_as_of: posizioni al {time}
+  members_as_of: posizioni aggiornate al {time}
   members_failed: 'Impossibile mostrare i membri: {error}'
   members_none: Nessun membro trovato
   members_here: "{n} membri qui:"
   member_coords: X {x} · Y {y}
   member_in: in {place}
   member_close: Chiudi
-  tag_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}). Digita il tag esattamente, incluse le maiuscole."
+  nap_toggle: Tutti i giocatori NAP
+  nap_search: Trova un giocatore (nome, ID o [TAG])...
+  nap_loading: Caricamento giocatori NAP...
+  nap_refreshing: Richiesta al gioco di ogni alleanza NAP...
+  nap_count: "{n} giocatori in {a} alleanze NAP"
+  nap_empty: 'Nessuna posizione salvata: Aggiorna per caricarle'
+  nap_missing: 'Non caricati: {tags}'
+  nap_here: "{n} giocatori qui:"
+  nap_refresh: Aggiorna
+  nap_refresh_left: "{left} di {max} aggiornamenti rimasti oggi (una richiesta di tracciamento per alleanza)"
+  nap_refresh_wait: 'Aggiornato poco fa: di nuovo tra {minutes} min'
+  tag_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}). Inserisci il tag esattamente, incluse le maiuscole."
   levels: Livelli
   alliances: Alleanze
   resources: Risorse
   buff_summary: Riepilogo Buff
   toggle_buff_summary: Attiva/Disattiva Riepilogo Buff
   close_buff_summary: Chiudi Riepilogo Buff
-  planner_mode: Modalità Planner
+  planner_mode: Modalità Pianificatore
   override_label: 'Cambia in:'
   override_placeholder: ES. WLO
-  override_help: Digita un tag per sovrascrivere le assegnazioni. Lascia vuoto per cambiare ciclicamente.
+  override_help: Inserisci un tag per sovrascrivere le assegnazioni dei clic. Lascia vuoto per ciclare.
   submit_plan: Invia Piano
-  compare_label: Confronta il piano con la mappa in tempo reale
+  compare_label: Confronta il piano con la mappa live
   show_live: Live
   show_plan: Il mio piano
   discard: Scarta
   discard_confirm: Scartare le modifiche pianificate ({n})? Questa operazione non può essere annullata.
-  view_locked: Disattiva la Modalità Planner per cambiare visualizzazione
-  plan_saved: Il piano è stato salvato ({n} modifiche). Attiva la Modalità Planner per continuare.
+  view_locked: Disattiva la Modalità Pianificatore per cambiare la vista
+  plan_saved: Il tuo piano è stato salvato ({n} modifiche). Attiva la Modalità Pianificatore per continuare.
   fullscreen: Schermo intero
   toggle_fullscreen: Attiva/Disattiva Schermo intero
   exit: Esci
@@ -774,24 +785,24 @@ map_planner:
   stripe_output: 'Striscia: Produzione'
   level_unknown: Livello --
   level: Livello {n}
-  hover: Passa sopra un territorio
+  hover: Passa il mouse su un territorio
   owner: 'Proprietario:'
   unclaimed: Non reclamato
   buff: 'Buff:'
   none: Nessuno
   no_active_buff: Nessun buff attivo
   drawer_title: Distribuzione Buff Alleanza
-  drawer_subtitle: Conteggio dinamico basato sulle assegnazioni della mappa attiva / planner
-  no_claims: Nessuna alleanza reclama territori al momento.
+  drawer_subtitle: Conteggio dinamico basato sulle assegnazioni attive della mappa / pianificatore
+  no_claims: Nessuna alleanza reclama attualmente il territorio.
   no_buffs: Nessun buff attivo assegnato
   cities_one: "{n} Città"
   cities_other: "{n} Città"
   col_alliance: Alleanza
   col_holdings: Possedimenti
-  col_buffs: Buff Attivi
+  col_buffs: Buff attivi
   buff_research_speed: Velocità Ricerca
   buff_troop_training_speed: Velocità Addestramento Truppe
-  buff_building_speed: Velocità Costruzione
+  buff_building_speed: Velocità Edifici
   buff_march_speed: Velocità Marcia
   buff_grain_gathering: Raccolta Grano
   buff_grain_output: Produzione Grano
@@ -799,7 +810,7 @@ map_planner:
   buff_timber_output: Produzione Legname
   buff_herb_gathering: Raccolta Erbe
   buff_herb_output: Produzione Erbe
-  no_changes: Nessuna modifica rilevata nel piano.
+  no_changes: Nessuna modifica rilevata nella tua bozza di piano.
   proposal_title: Invia Proposta Territorio Mappa
 proposals:
   title: Invia proposta
@@ -982,20 +993,20 @@ stats:
   show_hide: Tocca un'alleanza per mostrare o nascondere la sua linea.
   credit_before: Numeri dal
 steward:
-  page_title: Strumenti Steward
-  intro: 'Strumenti per gli Steward del Regno: cosa ti aspetta e una ricerca giocatori in tempo reale.'
+  page_title: Strumenti Amministratore
+  intro: 'Strumenti per gli Amministratori del Regno: cosa ti attende e ricerca giocatori live.'
   loading: Caricamento...
   sign_in: Accedi con Discord
-  sign_in_needed: Accedi con Discord per aprire gli strumenti Steward.
-  stewards_only: Solo gli Steward del Regno possono aprire gli strumenti Steward.
+  sign_in_needed: Accedi con Discord per aprire gli strumenti Amministratore.
+  stewards_only: Solo gli Amministratori del Regno possono aprire gli strumenti Amministratore.
   lookup_title: Ricerca giocatore
-  lookup_help: 'Qualsiasi giocatore, in diretta dal gioco: la sua alleanza, i numeri e i nomi e le alleanze precedenti. Digita un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
+  lookup_help: 'Qualsiasi giocatore, in diretta dal gioco: la loro alleanza, i numeri e i nomi e alleanze precedenti. Inserisci un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
   lookup_placeholder: ID giocatore o nome di un giocatore NAP
   lookup_go: Cerca
-  lookup_id_needed: Digita un ID giocatore (il numero sul suo profilo) o seleziona un giocatore NAP dai nomi trovati.
-  lookups_left: "{left} di {max} ricerche in tempo reale rimanenti oggi (condivise tra tutti gli Steward)."
-  looking: Interrogazione del gioco...
-  name_none: Nessun giocatore NAP con quel nome. Per chiunque altro, usa il suo ID giocatore.
+  lookup_id_needed: Inserisci un ID giocatore (il numero sul loro profilo) o scegli un giocatore NAP dai nomi trovati.
+  lookups_left: "{left} di {max} ricerche live rimaste oggi (condivise tra tutti gli Amministratori)."
+  looking: Richiesta al gioco...
+  name_none: Nessun giocatore NAP con quel nome. Per chiunque altro, usa il loro ID giocatore.
   no_alliance: Nessuna alleanza
   server: Server {n}
   online: Online ora
@@ -1007,39 +1018,39 @@ steward:
   vip: VIP
   position: Posizione (X, Y)
   language: Lingua
-  ranks: 'Classifiche Regno: #{might} Potenza · #{kills} uccisioni · #{heroes} eroi'
+  ranks: 'Ranghi del Regno: #{might} Potenza · #{kills} uccisioni · #{heroes} eroi'
   history_title: Nomi e alleanze
   history_none: Nessun nome o alleanza precedente rilevato.
-  seen_from: dal {when}
+  seen_from: da {when}
   first_seen: Visto per la prima volta dal tracker {when}.
   pending_title: In attesa di revisione
   pending_none: Nessuna immagine di alleanza in attesa.
   sent_by: Inviato da {name}, {when}
   race_title: Gara Top 4
-  race_none: Nessuna gara misurata ancora.
+  race_none: Nessuna gara ancora misurata.
   race_progress: "{n} di 3 giorni di Duello misurati finora."
-  race_finished: 'Tutti i 3 giorni misurati: i risultati sono nella leadership NAP.'
-  race_missing: 'Non misurato: {tags}'
+  race_finished: 'Tutti e 3 i giorni misurati: i risultati sono nella leadership NAP.'
+  race_missing: 'Non misurati: {tags}'
   race_more: Tabella completa nella pagina Regole
   quota_title: Richieste tracker
-  quota_help: Il Tracker di Last Asylum consente 1.000 richieste al giorno, che ripartono alle 00:00 UTC. La cifra sottostante è l'ultima fornita dal tracker al sito, quindi non costa nulla mostrarla; controllare ora costa una richiesta.
+  quota_help: Il tracker di Last Asylum consente 1.000 richieste al giorno, con ripristino alle 00:00 UTC. La cifra qui sotto è l'ultima fornita dal tracker al sito, quindi visualizzarla non ha costi; controllare ora costa una richiesta.
   quota_check: Controlla ora
   quota_used: usate oggi
   quota_failed: Impossibile raggiungere il tracker.
   quota_as_of: Aggiornato al {when}
   quota_none: Il sito non ha ancora richiesto nulla al tracker oggi.
-  quota_resets: Ricomincia tra {time}
+  quota_resets: Ripristina tra {time}
   usage_title: Cosa le ha consumate
   usage_automation: Automazione
-  usage_automation_help: Snapshot statistiche giornaliere e gara Top 4
-  usage_alliance: Strumenti alleanza
-  usage_alliance_help: Dashboard, elenco membri, nomine
+  usage_automation_help: Snapshot Statistiche Giornaliere e gara Top 4
+  usage_alliance: Strumenti Alleanza
+  usage_alliance_help: Dashboard, roster, nomine
   usage_public: Pagine pubbliche
   usage_public_help: Schede delle classifiche nella pagina Alleanza
-  usage_steward: Strumenti Steward
-  usage_steward_help: Ricerca giocatori e controlli di utilizzo
+  usage_steward: Strumenti Amministratore
+  usage_steward_help: Ricerche giocatori, aggiornamenti mappa e controlli di utilizzo
   usage_other: Altro
   usage_other_help: Tutto ciò che non è etichettato
   usage_unrecorded: Non registrato
-  usage_unrecorded_help: Contato dal tracker, non ancora salvato qui (ogni server salva ogni pochi minuti)
-  usage_none: Nessuna richiesta registrata oggi.
+  usage_unrecorded_help: Conteggiato dal tracker, non ancora salvato qui (ogni server salva ogni pochi minuti)
+  usage_none: Nessuna richiesta annotata ancora oggi.

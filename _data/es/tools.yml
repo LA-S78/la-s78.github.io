@@ -738,32 +738,43 @@ map_planner:
   members_search: Buscar un miembro (nombre o ID)...
   members_loading: Cargando tus miembros...
   members_count: "{n} miembros de [{tag}]"
-  members_as_of: posiciones al {time}
+  members_as_of: posiciones a fecha de {time}
   members_failed: 'No se pueden mostrar los miembros: {error}'
   members_none: Ningún miembro coincide
   members_here: "{n} miembros aquí:"
   member_coords: X {x} · Y {y}
   member_in: en {place}
   member_close: Cerrar
-  tag_ambiguous: "[{tag}] podría significar más de una alianza ({options}). Escribe la etiqueta exactamente, con sus mayúsculas."
+  nap_toggle: Todos los jugadores NAP
+  nap_search: Buscar un jugador (nombre, ID o [TAG])...
+  nap_loading: Cargando jugadores NAP...
+  nap_refreshing: Solicitando al juego todas las alianzas NAP...
+  nap_count: "{n} jugadores en {a} alianzas NAP"
+  nap_empty: 'Aún no hay posiciones guardadas: Refresca para cargarlas'
+  nap_missing: 'No cargado: {tags}'
+  nap_here: "{n} jugadores aquí:"
+  nap_refresh: Refrescar
+  nap_refresh_left: "{left} de {max} refrescos restantes hoy (una solicitud de rastreador por alianza)"
+  nap_refresh_wait: 'Refrescado hace un momento: de nuevo en {minutes} min'
+  tag_ambiguous: "[{tag}] podría significar más de una alianza ({options}). Escribe el tag exactamente, respetando las mayúsculas."
   levels: Niveles
   alliances: Alianzas
   resources: Recursos
   buff_summary: Resumen de Buffs
-  toggle_buff_summary: Alternar Resumen de Buffs
-  close_buff_summary: Cerrar Resumen de Buffs
+  toggle_buff_summary: Alternar resumen de Buffs
+  close_buff_summary: Cerrar resumen de Buffs
   planner_mode: Modo Planificador
   override_label: 'Cambiar a:'
   override_placeholder: P. EJ. WLO
-  override_help: Escribe una etiqueta para anular las asignaciones de clic. Déjalo en blanco para rotar.
-  submit_plan: Enviar Plan
+  override_help: Escribe un tag para anular las asignaciones de clic. Déjalo en blanco para ciclar.
+  submit_plan: Enviar plan
   compare_label: Comparar el plan con el mapa en vivo
   show_live: En vivo
   show_plan: Mi plan
   discard: Descartar
   discard_confirm: "¿Descartar tus cambios planificados ({n})? Esto no se puede deshacer."
   view_locked: Desactiva el Modo Planificador para cambiar la vista
-  plan_saved: Tu plan ha sido guardado ({n} cambios). Activa el Modo Planificador para continuar.
+  plan_saved: Tu plan se ha guardado ({n} cambios). Activa el Modo Planificador para continuar.
   fullscreen: Pantalla completa
   toggle_fullscreen: Alternar pantalla completa
   exit: Salir
@@ -774,33 +785,33 @@ map_planner:
   stripe_output: 'Franja: Producción'
   level_unknown: Nivel --
   level: Nivel {n}
-  hover: Pasa el cursor sobre un territorio
+  hover: Pasa el ratón sobre un territorio
   owner: 'Propietario:'
   unclaimed: Sin reclamar
   buff: 'Buff:'
   none: Ninguno
-  no_active_buff: Ningún buff activo
+  no_active_buff: Sin buff activo
   drawer_title: Distribución de Buffs de Alianza
-  drawer_subtitle: Conteo dinámico basado en las asignaciones activas del mapa / planificador
+  drawer_subtitle: Recuento dinámico basado en las asignaciones activas del mapa / planificador
   no_claims: Ninguna alianza reclama territorio actualmente.
   no_buffs: No hay buffs activos asignados
   cities_one: "{n} Ciudad"
   cities_other: "{n} Ciudades"
   col_alliance: Alianza
-  col_holdings: Posesiones
-  col_buffs: Buffs Activos
-  buff_research_speed: Velocidad de Investigación
-  buff_troop_training_speed: Velocidad de Entrenamiento de Tropas
-  buff_building_speed: Velocidad de Construcción
-  buff_march_speed: Velocidad de Marcha
-  buff_grain_gathering: Recolección de Grano
-  buff_grain_output: Producción de Grano
-  buff_timber_gathering: Recolección de Madera
-  buff_timber_output: Producción de Madera
-  buff_herb_gathering: Recolección de Hierbas
-  buff_herb_output: Producción de Hierbas
+  col_holdings: Propiedades
+  col_buffs: Buffs activos
+  buff_research_speed: Velocidad de investigación
+  buff_troop_training_speed: Velocidad de entrenamiento de tropas
+  buff_building_speed: Velocidad de construcción
+  buff_march_speed: Velocidad de marcha
+  buff_grain_gathering: Recolección de grano
+  buff_grain_output: Producción de grano
+  buff_timber_gathering: Recolección de madera
+  buff_timber_output: Producción de madera
+  buff_herb_gathering: Recolección de hierbas
+  buff_herb_output: Producción de hierbas
   no_changes: No se detectaron cambios en tu borrador de plan.
-  proposal_title: Enviar Propuesta de Territorio en el Mapa
+  proposal_title: Enviar propuesta de territorio en el mapa
 proposals:
   title: Enviar propuesta
   close: Cerrar
@@ -983,19 +994,19 @@ stats:
   credit_before: Números de
 steward:
   page_title: Herramientas de Administrador
-  intro: 'Herramientas para administradores de Reino: qué te espera y búsqueda de jugadores en tiempo real.'
+  intro: 'Herramientas para Administradores de Reino: qué te espera y búsqueda de jugadores en vivo.'
   loading: Cargando...
   sign_in: Iniciar sesión con Discord
-  sign_in_needed: Inicia sesión con Discord para abrir las herramientas de administrador.
-  stewards_only: Solo los administradores de Reino pueden abrir las herramientas de administrador.
-  lookup_title: Búsqueda de jugador
-  lookup_help: 'Cualquier jugador, en tiempo real desde el juego: su alianza, estadísticas, nombres y alianzas anteriores. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
-  lookup_placeholder: ID de jugador, o nombre de un jugador NAP
+  sign_in_needed: Inicia sesión con Discord para abrir las herramientas de Administrador.
+  stewards_only: Solo los Administradores de Reino pueden abrir las herramientas de Administrador.
+  lookup_title: Búsqueda de jugadores
+  lookup_help: 'Cualquier jugador, en vivo desde el juego: su alianza, números, nombres anteriores y alianzas. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
+  lookup_placeholder: ID de jugador o nombre de un jugador NAP
   lookup_go: Buscar
   lookup_id_needed: Escribe un ID de jugador (el número en su perfil) o elige un jugador NAP de los nombres encontrados.
-  lookups_left: "{left} de {max} búsquedas en tiempo real restantes hoy (compartidas por todos los administradores)."
+  lookups_left: "{left} de {max} búsquedas en vivo restantes hoy (compartidas por todos los Administradores)."
   looking: Consultando al juego...
-  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otro, usa su ID de jugador.
+  name_none: Ningún jugador NAP con ese nombre. Para cualquier otro, utiliza su ID de jugador.
   no_alliance: Sin alianza
   server: Servidor {n}
   online: En línea ahora
@@ -1013,9 +1024,9 @@ steward:
   seen_from: desde {when}
   first_seen: Visto por primera vez por el rastreador {when}.
   pending_title: Esperando revisión
-  pending_none: No hay imágenes de alianza en espera.
+  pending_none: No hay imágenes de alianza esperando.
   sent_by: Enviado por {name}, {when}
-  race_title: Carrera del Top 4
+  race_title: Carrera Top 4
   race_none: Aún no se ha medido ninguna carrera.
   race_progress: "{n} de 3 días de Duelo medidos hasta ahora."
   race_finished: 'Los 3 días medidos: los resultados están en el liderazgo NAP.'
@@ -1027,19 +1038,19 @@ steward:
   quota_used: usado hoy
   quota_failed: No se pudo contactar con el rastreador.
   quota_as_of: A fecha de {when}
-  quota_none: El sitio aún no ha solicitado nada al rastreador hoy.
+  quota_none: El sitio aún no ha pedido nada al rastreador hoy.
   quota_resets: Se reinicia en {time}
-  usage_title: Uso de solicitudes
+  usage_title: Qué los ha usado
   usage_automation: Automatización
-  usage_automation_help: Instantánea de estadísticas diarias y carrera del Top 4
-  usage_alliance: Herramientas de alianza
+  usage_automation_help: Instantánea de estadísticas diarias y carrera Top 4
+  usage_alliance: Herramientas de Alianza
   usage_alliance_help: Paneles, lista de miembros, nominaciones
   usage_public: Páginas públicas
-  usage_public_help: Tarjetas de clasificación en la página de Alianza
-  usage_steward: Herramientas de administrador
-  usage_steward_help: Búsqueda de jugadores y comprobaciones de uso
-  usage_other: Otros
+  usage_public_help: Tarjetas de clasificación en la página de la Alianza
+  usage_steward: Herramientas de Administrador
+  usage_steward_help: Búsquedas de jugadores, refrescos de mapa y verificación de uso
+  usage_other: Otro
   usage_other_help: Cualquier cosa no etiquetada
   usage_unrecorded: No registrado
   usage_unrecorded_help: Contado por el rastreador, aún no guardado aquí (cada servidor guarda cada pocos minutos)
-  usage_none: Aún no se han registrado solicitudes hoy.
+  usage_none: Aún no hay solicitudes registradas hoy.
