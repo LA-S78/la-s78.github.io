@@ -1082,16 +1082,27 @@ export function bindMapControls(svgRoot = null) {
 
     if (!document.documentElement.dataset.fullscreenBound) {
       document.documentElement.dataset.fullscreenBound = 'true';
+      // Bound once for the whole visit, so it looks the map up each time: after moving
+      // between pages the map is a new element (owner, 2026-11-20: leaving fullscreen with
+      // the back button or by switching apps cleared the first page's map, not the one on
+      // screen, which stayed half-fullscreen and collapsed)
       document.addEventListener('fullscreenchange', () => {
         const isNativeActive = !!document.fullscreenElement;
+        const current = document.getElementById('map-container');
         if (isNativeActive) {
-          mapContainer.classList.add('is-fullscreen');
+          current?.classList.add('is-fullscreen');
           document.body.classList.add('map-fullscreen-active');
         } else {
-          mapContainer.classList.remove('is-fullscreen');
+          current?.classList.remove('is-fullscreen');
           document.body.classList.remove('map-fullscreen-active');
         }
-        syncFullscreenUI(isNativeActive, btnFullscreen);
+        syncFullscreenUI(isNativeActive);
+      });
+      // A page kept for the back button is never kept in fullscreen
+      document.addEventListener('turbo:before-cache', () => {
+        document.getElementById('map-container')?.classList.remove('is-fullscreen');
+        document.body.classList.remove('map-fullscreen-active');
+        syncFullscreenUI(false);
       });
     }
   }

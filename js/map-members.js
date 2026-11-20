@@ -278,7 +278,9 @@ function start() {
         else showGroup(groups[Number(many.dataset.group)]);
       });
       // Clicks and hovers on a marker are the marker's, not the territory's under it
-      ['pointerdown', 'mousemove', 'mouseover'].forEach((type) =>
+      // (Not presses: a drag that starts on a marker must still move the map, js/map-zoom.js;
+      // territories ignore presses anyway while markers are shown)
+      ['mousemove', 'mouseover'].forEach((type) =>
         layer.addEventListener(type, (e) => e.stopPropagation()),
       );
     }
@@ -304,7 +306,12 @@ function start() {
           queued = true;
           requestAnimationFrame(() => {
             queued = false;
-            if (state.on) draw();
+            if (!state.on) return;
+            // Dragging moves the view, not the markers (they're drawn in map units): no
+            // redraw while the zoom is the same and the view stays inside what was drawn
+            // (owner, 2026-11-20: rebuilding every frame flickered); only the card follows
+            if (!needsRedraw()) return placePopup(currentPicked());
+            draw();
           });
         });
     }
@@ -313,9 +320,23 @@ function start() {
     const perPx = unitsPerPx();
     groups = groupsOnScreen(perPx);
     const vb = svg.viewBox?.baseVal;
+    // What's drawn: the view and as much again on every side, so dragging needs no redraw
+    // until the view leaves it
+    drawn = vb
+      ? {
+          zoom: window.MapZoom?.zoom() || 1,
+          x: vb.x - vb.width,
+          y: vb.y - vb.height,
+          width: vb.width * 3,
+          height: vb.height * 3,
+        }
+      : null;
     const inView = (x, y, pad) =>
-      !vb ||
-      (x > vb.x - pad && x < vb.x + vb.width + pad && y > vb.y - pad && y < vb.y + vb.height + pad);
+      !drawn ||
+      (x > drawn.x - pad &&
+        x < drawn.x + drawn.width + pad &&
+        y > drawn.y - pad &&
+        y < drawn.y + drawn.height + pad);
     let names = '';
     const buildings = [];
     const asBuilding = (m, cx, cy, picked) => {
@@ -380,12 +401,30 @@ function start() {
     if (buildings.length) {
       // Grass and the grid under everything; buildings further down the screen in front
       buildings.sort((a, b) => a.cy - b.cy);
-      html = ground(vb, perPx) + html + buildings.map((b) => b.svg).join('');
+      html = ground(drawn || vb, perPx) + html + buildings.map((b) => b.svg).join('');
     }
     svg.classList.toggle('is-game-view', buildings.length > 0);
     layer.innerHTML = html;
     placePopup(pickedGame ? picked : null);
   }
+
+  // ---- Redrawing only when needed ----
+  let drawn = null;
+  function needsRedraw() {
+    const vb = root()?.viewBox?.baseVal;
+    const zoom = window.MapZoom?.zoom() || 1;
+    if (!drawn || !vb || Math.abs(zoom - drawn.zoom) > 1e-6) return true;
+    return (
+      vb.x < drawn.x ||
+      vb.y < drawn.y ||
+      vb.x + vb.width > drawn.x + drawn.width ||
+      vb.y + vb.height > drawn.y + drawn.height
+    );
+  }
+  const currentPicked = () => {
+    const m = state.members.find((x) => x.uid === state.selected);
+    return m && sideOf(m) / unitsPerPx() >= GAME_FROM_PX ? m : null;
+  };
 
   // ---- The card over a tapped Sanctuary (game view) ----
   let pop = null;
