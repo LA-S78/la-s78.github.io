@@ -628,20 +628,25 @@ svg #layer1 path:hover {
   pointer-events: none;
 }
 
-/* The card over the chosen member (owner, 2026-11-20): the old card's compact layout and
-   colours (it replaced the card under the map), with the profile frame round the picture */
+/* The card over the chosen member (owner, 2026-11-20): the game's layout (a darker title
+   bar with the name and the close button; the picture with its profile frame and the details
+   under it), compact like the old card under the map, in the site's theme colours. */
 .map-game-pop {
+  --pop-bg: var(--surface-dark);
+  --pop-head: color-mix(in srgb, var(--surface-dark) 70%, #000);
+  --pop-border: var(--accent-color);
+  --pop-title: var(--text-main);
+  --pop-text: var(--text-muted);
+  --pop-strong: var(--text-main);
   position: absolute;
   z-index: 4; /* under the zoom buttons */
-  display: flex;
-  align-items: center;
-  gap: 10px;
   width: max-content;
-  max-width: min(340px, calc(100% - 8px));
-  padding: 8px 6px 8px 8px;
-  color: var(--text-muted);
-  background: var(--surface-dark);
-  border: 1px solid var(--accent-color);
+  min-width: 220px;
+  max-width: min(320px, calc(100% - 8px));
+  overflow: hidden;
+  color: var(--pop-text);
+  background: var(--pop-bg);
+  border: 1px solid var(--pop-border);
   border-radius: 8px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
   font-size: 13px;
@@ -650,6 +655,50 @@ svg #layer1 path:hover {
 
 .map-game-pop[hidden] {
   display: none;
+}
+
+.map-game-pop .map-game-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 3px 3px 10px;
+  background: var(--pop-head);
+  border-bottom: 1px solid color-mix(in srgb, var(--pop-border) 45%, transparent);
+}
+
+.map-game-pop .map-game-head strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 14px;
+  color: var(--pop-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-game-close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--pop-text);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.map-game-close:hover {
+  color: var(--pop-strong);
+}
+
+.map-game-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px 8px 7px;
 }
 
 .map-game-pic {
@@ -667,6 +716,7 @@ main .map-game-face,
   height: 40px;
   margin: 0;
   object-fit: cover;
+  border: 0;
   border-radius: 6px;
 }
 
@@ -675,8 +725,8 @@ main .map-game-face,
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: var(--text-main);
-  background: var(--overlay-5);
+  color: var(--pop-strong);
+  background: color-mix(in srgb, var(--pop-head) 80%, #888);
 }
 
 main .map-game-frame,
@@ -686,6 +736,8 @@ main .map-game-frame,
   width: 52px;
   height: 52px;
   margin: 0;
+  border: 0; /* not the page pictures' border (15-typography-markdown.css) */
+  border-radius: 0;
   pointer-events: none;
 }
 
@@ -695,37 +747,20 @@ main .map-game-frame,
   min-width: 0;
 }
 
-.map-game-who strong {
-  overflow: hidden;
-  font-size: 14px;
-  color: var(--text-main);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .map-game-who span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.map-game-close {
-  display: inline-flex;
-  flex: none;
-  align-self: flex-start;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  color: var(--text-muted);
-  background: none;
-  border: 0;
-  cursor: pointer;
-}
-
-.map-game-close:hover {
-  color: var(--text-main);
+/* The same card in the game's colours (pale blue, a darker blue title bar) */
+.map-game-pop.is-game-colours {
+  --pop-bg: #dfe8f3;
+  --pop-head: #b9cbe2;
+  --pop-border: #8ea6c6;
+  --pop-title: #1f2d44;
+  --pop-text: #4f6382;
+  --pop-strong: #1f2d44;
 }
 
 /* Members' names, once there's room for them (deep zoom) */

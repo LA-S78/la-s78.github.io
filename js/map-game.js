@@ -99,24 +99,24 @@ export function building(m, cx, cy, side, perPx, { name, picked, textWidth }) {
 }
 
 /**
- * The card over a chosen member (owner, 2026-11-20: laid out like the old card under the
- * map, which it replaces: more in less space). `lines` are the text lines under the name,
- * already worked out by js/map-members.js.
+ * The card over a chosen member (owner, 2026-11-20): the game's layout, a darker title bar
+ * with the name and the close button, and under it the picture (with its profile frame) and
+ * the details, compact like the old card under the map. `title` and `lines` are worked out
+ * by js/map-members.js.
  */
-export function popupHtml(m, { lines, close }) {
+export function popupHtml(m, { title, lines, close }) {
   const initial = esc((m.name || '?').charAt(0).toUpperCase());
   const face = m.avatar
     ? `<img class="map-game-face" src="${esc(m.avatar)}" alt="" referrerpolicy="no-referrer" data-initial="${initial}">`
     : `<span class="map-game-face map-game-initial">${initial}</span>`;
   const frame = m.frame ? `<img class="map-game-frame" src="${esc(m.frame)}" alt="">` : '';
   return `
-    <span class="map-game-pic">${face}${frame}</span>
-    <span class="map-game-who">
-      <strong>${esc(m.name)}</strong>
-      ${lines
+    <div class="map-game-head"><strong>${esc(title)}</strong><button type="button" class="map-game-close" aria-label="${esc(close.label)}">${close.icon}</button></div>
+    <div class="map-game-body">
+      <span class="map-game-pic">${face}${frame}</span>
+      <span class="map-game-who">${lines
         .filter(Boolean)
         .map((l) => `<span>${esc(l)}</span>`)
-        .join('')}
-    </span>
-    <button type="button" class="map-game-close" aria-label="${esc(close.label)}">${close.icon}</button>`;
+        .join('')}</span>
+    </div>`;
 }

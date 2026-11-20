@@ -459,8 +459,9 @@ function start() {
           ? n.toLocaleString(undefined, { notation: 'compact', maximumFractionDigits: 1 })
           : null;
       pop.innerHTML = popupHtml(m, {
+        title: `${tag ? `[${tag}] ` : ''}${m.name}`,
         lines: [
-          [tag ? `[${tag}]` : '', m.rank, might(m.power)].filter(Boolean).join(' · '),
+          [m.rank, `${tm('game_might')} ${might(m.power)}`].filter(Boolean).join(' · '),
           [
             compact(m.kills) !== null ? `${tm('game_kills')} ${compact(m.kills)}` : '',
             m.level ? `${tm('game_sanctuary')} ${m.level}` : '',
