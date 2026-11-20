@@ -496,6 +496,20 @@ svg #layer1 path:hover {
   text-decoration: underline dotted;
 }
 
+/* All NAP players (Stewards): the Refresh button and what it costs, on a line of its own */
+.map-nap-refresh {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.map-nap-refresh .draft-btn {
+  padding: 3px 10px;
+  font-size: 0.75rem;
+}
+
 .map-members-results[hidden],
 #map-members-search[hidden] {
   display: none;

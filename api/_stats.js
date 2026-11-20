@@ -45,6 +45,8 @@ const SUMMARY = () => `${prefix()}/summary.json`;
 const PLAYER_SERIES = () => `${prefix()}/player-series.json`;
 const TOP = () => `${prefix()}/top.json`;
 const PLAYER_INDEX = () => `${prefix()}/player-index.json`;
+/** Where every NAP player's Sanctuary is (the map's "All NAP players", Stewards only). */
+const POSITIONS = () => `${prefix()}/positions.json`;
 /** Days of each player's Might kept for the Top players view (its month and growth lines). */
 const PLAYER_DAYS = 31;
 const TOP_SIZES = { strongest: 100, week: 50, month: 50 };
@@ -432,6 +434,84 @@ async function inBatches(items, size, fn) {
   return out;
 }
 
+// ---------------------------------------------------------------------------------------
+// The map's "All NAP players" (owner request, 2026-11-20; Stewards only)
+// ---------------------------------------------------------------------------------------
+// One file, positions.json: { alliances: { TAG: { at, members: [[uid, name, Might, x, y,
+// picture, rank]] } } }. The daily snapshot updates it for free (it asks the tracker anyway);
+// a Steward's Refresh asks again for every NAP alliance (one request each). Each alliance
+// keeps its own time, so one that failed keeps its earlier positions.
+
+function positionsEntry(a) {
+  const at = Number.isFinite(a.at) ? a.at - (a.ageSeconds || 0) * 1000 : Date.now();
+  return {
+    at: new Date(at).toISOString(),
+    members: (a.members || [])
+      .filter((m) => Number.isFinite(m.x) && Number.isFinite(m.y))
+      .map((m) => [m.uid, m.name, m.power, m.x, m.y, m.avatar || null, m.rank || null]),
+  };
+}
+
+/** Adds alliances' lookups to the positions file (only ones newer than what it has). */
+async function savePositions(found, store) {
+  const file = (await store.read(POSITIONS())) || { alliances: {} };
+  file.alliances = file.alliances || {};
+  for (const [tag, a] of Object.entries(found)) {
+    const entry = positionsEntry(a);
+    const had = file.alliances[tag];
+    if (!had || Date.parse(entry.at) >= Date.parse(had.at)) file.alliances[tag] = entry;
+  }
+  file.updatedAt = new Date().toISOString();
+  await store.write(POSITIONS(), file);
+  return file;
+}
+
+/** The map's view: NAP alliances only (one left the NAP is left out), members flattened. */
+export function napPositionsView(file, tags) {
+  const alliances = [];
+  const members = [];
+  for (const tag of tags) {
+    const a = file?.alliances?.[tag];
+    if (!a) continue;
+    alliances.push({ tag, at: a.at, members: a.members.length });
+    for (const [uid, name, power, x, y, avatar, rank] of a.members) {
+      members.push({ uid: String(uid), name, power, x, y, avatar, rank, tag });
+    }
+  }
+  const missing = tags.filter((tag) => !file?.alliances?.[tag]);
+  return { alliances, members, missing };
+}
+
+export async function readNapPositions({ gist, store = blobStore } = {}) {
+  const tags = napTags(gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {});
+  if (store === blobStore && !blobToken()) return napPositionsView(null, tags);
+  return napPositionsView(await store.read(POSITIONS()), tags);
+}
+
+/** A Steward's Refresh: every NAP alliance asked again, live from the game. */
+export async function refreshNapPositions({ gist, store = blobStore, fetchImpl } = {}) {
+  if (store === blobStore && !blobToken()) throw new Error('No Blob store on this deployment');
+  const tags = napTags(gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {});
+  const todo = tags.filter((t) => !knownMissing(t));
+  const answers = await Promise.all(
+    todo.map((tag) =>
+      fetchAlliance(tag, {
+        fresh: true,
+        timeoutMs: 7000,
+        use: 'steward',
+        ...(fetchImpl ? { fetchImpl } : {}),
+      }).catch(() => null),
+    ),
+  );
+  const found = {};
+  const failed = [];
+  todo.forEach((tag, i) => (answers[i] ? (found[tag] = answers[i]) : failed.push(tag)));
+  const file = Object.keys(found).length
+    ? await savePositions(found, store)
+    : await store.read(POSITIONS());
+  return { ...napPositionsView(file, tags), failed, asked: todo.length };
+}
+
 /**
  * Takes the day's snapshot when one is due (called by the reminder check). Alliances already
  * measured today are kept; a failed lookup is tried again on the next check in the window.
@@ -475,8 +555,10 @@ export async function checkStatsSnapshot({
       ...(fetchImpl ? { fetchImpl } : {}),
     }),
   );
+  const answered = {};
   todo.forEach((tag, i) => {
     if (found[i]) {
+      answered[tag] = found[i];
       today.alliances[tag] = dayEntry(found[i]);
       report.measured.push(tag);
     } else report.failed.push(tag);
@@ -486,6 +568,12 @@ export async function checkStatsSnapshot({
 
   today.at = today.at || new Date(now).toISOString();
   await store.write(dayFile(due.day), today);
+  // The map's "All NAP players" gets the same positions, for free
+  try {
+    await savePositions(answered, store);
+  } catch (err) {
+    console.warn('NAP positions not saved:', err.message);
+  }
 
   const summary = (await store.read(SUMMARY())) || { days: [], alliances: {} };
   // The first time: earlier points from the Top 4 race's snapshots, so the chart has a start
