@@ -18,7 +18,8 @@ Ideas for more Last Asylum Tracker data (owner, 2026-11-19). The tracker allows 
   - [x] **Alliance growth** card on the dashboard: the alliance's Might and members over the last 30 days, from the same snapshot.
 - [x] **Map zoom** (owner, 2026-11-20): pinch, the mouse wheel and + / − / reset buttons, up to 6×; drag to move when zoomed in. "My members" groups split as you zoom, a tapped group zooms in, and a member found by search is zoomed to.
 - [x] **Members on the territory map (leaders only)** — "My members" on the territory map: a dot for each member of the signed-in leader's own alliance, a search box (name or ID) and a card with their Might, coordinates and territory. Positions lined up from five cities the owner read in the game.
-- [x] **Player lookup by ID** — now a view on the Stats tab (NAP players). A live lookup of players outside the NAP could be a Steward tool later.
+- [x] **Player lookup by ID** — a view on the Stats tab (NAP players), and a live lookup of any player on the Steward tools page.
+- [x] **Steward tools page** (`/steward.html`, linked from the account card for Stewards): live player lookup (any player: numbers, kingdom ranks, earlier names and alliances; 30 a day between all Stewards), alliance pictures waiting for review, the Top 4 race, and the tracker's requests used today.
 - ~~NAP checks from alliance declarations~~ — dropped (owner): declarations are free text and too unreliable.
 
 ## 🙋 Owner to-dos

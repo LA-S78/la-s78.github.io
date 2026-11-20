@@ -18,6 +18,7 @@ import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { fetchAlliance, memberPictures } from './_tracker.js';
+import { stewardTools } from './_steward_tools.js';
 import { allianceFrame, imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
@@ -76,6 +77,9 @@ async function respond(req, res) {
   }
   const mapState = gistJson(gist, 'map-state.json');
   const alliances = mapState.alliances || {};
+
+  // The Steward tools page (portal/steward.html): Stewards only, checked in there
+  if (req.method === 'GET' && req.query?.steward) return stewardTools(req, res, { gist, session });
 
   // Whose dashboard: your own; Stewards may pick any alliance.
   const asked = req.method === 'GET' ? req.query?.alliance : req.body?.alliance;

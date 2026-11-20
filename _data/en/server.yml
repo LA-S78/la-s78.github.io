@@ -5,6 +5,10 @@
 # Technical messages for administrators (set-up, raw Discord errors) aren't here.
 
 api_dashboard:
+  stewards_only: "Only Stewards can use the Steward tools."
+  lookups_used: "Today's player lookups are used up. They start again at the daily reset (00:00 GT)."
+  player_not_found: "No player has that ID."
+  player_unavailable: "The game couldn't be reached. Try again in a few minutes."
   positions_leaders_only: "Only your alliance's R4s and R5s (and Stewards) can see members on the map."
   positions_unavailable: "Members' positions can't be loaded right now. Try again in a few minutes."
   refresh_limit: "No roster refreshes left today. They start again at the daily reset (00:00 GT)."
