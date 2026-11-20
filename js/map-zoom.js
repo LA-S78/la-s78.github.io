@@ -16,8 +16,8 @@
 import { getSvgRoot } from './map.js';
 
 const MAX_ZOOM = 6;
-/** The most setMaxZoom allows (a phone needs about 70× for names in a packed hive). */
-const DEEPEST = 160;
+/** The most setMaxZoom allows (a phone's game view needs about 190× in a packed hive). */
+const DEEPEST = 320;
 const STEP = 1.6; // a button press
 const DRAG_PX = 6; // movement before a press counts as a drag, not a tap
 

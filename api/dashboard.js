@@ -182,7 +182,7 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
     takenAt: new Date(live.at - live.ageSeconds * 1000).toISOString(),
     members: live.members
       .filter((m) => Number.isFinite(m.x) && Number.isFinite(m.y))
-      .map(({ uid, name, power, rank, x, y, avatar }) => ({
+      .map(({ uid, name, power, rank, x, y, avatar, kills, level, frame }) => ({
         uid,
         name,
         power,
@@ -190,6 +190,10 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
         x,
         y,
         avatar,
+        // For the map's game view (its popup: kills, the Sanctuary level, the profile frame)
+        kills,
+        level,
+        frame,
       })),
   });
 }

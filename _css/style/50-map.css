@@ -605,6 +605,170 @@ main .map-member-pic,
   vector-effect: non-scaling-stroke;
 }
 
+/* The game view (js/map-game.js): grass and the tile grid, Sanctuaries' pictures with
+   their level badge and name plate, colours from the owner's game screenshots */
+.game-map .map-game-ground rect {
+  fill: #597b56;
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.game-map .map-game-ground path {
+  fill: none;
+  stroke: rgba(38, 66, 40, 0.55);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.game-map .map-game-sanctuary {
+  cursor: pointer;
+}
+
+.game-map .map-game-hit {
+  fill: transparent;
+}
+
+.game-map .map-game-level {
+  fill: #ece2c8;
+  stroke: #7d6a48;
+}
+
+.game-map .map-game-level-text {
+  fill: #3a2f1e;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 800;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.game-map .map-game-plate {
+  fill: rgba(28, 26, 22, 0.62);
+  stroke: rgba(255, 255, 255, 0.25);
+}
+
+.game-map .map-game-sanctuary.is-selected .map-game-plate {
+  fill: rgba(60, 40, 6, 0.85);
+  stroke: #f2c14e;
+}
+
+.game-map .map-game-name {
+  fill: #fff;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* The card over a tapped Sanctuary, styled after the game's: pale blue, a darker header */
+.map-game-pop {
+  position: absolute;
+  z-index: 6;
+  width: min(280px, calc(100% - 8px));
+  overflow: hidden;
+  color: #24324a;
+  background: #dfe8f3;
+  border: 1px solid #9fb2cc;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  font-size: 0.85rem;
+}
+
+.map-game-pop[hidden] {
+  display: none;
+}
+
+.map-game-pop .map-game-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 6px 8px 6px 12px;
+  background: #c4d3e6;
+}
+
+.map-game-pop .map-game-head strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-game-close {
+  display: inline-flex;
+  padding: 4px;
+  color: #24324a;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.map-game-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px 12px;
+}
+
+.map-game-pic {
+  position: relative;
+  flex: none;
+  width: 64px;
+  height: 64px;
+}
+
+main .map-game-face,
+.map-game-face {
+  position: absolute;
+  inset: 8px;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.map-game-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  background: #50627e;
+}
+
+main .map-game-frame,
+.map-game-frame {
+  position: absolute;
+  inset: 0;
+  width: 64px;
+  height: 64px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.map-game-rows {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+  min-width: 0;
+}
+
+.map-game-rows div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.map-game-rows span {
+  color: #5d7090;
+}
+
+.map-game-rows strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Members' names, once there's room for them (deep zoom) */
 .game-map .map-member-name {
   fill: #fff;
@@ -728,6 +892,15 @@ main .map-member-pic,
 }
 
 /* The buttons' icons aren't the map: undo the map picture's rules above for them */
+/* The game view card's close icon: the map's own svg sizing would blow it up */
+.game-map .map-game-pop svg {
+  width: 16px !important;
+  height: 16px !important;
+  max-height: none;
+  opacity: 1;
+  touch-action: manipulation;
+}
+
 .game-map .map-zoom svg {
   width: 18px !important;
   height: 18px !important;

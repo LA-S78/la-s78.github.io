@@ -18,8 +18,9 @@
 // points read in the game (five cities, 2026-11-19, and the Capitol area's corners,
 // 2026-11-20), so members near the Capitol land on the right side of its edge.
 
-import { getAllianceColor, getCityById, getSvgRoot } from './map.js';
+import { alliances, getAllianceColor, getCityById, getSvgRoot } from './map.js';
 import { toMap } from './map-coords.js';
+import { building, ground, popupHtml } from './map-game.js';
 
 const esc = (v) => window.escapeHtml(v);
 const tm = (key, vars) => window.t(`map_planner.${key}`, vars);
@@ -177,7 +178,11 @@ function start() {
   // same zoom (long names shortened with "…"; the chosen member's in full).
   const BUILDING = 0.6; // share of its 3×3 tiles a marker covers (room for the name below)
   const NAMES_FROM_PX = 56; // a Sanctuary this wide on screen: names under every one
-  const DEEPEST_PX = 80; // a Sanctuary at the deepest zoom, on screen (about the game's look)
+  // Further in, the game view (owner request, 2026-11-20; js/map-game.js): Sanctuaries'
+  // pictures on grass and the tile grid, with the level badge and name plate, and a card
+  // over the one tapped
+  const GAME_FROM_PX = 90;
+  const DEEPEST_PX = 120; // a Sanctuary at the deepest zoom, on screen (about the game's look)
 
   /** A Sanctuary's 3×3 tiles in map units, [width, height] (the map isn't to scale). */
   const footprints = new Map();
@@ -193,6 +198,9 @@ function start() {
     }
     return f;
   }
+
+  /** A Sanctuary's width in map units (the smaller side of its 3×3). */
+  const sideOf = (m) => Math.min(...footprint(m));
 
   // ---- How deep the map may zoom: until the smallest Sanctuary is DEEPEST_PX wide ----
   let smallest = null;
@@ -309,12 +317,27 @@ function start() {
       !vb ||
       (x > vb.x - pad && x < vb.x + vb.width + pad && y > vb.y - pad && y < vb.y + vb.height + pad);
     let names = '';
+    const buildings = [];
+    const asBuilding = (m, cx, cy, picked) => {
+      const side = sideOf(m);
+      const fpPx = side / perPx;
+      const px = Math.min(13, Math.max(10, fpPx * 0.13));
+      const name = picked ? m.name : fit(m.name, px, fpPx * 1.05 - 10);
+      buildings.push({
+        cy,
+        svg: building(m, cx, cy, side, perPx, { name, picked, textWidth }),
+      });
+    };
     let html = groups
       .map((g, i) => {
         if (g.members.length === 1) {
           const m = g.members[0];
           const size = markerSize(m, SIZE.one, perPx);
           const fpPx = Math.min(...footprint(m)) / perPx;
+          if (fpPx >= GAME_FROM_PX) {
+            if (inView(g.cx, g.cy, sideOf(m) * 2)) asBuilding(m, g.cx, g.cy, false);
+            return '';
+          }
           if (fpPx >= NAMES_FROM_PX && inView(g.cx, g.cy, size[0] * 2))
             names += nameText(m, g.cx, g.cy, size[1] / 2, fpPx, perPx, false);
           return `${square(g.cx, g.cy, SIZE.one, perPx, 'map-member-dot', `data-uid="${esc(m.uid)}"`, colorOf(m), size)}><title>${esc(label(m))}</title></rect>`;
@@ -327,7 +350,11 @@ function start() {
       .join('');
     html += names;
     const picked = state.members.find((m) => m.uid === state.selected);
-    if (picked) {
+    const pickedGame = picked && sideOf(picked) / perPx >= GAME_FROM_PX;
+    if (pickedGame) {
+      const { cx, cy } = toMap(picked.x, picked.y);
+      asBuilding(picked, cx, cy, true);
+    } else if (picked) {
       const { cx, cy } = toMap(picked.x, picked.y);
       const size = markerSize(picked, SIZE.picked, perPx);
       const half = Math.max(size[0], size[1]) / 2;
@@ -350,7 +377,89 @@ function start() {
           true,
         );
     }
+    if (buildings.length) {
+      // Grass and the grid under everything; buildings further down the screen in front
+      buildings.sort((a, b) => a.cy - b.cy);
+      html = ground(vb, perPx) + html + buildings.map((b) => b.svg).join('');
+    }
+    svg.classList.toggle('is-game-view', buildings.length > 0);
     layer.innerHTML = html;
+    placePopup(pickedGame ? picked : null);
+  }
+
+  // ---- The card over a tapped Sanctuary (game view) ----
+  let pop = null;
+  function placePopup(m) {
+    const box = container.querySelector('.game-map');
+    if (!m || !box) {
+      if (pop) pop.hidden = true;
+      return;
+    }
+    if (!pop) {
+      pop = document.createElement('div');
+      pop.className = 'map-game-pop';
+      pop.addEventListener('click', (e) => {
+        if (!e.target.closest('.map-game-close')) return;
+        state.selected = null;
+        card.hidden = true;
+        draw();
+      });
+      // Taps on the card are the card's, not the map's
+      ['pointerdown', 'mousedown', 'touchstart', 'wheel'].forEach((type) =>
+        pop.addEventListener(type, (e) => e.stopPropagation(), { passive: true }),
+      );
+      box.appendChild(pop);
+    }
+    if (pop.dataset.uid !== m.uid) {
+      pop.dataset.uid = m.uid;
+      pop.innerHTML = popupHtml(m, {
+        allianceName: alliances?.[m.tag || state.tag]?.name || '',
+        might: (n) => (Number.isFinite(n) ? n.toLocaleString() : '—'),
+        count: (n) => (Number.isFinite(n) ? n.toLocaleString() : '—'),
+        close: { label: tm('member_close'), icon: ic('cross', 'solo') },
+      });
+      if (!m.tag && state.tag)
+        pop.querySelector('.map-game-head strong').textContent = `[${state.tag}] ${m.name}`;
+      pop
+        .querySelector('img.map-game-frame')
+        ?.addEventListener('error', (e) => e.target.remove(), { once: true });
+      // A picture that doesn't load shows the initial
+      pop.querySelectorAll('img.map-game-face').forEach((img) =>
+        img.addEventListener(
+          'error',
+          () => {
+            const span = document.createElement('span');
+            span.className = 'map-game-face map-game-initial';
+            span.textContent = img.dataset.initial || '?';
+            img.replaceWith(span);
+          },
+          { once: true },
+        ),
+      );
+    }
+    pop.hidden = false;
+    // Above the building's top, centred on it; below it when there's no room above
+    const svg = root();
+    const ctm = svg.getScreenCTM();
+    const { cx, cy } = toMap(m.x, m.y);
+    const side = sideOf(m);
+    const pt = svg.createSVGPoint();
+    const at = (x, y) => {
+      pt.x = x;
+      pt.y = y;
+      return pt.matrixTransform(ctm);
+    };
+    const top = at(cx, cy + side * 0.28 - side * 0.8);
+    const bottom = at(cx, cy + side * 0.6);
+    const r = box.getBoundingClientRect();
+    const w = pop.offsetWidth;
+    const h = pop.offsetHeight;
+    const left = Math.min(r.width - w - 4, Math.max(4, top.x - r.left - w / 2));
+    let y = top.y - r.top - h - 8;
+    pop.classList.toggle('is-below', y < 4);
+    if (y < 4) y = bottom.y - r.top + 8;
+    pop.style.left = `${left}px`;
+    pop.style.top = `${Math.min(r.height - h - 4, y)}px`;
   }
 
   /** A shared marker tapped: the map zooms in on it until its members split apart. */
@@ -560,6 +669,8 @@ function start() {
 
   function turnOff() {
     state.on = false;
+    if (pop) pop.hidden = true;
+    root()?.classList.remove('is-game-view');
     window.MapZoom?.setMaxZoom?.(0); // back to the usual limit
     root()?.classList.remove('members-on');
     state.selected = null;
