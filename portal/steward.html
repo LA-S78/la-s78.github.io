@@ -122,9 +122,17 @@ strings: [steward]
       $('st-renamed').innerHTML = list
         .map(
           (r) => {
-            // The alliance as the game now names it, in bold so it stands out from the sentence
-            const now = `<strong>[${esc(r.now)}]${r.name ? ` ${esc(r.name)}` : ''}</strong>`;
-            const text = esc(t('steward.renamed', { old: `[${r.tag}]`, now: '\u0000' })).replace('\u0000', now);
+            // Both tags in the alliance's colour (it's the same alliance), as elsewhere on the site;
+            // the game's new name for it in bold so it stands out from the sentence
+            const colour = /^#[0-9a-f]{3,8}$/i.test(r.color || '') ? r.color : '';
+            const tag = (text) =>
+              colour ? `<span class="ally-text" style="--ally: ${colour}">${text}</span>` : text;
+            const now = `<strong>${tag(`[${esc(r.now)}]`)}${r.name ? ` ${esc(r.name)}` : ''}</strong>`;
+            const old = `<strong>${tag(`[${esc(r.tag)}]`)}</strong>`;
+            const text = esc(t('steward.renamed', { old: '\u0001', now: '\u0000' }))
+              .replace('\u0000', now)
+              .split('\u0001')
+              .join(old);
             return `<p>${ic('warning', 'warn')}<span>${text} <a href="/${lang || 'en'}/alliance.html#nap-ranks">${esc(t('steward.renamed_fix'))}</a></span></p>`;
           },
         )

@@ -26,6 +26,8 @@ import { say } from './_messages.js';
 import { readNapPositions, refreshNapPositions } from './_stats.js';
 import { noteSkin } from './_skins.js';
 import { renamedAlliances } from './_alliance_ids.js';
+import { sanitizeAlliances } from './_alliances.js';
+import { getRoleColors } from './_role_colors.js';
 import { napTags } from './_ascension.js';
 
 export const LOOKUPS_PER_DAY = 30;
@@ -114,6 +116,15 @@ function lookupsLeft(gist) {
   return { used, left: Math.max(0, LOOKUPS_PER_DAY - used), max: LOOKUPS_PER_DAY };
 }
 
+/** Renamed NAP alliances, each with its colour (Discord role colour first, as elsewhere). */
+async function renamedWithColours(gist) {
+  const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+  const list = await renamedAlliances(napTags(raw));
+  if (!list.length) return list;
+  const colours = sanitizeAlliances(raw, await getRoleColors().catch(() => ({})));
+  return list.map((r) => ({ ...r, color: colours[r.tag]?.color || null }));
+}
+
 export async function stewardTools(req, res, { gist, session }) {
   if (!isSteward(session.uid)) {
     return res.status(403).json({ error: say('api_dashboard.stewards_only') });
@@ -146,10 +157,9 @@ export async function stewardTools(req, res, { gist, session }) {
         : null,
       lookups: lookupsLeft(gist),
       usage: trackerUsage(gist),
-      // NAP alliances renamed in the game, still measured by their game number meanwhile
-      renamed: await renamedAlliances(
-        napTags(gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {}),
-      ).catch(() => []),
+      // NAP alliances renamed in the game, still measured by their game number meanwhile,
+      // with the alliance's colour (as on the rest of the site)
+      renamed: await renamedWithColours(gist).catch(() => []),
     });
   }
 
