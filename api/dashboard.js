@@ -19,6 +19,7 @@ import { isSteward } from './_stewards.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { fetchAlliance, memberPictures } from './_tracker.js';
 import { stewardTools } from './_steward_tools.js';
+import { readSkinMap } from './_stats.js';
 import { allianceFrame, imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
@@ -177,6 +178,8 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
     use: 'alliance',
   });
   if (!live) return res.status(502).json({ error: say('api_dashboard.positions_unavailable') });
+  // Sanctuary skins collected so far (api/_skins.js), for the map's game view
+  const skins = await readSkinMap().catch(() => ({}));
   return res.status(200).json({
     tag,
     takenAt: new Date(live.at - live.ageSeconds * 1000).toISOString(),
@@ -194,6 +197,7 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
         kills,
         level,
         frame,
+        skin: skins[String(uid)]?.[0] || null,
       })),
   });
 }

@@ -34,7 +34,7 @@ export function pictureUrl(value) {
   const v = String(value || '');
   if (v.startsWith(GAME_IMAGES) && /^[\w./-]+$/.test(v.slice(GAME_IMAGES.length))) return v;
   const art = v.match(
-    /^(?:https:\/\/(?:api\.)?lastasylumtracker\.com)?\/static\/(avatars\/head_\d{1,7}|frames\/frame_\d{1,7}|alliance\/badge_\d{1,7})\.png$/,
+    /^(?:https:\/\/(?:api\.)?lastasylumtracker\.com)?\/static\/(avatars\/head_\d{1,7}|frames\/frame_\d{1,7}|alliance\/badge_\d{1,7}|hq\/skin_\d{1,7})\.png$/,
   );
   return art ? `/game-art/${art[1]}.png` : null;
 }
@@ -304,14 +304,14 @@ export function findMember(typed, members) {
  */
 export async function fetchPlayer(
   uid,
-  { use = 'steward', env = process.env, fetchImpl = fetch } = {},
+  { use = 'steward', fresh = true, env = process.env, fetchImpl = fetch } = {},
 ) {
   const key = String(env.LAT_API_KEY || '').trim();
   const id = String(uid || '').trim();
   if (!key) return { error: 'unavailable' };
   if (!/^\d{5,15}$/.test(id)) return { error: 'not_found' };
   try {
-    const res = await trackerGet(`/players/${id}?fresh=1`, {
+    const res = await trackerGet(`/players/${id}${fresh ? '?fresh=1' : ''}`, {
       key,
       use,
       timeoutMs: 8000,
@@ -356,6 +356,10 @@ export async function fetchPlayer(
         likes: count(d.likes),
         avatar: pictureUrl(d.avatar_url),
         frame: pictureUrl(d.frame_url),
+        // The Sanctuary's skin (the map's game view): null without one. The tracker's own
+        // picture for "no skin" (castle_N.png) is an old look, so it isn't used.
+        skin: d.skin_id ? pictureUrl(d.hq_skin || d.city_skin_icon) : null,
+        skinName: d.skin_id ? String(d.skin_name || '').slice(0, 60) : '',
         ranks: { might: rank('power'), kills: rank('kills'), heroes: rank('heroes') },
         firstSeen: when(d.first_seen_at),
         lastSeen: when(d.last_seen_at),

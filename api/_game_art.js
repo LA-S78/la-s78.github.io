@@ -13,7 +13,9 @@
 import { get, put } from '@vercel/blob';
 
 const SOURCE = 'https://lastasylumtracker.com/static/';
-const PATH = /^(frames\/frame_\d{1,7}|avatars\/head_\d{1,7}|alliance\/badge_\d{1,7})\.png$/;
+// Sanctuary skins too (the territory map's game view, 2026-11-20): hq/skin_1001.png
+const PATH =
+  /^(frames\/frame_\d{1,7}|avatars\/head_\d{1,7}|alliance\/badge_\d{1,7}|hq\/skin_\d{1,7})\.png$/;
 const MAX_BYTES = 600 * 1024;
 const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 

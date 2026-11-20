@@ -24,6 +24,7 @@ import { latestRace } from './_ascension.js';
 import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_tracker.js';
 import { say } from './_messages.js';
 import { readNapPositions, refreshNapPositions } from './_stats.js';
+import { noteSkin } from './_skins.js';
 
 export const LOOKUPS_PER_DAY = 30;
 const FILE = 'steward-tools.json';
@@ -168,6 +169,12 @@ export async function stewardTools(req, res, { gist, session }) {
         ),
         lookups: before,
       });
+    }
+    // The map's game view keeps their skin (no extra request)
+    try {
+      await noteSkin(found.player);
+    } catch (err) {
+      console.warn('Skin not kept:', err.message);
     }
     // Counted once it worked (a failed lookup doesn't use up the day's allowance)
     let lookups = { ...before, used: before.used + 1, left: before.left - 1 };
