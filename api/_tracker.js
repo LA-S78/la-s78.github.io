@@ -50,6 +50,12 @@ export function pictureUrl(value) {
   return art ? `/game-art/${art[1]}.png` : null;
 }
 
+/** Forgets a "not found" answer kept for a tag (after a Steward links or renames it). */
+export function forgetMissing(tag) {
+  const key = String(tag || '').trim();
+  if (cache.get(key)?.missing) cache.delete(key);
+}
+
 /** Was this tag looked up in the last hour and not found? (so its gap is expected) */
 export function knownMissing(tag) {
   const hit = cache.get(String(tag || '').trim());

@@ -30,6 +30,7 @@ strings: [steward]
        that a Steward can link to their new tag -->
   <div id="st-renamed" class="st-renamed" hidden></div>
   <div id="st-unfound" class="st-renamed" hidden></div>
+  <div id="st-mismatch" class="st-renamed" hidden></div>
 
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
@@ -143,6 +144,45 @@ strings: [steward]
         )
         .join('');
     }
+
+    // A tag that now answers with a different game alliance (safeguard 4): measured by its
+    // number meanwhile; a Steward may relink if the new one is the same alliance after all
+    function mismatched(list) {
+      const box = $('st-mismatch');
+      box.hidden = !list.length;
+      box.innerHTML = list
+        .map((m) => {
+          const colour = /^#[0-9a-f]{3,8}$/i.test(m.color || '') ? m.color : '';
+          const tag = `<strong>${colour ? `<span class="ally-text" style="--ally: ${colour}">[${esc(m.tag)}]</span>` : `[${esc(m.tag)}]`}</strong>`;
+          const got = `<strong>${esc(m.name || '?')} (#${esc(m.got)})</strong>`;
+          const text = esc(t('steward.mismatch', { tag: '\u0001', got: '\u0002', known: m.known || '?' }))
+            .split('\u0001')
+            .join(tag)
+            .replace('\u0002', got);
+          return `<form class="st-link" data-relink="${esc(m.tag)}">
+            <p>${ic('warning', 'warn')}<span>${text}</span></p>
+            <small class="st-small">${esc(t('steward.mismatch_relink_help', { got: `${m.name || '?'} (#${m.got})` }))}</small>
+            <button type="submit" class="btn btn-secondary">${esc(t('steward.mismatch_relink'))}</button>
+            <small class="st-small" data-result></small>
+          </form>`;
+        })
+        .join('');
+    }
+    $('st-mismatch').addEventListener('submit', async (e) => {
+      const form = e.target.closest('form[data-relink]');
+      if (!form) return;
+      e.preventDefault();
+      const btn = form.querySelector('button');
+      btn.disabled = true;
+      const res = await ask(`steward=relink&tag=${encodeURIComponent(form.dataset.relink)}`);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        form.querySelector('[data-result]').textContent = data.error || res.statusText;
+        btn.disabled = false;
+        return;
+      }
+      await load();
+    });
 
     // A NAP alliance the game didn't find (no number to follow): a Steward types its tag now
     function unfound(list, links) {
@@ -347,6 +387,7 @@ strings: [steward]
       }
             renamed(data.renamed || []);
       unfound(data.unfound || [], data.links);
+      mismatched(data.mismatched || []);
     }
     load().catch((err) => show(err.message, 'error'));
   })();
