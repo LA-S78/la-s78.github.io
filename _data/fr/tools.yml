@@ -996,19 +996,19 @@ stats:
   credit_before: Chiffres du
 steward:
   page_title: Outils de l'Intendant
-  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend, et une recherche de joueur en direct.'
+  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et une recherche de joueur en temps réel.'
   loading: Chargement…
   sign_in: Se connecter avec Discord
   sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils de l'Intendant.
   stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils de l'Intendant.
   lookup_title: Recherche de joueur
-  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses chiffres, ses anciens noms et alliances. Saisissez un ID de joueur, ou un nom pour trouver l''ID d''un joueur NAP.'
-  lookup_placeholder: ID de joueur ou nom d'un joueur NAP
+  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses chiffres, ses anciens noms et alliances. Saisissez un identifiant de joueur, ou un nom pour trouver l''identifiant d''un joueur NAP.'
+  lookup_placeholder: Identifiant de joueur, ou nom d'un joueur NAP
   lookup_go: Rechercher
-  lookup_id_needed: Saisissez un ID de joueur (le nombre sur son profil), ou choisissez un joueur NAP parmi les noms trouvés.
+  lookup_id_needed: Saisissez un identifiant de joueur (le numéro sur son profil), ou choisissez un joueur NAP parmi les noms trouvés.
   lookups_left: "{left} sur {max} recherches en direct restantes aujourd'hui (partagées par tous les Intendants)."
   looking: Interrogation du jeu…
-  name_none: Aucun joueur NAP avec ce nom. Pour toute autre personne, utilisez son ID de joueur.
+  name_none: Aucun joueur NAP avec ce nom. Pour toute autre personne, utilisez son identifiant de joueur.
   no_alliance: Aucune alliance
   server: Serveur {n}
   online: En ligne
@@ -1022,41 +1022,41 @@ steward:
   language: Langue
   ranks: 'Rangs du Royaume : #{might} Puissance · #{kills} éliminations · #{heroes} héros'
   history_title: Noms et alliances
-  history_none: Aucun ancien nom ou alliance trouvé.
+  history_none: Aucun nom ou alliance précédent n'a été détecté.
   seen_from: depuis {when}
   first_seen: Vu pour la première fois par le tracker {when}.
-  renamed: "{old} est maintenant {now} dans le jeu. Il est toujours mesuré (Stats et course au Top 4) par le numéro d'identification du jeu, mais le site l'appelle toujours {old}."
-  renamed_fix: Renommer dans le planificateur d'Alliance
+  renamed: "{old} est maintenant {now} dans le jeu. Il est toujours mesuré (Stats et course au Top 4) par le numéro du jeu, mais le site l'appelle toujours {old}."
+  renamed_fix: Renommer dans le planificateur d'alliance
   test_copy: "🧪 Site de test : ses données ont été copiées depuis le site en direct {when} (/devupdate dans Discord pour une copie fraîche)."
-  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en direct. Exécutez /devupdate dans Discord pour une copie fraîche."
-  unfound: "{tag} n'a pas été trouvé dans le jeu, il n'est donc pas mesuré (Stats et course au Top 4). S'il a changé de tag dans le jeu, saisissez le nouveau et le site le suivra."
+  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en direct. Lancez /devupdate dans Discord pour une copie fraîche."
+  unfound: "{tag} n'a pas été trouvé dans le jeu, donc il n'est pas mesuré (Stats et course au Top 4). S'il a changé son tag dans le jeu, saisissez le nouveau et le site le suivra."
   unfound_now: Son tag dans le jeu actuellement
   unfound_placeholder: ex. Arch
   unfound_link: Lier
   unfound_checking: Vérification avec le jeu...
-  unfound_left: "{left} sur {max} liens restants aujourd'hui (chaque lien interroge le jeu une fois)"
+  unfound_left: "{left} sur {max} liens restants aujourd'hui (chaque interrogation coûte un lien)"
   pending_title: En attente de révision
   pending_none: Aucune image d'alliance en attente.
   sent_by: Envoyé par {name}, {when}
   race_title: Course au Top 4
-  race_none: Aucune course mesurée pour le moment.
+  race_none: Aucune course mesurée pour l'instant.
   race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
-  race_finished: 'Les 3 jours sont mesurés : les résultats sont communiqués à la direction NAP.'
+  race_finished: 'Les 3 jours ont été mesurés : les résultats sont dans le leadership NAP.'
   race_missing: 'Non mesuré : {tags}'
   race_more: Tableau complet sur la page des Règles
   quota_title: Requêtes du tracker
-  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le tracker au site ; cela ne coûte rien d'afficher cette page, mais vérifier maintenant consomme une requête.
+  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le tracker au site, donc l'afficher ne coûte rien ; vérifier maintenant coûte une requête.
   quota_check: Vérifier maintenant
   quota_used: utilisé aujourd'hui
   quota_failed: Le tracker n'a pas pu être contacté.
   quota_as_of: Au {when}
   quota_none: Le site n'a encore rien demandé au tracker aujourd'hui.
-  quota_resets: Redémarrage dans {time}
-  usage_title: Utilisation des requêtes
+  quota_resets: Redémarre dans {time}
+  usage_title: Ce qui a été utilisé
   usage_automation: Automatisation
   usage_automation_help: Instantané des Stats quotidiennes et course au Top 4
-  usage_alliance: Outils d'Alliance
-  usage_alliance_help: Tableaux de bord, effectifs, nominations
+  usage_alliance: Outils d'alliance
+  usage_alliance_help: Tableaux de bord, liste des membres, nominations
   usage_public: Pages publiques
   usage_public_help: Cartes de classement sur la page Alliance
   usage_steward: Outils de l'Intendant
@@ -1064,5 +1064,5 @@ steward:
   usage_other: Autre
   usage_other_help: Tout ce qui n'est pas étiqueté
   usage_unrecorded: Non enregistré
-  usage_unrecorded_help: Comptabilisé par le tracker, mais pas encore sauvegardé ici (chaque serveur enregistre toutes les quelques minutes)
+  usage_unrecorded_help: Compté par le tracker, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
   usage_none: Aucune requête notée aujourd'hui.

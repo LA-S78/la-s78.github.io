@@ -25,7 +25,13 @@ import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_
 import { say } from './_messages.js';
 import { readNapPositions, refreshNapPositions } from './_stats.js';
 import { noteSkin } from './_skins.js';
-import { renamedAlliances, readAllianceIds, linkAlliance } from './_alliance_ids.js';
+import {
+  renamedAlliances,
+  readAllianceIds,
+  linkAlliance,
+  relinkAlliance,
+  mismatchedAlliances,
+} from './_alliance_ids.js';
 import { readStatsSummary } from './_stats.js';
 import { fetchAlliance as fetchAllianceByTag } from './_tracker.js';
 import { sanitizeAlliances } from './_alliances.js';
@@ -157,6 +163,15 @@ async function renamedWithColours(gist) {
   return list.map((r) => ({ ...r, color: colours[r.tag]?.color || null }));
 }
 
+/** Tags whose game alliance changed under them, each with its colour. */
+async function mismatchedWithColours(gist) {
+  const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+  const list = await mismatchedAlliances(napTags(raw));
+  if (!list.length) return list;
+  const colours = sanitizeAlliances(raw, await getRoleColors().catch(() => ({})));
+  return list.map((m) => ({ ...m, color: colours[m.tag]?.color || null }));
+}
+
 /**
  * NAP alliances the latest Top 4 race day or Stats snapshot couldn't find, with no game
  * number saved for them and not already followed as renamed: [{ tag, name, color }].
@@ -260,6 +275,8 @@ export async function stewardTools(req, res, { gist, session }) {
       // NAP alliances the game didn't find, with no number to follow: a Steward can link them
       unfound: await unfoundAlliances(gist).catch(() => []),
       links: linksLeft(gist),
+      // A tag that now answers with a different game alliance (safeguard 4)
+      mismatched: await mismatchedWithColours(gist).catch(() => []),
       // On the test site: when its data was last copied from the live site (/devupdate)
       testCopy: isTestDeployment() ? gistJson(gist, TEST_COPY_FILE, null)?.copiedAt || '' : null,
     });
@@ -267,6 +284,17 @@ export async function stewardTools(req, res, { gist, session }) {
 
   if (what === 'positions') return napPositions(req, res, { gist, session });
   if (what === 'link') return linkRenamed(req, res, { gist, session });
+  // Safeguard 4: the alliance the tag answers with now is the one the site means after all
+  if (what === 'relink') {
+    const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+    const tag = String(req.query.tag || '').trim();
+    if (!napTags(raw).includes(tag))
+      return res.status(400).json({ error: say('api_dashboard.link_bad') });
+    const done = await relinkAlliance(tag);
+    return done
+      ? res.status(200).json({ relinked: tag })
+      : res.status(409).json({ error: say('api_dashboard.relink_none') });
+  }
 
   if (what === 'quota') {
     const quota = await fetchQuota();

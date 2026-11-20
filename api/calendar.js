@@ -11,6 +11,8 @@ import { checkAscension, latestRace } from './_ascension.js';
 import { checkStatsSnapshot } from './_stats.js';
 import { flushTrackerUsage } from './_tracker.js';
 import { checkSkins } from './_skins.js';
+import { updateRegister } from './_register.js';
+import { readAllianceIds } from './_alliance_ids.js';
 import { timingSafeEqual } from 'node:crypto';
 
 /** True when the request carries the reminder schedule's secret (compared in constant time). */
@@ -69,6 +71,18 @@ export default async function handler(req, res) {
       } catch (err) {
         console.error('Skin check failed:', err);
         report.skins = { error: err.message };
+      }
+      // The alliance register (docs/ALLIANCE-IDS-PLAN.md, step 0): every alliance on the map
+      // gets the site's own permanent ID, once, with the tracker numbers measured. Nothing
+      // reads it yet; it only adds, and saves only when something changed.
+      try {
+        const { ids } = await readAllianceIds();
+        report.register = await updateRegister(await readGist({ timeoutMs: 4000 }), ids, {
+          dryRun,
+        });
+      } catch (err) {
+        console.error('Alliance register not updated:', err);
+        report.register = { error: err.message };
       }
       // The requests those made, saved for the Steward tools page before this server stops
       if (!dryRun) await flushTrackerUsage().catch((err) => console.warn(err.message));
