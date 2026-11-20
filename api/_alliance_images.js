@@ -10,6 +10,7 @@
 //   GET  ?alliance_image=<file>        an approved picture, for everyone (/alliance-images/…)
 // Pictures are kept in a private Vercel Blob store and only ever served through here; the
 // list of what is pending and live is in the Gist (alliance-images.json).
+import { sendMessage } from './_discord_send.js';
 import crypto from 'crypto';
 import { put, get, copy, del } from '@vercel/blob';
 import { verifySessionToken } from './_tokens.js';
@@ -326,15 +327,9 @@ export function reviewMessage(entry, { status = null, colour = 0xb8975a } = {}) 
   return { embeds: [embed], components };
 }
 
-async function discord(path, method, body) {
-  const r = await fetch(`https://discord.com/api/v10${path}`, {
-    method,
-    headers: {
-      Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
+/** Posts (or, with `messageId`, edits) a review message (test site: test channel, no pings). */
+async function discord(channelId, body, messageId = null) {
+  const r = await sendMessage(channelId, body, { messageId });
   if (!r.ok) throw new Error(`Discord API Error: ${r.status} - ${await r.text()}`);
   return r.json();
 }
@@ -342,11 +337,9 @@ async function discord(path, method, body) {
 /** Marks a review post as decided (best effort: the decision is saved either way). */
 async function closeReviewPost(entry, status, colour) {
   if (!entry?.channelId || !entry?.messageId) return;
-  await discord(
-    `/channels/${entry.channelId}/messages/${entry.messageId}`,
-    'PATCH',
-    reviewMessage(entry, { status, colour }),
-  ).catch((err) => console.error('Could not update the image review post:', err.message));
+  await discord(entry.channelId, reviewMessage(entry, { status, colour }), entry.messageId).catch(
+    (err) => console.error('Could not update the image review post:', err.message),
+  );
 }
 
 // ---------------------------------------------------------------------------------------
@@ -510,7 +503,7 @@ async function submit(session, body) {
 
   try {
     const channelId = reviewChannel();
-    const msg = await discord(`/channels/${channelId}/messages`, 'POST', reviewMessage(entry));
+    const msg = await discord(channelId, reviewMessage(entry));
     entry.channelId = channelId;
     entry.messageId = msg.id;
   } catch (err) {

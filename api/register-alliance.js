@@ -1,4 +1,5 @@
 // api/register-alliance.js
+import { mayChangeDiscord } from './_discord_send.js';
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken } from './_tokens.js';
 import { ALLIANCE_COMMANDS_SCHEMA } from './_bot_schema.js'; // one list, shared with the bot
@@ -138,16 +139,19 @@ async function respond(req, res) {
     });
   }
 
-  // 3. Deploy Guild Slash Commands Instantly
+  // 3. Deploy Guild Slash Commands Instantly (never from the test site: it would change a
+  // real alliance's Discord server; _discord_send.js)
   const deployUrl = `https://discord.com/api/v10/applications/${clientId}/guilds/${cleanGuildId}/commands`;
-  const deployRes = await fetch(deployUrl, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bot ${botToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(ALLIANCE_COMMANDS_SCHEMA),
-  });
+  const deployRes = mayChangeDiscord()
+    ? await fetch(deployUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bot ${botToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(ALLIANCE_COMMANDS_SCHEMA),
+      })
+    : { ok: true };
 
   if (!deployRes.ok) {
     const errText = await deployRes.text();

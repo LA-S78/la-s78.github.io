@@ -12,6 +12,8 @@
 // - Unofficial and run by one person: a slow or failed answer is null, never an error, so
 //   no page or save depends on it.
 
+import { isTestDeployment } from './_gist.js';
+
 const BASE = 'https://api.lastasylumtracker.com/v1';
 /** Our kingdom (the tracker's server number). */
 export const TRACKER_SERVER = 78;
@@ -19,8 +21,17 @@ export const TRACKER_SERVER = 78;
 const CACHE_MS = 60 * 60 * 1000;
 const cache = new Map();
 
-export const trackerConfigured = (env = process.env) =>
-  Boolean(String(env.LAT_API_KEY || '').trim());
+/**
+ * The tracker key, or '' when this deployment mustn't use it. The test site never uses the
+ * tracker (it would spend the live site's 1,000 requests a day: the key is the same), unless
+ * TRACKER_ON_TEST=on is set there for a deliberate test (plan for alliance IDs, 2026-11-20).
+ */
+export function trackerKey(env = process.env) {
+  if (isTestDeployment() && String(env.TRACKER_ON_TEST || '').trim() !== 'on') return '';
+  return String(env.LAT_API_KEY || '').trim();
+}
+
+export const trackerConfigured = (env = process.env) => Boolean(trackerKey(env));
 
 const GAME_IMAGES = 'https://phs-image.globallap.com/';
 
@@ -213,7 +224,7 @@ export async function fetchAlliance(
     fetchImpl = fetch,
   } = {},
 ) {
-  const key = String(env.LAT_API_KEY || '').trim();
+  const key = trackerKey(env);
   const clean = String(tag || '').trim();
   if (!key || !clean) return null;
   const hit = cache.get(clean);
@@ -262,7 +273,7 @@ export async function fetchAllianceById(
   aid,
   { fresh = false, timeoutMs = 4000, use = 'other', env = process.env, fetchImpl = fetch } = {},
 ) {
-  const key = String(env.LAT_API_KEY || '').trim();
+  const key = trackerKey(env);
   const id = Number(aid);
   if (!key || !Number.isInteger(id) || id <= 0) return null;
   try {
@@ -343,7 +354,7 @@ export async function fetchPlayer(
   uid,
   { use = 'steward', fresh = true, env = process.env, fetchImpl = fetch } = {},
 ) {
-  const key = String(env.LAT_API_KEY || '').trim();
+  const key = trackerKey(env);
   const id = String(uid || '').trim();
   if (!key) return { error: 'unavailable' };
   if (!/^\d{5,15}$/.test(id)) return { error: 'not_found' };
@@ -413,7 +424,7 @@ export async function fetchPlayer(
 
 /** Today's tracker requests ({ limit, used, remaining, … }): costs one request itself. */
 export async function fetchQuota({ use = 'steward', env = process.env, fetchImpl = fetch } = {}) {
-  const key = String(env.LAT_API_KEY || '').trim();
+  const key = trackerKey(env);
   if (!key) return null;
   try {
     const res = await trackerGet('/quota', { key, use, timeoutMs: 5000, fetchImpl });
