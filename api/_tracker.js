@@ -206,3 +206,96 @@ export function findMember(typed, members) {
   const same = folded ? members.filter((m) => foldName(m.name) === folded) : [];
   return same.length === 1 ? same[0] : null;
 }
+
+/**
+ * One player, live from the game (the Steward tools' player lookup, owner request
+ * 2026-11-20; one tracker request each, Stewards only). By player ID: the tracker has no
+ * name lookup. Returns { player, quota } or { error: 'not_found' | 'unavailable' }.
+ * `history` keeps only the changes that matter when checking a player: earlier names and
+ * alliances, newest first.
+ */
+export async function fetchPlayer(uid, { env = process.env, fetchImpl = fetch } = {}) {
+  const key = String(env.LAT_API_KEY || '').trim();
+  const id = String(uid || '').trim();
+  if (!key) return { error: 'unavailable' };
+  if (!/^\d{5,15}$/.test(id)) return { error: 'not_found' };
+  try {
+    const res = await fetchImpl(`${BASE}/players/${id}?fresh=1`, {
+      headers: {
+        Authorization: `Bearer ${key}`,
+        Accept: 'application/json',
+        'User-Agent': 'Mozilla/5.0 (compatible; la-s78.app)',
+      },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (res.status === 404 || res.status === 422) return { error: 'not_found' };
+    if (!res.ok) return { error: 'unavailable', status: res.status };
+    const d = await res.json();
+    const changes = [];
+    let last = null;
+    // Oldest first, so each name or alliance change is kept once, with when it was first seen
+    for (const h of [...(Array.isArray(d.history) ? d.history : [])].sort(
+      (a, b) => (a.observed_at || 0) - (b.observed_at || 0),
+    )) {
+      const now = { name: String(h.nick || ''), tag: String(h.union_abbr || '') };
+      if (!last || now.name !== last.name || now.tag !== last.tag) {
+        changes.push({
+          ...now,
+          at: h.observed_at ? new Date(h.observed_at * 1000).toISOString() : null,
+        });
+        last = now;
+      }
+    }
+    const rank = (k) => (d.ranks && d.ranks[k] && Number(d.ranks[k].rank)) || null;
+    const when = (sec) => (Number(sec) ? new Date(Number(sec) * 1000).toISOString() : null);
+    return {
+      player: {
+        uid: String(d.uid ?? d.player_id ?? id),
+        name: String(d.nick_name ?? d.nick ?? ''),
+        server: Number(d.sid ?? d.kid) || null,
+        tag: String(d.alliance_abbr ?? d.union_abbr ?? ''),
+        allianceName: String(d.alliance_name ?? d.union_name ?? ''),
+        power: Number(d.power) || 0,
+        kills: count(d.kills),
+        level: Number(d.lv ?? d.level) || null,
+        vip: count(d.vip),
+        x: count(d.x),
+        y: count(d.y),
+        online: d.online === true,
+        shielded: Number(d.shielding) > 0,
+        language: d.language ? String(d.language).slice(0, 8) : null,
+        likes: count(d.likes),
+        avatar: pictureUrl(d.avatar_url),
+        frame: pictureUrl(d.frame_url),
+        ranks: { might: rank('power'), kills: rank('kills'), heroes: rank('heroes') },
+        firstSeen: when(d.first_seen_at),
+        lastSeen: when(d.last_seen_at),
+        live: d.cached === false,
+        history: changes.reverse().slice(0, 20),
+      },
+      quota: d.quota || null,
+    };
+  } catch (err) {
+    console.warn(`Tracker: player ${id} failed:`, err.message);
+    return { error: 'unavailable' };
+  }
+}
+
+/** Today's tracker requests ({ limit, used, remaining, … }): costs one request itself. */
+export async function fetchQuota({ env = process.env, fetchImpl = fetch } = {}) {
+  const key = String(env.LAT_API_KEY || '').trim();
+  if (!key) return null;
+  try {
+    const res = await fetchImpl(`${BASE}/quota`, {
+      headers: {
+        Authorization: `Bearer ${key}`,
+        'User-Agent': 'Mozilla/5.0 (compatible; la-s78.app)',
+      },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return null;
+    return (await res.json()).quota || null;
+  } catch {
+    return null;
+  }
+}

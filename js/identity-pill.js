@@ -204,6 +204,15 @@
       pop.append(dash);
     }
 
+    // The Stewards' own page (portal/steward.html; owner request, 2026-11-20)
+    if (id.steward && id.tier !== 'guest' && id.tier !== 'expired') {
+      const tools = el('a', 'id-pop-link');
+      tools.innerHTML = withIcon('shield', t.steward_tools || 'Steward Tools');
+      tools.href = '/steward.html';
+      tools.setAttribute('data-turbo', 'false');
+      pop.append(tools);
+    }
+
     const foot = el('div', 'id-pop-foot');
     if (id.tier !== 'guest' && id.tier !== 'expired')
       foot.append(el('div', 'id-pop-expiry', expiryText(id.exp, t)));

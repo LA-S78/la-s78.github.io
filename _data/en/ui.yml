@@ -227,6 +227,7 @@ identity:
   force_update: "Update App"
   force_updating: "Updating…"
   dashboard: "Alliance Dashboard"
+  steward_tools: "Steward Tools"
   role_steward: "Steward"
   role_r5: "R5"
   role_r4: "R4"
