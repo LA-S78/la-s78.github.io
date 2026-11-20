@@ -745,12 +745,11 @@ map_planner:
   zoom_reset: Показать всю карту
   members_toggle: Мои участники
   members_search: Найти участника (имя или ID)...
-  members_loading: Загрузка участников...
-  members_count: "{n} участник(ов) из [{tag}]"
+  members_loading: Загрузка ваших участников...
+  members_count: "{n} участников [{tag}]"
   members_as_of: позиции на {time}
   members_failed: 'Не удалось показать участников: {error}'
-  members_none: Участники не найдены
-  members_here: "{n} участник(ов) здесь:"
+  members_none: Участник не найден
   member_coords: X {x} · Y {y}
   member_in: в {place}
   member_close: Закрыть
@@ -758,14 +757,13 @@ map_planner:
   nap_search: Найти игрока (имя, ID или [TAG])...
   nap_loading: Загрузка игроков NAP...
   nap_refreshing: Запрос данных по всем альянсам NAP...
-  nap_count: "{n} игрок(ов) в {a} альянсах NAP"
-  nap_empty: 'Позиции еще не сохранены: нажмите «Обновить», чтобы загрузить их'
+  nap_count: "{n} игроков в {a} альянсах NAP"
+  nap_empty: 'Позиции еще не сохранены: обновите, чтобы загрузить их'
   nap_missing: 'Не загружено: {tags}'
-  nap_here: "{n} игрок(ов) здесь:"
   nap_refresh: Обновить
   nap_refresh_left: Осталось {left} из {max} обновлений на сегодня (один запрос трекера на альянс)
-  nap_refresh_wait: 'Обновлено только что: снова можно через {minutes} мин'
-  tag_ambiguous: "[{tag}] может относиться к нескольким альянсам ({options}). Введите тег в точности, с учетом заглавных букв."
+  nap_refresh_wait: 'Обновлено только что: повтор через {minutes} мин'
+  tag_ambiguous: "[{tag}] может означать более одного альянса ({options}). Введите тег точно, соблюдая заглавные буквы."
   levels: Уровни
   alliances: Альянсы
   resources: Ресурсы
@@ -774,35 +772,35 @@ map_planner:
   close_buff_summary: Закрыть сводку баффов
   planner_mode: Режим планировщика
   override_label: 'Изменить на:'
-  override_placeholder: НАПР. WLO
-  override_help: Введите тег, чтобы переопределить назначения при клике. Оставьте пустым для циклического перебора.
+  override_placeholder: НАПРИМЕР, WLO
+  override_help: Введите тег, чтобы переопределить назначения при клике. Оставьте пустым для циклического выбора.
   submit_plan: Отправить план
   compare_label: Сравнить план с текущей картой
   show_live: Живая карта
   show_plan: Мой план
   discard: Отменить
-  discard_confirm: Отменить запланированные изменения ({n})? Это действие нельзя будет отменить.
+  discard_confirm: Отменить ваши запланированные изменения ({n})? Это действие нельзя отменить.
   view_locked: Выключите режим планировщика, чтобы изменить вид
-  plan_saved: План сохранен ({n} изменений). Включите режим планировщика, чтобы продолжить.
+  plan_saved: Ваш план сохранен ({n} изменений). Включите режим планировщика, чтобы продолжить.
   fullscreen: Полноэкранный режим
   toggle_fullscreen: Переключить полноэкранный режим
   exit: Выйти
   grain: Зерно
   timber: Древесина
   herbs: Травы
-  solid_gather: 'Сплошной: Сбор'
-  stripe_output: 'Полоса: Выход'
+  solid_gather: 'Сплошное: Сбор'
+  stripe_output: 'Полоса: Выработка'
   level_unknown: Уровень --
   level: Уровень {n}
-  hover: Наведите на территорию
+  hover: Наведите курсор на территорию
   owner: 'Владелец:'
-  unclaimed: Ничья
+  unclaimed: Ничейная
   buff: 'Бафф:'
   none: Нет
-  no_active_buff: Нет активных баффов
+  no_active_buff: Нет активного баффа
   drawer_title: Распределение баффов альянсов
-  drawer_subtitle: Динамический подсчет на основе активных назначений карты/планировщика
-  no_claims: В данный момент альянсы не владеют территориями.
+  drawer_subtitle: Динамический подсчет на основе активной карты / назначений планировщика
+  no_claims: Ни один альянс в данный момент не претендует на территорию.
   no_buffs: Нет назначенных активных баффов
   cities_one: "{n} город"
   cities_few: "{n} города"
@@ -811,16 +809,16 @@ map_planner:
   col_holdings: Владения
   col_buffs: Активные баффы
   buff_research_speed: Скорость исследований
-  buff_troop_training_speed: Скорость тренировки войск
+  buff_troop_training_speed: Скорость подготовки войск
   buff_building_speed: Скорость строительства
   buff_march_speed: Скорость марша
   buff_grain_gathering: Сбор зерна
-  buff_grain_output: Выход зерна
+  buff_grain_output: Выработка зерна
   buff_timber_gathering: Сбор древесины
-  buff_timber_output: Выход древесины
+  buff_timber_output: Выработка древесины
   buff_herb_gathering: Сбор трав
-  buff_herb_output: Выход трав
-  no_changes: Изменения в черновике плана не найдены.
+  buff_herb_output: Выработка трав
+  no_changes: В черновике плана не обнаружено изменений.
   proposal_title: Отправить предложение по территории карты
 proposals:
   title: Отправить предложение

@@ -730,7 +730,7 @@ blacklist_planner:
   what_player: jugador
   sent: Propuesta de lista negra enviada al liderazgo en Discord. Se aplica una vez que un Steward la apruebe.
 map_planner:
-  view: 'Vista:'
+  view: 'Ver:'
   zoom_in: Acercar
   zoom_out: Alejar
   zoom_reset: Mostrar todo el mapa
@@ -740,8 +740,7 @@ map_planner:
   members_count: "{n} miembros de [{tag}]"
   members_as_of: posiciones a fecha de {time}
   members_failed: 'No se pueden mostrar los miembros: {error}'
-  members_none: Ningún miembro coincide
-  members_here: "{n} miembros aquí:"
+  members_none: No hay coincidencias
   member_coords: X {x} · Y {y}
   member_in: en {place}
   member_close: Cerrar
@@ -750,13 +749,12 @@ map_planner:
   nap_loading: Cargando jugadores NAP...
   nap_refreshing: Solicitando al juego todas las alianzas NAP...
   nap_count: "{n} jugadores en {a} alianzas NAP"
-  nap_empty: 'Aún no hay posiciones guardadas: Refresca para cargarlas'
+  nap_empty: 'No hay posiciones guardadas: Actualiza para cargarlas'
   nap_missing: 'No cargado: {tags}'
-  nap_here: "{n} jugadores aquí:"
-  nap_refresh: Refrescar
-  nap_refresh_left: "{left} de {max} refrescos restantes hoy (una solicitud de rastreador por alianza)"
-  nap_refresh_wait: 'Refrescado hace un momento: de nuevo en {minutes} min'
-  tag_ambiguous: "[{tag}] podría significar más de una alianza ({options}). Escribe el tag exactamente, respetando las mayúsculas."
+  nap_refresh: Actualizar
+  nap_refresh_left: "{left} de {max} actualizaciones restantes hoy (una solicitud de rastreo por alianza)"
+  nap_refresh_wait: 'Actualizado hace un momento: de nuevo en {minutes} min'
+  tag_ambiguous: "[{tag}] podría significar más de una alianza ({options}). Escribe la etiqueta exactamente, con sus mayúsculas."
   levels: Niveles
   alliances: Alianzas
   resources: Recursos
@@ -766,22 +764,22 @@ map_planner:
   planner_mode: Modo Planificador
   override_label: 'Cambiar a:'
   override_placeholder: P. EJ. WLO
-  override_help: Escribe un tag para anular las asignaciones de clic. Déjalo en blanco para ciclar.
+  override_help: Escribe una etiqueta para sobrescribir las asignaciones al hacer clic. Déjalo en blanco para alternar.
   submit_plan: Enviar plan
-  compare_label: Comparar el plan con el mapa en vivo
+  compare_label: Comparar el plan con el mapa en tiempo real
   show_live: En vivo
   show_plan: Mi plan
   discard: Descartar
   discard_confirm: "¿Descartar tus cambios planificados ({n})? Esto no se puede deshacer."
   view_locked: Desactiva el Modo Planificador para cambiar la vista
-  plan_saved: Tu plan se ha guardado ({n} cambios). Activa el Modo Planificador para continuar.
+  plan_saved: Tu plan está guardado ({n} cambios). Activa el Modo Planificador para continuar.
   fullscreen: Pantalla completa
   toggle_fullscreen: Alternar pantalla completa
   exit: Salir
   grain: Grano
   timber: Madera
   herbs: Hierbas
-  solid_gather: 'Sólido: Recolectar'
+  solid_gather: 'Sólido: Recolección'
   stripe_output: 'Franja: Producción'
   level_unknown: Nivel --
   level: Nivel {n}
@@ -792,7 +790,7 @@ map_planner:
   none: Ninguno
   no_active_buff: Sin buff activo
   drawer_title: Distribución de Buffs de Alianza
-  drawer_subtitle: Recuento dinámico basado en las asignaciones activas del mapa / planificador
+  drawer_subtitle: Recuento dinámico basado en el mapa activo / asignaciones del planificador
   no_claims: Ninguna alianza reclama territorio actualmente.
   no_buffs: No hay buffs activos asignados
   cities_one: "{n} Ciudad"
@@ -800,16 +798,16 @@ map_planner:
   col_alliance: Alianza
   col_holdings: Propiedades
   col_buffs: Buffs activos
-  buff_research_speed: Velocidad de investigación
-  buff_troop_training_speed: Velocidad de entrenamiento de tropas
-  buff_building_speed: Velocidad de construcción
-  buff_march_speed: Velocidad de marcha
-  buff_grain_gathering: Recolección de grano
-  buff_grain_output: Producción de grano
-  buff_timber_gathering: Recolección de madera
-  buff_timber_output: Producción de madera
-  buff_herb_gathering: Recolección de hierbas
-  buff_herb_output: Producción de hierbas
+  buff_research_speed: Velocidad de Investigación
+  buff_troop_training_speed: Velocidad de Entrenamiento de Tropas
+  buff_building_speed: Velocidad de Construcción
+  buff_march_speed: Velocidad de Marcha
+  buff_grain_gathering: Recolección de Grano
+  buff_grain_output: Producción de Grano
+  buff_timber_gathering: Recolección de Madera
+  buff_timber_output: Producción de Madera
+  buff_herb_gathering: Recolección de Hierbas
+  buff_herb_output: Producción de Hierbas
   no_changes: No se detectaron cambios en tu borrador de plan.
   proposal_title: Enviar propuesta de territorio en el mapa
 proposals:

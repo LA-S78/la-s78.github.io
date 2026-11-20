@@ -740,39 +740,37 @@ map_planner:
   members_count: "{n} membres de [{tag}]"
   members_as_of: positions au {time}
   members_failed: 'Les membres ne peuvent pas être affichés : {error}'
-  members_none: Aucun membre ne correspond
-  members_here: "{n} membres ici :"
+  members_none: Aucun membre trouvé
   member_coords: X {x} · Y {y}
   member_in: dans {place}
   member_close: Fermer
   nap_toggle: Tous les joueurs NAP
   nap_search: Trouver un joueur (nom, ID ou [TAG])...
   nap_loading: Chargement des joueurs NAP...
-  nap_refreshing: Demande de toutes les alliances NAP au jeu...
+  nap_refreshing: Récupération de chaque alliance NAP auprès du jeu...
   nap_count: "{n} joueurs dans {a} alliances NAP"
-  nap_empty: 'Aucune position enregistrée pour le moment : actualisez pour les charger'
+  nap_empty: 'Aucune position enregistrée : actualisez pour les charger'
   nap_missing: 'Non chargé : {tags}'
-  nap_here: "{n} joueurs ici :"
   nap_refresh: Actualiser
   nap_refresh_left: "{left} sur {max} actualisations restantes aujourd'hui (une requête de suivi par alliance)"
-  nap_refresh_wait: 'Actualisé il y a un instant : de nouveau dans {minutes} min'
-  tag_ambiguous: "[{tag}] pourrait désigner plusieurs alliances ({options}). Saisissez le tag exactement, avec ses majuscules."
+  nap_refresh_wait: 'Actualisé il y a un instant : nouvelle tentative dans {minutes} min'
+  tag_ambiguous: "[{tag}] pourrait correspondre à plusieurs alliances ({options}). Tapez le tag exactement, avec ses majuscules."
   levels: Niveaux
   alliances: Alliances
   resources: Ressources
-  buff_summary: Résumé des buffs
-  toggle_buff_summary: Basculer le résumé des buffs
+  buff_summary: Résumé des Buffs
+  toggle_buff_summary: Afficher/Masquer le résumé des buffs
   close_buff_summary: Fermer le résumé des buffs
   planner_mode: Mode Planificateur
-  override_label: 'Changer pour :'
+  override_label: 'Changer en :'
   override_placeholder: EX. WLO
-  override_help: Saisissez un tag pour remplacer les affectations par clic. Laissez vide pour faire défiler.
+  override_help: Tapez un tag pour remplacer les affectations de clic. Laissez vide pour alterner.
   submit_plan: Soumettre le plan
   compare_label: Comparer le plan avec la carte en direct
   show_live: En direct
   show_plan: Mon plan
   discard: Abandonner
-  discard_confirm: Abandonner vos changements prévus ({n}) ? Cette action est irréversible.
+  discard_confirm: Abandonner vos changements planifiés ({n}) ? Cette action est irréversible.
   view_locked: Désactivez le Mode Planificateur pour changer la vue
   plan_saved: Votre plan est enregistré ({n} changements). Activez le Mode Planificateur pour continuer.
   fullscreen: Plein écran
@@ -781,19 +779,19 @@ map_planner:
   grain: Grain
   timber: Bois
   herbs: Herbes
-  solid_gather: 'Solide : Récolte'
+  solid_gather: 'Plein : Récolte'
   stripe_output: 'Rayé : Production'
   level_unknown: Niveau --
   level: Niveau {n}
-  hover: Survolez un territoire
+  hover: Survoler un territoire
   owner: 'Propriétaire :'
   unclaimed: Non réclamé
   buff: 'Buff :'
   none: Aucun
   no_active_buff: Aucun buff actif
-  drawer_title: Distribution des buffs d'Alliance
-  drawer_subtitle: Décompte dynamique basé sur les affectations actives de la carte / du planificateur
-  no_claims: Aucune alliance ne revendique de territoire actuellement.
+  drawer_title: Distribution des Buffs d'Alliance
+  drawer_subtitle: Comptage dynamique basé sur les affectations actives de la carte / du planificateur
+  no_claims: Aucune alliance ne réclame de territoire actuellement.
   no_buffs: Aucun buff actif assigné
   cities_one: "{n} Ville"
   cities_other: "{n} Villes"
@@ -804,12 +802,12 @@ map_planner:
   buff_troop_training_speed: Vitesse d'entraînement des troupes
   buff_building_speed: Vitesse de construction
   buff_march_speed: Vitesse de marche
-  buff_grain_gathering: Récolte de Grain
-  buff_grain_output: Production de Grain
-  buff_timber_gathering: Récolte de Bois
-  buff_timber_output: Production de Bois
-  buff_herb_gathering: Récolte d'Herbes
-  buff_herb_output: Production d'Herbes
+  buff_grain_gathering: Récolte de grain
+  buff_grain_output: Production de grain
+  buff_timber_gathering: Récolte de bois
+  buff_timber_output: Production de bois
+  buff_herb_gathering: Récolte d'herbes
+  buff_herb_output: Production d'herbes
   no_changes: Aucun changement détecté dans votre brouillon de plan.
   proposal_title: Soumettre une proposition de territoire sur la carte
 proposals:

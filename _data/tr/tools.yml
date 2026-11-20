@@ -730,18 +730,17 @@ blacklist_planner:
   what_player: oyuncu
   sent: Kara liste teklifi Discord'da liderliğe gönderildi. Bir Kâhya onayladığında geçerli olur.
 map_planner:
-  view: 'Görüntüle:'
+  view: 'Görünüm:'
   zoom_in: Yakınlaştır
   zoom_out: Uzaklaştır
   zoom_reset: Tüm haritayı göster
   members_toggle: Üyelerim
   members_search: Bir üye bul (isim veya ID)...
   members_loading: Üyeleriniz yükleniyor...
-  members_count: "[{tag}] üyesinden {n} tanesi"
+  members_count: "[{tag}] üyesi {n} kişi"
   members_as_of: "{time} itibarıyla konumlar"
   members_failed: 'Üyeler gösterilemiyor: {error}'
   members_none: Eşleşen üye yok
-  members_here: 'Buradaki {n} üye:'
   member_coords: X {x} · Y {y}
   member_in: "{place} içinde"
   member_close: Kapat
@@ -751,12 +750,11 @@ map_planner:
   nap_refreshing: Oyundan tüm NAP ittifakları isteniyor...
   nap_count: "{a} NAP ittifakında {n} oyuncu"
   nap_empty: 'Henüz kaydedilmiş konum yok: Yüklemek için yenileyin'
-  nap_missing: 'Yüklenmedi: {tags}'
-  nap_here: 'Buradaki {n} oyuncu:'
+  nap_missing: 'Yüklenemedi: {tags}'
   nap_refresh: Yenile
-  nap_refresh_left: Bugün kalan {left}/{max} yenileme hakkı (ittifak başına bir takip isteği)
-  nap_refresh_wait: 'Az önce yenilendi: {minutes} dakika sonra tekrar denenebilir'
-  tag_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}). Etiketi, büyük harfleriyle tam olarak yazın."
+  nap_refresh_left: 'Bugün kalan yenileme hakkı: {left}/{max} (ittifak başına bir takipçi isteği)'
+  nap_refresh_wait: 'Az önce yenilendi: {minutes} dk sonra tekrar denenebilir'
+  tag_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}). Tag'i tam olarak, büyük harflere dikkat ederek girin."
   levels: Seviyeler
   alliances: İttifaklar
   resources: Kaynaklar
@@ -764,15 +762,15 @@ map_planner:
   toggle_buff_summary: Güçlendirme Özetini Aç/Kapat
   close_buff_summary: Güçlendirme Özetini Kapat
   planner_mode: Planlayıcı Modu
-  override_label: 'Şununla değiştir:'
-  override_placeholder: 'ÖRN: WLO'
-  override_help: Tıklama atamalarını geçersiz kılmak için bir etiket yazın. Döngüye almak için boş bırakın.
+  override_label: 'Değiştir:'
+  override_placeholder: Örn. WLO
+  override_help: Atamaları geçersiz kılmak için bir tag girin. Döngü için boş bırakın.
   submit_plan: Planı Gönder
   compare_label: Planı canlı harita ile karşılaştır
   show_live: Canlı
   show_plan: Planım
-  discard: İptal Et
-  discard_confirm: Planlanan değişiklikleriniz ({n}) iptal edilsin mi? Bu işlem geri alınamaz.
+  discard: İptal
+  discard_confirm: Planlanmış değişikliklerinizi ({n}) iptal etmek istiyor musunuz? Bu işlem geri alınamaz.
   view_locked: Görünümü değiştirmek için Planlayıcı Modunu kapatın
   plan_saved: Planınız kaydedildi ({n} değişiklik). Devam etmek için Planlayıcı Modunu açın.
   fullscreen: Tam Ekran
@@ -780,9 +778,9 @@ map_planner:
   exit: Çıkış
   grain: Tahıl
   timber: Kereste
-  herbs: Otlar
-  solid_gather: 'Katı: Toplama'
-  stripe_output: 'Şerit: Üretim'
+  herbs: Ot
+  solid_gather: 'Düz: Toplama'
+  stripe_output: 'Çizgili: Üretim'
   level_unknown: Seviye --
   level: Seviye {n}
   hover: Bir bölgenin üzerine gelin
@@ -792,7 +790,7 @@ map_planner:
   none: Yok
   no_active_buff: Aktif güçlendirme yok
   drawer_title: İttifak Güçlendirme Dağılımı
-  drawer_subtitle: Aktif harita / planlayıcı atamalarına dayalı dinamik döküm
+  drawer_subtitle: Aktif harita/planlayıcı atamalarına dayalı dinamik döküm
   no_claims: Şu anda hiçbir ittifak bölge talep etmiyor.
   no_buffs: Atanmış aktif güçlendirme yok
   cities_one: "{n} Şehir"
@@ -811,7 +809,7 @@ map_planner:
   buff_herb_gathering: Ot Toplama
   buff_herb_output: Ot Üretimi
   no_changes: Taslak planınızda değişiklik algılanmadı.
-  proposal_title: Harita Bölgesi Teklifi Gönder
+  proposal_title: Harita Bölge Teklifi Gönder
 proposals:
   title: Öneri Gönder
   close: Kapat

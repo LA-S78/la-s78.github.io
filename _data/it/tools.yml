@@ -730,18 +730,17 @@ blacklist_planner:
   what_player: giocatore
   sent: Proposta di blacklist inviata alla leadership su Discord. Sarà applicata una volta approvata da uno Steward.
 map_planner:
-  view: 'Vista:'
+  view: 'Visualizza:'
   zoom_in: Ingrandisci
-  zoom_out: Rimpicciolisci
+  zoom_out: Riduci
   zoom_reset: Mostra l'intera mappa
   members_toggle: I miei membri
   members_search: Trova un membro (nome o ID)...
   members_loading: Caricamento membri in corso...
   members_count: "{n} membri di [{tag}]"
-  members_as_of: posizioni aggiornate al {time}
+  members_as_of: posizioni al {time}
   members_failed: 'Impossibile mostrare i membri: {error}'
   members_none: Nessun membro trovato
-  members_here: "{n} membri qui:"
   member_coords: X {x} · Y {y}
   member_in: in {place}
   member_close: Chiudi
@@ -751,12 +750,11 @@ map_planner:
   nap_refreshing: Richiesta al gioco di ogni alleanza NAP...
   nap_count: "{n} giocatori in {a} alleanze NAP"
   nap_empty: 'Nessuna posizione salvata: Aggiorna per caricarle'
-  nap_missing: 'Non caricati: {tags}'
-  nap_here: "{n} giocatori qui:"
+  nap_missing: 'Non caricato: {tags}'
   nap_refresh: Aggiorna
   nap_refresh_left: "{left} di {max} aggiornamenti rimasti oggi (una richiesta di tracciamento per alleanza)"
   nap_refresh_wait: 'Aggiornato poco fa: di nuovo tra {minutes} min'
-  tag_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}). Inserisci il tag esattamente, incluse le maiuscole."
+  tag_ambiguous: "[{tag}] potrebbe indicare più di un'alleanza ({options}). Inserisci il tag esattamente, con le maiuscole."
   levels: Livelli
   alliances: Alleanze
   resources: Risorse
@@ -766,14 +764,14 @@ map_planner:
   planner_mode: Modalità Pianificatore
   override_label: 'Cambia in:'
   override_placeholder: ES. WLO
-  override_help: Inserisci un tag per sovrascrivere le assegnazioni dei clic. Lascia vuoto per ciclare.
+  override_help: Digita un tag per sovrascrivere le assegnazioni. Lascia vuoto per scorrere.
   submit_plan: Invia Piano
   compare_label: Confronta il piano con la mappa live
   show_live: Live
   show_plan: Il mio piano
   discard: Scarta
-  discard_confirm: Scartare le modifiche pianificate ({n})? Questa operazione non può essere annullata.
-  view_locked: Disattiva la Modalità Pianificatore per cambiare la vista
+  discard_confirm: Scartare le modifiche pianificate ({n})? L'azione è irreversibile.
+  view_locked: Disattiva la Modalità Pianificatore per cambiare visualizzazione
   plan_saved: Il tuo piano è stato salvato ({n} modifiche). Attiva la Modalità Pianificatore per continuare.
   fullscreen: Schermo intero
   toggle_fullscreen: Attiva/Disattiva Schermo intero
@@ -792,14 +790,14 @@ map_planner:
   none: Nessuno
   no_active_buff: Nessun buff attivo
   drawer_title: Distribuzione Buff Alleanza
-  drawer_subtitle: Conteggio dinamico basato sulle assegnazioni attive della mappa / pianificatore
-  no_claims: Nessuna alleanza reclama attualmente il territorio.
+  drawer_subtitle: Conteggio dinamico basato sulle assegnazioni mappa / piano
+  no_claims: Nessuna alleanza rivendica territori al momento.
   no_buffs: Nessun buff attivo assegnato
   cities_one: "{n} Città"
   cities_other: "{n} Città"
   col_alliance: Alleanza
   col_holdings: Possedimenti
-  col_buffs: Buff attivi
+  col_buffs: Buff Attivi
   buff_research_speed: Velocità Ricerca
   buff_troop_training_speed: Velocità Addestramento Truppe
   buff_building_speed: Velocità Edifici
