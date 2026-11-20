@@ -935,14 +935,14 @@ stats:
   views_label: Que montrer
   view_growth: Croissance NAP
   view_players: Top joueurs
-  view_achievements: Réalisations
-  view_lookup: Recherche joueur
+  view_achievements: Succès
+  view_lookup: Recherche de joueur
   growth_title: Croissance de l'alliance
   growth_members: "{n} membres"
   growth_more: Plus sur l'onglet
   growth_link: Stats
-  lookup_search: Nom ou ID du joueur...
-  lookup_hint: Joueurs NAP uniquement, à partir du snapshot quotidien. Saisissez au moins 2 lettres ou un ID.
+  lookup_search: Nom du joueur...
+  lookup_hint: Joueurs NAP uniquement, d'après l'instantané quotidien. Tapez au moins 2 lettres de leur nom.
   lookup_none: Aucun joueur NAP ne correspond.
   lookup_place: "#{place} sur {of} joueurs NAP par Puissance"
   lookup_kills: Éliminations
@@ -953,11 +953,11 @@ stats:
   lookup_history: Puissance sur le dernier mois
   ach_strongest: Le plus puissant
   ach_gain_week: Plus forte progression cette semaine
-  ach_kills: Le plus d'éliminations
-  ach_kills_week: Le plus d'éliminations cette semaine
-  ach_climb_month: Plus forte progression du Sanctuaire ce mois-ci
+  ach_kills: Plus grand nombre d'éliminations
+  ach_kills_week: Plus grand nombre d'éliminations cette semaine
+  ach_climb_month: Plus forte ascension du Sanctuaire ce mois-ci
   ach_away: Loin de la ruche
-  ach_away_help: Nombre de jours ce mois-ci à plus de 50 cases de la ruche de l'alliance (là où se trouvent la plupart de ses membres).
+  ach_away_help: Nombre de jours ce mois-ci à plus de 50 cases de la ruche de leur alliance (où se trouvent la plupart des membres).
   ach_none: Pas assez de jours collectés pour le moment.
   value_kills: "{n} éliminations"
   value_levels_one: "+1 niveau"
@@ -966,34 +966,34 @@ stats:
   value_days_other: "{n} jours"
   list_label: Quelle liste
   list_strongest: Les plus puissants
-  list_week: Progression hebdomadaire
-  list_month: Progression mensuelle
+  list_week: Gagné cette semaine
+  list_month: Gagné ce mois-ci
   filter_label: Alliance
   filter_all: Toutes les alliances NAP
   players_none: Aucun joueur à afficher pour le moment.
-  players_wait_week: Les gains de la semaine s'afficheront après la collecte d'un snapshot antérieur à ce lundi.
-  players_wait_month: Les gains sur un mois s'afficheront une fois qu'un mois complet de données aura été collecté.
-  players_as_of: D'après le snapshot précédant la réinitialisation du {date}.
+  players_wait_week: Les gains de cette semaine s'afficheront une fois qu'un instantané précédant ce lundi aura été collecté.
+  players_wait_month: Les gains sur un mois s'afficheront une fois qu'un mois de données aura été collecté.
+  players_as_of: D'après l'instantané avant la réinitialisation du {date}.
   week_note: Les semaines s'étendent du lundi au dimanche (Game Time) ; les records hebdomadaires recommencent chaque lundi.
   col_player: Joueur
-  col_gain: Gain
-  show_more: Afficher les {n}
+  col_gain: Gagné
+  show_more: Tout afficher {n}
   range_label: Période
   range_week: 1 semaine
   range_month: 1 mois
   range_all: Tout
   loading: Chargement des stats...
   failed: Les stats ne peuvent pas être chargées pour le moment.
-  collecting: Les stats sont collectées une fois par jour, juste avant la réinitialisation quotidienne (00:00 GT). Les graphiques se remplissent au jour le jour.
-  since: Collecte quotidienne depuis le {date}.
-  one_day: 'Un seul jour collecté pour l''instant : le graphique démarre à partir de deux jours.'
+  collecting: Les stats sont collectées une fois par jour, juste avant la réinitialisation quotidienne (00:00 GT). Les graphiques se remplissent jour après jour.
+  since: Collectées quotidiennement depuis le {date}.
+  one_day: 'Un seul jour collecté pour le moment : le graphique démarre une fois qu''il y en a deux.'
   col_alliance: Alliance
   col_might: Puissance
   col_week: 7 jours
   col_month: 30 jours
   no_number: "—"
   show_hide: Appuyez sur une alliance pour afficher ou masquer sa ligne.
-  credit_before: Chiffres issus du
+  credit_before: Chiffres du
 steward:
   page_title: Outils de l'Intendant
   intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et une recherche de joueur en direct.'
