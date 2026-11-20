@@ -981,3 +981,48 @@ stats:
   no_number: "—"
   show_hide: Appuyez sur une alliance pour afficher ou masquer sa ligne.
   credit_before: Chiffres issus du
+steward:
+  page_title: Outils de l'Intendant
+  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et recherche de joueur en direct.'
+  loading: Chargement…
+  sign_in: Se connecter avec Discord
+  sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils de l'Intendant.
+  stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils de l'Intendant.
+  lookup_title: Recherche de joueur
+  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses statistiques, ainsi que ses anciens noms et alliances. Entrez un ID de joueur ou un nom pour trouver l''ID d''un joueur sous NAP.'
+  lookup_placeholder: ID de joueur ou nom d'un joueur NAP
+  lookup_go: Rechercher
+  lookup_id_needed: Entrez un ID de joueur (le numéro sur son profil) ou choisissez un joueur NAP parmi les noms trouvés.
+  lookups_left: "{left} sur {max} recherches en direct restantes aujourd'hui (partagées par tous les Intendants)."
+  looking: Interrogation du jeu…
+  name_none: Aucun joueur NAP trouvé avec ce nom. Pour tout autre joueur, utilisez son ID.
+  no_alliance: Aucune alliance
+  server: Serveur {n}
+  online: En ligne
+  last_seen: Vu pour la dernière fois {when}
+  shielded: Bouclier actif
+  might: Puissance
+  kills: Éliminations
+  sanctuary: Sanctuaire
+  vip: VIP
+  position: Position (X, Y)
+  language: Langue
+  ranks: 'Rang du Royaume : #{might} Puissance · #{kills} Éliminations · #{heroes} Héros'
+  history_title: Noms et alliances
+  history_none: Aucun ancien nom ou alliance détecté.
+  seen_from: depuis {when}
+  first_seen: Détecté pour la première fois par le tracker {when}.
+  pending_title: En attente de révision
+  pending_none: Aucune image d'alliance en attente.
+  sent_by: Envoyé par {name}, {when}
+  race_title: Course du Top 4
+  race_none: Aucune course mesurée pour l'instant.
+  race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
+  race_finished: 'Les 3 jours sont mesurés : les résultats sont disponibles auprès des leaders NAP.'
+  race_missing: 'Non mesuré : {tags}'
+  race_more: Tableau complet sur la page des Règles
+  quota_title: Requêtes du Tracker
+  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour. Une vérification en consomme une.
+  quota_check: Vérifier l'utilisation
+  quota_used: utilisés aujourd'hui
+  quota_failed: Le tracker est injoignable.

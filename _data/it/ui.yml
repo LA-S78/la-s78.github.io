@@ -186,13 +186,13 @@ identity:
   account: Il tuo account
   sign_in: Accedi
   signing_in: Accesso in corso…
-  sign_in_failed: Accesso non riuscito, riprova
+  sign_in_failed: Accesso fallito, riprova
   sign_in_again: Accedi di nuovo
   refresh: Aggiorna accesso
   sign_out: Esci
   force_update: Aggiorna app
   force_updating: Aggiornamento…
-  dashboard: Dashboard dell’alleanza
+  dashboard: Dashboard Alleanza
   steward_tools: Strumenti Steward
   role_steward: Steward
   role_r5: R5
@@ -204,17 +204,17 @@ identity:
   alliance_label: Alleanza
   alliance_none: nessuna
   access_title: Il tuo accesso
-  access_view: Vedere la mappa dal vivo, gli orari e le classifiche
-  access_draft: Preparare piani in Modalità Pianificatore
-  access_join: Unisciti al server Discord del NAP per avere più accesso
+  access_view: Visualizza la mappa live, gli orari e le classifiche
+  access_draft: Crea piani in Modalità Pianificatore
+  access_join: Unisciti al server Discord NAP per ulteriori accessi
   access_ask_leader: Chiedi al tuo R4 o R5 di inviare i tuoi piani come proposte
-  access_send: Inviare proposte per mappa, classifica, lista nera e ricompense (5 al giorno)
-  access_send_unlimited: Inviare proposte senza limite giornaliero
-  access_approve: Approvare o rifiutare le proposte su Discord
+  access_send: Invia proposte per la mappa, classifiche, blacklist e ricompense (5 al giorno)
+  access_send_unlimited: Invia proposte senza limiti giornalieri
+  access_approve: Approva o rifiuta le proposte su Discord
   access_expired: Il tuo accesso è scaduto. Accedi di nuovo per inviare proposte.
-  expires_days: L’accesso scade tra {n} giorni
-  expires_one: L’accesso scade tra 1 giorno
-  expires_today: L’accesso scade oggi
-  found_role_id: trovata tramite ID ruolo
-  found_role_name: trovata tramite nome ruolo
-  found_nickname: trovata tramite soprannome
+  expires_days: Accesso in scadenza tra {n} giorni
+  expires_one: Accesso in scadenza tra 1 giorno
+  expires_today: Accesso in scadenza oggi
+  found_role_id: trovato tramite ID ruolo
+  found_role_name: trovato tramite nome ruolo
+  found_nickname: trovato tramite nickname

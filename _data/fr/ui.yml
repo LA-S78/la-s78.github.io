@@ -188,33 +188,33 @@ identity:
   signing_in: Connexion…
   sign_in_failed: Échec de la connexion, réessayez
   sign_in_again: Se reconnecter
-  refresh: Actualiser l’accès
+  refresh: Actualiser l'accès
   sign_out: Se déconnecter
-  force_update: Mettre à jour l’app
+  force_update: Mettre à jour l'app
   force_updating: Mise à jour…
-  dashboard: Tableau de bord de l’alliance
-  steward_tools: Outils Steward
-  role_steward: Steward
+  dashboard: Tableau de bord de l'Alliance
+  steward_tools: Outils de l'Intendant
+  role_steward: Intendant
   role_r5: R5
   role_r4: R4
   role_officer: Officier
   role_member: Membre
   role_guest: Invité
-  role_expired: Expirée
+  role_expired: Expiré
   alliance_label: Alliance
   alliance_none: aucune
   access_title: Votre accès
-  access_view: Voir la carte en direct, les horaires et les classements
-  access_draft: Préparer des plans en Mode Planificateur
-  access_join: Rejoignez le serveur Discord du NAP pour plus d’accès
-  access_ask_leader: Demandez à votre R4 ou R5 d’envoyer vos plans comme propositions
-  access_send: Envoyer des propositions pour la carte, le classement, la liste noire et les récompenses (5 par jour)
+  access_view: Voir la carte en direct, les plannings et les classements
+  access_draft: Ébaucher des plans en mode Planificateur
+  access_join: Rejoindre le serveur Discord NAP pour plus d'accès
+  access_ask_leader: Demander à votre R4 ou R5 d'envoyer vos plans en tant que propositions
+  access_send: Envoyer des propositions pour la carte, les classements, la liste noire et les récompenses (5 par jour)
   access_send_unlimited: Envoyer des propositions sans limite quotidienne
-  access_approve: Approuver ou refuser les propositions sur Discord
-  access_expired: Votre connexion a expiré. Reconnectez-vous pour envoyer des propositions.
+  access_approve: Approuver ou rejeter les propositions sur Discord
+  access_expired: Votre connexion a expiré. Connectez-vous à nouveau pour envoyer des propositions.
   expires_days: La connexion expire dans {n} jours
   expires_one: La connexion expire dans 1 jour
-  expires_today: La connexion expire aujourd’hui
-  found_role_id: trouvée par ID de rôle
-  found_role_name: trouvée par nom de rôle
-  found_nickname: trouvée par pseudo
+  expires_today: La connexion expire aujourd'hui
+  found_role_id: trouvé par ID de rôle
+  found_role_name: trouvé par nom de rôle
+  found_nickname: trouvé par pseudo

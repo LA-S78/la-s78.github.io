@@ -187,34 +187,34 @@ identity:
   sign_in: Iniciar sesión
   signing_in: Iniciando sesión…
   sign_in_failed: Error al iniciar sesión, inténtalo de nuevo
-  sign_in_again: Volver a iniciar sesión
+  sign_in_again: Iniciar sesión de nuevo
   refresh: Actualizar acceso
   sign_out: Cerrar sesión
-  force_update: Actualizar app
+  force_update: Actualizar aplicación
   force_updating: Actualizando…
-  dashboard: Panel de la alianza
-  steward_tools: Herramientas de Steward
-  role_steward: Steward
+  dashboard: Panel de Alianza
+  steward_tools: Herramientas de Administrador
+  role_steward: Administrador
   role_r5: R5
   role_r4: R4
   role_officer: Oficial
   role_member: Miembro
   role_guest: Invitado
-  role_expired: Caducada
+  role_expired: Caducado
   alliance_label: Alianza
   alliance_none: ninguna
   access_title: Tu acceso
-  access_view: Ver el mapa en vivo, los horarios y las clasificaciones
-  access_draft: Preparar planes en el Modo Planificador
-  access_join: Únete al servidor de Discord del NAP para tener más acceso
-  access_ask_leader: Pide a tu R4 o R5 que envíe tus planes como propuestas
-  access_send: Enviar propuestas de mapa, clasificación, lista negra y recompensas (5 al día)
+  access_view: Ver el mapa en tiempo real, horarios y clasificaciones
+  access_draft: Redactar planes en el Modo Planificador
+  access_join: Únete al servidor de Discord NAP para obtener más acceso
+  access_ask_leader: Pide a tu R4 o R5 que envíen tus planes como propuestas
+  access_send: Enviar propuestas para el mapa, clasificaciones, lista negra y recompensas (5 al día)
   access_send_unlimited: Enviar propuestas sin límite diario
   access_approve: Aprobar o rechazar propuestas en Discord
-  access_expired: Tu sesión ha caducado. Vuelve a iniciar sesión para enviar propuestas.
+  access_expired: Tu inicio de sesión ha caducado. Inicia sesión de nuevo para enviar propuestas.
   expires_days: La sesión caduca en {n} días
   expires_one: La sesión caduca en 1 día
   expires_today: La sesión caduca hoy
-  found_role_id: encontrada por ID de rol
-  found_role_name: encontrada por nombre de rol
-  found_nickname: encontrada por apodo
+  found_role_id: encontrado por ID de rol
+  found_role_name: encontrado por nombre de rol
+  found_nickname: encontrado por apodo

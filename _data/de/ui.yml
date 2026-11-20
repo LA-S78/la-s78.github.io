@@ -183,17 +183,17 @@ pwa:
   updating: Entschlüsseln...
   updated_msg: App auf die neueste Version aktualisiert.
 identity:
-  account: Dein Konto
+  account: Dein Account
   sign_in: Anmelden
-  signing_in: Anmeldung läuft…
-  sign_in_failed: Anmeldung fehlgeschlagen, bitte erneut versuchen
+  signing_in: Anmelden…
+  sign_in_failed: Anmeldung fehlgeschlagen, versuche es erneut
   sign_in_again: Erneut anmelden
   refresh: Zugriff aktualisieren
   sign_out: Abmelden
   force_update: App aktualisieren
-  force_updating: Wird aktualisiert…
+  force_updating: Aktualisieren…
   dashboard: Allianz-Dashboard
-  steward_tools: Steward-Werkzeuge
+  steward_tools: Steward-Tools
   role_steward: Steward
   role_r5: R5
   role_r4: R4
@@ -206,15 +206,15 @@ identity:
   access_title: Dein Zugriff
   access_view: Live-Karte, Zeitpläne und Ranglisten ansehen
   access_draft: Pläne im Planer-Modus entwerfen
-  access_join: Tritt dem NAP-Discord-Server bei, um mehr Zugriff zu erhalten
-  access_ask_leader: Bitte deinen R4 oder R5, deine Pläne als Vorschläge einzureichen
-  access_send: Vorschläge für Karte, Rangliste, Blacklist und Belohnungen einreichen (5 pro Tag)
-  access_send_unlimited: Vorschläge ohne Tageslimit einreichen
-  access_approve: Vorschläge in Discord annehmen oder ablehnen
-  access_expired: Deine Anmeldung ist abgelaufen. Melde dich erneut an, um Vorschläge einzureichen.
+  access_join: Tritt dem NAP Discord-Server für mehr Zugriff bei
+  access_ask_leader: Bitte deinen R4 oder R5, deine Pläne als Vorschlag zu senden
+  access_send: Vorschläge für Karte, Ranglisten, Blacklist und Belohnungen senden (5 pro Tag)
+  access_send_unlimited: Vorschläge ohne tägliches Limit senden
+  access_approve: Vorschläge auf Discord genehmigen oder ablehnen
+  access_expired: Deine Anmeldung ist abgelaufen. Melde dich erneut an, um Vorschläge zu senden.
   expires_days: Anmeldung läuft in {n} Tagen ab
   expires_one: Anmeldung läuft in 1 Tag ab
   expires_today: Anmeldung läuft heute ab
-  found_role_id: per Rollen-ID gefunden
-  found_role_name: per Rollenname gefunden
-  found_nickname: per Spitzname gefunden
+  found_role_id: gefunden über Rollen-ID
+  found_role_name: gefunden über Rollenname
+  found_nickname: gefunden über Nickname

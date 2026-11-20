@@ -981,3 +981,48 @@ stats:
   no_number: "—"
   show_hide: Tocca un'alleanza per mostrare o nascondere la sua linea.
   credit_before: Numeri dal
+steward:
+  page_title: Strumenti Amministratore
+  intro: 'Strumenti per gli Amministratori del Regno: cosa ti aspetta e una ricerca giocatori in tempo reale.'
+  loading: Caricamento…
+  sign_in: Accedi con Discord
+  sign_in_needed: Accedi con Discord per aprire gli strumenti Amministratore.
+  stewards_only: Solo gli Amministratori del Regno possono aprire gli strumenti Amministratore.
+  lookup_title: Ricerca giocatore
+  lookup_help: 'Qualsiasi giocatore, in tempo reale dal gioco: alleanza, statistiche, nomi e alleanze precedenti. Inserisci un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
+  lookup_placeholder: ID giocatore o nome di un giocatore NAP
+  lookup_go: Cerca
+  lookup_id_needed: Inserisci un ID giocatore (il numero sul suo profilo) o scegli un giocatore NAP dai nomi trovati.
+  lookups_left: "{left} di {max} ricerche in tempo reale rimaste oggi (condivise tra tutti gli Amministratori)."
+  looking: Interrogazione del gioco…
+  name_none: Nessun giocatore NAP con quel nome. Per chiunque altro, usa il suo ID giocatore.
+  no_alliance: Nessuna alleanza
+  server: Server {n}
+  online: Online ora
+  last_seen: Ultima attività {when}
+  shielded: Scudo attivo
+  might: Potenza
+  kills: Uccisioni
+  sanctuary: Santuario
+  vip: VIP
+  position: Posizione (X, Y)
+  language: Lingua
+  ranks: 'Ranghi del Regno: #{might} Potenza · #{kills} Uccisioni · #{heroes} eroi'
+  history_title: Nomi e alleanze
+  history_none: Nessun nome o alleanza precedente rilevato.
+  seen_from: dal {when}
+  first_seen: Rilevato per la prima volta dal tracker il {when}.
+  pending_title: In attesa di revisione
+  pending_none: Nessuna immagine di alleanza in attesa.
+  sent_by: Inviato da {name}, {when}
+  race_title: Gara delle prime 4
+  race_none: Nessuna gara ancora misurata.
+  race_progress: "{n} di 3 giorni di Duello misurati finora."
+  race_finished: 'Tutti e 3 i giorni misurati: i risultati sono nella dirigenza NAP.'
+  race_missing: 'Non misurato: {tags}'
+  race_more: Tabella completa nella pagina Regole
+  quota_title: Richieste Tracker
+  quota_help: Il Tracker di Last Asylum permette 1.000 richieste al giorno. Ogni controllo costa una richiesta.
+  quota_check: Verifica utilizzo
+  quota_used: utilizzati oggi
+  quota_failed: Impossibile raggiungere il tracker.

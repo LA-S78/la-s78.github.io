@@ -981,3 +981,48 @@ stats:
   no_number: "—"
   show_hide: Tippe auf eine Allianz, um deren Linie ein- oder auszublenden.
   credit_before: Zahlen vom
+steward:
+  page_title: Steward-Tools
+  intro: 'Tools für Königreich-Stewards: Was dich erwartet und eine Live-Spielersuche.'
+  loading: Lädt…
+  sign_in: Mit Discord anmelden
+  sign_in_needed: Melde dich mit Discord an, um die Steward-Tools zu öffnen.
+  stewards_only: Nur Königreich-Stewards können die Steward-Tools öffnen.
+  lookup_title: Spielersuche
+  lookup_help: 'Jeder Spieler, live aus dem Spiel: Allianz, Werte sowie frühere Namen und Allianzen. Gib eine Spieler-ID oder einen Namen ein, um die ID eines NAP-Spielers zu finden.'
+  lookup_placeholder: Spieler-ID oder Name eines NAP-Spielers
+  lookup_go: Suchen
+  lookup_id_needed: Gib eine Spieler-ID (die Zahl im Profil) ein oder wähle einen NAP-Spieler aus den gefundenen Namen.
+  lookups_left: "{left} von {max} Live-Suchen heute verfügbar (geteilt durch alle Stewards)."
+  looking: Frage das Spiel ab…
+  name_none: Kein NAP-Spieler mit diesem Namen. Verwende für alle anderen die Spieler-ID.
+  no_alliance: Keine Allianz
+  server: Server {n}
+  online: Jetzt online
+  last_seen: Zuletzt gesehen {when}
+  shielded: Schild aktiv
+  might: Macht
+  kills: Kills
+  sanctuary: Sanktuarium
+  vip: VIP
+  position: Position (X, Y)
+  language: Sprache
+  ranks: 'Königreich-Ränge: #{might} Macht · #{kills} Kills · #{heroes} Helden'
+  history_title: Namen und Allianzen
+  history_none: Keine früheren Namen oder Allianzen gefunden.
+  seen_from: seit {when}
+  first_seen: Vom Tracker erstmals gesehen am {when}.
+  pending_title: Wartet auf Überprüfung
+  pending_none: Keine Allianzbilder warten auf Prüfung.
+  sent_by: Gesendet von {name}, {when}
+  race_title: Top 4 Rennen
+  race_none: Noch kein Rennen gemessen.
+  race_progress: "{n} von 3 Duell-Tagen bisher gemessen."
+  race_finished: 'Alle 3 Tage gemessen: Die Ergebnisse liegen bei der NAP-Führung.'
+  race_missing: 'Nicht gemessen: {tags}'
+  race_more: Vollständige Tabelle auf der Regel-Seite
+  quota_title: Tracker-Anfragen
+  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag. Eine Überprüfung kostet eine.
+  quota_check: Nutzung prüfen
+  quota_used: heute verbraucht
+  quota_failed: Der Tracker konnte nicht erreicht werden.

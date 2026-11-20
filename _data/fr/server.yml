@@ -2,22 +2,26 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  positions_leaders_only: Seuls les R4 et R5 (ainsi que les Intendants) de votre alliance peuvent voir les membres sur la carte.
+  stewards_only: Seuls les intendants peuvent utiliser les outils d'intendant.
+  lookups_used: Les recherches de joueurs d'aujourd'hui sont épuisées. Elles recommenceront à la réinitialisation quotidienne (00:00 GT).
+  player_not_found: Aucun joueur ne possède cet identifiant.
+  player_unavailable: Le jeu est inaccessible. Réessayez dans quelques minutes.
+  positions_leaders_only: Seuls les R4 et R5 (et les intendants) de votre alliance peuvent voir les membres sur la carte.
   positions_unavailable: Les positions des membres ne peuvent pas être chargées pour le moment. Réessayez dans quelques minutes.
-  refresh_limit: Plus aucune actualisation disponible aujourd'hui. Elles redémarrent à la réinitialisation quotidienne (00:00 GT).
+  refresh_limit: Plus aucune actualisation de liste disponible aujourd'hui. Elles recommenceront à la réinitialisation quotidienne (00:00 GT).
   refresh_wait: La liste a été actualisée il y a un instant. Réessayez dans {n} min.
-  refresh_failed: Impossible de joindre le jeu. Réessayez dans quelques minutes.
+  refresh_failed: Le jeu est inaccessible. Réessayez dans quelques minutes.
   signed_out: Connectez-vous avec Discord (en haut à droite) pour voir le tableau de bord de votre alliance.
   load_failed: 'Impossible de charger le tableau de bord : {reason}'
-  no_alliance: Nous n'avons pas pu déterminer votre alliance. Le site l'identifie à partir de votre rôle d'alliance sur le serveur Discord NAP, ou via un [TAG] au début de votre pseudo sur le serveur. Corrigez cela sur Discord, puis utilisez Actualiser l'accès dans votre carte de compte (en haut à droite).
+  no_alliance: Nous n'avons pas pu déterminer votre alliance. Le site l'identifie à partir de votre rôle d'alliance sur le serveur Discord NAP, ou d'un [TAG] au début de votre pseudo sur le serveur. Corrigez cela sur Discord, puis utilisez "Actualiser l'accès" dans votre carte de compte (en haut à droite).
   leaders_only: Seuls les R4 et R5 de votre alliance peuvent modifier le tableau de bord.
   chart_removed: Ce graphique a été supprimé.
-  chart_already_removed: Ce graphique était déjà supprimé.
-  not_linked: Ce graphique n'est pas lié à une feuille ou un document Google.
+  chart_already_removed: Ce graphique avait déjà été supprimé.
+  not_linked: Ce graphique n'est pas lié à une feuille Google Sheet ou un document.
   unknown_change: Changement inconnu.
   save_failed: 'Impossible d''enregistrer : {reason}'
-  r5_only_nominate: Seul votre R5 peut ouvrir la page de nomination ici. Utilisez /nominate sur Discord.
-  rewards_closed: Les récompenses sont fermées jusqu'au {when}.
+  r5_only_nominate: Seul votre R5 peut ouvrir la page de nomination ici. Utilisez la commande /nominate sur Discord.
+  rewards_closed: Les récompenses sont fermées jusqu'à {when}.
   no_rank: "[{tag}] n'a aucun rang dans le classement."
   choose_type: Choisissez un type de graphique ou de tableau.
   title_needed: Donnez un titre au graphique ou au tableau.
@@ -25,15 +29,15 @@ api_dashboard:
   too_many_rows: Au maximum {max} lignes (ce tableau en a {count}).
   column_name: Colonne {n}
   paste_first: Collez d'abord un tableau (une ligne d'en-tête, puis les données).
-  no_data_rows: Le tableau ne contient aucune ligne de données sous son en-tête.
-  needs_numbers: Un graphique nécessite une colonne de nombres pour s'afficher.
-  needs_target: 'Un graphique de progression nécessite une cible : un nombre ou une colonne de cibles.'
+  no_data_rows: Le tableau n'a aucune ligne de données sous son en-tête.
+  needs_numbers: Un graphique a besoin d'une colonne de nombres pour s'afficher.
+  needs_target: 'Un graphique de progression a besoin d''une cible : un nombre ou une colonne de cibles.'
   too_many_widgets: Au maximum {max} graphiques et tableaux par alliance.
   sheet_unusable: 'Les données de la feuille ne peuvent pas être utilisées : {reason}'
   too_big: Cela rendrait ce tableau de bord trop volumineux ({size} Ko sur {max} Ko). Utilisez moins de lignes ou supprimez un tableau.
   player_name_needed: Entrez un nom de joueur.
-  time_format: Les horaires sont en Game Time comme 18:00 (ou laissez-les vides).
-  start_time_needed: Donnez également l'heure de début (ou laissez les deux vides).
+  time_format: Les horaires sont au format Game Time comme 18:00 (ou laissez-les vides).
+  start_time_needed: Indiquez également l'heure de début (ou laissez les deux vides).
   rotor_full: Au maximum {max} joueurs dans le rotor.
   already_in_rotor: "{name} est déjà dans le rotor."
   player_removed: Ce joueur a été supprimé.

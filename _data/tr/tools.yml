@@ -981,3 +981,48 @@ stats:
   no_number: "—"
   show_hide: Satırını göstermek veya gizlemek için bir ittifaka dokunun.
   credit_before: 'Veri kaynağı:'
+steward:
+  page_title: Yönetici Araçları
+  intro: 'Krallık Yöneticileri için araçlar: sizi neler bekliyor ve canlı oyuncu sorgulama.'
+  loading: Yükleniyor…
+  sign_in: Discord ile giriş yap
+  sign_in_needed: Yönetici araçlarını açmak için Discord ile giriş yapın.
+  stewards_only: Yönetici araçlarını sadece Krallık Yöneticileri açabilir.
+  lookup_title: Oyuncu sorgulama
+  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, sayıları ve önceki isimleri ile ittifakları. Bir oyuncu kimliği yazın veya NAP oyuncusunun kimliğini bulmak için bir isim girin.'
+  lookup_placeholder: Oyuncu Kimliği veya NAP oyuncusu ismi
+  lookup_go: Sorgula
+  lookup_id_needed: Bir oyuncu kimliği (profilindeki numara) yazın veya bulunan isimlerden bir NAP oyuncusu seçin.
+  lookups_left: Bugün kalan {left}/{max} canlı sorgulama hakkı (tüm Yöneticilerle paylaşılır).
+  looking: Oyuna soruluyor…
+  name_none: Bu isimde bir NAP oyuncusu yok. Diğer herkes için oyuncu kimliğini kullanın.
+  no_alliance: İttifak yok
+  server: Sunucu {n}
+  online: Şu an çevrimiçi
+  last_seen: Son görülme {when}
+  shielded: Kalkan aktif
+  might: Güç
+  kills: Leş
+  sanctuary: Sığınak
+  vip: VIP
+  position: Konum (X, Y)
+  language: Dil
+  ranks: 'Krallık sıralaması: #{might} Güç · #{kills} leş · #{heroes} kahraman'
+  history_title: İsimler ve ittifaklar
+  history_none: Daha önce görülmüş bir isim veya ittifak yok.
+  seen_from: "{when} tarihinden beri"
+  first_seen: Takipçi tarafından ilk kez {when} görüldü.
+  pending_title: İnceleme bekliyor
+  pending_none: Bekleyen ittifak resmi yok.
+  sent_by: "{name} tarafından gönderildi, {when}"
+  race_title: İlk 4 yarışı
+  race_none: Henüz ölçülen bir yarış yok.
+  race_progress: Şu ana kadar 3 Düello gününden {n} kadarı ölçüldü.
+  race_finished: '3 günün tamamı ölçüldü: sonuçlar NAP liderliğinde.'
+  race_missing: 'Ölçülmedi: {tags}'
+  race_more: Kurallar sayfasında tam tablo
+  quota_title: Takipçi istekleri
+  quota_help: Last Asylum Tracker günde 1.000 isteğe izin verir. Kontrol etmek bir hak harcar.
+  quota_check: Kullanımı kontrol et
+  quota_used: bugün kullanıldı
+  quota_failed: Takipçiye ulaşılamadı.
