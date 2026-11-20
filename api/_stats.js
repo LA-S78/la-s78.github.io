@@ -30,7 +30,8 @@ import { get, put } from '@vercel/blob';
 import { createHmac } from 'node:crypto';
 import { gistJson, isTestDeployment } from './_gist.js';
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
-import { fetchAlliance, foldName, knownMissing, trackerConfigured } from './_tracker.js';
+import { foldName, trackerConfigured } from './_tracker.js';
+import { measureAlliances } from './_alliance_ids.js';
 import { ASCENSION_FILE, napTags } from './_ascension.js';
 
 /** Snapshots are taken between 12 and 2 minutes before reset: the 5-minute check lands twice. */
@@ -488,14 +489,6 @@ export function topPlayers(series, today, day) {
   return { day, days: series.days, players: out, lists, achievements };
 }
 
-async function inBatches(items, size, fn) {
-  const out = [];
-  for (let i = 0; i < items.length; i += size) {
-    out.push(...(await Promise.all(items.slice(i, i + size).map(fn))));
-  }
-  return out;
-}
-
 // ---------------------------------------------------------------------------------------
 // The map's "All NAP players" (owner request, 2026-11-20; Stewards only)
 // ---------------------------------------------------------------------------------------
@@ -600,16 +593,12 @@ export async function readNapPositions({ gist, store = blobStore } = {}) {
 export async function refreshNapPositions({ gist, store = blobStore, fetchImpl } = {}) {
   if (store === blobStore && !blobToken()) throw new Error('No Blob store on this deployment');
   const tags = napTags(gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {});
-  const todo = tags.filter((t) => !knownMissing(t));
-  const answers = await Promise.all(
-    todo.map((tag) =>
-      fetchAlliance(tag, {
-        fresh: true,
-        timeoutMs: 7000,
-        use: 'steward',
-        ...(fetchImpl ? { fetchImpl } : {}),
-      }).catch(() => null),
-    ),
+  // By tag, or by the game's number for an alliance renamed in the game (api/_alliance_ids.js)
+  const todo = tags;
+  const answers = await measureAlliances(
+    todo,
+    { fresh: true, timeoutMs: 7000, use: 'steward' },
+    { store, batch: todo.length || 1, fetchImpl },
   );
   const found = {};
   const failed = [];
@@ -651,20 +640,17 @@ export async function checkStatsSnapshot({
     alliances: {},
   };
   // Not asked again: alliances done today, and ones the tracker just said it doesn't have
-  const todo = tags.filter((t) => !today.alliances[t] && !knownMissing(t));
+  const todo = tags.filter((t) => !today.alliances[t]);
   const report = { due: true, day: due.day, measured: [], failed: [] };
   if (!todo.length) return { ...report, note: 'already taken' };
 
   // A live game lookup (the tracker's own copy can be hours old). On Top 4 race days the
   // race has just asked for the same alliances: that answer is reused (freshWithinMs).
-  const found = await inBatches(todo, 4, (tag) =>
-    fetchAlliance(tag, {
-      fresh: true,
-      timeoutMs: 6000,
-      freshWithinMs: 10 * 60000,
-      use: 'automation',
-      ...(fetchImpl ? { fetchImpl } : {}),
-    }),
+  // (By tag, or by the game's number for an alliance renamed in the game: api/_alliance_ids.js)
+  const found = await measureAlliances(
+    todo,
+    { fresh: true, timeoutMs: 6000, freshWithinMs: 10 * 60000, use: 'automation' },
+    { store, fetchImpl },
   );
   const answered = {};
   todo.forEach((tag, i) => {

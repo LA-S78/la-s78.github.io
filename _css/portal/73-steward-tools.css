@@ -256,3 +256,31 @@
 .st-usage .st-use-unrecorded > i {
   background: var(--text-muted);
 }
+
+/* An alliance renamed in the game (api/_alliance_ids.js) */
+.st-renamed {
+  display: grid;
+  gap: 6px;
+  margin-top: 0.8rem;
+}
+
+.st-renamed[hidden] {
+  display: none;
+}
+
+.st-renamed p {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  background: var(--surface-dark);
+  border: 1px solid var(--status-warning, #d69e2e);
+  border-radius: 8px;
+}
+
+.st-renamed a {
+  color: var(--accent-text);
+}

@@ -23,6 +23,9 @@ strings: [steward]
     <button type="button" class="btn btn-primary" id="st-sign-in-btn">{{ "steward.sign_in" | t }}</button>
   </div>
 
+  <!-- NAP alliances renamed in the game (api/_alliance_ids.js) -->
+  <div id="st-renamed" class="st-renamed" hidden></div>
+
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
     <section class="st-card st-lookup">
@@ -111,6 +114,16 @@ strings: [steward]
             )
             .join('')}</ul>`
         : `<p class="sub-text">${ic('check', 'ok')}${esc(t('steward.pending_none'))}</p>`;
+    }
+
+    // An alliance whose tag changed in the game: rename it in the Alliance planner
+    function renamed(list) {
+      $('st-renamed').hidden = !list.length;
+      $('st-renamed').innerHTML = list
+        .map(
+          (r) => `<p>${ic('warning', 'warn')}<span>${esc(t('steward.renamed', { old: `[${r.tag}]`, now: `[${r.now}]`, name: r.name || '' }))} <a href="/${lang || 'en'}/alliance.html#nap-ranks">${esc(t('steward.renamed_fix'))}</a></span></p>`,
+        )
+        .join('');
     }
 
     function race(r) {
@@ -265,6 +278,7 @@ strings: [steward]
       pending(data.pending || []);
       race(data.race);
       usage(data.usage);
+      renamed(data.renamed || []);
     }
     load().catch((err) => show(err.message, 'error'));
   })();

@@ -1083,6 +1083,8 @@ steward:
   history_none: "No earlier names or alliances seen."
   seen_from: "since {when}"
   first_seen: "First seen by the tracker {when}."
+  renamed: "{old} is now {now} {name} in the game. It's still measured (Stats and the Top 4 race) by the game's number for it, but the site still calls it {old}."
+  renamed_fix: "Rename it in the Alliance planner"
   pending_title: "Waiting for review"
   pending_none: "No alliance pictures waiting."
   sent_by: "Sent by {name}, {when}"
