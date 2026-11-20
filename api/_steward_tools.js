@@ -8,18 +8,38 @@
 //                              one tracker request, at most LOOKUPS_PER_DAY a day between all
 //                              Stewards (counted in the Gist, steward-tools.json)
 //   ?steward=quota             the tracker's requests used today (costs one request itself)
+// The overview also shows the day's tracker usage without asking the tracker: the latest
+// figure any of its answers gave (with its time) and what made the requests (tracker-usage.json,
+// kept by api/_tracker.js).
 
 import { gistJson, updateGist } from './_gist.js';
 import { isSteward } from './_stewards.js';
 import { readImages, IMAGE_KINDS } from './_alliance_images.js';
 import { latestRace } from './_ascension.js';
-import { fetchPlayer, fetchQuota } from './_tracker.js';
+import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_tracker.js';
 import { say } from './_messages.js';
 
 export const LOOKUPS_PER_DAY = 30;
 const FILE = 'steward-tools.json';
 /** The game day (GT, UTC-2): the allowance starts again at the 00:00 GT reset. */
 const gameDay = (ms = Date.now()) => new Date(ms - 2 * 3600000).toISOString().slice(0, 10);
+
+/** Today's tracker usage (UTC day): { day, by: { use: n }, last: { used, limit, at } | null }. */
+export function trackerUsage(gist) {
+  const day = usageDay();
+  const saved = gistJson(gist, USAGE_FILE, {}).days?.[day] || {};
+  const by = { ...(saved.by || {}) };
+  let last = saved.last || null;
+  // This server's own requests not saved yet
+  const here = unsavedUsage();
+  if (here.day === day) {
+    for (const [use, n] of Object.entries(here.counts)) by[use] = (by[use] || 0) + n;
+    if (here.last && usageDay(Date.parse(here.last.at)) === day) {
+      if (!last || here.last.used >= last.used) last = here.last;
+    }
+  }
+  return { day, by, last };
+}
 
 function lookupsLeft(gist) {
   const d = gistJson(gist, FILE, {});
@@ -58,11 +78,13 @@ export async function stewardTools(req, res, { gist, session }) {
           }
         : null,
       lookups: lookupsLeft(gist),
+      usage: trackerUsage(gist),
     });
   }
 
   if (what === 'quota') {
-    return res.status(200).json({ quota: await fetchQuota() });
+    const quota = await fetchQuota();
+    return res.status(200).json({ quota, usage: trackerUsage(gist) });
   }
 
   if (what === 'player') {
@@ -70,7 +92,7 @@ export async function stewardTools(req, res, { gist, session }) {
     if (!before.left) {
       return res.status(429).json({ error: say('api_dashboard.lookups_used'), lookups: before });
     }
-    const found = await fetchPlayer(req.query.uid);
+    const found = await fetchPlayer(req.query.uid, { use: 'steward' });
     if (found.error) {
       return res.status(found.error === 'not_found' ? 404 : 502).json({
         error: say(
@@ -105,7 +127,9 @@ export async function stewardTools(req, res, { gist, session }) {
     } catch (err) {
       console.warn('Steward lookup not counted:', err.message);
     }
-    return res.status(200).json({ player: found.player, quota: found.quota, lookups });
+    return res
+      .status(200)
+      .json({ player: found.player, quota: found.quota, lookups, usage: trackerUsage(gist) });
   }
 
   return res.status(400).json({ error: 'Unknown request.' });

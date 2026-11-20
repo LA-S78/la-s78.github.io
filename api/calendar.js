@@ -9,6 +9,7 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 import { checkReminders } from './_reminders.js';
 import { checkAscension, latestRace } from './_ascension.js';
 import { checkStatsSnapshot } from './_stats.js';
+import { flushTrackerUsage } from './_tracker.js';
 import { timingSafeEqual } from 'node:crypto';
 
 /** True when the request carries the reminder schedule's secret (compared in constant time). */
@@ -60,6 +61,8 @@ export default async function handler(req, res) {
         console.error('Stats snapshot failed:', err);
         report.stats = { error: err.message };
       }
+      // The requests those made, saved for the Steward tools page before this server stops
+      if (!dryRun) await flushTrackerUsage().catch((err) => console.warn(err.message));
       return res.status(200).json(report);
     } catch (err) {
       console.error('Reminder check failed:', err);

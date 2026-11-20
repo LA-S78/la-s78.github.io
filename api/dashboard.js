@@ -131,7 +131,11 @@ async function respond(req, res) {
   if (access.leader || caravanShown) {
     // After a leader's refresh, a copy older than it isn't used (the tracker has the new one)
     const refreshedAt = Date.parse(saved.settings.rosterRefresh?.lastAt || '') || 0;
-    const live = await fetchAlliance(tag, { timeoutMs: 2500, newerThan: refreshedAt });
+    const live = await fetchAlliance(tag, {
+      timeoutMs: 2500,
+      newerThan: refreshedAt,
+      use: 'alliance',
+    });
     // The alliance's own avatar frame, when switched on, replaces members' in-game frames
     const frame = allianceFrame(gist, tag);
     if (access.leader) {
@@ -167,7 +171,11 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
   }
   const settings = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag).settings;
   const refreshedAt = Date.parse(settings.rosterRefresh?.lastAt || '') || 0;
-  const live = await fetchAlliance(tag, { timeoutMs: 3000, newerThan: refreshedAt });
+  const live = await fetchAlliance(tag, {
+    timeoutMs: 3000,
+    newerThan: refreshedAt,
+    use: 'alliance',
+  });
   if (!live) return res.status(502).json({ error: say('api_dashboard.positions_unavailable') });
   return res.status(200).json({
     tag,
@@ -210,7 +218,7 @@ async function refreshRoster(res, { gist, tag, alliances, session }) {
       .status(429)
       .json({ error: say('api_dashboard.refresh_wait', { n: before.waitMinutes }) });
   }
-  const live = await fetchAlliance(tag, { fresh: true, timeoutMs: 6000 });
+  const live = await fetchAlliance(tag, { fresh: true, timeoutMs: 6000, use: 'alliance' });
   if (!live) return res.status(502).json({ error: say('api_dashboard.refresh_failed') });
   let settings = null;
   try {
