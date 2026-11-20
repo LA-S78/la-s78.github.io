@@ -3,50 +3,51 @@
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
   stewards_only: Solo gli Steward possono usare gli strumenti Steward.
-  lookups_used: Hai terminato le ricerche dei giocatori per oggi. Si azzerano al ripristino giornaliero (00:00 GT).
-  player_not_found: Nessun giocatore ha quell'ID.
-  player_unavailable: Impossibile contattare il gioco. Riprova tra qualche minuto.
-  positions_leaders_only: Solo gli R4 e gli R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
-  positions_unavailable: Impossibile caricare le posizioni dei membri al momento. Riprova tra qualche minuto.
-  links_used: Hai terminato i collegamenti all'alleanza per oggi. Si azzerano al ripristino giornaliero (00:00 GT).
-  link_bad: Scegli un'alleanza e digita il tag che usa nel gioco adesso.
-  link_same: Questo è il tag che il sito sta già usando.
+  lookups_used: Le ricerche dei giocatori di oggi sono esaurite. Si azzerano al ripristino giornaliero (00:00 GT).
+  player_not_found: Nessun giocatore ha questo ID.
+  player_unavailable: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
+  positions_leaders_only: Solo gli R4 e R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
+  positions_unavailable: Le posizioni dei membri non possono essere caricate al momento. Riprova tra qualche minuto.
+  links_used: I link dell'alleanza di oggi sono esauriti. Si azzerano al ripristino giornaliero (00:00 GT).
+  relink_none: Non c'è più nulla da ricollegare per quell'alleanza.
+  link_bad: Scegli un'alleanza e digita il tag che usa attualmente nel gioco.
+  link_same: È il tag che il sito usa già.
   link_taken: "{tag} è già un'altra alleanza sul sito."
-  link_not_found: Il gioco non ha alcuna alleanza con tag {tag} (le maiuscole contano).
-  positions_used: Hai terminato gli aggiornamenti della mappa per oggi. Si azzerano al ripristino giornaliero (00:00 GT).
+  link_not_found: Il gioco non ha alcuna alleanza con il tag {tag} (le maiuscole contano).
+  positions_used: I caricamenti della mappa di oggi sono esauriti. Si azzerano al ripristino giornaliero (00:00 GT).
   positions_wait: La mappa è stata aggiornata poco fa. Riprova tra {minutes} min.
   refresh_limit: Nessun aggiornamento della lista rimasto per oggi. Si azzerano al ripristino giornaliero (00:00 GT).
   refresh_wait: La lista è stata aggiornata poco fa. Riprova tra {n} min.
-  refresh_failed: Impossibile contattare il gioco. Riprova tra qualche minuto.
+  refresh_failed: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
   signed_out: Accedi con Discord (in alto a destra) per vedere la dashboard della tua alleanza.
   load_failed: 'Impossibile caricare la dashboard: {reason}'
-  no_alliance: Non siamo riusciti a determinare la tua alleanza. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP, o da un [TAG] all'inizio del tuo nickname sul server. Correggilo su Discord, poi usa Aggiorna Accesso nella tua scheda account (in alto a destra).
-  leaders_only: Solo gli R4 e gli R5 della tua alleanza possono modificare la dashboard.
+  no_alliance: Non siamo riusciti a identificare la tua alleanza. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP, o tramite un [TAG] all'inizio del tuo nickname sul server. Correggi questo su Discord, quindi usa Aggiorna Accesso nella scheda del tuo account (in alto a destra).
+  leaders_only: Solo gli R4 e R5 della tua alleanza possono modificare la dashboard.
   chart_removed: Quel grafico è stato rimosso.
   chart_already_removed: Quel grafico era già stato rimosso.
   not_linked: Questo grafico non è collegato a un foglio o documento Google.
   unknown_change: Modifica sconosciuta.
   save_failed: 'Impossibile salvare: {reason}'
-  r5_only_nominate: Solo il tuo R5 può aprire la pagina delle candidature qui. Digita /nominate su Discord.
+  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate su Discord.
   rewards_closed: Le ricompense sono chiuse fino alle {when}.
-  no_rank: "[{tag}] non ha un rango nelle classifiche."
+  no_rank: "[{tag}] non ha un rango nella classifica."
   choose_type: Scegli un tipo di grafico o tabella.
   title_needed: Dai un titolo al grafico o alla tabella.
-  too_many_columns: Al massimo {max} colonne (questa tabella ne ha {count}).
-  too_many_rows: Al massimo {max} righe (questa tabella ne ha {count}).
+  too_many_columns: Massimo {max} colonne (questa tabella ne ha {count}).
+  too_many_rows: Massimo {max} righe (questa tabella ne ha {count}).
   column_name: Colonna {n}
   paste_first: Incolla prima una tabella (una riga di intestazione, poi i dati).
   no_data_rows: La tabella non ha righe di dati sotto l'intestazione.
-  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere mostrato.
-  needs_target: 'Un grafico di progresso ha bisogno di un obiettivo: un numero, o una colonna di obiettivi.'
-  too_many_widgets: Al massimo {max} grafici e tabelle per alleanza.
+  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere visualizzato.
+  needs_target: 'Un grafico di avanzamento ha bisogno di un obiettivo: un numero o una colonna di obiettivi.'
+  too_many_widgets: Massimo {max} grafici e tabelle per alleanza.
   sheet_unusable: 'I dati del foglio non possono essere usati: {reason}'
-  too_big: Ciò renderebbe questa dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
+  too_big: Ciò renderebbe la dashboard troppo grande ({size} KB di {max} KB). Usa meno righe o rimuovi una tabella.
   player_name_needed: Inserisci il nome di un giocatore.
-  time_format: Gli orari seguono il Game Time (es. 18:00) (o lasciali vuoti).
+  time_format: Gli orari sono in Game Time, come 18:00 (o lasciali vuoti).
   start_time_needed: Inserisci anche l'orario di inizio (o lasciali entrambi vuoti).
-  rotor_full: Al massimo {max} giocatori nel rotatore.
-  already_in_rotor: "{name} è già nel rotatore."
+  rotor_full: Massimo {max} giocatori nel rotore.
+  already_in_rotor: "{name} è già nel rotore."
   player_removed: Quel giocatore è stato rimosso.
 api_sheets:
   full_link: Incolla il link completo (che inizia con https://docs.google.com/…).
