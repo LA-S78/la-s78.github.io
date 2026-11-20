@@ -438,7 +438,7 @@ async function inBatches(items, size, fn) {
 // The map's "All NAP players" (owner request, 2026-11-20; Stewards only)
 // ---------------------------------------------------------------------------------------
 // One file, positions.json: { alliances: { TAG: { at, members: [[uid, name, Might, x, y,
-// picture, rank]] } } }. The daily snapshot updates it for free (it asks the tracker anyway);
+// picture, rank, kills, Sanctuary level, frame]] } } } (the last three for the map's game view). The daily snapshot updates it for free (it asks the tracker anyway);
 // a Steward's Refresh asks again for every NAP alliance (one request each). Each alliance
 // keeps its own time, so one that failed keeps its earlier positions.
 
@@ -448,7 +448,18 @@ function positionsEntry(a) {
     at: new Date(at).toISOString(),
     members: (a.members || [])
       .filter((m) => Number.isFinite(m.x) && Number.isFinite(m.y))
-      .map((m) => [m.uid, m.name, m.power, m.x, m.y, m.avatar || null, m.rank || null]),
+      .map((m) => [
+        m.uid,
+        m.name,
+        m.power,
+        m.x,
+        m.y,
+        m.avatar || null,
+        m.rank || null,
+        m.kills ?? null,
+        m.level ?? null,
+        m.frame || null,
+      ]),
   };
 }
 
@@ -479,10 +490,22 @@ export function napPositionsView(file, tags) {
   for (const tag of newestFirst) {
     const a = file.alliances[tag];
     alliances.push({ tag, at: a.at, members: a.members.length });
-    for (const [uid, name, power, x, y, avatar, rank] of a.members) {
+    for (const [uid, name, power, x, y, avatar, rank, kills, level, frame] of a.members) {
       if (seen.has(String(uid))) continue;
       seen.add(String(uid));
-      members.push({ uid: String(uid), name, power, x, y, avatar, rank, tag });
+      members.push({
+        uid: String(uid),
+        name,
+        power,
+        x,
+        y,
+        avatar,
+        rank,
+        tag,
+        kills: kills ?? null,
+        level: level ?? null,
+        frame: frame || null,
+      });
     }
   }
   alliances.sort((a, b) => tags.indexOf(a.tag) - tags.indexOf(b.tag));
