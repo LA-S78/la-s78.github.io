@@ -26,6 +26,7 @@
 //     TEST_CHANNEL_ID instead, pinging nobody, with the real destination written in it.
 //   - A request can ask for a dry run ({ dryRun: true }) anywhere.
 
+import { sendMessage } from './_discord_send.js';
 import { readGist, gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { inLocale, say } from './_messages.js';
 import { findTag } from './_alliances.js';
@@ -260,12 +261,11 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
             ? `🧪 Test reminder: would go to ${target.label}, pinging ${result.ping}`
             : null;
         try {
-          const res = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify(reminderMessage(evt, start, target.ping, testNote)),
-            signal: AbortSignal.timeout(4000),
-          });
+          const res = await sendMessage(
+            channelId,
+            reminderMessage(evt, start, target.ping, testNote),
+            { token: botToken },
+          );
           result.status = res.ok ? 'sent' : `Discord error ${res.status}`;
           if (res.ok) anyPosted = true;
         } catch (err) {

@@ -2,6 +2,7 @@
 // Leaders' proposals from the web planners -> the war-room Discord channel, for a Steward
 // to approve. Requires a login pass (api/_tokens.js), checks size and shape, and limits
 // R4/R5 to a few proposals per day.
+import { sendForm } from './_discord_send.js';
 import { verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { inLanguage, say, utcTime } from './_messages.js';
@@ -399,14 +400,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         const channelId = proposalChannel(
           process.env.REWARDS_CHANNEL_ID || process.env.WAR_ROOM_CHANNEL_ID,
         );
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -491,14 +485,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         }
 
         const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -600,14 +587,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         formData.append('files[0]', jsonBlob, 'diplomacy-blueprint.dat');
 
         const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -681,14 +661,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         );
 
         const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -783,14 +756,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         formData.append('files[0]', jsonBlob, 'override-blueprint.dat');
 
         const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();

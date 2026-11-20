@@ -11,6 +11,7 @@
 //   { runs: { '<week 1 Monday, GT date>': { days: { 3: { at, power: { TAG: n|null } }, 4, 5 },
 //     posted } } }
 
+import { sendMessage } from './_discord_send.js';
 import { gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { trackerConfigured } from './_tracker.js';
@@ -190,14 +191,12 @@ export async function checkAscension({ gist, now = Date.now(), dryRun = false } 
     const token = process.env.DISCORD_BOT_TOKEN;
     if ((test || live) && channelId && token) {
       try {
-        const res = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-          method: 'POST',
-          headers: { Authorization: `Bot ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify(
-            resultsMessage(due.runId, post, test ? '🧪 Test: would go to NAP leadership' : null),
-          ),
-          signal: AbortSignal.timeout(4000),
-        });
+        // (The test site's messages go to the test channel, pinging nobody: _discord_send.js)
+        const res = await sendMessage(
+          channelId,
+          resultsMessage(due.runId, post, test ? '🧪 Test: would go to NAP leadership' : null),
+          { token },
+        );
         report.posted = res.ok ? 'sent' : `Discord error ${res.status}`;
       } catch (err) {
         report.posted = `failed: ${err.message}`;
