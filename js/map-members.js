@@ -11,9 +11,8 @@
 //
 // Tapping a shared marker zooms in on it until its members split apart (owner, 2026-11-20:
 // no list of names). While markers are shown the map can zoom much further than usual
-// (js/map-zoom.js setMaxZoom): far enough for the closest two Sanctuaries loaded to have
-// markers and names of their own, on that screen. Names appear wherever they fit, the
-// strongest players first, so they never overlap.
+// (js/map-zoom.js setMaxZoom), until a Sanctuary is about as big on screen as in the game.
+// Zoomed in, markers cover their Sanctuary's 3×3 tiles and names show under them.
 //
 // Game X/Y become map positions through js/map-coords.js: a smooth warp through reference
 // points read in the game (five cities, 2026-11-19, and the Capitol area's corners,
@@ -171,106 +170,89 @@ function start() {
 
   let groups = [];
 
-  // ---- How deep the map may zoom: the closest two Sanctuaries, in map units ----
-  let closest = null;
-  function closestGap() {
-    if (closest !== null) return closest;
-    const pts = state.members.map((m) => toMap(m.x, m.y));
-    let best = Infinity;
-    for (let i = 0; i < pts.length; i++) {
-      for (let j = i + 1; j < pts.length; j++) {
-        const d = Math.hypot(pts[i].cx - pts[j].cx, pts[i].cy - pts[j].cy);
-        if (d < best) best = d;
-      }
+  // ---- Sanctuaries drawn as in the game (owner, 2026-11-20) ----
+  // A Sanctuary covers 3×3 tiles (its X/Y is the middle one), so neighbours are 3 tiles
+  // apart. Zoomed in, each marker grows to cover most of its 3×3, like the buildings in the
+  // game, and once they're big enough every one gets its name centred underneath, all at the
+  // same zoom (long names shortened with "…"; the chosen member's in full).
+  const BUILDING = 0.6; // share of its 3×3 tiles a marker covers (room for the name below)
+  const NAMES_FROM_PX = 56; // a Sanctuary this wide on screen: names under every one
+  const DEEPEST_PX = 80; // a Sanctuary at the deepest zoom, on screen (about the game's look)
+
+  /** A Sanctuary's 3×3 tiles in map units, [width, height] (the map isn't to scale). */
+  const footprints = new Map();
+  function footprint(m) {
+    let f = footprints.get(m.uid);
+    if (!f) {
+      const l = toMap(m.x - 1.5, m.y);
+      const r = toMap(m.x + 1.5, m.y);
+      const t = toMap(m.x, m.y + 1.5);
+      const b = toMap(m.x, m.y - 1.5);
+      f = [Math.abs(r.cx - l.cx), Math.abs(b.cy - t.cy)];
+      footprints.set(m.uid, f);
     }
-    // Two in one spot (never seen) still get a limit
-    closest = Number.isFinite(best) ? Math.max(best, 0.5) : 10;
-    return closest;
-  }
-  /** Room on screen, in pixels, for a neighbour's name beside its marker. */
-  const NAME_ROOM = 96;
-  function updateMaxZoom() {
-    const zoom = window.MapZoom;
-    if (!zoom?.setMaxZoom) return;
-    const perPx1 = unitsPerPx() * zoom.zoom(); // map units per pixel, not zoomed in
-    zoom.setMaxZoom(((NAME_ROOM * perPx1) / closestGap()) * 1.05);
+    return f;
   }
 
-  // ---- Names, where they fit ----
-  /** Names show from this zoom (fewer names over the whole map's territory labels). */
-  const NAMES_FROM = 4;
-  const NAME_PX = 11;
+  // ---- How deep the map may zoom: until the smallest Sanctuary is DEEPEST_PX wide ----
+  let smallest = null;
+  function updateMaxZoom() {
+    const zoom = window.MapZoom;
+    if (!zoom?.setMaxZoom || !state.members.length) return;
+    if (smallest === null) {
+      smallest = Math.min(...state.members.map((m) => Math.min(...footprint(m))));
+    }
+    const perPx1 = unitsPerPx() * zoom.zoom(); // map units per pixel, not zoomed in
+    zoom.setMaxZoom((DEEPEST_PX * perPx1) / smallest);
+  }
+
+  // ---- Names under the buildings ----
   let measureCtx = null;
-  function textWidth(text) {
+  /** A text's width in pixels at `px`. */
+  function textWidth(text, px) {
     if (!measureCtx) {
       measureCtx = document.createElement('canvas').getContext('2d');
       const family = getComputedStyle(document.body).fontFamily || 'sans-serif';
-      measureCtx.font = `600 ${NAME_PX}px ${family}`;
+      measureCtx.font = `600 100px ${family}`;
     }
-    return measureCtx.measureText(text).width;
+    return (measureCtx.measureText(text).width * px) / 100;
+  }
+  /** The name, shortened with "…" to fit `maxPx`. */
+  function fit(name, px, maxPx) {
+    if (textWidth(name, px) <= maxPx) return name;
+    const chars = [...name];
+    for (let n = chars.length - 1; n > 1; n--) {
+      const short = `${chars.slice(0, n).join('').trimEnd()}…`;
+      if (textWidth(short, px) <= maxPx) return short;
+    }
+    return `${chars[0]}…`;
+  }
+  /** A name under a marker: `cx, cy` its middle, `half` half its height (map units). */
+  function nameText(m, cx, cy, half, fpPx, perPx, picked) {
+    const px = Math.min(13, Math.max(10, fpPx * 0.16));
+    const text = picked ? m.name : fit(m.name, px, fpPx - 4);
+    const y = cy + half + px * 0.95 * perPx;
+    return `<text class="map-member-name${picked ? ' is-selected' : ''}" x="${cx.toFixed(2)}" y="${y.toFixed(2)}" font-size="${(px * perPx).toFixed(2)}" text-anchor="middle" stroke-width="${(3 * perPx).toFixed(2)}">${esc(text)}</text>`;
   }
 
-  /**
-   * Name labels for single markers in view, strongest first (the chosen member before all):
-   * to the right of the marker, else to its left, and only where the label touches no other
-   * label or marker.
-   */
-  function nameLabels(perPx) {
-    const zoom = window.MapZoom?.zoom() || 1;
-    const svg = root();
-    const vb = svg?.viewBox?.baseVal;
-    if (!vb || zoom < NAMES_FROM) return '';
-    const inView = (x, y) =>
-      x >= vb.x && x <= vb.x + vb.width && y >= vb.y && y <= vb.y + vb.height;
-    const boxes = [];
-    const singles = [];
-    for (const g of groups) {
-      if (!inView(g.cx, g.cy)) continue;
-      const h = ((g.members.length === 1 ? SIZE.one : SIZE.group) / 2 + 1) * perPx;
-      boxes.push([g.cx - h, g.cy - h, g.cx + h, g.cy + h]);
-      if (g.members.length === 1) singles.push(g);
-    }
-    const picked = state.members.find((m) => m.uid === state.selected);
-    if (picked) {
-      const { cx, cy } = toMap(picked.x, picked.y);
-      const h = (SIZE.picked / 2 + 2) * perPx;
-      boxes.push([cx - h, cy - h, cx + h, cy + h]);
-      singles.push({ cx, cy, members: [picked], picked: true });
-    }
-    singles.sort(
-      (a, b) => (b.picked ? 1 : 0) - (a.picked ? 1 : 0) || b.members[0].power - a.members[0].power,
-    );
-    const hits = (b) => boxes.some((o) => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
-    const font = NAME_PX * perPx;
-    const gap = (SIZE.one / 2 + 3) * perPx;
-    let html = '';
-    for (const g of singles.slice(0, 400)) {
-      const m = g.members[0];
-      const text = label(m);
-      const w = textWidth(text) * perPx;
-      const h = font * 1.25;
-      const right = [g.cx + gap, g.cy - h / 2, g.cx + gap + w, g.cy + h / 2];
-      const left = [g.cx - gap - w, g.cy - h / 2, g.cx - gap, g.cy + h / 2];
-      const own = g.picked ? (SIZE.picked / 2 + 2) * perPx : 0;
-      const tryBoxes = g.picked
-        ? [[right[0] + own, right[1], right[2] + own, right[3]]]
-        : [right, left];
-      const place = tryBoxes.find((b) => !hits(b)) || (g.picked ? tryBoxes[0] : null);
-      if (!place) continue;
-      boxes.push(place);
-      const anchorLeft = place === left;
-      html += `<text class="map-member-name${g.picked ? ' is-selected' : ''}" x="${(anchorLeft ? place[2] : place[0]).toFixed(1)}" y="${g.cy.toFixed(1)}" font-size="${font.toFixed(2)}" text-anchor="${anchorLeft ? 'end' : 'start'}" dy="0.35em" stroke-width="${(3 * perPx).toFixed(2)}">${esc(text)}</text>`;
-    }
-    return html;
-  }
   /** "Name" (My members) or "[TAG] Name" (All NAP players). */
   const label = (m) => (state.mode === 'nap' && m.tag ? `[${m.tag}] ${m.name}` : m.name);
   const hit = (m) =>
     `<button type="button" class="map-members-hit" data-uid="${esc(m.uid)}">${esc(label(m))} <small>${esc(might(m.power))}</small></button>`;
 
-  function square(cx, cy, px, perPx, cls, attrs, fill) {
-    const h = (px / 2) * perPx;
-    return `<rect class="${cls}" ${attrs} x="${(cx - h).toFixed(1)}" y="${(cy - h).toFixed(1)}" width="${(2 * h).toFixed(1)}" height="${(2 * h).toFixed(1)}" rx="${(perPx * 1.5).toFixed(1)}" fill="${esc(fill)}" stroke-width="${(SIZE.ring * perPx).toFixed(2)}"`;
+  /** A square marker `px` pixels wide, or `size` map units ([w, h]) when given. */
+  function square(cx, cy, px, perPx, cls, attrs, fill, size = null) {
+    const w = (size ? size[0] : px * perPx) / 2;
+    const h = (size ? size[1] : px * perPx) / 2;
+    const r = Math.min(w, h) * 0.25;
+    return `<rect class="${cls}" ${attrs} x="${(cx - w).toFixed(2)}" y="${(cy - h).toFixed(2)}" width="${(2 * w).toFixed(2)}" height="${(2 * h).toFixed(2)}" rx="${r.toFixed(2)}" fill="${esc(fill)}" stroke-width="${(SIZE.ring * perPx).toFixed(2)}"`;
+  }
+
+  /** A single marker's size in map units: SIZE px at the least, else most of its 3×3. */
+  function markerSize(m, px, perPx) {
+    // Square, as in the game (the map is drawn wider than tall in places)
+    const side = Math.max(px * perPx, Math.min(...footprint(m)) * BUILDING);
+    return [side, side];
   }
 
   function draw() {
@@ -322,29 +304,53 @@ function start() {
     const colorOf = (m) => getAllianceColor(m.tag || state.tag);
     const perPx = unitsPerPx();
     groups = groupsOnScreen(perPx);
+    const vb = svg.viewBox?.baseVal;
+    const inView = (x, y, pad) =>
+      !vb ||
+      (x > vb.x - pad && x < vb.x + vb.width + pad && y > vb.y - pad && y < vb.y + vb.height + pad);
+    let names = '';
     let html = groups
       .map((g, i) => {
         if (g.members.length === 1) {
           const m = g.members[0];
-          return `${square(g.cx, g.cy, SIZE.one, perPx, 'map-member-dot', `data-uid="${esc(m.uid)}"`, colorOf(m))}><title>${esc(label(m))}</title></rect>`;
+          const size = markerSize(m, SIZE.one, perPx);
+          const fpPx = Math.min(...footprint(m)) / perPx;
+          if (fpPx >= NAMES_FROM_PX && inView(g.cx, g.cy, size[0] * 2))
+            names += nameText(m, g.cx, g.cy, size[1] / 2, fpPx, perPx, false);
+          return `${square(g.cx, g.cy, SIZE.one, perPx, 'map-member-dot', `data-uid="${esc(m.uid)}"`, colorOf(m), size)}><title>${esc(label(m))}</title></rect>`;
         }
-        const names = g.members.map(label).join(', ');
+        const list = g.members.map(label).join(', ');
         const tags = new Set(g.members.map((m) => m.tag || state.tag));
         const fill = tags.size === 1 ? colorOf(g.members[0]) : MIXED;
-        return `<g class="map-member-group" data-group="${i}">${square(g.cx, g.cy, SIZE.group, perPx, 'map-member-dot', '', fill)}><title>${esc(names)}</title></rect><text x="${g.cx.toFixed(1)}" y="${g.cy.toFixed(1)}" font-size="${(8 * perPx).toFixed(1)}" dy="0.35em">${g.members.length}</text></g>`;
+        return `<g class="map-member-group" data-group="${i}">${square(g.cx, g.cy, SIZE.group, perPx, 'map-member-dot', '', fill)}><title>${esc(list)}</title></rect><text x="${g.cx.toFixed(1)}" y="${g.cy.toFixed(1)}" font-size="${(8 * perPx).toFixed(1)}" dy="0.35em">${g.members.length}</text></g>`;
       })
       .join('');
+    html += names;
     const picked = state.members.find((m) => m.uid === state.selected);
     if (picked) {
       const { cx, cy } = toMap(picked.x, picked.y);
+      const size = markerSize(picked, SIZE.picked, perPx);
+      const half = Math.max(size[0], size[1]) / 2;
       // A pulsing halo, a dark outline and a thick white edge: it stands out on any colour
-      const halo = (SIZE.picked / 2 + 5) * perPx;
-      html += `<rect class="map-member-halo" x="${(cx - halo).toFixed(1)}" y="${(cy - halo).toFixed(1)}" width="${(2 * halo).toFixed(1)}" height="${(2 * halo).toFixed(1)}" rx="${(3 * perPx).toFixed(1)}" stroke-width="${(2 * perPx).toFixed(1)}"></rect>`;
-      const edge = (SIZE.picked / 2 + 1.5) * perPx;
-      html += `<rect class="map-member-outline" x="${(cx - edge).toFixed(1)}" y="${(cy - edge).toFixed(1)}" width="${(2 * edge).toFixed(1)}" height="${(2 * edge).toFixed(1)}" rx="${(2 * perPx).toFixed(1)}"></rect>`;
-      html += `${square(cx, cy, SIZE.picked, perPx, 'map-member-dot is-selected', `data-uid="${esc(picked.uid)}"`, colorOf(picked)).replace(/stroke-width="[^"]*"/, `stroke-width="${(2 * perPx).toFixed(2)}"`)}><title>${esc(picked.name)}</title></rect>`;
+      const halo = half + 5 * perPx;
+      html += `<rect class="map-member-halo" x="${(cx - halo).toFixed(2)}" y="${(cy - halo).toFixed(2)}" width="${(2 * halo).toFixed(2)}" height="${(2 * halo).toFixed(2)}" rx="${(halo * 0.3).toFixed(2)}" stroke-width="${(2 * perPx).toFixed(2)}"></rect>`;
+      const edge = half + 1.5 * perPx;
+      html += `<rect class="map-member-outline" x="${(cx - edge).toFixed(2)}" y="${(cy - edge).toFixed(2)}" width="${(2 * edge).toFixed(2)}" height="${(2 * edge).toFixed(2)}" rx="${(edge * 0.3).toFixed(2)}"></rect>`;
+      html += `${square(cx, cy, SIZE.picked, perPx, 'map-member-dot is-selected', `data-uid="${esc(picked.uid)}"`, colorOf(picked), [2 * half, 2 * half]).replace(/stroke-width="[^"]*"/, `stroke-width="${(2 * perPx).toFixed(2)}"`)}><title>${esc(picked.name)}</title></rect>`;
+      // Their name in full once names show, else from a little way in
+      const fpPx = Math.min(...footprint(picked)) / perPx;
+      if (fpPx >= 20)
+        html += nameText(
+          picked,
+          cx,
+          cy,
+          half + 2 * perPx,
+          Math.max(fpPx, NAMES_FROM_PX),
+          perPx,
+          true,
+        );
     }
-    layer.innerHTML = html + nameLabels(perPx);
+    layer.innerHTML = html;
   }
 
   /** A shared marker tapped: the map zooms in on it until its members split apart. */
@@ -448,8 +454,8 @@ function start() {
     // Found by search: the map zooms to them (js/map-zoom.js)
     if (m && window.MapZoom) {
       const { cx, cy } = toMap(m.x, m.y);
-      // close enough for most neighbours' names too
-      window.MapZoom.focus(cx, cy, Math.max(window.MapZoom.zoom(), window.MapZoom.maxZoom * 0.5));
+      // close enough for the names under the buildings
+      window.MapZoom.focus(cx, cy, Math.max(window.MapZoom.zoom(), window.MapZoom.maxZoom * 0.6));
     }
   }
 
@@ -520,7 +526,8 @@ function start() {
       // Each player once (the server sends them so; kept safe here too)
       const seen = new Set();
       state.members = (body.members || []).filter((m) => !seen.has(m.uid) && seen.add(m.uid));
-      closest = null;
+      smallest = null;
+      footprints.clear();
       state.tag = body.tag || '';
       state.takenAt = body.takenAt || null;
       state.on = true;
