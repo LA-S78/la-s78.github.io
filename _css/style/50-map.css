@@ -120,6 +120,16 @@ svg #layer1 path:hover {
   animation: territory-flash 2s ease-in-out infinite alternate;
 }
 
+/* Past 6× zoom (svg.is-deep, js/map-zoom.js) territories drop the vignette (owner,
+   2026-11-20: dragging the zoomed-in map lagged, worst above WLO's hive). The filter blurs
+   each territory's edge by 40 map units, re-worked over the whole territory on every frame:
+   at 70× that is a blur thousands of pixels wide. Measured in the game view: 400–650ms a drag
+   frame with it, 35–45ms without. That far in, the darkened edges are off the screen anyway. */
+.game-map svg.is-deep #layer1 path,
+.game-map svg.is-deep #layer1 path:hover {
+  filter: none !important;
+}
+
 .territory-label {
   text-anchor: middle !important;
   dominant-baseline: central;
