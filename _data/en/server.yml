@@ -12,6 +12,7 @@ api_dashboard:
   positions_leaders_only: "Only your alliance's R4s and R5s (and Stewards) can see members on the map."
   positions_unavailable: "Members' positions can't be loaded right now. Try again in a few minutes."
   links_used: "Today's alliance links are used up. They start again at the daily reset (00:00 GT)."
+  relink_none: "There's nothing to relink for that alliance any more."
   link_bad: "Choose an alliance and type the tag it uses in the game now."
   link_same: "That's the tag the site already uses."
   link_taken: "{tag} is already another alliance on the site."
