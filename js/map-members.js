@@ -449,7 +449,7 @@ function start() {
       pt.y = y;
       return pt.matrixTransform(ctm);
     };
-    const top = at(cx, cy + side * 0.27 - side * 0.76);
+    const top = at(cx, cy + side * 0.28 - side * 0.8);
     const bottom = at(cx, cy + side * 0.6);
     const r = box.getBoundingClientRect();
     const w = pop.offsetWidth;

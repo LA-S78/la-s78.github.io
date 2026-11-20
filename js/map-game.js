@@ -72,8 +72,8 @@ export function building(m, cx, cy, side, perPx, { name, picked, textWidth }) {
   // The picture stands in the upper part of its 3×3, the name plate in the lower, so a row's
   // level badges clear the plates of the row above
   const w = side * 0.98;
-  const h = side * 0.76;
-  const bottom = cy + side * 0.27;
+  const h = side * 0.8;
+  const bottom = cy + side * 0.28;
   const top = bottom - h;
   let out = `<g class="map-game-sanctuary${picked ? ' is-selected' : ''}" data-uid="${esc(m.uid)}">`;
   out += `<rect class="map-game-hit" x="${(cx - side / 2).toFixed(2)}" y="${top.toFixed(2)}" width="${side.toFixed(2)}" height="${(bottom - top).toFixed(2)}"></rect>`;
@@ -83,7 +83,7 @@ export function building(m, cx, cy, side, perPx, { name, picked, textWidth }) {
   if (m.level) {
     const bw = badgePx * 2.6 * perPx;
     const bh = badgePx * 1.5 * perPx;
-    const by = top + side * 0.02;
+    const by = top - side * 0.01;
     out += `<rect class="map-game-level" x="${(cx - bw / 2).toFixed(2)}" y="${by.toFixed(2)}" width="${bw.toFixed(2)}" height="${bh.toFixed(2)}" rx="${(bh / 2).toFixed(2)}" stroke-width="${perPx.toFixed(2)}"></rect>`;
     out += `<text class="map-game-level-text" x="${cx.toFixed(2)}" y="${(by + bh / 2).toFixed(2)}" dy="0.35em" font-size="${(badgePx * perPx).toFixed(2)}">${esc(m.level)}</text>`;
   }
