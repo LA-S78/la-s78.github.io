@@ -740,18 +740,21 @@ blacklist_planner:
   sent: Предложение по черному списку отправлено руководству в Discord. Оно вступит в силу после одобрения стюардом.
 map_planner:
   view: 'Вид:'
+  zoom_in: Приблизить
+  zoom_out: Отдалить
+  zoom_reset: Показать всю карту
   members_toggle: Мои участники
   members_search: Найти участника (имя или ID)...
   members_loading: Загрузка ваших участников...
-  members_count: "{n} участников из [{tag}]"
+  members_count: "{n} участников [{tag}]"
   members_as_of: позиции на {time}
-  members_failed: 'Участники не могут быть отображены: {error}'
-  members_none: Нет подходящих участников
+  members_failed: 'Не удалось показать участников: {error}'
+  members_none: Участники не найдены
   members_here: "{n} участников здесь:"
   member_coords: X {x} · Y {y}
   member_in: в {place}
   member_close: Закрыть
-  tag_ambiguous: "[{tag}] может означать более одного альянса ({options}). Введите тег точно, включая заглавные буквы."
+  tag_ambiguous: "[{tag}] может означать несколько альянсов ({options}). Введите тег в точности, учитывая заглавные буквы."
   levels: Уровни
   alliances: Альянсы
   resources: Ресурсы
@@ -760,24 +763,24 @@ map_planner:
   close_buff_summary: Закрыть сводку баффов
   planner_mode: Режим планировщика
   override_label: 'Изменить на:'
-  override_placeholder: НАПРИМЕР, WLO
-  override_help: Введите тег, чтобы переопределить назначения по клику. Оставьте пустым для циклического перебора.
+  override_placeholder: НАПР. WLO
+  override_help: Введите тег, чтобы переназначить клики. Оставьте пустым для циклического выбора.
   submit_plan: Отправить план
   compare_label: Сравнить план с текущей картой
-  show_live: Текущая
+  show_live: Сейчас
   show_plan: Мой план
   discard: Отменить
-  discard_confirm: Отменить ваши запланированные изменения ({n})? Это действие нельзя отменить.
+  discard_confirm: Отменить запланированные изменения ({n})? Это действие нельзя будет отменить.
   view_locked: Выключите режим планировщика, чтобы изменить вид
-  plan_saved: Ваш план сохранен ({n} изменений). Включите режим планировщика, чтобы продолжить.
-  fullscreen: Полный экран
+  plan_saved: Ваш план сохранен ({n} изм.). Включите режим планировщика, чтобы продолжить.
+  fullscreen: Полноэкранный режим
   toggle_fullscreen: Переключить полноэкранный режим
   exit: Выход
   grain: Зерно
   timber: Древесина
   herbs: Травы
-  solid_gather: 'Сплошной: Сбор'
-  stripe_output: 'Полоса: Добыча'
+  solid_gather: 'Сплошное: сбор'
+  stripe_output: 'Полоса: производство'
   level_unknown: Уровень --
   level: Уровень {n}
   hover: Наведите на территорию
@@ -787,9 +790,9 @@ map_planner:
   none: Нет
   no_active_buff: Нет активных баффов
   drawer_title: Распределение баффов альянса
-  drawer_subtitle: Динамический подсчет на основе активной карты / назначений в планировщике
-  no_claims: В данный момент альянсы не владеют территориями.
-  no_buffs: Нет назначенных активных баффов
+  drawer_subtitle: Динамический подсчет на основе активных назначений на карте / в планировщике
+  no_claims: Ни один альянс сейчас не удерживает территорию.
+  no_buffs: Активных баффов не назначено
   cities_one: "{n} город"
   cities_few: "{n} города"
   cities_other: "{n} городов"
@@ -801,13 +804,13 @@ map_planner:
   buff_building_speed: Скорость строительства
   buff_march_speed: Скорость марша
   buff_grain_gathering: Сбор зерна
-  buff_grain_output: Добыча зерна
+  buff_grain_output: Производство зерна
   buff_timber_gathering: Сбор древесины
-  buff_timber_output: Добыча древесины
+  buff_timber_output: Производство древесины
   buff_herb_gathering: Сбор трав
-  buff_herb_output: Добыча трав
-  no_changes: В вашем черновике плана не обнаружено изменений.
-  proposal_title: Отправить предложение по территории на карте
+  buff_herb_output: Производство трав
+  no_changes: В черновике плана не обнаружено изменений.
+  proposal_title: Отправить предложение по территории карты
 proposals:
   title: Отправить предложение
   close: Закрыть

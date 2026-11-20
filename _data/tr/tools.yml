@@ -731,6 +731,9 @@ blacklist_planner:
   sent: Kara liste teklifi Discord'da liderliğe gönderildi. Bir Kâhya onayladığında geçerli olur.
 map_planner:
   view: 'Görünüm:'
+  zoom_in: Yakınlaştır
+  zoom_out: Uzaklaştır
+  zoom_reset: Tüm haritayı göster
   members_toggle: Üyelerim
   members_search: Bir üye bul (isim veya ID)...
   members_loading: Üyeleriniz yükleniyor...
@@ -742,7 +745,7 @@ map_planner:
   member_coords: X {x} · Y {y}
   member_in: "{place} içinde"
   member_close: Kapat
-  tag_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}). Etiketi büyük harfleriyle tam olarak yazın."
+  tag_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}). Tag'i büyük harfleriyle tam olarak yazın."
   levels: Seviyeler
   alliances: İttifaklar
   resources: Kaynaklar
@@ -751,24 +754,24 @@ map_planner:
   close_buff_summary: Güçlendirme Özetini Kapat
   planner_mode: Planlayıcı Modu
   override_label: 'Şununla değiştir:'
-  override_placeholder: ÖRN. WLO
-  override_help: Tıklama atamalarını geçersiz kılmak için bir etiket yazın. Döngü için boş bırakın.
+  override_placeholder: 'Örn: WLO'
+  override_help: Tıklama atamalarını geçersiz kılmak için bir tag yazın. Döngüye almak için boş bırakın.
   submit_plan: Planı Gönder
   compare_label: Planı canlı harita ile karşılaştır
   show_live: Canlı
   show_plan: Planım
-  discard: Vazgeç
-  discard_confirm: Planladığınız değişiklikleri ({n}) silmek istiyor musunuz? Bu işlem geri alınamaz.
+  discard: İptal
+  discard_confirm: Planlanan değişikliklerinizi ({n}) iptal etmek istiyor musunuz? Bu işlem geri alınamaz.
   view_locked: Görünümü değiştirmek için Planlayıcı Modunu kapatın
   plan_saved: Planınız kaydedildi ({n} değişiklik). Devam etmek için Planlayıcı Modunu açın.
   fullscreen: Tam Ekran
   toggle_fullscreen: Tam Ekranı Aç/Kapat
   exit: Çıkış
   grain: Tahıl
-  timber: Kereste
+  timber: Odun
   herbs: Ot
   solid_gather: 'Katı: Toplama'
-  stripe_output: 'Şerit: Üretim'
+  stripe_output: 'Çizgili: Üretim'
   level_unknown: Seviye --
   level: Seviye {n}
   hover: Bir bölgenin üzerine gelin
@@ -777,8 +780,8 @@ map_planner:
   buff: 'Güçlendirme:'
   none: Yok
   no_active_buff: Aktif güçlendirme yok
-  drawer_title: İttifak Güçlendirme Dağılımı
-  drawer_subtitle: Aktif harita/planlayıcı atamalarına dayalı dinamik çetele
+  drawer_title: İttifak Güçlendirme Dağıtımı
+  drawer_subtitle: Aktif harita / planlayıcı atamalarına dayalı dinamik döküm
   no_claims: Şu anda hiçbir ittifak bölge talep etmiyor.
   no_buffs: Atanmış aktif güçlendirme yok
   cities_one: "{n} Şehir"
@@ -792,12 +795,12 @@ map_planner:
   buff_march_speed: Yürüyüş Hızı
   buff_grain_gathering: Tahıl Toplama
   buff_grain_output: Tahıl Üretimi
-  buff_timber_gathering: Kereste Toplama
-  buff_timber_output: Kereste Üretimi
+  buff_timber_gathering: Odun Toplama
+  buff_timber_output: Odun Üretimi
   buff_herb_gathering: Ot Toplama
   buff_herb_output: Ot Üretimi
   no_changes: Taslak planınızda değişiklik algılanmadı.
-  proposal_title: Harita Bölgesi Teklifi Gönder
+  proposal_title: Harita Bölgesi Önerisi Gönder
 proposals:
   title: Öneri Gönder
   close: Kapat
