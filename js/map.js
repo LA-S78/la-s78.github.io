@@ -10,6 +10,7 @@ import {
   showSavedWhileLoading,
 } from './live-data-notice.js';
 import { submitProposalWithAuth } from './auth-modal.js';
+import { ambiguousTags, findTag } from './tags.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -31,6 +32,10 @@ const BUFF_KEYS = new Set([
 const buffName = (b) => (BUFF_KEYS.has(b.key) ? tm(`buff_${b.key}`) : b.name);
 
 const DRAFT_STORAGE_KEY = 'la_map_planner_draft';
+// '1' while Planner Mode is on, '0' once turned off, so a reload comes back to how it was (a
+// saved plan alone doesn't say: turning the planner off keeps the plan, owner decision
+// 2026-11-15)
+const PLANNER_ON_KEY = 'la_map_planner_on';
 
 export const LABEL_OVERRIDES = {
   Sky_Fortress: { rotate: 270, offsetX: -52 },
@@ -129,6 +134,10 @@ export let currentColorMode = 'level';
 export let isPlannerActive = false;
 export let isBuffDrawerOpen = false;
 export let draftState = null;
+// The view before Planner Mode switched to Alliances, to go back to when it's turned off
+let viewBeforePlanner = null;
+// In Planner Mode: showing the live map instead of the plan, to compare (editing paused)
+let showingLive = false;
 export let DRAFT_ALLIANCE_TAGS = [];
 
 export const COLOR_FALLBACKS = { unclaimed: '#2d3748', noAllianceColor: '#718096' };
@@ -429,13 +438,13 @@ export function renderBuffSummaryDrawer() {
     return;
   }
 
-  const activeOverride = document.getElementById('alliance-override')?.value.trim().toLowerCase();
+  const activeOverride = document.getElementById('alliance-override')?.value.trim();
 
   const rows = sortedTags
     .map((tag) => {
       const data = summary[tag];
       const allianceColor = getAllianceColor(tag);
-      const isEditing = activeOverride && tag.toLowerCase() === activeOverride;
+      const isEditing = activeOverride && findTag(sortedTags, activeOverride) === tag;
 
       const buffBadges =
         data.aggregatedBuffs && data.aggregatedBuffs.length > 0
@@ -451,13 +460,14 @@ export function renderBuffSummaryDrawer() {
               .join('')
           : `<span class="buff-none">${esc(tm('no_buffs'))}</span>`;
 
-      // One card per alliance: its tag and number of cities, then its buffs (they wrap, so
-      // long names in any language fit the panel; the old three-column table was cut off)
+      // One card per alliance: its tag (in its colour) and number of cities, then its buffs
+      // (they wrap, so long names in any language fit the panel; the old three-column table
+      // was cut off)
       return `
       <li class="buff-row ${isEditing ? 'is-active-target' : ''}">
         <div class="buff-row-head">
           <span class="alliance-dot" style="background-color: ${esc(allianceColor)}"></span>
-          <strong class="buff-row-tag">[${esc(tag)}]</strong>
+          <strong class="buff-row-tag ally-text" style="--ally: ${esc(allianceColor)}">[${esc(tag)}]</strong>
           <span class="city-count-pill">${esc(window.tn('map_planner.cities', data.count))}</span>
         </div>
         <div class="buff-badges-wrap">${buffBadges}</div>
@@ -498,11 +508,14 @@ export async function captureMapImage(svgRoot = null) {
   if (!root) return null;
 
   try {
-    const viewBox = root.viewBox?.baseVal;
+    // The whole map, whatever the reader has zoomed into (js/map-zoom.js keeps the full view)
+    const full = (root.dataset.fullViewBox || '').split(' ').map(Number);
+    const viewBox = full.length === 4 ? { width: full[2], height: full[3] } : root.viewBox?.baseVal;
     const width = viewBox?.width || root.clientWidth || 1000;
     const height = viewBox?.height || root.clientHeight || 800;
 
     const clonedSvg = root.cloneNode(true);
+    if (root.dataset.fullViewBox) clonedSvg.setAttribute('viewBox', root.dataset.fullViewBox);
     clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     clonedSvg.setAttribute('width', width);
     clonedSvg.setAttribute('height', height);
@@ -626,16 +639,41 @@ export async function captureMapImage(svgRoot = null) {
 // PLANNER MODE & DISPATCH
 // ==========================================================================
 
-export function togglePlannerMode(active, svgRoot = null) {
-  isPlannerActive = active;
-  const root = svgRoot || getSvgRoot();
-
-  const btnDraft =
-    document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
-  if (btnDraft) {
-    btnDraft.setAttribute('aria-pressed', active ? 'true' : 'false');
-    btnDraft.classList.toggle('active', active);
+/** The plan's changes saved on this device: { cityId: { owner } }, or {} */
+function savedPlan() {
+  try {
+    const plan = JSON.parse(localStorage.getItem(DRAFT_STORAGE_KEY) || '{}');
+    return plan && typeof plan === 'object' ? plan : {};
+  } catch (e) {
+    return {};
   }
+}
+
+/** How many territories the plan changes (compared with the live map). */
+function planChangeCount() {
+  const plan = draftState ? draftState.territory_ownership || {} : savedPlan();
+  return cities.filter((city) => {
+    const entry = plan[city.id];
+    if (!entry) return false;
+    const owner = typeof entry === 'string' ? entry : entry.owner || 'Unclaimed';
+    return owner !== (city.owner || 'Unclaimed');
+  }).length;
+}
+
+/**
+ * Planner Mode (owner decision, 2026-11-15):
+ *   - on: the map shows alliance colours (what the planner changes); the view it came from is
+ *     remembered and Levels/Resources are greyed out until the planner is off, so the view
+ *     buttons always match the map;
+ *   - off: back to the view it came from. The plan is KEPT (saved on this device) until it is
+ *     sent or "Discard" is pressed, so turning the planner off and on doesn't lose it;
+ *   - Live / My plan compares the plan with the live map without leaving the planner.
+ */
+export function togglePlannerMode(active, svgRoot = null) {
+  const root = svgRoot || getSvgRoot();
+  if (active && !isPlannerActive) viewBeforePlanner = currentColorMode;
+  isPlannerActive = active;
+  showingLive = false;
 
   // The tag box stays in the bar (greyed out until Planner Mode is on), so turning the
   // planner on or off doesn't shift the buttons around it
@@ -646,56 +684,125 @@ export function togglePlannerMode(active, svgRoot = null) {
   }
 
   if (isPlannerActive) {
-    if (!draftState) {
-      draftState = JSON.parse(JSON.stringify(mapState));
-      if (!draftState.territory_ownership) draftState.territory_ownership = {};
-    }
+    // The plan: the live map with this device's saved changes on top
+    draftState = JSON.parse(JSON.stringify(mapState));
+    draftState.territory_ownership = {
+      ...(draftState.territory_ownership || {}),
+      ...savedPlan(),
+    };
     currentColorMode = 'alliance';
   } else {
     draftState = null;
-    try {
-      localStorage.removeItem(DRAFT_STORAGE_KEY);
-    } catch (e) {}
-    currentColorMode = 'level';
-
-    const btnLevel = document.getElementById('btn-mode-level');
-    const btnAlliance = document.getElementById('btn-mode-alliance');
-    const btnResource = document.getElementById('btn-mode-resource');
-    const resourceLegend = document.getElementById('resource-map-legend');
-    if (btnLevel && btnAlliance) {
-      btnLevel.classList.add('active');
-      btnAlliance.classList.remove('active');
-      if (btnResource) btnResource.classList.remove('active');
-      if (resourceLegend) {
-        resourceLegend.classList.add('hidden');
-        resourceLegend.setAttribute('aria-hidden', 'true');
-      }
-    }
+    currentColorMode = viewBeforePlanner || 'level';
+    viewBeforePlanner = null;
   }
+  try {
+    // '0', not removed: no mark at all means a plan saved by the old version (see below)
+    localStorage.setItem(PLANNER_ON_KEY, active ? '1' : '0');
+  } catch (e) {}
 
-  if (root) {
-    setMapColorMode(currentColorMode, root);
-  }
-
+  if (root) setMapColorMode(currentColorMode, root);
+  syncPlannerControls();
   updateProposalUI();
 }
 
-export function getCityOwner(cityId) {
-  if (
-    isPlannerActive &&
-    draftState &&
-    draftState.territory_ownership &&
-    draftState.territory_ownership[cityId]
-  ) {
-    const draftData = draftState.territory_ownership[cityId];
-    return typeof draftData === 'string' ? draftData : draftData.owner || 'Unclaimed';
+/** Live / My plan, inside Planner Mode. */
+export function showLiveMap(live, svgRoot = null) {
+  if (!isPlannerActive) return;
+  showingLive = Boolean(live);
+  const root = svgRoot || getSvgRoot();
+  if (root) setMapColorMode(currentColorMode, root);
+  syncPlannerControls();
+}
+
+/** Throws the plan away (after asking), staying in Planner Mode. */
+export function discardPlan(svgRoot = null) {
+  const count = planChangeCount();
+  if (!count) return;
+  if (!confirm(tm('discard_confirm', { n: count }))) return;
+  try {
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+  } catch (e) {}
+  if (isPlannerActive) {
+    draftState = JSON.parse(JSON.stringify(mapState));
+    if (!draftState.territory_ownership) draftState.territory_ownership = {};
   }
+  showingLive = false;
+  const root = svgRoot || getSvgRoot();
+  if (root) setMapColorMode(currentColorMode, root);
+  syncPlannerControls();
+  updateProposalUI();
+}
+
+/** The view buttons, the planner button and the Live / My plan / Discard controls. */
+export function syncPlannerControls() {
+  const views = {
+    level: 'btn-mode-level',
+    alliance: 'btn-mode-alliance',
+    resource: 'btn-mode-resource',
+  };
+  for (const [mode, id] of Object.entries(views)) {
+    const btn = document.getElementById(id);
+    if (!btn) continue;
+    btn.classList.toggle('active', currentColorMode === mode);
+    btn.setAttribute('aria-pressed', currentColorMode === mode ? 'true' : 'false');
+    const locked = isPlannerActive && mode !== 'alliance';
+    btn.disabled = locked;
+    if (locked) btn.title = tm('view_locked');
+    else btn.removeAttribute('title');
+  }
+  const resourceLegend = document.getElementById('resource-map-legend');
+  if (resourceLegend) {
+    const shown = currentColorMode === 'resource';
+    resourceLegend.classList.toggle('hidden', !shown);
+    resourceLegend.setAttribute('aria-hidden', shown ? 'false' : 'true');
+  }
+
+  const count = planChangeCount();
+  const btnDraft =
+    document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
+  if (btnDraft) {
+    btnDraft.setAttribute('aria-pressed', isPlannerActive ? 'true' : 'false');
+    btnDraft.classList.toggle('active', isPlannerActive);
+    // A plan is waiting while the planner is off: the button says so
+    btnDraft.classList.toggle('has-plan', !isPlannerActive && count > 0);
+    if (!isPlannerActive && count > 0) btnDraft.title = tm('plan_saved', { n: count });
+    else btnDraft.removeAttribute('title');
+  }
+  const live = document.getElementById('btn-plan-live');
+  const mine = document.getElementById('btn-plan-mine');
+  for (const [btn, on] of [
+    [live, showingLive],
+    [mine, !showingLive],
+  ]) {
+    if (!btn) continue;
+    btn.disabled = !isPlannerActive;
+    btn.classList.toggle('active', isPlannerActive && on);
+    btn.setAttribute('aria-pressed', isPlannerActive && on ? 'true' : 'false');
+  }
+  const discard = document.getElementById('btn-discard-plan');
+  if (discard) discard.disabled = !isPlannerActive || count === 0;
+  const overrideInput = document.getElementById('alliance-override');
+  if (overrideInput) overrideInput.disabled = !isPlannerActive || showingLive;
+}
+
+/** The owner in the plan (the live owner where the plan changes nothing). */
+function plannedOwner(cityId) {
+  const draftData = draftState?.territory_ownership?.[cityId];
+  if (draftData) return typeof draftData === 'string' ? draftData : draftData.owner || 'Unclaimed';
+  const city = getCityById(cityId);
+  return city ? city.owner || 'Unclaimed' : 'Unclaimed';
+}
+
+/** The owner the map shows: the plan's in Planner Mode (unless comparing with Live). */
+export function getCityOwner(cityId) {
+  if (isPlannerActive && !showingLive) return plannedOwner(cityId);
   const city = getCityById(cityId);
   return city ? city.owner || 'Unclaimed' : 'Unclaimed';
 }
 
 export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
-  if (!isPlannerActive) return;
+  if (!isPlannerActive || showingLive) return;
   const root = svgRoot || getSvgRoot();
 
   if (!draftState) draftState = JSON.parse(JSON.stringify(mapState));
@@ -710,6 +817,7 @@ export function setDraftTerritoryOwner(cityId, newOwnerTag, svgRoot = null) {
   if (root) {
     setMapColorMode(currentColorMode, root);
   }
+  syncPlannerControls();
   updateProposalUI();
 }
 
@@ -720,10 +828,16 @@ export function promptTerritoryAssignment(cityId, svgRoot = null) {
   if (overrideInput && overrideInput.value.trim() !== '') {
     let customOwner = overrideInput.value.trim();
 
-    const existingTag = Object.keys(alliances).find(
-      (tag) => tag.toLowerCase() === customOwner.toLowerCase(),
-    );
-    customOwner = existingTag ? existingTag : customOwner.toUpperCase();
+    // The alliance meant (findTag: RâvN isn't RÂVN); a new tag is kept as typed. One that
+    // could mean two alliances (ravn: RâvN or RÂVN) assigns nothing: type it exactly.
+    const unsure = ambiguousTags(Object.keys(alliances), customOwner);
+    if (unsure.length) {
+      alert(
+        tm('tag_ambiguous', { tag: customOwner, options: unsure.map((t) => `[${t}]`).join(', ') }),
+      );
+      return;
+    }
+    customOwner = findTag(Object.keys(alliances), customOwner) || customOwner;
 
     setDraftTerritoryOwner(cityId, customOwner, root);
     return;
@@ -748,7 +862,7 @@ export function generateProposalPayload(authorName = 'Anonymous User') {
   const changes = {};
 
   cities.forEach((city) => {
-    const draftOwner = getCityOwner(city.id);
+    const draftOwner = plannedOwner(city.id);
     const originalOwner = city.owner || 'Unclaimed';
     if (draftOwner !== originalOwner) {
       changes[city.id] = { from: originalOwner, to: draftOwner };
@@ -801,6 +915,7 @@ export async function submitStrategyProposal() {
   submitProposalWithAuth({
     type: 'map',
     title: tm('proposal_title'),
+    icon: 'map',
     payload: payload,
     diffSummaryHtml: `<div class="diff-list">${diffItems}</div>`,
     onSuccess: () => {
@@ -872,7 +987,6 @@ export function bindMapControls(svgRoot = null) {
   const btnLevel = document.getElementById('btn-mode-level');
   const btnAlliance = document.getElementById('btn-mode-alliance');
   const btnResource = document.getElementById('btn-mode-resource');
-  const resourceLegend = document.getElementById('resource-map-legend');
   const btnDraft =
     document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
   const btnSubmit =
@@ -883,45 +997,40 @@ export function bindMapControls(svgRoot = null) {
   const mapContainer = document.getElementById('map-container');
   const btnFullscreen = document.getElementById('btn-toggle-fullscreen');
 
-  if (btnLevel && !btnLevel.dataset.bound) {
-    btnLevel.dataset.bound = 'true';
-    btnLevel.addEventListener('click', () => {
-      btnLevel.classList.add('active');
-      if (btnAlliance) btnAlliance.classList.remove('active');
-      if (btnResource) btnResource.classList.remove('active');
-      if (resourceLegend) {
-        resourceLegend.classList.add('hidden');
-        resourceLegend.setAttribute('aria-hidden', 'true');
-      }
-      setMapColorMode('level', svgRoot || getSvgRoot());
+  // The view buttons (greyed out in Planner Mode except Alliances: syncPlannerControls)
+  for (const [btn, mode] of [
+    [btnLevel, 'level'],
+    [btnAlliance, 'alliance'],
+    [btnResource, 'resource'],
+  ]) {
+    if (!btn || btn.dataset.bound) continue;
+    btn.dataset.bound = 'true';
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      setMapColorMode(mode, svgRoot || getSvgRoot());
+      syncPlannerControls();
     });
   }
 
-  if (btnAlliance && !btnAlliance.dataset.bound) {
-    btnAlliance.dataset.bound = 'true';
-    btnAlliance.addEventListener('click', () => {
-      btnAlliance.classList.add('active');
-      if (btnLevel) btnLevel.classList.remove('active');
-      if (btnResource) btnResource.classList.remove('active');
-      if (resourceLegend) {
-        resourceLegend.classList.add('hidden');
-        resourceLegend.setAttribute('aria-hidden', 'true');
-      }
-      setMapColorMode('alliance', svgRoot || getSvgRoot());
+  const btnLive = document.getElementById('btn-plan-live');
+  const btnMine = document.getElementById('btn-plan-mine');
+  const btnDiscard = document.getElementById('btn-discard-plan');
+  for (const [btn, live] of [
+    [btnLive, true],
+    [btnMine, false],
+  ]) {
+    if (!btn || btn.dataset.bound) continue;
+    btn.dataset.bound = 'true';
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showLiveMap(live, svgRoot || getSvgRoot());
     });
   }
-
-  if (btnResource && !btnResource.dataset.bound) {
-    btnResource.dataset.bound = 'true';
-    btnResource.addEventListener('click', () => {
-      btnResource.classList.add('active');
-      if (btnLevel) btnLevel.classList.remove('active');
-      if (btnAlliance) btnAlliance.classList.remove('active');
-      if (resourceLegend) {
-        resourceLegend.classList.remove('hidden');
-        resourceLegend.setAttribute('aria-hidden', 'false');
-      }
-      setMapColorMode('resource', svgRoot || getSvgRoot());
+  if (btnDiscard && !btnDiscard.dataset.bound) {
+    btnDiscard.dataset.bound = 'true';
+    btnDiscard.addEventListener('click', (e) => {
+      e.preventDefault();
+      discardPlan(svgRoot || getSvgRoot());
     });
   }
 
@@ -973,16 +1082,27 @@ export function bindMapControls(svgRoot = null) {
 
     if (!document.documentElement.dataset.fullscreenBound) {
       document.documentElement.dataset.fullscreenBound = 'true';
+      // Bound once for the whole visit, so it looks the map up each time: after moving
+      // between pages the map is a new element (owner, 2026-11-20: leaving fullscreen with
+      // the back button or by switching apps cleared the first page's map, not the one on
+      // screen, which stayed half-fullscreen and collapsed)
       document.addEventListener('fullscreenchange', () => {
         const isNativeActive = !!document.fullscreenElement;
+        const current = document.getElementById('map-container');
         if (isNativeActive) {
-          mapContainer.classList.add('is-fullscreen');
+          current?.classList.add('is-fullscreen');
           document.body.classList.add('map-fullscreen-active');
         } else {
-          mapContainer.classList.remove('is-fullscreen');
+          current?.classList.remove('is-fullscreen');
           document.body.classList.remove('map-fullscreen-active');
         }
-        syncFullscreenUI(isNativeActive, btnFullscreen);
+        syncFullscreenUI(isNativeActive);
+      });
+      // A page kept for the back button is never kept in fullscreen
+      document.addEventListener('turbo:before-cache', () => {
+        document.getElementById('map-container')?.classList.remove('is-fullscreen');
+        document.body.classList.remove('map-fullscreen-active');
+        syncFullscreenUI(false);
       });
     }
   }
@@ -1360,7 +1480,13 @@ export function enableMapHighlighting(svgRoot = null) {
       return null;
     };
 
+    // No territory hover while the map is being dragged (js/map-zoom.js: it made the map
+    // flicker) or while "My members" is on (js/map-members.js: only the markers respond)
+    const territoriesIdle = () =>
+      root.classList.contains('is-panning') || root.classList.contains('members-on');
+
     el.addEventListener('mouseenter', (e) => {
+      if (territoriesIdle()) return;
       const city = getTargetCity(e);
       const cityId = city ? city.id : el.id || e.target.id;
 
@@ -1376,10 +1502,11 @@ export function enableMapHighlighting(svgRoot = null) {
     el.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
+      if (territoriesIdle()) return;
       const city = getTargetCity(e);
       const cityId = city ? city.id : el.id || e.target.id;
 
-      if (isPlannerActive && cityId) {
+      if (isPlannerActive && !showingLive && cityId) {
         promptTerritoryAssignment(cityId, root);
         setHighlightedTerritory(cityId, root);
         updateInfoCard(getCityById(cityId));
@@ -1392,42 +1519,32 @@ export function enableMapHighlighting(svgRoot = null) {
 // STATE MANAGEMENT & INITIALIZATION
 // ==========================================================================
 
+/**
+ * After the map loads: back into Planner Mode if it was on when the page was left (its plan
+ * comes back with it). A plan saved before 2026-11-15 has no "on" mark; it always meant the
+ * planner was on. Returns true when the planner was turned on.
+ */
 export function checkAndRestoreMapDraft(svgRoot = null) {
   const root = svgRoot || getSvgRoot();
-  let savedDraft = null;
+  let on = null;
   try {
-    savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+    on = localStorage.getItem(PLANNER_ON_KEY);
   } catch (e) {}
-
-  if (!savedDraft) return false;
-
-  try {
-    const ownership = JSON.parse(savedDraft);
-    if (ownership && typeof ownership === 'object' && Object.keys(ownership).length > 0) {
-      isPlannerActive = true;
-      draftState = JSON.parse(JSON.stringify(mapState));
-      draftState.territory_ownership = {
-        ...(draftState.territory_ownership || {}),
-        ...ownership,
-      };
-      currentColorMode = 'alliance';
-
-      const btnDraft =
-        document.getElementById('btn-toggle-draft') || document.querySelector('.draft-btn');
-      if (btnDraft) {
-        btnDraft.setAttribute('aria-pressed', 'true');
-        btnDraft.classList.add('active');
-      }
-      const overrideInput = document.getElementById('alliance-override');
-      if (overrideInput) overrideInput.disabled = false;
-
-      if (root) setMapColorMode('alliance', root);
-      updateProposalUI();
-      return true;
+  const hasPlan = Object.keys(savedPlan()).length > 0;
+  if (on === '1' || (on === null && hasPlan)) {
+    if (isPlannerActive) {
+      // Already on (this visit): just lay the plan over the fresh live map
+      isPlannerActive = false;
+      const keep = viewBeforePlanner;
+      togglePlannerMode(true, root);
+      viewBeforePlanner = keep;
+    } else {
+      togglePlannerMode(true, root);
+      viewBeforePlanner = 'level';
     }
-  } catch (err) {
-    console.warn('Could not restore map draft from localStorage:', err);
+    return true;
   }
+  syncPlannerControls();
   return false;
 }
 

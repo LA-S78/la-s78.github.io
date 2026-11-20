@@ -35,29 +35,44 @@ guides:
   campaign_shop: Tienda de Campaña
   premium_shop: Paquetes Premium y Gemas
   t10: Calculadora T10
+  frozen_era: Era Helada
   scramble: Pelea Real
+  elixir: Pelea de Elixir
+  undead_siege: Asedio de los No Muertos
+  hunt_battle: Batalla de Caza
+  kill_event: Evento de Kills
+  gear_upgrade: Mejora de Equipo
 pages:
   home:
     title: Inicio
     subtitle: Compendio de Supervivencia
   rules:
     title: Reglas
-    subtitle: Reglas y rotación del servidor
+    subtitle: Reglas del Servidor y Rotación
   guides:
     title: Guías
-    subtitle: Guías del juego
+    subtitle: Guías del Juego
     writers:
-      title: Guía del escritor
-      subtitle: Guía del escritor
+      title: Guía del Escritor
+      subtitle: Guía del Escritor
   alliance:
     title: Alianza
-    subtitle: Alianza y diplomacia
+    subtitle: Alianza y Diplomacia
   api-test:
-    title: Inteligencia secreta de la alianza
-    subtitle: Inteligencia secreta de la alianza
+    title: Inteligencia de Alianza Ultrasecreta
+    subtitle: Inteligencia de Alianza Ultrasecreta
   calendar:
-    title: Calendario de eventos
-    subtitle: Eventos de alianza y servidor
+    title: Calendario de Eventos
+    subtitle: Eventos de Alianza y Servidor
+  map:
+    title: Mapa del Reino
+    subtitle: Mapa del Reino
+  rewards:
+    title: Recompensas del Capitolio
+    subtitle: Recompensas del Capitolio
+  '404':
+    title: Página no encontrada
+    subtitle: Área invadida
   guide_panes:
     heroes:
       title: Héroes y Builds
@@ -111,8 +126,8 @@ pages:
       title: Tienda de Campaña
       subtitle: Tienda de Campaña
     premium_shop:
-      title: Paquetes Premium y Gemas
-      subtitle: Paquetes Premium y Gemas
+      title: Paquetes Premium y de Gemas
+      subtitle: Paquetes Premium y de Gemas
     t10:
       title: Guía T10
       subtitle: Requisitos T10
@@ -128,6 +143,7 @@ nav_anchors:
   nap_ranks: Rangos NAP
   nap_territory: Territorio NAP
   blacklist: Lista Negra
+  nap_stats: Estadísticas
   markdown_usage: Uso
   markdown_example: Ejemplo
   guide_submissions: Envíos
@@ -149,47 +165,56 @@ nav_anchors:
   cheese_cheese: Queso
   cheese_strategy: Estrategia
   cheese_rewards: Recompensas
+status:
+  coming_soon: Próximamente
 search:
   guides: Buscar guías...
-  home: Buscar directorios, publicaciones...
+  home: Buscar guías y reglas...
   placeholder: Buscar...
+  results_label: Resultados de búsqueda
+  no_results: No se encontró nada para “{query}”.
+  unavailable: La búsqueda no está disponible en este momento. Inténtalo de nuevo cuando estés en línea.
+image_viewer:
+  close: Cerrar
+  download: Descargar
 pwa:
-  toast_msg: Nueva información adquirida.
+  toast_msg: Nueva información obtenida.
   update_btn: Actualizar
-  updating: Descifrando...
-  updated_msg: "✅ App actualizada a la última versión."
+  updating: Desencriptando...
+  updated_msg: App actualizada a la última versión.
 identity:
   account: Tu cuenta
   sign_in: Iniciar sesión
   signing_in: Iniciando sesión…
   sign_in_failed: Error al iniciar sesión, inténtalo de nuevo
-  sign_in_again: Volver a iniciar sesión
+  sign_in_again: Iniciar sesión de nuevo
   refresh: Actualizar acceso
   sign_out: Cerrar sesión
-  force_update: Actualizar app
+  force_update: Actualizar aplicación
   force_updating: Actualizando…
-  dashboard: Panel de la alianza
-  role_steward: Steward
+  dashboard: Panel de Alianza
+  steward_tools: Herramientas de Administrador
+  role_steward: Administrador
   role_r5: R5
   role_r4: R4
   role_officer: Oficial
   role_member: Miembro
   role_guest: Invitado
-  role_expired: Caducada
+  role_expired: Caducado
   alliance_label: Alianza
   alliance_none: ninguna
   access_title: Tu acceso
-  access_view: Ver el mapa en vivo, los horarios y las clasificaciones
-  access_draft: Preparar planes en el Modo Planificador
-  access_join: Únete al servidor de Discord del NAP para tener más acceso
-  access_ask_leader: Pide a tu R4 o R5 que envíe tus planes como propuestas
-  access_send: Enviar propuestas de mapa, clasificación, lista negra y recompensas (5 al día)
+  access_view: Ver el mapa en tiempo real, horarios y clasificaciones
+  access_draft: Redactar planes en el Modo Planificador
+  access_join: Únete al servidor de Discord NAP para obtener más acceso
+  access_ask_leader: Pide a tu R4 o R5 que envíen tus planes como propuestas
+  access_send: Enviar propuestas para el mapa, clasificaciones, lista negra y recompensas (5 al día)
   access_send_unlimited: Enviar propuestas sin límite diario
   access_approve: Aprobar o rechazar propuestas en Discord
-  access_expired: Tu sesión ha caducado. Vuelve a iniciar sesión para enviar propuestas.
+  access_expired: Tu inicio de sesión ha caducado. Inicia sesión de nuevo para enviar propuestas.
   expires_days: La sesión caduca en {n} días
   expires_one: La sesión caduca en 1 día
   expires_today: La sesión caduca hoy
-  found_role_id: encontrada por ID de rol
-  found_role_name: encontrada por nombre de rol
-  found_nickname: encontrada por apodo
+  found_role_id: encontrado por ID de rol
+  found_role_name: encontrado por nombre de rol
+  found_nickname: encontrado por apodo

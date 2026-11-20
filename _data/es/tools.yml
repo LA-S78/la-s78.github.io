@@ -6,7 +6,7 @@ common:
   sign_in_again: Iniciar sesión de nuevo
   not_saved: 'No guardado: {error}'
   cancel: Cancelar
-  save: "💾 Guardar"
+  save: Guardar
   saving: Guardando...
   edit: Editar
   delete: Eliminar
@@ -21,105 +21,138 @@ common:
   duration_hours: "{h}h {m}m"
   duration_minutes: "{m}m"
   game_time: "{time} GT"
-  your_time: "{time} tu hora"
+  your_time: "{time} tu hora local"
   off_week: Semana de descanso
   kw_week: Semana de Guerra de Reinos {n}
   copy: Copiar
   set_one: Encomio del Rey
-  set_two: Recompensa del Rey de Batalla
+  set_two: Recompensa de Rey de Batalla
   chests:
     commanders_will: Voluntad del Comandante
-    loyal_servant: Siervo Leal
+    loyal_servant: Sirviente Leal
     followers_heart: Corazón del Seguidor
     honor_vanguard: Vanguardia de Honor
-    fearless_hero: Héroe Intrépido
+    fearless_hero: Héroe Temerario
     logistics_support: Apoyo Logístico
 dashboard:
-  title: Panel de Alianza
+  title: Panel de la Alianza
   loading: Cargando el panel de tu alianza…
   view_as: Ver como
-  page_title: "[{tag}] Panel de Alianza"
-  subtitle: Panel de Alianza · {view}
-  subtitle_rank: 'Panel de Alianza · Rango #{rank} · {view}'
+  page_title: "[{tag}] Panel de la Alianza"
+  subtitle: Panel de la Alianza · {view}
+  subtitle_rank: 'Panel de la Alianza · Rango #{rank} · {view}'
+  not_in_nap: No está en el NAP
   view_steward: Vista de administrador
-  view_leader: Vista de liderazgo
+  view_leader: Vista de líder
   view_member: Vista de miembro
   sign_in_title: Inicia sesión para ver el panel de tu alianza.
-  sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra a través de tu rol NAP en el servidor.
+  sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra mediante tu rol de servidor NAP.
   sign_in_button: Iniciar sesión
-  load_failed: No se pudo cargar el panel. Comprueba tu conexión y actualiza. ({error})
-  edit_dashboard: "✏️ Editar Panel"
-  done_editing: "✓ Finalizar edición"
-  add_chart: "➕ Añadir gráfico o tabla"
+  load_failed: No se pudo cargar el panel. Comprueba tu conexión y vuelve a intentarlo. ({error})
+  edit_dashboard: Editar panel
+  done_editing: "✓ Edición terminada"
+  add_chart: Añadir gráfico o tabla
   editor_label: Editor de gráficos o tablas
   charts_label: Gráficos y tablas de la alianza
-  empty_member: "📊 Los líderes de tu alianza aún no han compartido gráficos o tablas aquí."
-  empty_editing: "📊 Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”."
-  empty_leader: "📊 Aún no hay gráficos o tablas. Usa “Editar Panel” para añadir uno."
-  visible_members: "👥 Todos los miembros"
-  visible_officers: "🔒 Solo oficiales"
-  google_sheet: Google Sheet
-  google_doc: Google Doc
+  empty_member: Los líderes de tu alianza aún no han compartido gráficos o tablas aquí.
+  empty_editing: 'Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”.'
+  empty_leader: Aún no hay gráficos o tablas. Usa “Editar panel” para añadir uno.
+  visible_members: Todos los miembros
+  visible_officers: Solo oficiales
+  google_sheet: Hoja de cálculo de Google
+  google_doc: Documento de Google
   synced: sincronizado {when}
   updated: Actualizado {when}
-  sync_now: "🔄 Sincronizar ahora"
-  syncing: "🔄 Sincronizando…"
+  sync_now: Sincronizar ahora
+  syncing: Sincronizando…
   sync_help: Obtener los números más recientes de la hoja
   confirm_delete: ¿Eliminar "{title}"? Esto no se puede deshacer.
   this_chart: este gráfico
 rewards_card:
-  title: "🔒 Recompensas Semanales"
+  title: Recompensas semanales
   officers: Oficiales
   open: Abierto
   closed: Cerrado
-  time_left: "{time} restante"
+  time_left: "{time} restantes"
   opens_in: abre en {time}
   closes_at: Cierra {when}
-  opens_at: Abre {when}, después del evento de capitolio del viernes
+  opens_at: Abre {when}, después del evento del capitolio del viernes
   off_week: Semana de descanso
-  kw_won: "🏆 KW ganada"
-  kw_lost: "🛡️ KW perdida"
-  kw_pending: "⏳ KW pendiente"
+  kw_won: Guerra de Reinos ganada
+  kw_lost: Guerra de Reinos perdida
+  kw_pending: Guerra de Reinos pendiente
   set_one: Encomio del Rey
-  set_two: Recompensa del Rey de Batalla
-  set_two_if_won: Recompensa del Rey de Batalla, si la guerra se gana
+  set_two: Recompensa de Rey de Batalla
+  set_two_if_won: Recompensa de Rey de Batalla, si se gana la guerra
   if_won: si se gana
   no_rank: 'Sin rango en la clasificación: sin cofres'
-  list_sent: "✅ Lista enviada · {count}"
+  list_sent: Lista enviada · {count}
   sent_at: Enviada {when}
   reserves_one: "({n} reserva)"
   reserves_other: "({n} reservas)"
   empty_slots: "{n} vacíos"
-  list_not_sent: "⚠️ Lista no enviada"
+  list_not_sent: Lista no enviada
   no_list_closed: Sin lista mientras está cerrado
-  edit_list: "📝 Editar"
-  send_list: "📝 Enviar lista"
+  edit_list: Editar
+  send_list: Enviar lista
   ask_r5: R5 o /nominate
-  ask_r5_help: Tu R5 puede abrir la página de nominación desde aquí, o ejecutar /nominate en Discord.
-  buyout_bonus: "🛡️ Compra: {amount} {chest} en cada set ganado"
+  ask_r5_help: Tu R5 puede abrir la página de nominación desde aquí o ejecutar /nominate en Discord.
+  buyout_bonus: 'Compra: {amount} {chest} en cada set ganado'
   buyout_bonus_help: Financiado por WLO
   buyout_threat: 'amenaza: {threat}'
-  buyout_cost: "⚖️ Compra: {amount} {chest} en cada set"
+  buyout_cost: 'Compra: {amount} {chest} en cada set'
   buyout_cost_help: Financiando a la alianza desplazada esta semana
+roster:
+  title: Lista de la alianza
+  summary: "{n} miembros · {might} Poder"
+  search: Buscar nombres o IDs...
+  sort_label: Ordenar por
+  sort_power: Poder
+  sort_name: Nombre
+  sort_rank: Rango
+  sanctuary_lv: Santuario {n}
+  copy_id: Copiar este ID de jugador
+  copied: Copiado
+  unavailable: La lista de miembros no se puede cargar en este momento. Inténtalo de nuevo más tarde.
+  credit_before: Datos del jugador desde
+  sort_tech: Investigación
+  sort_help: Ayuda
+  tech_title: Investigación de alianza donada hoy
+  help_title: Ayuda dada a la construcción e investigación de los miembros hoy
+  help_capped: Límite diario de ayuda alcanzado (1,000)
+  refresh: Actualizar
+  refresh_left: "{n} restantes"
+  refreshing: Actualizando...
+  refresh_help: 'Obtén datos en vivo del juego. Compartidos por los líderes de tu alianza: {n} de {max} restantes hoy, uno cada 10 minutos.'
+  refresh_wait: 'Actualizado hace un momento: siguiente en {n} min.'
+  refresh_none: Sin actualizaciones restantes hoy. Se reinician en el reinicio diario (00:00 GT).
+  daily_as_of: Investigación y ayuda desde el reinicio de hoy (00:00 GT), a las {time}
+  daily_old: 'Investigación y ayuda desde antes del reinicio de hoy: última lectura {time}'
+  daily_unknown: 'Investigación y ayuda: hora de lectura desconocida'
 caravan:
-  title: "🐪 Rotor de Caravana"
-  picked_count: "{picked}/{total} elegidos"
-  members_can_view: "👥 Los miembros pueden ver"
-  copy_status: "📋 Copiar estado"
-  new_week: "🔄 Nueva semana"
-  member_note: Elegido por tus R4 cuando una caravana está lista.
+  title: Rotativo de Caravanas
+  name_ok: En la lista de miembros de [{tag}]
+  name_spelling: 'En el juego se escribe:'
+  name_unknown: No está en la lista de miembros de [{tag}].
+  name_did_you_mean: "¿Quisiste decir:"
+  name_flag_spelling: En el juego se escribe {name}
+  picked_count: "{picked}/{total} seleccionados"
+  members_can_view: Los miembros pueden ver
+  copy_status: Copiar estado
+  new_week: Nueva semana
+  member_note: Seleccionado por tus R4 cuando una caravana está lista.
   search: Buscar nombres…
-  around_now: "⏰ Alrededor de ahora"
-  around_now_help: Solo jugadores disponibles alrededor de ahora
+  around_now: Más o menos ahora
+  around_now_help: Solo jugadores disponibles ahora mismo
   available: Disponible esta semana ({n})
-  picked: Elegidos esta semana ({n})
+  picked: Seleccionado esta semana ({n})
   nobody_matches: Nadie coincide.
-  everyone_picked: "Todos han tenido caravana esta semana. 🎉"
+  everyone_picked: Todos han tenido caravana esta semana.
   add_players: Añadir jugadores abajo.
   no_players: Aún no hay jugadores.
   flexible: flexible
-  pick: "✓ Elegir"
-  back_to_available: Volver a disponibles
+  pick: "✓ Seleccionado"
+  back_to_available: Volver a disponible
   name: Nombre
   from: Desde (Game Time)
   to: Hasta (Game Time)
@@ -128,45 +161,45 @@ caravan:
   add_to: Hasta las 22:00
   add_from_label: Disponible desde (Game Time, opcional)
   add_to_label: Disponible hasta (Game Time, opcional)
-  add: "➕ Añadir"
+  add: Añadir
   times_help: Los horarios son Game Time (UTC-2) y son opcionales; déjalos vacíos para jugadores que son flexibles.
-  status_title: "🐪 [{tag}] Rotor de Caravana: {picked}/{total} elegidos"
+  status_title: "🐪 [{tag}] Rotativo de Caravanas: {picked}/{total} seleccionados"
   status_available: 'Disponible: {names}'
-  status_picked: 'Elegidos: {names}'
+  status_picked: 'Seleccionado: {names}'
   nobody: nadie
   nobody_yet: nadie todavía
-  copy_prompt: 'Copiar el estado del rotor:'
-  confirm_remove: "¿Quitar a {name} del rotor?"
+  copy_prompt: 'Copiar el estado del rotativo:'
+  confirm_remove: "¿Eliminar a {name} del rotativo?"
   this_player: este jugador
-  confirm_new_week: "¿Iniciar una nueva semana? Todos vuelven a estar disponibles (los nombres y horarios se mantienen)."
+  confirm_new_week: "¿Empezar una nueva semana? Todos vuelven a disponible (los nombres y horarios se mantienen)."
 chart_editor:
-  edit_title: "✏️ Editar gráfico o tabla"
-  new_title: "➕ Nuevo gráfico o tabla"
+  edit_title: Editar gráfico o tabla
+  new_title: Nuevo gráfico o tabla
   type: Tipo
-  type_bar: "📊 Barras"
-  type_line: "📈 Líneas"
-  type_pie: "🍩 Circular"
-  type_progress: "🎯 Progreso"
-  type_table: "📋 Tabla"
+  type_bar: Barras
+  type_line: Líneas
+  type_pie: Circular
+  type_progress: Progreso
+  type_table: Tabla
   title: Título
-  title_example: p. ej. Puntuaciones de Duelo de Alianzas
+  title_example: ej. Puntuaciones del Duelo de Alianzas
   note: Explicación
-  note_example: p. ej. Mínimo 15M puntos de Duelo requeridos para el reset del viernes
+  note_example: ej. Mínimo 15M de puntos de Duelo requeridos para el reinicio del viernes
   who_sees: Quién puede verlo
-  officers_only: "🔒 Solo oficiales (R4/R5)"
-  all_members: "👥 Todos los miembros de la alianza"
+  officers_only: Solo oficiales (R4/R5)
+  all_members: Todos los miembros de la alianza
   data: Datos
-  data_source: De dónde provienen los datos
-  paste: "📋 Pegar una tabla"
-  link: "🔗 Enlace de Google Sheet / Doc"
-  paste_help: Copia las celdas de Google Sheets o Excel (fila de encabezado primero) y pégalas aquí.
+  data_source: Origen de los datos
+  paste: Pegar una tabla
+  link: Enlace a Google Sheet / Doc
+  paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
-  range: Rango, p. ej. A1:D20 (opcional)
-  doc_table: Qué tabla en el documento (1, 2…)
-  load: "⤓ Cargar desde Google"
-  loading: "⤓ Cargando…"
-  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede leer” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene los últimos números más tarde.'
-  load_first: Carga la hoja primero (⤓ Cargar desde Google).
+  range: Rango, ej. A1:D20 (opcional)
+  doc_table: Qué tabla del documento (1, 2...)
+  load: "⤓ Cargar de Google"
+  loading: "⤓ Cargando..."
+  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede ver” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene las últimas cifras más adelante.'
+  load_first: Carga la hoja primero (⤓ Cargar de Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
   size: "{rows} × {columns}"
@@ -178,34 +211,34 @@ chart_editor:
   labels: Nombres (etiquetas)
   numbers_to_show: Números a mostrar
   labels_swapped: Nombres (una línea o barra cada uno)
-  swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas a lo largo del eje inferior"
+  swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas a lo largo de la parte inferior"
   swap_bar: "⇄ Intercambiar filas y columnas: las columnas como barras, un color por fila"
-  swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a través de las semanas.'
+  swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a lo largo de las semanas.'
   rows_to_draw: Filas a dibujar (hasta 6)
-  rows_filter: Buscar un nombre…
-  rows_count: "{n} de 6 seleccionados"
-  columns_along: Columnas a lo largo del eje inferior (en el orden de la hoja)
+  rows_filter: Buscar nombre...
+  rows_count: "{n} de 6 elegidos"
+  columns_along: Columnas a lo largo de la parte inferior (en orden de hoja)
   numbers: Números
-  several_columns: Varias columnas de números
+  several_columns: Varias columnas numéricas
   side_by_side: Lado a lado
-  stacked_totals: 'Apilado: totales'
-  stacked_percent: 'Apilado: cada barra al 100%'
+  stacked_totals: 'Apiladas: totales'
+  stacked_percent: 'Apiladas: cada barra al 100%'
   vertical: Barras verticales
-  vertical_leaderboard: Barras verticales (en lugar de una clasificación)
-  traffic_columns: "🚦 Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde"
-  traffic_size: "🚦 Rojo → amarillo → verde (bajo → alto): por rango, el mejor en verde"
-  traffic_reverse: "↕️ Invertir: bajo es bueno (verde), alto es malo (rojo)"
-  traffic_target: "🚦 Rojo → amarillo → verde según qué tan cerca está cada uno del objetivo"
-  traffic_target_reverse: "↕️ Invertir: cuanto más lejos por debajo del objetivo, mejor"
-  donut: Donut (anillo)
+  vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
+  traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde'
+  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, el primero verde'
+  traffic_reverse: 'Invertir: bajo es bueno (verde), alto es malo (rojo)'
+  traffic_target: Rojo → amarillo → verde según la cercanía al objetivo
+  traffic_target_reverse: 'Invertir: cuanto más lejos del objetivo, mejor'
+  donut: Dona (anillo)
   target: Objetivo para todos
-  target_example: p. ej. 15M o 15000000
+  target_example: ej. 15M o 15000000
   target_column: "…o una columna de objetivos"
   use_number_above: "(usar el número de arriba)"
   highlight_where: Resaltar filas donde
-  no_highlight: "(sin resaltar)"
-  at_least: es al menos
-  at_least_example: p. ej. 300M
+  no_highlight: "(sin resaltado)"
+  at_least: sea al menos
+  at_least_example: ej. 300M
 charts:
   column: Columna {n}
   no_numbers: No hay números que graficar en la columna elegida.
@@ -238,23 +271,34 @@ charts:
   hint_progress: Toca o mantén el puntero sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas
+  name_ok: En la lista de miembros de [{tag}]
+  name_spelling: En el juego se escribe {name}
+  name_unknown: No está en la lista de miembros de [{tag}]
+  names_spelling_one: '1 nombre se escribe de forma diferente en el juego:'
+  names_spelling_other: "{n} nombres se escriben de forma diferente en el juego:"
+  use_game_spellings: Usar la escritura del juego
+  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todos modos; comprueba que sea correcto:'
+  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todos modos; comprueba que sean correctos:"
+  did_you_mean: "¿quisiste decir"
   loading: Cargando página de nominaciones...
-  players_label: "📋 Tus jugadores, mejor primero"
-  players_help: Un nombre por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor entre ambos conjuntos; los nombres que queden fuera de los cofres se mantienen como reserva y ascienden si se abren más cofres.
-  players_placeholder: Nombres exactos en el juego, mejor primero...
+  players_label: Tus jugadores, los mejores primero
+  players_help: Un nombre o ID de jugador por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor en ambos grupos; los nombres más allá de los cofres se mantienen como reservas y subirán de puesto si se abren más cofres.
+  players_placeholder: Nombres exactos del juego o IDs de jugador, los mejores primero...
+  id_found: Escrito como ID de jugador {id}
+  id_unknown: Ningún miembro de [{tag}] tiene el ID {id}
   who_gets_what: Quién recibe qué
-  save: Guardar Lista
+  save: Guardar lista
   saving: Guardando...
-  link_incomplete: Este enlace está incompleto. Usa /nominate en Discord para obtener uno nuevo.
-  load_failed: "{error} Usa /nominate en Discord para obtener un nuevo enlace."
-  closed: Las recompensas están cerradas. Las próximas se abren {when}, después del evento del capitolio del viernes.
-  header: Rango {rank} · recompensas {week} · abierto hasta {when}
-  banner_off_week: "👑 Solo Encomio del Rey esta semana (sin Guerra de Reinos)."
-  banner_won: "⚔️ Guerra de Reinos ganada: Los cofres de Recompensa del Rey de Batalla también están abiertos."
-  banner_lost: "🛡️ Guerra de Reinos perdida: Solo Encomio del Rey esta semana."
-  banner_pending: "⏳ Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte tras el resultado, por lo que el cofre de nadie cambia."
+  link_incomplete: Este enlace está incompleto. Ejecuta /nominate en Discord para obtener uno nuevo.
+  load_failed: "{error} Ejecuta /nominate en Discord para obtener un nuevo enlace."
+  closed: Las recompensas están cerradas. La próxima abre {when}, después del evento del capitolio del viernes.
+  header: Rango {rank} · recompensas de {week} · abierto hasta {when}
+  banner_off_week: Solo Condecoración del Rey esta semana (sin Guerra de Reinos).
+  banner_won: 'Guerra de Reinos ganada: los cofres de Recompensa del Rey de Batalla también están abiertos.'
+  banner_lost: 'Guerra de Reinos perdida: solo Condecoración del Rey esta semana.'
+  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte tras el resultado, así que el cofre de nadie cambia.
   handed_out_title: "✓ Ya repartido por el Rey ({n})"
-  handed_out_help: Estos cofres se entregan en el juego, por lo que permanecen con estos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
+  handed_out_help: Estos cofres se entregan en el juego, así que se quedan con esos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
   reserve: Reserva
   col_player: Jugador
   col_chest: Cofre
@@ -262,129 +306,131 @@ nominate:
   col_if_won: Si se gana
   chests_now: "{n} cofres ahora"
   chests_if_won: "{n} si se gana"
-  named: "{n} nombrado"
-  still_need_name: "{n} aún necesita nombre"
+  named: "{n} nombrados"
+  still_need_name: "{n} aún necesitan un nombre"
   reserves_one: "{n} reserva"
   reserves_other: "{n} reservas"
   listed_twice: "{name} está listado dos veces"
-  saved: "✅ Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta {when}."
+  saved: Guardado. El Rey ve tu lista. Puedes cambiarla hasta {when}.
   save_failed: 'No se pudo guardar: {error}'
 kings_console:
   page_title: Consola de Distribución del Rey
-  title: "👑 Consola de Distribución del Rey"
+  title: Consola de Distribución del Rey
   loading: Cargando nominaciones...
-  by_chest: Por Cofre
-  by_alliance: Por Alianza
-  can_tick: "✅ Marca al jugador una vez que su cofre se haya entregado en el juego. Las marcas se guardan para todos, y un cofre marcado permanece con ese jugador si las listas se reordenan."
-  view_only_signed_out: "👀 Solo vista. La lista del Rey puede ser marcada por {king} R4/R5 y Stewards: inicia sesión con Discord (arriba a la derecha)."
-  view_only: "👀 Solo vista: la lista es marcada por {king} R4/R5 y Stewards."
+  by_chest: Por cofre
+  by_alliance: Por alianza
+  can_tick: Toca a un jugador una vez que su cofre se entregue en el juego. Las marcas se guardan para todos, y un cofre marcado se queda con ese jugador si las listas se reordenan.
+  view_only_signed_out: 'Solo lectura. La lista de control del Rey puede ser marcada por el R4/R5 y oficiales de {king}: inicia sesión con Discord (arriba a la derecha).'
+  view_only: 'Solo lectura: la lista de control es marcada por el R4/R5 y oficiales de {king}.'
   kings_alliance: la alianza del Rey
   load_failed: 'Error al cargar las nominaciones: {error}'
-  closed: "🔒 Las recompensas están cerradas. Las listas de abajo son de la última semana; las próximas recompensas se abren el viernes alrededor de las 20:00 GT."
-  hold_title: 'Retener cofres:'
-  hold: "{title} esperar al resultado de la batalla del sábado antes de repartir. Si se gana la guerra, los cofres de Recompensa del Rey de Batalla se abrirán y todas las listas se reordenarán. Las recompensas cierran {when}."
+  closed: Las recompensas están cerradas. Las listas de abajo son de la última semana; las próximas recompensas abren el viernes alrededor de las 20:00 GT.
+  hold_title: 'Retener los cofres:'
+  hold: "{title} espera al resultado de la batalla del sábado antes de repartir. Si se gana la guerra, se abren los cofres de Recompensa del Rey de Batalla y toda lista se reordena. Las recompensas cierran {when}."
   won_title: 'Guerra de Reinos ganada:'
-  won: "{title} repartir ambos conjuntos. Las recompensas cierran {when} (miércoles 00:00 GT)."
-  week_title: 'Recompensas {week}:'
-  week: "{title} repartir el Encomio del Rey. Las recompensas cierran {when} (miércoles 00:00 GT)."
-  buyout_title: 'Restitución en tiempo de guerra activa:'
-  buyout_one: "{title} {tags} incluye espacios extra de Voluntad del Comandante financiados desde la asignación del Rango n.º 1 de WLO."
-  buyout_other: "{title} {tags} incluyen espacios extra de Voluntad del Comandante financiados desde la asignación del Rango n.º 1 de WLO."
+  won: "{title} reparte ambos grupos. Las recompensas cierran {when} (miércoles 00:00 GT)."
+  week_title: 'Recompensas de {week}:'
+  week: "{title} reparte la Condecoración del Rey. Las recompensas cierran {when} (miércoles 00:00 GT)."
+  buyout_title: 'Restitución de tiempos de guerra activa:'
+  buyout_one: "{title} {tags} incluye espacios extra de Voluntad del Comandante financiados por la cuota del Rango #1 de WLO."
+  buyout_other: "{title} {tags} incluyen espacios extra de Voluntad del Comandante financiados por la cuota del Rango #1 de WLO."
   no_nominations: Aún no se han enviado nominaciones.
-  no_entries: 0 entradas de destinatarios
+  no_entries: 0 registros de destinatarios
   progress: 'Progreso: {sent} / {total} distribuidos'
   alliance_heading: "[{tag}] • Rango {rank} ({n})"
-  ticked_by: Entregado (bloqueado) · marcado por {name} · {when}
-  buyout_badge: BUYOUT
+  was_named: listado como {name}
+  left_alliance: Ya no está en [{tag}]
+  ticked_by: Repartido (bloqueado) · marcado por {name} · {when}
+  buyout_badge: COMPRA
   pool_reg: REG
   pool_kw: KW
   copy_prompt: 'Copiar nombre del destinatario:'
-  not_on_list: "{name} ya no está en la lista de [{tag}] (la alianza lo cambió)."
+  not_on_list: "{name} ya no está en la lista de [{tag}] (la alianza la cambió)."
   now_reserve: "{name} ahora es reserva en la lista de [{tag}]: sin cofre."
   now_other_chest: "{name} ahora recibe {chest}, no {shown}."
-  stop_warning: "⚠️ Detente: no envíes ese {chest}. {why} Las listas se han actualizado: copia el nombre de nuevo de la lista de abajo."
+  stop_warning: 'Detente: no envíes ese {chest}. {why} Las listas se han actualizado: copia el nombre de nuevo desde la lista de abajo.'
   stop_alert: "¡No lo envíes!"
   lists_refreshed: Las listas se han actualizado.
 register:
-  page_title: Registro de Servidor de Alianza
+  page_title: Registro del Servidor de Alianza
   loading: Cargando portal de registro...
-  subtitle: Portal de Integración de Servidor de Alianza
-  step_invite: 1. Invita al bot a tu servidor
-  invite_help: Debes añadir el bot al Discord de tu alianza antes de completar el registro.
-  authorize: "🤖 Haz clic para autorizar al bot"
-  step_credentials: 2. Credenciales de Servidor y Rol
-  guild_id: ID del Servidor de Discord (ID de Gremio)
-  example: p. ej. {id}
-  guild_help: 'En Discord: Activa el Modo de Desarrollador → Clic derecho en el icono de tu servidor → {copy}. Debes ser el dueño del servidor o tener permisos de {admin} o {manage} en él. Los canales y el rol a continuación se verificarán en función de esto.'
-  copy_server_id: Copiar ID de servidor
+  subtitle: Portal de Integración del Servidor de Alianza
+  step_invite: 1. Invita al Bot a tu Servidor
+  invite_help: Debes añadir el bot a tu Discord de alianza antes de completar el registro.
+  authorize: Haz clic para autorizar al Bot
+  step_credentials: 2. Credenciales de Servidor y Roles
+  guild_id: ID del Servidor de Discord (Guild ID)
+  example: p. ej., {id}
+  guild_help: 'En Discord: Activa el Modo Desarrollador → Clic derecho en el icono de tu servidor → {copy}. Debes ser dueño de ese servidor o tener {admin} o {manage} allí. Los canales y el rol de abajo se verifican contra esto.'
+  copy_server_id: Copiar ID del Servidor
   administrator: Administrador
-  manage_server: Gestionar servidor
-  routing_heading: "📢 Operaciones y Gestión de Tickets"
-  routing_help: Configura dónde publica el bot las alertas públicas de operaciones y gestiona las sugerencias/tickets privados de los miembros.
-  alert_channel: ID del canal de Alertas de Operaciones
-  channel_id_title: Debe ser un ID de canal de Discord válido de 17-20 dígitos
-  role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
+  manage_server: Gestionar Servidor
+  routing_heading: Enrutamiento de Operaciones y Tickets
+  routing_help: Configura dónde publica el bot alertas públicas de operaciones y enruta sugerencias/tickets privados de miembros.
+  alert_channel: ID del Canal de Alertas de Operaciones
+  channel_id_title: Debe ser un ID de Canal de Discord válido de 17-20 dígitos
+  role_id_title: Debe ser un ID de Rol de Discord válido de 17-20 dígitos
   alert_channel_help: Clic derecho en tu canal de anuncios/alertas → {copy}.
-  copy_channel_id: Copiar ID de canal
-  alert_role: ID del Rol de Alerta predeterminado
+  copy_channel_id: Copiar ID del Canal
+  alert_role: ID del Rol de Alerta Predeterminado
   optional: "(Opcional)"
-  alert_role_placeholder: Déjalo en blanco para usar @everyone por defecto
-  alert_role_help: Clic derecho en tu rol de mención (p. ej. {example}) → {copy}. Si se deja en blanco, será {everyone}.
-  server_alerts: Publicar también recordatorios de eventos de todo el servidor aquí
-  server_alerts_help: Los recordatorios de eventos a nivel NAP establecidos por los Administradores van al Discord NAP; marca esto para recibirlos también en este canal de alertas.
-  copy_role_id: Copiar ID de rol
-  officer_channel: ID del canal de Recepción de Tickets de Oficiales
-  officer_channel_help: Clic derecho en tu {channel} → {copy}. Las propuestas de los miembros y los tickets de alianza de {suggest} se enviarán aquí para su revisión por parte del liderazgo.
-  private_channel: canal privado de tickets R4/R5
+  alert_role_placeholder: Déjalo en blanco para usar @everyone
+  alert_role_help: Clic derecho en tu rol de mención (p. ej., {example}) → {copy}. Si está en blanco, se usa {everyone}.
+  server_alerts: Publicar también recordatorios de eventos del servidor aquí
+  server_alerts_help: Los recordatorios de eventos de toda la NAP establecidos por los Stewards van al Discord NAP; marca esto para recibirlos también en este canal de alertas.
+  copy_role_id: Copiar ID del Rol
+  officer_channel: ID del Canal de Recepción de Tickets de Oficiales
+  officer_channel_help: Clic derecho en tu {channel} → {copy}. Las propuestas de los miembros y los tickets de alianza de {suggest} se enrutarán aquí para revisión de liderazgo.
+  private_channel: canal privado de tickets para R4/R5
   delegated_roles: Roles de Liderazgo Delegados
   delegated_roles_help: Nombres de roles separados por comas que pueden clasificar tickets, gestionar eventos y enviar nominaciones de cofres ({r5} siempre está autorizado).
   color: Color de Identidad de la Alianza
   preview: 'Vista previa:'
-  color_help: Aplicado a tu calendario de operaciones, tarjetas de tickets internas y propuestas respaldadas por el Consejo NAP.
-  submit: Registrar servidor y desplegar comandos
-  submitting: Verificando servidor y registrando...
-  bad_token: Token de registro inválido o ausente. Ejecuta /registerbot en el servidor NAP.
-  malformed_token: Token mal formado. Por favor solicita un nuevo enlace desde Discord.
-  expired: Este enlace de registro ha caducado (límite de 24h). Ejecuta /registerbot de nuevo.
+  color_help: Aplicado a tu calendario de operaciones, tarjetas de tickets internos y propuestas respaldadas del Consejo NAP.
+  submit: Registrar Servidor y Desplegar Comandos
+  submitting: Verificando Servidor y Registrando...
+  bad_token: Token de registro inválido o faltante. Ejecuta /registerbot en el servidor NAP.
+  malformed_token: Token mal formado. Solicita un nuevo enlace desde Discord.
+  expired: Este enlace de registro ha expirado (límite de 24h). Ejecuta /registerbot de nuevo.
   bad_guild: Formato de ID de Servidor de Discord inválido. Debe ser un número de 17-20 dígitos.
-  bad_alert_channel: Formato de ID de canal de Alertas de Operaciones inválido. Debe ser un número de 17-20 dígitos.
-  bad_alert_role: Formato de ID de rol de Alerta inválido. Debe ser un número de 17-20 dígitos (o dejar vacío para @everyone).
-  bad_officer_channel: Formato de ID de canal de Recepción de Tickets de Oficiales inválido. Debe ser un número de 17-20 dígitos.
-  failed: Error en el registro
-  error: 'Error de registro: {error}'
-  success: "✅ ¡Registro exitoso!"
-  linked: "{server} ahora está vinculado a {tag}."
-  server_id: ID de Servidor {id}
+  bad_alert_channel: Formato de ID de Canal de Alertas de Operaciones inválido. Debe ser un número de 17-20 dígitos.
+  bad_alert_role: Formato de ID de Rol de Alerta inválido. Debe ser un número de 17-20 dígitos (o dejar vacío para @everyone).
+  bad_officer_channel: Formato de ID de Canal de Recepción de Tickets inválido. Debe ser un número de 17-20 dígitos.
+  failed: Error de registro
+  error: 'Error de Registro: {error}'
+  success: "¡Registro Exitoso!"
+  linked: "{server} está ahora vinculado a {tag}."
+  server_id: ID del Servidor {id}
   r_alert_channel: 'Canal de Alertas de Operaciones:'
-  r_target: 'Destino de la notificación:'
+  r_target: 'Destinatario de Notificaciones:'
   r_role: Rol {id}
   r_default: "(Predeterminado)"
   r_officer_channel: 'Canal de Tickets de Oficiales:'
-  r_color: 'Color de identidad:'
-  r_commands: 'Comandos de barra desplegados:'
-  r_leaders: 'Liderazgo autorizado:'
+  r_color: 'Color de Identidad:'
+  r_commands: 'Comandos de Barra Desplegados:'
+  r_leaders: 'Liderazgo Autorizado:'
 calendar:
-  loading: Cargando horario del Reino...
-  load_failed: 'Error al cargar calendario: {error}'
+  loading: Cargando el horario del reino...
+  load_failed: 'Error al cargar el calendario: {error}'
   phase: Fase
-  schedule_title: Horario de Guerra de Reinos
+  schedule_title: Horario de la Guerra de Reinos
   loading_cycle: Cargando detalles del ciclo...
-  badge_closed: "🔒 Recompensas cerradas"
-  badge_kob_open: "⚔️ Batalla de Supervivencia abierta"
-  badge_awaiting: "⏳ Esperando resultado de Guerra de Reinos"
-  badge_open: "🎁 Recompensas abiertas"
-  set2_off_week: Solo Condecoración del Rey (sin Guerra de Reinos).
-  set2_won: 'Guerra de Reinos ganada: Recompensa de Batalla de Supervivencia también abierta.'
-  set2_lost: 'Guerra de Reinos perdida: Solo Condecoración del Rey.'
-  set2_pending: Recompensa de Batalla de Supervivencia si se gana la guerra del sábado; el Rey reparte después del resultado.
+  badge_closed: Recompensas cerradas
+  badge_kob_open: Rey de Batalla abierto
+  badge_awaiting: Esperando el resultado de la KW
+  badge_open: Recompensas abiertas
+  set2_off_week: Solo Encomio del Rey (sin Guerra de Reinos).
+  set2_won: 'Guerra de Reinos ganada: Recompensa del Rey de Batalla también abierta.'
+  set2_lost: 'Guerra de Reinos perdida: Solo Encomio del Rey.'
+  set2_pending: Recompensa del Rey de Batalla si se gana la guerra del sábado; el Rey la entrega tras el resultado.
   rewards_open_until: Recompensas de {week} abiertas hasta el martes 23:59 GT. {set2}
-  rewards_closed: Las recompensas están cerradas. Las próximas abren el viernes alrededor de las 20:00 GT, después del evento del capitolio.
+  rewards_closed: Las recompensas están cerradas. Se abren de nuevo el viernes a las 20:00 GT aproximadamente, tras el evento del capitolio.
   capitol_holder: POSEEDOR DEL CAPITOLIO
   current_holder: POSEEDOR ACTUAL DEL CAPITOLIO
-  next_holder: SIGUIENTE POSEEDOR DEL CAPITOLIO
+  next_holder: PRÓXIMO POSEEDOR DEL CAPITOLIO
   rank: 'Rango #{rank}'
   rank_override: 'Rango #{rank} (Anulación)'
-  rank_override_schedule: 'Rango #{rank} • Horario de anulación'
+  rank_override_schedule: 'Rango #{rank} • Horario de Anulación'
   captured_friday: Capturado el viernes
   captures_today: Capturas hoy
   captures_friday: Capturas el viernes
@@ -392,109 +438,146 @@ calendar:
   day_of_28: Día {day} de 28 ({week})
   week_n: Semana {n}
   next_reset: PRÓXIMO REINICIO (00:00 GT)
-  next_kw: PRÓXIMA BATALLA DE GUERRA DE REINOS
+  next_kw: PRÓXIMA BATALLA DE KW
   saturday: Sábado
-  today: "🔥 HOY"
+  today: HOY
   none_this_week: Ninguno esta semana
-  perspective: "🔍 PERSPECTIVA:"
-  combined: "🌐 Combinado (Reino + [{tag}])"
-  internal_only: "🛡️ [{tag}] Solo interno"
-  kingdom_only: "👑 Solo operaciones del Reino"
-  operations_active: "🛡️ Operaciones [{tag}] activas"
-  upcoming: Próximas operaciones y hitos
+  upcoming: Próximos eventos
   times_shown: Horarios mostrados en {gt} y tu hora local
   gt_label: Game Time (UTC-2)
-  no_operations: No hay operaciones programadas para esta perspectiva.
+  view_label: Vista de calendario
+  type_label: Tipo de evento
+  type_all: Todos los eventos
+  type_other: Otros eventos
+  read_guide: Guía
+  view_week: Semana
+  view_cycle: Ciclo
+  show_label: Mostrar tipos de evento
+  kind_server: Servidor
+  kind_alliance: Alianza
+  kind_war: Guerra de Reinos
+  kind_capitol: Capitolio
+  this_week: Esta semana
+  last_week: La semana pasada
+  next_week: La próxima semana
+  prev_week: Semana anterior
+  next_week_aria: Semana siguiente
+  this_cycle: Este ciclo
+  kvk_short: KvK {n}
+  off_short: Apagado
+  king_unknown: Se decide en el reinicio
+  day_today: Hoy
+  day_tomorrow: Mañana
+  day_yesterday: Ayer
+  events_count_one: "{n} evento"
+  events_count_other: "{n} eventos"
+  nothing_planned: No hay nada planeado
+  now_line: Ahora · {time} GT
+  local_time: "{time} local"
+  until: hasta las {when} GT
+  happening_now: Sucediendo ahora · termina en {time}
+  next_up: Siguiente · en {time}
+  dur_m: "{m}m"
+  dur_h: "{h}h"
+  dur_hm: "{h}h {m}m"
+  dur_dh: "{d}d {h}h"
+  ev_capture_title_open: Captura del Capitolio
+  ev_capture_desc_open: Los asientos de este ciclo se deciden en su reinicio.
   all_day: Todo el día
-  every_2_days: "🔁 Cada 2 días"
-  weekly: "🔁 Semanal"
-  mandatory: "🚨 Obligatorio"
-  edit: "✏️ Editar"
-  delete: "🗑️ Eliminar"
-  ev_capture_title: "👑 Captura del Capitolio — {who}"
+  every_2_days: Cada 2 días
+  weekly: Semanalmente
+  mandatory: Obligatorio
+  edit: Editar
+  delete: Eliminar
+  edit_events: Editar eventos
+  edit_done: "✓ Edición finalizada"
+  add_event: Añadir un evento
+  ev_capture_title: Captura del Capitolio — {who}
   ev_capture_desc: "{who} ({rank}) captura el Capitolio el viernes."
-  ev_kw_title: "⚔️ Batalla de Guerra de Reinos"
-  ev_kw_desc: Comienza a las 12:00 GT, generalmente termina alrededor de las 14:00 GT. Una victoria abre los cofres de Recompensa de Batalla de Supervivencia además de la Condecoración del Rey.
-  ev_open_title: "🎁 Recompensas abiertas — {week}"
-  ev_open_desc_kw: La Condecoración del Rey abre después del evento del capitolio. La Recompensa de Batalla de Supervivencia sigue si se gana la Guerra de Reinos del sábado; el Rey reparte después del resultado.
-  ev_open_desc: La Condecoración del Rey abre después del evento del capitolio (no hay Guerra de Reinos esta semana).
-  ev_close_title: "⌛ Cierre de recompensas — {week}"
+  ev_kw_title: Batalla de Guerra de Reinos
+  ev_kw_desc: Comienza a las 12:00 GT, generalmente termina alrededor de las 14:00 GT. Una victoria abre los cofres de Recompensa del Rey de Batalla además del Encomio del Rey.
+  ev_open_title: Recompensas abiertas — {week}
+  ev_open_desc_kw: El Encomio del Rey se abre después del evento del capitolio. La Recompensa del Rey de Batalla sigue si se gana la Guerra de Reinos del sábado; el Rey la entrega tras el resultado.
+  ev_open_desc: El Encomio del Rey se abre después del evento del capitolio (no hay Guerra de Reinos esta semana).
+  ev_close_title: Recompensas cerradas — {week}
   ev_close_desc: 'Los cofres expiran el miércoles a las 00:00 GT: reparte todo antes de esa hora.'
 calendar_events:
-  reminder: Recordar en Discord 1 hora antes
-  reminder_hint: Publicado en el canal de alertas de tu alianza, mencionando el rol elegido arriba.
-  reminder_hint_server: Publicado en el canal de alertas de NAP Discord (y en alianzas que se inscribieron), mencionando el rol elegido arriba.
-  reminder_no_channel: 'Tu alianza aún no tiene un canal de alertas: usa /registerbot en tu Discord para que se puedan publicar los recordatorios.'
-  reminder_no_server_channel: El canal de alertas NAP no está configurado aún (NAP_ALERT_CHANNEL_ID), por lo que no se pueden publicar recordatorios del servidor.
+  reminder_hint: Publicado en el canal de alertas de tu alianza.
+  reminder_hint_server: Publicado en el canal de alertas del Discord de NAP y en las alianzas participantes.
+  reminder_no_channel: 'Tu alianza aún no tiene un canal de alertas: ejecuta /registerbot en tu Discord para que los recordatorios puedan publicarse.'
+  reminder_no_server_channel: El canal de alertas de NAP aún no está configurado (NAP_ALERT_CHANNEL_ID), por lo que los recordatorios del servidor no pueden publicarse.
   edit_heading: Editar evento
   scope_label: Eventos a gestionar
-  scope_server: "🌐 Eventos de todo el servidor"
-  scope_alliance: "🛡️ Eventos de [{tag}]"
-  save_changes: "💾 Guardar cambios"
-  manage_mode: MODO DE GESTIÓN
+  scope_server: Eventos del servidor
+  scope_alliance: Eventos de [{tag}]
+  save_changes: Guardar cambios
+  manage_mode: MODO GESTIÓN
   session_active: Sesión autenticada activa
-  schedule_operation: "➕ Programar operación"
   create_operation: Crear operación
-  kingdom_admin: "👑 ADMINISTRACIÓN DEL REINO"
-  kingdom_desc: Programación de alertas y operaciones para todo el Reino
+  kingdom_admin: ADMINISTRACIÓN DEL REINO
+  kingdom_desc: Gestionando eventos del servidor
   kingdom_heading: Crear operación del Reino ([GLOBAL])
-  leadership: "🛡️ LIDERAZGO [{tag}]"
-  leadership_desc: Gestión de operaciones internas para [{tag}]
+  leadership: LIDERAZGO DE [{tag}]
+  leadership_desc: Gestionando eventos de [{tag}]
   alliance_heading: Crear operación de [{tag}]
-  preset: Preajuste de operación
-  preset_custom: "🛠️ Operación personalizada (Vacío)"
-  preset_crystal_cluster: "🔮 Valle de Cristal (0.5h)"
-  preset_elixir_scramble: "🧪 Pelea Real (0.5h)"
-  preset_survival_battle: "⚔️ Batalla de Supervivencia (4.0h)"
-  preset_kill_event: "🩸 Evento de matanza (24.0h)"
-  preset_kvk_battle: "👑 Batalla de KvK (1.0h)"
-  preset_gear_event: "🛡️ Evento de equipo (48.0h)"
-  preset_cheese_trap: "🧀 Trampa de Queso (0.5h)"
+  preset: Tipo de evento
+  type_custom: Personalizado
+  type_custom_hint: Formulario en blanco
+  duration_h: "{n}h"
   title: Título del evento
-  title_example: p. ej. Entrenamiento de Defensa de Colmena o Asalto a Puesto Avanzado
-  date: Fecha de inicio (AAAA-MM-DD)
+  title_example: ej. Práctica de Defensa de Colmena o Asalto a Puesto
+  date: Fecha de inicio (YYYY-MM-DD)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time del servidor (se ajusta en incrementos de 5 minutos)
-  duration: Duración (Horas)
+  time_hint: Game Time del servidor (ajustado a incrementos de 5 minutos)
+  duration: Duración (horas)
   frequency: Frecuencia
-  once: Evento único (No se repite)
+  once: Evento único (no se repite)
   every_2_days: Se repite cada 2 días
-  weekly: Se repite semanalmente (Mismo día y hora)
-  alert_level: Nivel de alerta de Discord
-  notify_role: "🔔 Mencionar rol predeterminado de alianza (Predeterminado a @everyone)"
-  notify_custom: "🎯 Destinar ID de rol específico (Anulación única)"
-  notify_everyone: "🚨 Forzar difusión @everyone (Operación obligatoria)"
-  notify_none: "🔕 Silencioso (Solo calendario - Sin mención en Discord)"
+  weekly: Se repite semanalmente (mismo día y hora)
+  alert_level: Recordatorio de Discord
+  remind_when: Cuándo publicarlo
+  remind_at_start: Al comenzar
+  remind_minutes: "{n} minutos antes"
+  remind_hour: 1 hora antes
+  remind_when_hint: Los recordatorios se revisan cada 5 minutos, por lo que pueden llegar con unos minutos de antelación.
+  notify_off: Sin recordatorio
+  notify_role: Mencionar al rol de alertas de la alianza
+  notify_custom: Mencionar a un rol específico
+  notify_everyone: Mencionar a @everyone
+  notify_none: Publicar sin mención
   role_id: ID de rol específico
-  role_id_hint: "(Requerido solo para Destinar rol específico)"
+  role_id_hint: (solo para "Mencionar a un rol específico")
   role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
   details: Instrucciones / Punto de reunión
-  details_example: p. ej. Asamblea en Colmena Alfa. R4s lideran rallies. Comandos de voz activos.
-  publish: Publicar en calendario
+  details_example: ej. Asamblea en Hive Alpha. R4s dirigen los rallies. Chat de voz activo.
+  publish: Publicar en el calendario
   publishing: Publicando...
   bad_time: El Game Time debe establecerse en incrementos de 5 minutos (:00, :05, :10, etc.)
-  bad_role: Por favor, introduce un ID de rol de Discord válido de 17-20 dígitos para el destino de alerta personalizado.
+  bad_role: Introduce un ID de rol de Discord válido de 17-20 dígitos para el objetivo de la alerta personalizada.
   save_failed: Error al guardar el evento
-  published: "¡Operación publicada correctamente!"
-  confirm_delete: "¿Estás seguro de que quieres eliminar esta operación del calendario?"
+  published: "¡Operación publicada con éxito!"
+  delete_heading: "¿Eliminar este evento?"
+  delete_repeats: 'Se repite ({repeat}): cada repetición será eliminada, no solo esta.'
+  delete_final: Esta acción no se puede deshacer.
+  delete_confirm: Eliminar
   delete_failed: Error al eliminar el evento
   removed: Operación eliminada.
 kings_scheduler:
-  title: "⚔️ Consola de Defensa y Rotación del Capitolio"
-  subtitle: Programación automatizada de defensa de enfrentamientos y restitución
+  title: Rotación del Capitolio
+  subtitle: Horario automatizado de defensa y restitución de emparejamientos
   overrides: 'Anulaciones: {n}/2'
   loading: Cargando horario en vivo...
   off_week: Semana de descanso
-  week_fri: Semana {n} Vie
+  week_fri: Viernes de semana {n}
   boss_window: Ventana de jefe {n}
   kvk_finale: Final de KvK
   loot_one: "{n} cofre del Rey"
   loot_other: "{n} cofres del Rey"
-  loot_border: 2 cofres del Rey + Marco
+  loot_border: 2 cofres del Rey + Borde
   active: ACTIVO
-  buyouts_title: "🛡️ Restitución de compra en tiempo de guerra activa"
+  buyouts_title: Restitución de compra en tiempo de guerra activa
   buyouts_count: "{n} activo"
-  installment: 'Pago semana {week}:'
+  installment: 'Pago de la semana {week}:'
   payout: "{reg} y {kw}"
   reg_gold: "+{n} Oro Reg"
   kw_gold: "+{n} Oro KW"
@@ -504,68 +587,75 @@ kings_scheduler:
   threat: "(Amenaza: {threat})"
   red_list: Lista roja
   wartime_buyout: Compra en tiempo de guerra
-  override_title: "🚨 Declarar anulación de horario"
-  override_help: "¿Escaneaste un servidor peligroso? Ingresa el ID del servidor oponente"
+  override_title: Declarar anulación de horario
+  override_help: "¿Has explorado un servidor peligroso? Introduce el ID del servidor oponente"
   target_week: Semana de KvK objetivo
-  week1_option: Viernes semana 1 (Enfrentamiento jefe 2)
-  week2_option: Viernes semana 2 (Enfrentamiento jefe 3)
-  opponent: Oponente escaneado (servidor)
-  opponent_example: p. ej., S94, S77
-  disclaimer: "*Las anulaciones envían una propuesta al senado del liderazgo de Discord para su verificación."
+  week1_option: Viernes de la semana 1 (Emparejamiento jefe 2)
+  week2_option: Viernes de la semana 2 (Emparejamiento jefe 3)
+  opponent: Oponente explorado (Servidor)
+  opponent_example: ej. S94, S77
+  disclaimer: "*Las anulaciones envían una propuesta del senado al liderazgo de Discord para su verificación."
   dispatch: Revisar y enviar anulación
   already_scheduled: "{who} No se requiere anulación de defensa."
   already_scheduled_who: WLO ya está programado para la semana {n}.
-  step1: 'Paso 1: Intercambio de calendario (costo de 0 cofres)'
-  step1_text: WLO tomará {week} para la defensa del reino contra {threat}.
+  step1: 'Paso 1: Intercambio de calendario (Costo de 0 cofres)'
+  step1_text: WLO tomará la semana {week} para la defensa del reino contra {threat}.
   week_label: Semana {n}
   opponent_placeholder: "[Oponente]"
   week3_finale: 'Final de la semana 3:'
   lose_nothing: "{ally} pierde 0 cofres. {wlo} pierde 0 cofres."
-  step2: 'Paso 2: Compra en tiempo de guerra (restitución en 2 cuotas)'
-  step2_text: 'Esta es la {second} en este ciclo. La semana 3 ya fue intercambiada, así que {ally} se retira y recibe una compra con cofres:'
+  step2: 'Paso 2: Compra en tiempo de guerra (Restitución en 2 plazos)'
+  step2_text: 'Esta es la {second} en este ciclo. La semana 3 ya fue intercambiada, por lo que {ally} no participa y recibe una compra con cofres:'
   second_override: segunda anulación de defensa
-  distribution: 'Distribución semana {n}:'
-  plus_gold: "+1 Oro Regular y +1 Oro KW a [{tag}]"
+  distribution: 'Distribución de la semana {n}:'
+  plus_gold: "+1 Oro regular y +1 Oro KW para [{tag}]"
   buyout_perks: "{ally} pierde 2 cofres del Rey, gana 4 cofres de oro. {wlo} gana 2 cofres del Rey, pierde 4 cofres de oro."
-  proposal_buyout: "🛡️ Declarar compra en tiempo de guerra"
-  proposal_swap: "⚔️ Declarar intercambio de defensa"
+  proposal_buyout: Declarar compra en tiempo de guerra
+  proposal_swap: Declarar intercambio de defensa
   sum_second: 2ª anulación de defensa de WLO
   sum_first: 1ª anulación de defensa de WLO
   sum_vs: Semana {n} vs {threat}
-  sum_buyout_issued: Compra en tiempo de guerra [{tag}] emitida
+  sum_buyout_issued: Compra en tiempo de guerra para [{tag}] emitida
   sum_four_gold: 4 cofres de oro en total
-  sum_installment: 'Cuota {i} (S{week}):'
-  sum_installment_chests: 1 Oro Reg + 1 Oro KW
+  sum_installment: 'Plazo {i} (S{week}):'
+  sum_installment_chests: 1 Oro reg + 1 Oro KW
   sum_swap: Intercambio de calendario
-  sum_swap_text: WLO toma S{n} viernes
-  sum_promoted: "[{tag}] promovido a la final de la semana 3"
-  sum_promoted_text: "(2 cofres del Rey + Ítem de mejora)"
-  sum_cost: 'Costo de cofre de alianza WLO: 0'
+  sum_swap_text: WLO toma el viernes de la S{n}
+  sum_promoted: "[{tag}] Ascendido a la final de la semana 3"
+  sum_promoted_text: "(2 cofres del Rey + Objeto de mejora)"
+  sum_cost: 'Costo de cofres de la alianza WLO: 0'
 rewards_planner:
-  host_week: Semana de anfitrión activa
-  planner_mode: Modo planificador
-  submit_plan: Enviar plan
+  host_week: Semana de Alojamiento Activa
+  planner_mode: Modo Planificador
+  submit_plan: Enviar Plan
   loading: Cargando niveles de recompensa…
   load_failed: No se pudieron cargar los niveles de recompensa.
-  add_tier: Añadir nivel de recompensa
-  remove_bracket: Eliminar rango
-  over_capacity: "¡Capacidad excedida! Oro: {gold}/{gold_max}, Morado: {purple}/{purple_max}, Azul: {blue}/{blue_max}"
-  proposal_title: "👑 Enviar propuesta de distribución de recompensas"
+  add_tier: Añadir Nivel de Recompensa
+  remove_bracket: Eliminar Grupo
+  over_capacity: "¡Capacidad Excedida! Oro: {gold}/{gold_max}, Morado: {purple}/{purple_max}, Azul: {blue}/{blue_max}"
+  proposal_title: Enviar Propuesta de Distribución de Recompensas
   rank_single: Rango {n}
   rank_range: Rango {from}–{to}
 event_presets:
   crystal_cluster_title: Valle de Cristal
   crystal_cluster_desc: Evento todos contra todos cada domingo
-  elixir_scramble_title: Pelea de Elixir
+  elixir_scramble_title: Pelea Real
   elixir_scramble_desc: Evento de batalla por equipos cada viernes
   survival_battle_title: Batalla de Supervivencia
   survival_battle_desc: Completa tareas para ganar recompensas
-  kill_event_title: Evento de Matanza
-  kill_event_desc: "¡Llegan invasores de otros servidores! Activa el escudo"
-  kvk_battle_title: Batalla de Guerra de Reinos
-  kvk_battle_desc: "¡Comienza la batalla por el Castillo Real!"
-  gear_event_title: Evento de Equipamiento
-  gear_event_desc: Obtén recompensas por mejorar el equipamiento
+  kill_event_title: Evento de Caza
+  kill_event_desc: "¡Llegan invasores de otros servidores! Activa tu escudo"
+  kvk_battle_title: Guerra de Reinos
+  kvk_battle_desc: "¡La batalla por el Castillo Real comienza!"
+  gear_upgrade_title: Mejora de Equipo
+  gear_upgrade_desc: Recibe recompensas por mejorar tu equipo
+  hunt_battle_title: Batalla de Caza
+  hunt_battle_desc: Caza a los gigantes para obtener recompensas
+  undead_siege_title: Asedio No Muerto
+  undead_siege_desc: 'Los no muertos asedian: mantén la línea'
+  capitol_capture_title: Captura del Capitolio
+  rewards_open_title: Recompensas Disponibles
+  rewards_close_title: Cierre de Recompensas
   cheese_trap_title: Trampa de Queso
   cheese_trap_desc: Ayuda a defenderte del Ladrón de Queso
 alliance_planner:
@@ -577,25 +667,31 @@ alliance_planner:
   tag_placeholder: TAG (ej. WLO)
   name_placeholder: Nombre completo de la alianza
   add_contender: "+ Añadir competidor"
-  loading_standings: Cargando la clasificación...
+  loading_standings: Cargando la clasificación…
   standings_failed: No se pudo cargar la clasificación.
   protected_academy: Academia protegida
   change_color: Cambiar color de [{tag}]
   academy_of: Academia de [{tag}]
   link_academy: "+ Vincular academia"
-  nap_protected: Protegido por NAP
+  nap_protected: NAP protegido
+  show_details: Mostrar detalles
+  hide_details: Ocultar detalles
+  stat_might: Poder
+  stat_members: miembros
+  stat_level: Nivel {n}
+  tracker_credit_before: Insignias y números de
   external: Externo
   revoke_nap: Revocar NAP
-  grant_nap: Conceder NAP
+  grant_nap: Otorgar NAP
   remove_alliance: Eliminar alianza
-  academy_prompt: 'Introduce el tag exacto de la alianza para vincularla como academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, ej. RâvN o râvn):'
+  academy_prompt: 'Introduce el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue mayúsculas/minúsculas, ej. RâvN o râvn):'
   academy_available: 'Disponible: {tags}'
   academy_new: 'O escribe un nuevo tag de academia para crearla:'
   already_exists: La alianza [{tag}] ya existe con esa capitalización exacta.
   no_changes: No se detectaron modificaciones en la clasificación actual.
-  proposal_title: "👑 Enviar clasificación NAP y propuesta diplomática"
+  proposal_title: Enviar clasificación NAP y propuesta diplomática
   diff_rank: "{tag}: Rango {from} ➔ {to}"
-  diff_academy: "{tag}: Asignada como academia de {parent}"
+  diff_academy: "{tag}: Asignada como Academia de {parent}"
   diff_nap: "{tag}: Estado NAP {status}"
   nap_status_protected: Protegido
   nap_status_revoked: Revocado
@@ -607,116 +703,364 @@ alliance_planner:
   diff_modified: Modificado [{tag}]
   unknown: Desconocido
 blacklist_planner:
-  players_title: "🚫 Jugadores en lista negra"
-  alliances_title: "⚠️ Alianzas en lista negra"
-  player_placeholder: IGN del jugador
-  alliance_placeholder: TAG de la alianza
+  players_title: Jugadores en Lista Negra
+  alliances_title: Alianzas en Lista Negra
+  player_placeholder: IGN del Jugador
+  alliance_placeholder: TAG de Alianza
   add: "+ Añadir"
-  edit: Editar lista negra
-  stop_editing: Dejar de editar
-  submit: Enviar lista negra
-  loading: Cargando...
+  edit: Editar Lista Negra
+  stop_editing: Dejar de Editar
+  submit: Enviar Lista Negra
+  loading: Cargando…
   failed: No se pudo cargar la lista negra.
-  no_players: No hay comandantes rebeldes en la lista negra.
-  no_alliances: No hay alianzas hostiles en la lista negra.
+  no_players: No hay comandantes rebeldes en lista negra.
+  no_alliances: No hay alianzas hostiles en lista negra.
   added: "{name} añadido a tu plan. Aún no se ha enviado: presiona {submit} sobre la lista negra para enviarlo al liderazgo para su aprobación."
   removed: "{name} eliminado de tu plan. Aún no se ha enviado: presiona {submit} sobre la lista negra para enviarlo al liderazgo para su aprobación."
   duplicate: "{name} ya está en la lista negra."
   press_edit: Presiona {edit} primero.
   add_failed: 'No se pudo añadir {name}: {error}'
   no_changes: No hay cambios en la lista negra para enviar.
-  proposal_title: "🚫 Enviar propuesta de lista negra NAP"
+  proposal_title: Enviar Propuesta de Lista Negra NAP
   diff_add: "{add} {what} {name}"
   diff_remove: "{remove} {what} {name}"
   add_word: Añadir
   remove_word: Eliminar
   what_alliance: alianza
   what_player: jugador
-  sent: Propuesta de lista negra enviada al liderazgo en Discord. Se aplicará una vez que un R5 la apruebe.
+  sent: Propuesta de lista negra enviada al liderazgo en Discord. Se aplica una vez que un Steward la apruebe.
 map_planner:
-  view: 'Ver:'
+  view: 'Vista:'
+  zoom_in: Acercar
+  zoom_out: Alejar
+  zoom_reset: Mostrar todo el mapa
+  members_toggle: Mis miembros
+  members_search: Buscar un miembro (nombre o ID)...
+  members_loading: Cargando tus miembros...
+  members_count: "{n} miembros de [{tag}]"
+  members_as_of: posiciones a las {time}
+  members_failed: 'No se pueden mostrar los miembros: {error}'
+  members_none: Ningún miembro coincide
+  member_coords: X {x} · Y {y}
+  member_in: en {place}
+  member_close: Cerrar
+  game_might: Poder
+  game_kills: Bajas
+  game_alliance: Alianza
+  game_sanctuary: Santuario
+  nap_toggle: Todos los jugadores NAP
+  nap_search: Buscar un jugador (nombre, ID o [TAG])...
+  nap_loading: Cargando jugadores NAP...
+  nap_refreshing: Solicitando al juego todas las alianzas NAP...
+  nap_count: "{n} jugadores en {a} alianzas NAP"
+  nap_empty: 'Aún no hay posiciones guardadas: Actualiza para cargarlas'
+  nap_missing: 'No cargado: {tags}'
+  nap_refresh: Actualizar
+  nap_refresh_left: "{left} de {max} actualizaciones restantes hoy (una solicitud de rastreador por alianza)"
+  nap_refresh_wait: 'Actualizado hace un momento: de nuevo en {minutes} min'
+  tag_ambiguous: "[{tag}] podría significar más de una alianza ({options}). Escribe el tag exactamente, con sus mayúsculas."
   levels: Niveles
   alliances: Alianzas
   resources: Recursos
-  buff_summary: Resumen de buffs
-  toggle_buff_summary: Alternar resumen de buffs
-  close_buff_summary: Cerrar resumen de buffs
-  planner_mode: Modo planificador
+  buff_summary: Resumen de Buffs
+  toggle_buff_summary: Alternar Resumen de Buffs
+  close_buff_summary: Cerrar Resumen de Buffs
+  planner_mode: Modo Planificador
   override_label: 'Cambiar a:'
   override_placeholder: P. EJ. WLO
-  override_help: Escribe una etiqueta para anular las asignaciones. Déjalo en blanco para rotar.
-  submit_plan: Enviar plan
+  override_help: Escribe un tag para anular las asignaciones al hacer clic. Déjalo en blanco para ciclar.
+  submit_plan: Enviar Plan
+  compare_label: Comparar el plan con el mapa en tiempo real
+  show_live: En vivo
+  show_plan: Mi plan
+  discard: Descartar
+  discard_confirm: "¿Descartar tus cambios planificados ({n})? Esto no se puede deshacer."
+  view_locked: Desactiva el Modo Planificador para cambiar la vista
+  plan_saved: Tu plan está guardado ({n} cambios). Activa el Modo Planificador para continuar.
   fullscreen: Pantalla completa
   toggle_fullscreen: Alternar pantalla completa
   exit: Salir
-  grain: "🌾 Grano"
-  timber: "🪵 Madera"
-  herbs: "🌿 Hierbas"
+  grain: Grano
+  timber: Madera
+  herbs: Hierbas
   solid_gather: 'Sólido: Recolectar'
   stripe_output: 'Franja: Producción'
   level_unknown: Nivel --
   level: Nivel {n}
-  hover: Pasa el ratón sobre un territorio
+  hover: Pasa el cursor sobre un territorio
   owner: 'Propietario:'
   unclaimed: Sin reclamar
   buff: 'Buff:'
   none: Ninguno
-  no_active_buff: Ningún buff activo
-  drawer_title: Distribución de buffs de alianza
-  drawer_subtitle: Recuento dinámico basado en las asignaciones activas del mapa/planificador
+  no_active_buff: Sin buff activo
+  drawer_title: Distribución de Buffs de Alianza
+  drawer_subtitle: Conteo dinámico basado en el mapa activo / asignaciones del planificador
   no_claims: Ninguna alianza reclama territorio actualmente.
-  no_buffs: No hay buffs activos asignados
+  no_buffs: Sin buffs activos asignados
   cities_one: "{n} Ciudad"
   cities_other: "{n} Ciudades"
   col_alliance: Alianza
-  col_holdings: Posesiones
-  col_buffs: Buffs activos
-  buff_research_speed: Velocidad de investigación
-  buff_troop_training_speed: Velocidad de entrenamiento de tropas
-  buff_building_speed: Velocidad de construcción
-  buff_march_speed: Velocidad de marcha
-  buff_grain_gathering: Recolección de grano
-  buff_grain_output: Producción de grano
-  buff_timber_gathering: Recolección de madera
-  buff_timber_output: Producción de madera
-  buff_herb_gathering: Recolección de hierbas
-  buff_herb_output: Producción de hierbas
-  no_changes: No se detectaron cambios en tu borrador.
-  proposal_title: "🗺️ Enviar propuesta de territorio del mapa"
+  col_holdings: Propiedades
+  col_buffs: Buffs Activos
+  buff_research_speed: Velocidad de Investigación
+  buff_troop_training_speed: Velocidad de Entrenamiento de Tropas
+  buff_building_speed: Velocidad de Construcción
+  buff_march_speed: Velocidad de Marcha
+  buff_grain_gathering: Recolección de Grano
+  buff_grain_output: Producción de Grano
+  buff_timber_gathering: Recolección de Madera
+  buff_timber_output: Producción de Madera
+  buff_herb_gathering: Recolección de Hierbas
+  buff_herb_output: Producción de Hierbas
+  no_changes: No se detectaron cambios en tu borrador de plan.
+  proposal_title: Enviar Propuesta de Territorio en el Mapa
 proposals:
   title: Enviar propuesta
   close: Cerrar
   summary: Resumen de la propuesta
-  notes: Notas de liderazgo (Opcional)
+  notes: Notas de liderazgo (opcional)
   notes_placeholder: Explica el contexto o la razón estratégica de esta propuesta...
   transmit: Transmitir propuesta
   user_avatar: Avatar de usuario
   submitting_as: Enviando como {name}
-  auth_required: Autenticación de liderazgo requerida
-  auth_reason: Las propuestas requieren liderazgo verificado en Discord o rango de oficial para ser enviadas.
-  log_in: Iniciar sesión con Discord para enviar
-  oauth_unreachable: El servicio OAuth de Discord no está accesible. Por favor, actualiza e inténtalo de nuevo.
+  auth_required: Se requiere autenticación de liderazgo
+  auth_reason: Las propuestas requieren liderazgo verificado de Discord o estado de oficial para ser enviadas.
+  log_in: Inicia sesión a través de Discord para enviar
+  oauth_unreachable: El servicio OAuth de Discord no está disponible. Por favor, actualiza e inténtalo de nuevo.
   transmit_discord: Transmitir a Discord
   leaders_only_note: Solo los líderes R4 y R5 pueden enviar propuestas. Pide a tu líder de alianza que envíe este plan.
   leaders_only: Solo líderes
-  login_expired: Tu sesión ha expirado. Inicia sesión con Discord de nuevo para enviar esta propuesta.
-  transmitted: "✅ ¡Propuesta transmitida con éxito al liderazgo NAP en Discord!"
+  login_expired: Tu inicio de sesión ha expirado. Inicia sesión con Discord de nuevo para enviar esta propuesta.
+  transmitted: "¡Propuesta transmitida con éxito al liderazgo NAP en Discord!"
   transmitting: Transmitiendo...
-  resume: Reanudar propuesta de {type}
+  resume: Reanudar propuesta {type}
   draft_restored: Borrador restaurado de la sesión anterior.
   pending_shifts: Cambios pendientes
   server_error: El servidor respondió con HTTP {status}
 live_data:
-  failed: "⚠️ No se pudieron cargar los datos más recientes. Comprueba tu conexión y actualiza la página."
-  offline: "📴 Sin conexión: mostrando los datos guardados en este dispositivo ({when})."
-  updating: "⏳ Actualizando..."
+  failed: No se pudieron cargar los datos más recientes. Comprueba tu conexión y actualiza la página.
+  offline: 'Desconectado: mostrando los datos guardados en este dispositivo ({when}).'
+  updating: Actualizando…
 capitol_rotation:
-  rank: 'Rango #{rank}'
-  this_week: Esta semana
-  captures: Capturas {date}
-  captured: Capturado {date}
-  override: 'Anular: reemplaza a [{replaced}] esta semana'
-  no_alliance: Aún no hay alianza en este rango
-  off_week_note: 'No hay Guerra de Reinos esta semana: [{tag}] mantiene el Capitolio.'
-  kw_note: 'Semana de Guerra de Reinos: la batalla es el sábado.'
-  schedule_note: Basado en el calendario en vivo y las clasificaciones NAP. Las anulaciones establecidas por los administradores se muestran aquí tan pronto como se guardan.
+  calendar_link: Ver la rotación de este ciclo en el calendario →
+ascension:
+  title: Carrera del Top 4
+  week_of: Guerra de Reinos Semana 1, semana del {date}
+  in_progress: 'En progreso: medido hasta ahora en {days}.'
+  finished: 'Final: los rangos NAP siguen estos totales una vez que un Steward confirma; el Top 4 toma sus puestos a partir del siguiente ciclo.'
+  col_alliance: Alianza
+  col_day: Día {n}
+  col_total: Total
+  missing_day: Día faltante
+  source: Poder del Last Asylum Tracker, medido 10 minutos antes del reinicio.
+image_review:
+  page_title: Revisar imagen de la Alianza
+  loading: Cargando la imagen…
+  sign_in_needed: Inicia sesión con Discord para revisar esta imagen. Solo los Stewards pueden verla.
+  sign_in: Iniciar sesión con Discord
+  stewards_only: Solo los Stewards pueden revisar imágenes de la alianza.
+  no_id: A este enlace le falta el ID de la imagen. Ábrelo de nuevo desde la publicación en Discord.
+  wide: Banner (Rangos NAP)
+  card: Tarjeta (Rotación del Capitolio)
+  frame: Marco de avatar (alrededor de las fotos de los miembros)
+  sent_by: Enviado por {name}, {when}
+  replaces: Aprobar reemplaza la imagen actual de la alianza.
+  checklist: 'Revisa antes de aprobar: arte propio de la alianza o arte del juego; sin logotipos de otras alianzas; nada ofensivo; sin información personal.'
+  reason_label: Motivo (opcional, se muestra en la publicación de Discord si rechazas)
+  approve: Aprobar
+  reject: Rechazar
+  working: Guardando…
+  decided_approved: Ya aprobado.
+  decided_rejected: Ya rechazado.
+  decided_replaced: Reemplazado por una imagen más reciente de la alianza.
+  decided_expired: 'Caducado: no se revisó en un plazo de 7 días.'
+  done_approved: Aprobado. La imagen ya está activa y la publicación de Discord ha sido actualizada.
+  done_rejected: Rechazado. La imagen fue eliminada y la publicación de Discord ha sido actualizada.
+alliance_images:
+  title: Imágenes de la Alianza
+  edit: Editar imágenes
+  done: "✓ Edición terminada"
+  help: Añade una imagen detrás de la tarjeta de Rotación de Capitolio y la fila de Rangos NAP de tu alianza, y un marco para las fotos de tus miembros. Un administrador revisará cada una antes de que otros la vean.
+  rules: 'Usa el arte propio de tu alianza o el arte del juego: nada de marcas de otras alianzas, nada ofensivo, ni información personal.'
+  left_today: "{left} de {max} imágenes restantes hoy para tu alianza."
+  not_ready: La carga de imágenes aún no está activada.
+  card: Tarjeta de Rotación de Capitolio
+  wide: Banner de Rangos NAP
+  frame: Marco de avatar de la Alianza
+  frame_spec: 'Un borde que rodea las imágenes de tus miembros en este sitio. Crea un PNG cuadrado con fondo transparente, de 380×380 píxeles (al menos 190×190): deja el cuadrado central transparente (de 72 a 308 píxeles, como los propios marcos del juego) y decora alrededor, hasta los bordes. Una pequeña decoración sobre el centro (una guirnalda, por ejemplo) está bien.'
+  use_frame: Usar para nuestros miembros
+  use_frame_on: Se muestra alrededor de la foto de cada miembro en el sitio, reemplazando su marco del juego.
+  use_frame_off: 'Desactivado: los miembros mantienen sus marcos del juego en el sitio.'
+  frame_title: Verificar el marco de avatar
+  frame_check_ok: 'Se ve bien: el centro es transparente. Así es como se verá alrededor de las fotos de tus miembros.'
+  frame_big: Grande
+  frame_roster: Plantilla
+  frame_lists: Listas
+  frame_not_square: Un marco debe ser cuadrado; esta imagen es de {width}×{height}.
+  frame_too_small: Esta imagen es solo de {width}×{height}. Un marco necesita al menos 190×190 píxeles (380×380 es mejor).
+  frame_covers: 'Este marco cubre aproximadamente el {percent}% del centro, donde aparecen las fotos de los miembros. Está bien si esa es la intención (una guirnalda, por ejemplo): comprueba las vistas previas a continuación antes de enviarlo.'
+  frame_covers_most: 'Este marco cubre aproximadamente el {percent}% del centro, por lo que la mayor parte de la foto de cada miembro quedaría oculta. Comprueba las vistas previas a continuación: envíalo solo si eso es lo que quieres.'
+  frame_not_png: Un marco de avatar debe ser un PNG (o WebP) con fondo transparente. Las imágenes JPEG no pueden tener transparencia, por lo que cubrirían las fotos de tus miembros.
+  frame_no_transparency: Esta imagen no tiene partes transparentes, por lo que se mostraría como un cuadrado sólido sobre las fotos de tus miembros. Guárdala como un PNG con fondo transparente.
+  frame_empty: 'Esta imagen es casi totalmente transparente: no hay marco que mostrar.'
+  frame_too_big: Este marco pesa {kb} KB una vez guardado; el máximo es 500 KB. Prueba con menos colores o menos detalles finos.
+  none: Sin imagen aún
+  live: En vivo desde el {when}
+  pending: Esperando a un administrador desde el {when}
+  rejected: Rechazada el {when}
+  rejected_reason: 'Rechazada el {when}: “{reason}”'
+  expired: No se revisó a tiempo ({when}). Envíala de nuevo.
+  choose: Elegir una imagen
+  replace: Elegir una imagen nueva
+  remove: Eliminar
+  confirm_remove: "¿Eliminar {slot}? Desaparecerá para todos al instante."
+  crop_title: Posicionar {slot}
+  crop_help: Arrastra para mover. Pellizca, desplázate o usa el control deslizante para hacer zoom. Solo se enviará lo que esté dentro del marco.
+  zoom: Zoom
+  preview_title: Cómo se verá
+  preview_phone: Teléfono
+  preview_desktop: Escritorio
+  preview_week: Semana 1 Vie
+  preview_loot: 2 Cofres de Rey
+  preview_status: Protección NAP
+  send: Enviar para revisión
+  sending: Enviando…
+  cancel: Cancelar
+  sent: Enviada. Un administrador la revisará; aparecerá una vez aprobada.
+  not_image: Ese archivo no es una imagen que este navegador pueda abrir. Prueba con un JPEG o PNG.
+  too_small: Esa imagen es bastante pequeña ({width}×{height}); puede verse borrosa. Aún puedes enviarla.
+  load_failed: No se pudo abrir la imagen.
+stats:
+  title: Estadísticas NAP
+  views_label: Qué mostrar
+  view_growth: Crecimiento NAP
+  view_players: Mejores jugadores
+  view_achievements: Logros
+  view_lookup: Búsqueda de jugador
+  growth_title: Crecimiento de la Alianza
+  growth_members: "{n} miembros"
+  growth_more: Más en la
+  growth_link: Pestaña de estadísticas
+  lookup_search: Nombre del jugador...
+  lookup_hint: Solo jugadores NAP, de la captura diaria. Escribe al menos 2 letras de su nombre.
+  lookup_none: No hay coincidencias de jugadores NAP.
+  lookup_place: "#{place} de {of} jugadores NAP por Poder"
+  lookup_kills: Bajas
+  lookup_level: Santuario
+  lookup_week: Esta semana
+  lookup_month: Últimos 30 días
+  lookup_kills_week: Bajas esta semana
+  lookup_history: Poder durante el último mes
+  ach_strongest: Más poderoso
+  ach_gain_week: Mayor ganancia esta semana
+  ach_kills: Más bajas
+  ach_kills_week: Más bajas esta semana
+  ach_climb_month: Mayor ascenso de Santuario este mes
+  ach_away: Lejos de la colmena
+  ach_away_help: Más días este mes a más de 50 casillas de la colmena de su alianza (donde están la mayoría de sus miembros).
+  ach_none: Aún no se han recolectado suficientes días.
+  value_kills: "{n} bajas"
+  value_levels_one: "+1 nivel"
+  value_levels_other: "+{n} niveles"
+  value_days_one: 1 día
+  value_days_other: "{n} días"
+  list_label: Qué lista
+  list_strongest: Más fuerte
+  list_week: Ganancia semanal
+  list_month: Ganancia mensual
+  filter_label: Alianza
+  filter_all: Todas las alianzas NAP
+  players_none: No hay jugadores que mostrar aún.
+  players_wait_week: Las ganancias de esta semana se mostrarán una vez que se recolecte una captura anterior a este lunes.
+  players_wait_month: Las ganancias de un mes se mostrarán una vez que se haya recopilado un mes de días.
+  players_as_of: A partir de la captura previa al reinicio de las {date}.
+  week_note: Las semanas van de lunes a domingo (Game Time); los registros semanales se reinician cada lunes.
+  col_player: Jugador
+  col_gain: Ganancia
+  show_more: Mostrar todos los {n}
+  range_label: Lapso de tiempo
+  range_week: 1 semana
+  range_month: 1 mes
+  range_all: Todos
+  loading: Cargando estadísticas...
+  failed: No se pueden cargar las estadísticas en este momento.
+  collecting: Las estadísticas se recopilan una vez al día, justo antes del reinicio diario (00:00 GT). Los gráficos se completan día a día.
+  since: Recopilado diariamente desde {date}.
+  one_day: 'Solo se ha recopilado un día hasta ahora: el gráfico comienza cuando hay dos.'
+  col_alliance: Alianza
+  col_might: Poder
+  col_week: 7 días
+  col_month: 30 días
+  no_number: "—"
+  show_hide: Toca una alianza para mostrar u ocultar su línea.
+  credit_before: Números desde el
+steward:
+  page_title: Herramientas de Intendente
+  intro: 'Herramientas para Intendentes del Reino: qué te espera y búsqueda de jugadores en tiempo real.'
+  loading: Cargando…
+  sign_in: Iniciar sesión con Discord
+  sign_in_needed: Inicia sesión con Discord para abrir las herramientas de Intendente.
+  stewards_only: Solo los Intendentes del Reino pueden abrir las herramientas de Intendente.
+  lookup_title: Búsqueda de jugador
+  lookup_help: 'Cualquier jugador, en vivo desde el juego: su alianza, estadísticas, y nombres y alianzas anteriores. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
+  lookup_placeholder: ID de jugador o nombre de un jugador NAP
+  lookup_go: Buscar
+  lookup_id_needed: Escribe un ID de jugador (el número en su perfil) o elige un jugador NAP de los nombres encontrados.
+  lookups_left: Quedan {left} de {max} búsquedas en vivo hoy (compartidas por todos los Intendentes).
+  looking: Consultando al juego…
+  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otro, usa su ID de jugador.
+  no_alliance: Sin alianza
+  server: Servidor {n}
+  online: En línea ahora
+  last_seen: Visto por última vez {when}
+  shielded: Escudo activo
+  might: Poder
+  kills: Bajas
+  sanctuary: Santuario
+  vip: VIP
+  position: Posición (X, Y)
+  language: Idioma
+  ranks: 'Rangos del reino: #{might} Poder · #{kills} bajas · #{heroes} héroes'
+  history_title: Nombres y alianzas
+  history_none: No se han visto nombres ni alianzas anteriores.
+  seen_from: desde {when}
+  first_seen: Visto por primera vez por el rastreador {when}.
+  renamed: "{old} ahora es {now} en el juego. Todavía se mide (Estadísticas y la carrera de los 4 Mejores) por el número del juego para ello, pero el sitio todavía lo llama {old}."
+  renamed_fix: Renómbralo en el planificador de Alianzas
+  unfound: "{tag} no se encontró en el juego, por lo que no se está midiendo (Estadísticas y la carrera de los 4 Mejores). Si cambió su etiqueta en el juego, escribe la nueva y el sitio la seguirá."
+  unfound_now: Su etiqueta en el juego ahora
+  unfound_placeholder: ej. Arch
+  unfound_link: Vincular
+  unfound_checking: Consultando al juego...
+  unfound_left: Quedan {left} de {max} vínculos hoy (cada uno consulta al juego una vez)
+  pending_title: Esperando revisión
+  pending_none: No hay imágenes de alianza pendientes.
+  sent_by: Enviado por {name}, {when}
+  race_title: Carrera de los 4 Mejores
+  race_none: Aún no se ha medido ninguna carrera.
+  race_progress: "{n} de 3 días de Duelo medidos hasta ahora."
+  race_finished: 'Los 3 días medidos: los resultados están en el liderazgo de NAP.'
+  race_missing: 'No medido: {tags}'
+  race_more: Tabla completa en la página de Reglas
+  quota_title: Solicitudes del rastreador
+  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día, reiniciándose a las 00:00 UTC. La cifra de abajo es la última que el rastreador dio al sitio, así que no cuesta nada mostrarla; comprobar ahora cuesta una solicitud.
+  quota_check: Comprobar ahora
+  quota_used: usado hoy
+  quota_failed: No se pudo contactar con el rastreador.
+  quota_as_of: A fecha de {when}
+  quota_none: El sitio aún no ha solicitado nada al rastreador hoy.
+  quota_resets: Se reinicia en {time}
+  usage_title: Qué los consumió
+  usage_automation: Automatización
+  usage_automation_help: Instantánea de Estadísticas diarias y carrera de los 4 Mejores
+  usage_alliance: Herramientas de Alianza
+  usage_alliance_help: Paneles, lista de miembros, nominaciones
+  usage_public: Páginas públicas
+  usage_public_help: Tarjetas de clasificación en la página de Alianza
+  usage_steward: Herramientas de Intendente
+  usage_steward_help: Búsquedas de jugadores, actualizaciones de mapa y comprobaciones de uso
+  usage_other: Otro
+  usage_other_help: Cualquier cosa no etiquetada
+  usage_unrecorded: No registrado
+  usage_unrecorded_help: Contado por el rastreador, aún no guardado aquí (cada servidor se guarda cada pocos minutos)
+  usage_none: Aún no hay solicitudes registradas hoy.

@@ -1,0 +1,81 @@
+name: Update install screenshots
+
+# The screenshots on the browser's "Install app" screen (site.webmanifest). Run by hand
+# (Actions → "Update install screenshots" → Run workflow) when the site's look has changed:
+# it photographs the same four pages of the live site (each in its own theme) on a phone
+# and a desktop, and opens a pull request with the new pictures and the manifest's list of
+# them, to check before merging. Not part of the
+# build: starting a browser for every deploy would slow every deploy down for pictures that
+# rarely need to change. tools/install-screenshots/shoot.mjs does the work.
+
+on:
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Site to photograph'
+        default: 'https://la-s78.app'
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: install-screenshots
+  cancel-in-progress: true
+
+jobs:
+  shoot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install the browser and the WebP converter
+        working-directory: tools/install-screenshots
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q webp
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Take the screenshots
+        env:
+          SITE: ${{ inputs.site }}
+        run: node tools/install-screenshots/shoot.mjs --site "$SITE"
+
+      # Also downloadable from the run's page, whatever happens to the pull request
+      - name: Keep the pictures with the run
+        uses: actions/upload-artifact@v6
+        with:
+          name: install-screenshots
+          path: images/screenshot-*.webp
+
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add -A images/ site.webmanifest
+          if git diff --cached --quiet; then
+            echo "The screenshots haven't changed." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch="install-screenshots/$(date -u +%Y%m%d-%H%M)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$branch"
+          git commit -q -m "Install screenshots from the live site"
+          git push -q origin "$branch"
+          body="New screenshots for the browser's Install app screen, taken from the live site by the \"Update install screenshots\" workflow. Check the pictures under Files changed before merging."
+          if url=$(gh pr create --base main --head "$branch" --title "Install screenshots: update from the live site" --body "$body"); then
+            echo "Pull request: $url" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            # Repositories can stop workflows opening pull requests (Settings → Actions →
+            # General → "Allow GitHub Actions to create and approve pull requests")
+            compare="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"
+            echo "Couldn't open the pull request automatically. Open it here: $compare" | tee -a "$GITHUB_STEP_SUMMARY"
+          fi

@@ -7,15 +7,19 @@
 
 import { ALLIANCE_COLORS, startingSchedule } from './alliance-defaults.js';
 import { submitProposalWithAuth } from './auth-modal.js';
+import { sameTag } from './tags.js';
+import { allyPicMarkup, revealAllyPics } from './ally-pics.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
 // The page's language (kings_scheduler.* in _data/<lang>/tools.yml, js/i18n.js): text, and
 // text around trusted HTML (bold tags, coloured alliance tags).
 const t = (key, vars) => window.t(`kings_scheduler.${key}`, vars);
+/** An interface icon (js/ui-icons.js) for the start of a label. */
+const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
 const th = (key, html, vars) => window.th(`kings_scheduler.${key}`, html, vars);
 const tag = (name, color) =>
-  `<strong${color ? ` style="color: ${esc(color)}"` : ''}>[${esc(name)}]</strong>`;
+  `<strong${color ? ` class="ally-text" style="--ally: ${esc(color)}"` : ''}>[${esc(name)}]</strong>`;
 
 let cycleState = {
   macro_cycle: 1,
@@ -26,6 +30,16 @@ let cycleState = {
 
 let activeBuyouts = [];
 let alliancesData = {};
+let allianceImages = {};
+
+/** The picture behind an alliance's card: { cls, attrs } (js/ally-pics.js), '' when none. */
+function cardPic(tag) {
+  // The tag as stored, or without its accents (RAVN for RÂVN). Letter case counts: RâvN
+  // and RÂVN are two alliances (owner, 2026-11-17), so RâvN never borrows RÂVN's picture.
+  const pics =
+    allianceImages[tag] || Object.entries(allianceImages).find(([key]) => sameTag(key, tag))?.[1];
+  return allyPicMarkup(pics?.card);
+}
 
 // Colours for alliances with none of their own: _data/alliances.yml (via js/alliance-defaults.js)
 const DEFAULT_ALLIANCE_COLORS = ALLIANCE_COLORS;
@@ -55,6 +69,11 @@ export async function fetchOperationsState() {
     if (data.map?.alliances) {
       alliancesData = data.map.alliances;
     }
+    // Approved alliance pictures (api/_alliance_images.js): { TAG: { card, wide } }
+    allianceImages =
+      data.map?.alliance_images && typeof data.map.alliance_images === 'object'
+        ? data.map.alliance_images
+        : {};
 
     if (data.rewards?.cycle_state) {
       cycleState = data.rewards.cycle_state;
@@ -84,28 +103,24 @@ function renderScheduleGrid() {
     {
       key: 'downtime',
       label: t('off_week'),
-      sub: t('boss_window', { n: 1 }),
       seat: schedule.downtime || startingSchedule().downtime,
       loot: window.tn('kings_scheduler.loot', 1),
     },
     {
       key: 'week_1',
       label: t('week_fri', { n: 1 }),
-      sub: t('boss_window', { n: 2 }),
       seat: schedule.week_1 || startingSchedule().week_1,
       loot: window.tn('kings_scheduler.loot', 2),
     },
     {
       key: 'week_2',
       label: t('week_fri', { n: 2 }),
-      sub: t('boss_window', { n: 3 }),
       seat: schedule.week_2 || startingSchedule().week_2,
       loot: window.tn('kings_scheduler.loot', 2),
     },
     {
       key: 'week_3',
       label: t('week_fri', { n: 3 }),
-      sub: t('kvk_finale'),
       seat: schedule.week_3 || startingSchedule().week_3,
       loot: t('loot_border'),
     },
@@ -116,16 +131,18 @@ function renderScheduleGrid() {
       const isCurrent =
         (w.key === 'downtime' && currentWeek === 0) || w.key === `week_${currentWeek}`;
       const color = getAllianceColor(w.seat);
+      const pic = cardPic(w.seat);
 
+      // Three rows (week, tag + ACTIVE, loot), lined up across the cards
+      // (CSS subgrid): every card the same height, the tags on one line
       return `
-      <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}">
+      <div class="ops-week-card ${isCurrent ? 'is-active-week' : ''}${pic.cls}"${pic.attrs}>
         <div class="ops-week-header">
           <span class="ops-week-num">${esc(w.label)}</span>
-          ${isCurrent ? `<span class="badge">${esc(t('active'))}</span>` : ''}
         </div>
-        <div class="ops-week-body">
-          <span class="ops-week-tag" style="color: ${esc(color)}">[${esc(w.seat)}]</span>
-          <span class="ops-week-sub">${esc(w.sub)}</span>
+        <div class="ops-week-tag-row">
+          <span class="ops-week-tag ally-text" style="--ally: ${esc(color)}">[${esc(w.seat)}]</span>
+          ${isCurrent ? `<span class="badge">${esc(t('active'))}</span>` : ''}
         </div>
         <div class="ops-week-loot">
           <small>${esc(w.loot)}</small>
@@ -134,6 +151,8 @@ function renderScheduleGrid() {
     `;
     })
     .join('');
+  // Pictures that weren't loaded yet fade in once they are (js/ally-pics.js)
+  revealAllyPics(container);
 }
 
 /**
@@ -182,7 +201,7 @@ function renderActiveBuyouts() {
       <div class="ops-buyout-card">
         <div class="ops-buyout-card-header">
           <div>
-            <strong>${esc(t('beneficiary'))}</strong> <span style="color: ${esc(color)}">[${esc(buyout.beneficiary)}]</span>
+            <strong>${esc(t('beneficiary'))}</strong> <span class="ally-text" style="--ally: ${esc(color)}">[${esc(buyout.beneficiary)}]</span>
             <small class="text-muted">${esc(t('threat', { threat: buyout.threat || t('red_list') }))}</small>
           </div>
           <span class="badge badge-warning">${esc(t('wartime_buyout'))}</span>
@@ -217,7 +236,7 @@ export function updateOverridePreview() {
   if (currentScheduledAlly === 'WLO') {
     previewBox.innerHTML = `
       <div class="preview-notice warning">
-        ⚠️ ${th('already_scheduled', { who: `<strong>${esc(t('already_scheduled_who', { n: targetWeek }))}</strong>` })}
+        ${ic('warning', 'warn')}${th('already_scheduled', { who: `<strong>${esc(t('already_scheduled_who', { n: targetWeek }))}</strong>` })}
       </div>
     `;
     submitBtn.disabled = true;
@@ -233,12 +252,12 @@ export function updateOverridePreview() {
           ${th('step1_text', { week: `<strong>${esc(t('week_label', { n: targetWeek }))}</strong>`, threat: `<strong>${esc(threatName || t('opponent_placeholder'))}</strong>` })}
         </p>
         <div class="preview-swap-row">
-          <span>${esc(t('week_label', { n: targetWeek }))}: ${tag('WLO', ALLIANCE_COLORS.WLO)}</span>
+          <span>${esc(t('week_label', { n: targetWeek }))}: ${tag('WLO', getAllianceColor('WLO'))}</span>
           <span class="swap-arrow">⇄</span>
           <span>${esc(t('week3_finale'))} ${tag(currentScheduledAlly, allyColor)}</span>
         </div>
         <div class="preview-perks">
-          🎁 ${th('lose_nothing', { ally: tag(currentScheduledAlly), wlo: tag('WLO') })}
+          ${ic('gift')}${th('lose_nothing', { ally: tag(currentScheduledAlly, allyColor), wlo: tag('WLO', getAllianceColor('WLO')) })}
         </div>
       </div>
     `;
@@ -255,7 +274,7 @@ export function updateOverridePreview() {
           <div class="p-item">• <strong>${esc(t('distribution', { n: 3 }))}</strong> ${esc(t('plus_gold', { tag: currentScheduledAlly }))}</div>
         </div>
         <div class="preview-perks">
-          🎁 ${th('buyout_perks', { ally: tag(currentScheduledAlly), wlo: tag('WLO') })}
+          ${ic('gift')}${th('buyout_perks', { ally: tag(currentScheduledAlly, allyColor), wlo: tag('WLO', getAllianceColor('WLO')) })}
         </div>
       </div>
     `;
@@ -292,24 +311,25 @@ export async function submitOverrideProposal() {
   const b = (key, vars) => `<strong>${esc(t(key, vars))}</strong>`;
   const vs = th('sum_vs', { threat: `<code>${esc(threatName)}</code>` }, { n: targetWeek });
   const installment = (i, week) =>
-    `<div>• 📦 <em>${esc(t('sum_installment', { i, week }))}</em> ${esc(t('sum_installment_chests'))}</div>`;
+    `<div>${ic('package')}<em>${esc(t('sum_installment', { i, week }))}</em> ${esc(t('sum_installment_chests'))}</div>`;
   const diffSummaryHtml = isBuyout
     ? `
-      <div>• 🚨 ${b('sum_second')}: ${vs}</div>
-      <div>• 🛡️ ${b('sum_buyout_issued', { tag: displacedAlly })}: ${esc(t('sum_four_gold'))}</div>
+      <div>${ic('siren')}${b('sum_second')}: ${vs}</div>
+      <div>${ic('shield')}${b('sum_buyout_issued', { tag: displacedAlly })}: ${esc(t('sum_four_gold'))}</div>
       ${installment(1, targetWeek)}
       ${installment(2, 3)}
     `
     : `
-      <div>• ⚔️ ${b('sum_first')}: ${vs}</div>
-      <div>• ⇄ ${b('sum_swap')}: ${esc(t('sum_swap_text', { n: targetWeek }))}</div>
-      <div>• 👑 ${b('sum_promoted', { tag: displacedAlly })} ${esc(t('sum_promoted_text'))}</div>
-      <div>• 💰 ${b('sum_cost')}</div>
+      <div>${ic('swords')}${b('sum_first')}: ${vs}</div>
+      <div>${ic('swap')}${b('sum_swap')}: ${esc(t('sum_swap_text', { n: targetWeek }))}</div>
+      <div>${ic('crown')}${b('sum_promoted', { tag: displacedAlly })} ${esc(t('sum_promoted_text'))}</div>
+      <div>${ic('coins')}${b('sum_cost')}</div>
     `;
 
   submitProposalWithAuth({
     type: 'override',
     title: t(isBuyout ? 'proposal_buyout' : 'proposal_swap'),
+    icon: isBuyout ? 'shield' : 'swords',
     payload,
     diffSummaryHtml,
     onSuccess: () => {

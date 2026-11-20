@@ -35,7 +35,13 @@ guides:
   campaign_shop: Kampagnen-Shop
   premium_shop: Premium- & Edelsteinpakete
   t10: T10-Rechner
+  frozen_era: Frost-Ära
   scramble: Königliches Gerangel
+  elixir: Elixier-Gerangel
+  undead_siege: Untoten-Belagerung
+  hunt_battle: Jagd-Event
+  kill_event: Kill-Event
+  gear_upgrade: Ausrüstungs-Upgrade
 pages:
   home:
     title: Startseite
@@ -58,6 +64,15 @@ pages:
   calendar:
     title: Event-Kalender
     subtitle: Allianz- & Server-Events
+  map:
+    title: Königreichskarte
+    subtitle: Königreichskarte
+  rewards:
+    title: Kapitol-Belohnungen
+    subtitle: Kapitol-Belohnungen
+  '404':
+    title: Seite nicht gefunden
+    subtitle: Bereich überrannt
   guide_panes:
     heroes:
       title: Helden & Builds
@@ -111,11 +126,11 @@ pages:
       title: Kampagnen-Shop
       subtitle: Kampagnen-Shop
     premium_shop:
-      title: Premium- & Edelsteinpakete
-      subtitle: Premium- & Edelsteinpakete
+      title: Premium- & Juwelen-Pakete
+      subtitle: Premium- & Juwelen-Pakete
     t10:
       title: T10-Guide
-      subtitle: T10-Voraussetzungen
+      subtitle: T10-Anforderungen
     scramble:
       title: Königliches Gerangel
       subtitle: Königliches Gerangel
@@ -128,6 +143,7 @@ nav_anchors:
   nap_ranks: NAP-Ränge
   nap_territory: NAP-Gebiet
   blacklist: Blacklist
+  nap_stats: Statistik
   markdown_usage: Nutzung
   markdown_example: Beispiel
   guide_submissions: Einreichungen
@@ -149,26 +165,35 @@ nav_anchors:
   cheese_cheese: Käse
   cheese_strategy: Strategie
   cheese_rewards: Belohnungen
+status:
+  coming_soon: Demnächst verfügbar
 search:
   guides: Guides durchsuchen...
-  home: Verzeichnisse, Beiträge durchsuchen...
+  home: Guides und Regeln durchsuchen...
   placeholder: Suchen...
+  results_label: Suchergebnisse
+  no_results: Nichts gefunden für „{query}“.
+  unavailable: Die Suche ist momentan nicht verfügbar. Versuche es erneut, wenn du online bist.
+image_viewer:
+  close: Schließen
+  download: Herunterladen
 pwa:
-  toast_msg: Neue Informationen erfasst.
+  toast_msg: Neue Informationen erhalten.
   update_btn: Aktualisieren
   updating: Entschlüsseln...
-  updated_msg: "✅ App auf die neueste Version aktualisiert."
+  updated_msg: App auf die neueste Version aktualisiert.
 identity:
-  account: Dein Konto
+  account: Dein Account
   sign_in: Anmelden
-  signing_in: Anmeldung läuft…
-  sign_in_failed: Anmeldung fehlgeschlagen, bitte erneut versuchen
+  signing_in: Anmelden…
+  sign_in_failed: Anmeldung fehlgeschlagen, versuche es erneut
   sign_in_again: Erneut anmelden
   refresh: Zugriff aktualisieren
   sign_out: Abmelden
   force_update: App aktualisieren
-  force_updating: Wird aktualisiert…
+  force_updating: Aktualisieren…
   dashboard: Allianz-Dashboard
+  steward_tools: Steward-Tools
   role_steward: Steward
   role_r5: R5
   role_r4: R4
@@ -181,15 +206,15 @@ identity:
   access_title: Dein Zugriff
   access_view: Live-Karte, Zeitpläne und Ranglisten ansehen
   access_draft: Pläne im Planer-Modus entwerfen
-  access_join: Tritt dem NAP-Discord-Server bei, um mehr Zugriff zu erhalten
-  access_ask_leader: Bitte deinen R4 oder R5, deine Pläne als Vorschläge einzureichen
-  access_send: Vorschläge für Karte, Rangliste, Blacklist und Belohnungen einreichen (5 pro Tag)
-  access_send_unlimited: Vorschläge ohne Tageslimit einreichen
-  access_approve: Vorschläge in Discord annehmen oder ablehnen
-  access_expired: Deine Anmeldung ist abgelaufen. Melde dich erneut an, um Vorschläge einzureichen.
+  access_join: Tritt dem NAP Discord-Server für mehr Zugriff bei
+  access_ask_leader: Bitte deinen R4 oder R5, deine Pläne als Vorschlag zu senden
+  access_send: Vorschläge für Karte, Ranglisten, Blacklist und Belohnungen senden (5 pro Tag)
+  access_send_unlimited: Vorschläge ohne tägliches Limit senden
+  access_approve: Vorschläge auf Discord genehmigen oder ablehnen
+  access_expired: Deine Anmeldung ist abgelaufen. Melde dich erneut an, um Vorschläge zu senden.
   expires_days: Anmeldung läuft in {n} Tagen ab
   expires_one: Anmeldung läuft in 1 Tag ab
   expires_today: Anmeldung läuft heute ab
-  found_role_id: per Rollen-ID gefunden
-  found_role_name: per Rollenname gefunden
-  found_nickname: per Spitzname gefunden
+  found_role_id: gefunden über Rollen-ID
+  found_role_name: gefunden über Rollenname
+  found_nickname: gefunden über Nickname

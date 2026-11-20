@@ -1,14 +1,19 @@
 // api/_reminders.js
 // Calendar reminders on Discord ("_" files are helpers, not endpoints). cron-job.org calls
-// POST /api/calendar every 10 minutes with { action: 'check-reminders' } and the
+// POST /api/calendar every 5 minutes (since 2026-11-17; 10 before) with { action: 'check-reminders' } and the
 // REMINDER_SECRET header (GitHub's schedule never started; "Run workflow" on
 // .github/workflows/reminders.yml runs one by hand); api/calendar.js hands the request here.
 // Owner design, 2026-11-13:
-//   - Only events whose `reminder` is '1h' (set on the event form). Events made before
-//     reminders existed have none, so they never fire.
-//   - Posted once per occurrence, at most an hour before it starts. A check can come a few
-//     minutes late, so the message shows the start as a Discord timestamp (each
-//     reader's own time, with a live countdown) rather than "in 1 hour".
+//   - Only events whose `reminder` is '1h' (set on the event form: '1h' means "on"; the name is
+//     from when an hour was the only choice). Events made before reminders existed have none,
+//     so they never fire.
+//   - When (owner request, 2026-11-17): `reminder_minutes`, 0 to 60 in steps of 10, how long
+//     before the start (events from before it: 60). The check runs every 5 minutes, so a
+//     reminder is posted within the 5 minutes before that time. 0 ("when it starts") is
+//     posted by the first check after the start, up to 15 minutes late, and says "Starting now".
+//   - Posted once per occurrence. A check can come a few minutes late, so the message shows
+//     the start as a Discord timestamp (each reader's own time, with a live countdown) rather
+//     than "in 1 hour".
 //   - Alliance events go to that alliance's alert channel (from /registerbot). Server-wide
 //     (Steward) events go to the NAP Discord (NAP_ALERT_CHANNEL_ID) and to the alert channel
 //     of alliances that opted in (server_event_alerts).
@@ -21,10 +26,21 @@
 //     TEST_CHANNEL_ID instead, pinging nobody, with the real destination written in it.
 //   - A request can ask for a dry run ({ dryRun: true }) anywhere.
 
+import { sendMessage } from './_discord_send.js';
 import { readGist, gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { inLocale, say } from './_messages.js';
+import { findTag } from './_alliances.js';
 
-const HOUR = 3600 * 1000;
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+/** How long after the start a "when it starts" reminder may still be posted. */
+const START_GRACE = 15 * MINUTE;
+
+/** Minutes before the start the event's reminder goes out: 0 to 60 in tens (default 60). */
+export function reminderLead(evt) {
+  const m = evt?.reminder_minutes;
+  return Number.isInteger(m) && m >= 0 && m <= 60 && m % 10 === 0 ? m : 60;
+}
 const STEPS = { '2days': 2 * 24 * HOUR, weekly: 7 * 24 * HOUR };
 
 /** The start (ms) of the event's next occurrence from `now` (repeating events step forward). */
@@ -36,13 +52,20 @@ export function nextOccurrence(evt, now) {
   return base + Math.ceil((now - base) / step) * step;
 }
 
-/** Events due for a reminder: reminder on, next occurrence within the hour, not yet reminded. */
+/**
+ * Events due for a reminder: reminder on, the next occurrence within its lead time
+ * (reminderLead), not yet reminded. A "when it starts" reminder (lead 0) is due from the
+ * start until START_GRACE after it, so the occurrence that just began still counts.
+ */
 export function dueReminders(events, now) {
   const due = [];
   for (const evt of events || []) {
     if (evt?.reminder !== '1h') continue;
-    const start = nextOccurrence(evt, now);
-    if (start === null || start <= now || start - now > HOUR) continue;
+    const lead = reminderLead(evt) * MINUTE;
+    const grace = lead === 0 ? START_GRACE : 0;
+    const start = nextOccurrence(evt, now - grace);
+    if (start === null || start <= now - grace || start - now > lead) continue;
+    if (lead > 0 && start <= now) continue; // started already: too late for "before"
     const occurrence = new Date(start).toISOString();
     if (evt.notification_status?.reminded_occurrence === occurrence) continue;
     due.push({ evt, start, occurrence });
@@ -50,11 +73,10 @@ export function dueReminders(events, now) {
   return due;
 }
 
-/** The alliance record for a tag, whatever its letter case (tags like RâvN). */
+/** The alliance record for an event's tag (findTag: RâvN and RÂVN are two alliances). */
 function allianceFor(alliances, tag) {
-  const wanted = String(tag || '').toUpperCase();
-  const entry = Object.entries(alliances || {}).find(([t]) => t.toUpperCase() === wanted);
-  return entry ? { tag: entry[0], ...entry[1] } : null;
+  const key = findTag(Object.keys(alliances || {}), tag);
+  return key ? { tag: key, ...alliances[key] } : null;
 }
 
 /** Who to ping in a channel: a role ID, 'everyone', or null (nobody). */
@@ -110,7 +132,7 @@ function reminderMessage(evt, start, ping, testNote) {
   const mention = ping === 'everyone' ? '@everyone' : ping ? `<@&${ping}>` : '';
   const title = String(evt.title || '').slice(0, 240);
   const embed = {
-    title: say('reminders.title', { title }),
+    title: say(reminderLead(evt) === 0 ? 'reminders.title_now' : 'reminders.title', { title }),
     description: String(evt.description || '').slice(0, 1000) || undefined,
     color:
       Number.parseInt(
@@ -135,6 +157,33 @@ function reminderMessage(evt, start, ping, testNote) {
           ? { roles: [ping] }
           : { parse: [] },
   };
+}
+
+/**
+ * Marks events' occurrences as reminded (`ids`: [{ id, occurrence }]) or, with
+ * `occurrence: null`, clears the mark again. One Gist save; throws if it can't be saved.
+ */
+async function markReminded(ids) {
+  await updateGist((fresh) => {
+    const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
+    for (const e of state.custom_events || []) {
+      const mark = ids.find((s) => s.id === e.id);
+      if (!mark) continue;
+      // Clearing only takes back our own mark (an edit since may have changed it)
+      if (mark.occurrence === null && e.notification_status?.reminded_occurrence !== mark.was)
+        continue;
+      e.notification_status = {
+        ...(e.notification_status || {}),
+        reminded_occurrence: mark.occurrence,
+      };
+    }
+    return {
+      files: { 'calendar-state.json': state },
+      description: ids.some((m) => m.occurrence)
+        ? `Calendar reminders posting (${ids.length})`
+        : `Calendar reminders not posted, to retry (${ids.length})`,
+    };
+  });
 }
 
 /**
@@ -164,7 +213,29 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
       remindersLive: process.env.REMINDERS_LIVE === 'true',
     };
     const report = { mode, settings, checked: events.length, due: [] };
-    const sent = []; // { id, occurrence } of reminders actually posted
+    // Marked as reminded BEFORE posting (owner report, 2026-11-20: an Elixir Scramble reminder
+    // went out twice). Posting first and saving after meant a failed save left it unmarked, so
+    // the next check, five minutes later and still inside the lead time, posted it again. Now
+    // a failed mark posts nothing (the next check tries again), and a reminder whose every
+    // post failed is unmarked so the next check retries it: at worst one check late, never
+    // twice.
+    if (mode !== 'dry-run' && due.length) {
+      try {
+        await markReminded(due.map(({ evt, occurrence }) => ({ id: evt.id, occurrence })));
+      } catch (err) {
+        // Not marked: nothing posted this time, and the rest of the 5-minute check (the race,
+        // the Stats snapshot) still runs
+        console.error('Reminders not marked, so not posted:', err.message);
+        report.error = `not marked as reminded, so not posted (tried again next check): ${err.message}`;
+        report.due = due.map(({ evt, occurrence }) => ({
+          id: evt.id,
+          title: evt.title,
+          occurrence,
+        }));
+        return report;
+      }
+    }
+    const failed = []; // { id, occurrence: null, was } of reminders no post went out for
     for (const { evt, start, occurrence } of due) {
       const targets = targetsFor(evt, alliances, process.env.NAP_ALERT_CHANNEL_ID);
       const item = { id: evt.id, title: evt.title, occurrence, targets: [] };
@@ -190,12 +261,11 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
             ? `🧪 Test reminder: would go to ${target.label}, pinging ${result.ping}`
             : null;
         try {
-          const res = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify(reminderMessage(evt, start, target.ping, testNote)),
-            signal: AbortSignal.timeout(4000),
-          });
+          const res = await sendMessage(
+            channelId,
+            reminderMessage(evt, start, target.ping, testNote),
+            { token: botToken },
+          );
           result.status = res.ok ? 'sent' : `Discord error ${res.status}`;
           if (res.ok) anyPosted = true;
         } catch (err) {
@@ -203,28 +273,18 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
         }
       }
       if (!targets.length) item.note = 'nowhere to post (no alert channel)';
-      // Recorded once anything was posted, so it isn't posted again; if every post failed it
-      // is tried again on the next check (until the event starts)
-      if (anyPosted) sent.push({ id: evt.id, occurrence });
+      // Nothing went out (Discord down, no channel): unmarked, so the next check retries it
+      // (until the event starts)
+      if (!anyPosted && targets.length && mode !== 'dry-run')
+        failed.push({ id: evt.id, occurrence: null, was: occurrence });
     }
 
-    if (sent.length) {
-      await updateGist((fresh) => {
-        const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
-        for (const e of state.custom_events || []) {
-          const done = sent.find((s) => s.id === e.id);
-          if (done) {
-            e.notification_status = {
-              ...(e.notification_status || {}),
-              reminded_occurrence: done.occurrence,
-            };
-          }
-        }
-        return {
-          files: { 'calendar-state.json': state },
-          description: `Calendar reminders posted (${sent.length})`,
-        };
-      });
+    if (failed.length) {
+      try {
+        await markReminded(failed);
+      } catch (err) {
+        console.error('Reminders not unmarked for a retry:', err.message);
+      }
     }
     return report;
   });

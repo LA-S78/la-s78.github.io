@@ -4,7 +4,7 @@ title: Reward Nominations
 title_key: "nominate.page_title"
 permalink: /nominate.html
 lang: "en"
-strings: [nominate]
+strings: [nominate, roster]
 ---
 
 <div class="content-pane portal-pane-sm" id="nominate-app">
@@ -21,7 +21,7 @@ strings: [nominate]
 
     <form id="nomination-form">
       <div class="smart-paste-box">
-        <label for="ranked-input">{{ "nominate.players_label" | t }}</label>
+        <label for="ranked-input">{% include ui-icon.html name="clipboard" %}{{ "nominate.players_label" | t }}</label>
         <p class="smart-paste-desc">{{ "nominate.players_help" | t }}</p>
         <textarea id="ranked-input" rows="10" placeholder="{{ "nominate.players_placeholder" | t }}"></textarea>
       </div>
@@ -29,9 +29,15 @@ strings: [nominate]
       <!-- Chests the King has already handed out in the game: locked, kept whatever the list says -->
       <div id="locked-box" class="nominate-locked" style="display: none;"></div>
 
+      <!-- Names checked against the alliance's member list (js/name-check.js, Last Asylum
+           Tracker): only advice, the list is saved as written -->
+      <div id="name-check" class="nominate-name-check" hidden></div>
+
       <div class="slot-group-title" id="assign-title">{{ "nominate.who_gets_what" | t }}</div>
       <div class="sub-text" id="assign-summary"></div>
       <div id="assign-list" class="nominate-assign-list"></div>
+      <!-- Where the member list for the name check comes from (owner request) -->
+      <p class="tracker-credit" id="tracker-credit" hidden>{% include ui-icon.html name="users" %}{{ "roster.credit_before" | t }} <a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a></p>
 
       <div id="save-status" class="status-banner" style="display: none;"></div>
       <button type="submit" id="btn-submit" class="submit-plan-btn btn-fw-lg">{{ "nominate.save" | t }}</button>
@@ -39,8 +45,12 @@ strings: [nominate]
   </div>
 </div>
 
+<script type="module" src="/js/name-check.js"></script>
+<script type="module" src="/js/player-portrait.js"></script>
 <script>
   (function () {
+    /** An interface icon (js/ui-icons.js) for the start of a label. */
+    const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
     const token = new URLSearchParams(window.location.search).get('token');
     const elLoading = document.getElementById('loading-state');
     const elError = document.getElementById('error-state');
@@ -89,12 +99,31 @@ strings: [nominate]
       return left;
     }
 
+    // Player IDs (owner request, 2026-11-18): a line may be a player ID; with the alliance's
+    // member list (data.alliance.players, { uid: name }) it shows as that player's name, and
+    // the server saves it so (api/_nominations.js resolvePlayers).
+    const looksLikeId = (s) => /^\d{5,12}$/.test(s);
+
+    /** One typed line: { name, id } (id: the player ID it was typed as), or null if empty. */
+    function resolveLine(raw) {
+      const typed = raw.trim();
+      if (!typed) return null;
+      const players = data && data.alliance.players;
+      if (players && looksLikeId(typed) && players[typed] && !Object.values(players).includes(typed)) {
+        return { name: players[typed], id: typed };
+      }
+      return { name: typed, id: null };
+    }
+
+    function linesFromInput() {
+      return input.value.split(/[\n,]+/).map(resolveLine).filter(Boolean);
+    }
+
     function namesFromInput() {
       const seen = new Set();
       const names = [];
-      for (const raw of input.value.split(/[\n,]+/)) {
-        const name = raw.trim();
-        if (!name || seen.has(name.toLowerCase()) || isLocked(name)) continue;
+      for (const { name } of linesFromInput()) {
+        if (seen.has(name.toLowerCase()) || isLocked(name)) continue;
         seen.add(name.toLowerCase());
         names.push(name);
       }
@@ -104,13 +133,18 @@ strings: [nominate]
     function duplicatesInInput() {
       const seen = new Set();
       const dupes = [];
-      for (const raw of input.value.split(/[\n,]+/)) {
-        const name = raw.trim();
-        if (!name) continue;
+      for (const { name } of linesFromInput()) {
         if (seen.has(name.toLowerCase())) dupes.push(name);
         seen.add(name.toLowerCase());
       }
       return dupes;
+    }
+
+    /** A typed ID that no member has (the server would refuse the list). */
+    function unknownId() {
+      if (!data || !data.alliance.players) return null;
+      const line = linesFromInput().find((l) => !l.id && looksLikeId(l.name) && !Object.values(data.alliance.players).includes(l.name));
+      return line ? line.name : null;
     }
 
     let data = null;
@@ -136,13 +170,13 @@ strings: [nominate]
 
       const banner = document.getElementById('set2-banner');
       if (!p.kwWeek) {
-        banner.textContent = t('nominate.banner_off_week');
+        banner.innerHTML = ic('crown') + escapeHtml(t('nominate.banner_off_week'));
       } else if (p.result === 'won') {
-        banner.textContent = t('nominate.banner_won');
+        banner.innerHTML = ic('swords') + escapeHtml(t('nominate.banner_won'));
       } else if (p.result === 'lost') {
-        banner.textContent = t('nominate.banner_lost');
+        banner.innerHTML = ic('shield') + escapeHtml(t('nominate.banner_lost'));
       } else {
-        banner.textContent = t('nominate.banner_pending', { when: formatTime(p.battleEndsAt) });
+        banner.innerHTML = ic('hourglass', 'wait') + escapeHtml(t('nominate.banner_pending', { when: formatTime(p.battleEndsAt) }));
       }
 
       locked = data.alliance.handedOut || [];
@@ -151,6 +185,10 @@ strings: [nominate]
       elForm.style.display = 'block';
       render();
     }
+
+    /** The player's picture from the tracker (js/player-portrait.js), when there is a list. */
+    const face = (name) =>
+      window.PlayerPortrait ? window.PlayerPortrait.portraitFor(name, data.alliance.pictures) : '';
 
     function render() {
       const names = namesFromInput();
@@ -166,8 +204,8 @@ strings: [nominate]
           locked
             .map(
               (l) => `<div class="nominate-assign-row is-locked">
-                <span class="slot-num">🔒</span>
-                <span class="player-ign">${escapeHtml(l.name)}</span>
+                <span class="slot-num">${ic('lock', 'solo')}</span>
+                <span class="player-ign">${face(l.name)}${escapeHtml(l.name)}</span>
                 <span class="nominate-chest"><span class="chest-glyph ${GLYPH[l.chest]}"></span><span>${escapeHtml(CHEST_NAMES[l.pool][l.chest])}</span></span>
               </div>`,
             )
@@ -183,16 +221,32 @@ strings: [nominate]
       let html = `<div class="nominate-assign-row nominate-assign-head">
           <span>#</span><span>${escapeHtml(t('nominate.col_player'))}</span><span>${escapeHtml(t(pending ? 'nominate.col_now' : 'nominate.col_chest'))}</span>${pending ? `<span>${escapeHtml(t('nominate.col_if_won'))}</span>` : ''}
         </div>`;
+      const typedIds = new Map(linesFromInput().filter((l) => l.id).map((l) => [l.name, l.id]));
+      const checks = names.map((n) => {
+        // A saved name whose player has since renamed: offered as a spelling fix
+        const uid = (data.alliance.ids || {})[n];
+        const now = uid && data.alliance.players ? data.alliance.players[uid] : null;
+        if (now && now !== n) return { status: 'spelling', match: now };
+        return window.NameCheck ? window.NameCheck.checkName(n, data.alliance.members) : null;
+      });
+      const mark = (c) =>
+        !c
+          ? ''
+          : c.status === 'ok'
+            ? ` <span class="name-mark" title="${escapeHtml(t('nominate.name_ok', { tag: data.alliance.tag }))}">${ic('check', 'ok')}</span>`
+            : ` <span class="name-mark" title="${escapeHtml(c.status === 'spelling' ? t('nominate.name_spelling', { name: c.match }) : t('nominate.name_unknown', { tag: data.alliance.tag }))}">${ic('warning', 'warn')}</span>`;
       for (let i = 0; i < rows; i++) {
         const name = names[i];
         html += `<div class="nominate-assign-row${name ? '' : ' is-empty'}">
           <span class="slot-num">${i + 1}.</span>
-          <span class="player-ign">${name ? escapeHtml(name) : '—'}</span>
+          <span class="player-ign">${name ? face(checks[i] && checks[i].status === 'spelling' ? checks[i].match : name) + escapeHtml(name) + (typedIds.has(name) ? ` <span class="name-mark" title="${escapeHtml(t('nominate.id_found', { id: typedIds.get(name) }))}">${ic('check', 'ok')}</span>` : mark(checks[i])) : '—'}</span>
           <span class="nominate-chest">${cell(now[i])}</span>
           ${pending ? `<span class="nominate-chest">${cell(ifWon[i])}</span>` : ''}
         </div>`;
       }
       document.getElementById('assign-list').innerHTML = html;
+      renderNameCheck(names, checks);
+      document.getElementById('tracker-credit').hidden = !Array.isArray(data.alliance.members) && !data.alliance.pictures;
 
       const open = now.length;
       const missing = Math.max(0, open - names.length);
@@ -208,12 +262,68 @@ strings: [nominate]
         .join(' · ');
 
       const dupes = duplicatesInInput();
+      const badId = unknownId();
       const btn = document.getElementById('btn-submit');
-      btn.disabled = names.length === 0 || dupes.length > 0;
-      btn.textContent = dupes.length ? t('nominate.listed_twice', { name: dupes[0] }) : t('nominate.save');
+      btn.disabled = names.length === 0 || dupes.length > 0 || Boolean(badId);
+      btn.textContent = dupes.length
+        ? t('nominate.listed_twice', { name: dupes[0] })
+        : badId
+          ? t('nominate.id_unknown', { id: badId, tag: data.alliance.tag })
+          : t('nominate.save');
     }
 
     input.addEventListener('input', render);
+
+    /**
+     * The summary above the list: names written differently in the game (with a button to
+     * use the game's spelling) and names not in the alliance (with close names). Hidden
+     * without a member list or when every name matches.
+     */
+    function renderNameCheck(names, checks) {
+      const box = document.getElementById('name-check');
+      const spelling = [];
+      const unknown = [];
+      names.forEach((n, i) => {
+        const c = checks[i];
+        if (c && c.status === 'spelling') spelling.push([n, c.match]);
+        if (c && c.status === 'unknown' && !looksLikeId(n)) unknown.push([n, c.suggestions]);
+      });
+      box.hidden = !spelling.length && !unknown.length;
+      if (box.hidden) return (box.innerHTML = '');
+      const tag = data.alliance.tag;
+      box.innerHTML =
+        (spelling.length
+          ? `<p>${ic('pencil', 'warn')}${escapeHtml(tn('nominate.names_spelling', spelling.length))}
+               ${spelling.map(([n, m]) => `<span class="name-pair">${escapeHtml(n)} → <strong>${escapeHtml(m)}</strong></span>`).join(' ')}
+             </p>
+             <button type="button" class="name-fix-btn" id="btn-fix-names">${escapeHtml(t('nominate.use_game_spellings'))}</button>`
+          : '') +
+        (unknown.length
+          ? `<p>${ic('warning', 'warn')}${escapeHtml(tn('nominate.names_unknown', unknown.length, { tag }))}</p>
+             <ul>${unknown
+               .map(
+                 ([n, s]) =>
+                   `<li><strong>${escapeHtml(n)}</strong>${s.length ? ` · ${escapeHtml(t('nominate.did_you_mean'))} ${s.map((x) => escapeHtml(x)).join(', ')}` : ''}</li>`,
+               )
+               .join('')}</ul>`
+          : '');
+      document.getElementById('btn-fix-names')?.addEventListener('click', () => {
+        const fix = new Map(spelling);
+        input.value = input.value
+          .split('\n')
+          .map((line) =>
+            line
+              .split(',')
+              .map((part) => {
+                const n = part.trim();
+                return fix.has(n) ? part.replace(n, fix.get(n)) : part;
+              })
+              .join(','),
+          )
+          .join('\n');
+        render();
+      });
+    }
 
     document.getElementById('nomination-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -230,7 +340,7 @@ strings: [nominate]
         const result = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
         status.className = 'status-banner status-success';
-        status.textContent = t('nominate.saved', { when: formatTime(data.period.closesAt) });
+        status.innerHTML = ic('check', 'ok') + escapeHtml(t('nominate.saved', { when: formatTime(data.period.closesAt) }));
       } catch (err) {
         status.className = 'status-banner warning';
         status.textContent = t('nominate.save_failed', { error: err.message });

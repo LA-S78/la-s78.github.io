@@ -17,15 +17,21 @@ import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { fetchAlliance, memberPictures } from './_tracker.js';
+import { stewardTools } from './_steward_tools.js';
+import { readSkinMap } from './_stats.js';
+import { allianceFrame, imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
 import { fetchSourceTable } from './_google_source.js';
 import {
   applyDashboardEdit,
+  countRefresh,
   dashboardFile,
   findAllianceKey,
   readDashboard,
+  refreshState,
   rewardStatus,
   viewerAccess,
   visibleDashboard,
@@ -73,6 +79,9 @@ async function respond(req, res) {
   const mapState = gistJson(gist, 'map-state.json');
   const alliances = mapState.alliances || {};
 
+  // The Steward tools page (portal/steward.html): Stewards only, checked in there
+  if (req.method === 'GET' && req.query?.steward) return stewardTools(req, res, { gist, session });
+
   // Whose dashboard: your own; Stewards may pick any alliance.
   const asked = req.method === 'GET' ? req.query?.alliance : req.body?.alliance;
   const tag =
@@ -90,8 +99,13 @@ async function respond(req, res) {
     if (req.body?.action === 'nominate-link') {
       return nominateLink(req, res, { gist, mapState, tag, access });
     }
-    return editDashboard(req, res, { gist, tag, access, session });
+    return editDashboard(req, res, { gist, tag, access, session, alliances });
   }
+
+  // The territory map's "My members" (owner request, 2026-11-19): where the leader's own
+  // alliance members' Sanctuaries are. Leaders only, their own alliance only (Stewards: the
+  // alliance asked for); from the roster's lookup, so no extra tracker requests.
+  if (req.query?.positions) return memberPositions(res, { gist, tag, alliances, access });
 
   const body = {
     viewer: { name: session.name || '', tier: access.tier, canNominate: access.canNominate },
@@ -102,12 +116,45 @@ async function respond(req, res) {
       color: sanitizeAlliances({ [tag]: alliances[tag] || {} }, await getRoleColors())[tag].color,
     },
     dashboard: visibleDashboard(
-      readDashboard(gistJson(gist, dashboardFile(tag), {}), tag),
+      readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag),
       access.leader,
     ),
   };
   if (steward) body.alliances = allianceList(alliances);
+
+  // The roster view (owner request, 2026-11-18): the alliance's members from the Last Asylum
+  // Tracker, for leaders only (owner, 2026-11-19: the "Members can view" option was removed).
+  // One lookup serves the roster and the leaders' name checks; null without the tracker or
+  // when it's slow.
+  const saved = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag);
+  // The Caravan Rotor shows players' pictures too (step 2), for whoever can see it
+  const caravanShown = Boolean(body.dashboard.caravan);
+  if (access.leader || caravanShown) {
+    // After a leader's refresh, a copy older than it isn't used (the tracker has the new one)
+    const refreshedAt = Date.parse(saved.settings.rosterRefresh?.lastAt || '') || 0;
+    const live = await fetchAlliance(tag, {
+      timeoutMs: 2500,
+      newerThan: refreshedAt,
+      use: 'alliance',
+    });
+    // The alliance's own avatar frame, when switched on, replaces members' in-game frames
+    const frame = allianceFrame(gist, tag);
+    if (access.leader) {
+      body.roster = rosterBody(live, frame);
+      body.roster.refresh = refreshState(saved.settings);
+    }
+    if (access.leader) body.members = live ? live.members.map((m) => m.name) : null;
+    if (caravanShown) body.pictures = memberPictures(live, frame);
+  }
+
   if (access.leader) {
+    // The alliance's card pictures (api/_alliance_images.js): R4/R5 send, the R5 or a
+    // Steward may take a live one down.
+    body.images = {
+      ...imageStatus(gist, tag),
+      canRemove:
+        steward || (session.role === 'R5' && findAllianceKey(alliances, session.alliance) === tag),
+    };
     body.rewards = rewardStatus({
       tag,
       rewardsData: gistJson(gist, 'rewards-data.json'),
@@ -119,16 +166,106 @@ async function respond(req, res) {
   return res.status(200).json(body);
 }
 
+async function memberPositions(res, { gist, tag, alliances, access }) {
+  if (!access.leader) {
+    return res.status(403).json({ error: say('api_dashboard.positions_leaders_only') });
+  }
+  const settings = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag).settings;
+  const refreshedAt = Date.parse(settings.rosterRefresh?.lastAt || '') || 0;
+  const live = await fetchAlliance(tag, {
+    timeoutMs: 3000,
+    newerThan: refreshedAt,
+    use: 'alliance',
+  });
+  if (!live) return res.status(502).json({ error: say('api_dashboard.positions_unavailable') });
+  // Sanctuary skins collected so far (api/_skins.js), for the map's game view
+  const skins = await readSkinMap().catch(() => ({}));
+  return res.status(200).json({
+    tag,
+    takenAt: new Date(live.at - live.ageSeconds * 1000).toISOString(),
+    members: live.members
+      .filter((m) => Number.isFinite(m.x) && Number.isFinite(m.y))
+      .map(({ uid, name, power, rank, x, y, avatar, kills, level, frame }) => ({
+        uid,
+        name,
+        power,
+        rank,
+        x,
+        y,
+        avatar,
+        // For the map's game view (its popup: kills, the Sanctuary level, the profile frame)
+        kills,
+        level,
+        frame,
+        skin: skins[String(uid)]?.[0] || null,
+      })),
+  });
+}
+
+/** The roster card's data from a tracker lookup (leaders only; null fields when there is none). */
+function rosterBody(live, frame = null) {
+  return {
+    members: live ? (frame ? live.members.map((m) => ({ ...m, frame })) : live.members) : null,
+    power: live ? live.power : null,
+    ageSeconds: live ? live.ageSeconds : null,
+    // When the game sent this copy: daily numbers count from the 00:00 GT reset
+    takenAt: live ? new Date(live.at - live.ageSeconds * 1000).toISOString() : null,
+  };
+}
+
+/**
+ * The roster's Refresh button (leaders): a live lookup from the game, within the alliance's
+ * daily allowance and cooldown (api/_dashboard.js refreshState). Counted only when it worked.
+ */
+async function refreshRoster(res, { gist, tag, alliances, session }) {
+  const file = dashboardFile(tag, alliances);
+  const before = refreshState(readDashboard(gistJson(gist, file, {}), tag).settings);
+  if (!before.left) return res.status(429).json({ error: say('api_dashboard.refresh_limit') });
+  if (before.waitMinutes) {
+    return res
+      .status(429)
+      .json({ error: say('api_dashboard.refresh_wait', { n: before.waitMinutes }) });
+  }
+  const live = await fetchAlliance(tag, { fresh: true, timeoutMs: 6000, use: 'alliance' });
+  if (!live) return res.status(502).json({ error: say('api_dashboard.refresh_failed') });
+  let settings = null;
+  try {
+    await updateGist(
+      (fresh) => {
+        const stored = readDashboard(gistJson(fresh, file, {}), tag);
+        stored.settings = countRefresh(stored.settings);
+        settings = stored.settings;
+        return {
+          files: { [file]: stored },
+          description: `Dashboard [${tag}]: roster refreshed by ${session.name || 'a leader'}`,
+        };
+      },
+      { gist },
+    );
+  } catch (err) {
+    // The lookup worked: the leader still gets it, the count just wasn't saved
+    console.warn(`Roster refresh [${tag}] not counted:`, err.message);
+  }
+  const stored = readDashboard(gistJson(gist, file, {}), tag).settings;
+  const roster = rosterBody(live, allianceFrame(gist, tag));
+  roster.refresh = refreshState(settings || countRefresh(stored));
+  return res.status(200).json({ roster, members: live.members.map((m) => m.name) });
+}
+
 /**
  * Leaders' edits to their alliance's dashboard (Stewards: any alliance): save, delete or move
  * a chart or table. Saved with updateGist, so edits made at the same moment are all kept.
  */
-async function editDashboard(req, res, { gist, tag, access, session }) {
+async function editDashboard(req, res, { gist, tag, access, session, alliances }) {
   if (!access.leader) {
     return res.status(403).json({ error: say('api_dashboard.leaders_only') });
   }
   const body = req.body || {};
-  const file = dashboardFile(tag);
+  const file = dashboardFile(tag, alliances);
+
+  if (body.action === 'roster-refresh') {
+    return refreshRoster(res, { gist, tag, alliances, session });
+  }
 
   // Read a Google Sheet / Doc for the editor's preview (nothing is saved).
   if (body.action === 'load-source') {
@@ -220,12 +357,18 @@ function nominateLink(req, res, { gist, mapState, tag, access }) {
   return res.status(200).json({ url: `/nominate.html?token=${token}` });
 }
 
-/** The alliances a Steward can switch between, best rank first. */
+/**
+ * The alliances a Steward can switch between, in the Alliance page's standings order (owner,
+ * 2026-11-17): NAP alliances (`is_nap`, on unless switched off) by rank, then by tag, the
+ * academies (RâvN, Ghst) among them; then the alliances outside the NAP, in the same order.
+ */
 function allianceList(alliances) {
-  return Object.entries(alliances)
-    .filter(([, a]) => a && a.type !== 'academy')
-    .map(([tag, a]) => ({ tag, rank: Number.isFinite(Number(a.rank)) ? Number(a.rank) : null }))
-    .sort((x, y) => (x.rank ?? 999) - (y.rank ?? 999) || x.tag.localeCompare(y.tag));
+  const rank = (a) => (Number.isFinite(Number(a?.rank)) && a.rank !== null ? Number(a.rank) : null);
+  const byRank = (x, y) => (x.rank ?? 999) - (y.rank ?? 999) || x.tag.localeCompare(y.tag);
+  const list = Object.entries(alliances)
+    .filter(([, a]) => a)
+    .map(([tag, a]) => ({ tag, rank: rank(a), nap: a.is_nap !== false }));
+  return [...list.filter((x) => x.nap).sort(byRank), ...list.filter((x) => !x.nap).sort(byRank)];
 }
 
 function firstByRank(alliances) {

@@ -5,17 +5,17 @@ title: Alliance Dashboard
 title_key: "dashboard.title"
 permalink: /dashboard.html
 lang: "en"
-strings: [dashboard, rewards_card, caravan, chart_editor, charts]
+strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_data, alliance_images, stats]
 ---
 
-<div class="content-pane portal-pane-md" id="dashboard-app">
+<div class="content-pane portal-pane-lg" id="dashboard-app">
   <div class="portal-header">
     <div class="alliance-badge-lg" id="dash-alliance">{{ "dashboard.title" | t }}</div>
     <div class="sub-text" id="dash-subtitle">{{ "dashboard.loading" | t }}</div>
     <!-- Stewards: look at (and help with) any alliance's dashboard -->
     <label class="dash-switcher" id="dash-switcher" hidden>
       <span>{{ "dashboard.view_as" | t }}</span>
-      <select id="dash-switcher-select"></select>
+      <select id="dash-switcher-select" data-site-select></select>
     </label>
   </div>
 
@@ -23,24 +23,38 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
 
   <!-- R4/R5, officers and Stewards only (the server sends it only to them) -->
   <section class="dash-card dash-rewards" id="dash-rewards" hidden aria-labelledby="dash-rewards-title">
-    <h3 class="dash-card-title" id="dash-rewards-title">{{ "rewards_card.title" | t }} <span class="dash-tag">{{ "rewards_card.officers" | t }}</span></h3>
+    <h3 class="dash-card-title" id="dash-rewards-title">{% include ui-icon.html name="lock" %}{{ "rewards_card.title" | t }} <span class="dash-tag">{{ "rewards_card.officers" | t }}</span></h3>
     <div id="dash-rewards-body"></div>
   </section>
 
   <!-- Caravan Rotor: run by leaders; members see it read-only when leaders allow -->
   <section class="dash-card dash-caravan" id="dash-caravan" hidden aria-labelledby="dash-caravan-title"></section>
 
+  <!-- The alliance's members from the Last Asylum Tracker (owner request, 2026-11-18): leaders
+       always, members when leaders switch it on (renderRoster) -->
+  <section class="dash-card dash-roster" id="dash-roster" hidden aria-labelledby="dash-roster-title"></section>
+  <!-- The alliance's Might and members over time, from the Stats tab's daily snapshot -->
+  <section class="dash-card dash-growth" id="dash-growth" hidden aria-labelledby="dash-growth-title"></section>
+
   <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
-    <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
-    <button type="button" class="dash-btn" id="dash-add" disabled>{{ "dashboard.add_chart" | t }}</button>
+    <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="pencil" %}{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
+    <button type="button" class="dash-btn" id="dash-add" disabled>{% include ui-icon.html name="plus" %}{{ "dashboard.add_chart" | t }}</button>
   </div>
   <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
 
   <section class="dash-widgets" id="dash-widgets" hidden aria-label="{{ "dashboard.charts_label" | t }}"></section>
+
+  <!-- Leaders: the alliance's card pictures (js/alliance-images.js), after the charts and
+       with their own "Edit images" button: folded to the current pictures until opened -->
+  <section class="dash-card ai-section" id="dash-images" hidden aria-label="{{ "alliance_images.title" | t }}"></section>
 </div>
 
+<script type="module" src="/js/name-check.js"></script>
+<script type="module" src="/js/player-portrait.js"></script>
+<script type="module" src="/js/line-chart.js"></script>
 <script src="/js/dashboard-widgets.js"></script>
+<script src="/js/alliance-images.js"></script>
 <script>
   (function () {
     // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
@@ -61,6 +75,9 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       }
     }
 
+    /** An interface icon (js/ui-icons.js) for the start of a label. */
+    const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
+
     function message(html, kind) {
       const el = $('dash-message');
       el.className = `status-banner${kind ? ` ${kind}` : ''}`;
@@ -68,37 +85,133 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       el.hidden = false;
     }
 
+    // ---------- This device's last copy (like the calendar and the other tools) ----------
+    // Shown straight away, dimmed with "Updating…", while the fresh dashboard loads; kept
+    // (with a note) when there's no connection. It's private alliance data, so:
+    // - it belongs to this sign-in: stored under a fingerprint of the sign-in pass (never the
+    //   pass itself), so someone else signing in on the device never sees it;
+    // - it's only to look at: no editing, Caravan Rotor or nomination until the server has
+    //   answered (readOnly);
+    // - it's kept for 7 days at most;
+    // - any refusal from the server (signed out, pass expired, left the alliance, no longer
+    //   allowed) deletes every saved dashboard on the device and hides what was shown, as
+    //   does signing out (js/main.js triggerLogout).
+    const SAVED_PREFIX = 'la_dash_';
+    let readOnly = false;
+    async function passPrint(pass) {
+      try {
+        const bytes = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass)));
+        return [...bytes.slice(0, 8)].map((b) => b.toString(16).padStart(2, '0')).join('');
+      } catch (e) {
+        return null; // no crypto (very old browser): no saved copy
+      }
+    }
+    let savedKey = null; // the key for what's on screen now
+    // Older than 7 days: not shown, and deleted (a phone left offline, lost or handed on)
+    const SAVED_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+    function readSaved(key) {
+      try {
+        const kept = JSON.parse(localStorage.getItem(key) || 'null');
+        if (kept && !(Date.now() - Date.parse(kept.at) < SAVED_MAX_AGE_MS)) {
+          localStorage.removeItem(key);
+          return null;
+        }
+        return kept && kept.data ? kept : null;
+      } catch (e) {
+        return null;
+      }
+    }
+    function remember() {
+      if (!savedKey || !data) return;
+      try {
+        localStorage.setItem(savedKey, JSON.stringify({ at: new Date().toISOString(), data }));
+      } catch (e) {
+        // Storage full or blocked: next time it just loads
+      }
+    }
+    function forgetAllSaved() {
+      try {
+        Object.keys(localStorage)
+          .filter((k) => k.startsWith(SAVED_PREFIX))
+          .forEach((k) => localStorage.removeItem(k));
+      } catch (e) {
+        // Storage blocked: nothing was saved
+      }
+    }
+    function setUpdating(on) {
+      const app = $('dashboard-app');
+      app.classList.toggle('is-updating', on);
+      if (on) app.dataset.updating = t('live_data.updating');
+    }
+    // Takes away a dashboard drawn from a saved copy (after the server refused)
+    function hideDashboard() {
+      data = null;
+      ['dash-rewards', 'dash-caravan', 'dash-edit-bar', 'dash-editor', 'dash-images', 'dash-widgets', 'dash-switcher'].forEach((id) => ($(id).hidden = true));
+      window.AllianceImages?.close($('dash-images'));
+      const badge = $('dash-alliance');
+      badge.textContent = t('dashboard.title');
+      badge.classList.remove('ally-text');
+      badge.style.removeProperty('--ally');
+    }
+    function savedNote(at) {
+      const when = new Date(at).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      message(ic('offline') + escapeHtml(t('live_data.offline', { when })), 'warning');
+    }
+
     async function load(alliance) {
       const pass = loginPass();
       if (!pass) {
         $('dash-subtitle').textContent = '';
         message(
-          `🔐 <strong>${escapeHtml(t('dashboard.sign_in_title'))}</strong><br>${th('dashboard.sign_in_help', { sign_in: `<strong>${escapeHtml(t('dashboard.sign_in_button'))}</strong>` })}` +
+          `${ic('lock')}<strong>${escapeHtml(t('dashboard.sign_in_title'))}</strong><br>${th('dashboard.sign_in_help', { sign_in: `<strong>${escapeHtml(t('dashboard.sign_in_button'))}</strong>` })}` +
             `<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_discord'))}</button>`,
         );
         $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
         return;
       }
+      const print = await passPrint(pass);
+      savedKey = print ? `${SAVED_PREFIX}${print}_${alliance || ''}` : null;
+      const fresh = fetch(`/api/dashboard${alliance ? `?alliance=${encodeURIComponent(alliance)}` : ''}`, {
+        headers: { Authorization: `Bearer ${pass}` },
+      });
+      // This sign-in's last copy, while the fresh one loads
+      const saved = savedKey && readSaved(savedKey);
+      if (saved) {
+        data = saved.data;
+        readOnly = true;
+        editing = false;
+        render();
+        setUpdating(true);
+      }
       try {
-        const res = await fetch(`/api/dashboard${alliance ? `?alliance=${encodeURIComponent(alliance)}` : ''}`, {
-          headers: { Authorization: `Bearer ${pass}` },
-        });
+        const res = await fresh;
         const body = await res.json().catch(() => ({}));
+        if (!res.ok && res.status >= 500 && saved) throw new Error(body.error || `HTTP ${res.status}`);
+        setUpdating(false);
         if (!res.ok) {
+          // The server refused (signed out, pass expired, no alliance, not allowed): no
+          // saved dashboard stays on this device
+          forgetAllSaved();
+          hideDashboard();
           $('dash-subtitle').textContent = '';
           if (body.code === 'login') {
-            message(`🔐 ${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_again'))}</button>`, 'warning');
+            message(`${ic('lock')}${escapeHtml(body.error)}<br><br><button type="button" class="submit-plan-btn" id="dash-signin">${escapeHtml(t('common.sign_in_again'))}</button>`, 'warning');
             $('dash-signin')?.addEventListener('click', () => window.triggerDiscordLogin?.());
           } else {
-            message(`⚠️ ${escapeHtml(body.error || `HTTP ${res.status}`)}`, 'warning');
+            message(`${ic('warning', 'warn')}${escapeHtml(body.error || `HTTP ${res.status}`)}`, 'warning');
           }
           return;
         }
         data = body;
+        readOnly = false;
         $('dash-message').hidden = true;
         render();
+        remember();
       } catch (err) {
-        message(`⚠️ ${escapeHtml(t('dashboard.load_failed', { error: err.message }))}`, 'warning');
+        setUpdating(false);
+        // No connection (or the server is down): the saved copy stays, to look at only
+        if (saved) savedNote(saved.at);
+        else message(`${ic('warning', 'warn')}${escapeHtml(t('dashboard.load_failed', { error: err.message }))}`, 'warning');
       }
     }
 
@@ -106,7 +219,10 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       const a = data.alliance;
       const badge = $('dash-alliance');
       badge.textContent = `[${a.tag}]`;
-      if (a.color && /^#[0-9a-f]{6}$/i.test(a.color)) badge.style.color = a.color;
+      if (a.color && /^#[0-9a-f]{6}$/i.test(a.color)) {
+        badge.classList.add('ally-text');
+        badge.style.setProperty('--ally', a.color);
+      }
       const who = t(`dashboard.view_${data.viewer.tier === 'steward' ? 'steward' : data.viewer.tier === 'leader' ? 'leader' : 'member'}`);
       $('dash-subtitle').textContent = a.rank
         ? t('dashboard.subtitle_rank', { rank: a.rank, view: who })
@@ -116,15 +232,69 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       // Stewards: alliance switcher
       if (Array.isArray(data.alliances) && data.alliances.length) {
         const select = $('dash-switcher-select');
-        select.innerHTML = data.alliances
-          .map((x) => `<option value="${escapeHtml(x.tag)}"${x.tag === a.tag ? ' selected' : ''}>[${escapeHtml(x.tag)}]${x.rank ? ` · #${x.rank}` : ''}</option>`)
-          .join('');
+        // The Alliance page's standings order: NAP alliances by rank, then the others apart
+        const option = (x) =>
+          `<option value="${escapeHtml(x.tag)}"${x.tag === a.tag ? ' selected' : ''}>[${escapeHtml(x.tag)}]${x.rank ? ` · #${x.rank}` : ''}</option>`;
+        const nap = data.alliances.filter((x) => x.nap !== false);
+        const others = data.alliances.filter((x) => x.nap === false);
+        select.innerHTML =
+          nap.map(option).join('') +
+          (others.length
+            ? `<optgroup label="${escapeHtml(t('dashboard.not_in_nap'))}">${others.map(option).join('')}</optgroup>`
+            : '');
         $('dash-switcher').hidden = false;
       }
 
       renderRewards();
       renderCaravan();
+      renderRoster();
+      renderGrowth();
       renderWidgets();
+    }
+
+    /**
+     * The alliance's growth (owner request, 2026-11-20): Might and members per day from the
+     * Stats tab's daily snapshot (/api/state?scope=stats, public and kept an hour by Vercel),
+     * for everyone who sees the dashboard. Hidden until two days are collected.
+     */
+    let growthData = null;
+    async function renderGrowth() {
+      const el = $('dash-growth');
+      const tag = data.alliance.tag;
+      if (!growthData) {
+        try {
+          const res = await fetch('/api/state?scope=stats');
+          growthData = res.ok ? await res.json() : { days: [] };
+        } catch {
+          growthData = { days: [] };
+        }
+      }
+      const days = (growthData.days || []).slice(-30);
+      // The same key as the NAP list (letter case counts: RâvN and RÂVN are two alliances)
+      const key = Object.keys(growthData.alliances || {}).find((k) => k === tag);
+      const power = key ? growthData.alliances[key] : null;
+      const members = key ? (growthData.members || {})[key] || {} : {};
+      const chart = window.LineChart && power
+        ? window.LineChart.lineChart({
+            days,
+            lines: [{ color: data.alliance.color || '#6abf4b', values: days.map((d) => power[d] ?? null) }],
+            format: might,
+            height: 150,
+            label: t('stats.growth_title'),
+          })
+        : '';
+      el.hidden = !chart;
+      if (!chart) return;
+      const last = days[days.length - 1];
+      const weekAgo = days.filter((d) => d <= new Date(Date.parse(`${last}T12:00:00Z`) - 7 * 86400000).toISOString().slice(0, 10)).pop();
+      const change = (a, b) => (Number.isFinite(a) && Number.isFinite(b) ? a - b : null);
+      const week = change(power[last], weekAgo ? power[weekAgo] : null);
+      const memberLine = days.map((d) => members[d] ?? null).filter(Number.isFinite);
+      el.innerHTML = `
+        <h3 class="dash-card-title" id="dash-growth-title">${ic('line_chart')}${escapeHtml(t('stats.growth_title'))}</h3>
+        <p class="dash-growth-now"><strong>${escapeHtml(might(power[last]))}</strong> ${escapeHtml(t('stats.col_might'))}${Number.isFinite(week) ? ` · <span class="${week >= 0 ? 'name-ok' : 'name-warn'}">${week >= 0 ? '+' : '−'}${escapeHtml(might(Math.abs(week)))}</span> ${escapeHtml(t('stats.col_week'))}` : ''}${memberLine.length ? ` · ${escapeHtml(t('stats.growth_members', { n: memberLine[memberLine.length - 1] }))}` : ''}</p>
+        ${chart}
+        <p class="tracker-credit">${ic('users')}${escapeHtml(t('stats.growth_more'))} <a href="/${document.documentElement.lang || 'en'}/alliance.html#nap-stats">${escapeHtml(t('stats.growth_link'))}</a></p>`;
     }
 
     /** Chests as coloured icons with counts (names in the tooltip): gold, purple, blue. */
@@ -167,33 +337,33 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       // 1. Period and Kingdom War result
       const clock = (iso) => `<span data-countdown="${escapeHtml(iso)}">${escapeHtml(countdown(iso))}</span>`;
       const status = p.open
-        ? `<span title="${escapeHtml(t('rewards_card.closes_at', { when: when(p.closesAt) }))}">🟢 <strong>${escapeHtml(t('rewards_card.open'))}</strong> · ${th('rewards_card.time_left', { time: clock(p.closesAt) })}</span>`
-        : `<span title="${escapeHtml(t('rewards_card.opens_at', { when: when(p.nextOpensAt) }))}">⚪ <strong>${escapeHtml(t('rewards_card.closed'))}</strong> · ${th('rewards_card.opens_in', { time: clock(p.nextOpensAt) })}</span>`;
+        ? `<span title="${escapeHtml(t('rewards_card.closes_at', { when: when(p.closesAt) }))}">${ic('dot', 'ok')}<strong>${escapeHtml(t('rewards_card.open'))}</strong> · ${th('rewards_card.time_left', { time: clock(p.closesAt) })}</span>`
+        : `<span title="${escapeHtml(t('rewards_card.opens_at', { when: when(p.nextOpensAt) }))}">${ic('dot', 'wait')}<strong>${escapeHtml(t('rewards_card.closed'))}</strong> · ${th('rewards_card.opens_in', { time: clock(p.nextOpensAt) })}</span>`;
       const war = !p.kwWeek
         ? `<span class="dash-pill">${escapeHtml(t('rewards_card.off_week'))}</span>`
         : p.result === 'won'
-          ? `<span class="dash-pill is-good">${escapeHtml(t('rewards_card.kw_won'))}</span>`
+          ? `<span class="dash-pill is-good">${ic('trophy')}${escapeHtml(t('rewards_card.kw_won'))}</span>`
           : p.result === 'lost'
-            ? `<span class="dash-pill">${escapeHtml(t('rewards_card.kw_lost'))}</span>`
-            : `<span class="dash-pill is-wait">${escapeHtml(t('rewards_card.kw_pending'))}</span>`;
+            ? `<span class="dash-pill">${ic('shield')}${escapeHtml(t('rewards_card.kw_lost'))}</span>`
+            : `<span class="dash-pill is-wait">${ic('hourglass')}${escapeHtml(t('rewards_card.kw_pending'))}</span>`;
 
       // 2. Chests: set 1 always; set 2 when won, greyed "if won" while pending
       let set2 = '';
-      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_two'))}">⚔️ ${chestIcons(r.chests, 'kingdom_war')}</span>`;
-      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="${escapeHtml(t('rewards_card.set_two_if_won'))}">⚔️ ${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>${escapeHtml(t('rewards_card.if_won'))}</small></span>`;
+      if (p.kwWeek && p.result === 'won') set2 = `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_two'))}">${ic('swords')}${chestIcons(r.chests, 'kingdom_war')}</span>`;
+      else if (p.kwWeek && p.result !== 'lost') set2 = `<span class="dash-set is-maybe" title="${escapeHtml(t('rewards_card.set_two_if_won'))}">${ic('swords')}${chestIcons(r.chestsIfWon, 'kingdom_war')}<small>${escapeHtml(t('rewards_card.if_won'))}</small></span>`;
       const chests = r.rank
-        ? `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_one'))}">👑 ${chestIcons(r.chests, 'standard')}</span>${set2}`
+        ? `<span class="dash-set" title="${escapeHtml(t('rewards_card.set_one'))}">${ic('crown')}${chestIcons(r.chests, 'standard')}</span>${set2}`
         : `<span class="dash-warn">${escapeHtml(t('rewards_card.no_rank'))}</span>`;
 
       // 3. The list
       const list = n.submitted
-        ? `<span title="${n.submittedAt ? escapeHtml(t('rewards_card.sent_at', { when: when(n.submittedAt) })) : ''}">${escapeHtml(t('rewards_card.list_sent', { count: n.ranked }))}${n.reserves ? ` <span class="dash-muted">${escapeHtml(tn('rewards_card.reserves', n.reserves))}</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${escapeHtml(t('rewards_card.empty_slots', { n: n.unfilled }))}</span>` : ''}</span>`
+        ? `<span title="${n.submittedAt ? escapeHtml(t('rewards_card.sent_at', { when: when(n.submittedAt) })) : ''}">${ic('check', 'ok')}${escapeHtml(t('rewards_card.list_sent', { count: n.ranked }))}${n.reserves ? ` <span class="dash-muted">${escapeHtml(tn('rewards_card.reserves', n.reserves))}</span>` : ''}${n.unfilled ? ` · <span class="dash-warn">${escapeHtml(t('rewards_card.empty_slots', { n: n.unfilled }))}</span>` : ''}</span>`
         : p.open
-          ? `<span class="dash-warn">${escapeHtml(t('rewards_card.list_not_sent'))}</span>`
+          ? `<span class="dash-warn">${ic('warning', 'warn')}${escapeHtml(t('rewards_card.list_not_sent'))}</span>`
           : `<span class="dash-muted">${escapeHtml(t('rewards_card.no_list_closed'))}</span>`;
       let action = '';
       if (p.open && data.viewer.canNominate) {
-        action = `<button type="button" class="dash-btn" id="dash-nominate">${escapeHtml(t(n.submitted ? 'rewards_card.edit_list' : 'rewards_card.send_list'))}</button>`;
+        action = readOnly ? '' : `<button type="button" class="dash-btn" id="dash-nominate">${ic('pencil')}${escapeHtml(t(n.submitted ? 'rewards_card.edit_list' : 'rewards_card.send_list'))}</button>`;
       } else if (p.open) {
         action = `<span class="dash-muted dash-small" title="${escapeHtml(t('rewards_card.ask_r5_help'))}">${escapeHtml(t('rewards_card.ask_r5'))}</span>`;
       }
@@ -201,9 +371,9 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       // 4. Buyout, only when it applies
       const gold = '<span class="chest-glyph gold"></span>';
       const buyout = r.hasBuyoutBonus
-        ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_bonus_help') + (r.buyoutThreat ? ` · ${t('rewards_card.buyout_threat', { threat: r.buyoutThreat })}` : ''))}"><span>${th('rewards_card.buyout_bonus', { amount: '<strong>+1</strong>', chest: gold })}</span></div>`
+        ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_bonus_help') + (r.buyoutThreat ? ` · ${t('rewards_card.buyout_threat', { threat: r.buyoutThreat })}` : ''))}"><span>${ic('shield')}${th('rewards_card.buyout_bonus', { amount: '<strong>+1</strong>', chest: gold })}</span></div>`
         : r.isWloDeducted
-          ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_cost_help'))}"><span>${th('rewards_card.buyout_cost', { amount: '<strong>−1</strong>', chest: gold })}</span></div>`
+          ? `<div class="dash-line dash-small" title="${escapeHtml(t('rewards_card.buyout_cost_help'))}"><span>${ic('scale')}${th('rewards_card.buyout_cost', { amount: '<strong>−1</strong>', chest: gold })}</span></div>`
           : '';
 
       $('dash-rewards-body').innerHTML =
@@ -275,6 +445,41 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       return f <= t ? n >= f && n <= t : n >= f || n <= t; // a window past midnight
     }
 
+    /**
+     * A typed player name checked against the alliance's member list (js/name-check.js,
+     * from the Last Asylum Tracker): the line under the name box. Only advice: an unknown
+     * name is still saved. '' when there is no list or no name.
+     */
+    function nameHint(name) {
+      const r = window.NameCheck && window.NameCheck.checkName(name, data.members);
+      if (!r) return '';
+      const tag = data.alliance.tag;
+      if (r.status === 'ok') return `<span class="name-ok">${ic('check', 'ok')}${escapeHtml(t('caravan.name_ok', { tag }))}</span>`;
+      const pick = (n) => `<button type="button" class="dash-link-btn" data-cv-name="${escapeHtml(n)}">${escapeHtml(n)}</button>`;
+      if (r.status === 'spelling') return `<span class="name-warn">${ic('pencil', 'warn')}${escapeHtml(t('caravan.name_spelling'))} ${pick(r.match)}</span>`;
+      return `<span class="name-warn">${ic('warning', 'warn')}${escapeHtml(t('caravan.name_unknown', { tag }))}${r.suggestions.length ? ` ${escapeHtml(t('caravan.name_did_you_mean'))} ${r.suggestions.map(pick).join(', ')}` : ''}</span>`;
+    }
+
+    /** The name boxes' hints, and a tap on a suggested name puts it in its box. */
+    function wireNameHints(root) {
+      root.querySelectorAll('input[data-name-hint]').forEach((box) => {
+        const hint = root.querySelector(`#${box.dataset.nameHint}`);
+        if (!hint) return;
+        const show = () => {
+          hint.innerHTML = nameHint(box.value);
+        };
+        box.addEventListener('input', show);
+        hint.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-cv-name]');
+          if (!b) return;
+          box.value = b.dataset.cvName;
+          show();
+          box.focus();
+        });
+        if (box.value) show();
+      });
+    }
+
     function renderCaravan() {
       const el = $('dash-caravan');
       const c = data.dashboard && data.dashboard.caravan;
@@ -293,54 +498,65 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       const row = (p) => {
         if (leader && caravanEditing === p.id) {
           return `<li class="dash-cv-row is-editing" data-id="${escapeHtml(p.id)}">
-            <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="${escapeHtml(t('caravan.name'))}">
+            <input type="text" class="cv-name" maxlength="40" value="${escapeHtml(p.name)}" aria-label="${escapeHtml(t('caravan.name'))}" list="cv-member-names" data-name-hint="cv-edit-hint" autocomplete="off">
             <input type="text" class="cv-from" value="${escapeHtml(p.from || '')}" placeholder="18:00" aria-label="${escapeHtml(t('caravan.from'))}">
             <input type="text" class="cv-to" value="${escapeHtml(p.to || '')}" placeholder="22:00" aria-label="${escapeHtml(t('caravan.to'))}">
-            <button type="button" class="dash-icon-btn" data-cv="save-edit" aria-label="${escapeHtml(t('common.save'))}">💾</button>
+            <button type="button" class="dash-icon-btn" data-cv="save-edit" aria-label="${escapeHtml(t('common.save'))}">${ic('save', 'solo')}</button>
             <button type="button" class="dash-icon-btn" data-cv="cancel-edit" aria-label="${escapeHtml(t('common.cancel'))}">✕</button>
+            <div class="dash-cv-hint dash-small" id="cv-edit-hint" aria-live="polite"></div>
           </li>`;
         }
         const tools = leader
           ? p.picked
             ? `<button type="button" class="dash-icon-btn" data-cv="unpick" title="${escapeHtml(t('caravan.back_to_available'))}">${escapeHtml(t('common.undo'))}</button>`
             : `<button type="button" class="dash-btn" data-cv="pick">${escapeHtml(t('caravan.pick'))}</button>
-               <button type="button" class="dash-icon-btn" data-cv="edit" title="${escapeHtml(t('common.edit'))}" aria-label="${escapeHtml(t('common.edit'))}">✏️</button>
-               <button type="button" class="dash-icon-btn" data-cv="remove" title="${escapeHtml(t('common.remove'))}" aria-label="${escapeHtml(t('common.remove'))}">🗑️</button>`
+               <button type="button" class="dash-icon-btn" data-cv="edit" title="${escapeHtml(t('common.edit'))}" aria-label="${escapeHtml(t('common.edit'))}">${ic('pencil', 'solo')}</button>
+               <button type="button" class="dash-icon-btn" data-cv="remove" title="${escapeHtml(t('common.remove'))}" aria-label="${escapeHtml(t('common.remove'))}">${ic('trash', 'solo')}</button>`
           : '';
         const pickedText = p.picked
           ? `<span class="dash-muted">✓ ${new Date(p.picked.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}${p.picked.by ? ` · ${escapeHtml(p.picked.by)}` : ''}</span>`
           : windowText(p);
+        // Leaders: a mark on a name the member list doesn't have exactly
+        const check = leader && window.NameCheck ? window.NameCheck.checkName(p.name, data.members) : null;
+        const flag =
+          check && check.status !== 'ok'
+            ? ` <span class="name-flag" title="${escapeHtml(check.status === 'spelling' ? t('caravan.name_flag_spelling', { name: check.match }) : t('caravan.name_unknown', { tag: data.alliance.tag }))}">${ic('warning', 'warn')}</span>`
+            : '';
         return `<li class="dash-cv-row${p.picked ? ' is-picked' : ''}" data-id="${escapeHtml(p.id)}">
-          <span class="dash-cv-name">${escapeHtml(p.name)}</span>
+          <span class="dash-cv-name">${window.PlayerPortrait ? window.PlayerPortrait.portraitFor(p.name, data.pictures) : ''}${escapeHtml(p.name)}${flag}</span>
           <span class="dash-cv-when">${pickedText}</span>
           <span class="dash-cv-tools">${tools}</span>
         </li>`;
       };
 
       el.innerHTML = `
-        <h3 class="dash-card-title" id="dash-caravan-title">${escapeHtml(t('caravan.title'))} <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span></h3>
+        <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))} <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span></h3>
         ${leader ? `<div class="dash-cv-bar">
-          <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${escapeHtml(t('caravan.members_can_view'))}</label>
+          <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${ic('users')}${escapeHtml(t('caravan.members_can_view'))}</label>
           <span class="dash-cv-actions">
-            <button type="button" class="dash-icon-btn" data-cv="copy">${escapeHtml(t('caravan.copy_status'))}</button>
-            <button type="button" class="dash-icon-btn" data-cv="new-week">${escapeHtml(t('caravan.new_week'))}</button>
+            <button type="button" class="dash-icon-btn" data-cv="copy">${ic('clipboard')}${escapeHtml(t('caravan.copy_status'))}</button>
+            <button type="button" class="dash-icon-btn" data-cv="new-week">${ic('refresh')}${escapeHtml(t('caravan.new_week'))}</button>
           </span>
-        </div>` : `<div class="dash-cv-bar"><span class="dash-muted dash-small">${escapeHtml(t('caravan.member_note'))}</span><button type="button" class="dash-icon-btn" data-cv="copy">${escapeHtml(t('caravan.copy_status'))}</button></div>`}
+        </div>` : `<div class="dash-cv-bar"><span class="dash-muted dash-small">${escapeHtml(t('caravan.member_note'))}</span><button type="button" class="dash-icon-btn" data-cv="copy">${ic('clipboard')}${escapeHtml(t('caravan.copy_status'))}</button></div>`}
         <div class="dash-cv-filters">
           <input type="search" id="cv-search" placeholder="${escapeHtml(t('caravan.search'))}" value="${escapeHtml(caravanFilter.text)}" aria-label="${escapeHtml(t('caravan.search'))}">
-          <button type="button" class="dash-icon-btn" data-cv="now" aria-pressed="${caravanFilter.now}" title="${escapeHtml(t('caravan.around_now_help'))}">${escapeHtml(t('caravan.around_now'))} <small>${escapeHtml(nowText)}</small></button>
+          <button type="button" class="dash-icon-btn" data-cv="now" aria-pressed="${caravanFilter.now}" title="${escapeHtml(t('caravan.around_now_help'))}">${ic('clock')}${escapeHtml(t('caravan.around_now'))} <small>${escapeHtml(nowText)}</small></button>
         </div>
         <div class="dash-cv-head">${escapeHtml(t('caravan.available', { n: all.length - picked.length }))}</div>
-        <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t(all.length - picked.length ? 'caravan.nobody_matches' : all.length ? 'caravan.everyone_picked' : leader ? 'caravan.add_players' : 'caravan.no_players'))}</li>`}</ul>
+        <ul class="dash-cv-list">${available.map(row).join('') || `<li class="dash-cv-empty">${!(all.length - picked.length) && all.length ? ic('sparkles', 'ok') : ''}${escapeHtml(t(all.length - picked.length ? 'caravan.nobody_matches' : all.length ? 'caravan.everyone_picked' : leader ? 'caravan.add_players' : 'caravan.no_players'))}</li>`}</ul>
         ${picked.length ? `<details class="dash-cv-picked"${leader ? '' : ' open'}><summary>${escapeHtml(t('caravan.picked', { n: picked.length }))}</summary><ul class="dash-cv-list">${picked.map(row).join('')}</ul></details>` : ''}
         ${leader ? `<form class="dash-cv-add" id="cv-add">
-          <input type="text" id="cv-add-name" maxlength="40" placeholder="${escapeHtml(t('caravan.player_name'))}" aria-label="${escapeHtml(t('caravan.player_name'))}">
+          <input type="text" id="cv-add-name" maxlength="40" placeholder="${escapeHtml(t('caravan.player_name'))}" aria-label="${escapeHtml(t('caravan.player_name'))}" list="cv-member-names" data-name-hint="cv-add-hint" autocomplete="off">
           <input type="text" id="cv-add-from" placeholder="${escapeHtml(t('caravan.add_from'))}" aria-label="${escapeHtml(t('caravan.add_from_label'))}">
           <input type="text" id="cv-add-to" placeholder="${escapeHtml(t('caravan.add_to'))}" aria-label="${escapeHtml(t('caravan.add_to_label'))}">
-          <button type="submit" class="dash-btn">${escapeHtml(t('caravan.add'))}</button>
+          <button type="submit" class="dash-btn">${ic('plus')}${escapeHtml(t('caravan.add'))}</button>
         </form>
+        <div class="dash-cv-hint dash-small" id="cv-add-hint" aria-live="polite"></div>
+        ${Array.isArray(data.members) || data.pictures ? trackerCredit() : ''}
         <div class="dash-muted dash-small">${escapeHtml(t('caravan.times_help'))}</div>
-        <div class="dash-error" id="cv-error"></div>` : ''}`;
+        <div class="dash-error" id="cv-error"></div>
+        ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}`;
+      if (leader) wireNameHints(el);
       const search = $('cv-search');
       search.addEventListener('input', () => {
         caravanFilter.text = search.value;
@@ -356,6 +572,171 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         const ok = await caravanChange({ action: 'caravan-add', name: $('cv-add-name').value, from: $('cv-add-from').value, to: $('cv-add-to').value });
         if (ok) $('cv-add-name')?.focus();
       });
+    }
+
+    /** "Player data from the Last Asylum Tracker" (owner request: wherever its data shows). */
+    function trackerCredit() {
+      return `<p class="tracker-credit">${ic('users')}${escapeHtml(t('roster.credit_before'))} <a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a></p>`;
+    }
+
+    /**
+     * A player's picture in its frame: their own picture from the game's image server (no
+     * referrer sent), or our copy of a default portrait, with our copy of their frame on top.
+     * Addresses come from the server (api/_tracker.js pictureUrl), which only lets those two
+     * kinds through; without a picture, the name's first letter.
+     */
+    function portrait(m, size = 'md') {
+      return window.PlayerPortrait ? window.PlayerPortrait.portrait(m, size) : '';
+    }
+
+    // The game's daily limit on helps (owner, 2026-11-19): reaching it is marked in the roster
+    const HELP_CAP = 1000;
+    // Minutes between two roster refreshes (as api/_dashboard.js REFRESH_COOLDOWN_MIN)
+    const REFRESH_COOLDOWN_MIN = 10;
+
+    let rosterView = { text: '', sort: 'power' };
+    const ROSTER_SORTS = {
+      power: (a, b) => b.power - a.power,
+      name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+      rank: (a, b) => (b.rank || '').localeCompare(a.rank || '') || b.power - a.power,
+      // Leaders: today's research donations and help
+      tech: (a, b) => (b.tech || 0) - (a.tech || 0) || b.power - a.power,
+      help: (a, b) => (b.help || 0) - (a.help || 0) || b.power - a.power,
+    };
+
+    /** Might as players read it: 1.23B, 456.7M */
+    function might(n) {
+      if (!Number.isFinite(n)) return '—';
+      return n >= 1e9 ? `${(n / 1e9).toFixed(2)}B` : `${(n / 1e6).toFixed(1)}M`;
+    }
+
+    /**
+     * How current today's numbers are: they count from the game's daily reset (00:00 GT,
+     * 02:00 UTC), and the tracker's copy of the roster can be hours old.
+     */
+    function dailyNote(takenAt) {
+      const at = Date.parse(takenAt);
+      if (!Number.isFinite(at)) return t('roster.daily_unknown');
+      const now = new Date();
+      let reset = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 2);
+      if (reset > now.getTime()) reset -= 86400000;
+      const time = new Date(at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+      return t(at >= reset ? 'roster.daily_as_of' : 'roster.daily_old', { time });
+    }
+
+    /**
+     * The roster's Refresh button (leaders): live numbers from the game, shared by the
+     * alliance's leaders: a few a day, one every few minutes (api/dashboard.js refreshRoster).
+     */
+    function refreshButton(state) {
+      if (!state) return '';
+      const last = Date.parse(state.lastAt || '');
+      const waitMin = Number.isFinite(last) ? Math.ceil((last + REFRESH_COOLDOWN_MIN * 60000 - Date.now()) / 60000) : 0;
+      const why = !state.left
+        ? t('roster.refresh_none')
+        : waitMin > 0
+          ? t('roster.refresh_wait', { n: waitMin })
+          : t('roster.refresh_help', { n: state.left, max: state.max });
+      const off = !state.left || waitMin > 0;
+      return `<button type="button" class="dash-icon-btn" id="roster-refresh"${off ? ' disabled' : ''} title="${escapeHtml(why)}">${ic('refresh')}${escapeHtml(t('roster.refresh'))} <small>${escapeHtml(t('roster.refresh_left', { n: state.left }))}</small></button>`;
+    }
+
+    async function refreshRoster() {
+      const btn = $('roster-refresh');
+      btn.disabled = true;
+      btn.innerHTML = ic('refresh') + escapeHtml(t('roster.refreshing'));
+      try {
+        const res = await fetch('/api/dashboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+          body: JSON.stringify({ action: 'roster-refresh', alliance: data.alliance.tag }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        data.roster = body.roster;
+        data.members = body.members;
+        renderRoster();
+        renderCaravan();
+      } catch (err) {
+        alert(err.message);
+        renderRoster();
+      }
+    }
+
+    function renderRoster() {
+      const el = $('dash-roster');
+      const r = data.roster;
+      el.hidden = !r;
+      if (!r) return;
+      const leader = isLeader();
+      const all = r.members || [];
+      // Today's research donations and help: leaders only (the server sends them only to them)
+      const giving = leader && all.some((m) => m.tech !== undefined);
+      if (!giving && (rosterView.sort === 'tech' || rosterView.sort === 'help')) rosterView.sort = 'power';
+      // The game leaves out a member who hasn't donated or helped yet today: that's 0
+      // (checked 2026-11-19: just after reset most members have no number, and none has 0)
+      const amount = (n) => escapeHtml((Number.isFinite(n) ? n : 0).toLocaleString());
+      const q = rosterView.text.trim().toLowerCase();
+      const shown = all
+        .filter((m) => !q || m.name.toLowerCase().includes(q) || String(m.uid).includes(q))
+        .sort(ROSTER_SORTS[rosterView.sort]);
+      const row = (m) => `<li class="dash-roster-row">
+          ${portrait(m)}
+          <span class="dash-roster-who">
+            <span class="dash-roster-name">${escapeHtml(m.name)}</span>
+            <span class="dash-muted dash-small">${m.rank ? `${escapeHtml(m.rank)} · ` : ''}<button type="button" class="dash-link-btn dash-roster-id" data-roster-id="${escapeHtml(m.uid)}" title="${escapeHtml(t('roster.copy_id'))}">ID ${escapeHtml(m.uid)}</button></span>
+          </span>
+          <span class="dash-roster-stats">
+            <span class="dash-roster-might">${might(m.power)}</span>
+            ${m.level ? `<span class="dash-muted dash-small">${escapeHtml(t('roster.sanctuary_lv', { n: m.level }))}</span>` : ''}
+            ${giving ? `<span class="dash-roster-giving dash-small"><span title="${escapeHtml(t('roster.tech_title'))}">${ic('flask')}${amount(m.tech)}</span>${m.help >= HELP_CAP ? `<span class="is-capped" title="${escapeHtml(t('roster.help_capped'))}">${ic('helping', 'ok')}${amount(m.help)}</span>` : `<span title="${escapeHtml(t('roster.help_title'))}">${ic('helping')}${amount(m.help)}</span>`}</span>` : ''}
+          </span>
+        </li>`;
+      const sorts = ['power', 'name', 'rank', ...(giving ? ['tech', 'help'] : [])]
+        .map((k) => `<button type="button" class="dash-icon-btn" data-roster-sort="${k}" aria-pressed="${rosterView.sort === k}">${escapeHtml(t(`roster.sort_${k}`))}</button>`)
+        .join('');
+      el.innerHTML = `
+        <div class="dash-roster-head">
+          <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}</h3>
+          ${refreshButton(r.refresh)}
+        </div>
+        ${r.members ? `<p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span></p>` : ''}
+        ${r.members
+          ? `<div class="dash-cv-filters">
+              <input type="search" id="roster-search" placeholder="${escapeHtml(t('roster.search'))}" value="${escapeHtml(rosterView.text)}" aria-label="${escapeHtml(t('roster.search'))}">
+              <span class="dash-roster-sorts" role="group" aria-label="${escapeHtml(t('roster.sort_label'))}">${sorts}</span>
+            </div>
+            <ul class="dash-roster-list">${shown.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t('caravan.nobody_matches'))}</li>`}</ul>
+            ${giving ? `<p class="dash-muted dash-small dash-roster-daily">${ic('clock')}${escapeHtml(dailyNote(r.takenAt))}</p>` : ''}`
+          : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>`}
+        ${trackerCredit()}`;
+      const search = $('roster-search');
+      search?.addEventListener('input', () => {
+        rosterView.text = search.value;
+        const pos = search.selectionStart;
+        renderRoster();
+        const again = $('roster-search');
+        again.focus();
+        again.setSelectionRange(pos, pos);
+      });
+      el.querySelectorAll('[data-roster-sort]').forEach((b) =>
+        b.addEventListener('click', () => {
+          rosterView.sort = b.dataset.rosterSort;
+          renderRoster();
+        }),
+      );
+      el.querySelectorAll('[data-roster-id]').forEach((b) =>
+        b.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(b.dataset.rosterId);
+            b.textContent = t('roster.copied');
+            setTimeout(() => (b.textContent = `ID ${b.dataset.rosterId}`), 1200);
+          } catch {
+            // No clipboard (an old browser): the ID stays visible to copy by hand
+          }
+        }),
+      );
+      $('roster-refresh')?.addEventListener('click', refreshRoster);
     }
 
     async function caravanChange(change) {
@@ -434,30 +815,33 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
     // ---------- Charts and tables ----------
     const W = window.DashboardWidgets;
     const TYPES = ['bar', 'line', 'pie', 'progress', 'table'].map((type) => [type, t(`chart_editor.type_${type}`)]);
+    const TYPE_ICONS = { bar: 'bar_chart', line: 'line_chart', pie: 'pie_chart', progress: 'target', table: 'table' };
     let editing = false;
 
+    // Leader tools; none on a saved copy (readOnly) until the server has answered
     function isLeader() {
-      return data && data.viewer.tier !== 'member';
+      return Boolean(data) && !readOnly && data.viewer.tier !== 'member';
     }
 
     function widgetCard(w, i, count) {
       const vis = t(w.visibility === 'members' ? 'dashboard.visible_members' : 'dashboard.visible_officers');
+      const visIcon = ic(w.visibility === 'members' ? 'users' : 'lock');
       const linked = w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc');
       const day = (iso) => new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
       const updated = linked
-        ? `🔗 ${t(w.source.kind === 'doc' ? 'dashboard.google_doc' : 'dashboard.google_sheet')}${w.syncedAt ? ` · ${t('dashboard.synced', { when: day(w.syncedAt) })}` : ''}`
+        ? `${t(w.source.kind === 'doc' ? 'dashboard.google_doc' : 'dashboard.google_sheet')}${w.syncedAt ? ` · ${t('dashboard.synced', { when: day(w.syncedAt) })}` : ''}`
         : w.updatedAt
           ? t('dashboard.updated', { when: new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) })
           : '';
-      const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
+      const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${ic('refresh')}${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
       const tool = (act, label, glyph, off) =>
         `<button type="button" class="dash-icon-btn" data-act="${act}" ${off ? 'disabled' : ''} title="${escapeHtml(t(label))}" aria-label="${escapeHtml(t(label))}">${glyph}</button>`;
       const tools = editing
-        ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲', i === 0)}${tool('down', 'common.move_down', '▼', i === count - 1)}${tool('edit', 'common.edit', '✏️')}${tool('delete', 'common.delete', '🗑️')}</div>`
+        ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲', i === 0)}${tool('down', 'common.move_down', '▼', i === count - 1)}${tool('edit', 'common.edit', ic('pencil', 'solo'))}${tool('delete', 'common.delete', ic('trash', 'solo'))}</div>`
         : '';
-      return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}">
+      return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}" data-type="${escapeHtml(w.type || '')}">
         <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
-        <div class="dash-widget-meta">${isLeader() ? `<span>${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${escapeHtml(updated)}</span>` : ''}${sync}</div>
+        <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}${sync}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
         <div class="dash-widget-body">${W.render(w)}</div>
       </article>`;
@@ -471,8 +855,9 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       $('dash-edit-toggle').setAttribute('aria-pressed', String(editing));
       // Always beside Edit Dashboard (greyed out until editing), so Edit doesn't shift
       $('dash-add').disabled = !editing;
+      renderImages();
       if (!list.length) {
-        el.innerHTML = `<div class="dash-card dash-empty">${escapeHtml(
+        el.innerHTML = `<div class="dash-card dash-empty">${ic('bar_chart')}${escapeHtml(
           t(!isLeader() ? 'dashboard.empty_member' : editing ? 'dashboard.empty_editing' : 'dashboard.empty_leader'),
         )}</div>`;
         return;
@@ -482,6 +867,36 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         const w = list.find((x) => x.id === card.dataset.id);
         W.mount(card.querySelector('.dash-widget-body'), w);
       });
+    }
+
+    // The alliance's card pictures: their own section and Edit button, after the charts
+    function renderImages() {
+      const el = $('dash-images');
+      const show = isLeader() && Boolean(data.images) && Boolean(window.AllianceImages);
+      el.hidden = !show;
+      if (!show) return window.AllianceImages?.close(el);
+      window.AllianceImages.render(el, {
+        alliance: data.alliance,
+        images: data.images,
+        steward: data.viewer.tier === 'steward',
+        pass: loginPass,
+        onChange: refresh,
+      });
+    }
+
+    /** Fetches the dashboard again without leaving edit mode (after an image change). */
+    async function refresh() {
+      try {
+        const res = await fetch(`/api/dashboard?alliance=${encodeURIComponent(data.alliance.tag)}`, {
+          headers: { Authorization: `Bearer ${loginPass()}` },
+        });
+        if (!res.ok) return;
+        data = await res.json();
+        render();
+        remember();
+      } catch (e) {
+        // No connection: what's shown stays; the next visit loads it
+      }
     }
 
     $('dash-edit-toggle').addEventListener('click', () => {
@@ -498,11 +913,11 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
       if (act === 'sync') {
         b.disabled = true;
-        b.textContent = t('dashboard.syncing');
+        b.innerHTML = ic('refresh') + escapeHtml(t('dashboard.syncing'));
         const error = await save({ action: 'sync-widget', id });
         if (error && document.body.contains(b)) {
           b.disabled = false;
-          b.textContent = t('dashboard.sync_now');
+          b.innerHTML = ic('refresh') + escapeHtml(t('dashboard.sync_now'));
         }
         return;
       }
@@ -526,7 +941,9 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
         data.dashboard = body.dashboard;
         renderCaravan();
+        renderRoster();
         renderWidgets();
+        remember();
         return '';
       } catch (err) {
         if (!change.widget && !quiet) alert(t('common.not_saved', { error: err.message }));
@@ -535,6 +952,10 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
     }
 
     // ---------- The editor ----------
+    // Line icons for "Who can see it" (js/site-select.js): a lock, and a group of people
+    const ICON_LOCK = '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>';
+    const ICON_MEMBERS =
+      '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>';
     function closeEditor() {
       $('dash-editor').hidden = true;
       $('dash-editor').innerHTML = '';
@@ -548,22 +969,22 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
       ed.hidden = false;
       const e = (key) => escapeHtml(t(`chart_editor.${key}`));
       ed.innerHTML = `
-        <h3 class="dash-card-title">${e(existing ? 'edit_title' : 'new_title')}</h3>
+        <h3 class="dash-card-title">${ic(existing ? 'pencil' : 'plus')}${e(existing ? 'edit_title' : 'new_title')}</h3>
         <label>${e('type')}</label>
-        <div class="dash-types" id="ed-types" role="group" aria-label="${e('type')}">${TYPES.map(([type, name]) => `<button type="button" data-type="${type}" aria-pressed="${w.type === type}">${escapeHtml(name)}</button>`).join('')}</div>
+        <div class="dash-types" id="ed-types" role="group" aria-label="${e('type')}">${TYPES.map(([type, name]) => `<button type="button" data-type="${type}" aria-pressed="${w.type === type}">${ic(TYPE_ICONS[type])}${escapeHtml(name)}</button>`).join('')}</div>
         <label for="ed-title">${e('title')}</label>
         <input type="text" id="ed-title" maxlength="80" value="${escapeHtml(w.title)}" placeholder="${e('title_example')}">
         <label for="ed-note">${e('note')} <span class="dash-muted">${escapeHtml(t('common.optional'))}</span></label>
         <textarea id="ed-note" rows="2" maxlength="400" placeholder="${e('note_example')}">${escapeHtml(w.note)}</textarea>
         <label for="ed-vis">${e('who_sees')}</label>
-        <select id="ed-vis">
-          <option value="r4_only"${w.visibility !== 'members' ? ' selected' : ''}>${e('officers_only')}</option>
-          <option value="members"${w.visibility === 'members' ? ' selected' : ''}>${e('all_members')}</option>
+        <select id="ed-vis" data-site-select>
+          <option value="r4_only" data-icon="${escapeHtml(ICON_LOCK)}"${w.visibility !== 'members' ? ' selected' : ''}>${e('officers_only')}</option>
+          <option value="members" data-icon="${escapeHtml(ICON_MEMBERS)}"${w.visibility === 'members' ? ' selected' : ''}>${e('all_members')}</option>
         </select>
         <label>${e('data')}</label>
         <div class="dash-types dash-src" role="group" aria-label="${e('data_source')}">
-          <button type="button" data-src="paste" aria-pressed="true">${e('paste')}</button>
-          <button type="button" data-src="link" aria-pressed="false">${e('link')}</button>
+          <button type="button" data-src="paste" aria-pressed="true">${ic('clipboard')}${e('paste')}</button>
+          <button type="button" data-src="link" aria-pressed="false">${ic('link')}${e('link')}</button>
         </div>
         <div id="ed-src-paste">
           <div class="dash-muted dash-small">${e('paste_help')}</div>
@@ -587,12 +1008,12 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         <div class="dash-error" id="ed-error"></div>
         <div class="dash-editor-actions">
           <button type="button" class="dash-icon-btn" id="ed-cancel">${escapeHtml(t('common.cancel'))}</button>
-          <button type="button" class="submit-plan-btn" id="ed-save">${escapeHtml(t('common.save'))}</button>
+          <button type="button" class="submit-plan-btn" id="ed-save">${ic('save')}${escapeHtml(t('common.save'))}</button>
         </div>`;
       $('ed-paste').value = w.data.columns.length ? W.toText(w.data) : '';
 
       const colSelect = (id, value, { none } = {}) =>
-        `<select id="${id}">${none ? `<option value="">${none}</option>` : ''}${w.data.columns
+        `<select id="${id}" data-site-select>${none ? `<option value="">${none}</option>` : ''}${w.data.columns
           .map((c, i) => `<option value="${i}"${Number(value) === i && value !== '' && value !== undefined ? ' selected' : ''}>${escapeHtml(c)}</option>`)
           .join('')}</select>`;
 
@@ -656,21 +1077,21 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         }
         if (w.type === 'bar') {
           html += `<label for="ed-stacked">${e('several_columns')}</label>
-            <select id="ed-stacked">
+            <select id="ed-stacked" data-site-select>
               <option value=""${!o.stacked ? ' selected' : ''}>${e('side_by_side')}</option>
               <option value="sum"${o.stacked === 'sum' ? ' selected' : ''}>${e('stacked_totals')}</option>
               <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>${e('stacked_percent')}</option>
             </select>`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> ${e(o.stacked ? 'vertical' : 'vertical_leaderboard')}</label>`;
-          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
-          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${e('traffic_reverse')}</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${ic('traffic')}${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${ic('updown')}${e('traffic_reverse')}</label>`;
         }
         if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> ${e('donut')}</label>`;
         if (w.type === 'progress') {
           html += `<label for="ed-target">${e('target')}</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="${e('target_example')}">`;
           html += `<label for="ed-targetcol">${e('target_column')}</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: e('use_number_above') })}`;
-          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${e('traffic_target')}</label>`;
-          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${e('traffic_target_reverse')}</label>`;
+          html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${ic('traffic')}${e('traffic_target')}</label>`;
+          if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${ic('updown')}${e('traffic_target_reverse')}</label>`;
         }
         if (w.type === 'table') {
           html += `<label for="ed-hlcol">${e('highlight_where')}</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: e('no_highlight') })}`;
@@ -854,7 +1275,7 @@ strings: [dashboard, rewards_card, caravan, chart_editor, charts]
         btn.textContent = t('common.saving');
         const error = await save({ action: 'save-widget', widget: w });
         btn.disabled = false;
-        btn.textContent = t('common.save');
+        btn.innerHTML = ic('save') + escapeHtml(t('common.save'));
         if (error) $('ed-error').textContent = error;
         else closeEditor();
       });

@@ -10,6 +10,9 @@ html {
   -webkit-text-size-adjust: 100%;
   overflow: hidden;
   touch-action: manipulation;
+  /* No blue flash over whatever is tapped (phone browsers): buttons and links show their own
+     pressed and active styles. Keyboard focus keeps its ring (:focus-visible). */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {

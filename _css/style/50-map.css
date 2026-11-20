@@ -120,6 +120,16 @@ svg #layer1 path:hover {
   animation: territory-flash 2s ease-in-out infinite alternate;
 }
 
+/* Past 6× zoom (svg.is-deep, js/map-zoom.js) territories drop the vignette (owner,
+   2026-11-20: dragging the zoomed-in map lagged, worst above WLO's hive). The filter blurs
+   each territory's edge by 40 map units, re-worked over the whole territory on every frame:
+   at 70× that is a blur thousands of pixels wide. Measured in the game view: 400–650ms a drag
+   frame with it, 35–45ms without. That far in, the darkened edges are off the screen anyway. */
+.game-map svg.is-deep #layer1 path,
+.game-map svg.is-deep #layer1 path:hover {
+  filter: none !important;
+}
+
 .territory-label {
   text-anchor: middle !important;
   dominant-baseline: central;
@@ -203,6 +213,27 @@ svg #layer1 path:hover {
   color: var(--border-color);
   font-size: 0.65rem;
   user-select: none;
+}
+
+/* Phones: owner and buff always on two lines (each kept to one), selected or not, so the
+   card keeps one height and the page doesn't jump between territories (owner, 2026-11-20) */
+@media (max-width: 639px) {
+  .info-details {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0.15rem;
+  }
+
+  .info-divider {
+    display: none;
+  }
+
+  .info-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 @media (min-width: 640px) {
@@ -329,6 +360,29 @@ svg #layer1 path:hover {
   display: none !important;
 }
 
+/* Planner Mode's Live / My plan and Discard, on the "Change to:" line (greyed out until the
+   planner is on, so nothing moves when it's turned on) */
+#planner-override-container {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.planner-compare .toggle-btn:disabled,
+.discard-plan-btn:disabled,
+.segmented-control .toggle-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.discard-plan-btn:not(:disabled):hover {
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+/* Planner Mode off with a saved plan: the indicator glows, the theme colour at half strength */
+.draft-btn.has-plan .draft-indicator {
+  background-color: rgba(var(--active-theme), 0.6);
+  box-shadow: 0 0 6px rgba(var(--active-theme), 0.6);
+}
+
 #alliance-override {
   background-color: var(--surface-dark);
   color: var(--text-main);
@@ -428,3 +482,417 @@ svg #layer1 path:hover {
   padding: 8px 12px;
 }
 
+
+/* ==========================================================================
+   "My members" (leaders only, owner request 2026-11-19; js/map-members.js): a dot for each
+   member of the leader's own alliance, a search box and a card for the chosen member.
+   ========================================================================== */
+
+.map-members {
+  margin: 0 0 0.6rem;
+}
+
+.map-members-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center; /* as in fullscreen (owner, 2026-11-20) */
+  gap: 6px 10px;
+}
+
+.map-members-bar [aria-pressed='true'] {
+  color: var(--accent-text);
+  border-color: var(--accent-color);
+}
+
+#map-members-search {
+  flex: 1 1 180px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.map-members-status {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.map-members-status a {
+  color: inherit;
+  text-decoration: underline dotted;
+}
+
+/* All NAP players (Stewards): the Refresh button and what it costs, on a line of its own */
+.map-nap-refresh {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.map-nap-refresh .draft-btn {
+  padding: 3px 10px;
+  font-size: 0.75rem;
+}
+
+.map-members-results[hidden],
+#map-members-search[hidden] {
+  display: none;
+}
+
+.map-members-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  max-height: 9.5rem; /* a big group's list scrolls instead of pushing the map down */
+  overflow-y: auto;
+}
+
+.map-members-hit {
+  padding: 3px 8px;
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--text-main);
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.map-members-hit small,
+.map-members-none {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+
+/* Zoomed in, borders and label outlines keep their width on screen (at a member markers'
+   deep zoom they would otherwise be many times thicker than the markers) */
+.game-map svg.is-zoomed #layer1 path,
+.game-map svg.is-zoomed .territory-label {
+  vector-effect: non-scaling-stroke;
+}
+
+/* The game view (js/map-game.js): grass and the tile grid, Sanctuaries' pictures with
+   their level badge and name plate, colours from the owner's game screenshots */
+.game-map .map-game-ground rect {
+  fill: #597b56;
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.game-map .map-game-ground path {
+  fill: none;
+  stroke: rgba(38, 66, 40, 0.55);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.game-map .map-game-sanctuary {
+  cursor: pointer;
+}
+
+.game-map .map-game-hit {
+  fill: transparent;
+}
+
+.game-map .map-game-level {
+  fill: #ece2c8;
+  stroke: #7d6a48;
+}
+
+.game-map .map-game-level-text {
+  fill: #3a2f1e;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 800;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.game-map .map-game-plate {
+  fill: rgba(28, 26, 22, 0.62);
+  stroke: rgba(255, 255, 255, 0.25);
+}
+
+.game-map .map-game-sanctuary.is-selected .map-game-plate {
+  fill: rgba(60, 40, 6, 0.85);
+  stroke: #f2c14e;
+}
+
+.game-map .map-game-name {
+  fill: #fff;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* The card over the chosen member (owner, 2026-11-20): the game's layout (a darker title
+   bar with the name and the close button; the picture with its profile frame and the details
+   under it), compact like the old card under the map, in the game's colours (owner's choice
+   over the site's theme, 2026-11-20): pale blue, a darker blue title bar. */
+.map-game-pop {
+  --pop-bg: #dfe8f3;
+  --pop-head: #b9cbe2;
+  --pop-border: #8ea6c6;
+  --pop-title: #1f2d44;
+  --pop-text: #4f6382;
+  --pop-strong: #1f2d44;
+  position: absolute;
+  z-index: 4; /* under the zoom buttons */
+  width: max-content;
+  min-width: 220px;
+  max-width: min(320px, calc(100% - 8px));
+  overflow: hidden;
+  color: var(--pop-text);
+  background: var(--pop-bg);
+  border: 1px solid var(--pop-border);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.map-game-pop[hidden] {
+  display: none;
+}
+
+.map-game-pop .map-game-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 3px 3px 10px;
+  background: var(--pop-head);
+  /* A line that takes no room, so the name stays in the middle of the bar */
+  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--pop-border) 60%, transparent);
+}
+
+.map-game-pop .map-game-head strong {
+  min-width: 0;
+  overflow: hidden;
+  /* The font draws its letters a little high in the line: nudged to the bar's middle */
+  padding-top: 2px;
+  font-size: 14px;
+  color: var(--pop-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-game-close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--pop-text);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.map-game-close:hover {
+  color: var(--pop-strong);
+}
+
+.map-game-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px 8px 7px;
+}
+
+.map-game-pic {
+  position: relative;
+  flex: none;
+  width: 52px;
+  height: 52px;
+}
+
+.map-game-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.map-game-who span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Members' names, once there's room for them (deep zoom) */
+.game-map .map-member-name {
+  fill: #fff;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 600;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.8);
+  stroke-linejoin: round;
+}
+
+/* The markers: small squares in the alliance's colour, ringed so they show on any territory;
+   members close together share one with their number */
+.game-map .map-member-dot {
+  stroke: #fff;
+  cursor: pointer;
+}
+
+.game-map .map-member-dot.is-selected {
+  stroke: #fff;
+}
+
+/* The chosen member: a dark outline under the white edge, and a slow white pulse around it */
+.game-map .map-member-outline {
+  fill: #000;
+  pointer-events: none;
+}
+
+.game-map .map-member-halo {
+  fill: none;
+  stroke: #fff;
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: map-member-pulse 1.6s ease-out infinite;
+}
+
+@keyframes map-member-pulse {
+  0% {
+    opacity: 0.95;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-map .map-member-halo {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
+.game-map .map-member-group {
+  cursor: pointer;
+}
+
+.game-map .map-member-group text {
+  fill: #fff;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.75);
+  stroke-width: 0.25em;
+}
+
+/* ==========================================================================
+   Zooming the map (owner request, 2026-11-20; js/map-zoom.js): buttons in the corner;
+   not zoomed in, one finger still scrolls the page (two-finger pinch zooms the map);
+   zoomed in, one finger moves the map.
+   ========================================================================== */
+
+.game-map.has-zoom {
+  position: relative;
+}
+
+.game-map svg {
+  touch-action: pan-y;
+}
+
+.game-map svg.is-zoomed {
+  touch-action: none;
+  cursor: grab;
+}
+
+.game-map svg.is-zoomed:active {
+  cursor: grabbing;
+}
+
+.map-zoom {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5; /* above the chosen member's card */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.map-zoom button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--text-main);
+  background: rgba(10, 12, 10, 0.75);
+  border: 1px solid var(--overlay-12, rgba(255, 255, 255, 0.12));
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.map-zoom button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* The buttons' icons aren't the map: undo the map picture's rules above for them */
+/* The game view card's close icon: the map's own svg sizing would blow it up */
+/* (#map-container: also in fullscreen, whose rule makes every svg in the map full width) */
+#map-container .game-map div.map-game-pop svg,
+.game-map .map-game-pop svg {
+  width: 16px !important;
+  height: 16px !important;
+  max-height: none;
+  opacity: 1;
+  touch-action: manipulation;
+}
+
+#map-container .game-map div.map-zoom svg,
+.game-map .map-zoom svg {
+  width: 18px !important;
+  height: 18px !important;
+  max-height: none;
+  opacity: 1;
+  touch-action: manipulation;
+}
+
+/* While the map is being dragged, and while "My members" is on, territories don't react to
+   the pointer: no hover glow or highlight (they redrew the map every frame and made it
+   flicker), and with the markers on, no stray territory taps (owner, 2026-11-20) */
+.game-map svg.is-panning #layer1 path,
+.game-map svg.members-on #layer1 path {
+  transition: none;
+  animation: none;
+}
+
+.game-map svg.is-panning #layer1 path:hover,
+.game-map svg.members-on #layer1 path:hover {
+  filter: url(#territory-vignette);
+  stroke: var(--shade-50) !important;
+  stroke-width: 1.5px !important;
+}
+
+.game-map svg.members-on #layer1 path {
+  cursor: default;
+}

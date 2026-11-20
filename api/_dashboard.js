@@ -11,32 +11,56 @@ import { chestCounts } from './_nomination_assign.js';
 import { describeRewardPeriod } from './_reward_period.js';
 import { sourceRequest } from './_google_source.js';
 import { say } from './_messages.js';
+import { findTag, tagSlug } from './_alliances.js';
 
 /** Most bytes one alliance's dashboard file may hold (thousands of table rows). */
 export const MAX_DASHBOARD_BYTES = 150 * 1024;
 
-/** Tags compared without letter case or accents (RÂVN = ravn). */
-export function foldTag(tag) {
-  return String(tag || '')
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .trim()
-    .toLowerCase();
-}
-
-/** The alliance's key in map-state.json for a tag written any way, or null. */
+/** The alliance's key in map-state.json for a tag written another way, or null (findTag). */
 export function findAllianceKey(alliances = {}, tag) {
-  const want = foldTag(tag);
-  if (!want) return null;
-  return Object.keys(alliances).find((key) => foldTag(key) === want) || null;
+  return findTag(Object.keys(alliances || {}), tag);
 }
 
-/** The Gist file holding an alliance's dashboard (letters and digits only: RÂVN -> RAVN). */
-export function dashboardFile(tag) {
-  const slug = foldTag(tag)
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, '');
-  return `dashboard-${slug || 'UNKNOWN'}.json`;
+/**
+ * The Gist file holding an alliance's dashboard: its letters and digits (RÂVN -> RAVN;
+ * RavN for RâvN, beside RÂVN: tagSlug). `alliances` is map-state.json's list.
+ */
+export function dashboardFile(tag, alliances = {}) {
+  return `dashboard-${tagSlug(tag, Object.keys(alliances || {}))}.json`;
+}
+
+/**
+ * The roster's Refresh button (owner, 2026-11-19): a live lookup from the game, shared by the
+ * alliance's leaders, at most REFRESH_PER_DAY a day (from the 00:00 GT reset) and one every
+ * REFRESH_COOLDOWN_MIN minutes, so the tracker's 1,000 requests a day are never at risk.
+ * Kept in the dashboard file as settings.rosterRefresh = { day, count, lastAt }.
+ */
+export const REFRESH_PER_DAY = 15;
+export const REFRESH_COOLDOWN_MIN = 10;
+
+/** The game day (GT, UTC-2) of a time, as YYYY-MM-DD. */
+const gameDay = (ms) => new Date(ms - 2 * 3600000).toISOString().slice(0, 10);
+
+/** Where the alliance stands: { left, waitMinutes, lastAt }. */
+export function refreshState(settings = {}, now = Date.now()) {
+  const r = settings.rosterRefresh || {};
+  const used = r.day === gameDay(now) ? Number(r.count) || 0 : 0;
+  const last = Date.parse(r.lastAt || '');
+  const waitMs = Number.isFinite(last) ? last + REFRESH_COOLDOWN_MIN * 60000 - now : 0;
+  return {
+    left: Math.max(0, REFRESH_PER_DAY - used),
+    max: REFRESH_PER_DAY,
+    waitMinutes: waitMs > 0 ? Math.ceil(waitMs / 60000) : 0,
+    lastAt: Number.isFinite(last) ? r.lastAt : null,
+  };
+}
+
+/** The settings after one more refresh at `now`. */
+export function countRefresh(settings = {}, now = Date.now()) {
+  const r = settings.rosterRefresh || {};
+  const day = gameDay(now);
+  const count = (r.day === day ? Number(r.count) || 0 : 0) + 1;
+  return { ...settings, rosterRefresh: { day, count, lastAt: new Date(now).toISOString() } };
 }
 
 /**

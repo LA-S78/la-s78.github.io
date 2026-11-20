@@ -43,6 +43,7 @@ _configs/     One small settings file per language
 _deploy/      Redirect pages used only during deployment
 docs/         HOWTO.md (recipes) and DECISIONS.md (why things are the way they are)
 test/         Demo / sandbox pages
+tools/        Developer tools: visual-diff (compares two builds), install-screenshots
 .github/      GitHub Actions workflows and the Discord command list
 ```
 
@@ -88,6 +89,12 @@ Pushing to `main` (production) or `dev` (preview at dev.la-s78.app) runs
 4. Deploy to Vercel, and refresh the GitHub Pages redirect (push only).
 
 Pull requests run steps 2 and 3 only, so you can see whether a change builds before merging.
+
+The screenshots on the browser's "Install app" screen are updated by hand, when the site's
+look has changed: **Actions → Update install screenshots → Run workflow**. It photographs four
+pages of the live site (home, guides, calendar, rules, each in its own theme) on a phone and a
+desktop (`tools/install-screenshots/shoot.mjs`) and opens a pull request with the new
+pictures, to check before merging.
 
 ## Code formatting
 

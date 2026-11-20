@@ -1,0 +1,58 @@
+/* ==========================================================================
+   PLAYER PORTRAITS (owner request, 2026-11-18): a player's picture in their in-game frame,
+   from the Last Asylum Tracker (the roster view, Caravan Rotor, nomination list and King's
+   console; js/player-portrait.js). The frames are 190px squares with an opening about 62% of
+   their width, so the picture sits in the middle at that size with the frame drawn over it.
+   ========================================================================== */
+
+/* The picture-in-frame itself is in _css/style/27-player-portraits.css (every page: the
+   Stats tab and the territory map show it too). */
+
+/* Beside a typed name (Caravan Rotor, nomination list, King's console) */
+.player-ign .player-portrait,
+.dash-cv-name .player-portrait {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.nominate-assign-row .player-portrait,
+.distribute-item .player-portrait {
+  width: 28px;
+  height: 28px;
+}
+
+/* Phones: the nomination list's names get a little more room (head row included) */
+@media (max-width: 560px) {
+  .nominate-assign-row .player-portrait {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+  }
+
+  .nominate-assign-list:has(.player-portrait) .nominate-assign-row:has(> :nth-child(4)) {
+    grid-template-columns: 18px minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.85fr);
+  }
+}
+
+/* A renamed player's name as listed (King's console) */
+.name-was {
+  margin-left: 4px;
+  font-size: 0.72em;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* "Player data from the Last Asylum Tracker", wherever its data shows */
+.tracker-credit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 10px 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.tracker-credit a {
+  color: inherit;
+  text-decoration: underline dotted;
+}

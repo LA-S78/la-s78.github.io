@@ -2,35 +2,51 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
+  stewards_only: Solo los Stewards pueden usar las herramientas de Steward.
+  lookups_used: Las búsquedas de jugadores de hoy se han agotado. Se reinician en el reinicio diario (00:00 GT).
+  player_not_found: Ningún jugador tiene ese ID.
+  player_unavailable: No se pudo contactar con el juego. Inténtalo de nuevo en unos minutos.
+  positions_leaders_only: Solo los R4 y R5 (y Stewards) de tu alianza pueden ver a los miembros en el mapa.
+  positions_unavailable: Las posiciones de los miembros no se pueden cargar en este momento. Inténtalo de nuevo en unos minutos.
+  links_used: Los enlaces de alianza de hoy se han agotado. Se reinician en el reinicio diario (00:00 GT).
+  link_bad: Elige una alianza y escribe el tag que usa en el juego ahora.
+  link_same: Ese es el tag que el sitio ya utiliza.
+  link_taken: "{tag} ya es otra alianza en el sitio."
+  link_not_found: El juego no tiene ninguna alianza con el tag {tag} (importan las mayúsculas y minúsculas).
+  positions_used: Las actualizaciones del mapa de hoy se han agotado. Se reinician en el reinicio diario (00:00 GT).
+  positions_wait: El mapa se actualizó hace un momento. Inténtalo de nuevo en {minutes} min.
+  refresh_limit: No quedan actualizaciones de la lista de miembros hoy. Se reinician en el reinicio diario (00:00 GT).
+  refresh_wait: La lista de miembros se actualizó hace un momento. Inténtalo de nuevo en {n} min.
+  refresh_failed: No se pudo contactar con el juego. Inténtalo de nuevo en unos minutos.
   signed_out: Inicia sesión con Discord (arriba a la derecha) para ver el panel de tu alianza.
   load_failed: 'No se pudo cargar el panel: {reason}'
-  no_alliance: No pudimos identificar a qué alianza perteneces. El sitio la detecta a partir de tu rol de alianza en el servidor de NAP de Discord, o mediante un [TAG] al principio de tu apodo en el servidor. Corrige eso en Discord y usa Refrescar Acceso en tu tarjeta de cuenta (arriba a la derecha).
+  no_alliance: No pudimos determinar en qué alianza estás. El sitio la encuentra a través de tu rol de alianza en el servidor NAP de Discord, o mediante un [TAG] al inicio de tu apodo en el servidor. Arregla eso en Discord y luego usa Actualizar Acceso en tu tarjeta de cuenta (arriba a la derecha).
   leaders_only: Solo los R4 y R5 de tu alianza pueden cambiar el panel.
   chart_removed: Ese gráfico fue eliminado.
-  chart_already_removed: Ese gráfico ya había sido eliminado.
-  not_linked: Este gráfico no está vinculado a una hoja o documento de Google.
+  chart_already_removed: Ese gráfico ya fue eliminado.
+  not_linked: Este gráfico no está vinculado a una hoja de cálculo o documento de Google.
   unknown_change: Cambio desconocido.
   save_failed: 'No se pudo guardar: {reason}'
-  r5_only_nominate: Solo tu R5 puede abrir la página de nominaciones aquí. Ejecuta /nominate en Discord.
-  rewards_closed: Las recompensas están cerradas hasta las {when}.
+  r5_only_nominate: Solo tu R5 puede abrir la página de nominaciones aquí. Usa /nominate en Discord.
+  rewards_closed: Las recompensas están cerradas hasta {when}.
   no_rank: "[{tag}] no tiene rango en la clasificación."
   choose_type: Elige un tipo de gráfico o tabla.
   title_needed: Dale un título al gráfico o a la tabla.
-  too_many_columns: Máximo {max} columnas (esta tabla tiene {count}).
-  too_many_rows: Máximo {max} filas (esta tabla tiene {count}).
+  too_many_columns: Como máximo {max} columnas (esta tabla tiene {count}).
+  too_many_rows: Como máximo {max} filas (esta tabla tiene {count}).
   column_name: Columna {n}
   paste_first: Pega primero una tabla (una fila de encabezado y luego los datos).
-  no_data_rows: La tabla no tiene filas de datos bajo su encabezado.
+  no_data_rows: La tabla no tiene filas de datos debajo de su encabezado.
   needs_numbers: Un gráfico necesita una columna de números para mostrarse.
   needs_target: 'Un gráfico de progreso necesita un objetivo: un número o una columna de objetivos.'
-  too_many_widgets: Máximo {max} gráficos y tablas por alianza.
-  sheet_unusable: 'No se pueden usar los datos de la hoja: {reason}'
-  too_big: Eso haría que el panel fuera demasiado grande ({size} KB de {max} KB). Usa menos filas o elimina una tabla.
-  player_name_needed: Introduce un nombre de jugador.
-  time_format: Los horarios son Game Time como 18:00 (o déjalos vacíos).
+  too_many_widgets: Como máximo {max} gráficos y tablas por alianza.
+  sheet_unusable: 'Los datos de la hoja no se pueden usar: {reason}'
+  too_big: Eso haría que este panel fuera demasiado grande ({size} KB de {max} KB). Usa menos filas o elimina una tabla.
+  player_name_needed: Introduce el nombre de un jugador.
+  time_format: Los horarios están en Game Time como 18:00 (o déjalos vacíos).
   start_time_needed: Indica también la hora de inicio (o deja ambos vacíos).
-  rotor_full: Máximo {max} jugadores en la rotación.
-  already_in_rotor: "{name} ya está en la rotación."
+  rotor_full: Como máximo {max} jugadores en el rotor.
+  already_in_rotor: "{name} ya está en el rotor."
   player_removed: Ese jugador fue eliminado.
 api_sheets:
   full_link: Pega el enlace completo (que empiece por https://docs.google.com/…).
@@ -55,9 +71,12 @@ api_nominate:
   signed_out: Inicia sesión con Discord (arriba a la derecha) para marcar cofres.
   invalid_chest: Cofre no válido.
   no_period: No hay ningún periodo de recompensa abierto en este momento.
-  king_only: Solo la alianza del Rey (R4/R5) y los Delegados pueden marcar cofres.
-  king_only_tag: Solo la alianza del Rey [{king}] (R4/R5) y los Delegados pueden marcar cofres.
+  king_only: Solo la alianza del Rey (R4/R5) y los Administradores pueden marcar cofres.
+  king_only_tag: Solo la alianza del Rey [{king}] (R4/R5) y los Administradores pueden marcar cofres.
   not_listed: "{name} ya no está en la lista de [{alliance}]. Refresca la página."
+  id_not_found: Ningún miembro de [{alliance}] tiene el ID de jugador {id}. Comprueba el número o escribe el nombre.
+  ids_unavailable: Los IDs de jugador no se pueden buscar ahora mismo ({id}). Escribe el nombre en su lugar.
+  listed_twice: "{name} está en la lista dos veces."
   save_failed: 'No se pudo guardar: {reason}'
 api_register:
   guild_id_format: Formato de ID de servidor de Discord no válido.
@@ -81,6 +100,28 @@ api_register:
   officer_channel_missing: El canal de recepción de tickets de oficiales ({id}) no está en "{server}" (o el bot no puede verlo). Copia su ID de nuevo.
   alert_role_missing: El rol de alerta predeterminado ({id}) no es un rol en "{server}". Copia su ID de nuevo, o déjalo vacío para @everyone.
   role_not_found: Todavía ningún rol en "{server}" coincide con "{role}"; funcionará cuando exista uno.
+api_alliance_images:
+  frame_png: Un marco de avatar debe ser un PNG con fondo transparente (un JPEG cubriría las imágenes de tus miembros).
+  not_set_up: Las imágenes de la alianza aún no están configuradas en el servidor.
+  failed: Algo salió mal con la imagen de la alianza. Por favor, inténtalo de nuevo.
+  bad_image: Ese archivo no es una imagen que el sitio pueda usar. Por favor, usa el formulario de carga.
+  too_big: La imagen es demasiado grande (más de {kb} KB). Por favor, usa el formulario de carga, que la reduce.
+  wrong_size: La imagen debe ser exactamente de {width}×{height} píxeles. Por favor, usa el formulario de carga.
+  has_metadata: La imagen aún contiene datos ocultos (como dónde se tomó una foto). Por favor, usa el formulario de carga, que los elimina.
+  leaders_only: Solo los líderes R4 y R5 pueden enviar imágenes de la alianza.
+  own_alliance_only: Solo puedes enviar imágenes para tu propia alianza.
+  unknown_alliance: Esa alianza no está en el NAP.
+  daily_limit: 'Límite diario alcanzado: {max} imágenes por alianza cada 24 horas. Puedes enviar la siguiente después de {when}.'
+  post_failed: La imagen no pudo ser enviada a los Administradores en Discord. Por favor, inténtalo de nuevo más tarde.
+  sent: Enviado a los Administradores para su revisión. Aparecerá una vez que sea aprobado.
+  stewards_only: Solo los Administradores pueden revisar las imágenes de la alianza.
+  not_found: Esa imagen no se encontró. Puede haber expirado.
+  already_decided: Esa imagen ya ha sido revisada (o reemplazada por una nueva).
+  approved: 'Aprobado: la imagen ya está activa.'
+  rejected: 'Rechazado: la imagen fue eliminada.'
+  remove_not_allowed: Solo el R5 de la alianza o un Administrador puede eliminar sus imágenes.
+  nothing_to_remove: No hay ninguna imagen allí para eliminar.
+  removed: Imagen eliminada.
 api_proposals:
   login_required: Por favor, inicia sesión con Discord de nuevo para enviar propuestas.
   leaders_only: Solo los líderes R4 y R5 pueden enviar propuestas.
@@ -107,7 +148,8 @@ api_events:
   updated: Operación "{title}" actualizada.
 reminders:
   title: "⏰ Empieza pronto: {title}"
-  starts: Comenzar
+  title_now: "🔔 Empieza ahora: {title}"
+  starts: Empezar
 bot_common:
   off_week: Semana de Descanso
   kw_week: Semana de Guerra de Reinos {n}
@@ -233,25 +275,31 @@ bot_rewards:
     • Reemplazos borrados: {overrides}
     • Compras en tiempo de guerra canceladas: {buyouts} (mantenidas en el historial)
     • La lista de cada alianza fue reordenada para los cofres corregidos.
+bot_ascension:
+  stewards_only: "⛔ Solo los Administradores del Reino pueden aplicar o mantener el orden de los 4 Mejores."
+  no_race: Los resultados de esta carrera ya no están almacenados.
+  already: "{name} ya ha decidido esta carrera."
+  cannot_apply: 'No se pueden aplicar los 4 Mejores: {reason}. Usa /rank.'
 bot_admin:
   rank_none: No hay alianzas registradas en el estado actual.
-  rank_title: "🛡️ Clasificación de NAP del servidor"
-  rank_open: Diplomacia y clasificación abiertas
-  rank_fetch_failed: "⚠️ Error al obtener la clasificación: {reason}"
-  rank_denied: "⛔ **Acceso denegado:** Solo los Administradores del Reino designados pueden actualizar la clasificación de las alianzas."
-  rank_missing: "⚠️ Faltan argumentos requeridos: tag y rank."
+  rank_title: "🛡️ Clasificación NAP del servidor"
+  rank_open: Diplomacia abierta y clasificaciones
+  rank_fetch_failed: "⚠️ Error al obtener las clasificaciones: {reason}"
+  rank_denied: "⛔ **Acceso denegado:** Solo los administradores del Reino designados pueden actualizar las clasificaciones de las alianzas."
+  rank_missing: "⚠️ Faltan argumentos obligatorios: tag y rank."
   rank_set_title: "👑 Clasificación NAP actualizada"
-  rank_set_text: 'La alianza `[{tag}]` ha sido asignada al **Puesto #{rank}** *(anteriormente: {previous})*.'
-  rank_unranked: Sin clasificación
+  rank_set_text: 'La alianza `[{tag}]` ha sido asignada al **Rango #{rank}** *(anteriormente: {previous})*.'
+  rank_unranked: Sin rango
   rank_updated_by: Actualizado por {name}
-  rank_view: Ver clasificación
-  rank_set_failed: "⚠️ Error al actualizar la clasificación: {reason}"
+  rank_view: Ver clasificaciones
+  rank_set_failed: "⚠️ Error al actualizar el rango: {reason}"
+  rank_ambiguous: "[{tag}] podría referirse a más de una alianza ({options}): escribe el tag exactamente, respetando las mayúsculas."
   dev_done: |-
-    ✅ **Datos de prueba actualizados.** Se copiaron {count} archivo(s) de los datos reales al Gist de prueba usado por dev.la-s78.app: {files}.
-    Los datos reales solo fueron leídos, no modificados.
+    ✅ **Datos de prueba actualizados.** Se copiaron {count} archivo(s) de los datos en vivo al Gist de prueba utilizado por dev.la-s78.app: {files}.
+    Los datos en vivo solo se leyeron, no se modificaron.
   dev_failed: "⚠️ **Datos de prueba no actualizados:** {reason}"
   dev_denied: "⛔ **Acceso denegado:** Solo los administradores pueden actualizar los datos de prueba."
-  test_proposal: "🧪 Esta es una propuesta de prueba desde el sitio de prueba. Utiliza datos de prueba, por lo que no se puede aprobar ni cambiar nada en tiempo real."
+  test_proposal: "🧪 Esta es una propuesta de prueba desde el sitio de pruebas. Utiliza datos de prueba, por lo que no puede aprobarse ni cambiar nada en vivo."
   approved_not_updated: "✅ Aprobado y guardado, pero este mensaje no pudo ser actualizado ({reason})."
 bot_register:
   nap_only: "⚠️ Este comando solo puede ser ejecutado en el servidor oficial de NAP."

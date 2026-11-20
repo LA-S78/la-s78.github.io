@@ -47,12 +47,22 @@
       toastMsg: "{{ site.data[site.active_lang].ui.pwa.toast_msg | default: 'New intel acquired.' }}",
       updateBtn: "{{ site.data[site.active_lang].ui.pwa.update_btn | default: 'Update' }}",
       updating: "{{ site.data[site.active_lang].ui.pwa.updating | default: 'Decrypting...' }}",
-      updatedMsg: "{{ site.data[site.active_lang].ui.pwa.updated_msg | default: '✅ App updated to the latest version.' }}"
+      updatedMsg: "{{ site.data[site.active_lang].ui.pwa.updated_msg | default: 'App updated to the latest version.' }}"
+    };
+    // The picture viewer's buttons (js/main.js)
+    window.imageViewerText = {
+      close: "{{ site.data[site.active_lang].ui.image_viewer.close | default: 'Close' }}",
+      download: "{{ site.data[site.active_lang].ui.image_viewer.download | default: 'Download' }}"
     };
   </script>
   <script src="/js/main.js" defer></script>
   <script src="/js/identity-pill.js" defer></script>
   <script src="/js/escape-html.js"></script>
+  <!-- The site's dropdown: upgrades <select data-site-select> (icons, hints, themed) -->
+  <script src="/js/site-select.js" defer></script>
+  <script src="/js/my-alliance.js" defer></script>
   <script src="/js/i18n.js"></script>
+  <!-- The interface icons (uiIcon(name), from _data/ui_icons.yml) -->
+  <script src="/js/ui-icons.js"></script>
   <script src="/js/theme-init.js"></script>
 </head>

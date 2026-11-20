@@ -1,0 +1,54 @@
+/* ==========================================================================
+   ALLIANCE IMAGE REVIEW (portal/review-image.html): a Steward checks an image before it
+   goes on the alliance's cards.
+   ========================================================================== */
+
+.ir-sign-in {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.ir-sign-in[hidden] {
+  display: none;
+}
+
+.ir-figure {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.ir-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--card-bg-solid);
+}
+
+/* The card one is shown smaller, as on its card */
+.ir-figure img.ir-card {
+  max-width: 320px;
+}
+
+.ir-note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0.5rem 0;
+}
+
+.ir-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* An avatar frame: shown square, on a check pattern so its see-through parts are visible */
+.ir-figure img.ir-frame {
+  width: min(100%, 320px);
+  height: auto;
+  background: repeating-conic-gradient(rgba(255, 255, 255, 0.12) 0 25%, transparent 0 50%) 0 0 / 20px 20px;
+}

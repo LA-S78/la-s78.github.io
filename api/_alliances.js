@@ -28,15 +28,85 @@ export function allianceFromRoleIds(roleIds = [], env = process.env) {
 /** Rank #1's tag and the three rotation seats [A, B, C] before any live schedule exists. */
 export const STARTING_ROTATION = ALLIANCES.starting_rotation;
 
+// ---------------------------------------------------------------------------------------
+// Telling alliances apart (owner, 2026-11-17): RâvN and RÂVN are two alliances, so letter
+// case counts. Accents don't: RAVN is RÂVN written without the accent.
+// ---------------------------------------------------------------------------------------
+
+/** A tag's letters without accents, letter case kept (RÂVN -> RAVN, RâvN -> RavN). */
+export function tagLetters(tag) {
+  return String(tag || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim();
+}
+
+/** The same alliance: the same letters, accents aside (RÂVN = RAVN, RÂVN ≠ RâvN). */
+export function sameTag(a, b) {
+  const x = tagLetters(a);
+  return Boolean(x) && x === tagLetters(b);
+}
+
+/**
+ * Which of `tags` a tag written some other way means: the exact tag, else the same letters
+ * without accents (RAVN -> RÂVN), else, for a tag typed in another letter case (ravn), the
+ * one alliance it can only mean. null when none, or when it could be more than one.
+ */
+export function findTag(tags = [], tag) {
+  const want = tagLetters(tag);
+  if (!want) return null;
+  const list = [...tags];
+  if (list.includes(String(tag).trim())) return String(tag).trim();
+  const same = list.filter((t) => tagLetters(t) === want);
+  if (same.length) return same[0];
+  const loose = list.filter((t) => tagLetters(t).toLowerCase() === want.toLowerCase());
+  return loose.length === 1 ? loose[0] : null;
+}
+
+/**
+ * The alliances a tag typed in another letter case could mean, when findTag can't choose
+ * (maintainer review, 2026-11-17): "ravn" with both RâvN and RÂVN registered gives
+ * ['RÂVN', 'RâvN']; [] when findTag finds one or none is close. A caller that would
+ * otherwise create a new alliance from the typed text asks the person to type it exactly.
+ */
+export function ambiguousTags(tags = [], tag) {
+  const want = tagLetters(tag).toLowerCase();
+  if (!want || findTag(tags, tag)) return [];
+  const loose = [...tags].filter((t) => tagLetters(t).toLowerCase() === want);
+  return loose.length > 1 ? loose : [];
+}
+
+/**
+ * An alliance's file-safe name for its stored files (dashboard, pictures): its letters and
+ * digits in capitals (RÂVN -> RAVN, HeKi -> HEKI), as before. When another alliance in
+ * `tags` already has those capitals (RâvN beside RÂVN), the letter case is kept instead
+ * (RavN), so the two never share a file.
+ */
+export function tagSlug(tag, tags = []) {
+  const kept = tagLetters(tag).replace(/[^A-Za-z0-9]/g, '');
+  const caps = kept.toUpperCase();
+  if (!kept) return 'UNKNOWN';
+  if (kept === caps) return caps;
+  const clash = [...tags].some(
+    (t) => !sameTag(t, tag) && tagLetters(t).replace(/[^A-Za-z0-9]/g, '') === caps,
+  );
+  return clash ? kept : caps;
+}
+
+/** A calendar event's scope: 'global' (any letter case), or the same alliance (sameTag). */
+export function sameScope(a, b) {
+  const x = String(a || 'global').trim();
+  const y = String(b || 'global').trim();
+  if (x.toLowerCase() === 'global' || y.toLowerCase() === 'global') {
+    return x.toLowerCase() === y.toLowerCase();
+  }
+  return sameTag(x, y);
+}
+
 /** An alliance's role colour, by its exact tag or the same letters without accents (RAVN/RÂVN). */
 export function roleColorFor(tag, roleColors = {}) {
   if (roleColors[tag]) return roleColors[tag];
-  const fold = (t) =>
-    String(t)
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toUpperCase();
-  const key = Object.keys(roleColors).find((k) => fold(k) === fold(tag));
+  const key = Object.keys(roleColors).find((k) => sameTag(k, tag));
   return key ? roleColors[key] : null;
 }
 

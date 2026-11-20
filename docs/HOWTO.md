@@ -16,6 +16,8 @@ your edits would vanish. Git ignores them, so they never show up as changes.
 - [Change styles (CSS) safely](#change-styles-css-safely)
 - [Add or change an alliance](#add-or-change-an-alliance)
 - [Add a Discord command](#add-a-discord-command)
+- [The Last Asylum Tracker key](#the-last-asylum-tracker-key)
+- [Set up alliance images (once)](#set-up-alliance-images-once)
 - [Get a change onto the live site](#get-a-change-onto-the-live-site)
 - [When the build check fails](#when-the-build-check-fails)
 
@@ -128,7 +130,16 @@ What to change:
 - Each pane (section) needs its own marker, `nav_id`, and `order` (1, 2, 3…).
 - Each `nav_links` entry is a tab in the guide's top menu: `name_key` is
   `<id>_<nav_id>`, and `url` is `#` plus that pane's `nav_id`.
-- Images go in `images/guides/`. Keep them under 500 KB (save as `.jpg` or `.webp`).
+- Images go in `images/guides/`. Keep them under 500 KB (save as `.jpg` or `.webp`). Give
+  them `class="blueprint-img"`: tapping one then opens it full size (the site's shared picture
+  viewer, with Close and Download), with nothing else to add. Several side by side:
+  `<div class="guide-shots">` around them.
+- A guide made from an English graphic: cut the game screenshots out (no words in them) and
+  write the words as text, so every language can read them. Where the sheet's arrows or
+  handwriting touch a screenshot, `tools/guide-graphics/clean_annotations.py` shows how to
+  remove them by colour and shape instead of cropping into the picture. Map markers can be shown in their
+  colours with `<span class="map-pin is-red" aria-hidden="true"></span>` (also `is-bright-red`,
+  `is-light-red`, `is-blue`, `is-white`, `is-yellow`).
 - Don't use code blocks (lines starting with three backticks): the build removes them.
 
 **2. Add a card to the Guides page** in `_data/guide_directory.yml`, under the same
@@ -161,6 +172,18 @@ once the draft is translated.
 reaches `main`, GitHub Actions translates the draft into all 8 languages, saves it as
 `_source/farming.md` and deletes `farming_en.md`. Only **one** `_en` draft is
 translated per push, so add guides one at a time.
+
+The translation also checks that the section titles (which label the tabs), the
+subtitle and the pictures' `alt` descriptions came back translated; anything still in
+English is sent to Gemini again on its own.
+
+**Titles still in English in an older guide, or a section wrong in one language?**
+Open **Actions → Fill missing translations → Run workflow**, type the guide's id
+(e.g. `kill_event`) and run it. Sections that don't match the English (a different
+section in their place, or missing) are translated again from the English, leftover
+English is translated, the site is built and checked, and a pull request opens to check and
+merge. That pull request's usual check shows as failed with no jobs: GitHub doesn't run it
+for pull requests a workflow opens. The workflow's own build check stands in for it.
 
 ---
 
@@ -297,6 +320,28 @@ or Claude) before merging. The pieces:
    blocks) and read it via `getBotStrings(lang)`.
 
 ---
+
+## The Last Asylum Tracker key
+
+The name checks (and, later, the Top 4 Might snapshots) read alliances from the Last
+Asylum Tracker. Its key is yours: log in with Patreon at https://api.lastasylumtracker.com/docs,
+create a key under **API keys**, and add it in Vercel as the environment variable
+`LAT_API_KEY` (Production). Without it the site works as before, just without the checks.
+A free account allows 1,000 requests a day; the site uses a few dozen.
+
+## Set up alliance images (once)
+
+Alliance images are kept in a private Vercel Blob store. To switch them on:
+
+1. In Vercel, open the project → **Storage** → **Create** → **Blob**. Choose **Private** if asked.
+2. Connect it to the project for **Production** and **Preview** (Preview is dev.la-s78.app),
+   with **Add a read-write token** ticked (Sensitive on is fine). The store is connected with the
+   prefix `ALLIANCE_CARD_IMAGES`, so Vercel adds `ALLIANCE_CARD_IMAGES_READ_WRITE_TOKEN` itself;
+   nothing to copy. (A store connected without a prefix, `BLOB_READ_WRITE_TOKEN`, works too.)
+3. Redeploy (or wait for the next deploy). Until then, uploads answer "Alliance images aren't set
+   up on the server yet."
+
+Stewards review each image from the link in the war-room post (the test channel on the test site).
 
 ## Test on dev.la-s78.app (test data)
 

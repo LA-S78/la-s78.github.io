@@ -4,8 +4,8 @@ rules_page:
     text: "Le seguenti linee guida sono obbligatorie per garantire il fair play e la stabilità del server."
   rotation:
     title: "Rotazione del Campidoglio"
-    text: "Per ascendere allo status di Top 3, il contendente deve superare la Potenza di un detentore attuale durante i giorni 3-5 del Duello tra Alleanze nella Settimana 1 della Guerra dei Regni."
-    note: "*Nota: Le istantanee della potenza vengono prese 10 minuti prima del ripristino giornaliero.*"
+    text: "I ranghi del NAP sono decisi dalla Potenza: ogni alleanza del NAP, accademie comprese, è classificata in base al totale della sua Potenza nei giorni 3, 4 e 5 del Duello tra Alleanze della Settimana 1 della Guerra tra Regni. Le quattro più alte occupano i posti della Top 4 dal ciclo successivo. I nuovi ranghi si applicano dopo la conferma di uno Steward."
+    note: "*Nota: la Potenza viene misurata automaticamente 10 minuti prima del reset (23:50 GT) in ciascuno dei tre giorni.*"
   rewards:
     title: "Ricompense del Campidoglio"
 alliance_page:
@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Info Critiche"
-    t10: "Calcolatore T10"
-    survival: "Battaglia di Sopravvivenza"
-    server_rules: "Regole del Server"
-    capitol_rotation: "Rotazione del Campidoglio"
-    capitol_rewards: "Ricompense del Campidoglio"
-    nap_alliances: "Alleanze NAP"
-    blacklist: "Lista Nera"
+    title: "Pagine fissate"
   directories:
     title: "Directory"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "Alleanza & Diplomazia"
       sub: "Gradi, stato diplomatico & accordi territoriali"
+    calendar:
+      title: "Calendario eventi"
+      sub: "Eventi di alleanza e del server, e la rotazione del Campidoglio"
 writers_page:
   usage:
     title: "Utilizzo di Markdown"

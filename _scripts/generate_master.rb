@@ -1,11 +1,125 @@
 require 'json'
 require 'fileutils'
 require_relative 'gemini_client' # call_gemini_api
+require_relative 'guide_text_check' # GuideTextCheck: titles, subtitles and alt text left in English
 
 $stdout.sync = true
 
 GLOSSARY = JSON.parse(File.read('_data/terminology.json'))['enforced_terms']
 LANGUAGES = ['en', 'de', 'es', 'fr', 'ru', 'tr', 'uk', 'it']
+
+# The texts inside a guide's structure (section titles, which also label the nav tabs; the
+# subtitle; pictures' alt text) that came back still in English get a second, small request
+# with just those (owner request, 2026-11-17: German and Ukrainian kept the Kill Event's
+# titles in English). Returns the fixed translation.
+def fill_untranslated(english, translated, lang)
+  todo = GuideTextCheck.untranslated(english, translated, lang, GLOSSARY)
+  return translated if todo.empty?
+
+  puts "--> #{todo.size} text(s) still in English in [#{lang}]: asking for just those"
+  reply = call_gemini_api(GuideTextCheck.prompt(todo, lang, GLOSSARY), lang, json: true)
+  answers = JSON.parse(reply.to_s.gsub(/\A```(?:json)?|```\z/, '').strip) rescue {}
+  answers = answers.select { |k, v| todo.key?(k) && v.is_a?(String) && !v.strip.empty? }
+  puts "--> filled #{answers.size} of #{todo.size}"
+  GuideTextCheck.apply(translated, answers)
+end
+
+# The prompt for translating guide text (a whole draft, or one block of it)
+def guide_prompt(body, lang, structure_instructions)
+  <<~PROMPT
+    You are an expert localization engineer. Translate the content, preserving the structural schema.
+
+    CRITICAL RULES:
+    1. PRESERVE STRUCTURE: #{structure_instructions}
+    2. ATTRIBUTES - DYNAMIC vs STATIC:
+       - DYNAMIC: You MUST update the 'lang' attribute to '#{lang}'.
+       - STATIC: You are FORBIDDEN from changing 'category', 'name', or 'section'.
+    3. YAML: Keep every key exactly as provided. TRANSLATE the values of 'title' and
+       'subtitle' (they are the headings readers see). Keep every other value exactly as
+       provided (nav_id, parent_guide, guide_id, order, layout, active_nav, name_key, url).
+    4. CONTENT: Translate the readable text, and the text of alt="..." attributes in
+       <img> tags. Keep every other tag, attribute and URL exactly as provided.
+    5. GLOSSARY: #{GLOSSARY.to_json}
+
+    INPUT:
+    #{body}
+  PROMPT
+end
+
+LEGACY_STRUCTURE = "- Legacy Delimiters: Use '=== guide--[lang]--... ==='."
+
+# A block whose ids or order differ from the English, or that is missing, translated again
+# from the English block alone (two tries). Only its texts go to Gemini, as JSON (title,
+# subtitle, body); the block's '=== … ===' line and ids are rebuilt from the English, so
+# they can't come back changed (owner request, 2026-11-17: asked for the whole block,
+# Gemini changed its structure). nil if both replies lost a link, picture or Liquid tag.
+def translate_block(key, en_block, lang)
+  puts "--> [#{lang}] #{key} doesn't match the English: translating it again"
+  fields, body = GuideTextCheck.parts(en_block)
+  return nil unless fields
+
+  todo = fields.merge('body' => body)
+  prompt = <<~PROMPT
+    Translate the values of this JSON object from English into the language with the code
+    "#{lang}". They are one section of a game guide: "title" and "subtitle" are headings,
+    "body" is Markdown with some HTML.
+    In "body": translate the readable text and the text of alt="..." attributes. Keep the
+    Markdown markup, HTML tags and their other attributes, URLs, emoji and Liquid tags
+    ({% ... %} and {{ ... }}) exactly as they are.
+    Keep the keys. Reply with the JSON object only.
+    Use this glossary of game terms: #{GLOSSARY.to_json}
+
+    #{JSON.pretty_generate(todo)}
+  PROMPT
+  2.times do |try|
+    sleep(5) if try.positive?
+    reply = call_gemini_api(prompt, lang, json: true)
+    answers = JSON.parse(reply.to_s.gsub(/\A```(?:json)?|```\z/, '').strip) rescue {}
+    answers = {} unless answers.is_a?(Hash)
+    block = GuideTextCheck.rebuild(en_block, lang, answers, answers['body'])
+    return block if block
+
+    puts "--> [#{lang}] the reply lost a link, picture or Liquid tag#{try.zero? ? ': asking again' : ''}"
+  end
+  puts "::warning::#{key} [#{lang}]: couldn't translate it again; left as it was"
+  nil
+end
+
+# --fill <id>: the same checks for a guide already translated (_source/<id>.md), from the
+# "Fill missing translations" workflow: blocks that don't match the English (wrong ids or
+# order, or missing) are translated again from the English, then leftover English titles,
+# subtitles and alt text are filled. Rewrites the file only if something changed.
+if (i = ARGV.index('--fill'))
+  id = ARGV[i + 1].to_s
+  abort 'Usage: ruby _scripts/generate_master.rb --fill <guide id>' unless id =~ /\A[a-z0-9_]+\z/
+  path = "_source/#{id}.md"
+  abort "No #{path}" unless File.exist?(path)
+
+  master = File.read(path)
+  english = GuideTextCheck.language_part(master, 'en')
+  changed = false
+  out = master.dup
+  LANGUAGES.drop(1).each do |lang|
+    part = GuideTextCheck.language_part(master, lang)
+    next if part.empty?
+
+    fixed, redone = GuideTextCheck.repair(english, part) { |key, en_block| translate_block(key, en_block, lang) }
+    puts "--> [#{lang}] translated again: #{redone.join(', ')}" if redone.any?
+    fixed = fill_untranslated(english, fixed, lang)
+    next if fixed == part
+
+    out = out.sub(part) { fixed }
+    changed = true
+    sleep(5)
+  end
+  if changed
+    File.write(path, out)
+    puts "✅ Filled missing translations in #{path}"
+  else
+    puts "Nothing to fix in #{path}"
+  end
+  exit
+end
 
 all_drafts = Dir.glob("_source/*_en.md")
 files = all_drafts.empty? ? [] : [all_drafts.first]
@@ -53,10 +167,10 @@ files.each do |en_file|
     puts "✅ Generated Data Master: #{base_name}.md"
 
   else
-    # --- NON-DATA FILE (GUIDE) LOGIC [UNTOUCHED] ---
+    # --- NON-DATA FILE (GUIDE) LOGIC ---
     is_legacy = full_content.include?("===")
-    structure_instructions = is_legacy ? 
-      "- Legacy Delimiters: Use '=== guide--[lang]--... ==='." :
+    structure_instructions = is_legacy ?
+      LEGACY_STRUCTURE :
       "- XML Schema: Use '<guide lang=\"#{LANGUAGES.join('|')}\" ...>' and '<pane lang=\"#{LANGUAGES.join('|')}\" ...>'."
 
     front_matter = ""
@@ -78,23 +192,21 @@ files.each do |en_file|
         puts "--> Preserving English source..."
         full_master_file << localized_front_matter << body_content << "\n"
       else
-        prompt = <<~PROMPT
-          You are an expert localization engineer. Translate the content, preserving the structural schema.
-          
-          CRITICAL RULES:
-          1. PRESERVE STRUCTURE: #{structure_instructions}
-          2. ATTRIBUTES - DYNAMIC vs STATIC:
-             - DYNAMIC: You MUST update the 'lang' attribute to '#{lang}'.
-             - STATIC: You are FORBIDDEN from changing 'category', 'name', or 'section'.
-          3. YAML: Keep all keys (title, subtitle, etc.) exactly as provided.
-          4. CONTENT: Translate ONLY readable text outside tags/YAML. 
-          5. GLOSSARY: #{GLOSSARY.to_json}
-          
-          INPUT:
-          #{body_content}
-        PROMPT
+        prompt = guide_prompt(body_content, lang, structure_instructions)
 
-        full_master_file << localized_front_matter << "\n" << call_gemini_api(prompt, lang) << "\n"
+        # A reply that lost or changed the structure (sections, ids, order) is asked for once more
+        translated = call_gemini_api(prompt, lang).to_s
+        if is_legacy && !GuideTextCheck.structure_matches?(body_content, translated)
+          puts "⚠️ [#{lang}] came back with a different structure: asking again"
+          sleep(20)
+          translated = call_gemini_api(prompt, lang).to_s
+          unless GuideTextCheck.structure_matches?(body_content, translated)
+            puts "::warning::#{base_name} [#{lang}]: the structure still differs from the English; check it"
+          end
+        end
+        translated = fill_untranslated(body_content, translated, lang) if is_legacy
+
+        full_master_file << localized_front_matter << "\n" << translated << "\n"
         
         puts "--> Cooldown: Waiting 20s..."
         sleep(20) 

@@ -5,7 +5,7 @@ page_key: "calendar"
 active_nav: calendar
 permalink: /calendar.html
 lang: "en"
-strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
+strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, live_data]
 ---
 
 <div class="content-pane portal-pane-lg">
@@ -39,15 +39,8 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
           <span class="mgmt-tag" id="mgmt-scope-tag">{{ "calendar_events.manage_mode" | t }}</span>
           <span class="mgmt-desc" id="mgmt-scope-desc">{{ "calendar_events.session_active" | t }}</span>
           <!-- A signed-in Steward: server events or their alliance's (js/calendar.js) -->
-          <select id="mgmt-scope-switch" class="cal-form-select" hidden aria-label="{{ "calendar_events.scope_label" | t }}"></select>
+          <select id="mgmt-scope-switch" class="cal-form-select" data-site-select hidden aria-label="{{ "calendar_events.scope_label" | t }}"></select>
         </div>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="btn-toggle-event-form"
-        >
-          {{ "calendar_events.schedule_operation" | t }}
-        </button>
       </div>
 
       <!-- Collapsible Event Creation Form -->
@@ -59,18 +52,16 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         <h3 class="form-title" id="form-heading">{{ "calendar_events.create_operation" | t }}</h3>
 
         <div class="form-grid">
-          <!-- Preset Selector -->
+          <!-- The event type: the site's dropdown (js/site-select.js) with each type's icon and
+               usual length, from _data/event_types.yml. Picking one fills in the form; "Custom"
+               leaves it blank. -->
           <div class="form-group form-col-full">
             <label for="evt-input-preset">{{ "calendar_events.preset" | t }}</label>
-            <select id="evt-input-preset" class="cal-form-select">
-              <option value="custom">{{ "calendar_events.preset_custom" | t }}</option>
-              <option value="crystal_cluster">{{ "calendar_events.preset_crystal_cluster" | t }}</option>
-              <option value="elixir_scramble">{{ "calendar_events.preset_elixir_scramble" | t }}</option>
-              <option value="survival_battle">{{ "calendar_events.preset_survival_battle" | t }}</option>
-              <option value="kill_event">{{ "calendar_events.preset_kill_event" | t }}</option>
-              <option value="kvk_battle">{{ "calendar_events.preset_kvk_battle" | t }}</option>
-              <option value="gear_event">{{ "calendar_events.preset_gear_event" | t }}</option>
-              <option value="cheese_trap">{{ "calendar_events.preset_cheese_trap" | t }}</option>
+            <select id="evt-input-preset" class="cal-form-select" data-site-select>
+              <option value="custom" data-icon='<path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>' data-hint="{{ "calendar_events.type_custom_hint" | t }}">{{ "calendar_events.type_custom" | t }}</option>
+              {%- for type in site.data.event_types.types -%}{%- if type.preset %}
+              <option value="{{ type.id }}" data-icon="{{ type.icon | escape }}" data-hint="{{ "calendar_events.duration_h" | t: "n", type.duration }}">{{ "event_presets." | append: type.id | append: "_title" | t }}</option>
+              {%- endif -%}{%- endfor %}
             </select>
           </div>
 
@@ -115,22 +106,44 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
           <!-- Recurrence Mode -->
           <div class="form-group">
             <label for="evt-input-recurrence">{{ "calendar_events.frequency" | t }}</label>
-            <select id="evt-input-recurrence" class="cal-form-select">
+            <select id="evt-input-recurrence" class="cal-form-select" data-site-select>
               <option value="none">{{ "calendar_events.once" | t }}</option>
               <option value="2days">{{ "calendar_events.every_2_days" | t }}</option>
               <option value="weekly">{{ "calendar_events.weekly" | t }}</option>
             </select>
           </div>
 
-          <!-- Discord Notification Target -->
+          <!-- The Discord reminder, one choice (owner, 2026-11-16): none, or posted 1 hour before
+               (each option with a line icon: bell off, bell, target, megaphone, message)
+               the start pinging the alert role, a specific role, @everyone or nobody
+               (api/_reminders.js). It replaced a "Remind 1 hour before" tick box that sat apart
+               from the ping, which made "Silent" look like "no reminder". -->
           <div class="form-group form-col-full">
             <label for="evt-input-notify">{{ "calendar_events.alert_level" | t }}</label>
-            <select id="evt-input-notify" class="cal-form-select">
-              <option value="role">{{ "calendar_events.notify_role" | t }}</option>
-              <option value="custom_role">{{ "calendar_events.notify_custom" | t }}</option>
-              <option value="everyone">{{ "calendar_events.notify_everyone" | t }}</option>
-              <option value="none">{{ "calendar_events.notify_none" | t }}</option>
+            <select id="evt-input-notify" class="cal-form-select" data-site-select>
+              <option value="off" data-icon='<path d="M8.7 3A6 6 0 0 1 18 8c0 2.3.3 4 .7 5.3"/><path d="M17 17H3s3-2 3-9c0-.6.1-1.2.3-1.7"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/><path d="m2 2 20 20"/>'>{{ "calendar_events.notify_off" | t }}</option>
+              <option value="role" data-icon='<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>' selected>{{ "calendar_events.notify_role" | t }}</option>
+              <option value="custom_role" data-icon='<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>'>{{ "calendar_events.notify_custom" | t }}</option>
+              <option value="everyone" data-icon='<path d="m3 11 18-5v12L3 14z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>'>{{ "calendar_events.notify_everyone" | t }}</option>
+              <option value="none" data-icon='<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'>{{ "calendar_events.notify_none" | t }}</option>
             </select>
+            <small class="form-hint" id="evt-reminder-hint">{{ "calendar_events.reminder_hint" | t }}</small>
+          </div>
+
+          <!-- When the reminder goes (owner request, 2026-11-17): from the start to an hour before,
+               in tens (reminder_minutes, api/_reminders.js). Greyed out with "No reminder". -->
+          <div class="form-group form-col-full" id="group-remind-time">
+            <label for="evt-input-remind-time">{{ "calendar_events.remind_when" | t }}</label>
+            <select id="evt-input-remind-time" class="cal-form-select" data-site-select>
+              <option value="0">{{ "calendar_events.remind_at_start" | t }}</option>
+              <option value="10">{{ "calendar_events.remind_minutes" | t_html: "n", 10 }}</option>
+              <option value="20">{{ "calendar_events.remind_minutes" | t_html: "n", 20 }}</option>
+              <option value="30">{{ "calendar_events.remind_minutes" | t_html: "n", 30 }}</option>
+              <option value="40">{{ "calendar_events.remind_minutes" | t_html: "n", 40 }}</option>
+              <option value="50">{{ "calendar_events.remind_minutes" | t_html: "n", 50 }}</option>
+              <option value="60" selected>{{ "calendar_events.remind_hour" | t }}</option>
+            </select>
+            <small class="form-hint" id="evt-remind-time-hint">{{ "calendar_events.remind_when_hint" | t }}</small>
           </div>
 
           <!-- Non-Jumping Custom Role Input -->
@@ -146,15 +159,6 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
               title="{{ "calendar_events.role_id_title" | t }}"
               disabled
             />
-          </div>
-
-          <!-- Discord reminder before the start (posted by the reminder check, api/calendar.js) -->
-          <div class="form-group form-col-full">
-            <label class="cal-check-label" for="evt-input-reminder">
-              <input type="checkbox" id="evt-input-reminder" checked />
-              {{ "calendar_events.reminder" | t }}
-            </label>
-            <small class="form-hint" id="evt-reminder-hint">{{ "calendar_events.reminder_hint" | t }}</small>
           </div>
 
           <!-- Instructions / Rally Point -->
@@ -188,14 +192,17 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
       <section class="cal-hero-card">
         <div class="cal-hero-header">
           <div>
-            <span class="cal-badge" id="hero-phase-badge">{{ "calendar.phase" | t }}</span>
-            <h1 id="hero-phase-title" class="cal-hero-title">{{ "calendar.schedule_title" | t }}</h1>
+            <!-- The week, with the rewards' state beside it (js/calendar.js renderHero) -->
+            <div class="cal-hero-title-row">
+              <h1 id="hero-phase-title" class="cal-hero-title">{{ "calendar.schedule_title" | t }}</h1>
+              <span class="cal-badge" id="hero-phase-badge" hidden></span>
+            </div>
             <p class="cal-hero-subtitle" id="hero-phase-subtitle">{{ "calendar.loading_cycle" | t }}</p>
           </div>
           <div class="cal-capitol-card">
             <div class="cal-capitol-label" id="hero-capitol-label">{{ "calendar.capitol_holder" | t }}</div>
             <div class="cal-capitol-holder" id="hero-capitol-holder">--</div>
-            <div class="cal-capitol-rank" id="hero-capitol-rank">{{ "calendar.rank" | t: "rank", "--" }}</div>
+            <div class="cal-capitol-rank" id="hero-capitol-rank">&nbsp;</div>
           </div>
         </div>
 
@@ -215,21 +222,21 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         </div>
       </section>
 
-      <!-- Scoped Filter Toolbar (Shown only when alliance context exists) -->
-      <div
-        class="cal-filter-toolbar"
-        id="cal-filter-toolbar"
-        style="display: none"
-      >
-        <div class="filter-controls-group">
-          <label for="cal-scope-filter" class="filter-label">{{ "calendar.perspective" | t }}</label>
-          <select id="cal-scope-filter" class="cal-filter-select"></select>
+      <!-- The events at a glance: week and cycle views (js/calendar-views.js) -->
+      <section class="cal-section">
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-heading">{{ "calendar.upcoming" | t }}</h2>
+            {% capture gt %}<strong>{{ "calendar.gt_label" | t }}</strong>{% endcapture %}
+            <div class="cal-tz-notice">{{ "calendar.times_shown" | t_html: "gt", gt }}</div>
+          </div>
         </div>
-        <div id="filter-status-tag" class="filter-active-badge"></div>
-      </div>
+
+        <div class="events-timeline" id="events-timeline-container"></div>
+      </section>
 
       <!-- ======================================================================
-           CAPITOL DEFENSE & ROTATION OPERATIONS CONSOLE
+           CAPITOL ROTATION (js/kvk-scheduler.js)
            ====================================================================== -->
       <section class="cal-section ops-portal" id="operations-portal">
         <div class="section-header-row ops-header">
@@ -254,7 +261,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
           style="display: none"
         >
           <div class="ops-section-header">
-            <h3 class="ops-section-title">{{ "kings_scheduler.buyouts_title" | t }}</h3>
+            <h3 class="ops-section-title">{% include ui-icon.html name="shield" %}{{ "kings_scheduler.buyouts_title" | t }}</h3>
             <span class="badge" id="ops-buyout-count-badge">{{ "kings_scheduler.buyouts_count" | t: "n", 0 }}</span>
           </div>
           <div class="ops-buyout-list" id="ops-buyout-list"></div>
@@ -263,7 +270,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         <!-- Threat Assessment & Override Simulator -->
         <div class="ops-override-box">
           <div class="ops-section-header">
-            <h3 class="ops-section-title">{{ "kings_scheduler.override_title" | t }}</h3>
+            <h3 class="ops-section-title">{% include ui-icon.html name="siren" %}{{ "kings_scheduler.override_title" | t }}</h3>
             <span class="sub-text">{{ "kings_scheduler.override_help" | t }}</span>
           </div>
 
@@ -273,6 +280,7 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
               <select
                 id="ops-input-target-week"
                 class="ops-select cal-form-select"
+                data-site-select
               >
                 <option value="1">{{ "kings_scheduler.week1_option" | t }}</option>
                 <option value="2">{{ "kings_scheduler.week2_option" | t }}</option>
@@ -314,22 +322,17 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals]
         </div>
       </section>
 
-      <!-- Operations Timeline Section -->
-      <section class="cal-section">
-        <div class="section-header-row">
-          <div>
-            <h2 class="section-heading">{{ "calendar.upcoming" | t }}</h2>
-            {% capture gt %}<strong>{{ "calendar.gt_label" | t }}</strong>{% endcapture %}
-            <div class="cal-tz-notice">{{ "calendar.times_shown" | t_html: "gt", gt }}</div>
-          </div>
-        </div>
-
-        <div class="events-timeline" id="events-timeline-container"></div>
-      </section>
     </div>
   </div>
 </div>
 
 <!-- Modular Scripts -->
+<!-- The event types (_data/event_types.yml), and their names in every language: older events
+     are matched to a type by title (js/calendar-views.js) -->
+<script type="application/json" id="event-types">{{ site.data.event_types | jsonify }}</script>
+<script type="application/json" id="event-type-names">{
+{%- for lang in site.languages %}"{{ lang }}": {{ site.data[lang].tools.event_presets | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor -%}
+}</script>
+<script src="/js/calendar-views.js"></script>
 <script src="/js/calendar.js"></script>
 <script type="module" src="/js/kvk-scheduler.js"></script>

@@ -2,6 +2,7 @@
 // Leaders' proposals from the web planners -> the war-room Discord channel, for a Steward
 // to approve. Requires a login pass (api/_tokens.js), checks size and shape, and limits
 // R4/R5 to a few proposals per day.
+import { sendForm } from './_discord_send.js';
 import { verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { inLanguage, say, utcTime } from './_messages.js';
@@ -13,6 +14,8 @@ import {
   isTestDeployment,
   TEST_PROPOSAL_FIELD,
 } from './_gist.js';
+import { isImageRequest, handleImageRequest } from './_alliance_images.js';
+import { serveGameArt } from './_game_art.js';
 
 const POOL_LIMITS = {
   commanders_will: 5,
@@ -38,6 +41,27 @@ export default function handler(req, res) {
 }
 
 async function respond(req, res) {
+  // Alliance images (api/_alliance_images.js) and our copies of the game's frames and
+  // default portraits (api/_game_art.js) share this endpoint.
+  const gameArt = req.method === 'GET' && req.query?.game_art;
+  if (gameArt || isImageRequest(req)) {
+    try {
+      const out = gameArt ? await serveGameArt(String(gameArt)) : await handleImageRequest(req);
+      if (out.image) {
+        res.setHeader('Content-Type', out.contentType);
+        res.setHeader('Cache-Control', out.cache);
+        if (out.cdnCache) res.setHeader('Vercel-CDN-Cache-Control', out.cdnCache);
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        return res.status(out.status).send(out.image);
+      }
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(out.status).json(out.json);
+    } catch (err) {
+      console.error('Alliance images failed:', err);
+      return res.status(500).json({ error: say('api_alliance_images.failed') });
+    }
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -376,14 +400,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         const channelId = proposalChannel(
           process.env.REWARDS_CHANNEL_ID || process.env.WAR_ROOM_CHANNEL_ID,
         );
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -468,14 +485,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         }
 
         const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -577,14 +587,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         formData.append('files[0]', jsonBlob, 'diplomacy-blueprint.dat');
 
         const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -658,14 +661,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         );
 
         const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();
@@ -760,14 +756,7 @@ async function dispatchProposal(payload, botToken, submitter) {
         formData.append('files[0]', jsonBlob, 'override-blueprint.dat');
 
         const channelId = proposalChannel(process.env.WAR_ROOM_CHANNEL_ID);
-        const discordRes = await fetch(
-          `https://discord.com/api/v10/channels/${channelId}/messages`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bot ${botToken}` },
-            body: formData,
-          },
-        );
+        const discordRes = await sendForm(channelId, formData, { token: botToken });
 
         if (!discordRes.ok) {
           const errorText = await discordRes.text();

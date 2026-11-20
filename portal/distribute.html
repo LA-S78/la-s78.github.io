@@ -9,7 +9,7 @@ strings: [kings_console]
 
 <div class="content-pane portal-pane-md">
   <div class="portal-header">
-    <h2 class="portal-title">{{ "kings_console.title" | t }}</h2>
+    <h2 class="portal-title">{% include ui-icon.html name="crown" %}{{ "kings_console.title" | t }}</h2>
     <div class="sub-text" id="progress-indicator">{{ "kings_console.loading" | t }}</div>
   </div>
 
@@ -31,10 +31,16 @@ strings: [kings_console]
   <div id="checklist-note" class="sub-text distribute-checklist-note"></div>
 
   <div id="roster-container"></div>
+  <p class="tracker-credit" id="tracker-credit" hidden>{% include ui-icon.html name="users" %}{{ "roster.credit_before" | t }} <a href="https://lastasylumtracker.com/" target="_blank" rel="noopener">Last Asylum Tracker</a></p>
 </div>
+
+<script type="module" src="/js/name-check.js"></script>
+<script type="module" src="/js/player-portrait.js"></script>
 
 <script>
   (function () {
+    /** An interface icon (js/ui-icons.js) for the start of a label. */
+    const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
     let nominationsData = {};
     let wartimeBuyouts = [];
     let groupBy = 'chest';
@@ -85,11 +91,11 @@ strings: [kings_console]
       if (!period || !period.open) {
         elNote.textContent = '';
       } else if (access.can) {
-        elNote.textContent = t('kings_console.can_tick');
+        elNote.innerHTML = ic('check', 'ok') + escapeHtml(t('kings_console.can_tick'));
       } else if (access.why === 'signed-out') {
-        elNote.textContent = t('kings_console.view_only_signed_out', { king: kingText });
+        elNote.innerHTML = ic('eye') + escapeHtml(t('kings_console.view_only_signed_out', { king: kingText }));
       } else {
-        elNote.textContent = t('kings_console.view_only', { king: kingText });
+        elNote.innerHTML = ic('eye') + escapeHtml(t('kings_console.view_only', { king: kingText }));
       }
     }
 
@@ -107,6 +113,7 @@ strings: [kings_console]
           handedOut = data.handed_out || {};
           king = data.king || null;
           render();
+          if (Object.keys(nominationsData).length) loadPictures();
         } catch (err) {
           elRoster.innerHTML = `<div class="status-banner warning">
             ${escapeHtml(t('kings_console.load_failed', { error: err.message }))}
@@ -129,13 +136,13 @@ strings: [kings_console]
       const week = Number(period.week) === 0 ? t('common.off_week') : t('common.kw_week', { n: period.week });
       let text;
       if (!period.open) {
-        text = escapeHtml(t('kings_console.closed'));
+        text = ic('lock') + escapeHtml(t('kings_console.closed'));
       } else if (period.kwWeek && period.result === 'pending') {
-        text = `⏳ ${th('kings_console.hold', { title: bold('kings_console.hold_title') }, { when: until })}`;
+        text = `${ic('hourglass', 'wait')}${th('kings_console.hold', { title: bold('kings_console.hold_title') }, { when: until })}`;
       } else if (period.result === 'won') {
-        text = `⚔️ ${th('kings_console.won', { title: bold('kings_console.won_title') }, { when: until })}`;
+        text = `${ic('swords')}${th('kings_console.won', { title: bold('kings_console.won_title') }, { when: until })}`;
       } else {
-        text = `🎁 ${th('kings_console.week', { title: bold('kings_console.week_title', { week }) }, { when: until })}`;
+        text = `${ic('gift')}${th('kings_console.week', { title: bold('kings_console.week_title', { week }) }, { when: until })}`;
       }
       el.innerHTML = `<span>${text}</span>`; // one block, so the bold words stay inline
       el.style.display = 'flex';
@@ -148,7 +155,7 @@ strings: [kings_console]
       if (buyoutAlliances.length > 0) {
         const tags = buyoutAlliances.map(a => `<strong>[${escapeHtml(a.alliance)}]</strong>`).join(', ');
         elBuyoutBanner.innerHTML = `
-          <span>🛡️</span>
+          <span>${ic('shield', 'solo')}</span>
           <div>
             ${th(buyoutAlliances.length === 1 ? 'kings_console.buyout_one' : 'kings_console.buyout_other', { title: `<strong>${escapeHtml(t('kings_console.buyout_title'))}</strong>`, tags })}
           </div>
@@ -215,14 +222,15 @@ strings: [kings_console]
         // One set at a time, like the game's two tabs: all of King's Commendation (REG),
         // then all of King of Battle Reward (KW); within a set, most valuable first.
         const tiers = [
-          { pool: 'REG', key: 'commanders_will', title: `🟡 ${CHEST_LABEL.standard.commanders_will}`, glyph: 'gold' },
-          { pool: 'REG', key: 'loyal_servant', title: `🟣 ${CHEST_LABEL.standard.loyal_servant}`, glyph: 'purple' },
-          { pool: 'REG', key: 'followers_heart', title: `🔵 ${CHEST_LABEL.standard.followers_heart}`, glyph: 'blue' },
-          { pool: 'KW', key: 'commanders_will', title: `🟡 ${CHEST_LABEL.kingdom_war.commanders_will}`, glyph: 'gold' },
-          { pool: 'KW', key: 'loyal_servant', title: `🟣 ${CHEST_LABEL.kingdom_war.loyal_servant}`, glyph: 'purple' },
-          { pool: 'KW', key: 'followers_heart', title: `🔵 ${CHEST_LABEL.kingdom_war.followers_heart}`, glyph: 'blue' }
+          { pool: 'REG', key: 'commanders_will', title: CHEST_LABEL.standard.commanders_will, glyph: 'gold' },
+          { pool: 'REG', key: 'loyal_servant', title: CHEST_LABEL.standard.loyal_servant, glyph: 'purple' },
+          { pool: 'REG', key: 'followers_heart', title: CHEST_LABEL.standard.followers_heart, glyph: 'blue' },
+          { pool: 'KW', key: 'commanders_will', title: CHEST_LABEL.kingdom_war.commanders_will, glyph: 'gold' },
+          { pool: 'KW', key: 'loyal_servant', title: CHEST_LABEL.kingdom_war.loyal_servant, glyph: 'purple' },
+          { pool: 'KW', key: 'followers_heart', title: CHEST_LABEL.kingdom_war.followers_heart, glyph: 'blue' }
         ];
-        const SET_NAMES = { REG: `👑 ${t('common.set_one')}`, KW: `⚔️ ${t('common.set_two')}` };
+        const SET_NAMES = { REG: t('common.set_one'), KW: t('common.set_two') };
+        const SET_ICONS = { REG: 'crown', KW: 'swords' };
 
         let currentSet = null;
         tiers.forEach(tier => {
@@ -241,9 +249,10 @@ strings: [kings_console]
           if (tier.pool !== currentSet) {
             currentSet = tier.pool;
             const setCount = flatList.filter(e => e.pool === tier.pool).length;
-            html += `<div class="distribute-set-heading">${escapeHtml(SET_NAMES[tier.pool])} (${setCount})</div>`;
+            html += `<div class="distribute-set-heading">${ic(SET_ICONS[tier.pool])}${escapeHtml(SET_NAMES[tier.pool])} (${setCount})</div>`;
           }
-          html += `<div class="slot-group-title distribute-group-heading">${escapeHtml(tier.title)} (${matched.length})</div>`;
+          // The chest's own colour mark (as in the rows), where the 🟡🟣🔵 emojis were
+          html += `<div class="slot-group-title distribute-group-heading"><span class="chest-glyph ${tier.glyph}"></span> ${escapeHtml(tier.title)} (${matched.length})</div>`;
           matched.forEach(item => {
             html += renderRow(item, tier.glyph);
           });
@@ -338,8 +347,52 @@ strings: [kings_console]
         el.setAttribute('role', 'alert');
         elRoster.parentNode.insertBefore(el, elRoster);
       }
-      el.textContent = text;
+      el.innerHTML = ic('warning', 'warn') + escapeHtml(text);
       el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+
+    // Players' pictures from the Last Asylum Tracker (owner request, 2026-11-18):
+    // { TAG: { name: { avatar, frame } } }, loaded after the list so it never waits for them
+    let pictures = null;
+    let players = {}; // { TAG: { uid: current name } }
+    let picturesAsked = false;
+
+    /**
+     * Who a listed player is now (step 3, owner request 2026-11-18): lists save each player's
+     * ID with their name, so a player who renamed shows their current name (the one to type
+     * in the game), and one who left the alliance is marked. { name, renamed, left }.
+     */
+    function playerNow(item) {
+      const uid = nominationsData[item.alliance]?.ids?.[item.ign];
+      const members = players[item.alliance];
+      if (!uid || !members) return { name: item.ign, renamed: false, left: false };
+      const now = members[uid];
+      if (!now) return { name: item.ign, renamed: false, left: true };
+      return { name: now, renamed: now !== item.ign, left: false };
+    }
+
+    // (an alliance the tracker didn't find shows initials, so the names stay lined up)
+    const face = (item, name) =>
+      pictures && window.PlayerPortrait
+        ? window.PlayerPortrait.portraitFor(name, pictures[item.alliance] || {}, 'sm')
+        : '';
+
+    async function loadPictures() {
+      if (picturesAsked) return;
+      picturesAsked = true;
+      try {
+        const res = await fetch('/api/nominate?pictures=1');
+        if (!res.ok) return;
+        const body = await res.json();
+        const found = body.pictures || {};
+        if (!Object.keys(found).length) return;
+        pictures = found;
+        players = body.players || {};
+        document.getElementById('tracker-credit').hidden = false;
+        render();
+      } catch {
+        // No pictures: the names show as before
+      }
     }
 
     function renderRow(item, glyph) {
@@ -347,7 +400,14 @@ strings: [kings_console]
       const tick = handedOut[key];
       const isKW = item.pool === 'KW';
       const when = tick ? new Date(tick.at).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-      const title = tick ? t('kings_console.ticked_by', { name: tick.by, when }) : '';
+      const now = playerNow(item);
+      const title = tick
+        ? t('kings_console.ticked_by', { name: tick.by, when })
+        : now.left
+          ? t('kings_console.left_alliance', { tag: item.alliance })
+          : now.renamed
+            ? t('kings_console.was_named', { name: item.ign })
+            : '';
 
       return `
         <div class="distribute-item ${tick ? 'sent' : ''} ${item.isBuyout ? 'is-buyout' : ''}" data-key="${escapeHtml(key)}"
@@ -359,8 +419,8 @@ strings: [kings_console]
             ${escapeHtml(t(isKW ? 'kings_console.pool_kw' : 'kings_console.pool_reg'))}
           </span>
           ${item.isBuyout ? `<span class="badge badge-buyout">${escapeHtml(t('kings_console.buyout_badge'))}</span>` : ''}
-          <span class="player-ign">${escapeHtml(item.ign)}</span>
-          <button type="button" class="copy-btn" data-copy="${escapeHtml(item.ign)}">${escapeHtml(t('common.copy'))}</button>
+          <span class="player-ign">${face(item, now.name)}${now.left ? `<span class="name-flag" title="${escapeHtml(t('kings_console.left_alliance', { tag: item.alliance }))}">${ic('warning', 'warn')}</span> ` : ''}${escapeHtml(now.name)}${now.renamed ? ` <small class="name-was">${escapeHtml(t('kings_console.was_named', { name: item.ign }))}</small>` : ''}</span>
+          <button type="button" class="copy-btn" data-copy="${escapeHtml(now.name)}">${escapeHtml(t('common.copy'))}</button>
         </div>
       `;
     }

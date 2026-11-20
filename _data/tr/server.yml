@@ -2,16 +2,32 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
+  stewards_only: Yalnızca Sorumlular Sorumlu araçlarını kullanabilir.
+  lookups_used: Bugünkü oyuncu sorgulama hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  player_not_found: Bu ID'ye sahip oyuncu bulunamadı.
+  player_unavailable: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
+  positions_leaders_only: Yalnızca ittifakınızın R4 ve R5 yetkilileri (ve Sorumlular) üyeleri haritada görebilir.
+  positions_unavailable: Üye konumları şu anda yüklenemiyor. Birkaç dakika içinde tekrar deneyin.
+  links_used: Bugünkü ittifak bağlantı hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  link_bad: Bir ittifak seçin ve şu anda oyunda kullandığı etiketi yazın.
+  link_same: Bu etiket sitede zaten kullanılıyor.
+  link_taken: "{tag} sitede başka bir ittifak tarafından kullanılıyor."
+  link_not_found: Oyunda {tag} etiketli bir ittifak bulunamadı (harf büyüklüğüne dikkat edin).
+  positions_used: Bugünkü harita yenileme hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  positions_wait: Harita kısa süre önce yenilendi. {minutes} dk içinde tekrar deneyin.
+  refresh_limit: Bugünkü kadro yenileme hakkınız bitti. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  refresh_wait: Kadro kısa süre önce yenilendi. {n} dk içinde tekrar deneyin.
+  refresh_failed: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
   signed_out: İttifak panelinizi görmek için Discord ile giriş yapın (sağ üst).
   load_failed: 'Panel yüklenemedi: {reason}'
-  no_alliance: Hangi ittifakta olduğunuzu tespit edemedik. Site, bunu NAP Discord sunucusundaki ittifak rolünüzden veya sunucu takma adınızın başındaki [ETİKET]'ten bulur. Discord'da bunu düzeltin, ardından hesap kartınızdaki (sağ üst) Erişim Yenile butonunu kullanın.
-  leaders_only: Panelde yalnızca ittifakınızın R4 ve R5 yetkilileri değişiklik yapabilir.
+  no_alliance: Hangi ittifakta olduğunuzu belirleyemedik. Site, NAP Discord sunucusundaki ittifak rolünüzden veya sunucu takma adınızın başındaki [TAG] ibaresinden bunu tespit eder. Bunu Discord'da düzeltin, ardından hesap kartınızda (sağ üst) Erişimi Yenile seçeneğini kullanın.
+  leaders_only: Yalnızca ittifakınızın R4 ve R5 yetkilileri paneli değiştirebilir.
   chart_removed: Bu grafik kaldırıldı.
   chart_already_removed: Bu grafik zaten kaldırılmıştı.
-  not_linked: Bu grafik bir Google E-Tablo veya Dokümanına bağlı değil.
-  unknown_change: Bilinmeyen değişiklik.
+  not_linked: Bu grafik bir Google E-Tablosuna veya Dokümanına bağlı değil.
+  unknown_change: Bilinmeyen bir değişiklik.
   save_failed: 'Kaydedilemedi: {reason}'
-  r5_only_nominate: Burada adaylık sayfasını yalnızca R5 yetkiliniz açabilir. Discord'da /nominate komutunu çalıştırın.
+  r5_only_nominate: Aday gösterme sayfasını buradan yalnızca R5 yetkiliniz açabilir. Discord'da /nominate komutunu çalıştırın.
   rewards_closed: Ödüller {when} tarihine kadar kapalıdır.
   no_rank: "[{tag}] sıralamada yer almıyor."
   choose_type: Bir grafik veya tablo türü seçin.
@@ -19,19 +35,19 @@ api_dashboard:
   too_many_columns: En fazla {max} sütun olabilir (bu tabloda {count} tane var).
   too_many_rows: En fazla {max} satır olabilir (bu tabloda {count} tane var).
   column_name: Sütun {n}
-  paste_first: Önce bir tablo yapıştırın (bir başlık satırı, ardından veriler).
-  no_data_rows: Tablonun başlık altında hiç veri satırı yok.
-  needs_numbers: Bir grafiğin gösterilmesi için sayısal bir sütuna ihtiyacı vardır.
-  needs_target: 'Bir ilerleme grafiğinin bir hedefe ihtiyacı vardır: bir sayı veya hedef sütunu.'
-  too_many_widgets: İttifak başına en fazla {max} grafik ve tablo.
-  sheet_unusable: 'Tablonun verileri kullanılamıyor: {reason}'
-  too_big: Bu işlem paneli çok büyük hale getirir ({size} KB / {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
-  player_name_needed: Bir oyuncu adı girin.
-  time_format: Saatler 18:00 gibi Oyun Saati formatındadır (veya boş bırakın).
-  start_time_needed: Başlangıç saatini de verin (veya her ikisini de boş bırakın).
-  rotor_full: Rotasyonda en fazla {max} oyuncu olabilir.
-  already_in_rotor: "{name} zaten rotasyonda."
-  player_removed: Oyuncu kaldırıldı.
+  paste_first: Önce bir tablo yapıştırın (başlık satırı ve ardından veriler).
+  no_data_rows: Tablonun başlık altında veri satırı bulunmuyor.
+  needs_numbers: Bir grafiğin gösterilmesi için sayı içeren bir sütuna ihtiyacı vardır.
+  needs_target: 'Bir ilerleme grafiği için bir hedef gerekir: bir sayı veya hedef sütunu.'
+  too_many_widgets: İttifak başına en fazla {max} grafik ve tablo eklenebilir.
+  sheet_unusable: 'Tablo verisi kullanılamıyor: {reason}'
+  too_big: Bu işlem paneli çok büyük hale getirirdi ({max} KB limitinin {size} KB kadarı dolu). Daha az satır kullanın veya bir tabloyu kaldırın.
+  player_name_needed: Bir oyuncu ismi girin.
+  time_format: Zamanlar 18:00 gibi Oyun Zamanı (GT) formatındadır (veya boş bırakın).
+  start_time_needed: Başlangıç zamanını da verin (veya ikisini de boş bırakın).
+  rotor_full: Dönüş listesinde en fazla {max} oyuncu olabilir.
+  already_in_rotor: "{name} zaten dönüş listesinde."
+  player_removed: Bu oyuncu kaldırıldı.
 api_sheets:
   full_link: Tam bağlantıyı yapıştırın (https://docs.google.com/ ile başlayan).
   google_only: Yalnızca Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.
@@ -51,13 +67,16 @@ api_sheets:
   no_table: Bu Dokümanda hiç tablo yok.
 api_nominate:
   link_invalid: Bu bağlantı geçersiz veya süresi dolmuş.
-  token_invalid: Jeton geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
+  token_invalid: Belirteç geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
   signed_out: Sandıkları işaretlemek için Discord ile giriş yapın (sağ üst).
   invalid_chest: Geçersiz sandık.
   no_period: Şu anda açık bir ödül dönemi yok.
-  king_only: Sandıkları yalnızca Kral'ın ittifakı (R4/R5) ve Kahyalar işaretleyebilir.
-  king_only_tag: Sandıkları yalnızca Kral'ın ittifakı [{king}] (R4/R5) ve Kahyalar işaretleyebilir.
-  not_listed: "{name} artık [{alliance}] listesinde değil. Sayfayı yenileyin."
+  king_only: Sadece Kral'ın ittifakı (R4/R5) ve Vekiller sandıkları işaretleyebilir.
+  king_only_tag: Sadece Kral'ın ittifakı [{king}] (R4/R5) ve Vekiller sandıkları işaretleyebilir.
+  not_listed: "{name}, [{alliance}] listesinde artık yok. Sayfayı yenileyin."
+  id_not_found: "[{alliance}] üyelerinden hiçbirinin oyuncu kimliği {id} değil. Numarayı kontrol edin veya ismi yazın."
+  ids_unavailable: Oyuncu kimliklerine şu anda bakılamıyor ({id}). Bunun yerine ismi yazın.
+  listed_twice: "{name} listede iki kez var."
   save_failed: 'Kaydedilemedi: {reason}'
 api_register:
   guild_id_format: Geçersiz Discord Sunucu Kimliği formatı.
@@ -81,6 +100,28 @@ api_register:
   officer_channel_missing: Yetkili Talep Kanalı ({id}) "{server}" içinde yok (veya bot bunu göremiyor). Kimliği tekrar kopyalayın.
   alert_role_missing: Varsayılan Uyarı Rolü ({id}) "{server}" içinde bir rol değil. Kimliği tekrar kopyalayın veya @everyone için boş bırakın.
   role_not_found: '"{server}" içinde "{role}" ile eşleşen bir rol henüz yok; biri oluşturulduğunda çalışacaktır.'
+api_alliance_images:
+  frame_png: Bir avatar çerçevesi şeffaf arka plana sahip bir PNG olmalıdır (JPEG dosyası üyelerinizin resimlerini kapatacaktır).
+  not_set_up: İttifak görselleri sunucuda henüz ayarlanmamış.
+  failed: İttifak görseliyle ilgili bir sorun oluştu. Lütfen tekrar deneyin.
+  bad_image: Bu dosya sitenin kullanabileceği bir resim değil. Lütfen yükleme formunu kullanın.
+  too_big: Resim çok büyük ({kb} KB üzeri). Lütfen resmi küçülten yükleme formunu kullanın.
+  wrong_size: Resim tam olarak {width}×{height} piksel olmalıdır. Lütfen yükleme formunu kullanın.
+  has_metadata: Resim hala gizli veriler içeriyor (fotoğrafın nerede çekildiği gibi). Lütfen bu verileri temizleyen yükleme formunu kullanın.
+  leaders_only: Sadece R4 ve R5 liderleri ittifak görselleri gönderebilir.
+  own_alliance_only: Sadece kendi ittifakınız için görsel gönderebilirsiniz.
+  unknown_alliance: Bu ittifak NAP listesinde bulunmuyor.
+  daily_limit: 'Günlük sınıra ulaşıldı: 24 saat içinde ittifak başına en fazla {max} görsel. Bir sonrakini {when} sonrasında gönderebilirsiniz.'
+  post_failed: Görsel Discord'daki görevlilere gönderilemedi. Lütfen daha sonra tekrar deneyin.
+  sent: İnceleme için görevlilere gönderildi. Onaylandıktan sonra görünecektir.
+  stewards_only: Sadece görevliler ittifak görsellerini inceleyebilir.
+  not_found: Görsel bulunamadı. Süresi dolmuş olabilir.
+  already_decided: Bu görsel zaten incelenmiş (veya yenisiyle değiştirilmiş).
+  approved: 'Onaylandı: görsel artık yayında.'
+  rejected: 'Reddedildi: görsel silindi.'
+  remove_not_allowed: Sadece ittifakın R5'i veya bir görevli görsellerini kaldırabilir.
+  nothing_to_remove: Kaldırılacak bir görsel yok.
+  removed: Görsel kaldırıldı.
 api_proposals:
   login_required: Öneri göndermek için lütfen tekrar Discord ile giriş yapın.
   leaders_only: Önerileri yalnızca R4 ve R5 liderleri gönderebilir.
@@ -107,6 +148,7 @@ api_events:
   updated: '"{title}" operasyonu güncellendi.'
 reminders:
   title: "⏰ Yakında başlıyor: {title}"
+  title_now: "🔔 Şimdi başlıyor: {title}"
   starts: Başlıyor
 bot_common:
   off_week: Mola Haftası
@@ -233,26 +275,32 @@ bot_rewards:
     • Temizlenen geçersiz kılmalar: {overrides}
     • Savaş dönemi satın alımları iptal edildi: {buyouts} (geçmişte tutuldu)
     • Her ittifakın listesi düzeltilmiş sandıklar için yeniden sıralandı.
+bot_ascension:
+  stewards_only: "⛔ Sadece Krallık Vekilleri başvuru yapabilir veya İlk 4 sıralamasını koruyabilir."
+  no_race: Bu yarışın sonuçları artık saklanmıyor.
+  already: "{name} bu yarış hakkında çoktan karar verdi."
+  cannot_apply: 'İlk 4 uygulanamıyor: {reason}. /rank kullanın.'
 bot_admin:
   rank_none: Mevcut durumda kayıtlı ittifak yok.
-  rank_title: "🛡️ Sunucu NAP Durumları"
-  rank_open: Açık Diplomasi & Durumlar
+  rank_title: "🛡️ Sunucu NAP Sıralaması"
+  rank_open: Açık Diplomasi & Sıralama
   rank_fetch_failed: "⚠️ Sıralamalar alınamadı: {reason}"
-  rank_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Sorumluları ittifak sıralamalarını güncelleyebilir."
-  rank_missing: "⚠️ Gerekli argümanlar eksik: tag ve rank."
-  rank_set_title: "👑 NAP Durumu Güncellendi"
-  rank_set_text: "`[{tag}]` ittifakı **Sıra #{rank}** olarak atandı *(önceki: {previous})*."
+  rank_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Yöneticileri ittifak sıralamalarını güncelleyebilir."
+  rank_missing: "⚠️ Eksik gerekli argümanlar: tag ve rank."
+  rank_set_title: "👑 NAP Sıralaması Güncellendi"
+  rank_set_text: "`[{tag}]` ittifakı **Sıralama #{rank}** olarak atandı *(önceki: {previous})*."
   rank_unranked: Sıralamasız
   rank_updated_by: "{name} tarafından güncellendi"
-  rank_view: Durumları Görüntüle
-  rank_set_failed: "⚠️ Sıra güncellenemedi: {reason}"
+  rank_view: Sıralamayı Görüntüle
+  rank_set_failed: "⚠️ Sıralama güncellenemedi: {reason}"
+  rank_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}): lütfen etiketi, büyük harfleriyle tam olarak yazın."
   dev_done: |-
-    ✅ **Test verileri güncellendi.** {count} dosya canlı verilerden, dev.la-s78.app tarafından kullanılan test Gist'ine kopyalandı: {files}.
-    Canlı veriler sadece okundu, değiştirilmedi.
+    ✅ **Test verileri güncellendi.** {count} dosya, canlı verilerden dev.la-s78.app tarafından kullanılan test Gist'ine kopyalandı: {files}.
+    Canlı veriler yalnızca okundu, değiştirilmedi.
   dev_failed: "⚠️ **Test verileri güncellenemedi:** {reason}"
-  dev_denied: "⛔ **Erişim Engellendi:** Sadece Sorumlular test verilerini güncelleyebilir."
-  test_proposal: "🧪 Bu, test sitesinden gelen bir test önerisidir. Test verilerini kullandığı için onaylanamaz veya canlı sistemde hiçbir şeyi değiştiremez."
-  approved_not_updated: "✅ Onaylandı ve kaydedildi ancak bu mesaj güncellenemedi ({reason})."
+  dev_denied: "⛔ **Erişim Engellendi:** Sadece Yöneticiler test verilerini güncelleyebilir."
+  test_proposal: "🧪 Bu, test sitesinden gelen bir test teklifidir. Test verilerini kullandığı için onaylanamaz veya canlı sistemde herhangi bir değişiklik yapamaz."
+  approved_not_updated: "✅ Onaylandı ve kaydedildi, ancak bu mesaj güncellenemedi ({reason})."
 bot_register:
   nap_only: "⚠️ Bu komut sadece resmi NAP sunucusunda çalıştırılabilir."
   sync_denied: "⛔ **Erişim Engellendi:** Sadece yetkili Krallık Sorumluları yayın-senkronizasyon komutlarını kullanabilir."

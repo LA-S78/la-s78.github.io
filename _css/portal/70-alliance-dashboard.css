@@ -1080,3 +1080,189 @@ li.dw-sel > .dw-bar-track {
 .dash-check.dash-sub {
   margin-left: 1.6rem;
 }
+
+/* Desktop: the dashboard uses the wide portal layout (like the main site's pages), with
+   charts two to a row; tables keep the full width. Phones and narrow windows: one column. */
+@media (min-width: 900px) {
+  .dash-widgets:not([hidden]) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+  .dash-widgets > .dash-card {
+    margin-bottom: 0;
+  }
+  .dash-widgets > .dash-widget[data-type="table"],
+  .dash-widgets > :only-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* The player-name check under the Caravan Rotor's name boxes (js/name-check.js, against the
+   alliance's member list from the Last Asylum Tracker): advice only, never blocks a save */
+.dash-cv-hint {
+  min-height: 1.2em;
+  margin: 4px 0 2px;
+}
+
+.dash-cv-row.is-editing .dash-cv-hint {
+  grid-column: 1 / -1;
+  flex-basis: 100%;
+}
+
+.name-ok {
+  color: var(--status-success-text);
+}
+
+.name-warn {
+  color: var(--status-warning-text, var(--text-main));
+}
+
+.name-flag {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.dash-link-btn {
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--accent-text);
+  background: none;
+  border: none;
+  text-decoration: underline dotted;
+  cursor: pointer;
+}
+
+/* ===== Alliance roster (owner request, 2026-11-18; Last Asylum Tracker) ===== */
+.dash-roster-sorts {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.dash-roster-sorts [aria-pressed='true'] {
+  border-color: var(--accent-color);
+  color: var(--accent-text);
+}
+
+.dash-roster-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  max-height: 560px;
+  overflow-y: auto;
+}
+
+.dash-roster-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-top: 1px solid var(--overlay-5);
+  font-size: 0.82rem;
+}
+
+.dash-roster-who,
+.dash-roster-stats {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dash-roster-stats {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.dash-roster-name {
+  font-weight: 600;
+  color: var(--text-main);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-roster-might {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The roster's search keeps a usable width: the sort buttons go under it when short of room */
+.dash-roster .dash-cv-filters {
+  flex-wrap: wrap;
+}
+
+.dash-roster .dash-cv-filters input {
+  flex: 1 1 180px;
+}
+
+/* Leaders: today's research donations and help */
+.dash-roster-giving {
+  display: inline-flex;
+  gap: 8px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.dash-roster-giving > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* The roster's head: title, then Refresh on the right; members and Might centred below */
+.dash-roster-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0.4rem;
+}
+
+.dash-roster-head .dash-card-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+#roster-refresh {
+  flex-shrink: 0;
+}
+
+.dash-roster-summary {
+  margin: 0 0 0.6rem;
+  text-align: center;
+}
+
+.dash-roster-summary .dash-tag {
+  display: inline-block;
+  margin-left: 0;
+}
+
+/* The roster's Refresh button: how many are left today */
+#roster-refresh small {
+  margin-left: 4px;
+  opacity: 0.75;
+}
+
+/* Reached the game's daily help limit */
+.dash-roster-giving .is-capped {
+  font-weight: 700;
+  color: var(--status-success-text, var(--text-main));
+}
+
+.dash-roster-daily {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0 0;
+}
+
+.dash-roster-id {
+  font-weight: 400;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}

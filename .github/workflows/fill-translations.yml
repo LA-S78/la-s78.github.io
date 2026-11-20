@@ -1,0 +1,82 @@
+name: Fill missing translations
+
+# For a guide that's already translated (_source/<guide>.md) but still has English in its
+# other languages' section titles (which also label the nav tabs), subtitle or picture
+# descriptions (alt text), or a section that doesn't match the English (a wrong section in
+# its place, or missing). Run by hand: Actions → "Fill missing translations" → Run
+# workflow, and type the guide's id (the file name without .md, e.g. kill_event). Gemini
+# translates those sections again from the English and the leftover texts; nothing else in
+# the guide changes, and a pull request opens to check before merging. New guides get the same check automatically when
+# their _en draft is translated (_scripts/generate_master.rb, _scripts/guide_text_check.rb).
+
+on:
+  workflow_dispatch:
+    inputs:
+      guide:
+        description: "Guide id (file name in _source without .md, e.g. kill_event)"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: fill-translations
+  cancel-in-progress: false
+
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setting up Ruby environment
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Translate the leftover English
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GUIDE: ${{ inputs.guide }}
+        run: bundle exec ruby _scripts/generate_master.rb --fill "$GUIDE"
+
+      # The same build and checks as a deploy, before the pull request opens (owner request,
+      # 2026-11-17). GitHub doesn't run the usual pull request check for a pull request this
+      # workflow opens (it shows as failed, with no jobs), so this is that check: a broken
+      # translation stops here, and no pull request opens.
+      - name: Check the site still builds
+        env:
+          JEKYLL_ENV: production
+          BUILD_LOG: ${{ runner.temp }}/jekyll-build.log
+        run: |
+          bundle exec ruby _scripts/build.rb --no-check
+          bundle exec ruby _scripts/check_build.rb
+
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GUIDE: ${{ inputs.guide }}
+        run: |
+          git add -A _source/
+          if git diff --cached --quiet; then
+            echo "Nothing to fix in $GUIDE." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch="fill-translations/${GUIDE}-$(date -u +%Y%m%d-%H%M)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$branch"
+          git commit -q -m "Fix the $GUIDE guide's translations"
+          git push -q origin "$branch"
+          body="Fixes to the \`$GUIDE\` guide's translations by the \"Fill missing translations\" workflow: sections that didn't match the English translated again, and section titles, subtitle and picture descriptions still in English translated. The site was built and checked with them by the workflow (the usual pull request check doesn't run for pull requests a workflow opens, and shows as failed). Check them under Files changed before merging."
+          if url=$(gh pr create --base main --head "$branch" --title "Translations: fix $GUIDE" --body "$body"); then
+            echo "Pull request: $url" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            # Repositories can stop workflows opening pull requests (Settings → Actions →
+            # General → "Allow GitHub Actions to create and approve pull requests")
+            compare="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"
+            echo "Couldn't open the pull request automatically. Open it here: $compare" | tee -a "$GITHUB_STEP_SUMMARY"
+          fi

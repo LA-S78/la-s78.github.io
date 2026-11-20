@@ -4,8 +4,8 @@ rules_page:
     text: "Adil oyun ve sunucu istikrarını sağlamak için aşağıdaki kurallar zorunludur."
   rotation:
     title: "Kapitol Rotasyonu"
-    text: "İlk 3'e girmek için, aday Krallık Savaşı 1. Hafta, İttifak Düellosu 3-5. Günlerde mevcut tutucunun Gücünü aşmalıdır."
-    note: "*Not: Güç snapshot'ları günlük sıfırlamadan 10 dakika önce alınır.*"
+    text: "NAP sıralamaları Güç ile belirlenir: akademiler dahil her NAP ittifakı, Krallık Savaşı 1. Hafta'nın İttifak Düellosu 3., 4. ve 5. günlerindeki toplam Gücüne göre sıralanır. En yüksek dört ittifak bir sonraki döngüden itibaren İlk 4 yerlerini alır. Yeni sıralamalar bir Steward onayladığında uygulanır."
+    note: "*Not: Güç, üç günün her birinde sıfırlamadan 10 dakika önce (23:50 GT) otomatik olarak ölçülür.*"
   rewards:
     title: "Kapitol Ödülleri"
 alliance_page:
@@ -37,14 +37,7 @@ guides_page:
     link_url: "/guides/writers.html"
 home_page:
   pinned:
-    title: "Kritik Bilgiler"
-    t10: "T10 Hesap Makinesi"
-    survival: "Hayatta Kalma Savaşı"
-    server_rules: "Sunucu Kuralları"
-    capitol_rotation: "Kapitol Rotasyonu"
-    capitol_rewards: "Kapitol Ödülleri"
-    nap_alliances: "NAP İttifakları"
-    blacklist: "Kara Liste"
+    title: "Sabitlenmiş sayfalar"
   directories:
     title: "Dizinler"
     rules:
@@ -56,6 +49,9 @@ home_page:
     alliance:
       title: "İttifak & Diplomasi"
       sub: "Dereceler, diplomasi durumu ve bölge anlaşmaları"
+    calendar:
+      title: "Etkinlik takvimi"
+      sub: "İttifak ve sunucu etkinlikleri, Başkent rotasyonu"
 writers_page:
   usage:
     title: "Markdown Kullanımı"

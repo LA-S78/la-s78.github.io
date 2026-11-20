@@ -28,7 +28,7 @@ strings: [register]
         target="_blank"
         class="draft-btn btn-fw btn-fw-link"
       >
-        {{ "register.authorize" | t }}
+        {% include ui-icon.html name="bot" %}{{ "register.authorize" | t }}
       </a>
     </div>
 
@@ -55,7 +55,7 @@ strings: [register]
 
         <!-- Notification & Ticket Routing Configuration -->
         <div class="portal-section-divider">
-          <span class="portal-section-heading">{{ "register.routing_heading" | t }}</span>
+          <span class="portal-section-heading">{% include ui-icon.html name="megaphone" %}{{ "register.routing_heading" | t }}</span>
           <p class="portal-section-sub">{{ "register.routing_help" | t }}</p>
 
           <!-- Alert Channel ID -->
@@ -180,6 +180,8 @@ strings: [register]
 
 <script>
   (function () {
+    /** An interface icon (js/ui-icons.js) for the start of a label. */
+    const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : "");
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
 
@@ -250,11 +252,13 @@ strings: [register]
       colorPicker.value = cleanHex.toLowerCase();
       colorHexInput.value = cleanHex;
 
-      previewBadge.style.color = cleanHex;
+      previewBadge.classList.add('ally-text');
+      previewBadge.style.setProperty('--ally', cleanHex);
       previewBadge.style.borderColor = cleanHex;
       previewBadge.style.boxShadow = `0 0 12px ${cleanHex}40`;
 
-      topAllianceBadge.style.color = cleanHex;
+      topAllianceBadge.classList.add('ally-text');
+      topAllianceBadge.style.setProperty('--ally', cleanHex);
     }
 
     // Initialize default or token-provided color
@@ -334,16 +338,16 @@ strings: [register]
         elFormContainer.style.display = "none";
         elSuccess.style.display = "block";
         const warnings = (result.warnings || [])
-          .map((w) => `<br>⚠️ ${escapeHtml(w)}`)
+          .map((w) => `<br>${ic("warning", "warn")}${escapeHtml(w)}`)
           .join("");
         const code = (v) => `<code>${escapeHtml(v)}</code>`;
         const label = (key) => `<strong>${escapeHtml(t(key))}</strong>`;
         const server = result.serverName
           ? `<strong>${escapeHtml(result.serverName)}</strong> (${code(guildId)})`
           : th("register.server_id", { id: code(guildId) });
-        const tag = `<strong style="color: ${escapeHtml(allianceColor)};">[${escapeHtml(payload.alliance)}]</strong>`;
+        const tag = `<strong class="ally-text" style="--ally: ${escapeHtml(allianceColor)};">[${escapeHtml(payload.alliance)}]</strong>`;
         elSuccess.innerHTML = `
-          <strong>${escapeHtml(t("register.success"))}</strong><br><br>
+          <strong>${ic("check", "ok")}${escapeHtml(t("register.success"))}</strong><br><br>
           ${th("register.linked", { server, tag })}<br><br>
           - ${label("register.r_alert_channel")} ${code(alertChannelId)}<br>
           - ${label("register.r_target")} ${alertRoleId ? th("register.r_role", { id: code(alertRoleId) }) : `${code("@everyone")} ${escapeHtml(t("register.r_default"))}`}<br>

@@ -2,6 +2,7 @@
 // Rewards: /nominate, /rewards and the Kingdom War Won/Lost buttons (see api/_reward_period.js).
 // Split out of api/interactions.js unchanged.
 
+import { sendMessage } from './_discord_send.js';
 import { InteractionResponseType } from 'discord-interactions';
 import {
   NOT_HANDLED,
@@ -616,10 +617,10 @@ export async function postKingdomWarResultPrompt(stored, botToken) {
     process.env.DISCORD_CHANNEL_ID_NAP_LEADERSHIP || process.env.DISCORD_WEBHOOK_CHANNEL_ID;
   if (!channelId || !botToken) return;
   try {
-    await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-      method: 'POST',
-      headers: { Authorization: `Bot ${botToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    // (Through the shared sender: on the test site, the test channel and no pings)
+    await sendMessage(
+      channelId,
+      {
         embeds: [
           {
             title: `⚔️ Kingdom War Result — ${weekLabel(stored.week)}`,
@@ -629,8 +630,9 @@ export async function postKingdomWarResultPrompt(stored, botToken) {
           },
         ],
         components: kingdomWarResultButtons(stored.id),
-      }),
-    });
+      },
+      { token: botToken },
+    );
   } catch (err) {
     console.warn('Kingdom War result prompt not sent:', err.message);
   }

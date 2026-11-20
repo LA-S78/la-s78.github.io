@@ -3,8 +3,13 @@
 // Handles creating, editing and deleting calendar events
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken, verifySessionToken } from './_tokens.js';
+// The event types the form offers (generated from _data/event_types.yml by _scripts/build.rb)
+import EVENT_TYPES from './_event_types.js';
+
+const PRESET_TYPES = EVENT_TYPES.filter((t) => t.preset).map((t) => t.id);
 import { isSteward } from './_stewards.js';
 import { inLanguage, say } from './_messages.js';
+import { sameScope } from './_alliances.js'; // RâvN's events aren't RÂVN's
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -77,6 +82,7 @@ async function respond(req, res) {
         notify_target: f.notify_target,
         custom_role_id: f.custom_role_id,
         reminder: f.reminder,
+        reminder_minutes: f.reminder_minutes,
         notification_status: {
           reminder_15m_sent: false,
           start_sent: false,
@@ -86,6 +92,7 @@ async function respond(req, res) {
         },
         type: isGlobalAdmin ? 'custom' : 'alliance',
         color: f.color,
+        event_type: f.event_type,
         allDay: false,
         createdAt: new Date().toISOString(),
       };
@@ -116,7 +123,7 @@ async function respond(req, res) {
       if (!eventId) return res.status(400).json({ error: 'Missing eventId to edit.' });
       const existing = calendarState.custom_events.find((e) => e.id === eventId);
       if (!existing) return res.status(404).json({ error: say('api_events.not_found') });
-      if ((existing.scope || 'global').toLowerCase() !== callerScope.toLowerCase()) {
+      if (!sameScope(existing.scope, callerScope)) {
         return res.status(403).json({ error: say('api_events.out_of_scope') });
       }
       const checked = cleanEventFields(eventData, isGlobalAdmin);
@@ -134,7 +141,9 @@ async function respond(req, res) {
         notify_target: f.notify_target,
         custom_role_id: f.custom_role_id,
         reminder: f.reminder,
+        reminder_minutes: f.reminder_minutes,
         color: f.color,
+        event_type: f.event_type,
         updatedAt: new Date().toISOString(),
       };
 
@@ -182,13 +191,11 @@ async function respond(req, res) {
       }
 
       const targetEvt = calendarState.custom_events[targetIndex];
-      const targetScope = (targetEvt.scope || 'global').toLowerCase();
-      const currentCallerScope = callerScope.toLowerCase();
 
       // Zero-Crossover Silo:
       // Global Admins can ONLY delete global events.
       // Alliance Leaders can ONLY delete events matching their exact alliance tag.
-      if (targetScope !== currentCallerScope) {
+      if (!sameScope(targetEvt.scope, callerScope)) {
         return res.status(403).json({
           error: say('api_events.out_of_scope'),
         });
@@ -230,8 +237,10 @@ function cleanEventFields(eventData, isGlobalAdmin) {
     notify_target = 'role',
     custom_role_id = null,
     reminder = 'off',
+    reminder_minutes = 60,
     color = null,
     description = '',
+    event_type = null,
   } = eventData || {};
 
   if (!title || !date || !time_gt) return { error: say('api_events.required_fields') };
@@ -259,14 +268,21 @@ function cleanEventFields(eventData, isGlobalAdmin) {
     cleanCustomRoleId = rawRole;
   }
 
-  // Discord reminder before the start: '1h' or 'off' (more choices can come later)
+  // Discord reminder: '1h' (on) or 'off', and how long before the start: 0 (when it starts)
+  // to 60 minutes, in tens (api/_reminders.js)
   const cleanReminder = ['1h', 'off'].includes(reminder) ? reminder : 'off';
+  const minutes = Number(reminder_minutes);
+  const cleanReminderMinutes =
+    Number.isInteger(minutes) && minutes >= 0 && minutes <= 60 && minutes % 10 === 0 ? minutes : 60;
 
   // Sanitize Accent Color Hex
   let cleanColor = isGlobalAdmin ? '#10b981' : '#3b82f6';
   if (color && /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(String(color).trim())) {
     cleanColor = String(color).trim();
   }
+
+  // The event type it was made from (_data/event_types.yml, a form preset): known ones only
+  const cleanEventType = PRESET_TYPES.includes(event_type) ? event_type : null;
 
   // Game Time is UTC-2 => UTC = GT + 2 hours
   const [year, month, day] = date.split('-').map(Number);
@@ -287,7 +303,9 @@ function cleanEventFields(eventData, isGlobalAdmin) {
       notify_target: cleanNotifyTarget,
       custom_role_id: cleanCustomRoleId,
       reminder: cleanReminder,
+      reminder_minutes: cleanReminderMinutes,
       color: cleanColor,
+      event_type: cleanEventType,
     },
   };
 }
