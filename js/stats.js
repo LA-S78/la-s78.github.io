@@ -5,6 +5,7 @@
 // with the change over 7 and 30 days. Runs on the full page load and on Turbo visits.
 
 import { lineChart } from './line-chart.js';
+import { portrait } from './player-portrait.js';
 
 const esc = (v) => window.escapeHtml(v);
 const t = (key, vars) => (window.t ? window.t(`stats.${key}`, vars) : key);
@@ -182,10 +183,9 @@ function sparkline(series) {
 }
 
 /** A player's picture: their own (from the game, no referrer) or their initial. */
-function face(p) {
-  return p.avatar
-    ? `<img class="stats-face" src="${esc(p.avatar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-initial="${esc((p.name || '?').charAt(0).toUpperCase())}">`
-    : `<span class="stats-face stats-initial">${esc((p.name || '?').charAt(0).toUpperCase())}</span>`;
+/** A player's picture in their frame (js/player-portrait.js). */
+function face(p, size = 'sm') {
+  return portrait(p, size);
 }
 
 /** Rows shown before "Show more" (the tab stays compact). */
@@ -248,23 +248,6 @@ function playersView(box, top, nap, list, tag, expanded) {
           }`
         : `<p class="stats-note">${esc(empty)}</p>`
     }`;
-  fallbackFaces(box);
-}
-
-/** A picture that doesn't load (changed, or the game's server is slow) shows the initial. */
-function fallbackFaces(box) {
-  box.querySelectorAll('img.stats-face').forEach((img) =>
-    img.addEventListener(
-      'error',
-      () => {
-        const span = document.createElement('span');
-        span.className = 'stats-face stats-initial';
-        span.textContent = img.dataset.initial || '?';
-        img.replaceWith(span);
-      },
-      { once: true },
-    ),
-  );
 }
 
 // ---------- Achievements ----------
@@ -327,7 +310,6 @@ function achievementsView(box, top, nap, tag) {
         }
       </section>`;
     }).join('')}</div>`;
-  fallbackFaces(box);
 }
 
 // ---------- Player lookup ----------
@@ -363,7 +345,7 @@ function lookupView(box, state, redraw) {
       ${
         p
           ? `<article class="stats-lk-card">
-        <header>${face(p)}<span class="stats-who"><strong>${esc(p.name)}</strong><small>[${esc(p.tag)}]</small></span></header>
+        <header>${face(p, 'card')}<span class="stats-who"><strong>${esc(p.name)}</strong><small>[${esc(p.tag)}]</small></span></header>
         <p class="stats-lk-place">${ic('trophy')}${esc(t('lookup_place', { place: p.place, of: p.of }))}</p>
         <div class="stats-lk-stats">
           ${stat(t('col_might'), might(p.power))}
@@ -391,7 +373,6 @@ function lookupView(box, state, redraw) {
           : ''
       }
     </div>`;
-  fallbackFaces(box);
   const input = box.querySelector('#stats-lookup-q');
   if (L.focus) {
     input.focus();

@@ -712,39 +712,6 @@ svg #layer1 path:hover {
   height: 52px;
 }
 
-main .map-game-face,
-.map-game-face {
-  position: absolute;
-  inset: 6px;
-  width: 40px;
-  height: 40px;
-  margin: 0;
-  object-fit: cover;
-  border: 0;
-  border-radius: 6px;
-}
-
-.map-game-initial {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  color: var(--pop-strong);
-  background: color-mix(in srgb, var(--pop-head) 80%, #888);
-}
-
-main .map-game-frame,
-.map-game-frame {
-  position: absolute;
-  inset: 0;
-  width: 52px;
-  height: 52px;
-  margin: 0;
-  border: 0; /* not the page pictures' border (15-typography-markdown.css) */
-  border-radius: 0;
-  pointer-events: none;
-}
-
 .map-game-who {
   display: flex;
   flex-direction: column;

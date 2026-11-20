@@ -1,0 +1,92 @@
+/* ==========================================================================
+   PLAYER PORTRAITS (owner request, 2026-11-18): a player's picture in their in-game frame,
+   from the Last Asylum Tracker (js/player-portrait.js). Here for every page (owner,
+   2026-11-20: wherever a player's picture shows, so does their frame: the roster, Caravan
+   Rotor, nominations, King's console, the Stats tab, the Steward player lookup and the
+   territory map's card). The frames are 190px squares with an opening about 62% of their
+   width, so the picture sits in the middle at that size with the frame drawn over it. Each
+   place sets its own size on .player-portrait (width and height).
+   ========================================================================== */
+
+.player-portrait {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+}
+
+.player-portrait.pf-sm {
+  width: 32px;
+  height: 32px;
+}
+
+/* A card's picture (the Stats lookup, the Steward lookup). Not pf-lg: that's the 120px
+   frame preview on the alliance pictures page. */
+.player-portrait.pf-card {
+  width: 52px;
+  height: 52px;
+}
+
+/* Not the site's usual picture border (main img): the frame is the border */
+main .player-portrait img {
+  max-width: none;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.player-portrait .pf-pic,
+main .player-portrait img.pf-pic {
+  position: absolute;
+  inset: 19%;
+  width: 62%;
+  height: 62%;
+  object-fit: cover;
+  border-radius: 3px;
+  background: var(--overlay-5);
+}
+
+main .player-portrait img.pf-pic:only-child {
+  border-radius: 6px;
+}
+
+.player-portrait .pf-initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* Without a frame, the picture fills the square */
+.player-portrait .pf-pic:only-child {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+}
+
+.player-portrait .pf-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+
+/* The Stats tab: 32px in the lists (28px on phones); the lookup card uses pf-card */
+@media (max-width: 560px) {
+  .stats-app .player-portrait.pf-sm {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* The territory map's card */
+.map-game-pic .player-portrait {
+  width: 52px;
+  height: 52px;
+}

@@ -185,7 +185,8 @@ function start() {
   // Further in, the game view (owner request, 2026-11-20; js/map-game.js): Sanctuaries'
   // pictures on grass and the tile grid, with the level badge and name plate, and a card
   // over the one tapped
-  const GAME_FROM_PX = 90;
+  // (owner, 2026-11-20: from where the names used to appear, so squares go straight to it)
+  const GAME_FROM_PX = NAMES_FROM_PX;
   const DEEPEST_PX = 120; // a Sanctuary at the deepest zoom, on screen (about the game's look)
 
   /** A Sanctuary's 3×3 tiles in map units, [width, height] (the map isn't to scale). */
@@ -346,7 +347,7 @@ function start() {
     const asBuilding = (m, cx, cy, picked) => {
       const side = sideOf(m);
       const fpPx = side / perPx;
-      const px = Math.min(13, Math.max(10, fpPx * 0.13));
+      const px = Math.min(13, Math.max(9, fpPx * 0.13));
       const name = picked ? m.name : fit(m.name, px, fpPx * 1.05 - 10);
       buildings.push({
         cy,
@@ -472,22 +473,7 @@ function start() {
         ],
         close: { label: tm('member_close'), icon: ic('cross', 'solo') },
       });
-      pop
-        .querySelector('img.map-game-frame')
-        ?.addEventListener('error', (e) => e.target.remove(), { once: true });
-      // A picture that doesn't load shows the initial
-      pop.querySelectorAll('img.map-game-face').forEach((img) =>
-        img.addEventListener(
-          'error',
-          () => {
-            const span = document.createElement('span');
-            span.className = 'map-game-face map-game-initial';
-            span.textContent = img.dataset.initial || '?';
-            img.replaceWith(span);
-          },
-          { once: true },
-        ),
-      );
+      // (a picture or frame that doesn't load: js/player-portrait.js)
     }
     pop.hidden = false;
     // Above the marker (in the game view, the building's top), centred on it; below it when
