@@ -769,6 +769,9 @@ blacklist_planner:
 
 map_planner:
   view: "View:"
+  zoom_in: "Zoom in"
+  zoom_out: "Zoom out"
+  zoom_reset: "Show the whole map"
   # "My members" (leaders only): where your own alliance's members are, from the Last Asylum Tracker
   members_toggle: "My members"
   members_search: "Find a member (name or ID)..."

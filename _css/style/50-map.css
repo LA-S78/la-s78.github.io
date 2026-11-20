@@ -642,3 +642,64 @@ main .map-member-pic,
   stroke: rgba(0, 0, 0, 0.75);
   stroke-width: 0.25em;
 }
+
+/* ==========================================================================
+   Zooming the map (owner request, 2026-11-20; js/map-zoom.js): buttons in the corner;
+   not zoomed in, one finger still scrolls the page (two-finger pinch zooms the map);
+   zoomed in, one finger moves the map.
+   ========================================================================== */
+
+.game-map.has-zoom {
+  position: relative;
+}
+
+.game-map svg {
+  touch-action: pan-y;
+}
+
+.game-map svg.is-zoomed {
+  touch-action: none;
+  cursor: grab;
+}
+
+.game-map svg.is-zoomed:active {
+  cursor: grabbing;
+}
+
+.map-zoom {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.map-zoom button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--text-main);
+  background: rgba(10, 12, 10, 0.75);
+  border: 1px solid var(--overlay-12, rgba(255, 255, 255, 0.12));
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.map-zoom button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* The buttons' icons aren't the map: undo the map picture's rules above for them */
+.game-map .map-zoom svg {
+  width: 18px !important;
+  height: 18px !important;
+  max-height: none;
+  opacity: 1;
+  touch-action: manipulation;
+}
