@@ -98,24 +98,25 @@ export function building(m, cx, cy, side, perPx, { name, picked, textWidth }) {
   return `${out}</g>`;
 }
 
-/** The card over a tapped Sanctuary, as in the game. */
-export function popupHtml(m, { allianceName, might, count, close }) {
+/**
+ * The card over a chosen member (owner, 2026-11-20: laid out like the old card under the
+ * map, which it replaces: more in less space). `lines` are the text lines under the name,
+ * already worked out by js/map-members.js.
+ */
+export function popupHtml(m, { lines, close }) {
   const initial = esc((m.name || '?').charAt(0).toUpperCase());
   const face = m.avatar
     ? `<img class="map-game-face" src="${esc(m.avatar)}" alt="" referrerpolicy="no-referrer" data-initial="${initial}">`
     : `<span class="map-game-face map-game-initial">${initial}</span>`;
   const frame = m.frame ? `<img class="map-game-frame" src="${esc(m.frame)}" alt="">` : '';
-  const row = (label, value) => `<div><span>${esc(label)}</span><strong>${value}</strong></div>`;
-  const alliance = m.tag ? `[${esc(m.tag)}]${allianceName ? ` ${esc(allianceName)}` : ''}` : '—';
   return `
-    <div class="map-game-head"><strong>${m.tag ? `[${esc(m.tag)}] ` : ''}${esc(m.name)}</strong><button type="button" class="map-game-close" aria-label="${esc(close.label)}">${close.icon}</button></div>
-    <div class="map-game-body">
-      <span class="map-game-pic">${face}${frame}</span>
-      <div class="map-game-rows">
-        ${row(window.t('map_planner.game_might'), esc(might(m.power)))}
-        ${row(window.t('map_planner.game_kills'), esc(count(m.kills)))}
-        ${row(window.t('map_planner.game_alliance'), alliance)}
-        ${m.level ? row(window.t('map_planner.game_sanctuary'), esc(m.level)) : ''}
-      </div>
-    </div>`;
+    <span class="map-game-pic">${face}${frame}</span>
+    <span class="map-game-who">
+      <strong>${esc(m.name)}</strong>
+      ${lines
+        .filter(Boolean)
+        .map((l) => `<span>${esc(l)}</span>`)
+        .join('')}
+    </span>
+    <button type="button" class="map-game-close" aria-label="${esc(close.label)}">${close.icon}</button>`;
 }

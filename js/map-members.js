@@ -18,7 +18,7 @@
 // points read in the game (five cities, 2026-11-19, and the Capitol area's corners,
 // 2026-11-20), so members near the Capitol land on the right side of its edge.
 
-import { alliances, getAllianceColor, getCityById, getSvgRoot } from './map.js';
+import { getAllianceColor, getCityById, getSvgRoot } from './map.js';
 import { toMap } from './map-coords.js';
 import { building, ground, popupHtml } from './map-game.js';
 
@@ -89,25 +89,29 @@ function start() {
 `;
   const anchor = container.querySelector('.map-controls');
   anchor.after(bar);
-  // The chosen member's card goes under the map, so the map stays in view above it
-  const cardBox = document.createElement('div');
-  cardBox.className = 'map-member-card';
-  cardBox.id = 'map-member-card';
-  cardBox.hidden = true;
   // Search results and a group's members go under the map too: the map doesn't move when
   // they appear (owner, 2026-11-20)
   const resultsBox = document.createElement('div');
   resultsBox.className = 'map-members-results';
   resultsBox.id = 'map-members-results';
   resultsBox.hidden = true;
-  (container.querySelector('.game-map') || bar).after(resultsBox, cardBox);
+  (container.querySelector('.game-map') || bar).after(resultsBox);
 
   const btn = bar.querySelector('#btn-map-members');
   const btnNap = bar.querySelector('#btn-map-nap');
   const search = bar.querySelector('#map-members-search');
   const status = bar.querySelector('#map-members-status');
   const results = resultsBox;
-  const card = cardBox;
+  // The chosen member's card sits over the map, by their marker (placePopup); the card that
+  // was under the map is gone (owner, 2026-11-20). `card` stays as a stand-in for it.
+  const card = {
+    set hidden(v) {
+      if (v && pop) pop.hidden = true;
+    },
+    get hidden() {
+      return !pop || pop.hidden;
+    },
+  };
 
   // ---- The dots, in a group kept last in the map so they sit on top ----
   let layer = null;
@@ -405,7 +409,7 @@ function start() {
     }
     svg.classList.toggle('is-game-view', buildings.length > 0);
     layer.innerHTML = html;
-    placePopup(pickedGame ? picked : null);
+    placePopup(picked || null);
   }
 
   // ---- Redrawing only when needed ----
@@ -421,12 +425,9 @@ function start() {
       vb.y + vb.height > drawn.y + drawn.height
     );
   }
-  const currentPicked = () => {
-    const m = state.members.find((x) => x.uid === state.selected);
-    return m && sideOf(m) / unitsPerPx() >= GAME_FROM_PX ? m : null;
-  };
+  const currentPicked = () => state.members.find((x) => x.uid === state.selected) || null;
 
-  // ---- The card over a tapped Sanctuary (game view) ----
+  // ---- The card over the chosen member (any zoom) ----
   let pop = null;
   function placePopup(m) {
     const box = container.querySelector('.game-map');
@@ -451,14 +452,25 @@ function start() {
     }
     if (pop.dataset.uid !== m.uid) {
       pop.dataset.uid = m.uid;
+      const tag = m.tag || state.tag;
+      const where = territoryAt(m);
+      const compact = (n) =>
+        Number.isFinite(n)
+          ? n.toLocaleString(undefined, { notation: 'compact', maximumFractionDigits: 1 })
+          : null;
       pop.innerHTML = popupHtml(m, {
-        allianceName: alliances?.[m.tag || state.tag]?.name || '',
-        might: (n) => (Number.isFinite(n) ? n.toLocaleString() : '—'),
-        count: (n) => (Number.isFinite(n) ? n.toLocaleString() : '—'),
+        lines: [
+          [tag ? `[${tag}]` : '', m.rank, might(m.power)].filter(Boolean).join(' · '),
+          [
+            compact(m.kills) !== null ? `${tm('game_kills')} ${compact(m.kills)}` : '',
+            m.level ? `${tm('game_sanctuary')} ${m.level}` : '',
+          ]
+            .filter(Boolean)
+            .join(' · '),
+          `${tm('member_coords', { x: m.x, y: m.y })}${where ? ` · ${tm('member_in', { place: where })}` : ''}`,
+        ],
         close: { label: tm('member_close'), icon: ic('cross', 'solo') },
       });
-      if (!m.tag && state.tag)
-        pop.querySelector('.map-game-head strong').textContent = `[${state.tag}] ${m.name}`;
       pop
         .querySelector('img.map-game-frame')
         ?.addEventListener('error', (e) => e.target.remove(), { once: true });
@@ -477,19 +489,23 @@ function start() {
       );
     }
     pop.hidden = false;
-    // Above the building's top, centred on it; below it when there's no room above
+    // Above the marker (in the game view, the building's top), centred on it; below it when
+    // there's no room above
     const svg = root();
     const ctm = svg.getScreenCTM();
     const { cx, cy } = toMap(m.x, m.y);
-    const side = sideOf(m);
+    const perPx = unitsPerPx();
+    const game = sideOf(m) / perPx >= GAME_FROM_PX;
+    const half = game ? 0 : markerSize(m, SIZE.picked, perPx)[0] / 2 + 6 * perPx;
+    const side = game ? sideOf(m) : 0;
     const pt = svg.createSVGPoint();
     const at = (x, y) => {
       pt.x = x;
       pt.y = y;
       return pt.matrixTransform(ctm);
     };
-    const top = at(cx, cy + side * 0.28 - side * 0.8);
-    const bottom = at(cx, cy + side * 0.6);
+    const top = game ? at(cx, cy + side * 0.28 - side * 0.8) : at(cx, cy - half);
+    const bottom = game ? at(cx, cy + side * 0.6) : at(cx, cy + half);
     const r = box.getBoundingClientRect();
     const w = pop.offsetWidth;
     const h = pop.offsetHeight;
@@ -546,21 +562,7 @@ function start() {
       card.hidden = true;
       return;
     }
-    const where = territoryAt(m);
-    card.innerHTML = `
-      ${m.avatar ? `<img class="map-member-pic" src="${esc(m.avatar)}" alt="" referrerpolicy="no-referrer" loading="lazy">` : `<span class="map-member-pic map-member-initial">${esc((m.name || '?').charAt(0).toUpperCase())}</span>`}
-      <span class="map-member-who">
-        <strong>${esc(m.name)}</strong>
-        <span>${state.mode === 'nap' && m.tag ? `[${esc(m.tag)}] · ` : ''}${m.rank ? `${esc(m.rank)} · ` : ''}${esc(might(m.power))}</span>
-        <span>${esc(tm('member_coords', { x: m.x, y: m.y }))}${where ? ` · ${esc(tm('member_in', { place: where }))}` : ''}</span>
-      </span>
-      <button type="button" class="map-member-close" aria-label="${esc(tm('member_close'))}">${ic('cross', 'solo')}</button>`;
-    card.hidden = false;
-    card.querySelector('.map-member-close').addEventListener('click', () => {
-      state.selected = null;
-      card.hidden = true;
-      draw();
-    });
+    // Its card is drawn by draw() (placePopup), over the map
   }
 
   // ---- Search: names or player IDs ----
