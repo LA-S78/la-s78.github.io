@@ -27,9 +27,20 @@ const BATCH = 8;
 const utcDay = (ms) => new Date(ms).toISOString().slice(0, 10);
 
 /** The night's allowance from the day's remaining requests. */
-export function nightBudget(remaining) {
+/** Once every NAP player has been checked once, at most this many a night (about a weekly
+ *  refresh for ~700 players without bursts against the tracker; maintainer review). */
+export const MAX_PER_NIGHT_AFTER_FIRST_PASS = 150;
+
+/**
+ * The night's allowance from the day's remaining requests. The 100 kept spare always come
+ * first: with 120 left the night gets 20, never the minimum of 50, which only applies when
+ * there's room for it. `firstPassDone`: every NAP player checked at least once (then capped).
+ */
+export function nightBudget(remaining, firstPassDone = false) {
   const spare = Math.max(0, Number(remaining) - KEEP_SPARE);
-  return Math.min(spare, Math.max(MIN_PER_NIGHT, Math.floor(spare / 2)));
+  const wanted = Math.max(MIN_PER_NIGHT, Math.floor(spare / 2));
+  const capped = firstPassDone ? Math.min(wanted, MAX_PER_NIGHT_AFTER_FIRST_PASS) : wanted;
+  return Math.min(spare, capped);
 }
 
 /** Is it skin time (22:00–23:55 UTC)? */
@@ -104,6 +115,7 @@ export async function checkSkins({
   const file = (await store.read(FILE())) || { players: {} };
   file.players = file.players || {};
   const day = utcDay(now);
+  const players = napPlayers(await readPositionsFile(store));
   // The night's allowance, worked out once from the day's remaining requests
   if (file.night?.day !== day) {
     const q =
@@ -111,13 +123,18 @@ export async function checkSkins({
     if (!q || !Number.isFinite(Number(q.remaining))) {
       return { due: true, error: 'Quota unknown: trying again on the next check' };
     }
-    file.night = { day, budget: nightBudget(q.remaining), used: 0, remaining: q.remaining };
+    const firstPassDone = players.length > 0 && players.every((p) => file.players[p.uid]);
+    file.night = {
+      day,
+      budget: nightBudget(q.remaining, firstPassDone),
+      used: 0,
+      remaining: q.remaining,
+    };
   }
   const left = Math.max(0, file.night.budget - file.night.used);
   const report = { due: true, budget: file.night.budget, usedBefore: file.night.used };
   if (!left) return { ...report, note: 'tonight’s allowance used' };
 
-  const players = napPlayers(await readPositionsFile(store));
   const queue = skinQueue(players, file.players).slice(0, Math.min(left, PER_RUN));
   if (dryRun) return { ...report, wouldCheck: queue.length, note: 'dry run: nothing asked' };
 

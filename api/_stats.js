@@ -56,6 +56,33 @@ const TOP_SIZES = { strongest: 100, week: 50, month: 50 };
 const TOP_PER_ALLIANCE = 15;
 const dayFile = (day) => `${prefix()}/days/${day}.json`;
 
+/** How long a day's snapshot keeps its players' positions (X/Y). */
+const KEEP_POSITIONS_DAYS = 7;
+
+/**
+ * Removes the positions from day files KEEP_POSITIONS_DAYS to +7 days old (a missed night or
+ * two is caught up); a file with none left isn't written again.
+ */
+export async function forgetOldPositions(day, store) {
+  for (let n = KEEP_POSITIONS_DAYS; n < KEEP_POSITIONS_DAYS + 7; n++) {
+    const old = daysBefore(day, n);
+    const file = await store.read(dayFile(old));
+    if (!file?.alliances) continue;
+    let changed = false;
+    for (const a of Object.values(file.alliances)) {
+      for (const p of a.players || []) {
+        // [uid, name, Might, kills, Sanctuary level, x, y, picture, frame]
+        if (p[5] !== null || p[6] !== null) {
+          p[5] = null;
+          p[6] = null;
+          changed = true;
+        }
+      }
+    }
+    if (changed) await store.write(dayFile(old), file);
+  }
+}
+
 /** The GT date (YYYY-MM-DD) of a moment. */
 export const gameDay = (ms) => new Date(ms + GT_OFFSET_MS).toISOString().slice(0, 10);
 
@@ -217,8 +244,15 @@ export async function lookupPlayer({ q, uid, pid }, { store = blobStore, steward
 // stand-in instead, the same every day (so a chosen player stays chosen) but not the ID and
 // not reversible: a keyed hash with a server-only secret. Stewards get the real IDs.
 // ---------------------------------------------------------------------------------------
-const ID_SECRET = () =>
-  process.env.STATS_ID_SECRET || process.env.DISCORD_BOT_TOKEN || 'la-s78-stats';
+// A server-only secret with plenty of randomness (player IDs are numbers, so a guessable key
+// would let anyone work stand-ins back to IDs by trying them all): STATS_ID_SECRET, else the
+// bot token. Without either, stand-ins are refused rather than made with a known key
+// (maintainer review, 2026-11-20).
+const ID_SECRET = () => {
+  const secret = process.env.STATS_ID_SECRET || process.env.DISCORD_BOT_TOKEN || '';
+  if (secret.length < 20) throw new Error('No secret for player stand-ins on this deployment');
+  return secret;
+};
 const idCache = new Map();
 export function publicId(uid) {
   const key = String(uid);
@@ -665,6 +699,14 @@ export async function checkStatsSnapshot({
 
   today.at = today.at || new Date(now).toISOString();
   await store.write(dayFile(due.day), today);
+  // Older days keep no positions (maintainer review, 2026-11-20): the map only needs today's
+  // (positions.json), and "away from the hive" is worked out on the day itself, so keeping
+  // every day's X/Y would only build up a history of where everyone moved
+  try {
+    await forgetOldPositions(due.day, store);
+  } catch (err) {
+    console.warn('Old positions not removed:', err.message);
+  }
   // The map's "All NAP players" gets the same positions, for free
   try {
     await savePositions(answered, store);
