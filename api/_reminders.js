@@ -159,6 +159,33 @@ function reminderMessage(evt, start, ping, testNote) {
 }
 
 /**
+ * Marks events' occurrences as reminded (`ids`: [{ id, occurrence }]) or, with
+ * `occurrence: null`, clears the mark again. One Gist save; throws if it can't be saved.
+ */
+async function markReminded(ids) {
+  await updateGist((fresh) => {
+    const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
+    for (const e of state.custom_events || []) {
+      const mark = ids.find((s) => s.id === e.id);
+      if (!mark) continue;
+      // Clearing only takes back our own mark (an edit since may have changed it)
+      if (mark.occurrence === null && e.notification_status?.reminded_occurrence !== mark.was)
+        continue;
+      e.notification_status = {
+        ...(e.notification_status || {}),
+        reminded_occurrence: mark.occurrence,
+      };
+    }
+    return {
+      files: { 'calendar-state.json': state },
+      description: ids.some((m) => m.occurrence)
+        ? `Calendar reminders posting (${ids.length})`
+        : `Calendar reminders not posted, to retry (${ids.length})`,
+    };
+  });
+}
+
+/**
  * Runs one reminder check. Returns a report: { mode, checked, due: [...] } where mode is
  * 'live', 'test' or 'dry-run'.
  */
@@ -185,7 +212,29 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
       remindersLive: process.env.REMINDERS_LIVE === 'true',
     };
     const report = { mode, settings, checked: events.length, due: [] };
-    const sent = []; // { id, occurrence } of reminders actually posted
+    // Marked as reminded BEFORE posting (owner report, 2026-11-20: an Elixir Scramble reminder
+    // went out twice). Posting first and saving after meant a failed save left it unmarked, so
+    // the next check, five minutes later and still inside the lead time, posted it again. Now
+    // a failed mark posts nothing (the next check tries again), and a reminder whose every
+    // post failed is unmarked so the next check retries it: at worst one check late, never
+    // twice.
+    if (mode !== 'dry-run' && due.length) {
+      try {
+        await markReminded(due.map(({ evt, occurrence }) => ({ id: evt.id, occurrence })));
+      } catch (err) {
+        // Not marked: nothing posted this time, and the rest of the 5-minute check (the race,
+        // the Stats snapshot) still runs
+        console.error('Reminders not marked, so not posted:', err.message);
+        report.error = `not marked as reminded, so not posted (tried again next check): ${err.message}`;
+        report.due = due.map(({ evt, occurrence }) => ({
+          id: evt.id,
+          title: evt.title,
+          occurrence,
+        }));
+        return report;
+      }
+    }
+    const failed = []; // { id, occurrence: null, was } of reminders no post went out for
     for (const { evt, start, occurrence } of due) {
       const targets = targetsFor(evt, alliances, process.env.NAP_ALERT_CHANNEL_ID);
       const item = { id: evt.id, title: evt.title, occurrence, targets: [] };
@@ -224,28 +273,18 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
         }
       }
       if (!targets.length) item.note = 'nowhere to post (no alert channel)';
-      // Recorded once anything was posted, so it isn't posted again; if every post failed it
-      // is tried again on the next check (until the event starts)
-      if (anyPosted) sent.push({ id: evt.id, occurrence });
+      // Nothing went out (Discord down, no channel): unmarked, so the next check retries it
+      // (until the event starts)
+      if (!anyPosted && targets.length && mode !== 'dry-run')
+        failed.push({ id: evt.id, occurrence: null, was: occurrence });
     }
 
-    if (sent.length) {
-      await updateGist((fresh) => {
-        const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
-        for (const e of state.custom_events || []) {
-          const done = sent.find((s) => s.id === e.id);
-          if (done) {
-            e.notification_status = {
-              ...(e.notification_status || {}),
-              reminded_occurrence: done.occurrence,
-            };
-          }
-        }
-        return {
-          files: { 'calendar-state.json': state },
-          description: `Calendar reminders posted (${sent.length})`,
-        };
-      });
+    if (failed.length) {
+      try {
+        await markReminded(failed);
+      } catch (err) {
+        console.error('Reminders not unmarked for a retry:', err.message);
+      }
     }
     return report;
   });
