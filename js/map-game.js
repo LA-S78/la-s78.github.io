@@ -54,7 +54,7 @@ export function ground(vb, perPx) {
   const y0 = Math.floor(Math.min(...ys)) - 1;
   const y1 = Math.ceil(Math.max(...ys)) + 1;
   let lines = '';
-  if (x1 - x0 < 160 && y1 - y0 < 160) {
+  if (x1 - x0 < 260 && y1 - y0 < 260) {
     const seg = (a, b) =>
       `M${a.cx.toFixed(2)} ${a.cy.toFixed(2)}L${b.cx.toFixed(2)} ${b.cy.toFixed(2)}`;
     for (let x = x0; x <= x1; x++) lines += seg(toMap(x + 0.5, y0), toMap(x + 0.5, y1));
