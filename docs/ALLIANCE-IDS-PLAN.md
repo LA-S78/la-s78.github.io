@@ -1,7 +1,7 @@
 # Plan: alliances by permanent ID, not by tag
 
-Status: **proposed, revised after the maintainer's review** (owner request, 2026-11-20; Gemini's
-review the same day). Nothing in here is built yet; each step below becomes its own pull request,
+Status: **proposed, revised after the maintainer's two reviews** (owner request, 2026-11-20;
+Gemini's reviews the same day: the plan, then the test-site rehearsal). Nothing in here is built yet; each step below becomes its own pull request,
 rehearsed on the test site first.
 
 ## Why
@@ -123,15 +123,56 @@ The test site (dev.la-s78.app) already keeps its data apart from the live site: 
 Gist (`TEST_GIST_ID`), its own `test/` folders in the Blob store (Stats, pictures, skins), and
 reminders and proposals go only to the test channel. What it lacks is today's live data.
 
-- **A by-hand "Copy live data to the test site" action** (GitHub Actions, run from the Actions
-  tab) copies the live Gist's files into the test Gist, and the live Blob's `stats/` and
-  `alliance-images/` index into `test/`. It never writes to the live data.
-  - It copies private data (dashboards, nominations) into the test Gist, which is a secret Gist
-    on the same account as the live one; the test site has the same sign-in rules as the live
-    one, so nobody sees more there than on the live site.
-  - Each rehearsal starts from a fresh copy, which replaces the previous one.
-- **Every step runs on the test site first:** copy, run the move, check the pages (and the
-  move's report), and only then run it on the live site.
+### The copy
+
+- **A Steward-only "Copy live data here" button on the test site**, run by the test site's own
+  server, so no new tokens leave Vercel (a Gist token can write every Gist on the account, and a
+  Blob token the whole store). It **fails closed** before writing anything unless it is running
+  on the test site, the test Gist isn't the live Gist, and every Blob path it writes starts with
+  `test/`. It only ever reads the live Gist.
+- **What it copies:** the live Gist's files into the test Gist, the Blob's `stats/` summary and
+  index files and the last 30 days of `stats/days/` into `test/stats/`, and the alliance
+  pictures (index and files, a handful) into `test/alliance-images/`. Bounded and small enough
+  for one serverless call; a by-hand GitHub Action only if it ever outgrows that.
+- **What it leaves out or blanks:**
+  - `proposal-log.json` (history; not migrated, so not needed);
+  - every alliance's Discord server, channel and role IDs from `/registerbot`.
+- **Stamped:** a `_copiedAt` time, shown on the test site, so it's clear how fresh the copy is.
+  Each rehearsal starts from a fresh copy, which replaces the previous one.
+
+### Keeping the test site from touching live things
+
+- **Discord:** every message the site sends goes through one helper that, on the test site,
+  sends to the test channel only and **pings nobody** (`allowed_mentions: { parse: [] }`). That
+  covers reminders, the race results, picture reviews, safeguard 4 notices and rename
+  announcements.
+- **The tracker:** the test site doesn't run the Stats snapshot, the Top 4 race or skin
+  collection, and uses no tracker requests unless switched on for a deliberate test (a
+  test-only setting), so it never spends the live site's 1,000 a day.
+- **Pictures:** a test-site delete or replace only ever touches `test/` files.
+- **Search engines:** the test site sends `noindex`; the test Gist's address is never shown or
+  logged.
+
+### Each step on the test site
+
+Copy, run the move, then check:
+
+- **the move's own report** (counts of what changed);
+- **run it twice:** the second run changes nothing;
+- **every reference resolves:** each alliance reference in the moved files (including
+  `parent_tag`, `academies`, Caravan Rotor entries and per-player alliance fields in Stats) is an
+  ID in the register, and no raw tags are left;
+- **RâvN and RÂVN** have separate IDs and keep their own data, and `ravn` is still refused;
+- **the pages** look the same before and after;
+- **public answers** (`/api/state`, Stats) carry no `discord_var`, `links` or real player IDs
+  (steps 0 and 6);
+- **step 1:** a browser signed in before the move, with a saved "My alliance", a planner draft
+  and a `?tag=` bookmark, keeps all of them working after it;
+- **at least once (step 2 or 5): an undo drill**, restoring from the move's backup;
+- **renames only after step 6 has run there:** then a full rehearsal of HMDA → Arch, a two-way
+  tag swap and all three safeguard 4 actions, checking every page.
+
+Only then is the step run on the live site.
 
 ## What stores alliances today, and when each moves
 
@@ -157,8 +198,8 @@ Each step starts by searching the code for its stores again, in case something n
 
 Each is one pull request, rehearsed on the test site, and merged only with the owner's yes.
 
-**Step 0: the register, "numbers must match", and the test-site copy.** The "Copy live data to
-the test site" action. `alliance-register.json` built from today's alliances (a new ID each,
+**Step 0: the register, "numbers must match", and the test-site copy.** The test site's guards
+first (the Discord helper, no tracker use, `noindex`), then its "Copy live data here" button. `alliance-register.json` built from today's alliances (a new ID each,
 colours and Discord settings from `_data/alliances.yml` and the map, tracker numbers from
 `stats/alliance-ids.json` where known), and the lookups (`allianceByTag`, `allianceById`).
 Nothing reads the register yet, so pages don't change. Safeguard 4 in the measurements, with the
@@ -187,7 +228,7 @@ names** (no file renames, no broken caches); new uploads are named by ID.
 record, so old charts still read naturally.
 
 **Step 7: the rename tool goes live,** and HMDA becomes Arch in one click. (Until now it ran only
-on the test site.)
+on the test site, and only once step 6 had run there.)
 
 **Step 8: tidy-up.** Remove the "read the old form too" safety nets once old passes have expired,
 and record the result in `DECISIONS.md`.
