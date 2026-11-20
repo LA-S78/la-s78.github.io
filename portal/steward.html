@@ -121,7 +121,12 @@ strings: [steward]
       $('st-renamed').hidden = !list.length;
       $('st-renamed').innerHTML = list
         .map(
-          (r) => `<p>${ic('warning', 'warn')}<span>${esc(t('steward.renamed', { old: `[${r.tag}]`, now: `[${r.now}]`, name: r.name || '' }))} <a href="/${lang || 'en'}/alliance.html#nap-ranks">${esc(t('steward.renamed_fix'))}</a></span></p>`,
+          (r) => {
+            // The alliance as the game now names it, in bold so it stands out from the sentence
+            const now = `<strong>[${esc(r.now)}]${r.name ? ` ${esc(r.name)}` : ''}</strong>`;
+            const text = esc(t('steward.renamed', { old: `[${r.tag}]`, now: '\u0000' })).replace('\u0000', now);
+            return `<p>${ic('warning', 'warn')}<span>${text} <a href="/${lang || 'en'}/alliance.html#nap-ranks">${esc(t('steward.renamed_fix'))}</a></span></p>`;
+          },
         )
         .join('');
     }
