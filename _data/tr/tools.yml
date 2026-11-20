@@ -744,17 +744,21 @@ map_planner:
   member_coords: X {x} · Y {y}
   member_in: "{place} içinde"
   member_close: Kapat
+  game_might: Güç
+  game_kills: Leş
+  game_alliance: İttifak
+  game_sanctuary: Sığınak
   nap_toggle: Tüm NAP oyuncuları
   nap_search: Bir oyuncu bul (isim, ID veya [TAG])...
   nap_loading: NAP oyuncuları yükleniyor...
-  nap_refreshing: Oyundan tüm NAP ittifakları isteniyor...
-  nap_count: "{a} NAP ittifakında {n} oyuncu"
-  nap_empty: 'Henüz kaydedilmiş konum yok: Yüklemek için yenileyin'
-  nap_missing: 'Yüklenemedi: {tags}'
+  nap_refreshing: Oyundan her NAP ittifakı için bilgi isteniyor...
+  nap_count: "{a} NAP ittifakındaki {n} oyuncu"
+  nap_empty: 'Henüz kayıtlı konum yok: Yüklemek için yenileyin'
+  nap_missing: 'Yüklenmedi: {tags}'
   nap_refresh: Yenile
-  nap_refresh_left: 'Bugün kalan yenileme hakkı: {left}/{max} (ittifak başına bir takipçi isteği)'
-  nap_refresh_wait: 'Az önce yenilendi: {minutes} dk sonra tekrar denenebilir'
-  tag_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}). Tag'i tam olarak, büyük harflere dikkat ederek girin."
+  nap_refresh_left: Bugün kalan {max} yenilemeden {left} tanesi (her ittifak için bir takipçi isteği)
+  nap_refresh_wait: 'Az önce yenilendi: {minutes} dakika içinde tekrar denenebilir'
+  tag_ambiguous: "[{tag}] birden fazla ittifak anlamına gelebilir ({options}). Etiketi büyük harfleriyle tam olarak yazın."
   levels: Seviyeler
   alliances: İttifaklar
   resources: Kaynaklar
@@ -762,15 +766,15 @@ map_planner:
   toggle_buff_summary: Güçlendirme Özetini Aç/Kapat
   close_buff_summary: Güçlendirme Özetini Kapat
   planner_mode: Planlayıcı Modu
-  override_label: 'Değiştir:'
+  override_label: 'Şununla değiştir:'
   override_placeholder: Örn. WLO
-  override_help: Atamaları geçersiz kılmak için bir tag girin. Döngü için boş bırakın.
+  override_help: Tıklama atamalarını geçersiz kılmak için bir etiket yazın. Döngü için boş bırakın.
   submit_plan: Planı Gönder
   compare_label: Planı canlı harita ile karşılaştır
   show_live: Canlı
   show_plan: Planım
-  discard: İptal
-  discard_confirm: Planlanmış değişikliklerinizi ({n}) iptal etmek istiyor musunuz? Bu işlem geri alınamaz.
+  discard: İptal Et
+  discard_confirm: Planlanan değişikliklerinizi ({n}) iptal etmek istiyor musunuz? Bu işlem geri alınamaz.
   view_locked: Görünümü değiştirmek için Planlayıcı Modunu kapatın
   plan_saved: Planınız kaydedildi ({n} değişiklik). Devam etmek için Planlayıcı Modunu açın.
   fullscreen: Tam Ekran
@@ -778,8 +782,8 @@ map_planner:
   exit: Çıkış
   grain: Tahıl
   timber: Kereste
-  herbs: Ot
-  solid_gather: 'Düz: Toplama'
+  herbs: Otu
+  solid_gather: 'Dolu: Toplama'
   stripe_output: 'Çizgili: Üretim'
   level_unknown: Seviye --
   level: Seviye {n}
@@ -790,8 +794,8 @@ map_planner:
   none: Yok
   no_active_buff: Aktif güçlendirme yok
   drawer_title: İttifak Güçlendirme Dağılımı
-  drawer_subtitle: Aktif harita/planlayıcı atamalarına dayalı dinamik döküm
-  no_claims: Şu anda hiçbir ittifak bölge talep etmiyor.
+  drawer_subtitle: Aktif harita/planlayıcı atamalarına dayalı dinamik liste
+  no_claims: Şu anda bölge talep eden ittifak yok.
   no_buffs: Atanmış aktif güçlendirme yok
   cities_one: "{n} Şehir"
   cities_other: "{n} Şehir"
@@ -800,16 +804,16 @@ map_planner:
   col_buffs: Aktif Güçlendirmeler
   buff_research_speed: Araştırma Hızı
   buff_troop_training_speed: Birlik Eğitim Hızı
-  buff_building_speed: İnşaat Hızı
+  buff_building_speed: Bina Hızı
   buff_march_speed: Yürüyüş Hızı
   buff_grain_gathering: Tahıl Toplama
   buff_grain_output: Tahıl Üretimi
   buff_timber_gathering: Kereste Toplama
   buff_timber_output: Kereste Üretimi
-  buff_herb_gathering: Ot Toplama
-  buff_herb_output: Ot Üretimi
+  buff_herb_gathering: Otu Toplama
+  buff_herb_output: Otu Üretimi
   no_changes: Taslak planınızda değişiklik algılanmadı.
-  proposal_title: Harita Bölge Teklifi Gönder
+  proposal_title: Harita Bölgesi Teklifi Gönder
 proposals:
   title: Öneri Gönder
   close: Kapat

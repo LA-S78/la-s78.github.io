@@ -730,31 +730,35 @@ blacklist_planner:
   what_player: giocatore
   sent: Proposta di blacklist inviata alla leadership su Discord. Sarà applicata una volta approvata da uno Steward.
 map_planner:
-  view: 'Visualizza:'
+  view: 'Vista:'
   zoom_in: Ingrandisci
-  zoom_out: Riduci
+  zoom_out: Rimpicciolisci
   zoom_reset: Mostra l'intera mappa
   members_toggle: I miei membri
   members_search: Trova un membro (nome o ID)...
   members_loading: Caricamento membri in corso...
   members_count: "{n} membri di [{tag}]"
-  members_as_of: posizioni al {time}
+  members_as_of: posizioni aggiornate alle {time}
   members_failed: 'Impossibile mostrare i membri: {error}'
   members_none: Nessun membro trovato
   member_coords: X {x} · Y {y}
   member_in: in {place}
   member_close: Chiudi
+  game_might: Potenza
+  game_kills: Uccisioni
+  game_alliance: Alleanza
+  game_sanctuary: Santuario
   nap_toggle: Tutti i giocatori NAP
   nap_search: Trova un giocatore (nome, ID o [TAG])...
-  nap_loading: Caricamento giocatori NAP...
-  nap_refreshing: Richiesta al gioco di ogni alleanza NAP...
+  nap_loading: Caricamento giocatori NAP in corso...
+  nap_refreshing: Richiesta dati di ogni alleanza NAP al gioco...
   nap_count: "{n} giocatori in {a} alleanze NAP"
   nap_empty: 'Nessuna posizione salvata: Aggiorna per caricarle'
   nap_missing: 'Non caricato: {tags}'
   nap_refresh: Aggiorna
   nap_refresh_left: "{left} di {max} aggiornamenti rimasti oggi (una richiesta di tracciamento per alleanza)"
   nap_refresh_wait: 'Aggiornato poco fa: di nuovo tra {minutes} min'
-  tag_ambiguous: "[{tag}] potrebbe indicare più di un'alleanza ({options}). Inserisci il tag esattamente, con le maiuscole."
+  tag_ambiguous: "[{tag}] potrebbe riferirsi a più di un'alleanza ({options}). Inserisci il tag esattamente, rispettando le maiuscole."
   levels: Livelli
   alliances: Alleanze
   resources: Risorse
@@ -764,51 +768,51 @@ map_planner:
   planner_mode: Modalità Pianificatore
   override_label: 'Cambia in:'
   override_placeholder: ES. WLO
-  override_help: Digita un tag per sovrascrivere le assegnazioni. Lascia vuoto per scorrere.
+  override_help: Inserisci un tag per sovrascrivere le assegnazioni dei clic. Lascia vuoto per scorrere.
   submit_plan: Invia Piano
   compare_label: Confronta il piano con la mappa live
   show_live: Live
   show_plan: Il mio piano
   discard: Scarta
-  discard_confirm: Scartare le modifiche pianificate ({n})? L'azione è irreversibile.
-  view_locked: Disattiva la Modalità Pianificatore per cambiare visualizzazione
-  plan_saved: Il tuo piano è stato salvato ({n} modifiche). Attiva la Modalità Pianificatore per continuare.
+  discard_confirm: Scartare le modifiche pianificate ({n})? L'operazione non può essere annullata.
+  view_locked: Disattiva la Modalità Pianificatore per cambiare vista
+  plan_saved: Il tuo piano è salvato ({n} modifiche). Attiva la Modalità Pianificatore per continuare.
   fullscreen: Schermo intero
   toggle_fullscreen: Attiva/Disattiva Schermo intero
   exit: Esci
   grain: Grano
   timber: Legname
   herbs: Erbe
-  solid_gather: 'Solido: Raccolta'
+  solid_gather: 'Pieno: Raccolta'
   stripe_output: 'Striscia: Produzione'
   level_unknown: Livello --
   level: Livello {n}
-  hover: Passa il mouse su un territorio
+  hover: Passa il mouse sopra un territorio
   owner: 'Proprietario:'
   unclaimed: Non reclamato
   buff: 'Buff:'
   none: Nessuno
   no_active_buff: Nessun buff attivo
   drawer_title: Distribuzione Buff Alleanza
-  drawer_subtitle: Conteggio dinamico basato sulle assegnazioni mappa / piano
-  no_claims: Nessuna alleanza rivendica territori al momento.
+  drawer_subtitle: Conteggio dinamico basato sulla mappa attiva / assegnazioni del pianificatore
+  no_claims: Nessuna alleanza reclama territorio al momento.
   no_buffs: Nessun buff attivo assegnato
   cities_one: "{n} Città"
   cities_other: "{n} Città"
   col_alliance: Alleanza
   col_holdings: Possedimenti
   col_buffs: Buff Attivi
-  buff_research_speed: Velocità Ricerca
+  buff_research_speed: Velocità di Ricerca
   buff_troop_training_speed: Velocità Addestramento Truppe
-  buff_building_speed: Velocità Edifici
-  buff_march_speed: Velocità Marcia
+  buff_building_speed: Velocità di Costruzione
+  buff_march_speed: Velocità di Marcia
   buff_grain_gathering: Raccolta Grano
   buff_grain_output: Produzione Grano
   buff_timber_gathering: Raccolta Legname
   buff_timber_output: Produzione Legname
   buff_herb_gathering: Raccolta Erbe
   buff_herb_output: Produzione Erbe
-  no_changes: Nessuna modifica rilevata nella tua bozza di piano.
+  no_changes: Nessuna modifica rilevata nel tuo piano bozza.
   proposal_title: Invia Proposta Territorio Mappa
 proposals:
   title: Invia proposta

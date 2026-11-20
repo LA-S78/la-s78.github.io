@@ -733,83 +733,87 @@ map_planner:
   view: 'Vue :'
   zoom_in: Zoom avant
   zoom_out: Zoom arrière
-  zoom_reset: Afficher toute la carte
+  zoom_reset: Afficher la carte entière
   members_toggle: Mes membres
   members_search: Trouver un membre (nom ou ID)...
   members_loading: Chargement de vos membres...
   members_count: "{n} membres de [{tag}]"
   members_as_of: positions au {time}
   members_failed: 'Les membres ne peuvent pas être affichés : {error}'
-  members_none: Aucun membre trouvé
+  members_none: Aucun membre ne correspond
   member_coords: X {x} · Y {y}
   member_in: dans {place}
   member_close: Fermer
+  game_might: Puissance
+  game_kills: Éliminations
+  game_alliance: Alliance
+  game_sanctuary: Sanctuaire
   nap_toggle: Tous les joueurs NAP
   nap_search: Trouver un joueur (nom, ID ou [TAG])...
   nap_loading: Chargement des joueurs NAP...
-  nap_refreshing: Récupération de chaque alliance NAP auprès du jeu...
+  nap_refreshing: Demande de chaque alliance NAP au jeu...
   nap_count: "{n} joueurs dans {a} alliances NAP"
-  nap_empty: 'Aucune position enregistrée : actualisez pour les charger'
+  nap_empty: 'Aucune position enregistrée : actualiser pour charger'
   nap_missing: 'Non chargé : {tags}'
   nap_refresh: Actualiser
   nap_refresh_left: "{left} sur {max} actualisations restantes aujourd'hui (une requête de suivi par alliance)"
-  nap_refresh_wait: 'Actualisé il y a un instant : nouvelle tentative dans {minutes} min'
-  tag_ambiguous: "[{tag}] pourrait correspondre à plusieurs alliances ({options}). Tapez le tag exactement, avec ses majuscules."
+  nap_refresh_wait: 'Actualisé il y a un instant : de nouveau dans {minutes} min'
+  tag_ambiguous: "[{tag}] pourrait désigner plusieurs alliances ({options}). Saisissez le tag exactement, avec ses majuscules."
   levels: Niveaux
   alliances: Alliances
   resources: Ressources
   buff_summary: Résumé des Buffs
-  toggle_buff_summary: Afficher/Masquer le résumé des buffs
-  close_buff_summary: Fermer le résumé des buffs
+  toggle_buff_summary: Basculer le résumé des Buffs
+  close_buff_summary: Fermer le résumé des Buffs
   planner_mode: Mode Planificateur
-  override_label: 'Changer en :'
-  override_placeholder: EX. WLO
-  override_help: Tapez un tag pour remplacer les affectations de clic. Laissez vide pour alterner.
+  override_label: 'Changer pour :'
+  override_placeholder: 'EX: WLO'
+  override_help: Saisissez un tag pour remplacer les attributions par clic. Laissez vide pour faire défiler.
   submit_plan: Soumettre le plan
   compare_label: Comparer le plan avec la carte en direct
   show_live: En direct
   show_plan: Mon plan
   discard: Abandonner
-  discard_confirm: Abandonner vos changements planifiés ({n}) ? Cette action est irréversible.
+  discard_confirm: Abandonner vos modifications planifiées ({n}) ? Cette action est irréversible.
   view_locked: Désactivez le Mode Planificateur pour changer la vue
-  plan_saved: Votre plan est enregistré ({n} changements). Activez le Mode Planificateur pour continuer.
+  plan_saved: Votre plan est enregistré ({n} modifications). Activez le Mode Planificateur pour continuer.
   fullscreen: Plein écran
   toggle_fullscreen: Basculer en plein écran
   exit: Quitter
   grain: Grain
   timber: Bois
   herbs: Herbes
-  solid_gather: 'Plein : Récolte'
+  solid_gather: 'Plein : Collecte'
   stripe_output: 'Rayé : Production'
   level_unknown: Niveau --
   level: Niveau {n}
-  hover: Survoler un territoire
+  hover: Survolez un territoire
   owner: 'Propriétaire :'
   unclaimed: Non réclamé
   buff: 'Buff :'
   none: Aucun
   no_active_buff: Aucun buff actif
   drawer_title: Distribution des Buffs d'Alliance
-  drawer_subtitle: Comptage dynamique basé sur les affectations actives de la carte / du planificateur
-  no_claims: Aucune alliance ne réclame de territoire actuellement.
-  no_buffs: Aucun buff actif assigné
+  drawer_subtitle: Calcul dynamique basé sur la carte active / les attributions du planificateur
+  no_claims: Aucune alliance ne revendique actuellement de territoire.
+  no_buffs: Aucun buff actif attribué
   cities_one: "{n} Ville"
   cities_other: "{n} Villes"
   col_alliance: Alliance
   col_holdings: Possessions
   col_buffs: Buffs actifs
-  buff_research_speed: Vitesse de recherche
-  buff_troop_training_speed: Vitesse d'entraînement des troupes
-  buff_building_speed: Vitesse de construction
-  buff_march_speed: Vitesse de marche
-  buff_grain_gathering: Récolte de grain
-  buff_grain_output: Production de grain
-  buff_timber_gathering: Récolte de bois
-  buff_timber_output: Production de bois
-  buff_herb_gathering: Récolte d'herbes
-  buff_herb_output: Production d'herbes
-  no_changes: Aucun changement détecté dans votre brouillon de plan.
-  proposal_title: Soumettre une proposition de territoire sur la carte
+  buff_research_speed: Vitesse de Recherche
+  buff_troop_training_speed: Vitesse d'Entraînement des Troupes
+  buff_building_speed: Vitesse de Construction
+  buff_march_speed: Vitesse de Marche
+  buff_grain_gathering: Collecte de Grain
+  buff_grain_output: Production de Grain
+  buff_timber_gathering: Collecte de Bois
+  buff_timber_output: Production de Bois
+  buff_herb_gathering: Collecte d'Herbes
+  buff_herb_output: Production d'Herbes
+  no_changes: Aucune modification détectée dans votre projet de plan.
+  proposal_title: Soumettre une Proposition de Territoire sur la Carte
 proposals:
   title: Soumettre une proposition
   close: Fermer

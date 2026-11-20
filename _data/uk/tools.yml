@@ -746,68 +746,72 @@ map_planner:
   members_search: Знайти учасника (ім'я або ID)...
   members_loading: Завантаження ваших учасників...
   members_count: "{n} учасників [{tag}]"
-  members_as_of: позиції станом на {time}
-  members_failed: 'Учасників не вдалося відобразити: {error}'
-  members_none: Немає відповідних учасників
+  members_as_of: позиції на {time}
+  members_failed: 'Учасників не вдалося показати: {error}'
+  members_none: Учасників не знайдено
   member_coords: X {x} · Y {y}
   member_in: у {place}
   member_close: Закрити
-  nap_toggle: Всі NAP гравці
+  game_might: Міць
+  game_kills: Вбивства
+  game_alliance: Альянс
+  game_sanctuary: Сховище
+  nap_toggle: Усі гравці NAP
   nap_search: Знайти гравця (ім'я, ID або [TAG])...
-  nap_loading: Завантаження NAP гравців...
-  nap_refreshing: Запит до гри для кожного NAP альянсу...
-  nap_count: "{n} гравців у {a} NAP альянсах"
+  nap_loading: Завантаження гравців NAP...
+  nap_refreshing: Запит у гру для кожного альянсу NAP...
+  nap_count: "{n} гравців у {a} альянсах NAP"
   nap_empty: 'Позиції ще не збережені: оновіть, щоб завантажити їх'
   nap_missing: 'Не завантажено: {tags}'
   nap_refresh: Оновити
-  nap_refresh_left: "{left} з {max} оновлень залишилося сьогодні (один запит трекера на альянс)"
-  nap_refresh_wait: 'Оновлено щойно: знову через {minutes} хв'
-  tag_ambiguous: "[{tag}] може означати більше одного альянсу ({options}). Введіть тег точно, з великими літерами."
+  nap_refresh_left: Залишилось {left} з {max} оновлень сьогодні (один запит трекера на альянс)
+  nap_refresh_wait: 'Щойно оновлено: повторіть через {minutes} хв'
+  tag_ambiguous: "[{tag}] може означати більше ніж один альянс ({options}). Введіть тег точно, враховуючи великі літери."
   levels: Рівні
   alliances: Альянси
   resources: Ресурси
-  buff_summary: Зведення бонусів
-  toggle_buff_summary: Перемкнути зведення бонусів
-  close_buff_summary: Закрити зведення бонусів
+  buff_summary: Зведення бафів
+  toggle_buff_summary: Перемкнути зведення бафів
+  close_buff_summary: Закрити зведення бафів
   planner_mode: Режим планувальника
   override_label: 'Змінити на:'
-  override_placeholder: 'НАПРИКЛАД: WLO'
-  override_help: Введіть тег, щоб змінити призначення кліків. Залиште порожнім, щоб циклічно змінити.
+  override_placeholder: Напр. WLO
+  override_help: Введіть тег, щоб перепризначити кліки. Залиште порожнім, щоб циклічно змінювати.
   submit_plan: Надіслати план
-  compare_label: Порівняти план з актуальною картою
-  show_live: Живий вигляд
+  compare_label: Порівняти план з картою у реальному часі
+  show_live: Наживо
   show_plan: Мій план
   discard: Відхилити
-  discard_confirm: Відхилити ваші заплановані зміни ({n})? Цю дію неможливо скасувати.
+  discard_confirm: Відхилити заплановані зміни ({n})? Цю дію неможливо скасувати.
   view_locked: Вимкніть режим планувальника, щоб змінити вигляд
   plan_saved: Ваш план збережено ({n} змін). Увімкніть режим планувальника, щоб продовжити.
   fullscreen: На весь екран
-  toggle_fullscreen: Перемкнути повноекранний режим
+  toggle_fullscreen: Увімкнути повноекранний режим
   exit: Вихід
   grain: Зерно
   timber: Деревина
   herbs: Трави
-  solid_gather: 'Суцільний: Збір'
-  stripe_output: 'Смугастий: Виробництво'
+  solid_gather: 'Суцільне: Збір'
+  stripe_output: 'Смуга: Вихід'
   level_unknown: Рівень --
   level: Рівень {n}
   hover: Наведіть на територію
   owner: 'Власник:'
-  unclaimed: Нічийна
-  buff: 'Бонус:'
-  none: Немає
-  no_active_buff: Немає активних бонусів
-  drawer_title: Розподіл бонусів альянсу
-  drawer_subtitle: Динамічний підрахунок на основі активної карти / призначень планувальника
-  no_claims: Жоден альянс наразі не претендує на територію.
-  no_buffs: Немає призначених активних бонусів
+  unclaimed: Нічия
+  buff: 'Баф:'
+  none: Відсутній
+  no_active_buff: Активних бафів немає
+  drawer_title: Розподіл бафів альянсу
+  drawer_subtitle: Динамічний підрахунок на основі активної карти / призначень у планувальнику
+  no_claims: Зараз жоден альянс не претендує на територію.
+  no_buffs: Активні бафи не призначені
   cities_one: "{n} Місто"
   cities_few: "{n} Міста"
   cities_other: "{n} Міст"
   col_alliance: Альянс
   col_holdings: Володіння
-  col_buffs: Активні бонуси
-  buff_research_speed: Швидкість досліджень
+  col_buffs: Активні бафи
+  buff_research_speed: Швидкість дослідження
   buff_troop_training_speed: Швидкість тренування військ
   buff_building_speed: Швидкість будівництва
   buff_march_speed: Швидкість маршу
@@ -817,7 +821,7 @@ map_planner:
   buff_timber_output: Виробництво деревини
   buff_herb_gathering: Збір трав
   buff_herb_output: Виробництво трав
-  no_changes: У вашому проекті плану не виявлено змін.
+  no_changes: Змін у вашому проекті плану не виявлено.
   proposal_title: Надіслати пропозицію щодо території на карті
 proposals:
   title: Надіслати пропозицію

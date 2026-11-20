@@ -730,7 +730,7 @@ blacklist_planner:
   what_player: jugador
   sent: Propuesta de lista negra enviada al liderazgo en Discord. Se aplica una vez que un Steward la apruebe.
 map_planner:
-  view: 'Ver:'
+  view: 'Vista:'
   zoom_in: Acercar
   zoom_out: Alejar
   zoom_reset: Mostrar todo el mapa
@@ -738,34 +738,38 @@ map_planner:
   members_search: Buscar un miembro (nombre o ID)...
   members_loading: Cargando tus miembros...
   members_count: "{n} miembros de [{tag}]"
-  members_as_of: posiciones a fecha de {time}
+  members_as_of: posiciones a las {time}
   members_failed: 'No se pueden mostrar los miembros: {error}'
-  members_none: No hay coincidencias
+  members_none: Ningún miembro coincide
   member_coords: X {x} · Y {y}
   member_in: en {place}
   member_close: Cerrar
+  game_might: Poder
+  game_kills: Bajas
+  game_alliance: Alianza
+  game_sanctuary: Santuario
   nap_toggle: Todos los jugadores NAP
   nap_search: Buscar un jugador (nombre, ID o [TAG])...
   nap_loading: Cargando jugadores NAP...
   nap_refreshing: Solicitando al juego todas las alianzas NAP...
   nap_count: "{n} jugadores en {a} alianzas NAP"
-  nap_empty: 'No hay posiciones guardadas: Actualiza para cargarlas'
+  nap_empty: 'Aún no hay posiciones guardadas: Actualiza para cargarlas'
   nap_missing: 'No cargado: {tags}'
   nap_refresh: Actualizar
-  nap_refresh_left: "{left} de {max} actualizaciones restantes hoy (una solicitud de rastreo por alianza)"
+  nap_refresh_left: "{left} de {max} actualizaciones restantes hoy (una solicitud de rastreador por alianza)"
   nap_refresh_wait: 'Actualizado hace un momento: de nuevo en {minutes} min'
-  tag_ambiguous: "[{tag}] podría significar más de una alianza ({options}). Escribe la etiqueta exactamente, con sus mayúsculas."
+  tag_ambiguous: "[{tag}] podría significar más de una alianza ({options}). Escribe el tag exactamente, con sus mayúsculas."
   levels: Niveles
   alliances: Alianzas
   resources: Recursos
   buff_summary: Resumen de Buffs
-  toggle_buff_summary: Alternar resumen de Buffs
-  close_buff_summary: Cerrar resumen de Buffs
+  toggle_buff_summary: Alternar Resumen de Buffs
+  close_buff_summary: Cerrar Resumen de Buffs
   planner_mode: Modo Planificador
   override_label: 'Cambiar a:'
   override_placeholder: P. EJ. WLO
-  override_help: Escribe una etiqueta para sobrescribir las asignaciones al hacer clic. Déjalo en blanco para alternar.
-  submit_plan: Enviar plan
+  override_help: Escribe un tag para anular las asignaciones al hacer clic. Déjalo en blanco para ciclar.
+  submit_plan: Enviar Plan
   compare_label: Comparar el plan con el mapa en tiempo real
   show_live: En vivo
   show_plan: Mi plan
@@ -779,25 +783,25 @@ map_planner:
   grain: Grano
   timber: Madera
   herbs: Hierbas
-  solid_gather: 'Sólido: Recolección'
+  solid_gather: 'Sólido: Recolectar'
   stripe_output: 'Franja: Producción'
   level_unknown: Nivel --
   level: Nivel {n}
-  hover: Pasa el ratón sobre un territorio
+  hover: Pasa el cursor sobre un territorio
   owner: 'Propietario:'
   unclaimed: Sin reclamar
   buff: 'Buff:'
   none: Ninguno
   no_active_buff: Sin buff activo
   drawer_title: Distribución de Buffs de Alianza
-  drawer_subtitle: Recuento dinámico basado en el mapa activo / asignaciones del planificador
+  drawer_subtitle: Conteo dinámico basado en el mapa activo / asignaciones del planificador
   no_claims: Ninguna alianza reclama territorio actualmente.
-  no_buffs: No hay buffs activos asignados
+  no_buffs: Sin buffs activos asignados
   cities_one: "{n} Ciudad"
   cities_other: "{n} Ciudades"
   col_alliance: Alianza
   col_holdings: Propiedades
-  col_buffs: Buffs activos
+  col_buffs: Buffs Activos
   buff_research_speed: Velocidad de Investigación
   buff_troop_training_speed: Velocidad de Entrenamiento de Tropas
   buff_building_speed: Velocidad de Construcción
@@ -809,7 +813,7 @@ map_planner:
   buff_herb_gathering: Recolección de Hierbas
   buff_herb_output: Producción de Hierbas
   no_changes: No se detectaron cambios en tu borrador de plan.
-  proposal_title: Enviar propuesta de territorio en el mapa
+  proposal_title: Enviar Propuesta de Territorio en el Mapa
 proposals:
   title: Enviar propuesta
   close: Cerrar
