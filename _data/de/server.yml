@@ -281,25 +281,30 @@ bot_ascension:
   already: "{name} hat dieses Rennen bereits entschieden."
   cannot_apply: 'Die Top 4 können nicht angewendet werden: {reason}. Nutze /rank.'
 bot_admin:
-  rank_none: Keine Allianzen im aktuellen Staat registriert.
-  rank_title: "🛡️ Server-NAP-Rangliste"
+  rank_none: Aktuell sind keine Allianzen registriert.
+  rank_title: "🛡️ Server NAP-Rangliste"
   rank_open: Offene Diplomatie & Rangliste
   rank_fetch_failed: "⚠️ Rangliste konnte nicht abgerufen werden: {reason}"
-  rank_denied: "⛔ **Zugriff verweigert:** Nur benannte Königreich-Verwalter können Allianz-Ranglisten aktualisieren."
+  rank_denied: "⛔ **Zugriff verweigert:** Nur ausgewählte Königreichsverwalter können Allianz-Ranglisten aktualisieren."
   rank_missing: "⚠️ Fehlende erforderliche Argumente: Tag und Rang."
   rank_set_title: "👑 NAP-Rangliste aktualisiert"
-  rank_set_text: 'Allianz `[{tag}]` wurde **Rang #{rank}** zugewiesen *(zuvor: {previous})*.'
-  rank_unranked: Nicht gelistet
+  rank_set_text: 'Die Allianz `[{tag}]` wurde auf **Rang #{rank}** gesetzt *(vorher: {previous})*.'
+  rank_unranked: Nicht bewertet
   rank_updated_by: Aktualisiert von {name}
-  rank_view: Rangliste anzeigen
+  rank_view: Rangliste ansehen
   rank_set_failed: "⚠️ Rang konnte nicht aktualisiert werden: {reason}"
-  rank_ambiguous: "[{tag}] könnte mehr als eine Allianz bedeuten ({options}): Bitte gib das Tag exakt ein, inklusive Großbuchstaben."
+  rank_ambiguous: "[{tag}] könnte mehr als eine Allianz bedeuten ({options}): Gib das Tag exakt ein, inklusive Großschreibung."
   dev_done: |-
     ✅ **Testdaten aktualisiert.** {count} Datei(en) wurden von den Live-Daten in den Test-Gist kopiert, der von dev.la-s78.app verwendet wird: {files}.
-    Die Live-Daten wurden nur gelesen, nicht geändert.
+    Die Live-Daten wurden nur gelesen, nicht verändert.
+  dev_removed: 'Aus dem Test-Gist entfernt (nicht in den Live-Daten vorhanden): {files}.'
+  dev_scrubbed: 'Wurde ausgelassen: Das Vorschlagsprotokoll. Gelöscht: Jede Discord-Server-, Kanal- und Rollen-ID der Allianz.'
+  dev_blobs: 'Ebenfalls in die Dateien der Testseite kopiert: {stats} Statistikdatei(en), die letzten {days} Tag(e) an Snapshots und {pictures} Allianzbild(er).'
+  dev_blobs_failed: "⚠️ {count} Datei(en) konnten nicht kopiert werden (siehe Protokolle); der Rest wurde kopiert."
+  dev_blobs_skipped: "⚠️ Statistiken und Bilder nicht kopiert: {reason}"
   dev_failed: "⚠️ **Testdaten nicht aktualisiert:** {reason}"
-  dev_denied: "⛔ **Zugriff verweigert:** Nur Verwalter können Testdaten aktualisieren."
-  test_proposal: "🧪 Dies ist ein Testvorschlag von der Test-Seite. Er nutzt Testdaten, daher kann er nicht genehmigt werden oder irgendetwas live ändern."
+  dev_denied: "⛔ **Zugriff verweigert:** Nur Verwalter können die Testdaten aktualisieren."
+  test_proposal: "🧪 Dies ist ein Testvorschlag von der Testseite. Er verwendet Testdaten und kann daher weder genehmigt werden noch Änderungen an Live-Daten vornehmen."
   approved_not_updated: "✅ Genehmigt und gespeichert, aber diese Nachricht konnte nicht aktualisiert werden ({reason})."
 bot_register:
   nap_only: "⚠️ Dieser Befehl kann nur auf dem offiziellen NAP-Server ausgeführt werden."

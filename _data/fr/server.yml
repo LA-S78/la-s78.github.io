@@ -293,13 +293,18 @@ bot_admin:
   rank_updated_by: Mis à jour par {name}
   rank_view: Voir le classement
   rank_set_failed: "⚠️ Échec de la mise à jour du rang : {reason}"
-  rank_ambiguous: "[{tag}] peut désigner plus d'une alliance ({options}) : veuillez saisir le tag exactement, avec ses majuscules."
+  rank_ambiguous: "[{tag}] peut correspondre à plusieurs alliances ({options}) : tapez le tag exactement, avec ses majuscules."
   dev_done: |-
     ✅ **Données de test mises à jour.** {count} fichier(s) copié(s) depuis les données réelles vers le Gist de test utilisé par dev.la-s78.app : {files}.
-    Les données réelles ont seulement été lues, pas modifiées.
+    Les données réelles ont été uniquement lues, pas modifiées.
+  dev_removed: 'Supprimé du Gist de test (absent des données réelles) : {files}.'
+  dev_scrubbed: 'Exclu : le journal des propositions. Effacé : tous les IDs de serveur Discord, de salon et de rôle des alliances.'
+  dev_blobs: 'Également copié sur les fichiers du site de test : {stats} fichier(s) de statistiques, les {days} dernier(s) jour(s) de snapshots et {pictures} image(s) d''alliance.'
+  dev_blobs_failed: "⚠️ {count} fichier(s) n'ont pas pu être copié(s) (voir les logs) ; les autres l'ont été."
+  dev_blobs_skipped: "⚠️ Statistiques et images non copiées : {reason}"
   dev_failed: "⚠️ **Données de test non mises à jour :** {reason}"
   dev_denied: "⛔ **Accès refusé :** Seuls les intendants peuvent mettre à jour les données de test."
-  test_proposal: "🧪 Ceci est une proposition de test depuis le site de test. Elle utilise des données de test, elle ne peut donc pas être approuvée ni modifier quoi que ce soit en temps réel."
+  test_proposal: "🧪 Ceci est une proposition de test provenant du site de test. Elle utilise des données de test, elle ne peut donc être approuvée ni changer quoi que ce soit en direct."
   approved_not_updated: "✅ Approuvé et enregistré, mais ce message n'a pas pu être mis à jour ({reason})."
 bot_register:
   nap_only: "⚠️ Cette commande peut uniquement être exécutée sur le serveur NAP officiel."
