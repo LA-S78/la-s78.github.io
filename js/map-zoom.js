@@ -155,6 +155,7 @@ function start() {
       const [a, b] = [...pointers.values()];
       pinch = { dist: Math.hypot(a.x - b.x, a.y - b.y) };
       moved = true;
+      svg.classList.add('is-panning');
     }
   });
 
@@ -178,6 +179,8 @@ function start() {
     if (!moved && startAt && Math.hypot(now.x - startAt.x, now.y - startAt.y) < DRAG_PX) return;
     if (!moved) {
       moved = true;
+      // While dragging, territory hover effects pause (they redrew the map every frame)
+      svg.classList.add('is-panning');
       try {
         svg.setPointerCapture(e.pointerId);
       } catch {
@@ -195,6 +198,7 @@ function start() {
   const lift = (e) => {
     pointers.delete(e.pointerId);
     if (pointers.size < 2) pinch = null;
+    if (!pointers.size) svg.classList.remove('is-panning');
   };
   svg.addEventListener('pointerup', lift);
   svg.addEventListener('pointercancel', lift);
