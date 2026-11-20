@@ -25,6 +25,8 @@ import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_
 import { say } from './_messages.js';
 import { readNapPositions, refreshNapPositions } from './_stats.js';
 import { noteSkin } from './_skins.js';
+import { renamedAlliances } from './_alliance_ids.js';
+import { napTags } from './_ascension.js';
 
 export const LOOKUPS_PER_DAY = 30;
 const FILE = 'steward-tools.json';
@@ -144,6 +146,10 @@ export async function stewardTools(req, res, { gist, session }) {
         : null,
       lookups: lookupsLeft(gist),
       usage: trackerUsage(gist),
+      // NAP alliances renamed in the game, still measured by their game number meanwhile
+      renamed: await renamedAlliances(
+        napTags(gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {}),
+      ).catch(() => []),
     });
   }
 

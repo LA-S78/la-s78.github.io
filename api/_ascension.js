@@ -13,7 +13,8 @@
 
 import { gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
-import { fetchAlliance, trackerConfigured } from './_tracker.js';
+import { trackerConfigured } from './_tracker.js';
+import { measureAlliances } from './_alliance_ids.js';
 import { ascensionButtons } from './_bot_ascension.js';
 
 export const ASCENSION_FILE = 'ascension.json';
@@ -94,14 +95,6 @@ export function latestRace(gist) {
   return { id, taken, finished: Boolean(taken[5]), rows: standings(run, []) };
 }
 
-async function inBatches(items, size, fn) {
-  const out = [];
-  for (let i = 0; i < items.length; i += size) {
-    out.push(...(await Promise.all(items.slice(i, i + size).map(fn))));
-  }
-  return out;
-}
-
 /** The results message for NAP leadership, after Day 5's snapshot. */
 function resultsMessage(runId, rows, testNote) {
   const fmt = (n) => (n === null ? '—' : `${(n / 1e9).toFixed(2)}B`);
@@ -149,9 +142,13 @@ export async function checkAscension({ gist, now = Date.now(), dryRun = false } 
   const report = { due: true, run: due.runId, day: due.day, measured: {}, failed: [] };
 
   if (todo.length) {
-    const results = await inBatches(todo, 4, (tag) =>
-      fetchAlliance(tag, { fresh: true, timeoutMs: 6000, use: 'automation' }),
-    );
+    // By tag, or by the game's number for an alliance renamed in the game (it's still measured
+    // under the site's tag; api/_alliance_ids.js)
+    const results = await measureAlliances(todo, {
+      fresh: true,
+      timeoutMs: 6000,
+      use: 'automation',
+    });
     todo.forEach((tag, i) => {
       if (results[i]) report.measured[tag] = results[i].power;
       else report.failed.push(tag);

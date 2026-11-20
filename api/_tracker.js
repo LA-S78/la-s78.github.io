@@ -54,6 +54,12 @@ function slim(d) {
   return {
     tag: String(d.abbr || ''),
     name: String(d.name || ''),
+    // The game's own number for the alliance: it stays when the tag changes (owner,
+    // 2026-11-20: HMDA became Arch), so lookups can fall back to it (api/_alliance_ids.js)
+    aid:
+      Number(d.union_id) ||
+      Number((Array.isArray(d.members) ? d.members.find((m) => m && m.aid) : null)?.aid) ||
+      null,
     power: Number(d.power) || 0,
     memberCount: Number(d.member_count) || (Array.isArray(d.members) ? d.members.length : 0),
     // For the Alliance standings cards (owner request, 2026-11-19): room, level and the
@@ -243,6 +249,37 @@ export async function fetchAlliance(
     return data;
   } catch (err) {
     console.warn(`Tracker: [${clean}] failed:`, err.message);
+    return null;
+  }
+}
+
+/**
+ * An alliance by the game's own number for it (its `aid`), whatever its tag is now; the same
+ * answer as fetchAlliance, or null. Used when a tag the site knows isn't found (renamed in
+ * the game): api/_alliance_ids.js.
+ */
+export async function fetchAllianceById(
+  aid,
+  { fresh = false, timeoutMs = 4000, use = 'other', env = process.env, fetchImpl = fetch } = {},
+) {
+  const key = String(env.LAT_API_KEY || '').trim();
+  const id = Number(aid);
+  if (!key || !Number.isInteger(id) || id <= 0) return null;
+  try {
+    const res = await trackerGet(`/alliances/${id}${fresh ? '?fresh=1' : ''}`, {
+      key,
+      use,
+      timeoutMs,
+      fetchImpl,
+    });
+    if (!res.ok || !res.data) {
+      console.warn(`Tracker: alliance #${id} answered HTTP ${res.status}`);
+      return null;
+    }
+    const data = slim(res.data);
+    return data.tag ? data : null;
+  } catch (err) {
+    console.warn(`Tracker: alliance #${id} failed:`, err.message);
     return null;
   }
 }
