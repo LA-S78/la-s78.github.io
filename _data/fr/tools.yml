@@ -1002,17 +1002,17 @@ steward:
   sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils de l'Intendant.
   stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils de l'Intendant.
   lookup_title: Recherche de joueur
-  lookup_help: 'N''importe quel joueur, en direct depuis le jeu : son alliance, ses statistiques, ainsi que ses noms et alliances précédents. Saisissez un ID de joueur ou un nom pour trouver l''ID d''un joueur NAP.'
-  lookup_placeholder: ID du joueur ou nom d'un joueur NAP
+  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses chiffres, ses noms et alliances précédents. Saisissez un ID de joueur, ou un nom pour trouver l''ID d''un joueur NAP.'
+  lookup_placeholder: ID de joueur, ou nom d'un joueur NAP
   lookup_go: Rechercher
-  lookup_id_needed: Saisissez un ID de joueur (le nombre sur son profil) ou choisissez un joueur NAP parmi les noms trouvés.
+  lookup_id_needed: Saisissez un ID de joueur (le numéro sur son profil), ou choisissez un joueur NAP parmi les noms trouvés.
   lookups_left: "{left} sur {max} recherches en direct restantes aujourd'hui (partagées par tous les Intendants)."
-  looking: Demande au jeu...
-  name_none: Aucun joueur NAP avec ce nom. Pour toute autre personne, utilisez son ID de joueur.
+  looking: Interrogation du jeu...
+  name_none: Aucun joueur NAP avec ce nom. Pour tout autre, utilisez son ID de joueur.
   no_alliance: Aucune alliance
   server: Serveur {n}
-  online: En ligne maintenant
-  last_seen: Vu pour la dernière fois {when}
+  online: En ligne
+  last_seen: Dernière connexion {when}
   shielded: Bouclier actif
   might: Puissance
   kills: Éliminations
@@ -1020,39 +1020,41 @@ steward:
   vip: VIP
   position: Position (X, Y)
   language: Langue
-  ranks: 'Rangs du Royaume : #{might} Puissance · #{kills} Éliminations · #{heroes} héros'
+  ranks: 'Rang du royaume : #{might} Puissance · #{kills} Éliminations · #{heroes} Héros'
   history_title: Noms et alliances
   history_none: Aucun nom ou alliance précédent n'a été trouvé.
   seen_from: depuis {when}
-  first_seen: Vu pour la première fois par le traqueur {when}.
+  first_seen: Vu pour la première fois par le tracker {when}.
+  renamed: "{old} est maintenant {now} dans le jeu. Il est toujours mesuré (Stats et course au Top 4) par son numéro de jeu, mais le site l'appelle toujours {old}."
+  renamed_fix: Renommez-le dans le planificateur d'alliance
   pending_title: En attente de révision
   pending_none: Aucune image d'alliance en attente.
   sent_by: Envoyé par {name}, {when}
   race_title: Course au Top 4
-  race_none: Aucune course mesurée pour le moment.
+  race_none: Aucune course mesurée pour l'instant.
   race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
-  race_finished: 'Les 3 jours sont mesurés : les résultats sont dans la direction du NAP.'
+  race_finished: '3 jours mesurés : les résultats sont dans le leadership NAP.'
   race_missing: 'Non mesuré : {tags}'
   race_more: Tableau complet sur la page des Règles
-  quota_title: Requêtes du traqueur
-  quota_help: Le traqueur de Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le traqueur au site, il ne coûte donc rien à afficher ; vérifier maintenant coûte une requête.
+  quota_title: Requêtes du tracker
+  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le tracker au site, il ne coûte donc rien de l'afficher ; vérifier maintenant coûte une requête.
   quota_check: Vérifier maintenant
   quota_used: utilisé aujourd'hui
-  quota_failed: Le traqueur n'a pas pu être contacté.
+  quota_failed: Le tracker n'a pas pu être atteint.
   quota_as_of: Au {when}
-  quota_none: Le site n'a encore rien demandé au traqueur aujourd'hui.
-  quota_resets: Recommence dans {time}
-  usage_title: Utilisation
+  quota_none: Le site n'a encore rien demandé au tracker aujourd'hui.
+  quota_resets: Réinitialisation dans {time}
+  usage_title: Utilisation des requêtes
   usage_automation: Automatisation
-  usage_automation_help: Instantané des statistiques quotidiennes et course au Top 4
+  usage_automation_help: Snapshot des stats quotidiennes et course au Top 4
   usage_alliance: Outils d'alliance
-  usage_alliance_help: Tableaux de bord, roster, nominations
+  usage_alliance_help: Tableaux de bord, effectifs, nominations
   usage_public: Pages publiques
   usage_public_help: Cartes de classement sur la page Alliance
   usage_steward: Outils de l'Intendant
-  usage_steward_help: Recherches de joueurs, actualisations de carte et vérifications d'utilisation
+  usage_steward_help: Recherches de joueurs, rafraîchissements de carte et vérifications d'utilisation
   usage_other: Autre
   usage_other_help: Tout ce qui n'est pas étiqueté
   usage_unrecorded: Non enregistré
-  usage_unrecorded_help: Compté par le traqueur, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
+  usage_unrecorded_help: Compté par le tracker, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
   usage_none: Aucune requête notée aujourd'hui.

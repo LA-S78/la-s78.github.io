@@ -996,19 +996,19 @@ stats:
   credit_before: Números desde el
 steward:
   page_title: Herramientas de Administrador
-  intro: 'Herramientas para Administradores de Reino: qué te espera y búsqueda de jugadores en vivo.'
+  intro: 'Herramientas para Administradores de Reino: qué te espera y búsqueda de jugadores en tiempo real.'
   loading: Cargando...
   sign_in: Iniciar sesión con Discord
   sign_in_needed: Inicia sesión con Discord para abrir las herramientas de Administrador.
   stewards_only: Solo los Administradores de Reino pueden abrir las herramientas de Administrador.
-  lookup_title: Búsqueda de jugadores
-  lookup_help: 'Cualquier jugador, en vivo desde el juego: su alianza, números, nombres anteriores y alianzas. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
+  lookup_title: Búsqueda de jugador
+  lookup_help: 'Cualquier jugador, en tiempo real desde el juego: su alianza, números, nombres anteriores y alianzas. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
   lookup_placeholder: ID de jugador o nombre de un jugador NAP
   lookup_go: Buscar
   lookup_id_needed: Escribe un ID de jugador (el número en su perfil) o elige un jugador NAP de los nombres encontrados.
   lookups_left: "{left} de {max} búsquedas en vivo restantes hoy (compartidas por todos los Administradores)."
   looking: Consultando al juego...
-  name_none: Ningún jugador NAP con ese nombre. Para cualquier otro, utiliza su ID de jugador.
+  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otro, utiliza su ID de jugador.
   no_alliance: Sin alianza
   server: Servidor {n}
   online: En línea ahora
@@ -1020,39 +1020,41 @@ steward:
   vip: VIP
   position: Posición (X, Y)
   language: Idioma
-  ranks: 'Rangos del Reino: #{might} Poder · #{kills} bajas · #{heroes} héroes'
+  ranks: 'Rangos del Reino: #{might} Poder · #{kills} Bajas · #{heroes} héroes'
   history_title: Nombres y alianzas
   history_none: No se han visto nombres o alianzas anteriores.
   seen_from: desde {when}
   first_seen: Visto por primera vez por el rastreador {when}.
+  renamed: "{old} ahora es {now} en el juego. Todavía se mide (Estadísticas y la carrera del Top 4) por el número del juego para él, pero el sitio todavía lo llama {old}."
+  renamed_fix: Renombrarlo en el planificador de Alianza
   pending_title: Esperando revisión
   pending_none: No hay imágenes de alianza esperando.
   sent_by: Enviado por {name}, {when}
-  race_title: Carrera Top 4
+  race_title: Carrera del Top 4
   race_none: Aún no se ha medido ninguna carrera.
   race_progress: "{n} de 3 días de Duelo medidos hasta ahora."
   race_finished: 'Los 3 días medidos: los resultados están en el liderazgo NAP.'
   race_missing: 'No medido: {tags}'
   race_more: Tabla completa en la página de Reglas
   quota_title: Solicitudes del rastreador
-  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día, reiniciándose a las 00:00 UTC. La cifra de abajo es la última que el rastreador dio al sitio, por lo que no cuesta nada mostrarla; verificar ahora cuesta una solicitud.
-  quota_check: Verificar ahora
-  quota_used: usado hoy
+  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día, reiniciándose a las 00:00 UTC. La cifra de abajo es la última que el rastreador dio al sitio, por lo que no cuesta nada mostrarla; comprobar ahora cuesta una solicitud.
+  quota_check: Comprobar ahora
+  quota_used: usadas hoy
   quota_failed: No se pudo contactar con el rastreador.
   quota_as_of: A fecha de {when}
-  quota_none: El sitio aún no ha pedido nada al rastreador hoy.
+  quota_none: El sitio aún no ha solicitado nada al rastreador hoy.
   quota_resets: Se reinicia en {time}
-  usage_title: Qué los ha usado
+  usage_title: Qué las consumió
   usage_automation: Automatización
-  usage_automation_help: Instantánea de estadísticas diarias y carrera Top 4
+  usage_automation_help: Instantánea de Estadísticas diarias y carrera del Top 4
   usage_alliance: Herramientas de Alianza
   usage_alliance_help: Paneles, lista de miembros, nominaciones
   usage_public: Páginas públicas
-  usage_public_help: Tarjetas de clasificación en la página de la Alianza
+  usage_public_help: Tarjetas de clasificación en la página de Alianza
   usage_steward: Herramientas de Administrador
-  usage_steward_help: Búsquedas de jugadores, refrescos de mapa y verificación de uso
+  usage_steward_help: Búsquedas de jugadores, actualizaciones de mapa y comprobaciones de uso
   usage_other: Otro
-  usage_other_help: Cualquier cosa no etiquetada
+  usage_other_help: Cualquier cosa sin etiquetar
   usage_unrecorded: No registrado
   usage_unrecorded_help: Contado por el rastreador, aún no guardado aquí (cada servidor guarda cada pocos minutos)
-  usage_none: Aún no hay solicitudes registradas hoy.
+  usage_none: Aún no se han registrado solicitudes hoy.
