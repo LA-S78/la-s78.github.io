@@ -477,8 +477,20 @@ async function savePositions(found, store) {
   return file;
 }
 
+/** Collected skins, { uid: [skin, checkedAt, level, x, y] } (api/_skins.js keeps them). */
+export async function readSkinMap(store = blobStore) {
+  if (store === blobStore && !blobToken()) return {};
+  return (await store.read(`${prefix()}/skins.json`))?.players || {};
+}
+
+/** Every NAP player's position file, as saved (api/_skins.js picks whom to check from it). */
+export async function readPositionsFile(store = blobStore) {
+  if (store === blobStore && !blobToken()) return null;
+  return store.read(POSITIONS());
+}
+
 /** The map's view: NAP alliances only (one left the NAP is left out), members flattened. */
-export function napPositionsView(file, tags) {
+export function napPositionsView(file, tags, skins = null) {
   const alliances = [];
   const members = [];
   // A player who moved alliance between two alliances' lookups is in both: shown once, from
@@ -505,6 +517,8 @@ export function napPositionsView(file, tags) {
         kills: kills ?? null,
         level: level ?? null,
         frame: frame || null,
+        // Their Sanctuary's skin, once collected (api/_skins.js); null: the usual building
+        skin: skins?.[String(uid)]?.[0] || null,
       });
     }
   }
@@ -516,7 +530,8 @@ export function napPositionsView(file, tags) {
 export async function readNapPositions({ gist, store = blobStore } = {}) {
   const tags = napTags(gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {});
   if (store === blobStore && !blobToken()) return napPositionsView(null, tags);
-  return napPositionsView(await store.read(POSITIONS()), tags);
+  const [file, skins] = await Promise.all([store.read(POSITIONS()), readSkinMap(store)]);
+  return napPositionsView(file, tags, skins);
 }
 
 /** A Steward's Refresh: every NAP alliance asked again, live from the game. */
@@ -540,7 +555,7 @@ export async function refreshNapPositions({ gist, store = blobStore, fetchImpl }
   const file = Object.keys(found).length
     ? await savePositions(found, store)
     : await store.read(POSITIONS());
-  return { ...napPositionsView(file, tags), failed, asked: todo.length };
+  return { ...napPositionsView(file, tags, await readSkinMap(store)), failed, asked: todo.length };
 }
 
 /**
@@ -548,7 +563,10 @@ export async function refreshNapPositions({ gist, store = blobStore, fetchImpl }
  * measured today are kept; a failed lookup is tried again on the next check in the window.
  * Returns a short report for the check's answer.
  */
-const blobStore = { read: readJson, write: writeJson };
+/** The Stats tab's private Blob files (also used by api/_skins.js). */
+export const blobStore = { read: readJson, write: writeJson };
+export const statsPath = (name) => `${prefix()}/${name}`;
+export const statsStoreReady = () => Boolean(blobToken());
 
 export async function checkStatsSnapshot({
   gist,

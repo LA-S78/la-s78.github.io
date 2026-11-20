@@ -10,6 +10,7 @@ import { checkReminders } from './_reminders.js';
 import { checkAscension, latestRace } from './_ascension.js';
 import { checkStatsSnapshot } from './_stats.js';
 import { flushTrackerUsage } from './_tracker.js';
+import { checkSkins } from './_skins.js';
 import { timingSafeEqual } from 'node:crypto';
 
 /** True when the request carries the reminder schedule's secret (compared in constant time). */
@@ -60,6 +61,14 @@ export default async function handler(req, res) {
       } catch (err) {
         console.error('Stats snapshot failed:', err);
         report.stats = { error: err.message };
+      }
+      // Sanctuary skins for the map's game view (api/_skins.js): before the tracker's day
+      // ends, with half of its spare requests
+      try {
+        report.skins = await checkSkins({ dryRun });
+      } catch (err) {
+        console.error('Skin check failed:', err);
+        report.skins = { error: err.message };
       }
       // The requests those made, saved for the Steward tools page before this server stops
       if (!dryRun) await flushTrackerUsage().catch((err) => console.warn(err.message));
