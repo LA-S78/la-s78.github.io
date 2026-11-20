@@ -996,23 +996,23 @@ stats:
   credit_before: 'Veriler şuradan:'
 steward:
   page_title: Yönetici Araçları
-  intro: 'Krallık Yöneticileri için araçlar: sizi nelerin beklediği ve canlı oyuncu sorgulama.'
+  intro: 'Krallık Yöneticileri için araçlar: sizi neyin beklediği ve canlı oyuncu sorgulama.'
   loading: Yükleniyor…
   sign_in: Discord ile giriş yap
   sign_in_needed: Yönetici araçlarını açmak için Discord ile giriş yapın.
-  stewards_only: Yönetici araçlarını yalnızca Krallık Yöneticileri açabilir.
+  stewards_only: Yönetici araçlarını sadece Krallık Yöneticileri açabilir.
   lookup_title: Oyuncu sorgulama
-  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakları, sayıları ve önceki isimleri ile ittifakları. Bir oyuncu ID''si girin veya bir NAP oyuncusunun ID''sini bulmak için bir isim yazın.'
-  lookup_placeholder: Oyuncu ID'si veya bir NAP oyuncusunun ismi
+  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, sayıları ve önceki isimleri ile ittifakları. Bir oyuncu ID''si girin ya da NAP oyuncusunun ID''sini bulmak için bir isim yazın.'
+  lookup_placeholder: Oyuncu ID'si veya NAP oyuncu ismi
   lookup_go: Sorgula
-  lookup_id_needed: Bir oyuncu ID'si (profilindeki sayı) girin veya bulunan isimlerden bir NAP oyuncusu seçin.
-  lookups_left: 'Bugün kalan canlı sorgulama hakkınız: {left} / {max} (tüm Yöneticilerle paylaşılır).'
+  lookup_id_needed: Bir oyuncu ID'si (profilindeki numara) girin ya da bulunan isimlerden bir NAP oyuncusu seçin.
+  lookups_left: Bugün kalan {left}/{max} canlı sorgulama (tüm Yöneticilerle paylaşılır).
   looking: Oyuna soruluyor…
-  name_none: Bu isimde bir NAP oyuncusu yok. Diğer herkes için oyuncu ID'sini kullanın.
+  name_none: Bu isimde bir NAP oyuncusu yok. Başkaları için oyuncu ID'sini kullanın.
   no_alliance: İttifak yok
   server: Sunucu {n}
   online: Şu an çevrimiçi
-  last_seen: 'Son görülme: {when}'
+  last_seen: Son görülme {when}
   shielded: Kalkan aktif
   might: Güç
   kills: Leş
@@ -1024,18 +1024,18 @@ steward:
   history_title: İsimler ve ittifaklar
   history_none: Daha önce görülen isim veya ittifak yok.
   seen_from: "{when} tarihinden beri"
-  first_seen: 'Takipçi tarafından ilk görülme: {when}.'
-  renamed: "{old} artık oyunda {now}. İstatistikler ve İlk 4 yarışı için hala oyunun ona atadığı numara üzerinden ölçülüyor ancak site hala {old} olarak adlandırıyor."
-  renamed_fix: İttifak planlayıcısında yeniden adlandır
-  test_copy: "🧪 Test sitesi: verileri {when} tarihinde canlı siteden kopyalandı (Discord'da /devupdate komutu taze bir kopya oluşturur)."
+  first_seen: Takipçi tarafından ilk görülme {when}.
+  renamed: "{old} oyunda artık {now}. Oyunun kendi numarasıyla hala ölçülmeye (İstatistikler ve İlk 4 yarışı) devam ediyor ancak site hala {old} olarak adlandırıyor."
+  renamed_fix: İttifak planlayıcısında yeniden adlandırın
+  test_copy: "🧪 Test sitesi: verileri {when} tarihinde canlı siteden kopyalandı (Discord'da /devupdate ile taze bir kopya oluşturulur)."
   test_copy_none: "🧪 Test sitesi: verileri henüz canlı siteden kopyalanmadı. Taze bir kopya için Discord'da /devupdate komutunu çalıştırın."
-  unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Eğer oyunda etiketini değiştirdiyse, yenisini yazın, site onu takip edecektir."
+  unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Eğer oyunda etiketini değiştirdiyse, yenisini yazın ve site onu takip edecektir."
   unfound_now: Oyundaki güncel etiketi
   unfound_placeholder: örn. Arch
   unfound_link: Bağla
   unfound_checking: Oyunla kontrol ediliyor...
-  unfound_left: 'Bugün kalan bağlantı hakkınız: {left} / {max} (her biri oyuna bir kez sorar)'
-  pending_title: İnceleme bekleniyor
+  unfound_left: Bugün kalan {left}/{max} bağlantı (her biri oyuna bir kez sorar)
+  pending_title: İnceleme bekliyor
   pending_none: Bekleyen ittifak resmi yok.
   sent_by: "{name} tarafından gönderildi, {when}"
   race_title: İlk 4 yarışı
@@ -1050,9 +1050,9 @@ steward:
   quota_used: bugün kullanılan
   quota_failed: Takipçiye ulaşılamadı.
   quota_as_of: "{when} itibarıyla"
-  quota_none: Site bugün takipçiye henüz hiçbir şey sormadı.
-  quota_resets: "{time} içinde tekrar başlayacak"
-  usage_title: Neler harcadı
+  quota_none: Site bugün takipçiye henüz bir şey sormadı.
+  quota_resets: "{time} içinde sıfırlanır"
+  usage_title: Kullananlar
   usage_automation: Otomasyon
   usage_automation_help: Günlük İstatistik anlık görüntüsü ve İlk 4 yarışı
   usage_alliance: İttifak araçları
@@ -1063,6 +1063,6 @@ steward:
   usage_steward_help: Oyuncu sorgulamaları, harita yenilemeleri ve kullanım kontrolleri
   usage_other: Diğer
   usage_other_help: Etiketlenmemiş her şey
-  usage_unrecorded: Kaydedilmemiş
-  usage_unrecorded_help: Takipçi tarafından sayılan ancak henüz buraya kaydedilmeyen (her sunucu birkaç dakikada bir kaydeder)
-  usage_none: Bugün henüz hiçbir istek kaydedilmedi.
+  usage_unrecorded: Kaydedilmedi
+  usage_unrecorded_help: Takipçi tarafından sayıldı, henüz buraya kaydedilmedi (her sunucu birkaç dakikada bir kaydeder)
+  usage_none: Bugün henüz kaydedilen bir istek yok.

@@ -14,15 +14,18 @@
 //   { ids: { TAG: { aid, name, at } }, renamed: { TAG: { now, name, at } } }
 
 import { blobStore, statsPath, statsStoreReady } from './_stats.js';
-import { fetchAlliance, fetchAllianceById, knownMissing } from './_tracker.js';
+import { fetchAlliance, fetchAllianceById, knownMissing, forgetMissing } from './_tracker.js';
 
 const FILE = () => statsPath('alliance-ids.json');
 
 export async function readAllianceIds(store = blobStore) {
-  if (store === blobStore && !statsStoreReady()) return { ids: {}, renamed: {} };
+  if (store === blobStore && !statsStoreReady()) return { ids: {}, renamed: {}, mismatch: {} };
   const file = (await store.read(FILE())) || {};
-  return { ids: file.ids || {}, renamed: file.renamed || {} };
+  return { ids: file.ids || {}, renamed: file.renamed || {}, mismatch: file.mismatch || {} };
 }
+
+const save = (store, file) =>
+  store.write(FILE(), { ids: file.ids, renamed: file.renamed, mismatch: file.mismatch || {} });
 
 /**
  * Measures alliances by tag, falling back to their remembered game number for a tag that
@@ -35,8 +38,24 @@ export async function measureAlliances(
   options = {},
   { store = blobStore, batch = 4, fetchImpl } = {},
 ) {
-  const file = await readAllianceIds(store).catch(() => ({ ids: {}, renamed: {} }));
+  const file = await readAllianceIds(store).catch(() => ({ ids: {}, renamed: {}, mismatch: {} }));
   let changed = false;
+  /** The alliance the site knows as `tag`, by its number (it may have another tag now). */
+  const byNumber = async (tag, aid) => {
+    const byId = await fetchAllianceById(aid, {
+      fresh: options.fresh,
+      timeoutMs: options.timeoutMs,
+      use: options.use,
+      ...extra,
+    });
+    if (!byId) return null;
+    if (byId.tag === tag) return byId;
+    if (file.renamed[tag]?.now !== byId.tag) {
+      file.renamed[tag] = { now: byId.tag, name: byId.name, at: new Date().toISOString() };
+      changed = true;
+    }
+    return { ...byId, tag, gameTag: byId.tag };
+  };
   const extra = fetchImpl ? { fetchImpl } : {};
   const one = async (tag) => {
     const known = file.ids[tag];
@@ -45,7 +64,22 @@ export async function measureAlliances(
     // A tag that was just not found is asked by number straight away (no second tag ask)
     let found =
       knownMissing(tag) && known ? null : await fetchAlliance(tag, { ...options, ...extra });
+    // Safeguard 4 (plan step 0c): the tag now answers with a different alliance than the one
+    // the site knows by it (a swap, a disbanded alliance's tag taken, another alliance using
+    // it). Never measured or linked as ours: the known alliance is measured by its number, and
+    // the Stewards are told; only a Steward relinks.
+    if (found && known?.aid && found.aid && found.aid !== known.aid) {
+      if (file.mismatch[tag]?.got !== found.aid) {
+        file.mismatch[tag] = { got: found.aid, name: found.name, at: new Date().toISOString() };
+        changed = true;
+      }
+      return byNumber(tag, known.aid);
+    }
     if (found) {
+      if (file.mismatch[tag]) {
+        delete file.mismatch[tag];
+        changed = true;
+      }
       if (found.aid && (!known || known.aid !== found.aid || known.name !== found.name)) {
         file.ids[tag] = { aid: found.aid, name: found.name, at: new Date().toISOString() };
         changed = true;
@@ -57,18 +91,7 @@ export async function measureAlliances(
       return found;
     }
     if (!known?.aid || !knownMissing(tag)) return null;
-    const byId = await fetchAllianceById(known.aid, {
-      fresh: options.fresh,
-      timeoutMs: options.timeoutMs,
-      use: options.use,
-      ...extra,
-    });
-    if (!byId) return null;
-    if (file.renamed[tag]?.now !== byId.tag) {
-      file.renamed[tag] = { now: byId.tag, name: byId.name, at: new Date().toISOString() };
-      changed = true;
-    }
-    return { ...byId, tag, gameTag: byId.tag };
+    return byNumber(tag, known.aid);
   };
   const out = [];
   for (let i = 0; i < tags.length; i += batch) {
@@ -76,7 +99,7 @@ export async function measureAlliances(
   }
   if (changed && !(store === blobStore && !statsStoreReady())) {
     try {
-      await store.write(FILE(), { ids: file.ids, renamed: file.renamed });
+      await save(store, file);
     } catch (err) {
       console.warn('Alliance numbers not saved:', err.message);
     }
@@ -95,7 +118,42 @@ export async function linkAlliance(siteTag, found, store = blobStore) {
   const at = new Date().toISOString();
   file.ids[siteTag] = { aid: found.aid, name: found.name, at, linked: true };
   file.renamed[siteTag] = { now: found.tag, name: found.name, at };
-  await store.write(FILE(), { ids: file.ids, renamed: file.renamed });
+  delete file.mismatch[siteTag];
+  await save(store, file);
+  // Asked again straight away, not after the hour the "not found" answer is kept
+  forgetMissing(siteTag);
+  forgetMissing(found.tag);
+}
+
+/**
+ * A Steward's answer to a mismatch (safeguard 4): the alliance the tag answers with now is the
+ * one the site means after all (a wrong first link, or the tracker renumbering). Links the tag
+ * to that number. Returns false if there's no mismatch to settle.
+ */
+export async function relinkAlliance(siteTag, store = blobStore) {
+  const file = await readAllianceIds(store);
+  const m = file.mismatch[siteTag];
+  if (!m?.got) return false;
+  file.ids[siteTag] = { aid: m.got, name: m.name, at: new Date().toISOString(), relinked: true };
+  delete file.mismatch[siteTag];
+  delete file.renamed[siteTag];
+  await save(store, file);
+  forgetMissing(siteTag);
+  return true;
+}
+
+/** Tags whose game alliance changed under them (safeguard 4), for the Steward tools page. */
+export async function mismatchedAlliances(tags, store = blobStore) {
+  const { ids, mismatch } = await readAllianceIds(store).catch(() => ({ ids: {}, mismatch: {} }));
+  return tags
+    .filter((t) => mismatch[t])
+    .map((t) => ({
+      tag: t,
+      got: mismatch[t].got,
+      name: mismatch[t].name,
+      known: ids[t]?.name || '',
+      at: mismatch[t].at,
+    }));
 }
 
 /** NAP alliances renamed in the game, for the Steward tools page: [{ tag, now, name, at }]. */
