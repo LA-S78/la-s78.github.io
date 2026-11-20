@@ -2,47 +2,52 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  stewards_only: Yalnızca Sorumlular, Sorumlu araçlarını kullanabilir.
+  stewards_only: Yalnızca Sorumlular Sorumlu araçlarını kullanabilir.
   lookups_used: Bugünkü oyuncu sorgulama hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
-  player_not_found: Bu ID ile bir oyuncu bulunamadı.
+  player_not_found: Bu ID'ye sahip oyuncu bulunamadı.
   player_unavailable: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
-  positions_leaders_only: Haritadaki üyeleri yalnızca ittifakınızın R4 ve R5 (ve Sorumlular) üyeleri görebilir.
+  positions_leaders_only: Yalnızca ittifakınızın R4 ve R5 yetkilileri (ve Sorumlular) üyeleri haritada görebilir.
   positions_unavailable: Üye konumları şu anda yüklenemiyor. Birkaç dakika içinde tekrar deneyin.
+  links_used: Bugünkü ittifak bağlantı hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  link_bad: Bir ittifak seçin ve şu anda oyunda kullandığı etiketi yazın.
+  link_same: Bu etiket sitede zaten kullanılıyor.
+  link_taken: "{tag} sitede başka bir ittifak tarafından kullanılıyor."
+  link_not_found: Oyunda {tag} etiketli bir ittifak bulunamadı (harf büyüklüğüne dikkat edin).
   positions_used: Bugünkü harita yenileme hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
-  positions_wait: Harita kısa süre önce yenilendi. {minutes} dk. içinde tekrar deneyin.
-  refresh_limit: Bugün başka kadro yenileme hakkınız kalmadı. Günlük sıfırlamada (00:00 GT) tekrar başlar.
-  refresh_wait: Kadro kısa süre önce yenilendi. {n} dk. içinde tekrar deneyin.
+  positions_wait: Harita kısa süre önce yenilendi. {minutes} dk içinde tekrar deneyin.
+  refresh_limit: Bugünkü kadro yenileme hakkınız bitti. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  refresh_wait: Kadro kısa süre önce yenilendi. {n} dk içinde tekrar deneyin.
   refresh_failed: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
   signed_out: İttifak panelinizi görmek için Discord ile giriş yapın (sağ üst).
   load_failed: 'Panel yüklenemedi: {reason}'
-  no_alliance: Hangi ittifakta olduğunuzu tespit edemedik. Site, bunu NAP Discord sunucusundaki ittifak rolünüzden veya sunucu takma adınızın başındaki bir [TAG] ifadesinden bulur. Discord'da bunu düzeltin, ardından hesap kartınızdaki (sağ üst) Erişimi Yenile seçeneğini kullanın.
-  leaders_only: Paneli yalnızca ittifakınızın R4 ve R5 üyeleri değiştirebilir.
-  chart_removed: O grafik kaldırıldı.
-  chart_already_removed: O grafik zaten kaldırılmıştı.
+  no_alliance: Hangi ittifakta olduğunuzu belirleyemedik. Site, NAP Discord sunucusundaki ittifak rolünüzden veya sunucu takma adınızın başındaki [TAG] ibaresinden bunu tespit eder. Bunu Discord'da düzeltin, ardından hesap kartınızda (sağ üst) Erişimi Yenile seçeneğini kullanın.
+  leaders_only: Yalnızca ittifakınızın R4 ve R5 yetkilileri paneli değiştirebilir.
+  chart_removed: Bu grafik kaldırıldı.
+  chart_already_removed: Bu grafik zaten kaldırılmıştı.
   not_linked: Bu grafik bir Google E-Tablosuna veya Dokümanına bağlı değil.
-  unknown_change: Bilinmeyen değişiklik.
+  unknown_change: Bilinmeyen bir değişiklik.
   save_failed: 'Kaydedilemedi: {reason}'
-  r5_only_nominate: Adaylık sayfasını burada yalnızca R5'iniz açabilir. Discord'da /nominate komutunu çalıştırın.
+  r5_only_nominate: Aday gösterme sayfasını buradan yalnızca R5 yetkiliniz açabilir. Discord'da /nominate komutunu çalıştırın.
   rewards_closed: Ödüller {when} tarihine kadar kapalıdır.
-  no_rank: "[{tag}] puan durumunda bir dereceye sahip değil."
+  no_rank: "[{tag}] sıralamada yer almıyor."
   choose_type: Bir grafik veya tablo türü seçin.
   title_needed: Grafiğe veya tabloya bir başlık verin.
-  too_many_columns: En fazla {max} sütun (bu tabloda {count} adet var).
-  too_many_rows: En fazla {max} satır (bu tabloda {count} adet var).
+  too_many_columns: En fazla {max} sütun olabilir (bu tabloda {count} tane var).
+  too_many_rows: En fazla {max} satır olabilir (bu tabloda {count} tane var).
   column_name: Sütun {n}
-  paste_first: Önce bir tablo yapıştırın (bir başlık satırı, ardından veriler).
-  no_data_rows: Tablonun başlığının altında veri satırı bulunmuyor.
-  needs_numbers: Bir grafiğin gösterilmesi için bir sayı sütununa ihtiyacı vardır.
-  needs_target: 'Bir ilerleme grafiğinin bir hedefe ihtiyacı vardır: bir sayı veya bir hedef sütunu.'
-  too_many_widgets: İttifak başına en fazla {max} grafik ve tablo.
-  sheet_unusable: 'Sayfanın verileri kullanılamıyor: {reason}'
-  too_big: Bu işlem paneli çok büyük hale getirir ({size} KB / {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
+  paste_first: Önce bir tablo yapıştırın (başlık satırı ve ardından veriler).
+  no_data_rows: Tablonun başlık altında veri satırı bulunmuyor.
+  needs_numbers: Bir grafiğin gösterilmesi için sayı içeren bir sütuna ihtiyacı vardır.
+  needs_target: 'Bir ilerleme grafiği için bir hedef gerekir: bir sayı veya hedef sütunu.'
+  too_many_widgets: İttifak başına en fazla {max} grafik ve tablo eklenebilir.
+  sheet_unusable: 'Tablo verisi kullanılamıyor: {reason}'
+  too_big: Bu işlem paneli çok büyük hale getirirdi ({max} KB limitinin {size} KB kadarı dolu). Daha az satır kullanın veya bir tabloyu kaldırın.
   player_name_needed: Bir oyuncu ismi girin.
   time_format: Zamanlar 18:00 gibi Oyun Zamanı (GT) formatındadır (veya boş bırakın).
-  start_time_needed: Başlangıç zamanını da belirtin (veya her ikisini de boş bırakın).
-  rotor_full: Döngüde en fazla {max} oyuncu olabilir.
-  already_in_rotor: "{name} zaten döngüde."
-  player_removed: O oyuncu kaldırıldı.
+  start_time_needed: Başlangıç zamanını da verin (veya ikisini de boş bırakın).
+  rotor_full: Dönüş listesinde en fazla {max} oyuncu olabilir.
+  already_in_rotor: "{name} zaten dönüş listesinde."
+  player_removed: Bu oyuncu kaldırıldı.
 api_sheets:
   full_link: Tam bağlantıyı yapıştırın (https://docs.google.com/ ile başlayan).
   google_only: Yalnızca Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.

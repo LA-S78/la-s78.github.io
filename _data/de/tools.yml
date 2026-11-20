@@ -996,65 +996,71 @@ stats:
   credit_before: Zahlen vom
 steward:
   page_title: Steward-Tools
-  intro: 'Tools für Königreich-Stewards: was dich erwartet und eine Live-Spielersuche.'
+  intro: 'Tools für Königreich-Stewards: Was erwartet dich und eine Live-Spielersuche.'
   loading: Laden…
   sign_in: Mit Discord anmelden
   sign_in_needed: Melde dich mit Discord an, um die Steward-Tools zu öffnen.
   stewards_only: Nur Königreich-Stewards können die Steward-Tools öffnen.
   lookup_title: Spielersuche
-  lookup_help: 'Jeder Spieler, live aus dem Spiel: Allianz, Werte sowie frühere Namen und Allianzen. Gib eine Spieler-ID ein oder einen Namen, um die ID eines NAP-Spielers zu finden.'
+  lookup_help: 'Jeder Spieler, live aus dem Spiel: Allianz, Werte sowie frühere Namen und Allianzen. Gib eine Spieler-ID oder einen Namen ein, um die ID eines NAP-Spielers zu finden.'
   lookup_placeholder: Spieler-ID oder Name eines NAP-Spielers
   lookup_go: Suchen
-  lookup_id_needed: Gib eine Spieler-ID ein (die Nummer auf dem Profil) oder wähle einen NAP-Spieler aus den gefundenen Namen.
-  lookups_left: "{left} von {max} Live-Suchen heute noch übrig (geteilt von allen Stewards)."
+  lookup_id_needed: Gib eine Spieler-ID (die Nummer im Profil) ein oder wähle einen NAP-Spieler aus den gefundenen Namen.
+  lookups_left: "{left} von {max} Live-Suchanfragen für heute verbleibend (geteilt mit allen Stewards)."
   looking: Frage das Spiel ab…
-  name_none: Kein NAP-Spieler mit diesem Namen gefunden. Für alle anderen nutze deren Spieler-ID.
+  name_none: Kein NAP-Spieler mit diesem Namen gefunden. Für alle anderen verwende bitte deren Spieler-ID.
   no_alliance: Keine Allianz
   server: Server {n}
   online: Jetzt online
   last_seen: Zuletzt gesehen {when}
   shielded: Schild aktiv
-  might: Macht
+  might: Stärke
   kills: Kills
   sanctuary: Sanktuarium
   vip: VIP
   position: Position (X, Y)
   language: Sprache
-  ranks: 'Königreich-Ränge: #{might} Macht · #{kills} Kills · #{heroes} Helden'
+  ranks: 'Königreich-Ränge: #{might} Stärke · #{kills} Kills · #{heroes} Helden'
   history_title: Namen und Allianzen
   history_none: Keine früheren Namen oder Allianzen gefunden.
   seen_from: seit {when}
-  first_seen: Vom Tracker erstmals gesehen am {when}.
-  renamed: "{old} heißt jetzt {now} im Spiel. Es wird weiterhin anhand der spielinternen Nummer gemessen (Statistiken und Top 4-Rennen), aber die Seite nennt es weiterhin {old}."
+  first_seen: Erstmals vom Tracker gesehen {when}.
+  renamed: "{old} heißt jetzt {now} im Spiel. Es wird weiterhin gemessen (Statistiken und Top 4-Rennen) über die Spiel-ID, aber die Seite nennt es weiterhin {old}."
   renamed_fix: Im Allianz-Planer umbenennen
+  unfound: "{tag} wurde im Spiel nicht gefunden und wird daher nicht gemessen (Statistiken und Top 4-Rennen). Falls das Tag im Spiel geändert wurde, gib das neue ein und die Seite wird es verfolgen."
+  unfound_now: Aktuelles Tag im Spiel
+  unfound_placeholder: z.B. Arch
+  unfound_link: Verknüpfen
+  unfound_checking: Prüfe mit dem Spiel...
+  unfound_left: "{left} von {max} Verknüpfungen heute übrig (jede fragt das Spiel einmal ab)"
   pending_title: Wartet auf Überprüfung
   pending_none: Keine Allianzbilder warten.
   sent_by: Gesendet von {name}, {when}
   race_title: Top 4-Rennen
-  race_none: Bisher kein Rennen gemessen.
+  race_none: Noch kein Rennen gemessen.
   race_progress: "{n} von 3 Duell-Tagen bisher gemessen."
-  race_finished: 'Alle 3 Tage gemessen: Ergebnisse liegen bei der NAP-Führung.'
+  race_finished: 'Alle 3 Tage gemessen: Die Ergebnisse liegen bei der NAP-Führung.'
   race_missing: 'Nicht gemessen: {tags}'
-  race_more: Vollständige Tabelle auf der Regeln-Seite
+  race_more: Vollständige Tabelle auf der Regelseite
   quota_title: Tracker-Anfragen
-  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag, beginnend um 00:00 UTC. Der Wert unten ist der letzte, den der Tracker der Seite gegeben hat, daher kostet die Anzeige nichts; jetzt prüfen verbraucht eine Anfrage.
+  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag, zurückgesetzt um 00:00 UTC. Die Zahl unten ist die aktuellste vom Tracker; die Anzeige kostet nichts, eine erneute Prüfung kostet eine Anfrage.
   quota_check: Jetzt prüfen
   quota_used: heute verbraucht
   quota_failed: Der Tracker konnte nicht erreicht werden.
   quota_as_of: Stand {when}
   quota_none: Die Seite hat heute noch keine Anfragen an den Tracker gesendet.
-  quota_resets: Startet erneut in {time}
+  quota_resets: Setzt zurück in {time}
   usage_title: Verbrauch
   usage_automation: Automatisierung
-  usage_automation_help: Tägliche Statistik-Schnappschüsse und Top 4-Rennen
+  usage_automation_help: Tägliche Statistik-Snapshots und Top 4-Rennen
   usage_alliance: Allianz-Tools
   usage_alliance_help: Dashboards, Mitgliederliste, Nominierungen
   usage_public: Öffentliche Seiten
-  usage_public_help: Ranglisten-Karten auf der Allianz-Seite
+  usage_public_help: Standings-Karten auf der Allianz-Seite
   usage_steward: Steward-Tools
-  usage_steward_help: Spielersuchen, Karten-Aktualisierungen und Verbrauchschecks
+  usage_steward_help: Spielersuche, Karten-Aktualisierungen und Verbrauchschecks
   usage_other: Sonstiges
-  usage_other_help: Alles, was nicht markiert ist
+  usage_other_help: Alles ohne spezifische Kennzeichnung
   usage_unrecorded: Nicht erfasst
-  usage_unrecorded_help: Vom Tracker gezählt, hier noch nicht gespeichert (jeder Server speichert alle paar Minuten)
-  usage_none: Heute noch keine Anfragen notiert.
+  usage_unrecorded_help: Vom Tracker gezählt, aber hier noch nicht gespeichert (jeder Server speichert alle paar Minuten)
+  usage_none: Heute noch keine Anfragen verzeichnet.
