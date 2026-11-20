@@ -491,8 +491,8 @@ function start() {
       pt.y = y;
       return pt.matrixTransform(ctm);
     };
-    const top = game ? at(cx, cy + side * 0.28 - side * 0.8) : at(cx, cy - half);
-    const bottom = game ? at(cx, cy + side * 0.6) : at(cx, cy + half);
+    const top = game ? at(cx, cy - side / 2) : at(cx, cy - half);
+    const bottom = game ? at(cx, cy + side / 2) : at(cx, cy + half);
     const r = box.getBoundingClientRect();
     const w = pop.offsetWidth;
     const h = pop.offsetHeight;
