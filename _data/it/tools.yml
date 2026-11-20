@@ -982,24 +982,24 @@ stats:
   show_hide: Tocca un'alleanza per mostrare o nascondere la sua linea.
   credit_before: Numeri dal
 steward:
-  page_title: Strumenti Amministratore
-  intro: 'Strumenti per gli Amministratori del Regno: cosa ti aspetta e una ricerca giocatori in tempo reale.'
-  loading: Caricamento…
+  page_title: Strumenti Steward
+  intro: 'Strumenti per gli Steward del Regno: cosa ti aspetta e una ricerca giocatori in tempo reale.'
+  loading: Caricamento...
   sign_in: Accedi con Discord
-  sign_in_needed: Accedi con Discord per aprire gli strumenti Amministratore.
-  stewards_only: Solo gli Amministratori del Regno possono aprire gli strumenti Amministratore.
+  sign_in_needed: Accedi con Discord per aprire gli strumenti Steward.
+  stewards_only: Solo gli Steward del Regno possono aprire gli strumenti Steward.
   lookup_title: Ricerca giocatore
-  lookup_help: 'Qualsiasi giocatore, in tempo reale dal gioco: alleanza, statistiche, nomi e alleanze precedenti. Inserisci un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
+  lookup_help: 'Qualsiasi giocatore, in diretta dal gioco: la sua alleanza, i numeri e i nomi e le alleanze precedenti. Digita un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
   lookup_placeholder: ID giocatore o nome di un giocatore NAP
   lookup_go: Cerca
-  lookup_id_needed: Inserisci un ID giocatore (il numero sul suo profilo) o scegli un giocatore NAP dai nomi trovati.
-  lookups_left: "{left} di {max} ricerche in tempo reale rimaste oggi (condivise tra tutti gli Amministratori)."
-  looking: Interrogazione del gioco…
+  lookup_id_needed: Digita un ID giocatore (il numero sul suo profilo) o seleziona un giocatore NAP dai nomi trovati.
+  lookups_left: "{left} di {max} ricerche in tempo reale rimanenti oggi (condivise tra tutti gli Steward)."
+  looking: Interrogazione del gioco...
   name_none: Nessun giocatore NAP con quel nome. Per chiunque altro, usa il suo ID giocatore.
   no_alliance: Nessuna alleanza
   server: Server {n}
   online: Online ora
-  last_seen: Ultima attività {when}
+  last_seen: Visto l'ultima volta {when}
   shielded: Scudo attivo
   might: Potenza
   kills: Uccisioni
@@ -1007,22 +1007,39 @@ steward:
   vip: VIP
   position: Posizione (X, Y)
   language: Lingua
-  ranks: 'Ranghi del Regno: #{might} Potenza · #{kills} Uccisioni · #{heroes} eroi'
+  ranks: 'Classifiche Regno: #{might} Potenza · #{kills} uccisioni · #{heroes} eroi'
   history_title: Nomi e alleanze
   history_none: Nessun nome o alleanza precedente rilevato.
   seen_from: dal {when}
-  first_seen: Rilevato per la prima volta dal tracker il {when}.
+  first_seen: Visto per la prima volta dal tracker {when}.
   pending_title: In attesa di revisione
   pending_none: Nessuna immagine di alleanza in attesa.
   sent_by: Inviato da {name}, {when}
-  race_title: Gara delle prime 4
-  race_none: Nessuna gara ancora misurata.
+  race_title: Gara Top 4
+  race_none: Nessuna gara misurata ancora.
   race_progress: "{n} di 3 giorni di Duello misurati finora."
-  race_finished: 'Tutti e 3 i giorni misurati: i risultati sono nella dirigenza NAP.'
+  race_finished: 'Tutti i 3 giorni misurati: i risultati sono nella leadership NAP.'
   race_missing: 'Non misurato: {tags}'
   race_more: Tabella completa nella pagina Regole
-  quota_title: Richieste Tracker
-  quota_help: Il Tracker di Last Asylum permette 1.000 richieste al giorno. Ogni controllo costa una richiesta.
-  quota_check: Verifica utilizzo
-  quota_used: utilizzati oggi
+  quota_title: Richieste tracker
+  quota_help: Il Tracker di Last Asylum consente 1.000 richieste al giorno, che ripartono alle 00:00 UTC. La cifra sottostante è l'ultima fornita dal tracker al sito, quindi non costa nulla mostrarla; controllare ora costa una richiesta.
+  quota_check: Controlla ora
+  quota_used: usate oggi
   quota_failed: Impossibile raggiungere il tracker.
+  quota_as_of: Aggiornato al {when}
+  quota_none: Il sito non ha ancora richiesto nulla al tracker oggi.
+  quota_resets: Ricomincia tra {time}
+  usage_title: Cosa le ha consumate
+  usage_automation: Automazione
+  usage_automation_help: Snapshot statistiche giornaliere e gara Top 4
+  usage_alliance: Strumenti alleanza
+  usage_alliance_help: Dashboard, elenco membri, nomine
+  usage_public: Pagine pubbliche
+  usage_public_help: Schede delle classifiche nella pagina Alleanza
+  usage_steward: Strumenti Steward
+  usage_steward_help: Ricerca giocatori e controlli di utilizzo
+  usage_other: Altro
+  usage_other_help: Tutto ciò che non è etichettato
+  usage_unrecorded: Non registrato
+  usage_unrecorded_help: Contato dal tracker, non ancora salvato qui (ogni server salva ogni pochi minuti)
+  usage_none: Nessuna richiesta registrata oggi.

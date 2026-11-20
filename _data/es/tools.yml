@@ -984,18 +984,18 @@ stats:
 steward:
   page_title: Herramientas de Administrador
   intro: 'Herramientas para administradores de Reino: qué te espera y búsqueda de jugadores en tiempo real.'
-  loading: Cargando…
+  loading: Cargando...
   sign_in: Iniciar sesión con Discord
-  sign_in_needed: Inicia sesión con Discord para abrir las herramientas de Administrador.
-  stewards_only: Solo los administradores de Reino pueden abrir las herramientas de Administrador.
-  lookup_title: Búsqueda de jugadores
-  lookup_help: 'Cualquier jugador, en directo desde el juego: su alianza, estadísticas, y nombres o alianzas anteriores. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
-  lookup_placeholder: ID de jugador o nombre de un jugador NAP
+  sign_in_needed: Inicia sesión con Discord para abrir las herramientas de administrador.
+  stewards_only: Solo los administradores de Reino pueden abrir las herramientas de administrador.
+  lookup_title: Búsqueda de jugador
+  lookup_help: 'Cualquier jugador, en tiempo real desde el juego: su alianza, estadísticas, nombres y alianzas anteriores. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
+  lookup_placeholder: ID de jugador, o nombre de un jugador NAP
   lookup_go: Buscar
-  lookup_id_needed: Escribe un ID de jugador (el número en su perfil) o selecciona un jugador NAP de los nombres encontrados.
-  lookups_left: "{left} de {max} búsquedas en directo restantes hoy (compartidas por todos los administradores)."
-  looking: Consultando el juego…
-  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otro, utiliza su ID de jugador.
+  lookup_id_needed: Escribe un ID de jugador (el número en su perfil) o elige un jugador NAP de los nombres encontrados.
+  lookups_left: "{left} de {max} búsquedas en tiempo real restantes hoy (compartidas por todos los administradores)."
+  looking: Consultando al juego...
+  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otro, usa su ID de jugador.
   no_alliance: Sin alianza
   server: Servidor {n}
   online: En línea ahora
@@ -1013,7 +1013,7 @@ steward:
   seen_from: desde {when}
   first_seen: Visto por primera vez por el rastreador {when}.
   pending_title: Esperando revisión
-  pending_none: No hay imágenes de alianzas pendientes.
+  pending_none: No hay imágenes de alianza en espera.
   sent_by: Enviado por {name}, {when}
   race_title: Carrera del Top 4
   race_none: Aún no se ha medido ninguna carrera.
@@ -1022,7 +1022,24 @@ steward:
   race_missing: 'No medido: {tags}'
   race_more: Tabla completa en la página de Reglas
   quota_title: Solicitudes del rastreador
-  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día. Cada consulta cuesta una.
-  quota_check: Comprobar uso
+  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día, reiniciándose a las 00:00 UTC. La cifra de abajo es la última que el rastreador dio al sitio, por lo que no cuesta nada mostrarla; verificar ahora cuesta una solicitud.
+  quota_check: Verificar ahora
   quota_used: usado hoy
-  quota_failed: No se pudo conectar con el rastreador.
+  quota_failed: No se pudo contactar con el rastreador.
+  quota_as_of: A fecha de {when}
+  quota_none: El sitio aún no ha solicitado nada al rastreador hoy.
+  quota_resets: Se reinicia en {time}
+  usage_title: Uso de solicitudes
+  usage_automation: Automatización
+  usage_automation_help: Instantánea de estadísticas diarias y carrera del Top 4
+  usage_alliance: Herramientas de alianza
+  usage_alliance_help: Paneles, lista de miembros, nominaciones
+  usage_public: Páginas públicas
+  usage_public_help: Tarjetas de clasificación en la página de Alianza
+  usage_steward: Herramientas de administrador
+  usage_steward_help: Búsqueda de jugadores y comprobaciones de uso
+  usage_other: Otros
+  usage_other_help: Cualquier cosa no etiquetada
+  usage_unrecorded: No registrado
+  usage_unrecorded_help: Contado por el rastreador, aún no guardado aquí (cada servidor guarda cada pocos minutos)
+  usage_none: Aún no se han registrado solicitudes hoy.

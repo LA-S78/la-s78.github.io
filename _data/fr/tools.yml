@@ -989,17 +989,17 @@ steward:
   sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils de l'Intendant.
   stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils de l'Intendant.
   lookup_title: Recherche de joueur
-  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses statistiques, ainsi que ses anciens noms et alliances. Entrez un ID de joueur ou un nom pour trouver l''ID d''un joueur sous NAP.'
-  lookup_placeholder: ID de joueur ou nom d'un joueur NAP
+  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses statistiques, ses anciens noms et alliances. Tapez un ID de joueur, ou un nom pour trouver l''ID d''un joueur NAP.'
+  lookup_placeholder: ID de joueur, ou nom d'un joueur NAP
   lookup_go: Rechercher
-  lookup_id_needed: Entrez un ID de joueur (le numéro sur son profil) ou choisissez un joueur NAP parmi les noms trouvés.
+  lookup_id_needed: Tapez un ID de joueur (le numéro sur son profil), ou choisissez un joueur NAP parmi les noms trouvés.
   lookups_left: "{left} sur {max} recherches en direct restantes aujourd'hui (partagées par tous les Intendants)."
   looking: Interrogation du jeu…
-  name_none: Aucun joueur NAP trouvé avec ce nom. Pour tout autre joueur, utilisez son ID.
+  name_none: Aucun joueur NAP avec ce nom. Pour tout autre joueur, utilisez son ID de joueur.
   no_alliance: Aucune alliance
   server: Serveur {n}
   online: En ligne
-  last_seen: Vu pour la dernière fois {when}
+  last_seen: Dernière connexion {when}
   shielded: Bouclier actif
   might: Puissance
   kills: Éliminations
@@ -1007,22 +1007,39 @@ steward:
   vip: VIP
   position: Position (X, Y)
   language: Langue
-  ranks: 'Rang du Royaume : #{might} Puissance · #{kills} Éliminations · #{heroes} Héros'
+  ranks: 'Rangs du Royaume : #{might} Puissance · #{kills} Éliminations · #{heroes} Héros'
   history_title: Noms et alliances
-  history_none: Aucun ancien nom ou alliance détecté.
+  history_none: Aucun nom ou alliance précédent détecté.
   seen_from: depuis {when}
-  first_seen: Détecté pour la première fois par le tracker {when}.
+  first_seen: Première détection par le tracker {when}.
   pending_title: En attente de révision
   pending_none: Aucune image d'alliance en attente.
   sent_by: Envoyé par {name}, {when}
   race_title: Course du Top 4
   race_none: Aucune course mesurée pour l'instant.
   race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
-  race_finished: 'Les 3 jours sont mesurés : les résultats sont disponibles auprès des leaders NAP.'
+  race_finished: 'Les 3 jours sont mesurés : les résultats sont entre les mains des dirigeants NAP.'
   race_missing: 'Non mesuré : {tags}'
   race_more: Tableau complet sur la page des Règles
-  quota_title: Requêtes du Tracker
-  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour. Une vérification en consomme une.
-  quota_check: Vérifier l'utilisation
+  quota_title: Requêtes du tracker
+  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le tracker au site ; le consulter ne coûte donc rien. Vérifier maintenant consomme une requête.
+  quota_check: Vérifier maintenant
   quota_used: utilisés aujourd'hui
   quota_failed: Le tracker est injoignable.
+  quota_as_of: Au {when}
+  quota_none: Le site n'a encore rien demandé au tracker aujourd'hui.
+  quota_resets: Redémarre dans {time}
+  usage_title: Utilisation
+  usage_automation: Automatisation
+  usage_automation_help: Instantané des statistiques quotidiennes et course du Top 4
+  usage_alliance: Outils d'alliance
+  usage_alliance_help: Tableaux de bord, liste des membres, nominations
+  usage_public: Pages publiques
+  usage_public_help: Cartes de classement sur la page Alliance
+  usage_steward: Outils de l'Intendant
+  usage_steward_help: Recherches de joueurs et vérifications d'utilisation
+  usage_other: Autre
+  usage_other_help: Tout ce qui n'est pas étiqueté
+  usage_unrecorded: Non enregistré
+  usage_unrecorded_help: Compté par le tracker, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
+  usage_none: Aucune requête notée aujourd'hui.

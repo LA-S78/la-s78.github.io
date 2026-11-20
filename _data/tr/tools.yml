@@ -983,19 +983,19 @@ stats:
   credit_before: 'Veri kaynağı:'
 steward:
   page_title: Yönetici Araçları
-  intro: 'Krallık Yöneticileri için araçlar: sizi neler bekliyor ve canlı oyuncu sorgulama.'
+  intro: 'Krallık Yöneticileri için araçlar: sizi nelerin beklediği ve canlı oyuncu sorgulama.'
   loading: Yükleniyor…
   sign_in: Discord ile giriş yap
   sign_in_needed: Yönetici araçlarını açmak için Discord ile giriş yapın.
-  stewards_only: Yönetici araçlarını sadece Krallık Yöneticileri açabilir.
+  stewards_only: Yönetici araçlarını yalnızca Krallık Yöneticileri açabilir.
   lookup_title: Oyuncu sorgulama
-  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, sayıları ve önceki isimleri ile ittifakları. Bir oyuncu kimliği yazın veya NAP oyuncusunun kimliğini bulmak için bir isim girin.'
-  lookup_placeholder: Oyuncu Kimliği veya NAP oyuncusu ismi
+  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, sayıları ve önceki isimleri ile ittifakları. Bir oyuncu ID''si girin veya bir NAP oyuncusunun ID''sini bulmak için ismini yazın.'
+  lookup_placeholder: Oyuncu ID'si veya bir NAP oyuncusunun ismi
   lookup_go: Sorgula
-  lookup_id_needed: Bir oyuncu kimliği (profilindeki numara) yazın veya bulunan isimlerden bir NAP oyuncusu seçin.
-  lookups_left: Bugün kalan {left}/{max} canlı sorgulama hakkı (tüm Yöneticilerle paylaşılır).
+  lookup_id_needed: Bir oyuncu ID'si (profilindeki sayı) yazın veya bulunan isimlerden bir NAP oyuncusu seçin.
+  lookups_left: Bugün kalan {left}/{max} canlı sorgulama (tüm Yöneticilerle paylaşılır).
   looking: Oyuna soruluyor…
-  name_none: Bu isimde bir NAP oyuncusu yok. Diğer herkes için oyuncu kimliğini kullanın.
+  name_none: Bu isimde bir NAP oyuncusu yok. Diğer herkes için oyuncu ID'sini kullanın.
   no_alliance: İttifak yok
   server: Sunucu {n}
   online: Şu an çevrimiçi
@@ -1009,20 +1009,37 @@ steward:
   language: Dil
   ranks: 'Krallık sıralaması: #{might} Güç · #{kills} leş · #{heroes} kahraman'
   history_title: İsimler ve ittifaklar
-  history_none: Daha önce görülmüş bir isim veya ittifak yok.
+  history_none: Daha önceki bir isim veya ittifak görülmedi.
   seen_from: "{when} tarihinden beri"
-  first_seen: Takipçi tarafından ilk kez {when} görüldü.
-  pending_title: İnceleme bekliyor
+  first_seen: Takipçi tarafından ilk görülme {when}.
+  pending_title: İnceleme bekleniyor
   pending_none: Bekleyen ittifak resmi yok.
-  sent_by: "{name} tarafından gönderildi, {when}"
+  sent_by: 'Gönderen: {name}, {when}'
   race_title: İlk 4 yarışı
-  race_none: Henüz ölçülen bir yarış yok.
+  race_none: Henüz bir yarış ölçülmedi.
   race_progress: Şu ana kadar 3 Düello gününden {n} kadarı ölçüldü.
   race_finished: '3 günün tamamı ölçüldü: sonuçlar NAP liderliğinde.'
   race_missing: 'Ölçülmedi: {tags}'
-  race_more: Kurallar sayfasında tam tablo
+  race_more: Tam tablo Kurallar sayfasında
   quota_title: Takipçi istekleri
-  quota_help: Last Asylum Tracker günde 1.000 isteğe izin verir. Kontrol etmek bir hak harcar.
-  quota_check: Kullanımı kontrol et
+  quota_help: Last Asylum Takipçisi, 00:00 UTC'de sıfırlanmak üzere günde 1.000 isteğe izin verir. Aşağıdaki rakam takipçinin siteye verdiği son rakamdır, bu yüzden görüntülemenin bir maliyeti yoktur; şimdi kontrol etmek bir istek harcar.
+  quota_check: Şimdi kontrol et
   quota_used: bugün kullanıldı
   quota_failed: Takipçiye ulaşılamadı.
+  quota_as_of: "{when} itibarıyla"
+  quota_none: Site bugün takipçiye henüz hiçbir şey sormadı.
+  quota_resets: "{time} içinde sıfırlanacak"
+  usage_title: Kullananlar
+  usage_automation: Otomasyon
+  usage_automation_help: Günlük İstatistik anlık görüntüsü ve İlk 4 yarışı
+  usage_alliance: İttifak araçları
+  usage_alliance_help: Paneller, kadro, adaylıklar
+  usage_public: Herkese açık sayfalar
+  usage_public_help: İttifak sayfasındaki sıralama kartları
+  usage_steward: Yönetici araçları
+  usage_steward_help: Oyuncu sorgulamaları ve kullanım kontrolleri
+  usage_other: Diğer
+  usage_other_help: Etiketlenmemiş her şey
+  usage_unrecorded: Kaydedilmedi
+  usage_unrecorded_help: Takipçi tarafından sayıldı, henüz buraya kaydedilmedi (her sunucu birkaç dakikada bir kaydeder)
+  usage_none: Bugün henüz hiçbir istek kaydedilmedi.
