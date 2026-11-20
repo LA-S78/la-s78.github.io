@@ -598,6 +598,24 @@ main .map-member-pic,
   cursor: pointer;
 }
 
+/* Zoomed in, borders and label outlines keep their width on screen (at a member markers'
+   deep zoom they would otherwise be many times thicker than the markers) */
+.game-map svg.is-zoomed #layer1 path,
+.game-map svg.is-zoomed .territory-label {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Members' names, once there's room for them (deep zoom) */
+.game-map .map-member-name {
+  fill: #fff;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 600;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.8);
+  stroke-linejoin: round;
+}
+
 /* The markers: small squares in the alliance's colour, ringed so they show on any territory;
    members close together share one with their number */
 .game-map .map-member-dot {
