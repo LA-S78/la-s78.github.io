@@ -19,15 +19,17 @@
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
      id="defs1">
+    <!-- Sized in map units (not 100%), so the texture zooms and moves with the map
+         (js/map-zoom.js narrows the viewBox; "100%" would follow the visible area) -->
     <pattern 
      id="normal-pattern" 
      patternUnits="userSpaceOnUse" 
-     width="100%" 
-     height="100%">
+     width="2115" 
+     height="1728">
     <image 
        href="/images/rust.jpg" 
-       width="100%" 
-       height="100%" 
+       width="2115" 
+       height="1728" 
        preserveAspectRatio="xMidYMid slice" />
   </pattern>
   <filter id="territory-vignette" filterUnits="objectBoundingBox">    <!-- 1. Blur the shape's alpha outline -->
@@ -898,8 +900,10 @@
 
   <!-- 2. MIDDLE LAYER: Rust Texture Overlay -->
   <rect
-     width="100%"
-     height="100%"
+     x="0"
+     y="0"
+     width="2115"
+     height="1728"
      fill="url(#normal-pattern)"
      class="normal-texture-overlay" />
 

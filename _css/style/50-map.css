@@ -703,3 +703,23 @@ main .map-member-pic,
   opacity: 1;
   touch-action: manipulation;
 }
+
+/* While the map is being dragged, and while "My members" is on, territories don't react to
+   the pointer: no hover glow or highlight (they redrew the map every frame and made it
+   flicker), and with the markers on, no stray territory taps (owner, 2026-11-20) */
+.game-map svg.is-panning #layer1 path,
+.game-map svg.members-on #layer1 path {
+  transition: none;
+  animation: none;
+}
+
+.game-map svg.is-panning #layer1 path:hover,
+.game-map svg.members-on #layer1 path:hover {
+  filter: url(#territory-vignette);
+  stroke: var(--shade-50) !important;
+  stroke-width: 1.5px !important;
+}
+
+.game-map svg.members-on #layer1 path {
+  cursor: default;
+}

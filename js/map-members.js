@@ -58,7 +58,7 @@ function start() {
       <input type="search" id="map-members-search" placeholder="${esc(tm('members_search'))}" aria-label="${esc(tm('members_search'))}" autocomplete="off" hidden>
       <span class="map-members-status" id="map-members-status"></span>
     </div>
-    <div class="map-members-results" id="map-members-results" hidden></div>`;
+`;
   const anchor = container.querySelector('.map-controls');
   anchor.after(bar);
   // The chosen member's card goes under the map, so the map stays in view above it
@@ -66,12 +66,18 @@ function start() {
   cardBox.className = 'map-member-card';
   cardBox.id = 'map-member-card';
   cardBox.hidden = true;
-  (container.querySelector('.game-map') || bar).after(cardBox);
+  // Search results and a group's members go under the map too: the map doesn't move when
+  // they appear (owner, 2026-11-20)
+  const resultsBox = document.createElement('div');
+  resultsBox.className = 'map-members-results';
+  resultsBox.id = 'map-members-results';
+  resultsBox.hidden = true;
+  (container.querySelector('.game-map') || bar).after(resultsBox, cardBox);
 
   const btn = bar.querySelector('#btn-map-members');
   const search = bar.querySelector('#map-members-search');
   const status = bar.querySelector('#map-members-status');
-  const results = bar.querySelector('#map-members-results');
+  const results = resultsBox;
   const card = cardBox;
 
   // ---- The dots, in a group kept last in the map so they sit on top ----
@@ -343,6 +349,8 @@ function start() {
       state.tag = body.tag || '';
       state.takenAt = body.takenAt;
       state.on = true;
+      // Territories don't respond while the markers are shown (owner: fewer stray taps)
+      root()?.classList.add('members-on');
       btn.setAttribute('aria-pressed', 'true');
       search.hidden = false;
       const when = state.takenAt
@@ -363,6 +371,7 @@ function start() {
 
   function turnOff() {
     state.on = false;
+    root()?.classList.remove('members-on');
     state.selected = null;
     btn.setAttribute('aria-pressed', 'false');
     search.hidden = true;

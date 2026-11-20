@@ -1469,7 +1469,13 @@ export function enableMapHighlighting(svgRoot = null) {
       return null;
     };
 
+    // No territory hover while the map is being dragged (js/map-zoom.js: it made the map
+    // flicker) or while "My members" is on (js/map-members.js: only the markers respond)
+    const territoriesIdle = () =>
+      root.classList.contains('is-panning') || root.classList.contains('members-on');
+
     el.addEventListener('mouseenter', (e) => {
+      if (territoriesIdle()) return;
       const city = getTargetCity(e);
       const cityId = city ? city.id : el.id || e.target.id;
 
@@ -1485,6 +1491,7 @@ export function enableMapHighlighting(svgRoot = null) {
     el.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
+      if (territoriesIdle()) return;
       const city = getTargetCity(e);
       const cityId = city ? city.id : el.id || e.target.id;
 
