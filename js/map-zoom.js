@@ -6,11 +6,18 @@
 // Not zoomed in, the page behaves as before: one finger scrolls the page, and wheeling down
 // over the map scrolls it too. A drag is never taken for a tap (Planner Mode's territory
 // taps). Map pictures (captureMapImage) keep the whole map: data-full-view-box.
-// Others can use window.MapZoom: focus(x, y, zoom), zoom(), maxZoom.
+// Others can use window.MapZoom: focus(x, y, zoom), zoom(), maxZoom, setMaxZoom(n).
+//
+// Deeper zoom (owner request, 2026-11-20): while member markers are shown, js/map-members.js
+// raises the limit (setMaxZoom) until every Sanctuary has its own marker and its name fits;
+// turned off, it goes back to MAX_ZOOM. Territory labels stop growing past MAX_ZOOM, and
+// borders keep their width on screen, so a deep zoom shows the markers, not thick lines.
 
 import { getSvgRoot } from './map.js';
 
 const MAX_ZOOM = 6;
+/** The most setMaxZoom allows (a phone needs about 70× for names in a packed hive). */
+const DEEPEST = 160;
 const STEP = 1.6; // a button press
 const DRAG_PX = 6; // movement before a press counts as a drag, not a tap
 
@@ -29,6 +36,7 @@ function start() {
   const base = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
   svg.dataset.fullViewBox = `${base.x} ${base.y} ${base.w} ${base.h}`;
   let view = { ...base };
+  let maxZoom = MAX_ZOOM;
 
   // ---- The buttons ----
   const controls = document.createElement('div');
@@ -45,10 +53,12 @@ function start() {
   /**
    * Territory labels grow only a little as the map zooms in (they're drawn in map units, so
    * they'd otherwise grow as much as the map and cover it): their size ÷ zoom^0.6, so on
-   * screen they grow zoom^0.4 (2× at 6×). The map redraws its labels at times: done again.
+   * screen they grow zoom^0.4 (2× at 6×), and no more past MAX_ZOOM. The map redraws its
+   * labels at times: done again.
    */
   function sizeLabels() {
-    const k = Math.pow(zoomLevel(), 0.6);
+    const z = zoomLevel();
+    const k = z / Math.pow(Math.min(z, MAX_ZOOM), 0.4);
     svg.querySelectorAll('.territory-label').forEach((el) => {
       if (!el.dataset.baseSize) el.dataset.baseSize = String(parseFloat(el.style.fontSize) || 0);
       const size = Number(el.dataset.baseSize);
@@ -70,15 +80,16 @@ function start() {
     sizeLabels();
     const z = zoomLevel();
     svg.classList.toggle('is-zoomed', z > 1.01);
-    controls.querySelector('[data-zoom="in"]').disabled = z >= MAX_ZOOM - 0.01;
+    controls.querySelector('[data-zoom="in"]').disabled = z >= maxZoom - 0.01;
+    svg.classList.toggle('is-deep', z > MAX_ZOOM + 0.01);
     controls.querySelector('[data-zoom="out"]').disabled = z <= 1.01;
     controls.querySelector('[data-zoom="reset"]').disabled = z <= 1.01;
     svg.dispatchEvent(new CustomEvent('mapzoom', { detail: { zoom: z } }));
   }
 
-  /** Keeps the view inside the map and between 1× and MAX_ZOOM. */
+  /** Keeps the view inside the map and between 1× and the limit. */
   function clamp() {
-    view.w = Math.min(base.w, Math.max(base.w / MAX_ZOOM, view.w));
+    view.w = Math.min(base.w, Math.max(base.w / maxZoom, view.w));
     view.h = (view.w * base.h) / base.w;
     view.x = Math.min(base.x + base.w - view.w, Math.max(base.x, view.x));
     view.y = Math.min(base.y + base.h - view.h, Math.max(base.y, view.y));
@@ -98,7 +109,7 @@ function start() {
 
   /** Zooms by `factor`, keeping the map point (cx, cy) where it is on screen. */
   function zoomAt(factor, cx, cy) {
-    const w = Math.min(base.w, Math.max(base.w / MAX_ZOOM, view.w / factor));
+    const w = Math.min(base.w, Math.max(base.w / maxZoom, view.w / factor));
     const k = w / view.w;
     view = { x: cx - (cx - view.x) * k, y: cy - (cy - view.y) * k, w, h: (w * base.h) / base.w };
     clamp();
@@ -107,7 +118,7 @@ function start() {
 
   /** Centres the map point (x, y) at `zoom` (others: the members search). */
   function focus(x, y, zoom = 3) {
-    const w = base.w / Math.min(MAX_ZOOM, Math.max(1, zoom));
+    const w = base.w / Math.min(maxZoom, Math.max(1, zoom));
     view = { x: x - w / 2, y: y - (w * base.h) / base.w / 2, w, h: (w * base.h) / base.w };
     clamp();
     apply();
@@ -218,7 +229,25 @@ function start() {
     true,
   );
 
-  window.MapZoom = { focus, zoom: zoomLevel, maxZoom: MAX_ZOOM };
+  /** A new limit (MAX_ZOOM at the least); zoomed in further, the view zooms out to it. */
+  function setMaxZoom(n) {
+    const next = Math.min(DEEPEST, Math.max(MAX_ZOOM, Number(n) || MAX_ZOOM));
+    if (Math.abs(next - maxZoom) < 0.01) return;
+    maxZoom = next;
+    if (zoomLevel() > maxZoom) {
+      const m = middle();
+      focus(m.x, m.y, maxZoom);
+    } else apply();
+  }
+
+  window.MapZoom = {
+    focus,
+    zoom: zoomLevel,
+    setMaxZoom,
+    get maxZoom() {
+      return maxZoom;
+    },
+  };
   apply();
 }
 

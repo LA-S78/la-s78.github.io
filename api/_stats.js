@@ -470,14 +470,22 @@ async function savePositions(found, store) {
 export function napPositionsView(file, tags) {
   const alliances = [];
   const members = [];
-  for (const tag of tags) {
-    const a = file?.alliances?.[tag];
-    if (!a) continue;
+  // A player who moved alliance between two alliances' lookups is in both: shown once, from
+  // the newer lookup
+  const seen = new Set();
+  const newestFirst = tags
+    .filter((tag) => file?.alliances?.[tag])
+    .sort((a, b) => Date.parse(file.alliances[b].at) - Date.parse(file.alliances[a].at));
+  for (const tag of newestFirst) {
+    const a = file.alliances[tag];
     alliances.push({ tag, at: a.at, members: a.members.length });
     for (const [uid, name, power, x, y, avatar, rank] of a.members) {
+      if (seen.has(String(uid))) continue;
+      seen.add(String(uid));
       members.push({ uid: String(uid), name, power, x, y, avatar, rank, tag });
     }
   }
+  alliances.sort((a, b) => tags.indexOf(a.tag) - tags.indexOf(b.tag));
   const missing = tags.filter((tag) => !file?.alliances?.[tag]);
   return { alliances, members, missing };
 }

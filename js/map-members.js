@@ -9,6 +9,12 @@
 // positions come from the daily Stats snapshot (free); the Refresh button asks the game again
 // (one tracker request per NAP alliance, a few times a day between all Stewards).
 //
+// Tapping a shared marker zooms in on it until its members split apart (owner, 2026-11-20:
+// no list of names). While markers are shown the map can zoom much further than usual
+// (js/map-zoom.js setMaxZoom): far enough for the closest two Sanctuaries loaded to have
+// markers and names of their own, on that screen. Names appear wherever they fit, the
+// strongest players first, so they never overlap.
+//
 // Game X/Y become map positions through js/map-coords.js: a smooth warp through reference
 // points read in the game (five cities, 2026-11-19, and the Capitol area's corners,
 // 2026-11-20), so members near the Capitol land on the right side of its edge.
@@ -164,6 +170,99 @@ function start() {
   }
 
   let groups = [];
+
+  // ---- How deep the map may zoom: the closest two Sanctuaries, in map units ----
+  let closest = null;
+  function closestGap() {
+    if (closest !== null) return closest;
+    const pts = state.members.map((m) => toMap(m.x, m.y));
+    let best = Infinity;
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        const d = Math.hypot(pts[i].cx - pts[j].cx, pts[i].cy - pts[j].cy);
+        if (d < best) best = d;
+      }
+    }
+    // Two in one spot (never seen) still get a limit
+    closest = Number.isFinite(best) ? Math.max(best, 0.5) : 10;
+    return closest;
+  }
+  /** Room on screen, in pixels, for a neighbour's name beside its marker. */
+  const NAME_ROOM = 96;
+  function updateMaxZoom() {
+    const zoom = window.MapZoom;
+    if (!zoom?.setMaxZoom) return;
+    const perPx1 = unitsPerPx() * zoom.zoom(); // map units per pixel, not zoomed in
+    zoom.setMaxZoom(((NAME_ROOM * perPx1) / closestGap()) * 1.05);
+  }
+
+  // ---- Names, where they fit ----
+  /** Names show from this zoom (fewer names over the whole map's territory labels). */
+  const NAMES_FROM = 4;
+  const NAME_PX = 11;
+  let measureCtx = null;
+  function textWidth(text) {
+    if (!measureCtx) {
+      measureCtx = document.createElement('canvas').getContext('2d');
+      const family = getComputedStyle(document.body).fontFamily || 'sans-serif';
+      measureCtx.font = `600 ${NAME_PX}px ${family}`;
+    }
+    return measureCtx.measureText(text).width;
+  }
+
+  /**
+   * Name labels for single markers in view, strongest first (the chosen member before all):
+   * to the right of the marker, else to its left, and only where the label touches no other
+   * label or marker.
+   */
+  function nameLabels(perPx) {
+    const zoom = window.MapZoom?.zoom() || 1;
+    const svg = root();
+    const vb = svg?.viewBox?.baseVal;
+    if (!vb || zoom < NAMES_FROM) return '';
+    const inView = (x, y) =>
+      x >= vb.x && x <= vb.x + vb.width && y >= vb.y && y <= vb.y + vb.height;
+    const boxes = [];
+    const singles = [];
+    for (const g of groups) {
+      if (!inView(g.cx, g.cy)) continue;
+      const h = ((g.members.length === 1 ? SIZE.one : SIZE.group) / 2 + 1) * perPx;
+      boxes.push([g.cx - h, g.cy - h, g.cx + h, g.cy + h]);
+      if (g.members.length === 1) singles.push(g);
+    }
+    const picked = state.members.find((m) => m.uid === state.selected);
+    if (picked) {
+      const { cx, cy } = toMap(picked.x, picked.y);
+      const h = (SIZE.picked / 2 + 2) * perPx;
+      boxes.push([cx - h, cy - h, cx + h, cy + h]);
+      singles.push({ cx, cy, members: [picked], picked: true });
+    }
+    singles.sort(
+      (a, b) => (b.picked ? 1 : 0) - (a.picked ? 1 : 0) || b.members[0].power - a.members[0].power,
+    );
+    const hits = (b) => boxes.some((o) => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
+    const font = NAME_PX * perPx;
+    const gap = (SIZE.one / 2 + 3) * perPx;
+    let html = '';
+    for (const g of singles.slice(0, 400)) {
+      const m = g.members[0];
+      const text = label(m);
+      const w = textWidth(text) * perPx;
+      const h = font * 1.25;
+      const right = [g.cx + gap, g.cy - h / 2, g.cx + gap + w, g.cy + h / 2];
+      const left = [g.cx - gap - w, g.cy - h / 2, g.cx - gap, g.cy + h / 2];
+      const own = g.picked ? (SIZE.picked / 2 + 2) * perPx : 0;
+      const tryBoxes = g.picked
+        ? [[right[0] + own, right[1], right[2] + own, right[3]]]
+        : [right, left];
+      const place = tryBoxes.find((b) => !hits(b)) || (g.picked ? tryBoxes[0] : null);
+      if (!place) continue;
+      boxes.push(place);
+      const anchorLeft = place === left;
+      html += `<text class="map-member-name${g.picked ? ' is-selected' : ''}" x="${(anchorLeft ? place[2] : place[0]).toFixed(1)}" y="${g.cy.toFixed(1)}" font-size="${font.toFixed(2)}" text-anchor="${anchorLeft ? 'end' : 'start'}" dy="0.35em" stroke-width="${(3 * perPx).toFixed(2)}">${esc(text)}</text>`;
+    }
+    return html;
+  }
   /** "Name" (My members) or "[TAG] Name" (All NAP players). */
   const label = (m) => (state.mode === 'nap' && m.tag ? `[${m.tag}] ${m.name}` : m.name);
   const hit = (m) =>
@@ -219,6 +318,7 @@ function start() {
           });
         });
     }
+    updateMaxZoom();
     const colorOf = (m) => getAllianceColor(m.tag || state.tag);
     const perPx = unitsPerPx();
     groups = groupsOnScreen(perPx);
@@ -244,32 +344,15 @@ function start() {
       html += `<rect class="map-member-outline" x="${(cx - edge).toFixed(1)}" y="${(cy - edge).toFixed(1)}" width="${(2 * edge).toFixed(1)}" height="${(2 * edge).toFixed(1)}" rx="${(2 * perPx).toFixed(1)}"></rect>`;
       html += `${square(cx, cy, SIZE.picked, perPx, 'map-member-dot is-selected', `data-uid="${esc(picked.uid)}"`, colorOf(picked)).replace(/stroke-width="[^"]*"/, `stroke-width="${(2 * perPx).toFixed(2)}"`)}><title>${esc(picked.name)}</title></rect>`;
     }
-    layer.innerHTML = html;
+    layer.innerHTML = html + nameLabels(perPx);
   }
 
-  /** A shared marker tapped: its members as buttons to pick from. */
+  /** A shared marker tapped: the map zooms in on it until its members split apart. */
   function showGroup(group) {
-    if (!group) return;
-    // Zoom into a group until it splits apart; once fully zoomed in, list its members
     const zoom = window.MapZoom;
-    if (zoom && zoom.zoom() < zoom.maxZoom - 0.01) {
-      zoom.focus(group.cx, group.cy, Math.min(zoom.maxZoom, zoom.zoom() * 2.5));
-      return;
-    }
-    // …and a group's list replaces the member's card
-    if (state.selected || !card.hidden) {
-      state.selected = null;
-      card.hidden = true;
-      draw();
-    }
-    results.hidden = false;
-    results.innerHTML =
-      `<span class="map-members-none">${esc(tm(state.mode === 'nap' ? 'nap_here' : 'members_here', { n: group.members.length }))}</span>` +
-      group.members
-        .slice()
-        .sort((a, b) => b.power - a.power)
-        .map(hit)
-        .join('');
+    if (!group || !zoom) return;
+    results.hidden = true;
+    zoom.focus(group.cx, group.cy, Math.min(zoom.maxZoom, Math.max(zoom.zoom() * 2.5, 2)));
   }
 
   function clear() {
@@ -365,7 +448,8 @@ function start() {
     // Found by search: the map zooms to them (js/map-zoom.js)
     if (m && window.MapZoom) {
       const { cx, cy } = toMap(m.x, m.y);
-      window.MapZoom.focus(cx, cy, Math.max(window.MapZoom.zoom(), 4));
+      // close enough for most neighbours' names too
+      window.MapZoom.focus(cx, cy, Math.max(window.MapZoom.zoom(), window.MapZoom.maxZoom * 0.5));
     }
   }
 
@@ -433,7 +517,10 @@ function start() {
         throw new Error(body.error || `HTTP ${res.status}`);
       }
       state.mode = mode;
-      state.members = body.members || [];
+      // Each player once (the server sends them so; kept safe here too)
+      const seen = new Set();
+      state.members = (body.members || []).filter((m) => !seen.has(m.uid) && seen.add(m.uid));
+      closest = null;
       state.tag = body.tag || '';
       state.takenAt = body.takenAt || null;
       state.on = true;
@@ -466,6 +553,7 @@ function start() {
 
   function turnOff() {
     state.on = false;
+    window.MapZoom?.setMaxZoom?.(0); // back to the usual limit
     root()?.classList.remove('members-on');
     state.selected = null;
     btn.setAttribute('aria-pressed', 'false');
