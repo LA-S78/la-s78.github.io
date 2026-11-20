@@ -2,7 +2,12 @@
 
 # 📋 Roadmap
 
-_Last tidied: 19 November 2026. Decisions behind finished work are in `docs/DECISIONS.md`; what changed since the maintainer's last review (#71–#87) is summed up in `docs/REVIEW_BRIEF.md`._
+_Last tidied: 20 November 2026. Decisions behind finished work are in `docs/DECISIONS.md`; what changed since the maintainer's last review (#71–#87) is summed up in `docs/REVIEW_BRIEF.md`._
+
+## ⭐ Top priorities
+
+- [ ] **Map: 4 corner landmarks** (maintainer review, 2026-11-20). The coordinate warp (`js/map-coords.js`) is pinned to five cities and the Capitol's corners; outside them it extrapolates, so markers near the map's edges and corners may drift. **Owner:** read the in-game X/Y of 4 recognisable spots near the NW, NE, SW and SE corners (a territory's corner or a landmark), and where each is on our map. Then they're added as anchor points, and edge positions are clamped onto the map.
+- [ ] **Disclaimer** (maintainer review, 2026-11-20): a short, unobtrusive note (footer or About) that the site is an unofficial community project, that the game's artwork belongs to its rights holders, and crediting the Last Asylum Tracker for game data. **Owner:** where it goes and what it says.
 
 ## 🚧 Active (next up)
 
