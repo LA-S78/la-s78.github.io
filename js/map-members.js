@@ -4,19 +4,16 @@
 // through /api/dashboard?positions=1, which checks the sign-in and sends the leader's own
 // alliance only (the roster's lookup: no extra tracker requests).
 //
-// Game X/Y (0–1000; X left to right, Y bottom to top) become map units with a straight-line
-// fit to five cities the owner read in the game (2026-11-19): Royal Castle 500/500, Old Oak
-// 39/935, Stonebrook Town 955/919, Haystack 67/39, Howling Vale 954/64. Each lands within
-// about 25 map units of its territory's middle (territories are about 200 units across).
+// Game X/Y become map positions through js/map-coords.js: a smooth warp through reference
+// points read in the game (five cities, 2026-11-19, and the Capitol area's corners,
+// 2026-11-20), so members near the Capitol land on the right side of its edge.
 
 import { getAllianceColor, getCityById, getSvgRoot } from './map.js';
+import { toMap } from './map-coords.js';
 
 const esc = (v) => window.escapeHtml(v);
 const tm = (key, vars) => window.t(`map_planner.${key}`, vars);
 const ic = (name, tone) => (window.uiIcon ? window.uiIcon(name, tone) : '');
-
-const FIT = { sx: 2.0786, bx: 32.25, sy: -1.7475, by: 1720.5 };
-export const toMap = (x, y) => ({ cx: FIT.sx * x + FIT.bx, cy: FIT.sy * y + FIT.by });
 
 /** Signed in as an R4/R5 or a Steward (the server checks again). */
 function isLeader() {
