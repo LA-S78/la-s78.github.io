@@ -125,11 +125,13 @@ reminders and proposals go only to the test channel. What it lacks is today's li
 
 ### The copy
 
-- **A Steward-only "Copy live data here" button on the test site**, run by the test site's own
-  server, so no new tokens leave Vercel (a Gist token can write every Gist on the account, and a
-  Blob token the whole store). It **fails closed** before writing anything unless it is running
-  on the test site, the test Gist isn't the live Gist, and every Blob path it writes starts with
-  `test/`. It only ever reads the live Gist.
+- **`/devupdate`** (the Stewards' Discord command in the owner's server, which already copied
+  the live Gist into the test Gist) does the copy. It runs on the **live** site, which is the
+  only place that can read the live Gist (Vercel never gives values marked Sensitive to the test
+  site), so no token leaves Vercel either. It **fails closed** unless it is running on the live
+  site, the test Gist isn't the live Gist, and every Blob path it writes starts with `test/`; it
+  only ever reads the live data. (The plan first had a button on the test site; that can't read
+  the live Gist.)
 - **What it copies:** the live Gist's files into the test Gist, the Blob's `stats/` summary and
   index files and the last 30 days of `stats/days/` into `test/stats/`, and the alliance
   pictures (index and files, a handful) into `test/alliance-images/`. Bounded and small enough
@@ -199,7 +201,7 @@ Each step starts by searching the code for its stores again, in case something n
 Each is one pull request, rehearsed on the test site, and merged only with the owner's yes.
 
 **Step 0: the register, "numbers must match", and the test-site copy.** The test site's guards
-first (the Discord helper, no tracker use, `noindex`), then its "Copy live data here" button. `alliance-register.json` built from today's alliances (a new ID each,
+first (the Discord helper, no tracker use, `noindex`), then the fuller copy (`/devupdate`). `alliance-register.json` built from today's alliances (a new ID each,
 colours and Discord settings from `_data/alliances.yml` and the map, tracker numbers from
 `stats/alliance-ids.json` where known), and the lookups (`allianceByTag`, `allianceById`).
 Nothing reads the register yet, so pages don't change. Safeguard 4 in the measurements, with the

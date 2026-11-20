@@ -323,3 +323,18 @@
 .st-link button {
   justify-self: start;
 }
+
+/* The test site only: how fresh its copy of the live data is */
+.st-test-copy {
+  margin: 0.6rem 0 0;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+}
+
+.st-test-copy[hidden] {
+  display: none;
+}
