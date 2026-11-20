@@ -175,6 +175,19 @@ function start() {
       // A bigger map (fullscreen, a wider window) splits groups apart
       resize = new ResizeObserver(() => state.on && draw());
       resize.observe(svg);
+      // Zooming in (js/map-zoom.js) splits groups apart: redrawn once per frame
+      let queued = false;
+      if (!svg.dataset.membersZoom) svg.dataset.membersZoom = '1';
+      else queued = true; // already listening (turned off and on again): no second listener
+      if (!queued)
+        svg.addEventListener('mapzoom', () => {
+          if (!state.on || queued) return;
+          queued = true;
+          requestAnimationFrame(() => {
+            queued = false;
+            if (state.on) draw();
+          });
+        });
     }
     const color = getAllianceColor(state.tag);
     const perPx = unitsPerPx();
@@ -205,6 +218,12 @@ function start() {
   /** A shared marker tapped: its members as buttons to pick from. */
   function showGroup(group) {
     if (!group) return;
+    // Zoom into a group until it splits apart; once fully zoomed in, list its members
+    const zoom = window.MapZoom;
+    if (zoom && zoom.zoom() < zoom.maxZoom - 0.01) {
+      zoom.focus(group.cx, group.cy, Math.min(zoom.maxZoom, zoom.zoom() * 2.5));
+      return;
+    }
     results.hidden = false;
     results.innerHTML =
       `<span class="map-members-none">${esc(tm('members_here', { n: group.members.length }))}</span>` +
@@ -302,8 +321,14 @@ function start() {
   });
   function pick(uid) {
     results.hidden = true;
-    search.value = state.members.find((m) => m.uid === uid)?.name || search.value;
+    const m = state.members.find((x) => x.uid === uid);
+    search.value = m?.name || search.value;
     select(uid);
+    // Found by search: the map zooms to them (js/map-zoom.js)
+    if (m && window.MapZoom) {
+      const { cx, cy } = toMap(m.x, m.y);
+      window.MapZoom.focus(cx, cy, Math.max(window.MapZoom.zoom(), 4));
+    }
   }
 
   // ---- The switch ----

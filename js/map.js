@@ -508,11 +508,14 @@ export async function captureMapImage(svgRoot = null) {
   if (!root) return null;
 
   try {
-    const viewBox = root.viewBox?.baseVal;
+    // The whole map, whatever the reader has zoomed into (js/map-zoom.js keeps the full view)
+    const full = (root.dataset.fullViewBox || '').split(' ').map(Number);
+    const viewBox = full.length === 4 ? { width: full[2], height: full[3] } : root.viewBox?.baseVal;
     const width = viewBox?.width || root.clientWidth || 1000;
     const height = viewBox?.height || root.clientHeight || 800;
 
     const clonedSvg = root.cloneNode(true);
+    if (root.dataset.fullViewBox) clonedSvg.setAttribute('viewBox', root.dataset.fullViewBox);
     clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
     clonedSvg.setAttribute('width', width);
     clonedSvg.setAttribute('height', height);
