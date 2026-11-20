@@ -918,34 +918,49 @@ stats:
   title: Stats NAP
   views_label: Que montrer
   view_growth: Croissance NAP
-  view_players: Meilleurs joueurs
-  view_achievements: Succès
+  view_players: Top joueurs
+  view_achievements: Réalisations
+  view_lookup: Recherche joueur
+  growth_title: Croissance de l'alliance
+  growth_members: "{n} membres"
+  growth_more: Plus sur l'onglet
+  growth_link: Stats
+  lookup_search: Nom ou ID du joueur...
+  lookup_hint: Joueurs NAP uniquement, à partir du snapshot quotidien. Saisissez au moins 2 lettres ou un ID.
+  lookup_none: Aucun joueur NAP ne correspond.
+  lookup_place: "#{place} sur {of} joueurs NAP par Puissance"
+  lookup_kills: Éliminations
+  lookup_level: Sanctuaire
+  lookup_week: Cette semaine
+  lookup_month: 30 derniers jours
+  lookup_kills_week: Éliminations cette semaine
+  lookup_history: Puissance sur le dernier mois
   ach_strongest: Le plus puissant
   ach_gain_week: Plus forte progression cette semaine
-  ach_kills: Plus grand nombre de victimes
-  ach_kills_week: Plus grand nombre de victimes cette semaine
-  ach_climb_month: Plus forte ascension du Sanctuaire ce mois-ci
+  ach_kills: Le plus d'éliminations
+  ach_kills_week: Le plus d'éliminations cette semaine
+  ach_climb_month: Plus forte progression du Sanctuaire ce mois-ci
   ach_away: Loin de la ruche
-  ach_away_help: Nombre de jours ce mois-ci passés à plus de 50 tuiles de la ruche de leur alliance (là où se trouvent la plupart de ses membres).
+  ach_away_help: Nombre de jours ce mois-ci à plus de 50 cases de la ruche de l'alliance (là où se trouvent la plupart de ses membres).
   ach_none: Pas assez de jours collectés pour le moment.
-  value_kills: "{n} victimes"
+  value_kills: "{n} éliminations"
   value_levels_one: "+1 niveau"
   value_levels_other: "+{n} niveaux"
   value_days_one: 1 jour
   value_days_other: "{n} jours"
   list_label: Quelle liste
-  list_strongest: Le plus puissant
-  list_week: Progression cette semaine
-  list_month: Progression ce mois-ci
+  list_strongest: Les plus puissants
+  list_week: Progression hebdomadaire
+  list_month: Progression mensuelle
   filter_label: Alliance
   filter_all: Toutes les alliances NAP
   players_none: Aucun joueur à afficher pour le moment.
-  players_wait_week: La progression de la semaine s'affiche une fois qu'un instantané datant d'avant ce lundi a été collecté.
-  players_wait_month: La progression sur un mois s'affiche une fois qu'un mois de données a été collecté.
-  players_as_of: Au moment de l'instantané avant la réinitialisation du {date}.
+  players_wait_week: Les gains de la semaine s'afficheront après la collecte d'un snapshot antérieur à ce lundi.
+  players_wait_month: Les gains sur un mois s'afficheront une fois qu'un mois complet de données aura été collecté.
+  players_as_of: D'après le snapshot précédant la réinitialisation du {date}.
   week_note: Les semaines s'étendent du lundi au dimanche (Game Time) ; les records hebdomadaires recommencent chaque lundi.
   col_player: Joueur
-  col_gain: Progression
+  col_gain: Gain
   show_more: Afficher les {n}
   range_label: Période
   range_week: 1 semaine
@@ -954,12 +969,12 @@ stats:
   loading: Chargement des stats...
   failed: Les stats ne peuvent pas être chargées pour le moment.
   collecting: Les stats sont collectées une fois par jour, juste avant la réinitialisation quotidienne (00:00 GT). Les graphiques se remplissent au jour le jour.
-  since: Collecté quotidiennement depuis le {date}.
-  one_day: 'Un seul jour collecté jusqu''ici : le graphique débute une fois qu''il y en a deux.'
+  since: Collecte quotidienne depuis le {date}.
+  one_day: 'Un seul jour collecté pour l''instant : le graphique démarre à partir de deux jours.'
   col_alliance: Alliance
   col_might: Puissance
   col_week: 7 jours
   col_month: 30 jours
   no_number: "—"
   show_hide: Appuyez sur une alliance pour afficher ou masquer sa ligne.
-  credit_before: Données du
+  credit_before: Chiffres issus du

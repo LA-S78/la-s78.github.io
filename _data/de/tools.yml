@@ -916,21 +916,36 @@ alliance_images:
   load_failed: Das Bild konnte nicht geöffnet werden.
 stats:
   title: NAP-Statistiken
-  views_label: Was anzeigen
+  views_label: Was soll angezeigt werden
   view_growth: NAP-Wachstum
   view_players: Top-Spieler
   view_achievements: Erfolge
-  ach_strongest: Der Mächtigste
+  view_lookup: Spielersuche
+  growth_title: Allianz-Wachstum
+  growth_members: "{n} Mitglieder"
+  growth_more: Mehr auf dem
+  growth_link: Statistik-Tab
+  lookup_search: Name oder Spieler-ID...
+  lookup_hint: Nur NAP-Spieler, basierend auf dem täglichen Snapshot. Gib mindestens 2 Buchstaben oder eine ID ein.
+  lookup_none: Kein passender NAP-Spieler gefunden.
+  lookup_place: "#{place} von {of} NAP-Spielern nach Macht"
+  lookup_kills: Kills
+  lookup_level: Sanktuarium
+  lookup_week: Diese Woche
+  lookup_month: Letzte 30 Tage
+  lookup_kills_week: Kills diese Woche
+  lookup_history: Macht im letzten Monat
+  ach_strongest: Mächtigster
   ach_gain_week: Größter Zuwachs diese Woche
   ach_kills: Meiste Kills
   ach_kills_week: Meiste Kills diese Woche
   ach_climb_month: Größter Sanktuarium-Aufstieg diesen Monat
-  ach_away: Abseits des Schwarms
-  ach_away_help: Anzahl der Tage diesen Monat, an denen sich der Spieler mehr als 50 Felder vom Allianz-Schwarm entfernt befand (dort, wo die meisten Mitglieder sind).
-  ach_none: Noch nicht genug Tage gesammelt.
+  ach_away: Abseits des Nests
+  ach_away_help: Die meisten Tage in diesem Monat mehr als 50 Kacheln vom Nest der Allianz entfernt (wo sich die meisten Mitglieder befinden).
+  ach_none: Noch nicht genügend Tage erfasst.
   value_kills: "{n} Kills"
-  value_levels_one: "+1 Stufe"
-  value_levels_other: "+{n} Stufen"
+  value_levels_one: "+1 Level"
+  value_levels_other: "+{n} Level"
   value_days_one: 1 Tag
   value_days_other: "{n} Tage"
   list_label: Welche Liste
@@ -939,11 +954,11 @@ stats:
   list_month: Zuwachs diesen Monat
   filter_label: Allianz
   filter_all: Alle NAP-Allianzen
-  players_none: Noch keine Spieler zum Anzeigen vorhanden.
-  players_wait_week: Die wöchentlichen Zuwächse werden angezeigt, sobald ein Snapshot von vor diesem Montag gesammelt wurde.
-  players_wait_month: Monatliche Zuwächse werden angezeigt, sobald Daten für einen vollen Monat gesammelt wurden.
-  players_as_of: Stand des Snapshots vor dem Reset am {date}.
-  week_note: Wochen laufen von Montag bis Sonntag (Game Time); die wöchentlichen Rekorde beginnen jeden Montag von vorn.
+  players_none: Noch keine Spieler verfügbar.
+  players_wait_week: Die Zuwächse dieser Woche werden angezeigt, sobald ein Snapshot von vor diesem Montag erfasst wurde.
+  players_wait_month: Zuwächse über einen Monat werden angezeigt, sobald Daten für einen Monat erfasst wurden.
+  players_as_of: 'Stand: Snapshot vor dem Reset am {date}.'
+  week_note: Wochen laufen von Montag bis Sonntag (Game Time); die wöchentlichen Rekorde beginnen jeden Montag von neuem.
   col_player: Spieler
   col_gain: Zuwachs
   show_more: Alle {n} anzeigen
@@ -953,13 +968,13 @@ stats:
   range_all: Alle
   loading: Statistiken werden geladen...
   failed: Statistiken können aktuell nicht geladen werden.
-  collecting: Statistiken werden einmal täglich kurz vor dem täglichen Reset (00:00 GT) gesammelt. Die Diagramme füllen sich Tag für Tag.
-  since: Täglich gesammelt seit {date}.
-  one_day: 'Bisher erst ein Tag gesammelt: Das Diagramm beginnt, sobald zwei Tage vorliegen.'
+  collecting: Statistiken werden einmal täglich kurz vor dem täglichen Reset (00:00 GT) erfasst. Die Diagramme füllen sich Tag für Tag.
+  since: Tägliche Erfassung seit {date}.
+  one_day: 'Bisher erst ein Tag erfasst: Das Diagramm beginnt, sobald zwei Tage vorliegen.'
   col_alliance: Allianz
   col_might: Macht
   col_week: 7 Tage
   col_month: 30 Tage
   no_number: "—"
-  show_hide: Tippe auf eine Allianz, um ihre Linie ein- oder auszublenden.
+  show_hide: Tippe auf eine Allianz, um deren Linie ein- oder auszublenden.
   credit_before: Zahlen vom
