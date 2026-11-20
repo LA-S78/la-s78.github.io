@@ -921,12 +921,12 @@ stats:
   view_players: Migliori giocatori
   view_achievements: Obiettivi
   ach_strongest: Il più potente
-  ach_gain_week: Maggior crescita questa settimana
+  ach_gain_week: Maggiore crescita questa settimana
   ach_kills: Più uccisioni
   ach_kills_week: Più uccisioni questa settimana
-  ach_climb_month: Maggior ascesa nel Santuario questo mese
+  ach_climb_month: Maggiore scalata del Santuario questo mese
   ach_away: Lontano dall'alveare
-  ach_away_help: Giorni in cui questo mese il giocatore è stato a più di 50 caselle di distanza dall'alveare della sua alleanza (dove si trova la maggior parte dei membri).
+  ach_away_help: Giorni in questo mese trascorsi a più di 50 caselle dall'alveare dell'alleanza (dove si trova la maggior parte dei membri).
   ach_none: Non ci sono ancora abbastanza giorni raccolti.
   value_kills: "{n} uccisioni"
   value_levels_one: "+1 livello"
@@ -935,30 +935,31 @@ stats:
   value_days_other: "{n} giorni"
   list_label: Quale lista
   list_strongest: Più forti
-  list_week: Guadagnati questa settimana
-  list_month: Guadagnati questo mese
+  list_week: Guadagnato questa settimana
+  list_month: Guadagnato questo mese
   filter_label: Alleanza
   filter_all: Tutte le alleanze NAP
-  players_none: Nessun giocatore da mostrare per ora.
-  players_wait_week: I guadagni settimanali vengono mostrati una volta raccolta una settimana di dati.
-  players_wait_month: I guadagni mensili vengono mostrati una volta raccolto un mese di dati.
-  players_as_of: Dati aggiornati allo snapshot prima del reset del {date}.
+  players_none: Nessun giocatore da mostrare ancora.
+  players_wait_week: I progressi di questa settimana verranno mostrati una volta raccolto un'istantanea precedente a questo lunedì.
+  players_wait_month: I progressi mensili verranno mostrati una volta raccolti i dati di un mese.
+  players_as_of: Dati aggiornati all'istantanea prima del reset del {date}.
+  week_note: Le settimane vanno da lunedì a domenica (Game Time); i record settimanali ripartono ogni lunedì.
   col_player: Giocatore
-  col_gain: Guadagnato
-  show_more: Mostra tutti {n}
+  col_gain: Guadagno
+  show_more: Mostra tutti i {n}
   range_label: Intervallo di tempo
   range_week: 1 settimana
   range_month: 1 mese
   range_all: Tutto
   loading: Caricamento statistiche...
   failed: Impossibile caricare le statistiche al momento.
-  collecting: Le statistiche vengono raccolte una volta al giorno, appena prima del reset giornaliero (00:00 GT). I grafici si riempiono giorno dopo giorno.
+  collecting: Le statistiche vengono raccolte una volta al giorno, poco prima del reset giornaliero (00:00 GT). I grafici si popolano giorno dopo giorno.
   since: Raccolti giornalmente dal {date}.
-  one_day: 'Raccolto solo un giorno finora: il grafico inizierà una volta raggiunti i due giorni.'
+  one_day: 'Raccolto solo un giorno finora: il grafico inizierà quando ce ne saranno due.'
   col_alliance: Alleanza
   col_might: Potenza
   col_week: 7 giorni
   col_month: 30 giorni
   no_number: "—"
   show_hide: Tocca un'alleanza per mostrare o nascondere la sua linea.
-  credit_before: Numeri provenienti dal
+  credit_before: Numeri dal

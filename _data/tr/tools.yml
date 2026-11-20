@@ -917,15 +917,15 @@ alliance_images:
 stats:
   title: NAP İstatistikleri
   views_label: Gösterilecekler
-  view_growth: NAP büyümesi
+  view_growth: NAP gelişimi
   view_players: En iyi oyuncular
   view_achievements: Başarılar
-  ach_strongest: En güçlü
-  ach_gain_week: Bu haftanın en büyük kazancı
+  ach_strongest: En Güçlü
+  ach_gain_week: Bu haftanın en büyük artışı
   ach_kills: En çok öldürme
-  ach_kills_week: Bu haftanın en çok öldürme sayısı
-  ach_climb_month: Bu ayın en büyük Sığınak tırmanışı
-  ach_away: Kovan dışı
+  ach_kills_week: Bu haftanın en çok öldürmesi
+  ach_climb_month: Bu ayın en büyük Sığınak yükselişi
+  ach_away: Kovandan uzak
   ach_away_help: Bu ay, ittifak kovanından (üyelerin çoğunun bulunduğu yer) 50 karodan fazla uzakta geçirilen gün sayısı.
   ach_none: Henüz yeterli gün verisi toplanmadı.
   value_kills: "{n} öldürme"
@@ -934,31 +934,32 @@ stats:
   value_days_one: 1 gün
   value_days_other: "{n} gün"
   list_label: Hangi liste
-  list_strongest: En güçlü
+  list_strongest: En Güçlü
   list_week: Bu hafta kazanılan
   list_month: Bu ay kazanılan
   filter_label: İttifak
   filter_all: Tüm NAP ittifakları
   players_none: Henüz gösterilecek oyuncu yok.
-  players_wait_week: Haftalık kazançlar, bir haftalık veri toplandıktan sonra görünür.
-  players_wait_month: Aylık kazançlar, bir aylık veri toplandıktan sonra görünür.
+  players_wait_week: Haftalık artışlar, bu Pazartesiden önceki bir anlık görüntü toplandığında görünür.
+  players_wait_month: Aylık artışlar, bir aylık veri toplandığında görünür.
   players_as_of: "{date} sıfırlamasından önceki anlık görüntü itibarıyla."
+  week_note: Haftalar Pazartesi'den Pazar'a (Game Time) kadar sürer; haftalık kayıtlar her Pazartesi yeniden başlar.
   col_player: Oyuncu
-  col_gain: Kazanılan
-  show_more: Hepsini göster {n}
+  col_gain: Artış
+  show_more: Tüm {n} göster
   range_label: Zaman aralığı
   range_week: 1 hafta
   range_month: 1 ay
-  range_all: Hepsi
+  range_all: Tümü
   loading: İstatistikler yükleniyor...
   failed: İstatistikler şu an yüklenemiyor.
   collecting: İstatistikler günde bir kez, günlük sıfırlamadan hemen önce (00:00 GT) toplanır. Grafikler gün geçtikçe dolar.
-  since: "{date} tarihinden beri günlük toplanmaktadır."
-  one_day: 'Şu ana kadar sadece bir günlük veri toplandı: grafik, iki gün olduğunda başlar.'
+  since: "{date} tarihinden beri günlük olarak toplanıyor."
+  one_day: 'Şu ana kadar sadece bir gün toplandı: grafik iki gün olduğunda başlar.'
   col_alliance: İttifak
   col_might: Güç
   col_week: 7 gün
   col_month: 30 gün
   no_number: "—"
-  show_hide: Bir ittifakın çizgisini göstermek veya gizlemek için üzerine dokunun.
+  show_hide: Satırını göstermek veya gizlemek için bir ittifaka dokunun.
   credit_before: 'Veriler şuradan:'
