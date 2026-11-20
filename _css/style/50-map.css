@@ -630,14 +630,15 @@ svg #layer1 path:hover {
 
 /* The card over the chosen member (owner, 2026-11-20): the game's layout (a darker title
    bar with the name and the close button; the picture with its profile frame and the details
-   under it), compact like the old card under the map, in the site's theme colours. */
+   under it), compact like the old card under the map, in the game's colours (owner's choice
+   over the site's theme, 2026-11-20): pale blue, a darker blue title bar. */
 .map-game-pop {
-  --pop-bg: var(--surface-dark);
-  --pop-head: color-mix(in srgb, var(--surface-dark) 70%, #000);
-  --pop-border: var(--accent-color);
-  --pop-title: var(--text-main);
-  --pop-text: var(--text-muted);
-  --pop-strong: var(--text-main);
+  --pop-bg: #dfe8f3;
+  --pop-head: #b9cbe2;
+  --pop-border: #8ea6c6;
+  --pop-title: #1f2d44;
+  --pop-text: #4f6382;
+  --pop-strong: #1f2d44;
   position: absolute;
   z-index: 4; /* under the zoom buttons */
   width: max-content;
@@ -664,12 +665,15 @@ svg #layer1 path:hover {
   gap: 6px;
   padding: 3px 3px 3px 10px;
   background: var(--pop-head);
-  border-bottom: 1px solid color-mix(in srgb, var(--pop-border) 45%, transparent);
+  /* A line that takes no room, so the name stays in the middle of the bar */
+  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--pop-border) 60%, transparent);
 }
 
 .map-game-pop .map-game-head strong {
   min-width: 0;
   overflow: hidden;
+  /* The font draws its letters a little high in the line: nudged to the bar's middle */
+  padding-top: 2px;
   font-size: 14px;
   color: var(--pop-title);
   text-overflow: ellipsis;
@@ -751,16 +755,6 @@ main .map-game-frame,
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-/* The same card in the game's colours (pale blue, a darker blue title bar) */
-.map-game-pop.is-game-colours {
-  --pop-bg: #dfe8f3;
-  --pop-head: #b9cbe2;
-  --pop-border: #8ea6c6;
-  --pop-title: #1f2d44;
-  --pop-text: #4f6382;
-  --pop-strong: #1f2d44;
 }
 
 /* Members' names, once there's room for them (deep zoom) */
