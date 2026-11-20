@@ -1090,6 +1090,7 @@ steward:
   unfound_placeholder: "e.g. Arch"
   unfound_link: "Link"
   unfound_checking: "Checking with the game..."
+  unfound_left: "{left} of {max} links left today (each asks the game once)"
   pending_title: "Waiting for review"
   pending_none: "No alliance pictures waiting."
   sent_by: "Sent by {name}, {when}"

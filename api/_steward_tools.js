@@ -112,6 +112,36 @@ async function napPositions(req, res, { gist, session }) {
   }
 }
 
+/** Alliance links a day between all Stewards (each costs a tracker request, found or not). */
+export const LINKS_PER_DAY = 10;
+
+function linksLeft(gist) {
+  const d = gistJson(gist, FILE, {});
+  const used = d.links?.day === gameDay() ? Number(d.links.count) || 0 : 0;
+  return { used, left: Math.max(0, LINKS_PER_DAY - used), max: LINKS_PER_DAY };
+}
+
+/** Counts one alliance link attempt (it asked the tracker). */
+async function countLink(gist, session) {
+  try {
+    await updateGist(
+      (fresh) => {
+        const d = gistJson(fresh, FILE, {});
+        const today = gameDay();
+        const count = (d.links?.day === today ? Number(d.links.count) || 0 : 0) + 1;
+        d.links = { day: today, count };
+        return {
+          files: { [FILE]: d },
+          description: `Alliance link by ${session.name || 'a Steward'}`,
+        };
+      },
+      { gist },
+    );
+  } catch (err) {
+    console.warn('Alliance link not counted:', err.message);
+  }
+}
+
 function lookupsLeft(gist) {
   const d = gistJson(gist, FILE, {});
   const used = d.lookups?.day === gameDay() ? Number(d.lookups.count) || 0 : 0;
@@ -159,7 +189,7 @@ async function unfoundAlliances(gist) {
 }
 
 /** ?steward=link&tag=HMDA&now=Arch: the alliance the site calls `tag` is `now` in the game. */
-async function linkRenamed(req, res, { gist }) {
+async function linkRenamed(req, res, { gist, session }) {
   const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
   const tag = String(req.query.tag || '').trim();
   const now = String(req.query.now || '')
@@ -174,15 +204,22 @@ async function linkRenamed(req, res, { gist }) {
   if (Object.keys(raw).includes(now)) {
     return res.status(409).json({ error: say('api_dashboard.link_taken', { tag: `[${now}]` }) });
   }
+  // At most LINKS_PER_DAY a day: a stuck page or repeated typos can't use up requests
+  const before = linksLeft(gist);
+  if (!before.left) {
+    return res.status(429).json({ error: say('api_dashboard.links_used'), links: before });
+  }
   const found = await fetchAllianceByTag(now, { fresh: true, timeoutMs: 7000, use: 'steward' });
+  await countLink(gist, session);
+  const links = { ...before, used: before.used + 1, left: before.left - 1 };
   if (!found) {
     return res
       .status(404)
-      .json({ error: say('api_dashboard.link_not_found', { tag: `[${now}]` }) });
+      .json({ error: say('api_dashboard.link_not_found', { tag: `[${now}]` }), links });
   }
   if (!found.aid) return res.status(502).json({ error: say('api_dashboard.player_unavailable') });
   await linkAlliance(tag, found);
-  return res.status(200).json({ linked: { tag, now: found.tag, name: found.name } });
+  return res.status(200).json({ linked: { tag, now: found.tag, name: found.name }, links });
 }
 
 export async function stewardTools(req, res, { gist, session }) {
@@ -222,11 +259,12 @@ export async function stewardTools(req, res, { gist, session }) {
       renamed: await renamedWithColours(gist).catch(() => []),
       // NAP alliances the game didn't find, with no number to follow: a Steward can link them
       unfound: await unfoundAlliances(gist).catch(() => []),
+      links: linksLeft(gist),
     });
   }
 
   if (what === 'positions') return napPositions(req, res, { gist, session });
-  if (what === 'link') return linkRenamed(req, res, { gist });
+  if (what === 'link') return linkRenamed(req, res, { gist, session });
 
   if (what === 'quota') {
     const quota = await fetchQuota();

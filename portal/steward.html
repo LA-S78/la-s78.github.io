@@ -142,7 +142,7 @@ strings: [steward]
     }
 
     // A NAP alliance the game didn't find (no number to follow): a Steward types its tag now
-    function unfound(list) {
+    function unfound(list, links) {
       const box = $('st-unfound');
       box.hidden = !list.length;
       box.innerHTML = list
@@ -153,7 +153,7 @@ strings: [steward]
             <p>${ic('warning', 'warn')}<span>${esc(t('steward.unfound', { tag: '\u0000' })).replace('\u0000', tag)}</span></p>
             <label><span>${esc(t('steward.unfound_now'))}</span><input type="text" name="now" maxlength="24" autocomplete="off" placeholder="${esc(t('steward.unfound_placeholder'))}" required></label>
             <button type="submit" class="btn btn-secondary">${esc(t('steward.unfound_link'))}</button>
-            <small class="st-small" data-result></small>
+            <small class="st-small" data-result>${links ? esc(t('steward.unfound_left', { left: links.left, max: links.max })) : ''}</small>
           </form>`;
         })
         .join('');
@@ -169,7 +169,13 @@ strings: [steward]
       try {
         const res = await ask(`steward=link&tag=${encodeURIComponent(form.dataset.tag)}&now=${encodeURIComponent(form.elements.now.value.trim())}`);
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || res.statusText);
+        if (!res.ok) {
+          // The error, and how many links are left today (none left: the button stays off)
+          const links = data.links;
+          out.textContent = `${data.error || res.statusText}${links ? ` · ${t('steward.unfound_left', { left: links.left, max: links.max })}` : ''}`;
+          btn.disabled = Boolean(links && !links.left);
+          return;
+        }
         // Linked: the overview now shows it as renamed (with the rename notice)
         await load();
       } catch (err) {
@@ -331,7 +337,7 @@ strings: [steward]
       race(data.race);
       usage(data.usage);
       renamed(data.renamed || []);
-      unfound(data.unfound || []);
+      unfound(data.unfound || [], data.links);
     }
     load().catch((err) => show(err.message, 'error'));
   })();
