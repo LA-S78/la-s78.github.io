@@ -144,6 +144,12 @@ function median(values) {
   return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
 }
 
+/** The Sunday before the week (Monday to Sunday, GT) that `day` is in: the week's baseline. */
+export function lastWeekEnd(day) {
+  const dow = new Date(`${day}T12:00:00Z`).getUTCDay(); // 0 Sunday … 6 Saturday
+  return daysBefore(day, ((dow + 6) % 7) + 1);
+}
+
 /** The day `n` days before `day` (YYYY-MM-DD). */
 const daysBefore = (day, n) =>
   new Date(Date.parse(`${day}T12:00:00Z`) - n * 86400000).toISOString().slice(0, 10);
@@ -217,10 +223,16 @@ export function topPlayers(series, today, day) {
     return v === null ? null : v * 1e6;
   };
   const line = (uid) => series.days.map((d) => series.p[uid]?.[d] ?? null);
-  const gains = (list, n) =>
+  // "This week" runs from Monday 00:00 GT, as everywhere else on the site (owner,
+  // 2026-11-20): it's measured from the last snapshot before Monday (Sunday's), so Monday
+  // shows Monday's gains and Sunday the whole week, Saturday's Kingdom War included.
+  // "This month" is the last 30 days.
+  const weekBase = lastWeekEnd(day);
+  const monthBase = daysBefore(day, 30);
+  const gains = (list, base) =>
     list
       .map((p) => {
-        const then = at(p.uid, daysBefore(day, n));
+        const then = at(p.uid, base);
         return then === null ? null : { ...p, change: Math.round(p.power - then) };
       })
       .filter(Boolean)
@@ -237,8 +249,8 @@ export function topPlayers(series, today, day) {
       sizes.strongest,
       false,
     ),
-    week: ids(gains(list, 7), sizes.week, true),
-    month: ids(gains(list, 30), sizes.month, true),
+    week: ids(gains(list, weekBase), sizes.week, true),
+    month: ids(gains(list, monthBase), sizes.month, true),
   });
   const lists = { all: listsFor(players, TOP_SIZES) };
   const small = { strongest: TOP_PER_ALLIANCE, week: TOP_PER_ALLIANCE, month: TOP_PER_ALLIANCE };
@@ -253,16 +265,16 @@ export function topPlayers(series, today, day) {
   const ACHIEVEMENTS = {
     strongest: (p) => p.power,
     gain_week: (p) => {
-      const then = at(p.uid, daysBefore(day, 7));
+      const then = at(p.uid, weekBase);
       return then === null ? null : Math.round(p.power - then);
     },
     kills: (p) => p.kills,
     kills_week: (p) => {
-      const then = valueAt('k', p.uid, daysBefore(day, 7));
+      const then = valueAt('k', p.uid, weekBase);
       return then === null || p.kills === null ? null : p.kills - then;
     },
     climb_month: (p) => {
-      const then = valueAt('l', p.uid, daysBefore(day, 30));
+      const then = valueAt('l', p.uid, monthBase);
       return then === null || p.level === null ? null : p.level - then;
     },
     away: (p) => {

@@ -225,7 +225,7 @@ function playersView(box, top, nap, list, tag, expanded) {
         </select>
       </label>
     </div>
-    ${top.day ? `<p class="stats-note">${esc(t('players_as_of', { date: dateLabel(top.day) }))}</p>` : ''}
+    ${top.day ? `<p class="stats-note">${esc(t('players_as_of', { date: dateLabel(top.day) }))}${list === 'week' ? ` ${esc(t('week_note'))}` : ''}</p>` : ''}
     ${
       rows.length
         ? `<ol class="stats-players">${rows
@@ -303,7 +303,7 @@ function achievementsView(box, top, nap, tag) {
         </select>
       </label>
     </div>
-    ${top.day ? `<p class="stats-note">${esc(t('players_as_of', { date: dateLabel(top.day) }))}</p>` : ''}
+    ${top.day ? `<p class="stats-note">${esc(t('players_as_of', { date: dateLabel(top.day) }))} ${esc(t('week_note'))}</p>` : ''}
     <div class="stats-records">${RECORDS.map(([key, icon, show]) => {
       const rows = (board[key] || [])
         .map(([uid, v]) => (top.players?.[uid] ? { ...top.players[uid], v } : null))
