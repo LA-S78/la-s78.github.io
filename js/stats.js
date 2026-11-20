@@ -355,7 +355,7 @@ function lookupView(box, state, redraw) {
             ? L.matches
                 .map(
                   (m) =>
-                    `<button type="button" class="stats-lk-hit" data-stats-uid="${esc(m.uid)}">${face(m)}<span class="stats-who"><strong>${esc(m.name)}</strong><small>[${esc(m.tag)}] · ${esc(might(m.power))}</small></span></button>`,
+                    `<button type="button" class="stats-lk-hit" data-stats-uid="${esc(m.id)}">${face(m)}<span class="stats-who"><strong>${esc(m.name)}</strong><small>[${esc(m.tag)}] · ${esc(might(m.power))}</small></span></button>`,
                 )
                 .join('')
             : `<p class="stats-note">${esc(t('lookup_none'))}</p>`
@@ -363,7 +363,7 @@ function lookupView(box, state, redraw) {
       ${
         p
           ? `<article class="stats-lk-card">
-        <header>${face(p)}<span class="stats-who"><strong>${esc(p.name)}</strong><small>[${esc(p.tag)}] · ID ${esc(p.uid)}</small></span></header>
+        <header>${face(p)}<span class="stats-who"><strong>${esc(p.name)}</strong><small>[${esc(p.tag)}]</small></span></header>
         <p class="stats-lk-place">${ic('trophy')}${esc(t('lookup_place', { place: p.place, of: p.of }))}</p>
         <div class="stats-lk-stats">
           ${stat(t('col_might'), might(p.power))}
@@ -421,7 +421,7 @@ function lookupView(box, state, redraw) {
 
 async function pickPlayer(state, uid, redraw) {
   try {
-    const res = await fetch(`/api/state?scope=stats-player&uid=${encodeURIComponent(uid)}`);
+    const res = await fetch(`/api/state?scope=stats-player&id=${encodeURIComponent(uid)}`);
     state.lookup.player = res.ok ? (await res.json()).player : null;
   } catch {
     state.lookup.player = null;
