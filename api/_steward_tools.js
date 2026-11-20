@@ -17,7 +17,7 @@
 // figure any of its answers gave (with its time) and what made the requests (tracker-usage.json,
 // kept by api/_tracker.js).
 
-import { gistJson, updateGist } from './_gist.js';
+import { gistJson, updateGist, isTestDeployment, TEST_COPY_FILE } from './_gist.js';
 import { isSteward } from './_stewards.js';
 import { readImages, IMAGE_KINDS } from './_alliance_images.js';
 import { latestRace } from './_ascension.js';
@@ -260,6 +260,8 @@ export async function stewardTools(req, res, { gist, session }) {
       // NAP alliances the game didn't find, with no number to follow: a Steward can link them
       unfound: await unfoundAlliances(gist).catch(() => []),
       links: linksLeft(gist),
+      // On the test site: when its data was last copied from the live site (/devupdate)
+      testCopy: isTestDeployment() ? gistJson(gist, TEST_COPY_FILE, null)?.copiedAt || '' : null,
     });
   }
 

@@ -23,6 +23,9 @@ strings: [steward]
     <button type="button" class="btn btn-primary" id="st-sign-in-btn">{{ "steward.sign_in" | t }}</button>
   </div>
 
+  <!-- The test site only: how fresh its copy of the live data is (/devupdate) -->
+  <p id="st-test-copy" class="st-test-copy" hidden></p>
+
   <!-- NAP alliances renamed in the game (api/_alliance_ids.js), and ones the game didn't find
        that a Steward can link to their new tag -->
   <div id="st-renamed" class="st-renamed" hidden></div>
@@ -336,7 +339,13 @@ strings: [steward]
       pending(data.pending || []);
       race(data.race);
       usage(data.usage);
-      renamed(data.renamed || []);
+      if (data.testCopy !== null && data.testCopy !== undefined) {
+        $('st-test-copy').hidden = false;
+        $('st-test-copy').textContent = data.testCopy
+          ? t('steward.test_copy', { when: when(data.testCopy) })
+          : t('steward.test_copy_none');
+      }
+            renamed(data.renamed || []);
       unfound(data.unfound || [], data.links);
     }
     load().catch((err) => show(err.message, 'error'));

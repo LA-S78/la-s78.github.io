@@ -1085,6 +1085,8 @@ steward:
   first_seen: "First seen by the tracker {when}."
   renamed: "{old} is now {now} in the game. It's still measured (Stats and the Top 4 race) by the game's number for it, but the site still calls it {old}."
   renamed_fix: "Rename it in the Alliance planner"
+  test_copy: "🧪 Test site: its data was copied from the live site {when} (/devupdate in Discord makes a fresh copy)."
+  test_copy_none: "🧪 Test site: its data hasn't been copied from the live site yet. Run /devupdate in Discord for a fresh copy."
   unfound: "{tag} wasn't found in the game, so it isn't being measured (Stats and the Top 4 race). If it changed its tag in the game, type the new one and the site will follow it."
   unfound_now: "Its tag in the game now"
   unfound_placeholder: "e.g. Arch"
