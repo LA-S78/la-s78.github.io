@@ -25,7 +25,9 @@ import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_
 import { say } from './_messages.js';
 import { readNapPositions, refreshNapPositions } from './_stats.js';
 import { noteSkin } from './_skins.js';
-import { renamedAlliances } from './_alliance_ids.js';
+import { renamedAlliances, readAllianceIds, linkAlliance } from './_alliance_ids.js';
+import { readStatsSummary } from './_stats.js';
+import { fetchAlliance as fetchAllianceByTag } from './_tracker.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { getRoleColors } from './_role_colors.js';
 import { napTags } from './_ascension.js';
@@ -125,6 +127,64 @@ async function renamedWithColours(gist) {
   return list.map((r) => ({ ...r, color: colours[r.tag]?.color || null }));
 }
 
+/**
+ * NAP alliances the latest Top 4 race day or Stats snapshot couldn't find, with no game
+ * number saved for them and not already followed as renamed: [{ tag, name, color }].
+ */
+async function unfoundAlliances(gist) {
+  const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+  const tags = napTags(raw);
+  const missing = new Set();
+  const race = latestRace(gist);
+  const raceDays = Object.entries(race?.taken || {})
+    .filter(([, at]) => at)
+    .map(([d]) => d);
+  if (raceDays.length) {
+    for (const row of race.rows) {
+      if (tags.includes(row.tag) && raceDays.every((d) => !Number.isFinite(row.days?.[d])))
+        missing.add(row.tag);
+    }
+  }
+  const summary = await readStatsSummary().catch(() => null);
+  const lastDay = summary?.days?.[summary.days.length - 1];
+  if (lastDay) {
+    for (const t of tags) if (!Number.isFinite(summary.alliances?.[t]?.[lastDay])) missing.add(t);
+  }
+  if (!missing.size) return [];
+  const { ids, renamed } = await readAllianceIds();
+  const colours = sanitizeAlliances(raw, await getRoleColors().catch(() => ({})));
+  return [...missing]
+    .filter((t) => !ids[t]?.aid && !renamed[t])
+    .map((t) => ({ tag: t, name: raw[t]?.name || '', color: colours[t]?.color || null }));
+}
+
+/** ?steward=link&tag=HMDA&now=Arch: the alliance the site calls `tag` is `now` in the game. */
+async function linkRenamed(req, res, { gist }) {
+  const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+  const tag = String(req.query.tag || '').trim();
+  const now = String(req.query.now || '')
+    .trim()
+    .replace(/^\[|\]$/g, '')
+    .slice(0, 24);
+  if (!napTags(raw).includes(tag) || !now) {
+    return res.status(400).json({ error: say('api_dashboard.link_bad') });
+  }
+  if (now === tag) return res.status(400).json({ error: say('api_dashboard.link_same') });
+  // Another alliance the site already has: not this one under a new name
+  if (Object.keys(raw).includes(now)) {
+    return res.status(409).json({ error: say('api_dashboard.link_taken', { tag: `[${now}]` }) });
+  }
+  const found = await fetchAllianceByTag(now, { fresh: true, timeoutMs: 7000, use: 'steward' });
+  if (!found) {
+    return res
+      .status(404)
+      .json({ error: say('api_dashboard.link_not_found', { tag: `[${now}]` }) });
+  }
+  if (!found.aid) return res.status(502).json({ error: say('api_dashboard.player_unavailable') });
+  await linkAlliance(tag, found);
+  return res.status(200).json({ linked: { tag, now: found.tag, name: found.name } });
+}
+
 export async function stewardTools(req, res, { gist, session }) {
   if (!isSteward(session.uid)) {
     return res.status(403).json({ error: say('api_dashboard.stewards_only') });
@@ -160,10 +220,13 @@ export async function stewardTools(req, res, { gist, session }) {
       // NAP alliances renamed in the game, still measured by their game number meanwhile,
       // with the alliance's colour (as on the rest of the site)
       renamed: await renamedWithColours(gist).catch(() => []),
+      // NAP alliances the game didn't find, with no number to follow: a Steward can link them
+      unfound: await unfoundAlliances(gist).catch(() => []),
     });
   }
 
   if (what === 'positions') return napPositions(req, res, { gist, session });
+  if (what === 'link') return linkRenamed(req, res, { gist });
 
   if (what === 'quota') {
     const quota = await fetchQuota();

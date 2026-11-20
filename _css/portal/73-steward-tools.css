@@ -284,3 +284,42 @@
 .st-renamed a {
   color: var(--accent-text);
 }
+
+/* Linking a NAP alliance the game didn't find to its new tag */
+.st-link {
+  display: grid;
+  gap: 6px;
+  padding: 0.6rem 0.8rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--status-warning, #d69e2e);
+  border-radius: 8px;
+}
+
+.st-link p {
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+.st-link label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.st-link input {
+  width: 9rem;
+  padding: 5px 8px;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--overlay-5);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.st-link button {
+  justify-self: start;
+}

@@ -84,6 +84,20 @@ export async function measureAlliances(
   return out;
 }
 
+/**
+ * A Steward links a NAP alliance the game no longer knows by its site tag to the tag it has
+ * now (owner request, 2026-11-20: HMDA was renamed before the site ever measured it, so there
+ * was no number to follow). `found`: that tag's alliance, just looked up. Saves its number
+ * against the site's tag, and the rename, so measurements follow it from then on.
+ */
+export async function linkAlliance(siteTag, found, store = blobStore) {
+  const file = await readAllianceIds(store);
+  const at = new Date().toISOString();
+  file.ids[siteTag] = { aid: found.aid, name: found.name, at, linked: true };
+  file.renamed[siteTag] = { now: found.tag, name: found.name, at };
+  await store.write(FILE(), { ids: file.ids, renamed: file.renamed });
+}
+
 /** NAP alliances renamed in the game, for the Steward tools page: [{ tag, now, name, at }]. */
 export async function renamedAlliances(tags, store = blobStore) {
   const { renamed } = await readAllianceIds(store).catch(() => ({ renamed: {} }));
