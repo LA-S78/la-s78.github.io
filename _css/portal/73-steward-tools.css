@@ -91,7 +91,8 @@
   gap: 10px;
 }
 
-.st-player header span {
+/* The name and alliance beside the picture (not the picture's own spans) */
+.st-player header > span:not(.player-portrait) {
   display: flex;
   flex-direction: column;
   min-width: 0;

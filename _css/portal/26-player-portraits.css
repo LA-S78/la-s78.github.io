@@ -5,66 +5,8 @@
    their width, so the picture sits in the middle at that size with the frame drawn over it.
    ========================================================================== */
 
-.player-portrait {
-  position: relative;
-  display: inline-block;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-}
-
-.player-portrait.pf-sm {
-  width: 32px;
-  height: 32px;
-}
-
-/* Not the site's usual picture border (main img): the frame is the border */
-main .player-portrait img {
-  max-width: none;
-  margin: 0;
-  border: none;
-  border-radius: 0;
-}
-
-.player-portrait .pf-pic,
-main .player-portrait img.pf-pic {
-  position: absolute;
-  inset: 19%;
-  width: 62%;
-  height: 62%;
-  object-fit: cover;
-  border-radius: 3px;
-  background: var(--overlay-5);
-}
-
-main .player-portrait img.pf-pic:only-child {
-  border-radius: 6px;
-}
-
-.player-portrait .pf-initial {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8em;
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
-/* Without a frame, the picture fills the square */
-.player-portrait .pf-pic:only-child {
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 6px;
-}
-
-.player-portrait .pf-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
+/* The picture-in-frame itself is in _css/style/27-player-portraits.css (every page: the
+   Stats tab and the territory map show it too). */
 
 /* Beside a typed name (Caravan Rotor, nomination list, King's console) */
 .player-ign .player-portrait,

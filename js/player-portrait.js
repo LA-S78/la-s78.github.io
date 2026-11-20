@@ -1,6 +1,7 @@
 // A player's picture in their in-game frame (owner request, 2026-11-18), from the Last Asylum
-// Tracker (api/_tracker.js): the roster view, Caravan Rotor, nomination list and King's
-// console. Styles: _css/portal/26-player-portraits.css. A classic script can use it as
+// Tracker (api/_tracker.js): the roster view, Caravan Rotor, nomination list, King's console,
+// and (2026-11-20) the Stats tab, the Steward player lookup and the territory map's card.
+// Styles: _css/style/27-player-portraits.css. A classic script can use it as
 // window.PlayerPortrait.
 //
 //   portrait({ name, avatar, frame }, 'sm')           → the picture's markup
@@ -15,9 +16,10 @@ import { foldName } from './name-check.js';
 const esc = (v) => window.escapeHtml(v);
 
 export function portrait(m, size = 'md') {
+  const initial = esc((m.name || '?').trim().charAt(0).toUpperCase() || '?');
   const pic = m.avatar
-    ? `<img class="pf-pic" src="${esc(m.avatar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
-    : `<span class="pf-pic pf-initial">${esc((m.name || '?').trim().charAt(0).toUpperCase() || '?')}</span>`;
+    ? `<img class="pf-pic" src="${esc(m.avatar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-initial="${initial}">`
+    : `<span class="pf-pic pf-initial">${initial}</span>`;
   const frame = m.frame
     ? `<img class="pf-frame" src="${esc(m.frame)}" alt="" loading="lazy" decoding="async">`
     : '';
@@ -47,3 +49,23 @@ export function portraitFor(name, pictures, size = 'sm') {
 }
 
 window.PlayerPortrait = { portrait, pictureFor, portraitFor };
+
+// A picture that doesn't load shows the initial, and a frame that doesn't load goes (for every
+// portrait on the page, whenever it was drawn)
+if (typeof document !== 'undefined' && !window.__portraitErrors) {
+  window.__portraitErrors = true;
+  document.addEventListener(
+    'error',
+    (e) => {
+      const img = e.target;
+      if (!(img instanceof HTMLImageElement) || !img.closest('.player-portrait')) return;
+      if (img.classList.contains('pf-frame')) return img.remove();
+      if (!img.classList.contains('pf-pic')) return;
+      const span = document.createElement('span');
+      span.className = 'pf-pic pf-initial';
+      span.textContent = img.dataset.initial || '?';
+      img.replaceWith(span);
+    },
+    true,
+  );
+}

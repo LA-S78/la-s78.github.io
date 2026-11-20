@@ -60,6 +60,7 @@ strings: [steward]
   </div>
 </div>
 
+<script type="module" src="/js/player-portrait.js"></script>
 <script>
   (function () {
     const $ = (s) => document.getElementById(s);
@@ -123,8 +124,9 @@ strings: [steward]
     }
 
     function player(p) {
-      const pic = p.avatar
-        ? `<img class="st-face" src="${esc(p.avatar)}" alt="" referrerpolicy="no-referrer" data-initial="${esc((p.name || '?').charAt(0).toUpperCase())}">`
+      // Their picture in their frame (js/player-portrait.js)
+      const pic = window.PlayerPortrait
+        ? window.PlayerPortrait.portrait(p, 'card')
         : `<span class="st-face st-initial">${esc((p.name || '?').charAt(0).toUpperCase())}</span>`;
       const row = (label, value) => `<div><small>${esc(label)}</small><strong>${value}</strong></div>`;
       const history = (p.history || [])
@@ -147,15 +149,6 @@ strings: [steward]
           ${history ? `<ul class="st-list st-history">${history}</ul>` : `<p class="sub-text">${esc(t('steward.history_none'))}</p>`}
           <p class="st-small">${esc(t('steward.first_seen', { when: day(p.firstSeen) }))}</p>
         </article>`;
-      // A picture that doesn't load shows the initial
-      $('st-player').querySelectorAll('img.st-face').forEach((img) =>
-        img.addEventListener('error', () => {
-          const span = document.createElement('span');
-          span.className = 'st-face st-initial';
-          span.textContent = img.dataset.initial || '?';
-          img.replaceWith(span);
-        }, { once: true }),
-      );
     }
 
     const quotaText = (q) =>

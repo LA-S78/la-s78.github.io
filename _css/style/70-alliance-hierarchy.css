@@ -757,24 +757,7 @@ main .ladder-badge,
   font-variant-numeric: tabular-nums;
 }
 
-main .stats-face,
-.stats-face {
-  width: 32px;
-  height: 32px;
-  margin: 0;
-  object-fit: cover;
-  border: none;
-  border-radius: 6px;
-}
-
-.stats-initial {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  color: var(--text-muted);
-  background: var(--overlay-5);
-}
+/* Players' pictures: their portrait in its frame (_css/style/27-player-portraits.css) */
 
 .stats-who,
 .stats-num {
@@ -830,11 +813,6 @@ main .stats-face,
     width: 52px;
   }
 
-  main .stats-face,
-  .stats-face {
-    width: 28px;
-    height: 28px;
-  }
 }
 
 .stats-more {
@@ -973,10 +951,6 @@ main .stats-face,
   font-size: 1rem;
 }
 
-.stats-lk-card header .stats-face {
-  width: 48px;
-  height: 48px;
-}
 
 .stats-lk-place {
   display: flex;

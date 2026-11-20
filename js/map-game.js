@@ -9,6 +9,7 @@
 // Colours are from the owner's screenshots: grass #597b56, grid lines a darker green.
 
 import { toMap } from './map-coords.js';
+import { portrait } from './player-portrait.js';
 
 export const DEFAULT_PICTURE = '/images/map/sanctuary.webp';
 const esc = (v) => window.escapeHtml(v);
@@ -54,7 +55,7 @@ export function ground(vb, perPx) {
   const y0 = Math.floor(Math.min(...ys)) - 1;
   const y1 = Math.ceil(Math.max(...ys)) + 1;
   let lines = '';
-  if (x1 - x0 < 260 && y1 - y0 < 260) {
+  if (x1 - x0 < 420 && y1 - y0 < 420) {
     const seg = (a, b) =>
       `M${a.cx.toFixed(2)} ${a.cy.toFixed(2)}L${b.cx.toFixed(2)} ${b.cy.toFixed(2)}`;
     for (let x = x0; x <= x1; x++) lines += seg(toMap(x + 0.5, y0), toMap(x + 0.5, y1));
@@ -69,32 +70,35 @@ export function ground(vb, perPx) {
  * the level badge above and the name plate below. `name` is already shortened to fit.
  */
 export function building(m, cx, cy, side, perPx, { name, picked, textWidth }) {
-  // The picture stands in the upper part of its 3×3, the name plate in the lower, so a row's
-  // level badges clear the plates of the row above
+  // As in the game (owner, 2026-11-20): the building, its name plate over its base, and the
+  // level just below the plate. They share the Sanctuary's row (its 3×3 tiles, `side` tall):
+  // the plate and badge take what they need and the picture gets the rest.
+  const px = Math.min(13, Math.max(9, (side / perPx) * 0.13));
+  const badgePx = Math.min(12, Math.max(7.5, (side / perPx) * 0.11));
+  const ph = px * 1.55 * perPx;
+  const bh = m.level ? badgePx * 1.45 * perPx : 0;
+  const gap = perPx;
+  const overlap = ph * 0.35; // the plate sits on the building's base
+  const top = cy - side / 2;
+  const h = Math.min(side * 0.8, side - ph - bh - 2 * gap + overlap);
   const w = side * 0.98;
-  const h = side * 0.8;
-  const bottom = cy + side * 0.28;
-  const top = bottom - h;
+  const picBottom = top + h;
+  const py = picBottom - overlap;
+  const by = py + ph + gap;
   let out = `<g class="map-game-sanctuary${picked ? ' is-selected' : ''}" data-uid="${esc(m.uid)}">`;
-  out += `<rect class="map-game-hit" x="${(cx - side / 2).toFixed(2)}" y="${top.toFixed(2)}" width="${side.toFixed(2)}" height="${(bottom - top).toFixed(2)}"></rect>`;
+  out += `<rect class="map-game-hit" x="${(cx - side / 2).toFixed(2)}" y="${top.toFixed(2)}" width="${side.toFixed(2)}" height="${(by + bh - top).toFixed(2)}"></rect>`;
   out += `<image href="${esc(m.skin || DEFAULT_PICTURE)}" x="${(cx - w / 2).toFixed(2)}" y="${top.toFixed(2)}" width="${w.toFixed(2)}" height="${h.toFixed(2)}" preserveAspectRatio="xMidYMax meet"></image>`;
-  // The level badge, as in the game: a pale pill with the number
-  const badgePx = Math.min(13, Math.max(9, (side / perPx) * 0.12));
+  // The name plate
+  const tw = textWidth(name, px) * perPx;
+  const pw = tw + 10 * perPx;
+  out += `<rect class="map-game-plate" x="${(cx - pw / 2).toFixed(2)}" y="${py.toFixed(2)}" width="${pw.toFixed(2)}" height="${ph.toFixed(2)}" rx="${(ph * 0.3).toFixed(2)}" stroke-width="${((picked ? 2 : 1) * perPx).toFixed(2)}"></rect>`;
+  out += `<text class="map-game-name" x="${cx.toFixed(2)}" y="${(py + ph / 2).toFixed(2)}" dy="0.35em" font-size="${(px * perPx).toFixed(2)}">${esc(name)}</text>`;
+  // The level: a pale pill with the number, under the plate
   if (m.level) {
     const bw = badgePx * 2.6 * perPx;
-    const bh = badgePx * 1.5 * perPx;
-    const by = top - side * 0.01;
     out += `<rect class="map-game-level" x="${(cx - bw / 2).toFixed(2)}" y="${by.toFixed(2)}" width="${bw.toFixed(2)}" height="${bh.toFixed(2)}" rx="${(bh / 2).toFixed(2)}" stroke-width="${perPx.toFixed(2)}"></rect>`;
     out += `<text class="map-game-level-text" x="${cx.toFixed(2)}" y="${(by + bh / 2).toFixed(2)}" dy="0.35em" font-size="${(badgePx * perPx).toFixed(2)}">${esc(m.level)}</text>`;
   }
-  // The name plate
-  const px = Math.min(13, Math.max(10, (side / perPx) * 0.13));
-  const tw = textWidth(name, px) * perPx;
-  const pw = tw + 10 * perPx;
-  const ph = px * 1.55 * perPx;
-  const py = bottom + side * 0.02;
-  out += `<rect class="map-game-plate" x="${(cx - pw / 2).toFixed(2)}" y="${py.toFixed(2)}" width="${pw.toFixed(2)}" height="${ph.toFixed(2)}" rx="${(ph * 0.3).toFixed(2)}" stroke-width="${((picked ? 2 : 1) * perPx).toFixed(2)}"></rect>`;
-  out += `<text class="map-game-name" x="${cx.toFixed(2)}" y="${(py + ph / 2).toFixed(2)}" dy="0.35em" font-size="${(px * perPx).toFixed(2)}">${esc(name)}</text>`;
   return `${out}</g>`;
 }
 
@@ -105,15 +109,10 @@ export function building(m, cx, cy, side, perPx, { name, picked, textWidth }) {
  * by js/map-members.js.
  */
 export function popupHtml(m, { title, lines, close }) {
-  const initial = esc((m.name || '?').charAt(0).toUpperCase());
-  const face = m.avatar
-    ? `<img class="map-game-face" src="${esc(m.avatar)}" alt="" referrerpolicy="no-referrer" data-initial="${initial}">`
-    : `<span class="map-game-face map-game-initial">${initial}</span>`;
-  const frame = m.frame ? `<img class="map-game-frame" src="${esc(m.frame)}" alt="">` : '';
   return `
     <div class="map-game-head"><strong>${esc(title)}</strong><button type="button" class="map-game-close" aria-label="${esc(close.label)}">${close.icon}</button></div>
     <div class="map-game-body">
-      <span class="map-game-pic">${face}${frame}</span>
+      <span class="map-game-pic">${portrait(m)}</span>
       <span class="map-game-who">${lines
         .filter(Boolean)
         .map((l) => `<span>${esc(l)}</span>`)
