@@ -131,7 +131,7 @@ async function respond(req, res) {
       color: sanitizeAlliances({ [tag]: alliances[tag] || {} }, await getRoleColors())[tag].color,
     },
     dashboard: visibleDashboard(
-      readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag),
+      readDashboard(gistJson(gist, dashboardFile(tag, alliances, gist), {}), tag),
       access.leader,
     ),
   };
@@ -141,7 +141,7 @@ async function respond(req, res) {
   // Tracker, for leaders only (owner, 2026-11-19: the "Members can view" option was removed).
   // One lookup serves the roster and the leaders' name checks; null without the tracker or
   // when it's slow.
-  const saved = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag);
+  const saved = readDashboard(gistJson(gist, dashboardFile(tag, alliances, gist), {}), tag);
   // The Caravan Rotor shows players' pictures too (step 2), for whoever can see it
   const caravanShown = Boolean(body.dashboard.caravan);
   if (access.leader || caravanShown) {
@@ -185,7 +185,10 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
   if (!access.leader) {
     return res.status(403).json({ error: say('api_dashboard.positions_leaders_only') });
   }
-  const settings = readDashboard(gistJson(gist, dashboardFile(tag, alliances), {}), tag).settings;
+  const settings = readDashboard(
+    gistJson(gist, dashboardFile(tag, alliances, gist), {}),
+    tag,
+  ).settings;
   const refreshedAt = Date.parse(settings.rosterRefresh?.lastAt || '') || 0;
   const live = await fetchAlliance(tag, {
     timeoutMs: 3000,
@@ -233,7 +236,7 @@ function rosterBody(live, frame = null) {
  * daily allowance and cooldown (api/_dashboard.js refreshState). Counted only when it worked.
  */
 async function refreshRoster(res, { gist, tag, alliances, session }) {
-  const file = dashboardFile(tag, alliances);
+  const file = dashboardFile(tag, alliances, gist);
   const before = refreshState(readDashboard(gistJson(gist, file, {}), tag).settings);
   if (!before.left) return res.status(429).json({ error: say('api_dashboard.refresh_limit') });
   if (before.waitMinutes) {
@@ -276,7 +279,7 @@ async function editDashboard(req, res, { gist, tag, access, session, alliances }
     return res.status(403).json({ error: say('api_dashboard.leaders_only') });
   }
   const body = req.body || {};
-  const file = dashboardFile(tag, alliances);
+  const file = dashboardFile(tag, alliances, gist);
 
   if (body.action === 'roster-refresh') {
     return refreshRoster(res, { gist, tag, alliances, session });

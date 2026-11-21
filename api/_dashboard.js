@@ -12,6 +12,7 @@ import { describeRewardPeriod } from './_reward_period.js';
 import { sourceRequest } from './_google_source.js';
 import { say } from './_messages.js';
 import { findTag, tagSlug } from './_alliances.js';
+import { dashboardsById } from './_dashboard_ids.js';
 
 /** Most bytes one alliance's dashboard file may hold (thousands of table rows). */
 export const MAX_DASHBOARD_BYTES = 150 * 1024;
@@ -23,9 +24,16 @@ export function findAllianceKey(alliances = {}, tag) {
 
 /**
  * The Gist file holding an alliance's dashboard: its letters and digits (RÂVN -> RAVN;
- * RavN for RâvN, beside RÂVN: tagSlug). `alliances` is map-state.json's list.
+ * RavN for RâvN, beside RÂVN: tagSlug). `alliances` is map-state.json's list. Once a Steward
+ * has moved dashboards to IDs (alliance IDs step 5, api/_dashboard_ids.js), the file is named
+ * after the alliance's ID instead (`gist` tells which).
  */
-export function dashboardFile(tag, alliances = {}) {
+export function dashboardFile(tag, alliances = {}, gist = null) {
+  if (gist && dashboardsById(gist)) {
+    const key = alliances?.[tag] ? tag : findAllianceKey(alliances, tag);
+    const id = key ? alliances[key]?.id : null;
+    if (id) return `dashboard-${id}.json`;
+  }
   return `dashboard-${tagSlug(tag, Object.keys(alliances || {}))}.json`;
 }
 

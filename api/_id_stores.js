@@ -37,6 +37,14 @@ import {
   countRewards,
   countNominations,
 } from './_rewards_ids.js';
+import {
+  IMAGES_FILE,
+  isById as imagesById,
+  imagesView,
+  imagesByIdForm,
+  countImages,
+} from './_images_ids.js';
+import { dashboardsById, moveDashboardsToIds, moveDashboardsToTags } from './_dashboard_ids.js';
 
 /** Keys in a fixed order, so two forms can be compared. */
 const canonical = (v) =>
@@ -101,9 +109,29 @@ export const STORES = {
     original: (state) => state,
     count: (view, register) => countNominations(view, register),
   },
+  pictures: {
+    file: IMAGES_FILE,
+    step: 5,
+    empty: {},
+    isById: imagesById,
+    view: imagesView,
+    byId: (view, register) => imagesByIdForm(view, register),
+    byTag: imagesView,
+    original: (state) => state,
+    count: (view, register) => countImages(view, register),
+  },
+  // Not one file: each alliance's dashboard file is copied to its ID's name (_dashboard_ids.js)
+  dashboards: {
+    step: 5,
+    custom: true,
+    form: (gist) => (dashboardsById(gist) ? 'id' : 'tag'),
+    moveToIds: moveDashboardsToIds,
+    moveToTags: moveDashboardsToTags,
+  },
 };
 
-export const storeForFile = (file) => Object.values(STORES).find((s) => s.file === file) || null;
+export const storeForFile = (file) =>
+  Object.values(STORES).find((s) => s.file && s.file === file) || null;
 
 const backupName = (file, now, what) =>
   `backup-${file.replace(/\.json$/, '')}-${now.toISOString().slice(0, 16).replace(':', '-')}${what ? `-${what}` : ''}.json`;
@@ -112,6 +140,7 @@ const backupName = (file, now, what) =>
 export async function moveToIds(key, { now = new Date(), update } = {}) {
   const store = STORES[key];
   if (!store) throw new Error('Unknown store.');
+  if (store.custom) return store.moveToIds({ now, update });
   const { updateGist } = await import('./_gist.js');
   const { readRegister, REGISTER_FILE } = await import('./_register.js');
   let report = null;
@@ -147,6 +176,7 @@ export async function moveToIds(key, { now = new Date(), update } = {}) {
 export async function moveToTags(key, { now = new Date(), update } = {}) {
   const store = STORES[key];
   if (!store) throw new Error('Unknown store.');
+  if (store.custom) return store.moveToTags({ now, update });
   const { updateGist } = await import('./_gist.js');
   const { readRegister } = await import('./_register.js');
   let report = null;
@@ -174,7 +204,11 @@ export function storeForms(gist) {
   return Object.fromEntries(
     Object.entries(STORES).map(([key, s]) => [
       key,
-      s.isById(JSON.parse(gist?.files?.[s.file]?.content || 'null')) ? 'id' : 'tag',
+      s.custom
+        ? s.form(gist)
+        : s.isById(JSON.parse(gist?.files?.[s.file]?.content || 'null'))
+          ? 'id'
+          : 'tag',
     ]),
   );
 }

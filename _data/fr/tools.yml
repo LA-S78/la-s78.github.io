@@ -995,34 +995,34 @@ stats:
   show_hide: Appuyez sur une alliance pour afficher ou masquer sa ligne.
   credit_before: Chiffres du
 steward:
-  move_title_map: 'IDs d''Alliance : la liste et les territoires des alliances'
-  move_title_calendar: 'IDs d''Alliance : calendrier des événements'
+  move_title_map: 'IDs d''Alliance : liste des alliances et territoires'
+  move_title_calendar: 'IDs d''Alliance : événements du calendrier'
   move_title_rewards: 'IDs d''Alliance : rotation du Capitole, rachats et coffres distribués'
   move_title_nominations: 'IDs d''Alliance : listes de nominations de cette période'
-  move_by_tag: Stocké par tag (comme avant). Le déplacement le stocke par l'ID permanent de chaque alliance ; les pages semblent identiques. Une sauvegarde du fichier est effectuée en premier.
-  move_by_id: Stocké par ID d'alliance. L'annulation le remet en tags, en conservant tous les changements effectués depuis.
+  move_by_tag: Stocké par tag (comme avant). Le déplacement le stocke via l'ID permanent de chaque alliance ; les pages semblent identiques. Une sauvegarde du fichier est effectuée en premier.
+  move_by_id: Stocké par ID d'alliance. L'annulation le transforme à nouveau en tags, en conservant chaque modification effectuée depuis.
   move_button: Déplacer vers les IDs
   move_undo: Annuler le déplacement
   move_confirm: Déplacer ceci vers les IDs d'alliance maintenant ?
-  move_undo_confirm: Remettre ceci en tags ?
+  move_undo_confirm: Transformer ceci à nouveau en tags ?
   move_done_map: 'Déplacé : {alliances} alliances, {links} liens d''académie, {owned} territoires. Sauvegarde : {backup}'
   move_done_rewards: 'Déplacé : {seats} sièges de rotation du Capitole, {buyouts} rachats actifs, {handed} coffres distribués. Sauvegarde : {backup}'
   move_done_nominations: 'Déplacé {lists} listes de nominations. Sauvegarde : {backup}'
-  move_done_calendar: 'Déplacé {alliance} événements d''alliance (événements mondiaux, inchangés : {global}). Sauvegarde : {backup}'
+  move_done_calendar: 'Déplacé {alliance} événements d''alliance (événements à l''échelle du serveur, inchangés : {global}). Sauvegarde : {backup}'
   move_undone: 'Retour aux tags. Sauvegarde du fichier par ID : {backup}'
   move_already: 'Rien à faire : c''est déjà fait.'
-  newtag: "{tag} est nouveau sur la carte. Est-ce une alliance déjà connue du site, renommée ou de retour sur la carte ? Tant que vous ne répondez pas, elle commence sans aucun membre et les membres de l'ancienne alliance sont invités à se reconnecter."
+  newtag: "{tag} est nouveau sur la carte. Est-ce une alliance que le site connaissait déjà, renommée ou de retour sur la carte ? Jusqu'à ce que vous répondiez, elle commence sans rien, et les membres de l'ancienne alliance sont invités à se reconnecter."
   newtag_same: 'Même alliance que :'
   newtag_new: C'est une nouvelle alliance
-  newtag_link: Lien
+  newtag_link: Lier
   page_title: Outils de l'Intendant
-  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et une recherche de joueur en temps réel.'
+  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et une recherche de joueur en direct.'
   loading: Chargement…
   sign_in: Se connecter avec Discord
   sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils de l'Intendant.
   stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils de l'Intendant.
   lookup_title: Recherche de joueur
-  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses statistiques, ainsi que ses noms et alliances précédents. Saisissez un ID de joueur ou un nom pour trouver l''ID d''un joueur NAP.'
+  lookup_help: 'Tout joueur, en direct du jeu : son alliance, ses chiffres, et ses noms et alliances précédents. Saisissez un ID de joueur ou un nom pour trouver l''ID d''un joueur NAP.'
   lookup_placeholder: ID de joueur, ou nom d'un joueur NAP
   lookup_go: Rechercher
   lookup_id_needed: Saisissez un ID de joueur (le numéro sur son profil) ou choisissez un joueur NAP parmi les noms trouvés.
@@ -1031,8 +1031,8 @@ steward:
   name_none: Aucun joueur NAP avec ce nom. Pour toute autre personne, utilisez son ID de joueur.
   no_alliance: Aucune alliance
   server: Serveur {n}
-  online: En ligne
-  last_seen: Vu pour la dernière fois {when}
+  online: En ligne maintenant
+  last_seen: Dernière vue {when}
   shielded: Bouclier actif
   might: Puissance
   kills: Éliminations
@@ -1044,48 +1044,48 @@ steward:
   history_title: Noms et alliances
   history_none: Aucun nom ou alliance précédent détecté.
   seen_from: depuis {when}
-  first_seen: Vu pour la première fois par le tracker {when}.
-  renamed: "{old} est maintenant {now} dans le jeu. Il est toujours mesuré (Stats et course au Top 4) par le numéro du jeu qui lui est attribué, mais le site continue de l'appeler {old}."
-  renamed_fix: Renommer dans le planificateur d'alliance
-  test_copy: "🧪 Site de test : ses données ont été copiées depuis le site réel {when} (/devupdate dans Discord effectue une nouvelle copie)."
-  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site réel. Exécutez /devupdate dans Discord pour une nouvelle copie."
-  mismatch: "{tag} dans le jeu répond désormais avec une alliance différente : {got}. Le site continue de mesurer l'alliance qu'il connaît sous le nom de {tag} ({known}) via son numéro de jeu, et ne compte pas la nouvelle comme étant celle-ci."
+  first_seen: Première détection par le tracker {when}.
+  renamed: "{old} est maintenant {now} dans le jeu. Elle est toujours mesurée (Stats et la course au Top 4) par son numéro de jeu, mais le site continue de l'appeler {old}."
+  renamed_fix: Renommer dans le planificateur d'Alliance
+  test_copy: "🧪 Site de test : ses données ont été copiées depuis le site en direct {when} (/devupdate dans Discord effectue une nouvelle copie)."
+  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en direct. Exécutez /devupdate dans Discord pour une nouvelle copie."
+  mismatch: "{tag} dans le jeu répond maintenant avec une alliance différente : {got}. Le site continue de mesurer l'alliance qu'il connaît sous le nom {tag} ({known}) par son numéro de jeu, et ne compte pas la nouvelle comme étant celle-ci."
   mismatch_relink: 'C''est la même alliance : relier'
-  mismatch_relink_help: À utiliser uniquement si {got} est bien l'alliance visée par le site (le premier lien était erroné ou le jeu l'a renuméroté). La retraite ou le changement de nom impliquent des étapes ultérieures.
-  unfound: "{tag} n'a pas été trouvé dans le jeu et n'est donc pas mesuré (Stats et course au Top 4). S'il a changé de tag dans le jeu, saisissez le nouveau et le site le suivra."
-  unfound_now: Son tag dans le jeu actuellement
+  mismatch_relink_help: Uniquement si {got} est réellement l'alliance que le site désigne (le premier lien était erroné ou le jeu l'a renumérotée). Les étapes de retrait ou de renommage viennent plus tard.
+  unfound: "{tag} n'a pas été trouvé dans le jeu, il n'est donc pas mesuré (Stats et la course au Top 4). S'il a changé de tag dans le jeu, saisissez le nouveau et le site le suivra."
+  unfound_now: Son tag dans le jeu maintenant
   unfound_placeholder: ex. Arch
-  unfound_link: Relier
+  unfound_link: Lier
   unfound_checking: Vérification avec le jeu...
-  unfound_left: "{left} sur {max} liens restants aujourd'hui (chaque opération interroge le jeu une fois)"
+  unfound_left: "{left} sur {max} liens restants aujourd'hui (chaque interrogation du jeu compte pour une)"
   pending_title: En attente de révision
   pending_none: Aucune image d'alliance en attente.
   sent_by: Envoyé par {name}, {when}
   race_title: Course au Top 4
-  race_none: Aucune course mesurée pour le moment.
-  race_progress: "{n} jours de Duel mesurés sur 3 jusqu'à présent."
-  race_finished: 'Les 3 jours ont été mesurés : les résultats sont disponibles auprès de la direction NAP.'
+  race_none: Aucune course mesurée pour l'instant.
+  race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
+  race_finished: 'Les 3 jours sont mesurés : les résultats sont dans la direction du NAP.'
   race_missing: 'Non mesuré : {tags}'
   race_more: Tableau complet sur la page des Règles
   quota_title: Requêtes du Tracker
-  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le tracker au site ; son affichage est donc gratuit ; vérifier maintenant coûte une requête.
+  quota_help: Le Tracker de Last Asylum autorise 1 000 requêtes par jour, recommençant à 00:00 UTC. Le chiffre ci-dessous est le dernier donné par le tracker au site ; son affichage ne coûte rien ; vérifier maintenant coûte une requête.
   quota_check: Vérifier maintenant
-  quota_used: utilisés aujourd'hui
+  quota_used: utilisé aujourd'hui
   quota_failed: Le tracker n'a pas pu être contacté.
   quota_as_of: Au {when}
   quota_none: Le site n'a encore rien demandé au tracker aujourd'hui.
-  quota_resets: Réinitialisation dans {time}
-  usage_title: Utilisation
+  quota_resets: Recommence dans {time}
+  usage_title: Ce qui les a utilisés
   usage_automation: Automatisation
   usage_automation_help: Instantané des Stats quotidiennes et course au Top 4
-  usage_alliance: Outils d'alliance
+  usage_alliance: Outils d'Alliance
   usage_alliance_help: Tableaux de bord, effectifs, nominations
   usage_public: Pages publiques
   usage_public_help: Cartes de classement sur la page Alliance
   usage_steward: Outils de l'Intendant
-  usage_steward_help: Recherches de joueur, actualisations de la carte et vérifications d'utilisation
+  usage_steward_help: Recherches de joueurs, rafraîchissements de carte et vérifications d'utilisation
   usage_other: Autre
   usage_other_help: Tout ce qui n'est pas étiqueté
   usage_unrecorded: Non enregistré
-  usage_unrecorded_help: Comptabilisé par le tracker, non encore sauvegardé ici (chaque serveur enregistre toutes les quelques minutes)
-  usage_none: Aucune requête notée aujourd'hui.
+  usage_unrecorded_help: Compté par le tracker, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
+  usage_none: Aucune requête notée pour aujourd'hui.
