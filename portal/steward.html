@@ -307,7 +307,8 @@ strings: [steward]
     // Alliance IDs step 8: the tidy-up. Lists the backups the moves left, and deletes them.
     function tidyBox(tidy) {
       const box = $('st-tidy');
-      const n = tidy ? tidy.gist.length + tidy.dashboards.length + tidy.stats.length : 0;
+      // The Stats backups are kept (owner, 2026-11-22): only the Gist's are deleted here
+      const n = tidy ? tidy.gist.length + tidy.dashboards.length : 0;
       box.hidden = !n;
       if (!n) return;
       box.innerHTML = `

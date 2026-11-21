@@ -1053,10 +1053,10 @@ stats:
 # The Steward tools page (portal/steward.html; Stewards only)
 steward:
   tidy_title: "Alliance IDs: tidy-up"
-  tidy_help: "Everything is stored by alliance ID now. The moves left backups: {gist} backup files and {dashboards} old dashboard files in the Gist, and {stats} Stats backup files. Delete them once you're happy (the Gist keeps its earlier revisions)."
+  tidy_help: "Everything is stored by alliance ID now. The moves left {gist} backup files and {dashboards} old dashboard files in the Gist. Delete them once you're happy: the Gist keeps its earlier revisions. The {stats} Stats backup files are kept (the Blob store has no revisions)."
   tidy_button: "Delete the backups"
   tidy_confirm: "Delete the alliance ID moves' backups?"
-  tidy_done: "Deleted: {gist} backup files, {dashboards} old dashboard files and {stats} Stats backup files."
+  tidy_done: "Deleted: {gist} backup files and {dashboards} old dashboard files. The Stats backups are kept."
   roster_title: "Alliances: rename, swap tags, retire"
   roster_help: "Renaming changes the tag everywhere at once (its history, events, pictures, dashboards and Stats stay with it). Public pages show \"formerly [OLD]\" for 30 days."
   roster_was: "was [{tag}] until {until}"

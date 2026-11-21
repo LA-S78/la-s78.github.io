@@ -3,7 +3,9 @@
 // store is kept by ID, a Steward deletes the backups the moves left: the Gist's
 // `backup-*.json` files, the dashboards' old `dashboard-<TAG>.json` files (their contents were
 // copied to `dashboard-<ID>.json`), and the Stats files' backup folders in the Blob store.
-// The Gist keeps every earlier revision, so even then nothing is gone for good.
+// The Gist keeps every earlier revision, so even then nothing is gone for good. The Stats
+// backups are kept (owner, 2026-11-22): the Blob store has no revisions, so they stay as the
+// only copy of the Stats files from before the move; listed, but not deleted, here.
 
 import { storeForms } from './_id_stores.js';
 
@@ -41,8 +43,5 @@ export async function tidyUp(gist) {
       description: `Alliance IDs step 8: ${files.length} backup files deleted (tidy-up)`,
     });
   }
-  const stats = list.stats.length
-    ? await (await import('./_stats.js')).deleteStatsBackups(list.stats)
-    : 0;
-  return { gist: list.gist.length, dashboards: list.dashboards.length, stats };
+  return { gist: list.gist.length, dashboards: list.dashboards.length, stats: 0 };
 }
