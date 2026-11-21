@@ -26,7 +26,7 @@ api_dashboard:
   refresh_failed: "The game couldn't be reached. Try again in a few minutes."
   signed_out: "Sign in with Discord (top right) to see your alliance dashboard."
   load_failed: "Could not load the dashboard: {reason}"
-  no_alliance: "We couldn't tell which alliance you're in. The site finds it from your alliance role in the NAP Discord server, or a [TAG] at the start of your server nickname. Fix that in Discord, then use Refresh Access in your account card (top right)."
+  no_alliance: "We couldn't tell which alliance you're in. The site finds it from your alliance role in the NAP Discord server. Ask your alliance's leaders or a Steward for the role, then use Refresh Access in your account card (top right)."
   leaders_only: "Only your alliance's R4s and R5s can change the dashboard."
   chart_removed: "That chart was removed."
   chart_already_removed: "That chart was already removed."
