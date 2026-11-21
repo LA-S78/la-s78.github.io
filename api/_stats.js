@@ -26,13 +26,25 @@
 //     Each player is kept once; every alliance has its own lists, so the filter shows them.
 // Research donations and help are not kept (owner: they stay off the public stats).
 
-import { get, put } from '@vercel/blob';
+import { get, put, list } from '@vercel/blob';
 import { createHmac } from 'node:crypto';
 import { gistJson, isTestDeployment } from './_gist.js';
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { foldName, trackerConfigured } from './_tracker.js';
 import { measureAlliances } from './_alliance_ids.js';
 import { ASCENSION_FILE, napTags } from './_ascension.js';
+import {
+  afterRead,
+  beforeWrite,
+  statsKind,
+  statsContext,
+  setStatsContext,
+  statsView,
+  statsByIdForm,
+  statsOriginal,
+  isById as isStatsById,
+  MOVES_FILE,
+} from './_stats_ids.js';
 
 /** Snapshots are taken between 12 and 2 minutes before reset: the 5-minute check lands twice. */
 const WINDOW = { from: 12, to: 2 };
@@ -94,7 +106,7 @@ export function statsSnapshotDue(now, calendarConfig = {}) {
   return { day: gameDay(now), minutesLeft };
 }
 
-async function readJson(path) {
+async function readRaw(path) {
   try {
     const blob = await get(path, { access: 'private', token: blobToken() });
     if (!blob) return null;
@@ -104,7 +116,22 @@ async function readJson(path) {
   }
 }
 
+/**
+ * A Blob file, in the tag form (alliance IDs step 6, api/_stats_ids.js): a file stored by ID
+ * is turned back into tags. Throws (never null) when that can't be done, so a failed read is
+ * never taken for an empty file and written over.
+ */
+async function readJson(path) {
+  return afterRead(path, await readRaw(path));
+}
+
+/** Saves a Blob file, by ID once a Steward has moved the Stats files. */
 async function writeJson(path, data) {
+  await writeRaw(path, await beforeWrite(path, data));
+}
+
+/** Exactly as given (the move and its undo). */
+export async function writeRaw(path, data) {
   await put(path, JSON.stringify(data), {
     access: 'private',
     token: blobToken(),
@@ -650,6 +677,8 @@ export async function refreshNapPositions({ gist, store = blobStore, fetchImpl }
  */
 /** The Stats tab's private Blob files (also used by api/_skins.js). */
 export const blobStore = { read: readJson, write: writeJson };
+/** The files exactly as stored (the alliance ID move and its undo). */
+export const rawBlobStore = { read: readRaw, write: writeRaw };
 export const statsPath = (name) => `${prefix()}/${name}`;
 export const statsStoreReady = () => Boolean(blobToken());
 
@@ -743,3 +772,125 @@ export async function checkStatsSnapshot({
   report.saved = true;
   return report;
 }
+
+// ---------------------------------------------------------------------------------------
+// Alliance IDs step 6: the Steward's move of the Stats files (api/_stats_ids.js), and its undo
+// ---------------------------------------------------------------------------------------
+
+/** stats/days/x.json → stats/<folder>/days/x.json (test/stats/… alike). */
+const backupPath = (path, folder) => path.replace(/(^|\/)stats\//, `$1stats/${folder}/`);
+
+/** Every Stats file that holds alliances: [{ path, kind }]. */
+async function statsFiles(listImpl = list) {
+  const out = [];
+  let cursor;
+  do {
+    const page = await listImpl({
+      prefix: `${prefix()}/`,
+      cursor,
+      token: blobToken(),
+      limit: 1000,
+    });
+    for (const b of page.blobs) {
+      const kind = statsKind(b.pathname);
+      if (kind) out.push({ path: b.pathname, kind });
+    }
+    cursor = page.hasMore ? page.cursor : undefined;
+  } while (cursor);
+  return out;
+}
+
+/** The switch in the Gist (alliance-id-moves.json `stats`), saved with updateGist. */
+async function setStatsSwitch(on, now) {
+  const { updateGist } = await import('./_gist.js');
+  await updateGist((gist) => {
+    const moves = { ...gistJson(gist, MOVES_FILE, {}) };
+    if (on) {
+      moves.stats = true;
+      moves.stats_at = now.toISOString();
+    } else {
+      delete moves.stats;
+      delete moves.stats_at;
+    }
+    return {
+      raw: true,
+      files: { [MOVES_FILE]: moves },
+      description: on ? 'Alliance IDs step 6: Stats files by ID' : 'Alliance IDs step 6 undone',
+    };
+  });
+  setStatsContext(null);
+}
+
+const sameJson = (a, b) => {
+  const c = (v) =>
+    Array.isArray(v)
+      ? v.map(c)
+      : v && typeof v === 'object'
+        ? Object.fromEntries(
+            Object.keys(v)
+              .sort()
+              .map((k) => [k, c(v[k])]),
+          )
+        : v;
+  return JSON.stringify(c(a)) === JSON.stringify(c(b));
+};
+
+/**
+ * Moves the Stats files to IDs: every file is converted and checked first (turned back into
+ * tags it must be the file it was), and nothing is written unless all pass; then each file's
+ * old form is kept under <stats>/backup-before-ids/, the new one written, and the switch
+ * turned on. Returns { moved, counts: { files, days }, backup } | { already: true }.
+ */
+export async function moveStatsToIds({ now = new Date(), store = rawBlobStore, files } = {}) {
+  if (store === rawBlobStore && !blobToken()) throw new Error('No Blob store on this deployment');
+  const ctx = await statsContext({ fresh: true });
+  if (ctx.moved) return { already: true };
+  const todo = [];
+  for (const f of files || (await statsFiles())) {
+    const data = await store.read(f.path);
+    if (!data || isStatsById(data)) continue;
+    const moved = statsByIdForm(f.kind, data, ctx.register);
+    if (!sameJson(statsView(f.kind, moved, ctx.register), statsOriginal(f.kind, data))) {
+      throw new Error(`${f.path} does not turn back into what it was: nothing was moved.`);
+    }
+    todo.push({ ...f, data, moved });
+  }
+  for (const f of todo) {
+    await store.write(backupPath(f.path, 'backup-before-ids'), f.data);
+    await store.write(f.path, f.moved);
+  }
+  await (store.setSwitch || setStatsSwitch)(true, now);
+  return {
+    moved: true,
+    store: 'stats',
+    counts: { files: todo.length, days: todo.filter((f) => f.kind === 'day').length },
+    backup: `${prefix()}/backup-before-ids/`,
+  };
+}
+
+/** Turns the Stats files back into tags (keeping what was added since), switch off first. */
+export async function moveStatsToTags({ now = new Date(), store = rawBlobStore, files } = {}) {
+  if (store === rawBlobStore && !blobToken()) throw new Error('No Blob store on this deployment');
+  const ctx = await statsContext({ fresh: true });
+  if (!ctx.moved) return { already: true };
+  await (store.setSwitch || setStatsSwitch)(false, now);
+  let count = 0;
+  let days = 0;
+  for (const f of files || (await statsFiles())) {
+    const data = await store.read(f.path);
+    if (!isStatsById(data)) continue;
+    await store.write(backupPath(f.path, 'backup-by-id'), data);
+    await store.write(f.path, statsView(f.kind, data, ctx.register));
+    count += 1;
+    if (f.kind === 'day') days += 1;
+  }
+  return {
+    undone: true,
+    store: 'stats',
+    counts: { files: count, days },
+    backup: `${prefix()}/backup-by-id/`,
+  };
+}
+
+/** Is the site writing Stats files by ID? */
+export const statsForm = (gist) => (gistJson(gist, MOVES_FILE, {}).stats ? 'id' : 'tag');
