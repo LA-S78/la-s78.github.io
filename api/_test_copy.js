@@ -30,7 +30,8 @@ const blobToken = () =>
 async function copyFile(from, to, token, { get, put }) {
   if (!to.startsWith('test/')) throw new Error(`Refused: ${to} is not a test path.`);
   if (from.startsWith('test/')) throw new Error(`Refused: ${from} is already a test path.`);
-  const blob = await get(from, { access: 'private', token });
+  // The latest copy (a just-written file can come from the cache as its old one for a minute)
+  const blob = await get(from, { access: 'private', token, useCache: false });
   if (!blob) return false;
   const body = Buffer.from(await new Response(blob.stream).arrayBuffer());
   await put(to, body, {
