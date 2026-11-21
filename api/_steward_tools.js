@@ -38,7 +38,7 @@ import { sanitizeAlliances } from './_alliances.js';
 import { getRoleColors } from './_role_colors.js';
 import { napTags } from './_ascension.js';
 import { readRegister, pendingAlliances, answerPending } from './_register.js';
-import { mapForm, moveMapToIds, moveMapToTags } from './_map_state.js';
+import { storeForms, moveToIds, moveToTags, STORES } from './_id_stores.js';
 
 export const LOOKUPS_PER_DAY = 30;
 const FILE = 'steward-tools.json';
@@ -281,8 +281,8 @@ export async function stewardTools(req, res, { gist, session }) {
       mismatched: await mismatchedWithColours(gist).catch(() => []),
       // Alliances new on the map while others are off it: same alliance, or new? (plan step 1)
       newTags: pendingAlliances(readRegister(gist)),
-      // How the alliance list and territories are stored: 'tag' or 'id' (step 2)
-      mapForm: mapForm(gist),
+      // How each store is kept: { map: 'tag' | 'id', calendar: … } (alliance IDs, steps 2–4)
+      storeForms: storeForms(gist),
       // On the test site: when its data was last copied from the live site (/devupdate)
       testCopy: isTestDeployment() ? gistJson(gist, TEST_COPY_FILE, null)?.copiedAt || '' : null,
     });
@@ -295,7 +295,9 @@ export async function stewardTools(req, res, { gist, session }) {
   // Alliance IDs step 2: the move of the alliance list and territories, and its undo
   if (what === 'move' || what === 'unmove') {
     try {
-      const report = what === 'move' ? await moveMapToIds() : await moveMapToTags();
+      const key = String(req.query.store || 'map');
+      if (!STORES[key]) return res.status(400).json({ error: 'Unknown store.' });
+      const report = what === 'move' ? await moveToIds(key) : await moveToTags(key);
       return res.status(200).json(report);
     } catch (err) {
       return res.status(500).json({ error: err.message });
