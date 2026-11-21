@@ -31,6 +31,7 @@ strings: [steward]
   <div id="st-renamed" class="st-renamed" hidden></div>
   <div id="st-unfound" class="st-renamed" hidden></div>
   <div id="st-mismatch" class="st-renamed" hidden></div>
+  <div id="st-newtags" class="st-renamed" hidden></div>
 
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
@@ -179,6 +180,51 @@ strings: [steward]
       if (!res.ok) {
         form.querySelector('[data-result]').textContent = data.error || res.statusText;
         btn.disabled = false;
+        return;
+      }
+      await load();
+    });
+
+    // An alliance new on the map while others are off it (alliance IDs, step 1): a Steward
+    // says whether it's one of them (renamed, or back) or a new alliance
+    function newTags(list) {
+      const box = $('st-newtags');
+      box.hidden = !list.length;
+      const tagHtml = (a) => {
+        const colour = /^#[0-9a-f]{3,8}$/i.test(a.color || '') ? a.color : '';
+        return `<strong>${colour ? `<span class="ally-text" style="--ally: ${colour}">[${esc(a.tag)}]</span>` : `[${esc(a.tag)}]`}</strong>`;
+      };
+      box.innerHTML = list
+        .map((p) => {
+          const text = esc(t('steward.newtag', { tag: '\u0001' })).replace('\u0001', tagHtml(p));
+          const options = p.maybe
+            .map((o) => `<option value="${esc(o.id)}">[${esc(o.tag)}] ${esc(o.name || '')}</option>`)
+            .join('');
+          return `<form class="st-link" data-newtag="${esc(p.id)}">
+            <p>${ic('warning', 'warn')}<span>${text}</span></p>
+            ${options ? `<label class="st-small">${esc(t('steward.newtag_same'))} <select name="same">${options}</select></label>` : ''}
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              ${options ? `<button type="submit" class="btn btn-secondary" value="same">${esc(t('steward.newtag_link'))}</button>` : ''}
+              <button type="submit" class="btn btn-secondary" value="new">${esc(t('steward.newtag_new'))}</button>
+            </div>
+            <small class="st-small" data-result></small>
+          </form>`;
+        })
+        .join('');
+    }
+    $('st-newtags').addEventListener('submit', async (e) => {
+      const form = e.target.closest('form[data-newtag]');
+      if (!form) return;
+      e.preventDefault();
+      const same = e.submitter?.value === 'same' ? form.querySelector('select')?.value || '' : '';
+      form.querySelectorAll('button').forEach((b) => (b.disabled = true));
+      const res = await ask(
+        `steward=newtag&id=${encodeURIComponent(form.dataset.newtag)}${same ? `&same=${encodeURIComponent(same)}` : ''}`,
+      );
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        form.querySelector('[data-result]').textContent = data.error || res.statusText;
+        form.querySelectorAll('button').forEach((b) => (b.disabled = false));
         return;
       }
       await load();
@@ -388,6 +434,7 @@ strings: [steward]
             renamed(data.renamed || []);
       unfound(data.unfound || [], data.links);
       mismatched(data.mismatched || []);
+      newTags(data.newTags || []);
     }
     load().catch((err) => show(err.message, 'error'));
   })();

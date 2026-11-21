@@ -995,6 +995,10 @@ stats:
   show_hide: Appuyez sur une alliance pour afficher ou masquer sa ligne.
   credit_before: Chiffres du
 steward:
+  newtag: "{tag} est nouveau sur la carte. S'agit-il d'une alliance déjà connue du site, renommée ou de retour sur la carte ? Tant que vous ne répondez pas, elle ne commence avec aucun de ses membres, et les membres de l'ancienne alliance sont invités à se reconnecter."
+  newtag_same: 'Même alliance que :'
+  newtag_new: C'est une nouvelle alliance
+  newtag_link: Lier
   page_title: Outils de l'Intendant
   intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et une recherche de joueur en direct.'
   loading: Chargement…
@@ -1002,17 +1006,17 @@ steward:
   sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils de l'Intendant.
   stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils de l'Intendant.
   lookup_title: Recherche de joueur
-  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses statistiques, ainsi que ses noms et alliances précédents. Saisissez un identifiant de joueur ou un nom pour trouver l''ID d''un joueur NAP.'
-  lookup_placeholder: ID du joueur ou nom d'un joueur NAP
+  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses chiffres, et ses noms et alliances précédents. Saisissez un identifiant de joueur ou un nom pour trouver l''identifiant d''un joueur NAP.'
+  lookup_placeholder: Identifiant de joueur ou nom d'un joueur NAP
   lookup_go: Rechercher
-  lookup_id_needed: Saisissez un ID de joueur (le numéro sur son profil) ou choisissez un joueur NAP parmi les noms trouvés.
+  lookup_id_needed: Saisissez un identifiant de joueur (le nombre sur son profil) ou choisissez un joueur NAP parmi les noms trouvés.
   lookups_left: "{left} sur {max} recherches en direct restantes aujourd'hui (partagées par tous les Intendants)."
-  looking: Interrogation du jeu en cours…
-  name_none: Aucun joueur NAP trouvé avec ce nom. Pour toute autre personne, utilisez son ID de joueur.
+  looking: Interrogation du jeu…
+  name_none: Aucun joueur NAP avec ce nom. Pour tout autre joueur, utilisez son identifiant de joueur.
   no_alliance: Aucune alliance
   server: Serveur {n}
-  online: En ligne
-  last_seen: Dernière connexion {when}
+  online: En ligne maintenant
+  last_seen: Vu pour la dernière fois {when}
   shielded: Bouclier actif
   might: Puissance
   kills: Éliminations
@@ -1020,45 +1024,45 @@ steward:
   vip: VIP
   position: Position (X, Y)
   language: Langue
-  ranks: 'Rangs du Royaume : #{might} Puissance · #{kills} éliminations · #{heroes} héros'
+  ranks: 'Rang du royaume : #{might} Puissance · #{kills} éliminations · #{heroes} héros'
   history_title: Noms et alliances
-  history_none: Aucun nom ou alliance précédent n'a été trouvé.
+  history_none: Aucun nom ou alliance précédent détecté.
   seen_from: depuis {when}
-  first_seen: Première détection par le tracker le {when}.
-  renamed: "{old} s'appelle désormais {now} dans le jeu. Il est toujours mesuré (Statistiques et course au Top 4) par le numéro que lui attribue le jeu, mais le site l'appelle toujours {old}."
-  renamed_fix: Renommer dans le planificateur d'Alliance
-  test_copy: "🧪 Site de test : ses données ont été copiées depuis le site en direct le {when} (/devupdate dans Discord permet d'effectuer une nouvelle copie)."
-  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en direct. Lancez /devupdate dans Discord pour effectuer une nouvelle copie."
-  mismatch: "{tag} répond désormais dans le jeu avec une alliance différente : {got}. Le site continue de mesurer l'alliance connue sous le nom de {tag} ({known}) via son numéro de jeu, et ne comptabilise pas la nouvelle alliance comme étant celle-ci."
+  first_seen: Détecté pour la première fois par le traqueur {when}.
+  renamed: "{old} est maintenant {now} dans le jeu. L'alliance est toujours mesurée (Statistiques et course au Top 4) par le numéro que lui attribue le jeu, mais le site continue de l'appeler {old}."
+  renamed_fix: Renommer dans le planificateur d'alliance
+  test_copy: "🧪 Site de test : ses données ont été copiées depuis le site en direct {when} (/devupdate sur Discord effectue une nouvelle copie)."
+  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en direct. Exécutez /devupdate sur Discord pour une nouvelle copie."
+  mismatch: "{tag} dans le jeu répond maintenant avec une alliance différente : {got}. Le site continue de mesurer l'alliance qu'il connaît sous le nom de {tag} ({known}) par le numéro que lui attribue le jeu, et ne compte pas la nouvelle comme étant celle-ci."
   mismatch_relink: 'C''est la même alliance : relier'
-  mismatch_relink_help: À utiliser uniquement si {got} est bien l'alliance visée par le site (le premier lien était erroné ou le jeu a réattribué le numéro). La mise à la retraite ou le renommage nécessitent des étapes ultérieures.
-  unfound: "{tag} n'a pas été trouvé dans le jeu et n'est donc pas mesuré (Statistiques et course au Top 4). S'il a changé son tag dans le jeu, saisissez le nouveau et le site le suivra."
-  unfound_now: Son tag dans le jeu actuellement
+  mismatch_relink_help: Uniquement si {got} est réellement l'alliance désignée par le site (le premier lien était erroné ou le jeu l'a renumérotée). Le retrait ou le renommage impliquent des étapes ultérieures.
+  unfound: "{tag} n'a pas été trouvé dans le jeu, il n'est donc pas mesuré (Statistiques et course au Top 4). S'il a changé son tag dans le jeu, saisissez le nouveau et le site le suivra."
+  unfound_now: Son tag dans le jeu maintenant
   unfound_placeholder: ex. Arch
-  unfound_link: Relier
-  unfound_checking: Vérification auprès du jeu...
-  unfound_left: "{left} sur {max} liaisons restantes aujourd'hui (chaque opération interroge le jeu une fois)"
-  pending_title: En attente de validation
+  unfound_link: Lier
+  unfound_checking: Vérification avec le jeu...
+  unfound_left: "{left} sur {max} liens restants aujourd'hui (chaque lien interroge le jeu une fois)"
+  pending_title: En attente de révision
   pending_none: Aucune image d'alliance en attente.
   sent_by: Envoyé par {name}, {when}
   race_title: Course au Top 4
   race_none: Aucune course mesurée pour le moment.
-  race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
-  race_finished: 'Les 3 jours ont été mesurés : les résultats sont disponibles auprès des leaders NAP.'
+  race_progress: "{n} des 3 jours du Duel mesurés jusqu'à présent."
+  race_finished: '3 jours mesurés : les résultats sont dans la direction NAP.'
   race_missing: 'Non mesuré : {tags}'
   race_more: Tableau complet sur la page des Règles
-  quota_title: Requêtes du tracker
-  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est la dernière donnée transmise par le tracker au site ; l'afficher ne coûte rien. Lancer une vérification maintenant coûte une requête.
+  quota_title: Requêtes du traqueur
+  quota_help: Le traqueur Last Asylum autorise 1 000 requêtes par jour, avec une réinitialisation à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le traqueur au site, il ne coûte donc rien à afficher ; vérifier maintenant coûte une requête.
   quota_check: Vérifier maintenant
   quota_used: utilisé aujourd'hui
-  quota_failed: Le tracker n'a pas pu être contacté.
-  quota_as_of: Au {when}
-  quota_none: Le site n'a encore rien demandé au tracker aujourd'hui.
+  quota_failed: Le traqueur n'a pas pu être atteint.
+  quota_as_of: En date du {when}
+  quota_none: Le site n'a encore rien demandé au traqueur aujourd'hui.
   quota_resets: Réinitialisation dans {time}
-  usage_title: Utilisation
+  usage_title: Utilisation des requêtes
   usage_automation: Automatisation
-  usage_automation_help: Instantané des Statistiques quotidiennes et course au Top 4
-  usage_alliance: Outils d'Alliance
+  usage_automation_help: Instantané des statistiques quotidiennes et course au Top 4
+  usage_alliance: Outils d'alliance
   usage_alliance_help: Tableaux de bord, effectifs, nominations
   usage_public: Pages publiques
   usage_public_help: Cartes de classement sur la page Alliance
@@ -1067,5 +1071,5 @@ steward:
   usage_other: Autre
   usage_other_help: Tout ce qui n'est pas étiqueté
   usage_unrecorded: Non enregistré
-  usage_unrecorded_help: Comptabilisé par le tracker, mais pas encore sauvegardé ici (chaque serveur effectue une sauvegarde toutes les quelques minutes)
+  usage_unrecorded_help: Compté par le traqueur, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
   usage_none: Aucune requête enregistrée aujourd'hui.

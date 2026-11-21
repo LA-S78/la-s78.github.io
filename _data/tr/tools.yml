@@ -995,20 +995,24 @@ stats:
   show_hide: Satırını göstermek veya gizlemek için bir ittifaka dokunun.
   credit_before: 'Veriler şuradan:'
 steward:
-  page_title: Kahya Araçları
-  intro: 'Krallık Kahyaları için araçlar: sizi nelerin beklediği ve anlık oyuncu sorgulama.'
+  newtag: "{tag} haritada yeni. Sitenin daha önce bildiği, yeniden adlandırılmış veya haritaya geri dönmüş bir ittifak mı? Siz cevaplayana kadar hiçbir şeyine sahip değilmiş gibi başlar ve eski ittifakın üyelerinden tekrar giriş yapmaları istenir."
+  newtag_same: 'Şu ittifakla aynı:'
+  newtag_new: Bu yeni bir ittifak
+  newtag_link: Bağlantı
+  page_title: Yönetici Araçları
+  intro: 'Krallık Yöneticileri için araçlar: sizi nelerin beklediği ve canlı oyuncu sorgulama.'
   loading: Yükleniyor…
   sign_in: Discord ile giriş yap
-  sign_in_needed: Kahya araçlarını açmak için Discord ile giriş yapın.
-  stewards_only: Kahya araçlarını sadece Krallık Kahyaları açabilir.
+  sign_in_needed: Yönetici araçlarını açmak için Discord ile giriş yapın.
+  stewards_only: Sadece Krallık Yöneticileri yönetici araçlarını açabilir.
   lookup_title: Oyuncu sorgulama
-  lookup_help: 'Oyundan anlık olarak herhangi bir oyuncu: ittifakı, sayıları ve önceki isimleri ile ittifakları. Bir NAP oyuncusunun kimliğini bulmak için oyuncu kimliğini (ID) veya ismini yazın.'
-  lookup_placeholder: Oyuncu kimliği veya NAP oyuncusu ismi
+  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, sayısal verileri ve önceki isimleri ile ittifakları. Bir oyuncu kimliği girin veya NAP oyuncusunun kimliğini bulmak için bir isim yazın.'
+  lookup_placeholder: Oyuncu kimliği veya bir NAP oyuncusunun ismi
   lookup_go: Sorgula
-  lookup_id_needed: Bir oyuncu kimliği yazın (profilindeki numara) veya bulunan isimlerden bir NAP oyuncusu seçin.
-  lookups_left: Bugün kalan {left}/{max} anlık sorgulama (tüm Kahyalar tarafından paylaşılır).
+  lookup_id_needed: Bir oyuncu kimliği (profilindeki numara) girin veya bulunan isimlerden bir NAP oyuncusu seçin.
+  lookups_left: Bugün kalan {left} / {max} canlı sorgulama (tüm Yöneticiler tarafından paylaşılır).
   looking: Oyuna soruluyor…
-  name_none: Bu isimde bir NAP oyuncusu yok. Diğer herkes için oyuncu kimliğini kullanın.
+  name_none: Bu isimde bir NAP oyuncusu yok. Diğerleri için oyuncu kimliğini kullanın.
   no_alliance: İttifak yok
   server: Sunucu {n}
   online: Şu an çevrimiçi
@@ -1020,52 +1024,52 @@ steward:
   vip: VIP
   position: Konum (X, Y)
   language: Dil
-  ranks: 'Krallık sıralaması: #{might} Güç · #{kills} Leş · #{heroes} Kahraman'
+  ranks: 'Krallık sıralaması: #{might} Güç · #{kills} leş · #{heroes} kahraman'
   history_title: İsimler ve ittifaklar
-  history_none: Daha önce görülen isim veya ittifak yok.
+  history_none: Daha önce görülen bir isim veya ittifak yok.
   seen_from: "{when} tarihinden beri"
-  first_seen: Takipçi tarafından ilk görülme {when}.
-  renamed: "{old} artık oyunda {now} olarak geçiyor. Oyun tarafından hala kendi numarasıyla (İstatistikler ve İlk 4 yarışı) ölçülüyor ancak site hala {old} olarak adlandırıyor."
-  renamed_fix: İttifak planlayıcısında yeniden adlandır
-  test_copy: "🧪 Test sitesi: verileri canlı siteden {when} tarihinde kopyalandı (Discord'da /devupdate yeni bir kopyasını oluşturur)."
-  test_copy_none: "🧪 Test sitesi: verileri henüz canlı siteden kopyalanmadı. Yeni bir kopya için Discord'da /devupdate çalıştırın."
-  mismatch: 'Oyundaki {tag} şu an farklı bir ittifak ile yanıt veriyor: {got}. Site, {tag} ({known}) olarak bildiği ittifakı oyunun numarasıyla ölçmeye devam ediyor ve yenisini onun yerine saymıyor.'
-  mismatch_relink: 'Aynı ittifak: yeniden bağla'
-  mismatch_relink_help: Sadece {got} gerçekten sitenin kastettiği ittifak ise (ilk bağlantı yanlışsa veya oyun numaralandırmayı değiştirdiyse). Emekli etme veya yeniden adlandırma işlemleri sonraki adımlarla gelir.
-  unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Eğer oyunda etiketini değiştirdiyse, yenisini yazın ve site onu takip edecektir."
-  unfound_now: Oyundaki etiketi şu an
+  first_seen: 'İzleyici tarafından ilk görülme: {when}.'
+  renamed: "{old} artık oyunda {now}. Oyunun numarasıyla ölçülmeye devam ediyor (İstatistikler ve İlk 4 yarışı), ancak site onu hala {old} olarak adlandırıyor."
+  renamed_fix: İttifak planlayıcısında yeniden adlandırın
+  test_copy: "🧪 Test sitesi: verileri {when} tarihinde canlı siteden kopyalandı (Discord'da /devupdate taze bir kopya oluşturur)."
+  test_copy_none: "🧪 Test sitesi: verileri henüz canlı siteden kopyalanmadı. Taze bir kopya için Discord'da /devupdate komutunu çalıştırın."
+  mismatch: 'Oyundaki {tag} şu an farklı bir ittifaka cevap veriyor: {got}. Site, {tag} ({known}) olarak bildiği ittifakı oyunun numarasıyla ölçmeye devam ediyor ve yeni geleni onun yerine saymıyor.'
+  mismatch_relink: 'Bu aynı ittifak: yeniden bağla'
+  mismatch_relink_help: Yalnızca {got} gerçekten sitenin kastettiği ittifaksa (ilk bağlantı yanlışsa veya oyun numaralandırmayı değiştirdiyse) kullanın. Emeklilik veya yeniden adlandırma daha sonraki adımlarla ilgilidir.
+  unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Eğer oyunda etiketini değiştirdiyse, yenisini yazın, site onu takip edecektir."
+  unfound_now: Oyundaki etiketi artık
   unfound_placeholder: örn. Arch
   unfound_link: Bağla
-  unfound_checking: Oyunda kontrol ediliyor...
-  unfound_left: Bugün kalan {left}/{max} bağlantı (her biri oyuna bir kez sorar)
-  pending_title: İnceleme bekleniyor
+  unfound_checking: Oyun ile kontrol ediliyor...
+  unfound_left: Bugün kalan {left} / {max} bağlantı (her biri oyuna bir kez sorar)
+  pending_title: İnceleme bekliyor
   pending_none: Bekleyen ittifak resmi yok.
   sent_by: "{name} tarafından gönderildi, {when}"
   race_title: İlk 4 yarışı
   race_none: Henüz ölçülen bir yarış yok.
   race_progress: Şu ana kadar 3 Düello gününden {n} kadarı ölçüldü.
   race_finished: '3 günün tamamı ölçüldü: sonuçlar NAP liderliğinde.'
-  race_missing: 'Ölçülmedi: {tags}'
-  race_more: Tam tablo Kurallar sayfasında
-  quota_title: Takipçi istekleri
-  quota_help: Last Asylum Takipçisi, 00:00 UTC'de sıfırlanmak üzere günde 1.000 isteğe izin verir. Aşağıdaki rakam takipçinin siteye verdiği son veridir, bu yüzden görüntülemek bir şey kaybettirmez; şu an kontrol etmek bir istek harcar.
+  race_missing: 'Ölçülmeyenler: {tags}'
+  race_more: Kurallar sayfasında tam tablo
+  quota_title: İzleyici istekleri
+  quota_help: Last Asylum İzleyicisi günde 1.000 isteğe izin verir, saat 00:00 UTC'de sıfırlanır. Aşağıdaki rakam izleyicinin siteye verdiği son rakamdır, bu yüzden göstermesi maliyetli değildir; şimdi kontrol etmek bir istek harcar.
   quota_check: Şimdi kontrol et
   quota_used: bugün kullanılan
-  quota_failed: Takipçiye ulaşılamadı.
+  quota_failed: İzleyiciye ulaşılamadı.
   quota_as_of: "{when} itibarıyla"
-  quota_none: Site bugün takipçiye henüz bir şey sormadı.
-  quota_resets: "{time} içinde sıfırlanır"
-  usage_title: Kullanan araçlar
+  quota_none: Site bugün izleyiciye henüz bir şey sormadı.
+  quota_resets: "{time} içinde tekrar başlayacak"
+  usage_title: Neler harcadı
   usage_automation: Otomasyon
   usage_automation_help: Günlük İstatistik anlık görüntüsü ve İlk 4 yarışı
   usage_alliance: İttifak araçları
   usage_alliance_help: Paneller, kadro, adaylıklar
   usage_public: Herkese açık sayfalar
   usage_public_help: İttifak sayfasındaki sıralama kartları
-  usage_steward: Kahya araçları
+  usage_steward: Yönetici araçları
   usage_steward_help: Oyuncu sorgulamaları, harita yenilemeleri ve kullanım kontrolleri
   usage_other: Diğer
   usage_other_help: Etiketlenmemiş her şey
   usage_unrecorded: Kaydedilmedi
-  usage_unrecorded_help: Takipçi tarafından sayıldı, henüz buraya kaydedilmedi (her sunucu birkaç dakikada bir kaydeder)
+  usage_unrecorded_help: İzleyici tarafından sayıldı, henüz buraya kaydedilmedi (her sunucu birkaç dakikada bir kaydeder)
   usage_none: Bugün henüz kaydedilen bir istek yok.
