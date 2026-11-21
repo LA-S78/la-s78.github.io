@@ -3,7 +3,8 @@ import { createSessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 import { findAllianceTag, findOfficerRole } from './_officer_roles.js';
 import { gistJson, isGistConfigured, readGist } from './_gist.js';
-import { allianceFromRoleIds } from './_alliances.js';
+import { allianceRoleFromRoleIds } from './_alliances.js';
+import { readRegister, allianceByDiscordVar, allianceByTag } from './_register.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -105,22 +106,28 @@ export default async function handler(req, res) {
 
     // --- DYNAMIC ALLIANCE SCANNER ---
     // First the alliance role IDs set in Vercel (the settings listed in _data/alliances.yml).
-    let allianceName = allianceFromRoleIds(userRoles) || 'Independent';
+    const allianceRole = allianceRoleFromRoleIds(userRoles); // { tag, name } or null
+    let allianceName = allianceRole?.tag || 'Independent';
     let allianceSource = allianceName === 'Independent' ? null : 'role-id'; // see alliance_source below
 
-    // The registered alliances (map-state.json), read once and only when needed below.
+    // The Gist (the registered alliances in map-state.json, and the alliance register), read
+    // once and only when needed below.
+    let gist = null;
     let alliances = null;
-    const loadAlliances = async () => {
-      if (alliances) return alliances;
-      alliances = {};
+    const loadGist = async () => {
+      if (gist) return gist;
+      gist = { files: {} };
       if (isGistConfigured()) {
         try {
-          alliances =
-            gistJson(await readGist({ timeoutMs: 2500 }), 'map-state.json').alliances || {};
+          gist = await readGist({ timeoutMs: 2500 });
         } catch (err) {
           console.warn('Alliance list unavailable:', err.message);
         }
       }
+      return gist;
+    };
+    const loadAlliances = async () => {
+      if (!alliances) alliances = gistJson(await loadGist(), 'map-state.json').alliances || {};
       return alliances;
     };
 
@@ -137,6 +144,25 @@ export default async function handler(req, res) {
       if (found) {
         allianceName = found.tag;
         allianceSource = found.via;
+      }
+    }
+
+    // The alliance's permanent ID and current tag, from the register (plan step 1): found by
+    // its Discord role's setting (which follows the alliance through a rename) or by its tag
+    // among the alliances on the map. A Discord setting whose alliance isn't on the map (renamed
+    // and not linked by a Steward yet) gives no alliance: never another alliance by its tag.
+    // Without a register entry, the tag stays as found and the pass has no ID.
+    let allianceId = null;
+    if (allianceName !== 'Independent') {
+      const register = readRegister(await loadGist());
+      const byRole = allianceRole ? allianceByDiscordVar(register, allianceRole.name) : null;
+      const entry = byRole?.stale ? null : byRole?.entry || allianceByTag(register, allianceName);
+      if (byRole?.stale) {
+        allianceName = 'Independent';
+        allianceSource = null;
+      } else if (entry) {
+        allianceName = entry.tag;
+        allianceId = entry.id;
       }
     }
 
@@ -166,7 +192,13 @@ export default async function handler(req, res) {
     const session =
       accessLevel !== 'public' && passSecret
         ? createSessionToken(
-            { uid: discordUserId, name: displayName, role: accessLevel, alliance: allianceName },
+            {
+              uid: discordUserId,
+              name: displayName,
+              role: accessLevel,
+              alliance: allianceName,
+              ...(allianceId ? { allianceId } : {}),
+            },
             passSecret,
           )
         : null;
@@ -176,6 +208,8 @@ export default async function handler(req, res) {
       username: displayName,
       avatar: avatarUrl,
       alliance: allianceName,
+      // The alliance's permanent ID (the register), when it has one
+      alliance_id: allianceId || undefined,
       steward: isSteward(discordUserId),
       officer: officerRole ? officerRole : undefined,
       // How the alliance was found (the pill shows it to Stewards): 'role-id' (DISCORD_<TAG>),

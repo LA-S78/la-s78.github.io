@@ -1,6 +1,7 @@
 // api/manage-event.js
 
 // Handles creating, editing and deleting calendar events
+import { currentSession } from './_register.js';
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken, verifySessionToken } from './_tokens.js';
 // The event types the form offers (generated from _data/event_types.yml by _scripts/build.rb)
@@ -39,7 +40,8 @@ async function respond(req, res) {
     callerScope = tokenPayload.scope;
   } else {
     const pass = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '');
-    const session = verifySessionToken(pass, botSecret);
+    // The member's alliance as it is now (its ID in the register; plan step 1)
+    const session = await currentSession(verifySessionToken(pass, botSecret));
     if (!session) {
       return res.status(401).json({ error: say('api_events.session_invalid') });
     }

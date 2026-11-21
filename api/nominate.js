@@ -3,6 +3,7 @@
 // list of players; the chests are worked out from it (api/_nomination_assign.js), here and
 // again whenever the Kingdom War result changes what's available.
 
+import { withCurrentAlliance } from './_register.js';
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifySessionToken, verifyToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
@@ -271,7 +272,9 @@ async function handleHandout(req, res) {
         return { refused: { status: 409, error: say('api_nominate.no_period') } };
       }
       const king = kingAlliance(rewardsData, period);
-      const leader = ['R4', 'R5'].includes(session.role) && sameTag(session.alliance, king);
+      // The member's alliance as it is now (its ID in the register; plan step 1)
+      const current = withCurrentAlliance(session, gist);
+      const leader = ['R4', 'R5'].includes(session.role) && sameTag(current.alliance, king);
       if (!steward && !leader) {
         return {
           refused: {

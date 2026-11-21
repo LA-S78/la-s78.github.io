@@ -10,6 +10,7 @@
 //   GET  ?alliance_image=<file>        an approved picture, for everyone (/alliance-images/…)
 // Pictures are kept in a private Vercel Blob store and only ever served through here; the
 // list of what is pending and live is in the Gist (alliance-images.json).
+import { currentSession } from './_register.js';
 import { sendMessage } from './_discord_send.js';
 import crypto from 'crypto';
 import { put, get, copy, del } from '@vercel/blob';
@@ -434,7 +435,8 @@ export async function handleImageRequest(req) {
   if (!blobConfigured() || !isGistConfigured()) {
     return reply(503, { error: say('api_alliance_images.not_set_up') });
   }
-  const session = sessionOf(req);
+  // The member's alliance as it is now (its ID in the register; plan step 1)
+  const session = await currentSession(sessionOf(req));
   if (!session) return loginNeeded();
   const body = req.body || {};
   if (body.type === 'alliance_image') return submit(session, body);

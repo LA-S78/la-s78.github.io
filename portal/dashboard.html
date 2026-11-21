@@ -171,7 +171,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       }
       const print = await passPrint(pass);
       savedKey = print ? `${SAVED_PREFIX}${print}_${alliance || ''}` : null;
-      const fresh = fetch(`/api/dashboard${alliance ? `?alliance=${encodeURIComponent(alliance)}` : ''}`, {
+      const param = /^al_[a-z0-9]{10}$/.test(alliance || '') ? 'id' : 'alliance';
+      const fresh = fetch(`/api/dashboard${alliance ? `?${param}=${encodeURIComponent(alliance)}` : ''}`, {
         headers: { Authorization: `Bearer ${pass}` },
       });
       // This sign-in's last copy, while the fresh one loads
@@ -1288,6 +1289,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     }
 
     $('dash-switcher-select').addEventListener('change', (e) => load(e.target.value));
-    load(new URLSearchParams(window.location.search).get('alliance'));
+    // ?id=al_… (the alliance's permanent ID) or ?alliance=TAG (older links): both still work
+    {
+      const q = new URLSearchParams(window.location.search);
+      load(q.get('id') || q.get('alliance'));
+    }
   })();
 </script>
