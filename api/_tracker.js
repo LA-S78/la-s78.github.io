@@ -13,10 +13,12 @@
 //   no page or save depends on it.
 
 import { isTestDeployment } from './_gist.js';
+import { SERVER_NUMBER } from './_server.js';
 
 const BASE = 'https://api.lastasylumtracker.com/v1';
 /** Our kingdom (the tracker's server number). */
-export const TRACKER_SERVER = 78;
+// The game server, set in one place (api/_server.js)
+export const TRACKER_SERVER = SERVER_NUMBER;
 /** Member lists are reused for an hour in a warm server instance (the tracker's own age). */
 const CACHE_MS = 60 * 60 * 1000;
 const cache = new Map();
