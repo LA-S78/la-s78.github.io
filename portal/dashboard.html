@@ -264,7 +264,12 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       const tag = data.alliance.tag;
       if (!growthData) {
         try {
-          const res = await fetch('/api/state?scope=stats');
+          // With the alliance list's version, so a rename or swap shows at once (step 7)
+          const v = await fetch('/api/state?scope=version')
+            .then((r) => (r.ok ? r.json() : {}))
+            .then((d) => encodeURIComponent(d.v || ''))
+            .catch(() => '');
+          const res = await fetch(`/api/state?scope=stats&v=${v}`);
           growthData = res.ok ? await res.json() : { days: [] };
         } catch {
           growthData = { days: [] };
