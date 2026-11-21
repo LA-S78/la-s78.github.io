@@ -23,11 +23,11 @@ export async function handleCalendarCommand(ctx) {
   try {
     if (isGistConfigured()) {
       const gistData = await getGistData();
-      const calRaw = gistData.files?.['calendar-state.json']?.content;
 
       const rewardsRaw = gistData.files?.['rewards-data.json']?.content;
 
-      if (calRaw) calConfig = { ...calConfig, ...JSON.parse(calRaw) };
+      // gistJson: the tag form however it's stored (alliance IDs, step 3)
+      calConfig = { ...calConfig, ...gistJson(gistData, 'calendar-state.json') };
       // gistJson: the tag-keyed list however it's stored (alliance IDs, step 2)
       alliances = gistJson(gistData, 'map-state.json').alliances || {};
       if (rewardsRaw) rewardsState = JSON.parse(rewardsRaw);

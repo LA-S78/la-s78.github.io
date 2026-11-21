@@ -4,7 +4,7 @@
 // proposal-log.json).
 // Files starting with "_" in api/ are helpers, not public endpoints.
 
-import { MAP_FILE, isById, mapView, byIdForm } from './_map_state.js';
+import { STORES, storeForFile } from './_id_stores.js';
 import { readRegister, REGISTER_FILE } from './_register.js';
 
 const GIST_API = 'https://api.github.com/gists';
@@ -85,28 +85,40 @@ export function gistJson(gist, filename, fallback = {}) {
   const content = gist?.files?.[filename]?.content;
   if (!content) return fallback;
   const data = JSON.parse(content);
-  // The alliance list stored by ID (step 2): every reader gets the tag-keyed view
-  if (filename === MAP_FILE && isById(data)) return mapView(data, readRegister(gist));
+  // Stored by alliance ID (steps 2–4): every reader gets the tag form
+  const store = storeForFile(filename);
+  if (store && store.isById(data)) return store.view(data, readRegister(gist));
   return data;
 }
 
 /**
- * A save's map-state.json, in the form the stored one has (step 2): a tag-keyed file saved
- * over one stored by ID is turned back into IDs, with any new alliance added to the register
- * in the same save. `out.raw` (the move and its undo) saves the files exactly as given.
+ * A save's files in the form the stored ones have (alliance IDs, steps 2–4): a tag-form file
+ * saved over one stored by ID is turned back into IDs, in the same save (the alliance list
+ * first: it may add alliances to the register, in the same save too). `out.raw` (a move and its
+ * undo) saves the files exactly as given.
  */
 export function storeMapForm(out, from) {
-  if (!out?.files?.[MAP_FILE] || out.raw) return out;
-  const stored = JSON.parse(from?.files?.[MAP_FILE]?.content || 'null');
-  const mine = out.files[MAP_FILE];
-  if (!isById(stored) || isById(mine)) return out;
-  const register = out.files[REGISTER_FILE]
-    ? { version: 1, alliances: out.files[REGISTER_FILE].alliances || {} }
-    : readRegister(from);
-  const converted = byIdForm(mine, register);
-  const files = { ...out.files, [MAP_FILE]: converted.stored };
-  if (converted.register) files[REGISTER_FILE] = converted.register;
-  return { ...out, files };
+  if (!out?.files || out.raw) return out;
+  let files = out.files;
+  let register = null;
+  for (const store of Object.values(STORES)) {
+    const mine = files[store.file];
+    if (!mine) continue;
+    const stored = JSON.parse(from?.files?.[store.file]?.content || 'null');
+    if (!store.isById(stored) || store.isById(mine)) continue;
+    register =
+      register ||
+      (files[REGISTER_FILE]
+        ? { version: 1, alliances: files[REGISTER_FILE].alliances || {} }
+        : readRegister(from));
+    const converted = store.byId(mine, register);
+    files = { ...files, [store.file]: converted.stored };
+    if (converted.register) {
+      register = converted.register;
+      files[REGISTER_FILE] = register;
+    }
+  }
+  return files === out.files ? out : { ...out, files };
 }
 
 /**
