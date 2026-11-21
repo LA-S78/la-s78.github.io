@@ -112,6 +112,8 @@
       keep('auth-username', data.username);
       keep('auth-avatar', data.avatar);
       keep('auth-alliance', data.alliance);
+      // The alliance's permanent ID (plan step 1); the tag above stays for display
+      keep('auth-alliance-id', data.alliance_id);
       // Officer role from the alliance's own server (counts as R4; see api/_officer_roles.js).
       keep('auth-officer', data.officer);
       // How the alliance was found (shown to Stewards in the header pill)
@@ -240,6 +242,7 @@
     localStorage.removeItem('auth-steward');
     localStorage.removeItem('auth-officer');
     localStorage.removeItem('auth-alliance-source');
+    localStorage.removeItem('auth-alliance-id');
     // Saved copies of private alliance dashboards (portal/dashboard.html): not left behind
     Object.keys(localStorage)
       .filter((k) => k.startsWith('la_dash_'))

@@ -151,3 +151,59 @@ export async function updateRegister(gist, trackerIds = {}, { dryRun = false } =
   );
   return { added: result.added, linked: result.linked, saved: true };
 }
+
+// ---------------------------------------------------------------------------------------
+// Sign-in and passes (plan step 1): a member's alliance follows its ID, not the tag
+// ---------------------------------------------------------------------------------------
+
+/** The active alliance whose Discord role is in the Vercel setting DISCORD_<name>. */
+export function allianceByDiscordVar(register, name) {
+  if (!name) return null;
+  return (
+    Object.values(register.alliances).find(
+      (a) => a.status === 'active' && a.discord_var === name,
+    ) || null
+  );
+}
+
+/**
+ * The alliance a sign-in pass means, as it is now: by the pass's alliance ID (new passes); else
+ * by its tag (older passes); else, for a pass from before a rename, by the tag history (the one
+ * place history is used: to recognise an old pass, never to look data up). null if none.
+ */
+export function allianceForPass(register, { allianceId, alliance } = {}) {
+  const byId = allianceId ? allianceById(register, allianceId) : null;
+  if (byId && byId.status === 'active') return byId;
+  if (!alliance || alliance === 'Independent') return null;
+  const byTag = allianceByTag(register, alliance);
+  if (byTag) return byTag;
+  const former = Object.values(register.alliances).filter(
+    (a) => a.status === 'active' && (a.tags || []).some((h) => h.tag === alliance && h.to),
+  );
+  return former.length === 1 ? former[0] : null;
+}
+
+/**
+ * A verified pass with its alliance brought up to date from the register: `alliance` becomes
+ * the alliance's current tag and `allianceId` its ID (both unchanged when the register doesn't
+ * know it). Every endpoint that checks a member's alliance calls this after reading the Gist.
+ */
+export function withCurrentAlliance(session, gist) {
+  if (!session) return session;
+  const entry = allianceForPass(readRegister(gist), session);
+  return entry ? { ...session, alliance: entry.tag, allianceId: entry.id } : session;
+}
+
+/**
+ * The same for code that checks a member's alliance before reading the Gist: reads it (or uses
+ * `gist` if given). If the Gist can't be read, the pass is used as it is.
+ */
+export async function currentSession(session, gist = null) {
+  if (!session) return session;
+  try {
+    const { readGist } = await import('./_gist.js');
+    return withCurrentAlliance(session, gist || (await readGist({ timeoutMs: 3000 })));
+  } catch {
+    return session;
+  }
+}

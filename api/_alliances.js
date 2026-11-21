@@ -17,10 +17,15 @@ export const ALLIANCE_ROLE_SETTINGS = ALLIANCES.role_settings || {};
  * @param {string[]} roleIds the member's role IDs in the NAP server
  */
 export function allianceFromRoleIds(roleIds = [], env = process.env) {
+  return allianceRoleFromRoleIds(roleIds, env)?.tag || null;
+}
+
+/** The same, with the setting's name too ({ tag, name } for DISCORD_<name>), or null. */
+export function allianceRoleFromRoleIds(roleIds = [], env = process.env) {
   for (const [tag, name] of Object.entries(ALLIANCE_ROLE_SETTINGS)) {
     // Trimmed: a value pasted into Vercel with a stray space or line break still matches.
     const roleId = String(env[`DISCORD_${name}`] || '').trim();
-    if (roleId && roleIds.includes(roleId)) return tag;
+    if (roleId && roleIds.includes(roleId)) return { tag, name };
   }
   return null;
 }
