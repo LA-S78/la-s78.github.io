@@ -112,7 +112,7 @@ export async function handleNominateCommand(ctx) {
     try {
       ({ rewardsData, askForResult } = await updateGist(
         (gist) => {
-          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const data = gistJson(gist, 'rewards-data.json');
           const map = gistJson(gist, 'map-state.json');
           const synced = syncRewardPeriod(data, map, period);
           const ask =
@@ -283,8 +283,8 @@ export async function handleRewardsCommand(ctx) {
   try {
     const gistData = await getGistData();
     const mapState = gistJson(gistData, 'map-state.json');
-    const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
-    let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+    const rewardsData = gistJson(gistData, 'rewards-data.json');
+    let nominations = gistJson(gistData, 'rewards-nominations.json');
     const calConfig = {
       ...DEFAULT_CALENDAR_CONFIG,
       ...gistJson(gistData, 'calendar-state.json', {}),
@@ -301,7 +301,7 @@ export async function handleRewardsCommand(ctx) {
       }
       await updateGist(
         (gist) => {
-          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const data = gistJson(gist, 'rewards-data.json');
           const map = gistJson(gist, 'map-state.json');
           syncRewardPeriod(data, map, period, username);
           data.lastReset = new Date().toISOString(); // a fresh checklist for the King
@@ -339,9 +339,9 @@ export async function handleRewardsCommand(ctx) {
       }
       const out = await updateGist(
         (gist) => {
-          const data = JSON.parse(gist.files['rewards-data.json']?.content || '{}');
+          const data = gistJson(gist, 'rewards-data.json');
           const map = gistJson(gist, 'map-state.json');
-          const lists = JSON.parse(gist.files['rewards-nominations.json']?.content || '{}');
+          const lists = gistJson(gist, 'rewards-nominations.json');
           const reset = resetOverrides(data, map, username);
           if (!reset.changed) return { reset };
           return {
@@ -648,9 +648,9 @@ export async function saveKingdomWarResult(result, actor, periodId = null, { dea
     // the same moment (updateGist).
     return await updateGist(
       (gistData) => {
-        const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
+        const rewardsData = gistJson(gistData, 'rewards-data.json');
         const mapState = gistJson(gistData, 'map-state.json');
-        let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
+        let nominations = gistJson(gistData, 'rewards-nominations.json');
         const calConfig = {
           ...DEFAULT_CALENDAR_CONFIG,
           ...gistJson(gistData, 'calendar-state.json', {}),
