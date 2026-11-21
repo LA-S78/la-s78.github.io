@@ -995,24 +995,34 @@ stats:
   show_hide: Tippe auf eine Allianz, um deren Linie ein- oder auszublenden.
   credit_before: Zahlen vom
 steward:
-  newtag: "{tag} ist neu auf der Karte. Handelt es sich um eine Allianz, die der Seite bereits bekannt ist, eine Umbenennung oder ist sie zurück auf der Karte? Bis du antwortest, startet sie ohne Daten, und Mitglieder der alten Allianz werden gebeten, sich erneut anzumelden."
+  move_title: 'Allianz-IDs: die Allianzliste und Gebiete'
+  move_by_tag: Nach Tag gespeichert (wie zuvor). Der Vorgang speichert sie anhand der permanenten ID jeder Allianz; die Seiten sehen gleich aus. Zuerst wird eine Sicherungskopie der Datei erstellt.
+  move_by_id: Nach Allianz-ID gespeichert. Rückgängig machen wandelt sie wieder in Tags um, wobei alle seither vorgenommenen Änderungen erhalten bleiben.
+  move_button: Zu IDs verschieben
+  move_undo: Verschiebung rückgängig machen
+  move_confirm: Allianzliste und Gebiete jetzt zu Allianz-IDs verschieben?
+  move_undo_confirm: Allianzliste und Gebiete wieder in Tags umwandeln?
+  move_done: 'Verschoben: {alliances} Allianzen, {links} Akademie-Links, {owned} Gebiete. Sicherung: {backup}'
+  move_undone: 'Zurück zu Tags. Sicherung der Datei nach ID: {backup}'
+  move_already: 'Nichts zu tun: Es ist bereits erledigt.'
+  newtag: "{tag} ist neu auf der Karte. Handelt es sich um eine Allianz, die die Seite bereits kennt, die umbenannt wurde oder wieder auf der Karte ist? Bis du antwortest, beginnt sie ohne deren Daten, und Mitglieder der alten Allianz werden gebeten, sich erneut anzumelden."
   newtag_same: 'Gleiche Allianz wie:'
   newtag_new: Es ist eine neue Allianz
-  newtag_link: Verknüpfen
-  page_title: Verwalter-Tools
-  intro: 'Tools für Königreich-Verwalter: Was dich erwartet und eine Live-Spielersuche.'
-  loading: Lädt…
+  newtag_link: Link
+  page_title: Steward-Tools
+  intro: 'Tools für Königreich-Stewards: was auf dich wartet und eine Live-Spielersuche.'
+  loading: Laden…
   sign_in: Mit Discord anmelden
-  sign_in_needed: Melde dich mit Discord an, um die Verwalter-Tools zu öffnen.
-  stewards_only: Nur Königreich-Verwalter können die Verwalter-Tools öffnen.
+  sign_in_needed: Melde dich mit Discord an, um die Steward-Tools zu öffnen.
+  stewards_only: Nur Königreich-Stewards können die Steward-Tools öffnen.
   lookup_title: Spielersuche
-  lookup_help: 'Jeder Spieler, live aus dem Spiel: Allianz, Werte sowie frühere Namen und Allianzen. Gib eine Spieler-ID oder einen Namen ein, um die ID eines NAP-Spielers zu finden.'
+  lookup_help: 'Jeder Spieler, live aus dem Spiel: Allianz, Werte sowie frühere Namen und Allianzen. Gib eine Spieler-ID ein oder einen Namen, um die ID eines NAP-Spielers zu finden.'
   lookup_placeholder: Spieler-ID oder Name eines NAP-Spielers
   lookup_go: Suchen
-  lookup_id_needed: Gib eine Spieler-ID ein (die Nummer auf dem Profil) oder wähle einen NAP-Spieler aus den gefundenen Namen aus.
-  lookups_left: "{left} von {max} Live-Suchen heute noch übrig (geteilt durch alle Verwalter)."
-  looking: Frage das Spiel ab…
-  name_none: Kein NAP-Spieler mit diesem Namen. Verwende für alle anderen die Spieler-ID.
+  lookup_id_needed: Gib eine Spieler-ID ein (die Nummer auf ihrem Profil) oder wähle einen NAP-Spieler aus den gefundenen Namen.
+  lookups_left: "{left} von {max} Live-Abfragen für heute übrig (von allen Stewards geteilt)."
+  looking: Frage das Spiel an…
+  name_none: Kein NAP-Spieler mit diesem Namen. Für alle anderen verwende ihre Spieler-ID.
   no_alliance: Keine Allianz
   server: Server {n}
   online: Jetzt online
@@ -1026,50 +1036,50 @@ steward:
   language: Sprache
   ranks: 'Königreich-Ränge: #{might} Stärke · #{kills} Kills · #{heroes} Helden'
   history_title: Namen und Allianzen
-  history_none: Keine früheren Namen oder Allianzen gefunden.
+  history_none: Keine früheren Namen oder Allianzen gesehen.
   seen_from: seit {when}
-  first_seen: Vom Tracker erstmals gesehen {when}.
-  renamed: "{old} heißt jetzt {now} im Spiel. Sie wird weiterhin (für Statistiken und das Rennen um die Top 4) über die spielinterne Nummer gemessen, aber die Seite nennt sie weiterhin {old}."
+  first_seen: Vom Tracker erstmals gesehen am {when}.
+  renamed: "{old} heißt jetzt {now} im Spiel. Sie wird immer noch (für Statistiken und das Rennen um die Top 4) anhand der Spielernummer gemessen, aber die Seite nennt sie weiterhin {old}."
   renamed_fix: Im Allianz-Planer umbenennen
-  test_copy: "🧪 Test-Seite: Daten wurden kopiert von der Live-Seite {when} (/devupdate in Discord erstellt eine frische Kopie)."
-  test_copy_none: "🧪 Test-Seite: Daten wurden noch nicht von der Live-Seite kopiert. Führe /devupdate in Discord aus für eine frische Kopie."
-  mismatch: "{tag} antwortet im Spiel jetzt mit einer anderen Allianz: {got}. Die Seite misst weiterhin die Allianz, die sie als {tag} ({known}) kennt, über die spielinterne Nummer und zählt die neue nicht als diese."
+  test_copy: "🧪 Testseite: ihre Daten wurden am {when} von der Live-Seite kopiert (/devupdate in Discord erstellt eine neue Kopie)."
+  test_copy_none: "🧪 Testseite: ihre Daten wurden noch nicht von der Live-Seite kopiert. Führe /devupdate in Discord für eine neue Kopie aus."
+  mismatch: "{tag} antwortet im Spiel jetzt mit einer anderen Allianz: {got}. Die Seite misst die als {tag} bekannte Allianz ({known}) weiterhin anhand ihrer Spielernummer und zählt die neue nicht als diese."
   mismatch_relink: 'Es ist die gleiche Allianz: neu verknüpfen'
-  mismatch_relink_help: Nur wenn {got} wirklich die Allianz ist, die die Seite meint (die erste Verknüpfung war falsch oder das Spiel hat sie neu nummeriert). Ruhestand oder Umbenennung erfordern spätere Schritte.
-  unfound: "{tag} wurde im Spiel nicht gefunden und wird daher nicht gemessen (Statistiken und Top 4 Rennen). Falls der Tag im Spiel geändert wurde, gib den neuen ein und die Seite wird ihm folgen."
+  mismatch_relink_help: Nur wenn {got} wirklich die Allianz ist, die die Seite meint (der erste Link war falsch oder das Spiel hat sie neu nummeriert). Ruhestand oder Umbenennung erfordern spätere Schritte.
+  unfound: "{tag} wurde im Spiel nicht gefunden und wird daher nicht gemessen (Statistiken und Top 4 Rennen). Wenn sie ihren Tag im Spiel geändert hat, gib den neuen ein und die Seite folgt ihr."
   unfound_now: Ihr Tag im Spiel jetzt
   unfound_placeholder: z. B. Arch
-  unfound_link: Verknüpfen
-  unfound_checking: Überprüfung mit dem Spiel...
-  unfound_left: "{left} von {max} Verknüpfungen heute noch übrig (jede fragt das Spiel einmal ab)"
+  unfound_link: Link
+  unfound_checking: Prüfe mit dem Spiel...
+  unfound_left: "{left} von {max} Links heute übrig (jeder fragt das Spiel einmal ab)"
   pending_title: Wartet auf Überprüfung
-  pending_none: Keine Allianz-Bilder warten.
+  pending_none: Keine Allianzbilder warten.
   sent_by: Gesendet von {name}, {when}
-  race_title: Top 4 Rennen
+  race_title: Rennen um die Top 4
   race_none: Noch kein Rennen gemessen.
   race_progress: "{n} von 3 Duell-Tagen bisher gemessen."
   race_finished: 'Alle 3 Tage gemessen: Die Ergebnisse liegen bei der NAP-Führung.'
   race_missing: 'Nicht gemessen: {tags}'
   race_more: Vollständige Tabelle auf der Regelseite
   quota_title: Tracker-Anfragen
-  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag, beginnend um 00:00 UTC. Die Zahl unten ist der letzte Wert, den der Tracker an die Seite gegeben hat, daher kostet die Anzeige nichts; eine Prüfung jetzt kostet eine Anfrage.
+  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag, beginnend um 00:00 UTC. Die Zahl unten ist die letzte, die der Tracker der Seite gegeben hat, also kostet die Anzeige nichts; jetzt prüfen kostet eine Anfrage.
   quota_check: Jetzt prüfen
-  quota_used: heute verwendet
+  quota_used: heute verbraucht
   quota_failed: Der Tracker konnte nicht erreicht werden.
   quota_as_of: Stand {when}
-  quota_none: Die Seite hat heute noch keine Anfragen an den Tracker gestellt.
+  quota_none: Die Seite hat den Tracker heute noch nichts gefragt.
   quota_resets: Startet erneut in {time}
   usage_title: Was sie verbraucht hat
   usage_automation: Automatisierung
-  usage_automation_help: Tägliche Statistik-Schnappschüsse und Top 4 Rennen
+  usage_automation_help: Täglicher Statistik-Snapshot und Top 4 Rennen
   usage_alliance: Allianz-Tools
-  usage_alliance_help: Dashboards, Dienstplan, Nominierungen
+  usage_alliance_help: Dashboards, Roster, Nominierungen
   usage_public: Öffentliche Seiten
   usage_public_help: Ranglisten-Karten auf der Allianz-Seite
-  usage_steward: Verwalter-Tools
+  usage_steward: Steward-Tools
   usage_steward_help: Spielersuche, Kartenaktualisierungen und Nutzungsprüfungen
   usage_other: Sonstiges
-  usage_other_help: Alles ohne Label
-  usage_unrecorded: Nicht erfasst
+  usage_other_help: Alles, was nicht gekennzeichnet ist
+  usage_unrecorded: Nicht aufgezeichnet
   usage_unrecorded_help: Vom Tracker gezählt, hier noch nicht gespeichert (jeder Server speichert alle paar Minuten)
-  usage_none: Noch keine Anfragen heute notiert.
+  usage_none: Heute noch keine Anfragen notiert.
