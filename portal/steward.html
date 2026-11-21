@@ -32,6 +32,13 @@ strings: [steward]
   <div id="st-unfound" class="st-renamed" hidden></div>
   <div id="st-mismatch" class="st-renamed" hidden></div>
   <div id="st-newtags" class="st-renamed" hidden></div>
+  <!-- Alliance IDs step 2: the move of the alliance list and territories, and its undo -->
+  <form id="st-move" class="st-link st-renamed" hidden>
+    <p><strong>{{ "steward.move_title" | t }}</strong></p>
+    <small class="st-small" data-state></small>
+    <div><button type="submit" class="btn btn-secondary" data-button></button></div>
+    <small class="st-small" data-result></small>
+  </form>
 
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
@@ -183,6 +190,40 @@ strings: [steward]
         return;
       }
       await load();
+    });
+
+    // Alliance IDs step 2: move the alliance list and territories to IDs, or undo it
+    let movedForm = null;
+    function moveBox(form) {
+      const box = $('st-move');
+      if (!form) return;
+      movedForm = form;
+      box.hidden = false;
+      box.querySelector('[data-state]').textContent = t(form === 'id' ? 'steward.move_by_id' : 'steward.move_by_tag');
+      box.querySelector('[data-button]').textContent = t(form === 'id' ? 'steward.move_undo' : 'steward.move_button');
+    }
+    $('st-move').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const box = $('st-move');
+      const undo = movedForm === 'id';
+      if (!window.confirm(t(undo ? 'steward.move_undo_confirm' : 'steward.move_confirm'))) return;
+      const btn = box.querySelector('[data-button]');
+      btn.disabled = true;
+      const res = await ask(`steward=${undo ? 'unmove' : 'move'}`);
+      const data = await res.json().catch(() => ({}));
+      btn.disabled = false;
+      const out = box.querySelector('[data-result]');
+      if (!res.ok) {
+        out.textContent = data.error || res.statusText;
+        return;
+      }
+      out.textContent = data.already
+        ? t('steward.move_already')
+        : data.moved
+          ? t('steward.move_done', { ...data.counts, backup: data.backup })
+          : t('steward.move_undone', { backup: data.backup });
+      await load();
+      box.querySelector('[data-result]').textContent = out.textContent;
     });
 
     // An alliance new on the map while others are off it (alliance IDs, step 1): a Steward
@@ -435,6 +476,7 @@ strings: [steward]
       unfound(data.unfound || [], data.links);
       mismatched(data.mismatched || []);
       newTags(data.newTags || []);
+      moveBox(data.mapForm);
     }
     load().catch((err) => show(err.message, 'error'));
   })();

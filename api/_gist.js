@@ -4,6 +4,9 @@
 // proposal-log.json).
 // Files starting with "_" in api/ are helpers, not public endpoints.
 
+import { MAP_FILE, isById, mapView, byIdForm } from './_map_state.js';
+import { readRegister, REGISTER_FILE } from './_register.js';
+
 const GIST_API = 'https://api.github.com/gists';
 const USER_AGENT = 'LA-S78-Compendium';
 
@@ -80,7 +83,30 @@ export async function readGist({ timeoutMs } = {}) {
  */
 export function gistJson(gist, filename, fallback = {}) {
   const content = gist?.files?.[filename]?.content;
-  return content ? JSON.parse(content) : fallback;
+  if (!content) return fallback;
+  const data = JSON.parse(content);
+  // The alliance list stored by ID (step 2): every reader gets the tag-keyed view
+  if (filename === MAP_FILE && isById(data)) return mapView(data, readRegister(gist));
+  return data;
+}
+
+/**
+ * A save's map-state.json, in the form the stored one has (step 2): a tag-keyed file saved
+ * over one stored by ID is turned back into IDs, with any new alliance added to the register
+ * in the same save. `out.raw` (the move and its undo) saves the files exactly as given.
+ */
+export function storeMapForm(out, from) {
+  if (!out?.files?.[MAP_FILE] || out.raw) return out;
+  const stored = JSON.parse(from?.files?.[MAP_FILE]?.content || 'null');
+  const mine = out.files[MAP_FILE];
+  if (!isById(stored) || isById(mine)) return out;
+  const register = out.files[REGISTER_FILE]
+    ? { version: 1, alliances: out.files[REGISTER_FILE].alliances || {} }
+    : readRegister(from);
+  const converted = byIdForm(mine, register);
+  const files = { ...out.files, [MAP_FILE]: converted.stored };
+  if (converted.register) files[REGISTER_FILE] = converted.register;
+  return { ...out, files };
 }
 
 /**
@@ -240,7 +266,7 @@ export async function updateGist(
 
   let from = gist || (await readGist({ timeoutMs })); // what our change is worked out from
   let fromVersion = from.history?.[0]?.version; // the revision that is
-  let out = await change(from);
+  let out = storeMapForm(await change(from), from);
   if (!out?.files) return out;
   // Nothing different from what is stored: no save.
   if (Object.entries(out.files).every(([n, d]) => from.files?.[n]?.content === text(d))) {
@@ -295,7 +321,7 @@ export async function updateGist(
     from = { ...latest, files };
     fromVersion = latest.history?.[0]?.version;
     const previous = out;
-    out = await change(from);
+    out = storeMapForm(await change(from), from);
     // Nothing of ours left to change (e.g. it is now refused): the rebuilt data, with what
     // we overwrote put back and our change taken out, must still be saved.
     if (!out?.files) {

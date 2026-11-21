@@ -73,7 +73,7 @@ export const allianceById = (register, id) => register.alliances[String(id)] || 
 export const onMap = (a) => Boolean(a && a.status === 'active' && !a.off_map);
 
 /** An entry a Steward merged into another (linkRegister) leads to that one. */
-function followMerged(register, entry) {
+export function followMerged(register, entry) {
   let e = entry;
   for (let i = 0; e && e.status === 'merged' && i < 5; i++) e = register.alliances[e.merged_into];
   return e || null;
