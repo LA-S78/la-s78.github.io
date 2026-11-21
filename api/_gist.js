@@ -102,6 +102,7 @@ export function storeMapForm(out, from) {
   let files = out.files;
   let register = null;
   for (const store of Object.values(STORES)) {
+    if (store.custom) continue;
     const mine = files[store.file];
     if (!mine) continue;
     const stored = JSON.parse(from?.files?.[store.file]?.content || 'null');
