@@ -9,6 +9,7 @@ import { ALLIANCE_COMMANDS_SCHEMA } from './_bot_schema.js';
 import { isSteward } from './_stewards.js';
 import { createToken } from './_tokens.js';
 import { say } from './_messages.js';
+import { gistJson } from './_gist.js';
 
 /** --- /registerbot COMMAND (NAP Server Only) --- */
 export async function handleRegisterBotCommand(ctx) {
@@ -34,7 +35,7 @@ export async function handleRegisterBotCommand(ctx) {
 
     try {
       const gistData = await getGistData();
-      const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+      const mapState = gistJson(gistData, 'map-state.json');
       const alliances = mapState.alliances || {};
 
       const results = [];
@@ -81,7 +82,7 @@ export async function handleRegisterBotCommand(ctx) {
   // DEFAULT ACTION: R5 Registration Portal Link
   try {
     const gistData = await getGistData();
-    const mapState = JSON.parse(gistData.files['map-state.json']?.content || '{}');
+    const mapState = gistJson(gistData, 'map-state.json');
     const alliances = mapState.alliances || {};
     const knownAlliances = Object.keys(alliances);
 

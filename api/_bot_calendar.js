@@ -7,7 +7,7 @@ import { NOT_HANDLED, getGistData, sendEphemeralMessage, weekName } from './_bot
 import { say } from './_messages.js';
 import { resolveMemberAllianceContext } from './_bot_roles.js';
 import { DEFAULT_CALENDAR_CONFIG, getCycleState, getScheduleSlot } from './_calendar_helper.js';
-import { isGistConfigured } from './_gist.js';
+import { gistJson, isGistConfigured } from './_gist.js';
 import { isSteward } from './_stewards.js';
 import { createToken } from './_tokens.js';
 
@@ -24,11 +24,12 @@ export async function handleCalendarCommand(ctx) {
     if (isGistConfigured()) {
       const gistData = await getGistData();
       const calRaw = gistData.files?.['calendar-state.json']?.content;
-      const mapRaw = gistData.files?.['map-state.json']?.content;
+
       const rewardsRaw = gistData.files?.['rewards-data.json']?.content;
 
       if (calRaw) calConfig = { ...calConfig, ...JSON.parse(calRaw) };
-      if (mapRaw) alliances = JSON.parse(mapRaw).alliances || {};
+      // gistJson: the tag-keyed list however it's stored (alliance IDs, step 2)
+      alliances = gistJson(gistData, 'map-state.json').alliances || {};
       if (rewardsRaw) rewardsState = JSON.parse(rewardsRaw);
     }
   } catch (err) {
