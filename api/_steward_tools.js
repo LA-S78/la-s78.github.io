@@ -38,6 +38,13 @@ import { sanitizeAlliances } from './_alliances.js';
 import { getRoleColors } from './_role_colors.js';
 import { napTags } from './_ascension.js';
 import { readRegister, pendingAlliances, answerPending } from './_register.js';
+import {
+  allianceRoster,
+  renameInRegister,
+  swapInRegister,
+  retireInRegister,
+  saveRegisterChange,
+} from './_rename.js';
 import { storeForms, moveToIds, moveToTags, STORES } from './_id_stores.js';
 
 export const LOOKUPS_PER_DAY = 30;
@@ -281,6 +288,8 @@ export async function stewardTools(req, res, { gist, session }) {
       mismatched: await mismatchedWithColours(gist).catch(() => []),
       // Alliances new on the map while others are off it: same alliance, or new? (plan step 1)
       newTags: pendingAlliances(readRegister(gist)),
+      // Every alliance with its tag history, for the rename tool (step 7; retired ones too)
+      roster: allianceRoster(readRegister(gist)),
       // How each store is kept: { map: 'tag' | 'id', calendar: … } (alliance IDs, steps 2–4)
       storeForms: storeForms(gist),
       // On the test site: when its data was last copied from the live site (/devupdate)
@@ -302,6 +311,22 @@ export async function stewardTools(req, res, { gist, session }) {
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
+  }
+  // The rename tool (alliance IDs step 7): rename, swap two tags, retire or bring back
+  if (['rename', 'swap', 'retire', 'unretire'].includes(what)) {
+    const q = req.query || {};
+    const by = session.name || 'a Steward';
+    const change =
+      what === 'rename'
+        ? (r) => renameInRegister(r, String(q.id || ''), String(q.to || ''))
+        : what === 'swap'
+          ? (r) => swapInRegister(r, String(q.a || ''), String(q.b || ''))
+          : (r) => retireInRegister(r, String(q.id || ''), what === 'retire');
+    const out = await saveRegisterChange(change, `Alliance ${what} by ${by}`);
+    if (out?.error) {
+      return res.status(409).json({ error: say(`api_dashboard.${out.error}`, out.vars || {}) });
+    }
+    return res.status(200).json({ ok: true, changed: out?.changed || [] });
   }
   if (what === 'newtag') {
     const ok = await answerPending(

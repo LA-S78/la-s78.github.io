@@ -34,6 +34,8 @@ strings: [steward]
   <div id="st-newtags" class="st-renamed" hidden></div>
   <!-- Alliance IDs (steps 2–4): each store's move to IDs, and its undo -->
   <div id="st-moves"></div>
+  <!-- Alliance IDs step 7: rename, swap two tags, retire or bring back (Stewards only) -->
+  <section id="st-roster" class="st-link" hidden></section>
 
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
@@ -142,7 +144,12 @@ strings: [steward]
               .replace('\u0000', now)
               .split('\u0001')
               .join(old);
-            return `<p>${ic('warning', 'warn')}<span>${text} <a href="/${lang || 'en'}/alliance.html#nap-ranks">${esc(t('steward.renamed_fix'))}</a></span></p>`;
+            // One click once the rename tool is there (step 7): the alliance it means, by its tag
+            const who = roster.find((a) => a.onMap && a.tag === r.tag);
+            const fix = who
+              ? `<button type="button" class="btn btn-secondary" data-rename-id="${esc(who.id)}" data-rename-to="${esc(r.now)}">${esc(t('steward.rename_one_click', { old: r.tag, now: r.now }))}</button>`
+              : `<a href="/${lang || 'en'}/alliance.html#nap-ranks">${esc(t('steward.renamed_fix'))}</a>`;
+            return `<p>${ic('warning', 'warn')}<span>${text} ${fix}</span></p>`;
           },
         )
         .join('');
@@ -185,6 +192,116 @@ strings: [steward]
         return;
       }
       await load();
+    });
+
+    // Alliance IDs step 7: the rename tool. Every alliance with its tag history; rename one,
+    // swap two alliances' tags (in one save), retire one removed from the map or bring it back.
+    let roster = [];
+    const tagHtml = (a) => {
+      const colour = /^#[0-9a-f]{3,8}$/i.test(a.color || '') ? a.color : '';
+      return colour
+        ? `<span class="ally-text" style="--ally: ${colour}">[${esc(a.tag)}]</span>`
+        : `[${esc(a.tag)}]`;
+    };
+    const history = (a) =>
+      a.tags
+        .filter((h) => h.to && h.tag !== a.tag)
+        .map((h) => esc(t('steward.roster_was', { tag: h.tag, until: when(h.to) })))
+        .join(' · ');
+    function rosterBox(list) {
+      roster = list;
+      const box = $('st-roster');
+      box.hidden = !list.length;
+      const live = list.filter((a) => a.onMap);
+      const off = list.filter((a) => !a.onMap && a.status === 'active');
+      const retired = list.filter((a) => a.status === 'retired');
+      const options = live.map((a) => `<option value="${esc(a.id)}">[${esc(a.tag)}] ${esc(a.name)}</option>`).join('');
+      box.innerHTML = `
+        <p><strong>${esc(t('steward.roster_title'))}</strong></p>
+        <small class="st-small">${esc(t('steward.roster_help'))}</small>
+        <div class="st-roster-list">${live
+          .map(
+            (a) => `<form class="st-roster-row" data-rename="${esc(a.id)}">
+              <span><strong>${tagHtml(a)}</strong> ${esc(a.name)}${history(a) ? `<br><small class="st-small">${history(a)}</small>` : ''}</span>
+              <span class="st-roster-act"><input name="to" maxlength="12" placeholder="${esc(t('steward.rename_placeholder'))}" aria-label="${esc(t('steward.rename_placeholder'))}">
+              <button type="submit" class="btn btn-secondary">${esc(t('steward.rename_button'))}</button></span>
+            </form>`,
+          )
+          .join('')}</div>
+        <form class="st-roster-row" data-swap>
+          <span>${esc(t('steward.swap_title'))}</span>
+          <span class="st-roster-act"><select name="a">${options}</select> ⇄ <select name="b">${live
+            .map((a, i) => `<option value="${esc(a.id)}"${i === 1 ? ' selected' : ''}>[${esc(a.tag)}] ${esc(a.name)}</option>`)
+            .join('')}</select>
+          <button type="submit" class="btn btn-secondary">${esc(t('steward.swap_button'))}</button></span>
+        </form>
+        ${
+          off.length
+            ? `<p class="st-small">${esc(t('steward.off_map_title'))}</p>${off
+                .map(
+                  (a) => `<form class="st-roster-row" data-retire="${esc(a.id)}"><span>${tagHtml(a)} ${esc(a.name)}</span>
+                  <button type="submit" class="btn btn-secondary">${esc(t('steward.retire_button'))}</button></form>`,
+                )
+                .join('')}`
+            : ''
+        }
+        ${
+          retired.length
+            ? `<details><summary>${esc(t('steward.retired_title', { n: retired.length }))}</summary>${retired
+                .map(
+                  (a) => `<form class="st-roster-row" data-unretire="${esc(a.id)}"><span>${tagHtml(a)} ${esc(a.name)}${history(a) ? `<br><small class="st-small">${history(a)}</small>` : ''}</span>
+                  <button type="submit" class="btn btn-secondary">${esc(t('steward.unretire_button'))}</button></form>`,
+                )
+                .join('')}</details>`
+            : ''
+        }
+        <small class="st-small" data-result></small>`;
+    }
+    async function rosterAsk(query, confirmText) {
+      if (confirmText && !window.confirm(confirmText)) return;
+      const res = await ask(query);
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) await load();
+      const out = $('st-roster').querySelector('[data-result]');
+      if (out) out.textContent = res.ok ? t('steward.roster_saved') : data.error || res.statusText;
+    }
+    const tagOf = (id) => roster.find((a) => a.id === id)?.tag || '?';
+    $('st-roster').addEventListener('submit', async (e) => {
+      const form = e.target;
+      e.preventDefault();
+      if (form.dataset.rename) {
+        const to = form.querySelector('[name="to"]').value.trim().replace(/^\[(.*)\]$/, '$1');
+        if (!to) return;
+        const from = tagOf(form.dataset.rename);
+        await rosterAsk(
+          `steward=rename&id=${encodeURIComponent(form.dataset.rename)}&to=${encodeURIComponent(to)}`,
+          t('steward.rename_confirm', { from, to }),
+        );
+      } else if ('swap' in form.dataset) {
+        const a = form.querySelector('[name="a"]').value;
+        const b = form.querySelector('[name="b"]').value;
+        if (!a || !b || a === b) return;
+        await rosterAsk(
+          `steward=swap&a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}`,
+          t('steward.swap_confirm', { a: tagOf(a), b: tagOf(b) }),
+        );
+      } else if (form.dataset.retire) {
+        await rosterAsk(
+          `steward=retire&id=${encodeURIComponent(form.dataset.retire)}`,
+          t('steward.retire_confirm', { tag: tagOf(form.dataset.retire) }),
+        );
+      } else if (form.dataset.unretire) {
+        await rosterAsk(`steward=unretire&id=${encodeURIComponent(form.dataset.unretire)}`);
+      }
+    });
+    // The "renamed in the game" notice's one-click rename
+    $('st-renamed').addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-rename-id]');
+      if (!btn) return;
+      await rosterAsk(
+        `steward=rename&id=${encodeURIComponent(btn.dataset.renameId)}&to=${encodeURIComponent(btn.dataset.renameTo)}`,
+        t('steward.rename_confirm', { from: tagOf(btn.dataset.renameId), to: btn.dataset.renameTo }),
+      );
     });
 
     // Alliance IDs (steps 2–4): one box per store, to move it to IDs or undo the move
@@ -470,7 +587,9 @@ strings: [steward]
           ? t('steward.test_copy', { when: when(data.testCopy) })
           : t('steward.test_copy_none');
       }
-            renamed(data.renamed || []);
+      // The alliance list first: the renamed notice's one-click rename looks alliances up in it
+      rosterBox(data.roster || []);
+      renamed(data.renamed || []);
       unfound(data.unfound || [], data.links);
       mismatched(data.mismatched || []);
       newTags(data.newTags || []);

@@ -134,6 +134,14 @@
   color: var(--white);
 }
 
+/* "formerly [HMDA]": 30 days after a Steward renamed the alliance (alliance IDs step 7) */
+.ladder-formerly {
+  font-size: 0.8em;
+  font-style: italic;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
 .ladder-name {
   font-size: 0.82rem;
   color: var(--text-muted);
