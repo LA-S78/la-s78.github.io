@@ -26,6 +26,17 @@ import {
   calendarByTagForm,
   countCalendar,
 } from './_calendar_ids.js';
+import {
+  REWARDS_FILE,
+  NOMINATIONS_FILE,
+  isById as rewardsById,
+  rewardsView,
+  rewardsByIdForm,
+  nominationsView,
+  nominationsByIdForm,
+  countRewards,
+  countNominations,
+} from './_rewards_ids.js';
 
 /** Keys in a fixed order, so two forms can be compared. */
 const canonical = (v) =>
@@ -68,6 +79,28 @@ export const STORES = {
     original: (state) => state,
     count: (view, register) => countCalendar(view, register),
   },
+  rewards: {
+    file: REWARDS_FILE,
+    step: 4,
+    isById: rewardsById,
+    view: rewardsView,
+    byId: (view, register) => rewardsByIdForm(view, register),
+    byTag: rewardsView,
+    original: (state) => state,
+    count: (view, register) => countRewards(view, register),
+  },
+  nominations: {
+    file: NOMINATIONS_FILE,
+    step: 4,
+    // No lists yet (a new period) is a file like any other
+    empty: {},
+    isById: rewardsById,
+    view: nominationsView,
+    byId: (view, register) => nominationsByIdForm(view, register),
+    byTag: nominationsView,
+    original: (state) => state,
+    count: (view, register) => countNominations(view, register),
+  },
 };
 
 export const storeForFile = (file) => Object.values(STORES).find((s) => s.file === file) || null;
@@ -83,7 +116,7 @@ export async function moveToIds(key, { now = new Date(), update } = {}) {
   const { readRegister, REGISTER_FILE } = await import('./_register.js');
   let report = null;
   await (update || updateGist)((gist) => {
-    const stored = JSON.parse(gist.files?.[store.file]?.content || 'null');
+    const stored = JSON.parse(gist.files?.[store.file]?.content || 'null') ?? store.empty ?? null;
     if (!stored) throw new Error(`${store.file} is missing.`);
     if (store.isById(stored)) {
       report = { already: true };
