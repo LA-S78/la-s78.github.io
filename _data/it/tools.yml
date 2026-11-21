@@ -995,33 +995,35 @@ stats:
   show_hide: Tocca un'alleanza per mostrare o nascondere la sua riga.
   credit_before: Numeri dal
 steward:
-  move_title: 'ID Alleanza: l''elenco alleanze e i territori'
-  move_by_tag: Archiviati per tag (come in precedenza). La procedura li archivia tramite l'ID permanente di ogni alleanza; l'aspetto delle pagine rimane invariato. Viene prima salvato un backup del file.
-  move_by_id: Archiviati per ID alleanza. L'annullamento li converte nuovamente in tag, mantenendo tutte le modifiche apportate nel frattempo.
-  move_button: Passa agli ID
-  move_undo: Annulla spostamento
-  move_confirm: Trasferire ora l'elenco alleanze e i territori agli ID alleanza?
-  move_undo_confirm: Convertire nuovamente l'elenco alleanze e i territori in tag?
-  move_done: 'Spostati: {alliances} alleanze, {links} link accademia, {owned} territori. Backup: {backup}'
-  move_undone: 'Ritorno ai tag. Backup del file per ID: {backup}'
+  move_title_map: 'ID Alleanze: elenco alleanze e territori'
+  move_title_calendar: 'ID Alleanze: eventi del calendario'
+  move_by_tag: Memorizzato tramite tag (come prima). Lo spostamento lo memorizza tramite l'ID permanente di ogni alleanza; le pagine hanno lo stesso aspetto. Viene prima salvato un backup del file.
+  move_by_id: Memorizzato tramite ID alleanza. L'annullamento lo trasforma di nuovo in tag, mantenendo ogni modifica apportata nel frattempo.
+  move_button: Sposta agli ID
+  move_undo: Annulla lo spostamento
+  move_confirm: Spostare questo agli ID alleanza ora?
+  move_undo_confirm: Trasformarlo di nuovo in tag?
+  move_done_map: 'Spostati: {alliances} alleanze, {links} collegamenti accademia, {owned} territori. Backup: {backup}'
+  move_done_calendar: 'Spostati: {alliance} eventi alleanza ({global} eventi globali del server invariati). Backup: {backup}'
+  move_undone: 'Tornato ai tag. Backup del file per ID: {backup}'
   move_already: 'Niente da fare: è già stato fatto.'
-  newtag: "{tag} è nuovo sulla mappa. È un'alleanza che il sito conosceva già, rinominata o tornata sulla mappa? Fino a quando non risponderai, non inizierà con nulla di loro e ai membri della vecchia alleanza verrà chiesto di accedere di nuovo."
+  newtag: "{tag} è nuovo sulla mappa. È un'alleanza già nota al sito, rinominata o tornata sulla mappa? Fino a quando non risponderai, non inizierà con nulla di loro e ai membri della vecchia alleanza verrà chiesto di accedere di nuovo."
   newtag_same: 'Stessa alleanza di:'
   newtag_new: È una nuova alleanza
   newtag_link: Collega
   page_title: Strumenti Steward
-  intro: 'Strumenti per gli Steward del Regno: cosa ti aspetta e una ricerca giocatori in tempo reale.'
+  intro: 'Strumenti per gli Steward del Regno: cosa ti aspetta e una ricerca dei giocatori in tempo reale.'
   loading: Caricamento…
   sign_in: Accedi con Discord
   sign_in_needed: Accedi con Discord per aprire gli strumenti Steward.
   stewards_only: Solo gli Steward del Regno possono aprire gli strumenti Steward.
   lookup_title: Ricerca giocatore
-  lookup_help: 'Qualsiasi giocatore, dal vivo dal gioco: alleanza, numeri, nomi precedenti e alleanze. Digita un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
+  lookup_help: 'Qualsiasi giocatore, in tempo reale dal gioco: la sua alleanza, i numeri e i nomi e le alleanze precedenti. Digita un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
   lookup_placeholder: ID giocatore o nome di un giocatore NAP
   lookup_go: Cerca
-  lookup_id_needed: Digita un ID giocatore (il numero sul profilo) o scegli un giocatore NAP tra i nomi trovati.
-  lookups_left: "{left} di {max} ricerche dal vivo rimanenti oggi (condivise tra tutti gli Steward)."
-  looking: Interrogo il gioco...
+  lookup_id_needed: Digita un ID giocatore (il numero sul suo profilo) o seleziona un giocatore NAP dai nomi trovati.
+  lookups_left: "{left} di {max} ricerche in tempo reale rimanenti oggi (condivise da tutti gli Steward)."
+  looking: Interrogando il gioco…
   name_none: Nessun giocatore NAP con quel nome. Per chiunque altro, usa il suo ID giocatore.
   no_alliance: Nessuna alleanza
   server: Server {n}
@@ -1034,52 +1036,52 @@ steward:
   vip: VIP
   position: Posizione (X, Y)
   language: Lingua
-  ranks: 'Gradi del Regno: #{might} Potenza · #{kills} uccisioni · #{heroes} eroi'
+  ranks: 'Gradi del Regno: #{might} Potenza · #{kills} Uccisioni · #{heroes} eroi'
   history_title: Nomi e alleanze
   history_none: Nessun nome o alleanza precedente rilevata.
   seen_from: dal {when}
-  first_seen: Visto per la prima volta dal tracker {when}.
-  renamed: "{old} ora è {now} nel gioco. È ancora misurato (Statistiche e gara Top 4) dal numero di gioco assegnato, ma il sito lo chiama ancora {old}."
-  renamed_fix: Rinominalo nel pianificatore Alleanza
-  test_copy: "🧪 Sito di prova: i suoi dati sono stati copiati dal sito live {when} (/devupdate in Discord crea una copia fresca)."
-  test_copy_none: "🧪 Sito di prova: i suoi dati non sono ancora stati copiati dal sito live. Esegui /devupdate in Discord per una copia fresca."
-  mismatch: "{tag} nel gioco ora risponde con un'alleanza diversa: {got}. Il sito continua a misurare l'alleanza che conosce come {tag} ({known}) tramite il numero assegnato dal gioco e non conta quella nuova come tale."
+  first_seen: Visto per la prima volta dal tracker il {when}.
+  renamed: "{old} ora è {now} nel gioco. Viene ancora misurato (Statistiche e gara Top 4) dal numero assegnatogli dal gioco, ma il sito lo chiama ancora {old}."
+  renamed_fix: Rinominalo nel pianificatore Alleanze
+  test_copy: "🧪 Sito di test: i suoi dati sono stati copiati dal sito live il {when} (/devupdate in Discord crea una copia aggiornata)."
+  test_copy_none: "🧪 Sito di test: i suoi dati non sono ancora stati copiati dal sito live. Esegui /devupdate in Discord per una copia aggiornata."
+  mismatch: "{tag} nel gioco ora risponde con un'alleanza diversa: {got}. Il sito continua a misurare l'alleanza che conosce come {tag} ({known}) tramite il numero assegnatogli dal gioco e non conteggia la nuova come tale."
   mismatch_relink: 'È la stessa alleanza: ricollega'
-  mismatch_relink_help: Solo se {got} è realmente l'alleanza intesa dal sito (il primo link era sbagliato o il gioco l'ha rinumerata). Il ritiro o la rinomina comportano passaggi successivi.
-  unfound: "{tag} non è stato trovato nel gioco, quindi non viene misurato (Statistiche e gara Top 4). Se ha cambiato tag nel gioco, digita quello nuovo e il sito lo seguirà."
+  mismatch_relink_help: Solo se {got} è davvero l'alleanza intesa dal sito (il primo collegamento era errato o il gioco l'ha rinumerata). Il ritiro o la ridenominazione richiedono passaggi successivi.
+  unfound: "{tag} non è stato trovato nel gioco, quindi non viene misurato (Statistiche e gara Top 4). Se ha cambiato il suo tag nel gioco, digita quello nuovo e il sito lo seguirà."
   unfound_now: Il suo tag nel gioco ora
   unfound_placeholder: es. Arch
   unfound_link: Collega
-  unfound_checking: Controllo con il gioco...
+  unfound_checking: Verifica con il gioco in corso...
   unfound_left: "{left} di {max} collegamenti rimanenti oggi (ognuno interroga il gioco una volta)"
   pending_title: In attesa di revisione
   pending_none: Nessuna immagine di alleanza in attesa.
   sent_by: Inviato da {name}, {when}
   race_title: Gara Top 4
-  race_none: Nessuna gara ancora misurata.
+  race_none: Nessuna gara misurata ancora.
   race_progress: "{n} di 3 giorni di Duello misurati finora."
-  race_finished: 'Tutti i 3 giorni misurati: i risultati sono nella leadership NAP.'
+  race_finished: 'Tutti e 3 i giorni misurati: i risultati sono nella leadership NAP.'
   race_missing: 'Non misurato: {tags}'
-  race_more: Tabella completa nella pagina Regole
+  race_more: Tabella completa sulla pagina Regole
   quota_title: Richieste Tracker
-  quota_help: Il Tracker di Last Asylum consente 1.000 richieste al giorno, con ripristino alle 00:00 UTC. La cifra qui sotto è l'ultima fornita dal tracker al sito, quindi mostrarla non ha costi; controllare ora costa una richiesta.
+  quota_help: Il Tracker di Last Asylum consente 1.000 richieste al giorno, con riavvio alle 00:00 UTC. La cifra sottostante è l'ultima che il tracker ha fornito al sito, quindi visualizzarla non ha costi; verificare ora costa una richiesta.
   quota_check: Controlla ora
-  quota_used: utilizzati oggi
+  quota_used: usate oggi
   quota_failed: Impossibile raggiungere il tracker.
   quota_as_of: Aggiornato al {when}
   quota_none: Il sito non ha ancora richiesto nulla al tracker oggi.
-  quota_resets: Ripristino tra {time}
-  usage_title: Cosa li ha utilizzati
+  quota_resets: Ricomincia tra {time}
+  usage_title: Cosa le ha consumate
   usage_automation: Automazione
   usage_automation_help: Snapshot Statistiche giornaliere e gara Top 4
   usage_alliance: Strumenti Alleanza
-  usage_alliance_help: Dashboard, roster, candidature
+  usage_alliance_help: Dashboard, roster, nomine
   usage_public: Pagine pubbliche
   usage_public_help: Schede delle classifiche sulla pagina Alleanza
   usage_steward: Strumenti Steward
   usage_steward_help: Ricerca giocatori, aggiornamenti mappa e controlli di utilizzo
   usage_other: Altro
-  usage_other_help: Qualsiasi cosa non etichettata
+  usage_other_help: Tutto ciò che non è etichettato
   usage_unrecorded: Non registrato
   usage_unrecorded_help: Conteggiato dal tracker, non ancora salvato qui (ogni server salva ogni pochi minuti)
-  usage_none: Nessuna richiesta annotata ancora oggi.
+  usage_none: Nessuna richiesta annotata oggi.
