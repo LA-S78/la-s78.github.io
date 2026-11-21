@@ -157,3 +157,22 @@ main img {
     center / 85% no-repeat;
   opacity: 1;
 }
+
+/* The disclaimer under every page's last panel (owner request, 2026-11-22) */
+/* A soft dark backing: it sits on the page's picture, outside the panels */
+.site-disclaimer {
+  margin: 2rem auto 0.5rem;
+  max-width: 46rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--text-muted);
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 8px;
+  backdrop-filter: blur(2px);
+}
+.site-disclaimer a {
+  color: inherit;
+  text-decoration: underline;
+}
