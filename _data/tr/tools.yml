@@ -12,20 +12,18 @@ common:
   delete: Sil
   remove: Kaldır
   undo: Geri al
-  move_up: Yukarı taşı
-  move_down: Aşağı taşı
   copied: "✓ Kopyalandı"
   optional: "(isteğe bağlı)"
   now: şimdi
   duration_days: "{d}g {h}s"
-  duration_hours: "{h}s {m}d"
-  duration_minutes: "{m}d"
+  duration_hours: "{h}s {m}dk"
+  duration_minutes: "{m}dk"
   game_time: "{time} GT"
   your_time: "{time} yerel saatiniz"
   off_week: Boş Hafta
   kw_week: Krallık Savaşı Haftası {n}
   copy: Kopyala
-  set_one: Kralın Övgüsü
+  set_one: Kral'ın Takdiri
   set_two: Savaş Kralı Ödülü
   chests:
     commanders_will: Komutanın İradesi
@@ -996,62 +994,45 @@ stats:
   show_hide: Satırını göstermek veya gizlemek için bir ittifaka dokunun.
   credit_before: 'Veriler şuradan:'
 steward:
-  move_title_map: 'İttifak Kimlikleri: ittifak listesi ve bölgeler'
-  move_title_calendar: 'İttifak Kimlikleri: takvim etkinlikleri'
-  move_title_rewards: 'İttifak Kimlikleri: Capitol rotasyonu, satın alımlar ve dağıtılan sandıklar'
-  move_title_pictures: 'İttifak Kimlikleri: ittifak resimleri listesi (resim dosyaları isimlerini korur)'
-  move_title_dashboards: 'İttifak Kimlikleri: ittifak panoları (her biri kendi ID dosyasına kopyalanır; eski dosyalar yedek olarak kalır)'
-  move_title_stats: 'İttifak Kimlikleri: İstatistik geçmişi (büyüme çizelgeleri, günlük kadrolar, konumlar, takipçi sayıları)'
-  move_title_nominations: 'İttifak Kimlikleri: bu dönemin aday listeleri'
-  move_by_tag: Etikete göre depolanır (eskisi gibi). Taşıma işlemi verileri her ittifakın kalıcı ID'sine göre kaydeder; sayfalar aynı görünür. Dosyanın bir yedeği önce kaydedilir.
-  move_by_id: İttifak ID'sine göre depolanır. Geri al işlemi, o zamandan beri yapılan her değişikliği koruyarak verileri tekrar etiketlere dönüştürür.
-  move_button: ID'lere taşı
-  move_undo: Taşıma işlemini geri al
-  move_confirm: Bunu şimdi ittifak ID'lerine taşıyın mı?
-  move_undo_confirm: Bunu tekrar etiketlere dönüştürün mü?
-  move_done_map: 'Taşındı: {alliances} ittifak, {links} akademi bağlantısı, {owned} bölge. Yedek: {backup}'
-  move_done_rewards: 'Taşındı: {seats} Capitol rotasyon koltuğu, {buyouts} aktif satın alım, {handed} dağıtılan sandık. Yedek: {backup}'
-  move_done_pictures: 'Taşındı: {alliances} ittifakın resimleri ({pending} inceleme bekliyor). Yedek: {backup}'
-  move_done_dashboards: 'Taşındı: {dashboards} pano kendi ID''li dosyasına kopyalandı. Eski dosyalar yedek olarak tutuluyor.'
-  move_done_stats: 'Taşındı: {files} İstatistik dosyası, bunların {days} tanesi günlük kadro. Yedek: {backup}'
-  move_done_nominations: "{lists} aday listesi taşındı. Yedek: {backup}"
-  move_done_calendar: "{alliance} ittifak etkinliği taşındı (sunucu çapındaki etkinlikler değişmedi: {global}). Yedek: {backup}"
-  move_undone: 'Etiketlere geri dönüldü. ID''ye göre dosyanın yedeği: {backup}'
-  move_already: 'Yapılacak bir şey yok: işlem zaten tamamlanmış.'
-  roster_title: 'İttifaklar: yeniden adlandır, etiket değiştir, emekli et'
-  roster_help: Yeniden adlandırma, etiketi her yerde anında değiştirir (geçmişi, etkinlikleri, resimleri, panoları ve İstatistikleri onunla kalır). Halka açık sayfalarda 30 gün boyunca "eski adıyla [ESKİ]" ibaresi görünür.
+  tidy_title: 'İttifak Kimlikleri: düzenleme'
+  tidy_help: 'Artık her şey ittifak kimliğine göre saklanıyor. Bu işlem yedekleri bıraktı: Gist içinde {gist} yedek dosyası ve {dashboards} eski panel dosyası, ayrıca {stats} İstatistik yedek dosyası. Memnun kaldığınızda bunları silebilirsiniz (Gist önceki revizyonlarını korur).'
+  tidy_button: Yedekleri sil
+  tidy_confirm: İttifak kimliği taşıma yedekleri silinsin mi?
+  tidy_done: 'Silindi: {gist} yedek dosyası, {dashboards} eski panel dosyası ve {stats} İstatistik yedek dosyası.'
+  roster_title: 'İttifaklar: yeniden adlandırma, etiket değiştirme, emekliye ayırma'
+  roster_help: Yeniden adlandırma, etiketi her yerde aynı anda değiştirir (geçmişi, etkinlikleri, resimleri, panelleri ve İstatistikleri onunla birlikte kalır). Genel sayfalarda 30 gün boyunca "eski adıyla [OLD]" ifadesi görünür.
   roster_was: "{until} tarihine kadar [{tag}] idi"
   rename_placeholder: Yeni etiket
   rename_button: Yeniden adlandır
   rename_confirm: "[{from}] etiketi [{to}] olarak değiştirilsin mi? Her sayfa yeni etiketi anında gösterir."
   rename_one_click: "[{old}] etiketini [{now}] olarak değiştir"
-  swap_title: 'İki ittifak etiket takas etsin:'
-  swap_button: Etiketleri takas et
-  swap_confirm: "[{a}] ve [{b}] etiketleri takas edilsin mi?"
+  swap_title: 'İki ittifak etiket değişimi yapıyor:'
+  swap_button: Etiketleri değiştir
+  swap_confirm: "[{a}] ve [{b}] etiketleri değiştirilsin mi?"
   off_map_title: 'Haritadan kaldırıldı (İttifak planlayıcısında):'
-  retire_button: Emekli et
-  retire_confirm: "[{tag}] emekli edilsin mi? Geçmişiyle birlikte tutulur (aşağıdaki emekli ittifaklar) ve geri getirilebilir."
+  retire_button: Emekliye ayır
+  retire_confirm: "[{tag}] emekliye ayrılsın mı? Geçmişiyle birlikte (aşağıdaki emekli ittifaklar) saklanır ve geri getirilebilir."
   retired_title: Emekli ittifaklar ({n})
   unretire_button: Geri getir
   roster_saved: Kaydedildi.
-  newtag: "{tag} haritada yeni. Site tarafından zaten bilinen, adı değişen veya haritaya geri dönen bir ittifak mı? Siz cevap verene kadar hiçbir verisiyle başlamaz ve eski ittifakın üyelerinden tekrar giriş yapmaları istenir."
-  newtag_same: 'Şu ittifakla aynı:'
-  newtag_new: Bu yeni bir ittifak
+  newtag: "{tag} haritada yeni. Bu site tarafından zaten bilinen, yeniden adlandırılmış veya haritaya geri dönmüş bir ittifak mı? Siz cevap verene kadar hiçbir verisi olmadan başlar ve eski ittifakın üyelerinden tekrar giriş yapmaları istenir."
+  newtag_same: 'Şununla aynı ittifak:'
+  newtag_new: Yeni bir ittifak
   newtag_link: Bağla
-  page_title: Steward Araçları
-  intro: 'Krallık Steward''ları için araçlar: sizi neler bekliyor ve canlı oyuncu arama.'
+  page_title: Kâhya Araçları
+  intro: 'Krallık Kâhyaları için araçlar: sizi neler bekliyor ve canlı oyuncu sorgulama.'
   loading: Yükleniyor…
   sign_in: Discord ile giriş yap
-  sign_in_needed: Steward araçlarını açmak için Discord ile giriş yapın.
-  stewards_only: Steward araçlarını sadece Krallık Steward'ları açabilir.
-  lookup_title: Oyuncu arama
-  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, rakamları, önceki isimleri ve ittifakları. Bir oyuncu ID''si girin veya NAP oyuncusunun ID''sini bulmak için isim yazın.'
-  lookup_placeholder: Oyuncu ID'si veya NAP oyuncusunun adı
-  lookup_go: Ara
-  lookup_id_needed: Bir oyuncu ID'si (profilindeki numara) girin veya bulunan isimlerden bir NAP oyuncusu seçin.
-  lookups_left: 'Bugün kalan canlı sorgulama sayısı: {max} üzerinden {left} (tüm Steward''lar tarafından ortak kullanılır).'
+  sign_in_needed: Kâhya araçlarını açmak için Discord ile giriş yapın.
+  stewards_only: Yalnızca Krallık Kâhyaları kâhya araçlarını açabilir.
+  lookup_title: Oyuncu sorgulama
+  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, rakamları ve önceki isimleri ile ittifakları. Bir oyuncu kimliği girin veya bir NAP oyuncusunun adını bularak kimliğine ulaşın.'
+  lookup_placeholder: Oyuncu Kimliği veya NAP oyuncusunun adı
+  lookup_go: Sorgula
+  lookup_id_needed: Bir oyuncu kimliği (profilindeki numara) girin veya bulunan isimlerden bir NAP oyuncusu seçin.
+  lookups_left: 'Bugün kalan canlı sorgulama hakkı (tüm Kâhyalar için ortak): {left}/{max}.'
   looking: Oyuna soruluyor…
-  name_none: Bu isimde bir NAP oyuncusu yok. Diğer herkes için oyuncu ID'lerini kullanın.
+  name_none: Bu ada sahip NAP oyuncusu bulunamadı. Başkaları için oyuncu kimliğini kullanın.
   no_alliance: İttifak yok
   server: Sunucu {n}
   online: Şu an çevrimiçi
@@ -1065,50 +1046,50 @@ steward:
   language: Dil
   ranks: 'Krallık sıralaması: #{might} Güç · #{kills} leş · #{heroes} kahraman'
   history_title: İsimler ve ittifaklar
-  history_none: Daha önce görünen bir isim veya ittifak yok.
+  history_none: Daha önce görülen isim veya ittifak yok.
   seen_from: "{when} tarihinden beri"
-  first_seen: 'Takipçi tarafından ilk görülme: {when}.'
-  renamed: "{old} artık oyunda {now}. Oyunun kendi numarasıyla ölçülmeye (İstatistikler ve İlk 4 yarışı) devam ediyor ancak site hala {old} olarak adlandırıyor."
+  first_seen: Takipçi tarafından ilk görülme {when}.
+  renamed: "{old} oyunda artık {now}. Oyunun kendi numarasıyla ölçülmeye devam ediyor (İstatistikler ve İlk 4 yarışı), ancak site onu hâlâ {old} olarak adlandırıyor."
   renamed_fix: İttifak planlayıcısında yeniden adlandırın
-  test_copy: "🧪 Test sitesi: verileri canlı siteden {when} tarihinde kopyalandı (Discord'da /devupdate yeni bir kopya oluşturur)."
+  test_copy: "🧪 Test sitesi: verileri {when} tarihinde canlı siteden kopyalandı (Discord'da /devupdate komutu yeni bir kopya oluşturur)."
   test_copy_none: "🧪 Test sitesi: verileri henüz canlı siteden kopyalanmadı. Yeni bir kopya için Discord'da /devupdate komutunu çalıştırın."
-  mismatch: "{tag} şu an oyunda farklı bir ittifakla yanıt veriyor: {got}. Site, {tag} ({known}) olarak bildiği ittifakı oyunun numarasıyla ölçmeye devam ediyor ve yenisini onun yerine saymıyor."
-  mismatch_relink: 'Aynı ittifak: yeniden bağla'
-  mismatch_relink_help: Sadece {got} gerçekten de sitenin kastettiği ittifaksa (ilk bağlantı yanlışsa veya oyun yeniden numaralandırdıysa) yapın. Emekli etme veya yeniden adlandırma daha sonraki adımlarla yapılır.
-  unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Eğer oyunda etiketini değiştirdiyse, yenisini yazın, site onu takip edecektir."
-  unfound_now: Oyundaki etiketi şu an
-  unfound_placeholder: ör. Arch
+  mismatch: 'Oyundaki {tag} şu anda farklı bir ittifak olarak yanıt veriyor: {got}. Site, {tag} olarak bildiği ittifakı oyunun numarasıyla ölçmeye devam ediyor ({known}) ve yenisini onun yerine saymıyor.'
+  mismatch_relink: 'Bu aynı ittifak: yeniden bağla'
+  mismatch_relink_help: Yalnızca {got} gerçekten sitenin kastettiği ittifak ise yapın (ilk bağlantı yanlışsa veya oyun numaralandırmayı değiştirdiyse). Emekliye ayırma veya yeniden adlandırma işlemleri sonraki adımlardır.
+  unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Eğer etiketi oyun içinde değiştiyse, yenisini girin; site onu takip edecektir."
+  unfound_now: Oyundaki güncel etiketi
+  unfound_placeholder: örn. Arch
   unfound_link: Bağla
   unfound_checking: Oyunla kontrol ediliyor...
-  unfound_left: 'Bugün kalan bağlantı sayısı: {max} üzerinden {left} (her biri oyuna bir kez sorar)'
+  unfound_left: 'Bugün kalan bağlantı hakkı: {left}/{max} (her biri oyuna bir kez sorar)'
   pending_title: İnceleme bekliyor
-  pending_none: İnceleme bekleyen ittifak resmi yok.
-  sent_by: "{name} tarafından gönderildi, {when}"
+  pending_none: Bekleyen ittifak resmi yok.
+  sent_by: 'Gönderen: {name}, {when}'
   race_title: İlk 4 yarışı
-  race_none: Henüz ölçülen bir yarış yok.
-  race_progress: Şu ana kadar 3 Düello gününden {n} kadarı ölçüldü.
+  race_none: Henüz ölçülen yarış yok.
+  race_progress: 3 Düello gününden {n} kadarı ölçüldü.
   race_finished: '3 günün tamamı ölçüldü: sonuçlar NAP liderliğinde.'
   race_missing: 'Ölçülmeyenler: {tags}'
   race_more: Tam tablo Kurallar sayfasında
   quota_title: Takipçi istekleri
-  quota_help: Last Asylum Takipçisi, 00:00 UTC'de sıfırlanmak üzere günlük 1.000 istek izni verir. Aşağıdaki rakam takipçinin siteye verdiği son rakamdır, bu yüzden göstermenin maliyeti yoktur; şimdi kontrol etmek bir istek harcar.
+  quota_help: Last Asylum Takipçisi, 00:00 UTC'de sıfırlanmak üzere günde 1.000 isteğe izin verir. Aşağıdaki rakam takipçinin siteye verdiği son değerdir, bu yüzden göstermenin maliyeti yoktur; şimdi kontrol etmek bir istek harcar.
   quota_check: Şimdi kontrol et
-  quota_used: bugün kullanıldı
+  quota_used: bugün kullanılan
   quota_failed: Takipçiye ulaşılamadı.
   quota_as_of: "{when} itibarıyla"
   quota_none: Site bugün takipçiye henüz hiçbir şey sormadı.
   quota_resets: "{time} içinde sıfırlanır"
-  usage_title: Nelerin kullandığı
+  usage_title: Kullanım detayları
   usage_automation: Otomasyon
-  usage_automation_help: Günlük İstatistik anlık görüntüsü ve İlk 4 yarışı
+  usage_automation_help: Günlük İstatistikler anlık görüntüsü ve İlk 4 yarışı
   usage_alliance: İttifak araçları
-  usage_alliance_help: Panolar, kadro, adaylıklar
-  usage_public: Halka açık sayfalar
-  usage_public_help: İttifak sayfasındaki sıralama kartları
-  usage_steward: Steward araçları
-  usage_steward_help: Oyuncu aramaları, harita yenilemeleri ve kullanım kontrolleri
+  usage_alliance_help: Paneller, kadro, adaylıklar
+  usage_public: Genel sayfalar
+  usage_public_help: İttifak sayfasındaki puan durumu kartları
+  usage_steward: Kâhya araçları
+  usage_steward_help: Oyuncu sorgulama, harita yenileme ve kullanım kontrolleri
   usage_other: Diğer
   usage_other_help: Etiketlenmemiş her şey
   usage_unrecorded: Kaydedilmemiş
-  usage_unrecorded_help: Takipçi tarafından sayıldı, henüz buraya kaydedilmedi (her sunucu birkaç dakikada bir kaydeder)
-  usage_none: Bugün henüz kaydedilen bir istek yok.
+  usage_unrecorded_help: Takipçi tarafından sayıldı, buraya henüz kaydedilmedi (her sunucu birkaç dakikada bir kaydeder)
+  usage_none: Bugün henüz bir istek kaydedilmedi.
