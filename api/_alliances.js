@@ -137,6 +137,8 @@ export function sanitizeAlliances(rawAlliances = {}, roleColors = {}) {
         : DEFAULT_FALLBACK_COLORS[cleanTag] || storedColor || null);
 
     sanitized[cleanTag] = {
+      // The alliance's permanent ID, once the list is stored by ID (alliance IDs, step 2)
+      ...(data?.id ? { id: String(data.id) } : {}),
       tag: cleanTag,
       name: data?.name || cleanTag,
       rank:
