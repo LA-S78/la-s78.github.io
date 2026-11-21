@@ -62,6 +62,19 @@ export default async function handler(req, res) {
     const rewardsState = gistJson(gist, 'rewards-data.json');
 
     const cleanAlliances = sanitizeAlliances(mapState.alliances || {}, roleColors);
+    const version = String(mapState.lastUpdated || mapState.revision || 'initial');
+    // The Stats answers are kept an hour under their address, `v` included (Gemini's review,
+    // 2026-11-22): any `v` but the current one is sent to the current one, so a made-up one
+    // never gets an hour of its own (nor a Blob read)
+    if (
+      ['stats', 'stats-players'].includes(scope) &&
+      req.query.v !== undefined &&
+      String(req.query.v) !== version
+    ) {
+      res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=30');
+      res.setHeader('Location', `/api/state?scope=${scope}&v=${encodeURIComponent(version)}`);
+      return res.status(307).end();
+    }
     // "[Arch], formerly [HMDA]" for 30 days after a Steward renamed it (alliance IDs step 7)
     for (const [tag, was] of Object.entries(formerlyTags(readRegister(gist)))) {
       if (cleanAlliances[tag]) cleanAlliances[tag].formerly = was;
@@ -86,8 +99,17 @@ export default async function handler(req, res) {
       // The alliance list's version (owner's step 7 rehearsal, 2026-11-22): the Stats answers
       // are kept an hour by Vercel, so the pages ask for them with this in the address; a
       // rename, swap or planner change gives a new one, and so fresh Stats at once
+      // With each alliance's tag now by its ID, so a browser can bring its saved "My alliance"
+      // up to date after a rename (Gemini's review, 2026-11-22)
       case 'version':
-        return res.status(200).json({ v: mapState.lastUpdated || mapState.revision || 'initial' });
+        return res.status(200).json({
+          v: version,
+          tags: Object.fromEntries(
+            Object.entries(mapState.alliances || {})
+              .filter(([, a]) => a?.id)
+              .map(([tag, a]) => [a.id, tag]),
+          ),
+        });
 
       case 'map':
         return res.status(200).json({

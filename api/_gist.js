@@ -106,7 +106,8 @@ export function storeMapForm(out, from) {
     const mine = files[store.file];
     if (!mine) continue;
     const stored = JSON.parse(from?.files?.[store.file]?.content || 'null');
-    if (!store.isById(stored) || store.isById(mine)) continue;
+    // Stores by ID keep that form; one that moves on its own (the race) moves on this save
+    if (!(store.isById(stored) || (store.autoMove && stored)) || store.isById(mine)) continue;
     register =
       register ||
       (files[REGISTER_FILE]
