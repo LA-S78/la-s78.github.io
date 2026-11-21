@@ -32,8 +32,8 @@ strings: [steward]
   <div id="st-unfound" class="st-renamed" hidden></div>
   <div id="st-mismatch" class="st-renamed" hidden></div>
   <div id="st-newtags" class="st-renamed" hidden></div>
-  <!-- Alliance IDs (steps 2–4): each store's move to IDs, and its undo -->
-  <div id="st-moves"></div>
+  <!-- Alliance IDs step 8: the moves' backups, deleted by a Steward (the tidy-up) -->
+  <form id="st-tidy" class="st-link" hidden></form>
   <!-- Alliance IDs step 7: rename, swap two tags, retire or bring back (Stewards only) -->
   <section id="st-roster" class="st-link" hidden></section>
 
@@ -304,41 +304,29 @@ strings: [steward]
       );
     });
 
-    // Alliance IDs (steps 2–4): one box per store, to move it to IDs or undo the move
-    let storeForms = {};
-    function moveBoxes(forms) {
-      storeForms = forms || {};
-      $('st-moves').innerHTML = Object.entries(storeForms)
-        .map(
-          ([key, form]) => `<form class="st-link st-renamed" data-store="${esc(key)}">
-            <p><strong>${esc(t(`steward.move_title_${key}`))}</strong></p>
-            <small class="st-small">${esc(t(form === 'id' ? 'steward.move_by_id' : 'steward.move_by_tag'))}</small>
-            <div><button type="submit" class="btn btn-secondary">${esc(t(form === 'id' ? 'steward.move_undo' : 'steward.move_button'))}</button></div>
-            <small class="st-small" data-result></small>
-          </form>`,
-        )
-        .join('');
+    // Alliance IDs step 8: the tidy-up. Lists the backups the moves left, and deletes them.
+    function tidyBox(tidy) {
+      const box = $('st-tidy');
+      const n = tidy ? tidy.gist.length + tidy.dashboards.length + tidy.stats.length : 0;
+      box.hidden = !n;
+      if (!n) return;
+      box.innerHTML = `
+        <p><strong>${esc(t('steward.tidy_title'))}</strong></p>
+        <small class="st-small">${esc(t('steward.tidy_help', { gist: tidy.gist.length, dashboards: tidy.dashboards.length, stats: tidy.stats.length }))}</small>
+        <div><button type="submit" class="btn btn-secondary">${esc(t('steward.tidy_button'))}</button></div>
+        <small class="st-small" data-result></small>`;
     }
-    $('st-moves').addEventListener('submit', async (e) => {
-      const box = e.target.closest('form[data-store]');
-      if (!box) return;
+    $('st-tidy').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const key = box.dataset.store;
-      const undo = storeForms[key] === 'id';
-      if (!window.confirm(t(undo ? 'steward.move_undo_confirm' : 'steward.move_confirm'))) return;
+      if (!window.confirm(t('steward.tidy_confirm'))) return;
+      const box = $('st-tidy');
       box.querySelector('button').disabled = true;
-      const res = await ask(`steward=${undo ? 'unmove' : 'move'}&store=${encodeURIComponent(key)}`);
+      const res = await ask('steward=tidy');
       const data = await res.json().catch(() => ({}));
-      let text;
-      if (!res.ok) text = data.error || res.statusText;
-      else if (data.already) text = t('steward.move_already');
-      else if (data.moved) text = t(`steward.move_done_${key}`, { ...data.counts, backup: data.backup });
-      else text = t('steward.move_undone', { backup: data.backup });
+      const text = res.ok ? t('steward.tidy_done', data) : data.error || res.statusText;
       if (res.ok) await load();
-      const again = $('st-moves').querySelector(`form[data-store="${CSS.escape(key)}"] [data-result]`);
-      if (again) again.textContent = text;
-      else box.querySelector('[data-result]').textContent = text;
-      box.querySelector('button').disabled = false;
+      box.hidden = false;
+      box.innerHTML = `<small class="st-small">${esc(text)}</small>`;
     });
 
     // An alliance new on the map while others are off it (alliance IDs, step 1): a Steward
@@ -593,7 +581,7 @@ strings: [steward]
       unfound(data.unfound || [], data.links);
       mismatched(data.mismatched || []);
       newTags(data.newTags || []);
-      moveBoxes(data.storeForms);
+      tidyBox(data.tidy);
     }
     load().catch((err) => show(err.message, 'error'));
   })();

@@ -78,6 +78,18 @@
       return;
     }
 
+    // A pass from before 2026-11-22 (no `iat`) is refused by the server (the alliance ID
+    // move's tidy-up): shown as signed out at once, not only when something fails
+    try {
+      const pass = localStorage.getItem('auth-session') || '';
+      if (pass) {
+        const data = JSON.parse(atob(pass.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')));
+        if (!data.iat) clearSignIn();
+      }
+    } catch {
+      clearSignIn();
+    }
+
     const cachedRole = localStorage.getItem('auth-role') || 'public';
     const cachedUser = localStorage.getItem('auth-username');
     const cachedAvatar = localStorage.getItem('auth-avatar');
@@ -234,6 +246,12 @@
   };
 
   window.triggerLogout = function () {
+    clearSignIn();
+    window.location.reload();
+  };
+
+  /** Forgets the sign-in in this browser (sign-out, or a pass the server no longer accepts). */
+  function clearSignIn() {
     localStorage.removeItem('auth-role');
     localStorage.removeItem('auth-username');
     localStorage.removeItem('auth-avatar');
@@ -247,8 +265,7 @@
     Object.keys(localStorage)
       .filter((k) => k.startsWith('la_dash_'))
       .forEach((k) => localStorage.removeItem(k));
-    window.location.reload();
-  };
+  }
 
   window.closeDialogGracefully = (dialog) => {
     if (!dialog) return;

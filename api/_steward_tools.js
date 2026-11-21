@@ -45,7 +45,7 @@ import {
   retireInRegister,
   saveRegisterChange,
 } from './_rename.js';
-import { storeForms, moveToIds, moveToTags, STORES } from './_id_stores.js';
+import { tidyList, tidyUp } from './_tidy_up.js';
 
 export const LOOKUPS_PER_DAY = 30;
 const FILE = 'steward-tools.json';
@@ -290,8 +290,8 @@ export async function stewardTools(req, res, { gist, session }) {
       newTags: pendingAlliances(readRegister(gist)),
       // Every alliance with its tag history, for the rename tool (step 7; retired ones too)
       roster: allianceRoster(readRegister(gist)),
-      // How each store is kept: { map: 'tag' | 'id', calendar: … } (alliance IDs, steps 2–4)
-      storeForms: storeForms(gist),
+      // The moves' backups, for the tidy-up (alliance IDs step 8)
+      tidy: await tidyList(gist).catch(() => null),
       // On the test site: when its data was last copied from the live site (/devupdate)
       testCopy: isTestDeployment() ? gistJson(gist, TEST_COPY_FILE, null)?.copiedAt || '' : null,
     });
@@ -301,13 +301,14 @@ export async function stewardTools(req, res, { gist, session }) {
   if (what === 'link') return linkRenamed(req, res, { gist, session });
   // A Steward's answer for an alliance new on the map: ?steward=newtag&id=al_…&same=al_… (or
   // no `same`: a new alliance)
-  // Alliance IDs step 2: the move of the alliance list and territories, and its undo
-  if (what === 'move' || what === 'unmove') {
+  // Alliance IDs step 8: the tidy-up (the moves' backups deleted)
+  if (what === 'tidy') {
     try {
-      const key = String(req.query.store || 'map');
-      if (!STORES[key]) return res.status(400).json({ error: 'Unknown store.' });
-      const report = what === 'move' ? await moveToIds(key) : await moveToTags(key);
-      return res.status(200).json(report);
+      const out = await tidyUp(gist);
+      if (out.error) {
+        return res.status(409).json({ error: say(`api_dashboard.${out.error}`, out.vars || {}) });
+      }
+      return res.status(200).json(out);
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }

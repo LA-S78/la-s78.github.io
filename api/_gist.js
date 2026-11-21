@@ -135,7 +135,8 @@ export async function writeGist(files, { description, timeoutMs } = {}) {
   const body = { files: {} };
   if (description) body.description = description;
   for (const [name, data] of Object.entries(files)) {
-    body.files[name] = { content: JSON.stringify(data, null, 2) };
+    // null deletes the file (the alliance ID tidy-up's backups)
+    body.files[name] = data === null ? null : { content: JSON.stringify(data, null, 2) };
   }
 
   const res = await fetch(`${GIST_API}/${id}`, {
