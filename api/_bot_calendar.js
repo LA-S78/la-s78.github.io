@@ -24,13 +24,11 @@ export async function handleCalendarCommand(ctx) {
     if (isGistConfigured()) {
       const gistData = await getGistData();
 
-      const rewardsRaw = gistData.files?.['rewards-data.json']?.content;
-
       // gistJson: the tag form however it's stored (alliance IDs, step 3)
       calConfig = { ...calConfig, ...gistJson(gistData, 'calendar-state.json') };
       // gistJson: the tag-keyed list however it's stored (alliance IDs, step 2)
       alliances = gistJson(gistData, 'map-state.json').alliances || {};
-      if (rewardsRaw) rewardsState = JSON.parse(rewardsRaw);
+      rewardsState = gistJson(gistData, 'rewards-data.json', rewardsState);
     }
   } catch (err) {
     console.warn('Calendar state fetch failed, using defaults:', err.message);
