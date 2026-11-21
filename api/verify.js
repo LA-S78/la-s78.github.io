@@ -132,12 +132,11 @@ export default async function handler(req, res) {
     };
 
     // No alliance role set up in the environment: find it like the bot does, by role name
-    // in the NAP server (or a "[TAG]" nickname).
+    // in the NAP server (roles only: a "[TAG]" nickname no longer counts).
     if (allianceName === 'Independent') {
       const found = await findAllianceTag({
         guildId: GUILD_ID,
         roleIds: userRoles,
-        nickname: guildData.nick,
         alliances: await loadAlliances(),
         botToken: DISCORD_BOT_TOKEN,
       });
@@ -213,7 +212,7 @@ export default async function handler(req, res) {
       steward: isSteward(discordUserId),
       officer: officerRole ? officerRole : undefined,
       // How the alliance was found (the pill shows it to Stewards): 'role-id' (DISCORD_<TAG>),
-      // 'role-name' or 'nickname'
+      // or 'role-name' (role named after the tag). 'nickname' is no longer given (2026-11-21).
       alliance_source: allianceSource || undefined,
       session,
     });

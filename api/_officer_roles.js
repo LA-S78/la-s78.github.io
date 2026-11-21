@@ -86,23 +86,16 @@ export async function findOfficerRole({ uid, alliance, alliances, botToken, time
 
 /**
  * Finds a player's alliance tag the way the bot does in the NAP server: a role named after
- * a known alliance ("WLO", "[WLO]" or "@WLO", any letter case). If no role matches, a
- * "[TAG]" at the start of their server nickname counts, when TAG is a known alliance (for
- * display; officer access still needs a role in that alliance's own server).
- * Returns { tag, via } (tag as stored in map-state.json; via 'role-name' or 'nickname'), or null.
- * @param {{guildId: string, roleIds: string[], nickname?: string, alliances: object, botToken: string, timeoutMs?: number}} args
+ * a known alliance ("WLO", "[WLO]" or "@WLO", any letter case). Roles only: a "[TAG]" in the
+ * server nickname no longer counts (owner decision, 2026-11-21: members can usually change
+ * their own nickname, and the alliance found opens that alliance's dashboard).
+ * Returns { tag, via: 'role-name' } (tag as stored in map-state.json), or null.
+ * @param {{guildId: string, roleIds: string[], alliances: object, botToken: string, timeoutMs?: number}} args
  */
-export async function findAllianceTag({
-  guildId,
-  roleIds,
-  nickname,
-  alliances,
-  botToken,
-  timeoutMs = 2500,
-}) {
+export async function findAllianceTag({ guildId, roleIds, alliances, botToken, timeoutMs = 2500 }) {
   const tags = Object.keys(alliances || {});
   if (!tags.length) return null;
-  // The tag a role name or nickname means (findTag: RâvN and RÂVN are two alliances; a
+  // The tag a role name means (findTag: RâvN and RÂVN are two alliances; a
   // name in another letter case only counts when it can mean just one of them)
   const byName = (name) => findTag(tags, name);
 
@@ -120,11 +113,8 @@ export async function findAllianceTag({
         if (byName(bare)) return { tag: byName(bare), via: 'role-name' };
       }
     } catch {
-      // Discord slow or down: try the nickname
+      // Discord slow or down: no alliance this time (Refresh Access tries again)
     }
   }
-
-  const fromNick = /^\s*\[([^\]]{1,10})\]/.exec(nickname || '');
-  const nickTag = fromNick ? byName(fromNick[1].trim()) : null;
-  return nickTag ? { tag: nickTag, via: 'nickname' } : null;
+  return null;
 }
