@@ -24,13 +24,31 @@ const mapScopes = (state, fn) => ({
     : {}),
 });
 
-/** The tag form of the stored file (unchanged when it's stored by tag). */
+/**
+ * The tag form of the stored file (unchanged when it's stored by tag). An alliance event's
+ * title starting with one of that alliance's former tags ("[HMDA] Muster" after HMDA became
+ * Arch) shows its tag now (Gemini's review, 2026-11-22); any other title stays as written.
+ */
 export function calendarView(stored, register) {
   if (!isById(stored)) return stored;
-  const tagOf = (v) =>
-    ID_PATTERN.test(v) ? followMerged(register, register.alliances[v])?.tag || v : v;
+  const entryOf = (v) =>
+    ID_PATTERN.test(v) ? followMerged(register, register.alliances[v]) || null : null;
   const { version: _v, ...state } = stored;
-  return mapScopes(state, tagOf);
+  if (!Array.isArray(state.custom_events)) return state;
+  return {
+    ...state,
+    custom_events: state.custom_events.map((e) => {
+      if (!e || typeof e.scope !== 'string') return e;
+      const entry = entryOf(e.scope);
+      if (!entry?.tag) return e;
+      const out = { ...e, scope: entry.tag };
+      const m = /^\[([^\]]{1,12})\]/.exec(String(e.title || ''));
+      if (m && m[1] !== entry.tag && (entry.tags || []).some((h) => h.tag === m[1])) {
+        out.title = `[${entry.tag}]${e.title.slice(m[0].length)}`;
+      }
+      return out;
+    }),
+  };
 }
 
 /** The tag form turned into the stored-by-ID form: { stored, register: null }. */

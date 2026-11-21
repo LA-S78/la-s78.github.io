@@ -7,7 +7,7 @@ common:
   not_saved: 'Nicht gespeichert: {error}'
   cancel: Abbrechen
   save: Speichern
-  saving: Speichern...
+  saving: Speichere…
   edit: Bearbeiten
   delete: Löschen
   remove: Entfernen
@@ -20,18 +20,18 @@ common:
   duration_minutes: "{m}Min"
   game_time: "{time} GT"
   your_time: "{time} deine Zeit"
-  off_week: Off-Woche
-  kw_week: Königreichskrieg Woche {n}
+  off_week: Ruhewoche
+  kw_week: Königreichskrieg-Woche {n}
   copy: Kopieren
   set_one: Belobigung des Königs
-  set_two: Belohnung des Schlachtenkönigs
+  set_two: Belohnung für den König der Kämpfe
   chests:
     commanders_will: Wille des Kommandanten
     loyal_servant: Treuer Diener
-    followers_heart: Herz des Gefolgsmannes
-    honor_vanguard: Ehrenvorhut
+    followers_heart: Herz der Anhänger
+    honor_vanguard: Ehren-Vorhut
     fearless_hero: Furchtloser Held
-    logistics_support: Logistikunterstützung
+    logistics_support: Logistik-Unterstützung
 dashboard:
   title: Allianz-Dashboard
   loading: Lade dein Allianz-Dashboard…
@@ -994,45 +994,45 @@ stats:
   show_hide: Tippe auf eine Allianz, um deren Linie ein- oder auszublenden.
   credit_before: Zahlen vom
 steward:
-  tidy_title: 'Allianz-IDs: Aufräumen'
-  tidy_help: 'Alles wird jetzt nach Allianz-ID gespeichert. Die Verschiebungen hinterließen Backups: {gist} Backup-Dateien und {dashboards} alte Dashboard-Dateien im Gist, sowie {stats} Statistik-Backup-Dateien. Lösche sie, wenn du zufrieden bist (das Gist behält seine früheren Revisionen).'
-  tidy_button: Backups löschen
-  tidy_confirm: Backups der Allianz-ID-Verschiebungen löschen?
-  tidy_done: 'Gelöscht: {gist} Backup-Dateien, {dashboards} alte Dashboard-Dateien und {stats} Statistik-Backup-Dateien.'
-  roster_title: 'Allianzen: umbenennen, Kürzel tauschen, in den Ruhestand schicken'
-  roster_help: Das Umbenennen ändert das Kürzel überall auf einmal (Historie, Events, Bilder, Dashboards und Statistiken bleiben erhalten). Öffentliche Seiten zeigen für 30 Tage "ehemals [ALT]" an.
+  tidy_title: 'Allianz-IDs: aufräumen'
+  tidy_help: 'Alles wird jetzt nach Allianz-ID gespeichert. Die Verschiebungen hinterlassen {gist} Sicherungsdateien und {dashboards} alte Dashboard-Dateien im Gist. Lösche sie, sobald du zufrieden bist: Das Gist behält seine früheren Revisionen bei. Die {stats} Stats-Sicherungsdateien bleiben erhalten (der Blob-Speicher hat keine Revisionen).'
+  tidy_button: Sicherungen löschen
+  tidy_confirm: Die Sicherungen der Allianz-ID-Verschiebungen löschen?
+  tidy_done: 'Gelöscht: {gist} Sicherungsdateien und {dashboards} alte Dashboard-Dateien. Die Stats-Sicherungen bleiben erhalten.'
+  roster_title: 'Allianzen: umbenennen, Tags tauschen, in Rente schicken'
+  roster_help: Das Umbenennen ändert das Tag überall gleichzeitig (seine Historie, Events, Bilder, Dashboards und Stats bleiben damit verknüpft). Öffentliche Seiten zeigen für 30 Tage "ehemals [ALT]" an.
   roster_was: war [{tag}] bis {until}
-  rename_placeholder: Neues Kürzel
+  rename_placeholder: Neues Tag
   rename_button: Umbenennen
-  rename_confirm: Von [{from}] zu [{to}] umbenennen? Jede Seite zeigt sofort das neue Kürzel an.
-  rename_one_click: Von [{old}] zu [{now}] umbenennen
-  swap_title: 'Zwei Allianzen tauschen Kürzel:'
-  swap_button: Kürzel tauschen
-  swap_confirm: Die Kürzel von [{a}] und [{b}] tauschen?
+  rename_confirm: "[{from}] in [{to}] umbenennen? Jede Seite zeigt sofort das neue Tag an."
+  rename_one_click: "[{old}] in [{now}] umbenennen"
+  swap_title: 'Zwei Allianzen tauschen Tags:'
+  swap_button: Tags tauschen
+  swap_confirm: Die Tags von [{a}] und [{b}] tauschen?
   off_map_title: 'Von der Karte entfernt (im Allianz-Planer):'
-  retire_button: In den Ruhestand
-  retire_confirm: "[{tag}] in den Ruhestand schicken? Die Historie bleibt erhalten (siehe Allianzen im Ruhestand unten) und kann wiederhergestellt werden."
-  retired_title: Allianzen im Ruhestand ({n})
+  retire_button: In Rente schicken
+  retire_confirm: "[{tag}] in Rente schicken? Es bleibt mit seiner Historie erhalten (Allianzen in Rente, siehe unten) und kann zurückgeholt werden."
+  retired_title: Allianzen in Rente ({n})
   unretire_button: Zurückholen
   roster_saved: Gespeichert.
-  newtag: "{tag} ist neu auf der Karte. Ist es eine Allianz, die die Seite bereits kennt, die umbenannt wurde oder die zurück auf der Karte ist? Bis du antwortest, startet sie ohne Daten, und Mitglieder der alten Allianz werden gebeten, sich erneut anzumelden."
+  newtag: "{tag} ist neu auf der Karte. Handelt es sich um eine Allianz, die die Seite bereits kennt, umbenannt wurde oder zurück auf der Karte ist? Bis du antwortest, startet sie ohne deren Daten, und Mitglieder der alten Allianz werden gebeten, sich erneut anzumelden."
   newtag_same: 'Gleiche Allianz wie:'
   newtag_new: Es ist eine neue Allianz
   newtag_link: Verknüpfen
   page_title: Steward-Tools
-  intro: 'Tools für Königreichs-Stewards: Was auf dich wartet und eine Live-Spielersuche.'
-  loading: Lade...
+  intro: 'Tools für Königreich-Stewards: was auf dich wartet und eine Live-Spielersuche.'
+  loading: Laden…
   sign_in: Mit Discord anmelden
   sign_in_needed: Melde dich mit Discord an, um die Steward-Tools zu öffnen.
-  stewards_only: Nur Königreichs-Stewards können die Steward-Tools öffnen.
+  stewards_only: Nur Königreich-Stewards können die Steward-Tools öffnen.
   lookup_title: Spielersuche
-  lookup_help: 'Jeder Spieler, live aus dem Spiel: Allianz, Werte sowie frühere Namen und Allianzen. Gib eine Spieler-ID oder einen Namen ein, um die ID eines NAP-Spielers zu finden.'
-  lookup_placeholder: Spieler-ID oder Name eines NAP-Spielers
+  lookup_help: 'Jeder Spieler, live aus dem Spiel: Allianz, Zahlen sowie frühere Namen und Allianzen. Gib eine Spieler-ID oder einen Namen ein, um die ID eines NAP-Spielers zu finden.'
+  lookup_placeholder: Spieler-ID oder der Name eines NAP-Spielers
   lookup_go: Suchen
-  lookup_id_needed: Gib eine Spieler-ID ein (die Nummer im Profil) oder wähle einen NAP-Spieler aus den gefundenen Namen.
-  lookups_left: "{left} von {max} Live-Suchen für heute übrig (geteilt von allen Stewards)."
-  looking: Frage das Spiel an...
-  name_none: Kein NAP-Spieler mit diesem Namen. Für alle anderen benutze deren Spieler-ID.
+  lookup_id_needed: Gib eine Spieler-ID ein (die Nummer auf ihrem Profil) oder wähle einen NAP-Spieler aus den gefundenen Namen.
+  lookups_left: "{left} von {max} Live-Suchanfragen für heute übrig (geteilt von allen Stewards)."
+  looking: Frage das Spiel ab…
+  name_none: Kein NAP-Spieler mit diesem Namen gefunden. Für alle anderen benutze bitte deren Spieler-ID.
   no_alliance: Keine Allianz
   server: Server {n}
   online: Jetzt online
@@ -1044,51 +1044,51 @@ steward:
   vip: VIP
   position: Position (X, Y)
   language: Sprache
-  ranks: 'Königreichsrang: #{might} Macht · #{kills} Kills · #{heroes} Helden'
+  ranks: 'Königreich-Ränge: #{might} Macht · #{kills} Kills · #{heroes} Helden'
   history_title: Namen und Allianzen
-  history_none: Keine früheren Namen oder Allianzen gefunden.
+  history_none: Keine früheren Namen oder Allianzen gesehen.
   seen_from: seit {when}
-  first_seen: Vom Tracker erstmals gesehen am {when}.
-  renamed: "{old} heißt jetzt {now} im Spiel. Sie wird weiterhin (durch Statistiken und das Rennen um die Top 4) über die Spiel-ID gemessen, aber die Seite nennt sie weiterhin {old}."
+  first_seen: Vom Tracker erstmals gesehen {when}.
+  renamed: "{old} heißt jetzt {now} im Spiel. Es wird immer noch anhand der Spiel-ID gemessen (Stats und das Top 4-Rennen), aber die Seite nennt es weiterhin {old}."
   renamed_fix: Im Allianz-Planer umbenennen
-  test_copy: "🧪 Testseite: Daten wurden am {when} von der Live-Seite kopiert (/devupdate in Discord erstellt eine neue Kopie)."
-  test_copy_none: "🧪 Testseite: Daten wurden noch nicht von der Live-Seite kopiert. Führe /devupdate in Discord für eine frische Kopie aus."
-  mismatch: "{tag} antwortet im Spiel jetzt mit einer anderen Allianz: {got}. Die Seite misst weiterhin die Allianz, die sie als {tag} ({known}) kennt, anhand der Spiel-ID und zählt die neue nicht als diese."
-  mismatch_relink: 'Es ist dieselbe Allianz: neu verknüpfen'
-  mismatch_relink_help: Nur wenn {got} wirklich die Allianz ist, die die Seite meint (die erste Verknüpfung war falsch oder das Spiel hat sie neu nummeriert). Ruhestand oder Umbenennung erfolgen in späteren Schritten.
-  unfound: "{tag} wurde im Spiel nicht gefunden und wird daher nicht gemessen (Statistiken und das Rennen um die Top 4). Wenn sich das Kürzel im Spiel geändert hat, gib das neue ein, und die Seite wird es verfolgen."
-  unfound_now: Aktuelles Kürzel im Spiel
+  test_copy: "🧪 Testseite: ihre Daten wurden von der Live-Seite kopiert {when} (/devupdate in Discord erstellt eine frische Kopie)."
+  test_copy_none: "🧪 Testseite: ihre Daten wurden noch nicht von der Live-Seite kopiert. Führe /devupdate in Discord für eine frische Kopie aus."
+  mismatch: "{tag} im Spiel antwortet jetzt mit einer anderen Allianz: {got}. Die Seite misst weiterhin die Allianz, die sie als {tag} ({known}) kennt, anhand der Spiel-ID und zählt die neue nicht als diese."
+  mismatch_relink: 'Es ist die gleiche Allianz: neu verknüpfen'
+  mismatch_relink_help: Nur wenn {got} wirklich die Allianz ist, die die Seite meint (die erste Verknüpfung war falsch oder das Spiel hat sie neu nummeriert). In Rente schicken oder Umbenennen sind spätere Schritte.
+  unfound: "{tag} wurde im Spiel nicht gefunden und wird daher nicht gemessen (Stats und Top 4-Rennen). Wenn sie ihr Tag im Spiel geändert hat, gib das neue ein, und die Seite folgt ihr."
+  unfound_now: Ihr Tag im Spiel jetzt
   unfound_placeholder: z. B. Arch
   unfound_link: Verknüpfen
-  unfound_checking: Überprüfung mit dem Spiel...
-  unfound_left: "{left} von {max} Verknüpfungen für heute übrig (jede fragt das Spiel einmal ab)"
+  unfound_checking: Prüfe mit dem Spiel...
+  unfound_left: "{left} von {max} Verknüpfungen heute übrig (jede fragt das Spiel einmal ab)"
   pending_title: Wartet auf Überprüfung
   pending_none: Keine Allianzbilder warten.
   sent_by: Gesendet von {name}, {when}
-  race_title: Rennen um die Top 4
+  race_title: Top 4-Rennen
   race_none: Noch kein Rennen gemessen.
-  race_progress: "{n} von 3 Duelltagen bisher gemessen."
-  race_finished: 'Alle 3 Tage gemessen: Ergebnisse liegen bei der NAP-Führung.'
+  race_progress: "{n} von 3 Duell-Tagen bisher gemessen."
+  race_finished: 'Alle 3 Tage gemessen: die Ergebnisse sind in der NAP-Führung.'
   race_missing: 'Nicht gemessen: {tags}'
   race_more: Vollständige Tabelle auf der Regelseite
   quota_title: Tracker-Anfragen
-  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag, beginnend um 00:00 UTC. Der Wert unten ist der letzte, den der Tracker der Seite übermittelt hat, daher kostet die Anzeige nichts; jetzt prüfen kostet eine Anfrage.
+  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag, beginnend um 00:00 UTC. Die Zahl unten ist der neueste Wert, den der Tracker der Seite gegeben hat; es kostet also nichts, ihn anzuzeigen; jetzt prüfen kostet eine Anfrage.
   quota_check: Jetzt prüfen
   quota_used: heute verbraucht
   quota_failed: Der Tracker konnte nicht erreicht werden.
   quota_as_of: Stand {when}
-  quota_none: Die Seite hat den Tracker heute noch nicht abgefragt.
+  quota_none: Die Seite hat heute noch keine Anfragen an den Tracker gestellt.
   quota_resets: Startet erneut in {time}
-  usage_title: Was wurde verbraucht
+  usage_title: Was sie verbraucht hat
   usage_automation: Automatisierung
-  usage_automation_help: Täglicher Statistik-Snapshot und Rennen um die Top 4
+  usage_automation_help: Täglicher Stats-Snapshot und Top 4-Rennen
   usage_alliance: Allianz-Tools
-  usage_alliance_help: Dashboards, Dienstplan, Nominierungen
+  usage_alliance_help: Dashboards, Roster, Nominierungen
   usage_public: Öffentliche Seiten
-  usage_public_help: Ranglisten-Karten auf der Allianz-Seite
+  usage_public_help: Standings-Karten auf der Allianz-Seite
   usage_steward: Steward-Tools
-  usage_steward_help: Spielersuche, Karten-Aktualisierungen und Nutzungsprüfungen
-  usage_other: Sonstiges
+  usage_steward_help: Spielersuchen, Kartenaktualisierungen und Nutzungsprüfungen
+  usage_other: Andere
   usage_other_help: Alles, was nicht gekennzeichnet ist
   usage_unrecorded: Nicht aufgezeichnet
   usage_unrecorded_help: Vom Tracker gezählt, hier noch nicht gespeichert (jeder Server speichert alle paar Minuten)
