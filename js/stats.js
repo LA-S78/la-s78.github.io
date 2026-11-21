@@ -431,7 +431,7 @@ async function start() {
     if (!state.top) {
       box.innerHTML = `<p class="stats-note">${esc(t('loading'))}</p>`;
       try {
-        const res = await fetch('/api/state?scope=stats-players');
+        const res = await fetch(`/api/state?scope=stats-players&v=${await statsVersion()}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         state.top = await res.json();
       } catch {
@@ -487,13 +487,32 @@ async function start() {
     draw();
   });
   try {
-    const res = await fetch('/api/state?scope=stats');
+    const res = await fetch(`/api/state?scope=stats&v=${await statsVersion()}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     state.data = await res.json();
     draw();
   } catch {
     box.innerHTML = `<p class="stats-note">${esc(t('failed'))}</p>`;
   }
+}
+
+/**
+ * The alliance list's version, in the Stats addresses (alliance IDs step 7): Vercel keeps the
+ * Stats answers an hour, so after a rename or a swap of tags a new address gets them fresh.
+ */
+let versionAsked = null;
+let versionAt = 0;
+function statsVersion() {
+  // Asked again after 15 seconds (the site keeps this script between pages)
+  if (Date.now() - versionAt > 15000) versionAsked = null;
+  versionAt = versionAsked ? versionAt : Date.now();
+  versionAsked =
+    versionAsked ||
+    fetch('/api/state?scope=version')
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((d) => encodeURIComponent(d.v || ''))
+      .catch(() => '');
+  return versionAsked;
 }
 
 start();
