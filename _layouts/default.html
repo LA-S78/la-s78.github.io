@@ -30,6 +30,7 @@
         {% if page.strings %}<script type="application/json" id="tool-strings">{{ page.strings | tool_strings_json }}</script>{% endif %}
         <main data-turbo-permanent="false">
             {{ content }}
+            {% include structure/disclaimer.html %}
         </main>
 
         {% if page.dialogs %}
