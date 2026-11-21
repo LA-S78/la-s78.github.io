@@ -664,17 +664,17 @@ alliance_planner:
   nap_alliances: "{n} Alianzas NAP"
   planner_mode: Modo Planificador
   submit_plan: Enviar plan
-  tag_placeholder: TAG (p. ej. WLO)
+  tag_placeholder: TAG (ej. WLO)
   name_placeholder: Nombre completo de la alianza
   add_contender: "+ Añadir competidor"
-  loading_standings: Cargando clasificación…
+  loading_standings: Cargando clasificación...
   standings_failed: No se pudo cargar la clasificación.
   protected_academy: Academia protegida
   change_color: Cambiar color de [{tag}]
   academy_of: Academia de [{tag}]
-  formerly: anteriormente [{tag}]
+  formerly: antes [{tag}]
   link_academy: "+ Vincular academia"
-  nap_protected: NAP Protegida
+  nap_protected: NAP protegido
   show_details: Mostrar detalles
   hide_details: Ocultar detalles
   stat_might: Poder
@@ -683,14 +683,14 @@ alliance_planner:
   tracker_credit_before: Insignias y números de
   external: Externo
   revoke_nap: Revocar NAP
-  grant_nap: Conceder NAP
+  grant_nap: Otorgar NAP
   remove_alliance: Eliminar alianza
-  academy_prompt: 'Introduce el tag de alianza exacto para vincularlo como una Academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, p. ej. RâvN o râvn):'
+  academy_prompt: 'Introduce el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, ej. RâvN o râvn):'
   academy_available: 'Disponible: {tags}'
-  academy_new: 'O escribe un nuevo tag de academia para crearlo:'
+  academy_new: 'O escribe un nuevo tag de academia para crearla:'
   already_exists: La alianza [{tag}] ya existe con esa capitalización exacta.
   no_changes: No se detectaron modificaciones en la clasificación actual.
-  proposal_title: Enviar propuesta de diplomacia y clasificación NAP
+  proposal_title: Enviar clasificación NAP y propuesta diplomática
   diff_rank: "{tag}: Rango {from} ➔ {to}"
   diff_academy: "{tag}: Asignada como Academia de {parent}"
   diff_nap: "{tag}: Estado NAP {status}"
@@ -996,119 +996,119 @@ stats:
   show_hide: Toca una alianza para mostrar u ocultar su línea.
   credit_before: Números desde el
 steward:
-  move_title_map: 'IDs de Alianza: la lista de alianzas y territorios'
-  move_title_calendar: 'IDs de Alianza: eventos del calendario'
-  move_title_rewards: 'IDs de Alianza: rotación del Capitolio, compras y cofres entregados'
-  move_title_pictures: 'IDs de Alianza: lista de fotos de alianzas (los archivos de imagen mantienen sus nombres)'
-  move_title_dashboards: 'IDs de Alianza: tableros de alianza (cada uno copiado en su archivo de ID; los archivos antiguos permanecen como copia de seguridad)'
-  move_title_stats: 'IDs de Alianza: Historial de estadísticas (gráficos de crecimiento, listas diarias, posiciones, números de seguimiento)'
-  move_title_nominations: 'IDs de Alianza: listas de nominación de este periodo'
+  move_title_map: 'IDs de alianza: la lista de alianzas y territorios'
+  move_title_calendar: 'IDs de alianza: eventos del calendario'
+  move_title_rewards: 'IDs de alianza: rotación del Capitolio, compras y cofres entregados'
+  move_title_pictures: 'IDs de alianza: la lista de imágenes de alianzas (los archivos de imagen conservan sus nombres)'
+  move_title_dashboards: 'IDs de alianza: paneles de control de alianzas (cada uno copiado al archivo de su ID; los archivos antiguos permanecen como copia de seguridad)'
+  move_title_stats: 'IDs de alianza: Historial de estadísticas (gráficos de crecimiento, listas diarias, posiciones, números de rastreador)'
+  move_title_nominations: 'IDs de alianza: listas de nominaciones de este período'
   move_by_tag: Almacenado por tag (como antes). El movimiento lo almacena por el ID permanente de cada alianza; las páginas se ven igual. Primero se guarda una copia de seguridad del archivo.
-  move_by_id: Almacenado por ID de alianza. Deshacer lo convierte de nuevo en tags, manteniendo todos los cambios realizados desde entonces.
+  move_by_id: Almacenado por ID de alianza. Deshacer lo devuelve a etiquetas, manteniendo cada cambio realizado desde entonces.
   move_button: Mover a IDs
   move_undo: Deshacer el movimiento
   move_confirm: "¿Mover esto a IDs de alianza ahora?"
-  move_undo_confirm: "¿Convertir esto de nuevo a tags?"
+  move_undo_confirm: "¿Volver a etiquetas?"
   move_done_map: 'Movido: {alliances} alianzas, {links} enlaces de academia, {owned} territorios. Copia de seguridad: {backup}'
   move_done_rewards: 'Movido: {seats} asientos de rotación del Capitolio, {buyouts} compras activas, {handed} cofres entregados. Copia de seguridad: {backup}'
-  move_done_pictures: 'Movido: fotos de {alliances} alianzas ({pending} esperando revisión). Copia de seguridad: {backup}'
-  move_done_dashboards: 'Movido: {dashboards} tableros copiados a su archivo de ID. Los archivos antiguos se mantienen como copia de seguridad.'
-  move_done_stats: 'Movido: {files} archivos de estadísticas, {days} de ellos listas diarias. Copia de seguridad: {backup}'
-  move_done_nominations: 'Movidas {lists} listas de nominación. Copia de seguridad: {backup}'
-  move_done_calendar: 'Movidos {alliance} eventos de alianza (eventos de todo el servidor, sin cambios: {global}). Copia de seguridad: {backup}'
-  move_undone: 'Vuelta a tags. Copia de seguridad del archivo por ID: {backup}'
+  move_done_pictures: 'Movido: imágenes de {alliances} alianzas ({pending} esperando revisión). Copia de seguridad: {backup}'
+  move_done_dashboards: 'Movido: {dashboards} paneles de control copiados al archivo de su ID. Los archivos antiguos se mantienen como copia de seguridad.'
+  move_done_stats: 'Movido: {files} archivos de Estadísticas, {days} de ellos listas diarias. Copia de seguridad: {backup}'
+  move_done_nominations: 'Movido {lists} listas de nominaciones. Copia de seguridad: {backup}'
+  move_done_calendar: 'Movido {alliance} eventos de alianza (eventos de todo el servidor, sin cambios: {global}). Copia de seguridad: {backup}'
+  move_undone: 'Regresado a etiquetas. Copia de seguridad del archivo por ID: {backup}'
   move_already: 'Nada que hacer: ya está hecho.'
-  roster_title: 'Alianzas: renombrar, intercambiar tags, retirar'
-  roster_help: Renombrar cambia el tag en todas partes a la vez (su historial, eventos, fotos, tableros y estadísticas permanecen con él). Las páginas públicas muestran "anteriormente [OLD]" durante 30 días.
-  roster_was: era [{tag}] hasta el {until}
+  roster_title: 'Alianzas: renombrar, intercambiar etiquetas, retirar'
+  roster_help: Renombrar cambia el tag en todas partes a la vez (su historial, eventos, imágenes, paneles y estadísticas permanecen con él). Las páginas públicas muestran "antes [OLD]" durante 30 días.
+  roster_was: era [{tag}] hasta {until}
   rename_placeholder: Nuevo tag
   rename_button: Renombrar
-  rename_confirm: "¿Renombrar [{from}] a [{to}]? Todas las páginas mostrarán el nuevo tag al instante."
+  rename_confirm: "¿Renombrar [{from}] a [{to}]? Cada página mostrará el nuevo tag al instante."
   rename_one_click: Renombrar [{old}] a [{now}]
-  swap_title: 'Dos alianzas intercambian tags:'
-  swap_button: Intercambiar tags
-  swap_confirm: "¿Intercambiar los tags de [{a}] y [{b}]?"
-  off_map_title: 'Eliminado del mapa (en el planificador de Alianzas):'
+  swap_title: 'Dos alianzas intercambian etiquetas:'
+  swap_button: Intercambiar etiquetas
+  swap_confirm: "¿Intercambiar las etiquetas de [{a}] y [{b}]?"
+  off_map_title: 'Eliminado del mapa (en el Planificador de alianzas):'
   retire_button: Retirar
-  retire_confirm: "¿Retirar [{tag}]? Se mantiene con su historial (alianzas retiradas, abajo) y puede ser traído de vuelta."
+  retire_confirm: "¿Retirar [{tag}]? Se mantiene con su historial (alianzas retiradas, abajo) y puede ser recuperada."
   retired_title: Alianzas retiradas ({n})
-  unretire_button: Traer de vuelta
+  unretire_button: Recuperar
   roster_saved: Guardado.
-  newtag: "{tag} es nuevo en el mapa. ¿Es una alianza que el sitio ya conocía, renombrada o de vuelta en el mapa? Hasta que no respondas, no empezará con nada de ellos, y se pedirá a los miembros de la antigua alianza que inicien sesión de nuevo."
+  newtag: "{tag} es nuevo en el mapa. ¿Es una alianza que el sitio ya conocía, renombrada o de vuelta en el mapa? Hasta que respondas, comienza sin nada suyo, y se pedirá a los miembros de la antigua alianza que inicien sesión de nuevo."
   newtag_same: 'Misma alianza que:'
   newtag_new: Es una nueva alianza
   newtag_link: Vincular
   page_title: Herramientas de Administrador
-  intro: 'Herramientas para Administradores del Reino: qué hay pendiente para ti y una búsqueda de jugadores en vivo.'
-  loading: Cargando…
+  intro: 'Herramientas para Administradores del Reino: qué te espera y una búsqueda de jugadores en tiempo real.'
+  loading: Cargando...
   sign_in: Iniciar sesión con Discord
   sign_in_needed: Inicia sesión con Discord para abrir las herramientas de Administrador.
   stewards_only: Solo los Administradores del Reino pueden abrir las herramientas de Administrador.
-  lookup_title: Búsqueda de jugadores
-  lookup_help: 'Cualquier jugador, en vivo desde el juego: su alianza, números y nombres o alianzas anteriores. Escribe un ID de jugador, o un nombre para encontrar el ID de un jugador NAP.'
-  lookup_placeholder: ID de jugador, o el nombre de un jugador NAP
+  lookup_title: Búsqueda de jugador
+  lookup_help: 'Cualquier jugador, en vivo desde el juego: su alianza, números y nombres/alianzas anteriores. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
+  lookup_placeholder: ID de jugador, o nombre de jugador NAP
   lookup_go: Buscar
   lookup_id_needed: Escribe un ID de jugador (el número en su perfil), o elige un jugador NAP de los nombres encontrados.
-  lookups_left: Quedan {left} de {max} búsquedas en vivo hoy (compartidas por todos los Administradores).
-  looking: Preguntando al juego…
-  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otra persona, usa su ID de jugador.
+  lookups_left: "{left} de {max} búsquedas en vivo restantes hoy (compartidas por todos los Administradores)."
+  looking: Preguntando al juego...
+  name_none: Ningún jugador NAP con ese nombre. Para cualquier otro, usa su ID de jugador.
   no_alliance: Sin alianza
   server: Servidor {n}
   online: En línea ahora
   last_seen: Visto por última vez {when}
-  shielded: Escudo activado
+  shielded: Escudo activo
   might: Poder
   kills: Bajas
   sanctuary: Santuario
   vip: VIP
   position: Posición (X, Y)
   language: Idioma
-  ranks: 'Rangos del reino: #{might} Poder · #{kills} bajas · #{heroes} héroes'
+  ranks: 'Rangos del Reino: #{might} Poder · #{kills} Bajas · #{heroes} héroes'
   history_title: Nombres y alianzas
   history_none: No se han visto nombres o alianzas anteriores.
   seen_from: desde {when}
-  first_seen: Visto por primera vez por el rastreador el {when}.
-  renamed: "{old} es ahora {now} en el juego. Todavía se mide (Estadísticas y la carrera Top 4) por el número del juego para ella, pero el sitio aún la llama {old}."
-  renamed_fix: Renómbrala en el planificador de Alianzas
-  test_copy: "🧪 Sitio de prueba: sus datos fueron copiados del sitio en vivo el {when} (/devupdate en Discord hace una copia nueva)."
+  first_seen: Visto por primera vez por el rastreador {when}.
+  renamed: "{old} ahora es {now} en el juego. Todavía es medido (Estadísticas y la carrera del Top 4) por el número del juego para ella, pero el sitio todavía la llama {old}."
+  renamed_fix: Renómbrala en el Planificador de alianzas
+  test_copy: "🧪 Sitio de prueba: sus datos fueron copiados del sitio en vivo {when} (/devupdate en Discord hace una copia nueva)."
   test_copy_none: "🧪 Sitio de prueba: sus datos aún no han sido copiados del sitio en vivo. Ejecuta /devupdate en Discord para una copia nueva."
-  mismatch: "{tag} en el juego ahora responde con una alianza diferente: {got}. El sitio sigue midiendo la alianza que conoce como {tag} ({known}) por el número del juego para ella, y no cuenta la nueva como tal."
+  mismatch: "{tag} en el juego ahora responde con una alianza diferente: {got}. El sitio mantiene la medición de la alianza que conoce como {tag} ({known}) por el número del juego para ella, y no cuenta la nueva como tal."
   mismatch_relink: 'Es la misma alianza: revincular'
-  mismatch_relink_help: Solo si {got} es realmente la alianza a la que se refiere el sitio (el primer enlace fue incorrecto o el juego la volvió a numerar). Retirar o renombrar vienen con pasos posteriores.
-  unfound: "{tag} no se encontró en el juego, por lo que no se está midiendo (Estadísticas y la carrera Top 4). Si cambió su tag en el juego, escribe el nuevo y el sitio lo seguirá."
-  unfound_now: Su tag en el juego ahora
-  unfound_placeholder: p. ej. Arch
+  mismatch_relink_help: Solo si {got} realmente es la alianza a la que se refiere el sitio (el primer enlace estaba mal o el juego la volvió a numerar). Retirar o renombrar vienen con pasos posteriores.
+  unfound: "{tag} no fue encontrada en el juego, por lo que no está siendo medida (Estadísticas y la carrera del Top 4). Si cambió su etiqueta en el juego, escribe la nueva y el sitio la seguirá."
+  unfound_now: Su etiqueta en el juego ahora
+  unfound_placeholder: ej. Arch
   unfound_link: Vincular
-  unfound_checking: Comprobando con el juego...
-  unfound_left: Quedan {left} de {max} enlaces hoy (cada uno pregunta al juego una vez)
+  unfound_checking: Verificando con el juego...
+  unfound_left: "{left} de {max} enlaces restantes hoy (cada uno pregunta al juego una vez)"
   pending_title: Esperando revisión
-  pending_none: No hay fotos de alianza esperando.
+  pending_none: Ninguna imagen de alianza esperando.
   sent_by: Enviado por {name}, {when}
-  race_title: Carrera Top 4
-  race_none: Aún no se ha medido ninguna carrera.
+  race_title: Carrera del Top 4
+  race_none: Ninguna carrera medida aún.
   race_progress: "{n} de 3 días de Duelo medidos hasta ahora."
-  race_finished: 'Los 3 días medidos: los resultados están en el liderazgo NAP.'
-  race_missing: 'No medidos: {tags}'
+  race_finished: 'Los 3 días medidos: los resultados están en la dirección NAP.'
+  race_missing: 'No medido: {tags}'
   race_more: Tabla completa en la página de Reglas
   quota_title: Solicitudes del rastreador
-  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día, empezando de nuevo a las 00:00 UTC. La cifra de abajo es la última que el rastreador dio al sitio, así que no cuesta nada mostrarla; verificar ahora cuesta una solicitud.
+  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día, comenzando de nuevo a las 00:00 UTC. La cifra a continuación es la última que el rastreador dio al sitio, por lo que no cuesta nada mostrarla; verificar ahora cuesta una solicitud.
   quota_check: Verificar ahora
   quota_used: usado hoy
   quota_failed: No se pudo contactar con el rastreador.
-  quota_as_of: A fecha de {when}
-  quota_none: El sitio aún no le ha pedido nada al rastreador hoy.
+  quota_as_of: A partir de {when}
+  quota_none: El sitio aún no ha solicitado nada al rastreador hoy.
   quota_resets: Comienza de nuevo en {time}
-  usage_title: Lo que los usó
+  usage_title: Qué los usó
   usage_automation: Automatización
-  usage_automation_help: Instantánea de estadísticas diarias y carrera Top 4
+  usage_automation_help: Instantánea diaria de estadísticas y carrera del Top 4
   usage_alliance: Herramientas de alianza
-  usage_alliance_help: Tableros, lista, nominaciones
+  usage_alliance_help: Paneles, lista, nominaciones
   usage_public: Páginas públicas
   usage_public_help: Tarjetas de clasificación en la página de Alianzas
-  usage_steward: Herramientas de Administrador
+  usage_steward: Herramientas de administrador
   usage_steward_help: Búsquedas de jugadores, actualizaciones de mapas y verificaciones de uso
   usage_other: Otro
   usage_other_help: Cualquier cosa no etiquetada
   usage_unrecorded: No registrado
   usage_unrecorded_help: Contado por el rastreador, aún no guardado aquí (cada servidor guarda cada pocos minutos)
-  usage_none: Aún no se han registrado solicitudes hoy.
+  usage_none: No se han registrado solicitudes hoy todavía.

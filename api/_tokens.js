@@ -81,7 +81,14 @@ export const SESSION_DAYS = 30;
  * @param {{uid: string, name: string, role: string, alliance: string}} user
  */
 export function createSessionToken(user, secret) {
-  const payload = { kind: 'session', ...user, exp: Date.now() + SESSION_DAYS * 24 * 3600 * 1000 };
+  const now = Date.now();
+  // `iat`: when it was issued. Passes without it (from before 2026-11-22) are refused below.
+  const payload = {
+    kind: 'session',
+    ...user,
+    iat: now,
+    exp: now + SESSION_DAYS * 24 * 3600 * 1000,
+  };
   const dataString = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const signature = crypto
     .createHmac('sha256', sessionKey(secret))
@@ -91,8 +98,9 @@ export function createSessionToken(user, secret) {
 }
 
 /**
- * Checks a login pass and returns { uid, name, role, alliance, exp }, or null if it is
- * missing, malformed, tampered with, expired, or not a login pass.
+ * Checks a login pass and returns { uid, name, role, alliance, allianceId, iat, exp }, or null
+ * if it is missing, malformed, tampered with, expired, from before 2026-11-22 (no `iat`), or
+ * not a login pass.
  */
 export function verifySessionToken(token, secret) {
   if (!token || typeof token !== 'string' || !secret) return null;
@@ -109,6 +117,10 @@ export function verifySessionToken(token, secret) {
     if (payload.kind !== 'session' || !payload.uid || !payload.exp || Date.now() > payload.exp) {
       return null;
     }
+    // Passes from before the alliance ID move's tidy-up (owner decision, 2026-11-22) carry no
+    // `iat` and some no alliance ID: refused, so everyone signs in once and every pass since
+    // names its alliance by ID (docs/ALLIANCE-IDS-PLAN.md, step 8)
+    if (!payload.iat) return null;
     return payload;
   } catch {
     return null;

@@ -2,59 +2,59 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: La tua alleanza è cambiata sul sito da quando hai effettuato l'accesso. Accedi di nuovo con Discord per proseguire.
+  alliance_changed: La tua alleanza è cambiata sul sito da quando hai effettuato l'accesso. Accedi di nuovo con Discord per continuare.
   rename_unknown: Quell'alleanza non è più sulla mappa. Ricarica la pagina.
-  rename_bad_tag: 'Digita il nuovo tag esattamente come appare nel gioco: massimo 12 caratteri, senza spazi, due punti, parentesi o barre.'
+  rename_bad_tag: 'Digita il nuovo tag esattamente come nel gioco: fino a 12 caratteri, senza spazi, due punti, parentesi o barre.'
   rename_same: È il tag che ha già.
   rename_taken: "[{tag}] ha già quel tag. Per scambiare i tag tra due alleanze, usa lo scambio."
   rename_fixed: "[{tag}] non può ancora essere rinominata qui: il suo tag è parte del codice del sito. Richiedi prima una modifica del codice."
-  rename_not_moved: 'La rinomina richiede che ogni archivio sia prima spostato agli ID alleanza (ancora per tag: {stores}).'
+  rename_not_moved: 'La ridenominazione richiede prima che ogni store venga spostato agli ID alleanza (ancora tramite tag: {stores}).'
   retire_on_map: Solo un'alleanza rimossa dalla mappa (nel pianificatore Alleanza) può essere ritirata.
-  pending_gone: A quell'alleanza è già stato risposto.
+  pending_gone: Quella richiesta per l'alleanza è già stata gestita.
   stewards_only: Solo gli Steward possono usare gli strumenti Steward.
-  lookups_used: Le ricerche giocatore di oggi sono esaurite. Ricominciano al reset giornaliero (00:00 GT).
+  lookups_used: Le ricerche dei giocatori di oggi sono esaurite. Ricominciano al ripristino giornaliero (00:00 GT).
   player_not_found: Nessun giocatore ha quell'ID.
-  player_unavailable: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
-  positions_leaders_only: Solo gli R4 e gli R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
+  player_unavailable: Impossibile contattare il gioco. Riprova tra qualche minuto.
+  positions_leaders_only: Solo gli R4 e R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
   positions_unavailable: Le posizioni dei membri non possono essere caricate al momento. Riprova tra qualche minuto.
-  links_used: I link alleanza di oggi sono esauriti. Ricominciano al reset giornaliero (00:00 GT).
+  links_used: I link alleanza di oggi sono esauriti. Ricominciano al ripristino giornaliero (00:00 GT).
   relink_none: Non c'è più nulla da ricollegare per quell'alleanza.
-  link_bad: Scegli un'alleanza e digita il tag che usa ora nel gioco.
+  link_bad: Scegli un'alleanza e digita il tag che usa nel gioco ora.
   link_same: È il tag che il sito usa già.
   link_taken: "{tag} è già un'altra alleanza sul sito."
-  link_not_found: Il gioco non ha alcuna alleanza con tag {tag} (le maiuscole contano).
-  positions_used: Gli aggiornamenti mappa di oggi sono esauriti. Ricominciano al reset giornaliero (00:00 GT).
+  link_not_found: Il gioco non ha nessuna alleanza con il tag {tag} (la distinzione tra maiuscole e minuscole conta).
+  positions_used: Gli aggiornamenti della mappa di oggi sono esauriti. Ricominciano al ripristino giornaliero (00:00 GT).
   positions_wait: La mappa è stata aggiornata poco fa. Riprova tra {minutes} min.
-  refresh_limit: Nessun aggiornamento roster rimasto oggi. Ricominciano al reset giornaliero (00:00 GT).
+  refresh_limit: Nessun aggiornamento roster rimasto per oggi. Ricominciano al ripristino giornaliero (00:00 GT).
   refresh_wait: Il roster è stato aggiornato poco fa. Riprova tra {n} min.
-  refresh_failed: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
+  refresh_failed: Impossibile contattare il gioco. Riprova tra qualche minuto.
   signed_out: Accedi con Discord (in alto a destra) per vedere la tua dashboard alleanza.
   load_failed: 'Impossibile caricare la dashboard: {reason}'
-  no_alliance: Non siamo riusciti a determinare in quale alleanza ti trovi. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP. Chiedi ai leader della tua alleanza o a uno Steward il ruolo, poi usa Aggiorna Accesso nella scheda del tuo account (in alto a destra).
-  leaders_only: Solo gli R4 e gli R5 della tua alleanza possono modificare la dashboard.
+  no_alliance: Non siamo riusciti a capire in quale alleanza sei. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP. Chiedi ai leader della tua alleanza o a uno Steward il ruolo, quindi usa Aggiorna Accesso nella scheda del tuo account (in alto a destra).
+  leaders_only: Solo gli R4 e R5 della tua alleanza possono modificare la dashboard.
   chart_removed: Quel grafico è stato rimosso.
   chart_already_removed: Quel grafico era già stato rimosso.
-  not_linked: Questo grafico non è collegato a un foglio Google o Doc.
+  not_linked: Questo grafico non è collegato a un foglio o documento Google.
   unknown_change: Modifica sconosciuta.
   save_failed: 'Impossibile salvare: {reason}'
-  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate in Discord.
-  rewards_closed: Le ricompense sono chiuse fino a {when}.
-  no_rank: "[{tag}] non ha alcun rango nella classifica."
+  r5_only_nominate: Solo il tuo R5 può aprire la pagina delle candidature qui. Digita /nominate su Discord.
+  rewards_closed: Le ricompense sono chiuse fino al {when}.
+  no_rank: "[{tag}] non ha alcun rango in classifica."
   choose_type: Scegli un tipo di grafico o tabella.
-  title_needed: Dai al grafico o alla tabella un titolo.
+  title_needed: Dai un titolo al grafico o alla tabella.
   too_many_columns: Al massimo {max} colonne (questa tabella ne ha {count}).
   too_many_rows: Al massimo {max} righe (questa tabella ne ha {count}).
   column_name: Colonna {n}
   paste_first: Incolla prima una tabella (una riga di intestazione, poi i dati).
   no_data_rows: La tabella non ha righe di dati sotto la sua intestazione.
   needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere visualizzato.
-  needs_target: 'Un grafico di progresso ha bisogno di un obiettivo: un numero, o una colonna di obiettivi.'
+  needs_target: 'Un grafico di progresso ha bisogno di un obiettivo: un numero o una colonna di obiettivi.'
   too_many_widgets: Al massimo {max} grafici e tabelle per alleanza.
   sheet_unusable: 'I dati del foglio non possono essere usati: {reason}'
   too_big: Ciò renderebbe questa dashboard troppo grande ({size} KB di {max} KB). Usa meno righe o rimuovi una tabella.
   player_name_needed: Inserisci un nome giocatore.
-  time_format: Gli orari sono in Game Time come 18:00 (o lasciali vuoti).
-  start_time_needed: Dai anche l'orario di inizio (o lasciali entrambi vuoti).
+  time_format: Gli orari sono in Game Time, come 18:00 (o lasciali vuoti).
+  start_time_needed: Inserisci anche l'ora di inizio (o lasciali entrambi vuoti).
   rotor_full: Al massimo {max} giocatori nel rotore.
   already_in_rotor: "{name} è già nel rotore."
   player_removed: Quel giocatore è stato rimosso.

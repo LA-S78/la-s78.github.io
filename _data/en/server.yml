@@ -13,6 +13,7 @@ api_dashboard:
   rename_fixed: "[{tag}] can't be renamed here yet: its tag is part of the site's code. Ask for a code change first."
   rename_not_moved: "Rename needs every store moved to alliance IDs first (still by tag: {stores})."
   retire_on_map: "Only an alliance removed from the map (in the Alliance planner) can be retired."
+  tidy_not_moved: "The tidy-up needs every store moved to alliance IDs first (still by tag: {stores})."
   pending_gone: "That alliance has already been answered for."
   stewards_only: "Only Stewards can use the Steward tools."
   lookups_used: "Today's player lookups are used up. They start again at the daily reset (00:00 GT)."
