@@ -5,6 +5,8 @@
 # Technical messages for administrators (set-up, raw Discord errors) aren't here.
 
 api_dashboard:
+  alliance_changed: "Your alliance changed on the site since you signed in. Sign in with Discord again to carry on."
+  pending_gone: "That alliance has already been answered for."
   stewards_only: "Only Stewards can use the Steward tools."
   lookups_used: "Today's player lookups are used up. They start again at the daily reset (00:00 GT)."
   player_not_found: "No player has that ID."

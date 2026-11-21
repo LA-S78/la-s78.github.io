@@ -1053,6 +1053,10 @@ stats:
 
 # The Steward tools page (portal/steward.html; Stewards only)
 steward:
+  newtag: "{tag} is new on the map. Is it an alliance the site already knew, renamed or back on the map? Until you answer, it starts with nothing of theirs, and members of the old alliance are asked to sign in again."
+  newtag_same: "Same alliance as:"
+  newtag_new: "It's a new alliance"
+  newtag_link: "Link"
   page_title: "Steward Tools"
   intro: "Tools for Kingdom Stewards: what's waiting for you, and a live player lookup."
   loading: "Loading…"
