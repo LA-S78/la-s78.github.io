@@ -995,36 +995,40 @@ stats:
   show_hide: Toca una alianza para mostrar u ocultar su línea.
   credit_before: Números desde el
 steward:
-  move_title_map: 'IDs de Alianza: la lista de alianzas y territorios'
+  move_title_map: 'IDs de Alianza: lista de alianzas y territorios'
   move_title_calendar: 'IDs de Alianza: eventos del calendario'
-  move_by_tag: Almacenado por etiqueta (como antes). El movimiento lo almacena por el ID permanente de cada alianza; las páginas se ven igual. Primero se guarda una copia de seguridad del archivo.
-  move_by_id: Almacenado por ID de alianza. Deshacer lo convierte de nuevo en etiquetas, conservando todos los cambios realizados desde entonces.
+  move_title_rewards: 'IDs de Alianza: rotación del Capitolio, compras y cofres entregados'
+  move_title_nominations: 'IDs de Alianza: listas de nominación de este periodo'
+  move_by_tag: Almacenado por etiqueta (como antes). El movimiento lo almacena por la ID permanente de cada alianza; las páginas se ven igual. Primero se guarda una copia de seguridad del archivo.
+  move_by_id: Almacenado por ID de alianza. Deshacer lo convierte de nuevo a etiquetas, manteniendo cada cambio realizado desde entonces.
   move_button: Mover a IDs
   move_undo: Deshacer el movimiento
   move_confirm: "¿Mover esto a IDs de alianza ahora?"
   move_undo_confirm: "¿Convertir esto de nuevo a etiquetas?"
   move_done_map: 'Movido: {alliances} alianzas, {links} enlaces de academia, {owned} territorios. Copia de seguridad: {backup}'
-  move_done_calendar: 'Se movieron {alliance} eventos de alianza (eventos globales del servidor, sin cambios: {global}). Copia de seguridad: {backup}'
-  move_undone: 'De vuelta a etiquetas. Copia de seguridad del archivo por ID: {backup}'
+  move_done_rewards: 'Movido: {seats} asientos de rotación del Capitolio, {buyouts} compras activas, {handed} cofres entregados. Copia de seguridad: {backup}'
+  move_done_nominations: 'Movidas {lists} listas de nominación. Copia de seguridad: {backup}'
+  move_done_calendar: 'Movidos {alliance} eventos de alianza (eventos globales del servidor, sin cambios: {global}). Copia de seguridad: {backup}'
+  move_undone: 'Vuelta a etiquetas. Copia de seguridad del archivo por ID: {backup}'
   move_already: 'Nada que hacer: ya está hecho.'
-  newtag: "{tag} es nuevo en el mapa. ¿Es una alianza que el sitio ya conocía, renombrada o de vuelta en el mapa? Hasta que respondas, comienza sin nada suyo, y se pedirá a los miembros de la antigua alianza que vuelvan a iniciar sesión."
+  newtag: "{tag} es nuevo en el mapa. ¿Es una alianza que el sitio ya conocía, renombrada o de vuelta en el mapa? Hasta que respondas, no empieza con nada de ellos, y se pide a los miembros de la antigua alianza que vuelvan a iniciar sesión."
   newtag_same: 'Misma alianza que:'
   newtag_new: Es una nueva alianza
   newtag_link: Enlace
   page_title: Herramientas de Administrador
-  intro: 'Herramientas para Administradores de Reino: qué te espera y una búsqueda de jugadores en vivo.'
+  intro: 'Herramientas para Administradores del Reino: qué te espera y búsqueda de jugadores en vivo.'
   loading: Cargando…
   sign_in: Iniciar sesión con Discord
   sign_in_needed: Inicia sesión con Discord para abrir las herramientas de Administrador.
-  stewards_only: Solo los Administradores de Reino pueden abrir las herramientas de Administrador.
+  stewards_only: Solo los Administradores del Reino pueden abrir las herramientas de Administrador.
   lookup_title: Búsqueda de jugador
-  lookup_help: 'Cualquier jugador, en vivo desde el juego: su alianza, números, y nombres y alianzas anteriores. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
-  lookup_placeholder: ID de jugador o nombre de un jugador NAP
+  lookup_help: 'Cualquier jugador, en vivo desde el juego: su alianza, números, nombres anteriores y alianzas. Escribe una ID de jugador o un nombre para encontrar la ID de un jugador NAP.'
+  lookup_placeholder: ID de jugador, o nombre de un jugador NAP
   lookup_go: Buscar
-  lookup_id_needed: Escribe un ID de jugador (el número en su perfil) o elige un jugador NAP de los nombres encontrados.
-  lookups_left: Quedan {left} de {max} búsquedas en vivo hoy (compartidas por todos los Administradores).
-  looking: Consultando el juego…
-  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otra persona, usa su ID de jugador.
+  lookup_id_needed: Escribe una ID de jugador (el número en su perfil) o elige un jugador NAP de los nombres encontrados.
+  lookups_left: "{left} de {max} búsquedas en vivo restantes hoy (compartidas por todos los Administradores)."
+  looking: Consultando al juego…
+  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otro, usa su ID de jugador.
   no_alliance: Sin alianza
   server: Servidor {n}
   online: En línea ahora
@@ -1036,50 +1040,50 @@ steward:
   vip: VIP
   position: Posición (X, Y)
   language: Idioma
-  ranks: 'Rangos del Reino: #{might} Poder · #{kills} bajas · #{heroes} héroes'
+  ranks: 'Rangos del Reino: #{might} Poder · #{kills} Bajas · #{heroes} héroes'
   history_title: Nombres y alianzas
-  history_none: No se han visto nombres ni alianzas anteriores.
+  history_none: No se han visto nombres o alianzas anteriores.
   seen_from: desde {when}
   first_seen: Visto por primera vez por el rastreador {when}.
-  renamed: "{old} es ahora {now} en el juego. Todavía se mide (Estadísticas y carrera de los 4 Mejores) por el número del juego para ella, pero el sitio todavía la llama {old}."
-  renamed_fix: Renómbrala en el planificador de Alianzas
+  renamed: "{old} es ahora {now} en el juego. Todavía se mide (Estadísticas y carrera de los 4 Mejores) por el número que le asigna el juego, pero el sitio sigue llamándolo {old}."
+  renamed_fix: Renómbralo en el planificador de Alianzas
   test_copy: "🧪 Sitio de prueba: sus datos fueron copiados del sitio en vivo {when} (/devupdate en Discord hace una copia nueva)."
-  test_copy_none: "🧪 Sitio de prueba: sus datos aún no han sido copiados del sitio en vivo. Ejecuta /devupdate en Discord para obtener una copia nueva."
-  mismatch: "{tag} en el juego ahora responde con una alianza diferente: {got}. El sitio sigue midiendo la alianza que conoce como {tag} ({known}) por el número del juego para ella, y no cuenta la nueva como tal."
+  test_copy_none: "🧪 Sitio de prueba: sus datos aún no han sido copiados del sitio en vivo. Ejecuta /devupdate en Discord para una copia nueva."
+  mismatch: "{tag} en el juego ahora responde con una alianza diferente: {got}. El sitio sigue midiendo la alianza que conoce como {tag} ({known}) mediante el número del juego, y no cuenta a la nueva como tal."
   mismatch_relink: 'Es la misma alianza: volver a enlazar'
-  mismatch_relink_help: Solo si {got} realmente es la alianza a la que se refiere el sitio (el primer enlace fue incorrecto o el juego la volvió a numerar). Retirar o renombrar vienen con pasos posteriores.
+  mismatch_relink_help: Solo si {got} es realmente la alianza a la que se refiere el sitio (el primer enlace fue incorrecto o el juego la renumeró). La retirada o el cambio de nombre vienen con pasos posteriores.
   unfound: "{tag} no se encontró en el juego, por lo que no se está midiendo (Estadísticas y carrera de los 4 Mejores). Si cambió su etiqueta en el juego, escribe la nueva y el sitio la seguirá."
   unfound_now: Su etiqueta en el juego ahora
   unfound_placeholder: ej. Arch
   unfound_link: Enlace
-  unfound_checking: Verificando con el juego...
-  unfound_left: Quedan {left} de {max} enlaces hoy (cada uno consulta el juego una vez)
+  unfound_checking: Comprobando con el juego...
+  unfound_left: "{left} de {max} enlaces restantes hoy (cada uno consulta al juego una vez)"
   pending_title: Esperando revisión
   pending_none: No hay imágenes de alianza esperando.
   sent_by: Enviado por {name}, {when}
   race_title: Carrera de los 4 Mejores
   race_none: Aún no se ha medido ninguna carrera.
   race_progress: "{n} de 3 días de Duelo medidos hasta ahora."
-  race_finished: 'Los 3 días medidos: los resultados están en la dirección de NAP.'
+  race_finished: 'Los 3 días medidos: los resultados están en el liderazgo NAP.'
   race_missing: 'No medido: {tags}'
   race_more: Tabla completa en la página de Reglas
   quota_title: Solicitudes del rastreador
-  quota_help: El Rastreador de Last Asylum permite 1,000 solicitudes al día, reiniciándose a las 00:00 UTC. La cifra de abajo es la última que el rastreador dio al sitio, así que mostrarla no cuesta nada; consultar ahora cuesta una solicitud.
-  quota_check: Consultar ahora
+  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día, empezando de nuevo a las 00:00 UTC. La cifra de abajo es la última que el rastreador dio al sitio, por lo que no cuesta nada mostrarla; comprobar ahora cuesta una solicitud.
+  quota_check: Comprobar ahora
   quota_used: usado hoy
   quota_failed: No se pudo contactar con el rastreador.
   quota_as_of: A fecha de {when}
   quota_none: El sitio aún no ha pedido nada al rastreador hoy.
-  quota_resets: Se reinicia en {time}
-  usage_title: Qué los ha usado
+  quota_resets: Empieza de nuevo en {time}
+  usage_title: Qué los usó
   usage_automation: Automatización
-  usage_automation_help: Instantánea de estadísticas diarias y carrera de los 4 Mejores
-  usage_alliance: Herramientas de alianza
+  usage_automation_help: Instantánea de Estadísticas diarias y carrera de los 4 Mejores
+  usage_alliance: Herramientas de Alianza
   usage_alliance_help: Paneles, lista de miembros, nominaciones
   usage_public: Páginas públicas
   usage_public_help: Tarjetas de clasificación en la página de Alianza
   usage_steward: Herramientas de Administrador
-  usage_steward_help: Búsquedas de jugadores, actualizaciones de mapas y comprobaciones de uso
+  usage_steward_help: Búsquedas de jugador, actualizaciones de mapa y comprobaciones de uso
   usage_other: Otro
   usage_other_help: Cualquier cosa no etiquetada
   usage_unrecorded: No registrado
