@@ -128,6 +128,16 @@ export const STORES = {
     moveToIds: moveDashboardsToIds,
     moveToTags: moveDashboardsToTags,
   },
+  // The Top 4 race's and Stats tab's Blob files (api/_stats_ids.js): moved in the Blob store,
+  // with a switch in the Gist
+  stats: {
+    step: 6,
+    custom: true,
+    form: (gist) =>
+      JSON.parse(gist?.files?.['alliance-id-moves.json']?.content || '{}')?.stats ? 'id' : 'tag',
+    moveToIds: async ({ now } = {}) => (await import('./_stats.js')).moveStatsToIds({ now }),
+    moveToTags: async ({ now } = {}) => (await import('./_stats.js')).moveStatsToTags({ now }),
+  },
 };
 
 export const storeForFile = (file) =>
