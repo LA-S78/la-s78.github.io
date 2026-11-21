@@ -129,7 +129,8 @@ export function allianceRoster(register) {
  */
 export async function saveRegisterChange(change, description) {
   const { updateGist } = await import('./_gist.js');
-  const { storeForms } = await import('./_id_stores.js');
+  const idStores = await import('./_id_stores.js');
+  const { storeForms } = idStores;
   const { forgetMissing } = await import('./_tracker.js');
   let result = null;
   await updateGist((gist) => {
@@ -142,13 +143,22 @@ export async function saveRegisterChange(change, description) {
       return {};
     }
     const before = readRegister(gist);
+    // A store that moves on its own (the race) is moved first, by the tags as they were, so a
+    // rename never lands on the old form and splits an alliance (Gemini's review, 2026-11-22)
+    const { STORES } = idStores;
+    const early = {};
+    for (const s of Object.values(STORES)) {
+      if (!s.autoMove) continue;
+      const raw = JSON.parse(gist.files?.[s.file]?.content || 'null');
+      if (raw && !s.isById(raw)) early[s.file] = s.byId(raw, before).stored;
+    }
     const out = change(before);
     if (out.error) {
       result = out;
       return {};
     }
     const map = JSON.parse(gist.files?.['map-state.json']?.content || 'null');
-    const files = { [REGISTER_FILE]: out.register };
+    const files = { ...early, [REGISTER_FILE]: out.register };
     if (map?.version === 2) {
       const alliances = { ...map.alliances };
       for (const [id, rec] of Object.entries(alliances)) {
