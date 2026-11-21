@@ -20,6 +20,7 @@ export const SIGNED_IN = {
     uid: '1',
     name: 'Visual Test',
     role: 'R5',
+    iat: Date.parse('2026-11-10T12:00:00Z'),
     exp: Date.parse('2026-12-10T12:00:00Z'),
   }),
   'auth-steward': 'false',

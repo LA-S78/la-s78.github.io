@@ -26,7 +26,7 @@
 //     Each player is kept once; every alliance has its own lists, so the filter shows them.
 // Research donations and help are not kept (owner: they stay off the public stats).
 
-import { get, put, list } from '@vercel/blob';
+import { get, put, list, del } from '@vercel/blob';
 import { createHmac } from 'node:crypto';
 import { gistJson, isTestDeployment } from './_gist.js';
 import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
@@ -897,3 +897,30 @@ export async function moveStatsToTags({ now = new Date(), store = rawBlobStore, 
 
 /** Is the site writing Stats files by ID? */
 export const statsForm = (gist) => (gistJson(gist, MOVES_FILE, {}).stats ? 'id' : 'tag');
+
+/** The Stats move's backup files (stats/backup-before-ids/, stats/backup-by-id/): their paths. */
+export async function statsBackups(listImpl = list) {
+  if (!blobToken()) return [];
+  const out = [];
+  for (const folder of ['backup-before-ids/', 'backup-by-id/']) {
+    let cursor;
+    do {
+      const page = await listImpl({
+        prefix: `${prefix()}/${folder}`,
+        cursor,
+        token: blobToken(),
+        limit: 1000,
+      });
+      out.push(...page.blobs.map((b) => b.pathname));
+      cursor = page.hasMore ? page.cursor : undefined;
+    } while (cursor);
+  }
+  return out;
+}
+
+/** Deletes them (the tidy-up, plan step 8). Only paths under a backup folder. */
+export async function deleteStatsBackups(paths) {
+  const ok = paths.filter((p) => /(^|\/)stats\/backup-(before-ids|by-id)\//.test(p));
+  for (let i = 0; i < ok.length; i += 100) await del(ok.slice(i, i + 100), { token: blobToken() });
+  return ok.length;
+}

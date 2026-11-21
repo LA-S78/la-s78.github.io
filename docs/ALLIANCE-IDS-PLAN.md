@@ -1,8 +1,10 @@
 # Plan: alliances by permanent ID, not by tag
 
-Status: **proposed, revised after the maintainer's two reviews** (owner request, 2026-11-20;
-Gemini's reviews the same day: the plan, then the test-site rehearsal). Nothing in here is built yet; each step below becomes its own pull request,
-rehearsed on the test site first.
+Status: **done (2026-11-22).** Steps 0–8 are live: every store is kept by alliance ID, Stewards
+rename, swap and retire alliances on the Steward tools page, and the moves' backups are removed
+by a Steward's tidy-up. What was built, step by step, is in `docs/DECISIONS.md` (the entries
+headed "alliance ID plan"). The plan below is kept as it was written (owner request, 2026-11-20;
+Gemini's reviews the same day), for the reasoning.
 
 ## Why
 
