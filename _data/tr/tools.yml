@@ -2,12 +2,13 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 common:
+  disclaimer: 'LA-S78, Last Asylum: Plague oyunu için hayran yapımı bir topluluk projesidir. Resmi bir 37Games web sitesi değildir ve Last Asylum: Plague ile bağlantısı yoktur. Oyun isimleri ve görseller sahiplerine aittir. Canlı oyun verileri {tracker} kaynağından alınmıştır.'
   sign_in_discord: Discord ile giriş yap
   sign_in_again: Tekrar giriş yap
   not_saved: 'Kaydedilmedi: {error}'
   cancel: İptal
   save: Kaydet
-  saving: Kaydediliyor...
+  saving: Kaydediliyor…
   edit: Düzenle
   delete: Sil
   remove: Kaldır
@@ -20,10 +21,10 @@ common:
   duration_minutes: "{m}d"
   game_time: "{time} GT"
   your_time: "{time} yerel saatiniz"
-  off_week: Hafta Dışı
-  kw_week: Krallık Savaşı Haftası {n}
+  off_week: Hafta İçi
+  kw_week: Krallık Savaşı {n}. Hafta
   copy: Kopyala
-  set_one: Kral'ın Takdiri
+  set_one: Kralın Övgüsü
   set_two: Savaş Kralı Ödülü
   chests:
     commanders_will: Komutanın İradesi

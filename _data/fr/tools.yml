@@ -2,6 +2,7 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 common:
+  disclaimer: 'LA-S78 est un projet communautaire créé par des fans pour le jeu Last Asylum: Plague. Ce n''est pas un site officiel de 37Games et il n''est pas affilié à Last Asylum: Plague. Les noms de jeu et les illustrations appartiennent à leurs propriétaires respectifs. Données de jeu en direct provenant du {tracker}.'
   sign_in_discord: Se connecter avec Discord
   sign_in_again: Se reconnecter
   not_saved: 'Non enregistré : {error}'
@@ -13,7 +14,7 @@ common:
   remove: Retirer
   undo: Annuler
   copied: "✓ Copié"
-  optional: "(optionnel)"
+  optional: "(facultatif)"
   now: maintenant
   duration_days: "{d}j {h}h"
   duration_hours: "{h}h {m}m"
@@ -29,7 +30,7 @@ common:
     commanders_will: Volonté du Commandant
     loyal_servant: Serviteur Loyal
     followers_heart: Cœur du Suiveur
-    honor_vanguard: Avant-garde d'Honneur
+    honor_vanguard: Avant-garde de l'Honneur
     fearless_hero: Héros Intrépide
     logistics_support: Soutien Logistique
 dashboard:
