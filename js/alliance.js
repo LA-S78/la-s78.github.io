@@ -743,6 +743,7 @@ export function renderStandingsHierarchy() {
             }
             <strong class="ladder-tag ally-text" style="--ally: ${esc(displayColor)}">[${esc(alliance.tag)}]</strong>
             <span class="ladder-name">${esc(alliance.name)}</span>
+            ${alliance.formerly ? `<span class="ladder-formerly">${esc(ta('formerly', { tag: alliance.formerly }))}</span>` : ''}
             ${
               alliance.parent_tag
                 ? compact

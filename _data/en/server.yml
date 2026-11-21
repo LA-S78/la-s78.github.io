@@ -6,6 +6,13 @@
 
 api_dashboard:
   alliance_changed: "Your alliance changed on the site since you signed in. Sign in with Discord again to carry on."
+  rename_unknown: "That alliance isn't on the map any more. Reload the page."
+  rename_bad_tag: "Type the new tag as it is in the game: up to 12 characters, no spaces, colons, brackets or slashes."
+  rename_same: "That's the tag it already has."
+  rename_taken: "[{tag}] already has that tag. To trade tags between two alliances, use the swap."
+  rename_fixed: "[{tag}] can't be renamed here yet: its tag is part of the site's code. Ask for a code change first."
+  rename_not_moved: "Rename needs every store moved to alliance IDs first (still by tag: {stores})."
+  retire_on_map: "Only an alliance removed from the map (in the Alliance planner) can be retired."
   pending_gone: "That alliance has already been answered for."
   stewards_only: "Only Stewards can use the Steward tools."
   lookups_used: "Today's player lookups are used up. They start again at the daily reset (00:00 GT)."

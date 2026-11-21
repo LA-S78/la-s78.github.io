@@ -1,6 +1,8 @@
 // api/state.js
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { sanitizeAlliances } from './_alliances.js';
+import { readRegister } from './_register.js';
+import { formerlyTags } from './_rename.js';
 import { liveImages } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
@@ -60,6 +62,10 @@ export default async function handler(req, res) {
     const rewardsState = gistJson(gist, 'rewards-data.json');
 
     const cleanAlliances = sanitizeAlliances(mapState.alliances || {}, roleColors);
+    // "[Arch], formerly [HMDA]" for 30 days after a Steward renamed it (alliance IDs step 7)
+    for (const [tag, was] of Object.entries(formerlyTags(readRegister(gist)))) {
+      if (cleanAlliances[tag]) cleanAlliances[tag].formerly = was;
+    }
     const blacklist = mapState.blacklist || { players: [], alliances: [] };
     // Approved card pictures (api/_alliance_images.js): { TAG: { card, wide } }
     const allianceImages = liveImages(gist, mapState.alliances || {});
@@ -77,6 +83,12 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=30');
 
     switch (scope) {
+      // The alliance list's version (owner's step 7 rehearsal, 2026-11-22): the Stats answers
+      // are kept an hour by Vercel, so the pages ask for them with this in the address; a
+      // rename, swap or planner change gives a new one, and so fresh Stats at once
+      case 'version':
+        return res.status(200).json({ v: mapState.lastUpdated || mapState.revision || 'initial' });
+
       case 'map':
         return res.status(200).json({
           alliances: cleanAlliances,

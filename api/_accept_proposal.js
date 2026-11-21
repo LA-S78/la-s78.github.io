@@ -18,6 +18,8 @@ import { isGistConfigured, gistJson, updateGist } from './_gist.js';
  */
 import { DEFAULT_FALLBACK_COLORS } from './_alliances.js';
 import { BASELINE_SCHEDULES } from './_cycle_helper.js';
+import { readRegister } from './_register.js';
+import { currentTagFor, currentTagOfId } from './_rename.js';
 
 const jsonResult = (status, json) => ({ status, json });
 
@@ -91,9 +93,11 @@ export async function acceptProposal(payload, { baseUrl = 'https://la-s78.app' }
             currentState.territory_ownership = {};
           }
 
+          // A change made before a rename names the old tag: the alliance's tag now (step 7)
+          const register = readRegister(gist);
           Object.entries(changes).forEach(([cityId, change]) => {
             currentState.territory_ownership[cityId] = {
-              owner: change.to,
+              owner: currentTagFor(register, change.to),
               updatedAt: new Date().toISOString(),
             };
           });
@@ -143,10 +147,24 @@ export async function acceptProposal(payload, { baseUrl = 'https://la-s78.app' }
 
           const previousAlliances = currentState.alliances || {};
           const mergedAlliances = {};
+          // A planner draft made before a rename (step 7): each alliance it knew carries its
+          // ID, so it is saved under the alliance's tag now, with its links followed too
+          const register = readRegister(gist);
+          const nowTag = (tag, data) =>
+            (data?.id && currentTagOfId(register, data.id)) || currentTagFor(register, tag.trim());
 
           // Preserve exact tag casing (RÂVN, RâvN, râvn remain distinct keys)
-          Object.entries(newAlliances).forEach(([tag, updatedData]) => {
-            const cleanTag = tag.trim();
+          Object.entries(newAlliances).forEach(([tag, rawData]) => {
+            const updatedData = {
+              ...rawData,
+              ...(rawData?.parent_tag
+                ? { parent_tag: currentTagFor(register, rawData.parent_tag) }
+                : {}),
+              ...(Array.isArray(rawData?.academies)
+                ? { academies: rawData.academies.map((t) => currentTagFor(register, t)) }
+                : {}),
+            };
+            const cleanTag = nowTag(tag, rawData);
             if (!cleanTag) return;
 
             const existing = previousAlliances[cleanTag] || {};
