@@ -83,6 +83,12 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=30');
 
     switch (scope) {
+      // The alliance list's version (owner's step 7 rehearsal, 2026-11-22): the Stats answers
+      // are kept an hour by Vercel, so the pages ask for them with this in the address; a
+      // rename, swap or planner change gives a new one, and so fresh Stats at once
+      case 'version':
+        return res.status(200).json({ v: mapState.lastUpdated || mapState.revision || 'initial' });
+
       case 'map':
         return res.status(200).json({
           alliances: cleanAlliances,
