@@ -999,39 +999,39 @@ steward:
   move_title_calendar: 'IDs d''Alliance : calendrier des événements'
   move_title_rewards: 'IDs d''Alliance : rotation du Capitole, rachats et coffres distribués'
   move_title_pictures: 'IDs d''Alliance : la liste des images d''alliance (les fichiers images conservent leurs noms)'
-  move_title_dashboards: 'IDs d''Alliance : tableaux de bord des alliances (chaque fichier est copié vers son ID ; les anciens fichiers restent en sauvegarde)'
+  move_title_dashboards: 'IDs d''Alliance : tableaux de bord d''alliance (chaque copie vers le fichier de son ID ; les anciens fichiers sont conservés comme sauvegarde)'
   move_title_nominations: 'IDs d''Alliance : listes de nominations de cette période'
-  move_by_tag: Stocké par tag (comme avant). Le transfert les stocke par l'ID permanent de chaque alliance ; les pages restent identiques. Une sauvegarde du fichier est effectuée en premier.
-  move_by_id: Stocké par ID d'alliance. L'annulation permet de revenir aux tags, tout en conservant les modifications effectuées depuis.
-  move_button: Transférer vers les IDs
-  move_undo: Annuler le transfert
-  move_confirm: Transférer ceci vers les IDs d'alliance maintenant ?
-  move_undo_confirm: Revenir aux tags ?
-  move_done_map: 'Transféré : {alliances} alliances, {links} liens d''académie, {owned} territoires. Sauvegarde : {backup}'
-  move_done_rewards: 'Transféré : {seats} sièges de rotation du Capitole, {buyouts} rachats actifs, {handed} coffres distribués. Sauvegarde : {backup}'
-  move_done_pictures: 'Transféré : images de {alliances} alliances ({pending} en attente de révision). Sauvegarde : {backup}'
-  move_done_dashboards: 'Transféré : {dashboards} tableaux de bord copiés vers leur fichier d''ID. Les anciens fichiers sont conservés en tant que sauvegarde.'
-  move_done_nominations: "{lists} listes de nominations transférées. Sauvegarde : {backup}"
-  move_done_calendar: "{alliance} événements d'alliance transférés (événements globaux, inchangés : {global}). Sauvegarde : {backup}"
+  move_by_tag: Stocké par tag (comme auparavant). Le déplacement le stocke par l'ID permanent de chaque alliance ; les pages semblent identiques. Une sauvegarde du fichier est effectuée en premier.
+  move_by_id: Stocké par ID d'alliance. Annuler le transforme à nouveau en tags, tout en conservant chaque modification effectuée depuis.
+  move_button: Déplacer vers les IDs
+  move_undo: Annuler le déplacement
+  move_confirm: Déplacer ceci vers les IDs d'alliance maintenant ?
+  move_undo_confirm: Transformer ceci à nouveau en tags ?
+  move_done_map: 'Déplacé : {alliances} alliances, {links} liens d''académie, {owned} territoires. Sauvegarde : {backup}'
+  move_done_rewards: 'Déplacé : {seats} sièges de rotation du Capitole, {buyouts} rachats actifs, {handed} coffres distribués. Sauvegarde : {backup}'
+  move_done_pictures: 'Déplacé : images de {alliances} alliances ({pending} en attente de révision). Sauvegarde : {backup}'
+  move_done_dashboards: 'Déplacé : {dashboards} tableaux de bord copiés vers leur fichier d''ID. Les anciens fichiers sont conservés comme sauvegarde.'
+  move_done_nominations: "{lists} listes de nominations déplacées. Sauvegarde : {backup}"
+  move_done_calendar: 'Événements de {alliance} alliance déplacés (événements à l''échelle du serveur, inchangés : {global}). Sauvegarde : {backup}'
   move_undone: 'Retour aux tags. Sauvegarde du fichier par ID : {backup}'
   move_already: 'Rien à faire : c''est déjà effectué.'
-  newtag: "{tag} est nouveau sur la carte. Est-ce une alliance que le site connaissait déjà, renommée ou de retour sur la carte ? Tant que vous n'avez pas répondu, elle démarre sans aucune de ses données, et les membres de l'ancienne alliance devront se reconnecter."
+  newtag: "{tag} est nouveau sur la carte. Est-ce une alliance que le site connaissait déjà, renommée ou de retour sur la carte ? Jusqu'à votre réponse, elle commence sans rien, et les membres de l'ancienne alliance sont invités à se reconnecter."
   newtag_same: 'Même alliance que :'
   newtag_new: C'est une nouvelle alliance
   newtag_link: Lien
-  page_title: Outils de l'Intendant
-  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et une recherche de joueur en direct.'
+  page_title: Outils d'Intendant
+  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend, et une recherche de joueurs en direct.'
   loading: Chargement...
   sign_in: Se connecter avec Discord
-  sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils de l'Intendant.
-  stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils de l'Intendant.
+  sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils d'Intendant.
+  stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils d'Intendant.
   lookup_title: Recherche de joueur
-  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses chiffres, et ses anciens noms et alliances. Tapez un ID de joueur, ou un nom pour trouver l''ID d''un joueur NAP.'
-  lookup_placeholder: ID de joueur ou nom d'un joueur NAP
+  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses chiffres, ainsi que ses anciens noms et alliances. Tapez un ID de joueur, ou un nom pour trouver l''ID d''un joueur NAP.'
+  lookup_placeholder: ID de joueur, ou nom d'un joueur NAP
   lookup_go: Rechercher
-  lookup_id_needed: Tapez un ID de joueur (le numéro sur son profil) ou choisissez un joueur NAP parmi les noms trouvés.
+  lookup_id_needed: Tapez un ID de joueur (le numéro sur son profil), ou choisissez un joueur NAP parmi les noms trouvés.
   lookups_left: "{left} sur {max} recherches en direct restantes aujourd'hui (partagées par tous les Intendants)."
-  looking: Interrogation du jeu...
+  looking: Demande au jeu...
   name_none: Aucun joueur NAP avec ce nom. Pour toute autre personne, utilisez son ID de joueur.
   no_alliance: Aucune alliance
   server: Serveur {n}
@@ -1049,17 +1049,17 @@ steward:
   history_none: Aucun ancien nom ou alliance trouvé.
   seen_from: depuis {when}
   first_seen: Vu pour la première fois par le tracker {when}.
-  renamed: "{old} est maintenant {now} dans le jeu. Elle est toujours mesurée (Stats et la course au Top 4) par son numéro de jeu, mais le site continue de l'appeler {old}."
-  renamed_fix: Renommer dans le planificateur d'alliance
-  test_copy: "🧪 Site de test : ses données ont été copiées depuis le site en direct {when} (/devupdate dans Discord pour effectuer une nouvelle copie)."
-  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en direct. Exécutez /devupdate dans Discord pour une nouvelle copie."
-  mismatch: "{tag} dans le jeu répond maintenant avec une alliance différente : {got}. Le site continue de mesurer l'alliance connue sous le nom de {tag} ({known}) par son numéro de jeu, et ne compte pas la nouvelle comme telle."
+  renamed: "{old} est maintenant {now} dans le jeu. Il est toujours mesuré (Stats et la course au Top 4) par le numéro du jeu, mais le site l'appelle toujours {old}."
+  renamed_fix: Le renommer dans le planificateur d'Alliance
+  test_copy: "🧪 Site de test : ses données ont été copiées depuis le site en direct {when} (/devupdate dans Discord crée une copie fraîche)."
+  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en direct. Exécutez /devupdate dans Discord pour une copie fraîche."
+  mismatch: "{tag} dans le jeu répond maintenant avec une alliance différente : {got}. Le site continue de mesurer l'alliance qu'il connaît sous le nom de {tag} ({known}) par le numéro du jeu, et ne compte pas la nouvelle comme telle."
   mismatch_relink: 'C''est la même alliance : relier'
-  mismatch_relink_help: Seulement si {got} est réellement l'alliance que le site désigne (le premier lien était erroné ou le jeu l'a renumérotée). Le retrait ou le renommage impliquent des étapes ultérieures.
-  unfound: "{tag} n'a pas été trouvé dans le jeu, il n'est donc pas mesuré (Stats et course au Top 4). Si le tag a changé dans le jeu, tapez le nouveau et le site le suivra."
-  unfound_now: Son tag dans le jeu actuellement
+  mismatch_relink_help: Seulement si {got} est vraiment l'alliance que le site désigne (le premier lien était erroné, ou le jeu l'a renuméroté). La retraite ou le changement de nom viennent avec des étapes ultérieures.
+  unfound: "{tag} n'a pas été trouvé dans le jeu, donc il n'est pas mesuré (Stats et la course au Top 4). S'il a changé son tag dans le jeu, tapez le nouveau et le site le suivra."
+  unfound_now: Son tag dans le jeu maintenant
   unfound_placeholder: ex. Arch
-  unfound_link: Relier
+  unfound_link: Lien
   unfound_checking: Vérification avec le jeu...
   unfound_left: "{left} sur {max} liens restants aujourd'hui (chaque lien interroge le jeu une fois)"
   pending_title: En attente de révision
@@ -1068,25 +1068,25 @@ steward:
   race_title: Course au Top 4
   race_none: Aucune course mesurée pour l'instant.
   race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
-  race_finished: 'Les 3 jours sont mesurés : les résultats sont à la disposition de la direction NAP.'
+  race_finished: 'Les 3 jours sont mesurés : les résultats sont à la direction NAP.'
   race_missing: 'Non mesuré : {tags}'
   race_more: Tableau complet sur la page des Règles
-  quota_title: Requêtes du Tracker
-  quota_help: Le tracker de Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le tracker au site ; son affichage est gratuit. Une vérification maintenant coûte une requête.
+  quota_title: Requêtes de tracker
+  quota_help: Le tracker Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier fourni par le tracker au site, donc l'afficher ne coûte rien ; vérifier maintenant coûte une requête.
   quota_check: Vérifier maintenant
   quota_used: utilisé aujourd'hui
-  quota_failed: Le tracker n'a pas pu être contacté.
+  quota_failed: Le tracker n'a pas pu être atteint.
   quota_as_of: Au {when}
   quota_none: Le site n'a encore rien demandé au tracker aujourd'hui.
   quota_resets: Réinitialisation dans {time}
-  usage_title: Utilisation
+  usage_title: Ce qui les a utilisés
   usage_automation: Automatisation
   usage_automation_help: Instantané des Stats quotidiennes et course au Top 4
-  usage_alliance: Outils d'alliance
+  usage_alliance: Outils d'Alliance
   usage_alliance_help: Tableaux de bord, effectifs, nominations
   usage_public: Pages publiques
   usage_public_help: Cartes de classement sur la page Alliance
-  usage_steward: Outils de l'Intendant
+  usage_steward: Outils d'Intendant
   usage_steward_help: Recherches de joueurs, rafraîchissements de carte et vérifications d'utilisation
   usage_other: Autre
   usage_other_help: Tout ce qui n'est pas étiqueté
