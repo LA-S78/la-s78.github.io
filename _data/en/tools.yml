@@ -1053,14 +1053,16 @@ stats:
 
 # The Steward tools page (portal/steward.html; Stewards only)
 steward:
-  move_title: "Alliance IDs: the alliance list and territories"
-  move_by_tag: "Stored by tag (as before). The move stores them by each alliance's permanent ID; pages look the same. A backup of the file is saved first."
-  move_by_id: "Stored by alliance ID. Undo turns them back into tags, keeping every change made since."
+  move_title_map: "Alliance IDs: the alliance list and territories"
+  move_title_calendar: "Alliance IDs: calendar events"
+  move_by_tag: "Stored by tag (as before). The move stores it by each alliance's permanent ID; pages look the same. A backup of the file is saved first."
+  move_by_id: "Stored by alliance ID. Undo turns it back into tags, keeping every change made since."
   move_button: "Move to IDs"
   move_undo: "Undo the move"
-  move_confirm: "Move the alliance list and territories to alliance IDs now?"
-  move_undo_confirm: "Turn the alliance list and territories back into tags?"
-  move_done: "Moved: {alliances} alliances, {links} academy links, {owned} territories. Backup: {backup}"
+  move_confirm: "Move this to alliance IDs now?"
+  move_undo_confirm: "Turn this back into tags?"
+  move_done_map: "Moved: {alliances} alliances, {links} academy links, {owned} territories. Backup: {backup}"
+  move_done_calendar: "Moved {alliance} alliance events (server-wide events, unchanged: {global}). Backup: {backup}"
   move_undone: "Back to tags. Backup of the by-ID file: {backup}"
   move_already: "Nothing to do: it's already done."
   newtag: "{tag} is new on the map. Is it an alliance the site already knew, renamed or back on the map? Until you answer, it starts with nothing of theirs, and members of the old alliance are asked to sign in again."

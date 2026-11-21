@@ -32,13 +32,8 @@ strings: [steward]
   <div id="st-unfound" class="st-renamed" hidden></div>
   <div id="st-mismatch" class="st-renamed" hidden></div>
   <div id="st-newtags" class="st-renamed" hidden></div>
-  <!-- Alliance IDs step 2: the move of the alliance list and territories, and its undo -->
-  <form id="st-move" class="st-link st-renamed" hidden>
-    <p><strong>{{ "steward.move_title" | t }}</strong></p>
-    <small class="st-small" data-state></small>
-    <div><button type="submit" class="btn btn-secondary" data-button></button></div>
-    <small class="st-small" data-result></small>
-  </form>
+  <!-- Alliance IDs (steps 2–4): each store's move to IDs, and its undo -->
+  <div id="st-moves"></div>
 
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
@@ -192,38 +187,41 @@ strings: [steward]
       await load();
     });
 
-    // Alliance IDs step 2: move the alliance list and territories to IDs, or undo it
-    let movedForm = null;
-    function moveBox(form) {
-      const box = $('st-move');
-      if (!form) return;
-      movedForm = form;
-      box.hidden = false;
-      box.querySelector('[data-state]').textContent = t(form === 'id' ? 'steward.move_by_id' : 'steward.move_by_tag');
-      box.querySelector('[data-button]').textContent = t(form === 'id' ? 'steward.move_undo' : 'steward.move_button');
+    // Alliance IDs (steps 2–4): one box per store, to move it to IDs or undo the move
+    let storeForms = {};
+    function moveBoxes(forms) {
+      storeForms = forms || {};
+      $('st-moves').innerHTML = Object.entries(storeForms)
+        .map(
+          ([key, form]) => `<form class="st-link st-renamed" data-store="${esc(key)}">
+            <p><strong>${esc(t(`steward.move_title_${key}`))}</strong></p>
+            <small class="st-small">${esc(t(form === 'id' ? 'steward.move_by_id' : 'steward.move_by_tag'))}</small>
+            <div><button type="submit" class="btn btn-secondary">${esc(t(form === 'id' ? 'steward.move_undo' : 'steward.move_button'))}</button></div>
+            <small class="st-small" data-result></small>
+          </form>`,
+        )
+        .join('');
     }
-    $('st-move').addEventListener('submit', async (e) => {
+    $('st-moves').addEventListener('submit', async (e) => {
+      const box = e.target.closest('form[data-store]');
+      if (!box) return;
       e.preventDefault();
-      const box = $('st-move');
-      const undo = movedForm === 'id';
+      const key = box.dataset.store;
+      const undo = storeForms[key] === 'id';
       if (!window.confirm(t(undo ? 'steward.move_undo_confirm' : 'steward.move_confirm'))) return;
-      const btn = box.querySelector('[data-button]');
-      btn.disabled = true;
-      const res = await ask(`steward=${undo ? 'unmove' : 'move'}`);
+      box.querySelector('button').disabled = true;
+      const res = await ask(`steward=${undo ? 'unmove' : 'move'}&store=${encodeURIComponent(key)}`);
       const data = await res.json().catch(() => ({}));
-      btn.disabled = false;
-      const out = box.querySelector('[data-result]');
-      if (!res.ok) {
-        out.textContent = data.error || res.statusText;
-        return;
-      }
-      out.textContent = data.already
-        ? t('steward.move_already')
-        : data.moved
-          ? t('steward.move_done', { ...data.counts, backup: data.backup })
-          : t('steward.move_undone', { backup: data.backup });
-      await load();
-      box.querySelector('[data-result]').textContent = out.textContent;
+      let text;
+      if (!res.ok) text = data.error || res.statusText;
+      else if (data.already) text = t('steward.move_already');
+      else if (data.moved) text = t(`steward.move_done_${key}`, { ...data.counts, backup: data.backup });
+      else text = t('steward.move_undone', { backup: data.backup });
+      if (res.ok) await load();
+      const again = $('st-moves').querySelector(`form[data-store="${CSS.escape(key)}"] [data-result]`);
+      if (again) again.textContent = text;
+      else box.querySelector('[data-result]').textContent = text;
+      box.querySelector('button').disabled = false;
     });
 
     // An alliance new on the map while others are off it (alliance IDs, step 1): a Steward
@@ -476,7 +474,7 @@ strings: [steward]
       unfound(data.unfound || [], data.links);
       mismatched(data.mismatched || []);
       newTags(data.newTags || []);
-      moveBox(data.mapForm);
+      moveBoxes(data.storeForms);
     }
     load().catch((err) => show(err.message, 'error'));
   })();

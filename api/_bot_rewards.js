@@ -86,10 +86,10 @@ export async function handleNominateCommand(ctx) {
       }
     }
 
-    const calRaw = gistData.files?.['calendar-state.json']?.content;
-    const calConfig = calRaw
-      ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
-      : DEFAULT_CALENDAR_CONFIG;
+    const calConfig = {
+      ...DEFAULT_CALENDAR_CONFIG,
+      ...gistJson(gistData, 'calendar-state.json', {}),
+    };
 
     // 0. The reward period (api/_reward_period.js): Friday 20:00 GT to Wednesday 00:00 GT
     const period = getRewardPeriod(Date.now(), calConfig);
@@ -285,10 +285,10 @@ export async function handleRewardsCommand(ctx) {
     const mapState = gistJson(gistData, 'map-state.json');
     const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
     let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
-    const calRaw = gistData.files?.['calendar-state.json']?.content;
-    const calConfig = calRaw
-      ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
-      : DEFAULT_CALENDAR_CONFIG;
+    const calConfig = {
+      ...DEFAULT_CALENDAR_CONFIG,
+      ...gistJson(gistData, 'calendar-state.json', {}),
+    };
     const period = getRewardPeriod(Date.now(), calConfig);
 
     // Stewards: clear this period's nominations (the result stays)
@@ -651,10 +651,10 @@ export async function saveKingdomWarResult(result, actor, periodId = null, { dea
         const rewardsData = JSON.parse(gistData.files['rewards-data.json']?.content || '{}');
         const mapState = gistJson(gistData, 'map-state.json');
         let nominations = JSON.parse(gistData.files['rewards-nominations.json']?.content || '{}');
-        const calRaw = gistData.files?.['calendar-state.json']?.content;
-        const calConfig = calRaw
-          ? { ...DEFAULT_CALENDAR_CONFIG, ...JSON.parse(calRaw) }
-          : DEFAULT_CALENDAR_CONFIG;
+        const calConfig = {
+          ...DEFAULT_CALENDAR_CONFIG,
+          ...gistJson(gistData, 'calendar-state.json', {}),
+        };
 
         const period = getRewardPeriod(Date.now(), calConfig);
         if (periodId && periodId !== period.id) {
