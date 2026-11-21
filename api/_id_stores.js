@@ -44,6 +44,7 @@ import {
   imagesByIdForm,
   countImages,
 } from './_images_ids.js';
+import { RACE_FILE, isById as raceById, raceView, raceByIdForm } from './_race_ids.js';
 import { dashboardsById, moveDashboardsToIds, moveDashboardsToTags } from './_dashboard_ids.js';
 
 /** Keys in a fixed order, so two forms can be compared. */
@@ -119,6 +120,19 @@ export const STORES = {
     byTag: imagesView,
     original: (state) => state,
     count: (view, register) => countImages(view, register),
+  },
+  // The Top 4 race (Gemini's review, 2026-11-22): moved on its next save, and by the rename
+  // tool before any rename (`autoMove`), not by a Steward's button
+  race: {
+    file: RACE_FILE,
+    step: 6,
+    autoMove: true,
+    isById: raceById,
+    view: raceView,
+    byId: (view, register) => raceByIdForm(view, register),
+    byTag: raceView,
+    original: (state) => state,
+    count: () => ({}),
   },
   // Not one file: each alliance's dashboard file is copied to its ID's name (_dashboard_ids.js)
   dashboards: {
@@ -214,11 +228,14 @@ export function storeForms(gist) {
   return Object.fromEntries(
     Object.entries(STORES).map(([key, s]) => [
       key,
-      s.custom
-        ? s.form(gist)
-        : s.isById(JSON.parse(gist?.files?.[s.file]?.content || 'null'))
-          ? 'id'
-          : 'tag',
+      // A store that moves on its own counts as moved (the rename tool moves it first)
+      s.autoMove
+        ? 'id'
+        : s.custom
+          ? s.form(gist)
+          : s.isById(JSON.parse(gist?.files?.[s.file]?.content || 'null'))
+            ? 'id'
+            : 'tag',
     ]),
   );
 }

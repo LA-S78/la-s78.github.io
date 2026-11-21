@@ -54,6 +54,25 @@
 
   window.MyAlliance = { refresh: () => mark() };
 
+  // After a Steward renames your alliance, the tag saved at sign-in is the old one: the
+  // alliance's tag now, by its ID, once per visit (Gemini's review, 2026-11-22)
+  (async () => {
+    try {
+      const id = localStorage.getItem('auth-alliance-id');
+      if (!id || sessionStorage.getItem('my-alliance-checked') === id) return;
+      sessionStorage.setItem('my-alliance-checked', id);
+      const res = await fetch('/api/state?scope=version');
+      const now = res.ok ? (await res.json()).tags?.[id] : null;
+      if (now && now !== localStorage.getItem('auth-alliance')) {
+        localStorage.setItem('auth-alliance', now);
+        mark();
+        window.renderIdentityPill?.();
+      }
+    } catch {
+      // Not now: the next visit asks again
+    }
+  })();
+
   if (document.readyState === 'loading')
     document.addEventListener('DOMContentLoaded', () => mark());
   else mark();
