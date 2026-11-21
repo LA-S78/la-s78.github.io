@@ -13,7 +13,7 @@
 //
 // Rules and storage: api/_dashboard.js and docs/DECISIONS.md ("Alliance Dashboard").
 
-import { allianceById, readRegister, withCurrentAlliance } from './_register.js';
+import { allianceById, onMap, readRegister, withCurrentAlliance } from './_register.js';
 import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
@@ -79,6 +79,11 @@ async function respond(req, res) {
   }
   // The member's alliance as it is now (its ID in the register; plan step 1)
   session = withCurrentAlliance(session, gist);
+  // The register can't vouch for the pass's alliance any more (renamed, or its tag taken by
+  // another alliance): sign in again rather than guess. Stewards carry on (they pick any).
+  if (session.allianceStale && !steward) {
+    return res.status(401).json({ error: say('api_dashboard.alliance_changed'), code: 'login' });
+  }
   const mapState = gistJson(gist, 'map-state.json');
   const alliances = mapState.alliances || {};
 
@@ -89,6 +94,10 @@ async function respond(req, res) {
   // A link may name the alliance by its ID (?id=al_…, plan step 1) or by its tag (?alliance=)
   const askedId = req.method === 'GET' ? req.query?.id : req.body?.id;
   const byId = askedId ? allianceById(readRegister(gist), askedId) : null;
+  // Only an alliance on the map: an old ID's tag may be another alliance's now
+  if (askedId && !onMap(byId)) {
+    return res.status(404).json({ error: say('api_dashboard.no_alliance'), code: 'no_alliance' });
+  }
   const asked = byId?.tag || (req.method === 'GET' ? req.query?.alliance : req.body?.alliance);
   const tag =
     (steward && asked && findAllianceKey(alliances, asked)) ||

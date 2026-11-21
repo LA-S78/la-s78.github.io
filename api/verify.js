@@ -4,7 +4,7 @@ import { isSteward } from './_stewards.js';
 import { findAllianceTag, findOfficerRole } from './_officer_roles.js';
 import { gistJson, isGistConfigured, readGist } from './_gist.js';
 import { allianceRoleFromRoleIds } from './_alliances.js';
-import { readRegister, allianceByDiscordVar, allianceForPass } from './_register.js';
+import { readRegister, allianceByDiscordVar, allianceByTag } from './_register.js';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -148,15 +148,19 @@ export default async function handler(req, res) {
     }
 
     // The alliance's permanent ID and current tag, from the register (plan step 1): found by
-    // its Discord role's setting (which follows the alliance through a rename) or by its tag.
+    // its Discord role's setting (which follows the alliance through a rename) or by its tag
+    // among the alliances on the map. A Discord setting whose alliance isn't on the map (renamed
+    // and not linked by a Steward yet) gives no alliance: never another alliance by its tag.
     // Without a register entry, the tag stays as found and the pass has no ID.
     let allianceId = null;
     if (allianceName !== 'Independent') {
       const register = readRegister(await loadGist());
-      const entry =
-        (allianceRole && allianceByDiscordVar(register, allianceRole.name)) ||
-        allianceForPass(register, { alliance: allianceName });
-      if (entry) {
+      const byRole = allianceRole ? allianceByDiscordVar(register, allianceRole.name) : null;
+      const entry = byRole?.stale ? null : byRole?.entry || allianceByTag(register, allianceName);
+      if (byRole?.stale) {
+        allianceName = 'Independent';
+        allianceSource = null;
+      } else if (entry) {
         allianceName = entry.tag;
         allianceId = entry.id;
       }

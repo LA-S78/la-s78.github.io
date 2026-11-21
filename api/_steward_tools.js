@@ -37,6 +37,7 @@ import { fetchAlliance as fetchAllianceByTag } from './_tracker.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { getRoleColors } from './_role_colors.js';
 import { napTags } from './_ascension.js';
+import { readRegister, pendingAlliances, answerPending } from './_register.js';
 
 export const LOOKUPS_PER_DAY = 30;
 const FILE = 'steward-tools.json';
@@ -277,6 +278,8 @@ export async function stewardTools(req, res, { gist, session }) {
       links: linksLeft(gist),
       // A tag that now answers with a different game alliance (safeguard 4)
       mismatched: await mismatchedWithColours(gist).catch(() => []),
+      // Alliances new on the map while others are off it: same alliance, or new? (plan step 1)
+      newTags: pendingAlliances(readRegister(gist)),
       // On the test site: when its data was last copied from the live site (/devupdate)
       testCopy: isTestDeployment() ? gistJson(gist, TEST_COPY_FILE, null)?.copiedAt || '' : null,
     });
@@ -284,6 +287,17 @@ export async function stewardTools(req, res, { gist, session }) {
 
   if (what === 'positions') return napPositions(req, res, { gist, session });
   if (what === 'link') return linkRenamed(req, res, { gist, session });
+  // A Steward's answer for an alliance new on the map: ?steward=newtag&id=al_…&same=al_… (or
+  // no `same`: a new alliance)
+  if (what === 'newtag') {
+    const ok = await answerPending(
+      String(req.query.id || ''),
+      String(req.query.same || '') || null,
+    );
+    return ok
+      ? res.status(200).json({ answered: req.query.id })
+      : res.status(409).json({ error: say('api_dashboard.pending_gone') });
+  }
   // Safeguard 4: the alliance the tag answers with now is the one the site means after all
   if (what === 'relink') {
     const raw = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
