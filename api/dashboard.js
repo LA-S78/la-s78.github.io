@@ -13,7 +13,7 @@
 //
 // Rules and storage: api/_dashboard.js and docs/DECISIONS.md ("Alliance Dashboard").
 
-import { allianceById, onMap, readRegister, withCurrentAlliance } from './_register.js';
+import { ID_PATTERN, allianceById, onMap, readRegister, withCurrentAlliance } from './_register.js';
 import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
@@ -91,8 +91,11 @@ async function respond(req, res) {
   if (req.method === 'GET' && req.query?.steward) return stewardTools(req, res, { gist, session });
 
   // Whose dashboard: your own; Stewards may pick any alliance.
-  // A link may name the alliance by its ID (?id=al_…, plan step 1) or by its tag (?alliance=)
-  const askedId = req.method === 'GET' ? req.query?.id : req.body?.id;
+  // A link may name the alliance by its ID (?id=al_…, plan step 1) or by its tag (?alliance=).
+  // Only the page's address, and only an alliance ID: a save's body has an `id` of its own
+  // (the chart being deleted or refreshed), which is never an alliance.
+  const askedId =
+    req.method === 'GET' && ID_PATTERN.test(String(req.query?.id || '')) ? req.query.id : null;
   const byId = askedId ? allianceById(readRegister(gist), askedId) : null;
   // Only an alliance on the map: an old ID's tag may be another alliance's now
   if (askedId && !onMap(byId)) {

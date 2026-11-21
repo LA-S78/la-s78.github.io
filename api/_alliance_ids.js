@@ -159,7 +159,8 @@ export async function mismatchedAlliances(tags, store = blobStore) {
 /** NAP alliances renamed in the game, for the Steward tools page: [{ tag, now, name, at }]. */
 export async function renamedAlliances(tags, store = blobStore) {
   const { renamed } = await readAllianceIds(store).catch(() => ({ renamed: {} }));
+  // Not once a Steward has renamed it to that tag (step 7): the next measurement clears it
   return tags
-    .filter((t) => renamed[t])
+    .filter((t) => renamed[t] && renamed[t].now !== t)
     .map((t) => ({ tag: t, now: renamed[t].now, name: renamed[t].name, at: renamed[t].at }));
 }
