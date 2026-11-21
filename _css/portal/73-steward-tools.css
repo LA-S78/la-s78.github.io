@@ -338,3 +338,43 @@
 .st-test-copy[hidden] {
   display: none;
 }
+
+/* The rename tool (alliance IDs step 7): one row per alliance, the form on the right */
+.st-roster-list {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+}
+.st-roster-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding: 6px 0;
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+}
+.st-roster-act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.st-roster-act input,
+.st-roster-act select {
+  min-width: 0;
+  max-width: 11em;
+}
+#st-roster details {
+  margin-top: 8px;
+}
+#st-roster summary {
+  cursor: pointer;
+}
+#st-roster {
+  margin-top: 0.8rem;
+  border-color: var(--border-color, rgba(255, 255, 255, 0.15));
+}
+#st-roster[hidden] {
+  display: none;
+}
