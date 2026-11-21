@@ -670,11 +670,11 @@ alliance_planner:
   loading_standings: Caricamento classifiche in corso…
   standings_failed: Impossibile caricare le classifiche.
   protected_academy: Accademia protetta
-  change_color: Cambia colore [{tag}]
+  change_color: Cambia colore di [{tag}]
   academy_of: Accademia di [{tag}]
   formerly: precedentemente [{tag}]
   link_academy: "+ Collega Accademia"
-  nap_protected: NAP Protetta
+  nap_protected: NAP protetta
   show_details: Mostra dettagli
   hide_details: Nascondi dettagli
   stat_might: Potenza
@@ -685,12 +685,12 @@ alliance_planner:
   revoke_nap: Revoca NAP
   grant_nap: Concedi NAP
   remove_alliance: Rimuovi alleanza
-  academy_prompt: 'Inserisci l''esatto tag alleanza da collegare come Accademia sotto [{tag}] (distingue tra maiuscole/minuscole, es. RâvN o râvn):'
+  academy_prompt: 'Inserisci il tag esatto dell''alleanza da collegare come Accademia sotto [{tag}] (distingue maiuscole/minuscole, es. RâvN o râvn):'
   academy_available: 'Disponibile: {tags}'
   academy_new: 'O digita un nuovo tag accademia per crearlo:'
   already_exists: L'alleanza [{tag}] esiste già con questa esatta capitalizzazione.
-  no_changes: Nessuna modifica rilevata nelle classifiche attuali.
-  proposal_title: Invia classifiche NAP e proposta diplomatica
+  no_changes: Nessuna modifica rilevata nelle classifiche correnti.
+  proposal_title: Invia Classifiche NAP e Proposta Diplomatica
   diff_rank: "{tag}: Rango {from} ➔ {to}"
   diff_academy: "{tag}: Assegnata come Accademia di {parent}"
   diff_nap: "{tag}: Stato NAP {status}"
@@ -996,66 +996,66 @@ stats:
   show_hide: Tocca un'alleanza per mostrare o nascondere la sua riga.
   credit_before: Numeri dal
 steward:
-  move_title_map: 'ID Alleanze: elenco alleanze e territori'
-  move_title_calendar: 'ID Alleanze: eventi del calendario'
-  move_title_rewards: 'ID Alleanze: rotazione Campidoglio, buyout e forzieri distribuiti'
-  move_title_pictures: 'ID Alleanze: elenco immagini alleanza (i file immagine mantengono i loro nomi)'
-  move_title_dashboards: 'ID Alleanze: dashboard alleanza (ognuna copiata nel file del suo ID; i vecchi file rimangono come backup)'
-  move_title_stats: 'ID Alleanze: cronologia statistiche (grafici di crescita, roster giornalieri, posizioni, numeri del tracker)'
-  move_title_nominations: 'ID Alleanze: elenchi candidature di questo periodo'
-  move_by_tag: Archiviato per tag (come prima). Lo spostamento lo archivia per l'ID permanente di ogni alleanza; le pagine hanno lo stesso aspetto. Viene salvato prima un backup del file.
-  move_by_id: Archiviato per ID alleanza. Annulla lo riporta ai tag, mantenendo ogni modifica effettuata nel frattempo.
+  move_title_map: 'ID Alleanza: elenco alleanze e territori'
+  move_title_calendar: 'ID Alleanza: eventi calendario'
+  move_title_rewards: 'ID Alleanza: rotazione Campidoglio, buyout e forzieri distribuiti'
+  move_title_pictures: 'ID Alleanza: elenco immagini alleanze (i file immagine mantengono i loro nomi)'
+  move_title_dashboards: 'ID Alleanza: dashboard alleanze (ognuna copiata nel file del suo ID; i vecchi file restano come backup)'
+  move_title_stats: 'ID Alleanza: cronologia statistiche (grafici di crescita, roster giornalieri, posizioni, numeri tracker)'
+  move_title_nominations: 'ID Alleanza: liste candidature di questo periodo'
+  move_by_tag: Archiviato per tag (come prima). Lo spostamento lo archivia tramite l'ID permanente di ogni alleanza; le pagine hanno lo stesso aspetto. Viene prima salvato un backup del file.
+  move_by_id: Archiviato per ID alleanza. L'annullamento lo trasforma di nuovo in tag, mantenendo ogni modifica apportata nel frattempo.
   move_button: Sposta agli ID
   move_undo: Annulla lo spostamento
   move_confirm: Spostare questo agli ID alleanza ora?
-  move_undo_confirm: Riportarlo ai tag?
-  move_done_map: 'Spostato: {alliances} alleanze, {links} collegamenti accademie, {owned} territori. Backup: {backup}'
-  move_done_rewards: 'Spostato: {seats} posti rotazione Campidoglio, {buyouts} buyout attivi, {handed} forzieri distribuiti. Backup: {backup}'
-  move_done_pictures: 'Spostato: immagini di {alliances} alleanze ({pending} in attesa di revisione). Backup: {backup}'
-  move_done_dashboards: 'Spostato: {dashboards} dashboard copiate nel file del loro ID. I vecchi file sono mantenuti come backup.'
-  move_done_stats: 'Spostato: {files} file Statistiche, {days} di essi roster giornalieri. Backup: {backup}'
-  move_done_nominations: 'Spostati {lists} elenchi candidature. Backup: {backup}'
+  move_undo_confirm: Trasformare di nuovo in tag?
+  move_done_map: 'Spostati: {alliances} alleanze, {links} link accademia, {owned} territori. Backup: {backup}'
+  move_done_rewards: 'Spostati: {seats} posti rotazione Campidoglio, {buyouts} buyout attivi, {handed} forzieri distribuiti. Backup: {backup}'
+  move_done_pictures: 'Spostate: immagini di {alliances} alleanze ({pending} in attesa di revisione). Backup: {backup}'
+  move_done_dashboards: 'Spostate: {dashboards} dashboard copiate nel file del loro ID. I vecchi file sono mantenuti come backup.'
+  move_done_stats: 'Spostati: {files} file statistiche, {days} di essi roster giornalieri. Backup: {backup}'
+  move_done_nominations: 'Spostate {lists} liste candidature. Backup: {backup}'
   move_done_calendar: 'Spostati {alliance} eventi alleanza (eventi a livello di server, invariati: {global}). Backup: {backup}'
-  move_undone: 'Tornato ai tag. Backup del file per-ID: {backup}'
+  move_undone: 'Tornato ai tag. Backup del file per ID: {backup}'
   move_already: 'Niente da fare: è già stato fatto.'
   roster_title: 'Alleanze: rinomina, scambia tag, ritira'
-  roster_help: La ridenominazione cambia il tag ovunque contemporaneamente (la cronologia, gli eventi, le immagini, le dashboard e le statistiche rimangono con esso). Le pagine pubbliche mostrano "precedentemente [OLD]" per 30 giorni.
-  roster_was: era [{tag}] fino a {until}
+  roster_help: La ridenominazione cambia il tag ovunque istantaneamente (la cronologia, gli eventi, le immagini, le dashboard e le statistiche rimangono associati). Le pagine pubbliche mostrano "precedentemente [OLD]" per 30 giorni.
+  roster_was: era [{tag}] fino al {until}
   rename_placeholder: Nuovo tag
   rename_button: Rinomina
-  rename_confirm: Rinominare [{from}] in [{to}]? Ogni pagina mostrerà subito il nuovo tag.
+  rename_confirm: Rinominare [{from}] in [{to}]? Ogni pagina mostrerà il nuovo tag istantaneamente.
   rename_one_click: Rinomina [{old}] in [{now}]
   swap_title: 'Due alleanze scambiano i tag:'
   swap_button: Scambia tag
   swap_confirm: Scambiare i tag di [{a}] e [{b}]?
-  off_map_title: 'Rimosso dalla mappa (nel pianificatore Alleanze):'
+  off_map_title: 'Rimosso dalla mappa (nel pianificatore alleanze):'
   retire_button: Ritira
-  retire_confirm: Ritirare [{tag}]? Viene conservato con la sua cronologia (alleanze ritirate, sotto) e può essere ripristinato.
+  retire_confirm: Ritirare [{tag}]? Viene mantenuto con la sua cronologia (alleanze ritirate, sotto) e può essere ripristinato.
   retired_title: Alleanze ritirate ({n})
   unretire_button: Ripristina
   roster_saved: Salvato.
-  newtag: "{tag} è nuovo sulla mappa. È un'alleanza che il sito conosceva già, rinominata o tornata sulla mappa? Finché non rispondi, inizia senza nulla, e ai membri della vecchia alleanza verrà chiesto di accedere di nuovo."
+  newtag: "{tag} è nuovo sulla mappa. È un'alleanza che il sito conosceva già, rinominata o tornata sulla mappa? Finché non rispondi, parte senza nulla di loro e ai membri della vecchia alleanza verrà chiesto di accedere nuovamente."
   newtag_same: 'Stessa alleanza di:'
   newtag_new: È una nuova alleanza
   newtag_link: Collega
-  page_title: Strumenti Steward
-  intro: 'Strumenti per gli Steward del Regno: cosa ti attende e una ricerca giocatori dal vivo.'
+  page_title: Strumenti Amministratore
+  intro: 'Strumenti per gli Amministratori del Regno: cosa ti aspetta e ricerca giocatori dal vivo.'
   loading: Caricamento…
   sign_in: Accedi con Discord
-  sign_in_needed: Accedi con Discord per aprire gli strumenti Steward.
-  stewards_only: Solo gli Steward del Regno possono aprire gli strumenti Steward.
+  sign_in_needed: Accedi con Discord per aprire gli strumenti Amministratore.
+  stewards_only: Solo gli Amministratori del Regno possono aprire gli strumenti Amministratore.
   lookup_title: Ricerca giocatore
-  lookup_help: 'Qualsiasi giocatore, in tempo reale dal gioco: la sua alleanza, i numeri, i nomi e le alleanze precedenti. Digita un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
+  lookup_help: 'Qualsiasi giocatore, dal vivo dal gioco: la sua alleanza, i numeri e i nomi e le alleanze precedenti. Digita un ID giocatore o un nome per trovare l''ID di un giocatore NAP.'
   lookup_placeholder: ID giocatore o nome di un giocatore NAP
   lookup_go: Cerca
-  lookup_id_needed: Digita un ID giocatore (il numero sul profilo) o scegli un giocatore NAP dai nomi trovati.
-  lookups_left: "{left} di {max} ricerche dal vivo rimanenti oggi (condivise tra tutti gli Steward)."
-  looking: Interrogazione del gioco…
+  lookup_id_needed: Digita un ID giocatore (il numero sul suo profilo) o seleziona un giocatore NAP dai nomi trovati.
+  lookups_left: "{left} di {max} ricerche dal vivo rimanenti oggi (condivise tra tutti gli Amministratori)."
+  looking: Interrogazione gioco in corso…
   name_none: Nessun giocatore NAP con quel nome. Per chiunque altro, usa il suo ID giocatore.
   no_alliance: Nessuna alleanza
   server: Server {n}
   online: Online ora
-  last_seen: Visto l'ultima volta {when}
+  last_seen: Ultima attività {when}
   shielded: Scudo attivo
   might: Potenza
   kills: Uccisioni
@@ -1063,52 +1063,52 @@ steward:
   vip: VIP
   position: Posizione (X, Y)
   language: Lingua
-  ranks: 'Ranghi del regno: #{might} Potenza · #{kills} Uccisioni · #{heroes} Eroi'
+  ranks: 'Ranghi regno: #{might} Potenza · #{kills} uccisioni · #{heroes} eroi'
   history_title: Nomi e alleanze
-  history_none: Nessun nome o alleanza precedente visto.
-  seen_from: da {when}
-  first_seen: Visto per la prima volta dal tracker {when}.
-  renamed: "{old} è ora {now} nel gioco. Viene ancora misurato (statistiche e corsa alla Top 4) dal numero di gioco, ma il sito lo chiama ancora {old}."
-  renamed_fix: Rinominalo nel pianificatore Alleanze
-  test_copy: "🧪 Sito di test: i dati sono stati copiati dal sito live {when} (/devupdate in Discord crea una copia fresca)."
-  test_copy_none: "🧪 Sito di test: i dati non sono stati ancora copiati dal sito live. Esegui /devupdate in Discord per una copia fresca."
-  mismatch: "{tag} nel gioco ora risponde con un'alleanza diversa: {got}. Il sito continua a misurare l'alleanza nota come {tag} ({known}) tramite il suo numero di gioco e non conta la nuova come tale."
+  history_none: Nessun nome o alleanza precedente rilevata.
+  seen_from: dal {when}
+  first_seen: Visto per la prima volta dal tracker il {when}.
+  renamed: "{old} ora è {now} nel gioco. È ancora misurato (Statistiche e gara Top 4) dal numero assegnato dal gioco, ma il sito lo chiama ancora {old}."
+  renamed_fix: Rinominalo nel pianificatore alleanze
+  test_copy: "🧪 Sito di test: i suoi dati sono stati copiati dal sito live il {when} (/devupdate su Discord esegue una nuova copia)."
+  test_copy_none: "🧪 Sito di test: i suoi dati non sono ancora stati copiati dal sito live. Esegui /devupdate su Discord per una nuova copia."
+  mismatch: "{tag} nel gioco ora risponde con un'alleanza diversa: {got}. Il sito continua a misurare l'alleanza che conosce come {tag} ({known}) tramite il numero assegnato dal gioco, e non conteggia la nuova come tale."
   mismatch_relink: 'È la stessa alleanza: ricollega'
-  mismatch_relink_help: Solo se {got} è davvero l'alleanza che intende il sito (il primo collegamento era errato o il gioco l'ha rinumerata). Il ritiro o la ridenominazione prevedono passaggi successivi.
-  unfound: "{tag} non è stato trovato nel gioco, quindi non viene misurato (statistiche e corsa alla Top 4). Se ha cambiato tag nel gioco, digita quello nuovo e il sito lo seguirà."
+  mismatch_relink_help: Solo se {got} è realmente l'alleanza a cui il sito si riferisce (il primo collegamento era errato o il gioco l'ha rinumerata). Il ritiro o la ridenominazione prevedono passaggi successivi.
+  unfound: "{tag} non è stato trovato nel gioco, quindi non viene misurato (Statistiche e gara Top 4). Se ha cambiato tag nel gioco, digita quello nuovo e il sito lo seguirà."
   unfound_now: Il suo tag nel gioco ora
   unfound_placeholder: es. Arch
   unfound_link: Collega
-  unfound_checking: Verifica in corso con il gioco...
+  unfound_checking: Verifica con il gioco in corso...
   unfound_left: "{left} di {max} collegamenti rimanenti oggi (ognuno interroga il gioco una volta)"
   pending_title: In attesa di revisione
   pending_none: Nessuna immagine alleanza in attesa.
   sent_by: Inviato da {name}, {when}
-  race_title: Corsa alla Top 4
-  race_none: Nessuna corsa ancora misurata.
+  race_title: Gara Top 4
+  race_none: Nessuna gara ancora misurata.
   race_progress: "{n} di 3 giorni di Duello misurati finora."
   race_finished: 'Tutti i 3 giorni misurati: i risultati sono nella leadership NAP.'
   race_missing: 'Non misurato: {tags}'
-  race_more: Tabella completa nella pagina Regole
-  quota_title: Richieste Tracker
-  quota_help: Il Tracker di Last Asylum consente 1.000 richieste al giorno, che ricominciano alle 00:00 UTC. La cifra qui sotto è l'ultima fornita dal tracker al sito, quindi mostrarla non costa nulla; controllare ora costa una richiesta.
+  race_more: Tabella completa sulla pagina Regole
+  quota_title: Richieste tracker
+  quota_help: Il tracker di Last Asylum consente 1.000 richieste al giorno, che ricominciano alle 00:00 UTC. La cifra sottostante è l'ultima fornita dal tracker al sito, quindi mostrarla non costa nulla; controllare ora costa una richiesta.
   quota_check: Controlla ora
   quota_used: usate oggi
   quota_failed: Impossibile raggiungere il tracker.
-  quota_as_of: Aggiornato al {when}
-  quota_none: Il sito non ha ancora chiesto nulla al tracker oggi.
+  quota_as_of: Al {when}
+  quota_none: Il sito non ha ancora richiesto nulla al tracker oggi.
   quota_resets: Ricomincia tra {time}
-  usage_title: Cosa le ha consumate
+  usage_title: Cosa le ha utilizzate
   usage_automation: Automazione
-  usage_automation_help: Snapshot giornaliero statistiche e corsa alla Top 4
-  usage_alliance: Strumenti Alleanza
+  usage_automation_help: Snapshot statistiche giornaliere e gara Top 4
+  usage_alliance: Strumenti alleanza
   usage_alliance_help: Dashboard, roster, candidature
   usage_public: Pagine pubbliche
-  usage_public_help: Schede delle classifiche sulla pagina Alleanza
-  usage_steward: Strumenti Steward
+  usage_public_help: Schede classifiche sulla pagina Alleanze
+  usage_steward: Strumenti Amministratore
   usage_steward_help: Ricerca giocatori, aggiornamenti mappa e verifiche utilizzo
   usage_other: Altro
   usage_other_help: Qualsiasi cosa non etichettata
   usage_unrecorded: Non registrato
-  usage_unrecorded_help: Contato dal tracker, non ancora salvato qui (ogni server salva ogni pochi minuti)
+  usage_unrecorded_help: Conteggiato dal tracker, non ancora salvato qui (ogni server salva ogni pochi minuti)
   usage_none: Nessuna richiesta annotata ancora oggi.

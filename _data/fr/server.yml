@@ -7,55 +7,55 @@ api_dashboard:
   rename_bad_tag: 'Saisissez le nouveau tag tel qu''il apparaît dans le jeu : jusqu''à 12 caractères, sans espaces, deux-points, crochets ou barres obliques.'
   rename_same: C'est déjà le tag utilisé.
   rename_taken: "[{tag}] possède déjà ce tag. Pour échanger des tags entre deux alliances, utilisez l'échange."
-  rename_fixed: "[{tag}] ne peut pas être renommé ici pour l'instant : son tag fait partie du code du site. Demandez d'abord un changement de code."
-  rename_not_moved: 'Le changement de nom nécessite le transfert préalable de tous les magasins vers les IDs d''alliance (toujours par tag : {stores}).'
+  rename_fixed: "[{tag}] ne peut pas encore être renommé ici : son tag fait partie du code du site. Demandez d'abord un changement de code."
+  rename_not_moved: 'Le renommage nécessite d''abord de déplacer tous les magasins vers les ID d''alliance (toujours par tag : {stores}).'
   retire_on_map: Seule une alliance retirée de la carte (dans le planificateur d'Alliance) peut être retirée.
-  pending_gone: Cette alliance a déjà reçu une réponse.
+  pending_gone: Une réponse a déjà été donnée pour cette alliance.
   stewards_only: Seuls les Stewards peuvent utiliser les outils de Steward.
   lookups_used: Les recherches de joueurs d'aujourd'hui sont épuisées. Elles seront réinitialisées à la remise à zéro quotidienne (00:00 GT).
   player_not_found: Aucun joueur ne possède cet ID.
-  player_unavailable: Le jeu est injoignable. Réessayez dans quelques minutes.
-  positions_leaders_only: Seuls les R4, R5 et Stewards de votre alliance peuvent voir les membres sur la carte.
+  player_unavailable: Le jeu n'a pas pu être atteint. Réessayez dans quelques minutes.
+  positions_leaders_only: Seuls les R4 et R5 (et les Stewards) de votre alliance peuvent voir les membres sur la carte.
   positions_unavailable: Les positions des membres ne peuvent pas être chargées pour le moment. Réessayez dans quelques minutes.
   links_used: Les liens d'alliance d'aujourd'hui sont épuisés. Ils seront réinitialisés à la remise à zéro quotidienne (00:00 GT).
   relink_none: Il n'y a plus rien à relier pour cette alliance.
-  link_bad: Choisissez une alliance et saisissez le tag utilisé actuellement dans le jeu.
-  link_same: C'est déjà le tag utilisé par le site.
+  link_bad: Choisissez une alliance et saisissez le tag qu'elle utilise actuellement dans le jeu.
+  link_same: C'est le tag déjà utilisé par le site.
   link_taken: "{tag} est déjà une autre alliance sur le site."
   link_not_found: Le jeu ne contient aucune alliance portant le tag {tag} (la casse des lettres compte).
   positions_used: Les rafraîchissements de carte d'aujourd'hui sont épuisés. Ils seront réinitialisés à la remise à zéro quotidienne (00:00 GT).
   positions_wait: La carte a été rafraîchie il y a un instant. Réessayez dans {minutes} min.
-  refresh_limit: Plus de rafraîchissements de liste de membres disponibles aujourd'hui. Ils seront réinitialisés à la remise à zéro quotidienne (00:00 GT).
+  refresh_limit: Aucun rafraîchissement de liste restant pour aujourd'hui. Ils seront réinitialisés à la remise à zéro quotidienne (00:00 GT).
   refresh_wait: La liste a été rafraîchie il y a un instant. Réessayez dans {n} min.
-  refresh_failed: Le jeu est injoignable. Réessayez dans quelques minutes.
-  signed_out: Connectez-vous avec Discord (en haut à droite) pour voir le tableau de bord de votre alliance.
+  refresh_failed: Le jeu n'a pas pu être atteint. Réessayez dans quelques minutes.
+  signed_out: Connectez-vous avec Discord (en haut à droite) pour voir votre tableau de bord d'alliance.
   load_failed: 'Impossible de charger le tableau de bord : {reason}'
-  no_alliance: Nous n'avons pas pu déterminer votre alliance. Le site l'identifie grâce à votre rôle d'alliance sur le serveur Discord NAP. Demandez le rôle aux leaders de votre alliance ou à un Steward, puis utilisez "Rafraîchir l'accès" dans votre carte de compte (en haut à droite).
+  no_alliance: Nous n'avons pas pu déterminer votre alliance. Le site l'identifie grâce à votre rôle d'alliance sur le serveur Discord NAP. Demandez le rôle aux leaders de votre alliance ou à un Steward, puis utilisez Rafraîchir l'accès dans la fiche de votre compte (en haut à droite).
   leaders_only: Seuls les R4 et R5 de votre alliance peuvent modifier le tableau de bord.
   chart_removed: Ce graphique a été supprimé.
   chart_already_removed: Ce graphique avait déjà été supprimé.
-  not_linked: Ce graphique n'est pas lié à un Google Sheet ou Doc.
+  not_linked: Ce graphique n'est pas lié à une feuille Google Sheet ou à un Doc.
   unknown_change: Changement inconnu.
   save_failed: 'Impossible d''enregistrer : {reason}'
-  r5_only_nominate: Seul votre R5 peut ouvrir la page de nomination ici. Exécutez /nominate dans Discord.
-  rewards_closed: Les récompenses sont fermées jusqu'au {when}.
+  r5_only_nominate: Seul votre R5 peut ouvrir la page de nomination ici. Tapez /nominate dans Discord.
+  rewards_closed: Les récompenses sont fermées jusqu'à {when}.
   no_rank: "[{tag}] n'a aucun rang dans le classement."
   choose_type: Choisissez un type de graphique ou de tableau.
   title_needed: Donnez un titre au graphique ou au tableau.
-  too_many_columns: Maximum {max} colonnes (ce tableau en compte {count}).
-  too_many_rows: Maximum {max} lignes (ce tableau en compte {count}).
+  too_many_columns: Au maximum {max} colonnes (ce tableau en a {count}).
+  too_many_rows: Au maximum {max} lignes (ce tableau en a {count}).
   column_name: Colonne {n}
   paste_first: Collez d'abord un tableau (une ligne d'en-tête, puis les données).
   no_data_rows: Le tableau n'a pas de lignes de données sous son en-tête.
-  needs_numbers: Un graphique nécessite une colonne de nombres pour s'afficher.
-  needs_target: 'Un graphique de progression nécessite une cible : un nombre ou une colonne de cibles.'
-  too_many_widgets: Maximum {max} graphiques et tableaux par alliance.
+  needs_numbers: Un graphique a besoin d'une colonne de nombres pour s'afficher.
+  needs_target: 'Un graphique de progression a besoin d''un objectif : un nombre ou une colonne d''objectifs.'
+  too_many_widgets: Au maximum {max} graphiques et tableaux par alliance.
   sheet_unusable: 'Les données de la feuille ne peuvent pas être utilisées : {reason}'
-  too_big: Cela rendrait ce tableau de bord trop volumineux ({size} Ko sur {max} Ko). Utilisez moins de lignes ou supprimez un tableau.
-  player_name_needed: Saisissez un nom de joueur.
-  time_format: Les horaires sont au format Game Time comme 18:00 (ou laissez-les vides).
-  start_time_needed: Indiquez aussi l'heure de début (ou laissez les deux vides).
-  rotor_full: Maximum {max} joueurs dans le rotor.
+  too_big: Cela rendrait ce tableau de bord trop grand ({size} Ko sur {max} Ko). Utilisez moins de lignes ou supprimez un tableau.
+  player_name_needed: Entrez un nom de joueur.
+  time_format: Les heures sont au format Game Time comme 18:00 (ou laissez vide).
+  start_time_needed: Indiquez également l'heure de début (ou laissez les deux vides).
+  rotor_full: Au maximum {max} joueurs dans le rotor.
   already_in_rotor: "{name} est déjà dans le rotor."
   player_removed: Ce joueur a été supprimé.
 api_sheets:

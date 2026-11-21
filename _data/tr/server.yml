@@ -2,42 +2,42 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: Giriş yaptığınızdan beri sitedeki ittifakınız değişti. Devam etmek için Discord ile tekrar giriş yapın.
-  rename_unknown: Bu ittifak artık haritada değil. Sayfayı yeniden yükleyin.
+  alliance_changed: Siteye giriş yaptığınızdan beri ittifakınız değişti. Devam etmek için Discord ile tekrar giriş yapın.
+  rename_unknown: Bu ittifak artık haritada değil. Sayfayı yenileyin.
   rename_bad_tag: 'Yeni etiketi oyundaki haliyle yazın: en fazla 12 karakter, boşluk, iki nokta, parantez veya eğik çizgi yok.'
-  rename_same: Bu zaten sahip olduğu etiket.
-  rename_taken: "[{tag}] zaten bu etikete sahip. İki ittifak arasında etiket takas etmek için takas seçeneğini kullanın."
-  rename_fixed: "[{tag}] burada henüz yeniden adlandırılamaz: etiketi sitenin kodunun bir parçasıdır. Önce kod değişikliği talep edin."
-  rename_not_moved: 'Yeniden adlandırma için önce her deponun ittifak kimliklerine taşınması gerekir (hala etikete göre: {stores}).'
-  retire_on_map: Yalnızca haritadan kaldırılmış (İttifak planlayıcısında) bir ittifak emekliye ayrılabilir.
-  pending_gone: Bu ittifak zaten yanıtlandı.
-  stewards_only: Yalnızca Kahyalar (Stewards), Kahya araçlarını kullanabilir.
-  lookups_used: Bugünkü oyuncu sorgulama haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
-  player_not_found: Bu kimliğe sahip bir oyuncu bulunamadı.
+  rename_same: Bu zaten mevcut etiket.
+  rename_taken: "[{tag}] bu etiketi zaten kullanıyor. İki ittifak arasında etiket takas etmek için takas özelliğini kullanın."
+  rename_fixed: "[{tag}] burada henüz yeniden adlandırılamaz: etiketi site kodunun bir parçasıdır. Önce kod değişikliği talep edin."
+  rename_not_moved: 'Yeniden adlandırma için tüm depoların önce ittifak kimliklerine taşınması gerekir (hala etiketle: {stores}).'
+  retire_on_map: Yalnızca haritadan kaldırılmış bir ittifak (İttifak planlayıcısında) emekli edilebilir.
+  pending_gone: O ittifakın yanıtı zaten verildi.
+  stewards_only: Yalnızca Görevliler (Stewards), Görevli araçlarını kullanabilir.
+  lookups_used: Bugünkü oyuncu sorgulama hakkınız bitti. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  player_not_found: Bu kimliğe sahip oyuncu yok.
   player_unavailable: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
-  positions_leaders_only: Yalnızca ittifakınızın R4 ve R5'leri (ve Kahyalar) haritadaki üyeleri görebilir.
-  positions_unavailable: Üyelerin konumları şu anda yüklenemiyor. Birkaç dakika içinde tekrar deneyin.
-  links_used: Bugünkü ittifak bağlantı haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
-  relink_none: Bu ittifak için yeniden bağlanacak bir şey kalmadı.
-  link_bad: Bir ittifak seçin ve şu anda oyunda kullandığı etiketi yazın.
+  positions_leaders_only: Yalnızca ittifakınızın R4 ve R5 üyeleri (ve Görevliler) haritadaki üyeleri görebilir.
+  positions_unavailable: Üyelerin konumları şu an yüklenemiyor. Birkaç dakika içinde tekrar deneyin.
+  links_used: Bugünkü ittifak bağlantı hakkınız bitti. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  relink_none: Bu ittifak için tekrar bağlanacak bir şey kalmadı.
+  link_bad: Bir ittifak seçin ve şu an oyunda kullandığı etiketi yazın.
   link_same: Bu, sitenin zaten kullandığı etiket.
-  link_taken: "{tag} sitede zaten başka bir ittifaktır."
+  link_taken: "{tag} sitedeki başka bir ittifak tarafından zaten kullanılıyor."
   link_not_found: Oyunda {tag} etiketli bir ittifak yok (büyük/küçük harf duyarlıdır).
-  positions_used: Bugünkü harita yenileme haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
-  positions_wait: Harita kısa süre önce yenilendi. {minutes} dakika içinde tekrar deneyin.
-  refresh_limit: Bugün kalan kadro yenileme hakkı yok. Günlük sıfırlamada (00:00 GT) tekrar başlar.
-  refresh_wait: Kadro kısa süre önce yenilendi. {n} dakika içinde tekrar deneyin.
+  positions_used: Bugünkü harita yenileme hakkınız bitti. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  positions_wait: Harita az önce yenilendi. {minutes} dakika sonra tekrar deneyin.
+  refresh_limit: Bugünlük liste yenileme hakkınız kalmadı. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  refresh_wait: Liste az önce yenilendi. {n} dakika sonra tekrar deneyin.
   refresh_failed: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
-  signed_out: İttifak panonuzu görmek için (sağ üstte) Discord ile giriş yapın.
+  signed_out: İttifak panonuzu görmek için Discord ile giriş yapın (sağ üst).
   load_failed: 'Pano yüklenemedi: {reason}'
-  no_alliance: Hangi ittifakta olduğunuzu anlayamadık. Site bunu NAP Discord sunucusundaki ittifak rolünüzden bulur. İttifak liderlerinizden veya bir Kahyadan rolü isteyin, ardından hesap kartınızdaki (sağ üstte) Erişim Yenile'yi kullanın.
-  leaders_only: Yalnızca ittifakınızın R4 ve R5'leri panoyu değiştirebilir.
+  no_alliance: Hangi ittifakta olduğunuzu anlayamadık. Site bunu NAP Discord sunucusundaki ittifak rolünüzden bulur. İttifak liderlerinizden veya bir Görevliden rolünüzü isteyin, ardından hesap kartınızdaki (sağ üst) Erişimi Yenile seçeneğini kullanın.
+  leaders_only: Yalnızca ittifakınızın R4 ve R5 üyeleri panoyu değiştirebilir.
   chart_removed: Bu grafik kaldırıldı.
   chart_already_removed: Bu grafik zaten kaldırılmıştı.
-  not_linked: Bu grafik bir Google E-Tablosuna veya Dokümanına bağlı değil.
+  not_linked: Bu grafik bir Google E-Tabloya veya Dokümana bağlı değil.
   unknown_change: Bilinmeyen değişiklik.
   save_failed: 'Kaydedilemedi: {reason}'
-  r5_only_nominate: Aday gösterme sayfasını burada yalnızca R5'iniz açabilir. Discord'da /nominate komutunu çalıştırın.
+  r5_only_nominate: Adaylık sayfasını burada yalnızca R5'iniz açabilir. Discord'da /nominate komutunu çalıştırın.
   rewards_closed: Ödüller {when} tarihine kadar kapalıdır.
   no_rank: "[{tag}] sıralamada yer almıyor."
   choose_type: Bir grafik veya tablo türü seçin.
@@ -45,16 +45,16 @@ api_dashboard:
   too_many_columns: En fazla {max} sütun (bu tabloda {count} adet var).
   too_many_rows: En fazla {max} satır (bu tabloda {count} adet var).
   column_name: Sütun {n}
-  paste_first: Önce bir tablo yapıştırın (bir başlık satırı, ardından veriler).
+  paste_first: Önce bir tablo yapıştırın (bir başlık satırı ve ardından veriler).
   no_data_rows: Tablonun başlığının altında veri satırı yok.
-  needs_numbers: Bir grafiğin gösterilmesi için sayı sütununa ihtiyacı vardır.
-  needs_target: 'Bir ilerleme grafiğinin bir hedefe ihtiyacı vardır: bir sayı veya hedef sütunu.'
+  needs_numbers: Bir grafiğin gösterilmesi için sayısal bir sütuna ihtiyacı vardır.
+  needs_target: 'Bir ilerleme grafiğinin bir hedefe ihtiyacı vardır: bir sayı veya bir hedef sütunu.'
   too_many_widgets: İttifak başına en fazla {max} grafik ve tablo.
-  sheet_unusable: 'Sayfanın verileri kullanılamıyor: {reason}'
-  too_big: Bu durum panoyu çok büyük yapar ({size} KB, sınır {max} KB). Daha az satır kullanın veya bir tablo kaldırın.
-  player_name_needed: Bir oyuncu adı girin.
-  time_format: Zamanlar 18:00 gibi Oyun Zamanı (GT) formatındadır (veya boş bırakın).
-  start_time_needed: Başlangıç zamanını da verin (veya her ikisini boş bırakın).
+  sheet_unusable: 'Tablo verisi kullanılamıyor: {reason}'
+  too_big: Bu, panoyu çok büyük yapar ({size} KB / {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
+  player_name_needed: Bir oyuncu ismi girin.
+  time_format: Saatler 18:00 gibi Oyun Zamanı (GT) formatındadır (veya boş bırakın).
+  start_time_needed: Başlangıç zamanını da girin (veya her ikisini de boş bırakın).
   rotor_full: Rotorda en fazla {max} oyuncu olabilir.
   already_in_rotor: "{name} zaten rotorda."
   player_removed: Bu oyuncu kaldırıldı.

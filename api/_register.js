@@ -13,7 +13,6 @@
 // the server: they are never sent to browsers.
 
 import { randomInt } from 'node:crypto';
-import { SESSION_DAYS } from './_tokens.js';
 import { gistJson, updateGist } from './_gist.js';
 import { ALLIANCE_ROLE_SETTINGS, DEFAULT_FALLBACK_COLORS, findTag } from './_alliances.js';
 
@@ -282,15 +281,16 @@ export function allianceByDiscordVar(register, name) {
 /**
  * The alliance a sign-in pass means, as it is now. Returns { entry }, { stale: true } (the
  * member must sign in again: never guessed), or null (the register can't say: the pass is
- * used as it is, as before step 1).
+ * used as it is).
  *  - A pass with an ID: that alliance if it's on the map (or the one a Steward merged it into);
- *    otherwise stale, NEVER its tag (alliance B may have that tag now).
- *  - A pass with only a tag (from before step 1, or an alliance not in the register yet): the
- *    alliance that held that tag when the pass was issued (passes last SESSION_DAYS, so issued
- *    = exp - that), and only if exactly one did and it's on the map now; stale if the register
- *    knows the tag but can't tell; null if no alliance in the register has ever had it.
+ *    otherwise stale, NEVER its tag (another alliance may have that tag now).
+ *  - A pass with only a tag (the alliance wasn't in the register yet when they signed in): stale
+ *    if the register knows that tag now (signing in again gives the ID); null if no alliance in
+ *    the register has ever had it.
+ * (Until 2026-11-22, passes from before step 1 were matched by the date they were issued; those
+ * passes are no longer accepted, so that's gone: plan step 8.)
  */
-export function allianceForPass(register, { allianceId, alliance, exp } = {}, now = Date.now()) {
+export function allianceForPass(register, { allianceId, alliance } = {}) {
   const entries = Object.values(register.alliances);
   if (!entries.length) return null;
   if (allianceId) {
@@ -298,30 +298,13 @@ export function allianceForPass(register, { allianceId, alliance, exp } = {}, no
     return onMap(entry) ? { entry } : { stale: true };
   }
   if (!alliance || alliance === 'Independent') return null;
-  const issued = new Date(Number(exp) ? Number(exp) - SESSION_DAYS * 86400000 : now).toISOString();
-  const heldThen = [];
-  let everHeld = false;
-  for (const a of entries) {
-    if (a.game !== GAME || String(a.server) !== SERVER) continue;
-    for (const h of a.tags?.length ? a.tags : [{ tag: a.tag, from: null, to: null }]) {
-      if (findTag([h.tag], alliance)) everHeld = true;
-      const from = h.from || null;
-      // Leaving the map ends an alliance's hold on its tag (until a Steward links it back)
-      const to = h.to || (a.status === 'active' && a.off_map) || null;
-      if ((!from || from <= issued) && (!to || to > issued)) heldThen.push({ tag: h.tag, a });
-    }
-  }
-  const key = findTag([...new Set(heldThen.map((x) => x.tag))], alliance);
-  if (!key) return everHeld ? { stale: true } : null;
-  // An entry a Steward merged counts as the one it joined
-  const owners = [
-    ...new Set(
-      heldThen.filter((x) => x.tag === key).map((x) => followMerged(register, x.a)?.id || x.a.id),
-    ),
-  ];
-  if (owners.length !== 1) return { stale: true };
-  const entry = register.alliances[owners[0]];
-  return onMap(entry) ? { entry } : { stale: true };
+  const known = entries.some(
+    (a) =>
+      a.game === GAME &&
+      String(a.server) === SERVER &&
+      (a.tags?.length ? a.tags : [{ tag: a.tag }]).some((h) => findTag([h.tag], alliance)),
+  );
+  return known ? { stale: true } : null;
 }
 
 /**
