@@ -378,3 +378,7 @@
 #st-roster[hidden] {
   display: none;
 }
+/* A box with nothing to show stays hidden (.st-link sets display: grid, which beat [hidden]) */
+.st-link[hidden] {
+  display: none;
+}
