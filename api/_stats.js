@@ -108,7 +108,10 @@ export function statsSnapshotDue(now, calendarConfig = {}) {
 
 async function readRaw(path) {
   try {
-    const blob = await get(path, { access: 'private', token: blobToken() });
+    // The latest copy, not the cache's (owner's step 6 rehearsal, 2026-11-22): just after a
+    // file is overwritten, the cache can give the old one for about a minute, and a change
+    // worked out from that old copy would drop what was written in between
+    const blob = await get(path, { access: 'private', token: blobToken(), useCache: false });
     if (!blob) return null;
     return JSON.parse(await new Response(blob.stream).text());
   } catch {
