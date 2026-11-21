@@ -2,9 +2,10 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 common:
-  sign_in_discord: Inicia sesión con Discord
-  sign_in_again: Inicia sesión de nuevo
-  not_saved: 'No se guardó: {error}'
+  disclaimer: 'LA-S78 es un proyecto comunitario hecho por fans para el juego Last Asylum: Plague. No es un sitio web oficial de 37Games y no está afiliado con Last Asylum: Plague. Los nombres y las ilustraciones del juego pertenecen a sus respectivos dueños. Datos del juego en vivo de {tracker}.'
+  sign_in_discord: Iniciar sesión con Discord
+  sign_in_again: Iniciar sesión de nuevo
+  not_saved: 'No guardado: {error}'
   cancel: Cancelar
   save: Guardar
   saving: Guardando...
@@ -27,10 +28,10 @@ common:
   set_two: Recompensa del Rey de Batalla
   chests:
     commanders_will: Voluntad del Comandante
-    loyal_servant: Siervo Leal
+    loyal_servant: Sirviente Leal
     followers_heart: Corazón del Seguidor
     honor_vanguard: Vanguardia de Honor
-    fearless_hero: Héroe Intrépido
+    fearless_hero: Héroe Temerario
     logistics_support: Apoyo Logístico
 dashboard:
   title: Panel de la Alianza

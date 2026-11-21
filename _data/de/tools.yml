@@ -2,12 +2,13 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 common:
+  disclaimer: 'LA-S78 ist ein von Fans erstelltes Community-Projekt für das Spiel Last Asylum: Plague. Es ist keine offizielle 37Games-Webseite und steht in keiner Verbindung zu Last Asylum: Plague. Spielnamen und Grafiken gehören ihren jeweiligen Eigentümern. Live-Spieldaten vom {tracker}.'
   sign_in_discord: Mit Discord anmelden
   sign_in_again: Erneut anmelden
   not_saved: 'Nicht gespeichert: {error}'
   cancel: Abbrechen
   save: Speichern
-  saving: Speichere…
+  saving: Speichern...
   edit: Bearbeiten
   delete: Löschen
   remove: Entfernen
@@ -20,18 +21,18 @@ common:
   duration_minutes: "{m}Min"
   game_time: "{time} GT"
   your_time: "{time} deine Zeit"
-  off_week: Ruhewoche
+  off_week: Off-Woche
   kw_week: Königreichskrieg-Woche {n}
   copy: Kopieren
   set_one: Belobigung des Königs
-  set_two: Belohnung für den König der Kämpfe
+  set_two: Belohnung des Königs des Kampfes
   chests:
-    commanders_will: Wille des Kommandanten
-    loyal_servant: Treuer Diener
-    followers_heart: Herz der Anhänger
-    honor_vanguard: Ehren-Vorhut
+    commanders_will: Wille des Befehlshabers
+    loyal_servant: Loyaler Diener
+    followers_heart: Herz des Gefolgsmanns
+    honor_vanguard: Ehrenvorhut
     fearless_hero: Furchtloser Held
-    logistics_support: Logistik-Unterstützung
+    logistics_support: Logistikunterstützung
 dashboard:
   title: Allianz-Dashboard
   loading: Lade dein Allianz-Dashboard…
