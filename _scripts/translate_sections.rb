@@ -105,7 +105,8 @@ def prompt_for(sections, lang)
     1. Keep every JSON key exactly as it is. Translate only the text values.
     2. Keep every {placeholder} (e.g. {name}, {n}) exactly as written, untranslated.
     3. Keep emoji, HTML tags and numbers as they are. Keep these untranslated: KvK, NAP,
-       T10, R1, R2, R3, R4, R5, UTC-2, GT, Game Time, alliance tags in [brackets], Discord.
+       T10, R1, R2, R3, R4, R5, UTC-2, GT, Game Time, alliance tags in [brackets], Discord,
+       and the names LA-S78, Last Asylum: Plague, 37Games and Last Asylum Tracker.
     4. #{plural}
     5. Address the reader with #{ADDRESS[lang]}. Buttons and short labels use
        #{VERBS[lang] || 'the infinitive, as apps usually do (e.g. French "Copier", Russian "Скопировать")'},

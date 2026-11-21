@@ -11,6 +11,7 @@
 #   (see _plugins/tool_strings.rb and js/i18n.js).
 
 common:
+  disclaimer: "LA-S78 is a fan-made community project for the Last Asylum: Plague game. It is not an official 37Games website and is not affiliated with Last Asylum: Plague. Game names and artwork belong to their owners. Live game data from the {tracker}."
   sign_in_discord: "Sign in with Discord"
   sign_in_again: "Sign in again"
   not_saved: "Not saved: {error}"
