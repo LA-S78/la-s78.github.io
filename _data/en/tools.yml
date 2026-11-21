@@ -1062,7 +1062,7 @@ steward:
   move_confirm: "Move this to alliance IDs now?"
   move_undo_confirm: "Turn this back into tags?"
   move_done_map: "Moved: {alliances} alliances, {links} academy links, {owned} territories. Backup: {backup}"
-  move_done_calendar: "Moved: {alliance} alliance events ({global} server-wide events unchanged). Backup: {backup}"
+  move_done_calendar: "Moved {alliance} alliance events (server-wide events, unchanged: {global}). Backup: {backup}"
   move_undone: "Back to tags. Backup of the by-ID file: {backup}"
   move_already: "Nothing to do: it's already done."
   newtag: "{tag} is new on the map. Is it an alliance the site already knew, renamed or back on the map? Until you answer, it starts with nothing of theirs, and members of the old alliance are asked to sign in again."
