@@ -2,52 +2,59 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: Deine Allianz hat sich auf der Seite geändert, seit du dich angemeldet hast. Melde dich erneut mit Discord an, um fortzufahren.
-  pending_gone: Für diese Allianz wurde bereits eine Antwort gegeben.
+  alliance_changed: Deine Allianz hat sich seit deiner Anmeldung auf der Seite geändert. Melde dich erneut mit Discord an, um fortzufahren.
+  rename_unknown: Diese Allianz befindet sich nicht mehr auf der Karte. Lade die Seite neu.
+  rename_bad_tag: 'Gib das neue Tag so ein, wie es im Spiel ist: bis zu 12 Zeichen, keine Leerzeichen, Doppelpunkte, Klammern oder Schrägstriche.'
+  rename_same: Das ist das Tag, das sie bereits hat.
+  rename_taken: "[{tag}] hat bereits dieses Tag. Um Tags zwischen zwei Allianzen zu tauschen, verwende den Tausch."
+  rename_fixed: "[{tag}] kann hier noch nicht umbenannt werden: das Tag ist Teil des Seitencodes. Bitte zuerst um eine Code-Änderung."
+  rename_not_moved: 'Für die Umbenennung müssen zuerst alle Speicher auf Allianz-IDs verschoben werden (immer noch nach Tag: {stores}).'
+  retire_on_map: Nur eine Allianz, die von der Karte entfernt wurde (im Allianz-Planer), kann in den Ruhestand versetzt werden.
+  pending_gone: Diese Allianz wurde bereits beantwortet.
   stewards_only: Nur Stewards können die Steward-Tools verwenden.
-  lookups_used: Die heutigen Spielerabfragen sind aufgebraucht. Sie werden beim täglichen Reset (00:00 GT) zurückgesetzt.
+  lookups_used: Die heutigen Spieler-Lookups sind aufgebraucht. Sie beginnen wieder beim täglichen Reset (00:00 GT).
   player_not_found: Kein Spieler hat diese ID.
-  player_unavailable: Das Spiel konnte nicht erreicht werden. Versuche es in wenigen Minuten erneut.
-  positions_leaders_only: Nur die R4s und R5s deiner Allianz (und Stewards) können Mitglieder auf der Karte sehen.
+  player_unavailable: Das Spiel war nicht erreichbar. Versuche es in wenigen Minuten erneut.
+  positions_leaders_only: Nur die R4s und R5s (sowie Stewards) deiner Allianz können Mitglieder auf der Karte sehen.
   positions_unavailable: Die Positionen der Mitglieder können derzeit nicht geladen werden. Versuche es in wenigen Minuten erneut.
-  links_used: Die heutigen Allianz-Links sind aufgebraucht. Sie werden beim täglichen Reset (00:00 GT) zurückgesetzt.
-  relink_none: Es gibt für diese Allianz nichts mehr neu zu verknüpfen.
-  link_bad: Wähle eine Allianz und gib das Tag ein, das sie aktuell im Spiel verwendet.
+  links_used: Die heutigen Allianz-Links sind aufgebraucht. Sie beginnen wieder beim täglichen Reset (00:00 GT).
+  relink_none: Es gibt nichts mehr, das für diese Allianz neu verknüpft werden könnte.
+  link_bad: Wähle eine Allianz aus und gib das Tag ein, das sie aktuell im Spiel verwendet.
   link_same: Das ist das Tag, das die Seite bereits verwendet.
   link_taken: "{tag} ist bereits eine andere Allianz auf der Seite."
   link_not_found: Das Spiel hat keine Allianz mit dem Tag {tag} (Groß-/Kleinschreibung beachten).
-  positions_used: Die heutigen Kartenaktualisierungen sind aufgebraucht. Sie werden beim täglichen Reset (00:00 GT) zurückgesetzt.
+  positions_used: Die heutigen Kartenaktualisierungen sind aufgebraucht. Sie beginnen wieder beim täglichen Reset (00:00 GT).
   positions_wait: Die Karte wurde vor einem Moment aktualisiert. Versuche es in {minutes} Min. erneut.
-  refresh_limit: Keine Kaderaktualisierungen mehr für heute übrig. Sie werden beim täglichen Reset (00:00 GT) zurückgesetzt.
-  refresh_wait: Der Kader wurde vor einem Moment aktualisiert. Versuche es in {n} Min. erneut.
-  refresh_failed: Das Spiel konnte nicht erreicht werden. Versuche es in wenigen Minuten erneut.
+  refresh_limit: Keine Roster-Aktualisierungen mehr für heute übrig. Sie beginnen wieder beim täglichen Reset (00:00 GT).
+  refresh_wait: Das Roster wurde vor einem Moment aktualisiert. Versuche es in {n} Min. erneut.
+  refresh_failed: Das Spiel war nicht erreichbar. Versuche es in wenigen Minuten erneut.
   signed_out: Melde dich mit Discord an (oben rechts), um dein Allianz-Dashboard zu sehen.
   load_failed: 'Dashboard konnte nicht geladen werden: {reason}'
-  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite findet dies anhand deiner Allianz-Rolle im NAP Discord-Server. Bitte die Führung deiner Allianz oder einen Steward um die Rolle und verwende dann „Zugriff aktualisieren“ in deiner Account-Karte (oben rechts).
+  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite findet dies anhand deiner Allianz-Rolle im NAP Discord-Server. Bitte deine Allianz-Führung oder einen Steward um die Rolle und verwende dann 'Zugriff aktualisieren' in deiner Account-Karte (oben rechts).
   leaders_only: Nur die R4s und R5s deiner Allianz können das Dashboard ändern.
   chart_removed: Dieses Diagramm wurde entfernt.
   chart_already_removed: Dieses Diagramm wurde bereits entfernt.
   not_linked: Dieses Diagramm ist nicht mit einem Google Sheet oder Doc verknüpft.
   unknown_change: Unbekannte Änderung.
   save_failed: 'Speichern fehlgeschlagen: {reason}'
-  r5_only_nominate: Nur dein R5 kann hier die Nominierungsseite öffnen. Führe /nominate in Discord aus.
-  rewards_closed: Belohnungen sind bis {when} geschlossen.
-  no_rank: "[{tag}] hat keinen Rang in der Rangliste."
+  r5_only_nominate: Nur dein R5 kann hier die Nominierungsseite öffnen. Nutze /nominate in Discord.
+  rewards_closed: Belohnungen sind geschlossen bis {when}.
+  no_rank: "[{tag}] hat keinen Rang in der Bestenliste."
   choose_type: Wähle einen Diagramm- oder Tabellentyp.
   title_needed: Gib dem Diagramm oder der Tabelle einen Titel.
   too_many_columns: Maximal {max} Spalten (diese Tabelle hat {count}).
   too_many_rows: Maximal {max} Zeilen (diese Tabelle hat {count}).
   column_name: Spalte {n}
   paste_first: Füge zuerst eine Tabelle ein (eine Kopfzeile, dann die Daten).
-  no_data_rows: Die Tabelle enthält keine Datenzeilen unter der Kopfzeile.
+  no_data_rows: Die Tabelle hat keine Datenzeilen unter ihrer Kopfzeile.
   needs_numbers: Ein Diagramm benötigt eine Spalte mit Zahlen zur Anzeige.
-  needs_target: 'Ein Fortschrittsdiagramm benötigt ein Ziel: eine Zahl oder eine Spalte mit Zielwerten.'
+  needs_target: 'Ein Fortschrittsdiagramm benötigt ein Ziel: eine Zahl oder eine Spalte mit Zielen.'
   too_many_widgets: Maximal {max} Diagramme und Tabellen pro Allianz.
   sheet_unusable: 'Die Daten des Sheets können nicht verwendet werden: {reason}'
   too_big: Das würde dieses Dashboard zu groß machen ({size} KB von {max} KB). Verwende weniger Zeilen oder entferne eine Tabelle.
   player_name_needed: Gib einen Spielernamen ein.
-  time_format: Zeiten sind Game Time wie 18:00 (oder lasse sie leer).
-  start_time_needed: Gib auch die Startzeit an (oder lasse beide leer).
+  time_format: Zeiten sind Game Time wie 18:00 (oder lass sie leer).
+  start_time_needed: Gib auch die Startzeit an (oder lass beide leer).
   rotor_full: Maximal {max} Spieler im Rotor.
   already_in_rotor: "{name} ist bereits im Rotor."
   player_removed: Dieser Spieler wurde entfernt.
