@@ -207,7 +207,7 @@
       styles.push(`--dw: ${ramp(w.options.reverse ? 1 - f : f)}`);
     // Four or more series: six clearly different colours (the theme's mixes of two colours
     // run together at that many; checked for colour-blind readers, 2026-11-23)
-    // and the two names compared ("Compare two"), told apart at a glance
+    // and the two names compared (Compare), told apart at a glance
     else if (n >= 4 || w._distinct) cls = `${extra ? `${extra} ` : ''}dw-d${k % SERIES}`;
     else cls = `${extra ? `${extra} ` : ''}dw-s${k % SERIES}`;
     if (css) styles.push(css);
@@ -387,7 +387,7 @@
             ),
             0,
           ) || 1;
-    // Pairs ("Compare two", stacked): two bars per tab, the second a little lighter
+    // Pairs (Compare, stacked): two bars per tab, the second a little lighter
     const pairs = w._pairs ? 2 : 1;
     const groupW = 600 / Math.ceil(shown.length / pairs);
     const barW = w._pairs
@@ -742,7 +742,7 @@
     if (!tabsOf(w)) return 'latest';
     return VIEWS.includes(v) ? v : 'latest';
   };
-  /** A bar chart with "Compare two" ticked in the editor (options.compare). */
+  /** A bar chart with Compare ticked in the editor (options.compare). */
   const comparable = (w) => w.type === 'bar' && Boolean(w.options?.compare) && !w.options?.swap;
   const key = (v) => String(v ?? '').trim();
 
@@ -867,7 +867,7 @@
   }
 
   /**
-   * "Compare two" (owner request, 2026-11-23; ticked per chart): two names (or a name and the
+   * Compare (owner request, 2026-11-23; ticked per chart): two names (or a name and the
    * top or bottom 5), side by side. On a chart stacked by its columns (Stack: totals), each
    * bar keeps its columns stacked, coloured as in the key (whose taps work as in the other
    * views): across tabs, a pair of bars per tab; on one tab, one bar each. Otherwise each is
@@ -934,13 +934,16 @@
     };
   }
 
-  const select = (attr, label, names, on) =>
-    `<select class="dw-pick" ${attr} aria-label="${esc(label)}">${names
+  // The site's dropdown (js/site-select.js), with a search box for name lists
+  const searchAttrs = () =>
+    `data-search="${esc(say('search_names'))}" data-search-none="${esc(say('no_match'))}"`;
+  const select = (attr, label, names, on, search = true) =>
+    `<select class="dw-pick" data-site-select ${search ? searchAttrs() : ''} ${attr} aria-label="${esc(label)}">${names
       .map((n) => `<option value="${esc(n)}"${n === on ? ' selected' : ''}>${esc(n)}</option>`)
       .join('')}</select>`;
 
   /**
-   * The buttons above a chart: the views (across tabs, or with "Compare two"), the lists each
+   * The buttons above a chart: the views (across tabs, or with Compare), the lists each
    * view needs (a tab, a name, two names, the columns to add up), and "reverse" for a chart in
    * order.
    */
@@ -964,7 +967,7 @@
     const lists = [];
     if (tabs && view === 'latest') {
       const names = [...tabs].reverse().map((t) => t.name);
-      lists.push(select('data-tabpick', say('view_tab'), names, w._tab || names[0]));
+      lists.push(select('data-tabpick', say('view_tab'), names, w._tab || names[0], false));
     }
     if (tabs && view === 'player') {
       const names = namesOf(w, tabs);
@@ -980,8 +983,8 @@
           )
           .join('');
       lists.push(
-        `<select class="dw-pick" data-cmp="0" aria-label="${esc(say('compare_first'))}">${choices(c.a)}</select>`,
-        `<select class="dw-pick" data-cmp="1" aria-label="${esc(say('compare_second'))}">${choices(c.b)}</select>`,
+        `<select class="dw-pick" data-site-select ${searchAttrs()} data-cmp="0" aria-label="${esc(say('compare_first'))}">${choices(c.a)}</select>`,
+        `<select class="dw-pick" data-site-select ${searchAttrs()} data-cmp="1" aria-label="${esc(say('compare_second'))}">${choices(c.b)}</select>`,
       );
     }
     if (lists.length) out += `<div class="dw-picks">${lists.join('')}</div>`;
@@ -1241,7 +1244,11 @@
           again = `[data-cmp="${p.dataset.cmp}"]`;
         }
         redraw();
-        el.querySelector(again)?.focus();
+        // Back to the same list's button, once the new dropdown is drawn (js/site-select.js)
+        setTimeout(() => {
+          const sel = el.querySelector(again);
+          (sel?.closest('.site-select')?.querySelector('.site-select-btn') || sel)?.focus();
+        });
       });
     }
     el.addEventListener('click', (e) => {
