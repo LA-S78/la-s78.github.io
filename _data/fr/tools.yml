@@ -102,11 +102,9 @@ rewards_card:
   buyout_cost: 'Rachat : {amount} {chest} dans chaque ensemble'
   buyout_cost_help: Financement de l'alliance déplacée cette semaine
 roster:
-  title: Liste de l'alliance
+  title: Effectif de l'alliance
   summary: "{n} membres · {might} Puissance"
-  show: Afficher les membres
-  hide: Masquer les membres
-  search: Rechercher des noms ou IDs...
+  search: Rechercher des noms ou des ID...
   sort_label: Trier par
   sort_power: Puissance
   sort_name: Nom
@@ -118,7 +116,7 @@ roster:
   credit_before: Données des joueurs issues de
   sort_tech: Recherche
   sort_help: Aide
-  tech_title: Recherche d'alliance donnée aujourd'hui
+  tech_title: Recherche d'alliance effectuée aujourd'hui
   help_title: Aide apportée à la construction et à la recherche des membres aujourd'hui
   help_capped: Limite d'aide quotidienne atteinte (1 000)
   refresh: Actualiser
@@ -126,7 +124,7 @@ roster:
   refreshing: Actualisation...
   refresh_help: 'Obtenez les chiffres en temps réel du jeu. Partagé par les chefs de votre alliance : {n} sur {max} restants aujourd''hui, un toutes les 10 minutes.'
   refresh_wait: 'Actualisé il y a un instant : prochain dans {n} min.'
-  refresh_none: Aucune actualisation restante aujourd'hui. Elles recommencent à la réinitialisation quotidienne (00:00 GT).
+  refresh_none: Plus d'actualisations disponibles aujourd'hui. Elles recommencent à la réinitialisation quotidienne (00:00 GT).
   daily_as_of: Recherche et aide depuis la réinitialisation d'aujourd'hui (00:00 GT), au {time}
   daily_old: 'Recherche et aide avant la réinitialisation d''aujourd''hui : dernière lecture {time}'
   daily_unknown: 'Recherche et aide : heure de lecture inconnue'
@@ -183,14 +181,14 @@ chart_editor:
   type_progress: Progression
   type_table: Tableau
   title: Titre
-  title_example: ex. Scores du Duel d'Alliances
+  title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: ex. Minimum 15M de points au Duel requis d'ici la réinitialisation de vendredi
-  who_sees: Qui peut voir ceci
+  note_example: ex. Minimum 15M de points de Duel requis avant la réinitialisation du vendredi
+  who_sees: Qui peut le voir
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
   data: Données
-  data_source: Origine des données
+  data_source: Source des données
   paste: Coller un tableau
   link: Lien Google Sheet / Doc
   paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
@@ -198,35 +196,33 @@ chart_editor:
   tab: Onglet
   order: Ordre
   order_sheet: Comme dans la feuille
-  order_desc: Le plus élevé en premier
-  order_asc: Le plus bas en premier
-  order_asc_help: Le plus bas en premier exclut les lignes sans données dans les colonnes affichées (ceux qui n'ont pas participé).
+  order_desc: Le plus élevé d'abord
+  order_asc: Le plus bas d'abord
+  order_asc_help: Le plus bas d'abord exclut les lignes vides dans les colonnes affichées (ceux qui n'ont pas participé).
   limit: Afficher
   limit_all: Tous
-  tabs_on: Même plage sur plusieurs onglets (un onglet par semaine, par exemple)
+  tabs_on: Même plage depuis plusieurs onglets (un onglet par semaine, par exemple)
   tabs_pattern: Noms d'onglets comme
   tabs_count: Nouveaux onglets à lire
   tabs_match: "{n} onglets correspondent : {names}."
   tabs_reads: Lit les {n} plus récents.
-  tabs_none: 'Aucun onglet ne correspond. # est un nombre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
-  tabs_read: Lire {n} onglets ; le plus récent est {newest}.
+  tabs_none: 'Aucun onglet ne correspond. # est n''importe quel nombre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
+  tabs_read: Lecture de {n} onglets ; le plus récent est {newest}.
   tabs_skipped: 'Impossible de lire : {names}.'
   view_start: Les spectateurs commencent sur
-  view_help: Les spectateurs peuvent changer de vue au-dessus du graphique.
+  view_help: Les spectateurs peuvent basculer entre les vues au-dessus du graphique.
   compare: 'Laisser les spectateurs comparer : deux noms, ou un nom avec le top ou bottom 5'
-  compare_pie: Laisser les spectateurs comparer deux noms (ou le top/bottom 5) sous forme de secteur
-  compare_line: Laisser les spectateurs comparer les lignes de deux noms (ou un nom avec le top/bottom 5 de chaque semaine)
-  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur mobile : touchez un coin, puis le coin opposé). La première ligne est l''en-tête. Touchez ensuite une lettre de colonne pour en faire les étiquettes, ou une colonne de chiffres.'
-  grid_tap_second: Touchez maintenant le coin opposé du tableau.
+  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur téléphone : appuyez sur un coin, puis sur le coin opposé). La première ligne est l''en-tête. Appuyez ensuite sur une lettre de colonne pour en faire les étiquettes, ou sur une colonne de chiffres.'
+  grid_tap_second: Appuyez maintenant sur le coin opposé du tableau.
   grid_mode: Cliquer sur une lettre de colonne définit
   grid_labels: Étiquettes
-  grid_numbers: Nombres
-  grid_more: Seules les 200 premières lignes et 60 colonnes sont affichées ici ; une plage peut aller au-delà.
+  grid_numbers: Chiffres
+  grid_more: Seules les 200 premières lignes et 60 colonnes sont affichées ici ; une plage peut aller plus loin.
   range: Plage, ex. A1:D20 (optionnel)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le web). Docs : Fichier → Partager → Publier sur le web. “Synchroniser maintenant” sur la carte récupère les derniers chiffres plus tard.'
+  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la carte récupérera les derniers chiffres plus tard.'
   load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
   preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
@@ -235,19 +231,19 @@ chart_editor:
   rows_other: "{n} lignes"
   columns_one: "{n} colonne"
   columns_other: "{n} colonnes"
-  at_most_500: "(500 au plus)"
+  at_most_500: "(500 au maximum)"
   labels: Noms (étiquettes)
-  numbers_to_show: Nombres à afficher
-  labels_swapped: Noms (une ligne ou barre chacun)
-  swap_line: "⇄ Échanger lignes et colonnes : une ligne par rangée, les colonnes en bas"
-  swap_bar: "⇄ Échanger lignes et colonnes : les colonnes en barres, une couleur par ligne"
+  numbers_to_show: Chiffres à afficher
+  labels_swapped: Noms (une ligne ou une barre chacun)
+  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
   swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
   rows_count: "{n} sur 6 choisis"
   columns_along: Colonnes en bas (dans l'ordre de la feuille)
-  numbers: Nombres
-  several_columns: Plusieurs colonnes de nombres
+  numbers: Chiffres
+  several_columns: Plusieurs colonnes de chiffres
   side_by_side: Côte à côte
   stacked_totals: 'Empilés : totaux'
   stacked_percent: 'Empilés : chaque barre à 100%'
@@ -256,27 +252,27 @@ chart_editor:
   traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
   traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, haut vert'
   traffic_reverse: 'Inverser : bas est bien (vert), haut est mal (rouge)'
-  traffic_target: Rouge → jaune → vert selon la proximité avec l'objectif
-  traffic_target_reverse: 'Inverser : plus loin en dessous de l''objectif est meilleur'
+  traffic_target: Rouge → jaune → vert selon la proximité de la cible
+  traffic_target_reverse: 'Inverser : plus loin sous la cible est mieux'
   donut: Donut (anneau)
-  target: Objectif pour tous
+  target: Cible pour tout le monde
   target_example: ex. 15M ou 15000000
-  target_column: "…ou une colonne d'objectifs"
-  use_number_above: "(utiliser le nombre ci-dessus)"
-  highlight_where: Mettre en évidence les lignes où
-  no_highlight: "(pas de mise en évidence)"
+  target_column: "…ou une colonne de cibles"
+  use_number_above: "(utiliser le chiffre ci-dessus)"
+  highlight_where: Surligner les lignes où
+  no_highlight: "(pas de surbrillance)"
   at_least: est au moins
   at_least_example: ex. 300M
 charts:
   column: Colonne {n}
-  no_numbers: Pas de nombres à représenter dans la colonne choisie.
-  line_two_rows: Une ligne nécessite au moins deux rangées.
-  line_two_columns: Une ligne nécessite au moins deux colonnes en bas.
-  no_positive: Pas de nombres positifs à représenter dans la colonne choisie.
-  no_targets: Aucun nombre (ou objectif) à comparer.
+  no_numbers: Aucun chiffre à représenter dans la colonne choisie.
+  line_two_rows: Un graphique linéaire nécessite au moins deux lignes.
+  line_two_columns: Un graphique linéaire nécessite au moins deux colonnes en bas.
+  no_positive: Aucun nombre positif à représenter dans la colonne choisie.
+  no_targets: Aucun chiffre (ou cible) à comparer.
   no_table: Pas encore de tableau.
   unknown_type: Type de graphique inconnu.
-  draw_failed: Ce graphique n'a pas pu être dessiné ({error}).
+  draw_failed: Ce graphique n'a pas pu être tracé ({error}).
   other: Autre
   value: Valeur
   total: Total
@@ -284,18 +280,18 @@ charts:
   share_of_all: "{value} · {share} du total"
   value_of_target: "{value} sur {target}"
   to_go: 'Restant : {value}'
-  target_reached: Objectif atteint ✓
+  target_reached: Cible atteinte ✓
   done: "✓ Terminé"
-  reached_target: "{done} sur {total} ont atteint l'objectif"
+  reached_target: "{done} sur {total} ont atteint la cible"
   search: Rechercher…
   search_label: Rechercher dans ce tableau
-  matching: "{n} correspondent"
-  show_all: Afficher les {n}
+  matching: "{n} correspondance(s)"
+  show_all: Afficher tout ({n})
   show_all_rows: Afficher les {n} lignes
   show_fewer: Afficher moins
   first_rows: Affichage des {shown} premières lignes sur {n}.
-  hint_bar: Touchez ou survolez une barre
-  hint_bar_key: Touchez ou survolez une barre. Touchez un nom dans la légende pour ne voir que celui-là.
+  hint_bar: Appuyez ou survolez une barre
+  hint_bar_key: Appuyez ou survolez une barre. Appuyez sur un nom dans la légende pour ne voir que celui-ci.
   views: Vues
   view_latest: Onglet le plus récent
   view_weeks: Totaux par onglet
@@ -304,21 +300,20 @@ charts:
   view_average: Moyenne de {n} onglets
   view_chart: Graphique
   view_compare: Comparer
-  search_names: Tapez un nom…
+  search_names: Saisissez un nom…
   no_match: Aucun nom ne correspond.
   view_tab: Onglet à afficher
   compare_first: Premier nom
   compare_second: Second nom
   compare_top: Top {n} (moyenne)
-  compare_bottom: Bottom {n} (moyenne)
+  compare_bottom: Flop {n} (moyenne)
   pair_left: 'Gauche : {name}'
-  share_of_column: "{name} : {share} du total"
   pair_right: 'Droite (estompé) : {name}'
-  flip_to_asc: "⇅ Le plus bas en premier"
-  flip_to_desc: "⇅ Le plus élevé en premier"
-  hint_line: Touchez ou survolez une semaine
-  hint_pie: Touchez ou survolez un secteur
-  hint_progress: Touchez ou survolez une ligne
+  flip_to_asc: "⇅ Plus bas d'abord"
+  flip_to_desc: "⇅ Plus haut d'abord"
+  hint_line: Appuyez ou survolez une semaine
+  hint_pie: Appuyez ou survolez une section
+  hint_progress: Appuyez ou survolez une ligne
 nominate:
   page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]
@@ -985,14 +980,14 @@ stats:
   title: Stats NAP
   views_label: Que montrer
   view_growth: Croissance NAP
-  chart_hint: Touchez ou survolez un jour pour le lire
-  view_players: Top joueurs
+  chart_hint: Appuyez ou survolez un jour pour le lire
+  view_players: Meilleurs joueurs
   view_achievements: Réalisations
   view_lookup: Recherche de joueur
   growth_title: Croissance de l'alliance
   growth_members: "{n} membres"
   growth_more: Plus sur l'onglet
-  growth_link: Stats
+  growth_link: Statistiques
   lookup_search: Nom du joueur...
   lookup_hint: Joueurs NAP uniquement, à partir de l'instantané quotidien. Tapez au moins 2 lettres de leur nom.
   lookup_none: Aucun joueur NAP ne correspond.
@@ -1004,29 +999,29 @@ stats:
   lookup_kills_week: Éliminations cette semaine
   lookup_history: Puissance au cours du dernier mois
   ach_strongest: Le plus puissant
-  ach_gain_week: Plus gros gain cette semaine
-  ach_kills: Plus d'éliminations
-  ach_kills_week: Plus d'éliminations cette semaine
-  ach_climb_month: Plus grosse ascension de Sanctuaire ce mois-ci
+  ach_gain_week: Plus forte progression cette semaine
+  ach_kills: Le plus d'éliminations
+  ach_kills_week: Le plus d'éliminations cette semaine
+  ach_climb_month: Plus forte progression du Sanctuaire ce mois-ci
   ach_away: Loin de la ruche
-  ach_away_help: Plus grand nombre de jours ce mois-ci à plus de 50 tuiles de la ruche de leur alliance (là où se trouvent la plupart de ses membres).
-  ach_none: Pas assez de jours collectés encore.
+  ach_away_help: Le plus grand nombre de jours ce mois-ci à plus de 50 cases de la ruche de leur alliance (où se trouvent la plupart de ses membres).
+  ach_none: Pas encore assez de jours collectés.
   value_kills: "{n} éliminations"
   value_levels_one: "+1 niveau"
   value_levels_other: "+{n} niveaux"
   value_days_one: 1 jour
   value_days_other: "{n} jours"
   list_label: Quelle liste
-  list_strongest: Les plus forts
+  list_strongest: Plus fort
   list_week: Gagné cette semaine
   list_month: Gagné ce mois-ci
   filter_label: Alliance
   filter_all: Toutes les alliances NAP
   players_none: Aucun joueur à afficher pour le moment.
-  players_wait_week: Les gains de cette semaine apparaissent une fois qu'un instantané précédant ce lundi a été collecté.
-  players_wait_month: Les gains sur un mois apparaissent une fois qu'un mois de jours a été collecté.
+  players_wait_week: Les gains de la semaine s'affichent une fois qu'un instantané précédant ce lundi a été collecté.
+  players_wait_month: Les gains sur un mois s'affichent une fois qu'un mois complet a été collecté.
   players_as_of: Au moment de l'instantané avant la réinitialisation du {date}.
-  week_note: Les semaines vont du lundi au dimanche (Game Time) ; les records hebdomadaires recommencent chaque lundi.
+  week_note: Les semaines s'étendent du lundi au dimanche (Game Time) ; les records hebdomadaires recommencent chaque lundi.
   col_player: Joueur
   col_gain: Gagné
   show_more: Afficher les {n}
@@ -1038,13 +1033,13 @@ stats:
   failed: Les stats ne peuvent pas être chargées pour le moment.
   collecting: Les stats sont collectées une fois par jour, juste avant la réinitialisation quotidienne (00:00 GT). Les graphiques se remplissent jour après jour.
   since: Collectées quotidiennement depuis le {date}.
-  one_day: 'Seulement un jour collecté jusqu''à présent : le graphique démarre une fois qu''il y en a deux.'
+  one_day: 'Un seul jour collecté pour le moment : le graphique démarre une fois qu''il y en a deux.'
   col_alliance: Alliance
   col_might: Puissance
   col_week: 7 jours
   col_month: 30 jours
   no_number: "—"
-  show_hide: Touchez une alliance pour afficher ou masquer sa ligne.
+  show_hide: Appuyez sur une alliance pour afficher ou masquer sa ligne.
   credit_before: Chiffres issus de
 steward:
   tidy_title: 'IDs d''Alliance : nettoyage'
