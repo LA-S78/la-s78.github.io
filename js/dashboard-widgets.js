@@ -3,7 +3,8 @@
  * Draws the Alliance Dashboard's charts and tables (portal/dashboard.html) from a widget:
  *   { type: 'bar'|'line'|'pie'|'progress'|'table', title, note, visibility,
  *     data: { columns, rows }, options: { labelCol, valueCols, vertical, donut, target,
- *     targetCol, highlightCol, highlightMin, swap, rowNames }, updatedAt }
+ *     targetCol, highlightCol, highlightMin, swap, rowNames, stacked, order, limit, view },
+ *     updatedAt }; a bar chart across tabs also has data.tab and data.older (see viewed()).
  * Everything is plain SVG/HTML coloured with the theme's CSS variables (.dw-s0 … .dw-s5 in
  * _css/portal/70-alliance-dashboard.css), so charts follow Plague, Sanctuary and Miasma.
  * Every value from the data goes through escapeHtml() (js/escape-html.js).
@@ -682,9 +683,148 @@
   const showAll = (n) =>
     `<button type="button" class="dw-more" data-show-all>${esc(say('show_all', { n }))}</button>`;
 
+  // ---------- across tabs (2026-11-23): one bar chart, four views ----------
+  // A chart read from several tabs (data.older: the older tabs, oldest first; data.rows: the
+  // newest, data.tab its name) has buttons above it: the newest tab (the chart as set up),
+  // the totals by tab, one name by tab (picked from a list), and each name's average over
+  // the tabs. The editor saves which one viewers start on (options.view); a viewer's
+  // choice (w._view, w._pick) isn't saved. The series (the columns chosen) are the same in
+  // every view, so the key's taps carry over.
+  const VIEWS = ['latest', 'weeks', 'player', 'average'];
+
+  /** Every tab, oldest first ([{ name, rows }]), or null for a chart from one table. */
+  function tabsOf(w) {
+    const older = w.data?.older;
+    if (w.type !== 'bar' || !Array.isArray(older) || !older.length) return null;
+    const width = (w.data.columns || []).length;
+    return [
+      ...older.map((t) => ({ name: t.name || '', rows: olderRows(t, width) })),
+      { name: w.data.tab || '', rows: w.data.rows || [] },
+    ];
+  }
+
+  /**
+   * An older tab's rows, full width: as read from the sheet ({ rows }), or as saved ({ cols,
+   * text }: the columns kept, a line per row, cells split by tabs; api/_dashboard.js).
+   */
+  function olderRows(t, width) {
+    if (Array.isArray(t.rows)) return t.rows;
+    if (typeof t.text !== 'string' || !Array.isArray(t.cols)) return [];
+    return t.text
+      .split('\n')
+      .filter(Boolean)
+      .map((line) => {
+        const cells = line.split('\t');
+        const row = Array(width).fill('');
+        t.cols.forEach((c, k) => {
+          if (c >= 0 && c < width) row[c] = cells[k] ?? '';
+        });
+        return row;
+      });
+  }
+  const viewOf = (w) => {
+    const v = w._view || w.options?.view;
+    return VIEWS.includes(v) ? v : 'latest';
+  };
+  const key = (v) => String(v ?? '').trim();
+
+  /** The names (labels) to pick from: the newest tab's, then any only in older tabs. */
+  function namesOf(w, tabs) {
+    const label = w.options?.labelCol ?? 0;
+    const out = [];
+    const seen = new Set();
+    for (const t of [...tabs].reverse())
+      for (const r of t.rows) {
+        const k = key(r[label]);
+        if (k && !seen.has(k)) seen.add(k), out.push(k);
+      }
+    return out;
+  }
+
+  /** Tab names along the bottom: their first word, when that tells them apart. */
+  function tabLabels(tabs) {
+    const first = tabs.map((t) => key(t.name).split(/\s+/)[0]);
+    return new Set(first).size === first.length ? first : tabs.map((t) => key(t.name));
+  }
+
+  /** The widget as the current view draws it (a chart from one table: itself). */
+  function viewed(w) {
+    const tabs = tabsOf(w);
+    const view = tabs ? viewOf(w) : 'latest';
+    if (view === 'latest') return w;
+    const o = w.options || {};
+    const cols = w.data.columns || [];
+    const label = o.labelCol ?? 0;
+    const vals = (o.valueCols && o.valueCols.length ? o.valueCols : [label === 1 ? 0 : 1]).filter(
+      (c) => c < cols.length,
+    );
+    const columns = [cols[label] ?? '', ...vals.map((c) => cols[c])];
+    const valueCols = vals.map((_, i) => i + 1);
+    const sum = (list) => list.reduce((t, v) => t + (Number.isFinite(v) ? v : 0), 0);
+    let rows;
+    if (view === 'weeks' || view === 'player') {
+      const names = tabLabels(tabs);
+      const pickName = w._pick || namesOf(w, tabs)[0] || '';
+      rows = tabs.map((t, i) => {
+        if (view === 'weeks')
+          return [names[i], ...vals.map((c) => String(sum(t.rows.map((r) => number(r[c])))))];
+        const r = t.rows.find((x) => key(x[label]) === pickName);
+        return [names[i], ...vals.map((c) => (r ? (r[c] ?? '') : ''))];
+      });
+      // Along the bottom, in the tabs' order: no ordering or cut-off
+      return {
+        ...w,
+        data: { columns, rows },
+        options: {
+          ...o,
+          labelCol: 0,
+          valueCols,
+          vertical: true,
+          order: undefined,
+          limit: 0,
+          swap: false,
+        },
+      };
+    }
+    // Average: each name's average of each column over the tabs it's in
+    rows = namesOf(w, tabs).map((n) => {
+      const found = tabs.map((t) => t.rows.find((x) => key(x[label]) === n)).filter(Boolean);
+      return [
+        n,
+        ...vals.map((c) => {
+          const nums = found.map((r) => number(r[c])).filter(Number.isFinite);
+          return nums.length ? String(Math.round(sum(nums) / nums.length)) : '';
+        }),
+      ];
+    });
+    return {
+      ...w,
+      data: { columns, rows },
+      options: { ...o, labelCol: 0, valueCols, swap: false },
+    };
+  }
+
+  /** The view buttons (and the name list in "one name by tab"). */
+  function viewBar(w, tabs) {
+    const view = viewOf(w);
+    const btn = (v, text) =>
+      `<button type="button" data-view="${v}" aria-pressed="${view === v}">${esc(text)}</button>`;
+    let pickList = '';
+    if (view === 'player') {
+      const names = namesOf(w, tabs);
+      const on = w._pick || names[0] || '';
+      pickList = `<select class="dw-pick" data-pick aria-label="${esc(say('view_pick'))}">${names
+        .map((n) => `<option value="${esc(n)}"${n === on ? ' selected' : ''}>${esc(n)}</option>`)
+        .join('')}</select>`;
+    }
+    return `<div class="dw-views" role="group" aria-label="${esc(say('views'))}">${btn('latest', key(w.data.tab) || say('view_latest'))}${btn('weeks', say('view_weeks'))}${btn('player', say('view_player'))}${btn('average', say('view_average', { n: tabs.length }))}</div>${pickList}`;
+  }
+
   /** The chart or table for a widget, as HTML (call mount() after inserting it). */
   function render(w) {
     try {
+      const tabs = tabsOf(w);
+      if (tabs) return viewBar(w, tabs) + bar(viewed(w));
       return { bar, line, pie, progress, table }[w.type]?.(w) ?? empty(say('unknown_type'));
     } catch (err) {
       return empty(say('draw_failed', { error: err.message }));
@@ -872,13 +1012,30 @@
     el.dwWidget = w;
     if (!el.dwLegend) {
       el.dwLegend = true;
-      el.addEventListener('click', (e) => {
-        const b = e.target.closest('[data-series]');
-        if (!b || !el.contains(b)) return;
+      const redraw = () => {
         const cur = el.dwWidget;
-        toggleSeries(cur, Number(b.dataset.series), series(cur).names.length);
         el.innerHTML = render(cur);
         mount(el, cur);
+      };
+      el.addEventListener('click', (e) => {
+        const cur = el.dwWidget;
+        const v = e.target.closest('[data-view]');
+        if (v && el.contains(v)) {
+          cur._view = v.dataset.view;
+          return redraw();
+        }
+        const b = e.target.closest('[data-series]');
+        if (!b || !el.contains(b)) return;
+        toggleSeries(cur, Number(b.dataset.series), series(viewed(cur)).names.length);
+        redraw();
+      });
+      // "One name by tab": the name picked
+      el.addEventListener('change', (e) => {
+        const p = e.target.closest('[data-pick]');
+        if (!p || !el.contains(p)) return;
+        el.dwWidget._pick = p.value;
+        redraw();
+        el.querySelector('[data-pick]')?.focus();
       });
     }
     el.addEventListener('click', (e) => {
