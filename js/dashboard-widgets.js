@@ -418,7 +418,7 @@
       .join('');
     const g = guides(0, top, stacked === 'percent' ? (v) => `${Math.round(v)}%` : undefined);
     const vertical =
-      frame(w, rects, g, w._pairs ? w._pairs.labels : shown.map((r) => r.label)) +
+      frame(w, rects, g, w._pairs ? w._pairs.labels : w._xLabels || shown.map((r) => r.label)) +
       legend(s.names, w) +
       (w._pairs
         ? `<div class="dw-note dw-pair-note"><span>${esc(say('pair_left', { name: w._pairs.names[0] }))}</span><span class="dw-pair-b-note">${esc(say('pair_right', { name: w._pairs.names[1] }))}</span></div>`
@@ -810,17 +810,19 @@
     let rows;
     if (view === 'compare') return compared(w, tabs, { label, vals, cols, sum });
     if (view === 'weeks' || view === 'player') {
-      const names = tabLabels(tabs);
       const pickName = w._pick || namesOf(w, tabs)[0] || '';
-      rows = tabs.map((t, i) => {
+      // Each bar is named by its whole tab name ("11/09 K71 QRT": the readout shows the
+      // opponent); along the bottom, the short form (owner, 2026-11-23)
+      rows = tabs.map((t) => {
         if (view === 'weeks')
-          return [names[i], ...vals.map((c) => String(sum(t.rows.map((r) => number(r[c])))))];
+          return [key(t.name), ...vals.map((c) => String(sum(t.rows.map((r) => number(r[c])))))];
         const r = t.rows.find((x) => key(x[label]) === pickName);
-        return [names[i], ...vals.map((c) => (r ? (r[c] ?? '') : ''))];
+        return [key(t.name), ...vals.map((c) => (r ? (r[c] ?? '') : ''))];
       });
       // Along the bottom, in the tabs' order: no ordering or cut-off
       return {
         ...w,
+        _xLabels: tabLabels(tabs),
         data: { columns, rows },
         options: {
           ...o,
@@ -910,8 +912,8 @@
         const names = tabLabels(tabs);
         const rows = [];
         tabs.forEach((t, i) => {
-          rows.push([`${whoName(a)} · ${names[i]}`, ...entryCells(t.rows, a, ctx)]);
-          rows.push([`${whoName(b)} · ${names[i]}`, ...entryCells(t.rows, b, ctx)]);
+          rows.push([`${whoName(a)} · ${key(t.name)}`, ...entryCells(t.rows, a, ctx)]);
+          rows.push([`${whoName(b)} · ${key(t.name)}`, ...entryCells(t.rows, b, ctx)]);
         });
         return {
           ...w,
@@ -930,14 +932,16 @@
       };
     }
     let rows;
+    let xLabels;
     if (tabs) {
       const names = tabLabels(tabs);
       const tot = (cells) =>
         cells.some((v) => v !== '')
           ? String(sum(cells.filter((_, k) => !off.has(k)).map((v) => number(v))))
           : '';
-      rows = tabs.map((t, i) => [
-        names[i],
+      xLabels = names;
+      rows = tabs.map((t) => [
+        key(t.name),
         tot(entryCells(t.rows, a, ctx)),
         tot(entryCells(t.rows, b, ctx)),
       ]);
@@ -952,6 +956,7 @@
       _flip: false,
       _plainKey: true,
       _distinct: true,
+      _xLabels: xLabels,
       data: { columns: ['', whoName(a), whoName(b)], rows },
       options: { ...o, ...base, valueCols: [1, 2], vertical: true, stacked: undefined },
     };

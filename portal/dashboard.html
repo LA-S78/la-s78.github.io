@@ -21,29 +21,38 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
 
   <div id="dash-message" class="status-banner" hidden></div>
 
-  <!-- R4/R5, officers and Stewards only (the server sends it only to them) -->
-  <section class="dash-card dash-rewards" id="dash-rewards" hidden aria-labelledby="dash-rewards-title">
-    <h3 class="dash-card-title" id="dash-rewards-title">{% include ui-icon.html name="lock" %}{{ "rewards_card.title" | t }} <span class="dash-tag">{{ "rewards_card.officers" | t }}</span></h3>
-    <div id="dash-rewards-body"></div>
-  </section>
-
-  <!-- Caravan Rotor: run by leaders; members see it read-only when leaders allow -->
-  <section class="dash-card dash-caravan" id="dash-caravan" hidden aria-labelledby="dash-caravan-title"></section>
-
-  <!-- The alliance's members from the Last Asylum Tracker (owner request, 2026-11-18): leaders
-       always, members when leaders switch it on (renderRoster) -->
-  <section class="dash-card dash-roster" id="dash-roster" hidden aria-labelledby="dash-roster-title"></section>
-  <!-- The alliance's Might and members over time, from the Stats tab's daily snapshot -->
-  <section class="dash-card dash-growth" id="dash-growth" hidden aria-labelledby="dash-growth-title"></section>
-
-  <!-- Leaders: edit mode (add, edit, move, delete charts and tables) -->
+  <!-- Leaders: edit mode (add, edit, move, delete charts and tables), at the top of the page
+       (owner, 2026-11-23); the chart editor opens under it -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
     <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="pencil" %}{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
     <button type="button" class="dash-btn" id="dash-add" disabled>{% include ui-icon.html name="plus" %}{{ "dashboard.add_chart" | t }}</button>
   </div>
   <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
 
-  <section class="dash-widgets" id="dash-widgets" hidden aria-label="{{ "dashboard.charts_label" | t }}"></section>
+  <!-- The page's cards, in the order leaders set (renderWidgets, layoutOrder): the dashboard's
+       own cards (each in a .dash-slot with its move buttons) and the charts and tables -->
+  <section class="dash-widgets" id="dash-widgets" hidden aria-label="{{ "dashboard.charts_label" | t }}">
+    <!-- R4/R5, officers and Stewards only (the server sends it only to them) -->
+    <div class="dash-slot" data-key="rewards">
+      <section class="dash-card dash-rewards" id="dash-rewards" hidden aria-labelledby="dash-rewards-title">
+        <h3 class="dash-card-title" id="dash-rewards-title">{% include ui-icon.html name="lock" %}{{ "rewards_card.title" | t }} <span class="dash-tag">{{ "rewards_card.officers" | t }}</span></h3>
+        <div id="dash-rewards-body"></div>
+      </section>
+    </div>
+    <!-- Caravan Rotor: run by leaders; members see it read-only when leaders allow -->
+    <div class="dash-slot" data-key="caravan">
+      <section class="dash-card dash-caravan" id="dash-caravan" hidden aria-labelledby="dash-caravan-title"></section>
+    </div>
+    <!-- The alliance's members from the Last Asylum Tracker (owner request, 2026-11-18): leaders
+         always, members when leaders switch it on (renderRoster) -->
+    <div class="dash-slot" data-key="roster">
+      <section class="dash-card dash-roster" id="dash-roster" hidden aria-labelledby="dash-roster-title"></section>
+    </div>
+    <!-- The alliance's Might and members over time, from the Stats tab's daily snapshot -->
+    <div class="dash-slot" data-key="growth">
+      <section class="dash-card dash-growth" id="dash-growth" hidden aria-labelledby="dash-growth-title"></section>
+    </div>
+  </section>
 
   <!-- Leaders: the alliance's card pictures (js/alliance-images.js), after the charts and
        with their own "Edit images" button: folded to the current pictures until opened -->
@@ -283,13 +292,15 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       const chart = window.LineChart && power
         ? window.LineChart.lineChart({
             days,
-            lines: [{ color: data.alliance.color || '#6abf4b', values: days.map((d) => power[d] ?? null) }],
+            lines: [{ color: data.alliance.color || '#6abf4b', name: t('stats.col_might'), values: days.map((d) => power[d] ?? null) }],
             format: might,
             height: 150,
             label: t('stats.growth_title'),
+            hint: t('stats.chart_hint'),
           })
         : '';
       el.hidden = !chart;
+      arrange();
       if (!chart) return;
       const last = days[days.length - 1];
       const weekAgo = days.filter((d) => d <= new Date(Date.parse(`${last}T12:00:00Z`) - 7 * 86400000).toISOString().slice(0, 10)).pop();
@@ -600,7 +611,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     // Minutes between two roster refreshes (as api/_dashboard.js REFRESH_COOLDOWN_MIN)
     const REFRESH_COOLDOWN_MIN = 10;
 
-    let rosterView = { text: '', sort: 'power' };
+    // open: the member list is shown (owner, 2026-11-23: it starts closed, so phones can scroll
+    // past it; "Show members" opens it for this visit)
+    let rosterView = { text: '', sort: 'power', open: false };
     const ROSTER_SORTS = {
       power: (a, b) => b.power - a.power,
       name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
@@ -706,16 +719,23 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}</h3>
           ${refreshButton(r.refresh)}
         </div>
-        ${r.members ? `<p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span></p>` : ''}
-        ${r.members
-          ? `<div class="dash-cv-filters">
+        ${r.members ? `<p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span><button type="button" class="dash-icon-btn dash-roster-toggle" id="roster-toggle" aria-expanded="${rosterView.open}" aria-controls="roster-body">${ic('chevron')}${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}</button></p>` : ''}
+        ${r.members && !rosterView.open
+          ? ''
+          : r.members
+          ? `<div id="roster-body"><div class="dash-cv-filters">
               <input type="search" id="roster-search" placeholder="${escapeHtml(t('roster.search'))}" value="${escapeHtml(rosterView.text)}" aria-label="${escapeHtml(t('roster.search'))}">
               <span class="dash-roster-sorts" role="group" aria-label="${escapeHtml(t('roster.sort_label'))}">${sorts}</span>
             </div>
             <ul class="dash-roster-list">${shown.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t('caravan.nobody_matches'))}</li>`}</ul>
-            ${giving ? `<p class="dash-muted dash-small dash-roster-daily">${ic('clock')}${escapeHtml(dailyNote(r.takenAt))}</p>` : ''}`
-          : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>`}
-        ${trackerCredit()}`;
+            ${giving ? `<p class="dash-muted dash-small dash-roster-daily">${ic('clock')}${escapeHtml(dailyNote(r.takenAt))}</p>` : ''}
+            ${trackerCredit()}</div>`
+          : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>${trackerCredit()}`}`;
+      $('roster-toggle')?.addEventListener('click', () => {
+        rosterView.open = !rosterView.open;
+        renderRoster();
+        $('roster-toggle')?.focus();
+      });
       const search = $('roster-search');
       search?.addEventListener('input', () => {
         rosterView.text = search.value;
@@ -842,10 +862,11 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${ic('refresh')}${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
       const tool = (act, label, glyph, off) =>
         `<button type="button" class="dash-icon-btn" data-act="${act}" ${off ? 'disabled' : ''} title="${escapeHtml(t(label))}" aria-label="${escapeHtml(t(label))}">${glyph}</button>`;
+      // ▲▼ are set for the card's place on the page by arrange() (charts and the page's own cards)
       const tools = editing
-        ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲', i === 0)}${tool('down', 'common.move_down', '▼', i === count - 1)}${tool('edit', 'common.edit', ic('pencil', 'solo'))}${tool('delete', 'common.delete', ic('trash', 'solo'))}</div>`
+        ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲')}${tool('down', 'common.move_down', '▼')}${tool('edit', 'common.edit', ic('pencil', 'solo'))}${tool('delete', 'common.delete', ic('trash', 'solo'))}</div>`
         : '';
-      return `<article class="dash-card dash-widget" data-id="${escapeHtml(w.id)}" data-type="${escapeHtml(w.type || '')}">
+      return `<article class="dash-card dash-widget" data-key="${escapeHtml(w.id)}" data-id="${escapeHtml(w.id)}" data-type="${escapeHtml(w.type || '')}">
         <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
         <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}${sync}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
@@ -862,16 +883,77 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       // Always beside Edit Dashboard (greyed out until editing), so Edit doesn't shift
       $('dash-add').disabled = !editing;
       renderImages();
+      // The charts are drawn afresh; the page's own cards (in their .dash-slot) stay
+      el.querySelectorAll(':scope > .dash-widget, :scope > .dash-empty').forEach((n) => n.remove());
       if (!list.length) {
-        el.innerHTML = `<div class="dash-card dash-empty">${ic('bar_chart')}${escapeHtml(
-          t(!isLeader() ? 'dashboard.empty_member' : editing ? 'dashboard.empty_editing' : 'dashboard.empty_leader'),
-        )}</div>`;
-        return;
+        el.insertAdjacentHTML(
+          'beforeend',
+          `<div class="dash-card dash-empty">${ic('bar_chart')}${escapeHtml(
+            t(!isLeader() ? 'dashboard.empty_member' : editing ? 'dashboard.empty_editing' : 'dashboard.empty_leader'),
+          )}</div>`,
+        );
       }
-      el.innerHTML = list.map((w, i) => widgetCard(w, i, list.length)).join('');
-      el.querySelectorAll('.dash-widget').forEach((card) => {
+      el.insertAdjacentHTML('beforeend', list.map((w, i) => widgetCard(w, i, list.length)).join(''));
+      el.querySelectorAll(':scope > .dash-widget').forEach((card) => {
         const w = list.find((x) => x.id === card.dataset.id);
         W.mount(card.querySelector('.dash-widget-body'), w);
+      });
+      arrange();
+    }
+
+    // ---------- The page's order (owner request, 2026-11-23) ----------
+    // Leaders move the page's own cards (Weekly Rewards, Caravan Rotor, the roster, Alliance
+    // growth) among the charts with the same ▲▼, in edit mode. The order is saved for the
+    // alliance (dashboard.layout; api/_dashboard.js layoutOrder, move-item).
+    const BUILT_INS = ['rewards', 'caravan', 'roster', 'growth'];
+    const BUILT_IN_NAMES = { rewards: 'rewards_card.title', caravan: 'caravan.title', roster: 'roster.title', growth: 'stats.growth_title' };
+    /** As api/_dashboard.js layoutOrder(): the saved order, the page's own cards first if unnamed, new charts last. */
+    function layoutOrder(layout, ids) {
+      const known = new Set([...BUILT_INS, ...ids]);
+      const named = [...new Set((layout || []).filter((k) => known.has(k)))];
+      return [...BUILT_INS.filter((k) => !named.includes(k)), ...named, ...ids.filter((id) => !named.includes(id))];
+    }
+    /** A card the viewer sees (a page card whose section is hidden isn't). */
+    const shownCard = (n) => !n.hidden && !(n.classList.contains('dash-slot') && n.querySelector(':scope > section')?.hidden);
+    const fullWidth = (n) => n.classList.contains('dash-slot') || n.dataset.type === 'table';
+
+    /** Puts the cards in the saved order, sets their ▲▼, and widens a chart left alone in its row. */
+    function arrange() {
+      const el = $('dash-widgets');
+      if (!data || !data.dashboard) return;
+      const ids = (data.dashboard.widgets || []).map((w) => w.id);
+      for (const key of layoutOrder(data.dashboard.layout, ids)) {
+        const node = el.querySelector(`:scope > [data-key="${CSS.escape(key)}"]`);
+        if (node) el.appendChild(node);
+      }
+      const empty = el.querySelector(':scope > .dash-empty');
+      if (empty) el.appendChild(empty);
+      const tool = (act, label, glyph) =>
+        `<button type="button" class="dash-icon-btn" data-act="${act}" title="${escapeHtml(t(label))}" aria-label="${escapeHtml(t(label))}">${glyph}</button>`;
+      el.querySelectorAll(':scope > .dash-slot').forEach((slot) => {
+        let bar = slot.querySelector(':scope > .dash-slot-tools');
+        if (!bar) {
+          slot.insertAdjacentHTML('afterbegin', `<div class="dash-slot-tools"><span>${escapeHtml(t(BUILT_IN_NAMES[slot.dataset.key]))}</span>${tool('up', 'common.move_up', '▲')}${tool('down', 'common.move_down', '▼')}</div>`);
+          bar = slot.querySelector(':scope > .dash-slot-tools');
+        }
+        bar.hidden = !(editing && isLeader());
+      });
+      const items = [...el.children].filter((n) => n.dataset.key && shownCard(n));
+      let col = 0;
+      items.forEach((n, i) => {
+        n.classList.remove('dash-alone');
+        if (fullWidth(n)) {
+          col = 0;
+        } else if (col === 0) {
+          const next = items[i + 1];
+          if (!next || fullWidth(next)) n.classList.add('dash-alone');
+          col = 1;
+        } else col = 0;
+        const tools = n.querySelector(':scope > .dash-slot-tools, :scope > .dash-widget-head > .dash-widget-tools');
+        const up = tools?.querySelector('[data-act="up"]');
+        const down = tools?.querySelector('[data-act="down"]');
+        if (up) up.disabled = i === 0;
+        if (down) down.disabled = i === items.length - 1;
       });
     }
 
@@ -912,10 +994,18 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     });
     $('dash-add').addEventListener('click', () => openEditor(null));
     $('dash-widgets').addEventListener('click', async (e) => {
-      const b = e.target.closest('[data-act]');
+      // Only the cards' own tools (the page's cards have buttons of their own inside)
+      const b = e.target.closest('.dash-widget-tools [data-act], .dash-slot-tools [data-act], .dash-widget-meta [data-act]');
       if (!b) return;
-      const id = b.closest('.dash-widget').dataset.id;
+      const card = b.closest('[data-key]');
+      const id = card.dataset.key;
       const act = b.dataset.act;
+      if (act === 'up' || act === 'down') {
+        const items = [...$('dash-widgets').children].filter((n) => n.dataset.key && shownCard(n));
+        const next = items[items.indexOf(card) + (act === 'up' ? -1 : 1)];
+        if (!next) return;
+        return save({ action: 'move-item', key: id, to: next.dataset.key });
+      }
       if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
       if (act === 'sync') {
         b.disabled = true;
@@ -932,7 +1022,6 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         if (!confirm(t('dashboard.confirm_delete', { title: w ? w.title : t('dashboard.this_chart') }))) return;
         return save({ action: 'delete-widget', id });
       }
-      return save({ action: 'move-widget', id, by: act === 'up' ? -1 : 1 });
     });
 
     /** Sends a change; on success shows the dashboard as saved. Returns the error text or ''. */

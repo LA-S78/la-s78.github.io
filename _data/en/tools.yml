@@ -118,6 +118,8 @@ rewards_card:
 roster:
   title: "Alliance roster"
   summary: "{n} members · {might} Might"
+  show: "Show members"
+  hide: "Hide members"
   search: "Search names or IDs..."
   sort_label: "Sort by"
   sort_power: "Might"
@@ -1035,6 +1037,7 @@ stats:
   title: "NAP Stats"
   views_label: "What to show"
   view_growth: "NAP growth"
+  chart_hint: "Tap or hover over a day to read it"
   view_players: "Top players"
   view_achievements: "Achievements"
   view_lookup: "Player lookup"
