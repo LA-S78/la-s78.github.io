@@ -239,11 +239,28 @@ and record the result in `DECISIONS.md`.
 
 ## Other servers and games, later
 
-Not part of this plan, but kept possible by it: tags are unique per game and server, the
-tracker link is one optional link among possible others (`links`), and nothing in the stored
-data assumes server 78. Adding a server later would mean: register entries with
-`"server": "N"`, a server picker where alliances are chosen, the tracker lookups taking the
-alliance's server, and game art kept under a per-game folder (`/game-art/<game>/…`).
+Not part of this plan, but kept possible by it (reviewed 2026-11-22, after the migration).
+**Each server keeps its own data**, rather than several servers sharing one set of files. Tags
+then only need to be unique within a server, as now, and the tag-form adapter
+(`api/_id_stores.js`) stays as it is. The alliance IDs are global already, and each register
+entry records its `game` and `server`.
+
+| Piece | Today | For a second server |
+|---|---|---|
+| Which server | `GAME_SERVER` in Vercel (default 78; `api/_server.js`, the only place) | set per deployment |
+| Gist data (map, calendar, rewards, nominations, race, dashboards, pictures list, register) | one Gist | a Gist per server |
+| Blob store (Stats, skins, pictures) | `stats/…`, `alliance-images/…` | a folder per server (as the test site's `test/`) |
+| Tracker | the server number from `GAME_SERVER` | nothing more |
+| Discord | one NAP server, its `DISCORD_<TAG>` role settings, Stewards, channels | a set per server |
+| Game calendar (KW dates, resets) | in `calendar-state.json` | already per Gist |
+| Site content (rules, rewards, guides, `_data/alliances.yml`) | written for S78 | per server, or shared where the game is the same |
+| How a visitor picks a server | la-s78.app | a subdomain or path per server, or a separate deployment |
+
+Roughly 3–4 pull requests for the data side: the server setting (done, 2026-11-22), a Gist and
+Blob folder per server, Discord settings and Stewards per server, and the server picker or
+domain. Build it when a second server is actually coming: its Discord, Stewards and rules will
+shape the choices. Another game would add game art under a per-game folder
+(`/game-art/<game>/…`).
 
 ## Questions for the owner (with the maintainer's recommendations)
 
