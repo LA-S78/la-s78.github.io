@@ -326,6 +326,7 @@ charts:
   view_player: "One name by tab"
   view_pick: "Name to show"
   view_average: "Average of {n} tabs"
+  view_total: "Total of {n} tabs"
   view_chart: "Chart"
   view_compare: "Compare"
   search_names: "Type a name…"
