@@ -258,7 +258,13 @@ function tabsData(source, data, columns, options) {
         .map((r) => r.join('\t'))
         .join('\n'),
     }));
-  return { tab: clip(data.tab, 100).trim(), older };
+  // Tabs that couldn't be read at the last load or sync: shown to leaders on the chart
+  // (owner, 2026-11-23), until the next one
+  const skipped = (Array.isArray(data.skipped) ? data.skipped : [])
+    .slice(0, MAX_TABS)
+    .map((n) => clip(n, 100).trim())
+    .filter(Boolean);
+  return { tab: clip(data.tab, 100).trim(), older, ...(skipped.length ? { skipped } : {}) };
 }
 
 /**
@@ -499,7 +505,8 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
   }
   d.updatedAt = now || new Date().toISOString();
   d.updatedBy = String(actor).slice(0, 60);
-  const bytes = Buffer.byteLength(JSON.stringify(d, null, 2));
+  // As saved (api/_gist.js fileText: without spaces, since 2026-11-23)
+  const bytes = Buffer.byteLength(JSON.stringify(d));
   if (bytes > MAX_DASHBOARD_BYTES) {
     return {
       error: say('api_dashboard.too_big', {

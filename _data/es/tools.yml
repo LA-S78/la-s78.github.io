@@ -208,7 +208,7 @@ chart_editor:
   tabs_count: Pestañas más recientes a leer
   tabs_match: "{n} pestañas coinciden: {names}."
   tabs_reads: Lee las {n} más recientes.
-  tabs_none: 'Ninguna pestaña coincide. # es cualquier número, * es cualquier cosa: "#/# *" coincide con "11/09 K71 QRT".'
+  tabs_none: 'Ninguna pestaña coincide. # es cualquier número, * es cualquier cosa: "#/# *" coincide con "06/14 Duel".'
   tabs_read: Leer {n} pestañas; la más reciente es {newest}.
   tabs_skipped: 'No se pudo leer: {names}.'
   view_start: Los espectadores comienzan en

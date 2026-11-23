@@ -208,7 +208,7 @@ chart_editor:
   tabs_count: Schede più recenti da leggere
   tabs_match: "{n} schede corrispondono: {names}."
   tabs_reads: Legge le {n} più recenti.
-  tabs_none: 'Nessuna scheda corrisponde. # è un numero qualsiasi, * è qualsiasi cosa: "#/# *" corrisponde a "11/09 K71 QRT".'
+  tabs_none: 'Nessuna scheda corrisponde. # è un numero qualsiasi, * è qualsiasi cosa: "#/# *" corrisponde a "06/14 Duel".'
   tabs_read: Letto {n} schede; la più recente è {newest}.
   tabs_skipped: 'Impossibile leggere: {names}.'
   view_start: Visualizzazioni iniziali

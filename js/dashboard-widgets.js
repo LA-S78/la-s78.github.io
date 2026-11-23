@@ -822,7 +822,7 @@
     if (view === 'compare') return compared(w, tabs, { label, vals, cols, sum });
     if (view === 'weeks' || view === 'player') {
       const pickName = w._pick || namesOf(w, tabs)[0] || '';
-      // Each bar is named by its whole tab name ("11/09 K71 QRT": the readout shows the
+      // Each bar is named by its whole tab name ("06/14 Duel": the readout shows the
       // opponent); along the bottom, the short form (owner, 2026-11-23)
       rows = tabs.map((t) => {
         if (view === 'weeks')
