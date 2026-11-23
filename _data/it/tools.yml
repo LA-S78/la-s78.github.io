@@ -175,29 +175,36 @@ chart_editor:
   edit_title: Modifica grafico o tabella
   new_title: Nuovo grafico o tabella
   type: Tipo
-  type_bar: Barre
-  type_line: Linee
-  type_pie: Torta
+  type_bar: A barre
+  type_line: A linee
+  type_pie: A torta
   type_progress: Progresso
   type_table: Tabella
   title: Titolo
   title_example: es. Punteggi Duello tra Alleanze
   note: Spiegazione
-  note_example: es. Minimo 15M punti Duello richiesti entro il reset di venerdì
+  note_example: es. Minimo 15M di punti Duello richiesti entro il reset di venerdì
   who_sees: Chi può vederlo
   officers_only: Solo ufficiali (R4/R5)
   all_members: Tutti i membri dell'alleanza
   data: Dati
-  data_source: Fonte dei dati
+  data_source: Origine dei dati
   paste: Incolla una tabella
-  link: Link Foglio / Doc Google
-  paste_help: Copia le celle da Fogli Google o Excel (prima la riga di intestazione) e incollale qui.
+  link: Link Google Sheet / Doc
+  paste_help: Copia le celle da Google Sheets o Excel (prima la riga dell'intestazione) e incollale qui.
   tab_name: Nome scheda (opzionale)
+  tab: Scheda
+  grid_help: Trascina sulla tabella per selezionarla (la prima riga è l'intestazione). Poi clicca sulla lettera di una colonna per renderla le etichette, o su una colonna numerica.
+  grid_tap_second: Ora tocca l'angolo opposto della tabella.
+  grid_mode: Cliccare sulla lettera di una colonna imposta
+  grid_labels: Etichette
+  grid_numbers: Numeri
+  grid_more: Qui sono mostrate solo le prime 200 righe e 60 colonne; un intervallo può andare oltre.
   range: Intervallo, es. A1:D20 (opzionale)
   doc_table: Quale tabella nel Doc (1, 2…)
   load: "⤓ Carica da Google"
   loading: "⤓ Caricamento…"
-  link_help: 'Fogli: Condividi → “Chiunque abbia il link può visualizzare” (o File → Condividi → Pubblica sul Web). Doc: File → Condividi → Pubblica sul Web. “Sincronizza ora” sulla scheda recupererà i dati più recenti in seguito.'
+  link_help: 'Fogli: Condividi → “Chiunque abbia il link può visualizzare” (o File → Condividi → Pubblica sul Web). Documenti: File → Condividi → Pubblica sul Web. “Sincronizza ora” sulla scheda recupera i numeri più recenti in seguito.'
   load_first: Carica prima il foglio (⤓ Carica da Google).
   preview: Anteprima
   preview_empty: Incolla una tabella sopra per vedere il grafico.
@@ -206,29 +213,29 @@ chart_editor:
   rows_other: "{n} righe"
   columns_one: "{n} colonna"
   columns_other: "{n} colonne"
-  at_most_500: "(al massimo 500)"
+  at_most_500: "(massimo 500)"
   labels: Nomi (etichette)
   numbers_to_show: Numeri da mostrare
-  labels_swapped: Nomi (una riga o una barra ciascuno)
-  swap_line: "⇄ Scambia righe e colonne: una linea per riga, colonne lungo il fondo"
-  swap_bar: "⇄ Scambia righe e colonne: colonne come barre, un colore per riga"
+  labels_swapped: Nomi (una riga o barra ciascuno)
+  swap_line: "⇄ Scambia righe e colonne: una linea per riga, le colonne lungo il fondo"
+  swap_bar: "⇄ Scambia righe e colonne: le colonne come barre, un colore per riga"
   swap_help: 'Per fogli con una riga per giocatore e una colonna per settimana: spunta questo per seguire i giocatori nel corso delle settimane.'
   rows_to_draw: Righe da disegnare (fino a 6)
   rows_filter: Trova un nome…
   rows_count: "{n} di 6 scelti"
   columns_along: Colonne lungo il fondo (in ordine del foglio)
   numbers: Numeri
-  several_columns: Diverse colonne di numeri
+  several_columns: Diverse colonne numeriche
   side_by_side: Fianco a fianco
   stacked_totals: 'Impilati: totali'
   stacked_percent: 'Impilati: ogni barra al 100%'
   vertical: Barre verticali
   vertical_leaderboard: Barre verticali (invece di una classifica)
   traffic_columns: 'Rosso → giallo → verde (basso → alto): prima colonna rossa, ultima verde'
-  traffic_size: 'Rosso → giallo → verde (basso → alto): per posizione, la migliore verde'
+  traffic_size: 'Rosso → giallo → verde (basso → alto): per rango, primo verde'
   traffic_reverse: 'Inverti: basso è buono (verde), alto è cattivo (rosso)'
-  traffic_target: Rosso → giallo → verde in base alla vicinanza all'obiettivo
-  traffic_target_reverse: 'Inverti: quanto più lontano sotto l''obiettivo, meglio è'
+  traffic_target: Rosso → giallo → verde in base a quanto ognuno è vicino all'obiettivo
+  traffic_target_reverse: 'Inverti: quanto più al di sotto dell''obiettivo, tanto meglio'
   donut: Ciambella (anello)
   target: Obiettivo per tutti
   target_example: es. 15M o 15000000

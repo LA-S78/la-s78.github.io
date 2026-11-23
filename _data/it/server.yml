@@ -60,22 +60,23 @@ api_dashboard:
   already_in_rotor: "{name} è già nel rotore."
   player_removed: Quel giocatore è stato rimosso.
 api_sheets:
+  no_tabs: Nessuna scheda trovata in quel foglio. Verifica che il link apra direttamente il foglio di calcolo.
   full_link: Incolla il link completo (che inizia con https://docs.google.com/…).
-  google_only: Si possono usare solo link di Google Sheets e Google Docs (docs.google.com).
-  range_format: L'intervallo dovrebbe essere simile a A1:D20 (o lascialo vuoto).
+  google_only: È possibile utilizzare solo link a Google Sheets e Google Docs (docs.google.com).
+  range_format: L'intervallo dovrebbe apparire come A1:D20 (oppure lascialo vuoto).
   not_sheet_or_doc: Quel link non è un foglio o un documento Google.
-  unexpected_redirect: Google ha inviato il download in un posto inaspettato, quindi non è stato recuperato.
+  unexpected_redirect: Google ha inviato il download verso una destinazione imprevista, quindi non è stato recuperato.
   too_many_redirects: Troppi reindirizzamenti da Google.
   too_slow: Google ha impiegato troppo tempo a rispondere. Riprova tra un momento.
   unreachable: Impossibile raggiungere Google ({reason}).
-  doc_not_shared: 'Google ha detto no: pubblica il documento (File → Condividi → Pubblica sul web), poi usa quel link.'
-  sheet_not_shared: 'Google ha detto no: condividi il foglio come "Chiunque abbia il link può visualizzare", oppure usa File → Condividi → Pubblica sul web.'
-  google_error: Google ha risposto con un errore ({status}). Controlla il link.
+  doc_not_shared: 'Google ha risposto negativamente: pubblica il documento (File → Condividi → Pubblica sul web), poi usa quel link.'
+  sheet_not_shared: 'Google ha risposto negativamente: condividi il foglio come "Chiunque abbia il link può visualizzare", oppure usa File → Condividi → Pubblica sul web.'
+  google_error: Google ha risposto con un errore ({status}). Verifica il link.
   too_large: Quel foglio è troppo grande da leggere (oltre 2 MB).
   empty: Quel foglio (o intervallo) è vuoto.
   no_such_table_one: Quel documento ha {count} tabella; non esiste la tabella {table}.
   no_such_table_other: Quel documento ha {count} tabelle; non esiste la tabella {table}.
-  no_table: Quel documento non contiene tabelle.
+  no_table: Quel documento non contiene alcuna tabella.
 api_nominate:
   link_invalid: Questo link non è valido o è scaduto.
   token_invalid: Il token non è valido o è scaduto. Esegui di nuovo /nominate.
