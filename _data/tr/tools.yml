@@ -183,20 +183,27 @@ chart_editor:
   title: Başlık
   title_example: ör. İttifak Düellosu puanları
   note: Açıklama
-  note_example: ör. Cuma sıfırlamasına kadar minimum 15M Düello puanı gerekli
+  note_example: ör. Cuma sıfırlamasına kadar en az 15M Düello puanı gereklidir
   who_sees: Kimler görebilir
   officers_only: Sadece subaylar (R4/R5)
   all_members: Tüm ittifak üyeleri
   data: Veri
   data_source: Veri kaynağı
-  paste: Tablo yapıştır
+  paste: Bir tablo yapıştırın
   link: Google E-Tablo / Doküman bağlantısı
-  paste_help: Google E-Tablolardan veya Excel'den hücreleri kopyalayın (başlık satırı önce olacak şekilde) ve buraya yapıştırın.
+  paste_help: Hücreleri Google E-Tablolar veya Excel'den kopyalayın (önce başlık satırı) ve buraya yapıştırın.
   tab_name: Sekme adı (isteğe bağlı)
   tab: Sekme
-  grid_help: 'Tabloyu seçmek için üzerine sürükleyin (telefonda: bir köşeye dokunun, ardından karşı köşeye). İlk satır başlıktır. Ardından etiket yapmak için bir sütun harfine veya sayı sütununa dokunun.'
-  grid_tap_second: Şimdi tablonun karşı köşesine dokunun.
-  grid_mode: 'Bir sütun harfine tıklamak şunu ayarlar:'
+  order: Sıralama
+  order_sheet: Tablodaki gibi
+  order_desc: En yüksekten
+  order_asc: En düşükten
+  order_asc_help: En düşükten sıralama, sütunlarda verisi olmayan satırları (katılmayanları) dışarıda bırakır.
+  limit: Göster
+  limit_all: Hepsi
+  grid_help: 'Seçmek için tablonun üzerine sürükleyin (telefonda: bir köşeye, ardından zıt köşeye dokunun). İlk satır başlıktır. Ardından etiket olması için bir sütun harfine veya sayı içeren bir sütuna dokunun.'
+  grid_tap_second: Şimdi tablonun zıt köşesine dokunun.
+  grid_mode: 'Bir sütun harfine dokunmak şunları ayarlar:'
   grid_labels: Etiketler
   grid_numbers: Sayılar
   grid_more: Burada sadece ilk 200 satır ve 60 sütun gösterilmektedir; aralık daha ileri gidebilir.
@@ -204,8 +211,8 @@ chart_editor:
   doc_table: Dokümandaki hangi tablo (1, 2…)
   load: "⤓ Google'dan yükle"
   loading: "⤓ Yükleniyor…"
-  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi eşitle” seçeneği daha sonra en güncel sayıları getirir.'
-  load_first: Önce sayfayı yükleyin (⤓ Google'dan yükle).
+  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Karttaki “Şimdi eşitle” düğmesi en güncel sayıları daha sonra çeker.'
+  load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
   preview: Önizleme
   preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
   size: "{rows} × {columns}"
@@ -218,22 +225,22 @@ chart_editor:
   numbers_to_show: Gösterilecek sayılar
   labels_swapped: İsimler (her biri bir satır veya çubuk)
   swap_line: "⇄ Satırları ve sütunları değiştir: satır başına bir çizgi, sütunlar altta"
-  swap_bar: "⇄ Satırları ve sütunları değiştir: çubuk olarak sütunlar, satır başına bir renk"
-  swap_help: 'Oyuncu başına bir satır ve hafta başına bir sütun içeren sayfalar için: oyuncuları haftalar boyunca takip etmek istiyorsanız bunu işaretleyin.'
+  swap_bar: "⇄ Satırları ve sütunları değiştir: sütunlar çubuk olarak, satır başına bir renk"
+  swap_help: 'Oyuncu başına bir satır ve hafta başına bir sütun içeren tablolar için: oyuncuları haftalar boyunca takip etmek istiyorsanız bunu işaretleyin.'
   rows_to_draw: Çizilecek satırlar (en fazla 6)
-  rows_filter: İsim ara…
-  rows_count: Seçilen {n} / 6
-  columns_along: Alttaki sütunlar (sayfa sırasına göre)
+  rows_filter: İsim arayın…
+  rows_count: "{n} / 6 seçildi"
+  columns_along: Altta yer alan sütunlar (tablo sırasına göre)
   numbers: Sayılar
   several_columns: Birden fazla sayı sütunu
   side_by_side: Yan yana
-  stacked_totals: 'Yığılmış: toplamlar'
-  stacked_percent: 'Yığılmış: her çubuk %100''e tamamlanır'
+  stacked_totals: 'Yığın: toplamlar'
+  stacked_percent: 'Yığın: her çubuk %100''e'
   vertical: Dikey çubuklar
-  vertical_leaderboard: Dikey çubuklar (liderlik tablosu yerine)
+  vertical_leaderboard: Dikey çubuklar (sıralama listesi yerine)
   traffic_columns: 'Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil'
   traffic_size: 'Kırmızı → sarı → yeşil (düşük → yüksek): dereceye göre, en üst yeşil'
-  traffic_reverse: 'Tersine çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)'
+  traffic_reverse: 'Tersine çevir: düşük iyi (yeşil), yüksek kötü (kırmızı)'
   traffic_target: Hedefe yakınlığa göre kırmızı → sarı → yeşil
   traffic_target_reverse: 'Tersine çevir: hedefin ne kadar altında kalırsa o kadar iyi'
   donut: Halka (donut)
@@ -241,9 +248,9 @@ chart_editor:
   target_example: ör. 15M veya 15000000
   target_column: "…veya hedef sütunu"
   use_number_above: "(yukarıdaki sayıyı kullan)"
-  highlight_where: 'Şu satırları vurgula:'
+  highlight_where: 'Satırları vurgula:'
   no_highlight: "(vurgu yok)"
-  at_least: en az şuna eşit
+  at_least: 'en az şuna sahip:'
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}
@@ -259,8 +266,8 @@ charts:
   value: Değer
   total: Toplam
   total_value: 'Toplam: {value}'
-  share_of_all: "{value} · tamamının %{share}'i"
-  value_of_target: "{target} hedefinin {value}'si"
+  share_of_all: "{value} · toplamın {share} kadarı"
+  value_of_target: "{target} içinde {value}"
   to_go: 'Kalan: {value}'
   target_reached: Hedefe ulaşıldı ✓
   done: "✓ Tamamlandı"
@@ -268,13 +275,14 @@ charts:
   search: Ara…
   search_label: Bu tabloda ara
   matching: "{n} eşleşme"
-  show_all: Tüm {n} taneyi göster
-  show_all_rows: Tüm {n} satırı göster
-  first_rows: "{n} satırın ilk {shown} tanesi gösteriliyor."
-  hint_bar: Bir sütuna dokunun veya üzerine gelin
-  hint_line: Bir haftaya dokunun veya üzerine gelin
-  hint_pie: Bir dilime dokunun veya üzerine gelin
-  hint_progress: Bir satıra dokunun veya üzerine gelin
+  show_all: "{n} tanesinin hepsini göster"
+  show_all_rows: "{n} satırın hepsini göster"
+  first_rows: "{n} satırdan ilk {shown} tanesi gösteriliyor."
+  hint_bar: Bir çubuğun üzerine gelin veya dokunun
+  hint_bar_key: Bir çubuğun üzerine gelin veya dokunun. Sadece o veriyi görmek için anahtardan bir isme dokunun.
+  hint_line: Bir haftanın üzerine gelin veya dokunun
+  hint_pie: Bir dilimin üzerine gelin veya dokunun
+  hint_progress: Bir satırın üzerine gelin veya dokunun
 nominate:
   page_title: Ödül Adaylıkları
   name_ok: "[{tag}] üye listesinde"
