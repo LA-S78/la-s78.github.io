@@ -1261,8 +1261,21 @@ li.dw-sel > .dw-bar-track {
 }
 
 .dash-roster-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   margin: 0 0 0.6rem;
   text-align: center;
+}
+
+/* Show / hide members (the roster starts closed, 2026-11-23): the arrow turns when open */
+.dash-roster-toggle svg {
+  transition: transform 0.15s ease;
+}
+.dash-roster-toggle[aria-expanded='true'] svg {
+  transform: rotate(180deg);
 }
 
 .dash-roster-summary .dash-tag {

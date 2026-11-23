@@ -601,7 +601,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     // Minutes between two roster refreshes (as api/_dashboard.js REFRESH_COOLDOWN_MIN)
     const REFRESH_COOLDOWN_MIN = 10;
 
-    let rosterView = { text: '', sort: 'power' };
+    // open: the member list is shown (owner, 2026-11-23: it starts closed, so phones can scroll
+    // past it; "Show members" opens it for this visit)
+    let rosterView = { text: '', sort: 'power', open: false };
     const ROSTER_SORTS = {
       power: (a, b) => b.power - a.power,
       name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
@@ -707,16 +709,23 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}</h3>
           ${refreshButton(r.refresh)}
         </div>
-        ${r.members ? `<p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span></p>` : ''}
-        ${r.members
-          ? `<div class="dash-cv-filters">
+        ${r.members ? `<p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span><button type="button" class="dash-icon-btn dash-roster-toggle" id="roster-toggle" aria-expanded="${rosterView.open}" aria-controls="roster-body">${ic('chevron')}${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}</button></p>` : ''}
+        ${r.members && !rosterView.open
+          ? ''
+          : r.members
+          ? `<div id="roster-body"><div class="dash-cv-filters">
               <input type="search" id="roster-search" placeholder="${escapeHtml(t('roster.search'))}" value="${escapeHtml(rosterView.text)}" aria-label="${escapeHtml(t('roster.search'))}">
               <span class="dash-roster-sorts" role="group" aria-label="${escapeHtml(t('roster.sort_label'))}">${sorts}</span>
             </div>
             <ul class="dash-roster-list">${shown.map(row).join('') || `<li class="dash-cv-empty">${escapeHtml(t('caravan.nobody_matches'))}</li>`}</ul>
-            ${giving ? `<p class="dash-muted dash-small dash-roster-daily">${ic('clock')}${escapeHtml(dailyNote(r.takenAt))}</p>` : ''}`
-          : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>`}
-        ${trackerCredit()}`;
+            ${giving ? `<p class="dash-muted dash-small dash-roster-daily">${ic('clock')}${escapeHtml(dailyNote(r.takenAt))}</p>` : ''}
+            ${trackerCredit()}</div>`
+          : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>${trackerCredit()}`}`;
+      $('roster-toggle')?.addEventListener('click', () => {
+        rosterView.open = !rosterView.open;
+        renderRoster();
+        $('roster-toggle')?.focus();
+      });
       const search = $('roster-search');
       search?.addEventListener('input', () => {
         rosterView.text = search.value;
