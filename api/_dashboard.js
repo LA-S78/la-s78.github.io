@@ -338,6 +338,8 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     if (o.reverse) options.reverse = true;
   }
   if (w.type === 'pie') options.donut = o.donut !== false;
+  // Compare for pies and swapped line charts too (owner, 2026-11-23)
+  if (o.compare && (w.type === 'pie' || (w.type === 'line' && swap))) options.compare = true;
   if (w.type === 'progress') {
     const target = Number(o.target);
     const targetCol = colIndex(o.targetCol, columns.length);
