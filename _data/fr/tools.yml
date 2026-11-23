@@ -35,27 +35,27 @@ common:
     logistics_support: Soutien Logistique
 dashboard:
   title: Tableau de bord de l'Alliance
-  loading: Chargement de votre tableau de bord d'alliance…
+  loading: Chargement de votre tableau de bord de l'alliance…
   view_as: Voir en tant que
   page_title: "[{tag}] Tableau de bord de l'Alliance"
   subtitle: Tableau de bord de l'Alliance · {view}
   subtitle_rank: 'Tableau de bord de l''Alliance · Rang #{rank} · {view}'
-  not_in_nap: Non inclus dans le NAP
+  not_in_nap: Pas dans le NAP
   view_steward: Vue intendant
   view_leader: Vue leadership
   view_member: Vue membre
   sign_in_title: Connectez-vous pour voir le tableau de bord de votre alliance.
-  sign_in_help: Utilisez {sign_in} en haut à droite (Discord). Votre alliance est identifiée via votre rôle NAP sur le serveur.
+  sign_in_help: Utilisez {sign_in} en haut à droite (Discord). Votre alliance est trouvée grâce à votre rôle serveur NAP.
   sign_in_button: Se connecter
   load_failed: Impossible de charger le tableau de bord. Vérifiez votre connexion et actualisez. ({error})
   edit_dashboard: Modifier le tableau de bord
-  done_editing: "✓ Fin de modification"
+  done_editing: "✓ Modification terminée"
   add_chart: Ajouter un graphique ou un tableau
   editor_label: Éditeur de graphique ou de tableau
   charts_label: Graphiques et tableaux de l'Alliance
-  empty_member: Les chefs de votre alliance n'ont encore partagé aucun graphique ou tableau ici.
-  empty_editing: 'Aucun graphique ou tableau pour l''instant : utilisez « Ajouter un graphique ou un tableau ».'
-  empty_leader: Aucun graphique ou tableau pour l'instant. Utilisez « Modifier le tableau de bord » pour en ajouter un.
+  empty_member: Les chefs de votre alliance n'ont pas encore partagé de graphiques ou de tableaux ici.
+  empty_editing: 'Aucun graphique ou tableau pour le moment : utilisez « Ajouter un graphique ou un tableau ».'
+  empty_leader: Aucun graphique ou tableau pour le moment. Utilisez « Modifier le tableau de bord » pour en ajouter un.
   visible_members: Tous les membres
   visible_officers: Officiers uniquement
   google_sheet: Google Sheet
@@ -64,8 +64,10 @@ dashboard:
   updated: Mis à jour {when}
   sync_now: Synchroniser maintenant
   syncing: Synchronisation…
-  sync_help: Récupérer les derniers chiffres depuis la feuille
-  confirm_delete: Supprimer « {title} » ? Cette action est irréversible.
+  syncing_tabs: Synchronisation de {n} onglets…
+  tabs_skipped: 'Lors de la dernière synchronisation, ces onglets n''ont pas pu être lus (Google était lent ou l''onglet n''était pas disponible) ; Synchroniser maintenant réessaiera : {names}'
+  sync_help: Récupérer les derniers chiffres de la feuille
+  confirm_delete: Supprimer "{title}" ? Cette action est irréversible.
   this_chart: ce graphique
 rewards_card:
   title: Récompenses Hebdomadaires
@@ -178,14 +180,14 @@ chart_editor:
   new_title: Nouveau graphique ou tableau
   type: Type
   type_bar: Barres
-  type_line: Courbes
+  type_line: Ligne
   type_pie: Secteurs
   type_progress: Progression
   type_table: Tableau
   title: Titre
-  title_example: 'ex: Scores du Duel d''Alliances'
+  title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: 'ex: Minimum 15M de points au Duel d''Alliances requis avant la réinitialisation du vendredi'
+  note_example: ex. Minimum 15M de points requis avant la réinitialisation du vendredi
   who_sees: Qui peut le voir
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
@@ -193,42 +195,44 @@ chart_editor:
   data_source: Source des données
   paste: Coller un tableau
   link: Lien Google Sheet / Doc
-  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
-  tab_name: Nom de l'onglet (optionnel)
+  paste_help: Copiez les cellules de Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
+  tab_name: Nom de l'onglet (facultatif)
   tab: Onglet
   order: Ordre
   order_sheet: Comme dans la feuille
-  order_desc: Le plus haut en premier
-  order_asc: Le plus bas en premier
-  order_asc_help: Le plus bas en premier exclut les lignes vides dans les colonnes affichées (ceux qui n'ont pas participé).
+  order_desc: Plus élevé d'abord
+  order_asc: Plus bas d'abord
+  order_asc_help: "« Plus bas d'abord » exclut les lignes sans données dans les colonnes affichées (ceux qui n'ont pas participé)."
   limit: Afficher
   limit_all: Tous
-  tabs_on: Même plage depuis plusieurs onglets (un onglet par semaine, par exemple)
-  tabs_pattern: Noms d'onglets tels que
+  tabs_on: Même plage provenant de plusieurs onglets (un onglet par semaine, par ex.)
+  tabs_pattern: Noms d'onglets comme
   tabs_count: Nouveaux onglets à lire
   tabs_match: "{n} onglets correspondent : {names}."
-  tabs_reads: Lit les {n} plus récents, du {oldest} au {newest}.
-  tabs_none: 'Aucun onglet ne correspond. # est n''importe quel chiffre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
-  tabs_read: "{n} onglets lus ; le plus récent est {newest}."
+  tabs_reads: Lit les {n} plus récents, de {oldest} à {newest}.
+  tabs_none: 'Aucun onglet ne correspond. # est n''importe quel nombre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
+  tabs_read: Lire {n} onglets ; le plus récent est {newest}.
+  finding_tabs: Recherche des onglets de la feuille…
+  reading_tabs: Lecture de {n} onglets depuis Google… cela peut prendre jusqu'à 20 secondes.
   tabs_skipped: 'Impossible de lire : {names}.'
   view_start: Les spectateurs commencent sur
   view_help: Les spectateurs peuvent basculer entre les vues au-dessus du graphique.
   compare: 'Laisser les spectateurs comparer : deux noms, ou un nom avec le top ou le bottom 5'
-  compare_pie: Laisser les spectateurs comparer deux noms (ou le top/bottom 5) comme leur propre graphique circulaire
-  compare_line: Laisser les spectateurs comparer les courbes de deux noms (ou un nom avec le top/bottom 5 de chaque semaine)
-  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur mobile : tapez un coin, puis le coin opposé). La première ligne est l''en-tête. Tapez ensuite sur une lettre de colonne pour en faire les étiquettes, ou une colonne de nombres.'
+  compare_pie: Laisser les spectateurs comparer deux noms (ou le top ou le bottom 5) sous forme de secteurs
+  compare_line: Laisser les spectateurs comparer les lignes de deux noms (ou un nom avec le top ou le bottom 5 de chaque semaine)
+  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur mobile : tapez un coin, puis le coin opposé). La première ligne est l''en-tête. Tapez ensuite sur une lettre de colonne pour en faire les étiquettes, ou une colonne numérique.'
   grid_tap_second: Tapez maintenant sur le coin opposé du tableau.
   grid_mode: Cliquer sur une lettre de colonne définit
   grid_labels: Étiquettes
-  grid_numbers: Nombres
+  grid_numbers: Chiffres
   grid_more: Seules les 200 premières lignes et 60 colonnes sont affichées ici ; une plage peut aller plus loin.
-  range: 'Plage, ex: A1:D20 (optionnel)'
+  range: Plage, ex. A1:D20 (facultatif)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le web). Docs : Fichier → Partager → Publier sur le web. “Synchroniser maintenant” sur la carte récupère les derniers chiffres plus tard.'
-  load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
-  preview: Prévisualiser
+  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent voir » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupère les derniers chiffres plus tard.'
+  load_first: Chargez d'abord la feuille (⤓ Charger depuis Google).
+  preview: Prévisualisation
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
   rows_one: "{n} ligne"
@@ -237,36 +241,36 @@ chart_editor:
   columns_other: "{n} colonnes"
   at_most_500: "(500 au maximum)"
   labels: Noms (étiquettes)
-  numbers_to_show: Nombres à afficher
-  labels_swapped: Noms (une ligne ou barre par personne)
-  swap_line: "⇄ Inverser lignes et colonnes : une courbe par ligne, les colonnes en bas"
-  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par ligne"
-  swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
+  numbers_to_show: Chiffres à afficher
+  labels_swapped: Noms (une ligne ou une barre chacun)
+  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes en barres, une couleur par ligne"
+  swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs à travers les semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
   rows_count: "{n} sur 6 choisis"
   columns_along: Colonnes en bas (dans l'ordre de la feuille)
-  numbers: Nombres
-  several_columns: Plusieurs colonnes de nombres
+  numbers: Chiffres
+  several_columns: Plusieurs colonnes de chiffres
   side_by_side: Côte à côte
-  stacked_totals: 'Empilé : totaux'
-  stacked_percent: 'Empilé : chaque barre à 100%'
+  stacked_totals: 'Empilés : totaux'
+  stacked_percent: 'Empilés : chaque barre à 100%'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
-  traffic_columns: 'Rouge → jaune → vert (faible → élevé) : première colonne rouge, dernière verte'
-  traffic_size: 'Rouge → jaune → vert (faible → élevé) : par rang, haut vert'
-  traffic_reverse: 'Inverser : faible est bon (vert), élevé est mauvais (rouge)'
-  traffic_target: Rouge → jaune → vert selon la proximité avec la cible
-  traffic_target_reverse: 'Inverser : plus on est loin en dessous de la cible, mieux c''est'
+  traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
+  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, haut vert'
+  traffic_reverse: 'Inverser : bas est bon (vert), haut est mauvais (rouge)'
+  traffic_target: Rouge → jaune → vert selon la proximité de chacun par rapport à la cible
+  traffic_target_reverse: 'Inverser : plus loin en dessous de la cible est meilleur'
   donut: Donut (anneau)
   target: Cible pour tout le monde
-  target_example: 'ex: 15M ou 15000000'
+  target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le nombre ci-dessus)"
+  use_number_above: "(utiliser le chiffre ci-dessus)"
   highlight_where: Surligner les lignes où
-  no_highlight: "(aucun surlignage)"
+  no_highlight: "(pas de surbrillance)"
   at_least: est au moins
-  at_least_example: 'ex: 300M'
+  at_least_example: ex. 300M
 charts:
   column: Colonne {n}
   no_numbers: Aucun nombre à mettre en graphique dans la colonne choisie.

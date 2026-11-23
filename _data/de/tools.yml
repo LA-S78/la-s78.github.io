@@ -35,19 +35,19 @@ common:
     logistics_support: Logistikunterstützung
 dashboard:
   title: Allianz-Dashboard
-  loading: Lade dein Allianz-Dashboard…
+  loading: Allianz-Dashboard wird geladen…
   view_as: Anzeigen als
   page_title: "[{tag}] Allianz-Dashboard"
   subtitle: Allianz-Dashboard · {view}
   subtitle_rank: 'Allianz-Dashboard · Rang #{rank} · {view}'
   not_in_nap: Nicht im NAP
-  view_steward: Verwalter-Ansicht
+  view_steward: Steward-Ansicht
   view_leader: Führungs-Ansicht
   view_member: Mitglieder-Ansicht
   sign_in_title: Melde dich an, um dein Allianz-Dashboard zu sehen.
   sign_in_help: Nutze {sign_in} oben rechts (Discord). Deine Allianz wird über deine NAP-Serverrolle gefunden.
   sign_in_button: Anmelden
-  load_failed: Das Dashboard konnte nicht geladen werden. Prüfe deine Verbindung und lade es neu. ({error})
+  load_failed: Dashboard konnte nicht geladen werden. Überprüfe deine Verbindung und lade neu. ({error})
   edit_dashboard: Dashboard bearbeiten
   done_editing: "✓ Bearbeitung abgeschlossen"
   add_chart: Diagramm oder Tabelle hinzufügen
@@ -64,8 +64,10 @@ dashboard:
   updated: Aktualisiert {when}
   sync_now: Jetzt synchronisieren
   syncing: Synchronisiere…
+  syncing_tabs: Synchronisiere {n} Reiter…
+  tabs_skipped: 'Beim letzten Synchronisieren konnten diese Reiter nicht gelesen werden (Google war langsam oder der Reiter war nicht verfügbar); „Jetzt synchronisieren“ versucht es erneut: {names}'
   sync_help: Die neuesten Zahlen aus der Tabelle abrufen
-  confirm_delete: "„{title}“ löschen? Dies kann nicht rückgängig gemacht werden."
+  confirm_delete: '"{title}" löschen? Dies kann nicht rückgängig gemacht werden.'
   this_chart: dieses Diagramm
 rewards_card:
   title: Wöchentliche Belohnungen
@@ -183,51 +185,53 @@ chart_editor:
   type_progress: Fortschritt
   type_table: Tabelle
   title: Titel
-  title_example: z. B. Allianz-Duell Punktzahlen
+  title_example: z. B. Allianz-Duell-Ergebnisse
   note: Erklärung
-  note_example: z. B. Mindestens 15M Duell-Punkte bis zum Reset am Freitag erforderlich
-  who_sees: Wer kann dies sehen
+  note_example: z. B. Mindestens 15 Mio. Duell-Punkte bis Freitag-Reset erforderlich
+  who_sees: Wer kann es sehen
   officers_only: Nur Offiziere (R4/R5)
   all_members: Alle Allianzmitglieder
   data: Daten
-  data_source: Datenherkunft
+  data_source: Datenquelle
   paste: Tabelle einfügen
-  link: Link zu Google Sheet / Doc
-  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
-  tab_name: Tab-Name (optional)
-  tab: Tab
-  order: Sortierung
-  order_sheet: Wie im Tabellenblatt
+  link: Google Tabelle / Doc Link
+  paste_help: Kopiere die Zellen aus Google Tabellen oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
+  tab_name: Reitername (optional)
+  tab: Reiter
+  order: Reihenfolge
+  order_sheet: Wie in der Tabelle
   order_desc: Höchste zuerst
   order_asc: Niedrigste zuerst
-  order_asc_help: Bei „Niedrigste zuerst“ werden Zeilen ohne Werte in den angezeigten Spalten (diejenigen, die nicht teilgenommen haben) ausgelassen.
+  order_asc_help: "„Niedrigste zuerst“ lässt Zeilen ohne Werte in den gezeigten Spalten weg (diejenigen, die nicht teilgenommen haben)."
   limit: Anzeigen
   limit_all: Alle
-  tabs_on: Gleicher Bereich aus mehreren Tabs (z. B. ein Tab pro Woche)
-  tabs_pattern: Tab-Namen wie
-  tabs_count: Neueste Tabs zum Lesen
-  tabs_match: "{n} Tabs stimmen überein: {names}."
+  tabs_on: Gleicher Bereich aus mehreren Reitern (z. B. ein Reiter pro Woche)
+  tabs_pattern: Reiternamen wie
+  tabs_count: Neueste Reiter zum Lesen
+  tabs_match: "{n} Reiter stimmen überein: {names}."
   tabs_reads: Liest die neuesten {n}, von {oldest} bis {newest}.
-  tabs_none: 'Kein Tab stimmt überein. # ist eine beliebige Zahl, * ist ein beliebiger Text: „#/# *“ entspricht „11/09 K71 QRT“.'
-  tabs_read: "{n} Tabs gelesen; der neueste ist {newest}."
-  tabs_skipped: 'Konnte nicht gelesen werden: {names}.'
+  tabs_none: 'Keine übereinstimmenden Reiter. # ist eine beliebige Zahl, * ist alles: „#/# *“ entspricht „11/09 K71 QRT“.'
+  tabs_read: "{n} Reiter gelesen; der neueste ist {newest}."
+  finding_tabs: Reiter der Tabelle werden gesucht…
+  reading_tabs: "{n} Reiter von Google werden gelesen… dies kann bis zu 20 Sekunden dauern."
+  tabs_skipped: 'Konnte nicht lesen: {names}.'
   view_start: Betrachter starten bei
-  view_help: Betrachter können oberhalb des Diagramms zwischen den Ansichten wechseln.
-  compare: 'Betrachter vergleichen lassen: zwei Namen oder ein Name mit den Top oder Bottom 5'
-  compare_pie: Betrachter zwei Namen (oder die Top/Bottom 5) als eigenes Tortendiagramm vergleichen lassen
-  compare_line: Betrachter die Linien zweier Namen vergleichen lassen (oder einen Namen mit den Top oder Bottom 5 jeder Woche)
-  grid_help: 'Ziehe über die Tabelle, um sie auszuwählen (auf dem Handy: tippe auf eine Ecke und dann auf die gegenüberliegende). Die erste Zeile ist die Kopfzeile. Tippe dann auf einen Spaltenbuchstaben, um ihn als Beschriftung oder Zahlenspalte festzulegen.'
+  view_help: Betrachter können zwischen den Ansichten über dem Diagramm wechseln.
+  compare: 'Vergleich ermöglichen: zwei Namen oder ein Name mit den Top/Bottom 5'
+  compare_pie: Vergleich von zwei Namen (oder Top/Bottom 5) als eigenes Kreisdiagramm
+  compare_line: Vergleich von Linien zweier Namen (oder ein Name mit den Top/Bottom 5 jeder Woche)
+  grid_help: 'Ziehe über die Tabelle, um sie auszuwählen (auf dem Smartphone: Tippe auf eine Ecke, dann auf die gegenüberliegende). Die erste Zeile ist die Kopfzeile. Tippe dann auf einen Spaltenbuchstaben, um ihn als Beschriftung oder Zahlenspalte festzulegen.'
   grid_tap_second: Tippe jetzt auf die gegenüberliegende Ecke der Tabelle.
-  grid_mode: Tippen auf einen Spaltenbuchstaben legt fest
+  grid_mode: Klicken auf einen Spaltenbuchstaben legt fest
   grid_labels: Beschriftungen
   grid_numbers: Zahlen
-  grid_more: Hier werden nur die ersten 200 Zeilen und 60 Spalten angezeigt; der Bereich kann weiter gehen.
+  grid_more: Hier werden nur die ersten 200 Zeilen und 60 Spalten angezeigt; ein Bereich kann weiter reichen.
   range: Bereich, z. B. A1:D20 (optional)
   doc_table: Welche Tabelle im Doc (1, 2…)
   load: "⤓ Von Google laden"
-  loading: "⤓ Wird geladen…"
-  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann die Ansicht öffnen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte lädt später die neuesten Zahlen.'
-  load_first: Lade zuerst das Tabellenblatt (⤓ Von Google laden).
+  loading: "⤓ Lade…"
+  link_help: 'Tabellen: Freigeben → „Jeder mit dem Link kann die Datei ansehen“ (oder Datei → Freigeben → Im Web veröffentlichen). Docs: Datei → Freigeben → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
+  load_first: Lade zuerst die Tabelle (⤓ Von Google laden).
   preview: Vorschau
   preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
   size: "{rows} × {columns}"
@@ -238,34 +242,34 @@ chart_editor:
   at_most_500: "(maximal 500)"
   labels: Namen (Beschriftungen)
   numbers_to_show: Anzuzeigende Zahlen
-  labels_swapped: Namen (je eine Linie oder ein Balken)
-  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten am unteren Rand"
+  labels_swapped: Namen (jeweils eine Linie oder ein Balken)
+  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten unten entlang"
   swap_bar: "⇄ Zeilen und Spalten tauschen: die Spalten als Balken, eine Farbe pro Zeile"
   swap_help: 'Für Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
   rows_to_draw: Zu zeichnende Zeilen (bis zu 6)
-  rows_filter: Namen finden…
-  rows_count: "{n} von 6 ausgewählt"
-  columns_along: Spalten am unteren Rand (in Tabellen-Reihenfolge)
+  rows_filter: Name finden…
+  rows_count: "{n} von 6 gewählt"
+  columns_along: Spalten entlang der Unterseite (in Tabellenreihenfolge)
   numbers: Zahlen
   several_columns: Mehrere Zahlenspalten
   side_by_side: Nebeneinander
   stacked_totals: 'Gestapelt: Summen'
-  stacked_percent: 'Gestapelt: jeder Balken bis 100 %'
+  stacked_percent: 'Gestapelt: jeder Balken auf 100%'
   vertical: Vertikale Balken
-  vertical_leaderboard: Vertikale Balken (statt Bestenliste)
+  vertical_leaderboard: Vertikale Balken (statt einer Bestenliste)
   traffic_columns: 'Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün'
-  traffic_size: 'Rot → gelb → grün (niedrig → hoch): nach Rang, Top in grün'
+  traffic_size: 'Rot → gelb → grün (niedrig → hoch): nach Rang, oben grün'
   traffic_reverse: 'Umgekehrt: niedrig ist gut (grün), hoch ist schlecht (rot)'
-  traffic_target: Rot → gelb → grün basierend darauf, wie nah jeder am Ziel ist
-  traffic_target_reverse: 'Umgekehrt: je weiter unter dem Ziel, desto besser'
+  traffic_target: Rot → gelb → grün je nachdem, wie nah jeder am Ziel ist
+  traffic_target_reverse: 'Umgekehrt: weiter unter dem Ziel ist besser'
   donut: Donut (Ring)
   target: Ziel für alle
   target_example: z. B. 15M oder 15000000
   target_column: "…oder eine Spalte mit Zielen"
-  use_number_above: "(die Zahl von oben verwenden)"
+  use_number_above: "(die Zahl oben verwenden)"
   highlight_where: Zeilen hervorheben, wo
   no_highlight: "(keine Hervorhebung)"
-  at_least: mindestens beträgt
+  at_least: ist mindestens
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}

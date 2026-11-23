@@ -34,28 +34,28 @@ common:
     fearless_hero: Héroe Intrépido
     logistics_support: Apoyo Logístico
 dashboard:
-  title: Panel de la Alianza
-  loading: Cargando el panel de tu alianza…
+  title: Panel de Alianza
+  loading: Cargando el panel de tu alianza...
   view_as: Ver como
-  page_title: "[{tag}] Panel de la Alianza"
-  subtitle: Panel de la Alianza · {view}
-  subtitle_rank: 'Panel de la Alianza · Rango #{rank} · {view}'
+  page_title: "[{tag}] Panel de Alianza"
+  subtitle: Panel de Alianza · {view}
+  subtitle_rank: 'Panel de Alianza · Rango #{rank} · {view}'
   not_in_nap: No está en el NAP
   view_steward: Vista de administrador
-  view_leader: Vista de líder
+  view_leader: Vista de liderazgo
   view_member: Vista de miembro
   sign_in_title: Inicia sesión para ver el panel de tu alianza.
   sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra mediante tu rol de servidor NAP.
   sign_in_button: Iniciar sesión
-  load_failed: No se pudo cargar el panel. Comprueba tu conexión y vuelve a intentarlo. ({error})
+  load_failed: No se pudo cargar el panel. Comprueba tu conexión y vuelve a cargar. ({error})
   edit_dashboard: Editar panel
-  done_editing: "✓ Edición terminada"
-  add_chart: Añadir gráfico o tabla
+  done_editing: "✓ Edición finalizada"
+  add_chart: Añadir un gráfico o tabla
   editor_label: Editor de gráficos o tablas
   charts_label: Gráficos y tablas de la alianza
   empty_member: Los líderes de tu alianza aún no han compartido gráficos o tablas aquí.
-  empty_editing: 'Aún no hay gráficos o tablas: usa “Añadir un gráfico o tabla”.'
-  empty_leader: Aún no hay gráficos o tablas. Usa “Editar panel” para añadir uno.
+  empty_editing: 'No hay gráficos o tablas aún: usa “Añadir un gráfico o tabla”.'
+  empty_leader: No hay gráficos o tablas aún. Usa “Editar panel” para añadir uno.
   visible_members: Todos los miembros
   visible_officers: Solo oficiales
   google_sheet: Hoja de cálculo de Google
@@ -63,8 +63,10 @@ dashboard:
   synced: sincronizado {when}
   updated: Actualizado {when}
   sync_now: Sincronizar ahora
-  syncing: Sincronizando…
-  sync_help: Obtener los números más recientes de la hoja
+  syncing: Sincronizando...
+  syncing_tabs: Sincronizando {n} pestañas...
+  tabs_skipped: 'En la última sincronización, estas pestañas no pudieron leerse (Google fue lento o la pestaña no estaba disponible); Sincronizar ahora lo intentará de nuevo: {names}'
+  sync_help: Obtener las últimas cifras de la hoja de cálculo
   confirm_delete: ¿Eliminar "{title}"? Esto no se puede deshacer.
   this_chart: este gráfico
 rewards_card:
@@ -183,50 +185,52 @@ chart_editor:
   type_progress: Progreso
   type_table: Tabla
   title: Título
-  title_example: p. ej. Puntuaciones de Duelo de Alianzas
+  title_example: ej. Puntuaciones del Duelo de Alianzas
   note: Explicación
-  note_example: p. ej. Mínimo de 15M de puntos en Duelo de Alianzas requerido para el reinicio del viernes
+  note_example: ej. Mínimo de 15M de puntos de Duelo requeridos para el reinicio del viernes
   who_sees: Quién puede verlo
   officers_only: Solo oficiales (R4/R5)
   all_members: Todos los miembros de la alianza
   data: Datos
   data_source: De dónde provienen los datos
   paste: Pegar una tabla
-  link: Enlace de Google Sheet / Doc
+  link: Enlace a Hoja/Documento de Google
   paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
   tab: Pestaña
   order: Orden
   order_sheet: Como en la hoja
-  order_desc: El más alto primero
-  order_asc: El más bajo primero
-  order_asc_help: El más bajo primero omite las filas sin nada en las columnas mostradas (aquellos que no participaron).
+  order_desc: Mayor primero
+  order_asc: Menor primero
+  order_asc_help: Menor primero excluye las filas sin valores en las columnas mostradas (aquellos que no participaron).
   limit: Mostrar
   limit_all: Todos
   tabs_on: Mismo rango de varias pestañas (una pestaña por semana, por ejemplo)
   tabs_pattern: Nombres de pestaña como
-  tabs_count: Pestañas más recientes a leer
+  tabs_count: Nuevas pestañas a leer
   tabs_match: "{n} pestañas coinciden: {names}."
   tabs_reads: Lee las {n} más recientes, desde {oldest} hasta {newest}.
   tabs_none: 'Ninguna pestaña coincide. # es cualquier número, * es cualquier cosa: "#/# *" coincide con "11/09 K71 QRT".'
-  tabs_read: Leer {n} pestañas; la más reciente es {newest}.
-  tabs_skipped: 'No se pudo leer: {names}.'
+  tabs_read: Leídas {n} pestañas; la más reciente es {newest}.
+  finding_tabs: Buscando las pestañas de la hoja...
+  reading_tabs: Leyendo {n} pestañas de Google... esto puede tardar hasta 20 segundos.
+  tabs_skipped: 'No se pudieron leer: {names}.'
   view_start: Los espectadores comienzan en
   view_help: Los espectadores pueden cambiar entre las vistas sobre el gráfico.
-  compare: 'Permitir comparar: dos nombres, o un nombre con los 5 mejores o peores'
-  compare_pie: Permitir comparar dos nombres (o los 5 mejores o peores) como un gráfico circular propio
-  compare_line: Permitir comparar las líneas de dos nombres (o un nombre con los 5 mejores o peores de cada semana)
-  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina, luego la opuesta). La primera fila es el encabezado. Luego toca una letra de columna para establecerla como etiquetas, o una columna numérica.'
+  compare: 'Permitir a los espectadores comparar: dos nombres, o un nombre con los 5 mejores o peores'
+  compare_pie: Permitir a los espectadores comparar dos nombres (o los 5 mejores o peores) como un gráfico circular propio
+  compare_line: Permitir a los espectadores comparar las líneas de dos nombres (o un nombre con los 5 mejores o peores de cada semana)
+  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina, luego la opuesta). La primera fila es el encabezado. Luego toca una letra de columna para convertirla en etiquetas, o una columna de números.'
   grid_tap_second: Ahora toca la esquina opuesta de la tabla.
-  grid_mode: Al hacer clic en una letra de columna se establece
+  grid_mode: Hacer clic en una letra de columna establece
   grid_labels: Etiquetas
   grid_numbers: Números
-  grid_more: Aquí solo se muestran las primeras 200 filas y 60 columnas; un rango puede ser mayor.
-  range: Rango, p. ej. A1:D20 (opcional)
-  doc_table: Qué tabla en el documento (1, 2...)
+  grid_more: Solo se muestran las primeras 200 filas y 60 columnas aquí; un rango puede ir más allá.
+  range: Rango, ej. A1:D20 (opcional)
+  doc_table: Qué tabla en el Documento (1, 2...)
   load: "⤓ Cargar desde Google"
   loading: "⤓ Cargando..."
-  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede leer” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtendrá los últimos números más tarde.'
+  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede leer” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene los últimos números más tarde.'
   load_first: Carga la hoja primero (⤓ Cargar desde Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
@@ -240,33 +244,33 @@ chart_editor:
   numbers_to_show: Números a mostrar
   labels_swapped: Nombres (una línea o barra cada uno)
   swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas a lo largo de la parte inferior"
-  swap_bar: "⇄ Intercambiar filas y columnas: las columnas como barras, un color por fila"
+  swap_bar: "⇄ Intercambiar filas y columnas: las columnas como las barras, un color por fila"
   swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a lo largo de las semanas.'
   rows_to_draw: Filas a dibujar (hasta 6)
   rows_filter: Buscar un nombre...
   rows_count: "{n} de 6 elegidos"
-  columns_along: Columnas a lo largo de la parte inferior (en el orden de la hoja)
+  columns_along: Columnas a lo largo de la parte inferior (en orden de la hoja)
   numbers: Números
-  several_columns: Varias columnas numéricas
+  several_columns: Varias columnas de números
   side_by_side: Uno al lado del otro
   stacked_totals: 'Apilado: totales'
   stacked_percent: 'Apilado: cada barra al 100%'
   vertical: Barras verticales
-  vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
-  traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde'
+  vertical_leaderboard: Barras verticales (en lugar de una clasificación)
+  traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna rojo, última verde'
   traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, los mejores en verde'
   traffic_reverse: 'Invertido: bajo es bueno (verde), alto es malo (rojo)'
   traffic_target: Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo
-  traffic_target_reverse: 'Invertido: cuanto más lejos del objetivo mejor'
-  donut: Donut (anillo)
+  traffic_target_reverse: 'Invertido: más por debajo del objetivo es mejor'
+  donut: Rosquilla (anillo)
   target: Objetivo para todos
-  target_example: p. ej. 15M o 15000000
-  target_column: "...o una columna de objetivos"
+  target_example: ej. 15M o 15000000
+  target_column: "…o una columna de objetivos"
   use_number_above: "(usar el número de arriba)"
   highlight_where: Resaltar filas donde
   no_highlight: "(sin resaltar)"
-  at_least: es al menos
-  at_least_example: p. ej. 300M
+  at_least: sea al menos
+  at_least_example: ej. 300M
 charts:
   column: Columna {n}
   no_numbers: No hay números para graficar en la columna elegida.
