@@ -35,37 +35,39 @@ common:
     logistics_support: Logistikunterstützung
 dashboard:
   title: Allianz-Dashboard
-  loading: Lade dein Allianz-Dashboard…
+  loading: Allianz-Dashboard wird geladen…
   view_as: Anzeigen als
   page_title: "[{tag}] Allianz-Dashboard"
   subtitle: Allianz-Dashboard · {view}
   subtitle_rank: 'Allianz-Dashboard · Rang #{rank} · {view}'
   not_in_nap: Nicht im NAP
-  view_steward: Verwalter-Ansicht
+  view_steward: Steward-Ansicht
   view_leader: Führungs-Ansicht
   view_member: Mitglieder-Ansicht
   sign_in_title: Melde dich an, um dein Allianz-Dashboard zu sehen.
-  sign_in_help: Nutze {sign_in} oben rechts (Discord). Deine Allianz wird über deine NAP-Serverrolle gefunden.
+  sign_in_help: Verwende {sign_in} oben rechts (Discord). Deine Allianz wird über deine NAP-Serverrolle gefunden.
   sign_in_button: Anmelden
-  load_failed: Das Dashboard konnte nicht geladen werden. Prüfe deine Verbindung und lade es neu. ({error})
+  load_failed: Das Dashboard konnte nicht geladen werden. Prüfe deine Verbindung und lade die Seite neu. ({error})
   edit_dashboard: Dashboard bearbeiten
-  done_editing: "✓ Bearbeitung abgeschlossen"
+  done_editing: "✓ Bearbeitung beendet"
   add_chart: Diagramm oder Tabelle hinzufügen
   editor_label: Diagramm- oder Tabellen-Editor
   charts_label: Allianz-Diagramme und -Tabellen
-  empty_member: Die Führung deiner Allianz hat hier noch keine Diagramme oder Tabellen geteilt.
-  empty_editing: 'Noch keine Diagramme oder Tabellen: Nutze „Diagramm oder Tabelle hinzufügen“.'
-  empty_leader: Noch keine Diagramme oder Tabellen. Nutze „Dashboard bearbeiten“, um eines hinzuzufügen.
+  empty_member: Deine Allianzführung hat hier noch keine Diagramme oder Tabellen geteilt.
+  empty_editing: 'Noch keine Diagramme oder Tabellen: Verwende „Diagramm oder Tabelle hinzufügen“.'
+  empty_leader: Noch keine Diagramme oder Tabellen. Verwende „Dashboard bearbeiten“, um eine hinzuzufügen.
   visible_members: Alle Mitglieder
   visible_officers: Nur Offiziere
   google_sheet: Google Tabelle
   google_doc: Google Dokument
-  synced: synchronisiert {when}
-  updated: Aktualisiert {when}
+  synced: synchronisiert am {when}
+  updated: Aktualisiert am {when}
   sync_now: Jetzt synchronisieren
   syncing: Synchronisiere…
+  syncing_tabs: Synchronisiere {n} Reiter…
+  tabs_skipped: 'Beim letzten Synchronisieren konnten diese Reiter nicht gelesen werden (Google war langsam oder der Reiter war nicht verfügbar); „Jetzt synchronisieren“ versucht es erneut: {names}'
   sync_help: Die neuesten Zahlen aus der Tabelle abrufen
-  confirm_delete: "„{title}“ löschen? Dies kann nicht rückgängig gemacht werden."
+  confirm_delete: '"{title}" löschen? Dies kann nicht rückgängig gemacht werden.'
   this_chart: dieses Diagramm
 rewards_card:
   title: Wöchentliche Belohnungen
@@ -183,50 +185,52 @@ chart_editor:
   type_progress: Fortschritt
   type_table: Tabelle
   title: Titel
-  title_example: z. B. Ergebnisse im Allianz-Duell
+  title_example: z. B. Allianz-Duell-Ergebnisse
   note: Erklärung
-  note_example: z. B. Mindestens 15 Mio. Duell-Punkte bis zum Reset am Freitag erforderlich
-  who_sees: Wer kann dies sehen
+  note_example: z. B. Mindestens 15M Duell-Punkte bis zum Freitag-Reset erforderlich
+  who_sees: Wer kann es sehen
   officers_only: Nur Offiziere (R4/R5)
   all_members: Alle Allianzmitglieder
   data: Daten
-  data_source: Woher die Daten stammen
+  data_source: Datenquelle
   paste: Tabelle einfügen
-  link: Google Sheet / Doc-Link
-  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
-  tab_name: Tab-Name (optional)
-  tab: Tab
+  link: Google Tabelle / Dokument Link
+  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (Kopfzeile zuerst) und füge sie hier ein.
+  tab_name: Reitername (optional)
+  tab: Reiter
   order: Sortierung
   order_sheet: Wie in der Tabelle
   order_desc: Höchste zuerst
   order_asc: Niedrigste zuerst
-  order_asc_help: Niedrigste zuerst lässt Zeilen aus, die keine Werte in den angezeigten Spalten haben (Spieler, die nicht teilgenommen haben).
+  order_asc_help: "„Niedrigste zuerst“ lässt Zeilen aus, die in den angezeigten Spalten nichts enthalten (diejenigen, die nicht teilgenommen haben)."
   limit: Anzeigen
   limit_all: Alle
-  tabs_on: Gleicher Bereich aus mehreren Tabs (z. B. ein Tab pro Woche)
-  tabs_pattern: Tab-Namen wie
-  tabs_count: Neueste zu lesende Tabs
-  tabs_match: "{n} Tabs stimmen überein: {names}."
-  tabs_reads: Liest die neuesten {n}.
-  tabs_none: 'Keine Tabs stimmen überein. # ist eine beliebige Zahl, * ist alles: "#/# *" entspricht "06/14 Duel".'
-  tabs_read: "{n} Tabs gelesen; der neueste ist {newest}."
-  tabs_skipped: 'Konnte nicht gelesen werden: {names}.'
-  view_start: Betrachter beginnen bei
-  view_help: Betrachter können über dem Diagramm zwischen den Ansichten wechseln.
-  compare: 'Betrachter vergleichen lassen: zwei Namen oder einen Namen mit den Top oder Bottom 5'
-  compare_pie: Betrachter zwei Namen (oder die Top/Bottom 5) als eigenes Kreisdiagramm vergleichen lassen
-  compare_line: Betrachter die Linien von zwei Namen (oder einen Namen mit den wöchentlichen Top/Bottom 5) vergleichen lassen
-  grid_help: 'Ziehe über die Tabelle, um sie auszuwählen (auf dem Handy: eine Ecke antippen, dann die gegenüberliegende). Die erste Zeile ist die Kopfzeile. Tippe dann auf einen Spaltenbuchstaben, um ihn als Beschriftung oder Zahlenspalte festzulegen.'
+  tabs_on: Gleicher Bereich aus mehreren Reitern (z. B. ein Reiter pro Woche)
+  tabs_pattern: Reiternamen wie
+  tabs_count: Neueste zu lesende Reiter
+  tabs_match: "{n} Reiter passen: {names}."
+  tabs_reads: Liest die neuesten {n}, von {oldest} bis {newest}.
+  tabs_none: 'Keine passenden Reiter. # ist eine beliebige Zahl, * ist alles: „#/# *“ passt auf „06/14 Duell“.'
+  tabs_read: Lese {n} Reiter; der neueste ist {newest}.
+  finding_tabs: Reiter der Tabelle werden gesucht…
+  reading_tabs: "{n} Reiter aus Google werden gelesen… dies kann bis zu 20 Sekunden dauern."
+  tabs_skipped: 'Konnte nicht lesen: {names}.'
+  view_start: Zuschauer beginnen mit
+  view_help: Zuschauer können über dem Diagramm zwischen den Ansichten wechseln.
+  compare: 'Vergleich ermöglichen: zwei Namen oder ein Name mit den Top/Bottom 5'
+  compare_pie: Zuschauern den Vergleich zweier Namen (oder Top/Bottom 5) als eigenes Kreisdiagramm ermöglichen
+  compare_line: Zuschauern den Vergleich der Linien zweier Namen (oder ein Name mit den Top/Bottom 5 jeder Woche) ermöglichen
+  grid_help: 'Ziehe über die Tabelle, um sie auszuwählen (auf dem Handy: tippe auf eine Ecke, dann auf die gegenüberliegende). Die erste Zeile ist die Kopfzeile. Tippe dann auf einen Spaltenbuchstaben, um ihn als Beschriftung festzulegen, oder auf eine Zahlenspalte.'
   grid_tap_second: Tippe jetzt auf die gegenüberliegende Ecke der Tabelle.
-  grid_mode: 'Klick auf einen Spaltenbuchstaben legt fest:'
+  grid_mode: Ein Klick auf einen Spaltenbuchstaben legt fest
   grid_labels: Beschriftungen
   grid_numbers: Zahlen
-  grid_more: Hier werden nur die ersten 200 Zeilen und 60 Spalten angezeigt; ein Bereich kann weiter reichen.
+  grid_more: Hier werden nur die ersten 200 Zeilen und 60 Spalten angezeigt; ein Bereich kann darüber hinausgehen.
   range: Bereich, z. B. A1:D20 (optional)
-  doc_table: Welche Tabelle im Doc (1, 2…)
+  doc_table: Welche Tabelle im Dokument (1, 2…)
   load: "⤓ Von Google laden"
-  loading: "⤓ Lade…"
-  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
+  loading: "⤓ Wird geladen…"
+  link_help: 'Tabellen: Freigeben → „Jeder mit dem Link kann die Ansicht öffnen“ (oder Datei → Freigeben → Im Web veröffentlichen). Dokumente: Datei → Freigeben → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
   load_first: Lade zuerst die Tabelle (⤓ Von Google laden).
   preview: Vorschau
   preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
@@ -238,12 +242,12 @@ chart_editor:
   at_most_500: "(maximal 500)"
   labels: Namen (Beschriftungen)
   numbers_to_show: Anzuzeigende Zahlen
-  labels_swapped: Namen (je eine Linie oder ein Balken)
-  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten entlang der Unterseite"
+  labels_swapped: Namen (jeweils eine Linie oder ein Balken)
+  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten unten"
   swap_bar: "⇄ Zeilen und Spalten tauschen: die Spalten als Balken, eine Farbe pro Zeile"
-  swap_help: 'Bei Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
+  swap_help: 'Für Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
   rows_to_draw: Zu zeichnende Zeilen (bis zu 6)
-  rows_filter: Namen finden…
+  rows_filter: Suche einen Namen…
   rows_count: "{n} von 6 ausgewählt"
   columns_along: Spalten entlang der Unterseite (in Tabellen-Reihenfolge)
   numbers: Zahlen
@@ -253,17 +257,17 @@ chart_editor:
   stacked_percent: 'Gestapelt: jeder Balken auf 100%'
   vertical: Vertikale Balken
   vertical_leaderboard: Vertikale Balken (statt einer Rangliste)
-  traffic_columns: 'Rot → Gelb → Grün (niedrig → hoch): erste Spalte rot, letzte grün'
-  traffic_size: 'Rot → Gelb → Grün (niedrig → hoch): nach Rang, Top-Werte grün'
+  traffic_columns: 'Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün'
+  traffic_size: 'Rot → gelb → grün (niedrig → hoch): nach Rang, oben grün'
   traffic_reverse: 'Umgekehrt: niedrig ist gut (grün), hoch ist schlecht (rot)'
-  traffic_target: Rot → Gelb → Grün basierend darauf, wie nah jeder am Ziel ist
-  traffic_target_reverse: 'Umgekehrt: je weiter unter dem Ziel, desto besser'
+  traffic_target: Rot → gelb → grün, basierend darauf, wie nah jeder am Ziel ist
+  traffic_target_reverse: 'Umgekehrt: weiter unter dem Ziel ist besser'
   donut: Donut (Ring)
   target: Ziel für alle
   target_example: z. B. 15M oder 15000000
   target_column: "…oder eine Spalte mit Zielen"
-  use_number_above: "(die obige Zahl verwenden)"
-  highlight_where: Zeilen hervorheben, wo
+  use_number_above: "(verwende die Zahl oben)"
+  highlight_where: Hervorheben, wo
   no_highlight: "(keine Hervorhebung)"
   at_least: mindestens ist
   at_least_example: z. B. 300M
