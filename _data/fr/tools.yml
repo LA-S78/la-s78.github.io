@@ -172,40 +172,33 @@ caravan:
   this_player: ce joueur
   confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde repasse en disponible (les noms et heures sont conservés).
 chart_editor:
-  edit_title: Modifier le graphique ou le tableau
+  edit_title: Modifier le graphique ou tableau
   new_title: Nouveau graphique ou tableau
   type: Type
   type_bar: Barres
-  type_line: Lignes
+  type_line: Ligne
   type_pie: Secteurs
   type_progress: Progression
   type_table: Tableau
   title: Titre
-  title_example: 'ex. : scores du Duel d''Alliances'
+  title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: 'ex. : 15M de points au Duel minimum requis avant la réinitialisation de vendredi'
-  who_sees: Qui peut voir ceci
+  note_example: ex. Minimum 15M de points de duel requis pour la réinitialisation de vendredi
+  who_sees: Visibilité
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
   data: Données
   data_source: Source des données
   paste: Coller un tableau
   link: Lien Google Sheet / Doc
-  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
+  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête en premier) et collez-les ici.
   tab_name: Nom de l'onglet (facultatif)
-  tab: Onglet
-  grid_help: Faites glisser sur le tableau pour le sélectionner (la première ligne est l'en-tête). Cliquez ensuite sur une lettre de colonne pour en faire les étiquettes, ou une colonne de chiffres.
-  grid_tap_second: Appuyez maintenant sur le coin opposé du tableau.
-  grid_mode: Cliquer sur une lettre de colonne définit
-  grid_labels: Étiquettes
-  grid_numbers: Chiffres
-  grid_more: Seules les 200 premières lignes et 60 colonnes sont affichées ici ; une plage peut aller plus loin.
-  range: 'Plage, ex. : A1:D20 (facultatif)'
+  range: Plage, ex. A1:D20 (facultatif)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → « Toute personne disposant du lien peut consulter » (ou Fichier → Partager → Publier sur le web). Docs : Fichier → Partager → Publier sur le web. « Synchroniser maintenant » sur la carte récupérera les derniers chiffres plus tard.'
-  load_first: Chargez d'abord la feuille (⤓ Charger depuis Google).
+  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent voir » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupérera les dernières données plus tard.'
+  load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
   preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
@@ -215,36 +208,36 @@ chart_editor:
   columns_other: "{n} colonnes"
   at_most_500: "(500 maximum)"
   labels: Noms (étiquettes)
-  numbers_to_show: Chiffres à afficher
-  labels_swapped: Noms (une ligne ou une barre chacun)
-  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
-  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes en tant que barres, une couleur par rangée"
-  swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
+  numbers_to_show: Nombres à afficher
+  labels_swapped: Noms (une ligne ou barre chacun)
+  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : colonnes en barres, une couleur par ligne"
+  swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs à travers les semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
-  rows_count: "{n} sur 6 choisi(e)s"
+  rows_count: "{n} sur 6 choisis"
   columns_along: Colonnes en bas (dans l'ordre de la feuille)
-  numbers: Chiffres
-  several_columns: Plusieurs colonnes de chiffres
+  numbers: Nombres
+  several_columns: Plusieurs colonnes de nombres
   side_by_side: Côte à côte
   stacked_totals: 'Empilé : totaux'
   stacked_percent: 'Empilé : chaque barre à 100%'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
-  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, haut vert'
-  traffic_reverse: 'Inverser : le bas est bon (vert), le haut est mauvais (rouge)'
-  traffic_target: Rouge → jaune → vert selon la proximité avec l'objectif
-  traffic_target_reverse: 'Inverser : plus on est en dessous de l''objectif, mieux c''est'
+  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, top en vert'
+  traffic_reverse: 'Inversé : bas est bon (vert), haut est mauvais (rouge)'
+  traffic_target: Rouge → jaune → vert selon la proximité avec la cible
+  traffic_target_reverse: 'Inversé : plus loin en dessous de la cible est meilleur'
   donut: Donut (anneau)
-  target: Objectif pour tout le monde
-  target_example: 'ex. : 15M ou 15000000'
-  target_column: "…ou une colonne d'objectifs"
-  use_number_above: "(utiliser le chiffre ci-dessus)"
+  target: Cible pour tout le monde
+  target_example: ex. 15M ou 15000000
+  target_column: "…ou une colonne de cibles"
+  use_number_above: "(utiliser le nombre au-dessus)"
   highlight_where: Surligner les lignes où
-  no_highlight: "(pas de surbrillance)"
-  at_least: est au moins égal à
-  at_least_example: 'ex. : 300M'
+  no_highlight: "(aucun surlignage)"
+  at_least: est au moins
+  at_least_example: ex. 300M
 charts:
   column: Colonne {n}
   no_numbers: Aucun chiffre à représenter dans la colonne choisie.

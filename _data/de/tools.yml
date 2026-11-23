@@ -181,31 +181,24 @@ chart_editor:
   type_progress: Fortschritt
   type_table: Tabelle
   title: Titel
-  title_example: z. B. Allianz-Duell Punkte
+  title_example: z. B. Allianz-Duell Punktzahl
   note: Erklärung
-  note_example: z. B. Mindestens 15 Mio. Duell-Punkte bis zum Freitag-Reset erforderlich
-  who_sees: Wer kann dies sehen
+  note_example: z. B. Mindestens 15M Duell-Punkte bis zum Freitag-Reset erforderlich
+  who_sees: Wer darf es sehen
   officers_only: Nur Offiziere (R4/R5)
-  all_members: Alle Allianzmitglieder
+  all_members: Alle Allianz-Mitglieder
   data: Daten
-  data_source: Datenquelle
+  data_source: Woher stammen die Daten
   paste: Tabelle einfügen
-  link: Google Sheet / Doc-Link
-  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
+  link: Google Tabelle / Dokument Link
+  paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst Kopfzeile) und füge sie hier ein.
   tab_name: Tab-Name (optional)
-  tab: Tab
-  grid_help: Ziehe über die Tabelle, um sie auszuwählen (die erste Zeile ist die Kopfzeile). Klicke dann auf einen Spaltenbuchstaben, um ihn als Beschriftung oder Zahlenspalte festzulegen.
-  grid_tap_second: Tippe jetzt auf die gegenüberliegende Ecke der Tabelle.
-  grid_mode: Klick auf einen Spaltenbuchstaben legt fest
-  grid_labels: Beschriftungen
-  grid_numbers: Zahlen
-  grid_more: Hier werden nur die ersten 200 Zeilen und 60 Spalten angezeigt; der Bereich kann größer sein.
   range: Bereich, z. B. A1:D20 (optional)
-  doc_table: Welche Tabelle im Doc (1, 2…)
+  doc_table: Welche Tabelle im Dokument (1, 2…)
   load: "⤓ Von Google laden"
-  loading: "⤓ Ladevorgang…"
-  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann die Datei ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
-  load_first: Lade zuerst das Blatt (⤓ Von Google laden).
+  loading: "⤓ Lade…"
+  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
+  load_first: Lade zuerst die Tabelle (⤓ Von Google laden).
   preview: Vorschau
   preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
   size: "{rows} × {columns}"
@@ -216,34 +209,34 @@ chart_editor:
   at_most_500: "(maximal 500)"
   labels: Namen (Beschriftungen)
   numbers_to_show: Anzuzeigende Zahlen
-  labels_swapped: Namen (jeweils eine Linie oder ein Balken)
+  labels_swapped: Namen (eine Zeile oder ein Balken je)
   swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten entlang der Unterseite"
   swap_bar: "⇄ Zeilen und Spalten tauschen: die Spalten als Balken, eine Farbe pro Zeile"
-  swap_help: 'Für Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
-  rows_to_draw: Zu zeichnende Zeilen (bis zu 6)
+  swap_help: 'Für Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen zu verfolgen.'
+  rows_to_draw: Zeilen zum Zeichnen (bis zu 6)
   rows_filter: Name suchen…
   rows_count: "{n} von 6 ausgewählt"
-  columns_along: Spalten entlang der Unterseite (in Blatt-Reihenfolge)
+  columns_along: Spalten entlang der Unterseite (in Tabellenreihenfolge)
   numbers: Zahlen
   several_columns: Mehrere Zahlenspalten
   side_by_side: Nebeneinander
   stacked_totals: 'Gestapelt: Summen'
   stacked_percent: 'Gestapelt: jeder Balken auf 100%'
   vertical: Vertikale Balken
-  vertical_leaderboard: Vertikale Balken (statt einer Bestenliste)
+  vertical_leaderboard: Vertikale Balken (statt einer Rangliste)
   traffic_columns: 'Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün'
-  traffic_size: 'Rot → gelb → grün (niedrig → hoch): nach Rang, Top ist grün'
+  traffic_size: 'Rot → gelb → grün (niedrig → hoch): nach Rang, Top-Rang grün'
   traffic_reverse: 'Umgekehrt: niedrig ist gut (grün), hoch ist schlecht (rot)'
-  traffic_target: Rot → gelb → grün basierend auf der Annäherung an das Ziel
+  traffic_target: Rot → gelb → grün danach, wie nah jeder am Ziel ist
   traffic_target_reverse: 'Umgekehrt: weiter unter dem Ziel ist besser'
   donut: Donut (Ring)
   target: Ziel für alle
   target_example: z. B. 15M oder 15000000
   target_column: "…oder eine Spalte mit Zielen"
-  use_number_above: "(die Zahl oben verwenden)"
+  use_number_above: "(verwende die Zahl oben)"
   highlight_where: Zeilen hervorheben, wo
   no_highlight: "(keine Hervorhebung)"
-  at_least: ist mindestens
+  at_least: mindestens ist
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}
