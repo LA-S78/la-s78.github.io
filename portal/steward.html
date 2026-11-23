@@ -35,7 +35,7 @@ strings: [steward, alliance_images]
   <!-- Alliance IDs step 8: the moves' backups, deleted by a Steward (the tidy-up) -->
   <form id="st-tidy" class="st-link" hidden></form>
   <!-- Alliance settings: tag, name, swap, pictures, retire (Stewards only; step 7 and 2026-11-23) -->
-  <section id="st-roster" class="st-link" hidden></section>
+  <section id="st-roster" class="st-card" hidden></section>
 
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
@@ -230,7 +230,7 @@ strings: [steward, alliance_images]
         )
         .join('');
       box.innerHTML = `
-        <p><strong>${esc(t('steward.roster_title'))}</strong></p>
+        <h3>${ic('castle')}${esc(t('steward.roster_title'))}</h3>
         <select id="st-pick" data-site-select data-search="${esc(t('steward.roster_search'))}" aria-label="${esc(t('steward.roster_pick'))}">
           <option value="">${esc(t('steward.roster_pick'))}</option>${options}
         </select>
