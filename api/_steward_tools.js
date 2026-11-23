@@ -19,7 +19,12 @@
 
 import { gistJson, updateGist, isTestDeployment, TEST_COPY_FILE } from './_gist.js';
 import { isSteward } from './_stewards.js';
-import { readImages, IMAGE_KINDS } from './_alliance_images.js';
+import {
+  readImages,
+  IMAGE_KINDS,
+  allianceFrames,
+  applyAllianceFrames,
+} from './_alliance_images.js';
 import { latestRace } from './_ascension.js';
 import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_tracker.js';
 import { say } from './_messages.js';
@@ -89,7 +94,10 @@ export function positionsRefreshState(gist, now = Date.now()) {
 async function napPositions(req, res, { gist, session }) {
   const before = positionsRefreshState(gist);
   if (!req.query.refresh) {
-    return res.status(200).json({ ...(await readNapPositions({ gist })), refresh: before });
+    return res.status(200).json({
+      ...applyAllianceFrames(await readNapPositions({ gist }), allianceFrames(gist)),
+      refresh: before,
+    });
   }
   if (!before.left || before.waitMinutes) {
     return res.status(429).json({
@@ -120,7 +128,7 @@ async function napPositions(req, res, { gist, session }) {
     console.warn('Positions refresh not counted:', err.message);
   }
   try {
-    const out = await refreshNapPositions({ gist });
+    const out = applyAllianceFrames(await refreshNapPositions({ gist }), allianceFrames(gist));
     return res.status(200).json({ ...out, refresh });
   } catch (err) {
     return res.status(502).json({ error: err.message, refresh });
@@ -401,9 +409,12 @@ export async function stewardTools(req, res, { gist, session }) {
     } catch (err) {
       console.warn('Steward lookup not counted:', err.message);
     }
-    return res
-      .status(200)
-      .json({ player: found.player, quota: found.quota, lookups, usage: trackerUsage(gist) });
+    return res.status(200).json({
+      player: applyAllianceFrames(found.player, allianceFrames(gist)),
+      quota: found.quota,
+      lookups,
+      usage: trackerUsage(gist),
+    });
   }
 
   return res.status(400).json({ error: 'Unknown request.' });
