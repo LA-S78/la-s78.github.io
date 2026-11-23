@@ -265,30 +265,29 @@ chart_editor:
   at_least_example: ex. 300M
 charts:
   column: Colonne {n}
-  no_numbers: Aucun chiffre à afficher dans la colonne choisie.
-  line_two_rows: Un graphique linéaire nécessite au moins deux lignes.
-  line_two_columns: Un graphique linéaire nécessite au moins deux colonnes en bas.
-  no_positive: Aucun chiffre positif à afficher dans la colonne choisie.
+  no_numbers: Aucun chiffre à représenter dans la colonne choisie.
+  line_two_rows: Une ligne nécessite au moins deux rangées.
+  line_two_columns: Une ligne nécessite au moins deux colonnes en bas.
+  no_positive: Aucun chiffre positif à représenter dans la colonne choisie.
   no_targets: Aucun chiffre (ou cible) à comparer.
-  no_table: Aucun tableau pour le moment.
+  no_table: Pas encore de tableau.
   unknown_type: Type de graphique inconnu.
-  draw_failed: Ce graphique n'a pas pu être tracé ({error}).
+  draw_failed: Ce graphique n'a pas pu être dessiné ({error}).
   other: Autre
   value: Valeur
   total: Total
   total_value: 'Total : {value}'
   share_of_all: "{value} · {share} du total"
   value_of_target: "{value} sur {target}"
-  to_go: 'Restant : {value}'
+  to_go: 'À atteindre : {value}'
   target_reached: Cible atteinte ✓
-  done: "✓ Terminé"
+  done: "✓ Fait"
   reached_target: "{done} sur {total} ont atteint la cible"
-  search: Rechercher...
+  search: Rechercher…
   search_label: Rechercher dans ce tableau
   matching: "{n} correspondant"
   show_all: Afficher les {n}
   show_all_rows: Afficher les {n} lignes
-  show_fewer: Afficher moins
   first_rows: Affichage des {shown} premières lignes sur {n}.
   hint_bar: Appuyez ou survolez une barre
   hint_bar_key: Appuyez ou survolez une barre. Appuyez sur un nom dans la légende pour ne voir que celui-ci.
@@ -300,17 +299,17 @@ charts:
   view_average: Moyenne de {n} onglets
   view_chart: Graphique
   view_compare: Comparer
-  search_names: Tapez un nom...
+  search_names: Tapez un nom…
   no_match: Aucun nom ne correspond.
   view_tab: Onglet à afficher
   compare_first: Premier nom
   compare_second: Second nom
   compare_top: Top {n} (moyenne)
-  compare_bottom: Flop {n} (moyenne)
+  compare_bottom: Bottom {n} (moyenne)
   pair_left: 'Gauche : {name}'
   pair_right: 'Droite (estompé) : {name}'
-  flip_to_asc: "⇅ Plus bas en premier"
-  flip_to_desc: "⇅ Plus haut en premier"
+  flip_to_asc: "⇅ Le plus bas d'abord"
+  flip_to_desc: "⇅ Le plus élevé d'abord"
   hint_line: Appuyez ou survolez une semaine
   hint_pie: Appuyez ou survolez une part
   hint_progress: Appuyez ou survolez une ligne
