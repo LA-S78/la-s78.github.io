@@ -1011,7 +1011,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
                 <button type="button" data-gmode="value" aria-pressed="false">${e('grid_numbers')}</button>
               </span>
             </div>
-            <div class="dash-grid" id="ed-grid"></div>
+            <div class="dash-grid-wrap">
+              <div class="dash-grid" id="ed-grid"></div>
+              <div class="dash-small dash-grid-status" id="ed-grid-status" aria-live="polite"></div>
+            </div>
             <div class="dash-muted dash-small" id="ed-grid-note"></div>
           </div>
           <div class="dash-link-opts" id="ed-doc-opts" hidden>
@@ -1306,20 +1309,27 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         const r = pick(a, b);
         $('ed-range').value = `${colLetter(r.c1)}${r.r1}:${colLetter(r.c2)}${r.r2}`;
         anchor = null;
-        $('ed-grid-help').textContent = t('chart_editor.grid_help');
+        $('ed-grid-status').textContent = '';
         $('ed-load').click();
       }
-      $('ed-grid').addEventListener('pointerdown', (ev) => {
+      // Touch and pen: a tap, not a touch, so scrolling the grid never picks anything (the
+      // browser sends no click when the finger moved). The prompt for the second corner has
+      // its own line under the grid, so nothing above it changes size and the page stays put.
+      let pointerKind = 'mouse';
+      $('ed-grid').addEventListener('click', (ev) => {
+        if (pointerKind === 'mouse') return;
         const cell = cellAt(ev);
         if (!cell) return;
-        if (ev.pointerType === 'touch') {
-          if (!anchor) {
-            anchor = posOf(cell);
-            highlightGrid(pick(anchor, anchor));
-            $('ed-grid-help').textContent = t('chart_editor.grid_tap_second');
-          } else finishPick(anchor, posOf(cell));
-          return;
-        }
+        if (!anchor) {
+          anchor = posOf(cell);
+          highlightGrid(pick(anchor, anchor));
+          $('ed-grid-status').textContent = t('chart_editor.grid_tap_second');
+        } else finishPick(anchor, posOf(cell));
+      });
+      $('ed-grid').addEventListener('pointerdown', (ev) => {
+        pointerKind = ev.pointerType || 'mouse';
+        const cell = cellAt(ev);
+        if (!cell || pointerKind !== 'mouse' || ev.button !== 0) return;
         ev.preventDefault();
         anchor = posOf(cell);
         dragging = true;
