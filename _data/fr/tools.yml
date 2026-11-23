@@ -208,7 +208,7 @@ chart_editor:
   tabs_count: Nouveaux onglets à lire
   tabs_match: "{n} onglets correspondent : {names}."
   tabs_reads: Lit les {n} plus récents.
-  tabs_none: 'Aucun onglet ne correspond. # est n''importe quel nombre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
+  tabs_none: 'Aucun onglet ne correspond. # est n''importe quel nombre, * est n''importe quoi : "#/# *" correspond à "06/14 Duel".'
   tabs_read: Lire {n} onglets ; le plus récent est {newest}.
   tabs_skipped: 'Impossible de lire : {names}.'
   view_start: Les spectateurs commencent sur

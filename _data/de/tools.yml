@@ -208,7 +208,7 @@ chart_editor:
   tabs_count: Neueste zu lesende Tabs
   tabs_match: "{n} Tabs stimmen überein: {names}."
   tabs_reads: Liest die neuesten {n}.
-  tabs_none: 'Keine Tabs stimmen überein. # ist eine beliebige Zahl, * ist alles: "#/# *" entspricht "11/09 K71 QRT".'
+  tabs_none: 'Keine Tabs stimmen überein. # ist eine beliebige Zahl, * ist alles: "#/# *" entspricht "06/14 Duel".'
   tabs_read: "{n} Tabs gelesen; der neueste ist {newest}."
   tabs_skipped: 'Konnte nicht gelesen werden: {names}.'
   view_start: Betrachter beginnen bei

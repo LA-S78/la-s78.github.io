@@ -208,7 +208,7 @@ chart_editor:
   tabs_count: Okunacak en yeni sekme sayısı
   tabs_match: "{n} sekme eşleşti: {names}."
   tabs_reads: En yeni {n} tanesini okur.
-  tabs_none: 'Hiçbir sekme eşleşmedi. # herhangi bir sayı, * herhangi bir şeydir: "#/# *" ifadesi "11/09 K71 QRT" ile eşleşir.'
+  tabs_none: 'Hiçbir sekme eşleşmedi. # herhangi bir sayı, * herhangi bir şeydir: "#/# *" ifadesi "06/14 Duel" ile eşleşir.'
   tabs_read: "{n} sekme okundu; en yenisi {newest}."
   tabs_skipped: 'Okunamadı: {names}.'
   view_start: 'Görüntüleyenler şununla başlar:'
