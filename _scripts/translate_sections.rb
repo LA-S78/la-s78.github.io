@@ -47,6 +47,14 @@ FEW_PLURAL = %w[ru uk].freeze # languages with a separate form for 2–4
 STATE_FILE = '_scripts/translation_state.json'
 OVERRIDES_FILE = '_data/translation_overrides.yml'
 COOLDOWN = 8 # seconds between Gemini calls
+# The whole run's time (2026-11-23: a slow Gemini held a deploy for over an hour, each call
+# waiting out timeouts and retries). Once it's used up no new call starts: what's left keeps
+# its current text and is translated on a later push (its state isn't marked done).
+BUDGET = Integer(ENV.fetch('TRANSLATE_BUDGET_SECONDS', '900'))
+STARTED = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+def over_budget?
+  Process.clock_gettime(Process::CLOCK_MONOTONIC) - STARTED > BUDGET
+end
 CHECK_ONLY = ARGV.include?('--check')
 ADOPT = ARGV.include?('--adopt')
 
@@ -121,7 +129,7 @@ end
 def ask_gemini(sections, lang)
   require_relative 'gemini_client'
   # Few retries: a busy Gemini mustn't hold up the deploy; English shows until the next push.
-  reply = call_gemini_api(prompt_for(sections, lang), lang, max_retries: 3, json: true).to_s
+  reply = call_gemini_api(prompt_for(sections, lang), lang, max_retries: 2, json: true, read_timeout: 240).to_s
   reply = reply.gsub(/^```[a-z]*\s*$/i, '').strip
   parsed = JSON.parse(reply)
   parsed.is_a?(Hash) ? parsed : {}
@@ -222,6 +230,10 @@ FILES.each do |name|
     next if CHECK_ONLY
 
     translated = {}
+    if !todo.empty? && over_budget?
+      puts "  ⏱️ #{lang}: time's up for this run; #{todo.keys.join(', ')} left for the next push"
+      todo = {}
+    end
     unless todo.empty?
       sleep(COOLDOWN) if calls.positive?
       calls += 1

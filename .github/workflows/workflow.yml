@@ -4,9 +4,14 @@ on:
   push:
     branches: [main, dev]
   # Pull requests run the full build + sanity checks, but never translate,
-  # commit, deploy or post alerts (all deploy-side steps are gated on push).
+  # commit, deploy or post alerts (all deploy-side steps skip pull requests).
   pull_request:
     branches: [main, dev]
+  # By hand (owner request, 2026-11-23): Actions → "Build and Deploy Multilingual Site" → Run
+  # workflow, on main or dev. Does what a push does: translates whatever is still missing
+  # (text a slow Gemini left for later, see _scripts/translate_sections.rb's time limit),
+  # saves it, builds and deploys that branch.
+  workflow_dispatch:
 
 # One run at a time per branch (or per pull request). On main/dev a new push waits for
 # the running deploy to finish instead of racing it, so an older build can never finish
@@ -19,6 +24,8 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # Run by hand only on main or dev: any other branch would be deployed to the test site
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
     
     permissions:
       contents: write
@@ -30,7 +37,7 @@ jobs:
       # with it when saving (this failed the run after #95). Pull requests build their commit.
       - uses: actions/checkout@v5
         with:
-          ref: ${{ github.event_name == 'push' && github.ref || '' }}
+          ref: ${{ github.event_name != 'pull_request' && github.ref || '' }}
 
       - name: Setting up Ruby environment
         uses: ruby/setup-ruby@v1
@@ -40,7 +47,7 @@ jobs:
 
       # --- TRANSLATE VIA AI (UPGRADED TO RECURSIVE DEEP SCAN) ---
       - name: Translating source text via AI
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -54,7 +61,7 @@ jobs:
       # --- TRANSLATE THE TOOLS' TEXT AND ui.yml (only the sections whose English changed) ---
       # _data/en/{tools,ui}.yml -> _data/<lang>/...; see _scripts/translate_sections.rb.
       - name: Translating changed tool text via AI
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         # --adopt first: a section that already has every English key and no record yet (e.g.
@@ -65,7 +72,7 @@ jobs:
 
       # --- FIXED INTERCEPT STAGE FOR UNTRACKED FILES ---
       - name: Saving master translation files
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -112,7 +119,7 @@ jobs:
           retention-days: 1
 
       - name: Preparing fallback redirects
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           mkdir _github_pages_site
           cp _deploy/migration.html _github_pages_site/index.html
@@ -121,7 +128,7 @@ jobs:
           cp _deploy/migration.html _github_pages_site/404.html
 
       - name: Caching deployment state
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         uses: actions/cache@v5
         with:
           path: ~/.local/share/com.vercel.cli
@@ -130,11 +137,11 @@ jobs:
             ${{ runner.os }}-vercel-
 
       - name: Installing deployment tools
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         run: npm install --global vercel@latest
 
       - name: Fetching deployment environment
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
@@ -146,11 +153,11 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Staging deployment folder
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         run: cp -r .vercel _site/
 
       - name: Deploying to Vercel
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel deploy --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
@@ -163,7 +170,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploying redirects to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
@@ -171,7 +178,7 @@ jobs:
           clean: true
 
       - name: Sending success alert
-        if: success() && github.event_name == 'push'
+        if: success() && github.event_name != 'pull_request'
         run: |
           curl -H "Content-Type: application/json" \
                -X POST \
@@ -179,7 +186,7 @@ jobs:
                ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Sending failure alert
-        if: failure() && github.event_name == 'push'
+        if: failure() && github.event_name != 'pull_request'
         run: |
           curl -H "Content-Type: application/json" \
                -X POST \
