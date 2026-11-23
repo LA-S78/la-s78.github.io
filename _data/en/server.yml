@@ -64,6 +64,7 @@ api_dashboard:
   player_removed: "That player was removed."
 
 api_sheets:
+  no_tabs: "No tabs were found in that sheet. Check the link opens the spreadsheet itself."
   full_link: "Paste the full link (starting https://docs.google.com/…)."
   google_only: "Only Google Sheets and Google Docs links (docs.google.com) can be used."
   range_format: "The range should look like A1:D20 (or leave it empty)."

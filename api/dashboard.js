@@ -25,7 +25,7 @@ import { allianceFrame, imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
-import { fetchSourceTable } from './_google_source.js';
+import { fetchSourceTable, fetchSheetTabs, fetchSheetGrid } from './_google_source.js';
 import {
   applyDashboardEdit,
   countRefresh,
@@ -286,6 +286,19 @@ async function editDashboard(req, res, { gist, tag, access, session, alliances }
 
   if (body.action === 'roster-refresh') {
     return refreshRoster(res, { gist, tag, alliances, session });
+  }
+
+  // The sheet preview (2026-11-23): a sheet's tabs, and one tab's grid (nothing is saved)
+  if (body.action === 'sheet-tabs' || body.action === 'sheet-grid') {
+    try {
+      const out =
+        body.action === 'sheet-tabs'
+          ? { tabs: await fetchSheetTabs(body.source || {}) }
+          : { grid: await fetchSheetGrid(body.source || {}) };
+      return res.status(200).json(out);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
   }
 
   // Read a Google Sheet / Doc for the editor's preview (nothing is saved).
