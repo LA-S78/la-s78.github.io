@@ -928,51 +928,53 @@ image_review:
   done_approved: Approuvé. L'image est maintenant en ligne et la publication Discord est mise à jour.
   done_rejected: Rejeté. L'image a été supprimée et la publication Discord est mise à jour.
 alliance_images:
-  title: Images d'alliance
+  title: Images de l'Alliance
   edit: Modifier les images
   done: "✓ Modification terminée"
   help: Ajoutez une image derrière la carte de Rotation du Capitole et la ligne des Rangs NAP de votre alliance, ainsi qu'un cadre pour les photos de vos membres. Un intendant vérifie chaque image avant qu'elle ne soit visible par les autres.
-  rules: 'Utilisez les visuels de votre alliance ou ceux du jeu : pas de marque appartenant à une autre alliance, rien d''offensant, pas d''informations personnelles.'
+  rules: 'Utilisez les visuels de votre alliance ou du jeu : pas de branding d''une autre alliance, rien d''offensant, pas d''informations personnelles.'
   left_today: "{left} sur {max} images restantes aujourd'hui pour votre alliance."
-  not_ready: Le téléchargement d'images n'est pas encore activé.
+  not_ready: Les téléchargements d'images ne sont pas encore activés.
   card: Carte de Rotation du Capitole
   wide: Bannière des Rangs NAP
-  frame: Cadre d'avatar d'alliance
-  frame_spec: 'Une bordure dessinée autour des photos de vos membres sur ce site. Créez un PNG carré avec un arrière-plan transparent, 380×380 pixels (au moins 190×190) : laissez le carré central transparent (de 72 à 308 pixels, comme les cadres du jeu) et décorez autour, jusqu''aux bords. Une petite décoration sur le milieu (une guirlande, par exemple) est acceptable.'
+  frame: Cadre d'avatar de l'Alliance
+  frame_spec: 'Une bordure dessinée autour des photos de vos membres sur ce site. Créez un PNG carré avec un fond transparent, 380×380 pixels (au moins 190×190) : laissez le carré central transparent (de 72 à 308 pixels, comme les cadres du jeu) et décorez autour, jusqu''aux bords. Une petite décoration sur le milieu (une guirlande, par exemple) est acceptable.'
   use_frame: Utiliser pour nos membres
-  use_frame_on: Affiché autour de la photo de chaque membre sur le site, à la place de leur cadre en jeu.
-  use_frame_off: 'Désactivé : les membres conservent leurs cadres en jeu sur le site.'
+  use_frame_on: Affiché autour des photos des membres partout sur le site, à la place du cadre standard du jeu. Les membres ayant un cadre spécial en jeu conservent le leur.
+  use_frame_all: Affiché autour de la photo de chaque membre partout sur le site, à la place de tout cadre en jeu, même les spéciaux.
+  frame_all: Également sur les cadres spéciaux
+  use_frame_off: 'Désactivé : les membres conservent leurs cadres du jeu sur le site.'
   frame_title: Vérifier le cadre d'avatar
-  frame_check_ok: 'Visuellement correct : le centre est transparent. Voici comment il apparaîtra autour des photos de vos membres.'
+  frame_check_ok: 'L''apparence est correcte : le milieu est transparent. Voici comment il apparaîtra autour des photos de vos membres.'
   frame_big: Grand
   frame_roster: Effectif
   frame_lists: Listes
-  frame_not_square: Un cadre doit être carré ; cette image fait {width}×{height}.
-  frame_too_small: Cette image ne fait que {width}×{height}. Un cadre nécessite au moins 190×190 pixels (380×380 est préférable).
-  frame_covers: 'Ce cadre recouvre environ {percent}% du centre, là où les photos des membres s''affichent. C''est acceptable si c''est voulu (une guirlande, par exemple) : vérifiez les aperçus ci-dessous avant d''envoyer.'
-  frame_covers_most: 'Ce cadre recouvre environ {percent}% du centre, la majeure partie de la photo de chaque membre serait donc masquée. Vérifiez les aperçus ci-dessous : ne l''envoyez que si c''est ce que vous souhaitez.'
-  frame_not_png: Un cadre d'avatar doit être au format PNG (ou WebP) avec un arrière-plan transparent. Les images JPEG ne peuvent pas être transparentes, elles masqueraient donc les photos de vos membres.
-  frame_no_transparency: Cette image n'a aucune partie transparente, elle s'afficherait donc comme un carré plein sur les photos de vos membres. Enregistrez-la en tant que PNG avec un arrière-plan transparent.
+  frame_not_square: Un cadre doit être carré ; cette image mesure {width}×{height}.
+  frame_too_small: Cette image mesure seulement {width}×{height}. Un cadre nécessite au moins 190×190 pixels (380×380 est préférable).
+  frame_covers: 'Ce cadre recouvre environ {percent}% du centre, là où s''affichent les photos des membres. C''est acceptable si c''est volontaire (une guirlande, par exemple) : vérifiez les aperçus ci-dessous avant l''envoi.'
+  frame_covers_most: 'Ce cadre recouvre environ {percent}% du centre, la majeure partie de la photo de chaque membre serait donc masquée. Vérifiez les aperçus ci-dessous : n''envoyez que si c''est le résultat souhaité.'
+  frame_not_png: Un cadre d'avatar doit être un PNG (ou WebP) avec un fond transparent. Les images JPEG ne peuvent pas être transparentes, elles masqueraient donc les photos de vos membres.
+  frame_no_transparency: Cette image n'a aucune partie transparente, elle s'afficherait donc comme un carré plein sur les photos de vos membres. Enregistrez-la en tant que PNG avec un fond transparent.
   frame_empty: 'Cette image est presque entièrement transparente : il n''y a aucun cadre à afficher.'
-  frame_too_big: Ce cadre fait {kb} Ko une fois enregistré ; le maximum est de 500 Ko. Essayez moins de couleurs ou des détails moins fins.
-  none: Aucune image pour le moment
+  frame_too_big: Ce cadre pèse {kb} Ko une fois enregistré ; le maximum est de 500 Ko. Essayez avec moins de couleurs ou moins de détails.
+  none: Aucune image pour l'instant
   live: En ligne depuis le {when}
   pending: En attente d'un intendant depuis le {when}
   rejected: Rejeté le {when}
-  rejected_reason: 'Rejeté le {when} : “{reason}”'
-  expired: Pas examiné à temps ({when}). Envoyez-le à nouveau.
+  rejected_reason: 'Rejeté le {when} : « {reason} »'
+  expired: Non examiné à temps ({when}). Envoyez-le à nouveau.
   choose: Choisir une image
   replace: Choisir une nouvelle image
   remove: Supprimer
   confirm_remove: Supprimer le {slot} ? Il disparaîtra immédiatement pour tout le monde.
   crop_title: Positionner le {slot}
-  crop_help: Faites glisser pour déplacer. Pincez, faites défiler ou utilisez le curseur pour zoomer. Seul ce qui se trouve à l'intérieur du cadre est envoyé.
+  crop_help: Faites glisser pour déplacer. Pincez, faites défiler ou utilisez le curseur pour zoomer. Seul ce qui est à l'intérieur du cadre est envoyé.
   zoom: Zoom
-  preview_title: À quoi cela ressemblera
+  preview_title: Apparence finale
   preview_phone: Téléphone
   preview_desktop: Ordinateur
   preview_week: Semaine 1 Ven
-  preview_loot: 2 Coffres de Roi
+  preview_loot: 2 Coffres du Roi
   preview_status: NAP Protégé
   send: Envoyer pour examen
   sending: Envoi en cours...

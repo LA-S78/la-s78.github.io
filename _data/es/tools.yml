@@ -928,59 +928,61 @@ image_review:
   done_approved: Aprobado. La imagen ya está activa y la publicación de Discord ha sido actualizada.
   done_rejected: Rechazado. La imagen fue eliminada y la publicación de Discord ha sido actualizada.
 alliance_images:
-  title: Imágenes de la Alianza
+  title: Imágenes de la alianza
   edit: Editar imágenes
   done: "✓ Edición terminada"
-  help: Añade una imagen detrás de la tarjeta de Rotación de Capitolio y la fila de Rangos NAP de tu alianza, y un marco para las fotos de tus miembros. Un administrador revisará cada una antes de que otros la vean.
-  rules: 'Usa el arte propio de tu alianza o el arte del juego: nada de marcas de otras alianzas, nada ofensivo, ni información personal.'
+  help: Añade una imagen detrás de la tarjeta de Rotación del Capitolio y la fila de Rangos NAP de tu alianza, además de un marco para las fotos de tus miembros. Un Supervisor revisará cada una antes de que alguien más pueda verla.
+  rules: 'Usa el arte propio de tu alianza o el arte del juego: sin marcas de otras alianzas, nada ofensivo, ni información personal.'
   left_today: "{left} de {max} imágenes restantes hoy para tu alianza."
-  not_ready: La carga de imágenes aún no está activada.
-  card: Tarjeta de Rotación de Capitolio
+  not_ready: Las subidas de imágenes aún no están habilitadas.
+  card: Tarjeta de Rotación del Capitolio
   wide: Banner de Rangos NAP
-  frame: Marco de avatar de la Alianza
-  frame_spec: 'Un borde que rodea las imágenes de tus miembros en este sitio. Crea un PNG cuadrado con fondo transparente, de 380×380 píxeles (al menos 190×190): deja el cuadrado central transparente (de 72 a 308 píxeles, como los propios marcos del juego) y decora alrededor, hasta los bordes. Una pequeña decoración sobre el centro (una guirnalda, por ejemplo) está bien.'
+  frame: Marco de avatar de alianza
+  frame_spec: 'Un borde que rodea las fotos de tus miembros en este sitio. Crea un PNG cuadrado con fondo transparente, de 380×380 píxeles (mínimo 190×190): deja el cuadrado central transparente (de 72 a 308 píxeles, como los marcos propios del juego) y decora alrededor, hasta los bordes. Una pequeña decoración sobre el centro (como una guirnalda) está bien.'
   use_frame: Usar para nuestros miembros
-  use_frame_on: Se muestra alrededor de la foto de cada miembro en el sitio, reemplazando su marco del juego.
+  use_frame_on: Se muestra alrededor de las fotos de los miembros en todo el sitio, reemplazando el marco básico del juego. Los miembros con un marco especial del juego conservan el suyo.
+  use_frame_all: Se muestra alrededor de la foto de cada miembro en todo el sitio, reemplazando cualquier marco del juego, incluidos los especiales.
+  frame_all: También sobre marcos especiales
   use_frame_off: 'Desactivado: los miembros mantienen sus marcos del juego en el sitio.'
-  frame_title: Verificar el marco de avatar
+  frame_title: Verificar marco de avatar
   frame_check_ok: 'Se ve bien: el centro es transparente. Así es como se verá alrededor de las fotos de tus miembros.'
   frame_big: Grande
-  frame_roster: Plantilla
+  frame_roster: Lista de miembros
   frame_lists: Listas
   frame_not_square: Un marco debe ser cuadrado; esta imagen es de {width}×{height}.
-  frame_too_small: Esta imagen es solo de {width}×{height}. Un marco necesita al menos 190×190 píxeles (380×380 es mejor).
-  frame_covers: 'Este marco cubre aproximadamente el {percent}% del centro, donde aparecen las fotos de los miembros. Está bien si esa es la intención (una guirnalda, por ejemplo): comprueba las vistas previas a continuación antes de enviarlo.'
-  frame_covers_most: 'Este marco cubre aproximadamente el {percent}% del centro, por lo que la mayor parte de la foto de cada miembro quedaría oculta. Comprueba las vistas previas a continuación: envíalo solo si eso es lo que quieres.'
+  frame_too_small: Esta imagen es de solo {width}×{height}. Un marco necesita al menos 190×190 píxeles (380×380 es lo mejor).
+  frame_covers: 'Este marco cubre aproximadamente el {percent}% del centro, donde se muestran las fotos de los miembros. Eso está bien si esa es la intención (como una guirnalda): revisa las vistas previas a continuación antes de enviarlo.'
+  frame_covers_most: 'Este marco cubre aproximadamente el {percent}% del centro, por lo que la mayor parte de la foto de cada miembro quedaría oculta. Revisa las vistas previas a continuación: envíalo solo si eso es lo que quieres.'
   frame_not_png: Un marco de avatar debe ser un PNG (o WebP) con fondo transparente. Las imágenes JPEG no pueden tener transparencia, por lo que cubrirían las fotos de tus miembros.
   frame_no_transparency: Esta imagen no tiene partes transparentes, por lo que se mostraría como un cuadrado sólido sobre las fotos de tus miembros. Guárdala como un PNG con fondo transparente.
   frame_empty: 'Esta imagen es casi totalmente transparente: no hay marco que mostrar.'
-  frame_too_big: Este marco pesa {kb} KB una vez guardado; el máximo es 500 KB. Prueba con menos colores o menos detalles finos.
-  none: Sin imagen aún
-  live: En vivo desde el {when}
-  pending: Esperando a un administrador desde el {when}
-  rejected: Rechazada el {when}
-  rejected_reason: 'Rechazada el {when}: “{reason}”'
-  expired: No se revisó a tiempo ({when}). Envíala de nuevo.
+  frame_too_big: Este marco pesa {kb} KB al guardarlo; el límite es 500 KB. Prueba con menos colores o menos detalle fino.
+  none: Aún sin imagen
+  live: En vivo desde {when}
+  pending: Esperando a un Supervisor desde {when}
+  rejected: Rechazada {when}
+  rejected_reason: 'Rechazada {when}: “{reason}”'
+  expired: No revisada a tiempo ({when}). Envíala de nuevo.
   choose: Elegir una imagen
   replace: Elegir una imagen nueva
   remove: Eliminar
-  confirm_remove: "¿Eliminar {slot}? Desaparecerá para todos al instante."
+  confirm_remove: "¿Eliminar {slot}? Desaparecerá para todos de inmediato."
   crop_title: Posicionar {slot}
-  crop_help: Arrastra para mover. Pellizca, desplázate o usa el control deslizante para hacer zoom. Solo se enviará lo que esté dentro del marco.
+  crop_help: Arrastra para mover. Pellizca, desplázate o usa el deslizador para hacer zoom. Solo se enviará lo que esté dentro del marco.
   zoom: Zoom
   preview_title: Cómo se verá
   preview_phone: Teléfono
   preview_desktop: Escritorio
   preview_week: Semana 1 Vie
   preview_loot: 2 Cofres de Rey
-  preview_status: Protección NAP
+  preview_status: Protegido por NAP
   send: Enviar para revisión
   sending: Enviando…
   cancel: Cancelar
-  sent: Enviada. Un administrador la revisará; aparecerá una vez aprobada.
+  sent: Enviado. Un Supervisor la revisará; aparecerá una vez aprobada.
   not_image: Ese archivo no es una imagen que este navegador pueda abrir. Prueba con un JPEG o PNG.
   too_small: Esa imagen es bastante pequeña ({width}×{height}); puede verse borrosa. Aún puedes enviarla.
-  load_failed: No se pudo abrir la imagen.
+  load_failed: La imagen no pudo ser abierta.
 stats:
   title: Estadísticas NAP
   views_label: Qué mostrar
