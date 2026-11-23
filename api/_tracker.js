@@ -450,11 +450,14 @@ const TITLE_ORDER = ['overseer', 'militarist', 'diplomat', 'recruiter'];
  * An alliance's leaders for the public standings cards (owner request, 2026-11-23): the R5,
  * then R4s with a title (Overseer, Militarist, Diplomat, Recruiter), then other R4s by Might.
  * Names and pictures only (no player IDs): [{ name, rank, title, avatar, frame, tag }].
+ * `titles`: { uid: "R4 · Diplomat" } kept from live lookups (api/_stats.js readTitles).
  */
-export function allianceLeaders(members, tag) {
+export function allianceLeaders(members, tag, titles = {}) {
   const out = [];
   for (const m of members || []) {
-    const [rank, title = ''] = String(m.rank || '').split(/\s*·\s*/);
+    // The cached member list says only "R4": a title kept from a live lookup fills it in
+    const label = m.rank === 'R4' && titles[m.uid] ? titles[m.uid] : m.rank;
+    const [rank, title = ''] = String(label || '').split(/\s*·\s*/);
     if (rank !== 'R5' && rank !== 'R4') continue;
     out.push({
       name: m.name,
