@@ -771,6 +771,12 @@ alliance_planner:
   stat_might: "Might"
   stat_members: "members"
   stat_level: "Level {n}"
+  # The opened card's leaders (the game's R4 titles; Overseer and Militarist renamed by the owner)
+  leaders: "Leaders"
+  leader_overseer: "Goddess"
+  leader_militarist: "God of War"
+  leader_diplomat: "Diplomat"
+  leader_recruiter: "Recruiter"
   tracker_credit_before: "Badges and numbers from the"
   external: "External"
   revoke_nap: "Revoke NAP"

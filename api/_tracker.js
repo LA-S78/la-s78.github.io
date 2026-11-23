@@ -442,3 +442,34 @@ export async function fetchQuota({ use = 'steward', env = process.env, fetchImpl
     return null;
   }
 }
+
+/** R4 titles in the order the standings cards show them (the game's own words, lower case). */
+const TITLE_ORDER = ['overseer', 'militarist', 'diplomat', 'recruiter'];
+
+/**
+ * An alliance's leaders for the public standings cards (owner request, 2026-11-23): the R5,
+ * then R4s with a title (Overseer, Militarist, Diplomat, Recruiter), then other R4s by Might.
+ * Names and pictures only (no player IDs): [{ name, rank, title, avatar, frame, tag }].
+ */
+export function allianceLeaders(members, tag) {
+  const out = [];
+  for (const m of members || []) {
+    const [rank, title = ''] = String(m.rank || '').split(/\s*·\s*/);
+    if (rank !== 'R5' && rank !== 'R4') continue;
+    out.push({
+      name: m.name,
+      rank,
+      title: title.trim().toLowerCase(),
+      avatar: m.avatar || null,
+      frame: m.frame || null,
+      tag,
+      power: m.power || 0,
+    });
+  }
+  const order = (l) =>
+    l.rank === 'R5' ? 0 : TITLE_ORDER.includes(l.title) ? 1 + TITLE_ORDER.indexOf(l.title) : 9;
+  return out
+    .sort((a, b) => order(a) - order(b) || b.power - a.power)
+    .slice(0, 12)
+    .map(({ power: _p, ...l }) => l);
+}
