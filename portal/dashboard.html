@@ -1103,6 +1103,19 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
               <option value="sum"${o.stacked === 'sum' ? ' selected' : ''}>${e('stacked_totals')}</option>
               <option value="percent"${o.stacked === 'percent' ? ' selected' : ''}>${e('stacked_percent')}</option>
             </select>`;
+          // The order of the bars (by their total) and how many (2026-11-23): e.g. the lowest 10
+          if (!o.swap) {
+            html += `<div class="dash-two"><div><label for="ed-order">${e('order')}</label>
+              <select id="ed-order" data-site-select>
+                <option value=""${!o.order ? ' selected' : ''}>${e('order_sheet')}</option>
+                <option value="desc"${o.order === 'desc' ? ' selected' : ''}>${e('order_desc')}</option>
+                <option value="asc"${o.order === 'asc' ? ' selected' : ''}>${e('order_asc')}</option>
+              </select></div><div><label for="ed-limit">${e('limit')}</label>
+              <select id="ed-limit" data-site-select>${[0, 5, 10, 15, 20, 25, 50]
+                .map((n) => `<option value="${n}"${(o.limit || 0) === n ? ' selected' : ''}>${n ? n : e('limit_all')}</option>`)
+                .join('')}</select></div></div>`;
+            if (o.order === 'asc') html += `<p class="dash-help">${e('order_asc_help')}</p>`;
+          }
           html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> ${e(o.stacked ? 'vertical' : 'vertical_leaderboard')}</label>`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${ic('traffic')}${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
           if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${ic('updown')}${e('traffic_reverse')}</label>`;
@@ -1153,6 +1166,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         }
         if ($('ed-vertical')) o.vertical = $('ed-vertical').checked;
         if ($('ed-stacked')) o.stacked = $('ed-stacked').value || undefined;
+        if ($('ed-order')) o.order = $('ed-order').value || undefined;
+        if ($('ed-limit')) o.limit = Number($('ed-limit').value) || undefined;
         if ($('ed-scale')) o.scale = $('ed-scale').checked;
         if ($('ed-reverse') && o.scale) o.reverse = $('ed-reverse').checked;
         else delete o.reverse;
