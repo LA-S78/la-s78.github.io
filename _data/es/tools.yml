@@ -102,18 +102,20 @@ rewards_card:
   buyout_cost: 'Compra: {amount} {chest} en cada set'
   buyout_cost_help: Financiando a la alianza desplazada esta semana
 roster:
-  title: Lista de la alianza
+  title: Lista de miembros de la alianza
   summary: "{n} miembros · {might} Poder"
+  show: Mostrar miembros
+  hide: Ocultar miembros
   search: Buscar nombres o IDs...
   sort_label: Ordenar por
   sort_power: Poder
   sort_name: Nombre
   sort_rank: Rango
   sanctuary_lv: Santuario {n}
-  copy_id: Copiar este ID de jugador
+  copy_id: Copiar ID de este jugador
   copied: Copiado
   unavailable: La lista de miembros no se puede cargar en este momento. Inténtalo de nuevo más tarde.
-  credit_before: Datos del jugador desde
+  credit_before: Datos de jugadores del
   sort_tech: Investigación
   sort_help: Ayuda
   tech_title: Investigación de alianza donada hoy
@@ -122,11 +124,11 @@ roster:
   refresh: Actualizar
   refresh_left: "{n} restantes"
   refreshing: Actualizando...
-  refresh_help: 'Obtén datos en vivo del juego. Compartidos por los líderes de tu alianza: {n} de {max} restantes hoy, uno cada 10 minutos.'
-  refresh_wait: 'Actualizado hace un momento: siguiente en {n} min.'
-  refresh_none: Sin actualizaciones restantes hoy. Se reinician en el reinicio diario (00:00 GT).
-  daily_as_of: Investigación y ayuda desde el reinicio de hoy (00:00 GT), a las {time}
-  daily_old: 'Investigación y ayuda desde antes del reinicio de hoy: última lectura {time}'
+  refresh_help: 'Obtén cifras en tiempo real del juego. Compartido por los líderes de tu alianza: {n} de {max} restantes hoy, una cada 10 minutos.'
+  refresh_wait: 'Actualizado hace un momento: la siguiente en {n} min.'
+  refresh_none: No quedan actualizaciones hoy. Se reinician en el reinicio diario (00:00 GT).
+  daily_as_of: Investigación y ayuda desde el reinicio de hoy (00:00 GT), al {time}
+  daily_old: 'Investigación y ayuda antes del reinicio de hoy: última lectura {time}'
   daily_unknown: 'Investigación y ayuda: hora de lectura desconocida'
 caravan:
   title: Rotativo de Caravanas
@@ -181,49 +183,51 @@ chart_editor:
   type_progress: Progreso
   type_table: Tabla
   title: Título
-  title_example: p. ej. Puntuaciones de Duelo de Alianzas
+  title_example: p. ej., Puntuaciones del Duelo de Alianzas
   note: Explicación
-  note_example: p. ej. Mínimo 15M de puntos de Duelo requeridos para el reinicio del viernes
+  note_example: p. ej., Mínimo 15M de puntos de Duelo necesarios para el reinicio del viernes
   who_sees: Quién puede verlo
   officers_only: Solo oficiales (R4/R5)
   all_members: Todos los miembros de la alianza
   data: Datos
   data_source: De dónde provienen los datos
   paste: Pegar una tabla
-  link: Enlace a Google Sheet / Doc
+  link: Enlace de Google Sheet / Doc
   paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
   tab: Pestaña
   order: Orden
   order_sheet: Como en la hoja
-  order_desc: El mayor primero
-  order_asc: El menor primero
-  order_asc_help: El menor primero omite las filas sin nada en las columnas mostradas (aquellos que no participaron).
+  order_desc: Mayor primero
+  order_asc: Menor primero
+  order_asc_help: Menor primero excluye las filas vacías en las columnas mostradas (aquellos que no participaron).
   limit: Mostrar
   limit_all: Todos
-  tabs_on: Mismo rango de varias pestañas (una pestaña por semana, por ejemplo)
+  tabs_on: Mismo rango de varias pestañas (una por semana, por ejemplo)
   tabs_pattern: Nombres de pestañas como
-  tabs_count: Pestañas más recientes a leer
+  tabs_count: Nuevas pestañas a leer
   tabs_match: "{n} pestañas coinciden: {names}."
-  tabs_reads: Lee las {n} más recientes.
-  tabs_none: 'No hay pestañas que coincidan. # es cualquier número, * es cualquier cosa: "#/# *" coincide con "11/09 K71 QRT".'
-  tabs_read: Leer {n} pestañas; la más reciente es {newest}.
+  tabs_reads: Lee las {n} más nuevas.
+  tabs_none: 'Ninguna pestaña coincide. # es cualquier número, * es cualquier cosa: "#/# *" coincide con "11/09 K71 QRT".'
+  tabs_read: Leídas {n} pestañas; la más nueva es {newest}.
   tabs_skipped: 'No se pudo leer: {names}.'
   view_start: Los espectadores comienzan en
   view_help: Los espectadores pueden cambiar entre las vistas sobre el gráfico.
-  compare: 'Permitir a los espectadores comparar: dos nombres, o un nombre con los 5 mejores o peores'
-  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina y luego la opuesta). La primera fila es el encabezado. Luego toca una letra de columna para convertirla en etiquetas, o una columna numérica.'
+  compare: 'Permitir comparar: dos nombres, o un nombre con los 5 mejores o peores'
+  compare_pie: Permitir comparar dos nombres (o los 5 mejores o peores) como un gráfico circular propio
+  compare_line: Permitir comparar las líneas de dos nombres (o un nombre con los 5 mejores o peores de cada semana)
+  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina y luego la opuesta). La primera fila es el encabezado. Luego toca una letra de columna para convertirla en etiquetas o columna de números.'
   grid_tap_second: Ahora toca la esquina opuesta de la tabla.
-  grid_mode: Hacer clic en una letra de columna establece
+  grid_mode: Al hacer clic en una letra de columna se establece
   grid_labels: Etiquetas
   grid_numbers: Números
-  grid_more: Solo se muestran aquí las primeras 200 filas y 60 columnas; un rango puede ir más allá.
+  grid_more: Solo se muestran aquí las primeras 200 filas y 60 columnas; un rango puede ser mayor.
   range: Rango, p. ej. A1:D20 (opcional)
   doc_table: Qué tabla en el Doc (1, 2…)
-  load: "⤓ Cargar de Google"
+  load: "⤓ Cargar desde Google"
   loading: "⤓ Cargando…"
-  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede leer” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene los últimos números más tarde.'
-  load_first: Carga la hoja primero (⤓ Cargar de Google).
+  link_help: 'Sheets: Compartir → "Cualquier persona con el enlace puede ver" (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. "Sincronizar ahora" en la tarjeta obtiene los últimos números más tarde.'
+  load_first: Carga la hoja primero (⤓ Cargar desde Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
   size: "{rows} × {columns}"
@@ -231,7 +235,7 @@ chart_editor:
   rows_other: "{n} filas"
   columns_one: "{n} columna"
   columns_other: "{n} columnas"
-  at_most_500: "(máximo 500)"
+  at_most_500: "(500 como máximo)"
   labels: Nombres (etiquetas)
   numbers_to_show: Números a mostrar
   labels_swapped: Nombres (una línea o barra cada uno)
@@ -239,9 +243,9 @@ chart_editor:
   swap_bar: "⇄ Intercambiar filas y columnas: las columnas como barras, un color por fila"
   swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a lo largo de las semanas.'
   rows_to_draw: Filas a dibujar (hasta 6)
-  rows_filter: Buscar un nombre…
+  rows_filter: Encontrar un nombre…
   rows_count: "{n} de 6 elegidos"
-  columns_along: Columnas a lo largo de la parte inferior (en el orden de la hoja)
+  columns_along: Columnas a lo largo de la parte inferior (en orden de hoja)
   numbers: Números
   several_columns: Varias columnas numéricas
   side_by_side: Lado a lado
@@ -250,29 +254,29 @@ chart_editor:
   vertical: Barras verticales
   vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
   traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde'
-  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, los mejores en verde'
-  traffic_reverse: 'Invertido: bajo es bueno (verde), alto es malo (rojo)'
+  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, el primero verde'
+  traffic_reverse: 'Invertir: bajo es bueno (verde), alto es malo (rojo)'
   traffic_target: Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo
-  traffic_target_reverse: 'Invertido: cuanto más lejos por debajo del objetivo, mejor'
-  donut: Rosquilla (anillo)
+  traffic_target_reverse: 'Invertir: más lejos por debajo del objetivo es mejor'
+  donut: Rosquilla
   target: Objetivo para todos
-  target_example: p. ej. 15M o 15000000
+  target_example: p. ej., 15M o 15000000
   target_column: "…o una columna de objetivos"
   use_number_above: "(usar el número de arriba)"
   highlight_where: Resaltar filas donde
-  no_highlight: "(sin resaltado)"
+  no_highlight: "(sin resaltar)"
   at_least: es al menos
-  at_least_example: p. ej. 300M
+  at_least_example: p. ej., 300M
 charts:
   column: Columna {n}
-  no_numbers: No hay números para graficar en la columna elegida.
-  line_two_rows: Un gráfico de líneas necesita al menos dos filas.
-  line_two_columns: Un gráfico de líneas necesita al menos dos columnas en la parte inferior.
-  no_positive: No hay números positivos para graficar en la columna elegida.
+  no_numbers: No hay números que graficar en la columna elegida.
+  line_two_rows: Una línea necesita al menos dos filas.
+  line_two_columns: Una línea necesita al menos dos columnas a lo largo de la parte inferior.
+  no_positive: No hay números positivos que graficar en la columna elegida.
   no_targets: No hay números (o objetivos) para comparar.
   no_table: Aún no hay tabla.
   unknown_type: Tipo de gráfico desconocido.
-  draw_failed: No se pudo dibujar este gráfico ({error}).
+  draw_failed: Este gráfico no se pudo dibujar ({error}).
   other: Otro
   value: Valor
   total: Total
@@ -281,19 +285,19 @@ charts:
   value_of_target: "{value} de {target}"
   to_go: 'Faltan: {value}'
   target_reached: Objetivo alcanzado ✓
-  done: "✓ Listo"
+  done: "✓ Hecho"
   reached_target: "{done} de {total} alcanzaron el objetivo"
   search: Buscar…
   search_label: Buscar en esta tabla
-  matching: "{n} coincidencia"
+  matching: "{n} coincidencias"
   show_all: Mostrar los {n}
   show_all_rows: Mostrar las {n} filas
   show_fewer: Mostrar menos
   first_rows: Mostrando las primeras {shown} de {n} filas.
-  hint_bar: Toca o pasa el cursor sobre una barra
-  hint_bar_key: Toca o pasa el cursor sobre una barra. Toca un nombre en la leyenda para ver solo ese.
+  hint_bar: Toca o pasa el ratón sobre una barra
+  hint_bar_key: Toca o pasa el ratón sobre una barra. Toca un nombre en la clave para ver solo ese.
   views: Vistas
-  view_latest: Pestaña más reciente
+  view_latest: Pestaña más nueva
   view_weeks: Totales por pestaña
   view_player: Un nombre por pestaña
   view_pick: Nombre a mostrar
@@ -301,19 +305,20 @@ charts:
   view_chart: Gráfico
   view_compare: Comparar
   search_names: Escribe un nombre…
-  no_match: No hay nombres que coincidan.
+  no_match: Ningún nombre coincide.
   view_tab: Pestaña a mostrar
   compare_first: Primer nombre
   compare_second: Segundo nombre
   compare_top: Top {n} (promedio)
-  compare_bottom: Últimos {n} (promedio)
+  compare_bottom: Bottom {n} (promedio)
   pair_left: 'Izquierda: {name}'
-  pair_right: 'Derecha (atenuado): {name}'
+  share_of_column: "{name}: {share} del total"
+  pair_right: 'Derecha (desvanecido): {name}'
   flip_to_asc: "⇅ Menor primero"
   flip_to_desc: "⇅ Mayor primero"
-  hint_line: Toca o pasa el cursor sobre una semana
-  hint_pie: Toca o pasa el cursor sobre una porción
-  hint_progress: Toca o pasa el cursor sobre una fila
+  hint_line: Toca o pasa el ratón sobre una semana
+  hint_pie: Toca o pasa el ratón sobre una porción
+  hint_progress: Toca o pasa el ratón sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas
   name_ok: En la lista de miembros de [{tag}]
@@ -980,16 +985,17 @@ stats:
   title: Estadísticas NAP
   views_label: Qué mostrar
   view_growth: Crecimiento NAP
-  view_players: Mejores jugadores
+  chart_hint: Toca o pasa el ratón sobre un día para leerlo
+  view_players: Jugadores destacados
   view_achievements: Logros
-  view_lookup: Búsqueda de jugador
-  growth_title: Crecimiento de la Alianza
+  view_lookup: Buscar jugador
+  growth_title: Crecimiento de la alianza
   growth_members: "{n} miembros"
   growth_more: Más en la
   growth_link: Pestaña de estadísticas
   lookup_search: Nombre del jugador...
   lookup_hint: Solo jugadores NAP, de la captura diaria. Escribe al menos 2 letras de su nombre.
-  lookup_none: No hay coincidencias de jugadores NAP.
+  lookup_none: Ningún jugador NAP coincide.
   lookup_place: "#{place} de {of} jugadores NAP por Poder"
   lookup_kills: Bajas
   lookup_level: Santuario
@@ -1004,42 +1010,42 @@ stats:
   ach_climb_month: Mayor ascenso de Santuario este mes
   ach_away: Lejos de la colmena
   ach_away_help: Más días este mes a más de 50 casillas de la colmena de su alianza (donde están la mayoría de sus miembros).
-  ach_none: Aún no se han recolectado suficientes días.
+  ach_none: Aún no hay suficientes días recopilados.
   value_kills: "{n} bajas"
   value_levels_one: "+1 nivel"
   value_levels_other: "+{n} niveles"
   value_days_one: 1 día
   value_days_other: "{n} días"
   list_label: Qué lista
-  list_strongest: Más fuerte
-  list_week: Ganancia semanal
-  list_month: Ganancia mensual
+  list_strongest: Más fuertes
+  list_week: Ganado esta semana
+  list_month: Ganado este mes
   filter_label: Alianza
   filter_all: Todas las alianzas NAP
-  players_none: No hay jugadores que mostrar aún.
-  players_wait_week: Las ganancias de esta semana se mostrarán una vez que se recolecte una captura anterior a este lunes.
-  players_wait_month: Las ganancias de un mes se mostrarán una vez que se haya recopilado un mes de días.
-  players_as_of: A partir de la captura previa al reinicio de las {date}.
+  players_none: Aún no hay jugadores que mostrar.
+  players_wait_week: Las ganancias de esta semana se muestran una vez que se ha recopilado una captura anterior a este lunes.
+  players_wait_month: Las ganancias de un mes se muestran una vez que se ha recopilado un mes de días.
+  players_as_of: Al momento de la captura antes del reinicio del {date}.
   week_note: Las semanas van de lunes a domingo (Game Time); los registros semanales se reinician cada lunes.
   col_player: Jugador
   col_gain: Ganancia
-  show_more: Mostrar todos los {n}
+  show_more: Mostrar los {n}
   range_label: Lapso de tiempo
   range_week: 1 semana
   range_month: 1 mes
-  range_all: Todos
+  range_all: Todo
   loading: Cargando estadísticas...
-  failed: No se pueden cargar las estadísticas en este momento.
+  failed: Las estadísticas no se pueden cargar en este momento.
   collecting: Las estadísticas se recopilan una vez al día, justo antes del reinicio diario (00:00 GT). Los gráficos se completan día a día.
-  since: Recopilado diariamente desde {date}.
-  one_day: 'Solo se ha recopilado un día hasta ahora: el gráfico comienza cuando hay dos.'
+  since: Recopilado diariamente desde el {date}.
+  one_day: 'Solo se ha recopilado un día hasta ahora: el gráfico comienza una vez que hay dos.'
   col_alliance: Alianza
   col_might: Poder
   col_week: 7 días
   col_month: 30 días
   no_number: "—"
   show_hide: Toca una alianza para mostrar u ocultar su línea.
-  credit_before: Números desde el
+  credit_before: Números del
 steward:
   tidy_title: 'IDs de Alianza: limpieza'
   tidy_help: 'Todo se almacena ahora por ID de alianza. Los movimientos dejaron {gist} archivos de respaldo y {dashboards} archivos antiguos de panel en el Gist. Elimínalos cuando estés listo: el Gist conserva sus revisiones anteriores. Los archivos de respaldo de Stats {stats} se conservan (el almacén Blob no tiene revisiones).'
