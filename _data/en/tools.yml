@@ -308,6 +308,7 @@ charts:
   matching: "{n} matching"
   show_all: "Show all {n}"
   show_all_rows: "Show all {n} rows"
+  show_fewer: "Show fewer"
   first_rows: "Showing the first {shown} of {n} rows."
   hint_bar: "Tap or hover over a bar"
   hint_bar_key: "Tap or hover over a bar. Tap a name in the key to see only that one."
