@@ -121,7 +121,7 @@
       ${
         // Over special frames too (owner, 2026-11-23): by default only the game's plain frame
         ctx.images.frameOn
-          ? `<label class="dash-check dash-sub ai-use-frame"><input type="checkbox" data-ai="frame-all"${ctx.images.frameAll ? ' checked' : ''}> ${esc(t('frame_all'))}</label>`
+          ? `<label class="dash-check ai-use-frame"><input type="checkbox" data-ai="frame-all"${ctx.images.frameAll ? ' checked' : ''}> ${esc(t('frame_all'))}</label>`
           : ''
       }
       <p class="dash-muted dash-small">${esc(t(!ctx.images.frameOn ? 'use_frame_off' : ctx.images.frameAll ? 'use_frame_all' : 'use_frame_on'))}</p>`

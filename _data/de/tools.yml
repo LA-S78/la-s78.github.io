@@ -930,45 +930,45 @@ image_review:
 alliance_images:
   title: Allianz-Bilder
   edit: Bilder bearbeiten
-  done: "✓ Bearbeitung abgeschlossen"
-  help: Füge ein Bild hinter die Capitol Rotation-Karte deiner Allianz und die NAP Ranks-Zeile ein, sowie einen Rahmen für die Bilder deiner Mitglieder. Ein Steward prüft jedes Bild, bevor es für andere sichtbar wird.
-  rules: 'Verwende die eigene Grafik deiner Allianz oder In-Game-Grafiken: kein Branding anderer Allianzen, keine anstößigen Inhalte, keine persönlichen Daten.'
+  done: "✓ Bearbeitung fertig"
+  help: Füge ein Bild hinter die Capitol-Rotationskarte deiner Allianz und die Zeile für NAP Ranks sowie einen Rahmen für die Bilder deiner Mitglieder hinzu. Ein Steward überprüft jedes Bild, bevor es jemand anderes sieht.
+  rules: 'Verwende die eigenen Grafiken deiner Allianz oder In-Game-Grafiken: kein Branding anderer Allianzen, nichts Anstößiges, keine persönlichen Informationen.'
   left_today: "{left} von {max} Bildern heute für deine Allianz übrig."
-  not_ready: Das Hochladen von Bildern ist noch nicht aktiviert.
-  card: Capitol Rotation-Karte
-  wide: NAP Ranks-Banner
+  not_ready: Das Hochladen von Bildern ist noch nicht freigeschaltet.
+  card: Capitol-Rotationskarte
+  wide: NAP Ranks Banner
   frame: Allianz-Avatarrahmen
-  frame_spec: 'Ein Rand, der auf dieser Seite um die Bilder deiner Mitglieder gezeichnet wird. Erstelle ein quadratisches PNG mit transparentem Hintergrund, 380×380 Pixel (mindestens 190×190): Lass das mittlere Quadrat transparent (von 72 bis 308 Pixel, wie die eigenen Rahmen des Spiels) und verziere den Bereich darum bis zu den Rändern. Eine kleine Verzierung über der Mitte (z. B. eine Girlande) ist in Ordnung.'
+  frame_spec: 'Ein Rahmen, der auf dieser Seite um die Bilder deiner Mitglieder gezeichnet wird. Erstelle ein quadratisches PNG mit transparentem Hintergrund, 380×380 Pixel (mindestens 190×190): Lass das mittlere Quadrat transparent (von 72 bis 308 Pixel, wie die eigenen Rahmen des Spiels) und dekoriere darum herum bis zu den Kanten. Eine kleine Dekoration über der Mitte (z. B. eine Girlande) ist in Ordnung.'
   use_frame: Für unsere Mitglieder verwenden
-  use_frame_on: Wird überall auf der Seite um die Mitgliederbilder anstelle des einfachen Rahmens des Spiels angezeigt. Mitglieder mit einem speziellen In-Game-Rahmen behalten ihren.
-  use_frame_all: Wird überall auf der Seite um jedes Mitgliederbild anstelle von jedem In-Game-Rahmen angezeigt, auch bei speziellen.
-  frame_all: Auch über speziellen Rahmen
+  use_frame_on: Wird überall auf der Seite um die Bilder der Mitglieder angezeigt, anstelle des einfachen Rahmens des Spiels. Mitglieder mit einem speziellen In-Game-Rahmen behalten ihren.
+  use_frame_all: Wird überall auf der Seite um jedes Mitgliedsbild angezeigt, anstelle jedes In-Game-Rahmens, auch bei speziellen.
   use_frame_off: 'Aus: Mitglieder behalten ihre In-Game-Rahmen auf der Seite.'
-  frame_title: Avatarrahmen prüfen
-  frame_check_ok: 'Sieht richtig aus: Die Mitte ist transparent. So wird er um die Bilder deiner Mitglieder aussehen.'
+  frame_all: Auch über speziellen Rahmen
+  frame_title: Avatarrahmen überprüfen
+  frame_check_ok: 'Sieht richtig aus: Die Mitte ist transparent. So wird es um die Bilder deiner Mitglieder aussehen.'
   frame_big: Groß
-  frame_roster: Kader
+  frame_roster: Roster
   frame_lists: Listen
   frame_not_square: Ein Rahmen muss quadratisch sein; dieses Bild ist {width}×{height}.
   frame_too_small: Dieses Bild ist nur {width}×{height}. Ein Rahmen benötigt mindestens 190×190 Pixel (380×380 ist am besten).
-  frame_covers: 'Dieser Rahmen verdeckt etwa {percent}% der Mitte, wo die Bilder der Mitglieder angezeigt werden. Das ist in Ordnung, wenn es beabsichtigt ist (z. B. eine Girlande): Prüfe die Vorschauen unten, bevor du es sendest.'
-  frame_covers_most: 'Dieser Rahmen verdeckt etwa {percent}% der Mitte, sodass ein Großteil des Bildes jedes Mitglieds verdeckt wäre. Prüfe die Vorschauen unten: Sende es nur, wenn das so gewünscht ist.'
+  frame_covers: 'Dieser Rahmen deckt etwa {percent}% der Mitte ab, wo die Bilder der Mitglieder zu sehen sind. Das ist in Ordnung, wenn es beabsichtigt ist (z. B. eine Girlande): Überprüfe die Vorschauen unten, bevor du es abschickst.'
+  frame_covers_most: 'Dieser Rahmen deckt etwa {percent}% der Mitte ab, sodass der Großteil jedes Mitgliedsbildes verdeckt wäre. Überprüfe die Vorschauen unten: Sende es nur ab, wenn das genau das ist, was du willst.'
   frame_not_png: Ein Avatarrahmen muss ein PNG (oder WebP) mit transparentem Hintergrund sein. JPEG-Bilder können nicht transparent sein, daher würden sie die Bilder deiner Mitglieder verdecken.
-  frame_no_transparency: Dieses Bild hat keine transparenten Teile, daher würde es als einfarbiges Quadrat über den Bildern deiner Mitglieder erscheinen. Speichere es als PNG mit transparentem Hintergrund.
-  frame_empty: 'Dieses Bild ist fast vollständig transparent: Es gibt keinen Rahmen, der angezeigt werden könnte.'
-  frame_too_big: Dieser Rahmen ist {kb} KB groß, nachdem er gespeichert wurde; das Limit sind 500 KB. Versuche es mit weniger Farben oder weniger feinen Details.
+  frame_no_transparency: Dieses Bild hat keine transparenten Bereiche, daher würde es als massives Quadrat über den Bildern deiner Mitglieder erscheinen. Speichere es als PNG mit transparentem Hintergrund.
+  frame_empty: 'Dieses Bild ist fast vollständig transparent: Es gibt keinen Rahmen zum Anzeigen.'
+  frame_too_big: Dieser Rahmen ist nach dem Speichern {kb} KB groß; das Maximum beträgt 500 KB. Versuche es mit weniger Farben oder weniger feinen Details.
   none: Noch kein Bild
   live: Live seit {when}
   pending: Wartet seit {when} auf einen Steward
   rejected: Abgelehnt {when}
   rejected_reason: 'Abgelehnt {when}: „{reason}“'
-  expired: Nicht rechtzeitig geprüft ({when}). Sende es erneut.
+  expired: Nicht rechtzeitig überprüft ({when}). Sende es erneut.
   choose: Bild auswählen
   replace: Neues Bild auswählen
   remove: Entfernen
-  confirm_remove: Den {slot} entfernen? Er verschwindet sofort für alle.
-  crop_title: "{slot} positionieren"
-  crop_help: Zum Verschieben ziehen. Zum Zoomen kneifen, scrollen oder den Schieberegler benutzen. Nur was innerhalb des Rahmens ist, wird gesendet.
+  confirm_remove: Das {slot} entfernen? Es verschwindet sofort für alle.
+  crop_title: Positioniere {slot}
+  crop_help: Ziehen zum Bewegen. Zoomen durch Zusammenziehen, Scrollen oder den Schieberegler. Nur was innerhalb des Rahmens ist, wird gesendet.
   zoom: Zoom
   preview_title: So wird es aussehen
   preview_phone: Telefon
@@ -976,12 +976,12 @@ alliance_images:
   preview_week: Woche 1 Fr
   preview_loot: 2 Königstruhen
   preview_status: NAP Geschützt
-  send: Zur Prüfung senden
-  sending: Senden…
+  send: Zur Überprüfung senden
+  sending: Senden...
   cancel: Abbrechen
-  sent: Gesendet. Ein Steward wird es prüfen; es erscheint nach der Genehmigung.
-  not_image: Diese Datei ist kein Bild, das dieser Browser öffnen kann. Versuche es mit einem JPEG oder PNG.
-  too_small: Dieses Bild ist ziemlich klein ({width}×{height}); es könnte unscharf aussehen. Du kannst es trotzdem senden.
+  sent: Gesendet. Ein Steward wird es überprüfen; es erscheint, sobald es genehmigt wurde.
+  not_image: Diese Datei ist kein Bild, das der Browser öffnen kann. Versuche es mit einem JPEG oder PNG.
+  too_small: Das Bild ist recht klein ({width}×{height}); es könnte unscharf aussehen. Du kannst es trotzdem senden.
   load_failed: Das Bild konnte nicht geöffnet werden.
 stats:
   title: NAP-Statistiken

@@ -930,57 +930,57 @@ image_review:
 alliance_images:
   title: İttifak görselleri
   edit: Görselleri düzenle
-  done: "✓ Düzenleme bitti"
-  help: İttifakınızın Capitol Rotation kartının ve NAP Ranks satırının arkasına bir resim ve üyelerinizin resimleri için bir çerçeve ekleyin. Her biri, başkaları görmeden önce bir Steward tarafından kontrol edilir.
-  rules: 'İttifakınızın kendi çizimlerini veya oyun içi çizimleri kullanın: başka bir ittifakın markası, saldırgan içerik veya kişisel bilgiler yasaktır.'
-  left_today: Bugün ittifakınız için {left} / {max} görsel hakkınız kaldı.
+  done: "✓ Düzenleme tamamlandı"
+  help: İttifakınızın Capitol Rotation kartının ve NAP Ranks satırının arkasına bir resim ve üyelerinizin resimleri için bir çerçeve ekleyin. Bir yetkili (Steward), herkes görmeden önce her birini kontrol eder.
+  rules: 'İttifakınızın kendi sanatını veya oyun içi sanatı kullanın: başka bir ittifakın markasını, saldırgan bir içeriği veya kişisel bilgileri kullanmayın.'
+  left_today: İttifakınızın bugün için {left} / {max} görsel hakkı kaldı.
   not_ready: Görsel yüklemeleri henüz açılmadı.
   card: Capitol Rotation kartı
-  wide: NAP Ranks afişi
+  wide: NAP Ranks başlığı
   frame: İttifak avatar çerçevesi
-  frame_spec: 'Sitede üyelerinizin resimlerinin etrafına çizilen bir kenarlık. Şeffaf arka plana sahip kare bir PNG oluşturun, 380×380 piksel (en az 190×190): orta kısmı şeffaf bırakın (oyunun kendi çerçeveleri gibi 72 ila 308 piksel arası) ve çevresini kenarlara kadar süsleyin. Ortasının üzerinde küçük bir süsleme (örneğin bir çelenk) sorun olmaz.'
+  frame_spec: 'Bu sitedeki üyelerinizin resimlerinin etrafına çizilen bir kenarlık. Şeffaf arka plana sahip kare bir PNG yapın, 380×380 piksel (en az 190×190): orta kareyi şeffaf bırakın (oyunun kendi çerçeveleri gibi 72 ila 308 piksel arası) ve kenarlara kadar süsleyin. Ortasının üzerinde küçük bir süsleme (örneğin bir çelenk) sorun olmaz.'
   use_frame: Üyelerimiz için kullan
-  use_frame_on: Oyunun sade çerçevesi yerine sitede her yerde üyelerin resimlerinin etrafında gösterilir. Özel oyun içi çerçevesi olan üyeler kendinkini korur.
-  use_frame_all: Oyun içi özel çerçeveler dahil her yerde, tüm üyelerin resimlerinin etrafında gösterilir.
+  use_frame_on: Oyunun sade çerçevesi yerine, sitedeki üyelerin resimlerinin etrafında her yerde gösterilir. Oyun içi özel çerçevesi olan üyeler kendinkini korur.
+  use_frame_all: Oyun içi özel çerçeveler dahil, sitedeki her üyenin resminin etrafında her yerde gösterilir.
   frame_all: Ayrıca özel çerçevelerin üzerinde
-  use_frame_off: 'Kapalı: üyeler sitede kendi oyun içi çerçevelerini korur.'
+  use_frame_off: 'Kapalı: üyeler sitede oyun içi çerçevelerini korur.'
   frame_title: Avatar çerçevesini kontrol et
   frame_check_ok: 'Doğru görünüyor: orta kısım şeffaf. Üyelerinizin resimlerinin etrafında böyle görünecek.'
   frame_big: Büyük
   frame_roster: Kadrolar
   frame_lists: Listeler
-  frame_not_square: Bir çerçeve kare olmalıdır; bu resim {width}×{height}.
-  frame_too_small: Bu resim sadece {width}×{height}. Bir çerçeve için en az 190×190 piksel gerekir (380×380 en iyisidir).
-  frame_covers: 'Bu çerçeve, üyelerin resimlerinin göründüğü orta kısmın yaklaşık %{percent}''ini kaplıyor. Eğer amaç buysa (örneğin bir çelenk) sorun yok: göndermeden önce aşağıdaki önizlemeleri kontrol edin.'
-  frame_covers_most: 'Bu çerçeve orta kısmın yaklaşık %{percent}''ini kaplıyor, yani her üyenin resminin çoğu gizli kalacak. Aşağıdaki önizlemeleri kontrol edin: yalnızca istediğiniz buysa gönderin.'
-  frame_not_png: Bir avatar çerçevesi şeffaf arka plana sahip bir PNG (veya WebP) olmalıdır. JPEG resimleri şeffaf olamaz, bu yüzden üyelerinizin resimlerini kapatırlar.
-  frame_no_transparency: Bu resimde şeffaf kısım yok, bu yüzden üyelerinizin resimlerinin üzerinde düz bir kare olarak görünür. Şeffaf arka planlı bir PNG olarak kaydedin.
+  frame_not_square: Bir çerçeve kare olmalıdır; bu resim {width}×{height} boyutlarında.
+  frame_too_small: Bu resim sadece {width}×{height} boyutlarında. Bir çerçeve için en az 190×190 piksel gerekir (380×380 en iyisidir).
+  frame_covers: 'Bu çerçeve, üyelerin resimlerinin göründüğü orta kısmın yaklaşık {percent}%''ini kaplıyor. Eğer amaç buysa (örneğin bir çelenk gibi) sorun yok: göndermeden önce aşağıdaki önizlemeleri kontrol edin.'
+  frame_covers_most: 'Bu çerçeve orta kısmın yaklaşık {percent}%''ini kaplıyor, yani her üyenin resminin çoğu gizli kalacak. Aşağıdaki önizlemeleri kontrol edin: yalnızca istediğiniz buysa gönderin.'
+  frame_not_png: Bir avatar çerçevesi, şeffaf arka plana sahip bir PNG (veya WebP) olmalıdır. JPEG resimler şeffaf olamaz, bu yüzden üyelerinizin resimlerini kapatırlar.
+  frame_no_transparency: Bu resmin şeffaf bir bölümü yok, bu yüzden üyelerinizin resimlerinin üzerinde düz bir kare olarak görünür. Arka planı şeffaf bir PNG olarak kaydedin.
   frame_empty: 'Bu resim neredeyse tamamen şeffaf: gösterilecek bir çerçeve yok.'
   frame_too_big: Bu çerçeve kaydedildiğinde {kb} KB; en fazla 500 KB olabilir. Daha az renk veya daha az detay kullanmayı deneyin.
   none: Henüz görsel yok
   live: "{when} tarihinden beri yayında"
-  pending: "{when} tarihinden beri Steward onayı bekleniyor"
+  pending: "{when} tarihinden beri bir yetkilinin (Steward) onayı bekleniyor"
   rejected: "{when} tarihinde reddedildi"
   rejected_reason: "{when} tarihinde reddedildi: “{reason}”"
   expired: Zamanında incelenmedi ({when}). Tekrar gönderin.
-  choose: Bir resim seç
-  replace: Yeni bir resim seç
+  choose: Bir resim seçin
+  replace: Yeni bir resim seçin
   remove: Kaldır
-  confirm_remove: "{slot} ögesini kaldırmak istiyor musunuz? Herkes için anında kaybolur."
+  confirm_remove: "{slot} ögesini kaldırmak istiyor musunuz? Herkes için anında kaybolacaktır."
   crop_title: "{slot} ögesini konumlandırın"
-  crop_help: Taşımak için sürükleyin. Yakınlaştırmak için kıstırın, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindekiler gönderilir.
+  crop_help: Taşımak için sürükleyin. Yakınlaştırmak için kıstırın, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindeki kısım gönderilir.
   zoom: Yakınlaştır
-  preview_title: Nasıl görüneceği
+  preview_title: Nasıl görünecek
   preview_phone: Telefon
   preview_desktop: Masaüstü
   preview_week: 1. Hafta Cum
   preview_loot: 2 Kral Sandığı
   preview_status: NAP Korumalı
-  send: İncelemeye gönder
+  send: İncelenmesi için gönder
   sending: Gönderiliyor…
   cancel: İptal
-  sent: Gönderildi. Bir Steward inceleyecek; onaylandığında görünecektir.
-  not_image: Bu dosya tarayıcının açabileceği bir resim değil. Bir JPEG veya PNG deneyin.
+  sent: Gönderildi. Bir yetkili (Steward) inceleyecek; onaylandığında görünecektir.
+  not_image: Bu dosya, tarayıcının açabileceği bir resim değil. Bir JPEG veya PNG deneyin.
   too_small: Bu resim oldukça küçük ({width}×{height}); bulanık görünebilir. Yine de gönderebilirsiniz.
   load_failed: Resim açılamadı.
 stats:
