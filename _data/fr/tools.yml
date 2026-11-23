@@ -172,7 +172,7 @@ caravan:
   this_player: ce joueur
   confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde repasse en disponible (les noms et heures sont conservés).
 chart_editor:
-  edit_title: Modifier le graphique ou le tableau
+  edit_title: Modifier le graphique ou tableau
   new_title: Nouveau graphique ou tableau
   type: Type
   type_bar: Barres
@@ -183,8 +183,8 @@ chart_editor:
   title: Titre
   title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: ex. Minimum 15M de points de duel requis avant la réinitialisation du vendredi
-  who_sees: Qui peut le voir
+  note_example: ex. Minimum 15M de points au Duel requis d'ici vendredi
+  who_sees: Qui peut voir ceci
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
   data: Données
@@ -194,10 +194,28 @@ chart_editor:
   paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
   tab_name: Nom de l'onglet (optionnel)
   tab: Onglet
-  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur téléphone : appuyez sur un coin, puis sur le coin opposé). La première ligne est l''en-tête. Ensuite, appuyez sur une lettre de colonne pour en faire les étiquettes, ou sur une colonne de nombres.'
-  grid_tap_second: Appuyez maintenant sur le coin opposé du tableau.
+  order: Ordre
+  order_sheet: Comme dans la feuille
+  order_desc: Le plus élevé d'abord
+  order_asc: Le plus bas d'abord
+  order_asc_help: Le plus bas d'abord exclut les lignes sans données dans les colonnes affichées (ceux qui n'ont pas participé).
+  limit: Afficher
+  limit_all: Tout
+  tabs_on: Même plage provenant de plusieurs onglets (un onglet par semaine, par exemple)
+  tabs_pattern: Noms d'onglets comme
+  tabs_count: Nombre d'onglets récents à lire
+  tabs_match: "{n} onglets correspondent : {names}."
+  tabs_reads: Lit les {n} plus récents.
+  tabs_none: 'Aucun onglet ne correspond. # est n''importe quel nombre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
+  tabs_read: Lecture de {n} onglets ; le plus récent est {newest}.
+  tabs_skipped: 'Impossible de lire : {names}.'
+  view_start: Les spectateurs commencent sur
+  view_help: Les spectateurs peuvent changer de vue au-dessus du graphique.
+  compare: Permettre aux spectateurs de comparer deux noms côte à côte
+  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur mobile : tapez un coin, puis le coin opposé). La première ligne est l''en-tête. Tapez ensuite sur une lettre de colonne pour définir les libellés, ou sur une colonne de nombres.'
+  grid_tap_second: Tapez maintenant sur le coin opposé du tableau.
   grid_mode: Cliquer sur une lettre de colonne définit
-  grid_labels: Étiquettes
+  grid_labels: Libellés
   grid_numbers: Nombres
   grid_more: Seules les 200 premières lignes et 60 premières colonnes sont affichées ici ; une plage peut aller plus loin.
   range: Plage, ex. A1:D20 (optionnel)
@@ -205,20 +223,20 @@ chart_editor:
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
   link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la carte récupère les derniers chiffres plus tard.'
-  load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
-  preview: Aperçu
+  load_first: Chargez d'abord la feuille (⤓ Charger depuis Google).
+  preview: Prévisualisation
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
   rows_one: "{n} ligne"
   rows_other: "{n} lignes"
   columns_one: "{n} colonne"
   columns_other: "{n} colonnes"
-  at_most_500: "(500 au maximum)"
-  labels: Noms (étiquettes)
+  at_most_500: "(500 maximum)"
+  labels: Noms (libellés)
   numbers_to_show: Nombres à afficher
-  labels_swapped: Noms (une ligne ou barre chacun)
-  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
-  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
+  labels_swapped: Noms (une ligne ou une barre chacun)
+  swap_line: "⇄ Inverser lignes et colonnes : une ligne par ligne, les colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par ligne"
   swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
@@ -227,32 +245,32 @@ chart_editor:
   numbers: Nombres
   several_columns: Plusieurs colonnes de nombres
   side_by_side: Côte à côte
-  stacked_totals: 'Empilé : totaux'
-  stacked_percent: 'Empilé : chaque barre à 100%'
+  stacked_totals: 'Empilés : totaux'
+  stacked_percent: 'Empilés : chaque barre à 100%'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
-  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, meilleur en vert'
-  traffic_reverse: 'Inversé : bas est bon (vert), haut est mauvais (rouge)'
+  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, premier en vert'
+  traffic_reverse: 'Inverser : le plus bas est bon (vert), le plus élevé est mauvais (rouge)'
   traffic_target: Rouge → jaune → vert selon la proximité par rapport à la cible
-  traffic_target_reverse: 'Inversé : plus loin en dessous de la cible est meilleur'
+  traffic_target_reverse: 'Inverser : plus on est en dessous de la cible, mieux c''est'
   donut: Donut (anneau)
   target: Cible pour tout le monde
   target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le nombre ci-dessus)"
+  use_number_above: "(utiliser le nombre au-dessus)"
   highlight_where: Surligner les lignes où
   no_highlight: "(aucun surlignage)"
   at_least: est au moins
   at_least_example: ex. 300M
 charts:
   column: Colonne {n}
-  no_numbers: Aucun chiffre à représenter dans la colonne choisie.
-  line_two_rows: Une ligne nécessite au moins deux rangées.
+  no_numbers: Aucun nombre à représenter dans la colonne choisie.
+  line_two_rows: Une ligne nécessite au moins deux lignes.
   line_two_columns: Une ligne nécessite au moins deux colonnes en bas.
-  no_positive: Aucun chiffre positif à représenter dans la colonne choisie.
-  no_targets: Aucun chiffre (ou cible) à comparer.
-  no_table: Aucun tableau pour l'instant.
+  no_positive: Aucun nombre positif à représenter dans la colonne choisie.
+  no_targets: Aucun nombre (ou cible) à comparer.
+  no_table: Pas encore de tableau.
   unknown_type: Type de graphique inconnu.
   draw_failed: Ce graphique n'a pas pu être dessiné ({error}).
   other: Autre
@@ -261,7 +279,7 @@ charts:
   total_value: 'Total : {value}'
   share_of_all: "{value} · {share} du total"
   value_of_target: "{value} sur {target}"
-  to_go: 'Restant : {value}'
+  to_go: 'Reste à faire : {value}'
   target_reached: Cible atteinte ✓
   done: "✓ Terminé"
   reached_target: "{done} sur {total} ont atteint la cible"
@@ -271,10 +289,24 @@ charts:
   show_all: Afficher les {n}
   show_all_rows: Afficher les {n} lignes
   first_rows: Affichage des {shown} premières lignes sur {n}.
-  hint_bar: Appuyez ou survolez une barre
-  hint_line: Appuyez ou survolez une semaine
-  hint_pie: Appuyez ou survolez une part
-  hint_progress: Appuyez ou survolez une ligne
+  hint_bar: Tapez ou survolez une barre
+  hint_bar_key: Tapez ou survolez une barre. Tapez un nom dans la légende pour ne voir que celui-ci.
+  views: Vues
+  view_latest: Onglet le plus récent
+  view_weeks: Totaux par onglet
+  view_player: Un nom par onglet
+  view_pick: Nom à afficher
+  view_average: Moyenne de {n} onglets
+  view_chart: Graphique
+  view_compare: Comparer deux
+  view_tab: Onglet à afficher
+  compare_first: Premier nom
+  compare_second: Second nom
+  flip_to_asc: "⇅ Le plus bas d'abord"
+  flip_to_desc: "⇅ Le plus élevé d'abord"
+  hint_line: Tapez ou survolez une semaine
+  hint_pie: Tapez ou survolez une part
+  hint_progress: Tapez ou survolez une ligne
 nominate:
   page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]
