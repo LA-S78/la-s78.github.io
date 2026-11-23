@@ -667,10 +667,12 @@
         .join('');
       foot.innerHTML =
         rows.length > shown.length
-          ? `<button type="button" class="dw-more">${esc(say('show_all_rows', { n: rows.length }))}</button>`
-          : q
-            ? esc(say('matching', { n: rows.length }))
-            : '';
+          ? `<button type="button" class="dw-more" aria-expanded="false">${esc(say('show_all_rows', { n: rows.length }))}</button>`
+          : showAllRows && rows.length > 100
+            ? `<button type="button" class="dw-more" aria-expanded="true">${esc(say('show_fewer'))}</button>`
+            : q
+              ? esc(say('matching', { n: rows.length }))
+              : '';
       el.querySelectorAll('th button').forEach((b) => {
         const on = Number(b.dataset.col) === sortCol;
         b.dataset.sort = on ? (desc ? 'desc' : 'asc') : '';
@@ -685,7 +687,10 @@
       draw();
     });
     foot.addEventListener('click', (e) => {
-      if (e.target.closest('.dw-more')) (showAllRows = true), draw();
+      if (!e.target.closest('.dw-more')) return;
+      showAllRows = !showAllRows;
+      draw();
+      if (!showAllRows) backToTop(el);
     });
     search?.addEventListener('input', draw);
     draw();
@@ -694,8 +699,26 @@
   const empty = (text) => `<div class="dw-empty">${esc(text)}</div>`;
   const more = (n, cap) =>
     n > cap ? `<div class="dw-note">${esc(say('first_rows', { shown: cap, n }))}</div>` : '';
+  // "Show all N" opens a long list; then the same button reads "Show fewer" (owner request,
+  // 2026-11-23) and closes it again (mount())
   const showAll = (n) =>
-    `<button type="button" class="dw-more" data-show-all>${esc(say('show_all', { n }))}</button>`;
+    `<button type="button" class="dw-more" data-show-all="${n}" aria-expanded="false">${esc(say('show_all', { n }))}</button>`;
+  /** After "Show fewer": scrolls back to the chart's card if its top is out of sight (or under
+   * the page's header). */
+  function backToTop(el) {
+    const card = el.closest('.dash-widget') || el;
+    const top = card.getBoundingClientRect().top;
+    const header = 80;
+    if (top < header) window.scrollTo({ top: window.scrollY + top - header, behavior: 'smooth' });
+  }
+  /** The "Show all" button as the list is now: open (the chart's box has dw-show-all) or not. */
+  function syncShowAll(el) {
+    const b = el.querySelector('[data-show-all]');
+    if (!b) return;
+    const open = el.classList.contains('dw-show-all');
+    b.textContent = open ? say('show_fewer') : say('show_all', { n: Number(b.dataset.showAll) });
+    b.setAttribute('aria-expanded', String(open));
+  }
 
   // ---------- across tabs (2026-11-23): one bar chart, four views ----------
   // A chart read from several tabs (data.older: the older tabs, oldest first; data.rows: the
@@ -1251,12 +1274,19 @@
         });
       });
     }
-    el.addEventListener('click', (e) => {
-      const b = e.target.closest('[data-show-all]');
-      if (!b) return;
-      el.classList.add('dw-show-all');
-      b.remove();
-    });
+    // "Show all" / "Show fewer": one listener per box (a chart is redrawn into the same box)
+    if (!el.dwShowAll) {
+      el.dwShowAll = true;
+      el.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-show-all]');
+        if (!b || !el.contains(b)) return;
+        const open = el.classList.toggle('dw-show-all');
+        syncShowAll(el);
+        // Closing a long list: back to the chart if its top has scrolled out of sight
+        if (!open) backToTop(el);
+      });
+    }
+    syncShowAll(el);
     if (['bar', 'line', 'pie', 'progress'].includes(w.type) && el.querySelector('[data-tip]'))
       selectable(el, say(el.querySelector('[data-series]') ? 'hint_bar_key' : `hint_${w.type}`));
   }
