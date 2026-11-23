@@ -1359,3 +1359,29 @@ li.dw-sel > .dw-bar-track {
   background: color-mix(in srgb, var(--gold) 30%, transparent);
   color: var(--text-main);
 }
+
+/* The tap prompt ("now tap the opposite corner"): floats over the top of the grid, just
+   under the letters, so nothing moves when it appears and the phone's bottom bar can't hide
+   it (owner, 2026-11-23) */
+.dash-grid-wrap {
+  position: relative;
+  min-width: 0; /* as wide as the editor, not the table (the grid scrolls inside it) */
+}
+.dash-grid-status {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 34px;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.82);
+  color: var(--text-main);
+  text-align: center;
+  pointer-events: none;
+  z-index: 3;
+}
+.dash-grid-status:empty {
+  display: none;
+}
