@@ -60,22 +60,23 @@ api_dashboard:
   already_in_rotor: "{name} ist bereits im Rotor."
   player_removed: Dieser Spieler wurde entfernt.
 api_sheets:
-  no_tabs: In dieser Tabelle wurden keine Registerkarten gefunden. Überprüfe, ob der Link die Tabelle selbst öffnet.
+  no_tabs: In dieser Tabelle wurden keine Registerkarten gefunden. Überprüfe, ob der Link direkt die Tabelle öffnet.
+  tabs_too_few: Weniger als 2 Registerkarten entsprechen diesem Muster. Überprüfe es anhand der Namen der Registerkarten (# ist eine beliebige Zahl, * ist beliebiges Zeichen).
   full_link: Füge den vollständigen Link ein (beginnend mit https://docs.google.com/…).
-  google_only: Es können nur Links zu Google Tabellen und Google Docs (docs.google.com) verwendet werden.
+  google_only: Es können nur Links zu Google Sheets und Google Docs (docs.google.com) verwendet werden.
   range_format: Der Bereich sollte wie A1:D20 aussehen (oder lasse ihn leer).
-  not_sheet_or_doc: Dieser Link ist keine Google Tabelle oder ein Google Doc.
+  not_sheet_or_doc: Dieser Link ist kein Google Sheet oder Google Doc.
   unexpected_redirect: Google hat den Download an einen unerwarteten Ort geleitet, daher wurde er nicht abgerufen.
   too_many_redirects: Zu viele Weiterleitungen von Google.
   too_slow: Google hat zu lange für eine Antwort gebraucht. Versuche es gleich noch einmal.
   unreachable: Google konnte nicht erreicht werden ({reason}).
   doc_not_shared: 'Google verweigert den Zugriff: Veröffentliche das Dokument (Datei → Teilen → Im Web veröffentlichen) und verwende dann diesen Link.'
-  sheet_not_shared: 'Google verweigert den Zugriff: Gib die Tabelle für „Jeder mit dem Link kann die Datei ansehen“ frei oder verwende Datei → Teilen → Im Web veröffentlichen.'
+  sheet_not_shared: 'Google verweigert den Zugriff: Teile die Tabelle als „Jeder mit dem Link kann ansehen“ oder verwende Datei → Teilen → Im Web veröffentlichen.'
   google_error: Google hat mit einem Fehler geantwortet ({status}). Überprüfe den Link.
   too_large: Diese Tabelle ist zu groß zum Lesen (über 2 MB).
   empty: Diese Tabelle (oder dieser Bereich) ist leer.
-  no_such_table_one: Das Dokument hat {count} Tabelle; es gibt keine Tabelle {table}.
-  no_such_table_other: Das Dokument hat {count} Tabellen; es gibt keine Tabelle {table}.
+  no_such_table_one: Das Dokument enthält {count} Tabelle; es gibt keine Tabelle {table}.
+  no_such_table_other: Das Dokument enthält {count} Tabellen; es gibt keine Tabelle {table}.
   no_table: Dieses Dokument enthält keine Tabelle.
 api_nominate:
   link_invalid: Dieser Link ist ungültig oder abgelaufen.

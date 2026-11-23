@@ -61,22 +61,23 @@ api_dashboard:
   player_removed: Quel giocatore è stato rimosso.
 api_sheets:
   no_tabs: Nessuna scheda trovata in quel foglio. Controlla che il link apra direttamente il foglio di calcolo.
+  tabs_too_few: Meno di 2 schede corrispondono a quel modello. Confrontalo con i nomi delle schede (# è un numero qualsiasi, * è qualsiasi cosa).
   full_link: Incolla il link completo (che inizia con https://docs.google.com/…).
-  google_only: È possibile utilizzare solo link a Google Sheets e Google Docs (docs.google.com).
+  google_only: È possibile utilizzare solo link di Fogli Google e Documenti Google (docs.google.com).
   range_format: L'intervallo dovrebbe apparire come A1:D20 (o lascialo vuoto).
-  not_sheet_or_doc: Quel link non è un Google Sheet o un Google Doc.
-  unexpected_redirect: Google ha reindirizzato il download verso una destinazione imprevista, quindi non è stato possibile recuperarlo.
+  not_sheet_or_doc: Quel link non è un foglio o un documento Google.
+  unexpected_redirect: Google ha inviato il download verso una destinazione imprevista, quindi non è stato recuperato.
   too_many_redirects: Troppi reindirizzamenti da Google.
-  too_slow: Google ha impiegato troppo tempo a rispondere. Riprova tra un momento.
+  too_slow: Google ha impiegato troppo tempo per rispondere. Riprova tra un momento.
   unreachable: Impossibile raggiungere Google ({reason}).
-  doc_not_shared: 'Google ha negato l''accesso: pubblica il Doc (File → Condividi → Pubblica sul web), quindi usa quel link.'
-  sheet_not_shared: 'Google ha negato l''accesso: condividi il foglio come "Chiunque abbia il link può visualizzare", oppure usa File → Condividi → Pubblica sul web.'
+  doc_not_shared: 'Google ha risposto no: pubblica il documento (File → Condividi → Pubblica sul web), quindi usa quel link.'
+  sheet_not_shared: 'Google ha risposto no: condividi il foglio come "Chiunque abbia il link può visualizzare" o usa File → Condividi → Pubblica sul web.'
   google_error: Google ha risposto con un errore ({status}). Controlla il link.
-  too_large: Il foglio è troppo grande per essere letto (oltre 2 MB).
+  too_large: Quel foglio è troppo grande da leggere (oltre 2 MB).
   empty: Quel foglio (o intervallo) è vuoto.
-  no_such_table_one: Quel Doc ha {count} tabella; non esiste la tabella {table}.
-  no_such_table_other: Quel Doc ha {count} tabelle; non esiste la tabella {table}.
-  no_table: Quel Doc non contiene alcuna tabella.
+  no_such_table_one: Quel documento ha {count} tabella; non c'è la tabella {table}.
+  no_such_table_other: Quel documento ha {count} tabelle; non c'è la tabella {table}.
+  no_table: Quel documento non contiene tabelle.
 api_nominate:
   link_invalid: Questo link non è valido o è scaduto.
   token_invalid: Il token non è valido o è scaduto. Esegui di nuovo /nominate.

@@ -60,23 +60,24 @@ api_dashboard:
   already_in_rotor: "{name} zaten rotorda."
   player_removed: O oyuncu kaldırıldı.
 api_sheets:
-  no_tabs: Bu tabloda hiç sekme bulunamadı. Bağlantının doğrudan e-tabloyu açtığından emin olun.
+  no_tabs: O sayfada hiçbir sekme bulunamadı. Bağlantının doğrudan e-tabloyu açtığından emin olun.
+  tabs_too_few: Bu desenle eşleşen 2'den az sekme var. Sekme adlarıyla karşılaştırın (# herhangi bir sayı, * herhangi bir şeydir).
   full_link: Tam bağlantıyı yapıştırın (https://docs.google.com/… ile başlayan).
-  google_only: Sadece Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.
-  range_format: Aralık A1:D20 şeklinde olmalıdır (veya boş bırakın).
-  not_sheet_or_doc: Bu bağlantı bir Google E-Tablosu veya Google Dokümanı değil.
-  unexpected_redirect: Google indirmeyi beklenmedik bir yere yönlendirdiği için veri alınamadı.
+  google_only: Yalnızca Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.
+  range_format: Aralık, A1:D20 gibi görünmelidir (veya boş bırakın).
+  not_sheet_or_doc: Bu bağlantı bir Google E-Tablo veya Google Doküman değil.
+  unexpected_redirect: Google indirme işlemini beklenmedik bir yere yönlendirdi, bu yüzden alınamadı.
   too_many_redirects: Google'dan çok fazla yönlendirme geldi.
-  too_slow: Google yanıt vermek için çok uzun süre bekledi. Birazdan tekrar deneyin.
+  too_slow: Google yanıt vermek için çok uzun sürdü. Biraz sonra tekrar deneyin.
   unreachable: Google'a ulaşılamadı ({reason}).
-  doc_not_shared: 'Google izin vermedi: Dokümanı yayınlayın (Dosya → Paylaş → Web''de yayınla) ve ardından bu bağlantıyı kullanın.'
-  sheet_not_shared: 'Google izin vermedi: E-tabloyu "Bağlantıya sahip herkes görüntüleyebilir" olarak ayarlayın veya Dosya → Paylaş → Web''de yayınla yolunu kullanın.'
-  google_error: Google bir hata ile yanıt verdi ({status}). Bağlantıyı kontrol edin.
-  too_large: Bu tablo okunamayacak kadar büyük (2 MB'tan fazla).
-  empty: Bu tablo (veya aralık) boş.
-  no_such_table_one: Bu Dokümanda {count} tablo var; {table} numaralı tablo bulunamadı.
-  no_such_table_other: Bu Dokümanda {count} tablo var; {table} numaralı tablo bulunamadı.
-  no_table: Bu Dokümanda hiç tablo yok.
+  doc_not_shared: 'Google erişimi reddetti: Dokümanı yayınlayın (Dosya → Paylaş → Web''de yayınla), ardından o bağlantıyı kullanın.'
+  sheet_not_shared: 'Google erişimi reddetti: Sayfayı "Bağlantıya sahip herkes görüntüleyebilir" şeklinde paylaşın veya Dosya → Paylaş → Web''de yayınla seçeneğini kullanın.'
+  google_error: Google bir hatayla yanıt verdi ({status}). Bağlantıyı kontrol edin.
+  too_large: Bu sayfa okunabilecek kadar büyük değil (2 MB üzeri).
+  empty: Bu sayfa (veya aralık) boş.
+  no_such_table_one: Bu Dokümanda {count} tablo var; {table} tablosu bulunamadı.
+  no_such_table_other: Bu Dokümanda {count} tablo var; {table} tablosu bulunamadı.
+  no_table: Bu Dokümanda tablo bulunmuyor.
 api_nominate:
   link_invalid: Bu bağlantı geçersiz veya süresi dolmuş.
   token_invalid: Belirteç geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
