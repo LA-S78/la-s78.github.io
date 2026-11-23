@@ -183,9 +183,9 @@ chart_editor:
   type_progress: Progreso
   type_table: Tabla
   title: Título
-  title_example: p. ej., puntuaciones de Duelo de Alianzas
+  title_example: p. ej. Puntuaciones de Duelo de Alianzas
   note: Explicación
-  note_example: p. ej., mínimo de 15M puntos de Duelo requeridos para el reinicio del viernes
+  note_example: p. ej. Mínimo de 15M de puntos en Duelo de Alianzas requerido para el reinicio del viernes
   who_sees: Quién puede verlo
   officers_only: Solo oficiales (R4/R5)
   all_members: Todos los miembros de la alianza
@@ -200,34 +200,34 @@ chart_editor:
   order_sheet: Como en la hoja
   order_desc: El más alto primero
   order_asc: El más bajo primero
-  order_asc_help: El más bajo primero excluye las filas sin nada en las columnas mostradas (aquellos que no participaron).
+  order_asc_help: El más bajo primero omite las filas sin nada en las columnas mostradas (aquellos que no participaron).
   limit: Mostrar
   limit_all: Todos
   tabs_on: Mismo rango de varias pestañas (una pestaña por semana, por ejemplo)
-  tabs_pattern: Nombres de pestañas como
+  tabs_pattern: Nombres de pestaña como
   tabs_count: Pestañas más recientes a leer
   tabs_match: "{n} pestañas coinciden: {names}."
-  tabs_reads: Lee las {n} más recientes.
+  tabs_reads: Lee las {n} más recientes, desde {oldest} hasta {newest}.
   tabs_none: 'Ninguna pestaña coincide. # es cualquier número, * es cualquier cosa: "#/# *" coincide con "11/09 K71 QRT".'
   tabs_read: Leer {n} pestañas; la más reciente es {newest}.
   tabs_skipped: 'No se pudo leer: {names}.'
   view_start: Los espectadores comienzan en
   view_help: Los espectadores pueden cambiar entre las vistas sobre el gráfico.
-  compare: 'Permitir a los espectadores comparar: dos nombres, o un nombre con los 5 mejores o peores'
-  compare_pie: Permitir a los espectadores comparar dos nombres (o los 5 mejores o peores) como un gráfico circular propio
-  compare_line: Permitir a los espectadores comparar las líneas de dos nombres (o un nombre con los 5 mejores o peores de cada semana)
-  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina y luego la opuesta). La primera fila es el encabezado. Luego toca la letra de una columna para convertirla en las etiquetas, o en una columna de números.'
+  compare: 'Permitir comparar: dos nombres, o un nombre con los 5 mejores o peores'
+  compare_pie: Permitir comparar dos nombres (o los 5 mejores o peores) como un gráfico circular propio
+  compare_line: Permitir comparar las líneas de dos nombres (o un nombre con los 5 mejores o peores de cada semana)
+  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina, luego la opuesta). La primera fila es el encabezado. Luego toca una letra de columna para establecerla como etiquetas, o una columna numérica.'
   grid_tap_second: Ahora toca la esquina opuesta de la tabla.
-  grid_mode: Hacer clic en una letra de columna establece
+  grid_mode: Al hacer clic en una letra de columna se establece
   grid_labels: Etiquetas
   grid_numbers: Números
-  grid_more: Solo se muestran aquí las primeras 200 filas y 60 columnas; un rango puede ser mayor.
+  grid_more: Aquí solo se muestran las primeras 200 filas y 60 columnas; un rango puede ser mayor.
   range: Rango, p. ej. A1:D20 (opcional)
-  doc_table: Qué tabla en el Doc (1, 2…)
+  doc_table: Qué tabla en el documento (1, 2...)
   load: "⤓ Cargar desde Google"
-  loading: "⤓ Cargando…"
-  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede ver” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene los últimos números más tarde.'
-  load_first: Carga primero la hoja (⤓ Cargar desde Google).
+  loading: "⤓ Cargando..."
+  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede leer” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtendrá los últimos números más tarde.'
+  load_first: Carga la hoja primero (⤓ Cargar desde Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
   size: "{rows} × {columns}"
@@ -243,25 +243,25 @@ chart_editor:
   swap_bar: "⇄ Intercambiar filas y columnas: las columnas como barras, un color por fila"
   swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a lo largo de las semanas.'
   rows_to_draw: Filas a dibujar (hasta 6)
-  rows_filter: Buscar un nombre…
+  rows_filter: Buscar un nombre...
   rows_count: "{n} de 6 elegidos"
-  columns_along: Columnas a lo largo de la parte inferior (en orden de hoja)
+  columns_along: Columnas a lo largo de la parte inferior (en el orden de la hoja)
   numbers: Números
-  several_columns: Varias columnas de números
-  side_by_side: Lado a lado
+  several_columns: Varias columnas numéricas
+  side_by_side: Uno al lado del otro
   stacked_totals: 'Apilado: totales'
   stacked_percent: 'Apilado: cada barra al 100%'
   vertical: Barras verticales
   vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
   traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde'
-  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, el más alto verde'
-  traffic_reverse: 'Invertir: bajo es bueno (verde), alto es malo (rojo)'
+  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, los mejores en verde'
+  traffic_reverse: 'Invertido: bajo es bueno (verde), alto es malo (rojo)'
   traffic_target: Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo
-  traffic_target_reverse: 'Invertir: cuanto más lejos del objetivo es mejor'
+  traffic_target_reverse: 'Invertido: cuanto más lejos del objetivo mejor'
   donut: Donut (anillo)
   target: Objetivo para todos
   target_example: p. ej. 15M o 15000000
-  target_column: "…o una columna de objetivos"
+  target_column: "...o una columna de objetivos"
   use_number_above: "(usar el número de arriba)"
   highlight_where: Resaltar filas donde
   no_highlight: "(sin resaltar)"

@@ -174,7 +174,7 @@ caravan:
   this_player: bu oyuncu
   confirm_new_week: Yeni bir hafta başlatılsın mı? Herkes müsait listesine geri döner (isimler ve saatler kalır).
 chart_editor:
-  edit_title: Grafik veya tabloyu düzenle
+  edit_title: Grafiği veya tabloyu düzenle
   new_title: Yeni grafik veya tablo
   type: Tür
   type_bar: Çubuk
@@ -185,7 +185,7 @@ chart_editor:
   title: Başlık
   title_example: ör. İttifak Düellosu puanları
   note: Açıklama
-  note_example: ör. Cuma sıfırlanmasına kadar en az 15M Düello puanı gerekir
+  note_example: ör. Cuma sıfırlanmasına kadar minimum 15M Düello puanı gereklidir
   who_sees: Kimler görebilir
   officers_only: Sadece subaylar (R4/R5)
   all_members: Tüm ittifak üyeleri
@@ -193,32 +193,32 @@ chart_editor:
   data_source: Veri kaynağı
   paste: Tablo yapıştır
   link: Google E-Tablo / Doküman bağlantısı
-  paste_help: Google E-Tablolar veya Excel'den hücreleri kopyalayın (önce başlık satırı) ve buraya yapıştırın.
+  paste_help: Google E-Tablolar veya Excel'deki hücreleri kopyalayın (önce başlık satırı) ve buraya yapıştırın.
   tab_name: Sekme adı (isteğe bağlı)
   tab: Sekme
   order: Sıralama
   order_sheet: Tablodaki gibi
-  order_desc: En yüksekten
-  order_asc: En düşükten
-  order_asc_help: En düşükten sıralama, gösterilen sütunlarda veri olmayan satırları (katılmayanlar) devre dışı bırakır.
+  order_desc: En yüksek önce
+  order_asc: En düşük önce
+  order_asc_help: En düşük önce seçeneği, gösterilen sütunlarda veri olmayan satırları (katılmayanlar) hariç tutar.
   limit: Göster
-  limit_all: Hepsi
-  tabs_on: Birkaç sekmeden aynı aralık (örneğin haftalık birer sekme)
-  tabs_pattern: Sekme adları şuna benzer
+  limit_all: Tümü
+  tabs_on: Birden fazla sekmeden aynı aralık (örneğin her hafta bir sekme)
+  tabs_pattern: Şuna benzeyen sekme adları
   tabs_count: Okunacak en yeni sekme sayısı
   tabs_match: "{n} sekme eşleşti: {names}."
-  tabs_reads: En yeni {n} tanesini okur.
-  tabs_none: 'Hiçbir sekme eşleşmedi. # herhangi bir sayı, * herhangi bir şeydir: "#/# *" ifadesi "11/09 K71 QRT" ile eşleşir.'
+  tabs_reads: En yeni {n} sekme okunuyor, {oldest} tarihinden {newest} tarihine kadar.
+  tabs_none: 'Eşleşen sekme yok. # herhangi bir sayı, * herhangi bir ifadeyi temsil eder: "#/# *" ifadesi "11/09 K71 QRT" ile eşleşir.'
   tabs_read: "{n} sekme okundu; en yenisi {newest}."
   tabs_skipped: 'Okunamadı: {names}.'
-  view_start: 'Görüntüleyenler şununla başlar:'
-  view_help: Görüntüleyenler, grafiğin üzerindeki görünümler arasında geçiş yapabilir.
-  compare: 'Görüntüleyenlerin kıyaslamasına izin ver: iki isim veya bir isim ile ilk/son 5'
-  compare_pie: Görüntüleyenlerin iki ismi (veya ilk/son 5'i) kendi pasta grafiklerinde kıyaslamasına izin ver
-  compare_line: Görüntüleyenlerin iki ismin çizgilerini kıyaslamasına izin ver (veya bir ismi her haftanın ilk/son 5'i ile)
-  grid_help: 'Tabloyu seçmek için sürükleyin (telefonda: bir köşeye, sonra karşı köşeye dokunun). İlk satır başlıktır. Ardından etiket yapmak için bir sütun harfine veya bir sayı sütununa dokunun.'
+  view_start: İzleyicilerin başlangıç görünümü
+  view_help: İzleyiciler grafiğin üzerindeki görünümler arasında geçiş yapabilir.
+  compare: 'İzleyicilerin karşılaştırma yapmasına izin ver: iki isim veya bir isim ile ilk ya da son 5'
+  compare_pie: İzleyicilerin iki ismi (veya ilk ya da son 5'i) kendi pasta grafikleri olarak karşılaştırmasına izin ver
+  compare_line: İzleyicilerin iki ismin çizgilerini karşılaştırmasına izin ver (veya bir ismi her haftanın ilk veya son 5'i ile)
+  grid_help: 'Seçmek için tablonun üzerinde sürükleyin (telefonda: bir köşeye, ardından karşı köşesine dokunun). İlk satır başlıktır. Ardından etiket yapmak için bir sütun harfine veya sayı sütununa dokunun.'
   grid_tap_second: Şimdi tablonun karşı köşesine dokunun.
-  grid_mode: 'Bir sütun harfine tıklamak şunu ayarlar:'
+  grid_mode: 'Sütun harfine tıklamak şunu ayarlar:'
   grid_labels: Etiketler
   grid_numbers: Sayılar
   grid_more: Burada sadece ilk 200 satır ve 60 sütun gösteriliyor; aralık daha ileriye gidebilir.
@@ -226,7 +226,7 @@ chart_editor:
   doc_table: Dokümandaki hangi tablo (1, 2…)
   load: "⤓ Google'dan yükle"
   loading: "⤓ Yükleniyor…"
-  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi eşitle” daha sonra en güncel sayıları getirir.'
+  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Karttaki “Şimdi senkronize et” özelliği daha sonra en güncel sayıları çeker.'
   load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
   preview: Önizleme
   preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
@@ -238,34 +238,34 @@ chart_editor:
   at_most_500: "(en fazla 500)"
   labels: İsimler (etiketler)
   numbers_to_show: Gösterilecek sayılar
-  labels_swapped: İsimler (her satır veya çubuk için bir tane)
-  swap_line: "⇄ Satır ve sütunları değiştir: satır başına bir çizgi, sütunlar alt kısımda"
-  swap_bar: "⇄ Satır ve sütunları değiştir: sütunlar çubuk olarak, satır başına bir renk"
-  swap_help: 'Oyuncu başına bir satır ve hafta başına bir sütun içeren tablolar için: haftalar boyunca oyuncuları takip etmek için bunu işaretleyin.'
+  labels_swapped: İsimler (her biri bir çizgi veya çubuk)
+  swap_line: "⇄ Satır ve sütunları değiştir: satır başına bir çizgi, alt kısımda sütunlar"
+  swap_bar: "⇄ Satır ve sütunları değiştir: çubuk olarak sütunlar, satır başına bir renk"
+  swap_help: 'Satır başına bir oyuncu ve hafta başına bir sütun içeren tablolar için: oyuncuları haftalar boyunca takip etmek istiyorsanız bunu işaretleyin.'
   rows_to_draw: Çizilecek satırlar (en fazla 6)
-  rows_filter: İsim bul…
-  rows_count: 6 içinden {n} seçildi
+  rows_filter: Bir isim bul…
+  rows_count: "{n} / 6 seçildi"
   columns_along: Alt kısımdaki sütunlar (tablo sırasına göre)
   numbers: Sayılar
   several_columns: Birden fazla sayı sütunu
   side_by_side: Yan yana
-  stacked_totals: 'Yığınlanmış: toplamlar'
-  stacked_percent: 'Yığınlanmış: her çubuk %100''e'
+  stacked_totals: 'Yığın: toplamlar'
+  stacked_percent: 'Yığın: her çubuk %100''e'
   vertical: Dikey çubuklar
-  vertical_leaderboard: Dikey çubuklar (liderlik tablosu yerine)
+  vertical_leaderboard: Dikey çubuklar (sıralama tablosu yerine)
   traffic_columns: 'Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil'
-  traffic_size: 'Kırmızı → sarı → yeşil (düşük → yüksek): sıralamaya göre, en üst yeşil'
-  traffic_reverse: 'Ters: düşük iyi (yeşil), yüksek kötü (kırmızı)'
-  traffic_target: Hedefe ne kadar yakın olduklarına göre kırmızı → sarı → yeşil
-  traffic_target_reverse: 'Ters: hedefin ne kadar altında kalırsa o kadar iyi'
+  traffic_size: 'Kırmızı → sarı → yeşil (düşük → yüksek): dereceye göre, en üst yeşil'
+  traffic_reverse: 'Tersine çevir: düşük olması iyi (yeşil), yüksek olması kötü (kırmızı)'
+  traffic_target: Herkesin hedefe ne kadar yakın olduğuna göre kırmızı → sarı → yeşil
+  traffic_target_reverse: 'Tersine çevir: hedefin ne kadar altında kalırsa o kadar iyi'
   donut: Halka (donut)
   target: Herkes için hedef
   target_example: ör. 15M veya 15000000
   target_column: "…veya hedef sütunu"
   use_number_above: "(yukarıdaki sayıyı kullan)"
-  highlight_where: Satırları vurgula
+  highlight_where: 'Şu satırları vurgula:'
   no_highlight: "(vurgu yok)"
-  at_least: en az
+  at_least: en az şuna eşit
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}

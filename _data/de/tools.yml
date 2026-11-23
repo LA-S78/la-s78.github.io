@@ -175,7 +175,7 @@ caravan:
   confirm_new_week: Neue Woche starten? Alle werden wieder auf verfügbar gesetzt (die Namen und Zeiten bleiben erhalten).
 chart_editor:
   edit_title: Diagramm oder Tabelle bearbeiten
-  new_title: Neues Diagramm oder Tabelle
+  new_title: Neues Diagramm oder neue Tabelle
   type: Typ
   type_bar: Balken
   type_line: Linie
@@ -183,51 +183,51 @@ chart_editor:
   type_progress: Fortschritt
   type_table: Tabelle
   title: Titel
-  title_example: z. B. Ergebnisse im Allianz-Duell
+  title_example: z. B. Allianz-Duell Punktzahlen
   note: Erklärung
-  note_example: z. B. Mindestens 15 Mio. Duell-Punkte bis zum Reset am Freitag erforderlich
+  note_example: z. B. Mindestens 15M Duell-Punkte bis zum Reset am Freitag erforderlich
   who_sees: Wer kann dies sehen
   officers_only: Nur Offiziere (R4/R5)
   all_members: Alle Allianzmitglieder
   data: Daten
-  data_source: Woher die Daten stammen
+  data_source: Datenherkunft
   paste: Tabelle einfügen
-  link: Google Sheet / Doc-Link
+  link: Link zu Google Sheet / Doc
   paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
   tab_name: Tab-Name (optional)
   tab: Tab
   order: Sortierung
-  order_sheet: Wie in der Tabelle
+  order_sheet: Wie im Tabellenblatt
   order_desc: Höchste zuerst
   order_asc: Niedrigste zuerst
-  order_asc_help: Niedrigste zuerst lässt Zeilen aus, die keine Werte in den angezeigten Spalten haben (Spieler, die nicht teilgenommen haben).
+  order_asc_help: Bei „Niedrigste zuerst“ werden Zeilen ohne Werte in den angezeigten Spalten (diejenigen, die nicht teilgenommen haben) ausgelassen.
   limit: Anzeigen
   limit_all: Alle
   tabs_on: Gleicher Bereich aus mehreren Tabs (z. B. ein Tab pro Woche)
   tabs_pattern: Tab-Namen wie
-  tabs_count: Neueste zu lesende Tabs
+  tabs_count: Neueste Tabs zum Lesen
   tabs_match: "{n} Tabs stimmen überein: {names}."
-  tabs_reads: Liest die neuesten {n}.
-  tabs_none: 'Keine Tabs stimmen überein. # ist eine beliebige Zahl, * ist alles: "#/# *" entspricht "11/09 K71 QRT".'
+  tabs_reads: Liest die neuesten {n}, von {oldest} bis {newest}.
+  tabs_none: 'Kein Tab stimmt überein. # ist eine beliebige Zahl, * ist ein beliebiger Text: „#/# *“ entspricht „11/09 K71 QRT“.'
   tabs_read: "{n} Tabs gelesen; der neueste ist {newest}."
   tabs_skipped: 'Konnte nicht gelesen werden: {names}.'
-  view_start: Betrachter beginnen bei
-  view_help: Betrachter können über dem Diagramm zwischen den Ansichten wechseln.
-  compare: 'Betrachter vergleichen lassen: zwei Namen oder einen Namen mit den Top oder Bottom 5'
-  compare_pie: Betrachter zwei Namen (oder die Top/Bottom 5) als eigenes Kreisdiagramm vergleichen lassen
-  compare_line: Betrachter die Linien von zwei Namen (oder einen Namen mit den wöchentlichen Top/Bottom 5) vergleichen lassen
-  grid_help: 'Ziehe über die Tabelle, um sie auszuwählen (auf dem Handy: eine Ecke antippen, dann die gegenüberliegende). Die erste Zeile ist die Kopfzeile. Tippe dann auf einen Spaltenbuchstaben, um ihn als Beschriftung oder Zahlenspalte festzulegen.'
+  view_start: Betrachter starten bei
+  view_help: Betrachter können oberhalb des Diagramms zwischen den Ansichten wechseln.
+  compare: 'Betrachter vergleichen lassen: zwei Namen oder ein Name mit den Top oder Bottom 5'
+  compare_pie: Betrachter zwei Namen (oder die Top/Bottom 5) als eigenes Tortendiagramm vergleichen lassen
+  compare_line: Betrachter die Linien zweier Namen vergleichen lassen (oder einen Namen mit den Top oder Bottom 5 jeder Woche)
+  grid_help: 'Ziehe über die Tabelle, um sie auszuwählen (auf dem Handy: tippe auf eine Ecke und dann auf die gegenüberliegende). Die erste Zeile ist die Kopfzeile. Tippe dann auf einen Spaltenbuchstaben, um ihn als Beschriftung oder Zahlenspalte festzulegen.'
   grid_tap_second: Tippe jetzt auf die gegenüberliegende Ecke der Tabelle.
-  grid_mode: 'Klick auf einen Spaltenbuchstaben legt fest:'
+  grid_mode: Tippen auf einen Spaltenbuchstaben legt fest
   grid_labels: Beschriftungen
   grid_numbers: Zahlen
-  grid_more: Hier werden nur die ersten 200 Zeilen und 60 Spalten angezeigt; ein Bereich kann weiter reichen.
+  grid_more: Hier werden nur die ersten 200 Zeilen und 60 Spalten angezeigt; der Bereich kann weiter gehen.
   range: Bereich, z. B. A1:D20 (optional)
   doc_table: Welche Tabelle im Doc (1, 2…)
   load: "⤓ Von Google laden"
-  loading: "⤓ Lade…"
-  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
-  load_first: Lade zuerst die Tabelle (⤓ Von Google laden).
+  loading: "⤓ Wird geladen…"
+  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann die Ansicht öffnen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte lädt später die neuesten Zahlen.'
+  load_first: Lade zuerst das Tabellenblatt (⤓ Von Google laden).
   preview: Vorschau
   preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
   size: "{rows} × {columns}"
@@ -239,33 +239,33 @@ chart_editor:
   labels: Namen (Beschriftungen)
   numbers_to_show: Anzuzeigende Zahlen
   labels_swapped: Namen (je eine Linie oder ein Balken)
-  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten entlang der Unterseite"
+  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten am unteren Rand"
   swap_bar: "⇄ Zeilen und Spalten tauschen: die Spalten als Balken, eine Farbe pro Zeile"
-  swap_help: 'Bei Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
+  swap_help: 'Für Tabellen mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
   rows_to_draw: Zu zeichnende Zeilen (bis zu 6)
   rows_filter: Namen finden…
   rows_count: "{n} von 6 ausgewählt"
-  columns_along: Spalten entlang der Unterseite (in Tabellen-Reihenfolge)
+  columns_along: Spalten am unteren Rand (in Tabellen-Reihenfolge)
   numbers: Zahlen
   several_columns: Mehrere Zahlenspalten
   side_by_side: Nebeneinander
   stacked_totals: 'Gestapelt: Summen'
-  stacked_percent: 'Gestapelt: jeder Balken auf 100%'
+  stacked_percent: 'Gestapelt: jeder Balken bis 100 %'
   vertical: Vertikale Balken
-  vertical_leaderboard: Vertikale Balken (statt einer Rangliste)
-  traffic_columns: 'Rot → Gelb → Grün (niedrig → hoch): erste Spalte rot, letzte grün'
-  traffic_size: 'Rot → Gelb → Grün (niedrig → hoch): nach Rang, Top-Werte grün'
+  vertical_leaderboard: Vertikale Balken (statt Bestenliste)
+  traffic_columns: 'Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün'
+  traffic_size: 'Rot → gelb → grün (niedrig → hoch): nach Rang, Top in grün'
   traffic_reverse: 'Umgekehrt: niedrig ist gut (grün), hoch ist schlecht (rot)'
-  traffic_target: Rot → Gelb → Grün basierend darauf, wie nah jeder am Ziel ist
+  traffic_target: Rot → gelb → grün basierend darauf, wie nah jeder am Ziel ist
   traffic_target_reverse: 'Umgekehrt: je weiter unter dem Ziel, desto besser'
   donut: Donut (Ring)
   target: Ziel für alle
   target_example: z. B. 15M oder 15000000
   target_column: "…oder eine Spalte mit Zielen"
-  use_number_above: "(die obige Zahl verwenden)"
+  use_number_above: "(die Zahl von oben verwenden)"
   highlight_where: Zeilen hervorheben, wo
   no_highlight: "(keine Hervorhebung)"
-  at_least: mindestens ist
+  at_least: mindestens beträgt
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}

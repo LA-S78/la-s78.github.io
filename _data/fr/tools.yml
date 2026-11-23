@@ -174,18 +174,18 @@ caravan:
   this_player: ce joueur
   confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde repasse en disponible (les noms et heures sont conservés).
 chart_editor:
-  edit_title: Modifier le graphique ou tableau
+  edit_title: Modifier le graphique ou le tableau
   new_title: Nouveau graphique ou tableau
   type: Type
   type_bar: Barres
-  type_line: Ligne
+  type_line: Courbes
   type_pie: Secteurs
   type_progress: Progression
   type_table: Tableau
   title: Titre
-  title_example: ex. scores du Duel d'Alliances
+  title_example: 'ex: Scores du Duel d''Alliances'
   note: Explication
-  note_example: ex. Minimum 15M de points de duel requis avant la réinitialisation de vendredi
+  note_example: 'ex: Minimum 15M de points au Duel d''Alliances requis avant la réinitialisation du vendredi'
   who_sees: Qui peut le voir
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
@@ -198,49 +198,49 @@ chart_editor:
   tab: Onglet
   order: Ordre
   order_sheet: Comme dans la feuille
-  order_desc: Plus élevé d'abord
-  order_asc: Plus bas d'abord
-  order_asc_help: Plus bas d'abord exclut les lignes vides dans les colonnes affichées (ceux qui n'ont pas participé).
+  order_desc: Le plus haut en premier
+  order_asc: Le plus bas en premier
+  order_asc_help: Le plus bas en premier exclut les lignes vides dans les colonnes affichées (ceux qui n'ont pas participé).
   limit: Afficher
   limit_all: Tous
   tabs_on: Même plage depuis plusieurs onglets (un onglet par semaine, par exemple)
-  tabs_pattern: Noms d'onglets comme
+  tabs_pattern: Noms d'onglets tels que
   tabs_count: Nouveaux onglets à lire
   tabs_match: "{n} onglets correspondent : {names}."
-  tabs_reads: Lit les {n} plus récents.
-  tabs_none: 'Aucun onglet ne correspond. # est n''importe quel nombre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
-  tabs_read: Lire {n} onglets ; le plus récent est {newest}.
+  tabs_reads: Lit les {n} plus récents, du {oldest} au {newest}.
+  tabs_none: 'Aucun onglet ne correspond. # est n''importe quel chiffre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
+  tabs_read: "{n} onglets lus ; le plus récent est {newest}."
   tabs_skipped: 'Impossible de lire : {names}.'
   view_start: Les spectateurs commencent sur
-  view_help: Les spectateurs peuvent changer de vue au-dessus du graphique.
-  compare: 'Laisser les spectateurs comparer : deux noms, ou un nom avec le top ou bottom 5'
-  compare_pie: Laisser les spectateurs comparer deux noms (ou le top ou bottom 5) sous forme de secteur
-  compare_line: Laisser les spectateurs comparer les lignes de deux noms (ou un nom avec le top ou bottom 5 de chaque semaine)
-  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur téléphone : touchez un coin, puis le coin opposé). La première ligne est l''en-tête. Puis touchez une lettre de colonne pour en faire les étiquettes, ou une colonne de nombres.'
-  grid_tap_second: Maintenant touchez le coin opposé du tableau.
+  view_help: Les spectateurs peuvent basculer entre les vues au-dessus du graphique.
+  compare: 'Laisser les spectateurs comparer : deux noms, ou un nom avec le top ou le bottom 5'
+  compare_pie: Laisser les spectateurs comparer deux noms (ou le top/bottom 5) comme leur propre graphique circulaire
+  compare_line: Laisser les spectateurs comparer les courbes de deux noms (ou un nom avec le top/bottom 5 de chaque semaine)
+  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur mobile : tapez un coin, puis le coin opposé). La première ligne est l''en-tête. Tapez ensuite sur une lettre de colonne pour en faire les étiquettes, ou une colonne de nombres.'
+  grid_tap_second: Tapez maintenant sur le coin opposé du tableau.
   grid_mode: Cliquer sur une lettre de colonne définit
   grid_labels: Étiquettes
   grid_numbers: Nombres
-  grid_more: Seules les 200 premières lignes et 60 colonnes sont montrées ici ; une plage peut aller plus loin.
-  range: Plage, ex. A1:D20 (optionnel)
+  grid_more: Seules les 200 premières lignes et 60 colonnes sont affichées ici ; une plage peut aller plus loin.
+  range: 'Plage, ex: A1:D20 (optionnel)'
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent consulter” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la fiche récupère les derniers chiffres plus tard.'
+  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le web). Docs : Fichier → Partager → Publier sur le web. “Synchroniser maintenant” sur la carte récupère les derniers chiffres plus tard.'
   load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
-  preview: Aperçu
+  preview: Prévisualiser
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
   rows_one: "{n} ligne"
   rows_other: "{n} lignes"
   columns_one: "{n} colonne"
   columns_other: "{n} colonnes"
-  at_most_500: "(500 au plus)"
+  at_most_500: "(500 au maximum)"
   labels: Noms (étiquettes)
   numbers_to_show: Nombres à afficher
-  labels_swapped: Noms (une ligne ou barre chacun)
-  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
-  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
+  labels_swapped: Noms (une ligne ou barre par personne)
+  swap_line: "⇄ Inverser lignes et colonnes : une courbe par ligne, les colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par ligne"
   swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
@@ -254,19 +254,19 @@ chart_editor:
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: 'Rouge → jaune → vert (faible → élevé) : première colonne rouge, dernière verte'
-  traffic_size: 'Rouge → jaune → vert (faible → élevé) : par rang, top vert'
-  traffic_reverse: 'Inverser : faible est bien (vert), élevé est mal (rouge)'
+  traffic_size: 'Rouge → jaune → vert (faible → élevé) : par rang, haut vert'
+  traffic_reverse: 'Inverser : faible est bon (vert), élevé est mauvais (rouge)'
   traffic_target: Rouge → jaune → vert selon la proximité avec la cible
-  traffic_target_reverse: 'Inverser : plus loin en dessous de la cible est mieux'
+  traffic_target_reverse: 'Inverser : plus on est loin en dessous de la cible, mieux c''est'
   donut: Donut (anneau)
   target: Cible pour tout le monde
-  target_example: ex. 15M ou 15000000
+  target_example: 'ex: 15M ou 15000000'
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le nombre au-dessus)"
+  use_number_above: "(utiliser le nombre ci-dessus)"
   highlight_where: Surligner les lignes où
   no_highlight: "(aucun surlignage)"
   at_least: est au moins
-  at_least_example: ex. 300M
+  at_least_example: 'ex: 300M'
 charts:
   column: Colonne {n}
   no_numbers: Aucun nombre à mettre en graphique dans la colonne choisie.
