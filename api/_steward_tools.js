@@ -24,7 +24,9 @@ import {
   IMAGE_KINDS,
   allianceFrames,
   applyAllianceFrames,
+  imageStatus,
 } from './_alliance_images.js';
+import { findAllianceKey } from './_dashboard.js';
 import { latestRace } from './_ascension.js';
 import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_tracker.js';
 import { say } from './_messages.js';
@@ -42,7 +44,7 @@ import { fetchAlliance as fetchAllianceByTag } from './_tracker.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { getRoleColors } from './_role_colors.js';
 import { napTags } from './_ascension.js';
-import { readRegister, pendingAlliances, answerPending } from './_register.js';
+import { readRegister, pendingAlliances, answerPending, REGISTER_FILE } from './_register.js';
 import {
   allianceRoster,
   renameInRegister,
@@ -254,6 +256,9 @@ async function linkRenamed(req, res, { gist, session }) {
   return res.status(200).json({ linked: { tag, now: found.tag, name: found.name }, links });
 }
 
+/** The longest alliance name kept (the game's are shorter). */
+const NAME_MAX = 40;
+
 export async function stewardTools(req, res, { gist, session }) {
   if (!isSteward(session.uid)) {
     return res.status(403).json({ error: say('api_dashboard.stewards_only') });
@@ -303,6 +308,56 @@ export async function stewardTools(req, res, { gist, session }) {
       // On the test site: when its data was last copied from the live site (/devupdate)
       testCopy: isTestDeployment() ? gistJson(gist, TEST_COPY_FILE, null)?.copiedAt || '' : null,
     });
+  }
+
+  // Alliance settings (owner request, 2026-11-23): one alliance's name, colour and pictures,
+  // for the Steward page's settings once one is picked (?steward=alliance&id=al_…)
+  if (what === 'alliance') {
+    const a = readRegister(gist).alliances[String(req.query.id || '')];
+    const map = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+    const key = a && findAllianceKey(map, a.tag);
+    if (!key) return res.status(404).json({ error: say('api_dashboard.alliance_unknown') });
+    return res.status(200).json({
+      alliance: {
+        id: a.id,
+        tag: key,
+        name: map[key]?.name || a.name || '',
+        rank: map[key]?.rank ?? null,
+        color: sanitizeAlliances({ [key]: map[key] || {} }, await getRoleColors())[key].color,
+      },
+      images: { ...imageStatus(gist, key), canRemove: true },
+    });
+  }
+  // The alliance's full name (?steward=name&id=al_…&name=…): kept in the alliance list
+  if (what === 'name') {
+    const name = String(req.query.name || '')
+      .replace(/\p{Cc}/gu, '')
+      .trim()
+      .slice(0, NAME_MAX);
+    if (!name) return res.status(400).json({ error: say('api_dashboard.name_bad') });
+    const id = String(req.query.id || '');
+    let tag = null;
+    await updateGist((g) => {
+      const register = readRegister(g);
+      const a = register.alliances[id];
+      const map = gistJson(g, 'map-state.json', { alliances: {} });
+      const key = a && findAllianceKey(map.alliances || {}, a.tag);
+      if (!key) return {};
+      tag = key;
+      if (map.alliances[key].name === name && a.name === name) return {};
+      map.alliances[key] = { ...map.alliances[key], name };
+      // The register's copy too (the Steward page's list and passes read it)
+      register.alliances[id] = { ...a, name };
+      return {
+        files: {
+          [REGISTER_FILE]: register,
+          'map-state.json': { ...map, lastUpdated: new Date().toISOString() },
+        },
+        description: `Alliance name for [${key}] by ${session.name || 'a Steward'}`,
+      };
+    });
+    if (!tag) return res.status(404).json({ error: say('api_dashboard.alliance_unknown') });
+    return res.status(200).json({ ok: true, tag, name });
   }
 
   if (what === 'positions') return napPositions(req, res, { gist, session });

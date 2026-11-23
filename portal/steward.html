@@ -5,7 +5,7 @@ title: Steward Tools
 title_key: "steward.page_title"
 permalink: /steward.html
 lang: "en"
-strings: [steward]
+strings: [steward, alliance_images]
 ---
 
 <!-- The Stewards' own page (owner request, 2026-11-20): what's waiting for them, and a live
@@ -34,8 +34,8 @@ strings: [steward]
   <div id="st-newtags" class="st-renamed" hidden></div>
   <!-- Alliance IDs step 8: the moves' backups, deleted by a Steward (the tidy-up) -->
   <form id="st-tidy" class="st-link" hidden></form>
-  <!-- Alliance IDs step 7: rename, swap two tags, retire or bring back (Stewards only) -->
-  <section id="st-roster" class="st-link" hidden></section>
+  <!-- Alliance settings: tag, name, swap, pictures, retire (Stewards only; step 7 and 2026-11-23) -->
+  <section id="st-roster" class="st-card" hidden></section>
 
   <div class="st-grid" id="st-tools" hidden>
     <!-- Player lookup: live from the game, any player -->
@@ -75,6 +75,7 @@ strings: [steward]
 </div>
 
 <script type="module" src="/js/player-portrait.js"></script>
+<script src="/js/alliance-images.js"></script>
 <script>
   (function () {
     const $ = (s) => document.getElementById(s);
@@ -208,55 +209,115 @@ strings: [steward]
         .filter((h) => h.to && h.tag !== a.tag)
         .map((h) => esc(t('steward.roster_was', { tag: h.tag, until: when(h.to) })))
         .join(' · ');
+    // Alliance settings (owner request, 2026-11-23): pick an alliance, then change its tag or
+    // name, trade tags with another, set its pictures (live at once), or retire it. Closed
+    // until one is picked; the pick is kept through reloads of the overview.
+    let picked = '';
     function rosterBox(list) {
       roster = list;
       const box = $('st-roster');
       box.hidden = !list.length;
-      const live = list.filter((a) => a.onMap);
-      const off = list.filter((a) => !a.onMap && a.status === 'active');
-      const retired = list.filter((a) => a.status === 'retired');
-      const options = live.map((a) => `<option value="${esc(a.id)}">[${esc(a.tag)}] ${esc(a.name)}</option>`).join('');
+      if (!list.length) return;
+      if (picked && !list.some((a) => a.id === picked)) picked = '';
+      const state = (a) =>
+        a.status === 'retired' ? t('steward.roster_retired') : !a.onMap ? t('steward.roster_off_map') : '';
+      const order = (a) => (a.status === 'retired' ? 2 : a.onMap ? 0 : 1);
+      const options = [...list]
+        .sort((x, y) => order(x) - order(y) || x.tag.localeCompare(y.tag))
+        .map(
+          (a) =>
+            `<option value="${esc(a.id)}"${a.id === picked ? ' selected' : ''}${state(a) ? ` data-hint="${esc(state(a))}"` : ''}>[${esc(a.tag)}] ${esc(a.name)}</option>`,
+        )
+        .join('');
       box.innerHTML = `
-        <p><strong>${esc(t('steward.roster_title'))}</strong></p>
-        <small class="st-small">${esc(t('steward.roster_help'))}</small>
-        <div class="st-roster-list">${live
-          .map(
-            (a) => `<form class="st-roster-row" data-rename="${esc(a.id)}">
-              <span><strong>${tagHtml(a)}</strong> ${esc(a.name)}${history(a) ? `<br><small class="st-small">${history(a)}</small>` : ''}</span>
-              <span class="st-roster-act"><input name="to" maxlength="12" placeholder="${esc(t('steward.rename_placeholder'))}" aria-label="${esc(t('steward.rename_placeholder'))}">
-              <button type="submit" class="btn btn-secondary">${esc(t('steward.rename_button'))}</button></span>
-            </form>`,
-          )
-          .join('')}</div>
-        <form class="st-roster-row" data-swap>
-          <span>${esc(t('steward.swap_title'))}</span>
-          <span class="st-roster-act"><select name="a">${options}</select> ⇄ <select name="b">${live
-            .map((a, i) => `<option value="${esc(a.id)}"${i === 1 ? ' selected' : ''}>[${esc(a.tag)}] ${esc(a.name)}</option>`)
-            .join('')}</select>
-          <button type="submit" class="btn btn-secondary">${esc(t('steward.swap_button'))}</button></span>
-        </form>
-        ${
-          off.length
-            ? `<p class="st-small">${esc(t('steward.off_map_title'))}</p>${off
-                .map(
-                  (a) => `<form class="st-roster-row" data-retire="${esc(a.id)}"><span>${tagHtml(a)} ${esc(a.name)}</span>
-                  <button type="submit" class="btn btn-secondary">${esc(t('steward.retire_button'))}</button></form>`,
-                )
-                .join('')}`
-            : ''
-        }
-        ${
-          retired.length
-            ? `<details><summary>${esc(t('steward.retired_title', { n: retired.length }))}</summary>${retired
-                .map(
-                  (a) => `<form class="st-roster-row" data-unretire="${esc(a.id)}"><span>${tagHtml(a)} ${esc(a.name)}${history(a) ? `<br><small class="st-small">${history(a)}</small>` : ''}</span>
-                  <button type="submit" class="btn btn-secondary">${esc(t('steward.unretire_button'))}</button></form>`,
-                )
-                .join('')}</details>`
-            : ''
-        }
-        <small class="st-small" data-result></small>`;
+        <h3>${ic('castle')}${esc(t('steward.roster_title'))}</h3>
+        <select id="st-pick" data-site-select data-search="${esc(t('steward.roster_search'))}" aria-label="${esc(t('steward.roster_pick'))}">
+          <option value="">${esc(t('steward.roster_pick'))}</option>${options}
+        </select>
+        <div id="st-alliance" hidden></div>`;
+      $('st-pick').addEventListener('change', () => {
+        picked = $('st-pick').value;
+        allianceBox();
+      });
+      allianceBox();
     }
+
+    /** The picked alliance's settings: tag, name, trading tags, pictures, retiring. */
+    async function allianceBox() {
+      const box = $('st-alliance');
+      const a = roster.find((x) => x.id === picked);
+      window.AllianceImages?.close(box.querySelector('#st-images') || document.createElement('div'));
+      box.hidden = !a;
+      if (!a) return (box.innerHTML = '');
+      const others = roster.filter((x) => x.onMap && x.id !== a.id);
+      const swap = a.onMap && others.length
+        ? `<form class="st-roster-row" data-swap>
+            <span>${esc(t('steward.swap_title'))}</span>
+            <span class="st-roster-act"><select name="b" data-site-select>${others
+              .map((o) => `<option value="${esc(o.id)}">[${esc(o.tag)}] ${esc(o.name)}</option>`)
+              .join('')}</select>
+            <button type="submit" class="btn btn-secondary">${esc(t('steward.swap_button'))}</button></span>
+          </form>`
+        : '';
+      box.innerHTML = `
+        <p class="st-alliance-head"><strong>${tagHtml(a)}</strong> ${esc(a.name)}${history(a) ? `<br><small class="st-small">${history(a)}</small>` : ''}</p>
+        ${
+          a.onMap
+            ? `<form class="st-roster-row" data-rename>
+            <span>${esc(t('steward.tag_label'))}</span>
+            <span class="st-roster-act"><input name="to" maxlength="12" value="${esc(a.tag)}" aria-label="${esc(t('steward.rename_placeholder'))}">
+            <button type="submit" class="btn btn-secondary">${esc(t('steward.rename_button'))}</button></span>
+          </form>
+          <small class="st-small">${esc(t('steward.rename_help'))}</small>
+          <form class="st-roster-row" data-name>
+            <span>${esc(t('steward.name_label'))}</span>
+            <span class="st-roster-act"><input name="name" maxlength="40" value="${esc(a.name)}" aria-label="${esc(t('steward.name_label'))}">
+            <button type="submit" class="btn btn-secondary">${esc(t('steward.name_button'))}</button></span>
+          </form>
+          ${swap}`
+            : ''
+        }
+        ${
+          a.status === 'retired'
+            ? `<form class="st-roster-row" data-unretire><span>${esc(t('steward.roster_retired'))}</span>
+            <button type="submit" class="btn btn-secondary">${esc(t('steward.unretire_button'))}</button></form>`
+            : !a.onMap
+              ? `<form class="st-roster-row" data-retire><span>${esc(t('steward.off_map_title'))}</span>
+            <button type="submit" class="btn btn-secondary">${esc(t('steward.retire_button'))}</button></form>`
+              : ''
+        }
+        <small class="st-small" data-result></small>
+        ${a.onMap ? `<section id="st-images" class="st-images"></section>` : ''}`;
+      if (a.onMap) await imagesBox(a);
+    }
+
+    /** The alliance's pictures, with the dashboard's own tool; a Steward's upload is live at once. */
+    async function imagesBox(a) {
+      const el = $('st-images');
+      if (!el || !window.AllianceImages) return;
+      try {
+        const res = await ask(`steward=alliance&id=${encodeURIComponent(a.id)}`);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || res.statusText);
+        if (picked !== a.id || !$('st-images')) return; // another alliance picked meanwhile
+        el._aiOpen = data.alliance.tag; // straight to the tools
+        window.AllianceImages.render(el, {
+          alliance: data.alliance,
+          images: data.images,
+          steward: true,
+          direct: true,
+          pass,
+          onChange: () => imagesBox(a),
+        });
+        el.querySelector('.dash-card-title')?.insertAdjacentHTML(
+          'afterend',
+          `<p class="st-small">${esc(t('steward.images_help'))}</p>`,
+        );
+      } catch (err) {
+        el.innerHTML = `<p class="st-small">${ic('cross', 'bad')}${esc(err.message)}</p>`;
+      }
+    }
+
     async function rosterAsk(query, confirmText) {
       if (confirmText && !window.confirm(confirmText)) return;
       const res = await ask(query);
@@ -268,30 +329,37 @@ strings: [steward]
     const tagOf = (id) => roster.find((a) => a.id === id)?.tag || '?';
     $('st-roster').addEventListener('submit', async (e) => {
       const form = e.target;
+      // The pictures' own forms (if any) are theirs
+      if (form.closest('#st-images')) return;
       e.preventDefault();
-      if (form.dataset.rename) {
+      const id = picked;
+      if (!id) return;
+      if ('rename' in form.dataset) {
         const to = form.querySelector('[name="to"]').value.trim().replace(/^\[(.*)\]$/, '$1');
-        if (!to) return;
-        const from = tagOf(form.dataset.rename);
+        const from = tagOf(id);
+        if (!to || to === from) return;
         await rosterAsk(
-          `steward=rename&id=${encodeURIComponent(form.dataset.rename)}&to=${encodeURIComponent(to)}`,
+          `steward=rename&id=${encodeURIComponent(id)}&to=${encodeURIComponent(to)}`,
           t('steward.rename_confirm', { from, to }),
         );
+      } else if ('name' in form.dataset) {
+        const name = form.querySelector('[name="name"]').value.trim();
+        if (!name) return;
+        await rosterAsk(`steward=name&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}`);
       } else if ('swap' in form.dataset) {
-        const a = form.querySelector('[name="a"]').value;
         const b = form.querySelector('[name="b"]').value;
-        if (!a || !b || a === b) return;
+        if (!b || b === id) return;
         await rosterAsk(
-          `steward=swap&a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}`,
-          t('steward.swap_confirm', { a: tagOf(a), b: tagOf(b) }),
+          `steward=swap&a=${encodeURIComponent(id)}&b=${encodeURIComponent(b)}`,
+          t('steward.swap_confirm', { a: tagOf(id), b: tagOf(b) }),
         );
-      } else if (form.dataset.retire) {
+      } else if ('retire' in form.dataset) {
         await rosterAsk(
-          `steward=retire&id=${encodeURIComponent(form.dataset.retire)}`,
-          t('steward.retire_confirm', { tag: tagOf(form.dataset.retire) }),
+          `steward=retire&id=${encodeURIComponent(id)}`,
+          t('steward.retire_confirm', { tag: tagOf(id) }),
         );
-      } else if (form.dataset.unretire) {
-        await rosterAsk(`steward=unretire&id=${encodeURIComponent(form.dataset.unretire)}`);
+      } else if ('unretire' in form.dataset) {
+        await rosterAsk(`steward=unretire&id=${encodeURIComponent(id)}`);
       }
     });
     // The "renamed in the game" notice's one-click rename

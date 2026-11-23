@@ -365,6 +365,21 @@
   min-width: 0;
   max-width: 11em;
 }
+/* Alliance settings (2026-11-23): the picked alliance's rows; the swap's dropdown (the site's
+   own, js/site-select.js) gets room of its own */
+.st-alliance-head {
+  margin: 10px 0 4px;
+}
+.st-roster-act .site-select,
+.st-roster-act [data-site-select] {
+  min-width: 12em;
+  max-width: 100%;
+}
+.st-images {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+}
 #st-roster details {
   margin-top: 8px;
 }

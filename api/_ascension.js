@@ -17,6 +17,8 @@ import { getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { trackerConfigured } from './_tracker.js';
 import { measureAlliances } from './_alliance_ids.js';
 import { ascensionButtons } from './_bot_ascension.js';
+import { readRegister } from './_register.js';
+import { currentTagFor } from './_rename.js';
 
 export const ASCENSION_FILE = 'ascension.json';
 export const DUEL_DAYS = [3, 4, 5]; // Wednesday, Thursday, Friday
@@ -85,12 +87,39 @@ export function standings(run, tags) {
   return [...ranked, ...rest];
 }
 
+/**
+ * A run with each day's alliances under their tags now (a run kept by tag from before a
+ * rename: HMDA's Day 5 shows as Arch's). Two old tags of one alliance in a day: the latest wins.
+ */
+function currentTags(run, register) {
+  if (!run?.days) return run;
+  const days = {};
+  for (const [d, day] of Object.entries(run.days)) {
+    if (!day?.power) {
+      days[d] = day;
+      continue;
+    }
+    const power = {};
+    // Tags that are an alliance's tag now first, so an old tag never overwrites them
+    const entries = Object.entries(day.power).sort(
+      ([a], [b]) =>
+        Number(currentTagFor(register, a) !== a) - Number(currentTagFor(register, b) !== b),
+    );
+    for (const [tag, v] of entries) {
+      const now = currentTagFor(register, tag);
+      if (!(now in power)) power[now] = v;
+    }
+    days[d] = { ...day, power };
+  }
+  return { ...run, days };
+}
+
 /** The latest run, as the pages show it: { id, taken: { 3: at… }, rows }, or null. */
 export function latestRace(gist) {
   const runs = gistJson(gist, ASCENSION_FILE, { runs: {} }).runs || {};
   const id = Object.keys(runs).sort().pop();
   if (!id) return null;
-  const run = runs[id];
+  const run = currentTags(runs[id], readRegister(gist));
   const taken = {};
   for (const d of DUEL_DAYS) taken[d] = run.days?.[d]?.at || null;
   return { id, taken, finished: Boolean(taken[5]), rows: standings(run, []) };

@@ -61,13 +61,15 @@
     const steward = ctx.steward;
     const canSend = st.ready && (steward || st.left > 0);
     section.classList.toggle('is-editing', open);
+    // On the Steward page (ctx.direct): always open, without the leaders' button and review notes
+    const direct = Boolean(ctx.direct);
     section.innerHTML = `
       <h3 class="dash-card-title">${ic('image')}${esc(t('title'))}</h3>
-      <div class="dash-edit-bar ai-edit-bar">
+      <div class="dash-edit-bar ai-edit-bar"${direct ? ' hidden' : ''}>
         <button type="button" class="dash-btn dash-two-labels" data-ai="toggle" aria-pressed="${open}"><span class="when-off">${ic('pencil')}${esc(t('edit'))}</span><span class="when-on">${esc(t('done'))}</span></button>
       </div>
       ${
-        open
+        open && !direct
           ? `<p class="ai-help">${esc(t('help'))}</p>
       <p class="ai-rules">${esc(t('rules'))}</p>
       <p class="ai-left dash-muted">${esc(st.ready ? (steward ? '' : t('left_today', { left: st.left, max: st.dailyLimit })) : t('not_ready'))}</p>`
@@ -144,6 +146,9 @@
   function framedSample(url, size) {
     return `<span class="player-portrait ai-frame-sample pf-${size}" aria-hidden="true"><span class="pf-pic pf-initial">A</span><img class="pf-frame" src="${esc(url)}" alt=""></span>`;
   }
+
+  /** "Send for review", or "Save (live now)" for a Steward on the Steward page. */
+  const sendLabel = (section) => t(section._ai?.ctx.direct ? 'save_live' : 'send');
 
   function say(section, text, kind = '') {
     const el = section.querySelector('.ai-message');
@@ -275,7 +280,7 @@
         .join('')}</div>
       <div class="dash-editor-actions">
         <button type="button" class="dash-icon-btn" data-ai="cancel">${esc(t('cancel'))}</button>
-        <button type="button" class="submit-plan-btn" data-ai="send">${esc(t('send'))}</button>
+        <button type="button" class="submit-plan-btn" data-ai="send">${esc(sendLabel(section))}</button>
       </div>`;
     const frame = box.querySelector('.ai-frame');
     const zoom = box.querySelector('.ai-zoom input');
@@ -582,7 +587,7 @@
         </div>
         <div class="dash-editor-actions">
           <button type="button" class="dash-icon-btn" data-ai="cancel">${esc(t('cancel'))}</button>
-          <button type="button" class="submit-plan-btn" data-ai="send-frame">${esc(t('send'))}</button>
+          <button type="button" class="submit-plan-btn" data-ai="send-frame">${esc(sendLabel(section))}</button>
         </div>`;
     }, 'image/png');
   }
@@ -598,16 +603,19 @@
         alliance: section._ai.ctx.alliance.tag,
         kind: 'frame',
         image: await dataUrl(c.blob),
+        ...(section._ai.ctx.direct ? { direct: true } : {}),
       });
       if (!r.ok) throw new Error('');
       closeCrop(section);
-      say(section, t('sent'), 'ok');
-      section._aiNote = { text: t('sent'), kind: 'ok' };
+      // A Steward's upload from the Steward page is live at once (the server says so)
+      const note = r.out?.live ? r.out.message || t('sent') : t('sent');
+      say(section, note, 'ok');
+      section._aiNote = { text: note, kind: 'ok' };
       section._ai.ctx.onChange?.();
     } catch (err) {
       if (err.message) say(section, err.message, 'error');
       button.disabled = false;
-      button.textContent = t('send');
+      button.textContent = sendLabel(section);
     }
   }
 
@@ -650,16 +658,19 @@
         alliance: section._ai.ctx.alliance.tag,
         kind: c.kind,
         image: await dataUrl(blob),
+        ...(section._ai.ctx.direct ? { direct: true } : {}),
       });
       if (!r.ok) throw new Error('');
       closeCrop(section);
-      say(section, t('sent'), 'ok');
-      section._aiNote = { text: t('sent'), kind: 'ok' };
+      // A Steward's upload from the Steward page is live at once (the server says so)
+      const note = r.out?.live ? r.out.message || t('sent') : t('sent');
+      say(section, note, 'ok');
+      section._aiNote = { text: note, kind: 'ok' };
       section._ai.ctx.onChange?.();
     } catch (err) {
       if (err.message) say(section, err.message, 'error');
       button.disabled = false;
-      button.textContent = t('send');
+      button.textContent = sendLabel(section);
     }
   }
 
