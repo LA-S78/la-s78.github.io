@@ -104,6 +104,8 @@ rewards_card:
 roster:
   title: İttifak kadrosu
   summary: "{n} üye · {might} Güç"
+  show: Üyeleri göster
+  hide: Üyeleri gizle
   search: İsim veya ID ara...
   sort_label: Sıralama
   sort_power: Güç
@@ -112,20 +114,20 @@ roster:
   sanctuary_lv: Sığınak {n}
   copy_id: Bu oyuncu ID'sini kopyala
   copied: Kopyalandı
-  unavailable: Üye listesi şu an yüklenemiyor. Lütfen daha sonra tekrar deneyin.
-  credit_before: 'Oyuncu verileri şuradan:'
+  unavailable: Üye listesi şu an yüklenemiyor. Daha sonra tekrar deneyin.
+  credit_before: 'Oyuncu verileri şuradan alındı:'
   sort_tech: Araştırma
   sort_help: Yardım
-  tech_title: Bugün yapılan ittifak araştırması bağışları
-  help_title: Bugün üyelerin inşaat ve araştırmalarına yapılan yardımlar
+  tech_title: Bugün bağışlanan ittifak araştırması
+  help_title: Bugün üyelere inşaat ve araştırma için verilen yardım
   help_capped: Günlük yardım sınırına ulaşıldı (1.000)
   refresh: Yenile
   refresh_left: "{n} kaldı"
   refreshing: Yenileniyor...
-  refresh_help: 'Oyundan canlı verileri alın. İttifak liderleriniz tarafından paylaşılır: Bugün {n} / {max} hak kaldı, her 10 dakikada bir yenilenir.'
-  refresh_wait: 'Az önce yenilendi: bir sonraki yenileme {n} dk. içinde.'
-  refresh_none: Bugün başka yenileme hakkı kalmadı. Günlük sıfırlama (00:00 GT) ile tekrar başlar.
-  daily_as_of: 'Bugünkü sıfırlamadan (00:00 GT) bu yana araştırma ve yardım, veriler: {time}'
+  refresh_help: 'Oyundan canlı sayıları al. İttifak liderleriniz tarafından paylaşılır: Bugün {n} / {max} kaldı, her 10 dakikada bir yenilenir.'
+  refresh_wait: 'Az önce yenilendi: bir sonraki {n} dk. içinde.'
+  refresh_none: Bugün başka yenileme hakkı kalmadı. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  daily_as_of: Bugünkü sıfırlamadan (00:00 GT) bu yana araştırma ve yardım, {time} itibarıyla
   daily_old: 'Bugünkü sıfırlamadan önceki araştırma ve yardım: son okuma {time}'
   daily_unknown: 'Araştırma ve yardım: okuma zamanı bilinmiyor'
 caravan:
@@ -980,66 +982,67 @@ stats:
   title: NAP İstatistikleri
   views_label: Ne gösterilecek
   view_growth: NAP büyümesi
+  chart_hint: Okumak için bir güne dokunun veya üzerine gelin
   view_players: En iyi oyuncular
   view_achievements: Başarılar
-  view_lookup: Oyuncu sorgulama
+  view_lookup: Oyuncu arama
   growth_title: İttifak büyümesi
   growth_members: "{n} üye"
-  growth_more: 'Daha fazlası şurada:'
-  growth_link: İstatistikler sekmesi
-  lookup_search: Oyuncu adı...
-  lookup_hint: Günlük anlık görüntüden sadece NAP oyuncuları. İsimlerinden en az 2 harf yazın.
+  growth_more: Daha fazlası için
+  growth_link: İstatistik sekmesi
+  lookup_search: Oyuncu ismi...
+  lookup_hint: Yalnızca günlük anlık görüntüden NAP oyuncuları. İsimlerinin en az 2 harfini girin.
   lookup_none: Eşleşen NAP oyuncusu yok.
   lookup_place: 'Güce göre {of} NAP oyuncusu arasında #{place}'
-  lookup_kills: Leş
+  lookup_kills: Öldürme
   lookup_level: Sığınak
   lookup_week: Bu hafta
   lookup_month: Son 30 gün
-  lookup_kills_week: Bu haftaki leşler
+  lookup_kills_week: Bu haftaki öldürme
   lookup_history: Son bir aydaki Güç
   ach_strongest: En güçlü
   ach_gain_week: Bu haftanın en büyük kazancı
-  ach_kills: En çok leş
-  ach_kills_week: Bu haftanın en çok leşi
-  ach_climb_month: Bu ayın en büyük Sığınak tırmanışı
-  ach_away: Kovandan uzak
-  ach_away_help: Bu ay, ittifak kovanından (üyelerinin çoğunun bulunduğu yer) 50 karodan fazla uzakta geçirilen gün sayısı.
-  ach_none: Henüz yeterli gün toplanmadı.
-  value_kills: "{n} leş"
+  ach_kills: En çok öldürme
+  ach_kills_week: Bu haftanın en çok öldürme sayısı
+  ach_climb_month: Bu ayki en büyük Sığınak yükselişi
+  ach_away: Kovandan uzakta
+  ach_away_help: Bu ay, ittifak kovanından (üyelerin çoğunun bulunduğu yer) 50 karodan fazla uzakta geçirilen gün sayısı.
+  ach_none: Henüz yeterli veri toplanmadı.
+  value_kills: "{n} öldürme"
   value_levels_one: "+1 seviye"
   value_levels_other: "+{n} seviye"
   value_days_one: 1 gün
   value_days_other: "{n} gün"
   list_label: Hangi liste
-  list_strongest: En güçlü
-  list_week: Bu hafta kazanılan
-  list_month: Bu ay kazanılan
+  list_strongest: En güçlüler
+  list_week: Bu hafta kazananlar
+  list_month: Bu ay kazananlar
   filter_label: İttifak
   filter_all: Tüm NAP ittifakları
   players_none: Henüz gösterilecek oyuncu yok.
-  players_wait_week: Bu haftanın kazanımları, bu Pazartesi öncesinden bir anlık görüntü toplandıktan sonra görünür.
-  players_wait_month: Bir aylık kazanımlar, bir ay veri toplandıktan sonra görünür.
+  players_wait_week: Haftalık kazançlar, bu Pazartesi öncesinden bir anlık görüntü alındıktan sonra gösterilir.
+  players_wait_month: Aylık kazançlar, bir aylık veri toplandıktan sonra gösterilir.
   players_as_of: "{date} sıfırlamasından önceki anlık görüntü itibarıyla."
-  week_note: Haftalar Pazartesi'den Pazar'a (Game Time) çalışır; haftalık kayıtlar her Pazartesi yeniden başlar.
+  week_note: Haftalar Pazartesi'den Pazar'a (Game Time) kadardır; haftalık kayıtlar her Pazartesi yeniden başlar.
   col_player: Oyuncu
-  col_gain: Kazanılan
-  show_more: "{n} tanesini göster"
+  col_gain: Kazanç
+  show_more: Tüm {n} tanesini göster
   range_label: Zaman aralığı
   range_week: 1 hafta
   range_month: 1 ay
   range_all: Tümü
   loading: İstatistikler yükleniyor...
-  failed: İstatistikler şu anda yüklenemiyor.
-  collecting: İstatistikler günde bir kez, günlük sıfırlamadan hemen önce (00:00 GT) toplanır. Grafikler gün geçtikçe dolar.
+  failed: İstatistikler şu an yüklenemiyor.
+  collecting: İstatistikler her gün, günlük sıfırlamadan hemen önce (00:00 GT) toplanır. Grafikler gün gün dolar.
   since: "{date} tarihinden beri günlük toplanmaktadır."
-  one_day: 'Şu ana kadar sadece bir gün toplandı: grafik iki gün olduğunda başlar.'
+  one_day: 'Henüz sadece bir gün toplandı: grafik iki gün olduğunda başlar.'
   col_alliance: İttifak
   col_might: Güç
   col_week: 7 gün
   col_month: 30 gün
   no_number: "—"
   show_hide: Satırını göstermek veya gizlemek için bir ittifaka dokunun.
-  credit_before: 'Veriler şuradan:'
+  credit_before: 'Sayılar şuradan alındı:'
 steward:
   tidy_title: 'İttifak Kimlikleri: temizlik'
   tidy_help: 'Artık her şey ittifak kimliği ile saklanıyor. Bu işlem {gist} yedek dosyasını ve {dashboards} eski gösterge paneli dosyasını Gist içinde bırakır. Memnun kaldığınızda bunları silin: Gist önceki sürümlerini korur. {stats} İstatistik yedek dosyaları saklanır (Blob deposunda sürüm bulunmaz).'

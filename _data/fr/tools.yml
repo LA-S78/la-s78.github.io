@@ -102,30 +102,32 @@ rewards_card:
   buyout_cost: 'Rachat : {amount} {chest} dans chaque ensemble'
   buyout_cost_help: Financement de l'alliance déplacée cette semaine
 roster:
-  title: Effectif de l'alliance
+  title: Liste des membres de l'Alliance
   summary: "{n} membres · {might} Puissance"
-  search: Rechercher des noms ou des ID...
+  show: Afficher les membres
+  hide: Masquer les membres
+  search: Rechercher des noms ou IDs...
   sort_label: Trier par
   sort_power: Puissance
   sort_name: Nom
   sort_rank: Rang
   sanctuary_lv: Sanctuaire {n}
-  copy_id: Copier cet ID de joueur
+  copy_id: Copier cet ID joueur
   copied: Copié
   unavailable: La liste des membres ne peut pas être chargée pour le moment. Réessayez plus tard.
-  credit_before: Données des joueurs issues de
+  credit_before: Données des joueurs provenant de
   sort_tech: Recherche
   sort_help: Aide
-  tech_title: Recherche d'alliance effectuée aujourd'hui
-  help_title: Aide apportée à la construction et à la recherche des membres aujourd'hui
+  tech_title: Recherche d'alliance donnée aujourd'hui
+  help_title: Aide fournie pour la construction et la recherche des membres aujourd'hui
   help_capped: Limite d'aide quotidienne atteinte (1 000)
   refresh: Actualiser
-  refresh_left: "{n} restants"
+  refresh_left: "{n} restantes"
   refreshing: Actualisation...
-  refresh_help: 'Obtenez les chiffres en temps réel du jeu. Partagé par les chefs de votre alliance : {n} sur {max} restants aujourd''hui, un toutes les 10 minutes.'
+  refresh_help: 'Obtenez des chiffres en direct du jeu. Partagé par les chefs de votre alliance : {n} sur {max} restants aujourd''hui, un toutes les 10 minutes.'
   refresh_wait: 'Actualisé il y a un instant : prochain dans {n} min.'
   refresh_none: Plus d'actualisations disponibles aujourd'hui. Elles recommencent à la réinitialisation quotidienne (00:00 GT).
-  daily_as_of: Recherche et aide depuis la réinitialisation d'aujourd'hui (00:00 GT), au {time}
+  daily_as_of: Recherche et aide depuis la réinitialisation d'aujourd'hui (00:00 GT), à {time}
   daily_old: 'Recherche et aide avant la réinitialisation d''aujourd''hui : dernière lecture {time}'
   daily_unknown: 'Recherche et aide : heure de lecture inconnue'
 caravan:
@@ -980,30 +982,31 @@ stats:
   title: Stats NAP
   views_label: Que montrer
   view_growth: Croissance NAP
-  view_players: Top joueurs
-  view_achievements: Succès
-  view_lookup: Recherche de joueur
-  growth_title: Croissance de l'alliance
+  chart_hint: Appuyez ou survolez un jour pour le lire
+  view_players: Meilleurs joueurs
+  view_achievements: Réalisations
+  view_lookup: Rechercher un joueur
+  growth_title: Croissance de l'Alliance
   growth_members: "{n} membres"
   growth_more: Plus sur l'onglet
   growth_link: Stats
   lookup_search: Nom du joueur...
-  lookup_hint: Joueurs NAP uniquement, d'après l'instantané quotidien. Tapez au moins 2 lettres de leur nom.
+  lookup_hint: Joueurs NAP uniquement, à partir de l'instantané quotidien. Tapez au moins 2 lettres de leur nom.
   lookup_none: Aucun joueur NAP ne correspond.
   lookup_place: "#{place} sur {of} joueurs NAP par Puissance"
   lookup_kills: Éliminations
   lookup_level: Sanctuaire
   lookup_week: Cette semaine
-  lookup_month: 30 derniers jours
+  lookup_month: Derniers 30 jours
   lookup_kills_week: Éliminations cette semaine
   lookup_history: Puissance sur le dernier mois
   ach_strongest: Le plus puissant
   ach_gain_week: Plus forte progression cette semaine
   ach_kills: Plus grand nombre d'éliminations
   ach_kills_week: Plus grand nombre d'éliminations cette semaine
-  ach_climb_month: Plus forte ascension du Sanctuaire ce mois-ci
+  ach_climb_month: Plus forte montée du Sanctuaire ce mois-ci
   ach_away: Loin de la ruche
-  ach_away_help: Nombre de jours ce mois-ci à plus de 50 cases de la ruche de leur alliance (où se trouvent la plupart des membres).
+  ach_away_help: Plus grand nombre de jours ce mois-ci à plus de 50 tuiles de la ruche de leur alliance (là où se trouvent la plupart des membres).
   ach_none: Pas assez de jours collectés pour le moment.
   value_kills: "{n} éliminations"
   value_levels_one: "+1 niveau"
@@ -1011,19 +1014,19 @@ stats:
   value_days_one: 1 jour
   value_days_other: "{n} jours"
   list_label: Quelle liste
-  list_strongest: Les plus puissants
+  list_strongest: Les plus forts
   list_week: Gagné cette semaine
   list_month: Gagné ce mois-ci
   filter_label: Alliance
   filter_all: Toutes les alliances NAP
   players_none: Aucun joueur à afficher pour le moment.
-  players_wait_week: Les gains de cette semaine s'afficheront une fois qu'un instantané précédant ce lundi aura été collecté.
-  players_wait_month: Les gains sur un mois s'afficheront une fois qu'un mois de données aura été collecté.
-  players_as_of: D'après l'instantané avant la réinitialisation du {date}.
+  players_wait_week: Les gains de cette semaine s'affichent une fois qu'un instantané précédant ce lundi a été collecté.
+  players_wait_month: Les gains sur un mois s'affichent une fois qu'un mois de données a été collecté.
+  players_as_of: À partir de l'instantané avant la réinitialisation du {date}.
   week_note: Les semaines s'étendent du lundi au dimanche (Game Time) ; les records hebdomadaires recommencent chaque lundi.
   col_player: Joueur
   col_gain: Gagné
-  show_more: Tout afficher {n}
+  show_more: Afficher les {n}
   range_label: Période
   range_week: 1 semaine
   range_month: 1 mois
@@ -1032,14 +1035,14 @@ stats:
   failed: Les stats ne peuvent pas être chargées pour le moment.
   collecting: Les stats sont collectées une fois par jour, juste avant la réinitialisation quotidienne (00:00 GT). Les graphiques se remplissent jour après jour.
   since: Collectées quotidiennement depuis le {date}.
-  one_day: 'Un seul jour collecté pour le moment : le graphique démarre une fois qu''il y en a deux.'
+  one_day: 'Un seul jour collecté pour l''instant : le graphique démarre une fois qu''il y en a deux.'
   col_alliance: Alliance
   col_might: Puissance
   col_week: 7 jours
   col_month: 30 jours
   no_number: "—"
   show_hide: Appuyez sur une alliance pour afficher ou masquer sa ligne.
-  credit_before: Chiffres du
+  credit_before: Chiffres provenant de
 steward:
   tidy_title: 'IDs d''Alliance : nettoyage'
   tidy_help: 'Tout est maintenant stocké par ID d''alliance. Les déplacements ont laissé {gist} fichiers de sauvegarde et {dashboards} anciens fichiers de tableau de bord dans le Gist. Supprimez-les une fois que vous êtes satisfait : le Gist conserve ses révisions antérieures. Les fichiers de sauvegarde des Stats {stats} sont conservés (le magasin Blob n''a pas de révisions).'
