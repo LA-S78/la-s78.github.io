@@ -102,32 +102,34 @@ rewards_card:
   buyout_cost: 'Ablöse: {amount} {chest} in jedem Set'
   buyout_cost_help: Finanzierung der verdrängten Allianz diese Woche
 roster:
-  title: Allianz-Mitgliederliste
+  title: Allianz-Kader
   summary: "{n} Mitglieder · {might} Macht"
+  show: Mitglieder anzeigen
+  hide: Mitglieder ausblenden
   search: Namen oder IDs suchen...
   sort_label: Sortieren nach
   sort_power: Macht
   sort_name: Name
   sort_rank: Rang
   sanctuary_lv: Sanktuarium {n}
-  copy_id: Diese Spieler-ID kopieren
+  copy_id: Spieler-ID kopieren
   copied: Kopiert
-  unavailable: Die Mitgliederliste kann momentan nicht geladen werden. Versuche es später erneut.
+  unavailable: Die Mitgliederliste kann derzeit nicht geladen werden. Versuche es später erneut.
   credit_before: Spielerdaten vom
   sort_tech: Forschung
   sort_help: Hilfe
   tech_title: Heute gespendete Allianz-Forschung
   help_title: Heute an Mitglieder bei Bau und Forschung geleistete Hilfe
-  help_capped: Tägliches Hilfe-Limit erreicht (1.000)
+  help_capped: Tägliches Hilfelimit erreicht (1.000)
   refresh: Aktualisieren
-  refresh_left: "{n} verbleibend"
-  refreshing: Aktualisiere...
-  refresh_help: 'Live-Zahlen aus dem Spiel abrufen. Von deinen Allianz-Anführern geteilt: {n} von {max} heute noch übrig, alle 10 Minuten eine.'
+  refresh_left: "{n} übrig"
+  refreshing: Wird aktualisiert...
+  refresh_help: 'Live-Zahlen aus dem Spiel abrufen. Geteilt durch die Anführer deiner Allianz: {n} von {max} heute übrig, eine alle 10 Minuten.'
   refresh_wait: 'Vor kurzem aktualisiert: nächste in {n} Min.'
-  refresh_none: Heute keine Aktualisierungen mehr übrig. Sie beginnen wieder beim täglichen Reset (00:00 GT).
+  refresh_none: Keine Aktualisierungen heute übrig. Sie beginnen wieder beim täglichen Reset (00:00 GT).
   daily_as_of: Forschung und Hilfe seit dem heutigen Reset (00:00 GT), Stand {time}
-  daily_old: 'Forschung und Hilfe vor dem heutigen Reset: letzter Abruf {time}'
-  daily_unknown: 'Forschung und Hilfe: Zeitpunkt des Abrufs unbekannt'
+  daily_old: 'Forschung und Hilfe vor dem heutigen Reset: letzter Stand {time}'
+  daily_unknown: 'Forschung und Hilfe: Zeitpunkt der Abfrage unbekannt'
 caravan:
   title: Karawanen-Rotor
   name_ok: In der Mitgliederliste von [{tag}]
@@ -265,21 +267,21 @@ chart_editor:
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}
-  no_numbers: Keine Zahlen zum Diagramm in der gewählten Spalte.
+  no_numbers: Keine Zahlen zum Darstellen in der gewählten Spalte.
   line_two_rows: Eine Linie benötigt mindestens zwei Zeilen.
   line_two_columns: Eine Linie benötigt mindestens zwei Spalten unten.
-  no_positive: Keine positiven Zahlen zum Diagramm in der gewählten Spalte.
+  no_positive: Keine positiven Zahlen zum Darstellen in der gewählten Spalte.
   no_targets: Keine Zahlen (oder Ziele) zum Vergleichen.
   no_table: Noch keine Tabelle.
   unknown_type: Unbekannter Diagrammtyp.
-  draw_failed: Dieses Diagramm konnte nicht gezeichnet werden ({error}).
-  other: Andere
+  draw_failed: Dieses Diagramm konnte nicht erstellt werden ({error}).
+  other: Sonstiges
   value: Wert
   total: Gesamt
   total_value: 'Gesamt: {value}'
   share_of_all: "{value} · {share} von allen"
   value_of_target: "{value} von {target}"
-  to_go: 'Noch offen: {value}'
+  to_go: 'Verbleibend: {value}'
   target_reached: Ziel erreicht ✓
   done: "✓ Erledigt"
   reached_target: "{done} von {total} haben das Ziel erreicht"
@@ -288,31 +290,32 @@ charts:
   matching: "{n} Treffer"
   show_all: Alle {n} anzeigen
   show_all_rows: Alle {n} Zeilen anzeigen
+  show_fewer: Weniger anzeigen
   first_rows: Zeige die ersten {shown} von {n} Zeilen.
-  hint_bar: Tippe oder bewege die Maus über einen Balken
-  hint_bar_key: Tippe oder bewege die Maus über einen Balken. Tippe in der Legende auf einen Namen, um nur diesen zu sehen.
+  hint_bar: Balken antippen oder darüberfahren
+  hint_bar_key: Balken antippen oder darüberfahren. Namen in der Legende antippen, um nur diesen anzuzeigen.
   views: Ansichten
   view_latest: Neuester Tab
-  view_weeks: Summen pro Tab
+  view_weeks: Gesamtsummen pro Tab
   view_player: Ein Name pro Tab
-  view_pick: Name zum Anzeigen
+  view_pick: Anzuzeigender Name
   view_average: Durchschnitt von {n} Tabs
   view_chart: Diagramm
   view_compare: Vergleichen
   search_names: Namen eingeben…
-  no_match: Keine Namen stimmen überein.
-  view_tab: Tab zum Anzeigen
+  no_match: Keine Namen gefunden.
+  view_tab: Tab zur Anzeige
   compare_first: Erster Name
   compare_second: Zweiter Name
   compare_top: Top {n} (Durchschnitt)
-  compare_bottom: Bottom {n} (Durchschnitt)
+  compare_bottom: Flop {n} (Durchschnitt)
   pair_left: 'Links: {name}'
-  pair_right: 'Rechts (blass): {name}'
+  pair_right: 'Rechts (abgeblendet): {name}'
   flip_to_asc: "⇅ Niedrigste zuerst"
   flip_to_desc: "⇅ Höchste zuerst"
-  hint_line: Tippe oder bewege die Maus über eine Woche
-  hint_pie: Tippe oder bewege die Maus über ein Stück
-  hint_progress: Tippe oder bewege die Maus über eine Zeile
+  hint_line: Woche antippen oder darüberfahren
+  hint_pie: Segment antippen oder darüberfahren
+  hint_progress: Zeile antippen oder darüberfahren
 nominate:
   page_title: Belohnungsnominierungen
   name_ok: In der Mitgliederliste von [{tag}]

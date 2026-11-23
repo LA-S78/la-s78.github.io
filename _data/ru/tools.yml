@@ -2,8 +2,9 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 common:
+  disclaimer: 'LA-S78 — это фанатский проект сообщества для игры Last Asylum: Plague. Он не является официальным сайтом 37Games и не связан с Last Asylum: Plague. Названия игр и изображения принадлежат их владельцам. Данные об игре в реальном времени предоставлены {tracker}.'
   sign_in_discord: Войти через Discord
-  sign_in_again: Войти снова
+  sign_in_again: Войти повторно
   not_saved: 'Не сохранено: {error}'
   cancel: Отмена
   save: Сохранить
@@ -12,28 +13,26 @@ common:
   delete: Удалить
   remove: Убрать
   undo: Отменить
-  move_up: Вверх
-  move_down: Вниз
   copied: "✓ Скопировано"
   optional: "(необязательно)"
   now: сейчас
   duration_days: "{d}д {h}ч"
-  duration_hours: "{h}ч {m}м"
-  duration_minutes: "{m}м"
+  duration_hours: "{h}ч {m}мин"
+  duration_minutes: "{m}мин"
   game_time: "{time} GT"
   your_time: "{time} по вашему времени"
-  off_week: Неделя перерыва
-  kw_week: Неделя Войны Королевств {n}
-  copy: Скопировать
-  set_one: Награда Короля
-  set_two: Награда Короля битвы
+  off_week: Неделя отдыха
+  kw_week: Война Королевств, неделя {n}
+  copy: Копировать
+  set_one: Королевская похвала
+  set_two: Награда короля битвы
   chests:
     commanders_will: Воля командира
     loyal_servant: Верный слуга
     followers_heart: Сердце последователя
     honor_vanguard: Авангард чести
     fearless_hero: Бесстрашный герой
-    logistics_support: Материально-техническое обеспечение
+    logistics_support: Материально-техническая поддержка
 dashboard:
   title: Дашборд Альянса
   loading: Загрузка дашборда вашего альянса…
@@ -105,31 +104,33 @@ rewards_card:
   buyout_cost_help: Финансирование перемещенного альянса на этой неделе
 roster:
   title: Состав альянса
-  summary: "{n} участников · {might} Силы"
-  search: Поиск по именам или ID...
+  summary: "{n} участников · {might} Мощи"
+  show: Показать участников
+  hide: Скрыть участников
+  search: Поиск по имени или ID...
   sort_label: Сортировать по
-  sort_power: Силе
+  sort_power: Мощи
   sort_name: Имени
   sort_rank: Рангу
   sanctuary_lv: Убежище {n}
-  copy_id: Скопировать ID игрока
+  copy_id: Копировать ID игрока
   copied: Скопировано
-  unavailable: Не удалось загрузить список участников. Попробуйте позже.
-  credit_before: Данные игроков из
-  sort_tech: Исследования
-  sort_help: Помощь
-  tech_title: Исследования альянса, выполненные сегодня
-  help_title: Помощь в строительстве и исследованиях, оказанная участникам сегодня
-  help_capped: Достигнут дневной лимит помощи (1 000)
+  unavailable: Список участников сейчас не загружается. Попробуйте позже.
+  credit_before: Данные игрока из
+  sort_tech: Исследованиям
+  sort_help: Помощи
+  tech_title: Исследования альянса, сделанные сегодня
+  help_title: Помощь в строительстве и исследованиях, оказанная сегодня
+  help_capped: Дневной лимит помощи достигнут (1000)
   refresh: Обновить
   refresh_left: Осталось {n}
   refreshing: Обновление...
-  refresh_help: 'Получите актуальные данные из игры. Обновление доступно лидерам вашего альянса: осталось {n} из {max} на сегодня, по одному каждые 10 минут.'
+  refresh_help: 'Получить актуальные данные из игры. Совместно с лидерами вашего альянса: осталось {n} из {max} на сегодня, доступно каждые 10 минут.'
   refresh_wait: 'Обновлено только что: следующее через {n} мин.'
-  refresh_none: Сегодня лимит обновлений исчерпан. Счетчик обнуляется с началом нового дня (00:00 GT).
-  daily_as_of: Исследования и помощь с начала игрового дня (00:00 GT), на {time}
-  daily_old: 'Исследования и помощь до начала игрового дня: последнее обновление {time}'
-  daily_unknown: 'Исследования и помощь: время обновления неизвестно'
+  refresh_none: Обновлений на сегодня больше нет. Они начнутся заново при ежедневном сбросе (00:00 GT).
+  daily_as_of: Исследования и помощь с момента сброса (00:00 GT) на {time}
+  daily_old: 'Исследования и помощь до сброса: последнее чтение {time}'
+  daily_unknown: 'Исследования и помощь: время чтения неизвестно'
 caravan:
   title: Ротатор караванов
   name_ok: В списке участников [{tag}]
@@ -269,19 +270,19 @@ chart_editor:
   at_least_example: напр. 300M
 charts:
   column: Столбец {n}
-  no_numbers: Нет чисел для отображения в выбранном столбце.
+  no_numbers: В выбранном столбце нет чисел для отображения.
   line_two_rows: Для линии нужно минимум две строки.
   line_two_columns: Для линии нужно минимум два столбца внизу.
-  no_positive: Нет положительных чисел для отображения в выбранном столбце.
+  no_positive: В выбранном столбце нет положительных чисел.
   no_targets: Нет чисел (или целей) для сравнения.
-  no_table: Таблица еще не создана.
+  no_table: Таблицы еще нет.
   unknown_type: Неизвестный тип диаграммы.
-  draw_failed: Не удалось отрисовать диаграмму ({error}).
+  draw_failed: Диаграмма не смогла построиться ({error}).
   other: Другое
   value: Значение
-  total: Всего
-  total_value: 'Всего: {value}'
-  share_of_all: "{value} · {share} от общего"
+  total: Итого
+  total_value: 'Итого: {value}'
+  share_of_all: "{value} · {share} от общего числа"
   value_of_target: "{value} из {target}"
   to_go: 'Осталось: {value}'
   target_reached: Цель достигнута ✓
@@ -289,34 +290,35 @@ charts:
   reached_target: "{done} из {total} достигли цели"
   search: Поиск…
   search_label: Поиск по таблице
-  matching: 'Совпадений: {n}'
+  matching: 'Найдено: {n}'
   show_all: Показать все {n}
   show_all_rows: Показать все {n} строк
+  show_fewer: Скрыть
   first_rows: Показаны первые {shown} из {n} строк.
-  hint_bar: Коснитесь или наведите на столбец
-  hint_bar_key: Коснитесь или наведите на столбец. Нажмите на имя в легенде, чтобы увидеть только его.
+  hint_bar: Нажмите или наведите на столбец
+  hint_bar_key: Нажмите или наведите на столбец. Нажмите на имя в легенде, чтобы увидеть только его.
   views: Виды
-  view_latest: Последняя вкладка
-  view_weeks: Итого по вкладкам
-  view_player: Одно имя по вкладкам
+  view_latest: Новая вкладка
+  view_weeks: Итоги по вкладкам
+  view_player: Имя по вкладкам
   view_pick: Имя для показа
-  view_average: Среднее по {n} вкладкам
+  view_average: Среднее за {n} вкладок
   view_chart: Диаграмма
-  view_compare: Сравнить
+  view_compare: Сравнение
   search_names: Введите имя…
-  no_match: Имен не найдено.
+  no_match: Нет совпадений.
   view_tab: Вкладка для показа
   compare_first: Первое имя
   compare_second: Второе имя
-  compare_top: Топ-{n} (среднее)
-  compare_bottom: Бот-{n} (среднее)
+  compare_top: Топ {n} (среднее)
+  compare_bottom: Худшие {n} (среднее)
   pair_left: 'Слева: {name}'
-  pair_right: 'Справа (затемнен): {name}'
-  flip_to_asc: "⇅ Сначала самые маленькие"
-  flip_to_desc: "⇅ Сначала самые большие"
-  hint_line: Коснитесь или наведите на неделю
-  hint_pie: Коснитесь или наведите на сегмент
-  hint_progress: Коснитесь или наведите на строку
+  pair_right: 'Справа (затемнено): {name}'
+  flip_to_asc: "⇅ Сначала наименьшие"
+  flip_to_desc: "⇅ Сначала наибольшие"
+  hint_line: Нажмите или наведите на неделю
+  hint_pie: Нажмите или наведите на сектор
+  hint_progress: Нажмите или наведите на строку
 nominate:
   page_title: Номинации на награды
   name_ok: В списке участников [{tag}]

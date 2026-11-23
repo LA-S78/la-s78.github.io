@@ -104,7 +104,9 @@ rewards_card:
 roster:
   title: Effectif de l'alliance
   summary: "{n} membres · {might} Puissance"
-  search: Rechercher des noms ou des ID...
+  show: Afficher les membres
+  hide: Masquer les membres
+  search: Rechercher des noms ou IDs...
   sort_label: Trier par
   sort_power: Puissance
   sort_name: Nom
@@ -113,19 +115,19 @@ roster:
   copy_id: Copier cet ID de joueur
   copied: Copié
   unavailable: La liste des membres ne peut pas être chargée pour le moment. Réessayez plus tard.
-  credit_before: Données des joueurs issues de
+  credit_before: Données des joueurs venant de
   sort_tech: Recherche
   sort_help: Aide
   tech_title: Recherche d'alliance effectuée aujourd'hui
   help_title: Aide apportée à la construction et à la recherche des membres aujourd'hui
   help_capped: Limite d'aide quotidienne atteinte (1 000)
   refresh: Actualiser
-  refresh_left: "{n} restants"
+  refresh_left: "{n} restant(s)"
   refreshing: Actualisation...
-  refresh_help: 'Obtenez les chiffres en temps réel du jeu. Partagé par les chefs de votre alliance : {n} sur {max} restants aujourd''hui, un toutes les 10 minutes.'
-  refresh_wait: 'Actualisé il y a un instant : prochain dans {n} min.'
+  refresh_help: 'Obtenez des chiffres en direct du jeu. Partagé par les chefs de votre alliance : {n} sur {max} restants aujourd''hui, un toutes les 10 minutes.'
+  refresh_wait: 'Actualisé il y a un instant : suivant dans {n} min.'
   refresh_none: Plus d'actualisations disponibles aujourd'hui. Elles recommencent à la réinitialisation quotidienne (00:00 GT).
-  daily_as_of: Recherche et aide depuis la réinitialisation d'aujourd'hui (00:00 GT), au {time}
+  daily_as_of: Recherche et aide depuis la réinitialisation d'aujourd'hui (00:00 GT), à {time}
   daily_old: 'Recherche et aide avant la réinitialisation d''aujourd''hui : dernière lecture {time}'
   daily_unknown: 'Recherche et aide : heure de lecture inconnue'
 caravan:
@@ -279,16 +281,17 @@ charts:
   total_value: 'Total : {value}'
   share_of_all: "{value} · {share} du total"
   value_of_target: "{value} sur {target}"
-  to_go: 'À atteindre : {value}'
+  to_go: 'Restant : {value}'
   target_reached: Cible atteinte ✓
   done: "✓ Fait"
   reached_target: "{done} sur {total} ont atteint la cible"
-  search: Rechercher…
+  search: Rechercher...
   search_label: Rechercher dans ce tableau
-  matching: "{n} correspondant"
+  matching: "{n} correspondance(s)"
   show_all: Afficher les {n}
-  show_all_rows: Afficher les {n} lignes
-  first_rows: Affichage des {shown} premières lignes sur {n}.
+  show_all_rows: Afficher les {n} rangées
+  show_fewer: Afficher moins
+  first_rows: Affichage des {shown} premières rangées sur {n}.
   hint_bar: Appuyez ou survolez une barre
   hint_bar_key: Appuyez ou survolez une barre. Appuyez sur un nom dans la légende pour ne voir que celui-ci.
   views: Vues
@@ -299,20 +302,20 @@ charts:
   view_average: Moyenne de {n} onglets
   view_chart: Graphique
   view_compare: Comparer
-  search_names: Tapez un nom…
+  search_names: Tapez un nom...
   no_match: Aucun nom ne correspond.
   view_tab: Onglet à afficher
   compare_first: Premier nom
   compare_second: Second nom
   compare_top: Top {n} (moyenne)
-  compare_bottom: Bottom {n} (moyenne)
+  compare_bottom: Bas de classement {n} (moyenne)
   pair_left: 'Gauche : {name}'
   pair_right: 'Droite (estompé) : {name}'
-  flip_to_asc: "⇅ Le plus bas d'abord"
-  flip_to_desc: "⇅ Le plus élevé d'abord"
+  flip_to_asc: "⇅ Plus bas en premier"
+  flip_to_desc: "⇅ Plus haut en premier"
   hint_line: Appuyez ou survolez une semaine
-  hint_pie: Appuyez ou survolez une part
-  hint_progress: Appuyez ou survolez une ligne
+  hint_pie: Appuyez ou survolez une tranche
+  hint_progress: Appuyez ou survolez une rangée
 nominate:
   page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]

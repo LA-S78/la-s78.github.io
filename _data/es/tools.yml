@@ -104,16 +104,18 @@ rewards_card:
 roster:
   title: Lista de la alianza
   summary: "{n} miembros · {might} Poder"
+  show: Mostrar miembros
+  hide: Ocultar miembros
   search: Buscar nombres o IDs...
   sort_label: Ordenar por
   sort_power: Poder
   sort_name: Nombre
   sort_rank: Rango
   sanctuary_lv: Santuario {n}
-  copy_id: Copiar este ID de jugador
+  copy_id: Copiar ID de jugador
   copied: Copiado
-  unavailable: La lista de miembros no se puede cargar en este momento. Inténtalo de nuevo más tarde.
-  credit_before: Datos del jugador desde
+  unavailable: La lista de miembros no se puede cargar ahora. Inténtalo más tarde.
+  credit_before: Datos de jugador de
   sort_tech: Investigación
   sort_help: Ayuda
   tech_title: Investigación de alianza donada hoy
@@ -122,11 +124,11 @@ roster:
   refresh: Actualizar
   refresh_left: "{n} restantes"
   refreshing: Actualizando...
-  refresh_help: 'Obtén datos en vivo del juego. Compartidos por los líderes de tu alianza: {n} de {max} restantes hoy, uno cada 10 minutos.'
+  refresh_help: 'Obtén datos en tiempo real del juego. Compartidos por los líderes de tu alianza: {n} de {max} restantes hoy, uno cada 10 minutos.'
   refresh_wait: 'Actualizado hace un momento: siguiente en {n} min.'
   refresh_none: Sin actualizaciones restantes hoy. Se reinician en el reinicio diario (00:00 GT).
   daily_as_of: Investigación y ayuda desde el reinicio de hoy (00:00 GT), a las {time}
-  daily_old: 'Investigación y ayuda desde antes del reinicio de hoy: última lectura {time}'
+  daily_old: 'Investigación y ayuda antes del reinicio de hoy: última lectura {time}'
   daily_unknown: 'Investigación y ayuda: hora de lectura desconocida'
 caravan:
   title: Rotativo de Caravanas
@@ -267,9 +269,9 @@ charts:
   column: Columna {n}
   no_numbers: No hay números que graficar en la columna elegida.
   line_two_rows: Una línea necesita al menos dos filas.
-  line_two_columns: Una línea necesita al menos dos columnas a lo largo de la parte inferior.
+  line_two_columns: Una línea necesita al menos dos columnas en la parte inferior.
   no_positive: No hay números positivos que graficar en la columna elegida.
-  no_targets: No hay números (u objetivos) para comparar.
+  no_targets: No hay números (o metas) para comparar.
   no_table: Aún no hay tabla.
   unknown_type: Tipo de gráfico desconocido.
   draw_failed: No se pudo dibujar este gráfico ({error}).
@@ -279,16 +281,17 @@ charts:
   total_value: 'Total: {value}'
   share_of_all: "{value} · {share} del total"
   value_of_target: "{value} de {target}"
-  to_go: 'Faltan: {value}'
-  target_reached: Objetivo alcanzado ✓
-  done: "✓ Listo"
-  reached_target: "{done} de {total} alcanzaron el objetivo"
-  search: Buscar…
+  to_go: 'Restante: {value}'
+  target_reached: Meta alcanzada ✓
+  done: "✓ Hecho"
+  reached_target: "{done} de {total} alcanzaron la meta"
+  search: Buscar...
   search_label: Buscar en esta tabla
-  matching: "{n} coinciden"
+  matching: "{n} coincidencias"
   show_all: Mostrar los {n}
   show_all_rows: Mostrar las {n} filas
-  first_rows: Mostrando las {shown} primeras de {n} filas.
+  show_fewer: Mostrar menos
+  first_rows: Mostrando las primeras {shown} de {n} filas.
   hint_bar: Toca o pasa el cursor sobre una barra
   hint_bar_key: Toca o pasa el cursor sobre una barra. Toca un nombre en la clave para ver solo ese.
   views: Vistas
@@ -299,17 +302,17 @@ charts:
   view_average: Promedio de {n} pestañas
   view_chart: Gráfico
   view_compare: Comparar
-  search_names: Escribe un nombre…
-  no_match: Ningún nombre coincide.
+  search_names: Escribe un nombre...
+  no_match: No hay coincidencias.
   view_tab: Pestaña a mostrar
   compare_first: Primer nombre
   compare_second: Segundo nombre
   compare_top: Top {n} (promedio)
-  compare_bottom: Peores {n} (promedio)
+  compare_bottom: Últimos {n} (promedio)
   pair_left: 'Izquierda: {name}'
   pair_right: 'Derecha (atenuado): {name}'
-  flip_to_asc: "⇅ El menor primero"
-  flip_to_desc: "⇅ El mayor primero"
+  flip_to_asc: "⇅ Menor primero"
+  flip_to_desc: "⇅ Mayor primero"
   hint_line: Toca o pasa el cursor sobre una semana
   hint_pie: Toca o pasa el cursor sobre una porción
   hint_progress: Toca o pasa el cursor sobre una fila
