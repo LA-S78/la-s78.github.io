@@ -64,6 +64,10 @@ export function sourceRequest(src) {
       if (sheet) q.set('sheet', sheet);
       else if (gid) q.set('gid', gid);
       if (range) q.set('range', range);
+      // Charts set up with the sheet preview (2026-11-23): exactly one header row, the first
+      // row of the range, as the preview shows it. Google otherwise guesses, and may merge two
+      // rows into the header ("7/20 K65" + "STAR"), so the rows wouldn't match the preview.
+      if (src.headerRows === 1) q.set('headers', '1');
       return {
         fetchUrl: `https://docs.google.com/spreadsheets/d/${encodeURIComponent(parts[2])}/gviz/tq?${q}`,
         format: 'csv',
@@ -231,4 +235,167 @@ export async function fetchSourceTable(src, { timeoutMs = TIMEOUT_MS } = {}) {
     );
   }
   return toData(rows);
+}
+
+// ---------------------------------------------------------------------------------------
+// The sheet preview (owner request, 2026-11-23): a sheet's tabs, and one tab's grid as the
+// sheet shows it (column letters, row numbers, merged cells), so a leader can pick a range by
+// dragging over it instead of typing one. Only for the dashboard editor; the chart's own
+// data is still read as above.
+// ---------------------------------------------------------------------------------------
+
+/** The sheet a link points at: { id, published } or { error }. */
+export function sheetOf(urlText) {
+  let url;
+  try {
+    url = new URL(String(urlText || '').trim());
+  } catch {
+    return { error: say('api_sheets.full_link') };
+  }
+  if (url.protocol !== 'https:' || url.hostname !== 'docs.google.com') {
+    return { error: say('api_sheets.google_only') };
+  }
+  const parts = url.pathname.split('/').filter(Boolean);
+  if (parts[0] !== 'spreadsheets' || parts[1] !== 'd' || !parts[2]) {
+    return { error: say('api_sheets.not_sheet_or_doc') };
+  }
+  if (parts[2] === 'e' && parts[3]) return { id: parts[3], published: true };
+  return { id: parts[2], published: false };
+}
+
+const sheetBase = ({ id, published }) =>
+  published
+    ? `https://docs.google.com/spreadsheets/d/e/${encodeURIComponent(id)}/pubhtml`
+    : `https://docs.google.com/spreadsheets/d/${encodeURIComponent(id)}/htmlview`;
+
+/** Reads a page of the sheet's own HTML view (with the usual checks). */
+async function sheetPage(url, { timeoutMs }) {
+  let res;
+  try {
+    res = await googleGet(url, { timeoutMs });
+  } catch (err) {
+    if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+      throw forLeader(say('api_sheets.too_slow'));
+    }
+    throw err.forLeader ? err : forLeader(say('api_sheets.unreachable', { reason: err.message }));
+  }
+  if (res.signIn || [401, 403, 404].includes(res.status)) {
+    throw forLeader(say('api_sheets.sheet_not_shared'));
+  }
+  if (!res.ok) throw forLeader(say('api_sheets.google_error', { status: res.status }));
+  const body = await res.text();
+  if (body.length > MAX_BYTES) throw forLeader(say('api_sheets.too_large'));
+  if (/accounts\.google\.com\/(ServiceLogin|v3\/signin)/i.test(body.slice(0, 5000))) {
+    throw forLeader(say('api_sheets.sheet_not_shared'));
+  }
+  return body;
+}
+
+/** The sheet's tabs, in order: [{ name, gid }]. */
+export function tabsFromHtml(html) {
+  const tabs = [];
+  const seen = new Set();
+  const add = (name, gid) => {
+    const n = text(
+      String(name)
+        .replace(/\\\//g, '/')
+        .replace(/\\u([0-9a-f]{4})/gi, (m, h) => String.fromCharCode(parseInt(h, 16))),
+    );
+    if (!gid || seen.has(gid)) return;
+    seen.add(gid);
+    tabs.push({ name: n, gid: String(gid) });
+  };
+  // Shared view: a script list { name: "…", pageUrl: "…gid=N" }
+  for (const m of String(html).matchAll(/\{name: "((?:[^"\\]|\\.)*)", pageUrl: "[^"]*?gid=(\d+)/g))
+    add(m[1], m[2]);
+  // Published view: <li id="sheet-button-N"><a …>Name</a>
+  for (const m of String(html).matchAll(/id="sheet-button-(\d+)"[^>]*>\s*<a[^>]*>([\s\S]*?)<\/a>/g))
+    add(m[2], m[1]);
+  return tabs;
+}
+
+export async function fetchSheetTabs(src, { timeoutMs = TIMEOUT_MS } = {}) {
+  const sheet = sheetOf(src?.url);
+  if (sheet.error) throw new Error(sheet.error);
+  const tabs = tabsFromHtml(await sheetPage(sheetBase(sheet), { timeoutMs }));
+  if (!tabs.length) throw forLeader(say('api_sheets.no_tabs'));
+  return tabs.slice(0, 200);
+}
+
+/** Column letters for a 0-based index: 0 → A, 26 → AA. */
+export const columnLetter = (i) => {
+  let s = '';
+  for (let n = i + 1; n > 0; n = Math.floor((n - 1) / 26))
+    s = String.fromCharCode(65 + ((n - 1) % 26)) + s;
+  return s;
+};
+
+const GRID_ROWS = 200;
+const GRID_COLS = 60;
+
+/**
+ * One tab's grid from the sheet's HTML view (the table Google draws, with letters along the
+ * top and row numbers down the side): { letters, rows: [{ n, cells }], more }. A merged cell's
+ * text is in its first cell; the cells it covers are blank. Freeze bars (columns or rows
+ * without a letter or number) are left out, so positions match the sheet's own.
+ */
+export function gridFromHtml(html) {
+  const table = (String(html).match(/<table[^>]*class="[^"]*waffle[^"]*"[\s\S]*?<\/table>/i) ||
+    [])[0];
+  if (!table) return null;
+  const trs = table.match(/<tr[\s\S]*?<\/tr>/gi) || [];
+  const grid = [];
+  trs.forEach((tr, r) => {
+    grid[r] = grid[r] || [];
+    let c = 0;
+    for (const m of tr.matchAll(/<(td|th)\b([^>]*)>([\s\S]*?)<\/\1>/gi)) {
+      while (grid[r][c] !== undefined) c++;
+      const attrs = m[2];
+      const cs = Math.min(
+        GRID_COLS + 2,
+        parseInt((attrs.match(/colspan="(\d+)"/i) || [])[1], 10) || 1,
+      );
+      const rs = Math.min(
+        GRID_ROWS + 2,
+        parseInt((attrs.match(/rowspan="(\d+)"/i) || [])[1], 10) || 1,
+      );
+      const value = text(m[3]);
+      for (let dr = 0; dr < rs; dr++) {
+        grid[r + dr] = grid[r + dr] || [];
+        for (let dc = 0; dc < cs; dc++) grid[r + dr][c + dc] = dr || dc ? '' : value;
+      }
+      c += cs;
+    }
+  });
+  if (!grid.length) return null;
+  // The first row holds the letters; the first cell of each row its number
+  const head = grid[0];
+  const keep = [];
+  head.forEach((h, i) => {
+    if (i > 0 && /^[A-Z]{1,3}$/.test(h || '')) keep.push(i);
+  });
+  const rows = [];
+  for (let r = 1; r < grid.length; r++) {
+    const n = parseInt(grid[r]?.[0], 10);
+    if (!Number.isInteger(n)) continue;
+    rows.push({ n, cells: keep.slice(0, GRID_COLS).map((i) => grid[r][i] ?? '') });
+  }
+  // Rows after the last one with anything in it aren't needed
+  let last = rows.length;
+  while (last > 0 && rows[last - 1].cells.every((v) => v === '')) last--;
+  return {
+    letters: keep.slice(0, GRID_COLS).map((i) => head[i]),
+    rows: rows.slice(0, Math.min(last, GRID_ROWS)),
+    more: last > GRID_ROWS || keep.length > GRID_COLS,
+  };
+}
+
+export async function fetchSheetGrid(src, { timeoutMs = TIMEOUT_MS } = {}) {
+  const sheet = sheetOf(src?.url);
+  if (sheet.error) throw new Error(sheet.error);
+  const gid = String(src?.gid || '').replace(/\D/g, '');
+  const url = `${sheetBase(sheet)}/sheet?headers=true${gid ? `&gid=${gid}` : ''}`;
+  const grid = gridFromHtml(await sheetPage(url, { timeoutMs }));
+  if (!grid || !grid.rows.length) throw forLeader(say('api_sheets.empty'));
+  return grid;
 }

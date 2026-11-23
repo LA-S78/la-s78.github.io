@@ -285,7 +285,12 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
       kind: w.source.kind,
       url: clip(w.source.url, 500).trim(),
       ...(w.source.kind === 'sheet'
-        ? { sheet: clip(w.source.sheet, 100).trim(), range: clip(w.source.range, 20).trim() }
+        ? {
+            sheet: clip(w.source.sheet, 100).trim(),
+            range: clip(w.source.range, 20).trim(),
+            // Set up with the sheet preview: the range's first row is the header (2026-11-23)
+            ...(w.source.headerRows === 1 ? { headerRows: 1 } : {}),
+          }
         : { table: Math.max(1, Math.min(50, parseInt(w.source.table, 10) || 1)) }),
     };
     const req = sourceRequest(src);

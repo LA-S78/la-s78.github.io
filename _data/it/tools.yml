@@ -2,33 +2,33 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 common:
-  disclaimer: 'LA-S78 è un progetto comunitario creato dai fan per il gioco Last Asylum: Plague. Non è un sito ufficiale 37Games e non è affiliato a Last Asylum: Plague. I nomi dei giochi e le grafiche appartengono ai rispettivi proprietari. Dati di gioco in tempo reale da {tracker}.'
+  disclaimer: 'LA-S78 è un progetto comunitario creato dai fan per il gioco Last Asylum: Plague. Non è un sito ufficiale di 37Games e non è affiliato con Last Asylum: Plague. I nomi dei giochi e le grafiche appartengono ai rispettivi proprietari. Dati di gioco in tempo reale da {tracker}.'
   sign_in_discord: Accedi con Discord
   sign_in_again: Accedi di nuovo
   not_saved: 'Non salvato: {error}'
   cancel: Annulla
   save: Salva
-  saving: Salvataggio…
+  saving: Salvataggio in corso...
   edit: Modifica
   delete: Elimina
   remove: Rimuovi
   undo: Annulla
   copied: "✓ Copiato"
   optional: "(opzionale)"
-  now: adesso
-  duration_days: "{d}g {h}o"
-  duration_hours: "{h}o {m}m"
+  now: ora
+  duration_days: "{d}g {h}h"
+  duration_hours: "{h}h {m}m"
   duration_minutes: "{m}m"
   game_time: "{time} GT"
   your_time: "{time} ora locale"
-  off_week: Settimana di riposo
+  off_week: Settimana di pausa
   kw_week: Settimana Guerra tra Regni {n}
   copy: Copia
   set_one: Encomio del Re
   set_two: Ricompensa Re della Battaglia
   chests:
     commanders_will: Volontà del Comandante
-    loyal_servant: Leale Servitore
+    loyal_servant: Servitore Leale
     followers_heart: Cuore del Seguace
     honor_vanguard: Avanguardia d'Onore
     fearless_hero: Eroe Impavido

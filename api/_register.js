@@ -17,8 +17,9 @@ import { gistJson, updateGist } from './_gist.js';
 import { ALLIANCE_ROLE_SETTINGS, DEFAULT_FALLBACK_COLORS, findTag } from './_alliances.js';
 
 export const REGISTER_FILE = 'alliance-register.json';
-export const GAME = 'lastasylum';
-export const SERVER = '78';
+// The game and server: set in one place (api/_server.js)
+export { GAME, SERVER } from './_server.js';
+import { GAME, SERVER } from './_server.js';
 
 /** Lowercase letters and digits without the easily confused 0 o 1 l i (31 characters). */
 const ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789';

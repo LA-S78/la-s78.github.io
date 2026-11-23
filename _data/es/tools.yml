@@ -2,13 +2,13 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 common:
-  disclaimer: 'LA-S78 es un proyecto comunitario hecho por fans para el juego Last Asylum: Plague. No es un sitio web oficial de 37Games y no está afiliado con Last Asylum: Plague. Los nombres y las ilustraciones del juego pertenecen a sus respectivos dueños. Datos del juego en vivo de {tracker}.'
+  disclaimer: 'LA-S78 es un proyecto comunitario hecho por fans para el juego Last Asylum: Plague. No es un sitio web oficial de 37Games y no está afiliado con Last Asylum: Plague. Los nombres y el arte del juego pertenecen a sus respectivos dueños. Datos del juego en vivo de {tracker}.'
   sign_in_discord: Iniciar sesión con Discord
   sign_in_again: Iniciar sesión de nuevo
   not_saved: 'No guardado: {error}'
   cancel: Cancelar
   save: Guardar
-  saving: Guardando...
+  saving: Guardando…
   edit: Editar
   delete: Eliminar
   remove: Quitar
@@ -24,14 +24,14 @@ common:
   off_week: Semana de descanso
   kw_week: Semana de Guerra de Reinos {n}
   copy: Copiar
-  set_one: Encomio del Rey
-  set_two: Recompensa del Rey de Batalla
+  set_one: Encomienda del Rey
+  set_two: Recompensa de Rey de la Batalla
   chests:
     commanders_will: Voluntad del Comandante
-    loyal_servant: Sirviente Leal
-    followers_heart: Corazón del Seguidor
+    loyal_servant: Siervo Leal
+    followers_heart: Corazón de Seguidor
     honor_vanguard: Vanguardia de Honor
-    fearless_hero: Héroe Temerario
+    fearless_hero: Héroe Intrépido
     logistics_support: Apoyo Logístico
 dashboard:
   title: Panel de la Alianza
