@@ -7,7 +7,7 @@
 # RAVN is RÂVN written without the accent. RâvN is a different alliance: tags are told
 # apart by letter case, not by accents (api/_alliances.js sameTag).
 colors:
-  WLO: "#25bb00"
+  WLO: "#47e6ef"
   RÂVN: "#cece00"
   RAVN: "#cece00"
   MIA: "#a400af"

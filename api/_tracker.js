@@ -14,6 +14,7 @@
 
 import { isTestDeployment } from './_gist.js';
 import { SERVER_NUMBER } from './_server.js';
+import { frameFor } from './_frames.js';
 
 const BASE = 'https://api.lastasylumtracker.com/v1';
 /** Our kingdom (the tracker's server number). */
@@ -306,15 +307,15 @@ export async function fetchAllianceById(
 /**
  * Members' pictures by name, for pages that show players by the name a leader typed (Caravan
  * Rotor, nomination list, King's console): { name: { avatar, frame } }. Members with neither
- * are left out; the page shows their initial. `allianceFrame`: the alliance's own avatar frame
- * (api/_alliance_images.js allianceFrame), used for everyone when given.
+ * are left out; the page shows their initial. `frameSetting`: the alliance's own avatar frame
+ * (api/_alliance_images.js allianceFrame: { url, all }), drawn as frameFor() says.
  */
-export function memberPictures(alliance, allianceFrame = null) {
+export function memberPictures(alliance, frameSetting = null) {
   if (!alliance) return null;
   const out = {};
   for (const m of alliance.members) {
-    // The alliance's own avatar frame, when switched on, replaces every in-game frame
-    const frame = allianceFrame || m.frame;
+    // The alliance's frame in place of the game's default one (or of any, with `all`)
+    const frame = frameFor(m.frame, frameSetting);
     if (m.avatar || frame) out[m.name] = { avatar: m.avatar, frame };
   }
   return out;

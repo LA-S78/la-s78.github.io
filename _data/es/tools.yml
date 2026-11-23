@@ -185,7 +185,7 @@ chart_editor:
   title: Título
   title_example: p. ej., puntuaciones de Duelo de Alianzas
   note: Explicación
-  note_example: p. ej., mínimo de 15 M de puntos de Duelo requeridos para el reinicio del viernes
+  note_example: p. ej., mínimo de 15M puntos de Duelo requeridos para el reinicio del viernes
   who_sees: Quién puede verlo
   officers_only: Solo oficiales (R4/R5)
   all_members: Todos los miembros de la alianza
@@ -198,12 +198,12 @@ chart_editor:
   tab: Pestaña
   order: Orden
   order_sheet: Como en la hoja
-  order_desc: Mayor primero
-  order_asc: Menor primero
-  order_asc_help: Menor primero excluye las filas sin valores en las columnas mostradas (aquellos que no participaron).
+  order_desc: El más alto primero
+  order_asc: El más bajo primero
+  order_asc_help: El más bajo primero excluye las filas sin nada en las columnas mostradas (aquellos que no participaron).
   limit: Mostrar
-  limit_all: Todo
-  tabs_on: Mismo rango de varias pestañas (p. ej., una pestaña por semana)
+  limit_all: Todos
+  tabs_on: Mismo rango de varias pestañas (una pestaña por semana, por ejemplo)
   tabs_pattern: Nombres de pestañas como
   tabs_count: Pestañas más recientes a leer
   tabs_match: "{n} pestañas coinciden: {names}."
@@ -216,18 +216,18 @@ chart_editor:
   compare: 'Permitir a los espectadores comparar: dos nombres, o un nombre con los 5 mejores o peores'
   compare_pie: Permitir a los espectadores comparar dos nombres (o los 5 mejores o peores) como un gráfico circular propio
   compare_line: Permitir a los espectadores comparar las líneas de dos nombres (o un nombre con los 5 mejores o peores de cada semana)
-  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina y luego la opuesta). La primera fila es el encabezado. Luego toca una letra de columna para convertirla en etiquetas, o una columna numérica.'
+  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina y luego la opuesta). La primera fila es el encabezado. Luego toca la letra de una columna para convertirla en las etiquetas, o en una columna de números.'
   grid_tap_second: Ahora toca la esquina opuesta de la tabla.
-  grid_mode: Al hacer clic en una letra de columna se establece
+  grid_mode: Hacer clic en una letra de columna establece
   grid_labels: Etiquetas
   grid_numbers: Números
-  grid_more: Solo se muestran las primeras 200 filas y 60 columnas aquí; un rango puede ser mayor.
+  grid_more: Solo se muestran aquí las primeras 200 filas y 60 columnas; un rango puede ser mayor.
   range: Rango, p. ej. A1:D20 (opcional)
-  doc_table: Qué tabla en el documento (1, 2…)
+  doc_table: Qué tabla en el Doc (1, 2…)
   load: "⤓ Cargar desde Google"
   loading: "⤓ Cargando…"
   link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede ver” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene los últimos números más tarde.'
-  load_first: Carga la hoja primero (⤓ Cargar desde Google).
+  load_first: Carga primero la hoja (⤓ Cargar desde Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
   size: "{rows} × {columns}"
@@ -235,43 +235,43 @@ chart_editor:
   rows_other: "{n} filas"
   columns_one: "{n} columna"
   columns_other: "{n} columnas"
-  at_most_500: "(máximo 500)"
+  at_most_500: "(500 como máximo)"
   labels: Nombres (etiquetas)
   numbers_to_show: Números a mostrar
   labels_swapped: Nombres (una línea o barra cada uno)
-  swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas en la parte inferior"
+  swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas a lo largo de la parte inferior"
   swap_bar: "⇄ Intercambiar filas y columnas: las columnas como barras, un color por fila"
   swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a lo largo de las semanas.'
   rows_to_draw: Filas a dibujar (hasta 6)
   rows_filter: Buscar un nombre…
-  rows_count: "{n} de 6 seleccionados"
-  columns_along: Columnas en la parte inferior (en orden de la hoja)
+  rows_count: "{n} de 6 elegidos"
+  columns_along: Columnas a lo largo de la parte inferior (en orden de hoja)
   numbers: Números
-  several_columns: Varias columnas numéricas
+  several_columns: Varias columnas de números
   side_by_side: Lado a lado
   stacked_totals: 'Apilado: totales'
   stacked_percent: 'Apilado: cada barra al 100%'
   vertical: Barras verticales
   vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
-  traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna rojo, última verde'
-  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, el mejor verde'
+  traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde'
+  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, el más alto verde'
   traffic_reverse: 'Invertir: bajo es bueno (verde), alto es malo (rojo)'
   traffic_target: Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo
-  traffic_target_reverse: 'Invertir: cuanto más lejos del objetivo, mejor'
-  donut: Rosquilla (anillo)
+  traffic_target_reverse: 'Invertir: cuanto más lejos del objetivo es mejor'
+  donut: Donut (anillo)
   target: Objetivo para todos
-  target_example: p. ej. 15 M o 15000000
+  target_example: p. ej. 15M o 15000000
   target_column: "…o una columna de objetivos"
   use_number_above: "(usar el número de arriba)"
   highlight_where: Resaltar filas donde
   no_highlight: "(sin resaltar)"
   at_least: es al menos
-  at_least_example: p. ej. 300 M
+  at_least_example: p. ej. 300M
 charts:
   column: Columna {n}
   no_numbers: No hay números para graficar en la columna elegida.
   line_two_rows: Una línea necesita al menos dos filas.
-  line_two_columns: Una línea necesita al menos dos columnas en la parte inferior.
+  line_two_columns: Una línea necesita al menos dos columnas a lo largo de la parte inferior.
   no_positive: No hay números positivos para graficar en la columna elegida.
   no_targets: No hay números (u objetivos) para comparar.
   no_table: Aún no hay tabla.
@@ -283,13 +283,13 @@ charts:
   total_value: 'Total: {value}'
   share_of_all: "{value} · {share} del total"
   value_of_target: "{value} de {target}"
-  to_go: 'Faltan: {value}'
+  to_go: 'Falta: {value}'
   target_reached: Objetivo alcanzado ✓
   done: "✓ Hecho"
   reached_target: "{done} de {total} alcanzaron el objetivo"
   search: Buscar…
   search_label: Buscar en esta tabla
-  matching: "{n} coinciden"
+  matching: "{n} coincidencia(s)"
   show_all: Mostrar los {n}
   show_all_rows: Mostrar las {n} filas
   show_fewer: Mostrar menos
@@ -310,14 +310,14 @@ charts:
   compare_first: Primer nombre
   compare_second: Segundo nombre
   compare_top: Top {n} (promedio)
-  compare_bottom: Peores {n} (promedio)
+  compare_bottom: Últimos {n} (promedio)
   pair_left: 'Izquierda: {name}'
   share_of_column: "{name}: {share} del total"
-  pair_right: 'Derecha (desvanecido): {name}'
-  flip_to_asc: "⇅ Menor primero"
-  flip_to_desc: "⇅ Mayor primero"
+  pair_right: 'Derecha (atenuado): {name}'
+  flip_to_asc: "⇅ El más bajo primero"
+  flip_to_desc: "⇅ El más alto primero"
   hint_line: Toca o pasa el cursor sobre una semana
-  hint_pie: Toca o pasa el cursor sobre una porción
+  hint_pie: Toca o pasa el cursor sobre una rebanada
   hint_progress: Toca o pasa el cursor sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas
