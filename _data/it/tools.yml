@@ -928,60 +928,60 @@ image_review:
   done_approved: Approvata. L'immagine è ora live e il post su Discord è aggiornato.
   done_rejected: Rifiutata. L'immagine è stata eliminata e il post su Discord è aggiornato.
 alliance_images:
-  title: Immagini dell'Alleanza
+  title: Immagini alleanza
   edit: Modifica immagini
   done: "✓ Modifica completata"
-  help: Aggiungi un'immagine dietro la scheda di Rotazione Campidoglio e la riga dei Gradi NAP della tua alleanza, e una cornice per le foto dei tuoi membri. Uno Steward controllerà ogni immagine prima che chiunque altro possa vederla.
-  rules: 'Usa immagini proprie dell''alleanza o di gioco: nessun marchio di altre alleanze, niente di offensivo, nessuna informazione personale.'
+  help: Aggiungi un'immagine dietro la scheda Rotazione Campidoglio e la riga Ranks NAP della tua alleanza, e una cornice per le foto dei tuoi membri. Uno Steward controlla ciascuna immagine prima che chiunque altro possa vederla.
+  rules: 'Usa materiale grafico della tua alleanza o di gioco: nessun marchio di altre alleanze, niente di offensivo, nessuna informazione personale.'
   left_today: "{left} di {max} immagini rimanenti oggi per la tua alleanza."
-  not_ready: Il caricamento immagini non è ancora attivo.
+  not_ready: Il caricamento delle immagini non è ancora attivo.
   card: Scheda Rotazione Campidoglio
-  wide: Banner Gradi NAP
-  frame: Cornice avatar dell'Alleanza
-  frame_spec: 'Un bordo disegnato attorno alle foto dei tuoi membri su questo sito. Crea un PNG quadrato con sfondo trasparente, 380×380 pixel (almeno 190×190): lascia il quadrato centrale trasparente (da 72 a 308 pixel, come le cornici del gioco) e decora attorno, fino ai bordi. Una piccola decorazione sopra il centro (una ghirlanda, per esempio) va bene.'
+  wide: Banner Ranks NAP
+  frame: Cornice avatar alleanza
+  frame_spec: 'Un bordo disegnato attorno alle foto dei tuoi membri su questo sito. Crea un PNG quadrato con sfondo trasparente, 380×380 pixel (almeno 190×190): lascia il quadrato centrale trasparente (da 72 a 308 pixel, come le cornici di gioco) e decora attorno, fino ai bordi. Una piccola decorazione sopra il centro (una ghirlanda, per esempio) va bene.'
   use_frame: Usa per i nostri membri
-  use_frame_on: Mostrata attorno alle foto dei membri ovunque sul sito, al posto della cornice semplice del gioco. I membri con una cornice speciale nel gioco manterranno la propria.
+  use_frame_on: Mostrata attorno alle foto dei membri ovunque sul sito, al posto della cornice semplice del gioco. I membri con una cornice speciale di gioco mantengono la loro.
   use_frame_all: Mostrata attorno alla foto di ogni membro ovunque sul sito, al posto di qualsiasi cornice di gioco, incluse quelle speciali.
   frame_all: Anche sopra le cornici speciali
-  use_frame_off: 'Disattivata: i membri mantengono le loro cornici di gioco sul sito.'
+  use_frame_off: 'Disattivato: i membri mantengono le loro cornici di gioco sul sito.'
   frame_title: Controlla la cornice dell'avatar
   frame_check_ok: 'Sembra corretta: il centro è trasparente. Ecco come apparirà attorno alle foto dei tuoi membri.'
   frame_big: Grande
   frame_roster: Rosa
-  frame_lists: Elenchi
+  frame_lists: Liste
   frame_not_square: Una cornice deve essere quadrata; questa immagine è {width}×{height}.
-  frame_too_small: Questa immagine è solo {width}×{height}. Una cornice necessita di almeno 190×190 pixel (380×380 è l'ideale).
+  frame_too_small: Questa immagine è solo {width}×{height}. Una cornice richiede almeno 190×190 pixel (380×380 è l'ideale).
   frame_covers: 'Questa cornice copre circa il {percent}% del centro, dove appaiono le foto dei membri. Va bene se è intenzionale (una ghirlanda, per esempio): controlla le anteprime qui sotto prima di inviare.'
-  frame_covers_most: 'Questa cornice copre circa il {percent}% del centro, quindi la maggior parte della foto di ogni membro verrebbe nascosta. Controlla le anteprime qui sotto: inviala solo se è ciò che desideri.'
-  frame_not_png: La cornice di un avatar deve essere un PNG (o WebP) con sfondo trasparente. Le immagini JPEG non possono avere trasparenza, quindi coprirebbero le foto dei tuoi membri.
+  frame_covers_most: 'Questa cornice copre circa il {percent}% del centro, quindi gran parte della foto di ogni membro verrebbe nascosta. Controlla le anteprime qui sotto: inviala solo se è quello che vuoi.'
+  frame_not_png: Una cornice avatar deve essere un PNG (o WebP) con sfondo trasparente. Le immagini JPEG non possono essere trasparenti, quindi coprirebbero le foto dei tuoi membri.
   frame_no_transparency: Questa immagine non ha parti trasparenti, quindi apparirebbe come un quadrato solido sopra le foto dei tuoi membri. Salvala come PNG con sfondo trasparente.
-  frame_empty: 'Questa immagine è quasi tutta trasparente: non c''è una cornice da mostrare.'
-  frame_too_big: Questa cornice pesa {kb} KB una volta salvata; il massimo è 500 KB. Prova a usare meno colori o meno dettagli.
+  frame_empty: 'Questa immagine è quasi tutta trasparente: non c''è nessuna cornice da mostrare.'
+  frame_too_big: Questa cornice pesa {kb} KB una volta salvata; il massimo è 500 KB. Prova a usare meno colori o meno dettagli fini.
   none: Nessuna immagine ancora
   live: Attiva dal {when}
   pending: In attesa di uno Steward dal {when}
-  rejected: Rifiutata il {when}
-  rejected_reason: 'Rifiutata il {when}: “{reason}”'
+  rejected: Respinta il {when}
+  rejected_reason: 'Respinta il {when}: “{reason}”'
   expired: Non revisionata in tempo ({when}). Inviala di nuovo.
   choose: Scegli un'immagine
   replace: Scegli una nuova immagine
   remove: Rimuovi
-  confirm_remove: Rimuovere {slot}? Scomparirà immediatamente per tutti.
+  confirm_remove: Rimuovere {slot}? Scomparirà subito per tutti.
   crop_title: Posiziona {slot}
-  crop_help: Trascina per muovere. Pizzica, scorri o usa lo slider per zoomare. Solo ciò che è dentro la cornice viene inviato.
+  crop_help: Trascina per spostare. Pizzica, scorri o usa il cursore per zoomare. Solo ciò che è all'interno della cornice viene inviato.
   zoom: Zoom
   preview_title: Come apparirà
   preview_phone: Telefono
   preview_desktop: Desktop
   preview_week: Settimana 1 Ven
   preview_loot: 2 Scrigni del Re
-  preview_status: NAP Protetto
+  preview_status: Protetto NAP
   send: Invia per revisione
   sending: Invio in corso...
   cancel: Annulla
-  sent: Inviato. Uno Steward la revisionerà; apparirà una volta approvata.
-  not_image: Quel file non è un'immagine apribile da questo browser. Prova un JPEG o PNG.
-  too_small: Quell'immagine è piuttosto piccola ({width}×{height}); potrebbe apparire sgranata. Puoi comunque inviarla.
+  sent: Inviata. Uno Steward la revisionerà; apparirà una volta approvata.
+  not_image: Quel file non è un'immagine che questo browser può aprire. Prova un JPEG o PNG.
+  too_small: Quell'immagine è piuttosto piccola ({width}×{height}); potrebbe apparire sfuocata. Puoi comunque inviarla.
   load_failed: Impossibile aprire l'immagine.
 stats:
   title: Statistiche NAP

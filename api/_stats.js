@@ -258,13 +258,16 @@ export async function lookupPlayer({ q, uid, pid }, { store = blobStore, steward
     )
     .sort(([, a], [, b]) => (b[2] || 0) - (a[2] || 0))
     .slice(0, 8)
-    .map(([id, [name, tag, power, , , avatar]]) => ({
+    // With their frame (owner, 2026-11-23: the search's pictures had none), so the alliance
+    // frame can stand in for the plain one (api/_frames.js) as everywhere else
+    .map(([id, [name, tag, power, , , avatar, frame]]) => ({
       ...(steward ? { uid: id } : {}),
       id: publicId(id),
       name,
       tag,
       power,
       avatar,
+      frame: frame || null,
     }));
   return { day, matches };
 }
