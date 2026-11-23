@@ -999,8 +999,23 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         <div id="ed-src-link" hidden>
           <input type="text" id="ed-url" placeholder="https://docs.google.com/spreadsheets/d/…" value="${escapeHtml((w.source && w.source.url) || '')}">
           <div class="dash-link-opts" id="ed-sheet-opts">
+            <select id="ed-tab" aria-label="${e('tab')}" hidden></select>
             <input type="text" id="ed-sheet" placeholder="${e('tab_name')}" value="${escapeHtml((w.source && w.source.sheet) || '')}">
             <input type="text" id="ed-range" placeholder="${e('range')}" value="${escapeHtml((w.source && w.source.range) || '')}">
+          </div>
+          <div class="dash-grid-box" id="ed-grid-box" hidden>
+            <div class="dash-grid-bar">
+              <span class="dash-muted dash-small" id="ed-grid-help">${e('grid_help')}</span>
+              <span class="dash-types dash-grid-mode" id="ed-grid-mode" role="group" aria-label="${e('grid_mode')}">
+                <button type="button" data-gmode="label" aria-pressed="true">${e('grid_labels')}</button>
+                <button type="button" data-gmode="value" aria-pressed="false">${e('grid_numbers')}</button>
+              </span>
+            </div>
+            <div class="dash-grid-wrap">
+              <div class="dash-grid" id="ed-grid"></div>
+              <div class="dash-small dash-grid-status" id="ed-grid-status" aria-live="polite"></div>
+            </div>
+            <div class="dash-muted dash-small" id="ed-grid-note"></div>
           </div>
           <div class="dash-link-opts" id="ed-doc-opts" hidden>
             <input type="text" inputmode="numeric" id="ed-table" placeholder="${e('doc_table')}" value="${escapeHtml(String((w.source && w.source.table) || ''))}">
@@ -1171,7 +1186,226 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         }
         box.innerHTML = W.render(w);
         W.mount(box, w);
+        highlightGrid();
       }
+
+      // The sheet preview (owner request, 2026-11-23): the sheet's tabs in a list, and the
+      // chosen tab's grid as the sheet shows it. Drag over it (or tap two corners on a phone)
+      // to pick the range; the label and number columns are marked in it; clicking a column
+      // letter makes it the labels or a number column (the switch above the grid).
+      let grid = null; // { letters, rows: [{ n, cells }], more }
+      let gridMode = 'label';
+      const colIndex = (letters) => [...letters].reduce((n, ch) => n * 26 + ch.charCodeAt(0) - 64, 0) - 1;
+      const colLetter = (i) => {
+        let s = '';
+        for (let n = i + 1; n > 0; n = Math.floor((n - 1) / 26)) s = String.fromCharCode(65 + ((n - 1) % 26)) + s;
+        return s;
+      };
+      function rangeOf(text) {
+        const m = /^([A-Z]{1,3})(\d+):([A-Z]{1,3})(\d+)$/i.exec(String(text || '').trim());
+        if (!m) return null;
+        const c1 = colIndex(m[1].toUpperCase());
+        const c2 = colIndex(m[3].toUpperCase());
+        return { c1: Math.min(c1, c2), c2: Math.max(c1, c2), r1: Math.min(+m[2], +m[4]), r2: Math.max(+m[2], +m[4]) };
+      }
+      async function editorAsk(action, source) {
+        const res = await fetch('/api/dashboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+          body: JSON.stringify({ action, source, alliance: data.alliance.tag }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        return body;
+      }
+      let tabsFor = '';
+      async function loadTabs() {
+        const url = $('ed-url').value.trim();
+        if (linkKind() !== 'sheet' || !/^https:\/\/docs\.google\.com\/spreadsheets\//.test(url) || url === tabsFor) return;
+        tabsFor = url;
+        try {
+          const { tabs } = await editorAsk('sheet-tabs', { kind: 'sheet', url });
+          if ($('ed-url').value.trim() !== url) return;
+          const wanted = $('ed-sheet').value.trim();
+          const fromLink = (url.match(/gid=(\d+)/) || [])[1];
+          const chosen = tabs.find((x) => x.name === wanted) || tabs.find((x) => x.gid === fromLink) || tabs[0];
+          $('ed-tab').innerHTML = tabs
+            .map((x) => `<option value="${escapeHtml(x.gid)}"${x === chosen ? ' selected' : ''}>${escapeHtml(x.name)}</option>`)
+            .join('');
+          $('ed-tab').hidden = false;
+          $('ed-sheet').hidden = true;
+          $('ed-sheet').value = chosen.name;
+          loadGrid(chosen.gid);
+        } catch (err) {
+          // The tab name can still be typed, as before
+          tabsFor = '';
+          $('ed-tab').hidden = true;
+          $('ed-sheet').hidden = false;
+          $('ed-error').textContent = err.message;
+        }
+      }
+      async function loadGrid(gid) {
+        $('ed-grid-box').hidden = false;
+        $('ed-grid').innerHTML = `<div class="dash-muted dash-small">${e('loading')}</div>`;
+        try {
+          ({ grid } = await editorAsk('sheet-grid', { kind: 'sheet', url: $('ed-url').value.trim(), gid }));
+          drawGrid();
+        } catch (err) {
+          grid = null;
+          $('ed-grid').innerHTML = `<div class="dash-error">${escapeHtml(err.message)}</div>`;
+        }
+      }
+      function drawGrid() {
+        if (!grid) return;
+        const start = colIndex(grid.letters[0] || 'A');
+        let html = '<table><thead><tr><th class="corner"></th>';
+        grid.letters.forEach((l) => (html += `<th class="col" data-col="${colIndex(l)}">${l}</th>`));
+        html += '</tr></thead><tbody>';
+        for (const row of grid.rows) {
+          html += `<tr><th class="row">${row.n}</th>`;
+          row.cells.forEach((v, i) => {
+            html += `<td data-c="${start + i}" data-r="${row.n}" title="${escapeHtml(v)}">${escapeHtml(v.length > 18 ? `${v.slice(0, 17)}…` : v)}</td>`;
+          });
+          html += '</tr>';
+        }
+        $('ed-grid').innerHTML = `${html}</tbody></table>`;
+        $('ed-grid-note').textContent = grid.more ? t('chart_editor.grid_more') : '';
+        highlightGrid();
+      }
+      function highlightGrid(drag) {
+        const box = $('ed-grid');
+        if (!box || !grid) return;
+        const r = drag || rangeOf($('ed-range').value);
+        const o = w.options || {};
+        box.querySelectorAll('td, th.col').forEach((cell) => {
+          const c = Number(cell.dataset.c ?? cell.dataset.col);
+          const rel = r ? c - r.c1 : -1;
+          const inCols = r && c >= r.c1 && c <= r.c2;
+          if (cell.tagName === 'TH') {
+            cell.classList.toggle('is-lab', Boolean(inCols && !drag && rel === o.labelCol));
+            cell.classList.toggle('is-val', Boolean(inCols && !drag && (o.valueCols || []).includes(rel)));
+            return;
+          }
+          const n = Number(cell.dataset.r);
+          const inside = inCols && n >= r.r1 && n <= r.r2;
+          cell.classList.toggle('is-in', Boolean(inside));
+          cell.classList.toggle('is-head', Boolean(inside && n === r.r1));
+          cell.classList.toggle('is-lab', Boolean(inside && !drag && rel === o.labelCol));
+          cell.classList.toggle('is-val', Boolean(inside && !drag && (o.valueCols || []).includes(rel)));
+        });
+      }
+      // Picking the range: drag with a mouse; on a touch screen, tap one corner then the other
+      let anchor = null;
+      let dragging = false;
+      const cellAt = (ev) => ev.target.closest && ev.target.closest('#ed-grid td');
+      const pick = (a, b) => ({
+        c1: Math.min(a.c, b.c),
+        c2: Math.max(a.c, b.c),
+        r1: Math.min(a.r, b.r),
+        r2: Math.max(a.r, b.r),
+      });
+      const posOf = (cell) => ({ c: Number(cell.dataset.c), r: Number(cell.dataset.r) });
+      function finishPick(a, b) {
+        const r = pick(a, b);
+        $('ed-range').value = `${colLetter(r.c1)}${r.r1}:${colLetter(r.c2)}${r.r2}`;
+        anchor = null;
+        $('ed-grid-status').textContent = '';
+        $('ed-load').click();
+      }
+      // Touch and pen: a tap, not a touch, so scrolling the grid never picks anything (the
+      // browser sends no click when the finger moved). The prompt for the second corner has
+      // its own line under the grid, so nothing above it changes size and the page stays put.
+      let pointerKind = 'mouse';
+      $('ed-grid').addEventListener('click', (ev) => {
+        if (pointerKind === 'mouse') return;
+        const cell = cellAt(ev);
+        if (!cell) return;
+        if (!anchor) {
+          anchor = posOf(cell);
+          highlightGrid(pick(anchor, anchor));
+          $('ed-grid-status').textContent = t('chart_editor.grid_tap_second');
+        } else finishPick(anchor, posOf(cell));
+      });
+      $('ed-grid').addEventListener('pointerdown', (ev) => {
+        pointerKind = ev.pointerType || 'mouse';
+        const cell = cellAt(ev);
+        if (!cell || pointerKind !== 'mouse' || ev.button !== 0) return;
+        ev.preventDefault();
+        anchor = posOf(cell);
+        dragging = true;
+        highlightGrid(pick(anchor, anchor));
+      });
+      // The cell under the pointer, by position (near the grid's edge, the nearest one inside),
+      // and the grid scrolls while the pointer is near its edge, for tables taller than the box
+      let lastPos = null;
+      let scrollTimer = 0;
+      function cellUnder(x, y) {
+        const g = $('ed-grid').getBoundingClientRect();
+        const cx = Math.min(Math.max(x, g.left + 40), g.right - 4);
+        const cy = Math.min(Math.max(y, g.top + 24), g.bottom - 4);
+        const el = document.elementFromPoint(cx, cy);
+        return el && el.closest ? el.closest('#ed-grid td') : null;
+      }
+      function dragTo(x, y) {
+        const cell = cellUnder(x, y);
+        if (cell) {
+          lastPos = posOf(cell);
+          highlightGrid(pick(anchor, lastPos));
+        }
+      }
+      document.addEventListener('pointermove', (ev) => {
+        if (!dragging) return;
+        dragTo(ev.clientX, ev.clientY);
+        const box = $('ed-grid');
+        const g = box.getBoundingClientRect();
+        const dy = ev.clientY > g.bottom - 24 ? 14 : ev.clientY < g.top + 30 ? -14 : 0;
+        const dx = ev.clientX > g.right - 24 ? 14 : ev.clientX < g.left + 44 ? -14 : 0;
+        clearInterval(scrollTimer);
+        if (dx || dy) {
+          scrollTimer = setInterval(() => {
+            box.scrollBy(dx, dy);
+            dragTo(ev.clientX, ev.clientY);
+          }, 40);
+        }
+      });
+      document.addEventListener('pointerup', () => {
+        if (!dragging) return;
+        dragging = false;
+        clearInterval(scrollTimer);
+        finishPick(anchor, lastPos || anchor);
+        lastPos = null;
+      });
+      // A column letter: the labels, or a number column on or off (the switch above the grid)
+      $('ed-grid').addEventListener('click', (ev) => {
+        const th = ev.target.closest('th.col');
+        const r = rangeOf($('ed-range').value);
+        if (!th || !r || !w.data.columns.length) return;
+        const rel = Number(th.dataset.col) - r.c1;
+        if (rel < 0 || rel >= w.data.columns.length) return;
+        const o = w.options;
+        if (gridMode === 'label') {
+          o.labelCol = rel;
+          o.valueCols = (o.valueCols || []).filter((i) => i !== rel);
+        } else if (rel !== o.labelCol) {
+          const single = w.type === 'pie' || w.type === 'progress';
+          const has = (o.valueCols || []).includes(rel);
+          o.valueCols = single ? [rel] : has ? o.valueCols.filter((i) => i !== rel) : [...(o.valueCols || []), rel];
+        }
+        drawOptions();
+        preview();
+      });
+      $('ed-grid-mode').addEventListener('click', (ev) => {
+        const b = ev.target.closest('[data-gmode]');
+        if (!b) return;
+        gridMode = b.dataset.gmode;
+        $('ed-grid-mode').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      });
+      $('ed-tab').addEventListener('change', () => {
+        const opt = $('ed-tab').selectedOptions[0];
+        $('ed-sheet').value = opt ? opt.textContent : '';
+        if (opt) loadGrid(opt.value);
+      });
+      $('ed-range').addEventListener('input', () => highlightGrid());
 
       // Where the data comes from: a pasted table, or a Google Sheet / Doc (loaded by the server).
       let mode = w.source && (w.source.kind === 'sheet' || w.source.kind === 'doc') ? 'link' : 'paste';
@@ -1187,12 +1421,20 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       function showLinkOptions() {
         $('ed-sheet-opts').hidden = linkKind() !== 'sheet';
         $('ed-doc-opts').hidden = linkKind() !== 'doc';
+        $('ed-grid-box').hidden = linkKind() !== 'sheet' || !grid;
       }
       function linkSource() {
         const kind = linkKind();
         return kind === 'doc'
           ? { kind, url: $('ed-url').value.trim(), table: Number($('ed-table').value) || 1 }
-          : { kind, url: $('ed-url').value.trim(), sheet: $('ed-sheet').value.trim(), range: $('ed-range').value.trim() };
+          : {
+              kind,
+              url: $('ed-url').value.trim(),
+              sheet: $('ed-sheet').value.trim(),
+              range: $('ed-range').value.trim(),
+              // The range's first row is the header, as the sheet preview shows it
+              headerRows: 1,
+            };
       }
       function useData(parsed) {
         const changed = parsed.columns.join('\t') !== w.data.columns.join('\t');
@@ -1209,7 +1451,12 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         const b = e.target.closest('[data-src]');
         if (b) setMode(b.dataset.src);
       });
-      $('ed-url').addEventListener('input', showLinkOptions);
+      let tabsTimer = 0;
+      $('ed-url').addEventListener('input', () => {
+        showLinkOptions();
+        clearTimeout(tabsTimer);
+        tabsTimer = setTimeout(loadTabs, 600);
+      });
       $('ed-load').addEventListener('click', async () => {
         const btn = $('ed-load');
         btn.disabled = true;
@@ -1288,7 +1535,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
 
       setMode(mode);
       showLinkOptions();
-      if (mode === 'link') useData(w.data);
+      if (mode === 'link') {
+        useData(w.data);
+        loadTabs();
+      }
       else readPaste();
       ed.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }

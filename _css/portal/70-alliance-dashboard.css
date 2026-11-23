@@ -1266,3 +1266,122 @@ li.dw-sel > .dw-bar-track {
   color: inherit;
   font-variant-numeric: tabular-nums;
 }
+
+/* The sheet preview (2026-11-23): the chosen tab's grid, as the sheet shows it. Drag to pick
+   the range; the label column and the number columns are marked like the chart's colours. */
+.dash-grid-box {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+}
+.dash-grid-box[hidden] {
+  display: none;
+}
+.dash-grid-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+.dash-grid-mode button {
+  padding: 3px 10px;
+  font-size: 0.8rem;
+}
+.dash-grid {
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 8px;
+  background: var(--surface-dark);
+  -webkit-overflow-scrolling: touch;
+}
+.dash-grid table {
+  margin: 0;
+  width: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  user-select: none;
+}
+.dash-grid th,
+.dash-grid td {
+  padding: 3px 6px;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+  max-width: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-grid td {
+  color: var(--text-main);
+  cursor: cell;
+}
+.dash-grid th {
+  position: sticky;
+  background: var(--surface-dark);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: center;
+  z-index: 1;
+}
+.dash-grid thead th {
+  top: 0;
+}
+.dash-grid th.row {
+  left: 0;
+  min-width: 2.2rem;
+}
+.dash-grid th.corner {
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+.dash-grid th.col {
+  cursor: pointer;
+  min-width: 2.5rem;
+}
+.dash-grid td.is-in {
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+}
+.dash-grid td.is-head {
+  font-weight: 700;
+}
+.dash-grid td.is-lab,
+.dash-grid th.is-lab {
+  background: color-mix(in srgb, var(--accent-color) 32%, transparent);
+  color: var(--text-main);
+}
+.dash-grid td.is-val,
+.dash-grid th.is-val {
+  background: color-mix(in srgb, var(--gold) 30%, transparent);
+  color: var(--text-main);
+}
+
+/* The tap prompt ("now tap the opposite corner"): floats over the top of the grid, just
+   under the letters, so nothing moves when it appears and the phone's bottom bar can't hide
+   it (owner, 2026-11-23) */
+.dash-grid-wrap {
+  position: relative;
+  min-width: 0; /* as wide as the editor, not the table (the grid scrolls inside it) */
+}
+.dash-grid-status {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 34px;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.82);
+  color: var(--text-main);
+  text-align: center;
+  pointer-events: none;
+  z-index: 3;
+}
+.dash-grid-status:empty {
+  display: none;
+}
