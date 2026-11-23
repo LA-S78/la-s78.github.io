@@ -1461,9 +1461,38 @@ li.dw-sel > .dw-bar-track {
   outline: 2px solid var(--accent-color);
   outline-offset: 1px;
 }
+.dw-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.dw-days {
+  justify-content: flex-start;
+  margin: 0 0 8px;
+}
+.dw-flip {
+  display: block;
+  margin: 0 0 8px auto;
+  padding: 3px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-main);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.dw-flip[aria-pressed='true'] {
+  border-color: var(--accent-color);
+}
+.dw-flip:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
 .dw-pick {
   max-width: 100%;
-  margin: 0 0 8px;
+  margin: 0;
   padding: 4px 8px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 6px;
