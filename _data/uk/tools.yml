@@ -277,56 +277,57 @@ chart_editor:
   at_least_example: наприклад, 300M
 charts:
   column: Стовпець {n}
-  no_numbers: У вибраному стовпці немає чисел для побудови діаграми.
+  no_numbers: У вибраному стовпці немає чисел для побудови графіка.
   line_two_rows: Для лінії потрібно принаймні два рядки.
   line_two_columns: Для лінії потрібно принаймні два стовпці знизу.
-  no_positive: У вибраному стовпці немає додатних чисел для побудови діаграми.
+  no_positive: У вибраному стовпці немає додатних чисел для графіка.
   no_targets: Немає чисел (або цілей) для порівняння.
   no_table: Таблиці ще немає.
-  unknown_type: Невідомий тип діаграми.
-  draw_failed: Не вдалося намалювати цю діаграму ({error}).
+  unknown_type: Невідомий тип графіка.
+  draw_failed: Цей графік не вдалося побудувати ({error}).
   other: Інше
   value: Значення
   total: Разом
   total_value: 'Разом: {value}'
-  share_of_all: "{value} · {share} від усіх"
+  share_of_all: "{value} · {share} від усього"
   value_of_target: "{value} з {target}"
-  to_go: 'Залишилось: {value}'
+  to_go: 'Залишилося: {value}'
   target_reached: Ціль досягнуто ✓
-  done: "✓ Готово"
+  done: "✓ Виконано"
   reached_target: "{done} з {total} досягли цілі"
-  search: Пошук…
+  search: Пошук...
   search_label: Шукати в цій таблиці
   matching: "{n} збігів"
   show_all: Показати всі {n}
   show_all_rows: Показати всі {n} рядків
   show_fewer: Показати менше
-  first_rows: Відображення перших {shown} з {n} рядків.
-  hint_bar: Натисніть або наведіть на смужку
-  hint_bar_key: Натисніть або наведіть на смужку. Натисніть на ім'я в легенді, щоб побачити лише його.
+  first_rows: Показано перші {shown} з {n} рядків.
+  hint_bar: Торкніться або наведіть курсор на стовпець
+  hint_bar_key: Торкніться або наведіть курсор на стовпець. Торкніться імені в легенді, щоб побачити тільки його.
   views: Перегляди
-  view_latest: Найновіша вкладка
-  view_weeks: Суми за вкладками
+  view_latest: Найсвіжіша вкладка
+  view_weeks: Підсумки за вкладками
   view_player: Одне ім'я за вкладками
   view_pick: Ім'я для показу
-  view_average: Середнє за {n} вкладками
-  view_chart: Діаграма
+  view_average: Середнє за {n} вкладок
+  view_total: Разом за {n} вкладок
+  view_chart: Графік
   view_compare: Порівняти
-  search_names: Введіть ім'я…
-  no_match: Немає збігів.
+  search_names: Введіть ім'я...
+  no_match: Збігів не знайдено.
   view_tab: Вкладка для показу
   compare_first: Перше ім'я
   compare_second: Друге ім'я
-  compare_top: Топ {n} (середнє)
-  compare_bottom: Бот {n} (середнє)
+  compare_top: Топ-{n} (середнє)
+  compare_bottom: Останні {n} (середнє)
   pair_left: 'Зліва: {name}'
   share_of_column: "{name}: {share} від загальної суми"
-  pair_right: 'Справа (бліде): {name}'
-  flip_to_asc: "⇅ Спочатку найнижчі"
-  flip_to_desc: "⇅ Спочатку найвищі"
-  hint_line: Натисніть або наведіть на тиждень
-  hint_pie: Натисніть або наведіть на сектор
-  hint_progress: Натисніть або наведіть на рядок
+  pair_right: 'Справа (тьмяно): {name}'
+  flip_to_asc: "⇅ Найменші спочатку"
+  flip_to_desc: "⇅ Найбільші спочатку"
+  hint_line: Торкніться або наведіть курсор на тиждень
+  hint_pie: Торкніться або наведіть курсор на сегмент
+  hint_progress: Торкніться або наведіть курсор на рядок
 nominate:
   page_title: Номінації на нагороди
   name_ok: У списку членів [{tag}]

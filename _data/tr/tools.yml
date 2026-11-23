@@ -273,11 +273,11 @@ chart_editor:
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}
-  no_numbers: Seçilen sütunda grafiklenecek sayı yok.
-  line_two_rows: Bir çizgi için en az iki satır gerekir.
-  line_two_columns: Bir çizgi için alt kısımda en az iki sütun gerekir.
-  no_positive: Seçilen sütunda grafiklenecek pozitif sayı yok.
-  no_targets: Kıyaslanacak sayı (veya hedef) yok.
+  no_numbers: Seçilen sütunda grafikleştirilecek sayı yok.
+  line_two_rows: Çizgi grafiği için en az iki satır gereklidir.
+  line_two_columns: Çizgi grafiği için altta en az iki sütun gereklidir.
+  no_positive: Seçilen sütunda grafikleştirilecek pozitif sayı yok.
+  no_targets: Karşılaştırılacak sayı (veya hedef) yok.
   no_table: Henüz tablo yok.
   unknown_type: Bilinmeyen grafik türü.
   draw_failed: Bu grafik çizilemedi ({error}).
@@ -286,43 +286,44 @@ charts:
   total: Toplam
   total_value: 'Toplam: {value}'
   share_of_all: "{value} · toplamın {share}'i"
-  value_of_target: "{target} içinden {value}"
+  value_of_target: "{target} içinde {value}"
   to_go: 'Kalan: {value}'
   target_reached: Hedefe ulaşıldı ✓
   done: "✓ Tamamlandı"
-  reached_target: "{total} kişiden {done} tanesi hedefe ulaştı"
+  reached_target: "{total} içinde {done} hedefe ulaştı"
   search: Ara…
   search_label: Bu tabloda ara
-  matching: "{n} eşleşen"
-  show_all: "{n} tanesini göster"
-  show_all_rows: "{n} satırın hepsini göster"
+  matching: "{n} eşleşme"
+  show_all: Tüm {n} öğeyi göster
+  show_all_rows: Tüm {n} satırı göster
   show_fewer: Daha az göster
-  first_rows: "{n} satırdan ilk {shown} tanesi gösteriliyor."
-  hint_bar: Bir çubuğa dokun veya üzerine gel
-  hint_bar_key: Bir çubuğa dokun veya üzerine gel. Sadece onu görmek için anahtardan bir isme dokun.
-  views: Görünümler
+  first_rows: Toplam {n} satırdan ilk {shown} tanesi gösteriliyor.
+  hint_bar: Bir çubuğa dokunun veya üzerine gelin
+  hint_bar_key: Bir çubuğa dokunun veya üzerine gelin. Sadece o veriyi görmek için anahtardan bir isme dokunun.
+  views: Görüntüleme
   view_latest: En yeni sekme
   view_weeks: Sekme bazlı toplamlar
-  view_player: Sekme bazlı bir isim
+  view_player: Sekme bazlı tek isim
   view_pick: Gösterilecek isim
   view_average: "{n} sekmenin ortalaması"
+  view_total: "{n} sekmenin toplamı"
   view_chart: Grafik
-  view_compare: Kıyasla
-  search_names: Bir isim yaz…
-  no_match: Hiçbir isim eşleşmedi.
+  view_compare: Karşılaştır
+  search_names: Bir isim yazın…
+  no_match: Eşleşen isim yok.
   view_tab: Gösterilecek sekme
   compare_first: İlk isim
   compare_second: İkinci isim
-  compare_top: İlk {n} (ortalama)
-  compare_bottom: Son {n} (ortalama)
+  compare_top: En iyi {n} (ortalama)
+  compare_bottom: En düşük {n} (ortalama)
   pair_left: 'Sol: {name}'
   share_of_column: "{name}: toplamın {share}'i"
-  pair_right: 'Sağ (soluk): {name}'
-  flip_to_asc: "⇅ En düşükten"
-  flip_to_desc: "⇅ En yüksekten"
-  hint_line: Bir haftaya dokun veya üzerine gel
-  hint_pie: Bir dilime dokun veya üzerine gel
-  hint_progress: Bir satıra dokun veya üzerine gel
+  pair_right: 'Sağ (silik): {name}'
+  flip_to_asc: "⇅ En düşükten yükseğe"
+  flip_to_desc: "⇅ En yüksekten düşüğe"
+  hint_line: Bir haftaya dokunun veya üzerine gelin
+  hint_pie: Bir dilime dokunun veya üzerine gelin
+  hint_progress: Bir satıra dokunun veya üzerine gelin
 nominate:
   page_title: Ödül Adaylıkları
   name_ok: "[{tag}] üye listesinde"

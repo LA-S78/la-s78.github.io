@@ -273,28 +273,28 @@ chart_editor:
   at_least_example: ej. 300M
 charts:
   column: Columna {n}
-  no_numbers: No hay números para graficar en la columna elegida.
+  no_numbers: No hay números que graficar en la columna elegida.
   line_two_rows: Una línea necesita al menos dos filas.
-  line_two_columns: Una línea necesita al menos dos columnas a lo largo de la parte inferior.
-  no_positive: No hay números positivos para graficar en la columna elegida.
+  line_two_columns: Una línea necesita al menos dos columnas en la parte inferior.
+  no_positive: No hay números positivos que graficar en la columna elegida.
   no_targets: No hay números (u objetivos) para comparar.
   no_table: Aún no hay tabla.
   unknown_type: Tipo de gráfico desconocido.
-  draw_failed: Este gráfico no pudo ser dibujado ({error}).
+  draw_failed: No se pudo dibujar este gráfico ({error}).
   other: Otro
   value: Valor
   total: Total
   total_value: 'Total: {value}'
   share_of_all: "{value} · {share} del total"
   value_of_target: "{value} de {target}"
-  to_go: 'Falta: {value}'
+  to_go: 'Restante: {value}'
   target_reached: Objetivo alcanzado ✓
   done: "✓ Hecho"
   reached_target: "{done} de {total} alcanzaron el objetivo"
   search: Buscar…
   search_label: Buscar en esta tabla
   matching: "{n} coincidencia(s)"
-  show_all: Mostrar los {n}
+  show_all: Mostrar todo {n}
   show_all_rows: Mostrar las {n} filas
   show_fewer: Mostrar menos
   first_rows: Mostrando las primeras {shown} de {n} filas.
@@ -306,10 +306,11 @@ charts:
   view_player: Un nombre por pestaña
   view_pick: Nombre a mostrar
   view_average: Promedio de {n} pestañas
+  view_total: Total de {n} pestañas
   view_chart: Gráfico
   view_compare: Comparar
   search_names: Escribe un nombre…
-  no_match: Ningún nombre coincide.
+  no_match: No hay nombres que coincidan.
   view_tab: Pestaña a mostrar
   compare_first: Primer nombre
   compare_second: Segundo nombre
@@ -318,10 +319,10 @@ charts:
   pair_left: 'Izquierda: {name}'
   share_of_column: "{name}: {share} del total"
   pair_right: 'Derecha (atenuado): {name}'
-  flip_to_asc: "⇅ El más bajo primero"
-  flip_to_desc: "⇅ El más alto primero"
+  flip_to_asc: "⇅ Menor primero"
+  flip_to_desc: "⇅ Mayor primero"
   hint_line: Toca o pasa el cursor sobre una semana
-  hint_pie: Toca o pasa el cursor sobre una rebanada
+  hint_pie: Toca o pasa el cursor sobre una porción
   hint_progress: Toca o pasa el cursor sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas
