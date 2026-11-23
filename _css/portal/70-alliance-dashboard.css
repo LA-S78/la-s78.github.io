@@ -38,6 +38,12 @@
   border-radius: 8px;
 }
 
+/* The page's last card (the alliance images) keeps its padding below: the pane's rule that
+   trims the last child's padding is for text, not for a card with a border (2026-11-23) */
+.content-pane > .dash-card:last-child {
+  padding-bottom: 0.9rem;
+}
+
 .dash-rewards {
   border-color: color-mix(in srgb, var(--accent-color) 45%, var(--border-color));
 }

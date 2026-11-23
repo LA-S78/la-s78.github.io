@@ -53,56 +53,22 @@ function growthChart(data, days, hidden) {
   const lines = data.nap
     .map((a, i) => ({ ...a, color: a.color || PALETTE[i % PALETTE.length] }))
     .filter((a) => data.alliances[a.tag] && !hidden.has(a.tag));
-  const W = 600;
-  const H = 260;
-  const pad = { l: 46, r: 12, t: 12, b: 26 };
-  const values = lines.flatMap((a) =>
-    days.map((d) => data.alliances[a.tag][d]).filter(Number.isFinite),
-  );
-  if (days.length < 2 || !values.length) return '';
-  let lo = Math.min(...values);
-  let hi = Math.max(...values);
-  const span = hi - lo || hi * 0.05 || 1;
-  lo = Math.max(0, lo - span * 0.08);
-  hi += span * 0.08;
-  const x = (i) => pad.l + (i / (days.length - 1)) * (W - pad.l - pad.r);
-  const y = (v) => pad.t + (1 - (v - lo) / (hi - lo)) * (H - pad.t - pad.b);
-  const ticks = [0, 0.25, 0.5, 0.75, 1].map((k) => lo + (hi - lo) * k);
-  const grid = ticks
-    .map(
-      (v) =>
-        `<line class="stats-grid" x1="${pad.l}" x2="${W - pad.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"></line><text class="stats-axis" x="${pad.l - 6}" y="${y(v).toFixed(1)}" dy="0.32em" text-anchor="end">${esc(might(v))}</text>`,
-    )
-    .join('');
-  const xLabels = [0, Math.floor((days.length - 1) / 2), days.length - 1]
-    .filter((v, i, arr) => arr.indexOf(v) === i)
-    .map(
-      (i) =>
-        `<text class="stats-axis" x="${x(i).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === days.length - 1 ? 'end' : 'middle'}">${esc(dateLabel(days[i]))}</text>`,
-    )
-    .join('');
-  const paths = lines
-    .map((a) => {
-      const pts = days
-        .map((d, i) => [i, data.alliances[a.tag][d]])
-        .filter(([, v]) => Number.isFinite(v));
-      if (!pts.length) return '';
-      const d = pts
-        .map(([i, v], k) => `${k ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`)
-        .join('');
-      const dots =
-        pts.length <= 12
-          ? pts
-              .map(
-                ([i, v]) =>
-                  `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.6" fill="${esc(a.color)}"></circle>`,
-              )
-              .join('')
-          : '';
-      return `<g><title>[${esc(a.tag)}]</title><path d="${d}" fill="none" stroke="${esc(a.color)}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"></path>${dots}</g>`;
-    })
-    .join('');
-  return `<svg class="stats-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('view_growth'))}">${grid}${xLabels}${paths}</svg>`;
+  // The shared line chart (js/line-chart.js), so each day can be read (owner, 2026-11-23)
+  return lineChart({
+    days,
+    lines: lines.map((a) => ({
+      name: `[${a.tag}]`,
+      color: a.color,
+      values: days.map((d) => data.alliances[a.tag][d] ?? null),
+    })),
+    format: might,
+    height: 260,
+    ticks: 5,
+    floorZero: true,
+    label: t('view_growth'),
+    hint: t('chart_hint'),
+    classes: { svg: 'stats-chart', grid: 'stats-grid', axis: 'stats-axis' },
+  });
 }
 
 function growthView(box, data, range, hidden) {
@@ -367,6 +333,7 @@ function lookupView(box, state, redraw) {
             ],
             format: might,
             label: t('lookup_history'),
+            hint: t('chart_hint'),
           }) || `<p class="stats-note">${esc(t('one_day'))}</p>`
         }
       </article>`

@@ -283,10 +283,11 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       const chart = window.LineChart && power
         ? window.LineChart.lineChart({
             days,
-            lines: [{ color: data.alliance.color || '#6abf4b', values: days.map((d) => power[d] ?? null) }],
+            lines: [{ color: data.alliance.color || '#6abf4b', name: t('stats.col_might'), values: days.map((d) => power[d] ?? null) }],
             format: might,
             height: 150,
             label: t('stats.growth_title'),
+            hint: t('stats.chart_hint'),
           })
         : '';
       el.hidden = !chart;

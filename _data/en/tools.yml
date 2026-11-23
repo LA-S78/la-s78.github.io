@@ -1035,6 +1035,7 @@ stats:
   title: "NAP Stats"
   views_label: "What to show"
   view_growth: "NAP growth"
+  chart_hint: "Tap or hover over a day to read it"
   view_players: "Top players"
   view_achievements: "Achievements"
   view_lookup: "Player lookup"
