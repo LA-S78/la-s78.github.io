@@ -118,7 +118,13 @@
       ${
         kind === 'frame' && slot.live
           ? `<label class="dash-check ai-use-frame"><input type="checkbox" data-ai="use-frame"${ctx.images.frameOn ? ' checked' : ''}> ${esc(t('use_frame'))}</label>
-      <p class="dash-muted dash-small">${esc(t(ctx.images.frameOn ? 'use_frame_on' : 'use_frame_off'))}</p>`
+      ${
+        // Over special frames too (owner, 2026-11-23): by default only the game's plain frame
+        ctx.images.frameOn
+          ? `<label class="dash-check dash-sub ai-use-frame"><input type="checkbox" data-ai="frame-all"${ctx.images.frameAll ? ' checked' : ''}> ${esc(t('frame_all'))}</label>`
+          : ''
+      }
+      <p class="dash-muted dash-small">${esc(t(!ctx.images.frameOn ? 'use_frame_off' : ctx.images.frameAll ? 'use_frame_all' : 'use_frame_on'))}</p>`
           : ''
       }
       ${kind === 'frame' && open ? `<p class="dash-muted dash-small ai-frame-spec">${esc(t('frame_spec'))}</p>` : ''}
@@ -175,12 +181,14 @@
       });
       if (r.ok) section._ai.ctx.onChange?.();
       else b.disabled = false;
-    } else if (act === 'use-frame') {
+    } else if (act === 'use-frame' || act === 'frame-all') {
       b.disabled = true;
       const r = await post(section, {
         type: 'alliance_image_frame',
         alliance: section._ai.ctx.alliance.tag,
-        on: b.checked,
+        // "Use for our members", and whether over special frames too
+        on: act === 'use-frame' ? b.checked : true,
+        all: act === 'frame-all' ? b.checked : Boolean(section._ai.ctx.images.frameAll),
       });
       if (r.ok) section._ai.ctx.onChange?.();
       else {

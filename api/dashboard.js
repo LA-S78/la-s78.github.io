@@ -21,7 +21,7 @@ import { sanitizeAlliances } from './_alliances.js';
 import { fetchAlliance, memberPictures } from './_tracker.js';
 import { stewardTools } from './_steward_tools.js';
 import { readSkinMap } from './_stats.js';
-import { allianceFrame, imageStatus } from './_alliance_images.js';
+import { allianceFrame, imageStatus, frameFor } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
@@ -160,7 +160,8 @@ async function respond(req, res) {
       newerThan: refreshedAt,
       use: 'alliance',
     });
-    // The alliance's own avatar frame, when switched on, replaces members' in-game frames
+    // The alliance's own avatar frame, when switched on: in place of the game's default frame
+    // (or of any frame, when the leaders chose so), frameFor() in api/_frames.js
     const frame = allianceFrame(gist, tag);
     if (access.leader) {
       body.roster = rosterBody(live, frame);
@@ -206,6 +207,7 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
   if (!live) return res.status(502).json({ error: say('api_dashboard.positions_unavailable') });
   // Sanctuary skins collected so far (api/_skins.js), for the map's game view
   const skins = await readSkinMap().catch(() => ({}));
+  const allianceFrameSetting = allianceFrame(gist, tag);
   return res.status(200).json({
     tag,
     takenAt: new Date(live.at - live.ageSeconds * 1000).toISOString(),
@@ -222,7 +224,7 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
         // For the map's game view (its popup: kills, the Sanctuary level, the profile frame)
         kills,
         level,
-        frame,
+        frame: frameFor(frame, allianceFrameSetting),
         skin: skins[String(uid)]?.[0] || null,
       })),
   });
@@ -231,7 +233,11 @@ async function memberPositions(res, { gist, tag, alliances, access }) {
 /** The roster card's data from a tracker lookup (leaders only; null fields when there is none). */
 function rosterBody(live, frame = null) {
   return {
-    members: live ? (frame ? live.members.map((m) => ({ ...m, frame })) : live.members) : null,
+    members: live
+      ? frame
+        ? live.members.map((m) => ({ ...m, frame: frameFor(m.frame, frame) }))
+        : live.members
+      : null,
     power: live ? live.power : null,
     ageSeconds: live ? live.ageSeconds : null,
     // When the game sent this copy: daily numbers count from the 00:00 GT reset
