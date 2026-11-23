@@ -214,6 +214,9 @@
     return `class="${cls}"${styles.length ? ` style="${styles.join('; ')}"` : ''}`;
   }
 
+  /** A line's or slice's colour class: the theme's, or with Compare the distinct pair. */
+  const tone = (w, k) => (w._distinct ? `dw-d${k % SERIES}` : `dw-s${k % SERIES}`);
+
   function legend(names, w) {
     if (names.length < 2) return '';
     // Bar charts: each name is a button (mount() handles them). The first tap shows only that
@@ -497,11 +500,11 @@
             ? pts
                 .map(
                   ([px, py, r]) =>
-                    `<circle class="dw-dot dw-s${k % SERIES}" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="6"><title>${esc(r.label)} · ${esc(s.names[k])}: ${short(r.values[k])}</title></circle>`,
+                    `<circle class="dw-dot ${tone(w, k)}" cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="6"><title>${esc(r.label)} · ${esc(s.names[k])}: ${short(r.values[k])}</title></circle>`,
                 )
                 .join('')
             : '';
-        return `<path class="dw-line dw-s${k % SERIES}" d="${d}"/>${dots}`;
+        return `<path class="dw-line ${tone(w, k)}" d="${d}"/>${dots}`;
       })
       .join('');
     // One tall tap area per row (the dots are too small to tap on a phone): its readout lists
@@ -542,7 +545,8 @@
     let parts = s.rows
       .map((r) => ({ label: r.label, v: r.values[0] }))
       .filter((p) => Number.isFinite(p.v) && p.v > 0)
-      .sort((a, b) => b.v - a.v);
+      // Biggest first; Compare keeps the two in the order picked (the first is always blue)
+      .sort((a, b) => (w._distinct ? 0 : b.v - a.v));
     if (!parts.length) return empty(say('no_positive'));
     if (parts.length > 7) {
       const other = parts.slice(6).reduce((t, p) => t + p.v, 0);
@@ -582,7 +586,7 @@
       .map((p, i) => {
         const a0 = at;
         at += (p.v / total) * Math.PI * 2;
-        return `<path class="dw-slice dw-s${i % SERIES}" ${pieTip(p, i)} d="${arcPath(a0, at)}"><title>${esc(p.label)}: ${short(p.v)} (${Math.round((p.v / total) * 100)}%)</title></path>`;
+        return `<path class="dw-slice ${tone(w, i)}" ${pieTip(p, i)} d="${arcPath(a0, at)}"><title>${esc(p.label)}: ${short(p.v)} (${Math.round((p.v / total) * 100)}%)</title></path>`;
       })
       .join('');
     const middle = donut
@@ -591,7 +595,7 @@
     return `<div class="dw-pie"><svg viewBox="0 0 160 160" role="img" aria-label="${esc(w.title)}">${rings}${middle}</svg><ul class="dw-pie-legend">${parts
       .map(
         (p, i) =>
-          `<li ${pieTip(p, i)}><i class="dw-s${i % SERIES}"></i><span>${esc(p.label)}</span><b>${Math.round((p.v / total) * 100)}%</b><small>${short(p.v)}</small></li>`,
+          `<li ${pieTip(p, i)}><i class="${tone(w, i)}"></i><span>${esc(p.label)}</span><b>${Math.round((p.v / total) * 100)}%</b><small>${short(p.v)}</small></li>`,
       )
       .join('')}</ul></div>`;
   }
@@ -765,8 +769,15 @@
     if (!tabsOf(w)) return 'latest';
     return VIEWS.includes(v) ? v : 'latest';
   };
-  /** A bar chart with Compare ticked in the editor (options.compare). */
-  const comparable = (w) => w.type === 'bar' && Boolean(w.options?.compare) && !w.options?.swap;
+  /**
+   * A chart with Compare ticked in the editor (options.compare): a bar chart (not swapped), a
+   * pie, or a swapped line chart (a row per name, a column per week: two names' lines).
+   */
+  const comparable = (w) =>
+    Boolean(w.options?.compare) &&
+    ((w.type === 'bar' && !w.options?.swap) ||
+      w.type === 'pie' ||
+      (w.type === 'line' && Boolean(w.options?.swap)));
   const key = (v) => String(v ?? '').trim();
 
   /** The names (labels) to pick from: the newest tab's, then any only in older tabs. */
@@ -876,11 +887,23 @@
   }
 
   /** One name's (or group's) cells for the columns `vals`, from one tab's rows. */
-  function entryCells(rows, who, { label, vals, off, sum }) {
+  function entryCells(rows, who, { label, vals, off, sum, perColumn }) {
     if (!GROUPS.includes(who)) {
       const r = rows.find((x) => key(x[label]) === who);
       return vals.map((c) => (r ? (r[c] ?? '') : ''));
     }
+    // A line over the weeks: each week's own top (or bottom) 5
+    if (perColumn)
+      return vals.map((c) => {
+        let list = rows
+          .filter((r) => key(r[label]) && number(r[c]) > 0)
+          .sort((x, y) => number(y[c]) - number(x[c]));
+        if (who === '@bottom') list = list.reverse();
+        list = list.slice(0, GROUP_SIZE);
+        return list.length
+          ? String(Math.round(sum(list.map((r) => number(r[c]))) / list.length))
+          : '';
+      });
     const tot = (r) => sum(vals.filter((_, k) => !off.has(k)).map((c) => number(r[c])));
     let list = rows.filter((r) => key(r[label]) && tot(r) > 0).sort((x, y) => tot(y) - tot(x));
     if (who === '@bottom') list = list.reverse();
@@ -903,6 +926,27 @@
     const { a, b } = comparedNames(w, tabs);
     const off = new Set(w._off || []);
     const ctx = { label, vals, off, sum };
+    if (w.type === 'pie') return comparedPie(w, { a, b, label, cols, sum });
+    if (w.type === 'line') {
+      // Two lines over the weeks (the chart's columns); a group is each week's own top 5
+      const row = (who) => {
+        const cells = entryCells(w.data.rows || [], who, {
+          ...ctx,
+          off: new Set(),
+          perColumn: true,
+        });
+        const r = Array(cols.length).fill('');
+        r[label] = whoName(who);
+        vals.forEach((c, k) => (r[c] = cells[k]));
+        return r;
+      };
+      return {
+        ...w,
+        _distinct: true,
+        data: { columns: cols, rows: [row(a), row(b)] },
+        options: { ...w.options, rowNames: [whoName(a), whoName(b)] },
+      };
+    }
     const o = w.options || {};
     const base = { labelCol: 0, order: undefined, limit: 0, swap: false, scale: false };
     if (o.stacked === 'sum') {
@@ -965,6 +1009,36 @@
   // The site's dropdown (js/site-select.js), with a search box for name lists
   const searchAttrs = () =>
     `data-search="${esc(say('search_names'))}" data-search-none="${esc(say('no_match'))}"`;
+  /**
+   * Compare on a pie (owner, 2026-11-23): the two fill the pie between them (a head-to-head
+   * split); under it, each one's share of the whole column (all the rows).
+   */
+  function comparedPie(w, { a, b, label, cols, sum }) {
+    const c = (w.options?.valueCols || [])[0] ?? (label === 1 ? 0 : 1);
+    const ctx = { label, vals: [c], off: new Set(), sum };
+    const value = (who) => entryCells(w.data.rows || [], who, ctx)[0];
+    const all = sum((w.data.rows || []).map((r) => number(r[c])).filter((v) => v > 0));
+    const shareOf = (who) => {
+      const v = number(value(who));
+      return Number.isFinite(v) && all > 0
+        ? say('share_of_column', { name: whoName(who), share: pct1(v / all) })
+        : '';
+    };
+    return {
+      ...w,
+      _distinct: true,
+      _note: [shareOf(a), shareOf(b)].filter(Boolean).join(' · '),
+      data: {
+        columns: [cols[label] ?? '', cols[c] ?? ''],
+        rows: [
+          [whoName(a), value(a)],
+          [whoName(b), value(b)],
+        ],
+      },
+      options: { ...w.options, labelCol: 0, valueCols: [1] },
+    };
+  }
+
   const select = (attr, label, names, on, search = true) =>
     `<select class="dw-pick" data-site-select ${search ? searchAttrs() : ''} ${attr} aria-label="${esc(label)}">${names
       .map((n) => `<option value="${esc(n)}"${n === on ? ' selected' : ''}>${esc(n)}</option>`)
@@ -1040,9 +1114,12 @@
   /** The chart or table for a widget, as HTML (call mount() after inserting it). */
   function render(w) {
     try {
-      if (w.type === 'bar') {
+      if (w.type === 'bar' || comparable(w)) {
         const shown = viewed(w);
-        return controls(w, tabsOf(w), shown) + bar(shown);
+        const note = shown._note
+          ? `<div class="dw-note dw-pair-note">${esc(shown._note)}</div>`
+          : '';
+        return controls(w, tabsOf(w), shown) + { bar, line, pie }[shown.type](shown) + note;
       }
       return { bar, line, pie, progress, table }[w.type]?.(w) ?? empty(say('unknown_type'));
     } catch (err) {
