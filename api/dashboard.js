@@ -25,7 +25,12 @@ import { allianceFrame, imageStatus } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
-import { fetchSourceTable, fetchSheetTabs, fetchSheetGrid } from './_google_source.js';
+import {
+  fetchSourceTable,
+  fetchSourceTabs,
+  fetchSheetTabs,
+  fetchSheetGrid,
+} from './_google_source.js';
 import {
   applyDashboardEdit,
   countRefresh,
@@ -277,6 +282,12 @@ async function refreshRoster(res, { gist, tag, alliances, session }) {
  * Leaders' edits to their alliance's dashboard (Stewards: any alliance): save, delete or move
  * a chart or table. Saved with updateGist, so edits made at the same moment are all kept.
  */
+/** A chart's table from its sheet or Doc: one range, or the same range across tabs. */
+const readSource = (source) =>
+  source?.kind === 'sheet' && source.tabs?.pattern
+    ? fetchSourceTabs(source)
+    : fetchSourceTable(source);
+
 async function editDashboard(req, res, { gist, tag, access, session, alliances }) {
   if (!access.leader) {
     return res.status(403).json({ error: say('api_dashboard.leaders_only') });
@@ -304,7 +315,7 @@ async function editDashboard(req, res, { gist, tag, access, session, alliances }
   // Read a Google Sheet / Doc for the editor's preview (nothing is saved).
   if (body.action === 'load-source') {
     try {
-      const data = await fetchSourceTable(body.source || {});
+      const data = await readSource(body.source || {});
       return res.status(200).json({ data, syncedAt: new Date().toISOString() });
     } catch (err) {
       return res.status(400).json({ error: err.message });
@@ -329,7 +340,7 @@ async function editDashboard(req, res, { gist, tag, access, session, alliances }
       return res.status(400).json({ error: say('api_dashboard.not_linked') });
     }
     try {
-      edit = { action: 'sync-data', id: body.id, data: await fetchSourceTable(widget.source) };
+      edit = { action: 'sync-data', id: body.id, data: await readSource(widget.source) };
     } catch (err) {
       return res.status(400).json({ error: err.message });
     }

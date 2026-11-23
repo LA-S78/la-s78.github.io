@@ -181,37 +181,30 @@ chart_editor:
   type_progress: Progreso
   type_table: Tabla
   title: Título
-  title_example: p. ej., Puntuaciones de Duelo de Alianzas
+  title_example: p. ej., puntuaciones de Duelo de Alianzas
   note: Explicación
-  note_example: p. ej., Mínimo 15M de puntos de Duelo requeridos para el reset del viernes
+  note_example: p. ej., mínimo de 15M de puntos en Duelo de Alianzas requeridos para el reinicio del viernes
   who_sees: Quién puede verlo
   officers_only: Solo oficiales (R4/R5)
   all_members: Todos los miembros de la alianza
   data: Datos
-  data_source: Origen de los datos
+  data_source: De dónde provienen los datos
   paste: Pegar una tabla
-  link: Enlace de Google Sheet / Doc
-  paste_help: Copia las celdas de Google Sheets o Excel (fila de encabezado primero) y pégalas aquí.
+  link: Enlace a Google Sheet / Doc
+  paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
   tab: Pestaña
-  order: Orden
-  order_sheet: Como en la hoja
-  order_desc: Mayor primero
-  order_asc: Menor primero
-  order_asc_help: Menor primero omite filas sin datos en las columnas mostradas (quienes no participaron).
-  limit: Mostrar
-  limit_all: Todo
-  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina, luego la opuesta). La primera fila es el encabezado. Luego toca una letra de columna para convertirla en etiquetas, o una columna numérica.'
+  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina, luego la opuesta). La primera fila es el encabezado. Luego toca una letra de columna para convertirla en las etiquetas, o una columna de números.'
   grid_tap_second: Ahora toca la esquina opuesta de la tabla.
-  grid_mode: Al hacer clic en una letra de columna se establece
+  grid_mode: Hacer clic en una letra de columna establece
   grid_labels: Etiquetas
   grid_numbers: Números
-  grid_more: Solo se muestran las primeras 200 filas y 60 columnas aquí; un rango puede ir más allá.
+  grid_more: Solo se muestran aquí las primeras 200 filas y 60 columnas; un rango puede ser mayor.
   range: Rango, p. ej. A1:D20 (opcional)
-  doc_table: Qué tabla del documento (1, 2…)
+  doc_table: Qué tabla en el documento (1, 2...)
   load: "⤓ Cargar desde Google"
-  loading: "⤓ Cargando…"
-  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede leer” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta actualiza los números más tarde.'
+  loading: "⤓ Cargando..."
+  link_help: 'Sheets: Compartir → "Cualquier persona con el enlace puede ver" (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. "Sincronizar ahora" en la tarjeta obtiene los últimos números más tarde.'
   load_first: Carga la hoja primero (⤓ Cargar desde Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
@@ -220,7 +213,7 @@ chart_editor:
   rows_other: "{n} filas"
   columns_one: "{n} columna"
   columns_other: "{n} columnas"
-  at_most_500: "(máximo 500)"
+  at_most_500: "(500 como máximo)"
   labels: Nombres (etiquetas)
   numbers_to_show: Números a mostrar
   labels_swapped: Nombres (una línea o barra cada uno)
@@ -228,37 +221,37 @@ chart_editor:
   swap_bar: "⇄ Intercambiar filas y columnas: las columnas como barras, un color por fila"
   swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a lo largo de las semanas.'
   rows_to_draw: Filas a dibujar (hasta 6)
-  rows_filter: Buscar un nombre…
-  rows_count: "{n} de 6 elegidos"
-  columns_along: Columnas en la parte inferior (en orden de la hoja)
+  rows_filter: Buscar un nombre...
+  rows_count: "{n} de 6 seleccionados"
+  columns_along: Columnas en la parte inferior (en el orden de la hoja)
   numbers: Números
-  several_columns: Varias columnas numéricas
+  several_columns: Varias columnas de números
   side_by_side: Lado a lado
   stacked_totals: 'Apilado: totales'
   stacked_percent: 'Apilado: cada barra al 100%'
   vertical: Barras verticales
-  vertical_leaderboard: Barras verticales (en lugar de un marcador)
-  traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna rojo, última verde'
-  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, mejor verde'
+  vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
+  traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde'
+  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, el superior verde'
   traffic_reverse: 'Invertir: bajo es bueno (verde), alto es malo (rojo)'
   traffic_target: Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo
-  traffic_target_reverse: 'Invertir: cuanto más lejos del objetivo sea mejor'
-  donut: Rosquilla (anillo)
+  traffic_target_reverse: 'Invertir: cuanto más lejos por debajo del objetivo, mejor'
+  donut: Dona (anillo)
   target: Objetivo para todos
   target_example: p. ej. 15M o 15000000
-  target_column: "…o una columna de objetivos"
+  target_column: "...o una columna de objetivos"
   use_number_above: "(usar el número de arriba)"
   highlight_where: Resaltar filas donde
-  no_highlight: "(sin resaltado)"
+  no_highlight: "(sin resaltar)"
   at_least: es al menos
   at_least_example: p. ej. 300M
 charts:
   column: Columna {n}
   no_numbers: No hay números que graficar en la columna elegida.
   line_two_rows: Una línea necesita al menos dos filas.
-  line_two_columns: Una línea necesita al menos dos columnas en la parte inferior.
+  line_two_columns: Una línea necesita al menos dos columnas a lo largo del eje inferior.
   no_positive: No hay números positivos que graficar en la columna elegida.
-  no_targets: No hay números (u objetivos) para comparar.
+  no_targets: No hay números (o objetivos) para comparar.
   no_table: Aún no hay tabla.
   unknown_type: Tipo de gráfico desconocido.
   draw_failed: Este gráfico no se pudo dibujar ({error}).
@@ -274,15 +267,14 @@ charts:
   reached_target: "{done} de {total} alcanzaron el objetivo"
   search: Buscar…
   search_label: Buscar en esta tabla
-  matching: "{n} coincidencias"
-  show_all: Mostrar los {n}
-  show_all_rows: Mostrar las {n} filas
+  matching: "{n} coincidente"
+  show_all: Mostrar todos {n}
+  show_all_rows: Mostrar todas {n} filas
   first_rows: Mostrando las primeras {shown} de {n} filas.
-  hint_bar: Toca o pasa el cursor sobre una barra
-  hint_bar_key: Toca o pasa el cursor sobre una barra. Toca un nombre en la leyenda para ver solo ese.
-  hint_line: Toca o pasa el cursor sobre una semana
-  hint_pie: Toca o pasa el cursor sobre una sección
-  hint_progress: Toca o pasa el cursor sobre una fila
+  hint_bar: Toca o mantén el puntero sobre una barra
+  hint_line: Toca o mantén el puntero sobre una semana
+  hint_pie: Toca o mantén el puntero sobre una porción
+  hint_progress: Toca o mantén el puntero sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas
   name_ok: En la lista de miembros de [{tag}]

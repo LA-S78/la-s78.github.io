@@ -176,43 +176,36 @@ chart_editor:
   new_title: Nouveau graphique ou tableau
   type: Type
   type_bar: Barres
-  type_line: Ligne
+  type_line: Lignes
   type_pie: Secteurs
   type_progress: Progression
   type_table: Tableau
   title: Titre
-  title_example: 'ex. : scores du Duel d''Alliances'
+  title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: 'ex. : 15M de points de Duel minimum requis avant la réinitialisation du vendredi'
+  note_example: ex. Minimum 15M de points de duel requis avant la réinitialisation du vendredi
   who_sees: Qui peut le voir
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
   data: Données
-  data_source: Origine des données
+  data_source: Source des données
   paste: Coller un tableau
   link: Lien Google Sheet / Doc
   paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
   tab_name: Nom de l'onglet (optionnel)
   tab: Onglet
-  order: Ordre
-  order_sheet: Comme dans la feuille
-  order_desc: Le plus élevé en premier
-  order_asc: Le plus faible en premier
-  order_asc_help: Le plus faible en premier exclut les lignes vides dans les colonnes affichées (ceux qui n'ont pas participé).
-  limit: Afficher
-  limit_all: Tous
-  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur téléphone : touchez un coin, puis le coin opposé). La première ligne est l''en-tête. Touchez ensuite une lettre de colonne pour définir les libellés, ou une colonne de nombres.'
-  grid_tap_second: Touchez maintenant le coin opposé du tableau.
-  grid_mode: Toucher une lettre de colonne définit
-  grid_labels: Libellés
+  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur téléphone : appuyez sur un coin, puis sur le coin opposé). La première ligne est l''en-tête. Ensuite, appuyez sur une lettre de colonne pour en faire les étiquettes, ou sur une colonne de nombres.'
+  grid_tap_second: Appuyez maintenant sur le coin opposé du tableau.
+  grid_mode: Cliquer sur une lettre de colonne définit
+  grid_labels: Étiquettes
   grid_numbers: Nombres
-  grid_more: Seules les 200 premières lignes et 60 colonnes sont montrées ici ; une plage peut aller au-delà.
-  range: 'Plage, ex. : A1:D20 (optionnel)'
+  grid_more: Seules les 200 premières lignes et 60 premières colonnes sont affichées ici ; une plage peut aller plus loin.
+  range: Plage, ex. A1:D20 (optionnel)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent consulter » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser » sur la carte récupère les derniers chiffres plus tard.'
-  load_first: Chargez d'abord la feuille (⤓ Charger depuis Google).
+  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la carte récupère les derniers chiffres plus tard.'
+  load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
   preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
@@ -221,11 +214,11 @@ chart_editor:
   columns_one: "{n} colonne"
   columns_other: "{n} colonnes"
   at_most_500: "(500 au maximum)"
-  labels: Noms (libellés)
+  labels: Noms (étiquettes)
   numbers_to_show: Nombres à afficher
   labels_swapped: Noms (une ligne ou barre chacun)
   swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
-  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes en barres, une couleur par rangée"
+  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
   swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
@@ -234,32 +227,32 @@ chart_editor:
   numbers: Nombres
   several_columns: Plusieurs colonnes de nombres
   side_by_side: Côte à côte
-  stacked_totals: 'Empilés : totaux'
-  stacked_percent: 'Empilés : chaque barre à 100 %'
+  stacked_totals: 'Empilé : totaux'
+  stacked_percent: 'Empilé : chaque barre à 100%'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
-  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, haut en vert'
-  traffic_reverse: 'Inversé : faible est bon (vert), élevé est mauvais (rouge)'
-  traffic_target: Rouge → jaune → vert selon la proximité de la cible
+  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, meilleur en vert'
+  traffic_reverse: 'Inversé : bas est bon (vert), haut est mauvais (rouge)'
+  traffic_target: Rouge → jaune → vert selon la proximité par rapport à la cible
   traffic_target_reverse: 'Inversé : plus loin en dessous de la cible est meilleur'
   donut: Donut (anneau)
-  target: Cible pour tous
-  target_example: 'ex. : 15M ou 15000000'
+  target: Cible pour tout le monde
+  target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le nombre au-dessus)"
+  use_number_above: "(utiliser le nombre ci-dessus)"
   highlight_where: Surligner les lignes où
-  no_highlight: "(pas de surbrillance)"
+  no_highlight: "(aucun surlignage)"
   at_least: est au moins
-  at_least_example: 'ex. : 300M'
+  at_least_example: ex. 300M
 charts:
   column: Colonne {n}
-  no_numbers: Aucun nombre à représenter dans la colonne choisie.
+  no_numbers: Aucun chiffre à représenter dans la colonne choisie.
   line_two_rows: Une ligne nécessite au moins deux rangées.
   line_two_columns: Une ligne nécessite au moins deux colonnes en bas.
-  no_positive: Aucun nombre positif à représenter dans la colonne choisie.
-  no_targets: Aucun nombre (ou cible) à comparer.
-  no_table: Aucun tableau pour le moment.
+  no_positive: Aucun chiffre positif à représenter dans la colonne choisie.
+  no_targets: Aucun chiffre (ou cible) à comparer.
+  no_table: Aucun tableau pour l'instant.
   unknown_type: Type de graphique inconnu.
   draw_failed: Ce graphique n'a pas pu être dessiné ({error}).
   other: Autre
@@ -268,7 +261,7 @@ charts:
   total_value: 'Total : {value}'
   share_of_all: "{value} · {share} du total"
   value_of_target: "{value} sur {target}"
-  to_go: 'Reste : {value}'
+  to_go: 'Restant : {value}'
   target_reached: Cible atteinte ✓
   done: "✓ Terminé"
   reached_target: "{done} sur {total} ont atteint la cible"
@@ -278,11 +271,10 @@ charts:
   show_all: Afficher les {n}
   show_all_rows: Afficher les {n} lignes
   first_rows: Affichage des {shown} premières lignes sur {n}.
-  hint_bar: Touchez ou survolez une barre
-  hint_bar_key: Touchez ou survolez une barre. Touchez un nom dans la légende pour ne voir que celui-ci.
-  hint_line: Touchez ou survolez une semaine
-  hint_pie: Touchez ou survolez une part
-  hint_progress: Touchez ou survolez une ligne
+  hint_bar: Appuyez ou survolez une barre
+  hint_line: Appuyez ou survolez une semaine
+  hint_pie: Appuyez ou survolez une part
+  hint_progress: Appuyez ou survolez une ligne
 nominate:
   page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]
