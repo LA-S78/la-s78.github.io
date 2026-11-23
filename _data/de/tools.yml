@@ -265,14 +265,14 @@ chart_editor:
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}
-  no_numbers: Keine Zahlen zum Diagramm in der gewählten Spalte.
+  no_numbers: Keine Zahlen zum Darstellen in der gewählten Spalte vorhanden.
   line_two_rows: Eine Linie benötigt mindestens zwei Zeilen.
-  line_two_columns: Eine Linie benötigt mindestens zwei Spalten unten.
-  no_positive: Keine positiven Zahlen zum Diagramm in der gewählten Spalte.
+  line_two_columns: Eine Linie benötigt mindestens zwei Spalten am unteren Rand.
+  no_positive: Keine positiven Zahlen zum Darstellen in der gewählten Spalte vorhanden.
   no_targets: Keine Zahlen (oder Ziele) zum Vergleichen.
-  no_table: Noch keine Tabelle.
+  no_table: Noch keine Tabelle vorhanden.
   unknown_type: Unbekannter Diagrammtyp.
-  draw_failed: Dieses Diagramm konnte nicht gezeichnet werden ({error}).
+  draw_failed: Dieses Diagramm konnte nicht erstellt werden ({error}).
   other: Andere
   value: Wert
   total: Gesamt
@@ -285,34 +285,35 @@ charts:
   reached_target: "{done} von {total} haben das Ziel erreicht"
   search: Suchen…
   search_label: Diese Tabelle durchsuchen
-  matching: "{n} Treffer"
+  matching: "{n} Übereinstimmungen"
   show_all: Alle {n} anzeigen
   show_all_rows: Alle {n} Zeilen anzeigen
+  show_fewer: Weniger anzeigen
   first_rows: Zeige die ersten {shown} von {n} Zeilen.
-  hint_bar: Tippe oder bewege die Maus über einen Balken
-  hint_bar_key: Tippe oder bewege die Maus über einen Balken. Tippe in der Legende auf einen Namen, um nur diesen zu sehen.
+  hint_bar: Balken antippen oder darüberfahren
+  hint_bar_key: Balken antippen oder darüberfahren. Tippe einen Namen in der Legende an, um nur diesen anzuzeigen.
   views: Ansichten
   view_latest: Neuester Tab
   view_weeks: Summen pro Tab
   view_player: Ein Name pro Tab
-  view_pick: Name zum Anzeigen
+  view_pick: Name anzeigen
   view_average: Durchschnitt von {n} Tabs
   view_chart: Diagramm
   view_compare: Vergleichen
   search_names: Namen eingeben…
-  no_match: Keine Namen stimmen überein.
-  view_tab: Tab zum Anzeigen
+  no_match: Keine passenden Namen gefunden.
+  view_tab: Tab anzeigen
   compare_first: Erster Name
   compare_second: Zweiter Name
   compare_top: Top {n} (Durchschnitt)
-  compare_bottom: Bottom {n} (Durchschnitt)
+  compare_bottom: Flop {n} (Durchschnitt)
   pair_left: 'Links: {name}'
-  pair_right: 'Rechts (blass): {name}'
+  pair_right: 'Rechts (ausgeblendet): {name}'
   flip_to_asc: "⇅ Niedrigste zuerst"
   flip_to_desc: "⇅ Höchste zuerst"
-  hint_line: Tippe oder bewege die Maus über eine Woche
-  hint_pie: Tippe oder bewege die Maus über ein Stück
-  hint_progress: Tippe oder bewege die Maus über eine Zeile
+  hint_line: Woche antippen oder darüberfahren
+  hint_pie: Segment antippen oder darüberfahren
+  hint_progress: Zeile antippen oder darüberfahren
 nominate:
   page_title: Belohnungsnominierungen
   name_ok: In der Mitgliederliste von [{tag}]
