@@ -273,6 +273,13 @@ html[data-theme='sanctuary'] .dw-s4 {
   color: var(--text-muted);
 }
 
+.dash-skipped {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0 0 0.6rem;
+}
+
 .dash-widget-note {
   margin: 0 0 0.6rem;
   font-size: 0.78rem;

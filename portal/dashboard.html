@@ -870,6 +870,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
         <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}${sync}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
+        ${isLeader() && w.data?.skipped?.length ? `<p class="dash-muted dash-small dash-skipped">${ic('warning', 'warn')}${escapeHtml(t('dashboard.tabs_skipped', { names: w.data.skipped.join(', ') }))}</p>` : ''}
         <div class="dash-widget-body">${W.render(w)}</div>
       </article>`;
     }
@@ -1009,7 +1010,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
       if (act === 'sync') {
         b.disabled = true;
-        b.innerHTML = ic('refresh') + escapeHtml(t('dashboard.syncing'));
+        const synced = data.dashboard.widgets.find((x) => x.id === id);
+        const tabs = synced?.source?.tabs ? synced.source.tabs.count : 0;
+        b.innerHTML = ic('refresh') + escapeHtml(tabs > 1 ? t('dashboard.syncing_tabs', { n: tabs }) : t('dashboard.syncing'));
         const error = await save({ action: 'sync-widget', id });
         if (error && document.body.contains(b)) {
           b.disabled = false;
@@ -1092,6 +1095,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
             <input type="text" id="ed-sheet" placeholder="${e('tab_name')}" value="${escapeHtml((w.source && w.source.sheet) || '')}">
             <input type="text" id="ed-range" placeholder="${e('range')}" value="${escapeHtml((w.source && w.source.range) || '')}">
           </div>
+          <div class="dash-muted dash-small" id="ed-sheet-status" aria-live="polite"></div>
           <div class="dash-tabs-box" id="ed-tabs-box" hidden>
             <label class="dash-check"><input type="checkbox" id="ed-tabs-on"${w.source && w.source.tabs ? ' checked' : ''}> ${e('tabs_on')}</label>
             <div class="dash-two" id="ed-tabs-opts"${w.source && w.source.tabs ? '' : ' hidden'}>
@@ -1122,6 +1126,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
             <input type="text" inputmode="numeric" id="ed-table" placeholder="${e('doc_table')}" value="${escapeHtml(String((w.source && w.source.table) || ''))}">
           </div>
           <button type="button" class="dash-btn" id="ed-load">${e('load')}</button>
+          <div class="dash-muted dash-small" id="ed-load-status" aria-live="polite"></div>
           <div class="dash-muted dash-small">${e('link_help')}</div>
         </div>
         <div class="dash-muted dash-small" id="ed-parsed"></div>
@@ -1364,8 +1369,12 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         const url = $('ed-url').value.trim();
         if (linkKind() !== 'sheet' || !/^https:\/\/docs\.google\.com\/spreadsheets\//.test(url) || url === tabsFor) return;
         tabsFor = url;
+        // Waiting for Google (owner, 2026-11-23: say it's working, so nothing looks missing)
+        $('ed-sheet-status').textContent = t('chart_editor.finding_tabs');
         try {
-          const { tabs } = await editorAsk('sheet-tabs', { kind: 'sheet', url });
+          const { tabs } = await editorAsk('sheet-tabs', { kind: 'sheet', url }).finally(() => {
+            if ($('ed-sheet-status')) $('ed-sheet-status').textContent = '';
+          });
           if ($('ed-url').value.trim() !== url) return;
           sheetTabs = tabs;
           const wanted = $('ed-sheet').value.trim();
@@ -1670,6 +1679,12 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         btn.disabled = true;
         btn.textContent = t('chart_editor.loading');
         $('ed-error').textContent = '';
+        // Several tabs can take a while: say how many, and how long it may take
+        if (tabsOn()) {
+          const pattern = $('ed-tabs-pattern').value.trim();
+          const n = pickTabs(sheetTabs.filter((x) => patternTest(pattern)(x.name)), Number($('ed-tabs-count').value) || 8).length;
+          if (n > 1) $('ed-load-status').textContent = t('chart_editor.reading_tabs', { n });
+        }
         try {
           const res = await fetch('/api/dashboard', {
             method: 'POST',
@@ -1686,6 +1701,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         }
         btn.disabled = false;
         btn.textContent = t('chart_editor.load');
+        $('ed-load-status').textContent = '';
       });
 
       function readPaste() {
