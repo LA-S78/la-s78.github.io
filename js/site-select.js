@@ -14,6 +14,11 @@
  * data-icon: the SVG inside a 24x24 line icon (the site's icon style). Only trusted markup from
  *            the site's own data (e.g. _data/event_types.yml): it's put into the page as is.
  * data-hint: a short second line, shown smaller beside the name.
+ * data-search on the <select> (2026-11-23): a search box at the top of the open list, for long
+ *            lists (e.g. 100 player names); its value is the box's placeholder, and
+ *            data-search-none the text when nothing matches. Matching ignores letter case,
+ *            accents and symbols ("human" finds "●Human●"): names containing what's typed,
+ *            else names with its letters in order ("drcs" finds "DracaryS").
  *
  * Options added or replaced later (select.innerHTML = …), a value set in code (select.value =
  * …, which fires no event), the select hidden or disabled, and dropdowns added to the page
@@ -92,10 +97,42 @@
       list.setAttribute('aria-label', select.getAttribute('aria-label'));
     }
 
-    let active = -1; // the highlighted option while open
+    let active = -1; // the highlighted option (its data-index) while open
     let typed = '';
     let typedAt = 0;
     const options = () => [...select.options].filter((o) => !o.hidden);
+
+    // The search box (data-search): an input above the options, inside the open list
+    const searchable = select.hasAttribute('data-search');
+    let search = null;
+    const fold = (t) =>
+      String(t || '')
+        .normalize('NFKD')
+        .replace(/\p{M}/gu, '')
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, '');
+    /** Hides the options that don't match the box; highlights the first that does. */
+    function filter() {
+      const q = fold(search?.value);
+      const items = [...list.querySelectorAll('[role="option"]')];
+      const texts = items.map((li) => fold(li.textContent));
+      const inOrder = (t) => {
+        let at = 0;
+        for (const ch of q) {
+          at = t.indexOf(ch, at) + 1;
+          if (!at) return false;
+        }
+        return true;
+      };
+      let ok = texts.map((t) => !q || t.includes(q));
+      if (q && !ok.some(Boolean)) ok = texts.map(inOrder);
+      items.forEach((li, i) => (li.hidden = !ok[i]));
+      list.querySelectorAll('.site-select-group').forEach((g) => (g.hidden = Boolean(q)));
+      const none = list.querySelector('.site-select-none');
+      if (none) none.hidden = ok.some(Boolean);
+      const first = items.find((li) => !li.hidden);
+      if (first) highlight(Number(first.dataset.index));
+    }
 
     function build() {
       const html = [];
@@ -107,6 +144,21 @@
         } else if (!child.hidden) html.push(item(child, index++));
       }
       list.innerHTML = html.join('');
+      if (searchable) {
+        const q = search ? search.value : '';
+        list.insertAdjacentHTML(
+          'afterbegin',
+          `<li class="site-select-search" role="presentation"><input type="search" autocomplete="off" spellcheck="false" placeholder="${esc(select.dataset.search || '')}" aria-label="${esc(select.dataset.search || select.getAttribute('aria-label') || '')}" aria-controls="${list.id}"></li>`,
+        );
+        list.insertAdjacentHTML(
+          'beforeend',
+          `<li class="site-select-none" role="presentation" hidden>${esc(select.dataset.searchNone || '')}</li>`,
+        );
+        search = list.querySelector('.site-select-search input');
+        search.value = q;
+        search.addEventListener('input', filter);
+        if (q) filter();
+      }
       sync();
     }
     function item(o, i) {
@@ -131,7 +183,19 @@
       active = Math.max(0, Math.min(items.length - 1, i));
       items.forEach((li, n) => li.classList.toggle('is-active', n === active));
       list.setAttribute('aria-activedescendant', items[active].id);
+      search?.setAttribute('aria-activedescendant', items[active].id);
       items[active].scrollIntoView({ block: 'nearest' });
+    }
+    /** Moves the highlight `by` options among those shown (the search hides some). */
+    function move(by) {
+      const shown = [...list.querySelectorAll('[role="option"]')]
+        .filter((li) => !li.hidden)
+        .map((li) => Number(li.dataset.index));
+      if (!shown.length) return;
+      if (by === -Infinity) return highlight(shown[0]);
+      if (by === Infinity) return highlight(shown[shown.length - 1]);
+      const at = shown.indexOf(active);
+      highlight(shown[Math.max(0, Math.min(shown.length - 1, (at < 0 ? -1 : at) + by))]);
     }
     function open() {
       if (button.disabled || !list.hidden) return;
@@ -146,7 +210,12 @@
         below < Math.min(list.scrollHeight, 320) + 12 && r.top > below,
       );
       highlight(Math.max(0, options().indexOf(select.options[select.selectedIndex])));
-      list.focus({ preventScroll: true });
+      if (search) {
+        search.value = '';
+        filter();
+        highlight(Math.max(0, options().indexOf(select.options[select.selectedIndex])));
+        search.focus({ preventScroll: true });
+      } else list.focus({ preventScroll: true });
       document.addEventListener('pointerdown', outside, true);
     }
     function close(focusButton = true) {
@@ -190,14 +259,17 @@
       if (li && Number(li.dataset.index) !== active) highlight(Number(li.dataset.index));
     });
     list.addEventListener('keydown', (e) => {
-      const count = list.querySelectorAll('[role="option"]').length;
-      if (e.key === 'ArrowDown') highlight(active + 1);
-      else if (e.key === 'ArrowUp') highlight(active - 1);
-      else if (e.key === 'Home') highlight(0);
-      else if (e.key === 'End') highlight(count - 1);
-      else if (e.key === 'PageDown') highlight(active + 5);
-      else if (e.key === 'PageUp') highlight(active - 5);
-      else if (e.key === 'Enter' || e.key === ' ') choose(active);
+      const inBox = search && e.target === search;
+      if (e.key === 'ArrowDown') move(1);
+      else if (e.key === 'ArrowUp') move(-1);
+      else if (e.key === 'Home' && !inBox) move(-Infinity);
+      else if (e.key === 'End' && !inBox) move(Infinity);
+      else if (e.key === 'PageDown') move(5);
+      else if (e.key === 'PageUp') move(-5);
+      else if (e.key === 'Enter' || (e.key === ' ' && !inBox)) {
+        if (list.querySelector(`[data-index="${active}"]:not([hidden])`)) choose(active);
+      } else if (inBox && e.key !== 'Escape' && e.key !== 'Tab')
+        return; // typing in the box
       else if (e.key === 'Escape') close();
       else if (e.key === 'Tab') {
         close(false);

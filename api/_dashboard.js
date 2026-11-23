@@ -9,13 +9,15 @@
 import { getAllianceNominationQuota, quotaIfWon } from './_rewards_helper.js';
 import { chestCounts } from './_nomination_assign.js';
 import { describeRewardPeriod } from './_reward_period.js';
-import { sourceRequest } from './_google_source.js';
+import { sourceRequest, MAX_TABS } from './_google_source.js';
 import { say } from './_messages.js';
 import { findTag, tagSlug } from './_alliances.js';
 import { dashboardsById } from './_dashboard_ids.js';
 
 /** Most bytes one alliance's dashboard file may hold (thousands of table rows). */
-export const MAX_DASHBOARD_BYTES = 150 * 1024;
+// 150 KB at first; 250 KB from 2026-11-23 (owner), for charts across tabs. Every Gist read
+// downloads every file, so this stays well under GitHub's 1 MB per file
+export const MAX_DASHBOARD_BYTES = 250 * 1024;
 
 /** The alliance's key in map-state.json for a tag written another way, or null (findTag). */
 export function findAllianceKey(alliances = {}, tag) {
@@ -175,7 +177,7 @@ export function rewardStatus({ tag, rewardsData, mapState, nominations, period }
 export const LIMITS = Object.freeze({
   widgets: 20,
   rows: 500,
-  columns: 40, // a weekly sheet gains a column each week; the 150 KB cap still applies
+  columns: 40, // a weekly sheet gains a column each week; the 250 KB cap still applies
   cellChars: 100,
   titleChars: 80,
   noteChars: 400,
@@ -191,6 +193,64 @@ const colIndex = (v, columns) => {
   const n = Number(v);
   return Number.isInteger(n) && n >= 0 && n < columns ? n : null;
 };
+
+/** "22,153,591" → "22153591": a number without its separators, to keep older tabs small. */
+const compact = (cell) =>
+  /^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(cell) ? cell.replace(/,/g, '') : cell;
+
+/**
+ * An older tab's rows, full width, from either form: as read from the sheet ({ rows }) or as
+ * stored ({ cols, text }: the columns kept, then one line per row, cells split by tabs).
+ */
+export function olderRows(t, width) {
+  if (Array.isArray(t.rows)) return t.rows.filter(Array.isArray);
+  if (typeof t.text !== 'string' || !Array.isArray(t.cols)) return [];
+  const cols = t.cols.map(Number);
+  return t.text
+    .split('\n')
+    .filter(Boolean)
+    .map((line) => {
+      const cells = line.split('\t');
+      const row = Array(width).fill('');
+      cols.forEach((c, k) => {
+        if (Number.isInteger(c) && c >= 0 && c < width) row[c] = cells[k] ?? '';
+      });
+      return row;
+    });
+}
+
+/**
+ * A chart across tabs keeps the newest tab as its rows (as any chart), and the older tabs,
+ * oldest first, as `older`: [{ name, cols, text }], with only the columns the chart uses (the
+ * label and the numbers), numbers without separators, one line of text per row. Stored as
+ * rows of cells, eight weeks of a 90-player sheet took 139 KB (the file is saved spaced out,
+ * a line per cell); this way about 57 KB.
+ */
+function tabsData(source, data, columns, options) {
+  if (!source.tabs) return {};
+  const cols = [options.labelCol, ...options.valueCols];
+  const cell = (v) =>
+    compact(
+      clip(v, LIMITS.cellChars)
+        .replace(/[\t\n\r]+/g, ' ')
+        .trim(),
+    );
+  const older = (Array.isArray(data.older) ? data.older : [])
+    .filter((t) => t && typeof t === 'object')
+    .slice(-(MAX_TABS - 1))
+    .map((t) => ({
+      name: clip(t.name, 100).trim(),
+      cols,
+      text: olderRows(t, columns.length)
+        .slice(0, LIMITS.rows)
+        .map((r) => cols.map((i) => cell(r[i])))
+        // A row with no numbers (a name only) isn't drawn in any view
+        .filter((r) => r.slice(1).some((v) => v !== ''))
+        .map((r) => r.join('\t'))
+        .join('\n'),
+    }));
+  return { tab: clip(data.tab, 100).trim(), older };
+}
 
 /**
  * Checks a widget sent from the editor and returns { widget } (cleaned: only known fields,
@@ -259,6 +319,8 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     if (o.order === 'desc' || o.order === 'asc') options.order = o.order;
     const limit = parseInt(o.limit, 10);
     if (limit > 0) options.limit = Math.min(100, limit);
+    // "Compare two" for viewers (2026-11-23): ticked per chart
+    if (o.compare && !swap) options.compare = true;
   }
   // scale: traffic-light colours, red (low) → yellow → green (high).
   if ((w.type === 'bar' || w.type === 'progress') && o.scale) {
@@ -297,11 +359,29 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
           }
         : { table: Math.max(1, Math.min(50, parseInt(w.source.table, 10) || 1)) }),
     };
+    // Across tabs (2026-11-23): the same range from the newest `count` tabs whose names match
+    // `pattern`; bar charts only
+    if (w.type === 'bar' && w.source.kind === 'sheet' && w.source.tabs) {
+      const pattern = clip(w.source.tabs.pattern, 40).trim();
+      if (pattern) {
+        src.tabs = {
+          pattern,
+          count: Math.max(2, Math.min(MAX_TABS, parseInt(w.source.tabs.count, 10) || 8)),
+        };
+      }
+    }
     const req = sourceRequest(src);
     if (req.error) return { error: req.error };
     source = src;
     syncedAt = !Number.isNaN(Date.parse(w.syncedAt)) ? new Date(w.syncedAt).toISOString() : now;
   }
+
+  if (source.tabs) {
+    // The view a viewer starts on (each can switch): this tab, the totals by tab, one row
+    // (player) across the tabs, or each row's average across them
+    if (['weeks', 'player', 'average'].includes(o.view)) options.view = o.view;
+  }
+  if (o.view === 'compare' && options.compare) options.view = 'compare';
 
   const id = /^w_[a-z0-9]{4,20}$/.test(String(w.id || ''))
     ? w.id
@@ -315,7 +395,7 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
       visibility: w.visibility === 'members' ? 'members' : 'r4_only',
       source,
       ...(syncedAt ? { syncedAt } : {}),
-      data: { columns, rows },
+      data: { columns, rows, ...tabsData(source, data, columns, options) },
       options,
       updatedAt: now,
       updatedBy: clip(actor, 60),

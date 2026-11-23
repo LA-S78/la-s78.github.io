@@ -1003,6 +1003,18 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
             <input type="text" id="ed-sheet" placeholder="${e('tab_name')}" value="${escapeHtml((w.source && w.source.sheet) || '')}">
             <input type="text" id="ed-range" placeholder="${e('range')}" value="${escapeHtml((w.source && w.source.range) || '')}">
           </div>
+          <div class="dash-tabs-box" id="ed-tabs-box" hidden>
+            <label class="dash-check"><input type="checkbox" id="ed-tabs-on"${w.source && w.source.tabs ? ' checked' : ''}> ${e('tabs_on')}</label>
+            <div class="dash-two" id="ed-tabs-opts"${w.source && w.source.tabs ? '' : ' hidden'}>
+              <div><label for="ed-tabs-pattern">${e('tabs_pattern')}</label>
+                <input type="text" id="ed-tabs-pattern" maxlength="40" value="${escapeHtml((w.source && w.source.tabs && w.source.tabs.pattern) || '')}"></div>
+              <div><label for="ed-tabs-count">${e('tabs_count')}</label>
+                <select id="ed-tabs-count" data-site-select>${[2, 3, 4, 5, 6, 7, 8, 9, 10]
+                  .map((n) => `<option value="${n}"${((w.source && w.source.tabs && w.source.tabs.count) || 8) === n ? ' selected' : ''}>${n}</option>`)
+                  .join('')}</select></div>
+            </div>
+            <div class="dash-muted dash-small" id="ed-tabs-match"></div>
+          </div>
           <div class="dash-grid-box" id="ed-grid-box" hidden>
             <div class="dash-grid-bar">
               <span class="dash-muted dash-small" id="ed-grid-help">${e('grid_help')}</span>
@@ -1115,6 +1127,22 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
                 .map((n) => `<option value="${n}"${(o.limit || 0) === n ? ' selected' : ''}>${n ? n : e('limit_all')}</option>`)
                 .join('')}</select></div></div>`;
             if (o.order === 'asc') html += `<p class="dash-help">${e('order_asc_help')}</p>`;
+            // Compare for viewers (owner, 2026-11-23: useful for some charts, not all)
+            html += `<label class="dash-check"><input type="checkbox" id="ed-compare"${o.compare ? ' checked' : ''}> ${e('compare')}</label>`;
+          }
+          // Across tabs (2026-11-23): the view viewers start on (they can switch)
+          if (w.data.older && w.data.older.length) {
+            html += `<label for="ed-view">${e('view_start')}</label>
+              <select id="ed-view" data-site-select>${[
+                ['', w.data.tab || t('charts.view_latest')],
+                ['weeks', t('charts.view_weeks')],
+                ['player', t('charts.view_player')],
+                ['average', t('charts.view_average', { n: w.data.older.length + 1 })],
+                ...(o.compare ? [['compare', t('charts.view_compare')]] : []),
+              ]
+                .map(([v, name]) => `<option value="${v}"${(o.view || '') === v ? ' selected' : ''}>${escapeHtml(name)}</option>`)
+                .join('')}</select>
+              <p class="dash-help">${e('view_help')}</p>`;
           }
           html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> ${e(o.stacked ? 'vertical' : 'vertical_leaderboard')}</label>`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${ic('traffic')}${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
@@ -1168,6 +1196,12 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         if ($('ed-stacked')) o.stacked = $('ed-stacked').value || undefined;
         if ($('ed-order')) o.order = $('ed-order').value || undefined;
         if ($('ed-limit')) o.limit = Number($('ed-limit').value) || undefined;
+        if ($('ed-compare')) o.compare = $('ed-compare').checked || undefined;
+        if (o.view === 'compare' && !o.compare) delete o.view;
+        if ($('ed-view')) {
+          o.view = $('ed-view').value || undefined;
+          delete w._view; // the preview shows the view chosen
+        }
         if ($('ed-scale')) o.scale = $('ed-scale').checked;
         if ($('ed-reverse') && o.scale) o.reverse = $('ed-reverse').checked;
         else delete o.reverse;
@@ -1241,6 +1275,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         try {
           const { tabs } = await editorAsk('sheet-tabs', { kind: 'sheet', url });
           if ($('ed-url').value.trim() !== url) return;
+          sheetTabs = tabs;
           const wanted = $('ed-sheet').value.trim();
           const fromLink = (url.match(/gid=(\d+)/) || [])[1];
           const chosen = tabs.find((x) => x.name === wanted) || tabs.find((x) => x.gid === fromLink) || tabs[0];
@@ -1250,10 +1285,14 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           $('ed-tab').hidden = false;
           $('ed-sheet').hidden = true;
           $('ed-sheet').value = chosen.name;
+          if (!$('ed-tabs-pattern').value.trim()) $('ed-tabs-pattern').value = suggestPattern(chosen.name);
+          showTabsBox();
           loadGrid(chosen.gid);
         } catch (err) {
           // The tab name can still be typed, as before
           tabsFor = '';
+          sheetTabs = [];
+          showTabsBox();
           $('ed-tab').hidden = true;
           $('ed-sheet').hidden = false;
           $('ed-error').textContent = err.message;
@@ -1419,7 +1458,12 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         const opt = $('ed-tab').selectedOptions[0];
         $('ed-sheet').value = opt ? opt.textContent : '';
         if (opt) loadGrid(opt.value);
+        if (opt && !$('ed-tabs-on').checked) $('ed-tabs-pattern').value = suggestPattern(opt.textContent);
+        showTabsBox();
       });
+      $('ed-tabs-on').addEventListener('change', showTabsBox);
+      $('ed-tabs-pattern').addEventListener('input', showTabsBox);
+      $('ed-tabs-count').addEventListener('change', showTabsBox);
       $('ed-range').addEventListener('input', () => highlightGrid());
 
       // Where the data comes from: a pasted table, or a Google Sheet / Doc (loaded by the server).
@@ -1437,6 +1481,39 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         $('ed-sheet-opts').hidden = linkKind() !== 'sheet';
         $('ed-doc-opts').hidden = linkKind() !== 'doc';
         $('ed-grid-box').hidden = linkKind() !== 'sheet' || !grid;
+        showTabsBox();
+      }
+      // Across tabs (owner request, 2026-11-23): the same range from the newest N tabs whose
+      // names match a pattern (# any number, * anything), for bar charts. The line under it
+      // lists the tabs it matches now (the server picks them again at every refresh).
+      let sheetTabs = []; // [{ name, gid }] from loadTabs()
+      const tabsOn = () => w.type === 'bar' && linkKind() === 'sheet' && $('ed-tabs-on').checked && $('ed-tabs-pattern').value.trim() !== '';
+      function suggestPattern(name) {
+        const words = String(name || '').trim().split(/\s+/);
+        return words[0] ? `${words[0].replace(/\d+/g, '#')}${words.length > 1 ? ' *' : ''}` : '';
+      }
+      function patternTest(pattern) {
+        const body = [...String(pattern || '').trim()]
+          .map((ch) => (ch === '#' ? '\\d+' : ch === '*' ? '.*' : /\s/.test(ch) ? '\\s+' : ch.replace(/[.+?^${}()|[\]\\/-]/g, '\\$&')))
+          .join('')
+          .replace(/(\\d\+)+/g, '\\d+');
+        const re = new RegExp(`^${body}$`, 'i');
+        return (name) => re.test(String(name || '').trim());
+      }
+      function showTabsBox() {
+        $('ed-tabs-box').hidden = w.type !== 'bar' || linkKind() !== 'sheet' || !sheetTabs.length;
+        $('ed-tabs-opts').hidden = !$('ed-tabs-on').checked;
+        const box = $('ed-tabs-match');
+        if (!$('ed-tabs-on').checked || !sheetTabs.length) {
+          box.textContent = '';
+          return;
+        }
+        const pattern = $('ed-tabs-pattern').value.trim();
+        const found = pattern ? sheetTabs.filter((x) => patternTest(pattern)(x.name)) : [];
+        const n = Number($('ed-tabs-count').value) || 8;
+        box.textContent = found.length
+          ? `${t('chart_editor.tabs_match', { n: found.length, names: found.slice(0, 4).map((x) => x.name).join(', ') + (found.length > 4 ? ', …' : '') })} ${t('chart_editor.tabs_reads', { n: Math.min(n, found.length) })}`
+          : t('chart_editor.tabs_none');
       }
       function linkSource() {
         const kind = linkKind();
@@ -1449,6 +1526,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
               range: $('ed-range').value.trim(),
               // The range's first row is the header, as the sheet preview shows it
               headerRows: 1,
+              ...(tabsOn() ? { tabs: { pattern: $('ed-tabs-pattern').value.trim(), count: Number($('ed-tabs-count').value) || 8 } } : {}),
             };
       }
       function useData(parsed) {
@@ -1457,7 +1535,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         if (changed) w.options = { ...w.options, labelCol: 0, valueCols: [] };
         $('ed-parsed').textContent = parsed.columns.length
           ? t('chart_editor.size', { rows: tn('chart_editor.rows', parsed.rows.length), columns: tn('chart_editor.columns', parsed.columns.length) }) +
-            (parsed.rows.length > 500 ? ` ${t('chart_editor.at_most_500')}` : '')
+            (parsed.rows.length > 500 ? ` ${t('chart_editor.at_most_500')}` : '') +
+            (parsed.older && parsed.older.length ? ` ${t('chart_editor.tabs_read', { n: parsed.older.length + 1, newest: parsed.tab || '' })}` : '') +
+            (parsed.skipped && parsed.skipped.length ? ` ${t('chart_editor.tabs_skipped', { names: parsed.skipped.join(', ') })}` : '')
           : '';
         drawOptions();
         preview();
@@ -1504,6 +1584,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         if (!b) return;
         readOptions();
         w.type = b.dataset.type;
+        showTabsBox();
         ed.querySelectorAll('#ed-types button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
         if (w.type === 'pie' || w.type === 'progress') w.options.valueCols = (w.options.valueCols || []).slice(0, 1);
         if (w.type === 'line' && (w.options.valueCols || []).length <= 1) w.options.valueCols = [];

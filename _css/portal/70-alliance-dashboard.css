@@ -1429,6 +1429,91 @@ li.dw-sel > .dw-bar-track {
   outline-offset: 1px;
 }
 
+/* The chart editor's "several tabs" option, under the sheet link */
+.dash-tabs-box {
+  margin: 8px 0;
+}
+
+/* A chart across tabs: the view buttons above it, and the name list for "one name by tab" */
+.dw-views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.dw-views button {
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted, var(--text-main));
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.dw-views button[aria-pressed='true'] {
+  border-color: var(--accent-color);
+  color: var(--text-main);
+  background: color-mix(in srgb, var(--accent-color) 16%, transparent);
+}
+.dw-views button:focus-visible,
+.dw-pick:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
+.dw-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.dw-picks .site-select {
+  flex: 0 1 240px;
+}
+.dw-days {
+  justify-content: flex-start;
+  margin: 0 0 8px;
+}
+.dw-pair-b {
+  opacity: 0.7;
+}
+.dw-pair-note {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 16px;
+}
+.dw-flip {
+  display: block;
+  margin: 0 0 8px auto;
+  padding: 3px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-main);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.dw-flip[aria-pressed='true'] {
+  border-color: var(--accent-color);
+}
+.dw-flip:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
+.dw-pick {
+  max-width: 100%;
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: var(--panel-bg, transparent);
+  color: var(--text-main);
+  font: inherit;
+  font-size: 0.85rem;
+}
+
 /* Two settings side by side in the chart editor (order and how many) */
 .dash-two {
   display: grid;
