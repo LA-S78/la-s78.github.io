@@ -841,6 +841,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     // ---------- Charts and tables ----------
     const W = window.DashboardWidgets;
     const TYPES = ['bar', 'line', 'pie', 'progress', 'table'].map((type) => [type, t(`chart_editor.type_${type}`)]);
+    const TAB_TYPES = { bar: ['weeks', 'player', 'total', 'average'], pie: ['total', 'average'], line: ['weeks', 'player'], table: ['total', 'average'] };
     const TYPE_ICONS = { bar: 'bar_chart', line: 'line_chart', pie: 'pie_chart', progress: 'target', table: 'table' };
     let editing = false;
 
@@ -1224,20 +1225,6 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
             // Compare for viewers (owner, 2026-11-23: useful for some charts, not all)
             html += `<label class="dash-check"><input type="checkbox" id="ed-compare"${o.compare ? ' checked' : ''}> ${e('compare')}</label>`;
           }
-          // Across tabs (2026-11-23): the view viewers start on (they can switch)
-          if (w.data.older && w.data.older.length) {
-            html += `<label for="ed-view">${e('view_start')}</label>
-              <select id="ed-view" data-site-select>${[
-                ['', w.data.tab || t('charts.view_latest')],
-                ['weeks', t('charts.view_weeks')],
-                ['player', t('charts.view_player')],
-                ['average', t('charts.view_average', { n: w.data.older.length + 1 })],
-                ...(o.compare ? [['compare', t('charts.view_compare')]] : []),
-              ]
-                .map(([v, name]) => `<option value="${v}"${(o.view || '') === v ? ' selected' : ''}>${escapeHtml(name)}</option>`)
-                .join('')}</select>
-              <p class="dash-help">${e('view_help')}</p>`;
-          }
           html += `<label class="dash-check"><input type="checkbox" id="ed-vertical"${o.vertical ? ' checked' : ''}> ${e(o.stacked ? 'vertical' : 'vertical_leaderboard')}</label>`;
           html += `<label class="dash-check"><input type="checkbox" id="ed-scale"${o.scale ? ' checked' : ''}> ${ic('traffic')}${e((o.valueCols || []).length > 1 ? 'traffic_columns' : 'traffic_size')}</label>`;
           if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${ic('updown')}${e('traffic_reverse')}</label>`;
@@ -1255,6 +1242,26 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         if (w.type === 'table') {
           html += `<label for="ed-hlcol">${e('highlight_where')}</label>${colSelect('ed-hlcol', o.highlightCol ?? '', { none: e('no_highlight') })}`;
           html += `<label for="ed-hlmin">${e('at_least')}</label><input type="text" inputmode="decimal" id="ed-hlmin" value="${o.highlightMin ?? ''}" placeholder="${e('at_least_example')}">`;
+        }
+        // Across tabs (2026-11-23; bar, pie, line and table): the view viewers start on (they
+        // can switch). The same views as js/dashboard-widgets.js TAB_VIEWS
+        if (w.data.older && w.data.older.length && TAB_TYPES[w.type] && !(w.type === 'line' && o.swap)) {
+          const n = w.data.older.length + 1;
+          const names = {
+            weeks: t('charts.view_weeks'),
+            player: t('charts.view_player'),
+            total: t('charts.view_total', { n }),
+            average: t('charts.view_average', { n }),
+          };
+          html += `<label for="ed-view">${e('view_start')}</label>
+            <select id="ed-view" data-site-select>${[
+              ['', w.data.tab || t('charts.view_latest')],
+              ...TAB_TYPES[w.type].map((v) => [v, names[v]]),
+              ...(o.compare && w.type === 'bar' ? [['compare', t('charts.view_compare')]] : []),
+            ]
+              .map(([v, name]) => `<option value="${v}"${(o.view || '') === v ? ' selected' : ''}>${escapeHtml(name)}</option>`)
+              .join('')}</select>
+            <p class="dash-help">${e('view_help')}</p>`;
         }
         $('ed-options').innerHTML = html;
       }
@@ -1588,7 +1595,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       // names match a pattern (# any number, * anything), for bar charts. The line under it
       // lists the tabs it matches now (the server picks them again at every refresh).
       let sheetTabs = []; // [{ name, gid }] from loadTabs()
-      const tabsOn = () => w.type === 'bar' && linkKind() === 'sheet' && $('ed-tabs-on').checked && $('ed-tabs-pattern').value.trim() !== '';
+      // The chart types that can read several tabs, and their views (as TAB_VIEWS in
+      // js/dashboard-widgets.js and api/_dashboard.js); a line chart only unswapped
+      const tabsType = () => Boolean(TAB_TYPES[w.type]) && !(w.type === 'line' && w.options.swap);
+      const tabsOn = () => tabsType() && linkKind() === 'sheet' && $('ed-tabs-on').checked && $('ed-tabs-pattern').value.trim() !== '';
       function suggestPattern(name) {
         const words = String(name || '').trim().split(/\s+/);
         return words[0] ? `${words[0].replace(/\d+/g, '#')}${words.length > 1 ? ' *' : ''}` : '';
@@ -1602,7 +1612,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         return (name) => re.test(String(name || '').trim());
       }
       function showTabsBox() {
-        $('ed-tabs-box').hidden = w.type !== 'bar' || linkKind() !== 'sheet' || !sheetTabs.length;
+        $('ed-tabs-box').hidden = !tabsType() || linkKind() !== 'sheet' || !sheetTabs.length;
         $('ed-tabs-opts').hidden = !$('ed-tabs-on').checked;
         const box = $('ed-tabs-match');
         if (!$('ed-tabs-on').checked || !sheetTabs.length) {
@@ -1733,6 +1743,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       $('ed-options').addEventListener('change', () => {
         readOptions();
         drawOptions();
+        showTabsBox(); // a line chart swapped or not changes whether tabs can be read
         preview();
       });
       $('ed-cancel').addEventListener('click', closeEditor);
