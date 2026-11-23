@@ -1,6 +1,7 @@
 // api/state.js
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { allianceFrames, applyAllianceFrames } from './_alliance_images.js';
+import { allianceLeaders } from './_tracker.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { readRegister } from './_register.js';
 import { formerlyTags } from './_rename.js';
@@ -151,8 +152,12 @@ export default async function handler(req, res) {
             capacity: a.capacity,
             level: a.level,
             badge: a.badge,
+            // Its R5 and R4s with their pictures (owner request, 2026-11-23), for the opened card
+            leaders: allianceLeaders(a.members, tag),
           };
         });
+        // Alliance avatar frames over the game's default frame (api/_frames.js)
+        applyAllianceFrames(stats, allianceFrames(gist));
         // Only a full answer is kept long: one with gaps (a slow lookup) is asked again soon.
         // An alliance the tracker doesn't have (HMDA, 2026-11-19) isn't a gap.
         const complete = tags.every((tag) => stats[tag] || knownMissing(tag));
