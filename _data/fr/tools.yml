@@ -102,9 +102,11 @@ rewards_card:
   buyout_cost: 'Rachat : {amount} {chest} dans chaque ensemble'
   buyout_cost_help: Financement de l'alliance déplacée cette semaine
 roster:
-  title: Effectif de l'alliance
+  title: Liste de l'alliance
   summary: "{n} membres · {might} Puissance"
-  search: Rechercher des noms ou des ID...
+  show: Afficher les membres
+  hide: Masquer les membres
+  search: Rechercher des noms ou IDs...
   sort_label: Trier par
   sort_power: Puissance
   sort_name: Nom
@@ -113,19 +115,19 @@ roster:
   copy_id: Copier cet ID de joueur
   copied: Copié
   unavailable: La liste des membres ne peut pas être chargée pour le moment. Réessayez plus tard.
-  credit_before: Données des joueurs issues de
+  credit_before: Données du joueur issues du
   sort_tech: Recherche
   sort_help: Aide
-  tech_title: Recherche d'alliance effectuée aujourd'hui
-  help_title: Aide apportée à la construction et à la recherche des membres aujourd'hui
+  tech_title: Recherche d'alliance donnée aujourd'hui
+  help_title: Aide donnée pour la construction et la recherche des membres aujourd'hui
   help_capped: Limite d'aide quotidienne atteinte (1 000)
   refresh: Actualiser
   refresh_left: "{n} restants"
   refreshing: Actualisation...
-  refresh_help: 'Obtenez les chiffres en temps réel du jeu. Partagé par les chefs de votre alliance : {n} sur {max} restants aujourd''hui, un toutes les 10 minutes.'
+  refresh_help: 'Obtenir les données en direct du jeu. Partagé par les chefs de votre alliance : {n} sur {max} restants aujourd''hui, un toutes les 10 minutes.'
   refresh_wait: 'Actualisé il y a un instant : prochain dans {n} min.'
-  refresh_none: Plus d'actualisations disponibles aujourd'hui. Elles recommencent à la réinitialisation quotidienne (00:00 GT).
-  daily_as_of: Recherche et aide depuis la réinitialisation d'aujourd'hui (00:00 GT), au {time}
+  refresh_none: Aucune actualisation restante aujourd'hui. Elles recommencent à la réinitialisation quotidienne (00:00 GT).
+  daily_as_of: Recherche et aide depuis la réinitialisation d'aujourd'hui (00:00 GT), à {time}
   daily_old: 'Recherche et aide avant la réinitialisation d''aujourd''hui : dernière lecture {time}'
   daily_unknown: 'Recherche et aide : heure de lecture inconnue'
 caravan:
@@ -172,18 +174,18 @@ caravan:
   this_player: ce joueur
   confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde repasse en disponible (les noms et heures sont conservés).
 chart_editor:
-  edit_title: Modifier le graphique ou le tableau
+  edit_title: Modifier le graphique ou tableau
   new_title: Nouveau graphique ou tableau
   type: Type
   type_bar: Barres
-  type_line: Lignes
+  type_line: Ligne
   type_pie: Secteurs
   type_progress: Progression
   type_table: Tableau
   title: Titre
   title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: ex. Minimum 15M de points de Duel requis avant la réinitialisation du vendredi
+  note_example: ex. Minimum 15M de points de duel requis avant la réinitialisation de vendredi
   who_sees: Qui peut le voir
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
@@ -196,9 +198,9 @@ chart_editor:
   tab: Onglet
   order: Ordre
   order_sheet: Comme dans la feuille
-  order_desc: Le plus élevé d'abord
-  order_asc: Le plus bas d'abord
-  order_asc_help: Le plus bas d'abord exclut les lignes vides dans les colonnes affichées (ceux qui n'ont pas participé).
+  order_desc: Plus élevé d'abord
+  order_asc: Plus bas d'abord
+  order_asc_help: Plus bas d'abord exclut les lignes vides dans les colonnes affichées (ceux qui n'ont pas participé).
   limit: Afficher
   limit_all: Tous
   tabs_on: Même plage depuis plusieurs onglets (un onglet par semaine, par exemple)
@@ -207,22 +209,24 @@ chart_editor:
   tabs_match: "{n} onglets correspondent : {names}."
   tabs_reads: Lit les {n} plus récents.
   tabs_none: 'Aucun onglet ne correspond. # est n''importe quel nombre, * est n''importe quoi : "#/# *" correspond à "11/09 K71 QRT".'
-  tabs_read: Lecture de {n} onglets ; le plus récent est {newest}.
+  tabs_read: Lire {n} onglets ; le plus récent est {newest}.
   tabs_skipped: 'Impossible de lire : {names}.'
   view_start: Les spectateurs commencent sur
-  view_help: Les spectateurs peuvent basculer entre les vues au-dessus du graphique.
+  view_help: Les spectateurs peuvent changer de vue au-dessus du graphique.
   compare: 'Laisser les spectateurs comparer : deux noms, ou un nom avec le top ou bottom 5'
-  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur téléphone : appuyez sur un coin, puis sur le coin opposé). La première ligne est l''en-tête. Appuyez ensuite sur une lettre de colonne pour en faire les étiquettes, ou sur une colonne de chiffres.'
-  grid_tap_second: Appuyez maintenant sur le coin opposé du tableau.
+  compare_pie: Laisser les spectateurs comparer deux noms (ou le top ou bottom 5) sous forme de secteur
+  compare_line: Laisser les spectateurs comparer les lignes de deux noms (ou un nom avec le top ou bottom 5 de chaque semaine)
+  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur téléphone : touchez un coin, puis le coin opposé). La première ligne est l''en-tête. Puis touchez une lettre de colonne pour en faire les étiquettes, ou une colonne de nombres.'
+  grid_tap_second: Maintenant touchez le coin opposé du tableau.
   grid_mode: Cliquer sur une lettre de colonne définit
   grid_labels: Étiquettes
-  grid_numbers: Chiffres
-  grid_more: Seules les 200 premières lignes et 60 colonnes sont affichées ici ; une plage peut aller plus loin.
+  grid_numbers: Nombres
+  grid_more: Seules les 200 premières lignes et 60 colonnes sont montrées ici ; une plage peut aller plus loin.
   range: Plage, ex. A1:D20 (optionnel)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la carte récupérera les derniers chiffres plus tard.'
+  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent consulter” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la fiche récupère les derniers chiffres plus tard.'
   load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
   preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
@@ -231,10 +235,10 @@ chart_editor:
   rows_other: "{n} lignes"
   columns_one: "{n} colonne"
   columns_other: "{n} colonnes"
-  at_most_500: "(500 au maximum)"
+  at_most_500: "(500 au plus)"
   labels: Noms (étiquettes)
-  numbers_to_show: Chiffres à afficher
-  labels_swapped: Noms (une ligne ou une barre chacun)
+  numbers_to_show: Nombres à afficher
+  labels_swapped: Noms (une ligne ou barre chacun)
   swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
   swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
   swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
@@ -242,56 +246,56 @@ chart_editor:
   rows_filter: Trouver un nom…
   rows_count: "{n} sur 6 choisis"
   columns_along: Colonnes en bas (dans l'ordre de la feuille)
-  numbers: Chiffres
-  several_columns: Plusieurs colonnes de chiffres
+  numbers: Nombres
+  several_columns: Plusieurs colonnes de nombres
   side_by_side: Côte à côte
-  stacked_totals: 'Empilés : totaux'
-  stacked_percent: 'Empilés : chaque barre à 100%'
+  stacked_totals: 'Empilé : totaux'
+  stacked_percent: 'Empilé : chaque barre à 100%'
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
-  traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
-  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, haut vert'
-  traffic_reverse: 'Inverser : bas est bien (vert), haut est mal (rouge)'
-  traffic_target: Rouge → jaune → vert selon la proximité de la cible
-  traffic_target_reverse: 'Inverser : plus loin sous la cible est mieux'
+  traffic_columns: 'Rouge → jaune → vert (faible → élevé) : première colonne rouge, dernière verte'
+  traffic_size: 'Rouge → jaune → vert (faible → élevé) : par rang, top vert'
+  traffic_reverse: 'Inverser : faible est bien (vert), élevé est mal (rouge)'
+  traffic_target: Rouge → jaune → vert selon la proximité avec la cible
+  traffic_target_reverse: 'Inverser : plus loin en dessous de la cible est mieux'
   donut: Donut (anneau)
   target: Cible pour tout le monde
   target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le chiffre ci-dessus)"
+  use_number_above: "(utiliser le nombre au-dessus)"
   highlight_where: Surligner les lignes où
-  no_highlight: "(pas de surbrillance)"
+  no_highlight: "(aucun surlignage)"
   at_least: est au moins
   at_least_example: ex. 300M
 charts:
   column: Colonne {n}
-  no_numbers: Aucun chiffre à représenter dans la colonne choisie.
-  line_two_rows: Un graphique linéaire nécessite au moins deux lignes.
-  line_two_columns: Un graphique linéaire nécessite au moins deux colonnes en bas.
-  no_positive: Aucun nombre positif à représenter dans la colonne choisie.
-  no_targets: Aucun chiffre (ou cible) à comparer.
+  no_numbers: Aucun nombre à mettre en graphique dans la colonne choisie.
+  line_two_rows: Une ligne nécessite au moins deux rangées.
+  line_two_columns: Une ligne nécessite au moins deux colonnes en bas.
+  no_positive: Aucun nombre positif à mettre en graphique dans la colonne choisie.
+  no_targets: Aucun nombre (ou cible) à comparer.
   no_table: Pas encore de tableau.
   unknown_type: Type de graphique inconnu.
-  draw_failed: Ce graphique n'a pas pu être tracé ({error}).
+  draw_failed: Ce graphique n'a pas pu être dessiné ({error}).
   other: Autre
   value: Valeur
   total: Total
   total_value: 'Total : {value}'
   share_of_all: "{value} · {share} du total"
   value_of_target: "{value} sur {target}"
-  to_go: 'Restant : {value}'
+  to_go: 'Reste : {value}'
   target_reached: Cible atteinte ✓
-  done: "✓ Terminé"
+  done: "✓ Fait"
   reached_target: "{done} sur {total} ont atteint la cible"
   search: Rechercher…
   search_label: Rechercher dans ce tableau
-  matching: "{n} correspondance(s)"
-  show_all: Afficher tout ({n})
+  matching: "{n} correspondant"
+  show_all: Afficher les {n}
   show_all_rows: Afficher les {n} lignes
   show_fewer: Afficher moins
   first_rows: Affichage des {shown} premières lignes sur {n}.
-  hint_bar: Appuyez ou survolez une barre
-  hint_bar_key: Appuyez ou survolez une barre. Appuyez sur un nom dans la légende pour ne voir que celui-ci.
+  hint_bar: Touchez ou survolez une barre
+  hint_bar_key: Touchez ou survolez une barre. Touchez un nom dans la clé pour voir uniquement celui-ci.
   views: Vues
   view_latest: Onglet le plus récent
   view_weeks: Totaux par onglet
@@ -300,20 +304,21 @@ charts:
   view_average: Moyenne de {n} onglets
   view_chart: Graphique
   view_compare: Comparer
-  search_names: Saisissez un nom…
+  search_names: Tapez un nom…
   no_match: Aucun nom ne correspond.
   view_tab: Onglet à afficher
   compare_first: Premier nom
   compare_second: Second nom
   compare_top: Top {n} (moyenne)
-  compare_bottom: Flop {n} (moyenne)
+  compare_bottom: Bottom {n} (moyenne)
   pair_left: 'Gauche : {name}'
+  share_of_column: "{name} : {share} du total"
   pair_right: 'Droite (estompé) : {name}'
   flip_to_asc: "⇅ Plus bas d'abord"
-  flip_to_desc: "⇅ Plus haut d'abord"
-  hint_line: Appuyez ou survolez une semaine
-  hint_pie: Appuyez ou survolez une section
-  hint_progress: Appuyez ou survolez une ligne
+  flip_to_desc: "⇅ Plus élevé d'abord"
+  hint_line: Touchez ou survolez une semaine
+  hint_pie: Touchez ou survolez un secteur
+  hint_progress: Touchez ou survolez une rangée
 nominate:
   page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]

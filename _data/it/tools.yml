@@ -183,40 +183,42 @@ chart_editor:
   type_progress: Progresso
   type_table: Tabella
   title: Titolo
-  title_example: es. Punteggi Duello tra Alleanze
+  title_example: es. punteggi Duello tra Alleanze
   note: Spiegazione
-  note_example: es. Minimo 15M punti Duello richiesti entro il reset di venerdì
+  note_example: es. Minimo 15M di punti Duello richiesti entro il reset di venerdì
   who_sees: Chi può vederlo
   officers_only: Solo ufficiali (R4/R5)
   all_members: Tutti i membri dell'alleanza
   data: Dati
   data_source: Da dove provengono i dati
   paste: Incolla una tabella
-  link: Link Google Sheet / Doc
+  link: Link a Google Sheet / Doc
   paste_help: Copia le celle da Google Sheets o Excel (prima la riga dell'intestazione) e incollale qui.
   tab_name: Nome scheda (opzionale)
   tab: Scheda
   order: Ordine
   order_sheet: Come nel foglio
-  order_desc: Prima il più alto
-  order_asc: Prima il più basso
-  order_asc_help: L'opzione "Prima il più basso" esclude le righe vuote nelle colonne mostrate (coloro che non hanno partecipato).
+  order_desc: Prima i più alti
+  order_asc: Prima i più bassi
+  order_asc_help: Selezionando prima i più bassi verranno omesse le righe senza valori nelle colonne mostrate (coloro che non hanno partecipato).
   limit: Mostra
   limit_all: Tutti
-  tabs_on: Stesso intervallo da diverse schede (es. una scheda per settimana)
+  tabs_on: Stesso intervallo da diverse schede (una scheda per settimana, ad esempio)
   tabs_pattern: Nomi delle schede come
   tabs_count: Schede più recenti da leggere
   tabs_match: "{n} schede corrispondono: {names}."
   tabs_reads: Legge le {n} più recenti.
   tabs_none: 'Nessuna scheda corrisponde. # è un numero qualsiasi, * è qualsiasi cosa: "#/# *" corrisponde a "11/09 K71 QRT".'
-  tabs_read: Leggi {n} schede; la più recente è {newest}.
+  tabs_read: Letto {n} schede; la più recente è {newest}.
   tabs_skipped: 'Impossibile leggere: {names}.'
-  view_start: Visualizzazioni iniziano su
-  view_help: Gli spettatori possono passare da una visualizzazione all'altra sopra il grafico.
-  compare: 'Permetti agli spettatori di confrontare: due nomi, oppure un nome con i primi o ultimi 5'
-  grid_help: 'Trascina sulla tabella per selezionarla (su telefono: tocca un angolo, poi quello opposto). La prima riga è l''intestazione. Poi tocca la lettera di una colonna per renderla le etichette, o una colonna numerica.'
+  view_start: Visualizzazioni iniziali
+  view_help: Gli utenti possono passare da una visualizzazione all'altra sopra il grafico.
+  compare: 'Permetti agli utenti di confrontare: due nomi, o un nome con i primi o ultimi 5'
+  compare_pie: Permetti agli utenti di confrontare due nomi (o i primi o ultimi 5) come un grafico a torta dedicato
+  compare_line: Permetti agli utenti di confrontare le linee di due nomi (o un nome con i primi o ultimi 5 di ogni settimana)
+  grid_help: 'Trascina sulla tabella per selezionarla (su telefono: tocca un angolo, poi quello opposto). La prima riga è l''intestazione. Poi tocca la lettera di una colonna per renderla etichetta, o una colonna numerica.'
   grid_tap_second: Ora tocca l'angolo opposto della tabella.
-  grid_mode: Cliccare una lettera di colonna imposta
+  grid_mode: Cliccare sulla lettera di una colonna imposta
   grid_labels: Etichette
   grid_numbers: Numeri
   grid_more: Qui sono mostrate solo le prime 200 righe e 60 colonne; un intervallo può andare oltre.
@@ -224,7 +226,7 @@ chart_editor:
   doc_table: Quale tabella nel Doc (1, 2…)
   load: "⤓ Carica da Google"
   loading: "⤓ Caricamento…"
-  link_help: 'Sheets: Condividi → “Chiunque abbia il link può visualizzare” (o File → Condividi → Pubblica sul web). Docs: File → Condividi → Pubblica sul web. “Sincronizza ora” sulla scheda recupera i numeri più recenti in seguito.'
+  link_help: 'Fogli: Condividi → “Chiunque abbia il link può visualizzare” (o File → Condividi → Pubblica sul web). Doc: File → Condividi → Pubblica sul web. “Sincronizza ora” sulla scheda recupera i numeri più recenti in seguito.'
   load_first: Carica prima il foglio (⤓ Carica da Google).
   preview: Anteprima
   preview_empty: Incolla una tabella sopra per vedere il grafico.
@@ -237,8 +239,8 @@ chart_editor:
   labels: Nomi (etichette)
   numbers_to_show: Numeri da mostrare
   labels_swapped: Nomi (una linea o barra ciascuno)
-  swap_line: "⇄ Scambia righe e colonne: una linea per riga, le colonne lungo il fondo"
-  swap_bar: "⇄ Scambia righe e colonne: le colonne come barre, un colore per riga"
+  swap_line: "⇄ Scambia righe e colonne: una linea per riga, colonne lungo il fondo"
+  swap_bar: "⇄ Scambia righe e colonne: colonne come barre, un colore per riga"
   swap_help: 'Per fogli con una riga per giocatore e una colonna per settimana: spunta questo per seguire i giocatori nel corso delle settimane.'
   rows_to_draw: Righe da disegnare (fino a 6)
   rows_filter: Trova un nome…
@@ -246,16 +248,16 @@ chart_editor:
   columns_along: Colonne lungo il fondo (nell'ordine del foglio)
   numbers: Numeri
   several_columns: Diverse colonne numeriche
-  side_by_side: Affiancate
+  side_by_side: Fianco a fianco
   stacked_totals: 'Impilate: totali'
   stacked_percent: 'Impilate: ogni barra al 100%'
   vertical: Barre verticali
   vertical_leaderboard: Barre verticali (invece di una classifica)
-  traffic_columns: 'Rosso → giallo → verde (basso → alto): prima colonna rossa, ultima verde'
-  traffic_size: 'Rosso → giallo → verde (basso → alto): per rango, top verde'
-  traffic_reverse: 'Inverti: basso è buono (verde), alto è cattivo (rosso)'
+  traffic_columns: 'Rosso → giallo → verde (basso → alto): prima colonna rosso, ultima verde'
+  traffic_size: 'Rosso → giallo → verde (basso → alto): per rango, i primi verde'
+  traffic_reverse: 'Inverso: basso è buono (verde), alto è cattivo (rosso)'
   traffic_target: Rosso → giallo → verde in base a quanto ognuno è vicino all'obiettivo
-  traffic_target_reverse: 'Inverti: più lontano sotto l''obiettivo è meglio'
+  traffic_target_reverse: 'Inverso: più lontano sotto l''obiettivo è meglio'
   donut: Ciambella (anello)
   target: Obiettivo per tutti
   target_example: es. 15M o 15000000
@@ -268,32 +270,32 @@ chart_editor:
 charts:
   column: Colonna {n}
   no_numbers: Nessun numero da rappresentare nella colonna scelta.
-  line_two_rows: Un grafico a linee richiede almeno due righe.
-  line_two_columns: Un grafico a linee richiede almeno due colonne lungo la base.
+  line_two_rows: Una linea richiede almeno due righe.
+  line_two_columns: Una linea richiede almeno due colonne lungo il fondo.
   no_positive: Nessun numero positivo da rappresentare nella colonna scelta.
   no_targets: Nessun numero (o obiettivo) da confrontare.
-  no_table: Tabella non ancora disponibile.
+  no_table: Ancora nessuna tabella.
   unknown_type: Tipo di grafico sconosciuto.
-  draw_failed: Impossibile disegnare il grafico ({error}).
+  draw_failed: Impossibile disegnare questo grafico ({error}).
   other: Altro
   value: Valore
   total: Totale
   total_value: 'Totale: {value}'
   share_of_all: "{value} · {share} del totale"
   value_of_target: "{value} di {target}"
-  to_go: 'Mancanti: {value}'
+  to_go: 'Mancano: {value}'
   target_reached: Obiettivo raggiunto ✓
   done: "✓ Fatto"
   reached_target: "{done} di {total} hanno raggiunto l'obiettivo"
-  search: Cerca...
+  search: Cerca…
   search_label: Cerca in questa tabella
   matching: "{n} corrispondenze"
-  show_all: Mostra tutti {n}
+  show_all: Mostra tutti i {n}
   show_all_rows: Mostra tutte le {n} righe
   show_fewer: Mostra meno
   first_rows: Mostrate le prime {shown} di {n} righe.
-  hint_bar: Tocca o passa sopra una barra
-  hint_bar_key: Tocca o passa sopra una barra. Tocca un nome nella legenda per visualizzare solo quello.
+  hint_bar: Tocca o passa il mouse sopra una barra
+  hint_bar_key: Tocca o passa il mouse sopra una barra. Tocca un nome nella legenda per vedere solo quello.
   views: Visualizzazioni
   view_latest: Scheda più recente
   view_weeks: Totali per scheda
@@ -302,20 +304,21 @@ charts:
   view_average: Media di {n} schede
   view_chart: Grafico
   view_compare: Confronta
-  search_names: Digita un nome...
-  no_match: Nessun nome corrispondente.
+  search_names: Digita un nome…
+  no_match: Nessun nome corrisponde.
   view_tab: Scheda da mostrare
   compare_first: Primo nome
   compare_second: Secondo nome
-  compare_top: Migliori {n} (media)
-  compare_bottom: Peggiori {n} (media)
+  compare_top: Primi {n} (media)
+  compare_bottom: Ultimi {n} (media)
   pair_left: 'Sinistra: {name}'
+  share_of_column: "{name}: {share} del totale"
   pair_right: 'Destra (sfumato): {name}'
-  flip_to_asc: "⇅ Dal più basso"
-  flip_to_desc: "⇅ Dal più alto"
-  hint_line: Tocca o passa sopra una settimana
-  hint_pie: Tocca o passa sopra una fetta
-  hint_progress: Tocca o passa sopra una riga
+  flip_to_asc: "⇅ Prima i più bassi"
+  flip_to_desc: "⇅ Prima i più alti"
+  hint_line: Tocca o passa il mouse sopra una settimana
+  hint_pie: Tocca o passa il mouse sopra una fetta
+  hint_progress: Tocca o passa il mouse sopra una riga
 nominate:
   page_title: Nomine per le Ricompense
   name_ok: Nella lista membri di [{tag}]
