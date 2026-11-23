@@ -235,9 +235,27 @@ export function olderRows(t, width) {
  * rows of cells, eight weeks of a 90-player sheet took 139 KB (the file is saved spaced out,
  * a line per cell); this way about 57 KB.
  */
-function tabsData(source, data, columns, options) {
+/**
+ * Charts that can read the same range from several tabs (2026-11-23: bar first, then pie, line
+ * and table, owner request), and the views each offers besides the tab itself ('latest'):
+ * totals by tab and one name by tab (along the bottom: bar, line), each name's total or average
+ * over the tabs (bar, pie, table). A line chart across tabs is the unswapped kind (its rows are
+ * the names); progress bars aren't (each tab has its own target). js copy: TAB_VIEWS in
+ * js/dashboard-widgets.js.
+ */
+export const TAB_VIEWS = Object.freeze({
+  bar: ['weeks', 'player', 'total', 'average'],
+  pie: ['total', 'average'],
+  line: ['weeks', 'player'],
+  table: ['total', 'average'],
+});
+const tabsAllowed = (type, swap) => Boolean(TAB_VIEWS[type]) && !(type === 'line' && swap);
+
+function tabsData(source, data, columns, options, type) {
   if (!source.tabs) return {};
-  const cols = [options.labelCol, ...options.valueCols];
+  // A table shows every column; a chart only its label and numbers
+  const cols =
+    type === 'table' ? columns.map((_, i) => i) : [options.labelCol, ...options.valueCols];
   const cell = (v) =>
     compact(
       clip(v, LIMITS.cellChars)
@@ -377,8 +395,8 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
         : { table: Math.max(1, Math.min(50, parseInt(w.source.table, 10) || 1)) }),
     };
     // Across tabs (2026-11-23): the same range from the newest `count` tabs whose names match
-    // `pattern`; bar charts only
-    if (w.type === 'bar' && w.source.kind === 'sheet' && w.source.tabs) {
+    // `pattern`; the chart types in TAB_VIEWS
+    if (tabsAllowed(w.type, options.swap) && w.source.kind === 'sheet' && w.source.tabs) {
       const pattern = clip(w.source.tabs.pattern, 40).trim();
       if (pattern) {
         src.tabs = {
@@ -396,7 +414,7 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
   if (source.tabs) {
     // The view a viewer starts on (each can switch): this tab, the totals by tab, one row
     // (player) across the tabs, or each row's average across them
-    if (['weeks', 'player', 'average'].includes(o.view)) options.view = o.view;
+    if (TAB_VIEWS[w.type].includes(o.view)) options.view = o.view;
   }
   if (o.view === 'compare' && options.compare) options.view = 'compare';
 
@@ -412,7 +430,7 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
       visibility: w.visibility === 'members' ? 'members' : 'r4_only',
       source,
       ...(syncedAt ? { syncedAt } : {}),
-      data: { columns, rows, ...tabsData(source, data, columns, options) },
+      data: { columns, rows, ...tabsData(source, data, columns, options, w.type) },
       options,
       updatedAt: now,
       updatedBy: clip(actor, 60),

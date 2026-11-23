@@ -731,12 +731,21 @@
   // the tabs. The editor saves which one viewers start on (options.view); a viewer's
   // choice (w._view, w._pick) isn't saved. The series (the columns chosen) are the same in
   // every view, so the key's taps carry over.
-  const VIEWS = ['latest', 'weeks', 'player', 'average', 'compare'];
+  // The charts that read several tabs and their views besides the tab itself (2026-11-23:
+  // pie, line and table too; api/_dashboard.js TAB_VIEWS): totals by tab and one name by tab
+  // (along the bottom), each name's total or average over the tabs
+  const TAB_VIEWS = {
+    bar: ['weeks', 'player', 'total', 'average'],
+    pie: ['total', 'average'],
+    line: ['weeks', 'player'],
+    table: ['total', 'average'],
+  };
 
   /** Every tab, oldest first ([{ name, rows }]), or null for a chart from one table. */
   function tabsOf(w) {
     const older = w.data?.older;
-    if (w.type !== 'bar' || !Array.isArray(older) || !older.length) return null;
+    if (!TAB_VIEWS[w.type] || (w.type === 'line' && w.options?.swap)) return null;
+    if (!Array.isArray(older) || !older.length) return null;
     const width = (w.data.columns || []).length;
     return [
       ...older.map((t) => ({ name: t.name || '', rows: olderRows(t, width) })),
@@ -767,7 +776,7 @@
     const v = w._view || w.options?.view;
     if (v === 'compare') return w.options?.compare ? v : 'latest';
     if (!tabsOf(w)) return 'latest';
-    return VIEWS.includes(v) ? v : 'latest';
+    return TAB_VIEWS[w.type].includes(v) ? v : 'latest';
   };
   /**
    * A chart with Compare ticked in the editor (options.compare): a bar chart (not swapped), a
@@ -812,9 +821,17 @@
     const o = w.options || {};
     const cols = w.data.columns || [];
     const label = o.labelCol ?? 0;
-    const vals = (o.valueCols && o.valueCols.length ? o.valueCols : [label === 1 ? 0 : 1]).filter(
-      (c) => c < cols.length,
-    );
+    // A table adds up every column with numbers (in the newest tab); a chart its chosen ones
+    const vals =
+      w.type === 'table'
+        ? cols
+            .map((_, i) => i)
+            .filter(
+              (i) => i !== label && (w.data.rows || []).some((r) => Number.isFinite(number(r[i]))),
+            )
+        : (o.valueCols && o.valueCols.length ? o.valueCols : [label === 1 ? 0 : 1]).filter(
+            (c) => c < cols.length,
+          );
     const columns = [cols[label] ?? '', ...vals.map((c) => cols[c])];
     const valueCols = vals.map((_, i) => i + 1);
     const sum = (list) => list.reduce((t, v) => t + (Number.isFinite(v) ? v : 0), 0);
@@ -830,6 +847,16 @@
         const r = t.rows.find((x) => key(x[label]) === pickName);
         return [key(t.name), ...vals.map((c) => (r ? (r[c] ?? '') : ''))];
       });
+      // A line chart: a point per tab, named by its short form (the points' labels are the
+      // ones along the bottom), a line per column
+      if (w.type === 'line') {
+        const short = tabLabels(tabs);
+        return {
+          ...w,
+          data: { columns, rows: rows.map((r, i) => [short[i], ...r.slice(1)]) },
+          options: { ...o, labelCol: 0, valueCols, swap: false },
+        };
+      }
       // Along the bottom, in the tabs' order: no ordering or cut-off
       return {
         ...w,
@@ -846,21 +873,30 @@
         },
       };
     }
-    // Average: each name's average of each column over the tabs it's in
+    // Total or average: each name's sum, or average, of each column over the tabs it's in
     rows = namesOf(w, tabs).map((n) => {
       const found = tabs.map((t) => t.rows.find((x) => key(x[label]) === n)).filter(Boolean);
       return [
         n,
         ...vals.map((c) => {
           const nums = found.map((r) => number(r[c])).filter(Number.isFinite);
-          return nums.length ? String(Math.round(sum(nums) / nums.length)) : '';
+          if (!nums.length) return '';
+          return String(Math.round(view === 'total' ? sum(nums) : sum(nums) / nums.length));
         }),
       ];
     });
+    // A table's highlight follows its column, if that column is kept
+    const highlightCol = vals.indexOf(o.highlightCol);
     return {
       ...w,
       data: { columns, rows },
-      options: { ...o, labelCol: 0, valueCols, swap: false },
+      options: {
+        ...o,
+        labelCol: 0,
+        valueCols,
+        swap: false,
+        highlightCol: highlightCol >= 0 ? highlightCol + 1 : undefined,
+      },
     };
   }
 
@@ -1055,11 +1091,16 @@
       `<button type="button" data-view="${v}" aria-pressed="${view === v}">${esc(text)}</button>`;
     const buttons = [];
     if (tabs) {
+      const views = TAB_VIEWS[w.type];
+      const label = {
+        weeks: say('view_weeks'),
+        player: say('view_player'),
+        total: say('view_total', { n: tabs.length }),
+        average: say('view_average', { n: tabs.length }),
+      };
       buttons.push(
         btn('latest', w._tab || key(w.data.tab) || say('view_latest')),
-        btn('weeks', say('view_weeks')),
-        btn('player', say('view_player')),
-        btn('average', say('view_average', { n: tabs.length })),
+        ...views.map((v) => btn(v, label[v])),
       );
     } else if (comparable(w)) buttons.push(btn('latest', say('view_chart')));
     if (comparable(w)) buttons.push(btn('compare', say('view_compare')));
@@ -1114,12 +1155,16 @@
   /** The chart or table for a widget, as HTML (call mount() after inserting it). */
   function render(w) {
     try {
-      if (w.type === 'bar' || comparable(w)) {
+      if (w.type === 'bar' || comparable(w) || tabsOf(w)) {
         const shown = viewed(w);
         const note = shown._note
           ? `<div class="dw-note dw-pair-note">${esc(shown._note)}</div>`
           : '';
-        return controls(w, tabsOf(w), shown) + { bar, line, pie }[shown.type](shown) + note;
+        return (
+          controls(w, tabsOf(w), shown) +
+          { bar, line, pie, progress, table }[shown.type](shown) +
+          note
+        );
       }
       return { bar, line, pie, progress, table }[w.type]?.(w) ?? empty(say('unknown_type'));
     } catch (err) {
@@ -1302,7 +1347,8 @@
 
   /** Makes a rendered widget interactive (table sorting/search, "Show all", tap to read). */
   function mount(el, w) {
-    if (w.type === 'table') fillTable(el, w);
+    // A table across tabs is filled from the view shown (a tab, the total, the average)
+    if (w.type === 'table') fillTable(el, viewed(w));
     // Legend taps (bar charts): redraw this chart with the series shown or hidden. Only for
     // this viewer, nothing is saved. One listener per box, for the widget drawn in it now.
     el.dwWidget = w;
