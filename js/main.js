@@ -1062,9 +1062,11 @@
     const vv = window.visualViewport;
     if (!vv || !window.matchMedia('(pointer: coarse)').matches) return;
     let tallest = vv.height;
+    let width = window.innerWidth;
     const typing = () => {
       const el = document.activeElement;
-      if (!el) return false;
+      // A box taken off the page (an editor closed while typing) no longer counts
+      if (!el || !el.isConnected) return false;
       if (el.isContentEditable || el.tagName === 'TEXTAREA') return true;
       return (
         el.tagName === 'INPUT' &&
@@ -1072,7 +1074,12 @@
       );
     };
     const update = () => {
-      // The tallest seen (a turned phone starts again: orientationchange below)
+      // The tallest seen; a new width (a turned phone, a resized window) starts again
+      // (Gemini's review, 2026-11-23)
+      if (window.innerWidth !== width) {
+        width = window.innerWidth;
+        tallest = vv.height;
+      }
       tallest = Math.max(tallest, vv.height);
       const open = typing() && vv.height < tallest - 150;
       document.documentElement.classList.toggle('kb-open', open);
@@ -1080,6 +1087,10 @@
     vv.addEventListener('resize', update);
     document.addEventListener('focusin', () => setTimeout(update, 300));
     document.addEventListener('focusout', () => setTimeout(update, 50));
+    // Leaving the page (Turbo) while typing: the box is gone, so the navigation comes back
+    document.addEventListener('turbo:before-render', () =>
+      document.documentElement.classList.remove('kb-open'),
+    );
     window.addEventListener('orientationchange', () =>
       setTimeout(() => ((tallest = vv.height), update()), 400),
     );

@@ -1603,9 +1603,30 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         const pattern = $('ed-tabs-pattern').value.trim();
         const found = pattern ? sheetTabs.filter((x) => patternTest(pattern)(x.name)) : [];
         const n = Number($('ed-tabs-count').value) || 8;
+        const chosen = pickTabs(found, n);
         box.textContent = found.length
-          ? `${t('chart_editor.tabs_match', { n: found.length, names: found.slice(0, 4).map((x) => x.name).join(', ') + (found.length > 4 ? ', …' : '') })} ${t('chart_editor.tabs_reads', { n: Math.min(n, found.length) })}`
+          ? `${t('chart_editor.tabs_match', { n: found.length, names: found.slice(0, 4).map((x) => x.name).join(', ') + (found.length > 4 ? ', …' : '') })} ${t('chart_editor.tabs_reads', { n: chosen.length, oldest: chosen[0]?.name || '', newest: chosen[chosen.length - 1]?.name || '' })}`
           : t('chart_editor.tabs_none');
+      }
+      /**
+       * The tabs the server will read, oldest first (as api/_google_source.js pickTabs): the
+       * newest end is worked out from the dates the names start with, by most neighbouring
+       * pairs; without dates, the last tab is the newest. Shown before loading, so a leader
+       * sees at once if the order came out backwards (Gemini's review, 2026-11-23).
+       */
+      function pickTabs(matched, count) {
+        const n = Math.max(2, Math.min(10, count || 10));
+        const dateKey = (name) => {
+          const m = /^(\d{1,2})[/.-](\d{1,2})(?!\d)/.exec(String(name || '').trim());
+          return m ? Number(m[1]) * 100 + Number(m[2]) : null;
+        };
+        let vote = 0;
+        for (let i = 1; i < matched.length; i++) {
+          const a = dateKey(matched[i - 1].name);
+          const b = dateKey(matched[i].name);
+          if (a !== null && b !== null && a !== b) vote += a > b ? 1 : -1;
+        }
+        return vote > 0 ? matched.slice(0, n).reverse() : matched.slice(-n);
       }
       function linkSource() {
         const kind = linkKind();
