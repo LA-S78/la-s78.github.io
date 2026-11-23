@@ -267,30 +267,30 @@ charts:
   column: Columna {n}
   no_numbers: No hay números para graficar en la columna elegida.
   line_two_rows: Una línea necesita al menos dos filas.
-  line_two_columns: Una línea necesita al menos dos columnas a lo largo de la parte inferior.
+  line_two_columns: Una línea necesita al menos dos columnas en la parte inferior.
   no_positive: No hay números positivos para graficar en la columna elegida.
-  no_targets: No hay números (o objetivos) para comparar.
+  no_targets: No hay números (u objetivos) para comparar.
   no_table: Aún no hay tabla.
   unknown_type: Tipo de gráfico desconocido.
-  draw_failed: Este gráfico no pudo ser dibujado ({error}).
+  draw_failed: No se pudo dibujar este gráfico ({error}).
   other: Otro
   value: Valor
   total: Total
   total_value: 'Total: {value}'
   share_of_all: "{value} · {share} del total"
   value_of_target: "{value} de {target}"
-  to_go: 'Restante: {value}'
+  to_go: 'Faltan: {value}'
   target_reached: Objetivo alcanzado ✓
   done: "✓ Hecho"
   reached_target: "{done} de {total} alcanzaron el objetivo"
   search: Buscar…
   search_label: Buscar en esta tabla
-  matching: "{n} coincidente"
+  matching: "{n} coincidencias"
   show_all: Mostrar los {n}
   show_all_rows: Mostrar las {n} filas
   first_rows: Mostrando las primeras {shown} de {n} filas.
   hint_bar: Toca o pasa el cursor sobre una barra
-  hint_bar_key: Toca o pasa el cursor sobre una barra. Toca un nombre en la clave para ver solo ese.
+  hint_bar_key: Toca o pasa el cursor sobre una barra. Toca un nombre en la leyenda para ver solo ese.
   views: Vistas
   view_latest: Pestaña más reciente
   view_weeks: Totales por pestaña
@@ -302,8 +302,12 @@ charts:
   view_tab: Pestaña a mostrar
   compare_first: Primer nombre
   compare_second: Segundo nombre
-  flip_to_asc: "⇅ El más bajo primero"
-  flip_to_desc: "⇅ El más alto primero"
+  compare_top: Top {n} (promedio)
+  compare_bottom: Últimos {n} (promedio)
+  pair_left: 'Izquierda: {name}'
+  pair_right: 'Derecha (atenuado): {name}'
+  flip_to_asc: "⇅ Menor primero"
+  flip_to_desc: "⇅ Mayor primero"
   hint_line: Toca o pasa el cursor sobre una semana
   hint_pie: Toca o pasa el cursor sobre una porción
   hint_progress: Toca o pasa el cursor sobre una fila

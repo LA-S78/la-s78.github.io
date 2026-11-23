@@ -266,11 +266,11 @@ chart_editor:
 charts:
   column: Colonna {n}
   no_numbers: Nessun numero da rappresentare nella colonna scelta.
-  line_two_rows: Una linea necessita di almeno due righe.
-  line_two_columns: Una linea necessita di almeno due colonne lungo il fondo.
+  line_two_rows: Una linea richiede almeno due righe.
+  line_two_columns: Una linea richiede almeno due colonne nella parte inferiore.
   no_positive: Nessun numero positivo da rappresentare nella colonna scelta.
   no_targets: Nessun numero (o obiettivo) da confrontare.
-  no_table: Nessuna tabella ancora.
+  no_table: Tabella non ancora disponibile.
   unknown_type: Tipo di grafico sconosciuto.
   draw_failed: Impossibile disegnare questo grafico ({error}).
   other: Altro
@@ -279,18 +279,18 @@ charts:
   total_value: 'Totale: {value}'
   share_of_all: "{value} · {share} del totale"
   value_of_target: "{value} di {target}"
-  to_go: 'Mancanti: {value}'
+  to_go: 'Mancano: {value}'
   target_reached: Obiettivo raggiunto ✓
   done: "✓ Fatto"
   reached_target: "{done} di {total} hanno raggiunto l'obiettivo"
-  search: Cerca…
+  search: Cerca...
   search_label: Cerca in questa tabella
   matching: "{n} corrispondenze"
   show_all: Mostra tutti i {n}
   show_all_rows: Mostra tutte le {n} righe
   first_rows: Mostrate le prime {shown} di {n} righe.
-  hint_bar: Tocca o passa sopra una barra
-  hint_bar_key: Tocca o passa sopra una barra. Tocca un nome nella legenda per vedere solo quello.
+  hint_bar: Tocca o passa il mouse sopra una barra
+  hint_bar_key: Tocca o passa il mouse sopra una barra. Tocca un nome nella legenda per vedere solo quello.
   views: Visualizzazioni
   view_latest: Scheda più recente
   view_weeks: Totali per scheda
@@ -302,11 +302,15 @@ charts:
   view_tab: Scheda da mostrare
   compare_first: Primo nome
   compare_second: Secondo nome
-  flip_to_asc: "⇅ Il più basso per primo"
-  flip_to_desc: "⇅ Il più alto per primo"
-  hint_line: Tocca o passa sopra una settimana
-  hint_pie: Tocca o passa sopra una fetta
-  hint_progress: Tocca o passa sopra una riga
+  compare_top: I migliori {n} (media)
+  compare_bottom: I peggiori {n} (media)
+  pair_left: 'Sinistra: {name}'
+  pair_right: 'Destra (sfumato): {name}'
+  flip_to_asc: "⇅ Dal più basso"
+  flip_to_desc: "⇅ Dal più alto"
+  hint_line: Tocca o passa il mouse sopra una settimana
+  hint_pie: Tocca o passa il mouse sopra una fetta
+  hint_progress: Tocca o passa il mouse sopra una riga
 nominate:
   page_title: Nomine per le Ricompense
   name_ok: Nella lista membri di [{tag}]

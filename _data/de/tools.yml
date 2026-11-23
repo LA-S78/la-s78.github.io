@@ -265,48 +265,52 @@ chart_editor:
   at_least_example: z.B. 300M
 charts:
   column: Spalte {n}
-  no_numbers: Keine Zahlen in der gewählten Spalte zum Diagramm hinzugefügt.
-  line_two_rows: Eine Linie erfordert mindestens zwei Zeilen.
-  line_two_columns: Eine Linie erfordert mindestens zwei Spalten entlang der Unterseite.
-  no_positive: Keine positiven Zahlen in der gewählten Spalte zum Diagramm hinzugefügt.
+  no_numbers: Keine Zahlen zum Darstellen in der gewählten Spalte.
+  line_two_rows: Eine Linie benötigt mindestens zwei Zeilen.
+  line_two_columns: Eine Linie benötigt mindestens zwei Spalten an der Unterseite.
+  no_positive: Keine positiven Zahlen zum Darstellen in der gewählten Spalte.
   no_targets: Keine Zahlen (oder Ziele) zum Vergleichen.
   no_table: Noch keine Tabelle.
   unknown_type: Unbekannter Diagrammtyp.
-  draw_failed: Dieses Diagramm konnte nicht gezeichnet werden ({error}).
+  draw_failed: Dieses Diagramm konnte nicht erstellt werden ({error}).
   other: Andere
   value: Wert
   total: Gesamt
   total_value: 'Gesamt: {value}'
   share_of_all: "{value} · {share} von allen"
   value_of_target: "{value} von {target}"
-  to_go: 'Noch offen: {value}'
+  to_go: 'Noch zu erreichen: {value}'
   target_reached: Ziel erreicht ✓
   done: "✓ Erledigt"
   reached_target: "{done} von {total} haben das Ziel erreicht"
-  search: Suche…
+  search: Suchen…
   search_label: Diese Tabelle durchsuchen
   matching: "{n} Treffer"
   show_all: Alle {n} anzeigen
   show_all_rows: Alle {n} Zeilen anzeigen
   first_rows: Zeige die ersten {shown} von {n} Zeilen.
-  hint_bar: Tippe auf einen Balken oder fahre mit der Maus darüber
-  hint_bar_key: Tippe auf einen Balken oder fahre mit der Maus darüber. Tippe auf einen Namen im Schlüssel, um nur diesen anzuzeigen.
+  hint_bar: Balken antippen oder darüberfahren
+  hint_bar_key: Balken antippen oder darüberfahren. Namen in der Legende antippen, um nur diesen anzuzeigen.
   views: Ansichten
   view_latest: Neuester Tab
-  view_weeks: Summen pro Tab
+  view_weeks: Gesamtsummen pro Tab
   view_player: Ein Name pro Tab
-  view_pick: Name anzeigen
+  view_pick: Anzuzeigender Name
   view_average: Durchschnitt von {n} Tabs
   view_chart: Diagramm
   view_compare: Zwei vergleichen
-  view_tab: Tab anzeigen
+  view_tab: Anzuzeigender Tab
   compare_first: Erster Name
   compare_second: Zweiter Name
-  flip_to_asc: "⇅ Niedrigste zuerst"
-  flip_to_desc: "⇅ Höchste zuerst"
-  hint_line: Tippe auf eine Woche oder fahre mit der Maus darüber
-  hint_pie: Tippe auf ein Segment oder fahre mit der Maus darüber
-  hint_progress: Tippe auf eine Zeile oder fahre mit der Maus darüber
+  compare_top: Top {n} (Durchschnitt)
+  compare_bottom: Flop {n} (Durchschnitt)
+  pair_left: 'Links: {name}'
+  pair_right: 'Rechts (abgeblendet): {name}'
+  flip_to_asc: "⇅ Niedrigster zuerst"
+  flip_to_desc: "⇅ Höchster zuerst"
+  hint_line: Woche antippen oder darüberfahren
+  hint_pie: Segment antippen oder darüberfahren
+  hint_progress: Zeile antippen oder darüberfahren
 nominate:
   page_title: Belohnungsnominierungen
   name_ok: In der Mitgliederliste von [{tag}]

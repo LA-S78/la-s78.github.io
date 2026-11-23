@@ -269,48 +269,52 @@ chart_editor:
   at_least_example: наприклад, 300M
 charts:
   column: Стовпець {n}
-  no_numbers: Немає чисел для відображення у вибраному стовпці.
+  no_numbers: Немає цифр для побудови графіка у вибраному стовпці.
   line_two_rows: Для лінії потрібно принаймні два рядки.
-  line_two_columns: Для лінії потрібно принаймні два стовпці вздовж низу.
-  no_positive: Немає додатних чисел для відображення у вибраному стовпці.
+  line_two_columns: Для лінії потрібно принаймні два стовпці внизу.
+  no_positive: Немає додатних чисел для побудови графіка у вибраному стовпці.
   no_targets: Немає чисел (або цілей) для порівняння.
   no_table: Таблиці ще немає.
-  unknown_type: Невідомий тип діаграми.
-  draw_failed: Не вдалося намалювати цю діаграму ({error}).
+  unknown_type: Невідомий тип графіка.
+  draw_failed: Цей графік не вдалося побудувати ({error}).
   other: Інше
   value: Значення
   total: Разом
   total_value: 'Всього: {value}'
-  share_of_all: "{value} · {share} від усіх"
+  share_of_all: "{value} · {share} від усього"
   value_of_target: "{value} з {target}"
-  to_go: 'Залишилось: {value}'
-  target_reached: Мета досягнута ✓
+  to_go: 'Залишилося: {value}'
+  target_reached: Ціль досягнута ✓
   done: "✓ Виконано"
-  reached_target: "{done} з {total} досягли мети"
+  reached_target: "{done} з {total} досягли цілі"
   search: Пошук…
   search_label: Шукати в цій таблиці
   matching: "{n} збігів"
   show_all: Показати всі {n}
   show_all_rows: Показати всі {n} рядків
   first_rows: Показано перші {shown} з {n} рядків.
-  hint_bar: Торкніться або наведіть на стовпчик
-  hint_bar_key: Торкніться або наведіть на стовпчик. Торкніться імені в легенді, щоб побачити тільки його.
+  hint_bar: Торкніться або наведіть курсор на стовпець
+  hint_bar_key: Торкніться або наведіть курсор на стовпець. Торкніться імені в легенді, щоб бачити лише його.
   views: Перегляди
   view_latest: Нова вкладка
   view_weeks: Разом по вкладках
   view_player: Одне ім'я по вкладках
   view_pick: Ім'я для показу
-  view_average: Середнє значення з {n} вкладок
-  view_chart: Діаграма
-  view_compare: Порівняти два
+  view_average: Середнє за {n} вкладок
+  view_chart: Графік
+  view_compare: Порівняти двох
   view_tab: Вкладка для показу
   compare_first: Перше ім'я
   compare_second: Друге ім'я
+  compare_top: Топ-{n} (середнє)
+  compare_bottom: Останні {n} (середнє)
+  pair_left: 'Зліва: {name}'
+  pair_right: 'Справа (напівпрозоре): {name}'
   flip_to_asc: "⇅ Спочатку найменші"
   flip_to_desc: "⇅ Спочатку найбільші"
-  hint_line: Торкніться або наведіть на тиждень
-  hint_pie: Торкніться або наведіть на сектор
-  hint_progress: Торкніться або наведіть на рядок
+  hint_line: Торкніться або наведіть курсор на тиждень
+  hint_pie: Торкніться або наведіть курсор на сектор
+  hint_progress: Торкніться або наведіть курсор на рядок
 nominate:
   page_title: Номінації на нагороди
   name_ok: У списку членів [{tag}]

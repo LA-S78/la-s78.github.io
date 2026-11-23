@@ -265,32 +265,32 @@ chart_editor:
   at_least_example: ex. 300M
 charts:
   column: Colonne {n}
-  no_numbers: Aucun nombre à représenter dans la colonne choisie.
-  line_two_rows: Une ligne nécessite au moins deux lignes.
+  no_numbers: Aucun chiffre à représenter dans la colonne choisie.
+  line_two_rows: Une ligne nécessite au moins deux rangées.
   line_two_columns: Une ligne nécessite au moins deux colonnes en bas.
-  no_positive: Aucun nombre positif à représenter dans la colonne choisie.
-  no_targets: Aucun nombre (ou cible) à comparer.
-  no_table: Pas encore de tableau.
+  no_positive: Aucun chiffre positif à représenter dans la colonne choisie.
+  no_targets: Aucun chiffre (ou objectif) à comparer.
+  no_table: Aucun tableau pour le moment.
   unknown_type: Type de graphique inconnu.
-  draw_failed: Ce graphique n'a pas pu être dessiné ({error}).
+  draw_failed: Ce graphique n'a pas pu être généré ({error}).
   other: Autre
   value: Valeur
   total: Total
   total_value: 'Total : {value}'
   share_of_all: "{value} · {share} du total"
   value_of_target: "{value} sur {target}"
-  to_go: 'Reste à faire : {value}'
-  target_reached: Cible atteinte ✓
+  to_go: 'Restant : {value}'
+  target_reached: Objectif atteint ✓
   done: "✓ Terminé"
-  reached_target: "{done} sur {total} ont atteint la cible"
+  reached_target: "{done} sur {total} ont atteint l'objectif"
   search: Rechercher…
   search_label: Rechercher dans ce tableau
-  matching: "{n} correspondant"
-  show_all: Afficher les {n}
-  show_all_rows: Afficher les {n} lignes
-  first_rows: Affichage des {shown} premières lignes sur {n}.
-  hint_bar: Tapez ou survolez une barre
-  hint_bar_key: Tapez ou survolez une barre. Tapez un nom dans la légende pour ne voir que celui-ci.
+  matching: "{n} correspondant(s)"
+  show_all: Afficher tout {n}
+  show_all_rows: Afficher les {n} rangées
+  first_rows: Affichage des {shown} premières rangées sur {n}.
+  hint_bar: Appuyer ou survoler une barre
+  hint_bar_key: Appuyer ou survoler une barre. Appuyer sur un nom dans la légende pour ne voir que celui-ci.
   views: Vues
   view_latest: Onglet le plus récent
   view_weeks: Totaux par onglet
@@ -298,15 +298,19 @@ charts:
   view_pick: Nom à afficher
   view_average: Moyenne de {n} onglets
   view_chart: Graphique
-  view_compare: Comparer deux
+  view_compare: Comparer deux éléments
   view_tab: Onglet à afficher
   compare_first: Premier nom
   compare_second: Second nom
-  flip_to_asc: "⇅ Le plus bas d'abord"
-  flip_to_desc: "⇅ Le plus élevé d'abord"
-  hint_line: Tapez ou survolez une semaine
-  hint_pie: Tapez ou survolez une part
-  hint_progress: Tapez ou survolez une ligne
+  compare_top: Top {n} (moyenne)
+  compare_bottom: Bottom {n} (moyenne)
+  pair_left: 'Gauche : {name}'
+  pair_right: 'Droite (estompé) : {name}'
+  flip_to_asc: "⇅ Plus bas en premier"
+  flip_to_desc: "⇅ Plus élevé en premier"
+  hint_line: Appuyer ou survoler une semaine
+  hint_pie: Appuyer ou survoler une section
+  hint_progress: Appuyer ou survoler une rangée
 nominate:
   page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]
