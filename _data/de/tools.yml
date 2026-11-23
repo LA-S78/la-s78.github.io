@@ -181,16 +181,16 @@ chart_editor:
   type_progress: Fortschritt
   type_table: Tabelle
   title: Titel
-  title_example: z. B. Allianz-Duell Punktzahlen
+  title_example: z. B. Allianz-Duell Punkte
   note: Erklärung
-  note_example: z. B. Mindestens 15M Duellpunkte bis Freitag-Reset erforderlich
-  who_sees: Wer kann es sehen
+  note_example: z. B. Mindestens 15 Mio. Duell-Punkte bis zum Reset am Freitag erforderlich
+  who_sees: Wer kann dies sehen
   officers_only: Nur Offiziere (R4/R5)
   all_members: Alle Allianzmitglieder
   data: Daten
-  data_source: Datenquelle
+  data_source: Woher die Daten stammen
   paste: Tabelle einfügen
-  link: Google Sheet / Doc Link
+  link: Link zu Google Sheet / Doc
   paste_help: Kopiere die Zellen aus Google Sheets oder Excel (zuerst die Kopfzeile) und füge sie hier ein.
   tab_name: Tab-Name (optional)
   tab: Tab
@@ -198,10 +198,21 @@ chart_editor:
   order_sheet: Wie im Sheet
   order_desc: Höchste zuerst
   order_asc: Niedrigste zuerst
-  order_asc_help: Niedrigste zuerst lässt Zeilen aus, in denen die angezeigten Spalten leer sind (d. h. diejenigen, die nicht teilgenommen haben).
+  order_asc_help: Niedrigste zuerst lässt Zeilen ohne Werte in den angezeigten Spalten weg (diejenigen, die nicht teilgenommen haben).
   limit: Anzeigen
   limit_all: Alle
-  grid_help: 'Ziehe über die Tabelle, um sie auszuwählen (auf dem Handy: tippe eine Ecke an, dann die gegenüberliegende). Die erste Zeile ist die Kopfzeile. Tippe dann auf einen Spaltenbuchstaben, um ihn als Beschriftung oder Zahlenspalte zu verwenden.'
+  tabs_on: Gleicher Bereich aus mehreren Tabs (z. B. ein Tab pro Woche)
+  tabs_pattern: Tab-Namen wie
+  tabs_count: Neueste zu lesende Tabs
+  tabs_match: "{n} Tabs stimmen überein: {names}."
+  tabs_reads: Liest die neuesten {n}.
+  tabs_none: 'Keine Tabs stimmen überein. # ist eine beliebige Zahl, * ist alles: "#/# *" findet "11/09 K71 QRT".'
+  tabs_read: "{n} Tabs gelesen; der neueste ist {newest}."
+  tabs_skipped: 'Konnte nicht gelesen werden: {names}.'
+  view_start: Betrachter starten bei
+  view_help: Betrachter können über dem Diagramm zwischen den Ansichten wechseln.
+  compare: 'Betrachter vergleichen lassen: zwei Namen oder einen Namen mit den Top oder Bottom 5'
+  grid_help: 'Ziehe über die Tabelle, um sie auszuwählen (auf dem Handy: tippe eine Ecke an, dann die gegenüberliegende). Die erste Zeile ist die Kopfzeile. Tippe dann auf einen Spaltenbuchstaben, um ihn als Beschriftung festzulegen, oder auf eine Zahlenspalte.'
   grid_tap_second: Tippe jetzt auf die gegenüberliegende Ecke der Tabelle.
   grid_mode: Klick auf einen Spaltenbuchstaben setzt
   grid_labels: Beschriftungen
@@ -210,8 +221,8 @@ chart_editor:
   range: Bereich, z. B. A1:D20 (optional)
   doc_table: Welche Tabelle im Doc (1, 2…)
   load: "⤓ Von Google laden"
-  loading: "⤓ Wird geladen…"
-  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann das Dokument ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
+  loading: "⤓ Lädt…"
+  link_help: 'Sheets: Teilen → „Jeder mit dem Link kann ansehen“ (oder Datei → Teilen → Im Web veröffentlichen). Docs: Datei → Teilen → Im Web veröffentlichen. „Jetzt synchronisieren“ auf der Karte ruft später die neuesten Zahlen ab.'
   load_first: Lade zuerst das Sheet (⤓ Von Google laden).
   preview: Vorschau
   preview_empty: Füge oben eine Tabelle ein, um das Diagramm zu sehen.
@@ -223,52 +234,52 @@ chart_editor:
   at_most_500: "(maximal 500)"
   labels: Namen (Beschriftungen)
   numbers_to_show: Anzuzeigende Zahlen
-  labels_swapped: Namen (jeweils eine Zeile oder ein Balken)
-  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten entlang der Unterseite"
+  labels_swapped: Namen (je eine Zeile oder ein Balken)
+  swap_line: "⇄ Zeilen und Spalten tauschen: eine Linie pro Zeile, die Spalten unten"
   swap_bar: "⇄ Zeilen und Spalten tauschen: die Spalten als Balken, eine Farbe pro Zeile"
-  swap_help: 'Für Sheets mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
-  rows_to_draw: Zeilen zum Zeichnen (bis zu 6)
-  rows_filter: Name suchen…
-  rows_count: "{n} von 6 ausgewählt"
-  columns_along: Spalten entlang der Unterseite (in Reihenfolge des Sheets)
+  swap_help: 'Bei Sheets mit einer Zeile pro Spieler und einer Spalte pro Woche: aktiviere dies, um Spieler über die Wochen hinweg zu verfolgen.'
+  rows_to_draw: Zu zeichnende Zeilen (bis zu 6)
+  rows_filter: Namen finden…
+  rows_count: "{n} von 6 gewählt"
+  columns_along: Spalten unten (in Sheet-Reihenfolge)
   numbers: Zahlen
   several_columns: Mehrere Zahlenspalten
   side_by_side: Nebeneinander
-  stacked_totals: 'Gestapelt: Summen'
+  stacked_totals: 'Gestapelt: Gesamtsummen'
   stacked_percent: 'Gestapelt: jeder Balken auf 100%'
   vertical: Vertikale Balken
-  vertical_leaderboard: Vertikale Balken (statt einer Bestenliste)
-  traffic_columns: 'Rot → gelb → grün (niedrig → hoch): erste Spalte rot, letzte grün'
-  traffic_size: 'Rot → gelb → grün (niedrig → hoch): nach Rang, oberste grün'
-  traffic_reverse: 'Umkehren: niedrig ist gut (grün), hoch ist schlecht (rot)'
-  traffic_target: Rot → gelb → grün danach, wie nah jeder am Ziel ist
-  traffic_target_reverse: 'Umkehren: weiter unter dem Ziel ist besser'
+  vertical_leaderboard: Vertikale Balken (statt Bestenliste)
+  traffic_columns: 'Rot → Gelb → Grün (niedrig → hoch): erste Spalte rot, letzte grün'
+  traffic_size: 'Rot → Gelb → Grün (niedrig → hoch): nach Rang, Spitze grün'
+  traffic_reverse: 'Umgekehrt: niedrig ist gut (grün), hoch ist schlecht (rot)'
+  traffic_target: Rot → Gelb → Grün danach, wie nah jeder am Ziel ist
+  traffic_target_reverse: 'Umgekehrt: je weiter unter dem Ziel, desto besser'
   donut: Donut (Ring)
-  target: Ziel für jeden
+  target: Ziel für alle
   target_example: z. B. 15M oder 15000000
   target_column: "…oder eine Spalte mit Zielen"
-  use_number_above: "(die Zahl oben verwenden)"
-  highlight_where: Zeilen hervorheben, wo
-  no_highlight: "(keine Hervorhebung)"
+  use_number_above: "(nutze die Zahl darüber)"
+  highlight_where: Markiere Zeilen, wo
+  no_highlight: "(keine Markierung)"
   at_least: mindestens beträgt
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}
-  no_numbers: Keine Zahlen zum Darstellen in der gewählten Spalte.
+  no_numbers: Keine Zahlen zum Diagramm in der gewählten Spalte.
   line_two_rows: Eine Linie benötigt mindestens zwei Zeilen.
-  line_two_columns: Eine Linie benötigt mindestens zwei Spalten entlang der Unterseite.
-  no_positive: Keine positiven Zahlen zum Darstellen in der gewählten Spalte.
+  line_two_columns: Eine Linie benötigt mindestens zwei Spalten unten.
+  no_positive: Keine positiven Zahlen zum Diagramm in der gewählten Spalte.
   no_targets: Keine Zahlen (oder Ziele) zum Vergleichen.
-  no_table: Noch keine Tabelle vorhanden.
+  no_table: Noch keine Tabelle.
   unknown_type: Unbekannter Diagrammtyp.
   draw_failed: Dieses Diagramm konnte nicht gezeichnet werden ({error}).
-  other: Sonstige
+  other: Andere
   value: Wert
-  total: Summe
-  total_value: 'Summe: {value}'
+  total: Gesamt
+  total_value: 'Gesamt: {value}'
   share_of_all: "{value} · {share} von allen"
   value_of_target: "{value} von {target}"
-  to_go: 'Noch zu erreichen: {value}'
+  to_go: 'Noch offen: {value}'
   target_reached: Ziel erreicht ✓
   done: "✓ Erledigt"
   reached_target: "{done} von {total} haben das Ziel erreicht"
@@ -279,9 +290,28 @@ charts:
   show_all_rows: Alle {n} Zeilen anzeigen
   first_rows: Zeige die ersten {shown} von {n} Zeilen.
   hint_bar: Tippe oder bewege die Maus über einen Balken
-  hint_bar_key: Tippe oder bewege die Maus über einen Balken. Tippe auf einen Namen in der Legende, um nur diesen anzuzeigen.
+  hint_bar_key: Tippe oder bewege die Maus über einen Balken. Tippe in der Legende auf einen Namen, um nur diesen zu sehen.
+  views: Ansichten
+  view_latest: Neuester Tab
+  view_weeks: Summen pro Tab
+  view_player: Ein Name pro Tab
+  view_pick: Name zum Anzeigen
+  view_average: Durchschnitt von {n} Tabs
+  view_chart: Diagramm
+  view_compare: Vergleichen
+  search_names: Namen eingeben…
+  no_match: Keine Namen stimmen überein.
+  view_tab: Tab zum Anzeigen
+  compare_first: Erster Name
+  compare_second: Zweiter Name
+  compare_top: Top {n} (Durchschnitt)
+  compare_bottom: Bottom {n} (Durchschnitt)
+  pair_left: 'Links: {name}'
+  pair_right: 'Rechts (blass): {name}'
+  flip_to_asc: "⇅ Niedrigste zuerst"
+  flip_to_desc: "⇅ Höchste zuerst"
   hint_line: Tippe oder bewege die Maus über eine Woche
-  hint_pie: Tippe oder bewege die Maus über ein Segment
+  hint_pie: Tippe oder bewege die Maus über ein Stück
   hint_progress: Tippe oder bewege die Maus über eine Zeile
 nominate:
   page_title: Belohnungsnominierungen
