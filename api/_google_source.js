@@ -402,7 +402,7 @@ export async function fetchSheetGrid(src, { timeoutMs = TIMEOUT_MS } = {}) {
 
 // ---------------------------------------------------------------------------------------
 // Across tabs (owner request, 2026-11-23, part 3 of the duel charts): the same range from
-// several tabs, e.g. one tab per week ("11/09 K71 QRT", "11/16 …"). The leader names the
+// several tabs, e.g. one tab per week ("06/14 Duel", "06/21 …"). The leader names the
 // tabs with a pattern (# is any number, * anything: "#/# *") and how many of the newest
 // to read (2–10). Each tab's columns are matched to the newest tab's by their heading.
 // ---------------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ export function patternTest(pattern) {
   return (name) => re.test(String(name || '').trim());
 }
 
-/** The date a tab's name starts with ("11/09 K71"), as a number to compare, or null. */
+/** The date a tab's name starts with ("06/14 Duel"), as a number to compare, or null. */
 const dateKey = (name) => {
   const m = /^(\d{1,2})[/.-](\d{1,2})(?![\d])/.exec(String(name || '').trim());
   return m ? Number(m[1]) * 100 + Number(m[2]) : null;
