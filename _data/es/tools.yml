@@ -181,9 +181,9 @@ chart_editor:
   type_progress: Progreso
   type_table: Tabla
   title: Título
-  title_example: p. ej., Puntuaciones de Duelo de Alianzas
+  title_example: ej. Puntuaciones del Duelo de Alianzas
   note: Explicación
-  note_example: p. ej., Mínimo de 15M de puntos en Duelo de Alianzas requerido para el reinicio del viernes
+  note_example: ej. Mínimo 15M de puntos de Duelo requeridos para el reinicio del viernes
   who_sees: Quién puede verlo
   officers_only: Solo oficiales (R4/R5)
   all_members: Todos los miembros de la alianza
@@ -193,19 +193,12 @@ chart_editor:
   link: Enlace a Google Sheet / Doc
   paste_help: Copia las celdas de Google Sheets o Excel (primero la fila de encabezado) y pégalas aquí.
   tab_name: Nombre de la pestaña (opcional)
-  tab: Pestaña
-  grid_help: 'Arrastra sobre la tabla para seleccionarla (en un teléfono: toca una esquina y luego la opuesta). La primera fila es el encabezado. Luego toca la letra de una columna para convertirla en etiquetas o una columna de números.'
-  grid_tap_second: Ahora toca la esquina opuesta de la tabla.
-  grid_mode: Al hacer clic en una letra de columna se establece como
-  grid_labels: Etiquetas
-  grid_numbers: Números
-  grid_more: Solo se muestran aquí las primeras 200 filas y 60 columnas; un rango puede ser mayor.
-  range: Rango, p. ej. A1:D20 (opcional)
-  doc_table: Qué tabla en el documento (1, 2…)
-  load: "⤓ Cargar desde Google"
-  loading: "⤓ Cargando…"
-  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede leer” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta recupera los números más recientes más tarde.'
-  load_first: Carga la hoja primero (⤓ Cargar desde Google).
+  range: Rango, ej. A1:D20 (opcional)
+  doc_table: Qué tabla del documento (1, 2...)
+  load: "⤓ Cargar de Google"
+  loading: "⤓ Cargando..."
+  link_help: 'Sheets: Compartir → “Cualquier persona con el enlace puede ver” (o Archivo → Compartir → Publicar en la web). Docs: Archivo → Compartir → Publicar en la web. “Sincronizar ahora” en la tarjeta obtiene las últimas cifras más adelante.'
+  load_first: Carga la hoja primero (⤓ Cargar de Google).
   preview: Vista previa
   preview_empty: Pega una tabla arriba para ver el gráfico.
   size: "{rows} × {columns}"
@@ -216,35 +209,35 @@ chart_editor:
   at_most_500: "(máximo 500)"
   labels: Nombres (etiquetas)
   numbers_to_show: Números a mostrar
-  labels_swapped: Nombres (uno por línea o barra)
-  swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas en la parte inferior"
+  labels_swapped: Nombres (una línea o barra cada uno)
+  swap_line: "⇄ Intercambiar filas y columnas: una línea por fila, las columnas a lo largo de la parte inferior"
   swap_bar: "⇄ Intercambiar filas y columnas: las columnas como barras, un color por fila"
   swap_help: 'Para hojas con una fila por jugador y una columna por semana: marca esto para seguir a los jugadores a lo largo de las semanas.'
   rows_to_draw: Filas a dibujar (hasta 6)
-  rows_filter: Buscar un nombre…
+  rows_filter: Buscar nombre...
   rows_count: "{n} de 6 elegidos"
-  columns_along: Columnas en la parte inferior (en el orden de la hoja)
+  columns_along: Columnas a lo largo de la parte inferior (en orden de hoja)
   numbers: Números
-  several_columns: Varias columnas de números
+  several_columns: Varias columnas numéricas
   side_by_side: Lado a lado
-  stacked_totals: 'Apilado: totales'
-  stacked_percent: 'Apilado: cada barra al 100%'
+  stacked_totals: 'Apiladas: totales'
+  stacked_percent: 'Apiladas: cada barra al 100%'
   vertical: Barras verticales
   vertical_leaderboard: Barras verticales (en lugar de una tabla de clasificación)
   traffic_columns: 'Rojo → amarillo → verde (bajo → alto): primera columna roja, última verde'
-  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, los mejores en verde'
+  traffic_size: 'Rojo → amarillo → verde (bajo → alto): por rango, el primero verde'
   traffic_reverse: 'Invertir: bajo es bueno (verde), alto es malo (rojo)'
-  traffic_target: Rojo → amarillo → verde según qué tan cerca esté cada uno del objetivo
-  traffic_target_reverse: 'Invertir: cuanto más lejos por debajo del objetivo, mejor'
-  donut: Donut (anillo)
+  traffic_target: Rojo → amarillo → verde según la cercanía al objetivo
+  traffic_target_reverse: 'Invertir: cuanto más lejos del objetivo, mejor'
+  donut: Dona (anillo)
   target: Objetivo para todos
-  target_example: p. ej. 15M o 15000000
+  target_example: ej. 15M o 15000000
   target_column: "…o una columna de objetivos"
   use_number_above: "(usar el número de arriba)"
   highlight_where: Resaltar filas donde
-  no_highlight: "(sin resaltar)"
+  no_highlight: "(sin resaltado)"
   at_least: sea al menos
-  at_least_example: p. ej. 300M
+  at_least_example: ej. 300M
 charts:
   column: Columna {n}
   no_numbers: No hay números que graficar en la columna elegida.

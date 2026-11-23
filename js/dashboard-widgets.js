@@ -204,6 +204,9 @@
     const f = frac ?? (n > 1 ? k / (n - 1) : undefined);
     if (w.options?.scale && f !== undefined)
       styles.push(`--dw: ${ramp(w.options.reverse ? 1 - f : f)}`);
+    // Four or more series: six clearly different colours (the theme's mixes of two colours
+    // run together at that many; checked for colour-blind readers, 2026-11-23)
+    else if (n >= 4) cls = `${extra ? `${extra} ` : ''}dw-d${k % SERIES}`;
     else cls = `${extra ? `${extra} ` : ''}dw-s${k % SERIES}`;
     if (css) styles.push(css);
     return `class="${cls}"${styles.length ? ` style="${styles.join('; ')}"` : ''}`;
@@ -211,22 +214,60 @@
 
   function legend(names, w) {
     if (names.length < 2) return '';
+    // Bar charts: each name is a button (mount() handles them). The first tap shows only that
+    // series, taps then add or remove series, and tapping the only one shown brings all back.
+    if (w.type === 'bar') {
+      const off = new Set(w._off || []);
+      return `<div class="dw-legend dw-legend-toggle">${names
+        .map(
+          (n, i) =>
+            `<button type="button" data-series="${i}" aria-pressed="${!off.has(i)}"><i ${paint(w, i, names.length)}></i>${esc(n)}</button>`,
+        )
+        .join('')}</div>`;
+    }
     return `<div class="dw-legend">${names
       .map((n, i) => `<span><i ${paint(w, i, names.length)}></i>${esc(n)}</span>`)
       .join('')}</div>`;
+  }
+
+  /** The series a viewer switched off (legend taps), after `k` was tapped. */
+  function toggleSeries(w, k, n) {
+    const off = new Set(w._off || []);
+    const shown = [...Array(n).keys()].filter((i) => !off.has(i));
+    if (!off.size) {
+      // All shown: only the tapped one
+      for (let i = 0; i < n; i++) if (i !== k) off.add(i);
+    } else if (shown.length === 1 && shown[0] === k) {
+      off.clear();
+    } else if (off.has(k)) off.delete(k);
+    else off.add(k);
+    w._off = off.size === n ? [] : [...off];
   }
 
   // ---------- bar: horizontal (one row each) or vertical; side by side or stacked ----------
   // options.stacked: '' (side by side) | 'sum' (stacked totals) | 'percent' (stacked to 100%).
   // Side-by-side horizontal bars are a best-first leaderboard; stacked bars keep the sheet's
   // order. Vertical charts with many rows switch to horizontal on narrow screens (phones).
+  // options.order: 'desc' | 'asc' (by the bar's total, the series shown only), else as
+  // before; options.limit: show only the first N rows of that order. Lowest first leaves out
+  // rows with nothing in the series shown (didn't take part). w._off: series a viewer hid in
+  // the legend; they keep their colours (colour follows the series, not its place).
   function bar(w) {
     const s = series(w);
     const o = w.options || {};
     const stacked = o.stacked === 'sum' || o.stacked === 'percent' ? o.stacked : '';
-    const rows = s.rows.filter((r) => r.values.some(Number.isFinite));
-    if (!rows.length) return empty(say('no_numbers'));
+    const off = new Set(w._off || []);
     const total = (r) => r.values.reduce((t, v) => t + (Number.isFinite(v) && v > 0 ? v : 0), 0);
+    let rows = s.rows
+      .map((r) => (off.size ? { ...r, values: r.values.map((v, k) => (off.has(k) ? NaN : v)) } : r))
+      .filter((r) => r.values.some(Number.isFinite));
+    if (o.order === 'desc' || o.order === 'asc') {
+      const size = (r) => (stacked || s.values.length > 1 ? total(r) : r.values[0] || 0);
+      if (o.order === 'asc') rows = rows.filter((r) => size(r) > 0);
+      rows = [...rows].sort((a, b) => (o.order === 'asc' ? size(a) - size(b) : size(b) - size(a)));
+    }
+    if (o.limit > 0) rows = rows.slice(0, o.limit);
+    if (!rows.length) return empty(say('no_numbers'));
     const n = s.values.length;
     // A segment's tooltip: its share (stacked to 100%) and the cell as written in the sheet.
     const tip = (r, k) => {
@@ -296,9 +337,10 @@
     const bySize = (r) => (n === 1 && !stacked ? rankOf(r.values[0]) : undefined);
 
     const horizontal = () => {
-      const list = stacked
-        ? rows
-        : [...rows].sort((a, b) => (b.values[0] || 0) - (a.values[0] || 0));
+      const list =
+        stacked || o.order
+          ? rows
+          : [...rows].sort((a, b) => (b.values[0] || 0) - (a.values[0] || 0));
       const max =
         stacked === 'percent'
           ? 1
@@ -825,6 +867,20 @@
   /** Makes a rendered widget interactive (table sorting/search, "Show all", tap to read). */
   function mount(el, w) {
     if (w.type === 'table') fillTable(el, w);
+    // Legend taps (bar charts): redraw this chart with the series shown or hidden. Only for
+    // this viewer, nothing is saved. One listener per box, for the widget drawn in it now.
+    el.dwWidget = w;
+    if (!el.dwLegend) {
+      el.dwLegend = true;
+      el.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-series]');
+        if (!b || !el.contains(b)) return;
+        const cur = el.dwWidget;
+        toggleSeries(cur, Number(b.dataset.series), series(cur).names.length);
+        el.innerHTML = render(cur);
+        mount(el, cur);
+      });
+    }
     el.addEventListener('click', (e) => {
       const b = e.target.closest('[data-show-all]');
       if (!b) return;
@@ -832,7 +888,7 @@
       b.remove();
     });
     if (['bar', 'line', 'pie', 'progress'].includes(w.type) && el.querySelector('[data-tip]'))
-      selectable(el, say(`hint_${w.type}`));
+      selectable(el, say(el.querySelector('[data-series]') ? 'hint_bar_key' : `hint_${w.type}`));
   }
 
   window.DashboardWidgets = { parseTable, toText, number, short, render, mount };

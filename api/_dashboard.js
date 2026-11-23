@@ -255,6 +255,10 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     options.vertical = Boolean(o.vertical);
     // Stacked: 'sum' (totals) or 'percent' (each bar to 100%).
     if (o.stacked === 'sum' || o.stacked === 'percent') options.stacked = o.stacked;
+    // The order of the bars (by their total) and how many to show (2026-11-23)
+    if (o.order === 'desc' || o.order === 'asc') options.order = o.order;
+    const limit = parseInt(o.limit, 10);
+    if (limit > 0) options.limit = Math.min(100, limit);
   }
   // scale: traffic-light colours, red (low) → yellow → green (high).
   if ((w.type === 'bar' || w.type === 'progress') && o.scale) {
