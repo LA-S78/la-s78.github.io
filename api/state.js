@@ -13,7 +13,13 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 
 import { BASELINE_SCHEDULES } from './_cycle_helper.js';
 import { fetchAlliance, knownMissing } from './_tracker.js';
-import { lookupPlayer, readStatsSummary, readTopPlayers, withPublicIds } from './_stats.js';
+import {
+  lookupPlayer,
+  readStatsSummary,
+  readTopPlayers,
+  withPublicIds,
+  readTitles,
+} from './_stats.js';
 import { verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
 
@@ -139,9 +145,10 @@ export default async function handler(req, res) {
           .filter(([, a]) => a && a.is_nap !== false)
           .map(([tag]) => tag)
           .slice(0, 30);
-        const found = await Promise.all(
-          tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000, use: 'public' })),
-        );
+        const [found, titles] = await Promise.all([
+          Promise.all(tags.map((tag) => fetchAlliance(tag, { timeoutMs: 3000, use: 'public' }))),
+          readTitles(),
+        ]);
         const stats = {};
         tags.forEach((tag, i) => {
           const a = found[i];
@@ -153,7 +160,7 @@ export default async function handler(req, res) {
             level: a.level,
             badge: a.badge,
             // Its R5 and R4s with their pictures (owner request, 2026-11-23), for the opened card
-            leaders: allianceLeaders(a.members, tag),
+            leaders: allianceLeaders(a.members, tag, titles),
           };
         });
         // Alliance avatar frames over the game's default frame (api/_frames.js)
