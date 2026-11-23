@@ -2,61 +2,63 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: Votre alliance a changé sur le site depuis votre dernière connexion. Connectez-vous à nouveau avec Discord pour continuer.
-  rename_unknown: Cette alliance ne se trouve plus sur la carte. Rechargez la page.
-  rename_bad_tag: 'Saisissez le nouveau tag tel qu''il apparaît dans le jeu : jusqu''à 12 caractères, sans espaces, deux-points, crochets ou barres obliques.'
-  rename_same: C'est déjà le tag utilisé.
-  rename_taken: "[{tag}] possède déjà ce tag. Pour échanger des tags entre deux alliances, utilisez la fonction d'échange."
+  alliance_changed: Votre alliance a changé sur le site depuis votre connexion. Reconnectez-vous avec Discord pour continuer.
+  rename_unknown: Cette alliance n'est plus sur la carte. Rechargez la page.
+  rename_bad_tag: 'Tapez le nouveau tag tel qu''il est dans le jeu : jusqu''à 12 caractères, sans espaces, deux-points, crochets ou barres obliques.'
+  rename_same: C'est déjà son tag actuel.
+  rename_taken: "[{tag}] possède déjà ce tag. Pour échanger des tags entre deux alliances, utilisez l'échange."
   rename_fixed: "[{tag}] ne peut pas encore être renommé ici : son tag fait partie du code du site. Demandez d'abord un changement de code."
-  rename_not_moved: 'Le renommage nécessite que chaque magasin soit d''abord déplacé vers les identifiants d''alliance (encore par tag : {stores}).'
-  retire_on_map: Seule une alliance retirée de la carte (dans le planificateur d'alliance) peut être retirée du service.
-  tidy_not_moved: 'Le nettoyage nécessite que chaque magasin soit d''abord déplacé vers les identifiants d''alliance (encore par tag : {stores}).'
-  pending_gone: Cette alliance a déjà reçu une réponse.
-  stewards_only: Seuls les intendants (Stewards) peuvent utiliser les outils d'intendant.
-  lookups_used: Les recherches de joueurs quotidiennes sont épuisées. Elles seront réinitialisées lors de la réinitialisation quotidienne (00:00 GT).
-  player_not_found: Aucun joueur ne possède cet identifiant.
-  player_unavailable: Le jeu n'a pas pu être contacté. Réessayez dans quelques minutes.
-  positions_leaders_only: Seuls les R4 et R5 (ainsi que les intendants) de votre alliance peuvent voir les membres sur la carte.
+  rename_not_moved: 'Le changement de nom nécessite que tous les magasins soient d''abord déplacés vers les IDs d''alliance (toujours par tag : {stores}).'
+  retire_on_map: Seule une alliance supprimée de la carte (dans le planificateur d'alliance) peut être retirée.
+  tidy_not_moved: 'Le nettoyage nécessite que tous les magasins soient d''abord déplacés vers les IDs d''alliance (toujours par tag : {stores}).'
+  pending_gone: Cette demande d'alliance a déjà été traitée.
+  stewards_only: Seuls les intendants peuvent utiliser les outils d'intendant.
+  lookups_used: Les recherches de joueurs d'aujourd'hui sont épuisées. Elles recommenceront à la réinitialisation quotidienne (00:00 GT).
+  player_not_found: Aucun joueur ne possède cet ID.
+  player_unavailable: Le jeu n'a pas pu être atteint. Réessayez dans quelques minutes.
+  positions_leaders_only: Seuls les R4 et R5 (et les intendants) de votre alliance peuvent voir les membres sur la carte.
   positions_unavailable: Les positions des membres ne peuvent pas être chargées pour le moment. Réessayez dans quelques minutes.
-  links_used: Les liens d'alliance quotidiens sont épuisés. Ils seront réinitialisés lors de la réinitialisation quotidienne (00:00 GT).
+  links_used: Les liens d'alliance d'aujourd'hui sont épuisés. Ils recommenceront à la réinitialisation quotidienne (00:00 GT).
   relink_none: Il n'y a plus rien à relier pour cette alliance.
-  link_bad: Choisissez une alliance et saisissez le tag qu'elle utilise actuellement dans le jeu.
+  link_bad: Choisissez une alliance et tapez le tag qu'elle utilise actuellement dans le jeu.
   link_same: C'est déjà le tag utilisé par le site.
   link_taken: "{tag} est déjà une autre alliance sur le site."
-  link_not_found: Le jeu ne contient aucune alliance portant le tag {tag} (la casse des lettres compte).
-  positions_used: Les rafraîchissements de carte quotidiens sont épuisés. Ils seront réinitialisés lors de la réinitialisation quotidienne (00:00 GT).
+  link_not_found: Le jeu ne possède aucune alliance avec le tag {tag} (la casse des lettres compte).
+  positions_used: Les rafraîchissements de carte d'aujourd'hui sont épuisés. Ils recommenceront à la réinitialisation quotidienne (00:00 GT).
   positions_wait: La carte a été rafraîchie il y a un instant. Réessayez dans {minutes} min.
-  refresh_limit: Aucun rafraîchissement de liste n'est disponible aujourd'hui. Ils seront réinitialisés lors de la réinitialisation quotidienne (00:00 GT).
+  refresh_limit: Aucun rafraîchissement de liste n'est disponible aujourd'hui. Ils recommenceront à la réinitialisation quotidienne (00:00 GT).
   refresh_wait: La liste a été rafraîchie il y a un instant. Réessayez dans {n} min.
-  refresh_failed: Le jeu n'a pas pu être contacté. Réessayez dans quelques minutes.
+  refresh_failed: Le jeu n'a pas pu être atteint. Réessayez dans quelques minutes.
   signed_out: Connectez-vous avec Discord (en haut à droite) pour voir votre tableau de bord d'alliance.
   load_failed: 'Impossible de charger le tableau de bord : {reason}'
-  no_alliance: Nous n'avons pas pu identifier votre alliance. Le site la trouve à partir de votre rôle d'alliance sur le serveur Discord NAP. Demandez le rôle aux leaders de votre alliance ou à un intendant, puis utilisez Rafraîchir l'accès dans la fiche de votre compte (en haut à droite).
+  no_alliance: Nous n'avons pas pu déterminer dans quelle alliance vous êtes. Le site la trouve à partir de votre rôle d'alliance sur le serveur Discord NAP. Demandez le rôle aux chefs de votre alliance ou à un intendant, puis utilisez Rafraîchir l'Accès dans votre carte de compte (en haut à droite).
+  alliance_unknown: Cette alliance n'est plus sur la carte. Rechargez la page et resélectionnez-la.
+  name_bad: Entrez d'abord le nom de l'alliance.
   leaders_only: Seuls les R4 et R5 de votre alliance peuvent modifier le tableau de bord.
   chart_removed: Ce graphique a été supprimé.
-  chart_already_removed: Ce graphique a déjà été supprimé.
-  not_linked: Ce graphique n'est pas lié à une feuille Google ou à un document.
+  chart_already_removed: Ce graphique avait déjà été supprimé.
+  not_linked: Ce graphique n'est pas lié à une feuille ou un document Google.
   unknown_change: Changement inconnu.
   save_failed: 'Impossible d''enregistrer : {reason}'
   r5_only_nominate: Seul votre R5 peut ouvrir la page de nomination ici. Exécutez /nominate dans Discord.
-  rewards_closed: Les récompenses sont fermées jusqu'au {when}.
+  rewards_closed: Les récompenses sont fermées jusqu'à {when}.
   no_rank: "[{tag}] n'a aucun rang dans le classement."
   choose_type: Choisissez un type de graphique ou de tableau.
   title_needed: Donnez un titre au graphique ou au tableau.
-  too_many_columns: Maximum {max} colonnes (ce tableau en a {count}).
-  too_many_rows: Maximum {max} lignes (ce tableau en a {count}).
+  too_many_columns: Au maximum {max} colonnes (ce tableau en a {count}).
+  too_many_rows: Au maximum {max} lignes (ce tableau en a {count}).
   column_name: Colonne {n}
   paste_first: Collez d'abord un tableau (une ligne d'en-tête, puis les données).
-  no_data_rows: Le tableau ne contient aucune ligne de données sous son en-tête.
-  needs_numbers: Un graphique nécessite une colonne de nombres pour s'afficher.
-  needs_target: 'Un graphique de progression nécessite une cible : un nombre ou une colonne de cibles.'
-  too_many_widgets: Maximum {max} graphiques et tableaux par alliance.
+  no_data_rows: Le tableau n'a aucune ligne de données sous son en-tête.
+  needs_numbers: Un graphique a besoin d'une colonne de chiffres pour s'afficher.
+  needs_target: 'Un graphique de progression a besoin d''une cible : un nombre ou une colonne de cibles.'
+  too_many_widgets: Au maximum {max} graphiques et tableaux par alliance.
   sheet_unusable: 'Les données de la feuille ne peuvent pas être utilisées : {reason}'
   too_big: Cela rendrait ce tableau de bord trop volumineux ({size} Ko sur {max} Ko). Utilisez moins de lignes ou supprimez un tableau.
   player_name_needed: Entrez un nom de joueur.
-  time_format: Les heures sont à l'heure du jeu (Game Time) comme 18:00 (ou laissez-les vides).
-  start_time_needed: Indiquez également l'heure de début (ou laissez les deux vides).
-  rotor_full: Maximum {max} joueurs dans le rotor.
+  time_format: Les heures sont au format Game Time comme 18:00 (ou laissez-les vides).
+  start_time_needed: Donnez aussi l'heure de début (ou laissez les deux vides).
+  rotor_full: Au maximum {max} joueurs dans le rotor.
   already_in_rotor: "{name} est déjà dans le rotor."
   player_removed: Ce joueur a été supprimé.
 api_sheets:
@@ -116,24 +118,25 @@ api_register:
 api_alliance_images:
   frame_png: Un cadre d'avatar doit être un PNG avec un fond transparent (un JPEG masquerait les photos de vos membres).
   not_set_up: Les images d'alliance ne sont pas encore configurées sur le serveur.
-  failed: Une erreur est survenue avec l'image d'alliance. Veuillez réessayer.
-  bad_image: Ce fichier n'est pas une image utilisable par le site. Veuillez utiliser le formulaire de téléchargement.
-  too_big: L'image est trop volumineuse (plus de {kb} Ko). Veuillez utiliser le formulaire de téléchargement pour la compresser.
-  wrong_size: L'image doit mesurer exactement {width}×{height} pixels. Veuillez utiliser le formulaire de téléchargement.
-  has_metadata: L'image contient toujours des données cachées (comme le lieu de prise de vue). Veuillez utiliser le formulaire de téléchargement pour les supprimer.
-  leaders_only: Seuls les membres R4 et R5 peuvent envoyer des images d'alliance.
+  failed: Un problème est survenu avec l'image de l'alliance. Veuillez réessayer.
+  bad_image: Ce fichier n'est pas une image que le site peut utiliser. Veuillez utiliser le formulaire d'envoi.
+  too_big: L'image est trop grande (plus de {kb} Ko). Veuillez utiliser le formulaire d'envoi, qui la compressera.
+  wrong_size: L'image doit faire exactement {width}×{height} pixels. Veuillez utiliser le formulaire d'envoi.
+  has_metadata: L'image contient encore des données cachées (comme le lieu de prise de la photo). Veuillez utiliser le formulaire d'envoi, qui les supprimera.
+  leaders_only: Seuls les chefs R4 et R5 peuvent envoyer des images d'alliance.
   own_alliance_only: Vous pouvez uniquement envoyer des images pour votre propre alliance.
-  unknown_alliance: Cette alliance ne figure pas dans le NAP.
-  daily_limit: 'Limite quotidienne atteinte : {max} images par alliance toutes les 24 heures. Vous pourrez en envoyer une nouvelle après {when}.'
+  unknown_alliance: Cette alliance n'est pas dans le NAP.
+  daily_limit: 'Limite quotidienne atteinte : {max} images par alliance toutes les 24 heures. Vous pourrez envoyer la suivante après {when}.'
   post_failed: L'image n'a pas pu être envoyée aux intendants sur Discord. Veuillez réessayer plus tard.
-  sent: Envoyé aux intendants pour examen. L'image apparaîtra une fois approuvée.
+  sent: Envoyé aux intendants pour examen. Elle apparaîtra une fois approuvée.
+  saved_live: 'Enregistré : l''image est maintenant en ligne.'
   stewards_only: Seuls les intendants peuvent examiner les images d'alliance.
-  not_found: Image introuvable. Elle a peut-être expiré.
+  not_found: Cette image n'a pas été trouvée. Elle a peut-être expiré.
   already_decided: Cette image a déjà été examinée (ou remplacée par une plus récente).
   approved: 'Approuvée : l''image est maintenant en ligne.'
   rejected: 'Rejetée : l''image a été supprimée.'
   remove_not_allowed: Seul le R5 de l'alliance ou un intendant peut supprimer ses images.
-  nothing_to_remove: Aucune image à supprimer.
+  nothing_to_remove: Il n'y a aucune image à supprimer ici.
   removed: Image supprimée.
 api_proposals:
   login_required: Veuillez vous reconnecter avec Discord pour envoyer des propositions.
