@@ -533,6 +533,10 @@ async function submit(session, body) {
     name: session.name,
     at: Date.now(),
   };
+  // A Steward's own upload from the Steward page (owner request, 2026-11-23): straight to
+  // live, with no review post (they would be approving their own picture)
+  if (steward && body.direct === true) return saveLive(session, entry, upload);
+
   await put(pendingPath(entry), upload.buf, {
     access: 'private',
     token: blobToken(),
@@ -586,6 +590,42 @@ async function submit(session, body) {
     ),
   ]);
   return reply(200, { success: true, id: entry.id, message: say('api_alliance_images.sent') });
+}
+
+/** Saves a Steward's picture as the alliance's live one, replacing what was there. */
+async function saveLive(session, entry, upload) {
+  const file = `${entry.slug}-${entry.kind}-${entry.id}.${entry.ext}`;
+  await put(livePath(file), upload.buf, {
+    access: 'private',
+    token: blobToken(),
+    contentType: upload.info.type,
+    addRandomSuffix: false,
+    allowOverwrite: true,
+  });
+  let previous = null;
+  let known = true;
+  await updateGist((g) => {
+    const { key } = allianceIn(g, entry.tag);
+    if (!key) {
+      known = false;
+      return {};
+    }
+    const images = readImages(g);
+    const live = { ...(images.live[entry.slug] || {}), tag: key };
+    previous = live[entry.kind]?.file || null;
+    live[entry.kind] = { file, at: Date.now(), by: session.name, approvedBy: session.name };
+    images.live[entry.slug] = live;
+    return {
+      files: { [IMAGES_FILE]: images },
+      description: `Alliance image saved for [${key}] by ${session.name} (Steward)`,
+    };
+  });
+  if (!known) {
+    await removeBlobs([livePath(file)]);
+    return reply(400, { error: say('api_alliance_images.unknown_alliance') });
+  }
+  await removeBlobs([previous && previous !== file ? livePath(previous) : null]);
+  return reply(200, { success: true, live: true, message: say('api_alliance_images.saved_live') });
 }
 
 async function review(session, body) {
