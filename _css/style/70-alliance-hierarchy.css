@@ -1017,3 +1017,51 @@ main .ladder-badge,
   font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
+
+/* Reading a day (js/line-chart.js, 2026-11-23): a column per day to hover or tap, the line
+   that marks it, and the line under the chart with its date and values */
+.lc-box {
+  position: relative;
+}
+.lc-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+.lc-mark {
+  stroke: var(--accent-color);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 3;
+  pointer-events: none;
+}
+.lc-svg:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.lc-readout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 12px;
+  min-height: 1.6em;
+  margin: 0.2rem 0 0.3rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.lc-readout.is-on {
+  color: var(--text-main);
+}
+.lc-val {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.lc-val i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+}
+

@@ -104,30 +104,28 @@ rewards_card:
 roster:
   title: İttifak kadrosu
   summary: "{n} üye · {might} Güç"
-  show: Üyeleri göster
-  hide: Üyeleri gizle
-  search: İsim veya kimlikleri ara...
-  sort_label: Sıralama ölçütü
+  search: İsim veya ID ara...
+  sort_label: Sıralama
   sort_power: Güç
   sort_name: İsim
   sort_rank: Rütbe
   sanctuary_lv: Sığınak {n}
-  copy_id: Bu oyuncu kimliğini kopyala
+  copy_id: Bu oyuncu ID'sini kopyala
   copied: Kopyalandı
-  unavailable: Üye listesi şu anda yüklenemiyor. Lütfen daha sonra tekrar deneyin.
-  credit_before: 'Oyuncu verileri şuradan alınmıştır:'
+  unavailable: Üye listesi şu an yüklenemiyor. Lütfen daha sonra tekrar deneyin.
+  credit_before: 'Oyuncu verileri şuradan:'
   sort_tech: Araştırma
   sort_help: Yardım
-  tech_title: Bugün bağışlanan ittifak araştırması
-  help_title: Bugün üyelerin inşaat ve araştırmalarına verilen yardım
+  tech_title: Bugün yapılan ittifak araştırması bağışları
+  help_title: Bugün üyelerin inşaat ve araştırmalarına yapılan yardımlar
   help_capped: Günlük yardım sınırına ulaşıldı (1.000)
   refresh: Yenile
   refresh_left: "{n} kaldı"
   refreshing: Yenileniyor...
-  refresh_help: 'Oyundan canlı verileri alın. İttifak liderleriniz tarafından paylaşılır: Bugün {n} / {max} yenileme hakkı kaldı, her 10 dakikada bir tane.'
-  refresh_wait: 'Az önce yenilendi: bir sonrakine {n} dk. kaldı.'
-  refresh_none: Bugün için yenileme kalmadı. Günlük sıfırlamada (00:00 GT) tekrar başlar.
-  daily_as_of: 'Bugünkü sıfırlamadan (00:00 GT) beri araştırma ve yardım, güncel zaman: {time}'
+  refresh_help: 'Oyundan canlı verileri alın. İttifak liderleriniz tarafından paylaşılır: Bugün {n} / {max} hak kaldı, her 10 dakikada bir yenilenir.'
+  refresh_wait: 'Az önce yenilendi: bir sonraki yenileme {n} dk. içinde.'
+  refresh_none: Bugün başka yenileme hakkı kalmadı. Günlük sıfırlama (00:00 GT) ile tekrar başlar.
+  daily_as_of: 'Bugünkü sıfırlamadan (00:00 GT) bu yana araştırma ve yardım, veriler: {time}'
   daily_old: 'Bugünkü sıfırlamadan önceki araştırma ve yardım: son okuma {time}'
   daily_unknown: 'Araştırma ve yardım: okuma zamanı bilinmiyor'
 caravan:
@@ -267,10 +265,10 @@ chart_editor:
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}
-  no_numbers: Seçilen sütunda grafiklenecek sayı yok.
-  line_two_rows: Bir çizgi için en az iki satır gerekir.
-  line_two_columns: Bir çizgi için alt kısımda en az iki sütun gerekir.
-  no_positive: Seçilen sütunda grafiklenecek pozitif sayı yok.
+  no_numbers: Seçilen sütunda grafikleştirilecek sayı yok.
+  line_two_rows: Bir çizgi grafiği için en az iki satır gereklidir.
+  line_two_columns: Bir çizgi grafiği için alt kısımda en az iki sütun gereklidir.
+  no_positive: Seçilen sütunda grafikleştirilecek pozitif sayı yok.
   no_targets: Karşılaştırılacak sayı (veya hedef) yok.
   no_table: Henüz tablo yok.
   unknown_type: Bilinmeyen grafik türü.
@@ -279,21 +277,21 @@ charts:
   value: Değer
   total: Toplam
   total_value: 'Toplam: {value}'
-  share_of_all: "{value} · hepsinin {share}'i"
-  value_of_target: "{target} hedefinden {value}"
+  share_of_all: "{value} · toplamın {share}'i"
+  value_of_target: "{target} değerinden {value}"
   to_go: 'Kalan: {value}'
   target_reached: Hedefe ulaşıldı ✓
   done: "✓ Tamamlandı"
-  reached_target: "{total} hedeften {done} tanesi hedefe ulaştı"
-  search: Ara...
-  search_label: Bu tabloyu ara
+  reached_target: "{total} tanesinden {done} tanesi hedefe ulaştı"
+  search: Ara…
+  search_label: Bu tabloda ara
   matching: "{n} eşleşme"
-  show_all: Tüm {n} tanesini göster
+  show_all: Tüm {n} öğeyi göster
   show_all_rows: Tüm {n} satırı göster
   show_fewer: Daha az göster
-  first_rows: İlk {n} satırın {shown} tanesi gösteriliyor.
-  hint_bar: Bir çubuğa dokunun veya fareyi üzerine getirin
-  hint_bar_key: Bir çubuğa dokunun veya fareyi üzerine getirin. Sadece o veriyi görmek için anahtardan bir isme dokunun.
+  first_rows: Toplam {n} satırdan ilk {shown} tanesi gösteriliyor.
+  hint_bar: Bir çubuğa dokunun veya üzerine gelin
+  hint_bar_key: Bir çubuğa dokunun veya üzerine gelin. Yalnızca onu görmek için anahtardan bir isme dokunun.
   views: Görüntülemeler
   view_latest: En yeni sekme
   view_weeks: Sekmelere göre toplamlar
@@ -302,7 +300,7 @@ charts:
   view_average: "{n} sekmenin ortalaması"
   view_chart: Grafik
   view_compare: Karşılaştır
-  search_names: Bir isim yazın...
+  search_names: Bir isim yazın…
   no_match: Eşleşen isim yok.
   view_tab: Gösterilecek sekme
   compare_first: İlk isim
@@ -311,11 +309,11 @@ charts:
   compare_bottom: En düşük {n} (ortalama)
   pair_left: 'Sol: {name}'
   pair_right: 'Sağ (soluk): {name}'
-  flip_to_asc: "⇅ En düşükten yükseğe"
-  flip_to_desc: "⇅ En yüksekten düşüğe"
-  hint_line: Bir haftaya dokunun veya fareyi üzerine getirin
-  hint_pie: Bir dilime dokunun veya fareyi üzerine getirin
-  hint_progress: Bir satıra dokunun veya fareyi üzerine getirin
+  flip_to_asc: "⇅ En düşükten başlayarak"
+  flip_to_desc: "⇅ En yüksekten başlayarak"
+  hint_line: Bir haftaya dokunun veya üzerine gelin
+  hint_pie: Bir dilime dokunun veya üzerine gelin
+  hint_progress: Bir satıra dokunun veya üzerine gelin
 nominate:
   page_title: Ödül Adaylıkları
   name_ok: "[{tag}] üye listesinde"

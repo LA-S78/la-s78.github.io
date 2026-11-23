@@ -104,31 +104,29 @@ rewards_card:
 roster:
   title: Rosa dell'alleanza
   summary: "{n} membri · {might} Potenza"
-  show: Mostra membri
-  hide: Nascondi membri
   search: Cerca nomi o ID...
   sort_label: Ordina per
   sort_power: Potenza
   sort_name: Nome
-  sort_rank: Grado
+  sort_rank: Rango
   sanctuary_lv: Santuario {n}
   copy_id: Copia ID giocatore
   copied: Copiato
-  unavailable: Impossibile caricare l'elenco membri al momento. Riprova più tardi.
-  credit_before: Dati giocatore da
+  unavailable: L'elenco dei membri non può essere caricato al momento. Riprova più tardi.
+  credit_before: Dati giocatore dal
   sort_tech: Ricerca
   sort_help: Aiuto
   tech_title: Ricerca alleanza donata oggi
-  help_title: Aiuto fornito oggi per costruzione e ricerca ai membri
-  help_capped: Limite giornaliero di aiuti raggiunto (1.000)
+  help_title: Aiuto fornito oggi alle costruzioni e ricerche dei membri
+  help_capped: Limite giornaliero di aiuto raggiunto (1.000)
   refresh: Aggiorna
   refresh_left: "{n} rimanenti"
   refreshing: Aggiornamento in corso...
-  refresh_help: 'Ottieni i numeri in tempo reale dal gioco. Condiviso dai leader della tua alleanza: {n} di {max} rimasti oggi, uno ogni 10 minuti.'
+  refresh_help: 'Ottieni dati in tempo reale dal gioco. Condiviso dai leader della tua alleanza: {n} di {max} rimanenti oggi, uno ogni 10 minuti.'
   refresh_wait: 'Aggiornato poco fa: prossimo tra {n} min.'
-  refresh_none: Nessun aggiornamento rimasto oggi. Ripartono al reset giornaliero (00:00 GT).
-  daily_as_of: Ricerca e aiuto dal reset odierno (00:00 GT), aggiornato alle {time}
-  daily_old: 'Ricerca e aiuto prima del reset odierno: ultima lettura {time}'
+  refresh_none: Nessun aggiornamento rimasto oggi. Ricominciano al reset giornaliero (00:00 GT).
+  daily_as_of: Ricerca e aiuto dal reset di oggi (00:00 GT), alle ore {time}
+  daily_old: 'Ricerca e aiuto prima del reset di oggi: ultima lettura {time}'
   daily_unknown: 'Ricerca e aiuto: orario di lettura sconosciuto'
 caravan:
   title: Rotazione Carovana
@@ -268,13 +266,13 @@ chart_editor:
 charts:
   column: Colonna {n}
   no_numbers: Nessun numero da rappresentare nella colonna scelta.
-  line_two_rows: Una linea richiede almeno due righe.
-  line_two_columns: Una linea richiede almeno due colonne in basso.
+  line_two_rows: Un grafico a linee richiede almeno due righe.
+  line_two_columns: Un grafico a linee richiede almeno due colonne lungo la base.
   no_positive: Nessun numero positivo da rappresentare nella colonna scelta.
   no_targets: Nessun numero (o obiettivo) da confrontare.
-  no_table: Ancora nessuna tabella.
+  no_table: Tabella non ancora disponibile.
   unknown_type: Tipo di grafico sconosciuto.
-  draw_failed: Impossibile disegnare questo grafico ({error}).
+  draw_failed: Impossibile disegnare il grafico ({error}).
   other: Altro
   value: Valore
   total: Totale
@@ -285,15 +283,15 @@ charts:
   target_reached: Obiettivo raggiunto ✓
   done: "✓ Fatto"
   reached_target: "{done} di {total} hanno raggiunto l'obiettivo"
-  search: Cerca…
+  search: Cerca...
   search_label: Cerca in questa tabella
   matching: "{n} corrispondenze"
-  show_all: Mostra tutti i {n}
+  show_all: Mostra tutti {n}
   show_all_rows: Mostra tutte le {n} righe
   show_fewer: Mostra meno
   first_rows: Mostrate le prime {shown} di {n} righe.
   hint_bar: Tocca o passa sopra una barra
-  hint_bar_key: Tocca o passa sopra una barra. Tocca un nome nella chiave per vedere solo quello.
+  hint_bar_key: Tocca o passa sopra una barra. Tocca un nome nella legenda per visualizzare solo quello.
   views: Visualizzazioni
   view_latest: Scheda più recente
   view_weeks: Totali per scheda
@@ -302,13 +300,13 @@ charts:
   view_average: Media di {n} schede
   view_chart: Grafico
   view_compare: Confronta
-  search_names: Digita un nome…
+  search_names: Digita un nome...
   no_match: Nessun nome corrispondente.
   view_tab: Scheda da mostrare
   compare_first: Primo nome
   compare_second: Secondo nome
-  compare_top: Top {n} (media)
-  compare_bottom: Ultimi {n} (media)
+  compare_top: Migliori {n} (media)
+  compare_bottom: Peggiori {n} (media)
   pair_left: 'Sinistra: {name}'
   pair_right: 'Destra (sfumato): {name}'
   flip_to_asc: "⇅ Dal più basso"
