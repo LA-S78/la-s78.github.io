@@ -1051,4 +1051,37 @@
       });
     });
   }
+
+  // ---------- The bottom navigation and the phone keyboard (owner, 2026-11-23) ----------
+  // While the on-screen keyboard is up, html gets .kb-open and the navigation hides
+  // (_css/style/20-header-footer-nav.css). "Up" is read from the visible area: a text box
+  // has focus and the visible height is well under the tallest seen (the keyboard takes a
+  // third of the screen or more). Closing the keyboard with the phone's back button keeps the
+  // box selected, so focus alone can't tell; the height can.
+  (function keyboardWatch() {
+    const vv = window.visualViewport;
+    if (!vv || !window.matchMedia('(pointer: coarse)').matches) return;
+    let tallest = vv.height;
+    const typing = () => {
+      const el = document.activeElement;
+      if (!el) return false;
+      if (el.isContentEditable || el.tagName === 'TEXTAREA') return true;
+      return (
+        el.tagName === 'INPUT' &&
+        !['checkbox', 'radio', 'button', 'submit', 'range', 'file', 'color'].includes(el.type)
+      );
+    };
+    const update = () => {
+      // The tallest seen (a turned phone starts again: orientationchange below)
+      tallest = Math.max(tallest, vv.height);
+      const open = typing() && vv.height < tallest - 150;
+      document.documentElement.classList.toggle('kb-open', open);
+    };
+    vv.addEventListener('resize', update);
+    document.addEventListener('focusin', () => setTimeout(update, 300));
+    document.addEventListener('focusout', () => setTimeout(update, 50));
+    window.addEventListener('orientationchange', () =>
+      setTimeout(() => ((tallest = vv.height), update()), 400),
+    );
+  })();
 })();

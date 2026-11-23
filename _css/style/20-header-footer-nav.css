@@ -148,6 +148,14 @@ footer {
   padding-top: 10px;
   padding-bottom: max(10px, env(safe-area-inset-bottom));
 }
+/* While a phone's keyboard is up (html.kb-open, js/main.js), the bottom navigation steps
+   aside: some phone browsers (seen in Brave on Android, owner 2026-11-23) left it stuck in
+   the middle of the screen over a blank band until the keyboard closed. It comes back as
+   soon as the keyboard goes, even if the text box is still selected. */
+html.kb-open footer {
+  display: none;
+}
+
 .nav-item {
   display: flex;
   flex-direction: column;
