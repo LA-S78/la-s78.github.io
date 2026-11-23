@@ -399,3 +399,123 @@ export async function fetchSheetGrid(src, { timeoutMs = TIMEOUT_MS } = {}) {
   if (!grid || !grid.rows.length) throw forLeader(say('api_sheets.empty'));
   return grid;
 }
+
+// ---------------------------------------------------------------------------------------
+// Across tabs (owner request, 2026-11-23, part 3 of the duel charts): the same range from
+// several tabs, e.g. one tab per week ("11/09 K71 QRT", "11/16 …"). The leader names the
+// tabs with a pattern (# is any number, * anything: "#/# *") and how many of the newest
+// to read (2–10). Each tab's columns are matched to the newest tab's by their heading.
+// ---------------------------------------------------------------------------------------
+
+export const MAX_TABS = 10;
+
+/** A pattern for tabs like this one: its first word with numbers as #, then " *". */
+export function tabPattern(name) {
+  const words = String(name || '')
+    .trim()
+    .split(/\s+/);
+  if (!words[0]) return '';
+  return `${words[0].replace(/\d+/g, '#')}${words.length > 1 ? ' *' : ''}`;
+}
+
+/** The pattern as a test: # one or more digits, * anything, letter case ignored. */
+export function patternTest(pattern) {
+  const p = String(pattern || '').trim();
+  if (!p) return () => false;
+  const body = p
+    .split('')
+    .map((ch) =>
+      ch === '#'
+        ? '\\d+'
+        : ch === '*'
+          ? '.*'
+          : /\s/.test(ch)
+            ? '\\s+'
+            : ch.replace(/[.+?^${}()|[\]\\/-]/g, '\\$&'),
+    )
+    .join('')
+    .replace(/(\\d\+)+/g, '\\d+');
+  const re = new RegExp(`^${body}$`, 'i');
+  return (name) => re.test(String(name || '').trim());
+}
+
+/** The date a tab's name starts with ("11/09 K71"), as a number to compare, or null. */
+const dateKey = (name) => {
+  const m = /^(\d{1,2})[/.-](\d{1,2})(?![\d])/.exec(String(name || '').trim());
+  return m ? Number(m[1]) * 100 + Number(m[2]) : null;
+};
+
+/**
+ * The tabs to read: those matching the pattern, the newest `count`, oldest first. Which end
+ * of the sheet holds the newest is worked out from the dates the names start with (most
+ * neighbouring pairs decide, so the turn of the year doesn't); without dates, the last tab
+ * is the newest (where Google adds a new tab).
+ */
+export function pickTabs(tabs, { pattern, count }) {
+  const test = patternTest(pattern);
+  const matched = (tabs || []).filter((t) => test(t.name));
+  const n = Math.max(2, Math.min(MAX_TABS, parseInt(count, 10) || MAX_TABS));
+  let vote = 0;
+  for (let i = 1; i < matched.length; i++) {
+    const a = dateKey(matched[i - 1].name);
+    const b = dateKey(matched[i].name);
+    if (a !== null && b !== null && a !== b) vote += a > b ? 1 : -1;
+  }
+  const newestFirst = vote > 0;
+  const chosen = newestFirst ? matched.slice(0, n) : matched.slice(-n);
+  return newestFirst ? chosen.reverse() : chosen;
+}
+
+/** The link pointing at one tab (by its gid). */
+function linkToTab(url, gid) {
+  const u = new URL(String(url).trim());
+  u.searchParams.delete('gid');
+  u.hash = `gid=${gid}`;
+  return u.href;
+}
+
+const headingKey = (h) =>
+  String(h ?? '')
+    .trim()
+    .toLowerCase();
+
+/** A tab's rows with its columns put in the order of `columns` (matched by heading). */
+export function alignRows(columns, data) {
+  const where = columns.map((c, i) => {
+    const j = data.columns.findIndex((h) => headingKey(h) === headingKey(c));
+    if (j >= 0) return j;
+    // A heading that isn't there: the same place, if that place's heading isn't used elsewhere
+    const at = data.columns[i];
+    return at !== undefined && !columns.some((h) => headingKey(h) === headingKey(at)) ? i : -1;
+  });
+  return data.rows.map((r) => where.map((j) => (j >= 0 ? (r[j] ?? '') : '')));
+}
+
+/**
+ * Reads the range from each chosen tab: { columns, rows, tab, older: [{ name, rows }] }, with
+ * the newest tab's rows as `rows` (so every chart works as before) and the others in `older`,
+ * oldest first. A tab that can't be read is left out (`skipped`), unless it's the newest.
+ */
+export async function fetchSourceTabs(src, { timeoutMs = TIMEOUT_MS } = {}) {
+  const tabs = pickTabs(await fetchSheetTabs(src, { timeoutMs }), src.tabs || {});
+  if (tabs.length < 2) throw forLeader(say('api_sheets.tabs_too_few'));
+  const results = await Promise.allSettled(
+    tabs.map((t) =>
+      fetchSourceTable(
+        { ...src, url: linkToTab(src.url, t.gid), sheet: '', tabs: undefined },
+        { timeoutMs },
+      ),
+    ),
+  );
+  const newest = results[results.length - 1];
+  if (newest.status === 'rejected') throw newest.reason;
+  const { columns, rows } = newest.value;
+  const older = [];
+  const skipped = [];
+  results.slice(0, -1).forEach((r, i) => {
+    if (r.status === 'fulfilled')
+      older.push({ name: tabs[i].name, rows: alignRows(columns, r.value) });
+    else skipped.push(tabs[i].name);
+  });
+  return { columns, rows, tab: tabs[tabs.length - 1].name, older, skipped };
+}
