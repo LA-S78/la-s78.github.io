@@ -1238,6 +1238,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           if (o.scale) html += `<label class="dash-check dash-sub"><input type="checkbox" id="ed-reverse"${o.reverse ? ' checked' : ''}> ${ic('updown')}${e('traffic_reverse')}</label>`;
         }
         if (w.type === 'pie') html += `<label class="dash-check"><input type="checkbox" id="ed-donut"${o.donut !== false ? ' checked' : ''}> ${e('donut')}</label>`;
+        // Compare on a pie, or a line chart with a row per name (swapped) (owner, 2026-11-23)
+        if (w.type === 'pie' || (w.type === 'line' && o.swap))
+          html += `<label class="dash-check"><input type="checkbox" id="ed-compare"${o.compare ? ' checked' : ''}> ${e(w.type === 'pie' ? 'compare_pie' : 'compare_line')}</label>`;
         if (w.type === 'progress') {
           html += `<label for="ed-target">${e('target')}</label><input type="text" inputmode="decimal" id="ed-target" value="${o.target ?? ''}" placeholder="${e('target_example')}">`;
           html += `<label for="ed-targetcol">${e('target_column')}</label>${colSelect('ed-targetcol', o.targetCol ?? '', { none: e('use_number_above') })}`;
