@@ -272,12 +272,12 @@ chart_editor:
   at_least: en az şuna eşit
   at_least_example: ör. 300M
 charts:
-  column: Sütun {n}
+  column: "{n}. Sütun"
   no_numbers: Seçilen sütunda grafiklenecek sayı yok.
   line_two_rows: Bir çizgi için en az iki satır gerekir.
   line_two_columns: Bir çizgi için alt kısımda en az iki sütun gerekir.
   no_positive: Seçilen sütunda grafiklenecek pozitif sayı yok.
-  no_targets: Kıyaslanacak sayı (veya hedef) yok.
+  no_targets: Karşılaştırılacak sayı (veya hedef) yok.
   no_table: Henüz tablo yok.
   unknown_type: Bilinmeyen grafik türü.
   draw_failed: Bu grafik çizilemedi ({error}).
@@ -285,44 +285,45 @@ charts:
   value: Değer
   total: Toplam
   total_value: 'Toplam: {value}'
-  share_of_all: "{value} · toplamın {share}'i"
-  value_of_target: "{target} içinden {value}"
+  share_of_all: "{value} · hepsinin {share}'i"
+  value_of_target: "{target} değerinin {value}'si"
   to_go: 'Kalan: {value}'
   target_reached: Hedefe ulaşıldı ✓
   done: "✓ Tamamlandı"
-  reached_target: "{total} kişiden {done} tanesi hedefe ulaştı"
+  reached_target: "{total} üzerinden {done} hedefe ulaşıldı"
   search: Ara…
   search_label: Bu tabloda ara
   matching: "{n} eşleşen"
-  show_all: "{n} tanesini göster"
-  show_all_rows: "{n} satırın hepsini göster"
+  show_all: Tüm {n} tanesini göster
+  show_all_rows: Tüm {n} satırı göster
   show_fewer: Daha az göster
-  first_rows: "{n} satırdan ilk {shown} tanesi gösteriliyor."
-  hint_bar: Bir çubuğa dokun veya üzerine gel
-  hint_bar_key: Bir çubuğa dokun veya üzerine gel. Sadece onu görmek için anahtardan bir isme dokun.
-  views: Görünümler
+  first_rows: "{n} satırın ilk {shown} tanesi gösteriliyor."
+  hint_bar: Bir çubuğa dokunun veya üzerine gelin
+  hint_bar_key: Bir çubuğa dokunun veya üzerine gelin. Sadece o veriyi görmek için anahtardan bir isme dokunun.
+  views: Görüntüleme
   view_latest: En yeni sekme
   view_weeks: Sekme bazlı toplamlar
-  view_player: Sekme bazlı bir isim
+  view_player: Sekme bazlı tek isim
   view_pick: Gösterilecek isim
   view_average: "{n} sekmenin ortalaması"
+  view_total: "{n} sekmenin toplamı"
   view_chart: Grafik
-  view_compare: Kıyasla
-  search_names: Bir isim yaz…
-  no_match: Hiçbir isim eşleşmedi.
+  view_compare: Karşılaştır
+  search_names: Bir isim yazın…
+  no_match: Eşleşen isim yok.
   view_tab: Gösterilecek sekme
   compare_first: İlk isim
   compare_second: İkinci isim
-  compare_top: İlk {n} (ortalama)
-  compare_bottom: Son {n} (ortalama)
+  compare_top: En iyi {n} (ortalama)
+  compare_bottom: En düşük {n} (ortalama)
   pair_left: 'Sol: {name}'
   share_of_column: "{name}: toplamın {share}'i"
-  pair_right: 'Sağ (soluk): {name}'
-  flip_to_asc: "⇅ En düşükten"
-  flip_to_desc: "⇅ En yüksekten"
-  hint_line: Bir haftaya dokun veya üzerine gel
-  hint_pie: Bir dilime dokun veya üzerine gel
-  hint_progress: Bir satıra dokun veya üzerine gel
+  pair_right: 'Sağ (silik): {name}'
+  flip_to_asc: "⇅ En düşükten başla"
+  flip_to_desc: "⇅ En yüksekten başla"
+  hint_line: Bir haftaya dokunun veya üzerine gelin
+  hint_pie: Bir dilime dokunun veya üzerine gelin
+  hint_progress: Bir satıra dokunun veya üzerine gelin
 nominate:
   page_title: Ödül Adaylıkları
   name_ok: "[{tag}] üye listesinde"
@@ -932,59 +933,60 @@ image_review:
   done_approved: Onaylandı. Görsel artık yayında ve Discord gönderisi güncellendi.
   done_rejected: Reddedildi. Görsel silindi ve Discord gönderisi güncellendi.
 alliance_images:
-  title: İttifak görselleri
-  edit: Görselleri düzenle
-  done: "✓ Düzenleme tamamlandı"
-  help: İttifakınızın Capitol Rotation kartının ve NAP Ranks satırının arkasına bir resim ve üyelerinizin resimleri için bir çerçeve ekleyin. Bir yetkili (Steward), herkes görmeden önce her birini kontrol eder.
-  rules: 'İttifakınızın kendi sanatını veya oyun içi sanatı kullanın: başka bir ittifakın markasını, saldırgan bir içeriği veya kişisel bilgileri kullanmayın.'
-  left_today: İttifakınızın bugün için {left} / {max} görsel hakkı kaldı.
-  not_ready: Görsel yüklemeleri henüz açılmadı.
-  card: Capitol Rotation kartı
-  wide: NAP Ranks başlığı
+  title: İttifak resimleri
+  edit: Resimleri düzenle
+  done: "✓ Düzenlemeyi bitir"
+  help: İttifakınızın Başkent Rotasyonu kartının ve NAP Ranks satırının arkasına bir resim ve üyelerinizin resimleri için bir çerçeve ekleyin. Bir Görevli (Steward), herkes görmeden önce her birini kontrol eder.
+  rules: 'İttifakınızın kendi sanat çalışmalarını veya oyun içi görselleri kullanın: başka ittifakların markalarını, saldırgan içerikleri veya kişisel bilgileri kullanmayın.'
+  left_today: İttifakınız için bugün {max} resimden {left} hakkınız kaldı.
+  not_ready: Resim yüklemeleri henüz açılmadı.
+  card: Başkent Rotasyonu kartı
+  wide: NAP Ranks banner'ı
   frame: İttifak avatar çerçevesi
-  frame_spec: 'Bu sitedeki üyelerinizin resimlerinin etrafına çizilen bir kenarlık. Şeffaf arka plana sahip kare bir PNG yapın, 380×380 piksel (en az 190×190): orta kareyi şeffaf bırakın (oyunun kendi çerçeveleri gibi 72 ila 308 piksel arası) ve kenarlara kadar süsleyin. Ortasının üzerinde küçük bir süsleme (örneğin bir çelenk) sorun olmaz.'
+  frame_spec: 'Sitedeki üyelerinizin resimleri etrafına çizilen bir kenarlık. Şeffaf arka plana sahip 380×380 piksellik kare bir PNG oluşturun (en az 190×190): orta kareyi (72''den 308 piksele kadar, oyunun kendi çerçeveleri gibi) şeffaf bırakın ve kenarları süsleyin. Ortasının üzerinde küçük bir süsleme (örneğin bir çelenk) sorun olmaz.'
   use_frame: Üyelerimiz için kullan
-  use_frame_on: Oyunun sade çerçevesi yerine, sitedeki üyelerin resimlerinin etrafında her yerde gösterilir. Oyun içi özel çerçevesi olan üyeler kendinkini korur.
-  use_frame_all: Oyun içi özel çerçeveler dahil, sitedeki her üyenin resminin etrafında her yerde gösterilir.
-  frame_all: Ayrıca özel çerçevelerin üzerinde
-  use_frame_off: 'Kapalı: üyeler sitede oyun içi çerçevelerini korur.'
+  use_frame_on: Oyunun düz çerçevesi yerine sitedeki her yerde üyelerin resimleri etrafında gösterilir. Oyun içi özel çerçevesi olan üyeler kendinkini korur.
+  use_frame_all: Oyun içi özel çerçeveler de dahil olmak üzere, oyunun tüm çerçeveleri yerine sitedeki her yerde her üyenin resmi etrafında gösterilir.
+  frame_all: Özel çerçevelerin üzerinde de
+  use_frame_off: 'Kapalı: Üyeler sitede oyun içi çerçevelerini kullanmaya devam eder.'
   frame_title: Avatar çerçevesini kontrol et
-  frame_check_ok: 'Doğru görünüyor: orta kısım şeffaf. Üyelerinizin resimlerinin etrafında böyle görünecek.'
+  frame_check_ok: 'Doğru görünüyor: orta kısım şeffaf. Üyelerinizin resimleri etrafında bu şekilde görünecektir.'
   frame_big: Büyük
   frame_roster: Kadrolar
   frame_lists: Listeler
-  frame_not_square: Bir çerçeve kare olmalıdır; bu resim {width}×{height} boyutlarında.
-  frame_too_small: Bu resim sadece {width}×{height} boyutlarında. Bir çerçeve için en az 190×190 piksel gerekir (380×380 en iyisidir).
-  frame_covers: 'Bu çerçeve, üyelerin resimlerinin göründüğü orta kısmın yaklaşık {percent}%''ini kaplıyor. Eğer amaç buysa (örneğin bir çelenk gibi) sorun yok: göndermeden önce aşağıdaki önizlemeleri kontrol edin.'
-  frame_covers_most: 'Bu çerçeve orta kısmın yaklaşık {percent}%''ini kaplıyor, yani her üyenin resminin çoğu gizli kalacak. Aşağıdaki önizlemeleri kontrol edin: yalnızca istediğiniz buysa gönderin.'
-  frame_not_png: Bir avatar çerçevesi, şeffaf arka plana sahip bir PNG (veya WebP) olmalıdır. JPEG resimler şeffaf olamaz, bu yüzden üyelerinizin resimlerini kapatırlar.
-  frame_no_transparency: Bu resmin şeffaf bir bölümü yok, bu yüzden üyelerinizin resimlerinin üzerinde düz bir kare olarak görünür. Arka planı şeffaf bir PNG olarak kaydedin.
+  frame_not_square: Bir çerçeve kare olmalıdır; bu resim {width}×{height} boyutunda.
+  frame_too_small: Bu resim sadece {width}×{height}. Bir çerçeve en az 190×190 piksel olmalıdır (380×380 en iyisidir).
+  frame_covers: 'Bu çerçeve, üyelerin resimlerinin göründüğü orta kısmın yaklaşık %{percent}''ini kaplıyor. Eğer amacı buysa (örneğin bir çelenk) sorun yok: göndermeden önce aşağıdaki önizlemeleri kontrol edin.'
+  frame_covers_most: 'Bu çerçeve orta kısmın yaklaşık %{percent}''ini kaplıyor, yani her üyenin resminin çoğu gizlenecek. Aşağıdaki önizlemeleri kontrol edin: ancak istediğiniz buysa gönderin.'
+  frame_not_png: Bir avatar çerçevesi şeffaf arka plana sahip bir PNG (veya WebP) olmalıdır. JPEG resimler şeffaf olamaz, bu yüzden üyelerinizin resimlerini kapatırlar.
+  frame_no_transparency: Bu resimde şeffaf kısım yok, bu yüzden üyelerinizin resimleri üzerinde düz bir kare olarak görünür. Şeffaf arka planlı PNG olarak kaydedin.
   frame_empty: 'Bu resim neredeyse tamamen şeffaf: gösterilecek bir çerçeve yok.'
-  frame_too_big: Bu çerçeve kaydedildiğinde {kb} KB; en fazla 500 KB olabilir. Daha az renk veya daha az detay kullanmayı deneyin.
-  none: Henüz görsel yok
+  frame_too_big: Bu çerçeve kaydedildiğinde {kb} KB boyutunda; sınır 500 KB'tır. Daha az renk veya daha az ince detay kullanmayı deneyin.
+  none: Henüz resim yok
   live: "{when} tarihinden beri yayında"
-  pending: "{when} tarihinden beri bir yetkilinin (Steward) onayı bekleniyor"
+  pending: "{when} tarihinden beri bir Görevlinin onayını bekliyor"
   rejected: "{when} tarihinde reddedildi"
   rejected_reason: "{when} tarihinde reddedildi: “{reason}”"
   expired: Zamanında incelenmedi ({when}). Tekrar gönderin.
   choose: Bir resim seçin
   replace: Yeni bir resim seçin
   remove: Kaldır
-  confirm_remove: "{slot} ögesini kaldırmak istiyor musunuz? Herkes için anında kaybolacaktır."
-  crop_title: "{slot} ögesini konumlandırın"
-  crop_help: Taşımak için sürükleyin. Yakınlaştırmak için kıstırın, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindeki kısım gönderilir.
+  confirm_remove: "{slot} öğesini kaldırmak istiyor musunuz? Anında herkes için kaybolur."
+  crop_title: "{slot} öğesini konumlandırın"
+  crop_help: Taşımak için sürükleyin. Yakınlaştırmak için sıkıştırma hareketi yapın, kaydırın veya kaydırıcıyı kullanın. Sadece çerçevenin içindeki kısım gönderilir.
   zoom: Yakınlaştır
-  preview_title: Nasıl görünecek
+  preview_title: Nasıl görüneceği
   preview_phone: Telefon
   preview_desktop: Masaüstü
-  preview_week: 1. Hafta Cum
+  preview_week: 1. Hafta Cuma
   preview_loot: 2 Kral Sandığı
   preview_status: NAP Korumalı
-  send: İncelenmesi için gönder
+  send: İncelemeye gönder
+  save_live: Kaydet (şimdi yayında)
   sending: Gönderiliyor…
   cancel: İptal
-  sent: Gönderildi. Bir yetkili (Steward) inceleyecek; onaylandığında görünecektir.
-  not_image: Bu dosya, tarayıcının açabileceği bir resim değil. Bir JPEG veya PNG deneyin.
+  sent: Gönderildi. Bir Görevli inceleyecektir; onaylandıktan sonra görünecektir.
+  not_image: Bu dosya, tarayıcının açabileceği bir resim değil. JPEG veya PNG deneyin.
   too_small: Bu resim oldukça küçük ({width}×{height}); bulanık görünebilir. Yine de gönderebilirsiniz.
   load_failed: Resim açılamadı.
 stats:
@@ -1053,102 +1055,112 @@ stats:
   show_hide: Satırını göstermek veya gizlemek için bir ittifaka dokunun.
   credit_before: 'Veriler şuradan alınmıştır:'
 steward:
-  tidy_title: 'İttifak Kimlikleri: temizlik'
-  tidy_help: 'Artık her şey ittifak kimliği ile saklanıyor. Bu işlem {gist} yedek dosyasını ve {dashboards} eski gösterge paneli dosyasını Gist içinde bırakır. Memnun kaldığınızda bunları silin: Gist önceki sürümlerini korur. {stats} İstatistik yedek dosyaları saklanır (Blob deposunda sürüm bulunmaz).'
+  tidy_title: 'İttifak Kimlikleri: düzenleme'
+  tidy_help: 'Artık her şey ittifak kimliğiyle depolanıyor. Taşınma işlemi Gist''te {gist} yedek dosyası ve {dashboards} eski panel dosyası bıraktı. Memnun kaldığınızda bunları silebilirsiniz: Gist eski sürümleri korur. {stats} istatistik yedek dosyaları korunur (Blob deposunda revizyon yoktur).'
   tidy_button: Yedekleri sil
   tidy_confirm: İttifak kimliği taşıma yedekleri silinsin mi?
-  tidy_done: "{gist} yedek dosyası ve {dashboards} eski gösterge paneli dosyası silindi. İstatistik yedekleri korundu."
-  roster_title: 'İttifaklar: yeniden adlandır, etiketleri değiştir, emekliye ayır'
-  roster_help: Yeniden adlandırma işlemi etiketi her yerde aynı anda değiştirir (geçmişi, etkinlikleri, resimleri, gösterge panelleri ve İstatistikleri onunla birlikte kalır). Genel sayfalarda 30 gün boyunca "eski adıyla [OLD]" ifadesi görünür.
+  tidy_done: 'Silindi: {gist} yedek dosyası ve {dashboards} eski panel dosyası. İstatistik yedekleri korundu.'
+  roster_title: İttifak ayarları
+  roster_pick: Düzenlenecek bir ittifak seçin…
+  roster_search: Bir ittifak bulun
+  roster_off_map: harita dışı
+  roster_retired: emekli
+  rename_help: İsim değişikliği etiketi her yerde aynı anda değiştirir (geçmişi, etkinlikleri, resimleri, panelleri ve istatistikleri onunla kalır). Halka açık sayfalar 30 gün boyunca "eski adıyla [OLD]" gösterir.
   roster_was: "{until} tarihine kadar [{tag}] idi"
   rename_placeholder: Yeni etiket
+  tag_label: Etiket
+  name_label: İsim
+  name_button: İsmi kaydet
+  name_saved: İsim kaydedildi.
+  images_title: Resimler
+  images_help: Buraya yükledikleriniz inceleme olmaksızın anında yayına girer. Liderlerin kendi yükledikleri yine onayınız için size gelir.
   rename_button: Yeniden adlandır
   rename_confirm: "[{from}] etiketi [{to}] olarak değiştirilsin mi? Her sayfa yeni etiketi anında gösterir."
-  rename_one_click: "[{old}] etiketini [{now}] olarak değiştir"
-  swap_title: 'İki ittifak etiket değişimi yapacak:'
-  swap_button: Etiketleri değiştir
-  swap_confirm: "[{a}] ve [{b}] ittifaklarının etiketleri değiştirilsin mi?"
+  rename_one_click: "[{old}] etiketini [{now}] olarak adlandır"
+  swap_title: 'Etiketleri şununla takas et:'
+  swap_button: Etiketleri takas et
+  swap_confirm: "[{a}] ve [{b}] etiketleri takas edilsin mi?"
   off_map_title: 'Haritadan kaldırıldı (İttifak planlayıcısında):'
-  retire_button: Emekliye ayır
-  retire_confirm: "[{tag}] emekliye ayrılsın mı? Geçmişiyle birlikte korunur (aşağıdaki emekli ittifaklar) ve geri getirilebilir."
+  retire_button: Emekli et
+  retire_confirm: "[{tag}] emekli edilsin mi? Geçmişiyle birlikte korunur (aşağıdaki emekli ittifaklar) ve geri getirilebilir."
   retired_title: Emekli ittifaklar ({n})
   unretire_button: Geri getir
   roster_saved: Kaydedildi.
-  newtag: "{tag} haritada yeni. Bu sitenin zaten bildiği, yeniden adlandırılmış veya haritaya geri dönmüş bir ittifak mı? Siz cevaplayana kadar hiçbir verisi olmadan başlar ve eski ittifakın üyelerinden tekrar giriş yapmaları istenir."
+  newtag: "{tag} haritada yeni. Site tarafından daha önce bilinen, yeniden adlandırılmış veya haritaya geri dönmüş bir ittifak mı? Siz yanıtlayana kadar, onların hiçbir verisiyle başlamaz ve eski ittifakın üyelerinden tekrar giriş yapmaları istenir."
   newtag_same: 'Şununla aynı ittifak:'
   newtag_new: Yeni bir ittifak
-  newtag_link: Bağla
-  page_title: Yönetici Araçları
-  intro: 'Krallık Yöneticileri için araçlar: sizi neler bekliyor ve canlı oyuncu arama.'
+  newtag_link: Bağlantı
+  page_title: Görevli Araçları
+  intro: 'Krallık Görevlileri için araçlar: sizi neler bekliyor ve canlı oyuncu arama.'
   loading: Yükleniyor…
   sign_in: Discord ile giriş yap
-  sign_in_needed: Yönetici araçlarını açmak için Discord ile giriş yapın.
-  stewards_only: Yönetici araçlarını sadece Krallık Yöneticileri açabilir.
+  sign_in_needed: Görevli araçlarını açmak için Discord ile giriş yapın.
+  stewards_only: Görevli araçlarını sadece Krallık Görevlileri açabilir.
   lookup_title: Oyuncu arama
-  lookup_help: 'Oyundan canlı olarak herhangi bir oyuncu: ittifakı, sayıları ve önceki isimleri ile ittifakları. Bir NAP oyuncusunun kimliğini bulmak için bir oyuncu kimliği veya isim yazın.'
+  lookup_help: 'Herhangi bir oyuncu, oyundan canlı verilerle: ittifakı, sayıları, eski isimleri ve ittifakları. Bir oyuncu kimliği yazın veya bir NAP oyuncusunun kimliğini bulmak için isim yazın.'
   lookup_placeholder: Oyuncu kimliği veya bir NAP oyuncusunun ismi
   lookup_go: Ara
   lookup_id_needed: Bir oyuncu kimliği (profilindeki numara) yazın veya bulunan isimlerden bir NAP oyuncusu seçin.
-  lookups_left: Bugün kalan {left} / {max} canlı arama (tüm Yöneticiler tarafından paylaşılır).
+  lookups_left: Bugün (tüm Görevliler tarafından paylaşılan) {max} canlı sorgulamadan {left} hakkınız kaldı.
   looking: Oyuna soruluyor…
-  name_none: Bu isme sahip NAP oyuncusu yok. Diğerleri için oyuncu kimliğini kullanın.
+  name_none: Bu isimde NAP oyuncusu yok. Diğer herkes için oyuncu kimliğini kullanın.
   no_alliance: İttifak yok
   server: Sunucu {n}
   online: Şu an çevrimiçi
   last_seen: Son görülme {when}
   shielded: Kalkan aktif
   might: Güç
-  kills: Leşler
+  kills: Leş
   sanctuary: Sığınak
   vip: VIP
   position: Konum (X, Y)
   language: Dil
-  ranks: 'Krallık rütbeleri: #{might} Güç · #{kills} leşler · #{heroes} kahramanlar'
+  ranks: 'Krallık sıralamaları: #{might} Güç · #{kills} leş · #{heroes} kahraman'
   history_title: İsimler ve ittifaklar
   history_none: Daha önce görülen isim veya ittifak yok.
   seen_from: "{when} tarihinden beri"
-  first_seen: İzleyici tarafından ilk görülme {when}.
-  renamed: "{old} oyunda artık {now}. Oyunun kendi numarasıyla ölçülmeye devam ediyor (İstatistikler ve İlk 4 yarışı), ancak site hala ona {old} diyor."
-  renamed_fix: İttifak planlayıcısında yeniden adlandır
+  first_seen: Takipçi tarafından ilk görülme {when}.
+  renamed: "{old}, oyunda artık {now}. Oyunun onun için atadığı numara ile (İstatistikler ve İlk 4 yarışı) ölçülmeye devam ediyor ancak site hala {old} olarak çağırıyor."
+  renamed_fix: İttifak planlayıcısında yeniden adlandırın
   test_copy: "🧪 Test sitesi: verileri canlı siteden {when} tarihinde kopyalandı (Discord'da /devupdate taze bir kopya oluşturur)."
   test_copy_none: "🧪 Test sitesi: verileri henüz canlı siteden kopyalanmadı. Taze bir kopya için Discord'da /devupdate komutunu çalıştırın."
-  mismatch: 'Oyundaki {tag} şu an farklı bir ittifak olarak cevap veriyor: {got}. Site, {tag} ({known}) olarak bildiği ittifakı oyunun numarasıyla ölçmeye devam ediyor ve yenisini onun yerine saymıyor.'
-  mismatch_relink: 'Bu aynı ittifak: yeniden bağla'
-  mismatch_relink_help: Yalnızca {got} gerçekten sitenin kastettiği ittifaksa (ilk bağlantı yanlışsa veya oyun numaralandırmayı değiştirdiyse) yapın. Emekliye ayırma veya yeniden adlandırma daha sonraki adımlarla yapılır.
-  unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Eğer oyunda etiketini değiştirdiyse, yeni etiketi yazın; site onu takip edecektir."
+  mismatch: 'Oyundaki {tag} şu anda farklı bir ittifakla yanıt veriyor: {got}. Site, {tag} ({known}) olarak bildiği ittifakı oyunun ona verdiği numarayla ölçmeye devam ediyor ve yenisini onun yerine saymıyor.'
+  mismatch_relink: 'Aynı ittifak: yeniden bağla'
+  mismatch_relink_help: Yalnızca {got} gerçekten sitenin kastettiği ittifaksa (ilk bağlantı yanlışsa veya oyun numaralandırmayı değiştirdiyse). Emekli etme veya yeniden adlandırma daha sonraki adımlarla yapılır.
+  unfound: "{tag} oyunda bulunamadı, bu yüzden ölçülmüyor (İstatistikler ve İlk 4 yarışı). Oyunda etiketini değiştirdiyse, yenisini yazın, site onu takip edecektir."
   unfound_now: Oyundaki mevcut etiketi
-  unfound_placeholder: örn. Arch
+  unfound_placeholder: örneğin Arch
   unfound_link: Bağla
   unfound_checking: Oyunla kontrol ediliyor...
-  unfound_left: Bugün kalan {left} / {max} bağlantı (her biri oyuna bir kez sorar)
+  unfound_left: Bugün {max} bağlantı hakkından {left} kaldı (her biri oyuna bir kez sorar)
   pending_title: İnceleme bekliyor
   pending_none: Bekleyen ittifak resmi yok.
   sent_by: "{name} tarafından gönderildi, {when}"
   race_title: İlk 4 yarışı
-  race_none: Henüz ölçülen bir yarış yok.
-  race_progress: Şimdiye kadar 3 Düello gününden {n} kadarı ölçüldü.
+  race_none: Henüz ölçülen yarış yok.
+  race_progress: 3 Düello gününden {n} tanesi ölçüldü.
   race_finished: '3 günün tamamı ölçüldü: sonuçlar NAP liderliğinde.'
   race_missing: 'Ölçülmedi: {tags}'
   race_more: Kurallar sayfasında tam tablo
-  quota_title: İzleyici istekleri
-  quota_help: Last Asylum İzleyicisi, 00:00 UTC'de sıfırlanmak üzere günde 1.000 isteğe izin verir. Aşağıdaki rakam, izleyicinin siteye verdiği son değerdir, bu yüzden göstermenin bir maliyeti yoktur; şimdi kontrol etmek bir istek harcar.
+  quota_title: Tracker istekleri
+  quota_help: Last Asylum Tracker, günde 00:00 UTC'de sıfırlanan 1.000 istek hakkı tanır. Aşağıdaki rakam takipçinin siteye verdiği son değerdir, bu yüzden göstermek ücretsizdir; şimdi kontrol etmek bir istek hakkı harcar.
   quota_check: Şimdi kontrol et
-  quota_used: bugün kullanılan
-  quota_failed: İzleyiciye ulaşılamadı.
+  quota_used: bugün kullanıldı
+  quota_failed: Takipçiye ulaşılamadı.
   quota_as_of: "{when} itibarıyla"
-  quota_none: Site bugün izleyiciye henüz bir şey sormadı.
-  quota_resets: "{time} içinde sıfırlanacak"
-  usage_title: Neler harcadı
+  quota_none: Site bugün takipçiye henüz bir şey sormadı.
+  quota_resets: "{time} içinde sıfırlanır"
+  usage_title: Kullanım alanları
   usage_automation: Otomasyon
   usage_automation_help: Günlük İstatistik anlık görüntüsü ve İlk 4 yarışı
   usage_alliance: İttifak araçları
-  usage_alliance_help: Gösterge panelleri, kadro, adaylıklar
-  usage_public: Genel sayfalar
+  usage_alliance_help: Paneller, kadro, aday göstermeler
+  usage_public: Halka açık sayfalar
   usage_public_help: İttifak sayfasındaki sıralama kartları
-  usage_steward: Yönetici araçları
-  usage_steward_help: Oyuncu aramaları, harita yenilemeleri ve kullanım kontrolleri
+  usage_steward: Görevli araçları
+  usage_steward_help: Oyuncu sorgulamaları, harita yenilemeleri ve kullanım kontrolleri
   usage_other: Diğer
   usage_other_help: Etiketlenmemiş her şey
-  usage_unrecorded: Kaydedilmedi
-  usage_unrecorded_help: İzleyici tarafından sayıldı, henüz buraya kaydedilmedi (her sunucu birkaç dakikada bir kaydeder)
-  usage_none: Bugün henüz kaydedilen bir istek yok.
+  usage_unrecorded: Kaydedilmemiş
+  usage_unrecorded_help: Takipçi tarafından sayılan ancak buraya henüz kaydedilmemiş (her sunucu birkaç dakikada bir kaydeder)
+  usage_none: Bugün henüz kaydedilen istek yok.
