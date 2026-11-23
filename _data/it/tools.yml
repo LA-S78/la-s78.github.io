@@ -102,34 +102,32 @@ rewards_card:
   buyout_cost: 'Acquisizione: {amount} {chest} in ogni set'
   buyout_cost_help: Finanziamento dell'alleanza sfollata questa settimana
 roster:
-  title: Rosa Alleanza
+  title: Rosa dell'alleanza
   summary: "{n} membri · {might} Potenza"
-  show: Mostra membri
-  hide: Nascondi membri
   search: Cerca nomi o ID...
   sort_label: Ordina per
   sort_power: Potenza
   sort_name: Nome
   sort_rank: Rango
   sanctuary_lv: Santuario {n}
-  copy_id: Copia questo ID giocatore
+  copy_id: Copia ID giocatore
   copied: Copiato
   unavailable: L'elenco dei membri non può essere caricato al momento. Riprova più tardi.
   credit_before: Dati giocatore dal
   sort_tech: Ricerca
   sort_help: Aiuto
   tech_title: Ricerca alleanza donata oggi
-  help_title: Aiuto fornito alle costruzioni e ricerche dei membri oggi
-  help_capped: Limite di aiuti giornalieri raggiunto (1.000)
+  help_title: Aiuto fornito oggi alle costruzioni e ricerche dei membri
+  help_capped: Limite giornaliero di aiuto raggiunto (1.000)
   refresh: Aggiorna
-  refresh_left: "{n} rimasti"
+  refresh_left: "{n} rimanenti"
   refreshing: Aggiornamento in corso...
-  refresh_help: 'Ottieni numeri in tempo reale dal gioco. Condiviso dai leader della tua alleanza: {n} su {max} rimasti oggi, uno ogni 10 minuti.'
+  refresh_help: 'Ottieni dati in tempo reale dal gioco. Condiviso dai leader della tua alleanza: {n} di {max} rimanenti oggi, uno ogni 10 minuti.'
   refresh_wait: 'Aggiornato poco fa: prossimo tra {n} min.'
-  refresh_none: Nessun aggiornamento rimasto oggi. Ricominciano al ripristino giornaliero (00:00 GT).
-  daily_as_of: Ricerca e aiuto dal ripristino di oggi (00:00 GT), alle {time}
-  daily_old: 'Ricerca e aiuto prima del ripristino di oggi: ultima lettura {time}'
-  daily_unknown: 'Ricerca e aiuto: ora della lettura sconosciuta'
+  refresh_none: Nessun aggiornamento rimasto oggi. Ricominciano al reset giornaliero (00:00 GT).
+  daily_as_of: Ricerca e aiuto dal reset di oggi (00:00 GT), alle ore {time}
+  daily_old: 'Ricerca e aiuto prima del reset di oggi: ultima lettura {time}'
+  daily_unknown: 'Ricerca e aiuto: orario di lettura sconosciuto'
 caravan:
   title: Rotazione Carovana
   name_ok: Nella lista membri di [{tag}]
@@ -982,9 +980,8 @@ stats:
   title: Statistiche NAP
   views_label: Cosa mostrare
   view_growth: Crescita NAP
-  chart_hint: Tocca o passa sopra un giorno per leggerlo
   view_players: Migliori giocatori
-  view_achievements: Traguardi
+  view_achievements: Obiettivi
   view_lookup: Ricerca giocatore
   growth_title: Crescita alleanza
   growth_members: "{n} membri"
@@ -992,7 +989,7 @@ stats:
   growth_link: Scheda statistiche
   lookup_search: Nome giocatore...
   lookup_hint: Solo giocatori NAP, dall'istantanea giornaliera. Digita almeno 2 lettere del nome.
-  lookup_none: Nessun giocatore NAP corrisponde.
+  lookup_none: Nessun giocatore NAP trovato.
   lookup_place: "#{place} di {of} giocatori NAP per Potenza"
   lookup_kills: Uccisioni
   lookup_level: Santuario
@@ -1001,47 +998,47 @@ stats:
   lookup_kills_week: Uccisioni questa settimana
   lookup_history: Potenza nell'ultimo mese
   ach_strongest: Il più potente
-  ach_gain_week: Maggior guadagno questa settimana
+  ach_gain_week: Maggiore aumento questa settimana
   ach_kills: Più uccisioni
   ach_kills_week: Più uccisioni questa settimana
-  ach_climb_month: Maggior ascesa del Santuario questo mese
+  ach_climb_month: Maggiore ascesa del Santuario questo mese
   ach_away: Lontano dall'alveare
-  ach_away_help: Maggior numero di giorni questo mese a più di 50 tessere dall'alveare della propria alleanza (dove si trova la maggior parte dei membri).
-  ach_none: Non abbastanza giorni raccolti ancora.
+  ach_away_help: Più giorni questo mese a oltre 50 caselle dall'alveare della loro alleanza (dove si trova la maggior parte dei membri).
+  ach_none: Non ci sono ancora abbastanza giorni raccolti.
   value_kills: "{n} uccisioni"
   value_levels_one: "+1 livello"
   value_levels_other: "+{n} livelli"
   value_days_one: 1 giorno
   value_days_other: "{n} giorni"
-  list_label: Quale elenco
+  list_label: Quale lista
   list_strongest: Più forti
-  list_week: Guadagnati questa settimana
-  list_month: Guadagnati questo mese
+  list_week: Aumento settimanale
+  list_month: Aumento mensile
   filter_label: Alleanza
   filter_all: Tutte le alleanze NAP
-  players_none: Nessun giocatore da mostrare ancora.
-  players_wait_week: I guadagni di questa settimana appaiono una volta raccolta un'istantanea precedente a questo lunedì.
-  players_wait_month: I guadagni su un mese appaiono una volta raccolto un mese di giorni.
-  players_as_of: All'istantanea prima del ripristino del {date}.
+  players_none: Nessun giocatore da mostrare.
+  players_wait_week: Gli aumenti di questa settimana verranno mostrati una volta raccolta un'istantanea precedente a questo lunedì.
+  players_wait_month: Gli aumenti mensili verranno mostrati una volta raccolti i dati di un mese.
+  players_as_of: Dati aggiornati all'istantanea precedente al reset del {date}.
   week_note: Le settimane vanno da lunedì a domenica (Game Time); i record settimanali ricominciano ogni lunedì.
   col_player: Giocatore
-  col_gain: Guadagno
-  show_more: Mostra tutti {n}
+  col_gain: Aumento
+  show_more: Mostra tutti i {n}
   range_label: Intervallo temporale
   range_week: 1 settimana
   range_month: 1 mese
-  range_all: Tutto
+  range_all: Tutti
   loading: Caricamento statistiche...
   failed: Le statistiche non possono essere caricate al momento.
-  collecting: Le statistiche vengono raccolte una volta al giorno, poco prima del ripristino giornaliero (00:00 GT). I grafici si riempiono giorno dopo giorno.
-  since: Raccolte giornalmente dal {date}.
-  one_day: 'Solo un giorno raccolto finora: il grafico inizia una volta che ce ne sono due.'
+  collecting: Le statistiche vengono raccolte una volta al giorno, poco prima del reset giornaliero (00:00 GT). I grafici si completano giorno dopo giorno.
+  since: Raccolti giornalmente dal {date}.
+  one_day: 'Raccolto solo un giorno finora: il grafico inizierà quando ce ne saranno due.'
   col_alliance: Alleanza
   col_might: Potenza
   col_week: 7 giorni
   col_month: 30 giorni
   no_number: "—"
-  show_hide: Tocca un'alleanza per mostrare o nascondere la sua linea.
+  show_hide: Tocca un'alleanza per mostrare o nascondere la sua riga.
   credit_before: Numeri dal
 steward:
   tidy_title: 'ID Alleanza: pulizia'
