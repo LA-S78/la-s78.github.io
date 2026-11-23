@@ -60,18 +60,17 @@ api_dashboard:
   already_in_rotor: "{name} est déjà dans le rotor."
   player_removed: Ce joueur a été supprimé.
 api_sheets:
-  no_tabs: Aucun onglet n'a été trouvé dans cette feuille. Vérifiez que le lien ouvre bien la feuille de calcul.
-  tabs_too_few: Moins de 2 onglets correspondent à ce modèle. Vérifiez-le par rapport aux noms des onglets (# est n'importe quel nombre, * est n'importe quoi).
+  no_tabs: Aucun onglet trouvé dans cette feuille. Vérifiez que le lien ouvre bien la feuille de calcul.
   full_link: Collez le lien complet (commençant par https://docs.google.com/…).
   google_only: Seuls les liens Google Sheets et Google Docs (docs.google.com) peuvent être utilisés.
-  range_format: La plage doit ressembler à A1:D20 (ou laissez vide).
-  not_sheet_or_doc: Ce lien n'est ni un Google Sheet ni un Google Doc.
-  unexpected_redirect: Google a envoyé le téléchargement vers un endroit inattendu, il n'a donc pas pu être récupéré.
+  range_format: La plage doit ressembler à A1:D20 (ou laissez-la vide).
+  not_sheet_or_doc: Ce lien n'est ni une feuille Google ni un document Google.
+  unexpected_redirect: Google a redirigé le téléchargement vers un emplacement inattendu, il n'a donc pas pu être récupéré.
   too_many_redirects: Trop de redirections depuis Google.
   too_slow: Google a mis trop de temps à répondre. Réessayez dans un instant.
   unreachable: Impossible de joindre Google ({reason}).
-  doc_not_shared: 'Google a refusé : publiez le document (Fichier → Partager → Publier sur le web), puis utilisez ce lien.'
-  sheet_not_shared: 'Google a refusé : partagez la feuille en "Tous les utilisateurs disposant du lien peuvent voir", ou utilisez Fichier → Partager → Publier sur le web.'
+  doc_not_shared: 'Google a refusé l''accès : publiez le document (Fichier → Partager → Publier sur le Web), puis utilisez ce lien.'
+  sheet_not_shared: 'Google a refusé l''accès : partagez la feuille en tant que « Tous les utilisateurs disposant du lien peuvent consulter », ou utilisez Fichier → Partager → Publier sur le Web.'
   google_error: Google a répondu avec une erreur ({status}). Vérifiez le lien.
   too_large: Cette feuille est trop volumineuse pour être lue (plus de 2 Mo).
   empty: Cette feuille (ou plage) est vide.

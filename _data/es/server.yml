@@ -60,24 +60,23 @@ api_dashboard:
   already_in_rotor: "{name} ya está en la rotación."
   player_removed: Ese jugador fue eliminado.
 api_sheets:
-  no_tabs: No se encontraron pestañas en esa hoja. Comprueba que el enlace abra la propia hoja de cálculo.
-  tabs_too_few: Menos de 2 pestañas coinciden con ese patrón. Compruébalo con los nombres de las pestañas (# es cualquier número, * es cualquier cosa).
-  full_link: Pega el enlace completo (que empiece por https://docs.google.com/…).
+  no_tabs: No se encontraron pestañas en esa hoja. Comprueba que el enlace abre la hoja de cálculo directamente.
+  full_link: Pega el enlace completo (empezando por https://docs.google.com/…).
   google_only: Solo se pueden usar enlaces de Google Sheets y Google Docs (docs.google.com).
-  range_format: El rango debe tener el formato A1:D20 (o déjalo vacío).
-  not_sheet_or_doc: Ese enlace no es una hoja de Google ni un documento de Google.
-  unexpected_redirect: Google envió la descarga a un lugar inesperado, por lo que no se pudo obtener.
-  too_many_redirects: Demasiadas redirecciones de Google.
+  range_format: El rango debe tener un formato como A1:D20 (o déjalo vacío).
+  not_sheet_or_doc: Ese enlace no es una hoja de cálculo ni un documento de Google.
+  unexpected_redirect: Google redirigió la descarga a un lugar inesperado, por lo que no se pudo obtener.
+  too_many_redirects: Demasiadas redirecciones desde Google.
   too_slow: Google ha tardado demasiado en responder. Inténtalo de nuevo en un momento.
-  unreachable: No se pudo contactar con Google ({reason}).
-  doc_not_shared: 'Google dijo que no: publica el documento (Archivo → Compartir → Publicar en la web) y utiliza ese enlace.'
-  sheet_not_shared: 'Google dijo que no: comparte la hoja como "Cualquier persona con el enlace puede leer" o utiliza Archivo → Compartir → Publicar en la web.'
+  unreachable: No se pudo conectar con Google ({reason}).
+  doc_not_shared: 'Google denegó el acceso: publica el documento (Archivo → Compartir → Publicar en la web) y usa ese enlace.'
+  sheet_not_shared: 'Google denegó el acceso: comparte la hoja como "Cualquier persona con el enlace puede ver" o usa Archivo → Compartir → Publicar en la web.'
   google_error: Google respondió con un error ({status}). Comprueba el enlace.
   too_large: Esa hoja es demasiado grande para leerla (más de 2 MB).
   empty: Esa hoja (o rango) está vacía.
   no_such_table_one: Ese documento tiene {count} tabla; no existe la tabla {table}.
   no_such_table_other: Ese documento tiene {count} tablas; no existe la tabla {table}.
-  no_table: Ese documento no tiene ninguna tabla.
+  no_table: Ese documento no contiene ninguna tabla.
 api_nominate:
   link_invalid: Este enlace no es válido o ha caducado.
   token_invalid: El token no es válido o ha caducado. Ejecuta /nominate de nuevo.
