@@ -319,6 +319,8 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     if (o.order === 'desc' || o.order === 'asc') options.order = o.order;
     const limit = parseInt(o.limit, 10);
     if (limit > 0) options.limit = Math.min(100, limit);
+    // "Compare two" for viewers (2026-11-23): ticked per chart
+    if (o.compare && !swap) options.compare = true;
   }
   // scale: traffic-light colours, red (low) → yellow → green (high).
   if ((w.type === 'bar' || w.type === 'progress') && o.scale) {
@@ -379,6 +381,7 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
     // (player) across the tabs, or each row's average across them
     if (['weeks', 'player', 'average'].includes(o.view)) options.view = o.view;
   }
+  if (o.view === 'compare' && options.compare) options.view = 'compare';
 
   const id = /^w_[a-z0-9]{4,20}$/.test(String(w.id || ''))
     ? w.id

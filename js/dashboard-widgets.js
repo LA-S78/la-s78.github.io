@@ -207,7 +207,8 @@
       styles.push(`--dw: ${ramp(w.options.reverse ? 1 - f : f)}`);
     // Four or more series: six clearly different colours (the theme's mixes of two colours
     // run together at that many; checked for colour-blind readers, 2026-11-23)
-    else if (n >= 4) cls = `${extra ? `${extra} ` : ''}dw-d${k % SERIES}`;
+    // and the two names compared ("Compare two"), told apart at a glance
+    else if (n >= 4 || w._distinct) cls = `${extra ? `${extra} ` : ''}dw-d${k % SERIES}`;
     else cls = `${extra ? `${extra} ` : ''}dw-s${k % SERIES}`;
     if (css) styles.push(css);
     return `class="${cls}"${styles.length ? ` style="${styles.join('; ')}"` : ''}`;
@@ -217,7 +218,7 @@
     if (names.length < 2) return '';
     // Bar charts: each name is a button (mount() handles them). The first tap shows only that
     // series, taps then add or remove series, and tapping the only one shown brings all back.
-    if (w.type === 'bar') {
+    if (w.type === 'bar' && !w._plainKey) {
       const off = new Set(w._off || []);
       return `<div class="dw-legend dw-legend-toggle">${names
         .map(
@@ -262,13 +263,18 @@
     let rows = s.rows
       .map((r) => (off.size ? { ...r, values: r.values.map((v, k) => (off.has(k) ? NaN : v)) } : r))
       .filter((r) => r.values.some(Number.isFinite));
-    if (o.order === 'desc' || o.order === 'asc') {
+    // A viewer's "reverse" (w._flip): the other order, not saved
+    const order = o.order && w._flip ? (o.order === 'asc' ? 'desc' : 'asc') : o.order;
+    if (order === 'desc' || order === 'asc') {
       const size = (r) => (stacked || s.values.length > 1 ? total(r) : r.values[0] || 0);
-      if (o.order === 'asc') rows = rows.filter((r) => size(r) > 0);
-      rows = [...rows].sort((a, b) => (o.order === 'asc' ? size(a) - size(b) : size(b) - size(a)));
+      if (order === 'asc') rows = rows.filter((r) => size(r) > 0);
+      rows = [...rows].sort((a, b) => (order === 'asc' ? size(a) - size(b) : size(b) - size(a)));
     }
     if (o.limit > 0) rows = rows.slice(0, o.limit);
     if (!rows.length) return empty(say('no_numbers'));
+    // Rows listed before "Show all": 10 (owner, 2026-11-23: 25 felt too long), unless the
+    // chart was set to show a number of rows
+    const cap = o.limit > 0 ? Infinity : 10;
     const n = s.values.length;
     // A segment's tooltip: its share (stacked to 100%) and the cell as written in the sheet.
     const tip = (r, k) => {
@@ -363,10 +369,10 @@
             )
             .join('');
           const value = stacked === 'percent' ? '' : short(stacked ? total(r) : r.values[0]);
-          return `<li class="${i >= 25 ? 'dw-extra' : ''}" ${pick(r.label, ro.lines, -1, '', ro.rowBadge)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
+          return `<li class="${i >= cap ? 'dw-extra' : ''}" ${pick(r.label, ro.lines, -1, '', ro.rowBadge)}><span class="dw-bar-label" title="${esc(r.label)}">${esc(r.label)}</span><span class="dw-bar-track${stacked ? ' dw-stack' : ''}">${segs}</span><span class="dw-bar-value">${value}</span></li>`;
         })
         .join('');
-      return `<ol class="dw-bars${stacked === 'percent' ? ' dw-no-value' : ''}">${items}</ol>${legend(s.names, w)}${list.length > 25 ? showAll(list.length) : ''}`;
+      return `<ol class="dw-bars${stacked === 'percent' ? ' dw-no-value' : ''}">${items}</ol>${legend(s.names, w)}${list.length > cap ? showAll(list.length) : ''}`;
     };
 
     if (!o.vertical) return horizontal();
@@ -690,7 +696,7 @@
   // the tabs. The editor saves which one viewers start on (options.view); a viewer's
   // choice (w._view, w._pick) isn't saved. The series (the columns chosen) are the same in
   // every view, so the key's taps carry over.
-  const VIEWS = ['latest', 'weeks', 'player', 'average'];
+  const VIEWS = ['latest', 'weeks', 'player', 'average', 'compare'];
 
   /** Every tab, oldest first ([{ name, rows }]), or null for a chart from one table. */
   function tabsOf(w) {
@@ -724,8 +730,12 @@
   }
   const viewOf = (w) => {
     const v = w._view || w.options?.view;
+    if (v === 'compare') return w.options?.compare ? v : 'latest';
+    if (!tabsOf(w)) return 'latest';
     return VIEWS.includes(v) ? v : 'latest';
   };
+  /** A bar chart with "Compare two" ticked in the editor (options.compare). */
+  const comparable = (w) => w.type === 'bar' && Boolean(w.options?.compare) && !w.options?.swap;
   const key = (v) => String(v ?? '').trim();
 
   /** The names (labels) to pick from: the newest tab's, then any only in older tabs. */
@@ -750,8 +760,13 @@
   /** The widget as the current view draws it (a chart from one table: itself). */
   function viewed(w) {
     const tabs = tabsOf(w);
-    const view = tabs ? viewOf(w) : 'latest';
-    if (view === 'latest') return w;
+    const view = viewOf(w);
+    if (view === 'latest') {
+      // Another tab than the newest, picked by the viewer (w._tab, its name)
+      const t = tabs && w._tab ? tabs.find((x) => x.name === w._tab) : null;
+      if (!t || t === tabs[tabs.length - 1]) return w;
+      return { ...w, data: { columns: w.data.columns, rows: t.rows } };
+    }
     const o = w.options || {};
     const cols = w.data.columns || [];
     const label = o.labelCol ?? 0;
@@ -762,6 +777,7 @@
     const valueCols = vals.map((_, i) => i + 1);
     const sum = (list) => list.reduce((t, v) => t + (Number.isFinite(v) ? v : 0), 0);
     let rows;
+    if (view === 'compare') return compared(w, tabs, { label, vals, cols, sum });
     if (view === 'weeks' || view === 'player') {
       const names = tabLabels(tabs);
       const pickName = w._pick || namesOf(w, tabs)[0] || '';
@@ -804,27 +820,131 @@
     };
   }
 
-  /** The view buttons (and the name list in "one name by tab"). */
-  function viewBar(w, tabs) {
+  /** The two names compared (w._cmp, else the first two). */
+  function comparedNames(w, tabs) {
+    const names = tabs ? namesOf(w, tabs) : namesOf(w, [{ rows: w.data.rows || [] }]);
+    const [a, b] = w._cmp || [];
+    return {
+      names,
+      a: names.includes(a) ? a : names[0] || '',
+      b: names.includes(b) ? b : names.find((n) => n !== (names.includes(a) ? a : names[0])) || '',
+    };
+  }
+
+  /**
+   * "Compare two" (owner request, 2026-11-23; ticked per chart): two names side by side, one
+   * colour each. Across tabs: a pair of bars per tab, each the total of the columns shown
+   * (the column buttons above pick them, as the key does in the other views). One tab: a
+   * pair of bars per column.
+   */
+  function compared(w, tabs, { label, vals, cols, sum }) {
+    const { a, b } = comparedNames(w, tabs);
+    const off = new Set(w._off || []);
+    const find = (rows, n) => rows.find((x) => key(x[label]) === n);
+    let rows;
+    if (tabs) {
+      const names = tabLabels(tabs);
+      const tot = (r) =>
+        r ? String(sum(vals.filter((_, k) => !off.has(k)).map((c) => number(r[c])))) : '';
+      rows = tabs.map((t, i) => [names[i], tot(find(t.rows, a)), tot(find(t.rows, b))]);
+    } else {
+      const ra = find(w.data.rows || [], a);
+      const rb = find(w.data.rows || [], b);
+      rows = vals.map((c) => [cols[c], ra ? (ra[c] ?? '') : '', rb ? (rb[c] ?? '') : '']);
+    }
+    return {
+      ...w,
+      _off: [],
+      _flip: false,
+      _plainKey: true,
+      _distinct: true,
+      data: { columns: ['', a, b], rows },
+      options: {
+        ...w.options,
+        labelCol: 0,
+        valueCols: [1, 2],
+        vertical: true,
+        stacked: undefined,
+        order: undefined,
+        limit: 0,
+        swap: false,
+        scale: false,
+      },
+    };
+  }
+
+  const select = (attr, label, names, on) =>
+    `<select class="dw-pick" ${attr} aria-label="${esc(label)}">${names
+      .map((n) => `<option value="${esc(n)}"${n === on ? ' selected' : ''}>${esc(n)}</option>`)
+      .join('')}</select>`;
+
+  /**
+   * The buttons above a chart: the views (across tabs, or with "Compare two"), the lists each
+   * view needs (a tab, a name, two names, the columns to add up), and "reverse" for a chart in
+   * order.
+   */
+  function controls(w, tabs, shown) {
     const view = viewOf(w);
     const btn = (v, text) =>
       `<button type="button" data-view="${v}" aria-pressed="${view === v}">${esc(text)}</button>`;
-    let pickList = '';
-    if (view === 'player') {
-      const names = namesOf(w, tabs);
-      const on = w._pick || names[0] || '';
-      pickList = `<select class="dw-pick" data-pick aria-label="${esc(say('view_pick'))}">${names
-        .map((n) => `<option value="${esc(n)}"${n === on ? ' selected' : ''}>${esc(n)}</option>`)
-        .join('')}</select>`;
+    const buttons = [];
+    if (tabs) {
+      buttons.push(
+        btn('latest', w._tab || key(w.data.tab) || say('view_latest')),
+        btn('weeks', say('view_weeks')),
+        btn('player', say('view_player')),
+        btn('average', say('view_average', { n: tabs.length })),
+      );
+    } else if (comparable(w)) buttons.push(btn('latest', say('view_chart')));
+    if (comparable(w)) buttons.push(btn('compare', say('view_compare')));
+    let out = buttons.length
+      ? `<div class="dw-views" role="group" aria-label="${esc(say('views'))}">${buttons.join('')}</div>`
+      : '';
+    const lists = [];
+    if (tabs && view === 'latest') {
+      const names = [...tabs].reverse().map((t) => t.name);
+      lists.push(select('data-tabpick', say('view_tab'), names, w._tab || names[0]));
     }
-    return `<div class="dw-views" role="group" aria-label="${esc(say('views'))}">${btn('latest', key(w.data.tab) || say('view_latest'))}${btn('weeks', say('view_weeks'))}${btn('player', say('view_player'))}${btn('average', say('view_average', { n: tabs.length }))}</div>${pickList}`;
+    if (tabs && view === 'player') {
+      const names = namesOf(w, tabs);
+      lists.push(select('data-pick', say('view_pick'), names, w._pick || names[0] || ''));
+    }
+    if (view === 'compare') {
+      const c = comparedNames(w, tabs);
+      lists.push(
+        select('data-cmp="0"', say('compare_first'), c.names, c.a),
+        select('data-cmp="1"', say('compare_second'), c.names, c.b),
+      );
+    }
+    if (lists.length) out += `<div class="dw-picks">${lists.join('')}</div>`;
+    // Across tabs, comparing: which columns are added up (the key's taps in the other views)
+    if (tabs && view === 'compare') {
+      const s = series(w);
+      if (s.names.length > 1) {
+        const off = new Set(w._off || []);
+        out += `<div class="dw-legend dw-legend-toggle dw-days">${s.names
+          .map(
+            (n, i) =>
+              `<button type="button" data-day="${i}" aria-pressed="${!off.has(i)}"><i ${paint(w, i, s.names.length)}></i>${esc(n)}</button>`,
+          )
+          .join('')}</div>`;
+      }
+    }
+    const o = shown.options || {};
+    if (shown.type === 'bar' && (o.order === 'asc' || o.order === 'desc')) {
+      const now = w._flip ? (o.order === 'asc' ? 'desc' : 'asc') : o.order;
+      out += `<button type="button" class="dw-flip" data-flip aria-pressed="${Boolean(w._flip)}">${esc(say(now === 'desc' ? 'flip_to_asc' : 'flip_to_desc'))}</button>`;
+    }
+    return out;
   }
 
   /** The chart or table for a widget, as HTML (call mount() after inserting it). */
   function render(w) {
     try {
-      const tabs = tabsOf(w);
-      if (tabs) return viewBar(w, tabs) + bar(viewed(w));
+      if (w.type === 'bar') {
+        const shown = viewed(w);
+        return controls(w, tabsOf(w), shown) + bar(shown);
+      }
       return { bar, line, pie, progress, table }[w.type]?.(w) ?? empty(say('unknown_type'));
     } catch (err) {
       return empty(say('draw_failed', { error: err.message }));
@@ -1024,18 +1144,36 @@
           cur._view = v.dataset.view;
           return redraw();
         }
+        const f = e.target.closest('[data-flip]');
+        if (f && el.contains(f)) {
+          cur._flip = !cur._flip;
+          return redraw();
+        }
+        const d = e.target.closest('[data-day]');
+        if (d && el.contains(d)) {
+          toggleSeries(cur, Number(d.dataset.day), series(cur).names.length);
+          return redraw();
+        }
         const b = e.target.closest('[data-series]');
         if (!b || !el.contains(b)) return;
         toggleSeries(cur, Number(b.dataset.series), series(viewed(cur)).names.length);
         redraw();
       });
-      // "One name by tab": the name picked
+      // The lists above the chart: a tab, a name, the two names compared
       el.addEventListener('change', (e) => {
-        const p = e.target.closest('[data-pick]');
+        const p = e.target.closest('[data-pick], [data-tabpick], [data-cmp]');
         if (!p || !el.contains(p)) return;
-        el.dwWidget._pick = p.value;
+        const cur = el.dwWidget;
+        let again = '';
+        if (p.hasAttribute('data-pick')) (cur._pick = p.value), (again = '[data-pick]');
+        else if (p.hasAttribute('data-tabpick')) (cur._tab = p.value), (again = '[data-tabpick]');
+        else {
+          const pair = [...el.querySelectorAll('[data-cmp]')].map((x) => x.value);
+          cur._cmp = pair;
+          again = `[data-cmp="${p.dataset.cmp}"]`;
+        }
         redraw();
-        el.querySelector('[data-pick]')?.focus();
+        el.querySelector(again)?.focus();
       });
     }
     el.addEventListener('click', (e) => {
