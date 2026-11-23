@@ -79,6 +79,13 @@ body.portal-body.has-footer #mobile-container {
   padding-bottom: calc(60px + env(safe-area-inset-bottom) + 2rem);
 }
 
+/* The room for the bottom navigation is the container's (above), so the page's own `main`
+   keeps none: the main site's rule (60px under main, where main scrolls) doubled it here,
+   leaving a wide gap under the disclaimer (owner, 2026-11-23) */
+body.portal-body main {
+  padding-bottom: 0;
+}
+
 body.portal-body.has-no-header #mobile-container,
 body.portal-body.has-no-header #main-content {
   padding-top: 0;
