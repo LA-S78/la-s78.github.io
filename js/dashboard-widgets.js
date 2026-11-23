@@ -262,7 +262,7 @@
     const total = (r) => r.values.reduce((t, v) => t + (Number.isFinite(v) && v > 0 ? v : 0), 0);
     let rows = s.rows
       .map((r) => (off.size ? { ...r, values: r.values.map((v, k) => (off.has(k) ? NaN : v)) } : r))
-      .filter((r) => r.values.some(Number.isFinite));
+      .filter((r) => w._pairs || r.values.some(Number.isFinite));
     // A viewer's "reverse" (w._flip): the other order, not saved
     const order = o.order && w._flip ? (o.order === 'asc' ? 'desc' : 'asc') : o.order;
     if (order === 'desc' || order === 'asc') {
@@ -387,8 +387,14 @@
             ),
             0,
           ) || 1;
-    const groupW = 600 / shown.length;
-    const barW = stacked ? Math.max(2, groupW * 0.7) : Math.max(2, (groupW * 0.8) / n);
+    // Pairs ("Compare two", stacked): two bars per tab, the second a little lighter
+    const pairs = w._pairs ? 2 : 1;
+    const groupW = 600 / Math.ceil(shown.length / pairs);
+    const barW = w._pairs
+      ? groupW * 0.36
+      : stacked
+        ? Math.max(2, groupW * 0.7)
+        : Math.max(2, (groupW * 0.8) / n);
     const rects = shown
       .map((r, i) => {
         let base = 190;
@@ -398,26 +404,28 @@
             if (!Number.isFinite(v) || v <= 0) return '';
             const value = stacked === 'percent' ? (v / (total(r) || 1)) * 100 : v;
             const h = (value / top) * 170;
-            const x = stacked ? i * groupW + groupW * 0.15 : i * groupW + groupW * 0.1 + k * barW;
+            const x = w._pairs
+              ? Math.floor(i / 2) * groupW + groupW * 0.12 + (i % 2) * groupW * 0.4
+              : stacked
+                ? i * groupW + groupW * 0.15
+                : i * groupW + groupW * 0.1 + k * barW;
             const y = stacked ? base - h : 190 - h;
             if (stacked) base -= h;
-            return `<rect ${paint(w, k, n, '', '', bySize(r))} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}><title>${esc(tip(r, k))}</title></rect>`;
+            return `<rect ${paint(w, k, n, w._pairs && i % 2 ? 'dw-pair-b' : '', '', bySize(r))} x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" ${pick(r.label, ro.lines, ro.on(k), '', ro.badge(k))}><title>${esc(tip(r, k))}</title></rect>`;
           })
           .join('');
       })
       .join('');
     const g = guides(0, top, stacked === 'percent' ? (v) => `${Math.round(v)}%` : undefined);
     const vertical =
-      frame(
-        w,
-        rects,
-        g,
-        shown.map((r) => r.label),
-      ) +
+      frame(w, rects, g, w._pairs ? w._pairs.labels : shown.map((r) => r.label)) +
       legend(s.names, w) +
+      (w._pairs
+        ? `<div class="dw-note dw-pair-note"><span>${esc(say('pair_left', { name: w._pairs.names[0] }))}</span><span class="dw-pair-b-note">${esc(say('pair_right', { name: w._pairs.names[1] }))}</span></div>`
+        : '') +
       more(rows.length, 30);
     // Many vertical bars don't fit a phone: there, the same chart as horizontal rows.
-    return rows.length > 8
+    return rows.length > 8 && !w._pairs
       ? `<div class="dw-wide">${vertical}</div><div class="dw-narrow">${horizontal()}</div>`
       : vertical;
   }
@@ -821,36 +829,99 @@
   }
 
   /** The two names compared (w._cmp, else the first two). */
+  // Groups a name can be compared with (owner request, 2026-11-23): the average of the top 5
+  // and of the bottom 5 (by the total of the columns shown; the bottom leaves out those with
+  // nothing, as "lowest first" does), worked out for each tab on its own.
+  const GROUPS = ['@top', '@bottom'];
+  const GROUP_SIZE = 5;
+  const whoName = (who) =>
+    who === '@top'
+      ? say('compare_top', { n: GROUP_SIZE })
+      : who === '@bottom'
+        ? say('compare_bottom', { n: GROUP_SIZE })
+        : who;
+
+  /** The two compared (w._cmp, else the first name and the top 5): names or groups. */
   function comparedNames(w, tabs) {
     const names = tabs ? namesOf(w, tabs) : namesOf(w, [{ rows: w.data.rows || [] }]);
+    const ok = (v) => names.includes(v) || GROUPS.includes(v);
     const [a, b] = w._cmp || [];
-    return {
-      names,
-      a: names.includes(a) ? a : names[0] || '',
-      b: names.includes(b) ? b : names.find((n) => n !== (names.includes(a) ? a : names[0])) || '',
-    };
+    const first = ok(a) ? a : names[0] || '';
+    return { names, a: first, b: ok(b) ? b : first === '@top' ? names[0] || '' : '@top' };
+  }
+
+  /** One name's (or group's) cells for the columns `vals`, from one tab's rows. */
+  function entryCells(rows, who, { label, vals, off, sum }) {
+    if (!GROUPS.includes(who)) {
+      const r = rows.find((x) => key(x[label]) === who);
+      return vals.map((c) => (r ? (r[c] ?? '') : ''));
+    }
+    const tot = (r) => sum(vals.filter((_, k) => !off.has(k)).map((c) => number(r[c])));
+    let list = rows.filter((r) => key(r[label]) && tot(r) > 0).sort((x, y) => tot(y) - tot(x));
+    if (who === '@bottom') list = list.reverse();
+    list = list.slice(0, GROUP_SIZE);
+    // The group's average: a blank cell counts as 0 (no points that day)
+    return vals.map((c) =>
+      list.length ? String(Math.round(sum(list.map((r) => number(r[c]))) / list.length)) : '',
+    );
   }
 
   /**
-   * "Compare two" (owner request, 2026-11-23; ticked per chart): two names side by side, one
-   * colour each. Across tabs: a pair of bars per tab, each the total of the columns shown
-   * (the column buttons above pick them, as the key does in the other views). One tab: a
-   * pair of bars per column.
+   * "Compare two" (owner request, 2026-11-23; ticked per chart): two names (or a name and the
+   * top or bottom 5), side by side. On a chart stacked by its columns (Stack: totals), each
+   * bar keeps its columns stacked, coloured as in the key (whose taps work as in the other
+   * views): across tabs, a pair of bars per tab; on one tab, one bar each. Otherwise each is
+   * one colour: across tabs, the total of the columns ticked in the buttons above, a pair per
+   * tab; on one tab, a pair per column.
    */
   function compared(w, tabs, { label, vals, cols, sum }) {
     const { a, b } = comparedNames(w, tabs);
     const off = new Set(w._off || []);
-    const find = (rows, n) => rows.find((x) => key(x[label]) === n);
+    const ctx = { label, vals, off, sum };
+    const o = w.options || {};
+    const base = { labelCol: 0, order: undefined, limit: 0, swap: false, scale: false };
+    if (o.stacked === 'sum') {
+      const columns = [cols[label] ?? '', ...vals.map((c) => cols[c])];
+      const valueCols = vals.map((_, i) => i + 1);
+      if (tabs) {
+        const names = tabLabels(tabs);
+        const rows = [];
+        tabs.forEach((t, i) => {
+          rows.push([`${whoName(a)} · ${names[i]}`, ...entryCells(t.rows, a, ctx)]);
+          rows.push([`${whoName(b)} · ${names[i]}`, ...entryCells(t.rows, b, ctx)]);
+        });
+        return {
+          ...w,
+          _flip: false,
+          _pairs: { labels: names, names: [whoName(a), whoName(b)] },
+          data: { columns, rows },
+          options: { ...o, ...base, valueCols, vertical: true, stacked: 'sum' },
+        };
+      }
+      const rows = [a, b].map((who) => [whoName(who), ...entryCells(w.data.rows || [], who, ctx)]);
+      return {
+        ...w,
+        _flip: false,
+        data: { columns, rows },
+        options: { ...o, ...base, valueCols, vertical: false, stacked: 'sum' },
+      };
+    }
     let rows;
     if (tabs) {
       const names = tabLabels(tabs);
-      const tot = (r) =>
-        r ? String(sum(vals.filter((_, k) => !off.has(k)).map((c) => number(r[c])))) : '';
-      rows = tabs.map((t, i) => [names[i], tot(find(t.rows, a)), tot(find(t.rows, b))]);
+      const tot = (cells) =>
+        cells.some((v) => v !== '')
+          ? String(sum(cells.filter((_, k) => !off.has(k)).map((v) => number(v))))
+          : '';
+      rows = tabs.map((t, i) => [
+        names[i],
+        tot(entryCells(t.rows, a, ctx)),
+        tot(entryCells(t.rows, b, ctx)),
+      ]);
     } else {
-      const ra = find(w.data.rows || [], a);
-      const rb = find(w.data.rows || [], b);
-      rows = vals.map((c) => [cols[c], ra ? (ra[c] ?? '') : '', rb ? (rb[c] ?? '') : '']);
+      const ca = entryCells(w.data.rows || [], a, ctx);
+      const cb = entryCells(w.data.rows || [], b, ctx);
+      rows = vals.map((c, k) => [cols[c], ca[k], cb[k]]);
     }
     return {
       ...w,
@@ -858,18 +929,8 @@
       _flip: false,
       _plainKey: true,
       _distinct: true,
-      data: { columns: ['', a, b], rows },
-      options: {
-        ...w.options,
-        labelCol: 0,
-        valueCols: [1, 2],
-        vertical: true,
-        stacked: undefined,
-        order: undefined,
-        limit: 0,
-        swap: false,
-        scale: false,
-      },
+      data: { columns: ['', whoName(a), whoName(b)], rows },
+      options: { ...o, ...base, valueCols: [1, 2], vertical: true, stacked: undefined },
     };
   }
 
@@ -911,14 +972,21 @@
     }
     if (view === 'compare') {
       const c = comparedNames(w, tabs);
+      const choices = (on) =>
+        [...GROUPS, ...c.names]
+          .map(
+            (n) =>
+              `<option value="${esc(n)}"${n === on ? ' selected' : ''}>${esc(whoName(n))}</option>`,
+          )
+          .join('');
       lists.push(
-        select('data-cmp="0"', say('compare_first'), c.names, c.a),
-        select('data-cmp="1"', say('compare_second'), c.names, c.b),
+        `<select class="dw-pick" data-cmp="0" aria-label="${esc(say('compare_first'))}">${choices(c.a)}</select>`,
+        `<select class="dw-pick" data-cmp="1" aria-label="${esc(say('compare_second'))}">${choices(c.b)}</select>`,
       );
     }
     if (lists.length) out += `<div class="dw-picks">${lists.join('')}</div>`;
     // Across tabs, comparing: which columns are added up (the key's taps in the other views)
-    if (tabs && view === 'compare') {
+    if (tabs && view === 'compare' && w.options?.stacked !== 'sum') {
       const s = series(w);
       if (s.names.length > 1) {
         const off = new Set(w._off || []);
