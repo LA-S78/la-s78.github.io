@@ -102,8 +102,10 @@ rewards_card:
   buyout_cost: 'Ablöse: {amount} {chest} in jedem Set'
   buyout_cost_help: Finanzierung der verdrängten Allianz diese Woche
 roster:
-  title: Allianz-Mitgliederliste
+  title: Allianz-Liste
   summary: "{n} Mitglieder · {might} Macht"
+  show: Mitglieder anzeigen
+  hide: Mitglieder verbergen
   search: Namen oder IDs suchen...
   sort_label: Sortieren nach
   sort_power: Macht
@@ -113,21 +115,21 @@ roster:
   copy_id: Diese Spieler-ID kopieren
   copied: Kopiert
   unavailable: Die Mitgliederliste kann momentan nicht geladen werden. Versuche es später erneut.
-  credit_before: Spielerdaten vom
+  credit_before: Spieldaten vom
   sort_tech: Forschung
   sort_help: Hilfe
   tech_title: Heute gespendete Allianz-Forschung
-  help_title: Heute an Mitglieder bei Bau und Forschung geleistete Hilfe
+  help_title: Heute geleistete Hilfe bei Bau und Forschung von Mitgliedern
   help_capped: Tägliches Hilfe-Limit erreicht (1.000)
   refresh: Aktualisieren
-  refresh_left: "{n} verbleibend"
+  refresh_left: "{n} übrig"
   refreshing: Aktualisiere...
-  refresh_help: 'Live-Zahlen aus dem Spiel abrufen. Von deinen Allianz-Anführern geteilt: {n} von {max} heute noch übrig, alle 10 Minuten eine.'
-  refresh_wait: 'Vor kurzem aktualisiert: nächste in {n} Min.'
+  refresh_help: 'Live-Zahlen aus dem Spiel abrufen. Geteilt von der Allianzführung: {n} von {max} heute noch übrig, eine alle 10 Minuten.'
+  refresh_wait: 'Vor Kurzem aktualisiert: nächste in {n} Min.'
   refresh_none: Heute keine Aktualisierungen mehr übrig. Sie beginnen wieder beim täglichen Reset (00:00 GT).
   daily_as_of: Forschung und Hilfe seit dem heutigen Reset (00:00 GT), Stand {time}
-  daily_old: 'Forschung und Hilfe vor dem heutigen Reset: letzter Abruf {time}'
-  daily_unknown: 'Forschung und Hilfe: Zeitpunkt des Abrufs unbekannt'
+  daily_old: 'Forschung und Hilfe vor dem heutigen Reset: zuletzt gelesen {time}'
+  daily_unknown: 'Forschung und Hilfe: Zeitpunkt des Lesens unbekannt'
 caravan:
   title: Karawanen-Rotor
   name_ok: In der Mitgliederliste von [{tag}]
@@ -977,18 +979,19 @@ alliance_images:
   too_small: Dieses Bild ist recht klein ({width}×{height}); es könnte verschwommen aussehen. Du kannst es trotzdem senden.
   load_failed: Das Bild konnte nicht geöffnet werden.
 stats:
-  title: NAP Statistiken
+  title: NAP-Statistiken
   views_label: Was anzeigen
-  view_growth: NAP Wachstum
+  view_growth: NAP-Wachstum
+  chart_hint: Tippe oder bewege die Maus über einen Tag, um ihn zu lesen
   view_players: Top-Spieler
-  view_achievements: Errungenschaften
+  view_achievements: Erfolge
   view_lookup: Spielersuche
   growth_title: Allianz-Wachstum
   growth_members: "{n} Mitglieder"
-  growth_more: Mehr auf dem
+  growth_more: Mehr im
   growth_link: Statistik-Tab
   lookup_search: Spielername...
-  lookup_hint: Nur NAP-Spieler, basierend auf dem täglichen Snapshot. Gib mindestens 2 Buchstaben des Namens ein.
+  lookup_hint: Nur NAP-Spieler aus dem täglichen Schnappschuss. Gib mindestens 2 Buchstaben des Namens ein.
   lookup_none: Kein NAP-Spieler gefunden.
   lookup_place: "#{place} von {of} NAP-Spielern nach Macht"
   lookup_kills: Kills
@@ -997,14 +1000,14 @@ stats:
   lookup_month: Letzte 30 Tage
   lookup_kills_week: Kills diese Woche
   lookup_history: Macht im letzten Monat
-  ach_strongest: Mächtigster
+  ach_strongest: Der Mächtigste
   ach_gain_week: Größter Zuwachs diese Woche
-  ach_kills: Meiste Kills
-  ach_kills_week: Meiste Kills diese Woche
+  ach_kills: Die meisten Kills
+  ach_kills_week: Die meisten Kills diese Woche
   ach_climb_month: Größter Sanktuarium-Aufstieg diesen Monat
-  ach_away: Fernab des Hives
-  ach_away_help: Die meisten Tage diesen Monat mehr als 50 Kacheln vom Hive ihrer Allianz entfernt (wo die meisten Mitglieder sind).
-  ach_none: Noch nicht genug Tage gesammelt.
+  ach_away: Abseits des Nests
+  ach_away_help: Die meisten Tage in diesem Monat mehr als 50 Felder vom Nest der Allianz entfernt (wo die meisten Mitglieder sind).
+  ach_none: Noch nicht genug Daten gesammelt.
   value_kills: "{n} Kills"
   value_levels_one: "+1 Stufe"
   value_levels_other: "+{n} Stufen"
@@ -1016,11 +1019,11 @@ stats:
   list_month: Zuwachs diesen Monat
   filter_label: Allianz
   filter_all: Alle NAP-Allianzen
-  players_none: Noch keine Spieler zum Anzeigen.
-  players_wait_week: Wöchentliche Zuwächse werden angezeigt, sobald ein Snapshot von vor diesem Montag gesammelt wurde.
-  players_wait_month: Monatliche Zuwächse werden angezeigt, sobald ein ganzer Monat an Daten gesammelt wurde.
-  players_as_of: Stand des Snapshots vor dem {date} Reset.
-  week_note: Wochen laufen von Montag bis Sonntag (Game Time); die wöchentlichen Rekorde beginnen jeden Montag neu.
+  players_none: Noch keine Spieler zum Anzeigen vorhanden.
+  players_wait_week: Die Zuwächse dieser Woche werden angezeigt, sobald ein Schnappschuss vor dem aktuellen Montag gesammelt wurde.
+  players_wait_month: Die Zuwächse über einen Monat werden angezeigt, sobald Daten für einen Monat gesammelt wurden.
+  players_as_of: Stand des Schnappschusses vor dem Reset am {date}.
+  week_note: Wochen laufen von Montag bis Sonntag (Game Time); die wöchentlichen Rekorde beginnen jeden Montag von vorn.
   col_player: Spieler
   col_gain: Zuwachs
   show_more: Alle {n} anzeigen
@@ -1028,17 +1031,17 @@ stats:
   range_week: 1 Woche
   range_month: 1 Monat
   range_all: Alle
-  loading: Statistiken laden...
-  failed: Statistiken können aktuell nicht geladen werden.
-  collecting: Statistiken werden einmal täglich kurz vor dem täglichen Reset (00:00 GT) gesammelt. Die Diagramme füllen sich Tag für Tag.
+  loading: Lade Statistiken...
+  failed: Statistiken können derzeit nicht geladen werden.
+  collecting: Statistiken werden einmal täglich kurz vor dem täglichen Reset (00:00 GT) gesammelt. Die Diagramme füllen sich von Tag zu Tag.
   since: Täglich gesammelt seit {date}.
-  one_day: 'Bisher nur ein Tag gesammelt: Das Diagramm beginnt, sobald zwei Tage vorliegen.'
+  one_day: 'Bisher erst ein Tag gesammelt: Das Diagramm beginnt, sobald zwei Tage vorhanden sind.'
   col_alliance: Allianz
   col_might: Macht
   col_week: 7 Tage
   col_month: 30 Tage
   no_number: "—"
-  show_hide: Tippe auf eine Allianz, um deren Linie ein- oder auszublenden.
+  show_hide: Tippe auf eine Allianz, um ihre Linie anzuzeigen oder zu verbergen.
   credit_before: Zahlen vom
 steward:
   tidy_title: 'Allianz-IDs: aufräumen'

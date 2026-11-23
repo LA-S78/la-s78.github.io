@@ -102,31 +102,33 @@ rewards_card:
   buyout_cost: 'Compra: {amount} {chest} en cada set'
   buyout_cost_help: Financiando a la alianza desplazada esta semana
 roster:
-  title: Lista de la alianza
+  title: Lista de miembros de la alianza
   summary: "{n} miembros · {might} Poder"
+  show: Mostrar miembros
+  hide: Ocultar miembros
   search: Buscar nombres o IDs...
   sort_label: Ordenar por
   sort_power: Poder
   sort_name: Nombre
   sort_rank: Rango
   sanctuary_lv: Santuario {n}
-  copy_id: Copiar este ID de jugador
+  copy_id: Copiar ID de jugador
   copied: Copiado
   unavailable: La lista de miembros no se puede cargar en este momento. Inténtalo de nuevo más tarde.
-  credit_before: Datos del jugador desde
+  credit_before: Datos de jugador de
   sort_tech: Investigación
   sort_help: Ayuda
   tech_title: Investigación de alianza donada hoy
-  help_title: Ayuda dada a la construcción e investigación de los miembros hoy
-  help_capped: Límite diario de ayuda alcanzado (1,000)
+  help_title: Ayuda dada a la construcción e investigación de miembros hoy
+  help_capped: Límite diario de ayuda alcanzado (1.000)
   refresh: Actualizar
   refresh_left: "{n} restantes"
   refreshing: Actualizando...
-  refresh_help: 'Obtén datos en vivo del juego. Compartidos por los líderes de tu alianza: {n} de {max} restantes hoy, uno cada 10 minutos.'
+  refresh_help: 'Obtén datos en vivo del juego. Compartido por los líderes de tu alianza: {n} de {max} restantes hoy, uno cada 10 minutos.'
   refresh_wait: 'Actualizado hace un momento: siguiente en {n} min.'
-  refresh_none: Sin actualizaciones restantes hoy. Se reinician en el reinicio diario (00:00 GT).
-  daily_as_of: Investigación y ayuda desde el reinicio de hoy (00:00 GT), a las {time}
-  daily_old: 'Investigación y ayuda desde antes del reinicio de hoy: última lectura {time}'
+  refresh_none: No quedan actualizaciones hoy. Se reinician en el reinicio diario (00:00 GT).
+  daily_as_of: Investigación y ayuda desde el reinicio de hoy (00:00 GT), al {time}
+  daily_old: 'Investigación y ayuda antes del reinicio de hoy: última lectura {time}'
   daily_unknown: 'Investigación y ayuda: hora de lectura desconocida'
 caravan:
   title: Rotativo de Caravanas
@@ -980,23 +982,24 @@ stats:
   title: Estadísticas NAP
   views_label: Qué mostrar
   view_growth: Crecimiento NAP
+  chart_hint: Toca o pasa el ratón sobre un día para leerlo
   view_players: Mejores jugadores
   view_achievements: Logros
-  view_lookup: Búsqueda de jugador
-  growth_title: Crecimiento de la Alianza
+  view_lookup: Buscar jugador
+  growth_title: Crecimiento de la alianza
   growth_members: "{n} miembros"
   growth_more: Más en la
   growth_link: Pestaña de estadísticas
   lookup_search: Nombre del jugador...
   lookup_hint: Solo jugadores NAP, de la captura diaria. Escribe al menos 2 letras de su nombre.
   lookup_none: No hay coincidencias de jugadores NAP.
-  lookup_place: "#{place} de {of} jugadores NAP por Poder"
+  lookup_place: "#{place} de {of} jugadores NAP por poder"
   lookup_kills: Bajas
   lookup_level: Santuario
   lookup_week: Esta semana
   lookup_month: Últimos 30 días
   lookup_kills_week: Bajas esta semana
-  lookup_history: Poder durante el último mes
+  lookup_history: Poder en el último mes
   ach_strongest: Más poderoso
   ach_gain_week: Mayor ganancia esta semana
   ach_kills: Más bajas
@@ -1004,34 +1007,34 @@ stats:
   ach_climb_month: Mayor ascenso de Santuario este mes
   ach_away: Lejos de la colmena
   ach_away_help: Más días este mes a más de 50 casillas de la colmena de su alianza (donde están la mayoría de sus miembros).
-  ach_none: Aún no se han recolectado suficientes días.
+  ach_none: Aún no se han recopilado suficientes días.
   value_kills: "{n} bajas"
   value_levels_one: "+1 nivel"
   value_levels_other: "+{n} niveles"
   value_days_one: 1 día
   value_days_other: "{n} días"
   list_label: Qué lista
-  list_strongest: Más fuerte
-  list_week: Ganancia semanal
-  list_month: Ganancia mensual
+  list_strongest: Más fuertes
+  list_week: Ganado esta semana
+  list_month: Ganado este mes
   filter_label: Alianza
   filter_all: Todas las alianzas NAP
-  players_none: No hay jugadores que mostrar aún.
-  players_wait_week: Las ganancias de esta semana se mostrarán una vez que se recolecte una captura anterior a este lunes.
-  players_wait_month: Las ganancias de un mes se mostrarán una vez que se haya recopilado un mes de días.
-  players_as_of: A partir de la captura previa al reinicio de las {date}.
+  players_none: Aún no hay jugadores que mostrar.
+  players_wait_week: Las ganancias de esta semana se muestran una vez recopilada una captura anterior a este lunes.
+  players_wait_month: Las ganancias de un mes se muestran una vez recopilado un mes de datos.
+  players_as_of: A partir de la captura anterior al reinicio del {date}.
   week_note: Las semanas van de lunes a domingo (Game Time); los registros semanales se reinician cada lunes.
   col_player: Jugador
-  col_gain: Ganancia
+  col_gain: Ganado
   show_more: Mostrar todos los {n}
-  range_label: Lapso de tiempo
+  range_label: Periodo de tiempo
   range_week: 1 semana
   range_month: 1 mes
-  range_all: Todos
+  range_all: Todo
   loading: Cargando estadísticas...
-  failed: No se pueden cargar las estadísticas en este momento.
+  failed: Las estadísticas no se pueden cargar ahora mismo.
   collecting: Las estadísticas se recopilan una vez al día, justo antes del reinicio diario (00:00 GT). Los gráficos se completan día a día.
-  since: Recopilado diariamente desde {date}.
+  since: Recopilado diariamente desde el {date}.
   one_day: 'Solo se ha recopilado un día hasta ahora: el gráfico comienza cuando hay dos.'
   col_alliance: Alianza
   col_might: Poder
@@ -1039,7 +1042,7 @@ stats:
   col_month: 30 días
   no_number: "—"
   show_hide: Toca una alianza para mostrar u ocultar su línea.
-  credit_before: Números desde el
+  credit_before: Cifras de
 steward:
   tidy_title: 'IDs de Alianza: limpieza'
   tidy_help: 'Todo se almacena ahora por ID de alianza. Los movimientos dejaron {gist} archivos de respaldo y {dashboards} archivos antiguos de panel en el Gist. Elimínalos cuando estés listo: el Gist conserva sus revisiones anteriores. Los archivos de respaldo de Stats {stats} se conservan (el almacén Blob no tiene revisiones).'
