@@ -226,7 +226,7 @@ chart_editor:
   tabs_pattern: "Tab names like"
   tabs_count: "Newest tabs to read"
   tabs_match: "{n} tabs match: {names}."
-  tabs_reads: "Reads the newest {n}."
+  tabs_reads: "Reads the newest {n}, from {oldest} to {newest}."
   tabs_none: "No tabs match. # is any number, * is anything: \"#/# *\" matches \"11/09 K71 QRT\"."
   tabs_read: "Read {n} tabs; the newest is {newest}."
   tabs_skipped: "Couldn't read: {names}."

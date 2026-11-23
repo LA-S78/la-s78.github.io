@@ -499,7 +499,8 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
   }
   d.updatedAt = now || new Date().toISOString();
   d.updatedBy = String(actor).slice(0, 60);
-  const bytes = Buffer.byteLength(JSON.stringify(d, null, 2));
+  // As saved (api/_gist.js fileText: without spaces, since 2026-11-23)
+  const bytes = Buffer.byteLength(JSON.stringify(d));
   if (bytes > MAX_DASHBOARD_BYTES) {
     return {
       error: say('api_dashboard.too_big', {
