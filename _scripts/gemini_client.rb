@@ -9,7 +9,7 @@ require 'json'
 GEMINI_MODEL = 'gemini-3.1-flash-lite'
 
 # json: true asks for a JSON reply (no YAML quoting pitfalls such as French "Statut : Ouvert").
-def call_gemini_api(prompt, _lang = nil, max_retries: 8, json: false)
+def call_gemini_api(prompt, _lang = nil, max_retries: 8, json: false, read_timeout: 300)
   uri = URI("https://generativelanguage.googleapis.com/v1beta/models/#{GEMINI_MODEL}:generateContent?key=#{ENV['GEMINI_API_KEY']}")
   header = { 'Content-Type': 'application/json' }
   body = { contents: [{ parts: [{ text: prompt }] }] }
@@ -22,7 +22,7 @@ def call_gemini_api(prompt, _lang = nil, max_retries: 8, json: false)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.open_timeout = 30
-    http.read_timeout = 300
+    http.read_timeout = read_timeout
 
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = body.to_json
