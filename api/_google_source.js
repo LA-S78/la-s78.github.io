@@ -491,22 +491,53 @@ export function alignRows(columns, data) {
   return data.rows.map((r) => where.map((j) => (j >= 0 ? (r[j] ?? '') : '')));
 }
 
+/** At most this many tabs are read at once (Gemini's review: fewer bursts at Google). */
+const TAB_CONCURRENCY = 4;
+/** All of a multi-tab read must be done within this (the function may run 30 s; vercel.json). */
+const TABS_BUDGET_MS = 20000;
+
 /**
  * Reads the range from each chosen tab: { columns, rows, tab, older: [{ name, rows }] }, with
  * the newest tab's rows as `rows` (so every chart works as before) and the others in `older`,
  * oldest first. A tab that can't be read is left out (`skipped`), unless it's the newest.
+ * Read 4 at a time (newest first), each within the usual timeout and one shared deadline: a
+ * tab still waiting when the time is up is skipped, so a slow one can't fail the whole call
+ * (Gemini's review, 2026-11-23).
  */
-export async function fetchSourceTabs(src, { timeoutMs = TIMEOUT_MS } = {}) {
-  const tabs = pickTabs(await fetchSheetTabs(src, { timeoutMs }), src.tabs || {});
-  if (tabs.length < 2) throw forLeader(say('api_sheets.tabs_too_few'));
-  const results = await Promise.allSettled(
-    tabs.map((t) =>
-      fetchSourceTable(
-        { ...src, url: linkToTab(src.url, t.gid), sheet: '', tabs: undefined },
-        { timeoutMs },
-      ),
-    ),
+export async function fetchSourceTabs(
+  src,
+  { timeoutMs = TIMEOUT_MS, budgetMs = TABS_BUDGET_MS } = {},
+) {
+  const deadline = Date.now() + budgetMs;
+  const left = () => deadline - Date.now();
+  const tabs = pickTabs(
+    await fetchSheetTabs(src, { timeoutMs: Math.min(timeoutMs, left()) }),
+    src.tabs || {},
   );
+  if (tabs.length < 2) throw forLeader(say('api_sheets.tabs_too_few'));
+  const results = new Array(tabs.length);
+  // Newest first, so the one the chart can't do without goes first
+  const queue = tabs.map((_, i) => i).reverse();
+  const worker = async () => {
+    while (queue.length) {
+      const i = queue.shift();
+      const time = Math.min(timeoutMs, left());
+      if (time < 1000) {
+        results[i] = { status: 'rejected', reason: forLeader(say('api_sheets.too_slow')) };
+        continue;
+      }
+      try {
+        const value = await fetchSourceTable(
+          { ...src, url: linkToTab(src.url, tabs[i].gid), sheet: '', tabs: undefined },
+          { timeoutMs: time },
+        );
+        results[i] = { status: 'fulfilled', value };
+      } catch (reason) {
+        results[i] = { status: 'rejected', reason };
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(TAB_CONCURRENCY, tabs.length) }, worker));
   const newest = results[results.length - 1];
   if (newest.status === 'rejected') throw newest.reason;
   const { columns, rows } = newest.value;

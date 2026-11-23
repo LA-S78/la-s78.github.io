@@ -124,6 +124,14 @@ export function storeMapForm(out, from) {
 }
 
 /**
+ * A file's text as saved. The alliances' dashboard files are saved without spaces or line
+ * breaks (Gemini's review, 2026-11-23): every Gist read downloads every file, and a dashboard
+ * with charts across tabs is large; the other files stay spaced out, easy to read in GitHub.
+ */
+export const fileText = (name, data) =>
+  /^dashboard-[^/]+\.json$/.test(name) ? JSON.stringify(data) : JSON.stringify(data, null, 2);
+
+/**
  * Saves one or more JSON files to the Gist in a single request (so they change together).
  * @param {Object<string, object>} files e.g. { 'map-state.json': state }
  * @param {object} [options]
@@ -137,7 +145,7 @@ export async function writeGist(files, { description, timeoutMs } = {}) {
   if (description) body.description = description;
   for (const [name, data] of Object.entries(files)) {
     // null deletes the file (the alliance ID tidy-up's backups)
-    body.files[name] = data === null ? null : { content: JSON.stringify(data, null, 2) };
+    body.files[name] = data === null ? null : { content: fileText(name, data) };
   }
 
   const res = await fetch(`${GIST_API}/${id}`, {
@@ -270,7 +278,6 @@ export async function updateGist(
   change,
   { gist = null, timeoutMs, deadline = Date.now() + 8000 } = {},
 ) {
-  const text = (data) => JSON.stringify(data, null, 2);
   const parse = (g, name) => JSON.parse(g?.files?.[name]?.content || 'null');
   const revisions = new Map(); // version -> Gist, read at most once each
   const revision = async (version) => {
@@ -284,7 +291,7 @@ export async function updateGist(
   let out = storeMapForm(await change(from), from);
   if (!out?.files) return out;
   // Nothing different from what is stored: no save.
-  if (Object.entries(out.files).every(([n, d]) => from.files?.[n]?.content === text(d))) {
+  if (Object.entries(out.files).every(([n, d]) => from.files?.[n]?.content === fileText(n, d))) {
     return out;
   }
 
@@ -331,7 +338,7 @@ export async function updateGist(
         data = mergeJson(parse(await revision(base), name), parse(theirs, name), data);
       }
       // Our own change taken out, so `change` adds it exactly once.
-      files[name] = { content: text(mergeJson(ours, parse(from, name), data)) };
+      files[name] = { content: fileText(name, mergeJson(ours, parse(from, name), data)) };
     }
     from = { ...latest, files };
     fromVersion = latest.history?.[0]?.version;

@@ -76,5 +76,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/dashboard.js": {
+      "maxDuration": 30
+    }
+  }
 }
