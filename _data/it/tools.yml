@@ -266,13 +266,13 @@ chart_editor:
 charts:
   column: Colonna {n}
   no_numbers: Nessun numero da rappresentare nella colonna scelta.
-  line_two_rows: Un grafico a linee richiede almeno due righe.
-  line_two_columns: Un grafico a linee richiede almeno due colonne lungo la base.
+  line_two_rows: Una linea richiede almeno due righe.
+  line_two_columns: Una linea richiede almeno due colonne lungo il fondo.
   no_positive: Nessun numero positivo da rappresentare nella colonna scelta.
   no_targets: Nessun numero (o obiettivo) da confrontare.
-  no_table: Nessuna tabella presente.
+  no_table: Nessuna tabella ancora.
   unknown_type: Tipo di grafico sconosciuto.
-  draw_failed: Impossibile disegnare il grafico ({error}).
+  draw_failed: Impossibile disegnare questo grafico ({error}).
   other: Altro
   value: Valore
   total: Totale
@@ -283,13 +283,12 @@ charts:
   target_reached: Obiettivo raggiunto ✓
   done: "✓ Fatto"
   reached_target: "{done} di {total} hanno raggiunto l'obiettivo"
-  search: Cerca...
+  search: Cerca…
   search_label: Cerca in questa tabella
   matching: "{n} corrispondenze"
   show_all: Mostra tutti i {n}
   show_all_rows: Mostra tutte le {n} righe
-  show_fewer: Mostra meno
-  first_rows: Visualizzazione delle prime {shown} di {n} righe.
+  first_rows: Mostrate le prime {shown} di {n} righe.
   hint_bar: Tocca o passa sopra una barra
   hint_bar_key: Tocca o passa sopra una barra. Tocca un nome nella legenda per vedere solo quello.
   views: Visualizzazioni
@@ -300,17 +299,17 @@ charts:
   view_average: Media di {n} schede
   view_chart: Grafico
   view_compare: Confronta
-  search_names: Scrivi un nome...
-  no_match: Nessun nome corrispondente.
+  search_names: Digita un nome…
+  no_match: Nessun nome corrisponde.
   view_tab: Scheda da mostrare
   compare_first: Primo nome
   compare_second: Secondo nome
-  compare_top: Primi {n} (media)
+  compare_top: Top {n} (media)
   compare_bottom: Ultimi {n} (media)
   pair_left: 'Sinistra: {name}'
-  pair_right: 'Destra (sfumato): {name}'
-  flip_to_asc: "⇅ Più bassi prima"
-  flip_to_desc: "⇅ Più alti prima"
+  pair_right: 'Destra (sbiadito): {name}'
+  flip_to_asc: "⇅ Prima il più basso"
+  flip_to_desc: "⇅ Prima il più alto"
   hint_line: Tocca o passa sopra una settimana
   hint_pie: Tocca o passa sopra una fetta
   hint_progress: Tocca o passa sopra una riga
