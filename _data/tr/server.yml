@@ -60,21 +60,22 @@ api_dashboard:
   already_in_rotor: "{name} zaten rotorda."
   player_removed: O oyuncu kaldırıldı.
 api_sheets:
-  full_link: Tam bağlantıyı yapıştırın (https://docs.google.com/ ile başlayan).
-  google_only: Yalnızca Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.
-  range_format: Aralık A1:D20 gibi görünmelidir (veya boş bırakın).
+  no_tabs: Bu tabloda hiç sekme bulunamadı. Bağlantının doğrudan e-tabloyu açtığından emin olun.
+  full_link: Tam bağlantıyı yapıştırın (https://docs.google.com/… ile başlayan).
+  google_only: Sadece Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.
+  range_format: Aralık A1:D20 şeklinde olmalıdır (veya boş bırakın).
   not_sheet_or_doc: Bu bağlantı bir Google E-Tablosu veya Google Dokümanı değil.
-  unexpected_redirect: Google indirme işlemini beklenmedik bir yere yönlendirdi, bu yüzden alınamadı.
+  unexpected_redirect: Google indirmeyi beklenmedik bir yere yönlendirdiği için veri alınamadı.
   too_many_redirects: Google'dan çok fazla yönlendirme geldi.
-  too_slow: Google'ın yanıt vermesi çok uzun sürdü. Bir süre sonra tekrar deneyin.
+  too_slow: Google yanıt vermek için çok uzun süre bekledi. Birazdan tekrar deneyin.
   unreachable: Google'a ulaşılamadı ({reason}).
-  doc_not_shared: 'Google reddetti: Dokümanı yayınlayın (Dosya → Paylaş → Web''de yayınla), ardından o bağlantıyı kullanın.'
-  sheet_not_shared: 'Google reddetti: Tabloyu "Bağlantıya sahip olan herkes görüntüleyebilir" şeklinde paylaşın veya Dosya → Paylaş → Web''de yayınla yolunu kullanın.'
+  doc_not_shared: 'Google izin vermedi: Dokümanı yayınlayın (Dosya → Paylaş → Web''de yayınla) ve ardından bu bağlantıyı kullanın.'
+  sheet_not_shared: 'Google izin vermedi: E-tabloyu "Bağlantıya sahip herkes görüntüleyebilir" olarak ayarlayın veya Dosya → Paylaş → Web''de yayınla yolunu kullanın.'
   google_error: Google bir hata ile yanıt verdi ({status}). Bağlantıyı kontrol edin.
-  too_large: Bu tablo okunmayacak kadar büyük (2 MB üzeri).
+  too_large: Bu tablo okunamayacak kadar büyük (2 MB'tan fazla).
   empty: Bu tablo (veya aralık) boş.
-  no_such_table_one: Bu Dokümanda {count} tablo var; {table} tablosu bulunamadı.
-  no_such_table_other: Bu Dokümanda {count} tablo var; {table} tablosu bulunamadı.
+  no_such_table_one: Bu Dokümanda {count} tablo var; {table} numaralı tablo bulunamadı.
+  no_such_table_other: Bu Dokümanda {count} tablo var; {table} numaralı tablo bulunamadı.
   no_table: Bu Dokümanda hiç tablo yok.
 api_nominate:
   link_invalid: Bu bağlantı geçersiz veya süresi dolmuş.

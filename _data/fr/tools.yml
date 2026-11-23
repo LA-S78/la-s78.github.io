@@ -172,32 +172,39 @@ caravan:
   this_player: ce joueur
   confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde repasse en disponible (les noms et heures sont conservés).
 chart_editor:
-  edit_title: Modifier le graphique ou tableau
+  edit_title: Modifier le graphique ou le tableau
   new_title: Nouveau graphique ou tableau
   type: Type
   type_bar: Barres
-  type_line: Ligne
+  type_line: Lignes
   type_pie: Secteurs
   type_progress: Progression
   type_table: Tableau
   title: Titre
   title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: ex. Minimum 15M de points de duel requis pour la réinitialisation de vendredi
-  who_sees: Visibilité
+  note_example: ex. Minimum 15M de points de duel requis avant la réinitialisation du vendredi
+  who_sees: Qui peut le voir
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
   data: Données
   data_source: Source des données
   paste: Coller un tableau
   link: Lien Google Sheet / Doc
-  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête en premier) et collez-les ici.
-  tab_name: Nom de l'onglet (facultatif)
-  range: Plage, ex. A1:D20 (facultatif)
+  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête d'abord) et collez-les ici.
+  tab_name: Nom de l'onglet (optionnel)
+  tab: Onglet
+  grid_help: 'Faites glisser sur le tableau pour le sélectionner (sur téléphone : appuyez sur un coin, puis sur le coin opposé). La première ligne est l''en-tête. Ensuite, appuyez sur une lettre de colonne pour en faire les étiquettes, ou sur une colonne de nombres.'
+  grid_tap_second: Appuyez maintenant sur le coin opposé du tableau.
+  grid_mode: Cliquer sur une lettre de colonne définit
+  grid_labels: Étiquettes
+  grid_numbers: Nombres
+  grid_more: Seules les 200 premières lignes et 60 premières colonnes sont affichées ici ; une plage peut aller plus loin.
+  range: Plage, ex. A1:D20 (optionnel)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent voir » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupérera les dernières données plus tard.'
+  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent voir” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la carte récupère les derniers chiffres plus tard.'
   load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
   preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
@@ -206,13 +213,13 @@ chart_editor:
   rows_other: "{n} lignes"
   columns_one: "{n} colonne"
   columns_other: "{n} colonnes"
-  at_most_500: "(500 maximum)"
+  at_most_500: "(500 au maximum)"
   labels: Noms (étiquettes)
   numbers_to_show: Nombres à afficher
   labels_swapped: Noms (une ligne ou barre chacun)
-  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, colonnes en bas"
-  swap_bar: "⇄ Inverser lignes et colonnes : colonnes en barres, une couleur par ligne"
-  swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs à travers les semaines.'
+  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
+  swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs au fil des semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
   rows_count: "{n} sur 6 choisis"
@@ -225,15 +232,15 @@ chart_editor:
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
-  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, top en vert'
+  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, meilleur en vert'
   traffic_reverse: 'Inversé : bas est bon (vert), haut est mauvais (rouge)'
-  traffic_target: Rouge → jaune → vert selon la proximité avec la cible
+  traffic_target: Rouge → jaune → vert selon la proximité par rapport à la cible
   traffic_target_reverse: 'Inversé : plus loin en dessous de la cible est meilleur'
   donut: Donut (anneau)
   target: Cible pour tout le monde
   target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le nombre au-dessus)"
+  use_number_above: "(utiliser le nombre ci-dessus)"
   highlight_where: Surligner les lignes où
   no_highlight: "(aucun surlignage)"
   at_least: est au moins
