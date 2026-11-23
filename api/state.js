@@ -1,5 +1,6 @@
 // api/state.js
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
+import { allianceFrames, applyAllianceFrames } from './_alliance_images.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { readRegister } from './_register.js';
 import { formerlyTags } from './_rename.js';
@@ -200,7 +201,11 @@ export default async function handler(req, res) {
             : req.query.uid !== undefined
               ? { uid: String(req.query.uid).slice(0, 20) }
               : { q: String(req.query.q || '').slice(0, 40) };
-        const answer = await lookupPlayer(ask, { steward });
+        // Alliance avatar frames over the game's default frame (api/_frames.js)
+        const answer = applyAllianceFrames(
+          await lookupPlayer(ask, { steward }),
+          allianceFrames(gist),
+        );
         res.setHeader(
           'Cache-Control',
           steward ? 'private, no-store' : 'public, s-maxage=1800, stale-while-revalidate=86400',
@@ -210,7 +215,10 @@ export default async function handler(req, res) {
 
       // The Stats tab's Top players view (api/_stats.js topPlayers), worked out daily
       case 'stats-players': {
-        const top = withPublicIds(await readTopPlayers());
+        const top = applyAllianceFrames(
+          withPublicIds(await readTopPlayers()),
+          allianceFrames(gist),
+        );
         res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
         return res
           .status(200)

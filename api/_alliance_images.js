@@ -19,6 +19,9 @@ import { isSteward } from './_stewards.js';
 import { say, utcTime } from './_messages.js';
 import { findAllianceKey } from './_dashboard.js';
 import { sameTag, tagSlug } from './_alliances.js';
+import { frameFor } from './_frames.js';
+
+export { DEFAULT_FRAMES, isDefaultFrame, frameFor } from './_frames.js';
 import {
   isGistConfigured,
   readGist,
@@ -87,22 +90,57 @@ export function readImages(gist) {
     decided: obj(d.decided),
     sent: Array.isArray(d.sent) ? d.sent : [],
     missing: obj(d.missing),
-    // Alliances that switched their avatar frame on: { slug: true }
+    // Alliances that switched their avatar frame on: { slug: true } (over the game's default
+    // frame only) or { slug: 'all' } (over special frames too; 2026-11-23)
     useFrame: obj(d.useFrame),
   };
 }
 
 /**
- * The alliance's avatar frame, when it has one and switched it on: its address, else null.
- * Drawn around every member's picture on the site, in place of their in-game frame (owner,
- * 2026-11-19: all members, everywhere their pictures appear).
+ * The alliance's avatar frame, when it has one and switched it on: { url, all }, else null.
+ * Drawn around members' pictures everywhere on the site (owner, 2026-11-19), in place of the
+ * game's default frame; with `all` (owner, 2026-11-23: the leaders' choice), in place of
+ * special frames too. See frameFor().
  */
 export function allianceFrame(gist, tag) {
   if (!tag) return null;
-  const images = readImages(gist);
-  const slug = allianceSlug(tag, mapAlliances(gist));
+  return frameSetting(readImages(gist), allianceSlug(tag, mapAlliances(gist)));
+}
+
+function frameSetting(images, slug) {
   const file = images.live[slug]?.frame?.file;
-  return file && images.useFrame[slug] ? `/alliance-images/${file}` : null;
+  const on = images.useFrame[slug];
+  return file && on ? { url: `/alliance-images/${file}`, all: on === 'all' } : null;
+}
+
+/** Every alliance's frame setting, by tag: { TAG: { url, all } } (alliances with one on). */
+export function allianceFrames(gist) {
+  const images = readImages(gist);
+  const alliances = mapAlliances(gist);
+  const out = {};
+  for (const tag of Object.keys(alliances)) {
+    const setting = frameSetting(images, allianceSlug(tag, alliances));
+    if (setting) out[tag] = setting;
+  }
+  return out;
+}
+
+/**
+ * The same for every object in a reply that has a player's `tag` and `frame` (the Stats
+ * tab's players, a lookup, the map's members): changed in place. `frames`: allianceFrames().
+ */
+export function applyAllianceFrames(value, frames) {
+  if (!frames || !Object.keys(frames).length) return value;
+  const walk = (v) => {
+    if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === 'object') {
+      if (typeof v.tag === 'string' && 'frame' in v && frames[v.tag])
+        v.frame = frameFor(v.frame, frames[v.tag]);
+      Object.values(v).forEach(walk);
+    }
+  };
+  walk(value);
+  return value;
 }
 
 /**
@@ -139,6 +177,7 @@ export function imageStatus(gist, tag) {
   return {
     slots,
     frameOn: Boolean(images.useFrame[slug]),
+    frameAll: images.useFrame[slug] === 'all',
     left: Math.max(0, DAILY_LIMIT - used),
     dailyLimit: DAILY_LIMIT,
     ready: blobConfigured(),
@@ -680,6 +719,8 @@ async function frameSwitch(session, body) {
     return reply(403, { error: say('api_alliance_images.own_alliance_only'), code: 'not_allowed' });
   }
   const on = Boolean(body.on);
+  // true: over the game's default frame only; 'all': over special frames too
+  const value = on ? (body.all ? 'all' : true) : null;
   let known = true;
   await updateGist((g) => {
     const { key, alliances } = allianceIn(g, body.alliance);
@@ -689,16 +730,16 @@ async function frameSwitch(session, body) {
     }
     const images = readImages(g);
     const slug = allianceSlug(key, alliances);
-    if (Boolean(images.useFrame[slug]) === on) return {};
-    if (on) images.useFrame[slug] = true;
+    if ((images.useFrame[slug] ?? null) === value) return {};
+    if (value) images.useFrame[slug] = value;
     else delete images.useFrame[slug];
     return {
       files: { [IMAGES_FILE]: images },
-      description: `Alliance avatar frame ${on ? 'on' : 'off'} for [${key}] by ${session.name}`,
+      description: `Alliance avatar frame ${on ? (value === 'all' ? 'on (all frames)' : 'on') : 'off'} for [${key}] by ${session.name}`,
     };
   });
   if (!known) return reply(400, { error: say('api_alliance_images.unknown_alliance') });
-  return reply(200, { success: true, on });
+  return reply(200, { success: true, on, all: value === 'all' });
 }
 
 /** The Steward review page: what is waiting, and the picture itself (Stewards only). */
