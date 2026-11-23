@@ -48,6 +48,18 @@ export function raceView(stored, register) {
   return convert(strip(stored), toTag);
 }
 
+/**
+ * The one alliance on the map that ever had a tag (a race measured before a rename: HMDA's
+ * Day 5 is Arch's), or null when none or several did.
+ */
+function formerOwner(register, tag) {
+  const here = (a) => a.game === GAME && String(a.server) === SERVER;
+  const had = Object.values(register.alliances).filter(
+    (a) => onMap(a) && here(a) && (a.tags || []).some((h) => h.tag === tag),
+  );
+  return had.length === 1 ? had[0].id : null;
+}
+
 export function raceByIdForm(view, register) {
   const here = (a) => a.game === GAME && String(a.server) === SERVER;
   const byTag = new Map(
@@ -56,7 +68,10 @@ export function raceByIdForm(view, register) {
       .map((a) => [a.tag, a.id]),
   );
   return {
-    stored: { version: 2, ...convert(strip(view), (t) => byTag.get(t) || t) },
+    stored: {
+      version: 2,
+      ...convert(strip(view), (t) => byTag.get(t) || formerOwner(register, t) || t),
+    },
     register: null,
   };
 }
