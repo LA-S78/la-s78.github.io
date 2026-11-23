@@ -148,6 +148,23 @@ footer {
   padding-top: 10px;
   padding-bottom: max(10px, env(safe-area-inset-bottom));
 }
+/* While typing on a phone (a text box has focus), the bottom navigation steps aside: with the
+   keyboard up, some phone browsers (seen in Brave on Android, owner 2026-11-23) left it stuck
+   in the middle of the screen over a blank band until the keyboard closed. It comes back
+   when the box loses focus. */
+@media (pointer: coarse) {
+  body:has(
+      :is(
+          input:not([type='checkbox'], [type='radio'], [type='button'], [type='submit'], [type='range'], [type='file']),
+          textarea,
+          [contenteditable='true']
+        ):focus
+    )
+    footer {
+    display: none;
+  }
+}
+
 .nav-item {
   display: flex;
   flex-direction: column;
