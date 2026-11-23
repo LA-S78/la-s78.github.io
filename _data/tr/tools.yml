@@ -174,7 +174,7 @@ caravan:
   this_player: bu oyuncu
   confirm_new_week: Yeni bir hafta başlatılsın mı? Herkes müsait listesine geri döner (isimler ve saatler kalır).
 chart_editor:
-  edit_title: Grafiği veya tabloyu düzenle
+  edit_title: Grafik veya tabloyu düzenle
   new_title: Yeni grafik veya tablo
   type: Tür
   type_bar: Çubuk
@@ -190,7 +190,7 @@ chart_editor:
   officers_only: Sadece subaylar (R4/R5)
   all_members: Tüm ittifak üyeleri
   data: Veri
-  data_source: Verinin kaynağı
+  data_source: Veri kaynağı
   paste: Tablo yapıştır
   link: Google E-Tablo / Doküman bağlantısı
   paste_help: Google E-Tablolar veya Excel'den hücreleri kopyalayın (önce başlık satırı) ve buraya yapıştırın.
@@ -200,33 +200,31 @@ chart_editor:
   order_sheet: Tablodaki gibi
   order_desc: En yüksek önce
   order_asc: En düşük önce
-  order_asc_help: En düşük önce seçeneği, gösterilen sütunlarda verisi olmayan (katılmayan) satırları çıkarır.
+  order_asc_help: En düşük önce seçeneği, gösterilen sütunlarda veri olmayan satırları (katılmayanlar) hariç tutar.
   limit: Göster
   limit_all: Tümü
-  tabs_on: Birkaç sekmeden aynı aralık (örneğin her hafta bir sekme)
-  tabs_pattern: Şunun gibi sekme adları
-  tabs_count: Okunacak en yeni sekmeler
+  tabs_on: Birden fazla sekmeden aynı aralık (örneğin haftalık bir sekme)
+  tabs_pattern: Sekme adları şuna benzer
+  tabs_count: Okunacak en yeni sekme sayısı
   tabs_match: "{n} sekme eşleşti: {names}."
   tabs_reads: En yeni {n} tanesini okur.
-  tabs_none: 'Eşleşen sekme yok. # herhangi bir sayı, * her şey anlamına gelir: "#/# *" ifadesi "11/09 K71 QRT" ile eşleşir.'
+  tabs_none: 'Eşleşen sekme yok. # herhangi bir sayı, * herhangi bir şeydir: "#/# *" ifadesi "11/09 K71 QRT" ile eşleşir.'
   tabs_read: "{n} sekme okundu; en yenisi {newest}."
   tabs_skipped: 'Okunamadı: {names}.'
-  view_start: İzleyicilerin başlangıcı
+  view_start: İzleyicilerin başlangıç görünümü
   view_help: İzleyiciler grafiğin üzerindeki görünümler arasında geçiş yapabilir.
-  compare: 'İzleyicilerin karşılaştırmasına izin ver: iki isim veya bir isim ile ilk ya da son 5'
-  compare_pie: İzleyicilerin iki ismi (veya ilk ya da son 5'i) kendi pastalarında karşılaştırmasına izin ver
-  compare_line: İzleyicilerin iki ismin çizgilerini karşılaştırmasına izin ver (veya bir ismi her haftanın ilk ya da son 5'i ile)
-  grid_help: 'Tabloyu seçmek için sürükleyin (telefonda: bir köşeye, ardından karşı köşeye dokunun). İlk satır başlıktır. Ardından etiket yapmak için bir sütun harfine veya sayı sütununa dokunun.'
+  compare: 'İzleyicilerin karşılaştırma yapmasına izin ver: iki isim veya bir isim ile ilk veya son 5'
+  grid_help: 'Seçmek için tabloyu sürükleyin (telefonda: bir köşeye, ardından karşı köşeye dokunun). İlk satır başlıktır. Ardından etiket yapmak için bir sütun harfine veya sayısal bir sütuna dokunun.'
   grid_tap_second: Şimdi tablonun karşı köşesine dokunun.
   grid_mode: Bir sütun harfine tıklamak şunu ayarlar
   grid_labels: Etiketler
   grid_numbers: Sayılar
-  grid_more: Burada sadece ilk 200 satır ve 60 sütun gösterilmektedir; aralık daha ileriye gidebilir.
+  grid_more: Burada sadece ilk 200 satır ve 60 sütun gösteriliyor; aralık daha ileriye gidebilir.
   range: Aralık, ör. A1:D20 (isteğe bağlı)
   doc_table: Dokümandaki hangi tablo (1, 2…)
   load: "⤓ Google'dan yükle"
   loading: "⤓ Yükleniyor…"
-  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi senkronize et” özelliği daha sonra en güncel sayıları getirir.'
+  link_help: 'E-Tablolar: Paylaş → “Bağlantıya sahip olan herkes görüntüleyebilir” (veya Dosya → Paylaş → Web''de yayınla). Dokümanlar: Dosya → Paylaş → Web''de yayınla. Kart üzerindeki “Şimdi senkronize et” en son sayıları daha sonra çeker.'
   load_first: Önce tabloyu yükleyin (⤓ Google'dan yükle).
   preview: Önizleme
   preview_empty: Grafiği görmek için yukarıya bir tablo yapıştırın.
@@ -238,41 +236,41 @@ chart_editor:
   at_most_500: "(en fazla 500)"
   labels: İsimler (etiketler)
   numbers_to_show: Gösterilecek sayılar
-  labels_swapped: İsimler (her biri için bir çizgi veya çubuk)
-  swap_line: "⇄ Satırları ve sütunları değiştir: satır başına bir çizgi, sütunlar altta"
-  swap_bar: "⇄ Satırları ve sütunları değiştir: çubuk olarak sütunlar, satır başına bir renk"
-  swap_help: 'Oyuncu başına bir satır ve hafta başına bir sütun içeren tablolar için: haftalar boyunca oyuncuları takip etmek üzere bunu işaretleyin.'
-  rows_to_draw: Çizilecek satırlar (6'ya kadar)
-  rows_filter: İsim ara…
-  rows_count: 6'dan {n} tanesi seçildi
+  labels_swapped: İsimler (her biri bir satır veya çubuk)
+  swap_line: "⇄ Satır ve sütunları değiştir: satır başına bir çizgi, sütunlar altta"
+  swap_bar: "⇄ Satır ve sütunları değiştir: sütunlar çubuk olarak, satır başına bir renk"
+  swap_help: 'Oyuncu başına bir satır ve hafta başına bir sütun olan tablolar için: oyuncuları haftalar boyunca takip etmek için bunu işaretleyin.'
+  rows_to_draw: Çizilecek satırlar (en fazla 6)
+  rows_filter: İsim bul…
+  rows_count: 6 taneden {n} tane seçildi
   columns_along: Alttaki sütunlar (tablo sırasına göre)
   numbers: Sayılar
   several_columns: Birden fazla sayı sütunu
   side_by_side: Yan yana
-  stacked_totals: 'Yığınlanmış: toplamlar'
-  stacked_percent: 'Yığınlanmış: her çubuk %100''e'
+  stacked_totals: 'Yığın: toplamlar'
+  stacked_percent: 'Yığın: her çubuk %100''e'
   vertical: Dikey çubuklar
   vertical_leaderboard: Dikey çubuklar (skor tablosu yerine)
   traffic_columns: 'Kırmızı → sarı → yeşil (düşük → yüksek): ilk sütun kırmızı, sonuncu yeşil'
   traffic_size: 'Kırmızı → sarı → yeşil (düşük → yüksek): sıralamaya göre, en üst yeşil'
-  traffic_reverse: 'Ters: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)'
-  traffic_target: Hedefe ne kadar yakın olduklarına göre kırmızı → sarı → yeşil
-  traffic_target_reverse: 'Ters: hedefin altında olmak daha iyidir'
+  traffic_reverse: 'Tersine çevir: düşük iyidir (yeşil), yüksek kötüdür (kırmızı)'
+  traffic_target: Herkesin hedefe ne kadar yakın olduğuna göre kırmızı → sarı → yeşil
+  traffic_target_reverse: 'Tersine çevir: hedefin ne kadar altında olduğu daha iyidir'
   donut: Halka (donut)
   target: Herkes için hedef
   target_example: ör. 15M veya 15000000
   target_column: "…veya hedef sütunu"
   use_number_above: "(yukarıdaki sayıyı kullan)"
-  highlight_where: Satırları vurgula
+  highlight_where: Şu satırları vurgula
   no_highlight: "(vurgu yok)"
-  at_least: en az şuna eşit
+  at_least: en az şu kadar olanlar
   at_least_example: ör. 300M
 charts:
   column: Sütun {n}
-  no_numbers: Seçilen sütunda grafiklenecek sayı yok.
-  line_two_rows: Bir çizgi için en az iki satır gerekir.
-  line_two_columns: Bir çizgi için altta en az iki sütun gerekir.
-  no_positive: Seçilen sütunda grafiklenecek pozitif sayı yok.
+  no_numbers: Seçilen sütunda grafikleştirilecek sayı yok.
+  line_two_rows: Bir çizgi grafiği için en az iki satır gereklidir.
+  line_two_columns: Bir çizgi grafiği için alt kısımda en az iki sütun gereklidir.
+  no_positive: Seçilen sütunda grafikleştirilecek pozitif sayı yok.
   no_targets: Karşılaştırılacak sayı (veya hedef) yok.
   no_table: Henüz tablo yok.
   unknown_type: Bilinmeyen grafik türü.
@@ -281,25 +279,25 @@ charts:
   value: Değer
   total: Toplam
   total_value: 'Toplam: {value}'
-  share_of_all: "{value} · hepsinin {share}'i"
-  value_of_target: "{target}'in {value}'si"
+  share_of_all: "{value} · toplamın {share}'i"
+  value_of_target: "{target} değerinden {value}"
   to_go: 'Kalan: {value}'
   target_reached: Hedefe ulaşıldı ✓
   done: "✓ Tamamlandı"
-  reached_target: "{total} kişiden {done} tanesi hedefe ulaştı"
+  reached_target: "{total} tanesinden {done} tanesi hedefe ulaştı"
   search: Ara…
   search_label: Bu tabloda ara
   matching: "{n} eşleşme"
-  show_all: "{n} tanesinin tümünü göster"
-  show_all_rows: "{n} satırın tümünü göster"
+  show_all: Tüm {n} öğeyi göster
+  show_all_rows: Tüm {n} satırı göster
   show_fewer: Daha az göster
-  first_rows: "{n} satırın ilk {shown} tanesi gösteriliyor."
-  hint_bar: Bir çubuğun üzerine dokunun veya gelin
-  hint_bar_key: Bir çubuğun üzerine dokunun veya gelin. Sadece o veriyi görmek için anahtardan bir isme dokunun.
-  views: Görünümler
+  first_rows: Toplam {n} satırdan ilk {shown} tanesi gösteriliyor.
+  hint_bar: Bir çubuğa dokunun veya üzerine gelin
+  hint_bar_key: Bir çubuğa dokunun veya üzerine gelin. Yalnızca onu görmek için anahtardan bir isme dokunun.
+  views: Görüntülemeler
   view_latest: En yeni sekme
-  view_weeks: Sekme bazlı toplamlar
-  view_player: Sekme bazlı bir isim
+  view_weeks: Sekmelere göre toplamlar
+  view_player: Sekme başına bir isim
   view_pick: Gösterilecek isim
   view_average: "{n} sekmenin ortalaması"
   view_chart: Grafik
@@ -309,16 +307,15 @@ charts:
   view_tab: Gösterilecek sekme
   compare_first: İlk isim
   compare_second: İkinci isim
-  compare_top: İlk {n} (ortalama)
-  compare_bottom: Son {n} (ortalama)
+  compare_top: En iyi {n} (ortalama)
+  compare_bottom: En düşük {n} (ortalama)
   pair_left: 'Sol: {name}'
-  share_of_column: "{name}: toplamın {share}'i"
   pair_right: 'Sağ (soluk): {name}'
-  flip_to_asc: "⇅ En düşük önce"
-  flip_to_desc: "⇅ En yüksek önce"
-  hint_line: Bir haftanın üzerine dokunun veya gelin
-  hint_pie: Bir dilimin üzerine dokunun veya gelin
-  hint_progress: Bir satırın üzerine dokunun veya gelin
+  flip_to_asc: "⇅ En düşükten başlayarak"
+  flip_to_desc: "⇅ En yüksekten başlayarak"
+  hint_line: Bir haftaya dokunun veya üzerine gelin
+  hint_pie: Bir dilime dokunun veya üzerine gelin
+  hint_progress: Bir satıra dokunun veya üzerine gelin
 nominate:
   page_title: Ödül Adaylıkları
   name_ok: "[{tag}] üye listesinde"
