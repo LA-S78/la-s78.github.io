@@ -1127,7 +1127,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
                 .map((n) => `<option value="${n}"${(o.limit || 0) === n ? ' selected' : ''}>${n ? n : e('limit_all')}</option>`)
                 .join('')}</select></div></div>`;
             if (o.order === 'asc') html += `<p class="dash-help">${e('order_asc_help')}</p>`;
-            // "Compare two" for viewers (owner, 2026-11-23: useful for some charts, not all)
+            // Compare for viewers (owner, 2026-11-23: useful for some charts, not all)
             html += `<label class="dash-check"><input type="checkbox" id="ed-compare"${o.compare ? ' checked' : ''}> ${e('compare')}</label>`;
           }
           // Across tabs (2026-11-23): the view viewers start on (they can switch)

@@ -224,6 +224,47 @@
   outline: none;
 }
 
+/* The search box at the top of a long list (data-search) */
+.site-select-search {
+  position: sticky;
+  top: -4px;
+  z-index: 1;
+  margin: -4px -4px 4px;
+  padding: 6px;
+  background: var(--card-bg-solid);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.site-select-search input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.4rem 0.55rem;
+  background: var(--surface-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  font: inherit;
+  font-size: 0.86rem;
+}
+
+.site-select-search input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.site-select-none {
+  padding: 0.5rem 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.site-select-search[hidden],
+.site-select-none[hidden],
+.site-select-option[hidden],
+.site-select-group[hidden] {
+  display: none;
+}
+
 .site-select.opens-up .site-select-list {
   top: auto;
   bottom: calc(100% + 4px);

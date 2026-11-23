@@ -1467,6 +1467,9 @@ li.dw-sel > .dw-bar-track {
   gap: 6px;
   margin-bottom: 8px;
 }
+.dw-picks .site-select {
+  flex: 0 1 240px;
+}
 .dw-days {
   justify-content: flex-start;
   margin: 0 0 8px;
