@@ -216,6 +216,28 @@
   --dw: var(--text-muted);
 }
 
+/* Four or more series (2026-11-23): six clearly different colours, the same in every theme
+   (the theme's colours are mixes of two, which run together at that many). Checked for
+   colour-blind readers against the dark panels: every pair of neighbours stays apart. */
+.dw-d0 {
+  --dw: #3987e5;
+}
+.dw-d1 {
+  --dw: #d95926;
+}
+.dw-d2 {
+  --dw: #199e70;
+}
+.dw-d3 {
+  --dw: #c98500;
+}
+.dw-d4 {
+  --dw: #d55181;
+}
+.dw-d5 {
+  --dw: #0ca30c;
+}
+
 /* Sanctuary's accent is itself orange-gold, so gold would be nearly the same colour:
    contrasting second and fifth colours there instead */
 html[data-theme='sanctuary'] .dw-s1 {
@@ -1384,4 +1406,32 @@ li.dw-sel > .dw-bar-track {
 }
 .dash-grid-status:empty {
   display: none;
+}
+
+/* A bar chart's legend: each name is a button (tap: only that series; then add or remove
+   series; tap the only one shown: all again). Series switched off are dimmed. */
+.dw-legend-toggle button {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-main);
+  font: inherit;
+  cursor: pointer;
+}
+.dw-legend-toggle button[aria-pressed='false'] {
+  opacity: 0.4;
+}
+.dw-legend-toggle button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
+
+/* Two settings side by side in the chart editor (order and how many) */
+.dash-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 10px;
 }
