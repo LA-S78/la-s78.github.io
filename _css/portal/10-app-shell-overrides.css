@@ -76,7 +76,9 @@ body.portal-body main {
 /* With the bottom navigation (front matter footer: true): room so it never covers the end
    of the page. The footer is 60px, plus the phone's safe area on newer phones. */
 body.portal-body.has-footer #mobile-container {
-  padding-bottom: calc(60px + env(safe-area-inset-bottom) + 2rem);
+  /* Just the footer's height, as the main site leaves (the disclaimer's own margin then gives
+     the same 8px above the navigation; was 2rem more, owner 2026-11-23) */
+  padding-bottom: calc(60px + env(safe-area-inset-bottom));
 }
 
 /* The room for the bottom navigation is the container's (above), so the page's own `main`
