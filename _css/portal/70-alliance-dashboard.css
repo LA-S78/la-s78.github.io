@@ -309,6 +309,27 @@ html[data-theme='sanctuary'] .dw-s4 {
   cursor: default;
 }
 
+/* The page's own cards (owner request, 2026-11-23): each in a slot that moves like a chart,
+   with its ▲▼ above it in edit mode. A slot whose card is hidden takes no room. */
+.dash-slot:has(> section[hidden]) {
+  display: none;
+}
+.dash-slot-tools {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.dash-slot-tools > span {
+  margin-right: auto;
+}
+.dash-slot-tools[hidden] {
+  display: none;
+}
+
 .dash-edit-bar[hidden] {
   display: none;
 }
@@ -1122,9 +1143,16 @@ li.dw-sel > .dw-bar-track {
   .dash-widgets > .dash-card {
     margin-bottom: 0;
   }
+  /* Full width: tables, the page's own cards, the "no charts yet" card, and a chart left alone
+     in its row (arrange() in portal/dashboard.html) */
   .dash-widgets > .dash-widget[data-type="table"],
-  .dash-widgets > :only-child {
+  .dash-widgets > .dash-slot,
+  .dash-widgets > .dash-empty,
+  .dash-widgets > .dash-alone {
     grid-column: 1 / -1;
+  }
+  .dash-widgets > .dash-slot > .dash-card {
+    margin-bottom: 0;
   }
 }
 

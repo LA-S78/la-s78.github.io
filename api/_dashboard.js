@@ -85,6 +85,10 @@ export function readDashboard(gistFileJson, tag) {
     settings: d.settings && typeof d.settings === 'object' ? d.settings : {},
     tickets: d.tickets ?? null,
     caravan: readCaravan(d.caravan),
+    // The order of the page's cards (2026-11-23): see layoutOrder()
+    layout: Array.isArray(d.layout)
+      ? d.layout.filter((k) => typeof k === 'string' && k.length <= 40).slice(0, 80)
+      : [],
     updatedAt: d.updatedAt || null,
     updatedBy: d.updatedBy || null,
   };
@@ -97,7 +101,12 @@ export function readDashboard(gistFileJson, tag) {
  */
 export function visibleDashboard(dashboard, leader) {
   const widgets = dashboard.widgets.filter((w) => leader || w?.visibility === 'members');
-  const out = { alliance: dashboard.alliance, widgets, updatedAt: dashboard.updatedAt };
+  const out = {
+    alliance: dashboard.alliance,
+    widgets,
+    layout: dashboard.layout || [],
+    updatedAt: dashboard.updatedAt,
+  };
   if (leader) out.settings = dashboard.settings;
   // The Caravan Rotor: leaders always; members only when leaders let them (read-only, and
   // without which officer ticked each name).
@@ -404,9 +413,31 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
 }
 
 /**
+ * The dashboard's own cards (owner request, 2026-11-23): leaders move them among the charts
+ * like a chart. In the page's default order, before the charts.
+ */
+export const BUILT_INS = Object.freeze(['rewards', 'caravan', 'roster', 'growth']);
+
+/**
+ * The order of the page's cards: the saved `layout` (built-in keys and chart ids), keeping
+ * only those that exist; a built-in card it doesn't name goes first (in the default order),
+ * a chart it doesn't name (a new one) last. js copy: portal/dashboard.html layoutOrder().
+ */
+export function layoutOrder(layout, widgetIds) {
+  const known = new Set([...BUILT_INS, ...widgetIds]);
+  const named = [...new Set((layout || []).filter((k) => known.has(k)))];
+  return [
+    ...BUILT_INS.filter((k) => !named.includes(k)),
+    ...named,
+    ...widgetIds.filter((id) => !named.includes(id)),
+  ];
+}
+
+/**
  * Applies an edit to an alliance's stored dashboard (a copy is changed and returned):
  *   { action: 'save-widget', widget } adds it, or replaces the one with the same id;
- *   { action: 'delete-widget', id };  { action: 'move-widget', id, by: -1 | 1 }.
+ *   { action: 'delete-widget', id };  { action: 'move-widget', id, by: -1 | 1 };
+ *   { action: 'move-item', key, to } (a card, built-in or chart, trades places with `to`).
  * Returns { dashboard } or { error, status }.
  */
 export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
@@ -445,12 +476,22 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     d.widgets = d.widgets.filter((w) => w.id !== edit.id);
     if (d.widgets.length === before)
       return { error: say('api_dashboard.chart_already_removed'), status: 404 };
-  } else if (edit.action === 'move-widget') {
-    const at = d.widgets.findIndex((w) => w.id === edit.id);
-    const to = at + (Number(edit.by) < 0 ? -1 : 1);
+    d.layout = (d.layout || []).filter((k) => k !== edit.id);
+  } else if (edit.action === 'move-widget' || edit.action === 'move-item') {
+    // Two cards trade places in the page's order (move-item: { key, to }, both a built-in
+    // card or a chart id; the page sends the card shown next to it). move-widget ({ id, by })
+    // is the older form: the card next to it in the order.
+    const order = layoutOrder(
+      d.layout,
+      d.widgets.map((w) => w.id),
+    );
+    const key = edit.action === 'move-item' ? edit.key : edit.id;
+    const at = order.indexOf(key);
     if (at < 0) return { error: say('api_dashboard.chart_removed'), status: 404 };
-    if (to >= 0 && to < d.widgets.length)
-      [d.widgets[at], d.widgets[to]] = [d.widgets[to], d.widgets[at]];
+    const to =
+      edit.action === 'move-item' ? order.indexOf(edit.to) : at + (Number(edit.by) < 0 ? -1 : 1);
+    if (to >= 0 && to < order.length && to !== at) [order[at], order[to]] = [order[to], order[at]];
+    d.layout = order;
   } else {
     return { error: say('api_dashboard.unknown_change'), status: 400 };
   }
