@@ -15,7 +15,9 @@ import { findTag, tagSlug } from './_alliances.js';
 import { dashboardsById } from './_dashboard_ids.js';
 
 /** Most bytes one alliance's dashboard file may hold (thousands of table rows). */
-export const MAX_DASHBOARD_BYTES = 150 * 1024;
+// 150 KB at first; 250 KB from 2026-11-23 (owner), for charts across tabs. Every Gist read
+// downloads every file, so this stays well under GitHub's 1 MB per file
+export const MAX_DASHBOARD_BYTES = 250 * 1024;
 
 /** The alliance's key in map-state.json for a tag written another way, or null (findTag). */
 export function findAllianceKey(alliances = {}, tag) {
@@ -175,7 +177,7 @@ export function rewardStatus({ tag, rewardsData, mapState, nominations, period }
 export const LIMITS = Object.freeze({
   widgets: 20,
   rows: 500,
-  columns: 40, // a weekly sheet gains a column each week; the 150 KB cap still applies
+  columns: 40, // a weekly sheet gains a column each week; the 250 KB cap still applies
   cellChars: 100,
   titleChars: 80,
   noteChars: 400,
@@ -221,8 +223,8 @@ export function olderRows(t, width) {
  * A chart across tabs keeps the newest tab as its rows (as any chart), and the older tabs,
  * oldest first, as `older`: [{ name, cols, text }], with only the columns the chart uses (the
  * label and the numbers), numbers without separators, one line of text per row. Stored as
- * rows of cells, eight weeks of a 90-player sheet took 139 KB of the 150 KB a dashboard may
- * use (the file is saved spaced out, a line per cell); this way about 45 KB.
+ * rows of cells, eight weeks of a 90-player sheet took 139 KB (the file is saved spaced out,
+ * a line per cell); this way about 57 KB.
  */
 function tabsData(source, data, columns, options) {
   if (!source.tabs) return {};
