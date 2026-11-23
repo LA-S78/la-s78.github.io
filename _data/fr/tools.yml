@@ -183,29 +183,22 @@ chart_editor:
   title: Titre
   title_example: ex. scores du Duel d'Alliances
   note: Explication
-  note_example: ex. 15M de points Duel minimum requis avant le reset du vendredi
-  who_sees: Qui peut le voir
+  note_example: ex. Minimum 15M de points de duel requis pour la réinitialisation de vendredi
+  who_sees: Visibilité
   officers_only: Officiers uniquement (R4/R5)
   all_members: Tous les membres de l'alliance
   data: Données
   data_source: Source des données
   paste: Coller un tableau
   link: Lien Google Sheet / Doc
-  paste_help: Copiez les cellules de Google Sheets ou Excel (ligne d'en-tête en premier) et collez-les ici.
-  tab_name: Nom de l'onglet (optionnel)
-  tab: Onglet
-  grid_help: 'Faites glisser votre doigt sur le tableau pour le sélectionner (sur un téléphone : tapez sur un coin, puis sur le coin opposé). La première ligne est l''en-tête. Tapez ensuite sur une lettre de colonne pour en faire les libellés, ou sur une colonne de chiffres.'
-  grid_tap_second: Tapez maintenant sur le coin opposé du tableau.
-  grid_mode: Cliquer sur une lettre de colonne définit
-  grid_labels: Libellés
-  grid_numbers: Nombres
-  grid_more: Seules les 200 premières lignes et 60 premières colonnes sont affichées ici ; une plage peut aller au-delà.
-  range: Plage, ex. A1:D20 (optionnel)
+  paste_help: Copiez les cellules depuis Google Sheets ou Excel (ligne d'en-tête en premier) et collez-les ici.
+  tab_name: Nom de l'onglet (facultatif)
+  range: Plage, ex. A1:D20 (facultatif)
   doc_table: Quel tableau dans le Doc (1, 2…)
   load: "⤓ Charger depuis Google"
   loading: "⤓ Chargement…"
-  link_help: 'Sheets : Partager → “Tous les utilisateurs disposant du lien peuvent consulter” (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. “Synchroniser maintenant” sur la fiche récupère les derniers chiffres plus tard.'
-  load_first: Chargez la feuille en premier (⤓ Charger depuis Google).
+  link_help: 'Sheets : Partager → « Tous les utilisateurs disposant du lien peuvent voir » (ou Fichier → Partager → Publier sur le Web). Docs : Fichier → Partager → Publier sur le Web. « Synchroniser maintenant » sur la carte récupérera les dernières données plus tard.'
+  load_first: Chargez la feuille d'abord (⤓ Charger depuis Google).
   preview: Aperçu
   preview_empty: Collez un tableau ci-dessus pour voir le graphique.
   size: "{rows} × {columns}"
@@ -213,17 +206,17 @@ chart_editor:
   rows_other: "{n} lignes"
   columns_one: "{n} colonne"
   columns_other: "{n} colonnes"
-  at_most_500: "(500 au maximum)"
-  labels: Noms (libellés)
+  at_most_500: "(500 maximum)"
+  labels: Noms (étiquettes)
   numbers_to_show: Nombres à afficher
   labels_swapped: Noms (une ligne ou barre chacun)
-  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, les colonnes le long du bas"
-  swap_bar: "⇄ Inverser lignes et colonnes : les colonnes comme barres, une couleur par rangée"
+  swap_line: "⇄ Inverser lignes et colonnes : une ligne par rangée, colonnes en bas"
+  swap_bar: "⇄ Inverser lignes et colonnes : colonnes en barres, une couleur par ligne"
   swap_help: 'Pour les feuilles avec une ligne par joueur et une colonne par semaine : cochez ceci pour suivre les joueurs à travers les semaines.'
   rows_to_draw: Lignes à dessiner (jusqu'à 6)
   rows_filter: Trouver un nom…
-  rows_count: "{n} sur 6 choisi(s)"
-  columns_along: Colonnes le long du bas (dans l'ordre de la feuille)
+  rows_count: "{n} sur 6 choisis"
+  columns_along: Colonnes en bas (dans l'ordre de la feuille)
   numbers: Nombres
   several_columns: Plusieurs colonnes de nombres
   side_by_side: Côte à côte
@@ -232,17 +225,17 @@ chart_editor:
   vertical: Barres verticales
   vertical_leaderboard: Barres verticales (au lieu d'un classement)
   traffic_columns: 'Rouge → jaune → vert (bas → haut) : première colonne rouge, dernière verte'
-  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, premier vert'
-  traffic_reverse: 'Inverser : bas est bon (vert), haut est mauvais (rouge)'
-  traffic_target: Rouge → jaune → vert selon la proximité de chacun avec la cible
-  traffic_target_reverse: 'Inverser : plus loin en dessous de la cible est meilleur'
+  traffic_size: 'Rouge → jaune → vert (bas → haut) : par rang, top en vert'
+  traffic_reverse: 'Inversé : bas est bon (vert), haut est mauvais (rouge)'
+  traffic_target: Rouge → jaune → vert selon la proximité avec la cible
+  traffic_target_reverse: 'Inversé : plus loin en dessous de la cible est meilleur'
   donut: Donut (anneau)
-  target: Cible pour tous
+  target: Cible pour tout le monde
   target_example: ex. 15M ou 15000000
   target_column: "…ou une colonne de cibles"
-  use_number_above: "(utiliser le nombre ci-dessus)"
+  use_number_above: "(utiliser le nombre au-dessus)"
   highlight_where: Surligner les lignes où
-  no_highlight: "(pas de surlignage)"
+  no_highlight: "(aucun surlignage)"
   at_least: est au moins
   at_least_example: ex. 300M
 charts:
