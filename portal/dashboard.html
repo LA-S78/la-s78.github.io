@@ -24,12 +24,17 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
   <!-- Leaders: edit mode (add, edit, move, delete charts and tables), at the top of the page
        (owner, 2026-11-23); the chart editor opens under it -->
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
-    <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="pencil" %}{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
-    <button type="button" class="dash-btn" id="dash-add" disabled>{% include ui-icon.html name="plus" %}{{ "dashboard.add_chart" | t }}</button>
-    <!-- Everyone (owner request, 2026-11-27): their own order, on this device only -->
-    <button type="button" class="dash-btn dash-two-labels" id="dash-arrange" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="updown" %}{{ "dashboard.arrange_mine" | t }}</span><span class="when-on">{{ "dashboard.arrange_done" | t }}</span></button>
-    <button type="button" class="dash-btn" id="dash-arrange-reset" hidden>{% include ui-icon.html name="refresh" %}{{ "dashboard.arrange_reset" | t }}</button>
-    <p class="dash-muted dash-small dash-arrange-help" id="dash-arrange-help" hidden>{{ "dashboard.arrange_help" | t }}</p>
+    <!-- One row: Edit (leaders) and Arrange my view (everyone, 2026-11-27); what each needs
+         (Add a chart, Reset, the help line) shows in the row below only while it's on -->
+    <div class="dash-edit-row">
+      <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="pencil" %}{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
+      <button type="button" class="dash-btn dash-two-labels" id="dash-arrange" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="updown" %}{{ "dashboard.arrange_mine" | t }}</span><span class="when-on">{{ "dashboard.arrange_done" | t }}</span></button>
+    </div>
+    <div class="dash-edit-row" id="dash-edit-more" hidden>
+      <button type="button" class="dash-btn" id="dash-add" hidden>{% include ui-icon.html name="plus" %}{{ "dashboard.add_chart" | t }}</button>
+      <button type="button" class="dash-btn" id="dash-arrange-reset" hidden>{% include ui-icon.html name="refresh" %}{{ "dashboard.arrange_reset" | t }}</button>
+      <p class="dash-muted dash-small dash-arrange-help" id="dash-arrange-help" hidden>{{ "dashboard.arrange_help" | t }}</p>
+    </div>
   </div>
   <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
 
@@ -566,7 +571,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         <div class="dash-cv-top">
           <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))}</h3>
           <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span>
-          <button type="button" class="dash-icon-btn dash-roster-toggle" id="caravan-toggle" aria-expanded="${caravanOpen}" aria-controls="caravan-body" aria-label="${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}">${ic('chevron')}<span class="dash-cv-toggle-text">${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}</span></button>
+          <button type="button" class="dash-icon-btn dash-roster-toggle" id="caravan-toggle" aria-expanded="${caravanOpen}" aria-controls="caravan-body" aria-label="${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}" title="${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}">${ic('chevron')}</button>
         </div>
         <div id="caravan-body"${caravanOpen ? '' : ' hidden'}>
         ${leader ? `<div class="dash-cv-bar">
@@ -860,7 +865,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         <div class="dash-cv-top">
           <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}</h3>
           ${r.members
-            ? `<button type="button" class="dash-icon-btn dash-roster-toggle" id="roster-toggle" aria-expanded="${rosterView.open}" aria-controls="roster-body" aria-label="${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}">${ic('chevron')}<span class="dash-cv-toggle-text">${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}</span></button>`
+            ? `<button type="button" class="dash-icon-btn dash-roster-toggle" id="roster-toggle" aria-expanded="${rosterView.open}" aria-controls="roster-body" aria-label="${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}" title="${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}">${ic('chevron')}</button>`
             : refreshButton(r.refresh)}
         </div>
         ${r.members && rosterView.open ? `<div class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span>${refreshButton(r.refresh)}</div>` : ''}
@@ -1051,7 +1056,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         : w.updatedAt
           ? t('dashboard.updated', { when: new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) })
           : '';
-      const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${ic('refresh')}${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
+      // Sync: a square button in the title row, left of Show/Hide (owner, 2026-11-27), so the
+      // line under the title keeps its place; it spins while the sheet is read
+      const sync = linked && isLeader() ? `<button type="button" class="dash-icon-btn dash-head-btn" data-act="sync" title="${escapeHtml(`${t('dashboard.sync_now')}: ${t('dashboard.sync_help')}`)}" aria-label="${escapeHtml(t('dashboard.sync_now'))}">${ic('refresh')}</button>` : '';
       const tool = (act, label, glyph, off) =>
         `<button type="button" class="dash-icon-btn" data-act="${act}" ${off ? 'disabled' : ''} title="${escapeHtml(t(label))}" aria-label="${escapeHtml(t(label))}">${glyph}</button>`;
       // ▲▼ are set for the card's place on the page by arrange() (charts and the page's own cards)
@@ -1059,8 +1066,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲')}${tool('down', 'common.move_down', '▼')}${tool('edit', 'common.edit', ic('pencil', 'solo'))}${tool('delete', 'common.delete', ic('trash', 'solo'))}</div>`
         : '';
       return `<article class="dash-card dash-widget" data-key="${escapeHtml(w.id)}" data-id="${escapeHtml(w.id)}" data-type="${escapeHtml(w.type || '')}">
-        <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}${newCharts.has(w.id) && !editing ? ` <span class="dash-tag dash-new">${escapeHtml(t('dashboard.new_chart'))}</span>` : ''}</h3>${tools}</div>
-        <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}${sync}</div>
+        <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}${newCharts.has(w.id) && !editing ? ` <span class="dash-tag dash-new">${escapeHtml(t('dashboard.new_chart'))}</span>` : ''}</h3>${tools}${sync}</div>
+        <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
         ${isLeader() && w.data?.skipped?.length ? `<p class="dash-muted dash-small dash-skipped">${ic('warning', 'warn')}${escapeHtml(t('dashboard.tabs_skipped', { names: w.data.skipped.join(', ') }))}</p>` : ''}
         <div class="dash-widget-body">${W.render(w)}</div>
@@ -1073,13 +1080,12 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       el.hidden = false;
       $('dash-edit-bar').hidden = false;
       $('dash-edit-toggle').hidden = !isLeader();
-      $('dash-add').hidden = !isLeader();
+      $('dash-add').hidden = !(editing && isLeader());
+      $('dash-edit-more').hidden = !((editing && isLeader()) || arranging);
       $('dash-edit-toggle').setAttribute('aria-pressed', String(editing));
       $('dash-arrange').setAttribute('aria-pressed', String(arranging));
       $('dash-arrange-reset').hidden = !arranging;
       $('dash-arrange-help').hidden = !arranging;
-      // Always beside Edit Dashboard (greyed out until editing), so Edit doesn't shift
-      $('dash-add').disabled = !editing;
       renderImages();
       // The charts are drawn afresh; the page's own cards (in their .dash-slot) stay
       el.querySelectorAll(':scope > .dash-widget, :scope > .dash-empty').forEach((n) => n.remove());
@@ -1213,7 +1219,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         if (!head) return;
         let btn = head.querySelector(':scope > .dash-fold');
         if (!btn) {
-          head.insertAdjacentHTML('beforeend', `<button type="button" class="dash-icon-btn dash-roster-toggle dash-fold">${ic('chevron')}<span class="dash-cv-toggle-text"></span></button>`);
+          head.insertAdjacentHTML('beforeend', `<button type="button" class="dash-icon-btn dash-roster-toggle dash-fold">${ic('chevron')}</button>`);
           btn = head.querySelector(':scope > .dash-fold');
         }
         // While editing, every card is open, so nothing is missed
@@ -1223,7 +1229,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         const label = t(folded ? 'dashboard.fold_show' : 'dashboard.fold_hide');
         btn.setAttribute('aria-expanded', String(!folded));
         btn.setAttribute('aria-label', label);
-        btn.querySelector('.dash-cv-toggle-text').textContent = label;
+        btn.title = label;
       });
     }
     /** A card the viewer sees (a page card whose section is hidden isn't). */
@@ -1357,7 +1363,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         }
         return;
       }
-      const b = e.target.closest('.dash-widget-tools [data-act], .dash-slot-tools [data-act], .dash-widget-meta [data-act]');
+      const b = e.target.closest('.dash-widget-tools [data-act], .dash-slot-tools [data-act], .dash-widget-head > [data-act]');
       if (!b) return;
       const card = b.closest('[data-key]');
       const id = card.dataset.key;
@@ -1389,11 +1395,13 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         b.disabled = true;
         const synced = data.dashboard.widgets.find((x) => x.id === id);
         const tabs = synced?.source?.tabs ? synced.source.tabs.count : 0;
-        b.innerHTML = ic('refresh') + escapeHtml(tabs > 1 ? t('dashboard.syncing_tabs', { n: tabs }) : t('dashboard.syncing'));
+        b.classList.add('is-busy');
+        b.title = tabs > 1 ? t('dashboard.syncing_tabs', { n: tabs }) : t('dashboard.syncing');
         const error = await save({ action: 'sync-widget', id });
         if (error && document.body.contains(b)) {
           b.disabled = false;
-          b.innerHTML = ic('refresh') + escapeHtml(t('dashboard.sync_now'));
+          b.classList.remove('is-busy');
+          b.title = `${t('dashboard.sync_now')}: ${t('dashboard.sync_help')}`;
         }
         return;
       }
