@@ -31,7 +31,7 @@ import { latestRace } from './_ascension.js';
 import { fetchPlayer, fetchQuota, unsavedUsage, usageDay, USAGE_FILE } from './_tracker.js';
 import { say } from './_messages.js';
 import { readNapPositions, refreshNapPositions } from './_stats.js';
-import { noteSkin } from './_skins.js';
+import { noteSkin, skinsStatus } from './_skins.js';
 import {
   renamedAlliances,
   readAllianceIds,
@@ -291,6 +291,8 @@ export async function stewardTools(req, res, { gist, session }) {
         : null,
       lookups: lookupsLeft(gist),
       usage: trackerUsage(gist),
+      // The nightly Sanctuary skin collection (api/_skins.js): is it keeping up?
+      skins: await skinsStatus().catch(() => null),
       // NAP alliances renamed in the game, still measured by their game number meanwhile,
       // with the alliance's colour (as on the rest of the site)
       renamed: await renamedWithColours(gist).catch(() => []),
