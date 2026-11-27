@@ -1655,3 +1655,14 @@ li.dw-sel > .dw-bar-track {
 .sheet-list .sl-status:empty {
   display: none;
 }
+.dash-cv-sheet-bar {
+  align-items: center;
+}
+.dash-cv-where {
+  margin-top: 8px;
+}
+.dash-cv-where > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

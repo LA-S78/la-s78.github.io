@@ -5,7 +5,7 @@ title: Alliance Dashboard
 title_key: "dashboard.title"
 permalink: /dashboard.html
 lang: "en"
-strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_data, alliance_images, stats]
+strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_data, alliance_images, stats, sheet_list]
 ---
 
 <div class="content-pane portal-pane-lg" id="dashboard-app">
@@ -64,6 +64,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
 <script type="module" src="/js/line-chart.js"></script>
 <script src="/js/dashboard-widgets.js"></script>
 <script src="/js/alliance-images.js"></script>
+<script src="/js/sheet-list.js"></script>
 <script>
   (function () {
     // escapeHtml() is the shared helper from /js/escape-html.js (loaded in <head>).
@@ -432,7 +433,11 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     let caravanFilter = { text: '', now: false };
     let caravanEditing = null; // id of the row being edited
     // The alliance sheet's suggestions (its "Caravan Bank" tab) and a just-made sync key
-    let cvSuggest = null; // { names: [{ name, balance }], heading } or { error }
+    let cvSuggest = null; // { names: [{ name, balance }], link, url } or { error }
+    // The sheet picker (js/sheet-list.js) for where the caravan list is: made once and moved
+    // into each new drawing of the rotor, so a half-made choice survives a pick or a refresh
+    let cvPicker = null;
+    let cvWhereOpen = false;
     let cvNewKey = '';
 
     const gtToLocal = (hhmm) => {
@@ -550,7 +555,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       };
 
       el.innerHTML = `
-        <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))} <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span></h3>
+        <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))}</h3>
+        <p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span><button type="button" class="dash-icon-btn dash-roster-toggle" id="caravan-toggle" aria-expanded="${caravanOpen}" aria-controls="caravan-body">${ic('chevron')}${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}</button></p>
+        <div id="caravan-body"${caravanOpen ? '' : ' hidden'}>
         ${leader ? `<div class="dash-cv-bar">
           <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${ic('users')}${escapeHtml(t('caravan.members_can_view'))}</label>
           <span class="dash-cv-actions">
@@ -577,8 +584,16 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         ${sheetPanel(all)}
         ${data.viewer.canNominate ? keyPanel() : ''}
         <div class="dash-error" id="cv-error"></div>
-        ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}`;
+        ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}
+        </div>`;
+      // Shown or hidden like the member list (owner request, 2026-11-27)
+      $('caravan-toggle').addEventListener('click', () => {
+        caravanOpen = !caravanOpen;
+        renderCaravan();
+        $('caravan-toggle')?.focus();
+      });
       if (leader) wireNameHints(el);
+      if (leader) placeSheetPicker();
       const search = $('cv-search');
       search.addEventListener('input', () => {
         caravanFilter.text = search.value;
@@ -602,7 +617,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
      * (or add them to the rotor first); the sheet takes the picks back with its sync key.
      */
     function sheetPanel(all) {
-      const saved = (data.dashboard.settings && (data.dashboard.settings.sheetUrl || data.dashboard.settings.capitolSheet)) || '';
+      const set = data.dashboard.settings || {};
+      const link = (cvSuggest && cvSuggest.link) || set.caravanLink;
       const byName = new Map(all.map((p) => [p.name.toLowerCase(), p]));
       let body = '';
       if (cvSuggest && cvSuggest.error) body = `<p class="dash-error">${escapeHtml(cvSuggest.error)}</p>`;
@@ -616,21 +632,62 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
                   : p.picked
                     ? `<span class="dash-muted">✓ ${escapeHtml(t('caravan.sheet_picked'))}</span>`
                     : `<button type="button" class="dash-btn" data-cv="sheet-pick" data-id="${escapeHtml(p.id)}">${escapeHtml(t('caravan.pick'))}</button>`;
-                return `<li class="dash-cv-row"><span class="dash-cv-name">${escapeHtml(s.name)}</span><span class="dash-cv-when dash-muted">${s.balance !== null ? escapeHtml(t('caravan.sheet_points', { n: s.balance })) : ''}</span><span class="dash-cv-tools">${act}</span></li>`;
+                return `<li class="dash-cv-row"><span class="dash-cv-name">${escapeHtml(s.name)}</span><span class="dash-cv-when dash-muted">${s.balance !== null ? escapeHtml(t('caravan.sheet_points', { n: s.balance.toLocaleString() })) : ''}</span><span class="dash-cv-tools">${act}</span></li>`;
               })
               .join('')}</ul>`
           : `<p class="dash-muted dash-small">${escapeHtml(t('caravan.sheet_none'))}</p>`;
       }
-      return `<details class="dash-cv-sheet"${cvSuggest ? ' open' : ''}>
+      return `<details class="dash-cv-sheet"${cvSuggest || cvWhereOpen ? ' open' : ''}>
         <summary>${ic('table')}${escapeHtml(t('caravan.sheet_title'))}</summary>
         <p class="dash-muted dash-small">${escapeHtml(t('caravan.sheet_help'))}</p>
         <div class="dash-cv-sheet-bar">
-          <input type="url" id="cv-sheet-url" value="${escapeHtml(saved)}" placeholder="https://docs.google.com/spreadsheets/d/…" aria-label="${escapeHtml(t('caravan.sheet_link'))}">
           <button type="button" class="dash-icon-btn" data-cv="sheet-load">${ic('refresh')}${escapeHtml(t('caravan.sheet_load'))}</button>
+          ${link ? `<span class="dash-muted dash-small">${escapeHtml(t('sheet_list.linked', { tab: link.tab, range: link.range }))}</span>` : ''}
         </div>
         ${body}
+        <details class="dash-cv-where" id="cv-where"${cvWhereOpen ? ' open' : ''}>
+          <summary>${escapeHtml(t('sheet_list.change'))}</summary>
+          <div id="cv-sheet-picker"></div>
+        </details>
       </details>`;
     }
+
+    /** After each drawing: the picker back in its place (made the first time it's opened). */
+    function placeSheetPicker() {
+      const where = $('cv-where');
+      if (!where) return;
+      where.addEventListener('toggle', () => {
+        cvWhereOpen = where.open;
+        if (where.open) placeSheetPicker.mountNow();
+      });
+      if (cvPicker) where.querySelector('#cv-sheet-picker').replaceWith(cvPicker.el);
+      else if (cvWhereOpen) placeSheetPicker.mountNow();
+    }
+    placeSheetPicker.mountNow = () => {
+      if (cvPicker || !window.SheetList) return;
+      const el = $('cv-sheet-picker');
+      const set = data.dashboard.settings || {};
+      const ask = (action, extra) => {
+        if (action === 'sheet-tabs' || action === 'sheet-grid') {
+          return dashAsk({ action, source: { kind: 'sheet', url: extra.url, gid: extra.gid } });
+        }
+        return dashAsk({ action: 'caravan-link', link: extra.link });
+      };
+      cvPicker = SheetList.mount(el, {
+        roles: ['name', 'points'],
+        preset: { tab: 'Caravan Bank', range: 'I1:J30', cols: { name: 0, points: 1 } },
+        url: (set.caravanLink && set.caravanLink.url) || set.sheetUrl || set.capitolSheet || '',
+        link: set.caravanLink || null,
+        ask,
+        onLinked: (out) => {
+          cvSuggest = out;
+          data.dashboard.settings = { ...set, caravanLink: out.link, sheetUrl: set.sheetUrl || out.url };
+          cvWhereOpen = false;
+          renderCaravan();
+        },
+      });
+      cvPicker.el = el;
+    };
 
     /** The sheet sync key (R5s and Stewards): the sheet's script reads the picks with it. */
     function keyPanel() {
@@ -657,7 +714,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         body: JSON.stringify({ alliance: data.alliance.tag, ...body }),
       });
       const out = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(out.error || `HTTP ${res.status}`);
+      if (!res.ok) throw Object.assign(new Error(out.error || `HTTP ${res.status}`), { code: out.code });
       return out;
     }
 
@@ -684,6 +741,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     // open: the member list is shown (owner, 2026-11-23: it starts closed, so phones can scroll
     // past it; "Show members" opens it for this visit)
     let rosterView = { text: '', sort: 'power', open: false };
+    let caravanOpen = false; // the Caravan Rotor's list, shown or hidden (like the roster)
     const ROSTER_SORTS = {
       power: (a, b) => b.power - a.power,
       name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
@@ -865,10 +923,11 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       if (b.dataset.cv === 'sheet-load') {
         b.disabled = true;
         try {
-          cvSuggest = await dashAsk({ action: 'caravan-suggest', url: $('cv-sheet-url').value.trim() });
-          data.dashboard.settings = { ...(data.dashboard.settings || {}), sheetUrl: cvSuggest.url };
+          cvSuggest = await dashAsk({ action: 'caravan-suggest' });
         } catch (err) {
           cvSuggest = { error: err.message };
+          // Not linked yet (or the sheet changed): show where to pick the list
+          if (err.code === 'no_link' || err.code === 'changed') cvWhereOpen = true;
         }
         return renderCaravan();
       }
