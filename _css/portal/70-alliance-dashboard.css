@@ -341,13 +341,19 @@ html[data-theme='sanctuary'] .dw-s4 {
   display: none;
 }
 
-/* Edit Dashboard and Add chart, centred (owner decision, 2026-11-13) */
+/* Edit Dashboard and Arrange my view, centred; below them, only while one is on, what it
+   needs (Add a chart, or Reset and the help line) (owner, 2026-11-27) */
 .dash-edit-bar {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+.dash-edit-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 8px;
-  margin-bottom: 1rem;
 }
 
 .dw-empty,
@@ -1685,15 +1691,6 @@ li.dw-sel > .dw-bar-track {
 #caravan-body[hidden] {
   display: none;
 }
-/* Phones: just the arrow, so the line still fits */
-@media (max-width: 480px) {
-  .dash-cv-toggle-text {
-    display: none;
-  }
-  .dash-cv-top .dash-roster-toggle svg {
-    margin: 0;
-  }
-}
 
 /* Each viewer's own view (2026-11-27): any card folds to its title line; "New" charts */
 .dash-card.is-folded > :not(.dash-widget-head):not(.dash-card-title):not(.dash-slot-tools) {
@@ -1705,12 +1702,6 @@ li.dw-sel > .dw-bar-track {
 }
 .dash-card.is-folded > .dash-widget-head .dash-card-title {
   margin-bottom: 0;
-}
-.dash-fold {
-  margin-left: auto;
-  flex: none;
-  font-family: var(--font-body, inherit);
-  font-size: 0.8rem;
 }
 .dash-fold[hidden] {
   display: none;
@@ -1726,14 +1717,45 @@ li.dw-sel > .dw-bar-track {
 .dash-arrange-help {
   flex-basis: 100%;
   margin: 0;
-}
-@media (max-width: 480px) {
-  .dash-fold .dash-cv-toggle-text {
-    display: none;
-  }
+  text-align: center;
 }
 /* A closed rotor or roster: no space under its top line */
 .dash-cv-top:last-child,
 .dash-cv-top:has(+ #caravan-body[hidden]) {
   margin-bottom: 0;
+}
+
+/* Show/Hide on every card (2026-11-27): one square arrow button in the same place at the right
+   of the title line, the same size open or closed, so nothing beside it moves; its name is in
+   the tooltip. Tags (OFFICERS, picked count) sit just left of it. */
+.dash-fold,
+.dash-cv-top .dash-roster-toggle {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  justify-content: center;
+}
+.dash-fold svg,
+.dash-cv-top .dash-roster-toggle svg {
+  margin: 0;
+}
+.dash-card-title > .dash-fold,
+.dash-widget-head > .dash-fold {
+  margin-left: auto;
+}
+.dash-card-title > .dash-tag + .dash-fold {
+  margin-left: 8px;
+}
+.dash-cv-top .dash-tag {
+  margin-left: auto;
+}
+.dash-cv-top .dash-card-title {
+  flex: 0 1 auto;
+}
+.dash-cv-top > .dash-roster-toggle {
+  margin-left: auto;
+}
+.dash-cv-top > .dash-tag + .dash-roster-toggle {
+  margin-left: 0;
 }
