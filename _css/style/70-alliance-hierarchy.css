@@ -1107,8 +1107,8 @@ main .ladder-badge,
 
 
 /* The NAP Roster bar (owner request, 2026-11-27): the NAP alliances' colours as diagonal
-   stripes in rank order, each with its banner showing through, under a dark shade so the
-   label and buttons stay readable (js/alliance.js drawNapStripes) */
+   stripes in rank order, under a dark shade so the label and buttons stay readable
+   (js/alliance.js drawNapStripes) */
 .nap-controls {
   position: relative;
   overflow: hidden;
@@ -1141,14 +1141,6 @@ main .ladder-badge,
   overflow: hidden;
   background: var(--c);
   transform: skewX(-24deg);
-}
-.nap-stripe.has-pic::before {
-  content: '';
-  position: absolute;
-  inset: 0 -60%;
-  background: var(--pic) center / cover no-repeat;
-  opacity: 0.55;
-  transform: skewX(24deg);
 }
 /* The shade: darkest where the text sits, so it reads on any colour */
 .nap-stripes::after {

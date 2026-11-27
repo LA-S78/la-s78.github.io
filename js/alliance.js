@@ -386,45 +386,36 @@ export async function fetchLiveAllianceState() {
 
 // ----------------------------------------------------------------------------
 // The NAP Roster bar's stripes (owner request, 2026-11-27): one diagonal stripe per NAP
-// alliance, in rank order, in its colour with its banner showing through. Kept in the browser
+// alliance, in rank order, in its colour (plain colours, owner's choice). Kept in the browser
 // (localStorage), so the bar is drawn at once on the next visit, and drawn again only when an
-// alliance, its colour, banner or rank changes.
+// alliance, its colour or its rank changes.
 // ----------------------------------------------------------------------------
 const STRIPES_KEY = 'nap-stripes';
-const SAFE_PIC = /^\/alliance-images\/[\w.-]+$/;
 let stripesShown = null;
 
-function drawNapStripes(bands) {
+function drawNapStripes(colors) {
   const el = document.getElementById('nap-stripes');
-  if (!el || !Array.isArray(bands)) return;
-  const sig = JSON.stringify(bands);
+  if (!el || !Array.isArray(colors)) return;
+  const sig = JSON.stringify(colors);
   if (sig === stripesShown) return;
   stripesShown = sig;
-  el.innerHTML = `<div class="nap-stripes-row">${bands
-    .map((b) => {
-      const color = /^#[0-9a-f]{6}$/i.test(b.color || '') ? b.color : '#556b4f';
-      const pic = SAFE_PIC.test(b.pic || '')
-        ? ` has-pic" style="--c:${color};--pic:url('${b.pic}')`
-        : `" style="--c:${color}`;
-      return `<span class="nap-stripe${pic}"></span>`;
-    })
+  el.innerHTML = `<div class="nap-stripes-row">${colors
+    .map(
+      (c) =>
+        `<span class="nap-stripe" style="--c:${/^#[0-9a-f]{6}$/i.test(c) ? c : '#556b4f'}"></span>`,
+    )
     .join('')}</div>`;
-  el.classList.toggle('is-shown', bands.length > 0);
+  el.classList.toggle('is-shown', colors.length > 0);
 }
 
-/** From the live standings: draw them, and keep them for the next visit if they changed. */
+/** From the live standings: draw them, and keep them for the next visit. */
 function updateNapStripes() {
-  const bands = getSortedLadder(originalAlliances)
+  const colors = getSortedLadder(originalAlliances)
     .filter((a) => a.is_nap)
-    .map((a) => {
-      const pics =
-        allianceImages[a.tag] ||
-        Object.entries(allianceImages).find(([k]) => sameTag(k, a.tag))?.[1];
-      return { color: resolveAllianceColor(a.tag, a.color, a.rank), pic: pics?.wide || '' };
-    });
-  drawNapStripes(bands);
+    .map((a) => resolveAllianceColor(a.tag, a.color, a.rank));
+  drawNapStripes(colors);
   try {
-    localStorage.setItem(STRIPES_KEY, JSON.stringify(bands));
+    localStorage.setItem(STRIPES_KEY, JSON.stringify(colors));
   } catch {
     // Not kept: drawn again from the live standings next time
   }
@@ -433,7 +424,11 @@ function updateNapStripes() {
 /** The last visit's stripes, while the live standings load. */
 function cachedNapStripes() {
   try {
-    drawNapStripes(JSON.parse(localStorage.getItem(STRIPES_KEY) || 'null'));
+    const kept = JSON.parse(localStorage.getItem(STRIPES_KEY) || 'null');
+    // Kept before plain colours: [{ color, pic }]
+    drawNapStripes(
+      Array.isArray(kept) ? kept.map((x) => (typeof x === 'string' ? x : x?.color)) : null,
+    );
   } catch {
     // Nothing kept yet
   }
