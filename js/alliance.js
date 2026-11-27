@@ -14,6 +14,7 @@ import {
 import { ALLIANCE_COLORS } from './alliance-defaults.js';
 import { sameTag } from './tags.js';
 import { allyPicMarkup, revealAllyPics } from './ally-pics.js';
+import { portrait } from './player-portrait.js';
 
 // Escape data before putting it into HTML (see js/escape-html.js).
 const esc = (value) => window.escapeHtml(value);
@@ -801,6 +802,7 @@ export function renderStandingsHierarchy() {
               ${stats.level ? `<span class="ladder-stat">${ic('trophy')}${esc(ta('stat_level', { n: stats.level }))}</span>` : ''}`
                   : ''
               }
+              ${leadersHtml(stats)}
               ${alliance.parent_tag ? `<span class="academy-child-badge">${ic('academy')}${esc(ta('academy_of', { tag: alliance.parent_tag }))}</span>` : ''}
               ${academyPills}
             </div>`
@@ -816,6 +818,31 @@ export function renderStandingsHierarchy() {
       : '');
   // Pictures that weren't loaded yet fade in once they are (js/ally-pics.js)
   revealAllyPics(container);
+}
+
+/** R4 titles the site renames (owner, 2026-11-23); others show as the game writes them. */
+const LEADER_TITLES = ['overseer', 'militarist', 'diplomat', 'recruiter'];
+
+/**
+ * An opened card's leaders (owner request, 2026-11-23): the R5 and R4s in their frames, from
+ * the tracker. One row: on phones it scrolls sideways, so the card (and its picture) grows by
+ * one row only.
+ */
+function leadersHtml(stats) {
+  const list = stats?.leaders || [];
+  if (!list.length) return '';
+  const label = (l) =>
+    l.title
+      ? LEADER_TITLES.includes(l.title)
+        ? ta(`leader_${l.title}`)
+        : l.title.replace(/^./, (c) => c.toUpperCase())
+      : l.rank;
+  return `<ul class="ladder-leaders" aria-label="${esc(ta('leaders'))}">${list
+    .map(
+      (l) =>
+        `<li class="ladder-leader${l.rank === 'R5' ? ' is-r5' : ''}">${portrait(l, 'sm')}<span><strong>${esc(l.name)}</strong><small>${esc(l.rank === 'R5' ? 'R5' : label(l))}</small></span></li>`,
+    )
+    .join('')}</ul>`;
 }
 
 export function renderBlacklist() {
