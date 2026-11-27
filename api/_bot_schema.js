@@ -63,6 +63,25 @@ const ALLIANCE_COMMANDS = [
     name: 'nominate',
     description: 'Request an authenticated portal link to submit weekly chest nominations',
     type: 1,
+    // Optional, so plain /nominate works as before (owner request, 2026-11-27)
+    options: [
+      {
+        type: 3,
+        name: 'show',
+        description: 'Leave blank for the nomination link',
+        required: false,
+        choices: [
+          { name: '🔗 Get the nomination link', value: 'link' },
+          { name: '📋 Show our current list', value: 'list' },
+        ],
+      },
+      {
+        type: 3,
+        name: 'alliance',
+        description: 'Stewards: act for another alliance (a test link when rewards are closed)',
+        required: false,
+      },
+    ],
   },
   {
     name: 'rewards',

@@ -28,13 +28,98 @@ import {
   syncRewardPeriod,
 } from './_reward_period.js';
 import { getAllianceNominationQuota, quotaIfWon } from './_rewards_helper.js';
+import { findAllianceKey } from './_dashboard.js';
 import { isSteward } from './_stewards.js';
 import { createToken } from './_tokens.js';
+
+/** The in-game chest names, best first, for the list reply (as the nomination page shows them). */
+const CHEST_LINES = [
+  ['standard', 'commanders_will', "Commander's Will"],
+  ['standard', 'loyal_servant', 'Loyal Servant'],
+  ['standard', 'followers_heart', "Follower's Heart"],
+  ['kingdom_war', 'commanders_will', 'Honor Vanguard'],
+  ['kingdom_war', 'loyal_servant', 'Fearless Hero'],
+  ['kingdom_war', 'followers_heart', 'Logistics Support'],
+];
+
+/** "/nominate show: list": the alliance's saved list this period, with who gets what. */
+function nominationList(res, gistData, tag) {
+  const entry = gistJson(gistData, 'rewards-nominations.json', {})[tag];
+  if (!entry || !Array.isArray(entry.ranked) || !entry.ranked.length) {
+    return sendEphemeralMessage(res, say('bot_nominate.list_none', { tag }));
+  }
+  const lines = [];
+  for (const [pool, chest, label] of CHEST_LINES) {
+    const names = entry.recipients?.[pool]?.[chest] || [];
+    if (names.length) lines.push(`**${label}:** ${names.join(', ')}`);
+  }
+  if (entry.reserves?.length)
+    lines.push(say('bot_nominate.list_reserves', { names: entry.reserves.join(', ') }));
+  if (entry.unfilled) lines.push(say('bot_nominate.list_unfilled', { n: entry.unfilled }));
+  const when = entry.submittedAt ? `<t:${unix(Date.parse(entry.submittedAt))}:R>` : '—';
+  return res.status(200).json({
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      embeds: [
+        {
+          title: say('bot_nominate.list_title', { tag }),
+          color: 0xb8975a,
+          description: `${say('bot_nominate.list_saved', { when })}\n\n${lines.join('\n').slice(0, 3800)}`,
+        },
+      ],
+      flags: 64,
+    },
+  });
+}
+
+/**
+ * A Steward's test link (owner request, 2026-11-27): the nomination page for any alliance
+ * even when rewards are closed or it has no chests. Everything works but saving (the API
+ * refuses test links), so features can be tried without touching real lists.
+ */
+function stewardTestLink(res, { tag, period, why, botToken, resolvedHost }) {
+  const token = createToken(
+    {
+      action: 'nominate',
+      alliance: tag,
+      test: true,
+      period: period.id,
+      exp: Date.now() + 24 * 60 * 60 * 1000,
+    },
+    botToken,
+  );
+  const url = `https://${resolvedHost}/nominate.html?token=${token}`;
+  return res.status(200).json({
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      embeds: [
+        {
+          title: say('bot_nominate.test_title', { tag }),
+          color: 0x6b7280,
+          description: say('bot_nominate.test_text', { why: say(`bot_nominate.test_why_${why}`) }),
+        },
+      ],
+      components: [
+        { type: 1, components: [{ type: 2, style: 5, label: say('bot_nominate.open_page'), url }] },
+      ],
+      flags: 64,
+    },
+  });
+}
 
 /** --- /nominate COMMAND (DYNAMIC QUOTA & BUYOUT INTERCEPTOR) --- */
 export async function handleNominateCommand(ctx) {
   const { res, name, resolvedHost, t, guildId, member, userId, botToken } = ctx;
   const ownerGuildId = (process.env.DISCORD_GUILD_ID_OWNER || '').trim();
+  // Options (owner request, 2026-11-27): show = link (default) or list; alliance = Stewards
+  // acting for another alliance, with a test link when the real one would be refused
+  const option = (n) => ctx.options?.find((o) => o.name === n)?.value;
+  const show = option('show') === 'list' ? 'list' : 'link';
+  const askedAlliance = String(option('alliance') || '').trim();
+  const steward = isSteward(userId);
+  if (askedAlliance && !steward) {
+    return sendEphemeralMessage(res, say('bot_nominate.alliance_stewards_only'));
+  }
 
   if (!guildId || !member) {
     return sendEphemeralMessage(res, say('bot_nominate.server_only'));
@@ -50,18 +135,30 @@ export async function handleNominateCommand(ctx) {
     const alliances = mapState.alliances || {};
     const knownAlliances = Object.keys(alliances);
 
+    // A Steward naming an alliance acts for it (no role checks); everyone else: their own
+    const forAlliance = askedAlliance ? findAllianceKey(alliances, askedAlliance) : null;
+    if (askedAlliance && !forAlliance) {
+      return sendEphemeralMessage(
+        res,
+        say('bot_nominate.unknown_alliance', { tag: askedAlliance }),
+      );
+    }
+    const context = forAlliance
+      ? {
+          detectedTag: forAlliance,
+          isDedicatedServer: false,
+          isR5: true,
+          allowedRoles: [],
+          hasDelegatedLeadership: true,
+        }
+      : await resolveMemberAllianceContext({ guildId, member, alliances, botToken });
     const {
       detectedTag: matchedAllianceTag,
       isDedicatedServer,
       isR5,
       allowedRoles,
       hasDelegatedLeadership,
-    } = await resolveMemberAllianceContext({
-      guildId,
-      member,
-      alliances,
-      botToken,
-    });
+    } = context;
 
     // Authorization Check: Dedicated Server vs. Shared NAP Server
     if (isDedicatedServer) {
@@ -91,8 +188,15 @@ export async function handleNominateCommand(ctx) {
       ...gistJson(gistData, 'calendar-state.json', {}),
     };
 
+    // "Show our current list": the saved list and who gets what (read only)
+    if (show === 'list') return nominationList(res, gistData, matchedAllianceTag);
+
     // 0. The reward period (api/_reward_period.js): Friday 20:00 GT to Wednesday 00:00 GT
     const period = getRewardPeriod(Date.now(), calConfig);
+    // A Steward acting for an alliance gets a test link instead of a refusal
+    const testLink = (why) =>
+      stewardTestLink(res, { tag: matchedAllianceTag, period, why, botToken, resolvedHost });
+    if (!period.open && forAlliance) return testLink('closed');
     if (!period.open) {
       return sendEphemeralMessage(
         res,
@@ -148,12 +252,14 @@ export async function handleNominateCommand(ctx) {
     const quotaData = getAllianceNominationQuota(matchedAllianceTag, rewardsData, mapState);
     const rank = quotaData.rank;
 
+    if ((isNaN(rank) || rank > 50) && forAlliance) return testLink('no_rank');
     if (isNaN(rank) || rank > 50) {
       return sendEphemeralMessage(res, say('bot_nominate.no_rank', { tag: matchedAllianceTag }));
     }
 
     const chestsNow = chestCounts(quotaData, quotaData.isKW);
     const chestsIfWon = chestCounts(quotaIfWon(matchedAllianceTag, rewardsData, mapState), true);
+    if (countChests(chestsNow) === 0 && forAlliance) return testLink('no_chests');
     if (countChests(chestsNow) === 0) {
       return sendEphemeralMessage(res, say('bot_nominate.no_chests', { tag: matchedAllianceTag }));
     }

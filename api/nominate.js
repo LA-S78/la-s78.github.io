@@ -130,6 +130,12 @@ async function respond(req, res) {
           // The alliance's Google Sheet, for "Fill from sheet" (kept from the last fill)
           sheetUrl: savedSheetUrl(gist, mapState, tag),
         };
+        // A Steward's test link (/nominate alliance:): the page opens even when rewards are
+        // closed; saving is refused below
+        if (payload.test) {
+          body.test = true;
+          body.period = { ...body.period, open: true };
+        }
       }
       return res.status(200).json(body);
     } catch (err) {
@@ -158,6 +164,7 @@ async function respond(req, res) {
     return res.status(403).json({ error: say('api_nominate.token_invalid') });
   }
   const tag = String(payload.alliance || '').trim();
+  if (payload.test) return res.status(409).json({ error: say('api_nominate.test_no_save') });
 
   // The ranked list, best first. An old page still open may send filled slots instead.
   const raw = Array.isArray(req.body.ranked)

@@ -26,7 +26,31 @@
     {
       "name": "nominate",
       "description": "Request a portal link to submit weekly chest nominations",
-      "type": 1
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "show",
+          "description": "Leave blank for the nomination link",
+          "required": false,
+          "choices": [
+            {
+              "name": "🔗 Get the nomination link",
+              "value": "link"
+            },
+            {
+              "name": "📋 Show our current list",
+              "value": "list"
+            }
+          ]
+        },
+        {
+          "type": 3,
+          "name": "alliance",
+          "description": "Stewards: act for another alliance (a test link when rewards are closed)",
+          "required": false
+        }
+      ]
     },
     {
       "name": "rewards",
@@ -177,7 +201,31 @@
     {
       "name": "nominate",
       "description": "Request a portal link to submit weekly chest nominations",
-      "type": 1
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "show",
+          "description": "Leave blank for the nomination link",
+          "required": false,
+          "choices": [
+            {
+              "name": "🔗 Get the nomination link",
+              "value": "link"
+            },
+            {
+              "name": "📋 Show our current list",
+              "value": "list"
+            }
+          ]
+        },
+        {
+          "type": 3,
+          "name": "alliance",
+          "description": "Stewards: act for another alliance (a test link when rewards are closed)",
+          "required": false
+        }
+      ]
     },
     {
       "name": "rewards",
@@ -304,7 +352,31 @@
     {
       "name": "nominate",
       "description": "Request a portal link to submit weekly chest nominations",
-      "type": 1
+      "type": 1,
+      "options": [
+        {
+          "type": 3,
+          "name": "show",
+          "description": "Leave blank for the nomination link",
+          "required": false,
+          "choices": [
+            {
+              "name": "🔗 Get the nomination link",
+              "value": "link"
+            },
+            {
+              "name": "📋 Show our current list",
+              "value": "list"
+            }
+          ]
+        },
+        {
+          "type": 3,
+          "name": "alliance",
+          "description": "Stewards: act for another alliance (a test link when rewards are closed)",
+          "required": false
+        }
+      ]
     },
     {
       "name": "rewards",

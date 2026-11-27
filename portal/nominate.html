@@ -179,7 +179,9 @@ strings: [nominate, roster]
         t('nominate.header', { rank: data.alliance.rank, week: weekName(p), when: formatTime(p.closesAt) });
 
       const banner = document.getElementById('set2-banner');
-      if (!p.kwWeek) {
+      if (data.test) {
+        banner.innerHTML = ic('warning', 'warn') + escapeHtml(t('nominate.test_banner'));
+      } else if (!p.kwWeek) {
         banner.innerHTML = ic('crown') + escapeHtml(t('nominate.banner_off_week'));
       } else if (p.result === 'won') {
         banner.innerHTML = ic('swords') + escapeHtml(t('nominate.banner_won'));
@@ -283,6 +285,11 @@ strings: [nominate, roster]
         : badId
           ? t('nominate.id_unknown', { id: badId, tag: data.alliance.tag })
           : t('nominate.save');
+      // A Steward's test link: everything works but saving
+      if (data.test) {
+        btn.disabled = true;
+        btn.textContent = t('nominate.test_no_save');
+      }
     }
 
     input.addEventListener('input', render);

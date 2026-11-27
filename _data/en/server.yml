@@ -86,6 +86,7 @@ api_sheets:
   no_table: "That Doc has no table in it."
 
 api_nominate:
+  test_no_save: "This is a Steward's test link: lists aren't saved from it."
   sheet_link_needed: "Paste your alliance's Google Sheet link first."
   sheet_no_names: "The sheet's \"{tab}\" tab has no names. Push a week in the sheet (Duel Tools) first."
   link_invalid: "This link is invalid or expired."
@@ -235,6 +236,18 @@ bot_map:
   resources: "Resources"
 
 bot_nominate:
+  alliance_stewards_only: "⛔ Only Stewards can choose an alliance. Run /nominate without it for your own."
+  unknown_alliance: "⚠️ There's no alliance with the tag **{tag}** on the map."
+  list_title: "📋 [{tag}] nomination list"
+  list_none: "No list saved for **[{tag}]** this period yet. Run /nominate for the link."
+  list_saved: "Saved {when}."
+  list_reserves: "**Reserves:** {names}"
+  list_unfilled: "⚠️ {n} chest(s) still need a name."
+  test_title: "🧪 Test link — [{tag}]"
+  test_text: "{why} Here's a test link instead: the page works as usual, but nothing is saved from it. Valid 24 hours."
+  test_why_closed: "Rewards are closed right now."
+  test_why_no_rank: "This alliance has no rank in the standings."
+  test_why_no_chests: "This alliance has no chests this period."
   server_only: "⚠️ This command must be executed inside your alliance Discord server or the NAP server."
   owner_server: "⛔ **Access Denied:** Reward nominations cannot be submitted from this server. Leaders must submit via the NAP server or their alliance server."
   dedicated_denied: "⛔ **Access Denied:** Only members holding **@R5** or authorized leadership roles ({roles}) can submit nominations for **[{tag}]**."
@@ -353,6 +366,10 @@ bot_commands:
   calendar_manage_global: "Manage Global Events (Admin Only)"
   nominate: "Request a portal link to submit weekly chest nominations"
   nominate_authenticated: "Request an authenticated portal link to submit weekly chest nominations"
+  nominate_show: "Leave blank for the nomination link"
+  nominate_show_link: "🔗 Get the nomination link"
+  nominate_show_list: "📋 Show our current list"
+  nominate_alliance: "Stewards: act for another alliance (a test link when rewards are closed)"
   rewards: "This week's rewards: status, and the Kingdom War result (Stewards)"
   rewards_action: "Leave blank to see this week's reward status"
   rewards_won: "Record Kingdom War: Won (Steward)"
