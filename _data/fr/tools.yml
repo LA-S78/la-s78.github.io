@@ -35,7 +35,15 @@ common:
     logistics_support: Soutien Logistique
 dashboard:
   title: Tableau de bord de l'Alliance
-  loading: Chargement de votre tableau de bord de l'alliance…
+  fold_show: Afficher
+  fold_hide: Masquer
+  new_chart: Nouveau
+  arrange_mine: Organiser ma vue
+  arrange_done: Terminé
+  arrange_reset: Réinitialiser selon l'Alliance
+  arrange_reset_confirm: Remettre les cartes dans l'ordre de votre alliance ? (Les cartes pliées restent pliées.)
+  arrange_help: Déplacez les cartes avec ▲▼. Cela n'affecte que vous sur cet appareil ; les outils restent au-dessus des graphiques, et tout nouveau graphique apparaîtra en haut.
+  loading: Chargement du tableau de bord de votre alliance...
   view_as: Voir en tant que
   page_title: "[{tag}] Tableau de bord de l'Alliance"
   subtitle: Tableau de bord de l'Alliance · {view}
@@ -45,29 +53,29 @@ dashboard:
   view_leader: Vue leadership
   view_member: Vue membre
   sign_in_title: Connectez-vous pour voir le tableau de bord de votre alliance.
-  sign_in_help: Utilisez {sign_in} en haut à droite (Discord). Votre alliance est trouvée via votre rôle de serveur NAP.
+  sign_in_help: Utilisez {sign_in} en haut à droite (Discord). Votre alliance est détectée via votre rôle NAP sur le serveur.
   sign_in_button: Se connecter
-  load_failed: Impossible de charger le tableau de bord. Vérifiez votre connexion et rafraîchissez. ({error})
+  load_failed: Impossible de charger le tableau de bord. Vérifiez votre connexion et actualisez. ({error})
   edit_dashboard: Modifier le tableau de bord
-  done_editing: "✓ Terminer la modification"
+  done_editing: "✓ Fin de modification"
   add_chart: Ajouter un graphique ou un tableau
   editor_label: Éditeur de graphique ou tableau
   charts_label: Graphiques et tableaux de l'Alliance
-  empty_member: Les chefs de votre alliance n'ont pas encore partagé de graphiques ou de tableaux ici.
-  empty_editing: 'Aucun graphique ou tableau pour le moment : utilisez « Ajouter un graphique ou un tableau ».'
-  empty_leader: Aucun graphique ou tableau pour le moment. Utilisez « Modifier le tableau de bord » pour en ajouter un.
+  empty_member: Les chefs de votre alliance n'ont encore partagé aucun graphique ou tableau ici.
+  empty_editing: 'Aucun graphique ou tableau pour l''instant : utilisez « Ajouter un graphique ou un tableau ».'
+  empty_leader: Aucun graphique ou tableau pour l'instant. Utilisez « Modifier le tableau de bord » pour en ajouter un.
   visible_members: Tous les membres
   visible_officers: Officiers uniquement
   google_sheet: Google Sheet
   google_doc: Google Doc
-  synced: synchronisé le {when}
-  updated: Mis à jour le {when}
+  synced: synchronisé {when}
+  updated: Mis à jour {when}
   sync_now: Synchroniser maintenant
-  syncing: Synchronisation…
-  syncing_tabs: Synchronisation de {n} onglets…
-  tabs_skipped: 'Lors de la dernière synchronisation, ces onglets n''ont pas pu être lus (Google était lent ou l''onglet n''était pas disponible) ; Synchroniser maintenant réessaiera : {names}'
+  syncing: Synchronisation...
+  syncing_tabs: Synchronisation de {n} onglets...
+  tabs_skipped: 'Lors de la dernière synchronisation, ces onglets n''ont pas pu être lus (Google était lent ou l''onglet était indisponible) ; Synchroniser maintenant réessaiera : {names}'
   sync_help: Récupérer les derniers chiffres de la feuille
-  confirm_delete: Supprimer "{title}" ? Cette action est irréversible.
+  confirm_delete: Supprimer « {title} » ? Cette action est irréversible.
   this_chart: ce graphique
 rewards_card:
   title: Récompenses Hebdomadaires

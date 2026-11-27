@@ -35,6 +35,14 @@ common:
     logistics_support: Apoyo Logístico
 dashboard:
   title: Panel de Alianza
+  fold_show: Mostrar
+  fold_hide: Ocultar
+  new_chart: Nuevo
+  arrange_mine: Organizar mi vista
+  arrange_done: Hecho
+  arrange_reset: Restablecer al diseño de la alianza
+  arrange_reset_confirm: "¿Volver a poner las tarjetas en el orden de tu alianza? (Las tarjetas plegadas permanecerán plegadas)."
+  arrange_help: Mueve las tarjetas con ▲▼. Solo para ti, en este dispositivo; las herramientas permanecen sobre las gráficas y las gráficas nuevas aparecen en la parte superior.
   loading: Cargando el panel de tu alianza…
   view_as: Ver como
   page_title: "[{tag}] Panel de Alianza"
@@ -45,30 +53,30 @@ dashboard:
   view_leader: Vista de liderazgo
   view_member: Vista de miembro
   sign_in_title: Inicia sesión para ver el panel de tu alianza.
-  sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra a partir de tu rol de servidor NAP.
+  sign_in_help: Usa {sign_in} en la parte superior derecha (Discord). Tu alianza se encuentra mediante tu rol de servidor NAP.
   sign_in_button: Iniciar sesión
-  load_failed: No se pudo cargar el panel. Comprueba tu conexión y vuelve a intentarlo. ({error})
+  load_failed: No se pudo cargar el panel. Verifica tu conexión y actualiza. ({error})
   edit_dashboard: Editar panel
-  done_editing: "✓ Finalizar edición"
-  add_chart: Añadir gráfico o tabla
-  editor_label: Editor de gráficos o tablas
-  charts_label: Gráficos y tablas de la alianza
-  empty_member: Los líderes de tu alianza aún no han compartido gráficos o tablas aquí.
-  empty_editing: 'Sin gráficos ni tablas todavía: usa “Añadir un gráfico o una tabla”.'
-  empty_leader: Sin gráficos ni tablas todavía. Usa “Editar panel” para añadir uno.
+  done_editing: "✓ Edición terminada"
+  add_chart: Añadir gráfica o tabla
+  editor_label: Editor de gráficas o tablas
+  charts_label: Gráficas y tablas de la alianza
+  empty_member: Los líderes de tu alianza aún no han compartido gráficas o tablas aquí.
+  empty_editing: 'Aún no hay gráficas o tablas: usa “Añadir gráfica o tabla”.'
+  empty_leader: Aún no hay gráficas o tablas. Usa “Editar panel” para añadir una.
   visible_members: Todos los miembros
   visible_officers: Solo oficiales
-  google_sheet: Google Sheet
-  google_doc: Google Doc
+  google_sheet: Hoja de cálculo de Google
+  google_doc: Documento de Google
   synced: sincronizado {when}
   updated: Actualizado {when}
   sync_now: Sincronizar ahora
   syncing: Sincronizando…
   syncing_tabs: Sincronizando {n} pestañas…
-  tabs_skipped: 'En la última sincronización, estas pestañas no se pudieron leer (Google iba lento o la pestaña no estaba disponible); Sincronizar ahora lo intentará de nuevo: {names}'
-  sync_help: Obtener los últimos números de la hoja
-  confirm_delete: ¿Eliminar "{title}"? Esto no se puede deshacer.
-  this_chart: este gráfico
+  tabs_skipped: 'En la última sincronización, estas pestañas no se pudieron leer (Google estaba lento o la pestaña no estaba disponible); Sincronizar ahora volverá a intentarlo: {names}'
+  sync_help: Obtener los números más recientes de la hoja
+  confirm_delete: ¿Eliminar "{title}"? Esta acción no se puede deshacer.
+  this_chart: esta gráfica
 rewards_card:
   title: Recompensas semanales
   officers: Oficiales

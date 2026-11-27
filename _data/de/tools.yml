@@ -35,37 +35,45 @@ common:
     logistics_support: Logistikunterstützung
 dashboard:
   title: Allianz-Dashboard
-  loading: Allianz-Dashboard wird geladen…
+  fold_show: Einblenden
+  fold_hide: Ausblenden
+  new_chart: Neu
+  arrange_mine: Meine Ansicht anordnen
+  arrange_done: Fertig
+  arrange_reset: Auf Allianz-Layout zurücksetzen
+  arrange_reset_confirm: Die Karten wieder in die Reihenfolge deiner Allianz bringen? (Eingeklappte Karten bleiben eingeklappt.)
+  arrange_help: Verschiebe Karten mit ▲▼. Gilt nur für dich auf diesem Gerät; Tools bleiben über den Diagrammen, neue Diagramme erscheinen ganz oben.
+  loading: Lade dein Allianz-Dashboard…
   view_as: Anzeigen als
   page_title: "[{tag}] Allianz-Dashboard"
   subtitle: Allianz-Dashboard · {view}
   subtitle_rank: 'Allianz-Dashboard · Rang #{rank} · {view}'
   not_in_nap: Nicht im NAP
-  view_steward: Steward-Ansicht
+  view_steward: Verwalter-Ansicht
   view_leader: Führungs-Ansicht
   view_member: Mitglieder-Ansicht
   sign_in_title: Melde dich an, um dein Allianz-Dashboard zu sehen.
-  sign_in_help: Verwende {sign_in} oben rechts (Discord). Deine Allianz wird über deine NAP-Serverrolle gefunden.
+  sign_in_help: Nutze {sign_in} oben rechts (Discord). Deine Allianz wird über deine NAP-Serverrolle gefunden.
   sign_in_button: Anmelden
   load_failed: Das Dashboard konnte nicht geladen werden. Prüfe deine Verbindung und lade die Seite neu. ({error})
   edit_dashboard: Dashboard bearbeiten
-  done_editing: "✓ Bearbeitung beendet"
+  done_editing: "✓ Bearbeitung fertig"
   add_chart: Diagramm oder Tabelle hinzufügen
   editor_label: Diagramm- oder Tabellen-Editor
   charts_label: Allianz-Diagramme und -Tabellen
-  empty_member: Deine Allianzführung hat hier noch keine Diagramme oder Tabellen geteilt.
-  empty_editing: 'Noch keine Diagramme oder Tabellen: Verwende „Diagramm oder Tabelle hinzufügen“.'
-  empty_leader: Noch keine Diagramme oder Tabellen. Verwende „Dashboard bearbeiten“, um eine hinzuzufügen.
+  empty_member: Die Führung deiner Allianz hat hier noch keine Diagramme oder Tabellen geteilt.
+  empty_editing: 'Noch keine Diagramme oder Tabellen: Nutze „Diagramm oder Tabelle hinzufügen“.'
+  empty_leader: Noch keine Diagramme oder Tabellen. Nutze „Dashboard bearbeiten“, um eine hinzuzufügen.
   visible_members: Alle Mitglieder
   visible_officers: Nur Offiziere
   google_sheet: Google Tabelle
-  google_doc: Google Dokument
-  synced: synchronisiert am {when}
-  updated: Aktualisiert am {when}
+  google_doc: Google Doc
+  synced: synchronisiert {when}
+  updated: Aktualisiert {when}
   sync_now: Jetzt synchronisieren
   syncing: Synchronisiere…
   syncing_tabs: Synchronisiere {n} Reiter…
-  tabs_skipped: 'Beim letzten Synchronisieren konnten diese Reiter nicht gelesen werden (Google war langsam oder der Reiter war nicht verfügbar); „Jetzt synchronisieren“ versucht es erneut: {names}'
+  tabs_skipped: 'Beim letzten Sync konnten diese Reiter nicht gelesen werden (Google war langsam oder der Reiter war nicht verfügbar); Jetzt synchronisieren versucht es erneut: {names}'
   sync_help: Die neuesten Zahlen aus der Tabelle abrufen
   confirm_delete: '"{title}" löschen? Dies kann nicht rückgängig gemacht werden.'
   this_chart: dieses Diagramm

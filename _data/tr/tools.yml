@@ -35,38 +35,46 @@ common:
     logistics_support: Lojistik Destek
 dashboard:
   title: İttifak Paneli
-  loading: İttifak paneliniz yükleniyor…
-  view_as: Görüntüle
+  fold_show: Göster
+  fold_hide: Gizle
+  new_chart: Yeni
+  arrange_mine: Görünümümü düzenle
+  arrange_done: Tamam
+  arrange_reset: İttifak düzenine sıfırla
+  arrange_reset_confirm: Kartları ittifakınızın sırasına geri getireyim mi? (Gizlenen kartlar gizli kalır.)
+  arrange_help: Kartları ▲▼ ile taşıyın. Sadece bu cihazda size özeldir; araçlar grafiklerin üzerinde kalır ve yeni grafikler en üste eklenir.
+  loading: İttifak paneli yükleniyor…
+  view_as: Görüntüleme
   page_title: "[{tag}] İttifak Paneli"
   subtitle: İttifak Paneli · {view}
   subtitle_rank: 'İttifak Paneli · Sıra #{rank} · {view}'
   not_in_nap: NAP içinde değil
-  view_steward: Yönetici görünümü
+  view_steward: Görevli görünümü
   view_leader: Liderlik görünümü
   view_member: Üye görünümü
   sign_in_title: İttifak panelinizi görmek için giriş yapın.
-  sign_in_help: Sağ üstteki {sign_in} düğmesini kullanın (Discord). İttifakınız, NAP sunucu rolünüzden bulunur.
+  sign_in_help: Sağ üstteki {sign_in} (Discord) seçeneğini kullanın. İttifakınız, NAP sunucu rolünüzden bulunur.
   sign_in_button: Giriş Yap
   load_failed: Panel yüklenemedi. Bağlantınızı kontrol edin ve yenileyin. ({error})
   edit_dashboard: Paneli Düzenle
-  done_editing: "✓ Düzenleme tamamlandı"
+  done_editing: "✓ Düzenleme bitti"
   add_chart: Grafik veya tablo ekle
   editor_label: Grafik veya tablo düzenleyici
   charts_label: İttifak grafikleri ve tabloları
-  empty_member: İttifakınızın liderleri henüz burada herhangi bir grafik veya tablo paylaşmadı.
-  empty_editing: 'Henüz grafik veya tablo yok: “Grafik veya tablo ekle” seçeneğini kullanın.'
-  empty_leader: Henüz grafik veya tablo yok. Bir tane eklemek için “Paneli Düzenle” seçeneğini kullanın.
+  empty_member: İttifak liderleriniz henüz burada herhangi bir grafik veya tablo paylaşmadı.
+  empty_editing: 'Henüz grafik veya tablo yok: "Grafik veya tablo ekle" seçeneğini kullanın.'
+  empty_leader: Henüz grafik veya tablo yok. Bir tane eklemek için "Paneli Düzenle" seçeneğini kullanın.
   visible_members: Tüm üyeler
   visible_officers: Sadece yetkililer
   google_sheet: Google E-Tablo
   google_doc: Google Doküman
-  synced: "{when} senkronize edildi"
-  updated: "{when} güncellendi"
-  sync_now: Şimdi senkronize et
-  syncing: Senkronize ediliyor…
-  syncing_tabs: "{n} sekme senkronize ediliyor…"
-  tabs_skipped: 'Son senkronizasyonda, şu sekmeler okunamadı (Google yavaştı veya sekme erişilemezdi); Şimdi senkronize et tekrar dener: {names}'
-  sync_help: En güncel sayıları tablodan al
+  synced: "{when} tarihinde eşitlendi"
+  updated: "{when} tarihinde güncellendi"
+  sync_now: Şimdi eşitle
+  syncing: Eşitleniyor…
+  syncing_tabs: "{n} sekme eşitleniyor…"
+  tabs_skipped: 'Son eşitlemede şu sekmeler okunamadı (Google yavaştı veya sekme kullanılamıyordu); Şimdi eşitle seçeneği tekrar dener: {names}'
+  sync_help: En güncel sayıları sayfadan çekin
   confirm_delete: '"{title}" silinsin mi? Bu işlem geri alınamaz.'
   this_chart: bu grafik
 rewards_card:

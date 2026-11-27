@@ -35,14 +35,22 @@ common:
     logistics_support: Supporto Logistico
 dashboard:
   title: Dashboard Alleanza
-  loading: Caricamento dashboard dell'alleanza in corso…
+  fold_show: Mostra
+  fold_hide: Nascondi
+  new_chart: Nuovo
+  arrange_mine: Organizza la mia vista
+  arrange_done: Fatto
+  arrange_reset: Ripristina layout alleanza
+  arrange_reset_confirm: Ripristinare l'ordine delle schede dell'alleanza? (Le schede chiuse rimarranno chiuse.)
+  arrange_help: Sposta le schede con ▲▼. Solo per te, su questo dispositivo; gli strumenti rimangono sopra i grafici e un nuovo grafico apparirà in cima.
+  loading: Caricamento dashboard alleanza in corso...
   view_as: Visualizza come
   page_title: "[{tag}] Dashboard Alleanza"
   subtitle: Dashboard Alleanza · {view}
-  subtitle_rank: 'Dashboard Alleanza · Grado #{rank} · {view}'
+  subtitle_rank: 'Dashboard Alleanza · Rango #{rank} · {view}'
   not_in_nap: Non nel NAP
   view_steward: Vista amministratore
-  view_leader: Vista dirigenza
+  view_leader: Vista leadership
   view_member: Vista membro
   sign_in_title: Accedi per vedere la dashboard della tua alleanza.
   sign_in_help: Usa {sign_in} in alto a destra (Discord). La tua alleanza viene trovata tramite il tuo ruolo server NAP.
@@ -50,12 +58,12 @@ dashboard:
   load_failed: Impossibile caricare la dashboard. Controlla la connessione e aggiorna. ({error})
   edit_dashboard: Modifica Dashboard
   done_editing: "✓ Modifica completata"
-  add_chart: Aggiungi un grafico o una tabella
-  editor_label: Editor di grafici o tabelle
-  charts_label: Grafici e tabelle dell'alleanza
+  add_chart: Aggiungi grafico o tabella
+  editor_label: Editor grafici o tabelle
+  charts_label: Grafici e tabelle alleanza
   empty_member: I leader della tua alleanza non hanno ancora condiviso grafici o tabelle qui.
-  empty_editing: 'Nessun grafico o tabella ancora: usa “Aggiungi un grafico o una tabella”.'
-  empty_leader: Nessun grafico o tabella ancora. Usa “Modifica Dashboard” per aggiungerne uno.
+  empty_editing: 'Nessun grafico o tabella: usa “Aggiungi grafico o tabella”.'
+  empty_leader: Nessun grafico o tabella. Usa “Modifica Dashboard” per aggiungerne uno.
   visible_members: Tutti i membri
   visible_officers: Solo ufficiali
   google_sheet: Google Sheet
@@ -63,11 +71,11 @@ dashboard:
   synced: sincronizzato {when}
   updated: Aggiornato {when}
   sync_now: Sincronizza ora
-  syncing: Sincronizzazione…
-  syncing_tabs: Sincronizzazione di {n} schede…
-  tabs_skipped: 'Durante l''ultima sincronizzazione, queste schede non sono state lette (Google era lento o la scheda non era disponibile); Sincronizza ora riproverà: {names}'
-  sync_help: Recupera gli ultimi numeri dal foglio
-  confirm_delete: Eliminare "{title}"? Questa operazione non può essere annullata.
+  syncing: Sincronizzazione...
+  syncing_tabs: Sincronizzazione di {n} schede...
+  tabs_skipped: 'Durante l''ultima sincronizzazione, queste schede non sono state lette (Google lento o scheda non disponibile); Sincronizza ora riproverà: {names}'
+  sync_help: Recupera i dati più recenti dal foglio
+  confirm_delete: Eliminare "{title}"? L'operazione è irreversibile.
   this_chart: questo grafico
 rewards_card:
   title: Ricompense Settimanali
