@@ -81,16 +81,18 @@ api_sheets:
   no_such_table_other: Das Dokument enthält {count} Tabellen; es gibt keine Tabelle {table}.
   no_table: Dieses Dokument enthält keine Tabelle.
 api_nominate:
+  sheet_link_needed: Füge zuerst den Google-Tabellen-Link deiner Allianz ein.
+  sheet_no_names: Der Tab "{tab}" in der Tabelle enthält keine Namen. Führe zuerst eine Woche in der Tabelle (Duell-Tools) aus.
   link_invalid: Dieser Link ist ungültig oder abgelaufen.
   token_invalid: Token ist ungültig oder abgelaufen. Führe /nominate erneut aus.
   signed_out: Melde dich mit Discord an (oben rechts), um Truhen zu markieren.
   invalid_chest: Ungültige Truhe.
-  no_period: Derzeit ist kein Belohnungszeitraum aktiv.
-  king_only: Nur die Allianz des Königs (R4/R5) und Stewards können Truhen markieren.
-  king_only_tag: Nur die Allianz des Königs [{king}] (R4/R5) und Stewards können Truhen markieren.
-  not_listed: "{name} ist nicht mehr auf der Liste von [{alliance}]. Lade die Seite neu."
+  no_period: Momentan ist kein Belohnungszeitraum aktiv.
+  king_only: Nur die Allianz des Königs (R4/R5) und die Stewards können Truhen markieren.
+  king_only_tag: Nur die Allianz des Königs [{king}] (R4/R5) und die Stewards können Truhen markieren.
+  not_listed: "{name} steht nicht mehr auf der Liste von [{alliance}]. Aktualisiere die Seite."
   id_not_found: Kein Mitglied von [{alliance}] hat die Spieler-ID {id}. Überprüfe die Nummer oder gib den Namen ein.
-  ids_unavailable: Spieler-IDs können derzeit nicht abgerufen werden ({id}). Gib stattdessen den Namen ein.
+  ids_unavailable: Spieler-IDs können momentan nicht abgerufen werden ({id}). Gib stattdessen den Namen ein.
   listed_twice: "{name} steht doppelt auf der Liste."
   save_failed: 'Speichern fehlgeschlagen: {reason}'
 api_register:

@@ -4,60 +4,62 @@
 api_dashboard:
   alliance_changed: Tu alianza ha cambiado en el sitio desde que iniciaste sesión. Inicia sesión con Discord de nuevo para continuar.
   rename_unknown: Esa alianza ya no está en el mapa. Recarga la página.
-  rename_bad_tag: 'Escribe la nueva etiqueta tal y como aparece en el juego: máximo 12 caracteres, sin espacios, dos puntos, corchetes o barras.'
-  rename_same: Esa ya es su etiqueta actual.
+  rename_bad_tag: 'Escribe la nueva etiqueta tal como está en el juego: hasta 12 caracteres, sin espacios, dos puntos, corchetes o barras.'
+  rename_same: Esa es la etiqueta que ya tiene.
   rename_taken: "[{tag}] ya tiene esa etiqueta. Para intercambiar etiquetas entre dos alianzas, utiliza el intercambio."
-  rename_fixed: "[{tag}] no se puede renombrar aquí todavía: su etiqueta es parte del código del sitio. Solicita un cambio de código primero."
-  rename_not_moved: 'Renombrar requiere que cada tienda se mueva primero a los IDs de alianza (todavía por etiqueta: {stores}).'
-  retire_on_map: Solo se puede retirar una alianza que haya sido eliminada del mapa (en el planificador de alianzas).
-  tidy_not_moved: 'La limpieza requiere que cada tienda se mueva primero a los IDs de alianza (todavía por etiqueta: {stores}).'
-  pending_gone: Ya se ha respondido a esa alianza.
+  rename_fixed: "[{tag}] no puede ser renombrada aquí todavía: su etiqueta es parte del código del sitio. Solicita un cambio de código primero."
+  rename_not_moved: 'El cambio de nombre requiere que todas las tiendas se muevan primero a los IDs de alianza (todavía por etiqueta: {stores}).'
+  retire_on_map: Solo una alianza eliminada del mapa (en el planificador de alianzas) puede ser retirada.
+  tidy_not_moved: 'La limpieza requiere que todas las tiendas se muevan primero a los IDs de alianza (todavía por etiqueta: {stores}).'
+  pending_gone: Esa alianza ya ha sido contestada.
   stewards_only: Solo los Stewards pueden usar las herramientas de Steward.
-  lookups_used: Has agotado las búsquedas de jugadores de hoy. Se reinician en el reinicio diario (00:00 GT).
+  lookups_used: Las búsquedas de jugadores de hoy se han agotado. Comienzan de nuevo en el reinicio diario (00:00 GT).
   player_not_found: Ningún jugador tiene ese ID.
   player_unavailable: No se pudo contactar con el juego. Inténtalo de nuevo en unos minutos.
-  positions_leaders_only: Solo los R4 y R5 de tu alianza (y los Stewards) pueden ver a los miembros en el mapa.
+  positions_leaders_only: Solo los R4 y R5 (y Stewards) de tu alianza pueden ver a los miembros en el mapa.
   positions_unavailable: Las posiciones de los miembros no se pueden cargar en este momento. Inténtalo de nuevo en unos minutos.
-  links_used: Has agotado los enlaces de alianza de hoy. Se reinician en el reinicio diario (00:00 GT).
+  links_used: Los enlaces de alianza de hoy se han agotado. Comienzan de nuevo en el reinicio diario (00:00 GT).
   relink_none: Ya no hay nada que volver a vincular para esa alianza.
   link_bad: Elige una alianza y escribe la etiqueta que usa en el juego ahora.
-  link_same: Esa ya es la etiqueta que usa el sitio.
+  link_same: Esa es la etiqueta que el sitio ya usa.
   link_taken: "{tag} ya es otra alianza en el sitio."
-  link_not_found: El juego no tiene ninguna alianza con la etiqueta {tag} (la capitalización importa).
-  positions_used: Has agotado las actualizaciones del mapa de hoy. Se reinician en el reinicio diario (00:00 GT).
+  link_not_found: El juego no tiene ninguna alianza etiquetada como {tag} (distingue entre mayúsculas y minúsculas).
+  positions_used: Las actualizaciones del mapa de hoy se han agotado. Comienzan de nuevo en el reinicio diario (00:00 GT).
   positions_wait: El mapa se actualizó hace un momento. Inténtalo de nuevo en {minutes} min.
-  refresh_limit: No quedan actualizaciones de lista hoy. Se reinician en el reinicio diario (00:00 GT).
+  refresh_limit: No quedan actualizaciones de lista hoy. Comienzan de nuevo en el reinicio diario (00:00 GT).
   refresh_wait: La lista se actualizó hace un momento. Inténtalo de nuevo en {n} min.
   refresh_failed: No se pudo contactar con el juego. Inténtalo de nuevo en unos minutos.
-  signed_out: Inicia sesión con Discord (arriba a la derecha) para ver el panel de tu alianza.
-  load_failed: 'No se pudo cargar el panel: {reason}'
-  no_alliance: No pudimos determinar en qué alianza estás. El sitio la encuentra a partir de tu rol de alianza en el servidor NAP Discord. Pide el rol a los líderes de tu alianza o a un Steward, luego usa Refrescar Acceso en tu tarjeta de cuenta (arriba a la derecha).
-  leaders_only: Solo los R4 y R5 de tu alianza pueden cambiar el panel.
+  signed_out: Inicia sesión con Discord (arriba a la derecha) para ver el tablero de tu alianza.
+  load_failed: 'No se pudo cargar el tablero: {reason}'
+  no_alliance: No pudimos determinar en qué alianza estás. El sitio la encuentra a partir de tu rol de alianza en el servidor NAP Discord. Pide el rol a los líderes de tu alianza o a un Steward, luego usa Refresh Access en tu tarjeta de cuenta (arriba a la derecha).
+  alliance_unknown: Esa alianza ya no está en el mapa. Recarga la página y selecciónala de nuevo.
+  name_bad: Escribe primero el nombre de la alianza.
+  leaders_only: Solo los R4 y R5 de tu alianza pueden cambiar el tablero.
   chart_removed: Ese gráfico fue eliminado.
   chart_already_removed: Ese gráfico ya fue eliminado.
   not_linked: Este gráfico no está vinculado a una hoja o documento de Google.
   unknown_change: Cambio desconocido.
   save_failed: 'No se pudo guardar: {reason}'
-  r5_only_nominate: Solo tu R5 puede abrir la página de nominaciones aquí. Usa /nominate en Discord.
-  rewards_closed: Las recompensas están cerradas hasta {when}.
+  r5_only_nominate: Solo tu R5 puede abrir la página de nominación aquí. Ejecuta /nominate en Discord.
+  rewards_closed: Las recompensas están cerradas hasta el {when}.
   no_rank: "[{tag}] no tiene rango en la clasificación."
   choose_type: Elige un tipo de gráfico o tabla.
-  title_needed: Dale un título al gráfico o tabla.
-  too_many_columns: Máximo {max} columnas (esta tabla tiene {count}).
-  too_many_rows: Máximo {max} filas (esta tabla tiene {count}).
+  title_needed: Dale un título al gráfico o a la tabla.
+  too_many_columns: Como máximo {max} columnas (esta tabla tiene {count}).
+  too_many_rows: Como máximo {max} filas (esta tabla tiene {count}).
   column_name: Columna {n}
-  paste_first: Pega una tabla primero (una fila de encabezado y luego los datos).
+  paste_first: Pega una tabla primero (una fila de encabezado, luego los datos).
   no_data_rows: La tabla no tiene filas de datos bajo su encabezado.
   needs_numbers: Un gráfico necesita una columna de números para mostrarse.
   needs_target: 'Un gráfico de progreso necesita un objetivo: un número o una columna de objetivos.'
-  too_many_widgets: Máximo {max} gráficos y tablas por alianza.
+  too_many_widgets: Como máximo {max} gráficos y tablas por alianza.
   sheet_unusable: 'Los datos de la hoja no se pueden utilizar: {reason}'
-  too_big: Eso haría que este panel sea demasiado grande ({size} KB de {max} KB). Usa menos filas o elimina una tabla.
-  player_name_needed: Introduce el nombre de un jugador.
-  time_format: Los horarios son según el Game Time como 18:00 (o déjalos vacíos).
-  start_time_needed: Proporciona también la hora de inicio (o deja ambos vacíos).
-  rotor_full: Máximo {max} jugadores en la rotación.
-  already_in_rotor: "{name} ya está en la rotación."
+  too_big: Eso haría que este tablero fuera demasiado grande ({size} KB de {max} KB). Usa menos filas o elimina una tabla.
+  player_name_needed: Introduce un nombre de jugador.
+  time_format: Los tiempos son Game Time como 18:00 (o déjalos vacíos).
+  start_time_needed: Indica también la hora de inicio (o deja ambos vacíos).
+  rotor_full: Como máximo {max} jugadores en el rotor.
+  already_in_rotor: "{name} ya está en el rotor."
   player_removed: Ese jugador fue eliminado.
 api_sheets:
   no_tabs: No se encontraron pestañas en esa hoja. Verifica que el enlace abra la hoja de cálculo.
@@ -79,16 +81,18 @@ api_sheets:
   no_such_table_other: Ese documento tiene {count} tablas; no existe la tabla {table}.
   no_table: Ese documento no contiene ninguna tabla.
 api_nominate:
+  sheet_link_needed: Pega primero el enlace de la hoja de Google de tu alianza.
+  sheet_no_names: La pestaña "{tab}" de la hoja no tiene nombres. Publica una semana en la hoja (Duel Tools) primero.
   link_invalid: Este enlace no es válido o ha caducado.
   token_invalid: El token no es válido o ha caducado. Ejecuta /nominate de nuevo.
-  signed_out: Inicia sesión con Discord (arriba a la derecha) para marcar cofres.
+  signed_out: Inicia sesión con Discord (arriba a la derecha) para marcar los cofres.
   invalid_chest: Cofre no válido.
-  no_period: No hay ningún periodo de recompensa abierto en este momento.
-  king_only: Solo la alianza del Rey (R4/R5) y los Administradores pueden marcar cofres.
-  king_only_tag: Solo la alianza del Rey [{king}] (R4/R5) y los Administradores pueden marcar cofres.
-  not_listed: "{name} ya no está en la lista de [{alliance}]. Refresca la página."
+  no_period: No hay ningún período de recompensa abierto en este momento.
+  king_only: Solo la alianza del Rey (R4/R5) y los Stewards pueden marcar los cofres.
+  king_only_tag: Solo la alianza del Rey [{king}] (R4/R5) y los Stewards pueden marcar los cofres.
+  not_listed: "{name} ya no está en la lista de [{alliance}]. Recarga la página."
   id_not_found: Ningún miembro de [{alliance}] tiene el ID de jugador {id}. Comprueba el número o escribe el nombre.
-  ids_unavailable: Los IDs de jugador no se pueden buscar ahora mismo ({id}). Escribe el nombre en su lugar.
+  ids_unavailable: Los IDs de jugador no se pueden consultar ahora mismo ({id}). Escribe el nombre en su lugar.
   listed_twice: "{name} está en la lista dos veces."
   save_failed: 'No se pudo guardar: {reason}'
 api_register:
@@ -114,25 +118,26 @@ api_register:
   alert_role_missing: El rol de alerta predeterminado ({id}) no es un rol en "{server}". Copia su ID de nuevo, o déjalo vacío para @everyone.
   role_not_found: Todavía ningún rol en "{server}" coincide con "{role}"; funcionará cuando exista uno.
 api_alliance_images:
-  frame_png: Un marco de avatar debe ser un PNG con fondo transparente (un JPEG cubriría las imágenes de tus miembros).
-  not_set_up: Las imágenes de la alianza aún no están configuradas en el servidor.
+  frame_png: Un marco de avatar debe ser un PNG con fondo transparente (un JPEG cubriría las fotos de tus miembros).
+  not_set_up: Las imágenes de alianza aún no están configuradas en el servidor.
   failed: Algo salió mal con la imagen de la alianza. Por favor, inténtalo de nuevo.
-  bad_image: Ese archivo no es una imagen que el sitio pueda usar. Por favor, usa el formulario de carga.
-  too_big: La imagen es demasiado grande (más de {kb} KB). Por favor, usa el formulario de carga, que la reduce.
-  wrong_size: La imagen debe ser exactamente de {width}×{height} píxeles. Por favor, usa el formulario de carga.
-  has_metadata: La imagen aún contiene datos ocultos (como dónde se tomó una foto). Por favor, usa el formulario de carga, que los elimina.
-  leaders_only: Solo los líderes R4 y R5 pueden enviar imágenes de la alianza.
+  bad_image: Ese archivo no es una imagen que el sitio pueda usar. Por favor, utiliza el formulario de carga.
+  too_big: La imagen es demasiado grande (más de {kb} KB). Por favor, utiliza el formulario de carga, que la reduce.
+  wrong_size: La imagen debe tener exactamente {width}×{height} píxeles. Por favor, utiliza el formulario de carga.
+  has_metadata: La imagen todavía contiene datos ocultos (como dónde se tomó una foto). Por favor, utiliza el formulario de carga, que los elimina.
+  leaders_only: Solo los líderes R4 y R5 pueden enviar imágenes de alianza.
   own_alliance_only: Solo puedes enviar imágenes para tu propia alianza.
   unknown_alliance: Esa alianza no está en el NAP.
   daily_limit: 'Límite diario alcanzado: {max} imágenes por alianza cada 24 horas. Puedes enviar la siguiente después de {when}.'
-  post_failed: La imagen no pudo ser enviada a los Administradores en Discord. Por favor, inténtalo de nuevo más tarde.
-  sent: Enviado a los Administradores para su revisión. Aparecerá una vez que sea aprobado.
-  stewards_only: Solo los Administradores pueden revisar las imágenes de la alianza.
-  not_found: Esa imagen no se encontró. Puede haber expirado.
-  already_decided: Esa imagen ya ha sido revisada (o reemplazada por una nueva).
+  post_failed: No se pudo enviar la imagen a los Stewards en Discord. Por favor, inténtalo de nuevo más tarde.
+  sent: Enviado a los Stewards para su revisión. Aparecerá una vez aprobado.
+  saved_live: 'Guardado: la imagen ya está activa.'
+  stewards_only: Solo los Stewards pueden revisar las imágenes de alianza.
+  not_found: Esa imagen no se encontró. Puede haber caducado.
+  already_decided: Esa imagen ya ha sido revisada (o reemplazada por una más reciente).
   approved: 'Aprobado: la imagen ya está activa.'
   rejected: 'Rechazado: la imagen fue eliminada.'
-  remove_not_allowed: Solo el R5 de la alianza o un Administrador puede eliminar sus imágenes.
+  remove_not_allowed: Solo el R5 de la alianza o un Steward puede eliminar sus imágenes.
   nothing_to_remove: No hay ninguna imagen allí para eliminar.
   removed: Imagen eliminada.
 api_proposals:

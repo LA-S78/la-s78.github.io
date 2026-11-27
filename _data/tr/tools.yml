@@ -327,39 +327,45 @@ charts:
 nominate:
   page_title: Ödül Adaylıkları
   name_ok: "[{tag}] üye listesinde"
-  name_spelling: Oyunda {name} olarak yazılıyor
+  name_spelling: 'Oyunda şu şekilde yazılmış: {name}'
   name_unknown: "[{tag}] üye listesinde değil"
-  names_spelling_one: '1 isim oyunda farklı yazılıyor:'
-  names_spelling_other: "{n} isim oyunda farklı yazılıyor:"
-  use_game_spellings: Oyun içi yazımları kullan
-  names_unknown_one: '1 isim [{tag}] üye listesinde değil. Yine de kaydedilecek; doğru olduğundan emin olun:'
-  names_unknown_other: "{n} isim [{tag}] üye listesinde değil. Yine de kaydedilecek; doğru olduklarından emin olun:"
-  did_you_mean: şunu mu kastettiniz
+  names_spelling_one: '1 isim oyunda farklı yazılmış:'
+  names_spelling_other: "{n} isim oyunda farklı yazılmış:"
+  use_game_spellings: Oyun içi yazımı kullan
+  names_unknown_one: '1 isim [{tag}] üye listesinde yok. Yine de kaydedilecek; doğru olduğundan emin olun:'
+  names_unknown_other: "{n} isim [{tag}] üye listesinde yok. Yine de kaydedilecek; doğru olduklarından emin olun:"
+  did_you_mean: bunu mu demek istediniz
   loading: Adaylık sayfası yükleniyor...
-  players_label: Oyuncularınız, en iyiden başlayarak
-  players_help: Her satıra bir isim veya oyuncu kimliği (ya da virgülle ayrılmış şekilde), en iyi oyuncunuzu en başa gelecek şekilde yazın. Sandıklar, değer sırasına göre her iki sette de listeyi aşağıya doğru takip eder; sandıkların ötesindeki isimler yedek olarak tutulur ve daha fazla sandık açılırsa üst sıralara geçerler.
-  players_placeholder: Tam oyun içi isimler veya oyuncu kimlikleri, en iyisi en başta...
-  id_found: "{id} oyuncu kimliği olarak yazıldı"
+  players_label: Oyuncularınız, en iyisi başta olacak şekilde
+  players_help: Her satıra bir isim veya oyuncu kimliği (ya da virgülle ayırarak), en iyi oyuncunuzu başa gelecek şekilde yazın. Sandıklar, her iki sette de değer sırasına göre listenin aşağısına doğru dağıtılır; sandık sayısının ötesindeki isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
+  players_placeholder: Tam oyun içi isimler veya oyuncu kimlikleri, en iyisi başta...
+  id_found: "{id} oyuncu kimliği olarak girildi"
   id_unknown: "[{tag}] içinde {id} kimliğine sahip üye yok"
-  who_gets_what: Kime ne verilecek
+  who_gets_what: Kim ne alacak
   save: Listeyi Kaydet
+  sheet_fill: Çizelgeden doldur
+  sheet_link: Google Çizelge bağlantısı
+  sheet_help: İttifakınızın Duel Tools "Capitol Ranking" sekmesini içeren, "Bağlantıya sahip olan herkes görüntüleyebilir" olarak paylaşılmış çizelgesi. Bağlantı bir dahaki sefere hatırlanır.
+  sheet_loading: Çizelge okunuyor…
+  sheet_filled: Çizelgeden {n} isim dolduruldu. Kontrol edin ve ardından kaydedin.
+  sheet_filled_week: Çizelgeden {n} isim dolduruldu ({week}). Kontrol edin ve ardından kaydedin.
   saving: Kaydediliyor...
   link_incomplete: Bu bağlantı eksik. Yeni bir tane için Discord'da /nominate komutunu çalıştırın.
   load_failed: "{error} Yeni bir bağlantı için Discord'da /nominate komutunu çalıştırın."
-  closed: Ödüller kapalı. Bir sonraki açılış {when}, Cuma günkü başkent etkinliğinden sonra.
+  closed: Ödüller kapalı. Bir sonraki açılış Cuma günkü başkent etkinliğinden sonra, {when} tarihinde.
   header: Sıra {rank} · {week} ödülleri · {when} tarihine kadar açık
   banner_off_week: Bu hafta sadece Kral'ın Takdir Belgesi var (Krallık Savaşı yok).
   banner_won: 'Krallık Savaşı kazanıldı: Savaş Kralı Ödül sandıkları da açık.'
   banner_lost: 'Krallık Savaşı kaybedildi: Bu hafta sadece Kral''ın Takdir Belgesi var.'
-  banner_pending: Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Kazanılırsa Savaş Kralı Ödül sandıkları da açılır ve listeniz yeniden sıralanır. Kral dağıtımı sonuçtan sonra yaptığı için kimsenin sandığı değişmez.
+  banner_pending: Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Eğer kazanılırsa, Savaş Kralı Ödül sandıkları da açılır ve listeniz yeniden sıralanır. Kral ödülleri sonuçtan sonra dağıtır, bu nedenle kimsenin sandığı değişmez.
   handed_out_title: "✓ Kral tarafından çoktan dağıtıldı ({n})"
-  handed_out_help: Bu sandıklar oyun içinde verildiği için, listeniz ne derse desin bu oyuncularda kalırlar. Aşağıdaki liste geri kalanları paylaştırır.
+  handed_out_help: Bu sandıklar oyun içinde verildiği için listeniz ne derse desin bu oyuncularda kalır. Aşağıdaki liste geri kalanını paylaşır.
   reserve: Yedek
   col_player: Oyuncu
   col_chest: Sandık
   col_now: Şimdi
   col_if_won: Kazanılırsa
-  chests_now: Şimdi {n} sandık
+  chests_now: Şu an {n} sandık
   chests_if_won: Kazanılırsa {n}
   named: "{n} isimlendirildi"
   still_need_name: "{n} isme hala ihtiyaç var"
@@ -719,11 +725,11 @@ alliance_planner:
   nap_alliances: "{n} NAP İttifakı"
   planner_mode: Planlayıcı Modu
   submit_plan: Planı Gönder
-  tag_placeholder: ETİKET (ör. WLO)
+  tag_placeholder: ETİKET (örn. WLO)
   name_placeholder: Tam İttifak Adı
-  add_contender: "+ Yarışmacı Ekle"
-  loading_standings: Sıralamalar yükleniyor…
-  standings_failed: Sıralamalar yüklenemedi.
+  add_contender: "+ Aday Ekle"
+  loading_standings: Sıralama yükleniyor…
+  standings_failed: Sıralama yüklenemedi.
   protected_academy: Korunan Akademi
   change_color: "[{tag}] Rengini Değiştir"
   academy_of: "[{tag}] Akademisi"
@@ -734,22 +740,27 @@ alliance_planner:
   hide_details: Detayları gizle
   stat_might: Güç
   stat_members: üye
-  stat_level: "{n}. Seviye"
+  stat_level: Seviye {n}
+  leaders: Liderler
+  leader_overseer: Tanrıça
+  leader_militarist: Savaş Tanrısı
+  leader_diplomat: Diplomat
+  leader_recruiter: İşe Alımcı
   tracker_credit_before: 'Rozetler ve sayılar şuradan:'
   external: Harici
   revoke_nap: NAP'ı İptal Et
   grant_nap: NAP Ver
   remove_alliance: İttifakı Kaldır
-  academy_prompt: "[{tag}] altında Akademi olarak bağlamak için tam ittifak etiketini girin (büyük/küçük harf duyarlı, ör. RâvN veya râvn):"
+  academy_prompt: "[{tag}] altında Akademi olarak bağlamak için tam ittifak etiketini girin (büyük/küçük harf duyarlı, örn. RâvN veya râvn):"
   academy_available: 'Mevcut: {tags}'
   academy_new: 'Veya oluşturmak için yeni bir akademi etiketi yazın:'
-  already_exists: "[{tag}] ittifakı, tam olarak bu büyük/küçük harf kullanımıyla zaten mevcut."
-  no_changes: Mevcut sıralamalarda değişiklik algılanmadı.
-  proposal_title: NAP Sıralaması ve Diplomasi Teklifi Gönder
+  already_exists: "[{tag}] ittifakı tam olarak bu yazımla zaten mevcut."
+  no_changes: Mevcut sıralamada herhangi bir değişiklik tespit edilmedi.
+  proposal_title: NAP Sıralamasını & Diplomasi Teklifini Gönder
   diff_rank: "{tag}: Sıra {from} ➔ {to}"
   diff_academy: "{tag}: {parent} Akademisi olarak atandı"
   diff_nap: "{tag}: NAP Durumu {status}"
-  nap_status_protected: Korunuyor
+  nap_status_protected: Korunan
   nap_status_revoked: İptal Edildi
   diff_color: "{tag}: Renk {color} olarak güncellendi"
   diff_added: "{added}: Sıra #{rank} ({name})"

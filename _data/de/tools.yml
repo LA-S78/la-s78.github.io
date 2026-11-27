@@ -273,18 +273,18 @@ chart_editor:
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}
-  no_numbers: Keine Zahlen zum Darstellen in der gewählten Spalte.
+  no_numbers: Keine Zahlen zur Darstellung in der gewählten Spalte vorhanden.
   line_two_rows: Eine Linie benötigt mindestens zwei Zeilen.
-  line_two_columns: Eine Linie benötigt mindestens zwei Spalten entlang der Unterseite.
-  no_positive: Keine positiven Zahlen zum Darstellen in der gewählten Spalte.
-  no_targets: Keine Zahlen (oder Ziele) zum Vergleichen.
+  line_two_columns: Eine Linie benötigt mindestens zwei Spalten am unteren Rand.
+  no_positive: Keine positiven Zahlen zur Darstellung in der gewählten Spalte vorhanden.
+  no_targets: Keine Zahlen (oder Ziele) zum Vergleich vorhanden.
   no_table: Noch keine Tabelle.
   unknown_type: Unbekannter Diagrammtyp.
   draw_failed: Dieses Diagramm konnte nicht gezeichnet werden ({error}).
   other: Sonstiges
   value: Wert
-  total: Summe
-  total_value: 'Summe: {value}'
+  total: Gesamt
+  total_value: 'Gesamt: {value}'
   share_of_all: "{value} · {share} von allen"
   value_of_target: "{value} von {target}"
   to_go: 'Noch offen: {value}'
@@ -298,61 +298,68 @@ charts:
   show_all_rows: Alle {n} Zeilen anzeigen
   show_fewer: Weniger anzeigen
   first_rows: Zeige die ersten {shown} von {n} Zeilen.
-  hint_bar: Tippe oder bewege die Maus über einen Balken
-  hint_bar_key: Tippe oder bewege die Maus über einen Balken. Tippe auf einen Namen in der Legende, um nur diesen anzuzeigen.
+  hint_bar: Balken antippen oder darüberfahren
+  hint_bar_key: Balken antippen oder darüberfahren. Einen Namen in der Legende antippen, um nur diesen anzuzeigen.
   views: Ansichten
   view_latest: Neuester Tab
-  view_weeks: Summen pro Tab
+  view_weeks: Gesamtsummen pro Tab
   view_player: Ein Name pro Tab
-  view_pick: Name zum Anzeigen
+  view_pick: Anzuzeigender Name
   view_average: Durchschnitt von {n} Tabs
+  view_total: Gesamtsumme von {n} Tabs
   view_chart: Diagramm
   view_compare: Vergleichen
   search_names: Namen eingeben…
-  no_match: Keine Namen gefunden.
+  no_match: Keine passenden Namen gefunden.
   view_tab: Anzuzeigender Tab
   compare_first: Erster Name
   compare_second: Zweiter Name
   compare_top: Top {n} (Durchschnitt)
-  compare_bottom: Bottom {n} (Durchschnitt)
+  compare_bottom: Flop {n} (Durchschnitt)
   pair_left: 'Links: {name}'
-  share_of_column: "{name}: {share} der Summe"
-  pair_right: 'Rechts (ausgeblendet): {name}'
+  share_of_column: "{name}: {share} der Gesamtsumme"
+  pair_right: 'Rechts (abgeblendet): {name}'
   flip_to_asc: "⇅ Niedrigste zuerst"
   flip_to_desc: "⇅ Höchste zuerst"
-  hint_line: Tippe oder bewege die Maus über eine Woche
-  hint_pie: Tippe oder bewege die Maus über ein Segment
-  hint_progress: Tippe oder bewege die Maus über eine Zeile
+  hint_line: Woche antippen oder darüberfahren
+  hint_pie: Segment antippen oder darüberfahren
+  hint_progress: Zeile antippen oder darüberfahren
 nominate:
   page_title: Belohnungsnominierungen
   name_ok: In der Mitgliederliste von [{tag}]
-  name_spelling: Im Spiel wird es {name} geschrieben
+  name_spelling: Im Spiel wird es als {name} geschrieben
   name_unknown: Nicht in der Mitgliederliste von [{tag}]
   names_spelling_one: '1 Name wird im Spiel anders geschrieben:'
   names_spelling_other: "{n} Namen werden im Spiel anders geschrieben:"
   use_game_spellings: Spielschreibweisen verwenden
-  names_unknown_one: '1 Name ist nicht in der Mitgliederliste von [{tag}]. Er wird trotzdem gespeichert; prüfe, ob er korrekt ist:'
-  names_unknown_other: "{n} Namen sind nicht in der Mitgliederliste von [{tag}]. Sie werden trotzdem gespeichert; prüfe, ob sie korrekt sind:"
+  names_unknown_one: '1 Name ist nicht in der Mitgliederliste von [{tag}]. Er wird trotzdem gespeichert; bitte überprüfen:'
+  names_unknown_other: "{n} Namen sind nicht in der Mitgliederliste von [{tag}]. Sie werden trotzdem gespeichert; bitte überprüfen:"
   did_you_mean: meintest du
-  loading: Nomierungsseite wird geladen...
-  players_label: Deine Spieler, die Besten zuerst
-  players_help: Ein Name oder eine Spieler-ID pro Zeile (oder durch Kommas getrennt), dein bester Spieler zuerst. Truhen werden in der Reihenfolge ihres Wertes über beide Sets verteilt; Namen hinter den Truhen bleiben als Reserve und rücken nach, falls weitere Truhen geöffnet werden.
-  players_placeholder: Exakte Spielernamen oder Spieler-IDs, die besten zuerst...
+  loading: Lade Nominierungsseite…
+  players_label: Deine Spieler, die besten zuerst
+  players_help: Ein Name oder eine Spieler-ID pro Zeile (oder durch Kommas getrennt), dein bester Spieler zuerst. Truhen werden in der Reihenfolge des Wertes über beide Sets verteilt; Namen hinter den Truhen werden als Reserve gehalten und rücken nach, falls mehr Truhen geöffnet werden.
+  players_placeholder: Exakte Spielernamen oder Spieler-IDs, die besten zuerst…
   id_found: Eingegeben als Spieler-ID {id}
   id_unknown: Kein Mitglied von [{tag}] hat die ID {id}
   who_gets_what: Wer bekommt was
   save: Liste speichern
-  saving: Wird gespeichert...
-  link_incomplete: Dieser Link ist unvollständig. Führe /nominate in Discord für einen neuen aus.
-  load_failed: "{error} Führe /nominate in Discord für einen neuen Link aus."
-  closed: Belohnungen sind geschlossen. Die nächste Runde öffnet {when}, nach dem Kapitol-Event am Freitag.
+  sheet_fill: Aus Tabelle ausfüllen
+  sheet_link: Google Sheet-Link
+  sheet_help: Das Sheet deiner Allianz mit dem „Capitol Ranking“-Tab der Duel Tools, freigegeben als „Jeder mit dem Link kann die Seite ansehen“. Der Link wird für das nächste Mal gespeichert.
+  sheet_loading: Lese Tabelle…
+  sheet_filled: "{n} Namen aus der Tabelle gefüllt. Überprüfen und dann speichern."
+  sheet_filled_week: "{n} Namen aus der Tabelle ({week}) gefüllt. Überprüfen und dann speichern."
+  saving: Speichere…
+  link_incomplete: Dieser Link ist unvollständig. Führe /nominate auf Discord für einen neuen aus.
+  load_failed: "{error} Führe /nominate auf Discord für einen neuen Link aus."
+  closed: Belohnungen sind geschlossen. Die nächsten öffnen {when}, nach dem Capitol-Event am Freitag.
   header: Rang {rank} · {week} Belohnungen · offen bis {when}
   banner_off_week: Diese Woche nur Belobigung des Königs (kein Königreichskrieg).
-  banner_won: 'Königreichskrieg gewonnen: Truhen der „König der Schlacht“-Belohnung sind ebenfalls offen.'
+  banner_won: 'Königreichskrieg gewonnen: Belohnungstruhen des Schlachtkönigs sind auch offen.'
   banner_lost: 'Königreichskrieg verloren: Diese Woche nur Belobigung des Königs.'
-  banner_pending: Warte auf das Kampfergebnis vom Samstag (ca. {when}). Falls gewonnen, werden die „König der Schlacht“-Truhen ebenfalls geöffnet und deine Liste neu sortiert. Der König verteilt nach dem Ergebnis, also ändert sich die Truhe von niemandem.
+  banner_pending: Warte auf das Ergebnis der Schlacht vom Samstag (gegen {when}). Wenn gewonnen, öffnen auch die Belohnungstruhen des Schlachtkönigs und deine Liste wird neu sortiert. Der König verteilt nach dem Ergebnis, daher ändert sich an den Truhen niemandem etwas.
   handed_out_title: "✓ Bereits vom König verteilt ({n})"
-  handed_out_help: Diese Truhen wurden bereits im Spiel vergeben und bleiben bei diesen Spielern, egal was in deiner Liste steht. Die Liste unten verteilt den Rest.
+  handed_out_help: Diese Truhen sind im Spiel bereits vergeben, sie bleiben bei diesen Spielern, egal was deine Liste sagt. Die Liste unten verteilt den Rest.
   reserve: Reserve
   col_player: Spieler
   col_chest: Truhe
@@ -716,13 +723,13 @@ alliance_planner:
   roster: 'NAP-Liste:'
   roster_loading: "-- Allianzen"
   nap_alliances: "{n} NAP-Allianzen"
-  planner_mode: Planer-Modus
+  planner_mode: Planungsmodus
   submit_plan: Plan einreichen
-  tag_placeholder: TAG (z. B. WLO)
+  tag_placeholder: TAG (z.B. WLO)
   name_placeholder: Vollständiger Allianzname
-  add_contender: "+ Herausforderer hinzufügen"
-  loading_standings: Lade Tabellen…
-  standings_failed: Tabellen konnten nicht geladen werden.
+  add_contender: "+ Anwärter hinzufügen"
+  loading_standings: Lade Tabellenstand…
+  standings_failed: Tabellenstand konnte nicht geladen werden.
   protected_academy: Geschützte Akademie
   change_color: "[{tag}] Farbe ändern"
   academy_of: Akademie von [{tag}]
@@ -734,26 +741,31 @@ alliance_planner:
   stat_might: Stärke
   stat_members: Mitglieder
   stat_level: Level {n}
+  leaders: Anführer
+  leader_overseer: Göttin
+  leader_militarist: Kriegsgott
+  leader_diplomat: Diplomat
+  leader_recruiter: Anwerber
   tracker_credit_before: Abzeichen und Zahlen vom
   external: Extern
-  revoke_nap: NAP widerrufen
+  revoke_nap: NAP entziehen
   grant_nap: NAP gewähren
   remove_alliance: Allianz entfernen
-  academy_prompt: 'Gib das exakte Allianz-Tag ein, um es als Akademie unter [{tag}] zu verknüpfen (Groß-/Kleinschreibung beachten, z. B. RâvN oder râvn):'
+  academy_prompt: 'Exakten Allianz-Tag eingeben, um als Akademie unter [{tag}] zu verknüpfen (Groß-/Kleinschreibung beachten, z.B. RâvN oder râvn):'
   academy_available: 'Verfügbar: {tags}'
-  academy_new: 'Oder gib ein neues Akademie-Tag ein, um es zu erstellen:'
-  already_exists: Allianz [{tag}] existiert bereits mit genau dieser Schreibweise.
-  no_changes: Keine Änderungen in den aktuellen Tabellen erkannt.
-  proposal_title: NAP-Tabellen & Diplomatie-Vorschlag einreichen
+  academy_new: 'Oder neuen Akademie-Tag eingeben, um ihn zu erstellen:'
+  already_exists: Allianz [{tag}] existiert bereits unter exakt dieser Schreibweise.
+  no_changes: Keine Änderungen im aktuellen Stand erkannt.
+  proposal_title: NAP-Stand und Diplomatievorschlag einreichen
   diff_rank: "{tag}: Rang {from} ➔ {to}"
   diff_academy: "{tag}: Als Akademie von {parent} zugewiesen"
   diff_nap: "{tag}: NAP-Status {status}"
   nap_status_protected: Geschützt
-  nap_status_revoked: Widerrufen
+  nap_status_revoked: Entzogen
   diff_color: "{tag}: Farbe auf {color} aktualisiert"
   diff_added: "{added}: Rang #{rank} ({name})"
   added_tag: "[{tag}] hinzugefügt"
-  diff_removed: "{removed} aus Tabellen"
+  diff_removed: "{removed} aus dem Stand entfernt"
   removed_tag: "[{tag}] entfernt"
   diff_modified: "[{tag}] geändert"
   unknown: Unbekannt
@@ -932,60 +944,61 @@ image_review:
   done_approved: Genehmigt. Das Bild ist jetzt live und der Discord-Post wurde aktualisiert.
   done_rejected: Abgelehnt. Das Bild wurde gelöscht und der Discord-Post wurde aktualisiert.
 alliance_images:
-  title: Allianz-Bilder
+  title: Allianzbilder
   edit: Bilder bearbeiten
-  done: "✓ Bearbeitung fertig"
-  help: Füge ein Bild hinter die Capitol-Rotationskarte deiner Allianz und die Zeile für NAP Ranks sowie einen Rahmen für die Bilder deiner Mitglieder hinzu. Ein Steward überprüft jedes Bild, bevor es jemand anderes sieht.
-  rules: 'Verwende die eigenen Grafiken deiner Allianz oder In-Game-Grafiken: kein Branding anderer Allianzen, nichts Anstößiges, keine persönlichen Informationen.'
-  left_today: "{left} von {max} Bildern heute für deine Allianz übrig."
-  not_ready: Das Hochladen von Bildern ist noch nicht freigeschaltet.
+  done: "✓ Bearbeitung abgeschlossen"
+  help: Füge ein Bild hinter die Capitol-Rotationskarte deiner Allianz und die NAP-Rangzeile sowie einen Rahmen für die Bilder deiner Mitglieder ein. Ein Steward prüft jedes einzelne, bevor es jemand anderes sieht.
+  rules: 'Verwende eigene Kunst deiner Allianz oder Kunst aus dem Spiel: keine Marken anderer Allianzen, nichts Anstößiges, keine persönlichen Informationen.'
+  left_today: "{left} von {max} Bildern heute noch für deine Allianz übrig."
+  not_ready: Bild-Uploads sind noch nicht aktiviert.
   card: Capitol-Rotationskarte
-  wide: NAP Ranks Banner
+  wide: NAP-Ränge-Banner
   frame: Allianz-Avatarrahmen
-  frame_spec: 'Ein Rahmen, der auf dieser Seite um die Bilder deiner Mitglieder gezeichnet wird. Erstelle ein quadratisches PNG mit transparentem Hintergrund, 380×380 Pixel (mindestens 190×190): Lass das mittlere Quadrat transparent (von 72 bis 308 Pixel, wie die eigenen Rahmen des Spiels) und dekoriere darum herum bis zu den Kanten. Eine kleine Dekoration über der Mitte (z. B. eine Girlande) ist in Ordnung.'
+  frame_spec: 'Ein Rahmen, der um die Bilder deiner Mitglieder auf dieser Seite gezeichnet wird. Erstelle ein quadratisches PNG mit transparentem Hintergrund, 380×380 Pixel (mindestens 190×190): Lass das mittlere Quadrat transparent (von 72 bis 308 Pixel, wie die eigenen Rahmen des Spiels) und dekoriere darum bis zu den Rändern. Ein bisschen Dekoration über der Mitte (z.B. eine Girlande) ist in Ordnung.'
   use_frame: Für unsere Mitglieder verwenden
   use_frame_on: Wird überall auf der Seite um die Bilder der Mitglieder angezeigt, anstelle des einfachen Rahmens des Spiels. Mitglieder mit einem speziellen In-Game-Rahmen behalten ihren.
-  use_frame_all: Wird überall auf der Seite um jedes Mitgliedsbild angezeigt, anstelle jedes In-Game-Rahmens, auch bei speziellen.
-  use_frame_off: 'Aus: Mitglieder behalten ihre In-Game-Rahmen auf der Seite.'
+  use_frame_all: Wird überall auf der Seite um jedes Bild der Mitglieder angezeigt, anstelle jedes In-Game-Rahmens, auch spezieller.
   frame_all: Auch über speziellen Rahmen
+  use_frame_off: 'Aus: Mitglieder behalten ihre In-Game-Rahmen auf der Seite.'
   frame_title: Avatarrahmen überprüfen
-  frame_check_ok: 'Sieht richtig aus: Die Mitte ist transparent. So wird es um die Bilder deiner Mitglieder aussehen.'
+  frame_check_ok: 'Sieht gut aus: die Mitte ist transparent. So wird er um die Bilder deiner Mitglieder aussehen.'
   frame_big: Groß
-  frame_roster: Roster
+  frame_roster: Kader
   frame_lists: Listen
   frame_not_square: Ein Rahmen muss quadratisch sein; dieses Bild ist {width}×{height}.
   frame_too_small: Dieses Bild ist nur {width}×{height}. Ein Rahmen benötigt mindestens 190×190 Pixel (380×380 ist am besten).
-  frame_covers: 'Dieser Rahmen deckt etwa {percent}% der Mitte ab, wo die Bilder der Mitglieder zu sehen sind. Das ist in Ordnung, wenn es beabsichtigt ist (z. B. eine Girlande): Überprüfe die Vorschauen unten, bevor du es abschickst.'
-  frame_covers_most: 'Dieser Rahmen deckt etwa {percent}% der Mitte ab, sodass der Großteil jedes Mitgliedsbildes verdeckt wäre. Überprüfe die Vorschauen unten: Sende es nur ab, wenn das genau das ist, was du willst.'
+  frame_covers: 'Dieser Rahmen verdeckt etwa {percent}% der Mitte, wo die Bilder der Mitglieder angezeigt werden. Das ist in Ordnung, wenn es beabsichtigt ist (z.B. eine Girlande): Überprüfe die Vorschau unten, bevor du es sendest.'
+  frame_covers_most: 'Dieser Rahmen verdeckt etwa {percent}% der Mitte, sodass der Großteil des Bildes jedes Mitglieds verdeckt wäre. Überprüfe die Vorschau unten: sende es nur, wenn das so gewollt ist.'
   frame_not_png: Ein Avatarrahmen muss ein PNG (oder WebP) mit transparentem Hintergrund sein. JPEG-Bilder können nicht transparent sein, daher würden sie die Bilder deiner Mitglieder verdecken.
-  frame_no_transparency: Dieses Bild hat keine transparenten Bereiche, daher würde es als massives Quadrat über den Bildern deiner Mitglieder erscheinen. Speichere es als PNG mit transparentem Hintergrund.
-  frame_empty: 'Dieses Bild ist fast vollständig transparent: Es gibt keinen Rahmen zum Anzeigen.'
-  frame_too_big: Dieser Rahmen ist nach dem Speichern {kb} KB groß; das Maximum beträgt 500 KB. Versuche es mit weniger Farben oder weniger feinen Details.
+  frame_no_transparency: Dieses Bild hat keine transparenten Teile, daher würde es als festes Quadrat über den Bildern deiner Mitglieder erscheinen. Speichere es als PNG mit transparentem Hintergrund.
+  frame_empty: 'Dieses Bild ist fast vollständig transparent: es gibt keinen Rahmen anzuzeigen.'
+  frame_too_big: Dieser Rahmen ist {kb} KB groß, nachdem er gespeichert wurde; das Maximum sind 500 KB. Versuche es mit weniger Farben oder weniger feinen Details.
   none: Noch kein Bild
   live: Live seit {when}
   pending: Wartet seit {when} auf einen Steward
-  rejected: Abgelehnt {when}
-  rejected_reason: 'Abgelehnt {when}: „{reason}“'
-  expired: Nicht rechtzeitig überprüft ({when}). Sende es erneut.
+  rejected: Abgelehnt am {when}
+  rejected_reason: 'Abgelehnt am {when}: „{reason}“'
+  expired: Nicht rechtzeitig geprüft ({when}). Sende es erneut.
   choose: Bild auswählen
   replace: Neues Bild auswählen
   remove: Entfernen
-  confirm_remove: Das {slot} entfernen? Es verschwindet sofort für alle.
-  crop_title: Positioniere {slot}
-  crop_help: Ziehen zum Bewegen. Zoomen durch Zusammenziehen, Scrollen oder den Schieberegler. Nur was innerhalb des Rahmens ist, wird gesendet.
+  confirm_remove: "{slot} entfernen? Es verschwindet sofort für alle."
+  crop_title: "{slot} positionieren"
+  crop_help: Zum Bewegen ziehen. Zoomen durch Pinchen, Scrollen oder den Schieberegler. Nur das, was sich innerhalb des Rahmens befindet, wird gesendet.
   zoom: Zoom
-  preview_title: So wird es aussehen
-  preview_phone: Telefon
+  preview_title: Wie es aussehen wird
+  preview_phone: Handy
   preview_desktop: Desktop
   preview_week: Woche 1 Fr
   preview_loot: 2 Königstruhen
-  preview_status: NAP Geschützt
-  send: Zur Überprüfung senden
-  sending: Senden...
+  preview_status: NAP-geschützt
+  send: Zur Prüfung senden
+  save_live: Speichern (jetzt live)
+  sending: Sende…
   cancel: Abbrechen
-  sent: Gesendet. Ein Steward wird es überprüfen; es erscheint, sobald es genehmigt wurde.
-  not_image: Diese Datei ist kein Bild, das der Browser öffnen kann. Versuche es mit einem JPEG oder PNG.
-  too_small: Das Bild ist recht klein ({width}×{height}); es könnte unscharf aussehen. Du kannst es trotzdem senden.
+  sent: Gesendet. Ein Steward wird es prüfen; es erscheint nach der Genehmigung.
+  not_image: Diese Datei ist kein Bild, das dieser Browser öffnen kann. Versuche ein JPEG oder PNG.
+  too_small: Dieses Bild ist ziemlich klein ({width}×{height}); es könnte unscharf wirken. Du kannst es trotzdem senden.
   load_failed: Das Bild konnte nicht geöffnet werden.
 stats:
   title: NAP-Statistiken
@@ -1053,34 +1066,44 @@ stats:
   show_hide: Tippe auf eine Allianz, um ihre Linie anzuzeigen oder auszublenden.
   credit_before: Zahlen von
 steward:
-  tidy_title: 'Allianz-IDs: aufräumen'
-  tidy_help: 'Alles wird jetzt nach Allianz-ID gespeichert. Die Verschiebungen hinterlassen {gist} Sicherungsdateien und {dashboards} alte Dashboard-Dateien im Gist. Lösche sie, sobald du zufrieden bist: Das Gist behält seine früheren Revisionen bei. Die {stats} Stats-Sicherungsdateien bleiben erhalten (der Blob-Speicher hat keine Revisionen).'
-  tidy_button: Sicherungen löschen
-  tidy_confirm: Die Sicherungen der Allianz-ID-Verschiebungen löschen?
-  tidy_done: 'Gelöscht: {gist} Sicherungsdateien und {dashboards} alte Dashboard-Dateien. Die Stats-Sicherungen bleiben erhalten.'
-  roster_title: 'Allianzen: umbenennen, Tags tauschen, in Rente schicken'
-  roster_help: Das Umbenennen ändert das Tag überall gleichzeitig (seine Historie, Events, Bilder, Dashboards und Stats bleiben damit verknüpft). Öffentliche Seiten zeigen für 30 Tage "ehemals [ALT]" an.
-  roster_was: war [{tag}] bis {until}
+  tidy_title: 'Allianz-IDs: Aufräumen'
+  tidy_help: 'Alles wird jetzt nach Allianz-ID gespeichert. Die Verschiebungen hinterließen {gist} Backup-Dateien und {dashboards} alte Dashboard-Dateien im Gist. Lösche sie, wenn du zufrieden bist: Der Gist behält seine früheren Revisionen. Die {stats} Stats-Backup-Dateien werden behalten (der Blob-Speicher hat keine Revisionen).'
+  tidy_button: Backups löschen
+  tidy_confirm: Backups der Allianz-ID-Verschiebungen löschen?
+  tidy_done: 'Gelöscht: {gist} Backup-Dateien und {dashboards} alte Dashboard-Dateien. Die Stats-Backups wurden behalten.'
+  roster_title: Allianz-Einstellungen
+  roster_pick: Wähle eine Allianz zum Bearbeiten…
+  roster_search: Allianz finden
+  roster_off_map: von der Karte entfernt
+  roster_retired: im Ruhestand
+  rename_help: Umbenennen ändert das Tag überall auf einmal (Historie, Events, Bilder, Dashboards und Stats bleiben erhalten). Öffentliche Seiten zeigen 30 Tage lang „ehemals [ALT]“ an.
+  roster_was: war bis {until} [{tag}]
   rename_placeholder: Neues Tag
+  tag_label: Tag
+  name_label: Name
+  name_button: Name speichern
+  name_saved: Name gespeichert.
+  images_title: Bilder
+  images_help: Deine Uploads hier gehen sofort live, ohne nachträgliche Prüfung. Eigene Uploads der Anführer kommen weiterhin zur Prüfung zu dir.
   rename_button: Umbenennen
   rename_confirm: "[{from}] in [{to}] umbenennen? Jede Seite zeigt sofort das neue Tag an."
   rename_one_click: "[{old}] in [{now}] umbenennen"
-  swap_title: 'Zwei Allianzen tauschen Tags:'
+  swap_title: 'Tags tauschen mit:'
   swap_button: Tags tauschen
   swap_confirm: Die Tags von [{a}] und [{b}] tauschen?
-  off_map_title: 'Von der Karte entfernt (im Allianz-Planer):'
-  retire_button: In Rente schicken
-  retire_confirm: "[{tag}] in Rente schicken? Es bleibt mit seiner Historie erhalten (Allianzen in Rente, siehe unten) und kann zurückgeholt werden."
-  retired_title: Allianzen in Rente ({n})
+  off_map_title: 'Von der Karte entfernt (im Allianzplaner):'
+  retire_button: In den Ruhestand
+  retire_confirm: "[{tag}] in den Ruhestand schicken? Es bleibt mit seiner Historie erhalten (Allianzen im Ruhestand, unten) und kann zurückgeholt werden."
+  retired_title: Allianzen im Ruhestand ({n})
   unretire_button: Zurückholen
   roster_saved: Gespeichert.
-  newtag: "{tag} ist neu auf der Karte. Handelt es sich um eine Allianz, die die Seite bereits kennt, umbenannt wurde oder zurück auf der Karte ist? Bis du antwortest, startet sie ohne deren Daten, und Mitglieder der alten Allianz werden gebeten, sich erneut anzumelden."
+  newtag: "{tag} ist neu auf der Karte. Ist es eine Allianz, die die Seite bereits kannte, umbenannt wurde oder zurück auf der Karte ist? Bis du antwortest, startet sie ohne deren Daten, und Mitglieder der alten Allianz werden gebeten, sich erneut anzumelden."
   newtag_same: 'Gleiche Allianz wie:'
   newtag_new: Es ist eine neue Allianz
   newtag_link: Verknüpfen
   page_title: Steward-Tools
-  intro: 'Tools für Königreich-Stewards: was auf dich wartet und eine Live-Spielersuche.'
-  loading: Laden…
+  intro: 'Tools für Königreich-Stewards: Was auf dich wartet und eine Live-Spielersuche.'
+  loading: Lade…
   sign_in: Mit Discord anmelden
   sign_in_needed: Melde dich mit Discord an, um die Steward-Tools zu öffnen.
   stewards_only: Nur Königreich-Stewards können die Steward-Tools öffnen.
@@ -1088,67 +1111,67 @@ steward:
   lookup_help: 'Jeder Spieler, live aus dem Spiel: Allianz, Zahlen sowie frühere Namen und Allianzen. Gib eine Spieler-ID oder einen Namen ein, um die ID eines NAP-Spielers zu finden.'
   lookup_placeholder: Spieler-ID oder der Name eines NAP-Spielers
   lookup_go: Suchen
-  lookup_id_needed: Gib eine Spieler-ID ein (die Nummer auf ihrem Profil) oder wähle einen NAP-Spieler aus den gefundenen Namen.
-  lookups_left: "{left} von {max} Live-Suchanfragen für heute übrig (geteilt von allen Stewards)."
-  looking: Frage das Spiel ab…
-  name_none: Kein NAP-Spieler mit diesem Namen gefunden. Für alle anderen benutze bitte deren Spieler-ID.
+  lookup_id_needed: Gib eine Spieler-ID ein (die Nummer auf dem Profil) oder wähle einen NAP-Spieler aus den gefundenen Namen.
+  lookups_left: "{left} von {max} Live-Suchen heute noch übrig (geteilt von allen Stewards)."
+  looking: Frage das Spiel…
+  name_none: Kein NAP-Spieler mit diesem Namen. Für andere verwende bitte deren Spieler-ID.
   no_alliance: Keine Allianz
   server: Server {n}
   online: Jetzt online
   last_seen: Zuletzt gesehen {when}
   shielded: Schild aktiv
-  might: Macht
+  might: Stärke
   kills: Kills
   sanctuary: Sanktuarium
   vip: VIP
   position: Position (X, Y)
   language: Sprache
-  ranks: 'Königreich-Ränge: #{might} Macht · #{kills} Kills · #{heroes} Helden'
+  ranks: 'Königreich-Ränge: #{might} Stärke · #{kills} Kills · #{heroes} Helden'
   history_title: Namen und Allianzen
   history_none: Keine früheren Namen oder Allianzen gesehen.
   seen_from: seit {when}
-  first_seen: Vom Tracker erstmals gesehen {when}.
-  renamed: "{old} heißt jetzt {now} im Spiel. Es wird immer noch anhand der Spiel-ID gemessen (Stats und das Top 4-Rennen), aber die Seite nennt es weiterhin {old}."
-  renamed_fix: Im Allianz-Planer umbenennen
-  test_copy: "🧪 Testseite: ihre Daten wurden von der Live-Seite kopiert {when} (/devupdate in Discord erstellt eine frische Kopie)."
-  test_copy_none: "🧪 Testseite: ihre Daten wurden noch nicht von der Live-Seite kopiert. Führe /devupdate in Discord für eine frische Kopie aus."
-  mismatch: "{tag} im Spiel antwortet jetzt mit einer anderen Allianz: {got}. Die Seite misst weiterhin die Allianz, die sie als {tag} ({known}) kennt, anhand der Spiel-ID und zählt die neue nicht als diese."
-  mismatch_relink: 'Es ist die gleiche Allianz: neu verknüpfen'
-  mismatch_relink_help: Nur wenn {got} wirklich die Allianz ist, die die Seite meint (die erste Verknüpfung war falsch oder das Spiel hat sie neu nummeriert). In Rente schicken oder Umbenennen sind spätere Schritte.
-  unfound: "{tag} wurde im Spiel nicht gefunden und wird daher nicht gemessen (Stats und Top 4-Rennen). Wenn sie ihr Tag im Spiel geändert hat, gib das neue ein, und die Seite folgt ihr."
+  first_seen: Vom Tracker erstmals gesehen am {when}.
+  renamed: "{old} heißt jetzt {now} im Spiel. Es wird weiterhin (durch Stats und das Top-4-Rennen) anhand der Spielernummer gemessen, aber die Seite nennt es weiterhin {old}."
+  renamed_fix: Im Allianzplaner umbenennen
+  test_copy: "🧪 Testseite: Die Daten wurden am {when} von der Live-Seite kopiert (/devupdate auf Discord erstellt eine frische Kopie)."
+  test_copy_none: "🧪 Testseite: Die Daten wurden noch nicht von der Live-Seite kopiert. Führe /devupdate auf Discord für eine frische Kopie aus."
+  mismatch: "{tag} antwortet im Spiel jetzt mit einer anderen Allianz: {got}. Die Seite misst die als {tag} bekannte Allianz ({known}) weiterhin anhand der internen Spielernummer und zählt die neue nicht als diese."
+  mismatch_relink: 'Es ist dieselbe Allianz: neu verknüpfen'
+  mismatch_relink_help: Nur wenn {got} wirklich die Allianz ist, die die Seite meint (die erste Verknüpfung war falsch oder das Spiel hat sie neu nummeriert). In den Ruhestand schicken oder Umbenennen erfordern spätere Schritte.
+  unfound: "{tag} wurde im Spiel nicht gefunden und wird daher nicht gemessen (Stats und Top-4-Rennen). Wenn das Tag im Spiel geändert wurde, gib das neue ein und die Seite wird es verfolgen."
   unfound_now: Ihr Tag im Spiel jetzt
-  unfound_placeholder: z. B. Arch
+  unfound_placeholder: z.B. Arch
   unfound_link: Verknüpfen
-  unfound_checking: Prüfe mit dem Spiel...
-  unfound_left: "{left} von {max} Verknüpfungen heute übrig (jede fragt das Spiel einmal ab)"
-  pending_title: Wartet auf Überprüfung
-  pending_none: Keine Allianzbilder warten.
+  unfound_checking: Prüfe mit dem Spiel…
+  unfound_left: "{left} von {max} Verknüpfungen heute noch übrig (jede fragt das Spiel einmal ab)"
+  pending_title: Wartet auf Prüfung
+  pending_none: Keine Allianzbilder warten auf Prüfung.
   sent_by: Gesendet von {name}, {when}
-  race_title: Top 4-Rennen
+  race_title: Top-4-Rennen
   race_none: Noch kein Rennen gemessen.
   race_progress: "{n} von 3 Duell-Tagen bisher gemessen."
-  race_finished: 'Alle 3 Tage gemessen: die Ergebnisse sind in der NAP-Führung.'
+  race_finished: 'Alle 3 Tage gemessen: Die Ergebnisse sind in der NAP-Führung.'
   race_missing: 'Nicht gemessen: {tags}'
   race_more: Vollständige Tabelle auf der Regelseite
   quota_title: Tracker-Anfragen
-  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag, beginnend um 00:00 UTC. Die Zahl unten ist der neueste Wert, den der Tracker der Seite gegeben hat; es kostet also nichts, ihn anzuzeigen; jetzt prüfen kostet eine Anfrage.
+  quota_help: Der Last Asylum Tracker erlaubt 1.000 Anfragen pro Tag, beginnend um 00:00 UTC. Die Zahl unten ist die aktuellste, die der Tracker der Seite gegeben hat, daher kostet die Anzeige nichts; eine Prüfung jetzt kostet eine Anfrage.
   quota_check: Jetzt prüfen
   quota_used: heute verbraucht
   quota_failed: Der Tracker konnte nicht erreicht werden.
   quota_as_of: Stand {when}
-  quota_none: Die Seite hat heute noch keine Anfragen an den Tracker gestellt.
+  quota_none: Die Seite hat den Tracker heute noch nichts gefragt.
   quota_resets: Startet erneut in {time}
   usage_title: Was sie verbraucht hat
   usage_automation: Automatisierung
-  usage_automation_help: Täglicher Stats-Snapshot und Top 4-Rennen
+  usage_automation_help: Täglicher Stats-Snapshot und Top-4-Rennen
   usage_alliance: Allianz-Tools
-  usage_alliance_help: Dashboards, Roster, Nominierungen
+  usage_alliance_help: Dashboards, Kader, Nominierungen
   usage_public: Öffentliche Seiten
-  usage_public_help: Standings-Karten auf der Allianz-Seite
+  usage_public_help: Stand-Karten auf der Allianz-Seite
   usage_steward: Steward-Tools
-  usage_steward_help: Spielersuchen, Kartenaktualisierungen und Nutzungsprüfungen
-  usage_other: Andere
-  usage_other_help: Alles, was nicht gekennzeichnet ist
+  usage_steward_help: Spielersuche, Karten-Aktualisierungen und Nutzungsprüfungen
+  usage_other: Sonstiges
+  usage_other_help: Alles ohne Beschriftung
   usage_unrecorded: Nicht aufgezeichnet
   usage_unrecorded_help: Vom Tracker gezählt, hier noch nicht gespeichert (jeder Server speichert alle paar Minuten)
   usage_none: Heute noch keine Anfragen notiert.

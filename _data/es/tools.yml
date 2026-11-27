@@ -275,12 +275,12 @@ charts:
   column: Columna {n}
   no_numbers: No hay números para graficar en la columna elegida.
   line_two_rows: Una línea necesita al menos dos filas.
-  line_two_columns: Una línea necesita al menos dos columnas a lo largo de la parte inferior.
+  line_two_columns: Una línea necesita al menos dos columnas en la parte inferior.
   no_positive: No hay números positivos para graficar en la columna elegida.
-  no_targets: No hay números (u objetivos) para comparar.
+  no_targets: No hay números (o objetivos) para comparar.
   no_table: Aún no hay tabla.
   unknown_type: Tipo de gráfico desconocido.
-  draw_failed: Este gráfico no pudo ser dibujado ({error}).
+  draw_failed: Este gráfico no pudo dibujarse ({error}).
   other: Otro
   value: Valor
   total: Total
@@ -291,38 +291,39 @@ charts:
   target_reached: Objetivo alcanzado ✓
   done: "✓ Hecho"
   reached_target: "{done} de {total} alcanzaron el objetivo"
-  search: Buscar…
+  search: Buscar...
   search_label: Buscar en esta tabla
   matching: "{n} coincidencia(s)"
-  show_all: Mostrar los {n}
+  show_all: Mostrar todo {n}
   show_all_rows: Mostrar las {n} filas
   show_fewer: Mostrar menos
   first_rows: Mostrando las primeras {shown} de {n} filas.
-  hint_bar: Toca o pasa el cursor sobre una barra
-  hint_bar_key: Toca o pasa el cursor sobre una barra. Toca un nombre en la leyenda para ver solo ese.
+  hint_bar: Toca o coloca el cursor sobre una barra
+  hint_bar_key: Toca o coloca el cursor sobre una barra. Toca un nombre en la clave para ver solo ese.
   views: Vistas
   view_latest: Pestaña más reciente
   view_weeks: Totales por pestaña
   view_player: Un nombre por pestaña
   view_pick: Nombre a mostrar
   view_average: Promedio de {n} pestañas
+  view_total: Total de {n} pestañas
   view_chart: Gráfico
   view_compare: Comparar
-  search_names: Escribe un nombre…
-  no_match: Ningún nombre coincide.
+  search_names: Escribe un nombre...
+  no_match: No hay nombres que coincidan.
   view_tab: Pestaña a mostrar
   compare_first: Primer nombre
   compare_second: Segundo nombre
   compare_top: Top {n} (promedio)
-  compare_bottom: Últimos {n} (promedio)
+  compare_bottom: Bottom {n} (promedio)
   pair_left: 'Izquierda: {name}'
   share_of_column: "{name}: {share} del total"
   pair_right: 'Derecha (atenuado): {name}'
-  flip_to_asc: "⇅ El más bajo primero"
-  flip_to_desc: "⇅ El más alto primero"
-  hint_line: Toca o pasa el cursor sobre una semana
-  hint_pie: Toca o pasa el cursor sobre una rebanada
-  hint_progress: Toca o pasa el cursor sobre una fila
+  flip_to_asc: "⇅ Menor primero"
+  flip_to_desc: "⇅ Mayor primero"
+  hint_line: Toca o coloca el cursor sobre una semana
+  hint_pie: Toca o coloca el cursor sobre una porción
+  hint_progress: Toca o coloca el cursor sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas
   name_ok: En la lista de miembros de [{tag}]
@@ -330,29 +331,35 @@ nominate:
   name_unknown: No está en la lista de miembros de [{tag}]
   names_spelling_one: '1 nombre se escribe de forma diferente en el juego:'
   names_spelling_other: "{n} nombres se escriben de forma diferente en el juego:"
-  use_game_spellings: Usar la escritura del juego
-  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todos modos; comprueba que sea correcto:'
-  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todos modos; comprueba que sean correctos:"
-  did_you_mean: "¿quisiste decir"
+  use_game_spellings: Usar la ortografía del juego
+  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todos modos; verifica que sea correcto:'
+  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todos modos; verifica que sean correctos:"
+  did_you_mean: "¿quisiste decir?"
   loading: Cargando página de nominaciones...
   players_label: Tus jugadores, los mejores primero
-  players_help: Un nombre o ID de jugador por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor en ambos grupos; los nombres más allá de los cofres se mantienen como reservas y subirán de puesto si se abren más cofres.
+  players_help: Un nombre o ID de jugador por línea (o separados por comas), tu mejor jugador primero. Los cofres bajan por la lista en orden de valor en ambos conjuntos; los nombres más allá de los cofres se mantienen como reserva y ascienden si se abren más cofres.
   players_placeholder: Nombres exactos del juego o IDs de jugador, los mejores primero...
   id_found: Escrito como ID de jugador {id}
   id_unknown: Ningún miembro de [{tag}] tiene el ID {id}
-  who_gets_what: Quién recibe qué
-  save: Guardar lista
+  who_gets_what: Quién obtiene qué
+  save: Guardar Lista
+  sheet_fill: Rellenar desde hoja
+  sheet_link: Enlace de Google Sheet
+  sheet_help: La hoja de tu alianza con la pestaña "Capitol Ranking" de Duel Tools, compartida como "Cualquier persona con el enlace puede leer". El enlace se recordará para la próxima vez.
+  sheet_loading: Leyendo la hoja...
+  sheet_filled: Se rellenaron {n} nombres desde la hoja. Verifícalos y luego guarda.
+  sheet_filled_week: Se rellenaron {n} nombres desde la hoja ({week}). Verifícalos y luego guarda.
   saving: Guardando...
   link_incomplete: Este enlace está incompleto. Ejecuta /nominate en Discord para obtener uno nuevo.
   load_failed: "{error} Ejecuta /nominate en Discord para obtener un nuevo enlace."
-  closed: Las recompensas están cerradas. La próxima abre {when}, después del evento del capitolio del viernes.
+  closed: Las recompensas están cerradas. Se abrirán {when}, después del evento del capitolio del viernes.
   header: Rango {rank} · recompensas de {week} · abierto hasta {when}
-  banner_off_week: Solo Condecoración del Rey esta semana (sin Guerra de Reinos).
-  banner_won: 'Guerra de Reinos ganada: los cofres de Recompensa del Rey de Batalla también están abiertos.'
-  banner_lost: 'Guerra de Reinos perdida: solo Condecoración del Rey esta semana.'
-  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte tras el resultado, así que el cofre de nadie cambia.
-  handed_out_title: "✓ Ya repartido por el Rey ({n})"
-  handed_out_help: Estos cofres se entregan en el juego, así que se quedan con esos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
+  banner_off_week: Solo Encomio del Rey esta semana (sin Guerra de Reinos).
+  banner_won: 'Guerra de Reinos ganada: Los cofres de Recompensa del Rey de Batalla también están abiertos.'
+  banner_lost: 'Guerra de Reinos perdida: Solo Encomio del Rey esta semana.'
+  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte después del resultado, por lo que el cofre de nadie cambia.
+  handed_out_title: "✓ Ya repartidos por el Rey ({n})"
+  handed_out_help: Estos cofres se entregan en el juego, por lo que permanecen con estos jugadores independientemente de lo que diga tu lista. La lista a continuación reparte el resto.
   reserve: Reserva
   col_player: Jugador
   col_chest: Cofre
@@ -364,8 +371,8 @@ nominate:
   still_need_name: "{n} aún necesitan un nombre"
   reserves_one: "{n} reserva"
   reserves_other: "{n} reservas"
-  listed_twice: "{name} está listado dos veces"
-  saved: Guardado. El Rey ve tu lista. Puedes cambiarla hasta {when}.
+  listed_twice: "{name} aparece dos veces"
+  saved: Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta el {when}.
   save_failed: 'No se pudo guardar: {error}'
 kings_console:
   page_title: Consola de Distribución del Rey
@@ -717,39 +724,44 @@ alliance_planner:
   roster_loading: "-- Alianzas"
   nap_alliances: "{n} Alianzas NAP"
   planner_mode: Modo Planificador
-  submit_plan: Enviar plan
+  submit_plan: Enviar Plan
   tag_placeholder: TAG (ej. WLO)
-  name_placeholder: Nombre completo de la alianza
-  add_contender: "+ Añadir competidor"
-  loading_standings: Cargando clasificación...
+  name_placeholder: Nombre completo de la Alianza
+  add_contender: "+ Añadir Candidato"
+  loading_standings: Cargando la clasificación...
   standings_failed: No se pudo cargar la clasificación.
-  protected_academy: Academia protegida
-  change_color: Cambiar color de [{tag}]
+  protected_academy: Academia Protegida
+  change_color: Cambiar Color de [{tag}]
   academy_of: Academia de [{tag}]
-  formerly: antes [{tag}]
-  link_academy: "+ Vincular academia"
-  nap_protected: NAP protegido
+  formerly: anteriormente [{tag}]
+  link_academy: "+ Vincular Academia"
+  nap_protected: NAP Protegida
   show_details: Mostrar detalles
   hide_details: Ocultar detalles
   stat_might: Poder
   stat_members: miembros
   stat_level: Nivel {n}
+  leaders: Líderes
+  leader_overseer: Diosa
+  leader_militarist: Dios de la Guerra
+  leader_diplomat: Diplomático
+  leader_recruiter: Reclutador
   tracker_credit_before: Insignias y números de
   external: Externo
   revoke_nap: Revocar NAP
   grant_nap: Otorgar NAP
-  remove_alliance: Eliminar alianza
-  academy_prompt: 'Introduce el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, ej. RâvN o râvn):'
+  remove_alliance: Eliminar Alianza
+  academy_prompt: 'Ingresa el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue mayúsculas, ej. RâvN o râvn):'
   academy_available: 'Disponible: {tags}'
   academy_new: 'O escribe un nuevo tag de academia para crearla:'
   already_exists: La alianza [{tag}] ya existe con esa capitalización exacta.
-  no_changes: No se detectaron modificaciones en la clasificación actual.
-  proposal_title: Enviar clasificación NAP y propuesta diplomática
+  no_changes: No se detectaron cambios en la clasificación actual.
+  proposal_title: Enviar Clasificación NAP y Propuesta Diplomática
   diff_rank: "{tag}: Rango {from} ➔ {to}"
   diff_academy: "{tag}: Asignada como Academia de {parent}"
   diff_nap: "{tag}: Estado NAP {status}"
-  nap_status_protected: Protegido
-  nap_status_revoked: Revocado
+  nap_status_protected: Protegida
+  nap_status_revoked: Revocada
   diff_color: "{tag}: Color actualizado a {color}"
   diff_added: "{added}: Rango #{rank} ({name})"
   added_tag: Añadido [{tag}]
@@ -932,61 +944,62 @@ image_review:
   done_approved: Aprobado. La imagen ya está activa y la publicación de Discord ha sido actualizada.
   done_rejected: Rechazado. La imagen fue eliminada y la publicación de Discord ha sido actualizada.
 alliance_images:
-  title: Imágenes de la alianza
+  title: Imágenes de la Alianza
   edit: Editar imágenes
-  done: "✓ Edición terminada"
-  help: Añade una imagen detrás de la tarjeta de Rotación del Capitolio y la fila de Rangos NAP de tu alianza, además de un marco para las fotos de tus miembros. Un Supervisor revisará cada una antes de que alguien más pueda verla.
-  rules: 'Usa el arte propio de tu alianza o el arte del juego: sin marcas de otras alianzas, nada ofensivo, ni información personal.'
-  left_today: "{left} de {max} imágenes restantes hoy para tu alianza."
-  not_ready: Las subidas de imágenes aún no están habilitadas.
+  done: "✓ Terminar edición"
+  help: Añade una imagen detrás de la tarjeta de Rotación del Capitolio de tu alianza y la fila de Rangos NAP, y un marco para las fotos de tus miembros. Un Administrador revisa cada una antes de que alguien más la vea.
+  rules: 'Usa arte propio de tu alianza o arte del juego: nada de marca de otra alianza, nada ofensivo, nada de información personal.'
+  left_today: Quedan {left} de {max} imágenes hoy para tu alianza.
+  not_ready: Las cargas de imágenes aún no están activadas.
   card: Tarjeta de Rotación del Capitolio
   wide: Banner de Rangos NAP
-  frame: Marco de avatar de alianza
-  frame_spec: 'Un borde que rodea las fotos de tus miembros en este sitio. Crea un PNG cuadrado con fondo transparente, de 380×380 píxeles (mínimo 190×190): deja el cuadrado central transparente (de 72 a 308 píxeles, como los marcos propios del juego) y decora alrededor, hasta los bordes. Una pequeña decoración sobre el centro (como una guirnalda) está bien.'
+  frame: Marco de avatar de la Alianza
+  frame_spec: 'Un borde dibujado alrededor de las fotos de tus miembros en este sitio. Crea un PNG cuadrado con fondo transparente, 380×380 píxeles (al menos 190×190): deja el cuadrado central transparente (de 72 a 308 píxeles, como los marcos del juego) y decora alrededor hasta los bordes. Una pequeña decoración sobre el medio (como una guirnalda) está bien.'
   use_frame: Usar para nuestros miembros
-  use_frame_on: Se muestra alrededor de las fotos de los miembros en todo el sitio, reemplazando el marco básico del juego. Los miembros con un marco especial del juego conservan el suyo.
-  use_frame_all: Se muestra alrededor de la foto de cada miembro en todo el sitio, reemplazando cualquier marco del juego, incluidos los especiales.
+  use_frame_on: Se muestra alrededor de las fotos de los miembros en todo el sitio, en lugar del marco simple del juego. Los miembros con un marco especial del juego conservan el suyo.
+  use_frame_all: Se muestra alrededor de la foto de cada miembro en todo el sitio, reemplazando cualquier marco del juego, incluso los especiales.
   frame_all: También sobre marcos especiales
-  use_frame_off: 'Desactivado: los miembros mantienen sus marcos del juego en el sitio.'
-  frame_title: Verificar marco de avatar
-  frame_check_ok: 'Se ve bien: el centro es transparente. Así es como se verá alrededor de las fotos de tus miembros.'
+  use_frame_off: 'Desactivado: los miembros conservan sus marcos del juego en el sitio.'
+  frame_title: Verificar el marco del avatar
+  frame_check_ok: 'Se ve bien: el medio es transparente. Así es como se verá alrededor de las fotos de tus miembros.'
   frame_big: Grande
-  frame_roster: Lista de miembros
+  frame_roster: Lista
   frame_lists: Listas
-  frame_not_square: Un marco debe ser cuadrado; esta imagen es de {width}×{height}.
-  frame_too_small: Esta imagen es de solo {width}×{height}. Un marco necesita al menos 190×190 píxeles (380×380 es lo mejor).
-  frame_covers: 'Este marco cubre aproximadamente el {percent}% del centro, donde se muestran las fotos de los miembros. Eso está bien si esa es la intención (como una guirnalda): revisa las vistas previas a continuación antes de enviarlo.'
-  frame_covers_most: 'Este marco cubre aproximadamente el {percent}% del centro, por lo que la mayor parte de la foto de cada miembro quedaría oculta. Revisa las vistas previas a continuación: envíalo solo si eso es lo que quieres.'
-  frame_not_png: Un marco de avatar debe ser un PNG (o WebP) con fondo transparente. Las imágenes JPEG no pueden tener transparencia, por lo que cubrirían las fotos de tus miembros.
-  frame_no_transparency: Esta imagen no tiene partes transparentes, por lo que se mostraría como un cuadrado sólido sobre las fotos de tus miembros. Guárdala como un PNG con fondo transparente.
-  frame_empty: 'Esta imagen es casi totalmente transparente: no hay marco que mostrar.'
-  frame_too_big: Este marco pesa {kb} KB al guardarlo; el límite es 500 KB. Prueba con menos colores o menos detalle fino.
-  none: Aún sin imagen
-  live: En vivo desde {when}
-  pending: Esperando a un Supervisor desde {when}
-  rejected: Rechazada {when}
-  rejected_reason: 'Rechazada {when}: “{reason}”'
+  frame_not_square: Un marco debe ser cuadrado; esta imagen es {width}×{height}.
+  frame_too_small: Esta imagen es solo de {width}×{height}. Un marco necesita al menos 190×190 píxeles (380×380 es mejor).
+  frame_covers: 'Este marco cubre aproximadamente el {percent}% del centro, donde aparecen las fotos de los miembros. Está bien si es la intención (como una guirnalda): verifica las vistas previas a continuación antes de enviar.'
+  frame_covers_most: 'Este marco cubre aproximadamente el {percent}% del centro, por lo que la mayor parte de la foto de cada miembro quedaría oculta. Verifica las vistas previas a continuación: envíalo solo si eso es lo que deseas.'
+  frame_not_png: El marco del avatar debe ser un PNG (o WebP) con fondo transparente. Las imágenes JPEG no pueden tener transparencia, por lo que cubrirían las fotos de tus miembros.
+  frame_no_transparency: Esta imagen no tiene partes transparentes, por lo que se mostraría como un cuadrado sólido sobre las fotos de tus miembros. Guárdala como PNG con fondo transparente.
+  frame_empty: 'Esta imagen es casi totalmente transparente: no hay marco para mostrar.'
+  frame_too_big: Este marco pesa {kb} KB una vez guardado; el máximo es 500 KB. Intenta usar menos colores o menos detalles finos.
+  none: Aún no hay imagen
+  live: Activa desde el {when}
+  pending: Esperando a un Administrador desde el {when}
+  rejected: Rechazada el {when}
+  rejected_reason: 'Rechazada el {when}: “{reason}”'
   expired: No revisada a tiempo ({when}). Envíala de nuevo.
   choose: Elegir una imagen
-  replace: Elegir una imagen nueva
+  replace: Elegir una nueva imagen
   remove: Eliminar
-  confirm_remove: "¿Eliminar {slot}? Desaparecerá para todos de inmediato."
-  crop_title: Posicionar {slot}
-  crop_help: Arrastra para mover. Pellizca, desplázate o usa el deslizador para hacer zoom. Solo se enviará lo que esté dentro del marco.
+  confirm_remove: "¿Eliminar el {slot}? Desaparece para todos inmediatamente."
+  crop_title: Posicionar el {slot}
+  crop_help: Arrastra para mover. Pellizca, desplázate o usa el control deslizante para hacer zoom. Solo se envía lo que está dentro del marco.
   zoom: Zoom
   preview_title: Cómo se verá
   preview_phone: Teléfono
   preview_desktop: Escritorio
-  preview_week: Semana 1 Vie
-  preview_loot: 2 Cofres de Rey
-  preview_status: Protegido por NAP
+  preview_week: Viernes de Semana 1
+  preview_loot: 2 Cofres del Rey
+  preview_status: NAP Protegida
   send: Enviar para revisión
-  sending: Enviando…
+  save_live: Guardar (activa ahora)
+  sending: Enviando...
   cancel: Cancelar
-  sent: Enviado. Un Supervisor la revisará; aparecerá una vez aprobada.
-  not_image: Ese archivo no es una imagen que este navegador pueda abrir. Prueba con un JPEG o PNG.
-  too_small: Esa imagen es bastante pequeña ({width}×{height}); puede verse borrosa. Aún puedes enviarla.
-  load_failed: La imagen no pudo ser abierta.
+  sent: Enviada. Un Administrador la revisará; aparecerá una vez aprobada.
+  not_image: Ese archivo no es una imagen que este navegador pueda abrir. Intenta con un JPEG o PNG.
+  too_small: Esa imagen es bastante pequeña ({width}×{height}); puede verse borrosa. Aun así puedes enviarla.
+  load_failed: No se pudo abrir la imagen.
 stats:
   title: Estadísticas NAP
   views_label: Qué mostrar
@@ -1054,44 +1067,54 @@ stats:
   credit_before: Números del
 steward:
   tidy_title: 'IDs de Alianza: limpieza'
-  tidy_help: 'Todo se almacena ahora por ID de alianza. Los movimientos dejaron {gist} archivos de respaldo y {dashboards} archivos antiguos de panel en el Gist. Elimínalos cuando estés listo: el Gist conserva sus revisiones anteriores. Los archivos de respaldo de Stats {stats} se conservan (el almacén Blob no tiene revisiones).'
+  tidy_help: 'Todo se almacena por ID de alianza ahora. Los cambios dejaron {gist} archivos de respaldo y {dashboards} archivos de panel antiguos en el Gist. Elimínalos una vez que estés satisfecho: el Gist mantiene sus revisiones anteriores. Los archivos de respaldo de Stats {stats} se conservan (el almacenamiento Blob no tiene revisiones).'
   tidy_button: Eliminar respaldos
-  tidy_confirm: "¿Eliminar los respaldos de los movimientos de IDs de alianza?"
-  tidy_done: 'Eliminado: {gist} archivos de respaldo y {dashboards} archivos antiguos de panel. Los respaldos de Stats se conservan.'
-  roster_title: 'Alianzas: renombrar, intercambiar etiquetas, retirar'
-  roster_help: Renombrar cambia la etiqueta en todas partes a la vez (su historial, eventos, imágenes, paneles y Stats permanecen con ella). Las páginas públicas muestran "anteriormente [OLD]" durante 30 días.
-  roster_was: era [{tag}] hasta {until}
-  rename_placeholder: Nueva etiqueta
+  tidy_confirm: "¿Eliminar los respaldos de los cambios de ID de alianza?"
+  tidy_done: 'Eliminados: {gist} archivos de respaldo y {dashboards} archivos de panel antiguos. Los respaldos de Stats se conservan.'
+  roster_title: Configuración de la alianza
+  roster_pick: Elige una alianza para editar...
+  roster_search: Buscar una alianza
+  roster_off_map: fuera del mapa
+  roster_retired: retirada
+  rename_help: Renombrar cambia el tag en todas partes a la vez (su historial, eventos, imágenes, paneles y Stats permanecen con ella). Las páginas públicas muestran "anteriormente [OLD]" durante 30 días.
+  roster_was: era [{tag}] hasta el {until}
+  rename_placeholder: Nuevo tag
+  tag_label: Tag
+  name_label: Nombre
+  name_button: Guardar nombre
+  name_saved: Nombre guardado.
+  images_title: Imágenes
+  images_help: Tus cargas aquí se activan inmediatamente, sin revisión posterior. Las cargas de los propios líderes siguen llegando para revisión.
   rename_button: Renombrar
-  rename_confirm: "¿Renombrar [{from}] a [{to}]? Todas las páginas mostrarán la nueva etiqueta al instante."
+  rename_confirm: "¿Renombrar [{from}] a [{to}]? Todas las páginas muestran el nuevo tag de inmediato."
   rename_one_click: Renombrar [{old}] a [{now}]
-  swap_title: 'Dos alianzas intercambian etiquetas:'
-  swap_button: Intercambiar etiquetas
-  swap_confirm: "¿Intercambiar las etiquetas de [{a}] y [{b}]?"
-  off_map_title: 'Eliminado del mapa (en el planificador de Alianza):'
+  swap_title: 'Intercambiar tags con:'
+  swap_button: Intercambiar tags
+  swap_confirm: "¿Intercambiar los tags de [{a}] y [{b}]?"
+  off_map_title: 'Eliminado del mapa (en el Planificador de Alianzas):'
   retire_button: Retirar
-  retire_confirm: "¿Retirar [{tag}]? Se conserva con su historial (alianzas retiradas, abajo) y se puede traer de vuelta."
+  retire_confirm: "¿Retirar [{tag}]? Se mantiene con su historial (alianzas retiradas, a continuación) y puede traerse de vuelta."
   retired_title: Alianzas retiradas ({n})
   unretire_button: Traer de vuelta
   roster_saved: Guardado.
-  newtag: "{tag} es nuevo en el mapa. ¿Es una alianza que el sitio ya conocía, renombrada o de vuelta en el mapa? Hasta que respondas, comienza sin nada de ellos, y a los miembros de la antigua alianza se les pedirá iniciar sesión de nuevo."
+  newtag: "{tag} es nuevo en el mapa. ¿Es una alianza que el sitio ya conocía, renombrada o de vuelta en el mapa? Hasta que no respondas, comienza sin nada de ellos, y se pide a los miembros de la antigua alianza que inicien sesión de nuevo."
   newtag_same: 'Misma alianza que:'
-  newtag_new: Es una alianza nueva
-  newtag_link: Enlazar
+  newtag_new: Es una nueva alianza
+  newtag_link: Vincular
   page_title: Herramientas de Administrador
-  intro: 'Herramientas para Administradores de Reino: qué hay pendiente para ti y una búsqueda de jugadores en vivo.'
-  loading: Cargando…
+  intro: 'Herramientas para Administradores del Reino: qué está esperando y una búsqueda de jugadores en tiempo real.'
+  loading: Cargando...
   sign_in: Iniciar sesión con Discord
   sign_in_needed: Inicia sesión con Discord para abrir las herramientas de Administrador.
-  stewards_only: Solo los Administradores de Reino pueden abrir las herramientas de Administrador.
+  stewards_only: Solo los Administradores del Reino pueden abrir las herramientas de Administrador.
   lookup_title: Búsqueda de jugadores
-  lookup_help: 'Cualquier jugador, en vivo desde el juego: su alianza, números, nombres anteriores y alianzas. Escribe un ID de jugador, o un nombre para encontrar el ID de un jugador NAP.'
-  lookup_placeholder: ID de jugador, o nombre de un jugador NAP
+  lookup_help: 'Cualquier jugador, en tiempo real desde el juego: su alianza, números y nombres y alianzas anteriores. Escribe un ID de jugador o un nombre para encontrar el ID de un jugador NAP.'
+  lookup_placeholder: ID de jugador o nombre de un jugador NAP
   lookup_go: Buscar
-  lookup_id_needed: Escribe un ID de jugador (el número en su perfil), o elige un jugador NAP de los nombres encontrados.
-  lookups_left: "{left} de {max} búsquedas en vivo restantes hoy (compartidas por todos los Administradores)."
-  looking: Preguntando al juego…
-  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otra persona, usa su ID de jugador.
+  lookup_id_needed: Escribe un ID de jugador (el número en su perfil) o elige un jugador NAP de los nombres encontrados.
+  lookups_left: Quedan {left} de {max} búsquedas en tiempo real hoy (compartidas por todos los Administradores).
+  looking: Preguntando al juego...
+  name_none: No hay ningún jugador NAP con ese nombre. Para cualquier otro, usa su ID de jugador.
   no_alliance: Sin alianza
   server: Servidor {n}
   online: En línea ahora
@@ -1103,52 +1126,52 @@ steward:
   vip: VIP
   position: Posición (X, Y)
   language: Idioma
-  ranks: 'Rangos de reino: #{might} Poder · #{kills} Bajas · #{heroes} héroes'
+  ranks: 'Rangos del reino: #{might} Poder · #{kills} bajas · #{heroes} héroes'
   history_title: Nombres y alianzas
   history_none: No se han visto nombres o alianzas anteriores.
   seen_from: desde {when}
-  first_seen: Visto por primera vez por el rastreador {when}.
-  renamed: "{old} es ahora {now} en el juego. Todavía es medido (Stats y la carrera del Top 4) por el número que le asigna el juego, pero el sitio todavía lo llama {old}."
-  renamed_fix: Renómbralo en el planificador de Alianza
-  test_copy: "🧪 Sitio de prueba: sus datos fueron copiados del sitio en vivo {when} (/devupdate en Discord hace una copia nueva)."
+  first_seen: Visto por primera vez por el rastreador el {when}.
+  renamed: "{old} es ahora {now} en el juego. Todavía se mide (Stats y la carrera por el Top 4) mediante el número que el juego le asigna, pero el sitio sigue llamándola {old}."
+  renamed_fix: Renómbrala en el Planificador de Alianzas
+  test_copy: "🧪 Sitio de prueba: sus datos fueron copiados del sitio en vivo el {when} (/devupdate en Discord hace una copia nueva)."
   test_copy_none: "🧪 Sitio de prueba: sus datos aún no han sido copiados del sitio en vivo. Ejecuta /devupdate en Discord para una copia nueva."
-  mismatch: "{tag} en el juego responde ahora con una alianza diferente: {got}. El sitio sigue midiendo la alianza que conoce como {tag} ({known}) por el número del juego, y no cuenta a la nueva como tal."
-  mismatch_relink: 'Es la misma alianza: volver a enlazar'
-  mismatch_relink_help: Solo si {got} es realmente la alianza a la que se refiere el sitio (el primer enlace estaba mal, o el juego la renumeró). Retirar o renombrar vienen con pasos posteriores.
-  unfound: "{tag} no se encontró en el juego, por lo que no se está midiendo (Stats y la carrera del Top 4). Si cambió su etiqueta en el juego, escribe la nueva y el sitio la seguirá."
-  unfound_now: Su etiqueta en el juego ahora
-  unfound_placeholder: p. ej. Arch
-  unfound_link: Enlazar
-  unfound_checking: Comprobando con el juego...
-  unfound_left: "{left} de {max} enlaces restantes hoy (cada uno pregunta al juego una vez)"
+  mismatch: "{tag} en el juego responde ahora con una alianza diferente: {got}. El sitio sigue midiendo la alianza que conoce como {tag} ({known}) por el número que el juego le asigna, y no cuenta la nueva como ella."
+  mismatch_relink: 'Es la misma alianza: revincular'
+  mismatch_relink_help: Solo si {got} es realmente la alianza a la que el sitio se refiere (el primer enlace fue incorrecto o el juego la renumeró). Retirar o renombrar vienen con pasos posteriores.
+  unfound: "{tag} no se encontró en el juego, por lo que no se está midiendo (Stats y la carrera por el Top 4). Si cambió su tag en el juego, escribe el nuevo y el sitio lo seguirá."
+  unfound_now: Su tag en el juego ahora
+  unfound_placeholder: ej. Arch
+  unfound_link: Vincular
+  unfound_checking: Verificando con el juego...
+  unfound_left: Quedan {left} de {max} enlaces hoy (cada uno pregunta al juego una vez)
   pending_title: Esperando revisión
   pending_none: No hay imágenes de alianza esperando.
   sent_by: Enviado por {name}, {when}
-  race_title: Carrera del Top 4
-  race_none: Ninguna carrera medida todavía.
+  race_title: Carrera por el Top 4
+  race_none: Aún no se mide ninguna carrera.
   race_progress: "{n} de 3 días de Duelo medidos hasta ahora."
   race_finished: '3 días medidos: los resultados están en el liderazgo NAP.'
-  race_missing: 'No medido: {tags}'
+  race_missing: 'No medidos: {tags}'
   race_more: Tabla completa en la página de Reglas
-  quota_title: Solicitudes del rastreador
-  quota_help: El rastreador de Last Asylum permite 1,000 solicitudes al día, reiniciándose a las 00:00 UTC. La cifra de abajo es la última que el rastreador dio al sitio, así que no cuesta nada mostrarla; verificar ahora cuesta una solicitud.
-  quota_check: Verificar ahora
+  quota_title: Solicitudes de Rastreador
+  quota_help: Last Asylum Tracker permite 1,000 solicitudes al día, reiniciándose a las 00:00 UTC. La cifra a continuación es la última que el rastreador dio al sitio, por lo que no cuesta nada mostrarla; comprobar ahora cuesta una solicitud.
+  quota_check: Comprobar ahora
   quota_used: usado hoy
-  quota_failed: No se pudo contactar con el rastreador.
-  quota_as_of: Al {when}
-  quota_none: El sitio no ha solicitado nada al rastreador hoy.
+  quota_failed: No se pudo contactar al rastreador.
+  quota_as_of: A fecha de {when}
+  quota_none: El sitio aún no ha pedido nada al rastreador hoy.
   quota_resets: Se reinicia en {time}
-  usage_title: Qué los utilizó
+  usage_title: Qué las utilizó
   usage_automation: Automatización
-  usage_automation_help: Instantánea diaria de Stats y carrera del Top 4
-  usage_alliance: Herramientas de Alianza
-  usage_alliance_help: Paneles, roster, nominaciones
+  usage_automation_help: Captura de Stats diaria y carrera por el Top 4
+  usage_alliance: Herramientas de alianza
+  usage_alliance_help: Paneles, lista, nominaciones
   usage_public: Páginas públicas
-  usage_public_help: Tarjetas de posiciones en la página de Alianza
+  usage_public_help: Tarjetas de clasificación en la página de Alianzas
   usage_steward: Herramientas de Administrador
   usage_steward_help: Búsquedas de jugadores, actualizaciones de mapa y comprobaciones de uso
   usage_other: Otro
-  usage_other_help: Cualquier cosa sin etiqueta
+  usage_other_help: Cualquier cosa no etiquetada
   usage_unrecorded: No registrado
   usage_unrecorded_help: Contado por el rastreador, aún no guardado aquí (cada servidor guarda cada pocos minutos)
-  usage_none: No se han registrado solicitudes hoy.
+  usage_none: Aún no se han registrado solicitudes hoy.

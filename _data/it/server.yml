@@ -2,45 +2,47 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: La tua alleanza è cambiata sul sito da quando hai effettuato l'accesso. Accedi di nuovo con Discord per procedere.
+  alliance_changed: La tua alleanza è cambiata sul sito dall'ultimo accesso. Accedi nuovamente con Discord per continuare.
   rename_unknown: Quell'alleanza non è più sulla mappa. Ricarica la pagina.
-  rename_bad_tag: 'Digita il nuovo tag esattamente come appare nel gioco: fino a 12 caratteri, senza spazi, due punti, parentesi o barre.'
+  rename_bad_tag: 'Digita il nuovo tag esattamente come nel gioco: fino a 12 caratteri, senza spazi, due punti, parentesi o barre.'
   rename_same: È il tag che ha già.
-  rename_taken: "[{tag}] ha già quel tag. Per scambiare i tag tra due alleanze, usa lo scambio."
-  rename_fixed: "[{tag}] non può ancora essere rinominata qui: il suo tag è parte del codice del sito. Richiedi prima un cambio codice."
-  rename_not_moved: 'Il cambio nome richiede prima che tutti gli store siano spostati agli ID alleanza (attualmente per tag: {stores}).'
-  retire_on_map: Solo un'alleanza rimossa dalla mappa (nel pianificatore Alleanza) può essere ritirata.
-  tidy_not_moved: 'La pulizia richiede prima che tutti gli store siano spostati agli ID alleanza (attualmente per tag: {stores}).'
+  rename_taken: "[{tag}] ha già quel tag. Per scambiare i tag tra due alleanze, usa lo swap."
+  rename_fixed: "[{tag}] non può ancora essere rinominata qui: il suo tag è parte del codice del sito. Richiedi prima una modifica al codice."
+  rename_not_moved: 'La ridenominazione richiede che ogni negozio sia prima spostato agli ID alleanza (ancora per tag: {stores}).'
+  retire_on_map: Solo un'alleanza rimossa dalla mappa (nel pianificatore Alleanze) può essere ritirata.
+  tidy_not_moved: 'Il riordino richiede che ogni negozio sia prima spostato agli ID alleanza (ancora per tag: {stores}).'
   pending_gone: Quell'alleanza ha già ricevuto una risposta.
-  stewards_only: Solo gli Steward possono usare gli strumenti Steward.
-  lookups_used: Le ricerche giocatori di oggi sono esaurite. Ricominciano al ripristino giornaliero (00:00 GT).
+  stewards_only: Solo gli Steward possono utilizzare gli strumenti Steward.
+  lookups_used: Le ricerche dei giocatori di oggi sono esaurite. Ricominceranno al ripristino giornaliero (00:00 GT).
   player_not_found: Nessun giocatore ha quell'ID.
-  player_unavailable: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
-  positions_leaders_only: Solo gli R4 e R5 della tua alleanza (e gli Steward) possono vedere i membri sulla mappa.
+  player_unavailable: Non è stato possibile raggiungere il gioco. Riprova tra qualche minuto.
+  positions_leaders_only: Solo gli R4 e R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
   positions_unavailable: Le posizioni dei membri non possono essere caricate al momento. Riprova tra qualche minuto.
-  links_used: I link alleanza di oggi sono esauriti. Ricominciano al ripristino giornaliero (00:00 GT).
+  links_used: I link alleanza di oggi sono esauriti. Ricominceranno al ripristino giornaliero (00:00 GT).
   relink_none: Non c'è più nulla da ricollegare per quell'alleanza.
   link_bad: Scegli un'alleanza e digita il tag che usa attualmente nel gioco.
   link_same: È il tag che il sito usa già.
   link_taken: "{tag} è già un'altra alleanza sul sito."
-  link_not_found: Il gioco non ha alcuna alleanza con tag {tag} (la differenza tra maiuscole e minuscole conta).
-  positions_used: Gli aggiornamenti della mappa di oggi sono esauriti. Ricominciano al ripristino giornaliero (00:00 GT).
+  link_not_found: Il gioco non ha alcuna alleanza con il tag {tag} (la distinzione tra maiuscole e minuscole è importante).
+  positions_used: Gli aggiornamenti della mappa di oggi sono esauriti. Ricominceranno al ripristino giornaliero (00:00 GT).
   positions_wait: La mappa è stata aggiornata poco fa. Riprova tra {minutes} min.
-  refresh_limit: Nessun aggiornamento roster rimasto oggi. Ricominciano al ripristino giornaliero (00:00 GT).
+  refresh_limit: Nessun aggiornamento roster rimasto oggi. Ricominceranno al ripristino giornaliero (00:00 GT).
   refresh_wait: Il roster è stato aggiornato poco fa. Riprova tra {n} min.
-  refresh_failed: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
+  refresh_failed: Non è stato possibile raggiungere il gioco. Riprova tra qualche minuto.
   signed_out: Accedi con Discord (in alto a destra) per vedere la dashboard della tua alleanza.
   load_failed: 'Impossibile caricare la dashboard: {reason}'
-  no_alliance: Non siamo riusciti a determinare in quale alleanza ti trovi. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP. Chiedi il ruolo ai leader della tua alleanza o a uno Steward, quindi usa Aggiorna Accesso nella tua scheda account (in alto a destra).
+  no_alliance: Non siamo riusciti a identificare la tua alleanza. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP. Chiedi il ruolo ai leader della tua alleanza o a uno Steward, quindi usa Aggiorna Accesso nella scheda del tuo account (in alto a destra).
+  alliance_unknown: Quell'alleanza non è più sulla mappa. Ricarica la pagina e selezionala di nuovo.
+  name_bad: Digita prima il nome dell'alleanza.
   leaders_only: Solo gli R4 e R5 della tua alleanza possono modificare la dashboard.
   chart_removed: Quel grafico è stato rimosso.
   chart_already_removed: Quel grafico era già stato rimosso.
   not_linked: Questo grafico non è collegato a un foglio o documento Google.
   unknown_change: Modifica sconosciuta.
   save_failed: 'Impossibile salvare: {reason}'
-  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate in Discord.
-  rewards_closed: Le ricompense sono chiuse fino a {when}.
-  no_rank: "[{tag}] non ha una posizione nella classifica."
+  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate su Discord.
+  rewards_closed: Le ricompense sono chiuse fino al {when}.
+  no_rank: "[{tag}] non ha un grado nella classifica."
   choose_type: Scegli un tipo di grafico o tabella.
   title_needed: Dai un titolo al grafico o alla tabella.
   too_many_columns: Al massimo {max} colonne (questa tabella ne ha {count}).
@@ -48,13 +50,13 @@ api_dashboard:
   column_name: Colonna {n}
   paste_first: Incolla prima una tabella (una riga di intestazione, poi i dati).
   no_data_rows: La tabella non ha righe di dati sotto l'intestazione.
-  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere mostrato.
-  needs_target: 'Un grafico di avanzamento ha bisogno di un obiettivo: un numero o una colonna di obiettivi.'
+  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere visualizzato.
+  needs_target: 'Un grafico di progresso ha bisogno di un obiettivo: un numero o una colonna di obiettivi.'
   too_many_widgets: Al massimo {max} grafici e tabelle per alleanza.
   sheet_unusable: 'I dati del foglio non possono essere utilizzati: {reason}'
   too_big: Ciò renderebbe questa dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
   player_name_needed: Inserisci il nome di un giocatore.
-  time_format: Gli orari seguono il Game Time, es. 18:00 (o lasciali vuoti).
+  time_format: Gli orari sono in Game Time come 18:00 (o lasciali vuoti).
   start_time_needed: Inserisci anche l'orario di inizio (o lasciali entrambi vuoti).
   rotor_full: Al massimo {max} giocatori nel rotore.
   already_in_rotor: "{name} è già nel rotore."
@@ -79,17 +81,19 @@ api_sheets:
   no_such_table_other: Quel Doc contiene {count} tabelle; non esiste la tabella {table}.
   no_table: Quel Doc non contiene tabelle.
 api_nominate:
+  sheet_link_needed: Incolla prima il link del Google Sheet della tua alleanza.
+  sheet_no_names: La scheda "{tab}" del foglio non contiene nomi. Invia prima una settimana nel foglio (Strumenti Duello).
   link_invalid: Questo link non è valido o è scaduto.
-  token_invalid: Il token non è valido o è scaduto. Esegui di nuovo /nominate.
+  token_invalid: Il token non è valido o è scaduto. Esegui /nominate di nuovo.
   signed_out: Accedi con Discord (in alto a destra) per spuntare i forzieri.
   invalid_chest: Forziere non valido.
-  no_period: Nessun periodo di ricompensa è attualmente aperto.
+  no_period: Nessun periodo di ricompensa è aperto al momento.
   king_only: Solo l'alleanza del Re (R4/R5) e gli Steward possono spuntare i forzieri.
   king_only_tag: Solo l'alleanza del Re [{king}] (R4/R5) e gli Steward possono spuntare i forzieri.
-  not_listed: "{name} non è più nella lista di [{alliance}]. Aggiorna la pagina."
+  not_listed: "{name} non è più nell'elenco di [{alliance}]. Ricarica la pagina."
   id_not_found: Nessun membro di [{alliance}] ha l'ID giocatore {id}. Controlla il numero o digita il nome.
   ids_unavailable: Gli ID giocatore non possono essere cercati al momento ({id}). Digita invece il nome.
-  listed_twice: "{name} è presente due volte nella lista."
+  listed_twice: "{name} è nell'elenco due volte."
   save_failed: 'Impossibile salvare: {reason}'
 api_register:
   guild_id_format: Formato ID server Discord non valido.
@@ -117,23 +121,24 @@ api_alliance_images:
   frame_png: Una cornice avatar deve essere un PNG con sfondo trasparente (un JPEG coprirebbe le immagini dei tuoi membri).
   not_set_up: Le immagini dell'alleanza non sono ancora configurate sul server.
   failed: Qualcosa è andato storto con l'immagine dell'alleanza. Riprova.
-  bad_image: Quel file non è un'immagine utilizzabile dal sito. Usa il modulo di caricamento.
-  too_big: L'immagine è troppo grande (oltre {kb} KB). Usa il modulo di caricamento, che la ridimensionerà.
+  bad_image: Quel file non è un'immagine che il sito può usare. Usa il modulo di caricamento.
+  too_big: L'immagine è troppo grande (oltre {kb} KB). Usa il modulo di caricamento, che la ridimensiona.
   wrong_size: L'immagine deve essere esattamente di {width}×{height} pixel. Usa il modulo di caricamento.
-  has_metadata: L'immagine contiene ancora dati nascosti (come il luogo in cui è stata scattata). Usa il modulo di caricamento per rimuoverli.
+  has_metadata: L'immagine contiene ancora dati nascosti (come il luogo in cui è stata scattata una foto). Usa il modulo di caricamento, che li rimuove.
   leaders_only: Solo i leader R4 e R5 possono inviare immagini dell'alleanza.
   own_alliance_only: Puoi inviare immagini solo per la tua alleanza.
   unknown_alliance: Quell'alleanza non è nel NAP.
-  daily_limit: 'Limite giornaliero raggiunto: {max} immagini per alleanza ogni 24 ore. Puoi inviarne un''altra dopo le {when}.'
+  daily_limit: 'Limite giornaliero raggiunto: {max} immagini per alleanza ogni 24 ore. Puoi inviare la prossima dopo {when}.'
   post_failed: L'immagine non può essere inviata agli Steward su Discord. Riprova più tardi.
   sent: Inviata agli Steward per la revisione. Apparirà una volta approvata.
+  saved_live: 'Salvata: l''immagine è ora attiva.'
   stewards_only: Solo gli Steward possono revisionare le immagini dell'alleanza.
-  not_found: Immagine non trovata. Potrebbe essere scaduta.
-  already_decided: L'immagine è già stata revisionata (o sostituita da una più recente).
-  approved: 'Approvata: l''immagine è ora live.'
-  rejected: 'Respinta: l''immagine è stata eliminata.'
+  not_found: Quell'immagine non è stata trovata. Potrebbe essere scaduta.
+  already_decided: Quell'immagine è già stata revisionata (o sostituita da una più recente).
+  approved: 'Approvata: l''immagine è ora attiva.'
+  rejected: 'Rifiutata: l''immagine è stata eliminata.'
   remove_not_allowed: Solo l'R5 dell'alleanza o uno Steward può rimuovere le sue immagini.
-  nothing_to_remove: Non c'è alcuna immagine da rimuovere.
+  nothing_to_remove: Non c'è nessuna immagine da rimuovere.
   removed: Immagine rimossa.
 api_proposals:
   login_required: Per favore accedi di nuovo con Discord per inviare proposte.

@@ -81,17 +81,19 @@ api_sheets:
   no_such_table_other: Bu Dokümanda {count} tablo var; {table} numaralı tablo bulunmuyor.
   no_table: Bu Doküman hiçbir tablo içermiyor.
 api_nominate:
+  sheet_link_needed: Önce ittifakınızın Google E-Tablo bağlantısını yapıştırın.
+  sheet_no_names: Sayfanın "{tab}" sekmesinde isim yok. Önce sayfada bir hafta ilerletin (Düello Araçları).
   link_invalid: Bu bağlantı geçersiz veya süresi dolmuş.
   token_invalid: Belirteç geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
   signed_out: Sandıkları işaretlemek için Discord ile giriş yapın (sağ üst).
   invalid_chest: Geçersiz sandık.
   no_period: Şu anda açık bir ödül dönemi yok.
-  king_only: Sadece Kral'ın ittifakı (R4/R5) ve Vekiller sandıkları işaretleyebilir.
-  king_only_tag: Sadece Kral'ın ittifakı [{king}] (R4/R5) ve Vekiller sandıkları işaretleyebilir.
-  not_listed: "{name}, [{alliance}] listesinde artık yok. Sayfayı yenileyin."
+  king_only: Sandıkları yalnızca Kralın ittifakı (R4/R5) ve Kâhyalar işaretleyebilir.
+  king_only_tag: Sandıkları yalnızca Kralın ittifakı [{king}] (R4/R5) ve Kâhyalar işaretleyebilir.
+  not_listed: "{name}, artık [{alliance}] listesinde değil. Sayfayı yenileyin."
   id_not_found: "[{alliance}] üyelerinden hiçbirinin oyuncu kimliği {id} değil. Numarayı kontrol edin veya ismi yazın."
-  ids_unavailable: Oyuncu kimliklerine şu anda bakılamıyor ({id}). Bunun yerine ismi yazın.
-  listed_twice: "{name} listede iki kez var."
+  ids_unavailable: Oyuncu kimlikleri şu anda aranamıyor ({id}). Bunun yerine ismi yazın.
+  listed_twice: "{name} listede iki kez geçiyor."
   save_failed: 'Kaydedilemedi: {reason}'
 api_register:
   guild_id_format: Geçersiz Discord Sunucu Kimliği formatı.

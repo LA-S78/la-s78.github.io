@@ -325,7 +325,7 @@ charts:
   hint_pie: Appuyez ou survolez une part
   hint_progress: Appuyez ou survolez une ligne
 nominate:
-  page_title: Nominations de récompenses
+  page_title: Nominations de Récompenses
   name_ok: Dans la liste des membres de [{tag}]
   name_spelling: Dans le jeu, il est écrit {name}
   name_unknown: Pas dans la liste des membres de [{tag}]
@@ -334,39 +334,45 @@ nominate:
   use_game_spellings: Utiliser l'orthographe du jeu
   names_unknown_one: '1 nom n''est pas dans la liste des membres de [{tag}]. Il sera quand même enregistré ; vérifiez qu''il est correct :'
   names_unknown_other: "{n} noms ne sont pas dans la liste des membres de [{tag}]. Ils seront quand même enregistrés ; vérifiez qu'ils sont corrects :"
-  did_you_mean: vouliez-vous dire
-  loading: Chargement de la page de nomination...
+  did_you_mean: voulez-vous dire
+  loading: Chargement de la page des nominations...
   players_label: Vos joueurs, les meilleurs en premier
-  players_help: Un nom ou ID de joueur par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres sont distribués en suivant la liste par ordre de valeur entre les deux jeux ; les noms au-delà des coffres sont conservés en réserve et remontent si d'autres coffres s'ouvrent.
-  players_placeholder: Noms exacts en jeu ou ID de joueur, les meilleurs en premier...
-  id_found: Saisi comme ID de joueur {id}
+  players_help: Un nom ou ID de joueur par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres descendent la liste par ordre de valeur sur les deux ensembles ; les noms au-delà des coffres sont conservés en tant que réserves et remontent si d'autres coffres s'ouvrent.
+  players_placeholder: Noms exacts dans le jeu ou IDs de joueur, les meilleurs en premier...
+  id_found: Saisi en tant qu'ID de joueur {id}
   id_unknown: Aucun membre de [{tag}] n'a l'ID {id}
   who_gets_what: Qui reçoit quoi
-  save: Enregistrer la liste
+  save: Enregistrer la Liste
+  sheet_fill: Remplir depuis la feuille
+  sheet_link: Lien Google Sheet
+  sheet_help: La feuille de votre alliance avec l'onglet "Capitol Ranking" des Duel Tools, partagée en "Tous les utilisateurs disposant du lien peuvent voir". Le lien est mémorisé pour la prochaine fois.
+  sheet_loading: Lecture de la feuille...
+  sheet_filled: "{n} noms remplis depuis la feuille. Vérifiez-les, puis enregistrez."
+  sheet_filled_week: "{n} noms remplis depuis la feuille ({week}). Vérifiez-les, puis enregistrez."
   saving: Enregistrement...
-  link_incomplete: Ce lien est incomplet. Exécutez /nominate sur Discord pour en obtenir un nouveau.
-  load_failed: "{error} Exécutez /nominate sur Discord pour un nouveau lien."
-  closed: Les récompenses sont closes. La prochaine ouverture aura lieu {when}, après l'événement du Capitole du vendredi.
-  header: Rang {rank} · récompenses de {week} · ouvert jusqu'au {when}
-  banner_off_week: Uniquement la Recommandation du Roi cette semaine (pas de Guerre des Royaumes).
-  banner_won: 'Guerre des Royaumes gagnée : les coffres de Récompense du Roi de la Bataille sont également ouverts.'
-  banner_lost: 'Guerre des Royaumes perdue : uniquement la Recommandation du Roi cette semaine.'
-  banner_pending: En attente du résultat de la bataille de samedi (vers {when}). S'il est gagné, les coffres de Récompense du Roi de la Bataille s'ouvriront également et votre liste sera retriée. Le Roi distribue après le résultat, donc le coffre de personne ne change.
+  link_incomplete: Ce lien est incomplet. Lancez /nominate dans Discord pour en obtenir un nouveau.
+  load_failed: "{error} Lancez /nominate dans Discord pour un nouveau lien."
+  closed: Les récompenses sont fermées. La prochaine ouverture aura lieu {when}, après l'événement du Capitole de vendredi.
+  header: Rang {rank} · Récompenses {week} · ouvert jusqu'à {when}
+  banner_off_week: Mention du Roi uniquement cette semaine (pas de Guerre des Royaumes).
+  banner_won: 'Guerre des Royaumes remportée : les coffres de Récompense Roi de la Bataille sont également ouverts.'
+  banner_lost: 'Guerre des Royaumes perdue : Mention du Roi uniquement cette semaine.'
+  banner_pending: En attente du résultat de la bataille de samedi (environ {when}). Si elle est gagnée, les coffres de Récompense Roi de la Bataille s'ouvriront également et votre liste sera retriée. Le Roi distribue après le résultat, donc le coffre de personne ne change.
   handed_out_title: "✓ Déjà distribué par le Roi ({n})"
-  handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc avec ces joueurs quelle que soit votre liste. La liste ci-dessous répartit le reste.
+  handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc avec ces joueurs, peu importe ce que dit votre liste. La liste ci-dessous répartit le reste.
   reserve: Réserve
   col_player: Joueur
   col_chest: Coffre
   col_now: Maintenant
-  col_if_won: Si victoire
+  col_if_won: Si gagné
   chests_now: "{n} coffres maintenant"
-  chests_if_won: "{n} si victoire"
+  chests_if_won: "{n} si gagné"
   named: "{n} nommés"
-  still_need_name: "{n} nécessitent encore un nom"
+  still_need_name: "{n} ont encore besoin d'un nom"
   reserves_one: "{n} réserve"
   reserves_other: "{n} réserves"
   listed_twice: "{name} est listé deux fois"
-  saved: Enregistré. Le Roi voit votre liste. Vous pouvez la modifier jusqu'au {when}.
+  saved: Enregistré. Le Roi voit votre liste. Vous pouvez la modifier jusqu'à {when}.
   save_failed: 'Échec de l''enregistrement : {error}'
 kings_console:
   page_title: Console de Distribution du Roi
@@ -714,40 +720,45 @@ event_presets:
   cheese_trap_title: Piège à Fromage
   cheese_trap_desc: Aidez à repousser le Voleur de Fromage
 alliance_planner:
-  roster: 'Roster NAP :'
+  roster: 'Liste NAP :'
   roster_loading: "-- Alliances"
   nap_alliances: "{n} Alliances NAP"
   planner_mode: Mode Planificateur
-  submit_plan: Soumettre le plan
-  tag_placeholder: TAG (ex. WLO)
-  name_placeholder: Nom complet de l'alliance
-  add_contender: "+ Ajouter un concurrent"
-  loading_standings: Chargement du classement…
+  submit_plan: Soumettre le Plan
+  tag_placeholder: 'TAG (ex: WLO)'
+  name_placeholder: Nom Complet de l'Alliance
+  add_contender: "+ Ajouter un Candidat"
+  loading_standings: Chargement du classement...
   standings_failed: Impossible de charger le classement.
-  protected_academy: Académie protégée
-  change_color: Modifier la couleur de [{tag}]
+  protected_academy: Académie Protégée
+  change_color: Changer la couleur de [{tag}]
   academy_of: Académie de [{tag}]
   formerly: anciennement [{tag}]
-  link_academy: "+ Lier une académie"
+  link_academy: "+ Lier une Académie"
   nap_protected: NAP Protégé
   show_details: Afficher les détails
   hide_details: Masquer les détails
   stat_might: Puissance
   stat_members: membres
   stat_level: Niveau {n}
-  tracker_credit_before: Badges et nombres provenant de
+  leaders: Dirigeants
+  leader_overseer: Déesse
+  leader_militarist: Dieu de la Guerre
+  leader_diplomat: Diplomate
+  leader_recruiter: Recruteur
+  tracker_credit_before: Badges et nombres depuis le
   external: Externe
   revoke_nap: Révoquer le NAP
   grant_nap: Accorder le NAP
-  remove_alliance: Supprimer l'alliance
-  academy_prompt: 'Entrez le tag exact de l''alliance à lier en tant qu''Académie sous [{tag}] (sensible à la casse, ex. RâvN ou râvn) :'
+  remove_alliance: Supprimer l'Alliance
+  academy_prompt: 'Entrez le tag exact de l''alliance à lier en tant qu''Académie sous [{tag}] (sensible à la casse, ex: RâvN ou râvn) :'
   academy_available: 'Disponible : {tags}'
   academy_new: 'Ou tapez un nouveau tag d''académie pour le créer :'
-  already_exists: L'alliance [{tag}] existe déjà avec cette casse exacte.
+  already_exists: L'alliance [{tag}] existe déjà avec cette capitalisation exacte.
   no_changes: Aucune modification détectée dans le classement actuel.
-  proposal_title: Soumettre le classement NAP et la proposition diplomatique
+  proposal_title: Soumettre le Classement NAP & Proposition Diplomatique
   diff_rank: "{tag} : Rang {from} ➔ {to}"
-  diff_academy: "{tag} : Attribué comme académie de {parent}"
+  diff_academy: "{tag} : Assignée comme Académie de {parent}"
   diff_nap: "{tag} : Statut NAP {status}"
   nap_status_protected: Protégé
   nap_status_revoked: Révoqué
