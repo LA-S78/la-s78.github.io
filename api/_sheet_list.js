@@ -192,3 +192,33 @@ export async function linkList(raw, kind, who) {
   const saved = { ...link, heads: read.heads, at: new Date().toISOString(), by: who || '' };
   return { ...read, link: saved };
 }
+
+/**
+ * A light limit on sheet requests (Gemini's review, 2026-11-27): each alliance may make
+ * `max` in a minute, so a page or link can't be used to make many Google fetches. Counted
+ * per server, which is enough to stop a loop. Returns true when this one may go ahead.
+ */
+const SHEET_CALLS = new Map();
+export function sheetCallAllowed(who, { max = 30, perMs = 60000, now = Date.now() } = {}) {
+  const recent = (SHEET_CALLS.get(who) || []).filter((t) => now - t < perMs);
+  if (recent.length >= max) {
+    SHEET_CALLS.set(who, recent);
+    return false;
+  }
+  recent.push(now);
+  SHEET_CALLS.set(who, recent);
+  if (SHEET_CALLS.size > 500) SHEET_CALLS.clear();
+  return true;
+}
+
+/** A link sent back by the page (a Steward's test link keeps it there): checked as when it was made. */
+export function linkFromPage(raw, kind) {
+  const { link, error } = cleanLink(raw, kind);
+  if (error) return { error };
+  const heads = {};
+  for (const role of LIST_ROLES[kind]) {
+    const h = raw?.heads?.[role];
+    if (typeof h === 'string' && h.length <= 100) heads[role] = h;
+  }
+  return { link: { ...link, heads } };
+}

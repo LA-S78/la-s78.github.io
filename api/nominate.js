@@ -29,7 +29,13 @@ import { sameTag } from './_alliances.js'; // RâvN ≠ RÂVN; RAVN = RÂVN
 import { fetchAlliance, findMember, looksLikeId, memberPictures } from './_tracker.js';
 import { allianceFrame } from './_alliance_images.js';
 import { fetchSheetGrid, fetchSheetTabs } from './_google_source.js';
-import { linkList, readSavedList } from './_sheet_list.js';
+import {
+  linkFromPage,
+  linkList,
+  readList,
+  readSavedList,
+  sheetCallAllowed,
+} from './_sheet_list.js';
 import { dashboardFile, findAllianceKey, readDashboard } from './_dashboard.js';
 
 export default function handler(req, res) {
@@ -418,6 +424,9 @@ async function sheetAction(req, res) {
   if (!payload) return res.status(403).json({ error: say('api_nominate.token_invalid') });
   const tag = String(payload.alliance || '').trim();
   const body = req.body || {};
+  if (!sheetCallAllowed(`nominate:${tag}`)) {
+    return res.status(429).json({ error: say('api_sheets.too_many') });
+  }
   try {
     if (body.action === 'sheet-tabs') {
       return res.status(200).json({ tabs: await fetchSheetTabs({ url: body.url }) });
@@ -427,8 +436,14 @@ async function sheetAction(req, res) {
     }
     if (body.action === 'sheet-link') {
       const read = await linkList(body.link, 'capitol', `[${tag}] nomination link`);
-      // A Steward's test link saves it too (owner, 2026-11-27): it's the alliance's sheet
-      // setting, not its nominations, and Stewards can change it on the dashboard anyway
+      const { tab, gid, range, cols } = read.link;
+      // A Steward's test link changes nothing stored (Gemini's review, 2026-11-27: a test is a
+      // sandbox): the page keeps the link for this visit and sends it back with each fill
+      if (payload.test) {
+        return res
+          .status(200)
+          .json({ ...fillResult(read), link: { tab, gid, range, cols }, testLink: read.link });
+      }
       await updateGist((gist) => {
         const { key, file } = allianceSettings(gist, tag);
         if (!key) return {};
@@ -440,10 +455,14 @@ async function sheetAction(req, res) {
           description: `Capitol sheet list linked for [${key}]`,
         };
       });
-      const { tab, gid, range, cols } = read.link;
       return res.status(200).json({ ...fillResult(read), link: { tab, gid, range, cols } });
     }
-    // sheet-fill: from the saved link (or a Duel Tools sheet)
+    // sheet-fill: from the saved link (or a Duel Tools sheet); a test link's own, from the page
+    if (payload.test && body.link) {
+      const { link, error } = linkFromPage(body.link, 'capitol');
+      if (error) return res.status(400).json({ error });
+      return res.status(200).json(fillResult(await readList(link, 'capitol')));
+    }
     const gist = await readGist();
     const read = await readSavedList(allianceSettings(gist, tag).settings, 'capitol');
     return res.status(200).json(fillResult(read));
