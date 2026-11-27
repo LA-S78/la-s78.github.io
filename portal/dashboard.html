@@ -431,6 +431,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     // Times are Game Time (UTC-2) and shown with the reader's own time beside them.
     let caravanFilter = { text: '', now: false };
     let caravanEditing = null; // id of the row being edited
+    // The alliance sheet's suggestions (its "Caravan Bank" tab) and a just-made sync key
+    let cvSuggest = null; // { names: [{ name, balance }], heading } or { error }
+    let cvNewKey = '';
 
     const gtToLocal = (hhmm) => {
       const [h, m] = hhmm.split(':').map(Number);
@@ -571,6 +574,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         <div class="dash-cv-hint dash-small" id="cv-add-hint" aria-live="polite"></div>
         ${Array.isArray(data.members) || data.pictures ? trackerCredit() : ''}
         <div class="dash-muted dash-small">${escapeHtml(t('caravan.times_help'))}</div>
+        ${sheetPanel(all)}
+        ${data.viewer.canNominate ? keyPanel() : ''}
         <div class="dash-error" id="cv-error"></div>
         ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}`;
       if (leader) wireNameHints(el);
@@ -589,6 +594,71 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         const ok = await caravanChange({ action: 'caravan-add', name: $('cv-add-name').value, from: $('cv-add-from').value, to: $('cv-add-to').value });
         if (ok) $('cv-add-name')?.focus();
       });
+    }
+
+    /**
+     * The alliance sheet's suggested players (owner request, 2026-11-27): its Duel Tools
+     * "Caravan Bank" tab lists who has the points for a caravan this week. Pick them here
+     * (or add them to the rotor first); the sheet takes the picks back with its sync key.
+     */
+    function sheetPanel(all) {
+      const saved = (data.dashboard.settings && (data.dashboard.settings.sheetUrl || data.dashboard.settings.capitolSheet)) || '';
+      const byName = new Map(all.map((p) => [p.name.toLowerCase(), p]));
+      let body = '';
+      if (cvSuggest && cvSuggest.error) body = `<p class="dash-error">${escapeHtml(cvSuggest.error)}</p>`;
+      else if (cvSuggest) {
+        body = cvSuggest.names.length
+          ? `<ul class="dash-cv-list">${cvSuggest.names
+              .map((s) => {
+                const p = byName.get(s.name.toLowerCase());
+                const act = !p
+                  ? `<button type="button" class="dash-icon-btn" data-cv="sheet-add" data-name="${escapeHtml(s.name)}">${ic('plus')}${escapeHtml(t('caravan.sheet_add'))}</button>`
+                  : p.picked
+                    ? `<span class="dash-muted">✓ ${escapeHtml(t('caravan.sheet_picked'))}</span>`
+                    : `<button type="button" class="dash-btn" data-cv="sheet-pick" data-id="${escapeHtml(p.id)}">${escapeHtml(t('caravan.pick'))}</button>`;
+                return `<li class="dash-cv-row"><span class="dash-cv-name">${escapeHtml(s.name)}</span><span class="dash-cv-when dash-muted">${s.balance !== null ? escapeHtml(t('caravan.sheet_points', { n: s.balance })) : ''}</span><span class="dash-cv-tools">${act}</span></li>`;
+              })
+              .join('')}</ul>`
+          : `<p class="dash-muted dash-small">${escapeHtml(t('caravan.sheet_none'))}</p>`;
+      }
+      return `<details class="dash-cv-sheet"${cvSuggest ? ' open' : ''}>
+        <summary>${ic('table')}${escapeHtml(t('caravan.sheet_title'))}</summary>
+        <p class="dash-muted dash-small">${escapeHtml(t('caravan.sheet_help'))}</p>
+        <div class="dash-cv-sheet-bar">
+          <input type="url" id="cv-sheet-url" value="${escapeHtml(saved)}" placeholder="https://docs.google.com/spreadsheets/d/…" aria-label="${escapeHtml(t('caravan.sheet_link'))}">
+          <button type="button" class="dash-icon-btn" data-cv="sheet-load">${ic('refresh')}${escapeHtml(t('caravan.sheet_load'))}</button>
+        </div>
+        ${body}
+      </details>`;
+    }
+
+    /** The sheet sync key (R5s and Stewards): the sheet's script reads the picks with it. */
+    function keyPanel() {
+      const k = data.dashboard.settings && data.dashboard.settings.caravanKey;
+      const when = (v) => new Date(v).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<details class="dash-cv-sheet"${cvNewKey ? ' open' : ''}>
+        <summary>${ic('lock')}${escapeHtml(t('caravan.key_title'))}</summary>
+        <p class="dash-muted dash-small">${escapeHtml(t('caravan.key_help'))}</p>
+        ${cvNewKey ? `<p class="dash-small">${ic('warning', 'warn')}${escapeHtml(t('caravan.key_once'))}</p>
+          <div class="dash-cv-sheet-bar"><input type="text" id="cv-key" readonly value="${escapeHtml(cvNewKey)}" aria-label="${escapeHtml(t('caravan.key_title'))}"><button type="button" class="dash-icon-btn" data-cv="key-copy">${ic('clipboard')}${escapeHtml(t('common.copy'))}</button></div>` : ''}
+        <p class="dash-small">${k ? escapeHtml(t('caravan.key_active', { end: k.end || '', when: when(k.at), by: k.by || '—' })) : escapeHtml(t('caravan.key_none'))}</p>
+        <div class="dash-cv-sheet-bar">
+          <button type="button" class="dash-icon-btn" data-cv="key-create">${ic('plus')}${escapeHtml(t(k ? 'caravan.key_replace' : 'caravan.key_create'))}</button>
+          ${k ? `<button type="button" class="dash-icon-btn" data-cv="key-revoke">${ic('trash')}${escapeHtml(t('caravan.key_revoke'))}</button>` : ''}
+        </div>
+      </details>`;
+    }
+
+    /** A dashboard request that isn't a saved edit (sheet suggestions, the sync key). */
+    async function dashAsk(body) {
+      const res = await fetch('/api/dashboard', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${loginPass()}` },
+        body: JSON.stringify({ alliance: data.alliance.tag, ...body }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out.error || `HTTP ${res.status}`);
+      return out;
     }
 
     /** "Player data from the Last Asylum Tracker" (owner request: wherever its data shows). */
@@ -791,6 +861,52 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     $('dash-caravan').addEventListener('click', async (e) => {
       const b = e.target.closest('[data-cv]');
       if (!b) return;
+      // The sheet's suggestions and the sync key (2026-11-27)
+      if (b.dataset.cv === 'sheet-load') {
+        b.disabled = true;
+        try {
+          cvSuggest = await dashAsk({ action: 'caravan-suggest', url: $('cv-sheet-url').value.trim() });
+          data.dashboard.settings = { ...(data.dashboard.settings || {}), sheetUrl: cvSuggest.url };
+        } catch (err) {
+          cvSuggest = { error: err.message };
+        }
+        return renderCaravan();
+      }
+      if (b.dataset.cv === 'sheet-pick') {
+        b.disabled = true;
+        await caravanChange({ action: 'caravan-pick', id: b.dataset.id });
+        return;
+      }
+      if (b.dataset.cv === 'sheet-add') {
+        b.disabled = true;
+        await caravanChange({ action: 'caravan-add', name: b.dataset.name, from: '', to: '' });
+        return;
+      }
+      if (b.dataset.cv === 'key-create' || b.dataset.cv === 'key-revoke') {
+        const create = b.dataset.cv === 'key-create';
+        if (!confirm(t(create ? (data.dashboard.settings?.caravanKey ? 'caravan.key_replace_confirm' : 'caravan.key_create_confirm') : 'caravan.key_revoke_confirm'))) return;
+        b.disabled = true;
+        try {
+          const out = await dashAsk({ action: create ? 'caravan-key-create' : 'caravan-key-revoke' });
+          const settings = { ...(data.dashboard.settings || {}) };
+          if (create) settings.caravanKey = out.record;
+          else delete settings.caravanKey;
+          data.dashboard.settings = settings;
+          cvNewKey = create ? out.key : '';
+        } catch (err) {
+          alert(err.message);
+        }
+        return renderCaravan();
+      }
+      if (b.dataset.cv === 'key-copy') {
+        try {
+          await navigator.clipboard.writeText(cvNewKey);
+          b.textContent = t('common.copied');
+        } catch {
+          $('cv-key')?.select();
+        }
+        return;
+      }
       const act = b.dataset.cv;
       const id = b.closest('[data-id]')?.dataset.id;
       if (act === 'now') {

@@ -13,7 +13,15 @@
 //
 // Rules and storage: api/_dashboard.js and docs/DECISIONS.md ("Alliance Dashboard").
 
-import { ID_PATTERN, allianceById, onMap, readRegister, withCurrentAlliance } from './_register.js';
+import {
+  ID_PATTERN,
+  allianceById,
+  allianceByTag,
+  onMap,
+  readRegister,
+  withCurrentAlliance,
+} from './_register.js';
+import { newCaravanKey } from './_caravan_export.js';
 import { gistJson, isGistConfigured, readGist, updateGist } from './_gist.js';
 import { createToken, verifySessionToken } from './_tokens.js';
 import { isSteward } from './_stewards.js';
@@ -318,6 +326,22 @@ async function editDashboard(req, res, { gist, tag, access, session, alliances }
     }
   }
 
+  // The sheet sync key (R5s and Stewards): made once, shown once, stored as a hash
+  if (body.action === 'caravan-key-create' || body.action === 'caravan-key-revoke') {
+    return caravanKey(res, {
+      gist,
+      tag,
+      access,
+      session,
+      file,
+      create: body.action === 'caravan-key-create',
+    });
+  }
+  // The alliance sheet's suggested caravan players (its "Caravan Bank" tab, Duel Tools)
+  if (body.action === 'caravan-suggest') {
+    return caravanSuggest(res, { gist, tag, file, url: body.url, session });
+  }
+
   // Read a Google Sheet / Doc for the editor's preview (nothing is saved).
   if (body.action === 'load-source') {
     try {
@@ -424,4 +448,80 @@ function allianceList(alliances) {
 
 function firstByRank(alliances) {
   return allianceList(alliances)[0]?.tag || null;
+}
+
+// ---------------------------------------------------------------------------------------
+// The Caravan Rotor and the alliance's Google Sheet (owner request, 2026-11-27)
+// ---------------------------------------------------------------------------------------
+
+/** The alliance's sheet link (one for the dashboard: nominations and caravans). */
+export function allianceSheetUrl(settings = {}) {
+  const url = settings.sheetUrl || settings.capitolSheet;
+  return typeof url === 'string' ? url : '';
+}
+
+/** Keeps a setting in the alliance's dashboard file (no-op when it's already so). */
+async function saveSetting(file, tag, key, value, who) {
+  return updateGist((g) => {
+    const raw = gistJson(g, file, {});
+    if (JSON.stringify(raw.settings?.[key] ?? null) === JSON.stringify(value ?? null)) return {};
+    const settings = { ...(raw.settings || {}) };
+    if (value === null) delete settings[key];
+    else settings[key] = value;
+    return {
+      files: { [file]: { ...raw, settings } },
+      description: `Dashboard [${tag}]: ${key} by ${who || 'a leader'}`,
+    };
+  });
+}
+
+async function caravanKey(res, { gist, tag, access, session, file, create }) {
+  if (!access.canNominate) {
+    return res.status(403).json({ error: say('api_dashboard.caravan_key_r5') });
+  }
+  if (!create) {
+    await saveSetting(file, tag, 'caravanKey', null, session.name);
+    return res.status(200).json({ revoked: true });
+  }
+  const entry = allianceByTag(readRegister(gist), tag);
+  if (!entry) return res.status(409).json({ error: say('api_dashboard.no_alliance') });
+  const { key, record } = newCaravanKey(entry.id, session.name);
+  await saveSetting(file, tag, 'caravanKey', record, session.name);
+  return res.status(200).json({ key, record });
+}
+
+async function caravanSuggest(res, { gist, tag, file, url: given, session }) {
+  const saved = allianceSheetUrl(readDashboard(gistJson(gist, file, {}), tag).settings);
+  const url = String(given || saved || '')
+    .trim()
+    .slice(0, 500);
+  if (!url)
+    return res.status(400).json({ error: say('api_dashboard.sheet_link_needed'), code: 'no_link' });
+  let data;
+  try {
+    data = await fetchSourceTable({
+      kind: 'sheet',
+      url,
+      sheet: 'Caravan Bank',
+      range: 'I1:J30',
+      headerRows: 1,
+    });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+  // Names under "Suggested this week", until the first blank row
+  const names = [];
+  for (const r of data.rows) {
+    const name = String(r[0] || '').trim();
+    if (!name || name.startsWith('⚠') || name.startsWith('Worked out')) break;
+    names.push({ name, balance: Number(String(r[1] || '').replace(/,/g, '')) || null });
+  }
+  if (url !== saved) {
+    try {
+      await saveSetting(file, tag, 'sheetUrl', url, session.name);
+    } catch (err) {
+      console.warn('Sheet link not kept:', err.message);
+    }
+  }
+  return res.status(200).json({ names: names.slice(0, 20), url, heading: data.columns[0] || '' });
 }

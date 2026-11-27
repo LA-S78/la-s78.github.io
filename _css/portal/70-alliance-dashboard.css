@@ -860,6 +860,7 @@ html[data-theme='sanctuary'] .dw-s4 {
 
 .dash-cv-filters input,
 .dash-cv-add input,
+.dash-cv-sheet-bar input,
 .dash-cv-row.is-editing input {
   min-width: 0;
   padding: 5px 8px;
@@ -1573,4 +1574,25 @@ li.dw-sel > .dw-bar-track {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 10px;
+}
+
+/* Caravan Rotor: the alliance sheet's suggestions and the sync key (2026-11-27) */
+.dash-cv-sheet {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--overlay-5, rgba(255, 255, 255, 0.08));
+}
+.dash-cv-sheet > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.dash-cv-sheet-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+.dash-cv-sheet-bar input {
+  flex: 1 1 14em;
+  min-width: 0;
 }

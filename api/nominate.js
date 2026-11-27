@@ -382,7 +382,9 @@ function calendarConfig(gist) {
 function savedSheetUrl(gist, mapState, tag) {
   const alliances = mapState?.alliances || {};
   const file = dashboardFile(findAllianceKey(alliances, tag) || tag, alliances, gist);
-  const url = readDashboard(gistJson(gist, file, {}), tag).settings?.capitolSheet;
+  const settings = readDashboard(gistJson(gist, file, {}), tag).settings || {};
+  // One sheet link for the alliance (nominations and caravans); capitolSheet: before that
+  const url = settings.sheetUrl || settings.capitolSheet;
   return typeof url === 'string' ? url : '';
 }
 
@@ -429,9 +431,9 @@ async function sheetFill(req, res) {
       if (!key) return {};
       const file = dashboardFile(key, alliances, gist);
       const raw = gistJson(gist, file, {});
-      if (raw.settings?.capitolSheet === url) return {};
+      if (raw.settings?.sheetUrl === url) return {};
       return {
-        files: { [file]: { ...raw, settings: { ...(raw.settings || {}), capitolSheet: url } } },
+        files: { [file]: { ...raw, settings: { ...(raw.settings || {}), sheetUrl: url } } },
         description: `Capitol sheet link for [${key}]`,
       };
     });

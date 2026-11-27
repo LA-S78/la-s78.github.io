@@ -83,6 +83,46 @@ const ALLIANCE_COMMANDS = [
       },
     ],
   },
+  // /caravan (owner request, 2026-11-27): api/_bot_caravan.js
+  {
+    name: 'caravan',
+    description: "Your alliance's Caravan Rotor: see it, or pick a player (leaders)",
+    type: 1,
+    options: [
+      {
+        type: 3,
+        name: 'action',
+        description: 'Leave blank to see the rotor',
+        required: false,
+        choices: [
+          {
+            name: '👀 Show the rotor',
+            value: 'show',
+          },
+          {
+            name: '✅ Pick a player',
+            value: 'pick',
+          },
+          {
+            name: '↩️ Undo a pick',
+            value: 'unpick',
+          },
+        ],
+      },
+      {
+        type: 3,
+        name: 'player',
+        description: "The player's in-game name (for pick or undo)",
+        required: false,
+      },
+      {
+        type: 3,
+        name: 'alliance',
+        description: "Stewards: another alliance's tag",
+        required: false,
+      },
+    ],
+  },
   {
     name: 'rewards',
     description: "This week's rewards: status, and the Kingdom War result (Stewards)",
