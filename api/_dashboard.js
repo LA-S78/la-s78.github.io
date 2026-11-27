@@ -442,23 +442,29 @@ export function cleanWidget(input, { actor = '', now = new Date().toISOString() 
 }
 
 /**
- * The dashboard's own cards (owner request, 2026-11-23): leaders move them among the charts
- * like a chart. In the page's default order, before the charts.
+ * The dashboard's own cards (owner request, 2026-11-23). Two groups since 2026-11-27 (owner
+ * request): the tools always come first, then the charts (Alliance growth and the alliance's
+ * own charts); cards move only within their group.
  */
 export const BUILT_INS = Object.freeze(['rewards', 'caravan', 'roster', 'growth']);
+export const TOOL_KEYS = Object.freeze(['rewards', 'caravan', 'roster']);
+export const groupOf = (key) => (TOOL_KEYS.includes(key) ? 'tools' : 'charts');
 
 /**
- * The order of the page's cards: the saved `layout` (built-in keys and chart ids), keeping
- * only those that exist; a built-in card it doesn't name goes first (in the default order),
- * a chart it doesn't name (a new one) last. js copy: portal/dashboard.html layoutOrder().
+ * The order of the page's cards: the tools, then the charts, each in the saved `layout`'s
+ * order (built-in keys and chart ids), keeping only those that exist. A tool it doesn't name
+ * goes first (in the default order); so does a chart it doesn't name (a new one), at the top
+ * of the charts where it's seen. js copy: portal/dashboard.html layoutOrder().
  */
 export function layoutOrder(layout, widgetIds) {
   const known = new Set([...BUILT_INS, ...widgetIds]);
   const named = [...new Set((layout || []).filter((k) => known.has(k)))];
+  const charts = ['growth', ...widgetIds];
   return [
-    ...BUILT_INS.filter((k) => !named.includes(k)),
-    ...named,
-    ...widgetIds.filter((id) => !named.includes(id)),
+    ...TOOL_KEYS.filter((k) => !named.includes(k)),
+    ...named.filter((k) => groupOf(k) === 'tools'),
+    ...charts.filter((k) => !named.includes(k)),
+    ...named.filter((k) => groupOf(k) === 'charts'),
   ];
 }
 
@@ -519,7 +525,9 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
     if (at < 0) return { error: say('api_dashboard.chart_removed'), status: 404 };
     const to =
       edit.action === 'move-item' ? order.indexOf(edit.to) : at + (Number(edit.by) < 0 ? -1 : 1);
-    if (to >= 0 && to < order.length && to !== at) [order[at], order[to]] = [order[to], order[at]];
+    // Tools stay above charts: a card only trades places within its own group
+    const sameGroup = to >= 0 && to < order.length && groupOf(order[to]) === groupOf(key);
+    if (sameGroup && to !== at) [order[at], order[to]] = [order[to], order[at]];
     d.layout = order;
   } else {
     return { error: say('api_dashboard.unknown_change'), status: 400 };

@@ -26,6 +26,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
   <div class="dash-edit-bar" id="dash-edit-bar" hidden>
     <button type="button" class="dash-btn dash-two-labels" id="dash-edit-toggle" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="pencil" %}{{ "dashboard.edit_dashboard" | t }}</span><span class="when-on">{{ "dashboard.done_editing" | t }}</span></button>
     <button type="button" class="dash-btn" id="dash-add" disabled>{% include ui-icon.html name="plus" %}{{ "dashboard.add_chart" | t }}</button>
+    <!-- Everyone (owner request, 2026-11-27): their own order, on this device only -->
+    <button type="button" class="dash-btn dash-two-labels" id="dash-arrange" aria-pressed="false"><span class="when-off">{% include ui-icon.html name="updown" %}{{ "dashboard.arrange_mine" | t }}</span><span class="when-on">{{ "dashboard.arrange_done" | t }}</span></button>
+    <button type="button" class="dash-btn" id="dash-arrange-reset" hidden>{% include ui-icon.html name="refresh" %}{{ "dashboard.arrange_reset" | t }}</button>
+    <p class="dash-muted dash-small dash-arrange-help" id="dash-arrange-help" hidden>{{ "dashboard.arrange_help" | t }}</p>
   </div>
   <section class="dash-card dash-editor" id="dash-editor" hidden aria-label="{{ "dashboard.editor_label" | t }}"></section>
 
@@ -191,6 +195,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         data = saved.data;
         readOnly = true;
         editing = false;
+        noteNewCharts();
         render();
         setUpdating(true);
       }
@@ -216,6 +221,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         data = body;
         readOnly = false;
         $('dash-message').hidden = true;
+        noteNewCharts();
         render();
         remember();
       } catch (err) {
@@ -313,6 +319,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         <p class="dash-growth-now"><strong>${escapeHtml(might(power[last]))}</strong> ${escapeHtml(t('stats.col_might'))}${Number.isFinite(week) ? ` · <span class="${week >= 0 ? 'name-ok' : 'name-warn'}">${week >= 0 ? '+' : '−'}${escapeHtml(might(Math.abs(week)))}</span> ${escapeHtml(t('stats.col_week'))}` : ''}${memberLine.length ? ` · ${escapeHtml(t('stats.growth_members', { n: memberLine[memberLine.length - 1] }))}` : ''}</p>
         ${chart}
         <p class="tracker-credit">${ic('users')}${escapeHtml(t('stats.growth_more'))} <a href="/${document.documentElement.lang || 'en'}/alliance.html#nap-stats">${escapeHtml(t('stats.growth_link'))}</a></p>`;
+      applyFolds();
     }
 
     /** Chests as coloured icons with counts (names in the tooltip): gold, purple, blue. */
@@ -511,6 +518,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       const leader = isLeader();
       el.hidden = !c;
       if (!c) return;
+      caravanOpen = !isFolded('caravan');
       const all = c.roster || [];
       const picked = all.filter((p) => p.picked);
       const q = caravanFilter.text.trim().toLowerCase();
@@ -591,7 +599,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         </div>`;
       // Shown or hidden like the member list (owner request, 2026-11-27)
       $('caravan-toggle').addEventListener('click', () => {
-        caravanOpen = !caravanOpen;
+        setFolded('caravan', caravanOpen);
         renderCaravan();
         $('caravan-toggle')?.focus();
       });
@@ -744,7 +752,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     // open: the member list is shown (owner, 2026-11-23: it starts closed, so phones can scroll
     // past it; "Show members" opens it for this visit)
     let rosterView = { text: '', sort: 'power', open: false };
-    let caravanOpen = false; // the Caravan Rotor's list, shown or hidden (like the roster)
+    let caravanOpen = false; // the Caravan Rotor's list, shown or hidden: isFolded('caravan')
     const ROSTER_SORTS = {
       power: (a, b) => b.power - a.power,
       name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
@@ -818,6 +826,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       const r = data.roster;
       el.hidden = !r;
       if (!r) return;
+      rosterView.open = !isFolded('roster');
       const leader = isLeader();
       const all = r.members || [];
       // Today's research donations and help: leaders only (the server sends them only to them)
@@ -867,7 +876,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
             ${trackerCredit()}</div>`
           : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>${trackerCredit()}`}`;
       $('roster-toggle')?.addEventListener('click', () => {
-        rosterView.open = !rosterView.open;
+        setFolded('roster', rosterView.open);
         renderRoster();
         $('roster-toggle')?.focus();
       });
@@ -1050,7 +1059,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲')}${tool('down', 'common.move_down', '▼')}${tool('edit', 'common.edit', ic('pencil', 'solo'))}${tool('delete', 'common.delete', ic('trash', 'solo'))}</div>`
         : '';
       return `<article class="dash-card dash-widget" data-key="${escapeHtml(w.id)}" data-id="${escapeHtml(w.id)}" data-type="${escapeHtml(w.type || '')}">
-        <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}</h3>${tools}</div>
+        <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}${newCharts.has(w.id) && !editing ? ` <span class="dash-tag dash-new">${escapeHtml(t('dashboard.new_chart'))}</span>` : ''}</h3>${tools}</div>
         <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}${sync}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
         ${isLeader() && w.data?.skipped?.length ? `<p class="dash-muted dash-small dash-skipped">${ic('warning', 'warn')}${escapeHtml(t('dashboard.tabs_skipped', { names: w.data.skipped.join(', ') }))}</p>` : ''}
@@ -1062,8 +1071,13 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       const list = (data.dashboard && data.dashboard.widgets) || [];
       const el = $('dash-widgets');
       el.hidden = false;
-      $('dash-edit-bar').hidden = !isLeader();
+      $('dash-edit-bar').hidden = false;
+      $('dash-edit-toggle').hidden = !isLeader();
+      $('dash-add').hidden = !isLeader();
       $('dash-edit-toggle').setAttribute('aria-pressed', String(editing));
+      $('dash-arrange').setAttribute('aria-pressed', String(arranging));
+      $('dash-arrange-reset').hidden = !arranging;
+      $('dash-arrange-help').hidden = !arranging;
       // Always beside Edit Dashboard (greyed out until editing), so Edit doesn't shift
       $('dash-add').disabled = !editing;
       renderImages();
@@ -1083,6 +1097,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         W.mount(card.querySelector('.dash-widget-body'), w);
       });
       arrange();
+      markSeen(list.map((w) => w.id));
     }
 
     // ---------- The page's order (owner request, 2026-11-23) ----------
@@ -1091,11 +1106,125 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     // alliance (dashboard.layout; api/_dashboard.js layoutOrder, move-item).
     const BUILT_INS = ['rewards', 'caravan', 'roster', 'growth'];
     const BUILT_IN_NAMES = { rewards: 'rewards_card.title', caravan: 'caravan.title', roster: 'roster.title', growth: 'stats.growth_title' };
-    /** As api/_dashboard.js layoutOrder(): the saved order, the page's own cards first if unnamed, new charts last. */
+    // Two groups (owner request, 2026-11-27): the tools always above the charts (Alliance
+    // growth and the alliance's own); cards move only within their group.
+    const TOOLS = ['rewards', 'caravan', 'roster'];
+    const groupOf = (key) => (TOOLS.includes(key) ? 'tools' : 'charts');
+    /** As api/_dashboard.js layoutOrder(): tools then charts, each in the saved order; unnamed ones (a new chart) first in their group. */
     function layoutOrder(layout, ids) {
       const known = new Set([...BUILT_INS, ...ids]);
       const named = [...new Set((layout || []).filter((k) => known.has(k)))];
-      return [...BUILT_INS.filter((k) => !named.includes(k)), ...named, ...ids.filter((id) => !named.includes(id))];
+      const charts = ['growth', ...ids];
+      return [
+        ...TOOLS.filter((k) => !named.includes(k)),
+        ...named.filter((k) => groupOf(k) === 'tools'),
+        ...charts.filter((k) => !named.includes(k)),
+        ...named.filter((k) => groupOf(k) === 'charts'),
+      ];
+    }
+
+    // ---------- Each viewer's own view (owner request, 2026-11-27) ----------
+    // Kept in this browser, for each alliance: which cards are folded, the viewer's own order
+    // within the tools and within the charts ("Arrange my view"), and the charts already seen
+    // (one added since is tagged "New" for that visit). Leaders' Edit dashboard still sets the
+    // alliance's order, which a viewer without an order of their own follows.
+    const FOLDED_FIRST = { caravan: true, roster: true }; // closed until opened
+    let view = null;
+    let viewFor = null;
+    let newCharts = new Set();
+    let newFor = null;
+    let arranging = false;
+    function myView() {
+      const tag = data && data.alliance ? data.alliance.tag : '';
+      if (!view || viewFor !== tag) {
+        viewFor = tag;
+        view = { folded: {}, order: { tools: [], charts: [] }, seen: null };
+        try {
+          const v = JSON.parse(localStorage.getItem(`dash-view:${tag}`) || 'null');
+          if (v && typeof v === 'object') {
+            view.folded = v.folded && typeof v.folded === 'object' ? v.folded : {};
+            view.order = { tools: [], charts: [], ...(v.order || {}) };
+            view.seen = Array.isArray(v.seen) ? v.seen : null;
+          }
+        } catch (e) {
+          // No storage (private window): the alliance's view, nothing remembered
+        }
+      }
+      return view;
+    }
+    function saveView() {
+      try {
+        localStorage.setItem(`dash-view:${viewFor}`, JSON.stringify(view));
+      } catch (e) {
+        // Not kept; the page still works
+      }
+    }
+    const isFolded = (key) => {
+      const f = myView().folded[key];
+      return f === undefined ? Boolean(FOLDED_FIRST[key]) : Boolean(f);
+    };
+    function setFolded(key, folded) {
+      myView().folded[key] = folded;
+      saveView();
+    }
+    /** After a load: the charts not seen before on this device are "New" for this visit. */
+    function noteNewCharts() {
+      if (!data || !data.dashboard) return;
+      const v = myView();
+      if (newFor !== viewFor) {
+        newFor = viewFor;
+        newCharts = new Set();
+      }
+      const ids = (data.dashboard.widgets || []).map((w) => w.id);
+      if (!Array.isArray(v.seen)) {
+        // A first visit: nothing is new
+        v.seen = ids;
+        return saveView();
+      }
+      ids.filter((id) => !v.seen.includes(id)).forEach((id) => newCharts.add(id));
+    }
+    function markSeen(ids) {
+      const v = myView();
+      if (!Array.isArray(v.seen) || ids.some((id) => !v.seen.includes(id)) || v.seen.length !== ids.length) {
+        v.seen = ids;
+        saveView();
+      }
+    }
+    /** The order for this viewer: the alliance's while editing, else their own within each group (cards they haven't placed, like a new chart, first). */
+    function pageOrder() {
+      const ids = (data.dashboard.widgets || []).map((w) => w.id);
+      const base = layoutOrder(data.dashboard.layout, ids);
+      if (editing) return base;
+      const mine = myView().order;
+      return ['tools', 'charts'].flatMap((g) => {
+        const list = base.filter((k) => groupOf(k) === g);
+        const own = (mine[g] || []).filter((k) => list.includes(k));
+        return own.length ? [...list.filter((k) => !own.includes(k)), ...own] : list;
+      });
+    }
+
+    /** Each card's Show/Hide (the rotor and the roster have their own), and folded cards closed. */
+    function applyFolds() {
+      const el = $('dash-widgets');
+      el.querySelectorAll(':scope > .dash-slot > .dash-card, :scope > .dash-widget').forEach((card) => {
+        const key = card.closest('[data-key]')?.dataset.key;
+        if (!key || key === 'caravan' || key === 'roster') return;
+        const head = card.querySelector(':scope > .dash-widget-head') || card.querySelector(':scope > h3.dash-card-title');
+        if (!head) return;
+        let btn = head.querySelector(':scope > .dash-fold');
+        if (!btn) {
+          head.insertAdjacentHTML('beforeend', `<button type="button" class="dash-icon-btn dash-roster-toggle dash-fold">${ic('chevron')}<span class="dash-cv-toggle-text"></span></button>`);
+          btn = head.querySelector(':scope > .dash-fold');
+        }
+        // While editing, every card is open, so nothing is missed
+        const folded = !editing && isFolded(key);
+        btn.hidden = editing;
+        card.classList.toggle('is-folded', folded);
+        const label = t(folded ? 'dashboard.fold_show' : 'dashboard.fold_hide');
+        btn.setAttribute('aria-expanded', String(!folded));
+        btn.setAttribute('aria-label', label);
+        btn.querySelector('.dash-cv-toggle-text').textContent = label;
+      });
     }
     /** A card the viewer sees (a page card whose section is hidden isn't). */
     const shownCard = (n) => !n.hidden && !(n.classList.contains('dash-slot') && n.querySelector(':scope > section')?.hidden);
@@ -1105,8 +1234,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     function arrange() {
       const el = $('dash-widgets');
       if (!data || !data.dashboard) return;
-      const ids = (data.dashboard.widgets || []).map((w) => w.id);
-      for (const key of layoutOrder(data.dashboard.layout, ids)) {
+      for (const key of pageOrder()) {
         const node = el.querySelector(`:scope > [data-key="${CSS.escape(key)}"]`);
         if (node) el.appendChild(node);
       }
@@ -1122,6 +1250,17 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         }
         bar.hidden = !(editing && isLeader());
       });
+      // "Arrange my view": ▲▼ on every card the viewer sees (their own order)
+      el.querySelectorAll(':scope > [data-key]').forEach((n) => {
+        let mine = n.querySelector(':scope > .dash-my-tools');
+        if (!mine) {
+          // A chart shows its title just below; the page's own cards are named here
+          const name = n.classList.contains('dash-slot') ? t(BUILT_IN_NAMES[n.dataset.key]) : '';
+          n.insertAdjacentHTML('afterbegin', `<div class="dash-slot-tools dash-my-tools"><span>${escapeHtml(name)}</span>${tool('my-up', 'common.move_up', '▲')}${tool('my-down', 'common.move_down', '▼')}</div>`);
+          mine = n.querySelector(':scope > .dash-my-tools');
+        }
+        mine.hidden = !arranging;
+      });
       const items = [...el.children].filter((n) => n.dataset.key && shownCard(n));
       let col = 0;
       items.forEach((n, i) => {
@@ -1133,12 +1272,15 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
           if (!next || fullWidth(next)) n.classList.add('dash-alone');
           col = 1;
         } else col = 0;
-        const tools = n.querySelector(':scope > .dash-slot-tools, :scope > .dash-widget-head > .dash-widget-tools');
-        const up = tools?.querySelector('[data-act="up"]');
-        const down = tools?.querySelector('[data-act="down"]');
-        if (up) up.disabled = i === 0;
-        if (down) down.disabled = i === items.length - 1;
+        // ▲▼ stop at the end of the card's group (tools stay above charts)
+        const first = i === 0 || groupOf(items[i - 1].dataset.key) !== groupOf(n.dataset.key);
+        const last = i === items.length - 1 || groupOf(items[i + 1].dataset.key) !== groupOf(n.dataset.key);
+        n.querySelectorAll(':scope > .dash-slot-tools, :scope > .dash-widget-head > .dash-widget-tools').forEach((tools) => {
+          tools.querySelectorAll('[data-act="up"], [data-act="my-up"]').forEach((b) => (b.disabled = first));
+          tools.querySelectorAll('[data-act="down"], [data-act="my-down"]').forEach((b) => (b.disabled = last));
+        });
       });
+      applyFolds();
     }
 
     // The alliance's card pictures: their own section and Edit button, after the charts
@@ -1173,22 +1315,74 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
 
     $('dash-edit-toggle').addEventListener('click', () => {
       editing = !editing;
+      if (editing) arranging = false;
       if (!editing) closeEditor();
+      renderWidgets();
+    });
+    $('dash-arrange').addEventListener('click', () => {
+      arranging = !arranging;
+      if (arranging && editing) {
+        editing = false;
+        closeEditor();
+      }
+      renderWidgets();
+    });
+    $('dash-arrange-reset').addEventListener('click', () => {
+      if (!confirm(t('dashboard.arrange_reset_confirm'))) return;
+      myView().order = { tools: [], charts: [] };
+      saveView();
       renderWidgets();
     });
     $('dash-add').addEventListener('click', () => openEditor(null));
     $('dash-widgets').addEventListener('click', async (e) => {
       // Only the cards' own tools (the page's cards have buttons of their own inside)
+      // A card's Show/Hide (remembered on this device)
+      const fold = e.target.closest('.dash-fold');
+      if (fold) {
+        const card = fold.closest('[data-key]');
+        const key = card.dataset.key;
+        setFolded(key, !isFolded(key));
+        applyFolds();
+        if (!isFolded(key)) {
+          // Drawn again now it has room (a chart drawn while folded has no size)
+          if (key === 'growth') renderGrowth();
+          else {
+            const w = (data.dashboard.widgets || []).find((x) => x.id === key);
+            const body = card.querySelector('.dash-widget-body');
+            if (w && body) {
+              body.innerHTML = W.render(w);
+              W.mount(body, w);
+            }
+          }
+        }
+        return;
+      }
       const b = e.target.closest('.dash-widget-tools [data-act], .dash-slot-tools [data-act], .dash-widget-meta [data-act]');
       if (!b) return;
       const card = b.closest('[data-key]');
       const id = card.dataset.key;
       const act = b.dataset.act;
-      if (act === 'up' || act === 'down') {
+      const neighbour = (dir) => {
         const items = [...$('dash-widgets').children].filter((n) => n.dataset.key && shownCard(n));
-        const next = items[items.indexOf(card) + (act === 'up' ? -1 : 1)];
+        const next = items[items.indexOf(card) + dir];
+        return next && groupOf(next.dataset.key) === groupOf(id) ? next : null;
+      };
+      if (act === 'up' || act === 'down') {
+        const next = neighbour(act === 'up' ? -1 : 1);
         if (!next) return;
         return save({ action: 'move-item', key: id, to: next.dataset.key });
+      }
+      if (act === 'my-up' || act === 'my-down') {
+        const next = neighbour(act === 'my-up' ? -1 : 1);
+        if (!next) return;
+        const g = groupOf(id);
+        const list = pageOrder().filter((k) => groupOf(k) === g);
+        const a = list.indexOf(id);
+        const z = list.indexOf(next.dataset.key);
+        [list[a], list[z]] = [list[z], list[a]];
+        myView().order[g] = list;
+        saveView();
+        return arrange();
       }
       if (act === 'edit') return openEditor(data.dashboard.widgets.find((w) => w.id === id));
       if (act === 'sync') {

@@ -1694,3 +1694,46 @@ li.dw-sel > .dw-bar-track {
     margin: 0;
   }
 }
+
+/* Each viewer's own view (2026-11-27): any card folds to its title line; "New" charts */
+.dash-card.is-folded > :not(.dash-widget-head):not(.dash-card-title):not(.dash-slot-tools) {
+  display: none !important;
+}
+.dash-card.is-folded > .dash-card-title,
+.dash-card.is-folded > .dash-widget-head {
+  margin-bottom: 0;
+}
+.dash-card.is-folded > .dash-widget-head .dash-card-title {
+  margin-bottom: 0;
+}
+.dash-fold {
+  margin-left: auto;
+  flex: none;
+  font-family: var(--font-body, inherit);
+  font-size: 0.8rem;
+}
+.dash-fold[hidden] {
+  display: none;
+}
+.dash-new {
+  margin-left: 6px;
+  color: var(--gold);
+  border-color: color-mix(in srgb, var(--gold) 60%, transparent);
+}
+.dash-edit-bar [hidden] {
+  display: none !important;
+}
+.dash-arrange-help {
+  flex-basis: 100%;
+  margin: 0;
+}
+@media (max-width: 480px) {
+  .dash-fold .dash-cv-toggle-text {
+    display: none;
+  }
+}
+/* A closed rotor or roster: no space under its top line */
+.dash-cv-top:last-child,
+.dash-cv-top:has(+ #caravan-body[hidden]) {
+  margin-bottom: 0;
+}
