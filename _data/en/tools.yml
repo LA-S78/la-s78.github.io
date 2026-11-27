@@ -366,6 +366,16 @@ nominate:
   id_unknown: "No member of [{tag}] has the ID {id}"
   who_gets_what: "Who gets what"
   save: "Save List"
+  # "Fill from sheet": the list from the alliance's Google Sheet (Duel Tools' "Capitol Ranking" tab)
+  sheet_fill: "Fill from sheet"
+  # A Steward's test link (/nominate alliance:): everything works but saving
+  test_banner: "Test link (Steward): this page works as usual, but nothing is saved."
+  test_no_save: "Test link: not saved"
+  sheet_link: "Google Sheet link"
+  sheet_help: "Your alliance's sheet with the Duel Tools \"Capitol Ranking\" tab, shared as \"Anyone with the link can view\". The link is remembered for next time."
+  sheet_loading: "Reading the sheet…"
+  sheet_filled: "Filled {n} names from the sheet. Check them, then save."
+  sheet_filled_week: "Filled {n} names from the sheet ({week}). Check them, then save."
   saving: "Saving..."
   link_incomplete: "This link is incomplete. Run /nominate in Discord for a new one."
   load_failed: "{error} Run /nominate in Discord for a new link."
