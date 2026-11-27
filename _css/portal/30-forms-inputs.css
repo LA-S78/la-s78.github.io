@@ -437,6 +437,15 @@
   width: 100%;
   margin-top: 6px;
 }
+.nominate-sheet-now {
+  display: block;
+  margin-left: 1.1em;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+.nominate-sheet-now:empty {
+  display: none;
+}
 .nominate-sheet-result {
   display: grid;
   gap: 6px;

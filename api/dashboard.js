@@ -33,6 +33,7 @@ import { allianceFrame, imageStatus, frameFor } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
+import { readSavedList } from './_sheet_list.js';
 import {
   fetchSourceTable,
   fetchSourceTabs,
@@ -497,30 +498,14 @@ async function caravanSuggest(res, { gist, tag, file, url: given, session }) {
     .slice(0, 500);
   if (!url)
     return res.status(400).json({ error: say('api_dashboard.sheet_link_needed'), code: 'no_link' });
-  let data;
+  // The Duel Tools "Caravan Bank" tab, checked by its heading (api/_sheet_list.js): Google
+  // gives a sheet's first tab when there's no such tab, which once listed duel scores
+  let names;
   try {
-    data = await fetchSourceTable({
-      kind: 'sheet',
-      url,
-      sheet: 'Caravan Bank',
-      range: 'I1:J30',
-      headerRows: 1,
-    });
+    const read = await readSavedList({ sheetUrl: url }, 'caravan');
+    names = read.rows.map((r) => ({ name: r.name, balance: r.points ?? null }));
   } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
-  // Google gives the sheet's first tab when there's no "Caravan Bank" tab (Duel Tools not set
-  // up yet), so a list of duel scores came back (owner report, 2026-11-27): the heading the
-  // script writes in I1 shows it's the right tab
-  if (!/^suggested/i.test(String(data.columns[0] || '').trim())) {
-    return res.status(400).json({ error: say('api_dashboard.sheet_no_bank'), code: 'no_bank' });
-  }
-  // Names under "Suggested this week", until the first blank row
-  const names = [];
-  for (const r of data.rows) {
-    const name = String(r[0] || '').trim();
-    if (!name || name.startsWith('⚠') || name.startsWith('Worked out')) break;
-    names.push({ name, balance: Number(String(r[1] || '').replace(/,/g, '')) || null });
+    return res.status(400).json({ error: err.message, code: err.code || undefined });
   }
   if (url !== saved) {
     try {
@@ -529,5 +514,5 @@ async function caravanSuggest(res, { gist, tag, file, url: given, session }) {
       console.warn('Sheet link not kept:', err.message);
     }
   }
-  return res.status(200).json({ names: names.slice(0, 20), url, heading: data.columns[0] || '' });
+  return res.status(200).json({ names: names.slice(0, 20), url });
 }
