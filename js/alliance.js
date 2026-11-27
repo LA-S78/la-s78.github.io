@@ -1276,7 +1276,17 @@ export function bindAllianceControls() {
         const tag = expandBtn.dataset.tag;
         if (openRows.has(tag)) openRows.delete(tag);
         else openRows.add(tag);
+        // The list is drawn afresh: the card tapped stays where it was on screen, rather than
+        // the page jumping (owner report, 2026-11-27)
+        const card = () =>
+          [...hierarchyList.querySelectorAll('[data-action="expand"]')].find(
+            (b) => b.dataset.tag === tag,
+          );
+        const before = expandBtn.getBoundingClientRect().top;
         renderStandingsHierarchy();
+        const after = card()?.getBoundingClientRect().top;
+        if (Number.isFinite(after) && Math.abs(after - before) > 1)
+          window.scrollBy(0, after - before);
         return;
       }
       if (!isAlliancePlannerActive) return;
