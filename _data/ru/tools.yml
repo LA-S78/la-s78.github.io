@@ -304,57 +304,58 @@ chart_editor:
   at_least_example: например, 300M
 charts:
   column: Столбец {n}
-  no_numbers: Нет чисел для графика в выбранном столбце.
-  line_two_rows: Для линии нужно минимум две строки.
-  line_two_columns: Для линии нужно минимум два столбца вдоль нижней оси.
-  no_positive: Нет положительных чисел для графика в выбранном столбце.
+  no_numbers: Нет чисел для построения графика в выбранном столбце.
+  no_numbers_shown: Для выбранных ниже данных еще нет чисел. Нажмите на имя, чтобы показать его снова, или на другое, чтобы добавить его.
+  line_two_rows: Для линейного графика нужно минимум две строки.
+  line_two_columns: Для линейного графика нужно минимум два столбца внизу.
+  no_positive: Нет положительных чисел для построения графика в выбранном столбце.
   no_targets: Нет чисел (или целей) для сравнения.
-  no_table: Таблицы пока нет.
+  no_table: Таблица еще не создана.
   unknown_type: Неизвестный тип графика.
-  draw_failed: Не удалось отрисовать график ({error}).
+  draw_failed: Не удалось построить этот график ({error}).
   other: Другое
   value: Значение
-  total: Всего
-  total_value: 'Всего: {value}'
-  share_of_all: "{value} · {share} от общего"
+  total: Итого
+  total_value: 'Итого: {value}'
+  share_of_all: "{value} · {share} от общего числа"
   value_of_target: "{value} из {target}"
   to_go: 'Осталось: {value}'
   target_reached: Цель достигнута ✓
-  done: "✓ Выполнено"
+  done: "✓ Готово"
   reached_target: "{done} из {total} достигли цели"
   search: Поиск…
-  search_label: Искать в таблице
-  matching: 'совпадений: {n}'
+  search_label: Поиск по этой таблице
+  matching: "{n} совпадений"
   show_all: Показать все {n}
   show_all_rows: Показать все {n} строк
   show_fewer: Показать меньше
   first_rows: Показаны первые {shown} из {n} строк.
-  hint_bar: Коснитесь или наведите на столбец
-  hint_bar_key: Коснитесь или наведите на столбец. Коснитесь имени в легенде, чтобы увидеть только его.
-  views: Виды
+  hint_bar: Нажмите или наведите на столбец
+  hint_bar_key: Нажмите или наведите на столбец. Нажмите на имя в легенде, чтобы оставить только его.
+  views: Просмотры
   view_latest: Новейшая вкладка
   view_weeks: Итого по вкладкам
   view_player: Одно имя по вкладкам
-  view_pick: Имя для показа
-  view_average: Среднее {n} вкладок
-  view_total: Сумма {n} вкладок
+  view_pick: Имя для отображения
+  view_average: Среднее значение {n} вкладок
+  view_total: Итого по {n} вкладкам
   view_chart: График
   view_compare: Сравнить
   search_names: Введите имя…
-  no_match: Имен не найдено.
-  view_tab: Вкладка для показа
+  no_match: Имена не найдены.
+  view_tab: Вкладка для отображения
   compare_first: Первое имя
   compare_second: Второе имя
   compare_top: Топ {n} (среднее)
-  compare_bottom: Бот {n} (среднее)
+  compare_bottom: Нижние {n} (среднее)
   pair_left: 'Слева: {name}'
-  share_of_column: "{name}: {share} от общего"
-  pair_right: 'Справа (затухание): {name}'
-  flip_to_asc: "⇅ Сначала самые маленькие"
-  flip_to_desc: "⇅ Сначала самые большие"
-  hint_line: Коснитесь или наведите на неделю
-  hint_pie: Коснитесь или наведите на сектор
-  hint_progress: Коснитесь или наведите на строку
+  share_of_column: "{name}: {share} от итогового значения"
+  pair_right: 'Справа (затухающий): {name}'
+  flip_to_asc: "⇅ Сначала наименьшие"
+  flip_to_desc: "⇅ Сначала наибольшие"
+  hint_line: Нажмите или наведите на неделю
+  hint_pie: Нажмите или наведите на сектор
+  hint_progress: Нажмите или наведите на строку
 nominate:
   page_title: Номинации на награды
   name_ok: В списке участников [{tag}]

@@ -302,32 +302,33 @@ chart_editor:
 charts:
   column: Colonna {n}
   no_numbers: Nessun numero da rappresentare nella colonna scelta.
-  line_two_rows: Un grafico a linee richiede almeno due righe.
-  line_two_columns: Un grafico a linee richiede almeno due colonne lungo la base.
+  no_numbers_shown: Ancora nessun numero per ciò che è selezionato sotto. Tocca un nome per mostrarlo di nuovo, o un altro per aggiungerlo.
+  line_two_rows: Un grafico a linee necessita di almeno due righe.
+  line_two_columns: Un grafico a linee necessita di almeno due colonne in basso.
   no_positive: Nessun numero positivo da rappresentare nella colonna scelta.
   no_targets: Nessun numero (o obiettivo) da confrontare.
-  no_table: Tabella ancora non disponibile.
+  no_table: Nessuna tabella ancora.
   unknown_type: Tipo di grafico sconosciuto.
-  draw_failed: Impossibile disegnare questo grafico ({error}).
+  draw_failed: Impossibile creare questo grafico ({error}).
   other: Altro
   value: Valore
   total: Totale
   total_value: 'Totale: {value}'
   share_of_all: "{value} · {share} del totale"
-  value_of_target: "{value} di {target}"
-  to_go: 'Mancano: {value}'
+  value_of_target: "{value} su {target}"
+  to_go: 'Mancanti: {value}'
   target_reached: Obiettivo raggiunto ✓
   done: "✓ Fatto"
-  reached_target: "{done} di {total} hanno raggiunto l'obiettivo"
-  search: Cerca...
+  reached_target: "{done} su {total} hanno raggiunto l'obiettivo"
+  search: Cerca…
   search_label: Cerca in questa tabella
   matching: "{n} corrispondenze"
-  show_all: Mostra tutti {n}
+  show_all: Mostra tutti i {n}
   show_all_rows: Mostra tutte le {n} righe
   show_fewer: Mostra meno
   first_rows: Visualizzazione delle prime {shown} di {n} righe.
-  hint_bar: Tocca o passa sopra una barra
-  hint_bar_key: Tocca o passa sopra una barra. Tocca un nome nella legenda per visualizzare solo quello.
+  hint_bar: Tocca o passa il mouse sopra una barra
+  hint_bar_key: Tocca o passa il mouse sopra una barra. Tocca un nome nella legenda per vedere solo quello.
   views: Visualizzazioni
   view_latest: Scheda più recente
   view_weeks: Totali per scheda
@@ -337,21 +338,21 @@ charts:
   view_total: Totale di {n} schede
   view_chart: Grafico
   view_compare: Confronta
-  search_names: Digita un nome...
+  search_names: Digita un nome…
   no_match: Nessun nome corrispondente.
   view_tab: Scheda da mostrare
   compare_first: Primo nome
   compare_second: Secondo nome
-  compare_top: Migliori {n} (media)
-  compare_bottom: Peggiori {n} (media)
+  compare_top: Primi {n} (media)
+  compare_bottom: Ultimi {n} (media)
   pair_left: 'Sinistra: {name}'
   share_of_column: "{name}: {share} del totale"
   pair_right: 'Destra (sfumato): {name}'
   flip_to_asc: "⇅ Dal più basso"
   flip_to_desc: "⇅ Dal più alto"
-  hint_line: Tocca o passa sopra una settimana
-  hint_pie: Tocca o passa sopra una fetta
-  hint_progress: Tocca o passa sopra una riga
+  hint_line: Tocca o passa il mouse sopra una settimana
+  hint_pie: Tocca o passa il mouse sopra una sezione
+  hint_progress: Tocca o passa il mouse sopra una riga
 nominate:
   page_title: Nominationi Ricompense
   name_ok: Nella lista membri di [{tag}]

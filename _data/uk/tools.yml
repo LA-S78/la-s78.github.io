@@ -79,23 +79,23 @@ dashboard:
   confirm_delete: Видалити "{title}"? Цю дію неможливо скасувати.
   this_chart: цю діаграму
 rewards_card:
-  title: Щотижневі винагороди
+  title: Щотижневі нагороди
   officers: Офіцери
   open: Відкрито
   closed: Закрито
-  time_left: залишилось {time}
+  time_left: 'Залишилось: {time}'
   opens_in: відкриється через {time}
   closes_at: Закривається {when}
-  opens_at: Відкриється {when}, після п'ятничного захоплення Капітолію
-  off_week: Вихідний тиждень
-  kw_won: Війна Королівств переможна
-  kw_lost: Війна Королівств програна
-  kw_pending: Війна Королівств очікується
-  set_one: Комендація Короля
-  set_two: Винагорода Короля Битви
-  set_two_if_won: Винагорода Короля Битви, у разі перемоги у війні
-  if_won: якщо перемога
-  no_rank: 'Немає рангу в рейтингу: немає скринь'
+  opens_at: Відкривається {when}, після п'ятничної події в Капітолії
+  off_week: Тиждень відпочинку
+  kw_won: ВК виграно
+  kw_lost: ВК програно
+  kw_pending: ВК очікується
+  set_one: Королівська подяка
+  set_two: Нагорода Короля Битви
+  set_two_if_won: Нагорода Короля Битви, якщо війну виграно
+  if_won: якщо виграно
+  no_rank: 'Немає рангу в турнірній таблиці: немає скринь'
   list_sent: Список надіслано · {count}
   sent_at: Надіслано {when}
   reserves_one: "({n} резерв)"
@@ -103,7 +103,7 @@ rewards_card:
   reserves_other: "({n} резервів)"
   empty_slots: "{n} порожньо"
   list_not_sent: Список не надіслано
-  no_list_closed: Немає списку, поки закрито
+  no_list_closed: Список недоступний, поки закрито
   edit_list: Редагувати
   send_list: Надіслати список
   ask_r5: R5 або /nominate
@@ -112,7 +112,7 @@ rewards_card:
   buyout_bonus_help: Фінансується WLO
   buyout_threat: 'загроза: {threat}'
   buyout_cost: 'Викуп: {amount} {chest} у кожному наборі'
-  buyout_cost_help: Фінансування іншого альянсу цього тижня
+  buyout_cost_help: Фінансування витісненого альянсу цього тижня
 roster:
   title: Склад альянсу
   summary: "{n} учасників · {might} Сили"
@@ -305,56 +305,57 @@ chart_editor:
   at_least_example: наприклад, 300M
 charts:
   column: Стовпець {n}
-  no_numbers: У вибраному стовпці немає чисел для побудови графіка.
+  no_numbers: Немає чисел для відображення в обраному стовпці.
+  no_numbers_shown: Ще немає чисел для вибраного нижче. Торкніться імені, щоб відобразити його знову, або іншого, щоб додати його.
   line_two_rows: Для лінії потрібно принаймні два рядки.
-  line_two_columns: Для лінії потрібно принаймні два стовпці знизу.
-  no_positive: У вибраному стовпці немає додатних чисел для графіка.
+  line_two_columns: Для лінії потрібно принаймні два стовпці внизу.
+  no_positive: Немає додатних чисел для відображення в обраному стовпці.
   no_targets: Немає чисел (або цілей) для порівняння.
   no_table: Таблиці ще немає.
-  unknown_type: Невідомий тип графіка.
-  draw_failed: Цей графік не вдалося побудувати ({error}).
+  unknown_type: Невідомий тип діаграми.
+  draw_failed: Цю діаграму не вдалося відобразити ({error}).
   other: Інше
   value: Значення
   total: Разом
   total_value: 'Разом: {value}'
-  share_of_all: "{value} · {share} від усього"
+  share_of_all: "{value} · {share} від загальної кількості"
   value_of_target: "{value} з {target}"
-  to_go: 'Залишилося: {value}'
+  to_go: 'Залишилось: {value}'
   target_reached: Ціль досягнуто ✓
-  done: "✓ Виконано"
+  done: "✓ Готово"
   reached_target: "{done} з {total} досягли цілі"
-  search: Пошук...
+  search: Пошук…
   search_label: Шукати в цій таблиці
   matching: "{n} збігів"
   show_all: Показати всі {n}
   show_all_rows: Показати всі {n} рядків
   show_fewer: Показати менше
-  first_rows: Показано перші {shown} з {n} рядків.
+  first_rows: Відображення перших {shown} з {n} рядків.
   hint_bar: Торкніться або наведіть курсор на стовпець
   hint_bar_key: Торкніться або наведіть курсор на стовпець. Торкніться імені в легенді, щоб побачити тільки його.
   views: Перегляди
-  view_latest: Найсвіжіша вкладка
-  view_weeks: Підсумки за вкладками
-  view_player: Одне ім'я за вкладками
+  view_latest: Найновіша вкладка
+  view_weeks: Всього по вкладках
+  view_player: Одне ім'я по вкладках
   view_pick: Ім'я для показу
-  view_average: Середнє за {n} вкладок
+  view_average: Середнє значення {n} вкладок
   view_total: Разом за {n} вкладок
-  view_chart: Графік
+  view_chart: Діаграма
   view_compare: Порівняти
-  search_names: Введіть ім'я...
-  no_match: Збігів не знайдено.
+  search_names: Введіть ім'я…
+  no_match: Збігів немає.
   view_tab: Вкладка для показу
   compare_first: Перше ім'я
   compare_second: Друге ім'я
-  compare_top: Топ-{n} (середнє)
-  compare_bottom: Останні {n} (середнє)
+  compare_top: Топ {n} (середнє)
+  compare_bottom: Нижні {n} (середнє)
   pair_left: 'Зліва: {name}'
-  share_of_column: "{name}: {share} від загальної суми"
+  share_of_column: "{name}: {share} від загальної кількості"
   pair_right: 'Справа (тьмяно): {name}'
-  flip_to_asc: "⇅ Найменші спочатку"
-  flip_to_desc: "⇅ Найбільші спочатку"
+  flip_to_asc: "⇅ Спочатку найменші"
+  flip_to_desc: "⇅ Спочатку найбільші"
   hint_line: Торкніться або наведіть курсор на тиждень
-  hint_pie: Торкніться або наведіть курсор на сегмент
+  hint_pie: Торкніться або наведіть курсор на сектор
   hint_progress: Торкніться або наведіть курсор на рядок
 nominate:
   page_title: Номінації на нагороди

@@ -301,57 +301,58 @@ chart_editor:
   at_least_example: z. B. 300M
 charts:
   column: Spalte {n}
-  no_numbers: Keine Zahlen zum Darstellen in der gewählten Spalte.
-  line_two_rows: Eine Linie benötigt mindestens zwei Zeilen.
-  line_two_columns: Eine Linie benötigt mindestens zwei Spalten unten.
-  no_positive: Keine positiven Zahlen zum Darstellen in der gewählten Spalte.
-  no_targets: Keine Zahlen (oder Ziele) zum Vergleichen.
+  no_numbers: Keine Zahlen zur Darstellung in der gewählten Spalte.
+  no_numbers_shown: Noch keine Zahlen für die getroffene Auswahl. Tippe auf einen Namen, um ihn wieder anzuzeigen, oder auf einen anderen, um ihn hinzuzufügen.
+  line_two_rows: Eine Linie erfordert mindestens zwei Zeilen.
+  line_two_columns: Eine Linie erfordert mindestens zwei Spalten am unteren Rand.
+  no_positive: Keine positiven Zahlen zur Darstellung in der gewählten Spalte.
+  no_targets: Keine Zahlen (oder Ziele) zum Vergleich.
   no_table: Noch keine Tabelle.
   unknown_type: Unbekannter Diagrammtyp.
-  draw_failed: Dieses Diagramm konnte nicht erstellt werden ({error}).
+  draw_failed: Dieses Diagramm konnte nicht gezeichnet werden ({error}).
   other: Andere
   value: Wert
   total: Gesamt
   total_value: 'Gesamt: {value}'
   share_of_all: "{value} · {share} von allen"
   value_of_target: "{value} von {target}"
-  to_go: 'Noch offen: {value}'
+  to_go: 'Noch zu erreichen: {value}'
   target_reached: Ziel erreicht ✓
   done: "✓ Erledigt"
   reached_target: "{done} von {total} haben das Ziel erreicht"
-  search: Suche…
+  search: Suchen…
   search_label: Diese Tabelle durchsuchen
   matching: "{n} Übereinstimmungen"
   show_all: Alle {n} anzeigen
   show_all_rows: Alle {n} Zeilen anzeigen
   show_fewer: Weniger anzeigen
   first_rows: Zeige die ersten {shown} von {n} Zeilen.
-  hint_bar: Balken antippen oder darüber fahren
-  hint_bar_key: Balken antippen oder darüber fahren. Einen Namen im Schlüssel antippen, um nur diesen zu sehen.
+  hint_bar: Balken antippen oder darüberfahren
+  hint_bar_key: Balken antippen oder darüberfahren. Tippe auf einen Namen im Schlüssel, um nur diesen anzuzeigen.
   views: Ansichten
   view_latest: Neuester Tab
   view_weeks: Gesamtsummen pro Tab
   view_player: Ein Name pro Tab
-  view_pick: Name zum Anzeigen
+  view_pick: Name zur Anzeige
   view_average: Durchschnitt von {n} Tabs
   view_total: Gesamtsumme von {n} Tabs
   view_chart: Diagramm
   view_compare: Vergleichen
-  search_names: Namen eingeben…
-  no_match: Keine Namen gefunden.
-  view_tab: Tab zum Anzeigen
+  search_names: Name eingeben…
+  no_match: Keine passenden Namen.
+  view_tab: Tab zur Anzeige
   compare_first: Erster Name
   compare_second: Zweiter Name
   compare_top: Top {n} (Durchschnitt)
   compare_bottom: Flop {n} (Durchschnitt)
   pair_left: 'Links: {name}'
   share_of_column: "{name}: {share} der Gesamtsumme"
-  pair_right: 'Rechts (ausgeblendet): {name}'
+  pair_right: 'Rechts (abgeblendet): {name}'
   flip_to_asc: "⇅ Niedrigste zuerst"
   flip_to_desc: "⇅ Höchste zuerst"
-  hint_line: Woche antippen oder darüber fahren
-  hint_pie: Segment antippen oder darüber fahren
-  hint_progress: Zeile antippen oder darüber fahren
+  hint_line: Woche antippen oder darüberfahren
+  hint_pie: Segment antippen oder darüberfahren
+  hint_progress: Zeile antippen oder darüberfahren
 nominate:
   page_title: Belohnungs-Nominierungen
   name_ok: In der Mitgliederliste von [{tag}]

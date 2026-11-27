@@ -302,34 +302,35 @@ chart_editor:
 charts:
   column: Columna {n}
   no_numbers: No hay números que graficar en la columna elegida.
+  no_numbers_shown: Aún no hay números para lo seleccionado abajo. Toca un nombre para mostrarlo de nuevo, u otro para añadirlo.
   line_two_rows: Una línea necesita al menos dos filas.
   line_two_columns: Una línea necesita al menos dos columnas en la parte inferior.
   no_positive: No hay números positivos que graficar en la columna elegida.
-  no_targets: No hay números (u objetivos) para comparar.
+  no_targets: No hay números (u objetivos) que comparar.
   no_table: Aún no hay tabla.
   unknown_type: Tipo de gráfico desconocido.
-  draw_failed: No se pudo dibujar este gráfico ({error}).
+  draw_failed: Este gráfico no pudo ser dibujado ({error}).
   other: Otro
   value: Valor
   total: Total
   total_value: 'Total: {value}'
   share_of_all: "{value} · {share} del total"
   value_of_target: "{value} de {target}"
-  to_go: 'Restante: {value}'
+  to_go: 'Faltan: {value}'
   target_reached: Objetivo alcanzado ✓
   done: "✓ Hecho"
   reached_target: "{done} de {total} alcanzaron el objetivo"
-  search: Buscar…
+  search: Buscar...
   search_label: Buscar en esta tabla
   matching: "{n} coincidencia(s)"
-  show_all: Mostrar todo {n}
+  show_all: Mostrar los {n}
   show_all_rows: Mostrar las {n} filas
   show_fewer: Mostrar menos
   first_rows: Mostrando las primeras {shown} de {n} filas.
   hint_bar: Toca o pasa el cursor sobre una barra
   hint_bar_key: Toca o pasa el cursor sobre una barra. Toca un nombre en la leyenda para ver solo ese.
   views: Vistas
-  view_latest: Pestaña más reciente
+  view_latest: Pestaña más nueva
   view_weeks: Totales por pestaña
   view_player: Un nombre por pestaña
   view_pick: Nombre a mostrar
@@ -337,7 +338,7 @@ charts:
   view_total: Total de {n} pestañas
   view_chart: Gráfico
   view_compare: Comparar
-  search_names: Escribe un nombre…
+  search_names: Escribe un nombre...
   no_match: No hay nombres que coincidan.
   view_tab: Pestaña a mostrar
   compare_first: Primer nombre
@@ -350,7 +351,7 @@ charts:
   flip_to_asc: "⇅ Menor primero"
   flip_to_desc: "⇅ Mayor primero"
   hint_line: Toca o pasa el cursor sobre una semana
-  hint_pie: Toca o pasa el cursor sobre una porción
+  hint_pie: Toca o pasa el cursor sobre una sección
   hint_progress: Toca o pasa el cursor sobre una fila
 nominate:
   page_title: Nominaciones de Recompensas

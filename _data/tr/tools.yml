@@ -302,8 +302,9 @@ chart_editor:
 charts:
   column: Sütun {n}
   no_numbers: Seçilen sütunda grafikleştirilecek sayı yok.
-  line_two_rows: Çizgi grafiği için en az iki satır gereklidir.
-  line_two_columns: Çizgi grafiği için altta en az iki sütun gereklidir.
+  no_numbers_shown: Aşağıda seçilenler için henüz sayı yok. Bir ismi tekrar göstermek için ona dokunun veya başka bir isim ekleyin.
+  line_two_rows: Bir çizgi grafiği için en az iki satır gereklidir.
+  line_two_columns: Bir çizgi grafiği için altta en az iki sütun gereklidir.
   no_positive: Seçilen sütunda grafikleştirilecek pozitif sayı yok.
   no_targets: Karşılaştırılacak sayı (veya hedef) yok.
   no_table: Henüz tablo yok.
@@ -313,42 +314,42 @@ charts:
   value: Değer
   total: Toplam
   total_value: 'Toplam: {value}'
-  share_of_all: "{value} · toplamın {share}'i"
-  value_of_target: "{target} içinde {value}"
+  share_of_all: "{value} · toplamın {share} kadarı"
+  value_of_target: "{target} içinden {value}"
   to_go: 'Kalan: {value}'
   target_reached: Hedefe ulaşıldı ✓
   done: "✓ Tamamlandı"
-  reached_target: "{total} içinde {done} hedefe ulaştı"
+  reached_target: "{total} üzerinden {done} hedefe ulaştı"
   search: Ara…
   search_label: Bu tabloda ara
-  matching: "{n} eşleşme"
-  show_all: Tüm {n} öğeyi göster
+  matching: "{n} eşleşen"
+  show_all: Tüm {n} göster
   show_all_rows: Tüm {n} satırı göster
   show_fewer: Daha az göster
-  first_rows: Toplam {n} satırdan ilk {shown} tanesi gösteriliyor.
+  first_rows: Toplam {n} satırın ilk {shown} tanesi gösteriliyor.
   hint_bar: Bir çubuğa dokunun veya üzerine gelin
   hint_bar_key: Bir çubuğa dokunun veya üzerine gelin. Sadece o veriyi görmek için anahtardan bir isme dokunun.
-  views: Görüntüleme
+  views: Görüntülemeler
   view_latest: En yeni sekme
-  view_weeks: Sekme bazlı toplamlar
-  view_player: Sekme bazlı tek isim
+  view_weeks: Sekmeye göre toplamlar
+  view_player: Sekmeye göre tek isim
   view_pick: Gösterilecek isim
   view_average: "{n} sekmenin ortalaması"
   view_total: "{n} sekmenin toplamı"
   view_chart: Grafik
   view_compare: Karşılaştır
   search_names: Bir isim yazın…
-  no_match: Eşleşen isim yok.
+  no_match: Hiçbir isim eşleşmedi.
   view_tab: Gösterilecek sekme
   compare_first: İlk isim
   compare_second: İkinci isim
   compare_top: En iyi {n} (ortalama)
   compare_bottom: En düşük {n} (ortalama)
   pair_left: 'Sol: {name}'
-  share_of_column: "{name}: toplamın {share}'i"
+  share_of_column: "{name}: toplamın {share} kadarı"
   pair_right: 'Sağ (silik): {name}'
-  flip_to_asc: "⇅ En düşükten yükseğe"
-  flip_to_desc: "⇅ En yüksekten düşüğe"
+  flip_to_asc: "⇅ Önce en düşük"
+  flip_to_desc: "⇅ Önce en yüksek"
   hint_line: Bir haftaya dokunun veya üzerine gelin
   hint_pie: Bir dilime dokunun veya üzerine gelin
   hint_progress: Bir satıra dokunun veya üzerine gelin
