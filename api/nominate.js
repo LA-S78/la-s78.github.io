@@ -407,21 +407,33 @@ async function sheetFill(req, res) {
     return res.status(400).json({ error: err.message });
   }
   // The "Player" column (else the first), in the tab's order; "Week" from its first row
-  const col = Math.max(
-    0,
-    data.columns.findIndex((c) => /^player/i.test(c)),
-  );
+  const col = data.columns.findIndex((c) => /^player$/i.test(c.trim()));
+  const scoreCol = data.columns.findIndex((c) => /^score$/i.test(c.trim()));
+  // Google gives the sheet's first tab when there's no "Capitol Ranking" tab, so check it's
+  // the tab Duel Tools writes (Player and Score columns) before using any names
+  if (col < 0 || scoreCol < 0) {
+    return res.status(400).json({ error: say('api_nominate.sheet_no_tab', { tab: CAPITOL_TAB }) });
+  }
   const weekCol = data.columns.findIndex((c) => /^week/i.test(c));
   // The player's ID when the sheet has one (Duel Tools v4.2's "Player ID" column): the
   // page and the save turn it into their name now, so a rename since doesn't matter
   const idCol = data.columns.findIndex((c) => /^(player )?id$/i.test(c.trim()));
-  const names = data.rows
+  const listed = data.rows
     .map((r) => {
       const id = idCol >= 0 ? String(r[idCol] || '').replace(/\D/g, '') : '';
-      return looksLikeId(id) ? id : String(r[col] || '').trim();
+      const shown = String(r[col] || '').trim();
+      const score = Number(String(r[scoreCol] || '').replace(/[^\d.-]/g, ''));
+      return {
+        key: looksLikeId(id) ? id : shown,
+        name: shown || id,
+        score: Number.isFinite(score) ? score : null,
+      };
     })
-    .filter(Boolean)
+    .filter((p) => p.key)
     .slice(0, 50);
+  const names = listed.map((p) => p.key);
+  // The sheet's names and scores, shown under the list so the order can be checked
+  const scores = listed.map(({ name, score }) => ({ name, score }));
   if (!names.length) {
     return res
       .status(400)
@@ -446,5 +458,5 @@ async function sheetFill(req, res) {
   } catch (err) {
     console.warn('Capitol sheet link not kept:', err.message);
   }
-  return res.status(200).json({ names, week, url });
+  return res.status(200).json({ names, scores, week, url });
 }

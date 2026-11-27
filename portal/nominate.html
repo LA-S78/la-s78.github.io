@@ -33,6 +33,11 @@ strings: [nominate, roster]
             <p class="smart-paste-desc">{{ "nominate.sheet_help" | t }}</p>
           </details>
           <p class="smart-paste-desc" id="sheet-status" hidden></p>
+          <!-- After a fill: the sheet's names with their scores, and Undo (the list as it was) -->
+          <div class="nominate-sheet-result" id="sheet-result" hidden>
+            <ol class="nominate-sheet-scores" id="sheet-scores"></ol>
+            <button type="button" class="btn btn-secondary" id="btn-sheet-undo">{% include ui-icon.html name="refresh" %}{{ "nominate.sheet_undo" | t }}</button>
+          </div>
         </div>
       </div>
 
@@ -307,6 +312,7 @@ strings: [nominate, roster]
       btn.disabled = true;
       out.hidden = false;
       out.textContent = t('nominate.sheet_loading');
+      document.getElementById('sheet-result').hidden = true;
       try {
         const res = await fetch('/api/nominate', {
           method: 'POST',
@@ -316,7 +322,9 @@ strings: [nominate, roster]
         const body = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
         // Chests already handed out stay as they are: their players aren't listed again
+        sheetBefore = input.value;
         input.value = body.names.filter((n) => !isLocked(n)).join('\n');
+        showSheetScores(body.scores || []);
         data.alliance.sheetUrl = body.url;
         document.getElementById('sheet-link-box').open = false;
         out.textContent = t(body.week ? 'nominate.sheet_filled_week' : 'nominate.sheet_filled', {
@@ -329,6 +337,35 @@ strings: [nominate, roster]
       } finally {
         btn.disabled = false;
       }
+    });
+
+    // What the list was before "Fill from sheet", for Undo
+    let sheetBefore = null;
+    const fmtScore = (n) => (n === null || n === undefined ? '' : Number(n).toLocaleString());
+    function showSheetScores(scores) {
+      const ol = document.getElementById('sheet-scores');
+      ol.replaceChildren(
+        ...scores.map((p) => {
+          const li = document.createElement('li');
+          const name = document.createElement('span');
+          name.textContent = p.name;
+          const score = document.createElement('span');
+          score.className = 'nominate-sheet-score';
+          score.textContent = fmtScore(p.score);
+          li.append(name, score);
+          return li;
+        }),
+      );
+      ol.hidden = !scores.length;
+      document.getElementById('sheet-result').hidden = false;
+    }
+    document.getElementById('btn-sheet-undo').addEventListener('click', () => {
+      if (sheetBefore === null) return;
+      input.value = sheetBefore;
+      sheetBefore = null;
+      document.getElementById('sheet-result').hidden = true;
+      document.getElementById('sheet-status').textContent = t('nominate.sheet_undone');
+      render();
     });
 
     /**

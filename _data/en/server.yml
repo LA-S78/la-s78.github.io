@@ -7,6 +7,7 @@
 api_dashboard:
   caravan_key_r5: "Only the alliance's R5 (or a Steward) can create or revoke the sheet sync key."
   sheet_link_needed: "Paste your alliance's Google Sheet link first."
+  sheet_no_bank: "That sheet has no \"Caravan Bank\" tab yet. Install Duel Tools in the sheet and run Duel Tools → Set up, then try again."
   alliance_changed: "Your alliance changed on the site since you signed in. Sign in with Discord again to carry on."
   rename_unknown: "That alliance isn't on the map any more. Reload the page."
   rename_bad_tag: "Type the new tag as it is in the game: up to 12 characters, no spaces, colons, brackets or slashes."
@@ -90,6 +91,7 @@ api_sheets:
 api_nominate:
   test_no_save: "This is a Steward's test link: lists aren't saved from it."
   sheet_link_needed: "Paste your alliance's Google Sheet link first."
+  sheet_no_tab: "That sheet has no \"{tab}\" tab yet. Install Duel Tools in the sheet and run Duel Tools → Set up, then try again."
   sheet_no_names: "The sheet's \"{tab}\" tab has no names. Push a week in the sheet (Duel Tools) first."
   link_invalid: "This link is invalid or expired."
   token_invalid: "Token is invalid or expired. Run /nominate again."

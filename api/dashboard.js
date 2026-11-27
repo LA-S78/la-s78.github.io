@@ -509,6 +509,12 @@ async function caravanSuggest(res, { gist, tag, file, url: given, session }) {
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
+  // Google gives the sheet's first tab when there's no "Caravan Bank" tab (Duel Tools not set
+  // up yet), so a list of duel scores came back (owner report, 2026-11-27): the heading the
+  // script writes in I1 shows it's the right tab
+  if (!/^suggested/i.test(String(data.columns[0] || '').trim())) {
+    return res.status(400).json({ error: say('api_dashboard.sheet_no_bank'), code: 'no_bank' });
+  }
   // Names under "Suggested this week", until the first blank row
   const names = [];
   for (const r of data.rows) {

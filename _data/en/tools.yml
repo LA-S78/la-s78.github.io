@@ -394,6 +394,8 @@ nominate:
   sheet_link: "Google Sheet link"
   sheet_help: "Your alliance's sheet with the Duel Tools \"Capitol Ranking\" tab, shared as \"Anyone with the link can view\". The link is remembered for next time."
   sheet_loading: "Reading the sheet…"
+  sheet_undo: "Undo"
+  sheet_undone: "Back to the list as it was before the fill."
   sheet_filled: "Filled {n} names from the sheet. Check them, then save."
   sheet_filled_week: "Filled {n} names from the sheet ({week}). Check them, then save."
   saving: "Saving..."
