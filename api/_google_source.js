@@ -36,7 +36,12 @@ export function sourceRequest(src) {
     return { error: say('api_sheets.google_only') };
   }
   const parts = url.pathname.split('/').filter(Boolean);
-  const gid = url.searchParams.get('gid') || (url.hash.match(/gid=(\d+)/) || [])[1] || '';
+  // A tab picked in the sheet picker comes as src.gid; else the one in the link, if any
+  const gid =
+    String(src?.gid || '').replace(/\D/g, '') ||
+    url.searchParams.get('gid') ||
+    (url.hash.match(/gid=(\d+)/) || [])[1] ||
+    '';
   const range = String(src.range || '').trim();
   if (range && !/^[A-Za-z]{1,3}\d{0,7}(:[A-Za-z]{1,3}\d{0,7})?$/.test(range)) {
     return { error: say('api_sheets.range_format') };

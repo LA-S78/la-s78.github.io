@@ -4,7 +4,7 @@ title: Reward Nominations
 title_key: "nominate.page_title"
 permalink: /nominate.html
 lang: "en"
-strings: [nominate, roster]
+strings: [nominate, roster, sheet_list]
 ---
 
 <div class="content-pane portal-pane-sm" id="nominate-app">
@@ -27,12 +27,17 @@ strings: [nominate, roster]
         <!-- Fill the list from the alliance's Google Sheet ("Capitol Ranking" tab, Duel Tools) -->
         <div class="nominate-sheet">
           <button type="button" class="btn btn-secondary" id="btn-sheet-fill">{% include ui-icon.html name="table" %}{{ "nominate.sheet_fill" | t }}</button>
+          <!-- Where the list is in the sheet (js/sheet-list.js): any tab and layout -->
           <details id="sheet-link-box">
-            <summary>{{ "nominate.sheet_link" | t }}</summary>
-            <input type="url" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/…" autocomplete="off">
-            <p class="smart-paste-desc">{{ "nominate.sheet_help" | t }}</p>
+            <summary>{{ "sheet_list.change" | t }} <span class="nominate-sheet-now" id="sheet-link-now"></span></summary>
+            <div id="sheet-picker"></div>
           </details>
           <p class="smart-paste-desc" id="sheet-status" hidden></p>
+          <!-- After a fill: the sheet's names with their scores, and Undo (the list as it was) -->
+          <div class="nominate-sheet-result" id="sheet-result" hidden>
+            <ol class="nominate-sheet-scores" id="sheet-scores"></ol>
+            <button type="button" class="btn btn-secondary" id="btn-sheet-undo">{% include ui-icon.html name="refresh" %}{{ "nominate.sheet_undo" | t }}</button>
+          </div>
         </div>
       </div>
 
@@ -57,6 +62,7 @@ strings: [nominate, roster]
 
 <script type="module" src="/js/name-check.js"></script>
 <script type="module" src="/js/player-portrait.js"></script>
+<script src="/js/sheet-list.js"></script>
 <script>
   (function () {
     /** An interface icon (js/ui-icons.js) for the start of a label. */
@@ -191,9 +197,7 @@ strings: [nominate, roster]
         banner.innerHTML = ic('hourglass', 'wait') + escapeHtml(t('nominate.banner_pending', { when: formatTime(p.battleEndsAt) }));
       }
 
-      document.getElementById('sheet-url').value = data.alliance.sheetUrl || '';
-      // No link yet: the box starts open, so it's clear where it goes
-      document.getElementById('sheet-link-box').open = !data.alliance.sheetUrl;
+      showSheetLink();
       locked = data.alliance.handedOut || [];
       input.value = (data.alliance.ranked || []).filter((n) => !isLocked(n)).join('\n');
       elLoading.style.display = 'none';
@@ -294,41 +298,104 @@ strings: [nominate, roster]
 
     input.addEventListener('input', render);
 
-    // "Fill from sheet": the list from the alliance's sheet, to check and save as usual
+    // "Fill from sheet": the list from the alliance's sheet, to check and save as usual. Where
+    // the list is in the sheet is picked once (the box under the button, js/sheet-list.js);
+    // a Duel Tools sheet needs no picking.
+    const sheetBox = document.getElementById('sheet-link-box');
+    let picker = null;
+    async function sheetAsk(action, extra) {
+      const res = await fetch('/api/nominate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, token, ...extra }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw Object.assign(new Error(body.error || `HTTP ${res.status}`), { code: body.code });
+      return body;
+    }
+    /** The saved list's place, beside the box's title. */
+    function showSheetLink() {
+      const l = data && data.alliance.sheetLink;
+      document.getElementById('sheet-link-now').textContent = l ? t('sheet_list.linked', { tab: l.tab, range: l.range }) : '';
+    }
+    function openPicker() {
+      sheetBox.open = true;
+      if (picker || !window.SheetList) return;
+      picker = SheetList.mount(document.getElementById('sheet-picker'), {
+        roles: ['name', 'id', 'score'],
+        preset: { tab: 'Capitol Ranking', range: 'A1:D', cols: { name: 0, score: 1, id: 3 } },
+        url: data.alliance.sheetUrl || '',
+        link: data.alliance.sheetLink || null,
+        ask: sheetAsk,
+        onLinked: (body) => {
+          data.alliance.sheetLink = body.link || null;
+          showSheetLink();
+          sheetBox.open = false;
+          applyFill(body);
+        },
+      });
+    }
+    sheetBox.addEventListener('toggle', () => sheetBox.open && openPicker());
+
+    function applyFill(body) {
+      const out = document.getElementById('sheet-status');
+      // Chests already handed out stay as they are: their players aren't listed again
+      sheetBefore = input.value;
+      input.value = body.names.filter((n) => !isLocked(n)).join('\n');
+      showSheetScores(body.scores || []);
+      out.hidden = false;
+      out.textContent = t(body.week ? 'nominate.sheet_filled_week' : 'nominate.sheet_filled', {
+        n: body.names.length,
+        week: body.week,
+      });
+      render();
+    }
+
     document.getElementById('btn-sheet-fill').addEventListener('click', async () => {
       const btn = document.getElementById('btn-sheet-fill');
       const out = document.getElementById('sheet-status');
-      const url = document.getElementById('sheet-url').value.trim();
-      if (!url) {
-        document.getElementById('sheet-link-box').open = true;
-        document.getElementById('sheet-url').focus();
-        return;
-      }
       btn.disabled = true;
       out.hidden = false;
       out.textContent = t('nominate.sheet_loading');
+      document.getElementById('sheet-result').hidden = true;
       try {
-        const res = await fetch('/api/nominate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'sheet-fill', token, url }),
-        });
-        const body = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
-        // Chests already handed out stay as they are: their players aren't listed again
-        input.value = body.names.filter((n) => !isLocked(n)).join('\n');
-        data.alliance.sheetUrl = body.url;
-        document.getElementById('sheet-link-box').open = false;
-        out.textContent = t(body.week ? 'nominate.sheet_filled_week' : 'nominate.sheet_filled', {
-          n: body.names.length,
-          week: body.week,
-        });
-        render();
+        applyFill(await sheetAsk('sheet-fill'));
       } catch (err) {
         out.textContent = err.message;
+        // Not linked yet (or the sheet changed): show where to pick the list
+        if (err.code === 'no_link' || err.code === 'changed') openPicker();
       } finally {
         btn.disabled = false;
       }
+    });
+
+    // What the list was before "Fill from sheet", for Undo
+    let sheetBefore = null;
+    const fmtScore = (n) => (n === null || n === undefined ? '' : Number(n).toLocaleString());
+    function showSheetScores(scores) {
+      const ol = document.getElementById('sheet-scores');
+      ol.replaceChildren(
+        ...scores.map((p) => {
+          const li = document.createElement('li');
+          const name = document.createElement('span');
+          name.textContent = p.name;
+          const score = document.createElement('span');
+          score.className = 'nominate-sheet-score';
+          score.textContent = fmtScore(p.score);
+          li.append(name, score);
+          return li;
+        }),
+      );
+      ol.hidden = !scores.length;
+      document.getElementById('sheet-result').hidden = false;
+    }
+    document.getElementById('btn-sheet-undo').addEventListener('click', () => {
+      if (sheetBefore === null) return;
+      input.value = sheetBefore;
+      sheetBefore = null;
+      document.getElementById('sheet-result').hidden = true;
+      document.getElementById('sheet-status').textContent = t('nominate.sheet_undone');
+      render();
     });
 
     /**

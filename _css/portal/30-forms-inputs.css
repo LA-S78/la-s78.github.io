@@ -437,6 +437,42 @@
   width: 100%;
   margin-top: 6px;
 }
+.nominate-sheet-now {
+  display: block;
+  margin-left: 1.1em;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+.nominate-sheet-now:empty {
+  display: none;
+}
+.nominate-sheet-result {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+}
+.nominate-sheet-result[hidden] {
+  display: none;
+}
+.nominate-sheet-scores {
+  margin: 0;
+  padding-left: 1.6em;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  columns: 2 14em;
+  column-gap: 2em;
+  width: 100%;
+}
+.nominate-sheet-scores li {
+  break-inside: avoid;
+}
+.nominate-sheet-scores li > span:first-child {
+  color: var(--text-main);
+}
+.nominate-sheet-score {
+  margin-left: 0.5em;
+  font-variant-numeric: tabular-nums;
+}
 .nominate-sheet summary {
   cursor: pointer;
   font-size: 0.85rem;

@@ -86,6 +86,11 @@ api_sheets:
   no_such_table_one: "That Doc has {count} table; there's no table {table}."
   no_such_table_other: "That Doc has {count} tables; there's no table {table}."
   no_table: "That Doc has no table in it."
+  list_range: "Pick the cells again: up to 26 columns, starting with a row of headings."
+  list_name_needed: "Choose which column has the players' names."
+  list_changed: "The sheet has changed since its list was linked (the \"{heading}\" column isn't where it was on \"{tab}\"). Link the list again."
+  list_no_names: "There are no names in the linked cells on \"{tab}\"."
+  list_pick: "Choose where the list is in your sheet: its tab, its cells, and which column has the names."
 
 api_nominate:
   test_no_save: "This is a Steward's test link: lists aren't saved from it."

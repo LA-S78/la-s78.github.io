@@ -28,11 +28,9 @@ import { inLanguage, say } from './_messages.js';
 import { sameTag } from './_alliances.js'; // RâvN ≠ RÂVN; RAVN = RÂVN
 import { fetchAlliance, findMember, looksLikeId, memberPictures } from './_tracker.js';
 import { allianceFrame } from './_alliance_images.js';
-import { fetchSourceTable } from './_google_source.js';
+import { fetchSheetGrid, fetchSheetTabs } from './_google_source.js';
+import { linkList, readSavedList } from './_sheet_list.js';
 import { dashboardFile, findAllianceKey, readDashboard } from './_dashboard.js';
-
-/** The tab the alliance's sheet keeps its capitol list in (Duel Tools script, v4.0). */
-export const CAPITOL_TAB = 'Capitol Ranking';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -127,8 +125,8 @@ async function respond(req, res) {
           // so officers can type an ID and see who it is
           ids: nominations[tag]?.ids || {},
           players: tracker ? Object.fromEntries(tracker.members.map((m) => [m.uid, m.name])) : null,
-          // The alliance's Google Sheet, for "Fill from sheet" (kept from the last fill)
-          sheetUrl: savedSheetUrl(gist, mapState, tag),
+          // The alliance's Google Sheet and where its list is, for "Fill from sheet"
+          ...sheetInfo(gist, tag),
         };
         // A Steward's test link (/nominate alliance:): the page opens even when rewards are
         // closed; saving is refused below
@@ -149,7 +147,9 @@ async function respond(req, res) {
   }
 
   if (req.body?.action === 'handout') return handleHandout(req, res);
-  if (req.body?.action === 'sheet-fill') return sheetFill(req, res);
+  if (['sheet-tabs', 'sheet-grid', 'sheet-link', 'sheet-fill'].includes(req.body?.action)) {
+    return sheetAction(req, res);
+  }
 
   const { token } = req.body || {};
   const botToken = process.env.DISCORD_BOT_TOKEN;
@@ -373,78 +373,82 @@ function calendarConfig(gist) {
 
 // ---------------------------------------------------------------------------------------
 // "Fill from sheet" (owner request, 2026-11-27): the nomination list from the alliance's own
-// Google Sheet, its "Capitol Ranking" tab (the Duel Tools script writes it: the newest
-// week's top scores, players marked Excluded or Left skipped). Only fills the page's list;
-// the leader checks it and saves as usual. The sheet's link is kept in the alliance's
-// dashboard settings (`capitolSheet`), so next time it's one tap.
+// Google Sheet. Where the list is (tab, cells, the name / player ID / score columns) is
+// picked once with the sheet picker (js/sheet-list.js) and kept in the alliance's dashboard
+// settings as capitolLink (api/_sheet_list.js); a Duel Tools sheet ("Capitol Ranking" tab)
+// works without picking. Only fills the page's list: the leader checks it and saves as usual.
 // ---------------------------------------------------------------------------------------
 
-function savedSheetUrl(gist, mapState, tag) {
-  const alliances = mapState?.alliances || {};
-  const file = dashboardFile(findAllianceKey(alliances, tag) || tag, alliances, gist);
-  const settings = readDashboard(gistJson(gist, file, {}), tag).settings || {};
-  // One sheet link for the alliance (nominations and caravans); capitolSheet: before that
-  const url = settings.sheetUrl || settings.capitolSheet;
-  return typeof url === 'string' ? url : '';
+/** The alliance's dashboard file and settings. */
+function allianceSettings(gist, tag) {
+  const alliances = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+  const key = findAllianceKey(alliances, tag);
+  const file = dashboardFile(key || tag, alliances, gist);
+  return { key, file, settings: readDashboard(gistJson(gist, file, {}), tag).settings || {} };
 }
 
-/** POST { action: 'sheet-fill', token, url } → { names, week, url } (nothing saved but the link). */
-async function sheetFill(req, res) {
+/** What the page needs to show the sheet picker: the sheet's address and the saved link. */
+function sheetInfo(gist, tag) {
+  const { settings } = allianceSettings(gist, tag);
+  const url = settings.capitolLink?.url || settings.sheetUrl || settings.capitolSheet;
+  const link = settings.capitolLink;
+  return {
+    sheetUrl: typeof url === 'string' ? url : '',
+    sheetLink: link ? { tab: link.tab, gid: link.gid, range: link.range, cols: link.cols } : null,
+  };
+}
+
+/** The fill as the page shows it: names (an ID when there is one) and the sheet's scores. */
+function fillResult(read) {
+  return {
+    names: read.rows.map((r) => (r.id && looksLikeId(r.id) ? r.id : r.name)),
+    scores: read.rows.map((r) => ({ name: r.name, score: r.score ?? null })),
+    week: read.week || '',
+  };
+}
+
+/**
+ * POST { action: 'sheet-tabs' | 'sheet-grid' | 'sheet-link' | 'sheet-fill', token, … }:
+ * the sheet picker's tabs and grid, linking the list, and filling from it.
+ */
+async function sheetAction(req, res) {
   const payload = verifyToken(String(req.body?.token || ''), process.env.DISCORD_BOT_TOKEN, {
     action: 'nominate',
   });
   if (!payload) return res.status(403).json({ error: say('api_nominate.token_invalid') });
   const tag = String(payload.alliance || '').trim();
-  const url = String(req.body?.url || '')
-    .trim()
-    .slice(0, 500);
-  if (!url) return res.status(400).json({ error: say('api_nominate.sheet_link_needed') });
-
-  let data;
+  const body = req.body || {};
   try {
-    data = await fetchSourceTable({ kind: 'sheet', url, sheet: CAPITOL_TAB, headerRows: 1 });
+    if (body.action === 'sheet-tabs') {
+      return res.status(200).json({ tabs: await fetchSheetTabs({ url: body.url }) });
+    }
+    if (body.action === 'sheet-grid') {
+      return res.status(200).json({ grid: await fetchSheetGrid({ url: body.url, gid: body.gid }) });
+    }
+    if (body.action === 'sheet-link') {
+      const read = await linkList(body.link, 'capitol', `[${tag}] nomination link`);
+      // A Steward's test link reads the list but doesn't change the alliance's settings
+      if (!payload.test) {
+        await updateGist((gist) => {
+          const { key, file } = allianceSettings(gist, tag);
+          if (!key) return {};
+          const raw = gistJson(gist, file, {});
+          const settings = { ...(raw.settings || {}), capitolLink: read.link };
+          if (!settings.sheetUrl) settings.sheetUrl = read.link.url;
+          return {
+            files: { [file]: { ...raw, settings } },
+            description: `Capitol sheet list linked for [${key}]`,
+          };
+        });
+      }
+      const { tab, gid, range, cols } = read.link;
+      return res.status(200).json({ ...fillResult(read), link: { tab, gid, range, cols } });
+    }
+    // sheet-fill: from the saved link (or a Duel Tools sheet)
+    const gist = await readGist();
+    const read = await readSavedList(allianceSettings(gist, tag).settings, 'capitol');
+    return res.status(200).json(fillResult(read));
   } catch (err) {
-    return res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message, code: err.code || undefined });
   }
-  // The "Player" column (else the first), in the tab's order; "Week" from its first row
-  const col = Math.max(
-    0,
-    data.columns.findIndex((c) => /^player/i.test(c)),
-  );
-  const weekCol = data.columns.findIndex((c) => /^week/i.test(c));
-  // The player's ID when the sheet has one (Duel Tools v4.2's "Player ID" column): the
-  // page and the save turn it into their name now, so a rename since doesn't matter
-  const idCol = data.columns.findIndex((c) => /^(player )?id$/i.test(c.trim()));
-  const names = data.rows
-    .map((r) => {
-      const id = idCol >= 0 ? String(r[idCol] || '').replace(/\D/g, '') : '';
-      return looksLikeId(id) ? id : String(r[col] || '').trim();
-    })
-    .filter(Boolean)
-    .slice(0, 50);
-  if (!names.length) {
-    return res
-      .status(400)
-      .json({ error: say('api_nominate.sheet_no_names', { tab: CAPITOL_TAB }) });
-  }
-  const week = weekCol >= 0 ? String(data.rows[0]?.[weekCol] || '') : '';
-
-  // Remember the link for next time (in the alliance's dashboard settings)
-  try {
-    await updateGist((gist) => {
-      const alliances = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
-      const key = findAllianceKey(alliances, tag);
-      if (!key) return {};
-      const file = dashboardFile(key, alliances, gist);
-      const raw = gistJson(gist, file, {});
-      if (raw.settings?.sheetUrl === url) return {};
-      return {
-        files: { [file]: { ...raw, settings: { ...(raw.settings || {}), sheetUrl: url } } },
-        description: `Capitol sheet link for [${key}]`,
-      };
-    });
-  } catch (err) {
-    console.warn('Capitol sheet link not kept:', err.message);
-  }
-  return res.status(200).json({ names, week, url });
 }

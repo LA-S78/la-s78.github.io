@@ -1596,3 +1596,62 @@ li.dw-sel > .dw-bar-track {
   flex: 1 1 14em;
   min-width: 0;
 }
+
+/* The sheet picker for a list of players (js/sheet-list.js): nomination page and caravans */
+.sheet-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+.sheet-list [hidden] {
+  display: none !important;
+}
+.sheet-list p {
+  margin: 0;
+}
+.sheet-list-bar {
+  display: flex;
+  gap: 6px;
+}
+.sheet-list-bar input {
+  flex: 1;
+  min-width: 0;
+}
+.sheet-list .sl-tab-row,
+.sheet-list .sl-roles label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.sheet-list .sl-grid-box,
+.sheet-list .sl-cols {
+  display: grid;
+  gap: 6px;
+}
+.sheet-list .sl-roles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+.sheet-list .sl-bottom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-main);
+}
+.sheet-list .sl-preview {
+  margin: 0;
+  padding-left: 1.6em;
+  font-size: 0.85rem;
+}
+.sheet-list .sl-use {
+  justify-self: start;
+}
+.sheet-list .sl-error:empty,
+.sheet-list .sl-status:empty {
+  display: none;
+}
