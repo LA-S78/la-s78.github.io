@@ -1,139 +1,149 @@
 # Review brief: changes since the last maintainer review
 
-For the maintainer (Gemini). The last review covered PRs #71–#87, and its follow-up merged as
-#89 on 12 November 2026. This brief covers **#90–#210**, all merged and live by 17 November
-2026. The full reasoning for each change is in `docs/DECISIONS.md`; `todo.md` has the updated
-roadmap. The PR numbers are the place to look for the details.
+For the maintainer (Gemini). Your last full review covered the charts and dashboard work. Its
+follow-ups merged as **#320** on 23 November 2026. This brief covers **#324–#345** plus one
+workflow change pushed straight to `main`. Everything is merged and live as of 27 November
+2026.
+
+The reasoning for each change is in `docs/DECISIONS.md`. The PR numbers are the place to look
+for the details.
 
 ## Worth a closer look
 
-These are the changes where a second pair of eyes matters most: they touch security, stored
-data or the deploy.
+These changes touch security, stored data, outside services or the deploy, so a second pair
+of eyes matters most here.
 
-1. **Alliance pictures** (#178–#180, #207, #209, #210): the first user uploads on the site.
-   - Pictures are kept in a **private** Vercel Blob store. Approved ones are served only
-     through `/alliance-images/<file>` (`api/_alliance_images.js`, via `/api/proposal`).
-   - Each upload is checked from its bytes: WebP, JPEG or PNG only (no SVG), the exact size
-     for its slot, at most 250 KB, and no hidden data such as EXIF or GPS.
-   - Limits: 3 pictures per alliance per day, from R4/R5 of that alliance only.
-   - A Steward reviews each picture on `/review-image.html`, which shows it only after a
-     server-side Steward check. The Discord post never contains the picture.
-   - Pictures nobody reviews are deleted after 7 days.
-   - #207 widened the file-name check to allow lowercase letters (`RavN-…`). Please check
-     that the pattern still refuses path tricks.
-2. **Alliance tag identity** (#199): a site-wide rule change. Letter case now counts, accents
-   don't, so RâvN and RÂVN are two alliances while RAVN is still RÂVN.
-   - The rule lives in `api/_alliances.js` (`sameTag`, `findTag`, `tagSlug`, `sameScope`) and
-     `js/tags.js`. It replaced case-insensitive comparisons that let one alliance reach
-     another's dashboard, pictures and private calendar events.
-   - Stored file names keep their capitals, so nothing stored moved. Only a tag that shares
-     its capitals with another alliance keeps its letter case (`RavN`).
-3. **Own service worker** (#125, #126): Workbox 4.3.1, which browsers downloaded unchecked from
-   Google's servers, was replaced by the site's own `sw.js`. A build check keeps it free of
-   outside scripts. A phone now saves only its reader's language plus the pages it visits.
-4. **Calendar reminders** (#131, #132, #134–#144, #185, #187):
-   - Discord posts come from `api/_reminders.js`, reached through `POST /api/calendar` with
-     `REMINDER_SECRET`. cron-job.org calls it every 5 minutes.
-   - The live site posts only with `REMINDERS_LIVE=true`. The dev site posts only to the
-     test channel.
-   - Leaders now add, edit and delete events after signing in on the site (#134, #172–#177).
-5. **Translation pipeline:**
-   - The server's messages (#95), the bot's replies (#96, #100) and Discord's command picker
-     (#98) are now translated.
-   - For guides, titles, subtitles and alt text are checked and filled after Gemini's
-     translation (#190).
-   - A guide section that doesn't match the English is rebuilt from it, sending only the text
-     to Gemini as JSON (#191, #192).
-   - A hand-run **Fill missing translations** workflow fixes older guides. It builds and
-     checks the site before opening a pull request (#198); pull requests opened by a workflow
-     show GitHub's usual check as failed with no jobs.
-6. **Server functions:** still **11 of 12** on the Vercel Hobby plan. Everything new went
-   through existing endpoints.
+1. **The alliance sheet can read caravan picks (#334).** This is a new way in from outside the
+   site.
+   - **Endpoint:** `GET /api/state?scope=caravan-export` with `Authorization: Bearer cvk.<al_id>.<32 hex>`.
+     It answers `private, no-store`.
+   - **The key** (`api/_caravan_export.js`):
+     - It's made by an R5 or a Steward on the dashboard and shown once.
+     - Only a hash is stored, in the alliance's dashboard `settings.caravanKey`.
+     - It's checked with a timing-safe compare.
+     - It can be replaced or revoked.
+   - **What it returns:** the alliance, the week's start, and the picks. Each pick has a name,
+     a time and a week, and there are no Discord IDs.
+   - **Source of the picks:** a pick log (`caravan.log`, newest 400) that survives "New week".
+     `visibleDashboard` strips the log out of what the page receives.
+   - **Please check:** the key format, the hash compare, and that the log can't reach members.
+2. **Sheet lists for any layout (#336, #337).** The server now reads a range from any Google
+   Sheet a leader links.
+   - **Where the list is:** "Fill from sheet" (nominations) and the caravan suggestions no
+     longer read fixed Duel Tools tabs. A leader picks the tab, the cells and the column
+     roles with a sheet picker. That's `js/sheet-list.js`, which reuses the chart builder's
+     grid.
+   - **The saved link** (`settings.capitolLink` / `caravanLink`) is `{ url, gid, tab, range,
+     cols, heads }`. `api/_sheet_list.js` has `cleanLink`, `readList`, `readSavedList` and
+     `linkList`.
+   - **The safeguard:** the **headings seen when linking** are stored. A later read with
+     different headings stops with `code: 'changed'`. This guards against Google's habit of
+     quietly returning the *first* tab when the requested one is missing (that's how duel
+     scores once showed up as caravan suggestions). It also catches columns being moved.
+   - **What's fetched** still goes through `api/_google_source.js`: Google hosts only,
+     timeouts, a size cap. `sourceRequest` now also takes a `gid`.
+   - **Who can call it:**
+     - On `/api/nominate`, the new actions `sheet-tabs`, `sheet-grid`, `sheet-link` and
+       `sheet-fill` take the /nominate token.
+     - On `/api/dashboard`, `caravan-link` and `caravan-suggest` are leader-only.
+     - A Steward's **test link** saves the sheet link too (#338). That's the alliance's sheet
+       setting, not its nominations, and Stewards can already change it on the dashboard.
+3. **Steward image uploads skip review (#326).** On the Steward page's Alliance settings, a
+   Steward's upload goes live straight away (`saveLive()` in `api/_alliance_images.js`,
+   `direct: true`), with no review post.
+   - The byte checks still apply.
+   - **Please check:** that `direct` is honoured only for a verified Steward session.
+4. **New Discord commands and options (#332, #334).**
+   - **`/nominate show:list`:** leaders see the saved list privately.
+   - **`/nominate alliance:`:** Stewards only. It gives a **test token** (`test: true`, 24
+     hours) when the real link would be refused. With a test token, the page works but
+     saving nominations returns `409 test_no_save`.
+   - **`/caravan`:** show, pick or unpick, with `player:` and a Steward-only `alliance:`. It's
+     allowed for R4s, R5s and delegated leadership (`api/_bot_caravan.js`). A name not in the
+     rotor is added, then picked.
+   - Both command lists are updated: `.github/discord.json` and `api/_bot_schema.js`.
+5. **The deploy workflow (pushed to `main`; the owner asked for no PR).**
+   - **Two jobs:** `build-and-deploy` is now **`build`**, then **`deploy`**. `deploy` runs
+     only on pushes and Run workflow, and only fetches the built site's bundle. A failed
+     deploy can be re-run alone. Each job sends its own Discord alert.
+   - **A new build step fails if `_site` holds any hidden file.** The upload leaves hidden
+     files out by default. That keeps secrets out (for example `.vercel` from `vercel pull`),
+     and the check means nothing goes missing silently.
+   - Its first run succeeded.
+   - Any required-check rule naming `build-and-deploy` would need to name `build` now.
+   - Earlier, #328 added a time limit for translations (`TRANSLATE_BUDGET_SECONDS`, default
+     900) and a manual "Run workflow".
+6. **Leader titles are stored (#330, #331).** `stats/titles.json` holds `{ uid: "R4 · Title" }`,
+   saved from live tracker lookups, because the tracker's cached rosters don't carry titles.
+   - The standings cards' open view lists the R5 and R4s with titles: Goddess, God of War,
+     Diplomat, Recruiter.
+   - The cards carry names, ranks, avatars and frames, and **no player IDs**.
 
-## Translations (#90–#100)
+## Other changes
 
-- Every tool's text, the server's messages and the Discord bot (replies, Steward tools and
-  the command picker) are now in all 8 languages.
-- `ui.yml` goes through the section translator; the hand translations were kept.
-- Posts in the shared leadership channels stay in English.
+**Alliance settings and the alliance page**
+- **#326:** the Steward page's Alliance settings: pick an alliance, then edit its tag and
+  name, trade tags with another alliance, retire it, or upload pictures.
+  - The fixed HMDA/Arch race warning came from the race keeping tags from before the move to
+    IDs (`formerOwner`, `currentTags`).
+- **#340:** the NAP Roster bar's background is diagonal stripes of the NAP alliances'
+  colours, in rank order. They're cached in `localStorage` and redrawn only when a colour or
+  the order changes.
+- **#343:** the tool bars (`.map-controls`) now have the theme colour on all four sides. Only
+  the bottom edge had it before.
 
-## Live data and the installed app
+**Dashboard layout and each viewer's own view**
+- **#339, tools above charts:** the tools (rewards, rotor, roster) always come before the
+  charts (growth plus the alliance's own).
+  - Leaders' moves stay within each group: `layoutOrder`, and `move-item` refuses a move
+    across groups.
+  - A chart the layout doesn't name (a new one) goes to the top of the charts.
+- **#339, the viewer's own view:** every card folds to its title line. "Arrange my view" lets
+  everyone reorder within each group, with "Reset to alliance layout".
+  - All of this is per browser, per alliance, in `localStorage` (`dash-view:<tag>`), with no
+    server writes.
+  - Charts not yet seen on that device get a "New" tag.
+- **#338, #341, header tidy-up:**
+  - The rotor's and the roster's header details now sit on one line.
+  - Edit and Arrange share one row, and their extra buttons appear below only while they're
+    on.
+  - Every card has the same square Show/Hide arrow, with its name in the tooltip.
+  - Sync is a square button in a chart's title row.
+- **#344:** opening or closing a card keeps it where it was on screen (`keepInPlace`), on the
+  dashboard and the alliance standings. `arrange()` now moves cards only when the order
+  changed, because moving them every time made phones jump.
 
-- **Last known data while loading** (#117, #122, #168, #169): every tool, now including the
-  calendar and the dashboard, shows the device's saved copy dimmed with "Updating…". Saved
-  copies are dropped after 7 days.
-- **Own service worker** (#125, #126); Back keeps the reader's place (#127, #170).
-- **Installed app look** (#128–#130, #164–#167): status and bottom bar colours follow the
-  theme, and a hand-run workflow takes install screenshots from the live site.
-- **Lighter pages** (#110, #152): a first visit fell from about 5 MB to about 0.7 MB.
+**Charts**
+- **#324:** pie, line and table charts can read across tabs, and bar charts gain "Total of N
+  tabs".
+- **#345:** a bar chart's legend now stays when a viewer picks a series with no numbers yet.
+  Before, it vanished and the choice couldn't be undone.
 
-## Look and feel (from a measured audit of every page and theme)
+**Nominations and caravans**
+- **#335:** Fill from sheet uses the Player ID column when there is one, so a name change in
+  the game doesn't matter.
+- **#336:** after a fill, the sheet's names are listed with their scores, plus an Undo.
 
-- **Phones:**
-  - roomier pages (#113);
-  - one button system with three heights (#114);
-  - tidy toolbars (#115);
-  - nothing moves under the finger when a button is pressed (#116);
-  - per-tool fixes for the buff summary, ladder rows, calendar, nominations and rewards
-    card (#107, #109, #118–#123).
-- **Readability:**
-  - keyboard focus rings and readable accent text (#111);
-  - readable alliance tags (#151);
-  - roadmap tick boxes that read apart (#206).
-- **Line icons instead of emojis** across the site, from one icon set in `_data/ui_icons.yml`
-  (#181–#184), plus new footer and guide icons (#186).
+**Map**
+- **#342, the pinch fix (`js/map-zoom.js`):** a finger whose lift was missed stayed listed.
+  The next one-finger drag then counted as a pinch around a forgotten point. Fixes:
+  - a first finger (`isPrimary`) clears any left over;
+  - lifts and cancels are heard on the whole window, and removed when the page changes;
+  - when one of three fingers lifts, the pinch carries on without a jump.
+- **#342, skins status:** the Steward page shows how the nightly skin collection is doing
+  (`skinsStatus` in `api/_skins.js`). No fault was found in the collector. With the cap of
+  150 a night after the first pass, each NAP player is refreshed about every 5–6 days.
 
-## Features
+**Translations (#328):** the translator has a time limit. Sections not reached are left for
+the next push or the manual run.
 
-- **Site search** (#153): any section of the guides, Rules and Alliance pages, in the reader's
-  language.
-- **Calendar redesign** (#155–#158, #162, #170–#177):
-  - week and cycle views;
-  - event types with icons and pictures (`_data/event_types.yml`) and a type filter;
-  - the week's king, and one Capitol rotation board;
-  - a reminder lead time chosen per event (#185);
-  - the Capitol holder's banner in the holder box (#210).
-- **Your own alliance highlighted** across the site (#160, #161, #171).
-- **Capitol Rotation chart** on the Rules page, drawn live from the calendar (#101, #103,
-  #104); `/rewards` Steward reset for overrides and buyouts (#102).
-- **Dashboard:**
-  - charts can swap rows and columns, with up to 40 columns (#105);
-  - the site footer is back (#106);
-  - the Stewards' switcher lists every alliance, academies included, in standings order (#201).
-- **Map:** Planner Mode keeps the view and the plan (#154).
-- **Guides:**
-  - Kill Event (#188) and Frozen Era (#197), made from the owner's English graphics: the
-    pictures are cut out and the words written as text, so they can be translated;
-  - a shared picture viewer (#188);
-  - guide cards show their event's picture (#196);
-  - pictures for many guide cards (#200, #202–#205), and a new Hunt Battle event type (#200).
+## Questions for you
 
-## Fixes
-
-- **Tools left blank after some page loads:** tools now also start when Turbo swaps in a
-  page (`turbo:frame-render`) (#124).
-- **Small fixes:** section tabs follow the page reliably (#112); search, map fullscreen, the
-  language picker and WLO's colour (#163); dropdowns no longer duplicate after Back (#159);
-  no blue tap flash on phones (#149).
-- **Alliance pictures:**
-  - RâvN's approved pictures answered "not found" (#207);
-  - pictures pop in late, now faded in once loaded (#209);
-  - the academy icon is back on "Academy of [TAG]" (#208).
-- **CI:** a queued run builds the newest commit, so back-to-back merges can't clash (#97).
-  All workflows run on Node 24 (#108).
-
-## Open questions (owner)
-
-- How long Undead Siege and Hunt Battle last, and whether they repeat (both default to
-  1 hour, no repeat).
-- The Crystal Valley guide placeholder, the Thief Hunt "Store" placeholder, and the home
-  page credits.
-- Pictures for the remaining guide cards, waiting on Gemini image limits.
-
-## Review outcome (maintainer, 2026-11-17)
-
-- Picture file names, pending-picture caching, the tag identity rule and the reminder route:
-  confirmed sound. The file-name check was tested against the listed tricks.
-- Follow-ups: tags typed in a letter case that could mean two alliances are now refused by
-  `/rank` and the map planner instead of becoming a new alliance; the reminder secret is
-  compared by bytes. Details in `docs/DECISIONS.md`.
+1. **The caravan export key:** is one key per alliance, stored as a hash in the dashboard
+   file, enough? Or should it live in its own file?
+2. **Test links saving the sheet link (#338):** acceptable, or should test links keep only an
+   in-page copy?
+3. **The skin collection cap:** raise it from 150 to about 300 a night, for a refresh every
+   2–3 days? The owner will decide after seeing the Steward page's numbers.
+4. **Per-device view settings (#339):** fine for now? Syncing them per account would mean a
+   Gist write for every fold.
