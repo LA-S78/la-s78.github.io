@@ -1056,7 +1056,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         : w.updatedAt
           ? t('dashboard.updated', { when: new Date(w.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) })
           : '';
-      const sync = linked && isLeader() ? `<button type="button" class="dash-sync" data-act="sync" title="${escapeHtml(t('dashboard.sync_help'))}">${ic('refresh')}${escapeHtml(t('dashboard.sync_now'))}</button>` : '';
+      // Sync: a square button in the title row, left of Show/Hide (owner, 2026-11-27), so the
+      // line under the title keeps its place; it spins while the sheet is read
+      const sync = linked && isLeader() ? `<button type="button" class="dash-icon-btn dash-head-btn" data-act="sync" title="${escapeHtml(`${t('dashboard.sync_now')}: ${t('dashboard.sync_help')}`)}" aria-label="${escapeHtml(t('dashboard.sync_now'))}">${ic('refresh')}</button>` : '';
       const tool = (act, label, glyph, off) =>
         `<button type="button" class="dash-icon-btn" data-act="${act}" ${off ? 'disabled' : ''} title="${escapeHtml(t(label))}" aria-label="${escapeHtml(t(label))}">${glyph}</button>`;
       // ▲▼ are set for the card's place on the page by arrange() (charts and the page's own cards)
@@ -1064,8 +1066,8 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         ? `<div class="dash-widget-tools">${tool('up', 'common.move_up', '▲')}${tool('down', 'common.move_down', '▼')}${tool('edit', 'common.edit', ic('pencil', 'solo'))}${tool('delete', 'common.delete', ic('trash', 'solo'))}</div>`
         : '';
       return `<article class="dash-card dash-widget" data-key="${escapeHtml(w.id)}" data-id="${escapeHtml(w.id)}" data-type="${escapeHtml(w.type || '')}">
-        <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}${newCharts.has(w.id) && !editing ? ` <span class="dash-tag dash-new">${escapeHtml(t('dashboard.new_chart'))}</span>` : ''}</h3>${tools}</div>
-        <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}${sync}</div>
+        <div class="dash-widget-head"><h3 class="dash-card-title">${escapeHtml(w.title)}${newCharts.has(w.id) && !editing ? ` <span class="dash-tag dash-new">${escapeHtml(t('dashboard.new_chart'))}</span>` : ''}</h3>${tools}${sync}</div>
+        <div class="dash-widget-meta">${isLeader() ? `<span>${visIcon}${escapeHtml(vis)}</span>` : ''}${updated ? `<span>${linked ? ic('link') : ''}${escapeHtml(updated)}</span>` : ''}</div>
         ${w.note ? `<p class="dash-widget-note">${escapeHtml(w.note)}</p>` : ''}
         ${isLeader() && w.data?.skipped?.length ? `<p class="dash-muted dash-small dash-skipped">${ic('warning', 'warn')}${escapeHtml(t('dashboard.tabs_skipped', { names: w.data.skipped.join(', ') }))}</p>` : ''}
         <div class="dash-widget-body">${W.render(w)}</div>
@@ -1361,7 +1363,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         }
         return;
       }
-      const b = e.target.closest('.dash-widget-tools [data-act], .dash-slot-tools [data-act], .dash-widget-meta [data-act]');
+      const b = e.target.closest('.dash-widget-tools [data-act], .dash-slot-tools [data-act], .dash-widget-head > [data-act]');
       if (!b) return;
       const card = b.closest('[data-key]');
       const id = card.dataset.key;
@@ -1393,11 +1395,13 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         b.disabled = true;
         const synced = data.dashboard.widgets.find((x) => x.id === id);
         const tabs = synced?.source?.tabs ? synced.source.tabs.count : 0;
-        b.innerHTML = ic('refresh') + escapeHtml(tabs > 1 ? t('dashboard.syncing_tabs', { n: tabs }) : t('dashboard.syncing'));
+        b.classList.add('is-busy');
+        b.title = tabs > 1 ? t('dashboard.syncing_tabs', { n: tabs }) : t('dashboard.syncing');
         const error = await save({ action: 'sync-widget', id });
         if (error && document.body.contains(b)) {
           b.disabled = false;
-          b.innerHTML = ic('refresh') + escapeHtml(t('dashboard.sync_now'));
+          b.classList.remove('is-busy');
+          b.title = `${t('dashboard.sync_now')}: ${t('dashboard.sync_help')}`;
         }
         return;
       }

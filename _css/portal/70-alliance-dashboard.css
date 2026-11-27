@@ -1729,6 +1729,7 @@ li.dw-sel > .dw-bar-track {
    of the title line, the same size open or closed, so nothing beside it moves; its name is in
    the tooltip. Tags (OFFICERS, picked count) sit just left of it. */
 .dash-fold,
+.dash-head-btn,
 .dash-cv-top .dash-roster-toggle {
   flex: none;
   width: 30px;
@@ -1737,12 +1738,28 @@ li.dw-sel > .dw-bar-track {
   justify-content: center;
 }
 .dash-fold svg,
+.dash-head-btn svg,
 .dash-cv-top .dash-roster-toggle svg {
   margin: 0;
 }
 .dash-card-title > .dash-fold,
 .dash-widget-head > .dash-fold {
   margin-left: auto;
+}
+/* A chart's buttons in its title row: Sync next to Show/Hide */
+.dash-widget-head {
+  align-items: center;
+}
+.dash-widget-head > .dash-head-btn + .dash-fold {
+  margin-left: 0;
+}
+.dash-head-btn.is-busy svg {
+  animation: dash-spin 0.9s linear infinite;
+}
+@keyframes dash-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 .dash-card-title > .dash-tag + .dash-fold {
   margin-left: 8px;
