@@ -604,8 +604,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         </div>`;
       // Shown or hidden like the member list (owner request, 2026-11-27)
       $('caravan-toggle').addEventListener('click', () => {
-        setFolded('caravan', caravanOpen);
-        renderCaravan();
+        keepInPlace(() => $('dash-caravan'), () => {
+          setFolded('caravan', caravanOpen);
+          renderCaravan();
+        });
         $('caravan-toggle')?.focus();
       });
       if (leader) wireNameHints(el);
@@ -881,8 +883,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
             ${trackerCredit()}</div>`
           : `<p class="dash-muted">${escapeHtml(t('roster.unavailable'))}</p>${trackerCredit()}`}`;
       $('roster-toggle')?.addEventListener('click', () => {
-        setFolded('roster', rosterView.open);
-        renderRoster();
+        keepInPlace(() => $('dash-roster'), () => {
+          setFolded('roster', rosterView.open);
+          renderRoster();
+        });
         $('roster-toggle')?.focus();
       });
       const search = $('roster-search');
@@ -1173,6 +1177,18 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       myView().folded[key] = folded;
       saveView();
     }
+    /**
+     * Opening or closing a card keeps it where it is on screen (owner report, 2026-11-27: the
+     * page jumped, so the card ended up far from the finger). `card()` finds it again after the
+     * change, which may draw it afresh.
+     */
+    function keepInPlace(card, change) {
+      const before = card()?.getBoundingClientRect().top;
+      change();
+      const after = card()?.getBoundingClientRect().top;
+      if (Number.isFinite(before) && Number.isFinite(after) && Math.abs(after - before) > 1) window.scrollBy(0, after - before);
+    }
+
     /** After a load: the charts not seen before on this device are "New" for this visit. */
     function noteNewCharts() {
       if (!data || !data.dashboard) return;
@@ -1240,10 +1256,11 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     function arrange() {
       const el = $('dash-widgets');
       if (!data || !data.dashboard) return;
-      for (const key of pageOrder()) {
-        const node = el.querySelector(`:scope > [data-key="${CSS.escape(key)}"]`);
-        if (node) el.appendChild(node);
-      }
+      // Cards are moved only when the order changed: moving them all every time made the
+      // browser lose its place on the page, so it jumped
+      const want = pageOrder().map((key) => el.querySelector(`:scope > [data-key="${CSS.escape(key)}"]`)).filter(Boolean);
+      const have = [...el.children].filter((n) => n.dataset.key);
+      if (want.some((n, i) => have[i] !== n)) want.forEach((n) => el.appendChild(n));
       const empty = el.querySelector(':scope > .dash-empty');
       if (empty) el.appendChild(empty);
       const tool = (act, label, glyph) =>
@@ -1347,9 +1364,10 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       if (fold) {
         const card = fold.closest('[data-key]');
         const key = card.dataset.key;
-        setFolded(key, !isFolded(key));
-        applyFolds();
-        if (!isFolded(key)) {
+        keepInPlace(() => card, () => {
+          setFolded(key, !isFolded(key));
+          applyFolds();
+          if (isFolded(key)) return;
           // Drawn again now it has room (a chart drawn while folded has no size)
           if (key === 'growth') renderGrowth();
           else {
@@ -1360,7 +1378,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
               W.mount(body, w);
             }
           }
-        }
+        });
         return;
       }
       const b = e.target.closest('.dash-widget-tools [data-act], .dash-slot-tools [data-act], .dash-widget-head > [data-act]');
