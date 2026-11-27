@@ -21,8 +21,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+# Two jobs (owner request, 2026-11-27): "build" translates, builds, checks and saves the
+# built site as a file bundle; "deploy" (pushes and Run workflow only, never pull requests)
+# takes that bundle to Vercel and GitHub Pages. A Vercel hiccup can then be retried on its
+# own (Re-run failed jobs) without translating and building again.
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     # Run by hand only on main or dev: any other branch would be deployed to the test site
     if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
@@ -111,6 +115,18 @@ jobs:
           npm ci --ignore-scripts --no-audit --no-fund
           npm run format:check
 
+      # Hidden files (names starting with a dot) are left out of the bundle below (GitHub's
+      # default, which keeps things like .env or .vercel secrets out of it). Jekyll doesn't
+      # publish them anyway; this makes sure one never goes missing from the site quietly.
+      - name: Checking for hidden files
+        run: |
+          hidden=$(find _site -name '.*' -print)
+          if [ -n "$hidden" ]; then
+            echo "::error::The built site has hidden files, which the deploy would leave out:"
+            echo "$hidden"
+            exit 1
+          fi
+
       - name: Uploading build artifacts
         uses: actions/upload-artifact@v6
         with:
@@ -118,8 +134,35 @@ jobs:
           path: _site/
           retention-days: 1
 
+      - name: Sending failure alert
+        if: failure() && github.event_name != 'pull_request'
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": "🚨 **Build Failed!** The deployment compilation crashed on the `'"${{ github.ref_name }}"'` branch. Check the GitHub Actions logs to see what broke."}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: write # the GitHub Pages redirects (gh-pages branch)
+
+    steps:
+      # Only for _deploy/ (the redirect page); the site itself comes from the build's bundle
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Fetching the built site
+        uses: actions/download-artifact@v7
+        with:
+          name: compiled-site
+          path: _site/
+
       - name: Preparing fallback redirects
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
           mkdir _github_pages_site
           cp _deploy/migration.html _github_pages_site/index.html
@@ -128,7 +171,6 @@ jobs:
           cp _deploy/migration.html _github_pages_site/404.html
 
       - name: Caching deployment state
-        if: github.event_name != 'pull_request'
         uses: actions/cache@v5
         with:
           path: ~/.local/share/com.vercel.cli
@@ -137,11 +179,9 @@ jobs:
             ${{ runner.os }}-vercel-
 
       - name: Installing deployment tools
-        if: github.event_name != 'pull_request'
         run: npm install --global vercel@latest
 
       - name: Fetching deployment environment
-        if: github.event_name != 'pull_request'
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
@@ -153,11 +193,9 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Staging deployment folder
-        if: github.event_name != 'pull_request'
         run: cp -r .vercel _site/
 
       - name: Deploying to Vercel
-        if: github.event_name != 'pull_request'
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             vercel deploy --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }} --cwd _site/
@@ -170,7 +208,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploying redirects to GitHub Pages
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
@@ -178,7 +216,7 @@ jobs:
           clean: true
 
       - name: Sending success alert
-        if: success() && github.event_name != 'pull_request'
+        if: success()
         run: |
           curl -H "Content-Type: application/json" \
                -X POST \
@@ -186,9 +224,9 @@ jobs:
                ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Sending failure alert
-        if: failure() && github.event_name != 'pull_request'
+        if: failure()
         run: |
           curl -H "Content-Type: application/json" \
                -X POST \
-               -d '{"content": "🚨 **Build Failed!** The deployment compilation crashed on the `'"${{ github.ref_name }}"'` branch. Check the GitHub Actions logs to see what broke."}' \
+               -d '{"content": "🚨 **Deploy Failed!** The site built, but sending it to Vercel / GitHub Pages failed on the `'"${{ github.ref_name }}"'` branch. Check the GitHub Actions logs to see what broke."}' \
                ${{ secrets.DISCORD_WEBHOOK_URL }}
