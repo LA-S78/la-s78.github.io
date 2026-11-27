@@ -1,6 +1,7 @@
 // api/state.js
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
 import { allianceFrames, applyAllianceFrames } from './_alliance_images.js';
+import { caravanExport } from './_caravan_export.js';
 import { allianceLeaders } from './_tracker.js';
 import { sanitizeAlliances } from './_alliances.js';
 import { readRegister } from './_register.js';
@@ -140,6 +141,16 @@ export default async function handler(req, res) {
       // alliance's Might, members, level and in-game badge from the Last Asylum Tracker. Loaded
       // after the standings, so a slow tracker never holds them up. Kept 2 hours by Vercel (and
       // an hour on each server), so the tracker is asked at most about 10 times every 2 hours.
+      // The Caravan Rotor's picks for the alliance's sheet (api/_caravan_export.js): only
+      // with the alliance's key, never cached
+      case 'caravan-export': {
+        const auth = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '');
+        const out = caravanExport(gist, auth || req.query.key);
+        res.setHeader('Cache-Control', 'private, no-store');
+        if (!out) return res.status(403).json({ error: 'Unknown or revoked key.' });
+        return res.status(200).json(out);
+      }
+
       case 'tracker': {
         const tags = Object.entries(mapState.alliances || {})
           .filter(([, a]) => a && a.is_nap !== false)

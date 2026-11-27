@@ -5,6 +5,8 @@
 # Technical messages for administrators (set-up, raw Discord errors) aren't here.
 
 api_dashboard:
+  caravan_key_r5: "Only the alliance's R5 (or a Steward) can create or revoke the sheet sync key."
+  sheet_link_needed: "Paste your alliance's Google Sheet link first."
   alliance_changed: "Your alliance changed on the site since you signed in. Sign in with Discord again to carry on."
   rename_unknown: "That alliance isn't on the map any more. Reload the page."
   rename_bad_tag: "Type the new tag as it is in the game: up to 12 characters, no spaces, colons, brackets or slashes."
@@ -235,6 +237,24 @@ bot_map:
   alliances: "Alliances"
   resources: "Resources"
 
+bot_caravan:
+  server_only: "⚠️ Use /caravan inside your alliance's Discord server or the NAP server."
+  alliance_stewards_only: "⛔ Only Stewards can choose an alliance. Run /caravan without it for your own."
+  player_needed: "Type the player's name in **player** to pick or undo."
+  unknown_alliance: "⚠️ There's no alliance with the tag **{tag}** on the map."
+  no_alliance: "⚠️ Couldn't tell your alliance: make sure you have your alliance's role."
+  leaders_only: "⛔ Only your alliance's leaders (R4, R5 and officer roles) can use the Caravan Rotor here."
+  not_in_rotor: "**{name}** isn't in the rotor."
+  already_picked: "**{name}** is already picked this week."
+  not_picked: "**{name}** isn't picked this week."
+  added: "➕ **{name}** wasn't in the rotor, so they were added."
+  picked_done: "✅ **{name}** picked."
+  unpicked_done: "↩️ **{name}** is available again."
+  failed: "⚠️ The rotor couldn't be read or saved just now. Please try again in a moment."
+  title: "🐪 [{tag}] Caravan Rotor: {picked}/{total} picked"
+  picked: "Picked this week:"
+  available: "Available:"
+  footer: "The dashboard's Caravan Rotor shows the same list (and the sheet's suggestions)."
 bot_nominate:
   alliance_stewards_only: "⛔ Only Stewards can choose an alliance. Run /nominate without it for your own."
   unknown_alliance: "⚠️ There's no alliance with the tag **{tag}** on the map."
@@ -370,6 +390,13 @@ bot_commands:
   nominate_show_link: "🔗 Get the nomination link"
   nominate_show_list: "📋 Show our current list"
   nominate_alliance: "Stewards: act for another alliance (a test link when rewards are closed)"
+  caravan: "Your alliance's Caravan Rotor: see it, or pick a player (leaders)"
+  caravan_action: "Leave blank to see the rotor"
+  caravan_show: "👀 Show the rotor"
+  caravan_pick: "✅ Pick a player"
+  caravan_unpick: "↩️ Undo a pick"
+  caravan_player: "The player's in-game name (for pick or undo)"
+  caravan_alliance: "Stewards: another alliance's tag"
   rewards: "This week's rewards: status, and the Kingdom War result (Stewards)"
   rewards_action: "Leave blank to see this week's reward status"
   rewards_won: "Record Kingdom War: Won (Steward)"

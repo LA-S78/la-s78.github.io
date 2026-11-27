@@ -111,8 +111,11 @@ export function visibleDashboard(dashboard, leader) {
   // The Caravan Rotor: leaders always; members only when leaders let them (read-only, and
   // without which officer ticked each name).
   const c = dashboard.caravan;
-  if (leader) out.caravan = c;
-  else if (c.membersCanView) {
+  if (leader) {
+    // The log (for the sheet's sync) stays on the server: the page doesn't need it
+    const { log: _log, ...rest } = c;
+    out.caravan = rest;
+  } else if (c.membersCanView) {
     out.caravan = {
       membersCanView: true,
       weekStartedAt: c.weekStartedAt,
@@ -539,10 +542,14 @@ export function applyDashboardEdit(stored, edit, { actor = '', now } = {}) {
 
 // ---------------------------------------------------------------------------------------
 // Caravan Rotor: R4s pick who gets each caravan, by who is available, not a fixed queue.
-// { membersCanView, weekStartedAt, roster: [{ id, name, from, to, picked: { at, by } | null }] }
+// { membersCanView, weekStartedAt, roster: [{ id, name, from, to, picked: { at, by } | null }],
+//   log: [{ name, at, by, week }] }
+// log (2026-11-27): every pick, kept through "New week" (newest last, CARAVAN_LIMITS.log at
+// most), so the alliance's sheet can take the picks (api/_caravan_export.js) even after
+// the rotor moved on. An undo takes its pick back out of the log.
 // from/to: an optional Game Time (UTC-2) window, "HH:MM"; to may be empty (a single time).
 
-export const CARAVAN_LIMITS = Object.freeze({ roster: 100, nameChars: 40 });
+export const CARAVAN_LIMITS = Object.freeze({ roster: 100, nameChars: 40, log: 400 });
 
 const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -552,6 +559,7 @@ function readCaravan(c) {
     membersCanView: Boolean(v.membersCanView),
     weekStartedAt: v.weekStartedAt || null,
     roster: (Array.isArray(v.roster) ? v.roster : []).filter((p) => p && p.id && p.name),
+    log: (Array.isArray(v.log) ? v.log : []).filter((e) => e && e.name && e.at),
   };
 }
 
@@ -623,8 +631,23 @@ export function applyCaravanEdit(
       // Picking someone already picked keeps the first pick (two officers tapping at once).
       if (edit.action === 'caravan-pick' && !roster[at].picked) {
         roster[at].picked = { at: now, by: clip(actor, 60) };
+        c.log = [
+          ...c.log,
+          { name: roster[at].name, at: now, by: clip(actor, 60), week: c.weekStartedAt },
+        ].slice(-CARAVAN_LIMITS.log);
       }
-      if (edit.action === 'caravan-unpick') roster[at].picked = null;
+      if (edit.action === 'caravan-unpick' && roster[at].picked) {
+        // The log's entry for this pick goes too (the latest for this name this week)
+        const pickedAt = roster[at].picked.at;
+        const name = roster[at].name.toLowerCase();
+        let drop = -1;
+        c.log.forEach((e, i) => {
+          if (e.name.toLowerCase() === name && (e.at === pickedAt || e.week === c.weekStartedAt))
+            drop = i;
+        });
+        if (drop >= 0) c.log = c.log.filter((_, i) => i !== drop);
+        roster[at].picked = null;
+      }
       break;
     }
     case 'caravan-new-week':

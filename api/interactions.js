@@ -19,6 +19,7 @@ import {
   handleRewardsCommand,
 } from './_bot_rewards.js';
 import { handleAscensionButton } from './_bot_ascension.js';
+import { handleCaravanCommand } from './_bot_caravan.js';
 
 export const config = { api: { bodyParser: false } };
 
@@ -30,6 +31,7 @@ const COMMANDS = {
   map: handleMapCommand,
   registerbot: handleRegisterBotCommand,
   nominate: handleNominateCommand,
+  caravan: handleCaravanCommand,
   rewards: handleRewardsCommand,
   rank: handleRankCommand,
   devupdate: handleDevUpdateCommand,

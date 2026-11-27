@@ -150,6 +150,26 @@ roster:
   daily_unknown: "Research and help: time of reading unknown"
 
 caravan:
+  # The alliance's Google Sheet (Duel Tools): its suggested players, and the sync key (2026-11-27)
+  sheet_title: "Suggested by the alliance sheet"
+  sheet_help: "Your alliance's sheet (Duel Tools) works out who has the points for a caravan this week. Load its list, then pick from it."
+  sheet_link: "Google Sheet link"
+  sheet_load: "Load suggestions"
+  sheet_none: "The sheet suggests nobody this week (nobody has enough points)."
+  sheet_points: "{n} points"
+  sheet_add: "Add to rotor"
+  sheet_picked: "picked"
+  key_title: "Sheet sync key"
+  key_help: "Lets your alliance sheet's script read this rotor's picks (Duel Tools → Set website sync key). Only the R5 or a Steward can create or revoke it."
+  key_none: "No key yet: the sheet can't read the picks."
+  key_active: "A key ending …{end} is active (created {when} by {by})."
+  key_create: "Create key"
+  key_replace: "Replace key"
+  key_revoke: "Revoke"
+  key_once: "Copy this key into the sheet now: it isn't shown again."
+  key_create_confirm: "Create a sync key for your alliance sheet?"
+  key_replace_confirm: "Replace the key? The sheet stops syncing until you give it the new one."
+  key_revoke_confirm: "Revoke the key? The sheet can no longer read the picks."
   title: "Caravan Rotor"
   # The name check against the alliance's member list (Last Asylum Tracker; js/name-check.js)
   name_ok: "In [{tag}]'s member list"
