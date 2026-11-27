@@ -427,20 +427,19 @@ async function sheetAction(req, res) {
     }
     if (body.action === 'sheet-link') {
       const read = await linkList(body.link, 'capitol', `[${tag}] nomination link`);
-      // A Steward's test link reads the list but doesn't change the alliance's settings
-      if (!payload.test) {
-        await updateGist((gist) => {
-          const { key, file } = allianceSettings(gist, tag);
-          if (!key) return {};
-          const raw = gistJson(gist, file, {});
-          const settings = { ...(raw.settings || {}), capitolLink: read.link };
-          if (!settings.sheetUrl) settings.sheetUrl = read.link.url;
-          return {
-            files: { [file]: { ...raw, settings } },
-            description: `Capitol sheet list linked for [${key}]`,
-          };
-        });
-      }
+      // A Steward's test link saves it too (owner, 2026-11-27): it's the alliance's sheet
+      // setting, not its nominations, and Stewards can change it on the dashboard anyway
+      await updateGist((gist) => {
+        const { key, file } = allianceSettings(gist, tag);
+        if (!key) return {};
+        const raw = gistJson(gist, file, {});
+        const settings = { ...(raw.settings || {}), capitolLink: read.link };
+        if (!settings.sheetUrl) settings.sheetUrl = read.link.url;
+        return {
+          files: { [file]: { ...raw, settings } },
+          description: `Capitol sheet list linked for [${key}]`,
+        };
+      });
       const { tab, gid, range, cols } = read.link;
       return res.status(200).json({ ...fillResult(read), link: { tab, gid, range, cols } });
     }

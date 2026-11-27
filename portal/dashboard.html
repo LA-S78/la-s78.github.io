@@ -555,8 +555,11 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       };
 
       el.innerHTML = `
-        <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))}</h3>
-        <p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span><button type="button" class="dash-icon-btn dash-roster-toggle" id="caravan-toggle" aria-expanded="${caravanOpen}" aria-controls="caravan-body">${ic('chevron')}${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}</button></p>
+        <div class="dash-cv-top">
+          <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))}</h3>
+          <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span>
+          <button type="button" class="dash-icon-btn dash-roster-toggle" id="caravan-toggle" aria-expanded="${caravanOpen}" aria-controls="caravan-body" aria-label="${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}">${ic('chevron')}<span class="dash-cv-toggle-text">${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}</span></button>
+        </div>
         <div id="caravan-body"${caravanOpen ? '' : ' hidden'}>
         ${leader ? `<div class="dash-cv-bar">
           <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${ic('users')}${escapeHtml(t('caravan.members_can_view'))}</label>
@@ -843,11 +846,15 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         .map((k) => `<button type="button" class="dash-icon-btn" data-roster-sort="${k}" aria-pressed="${rosterView.sort === k}">${escapeHtml(t(`roster.sort_${k}`))}</button>`)
         .join('');
       el.innerHTML = `
-        <div class="dash-roster-head">
+        <!-- One top line: the title and Show/Hide members; the totals and Refresh only once it's
+             open (owner request, 2026-11-27: saves the space when closed, like the rotor) -->
+        <div class="dash-cv-top">
           <h3 class="dash-card-title" id="dash-roster-title">${ic('users')}${escapeHtml(t('roster.title'))}</h3>
-          ${refreshButton(r.refresh)}
+          ${r.members
+            ? `<button type="button" class="dash-icon-btn dash-roster-toggle" id="roster-toggle" aria-expanded="${rosterView.open}" aria-controls="roster-body" aria-label="${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}">${ic('chevron')}<span class="dash-cv-toggle-text">${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}</span></button>`
+            : refreshButton(r.refresh)}
         </div>
-        ${r.members ? `<p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span><button type="button" class="dash-icon-btn dash-roster-toggle" id="roster-toggle" aria-expanded="${rosterView.open}" aria-controls="roster-body">${ic('chevron')}${escapeHtml(t(rosterView.open ? 'roster.hide' : 'roster.show'))}</button></p>` : ''}
+        ${r.members && rosterView.open ? `<div class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('roster.summary', { n: all.length, might: might(r.power) }))}</span>${refreshButton(r.refresh)}</div>` : ''}
         ${r.members && !rosterView.open
           ? ''
           : r.members
