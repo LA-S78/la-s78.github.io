@@ -45,6 +45,15 @@ common:
 
 dashboard:
   title: "Alliance Dashboard"
+  # Each viewer's own view (2026-11-27): folding cards and their own order, on this device
+  fold_show: "Show"
+  fold_hide: "Hide"
+  new_chart: "New"
+  arrange_mine: "Arrange my view"
+  arrange_done: "Done"
+  arrange_reset: "Reset to alliance layout"
+  arrange_reset_confirm: "Put the cards back in your alliance's order? (Folded cards stay folded.)"
+  arrange_help: "Move cards with ▲▼. Only for you, on this device; tools stay above charts, and a new chart appears at the top of the charts."
   loading: "Loading your alliance dashboard…"
   view_as: "View as"
   page_title: "[{tag}] Alliance Dashboard"
