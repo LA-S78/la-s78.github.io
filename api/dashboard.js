@@ -33,7 +33,7 @@ import { allianceFrame, imageStatus, frameFor } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
-import { readSavedList } from './_sheet_list.js';
+import { linkList, readSavedList } from './_sheet_list.js';
 import {
   fetchSourceTable,
   fetchSourceTabs,
@@ -339,8 +339,9 @@ async function editDashboard(req, res, { gist, tag, access, session, alliances }
     });
   }
   // The alliance sheet's suggested caravan players (its "Caravan Bank" tab, Duel Tools)
-  if (body.action === 'caravan-suggest') {
-    return caravanSuggest(res, { gist, tag, file, url: body.url, session });
+  if (body.action === 'caravan-suggest' || body.action === 'caravan-link') {
+    const link = body.action === 'caravan-link' ? body.link || {} : null;
+    return caravanSuggest(res, { gist, tag, file, session, link });
   }
 
   // Read a Google Sheet / Doc for the editor's preview (nothing is saved).
@@ -455,12 +456,6 @@ function firstByRank(alliances) {
 // The Caravan Rotor and the alliance's Google Sheet (owner request, 2026-11-27)
 // ---------------------------------------------------------------------------------------
 
-/** The alliance's sheet link (one for the dashboard: nominations and caravans). */
-export function allianceSheetUrl(settings = {}) {
-  const url = settings.sheetUrl || settings.capitolSheet;
-  return typeof url === 'string' ? url : '';
-}
-
 /** Keeps a setting in the alliance's dashboard file (no-op when it's already so). */
 async function saveSetting(file, tag, key, value, who) {
   return updateGist((g) => {
@@ -491,28 +486,37 @@ async function caravanKey(res, { gist, tag, access, session, file, create }) {
   return res.status(200).json({ key, record });
 }
 
-async function caravanSuggest(res, { gist, tag, file, url: given, session }) {
-  const saved = allianceSheetUrl(readDashboard(gistJson(gist, file, {}), tag).settings);
-  const url = String(given || saved || '')
-    .trim()
-    .slice(0, 500);
-  if (!url)
-    return res.status(400).json({ error: say('api_dashboard.sheet_link_needed'), code: 'no_link' });
-  // The Duel Tools "Caravan Bank" tab, checked by its heading (api/_sheet_list.js): Google
-  // gives a sheet's first tab when there's no such tab, which once listed duel scores
-  let names;
+/**
+ * The alliance sheet's caravan suggestions: from the list linked with the sheet picker
+ * (settings.caravanLink, api/_sheet_list.js), else a Duel Tools sheet's "Caravan Bank".
+ * POST { action: 'caravan-link', link } links the list (read once to check it) and answers
+ * like 'caravan-suggest'.
+ */
+async function caravanSuggest(res, { gist, tag, file, session, link }) {
+  const settings = readDashboard(gistJson(gist, file, {}), tag).settings || {};
+  let read;
   try {
-    const read = await readSavedList({ sheetUrl: url }, 'caravan');
-    names = read.rows.map((r) => ({ name: r.name, balance: r.points ?? null }));
+    read = link
+      ? await linkList(link, 'caravan', session.name)
+      : await readSavedList(settings, 'caravan');
   } catch (err) {
     return res.status(400).json({ error: err.message, code: err.code || undefined });
   }
-  if (url !== saved) {
-    try {
-      await saveSetting(file, tag, 'sheetUrl', url, session.name);
-    } catch (err) {
-      console.warn('Sheet link not kept:', err.message);
-    }
+  if (link) {
+    await updateGist((g) => {
+      const raw = gistJson(g, file, {});
+      const next = { ...(raw.settings || {}), caravanLink: read.link };
+      if (!next.sheetUrl) next.sheetUrl = read.link.url;
+      return {
+        files: { [file]: { ...raw, settings: next } },
+        description: `Dashboard [${tag}]: caravan sheet list linked by ${session.name || 'a leader'}`,
+      };
+    });
   }
-  return res.status(200).json({ names: names.slice(0, 20), url });
+  const saved = link ? read.link : settings.caravanLink;
+  return res.status(200).json({
+    names: read.rows.slice(0, 20).map((r) => ({ name: r.name, balance: r.points ?? null })),
+    link: saved ? { tab: saved.tab, gid: saved.gid, range: saved.range, cols: saved.cols } : null,
+    url: saved?.url || settings.sheetUrl || '',
+  });
 }

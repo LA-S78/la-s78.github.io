@@ -152,8 +152,7 @@ roster:
 caravan:
   # The alliance's Google Sheet (Duel Tools): its suggested players, and the sync key (2026-11-27)
   sheet_title: "Suggested by the alliance sheet"
-  sheet_help: "Your alliance's sheet (Duel Tools) works out who has the points for a caravan this week. Load its list, then pick from it."
-  sheet_link: "Google Sheet link"
+  sheet_help: "If your alliance's Google Sheet works out who should get a caravan, load its list here and pick from it. Show the site where the list is once (below); a Duel Tools sheet is found by itself."
   sheet_load: "Load suggestions"
   sheet_none: "The sheet suggests nobody this week (nobody has enough points)."
   sheet_points: "{n} points"
