@@ -2,43 +2,45 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: Site girişinden bu yana ittifakınız değişti. Devam etmek için Discord ile tekrar giriş yapın.
+  alliance_changed: Giriş yaptığınızdan beri sitede ittifakınız değişti. Devam etmek için Discord ile tekrar giriş yapın.
   rename_unknown: Bu ittifak artık haritada değil. Sayfayı yenileyin.
-  rename_bad_tag: 'Yeni etiketi oyundaki haliyle yazın: en fazla 12 karakter, boşluk, iki nokta, parantez veya eğik çizgi içermemeli.'
-  rename_same: Bu zaten mevcut etiket.
-  rename_taken: "[{tag}] etiketi zaten başkası tarafından kullanılıyor. İki ittifak arasında etiket takası yapmak için değiştir seçeneğini kullanın."
-  rename_fixed: "[{tag}] etiketi burada henüz yeniden adlandırılamaz: etiketi sitenin kodunun bir parçası. Önce kod değişikliği talep edin."
-  rename_not_moved: 'Yeniden adlandırma için tüm depoların önce ittifak kimliklerine taşınması gerekir (hala etiket bazlı: {stores}).'
-  retire_on_map: Yalnızca haritadan kaldırılan (İttifak planlayıcısında) bir ittifak emekli edilebilir.
-  tidy_not_moved: 'Düzenleme için tüm depoların önce ittifak kimliklerine taşınması gerekir (hala etiket bazlı: {stores}).'
-  pending_gone: O ittifak için zaten yanıt verildi.
-  stewards_only: Yalnızca Temsilciler, Temsilci araçlarını kullanabilir.
-  lookups_used: Bugünkü oyuncu sorgulama hakkınız bitti. Haklar günlük sıfırlamada (00:00 GT) tekrar başlar.
+  rename_bad_tag: 'Yeni etiketi oyundaki haliyle yazın: en fazla 12 karakter, boşluk, iki nokta, parantez veya eğik çizgi yok.'
+  rename_same: Bu zaten sahip olduğu etiket.
+  rename_taken: "[{tag}] etiketine zaten sahip. İki ittifak arasında etiket takası yapmak için takas özelliğini kullanın."
+  rename_fixed: "[{tag}] burada henüz yeniden adlandırılamaz: etiketi sitenin kodunun bir parçasıdır. Önce bir kod değişikliği talep edin."
+  rename_not_moved: 'Yeniden adlandırma için önce her mağazanın ittifak kimliklerine taşınması gerekir (hala etikete göre: {stores}).'
+  retire_on_map: Yalnızca haritadan kaldırılmış bir ittifak (İttifak planlayıcısında) emekli edilebilir.
+  tidy_not_moved: 'Düzenleme için önce her mağazanın ittifak kimliklerine taşınması gerekir (hala etikete göre: {stores}).'
+  pending_gone: Bu ittifak için zaten yanıt verildi.
+  stewards_only: Yalnızca Kahyalar, Kahya araçlarını kullanabilir.
+  lookups_used: Bugünkü oyuncu sorgulama haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlayacak.
   player_not_found: Bu kimliğe sahip bir oyuncu yok.
   player_unavailable: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
-  positions_leaders_only: Yalnızca ittifakınızın R4 ve R5'leri (ve Temsilciler) üyeleri harita üzerinde görebilir.
+  positions_leaders_only: Yalnızca ittifakınızın R4 ve R5'leri (ve Kahyalar) üyeleri haritada görebilir.
   positions_unavailable: Üyelerin konumları şu anda yüklenemiyor. Birkaç dakika içinde tekrar deneyin.
-  links_used: Bugünkü ittifak bağlantısı hakkınız bitti. Haklar günlük sıfırlamada (00:00 GT) tekrar başlar.
-  relink_none: Bu ittifak için yeniden bağlanacak bir şey kalmadı.
-  link_bad: Bir ittifak seçin ve şu an oyunda kullandığı etiketi yazın.
+  links_used: Bugünkü ittifak bağlantı haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlayacak.
+  relink_none: Bu ittifak için tekrar bağlanacak bir şey kalmadı.
+  link_bad: Bir ittifak seçin ve şu anda oyunda kullandığı etiketi yazın.
   link_same: Bu, sitenin zaten kullandığı etiket.
-  link_taken: "{tag} sitede zaten başka bir ittifaka ait."
-  link_not_found: Oyunda {tag} etiketine sahip bir ittifak yok (harf duyarlılığı vardır).
-  positions_used: Bugünkü harita yenileme hakkınız bitti. Haklar günlük sıfırlamada (00:00 GT) tekrar başlar.
+  link_taken: "{tag} sitede zaten başka bir ittifak."
+  link_not_found: Oyunda {tag} etiketli bir ittifak yok (büyük/küçük harf duyarlıdır).
+  positions_used: Bugünkü harita yenileme haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlayacak.
   positions_wait: Harita kısa süre önce yenilendi. {minutes} dakika sonra tekrar deneyin.
-  refresh_limit: Bugün başka kadro yenileme hakkınız kalmadı. Haklar günlük sıfırlamada (00:00 GT) tekrar başlar.
+  refresh_limit: Bugün başka kadro yenileme hakkı kalmadı. Günlük sıfırlamada (00:00 GT) tekrar başlayacak.
   refresh_wait: Kadro kısa süre önce yenilendi. {n} dakika sonra tekrar deneyin.
   refresh_failed: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
-  signed_out: İttifak panelinizi görmek için Discord ile (sağ üst) giriş yapın.
-  load_failed: 'Panel yüklenemedi: {reason}'
-  no_alliance: Hangi ittifakta olduğunuzu belirleyemedik. Site, NAP Discord sunucusundaki ittifak rolünüzden bunu bulur. İttifak liderlerinizden veya bir Temsilciden rolü isteyin, ardından hesap kartınızdaki (sağ üst) Erişim Yenile butonunu kullanın.
-  leaders_only: Yalnızca ittifakınızın R4 ve R5'leri paneli değiştirebilir.
+  signed_out: İttifak panonuzu görmek için Discord ile giriş yapın (sağ üst).
+  load_failed: 'Pano yüklenemedi: {reason}'
+  no_alliance: Hangi ittifakta olduğunuzu anlayamadık. Site bunu NAP Discord sunucusundaki ittifak rolünüzden bulur. İttifak liderlerinizden veya bir Kahyadan rolü isteyin, ardından hesap kartınızda (sağ üst) Erişim Yenileme'yi kullanın.
+  alliance_unknown: Bu ittifak artık haritada değil. Sayfayı yenileyin ve tekrar seçin.
+  name_bad: Önce ittifak adını yazın.
+  leaders_only: Yalnızca ittifakınızın R4 ve R5'leri panoyu değiştirebilir.
   chart_removed: O grafik kaldırıldı.
   chart_already_removed: O grafik zaten kaldırılmıştı.
-  not_linked: Bu grafik bir Google Sayfası veya Dokümanı ile bağlantılı değil.
+  not_linked: Bu grafik bir Google E-Tabloya veya Dokümana bağlı değil.
   unknown_change: Bilinmeyen değişiklik.
   save_failed: 'Kaydedilemedi: {reason}'
-  r5_only_nominate: Burada adaylık sayfasını yalnızca R5'iniz açabilir. Discord'da /nominate komutunu çalıştırın.
+  r5_only_nominate: Burada aday gösterme sayfasını yalnızca R5'iniz açabilir. Discord'da /nominate komutunu çalıştırın.
   rewards_closed: Ödüller {when} tarihine kadar kapalıdır.
   no_rank: "[{tag}] sıralamada yer almıyor."
   choose_type: Bir grafik veya tablo türü seçin.
@@ -46,18 +48,18 @@ api_dashboard:
   too_many_columns: En fazla {max} sütun (bu tabloda {count} adet var).
   too_many_rows: En fazla {max} satır (bu tabloda {count} adet var).
   column_name: Sütun {n}
-  paste_first: Önce bir tablo yapıştırın (bir başlık satırı ve ardından veriler).
-  no_data_rows: Tablonun başlığının altında veri satırı yok.
+  paste_first: Önce bir tablo yapıştırın (başlık satırı, ardından veriler).
+  no_data_rows: Tablonun başlığının altında hiç veri satırı yok.
   needs_numbers: Bir grafiğin gösterilmesi için sayı içeren bir sütuna ihtiyacı vardır.
   needs_target: 'Bir ilerleme grafiğinin bir hedefe ihtiyacı vardır: bir sayı veya hedef sütunu.'
   too_many_widgets: İttifak başına en fazla {max} grafik ve tablo.
-  sheet_unusable: 'Sayfa verisi kullanılamıyor: {reason}'
-  too_big: Bu, paneli çok büyük hale getirir ({size} KB, maksimum {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
-  player_name_needed: Bir oyuncu ismi girin.
-  time_format: Zamanlar 18:00 gibi Oyun Saati formatındadır (veya boş bırakın).
-  start_time_needed: Başlangıç zamanını da belirtin (veya ikisini de boş bırakın).
-  rotor_full: Rotorda en fazla {max} oyuncu olabilir.
-  already_in_rotor: "{name} zaten rotorda."
+  sheet_unusable: 'E-tablo verileri kullanılamıyor: {reason}'
+  too_big: Bu, panoyu çok büyük yapar ({size} KB / {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
+  player_name_needed: Bir oyuncu adı girin.
+  time_format: Zamanlar 18:00 gibi Oyun Zamanı formatında olmalıdır (veya boş bırakın).
+  start_time_needed: Başlangıç zamanını da verin (veya ikisini de boş bırakın).
+  rotor_full: Rotasyonda en fazla {max} oyuncu olabilir.
+  already_in_rotor: "{name} zaten rotasyonda."
   player_removed: O oyuncu kaldırıldı.
 api_sheets:
   no_tabs: Bu tabloda sekme bulunamadı. Bağlantının doğrudan elektronik tabloyu açtığından emin olun.
@@ -79,16 +81,19 @@ api_sheets:
   no_such_table_other: Bu Dokümanda {count} tablo var; {table} numaralı tablo bulunmuyor.
   no_table: Bu Doküman hiçbir tablo içermiyor.
 api_nominate:
+  test_no_save: 'Bu bir Kahya test bağlantısıdır: listeler buradan kaydedilmez.'
+  sheet_link_needed: Önce ittifakınızın Google E-Tablo bağlantısını yapıştırın.
+  sheet_no_names: E-tablonun "{tab}" sekmesinde hiç isim yok. Önce tablodaki bir haftayı (Düellocu Araçları) çalıştırın.
   link_invalid: Bu bağlantı geçersiz veya süresi dolmuş.
   token_invalid: Belirteç geçersiz veya süresi dolmuş. /nominate komutunu tekrar çalıştırın.
   signed_out: Sandıkları işaretlemek için Discord ile giriş yapın (sağ üst).
   invalid_chest: Geçersiz sandık.
   no_period: Şu anda açık bir ödül dönemi yok.
-  king_only: Sadece Kral'ın ittifakı (R4/R5) ve Vekiller sandıkları işaretleyebilir.
-  king_only_tag: Sadece Kral'ın ittifakı [{king}] (R4/R5) ve Vekiller sandıkları işaretleyebilir.
-  not_listed: "{name}, [{alliance}] listesinde artık yok. Sayfayı yenileyin."
-  id_not_found: "[{alliance}] üyelerinden hiçbirinin oyuncu kimliği {id} değil. Numarayı kontrol edin veya ismi yazın."
-  ids_unavailable: Oyuncu kimliklerine şu anda bakılamıyor ({id}). Bunun yerine ismi yazın.
+  king_only: Yalnızca Kralın ittifakı (R4/R5) ve Kahyalar sandıkları işaretleyebilir.
+  king_only_tag: Yalnızca Kralın ittifakı [{king}] (R4/R5) ve Kahyalar sandıkları işaretleyebilir.
+  not_listed: "{name} artık [{alliance}] listesinde değil. Sayfayı yenileyin."
+  id_not_found: "[{alliance}] üyesinde {id} oyuncu kimliği yok. Numarayı kontrol edin veya ismi yazın."
+  ids_unavailable: Oyuncu kimlikleri şu anda sorgulanamıyor ({id}). Bunun yerine ismi yazın.
   listed_twice: "{name} listede iki kez var."
   save_failed: 'Kaydedilemedi: {reason}'
 api_register:
@@ -114,25 +119,26 @@ api_register:
   alert_role_missing: Varsayılan Uyarı Rolü ({id}) "{server}" içinde bir rol değil. Kimliği tekrar kopyalayın veya @everyone için boş bırakın.
   role_not_found: '"{server}" içinde "{role}" ile eşleşen bir rol henüz yok; biri oluşturulduğunda çalışacaktır.'
 api_alliance_images:
-  frame_png: Bir avatar çerçevesi şeffaf arka plana sahip bir PNG olmalıdır (JPEG dosyası üyelerinizin resimlerini kapatacaktır).
-  not_set_up: İttifak görselleri sunucuda henüz ayarlanmamış.
+  frame_png: Bir avatar çerçevesi, şeffaf arka plana sahip bir PNG olmalıdır (JPEG, üyelerinizin resimlerini kapatır).
+  not_set_up: İttifak görselleri sunucuda henüz ayarlanmadı.
   failed: İttifak görseliyle ilgili bir sorun oluştu. Lütfen tekrar deneyin.
   bad_image: Bu dosya sitenin kullanabileceği bir resim değil. Lütfen yükleme formunu kullanın.
-  too_big: Resim çok büyük ({kb} KB üzeri). Lütfen resmi küçülten yükleme formunu kullanın.
+  too_big: Resim çok büyük ({kb} KB üzeri). Resmin boyutunu küçülten yükleme formunu kullanın.
   wrong_size: Resim tam olarak {width}×{height} piksel olmalıdır. Lütfen yükleme formunu kullanın.
-  has_metadata: Resim hala gizli veriler içeriyor (fotoğrafın nerede çekildiği gibi). Lütfen bu verileri temizleyen yükleme formunu kullanın.
-  leaders_only: Sadece R4 ve R5 liderleri ittifak görselleri gönderebilir.
+  has_metadata: Resim hala gizli veriler taşıyor (fotoğrafın nerede çekildiği gibi). Bunu kaldıran yükleme formunu kullanın.
+  leaders_only: Yalnızca R4 ve R5 liderleri ittifak görselleri gönderebilir.
   own_alliance_only: Sadece kendi ittifakınız için görsel gönderebilirsiniz.
-  unknown_alliance: Bu ittifak NAP listesinde bulunmuyor.
-  daily_limit: 'Günlük sınıra ulaşıldı: 24 saat içinde ittifak başına en fazla {max} görsel. Bir sonrakini {when} sonrasında gönderebilirsiniz.'
-  post_failed: Görsel Discord'daki görevlilere gönderilemedi. Lütfen daha sonra tekrar deneyin.
-  sent: İnceleme için görevlilere gönderildi. Onaylandıktan sonra görünecektir.
-  stewards_only: Sadece görevliler ittifak görsellerini inceleyebilir.
-  not_found: Görsel bulunamadı. Süresi dolmuş olabilir.
-  already_decided: Bu görsel zaten incelenmiş (veya yenisiyle değiştirilmiş).
-  approved: 'Onaylandı: görsel artık yayında.'
-  rejected: 'Reddedildi: görsel silindi.'
-  remove_not_allowed: Sadece ittifakın R5'i veya bir görevli görsellerini kaldırabilir.
+  unknown_alliance: Bu ittifak NAP'te yok.
+  daily_limit: 'Günlük sınıra ulaşıldı: 24 saat içinde ittifak başına {max} görsel. Bir sonrakini {when} tarihinden sonra gönderebilirsiniz.'
+  post_failed: Görsel Discord'daki Kahyalara gönderilemedi. Lütfen daha sonra tekrar deneyin.
+  sent: İncelenmek üzere Kahyalara gönderildi. Onaylandıktan sonra görünecektir.
+  saved_live: 'Kaydedildi: Görsel artık yayında.'
+  stewards_only: Yalnızca Kahyalar ittifak görsellerini inceleyebilir.
+  not_found: O görsel bulunamadı. Süresi dolmuş olabilir.
+  already_decided: O görsel zaten incelendi (veya daha yenisiyle değiştirildi).
+  approved: 'Onaylandı: Görsel artık yayında.'
+  rejected: 'Reddedildi: Görsel silindi.'
+  remove_not_allowed: Sadece ittifakın R5'i veya bir Kahya görsellerini kaldırabilir.
   nothing_to_remove: Kaldırılacak bir görsel yok.
   removed: Görsel kaldırıldı.
 api_proposals:
@@ -219,33 +225,45 @@ bot_map:
   alliances: İttifaklar
   resources: Kaynaklar
 bot_nominate:
-  server_only: "⚠️ Bu komut ittifak Discord sunucunuzda veya NAP sunucusunda çalıştırılmalıdır."
-  owner_server: "⛔ **Erişim Engellendi:** Ödül adaylıkları bu sunucudan gönderilemez. Liderler adaylıkları NAP sunucusu veya kendi ittifak sunucuları üzerinden göndermelidir."
-  dedicated_denied: "⛔ **Erişim Engellendi:** Sadece **@R5** sahibi üyeler veya yetkili liderlik rolleri ({roles}) **[{tag}]** için adaylık gönderebilir."
-  r5_only: "⛔ **Erişim Engellendi:** Sadece **@R5** rolüne sahip İttifak Liderleri ödül adaylığı gönderebilir."
-  no_tag_role: "⚠️ İttifak etiketi rolünüz algılanamadı. İttifak rolünüzün (örn. `@{example}`) atandığından emin olun."
-  closed: "🔒 **Ödüller kapalı.** {week} ödülleri {closed} sona erdi.\nSonraki ödüller Cuma günkü başkent etkinliğinden sonra, {opens} açılacak."
-  period_busy: "⚠️ Servis meşgul: yeni ödül dönemi açılamadı. Lütfen birkaç saniye içinde /nominate komutunu tekrar deneyin."
-  no_rank: "⚠️ **[{tag}]** için sıralamada aktif bir derece atanmamış."
-  no_chests: "⚠️ **[{tag}]** için mevcut dağıtımda ayrılan 0 sandık var."
+  alliance_stewards_only: "⛔ Yalnızca Kahyalar bir ittifak seçebilir. Kendi ittifakınız için komutu ittifaksız çalıştırın."
+  unknown_alliance: "⚠️ Haritada **{tag}** etiketine sahip bir ittifak yok."
+  list_title: "📋 [{tag}] aday listesi"
+  list_none: "**[{tag}]** için bu dönem henüz bir liste kaydedilmemiş. Bağlantı için /nominate komutunu çalıştırın."
+  list_saved: "{when} tarihinde kaydedildi."
+  list_reserves: "**Yedekler:** {names}"
+  list_unfilled: "⚠️ {n} sandık için hala bir isme ihtiyaç var."
+  test_title: "🧪 Test bağlantısı — [{tag}]"
+  test_text: "{why} İşte bir test bağlantısı: sayfa normal şekilde çalışır ancak buradan hiçbir şey kaydedilmez. 24 saat geçerlidir."
+  test_why_closed: Ödüller şu anda kapalı.
+  test_why_no_rank: Bu ittifak sıralamada yer almıyor.
+  test_why_no_chests: Bu ittifakın bu dönem hiç sandığı yok.
+  server_only: "⚠️ Bu komut ittifakınızın Discord sunucusunda veya NAP sunucusunda çalıştırılmalıdır."
+  owner_server: "⛔ **Erişim Engellendi:** Ödül adayları bu sunucudan gönderilemez. Liderler NAP sunucusu veya kendi ittifak sunucuları üzerinden göndermelidir."
+  dedicated_denied: "⛔ **Erişim Engellendi:** Yalnızca **@R5** rolüne veya yetkili liderlik rollerine ({roles}) sahip olan üyeler **[{tag}]** için aday gösterebilir."
+  r5_only: "⛔ **Erişim Engellendi:** Yalnızca **@R5** rolüne sahip İttifak Liderleri ödül adaylığı gönderebilir."
+  no_tag_role: "⚠️ İttifak etiketi rolünüz tespit edilemedi. İttifak rolünüzün (örn. `@{example}`) atandığından emin olun."
+  closed: "🔒 **Ödüller kapalı.** {week} ödüllerinin süresi {closed} tarihinde doldu.\nBir sonraki ödüller Cuma günü gerçekleşecek başkent etkinliğinden sonra {opens} tarihinde açılacak."
+  period_busy: "⚠️ Hizmet meşgul: yeni ödül dönemi açılamadı. Lütfen birkaç saniye sonra /nominate komutunu tekrar deneyin."
+  no_rank: "⚠️ **[{tag}]** sıralamada aktif bir dereceye sahip değil."
+  no_chests: "⚠️ **[{tag}]** güncel dağıtımda 0 sandığa sahip."
   no_kw: Bu hafta Krallık Savaşı yok.
   won: "⚔️ **Kazandı.** Onur Öncüsü ×{gold} · Korkusuz Kahraman ×{purple} · Lojistik Destek ×{blue}"
   lost: 'Bu hafta değil: Krallık Savaşı kaybedildi.'
-  waiting: "⏳ **Savaş sonucunu bekliyor** (yaklaşık {time}). Eğer kazanılırsa: Onur Öncüsü ×{gold} · Korkusuz Kahraman ×{purple} · Lojistik Destek ×{blue}"
+  waiting: "⏳ **Savaş sonucu bekleniyor** (yaklaşık {time}). Kazanılırsa: Onur Öncüsü ×{gold} · Korkusuz Kahraman ×{purple} · Lojistik Destek ×{blue}"
   commendation: "👑 Kralın Takdiri"
   commendation_line: Komutanın İradesi ×{gold} · Sadık Hizmetkar ×{purple} · Takipçinin Kalbi ×{blue}
   battle_reward: "⚔️ Savaş Kralı Ödülü"
-  buyout_title: "🛡️ Savaş Dönemi Geri Ödeme Aktif"
-  buyout_text: 'Bu haftaki savunma geçersiz kılma (Tehdit: `{threat}`) için WLO tarafından finanse edilen **+1 Komutanın İradesi** (ve savaş kazanılırsa **+1 Onur Öncüsü**) dahildir.'
+  buyout_title: "🛡️ Savaş Zamanı Satın Alma İadesi Aktif"
+  buyout_text: 'WLO tarafından bu haftanın savunma geçersiz kılma işlemi için finanse edilen **+1 Komutanın İradesi** (ve savaş kazanılırsa **+1 Onur Öncüsü**) içerir (Tehdit: `{threat}`).'
   buyout_default_threat: Kırmızı Liste
-  funds_title: "⚖️ Savaş Dönemi Geri Ödemesi Finanse Edildi"
-  funds_text: WLO, yerinden edilen ittifakın tazminatını finanse etmek için bu haftanın 1. Sıra tahsisinden **1 Komutanın İradesi** (ve savaş kazanılırsa **1 Onur Öncüsü**) sağlar.
+  funds_title: "⚖️ Savaş Zamanı Satın Alma İadesi Finanse Edildi"
+  funds_text: WLO, yerinden edilen ittifakın iadesini finanse etmek için bu haftanın 1. Sıra tahsisatından **1 Komutanın İradesi** (ve savaş kazanılırsa **1 Onur Öncüsü**) sağlar.
   how_title: "📝 Nasıl çalışır"
-  how_text: Oyuncularınızı **en iyiden başlayarak** listeleyin. Sandıklar, her iki set genelinde değer sırasına göre listeye dağıtılır; ekstra isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
-  how_waiting: "⏳ Kral dağıtımı savaş sonucundan sonra yapar, bu nedenle kimsenin sandığı değişmez."
+  how_text: Oyuncularınızı **en iyiden başlayarak** listeleyin. Sandıklar her iki sette de değer sırasına göre listelenir; fazladan isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
+  how_waiting: "⏳ Kral ödülleri savaş sonucundan sonra dağıtır, bu yüzden kimsenin sandığı değişmez."
   title: "🎁 {week} Ödülleri — [{tag}]"
-  summary: 'Sıra #{rank} · {until} ({relative}) tarihine kadar açık.'
-  open_page: Adaylık Sayfasını Aç
+  summary: 'Sıra #{rank} · {until} tarihine kadar açık ({relative}).'
+  open_page: Aday Sayfasını Aç
 bot_rewards:
   reset_denied: "⛔ **Erişim Reddedildi:** Adaylıkları yalnızca atanmış Krallık Görevlileri temizleyebilir."
   nothing_to_clear: "🔒 Açık bir ödül dönemi yok, bu yüzden temizlenecek bir şey yok."
@@ -343,35 +361,39 @@ bot_register:
 bot_commands:
   calendar: Etkinlik Takvimini görüntüleyin veya yönetin
   calendar_kingdom: Krallık Etkinlik Takvimini görüntüleyin veya yönetin
-  calendar_action: Gerçekleştirilecek eylem (takvimi görüntülemek için boş bırakın)
-  calendar_manage_alliance: İttifak Etkinliklerini Yönet (varsayılan R5)
-  calendar_manage_global: Küresel Etkinlikleri Yönet (Sadece Yönetici)
-  nominate: Haftalık sandık adaylıklarını göndermek için bir portal bağlantısı isteyin
-  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimliği doğrulanmış bir portal bağlantısı isteyin
-  rewards: 'Bu haftaki ödüller: durum ve Krallık Savaşı sonucu (Görevliler)'
-  rewards_action: Bu haftaki ödül durumunu görmek için boş bırakın
-  rewards_won: 'Krallık Savaşını kaydet: Kazanıldı (Görevli)'
-  rewards_lost: 'Krallık Savaşını kaydet: Kaybedildi (Görevli)'
-  rewards_reset: Bu haftaki adaylıkları temizle (Görevli)
-  rewards_reset_overrides: Başkent geçersiz kılmalarını ve satın alımları sıfırla (Görevli)
+  calendar_action: Gerçekleştirilecek eylem (görüntülemek için boş bırakın)
+  calendar_manage_alliance: İttifak Etkinliklerini yönetin (varsayılan R5)
+  calendar_manage_global: Küresel Etkinlikleri yönetin (Sadece Yönetici)
+  nominate: Haftalık sandık adaylıklarını göndermek için portal bağlantısı isteyin
+  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimlik doğrulamalı portal bağlantısı isteyin
+  nominate_show: Adaylık bağlantısı için boş bırakın
+  nominate_show_link: "🔗 Adaylık bağlantısını al"
+  nominate_show_list: "📋 Güncel listemizi göster"
+  nominate_alliance: 'Kahyalar: başka bir ittifak adına hareket et (ödüller kapalıyken test bağlantısı)'
+  rewards: 'Bu haftanın ödülleri: durum ve Krallık Savaşı sonucu (Kahyalar)'
+  rewards_action: Bu haftanın ödül durumunu görmek için boş bırakın
+  rewards_won: 'Krallık Savaşını Kaydet: Kazandı (Kahya)'
+  rewards_lost: 'Krallık Savaşını Kaydet: Kaybetti (Kahya)'
+  rewards_reset: Bu haftanın adaylıklarını temizle (Kahya)
+  rewards_reset_overrides: Başkent geçersiz kılmalarını ve satın almaları sıfırla (Kahya)
   rank: İttifak NAP sıralamalarını görüntüleyin veya yönetin
-  rank_set: Bir ittifakın NAP sırasını güncelle (Sadece Yönetici)
-  rank_tag: İttifak etiketi (örneğin ABC)
-  rank_position: Yeni sıra konumu (örneğin 1'den 10'a)
-  rank_list: Mevcut NAP sıralamalarını ve durumlarını görüntüle
+  rank_set: Bir ittifakın NAP sırasını güncelleyin (Sadece Yönetici)
+  rank_tag: İttifak etiketi (örn. ABC)
+  rank_position: Yeni sıra konumu (örn. 1'den 10'a)
+  rank_list: Güncel NAP sıralamalarını ve durumunu görüntüle
   sb: Hayatta Kalma Savaşı programını görüntüle
-  sb_long: Hayatta Kalma Savaşı silah yarışı programını ve aktif etkinlikleri görüntüle
+  sb_long: Hayatta Kalma Savaşı silahlanma yarışı programını ve aktif etkinlikleri görüntüle
   sb_day: Döngü günü (1-7)
   rules: Sunucu ve Krallık NAP kurallarını görüntüle
-  rules_rule: Görüntülenecek belirli kural numarası
+  rules_rule: Görüntülenecek özel kural numarası
   map: Canlı bölge haritasını görüntüle
   map_long: Canlı Last Asylum bölge haritasını görüntüle
-  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Görevliler; yanıtı sadece siz görürsünüz)
-  registerbot: İttifak sunucusunu kaydet veya eğik çizgi komutlarını senkronize et
+  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Kahyalar; yanıtı sadece siz görürsünüz)
+  registerbot: İttifak sunucusunu kaydedin veya eğik çizgi komutlarını senkronize edin
   registerbot_action: Gerçekleştirilecek eylem (kayıt portalı bağlantısını almak için boş bırakın)
   registerbot_sync: Tüm Kayıtlı Sunucuları Senkronize Et (Sadece Yönetici)
   suggest: Bir kural önerisi gönderin, bir ittifak sorununu bildirin veya bilet durumunuzu kontrol edin
-  suggest_type: Bilet kategorisi seçin veya aktif başvurularınızı kontrol edin
+  suggest_type: Bilet kategorisini seçin veya aktif gönderimlerinizi kontrol edin
   suggest_nap: "👑 Krallık / NAP Önerisi (Sunucu Geneli Kural veya Etkinlik Fikri)"
-  suggest_alliance: "🛡️ Dahili İttifak Sorunu (R4/R5'leriniz Tarafından Özel Olarak Ele Alınır)"
+  suggest_alliance: "🛡️ Dahili İttifak Sorunu (R4/R5'leriniz tarafından gizlice ele alınır)"
   suggest_status: "📋 Bilet Durumumu Görüntüle (Aktif ve Son Geçmiş)"

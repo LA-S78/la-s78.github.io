@@ -81,14 +81,17 @@ api_sheets:
   no_such_table_other: Das Dokument enthält {count} Tabellen; es gibt keine Tabelle {table}.
   no_table: Dieses Dokument enthält keine Tabelle.
 api_nominate:
+  test_no_save: 'Dies ist ein Test-Link für Stewards: Listen werden hierüber nicht gespeichert.'
+  sheet_link_needed: Füge zuerst den Google-Tabellen-Link deiner Allianz ein.
+  sheet_no_names: Der Tab "{tab}" der Tabelle enthält keine Namen. Übertrage zuerst eine Woche in die Tabelle (Duell-Tools).
   link_invalid: Dieser Link ist ungültig oder abgelaufen.
   token_invalid: Token ist ungültig oder abgelaufen. Führe /nominate erneut aus.
   signed_out: Melde dich mit Discord an (oben rechts), um Truhen zu markieren.
   invalid_chest: Ungültige Truhe.
-  no_period: Derzeit ist kein Belohnungszeitraum aktiv.
+  no_period: Momentan ist kein Belohnungszeitraum offen.
   king_only: Nur die Allianz des Königs (R4/R5) und Stewards können Truhen markieren.
   king_only_tag: Nur die Allianz des Königs [{king}] (R4/R5) und Stewards können Truhen markieren.
-  not_listed: "{name} ist nicht mehr auf der Liste von [{alliance}]. Lade die Seite neu."
+  not_listed: "{name} steht nicht mehr auf der Liste von [{alliance}]. Aktualisiere die Seite."
   id_not_found: Kein Mitglied von [{alliance}] hat die Spieler-ID {id}. Überprüfe die Nummer oder gib den Namen ein.
   ids_unavailable: Spieler-IDs können derzeit nicht abgerufen werden ({id}). Gib stattdessen den Namen ein.
   listed_twice: "{name} steht doppelt auf der Liste."
@@ -222,32 +225,44 @@ bot_map:
   alliances: Allianzen
   resources: Ressourcen
 bot_nominate:
-  server_only: "⚠️ Dieser Befehl muss in deinem Allianz-Discord-Server oder dem NAP-Server ausgeführt werden."
-  owner_server: "⛔ **Zugriff verweigert:** Belohnungsnominierungen können von diesem Server aus nicht eingereicht werden. Führungskräfte müssen diese über den NAP-Server oder ihren Allianz-Server einreichen."
-  dedicated_denied: "⛔ **Zugriff verweigert:** Nur Mitglieder mit **@R5** oder autorisierten Führungsrollen ({roles}) können Nominierungen für **[{tag}]** einreichen."
-  r5_only: "⛔ **Zugriff verweigert:** Nur Allianzführer mit der **@R5**-Rolle können Belohnungsnominierungen einreichen."
-  no_tag_role: "⚠️ Deine Allianz-Tag-Rolle konnte nicht erkannt werden. Stelle sicher, dass du deine Allianz-Rolle (z. B. `@{example}`) zugewiesen hast."
-  closed: "🔒 **Belohnungen sind geschlossen.** Die {week}-Belohnungen liefen am {closed} ab.\nDie nächsten Belohnungen öffnen am {opens}, nach dem Kapitol-Event am Freitag."
-  period_busy: "⚠️ Dienst ausgelastet: Die neue Belohnungsperiode konnte nicht geöffnet werden. Bitte versuche /nominate in wenigen Sekunden erneut."
-  no_rank: "⚠️ **[{tag}]** hat keinen aktiven Rang in der Rangliste zugewiesen."
-  no_chests: "⚠️ **[{tag}]** hat 0 Truhen gemäß der aktuellen Verteilung zugeteilt bekommen."
-  no_kw: Kein Königreichskrieg diese Woche.
-  won: "⚔️ **Gewonnen.** Ehren-Vanguard ×{gold} · Furchtloser Held ×{purple} · Logistik-Unterstützung ×{blue}"
+  alliance_stewards_only: "⛔ Nur Stewards können eine Allianz wählen. Führe /nominate ohne Angabe für deine eigene aus."
+  unknown_alliance: "⚠️ Auf der Karte gibt es keine Allianz mit dem Tag **{tag}**."
+  list_title: "📋 [{tag}] Nominierungsliste"
+  list_none: Für **[{tag}]** ist in diesem Zeitraum noch keine Liste gespeichert. Führe /nominate für den Link aus.
+  list_saved: Gespeichert am {when}.
+  list_reserves: "**Reserven:** {names}"
+  list_unfilled: "⚠️ {n} Truhe(n) benötigen noch einen Namen."
+  test_title: "🧪 Test-Link — [{tag}]"
+  test_text: "{why} Hier stattdessen ein Test-Link: Die Seite funktioniert wie gewohnt, aber es wird nichts gespeichert. 24 Stunden gültig."
+  test_why_closed: Belohnungen sind derzeit geschlossen.
+  test_why_no_rank: Diese Allianz hat keinen Rang in der Bestenliste.
+  test_why_no_chests: Diese Allianz erhält in diesem Zeitraum keine Truhen.
+  server_only: "⚠️ Dieser Befehl muss innerhalb deines Allianz-Discord-Servers oder des NAP-Servers ausgeführt werden."
+  owner_server: "⛔ **Zugriff verweigert:** Belohnungs-Nominierungen können nicht von diesem Server aus eingereicht werden. Anführer müssen über den NAP-Server oder ihren Allianz-Server einreichen."
+  dedicated_denied: "⛔ **Zugriff verweigert:** Nur Mitglieder mit der Rolle **@R5** oder autorisierte Führungsrollen ({roles}) können Nominierungen für **[{tag}]** einreichen."
+  r5_only: "⛔ **Zugriff verweigert:** Nur Allianz-Anführer mit der Rolle **@R5** können Belohnungs-Nominierungen einreichen."
+  no_tag_role: "⚠️ Dein Allianz-Tag konnte nicht erkannt werden. Stelle sicher, dass dir deine Allianz-Rolle (z. B. `@{example}`) zugewiesen wurde."
+  closed: "🔒 **Belohnungen sind geschlossen.** Die Belohnungen für {week} sind am {closed} abgelaufen.\nDie nächsten Belohnungen öffnen am {opens}, nach dem Kapitol-Event am Freitag."
+  period_busy: "⚠️ Dienst ausgelastet: Der neue Belohnungszeitraum konnte nicht geöffnet werden. Bitte versuche /nominate in wenigen Sekunden erneut."
+  no_rank: "⚠️ **[{tag}]** hat keinen aktiven Rang in der Bestenliste zugewiesen."
+  no_chests: "⚠️ **[{tag}]** hat 0 Truhen gemäß der aktuellen Verteilung."
+  no_kw: Diese Woche kein Königreichskrieg.
+  won: "⚔️ **Gewonnen.** Ehren-Vorhut ×{gold} · Furchtloser Held ×{purple} · Logistikunterstützung ×{blue}"
   lost: 'Nicht diese Woche: Der Königreichskrieg wurde verloren.'
-  waiting: "⏳ **Warten auf das Kampfergebnis** (etwa {time}). Falls gewonnen: Ehren-Vanguard ×{gold} · Furchtloser Held ×{purple} · Logistik-Unterstützung ×{blue}"
+  waiting: "⏳ **Warte auf das Schlacht-Ergebnis** (ca. {time}). Falls gewonnen: Ehren-Vorhut ×{gold} · Furchtloser Held ×{purple} · Logistikunterstützung ×{blue}"
   commendation: "👑 Belobigung des Königs"
-  commendation_line: Wille des Kommandanten ×{gold} · Loyaler Diener ×{purple} · Herz des Anhängers ×{blue}
-  battle_reward: "⚔️ Belohnung des Schlachtkönigs"
-  buyout_title: "🛡️ Kriegsentschädigung aktiv"
-  buyout_text: 'Beinhaltet **+1 Wille des Kommandanten** (und **+1 Ehren-Vanguard**, falls der Krieg gewonnen wurde), finanziert durch WLO für die Verteidigungs-Übersteuerung dieser Woche (Bedrohung: `{threat}`).'
+  commendation_line: Wille des Befehlshabers ×{gold} · Treuer Diener ×{purple} · Herz des Gefolgsmanns ×{blue}
+  battle_reward: "⚔️ Belohnung: König der Schlacht"
+  buyout_title: "🛡️ Kriegs-Auszahlung aktiv"
+  buyout_text: 'Beinhaltet **+1 Wille des Befehlshabers** (und **+1 Ehren-Vorhut**, falls der Krieg gewonnen wird), finanziert durch WLO für die Verteidigungs-Übersteuerung dieser Woche (Bedrohung: `{threat}`).'
   buyout_default_threat: Rote Liste
-  funds_title: "⚖️ Kriegsentschädigung finanziert"
-  funds_text: 'WLO stellt **1 Wille des Kommandanten** (und **1 Ehren-Vanguard**, falls der Krieg gewonnen wurde) aus dem Kontingent für Rang #1 dieser Woche bereit, um die Entschädigung der verdrängten Allianz zu finanzieren.'
+  funds_title: "⚖️ Kriegs-Auszahlung finanziert"
+  funds_text: 'WLO liefert **1 Wille des Befehlshabers** (und **1 Ehren-Vorhut**, falls der Krieg gewonnen wird) aus der Zuteilung von Rang #1 dieser Woche, um die Entschädigung der verdrängten Allianz zu finanzieren.'
   how_title: "📝 So funktioniert es"
-  how_text: Liste deine Spieler **nach Bestleistung** auf. Die Truhen werden der Liste nach entsprechend des Wertes über beide Sets verteilt; zusätzliche Namen werden als Reserve gehalten und rücken nach, falls mehr Truhen geöffnet werden.
-  how_waiting: "⏳ Der König verteilt nach dem Kampfergebnis, daher ändert sich an den Truhen von niemandem etwas."
+  how_text: Liste deine Spieler **nach Stärke absteigend** auf. Die Truhen werden der Reihe nach gemäß dem Wert beider Sets vergeben; zusätzliche Namen bleiben als Reserven und rücken nach, falls mehr Truhen geöffnet werden.
+  how_waiting: "⏳ Der König verteilt nach dem Schlacht-Ergebnis, daher ändern sich die Truhen niemanden."
   title: "🎁 {week} Belohnungen — [{tag}]"
-  summary: 'Rang #{rank} · geöffnet bis {until} ({relative}).'
+  summary: 'Rang #{rank} · offen bis {until} ({relative}).'
   open_page: Nominierungsseite öffnen
 bot_rewards:
   reset_denied: "⛔ **Zugriff verweigert:** Nur ernannte Königreich-Verwalter können Nominierungen löschen."
@@ -344,37 +359,41 @@ bot_register:
   open_portal: Registrierungsportal öffnen
   busy: "⚠️ Dienst ausgelastet: {reason}. Bitte versuche es in wenigen Momenten erneut."
 bot_commands:
-  calendar: Veranstaltungskalender anzeigen oder verwalten
-  calendar_kingdom: Königreich-Veranstaltungskalender anzeigen oder verwalten
-  calendar_action: Auszuführende Aktion (leer lassen, um den Kalender anzuzeigen)
-  calendar_manage_alliance: Allianz-Veranstaltungen verwalten (standardmäßig R5)
-  calendar_manage_global: Globale Veranstaltungen verwalten (nur Admins)
-  nominate: Portal-Link für die Einreichung wöchentlicher Truhen-Nominierungen anfordern
-  nominate_authenticated: Authentifizierten Portal-Link für die Einreichung wöchentlicher Truhen-Nominierungen anfordern
-  rewards: 'Belohnungen dieser Woche: Status und Königreichskrieg-Ergebnis (Verwalter)'
+  calendar: Event-Kalender ansehen oder verwalten
+  calendar_kingdom: Königreichs-Event-Kalender ansehen oder verwalten
+  calendar_action: Auszuführende Aktion (leer lassen, um Kalender zu sehen)
+  calendar_manage_alliance: Allianz-Events verwalten (standardmäßig R5)
+  calendar_manage_global: Globale Events verwalten (nur Admins)
+  nominate: Portal-Link für wöchentliche Truhen-Nominierungen anfordern
+  nominate_authenticated: Authentifizierten Portal-Link für wöchentliche Truhen-Nominierungen anfordern
+  nominate_show: Leer lassen für den Nominierungs-Link
+  nominate_show_link: "🔗 Nominierungs-Link abrufen"
+  nominate_show_list: "📋 Aktuelle Liste anzeigen"
+  nominate_alliance: 'Stewards: Für eine andere Allianz handeln (Test-Link, wenn Belohnungen geschlossen sind)'
+  rewards: 'Belohnungen dieser Woche: Status und Königreichskrieg-Ergebnis (Stewards)'
   rewards_action: Leer lassen, um den Belohnungsstatus dieser Woche zu sehen
-  rewards_won: 'Königreichskrieg aufzeichnen: Gewonnen (Verwalter)'
-  rewards_lost: 'Königreichskrieg aufzeichnen: Verloren (Verwalter)'
-  rewards_reset: Nominierungen dieser Woche löschen (Verwalter)
-  rewards_reset_overrides: Kapitol-Überschreibungen und Ausgleiche zurücksetzen (Verwalter)
-  rank: NAP-Ranglisten der Allianz anzeigen oder verwalten
+  rewards_won: Königreichskrieg als gewonnen markieren (Steward)
+  rewards_lost: Königreichskrieg als verloren markieren (Steward)
+  rewards_reset: Nominierungen dieser Woche löschen (Steward)
+  rewards_reset_overrides: Kapitol-Übersteuerungen und Auszahlungen zurücksetzen (Steward)
+  rank: NAP-Ränge der Allianz ansehen oder verwalten
   rank_set: NAP-Rang einer Allianz aktualisieren (nur Admins)
   rank_tag: Allianz-Tag (z. B. ABC)
-  rank_position: Neue Rangposition (z. B. 1 bis 10)
+  rank_position: Neue Rang-Position (z. B. 1 bis 10)
   rank_list: Aktuelle NAP-Ranglisten und Standings anzeigen
-  sb: Überlebenskampf-Zeitplan anzeigen
-  sb_long: Überlebenskampf-Rüstungswettlauf-Zeitplan und aktive Veranstaltungen anzeigen
+  sb: Zeitplan für den Überlebenskampf anzeigen
+  sb_long: Zeitplan für Wettrüsten im Überlebenskampf und aktive Events anzeigen
   sb_day: Tag des Zyklus (1-7)
   rules: Server- und Königreich-NAP-Regeln anzeigen
   rules_rule: Spezifische Regelnummer zum Anzeigen
-  map: Live-Gebietskarte anzeigen
-  map_long: Last Asylum Live-Gebietskarte anzeigen
-  devupdate: Live-Daten in die Testseite kopieren (nur Verwalter; nur du siehst die Antwort)
+  map: Live-Gebietskarte ansehen
+  map_long: Live-Gebietskarte von Last Asylum ansehen
+  devupdate: Live-Daten in die Test-Site kopieren (nur Stewards; nur du siehst die Antwort)
   registerbot: Allianz-Server registrieren oder Slash-Befehle synchronisieren
   registerbot_action: Auszuführende Aktion (leer lassen, um Registrierungs-Portal-Link zu erhalten)
   registerbot_sync: Alle registrierten Server synchronisieren (nur Admins)
-  suggest: Regelvorschlag einreichen, Allianz-Problem melden oder Ticketstatus prüfen
-  suggest_type: Ticketkategorie wählen oder aktive Einreichungen prüfen
-  suggest_nap: "👑 Königreich- / NAP-Vorschlag (Serverweite Regel oder Veranstaltungsidee)"
-  suggest_alliance: "🛡️ Internes Allianz-Problem (wird privat durch deine R4/R5s behandelt)"
-  suggest_status: "📋 Meinen Ticketstatus anzeigen (aktiv & letzte Historie)"
+  suggest: Regelvorschlag einreichen, Allianz-Problem melden oder Ticket-Status prüfen
+  suggest_type: Ticket-Kategorie auswählen oder aktive Einreichungen prüfen
+  suggest_nap: "👑 Königreich / NAP-Vorschlag (Serverweite Regel oder Event-Idee)"
+  suggest_alliance: "🛡️ Internes Allianz-Problem (wird privat durch deine R4/R5 behandelt)"
+  suggest_status: "📋 Meinen Ticket-Status anzeigen (aktiv & Verlauf)"

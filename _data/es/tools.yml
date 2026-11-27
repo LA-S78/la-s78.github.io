@@ -331,29 +331,37 @@ nominate:
   name_unknown: No está en la lista de miembros de [{tag}]
   names_spelling_one: '1 nombre se escribe de forma diferente en el juego:'
   names_spelling_other: "{n} nombres se escriben de forma diferente en el juego:"
-  use_game_spellings: Usar la escritura del juego
-  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todos modos; comprueba que sea correcto:'
-  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todos modos; comprueba que sean correctos:"
-  did_you_mean: "¿quisiste decir"
-  loading: Cargando página de nominaciones...
-  players_label: Tus jugadores, los mejores primero
-  players_help: Un nombre o ID de jugador por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor en ambos grupos; los nombres más allá de los cofres se mantienen como reservas y subirán de puesto si se abren más cofres.
-  players_placeholder: Nombres exactos del juego o IDs de jugador, los mejores primero...
+  use_game_spellings: Usar la ortografía del juego
+  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todas formas; comprueba si es correcto:'
+  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todas formas; comprueba si son correctos:"
+  did_you_mean: quisiste decir
+  loading: Cargando página de nominación...
+  players_label: Tus jugadores, mejores primero
+  players_help: Un nombre o ID de jugador por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor en ambos conjuntos; los nombres después de los cofres se mantienen como reserva y subirán si se abren más cofres.
+  players_placeholder: Nombres exactos del juego o IDs de jugador, mejores primero...
   id_found: Escrito como ID de jugador {id}
   id_unknown: Ningún miembro de [{tag}] tiene el ID {id}
   who_gets_what: Quién recibe qué
   save: Guardar lista
+  sheet_fill: Rellenar desde hoja
+  test_banner: 'Enlace de prueba (Steward): esta página funciona como siempre, pero no se guarda nada.'
+  test_no_save: 'Enlace de prueba: no guardado'
+  sheet_link: Enlace a Google Sheet
+  sheet_help: La hoja de tu alianza con la pestaña "Capitol Ranking" de las Duelo de Alianzas, compartida como "Cualquier persona con el enlace puede ver". El enlace se recuerda para la próxima vez.
+  sheet_loading: Leyendo la hoja…
+  sheet_filled: Se rellenaron {n} nombres desde la hoja. Revísalos y luego guarda.
+  sheet_filled_week: Se rellenaron {n} nombres desde la hoja ({week}). Revísalos y luego guarda.
   saving: Guardando...
   link_incomplete: Este enlace está incompleto. Ejecuta /nominate en Discord para obtener uno nuevo.
-  load_failed: "{error} Ejecuta /nominate en Discord para obtener un nuevo enlace."
-  closed: Las recompensas están cerradas. La próxima abre {when}, después del evento del capitolio del viernes.
-  header: Rango {rank} · recompensas de {week} · abierto hasta {when}
-  banner_off_week: Solo Condecoración del Rey esta semana (sin Guerra de Reinos).
-  banner_won: 'Guerra de Reinos ganada: los cofres de Recompensa del Rey de Batalla también están abiertos.'
-  banner_lost: 'Guerra de Reinos perdida: solo Condecoración del Rey esta semana.'
-  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa del Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte tras el resultado, así que el cofre de nadie cambia.
-  handed_out_title: "✓ Ya repartido por el Rey ({n})"
-  handed_out_help: Estos cofres se entregan en el juego, así que se quedan con esos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
+  load_failed: "{error} Ejecuta /nominate en Discord para un nuevo enlace."
+  closed: Las recompensas están cerradas. La próxima apertura es {when}, después del evento del capitolio del viernes.
+  header: Rango {rank} · Recompensas de {week} · abierto hasta {when}
+  banner_off_week: Solo mención del Rey esta semana (sin Guerra de Reinos).
+  banner_won: 'Guerra de Reinos ganada: los cofres de Recompensa Rey de la Batalla también están abiertos.'
+  banner_lost: 'Guerra de Reinos perdida: solo mención del Rey esta semana.'
+  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa Rey de la Batalla también se abrirán y tu lista se reordenará. El Rey reparte después del resultado, por lo que el cofre de nadie cambia.
+  handed_out_title: "✓ Ya entregado por el Rey ({n})"
+  handed_out_help: Estos cofres se entregan en el juego, por lo que permanecen con estos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
   reserve: Reserva
   col_player: Jugador
   col_chest: Cofre
@@ -366,7 +374,7 @@ nominate:
   reserves_one: "{n} reserva"
   reserves_other: "{n} reservas"
   listed_twice: "{name} está listado dos veces"
-  saved: Guardado. El Rey ve tu lista. Puedes cambiarla hasta {when}.
+  saved: Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta {when}.
   save_failed: 'No se pudo guardar: {error}'
 kings_console:
   page_title: Consola de Distribución del Rey
@@ -714,7 +722,7 @@ event_presets:
   cheese_trap_title: Trampa de Queso
   cheese_trap_desc: Ayuda a defenderte del Ladrón de Queso
 alliance_planner:
-  roster: 'Lista NAP:'
+  roster: 'Lista de NAP:'
   roster_loading: "-- Alianzas"
   nap_alliances: "{n} Alianzas NAP"
   planner_mode: Modo Planificador
@@ -722,25 +730,30 @@ alliance_planner:
   tag_placeholder: TAG (ej. WLO)
   name_placeholder: Nombre completo de la alianza
   add_contender: "+ Añadir competidor"
-  loading_standings: Cargando clasificación...
+  loading_standings: Cargando la clasificación…
   standings_failed: No se pudo cargar la clasificación.
   protected_academy: Academia protegida
   change_color: Cambiar color de [{tag}]
   academy_of: Academia de [{tag}]
-  formerly: antes [{tag}]
+  formerly: anteriormente [{tag}]
   link_academy: "+ Vincular academia"
-  nap_protected: NAP protegido
+  nap_protected: NAP Protegido
   show_details: Mostrar detalles
   hide_details: Ocultar detalles
   stat_might: Poder
   stat_members: miembros
   stat_level: Nivel {n}
+  leaders: Líderes
+  leader_overseer: Diosa
+  leader_militarist: Dios de la Guerra
+  leader_diplomat: Diplomático
+  leader_recruiter: Reclutador
   tracker_credit_before: Insignias y números de
   external: Externo
   revoke_nap: Revocar NAP
-  grant_nap: Otorgar NAP
+  grant_nap: Conceder NAP
   remove_alliance: Eliminar alianza
-  academy_prompt: 'Introduce el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, ej. RâvN o râvn):'
+  academy_prompt: 'Ingresa el tag exacto de la alianza para vincularla como Academia bajo [{tag}] (distingue entre mayúsculas y minúsculas, ej. RâvN o râvn):'
   academy_available: 'Disponible: {tags}'
   academy_new: 'O escribe un nuevo tag de academia para crearla:'
   already_exists: La alianza [{tag}] ya existe con esa capitalización exacta.

@@ -327,7 +327,7 @@ charts:
 nominate:
   page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]
-  name_spelling: Dans le jeu, il est écrit {name}
+  name_spelling: Dans le jeu, il s'écrit {name}
   name_unknown: Pas dans la liste des membres de [{tag}]
   names_spelling_one: '1 nom est écrit différemment dans le jeu :'
   names_spelling_other: "{n} noms sont écrits différemment dans le jeu :"
@@ -336,24 +336,32 @@ nominate:
   names_unknown_other: "{n} noms ne sont pas dans la liste des membres de [{tag}]. Ils seront quand même enregistrés ; vérifiez qu'ils sont corrects :"
   did_you_mean: vouliez-vous dire
   loading: Chargement de la page de nomination...
-  players_label: Vos joueurs, les meilleurs en premier
-  players_help: Un nom ou ID de joueur par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres sont distribués en suivant la liste par ordre de valeur entre les deux jeux ; les noms au-delà des coffres sont conservés en réserve et remontent si d'autres coffres s'ouvrent.
-  players_placeholder: Noms exacts en jeu ou ID de joueur, les meilleurs en premier...
-  id_found: Saisi comme ID de joueur {id}
+  players_label: Vos joueurs, les meilleurs d'abord
+  players_help: Un nom ou ID de joueur par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres sont distribués dans la liste par ordre de valeur sur les deux ensembles ; les noms au-delà des coffres sont conservés comme réserves et remontent si d'autres coffres s'ouvrent.
+  players_placeholder: Noms exacts dans le jeu ou ID de joueurs, les meilleurs d'abord...
+  id_found: Saisi en tant qu'ID de joueur {id}
   id_unknown: Aucun membre de [{tag}] n'a l'ID {id}
   who_gets_what: Qui reçoit quoi
   save: Enregistrer la liste
+  sheet_fill: Remplir depuis la feuille
+  test_banner: 'Lien de test (Intendant) : cette page fonctionne normalement, mais rien n''est enregistré.'
+  test_no_save: 'Lien de test : non enregistré'
+  sheet_link: Lien Google Sheet
+  sheet_help: La feuille de votre alliance avec l'onglet "Capitol Ranking" des Duel Tools, partagée en "Tous les utilisateurs disposant du lien peuvent voir". Le lien est mémorisé pour la prochaine fois.
+  sheet_loading: Lecture de la feuille…
+  sheet_filled: "{n} noms remplis depuis la feuille. Vérifiez-les, puis enregistrez."
+  sheet_filled_week: "{n} noms remplis depuis la feuille ({week}). Vérifiez-les, puis enregistrez."
   saving: Enregistrement...
   link_incomplete: Ce lien est incomplet. Exécutez /nominate sur Discord pour en obtenir un nouveau.
   load_failed: "{error} Exécutez /nominate sur Discord pour un nouveau lien."
-  closed: Les récompenses sont closes. La prochaine ouverture aura lieu {when}, après l'événement du Capitole du vendredi.
-  header: Rang {rank} · récompenses de {week} · ouvert jusqu'au {when}
-  banner_off_week: Uniquement la Recommandation du Roi cette semaine (pas de Guerre des Royaumes).
-  banner_won: 'Guerre des Royaumes gagnée : les coffres de Récompense du Roi de la Bataille sont également ouverts.'
-  banner_lost: 'Guerre des Royaumes perdue : uniquement la Recommandation du Roi cette semaine.'
-  banner_pending: En attente du résultat de la bataille de samedi (vers {when}). S'il est gagné, les coffres de Récompense du Roi de la Bataille s'ouvriront également et votre liste sera retriée. Le Roi distribue après le résultat, donc le coffre de personne ne change.
+  closed: Les récompenses sont fermées. Prochaine ouverture {when}, après l'événement du capitole de vendredi.
+  header: Rang {rank} · Récompenses {week} · ouvert jusqu'au {when}
+  banner_off_week: Recommandation du Roi uniquement cette semaine (pas de Guerre des Royaumes).
+  banner_won: 'Guerre des Royaumes gagnée : les coffres de récompense Roi de la Bataille sont également ouverts.'
+  banner_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement cette semaine.'
+  banner_pending: En attente du résultat de la bataille de samedi (environ {when}). Si elle est gagnée, les coffres de récompense Roi de la Bataille s'ouvriront également et votre liste sera retriée. Le Roi distribue les récompenses après le résultat, donc aucun coffre ne change.
   handed_out_title: "✓ Déjà distribué par le Roi ({n})"
-  handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc avec ces joueurs quelle que soit votre liste. La liste ci-dessous répartit le reste.
+  handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc avec ces joueurs, peu importe ce que dit votre liste. La liste ci-dessous répartit le reste.
   reserve: Réserve
   col_player: Joueur
   col_chest: Coffre
@@ -367,7 +375,7 @@ nominate:
   reserves_other: "{n} réserves"
   listed_twice: "{name} est listé deux fois"
   saved: Enregistré. Le Roi voit votre liste. Vous pouvez la modifier jusqu'au {when}.
-  save_failed: 'Échec de l''enregistrement : {error}'
+  save_failed: 'Impossible d''enregistrer : {error}'
 kings_console:
   page_title: Console de Distribution du Roi
   title: Console de Distribution du Roi
@@ -714,7 +722,7 @@ event_presets:
   cheese_trap_title: Piège à Fromage
   cheese_trap_desc: Aidez à repousser le Voleur de Fromage
 alliance_planner:
-  roster: 'Roster NAP :'
+  roster: 'Liste NAP :'
   roster_loading: "-- Alliances"
   nap_alliances: "{n} Alliances NAP"
   planner_mode: Mode Planificateur
@@ -725,17 +733,22 @@ alliance_planner:
   loading_standings: Chargement du classement…
   standings_failed: Impossible de charger le classement.
   protected_academy: Académie protégée
-  change_color: Modifier la couleur de [{tag}]
+  change_color: Changer la couleur de [{tag}]
   academy_of: Académie de [{tag}]
   formerly: anciennement [{tag}]
   link_academy: "+ Lier une académie"
-  nap_protected: NAP Protégé
+  nap_protected: Protégé par NAP
   show_details: Afficher les détails
   hide_details: Masquer les détails
   stat_might: Puissance
   stat_members: membres
   stat_level: Niveau {n}
-  tracker_credit_before: Badges et nombres provenant de
+  leaders: Dirigeants
+  leader_overseer: Déesse
+  leader_militarist: Dieu de la Guerre
+  leader_diplomat: Diplomate
+  leader_recruiter: Recruteur
+  tracker_credit_before: Badges et nombres provenant du
   external: Externe
   revoke_nap: Révoquer le NAP
   grant_nap: Accorder le NAP
@@ -743,11 +756,11 @@ alliance_planner:
   academy_prompt: 'Entrez le tag exact de l''alliance à lier en tant qu''Académie sous [{tag}] (sensible à la casse, ex. RâvN ou râvn) :'
   academy_available: 'Disponible : {tags}'
   academy_new: 'Ou tapez un nouveau tag d''académie pour le créer :'
-  already_exists: L'alliance [{tag}] existe déjà avec cette casse exacte.
+  already_exists: L'alliance [{tag}] existe déjà avec cette capitalisation exacte.
   no_changes: Aucune modification détectée dans le classement actuel.
   proposal_title: Soumettre le classement NAP et la proposition diplomatique
   diff_rank: "{tag} : Rang {from} ➔ {to}"
-  diff_academy: "{tag} : Attribué comme académie de {parent}"
+  diff_academy: "{tag} : Attribué comme Académie de {parent}"
   diff_nap: "{tag} : Statut NAP {status}"
   nap_status_protected: Protégé
   nap_status_revoked: Révoqué
@@ -933,60 +946,61 @@ image_review:
   done_approved: Approuvé. L'image est maintenant en ligne et la publication Discord est mise à jour.
   done_rejected: Rejeté. L'image a été supprimée et la publication Discord est mise à jour.
 alliance_images:
-  title: Images de l'Alliance
+  title: Images d'alliance
   edit: Modifier les images
-  done: "✓ Modification terminée"
-  help: Ajoutez une image derrière la carte de Rotation du Capitole et la ligne des Rangs NAP de votre alliance, ainsi qu'un cadre pour les photos de vos membres. Un intendant vérifie chaque image avant qu'elle ne soit visible par les autres.
-  rules: 'Utilisez les visuels de votre alliance ou du jeu : pas de branding d''une autre alliance, rien d''offensant, pas d''informations personnelles.'
+  done: "✓ Édition terminée"
+  help: Ajoutez une image derrière la carte de Rotation du Capitole de votre alliance et la ligne des Rangs NAP, ainsi qu'un cadre pour les images de vos membres. Un Intendant vérifie chaque image avant que quelqu'un d'autre ne la voie.
+  rules: 'Utilisez les illustrations de votre propre alliance ou celles du jeu : pas de branding d''autre alliance, rien d''offensant, pas d''informations personnelles.'
   left_today: "{left} sur {max} images restantes aujourd'hui pour votre alliance."
-  not_ready: Les téléchargements d'images ne sont pas encore activés.
+  not_ready: Le téléchargement d'images n'est pas encore activé.
   card: Carte de Rotation du Capitole
   wide: Bannière des Rangs NAP
-  frame: Cadre d'avatar de l'Alliance
-  frame_spec: 'Une bordure dessinée autour des photos de vos membres sur ce site. Créez un PNG carré avec un fond transparent, 380×380 pixels (au moins 190×190) : laissez le carré central transparent (de 72 à 308 pixels, comme les cadres du jeu) et décorez autour, jusqu''aux bords. Une petite décoration sur le milieu (une guirlande, par exemple) est acceptable.'
+  frame: Cadre d'avatar d'alliance
+  frame_spec: 'Une bordure dessinée autour des photos de vos membres sur ce site. Créez un PNG carré avec un fond transparent, 380×380 pixels (au moins 190×190) : laissez le carré central transparent (de 72 à 308 pixels, comme les cadres du jeu) et décorez autour, jusqu''aux bords. Une petite décoration au-dessus du milieu (une guirlande, par exemple) est autorisée.'
   use_frame: Utiliser pour nos membres
-  use_frame_on: Affiché autour des photos des membres partout sur le site, à la place du cadre standard du jeu. Les membres ayant un cadre spécial en jeu conservent le leur.
-  use_frame_all: Affiché autour de la photo de chaque membre partout sur le site, à la place de tout cadre en jeu, même les spéciaux.
-  frame_all: Également sur les cadres spéciaux
-  use_frame_off: 'Désactivé : les membres conservent leurs cadres du jeu sur le site.'
+  use_frame_on: Affiché autour des photos des membres partout sur le site, à la place du cadre simple du jeu. Les membres ayant un cadre spécial dans le jeu conservent le leur.
+  use_frame_all: Affiché autour de la photo de chaque membre partout sur le site, à la place de tout cadre de jeu, même les spéciaux.
+  frame_all: Également par-dessus les cadres spéciaux
+  use_frame_off: 'Désactivé : les membres conservent leurs cadres de jeu sur le site.'
   frame_title: Vérifier le cadre d'avatar
-  frame_check_ok: 'L''apparence est correcte : le milieu est transparent. Voici comment il apparaîtra autour des photos de vos membres.'
+  frame_check_ok: 'Semble correct : le centre est transparent. Voici comment il apparaîtra autour des photos de vos membres.'
   frame_big: Grand
-  frame_roster: Effectif
+  frame_roster: Liste
   frame_lists: Listes
-  frame_not_square: Un cadre doit être carré ; cette image mesure {width}×{height}.
-  frame_too_small: Cette image mesure seulement {width}×{height}. Un cadre nécessite au moins 190×190 pixels (380×380 est préférable).
-  frame_covers: 'Ce cadre recouvre environ {percent}% du centre, là où s''affichent les photos des membres. C''est acceptable si c''est volontaire (une guirlande, par exemple) : vérifiez les aperçus ci-dessous avant l''envoi.'
-  frame_covers_most: 'Ce cadre recouvre environ {percent}% du centre, la majeure partie de la photo de chaque membre serait donc masquée. Vérifiez les aperçus ci-dessous : n''envoyez que si c''est le résultat souhaité.'
-  frame_not_png: Un cadre d'avatar doit être un PNG (ou WebP) avec un fond transparent. Les images JPEG ne peuvent pas être transparentes, elles masqueraient donc les photos de vos membres.
-  frame_no_transparency: Cette image n'a aucune partie transparente, elle s'afficherait donc comme un carré plein sur les photos de vos membres. Enregistrez-la en tant que PNG avec un fond transparent.
-  frame_empty: 'Cette image est presque entièrement transparente : il n''y a aucun cadre à afficher.'
-  frame_too_big: Ce cadre pèse {kb} Ko une fois enregistré ; le maximum est de 500 Ko. Essayez avec moins de couleurs ou moins de détails.
-  none: Aucune image pour l'instant
-  live: En ligne depuis le {when}
-  pending: En attente d'un intendant depuis le {when}
-  rejected: Rejeté le {when}
-  rejected_reason: 'Rejeté le {when} : « {reason} »'
-  expired: Non examiné à temps ({when}). Envoyez-le à nouveau.
+  frame_not_square: Un cadre doit être carré ; cette image fait {width}×{height}.
+  frame_too_small: Cette image ne fait que {width}×{height}. Un cadre nécessite au moins 190×190 pixels (380×380 est préférable).
+  frame_covers: 'Ce cadre couvre environ {percent}% du centre, là où s''affichent les photos des membres. C''est acceptable si c''est voulu (une guirlande, par exemple) : vérifiez les aperçus ci-dessous avant l''envoi.'
+  frame_covers_most: 'Ce cadre couvre environ {percent}% du centre, donc la majeure partie de la photo de chaque membre serait cachée. Vérifiez les aperçus ci-dessous : ne l''envoyez que si c''est ce que vous souhaitez.'
+  frame_not_png: Un cadre d'avatar doit être un PNG (ou WebP) avec un fond transparent. Les images JPEG ne peuvent pas être transparentes, elles couvriraient donc les photos de vos membres.
+  frame_no_transparency: Cette image n'a pas de parties transparentes, elle s'afficherait donc comme un carré plein par-dessus les photos de vos membres. Enregistrez-la en tant que PNG avec un fond transparent.
+  frame_empty: 'Cette image est presque entièrement transparente : il n''y a pas de cadre à afficher.'
+  frame_too_big: Ce cadre pèse {kb} Ko une fois enregistré ; le maximum est 500 Ko. Essayez avec moins de couleurs ou moins de détails fins.
+  none: Pas encore d'image
+  live: En ligne depuis {when}
+  pending: En attente d'un Intendant depuis {when}
+  rejected: Rejeté {when}
+  rejected_reason: 'Rejeté {when} : “{reason}”'
+  expired: Pas examiné à temps ({when}). Envoyez-le à nouveau.
   choose: Choisir une image
   replace: Choisir une nouvelle image
   remove: Supprimer
-  confirm_remove: Supprimer le {slot} ? Il disparaîtra immédiatement pour tout le monde.
-  crop_title: Positionner le {slot}
+  confirm_remove: Supprimer {slot} ? Cela disparaît immédiatement pour tout le monde.
+  crop_title: Positionner {slot}
   crop_help: Faites glisser pour déplacer. Pincez, faites défiler ou utilisez le curseur pour zoomer. Seul ce qui est à l'intérieur du cadre est envoyé.
   zoom: Zoom
-  preview_title: Apparence finale
+  preview_title: À quoi cela ressemblera
   preview_phone: Téléphone
   preview_desktop: Ordinateur
   preview_week: Semaine 1 Ven
   preview_loot: 2 Coffres du Roi
-  preview_status: NAP Protégé
+  preview_status: Protégé par NAP
   send: Envoyer pour examen
-  sending: Envoi en cours...
+  save_live: Enregistrer (en ligne maintenant)
+  sending: Envoi…
   cancel: Annuler
-  sent: Envoyé. Un intendant l'examinera ; il apparaîtra une fois approuvé.
-  not_image: Ce fichier n'est pas une image que ce navigateur peut ouvrir. Essayez un JPEG ou un PNG.
-  too_small: Cette image est assez petite ({width}×{height}) ; elle peut paraître floue. Vous pouvez tout de même l'envoyer.
+  sent: Envoyé. Un Intendant l'examinera ; il apparaîtra une fois approuvé.
+  not_image: Ce fichier n'est pas une image que ce navigateur peut ouvrir. Essayez un JPEG ou PNG.
+  too_small: Cette image est assez petite ({width}×{height}) ; elle peut paraître floue. Vous pouvez quand même l'envoyer.
   load_failed: L'image n'a pas pu être ouverte.
 stats:
   title: Stats NAP
@@ -1054,96 +1068,106 @@ stats:
   show_hide: Appuyez sur une alliance pour afficher ou masquer sa ligne.
   credit_before: Chiffres issus de
 steward:
-  tidy_title: 'IDs d''Alliance : nettoyage'
-  tidy_help: 'Tout est maintenant stocké par ID d''alliance. Les déplacements ont laissé {gist} fichiers de sauvegarde et {dashboards} anciens fichiers de tableau de bord dans le Gist. Supprimez-les une fois que vous êtes satisfait : le Gist conserve ses révisions antérieures. Les fichiers de sauvegarde des Stats {stats} sont conservés (le magasin Blob n''a pas de révisions).'
+  tidy_title: 'ID d''alliance : nettoyage'
+  tidy_help: 'Tout est désormais stocké par ID d''alliance. Les déplacements ont laissé {gist} fichiers de sauvegarde et {dashboards} anciens fichiers de tableau de bord dans le Gist. Supprimez-les une fois que vous êtes satisfait : le Gist conserve ses révisions antérieures. Les fichiers de sauvegarde des statistiques {stats} sont conservés (le stockage Blob n''a pas de révisions).'
   tidy_button: Supprimer les sauvegardes
   tidy_confirm: Supprimer les sauvegardes des déplacements d'ID d'alliance ?
-  tidy_done: 'Supprimés : {gist} fichiers de sauvegarde et {dashboards} anciens fichiers de tableau de bord. Les sauvegardes des Stats sont conservées.'
-  roster_title: 'Alliances : renommer, échanger les tags, retirer'
-  roster_help: Le renommage modifie le tag partout à la fois (son historique, ses événements, ses images, ses tableaux de bord et ses Stats lui restent associés). Les pages publiques affichent "anciennement [OLD]" pendant 30 jours.
+  tidy_done: 'Supprimé : {gist} fichiers de sauvegarde et {dashboards} anciens fichiers de tableau de bord. Les sauvegardes des statistiques sont conservées.'
+  roster_title: Paramètres de l'alliance
+  roster_pick: Choisissez une alliance à modifier…
+  roster_search: Trouver une alliance
+  roster_off_map: hors carte
+  roster_retired: retiré
+  rename_help: Renommer change le tag partout à la fois (son historique, ses événements, images, tableaux de bord et statistiques restent avec lui). Les pages publiques affichent "anciennement [OLD]" pendant 30 jours.
   roster_was: était [{tag}] jusqu'au {until}
   rename_placeholder: Nouveau tag
+  tag_label: Tag
+  name_label: Nom
+  name_button: Enregistrer le nom
+  name_saved: Nom enregistré.
+  images_title: Images
+  images_help: Vos téléchargements ici sont mis en ligne immédiatement, sans examen. Les téléchargements des dirigeants vous parviennent toujours pour examen.
   rename_button: Renommer
-  rename_confirm: Renommer [{from}] en [{to}] ? Chaque page affichera le nouveau tag instantanément.
+  rename_confirm: Renommer [{from}] en [{to}] ? Chaque page affiche immédiatement le nouveau tag.
   rename_one_click: Renommer [{old}] en [{now}]
-  swap_title: 'Deux alliances échangent leurs tags :'
+  swap_title: 'Échanger les tags avec :'
   swap_button: Échanger les tags
   swap_confirm: Échanger les tags de [{a}] et [{b}] ?
   off_map_title: 'Retiré de la carte (dans le planificateur d''Alliance) :'
   retire_button: Retirer
-  retire_confirm: Retirer [{tag}] ? Elle est conservée avec son historique (alliances retirées, ci-dessous) et peut être remise en service.
+  retire_confirm: Retirer [{tag}] ? Il est conservé avec son historique (alliances retirées, ci-dessous) et peut être ramené.
   retired_title: Alliances retirées ({n})
-  unretire_button: Remettre en service
+  unretire_button: Ramener
   roster_saved: Enregistré.
-  newtag: "{tag} est nouveau sur la carte. Est-ce une alliance que le site connaissait déjà, renommée ou de retour sur la carte ? Jusqu'à ce que vous répondiez, elle commence sans rien, et les membres de l'ancienne alliance sont invités à se reconnecter."
+  newtag: "{tag} est nouveau sur la carte. Est-ce une alliance que le site connaissait déjà, renommée ou de retour sur la carte ? Jusqu'à ce que vous répondiez, elle commence sans rien de ses données, et les membres de l'ancienne alliance devront se reconnecter."
   newtag_same: 'Même alliance que :'
   newtag_new: C'est une nouvelle alliance
   newtag_link: Lier
   page_title: Outils d'Intendant
-  intro: 'Outils pour les Intendants du Royaume : ce qui vous attend et recherche de joueur en direct.'
-  loading: Chargement...
+  intro: 'Outils pour les Intendants de Royaume : ce qui vous attend, et une recherche de joueur en direct.'
+  loading: Chargement…
   sign_in: Se connecter avec Discord
   sign_in_needed: Connectez-vous avec Discord pour ouvrir les outils d'Intendant.
-  stewards_only: Seuls les Intendants du Royaume peuvent ouvrir les outils d'Intendant.
+  stewards_only: Seuls les Intendants de Royaume peuvent ouvrir les outils d'Intendant.
   lookup_title: Recherche de joueur
-  lookup_help: 'N''importe quel joueur, en direct du jeu : son alliance, ses chiffres, et ses anciens noms et alliances. Tapez un ID de joueur, ou un nom pour trouver l''ID d''un joueur NAP.'
+  lookup_help: 'Tout joueur, en direct du jeu : son alliance, ses chiffres, et ses noms et alliances antérieurs. Saisissez un ID de joueur, ou un nom pour trouver l''ID d''un joueur NAP.'
   lookup_placeholder: ID de joueur, ou nom d'un joueur NAP
   lookup_go: Rechercher
-  lookup_id_needed: Tapez un ID de joueur (le numéro sur son profil), ou choisissez un joueur NAP parmi les noms trouvés.
+  lookup_id_needed: Saisissez un ID de joueur (le nombre sur son profil), ou choisissez un joueur NAP parmi les noms trouvés.
   lookups_left: "{left} sur {max} recherches en direct restantes aujourd'hui (partagées par tous les Intendants)."
-  looking: Interrogation du jeu en cours...
+  looking: Demande au jeu…
   name_none: Aucun joueur NAP avec ce nom. Pour toute autre personne, utilisez son ID de joueur.
   no_alliance: Aucune alliance
   server: Serveur {n}
   online: En ligne maintenant
-  last_seen: Vu pour la dernière fois le {when}
-  shielded: Bouclier activé
+  last_seen: Vu pour la dernière fois {when}
+  shielded: Bouclier actif
   might: Puissance
   kills: Éliminations
   sanctuary: Sanctuaire
   vip: VIP
   position: Position (X, Y)
   language: Langue
-  ranks: 'Rangs du Royaume : #{might} Puissance · #{kills} éliminations · #{heroes} héros'
+  ranks: 'Rangs du Royaume : #{might} Puissance · #{kills} Éliminations · #{heroes} Héros'
   history_title: Noms et alliances
-  history_none: Aucun nom ou alliance précédent vu.
-  seen_from: depuis le {when}
-  first_seen: Vu pour la première fois par le tracker le {when}.
-  renamed: "{old} est maintenant {now} dans le jeu. Elle est toujours mesurée (Stats et course au Top 4) par son numéro de jeu, mais le site l'appelle toujours {old}."
-  renamed_fix: Renommez-la dans le planificateur d'Alliance
-  test_copy: "🧪 Site de test : ses données ont été copiées depuis le site en direct le {when} (/devupdate dans Discord crée une copie fraîche)."
-  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en direct. Exécutez /devupdate dans Discord pour une copie fraîche."
+  history_none: Aucun nom ou alliance précédent n'a été vu.
+  seen_from: depuis {when}
+  first_seen: Vu pour la première fois par le tracker {when}.
+  renamed: "{old} est maintenant {now} dans le jeu. Il est toujours mesuré (Statistiques et course au Top 4) par le numéro que lui attribue le jeu, mais le site l'appelle toujours {old}."
+  renamed_fix: Renommez-le dans le planificateur d'Alliance
+  test_copy: "🧪 Site de test : ses données ont été copiées depuis le site en ligne {when} (/devupdate sur Discord crée une copie fraîche)."
+  test_copy_none: "🧪 Site de test : ses données n'ont pas encore été copiées depuis le site en ligne. Exécutez /devupdate sur Discord pour une copie fraîche."
   mismatch: "{tag} dans le jeu répond maintenant avec une alliance différente : {got}. Le site continue de mesurer l'alliance qu'il connaît sous le nom de {tag} ({known}) par son numéro de jeu, et ne compte pas la nouvelle comme étant celle-ci."
-  mismatch_relink: 'C''est la même alliance : relier'
-  mismatch_relink_help: Seulement si {got} est vraiment l'alliance que le site désigne (le premier lien était incorrect, ou le jeu l'a renumérotée). Le retrait ou le renommage viendront aux étapes ultérieures.
-  unfound: "{tag} n'a pas été trouvé dans le jeu, il n'est donc pas mesuré (Stats et course au Top 4). S'il a changé de tag dans le jeu, tapez le nouveau et le site le suivra."
-  unfound_now: Son tag dans le jeu maintenant
+  mismatch_relink: 'C''est la même alliance : relier à nouveau'
+  mismatch_relink_help: Uniquement si {got} est vraiment l'alliance que le site désigne (le premier lien était faux, ou le jeu l'a renuméroté). Le retrait ou le renommage viennent avec des étapes ultérieures.
+  unfound: "{tag} n'a pas été trouvé dans le jeu, il n'est donc pas mesuré (Statistiques et course au Top 4). S'il a changé de tag dans le jeu, saisissez le nouveau et le site le suivra."
+  unfound_now: Son tag dans le jeu actuellement
   unfound_placeholder: ex. Arch
   unfound_link: Lier
-  unfound_checking: Vérification auprès du jeu...
-  unfound_left: "{left} sur {max} liens restants aujourd'hui (chaque recherche interroge le jeu une fois)"
-  pending_title: En attente de révision
+  unfound_checking: Vérification avec le jeu...
+  unfound_left: "{left} sur {max} liens restants aujourd'hui (chacun interroge le jeu une fois)"
+  pending_title: En attente d'examen
   pending_none: Aucune image d'alliance en attente.
-  sent_by: Envoyé par {name}, le {when}
+  sent_by: Envoyé par {name}, {when}
   race_title: Course au Top 4
   race_none: Aucune course mesurée pour le moment.
-  race_progress: "{n} sur 3 jours de Duel mesurés jusqu'à présent."
-  race_finished: 'Les 3 jours ont été mesurés : les résultats sont dans la direction du NAP.'
+  race_progress: "{n} sur 3 jours de Duel mesurés jusqu'ici."
+  race_finished: 'Les 3 jours mesurés : les résultats sont dans le leadership NAP.'
   race_missing: 'Non mesuré : {tags}'
-  race_more: Tableau complet sur la page des règles
+  race_more: Tableau complet sur la page des Règles
   quota_title: Requêtes du Tracker
-  quota_help: Le Tracker de Last Asylum autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier que le tracker a fourni au site, donc cela ne coûte rien d'afficher ; vérifier maintenant coûte une requête.
+  quota_help: Le Last Asylum Tracker autorise 1 000 requêtes par jour, réinitialisées à 00:00 UTC. Le chiffre ci-dessous est le dernier que le tracker a donné au site, il ne coûte donc rien à afficher ; vérifier maintenant coûte une requête.
   quota_check: Vérifier maintenant
   quota_used: utilisé aujourd'hui
   quota_failed: Le tracker n'a pas pu être atteint.
   quota_as_of: Au {when}
   quota_none: Le site n'a encore rien demandé au tracker aujourd'hui.
-  quota_resets: Réinitialisation dans {time}
-  usage_title: Utilisation
+  quota_resets: Redémarre dans {time}
+  usage_title: Ce qui les a utilisés
   usage_automation: Automatisation
-  usage_automation_help: Instantané des Stats quotidiennes et course au Top 4
-  usage_alliance: Outils d'alliance
-  usage_alliance_help: Tableaux de bord, roster, nominations
+  usage_automation_help: Instantané des statistiques quotidiennes et course au Top 4
+  usage_alliance: Outils d'Alliance
+  usage_alliance_help: Tableaux de bord, liste, nominations
   usage_public: Pages publiques
   usage_public_help: Cartes de classement sur la page Alliance
   usage_steward: Outils d'Intendant
@@ -1151,5 +1175,5 @@ steward:
   usage_other: Autre
   usage_other_help: Tout ce qui n'est pas étiqueté
   usage_unrecorded: Non enregistré
-  usage_unrecorded_help: Compté par le tracker, pas encore sauvegardé ici (chaque serveur sauvegarde toutes les quelques minutes)
+  usage_unrecorded_help: Compté par le tracker, pas encore enregistré ici (chaque serveur sauvegarde toutes les quelques minutes)
   usage_none: Aucune requête notée aujourd'hui.

@@ -2,61 +2,63 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: La tua alleanza è cambiata sul sito da quando hai effettuato l'accesso. Accedi di nuovo con Discord per procedere.
+  alliance_changed: La tua alleanza è cambiata sul sito dall'ultimo accesso. Accedi di nuovo con Discord per continuare.
   rename_unknown: Quell'alleanza non è più sulla mappa. Ricarica la pagina.
-  rename_bad_tag: 'Digita il nuovo tag esattamente come appare nel gioco: fino a 12 caratteri, senza spazi, due punti, parentesi o barre.'
+  rename_bad_tag: 'Digita il nuovo tag esattamente come appare nel gioco: massimo 12 caratteri, senza spazi, due punti, parentesi o barre.'
   rename_same: È il tag che ha già.
-  rename_taken: "[{tag}] ha già quel tag. Per scambiare i tag tra due alleanze, usa lo scambio."
-  rename_fixed: "[{tag}] non può ancora essere rinominata qui: il suo tag è parte del codice del sito. Richiedi prima un cambio codice."
-  rename_not_moved: 'Il cambio nome richiede prima che tutti gli store siano spostati agli ID alleanza (attualmente per tag: {stores}).'
-  retire_on_map: Solo un'alleanza rimossa dalla mappa (nel pianificatore Alleanza) può essere ritirata.
-  tidy_not_moved: 'La pulizia richiede prima che tutti gli store siano spostati agli ID alleanza (attualmente per tag: {stores}).'
-  pending_gone: Quell'alleanza ha già ricevuto una risposta.
+  rename_taken: "[{tag}] ha già quel tag. Per scambiare i tag tra due alleanze, usa la funzione di scambio."
+  rename_fixed: "[{tag}] non può ancora essere rinominata qui: il suo tag è parte del codice del sito. Chiedi prima una modifica del codice."
+  rename_not_moved: 'La rinomina richiede prima che ogni negozio sia spostato agli ID alleanza (ancora per tag: {stores}).'
+  retire_on_map: Solo un'alleanza rimossa dalla mappa (nel pianificatore Alleanze) può essere ritirata.
+  tidy_not_moved: 'Il riordino richiede prima che ogni negozio sia spostato agli ID alleanza (ancora per tag: {stores}).'
+  pending_gone: A quell'alleanza è già stata data una risposta.
   stewards_only: Solo gli Steward possono usare gli strumenti Steward.
-  lookups_used: Le ricerche giocatori di oggi sono esaurite. Ricominciano al ripristino giornaliero (00:00 GT).
+  lookups_used: Le ricerche giocatori di oggi sono esaurite. Ricominceranno al ripristino giornaliero (00:00 GT).
   player_not_found: Nessun giocatore ha quell'ID.
   player_unavailable: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
-  positions_leaders_only: Solo gli R4 e R5 della tua alleanza (e gli Steward) possono vedere i membri sulla mappa.
+  positions_leaders_only: Solo gli R4 e gli R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
   positions_unavailable: Le posizioni dei membri non possono essere caricate al momento. Riprova tra qualche minuto.
-  links_used: I link alleanza di oggi sono esauriti. Ricominciano al ripristino giornaliero (00:00 GT).
+  links_used: I link alleanza di oggi sono esauriti. Ricominceranno al ripristino giornaliero (00:00 GT).
   relink_none: Non c'è più nulla da ricollegare per quell'alleanza.
-  link_bad: Scegli un'alleanza e digita il tag che usa attualmente nel gioco.
-  link_same: È il tag che il sito usa già.
+  link_bad: Scegli un'alleanza e digita il tag che usa ora nel gioco.
+  link_same: È il tag che il sito sta già usando.
   link_taken: "{tag} è già un'altra alleanza sul sito."
-  link_not_found: Il gioco non ha alcuna alleanza con tag {tag} (la differenza tra maiuscole e minuscole conta).
-  positions_used: Gli aggiornamenti della mappa di oggi sono esauriti. Ricominciano al ripristino giornaliero (00:00 GT).
+  link_not_found: Il gioco non ha alcuna alleanza con tag {tag} (le maiuscole contano).
+  positions_used: Gli aggiornamenti della mappa di oggi sono esauriti. Ricominceranno al ripristino giornaliero (00:00 GT).
   positions_wait: La mappa è stata aggiornata poco fa. Riprova tra {minutes} min.
-  refresh_limit: Nessun aggiornamento roster rimasto oggi. Ricominciano al ripristino giornaliero (00:00 GT).
+  refresh_limit: Nessun aggiornamento roster rimasto per oggi. Ricominceranno al ripristino giornaliero (00:00 GT).
   refresh_wait: Il roster è stato aggiornato poco fa. Riprova tra {n} min.
   refresh_failed: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
   signed_out: Accedi con Discord (in alto a destra) per vedere la dashboard della tua alleanza.
   load_failed: 'Impossibile caricare la dashboard: {reason}'
-  no_alliance: Non siamo riusciti a determinare in quale alleanza ti trovi. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP. Chiedi il ruolo ai leader della tua alleanza o a uno Steward, quindi usa Aggiorna Accesso nella tua scheda account (in alto a destra).
-  leaders_only: Solo gli R4 e R5 della tua alleanza possono modificare la dashboard.
+  no_alliance: Non siamo riusciti a capire in quale alleanza ti trovi. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP. Chiedi il ruolo ai leader della tua alleanza o a uno Steward, quindi usa Aggiorna Accesso nella scheda del tuo account (in alto a destra).
+  alliance_unknown: Quell'alleanza non è più sulla mappa. Ricarica la pagina e sceglila di nuovo.
+  name_bad: Digita prima il nome dell'alleanza.
+  leaders_only: Solo gli R4 e gli R5 della tua alleanza possono modificare la dashboard.
   chart_removed: Quel grafico è stato rimosso.
   chart_already_removed: Quel grafico era già stato rimosso.
   not_linked: Questo grafico non è collegato a un foglio o documento Google.
   unknown_change: Modifica sconosciuta.
   save_failed: 'Impossibile salvare: {reason}'
-  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate in Discord.
+  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate su Discord.
   rewards_closed: Le ricompense sono chiuse fino a {when}.
-  no_rank: "[{tag}] non ha una posizione nella classifica."
+  no_rank: "[{tag}] non ha un grado nella classifica."
   choose_type: Scegli un tipo di grafico o tabella.
   title_needed: Dai un titolo al grafico o alla tabella.
-  too_many_columns: Al massimo {max} colonne (questa tabella ne ha {count}).
-  too_many_rows: Al massimo {max} righe (questa tabella ne ha {count}).
+  too_many_columns: Massimo {max} colonne (questa tabella ne ha {count}).
+  too_many_rows: Massimo {max} righe (questa tabella ne ha {count}).
   column_name: Colonna {n}
   paste_first: Incolla prima una tabella (una riga di intestazione, poi i dati).
   no_data_rows: La tabella non ha righe di dati sotto l'intestazione.
-  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere mostrato.
+  needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere visualizzato.
   needs_target: 'Un grafico di avanzamento ha bisogno di un obiettivo: un numero o una colonna di obiettivi.'
-  too_many_widgets: Al massimo {max} grafici e tabelle per alleanza.
-  sheet_unusable: 'I dati del foglio non possono essere utilizzati: {reason}'
-  too_big: Ciò renderebbe questa dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
+  too_many_widgets: Massimo {max} grafici e tabelle per alleanza.
+  sheet_unusable: 'I dati del foglio non possono essere usati: {reason}'
+  too_big: Ciò renderebbe la dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
   player_name_needed: Inserisci il nome di un giocatore.
-  time_format: Gli orari seguono il Game Time, es. 18:00 (o lasciali vuoti).
-  start_time_needed: Inserisci anche l'orario di inizio (o lasciali entrambi vuoti).
-  rotor_full: Al massimo {max} giocatori nel rotore.
+  time_format: Gli orari sono Game Time come 18:00 (o lasciali vuoti).
+  start_time_needed: Indica anche l'orario di inizio (o lasciali entrambi vuoti).
+  rotor_full: Massimo {max} giocatori nel rotore.
   already_in_rotor: "{name} è già nel rotore."
   player_removed: Quel giocatore è stato rimosso.
 api_sheets:
@@ -79,17 +81,20 @@ api_sheets:
   no_such_table_other: Quel Doc contiene {count} tabelle; non esiste la tabella {table}.
   no_table: Quel Doc non contiene tabelle.
 api_nominate:
+  test_no_save: 'Questo è un link di test dello Steward: gli elenchi non vengono salvati da qui.'
+  sheet_link_needed: Incolla prima il link del foglio Google della tua alleanza.
+  sheet_no_names: La scheda "{tab}" del foglio non ha nomi. Inserisci una settimana nel foglio (Strumenti Duello) per prima.
   link_invalid: Questo link non è valido o è scaduto.
   token_invalid: Il token non è valido o è scaduto. Esegui di nuovo /nominate.
   signed_out: Accedi con Discord (in alto a destra) per spuntare i forzieri.
   invalid_chest: Forziere non valido.
-  no_period: Nessun periodo di ricompensa è attualmente aperto.
+  no_period: Nessun periodo di ricompensa è aperto al momento.
   king_only: Solo l'alleanza del Re (R4/R5) e gli Steward possono spuntare i forzieri.
   king_only_tag: Solo l'alleanza del Re [{king}] (R4/R5) e gli Steward possono spuntare i forzieri.
-  not_listed: "{name} non è più nella lista di [{alliance}]. Aggiorna la pagina."
+  not_listed: "{name} non è più nell'elenco di [{alliance}]. Ricarica la pagina."
   id_not_found: Nessun membro di [{alliance}] ha l'ID giocatore {id}. Controlla il numero o digita il nome.
-  ids_unavailable: Gli ID giocatore non possono essere cercati al momento ({id}). Digita invece il nome.
-  listed_twice: "{name} è presente due volte nella lista."
+  ids_unavailable: Gli ID giocatore non possono essere cercati al momento ({id}). Digita il nome invece.
+  listed_twice: "{name} è nell'elenco due volte."
   save_failed: 'Impossibile salvare: {reason}'
 api_register:
   guild_id_format: Formato ID server Discord non valido.
@@ -116,24 +121,25 @@ api_register:
 api_alliance_images:
   frame_png: Una cornice avatar deve essere un PNG con sfondo trasparente (un JPEG coprirebbe le immagini dei tuoi membri).
   not_set_up: Le immagini dell'alleanza non sono ancora configurate sul server.
-  failed: Qualcosa è andato storto con l'immagine dell'alleanza. Riprova.
-  bad_image: Quel file non è un'immagine utilizzabile dal sito. Usa il modulo di caricamento.
-  too_big: L'immagine è troppo grande (oltre {kb} KB). Usa il modulo di caricamento, che la ridimensionerà.
-  wrong_size: L'immagine deve essere esattamente di {width}×{height} pixel. Usa il modulo di caricamento.
-  has_metadata: L'immagine contiene ancora dati nascosti (come il luogo in cui è stata scattata). Usa il modulo di caricamento per rimuoverli.
+  failed: Qualcosa è andato storto con l'immagine dell'alleanza. Per favore, riprova.
+  bad_image: Quel file non è un'immagine che il sito può usare. Per favore, usa il modulo di caricamento.
+  too_big: L'immagine è troppo grande (oltre {kb} KB). Per favore, usa il modulo di caricamento, che la ridimensiona.
+  wrong_size: L'immagine deve essere esattamente di {width}×{height} pixel. Per favore, usa il modulo di caricamento.
+  has_metadata: L'immagine contiene ancora dati nascosti (come il luogo in cui è stata scattata una foto). Per favore, usa il modulo di caricamento, che li rimuove.
   leaders_only: Solo i leader R4 e R5 possono inviare immagini dell'alleanza.
   own_alliance_only: Puoi inviare immagini solo per la tua alleanza.
   unknown_alliance: Quell'alleanza non è nel NAP.
-  daily_limit: 'Limite giornaliero raggiunto: {max} immagini per alleanza ogni 24 ore. Puoi inviarne un''altra dopo le {when}.'
-  post_failed: L'immagine non può essere inviata agli Steward su Discord. Riprova più tardi.
+  daily_limit: 'Limite giornaliero raggiunto: {max} immagini per alleanza ogni 24 ore. Puoi inviare la prossima dopo {when}.'
+  post_failed: L'immagine non è stata inviata agli Steward su Discord. Per favore, riprova più tardi.
   sent: Inviata agli Steward per la revisione. Apparirà una volta approvata.
+  saved_live: 'Salvata: l''immagine è ora live.'
   stewards_only: Solo gli Steward possono revisionare le immagini dell'alleanza.
-  not_found: Immagine non trovata. Potrebbe essere scaduta.
-  already_decided: L'immagine è già stata revisionata (o sostituita da una più recente).
+  not_found: Quell'immagine non è stata trovata. Potrebbe essere scaduta.
+  already_decided: Quell'immagine è già stata revisionata (o sostituita da una più recente).
   approved: 'Approvata: l''immagine è ora live.'
   rejected: 'Respinta: l''immagine è stata eliminata.'
   remove_not_allowed: Solo l'R5 dell'alleanza o uno Steward può rimuovere le sue immagini.
-  nothing_to_remove: Non c'è alcuna immagine da rimuovere.
+  nothing_to_remove: Non c'è nessuna immagine da rimuovere.
   removed: Immagine rimossa.
 api_proposals:
   login_required: Per favore accedi di nuovo con Discord per inviare proposte.
@@ -219,33 +225,45 @@ bot_map:
   alliances: Alleanze
   resources: Risorse
 bot_nominate:
+  alliance_stewards_only: "⛔ Solo gli Steward possono scegliere un'alleanza. Esegui /nominate senza, per la tua."
+  unknown_alliance: "⚠️ Non esiste alcuna alleanza con il tag **{tag}** sulla mappa."
+  list_title: "📋 Elenco nomine [{tag}]"
+  list_none: Nessun elenco salvato per **[{tag}]** in questo periodo. Esegui /nominate per il link.
+  list_saved: Salvato {when}.
+  list_reserves: "**Riserve:** {names}"
+  list_unfilled: "⚠️ {n} forziere/i necessitano ancora di un nome."
+  test_title: "🧪 Link di test — [{tag}]"
+  test_text: "{why} Ecco un link di test al suo posto: la pagina funziona normalmente, ma non viene salvato nulla. Valido 24 ore."
+  test_why_closed: Le ricompense sono chiuse al momento.
+  test_why_no_rank: Questa alleanza non ha un grado nella classifica.
+  test_why_no_chests: Questa alleanza non ha forzieri in questo periodo.
   server_only: "⚠️ Questo comando deve essere eseguito all'interno del server Discord della tua alleanza o del server NAP."
-  owner_server: "⛔ **Accesso Negato:** Le candidature alle ricompense non possono essere inviate da questo server. I leader devono inviarle tramite il server NAP o il server della loro alleanza."
-  dedicated_denied: "⛔ **Accesso Negato:** Solo i membri con il ruolo **@R5** o ruoli di leadership autorizzati ({roles}) possono inviare candidature per **[{tag}]**."
-  r5_only: "⛔ **Accesso Negato:** Solo i Leader dell'Alleanza con il ruolo **@R5** possono inviare candidature alle ricompense."
-  no_tag_role: "⚠️ Impossibile rilevare il ruolo con il tag della tua alleanza. Assicurati di avere il ruolo della tua alleanza (es. `@{example}`) assegnato."
-  closed: "🔒 **Le ricompense sono chiuse.** Le ricompense di {week} sono scadute il {closed}.\nLe prossime ricompense aprono il {opens}, dopo l'evento del campidoglio di venerdì."
-  period_busy: "⚠️ Servizio occupato: impossibile aprire il nuovo periodo di ricompense. Riprova con /nominate tra pochi secondi."
+  owner_server: "⛔ **Accesso Negato:** Le nomine per le ricompense non possono essere inviate da questo server. I leader devono inviarle tramite il server NAP o il server della propria alleanza."
+  dedicated_denied: "⛔ **Accesso Negato:** Solo i membri con ruolo **@R5** o ruoli di leadership autorizzati ({roles}) possono inviare nomine per **[{tag}]**."
+  r5_only: "⛔ **Accesso Negato:** Solo i leader dell'alleanza con il ruolo **@R5** possono inviare le nomine per le ricompense."
+  no_tag_role: "⚠️ Impossibile rilevare il ruolo del tuo tag alleanza. Assicurati di avere il ruolo della tua alleanza (es. `@{example}`) assegnato."
+  closed: "🔒 **Le ricompense sono chiuse.** Le ricompense della {week} sono scadute {closed}.\nLe prossime ricompense apriranno {opens}, dopo l'evento del Campidoglio di venerdì."
+  period_busy: "⚠️ Servizio occupato: impossibile aprire il nuovo periodo di ricompensa. Per favore, riprova /nominate tra pochi secondi."
   no_rank: "⚠️ **[{tag}]** non ha un grado attivo assegnato nella classifica."
-  no_chests: "⚠️ **[{tag}]** ha 0 forzieri assegnati in base alla distribuzione attuale."
+  no_chests: "⚠️ **[{tag}]** ha 0 forzieri assegnati secondo la distribuzione attuale."
   no_kw: Nessuna Guerra tra Regni questa settimana.
   won: "⚔️ **Vinta.** Avanguardia d'Onore ×{gold} · Eroe Senza Paura ×{purple} · Supporto Logistico ×{blue}"
   lost: 'Non questa settimana: la Guerra tra Regni è stata persa.'
   waiting: "⏳ **In attesa del risultato della battaglia** (circa {time}). Se vinta: Avanguardia d'Onore ×{gold} · Eroe Senza Paura ×{purple} · Supporto Logistico ×{blue}"
-  commendation: "👑 Commendazione del Re"
-  commendation_line: Volontà del Comandante ×{gold} · Servitore Leale ×{purple} · Cuore del Seguace ×{blue}
+  commendation: "👑 Commenda del Re"
+  commendation_line: Volontà del Comandante ×{gold} · Servo Leale ×{purple} · Cuore del Seguace ×{blue}
   battle_reward: "⚔️ Ricompensa Re della Battaglia"
-  buyout_title: "🛡️ Restituzione riscatto in tempo di guerra attiva"
-  buyout_text: 'Include **+1 Volontà del Comandante** (e **+1 Avanguardia d''Onore** se la guerra viene vinta), finanziata da WLO per il superamento della difesa di questa settimana (Minaccia: `{threat}`).'
+  buyout_title: "🛡️ Restituzione riscatto bellico attiva"
+  buyout_text: 'Include **+1 Volontà del Comandante** (e **+1 Avanguardia d''Onore** se la guerra è vinta), finanziata da WLO per l''override della difesa di questa settimana (Minaccia: `{threat}`).'
   buyout_default_threat: Lista Rossa
-  funds_title: "⚖️ Restituzione riscatto in tempo di guerra finanziata"
-  funds_text: 'WLO fornisce **1 Volontà del Comandante** (e **1 Avanguardia d''Onore** se la guerra viene vinta) dall''assegnazione del Grado #1 di questa settimana per finanziare la restituzione dell''alleanza sfollata.'
+  funds_title: "⚖️ Restituzione riscatto bellico finanziata"
+  funds_text: 'WLO fornisce **1 Volontà del Comandante** (e **1 Avanguardia d''Onore** se la guerra è vinta) dall''assegnazione di Rank #1 di questa settimana per finanziare la restituzione dell''alleanza sfollata.'
   how_title: "📝 Come funziona"
-  how_text: Elenca i tuoi giocatori **dal migliore al peggiore**. I forzieri vengono distribuiti seguendo la lista per valore in entrambi i set; i nomi extra vengono tenuti come riserve e scalano verso l'alto se vengono aperti più forzieri.
+  how_text: Elenca i tuoi giocatori **dal migliore al peggiore**. I forzieri vengono assegnati nell'elenco in ordine di valore in entrambi i set; i nomi extra vengono tenuti come riserve e avanzano se si aprono più forzieri.
   how_waiting: "⏳ Il Re distribuisce dopo il risultato della battaglia, quindi il forziere di nessuno cambia."
   title: "🎁 Ricompense {week} — [{tag}]"
-  summary: 'Grado #{rank} · aperto fino al {until} ({relative}).'
-  open_page: Apri Pagina Candidature
+  summary: 'Rank #{rank} · aperto fino al {until} ({relative}).'
+  open_page: Apri pagina delle nomine
 bot_rewards:
   reset_denied: "⛔ **Accesso negato:** Solo gli Steward del Regno designati possono cancellare le candidature."
   nothing_to_clear: "🔒 Nessun periodo di ricompensa è aperto, quindi non c'è nulla da cancellare."
@@ -344,34 +362,38 @@ bot_commands:
   calendar: Visualizza o gestisci il calendario eventi
   calendar_kingdom: Visualizza o gestisci il calendario eventi del Regno
   calendar_action: Azione da eseguire (lascia vuoto per visualizzare il calendario)
-  calendar_manage_alliance: Gestisci eventi Alleanza (R5 di default)
-  calendar_manage_global: Gestisci eventi globali (Solo Admin)
-  nominate: Richiedi un link al portale per inviare le candidature settimanali per le casse
-  nominate_authenticated: Richiedi un link autenticato al portale per inviare le candidature settimanali per le casse
+  calendar_manage_alliance: Gestisci eventi Alleanza (R5 per impostazione predefinita)
+  calendar_manage_global: Gestisci eventi Globali (Solo Admin)
+  nominate: Richiedi un link al portale per inviare le nomine settimanali dei forzieri
+  nominate_authenticated: Richiedi un link al portale autenticato per inviare le nomine settimanali dei forzieri
+  nominate_show: Lascia vuoto per il link di nomina
+  nominate_show_link: "🔗 Ottieni il link di nomina"
+  nominate_show_list: "📋 Mostra il nostro elenco attuale"
+  nominate_alliance: 'Steward: agisci per un''altra alleanza (un link di test quando le ricompense sono chiuse)'
   rewards: 'Ricompense di questa settimana: stato e risultato della Guerra tra Regni (Steward)'
   rewards_action: Lascia vuoto per vedere lo stato delle ricompense di questa settimana
   rewards_won: 'Registra Guerra tra Regni: Vinta (Steward)'
   rewards_lost: 'Registra Guerra tra Regni: Persa (Steward)'
-  rewards_reset: Cancella le candidature di questa settimana (Steward)
-  rewards_reset_overrides: Resetta override e buyout del Capitol (Steward)
-  rank: Visualizza o gestisci i ranghi NAP delle alleanze
-  rank_set: Aggiorna il rango NAP di un'alleanza (Solo Admin)
-  rank_tag: Tag dell'alleanza (es. ABC)
-  rank_position: Nuova posizione di rango (es. da 1 a 10)
-  rank_list: Mostra i ranghi e le posizioni NAP attuali
-  sb: Mostra il programma della Battaglia di Sopravvivenza
-  sb_long: Mostra il programma della corsa agli armamenti della Battaglia di Sopravvivenza e gli eventi attivi
+  rewards_reset: Cancella le nomine di questa settimana (Steward)
+  rewards_reset_overrides: Ripristina override del Campidoglio e riscatti (Steward)
+  rank: Visualizza o gestisci i gradi NAP dell'alleanza
+  rank_set: Aggiorna il grado NAP di un'alleanza (Solo Admin)
+  rank_tag: Tag alleanza (es. ABC)
+  rank_position: Nuova posizione in classifica (es. da 1 a 10)
+  rank_list: Mostra i gradi e le classifiche NAP attuali
+  sb: Visualizza il programma della Battaglia di Sopravvivenza
+  sb_long: Visualizza il programma della corsa agli armamenti della Battaglia di Sopravvivenza e gli eventi attivi
   sb_day: Giorno del ciclo (1-7)
-  rules: Mostra le regole del server e del NAP del Regno
-  rules_rule: Numero specifico della regola da visualizzare
-  map: Visualizza la mappa del territorio in tempo reale
-  map_long: Visualizza la mappa del territorio di Last Asylum in tempo reale
-  devupdate: Copia i dati in tempo reale nei dati del sito di test (Solo Steward; solo tu vedrai la risposta)
+  rules: Visualizza le regole del server e del NAP del Regno
+  rules_rule: Numero della regola specifica da visualizzare
+  map: Visualizza la mappa territoriale live
+  map_long: Visualizza la mappa territoriale live di Last Asylum
+  devupdate: Copia i dati live nei dati del sito di test (Solo Steward; solo tu vedrai la risposta)
   registerbot: Registra il server dell'alleanza o sincronizza i comandi slash
   registerbot_action: Azione da eseguire (lascia vuoto per ottenere il link al portale di registrazione)
   registerbot_sync: Sincronizza tutti i server registrati (Solo Admin)
   suggest: Invia una proposta di regola, segnala un problema dell'alleanza o controlla lo stato del tuo ticket
-  suggest_type: Seleziona la categoria del ticket o controlla le tue richieste attive
+  suggest_type: Seleziona la categoria del ticket o controlla le tue proposte attive
   suggest_nap: "👑 Proposta Regno / NAP (Regola per tutto il server o idea per evento)"
   suggest_alliance: "🛡️ Problema interno all'alleanza (Gestito privatamente dai tuoi R4/R5)"
   suggest_status: "📋 Visualizza lo stato del mio ticket (Attivo e cronologia recente)"
