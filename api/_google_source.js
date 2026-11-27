@@ -444,26 +444,52 @@ export function patternTest(pattern) {
   return (name) => re.test(String(name || '').trim());
 }
 
-/** The date a tab's name starts with ("06/14 Duel"), as a number to compare, or null. */
-const dateKey = (name) => {
+/** The two numbers a tab's name starts with ("06/14 Duel" → [6, 14]), or null. */
+const leadingDate = (name) => {
   const m = /^(\d{1,2})[/.-](\d{1,2})(?![\d])/.exec(String(name || '').trim());
-  return m ? Number(m[1]) * 100 + Number(m[2]) : null;
+  return m ? [Number(m[1]), Number(m[2])] : null;
+};
+
+/**
+ * Whether the tabs' dates are day/month ("23/11 Duel") rather than month/day ("11/23 Duel"):
+ * a first number over 12 can only be a day, a second over 12 only a day too. Undecided
+ * (every number 12 or under): month/day, as before.
+ */
+const dayFirst = (names) => {
+  let dm = 0;
+  let md = 0;
+  names.forEach((n) => {
+    const d = leadingDate(n);
+    if (!d) return;
+    if (d[0] > 12) dm++;
+    if (d[1] > 12) md++;
+  });
+  return dm > md;
+};
+
+/** A tab's date as a number to compare (month × 100 + day), or null. */
+const dateKey = (name, dm = false) => {
+  const d = leadingDate(name);
+  if (!d) return null;
+  return dm ? d[1] * 100 + d[0] : d[0] * 100 + d[1];
 };
 
 /**
  * The tabs to read: those matching the pattern, the newest `count`, oldest first. Which end
- * of the sheet holds the newest is worked out from the dates the names start with (most
- * neighbouring pairs decide, so the turn of the year doesn't); without dates, the last tab
- * is the newest (where Google adds a new tab).
+ * of the sheet holds the newest is worked out from the dates the names start with, read as
+ * month/day or day/month, whichever the names show (most neighbouring pairs decide, so the
+ * turn of the year doesn't); without dates, the last tab is the newest (where Google adds a
+ * new tab).
  */
 export function pickTabs(tabs, { pattern, count }) {
   const test = patternTest(pattern);
   const matched = (tabs || []).filter((t) => test(t.name));
   const n = Math.max(2, Math.min(MAX_TABS, parseInt(count, 10) || MAX_TABS));
+  const dm = dayFirst(matched.map((t) => t.name));
   let vote = 0;
   for (let i = 1; i < matched.length; i++) {
-    const a = dateKey(matched[i - 1].name);
-    const b = dateKey(matched[i].name);
+    const a = dateKey(matched[i - 1].name, dm);
+    const b = dateKey(matched[i].name, dm);
     if (a !== null && b !== null && a !== b) vote += a > b ? 1 : -1;
   }
   const newestFirst = vote > 0;
