@@ -157,6 +157,13 @@ function start() {
   let startAt = null;
 
   svg.addEventListener('pointerdown', (e) => {
+    // A first finger (or a mouse press): nothing else can be down, so any finger still listed
+    // is one whose lift was missed (owner report, 2026-11-27: a pinch now and then "stuck",
+    // the next one-finger drag zooming around a forgotten point until a refresh)
+    if (e.isPrimary) {
+      pointers.clear();
+      pinch = null;
+    }
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.size === 1) {
       moved = false;
@@ -207,12 +214,33 @@ function start() {
   });
 
   const lift = (e) => {
-    pointers.delete(e.pointerId);
+    if (!pointers.delete(e.pointerId)) return;
     if (pointers.size < 2) pinch = null;
+    else {
+      // Three fingers down and one lifted: the pinch carries on from the two left, without
+      // a jump from the old distance
+      const [a, b] = [...pointers.values()];
+      pinch = { dist: Math.hypot(a.x - b.x, a.y - b.y) };
+    }
     if (!pointers.size) svg.classList.remove('is-panning');
   };
-  svg.addEventListener('pointerup', lift);
-  svg.addEventListener('pointercancel', lift);
+  // Lifts are heard anywhere on the page, not only over the map: a finger lifted off the map,
+  // or over a part of it redrawn meanwhile, isn't left behind as still down
+  const ends = new AbortController();
+  for (const type of ['pointerup', 'pointercancel']) {
+    window.addEventListener(type, lift, { capture: true, signal: ends.signal });
+  }
+  window.addEventListener(
+    'blur',
+    () => {
+      pointers.clear();
+      pinch = null;
+      svg.classList.remove('is-panning');
+    },
+    { signal: ends.signal },
+  );
+  // This map gone (another page): its page-wide listeners go too
+  document.addEventListener('turbo:before-render', () => ends.abort(), { once: true });
   svg.addEventListener('pointerleave', (e) => {
     if (e.pointerType === 'mouse') lift(e);
   });

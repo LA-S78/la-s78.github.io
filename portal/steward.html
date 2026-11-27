@@ -69,6 +69,7 @@ strings: [steward, alliance_images]
       <p class="sub-text">{{ "steward.quota_help" | t }}</p>
       <div id="st-quota"></div>
       <div id="st-usage"></div>
+      <div id="st-skins"></div>
       <button type="button" class="btn btn-secondary" id="st-quota-btn">{{ "steward.quota_check" | t }}</button>
     </section>
   </div>
@@ -557,6 +558,18 @@ strings: [steward, alliance_images]
       }`;
     }
 
+    /** The nightly Sanctuary skin collection (owner, 2026-11-27): is it keeping up? */
+    function skins(k) {
+      const el = $('st-skins');
+      if (!k) return (el.innerHTML = '');
+      const days = k.oldest ? Math.max(0, Math.round((Date.now() - Date.parse(k.oldest)) / 86400000)) : null;
+      el.innerHTML = `<h4>${esc(t('steward.skins_title'))}</h4><p class="st-small">${esc(
+        t('steward.skins_line', { players: count(k.players), with_skin: count(k.withSkin), never: count(k.never), last_day: count(k.lastDay), days: days ?? '—' }),
+      )}</p><p class="st-small">${esc(
+        k.night ? t('steward.skins_night', { day: k.night.day, used: count(k.night.used), budget: count(k.night.budget) }) : t('steward.skins_no_night'),
+      )}</p>`;
+    }
+
     // Names search NAP players in the Stats tab's daily data (free); an ID asks the game
     let timer = null;
     $('st-q').addEventListener('input', () => {
@@ -638,6 +651,7 @@ strings: [steward, alliance_images]
       pending(data.pending || []);
       race(data.race);
       usage(data.usage);
+      skins(data.skins);
       if (data.testCopy !== null && data.testCopy !== undefined) {
         $('st-test-copy').hidden = false;
         $('st-test-copy').textContent = data.testCopy

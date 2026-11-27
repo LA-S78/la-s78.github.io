@@ -1159,6 +1159,11 @@ stats:
 
 # The Steward tools page (portal/steward.html; Stewards only)
 steward:
+  # The nightly Sanctuary skin collection (2026-11-27)
+  skins_title: "Sanctuary skins"
+  skins_line: "{players} NAP players · {with_skin} with a skin · {never} never checked · {last_day} checked in the last day · oldest check {days} days ago"
+  skins_night: "Last night ({day}): {used} of {budget} lookups used."
+  skins_no_night: "No nightly collection has run yet."
   tidy_title: "Alliance IDs: tidy-up"
   tidy_help: "Everything is stored by alliance ID now. The moves left {gist} backup files and {dashboards} old dashboard files in the Gist. Delete them once you're happy: the Gist keeps its earlier revisions. The {stats} Stats backup files are kept (the Blob store has no revisions)."
   tidy_button: "Delete the backups"

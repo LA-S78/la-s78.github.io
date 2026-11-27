@@ -181,4 +181,41 @@ export async function checkSkins({
   return { ...report, checked, withSkin: skins, failed, usedAfter: file.night.used };
 }
 
+/**
+ * How the collection is going, for the Steward page (owner question, 2026-11-27: skins seemed
+ * to update very slowly): NAP players, how many were never checked, how many have a skin,
+ * how many were checked in the last day, the oldest check, and the last night's allowance.
+ */
+export async function skinsStatus({ now = Date.now(), store = blobStore } = {}) {
+  if (store === blobStore && !statsStoreReady()) return null;
+  const [file, positions] = await Promise.all([store.read(FILE()), readPositionsFile(store)]);
+  const players = napPlayers(positions);
+  const known = file?.players || {};
+  let never = 0;
+  let withSkin = 0;
+  let lastDay = 0;
+  let oldest = null;
+  for (const p of players) {
+    const k = known[p.uid];
+    if (!k) {
+      never += 1;
+      continue;
+    }
+    if (k[0]) withSkin += 1;
+    const at = Date.parse(k[1]) || 0;
+    if (now - at < 24 * 3600000) lastDay += 1;
+    if (oldest === null || at < oldest) oldest = at;
+  }
+  return {
+    players: players.length,
+    never,
+    withSkin,
+    lastDay,
+    oldest: oldest ? new Date(oldest).toISOString() : null,
+    night: file?.night
+      ? { day: file.night.day, budget: file.night.budget, used: file.night.used }
+      : null,
+  };
+}
+
 export { readSkinMap };
