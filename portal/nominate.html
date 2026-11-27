@@ -24,6 +24,16 @@ strings: [nominate, roster]
         <label for="ranked-input">{% include ui-icon.html name="clipboard" %}{{ "nominate.players_label" | t }}</label>
         <p class="smart-paste-desc">{{ "nominate.players_help" | t }}</p>
         <textarea id="ranked-input" rows="10" placeholder="{{ "nominate.players_placeholder" | t }}"></textarea>
+        <!-- Fill the list from the alliance's Google Sheet ("Capitol Ranking" tab, Duel Tools) -->
+        <div class="nominate-sheet">
+          <button type="button" class="btn btn-secondary" id="btn-sheet-fill">{% include ui-icon.html name="table" %}{{ "nominate.sheet_fill" | t }}</button>
+          <details id="sheet-link-box">
+            <summary>{{ "nominate.sheet_link" | t }}</summary>
+            <input type="url" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/…" autocomplete="off">
+            <p class="smart-paste-desc">{{ "nominate.sheet_help" | t }}</p>
+          </details>
+          <p class="smart-paste-desc" id="sheet-status" hidden></p>
+        </div>
       </div>
 
       <!-- Chests the King has already handed out in the game: locked, kept whatever the list says -->
@@ -179,6 +189,9 @@ strings: [nominate, roster]
         banner.innerHTML = ic('hourglass', 'wait') + escapeHtml(t('nominate.banner_pending', { when: formatTime(p.battleEndsAt) }));
       }
 
+      document.getElementById('sheet-url').value = data.alliance.sheetUrl || '';
+      // No link yet: the box starts open, so it's clear where it goes
+      document.getElementById('sheet-link-box').open = !data.alliance.sheetUrl;
       locked = data.alliance.handedOut || [];
       input.value = (data.alliance.ranked || []).filter((n) => !isLocked(n)).join('\n');
       elLoading.style.display = 'none';
@@ -273,6 +286,43 @@ strings: [nominate, roster]
     }
 
     input.addEventListener('input', render);
+
+    // "Fill from sheet": the list from the alliance's sheet, to check and save as usual
+    document.getElementById('btn-sheet-fill').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-sheet-fill');
+      const out = document.getElementById('sheet-status');
+      const url = document.getElementById('sheet-url').value.trim();
+      if (!url) {
+        document.getElementById('sheet-link-box').open = true;
+        document.getElementById('sheet-url').focus();
+        return;
+      }
+      btn.disabled = true;
+      out.hidden = false;
+      out.textContent = t('nominate.sheet_loading');
+      try {
+        const res = await fetch('/api/nominate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'sheet-fill', token, url }),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+        // Chests already handed out stay as they are: their players aren't listed again
+        input.value = body.names.filter((n) => !isLocked(n)).join('\n');
+        data.alliance.sheetUrl = body.url;
+        document.getElementById('sheet-link-box').open = false;
+        out.textContent = t(body.week ? 'nominate.sheet_filled_week' : 'nominate.sheet_filled', {
+          n: body.names.length,
+          week: body.week,
+        });
+        render();
+      } catch (err) {
+        out.textContent = err.message;
+      } finally {
+        btn.disabled = false;
+      }
+    });
 
     /**
      * The summary above the list: names written differently in the game (with a button to

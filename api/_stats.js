@@ -61,6 +61,9 @@ const TOP = () => `${prefix()}/top.json`;
 const PLAYER_INDEX = () => `${prefix()}/player-index.json`;
 /** Where every NAP player's Sanctuary is (the map's "All NAP players", Stewards only). */
 const POSITIONS = () => `${prefix()}/positions.json`;
+/** R4 titles from live lookups (owner request, 2026-11-23): { uid: "R4 · Diplomat" }. The
+ *  tracker's cached member lists say only "R4", so the standings cards' leaders read them here. */
+const TITLES = () => `${prefix()}/titles.json`;
 /** Days of each player's Might kept for the Top players view (its month and growth lines). */
 const PLAYER_DAYS = 31;
 const TOP_SIZES = { strongest: 100, week: 50, month: 50 };
@@ -656,6 +659,41 @@ export async function readNapPositions({ gist, store = blobStore } = {}) {
   return napPositionsView(file, tags, skins);
 }
 
+/**
+ * Keeps the R4 titles of alliances just looked up live: each one's members are written over
+ * (a title given up is dropped); other alliances' entries stay. Never throws.
+ */
+export async function saveTitles(found, store = blobStore) {
+  try {
+    const titles = (await store.read(TITLES())) || {};
+    let changed = false;
+    for (const a of Object.values(found || {})) {
+      for (const m of a?.members || []) {
+        const titled = /^R4\s*·\s*\S/.test(m.rank || '');
+        if (titled && titles[m.uid] !== m.rank) {
+          titles[m.uid] = m.rank;
+          changed = true;
+        } else if (!titled && m.uid in titles) {
+          delete titles[m.uid];
+          changed = true;
+        }
+      }
+    }
+    if (changed) await store.write(TITLES(), titles);
+  } catch (err) {
+    console.warn('R4 titles not kept:', err.message);
+  }
+}
+
+/** The R4 titles kept from live lookups ({ uid: "R4 · Diplomat" }), or {}. */
+export async function readTitles(store = blobStore) {
+  try {
+    return (await store.read(TITLES())) || {};
+  } catch {
+    return {};
+  }
+}
+
 /** A Steward's Refresh: every NAP alliance asked again, live from the game. */
 export async function refreshNapPositions({ gist, store = blobStore, fetchImpl } = {}) {
   if (store === blobStore && !blobToken()) throw new Error('No Blob store on this deployment');
@@ -670,6 +708,7 @@ export async function refreshNapPositions({ gist, store = blobStore, fetchImpl }
   const found = {};
   const failed = [];
   todo.forEach((tag, i) => (answers[i] ? (found[tag] = answers[i]) : failed.push(tag)));
+  await saveTitles(found, store);
   const file = Object.keys(found).length
     ? await savePositions(found, store)
     : await store.read(POSITIONS());
@@ -734,6 +773,7 @@ export async function checkStatsSnapshot({
 
   today.at = today.at || new Date(now).toISOString();
   await store.write(dayFile(due.day), today);
+  await saveTitles(answered, store);
   // Older days keep no positions (maintainer review, 2026-11-20): the map only needs today's
   // (positions.json), and "away from the hive" is worked out on the day itself, so keeping
   // every day's X/Y would only build up a history of where everyone moved

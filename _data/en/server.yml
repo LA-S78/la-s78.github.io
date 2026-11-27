@@ -86,6 +86,8 @@ api_sheets:
   no_table: "That Doc has no table in it."
 
 api_nominate:
+  sheet_link_needed: "Paste your alliance's Google Sheet link first."
+  sheet_no_names: "The sheet's \"{tab}\" tab has no names. Push a week in the sheet (Duel Tools) first."
   link_invalid: "This link is invalid or expired."
   token_invalid: "Token is invalid or expired. Run /nominate again."
   signed_out: "Sign in with Discord (top right) to tick chests."

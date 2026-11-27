@@ -552,6 +552,46 @@ main .ladder-badge,
   color: var(--text-muted);
 }
 
+/* The opened card's leaders (owner request, 2026-11-23): one row of framed pictures, which
+   scrolls sideways when it doesn't fit (phones), so the card grows by one row only */
+.ladder-leaders {
+  flex-basis: 100%;
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  gap: 4px 14px;
+  margin: 2px 0 0;
+  padding: 0 0 2px;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.ladder-leader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin: 0;
+}
+.ladder-leader > span {
+  display: grid;
+  line-height: 1.2;
+}
+.ladder-leader strong {
+  color: var(--text-main);
+  font-weight: 600;
+  max-width: 9em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ladder-leader small {
+  font-size: 0.7rem;
+}
+.ladder-leader.is-r5 small {
+  color: var(--accent-text);
+}
+
 .ladder-stat {
   display: inline-flex;
   align-items: center;

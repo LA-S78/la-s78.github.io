@@ -423,3 +423,22 @@
 .name-fix-btn:hover {
   background: color-mix(in srgb, var(--accent-color) 20%, transparent);
 }
+
+/* Nominations: "Fill from sheet" under the list (2026-11-27) */
+.nominate-sheet {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+.nominate-sheet > .btn {
+  justify-self: start;
+}
+.nominate-sheet input[type='url'] {
+  width: 100%;
+  margin-top: 6px;
+}
+.nominate-sheet summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
