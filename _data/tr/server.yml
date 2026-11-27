@@ -2,65 +2,67 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: Giriş yaptığınızdan beri sitede ittifakınız değişti. Devam etmek için Discord ile tekrar giriş yapın.
+  caravan_key_r5: Sadece ittifakın R5'i (veya bir Görevlisi) sayfa senkronizasyon anahtarını oluşturabilir veya iptal edebilir.
+  sheet_link_needed: Önce ittifakınızın Google E-Tablo bağlantısını yapıştırın.
+  alliance_changed: Siteye giriş yaptığınızdan beri ittifakınız değişti. Devam etmek için Discord ile tekrar giriş yapın.
   rename_unknown: Bu ittifak artık haritada değil. Sayfayı yenileyin.
-  rename_bad_tag: 'Yeni etiketi oyundaki haliyle yazın: en fazla 12 karakter, boşluk, iki nokta, parantez veya eğik çizgi yok.'
-  rename_same: Bu zaten sahip olduğu etiket.
-  rename_taken: "[{tag}] etiketine zaten sahip. İki ittifak arasında etiket takası yapmak için takas özelliğini kullanın."
-  rename_fixed: "[{tag}] burada henüz yeniden adlandırılamaz: etiketi sitenin kodunun bir parçasıdır. Önce bir kod değişikliği talep edin."
+  rename_bad_tag: 'Yeni etiketi oyundaki gibi yazın: en fazla 12 karakter, boşluk, iki nokta, parantez veya eğik çizgi yok.'
+  rename_same: Bu zaten mevcut etiket.
+  rename_taken: "[{tag}] zaten bu etikete sahip. İki ittifak arasında etiket takası yapmak için takas özelliğini kullanın."
+  rename_fixed: "[{tag}] burada henüz yeniden adlandırılamaz: etiketi sitenin kodunun bir parçası. Önce bir kod değişikliği talep edin."
   rename_not_moved: 'Yeniden adlandırma için önce her mağazanın ittifak kimliklerine taşınması gerekir (hala etikete göre: {stores}).'
   retire_on_map: Yalnızca haritadan kaldırılmış bir ittifak (İttifak planlayıcısında) emekli edilebilir.
   tidy_not_moved: 'Düzenleme için önce her mağazanın ittifak kimliklerine taşınması gerekir (hala etikete göre: {stores}).'
-  pending_gone: Bu ittifak için zaten yanıt verildi.
-  stewards_only: Yalnızca Kahyalar, Kahya araçlarını kullanabilir.
-  lookups_used: Bugünkü oyuncu sorgulama haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlayacak.
+  pending_gone: O ittifakın talebi zaten yanıtlandı.
+  stewards_only: Sadece Görevliler, Görevli araçlarını kullanabilir.
+  lookups_used: Bugünkü oyuncu sorgulama hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
   player_not_found: Bu kimliğe sahip bir oyuncu yok.
   player_unavailable: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
-  positions_leaders_only: Yalnızca ittifakınızın R4 ve R5'leri (ve Kahyalar) üyeleri haritada görebilir.
-  positions_unavailable: Üyelerin konumları şu anda yüklenemiyor. Birkaç dakika içinde tekrar deneyin.
-  links_used: Bugünkü ittifak bağlantı haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlayacak.
-  relink_none: Bu ittifak için tekrar bağlanacak bir şey kalmadı.
-  link_bad: Bir ittifak seçin ve şu anda oyunda kullandığı etiketi yazın.
-  link_same: Bu, sitenin zaten kullandığı etiket.
+  positions_leaders_only: Yalnızca ittifakınızın R4'leri ve R5'leri (ve Görevliler) üyeleri haritada görebilir.
+  positions_unavailable: Üyelerin konumları şu an yüklenemiyor. Birkaç dakika içinde tekrar deneyin.
+  links_used: Bugünkü ittifak bağlantısı hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  relink_none: Bu ittifak için yeniden bağlanacak bir şey kalmadı.
+  link_bad: Bir ittifak seçin ve şu an oyunda kullandığı etiketi yazın.
+  link_same: Bu etiket site tarafından zaten kullanılıyor.
   link_taken: "{tag} sitede zaten başka bir ittifak."
   link_not_found: Oyunda {tag} etiketli bir ittifak yok (büyük/küçük harf duyarlıdır).
-  positions_used: Bugünkü harita yenileme haklarınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlayacak.
-  positions_wait: Harita kısa süre önce yenilendi. {minutes} dakika sonra tekrar deneyin.
-  refresh_limit: Bugün başka kadro yenileme hakkı kalmadı. Günlük sıfırlamada (00:00 GT) tekrar başlayacak.
-  refresh_wait: Kadro kısa süre önce yenilendi. {n} dakika sonra tekrar deneyin.
+  positions_used: Bugünkü harita yenileme hakkınız tükendi. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  positions_wait: Harita az önce yenilendi. {minutes} dakika sonra tekrar deneyin.
+  refresh_limit: Bugünlük liste yenileme hakkınız kalmadı. Günlük sıfırlamada (00:00 GT) tekrar başlar.
+  refresh_wait: Liste az önce yenilendi. {n} dakika sonra tekrar deneyin.
   refresh_failed: Oyuna ulaşılamadı. Birkaç dakika içinde tekrar deneyin.
   signed_out: İttifak panonuzu görmek için Discord ile giriş yapın (sağ üst).
   load_failed: 'Pano yüklenemedi: {reason}'
-  no_alliance: Hangi ittifakta olduğunuzu anlayamadık. Site bunu NAP Discord sunucusundaki ittifak rolünüzden bulur. İttifak liderlerinizden veya bir Kahyadan rolü isteyin, ardından hesap kartınızda (sağ üst) Erişim Yenileme'yi kullanın.
+  no_alliance: Hangi ittifakta olduğunuzu anlayamadık. Site, sizi NAP Discord sunucusundaki ittifak rolünüzden bulur. İttifak liderlerinizden veya bir Görevliden rolü isteyin, ardından hesap kartınızdaki (sağ üst) Erişim Yenile butonunu kullanın.
   alliance_unknown: Bu ittifak artık haritada değil. Sayfayı yenileyin ve tekrar seçin.
-  name_bad: Önce ittifak adını yazın.
-  leaders_only: Yalnızca ittifakınızın R4 ve R5'leri panoyu değiştirebilir.
-  chart_removed: O grafik kaldırıldı.
-  chart_already_removed: O grafik zaten kaldırılmıştı.
+  name_bad: Önce ittifakın adını yazın.
+  leaders_only: Yalnızca ittifakınızın R4'leri ve R5'leri panoyu değiştirebilir.
+  chart_removed: Bu grafik kaldırıldı.
+  chart_already_removed: Bu grafik zaten kaldırılmıştı.
   not_linked: Bu grafik bir Google E-Tabloya veya Dokümana bağlı değil.
   unknown_change: Bilinmeyen değişiklik.
   save_failed: 'Kaydedilemedi: {reason}'
-  r5_only_nominate: Burada aday gösterme sayfasını yalnızca R5'iniz açabilir. Discord'da /nominate komutunu çalıştırın.
+  r5_only_nominate: Burada aday gösterme sayfasını sadece R5'iniz açabilir. Discord'da /nominate komutunu çalıştırın.
   rewards_closed: Ödüller {when} tarihine kadar kapalıdır.
   no_rank: "[{tag}] sıralamada yer almıyor."
   choose_type: Bir grafik veya tablo türü seçin.
   title_needed: Grafiğe veya tabloya bir başlık verin.
-  too_many_columns: En fazla {max} sütun (bu tabloda {count} adet var).
-  too_many_rows: En fazla {max} satır (bu tabloda {count} adet var).
+  too_many_columns: En fazla {max} sütun (bu tabloda {count} tane var).
+  too_many_rows: En fazla {max} satır (bu tabloda {count} tane var).
   column_name: Sütun {n}
-  paste_first: Önce bir tablo yapıştırın (başlık satırı, ardından veriler).
-  no_data_rows: Tablonun başlığının altında hiç veri satırı yok.
-  needs_numbers: Bir grafiğin gösterilmesi için sayı içeren bir sütuna ihtiyacı vardır.
+  paste_first: Önce bir tablo yapıştırın (bir başlık satırı, ardından veriler).
+  no_data_rows: Tablonun başlığının altında veri satırı yok.
+  needs_numbers: Bir grafiğin gösterilmesi için sayı içeren bir sütuna ihtiyacı var.
   needs_target: 'Bir ilerleme grafiğinin bir hedefe ihtiyacı vardır: bir sayı veya hedef sütunu.'
   too_many_widgets: İttifak başına en fazla {max} grafik ve tablo.
-  sheet_unusable: 'E-tablo verileri kullanılamıyor: {reason}'
-  too_big: Bu, panoyu çok büyük yapar ({size} KB / {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
+  sheet_unusable: 'Sayfanın verileri kullanılamaz: {reason}'
+  too_big: Bu, panoyu çok büyük hale getirir ({size} KB / {max} KB). Daha az satır kullanın veya bir tabloyu kaldırın.
   player_name_needed: Bir oyuncu adı girin.
-  time_format: Zamanlar 18:00 gibi Oyun Zamanı formatında olmalıdır (veya boş bırakın).
-  start_time_needed: Başlangıç zamanını da verin (veya ikisini de boş bırakın).
-  rotor_full: Rotasyonda en fazla {max} oyuncu olabilir.
-  already_in_rotor: "{name} zaten rotasyonda."
-  player_removed: O oyuncu kaldırıldı.
+  time_format: Saatler 18:00 gibi Oyun Saati formatındadır (veya boş bırakın).
+  start_time_needed: Başlangıç saatini de verin (veya her ikisini de boş bırakın).
+  rotor_full: Rotorda en fazla {max} oyuncu olabilir.
+  already_in_rotor: "{name} zaten rotorda."
+  player_removed: Bu oyuncu kaldırıldı.
 api_sheets:
   no_tabs: Bu tabloda sekme bulunamadı. Bağlantının doğrudan elektronik tabloyu açtığından emin olun.
   tabs_too_few: Bu desenle eşleşen 2'den az sekme var. Sekme isimlerini kontrol edin (# herhangi bir sayı, * her şey anlamına gelir).
@@ -224,6 +226,24 @@ bot_map:
   levels: Seviyeler
   alliances: İttifaklar
   resources: Kaynaklar
+bot_caravan:
+  server_only: "⚠️ /caravan komutunu ittifakınızın Discord sunucusunda veya NAP sunucusunda kullanın."
+  alliance_stewards_only: "⛔ Sadece Görevliler bir ittifak seçebilir. Kendi ittifakınız için komutu ittifak belirtmeden çalıştırın."
+  player_needed: Seçmek veya geri almak için **player** kısmına oyuncunun adını yazın.
+  unknown_alliance: "⚠️ Haritada **{tag}** etiketli bir ittifak yok."
+  no_alliance: "⚠️ İttifakınız tespit edilemedi: ittifak rolüne sahip olduğunuzdan emin olun."
+  leaders_only: "⛔ Buradaki Kervan Rotorunu sadece ittifakınızın liderleri (R4, R5 ve görevli rolleri) kullanabilir."
+  not_in_rotor: "**{name}** rotorda değil."
+  already_picked: "**{name}** bu hafta zaten seçilmiş."
+  not_picked: "**{name}** bu hafta seçilmemiş."
+  added: "➕ **{name}** rotorda olmadığı için eklendi."
+  picked_done: "✅ **{name}** seçildi."
+  unpicked_done: "↩️ **{name}** tekrar kullanılabilir."
+  failed: "⚠️ Rotor şu an okunamadı veya kaydedilemedi. Lütfen kısa bir süre sonra tekrar deneyin."
+  title: "🐪 [{tag}] Kervan Rotoru: {picked}/{total} seçildi"
+  picked: 'Bu hafta seçilenler:'
+  available: 'Müsait:'
+  footer: Panonun Kervan Rotoru aynı listeyi (ve sayfanın önerilerini) gösterir.
 bot_nominate:
   alliance_stewards_only: "⛔ Yalnızca Kahyalar bir ittifak seçebilir. Kendi ittifakınız için komutu ittifaksız çalıştırın."
   unknown_alliance: "⚠️ Haritada **{tag}** etiketine sahip bir ittifak yok."
@@ -361,39 +381,46 @@ bot_register:
 bot_commands:
   calendar: Etkinlik Takvimini görüntüleyin veya yönetin
   calendar_kingdom: Krallık Etkinlik Takvimini görüntüleyin veya yönetin
-  calendar_action: Gerçekleştirilecek eylem (görüntülemek için boş bırakın)
-  calendar_manage_alliance: İttifak Etkinliklerini yönetin (varsayılan R5)
-  calendar_manage_global: Küresel Etkinlikleri yönetin (Sadece Yönetici)
-  nominate: Haftalık sandık adaylıklarını göndermek için portal bağlantısı isteyin
-  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimlik doğrulamalı portal bağlantısı isteyin
+  calendar_action: Gerçekleştirilecek işlem (takvimi görmek için boş bırakın)
+  calendar_manage_alliance: İttifak Etkinliklerini Yönetin (varsayılan R5)
+  calendar_manage_global: Küresel Etkinlikleri Yönetin (Sadece Yönetici)
+  nominate: Haftalık sandık adaylıklarını göndermek için bir portal bağlantısı talep edin
+  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimliği doğrulanmış bir portal bağlantısı talep edin
   nominate_show: Adaylık bağlantısı için boş bırakın
   nominate_show_link: "🔗 Adaylık bağlantısını al"
   nominate_show_list: "📋 Güncel listemizi göster"
-  nominate_alliance: 'Kahyalar: başka bir ittifak adına hareket et (ödüller kapalıyken test bağlantısı)'
-  rewards: 'Bu haftanın ödülleri: durum ve Krallık Savaşı sonucu (Kahyalar)'
-  rewards_action: Bu haftanın ödül durumunu görmek için boş bırakın
-  rewards_won: 'Krallık Savaşını Kaydet: Kazandı (Kahya)'
-  rewards_lost: 'Krallık Savaşını Kaydet: Kaybetti (Kahya)'
-  rewards_reset: Bu haftanın adaylıklarını temizle (Kahya)
-  rewards_reset_overrides: Başkent geçersiz kılmalarını ve satın almaları sıfırla (Kahya)
+  nominate_alliance: 'Görevliler: başka bir ittifak adına işlem yapın (ödüller kapalıyken test bağlantısı)'
+  caravan: 'İttifakınızın Kervan Rotoru: görüntüleyin veya oyuncu seçin (liderler)'
+  caravan_action: Rotoru görmek için boş bırakın
+  caravan_show: "👀 Rotoru göster"
+  caravan_pick: "✅ Bir oyuncu seç"
+  caravan_unpick: "↩️ Bir seçimi geri al"
+  caravan_player: Oyuncunun oyun içi adı (seçmek veya geri almak için)
+  caravan_alliance: 'Görevliler: başka bir ittifakın etiketi'
+  rewards: 'Bu haftaki ödüller: durum ve Krallık Savaşı sonucu (Görevliler)'
+  rewards_action: Bu haftaki ödül durumunu görmek için boş bırakın
+  rewards_won: 'Krallık Savaşını Kaydet: Kazanıldı (Görevli)'
+  rewards_lost: 'Krallık Savaşını Kaydet: Kaybedildi (Görevli)'
+  rewards_reset: Bu haftaki adaylıkları temizle (Görevli)
+  rewards_reset_overrides: Capitol geçersiz kılmalarını ve satın alımları sıfırla (Görevli)
   rank: İttifak NAP sıralamalarını görüntüleyin veya yönetin
-  rank_set: Bir ittifakın NAP sırasını güncelleyin (Sadece Yönetici)
+  rank_set: Bir ittifakın NAP sıralamasını güncelleyin (Sadece Yönetici)
   rank_tag: İttifak etiketi (örn. ABC)
-  rank_position: Yeni sıra konumu (örn. 1'den 10'a)
+  rank_position: Yeni sıra konumu (örn. 1 - 10)
   rank_list: Güncel NAP sıralamalarını ve durumunu görüntüle
   sb: Hayatta Kalma Savaşı programını görüntüle
-  sb_long: Hayatta Kalma Savaşı silahlanma yarışı programını ve aktif etkinlikleri görüntüle
-  sb_day: Döngü günü (1-7)
+  sb_long: Hayatta Kalma Savaşı silah yarışı programını ve aktif etkinlikleri görüntüle
+  sb_day: Döngünün günü (1-7)
   rules: Sunucu ve Krallık NAP kurallarını görüntüle
-  rules_rule: Görüntülenecek özel kural numarası
+  rules_rule: Görüntülenecek belirli kural numarası
   map: Canlı bölge haritasını görüntüle
   map_long: Canlı Last Asylum bölge haritasını görüntüle
-  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Kahyalar; yanıtı sadece siz görürsünüz)
-  registerbot: İttifak sunucusunu kaydedin veya eğik çizgi komutlarını senkronize edin
-  registerbot_action: Gerçekleştirilecek eylem (kayıt portalı bağlantısını almak için boş bırakın)
+  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Görevliler; yanıtı sadece siz görürsünüz)
+  registerbot: İttifak sunucusunu kaydedin veya slash komutlarını senkronize edin
+  registerbot_action: Gerçekleştirilecek işlem (kayıt portalı bağlantısını almak için boş bırakın)
   registerbot_sync: Tüm Kayıtlı Sunucuları Senkronize Et (Sadece Yönetici)
-  suggest: Bir kural önerisi gönderin, bir ittifak sorununu bildirin veya bilet durumunuzu kontrol edin
-  suggest_type: Bilet kategorisini seçin veya aktif gönderimlerinizi kontrol edin
-  suggest_nap: "👑 Krallık / NAP Önerisi (Sunucu Geneli Kural veya Etkinlik Fikri)"
-  suggest_alliance: "🛡️ Dahili İttifak Sorunu (R4/R5'leriniz tarafından gizlice ele alınır)"
-  suggest_status: "📋 Bilet Durumumu Görüntüle (Aktif ve Son Geçmiş)"
+  suggest: Bir kural önerisi gönderin, bir ittifak sorunu bildirin veya bilet durumunuzu kontrol edin
+  suggest_type: Bilet kategorisini seçin veya aktif gönderilerinizi kontrol edin
+  suggest_nap: "👑 Krallık / NAP Önerisi (Sunucu Genelinde Kural veya Etkinlik Fikri)"
+  suggest_alliance: "🛡️ İttifak İçi Sorun (R4/R5'leriniz Tarafından Özel Olarak Ele Alınır)"
+  suggest_status: "📋 Bilet Durumumu Görüntüle (Aktif ve Geçmiş Geçmiş)"

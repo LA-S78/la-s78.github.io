@@ -2,47 +2,49 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: Deine Allianz hat sich auf der Seite geändert, seit du dich angemeldet hast. Melde dich erneut mit Discord an, um fortzufahren.
+  caravan_key_r5: Nur der R5 (oder ein Steward) der Allianz kann den Synchronisierungsschlüssel erstellen oder widerrufen.
+  sheet_link_needed: Füge zuerst den Link zur Google-Tabelle deiner Allianz ein.
+  alliance_changed: Deine Allianz auf der Seite hat sich seit der Anmeldung geändert. Melde dich erneut mit Discord an, um fortzufahren.
   rename_unknown: Diese Allianz ist nicht mehr auf der Karte. Lade die Seite neu.
-  rename_bad_tag: 'Gib das neue Tag so ein, wie es im Spiel ist: bis zu 12 Zeichen, keine Leerzeichen, Doppelpunkte, Klammern oder Schrägstriche.'
+  rename_bad_tag: 'Gib das neue Tag so ein, wie es im Spiel erscheint: bis zu 12 Zeichen, keine Leerzeichen, Doppelpunkte, Klammern oder Schrägstriche.'
   rename_same: Das ist bereits das aktuelle Tag.
   rename_taken: "[{tag}] hat bereits dieses Tag. Um Tags zwischen zwei Allianzen zu tauschen, verwende den Tausch-Befehl."
-  rename_fixed: "[{tag}] kann hier noch nicht umbenannt werden: Sein Tag ist Teil des Codes der Seite. Bitte zuerst um eine Code-Änderung."
-  rename_not_moved: 'Für die Umbenennung müssen zuerst alle Speicher zu Allianz-IDs verschoben werden (immer noch nach Tag: {stores}).'
+  rename_fixed: "[{tag}] kann hier noch nicht umbenannt werden: Das Tag ist Teil des Seitencodes. Frage zuerst eine Code-Änderung an."
+  rename_not_moved: 'Für eine Umbenennung müssen zuerst alle Läden auf Allianz-IDs umgestellt werden (aktuell noch nach Tag: {stores}).'
   retire_on_map: Nur eine Allianz, die von der Karte entfernt wurde (im Allianz-Planer), kann in den Ruhestand versetzt werden.
-  tidy_not_moved: 'Das Aufräumen erfordert, dass zuerst alle Speicher zu Allianz-IDs verschoben werden (immer noch nach Tag: {stores}).'
-  pending_gone: Diese Allianz wurde bereits beantwortet.
+  tidy_not_moved: 'Für das Aufräumen müssen zuerst alle Läden auf Allianz-IDs umgestellt werden (aktuell noch nach Tag: {stores}).'
+  pending_gone: Diese Allianz wurde bereits bearbeitet.
   stewards_only: Nur Stewards können die Steward-Tools verwenden.
-  lookups_used: Die heutigen Spielerabfragen sind aufgebraucht. Sie beginnen wieder beim täglichen Reset (00:00 GT).
-  player_not_found: Kein Spieler hat diese ID.
-  player_unavailable: Das Spiel war nicht erreichbar. Versuche es in wenigen Minuten erneut.
-  positions_leaders_only: Nur die R4s und R5s (und Stewards) deiner Allianz können Mitglieder auf der Karte sehen.
-  positions_unavailable: Die Positionen der Mitglieder können derzeit nicht geladen werden. Versuche es in wenigen Minuten erneut.
-  links_used: Die heutigen Allianz-Links sind aufgebraucht. Sie beginnen wieder beim täglichen Reset (00:00 GT).
+  lookups_used: Die heutigen Spieler-Abfragen sind aufgebraucht. Sie werden beim täglichen Reset (00:00 GT) zurückgesetzt.
+  player_not_found: Es gibt keinen Spieler mit dieser ID.
+  player_unavailable: Das Spiel konnte nicht erreicht werden. Versuche es in wenigen Minuten erneut.
+  positions_leaders_only: Nur die R4 und R5 (sowie Stewards) deiner Allianz können Mitglieder auf der Karte sehen.
+  positions_unavailable: Mitgliederpositionen können momentan nicht geladen werden. Versuche es in wenigen Minuten erneut.
+  links_used: Die heutigen Allianz-Links sind aufgebraucht. Sie werden beim täglichen Reset (00:00 GT) zurückgesetzt.
   relink_none: Für diese Allianz gibt es nichts mehr neu zu verknüpfen.
-  link_bad: Wähle eine Allianz aus und gib das Tag ein, das sie jetzt im Spiel verwendet.
-  link_same: Das ist das Tag, das die Seite bereits verwendet.
+  link_bad: Wähle eine Allianz und gib das Tag ein, das sie aktuell im Spiel verwendet.
+  link_same: Das ist bereits das aktuelle Tag der Seite.
   link_taken: "{tag} ist bereits eine andere Allianz auf der Seite."
   link_not_found: Das Spiel hat keine Allianz mit dem Tag {tag} (Groß-/Kleinschreibung beachten).
-  positions_used: Die heutigen Karten-Aktualisierungen sind aufgebraucht. Sie beginnen wieder beim täglichen Reset (00:00 GT).
+  positions_used: Die heutigen Karten-Aktualisierungen sind aufgebraucht. Sie werden beim täglichen Reset (00:00 GT) zurückgesetzt.
   positions_wait: Die Karte wurde gerade erst aktualisiert. Versuche es in {minutes} Min. erneut.
-  refresh_limit: Heute sind keine Roster-Aktualisierungen mehr übrig. Sie beginnen wieder beim täglichen Reset (00:00 GT).
+  refresh_limit: Keine Roster-Aktualisierungen für heute übrig. Sie werden beim täglichen Reset (00:00 GT) zurückgesetzt.
   refresh_wait: Das Roster wurde gerade erst aktualisiert. Versuche es in {n} Min. erneut.
-  refresh_failed: Das Spiel war nicht erreichbar. Versuche es in wenigen Minuten erneut.
+  refresh_failed: Das Spiel konnte nicht erreicht werden. Versuche es in wenigen Minuten erneut.
   signed_out: Melde dich mit Discord an (oben rechts), um dein Allianz-Dashboard zu sehen.
   load_failed: 'Konnte das Dashboard nicht laden: {reason}'
-  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite findet dies über deine Allianz-Rolle im NAP Discord-Server. Bitte die Führung deiner Allianz oder einen Steward um die Rolle und verwende dann „Zugriff aktualisieren“ in deiner Account-Karte (oben rechts).
+  no_alliance: Wir konnten nicht feststellen, in welcher Allianz du bist. Die Seite ermittelt dies über deine Allianz-Rolle im NAP-Discord-Server. Frage die Führung deiner Allianz oder einen Steward nach der Rolle und verwende dann „Zugriff aktualisieren“ in deiner Kontokarte (oben rechts).
   alliance_unknown: Diese Allianz ist nicht mehr auf der Karte. Lade die Seite neu und wähle sie erneut aus.
   name_bad: Gib zuerst den Namen der Allianz ein.
-  leaders_only: Nur die R4s und R5s deiner Allianz können das Dashboard ändern.
-  chart_removed: Dieses Diagramm wurde entfernt.
-  chart_already_removed: Dieses Diagramm wurde bereits entfernt.
-  not_linked: Dieses Diagramm ist nicht mit einer Google Tabelle oder einem Dokument verknüpft.
+  leaders_only: Nur die R4 und R5 deiner Allianz können das Dashboard ändern.
+  chart_removed: Das Diagramm wurde entfernt.
+  chart_already_removed: Das Diagramm wurde bereits entfernt.
+  not_linked: Dieses Diagramm ist nicht mit einer Google-Tabelle oder einem Dokument verknüpft.
   unknown_change: Unbekannte Änderung.
   save_failed: 'Konnte nicht speichern: {reason}'
   r5_only_nominate: Nur dein R5 kann hier die Nominierungsseite öffnen. Führe /nominate in Discord aus.
   rewards_closed: Belohnungen sind geschlossen bis {when}.
-  no_rank: "[{tag}] hat keinen Rang in der Bestenliste."
+  no_rank: "[{tag}] hat keinen Rang in der Tabelle."
   choose_type: Wähle einen Diagramm- oder Tabellentyp.
   title_needed: Gib dem Diagramm oder der Tabelle einen Titel.
   too_many_columns: Maximal {max} Spalten (diese Tabelle hat {count}).
@@ -50,13 +52,13 @@ api_dashboard:
   column_name: Spalte {n}
   paste_first: Füge zuerst eine Tabelle ein (eine Kopfzeile, dann die Daten).
   no_data_rows: Die Tabelle hat keine Datenzeilen unter ihrer Kopfzeile.
-  needs_numbers: Ein Diagramm benötigt eine Spalte mit Zahlen zur Anzeige.
+  needs_numbers: Ein Diagramm benötigt eine Spalte mit Zahlen zur Darstellung.
   needs_target: 'Ein Fortschrittsdiagramm benötigt ein Ziel: eine Zahl oder eine Spalte mit Zielen.'
   too_many_widgets: Maximal {max} Diagramme und Tabellen pro Allianz.
   sheet_unusable: 'Die Daten der Tabelle können nicht verwendet werden: {reason}'
   too_big: Das würde dieses Dashboard zu groß machen ({size} KB von {max} KB). Verwende weniger Zeilen oder entferne eine Tabelle.
   player_name_needed: Gib einen Spielernamen ein.
-  time_format: Zeiten entsprechen der Game Time wie 18:00 (oder lass sie leer).
+  time_format: Zeiten sind Game Time wie 18:00 (oder leer lassen).
   start_time_needed: Gib auch die Startzeit an (oder lass beide leer).
   rotor_full: Maximal {max} Spieler im Rotor.
   already_in_rotor: "{name} ist bereits im Rotor."
@@ -224,6 +226,24 @@ bot_map:
   levels: Level
   alliances: Allianzen
   resources: Ressourcen
+bot_caravan:
+  server_only: "⚠️ Verwende /caravan innerhalb deines Allianz-Discord-Servers oder des NAP-Servers."
+  alliance_stewards_only: "⛔ Nur Stewards können eine Allianz auswählen. Führe /caravan ohne Angabe für deine eigene aus."
+  player_needed: Gib den Spielernamen unter **player** ein, um auszuwählen oder rückgängig zu machen.
+  unknown_alliance: "⚠️ Es gibt keine Allianz mit dem Tag **{tag}** auf der Karte."
+  no_alliance: "⚠️ Allianz nicht erkannt: Stelle sicher, dass du deine Allianz-Rolle besitzt."
+  leaders_only: "⛔ Nur die Allianzführung (R4, R5 und Offiziersrollen) kann den Caravan-Rotor hier verwenden."
+  not_in_rotor: "**{name}** ist nicht im Rotor."
+  already_picked: "**{name}** wurde diese Woche bereits ausgewählt."
+  not_picked: "**{name}** wurde diese Woche nicht ausgewählt."
+  added: "➕ **{name}** war nicht im Rotor, daher wurde er hinzugefügt."
+  picked_done: "✅ **{name}** ausgewählt."
+  unpicked_done: "↩️ **{name}** ist wieder verfügbar."
+  failed: "⚠️ Der Rotor konnte gerade nicht gelesen oder gespeichert werden. Bitte versuche es in einem Moment erneut."
+  title: "🐪 [{tag}] Caravan-Rotor: {picked}/{total} ausgewählt"
+  picked: 'Diese Woche ausgewählt:'
+  available: 'Verfügbar:'
+  footer: Der Caravan-Rotor im Dashboard zeigt dieselbe Liste (sowie die Vorschläge aus der Tabelle).
 bot_nominate:
   alliance_stewards_only: "⛔ Nur Stewards können eine Allianz wählen. Führe /nominate ohne Angabe für deine eigene aus."
   unknown_alliance: "⚠️ Auf der Karte gibt es keine Allianz mit dem Tag **{tag}**."
@@ -360,40 +380,47 @@ bot_register:
   busy: "⚠️ Dienst ausgelastet: {reason}. Bitte versuche es in wenigen Momenten erneut."
 bot_commands:
   calendar: Event-Kalender ansehen oder verwalten
-  calendar_kingdom: Königreichs-Event-Kalender ansehen oder verwalten
-  calendar_action: Auszuführende Aktion (leer lassen, um Kalender zu sehen)
+  calendar_kingdom: Königreich-Event-Kalender ansehen oder verwalten
+  calendar_action: Auszuführende Aktion (leer lassen, um Kalender anzusehen)
   calendar_manage_alliance: Allianz-Events verwalten (standardmäßig R5)
-  calendar_manage_global: Globale Events verwalten (nur Admins)
-  nominate: Portal-Link für wöchentliche Truhen-Nominierungen anfordern
-  nominate_authenticated: Authentifizierten Portal-Link für wöchentliche Truhen-Nominierungen anfordern
+  calendar_manage_global: Globale Events verwalten (nur Admin)
+  nominate: Portal-Link zum Einreichen der wöchentlichen Truhen-Nominierungen anfordern
+  nominate_authenticated: Authentifizierten Portal-Link zum Einreichen der wöchentlichen Truhen-Nominierungen anfordern
   nominate_show: Leer lassen für den Nominierungs-Link
   nominate_show_link: "🔗 Nominierungs-Link abrufen"
   nominate_show_list: "📋 Aktuelle Liste anzeigen"
-  nominate_alliance: 'Stewards: Für eine andere Allianz handeln (Test-Link, wenn Belohnungen geschlossen sind)'
-  rewards: 'Belohnungen dieser Woche: Status und Königreichskrieg-Ergebnis (Stewards)'
-  rewards_action: Leer lassen, um den Belohnungsstatus dieser Woche zu sehen
+  nominate_alliance: 'Stewards: für eine andere Allianz agieren (ein Test-Link, wenn Belohnungen geschlossen sind)'
+  caravan: 'Caravan-Rotor deiner Allianz: ansehen oder Spieler auswählen (Führung)'
+  caravan_action: Leer lassen, um den Rotor anzusehen
+  caravan_show: "👀 Rotor anzeigen"
+  caravan_pick: "✅ Spieler auswählen"
+  caravan_unpick: "↩️ Auswahl rückgängig machen"
+  caravan_player: Der In-Game-Name des Spielers (zum Auswählen oder Rückgängigmachen)
+  caravan_alliance: 'Stewards: Tag einer anderen Allianz'
+  rewards: 'Die Belohnungen dieser Woche: Status und das Ergebnis des Königreichskriegs (Stewards)'
+  rewards_action: Leer lassen, um den Belohnungsstatus dieser Woche anzusehen
   rewards_won: Königreichskrieg als gewonnen markieren (Steward)
   rewards_lost: Königreichskrieg als verloren markieren (Steward)
   rewards_reset: Nominierungen dieser Woche löschen (Steward)
-  rewards_reset_overrides: Kapitol-Übersteuerungen und Auszahlungen zurücksetzen (Steward)
-  rank: NAP-Ränge der Allianz ansehen oder verwalten
-  rank_set: NAP-Rang einer Allianz aktualisieren (nur Admins)
+  rewards_reset_overrides: Kapitol-Overrides und Buyouts zurücksetzen (Steward)
+  rank: Allianz-NAP-Rankings ansehen oder verwalten
+  rank_set: NAP-Rang einer Allianz aktualisieren (nur Admin)
   rank_tag: Allianz-Tag (z. B. ABC)
-  rank_position: Neue Rang-Position (z. B. 1 bis 10)
-  rank_list: Aktuelle NAP-Ranglisten und Standings anzeigen
+  rank_position: Neue Rangposition (z. B. 1 bis 10)
+  rank_list: Aktuelle NAP-Rankings und Tabellen anzeigen
   sb: Zeitplan für den Überlebenskampf anzeigen
-  sb_long: Zeitplan für Wettrüsten im Überlebenskampf und aktive Events anzeigen
+  sb_long: Zeitplan für das Wettrüsten im Überlebenskampf und aktive Events anzeigen
   sb_day: Tag des Zyklus (1-7)
   rules: Server- und Königreich-NAP-Regeln anzeigen
-  rules_rule: Spezifische Regelnummer zum Anzeigen
+  rules_rule: Spezifische Regelnummer zum Ansehen
   map: Live-Gebietskarte ansehen
   map_long: Live-Gebietskarte von Last Asylum ansehen
-  devupdate: Live-Daten in die Test-Site kopieren (nur Stewards; nur du siehst die Antwort)
-  registerbot: Allianz-Server registrieren oder Slash-Befehle synchronisieren
+  devupdate: Live-Daten in die Daten der Test-Seite kopieren (nur Stewards; nur du siehst die Antwort)
+  registerbot: Allianz-Server registrieren oder Slash-Commands synchronisieren
   registerbot_action: Auszuführende Aktion (leer lassen, um Registrierungs-Portal-Link zu erhalten)
-  registerbot_sync: Alle registrierten Server synchronisieren (nur Admins)
-  suggest: Regelvorschlag einreichen, Allianz-Problem melden oder Ticket-Status prüfen
+  registerbot_sync: Alle registrierten Server synchronisieren (nur Admin)
+  suggest: Regelvorschlag einreichen, ein Allianz-Problem melden oder Ticket-Status prüfen
   suggest_type: Ticket-Kategorie auswählen oder aktive Einreichungen prüfen
   suggest_nap: "👑 Königreich / NAP-Vorschlag (Serverweite Regel oder Event-Idee)"
-  suggest_alliance: "🛡️ Internes Allianz-Problem (wird privat durch deine R4/R5 behandelt)"
-  suggest_status: "📋 Meinen Ticket-Status anzeigen (aktiv & Verlauf)"
+  suggest_alliance: "🛡️ Internes Allianz-Problem (wird privat von deinen R4/R5 bearbeitet)"
+  suggest_status: "📋 Meinen Ticket-Status ansehen (aktiv & Verlauf)"

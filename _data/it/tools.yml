@@ -133,28 +133,47 @@ roster:
   daily_old: 'Ricerca e aiuto prima del reset di oggi: ultima lettura {time}'
   daily_unknown: 'Ricerca e aiuto: orario di lettura sconosciuto'
 caravan:
-  title: Rotazione Carovana
+  sheet_title: Suggerito dal foglio dell'alleanza
+  sheet_help: Il foglio della tua alleanza (Duel Tools) calcola chi ha i punti per una carovana questa settimana. Carica la lista, poi scegli da lì.
+  sheet_link: Link Google Sheet
+  sheet_load: Carica suggerimenti
+  sheet_none: Il foglio non suggerisce nessuno questa settimana (nessuno ha punti a sufficienza).
+  sheet_points: "{n} punti"
+  sheet_add: Aggiungi al rotore
+  sheet_picked: selezionato
+  key_title: Chiave di sincronizzazione foglio
+  key_help: Permette allo script del foglio della tua alleanza di leggere le scelte di questo rotore (Duel Tools → Imposta chiave di sincronizzazione sito). Solo il R5 o uno Steward può crearla o revocarla.
+  key_none: 'Nessuna chiave ancora: il foglio non può leggere le scelte.'
+  key_active: Una chiave che termina in …{end} è attiva (creata {when} da {by}).
+  key_create: Crea chiave
+  key_replace: Sostituisci chiave
+  key_revoke: Revoca
+  key_once: 'Copia questa chiave nel foglio ora: non verrà mostrata di nuovo.'
+  key_create_confirm: Creare una chiave di sincronizzazione per il foglio della tua alleanza?
+  key_replace_confirm: Sostituire la chiave? Il foglio smetterà di sincronizzarsi finché non inserirai quella nuova.
+  key_revoke_confirm: Revocare la chiave? Il foglio non potrà più leggere le scelte.
+  title: Rotore Carovana
   name_ok: Nella lista membri di [{tag}]
   name_spelling: 'Nel gioco è scritto:'
   name_unknown: Non nella lista membri di [{tag}].
   name_did_you_mean: 'Intendevi:'
   name_flag_spelling: Nel gioco è scritto {name}
-  picked_count: "{picked}/{total} scelti"
+  picked_count: "{picked}/{total} selezionati"
   members_can_view: I membri possono visualizzare
   copy_status: Copia stato
   new_week: Nuova settimana
-  member_note: Scelti dai tuoi R4 quando una carovana è pronta.
+  member_note: Selezionato dai tuoi R4 quando una carovana è pronta.
   search: Cerca nomi…
-  around_now: Attorno a questo momento
-  around_now_help: Solo giocatori disponibili attorno a questo momento
+  around_now: Verso quest'ora
+  around_now_help: Solo i giocatori disponibili ora
   available: Disponibili questa settimana ({n})
-  picked: Scelti questa settimana ({n})
+  picked: Selezionati questa settimana ({n})
   nobody_matches: Nessuna corrispondenza.
   everyone_picked: Tutti hanno avuto una carovana questa settimana.
   add_players: Aggiungi giocatori qui sotto.
   no_players: Ancora nessun giocatore.
   flexible: flessibile
-  pick: "✓ Scelto"
+  pick: "✓ Seleziona"
   back_to_available: Torna ai disponibili
   name: Nome
   from: Da (Game Time)
@@ -165,16 +184,16 @@ caravan:
   add_from_label: Disponibile da (Game Time, opzionale)
   add_to_label: Disponibile fino a (Game Time, opzionale)
   add: Aggiungi
-  times_help: Gli orari sono Game Time (UTC-2) e sono opzionali; lasciali vuoti per i giocatori flessibili.
-  status_title: "🐪 [{tag}] Rotazione Carovana: {picked}/{total} scelti"
+  times_help: Gli orari sono in Game Time (UTC-2) e sono opzionali; lasciali vuoti per i giocatori flessibili.
+  status_title: "🐪 [{tag}] Rotore Carovana: {picked}/{total} selezionati"
   status_available: 'Disponibili: {names}'
-  status_picked: 'Scelti: {names}'
+  status_picked: 'Selezionati: {names}'
   nobody: nessuno
-  nobody_yet: ancora nessuno
-  copy_prompt: 'Copia lo stato della rotazione:'
-  confirm_remove: Rimuovere {name} dalla rotazione?
+  nobody_yet: nessuno ancora
+  copy_prompt: 'Copia lo stato del rotore:'
+  confirm_remove: Rimuovere {name} dal rotore?
   this_player: questo giocatore
-  confirm_new_week: Iniziare una nuova settimana? Tutti torneranno tra i disponibili (i nomi e gli orari rimarranno).
+  confirm_new_week: Iniziare una nuova settimana? Tutti torneranno disponibili (i nomi e gli orari rimarranno).
 chart_editor:
   edit_title: Modifica grafico o tabella
   new_title: Nuovo grafico o tabella

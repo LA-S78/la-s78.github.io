@@ -2,63 +2,65 @@
 # Don't edit: change the English file (a section is translated again when its English
 # changes), or put a fix in _data/translation_overrides.yml (kept through re-translations).
 api_dashboard:
-  alliance_changed: La tua alleanza è cambiata sul sito dall'ultimo accesso. Accedi di nuovo con Discord per continuare.
+  caravan_key_r5: Solo l'R5 dell'alleanza (o uno Steward) può creare o revocare la chiave di sincronizzazione del foglio.
+  sheet_link_needed: Incolla prima il link del Google Sheet della tua alleanza.
+  alliance_changed: La tua alleanza è cambiata sul sito da quando hai effettuato l'accesso. Accedi di nuovo con Discord per continuare.
   rename_unknown: Quell'alleanza non è più sulla mappa. Ricarica la pagina.
-  rename_bad_tag: 'Digita il nuovo tag esattamente come appare nel gioco: massimo 12 caratteri, senza spazi, due punti, parentesi o barre.'
+  rename_bad_tag: 'Digita il nuovo tag esattamente come nel gioco: fino a 12 caratteri, senza spazi, due punti, parentesi o barre.'
   rename_same: È il tag che ha già.
-  rename_taken: "[{tag}] ha già quel tag. Per scambiare i tag tra due alleanze, usa la funzione di scambio."
-  rename_fixed: "[{tag}] non può ancora essere rinominata qui: il suo tag è parte del codice del sito. Chiedi prima una modifica del codice."
-  rename_not_moved: 'La rinomina richiede prima che ogni negozio sia spostato agli ID alleanza (ancora per tag: {stores}).'
-  retire_on_map: Solo un'alleanza rimossa dalla mappa (nel pianificatore Alleanze) può essere ritirata.
-  tidy_not_moved: 'Il riordino richiede prima che ogni negozio sia spostato agli ID alleanza (ancora per tag: {stores}).'
-  pending_gone: A quell'alleanza è già stata data una risposta.
-  stewards_only: Solo gli Steward possono usare gli strumenti Steward.
-  lookups_used: Le ricerche giocatori di oggi sono esaurite. Ricominceranno al ripristino giornaliero (00:00 GT).
+  rename_taken: "[{tag}] ha già quel tag. Per scambiare i tag tra due alleanze, usa lo scambio."
+  rename_fixed: "[{tag}] non può ancora essere rinominata qui: il suo tag è parte del codice del sito. Richiedi prima una modifica del codice."
+  rename_not_moved: 'La rinomina richiede che ogni store sia prima spostato agli ID alleanza (ancora tramite tag: {stores}).'
+  retire_on_map: Solo un'alleanza rimossa dalla mappa (nel pianificatore di Alleanza) può essere ritirata.
+  tidy_not_moved: 'Il riordino richiede che ogni store sia prima spostato agli ID alleanza (ancora tramite tag: {stores}).'
+  pending_gone: A quell'alleanza è già stato risposto.
+  stewards_only: Solo gli Steward possono utilizzare gli strumenti Steward.
+  lookups_used: Le ricerche dei giocatori di oggi sono esaurite. Ricominceranno al ripristino giornaliero (00:00 GT).
   player_not_found: Nessun giocatore ha quell'ID.
   player_unavailable: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
-  positions_leaders_only: Solo gli R4 e gli R5 (e gli Steward) della tua alleanza possono vedere i membri sulla mappa.
+  positions_leaders_only: Solo gli R4 e R5 della tua alleanza (e gli Steward) possono vedere i membri sulla mappa.
   positions_unavailable: Le posizioni dei membri non possono essere caricate al momento. Riprova tra qualche minuto.
-  links_used: I link alleanza di oggi sono esauriti. Ricominceranno al ripristino giornaliero (00:00 GT).
+  links_used: I link dell'alleanza di oggi sono esauriti. Ricominceranno al ripristino giornaliero (00:00 GT).
   relink_none: Non c'è più nulla da ricollegare per quell'alleanza.
-  link_bad: Scegli un'alleanza e digita il tag che usa ora nel gioco.
-  link_same: È il tag che il sito sta già usando.
+  link_bad: Scegli un'alleanza e digita il tag che usa nel gioco ora.
+  link_same: È il tag che il sito utilizza già.
   link_taken: "{tag} è già un'altra alleanza sul sito."
-  link_not_found: Il gioco non ha alcuna alleanza con tag {tag} (le maiuscole contano).
+  link_not_found: Il gioco non ha alcuna alleanza con il tag {tag} (la differenza tra maiuscole e minuscole conta).
   positions_used: Gli aggiornamenti della mappa di oggi sono esauriti. Ricominceranno al ripristino giornaliero (00:00 GT).
   positions_wait: La mappa è stata aggiornata poco fa. Riprova tra {minutes} min.
-  refresh_limit: Nessun aggiornamento roster rimasto per oggi. Ricominceranno al ripristino giornaliero (00:00 GT).
+  refresh_limit: Nessun aggiornamento roster rimasto oggi. Ricominceranno al ripristino giornaliero (00:00 GT).
   refresh_wait: Il roster è stato aggiornato poco fa. Riprova tra {n} min.
   refresh_failed: Impossibile raggiungere il gioco. Riprova tra qualche minuto.
   signed_out: Accedi con Discord (in alto a destra) per vedere la dashboard della tua alleanza.
   load_failed: 'Impossibile caricare la dashboard: {reason}'
-  no_alliance: Non siamo riusciti a capire in quale alleanza ti trovi. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP. Chiedi il ruolo ai leader della tua alleanza o a uno Steward, quindi usa Aggiorna Accesso nella scheda del tuo account (in alto a destra).
+  no_alliance: Non siamo riusciti a determinare in quale alleanza ti trovi. Il sito la trova dal tuo ruolo alleanza nel server Discord NAP. Chiedi ai leader della tua alleanza o a uno Steward il ruolo, quindi usa Refresh Access nella tua scheda account (in alto a destra).
   alliance_unknown: Quell'alleanza non è più sulla mappa. Ricarica la pagina e sceglila di nuovo.
   name_bad: Digita prima il nome dell'alleanza.
-  leaders_only: Solo gli R4 e gli R5 della tua alleanza possono modificare la dashboard.
+  leaders_only: Solo gli R4 e R5 della tua alleanza possono modificare la dashboard.
   chart_removed: Quel grafico è stato rimosso.
   chart_already_removed: Quel grafico era già stato rimosso.
-  not_linked: Questo grafico non è collegato a un foglio o documento Google.
+  not_linked: Questo grafico non è collegato a un Google Sheet o Doc.
   unknown_change: Modifica sconosciuta.
   save_failed: 'Impossibile salvare: {reason}'
-  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate su Discord.
-  rewards_closed: Le ricompense sono chiuse fino a {when}.
-  no_rank: "[{tag}] non ha un grado nella classifica."
+  r5_only_nominate: Solo il tuo R5 può aprire la pagina di nomina qui. Esegui /nominate in Discord.
+  rewards_closed: Le ricompense sono chiuse fino alle {when}.
+  no_rank: "[{tag}] non ha alcun rango in classifica."
   choose_type: Scegli un tipo di grafico o tabella.
   title_needed: Dai un titolo al grafico o alla tabella.
-  too_many_columns: Massimo {max} colonne (questa tabella ne ha {count}).
-  too_many_rows: Massimo {max} righe (questa tabella ne ha {count}).
+  too_many_columns: Al massimo {max} colonne (questa tabella ne ha {count}).
+  too_many_rows: Al massimo {max} righe (questa tabella ne ha {count}).
   column_name: Colonna {n}
   paste_first: Incolla prima una tabella (una riga di intestazione, poi i dati).
   no_data_rows: La tabella non ha righe di dati sotto l'intestazione.
   needs_numbers: Un grafico ha bisogno di una colonna di numeri per essere visualizzato.
-  needs_target: 'Un grafico di avanzamento ha bisogno di un obiettivo: un numero o una colonna di obiettivi.'
-  too_many_widgets: Massimo {max} grafici e tabelle per alleanza.
+  needs_target: 'Un grafico di progresso ha bisogno di un obiettivo: un numero o una colonna di obiettivi.'
+  too_many_widgets: Al massimo {max} grafici e tabelle per alleanza.
   sheet_unusable: 'I dati del foglio non possono essere usati: {reason}'
-  too_big: Ciò renderebbe la dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
+  too_big: Ciò renderebbe questa dashboard troppo grande ({size} KB su {max} KB). Usa meno righe o rimuovi una tabella.
   player_name_needed: Inserisci il nome di un giocatore.
   time_format: Gli orari sono Game Time come 18:00 (o lasciali vuoti).
-  start_time_needed: Indica anche l'orario di inizio (o lasciali entrambi vuoti).
-  rotor_full: Massimo {max} giocatori nel rotore.
+  start_time_needed: Inserisci anche l'ora di inizio (o lasciali entrambi vuoti).
+  rotor_full: Al massimo {max} giocatori nel rotore.
   already_in_rotor: "{name} è già nel rotore."
   player_removed: Quel giocatore è stato rimosso.
 api_sheets:
@@ -224,6 +226,24 @@ bot_map:
   levels: Livelli
   alliances: Alleanze
   resources: Risorse
+bot_caravan:
+  server_only: "⚠️ Usa /caravan all'interno del server Discord della tua alleanza o del server NAP."
+  alliance_stewards_only: "⛔ Solo gli Steward possono scegliere un'alleanza. Esegui /caravan senza di essa per la tua."
+  player_needed: Digita il nome del giocatore in **player** per scegliere o annullare.
+  unknown_alliance: "⚠️ Non c'è alcuna alleanza con il tag **{tag}** sulla mappa."
+  no_alliance: "⚠️ Impossibile determinare la tua alleanza: assicurati di avere il ruolo della tua alleanza."
+  leaders_only: "⛔ Solo i leader della tua alleanza (ruoli R4, R5 e ufficiale) possono utilizzare il rotore carovana qui."
+  not_in_rotor: "**{name}** non è nel rotore."
+  already_picked: "**{name}** è già stato scelto questa settimana."
+  not_picked: "**{name}** non è stato scelto questa settimana."
+  added: "➕ **{name}** non era nel rotore, quindi è stato aggiunto."
+  picked_done: "✅ **{name}** scelto."
+  unpicked_done: "↩️ **{name}** è di nuovo disponibile."
+  failed: "⚠️ Il rotore non poteva essere letto o salvato proprio ora. Riprova tra un momento."
+  title: "🐪 [{tag}] Rotore Carovana: {picked}/{total} scelti"
+  picked: 'Scelti questa settimana:'
+  available: 'Disponibili:'
+  footer: Il rotore carovana della dashboard mostra lo stesso elenco (e i suggerimenti del foglio).
 bot_nominate:
   alliance_stewards_only: "⛔ Solo gli Steward possono scegliere un'alleanza. Esegui /nominate senza, per la tua."
   unknown_alliance: "⚠️ Non esiste alcuna alleanza con il tag **{tag}** sulla mappa."
@@ -362,38 +382,45 @@ bot_commands:
   calendar: Visualizza o gestisci il calendario eventi
   calendar_kingdom: Visualizza o gestisci il calendario eventi del Regno
   calendar_action: Azione da eseguire (lascia vuoto per visualizzare il calendario)
-  calendar_manage_alliance: Gestisci eventi Alleanza (R5 per impostazione predefinita)
+  calendar_manage_alliance: Gestisci eventi Alleanza (R5 di default)
   calendar_manage_global: Gestisci eventi Globali (Solo Admin)
-  nominate: Richiedi un link al portale per inviare le nomine settimanali dei forzieri
-  nominate_authenticated: Richiedi un link al portale autenticato per inviare le nomine settimanali dei forzieri
-  nominate_show: Lascia vuoto per il link di nomina
-  nominate_show_link: "🔗 Ottieni il link di nomina"
-  nominate_show_list: "📋 Mostra il nostro elenco attuale"
-  nominate_alliance: 'Steward: agisci per un''altra alleanza (un link di test quando le ricompense sono chiuse)'
-  rewards: 'Ricompense di questa settimana: stato e risultato della Guerra tra Regni (Steward)'
+  nominate: Richiedi un link al portale per inviare le candidature settimanali per i forzieri
+  nominate_authenticated: Richiedi un link al portale autenticato per inviare le candidature settimanali per i forzieri
+  nominate_show: Lascia vuoto per il link di candidatura
+  nominate_show_link: "🔗 Ottieni il link di candidatura"
+  nominate_show_list: "📋 Mostra la nostra lista attuale"
+  nominate_alliance: 'Steward: agisci per un''altra alleanza (un link di prova quando le ricompense sono chiuse)'
+  caravan: 'Rotore Carovana della tua alleanza: visualizzalo o scegli un giocatore (leader)'
+  caravan_action: Lascia vuoto per vedere il rotore
+  caravan_show: "👀 Mostra il rotore"
+  caravan_pick: "✅ Scegli un giocatore"
+  caravan_unpick: "↩️ Annulla una scelta"
+  caravan_player: Il nome in gioco del giocatore (per scegliere o annullare)
+  caravan_alliance: 'Steward: il tag di un''altra alleanza'
+  rewards: 'Ricompense di questa settimana: stato e il risultato della Guerra tra Regni (Steward)'
   rewards_action: Lascia vuoto per vedere lo stato delle ricompense di questa settimana
   rewards_won: 'Registra Guerra tra Regni: Vinta (Steward)'
   rewards_lost: 'Registra Guerra tra Regni: Persa (Steward)'
-  rewards_reset: Cancella le nomine di questa settimana (Steward)
-  rewards_reset_overrides: Ripristina override del Campidoglio e riscatti (Steward)
-  rank: Visualizza o gestisci i gradi NAP dell'alleanza
-  rank_set: Aggiorna il grado NAP di un'alleanza (Solo Admin)
+  rewards_reset: Cancella le candidature di questa settimana (Steward)
+  rewards_reset_overrides: Ripristina le sovrascritture e i buyout del Campidoglio (Steward)
+  rank: Visualizza o gestisci i ranghi NAP dell'alleanza
+  rank_set: Aggiorna il rango NAP di un'alleanza (Solo Admin)
   rank_tag: Tag alleanza (es. ABC)
-  rank_position: Nuova posizione in classifica (es. da 1 a 10)
-  rank_list: Mostra i gradi e le classifiche NAP attuali
-  sb: Visualizza il programma della Battaglia di Sopravvivenza
-  sb_long: Visualizza il programma della corsa agli armamenti della Battaglia di Sopravvivenza e gli eventi attivi
+  rank_position: Nuova posizione di rango (es. da 1 a 10)
+  rank_list: Mostra i ranghi e le classifiche NAP attuali
+  sb: Mostra il programma della Battaglia di Sopravvivenza
+  sb_long: Mostra il programma della corsa agli armamenti della Battaglia di Sopravvivenza ed eventi attivi
   sb_day: Giorno del ciclo (1-7)
-  rules: Visualizza le regole del server e del NAP del Regno
+  rules: Mostra le regole NAP del server e del Regno
   rules_rule: Numero della regola specifica da visualizzare
-  map: Visualizza la mappa territoriale live
-  map_long: Visualizza la mappa territoriale live di Last Asylum
-  devupdate: Copia i dati live nei dati del sito di test (Solo Steward; solo tu vedrai la risposta)
+  map: Visualizza la mappa del territorio in tempo reale
+  map_long: Visualizza la mappa del territorio di Last Asylum in tempo reale
+  devupdate: Copia i dati live nei dati del sito di test (solo Steward; solo tu vedi la risposta)
   registerbot: Registra il server dell'alleanza o sincronizza i comandi slash
   registerbot_action: Azione da eseguire (lascia vuoto per ottenere il link al portale di registrazione)
   registerbot_sync: Sincronizza tutti i server registrati (Solo Admin)
   suggest: Invia una proposta di regola, segnala un problema dell'alleanza o controlla lo stato del tuo ticket
   suggest_type: Seleziona la categoria del ticket o controlla le tue proposte attive
-  suggest_nap: "👑 Proposta Regno / NAP (Regola per tutto il server o idea per evento)"
-  suggest_alliance: "🛡️ Problema interno all'alleanza (Gestito privatamente dai tuoi R4/R5)"
-  suggest_status: "📋 Visualizza lo stato del mio ticket (Attivo e cronologia recente)"
+  suggest_nap: "👑 Proposta Regno / NAP (Regola Server o Idea Evento)"
+  suggest_alliance: "🛡️ Problema interno all'alleanza (gestito privatamente dai tuoi R4/R5)"
+  suggest_status: "📋 Visualizza lo stato del mio ticket (Attivo e Storico recente)"

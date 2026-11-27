@@ -224,6 +224,24 @@ bot_map:
   levels: Niveles
   alliances: Alianzas
   resources: Recursos
+bot_caravan:
+  server_only: "⚠️ Usa /caravan dentro del servidor de Discord de tu alianza o en el servidor NAP."
+  alliance_stewards_only: "⛔ Solo los Stewards pueden elegir una alianza. Ejecuta /caravan sin ella para la tuya."
+  player_needed: Escribe el nombre del jugador en **player** para elegir o deshacer.
+  unknown_alliance: "⚠️ No hay ninguna alianza con la etiqueta **{tag}** en el mapa."
+  no_alliance: "⚠️ No pudimos determinar tu alianza: asegúrate de tener el rol de tu alianza."
+  leaders_only: "⛔ Solo los líderes de tu alianza (roles R4, R5 y oficiales) pueden usar el Rotor de Caravana aquí."
+  not_in_rotor: "**{name}** no está en el rotor."
+  already_picked: "**{name}** ya ha sido elegido esta semana."
+  not_picked: "**{name}** no ha sido elegido esta semana."
+  added: "➕ **{name}** no estaba en el rotor, así que fue añadido."
+  picked_done: "✅ **{name}** elegido."
+  unpicked_done: "↩️ **{name}** está disponible de nuevo."
+  failed: "⚠️ El rotor no se pudo leer ni guardar en este momento. Por favor, inténtalo de nuevo en un momento."
+  title: "🐪 [{tag}] Rotor de Caravana: {picked}/{total} elegidos"
+  picked: 'Elegidos esta semana:'
+  available: 'Disponible:'
+  footer: El Rotor de Caravana del panel muestra la misma lista (y las sugerencias de la hoja).
 bot_nominate:
   alliance_stewards_only: "⛔ Solo los Administradores pueden elegir una alianza. Ejecuta /nominate sin ella para la tuya."
   unknown_alliance: "⚠️ No hay ninguna alianza con la etiqueta **{tag}** en el mapa."
@@ -359,41 +377,48 @@ bot_register:
   open_portal: Abrir portal de registro
   busy: "⚠️ Servicio ocupado: {reason}. Por favor, inténtalo de nuevo en unos momentos."
 bot_commands:
-  calendar: Ver o gestionar el calendario de eventos
-  calendar_kingdom: Ver o gestionar el calendario de eventos del Reino
-  calendar_action: Acción a realizar (déjalo en blanco para ver el calendario)
-  calendar_manage_alliance: Gestionar eventos de la alianza (R5 por defecto)
-  calendar_manage_global: Gestionar eventos globales (Solo administradores)
-  nominate: Solicitar un enlace al portal para enviar nominaciones de cofres semanales
-  nominate_authenticated: Solicitar un enlace al portal autenticado para enviar nominaciones de cofres semanales
-  nominate_show: Déjalo en blanco para el enlace de nominación
+  calendar: Ver o gestionar el Calendario de Eventos
+  calendar_kingdom: Ver o gestionar el Calendario de Eventos del Reino
+  calendar_action: Acción a realizar (dejar en blanco para ver el calendario)
+  calendar_manage_alliance: Gestionar Eventos de Alianza (R5 por defecto)
+  calendar_manage_global: Gestionar Eventos Globales (Solo Administradores)
+  nominate: Solicitar un enlace de portal para enviar nominaciones de cofres semanales
+  nominate_authenticated: Solicitar un enlace de portal autenticado para enviar nominaciones de cofres semanales
+  nominate_show: Dejar en blanco para el enlace de nominación
   nominate_show_link: "🔗 Obtener el enlace de nominación"
   nominate_show_list: "📋 Mostrar nuestra lista actual"
-  nominate_alliance: 'Administradores: actuar por otra alianza (un enlace de prueba cuando las recompensas están cerradas)'
-  rewards: 'Recompensas de esta semana: estado y el resultado de la Guerra de Reinos (Administradores)'
-  rewards_action: Déjalo en blanco para ver el estado de las recompensas de esta semana
-  rewards_won: 'Registrar Guerra de Reinos: Ganada (Administrador)'
-  rewards_lost: 'Registrar Guerra de Reinos: Perdida (Administrador)'
-  rewards_reset: Borrar las nominaciones de esta semana (Administrador)
-  rewards_reset_overrides: Restablecer anulaciones y compras del Capitolio (Administrador)
-  rank: Ver o gestionar las clasificaciones NAP de las alianzas
-  rank_set: Actualizar el rango NAP de una alianza (Solo administradores)
-  rank_tag: Etiqueta de alianza (p. ej., ABC)
-  rank_position: Nueva posición de rango (p. ej., 1 a 10)
-  rank_list: Mostrar clasificaciones y posiciones NAP actuales
-  sb: Mostrar el calendario de Batalla de Supervivencia
-  sb_long: Mostrar el calendario de carrera armamentista de Batalla de Supervivencia y eventos activos
+  nominate_alliance: 'Stewards: actuar por otra alianza (un enlace de prueba cuando las recompensas están cerradas)'
+  caravan: 'Rotor de Caravana de tu alianza: verlo o elegir un jugador (líderes)'
+  caravan_action: Dejar en blanco para ver el rotor
+  caravan_show: "👀 Mostrar el rotor"
+  caravan_pick: "✅ Elegir un jugador"
+  caravan_unpick: "↩️ Deshacer una elección"
+  caravan_player: El nombre del jugador en el juego (para elegir o deshacer)
+  caravan_alliance: 'Stewards: etiqueta de otra alianza'
+  rewards: 'Recompensas de esta semana: estado y resultado de la Guerra de Reinos (Stewards)'
+  rewards_action: Dejar en blanco para ver el estado de las recompensas de esta semana
+  rewards_won: 'Registrar Guerra de Reinos: Ganada (Steward)'
+  rewards_lost: 'Registrar Guerra de Reinos: Perdida (Steward)'
+  rewards_reset: Limpiar las nominaciones de esta semana (Steward)
+  rewards_reset_overrides: Restablecer anulaciones y compras de Capitolio (Steward)
+  rank: Ver o gestionar las clasificaciones NAP de la alianza
+  rank_set: Actualizar el rango NAP de una alianza (Solo Administradores)
+  rank_tag: Etiqueta de la alianza (ej., ABC)
+  rank_position: Nueva posición de rango (ej., 1 al 10)
+  rank_list: Mostrar las clasificaciones NAP actuales
+  sb: Mostrar el cronograma de Batalla de Supervivencia
+  sb_long: Mostrar el cronograma de la carrera armamentista de Batalla de Supervivencia y eventos activos
   sb_day: Día del ciclo (1-7)
-  rules: Mostrar las reglas del servidor y NAP del Reino
-  rules_rule: Número de regla específico a ver
+  rules: Mostrar las reglas del servidor y del Reino NAP
+  rules_rule: Número de regla específica a visualizar
   map: Ver el mapa de territorio en vivo
   map_long: Ver el mapa de territorio de Last Asylum en vivo
-  devupdate: Copiar los datos en vivo a los datos del sitio de prueba (Solo administradores; solo tú ves la respuesta)
-  registerbot: Registrar servidor de alianza o sincronizar comandos de barra
-  registerbot_action: Acción a realizar (déjalo en blanco para obtener el enlace del portal de registro)
-  registerbot_sync: Sincronizar todos los servidores registrados (Solo administradores)
-  suggest: Enviar una propuesta de regla, informar de un problema de alianza o comprobar el estado de tu ticket
-  suggest_type: Seleccionar categoría de ticket o comprobar tus envíos activos
-  suggest_nap: "👑 Propuesta de Reino / NAP (Regla para todo el servidor o idea de evento)"
-  suggest_alliance: "🛡️ Problema interno de la alianza (Gestionado privadamente por tus R4/R5s)"
+  devupdate: Copiar los datos en vivo a los datos del sitio de prueba (Solo Stewards; solo tú ves la respuesta)
+  registerbot: Registrar servidor de alianza o sincronizar comandos slash
+  registerbot_action: Acción a realizar (dejar en blanco para obtener el enlace del portal de registro)
+  registerbot_sync: Sincronizar todos los servidores registrados (Solo Administradores)
+  suggest: Enviar una propuesta de regla, informar un problema de alianza o verificar el estado de tu ticket
+  suggest_type: Seleccionar categoría de ticket o verificar tus envíos activos
+  suggest_nap: "👑 Propuesta para el Reino / NAP (Regla para todo el servidor o idea de evento)"
+  suggest_alliance: "🛡️ Problema interno de la Alianza (Gestionado privadamente por tus R4/R5)"
   suggest_status: "📋 Ver el estado de mi ticket (Activo e historial reciente)"
