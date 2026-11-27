@@ -32,7 +32,9 @@ nav_id: "nap-ranks"
 
 <div id="alliance-container" class="alliance-wrapper">
   <!-- Controls Bar -->
-  <div class="map-controls">
+  <div class="map-controls nap-controls">
+    <!-- The NAP alliances' colours as diagonal stripes (js/alliance.js drawNapStripes) -->
+    <div class="nap-stripes" id="nap-stripes" aria-hidden="true"></div>
     <div class="control-group left">
       <span class="control-label">{{ "alliance_planner.roster" | t }}</span>
       <span id="alliance-total-count" class="badge">{{ "alliance_planner.roster_loading" | t }}</span>

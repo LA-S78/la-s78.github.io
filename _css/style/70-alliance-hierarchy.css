@@ -1105,3 +1105,56 @@ main .ladder-badge,
   border-radius: 2px;
 }
 
+
+/* The NAP Roster bar (owner request, 2026-11-27): the NAP alliances' colours as diagonal
+   stripes in rank order, under a dark shade so the label and buttons stay readable
+   (js/alliance.js drawNapStripes) */
+.nap-controls {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.nap-controls > :not(.nap-stripes) {
+  position: relative;
+  z-index: 1;
+}
+.nap-stripes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.nap-stripes.is-shown {
+  opacity: 1;
+}
+/* Wider than the bar, so the slanted ends of the first and last stripes are out of sight */
+.nap-stripes-row {
+  position: absolute;
+  inset: 0 -8%;
+  display: flex;
+}
+.nap-stripe {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: var(--c);
+  transform: skewX(-24deg);
+}
+/* The shade: darkest where the text sits, so it reads on any colour */
+.nap-stripes::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(12, 14, 11, 0.82),
+    rgba(12, 14, 11, 0.6) 45%,
+    rgba(12, 14, 11, 0.6) 55%,
+    rgba(12, 14, 11, 0.82)
+  );
+}
+.nap-controls .control-label {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
