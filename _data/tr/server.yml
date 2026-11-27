@@ -64,29 +64,30 @@ api_dashboard:
   already_in_rotor: "{name} zaten rotorda."
   player_removed: Bu oyuncu kaldırıldı.
 api_sheets:
-  no_tabs: Bu tabloda hiç sekme bulunamadı. Bağlantının doğrudan e-tabloyu açtığından emin olun.
+  no_tabs: Bu tabloda hiç sekme bulunamadı. Bağlantının doğrudan elektronik tabloyu açtığından emin olun.
   tabs_too_few: Bu desenle eşleşen 2'den az sekme var. Sekme adlarıyla karşılaştırın (# herhangi bir sayı, * herhangi bir şeydir).
   full_link: Tam bağlantıyı yapıştırın (https://docs.google.com/... ile başlayan).
   google_only: Yalnızca Google E-Tablolar ve Google Dokümanlar bağlantıları (docs.google.com) kullanılabilir.
   range_format: Aralık A1:D20 gibi görünmelidir (veya boş bırakın).
   not_sheet_or_doc: Bu bağlantı bir Google E-Tablo veya Google Doküman değil.
-  unexpected_redirect: Google indirme işlemini beklenmedik bir yere yönlendirdi, bu yüzden alınamadı.
+  unexpected_redirect: Google indirmeyi beklenmedik bir yere yönlendirdi, bu yüzden alınamadı.
   too_many_redirects: Google'dan çok fazla yönlendirme geldi.
-  too_slow: Google yanıt vermek için çok uzun süre harcadı. Birazdan tekrar deneyin.
+  too_slow: Google'ın yanıt vermesi çok uzun sürdü. Birazdan tekrar deneyin.
   unreachable: Google'a ulaşılamadı ({reason}).
-  doc_not_shared: 'Google izin vermedi: Dokümanı yayınlayın (Dosya → Paylaş → Web''de yayınla), ardından o bağlantıyı kullanın.'
-  sheet_not_shared: 'Google izin vermedi: E-tabloyu "Bağlantıya sahip herkes görüntüleyebilir" şeklinde paylaşın veya Dosya → Paylaş → Web''de yayınla seçeneğini kullanın.'
+  doc_not_shared: 'Google erişimi reddetti: Dokümanı yayınlayın (Dosya → Paylaş → Web''de yayınla), ardından o bağlantıyı kullanın.'
+  sheet_not_shared: 'Google erişimi reddetti: Tabloyu "Bağlantıya sahip olan herkes görüntüleyebilir" şeklinde paylaşın veya Dosya → Paylaş → Web''de yayınla seçeneğini kullanın.'
   google_error: Google bir hata ile yanıt verdi ({status}). Bağlantıyı kontrol edin.
-  too_large: Bu tablo okunmak için çok büyük (2 MB'tan fazla).
+  too_large: Bu tablo okunamayacak kadar büyük (2 MB'ın üzerinde).
   empty: Bu tablo (veya aralık) boş.
-  no_such_table_one: Bu Dokümanda {count} tablo var; {table} numaralı tablo bulunmuyor.
-  no_such_table_other: Bu Dokümanda {count} tablo var; {table} numaralı tablo bulunmuyor.
-  no_table: Bu Dokümanda hiç tablo yok.
-  list_range: 'Hücreleri yeniden seçin: en fazla 26 sütun, başlık satırıyla başlayarak.'
+  no_such_table_one: Bu Dokümanda {count} tablo var; {table} numaralı tablo yok.
+  no_such_table_other: Bu Dokümanda {count} tablo var; {table} numaralı tablo yok.
+  no_table: Bu Dokümanın içinde hiçbir tablo yok.
+  list_range: 'Hücreleri tekrar seçin: başlık satırıyla başlayan en fazla 26 sütun.'
   list_name_needed: Oyuncu isimlerinin hangi sütunda olduğunu seçin.
-  list_changed: Liste bağlandığından beri tablo değişti ("{heading}" sütunu "{tab}" içindeki eski yerinde değil). Listeyi tekrar bağlayın.
-  list_no_names: '"{tab}" üzerindeki bağlantılı hücrelerde hiç isim yok.'
-  list_pick: 'Listenin tablonuzdaki yerini seçin: sekmesi, hücreleri ve isimlerin olduğu sütun.'
+  list_changed: Liste bağlandığından beri tablo değişti ("{heading}" sütunu artık "{tab}" sekmesindeki yerinde değil). Listeyi tekrar bağlayın.
+  list_no_names: '"{tab}" sekmesindeki bağlantılı hücrelerde hiç isim yok.'
+  too_many: İttifakınızdan son bir dakika içinde çok fazla tablo isteği geldi. Biraz bekleyin ve tekrar deneyin.
+  list_pick: 'Listenin tablonuzdaki yerini seçin: sekmesi, hücreleri ve isimlerin hangi sütunda olduğu.'
 api_nominate:
   test_no_save: 'Bu bir Kahya test bağlantısıdır: listeler buradan kaydedilmez.'
   sheet_link_needed: Önce ittifakınızın Google E-Tablo bağlantısını yapıştırın.
