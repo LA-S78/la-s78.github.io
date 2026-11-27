@@ -412,8 +412,14 @@ async function sheetFill(req, res) {
     data.columns.findIndex((c) => /^player/i.test(c)),
   );
   const weekCol = data.columns.findIndex((c) => /^week/i.test(c));
+  // The player's ID when the sheet has one (Duel Tools v4.2's "Player ID" column): the
+  // page and the save turn it into their name now, so a rename since doesn't matter
+  const idCol = data.columns.findIndex((c) => /^(player )?id$/i.test(c.trim()));
   const names = data.rows
-    .map((r) => String(r[col] || '').trim())
+    .map((r) => {
+      const id = idCol >= 0 ? String(r[idCol] || '').replace(/\D/g, '') : '';
+      return looksLikeId(id) ? id : String(r[col] || '').trim();
+    })
     .filter(Boolean)
     .slice(0, 50);
   if (!names.length) {
