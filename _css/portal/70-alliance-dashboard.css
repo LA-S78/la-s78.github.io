@@ -1666,3 +1666,31 @@ li.dw-sel > .dw-bar-track {
   font-size: 0.85rem;
   color: var(--text-muted);
 }
+
+/* The Caravan Rotor's top line: title, picked count and Show/Hide on one row (owner, 2026-11-27) */
+.dash-cv-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin: 0 0 0.6rem;
+}
+.dash-cv-top .dash-card-title {
+  margin: 0;
+  flex: 1 1 auto;
+}
+.dash-cv-top .dash-tag {
+  margin-left: 0;
+}
+#caravan-body[hidden] {
+  display: none;
+}
+/* Phones: just the arrow, so the line still fits */
+@media (max-width: 480px) {
+  .dash-cv-toggle-text {
+    display: none;
+  }
+  .dash-cv-top .dash-roster-toggle svg {
+    margin: 0;
+  }
+}
