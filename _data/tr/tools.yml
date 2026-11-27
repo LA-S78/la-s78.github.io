@@ -133,28 +133,29 @@ roster:
   daily_old: 'Bugünkü sıfırlamadan önceki araştırma ve yardım: son okuma {time}'
   daily_unknown: 'Araştırma ve yardım: okuma zamanı bilinmiyor'
 caravan:
-  sheet_title: İttifak çizelgesi önerisi
-  sheet_help: İttifakınızın çizelgesi (Duel Tools), bu hafta kervan için kimin puanı olduğunu hesaplar. Listeyi yükleyin ve ardından seçim yapın.
-  sheet_link: Google E-Tablo bağlantısı
+  show: Rotoru göster
+  hide: Rotoru gizle
+  sheet_title: İttifak tablosu tarafından önerilen
+  sheet_help: İttifakınızın Google Tablosu kervanı kimin alması gerektiğini hesaplıyorsa, listesini buradan yükleyin ve seçim yapın. Listenin bulunduğu siteyi bir kez gösterin (aşağıda); bir Duel Tools tablosu kendiliğinden bulunur.
   sheet_load: Önerileri yükle
-  sheet_none: Çizelge bu hafta kimseyi önermiyor (yeterli puana sahip kimse yok).
+  sheet_none: Tablo bu hafta kimseyi önermiyor (yeterli puanı olan yok).
   sheet_points: "{n} puan"
-  sheet_add: Sıraya ekle
+  sheet_add: Rotora ekle
   sheet_picked: seçildi
-  key_title: Çizelge senkronizasyon anahtarı
-  key_help: İttifak çizelgenizin betiğinin bu sıradaki seçimleri okumasını sağlar (Duel Tools → Set website sync key). Yalnızca R5 veya bir Yönetici oluşturabilir veya iptal edebilir.
-  key_none: 'Henüz anahtar yok: çizelge seçimleri okuyamıyor.'
-  key_active: "…{end} ile biten bir anahtar etkin ({when}, {by} tarafından oluşturuldu)."
+  key_title: Tablo eşitleme anahtarı
+  key_help: İttifak tablonuzun script'inin bu rotorun seçimlerini okumasını sağlar (Duel Tools → Web sitesi eşitleme anahtarını ayarla). Sadece R5 veya bir Sorumlu (Steward) bunu oluşturabilir veya iptal edebilir.
+  key_none: 'Henüz anahtar yok: tablo seçimleri okuyamaz.'
+  key_active: "...{end} ile biten bir anahtar etkin ({by} tarafından {when} tarihinde oluşturuldu)."
   key_create: Anahtar oluştur
   key_replace: Anahtarı değiştir
   key_revoke: İptal et
-  key_once: 'Bu anahtarı şimdi çizelgeye kopyalayın: tekrar gösterilmeyecektir.'
-  key_create_confirm: İttifak çizelgeniz için bir senkronizasyon anahtarı oluşturulsun mu?
-  key_replace_confirm: Anahtar değiştirilsin mi? Çizelge, yeni anahtarı girene kadar senkronizasyonu durduracaktır.
-  key_revoke_confirm: Anahtar iptal edilsin mi? Çizelge artık seçimleri okuyamayacaktır.
-  title: Kervan Sırası
+  key_once: 'Bu anahtarı şimdi tabloya kopyalayın: tekrar gösterilmeyecektir.'
+  key_create_confirm: İttifak tablonuz için bir eşitleme anahtarı oluşturulsun mu?
+  key_replace_confirm: Anahtar değiştirilsin mi? Yeni anahtarı tabloya girene kadar eşitleme duracaktır.
+  key_revoke_confirm: Anahtar iptal edilsin mi? Tablo artık seçimleri okuyamayacak.
+  title: Kervan Rotoru
   name_ok: "[{tag}] üye listesinde"
-  name_spelling: 'Oyundaki yazılışı:'
+  name_spelling: 'Oyunda yazılışı:'
   name_unknown: "[{tag}] üye listesinde değil."
   name_did_you_mean: 'Şunu mu demek istediniz:'
   name_flag_spelling: Oyundaki yazılışı {name}
@@ -163,18 +164,18 @@ caravan:
   copy_status: Durumu kopyala
   new_week: Yeni hafta
   member_note: Kervan hazır olduğunda R4'leriniz tarafından seçilir.
-  search: İsim ara...
-  around_now: Şu civarda
-  around_now_help: Yalnızca şu an müsait olan oyuncular
+  search: İsimlerde ara…
+  around_now: Şu sıralar
+  around_now_help: Sadece şu sıralar müsait olan oyuncular
   available: Bu hafta müsait ({n})
   picked: Bu hafta seçilenler ({n})
-  nobody_matches: Eşleşme bulunamadı.
-  everyone_picked: Bu hafta herkes kervanını aldı.
-  add_players: Aşağıdan oyuncu ekleyin.
+  nobody_matches: Eşleşen kimse yok.
+  everyone_picked: Bu hafta herkes kervan aldı.
+  add_players: Aşağıya oyuncu ekleyin.
   no_players: Henüz oyuncu yok.
   flexible: esnek
   pick: "✓ Seçildi"
-  back_to_available: Müsait olanlara geri dön
+  back_to_available: Müsait listesine geri al
   name: İsim
   from: Başlangıç (Game Time)
   to: Bitiş (Game Time)
@@ -184,16 +185,16 @@ caravan:
   add_from_label: Müsaitlik başlangıcı (Game Time, isteğe bağlı)
   add_to_label: Müsaitlik bitişi (Game Time, isteğe bağlı)
   add: Ekle
-  times_help: Saatler Game Time (UTC-2) olup isteğe bağlıdır; esnek oyuncular için boş bırakın.
-  status_title: "🐪 [{tag}] Kervan Sırası: {picked}/{total} seçildi"
+  times_help: Saatler Game Time (UTC-2) cinsindendir ve isteğe bağlıdır; esnek olan oyuncular için boş bırakın.
+  status_title: "🐪 [{tag}] Kervan Rotoru: {picked}/{total} seçildi"
   status_available: 'Müsait: {names}'
   status_picked: 'Seçilenler: {names}'
   nobody: kimse
   nobody_yet: henüz kimse yok
-  copy_prompt: 'Sıra durumunu kopyala:'
-  confirm_remove: "{name} sıradan kaldırılsın mı?"
+  copy_prompt: 'Rotor durumunu kopyala:'
+  confirm_remove: "{name} rotordan çıkarılsın mı?"
   this_player: bu oyuncu
-  confirm_new_week: Yeni hafta başlatılsın mı? Herkes 'müsait' durumuna dönecek (isimler ve saatler korunur).
+  confirm_new_week: Yeni bir hafta başlatılsın mı? Herkes müsait listesine geri döner (isimler ve saatler kalır).
 chart_editor:
   edit_title: Grafik veya tabloyu düzenle
   new_title: Yeni grafik veya tablo

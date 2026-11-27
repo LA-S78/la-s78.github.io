@@ -133,26 +133,27 @@ roster:
   daily_old: 'Ricerca e aiuto prima del reset di oggi: ultima lettura {time}'
   daily_unknown: 'Ricerca e aiuto: orario di lettura sconosciuto'
 caravan:
-  sheet_title: Suggerito dal foglio dell'alleanza
-  sheet_help: Il foglio della tua alleanza (Duel Tools) calcola chi ha i punti per una carovana questa settimana. Carica la lista, poi scegli da lì.
-  sheet_link: Link Google Sheet
+  show: Mostra rotore
+  hide: Nascondi rotore
+  sheet_title: Suggerito dal foglio alleanza
+  sheet_help: Se il Google Sheet della tua alleanza calcola chi dovrebbe ricevere una carovana, carica la lista qui e seleziona da essa. Mostra il sito dove si trova la lista una volta (sotto); un foglio Duel Tools viene trovato automaticamente.
   sheet_load: Carica suggerimenti
-  sheet_none: Il foglio non suggerisce nessuno questa settimana (nessuno ha punti a sufficienza).
+  sheet_none: Il foglio non suggerisce nessuno questa settimana (nessuno ha abbastanza punti).
   sheet_points: "{n} punti"
   sheet_add: Aggiungi al rotore
   sheet_picked: selezionato
   key_title: Chiave di sincronizzazione foglio
-  key_help: Permette allo script del foglio della tua alleanza di leggere le scelte di questo rotore (Duel Tools → Imposta chiave di sincronizzazione sito). Solo il R5 o uno Steward può crearla o revocarla.
-  key_none: 'Nessuna chiave ancora: il foglio non può leggere le scelte.'
-  key_active: Una chiave che termina in …{end} è attiva (creata {when} da {by}).
+  key_help: Permette allo script del foglio della tua alleanza di leggere le selezioni di questo rotore (Duel Tools → Imposta chiave di sincronizzazione sito). Solo l'R5 o uno Steward può crearla o revocarla.
+  key_none: 'Nessuna chiave ancora: il foglio non può leggere le selezioni.'
+  key_active: Una chiave che termina con …{end} è attiva (creata {when} da {by}).
   key_create: Crea chiave
   key_replace: Sostituisci chiave
   key_revoke: Revoca
-  key_once: 'Copia questa chiave nel foglio ora: non verrà mostrata di nuovo.'
+  key_once: 'Copia questa chiave nel foglio ora: non verrà più mostrata.'
   key_create_confirm: Creare una chiave di sincronizzazione per il foglio della tua alleanza?
   key_replace_confirm: Sostituire la chiave? Il foglio smetterà di sincronizzarsi finché non inserirai quella nuova.
-  key_revoke_confirm: Revocare la chiave? Il foglio non potrà più leggere le scelte.
-  title: Rotore Carovana
+  key_revoke_confirm: Revocare la chiave? Il foglio non potrà più leggere le selezioni.
+  title: Rotore Carovane
   name_ok: Nella lista membri di [{tag}]
   name_spelling: 'Nel gioco è scritto:'
   name_unknown: Non nella lista membri di [{tag}].
@@ -169,23 +170,23 @@ caravan:
   available: Disponibili questa settimana ({n})
   picked: Selezionati questa settimana ({n})
   nobody_matches: Nessuna corrispondenza.
-  everyone_picked: Tutti hanno avuto una carovana questa settimana.
-  add_players: Aggiungi giocatori qui sotto.
-  no_players: Ancora nessun giocatore.
+  everyone_picked: Tutti hanno ricevuto una carovana questa settimana.
+  add_players: Aggiungi giocatori sotto.
+  no_players: Nessun giocatore ancora.
   flexible: flessibile
-  pick: "✓ Seleziona"
-  back_to_available: Torna ai disponibili
+  pick: "✓ Selezionato"
+  back_to_available: Torna tra i disponibili
   name: Nome
   from: Da (Game Time)
   to: A (Game Time)
   player_name: Nome giocatore
-  add_from: Da 18:00
-  add_to: A 22:00
-  add_from_label: Disponibile da (Game Time, opzionale)
-  add_to_label: Disponibile fino a (Game Time, opzionale)
+  add_from: Dalle 18:00
+  add_to: Alle 22:00
+  add_from_label: Disponibile da (Game Time, facoltativo)
+  add_to_label: Disponibile fino a (Game Time, facoltativo)
   add: Aggiungi
-  times_help: Gli orari sono in Game Time (UTC-2) e sono opzionali; lasciali vuoti per i giocatori flessibili.
-  status_title: "🐪 [{tag}] Rotore Carovana: {picked}/{total} selezionati"
+  times_help: Gli orari sono in Game Time (UTC-2) e sono facoltativi; lasciali vuoti per i giocatori flessibili.
+  status_title: "🐪 [{tag}] Rotore Carovane: {picked}/{total} selezionati"
   status_available: 'Disponibili: {names}'
   status_picked: 'Selezionati: {names}'
   nobody: nessuno
@@ -193,7 +194,7 @@ caravan:
   copy_prompt: 'Copia lo stato del rotore:'
   confirm_remove: Rimuovere {name} dal rotore?
   this_player: questo giocatore
-  confirm_new_week: Iniziare una nuova settimana? Tutti torneranno disponibili (i nomi e gli orari rimarranno).
+  confirm_new_week: Iniziare una nuova settimana? Tutti torneranno tra i disponibili (i nomi e gli orari rimarranno).
 chart_editor:
   edit_title: Modifica grafico o tabella
   new_title: Nuovo grafico o tabella

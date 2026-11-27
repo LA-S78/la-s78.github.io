@@ -133,26 +133,27 @@ roster:
   daily_old: 'Investigación y ayuda antes del reinicio de hoy: última lectura {time}'
   daily_unknown: 'Investigación y ayuda: hora de lectura desconocida'
 caravan:
+  show: Mostrar rotor
+  hide: Ocultar rotor
   sheet_title: Sugerido por la hoja de la alianza
-  sheet_help: La hoja de tu alianza (Duel Tools) calcula quién tiene los puntos para una caravana esta semana. Carga su lista y elige de ella.
-  sheet_link: Enlace a Google Sheet
+  sheet_help: Si la hoja de Google de tu alianza determina quién debe recibir una caravana, carga su lista aquí y elige de ella. Muestra el sitio donde está la lista una vez (abajo); una hoja de Duelo de Alianzas se encuentra por sí misma.
   sheet_load: Cargar sugerencias
   sheet_none: La hoja no sugiere a nadie esta semana (nadie tiene suficientes puntos).
   sheet_points: "{n} puntos"
-  sheet_add: Añadir al rotador
+  sheet_add: Añadir al rotor
   sheet_picked: elegido
-  key_title: Clave de sincronización de la hoja
-  key_help: Permite que el script de la hoja de tu alianza lea las elecciones de este rotador (Duel Tools → Set website sync key). Solo el R5 o un Steward pueden crearla o revocarla.
-  key_none: 'Aún no hay clave: la hoja no puede leer las elecciones.'
-  key_active: Hay una clave activa que termina en …{end} (creada {when} por {by}).
+  key_title: Clave de sincronización de hoja
+  key_help: Permite que el script de la hoja de tu alianza lea las selecciones de este rotor (Duel Tools → Set website sync key). Solo el R5 o un Steward pueden crearla o revocarla.
+  key_none: 'Aún sin clave: la hoja no puede leer las selecciones.'
+  key_active: Una clave que termina en …{end} está activa (creada {when} por {by}).
   key_create: Crear clave
   key_replace: Reemplazar clave
   key_revoke: Revocar
-  key_once: 'Copia esta clave en la hoja ahora: no se volverá a mostrar.'
+  key_once: 'Copia esta clave en la hoja ahora: no se mostrará de nuevo.'
   key_create_confirm: "¿Crear una clave de sincronización para la hoja de tu alianza?"
   key_replace_confirm: "¿Reemplazar la clave? La hoja dejará de sincronizarse hasta que le des la nueva."
-  key_revoke_confirm: "¿Revocar la clave? La hoja ya no podrá leer las elecciones."
-  title: Rotador de Caravana
+  key_revoke_confirm: "¿Revocar la clave? La hoja ya no podrá leer las selecciones."
+  title: Rotor de Caravana
   name_ok: En la lista de miembros de [{tag}]
   name_spelling: 'En el juego se escribe:'
   name_unknown: No está en la lista de miembros de [{tag}].
@@ -162,10 +163,10 @@ caravan:
   members_can_view: Los miembros pueden ver
   copy_status: Copiar estado
   new_week: Nueva semana
-  member_note: Elegido por tus R4 cuando una caravana está lista.
+  member_note: Elegido por tus R4 cuando una caravana esté lista.
   search: Buscar nombres…
-  around_now: Cerca de ahora
-  around_now_help: Solo jugadores disponibles cerca de ahora
+  around_now: Alrededor de ahora
+  around_now_help: Solo jugadores disponibles alrededor de ahora
   available: Disponible esta semana ({n})
   picked: Elegido esta semana ({n})
   nobody_matches: Nadie coincide.
@@ -173,7 +174,7 @@ caravan:
   add_players: Añadir jugadores abajo.
   no_players: Aún no hay jugadores.
   flexible: flexible
-  pick: "✓ Elegir"
+  pick: "✓ Elegido"
   back_to_available: Volver a disponible
   name: Nombre
   from: Desde (Game Time)
@@ -184,16 +185,16 @@ caravan:
   add_from_label: Disponible desde (Game Time, opcional)
   add_to_label: Disponible hasta (Game Time, opcional)
   add: Añadir
-  times_help: Los horarios son Game Time (UTC-2) y son opcionales; déjalos vacíos para los jugadores que son flexibles.
-  status_title: "🐪 [{tag}] Rotador de Caravana: {picked}/{total} elegidos"
+  times_help: Los horarios son Game Time (UTC-2) y opcionales; déjalos vacíos para jugadores que son flexibles.
+  status_title: "🐪 [{tag}] Rotor de Caravana: {picked}/{total} elegidos"
   status_available: 'Disponible: {names}'
   status_picked: 'Elegido: {names}'
   nobody: nadie
-  nobody_yet: nadie aún
-  copy_prompt: 'Copiar el estado del rotador:'
-  confirm_remove: "¿Eliminar a {name} del rotador?"
+  nobody_yet: nadie todavía
+  copy_prompt: 'Copiar el estado del rotor:'
+  confirm_remove: "¿Eliminar a {name} del rotor?"
   this_player: este jugador
-  confirm_new_week: "¿Comenzar una nueva semana? Todos vuelven a estar disponibles (los nombres y horarios se mantienen)."
+  confirm_new_week: "¿Iniciar una nueva semana? Todos vuelven a estar disponibles (los nombres y horarios se mantienen)."
 chart_editor:
   edit_title: Editar gráfico o tabla
   new_title: Nuevo gráfico o tabla

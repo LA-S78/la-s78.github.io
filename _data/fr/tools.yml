@@ -133,45 +133,46 @@ roster:
   daily_old: 'Recherche et aide avant la réinitialisation d''aujourd''hui : dernière lecture {time}'
   daily_unknown: 'Recherche et aide : heure de lecture inconnue'
 caravan:
-  sheet_title: Suggéré par la feuille d'alliance
-  sheet_help: La feuille de votre alliance (Duel Tools) détermine qui a les points pour une caravane cette semaine. Chargez sa liste, puis faites votre sélection.
-  sheet_link: Lien Google Sheet
+  show: Afficher le rotor
+  hide: Masquer le rotor
+  sheet_title: Suggéré par la feuille de calcul de l'alliance
+  sheet_help: Si la Google Sheet de votre alliance détermine qui doit obtenir une caravane, chargez sa liste ici et faites votre choix. Affichez le site où se trouve la liste une fois (ci-dessous) ; une feuille Duel Tools est détectée automatiquement.
   sheet_load: Charger les suggestions
   sheet_none: La feuille ne suggère personne cette semaine (personne n'a assez de points).
   sheet_points: "{n} points"
   sheet_add: Ajouter au rotor
   sheet_picked: sélectionné
   key_title: Clé de synchronisation de la feuille
-  key_help: Permet au script de la feuille de votre alliance de lire les sélections de ce rotor (Duel Tools → Set website sync key). Seul le R5 ou un intendant peut la créer ou la révoquer.
-  key_none: 'Aucune clé : la feuille ne peut pas lire les sélections.'
-  key_active: Une clé se terminant par …{end} est active (créée {when} par {by}).
+  key_help: Permet au script de la feuille de votre alliance de lire les choix de ce rotor (Duel Tools → Définir la clé de synchronisation du site). Seul le R5 ou un Intendant peut la créer ou la révoquer.
+  key_none: 'Aucune clé pour le moment : la feuille ne peut pas lire les choix.'
+  key_active: Une clé se terminant par {end} est active (créée le {when} par {by}).
   key_create: Créer une clé
   key_replace: Remplacer la clé
   key_revoke: Révoquer
   key_once: 'Copiez cette clé dans la feuille maintenant : elle ne sera plus affichée.'
-  key_create_confirm: Créer une clé de synchronisation pour votre feuille d'alliance ?
+  key_create_confirm: Créer une clé de synchronisation pour la feuille de votre alliance ?
   key_replace_confirm: Remplacer la clé ? La feuille cessera de se synchroniser jusqu'à ce que vous lui donniez la nouvelle.
-  key_revoke_confirm: Révoquer la clé ? La feuille ne pourra plus lire les sélections.
-  title: Rotor de Caravanes
+  key_revoke_confirm: Révoquer la clé ? La feuille ne pourra plus lire les choix.
+  title: Rotor de Caravane
   name_ok: Dans la liste des membres de [{tag}]
-  name_spelling: 'Dans le jeu, il s''écrit :'
+  name_spelling: 'Dans le jeu, il est écrit :'
   name_unknown: Pas dans la liste des membres de [{tag}].
-  name_did_you_mean: 'Voulez-vous dire :'
-  name_flag_spelling: Dans le jeu, il s'écrit {name}
+  name_did_you_mean: 'Vouliez-vous dire :'
+  name_flag_spelling: Dans le jeu, il est écrit {name}
   picked_count: "{picked}/{total} sélectionné(s)"
   members_can_view: Les membres peuvent voir
   copy_status: Copier le statut
   new_week: Nouvelle semaine
   member_note: Sélectionné par vos R4 lorsqu'une caravane est prête.
   search: Rechercher des noms…
-  around_now: Vers maintenant
-  around_now_help: Joueurs disponibles vers maintenant uniquement
+  around_now: Autour de maintenant
+  around_now_help: Seulement les joueurs disponibles autour de maintenant
   available: Disponible cette semaine ({n})
   picked: Sélectionné cette semaine ({n})
   nobody_matches: Aucun résultat.
   everyone_picked: Tout le monde a eu une caravane cette semaine.
   add_players: Ajouter des joueurs ci-dessous.
-  no_players: Pas encore de joueurs.
+  no_players: Aucun joueur pour le moment.
   flexible: flexible
   pick: "✓ Sélectionner"
   back_to_available: Retour aux disponibles
@@ -184,8 +185,8 @@ caravan:
   add_from_label: Disponible à partir de (Game Time, optionnel)
   add_to_label: Disponible jusqu'à (Game Time, optionnel)
   add: Ajouter
-  times_help: Les heures sont en Game Time (UTC-2) et optionnelles ; laissez vide pour les joueurs flexibles.
-  status_title: "🐪 [{tag}] Rotor de Caravanes : {picked}/{total} sélectionné(s)"
+  times_help: Les heures sont en Game Time (UTC-2) et sont optionnelles ; laissez-les vides pour les joueurs flexibles.
+  status_title: "🐪 [{tag}] Rotor de Caravane : {picked}/{total} sélectionné(s)"
   status_available: 'Disponible : {names}'
   status_picked: 'Sélectionné : {names}'
   nobody: personne
@@ -193,7 +194,7 @@ caravan:
   copy_prompt: 'Copier le statut du rotor :'
   confirm_remove: Supprimer {name} du rotor ?
   this_player: ce joueur
-  confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde redevient disponible (les noms et heures sont conservés).
+  confirm_new_week: Démarrer une nouvelle semaine ? Tout le monde retourne dans les disponibles (les noms et heures restent).
 chart_editor:
   edit_title: Modifier le graphique ou le tableau
   new_title: Nouveau graphique ou tableau

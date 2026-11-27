@@ -133,45 +133,46 @@ roster:
   daily_old: 'Forschung und Hilfe von vor dem heutigen Reset: letzter Stand {time}'
   daily_unknown: 'Forschung und Hilfe: Zeitpunkt der Ablesung unbekannt'
 caravan:
-  sheet_title: Vom Allianz-Sheet vorgeschlagen
-  sheet_help: Dein Allianz-Sheet (Duel Tools) berechnet, wer diese Woche die Punkte für einen Karawanen-Slot hat. Lade die Liste und wähle dann jemanden aus.
-  sheet_link: Google Sheet Link
+  show: Rotor anzeigen
+  hide: Rotor ausblenden
+  sheet_title: Vorgeschlagen durch die Allianz-Tabelle
+  sheet_help: Wenn die Google-Tabelle deiner Allianz berechnet, wer einen Karawanen-Slot bekommen soll, lade die Liste hier und wähle aus ihr aus. Zeige die Seite, auf der die Liste ist, einmal an (unten); eine Duel Tools-Tabelle wird automatisch gefunden.
   sheet_load: Vorschläge laden
-  sheet_none: Das Sheet schlägt diese Woche niemanden vor (niemand hat genug Punkte).
+  sheet_none: Die Tabelle schlägt diese Woche niemanden vor (niemand hat genügend Punkte).
   sheet_points: "{n} Punkte"
-  sheet_add: Zum Rotationsplan hinzufügen
+  sheet_add: Zum Rotor hinzufügen
   sheet_picked: ausgewählt
-  key_title: Sheet-Sync-Key
-  key_help: Erlaubt dem Skript deines Allianz-Sheets, die Auswahl dieses Rotationsplans zu lesen (Duel Tools → Set website sync key). Nur der R5 oder ein Steward kann ihn erstellen oder widerrufen.
-  key_none: 'Noch kein Key: Das Sheet kann die Auswahl nicht lesen.'
-  key_active: Ein Key, der auf …{end} endet, ist aktiv (erstellt am {when} von {by}).
-  key_create: Key erstellen
-  key_replace: Key ersetzen
+  key_title: Tabellen-Sync-Schlüssel
+  key_help: Erlaubt dem Skript deiner Allianz-Tabelle, die Auswahl dieses Rotors zu lesen (Duel Tools → Website-Sync-Schlüssel festlegen). Nur der R5 oder ein Verwalter kann ihn erstellen oder widerrufen.
+  key_none: 'Noch kein Schlüssel: Die Tabelle kann die Auswahl nicht lesen.'
+  key_active: Ein Schlüssel, der auf …{end} endet, ist aktiv (erstellt {when} von {by}).
+  key_create: Schlüssel erstellen
+  key_replace: Schlüssel ersetzen
   key_revoke: Widerrufen
-  key_once: 'Kopiere diesen Key jetzt in das Sheet: Er wird nicht erneut angezeigt.'
-  key_create_confirm: Sync-Key für dein Allianz-Sheet erstellen?
-  key_replace_confirm: Key ersetzen? Das Sheet stoppt die Synchronisierung, bis du den neuen Key eingibst.
-  key_revoke_confirm: Key widerrufen? Das Sheet kann die Auswahl nicht mehr lesen.
-  title: Karawanen-Rotationsplan
+  key_once: 'Kopiere diesen Schlüssel jetzt in die Tabelle: Er wird nicht erneut angezeigt.'
+  key_create_confirm: Sync-Schlüssel für deine Allianz-Tabelle erstellen?
+  key_replace_confirm: Schlüssel ersetzen? Die Tabelle synchronisiert nicht mehr, bis du ihr den neuen Schlüssel gibst.
+  key_revoke_confirm: Schlüssel widerrufen? Die Tabelle kann die Auswahl dann nicht mehr lesen.
+  title: Karawanen-Rotor
   name_ok: In der Mitgliederliste von [{tag}]
-  name_spelling: 'Im Spiel geschrieben als:'
+  name_spelling: 'Im Spiel wird es so geschrieben:'
   name_unknown: Nicht in der Mitgliederliste von [{tag}].
   name_did_you_mean: 'Meintest du:'
-  name_flag_spelling: Im Spiel geschrieben als {name}
+  name_flag_spelling: Im Spiel wird es {name} geschrieben
   picked_count: "{picked}/{total} ausgewählt"
-  members_can_view: Mitglieder können dies sehen
+  members_can_view: Mitglieder können ansehen
   copy_status: Status kopieren
   new_week: Neue Woche
-  member_note: Wird von R4s ausgewählt, wenn eine Karawane bereit ist.
+  member_note: Von deinen R4s ausgewählt, wenn eine Karawane bereit ist.
   search: Namen suchen…
   around_now: Etwa jetzt
   around_now_help: Nur Spieler, die etwa jetzt verfügbar sind
-  available: Verfügbar diese Woche ({n})
+  available: Diese Woche verfügbar ({n})
   picked: Diese Woche ausgewählt ({n})
-  nobody_matches: Keine Treffer.
-  everyone_picked: Jeder hatte diese Woche bereits eine Karawane.
+  nobody_matches: Niemand passt.
+  everyone_picked: Jeder hat diese Woche eine Karawane erhalten.
   add_players: Spieler unten hinzufügen.
-  no_players: Noch keine Spieler vorhanden.
+  no_players: Noch keine Spieler.
   flexible: flexibel
   pick: "✓ Ausgewählt"
   back_to_available: Zurück zu verfügbar
@@ -179,21 +180,21 @@ caravan:
   from: Von (Game Time)
   to: Bis (Game Time)
   player_name: Spielername
-  add_from: Ab 18:00
+  add_from: Von 18:00
   add_to: Bis 22:00
   add_from_label: Verfügbar ab (Game Time, optional)
   add_to_label: Verfügbar bis (Game Time, optional)
   add: Hinzufügen
-  times_help: Zeiten sind Game Time (UTC-2) und optional; lasse sie leer für Spieler, die flexibel sind.
-  status_title: "🐪 [{tag}] Karawanen-Rotationsplan: {picked}/{total} ausgewählt"
+  times_help: Zeiten sind Game Time (UTC-2) und optional; lass sie für flexible Spieler leer.
+  status_title: "🐪 [{tag}] Karawanen-Rotor: {picked}/{total} ausgewählt"
   status_available: 'Verfügbar: {names}'
   status_picked: 'Ausgewählt: {names}'
   nobody: niemand
   nobody_yet: noch niemand
-  copy_prompt: 'Rotationsstatus kopieren:'
-  confirm_remove: "{name} aus dem Rotationsplan entfernen?"
-  this_player: dieser Spieler
-  confirm_new_week: Neue Woche beginnen? Jeder wird wieder auf verfügbar gesetzt (Namen und Zeiten bleiben erhalten).
+  copy_prompt: 'Rotor-Status kopieren:'
+  confirm_remove: "{name} aus dem Rotor entfernen?"
+  this_player: diesen Spieler
+  confirm_new_week: Eine neue Woche starten? Jeder wird zurück auf "verfügbar" gesetzt (die Namen und Zeiten bleiben bestehen).
 chart_editor:
   edit_title: Diagramm oder Tabelle bearbeiten
   new_title: Neues Diagramm oder Tabelle
