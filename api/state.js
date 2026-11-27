@@ -144,9 +144,12 @@ export default async function handler(req, res) {
       // The Caravan Rotor's picks for the alliance's sheet (api/_caravan_export.js): only
       // with the alliance's key, never cached
       case 'caravan-export': {
+        // The key only in the Authorization header (Gemini's review, 2026-11-27: a key in the
+        // address can end up in logs); the answer depends on it, so caches are told so
         const auth = String(req.headers?.authorization || '').replace(/^Bearer\s+/i, '');
-        const out = caravanExport(gist, auth || req.query.key);
+        const out = caravanExport(gist, auth);
         res.setHeader('Cache-Control', 'private, no-store');
+        res.setHeader('Vary', 'Authorization');
         if (!out) return res.status(403).json({ error: 'Unknown or revoked key.' });
         return res.status(200).json(out);
       }

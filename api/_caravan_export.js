@@ -6,8 +6,8 @@
 // Read only, and only with the alliance's key: an R5 (or a Steward) creates it on the
 // dashboard and can revoke it there. The key names the alliance by its ID
 // ("cvk.<alliance ID>.<random>", so a rename doesn't break it) and only its SHA-256 hash is
-// stored (the dashboard's settings.caravanKey). GET /api/state?scope=caravan-export with
-// "Authorization: Bearer <key>" (or &key=).
+// stored (the dashboard's settings.caravanKey; the page gets it without the hash). GET
+// /api/state?scope=caravan-export with "Authorization: Bearer <key>".
 
 import crypto from 'node:crypto';
 import { gistJson } from './_gist.js';

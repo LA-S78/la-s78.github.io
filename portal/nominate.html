@@ -303,6 +303,8 @@ strings: [nominate, roster, sheet_list]
     // a Duel Tools sheet needs no picking.
     const sheetBox = document.getElementById('sheet-link-box');
     let picker = null;
+    // A Steward's test link: the linked list is kept here for this visit only (nothing stored)
+    let testLink = null;
     async function sheetAsk(action, extra) {
       const res = await fetch('/api/nominate', {
         method: 'POST',
@@ -328,6 +330,7 @@ strings: [nominate, roster, sheet_list]
         link: data.alliance.sheetLink || null,
         ask: sheetAsk,
         onLinked: (body) => {
+          if (body.testLink) testLink = body.testLink;
           data.alliance.sheetLink = body.link || null;
           showSheetLink();
           sheetBox.open = false;
@@ -359,7 +362,7 @@ strings: [nominate, roster, sheet_list]
       out.textContent = t('nominate.sheet_loading');
       document.getElementById('sheet-result').hidden = true;
       try {
-        applyFill(await sheetAsk('sheet-fill'));
+        applyFill(await sheetAsk('sheet-fill', testLink ? { link: testLink } : {}));
       } catch (err) {
         out.textContent = err.message;
         // Not linked yet (or the sheet changed): show where to pick the list

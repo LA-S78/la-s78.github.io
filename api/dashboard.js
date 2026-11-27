@@ -33,7 +33,7 @@ import { allianceFrame, imageStatus, frameFor } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 import { DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { getRewardPeriod } from './_reward_period.js';
-import { linkList, readSavedList } from './_sheet_list.js';
+import { linkList, readSavedList, sheetCallAllowed } from './_sheet_list.js';
 import {
   fetchSourceTable,
   fetchSourceTabs,
@@ -50,6 +50,7 @@ import {
   rewardStatus,
   viewerAccess,
   visibleDashboard,
+  publicKeyRecord,
 } from './_dashboard.js';
 import { inLanguage, say, utcTime } from './_messages.js';
 
@@ -314,6 +315,19 @@ async function editDashboard(req, res, { gist, tag, access, session, alliances }
     return refreshRoster(res, { gist, tag, alliances, session });
   }
 
+  // Sheet requests, a light limit per alliance (Gemini's review, 2026-11-27)
+  const SHEET_ACTIONS = [
+    'sheet-tabs',
+    'sheet-grid',
+    'caravan-suggest',
+    'caravan-link',
+    'load-source',
+    'sync-widget',
+  ];
+  if (SHEET_ACTIONS.includes(body.action) && !sheetCallAllowed(`dashboard:${tag}`)) {
+    return res.status(429).json({ error: say('api_sheets.too_many') });
+  }
+
   // The sheet preview (2026-11-23): a sheet's tabs, and one tab's grid (nothing is saved)
   if (body.action === 'sheet-tabs' || body.action === 'sheet-grid') {
     try {
@@ -483,7 +497,7 @@ async function caravanKey(res, { gist, tag, access, session, file, create }) {
   if (!entry) return res.status(409).json({ error: say('api_dashboard.no_alliance') });
   const { key, record } = newCaravanKey(entry.id, session.name);
   await saveSetting(file, tag, 'caravanKey', record, session.name);
-  return res.status(200).json({ key, record });
+  return res.status(200).json({ key, record: publicKeyRecord(record) });
 }
 
 /**

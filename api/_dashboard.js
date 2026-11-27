@@ -99,6 +99,9 @@ export function readDashboard(gistFileJson, tag) {
  * members; leaders (R4/R5/officers) and Stewards get everything. Enforced here, on the
  * server, so hidden parts never reach a member's browser.
  */
+/** The caravan sync key as the page sees it: no hash. */
+export const publicKeyRecord = (k) => ({ at: k.at, by: k.by, end: k.end });
+
 export function visibleDashboard(dashboard, leader) {
   const widgets = dashboard.widgets.filter((w) => leader || w?.visibility === 'members');
   const out = {
@@ -107,7 +110,12 @@ export function visibleDashboard(dashboard, leader) {
     layout: dashboard.layout || [],
     updatedAt: dashboard.updatedAt,
   };
-  if (leader) out.settings = dashboard.settings;
+  if (leader) {
+    // The caravan sync key's hash stays on the server (Gemini's review, 2026-11-27): the page
+    // shows only when it was made, by whom, and its last characters
+    const { caravanKey, ...settings } = dashboard.settings || {};
+    out.settings = caravanKey ? { ...settings, caravanKey: publicKeyRecord(caravanKey) } : settings;
+  }
   // The Caravan Rotor: leaders always; members only when leaders let them (read-only, and
   // without which officer ticked each name).
   const c = dashboard.caravan;
