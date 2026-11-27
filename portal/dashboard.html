@@ -555,7 +555,9 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
       };
 
       el.innerHTML = `
-        <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))} <span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span></h3>
+        <h3 class="dash-card-title" id="dash-caravan-title">${ic('caravan')}${escapeHtml(t('caravan.title'))}</h3>
+        <p class="dash-roster-summary"><span class="dash-tag">${escapeHtml(t('caravan.picked_count', { picked: picked.length, total: all.length }))}</span><button type="button" class="dash-icon-btn dash-roster-toggle" id="caravan-toggle" aria-expanded="${caravanOpen}" aria-controls="caravan-body">${ic('chevron')}${escapeHtml(t(caravanOpen ? 'caravan.hide' : 'caravan.show'))}</button></p>
+        <div id="caravan-body"${caravanOpen ? '' : ' hidden'}>
         ${leader ? `<div class="dash-cv-bar">
           <label class="dash-check"><input type="checkbox" id="cv-members"${c.membersCanView ? ' checked' : ''}> ${ic('users')}${escapeHtml(t('caravan.members_can_view'))}</label>
           <span class="dash-cv-actions">
@@ -582,7 +584,14 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
         ${sheetPanel(all)}
         ${data.viewer.canNominate ? keyPanel() : ''}
         <div class="dash-error" id="cv-error"></div>
-        ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}`;
+        ${Array.isArray(data.members) ? `<datalist id="cv-member-names">${data.members.map((n) => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>` : ''}` : ''}
+        </div>`;
+      // Shown or hidden like the member list (owner request, 2026-11-27)
+      $('caravan-toggle').addEventListener('click', () => {
+        caravanOpen = !caravanOpen;
+        renderCaravan();
+        $('caravan-toggle')?.focus();
+      });
       if (leader) wireNameHints(el);
       if (leader) placeSheetPicker();
       const search = $('cv-search');
@@ -732,6 +741,7 @@ strings: [dashboard, rewards_card, caravan, roster, chart_editor, charts, live_d
     // open: the member list is shown (owner, 2026-11-23: it starts closed, so phones can scroll
     // past it; "Show members" opens it for this visit)
     let rosterView = { text: '', sort: 'power', open: false };
+    let caravanOpen = false; // the Caravan Rotor's list, shown or hidden (like the roster)
     const ROSTER_SORTS = {
       power: (a, b) => b.power - a.power,
       name: (a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),

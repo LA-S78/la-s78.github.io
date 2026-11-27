@@ -150,6 +150,8 @@ roster:
   daily_unknown: "Research and help: time of reading unknown"
 
 caravan:
+  show: "Show rotor"
+  hide: "Hide rotor"
   # The alliance's Google Sheet (Duel Tools): its suggested players, and the sync key (2026-11-27)
   sheet_title: "Suggested by the alliance sheet"
   sheet_help: "If your alliance's Google Sheet works out who should get a caravan, load its list here and pick from it. Show the site where the list is once (below); a Duel Tools sheet is found by itself."
