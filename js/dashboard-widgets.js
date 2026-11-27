@@ -274,6 +274,9 @@
       rows = [...rows].sort((a, b) => (order === 'asc' ? size(a) - size(b) : size(b) - size(a)));
     }
     if (o.limit > 0) rows = rows.slice(0, o.limit);
+    // Nothing in the series a viewer picked in the legend (owner report, 2026-11-27: a series
+    // with no numbers yet left no legend to tap back): say so, and keep the legend
+    if (!rows.length && off.size) return empty(say('no_numbers_shown')) + legend(s.names, w);
     if (!rows.length) return empty(say('no_numbers'));
     // Rows listed before "Show all": 10 (owner, 2026-11-23: 25 felt too long), unless the
     // chart was set to show a number of rows

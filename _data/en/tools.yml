@@ -324,6 +324,7 @@ chart_editor:
 charts:
   column: "Column {n}"
   no_numbers: "No numbers to chart in the chosen column."
+  no_numbers_shown: "No numbers yet for what's picked below. Tap a name to show it again, or another to add it."
   line_two_rows: "A line needs at least two rows."
   line_two_columns: "A line needs at least two columns along the bottom."
   no_positive: "No positive numbers to chart in the chosen column."
