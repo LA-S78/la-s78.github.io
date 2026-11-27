@@ -384,6 +384,61 @@ export async function fetchLiveAllianceState() {
 // 3. LADDER REORDERING & MUTATION LOGIC
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// The NAP Roster bar's stripes (owner request, 2026-11-27): one diagonal stripe per NAP
+// alliance, in rank order, in its colour with its banner showing through. Kept in the browser
+// (localStorage), so the bar is drawn at once on the next visit, and drawn again only when an
+// alliance, its colour, banner or rank changes.
+// ----------------------------------------------------------------------------
+const STRIPES_KEY = 'nap-stripes';
+const SAFE_PIC = /^\/alliance-images\/[\w.-]+$/;
+let stripesShown = null;
+
+function drawNapStripes(bands) {
+  const el = document.getElementById('nap-stripes');
+  if (!el || !Array.isArray(bands)) return;
+  const sig = JSON.stringify(bands);
+  if (sig === stripesShown) return;
+  stripesShown = sig;
+  el.innerHTML = `<div class="nap-stripes-row">${bands
+    .map((b) => {
+      const color = /^#[0-9a-f]{6}$/i.test(b.color || '') ? b.color : '#556b4f';
+      const pic = SAFE_PIC.test(b.pic || '')
+        ? ` has-pic" style="--c:${color};--pic:url('${b.pic}')`
+        : `" style="--c:${color}`;
+      return `<span class="nap-stripe${pic}"></span>`;
+    })
+    .join('')}</div>`;
+  el.classList.toggle('is-shown', bands.length > 0);
+}
+
+/** From the live standings: draw them, and keep them for the next visit if they changed. */
+function updateNapStripes() {
+  const bands = getSortedLadder(originalAlliances)
+    .filter((a) => a.is_nap)
+    .map((a) => {
+      const pics =
+        allianceImages[a.tag] ||
+        Object.entries(allianceImages).find(([k]) => sameTag(k, a.tag))?.[1];
+      return { color: resolveAllianceColor(a.tag, a.color, a.rank), pic: pics?.wide || '' };
+    });
+  drawNapStripes(bands);
+  try {
+    localStorage.setItem(STRIPES_KEY, JSON.stringify(bands));
+  } catch {
+    // Not kept: drawn again from the live standings next time
+  }
+}
+
+/** The last visit's stripes, while the live standings load. */
+function cachedNapStripes() {
+  try {
+    drawNapStripes(JSON.parse(localStorage.getItem(STRIPES_KEY) || 'null'));
+  } catch {
+    // Nothing kept yet
+  }
+}
+
 function getSortedLadder(alliancesObj) {
   return Object.values(alliancesObj).sort((a, b) => {
     const rankA = a.rank !== null && a.rank !== undefined ? Number(a.rank) : 999;
@@ -654,6 +709,8 @@ export function renderStandingsHierarchy() {
   if (!container) return;
 
   const countBadge = document.getElementById('alliance-total-count');
+  if (liveState === 'ok' || liveState === 'saved') updateNapStripes();
+  else cachedNapStripes();
   if (liveState !== 'ok' && liveState !== 'saved') {
     container.innerHTML = `<div class="blacklist-empty">${esc(ta(liveState === 'failed' ? 'standings_failed' : 'loading_standings'))}</div>`;
     if (countBadge) countBadge.textContent = '…';
