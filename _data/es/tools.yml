@@ -351,36 +351,36 @@ nominate:
   names_spelling_one: '1 nombre se escribe de forma diferente en el juego:'
   names_spelling_other: "{n} nombres se escriben de forma diferente en el juego:"
   use_game_spellings: Usar la ortografía del juego
-  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todas formas; comprueba si es correcto:'
-  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todas formas; comprueba si son correctos:"
+  names_unknown_one: '1 nombre no está en la lista de miembros de [{tag}]. Se guardará de todas formas; comprueba que sea correcto:'
+  names_unknown_other: "{n} nombres no están en la lista de miembros de [{tag}]. Se guardarán de todas formas; comprueba que sean correctos:"
   did_you_mean: quisiste decir
   loading: Cargando página de nominación...
-  players_label: Tus jugadores, mejores primero
-  players_help: Un nombre o ID de jugador por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan bajando por la lista en orden de valor en ambos conjuntos; los nombres después de los cofres se mantienen como reserva y subirán si se abren más cofres.
-  players_placeholder: Nombres exactos del juego o IDs de jugador, mejores primero...
+  players_label: Tus jugadores, los mejores primero
+  players_help: Un nombre o ID de jugador por línea (o separados por comas), tu mejor jugador primero. Los cofres se asignan siguiendo la lista según el valor en ambos conjuntos; los nombres después de los cofres se mantienen como reservas y suben si se abren más cofres.
+  players_placeholder: Nombres exactos en el juego o IDs de jugador, los mejores primero...
   id_found: Escrito como ID de jugador {id}
   id_unknown: Ningún miembro de [{tag}] tiene el ID {id}
   who_gets_what: Quién recibe qué
   save: Guardar lista
   sheet_fill: Rellenar desde hoja
-  test_banner: 'Enlace de prueba (Steward): esta página funciona como siempre, pero no se guarda nada.'
+  test_banner: 'Enlace de prueba (Steward): esta página funciona normalmente, pero no se guarda nada.'
   test_no_save: 'Enlace de prueba: no guardado'
-  sheet_link: Enlace a Google Sheet
-  sheet_help: La hoja de tu alianza con la pestaña "Capitol Ranking" de las Duelo de Alianzas, compartida como "Cualquier persona con el enlace puede ver". El enlace se recuerda para la próxima vez.
   sheet_loading: Leyendo la hoja…
+  sheet_undo: Deshacer
+  sheet_undone: Volver a la lista tal como estaba antes del relleno.
   sheet_filled: Se rellenaron {n} nombres desde la hoja. Revísalos y luego guarda.
   sheet_filled_week: Se rellenaron {n} nombres desde la hoja ({week}). Revísalos y luego guarda.
   saving: Guardando...
   link_incomplete: Este enlace está incompleto. Ejecuta /nominate en Discord para obtener uno nuevo.
-  load_failed: "{error} Ejecuta /nominate en Discord para un nuevo enlace."
-  closed: Las recompensas están cerradas. La próxima apertura es {when}, después del evento del capitolio del viernes.
-  header: Rango {rank} · Recompensas de {week} · abierto hasta {when}
-  banner_off_week: Solo mención del Rey esta semana (sin Guerra de Reinos).
-  banner_won: 'Guerra de Reinos ganada: los cofres de Recompensa Rey de la Batalla también están abiertos.'
-  banner_lost: 'Guerra de Reinos perdida: solo mención del Rey esta semana.'
-  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa Rey de la Batalla también se abrirán y tu lista se reordenará. El Rey reparte después del resultado, por lo que el cofre de nadie cambia.
-  handed_out_title: "✓ Ya entregado por el Rey ({n})"
-  handed_out_help: Estos cofres se entregan en el juego, por lo que permanecen con estos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
+  load_failed: "{error} Ejecuta /nominate en Discord para obtener un nuevo enlace."
+  closed: Las recompensas están cerradas. La próxima apertura es el {when}, después del evento de capitolio del viernes.
+  header: Rango {rank} · recompensas de {week} · abierto hasta el {when}
+  banner_off_week: Solo Recomendación del Rey esta semana (sin Guerra de Reinos).
+  banner_won: 'Guerra de Reinos ganada: los cofres de Recompensa de Rey de Batalla también están abiertos.'
+  banner_lost: 'Guerra de Reinos perdida: solo Recomendación del Rey esta semana.'
+  banner_pending: Esperando el resultado de la batalla del sábado (alrededor de {when}). Si se gana, los cofres de Recompensa de Rey de Batalla también se abrirán y tu lista se reordenará. El Rey reparte después del resultado, así que el cofre de nadie cambia.
+  handed_out_title: "✓ Ya repartidos por el Rey ({n})"
+  handed_out_help: Estos cofres se entregan en el juego, así que se quedan con esos jugadores sin importar lo que diga tu lista. La lista de abajo reparte el resto.
   reserve: Reserva
   col_player: Jugador
   col_chest: Cofre
@@ -388,12 +388,12 @@ nominate:
   col_if_won: Si se gana
   chests_now: "{n} cofres ahora"
   chests_if_won: "{n} si se gana"
-  named: "{n} nombrados"
-  still_need_name: "{n} aún necesitan un nombre"
+  named: "{n} nombrado"
+  still_need_name: "{n} todavía necesitan un nombre"
   reserves_one: "{n} reserva"
   reserves_other: "{n} reservas"
   listed_twice: "{name} está listado dos veces"
-  saved: Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta {when}.
+  saved: Guardado. El Rey puede ver tu lista. Puedes cambiarla hasta el {when}.
   save_failed: 'No se pudo guardar: {error}'
 kings_console:
   page_title: Consola de Distribución del Rey
@@ -1196,3 +1196,29 @@ steward:
   usage_unrecorded: No registrado
   usage_unrecorded_help: Contado por el tracker, aún no guardado aquí (cada servidor guarda cada pocos minutos)
   usage_none: No se han registrado solicitudes hoy.
+sheet_list:
+  intro: Muestra el sitio donde se encuentra la lista en la Hoja de Google de tu alianza (compartida como "Cualquier persona con el enlace puede ver"). Se recordará para la próxima vez.
+  link_label: Enlace de Hoja de Google
+  open: Abrir hoja
+  not_sheet: Pega el enlace a una Hoja de Google (https://docs.google.com/spreadsheets/…).
+  finding_tabs: Buscando las pestañas de la hoja…
+  loading: Cargando…
+  tab: Pestaña
+  grid_help: Arrastra sobre la lista, incluyendo su fila de encabezados. En un teléfono, toca la primera celda y luego la última.
+  tap_second: Ahora toca la esquina opuesta de la lista.
+  grid_more: Solo se muestran aquí las primeras 200 filas y 60 columnas.
+  duel_tools: 'Se encontró la pestaña de Herramientas de Duelo "{tab}": ha sido elegida para ti. Pulsa "Usar esta lista" si parece correcta.'
+  range: 'Celdas: {range}'
+  to_bottom: Seguir leyendo hasta el final de la hoja (para una lista que crece)
+  role_name: Nombres
+  role_id: IDs de jugador
+  role_score: Puntuaciones
+  role_points: Puntos
+  none: "— ninguno —"
+  preview: 'Los primeros jugadores en ella:'
+  no_rows: Todavía no hay nombres bajo los encabezados.
+  use: Usar esta lista
+  saving: Comprobando la lista con Google…
+  pick_first: Arrastra primero sobre la lista en la cuadrícula.
+  change: Dónde está la lista en tu hoja
+  linked: "{tab}, celdas {range}"

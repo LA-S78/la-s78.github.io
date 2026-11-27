@@ -346,7 +346,7 @@ charts:
 nominate:
   page_title: Nominations de récompenses
   name_ok: Dans la liste des membres de [{tag}]
-  name_spelling: Dans le jeu, il s'écrit {name}
+  name_spelling: Dans le jeu, il est écrit {name}
   name_unknown: Pas dans la liste des membres de [{tag}]
   names_spelling_one: '1 nom est écrit différemment dans le jeu :'
   names_spelling_other: "{n} noms sont écrits différemment dans le jeu :"
@@ -355,30 +355,30 @@ nominate:
   names_unknown_other: "{n} noms ne sont pas dans la liste des membres de [{tag}]. Ils seront quand même enregistrés ; vérifiez qu'ils sont corrects :"
   did_you_mean: vouliez-vous dire
   loading: Chargement de la page de nomination...
-  players_label: Vos joueurs, les meilleurs d'abord
-  players_help: Un nom ou ID de joueur par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres sont distribués dans la liste par ordre de valeur sur les deux ensembles ; les noms au-delà des coffres sont conservés comme réserves et remontent si d'autres coffres s'ouvrent.
-  players_placeholder: Noms exacts dans le jeu ou ID de joueurs, les meilleurs d'abord...
+  players_label: Vos joueurs, les meilleurs en premier
+  players_help: Un nom ou ID de joueur par ligne (ou séparés par des virgules), votre meilleur joueur en premier. Les coffres sont distribués selon l'ordre de la liste et leur valeur sur les deux séries ; les noms au-delà des coffres sont conservés en réserve et remontent si d'autres coffres s'ouvrent.
+  players_placeholder: Noms exacts dans le jeu ou ID de joueurs, meilleurs en premier...
   id_found: Saisi en tant qu'ID de joueur {id}
-  id_unknown: Aucun membre de [{tag}] n'a l'ID {id}
+  id_unknown: Aucun membre de [{tag}] ne possède l'ID {id}
   who_gets_what: Qui reçoit quoi
   save: Enregistrer la liste
   sheet_fill: Remplir depuis la feuille
-  test_banner: 'Lien de test (Intendant) : cette page fonctionne normalement, mais rien n''est enregistré.'
+  test_banner: 'Lien de test (Steward) : cette page fonctionne normalement, mais rien n''est enregistré.'
   test_no_save: 'Lien de test : non enregistré'
-  sheet_link: Lien Google Sheet
-  sheet_help: La feuille de votre alliance avec l'onglet "Capitol Ranking" des Duel Tools, partagée en "Tous les utilisateurs disposant du lien peuvent voir". Le lien est mémorisé pour la prochaine fois.
   sheet_loading: Lecture de la feuille…
+  sheet_undo: Annuler
+  sheet_undone: Retour à la liste telle qu'elle était avant le remplissage.
   sheet_filled: "{n} noms remplis depuis la feuille. Vérifiez-les, puis enregistrez."
   sheet_filled_week: "{n} noms remplis depuis la feuille ({week}). Vérifiez-les, puis enregistrez."
   saving: Enregistrement...
   link_incomplete: Ce lien est incomplet. Exécutez /nominate sur Discord pour en obtenir un nouveau.
-  load_failed: "{error} Exécutez /nominate sur Discord pour un nouveau lien."
-  closed: Les récompenses sont fermées. Prochaine ouverture {when}, après l'événement du capitole de vendredi.
+  load_failed: "{error} Exécutez /nominate sur Discord pour obtenir un nouveau lien."
+  closed: Les récompenses sont fermées. Prochaine ouverture {when}, après l'événement de la capitale du vendredi.
   header: Rang {rank} · Récompenses {week} · ouvert jusqu'au {when}
-  banner_off_week: Recommandation du Roi uniquement cette semaine (pas de Guerre des Royaumes).
-  banner_won: 'Guerre des Royaumes gagnée : les coffres de récompense Roi de la Bataille sont également ouverts.'
-  banner_lost: 'Guerre des Royaumes perdue : Recommandation du Roi uniquement cette semaine.'
-  banner_pending: En attente du résultat de la bataille de samedi (environ {when}). Si elle est gagnée, les coffres de récompense Roi de la Bataille s'ouvriront également et votre liste sera retriée. Le Roi distribue les récompenses après le résultat, donc aucun coffre ne change.
+  banner_off_week: Uniquement la Mention du Roi cette semaine (pas de Guerre des Royaumes).
+  banner_won: 'Guerre des Royaumes gagnée : les coffres de récompense du Roi de la Bataille sont aussi ouverts.'
+  banner_lost: 'Guerre des Royaumes perdue : uniquement la Mention du Roi cette semaine.'
+  banner_pending: En attente du résultat de la bataille de samedi (environ {when}). Si gagnée, les coffres de récompense du Roi de la Bataille s'ouvriront aussi et votre liste sera retriée. Le Roi distribue après le résultat, donc le coffre de personne ne change.
   handed_out_title: "✓ Déjà distribué par le Roi ({n})"
   handed_out_help: Ces coffres sont donnés dans le jeu, ils restent donc avec ces joueurs, peu importe ce que dit votre liste. La liste ci-dessous répartit le reste.
   reserve: Réserve
@@ -1196,3 +1196,29 @@ steward:
   usage_unrecorded: Non enregistré
   usage_unrecorded_help: Compté par le tracker, pas encore enregistré ici (chaque serveur sauvegarde toutes les quelques minutes)
   usage_none: Aucune requête notée aujourd'hui.
+sheet_list:
+  intro: Indiquez le site où se trouve la liste dans le Google Sheet de votre alliance (partagé en "Tous les utilisateurs disposant du lien peuvent consulter"). Il sera mémorisé pour la prochaine fois.
+  link_label: Lien Google Sheet
+  open: Ouvrir la feuille
+  not_sheet: Collez le lien d'un Google Sheet (https://docs.google.com/spreadsheets/…).
+  finding_tabs: Recherche des onglets de la feuille…
+  loading: Chargement…
+  tab: Onglet
+  grid_help: Faites glisser sur la liste, en incluant la ligne d'en-tête. Sur téléphone, appuyez sur la première cellule, puis la dernière.
+  tap_second: Appuyez maintenant sur le coin opposé de la liste.
+  grid_more: Seules les 200 premières lignes et 60 premières colonnes sont affichées ici.
+  duel_tools: 'Onglet Duel d''Alliances "{tab}" trouvé : il est sélectionné pour vous. Appuyez sur "Utiliser cette liste" si cela semble correct.'
+  range: 'Cellules : {range}'
+  to_bottom: Continuer la lecture jusqu'au bas de la feuille (pour une liste qui s'agrandit)
+  role_name: Noms
+  role_id: ID de joueur
+  role_score: Scores
+  role_points: Points
+  none: "— aucun —"
+  preview: 'Les premiers joueurs dedans :'
+  no_rows: Pas encore de noms sous les en-têtes.
+  use: Utiliser cette liste
+  saving: Vérification de la liste avec Google…
+  pick_first: Faites glisser sur la liste dans la grille d'abord.
+  change: Où se trouve la liste dans votre feuille
+  linked: "{tab}, cellules {range}"

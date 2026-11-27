@@ -346,50 +346,50 @@ charts:
 nominate:
   page_title: Ödül Adaylıkları
   name_ok: "[{tag}] üye listesinde"
-  name_spelling: 'Oyunda şu şekilde yazılmış: {name}'
+  name_spelling: Oyunda {name} olarak yazılıyor
   name_unknown: "[{tag}] üye listesinde değil"
-  names_spelling_one: '1 isim oyunda farklı yazılmış:'
-  names_spelling_other: "{n} isim oyunda farklı yazılmış:"
-  use_game_spellings: Oyun içi yazılışları kullan
-  names_unknown_one: '1 isim [{tag}] üye listesinde değil. Yine de kaydedilecek; doğru olup olmadığını kontrol edin:'
-  names_unknown_other: "{n} isim [{tag}] üye listesinde değil. Yine de kaydedilecek; doğru olup olmadıklarını kontrol edin:"
-  did_you_mean: bunu mu demek istediniz
+  names_spelling_one: '1 isim oyunda farklı yazılıyor:'
+  names_spelling_other: "{n} isim oyunda farklı yazılıyor:"
+  use_game_spellings: Oyun içi yazımları kullan
+  names_unknown_one: '1 isim [{tag}] üye listesinde yok. Yine de kaydedilecek; doğru olduğundan emin olun:'
+  names_unknown_other: "{n} isim [{tag}] üye listesinde yok. Yine de kaydedilecek; doğru olduklarından emin olun:"
+  did_you_mean: şunu mu demek istediniz
   loading: Adaylık sayfası yükleniyor...
-  players_label: Oyuncularınız, en iyisi başta olacak şekilde
-  players_help: Satır başına bir isim veya oyuncu ID'si (ya da virgülle ayrılmış şekilde), en iyi oyuncunuz başta olacak şekilde girin. Sandıklar, her iki setteki değer sırasına göre listeden aşağıya doğru dağıtılır; sandık sayısını aşan isimler yedek olarak tutulur ve daha fazla sandık açılırsa üst sıralara geçerler.
-  players_placeholder: Tam oyun içi isimler veya oyuncu ID'leri, en iyi oyuncu başta...
-  id_found: "{id} oyuncu ID'si olarak yazıldı"
-  id_unknown: "[{tag}] üyesinin {id} ID'si yok"
+  players_label: Oyuncularınız, en iyiden başlayarak
+  players_help: Her satıra bir isim veya oyuncu kimliği yazın (veya virgülle ayırın), en iyi oyuncunuzu başa koyun. Sandıklar her iki sette de değer sırasına göre aşağı doğru dağıtılır; sandıkların ötesindeki isimler yedek olarak tutulur ve daha fazla sandık açılırsa yukarı kaydırılır.
+  players_placeholder: Tam oyun içi isimler veya oyuncu kimlikleri, en iyiden başlayarak...
+  id_found: "{id} oyuncu kimliği olarak girildi"
+  id_unknown: "[{tag}] içinde {id} kimliğine sahip bir üye yok"
   who_gets_what: Kim ne alacak
   save: Listeyi Kaydet
-  sheet_fill: Çizelgeden doldur
-  test_banner: 'Test bağlantısı (Kâhya): bu sayfa normal şekilde çalışır ancak hiçbir şey kaydedilmez.'
+  sheet_fill: Tablodan doldur
+  test_banner: 'Test bağlantısı (Sorumlu): bu sayfa normal çalışır, ancak hiçbir şey kaydedilmez.'
   test_no_save: 'Test bağlantısı: kaydedilmedi'
-  sheet_link: Google Çizelge bağlantısı
-  sheet_help: İttifakınızın Duel Tools "Capitol Ranking" sekmesini içeren, "Bağlantıya sahip olan herkes görüntüleyebilir" şeklinde paylaşılmış çizelgesi. Bağlantı bir sonraki sefer için hatırlanır.
-  sheet_loading: Çizelge okunuyor...
-  sheet_filled: Çizelgeden {n} isim dolduruldu. Kontrol edip kaydedin.
-  sheet_filled_week: Çizelgeden {n} isim dolduruldu ({week}). Kontrol edip kaydedin.
+  sheet_loading: Tablo okunuyor…
+  sheet_undo: Geri al
+  sheet_undone: Doldurmadan önceki listeye dönüldü.
+  sheet_filled: Tablodan {n} isim dolduruldu. Kontrol edin ve kaydedin.
+  sheet_filled_week: Tablodan {n} isim dolduruldu ({week}). Kontrol edin ve kaydedin.
   saving: Kaydediliyor...
-  link_incomplete: Bu bağlantı eksik. Yeni bir tane için Discord'da /nominate komutunu çalıştırın.
-  load_failed: "{error} Yeni bir bağlantı için Discord'da /nominate komutunu çalıştırın."
-  closed: Ödüller kapalı. Bir sonraki açılış {when}, Cuma günkü başkent etkinliğinden sonra.
+  link_incomplete: Bu bağlantı eksik. Yeni bir tane için Discord üzerinde /nominate komutunu çalıştırın.
+  load_failed: "{error} Yeni bir bağlantı için Discord üzerinde /nominate komutunu çalıştırın."
+  closed: Ödüller kapalı. Bir sonraki açılış Cuma günkü capitol etkinliğinden sonra {when}.
   header: Sıra {rank} · {week} ödülleri · {when} tarihine kadar açık
   banner_off_week: Bu hafta sadece Kral'ın Takdir Belgesi (Krallık Savaşı yok).
   banner_won: 'Krallık Savaşı kazanıldı: Savaş Kralı Ödül sandıkları da açık.'
-  banner_lost: 'Krallık Savaşı kaybedildi: Bu hafta sadece Kral''ın Takdir Belgesi var.'
-  banner_pending: Cumartesi günkü savaş sonucu bekleniyor ({when} civarı). Eğer kazanılırsa, Savaş Kralı Ödül sandıkları da açılacak ve listeniz yeniden sıralanacaktır. Kral, sonuçtan sonra dağıtım yaptığı için kimsenin sandığı değişmez.
-  handed_out_title: "✓ Kral tarafından çoktan dağıtıldı ({n})"
-  handed_out_help: Bu sandıklar oyun içinde verildiğinden, listeniz ne derse desin bu oyuncularda kalır. Aşağıdaki liste geri kalanını paylaştırır.
+  banner_lost: 'Krallık Savaşı kaybedildi: Bu hafta sadece Kral''ın Takdir Belgesi.'
+  banner_pending: Cumartesi günkü savaş sonucu bekleniyor (yaklaşık {when}). Kazanılırsa, Savaş Kralı Ödül sandıkları da açılacak ve listeniz yeniden sıralanacaktır. Kral dağıtımı sonuçtan sonra yaptığı için kimsenin sandığı değişmez.
+  handed_out_title: "✓ Kral tarafından dağıtıldı ({n})"
+  handed_out_help: Bu sandıklar oyun içinde verildiği için, listeniz ne derse desin bu oyuncularda kalır. Aşağıdaki liste geri kalanını paylaştırır.
   reserve: Yedek
   col_player: Oyuncu
   col_chest: Sandık
   col_now: Şimdi
   col_if_won: Kazanılırsa
-  chests_now: Şu an {n} sandık
+  chests_now: "{n} sandık şimdi"
   chests_if_won: Kazanılırsa {n}
-  named: "{n} isimli"
-  still_need_name: "{n} kişinin hala bir isme ihtiyacı var"
+  named: "{n} isimlendirildi"
+  still_need_name: "{n} isimlendirme gerekiyor"
   reserves_one: "{n} yedek"
   reserves_other: "{n} yedek"
   listed_twice: "{name} iki kez listelenmiş"
@@ -1196,3 +1196,29 @@ steward:
   usage_unrecorded: Kaydedilmemiş
   usage_unrecorded_help: Takipçi tarafından sayılan, henüz buraya kaydedilmemiş (her sunucu birkaç dakikada bir kaydeder)
   usage_none: Bugün henüz kaydedilen istek yok.
+sheet_list:
+  intro: İttifakınızın Google E-Tablosundaki ("Bağlantıya sahip herkes görüntüleyebilir" olarak paylaşılan) listeyi gösterin. Bir dahaki sefere hatırlanacaktır.
+  link_label: Google E-Tablo bağlantısı
+  open: Tabloyu aç
+  not_sheet: Bir Google E-Tablo bağlantısını yapıştırın (https://docs.google.com/spreadsheets/…).
+  finding_tabs: Tablonun sekmeleri bulunuyor…
+  loading: Yükleniyor…
+  tab: Sekme
+  grid_help: Başlık satırı dahil olmak üzere listeyi sürükleyin. Telefonda, ilk hücreye ve ardından son hücreye dokunun.
+  tap_second: Şimdi listenin karşı köşesine dokunun.
+  grid_more: Burada sadece ilk 200 satır ve 60 sütun gösterilmektedir.
+  duel_tools: '"{tab}" Düello Araçları sekmesi bulundu: sizin için seçildi. Doğru görünüyorsa "Bu listeyi kullan"a basın.'
+  range: 'Hücreler: {range}'
+  to_bottom: Tablonun sonuna kadar okumaya devam et (büyüyen bir liste için)
+  role_name: İsimler
+  role_id: Oyuncu Kimlikleri
+  role_score: Skorlar
+  role_points: Puanlar
+  none: "— yok —"
+  preview: 'İçindeki ilk oyuncular:'
+  no_rows: Başlıkların altında henüz isim yok.
+  use: Bu listeyi kullan
+  saving: Liste Google ile kontrol ediliyor…
+  pick_first: Önce ızgara içindeki listeyi sürükleyin.
+  change: Listenin tablonuzdaki yeri
+  linked: "{tab}, {range} hücreleri"

@@ -65,23 +65,28 @@ api_dashboard:
   player_removed: Dieser Spieler wurde entfernt.
 api_sheets:
   no_tabs: In dieser Tabelle wurden keine Registerkarten gefunden. Überprüfe, ob der Link direkt die Tabelle öffnet.
-  tabs_too_few: Weniger als 2 Registerkarten entsprechen diesem Muster. Überprüfe es anhand der Namen der Registerkarten (# ist eine beliebige Zahl, * steht für alles).
+  tabs_too_few: Weniger als 2 Registerkarten entsprechen diesem Muster. Überprüfe es anhand der Namen der Registerkarten (# ist eine beliebige Zahl, * steht für beliebiges).
   full_link: Füge den vollständigen Link ein (beginnend mit https://docs.google.com/…).
-  google_only: Es können nur Google Sheets- und Google Docs-Links (docs.google.com) verwendet werden.
-  range_format: Der Bereich sollte wie A1:D20 aussehen (oder lasse ihn leer).
-  not_sheet_or_doc: Dieser Link ist weder ein Google Sheet noch ein Google Doc.
-  unexpected_redirect: Google hat den Download an einen unerwarteten Ort weitergeleitet, daher wurde er nicht abgerufen.
+  google_only: Es können nur Links zu Google Sheets und Google Docs (docs.google.com) verwendet werden.
+  range_format: Der Bereich sollte wie A1:D20 aussehen (oder leer gelassen werden).
+  not_sheet_or_doc: Dieser Link führt weder zu einem Google Sheet noch zu einem Google Doc.
+  unexpected_redirect: Google hat den Download an einen unerwarteten Ort weitergeleitet, daher konnte er nicht abgerufen werden.
   too_many_redirects: Zu viele Weiterleitungen von Google.
   too_slow: Google hat zu lange für eine Antwort gebraucht. Versuche es gleich noch einmal.
   unreachable: Google konnte nicht erreicht werden ({reason}).
-  doc_not_shared: 'Google verweigert den Zugriff: Veröffentliche das Dokument (Datei → Teilen → Im Web veröffentlichen) und verwende dann diesen Link.'
-  sheet_not_shared: 'Google verweigert den Zugriff: Gib die Tabelle als „Jeder mit dem Link kann ansehen“ frei oder verwende Datei → Teilen → Im Web veröffentlichen.'
+  doc_not_shared: 'Google sagt nein: Veröffentliche das Doc (Datei → Teilen → Im Web veröffentlichen) und verwende dann diesen Link.'
+  sheet_not_shared: 'Google sagt nein: Gib die Tabelle als "Jeder mit dem Link kann die Datei ansehen" frei oder verwende Datei → Teilen → Im Web veröffentlichen.'
   google_error: Google hat mit einem Fehler geantwortet ({status}). Überprüfe den Link.
   too_large: Diese Tabelle ist zu groß zum Lesen (über 2 MB).
   empty: Diese Tabelle (oder dieser Bereich) ist leer.
-  no_such_table_one: Das Dokument enthält {count} Tabelle; es gibt keine Tabelle {table}.
-  no_such_table_other: Das Dokument enthält {count} Tabellen; es gibt keine Tabelle {table}.
-  no_table: Dieses Dokument enthält keine Tabelle.
+  no_such_table_one: Das Doc hat {count} Tabelle; es gibt keine Tabelle {table}.
+  no_such_table_other: Das Doc hat {count} Tabellen; es gibt keine Tabelle {table}.
+  no_table: Dieses Doc enthält keine Tabelle.
+  list_range: 'Wähle die Zellen erneut aus: bis zu 26 Spalten, beginnend mit einer Überschriftenzeile.'
+  list_name_needed: Wähle aus, in welcher Spalte die Spielernamen stehen.
+  list_changed: Die Tabelle hat sich geändert, seit die Liste verknüpft wurde (die Spalte "{heading}" befindet sich nicht mehr an der Stelle auf "{tab}"). Verknüpfe die Liste erneut.
+  list_no_names: In den verknüpften Zellen auf "{tab}" sind keine Namen enthalten.
+  list_pick: 'Wähle aus, wo sich die Liste in deiner Tabelle befindet: ihre Registerkarte, ihre Zellen und welche Spalte die Namen enthält.'
 api_nominate:
   test_no_save: 'Dies ist ein Test-Link für Stewards: Listen werden hierüber nicht gespeichert.'
   sheet_link_needed: Füge zuerst den Google-Tabellen-Link deiner Allianz ein.

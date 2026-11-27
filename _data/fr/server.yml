@@ -64,24 +64,29 @@ api_dashboard:
   already_in_rotor: "{name} est déjà dans le rotor."
   player_removed: Ce joueur a été supprimé.
 api_sheets:
-  no_tabs: Aucun onglet n'a été trouvé dans cette feuille. Vérifiez que le lien ouvre bien la feuille de calcul elle-même.
-  tabs_too_few: Moins de 2 onglets correspondent à ce modèle. Vérifiez-le par rapport aux noms des onglets (# est un chiffre quelconque, * est n'importe quoi).
+  no_tabs: Aucun onglet trouvé dans cette feuille. Vérifiez que le lien ouvre bien la feuille de calcul.
+  tabs_too_few: Moins de 2 onglets correspondent à ce modèle. Vérifiez-le avec les noms d'onglets (# est un nombre quelconque, * est n'importe quoi).
   full_link: Collez le lien complet (commençant par https://docs.google.com/…).
   google_only: Seuls les liens Google Sheets et Google Docs (docs.google.com) peuvent être utilisés.
   range_format: La plage doit ressembler à A1:D20 (ou laissez vide).
-  not_sheet_or_doc: Ce lien n'est ni un Google Sheet ni un Google Doc.
-  unexpected_redirect: Google a envoyé le téléchargement vers un emplacement inattendu, il n'a donc pas pu être récupéré.
-  too_many_redirects: Trop de redirections depuis Google.
+  not_sheet_or_doc: Ce lien n'est ni une feuille ni un document Google.
+  unexpected_redirect: Google a envoyé le téléchargement vers un endroit inattendu, il n'a donc pas pu être récupéré.
+  too_many_redirects: Trop de redirections de la part de Google.
   too_slow: Google a mis trop de temps à répondre. Réessayez dans un instant.
-  unreachable: Impossible de joindre Google ({reason}).
-  doc_not_shared: 'Google a refusé : publiez le Doc (Fichier → Partager → Publier sur le Web), puis utilisez ce lien.'
+  unreachable: Impossible de contacter Google ({reason}).
+  doc_not_shared: 'Google a refusé : publiez le document (Fichier → Partager → Publier sur le Web), puis utilisez ce lien.'
   sheet_not_shared: 'Google a refusé : partagez la feuille en tant que "Tous les utilisateurs disposant du lien peuvent consulter", ou utilisez Fichier → Partager → Publier sur le Web.'
   google_error: Google a répondu avec une erreur ({status}). Vérifiez le lien.
   too_large: Cette feuille est trop volumineuse pour être lue (plus de 2 Mo).
   empty: Cette feuille (ou plage) est vide.
-  no_such_table_one: Ce Doc contient {count} table ; il n'y a pas de table {table}.
-  no_such_table_other: Ce Doc contient {count} tables ; il n'y a pas de table {table}.
-  no_table: Ce Doc ne contient aucune table.
+  no_such_table_one: Ce document contient {count} tableau ; il n'y a pas de tableau {table}.
+  no_such_table_other: Ce document contient {count} tableaux ; il n'y a pas de tableau {table}.
+  no_table: Ce document ne contient aucun tableau.
+  list_range: 'Sélectionnez à nouveau les cellules : jusqu''à 26 colonnes, en commençant par une ligne d''en-têtes.'
+  list_name_needed: Choisissez quelle colonne contient les noms des joueurs.
+  list_changed: La feuille a été modifiée depuis que la liste a été liée (la colonne "{heading}" n'est plus à sa place sur "{tab}"). Reliez la liste.
+  list_no_names: Il n'y a aucun nom dans les cellules liées sur "{tab}".
+  list_pick: 'Choisissez l''emplacement de la liste dans votre feuille : son onglet, ses cellules et quelle colonne contient les noms.'
 api_nominate:
   test_no_save: 'Ceci est un lien de test de l''Intendant : les listes ne sont pas enregistrées à partir de celui-ci.'
   sheet_link_needed: Collez d'abord le lien Google Sheet de votre alliance.

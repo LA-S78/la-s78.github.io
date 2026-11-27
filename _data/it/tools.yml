@@ -344,50 +344,50 @@ charts:
   hint_pie: Tocca o passa sopra una fetta
   hint_progress: Tocca o passa sopra una riga
 nominate:
-  page_title: Nomine per le Ricompense
+  page_title: Nominationi Ricompense
   name_ok: Nella lista membri di [{tag}]
   name_spelling: Nel gioco è scritto {name}
   name_unknown: Non nella lista membri di [{tag}]
   names_spelling_one: '1 nome è scritto diversamente nel gioco:'
   names_spelling_other: "{n} nomi sono scritti diversamente nel gioco:"
-  use_game_spellings: Usa le grafie del gioco
-  names_unknown_one: '1 nome non è nella lista membri di [{tag}]. Verrà comunque salvato; controlla che sia corretto:'
-  names_unknown_other: "{n} nomi non sono nella lista membri di [{tag}]. Verranno comunque salvati; controlla che siano corretti:"
+  use_game_spellings: Usa lo spelling del gioco
+  names_unknown_one: '1 nome non è nella lista membri di [{tag}]. Sarà comunque salvato; controlla se è corretto:'
+  names_unknown_other: "{n} nomi non sono nella lista membri di [{tag}]. Saranno comunque salvati; controlla se sono corretti:"
   did_you_mean: intendevi
-  loading: Caricamento pagina nomine...
-  players_label: I tuoi giocatori, prima i migliori
-  players_help: Un nome o ID giocatore per riga (o separati da virgole), il tuo miglior giocatore per primo. Gli scrigni scendono lungo la lista in ordine di valore tra entrambi i set; i nomi oltre gli scrigni sono tenuti come riserve e salgono se si aprono più scrigni.
-  players_placeholder: Nomi esatti nel gioco o ID giocatore, prima i migliori...
+  loading: Caricamento pagina di nomina...
+  players_label: I tuoi giocatori, i migliori per primi
+  players_help: Un nome o ID giocatore per riga (o separati da virgole), il tuo miglior giocatore per primo. I forzieri seguono la lista in ordine di valore attraverso entrambi i set; i nomi oltre i forzieri sono tenuti come riserve e avanzano se si aprono più forzieri.
+  players_placeholder: Nomi esatti nel gioco o ID giocatore, i migliori per primi...
   id_found: Digitato come ID giocatore {id}
   id_unknown: Nessun membro di [{tag}] ha l'ID {id}
-  who_gets_what: Chi ottiene cosa
-  save: Salva Lista
+  who_gets_what: Chi riceve cosa
+  save: Salva lista
   sheet_fill: Compila dal foglio
   test_banner: 'Link di prova (Steward): questa pagina funziona normalmente, ma non viene salvato nulla.'
   test_no_save: 'Link di prova: non salvato'
-  sheet_link: Link Google Sheet
-  sheet_help: Il foglio della tua alleanza con la scheda "Capitol Ranking" dei Duel Tools, condiviso come "Chiunque abbia il link può visualizzare". Il link viene memorizzato per la prossima volta.
   sheet_loading: Lettura del foglio…
+  sheet_undo: Annulla
+  sheet_undone: Torna alla lista com'era prima della compilazione.
   sheet_filled: Compilati {n} nomi dal foglio. Controllali, poi salva.
   sheet_filled_week: Compilati {n} nomi dal foglio ({week}). Controllali, poi salva.
   saving: Salvataggio...
   link_incomplete: Questo link è incompleto. Esegui /nominate su Discord per averne uno nuovo.
   load_failed: "{error} Esegui /nominate su Discord per un nuovo link."
-  closed: Le ricompense sono chiuse. La prossima apertura {when}, dopo l'evento capitolare di venerdì.
-  header: Rango {rank} · Ricompense {week} · aperto fino a {when}
-  banner_off_week: Solo Commenda del Re questa settimana (niente Guerra tra Regni).
-  banner_won: 'Guerra tra Regni vinta: anche gli scrigni Ricompensa Re della Battaglia sono aperti.'
-  banner_lost: 'Guerra tra Regni persa: solo Commenda del Re questa settimana.'
-  banner_pending: In attesa del risultato della battaglia di sabato (circa {when}). Se vinta, si aprono anche gli scrigni Ricompensa Re della Battaglia e la tua lista viene riordinata. Il Re distribuisce dopo il risultato, quindi lo scrigno di nessuno cambia.
+  closed: Le ricompense sono chiuse. Il prossimo evento {when}, dopo l'evento del Campidoglio di venerdì.
+  header: Grado {rank} · ricompense {week} · aperto fino a {when}
+  banner_off_week: Solo Encomio del Re questa settimana (niente Guerra tra Regni).
+  banner_won: 'Guerra tra Regni vinta: anche i forzieri Ricompensa Re della Battaglia sono aperti.'
+  banner_lost: 'Guerra tra Regni persa: solo Encomio del Re questa settimana.'
+  banner_pending: In attesa del risultato della battaglia di sabato (circa {when}). Se vinta, si aprono anche i forzieri Ricompensa Re della Battaglia e la tua lista viene riordinata. Il Re distribuisce dopo il risultato, quindi il forziere di nessuno cambia.
   handed_out_title: "✓ Già distribuiti dal Re ({n})"
-  handed_out_help: Questi scrigni vengono dati nel gioco, quindi restano a questi giocatori indipendentemente da ciò che dice la tua lista. La lista qui sotto distribuisce il resto.
+  handed_out_help: Questi forzieri sono dati nel gioco, quindi restano a questi giocatori a prescindere da cosa dice la tua lista. La lista sottostante distribuisce il resto.
   reserve: Riserva
   col_player: Giocatore
-  col_chest: Scrigno
+  col_chest: Forziere
   col_now: Ora
-  col_if_won: Se vinta
-  chests_now: "{n} scrigni ora"
-  chests_if_won: "{n} se vinta"
+  col_if_won: Se vinto
+  chests_now: "{n} forzieri ora"
+  chests_if_won: "{n} se vinto"
   named: "{n} nominati"
   still_need_name: "{n} necessitano ancora di un nome"
   reserves_one: "{n} riserva"
@@ -1196,3 +1196,29 @@ steward:
   usage_unrecorded: Non registrato
   usage_unrecorded_help: Contato dal tracker, non ancora salvato qui (ogni server salva ogni pochi minuti)
   usage_none: Nessuna richiesta annotata oggi.
+sheet_list:
+  intro: Indica il sito dove si trova la lista nel Foglio Google della tua alleanza (condiviso come "Chiunque abbia il link può visualizzare"). Sarà ricordato per la prossima volta.
+  link_label: Link Foglio Google
+  open: Apri foglio
+  not_sheet: Incolla il link a un Foglio Google (https://docs.google.com/spreadsheets/…).
+  finding_tabs: Ricerca delle schede del foglio…
+  loading: Caricamento…
+  tab: Scheda
+  grid_help: Trascina sulla lista, inclusa la riga delle intestazioni. Su telefono, tocca la prima cella, poi l'ultima.
+  tap_second: Ora tocca l'angolo opposto della lista.
+  grid_more: Qui sono mostrate solo le prime 200 righe e 60 colonne.
+  duel_tools: 'Trovata la scheda Duel Tools "{tab}": è stata scelta per te. Premi "Usa questa lista" se sembra corretta.'
+  range: 'Celle: {range}'
+  to_bottom: Continua a leggere fino in fondo al foglio (per una lista che cresce)
+  role_name: Nomi
+  role_id: ID Giocatore
+  role_score: Punteggi
+  role_points: Punti
+  none: "— nessuno —"
+  preview: 'I primi giocatori al suo interno:'
+  no_rows: Nessun nome ancora sotto le intestazioni.
+  use: Usa questa lista
+  saving: Verifica della lista con Google…
+  pick_first: Trascina prima sulla lista nella griglia.
+  change: Dove si trova la lista nel tuo foglio
+  linked: "{tab}, celle {range}"

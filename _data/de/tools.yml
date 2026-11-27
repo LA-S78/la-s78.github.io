@@ -346,53 +346,53 @@ charts:
 nominate:
   page_title: Belohnungs-Nominierungen
   name_ok: In der Mitgliederliste von [{tag}]
-  name_spelling: Im Spiel geschrieben als {name}
+  name_spelling: Im Spiel wird es {name} geschrieben
   name_unknown: Nicht in der Mitgliederliste von [{tag}]
   names_spelling_one: '1 Name wird im Spiel anders geschrieben:'
   names_spelling_other: "{n} Namen werden im Spiel anders geschrieben:"
-  use_game_spellings: Schreibweisen aus dem Spiel verwenden
-  names_unknown_one: '1 Name ist nicht in der Mitgliederliste von [{tag}]. Er wird trotzdem gespeichert; bitte prüfen:'
-  names_unknown_other: "{n} Namen sind nicht in der Mitgliederliste von [{tag}]. Sie werden trotzdem gespeichert; bitte prüfen:"
+  use_game_spellings: Spiel-Schreibweisen verwenden
+  names_unknown_one: '1 Name ist nicht in der Mitgliederliste von [{tag}]. Er wird trotzdem gespeichert; prüfe, ob er korrekt ist:'
+  names_unknown_other: "{n} Namen sind nicht in der Mitgliederliste von [{tag}]. Sie werden trotzdem gespeichert; prüfe, ob sie korrekt sind:"
   did_you_mean: meintest du
   loading: Nominierungsseite wird geladen...
   players_label: Deine Spieler, die Besten zuerst
-  players_help: Ein Name oder eine Spieler-ID pro Zeile (oder mit Kommas getrennt), dein bester Spieler zuerst. Truhen werden in der Reihenfolge ihres Wertes über beide Sets verteilt; Namen hinter den Truhen werden als Reserve gespeichert und rücken nach, wenn weitere Truhen geöffnet werden.
-  players_placeholder: Exakte Namen im Spiel oder Spieler-IDs, die Besten zuerst...
+  players_help: Ein Name oder eine Spieler-ID pro Zeile (oder durch Kommas getrennt), dein bester Spieler zuerst. Die Truhen werden der Reihe nach gemäß ihrem Wert über beide Sets verteilt; Namen, die über die Truhenanzahl hinausgehen, werden als Reserve geführt und rücken nach, falls weitere Truhen geöffnet werden.
+  players_placeholder: Exakte Spielernamen oder Spieler-IDs, die besten zuerst...
   id_found: Eingegeben als Spieler-ID {id}
   id_unknown: Kein Mitglied von [{tag}] hat die ID {id}
   who_gets_what: Wer bekommt was
   save: Liste speichern
-  sheet_fill: Aus Tabelle füllen
-  test_banner: 'Test-Link (Steward): diese Seite funktioniert wie gewohnt, aber es wird nichts gespeichert.'
+  sheet_fill: Aus Tabelle ausfüllen
+  test_banner: 'Test-Link (Steward): Diese Seite funktioniert wie gewohnt, aber nichts wird gespeichert.'
   test_no_save: 'Test-Link: nicht gespeichert'
-  sheet_link: Google-Tabellen-Link
-  sheet_help: Die Tabelle deiner Allianz mit dem "Capitol Ranking"-Tab der Duel Tools, geteilt als "Jeder mit dem Link kann die Seite ansehen". Der Link wird für das nächste Mal gespeichert.
   sheet_loading: Tabelle wird gelesen...
-  sheet_filled: "{n} Namen aus der Tabelle eingetragen. Bitte prüfen und dann speichern."
-  sheet_filled_week: "{n} Namen aus der Tabelle eingetragen ({week}). Bitte prüfen und dann speichern."
-  saving: Speichern...
+  sheet_undo: Rückgängig
+  sheet_undone: Zurück zur Liste, wie sie vor dem Ausfüllen war.
+  sheet_filled: "{n} Namen aus der Tabelle ausgefüllt. Überprüfe sie und speichere dann."
+  sheet_filled_week: "{n} Namen aus der Tabelle ({week}) ausgefüllt. Überprüfe sie und speichere dann."
+  saving: Wird gespeichert...
   link_incomplete: Dieser Link ist unvollständig. Führe /nominate in Discord für einen neuen aus.
   load_failed: "{error} Führe /nominate in Discord für einen neuen Link aus."
   closed: Belohnungen sind geschlossen. Die nächste Öffnung ist am {when}, nach dem Kapitol-Event am Freitag.
   header: Rang {rank} · {week} Belohnungen · offen bis {when}
-  banner_off_week: Diese Woche nur Königslob (kein Königreichskrieg).
-  banner_won: 'Königreichskrieg gewonnen: Belohnungstruhen für den Kampf des Königs sind ebenfalls offen.'
-  banner_lost: 'Königreichskrieg verloren: Diese Woche nur Königslob.'
-  banner_pending: Warten auf das Ergebnis der Schlacht am Samstag (ca. {when}). Bei einem Sieg öffnen sich auch die Belohnungstruhen für den Kampf des Königs und deine Liste wird neu sortiert. Der König verteilt die Belohnungen nach dem Ergebnis, daher ändert sich für niemanden die Truhe.
+  banner_off_week: Diese Woche nur die Belobigung des Königs (kein Königreichskrieg).
+  banner_won: 'Königreichskrieg gewonnen: „König des Kampfes“-Belohnungstruhen sind ebenfalls offen.'
+  banner_lost: 'Königreichskrieg verloren: Diese Woche nur die Belobigung des Königs.'
+  banner_pending: Warten auf das Ergebnis der Schlacht am Samstag (etwa {when}). Wenn gewonnen, öffnen sich zusätzlich die „König des Kampfes“-Belohnungstruhen und deine Liste wird neu sortiert. Der König verteilt nach dem Ergebnis, sodass sich die Truhenzuteilung für niemanden ändert.
   handed_out_title: "✓ Bereits vom König verteilt ({n})"
-  handed_out_help: Diese Truhen werden im Spiel vergeben, sie bleiben also bei den Spielern, egal was in deiner Liste steht. Die Liste unten verteilt den Rest.
+  handed_out_help: Diese Truhen werden im Spiel vergeben und bleiben bei diesen Spielern, egal was deine Liste sagt. Die Liste unten verteilt den Rest.
   reserve: Reserve
   col_player: Spieler
   col_chest: Truhe
   col_now: Jetzt
-  col_if_won: Bei Sieg
-  chests_now: "{n} Truhen aktuell"
-  chests_if_won: "{n} bei Sieg"
+  col_if_won: Wenn gewonnen
+  chests_now: "{n} Truhen jetzt"
+  chests_if_won: "{n} wenn gewonnen"
   named: "{n} benannt"
   still_need_name: "{n} benötigen noch einen Namen"
   reserves_one: "{n} Reserve"
   reserves_other: "{n} Reserven"
-  listed_twice: "{name} ist doppelt aufgeführt"
+  listed_twice: "{name} ist zweimal aufgeführt"
   saved: Gespeichert. Der König sieht deine Liste. Du kannst sie bis {when} ändern.
   save_failed: 'Speichern fehlgeschlagen: {error}'
 kings_console:
@@ -1196,3 +1196,29 @@ steward:
   usage_unrecorded: Nicht erfasst
   usage_unrecorded_help: Vom Tracker gezählt, aber hier noch nicht gespeichert (jeder Server speichert alle paar Minuten)
   usage_none: Heute noch keine Anfragen notiert.
+sheet_list:
+  intro: Zeige die Seite, auf der die Liste in der Google-Tabelle deiner Allianz steht (freigegeben als „Jeder mit dem Link kann die Seite sehen“). Sie wird für das nächste Mal gespeichert.
+  link_label: Google Tabellen-Link
+  open: Tabelle öffnen
+  not_sheet: Füge den Link zu einer Google-Tabelle ein (https://docs.google.com/spreadsheets/…).
+  finding_tabs: Reiter der Tabelle werden gesucht…
+  loading: Wird geladen…
+  tab: Reiter
+  grid_help: Ziehe über die Liste, einschließlich der Überschriftenzeile. Tippe auf einem Handy auf die erste Zelle und dann auf die letzte.
+  tap_second: Tippe jetzt auf die gegenüberliegende Ecke der Liste.
+  grid_more: Nur die ersten 200 Zeilen und 60 Spalten werden hier angezeigt.
+  duel_tools: 'Duell-Tools-Reiter „{tab}“ gefunden: Er wurde für dich ausgewählt. Drücke „Diese Liste verwenden“, wenn es richtig aussieht.'
+  range: 'Zellen: {range}'
+  to_bottom: Weiter bis zum Ende der Tabelle lesen (für eine wachsende Liste)
+  role_name: Namen
+  role_id: Spieler-IDs
+  role_score: Punktzahlen
+  role_points: Punkte
+  none: "— keine —"
+  preview: 'Die ersten Spieler darin:'
+  no_rows: Noch keine Namen unter den Überschriften.
+  use: Diese Liste verwenden
+  saving: Liste wird mit Google geprüft…
+  pick_first: Ziehe zuerst über die Liste im Raster.
+  change: Wo die Liste in deiner Tabelle steht
+  linked: "{tab}, Zellen {range}"
