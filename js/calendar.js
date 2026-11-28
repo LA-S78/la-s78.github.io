@@ -491,6 +491,64 @@ async function initCalendar() {
     const btnCancel = document.getElementById('btn-cancel-event-form');
     const notifySelect = document.getElementById('evt-input-notify');
     const customRoleInput = document.getElementById('evt-input-role-id');
+    // "Ping a specific role": a dropdown of the server's roles (owner, 2026-11-28), the ID
+    // box only when those can't be read. The roles are asked for once, the first time.
+    const rolePick = document.getElementById('evt-input-role-pick');
+    const roleHint = document.getElementById('evt-role-pick-hint');
+    let rolesAsked = null;
+    const loadRoles = () =>
+      (rolesAsked ||= manageEvents({ action: 'roles' })
+        .then((r) => (r.ok ? r.json() : { roles: [] }))
+        .then((d) => (Array.isArray(d.roles) ? d.roles : []))
+        .catch(() => []));
+    /** Shows the picker (or the ID box) for the current choice; `chosen`: the role to select. */
+    async function showRolePicker(chosen = customRoleInput.value.trim()) {
+      const isCustom = notifySelect.value === 'custom_role';
+      const lockBox = (locked) => {
+        customRoleInput.disabled = locked;
+        customRoleInput.classList.toggle('input-locked', locked);
+      };
+      if (!isCustom || !rolePick) {
+        if (rolePick) rolePick.hidden = true;
+        if (roleHint) roleHint.hidden = true;
+        customRoleInput.hidden = false;
+        lockBox(!isCustom);
+        if (!isCustom) customRoleInput.value = '';
+        return;
+      }
+      if (roleHint) {
+        roleHint.textContent = t('calendar_events.role_pick_loading');
+        roleHint.hidden = false;
+      }
+      const roles = await loadRoles();
+      if (notifySelect.value !== 'custom_role') return; // changed while loading
+      if (!roles.length) {
+        // The fallback: paste the ID, as before
+        rolePick.hidden = true;
+        customRoleInput.hidden = false;
+        lockBox(false);
+        customRoleInput.value = chosen || '';
+        if (roleHint) roleHint.textContent = t('calendar_events.role_pick_unavailable');
+        return;
+      }
+      const options = [`<option value="">${esc(t('calendar_events.role_pick_choose'))}</option>`];
+      if (chosen && !roles.some((r) => r.id === chosen)) {
+        options.push(
+          `<option value="${esc(chosen)}">${esc(t('calendar_events.role_pick_unknown', { id: chosen }))}</option>`,
+        );
+      }
+      for (const r of roles) options.push(`<option value="${esc(r.id)}">@${esc(r.name)}</option>`);
+      rolePick.innerHTML = options.join('');
+      rolePick.value = chosen || '';
+      customRoleInput.value = rolePick.value;
+      customRoleInput.hidden = true;
+      rolePick.hidden = false;
+      if (roleHint) roleHint.hidden = true;
+      window.SiteSelect?.sync(rolePick);
+    }
+    rolePick?.addEventListener('change', () => {
+      customRoleInput.value = rolePick.value;
+    });
     // The event type (the site's dropdown, js/site-select.js): read and set the one picked
     const presetSelect = document.getElementById('evt-input-preset');
     const presetValue = () => presetSelect?.value || 'custom';
@@ -540,6 +598,7 @@ async function initCalendar() {
       if (submitBtn) submitBtn.textContent = t('calendar_events.publish');
       editingNotifyTarget = null;
       window.SiteSelect?.sync(notifySelect);
+      showRolePicker('');
       const remindTime = document.getElementById('evt-input-remind-time');
       if (remindTime) {
         remindTime.value = '60';
@@ -582,10 +641,7 @@ async function initCalendar() {
         window.SiteSelect?.sync(remindTime);
       }
       updateReminderHint();
-      const isCustom = notifySelect.value === 'custom_role';
-      customRoleInput.disabled = !isCustom;
-      customRoleInput.classList.toggle('input-locked', !isCustom);
-      customRoleInput.value = isCustom ? evt.custom_role_id || '' : '';
+      showRolePicker(notifySelect.value === 'custom_role' ? evt.custom_role_id || '' : '');
       if (formHeading) formHeading.textContent = t('calendar_events.edit_heading');
       if (submitBtn) submitBtn.innerHTML = ic('save') + esc(t('calendar_events.save_changes'));
       formEl.style.display = 'block';
@@ -629,12 +685,8 @@ async function initCalendar() {
 
     if (notifySelect && customRoleInput) {
       notifySelect.addEventListener('change', () => {
-        const isCustom = notifySelect.value === 'custom_role';
         updateReminderHint();
-        customRoleInput.disabled = !isCustom;
-        customRoleInput.classList.toggle('input-locked', !isCustom);
-        if (isCustom) customRoleInput.focus();
-        else customRoleInput.value = '';
+        showRolePicker('');
       });
     }
 
@@ -708,8 +760,12 @@ async function initCalendar() {
         const customRoleId = customRoleInput.value.trim();
 
         if (notifyTarget === 'custom_role' && !/^\d{17,20}$/.test(customRoleId)) {
-          showNotification(t('calendar_events.bad_role'), 'error');
-          customRoleInput.focus();
+          const picking = rolePick && !rolePick.hidden;
+          showNotification(
+            t(picking ? 'calendar_events.role_pick_needed' : 'calendar_events.bad_role'),
+            'error',
+          );
+          (picking ? rolePick : customRoleInput).focus();
           return;
         }
 
@@ -745,8 +801,7 @@ async function initCalendar() {
           showNotification(result.message || t('calendar_events.published'), 'success');
           formEl.reset();
           resetPanelTheme();
-          customRoleInput.disabled = true;
-          customRoleInput.classList.add('input-locked');
+          showRolePicker('');
           formEl.style.display = 'none';
           leaveEditMode();
           await loadCalendar({ useSaved: false });
