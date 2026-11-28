@@ -188,6 +188,11 @@ reminders:
   title: "⏰ Starting soon: {title}"
   title_now: "🔔 Starting now: {title}"
   starts: "Starts"
+  line: "⏰ **{title}** starts {when}"
+  line_now: "🔔 **{title}** is starting now"
+  card_soon: "Starting in {minutes} min"
+  card_hour: "Starting in 1 hour"
+  card_now: "Starting now"
 
 # The Discord bot's replies (api/_bot_*.js), in the user's Discord language. Keep Discord
 # codes as they are: **bold**, `/commands`, and {time}-style placeholders that become

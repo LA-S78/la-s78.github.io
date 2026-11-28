@@ -238,3 +238,34 @@ export async function serveCalendarCard(req, res) {
     return res.status(500).json({ error: err.message });
   }
 }
+
+/**
+ * A reminder as one card (owner, 2026-11-28: the reminder is the card): a badge in the
+ * event's colour ("Starting in 15 min", "Starting now"), the time, the title, up to two lines
+ * of the description, and whose it is, over the event type's picture. api/_reminders.js
+ * attaches it to the message, so Discord shows it full width with no box around it.
+ * card: { badge, color, time, title, lines: [], tag, picture (data URL or null) }.
+ */
+export function reminderCardPng(card) {
+  const h = 420;
+  const color = card.color || LABEL;
+  // The badge in the event's own colour, its text white or near-black, whichever reads
+  const fill = /^#[0-9a-f]{6}$/i.test(card.badgeColor || '') ? card.badgeColor : color;
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(fill.slice(i, i + 2), 16) || 0);
+  const ink = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 > 0.6 ? '#14110d' : '#ffffff';
+  const badge = fit(String(card.badge || '').toUpperCase(), 28, 700, true);
+  const badgeWidth = Math.round(badge.length * 28 * 0.66) + 48;
+  const lines = (card.lines || []).slice(0, 2);
+  return render(`<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${h}" viewBox="0 0 ${WIDTH} ${h}"><defs>${SHADOW}</defs>
+  ${frame('r', 0, h, card.picture)}
+  <g clip-path="url(#clipr)"><rect x="0" y="0" width="12" height="${h}" fill="${esc(color)}"/></g>
+  <rect x="48" y="44" width="${badgeWidth}" height="50" rx="25" fill="${esc(fill)}"/>
+  <text x="${48 + badgeWidth / 2}" y="79" text-anchor="middle" font-family="Inter" font-size="28" font-weight="700" letter-spacing="1.5" fill="${ink}">${esc(badge)}</text>
+  <g filter="url(#shadow)" font-family="Inter">
+    <text x="50" y="158" font-size="34" font-weight="700" fill="${esc(color)}">${esc(fit(card.time, 34, 900, true))}</text>
+    <text x="46" y="246" font-size="80" font-weight="700" fill="${TEXT}">${esc(fit(card.title, 80, 910, true))}</text>
+    ${lines.map((l, i) => `<text x="50" y="${304 + i * 44}" font-size="32" font-weight="400" fill="#cfc8bf">${esc(fit(l, 32, 900))}</text>`).join('')}
+    ${card.tag ? `<text x="${WIDTH - 40}" y="${h - 34}" text-anchor="end" font-size="26" font-weight="700" fill="${LABEL}">${esc(fit(card.tag, 26, 400, true))}</text>` : ''}
+  </g>
+</svg>`);
+}
