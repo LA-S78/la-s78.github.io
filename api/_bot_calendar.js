@@ -14,6 +14,9 @@ import { projectEvents, visibleEvents } from './_calendar_events.js';
 import EVENT_TYPES from './_event_types.js';
 import { getRewardPeriod } from './_reward_period.js';
 import { gistJson, isGistConfigured } from './_gist.js';
+import { findTag, sanitizeAlliances } from './_alliances.js';
+import { liveImages } from './_alliance_images.js';
+import { getRoleColors } from './_role_colors.js';
 
 const DAY_MS = 86400000;
 const MAX_CARDS = 5; // event cards in one reply (Discord allows 10 embeds; 5 keeps it readable)
@@ -31,9 +34,11 @@ export async function handleCalendarCommand(ctx) {
   let calConfig = DEFAULT_CALENDAR_CONFIG;
   let alliances = {};
   let rewardsState = {};
+  let gist = null;
   try {
     if (isGistConfigured()) {
       const gistData = await getGistData();
+      gist = gistData;
       // gistJson: the tag form however it's stored (alliance IDs, step 3)
       calConfig = { ...calConfig, ...gistJson(gistData, 'calendar-state.json') };
       // gistJson: the tag-keyed list however it's stored (alliance IDs, step 2)
@@ -114,15 +119,13 @@ export async function handleCalendarCommand(ctx) {
       color: isAlliance ? ALLIANCE_COLOR : state.isKW ? WAR_COLOR : KINGDOM_COLOR,
       footer: { text: `la-s78.app · ${weekName(state.clockWeek)}` },
     };
-    const cards = listing.today
-      .slice(0, MAX_CARDS)
-      .map((evt) =>
-        eventCard(evt, {
-          host: resolvedHost,
-          now,
-          fallback: isAlliance ? ALLIANCE_COLOR : KINGDOM_COLOR,
-        }),
-      );
+    const cards = listing.today.slice(0, MAX_CARDS).map((evt) =>
+      eventCard(evt, {
+        host: resolvedHost,
+        now,
+        fallback: isAlliance ? ALLIANCE_COLOR : KINGDOM_COLOR,
+      }),
+    );
     const label = isAlliance
       ? say('bot_calendar.open_alliance', { tag: detectedTag })
       : say('bot_calendar.open_full');
@@ -137,7 +140,7 @@ export async function handleCalendarCommand(ctx) {
     ? say('bot_calendar.open_alliance', { tag: detectedTag })
     : say('bot_calendar.open_full');
   return reply({
-    embeds: [capitolCard(state, capitol, now)],
+    embeds: await capitolCards(state, capitol, { alliances, gist, host: resolvedHost }),
     components: [button(label, calendarUrl(detectedTag))],
   });
 }
@@ -178,71 +181,70 @@ function capitolInfo(state, calConfig, alliances, rewardsState) {
   const nextRank = nextScheduledTag
     ? alliances[nextScheduledTag]?.rank || nextWeekConfig?.capitol_rank
     : nextWeekConfig?.capitol_rank;
-  return { holderTag, holderRank, nextHolderTag, nextRank, nextSlot, nextWeekResetTs };
+  const holderKey = scheduledTag || holderEntry?.[0] || null;
+  const nextKey = nextScheduledTag || nextHolderEntry?.[0] || null;
+  return {
+    holderTag,
+    holderRank,
+    nextHolderTag,
+    nextRank,
+    nextSlot,
+    nextWeekResetTs,
+    holderKey,
+    nextKey,
+  };
 }
 
-/** The Capitol card: holder, the daily reset, the Kingdom War, the next rotation week. */
-function capitolCard(state, c, now) {
-  // Time to the daily reset, written out: Discord's own relative time says "in a day"
-  // for anything over ~22 hours, which isn't useful here.
-  const minsToReset = Math.max(0, Math.round((state.nextResetTimestamp * 1000 - now) / 60000));
-  // The week's alliance captures the Capitol on Friday (see _calendar_helper.js).
-  const captureNote = state.capitolCaptured
-    ? say('bot_calendar.captured_friday')
-    : state.isCaptureDay
-      ? say('bot_calendar.captures_today')
-      : say('bot_calendar.captures_friday', { when: `<t:${state.captureTimestamp}:R>` });
-
-  const fields = [
-    {
-      name: say(state.capitolCaptured ? 'bot_calendar.current_holder' : 'bot_calendar.next_holder'),
-      value: say('bot_calendar.holder_line', {
-        tag: c.holderTag,
-        rank: c.holderRank,
-        note: captureNote,
-      }),
-      inline: true,
-    },
-    {
-      name: say('bot_calendar.next_reset'),
-      value: say('bot_calendar.reset_line', {
-        time: `<t:${state.nextResetTimestamp}:t>`,
-        hours: Math.floor(minsToReset / 60),
-        minutes: minsToReset % 60,
-      }),
-      inline: true,
-    },
-  ];
-  if (state.isKW) {
-    fields.push({
-      name: say(state.isKWBattleDay ? 'bot_calendar.kw_today' : 'bot_calendar.kw_next'),
-      value: state.isKWBattleDay
-        ? say('bot_calendar.kw_active')
-        : say('bot_calendar.kw_scheduled', {
-            relative: `<t:${state.kwBattleTimestamp}:R>`,
-            date: `<t:${state.kwBattleTimestamp}:D>`,
-          }),
-      inline: false,
-    });
-  }
-  fields.push({
-    name: say('bot_calendar.next_phase'),
-    value: say('bot_calendar.next_phase_line', {
-      week: weekName(c.nextSlot.clockWeek),
-      when: `<t:${c.nextWeekResetTs}:R>`,
-      tag: c.nextHolderTag,
-      rank: c.nextRank,
-    }),
-    inline: false,
-  });
-  return {
-    title: say('bot_calendar.title'),
-    color: state.isKW ? WAR_COLOR : KINGDOM_COLOR,
-    description: `${state.clockWeek === 0 ? '🛡️' : '⚔️'} **${weekName(state.clockWeek)}**`,
-    fields,
-    footer: { text: 'la-s78.app' },
-    timestamp: now.toISOString(),
+/**
+ * The Capitol view (owner, 2026-11-28): two cards, as the calendar page's holder box. This
+ * week's holder ("current" once Friday's capture is done), then next week's. Each card is
+ * in its alliance's colour (the same colour the site shows: Discord role, then the site's
+ * choice) with the alliance's approved banner as its picture. Discord can't colour text
+ * or put text over a picture, so the colour is the card's edge and the banner sits under
+ * the tag.
+ */
+export async function capitolCards(state, c, { alliances, gist, host }) {
+  // The role colours come from Discord: never let them hold up the reply (3 seconds)
+  const roleColors = await Promise.race([
+    getRoleColors().catch(() => ({})),
+    new Promise((resolve) => setTimeout(() => resolve({}), 1200)),
+  ]);
+  const coloured = sanitizeAlliances(alliances, roleColors);
+  const banners = gist ? liveImages(gist, alliances) : {};
+  const tags = Object.keys(alliances);
+  const card = (key, shown, label, line) => {
+    const tag = key ? findTag(tags, key) : null;
+    const out = {
+      author: { name: label },
+      title: shown,
+      description: line,
+      color: colorNumber(tag && coloured[tag]?.color) ?? KINGDOM_COLOR,
+    };
+    const wide = tag && banners[tag]?.wide;
+    if (wide) out.image = { url: `https://${host}${wide}` };
+    return out;
   };
+  const captureTs = state.captureTimestamp;
+  const thisWeek = card(
+    c.holderKey,
+    c.holderTag,
+    say(state.capitolCaptured ? 'bot_calendar.card_current' : 'bot_calendar.card_this_week'),
+    state.capitolCaptured
+      ? say('bot_calendar.card_captured')
+      : state.isCaptureDay
+        ? say('bot_calendar.card_captures_today')
+        : say('bot_calendar.card_captures', { when: `<t:${captureTs}:R>` }),
+  );
+  const nextWeek = card(
+    c.nextKey,
+    c.nextHolderTag,
+    say('bot_calendar.card_next'),
+    say('bot_calendar.card_next_line', {
+      week: weekName(c.nextSlot.clockWeek),
+      date: `<t:${captureTs + 7 * 86400}:D>`,
+    }),
+  );
+  return [thisWeek, nextWeek];
 }
 
 /**
