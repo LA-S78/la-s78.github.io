@@ -594,9 +594,9 @@ calendar:
   ev_close_desc: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette heure.'
 calendar_events:
   reminder_hint: Publié dans le canal d'alerte de votre alliance.
-  reminder_hint_server: Publié dans le canal d'alerte du NAP Discord, ainsi que dans les alliances ayant opté pour cette option.
-  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : exécutez /registerbot sur votre Discord pour que les rappels puissent être publiés.'
-  reminder_no_server_channel: Le canal d'alerte du NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), les rappels du serveur ne peuvent donc pas être publiés.
+  reminder_hint_server: Publié dans le canal d'alerte du Discord NAP, et dans les alliances ayant opté pour cette option.
+  reminder_no_channel: 'Votre alliance n''a pas encore de canal d''alerte : exécutez /registerbot sur votre Discord pour permettre la publication des rappels.'
+  reminder_no_server_channel: Le canal d'alerte NAP n'est pas encore configuré (NAP_ALERT_CHANNEL_ID), les rappels du serveur ne peuvent donc pas être publiés.
   edit_heading: Modifier l'événement
   scope_label: Événements à gérer
   scope_server: Événements du serveur
@@ -616,48 +616,64 @@ calendar_events:
   type_custom_hint: Formulaire vierge
   duration_h: "{n}h"
   title: Titre de l'événement
-  title_example: 'ex: Drill de défense de la ruche ou Assaut d''avant-poste'
+  title_example: 'ex: Drill de Défense de la Ruche ou Assaut d''Avant-poste'
   date: Date de début (AAAA-MM-JJ)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time du serveur (s'ajuste par tranches de 5 minutes)
+  time_hint: Game Time du serveur (par tranches de 5 minutes)
   duration: Durée (heures)
   frequency: Fréquence
   once: Événement unique (ne se répète pas)
   every_2_days: Répétition tous les 2 jours
-  weekly: Répétition hebdomadaire (même jour et heure)
+  weekly: Répétition hebdomadaire (même jour & heure)
   alert_level: Rappel Discord
   remind_when: Moment de la publication
-  remind_at_start: Au début
+  remind_at_start: Au début de l'événement
   remind_minutes: "{n} minutes avant"
   remind_hour: 1 heure avant
-  remind_when_hint: Les rappels sont vérifiés toutes les 5 minutes, ils peuvent donc arriver avec quelques minutes d'avance.
+  remind_when_hint: Les rappels sont vérifiés toutes les 5 minutes, ils peuvent donc arriver avec un léger décalage.
   notify_off: Aucun rappel
   notify_role: Mentionner le rôle d'alerte de l'alliance
   notify_custom: Mentionner un rôle spécifique
   notify_everyone: Mentionner @everyone
   notify_none: Publier sans mention
   role_id: ID du rôle spécifique
+  allow_optin: Permettre aux alliances de recevoir ce rappel sur leur propre Discord
+  allow_optin_hint: Les R4/R5 de chaque alliance choisissent pour chaque événement s'il est publié dans leur canal d'alerte et qui il mentionne.
+  optin_button_off: S'inscrire
+  optin_button_on: Inscrit
+  optin_heading: Rappel sur le Discord de [{tag}]
+  optin_intro: 'Publier le rappel de cet événement dans le canal d''alerte de [{tag}], en mentionnant :'
+  optin_ping_role: Notre rôle d'alerte
+  optin_ping_custom: Un rôle spécifique
+  optin_ping_everyone: "@everyone"
+  optin_ping_none: Personne (publier simplement)
+  optin_from_register: "[{tag}] reçoit le rappel de chaque événement du serveur (choisi lors de l'inscription via /registerbot). Vous pouvez le modifier pour cet événement ici."
+  optin_no_channel: "[{tag}] n'a pas encore de canal d'alerte : exécutez /registerbot sur votre Discord au préalable."
+  optin_save_on: Recevoir ce rappel
+  optin_save: Enregistrer
+  optin_stop: Arrêter ce rappel
+  optin_failed: Échec de l'enregistrement. Veuillez réessayer dans un instant.
   kw_every_week: Chaque semaine de Guerre des Royaumes
-  kw_locked_note: 'La bataille de la Guerre des Royaumes suit une rotation : son jour, son heure et sa durée sont fixés et ne peuvent être supprimés. Modifiez sa description et le rappel Discord ; chaque bataille de la Guerre des Royaumes les utilisera.'
+  kw_locked_note: 'La bataille de Guerre des Royaumes suit une rotation : son jour, son heure et sa durée sont fixes et ne peuvent être supprimés. Vous pouvez changer sa description et le rappel Discord ; chaque bataille de Guerre des Royaumes utilisera ces paramètres.'
   role_pick: Rôle à mentionner
   role_pick_choose: Choisir un rôle…
   role_pick_loading: Chargement des rôles du serveur…
-  role_pick_unavailable: Les rôles du serveur n'ont pas pu être lus (le bot est-il présent ?). Collez l'ID du rôle à la place.
+  role_pick_unavailable: Les rôles du serveur n'ont pas pu être lus (le bot est-il présent ?). Veuillez coller l'ID du rôle à la place.
   role_pick_unknown: Un rôle qui n'est plus sur le serveur ({id})
   role_pick_needed: Choisissez le rôle à mentionner.
-  role_id_hint: "(uniquement pour « Mentionner un rôle spécifique »)"
-  role_id_title: Doit être un ID de rôle Discord valide de 17 à 20 chiffres
+  role_id_hint: "(seulement pour « Mentionner un rôle spécifique »)"
+  role_id_title: Doit être un ID de rôle Discord valide de 17-20 chiffres
   details: Instructions / Point de ralliement
-  details_example: 'ex: Rassemblement à la ruche Alpha. R4 dirigent les ralliements. Chat vocal actif.'
+  details_example: 'ex: Rassemblement à Ruche Alpha. R4 dirigent les ralliements. Communication vocale activée.'
   publish: Publier dans le calendrier
-  publishing: Publication...
-  bad_time: Le Game Time doit être réglé par tranches de 5 minutes (:00, :05, :10, etc.)
-  bad_role: Veuillez saisir un ID de rôle Discord valide de 17 à 20 chiffres pour la cible de l'alerte personnalisée.
+  publishing: Publication en cours...
+  bad_time: Le Game Time doit être défini par tranches de 5 minutes (:00, :05, :10, etc.)
+  bad_role: Veuillez entrer un ID de rôle Discord valide de 17-20 chiffres pour la cible de l'alerte personnalisée.
   save_failed: Échec de l'enregistrement de l'événement
   published: Opération publiée avec succès !
   delete_heading: Supprimer cet événement ?
-  delete_repeats: 'Il se répète ({repeat}) : chaque répétition sera supprimée, pas seulement celle-ci.'
-  delete_final: Ceci ne peut pas être annulé.
+  delete_repeats: 'Il se répète ({repeat}) : toutes les répétitions seront supprimées, pas seulement celle-ci.'
+  delete_final: Cette action est irréversible.
   delete_confirm: Supprimer
   delete_failed: Échec de la suppression de l'événement
   removed: Opération supprimée.

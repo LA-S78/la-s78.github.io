@@ -594,21 +594,21 @@ calendar:
   ev_close_desc: 'Sandıklar Çarşamba 00:00 GT''de sona erer: O zamana kadar her şeyi dağıtın.'
 calendar_events:
   reminder_hint: İttifakınızın uyarı kanalında paylaşıldı.
-  reminder_hint_server: NAP Discord'un uyarı kanalında ve katılım sağlayan ittifaklarda paylaşıldı.
-  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: Hatırlatıcıların paylaşılabilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
-  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları paylaşılamaz.
+  reminder_hint_server: NAP Discord'unun uyarı kanalında ve bildirimleri açan ittifaklarda paylaşıldı.
+  reminder_no_channel: 'İttifakınızın henüz bir uyarı kanalı yok: hatırlatıcıların gönderilebilmesi için Discord''unuzda /registerbot komutunu çalıştırın.'
+  reminder_no_server_channel: NAP uyarı kanalı henüz ayarlanmadı (NAP_ALERT_CHANNEL_ID), bu yüzden sunucu hatırlatıcıları gönderilemiyor.
   edit_heading: Etkinliği düzenle
-  scope_label: Etkinlikleri kim yönetecek
+  scope_label: Hangi etkinliklerin yönetileceği
   scope_server: Sunucu genelindeki etkinlikler
   scope_alliance: "[{tag}] etkinlikleri"
   save_changes: Değişiklikleri kaydet
   manage_mode: YÖNETİM MODU
-  session_active: Kimliği Doğrulanmış Oturum Etkin
+  session_active: Doğrulanmış Oturum Aktif
   create_operation: Operasyon Oluştur
   kingdom_admin: KRALLIK YÖNETİCİSİ
   kingdom_desc: Sunucu etkinliklerini yönetme
   kingdom_heading: Krallık Operasyonu Oluştur ([GLOBAL])
-  leadership: "[{tag}] LİDERLİK"
+  leadership: "[{tag}] LİDERLİĞİ"
   leadership_desc: "[{tag}] etkinliklerini yönetme"
   alliance_heading: "[{tag}] Operasyonu Oluştur"
   preset: Etkinlik türü
@@ -616,47 +616,63 @@ calendar_events:
   type_custom_hint: Boş form
   duration_h: "{n}s"
   title: Etkinlik Başlığı
-  title_example: ör. Kovan Savunması Tatbikatı veya İleri Karakol Saldırısı
+  title_example: ör. Kovan Savunma Talimi veya İleri Karakol Saldırısı
   date: Başlangıç Tarihi (YYYY-AA-GG)
   time: Game Time (SS:DD UTC-2)
   time_hint: Sunucu Game Time (5 dakikalık artışlara yuvarlanır)
   duration: Süre (Saat)
   frequency: Sıklık
-  once: Tek Seferlik Etkinlik (Tekrar etmez)
-  every_2_days: Her 2 Günde Bir Tekrarla
-  weekly: Haftalık Tekrarla (Aynı gün ve saat)
+  once: Tek Seferlik Etkinlik (Tekrarlanmaz)
+  every_2_days: Her 2 Günde Bir Tekrarlanır
+  weekly: Haftalık Tekrarlanır (Aynı gün ve saat)
   alert_level: Discord hatırlatıcısı
-  remind_when: Ne zaman paylaşılacak
+  remind_when: Ne zaman gönderilecek
   remind_at_start: Başladığında
   remind_minutes: "{n} dakika önce"
   remind_hour: 1 saat önce
-  remind_when_hint: Hatırlatıcılar her 5 dakikada bir kontrol edilir, bu yüzden birkaç dakika erken gelebilir.
+  remind_when_hint: Hatırlatıcılar her 5 dakikada bir kontrol edilir, bu yüzden birkaç dakika erken ulaşabilir.
   notify_off: Hatırlatıcı yok
   notify_role: İttifakın uyarı rolüne ping at
   notify_custom: Belirli bir role ping at
   notify_everyone: "@everyone'a ping at"
   notify_none: Ping atmadan paylaş
-  role_id: Belirli Rol Kimliği
+  role_id: Belirli Rol ID'si
+  allow_optin: İttifakların bu hatırlatıcıyı kendi Discord'larında almasına izin ver
+  allow_optin_hint: Her ittifakın R4/R5 yetkilisi, hatırlatıcının kendi uyarı kanallarında paylaşılıp paylaşılmayacağına ve kime ping atılacağına karar verir.
+  optin_button_off: Bildirimleri aç
+  optin_button_on: Bildirimler açık
+  optin_heading: "[{tag}] Discord'unda hatırlatıcı"
+  optin_intro: 'Bu etkinlik hatırlatıcısını [{tag}]''ın uyarı kanalında paylaş, ping atılacaklar:'
+  optin_ping_role: Uyarı rolümüz
+  optin_ping_custom: Belirli bir rol
+  optin_ping_everyone: "@everyone"
+  optin_ping_none: Kimse (sadece gönder)
+  optin_from_register: "[{tag}], her sunucu etkinliği hatırlatıcısını alır (/registerbot ile kayıt olurken seçilmiştir). Bu etkinlik için buradan değiştirebilirsiniz."
+  optin_no_channel: "[{tag}]'ın henüz bir uyarı kanalı yok: önce Discord'unuzda /registerbot çalıştırın."
+  optin_save_on: Bu hatırlatıcıyı al
+  optin_save: Kaydet
+  optin_stop: Bu hatırlatıcıyı durdur
+  optin_failed: Kaydedilemedi. Lütfen kısa bir süre sonra tekrar deneyin.
   kw_every_week: Her Krallık Savaşı haftası
-  kw_locked_note: 'Krallık Savaşı muharebesi rotasyonu takip eder: günü, saati ve süresi belirlenmiştir ve silinemez. Açıklamasını ve Discord hatırlatıcısını değiştirin; her Krallık Savaşı haftasının muharebesi bunları kullanacaktır.'
+  kw_locked_note: 'Krallık Savaşı muharebesi döngüyü takip eder: günü, saati ve süresi sabittir ve silinemez. Açıklamasını ve Discord hatırlatıcısını değiştirin; her Krallık Savaşı haftasının muharebesi bunları kullanır.'
   role_pick: Ping atılacak rol
   role_pick_choose: Bir rol seçin…
   role_pick_loading: Sunucu rolleri yükleniyor…
-  role_pick_unavailable: Sunucu rolleri okunamadı (bot sunucuda mı?). Bunun yerine rolün kimliğini yapıştırın.
+  role_pick_unavailable: Sunucu rolleri okunamadı (bot sunucuda mı?). Bunun yerine rolün ID'sini yapıştırın.
   role_pick_unknown: Artık sunucuda olmayan bir rol ({id})
   role_pick_needed: Ping atılacak rolü seçin.
-  role_id_hint: "(sadece “Belirli bir role ping at” için)"
-  role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
+  role_id_hint: "(sadece “Belirli bir role ping at” seçeneği için)"
+  role_id_title: Geçerli bir 17-20 haneli Discord Rol ID'si olmalıdır
   details: Talimatlar / Toplanma Noktası
-  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallilere öncülük eder. Sesli iletişim açık.
+  details_example: ör. Kovan Alfa'da toplanma. R4'ler rallileri yönetecek. Sesli iletişim açık.
   publish: Takvimde Yayınla
   publishing: Yayınlanıyor...
   bad_time: Game Time 5 dakikalık artışlarla ayarlanmalıdır (:00, :05, :10 vb.)
-  bad_role: Lütfen özel uyarı hedefi için geçerli bir 17-20 haneli Discord Rol Kimliği girin.
+  bad_role: Lütfen özel uyarı hedefi için geçerli bir 17-20 haneli Discord Rol ID'si girin.
   save_failed: Etkinlik kaydedilemedi
   published: Operasyon başarıyla yayınlandı!
   delete_heading: Bu etkinliği sil?
-  delete_repeats: 'Bu bir tekrar eden etkinlik ({repeat}): sadece bu değil, tüm tekrarlar kaldırılacaktır.'
+  delete_repeats: 'Bu etkinlik tekrarlıyor ({repeat}): sadece bu değil, tüm tekrarlar kaldırılacak.'
   delete_final: Bu işlem geri alınamaz.
   delete_confirm: Sil
   delete_failed: Etkinlik silinemedi

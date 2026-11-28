@@ -594,32 +594,32 @@ calendar:
   ev_close_desc: 'Los cofres caducan el miércoles a las 00:00 GT: reparte todo antes de esa hora.'
 calendar_events:
   reminder_hint: Publicado en el canal de alertas de tu alianza.
-  reminder_hint_server: Publicado en el canal de alertas del Discord NAP y en las alianzas que se hayan suscrito.
-  reminder_no_channel: 'Tu alianza aún no tiene un canal de alertas: ejecuta /registerbot en tu Discord para que se puedan publicar los recordatorios.'
-  reminder_no_server_channel: El canal de alertas NAP aún no está configurado (NAP_ALERT_CHANNEL_ID), por lo que no se pueden publicar recordatorios del servidor.
+  reminder_hint_server: Publicado en el canal de alertas de NAP Discord y en las alianzas que se inscribieron.
+  reminder_no_channel: 'Tu alianza aún no tiene un canal de alertas: ejecuta /registerbot en tu Discord para que los recordatorios puedan publicarse.'
+  reminder_no_server_channel: El canal de alertas de NAP aún no está configurado (NAP_ALERT_CHANNEL_ID), por lo que los recordatorios del servidor no se pueden publicar.
   edit_heading: Editar evento
-  scope_label: Qué eventos gestionar
+  scope_label: Eventos a gestionar
   scope_server: Eventos de todo el servidor
   scope_alliance: Eventos de [{tag}]
   save_changes: Guardar cambios
-  manage_mode: MODO GESTIÓN
+  manage_mode: MODO DE GESTIÓN
   session_active: Sesión autenticada activa
   create_operation: Crear operación
   kingdom_admin: ADMINISTRACIÓN DEL REINO
   kingdom_desc: Gestionando eventos del servidor
-  kingdom_heading: Crear operación de reino ([GLOBAL])
+  kingdom_heading: Crear operación del reino ([GLOBAL])
   leadership: LIDERAZGO DE [{tag}]
   leadership_desc: Gestionando eventos de [{tag}]
   alliance_heading: Crear operación de [{tag}]
   preset: Tipo de evento
   type_custom: Personalizado
-  type_custom_hint: Formulario vacío
+  type_custom_hint: Formulario en blanco
   duration_h: "{n}h"
   title: Título del evento
-  title_example: ej. Defensa de colmena o Asalto a puesto avanzado
+  title_example: p. ej. Entrenamiento de Defensa de Colmena o Asalto a Puesto de Avanzada
   date: Fecha de inicio (AAAA-MM-DD)
   time: Game Time (HH:MM UTC-2)
-  time_hint: Game Time del servidor (se ajusta a incrementos de 5 minutos)
+  time_hint: Game Time del servidor (se ajusta a intervalos de 5 minutos)
   duration: Duración (horas)
   frequency: Frecuencia
   once: Evento único (no se repite)
@@ -627,39 +627,55 @@ calendar_events:
   weekly: Se repite semanalmente (mismo día y hora)
   alert_level: Recordatorio de Discord
   remind_when: Cuándo publicarlo
-  remind_at_start: Al comenzar
+  remind_at_start: Cuando comience
   remind_minutes: "{n} minutos antes"
   remind_hour: 1 hora antes
-  remind_when_hint: Los recordatorios se revisan cada 5 minutos, por lo que podrían llegar unos minutos antes.
+  remind_when_hint: Los recordatorios se revisan cada 5 minutos, por lo que pueden llegar unos minutos antes.
   notify_off: Sin recordatorio
-  notify_role: Mencionar el rol de alertas de la alianza
-  notify_custom: Mencionar un rol específico
-  notify_everyone: Mencionar @everyone
+  notify_role: Mencionar al rol de alerta de la alianza
+  notify_custom: Mencionar a un rol específico
+  notify_everyone: Mencionar a @everyone
   notify_none: Publicar sin mención
   role_id: ID de rol específico
+  allow_optin: Permitir que las alianzas reciban este recordatorio en su propio Discord
+  allow_optin_hint: Los R4/R5 de cada alianza eligen en el evento si se publica en su canal de alertas y a quién menciona.
+  optin_button_off: Inscribirse
+  optin_button_on: Inscrito
+  optin_heading: Recordatorio en el Discord de [{tag}]
+  optin_intro: 'Publicar el recordatorio de este evento en el canal de alertas de [{tag}], mencionando a:'
+  optin_ping_role: Nuestro rol de alerta
+  optin_ping_custom: Un rol específico
+  optin_ping_everyone: "@everyone"
+  optin_ping_none: A nadie (solo publicarlo)
+  optin_from_register: "[{tag}] recibe el recordatorio de cada evento del servidor (elegido al registrarse con /registerbot). Cámbialo para este evento aquí."
+  optin_no_channel: "[{tag}] aún no tiene un canal de alertas: primero ejecuta /registerbot en tu Discord."
+  optin_save_on: Recibir este recordatorio
+  optin_save: Guardar
+  optin_stop: Detener este recordatorio
+  optin_failed: No se pudo guardar. Inténtalo de nuevo en un momento.
   kw_every_week: Cada semana de Guerra de Reinos
-  kw_locked_note: 'La batalla de Guerra de Reinos sigue la rotación: su día, hora y duración están fijados y no pueden borrarse. Cambia su descripción y el recordatorio de Discord; todas las batallas de Guerra de Reinos los utilizarán.'
-  role_pick: Rol para mencionar
-  role_pick_choose: Elegir un rol…
-  role_pick_loading: Cargando los roles del servidor…
+  kw_locked_note: 'La batalla de Guerra de Reinos sigue la rotación: su día, hora y duración están establecidos y no se pueden eliminar. Cambia su descripción y recordatorio de Discord; todas las batallas de Guerra de Reinos los utilizarán.'
+  role_pick: Rol a mencionar
+  role_pick_choose: Elige un rol...
+  role_pick_loading: Cargando roles del servidor...
   role_pick_unavailable: No se pudieron leer los roles del servidor (¿está el bot en él?). Pega el ID del rol en su lugar.
   role_pick_unknown: Un rol que ya no está en el servidor ({id})
-  role_pick_needed: Elige el rol para mencionar.
-  role_id_hint: "(solo para “Mencionar un rol específico”)"
+  role_pick_needed: Elige el rol a mencionar.
+  role_id_hint: (solo para "Mencionar a un rol específico")
   role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
   details: Instrucciones / Punto de reunión
-  details_example: ej. Reunión en Colmena Alfa. R4s lideran ataques. Comunicación por voz activa.
+  details_example: p. ej. Reunión en Colmena Alfa. R4s dirigen los rallies. Comunicaciones por voz activas.
   publish: Publicar en el calendario
-  publishing: Publicando…
+  publishing: Publicando...
   bad_time: El Game Time debe establecerse en incrementos de 5 minutos (:00, :05, :10, etc.)
   bad_role: Introduce un ID de rol de Discord válido de 17-20 dígitos para el objetivo de alerta personalizado.
-  save_failed: No se pudo guardar el evento
-  published: "¡Operación publicada correctamente!"
+  save_failed: Error al guardar el evento
+  published: "¡Operación publicada con éxito!"
   delete_heading: "¿Eliminar este evento?"
-  delete_repeats: 'Se repite ({repeat}): cada repetición será eliminada, no solo esta.'
+  delete_repeats: 'Se repite ({repeat}): todas las repeticiones serán eliminadas, no solo esta.'
   delete_final: Esto no se puede deshacer.
   delete_confirm: Eliminar
-  delete_failed: No se pudo eliminar el evento
+  delete_failed: Error al eliminar el evento
   removed: Operación eliminada.
 kings_scheduler:
   title: Rotación del Capitolio

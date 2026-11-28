@@ -161,11 +161,17 @@ api_proposals:
   no_changes: Aucun changement fourni.
   week_and_threat: La semaine cible et le serveur de menace sont requis.
 api_events:
-  kw_stewards_only: Seuls les Stewards peuvent modifier la bataille de Guerre des Royaumes.
-  kw_no_delete: 'La bataille de Guerre des Royaumes suit la rotation : elle peut être modifiée, mais pas supprimée.'
-  kw_saved: 'Bataille de Guerre des Royaumes enregistrée : elle est utilisée pour chaque semaine de Guerre des Royaumes.'
-  session_invalid: Votre connexion ou votre lien de calendrier a expiré. Connectez-vous à nouveau avec Discord, ou relancez /calendar dans Discord.
-  not_leader: Seuls les R4 et R5 peuvent gérer les événements de leur alliance (et les Stewards pour ceux à l'échelle du serveur).
+  optin_global: 'L''inscription est réservée au canal propre à une alliance : basculez d''abord sur les événements de votre alliance.'
+  optin_no_alliance: Votre alliance n'est pas encore sur la carte, elle n'a donc nulle part où recevoir de rappels.
+  optin_no_channel: "[{tag}] n'a pas encore de canal d'alerte : exécutez d'abord /registerbot sur votre Discord."
+  optin_closed: Le rappel de cet événement n'est pas ouvert aux alliances.
+  optin_on: "[{tag}] recevra le rappel de cet événement."
+  optin_off: "[{tag}] ne recevra pas le rappel de cet événement."
+  kw_stewards_only: Seuls les intendants peuvent modifier la bataille de la Guerre des Royaumes.
+  kw_no_delete: 'La bataille de la Guerre des Royaumes suit la rotation : elle peut être modifiée, mais pas supprimée.'
+  kw_saved: 'Bataille de la Guerre des Royaumes enregistrée : chaque semaine de Guerre des Royaumes l''utilise.'
+  session_invalid: Votre connexion ou lien de calendrier a expiré. Reconnectez-vous avec Discord, ou réexécutez /calendar dans Discord.
+  not_leader: Seuls les R4 et R5 peuvent gérer les événements de leur alliance (et les intendants ceux à l'échelle du serveur).
   required_fields: Le titre, la date et le Game Time sont obligatoires.
   date_format: La date doit être au format AAAA-MM-JJ.
   time_format: Le Game Time doit être au format HH:MM (00:00 à 23:59).

@@ -161,19 +161,25 @@ api_proposals:
   no_changes: Keine Änderungen angegeben.
   week_and_threat: Zielwoche und Bedrohungsserver sind erforderlich.
 api_events:
-  kw_stewards_only: Nur Stewards können den Königreichskrieg-Kampf bearbeiten.
-  kw_no_delete: 'Der Königreichskrieg-Kampf folgt der Rotation: Er kann bearbeitet, aber nicht gelöscht werden.'
-  kw_saved: 'Königreichskrieg-Kampf gespeichert: Er wird für jede Königreichskrieg-Woche verwendet.'
-  session_invalid: Dein Anmelde- oder Kalender-Link ist abgelaufen. Melde dich erneut mit Discord an oder führe /calendar in Discord erneut aus.
-  not_leader: Nur R4 und R5 können ihre Allianz-Events verwalten (und Stewards serverweit).
+  optin_global: 'Die Anmeldung gilt für den eigenen Kanal einer Allianz: Bitte wechsle zuerst zu deinem Allianz-Kanal.'
+  optin_no_alliance: Deine Allianz ist noch nicht auf der Karte, daher gibt es keinen Ort für Erinnerungen.
+  optin_no_channel: "[{tag}] hat noch keinen Benachrichtigungskanal: Führe zuerst /registerbot in deinem Discord aus."
+  optin_closed: Die Erinnerung für dieses Event ist nicht für Allianzen verfügbar.
+  optin_on: "[{tag}] erhält nun die Erinnerung für dieses Event."
+  optin_off: "[{tag}] erhält nicht mehr die Erinnerung für dieses Event."
+  kw_stewards_only: Nur Verwalter können die Schlacht im Königreichskrieg bearbeiten.
+  kw_no_delete: 'Die Schlacht im Königreichskrieg folgt der Rotation: Sie kann bearbeitet, aber nicht gelöscht werden.'
+  kw_saved: 'Schlacht im Königreichskrieg gespeichert: Wird für jede Woche im Königreichskrieg verwendet.'
+  session_invalid: Deine Anmeldung oder dein Kalender-Link ist abgelaufen. Melde dich erneut mit Discord an oder führe /calendar in Discord erneut aus.
+  not_leader: Nur R4 und R5 können ihre Allianz-Events verwalten (und Verwalter können serverweite Events verwalten).
   required_fields: Titel, Datum und Game Time sind erforderlich.
-  date_format: Das Datum muss im Format YYYY-MM-DD sein.
-  time_format: Game Time muss im Format HH:MM (00:00 bis 23:59) sein.
-  time_step: Game Time muss in 5-Minuten-Schritten angegeben werden (:00, :05, :10, :15, etc.).
-  role_id_needed: Für „Ziel-Rolle“ ist eine gültige 17-20-stellige Discord-Rollen-ID erforderlich.
+  date_format: Das Datum muss im Format YYYY-MM-DD angegeben werden.
+  time_format: Die Game Time muss im Format HH:MM (00:00 bis 23:59) angegeben werden.
+  time_step: Die Game Time muss in 5-Minuten-Schritten erfolgen (:00, :05, :10, :15 usw.).
+  role_id_needed: Für eine spezifische Zielrolle ist eine gültige 17-20-stellige Discord-Rollen-ID erforderlich.
   published: Operation "{title}" erfolgreich veröffentlicht.
   not_found: Event nicht gefunden oder bereits gelöscht.
-  out_of_scope: 'Zugriff verweigert: Du kannst Events außerhalb deines zugewiesenen Bereichs nicht bearbeiten oder löschen.'
+  out_of_scope: 'Zugriff verweigert: Du kannst Events außerhalb deines zugewiesenen Bereichs nicht ändern oder löschen.'
   deleted: 'Operation gelöscht: {title}'
   updated: Operation "{title}" aktualisiert.
 reminders:
