@@ -883,13 +883,17 @@
   opacity: 0.55;
 }
 .ag-event {
+  /* Closer to the cards /calendar draws in Discord (owner, 2026-11-28: the page's looked
+     washed out beside them): a darker card, so pictures keep their colour and the text
+     stands out; the event's colour as a thicker edge and in its time */
+  --ag-base: color-mix(in srgb, rgb(var(--active-theme)) 5%, #0f0d0b);
   display: grid;
   grid-template-columns: 4.6rem minmax(0, 1fr);
   gap: 0.75rem;
-  padding: 0.65rem 0.8rem;
-  background: var(--card-bg);
+  padding: 0.7rem 0.85rem;
+  background: color-mix(in srgb, var(--ag-base) 94%, transparent);
   border: 1px solid var(--border-color);
-  border-left: 4px solid var(--k);
+  border-left: 6px solid var(--k);
   border-radius: 8px;
 }
 .ag-time {
@@ -898,8 +902,9 @@
   line-height: 1.15;
 }
 .ag-time b {
-  font-size: 1.05rem;
-  color: var(--text-main);
+  font-size: 1.1rem;
+  /* The event's colour, lightened so dark ones (Elixir Scramble's green) stay readable */
+  color: color-mix(in srgb, var(--k) 60%, #fff);
 }
 .ag-time small {
   font-size: 0.6rem;
@@ -918,7 +923,7 @@
 .ag-title {
   font-weight: 700;
   color: var(--text-main);
-  font-size: 0.92rem;
+  font-size: 1rem;
   overflow-wrap: anywhere;
 }
 .ag-meta {
@@ -930,7 +935,7 @@
   color: var(--text-muted);
 }
 .ag-kind {
-  color: var(--k);
+  color: color-mix(in srgb, var(--k) 75%, #fff);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -959,7 +964,7 @@
   opacity: 0.45;
 }
 .ag-event.is-live {
-  background: color-mix(in srgb, var(--k) 14%, var(--card-bg));
+  background: color-mix(in srgb, var(--k) 14%, var(--ag-base));
   border-color: var(--k);
   box-shadow: 0 0 14px color-mix(in srgb, var(--k) 25%, transparent);
 }
@@ -1145,15 +1150,16 @@
    the right, never leaving a gap) so its subject, about two-thirds across every picture,
    stays in frame. Wider cards show the picture's full width, so they don't change. */
 .ag-event.has-pic {
-  --pic-fade: var(--card-bg-solid, #1b1714);
+  /* Faded into the dark card (as in Discord), lighter towards the right so the scene shows */
+  --pic-fade: var(--ag-base);
   background:
     linear-gradient(
       90deg,
       var(--pic-fade) 0%,
-      var(--pic-fade) 22%,
-      color-mix(in srgb, var(--pic-fade) 82%, transparent) 45%,
-      color-mix(in srgb, var(--pic-fade) 55%, transparent) 75%,
-      color-mix(in srgb, var(--pic-fade) 40%, transparent) 100%
+      var(--pic-fade) 20%,
+      color-mix(in srgb, var(--pic-fade) 78%, transparent) 42%,
+      color-mix(in srgb, var(--pic-fade) 45%, transparent) 72%,
+      color-mix(in srgb, var(--pic-fade) 25%, transparent) 100%
     ),
     var(--pic) 55% center / cover no-repeat,
     var(--pic-fade);
@@ -1164,18 +1170,19 @@
     linear-gradient(
       90deg,
       color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 0%,
-      color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 22%,
-      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 82%, transparent) 45%,
-      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 55%, transparent) 75%,
-      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 40%, transparent) 100%
+      color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 20%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 78%, transparent) 42%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 45%, transparent) 72%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 25%, transparent) 100%
     ),
     var(--pic) 55% center / cover no-repeat,
     var(--pic-fade);
 }
 
+.ag-event.has-pic .ag-title,
 .ag-event.has-pic .ag-desc,
 .ag-event.has-pic .ag-meta {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
 }
 
 /* Leaders: "Edit events" (showing Edit / Delete on their events while on) and "Add an event",
