@@ -213,8 +213,13 @@ puts "Generated api/_cities_data.js (#{cities.size} cities)"
 # The event types' ids and whether the form offers them (api/manage-event.js checks a saved
 # event's type against them); their colour and picture for the event cards /calendar posts
 # in Discord (api/_bot_calendar.js)
+# ... and the titles that mean each type (its name in every language, and older names), so
+# an event saved without a type is still recognised by its title, as the calendar page does
+type_names = Dir.glob('_data/*/tools.yml').map { |f| (YAML.load_file(f) || {})['event_presets'] || {} }
 event_types = (YAML.load_file('_data/event_types.yml')['types'] || []).map do |t|
-  { 'id' => t['id'], 'preset' => t['preset'] == true, 'color' => t['color'], 'picture' => t['picture'] }.compact
+  names = (type_names.map { |n| n["#{t['id']}_title"] } + Array(t['match'])).compact.map(&:to_s).uniq
+  { 'id' => t['id'], 'preset' => t['preset'] == true, 'color' => t['color'], 'picture' => t['picture'],
+    'names' => names.empty? ? nil : names }.compact
 end
 File.write('api/_event_types.js', "export default #{JSON.generate(event_types)};\n")
 puts "Generated api/_event_types.js (#{event_types.size} event types)"

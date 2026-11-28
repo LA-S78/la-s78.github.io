@@ -29,6 +29,7 @@ types:
     recurrence: weekly
     guide: crystal
     picture: crystal_cluster.webp
+    match: ['Crystal Cluster']
     icon: '<path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/>'
 
   - id: elixir_scramble
@@ -87,6 +88,7 @@ types:
     guide: kingdom
     picture: kvk_battle.webp
     card_picture: kvk_battle_card.webp
+    match: ['Kingdom War', 'Kingdom War Battle', 'KvK', 'KvK Battle', 'Kingdom vs Kingdom']
     icon: '<path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6M16 16l4 4M19 21l2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/><path d="m5 14 4 4M7 17l-3 3M3 19l2 2"/>'
 
   # "Gear Upgrade" (owner, 2026-11-15; was "Gear Event"): gear as in armour and weapons
