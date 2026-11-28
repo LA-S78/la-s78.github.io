@@ -56,6 +56,23 @@
   const gtTime = (ms) => `${pad(gt(ms).getUTCHours())}:${pad(gt(ms).getUTCMinutes())}`;
 
   /** Which colour and chip an event belongs to. */
+  /**
+   * The title without the "[TAG] " or "[GLOBAL] " the server puts in front when an event is
+   * saved (api/manage-event.js; Discord reminders still use it): the card's label already
+   * says whose it is, and the tag made titles wrap on phones (owner, 2026-11-28). Only that
+   * prefix: a title that starts with other brackets keeps them.
+   */
+  function shownTitle(evt) {
+    const title = String(evt.title || '');
+    const m = /^\[([^\]]+)\]\s*/.exec(title);
+    if (!m) return title;
+    const inside = m[1].trim().toLowerCase();
+    const scope = String(evt.scope || 'global')
+      .trim()
+      .toLowerCase();
+    return inside === 'global' || inside === scope ? title.slice(m[0].length) : title;
+  }
+
   function kindOf(evt) {
     if (evt.type === 'war') return 'war';
     if (evt.type === 'rotation') return 'rotation';
@@ -138,9 +155,11 @@
       return t('calendar.dur_dh', { d: Math.floor(h / 24), h: h % 24 });
     };
     const KIND_LABEL = {
-      server: t('calendar.kind_server'),
+      // Server-wide events and the Kingdom War both say "Kingdom" (owner, 2026-11-28: room for
+      // other kingdom events); the war keeps its own colour
+      server: t('calendar.kind_kingdom'),
       alliance: t('calendar.kind_alliance'),
-      war: t('calendar.kind_war'),
+      war: t('calendar.kind_kingdom'),
       rotation: t('calendar.kind_capitol'),
     };
 
@@ -623,6 +642,7 @@
             const end = new Date(e.end || e.start).getTime();
             return {
               ...e,
+              title: shownTitle(e),
               s,
               e: Number.isFinite(end) ? end : s,
               kind: kindOf(e),

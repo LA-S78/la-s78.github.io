@@ -23,6 +23,22 @@ export function visibleEvents(customEvents, { alliance = null, only = null } = {
 }
 
 /**
+ * An event's title without the "[TAG] " or "[GLOBAL] " api/manage-event.js puts in front
+ * when it's saved (owner, 2026-11-28: the card already says whose it is). Only that prefix:
+ * other brackets at the start stay. js/calendar-views.js shownTitle() does the same.
+ */
+export function shownTitle(evt) {
+  const title = String(evt?.title || '');
+  const m = /^\[([^\]]+)\]\s*/.exec(title);
+  if (!m) return title;
+  const inside = m[1].trim().toLowerCase();
+  const scope = String(evt?.scope || 'global')
+    .trim()
+    .toLowerCase();
+  return inside === 'global' || inside === scope ? title.slice(m[0].length) : title;
+}
+
+/**
  * Events in the window [startMs, endMs]: one-off events that haven't ended before it, and
  * every repeat of a repeating one (weekly or every two days, at most 30) that touches it.
  */

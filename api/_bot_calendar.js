@@ -11,7 +11,7 @@ import { createHash } from 'node:crypto';
 import { language, say } from './_messages.js';
 import { resolveMemberAllianceContext } from './_bot_roles.js';
 import { DEFAULT_CALENDAR_CONFIG, getCycleState, getScheduleSlot } from './_calendar_helper.js';
-import { projectEvents, visibleEvents } from './_calendar_events.js';
+import { projectEvents, shownTitle, visibleEvents } from './_calendar_events.js';
 import EVENT_TYPES from './_event_types.js';
 import { getRewardPeriod } from './_reward_period.js';
 import { gistJson, isGistConfigured } from './_gist.js';
@@ -89,7 +89,7 @@ export async function handleCalendarCommand(ctx) {
       lines.push(
         listing.next
           ? say('bot_calendar.next_up', {
-              title: cut(listing.next.title, 120),
+              title: cut(shownTitle(listing.next), 120),
               when: `<t:${Math.floor(Date.parse(listing.next.start) / 1000)}:F> (<t:${Math.floor(Date.parse(listing.next.start) / 1000)}:R>)`,
             })
           : say('bot_calendar.nothing_soon'),
@@ -306,7 +306,7 @@ export function eventCardData(events, { origin }) {
     const start = Date.parse(evt.start);
     const end = Date.parse(evt.end || evt.start);
     return {
-      title: String(evt.title || '').trim() || '—',
+      title: shownTitle(evt).trim() || '—',
       time: evt.allDay ? say('bot_calendar.all_day') : `${gtTime(start)}–${gtTime(end)} GT`,
       text: String(evt.description || '')
         .trim()
