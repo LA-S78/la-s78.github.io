@@ -295,6 +295,25 @@ function gtDate(ms) {
 const gtTime = (ms) => new Date(ms - GT_OFFSET_MS).toISOString().slice(11, 16);
 
 /**
+ * "14:00–14:30 GT", or, when it ends on a later Game Time day, "00:00 GT – Sun 00:00 GT"
+ * (the day in the reader's language, as the calendar page's "until Sun 00:00 GT").
+ */
+function gtRange(start, end) {
+  const day = (ms) => new Date(ms - GT_OFFSET_MS).toISOString().slice(0, 10);
+  if (day(start) === day(end)) return `${gtTime(start)}–${gtTime(end)} GT`;
+  let weekday;
+  try {
+    weekday = new Intl.DateTimeFormat(language() === 'en' ? 'en-GB' : language(), {
+      weekday: 'short',
+      timeZone: 'Etc/GMT+2',
+    }).format(new Date(end));
+  } catch {
+    weekday = day(end);
+  }
+  return `${gtTime(start)} GT – ${weekday} ${gtTime(end)} GT`;
+}
+
+/**
  * What goes on today's event cards (at most MAX_CARDS): the time in Game Time (a picture
  * can't follow each reader's time zone; the game and the site use GT), the title, the first
  * line of the description, the event's colour (made light enough to read on the dark card)
@@ -307,7 +326,7 @@ export function eventCardData(events, { origin }) {
     const end = Date.parse(evt.end || evt.start);
     return {
       title: shownTitle(evt).trim() || '—',
-      time: evt.allDay ? say('bot_calendar.all_day') : `${gtTime(start)}–${gtTime(end)} GT`,
+      time: evt.allDay ? say('bot_calendar.all_day') : gtRange(start, end),
       text: String(evt.description || '')
         .trim()
         .split('\n')[0],
