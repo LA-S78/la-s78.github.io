@@ -331,6 +331,8 @@ export function eventCardData(events, { origin }) {
         .trim()
         .split('\n')[0],
       color: readable(evt.color || type?.color || '#86b874'),
+      // The colour as chosen (a reminder's badge is filled with it)
+      base: evt.color || type?.color || '#86b874',
       picture: type?.picture ? `${origin}/images/events/${type.picture}` : null,
     };
   });

@@ -19,6 +19,10 @@
 //     of alliances that opted in (server_event_alerts).
 //   - Who is pinged follows the event's notify_target: the alliance's alert role, a custom
 //     role, @everyone, or nobody.
+//   - The look (owner, 2026-11-28): a card drawn as a picture (api/_calendar_cards.js, as
+//     /calendar's), attached so Discord shows it full width with no box, under one line of
+//     text: the ping, the title and a live countdown (phones' notifications show only text).
+//     If the card can't be drawn or Discord refuses it, the reminder goes out as before.
 // Safety:
 //   - The live site posts nothing until REMINDERS_LIVE=true is set in Vercel: until then a
 //     check only reports what it would send ("dry run") and records nothing.
@@ -26,15 +30,18 @@
 //     TEST_CHANNEL_ID instead, pinging nobody, with the real destination written in it.
 //   - A request can ask for a dry run ({ dryRun: true }) anywhere.
 
-import { sendMessage } from './_discord_send.js';
+import { sendForm, sendMessage } from './_discord_send.js';
 import { readGist, gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { inLocale, say } from './_messages.js';
 import { findTag } from './_alliances.js';
+import { shownTitle } from './_calendar_events.js';
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
 /** How long after the start a "when it starts" reminder may still be posted. */
 const START_GRACE = 15 * MINUTE;
+/** Where the event pictures are (the same on the test site). */
+const SITE = 'https://la-s78.app';
 
 /** Minutes before the start the event's reminder goes out: 0 to 60 in tens (default 60). */
 export function reminderLead(evt) {
@@ -149,14 +156,89 @@ function reminderMessage(evt, start, ping, testNote) {
     // On a test deployment the would-be ping is shown as text in the footer, not sent
     content: testNote ? '' : mention,
     embeds: [embed],
-    allowed_mentions: testNote
-      ? { parse: [] }
-      : ping === 'everyone'
-        ? { parse: ['everyone'] }
-        : ping
-          ? { roles: [ping] }
-          : { parse: [] },
+    allowed_mentions: mentionsFor(ping, testNote),
   };
+}
+
+/** Who a reminder may ping: the role, @everyone, or nobody (and nobody on a test). */
+function mentionsFor(ping, testNote) {
+  if (testNote) return { parse: [] };
+  if (ping === 'everyone') return { parse: ['everyone'] };
+  return ping ? { roles: [ping] } : { parse: [] };
+}
+
+/** The occurrence as an event of its own: this start, and the event's length. */
+function occurrenceOf(evt, start) {
+  const baseStart = Date.parse(evt.start);
+  const length = evt.duration_hours
+    ? parseFloat(evt.duration_hours) * HOUR
+    : Math.max(30 * MINUTE, Date.parse(evt.end || evt.start) - baseStart || HOUR);
+  return {
+    ...evt,
+    start: new Date(start).toISOString(),
+    end: new Date(start + length).toISOString(),
+  };
+}
+
+/**
+ * The reminder's card (a PNG), as /calendar's event cards: a badge ("Starting in 15 min",
+ * "Starting now"), the time in Game Time, the title, two lines of the description and whose
+ * it is, over the event type's picture. The drawing code (sharp) loads only here.
+ */
+export async function reminderCard(evt, start, now) {
+  const { eventCardData } = await import('./_bot_calendar.js');
+  const { reminderCardPng, pictureData } = await import('./_calendar_cards.js');
+  const [shown] = eventCardData([occurrenceOf(evt, start)], { origin: SITE });
+  const minutes = Math.round((start - now) / MINUTE);
+  const badge =
+    reminderLead(evt) === 0 || minutes <= 0
+      ? say('reminders.card_now')
+      : minutes >= 55
+        ? say('reminders.card_hour')
+        : say('reminders.card_soon', { minutes: Math.max(5, Math.round(minutes / 5) * 5) });
+  const lines = String(evt.description || '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .slice(0, 2);
+  const isGlobal = !evt.scope || String(evt.scope).toLowerCase() === 'global';
+  return reminderCardPng({
+    badge,
+    color: shown.color,
+    badgeColor: shown.base,
+    time: shown.time,
+    title: shown.title,
+    lines,
+    tag: isGlobal ? 'la-s78.app' : `[${evt.scope}] · la-s78.app`,
+    picture: await pictureData(shown.picture),
+  });
+}
+
+/** The reminder as a card: one line of text (the ping, the title, a countdown) and the card. */
+function reminderForm(evt, start, ping, testNote, png) {
+  const unix = Math.floor(start / 1000);
+  const mention = ping === 'everyone' ? '@everyone' : ping ? `<@&${ping}>` : '';
+  const title = shownTitle(evt).slice(0, 200);
+  const line = say(reminderLead(evt) === 0 ? 'reminders.line_now' : 'reminders.line', {
+    title,
+    when: `<t:${unix}:R>`,
+  });
+  const payload = {
+    // On a test deployment the would-be ping is written under it, not sent
+    content: `${[testNote ? '' : mention, line].filter(Boolean).join(' ')}${testNote ? `\n-# ${testNote}` : ''}`,
+    allowed_mentions: mentionsFor(ping, testNote),
+    attachments: [
+      {
+        id: 0,
+        filename: 'reminder.png',
+        description: `${title} (${say('reminders.starts')} <t:${unix}:F>)`.slice(0, 1000),
+      },
+    ],
+  };
+  const form = new FormData();
+  form.append('payload_json', JSON.stringify(payload));
+  form.append('files[0]', new Blob([png], { type: 'image/png' }), 'reminder.png');
+  return form;
 }
 
 /**
@@ -241,6 +323,7 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
       const item = { id: evt.id, title: evt.title, occurrence, targets: [] };
       report.due.push(item);
       let anyPosted = false;
+      let card; // drawn once for every channel (undefined: not tried yet; null: couldn't)
       for (const target of targets) {
         const result = {
           to: target.label,
@@ -261,11 +344,27 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
             ? `🧪 Test reminder: would go to ${target.label}, pinging ${result.ping}`
             : null;
         try {
-          const res = await sendMessage(
-            channelId,
-            reminderMessage(evt, start, target.ping, testNote),
-            { token: botToken },
-          );
+          if (card === undefined) {
+            try {
+              card = await reminderCard(evt, start, now);
+            } catch (err) {
+              console.warn('Reminder card not drawn, sending text:', err.message);
+              card = null;
+            }
+          }
+          let res = null;
+          if (card) {
+            res = await sendForm(channelId, reminderForm(evt, start, target.ping, testNote, card), {
+              token: botToken,
+            });
+            result.style = res.ok ? 'card' : `card refused (${res.status}), sent as text`;
+          }
+          if (!res || !res.ok) {
+            res = await sendMessage(channelId, reminderMessage(evt, start, target.ping, testNote), {
+              token: botToken,
+            });
+            if (!card) result.style = 'text';
+          }
           result.status = res.ok ? 'sent' : `Discord error ${res.status}`;
           if (res.ok) anyPosted = true;
         } catch (err) {
