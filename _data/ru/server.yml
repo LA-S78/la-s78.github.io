@@ -176,8 +176,13 @@ api_events:
   updated: Операция "{title}" обновлена.
 reminders:
   title: "⏰ Скоро начнется: {title}"
-  title_now: "🔔 Начинается сейчас: {title}"
+  title_now: "🔔 Начало: {title}"
   starts: Начало
+  line: "⏰ **{title}** начнется {when}"
+  line_now: "🔔 **{title}** начинается сейчас"
+  card_soon: Начало через {minutes} мин
+  card_hour: Начало через 1 час
+  card_now: Начинается сейчас
 bot_common:
   off_week: Межсезонье
   kw_week: Неделя Войны Королевств {n}

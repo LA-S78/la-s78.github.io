@@ -174,9 +174,14 @@ api_events:
   deleted: 'Operazione eliminata: {title}'
   updated: Operazione "{title}" aggiornata.
 reminders:
-  title: "⏰ Inizia presto: {title}"
-  title_now: "🔔 Inizia ora: {title}"
+  title: "⏰ Inizio imminente: {title}"
+  title_now: "🔔 Inizio ora: {title}"
   starts: Inizia
+  line: "⏰ **{title}** inizia {when}"
+  line_now: "🔔 **{title}** sta iniziando ora"
+  card_soon: Inizia tra {minutes} min
+  card_hour: Inizia tra 1 ora
+  card_now: Inizia ora
 bot_common:
   off_week: Settimana di pausa
   kw_week: Settimana Guerra tra Regni {n}

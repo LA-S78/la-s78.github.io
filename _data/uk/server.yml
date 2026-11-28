@@ -175,9 +175,14 @@ api_events:
   deleted: 'Видалено операцію: {title}'
   updated: Операцію "{title}" оновлено.
 reminders:
-  title: "⏰ Скоро розпочнеться: {title}"
-  title_now: "🔔 Розпочинається зараз: {title}"
-  starts: Розпочинається
+  title: "⏰ Починається незабаром: {title}"
+  title_now: "🔔 Починається зараз: {title}"
+  starts: Початок
+  line: "⏰ **{title}** починається {when}"
+  line_now: "🔔 **{title}** починається зараз"
+  card_soon: Починається через {minutes} хв
+  card_hour: Починається через 1 годину
+  card_now: Починається зараз
 bot_common:
   off_week: Тиждень відпочинку
   kw_week: Тиждень Війна Королівств {n}

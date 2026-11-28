@@ -177,6 +177,11 @@ reminders:
   title: "⏰ Beginnt bald: {title}"
   title_now: "🔔 Beginnt jetzt: {title}"
   starts: Startet
+  line: "⏰ **{title}** startet {when}"
+  line_now: "🔔 **{title}** startet jetzt"
+  card_soon: Startet in {minutes} Min.
+  card_hour: Startet in 1 Stunde
+  card_now: Startet jetzt
 bot_common:
   off_week: Off-Woche
   kw_week: Königreichskrieg-Woche {n}

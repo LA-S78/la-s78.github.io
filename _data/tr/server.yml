@@ -177,6 +177,11 @@ reminders:
   title: "⏰ Yakında başlıyor: {title}"
   title_now: "🔔 Şimdi başlıyor: {title}"
   starts: Başlıyor
+  line: "⏰ **{title}** {when} başlıyor"
+  line_now: "🔔 **{title}** şimdi başlıyor"
+  card_soon: "{minutes} dk. içinde başlıyor"
+  card_hour: 1 saat içinde başlıyor
+  card_now: Şimdi başlıyor
 bot_common:
   off_week: Mola Haftası
   kw_week: Krallık Savaşı Haftası {n}

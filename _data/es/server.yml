@@ -176,7 +176,12 @@ api_events:
 reminders:
   title: "⏰ Empieza pronto: {title}"
   title_now: "🔔 Empieza ahora: {title}"
-  starts: Empezar
+  starts: Comienza
+  line: "⏰ **{title}** comienza {when}"
+  line_now: "🔔 **{title}** comienza ahora"
+  card_soon: Empieza en {minutes} min
+  card_hour: Empieza en 1 hora
+  card_now: Empieza ahora
 bot_common:
   off_week: Semana de Descanso
   kw_week: Semana de Guerra de Reinos {n}
