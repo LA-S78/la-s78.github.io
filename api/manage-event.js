@@ -11,6 +11,7 @@ const PRESET_TYPES = EVENT_TYPES.filter((t) => t.preset).map((t) => t.id);
 import { isSteward } from './_stewards.js';
 import { inLanguage, say } from './_messages.js';
 import { sameScope } from './_alliances.js'; // RâvN's events aren't RÂVN's
+import { listGuildRoles, roleServerFor } from './_guild_roles.js';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -60,6 +61,21 @@ async function respond(req, res) {
     const gist = await readGist();
     let calendarState = gistJson(gist, 'calendar-state.json', { custom_events: [] });
     calendarState.custom_events = calendarState.custom_events || [];
+
+    // --- ACTION: THE ROLES A REMINDER CAN PING (owner, 2026-11-28) ---
+    // For the form's "a specific role": the alliance's own server for its events, the NAP
+    // server for server-wide ones. Only the caller's own scope (decided above).
+    if (action === 'roles') {
+      const alliances = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+      const guildId = roleServerFor(callerScope, alliances);
+      if (!guildId) return res.status(200).json({ roles: [], reason: 'no_server' });
+      try {
+        return res.status(200).json({ roles: await listGuildRoles(guildId, { token: botSecret }) });
+      } catch (err) {
+        console.warn('Roles not read:', err.message);
+        return res.status(200).json({ roles: [], reason: 'unreachable' });
+      }
+    }
 
     // --- ACTION: CREATE EVENT ---
     if (action === 'create') {

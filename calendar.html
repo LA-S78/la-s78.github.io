@@ -146,10 +146,15 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
             <small class="form-hint" id="evt-remind-time-hint">{{ "calendar_events.remind_when_hint" | t }}</small>
           </div>
 
-          <!-- Non-Jumping Custom Role Input -->
+          <!-- The role "Ping a specific role" pings (owner, 2026-11-28): picked from the roles of
+               the server the reminder goes to (the alliance's own server, or the NAP server for
+               server-wide events; api/manage-event.js action "roles"). The ID box below is the
+               fallback when those can't be read, and stays (locked) as a placeholder otherwise. -->
           <div class="form-group form-col-full" id="group-custom-role">
-            <label for="evt-input-role-id">{{ "calendar_events.role_id" | t }}
+            <label for="evt-input-role-pick">{{ "calendar_events.role_pick" | t }}
               <small class="form-hint-inline">{{ "calendar_events.role_id_hint" | t }}</small></label>
+            <select id="evt-input-role-pick" class="cal-form-select" data-site-select hidden></select>
+            <small class="form-hint" id="evt-role-pick-hint" hidden></small>
             <input
               type="text"
               id="evt-input-role-id"
