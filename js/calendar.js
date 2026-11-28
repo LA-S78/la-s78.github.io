@@ -131,6 +131,15 @@ async function initCalendar() {
   const activeAlliance =
     !isGlobalAdmin && sessionScope ? sessionScope.trim() : allianceParam || null;
 
+  // The alliance whose R4/R5 choose server-wide events' reminders for it: a leader signed in
+  // (their alliance), or a /calendar link for an alliance
+  const optinAlliance =
+    signedInLeader && signedInAlliance && !viaLink && !isGlobalAdmin
+      ? signedInAlliance
+      : viaLink && !isGlobalAdmin
+        ? sessionScope
+        : null;
+
   let allEvents = [];
   // Whether reminders have somewhere to go: { alliance, server } (api/calendar.js)
   let reminderChannels = null;
@@ -415,6 +424,16 @@ async function initCalendar() {
           onAdd: (date) => openAddForm?.(date),
           onStopEditing: () => closeEventForm?.(),
           onDelete: (id, info) => handleDeleteEvent(id, info),
+          // An alliance's R4/R5: the opt-in under a server-wide event's time (api/_event_optins.js)
+          optinFor: (e) =>
+            optinAlliance &&
+            e.optin &&
+            e.allow_optin &&
+            e.reminder === '1h' &&
+            (e.e || e.s) > Date.now()
+              ? e.optin
+              : null,
+          onOptIn: (id) => openOptinDialog(id),
         })
       : null;
 
@@ -492,6 +511,9 @@ async function initCalendar() {
     }
 
     const formEl = document.getElementById('form-create-event');
+    // Only Stewards (server-wide events) choose whether alliances can opt in
+    const optinGroup = document.getElementById('group-allow-optin');
+    if (optinGroup) optinGroup.hidden = !isGlobalAdmin;
     const btnCancel = document.getElementById('btn-cancel-event-form');
     const notifySelect = document.getElementById('evt-input-notify');
     const customRoleInput = document.getElementById('evt-input-role-id');
@@ -633,6 +655,8 @@ async function initCalendar() {
     // Back to "create": heading, button and reminder default as for a new event
     function leaveEditMode() {
       lockForKwBattle(false);
+      const allowOptin = document.getElementById('evt-input-allow-optin');
+      if (allowOptin) allowOptin.checked = true;
       editingEventId = null;
       if (formHeading) formHeading.textContent = createHeading;
       if (submitBtn) submitBtn.textContent = t('calendar_events.publish');
@@ -691,6 +715,8 @@ async function initCalendar() {
         document.getElementById('evt-input-details').value = evt.i18n?.vars?.description || '';
       }
       lockForKwBattle(evt.editable === 'kw_battle');
+      const allowOptin = document.getElementById('evt-input-allow-optin');
+      if (allowOptin) allowOptin.checked = evt.allow_optin !== false;
       if (formHeading) formHeading.textContent = t('calendar_events.edit_heading');
       if (submitBtn) submitBtn.innerHTML = ic('save') + esc(t('calendar_events.save_changes'));
       formEl.style.display = 'block';
@@ -839,6 +865,8 @@ async function initCalendar() {
             description: document.getElementById('evt-input-details').value,
             reminder: remind ? '1h' : 'off',
             reminder_minutes: Number(document.getElementById('evt-input-remind-time')?.value ?? 60),
+            // Server-wide events: whether alliances may opt in (Stewards; api/_event_optins.js)
+            allow_optin: document.getElementById('evt-input-allow-optin')?.checked !== false,
           },
         };
 
@@ -870,6 +898,147 @@ async function initCalendar() {
   // The confirmation before deleting, in the site's style (it was the browser's own box,
   // which named no event): the event, its day and time, a warning when it repeats (every
   // repeat goes), Cancel first, Delete in red. Resolves true for Delete.
+  // An alliance's choice for a server-wide event's reminder (owner, 2026-11-28): posted in its
+  // alert channel or not, and who it pings, with the alliance's own roles to pick from
+  // (api/manage-event.js actions "optin" and "roles")
+  let optinRoles = null;
+  async function openOptinDialog(eventId) {
+    const evt = allEvents.find((e) => e.id === eventId);
+    if (!evt || !optinAlliance) return;
+    const tag = optinAlliance;
+    const now = evt.optin || { on: false, ping: 'role', role_id: null, chosen: false };
+    const noChannel = reminderChannels?.alliance === false;
+    let dialog = document.getElementById('cal-optin-dialog');
+    if (!dialog) {
+      dialog = document.createElement('dialog');
+      dialog.id = 'cal-optin-dialog';
+      dialog.className = 'auth-modal cal-confirm cal-optin';
+      dialog.setAttribute('aria-labelledby', 'cal-optin-heading');
+      document.body.appendChild(dialog);
+    }
+    const start = new Date(evt.start);
+    const when = `${start.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })} · ${new Date(start.getTime() - 2 * 3600000).toISOString().slice(11, 16)} GT`;
+    const pings = ['role', 'custom_role', 'everyone', 'none'];
+    const label = {
+      role: 'optin_ping_role',
+      custom_role: 'optin_ping_custom',
+      everyone: 'optin_ping_everyone',
+      none: 'optin_ping_none',
+    };
+    dialog.innerHTML = `
+      <div class="auth-modal-frame">
+        <div class="auth-modal-header">
+          <div class="auth-modal-title-wrap">
+            <span class="auth-modal-icon" aria-hidden="true">${ic('bell', 'solo')}</span>
+            <h3 id="cal-optin-heading" class="auth-modal-title">${esc(t('calendar_events.optin_heading', { tag }))}</h3>
+          </div>
+        </div>
+        <div class="auth-modal-body">
+          <p class="cal-confirm-what"><strong>${esc(String(evt.title || '').replace(/^\[GLOBAL\]\s*/i, ''))}</strong><br><span>${esc(when)}</span></p>
+          ${noChannel ? `<p class="cal-confirm-warn">${ic('warning', 'warn')}${esc(t('calendar_events.optin_no_channel', { tag }))}</p>` : ''}
+          ${!now.chosen && now.on ? `<p class="cal-confirm-final">${esc(t('calendar_events.optin_from_register', { tag }))}</p>` : ''}
+          <p class="cal-optin-intro">${esc(t('calendar_events.optin_intro', { tag }))}</p>
+          <div class="cal-optin-pings" role="radiogroup">
+            ${pings
+              .map(
+                (p) =>
+                  `<label><input type="radio" name="cal-optin-ping" value="${p}"${now.ping === p ? ' checked' : ''}> ${esc(t(`calendar_events.${label[p]}`))}</label>`,
+              )
+              .join('')}
+          </div>
+          <div class="cal-optin-role" hidden>
+            <select id="cal-optin-role" class="cal-form-select" data-site-select aria-label="${esc(t('calendar_events.role_pick'))}"></select>
+            <input type="text" id="cal-optin-role-id" class="cal-optin-role-id" placeholder="e.g. 1198765432109876543" hidden />
+            <small class="form-hint" id="cal-optin-role-hint" hidden></small>
+          </div>
+        </div>
+        <div class="auth-modal-footer">
+          <button type="button" class="btn-modal-cancel" data-answer="cancel">${esc(t('common.cancel'))}</button>
+          ${now.on ? `<button type="button" class="btn-modal-cancel" data-answer="off">${esc(t('calendar_events.optin_stop'))}</button>` : ''}
+          <button type="button" class="btn-modal-action" data-answer="on"${noChannel ? ' disabled' : ''}>${esc(t(now.on ? 'calendar_events.optin_save' : 'calendar_events.optin_save_on'))}</button>
+        </div>
+      </div>`;
+    const roleBox = dialog.querySelector('.cal-optin-role');
+    const roleSelect = dialog.querySelector('#cal-optin-role');
+    const roleId = dialog.querySelector('#cal-optin-role-id');
+    const roleHint = dialog.querySelector('#cal-optin-role-hint');
+    const picked = () =>
+      dialog.querySelector('input[name="cal-optin-ping"]:checked')?.value || 'role';
+    // "A specific role": the alliance's roles (the ID box if they can't be read)
+    async function showRoles() {
+      roleBox.hidden = picked() !== 'custom_role';
+      if (roleBox.hidden) return;
+      roleHint.textContent = t('calendar_events.role_pick_loading');
+      roleHint.hidden = false;
+      optinRoles ||= manageEvents({ action: 'roles', scope: tag })
+        .then((r) => (r.ok ? r.json() : { roles: [] }))
+        .then((d) => (Array.isArray(d.roles) ? d.roles : []))
+        .catch(() => []);
+      const roles = await optinRoles;
+      if (!roles.length) {
+        roleSelect.hidden = true;
+        roleId.hidden = false;
+        roleId.value = now.role_id || '';
+        roleHint.textContent = t('calendar_events.role_pick_unavailable');
+        return;
+      }
+      const chosen = now.role_id || '';
+      roleSelect.innerHTML = [
+        `<option value="">${esc(t('calendar_events.role_pick_choose'))}</option>`,
+        ...(chosen && !roles.some((r) => r.id === chosen)
+          ? [
+              `<option value="${esc(chosen)}">${esc(t('calendar_events.role_pick_unknown', { id: chosen }))}</option>`,
+            ]
+          : []),
+        ...roles.map((r) => `<option value="${esc(r.id)}">@${esc(r.name)}</option>`),
+      ].join('');
+      roleSelect.value = chosen;
+      roleSelect.hidden = false;
+      roleId.hidden = true;
+      roleHint.hidden = true;
+      window.SiteSelect?.sync(roleSelect);
+    }
+    dialog.querySelector('.cal-optin-pings').addEventListener('change', showRoles);
+    showRoles();
+    dialog.showModal();
+    const answer = await new Promise((resolve) => {
+      const onClick = (e) => {
+        const b = e.target.closest('[data-answer]');
+        if (b) resolve(b.dataset.answer);
+        else if (e.target === dialog) resolve('cancel');
+      };
+      const onCancel = (e) => {
+        e.preventDefault();
+        resolve('cancel');
+      };
+      dialog.addEventListener('click', onClick);
+      dialog.addEventListener('cancel', onCancel, { once: true });
+    });
+    const ping = picked();
+    const role = roleSelect.hidden ? roleId.value.trim() : roleSelect.value;
+    if (answer === 'on' && ping === 'custom_role' && !/^\d{17,20}$/.test(role)) {
+      showNotification(t('calendar_events.role_pick_needed'), 'error');
+      dialog.close();
+      return openOptinDialog(eventId);
+    }
+    dialog.close();
+    if (answer === 'cancel') return;
+    try {
+      const res = await manageEvents({
+        action: 'optin',
+        scope: tag,
+        eventId,
+        optin: { on: answer === 'on', ping, role_id: ping === 'custom_role' ? role : null },
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out.error || t('calendar_events.optin_failed'));
+      showNotification(out.message || t('calendar_events.published'), 'success');
+      await loadCalendar({ useSaved: false });
+    } catch (err) {
+      showNotification(err.message || t('calendar_events.optin_failed'), 'error');
+    }
+  }
+
   function confirmDelete({ title = '', when = '', repeat = '' } = {}) {
     let dialog = document.getElementById('cal-delete-dialog');
     if (!dialog) {

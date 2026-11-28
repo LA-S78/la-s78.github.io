@@ -168,6 +168,16 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
             />
           </div>
 
+          <!-- Server-wide events (Stewards; owner, 2026-11-28): whether alliances can get the
+               reminder in their own Discord, each choosing on the event (api/_event_optins.js) -->
+          <div class="form-group form-col-full" id="group-allow-optin" hidden>
+            <label class="cal-check" for="evt-input-allow-optin">
+              <input type="checkbox" id="evt-input-allow-optin" checked />
+              {{ "calendar_events.allow_optin" | t }}
+            </label>
+            <small class="form-hint">{{ "calendar_events.allow_optin_hint" | t }}</small>
+          </div>
+
           <!-- Instructions / Rally Point -->
           <div class="form-group form-col-full">
             <label for="evt-input-details">{{ "calendar_events.details" | t }}</label>

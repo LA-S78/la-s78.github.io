@@ -81,3 +81,5 @@ flask: '<path d="M9 3h6"/><path d="M10 3v6.5L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 
 helping: '<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 12 5.5 5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/><path d="M12 9.5v6"/><path d="M9 12.5h6"/>'
 # Open / close a card's details (Alliance standings)
 chevron: '<path d="m6 9 6 6 6-6"/>'
+# A reminder (an alliance's opt-in to a server-wide event's reminder, calendar)
+bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>'

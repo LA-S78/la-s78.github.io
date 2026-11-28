@@ -9,6 +9,7 @@ import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 import { checkReminders } from './_reminders.js';
 import { projectEvents, visibleEvents } from './_calendar_events.js';
 import { kwBattleFields, kwBattleSettings } from './_kw_battle.js';
+import { optinAllowed, optinFor } from './_event_optins.js';
 import { checkAscension, latestRace } from './_ascension.js';
 import { checkStatsSnapshot } from './_stats.js';
 import { flushTrackerUsage } from './_tracker.js';
@@ -301,10 +302,31 @@ export default async function handler(req, res) {
     endMs: Math.max(rangeEndMs, now.getTime() + 28 * 86400 * 1000),
   });
 
-  // 4. Combine and Sort Chronologically
-  const allEvents = [...cycleMilestones, ...projectedEvents].sort(
-    (a, b) => new Date(a.start) - new Date(b.start),
-  );
+  // 4. Combine and Sort Chronologically. Server-wide events say whether alliances can opt
+  // in to their reminder and, for the alliance asked about, its choice (api/_event_optins.js);
+  // other alliances' choices stay here.
+  const optinTag = requestedAlliance ? findTag(Object.keys(alliances), requestedAlliance) : null;
+  const kwOptins = kwBattleSettings(calConfig).optins || {};
+  const allEvents = [...cycleMilestones, ...projectedEvents]
+    .map((evt) => {
+      const isServer = String(evt.scope || 'global').toLowerCase() === 'global';
+      const optins = evt.editable === 'kw_battle' ? kwOptins : evt.optins;
+      // The site's own milestones (the Capitol, rewards) have no reminder; the battle has one
+      const milestone =
+        (evt.type === 'rotation' || evt.type === 'war') && evt.editable !== 'kw_battle';
+      if (!isServer || milestone) {
+        if (!('optins' in evt)) return evt;
+        const { optins: _hidden, ...rest } = evt;
+        return rest;
+      }
+      const { optins: _hidden, ...rest } = evt;
+      return {
+        ...rest,
+        allow_optin: optinAllowed(evt),
+        ...(optinTag ? { optin: optinFor({ optins }, optinTag, alliances[optinTag]) } : {}),
+      };
+    })
+    .sort((a, b) => new Date(a.start) - new Date(b.start));
 
   // Whether event reminders have somewhere to go (the event form says so when they don't):
   // an alliance's registered alert channel, and the NAP Discord's channel for server events.

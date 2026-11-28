@@ -154,6 +154,13 @@
         return m % 60 ? t('calendar.dur_hm', { h, m: m % 60 }) : t('calendar.dur_h', { h });
       return t('calendar.dur_dh', { d: Math.floor(h / 24), h: h % 24 });
     };
+    // Under a server-wide event's time, for its alliance's R4/R5 (owner, 2026-11-28): whether
+    // its reminder is posted in their Discord; tapping it opens the choice (js/calendar.js)
+    const optinButton = (e) => {
+      const choice = opts.optinFor?.(e);
+      if (!choice) return '';
+      return `<button type="button" class="ag-optin${choice.on ? ' is-on' : ''}" data-event-id="${esc(e.id)}" aria-pressed="${choice.on}">${ic('bell')}${esc(t(choice.on ? 'calendar_events.optin_button_on' : 'calendar_events.optin_button_off'))}</button>`;
+    };
     const KIND_LABEL = {
       // Server-wide events and the Kingdom War both say "Kingdom" (owner, 2026-11-28: room for
       // other kingdom events); the war keeps its own colour
@@ -326,6 +333,9 @@
       }
       const edit = e.target.closest('.btn-edit-event');
       if (edit) opts.onEdit?.(edit.dataset.eventId);
+      // An alliance's opt-in to a server-wide event's reminder (js/calendar.js)
+      const optin = e.target.closest('.ag-optin');
+      if (optin) opts.onOptIn?.(optin.dataset.eventId);
       const del = e.target.closest('.btn-delete-event');
       if (del) {
         // What the confirmation names: the event, the day and time it was tapped on, and
@@ -490,7 +500,7 @@
             e.allDay
               ? `<b>${esc(t('calendar.all_day'))}</b>`
               : `<b>${gtTime(e.s)}</b><small>GT</small><span>${esc(t('calendar.local_time', { time: localTime(e.s) }))}</span>`
-          }</div>
+          }${optinButton(e)}</div>
           <div class="ag-body">${badge}
             <div class="ag-title"><span class="ag-ic">${icon}</span><span>${esc(e.title)}</span></div>
             <div class="ag-meta"><span class="ag-kind">${esc(KIND_LABEL[e.kind])}</span>${

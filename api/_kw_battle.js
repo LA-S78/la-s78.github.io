@@ -29,6 +29,7 @@ export function kwBattleFields(settings) {
     reminder_minutes: settings.reminder_minutes ?? 60,
     notify_target: settings.notify_target || 'role',
     custom_role_id: settings.custom_role_id || null,
+    allow_optin: settings.allow_optin !== false,
     editable: 'kw_battle',
   };
 }
@@ -68,6 +69,7 @@ export function kwBattleReminderEvent(calConfig, now) {
     event_type: 'kvk_battle',
     color: '#8f0000',
     ...kwBattleFields(settings),
+    optins: settings.optins || {},
     notification_status: settings.notification_status || {},
   };
 }

@@ -36,6 +36,7 @@ import { inLocale, say } from './_messages.js';
 import { findTag } from './_alliances.js';
 import { shownTitle } from './_calendar_events.js';
 import { KW_BATTLE_ID, kwBattleReminderEvent } from './_kw_battle.js';
+import { optinAllowed, optinFor, optinPing } from './_event_optins.js';
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
@@ -120,16 +121,20 @@ export function targetsFor(evt, alliances, napChannelId) {
     const ping = evt.notify_target === 'role' ? null : pingFor(evt, null);
     targets.push({ channelId: napChannelId, ping, label: 'NAP' });
   }
-  // Alliances that opted in: their own alert role (a custom NAP role means nothing there)
+  // Alliances (owner, 2026-11-28; api/_event_optins.js): unless the event keeps its
+  // reminder to the NAP, every alliance that opted in to it (or, without a choice of its
+  // own, to every server event when it registered), pinging what it chose (a custom NAP
+  // role means nothing in an alliance's server)
+  if (!optinAllowed(evt)) return targets;
   for (const [tag, a] of Object.entries(alliances || {})) {
-    if (!a?.server_event_alerts || !a.alert_channel_id) continue;
-    const ping =
-      evt.notify_target === 'none'
-        ? null
-        : evt.notify_target === 'everyone'
-          ? 'everyone'
-          : a.alert_role_id || 'everyone';
-    targets.push({ channelId: a.alert_channel_id, ping, label: `[${tag}]` });
+    if (!a?.alert_channel_id) continue;
+    const choice = optinFor(evt, tag, a);
+    if (!choice.on) continue;
+    targets.push({
+      channelId: a.alert_channel_id,
+      ping: optinPing(evt, choice, a),
+      label: `[${tag}]`,
+    });
   }
   return targets;
 }
