@@ -11,23 +11,28 @@ import { SERVER_DATA } from './_generated_translations.js';
 const ALLIANCE_COMMANDS = [
   {
     name: 'calendar',
-    description: 'View or manage the Kingdom Event Calendar',
+    description: "See the Capitol and today's events",
     type: 1,
     options: [
       {
         type: 3,
-        name: 'action',
-        description: 'Action to perform (leave blank to view calendar)',
+        name: 'view',
+        description: 'What to show (blank: the Capitol card)',
         required: false,
         choices: [
-          {
-            name: 'Manage Alliance Events (R5 by default)',
-            value: 'manage_alliance',
-          },
-          {
-            name: 'Manage Global Events (Admin Only)',
-            value: 'manage_global',
-          },
+          { name: "👑 Capitol: holder, daily reset and what's next", value: 'capitol' },
+          { name: "🛡️ Alliance: your alliance's events today", value: 'alliance' },
+          { name: '🏰 Kingdom: server-wide events today', value: 'kingdom' },
+        ],
+      },
+      {
+        type: 3,
+        name: 'share',
+        description: 'Who sees the reply (blank: only you)',
+        required: false,
+        choices: [
+          { name: '🔒 Only me', value: 'private' },
+          { name: '📢 Everyone in this channel', value: 'public' },
         ],
       },
     ],

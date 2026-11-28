@@ -211,8 +211,11 @@ File.write('api/_cities_data.js', "export default #{JSON.generate(cities)};\n")
 puts "Generated api/_cities_data.js (#{cities.size} cities)"
 
 # The event types' ids and whether the form offers them (api/manage-event.js checks a saved
-# event's type against them)
-event_types = (YAML.load_file('_data/event_types.yml')['types'] || []).map { |t| { 'id' => t['id'], 'preset' => t['preset'] == true } }
+# event's type against them); their colour and picture for the event cards /calendar posts
+# in Discord (api/_bot_calendar.js)
+event_types = (YAML.load_file('_data/event_types.yml')['types'] || []).map do |t|
+  { 'id' => t['id'], 'preset' => t['preset'] == true, 'color' => t['color'], 'picture' => t['picture'] }.compact
+end
 File.write('api/_event_types.js', "export default #{JSON.generate(event_types)};\n")
 puts "Generated api/_event_types.js (#{event_types.size} event types)"
 

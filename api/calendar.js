@@ -1,12 +1,13 @@
 // api/calendar.js
 import { describeRotation, getCycleState, DEFAULT_CALENDAR_CONFIG } from './_calendar_helper.js';
 import { isGistConfigured, readGist, gistJson } from './_gist.js';
-import { findTag, sameScope, sameTag, sanitizeAlliances } from './_alliances.js';
+import { findTag, sameTag, sanitizeAlliances } from './_alliances.js';
 import { liveImages } from './_alliance_images.js';
 import { resolveCohortSchedule } from './_cycle_helper.js';
 import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 import { checkReminders } from './_reminders.js';
+import { projectEvents, visibleEvents } from './_calendar_events.js';
 import { checkAscension, latestRace } from './_ascension.js';
 import { checkStatsSnapshot } from './_stats.js';
 import { flushTrackerUsage } from './_tracker.js';
@@ -284,62 +285,15 @@ export default async function handler(req, res) {
   const requestedAlliance = req.query?.alliance?.trim() || null;
   const customEvents = calConfig.custom_events || [];
 
-  const sanitizedCustomEvents = customEvents.filter((evt) => {
-    if (sameScope(evt.scope, 'global')) return true;
-    return Boolean(requestedAlliance) && sameScope(evt.scope, requestedAlliance);
-  });
+  const sanitizedCustomEvents = visibleEvents(customEvents, { alliance: requestedAlliance });
 
   // 3. Project Recurring Events Forward Across the 28-Day Cycle Horizon
   // The same weeks as the milestones above (last week and the whole cycle, for the week and
-  // cycle views), and at least four weeks ahead
-  const windowStartMs = rangeStartMs;
-  const windowEndMs = Math.max(rangeEndMs, now.getTime() + 28 * 86400 * 1000);
-
-  const projectedEvents = [];
-
-  for (const evt of sanitizedCustomEvents) {
-    const recurrence = evt.recurrence || 'none';
-
-    if (recurrence === 'none') {
-      const evtEndMs = new Date(evt.end || evt.start).getTime();
-      if (evtEndMs >= windowStartMs) {
-        projectedEvents.push(evt);
-      }
-      continue;
-    }
-
-    const stepMs = recurrence === '2days' ? 2 * 86400 * 1000 : 7 * 86400 * 1000;
-
-    const baseStartMs = new Date(evt.start).getTime();
-    if (isNaN(baseStartMs)) {
-      projectedEvents.push(evt);
-      continue;
-    }
-
-    const durationMs = evt.duration_hours
-      ? parseFloat(evt.duration_hours) * 3600 * 1000
-      : Math.max(1800000, new Date(evt.end).getTime() - baseStartMs || 3600000);
-
-    let curStartMs = baseStartMs;
-    if (curStartMs < windowStartMs) {
-      const skipSteps = Math.floor((windowStartMs - curStartMs) / stepMs);
-      curStartMs += skipSteps * stepMs;
-    }
-
-    let count = 0;
-    while (curStartMs <= windowEndMs && count < 30) {
-      const curEndMs = curStartMs + durationMs;
-      if (curEndMs >= windowStartMs) {
-        projectedEvents.push({
-          ...evt,
-          start: new Date(curStartMs).toISOString(),
-          end: new Date(curEndMs).toISOString(),
-        });
-      }
-      curStartMs += stepMs;
-      count++;
-    }
-  }
+  // cycle views), and at least four weeks ahead (api/_calendar_events.js, shared with /calendar)
+  const projectedEvents = projectEvents(sanitizedCustomEvents, {
+    startMs: rangeStartMs,
+    endMs: Math.max(rangeEndMs, now.getTime() + 28 * 86400 * 1000),
+  });
 
   // 4. Combine and Sort Chronologically
   const allEvents = [...cycleMilestones, ...projectedEvents].sort(
