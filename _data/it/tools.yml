@@ -447,59 +447,73 @@ register:
   page_title: Registrazione Server Alleanza
   loading: Caricamento portale di registrazione...
   subtitle: Portale di Integrazione Server Alleanza
-  step_invite: 1. Invita il bot sul tuo server
+  step_invite: 1. Invita il Bot nel tuo server
   invite_help: Devi aggiungere il bot al Discord della tua alleanza prima di completare la registrazione.
-  authorize: Clicca per autorizzare il bot
+  authorize: Clicca per Autorizzare il Bot
   step_credentials: 2. Credenziali Server e Ruolo
-  guild_id: ID Server Discord (ID Gilda)
+  guild_id: ID Server Discord (ID Guild)
   example: es. {id}
-  guild_help: 'Su Discord: Abilita Modalità Sviluppatore → Clicca col tasto destro sull''icona del tuo server → {copy}. Devi possedere quel server o avere permessi di {admin} o {manage}. I canali e il ruolo sottostanti verranno verificati.'
+  guild_help: 'In Discord: Attiva Modalità Sviluppatore → Tasto destro sull''icona del tuo server → {copy}. Devi essere il proprietario di quel server o avere i permessi {admin} o {manage}. Il canale e il ruolo qui sotto verranno verificati.'
   copy_server_id: Copia ID Server
+  lookup_waiting: Inserisci l'ID del server per scegliere i canali e i ruoli da un elenco.
+  lookup_loading: Ricerca canali e ruoli del server...
+  lookup_found: "{server}: {channels} canali, {roles} ruoli. Ne hai creato uno nuovo su Discord? Premi Aggiorna."
+  lookup_failed: Impossibile elencare canali e ruoli del server ({error}). Puoi comunque digitare gli ID qui sotto.
+  refresh: Aggiorna
+  type_ids: Digita gli ID manualmente
+  search: Cerca...
+  search_none: Nessun risultato
+  pick_channel: Scegli un canale...
+  everyone_default: "@everyone (predefinito)"
+  not_in_server: "{id} (non presente in questo server)"
+  role_missing: "@{role} (ruolo non ancora esistente)"
   administrator: Amministratore
-  manage_server: Gestisci Server
-  routing_heading: Operazioni e Instradamento Ticket
-  routing_help: Configura dove il bot pubblica avvisi pubblici sulle operazioni e instrada suggerimenti/ticket privati dei membri.
-  alert_channel: ID Canale Avvisi Operazioni
+  manage_server: Gestisci server
+  routing_heading: Operazioni e Gestione Ticket
+  routing_help: Configura dove il bot pubblica gli avvisi operativi pubblici e instrada i suggerimenti/ticket privati dei membri.
+  alert_channel: ID Canale Avvisi Operativi
   channel_id_title: Deve essere un ID Canale Discord valido di 17-20 cifre
   role_id_title: Deve essere un ID Ruolo Discord valido di 17-20 cifre
-  alert_channel_help: Clicca col tasto destro sul tuo canale annunci/avvisi → {copy}.
+  alert_channel_help: Tasto destro sul tuo canale annunci/avvisi → {copy}.
   copy_channel_id: Copia ID Canale
-  alert_role: ID Ruolo Avvisi Predefinito
+  alert_role: ID Ruolo Avviso Predefinito
   optional: "(Opzionale)"
-  alert_role_placeholder: Lascia vuoto per impostare @everyone
-  alert_role_help: Clicca col tasto destro sul tuo ruolo di notifica (es. {example}) → {copy}. Se vuoto, usa {everyone}.
-  server_alerts: Pubblica qui anche i promemoria eventi del server
-  server_alerts_help: I promemoria degli eventi NAP stabiliti dagli Steward vanno al Discord NAP; spunta questa opzione per riceverli anche in questo canale avvisi.
+  alert_role_placeholder: Lascia vuoto per usare @everyone
+  alert_role_help: Tasto destro sul tuo ruolo per i ping (es. {example}) → {copy}. Se vuoto, usa {everyone} come predefinito.
+  server_alerts: Pubblica qui anche i promemoria eventi per tutto il server
+  server_alerts_help: I promemoria degli eventi NAP impostati dagli Steward vanno al Discord NAP; spunta questa opzione per riceverli anche in questo canale avvisi.
   copy_role_id: Copia ID Ruolo
   officer_channel: ID Canale Ricezione Ticket Ufficiali
-  officer_channel_help: Clicca col tasto destro sul tuo {channel} → {copy}. Le proposte dei membri e i ticket dell'alleanza da {suggest} verranno instradati qui per la revisione della leadership.
+  officer_channel_help: Tasto destro sul tuo {channel} → {copy}. Le proposte dei membri e i ticket dell'alleanza da {suggest} verranno instradati qui per la revisione dei leader.
   private_channel: canale ticket privato R4/R5
+  not_in_use: Non ancora in uso
+  officer_channel_off: Non necessario al momento
   delegated_roles: Ruoli di Leadership Delegati
-  delegated_roles_help: Nomi dei ruoli separati da virgola che possono gestire ticket, eventi e inviare nomine per i forzieri ({r5} è sempre autorizzato).
-  color: Colore Identificativo Alleanza
+  delegated_roles_help: Ruoli che possono gestire i ticket, gli eventi e inviare candidature per i forzieri ({r5} è sempre autorizzato).
+  color: Colore Identità Alleanza
   preview: 'Anteprima:'
-  color_help: Applicato al tuo calendario operativo, alle schede dei ticket interni e alle proposte approvate dal Consiglio NAP.
+  color_help: Applicato al tuo calendario delle operazioni, alle schede dei ticket interni e alle proposte approvate dal Consiglio NAP.
   submit: Registra Server e Distribuisci Comandi
-  submitting: Verifica server e registrazione in corso...
+  submitting: Verifica Server e Registrazione in corso...
   bad_token: Token di registrazione non valido o mancante. Esegui /registerbot nel server NAP.
   malformed_token: Token malformato. Richiedi un nuovo link da Discord.
-  expired: Questo link di registrazione è scaduto (limite 24h). Esegui di nuovo /registerbot.
+  expired: Questo link di registrazione è scaduto (limite di 24 ore). Esegui di nuovo /registerbot.
   bad_guild: Formato ID Server Discord non valido. Deve essere un numero di 17-20 cifre.
-  bad_alert_channel: Formato ID Canale Avvisi Operazioni non valido. Deve essere un numero di 17-20 cifre.
-  bad_alert_role: Formato ID Ruolo Avvisi non valido. Deve essere un numero di 17-20 cifre (o vuoto per @everyone).
+  bad_alert_channel: Formato ID Canale Avvisi Operativi non valido. Deve essere un numero di 17-20 cifre.
+  bad_alert_role: Formato ID Ruolo Avviso non valido. Deve essere un numero di 17-20 cifre (o lasciato vuoto per @everyone).
   bad_officer_channel: Formato ID Canale Ricezione Ticket Ufficiali non valido. Deve essere un numero di 17-20 cifre.
   failed: Registrazione fallita
   error: 'Errore di registrazione: {error}'
   success: Registrazione avvenuta con successo!
   linked: "{server} è ora collegato a {tag}."
   server_id: ID Server {id}
-  r_alert_channel: 'Canale Avvisi Operazioni:'
-  r_target: 'Destinatario notifica:'
+  r_alert_channel: 'Canale Avvisi Operativi:'
+  r_target: 'Destinatario Notifica:'
   r_role: Ruolo {id}
   r_default: "(Predefinito)"
   r_officer_channel: 'Canale Ticket Ufficiali:'
-  r_color: 'Colore identità:'
-  r_commands: 'Slash command distribuiti:'
+  r_color: 'Colore Identità:'
+  r_commands: 'Comandi Slash distribuiti:'
   r_leaders: 'Leadership autorizzata:'
 calendar:
   loading: Caricamento calendario del Regno...

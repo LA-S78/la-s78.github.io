@@ -444,50 +444,64 @@ kings_console:
   stop_alert: Gönderme!
   lists_refreshed: Listeler yenilendi.
 register:
-  page_title: İttifak Sunucusu Kaydı
+  page_title: İttifak Sunucu Kaydı
   loading: Kayıt portalı yükleniyor...
-  subtitle: İttifak Sunucusu Entegrasyon Portalı
+  subtitle: İttifak Sunucu Entegrasyon Portalı
   step_invite: 1. Botu Sunucunuza Davet Edin
   invite_help: Kaydı tamamlamadan önce botu ittifak Discord'unuza eklemelisiniz.
-  authorize: Botu Yetkilendirmek İçin Tıklayın
-  step_credentials: 2. Sunucu ve Rol Kimlik Bilgileri
-  guild_id: Discord Sunucu Kimliği (Guild ID)
+  authorize: Botu Yetkilendirmek için Tıklayın
+  step_credentials: 2. Sunucu & Rol Kimlik Bilgileri
+  guild_id: Discord Sunucu Kimliği (Sunucu ID)
   example: ör. {id}
-  guild_help: 'Discord''da: Geliştirici Modunu Etkinleştirin → Sunucu simgenize sağ tıklayın → {copy}. O sunucunun sahibi olmalı veya orada {admin} ya da {manage} yetkisine sahip olmalısınız. Aşağıdaki kanallar ve rol buna göre kontrol edilir.'
+  guild_help: 'Discord''da: Geliştirici Modunu Etkinleştir → Sunucu simgesine sağ tıkla → {copy}. O sunucunun sahibi olmalı veya {admin} ya da {manage} yetkisine sahip olmalısınız. Aşağıdaki kanal ve rol buna göre kontrol edilir.'
   copy_server_id: Sunucu Kimliğini Kopyala
+  lookup_waiting: Kanal ve rollerini listeden seçmek için sunucu kimliğini girin.
+  lookup_loading: Sunucunun kanalları ve rolleri aranıyor...
+  lookup_found: "{server}: {channels} kanal, {roles} rol bulundu. Discord'da yeni bir tane mi oluşturdunuz? Yenile düğmesine basın."
+  lookup_failed: Sunucunun kanalları ve rolleri listelenemedi ({error}). Kimlikleri aşağıya kendiniz yazabilirsiniz.
+  refresh: Yenile
+  type_ids: Bunun yerine kimlikleri yazın
+  search: Ara...
+  search_none: Eşleşme bulunamadı
+  pick_channel: Bir kanal seçin...
+  everyone_default: "@everyone (varsayılan)"
+  not_in_server: "{id} (bu sunucuda değil)"
+  role_missing: "@{role} (henüz böyle bir rol yok)"
   administrator: Yönetici
   manage_server: Sunucuyu Yönet
-  routing_heading: Operasyonlar ve Bilet Yönlendirme
-  routing_help: Botun halka açık operasyon uyarılarını nereye göndereceğini ve özel üye önerilerini/biletlerini nereye yönlendireceğini yapılandırın.
+  routing_heading: Operasyonlar & Bilet Yönlendirme
+  routing_help: Botun halka açık operasyon uyarılarını nerede yayınlayacağını ve özel üye önerilerini/biletlerini nereye yönlendireceğini yapılandırın.
   alert_channel: Operasyon Uyarı Kanal Kimliği
   channel_id_title: Geçerli bir 17-20 haneli Discord Kanal Kimliği olmalıdır
   role_id_title: Geçerli bir 17-20 haneli Discord Rol Kimliği olmalıdır
-  alert_channel_help: Duyuru/uyarı kanalınıza sağ tıklayın → {copy}.
+  alert_channel_help: Duyuru/uyarı kanalınıza sağ tıkla → {copy}.
   copy_channel_id: Kanal Kimliğini Kopyala
   alert_role: Varsayılan Uyarı Rol Kimliği
   optional: "(İsteğe bağlı)"
   alert_role_placeholder: "@everyone varsayılanı için boş bırakın"
-  alert_role_help: Ping rolünüze sağ tıklayın (ör. {example}) → {copy}. Boş bırakılırsa {everyone} olarak ayarlanır.
-  server_alerts: Sunucu genelindeki etkinlik hatırlatıcılarını da buraya gönder
-  server_alerts_help: Kâhyalar tarafından belirlenen NAP genelindeki etkinliklerin hatırlatıcıları NAP Discord'una gider; bunları bu uyarı kanalında da görmek için işaretleyin.
+  alert_role_help: Ping rolünüze sağ tıkla (ör. {example}) → {copy}. Boş bırakılırsa {everyone} varsayılır.
+  server_alerts: Sunucu genelindeki etkinlik hatırlatıcılarını da burada paylaş
+  server_alerts_help: Steward'lar tarafından belirlenen NAP genelindeki etkinliklerin hatırlatıcıları NAP Discord'una gider; bunları bu uyarı kanalında da almak için işaretleyin.
   copy_role_id: Rol Kimliğini Kopyala
-  officer_channel: Subay Bilet Kabul Kanal Kimliği
-  officer_channel_help: "{channel} kanalınıza sağ tıklayın → {copy}. Üye teklifleri ve {suggest} üzerinden gelen ittifak biletleri liderlik incelemesi için buraya yönlendirilecektir."
+  officer_channel: Yetkili Bilet Kabul Kanal Kimliği
+  officer_channel_help: "{channel} kanalınıza sağ tıkla → {copy}. Üye önerileri ve {suggest} üzerinden gelen ittifak biletleri, liderlik incelemesi için buraya yönlendirilecektir."
   private_channel: özel R4/R5 bilet kanalı
-  delegated_roles: Devredilmiş Liderlik Rolleri
-  delegated_roles_help: Biletleri triyaj yapabilen, etkinlikleri yönetebilen ve sandık adaylıkları sunabilen virgülle ayrılmış rol isimleri ({r5} her zaman yetkilidir).
+  not_in_use: Henüz kullanımda değil
+  officer_channel_off: Şimdilik gerekli değil
+  delegated_roles: Yetkilendirilmiş Liderlik Rolleri
+  delegated_roles_help: Biletleri ayıklayabilen, etkinlikleri yönetebilen ve sandık adaylıklarını gönderebilen roller ({r5} her zaman yetkilidir).
   color: İttifak Kimlik Rengi
   preview: 'Önizleme:'
-  color_help: Operasyon takviminize, dahili bilet kartlarınıza ve onaylanmış NAP Konseyi tekliflerinize uygulanır.
-  submit: Sunucuyu Kaydet ve Komutları Dağıt
-  submitting: Sunucu Doğrulanıyor ve Kaydediliyor...
-  bad_token: Geçersiz veya eksik kayıt belirteci. NAP sunucusunda /registerbot çalıştırın.
-  malformed_token: Hatalı biçimlendirilmiş belirteç. Lütfen Discord'dan yeni bir bağlantı isteyin.
+  color_help: Operasyon takviminize, dahili bilet kartlarınıza ve onaylanmış NAP Konseyi önerilerine uygulanır.
+  submit: Sunucuyu Kaydet & Komutları Dağıt
+  submitting: Sunucu Doğrulanıyor & Kaydediliyor...
+  bad_token: Geçersiz veya eksik kayıt simgesi. NAP sunucusunda /registerbot komutunu çalıştırın.
+  malformed_token: Hatalı biçimlendirilmiş simge. Lütfen Discord'dan yeni bir bağlantı talep edin.
   expired: Bu kayıt bağlantısının süresi doldu (24 saat sınırı). /registerbot komutunu tekrar çalıştırın.
   bad_guild: Geçersiz Discord Sunucu Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
   bad_alert_channel: Geçersiz Operasyon Uyarı Kanal Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
-  bad_alert_role: Geçersiz Uyarı Rol Kimliği formatı. 17-20 haneli bir sayı olmalıdır (veya @everyone için boş bırakın).
-  bad_officer_channel: Geçersiz Subay Bilet Kabul Kanal Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
+  bad_alert_role: Geçersiz Uyarı Rol Kimliği formatı. 17-20 haneli bir sayı olmalıdır (veya @everyone için boş bırakılmalıdır).
+  bad_officer_channel: Geçersiz Yetkili Bilet Kabul Kanal Kimliği formatı. 17-20 haneli bir sayı olmalıdır.
   failed: Kayıt başarısız
   error: 'Kayıt Hatası: {error}'
   success: Kayıt Başarılı!
@@ -497,10 +511,10 @@ register:
   r_target: 'Bildirim Hedefi:'
   r_role: Rol {id}
   r_default: "(Varsayılan)"
-  r_officer_channel: 'Subay Bilet Kanalı:'
+  r_officer_channel: 'Yetkili Bilet Kanalı:'
   r_color: 'Kimlik Rengi:'
-  r_commands: 'Eğik Çizgi Komutları Dağıtıldı:'
-  r_leaders: 'Yetkili Liderlik:'
+  r_commands: 'Dağıtılan Slash Komutları:'
+  r_leaders: 'Yetkilendirilmiş Liderlik:'
 calendar:
   loading: Krallık takvimi yükleniyor...
   load_failed: 'Takvim yüklenemedi: {error}'

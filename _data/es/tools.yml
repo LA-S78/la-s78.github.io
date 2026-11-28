@@ -444,62 +444,76 @@ kings_console:
   stop_alert: "¡No lo envíes!"
   lists_refreshed: Las listas se han actualizado.
 register:
-  page_title: Registro del Servidor de Alianza
+  page_title: Registro del Servidor de la Alianza
   loading: Cargando portal de registro...
-  subtitle: Portal de Integración del Servidor de Alianza
-  step_invite: 1. Invita al Bot a tu Servidor
-  invite_help: Debes añadir el bot a tu Discord de alianza antes de completar el registro.
-  authorize: Haz clic para autorizar al Bot
-  step_credentials: 2. Credenciales de Servidor y Roles
-  guild_id: ID del Servidor de Discord (Guild ID)
-  example: p. ej., {id}
-  guild_help: 'En Discord: Activa el Modo Desarrollador → Clic derecho en el icono de tu servidor → {copy}. Debes ser dueño de ese servidor o tener {admin} o {manage} allí. Los canales y el rol de abajo se verifican contra esto.'
+  subtitle: Portal de Integración del Servidor de la Alianza
+  step_invite: 1. Invitar al Bot a tu Servidor
+  invite_help: Debes añadir el bot al Discord de tu alianza antes de completar el registro.
+  authorize: Hacer clic para Autorizar al Bot
+  step_credentials: 2. Credenciales del Servidor y Rol
+  guild_id: ID del Servidor de Discord (ID de Gremio)
+  example: ej. {id}
+  guild_help: 'En Discord: Habilita el Modo Desarrollador → Haz clic derecho en el icono de tu servidor → {copy}. Debes ser el propietario de ese servidor o tener {admin} o {manage} allí. Los canales y roles de abajo se verifican contra esto.'
   copy_server_id: Copiar ID del Servidor
+  lookup_waiting: Introduce el ID del servidor para elegir sus canales y roles de una lista.
+  lookup_loading: Buscando los canales y roles del servidor...
+  lookup_found: "{server}: {channels} canales, {roles} roles. ¿Creaste uno nuevo en Discord? Presiona Actualizar."
+  lookup_failed: No se pudieron listar los canales y roles del servidor ({error}). Aún puedes escribir los IDs a continuación.
+  refresh: Actualizar
+  type_ids: Escribir IDs manualmente
+  search: Buscar...
+  search_none: Sin resultados
+  pick_channel: Elegir un canal...
+  everyone_default: "@everyone (predeterminado)"
+  not_in_server: "{id} (no está en este servidor)"
+  role_missing: "@{role} (aún no existe dicho rol)"
   administrator: Administrador
   manage_server: Gestionar Servidor
-  routing_heading: Enrutamiento de Operaciones y Tickets
-  routing_help: Configura dónde publica el bot alertas públicas de operaciones y enruta sugerencias/tickets privados de miembros.
+  routing_heading: Operaciones y Enrutamiento de Tickets
+  routing_help: Configura dónde el bot publica alertas de operaciones públicas y enruta sugerencias/tickets privados de los miembros.
   alert_channel: ID del Canal de Alertas de Operaciones
-  channel_id_title: Debe ser un ID de Canal de Discord válido de 17-20 dígitos
-  role_id_title: Debe ser un ID de Rol de Discord válido de 17-20 dígitos
-  alert_channel_help: Clic derecho en tu canal de anuncios/alertas → {copy}.
+  channel_id_title: Debe ser un ID de canal de Discord válido de 17-20 dígitos
+  role_id_title: Debe ser un ID de rol de Discord válido de 17-20 dígitos
+  alert_channel_help: Haz clic derecho en tu canal de anuncios/alertas → {copy}.
   copy_channel_id: Copiar ID del Canal
   alert_role: ID del Rol de Alerta Predeterminado
   optional: "(Opcional)"
   alert_role_placeholder: Déjalo en blanco para usar @everyone
-  alert_role_help: Clic derecho en tu rol de mención (p. ej., {example}) → {copy}. Si está en blanco, se usa {everyone}.
+  alert_role_help: Haz clic derecho en tu rol de menciones (ej. {example}) → {copy}. Se usará {everyone} si se deja en blanco.
   server_alerts: Publicar también recordatorios de eventos del servidor aquí
-  server_alerts_help: Los recordatorios de eventos de toda la NAP establecidos por los Stewards van al Discord NAP; marca esto para recibirlos también en este canal de alertas.
+  server_alerts_help: Los recordatorios de eventos a nivel NAP establecidos por los Administradores van al Discord NAP; marca esto para recibirlos también en este canal de alertas.
   copy_role_id: Copiar ID del Rol
   officer_channel: ID del Canal de Recepción de Tickets de Oficiales
-  officer_channel_help: Clic derecho en tu {channel} → {copy}. Las propuestas de los miembros y los tickets de alianza de {suggest} se enrutarán aquí para revisión de liderazgo.
-  private_channel: canal privado de tickets para R4/R5
-  delegated_roles: Roles de Liderazgo Delegados
-  delegated_roles_help: Nombres de roles separados por comas que pueden clasificar tickets, gestionar eventos y enviar nominaciones de cofres ({r5} siempre está autorizado).
+  officer_channel_help: Haz clic derecho en tu {channel} → {copy}. Las propuestas de los miembros y los tickets de la alianza de {suggest} se enrutarán aquí para la revisión del liderazgo.
+  private_channel: canal de tickets privado para R4/R5
+  not_in_use: Aún no en uso
+  officer_channel_off: No es necesario por ahora
+  delegated_roles: Roles de Liderazgo Delegado
+  delegated_roles_help: Roles que pueden triar tickets, gestionar eventos y enviar nominaciones de cofres ({r5} siempre está autorizado).
   color: Color de Identidad de la Alianza
   preview: 'Vista previa:'
-  color_help: Aplicado a tu calendario de operaciones, tarjetas de tickets internos y propuestas respaldadas del Consejo NAP.
+  color_help: Aplicado a tu calendario de operaciones, tarjetas de tickets internos y propuestas del Consejo NAP respaldadas.
   submit: Registrar Servidor y Desplegar Comandos
   submitting: Verificando Servidor y Registrando...
-  bad_token: Token de registro inválido o faltante. Ejecuta /registerbot en el servidor NAP.
-  malformed_token: Token mal formado. Solicita un nuevo enlace desde Discord.
-  expired: Este enlace de registro ha expirado (límite de 24h). Ejecuta /registerbot de nuevo.
-  bad_guild: Formato de ID de Servidor de Discord inválido. Debe ser un número de 17-20 dígitos.
-  bad_alert_channel: Formato de ID de Canal de Alertas de Operaciones inválido. Debe ser un número de 17-20 dígitos.
-  bad_alert_role: Formato de ID de Rol de Alerta inválido. Debe ser un número de 17-20 dígitos (o dejar vacío para @everyone).
-  bad_officer_channel: Formato de ID de Canal de Recepción de Tickets inválido. Debe ser un número de 17-20 dígitos.
-  failed: Error de registro
+  bad_token: Token de registro inválido o ausente. Ejecuta /registerbot en el servidor NAP.
+  malformed_token: Token malformado. Por favor, solicita un nuevo enlace desde Discord.
+  expired: Este enlace de registro ha caducado (límite de 24h). Ejecuta /registerbot de nuevo.
+  bad_guild: Formato de ID de servidor de Discord inválido. Debe ser un número de 17-20 dígitos.
+  bad_alert_channel: Formato de ID de canal de alertas de operaciones inválido. Debe ser un número de 17-20 dígitos.
+  bad_alert_role: Formato de ID de rol de alerta inválido. Debe ser un número de 17-20 dígitos (o dejar vacío para @everyone).
+  bad_officer_channel: Formato de ID de canal de recepción de tickets de oficiales inválido. Debe ser un número de 17-20 dígitos.
+  failed: Registro fallido
   error: 'Error de Registro: {error}'
   success: "¡Registro Exitoso!"
-  linked: "{server} está ahora vinculado a {tag}."
+  linked: "{server} ahora está vinculado a {tag}."
   server_id: ID del Servidor {id}
   r_alert_channel: 'Canal de Alertas de Operaciones:'
-  r_target: 'Destinatario de Notificaciones:'
+  r_target: 'Destino de la Notificación:'
   r_role: Rol {id}
   r_default: "(Predeterminado)"
   r_officer_channel: 'Canal de Tickets de Oficiales:'
   r_color: 'Color de Identidad:'
-  r_commands: 'Comandos de Barra Desplegados:'
+  r_commands: 'Comandos Slash Desplegados:'
   r_leaders: 'Liderazgo Autorizado:'
 calendar:
   loading: Cargando horario del Reino...
