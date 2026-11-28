@@ -298,6 +298,16 @@ if (fontBase64 && fontBase64.length > 100 && !fs.existsSync(FONT_PATH)) {
 }
 
 export default async function handler(req, res) {
+  // The cards /calendar shows in Discord (api/_calendar_cards.js) are drawn here too: the
+  // site has one function left of its plan's 12, so pictures share this one. Loaded only
+  // when asked for, so the map's own pictures don't load the card code (or sharp).
+  if (req.query?.card) {
+    const [{ serveCalendarCard }, { inLanguage }] = await Promise.all([
+      import('./_calendar_cards.js'),
+      import('./_messages.js'),
+    ]);
+    return inLanguage(req, () => serveCalendarCard(req, res));
+  }
   try {
     let svg = rawSvg;
     if (!svg || typeof svg !== 'string') {

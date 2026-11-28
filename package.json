@@ -8,7 +8,8 @@
     "@resvg/resvg-js": "^2.6.2",
     "@vercel/blob": "^2.9.0",
     "discord-interactions": "^4.4.0",
-    "js-yaml": "^5.3.0"
+    "js-yaml": "^5.3.0",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "prettier": "3.3.3"

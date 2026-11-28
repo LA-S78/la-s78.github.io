@@ -211,14 +211,22 @@ File.write('api/_cities_data.js', "export default #{JSON.generate(cities)};\n")
 puts "Generated api/_cities_data.js (#{cities.size} cities)"
 
 # The event types' ids and whether the form offers them (api/manage-event.js checks a saved
-# event's type against them)
-event_types = (YAML.load_file('_data/event_types.yml')['types'] || []).map { |t| { 'id' => t['id'], 'preset' => t['preset'] == true } }
+# event's type against them); their colour and picture for the event cards /calendar posts
+# in Discord (api/_bot_calendar.js)
+event_types = (YAML.load_file('_data/event_types.yml')['types'] || []).map do |t|
+  { 'id' => t['id'], 'preset' => t['preset'] == true, 'color' => t['color'], 'picture' => t['picture'] }.compact
+end
 File.write('api/_event_types.js', "export default #{JSON.generate(event_types)};\n")
 puts "Generated api/_event_types.js (#{event_types.size} event types)"
 
 alliances = YAML.load_file('_data/alliances.yml')
 File.write('api/_alliances_data.js', "export default #{JSON.generate(alliances)};\n")
 puts "Generated api/_alliances_data.js (#{alliances['colors'].size} alliance colours)"
+
+# The cards the Discord bot draws (api/_calendar_cards.js): Inter, kept in _fonts/ (OFL)
+card_fonts = %w[Bold Regular].to_h { |w| [w.downcase, Base64.strict_encode64(File.binread("_fonts/Inter-#{w}.otf"))] }
+File.write('api/_card_fonts.js', "export default #{JSON.generate(card_fonts)};\n")
+puts 'Generated api/_card_fonts.js (Inter Bold and Regular)'
 
 font_candidates = [
   '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
