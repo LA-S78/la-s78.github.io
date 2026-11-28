@@ -902,7 +902,7 @@
   line-height: 1.15;
 }
 .ag-time b {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   /* The event's colour, lightened so dark ones (Elixir Scramble's green) stay readable */
   color: color-mix(in srgb, var(--k) 60%, #fff);
 }
@@ -921,9 +921,9 @@
   min-width: 0;
 }
 .ag-title {
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-main);
-  font-size: 1rem;
+  font-size: 1.1rem;
   overflow-wrap: anywhere;
 }
 .ag-meta {
@@ -1150,16 +1150,17 @@
    the right, never leaving a gap) so its subject, about two-thirds across every picture,
    stays in frame. Wider cards show the picture's full width, so they don't change. */
 .ag-event.has-pic {
-  /* Faded into the dark card (as in Discord), lighter towards the right so the scene shows */
+  /* Faded into the dark card only where the text starts (owner: bolder), so most of the
+     scene shows; the text keeps a strong shadow over it (below) */
   --pic-fade: var(--ag-base);
   background:
     linear-gradient(
       90deg,
       var(--pic-fade) 0%,
-      var(--pic-fade) 20%,
-      color-mix(in srgb, var(--pic-fade) 78%, transparent) 42%,
-      color-mix(in srgb, var(--pic-fade) 45%, transparent) 72%,
-      color-mix(in srgb, var(--pic-fade) 25%, transparent) 100%
+      color-mix(in srgb, var(--pic-fade) 90%, transparent) 12%,
+      color-mix(in srgb, var(--pic-fade) 62%, transparent) 36%,
+      color-mix(in srgb, var(--pic-fade) 30%, transparent) 66%,
+      color-mix(in srgb, var(--pic-fade) 10%, transparent) 100%
     ),
     var(--pic) 55% center / cover no-repeat,
     var(--pic-fade);
@@ -1170,19 +1171,25 @@
     linear-gradient(
       90deg,
       color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 0%,
-      color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 20%,
-      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 78%, transparent) 42%,
-      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 45%, transparent) 72%,
-      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 25%, transparent) 100%
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 90%, transparent) 12%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 62%, transparent) 36%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 30%, transparent) 66%,
+      color-mix(in srgb, color-mix(in srgb, var(--k) 14%, var(--pic-fade)) 10%, transparent) 100%
     ),
     var(--pic) 55% center / cover no-repeat,
     var(--pic-fade);
 }
 
+.ag-event.has-pic .ag-time,
 .ag-event.has-pic .ag-title,
 .ag-event.has-pic .ag-desc,
 .ag-event.has-pic .ag-meta {
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  text-shadow:
+    0 1px 2px #000,
+    0 0 10px rgba(0, 0, 0, 0.75);
+}
+.ag-event.has-pic .ag-desc {
+  color: color-mix(in srgb, var(--text-muted) 70%, #fff);
 }
 
 /* Leaders: "Edit events" (showing Edit / Delete on their events while on) and "Add an event",
