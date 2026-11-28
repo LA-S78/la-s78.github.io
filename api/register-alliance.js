@@ -3,7 +3,7 @@ import { mayChangeDiscord } from './_discord_send.js';
 import { isGistConfigured, readGist, gistJson, updateGist } from './_gist.js';
 import { verifyToken } from './_tokens.js';
 import { ALLIANCE_COMMANDS_SCHEMA } from './_bot_schema.js'; // one list, shared with the bot
-import { checkTargetServer } from './_register_checks.js';
+import { checkServerAccess, checkTargetServer, serverChoices } from './_register_checks.js';
 import { isSteward } from './_stewards.js';
 import { inLanguage, say } from './_messages.js';
 
@@ -45,6 +45,32 @@ async function respond(req, res) {
   }
 
   const cleanGuildId = String(guildId).trim();
+
+  // --- The portal's lists to pick from (owner, 2026-11-28): the server's text channels and
+  //     roles, for the same person and link that may register it. Its Refresh asks again
+  //     after channels or roles are made in Discord. Nothing is saved.
+  if (req.body?.action === 'lookup') {
+    try {
+      const access = await checkServerAccess({
+        guildId: cleanGuildId,
+        uid: payload.uid || null,
+        steward: Boolean(payload.uid && isSteward(payload.uid)),
+        botToken,
+      });
+      if (!access.ok) return res.status(access.status).json({ error: access.error });
+      const channelsRes = await access.get(`/guilds/${cleanGuildId}/channels`);
+      if (!channelsRes.ok) {
+        return res.status(502).json({
+          error: say('api_register.channels_check_failed', { status: channelsRes.status }),
+        });
+      }
+      return res.status(200).json(serverChoices(access.guild, await channelsRes.json()));
+    } catch (err) {
+      return res
+        .status(502)
+        .json({ error: say('api_register.discord_unreachable', { reason: err.message }) });
+    }
+  }
   const cleanRoles = Array.isArray(delegatedRoles)
     ? delegatedRoles
         .map((r) =>

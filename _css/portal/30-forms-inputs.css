@@ -136,7 +136,9 @@
   font-size: 0.82rem;
   font-family: var(--font-body);
   box-sizing: border-box;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .slot-input:focus {
@@ -271,7 +273,6 @@
   border: 1px solid var(--accent-color);
   color: var(--text-main);
 }
-
 
 /* Nomination page: the ranked list and the chest each name gets (portal/nominate.html) */
 #ranked-input {
@@ -477,4 +478,98 @@
   cursor: pointer;
   font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+/* Registration: the server's channels and roles to pick from (portal/register.html) */
+.reg-lookup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.reg-lookup-status {
+  flex: 1;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.reg-lookup-status[data-tone='ok'] {
+  color: var(--text-main);
+}
+
+.reg-lookup-status[data-tone='warn'] {
+  color: var(--gold);
+}
+
+.reg-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--control-radius, 6px);
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.reg-refresh-btn:hover:not(:disabled) {
+  border-color: var(--accent-color);
+}
+
+.reg-refresh-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.reg-manual-link {
+  margin-top: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font-size: 0.72rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.reg-role-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.reg-role-pick {
+  --role: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--role);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.reg-role-pick:has(input:checked) {
+  border-color: var(--accent-color);
+  border-left-color: var(--role);
+  background: color-mix(in srgb, var(--accent-color) 14%, transparent);
+}
+
+.reg-role-pick input {
+  accent-color: var(--accent-color);
+  margin: 0;
+}
+
+/* .slot-input sets display, which would beat the hidden attribute */
+#registration-form [hidden] {
+  display: none !important;
 }
