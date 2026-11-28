@@ -51,6 +51,12 @@ strings: [register]
             required
           />
           <div class="portal-hint" data-th="register.guild_help" data-th-strong="copy:register.copy_server_id admin:register.administrator manage:register.manage_server"></div>
+          <!-- The server's channels and roles to pick from (filled once the ID is in) -->
+          <div class="reg-lookup">
+            <span id="reg-lookup-status" class="reg-lookup-status" aria-live="polite">{{ "register.lookup_waiting" | t }}</span>
+            <button type="button" id="btn-reg-refresh" class="reg-refresh-btn">{% include ui-icon.html name="refresh" %}{{ "register.refresh" | t }}</button>
+          </div>
+          <button type="button" id="btn-reg-manual" class="reg-manual-link" hidden>{{ "register.type_ids" | t }}</button>
         </div>
 
         <!-- Notification & Ticket Routing Configuration -->
@@ -63,6 +69,7 @@ strings: [register]
             <label for="reg-alert-channel" class="portal-label">
               {{ "register.alert_channel" | t }} <span class="portal-req">*</span>
             </label>
+            <select id="pick-reg-alert-channel" class="slot-input reg-pick" data-site-select data-search="{{ "register.search" | t }}" data-search-none="{{ "register.search_none" | t }}" data-for="reg-alert-channel" aria-label="{{ "register.alert_channel" | t }}" hidden></select>
             <input
               type="text"
               id="reg-alert-channel"
@@ -81,6 +88,7 @@ strings: [register]
             <label for="reg-alert-role" class="portal-label">
               {{ "register.alert_role" | t }} <span class="portal-opt">{{ "register.optional" | t }}</span>
             </label>
+            <select id="pick-reg-alert-role" class="slot-input reg-pick" data-site-select data-search="{{ "register.search" | t }}" data-search-none="{{ "register.search_none" | t }}" data-for="reg-alert-role" aria-label="{{ "register.alert_role" | t }}" hidden></select>
             <input
               type="text"
               id="reg-alert-role"
@@ -102,20 +110,19 @@ strings: [register]
             <div class="portal-hint">{{ "register.server_alerts_help" | t }}</div>
           </div>
 
-          <!-- Officer Triage / Ticket Channel ID -->
-          <div class="portal-field">
+          <!-- Officer Triage / Ticket Channel: switched off (owner, 2026-11-28). Nothing posts
+               tickets to it yet; shown greyed out so alliances know it's coming. -->
+          <div class="portal-field is-off" aria-disabled="true">
             <label for="reg-officer-channel" class="portal-label">
-              {{ "register.officer_channel" | t }} <span class="portal-req">*</span>
+              {{ "register.officer_channel" | t }} <span class="portal-off-tag">{{ "register.not_in_use" | t }}</span>
             </label>
             <input
               type="text"
               id="reg-officer-channel"
               name="officer_channel_id"
               class="slot-input"
-              placeholder="{{ "register.example" | t: "id", "1298765432109876543" }}"
-              pattern="^\d{17,20}$"
-              title="{{ "register.channel_id_title" | t }}"
-              required
+              placeholder="{{ "register.officer_channel_off" | t }}"
+              disabled
             />
             <div class="portal-hint" data-th="register.officer_channel_help" data-th-strong="channel:register.private_channel copy:register.copy_channel_id" data-th-code="suggest:/suggest"></div>
           </div>
@@ -126,6 +133,7 @@ strings: [register]
           <label for="input-roles" class="portal-label portal-label-accent">
             {{ "register.delegated_roles" | t }} <span class="portal-opt">{{ "register.optional" | t }}</span>
           </label>
+          <div id="pick-roles" class="reg-role-picks" hidden></div>
           <input
             type="text"
             id="input-roles"
@@ -276,6 +284,187 @@ strings: [register]
       }
     });
 
+    // ── Pick channels and roles from the server (owner, 2026-11-28) ──────────────────────
+    // Once the server ID is in, the server's text channels and roles are listed to pick
+    // from. Refresh lists them again after channels or roles are made in Discord, keeping
+    // what was picked. The ID boxes stay underneath: "Type IDs instead" brings them back.
+    const guildInput = document.getElementById("input-guild-id");
+    const lookupStatus = document.getElementById("reg-lookup-status");
+    const btnRefresh = document.getElementById("btn-reg-refresh");
+    const btnManual = document.getElementById("btn-reg-manual");
+    const rolesInput = document.getElementById("input-roles");
+    const rolePicks = document.getElementById("pick-roles");
+    const pickers = [...document.querySelectorAll("select.reg-pick")];
+    let choices = null; // { serverName, channels, roles } for `choicesFor`
+    let choicesFor = "";
+    let manual = false;
+    let lookupSeq = 0;
+
+    const splitNames = (text) =>
+      String(text || "")
+        .split(/[,]+/)
+        .map((r) => r.replace(/^@/, "").trim())
+        .filter(Boolean);
+    const sameName = (a, b) => a.toLowerCase() === b.toLowerCase();
+
+    function setStatus(text, tone) {
+      lookupStatus.textContent = text;
+      lookupStatus.dataset.tone = tone || "";
+    }
+
+    function option(value, text, selected) {
+      const o = document.createElement("option");
+      o.value = value;
+      o.textContent = text;
+      if (selected) o.selected = true;
+      return o;
+    }
+
+    function fillChannelPicker(select, current) {
+      select.replaceChildren(option("", t("register.pick_channel"), !current));
+      for (const c of choices.channels) {
+        const o = option(c.id, `#${c.name}`, c.id === current);
+        if (c.category) o.dataset.hint = c.category; // its category, as Discord groups it
+        select.append(o);
+      }
+      // A channel picked (or typed) that the list no longer has: kept, marked
+      if (current && !choices.channels.some((c) => c.id === current)) {
+        select.append(option(current, t("register.not_in_server", { id: current }), true));
+      }
+    }
+
+    function fillRolePicker(select, current) {
+      select.replaceChildren(option("", t("register.everyone_default"), !current));
+      for (const r of choices.roles) select.append(option(r.id, `@${r.name}`, r.id === current));
+      if (current && !choices.roles.some((r) => r.id === current)) {
+        select.append(option(current, t("register.not_in_server", { id: current }), true));
+      }
+    }
+
+    function fillRolePicks() {
+      const picked = splitNames(rolesInput.value);
+      rolePicks.replaceChildren();
+      const names = choices.roles.map((r) => r.name);
+      // Names typed that match no role stay ticked (the role may be made later)
+      for (const name of picked) if (!names.some((n) => sameName(n, name))) names.push(name);
+      for (const name of names) {
+        const role = choices.roles.find((r) => r.name === name);
+        const label = document.createElement("label");
+        label.className = "reg-role-pick";
+        if (role?.color) label.style.setProperty("--role", role.color);
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.value = name;
+        box.checked = picked.some((p) => sameName(p, name));
+        box.addEventListener("change", () => {
+          rolesInput.value = [...rolePicks.querySelectorAll("input:checked")]
+            .map((b) => b.value)
+            .join(", ");
+        });
+        const text = document.createElement("span");
+        text.textContent = role ? `@${name}` : t("register.role_missing", { role: name });
+        label.append(box, text);
+        rolePicks.append(label);
+      }
+    }
+
+    function showPickers(on) {
+      for (const select of pickers) {
+        const input = document.getElementById(select.dataset.for);
+        select.hidden = !on;
+        input.hidden = on;
+        // The ID box is what's sent; the list only writes into it
+        input.required = !on && input.id !== "reg-alert-role";
+        select.required = on && input.id !== "reg-alert-role";
+        const label = document.querySelector(`label[for="${input.id}"], label[for="${select.id}"]`);
+        if (label) label.htmlFor = on ? select.id : input.id;
+        if (on) (input.id === "reg-alert-role" ? fillRolePicker : fillChannelPicker)(select, input.value.trim());
+        const hint = input.parentElement.querySelector(".portal-hint");
+        if (hint) hint.hidden = on;
+      }
+      rolePicks.hidden = !on;
+      rolesInput.hidden = on;
+      if (on) fillRolePicks();
+      btnManual.hidden = !on;
+    }
+
+    pickers.forEach((select) =>
+      select.addEventListener("change", () => {
+        document.getElementById(select.dataset.for).value = select.value;
+      }),
+    );
+
+    async function lookup() {
+      const guildId = guildInput.value.trim();
+      if (!/^\d{17,20}$/.test(guildId)) {
+        choices = null;
+        choicesFor = "";
+        showPickers(false);
+        setStatus(t("register.lookup_waiting"));
+        return;
+      }
+      const seq = ++lookupSeq;
+      btnRefresh.disabled = true;
+      setStatus(t("register.lookup_loading"));
+      try {
+        const res = await fetch("/api/register-alliance", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "lookup", token, guildId }),
+        });
+        const result = await res.json().catch(() => ({}));
+        if (seq !== lookupSeq) return; // a newer ID was typed meanwhile
+        if (!res.ok) throw new Error(result.error || `HTTP ${res.status}`);
+        // Another server: what was picked belonged to the old one
+        if (choicesFor && choicesFor !== guildId) {
+          pickers.forEach((sel) => (document.getElementById(sel.dataset.for).value = ""));
+        }
+        choices = result;
+        choicesFor = guildId;
+        setStatus(
+          t("register.lookup_found", {
+            server: result.serverName || guildId,
+            channels: result.channels.length,
+            roles: result.roles.length,
+          }),
+          "ok",
+        );
+        if (!manual) showPickers(true);
+      } catch (err) {
+        if (seq !== lookupSeq) return;
+        choices = null;
+        showPickers(false);
+        setStatus(t("register.lookup_failed", { error: err.message }), "warn");
+      } finally {
+        if (seq === lookupSeq) btnRefresh.disabled = false;
+      }
+    }
+
+    if (guildInput.value.trim()) lookup(); // filled in by the browser
+    let lookupTimer = null;
+    guildInput.addEventListener("input", () => {
+      clearTimeout(lookupTimer);
+      lookupTimer = setTimeout(lookup, 500);
+    });
+    btnRefresh.addEventListener("click", () => {
+      manual = false;
+      lookup();
+    });
+    btnManual.addEventListener("click", () => {
+      manual = true;
+      showPickers(false);
+    });
+
+    /** A channel's or role's name for the summary, else its ID. */
+    const channelName = (id) => {
+      const c = choices?.channels.find((x) => x.id === id);
+      return c ? `#${c.name}` : id;
+    };
+    const roleName = (id) => {
+      const r = choices?.roles.find((x) => x.id === id);
+      return r ? `@${r.name}` : id;
+    };
+
     const form = document.getElementById("registration-form");
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -284,14 +473,9 @@ strings: [register]
       const alertChannelId = document.getElementById("reg-alert-channel").value.trim();
       const rawAlertRole = document.getElementById("reg-alert-role").value.trim();
       const alertRoleId = rawAlertRole || null;
-      const officerChannelId = document.getElementById("reg-officer-channel").value.trim();
       const allianceColor = colorPicker.value.toUpperCase();
 
-      const rawRoles = document.getElementById("input-roles").value;
-      const delegatedRoles = rawRoles
-        .split(/[,]+/)
-        .map((r) => r.trim())
-        .filter(Boolean);
+      const delegatedRoles = splitNames(rolesInput.value);
 
       if (!/^\d{17,20}$/.test(guildId)) {
         alert(t("register.bad_guild"));
@@ -305,11 +489,6 @@ strings: [register]
 
       if (alertRoleId && !/^\d{17,20}$/.test(alertRoleId)) {
         alert(t("register.bad_alert_role"));
-        return;
-      }
-
-      if (!/^\d{17,20}$/.test(officerChannelId)) {
-        alert(t("register.bad_officer_channel"));
         return;
       }
 
@@ -327,7 +506,6 @@ strings: [register]
             alert_channel_id: alertChannelId,
             alert_role_id: alertRoleId,
             server_event_alerts: document.getElementById("reg-server-alerts").checked,
-            officer_channel_id: officerChannelId,
             alliance_color: allianceColor,
           }),
         });
@@ -349,9 +527,8 @@ strings: [register]
         elSuccess.innerHTML = `
           <strong>${ic("check", "ok")}${escapeHtml(t("register.success"))}</strong><br><br>
           ${th("register.linked", { server, tag })}<br><br>
-          - ${label("register.r_alert_channel")} ${code(alertChannelId)}<br>
-          - ${label("register.r_target")} ${alertRoleId ? th("register.r_role", { id: code(alertRoleId) }) : `${code("@everyone")} ${escapeHtml(t("register.r_default"))}`}<br>
-          - ${label("register.r_officer_channel")} ${code(officerChannelId)}<br>
+          - ${label("register.r_alert_channel")} ${code(channelName(alertChannelId))}<br>
+          - ${label("register.r_target")} ${alertRoleId ? (roleName(alertRoleId) !== alertRoleId ? code(roleName(alertRoleId)) : th("register.r_role", { id: code(alertRoleId) })) : `${code("@everyone")} ${escapeHtml(t("register.r_default"))}`}<br>
           - ${label("register.r_color")} ${code(allianceColor)}<br>
           - ${label("register.r_commands")} ${["/calendar", "/suggest", "/nominate", "/rewards", "/map", "/sb", "/rules"].map(code).join(", ")}.<br>
           - ${label("register.r_leaders")} <strong>@R5</strong>${delegatedRoles.length ? `, ${delegatedRoles.map((r) => "@" + escapeHtml(r)).join(", ")}` : ""}.

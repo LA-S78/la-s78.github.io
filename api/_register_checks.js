@@ -31,29 +31,13 @@ export function canManageServer(guild, memberRoleIds = []) {
 }
 
 /**
- * Checks the target server for a registration.
- * @param {object} p
- * @param {string} p.guildId the server to link
- * @param {string|null} p.uid Discord id of the person registering (from the /registerbot link)
- * @param {boolean} p.steward a Steward registering on an alliance's behalf (no admin check)
- * @param {string} p.alertChannelId
- * @param {string} p.officerChannelId
- * @param {string|null} p.alertRoleId
- * @param {string[]} p.delegatedRoles role names (lower case)
- * @param {string} p.botToken
- * @returns {Promise<{ ok: true, warnings: string[], serverName: string }
+ * The server's own check: the bot is in it and the person registering may manage it
+ * (Stewards may register on an alliance's behalf). Shared by the registration and the
+ * portal's channel and role lists.
+ * @returns {Promise<{ ok: true, guild: object, get: Function }
  *   | { ok: false, status: number, error: string }>}
  */
-export async function checkTargetServer({
-  guildId,
-  uid,
-  steward = false,
-  alertChannelId,
-  officerChannelId,
-  alertRoleId = null,
-  delegatedRoles = [],
-  botToken,
-}) {
+export async function checkServerAccess({ guildId, uid, steward = false, botToken }) {
   const get = (path) =>
     fetch(`${DISCORD_API}${path}`, {
       headers: { Authorization: `Bot ${botToken}` },
@@ -90,6 +74,75 @@ export async function checkTargetServer({
       }
     }
   }
+  return { ok: true, guild, get };
+}
+
+const POSTABLE = new Set([0, 5]); // text and announcement channels
+
+/**
+ * What the portal offers to pick from (owner, 2026-11-28: pick, don't paste IDs): the
+ * server's text channels in Discord's order, under their category, and its roles, highest
+ * first, leaving out @everyone and roles that belong to bots or integrations.
+ */
+export function serverChoices(guild, channels = []) {
+  const list = Array.isArray(channels) ? channels : [];
+  const categories = new Map(list.filter((c) => c.type === 4).map((c) => [c.id, c]));
+  const catPos = (c) => {
+    const cat = categories.get(c.parent_id);
+    return cat ? cat.position || 0 : -1; // channels outside a category come first, as in Discord
+  };
+  const outChannels = list
+    .filter((c) => POSTABLE.has(c.type))
+    .sort(
+      (a, b) =>
+        catPos(a) - catPos(b) ||
+        String(a.parent_id || '').localeCompare(String(b.parent_id || '')) ||
+        (a.position || 0) - (b.position || 0),
+    )
+    .map((c) => ({
+      id: String(c.id),
+      name: String(c.name || ''),
+      category: categories.get(c.parent_id)?.name || null,
+    }));
+  const roles = (Array.isArray(guild?.roles) ? guild.roles : [])
+    .filter((r) => r && r.id !== guild.id && !r.managed && String(r.name || '').trim())
+    .sort((a, b) => (b.position || 0) - (a.position || 0))
+    .map((r) => ({
+      id: String(r.id),
+      name: String(r.name).trim(),
+      color: r.color ? `#${Number(r.color).toString(16).padStart(6, '0')}` : null,
+    }));
+  return { serverName: guild?.name || '', channels: outChannels, roles };
+}
+
+/**
+ * Checks the target server for a registration.
+ * @param {object} p
+ * @param {string} p.guildId the server to link
+ * @param {string|null} p.uid Discord id of the person registering (from the /registerbot link)
+ * @param {boolean} p.steward a Steward registering on an alliance's behalf (no admin check)
+ * @param {string} p.alertChannelId
+ * @param {string} p.officerChannelId
+ * @param {string|null} p.alertRoleId
+ * @param {string[]} p.delegatedRoles role names (lower case)
+ * @param {string} p.botToken
+ * @returns {Promise<{ ok: true, warnings: string[], serverName: string }
+ *   | { ok: false, status: number, error: string }>}
+ */
+export async function checkTargetServer({
+  guildId,
+  uid,
+  steward = false,
+  alertChannelId,
+  officerChannelId,
+  alertRoleId = null,
+  delegatedRoles = [],
+  botToken,
+}) {
+  const fail = (status, error) => ({ ok: false, status, error });
+  const access = await checkServerAccess({ guildId, uid, steward, botToken });
+  if (!access.ok) return access;
+  const { guild, get } = access;
 
   // The channels and role typed are in this server
   const channelsRes = await get(`/guilds/${guildId}/channels`);
@@ -104,7 +157,7 @@ export async function checkTargetServer({
       say('api_register.alert_channel_missing', { id: alertChannelId, server: guild.name }),
     );
   }
-  if (!channelIds.has(officerChannelId)) {
+  if (officerChannelId && !channelIds.has(officerChannelId)) {
     return fail(
       400,
       say('api_register.officer_channel_missing', { id: officerChannelId, server: guild.name }),
