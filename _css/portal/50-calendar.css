@@ -1240,3 +1240,60 @@ dialog.cal-confirm {
   border-color: color-mix(in srgb, var(--status-danger) 85%, black) !important;
   box-shadow: 0 6px 18px color-mix(in srgb, var(--status-danger) 45%, transparent) !important;
 }
+
+/* An alliance's opt-in to a server-wide event's reminder (js/calendar.js openOptinDialog;
+   owner, 2026-11-28): a small button under the event's time for its R4/R5 */
+.ag-optin {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 2px 8px;
+  width: max-content;
+  max-width: 100%;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--ag-base, #0f0d0b) 80%, transparent);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.ag-optin .ui-ic {
+  width: 12px;
+  height: 12px;
+}
+.ag-optin:hover {
+  color: var(--text-main);
+  border-color: var(--accent-color);
+}
+.ag-optin.is-on {
+  color: var(--accent-text);
+  border-color: color-mix(in srgb, var(--accent-color) 70%, transparent);
+}
+/* Its pop-up: who to ping */
+.cal-optin-intro {
+  margin: 0 0 8px;
+}
+.cal-optin-pings {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.cal-optin-pings label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.cal-optin-role input[type='text'] {
+  width: 100%;
+}
+/* The form's "let alliances opt in" (Stewards) */
+.cal-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}

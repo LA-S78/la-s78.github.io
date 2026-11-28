@@ -10,9 +10,10 @@ import EVENT_TYPES from './_event_types.js';
 const PRESET_TYPES = EVENT_TYPES.filter((t) => t.preset).map((t) => t.id);
 import { isSteward } from './_stewards.js';
 import { inLanguage, say } from './_messages.js';
-import { sameScope } from './_alliances.js'; // RâvN's events aren't RÂVN's
+import { findTag, sameScope } from './_alliances.js'; // RâvN's events aren't RÂVN's
 import { listGuildRoles, roleServerFor } from './_guild_roles.js';
 import { isKwBattleId } from './_kw_battle.js';
+import { OPTIN_PINGS } from './_event_optins.js';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -113,6 +114,8 @@ async function respond(req, res) {
         color: f.color,
         event_type: f.event_type,
         allDay: false,
+        // Server-wide events: whether alliances may opt in to the reminder (api/_event_optins.js)
+        ...(isGlobalAdmin ? { allow_optin: eventData?.allow_optin !== false } : {}),
         createdAt: new Date().toISOString(),
       };
 
@@ -138,6 +141,61 @@ async function respond(req, res) {
     // --- ACTION: EDIT EVENT ---
     // Same checks as creating; same scope rule as deleting (an alliance edits only its own
     // events, Stewards only server-wide ones). The id, scope and creation time stay.
+    // --- ACTION: AN ALLIANCE'S CHOICE FOR A SERVER-WIDE EVENT'S REMINDER (owner, 2026-11-28) ---
+    // R4/R5 (their own alliance, decided above): post it in their alert channel or not, and
+    // who it pings (api/_event_optins.js). The event must let alliances opt in.
+    if (action === 'optin') {
+      if (isGlobalAdmin) return res.status(403).json({ error: say('api_events.optin_global') });
+      const alliances = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
+      const tag = findTag(Object.keys(alliances), callerScope);
+      if (!tag) return res.status(404).json({ error: say('api_events.optin_no_alliance') });
+      const asked = req.body?.optin || {};
+      const on = asked.on === true;
+      const ping = OPTIN_PINGS.includes(asked.ping) ? asked.ping : 'role';
+      let roleId = null;
+      if (on && ping === 'custom_role') {
+        roleId = String(asked.role_id || '').trim();
+        if (!/^\d{17,20}$/.test(roleId))
+          return res.status(400).json({ error: say('api_events.role_id_needed') });
+      }
+      if (on && !alliances[tag]?.alert_channel_id) {
+        return res.status(400).json({ error: say('api_events.optin_no_channel', { tag }) });
+      }
+      const kw = isKwBattleId(eventId);
+      const target = kw
+        ? calendarState.kw_battle || {}
+        : calendarState.custom_events.find((e) => e.id === eventId);
+      if (!target || (!kw && !sameScope(target.scope, 'global'))) {
+        return res.status(404).json({ error: say('api_events.not_found') });
+      }
+      if (target.allow_optin === false) {
+        return res.status(403).json({ error: say('api_events.optin_closed') });
+      }
+      const choice = { on, ping, role_id: roleId, at: new Date().toISOString() };
+      let found = false;
+      await updateGist(
+        (fresh) => {
+          const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
+          const evt = kw
+            ? (state.kw_battle = state.kw_battle || {})
+            : (state.custom_events || []).find((e) => e.id === eventId);
+          if (!evt) return null; // deleted meanwhile
+          found = true;
+          evt.optins = { ...(evt.optins || {}), [tag]: choice };
+          return {
+            files: { 'calendar-state.json': state },
+            description: `[${tag}] reminders ${on ? 'on' : 'off'} for ${kw ? 'the Kingdom War battle' : eventId}`,
+          };
+        },
+        { gist },
+      );
+      if (!found) return res.status(404).json({ error: say('api_events.not_found') });
+      return res.status(200).json({
+        success: true,
+        message: say(on ? 'api_events.optin_on' : 'api_events.optin_off', { tag }),
+      });
+    }
+
     // The Kingdom War battle (api/_kw_battle.js; owner, 2026-11-28): Stewards change its
     // description and reminder; its day, time and length follow the rotation
     if (action === 'edit' && isKwBattleId(eventId)) {
@@ -155,6 +213,7 @@ async function respond(req, res) {
             ...(state.kw_battle || {}),
             ...checked.fields,
             description: description || null,
+            allow_optin: eventData?.allow_optin !== false,
             updatedAt: new Date().toISOString(),
           };
           return {
@@ -192,6 +251,7 @@ async function respond(req, res) {
         reminder_minutes: f.reminder_minutes,
         color: f.color,
         event_type: f.event_type,
+        ...(isGlobalAdmin ? { allow_optin: eventData?.allow_optin !== false } : {}),
         updatedAt: new Date().toISOString(),
       };
 

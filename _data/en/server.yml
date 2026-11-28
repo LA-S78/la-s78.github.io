@@ -170,6 +170,12 @@ api_proposals:
   week_and_threat: "Target week and threat server are required."
 
 api_events:
+  optin_global: "Opting in is for an alliance's own channel: switch to your alliance's events first."
+  optin_no_alliance: "Your alliance isn't on the map yet, so it has nowhere to get reminders."
+  optin_no_channel: "[{tag}] has no alert channel yet: run /registerbot in your Discord first."
+  optin_closed: "This event's reminder isn't open to alliances."
+  optin_on: "[{tag}] will get this event's reminder."
+  optin_off: "[{tag}] won't get this event's reminder."
   kw_stewards_only: "Only Stewards can edit the Kingdom War battle."
   kw_no_delete: "The Kingdom War battle follows the rotation: it can be edited, not deleted."
   kw_saved: "Kingdom War battle saved: every Kingdom War week's battle uses it."
