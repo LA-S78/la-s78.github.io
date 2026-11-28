@@ -502,40 +502,40 @@ register:
   r_commands: 'Slash-Befehle bereitgestellt:'
   r_leaders: 'Autorisierte Führung:'
 calendar:
-  loading: Lade Königreich-Zeitplan...
-  load_failed: 'Laden des Kalenders fehlgeschlagen: {error}'
+  loading: Kingdom-Zeitplan wird geladen...
+  load_failed: 'Kalender konnte nicht geladen werden: {error}'
   phase: Phase
-  schedule_title: Zeitplan Königreichskrieg
-  loading_cycle: Lade Zyklusdetails...
+  schedule_title: Königreichskrieg-Zeitplan
+  loading_cycle: Zyklusdetails werden geladen...
   badge_closed: Belohnungen geschlossen
   badge_kob_open: König des Kampfes offen
-  badge_awaiting: Warte auf Ergebnis des Königreichskriegs
+  badge_awaiting: Warten auf KW-Ergebnis
   badge_open: Belohnungen offen
-  set2_off_week: Nur Königsempfehlung (kein Königreichskrieg).
+  set2_off_week: Nur Belobigung des Königs (kein Königreichskrieg).
   set2_won: 'Königreichskrieg gewonnen: Belohnung „König des Kampfes“ ebenfalls offen.'
-  set2_lost: 'Königreichskrieg verloren: Nur Königsempfehlung.'
-  set2_pending: Belohnung „König des Kampfes“ bei Sieg im Krieg am Samstag; der König verteilt sie nach dem Ergebnis.
+  set2_lost: 'Königreichskrieg verloren: Nur Belobigung des Königs.'
+  set2_pending: Belohnung „König des Kampfes“ bei Sieg im Samstagskrieg; der König verteilt diese nach dem Ergebnis.
   rewards_open_until: Belohnungen für {week} offen bis Dienstag 23:59 GT. {set2}
-  rewards_closed: Belohnungen sind geschlossen. Die nächste Öffnung ist am Freitag gegen 20:00 GT, nach dem Kapitol-Event.
+  rewards_closed: Belohnungen sind geschlossen. Das nächste Mal offen am Freitag gegen 20:00 GT, nach dem Kapitol-Event.
   capitol_holder: KAPITOL-HALTER
   current_holder: AKTUELLER KAPITOL-HALTER
   next_holder: NÄCHSTER KAPITOL-HALTER
   rank: 'Rang #{rank}'
-  rank_override: 'Rang #{rank} (Überschrieben)'
-  rank_override_schedule: 'Rang #{rank} • Überschriebener Zeitplan'
-  captured_friday: Eingenommen am Freitag
-  captures_today: Einnahmen heute
-  captures_friday: Einnahmen am Freitag
+  rank_override: 'Rang #{rank} (Überschreiben)'
+  rank_override_schedule: 'Rang #{rank} • Zeitplan überschreiben'
+  captured_friday: Erobert am Freitag
+  captures_today: Eroberungen heute
+  captures_friday: Eroberungen am Freitag
   cycle_progress: ZYKLUSFORTSCHRITT
   day_of_28: Tag {day} von 28 ({week})
   week_n: Woche {n}
   next_reset: NÄCHSTER RESET (00:00 GT)
-  next_kw: NÄCHSTE SCHLACHT (Königreichskrieg)
+  next_kw: NÄCHSTE KW-SCHLACHT
   saturday: Samstag
   today: HEUTE
-  none_this_week: Diese Woche keine
+  none_this_week: Keine diese Woche
   upcoming: Bevorstehende Events
-  times_shown: Zeiten werden in {gt} & deiner Ortszeit angezeigt
+  times_shown: Zeiten angezeigt in {gt} & deiner Ortszeit
   gt_label: Game Time (UTC-2)
   view_label: Kalenderansicht
   type_label: Event-Typ
@@ -545,9 +545,8 @@ calendar:
   view_week: Woche
   view_cycle: Zyklus
   show_label: Event-Typen anzeigen
-  kind_server: Server
+  kind_kingdom: Königreich
   kind_alliance: Allianz
-  kind_war: Königreichskrieg
   kind_capitol: Kapitol
   this_week: Diese Woche
   last_week: Letzte Woche
@@ -557,7 +556,7 @@ calendar:
   this_cycle: Dieser Zyklus
   kvk_short: KvK {n}
   off_short: Aus
-  king_unknown: Wird beim Reset entschieden
+  king_unknown: Entscheidung beim Reset
   day_today: Heute
   day_tomorrow: Morgen
   day_yesterday: Gestern
@@ -565,16 +564,16 @@ calendar:
   events_count_other: "{n} Events"
   nothing_planned: Nichts geplant
   now_line: Jetzt · {time} GT
-  local_time: "{time} Ortszeit"
+  local_time: "{time} lokal"
   until: bis {when} GT
-  happening_now: Findet jetzt statt · endet in {time}
+  happening_now: Läuft gerade · endet in {time}
   next_up: Als Nächstes · in {time}
-  dur_m: "{m} Min."
-  dur_h: "{h} Std."
-  dur_hm: "{h} Std. {m} Min."
-  dur_dh: "{d} T. {h} Std."
-  ev_capture_title_open: Kapitol-Einnahme
-  ev_capture_desc_open: Die Plätze dieses Zyklus werden beim Reset entschieden.
+  dur_m: "{m}m"
+  dur_h: "{h}h"
+  dur_hm: "{h}h {m}m"
+  dur_dh: "{d}d {h}h"
+  ev_capture_title_open: Kapitol-Eroberung
+  ev_capture_desc_open: Die Sitze dieses Zyklus werden beim Reset entschieden.
   all_day: Ganztägig
   every_2_days: Alle 2 Tage
   weekly: Wöchentlich
@@ -584,15 +583,15 @@ calendar:
   edit_events: Events bearbeiten
   edit_done: "✓ Bearbeitung abgeschlossen"
   add_event: Event hinzufügen
-  ev_capture_title: Kapitol-Einnahme — {who}
-  ev_capture_desc: "{who} ({rank}) nimmt am Freitag das Kapitol ein."
-  ev_kw_title: Königreichskrieg-Schlacht
-  ev_kw_desc: Startet um 12:00 GT, endet meist gegen 14:00 GT. Ein Sieg öffnet zusätzlich zur Königsempfehlung die Belohnungstruhen für „König des Kampfes“.
+  ev_capture_title: Kapitol-Eroberung — {who}
+  ev_capture_desc: "{who} ({rank}) erobert am Freitag das Kapitol."
+  ev_kw_title: Königreichskrieg
+  ev_kw_desc: Beginnt um 12:00 GT, endet normalerweise gegen 14:00 GT. Ein Sieg schaltet zusätzlich zur Belobigung des Königs die Belohnungstruhen „König des Kampfes“ frei.
   ev_open_title: Belohnungen offen — {week}
-  ev_open_desc_kw: Königsempfehlung öffnet nach dem Kapitol-Event. Belohnung „König des Kampfes“ folgt bei Sieg im Königreichskrieg am Samstag; der König verteilt sie nach dem Ergebnis.
-  ev_open_desc: Königsempfehlung öffnet nach dem Kapitol-Event (diese Woche kein Königreichskrieg).
-  ev_close_title: Belohnungen schließen — {week}
-  ev_close_desc: 'Truhen laufen Mittwoch um 00:00 GT ab: Vorher alles verteilen.'
+  ev_open_desc_kw: Belobigung des Königs öffnet nach dem Kapitol-Event. Belohnung „König des Kampfes“ folgt, falls der Samstag-Königreichskrieg gewonnen wurde; der König verteilt diese nach dem Ergebnis.
+  ev_open_desc: Belobigung des Königs öffnet nach dem Kapitol-Event (kein Königreichskrieg diese Woche).
+  ev_close_title: Belohnungen geschlossen — {week}
+  ev_close_desc: 'Truhen laufen am Mittwoch um 00:00 GT ab: Alles davor verteilen.'
 calendar_events:
   reminder_hint: Im Alarm-Kanal deiner Allianz gepostet.
   reminder_hint_server: Im Alarm-Kanal des NAP Discord gepostet, sowie in Allianzen, die zugestimmt haben.

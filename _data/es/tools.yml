@@ -502,27 +502,27 @@ register:
   r_commands: 'Comandos de Barra Desplegados:'
   r_leaders: 'Liderazgo Autorizado:'
 calendar:
-  loading: Cargando el horario del reino...
+  loading: Cargando horario del Reino...
   load_failed: 'Error al cargar el calendario: {error}'
   phase: Fase
-  schedule_title: Horario de la Guerra de Reinos
+  schedule_title: Horario de Guerra de Reinos
   loading_cycle: Cargando detalles del ciclo...
   badge_closed: Recompensas cerradas
-  badge_kob_open: Rey de Batalla abierto
-  badge_awaiting: Esperando el resultado de la KW
+  badge_kob_open: Rey de la Batalla abierto
+  badge_awaiting: Esperando resultado de la Guerra de Reinos
   badge_open: Recompensas abiertas
   set2_off_week: Solo Encomio del Rey (sin Guerra de Reinos).
-  set2_won: 'Guerra de Reinos ganada: Recompensa del Rey de Batalla también abierta.'
+  set2_won: 'Guerra de Reinos ganada: Recompensa del Rey de la Batalla también abierta.'
   set2_lost: 'Guerra de Reinos perdida: Solo Encomio del Rey.'
-  set2_pending: Recompensa del Rey de Batalla si se gana la guerra del sábado; el Rey la entrega tras el resultado.
+  set2_pending: Recompensa del Rey de la Batalla si se gana la guerra del sábado; el Rey las reparte tras el resultado.
   rewards_open_until: Recompensas de {week} abiertas hasta el martes 23:59 GT. {set2}
-  rewards_closed: Las recompensas están cerradas. Se abren de nuevo el viernes a las 20:00 GT aproximadamente, tras el evento del capitolio.
+  rewards_closed: Las recompensas están cerradas. Las próximas abren el viernes alrededor de las 20:00 GT, tras el evento del capitolio.
   capitol_holder: POSEEDOR DEL CAPITOLIO
   current_holder: POSEEDOR ACTUAL DEL CAPITOLIO
   next_holder: PRÓXIMO POSEEDOR DEL CAPITOLIO
   rank: 'Rango #{rank}'
-  rank_override: 'Rango #{rank} (Anulación)'
-  rank_override_schedule: 'Rango #{rank} • Horario de Anulación'
+  rank_override: 'Rango #{rank} (Anulado)'
+  rank_override_schedule: 'Rango #{rank} • Calendario anulado'
   captured_friday: Capturado el viernes
   captures_today: Capturas hoy
   captures_friday: Capturas el viernes
@@ -544,10 +544,9 @@ calendar:
   read_guide: Guía
   view_week: Semana
   view_cycle: Ciclo
-  show_label: Mostrar tipos de evento
-  kind_server: Servidor
+  show_label: Mostrar tipos de eventos
+  kind_kingdom: Reino
   kind_alliance: Alianza
-  kind_war: Guerra de Reinos
   kind_capitol: Capitolio
   this_week: Esta semana
   last_week: La semana pasada
@@ -556,18 +555,18 @@ calendar:
   next_week_aria: Semana siguiente
   this_cycle: Este ciclo
   kvk_short: KvK {n}
-  off_short: Apagado
-  king_unknown: Se decide en el reinicio
+  off_short: Descanso
+  king_unknown: Decidido en el reinicio
   day_today: Hoy
   day_tomorrow: Mañana
   day_yesterday: Ayer
   events_count_one: "{n} evento"
   events_count_other: "{n} eventos"
-  nothing_planned: No hay nada planeado
+  nothing_planned: Nada planeado
   now_line: Ahora · {time} GT
-  local_time: "{time} local"
-  until: hasta las {when} GT
-  happening_now: Sucediendo ahora · termina en {time}
+  local_time: "{time} hora local"
+  until: hasta {when} GT
+  happening_now: Ocurriendo ahora · termina en {time}
   next_up: Siguiente · en {time}
   dur_m: "{m}m"
   dur_h: "{h}h"
@@ -577,7 +576,7 @@ calendar:
   ev_capture_desc_open: Los asientos de este ciclo se deciden en su reinicio.
   all_day: Todo el día
   every_2_days: Cada 2 días
-  weekly: Semanalmente
+  weekly: Semanal
   mandatory: Obligatorio
   edit: Editar
   delete: Eliminar
@@ -587,12 +586,12 @@ calendar:
   ev_capture_title: Captura del Capitolio — {who}
   ev_capture_desc: "{who} ({rank}) captura el Capitolio el viernes."
   ev_kw_title: Batalla de Guerra de Reinos
-  ev_kw_desc: Comienza a las 12:00 GT, generalmente termina alrededor de las 14:00 GT. Una victoria abre los cofres de Recompensa del Rey de Batalla además del Encomio del Rey.
+  ev_kw_desc: Comienza a las 12:00 GT, generalmente termina alrededor de las 14:00 GT. Una victoria abre los cofres de Recompensa del Rey de la Batalla además del Encomio del Rey.
   ev_open_title: Recompensas abiertas — {week}
-  ev_open_desc_kw: El Encomio del Rey se abre después del evento del capitolio. La Recompensa del Rey de Batalla sigue si se gana la Guerra de Reinos del sábado; el Rey la entrega tras el resultado.
-  ev_open_desc: El Encomio del Rey se abre después del evento del capitolio (no hay Guerra de Reinos esta semana).
-  ev_close_title: Recompensas cerradas — {week}
-  ev_close_desc: 'Los cofres expiran el miércoles a las 00:00 GT: reparte todo antes de esa hora.'
+  ev_open_desc_kw: El Encomio del Rey se abre después del evento del capitolio. La Recompensa del Rey de la Batalla sigue si se gana la Guerra de Reinos del sábado; el Rey las reparte tras el resultado.
+  ev_open_desc: El Encomio del Rey se abre después del evento del capitolio (sin Guerra de Reinos esta semana).
+  ev_close_title: Cierre de recompensas — {week}
+  ev_close_desc: 'Los cofres caducan el miércoles a las 00:00 GT: reparte todo antes de esa hora.'
 calendar_events:
   reminder_hint: Publicado en el canal de alertas de tu alianza.
   reminder_hint_server: Publicado en el canal de alertas del Discord de NAP y en las alianzas participantes.
