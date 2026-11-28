@@ -50,6 +50,8 @@ strings: [calendar, calendar_events, event_presets, kings_scheduler, proposals, 
         style="display: none"
       >
         <h3 class="form-title" id="form-heading">{{ "calendar_events.create_operation" | t }}</h3>
+        <!-- Editing the Kingdom War battle (Stewards; api/_kw_battle.js): its timing is locked -->
+        <p class="form-hint" id="evt-kw-note" hidden>{{ "calendar_events.kw_locked_note" | t }}</p>
 
         <div class="form-grid">
           <!-- The event type: the site's dropdown (js/site-select.js) with each type's icon and

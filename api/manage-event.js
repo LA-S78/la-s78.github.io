@@ -12,6 +12,7 @@ import { isSteward } from './_stewards.js';
 import { inLanguage, say } from './_messages.js';
 import { sameScope } from './_alliances.js'; // RâvN's events aren't RÂVN's
 import { listGuildRoles, roleServerFor } from './_guild_roles.js';
+import { isKwBattleId } from './_kw_battle.js';
 
 export default function handler(req, res) {
   return inLanguage(req, () => respond(req, res));
@@ -137,6 +138,35 @@ async function respond(req, res) {
     // --- ACTION: EDIT EVENT ---
     // Same checks as creating; same scope rule as deleting (an alliance edits only its own
     // events, Stewards only server-wide ones). The id, scope and creation time stay.
+    // The Kingdom War battle (api/_kw_battle.js; owner, 2026-11-28): Stewards change its
+    // description and reminder; its day, time and length follow the rotation
+    if (action === 'edit' && isKwBattleId(eventId)) {
+      if (!isGlobalAdmin)
+        return res.status(403).json({ error: say('api_events.kw_stewards_only') });
+      const checked = cleanReminderFields(eventData || {});
+      if (checked.error) return res.status(400).json({ error: checked.error });
+      const description = String(eventData?.description || '')
+        .trim()
+        .slice(0, 1000);
+      await updateGist(
+        (fresh) => {
+          const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
+          state.kw_battle = {
+            ...(state.kw_battle || {}),
+            ...checked.fields,
+            description: description || null,
+            updatedAt: new Date().toISOString(),
+          };
+          return {
+            files: { 'calendar-state.json': state },
+            description: 'Kingdom War battle edited',
+          };
+        },
+        { gist },
+      );
+      return res.status(200).json({ success: true, message: say('api_events.kw_saved') });
+    }
+
     if (action === 'edit') {
       if (!eventId) return res.status(400).json({ error: 'Missing eventId to edit.' });
       const existing = calendarState.custom_events.find((e) => e.id === eventId);
@@ -202,6 +232,10 @@ async function respond(req, res) {
       if (!eventId) {
         return res.status(400).json({ error: 'Missing eventId to delete.' });
       }
+      // The Kingdom War battle comes from the rotation: it can be edited, not deleted
+      if (isKwBattleId(eventId)) {
+        return res.status(403).json({ error: say('api_events.kw_no_delete') });
+      }
 
       const targetIndex = calendarState.custom_events.findIndex((e) => e.id === eventId);
       if (targetIndex === -1) {
@@ -245,6 +279,39 @@ async function respond(req, res) {
  * Checks and cleans the fields of an event being created or edited. Returns { error } (a
  * message in the reader's language) or { fields }.
  */
+/**
+ * The Discord reminder's fields, checked: who it pings (a specific role needs its ID), on
+ * ('1h') or 'off', and how long before the start (0 to 60 minutes, in tens;
+ * api/_reminders.js). Shared by events and the Kingdom War battle.
+ */
+function cleanReminderFields({
+  notify_target = 'role',
+  custom_role_id = null,
+  reminder = 'off',
+  reminder_minutes = 60,
+} = {}) {
+  const allowedTargets = ['role', 'custom_role', 'everyone', 'none'];
+  const target = allowedTargets.includes(notify_target) ? notify_target : 'role';
+  let roleId = null;
+  if (target === 'custom_role') {
+    const rawRole = String(custom_role_id || '').trim();
+    if (!/^\d{17,20}$/.test(rawRole)) return { error: say('api_events.role_id_needed') };
+    roleId = rawRole;
+  }
+  const minutes = Number(reminder_minutes);
+  return {
+    fields: {
+      notify_target: target,
+      custom_role_id: roleId,
+      reminder: ['1h', 'off'].includes(reminder) ? reminder : 'off',
+      reminder_minutes:
+        Number.isInteger(minutes) && minutes >= 0 && minutes <= 60 && minutes % 10 === 0
+          ? minutes
+          : 60,
+    },
+  };
+}
+
 function cleanEventFields(eventData, isGlobalAdmin) {
   const {
     title,
@@ -276,22 +343,19 @@ function cleanEventFields(eventData, isGlobalAdmin) {
   const allowedRecurrences = ['none', '2days', 'weekly'];
   const cleanRecurrence = allowedRecurrences.includes(recurrence) ? recurrence : 'none';
 
-  // Alert Level & Role Validation
-  const allowedTargets = ['role', 'custom_role', 'everyone', 'none'];
-  const cleanNotifyTarget = allowedTargets.includes(notify_target) ? notify_target : 'role';
-  let cleanCustomRoleId = null;
-  if (cleanNotifyTarget === 'custom_role') {
-    const rawRole = String(custom_role_id || '').trim();
-    if (!/^\d{17,20}$/.test(rawRole)) return { error: say('api_events.role_id_needed') };
-    cleanCustomRoleId = rawRole;
-  }
-
-  // Discord reminder: '1h' (on) or 'off', and how long before the start: 0 (when it starts)
-  // to 60 minutes, in tens (api/_reminders.js)
-  const cleanReminder = ['1h', 'off'].includes(reminder) ? reminder : 'off';
-  const minutes = Number(reminder_minutes);
-  const cleanReminderMinutes =
-    Number.isInteger(minutes) && minutes >= 0 && minutes <= 60 && minutes % 10 === 0 ? minutes : 60;
+  const reminderFields = cleanReminderFields({
+    notify_target,
+    custom_role_id,
+    reminder,
+    reminder_minutes,
+  });
+  if (reminderFields.error) return reminderFields;
+  const {
+    notify_target: cleanNotifyTarget,
+    custom_role_id: cleanCustomRoleId,
+    reminder: cleanReminder,
+    reminder_minutes: cleanReminderMinutes,
+  } = reminderFields.fields;
 
   // Sanitize Accent Color Hex
   let cleanColor = isGlobalAdmin ? '#10b981' : '#3b82f6';

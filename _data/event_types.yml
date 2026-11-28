@@ -79,9 +79,11 @@ types:
     picture: undead_siege.webp
     icon: '<path d="M12 3a8 8 0 0 0-8 8c0 2.4 1 4.4 2.7 5.8V20a1 1 0 0 0 1 1h8.6a1 1 0 0 0 1-1v-3.2A7.9 7.9 0 0 0 20 11a8 8 0 0 0-8-8z"/><circle cx="9" cy="11.5" r="1.6"/><circle cx="15" cy="11.5" r="1.6"/><path d="M10 21v-2.5M14 21v-2.5M11.2 15.6l.8-1.4.8 1.4"/>'
 
-  # The Kingdom War battle: a preset leaders can schedule, and the site's own Saturday battle
+  # The Kingdom War battle: the site's own Saturday battle (api/calendar.js), which Stewards
+  # edit (api/_kw_battle.js). Not offered in the scheduling form (owner, 2026-11-28: one
+  # battle, not copies); older events made from it keep its picture by their title (match).
   - id: kvk_battle
-    preset: true
+    preset: false
     color: '#8ED2EF'
     duration: 1
     recurrence: none

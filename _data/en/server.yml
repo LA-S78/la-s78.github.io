@@ -170,6 +170,9 @@ api_proposals:
   week_and_threat: "Target week and threat server are required."
 
 api_events:
+  kw_stewards_only: "Only Stewards can edit the Kingdom War battle."
+  kw_no_delete: "The Kingdom War battle follows the rotation: it can be edited, not deleted."
+  kw_saved: "Kingdom War battle saved: every Kingdom War week's battle uses it."
   session_invalid: "Your sign-in or calendar link has expired. Sign in with Discord again, or re-run /calendar in Discord."
   not_leader: "Only R4 and R5 can manage their alliance's events (and Stewards server-wide ones)."
   required_fields: "Title, Date, and Game Time are required."

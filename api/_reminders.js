@@ -35,6 +35,7 @@ import { readGist, gistJson, updateGist, isTestDeployment } from './_gist.js';
 import { inLocale, say } from './_messages.js';
 import { findTag } from './_alliances.js';
 import { shownTitle } from './_calendar_events.js';
+import { KW_BATTLE_ID, kwBattleReminderEvent } from './_kw_battle.js';
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
@@ -248,6 +249,23 @@ function reminderForm(evt, start, ping, testNote, png) {
 async function markReminded(ids) {
   await updateGist((fresh) => {
     const state = gistJson(fresh, 'calendar-state.json', { custom_events: [] });
+    // The Kingdom War battle keeps its mark in its settings (api/_kw_battle.js)
+    const kwMark = ids.find((s) => s.id === KW_BATTLE_ID);
+    if (kwMark) {
+      const kw = state.kw_battle || {};
+      if (
+        kwMark.occurrence !== null ||
+        kw.notification_status?.reminded_occurrence === kwMark.was
+      ) {
+        state.kw_battle = {
+          ...kw,
+          notification_status: {
+            ...(kw.notification_status || {}),
+            reminded_occurrence: kwMark.occurrence,
+          },
+        };
+      }
+    }
     for (const e of state.custom_events || []) {
       const mark = ids.find((s) => s.id === e.id);
       if (!mark) continue;
@@ -281,7 +299,10 @@ export async function checkReminders({ dryRun = false, now = Date.now() } = {}) 
     const botToken = process.env.DISCORD_BOT_TOKEN;
 
     const gist = await readGist({ timeoutMs: 4000 });
-    const events = gistJson(gist, 'calendar-state.json', { custom_events: [] }).custom_events || [];
+    const calState = gistJson(gist, 'calendar-state.json', { custom_events: [] });
+    // The leaders' events, and the Kingdom War battle when Stewards turned its reminder on
+    const kwBattle = kwBattleReminderEvent(calState, now);
+    const events = [...(calState.custom_events || []), ...(kwBattle ? [kwBattle] : [])];
     const alliances = gistJson(gist, 'map-state.json', { alliances: {} }).alliances || {};
     const due = dueReminders(events, now);
 

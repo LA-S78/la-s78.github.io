@@ -671,6 +671,8 @@ calendar_events:
   notify_everyone: "Ping @everyone"
   notify_none: "Post without a ping"
   role_id: "Specific Role ID"
+  kw_every_week: "Every Kingdom War week"
+  kw_locked_note: "The Kingdom War battle follows the rotation: its day, time and length are set, and it can't be deleted. Change its description and Discord reminder; every Kingdom War week's battle uses them."
   role_pick: "Role to ping"
   role_pick_choose: "Choose a role…"
   role_pick_loading: "Loading the server's roles…"
