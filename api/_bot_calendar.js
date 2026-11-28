@@ -302,7 +302,7 @@ const gtTime = (ms) => new Date(ms - GT_OFFSET_MS).toISOString().slice(11, 16);
  */
 export function eventCardData(events, { origin }) {
   return events.slice(0, MAX_CARDS).map((evt) => {
-    const type = EVENT_TYPES.find((t) => t.id === evt.event_type);
+    const type = typeOf(evt);
     const start = Date.parse(evt.start);
     const end = Date.parse(evt.end || evt.start);
     return {
@@ -315,6 +315,29 @@ export function eventCardData(events, { origin }) {
       picture: type?.picture ? `${origin}/images/events/${type.picture}` : null,
     };
   });
+}
+
+const normTitle = (text) =>
+  String(text || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+/**
+ * An event's type, as the calendar page finds it (js/calendar-views.js typeOf): the one it
+ * stores (events made from a form preset, and the site's own milestones), else the type
+ * whose name in any language, or older name, is its title (without "[TAG] "). Events saved
+ * before types were stored, or without picking one, have only their title.
+ */
+function typeOf(evt) {
+  const stored = EVENT_TYPES.find((t) => t.id === evt.event_type);
+  if (stored) return stored;
+  const title = normTitle(String(evt.title || '').replace(/^\[[^\]]+\]\s*/, ''));
+  return title
+    ? EVENT_TYPES.find((t) => (t.names || []).some((n) => normTitle(n) === title)) || null
+    : null;
 }
 
 /** A colour light enough for text on the dark card: dark ones are mixed with white. */
