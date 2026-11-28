@@ -53,7 +53,8 @@ async function initCalendar() {
         t('calendar.ev_capture_desc', { who, rank }),
       ];
     },
-    kw_battle: () => [t('calendar.ev_kw_title'), t('calendar.ev_kw_desc')],
+    // A description a Steward wrote stays as written (api/_kw_battle.js)
+    kw_battle: (v) => [t('calendar.ev_kw_title'), v.description || t('calendar.ev_kw_desc')],
     rewards_open: (v) => [
       t('calendar.ev_open_title', { week: weekName(v.week) }),
       t(v.kw ? 'calendar.ev_open_desc_kw' : 'calendar.ev_open_desc'),
@@ -397,7 +398,10 @@ async function initCalendar() {
           canEdit: (evt) =>
             isManagementSession &&
             evt.id &&
-            evt.id.startsWith('evt-') &&
+            // The Kingdom War battle: Stewards edit it (not delete it; api/_kw_battle.js)
+            (evt.editable === 'kw_battle'
+              ? sessionScope?.toLowerCase() === 'global'
+              : evt.id.startsWith('evt-')) &&
             sessionScope &&
             evt.scope &&
             (evt.scope.toLowerCase() === 'global'
@@ -591,8 +595,44 @@ async function initCalendar() {
     let editingNotifyTarget = null;
     const createHeading = formHeading ? formHeading.textContent : '';
 
+    // The Kingdom War battle (api/_kw_battle.js; owner, 2026-11-28): its type, title, day,
+    // time, length and repeat follow the rotation, so they're locked while it's edited
+    const KW_LOCKED = [
+      'evt-input-preset',
+      'evt-input-title',
+      'evt-input-date',
+      'evt-input-time',
+      'evt-input-duration',
+      'evt-input-recurrence',
+    ];
+    function lockForKwBattle(on) {
+      const note = document.getElementById('evt-kw-note');
+      if (note) note.hidden = !on;
+      const repeat = document.getElementById('evt-input-recurrence');
+      repeat?.querySelector('option[value="kw_weeks"]')?.remove();
+      if (on && repeat) {
+        repeat.insertAdjacentHTML(
+          'beforeend',
+          `<option value="kw_weeks">${esc(t('calendar_events.kw_every_week'))}</option>`,
+        );
+        repeat.value = 'kw_weeks';
+      }
+      for (const id of KW_LOCKED) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        el.disabled = on;
+        // The site's dropdowns draw their own locked look
+        if (el.tagName === 'SELECT') window.SiteSelect?.sync(el);
+        else el.classList.toggle('input-locked', on);
+      }
+      // Its type is the Kingdom War: the type box has nothing to offer, so it's hidden
+      const typeGroup = document.getElementById('evt-input-preset')?.closest('.form-group');
+      if (typeGroup) typeGroup.hidden = on;
+    }
+
     // Back to "create": heading, button and reminder default as for a new event
     function leaveEditMode() {
+      lockForKwBattle(false);
       editingEventId = null;
       if (formHeading) formHeading.textContent = createHeading;
       if (submitBtn) submitBtn.textContent = t('calendar_events.publish');
@@ -642,6 +682,15 @@ async function initCalendar() {
       }
       updateReminderHint();
       showRolePicker(notifySelect.value === 'custom_role' ? evt.custom_role_id || '' : '');
+      if (evt.editable === 'kw_battle') {
+        // Its title in the page's language, its 2 hours, and the week clicked (all locked).
+        // The description box holds only what a Steward wrote: left empty, the site's own
+        // description stays, in each reader's language.
+        document.getElementById('evt-input-title').value = t('calendar.ev_kw_title');
+        document.getElementById('evt-input-duration').value = 2;
+        document.getElementById('evt-input-details').value = evt.i18n?.vars?.description || '';
+      }
+      lockForKwBattle(evt.editable === 'kw_battle');
       if (formHeading) formHeading.textContent = t('calendar_events.edit_heading');
       if (submitBtn) submitBtn.innerHTML = ic('save') + esc(t('calendar_events.save_changes'));
       formEl.style.display = 'block';

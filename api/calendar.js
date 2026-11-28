@@ -8,6 +8,7 @@ import { getRoleColors } from './_role_colors.js';
 import { describeRewardPeriod, getRewardPeriod } from './_reward_period.js';
 import { checkReminders } from './_reminders.js';
 import { projectEvents, visibleEvents } from './_calendar_events.js';
+import { kwBattleFields, kwBattleSettings } from './_kw_battle.js';
 import { checkAscension, latestRace } from './_ascension.js';
 import { checkStatsSnapshot } from './_stats.js';
 import { flushTrackerUsage } from './_tracker.js';
@@ -228,16 +229,21 @@ export default async function handler(req, res) {
       allDay: true,
     });
 
-    // Kingdom War battle: Saturday from 12:00 GT, usually over by about 14:00 GT
+    // Kingdom War battle: Saturday from 12:00 GT, usually over by about 14:00 GT. Stewards
+    // edit its description and reminder (api/_kw_battle.js); its timing follows the rotation.
     if (week.isKW) {
       const battleStart = week.kwBattleTimestamp * 1000 + 12 * 3600000;
+      const kw = kwBattleSettings(calConfig);
       cycleMilestones.push({
         id: `sys-kw-battle-${new Date(battleStart).toISOString()}`,
         scope: 'global',
         title: '⚔️ Kingdom War Battle',
         description:
+          kw.description ||
           "Starts 12:00 GT, usually over by about 14:00 GT. A win opens the King of Battle Reward chests on top of the King's Commendation.",
-        i18n: { key: 'kw_battle', vars: {} },
+        // The page words it in its language, unless a Steward wrote the description
+        i18n: { key: 'kw_battle', vars: { description: kw.description || null } },
+        ...kwBattleFields(kw),
         start: new Date(battleStart).toISOString(),
         end: new Date(battleStart + 2 * 3600000).toISOString(),
         type: 'war',

@@ -478,8 +478,12 @@
         // tap while browsing deleted events too easily)
         const actions =
           state.editing && opts.canEdit?.(e)
-            ? `<div class="ag-actions"><button type="button" class="btn-edit-event" data-event-id="${esc(e.id)}">${ic('pencil')}${esc(t('calendar.edit'))}</button>
-             <button type="button" class="btn-delete-event" data-event-id="${esc(e.id)}" data-start="${e.s}">${ic('trash')}${esc(t('calendar.delete'))}</button></div>`
+            ? `<div class="ag-actions"><button type="button" class="btn-edit-event" data-event-id="${esc(e.id)}">${ic('pencil')}${esc(t('calendar.edit'))}</button>${
+                // The Kingdom War battle follows the rotation: edited, never deleted
+                e.editable
+                  ? ''
+                  : `<button type="button" class="btn-delete-event" data-event-id="${esc(e.id)}" data-start="${e.s}">${ic('trash')}${esc(t('calendar.delete'))}</button>`
+              }</div>`
             : '';
         return `<li class="ag-event k-${e.kind}${type?.picture ? ' has-pic' : ''}${isLive ? ' is-live' : ''}${isNext ? ' is-next' : ''}${past ? ' is-past' : ''}"${color}>
           <div class="ag-time">${
