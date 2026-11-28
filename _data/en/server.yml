@@ -222,7 +222,7 @@ bot_calendar:
   card_next: "NEXT CAPITOL HOLDER"
   card_captured: "Captured Friday"
   card_captures_today: "Captures the Capitol today"
-  card_captures: "Captures Friday, {when}"
+  card_captures: "Captures Friday, {date}"
   card_next_line: "{week} · captures Friday {date}"
   sys_capture: "👑 Capitol Capture — {who}"
   sys_capture_text: "{who} captures the Capitol today."

@@ -223,6 +223,11 @@ alliances = YAML.load_file('_data/alliances.yml')
 File.write('api/_alliances_data.js', "export default #{JSON.generate(alliances)};\n")
 puts "Generated api/_alliances_data.js (#{alliances['colors'].size} alliance colours)"
 
+# The cards the Discord bot draws (api/_calendar_cards.js): Inter, kept in _fonts/ (OFL)
+card_fonts = %w[Bold Regular].to_h { |w| [w.downcase, Base64.strict_encode64(File.binread("_fonts/Inter-#{w}.otf"))] }
+File.write('api/_card_fonts.js', "export default #{JSON.generate(card_fonts)};\n")
+puts 'Generated api/_card_fonts.js (Inter Bold and Regular)'
+
 font_candidates = [
   '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
   '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf',

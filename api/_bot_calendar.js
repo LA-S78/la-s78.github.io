@@ -7,7 +7,8 @@
 
 import { InteractionResponseType } from 'discord-interactions';
 import { getGistData, sendEphemeralMessage, weekName } from './_bot_common.js';
-import { say } from './_messages.js';
+import { createHash } from 'node:crypto';
+import { language, say } from './_messages.js';
 import { resolveMemberAllianceContext } from './_bot_roles.js';
 import { DEFAULT_CALENDAR_CONFIG, getCycleState, getScheduleSlot } from './_calendar_helper.js';
 import { projectEvents, visibleEvents } from './_calendar_events.js';
@@ -19,7 +20,8 @@ import { liveImages } from './_alliance_images.js';
 import { getRoleColors } from './_role_colors.js';
 
 const DAY_MS = 86400000;
-const MAX_CARDS = 5; // event cards in one reply (Discord allows 10 embeds; 5 keeps it readable)
+const MAX_CARDS = 5; // event cards in one picture (more: "+N more on the calendar")
+const GT_OFFSET_MS = 2 * 3600000; // Game Time is UTC-2
 const ALLIANCE_COLOR = 0x3b82f6;
 const KINGDOM_COLOR = 0xb8975a;
 const WAR_COLOR = 0x8f0000;
@@ -31,23 +33,7 @@ export async function handleCalendarCommand(ctx) {
   const view = opt('view') || 'capitol';
   const isPublic = opt('share') === 'public';
 
-  let calConfig = DEFAULT_CALENDAR_CONFIG;
-  let alliances = {};
-  let rewardsState = {};
-  let gist = null;
-  try {
-    if (isGistConfigured()) {
-      const gistData = await getGistData();
-      gist = gistData;
-      // gistJson: the tag form however it's stored (alliance IDs, step 3)
-      calConfig = { ...calConfig, ...gistJson(gistData, 'calendar-state.json') };
-      // gistJson: the tag-keyed list however it's stored (alliance IDs, step 2)
-      alliances = gistJson(gistData, 'map-state.json').alliances || {};
-      rewardsState = gistJson(gistData, 'rewards-data.json', rewardsState);
-    }
-  } catch (err) {
-    console.warn('Calendar state fetch failed, using defaults:', err.message);
-  }
+  const { calConfig, alliances, rewardsState, gist } = await loadCalendar(getGistData);
 
   const { detectedTag } = await resolveMemberAllianceContext({
     guildId,
@@ -119,18 +105,18 @@ export async function handleCalendarCommand(ctx) {
       color: isAlliance ? ALLIANCE_COLOR : state.isKW ? WAR_COLOR : KINGDOM_COLOR,
       footer: { text: `la-s78.app · ${weekName(state.clockWeek)}` },
     };
-    const cards = listing.today.slice(0, MAX_CARDS).map((evt) =>
-      eventCard(evt, {
-        host: resolvedHost,
-        now,
-        fallback: isAlliance ? ALLIANCE_COLOR : KINGDOM_COLOR,
-      }),
-    );
+    if (listing.today.length) {
+      const origin = `https://${resolvedHost}`;
+      const shown = eventCardData(listing.today, { origin });
+      header.image = {
+        url: cardUrl(origin, { card: view, ...(isAlliance ? { tag: detectedTag } : {}) }, shown),
+      };
+    }
     const label = isAlliance
       ? say('bot_calendar.open_alliance', { tag: detectedTag })
       : say('bot_calendar.open_full');
     return reply({
-      embeds: [header, ...cards],
+      embeds: [header],
       components: [button(label, calendarUrl(isAlliance ? detectedTag : detectedTag || ''))],
     });
   }
@@ -139,17 +125,68 @@ export async function handleCalendarCommand(ctx) {
   const label = detectedTag
     ? say('bot_calendar.open_alliance', { tag: detectedTag })
     : say('bot_calendar.open_full');
+  const origin = `https://${resolvedHost}`;
+  const cards = capitolCardData(state, capitol, {
+    alliances,
+    coloured: sanitizeAlliances(alliances, await roleColoursQuickly()),
+    banners: gist ? liveImages(gist, alliances) : {},
+    origin,
+  });
   return reply({
-    embeds: await capitolCards(state, capitol, { alliances, gist, host: resolvedHost }),
+    embeds: [
+      {
+        color: colorNumber(cards[0].color) ?? KINGDOM_COLOR,
+        image: { url: cardUrl(origin, { card: 'capitol' }, cards) },
+      },
+    ],
     components: [button(label, calendarUrl(detectedTag))],
   });
+}
+
+/** Loads the calendar's settings, the alliances and the reward schedule (defaults without a Gist). */
+export async function loadCalendar(read) {
+  let calConfig = DEFAULT_CALENDAR_CONFIG;
+  let alliances = {};
+  let rewardsState = {};
+  let gist = null;
+  try {
+    if (isGistConfigured()) {
+      gist = await read();
+      // gistJson: the tag form however it's stored (alliance IDs, step 3)
+      calConfig = { ...calConfig, ...gistJson(gist, 'calendar-state.json') };
+      // gistJson: the tag-keyed list however it's stored (alliance IDs, step 2)
+      alliances = gistJson(gist, 'map-state.json').alliances || {};
+      rewardsState = gistJson(gist, 'rewards-data.json', rewardsState);
+    }
+  } catch (err) {
+    console.warn('Calendar state fetch failed, using defaults:', err.message);
+  }
+  return { calConfig, alliances, rewardsState, gist };
+}
+
+/** The alliances' Discord role colours, or none if Discord is slow (a reply has 3 seconds). */
+export function roleColoursQuickly(ms = 1200) {
+  return Promise.race([
+    getRoleColors().catch(() => ({})),
+    new Promise((resolve) => setTimeout(() => resolve({}), ms)),
+  ]);
+}
+
+/**
+ * A card picture's address (api/map-image.js ?card=…). `v` changes whenever what the picture
+ * shows changes (Discord keeps a copy per address), and the language is the reader's.
+ */
+export function cardUrl(origin, params, shown) {
+  const v = createHash('sha1').update(JSON.stringify(shown)).digest('hex').slice(0, 12);
+  const q = new URLSearchParams({ ...params, lang: language(), v });
+  return `${origin}/api/map-image?${q}&ext=.png`;
 }
 
 /**
  * Who holds or captures the Capitol this week and next (the override schedule first, then
  * the map's ranks), and the next rotation week.
  */
-function capitolInfo(state, calConfig, alliances, rewardsState) {
+export function capitolInfo(state, calConfig, alliances, rewardsState) {
   const activeSchedule = rewardsState.cycle_state?.active_schedule || {};
   const scheduledTag = activeSchedule[state.scheduleSlot]?.trim();
   const holderEntry = Object.entries(alliances).find(
@@ -197,54 +234,99 @@ function capitolInfo(state, calConfig, alliances, rewardsState) {
 
 /**
  * The Capitol view (owner, 2026-11-28): two cards, as the calendar page's holder box. This
- * week's holder ("current" once Friday's capture is done), then next week's. Each card is
- * in its alliance's colour (the same colour the site shows: Discord role, then the site's
- * choice) with the alliance's approved banner as its picture. Discord can't colour text
- * or put text over a picture, so the colour is the card's edge and the banner sits under
- * the tag.
+ * week's holder ("current" once Friday's capture is done), then next week's: the label, the
+ * tag in its alliance's colour (Discord role, then the site's choice), the line under it,
+ * and the alliance's approved banner (its address) behind. Words only: a picture can't
+ * show Discord's live "in 2 days", so dates are written out (Game Time).
  */
-export async function capitolCards(state, c, { alliances, gist, host }) {
-  // The role colours come from Discord: never let them hold up the reply (3 seconds)
-  const roleColors = await Promise.race([
-    getRoleColors().catch(() => ({})),
-    new Promise((resolve) => setTimeout(() => resolve({}), 1200)),
-  ]);
-  const coloured = sanitizeAlliances(alliances, roleColors);
-  const banners = gist ? liveImages(gist, alliances) : {};
+export function capitolCardData(state, c, { alliances, coloured, banners, origin }) {
   const tags = Object.keys(alliances);
-  const card = (key, shown, label, line) => {
+  const card = (key, tagShown, label, line) => {
     const tag = key ? findTag(tags, key) : null;
-    const out = {
-      author: { name: label },
-      title: shown,
-      description: line,
-      color: colorNumber(tag && coloured[tag]?.color) ?? KINGDOM_COLOR,
-    };
     const wide = tag && banners[tag]?.wide;
-    if (wide) out.image = { url: `https://${host}${wide}` };
-    return out;
+    return {
+      label,
+      tag: tagShown,
+      color: (tag && coloured[tag]?.color) || null,
+      line,
+      picture: wide ? `${origin}${wide}` : null,
+    };
   };
-  const captureTs = state.captureTimestamp;
-  const thisWeek = card(
-    c.holderKey,
-    c.holderTag,
-    say(state.capitolCaptured ? 'bot_calendar.card_current' : 'bot_calendar.card_this_week'),
-    state.capitolCaptured
-      ? say('bot_calendar.card_captured')
-      : state.isCaptureDay
-        ? say('bot_calendar.card_captures_today')
-        : say('bot_calendar.card_captures', { when: `<t:${captureTs}:R>` }),
-  );
-  const nextWeek = card(
-    c.nextKey,
-    c.nextHolderTag,
-    say('bot_calendar.card_next'),
-    say('bot_calendar.card_next_line', {
-      week: weekName(c.nextSlot.clockWeek),
-      date: `<t:${captureTs + 7 * 86400}:D>`,
-    }),
-  );
-  return [thisWeek, nextWeek];
+  const captureMs = state.captureTimestamp * 1000;
+  return [
+    card(
+      c.holderKey,
+      c.holderTag,
+      say(state.capitolCaptured ? 'bot_calendar.card_current' : 'bot_calendar.card_this_week'),
+      state.capitolCaptured
+        ? say('bot_calendar.card_captured')
+        : state.isCaptureDay
+          ? say('bot_calendar.card_captures_today')
+          : say('bot_calendar.card_captures', { date: gtDate(captureMs) }),
+    ),
+    card(
+      c.nextKey,
+      c.nextHolderTag,
+      say('bot_calendar.card_next'),
+      say('bot_calendar.card_next_line', {
+        week: weekName(c.nextSlot.clockWeek),
+        date: gtDate(captureMs + 7 * DAY_MS),
+      }),
+    ),
+  ];
+}
+
+/** "4 December" (in the reader's language), on the Game Time calendar. */
+function gtDate(ms) {
+  try {
+    // British order for English, as the site ("4 December")
+    const lang = language() === 'en' ? 'en-GB' : language();
+    return new Intl.DateTimeFormat(lang, {
+      day: 'numeric',
+      month: 'long',
+      timeZone: 'Etc/GMT+2',
+    }).format(new Date(ms));
+  } catch {
+    return new Date(ms - GT_OFFSET_MS).toISOString().slice(0, 10);
+  }
+}
+
+/** "14:00" in Game Time. */
+const gtTime = (ms) => new Date(ms - GT_OFFSET_MS).toISOString().slice(11, 16);
+
+/**
+ * What goes on today's event cards (at most MAX_CARDS): the time in Game Time (a picture
+ * can't follow each reader's time zone; the game and the site use GT), the title, the first
+ * line of the description, the event's colour (made light enough to read on the dark card)
+ * and its type's picture (its address).
+ */
+export function eventCardData(events, { origin }) {
+  return events.slice(0, MAX_CARDS).map((evt) => {
+    const type = EVENT_TYPES.find((t) => t.id === evt.event_type);
+    const start = Date.parse(evt.start);
+    const end = Date.parse(evt.end || evt.start);
+    return {
+      title: String(evt.title || '').trim() || '—',
+      time: evt.allDay ? say('bot_calendar.all_day') : `${gtTime(start)}–${gtTime(end)} GT`,
+      text: String(evt.description || '')
+        .trim()
+        .split('\n')[0],
+      color: readable(evt.color || type?.color || '#86b874'),
+      picture: type?.picture ? `${origin}/images/events/${type.picture}` : null,
+    };
+  });
+}
+
+/** A colour light enough for text on the dark card: dark ones are mixed with white. */
+function readable(hex) {
+  const n = colorNumber(hex);
+  if (n === null) return '#86b874';
+  const [r, g, b] = [n >> 16, (n >> 8) & 255, n & 255];
+  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  if (lum >= 0.45) return `#${n.toString(16).padStart(6, '0')}`;
+  const k = Math.min(0.75, 0.45 - lum + 0.3);
+  const mix = (v) => Math.round(v + (255 - v) * k);
+  return `#${[mix(r), mix(g), mix(b)].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
 }
 
 /**
@@ -331,28 +413,6 @@ function milestones({ state, calConfig, capitol, dayStart, dayEnd }) {
   return out.filter(
     (e, i) => out.findIndex((x) => x.event_type === e.event_type && x.start === e.start) === i,
   );
-}
-
-/** One event as a card: its colour, time, a short description, and its type's picture. */
-function eventCard(evt, { host, now, fallback }) {
-  const type = EVENT_TYPES.find((t) => t.id === evt.event_type);
-  const startS = Math.floor(Date.parse(evt.start) / 1000);
-  const endS = Math.floor(Date.parse(evt.end || evt.start) / 1000);
-  const when = evt.allDay
-    ? say('bot_calendar.all_day')
-    : `${
-        startS * 1000 > now.getTime()
-          ? say('bot_calendar.starts_in', { time: `<t:${startS}:t>`, relative: `<t:${startS}:R>` })
-          : say('bot_calendar.started', { time: `<t:${startS}:t>`, relative: `<t:${startS}:R>` })
-      } · ${say('bot_calendar.ends', { time: `<t:${endS}:t>` })}`;
-  const text = cut(String(evt.description || '').trim(), 300);
-  const card = {
-    title: cut(String(evt.title || '').trim() || '—', 240),
-    description: [`🕒 ${when}`, text].filter(Boolean).join('\n'),
-    color: colorNumber(evt.color) ?? colorNumber(type?.color) ?? fallback,
-  };
-  if (type?.picture) card.image = { url: `https://${host}/images/events/${type.picture}` };
-  return card;
 }
 
 const cut = (s, n) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
