@@ -186,40 +186,38 @@ bot_common:
   leaders_denied: "⛔ **Accès refusé :** Seuls les membres possédant le rôle **@R5** ou des rôles de direction ({roles}) peuvent gérer les événements pour **[{tag}]**."
   steward_only_kw: "⛔ **Accès refusé :** Seuls les intendants désignés du Royaume peuvent enregistrer le résultat de la Guerre des Royaumes."
 bot_calendar:
-  global_denied: "⛔ **Accès refusé :** Seuls les intendants désignés du Royaume peuvent gérer les événements à l'échelle du Royaume."
-  global_title: "👑 Portail de gestion des événements du Royaume"
-  global_text: |-
-    Cliquez ci-dessous pour ouvrir le calendrier en **Mode de Gestion Globale**.
-
-    Vous pouvez planifier des annonces à l'échelle du Royaume, des alertes de trêve ou supprimer des entrées.
-  global_button: Ouvrir le portail de gestion globale
-  no_alliance: "⚠️ Impossible de détecter votre alliance. Exécutez cette commande dans votre serveur d'alliance enregistré, ou assurez-vous d'avoir votre rôle d'alliance sur le serveur NAP."
-  alliance_title: "🛡️ Gestion des événements d'alliance — [{tag}]"
-  alliance_text: |-
-    Cliquez ci-dessous pour ouvrir le calendrier en **Mode de Gestion d'Alliance** pour **[{tag}]**.
-
-    Vous pouvez planifier des raids internes, des déplacements de ruche et des exercices d'entraînement.
-  alliance_button: Ouvrir le portail de gestion [{tag}]
-  rank: 'Rang #{rank}'
-  captured_friday: capturé vendredi
-  captures_today: captures aujourd'hui
-  captures_friday: captures vendredi, {when}
-  current_holder: "👑 Détenteur actuel du Capitole"
-  next_holder: "👑 Prochain détenteur du Capitole"
-  holder_line: "**{tag}** *(Rang #{rank})* — {note}"
-  next_reset: "⏰ Prochaine réinitialisation quotidienne (00:00 GT)"
-  reset_line: "**{time}** (dans {hours}h {minutes}m)"
-  kw_today: "⚔️ Bataille de la Guerre des Royaumes (AUJOURD'HUI)"
-  kw_next: "⚔️ Prochaine bataille de la Guerre des Royaumes"
-  kw_active: "🔥 **Fenêtre de guerre active :** Défendez et conquérez le Capitole !"
-  kw_scheduled: Prévu pour **samedi** ({relative} / {date})
-  next_phase: "⏭️ Prochaine phase de rotation"
-  next_phase_line: |-
-    **{week}** débute le {when}.
-    **{tag}** *(Rang #{rank})* capture le Capitole ce vendredi.
+  no_alliance: "⚠️ Impossible de détecter votre alliance. Exécutez cette commande sur le serveur de votre alliance enregistrée, ou assurez-vous de disposer du rôle d'alliance sur le serveur NAP."
+  manage_moved: 'La gestion des événements a été déplacée sur le site web : connectez-vous avec Discord sur la page du calendrier, puis utilisez **Ajouter un événement**. Les R4 et R5 gèrent les événements de leur alliance ; les Stewards gèrent également ceux à l''échelle du serveur.'
+  manage_button: Ouvrir le calendrier
+  alliance_today: "🛡️ Événements de [{tag}] aujourd'hui"
+  kingdom_today: "🏰 Événements du Royaume aujourd'hui"
+  today_none: Rien de prévu aujourd'hui.
+  today_count: "{count} aujourd'hui, de {from} à {to} (Game Time)."
+  next_up: 'Suivant : **{title}** {when}'
+  nothing_soon: Rien de prévu dans les deux prochaines semaines.
+  more_events: "+{count} de plus sur le calendrier"
+  all_day: Toute la journée
+  starts_in: "{time}, {relative}"
+  started: "{time} (commencé {relative})"
+  ends: jusqu'à {time}
+  card_current: DÉTENTEUR ACTUEL DU CAPITOLE
+  card_this_week: DÉTENTEUR DU CAPITOLE CETTE SEMAINE
+  card_next: PROCHAIN DÉTENTEUR DU CAPITOLE
+  card_captured: Capturé vendredi
+  card_captures_today: Capture le Capitole aujourd'hui
+  card_captures: Capture le vendredi {date}
+  card_next_line: "{week} · capture le vendredi {date}"
+  sys_capture: "👑 Capture du Capitole — {who}"
+  sys_capture_text: "{who} capture le Capitole aujourd'hui."
+  sys_kw: "⚔️ Bataille de Guerre des Royaumes"
+  sys_kw_text: Début à 12:00 GT, se termine généralement vers 14:00 GT.
+  sys_rewards_open: "🎁 Récompenses ouvertes"
+  sys_rewards_open_text: La Commémoration du Roi ouvre après l'événement du Capitole.
+  sys_rewards_close: "⌛ Fermeture des récompenses"
+  sys_rewards_close_text: 'Les coffres expirent le mercredi à 00:00 GT : distribuez tout avant cette heure.'
+  rank: Rang n°{rank}
   open_alliance: Ouvrir le calendrier ([{tag}])
   open_full: Ouvrir le calendrier complet
-  title: "📅 Calendrier de la Guerre des Royaumes"
 bot_map:
   failed: "⚠️ Impossible de générer l'aperçu de la carte."
   level_title: "🏰 Last Asylum : Niveaux de territoire"
@@ -385,48 +383,51 @@ bot_register:
   open_portal: Ouvrir le portail d'enregistrement
   busy: "⚠️ Service occupé : {reason}. Veuillez réessayer dans quelques instants."
 bot_commands:
-  calendar: Voir ou gérer le calendrier des événements
-  calendar_kingdom: Voir ou gérer le calendrier des événements du royaume
-  calendar_action: Action à effectuer (laisser vide pour voir le calendrier)
-  calendar_manage_alliance: Gérer les événements d'alliance (R5 par défaut)
-  calendar_manage_global: Gérer les événements globaux (Admin uniquement)
-  nominate: Demander un lien de portail pour soumettre les nominations hebdomadaires aux coffres
-  nominate_authenticated: Demander un lien de portail authentifié pour soumettre les nominations hebdomadaires aux coffres
+  calendar: Voir le Capitole et les événements d'aujourd'hui
+  calendar_view: 'Ce qu''il faut afficher (vide : la carte du Capitole)'
+  calendar_view_capitol: "👑 Capitole : détenteur, réinitialisation quotidienne et événements suivants"
+  calendar_view_alliance: "🛡️ Alliance : événements de votre alliance aujourd'hui"
+  calendar_view_kingdom: "🏰 Royaume : événements du serveur aujourd'hui"
+  calendar_share: 'Qui voit la réponse (vide : uniquement vous)'
+  calendar_share_private: "🔒 Uniquement moi"
+  calendar_share_public: "📢 Tout le monde dans ce canal"
+  nominate: Demander un lien de portail pour soumettre les nominations aux coffres hebdomadaires
+  nominate_authenticated: Demander un lien de portail authentifié pour soumettre les nominations aux coffres hebdomadaires
   nominate_show: Laisser vide pour le lien de nomination
   nominate_show_link: "🔗 Obtenir le lien de nomination"
-  nominate_show_list: "📋 Afficher notre liste actuelle"
+  nominate_show_list: "📋 Voir notre liste actuelle"
   nominate_alliance: 'Stewards : agir pour une autre alliance (un lien de test quand les récompenses sont fermées)'
-  caravan: 'Rotor de Caravane de votre alliance : voir, ou choisir un joueur (chefs)'
+  caravan: 'Le rotor de caravane de votre alliance : le voir, ou choisir un joueur (leaders)'
   caravan_action: Laisser vide pour voir le rotor
-  caravan_show: "👀 Afficher le rotor"
+  caravan_show: "👀 Voir le rotor"
   caravan_pick: "✅ Choisir un joueur"
   caravan_unpick: "↩️ Annuler un choix"
-  caravan_player: Nom du joueur en jeu (pour choisir ou annuler)
+  caravan_player: Le nom du joueur dans le jeu (pour choisir ou annuler)
   caravan_alliance: 'Stewards : tag d''une autre alliance'
-  rewards: 'Récompenses de la semaine : statut, et résultat de la Guerre des Royaumes (Stewards)'
-  rewards_action: Laisser vide pour voir le statut des récompenses de la semaine
-  rewards_won: 'Enregistrer Guerre des Royaumes : Victoire (Steward)'
-  rewards_lost: 'Enregistrer Guerre des Royaumes : Défaite (Steward)'
-  rewards_reset: Effacer les nominations de la semaine (Steward)
-  rewards_reset_overrides: Réinitialiser les overrides et rachats du Capitole (Steward)
-  rank: Voir ou gérer les classements NAP d'alliance
+  rewards: 'Récompenses de cette semaine : statut, et résultat de la Guerre des Royaumes (Stewards)'
+  rewards_action: Laisser vide pour voir le statut des récompenses de cette semaine
+  rewards_won: 'Enregistrer la Guerre des Royaumes : Gagnée (Steward)'
+  rewards_lost: 'Enregistrer la Guerre des Royaumes : Perdue (Steward)'
+  rewards_reset: Effacer les nominations de cette semaine (Steward)
+  rewards_reset_overrides: Réinitialiser les priorités et rachats du Capitole (Steward)
+  rank: Voir ou gérer les rangs NAP de l'alliance
   rank_set: Mettre à jour le rang NAP d'une alliance (Admin uniquement)
-  rank_tag: 'Tag de l''alliance (ex: ABC)'
-  rank_position: 'Nouvelle position de rang (ex: 1 à 10)'
-  rank_list: Afficher les classements et standings NAP actuels
-  sb: Afficher le planning de la Bataille de Survie
-  sb_long: Afficher le planning de la course aux armements de la Bataille de Survie et les événements actifs
+  rank_tag: 'Tag de l''alliance (ex : ABC)'
+  rank_position: 'Nouvelle position de rang (ex : 1 à 10)'
+  rank_list: Afficher les classements et positions NAP actuels
+  sb: Afficher le calendrier de la Bataille de Survie
+  sb_long: Afficher le calendrier de la course à l'armement de la Bataille de Survie et les événements actifs
   sb_day: Jour du cycle (1-7)
-  rules: Afficher les règles du serveur et du royaume NAP
+  rules: Afficher les règles du serveur et du Royaume NAP
   rules_rule: Numéro de règle spécifique à consulter
   map: Voir la carte du territoire en direct
   map_long: Voir la carte du territoire Last Asylum en direct
-  devupdate: Copier les données en direct vers les données du site de test (Stewards uniquement ; seul vous voyez la réponse)
+  devupdate: Copier les données en direct dans les données du site de test (Stewards uniquement ; vous seul voyez la réponse)
   registerbot: Enregistrer le serveur d'alliance ou synchroniser les commandes slash
   registerbot_action: Action à effectuer (laisser vide pour obtenir le lien du portail d'enregistrement)
   registerbot_sync: Synchroniser tous les serveurs enregistrés (Admin uniquement)
-  suggest: Soumettre une proposition de règle, signaler un problème d'alliance, ou vérifier le statut de votre ticket
-  suggest_type: Sélectionner la catégorie du ticket ou vérifier vos soumissions actives
-  suggest_nap: "👑 Royaume / Proposition NAP (Règle à l'échelle du serveur ou idée d'événement)"
-  suggest_alliance: "🛡️ Problème d'alliance interne (Géré en privé par vos R4/R5)"
-  suggest_status: "📋 Voir le statut de mon ticket (Actif & Historique récent)"
+  suggest: Soumettre une proposition de règle, signaler un problème d'alliance ou vérifier le statut de votre ticket
+  suggest_type: Sélectionner la catégorie du ticket ou consulter vos soumissions actives
+  suggest_nap: "👑 Proposition pour le Royaume / NAP (Règle à l'échelle du serveur ou idée d'événement)"
+  suggest_alliance: "🛡️ Problème d'alliance interne (géré en privé par vos R4/R5)"
+  suggest_status: "📋 Voir le statut de mon ticket (Actif et historique récent)"

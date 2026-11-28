@@ -186,40 +186,38 @@ bot_common:
   leaders_denied: "⛔ **Zugriff verweigert:** Nur Mitglieder mit **@R5** oder Führungsrollen ({roles}) können Events für **[{tag}]** verwalten."
   steward_only_kw: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können das Ergebnis vom Königreichskrieg erfassen."
 bot_calendar:
-  global_denied: "⛔ **Zugriff verweigert:** Nur designierte Königreichsverwalter können Königreichs-Events verwalten."
-  global_title: "👑 Königreich-Event-Verwaltungsportal"
-  global_text: |-
-    Klicke unten, um den Kalender im **Globalen Verwaltungsmodus** zu öffnen.
-
-    Du kannst königreichsweite Ankündigungen, Friedensabkommen-Alarme oder gelöschte Einträge planen.
-  global_button: Globales Verwaltungsportal öffnen
   no_alliance: "⚠️ Deine Allianz konnte nicht erkannt werden. Führe diesen Befehl in deinem registrierten Allianz-Server aus oder stelle sicher, dass du deine Allianz-Rolle im NAP-Server hast."
-  alliance_title: "🛡️ Allianz-Event-Verwaltung — [{tag}]"
-  alliance_text: |-
-    Klicke unten, um den Kalender im **Allianz-Verwaltungsmodus** für **[{tag}]** zu öffnen.
-
-    Du kannst interne Raids, Schwarm-Bewegungen und Trainingsübungen planen.
-  alliance_button: "[{tag}]-Verwaltungsportal öffnen"
+  manage_moved: 'Die Verwaltung von Events erfolgt jetzt über die Website: Melde dich auf der Kalender-Seite mit Discord an und verwende dann **Event hinzufügen**. R4 und R5 verwalten die Events ihrer Allianz; Stewards auch serverweite Events.'
+  manage_button: Kalender öffnen
+  alliance_today: "🛡️ [{tag}] Events heute"
+  kingdom_today: "🏰 Königreich-Events heute"
+  today_none: Heute ist nichts geplant.
+  today_count: "{count} heute, von {from} bis {to} (Game Time Tag)."
+  next_up: 'Nächstes: **{title}** {when}'
+  nothing_soon: Für die nächsten zwei Wochen ist nichts geplant.
+  more_events: "+{count} weitere im Kalender"
+  all_day: Ganztägig
+  starts_in: "{time}, {relative}"
+  started: "{time} (begann {relative})"
+  ends: bis {time}
+  card_current: AKTUELLER KAPITOL-HALTER
+  card_this_week: KAPITOL-HALTER DIESER WOCHE
+  card_next: NÄCHSTER KAPITOL-HALTER
+  card_captured: Eingenommen am Freitag
+  card_captures_today: Nimmt heute das Kapitol ein
+  card_captures: Nimmt es am Freitag, {date} ein
+  card_next_line: "{week} · nimmt es am Freitag, {date} ein"
+  sys_capture: "👑 Kapitol-Einnahme — {who}"
+  sys_capture_text: "{who} nimmt heute das Kapitol ein."
+  sys_kw: "⚔️ Königreichskrieg-Schlacht"
+  sys_kw_text: Beginnt um 12:00 GT, normalerweise gegen 14:00 GT beendet.
+  sys_rewards_open: "🎁 Belohnungen verfügbar"
+  sys_rewards_open_text: Die Königliche Empfehlung öffnet nach dem Kapitol-Event.
+  sys_rewards_close: "⌛ Belohnungen schließen"
+  sys_rewards_close_text: 'Truhen laufen am Mittwoch um 00:00 GT ab: Verteile vorher alles.'
   rank: 'Rang #{rank}'
-  captured_friday: Freitag erobert
-  captures_today: heutige Eroberungen
-  captures_friday: Freitag erobert, {when}
-  current_holder: "👑 Aktueller Kapitolinhaber"
-  next_holder: "👑 Nächster Kapitolinhaber"
-  holder_line: "**{tag}** *(Rang #{rank})* — {note}"
-  next_reset: "⏰ Nächster täglicher Reset (00:00 GT)"
-  reset_line: "**{time}** (in {hours}h {minutes}m)"
-  kw_today: "⚔️ Königreichskrieg-Kampf (HEUTE)"
-  kw_next: "⚔️ Nächster Königreichskrieg-Kampf"
-  kw_active: "🔥 **Aktives Kriegsfenster:** Verteidige und erobere das Kapitol!"
-  kw_scheduled: Geplant für **Samstag** ({relative} / {date})
-  next_phase: "⏭️ Nächste Rotationsphase"
-  next_phase_line: |-
-    **{week}** beginnt {when}.
-    **{tag}** *(Rang #{rank})* erobert das Kapitol an diesem Freitag.
   open_alliance: Kalender öffnen ([{tag}])
-  open_full: Vollständigen Kalender öffnen
-  title: "📅 Königreichskrieg-Kalender"
+  open_full: Vollen Kalender öffnen
 bot_map:
   failed: "⚠️ Karten-Vorschau konnte nicht generiert werden."
   level_title: "🏰 Last Asylum: Gebietslevel"
@@ -385,48 +383,51 @@ bot_register:
   open_portal: Registrierungsportal öffnen
   busy: "⚠️ Dienst ausgelastet: {reason}. Bitte versuche es in wenigen Momenten erneut."
 bot_commands:
-  calendar: Event-Kalender ansehen oder verwalten
-  calendar_kingdom: Königreich-Event-Kalender ansehen oder verwalten
-  calendar_action: Auszuführende Aktion (leer lassen, um Kalender anzusehen)
-  calendar_manage_alliance: Allianz-Events verwalten (standardmäßig R5)
-  calendar_manage_global: Globale Events verwalten (nur Admin)
-  nominate: Portal-Link zum Einreichen der wöchentlichen Truhen-Nominierungen anfordern
-  nominate_authenticated: Authentifizierten Portal-Link zum Einreichen der wöchentlichen Truhen-Nominierungen anfordern
+  calendar: Zeige das Kapitol und die Events von heute an
+  calendar_view: 'Was soll angezeigt werden (leer: die Kapitol-Karte)'
+  calendar_view_capitol: "👑 Kapitol: Halter, täglicher Reset und nächstes Event"
+  calendar_view_alliance: "🛡️ Allianz: Events deiner Allianz heute"
+  calendar_view_kingdom: "🏰 Königreich: Serverweite Events heute"
+  calendar_share: 'Wer sieht die Antwort (leer: nur du)'
+  calendar_share_private: "🔒 Nur ich"
+  calendar_share_public: "📢 Alle in diesem Kanal"
+  nominate: Fordere einen Portal-Link an, um wöchentliche Truhen-Nominierungen einzureichen
+  nominate_authenticated: Fordere einen authentifizierten Portal-Link an, um wöchentliche Truhen-Nominierungen einzureichen
   nominate_show: Leer lassen für den Nominierungs-Link
   nominate_show_link: "🔗 Nominierungs-Link abrufen"
   nominate_show_list: "📋 Aktuelle Liste anzeigen"
-  nominate_alliance: 'Stewards: für eine andere Allianz agieren (ein Test-Link, wenn Belohnungen geschlossen sind)'
-  caravan: 'Caravan-Rotor deiner Allianz: ansehen oder Spieler auswählen (Führung)'
-  caravan_action: Leer lassen, um den Rotor anzusehen
+  nominate_alliance: 'Stewards: Für eine andere Allianz handeln (Testlink, wenn Belohnungen geschlossen sind)'
+  caravan: 'Der Karawanen-Rotor deiner Allianz: ansehen oder einen Spieler wählen (Anführer)'
+  caravan_action: Leer lassen, um den Rotor zu sehen
   caravan_show: "👀 Rotor anzeigen"
   caravan_pick: "✅ Spieler auswählen"
   caravan_unpick: "↩️ Auswahl rückgängig machen"
-  caravan_player: Der In-Game-Name des Spielers (zum Auswählen oder Rückgängigmachen)
-  caravan_alliance: 'Stewards: Tag einer anderen Allianz'
-  rewards: 'Die Belohnungen dieser Woche: Status und das Ergebnis des Königreichskriegs (Stewards)'
-  rewards_action: Leer lassen, um den Belohnungsstatus dieser Woche anzusehen
-  rewards_won: Königreichskrieg als gewonnen markieren (Steward)
-  rewards_lost: Königreichskrieg als verloren markieren (Steward)
+  caravan_player: Der Spielname des Spielers (zum Auswählen oder Rückgängigmachen)
+  caravan_alliance: 'Stewards: Das Tag einer anderen Allianz'
+  rewards: 'Belohnungen dieser Woche: Status und das Königreichskrieg-Ergebnis (Stewards)'
+  rewards_action: Leer lassen, um den Belohnungsstatus dieser Woche zu sehen
+  rewards_won: 'Königreichskrieg aufzeichnen: Gewonnen (Steward)'
+  rewards_lost: 'Königreichskrieg aufzeichnen: Verloren (Steward)'
   rewards_reset: Nominierungen dieser Woche löschen (Steward)
-  rewards_reset_overrides: Kapitol-Overrides und Buyouts zurücksetzen (Steward)
-  rank: Allianz-NAP-Rankings ansehen oder verwalten
-  rank_set: NAP-Rang einer Allianz aktualisieren (nur Admin)
+  rewards_reset_overrides: Kapitol-Overrides und -Aufkäufe zurücksetzen (Steward)
+  rank: NAP-Rankings der Allianz anzeigen oder verwalten
+  rank_set: NAP-Rang einer Allianz aktualisieren (nur für Admins)
   rank_tag: Allianz-Tag (z. B. ABC)
   rank_position: Neue Rangposition (z. B. 1 bis 10)
   rank_list: Aktuelle NAP-Rankings und Tabellen anzeigen
-  sb: Zeitplan für den Überlebenskampf anzeigen
-  sb_long: Zeitplan für das Wettrüsten im Überlebenskampf und aktive Events anzeigen
+  sb: Überlebenskampf-Zeitplan anzeigen
+  sb_long: Überlebenskampf-Wettrüsten-Zeitplan und aktive Events anzeigen
   sb_day: Tag des Zyklus (1-7)
   rules: Server- und Königreich-NAP-Regeln anzeigen
   rules_rule: Spezifische Regelnummer zum Ansehen
   map: Live-Gebietskarte ansehen
   map_long: Live-Gebietskarte von Last Asylum ansehen
-  devupdate: Live-Daten in die Daten der Test-Seite kopieren (nur Stewards; nur du siehst die Antwort)
-  registerbot: Allianz-Server registrieren oder Slash-Commands synchronisieren
-  registerbot_action: Auszuführende Aktion (leer lassen, um Registrierungs-Portal-Link zu erhalten)
-  registerbot_sync: Alle registrierten Server synchronisieren (nur Admin)
-  suggest: Regelvorschlag einreichen, ein Allianz-Problem melden oder Ticket-Status prüfen
+  devupdate: Live-Daten in die Daten der Test-Website kopieren (nur Stewards; nur du siehst die Antwort)
+  registerbot: Allianz-Server registrieren oder Slash-Befehle synchronisieren
+  registerbot_action: Auszuführende Aktion (leer lassen für Registrierungs-Portal-Link)
+  registerbot_sync: Alle registrierten Server synchronisieren (nur für Admins)
+  suggest: Regelvorschlag einreichen, Allianz-Problem melden oder Ticketstatus prüfen
   suggest_type: Ticket-Kategorie auswählen oder aktive Einreichungen prüfen
   suggest_nap: "👑 Königreich / NAP-Vorschlag (Serverweite Regel oder Event-Idee)"
   suggest_alliance: "🛡️ Internes Allianz-Problem (wird privat von deinen R4/R5 bearbeitet)"
-  suggest_status: "📋 Meinen Ticket-Status ansehen (aktiv & Verlauf)"
+  suggest_status: "📋 Meinen Ticketstatus anzeigen (aktiv & Verlauf)"

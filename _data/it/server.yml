@@ -186,40 +186,38 @@ bot_common:
   leaders_denied: "⛔ **Accesso Negato:** Solo i membri con il ruolo **@R5** o ruoli di leadership ({roles}) possono gestire gli eventi per **[{tag}]**."
   steward_only_kw: "⛔ **Accesso Negato:** Solo gli Steward del Regno designati possono registrare il risultato della Guerra tra Regni."
 bot_calendar:
-  global_denied: "⛔ **Accesso Negato:** Solo gli Steward del Regno designati possono gestire gli eventi per l'intero Regno."
-  global_title: "👑 Portale di Gestione Eventi del Regno"
-  global_text: |-
-    Clicca qui sotto per aprire il calendario in **Modalità di Gestione Globale**.
-
-    Puoi programmare annunci per tutto il regno, avvisi di tregua o eliminare voci.
-  global_button: Apri Portale di Gestione Globale
   no_alliance: "⚠️ Non è stato possibile rilevare la tua alleanza. Esegui questo comando all'interno del server della tua alleanza registrata o assicurati di avere il ruolo della tua alleanza nel server NAP."
-  alliance_title: "🛡️ Gestione Eventi Alleanza — [{tag}]"
-  alliance_text: |-
-    Clicca qui sotto per aprire il calendario in **Modalità di Gestione Alleanza** per **[{tag}]**.
-
-    Puoi programmare incursioni interne, movimenti dell'alveare ed esercitazioni.
-  alliance_button: Apri Portale di Gestione [{tag}]
-  rank: 'Grado #{rank}'
-  captured_friday: conquistato venerdì
-  captures_today: conquiste oggi
-  captures_friday: conquiste venerdì, {when}
-  current_holder: "👑 Attuale Detentore del Campidoglio"
-  next_holder: "👑 Prossimo Detentore del Campidoglio"
-  holder_line: "**{tag}** *(Grado #{rank})* — {note}"
-  next_reset: "⏰ Prossimo Ripristino Giornaliero (00:00 GT)"
-  reset_line: "**{time}** (tra {hours}h {minutes}m)"
-  kw_today: "⚔️ Battaglia Guerra tra Regni (OGGI)"
-  kw_next: "⚔️ Prossima Battaglia Guerra tra Regni"
-  kw_active: "🔥 **Finestra di Guerra Attiva:** Difendi e conquista il Campidoglio!"
-  kw_scheduled: Programmata per **Sabato** ({relative} / {date})
-  next_phase: "⏭️ Prossima Fase di Rotazione"
-  next_phase_line: |-
-    **{week}** inizia {when}.
-    **{tag}** *(Grado #{rank})* conquista il Campidoglio quel venerdì.
-  open_alliance: Apri Calendario ([{tag}])
-  open_full: Apri Calendario Completo
-  title: "📅 Calendario Guerra tra Regni"
+  manage_moved: 'La gestione degli eventi si è spostata sul sito web: accedi con Discord sulla pagina del calendario, quindi usa **Aggiungi evento**. R4 e R5 gestiscono gli eventi della propria alleanza; gli Steward anche quelli dell''intero server.'
+  manage_button: Apri il calendario
+  alliance_today: "🛡️ Eventi [{tag}] di oggi"
+  kingdom_today: "🏰 Eventi del regno di oggi"
+  today_none: Nessun evento in programma oggi.
+  today_count: "{count} oggi, da {from} a {to} (Game Time)."
+  next_up: 'Prossimo: **{title}** {when}'
+  nothing_soon: Nessun evento programmato nelle prossime due settimane.
+  more_events: "+{count} altri sul calendario"
+  all_day: Tutto il giorno
+  starts_in: "{time}, {relative}"
+  started: "{time} (iniziato {relative})"
+  ends: fino alle {time}
+  card_current: ATTUALE DETENTORE DEL CAPITOL
+  card_this_week: DETENTORE DEL CAPITOL DI QUESTA SETTIMANA
+  card_next: PROSSIMO DETENTORE DEL CAPITOL
+  card_captured: Catturato venerdì
+  card_captures_today: Cattura il Capitol oggi
+  card_captures: Cattura venerdì, {date}
+  card_next_line: "{week} · cattura venerdì {date}"
+  sys_capture: "👑 Cattura del Capitol — {who}"
+  sys_capture_text: "{who} cattura il Capitol oggi."
+  sys_kw: "⚔️ Battaglia Guerra tra Regni"
+  sys_kw_text: Inizia alle 12:00 GT, di solito termina verso le 14:00 GT.
+  sys_rewards_open: "🎁 Ricompense aperte"
+  sys_rewards_open_text: Il Riconoscimento del Re si apre dopo l'evento del Capitol.
+  sys_rewards_close: "⌛ Ricompense chiuse"
+  sys_rewards_close_text: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
+  rank: 'Posizione #{rank}'
+  open_alliance: Apri calendario ([{tag}])
+  open_full: Apri calendario completo
 bot_map:
   failed: "⚠️ Non è stato possibile generare l'anteprima della mappa."
   level_title: "🏰 Last Asylum: Livelli Territorio"
@@ -385,48 +383,51 @@ bot_register:
   open_portal: Apri Portale di Registrazione
   busy: "⚠️ Servizio occupato: {reason}. Riprova tra poco."
 bot_commands:
-  calendar: Visualizza o gestisci il calendario eventi
-  calendar_kingdom: Visualizza o gestisci il calendario eventi del Regno
-  calendar_action: Azione da eseguire (lascia vuoto per visualizzare il calendario)
-  calendar_manage_alliance: Gestisci eventi Alleanza (R5 di default)
-  calendar_manage_global: Gestisci eventi Globali (Solo Admin)
-  nominate: Richiedi un link al portale per inviare le candidature settimanali per i forzieri
-  nominate_authenticated: Richiedi un link al portale autenticato per inviare le candidature settimanali per i forzieri
-  nominate_show: Lascia vuoto per il link di candidatura
-  nominate_show_link: "🔗 Ottieni il link di candidatura"
+  calendar: Vedi il Capitol e gli eventi di oggi
+  calendar_view: 'Cosa mostrare (vuoto: la scheda Capitol)'
+  calendar_view_capitol: "👑 Capitol: detentore, reset giornaliero e cosa succede dopo"
+  calendar_view_alliance: "🛡️ Alleanza: eventi della tua alleanza oggi"
+  calendar_view_kingdom: "🏰 Regno: eventi dell'intero server oggi"
+  calendar_share: 'Chi vede la risposta (vuoto: solo tu)'
+  calendar_share_private: "🔒 Solo io"
+  calendar_share_public: "📢 Tutti in questo canale"
+  nominate: Richiedi un link al portale per inviare le nomine settimanali dei forzieri
+  nominate_authenticated: Richiedi un link al portale autenticato per inviare le nomine settimanali dei forzieri
+  nominate_show: Lascia vuoto per il link di nomina
+  nominate_show_link: "🔗 Ottieni il link di nomina"
   nominate_show_list: "📋 Mostra la nostra lista attuale"
   nominate_alliance: 'Steward: agisci per un''altra alleanza (un link di prova quando le ricompense sono chiuse)'
-  caravan: 'Rotore Carovana della tua alleanza: visualizzalo o scegli un giocatore (leader)'
-  caravan_action: Lascia vuoto per vedere il rotore
-  caravan_show: "👀 Mostra il rotore"
-  caravan_pick: "✅ Scegli un giocatore"
-  caravan_unpick: "↩️ Annulla una scelta"
-  caravan_player: Il nome in gioco del giocatore (per scegliere o annullare)
-  caravan_alliance: 'Steward: il tag di un''altra alleanza'
-  rewards: 'Ricompense di questa settimana: stato e il risultato della Guerra tra Regni (Steward)'
+  caravan: 'Rotazione Carovane della tua alleanza: vedi o seleziona un giocatore (leader)'
+  caravan_action: Lascia vuoto per vedere la rotazione
+  caravan_show: "👀 Mostra la rotazione"
+  caravan_pick: "✅ Seleziona un giocatore"
+  caravan_unpick: "↩️ Annulla una selezione"
+  caravan_player: Nome di gioco del giocatore (per selezionare o annullare)
+  caravan_alliance: 'Steward: tag di un''altra alleanza'
+  rewards: 'Ricompense di questa settimana: stato e risultato della Guerra tra Regni (Steward)'
   rewards_action: Lascia vuoto per vedere lo stato delle ricompense di questa settimana
   rewards_won: 'Registra Guerra tra Regni: Vinta (Steward)'
   rewards_lost: 'Registra Guerra tra Regni: Persa (Steward)'
-  rewards_reset: Cancella le candidature di questa settimana (Steward)
-  rewards_reset_overrides: Ripristina le sovrascritture e i buyout del Campidoglio (Steward)
-  rank: Visualizza o gestisci i ranghi NAP dell'alleanza
-  rank_set: Aggiorna il rango NAP di un'alleanza (Solo Admin)
-  rank_tag: Tag alleanza (es. ABC)
-  rank_position: Nuova posizione di rango (es. da 1 a 10)
-  rank_list: Mostra i ranghi e le classifiche NAP attuali
+  rewards_reset: Cancella le nomine di questa settimana (Steward)
+  rewards_reset_overrides: Resetta gli override e i buyout del Capitol (Steward)
+  rank: Visualizza o gestisci le posizioni NAP dell'alleanza
+  rank_set: Aggiorna la posizione NAP di un'alleanza (solo Admin)
+  rank_tag: Tag dell'alleanza (es. ABC)
+  rank_position: Nuova posizione (es. da 1 a 10)
+  rank_list: Mostra le posizioni e la classifica NAP attuali
   sb: Mostra il programma della Battaglia di Sopravvivenza
   sb_long: Mostra il programma della corsa agli armamenti della Battaglia di Sopravvivenza ed eventi attivi
   sb_day: Giorno del ciclo (1-7)
-  rules: Mostra le regole NAP del server e del Regno
+  rules: Mostra le regole del server e del Regno NAP
   rules_rule: Numero della regola specifica da visualizzare
   map: Visualizza la mappa del territorio in tempo reale
   map_long: Visualizza la mappa del territorio di Last Asylum in tempo reale
   devupdate: Copia i dati live nei dati del sito di test (solo Steward; solo tu vedi la risposta)
   registerbot: Registra il server dell'alleanza o sincronizza i comandi slash
   registerbot_action: Azione da eseguire (lascia vuoto per ottenere il link al portale di registrazione)
-  registerbot_sync: Sincronizza tutti i server registrati (Solo Admin)
+  registerbot_sync: Sincronizza tutti i server registrati (solo Admin)
   suggest: Invia una proposta di regola, segnala un problema dell'alleanza o controlla lo stato del tuo ticket
   suggest_type: Seleziona la categoria del ticket o controlla le tue proposte attive
-  suggest_nap: "👑 Proposta Regno / NAP (Regola Server o Idea Evento)"
+  suggest_nap: "👑 Proposta Regno / NAP (Regola per l'intero server o idea per un evento)"
   suggest_alliance: "🛡️ Problema interno all'alleanza (gestito privatamente dai tuoi R4/R5)"
-  suggest_status: "📋 Visualizza lo stato del mio ticket (Attivo e Storico recente)"
+  suggest_status: "📋 Visualizza lo stato del mio ticket (attivo e cronologia recente)"

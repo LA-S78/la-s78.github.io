@@ -186,40 +186,38 @@ bot_common:
   leaders_denied: "⛔ **Erişim Engellendi:** Sadece **@R5** sahibi üyeler veya liderlik rolleri ({roles}) **[{tag}]** için etkinlikleri yönetebilir."
   steward_only_kw: "⛔ **Erişim Engellendi:** Sadece görevli Krallık Yöneticileri Krallık Savaşı sonucunu kaydedebilir."
 bot_calendar:
-  global_denied: "⛔ **Erişim Engellendi:** Sadece görevli Krallık Yöneticileri Krallık geneli etkinlikleri yönetebilir."
-  global_title: "👑 Krallık Etkinlik Yönetim Portalı"
-  global_text: |-
-    Takvimi **Genel Yönetim Modunda** açmak için aşağıya tıklayın.
-
-    Krallık geneli duyurular, ateşkes uyarıları planlayabilir veya girişleri silebilirsiniz.
-  global_button: Genel Yönetim Portalını Aç
-  no_alliance: "⚠️ İttifakınız algılanamadı. Bu komutu kayıtlı ittifak sunucunuzda çalıştırın veya NAP sunucusunda ittifak rolünüzün olduğundan emin olun."
-  alliance_title: "🛡️ İttifak Etkinlik Yönetimi — [{tag}]"
-  alliance_text: |-
-    Takvimi **[{tag}]** için **İttifak Yönetim Modunda** açmak için aşağıya tıklayın.
-
-    Dahili baskınlar, kovan hareketleri ve eğitim tatbikatları planlayabilirsiniz.
-  alliance_button: "[{tag}] Yönetim Portalını Aç"
+  no_alliance: "⚠️ İttifakınız tespit edilemedi. Bu komutu kayıtlı ittifak sunucunuzda çalıştırın veya NAP sunucusunda ittifak rolüne sahip olduğunuzdan emin olun."
+  manage_moved: 'Etkinlik yönetimi web sitesine taşındı: takvim sayfasında Discord ile giriş yapın, ardından **Etkinlik ekle** özelliğini kullanın. R4 ve R5''ler kendi ittifaklarının etkinliklerini; Yöneticiler ise sunucu genelindekileri yönetir.'
+  manage_button: Takvimi aç
+  alliance_today: "🛡️ [{tag}] bugün gerçekleşecek etkinlikler"
+  kingdom_today: "🏰 Krallık bugün gerçekleşecek etkinlikler"
+  today_none: Bugün bir etkinlik yok.
+  today_count: Bugün {count} etkinlik, {from} ile {to} arasında (Game Time günü).
+  next_up: 'Sırada: **{title}** {when}'
+  nothing_soon: Önümüzdeki iki hafta içinde hiçbir etkinlik planlanmamış.
+  more_events: Takvimde {count} etkinlik daha var
+  all_day: Tüm gün
+  starts_in: "{time}, {relative}"
+  started: "{time} ({relative} önce başladı)"
+  ends: "{time} saatine kadar"
+  card_current: MEVCUT BAŞKENT SAHİBİ
+  card_this_week: BU HAFTAKİ BAŞKENT SAHİBİ
+  card_next: SIRADAKİ BAŞKENT SAHİBİ
+  card_captured: Cuma günü ele geçirildi
+  card_captures_today: Başkenti bugün ele geçiriyor
+  card_captures: Cuma günü ele geçiriyor, {date}
+  card_next_line: "{week} · Cuma günü ele geçiriyor {date}"
+  sys_capture: "👑 Başkent Ele Geçirme — {who}"
+  sys_capture_text: "{who} bugün başkenti ele geçiriyor."
+  sys_kw: "⚔️ Krallık Savaşı"
+  sys_kw_text: 12:00 GT'de başlar, genellikle 14:00 GT civarında biter.
+  sys_rewards_open: "🎁 Ödüller açıldı"
+  sys_rewards_open_text: Kral'ın Takdir Belgesi başkent etkinliğinden sonra açılır.
+  sys_rewards_close: "⌛ Ödüller kapanıyor"
+  sys_rewards_close_text: 'Sandıkların süresi Çarşamba 00:00 GT''de dolar: o zamandan önce hepsini dağıtın.'
   rank: 'Sıra #{rank}'
-  captured_friday: Cuma günü ele geçirildi
-  captures_today: bugün ele geçiriyor
-  captures_friday: Cuma günü ele geçiriyor, {when}
-  current_holder: "👑 Mevcut Başkent Sahibi"
-  next_holder: "👑 Sonraki Başkent Sahibi"
-  holder_line: "**{tag}** *(Sıra #{rank})* — {note}"
-  next_reset: "⏰ Sonraki Günlük Sıfırlama (00:00 GT)"
-  reset_line: "**{time}** ({hours}s {minutes}dk içinde)"
-  kw_today: "⚔️ Krallık Savaşı (BUGÜN)"
-  kw_next: "⚔️ Sonraki Krallık Savaşı"
-  kw_active: "🔥 **Aktif Savaş Penceresi:** Başkenti savunun ve fethedin!"
-  kw_scheduled: 'Planlanan: **Cumartesi** ({relative} / {date})'
-  next_phase: "⏭️ Sonraki Rotasyon Aşaması"
-  next_phase_line: |-
-    **{week}**, {when} başlıyor.
-    **{tag}** *(Sıra #{rank})* o Cuma Başkenti ele geçiriyor.
   open_alliance: Takvimi Aç ([{tag}])
   open_full: Tam Takvimi Aç
-  title: "📅 Krallık Savaşı Takvimi"
 bot_map:
   failed: "⚠️ Harita önizlemesi oluşturulamadı."
   level_title: "🏰 Last Asylum: Bölge Seviyeleri"
@@ -385,48 +383,51 @@ bot_register:
   open_portal: Kayıt Portalı'nı Aç
   busy: "⚠️ Hizmet meşgul: {reason}. Lütfen kısa süre içinde tekrar deneyin."
 bot_commands:
-  calendar: Etkinlik Takvimini görüntüleyin veya yönetin
-  calendar_kingdom: Krallık Etkinlik Takvimini görüntüleyin veya yönetin
-  calendar_action: Gerçekleştirilecek işlem (takvimi görmek için boş bırakın)
-  calendar_manage_alliance: İttifak Etkinliklerini Yönetin (varsayılan R5)
-  calendar_manage_global: Küresel Etkinlikleri Yönetin (Sadece Yönetici)
-  nominate: Haftalık sandık adaylıklarını göndermek için bir portal bağlantısı talep edin
-  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimliği doğrulanmış bir portal bağlantısı talep edin
+  calendar: Başkent durumunu ve bugünkü etkinlikleri görüntüle
+  calendar_view: 'Ne gösterilsin (boş: Başkent kartı)'
+  calendar_view_capitol: "👑 Başkent: sahibi, günlük sıfırlama ve sıradakiler"
+  calendar_view_alliance: "🛡️ İttifak: ittifakınızın bugünkü etkinlikleri"
+  calendar_view_kingdom: "🏰 Krallık: sunucu genelindeki bugünkü etkinlikler"
+  calendar_share: 'Yanıtı kimler görecek (boş: sadece siz)'
+  calendar_share_private: "🔒 Sadece ben"
+  calendar_share_public: "📢 Bu kanaldaki herkes"
+  nominate: Haftalık sandık adaylıklarını göndermek için bir portal bağlantısı iste
+  nominate_authenticated: Haftalık sandık adaylıklarını göndermek için kimlik doğrulamalı bir portal bağlantısı iste
   nominate_show: Adaylık bağlantısı için boş bırakın
   nominate_show_link: "🔗 Adaylık bağlantısını al"
-  nominate_show_list: "📋 Güncel listemizi göster"
-  nominate_alliance: 'Görevliler: başka bir ittifak adına işlem yapın (ödüller kapalıyken test bağlantısı)'
-  caravan: 'İttifakınızın Kervan Rotoru: görüntüleyin veya oyuncu seçin (liderler)'
+  nominate_show_list: "📋 Mevcut listemizi göster"
+  nominate_alliance: 'Yöneticiler: başka bir ittifak adına işlem yap (ödüller kapalıyken test bağlantısı)'
+  caravan: 'İttifakınızın Kervan Rotoru: görüntüle veya bir oyuncu seç (liderler)'
   caravan_action: Rotoru görmek için boş bırakın
   caravan_show: "👀 Rotoru göster"
   caravan_pick: "✅ Bir oyuncu seç"
-  caravan_unpick: "↩️ Bir seçimi geri al"
+  caravan_unpick: "↩️ Seçimi geri al"
   caravan_player: Oyuncunun oyun içi adı (seçmek veya geri almak için)
-  caravan_alliance: 'Görevliler: başka bir ittifakın etiketi'
-  rewards: 'Bu haftaki ödüller: durum ve Krallık Savaşı sonucu (Görevliler)'
+  caravan_alliance: 'Yöneticiler: başka bir ittifak etiketi'
+  rewards: 'Bu haftaki ödüller: durum ve Krallık Savaşı sonucu (Yöneticiler)'
   rewards_action: Bu haftaki ödül durumunu görmek için boş bırakın
-  rewards_won: 'Krallık Savaşını Kaydet: Kazanıldı (Görevli)'
-  rewards_lost: 'Krallık Savaşını Kaydet: Kaybedildi (Görevli)'
-  rewards_reset: Bu haftaki adaylıkları temizle (Görevli)
-  rewards_reset_overrides: Capitol geçersiz kılmalarını ve satın alımları sıfırla (Görevli)
-  rank: İttifak NAP sıralamalarını görüntüleyin veya yönetin
-  rank_set: Bir ittifakın NAP sıralamasını güncelleyin (Sadece Yönetici)
-  rank_tag: İttifak etiketi (örn. ABC)
-  rank_position: Yeni sıra konumu (örn. 1 - 10)
-  rank_list: Güncel NAP sıralamalarını ve durumunu görüntüle
+  rewards_won: 'Krallık Savaşı''nı Kaydet: Kazandı (Yönetici)'
+  rewards_lost: 'Krallık Savaşı''nı Kaydet: Kaybetti (Yönetici)'
+  rewards_reset: Bu haftaki adaylıkları temizle (Yönetici)
+  rewards_reset_overrides: Başkent geçersiz kılmalarını ve satın alımları sıfırla (Yönetici)
+  rank: İttifak NAP sıralamalarını görüntüle veya yönet
+  rank_set: Bir ittifakın NAP sıralamasını güncelle (Sadece Yönetici)
+  rank_tag: İttifak etiketi (ör. ABC)
+  rank_position: Yeni sıra konumu (ör. 1 ile 10 arası)
+  rank_list: Mevcut NAP sıralamalarını ve durumunu göster
   sb: Hayatta Kalma Savaşı programını görüntüle
-  sb_long: Hayatta Kalma Savaşı silah yarışı programını ve aktif etkinlikleri görüntüle
-  sb_day: Döngünün günü (1-7)
+  sb_long: Hayatta Kalma Savaşı silahlanma yarışı programını ve aktif etkinlikleri görüntüle
+  sb_day: Döngü günü (1-7)
   rules: Sunucu ve Krallık NAP kurallarını görüntüle
-  rules_rule: Görüntülenecek belirli kural numarası
+  rules_rule: Görüntülenecek özel kural numarası
   map: Canlı bölge haritasını görüntüle
   map_long: Canlı Last Asylum bölge haritasını görüntüle
-  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Görevliler; yanıtı sadece siz görürsünüz)
-  registerbot: İttifak sunucusunu kaydedin veya slash komutlarını senkronize edin
-  registerbot_action: Gerçekleştirilecek işlem (kayıt portalı bağlantısını almak için boş bırakın)
+  devupdate: Canlı verileri test sitesinin verilerine kopyala (Sadece Yöneticiler; yanıtı sadece siz görürsünüz)
+  registerbot: İttifak sunucusunu kaydet veya eğik çizgi komutlarını senkronize et
+  registerbot_action: Gerçekleştirilecek eylem (kayıt portalı bağlantısını almak için boş bırakın)
   registerbot_sync: Tüm Kayıtlı Sunucuları Senkronize Et (Sadece Yönetici)
-  suggest: Bir kural önerisi gönderin, bir ittifak sorunu bildirin veya bilet durumunuzu kontrol edin
-  suggest_type: Bilet kategorisini seçin veya aktif gönderilerinizi kontrol edin
+  suggest: Kural önerisi gönder, ittifak sorunu bildir veya talep durumunu kontrol et
+  suggest_type: Talep kategorisini seç veya aktif başvurularını kontrol et
   suggest_nap: "👑 Krallık / NAP Önerisi (Sunucu Genelinde Kural veya Etkinlik Fikri)"
-  suggest_alliance: "🛡️ İttifak İçi Sorun (R4/R5'leriniz Tarafından Özel Olarak Ele Alınır)"
-  suggest_status: "📋 Bilet Durumumu Görüntüle (Aktif ve Geçmiş Geçmiş)"
+  suggest_alliance: "🛡️ İttifak İçi Sorun (R4/R5'leriniz Tarafından Gizli Ele Alınır)"
+  suggest_status: "📋 Talep Durumumu Görüntüle (Aktif & Geçmiş)"
