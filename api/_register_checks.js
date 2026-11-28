@@ -157,7 +157,7 @@ export async function checkTargetServer({
       say('api_register.alert_channel_missing', { id: alertChannelId, server: guild.name }),
     );
   }
-  if (!channelIds.has(officerChannelId)) {
+  if (officerChannelId && !channelIds.has(officerChannelId)) {
     return fail(
       400,
       say('api_register.officer_channel_missing', { id: officerChannelId, server: guild.name }),

@@ -573,3 +573,28 @@
 #registration-form [hidden] {
   display: none !important;
 }
+
+/* A field shown but switched off (registration's ticket channel, not in use yet) */
+.portal-field.is-off {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+  pointer-events: none;
+  user-select: none;
+}
+
+.portal-field.is-off .slot-input {
+  cursor: not-allowed;
+  border-style: dashed;
+}
+
+.portal-off-tag {
+  margin-left: 6px;
+  padding: 1px 7px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

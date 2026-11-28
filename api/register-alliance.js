@@ -103,14 +103,15 @@ async function respond(req, res) {
     cleanRoleId = rawRoleId;
   }
 
-  // Validate Officer Ticket Intake Channel ID
+  // Officer Ticket Intake Channel: switched off on the form (owner, 2026-11-28; nothing posts
+  // tickets to it yet). Optional: one sent is checked and saved, else any saved one is kept.
   const rawOfficerChannel = String(officer_channel_id || '').trim();
-  if (!rawOfficerChannel || !/^\d{17,20}$/.test(rawOfficerChannel)) {
+  if (rawOfficerChannel && !/^\d{17,20}$/.test(rawOfficerChannel)) {
     return res.status(400).json({
       error: say('api_register.officer_channel_needed'),
     });
   }
-  const cleanOfficerChannelId = rawOfficerChannel;
+  const cleanOfficerChannelId = rawOfficerChannel || null;
 
   // Validate Alliance Identity Color (Hex)
   let cleanColor = '#B8975A';
@@ -201,7 +202,7 @@ async function respond(req, res) {
       allianceRecord.alert_role_id = cleanRoleId;
       // Opt-in: reminders of server-wide (Steward) events also go to this alert channel
       allianceRecord.server_event_alerts = server_event_alerts === true;
-      allianceRecord.officer_channel_id = cleanOfficerChannelId;
+      if (cleanOfficerChannelId) allianceRecord.officer_channel_id = cleanOfficerChannelId;
       allianceRecord.color = cleanColor;
 
       state.lastUpdated = new Date().toISOString();

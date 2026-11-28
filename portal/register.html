@@ -110,21 +110,19 @@ strings: [register]
             <div class="portal-hint">{{ "register.server_alerts_help" | t }}</div>
           </div>
 
-          <!-- Officer Triage / Ticket Channel ID -->
-          <div class="portal-field">
+          <!-- Officer Triage / Ticket Channel: switched off (owner, 2026-11-28). Nothing posts
+               tickets to it yet; shown greyed out so alliances know it's coming. -->
+          <div class="portal-field is-off" aria-disabled="true">
             <label for="reg-officer-channel" class="portal-label">
-              {{ "register.officer_channel" | t }} <span class="portal-req">*</span>
+              {{ "register.officer_channel" | t }} <span class="portal-off-tag">{{ "register.not_in_use" | t }}</span>
             </label>
-            <select id="pick-reg-officer-channel" class="slot-input reg-pick" data-site-select data-search="{{ "register.search" | t }}" data-search-none="{{ "register.search_none" | t }}" data-for="reg-officer-channel" aria-label="{{ "register.officer_channel" | t }}" hidden></select>
             <input
               type="text"
               id="reg-officer-channel"
               name="officer_channel_id"
               class="slot-input"
-              placeholder="{{ "register.example" | t: "id", "1298765432109876543" }}"
-              pattern="^\d{17,20}$"
-              title="{{ "register.channel_id_title" | t }}"
-              required
+              placeholder="{{ "register.officer_channel_off" | t }}"
+              disabled
             />
             <div class="portal-hint" data-th="register.officer_channel_help" data-th-strong="channel:register.private_channel copy:register.copy_channel_id" data-th-code="suggest:/suggest"></div>
           </div>
@@ -475,7 +473,6 @@ strings: [register]
       const alertChannelId = document.getElementById("reg-alert-channel").value.trim();
       const rawAlertRole = document.getElementById("reg-alert-role").value.trim();
       const alertRoleId = rawAlertRole || null;
-      const officerChannelId = document.getElementById("reg-officer-channel").value.trim();
       const allianceColor = colorPicker.value.toUpperCase();
 
       const delegatedRoles = splitNames(rolesInput.value);
@@ -495,11 +492,6 @@ strings: [register]
         return;
       }
 
-      if (!/^\d{17,20}$/.test(officerChannelId)) {
-        alert(t("register.bad_officer_channel"));
-        return;
-      }
-
       btn.disabled = true;
       btn.textContent = t("register.submitting");
 
@@ -514,7 +506,6 @@ strings: [register]
             alert_channel_id: alertChannelId,
             alert_role_id: alertRoleId,
             server_event_alerts: document.getElementById("reg-server-alerts").checked,
-            officer_channel_id: officerChannelId,
             alliance_color: allianceColor,
           }),
         });
@@ -538,7 +529,6 @@ strings: [register]
           ${th("register.linked", { server, tag })}<br><br>
           - ${label("register.r_alert_channel")} ${code(channelName(alertChannelId))}<br>
           - ${label("register.r_target")} ${alertRoleId ? (roleName(alertRoleId) !== alertRoleId ? code(roleName(alertRoleId)) : th("register.r_role", { id: code(alertRoleId) })) : `${code("@everyone")} ${escapeHtml(t("register.r_default"))}`}<br>
-          - ${label("register.r_officer_channel")} ${code(channelName(officerChannelId))}<br>
           - ${label("register.r_color")} ${code(allianceColor)}<br>
           - ${label("register.r_commands")} ${["/calendar", "/suggest", "/nominate", "/rewards", "/map", "/sb", "/rules"].map(code).join(", ")}.<br>
           - ${label("register.r_leaders")} <strong>@R5</strong>${delegatedRoles.length ? `, ${delegatedRoles.map((r) => "@" + escapeHtml(r)).join(", ")}` : ""}.

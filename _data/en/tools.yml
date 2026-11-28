@@ -516,6 +516,8 @@ register:
   officer_channel: "Officer Ticket Intake Channel ID"
   officer_channel_help: "Right-click your {channel} → {copy}. Member proposals and alliance tickets from {suggest} will route here for leadership review."
   private_channel: "private R4/R5 ticket channel"
+  not_in_use: "Not in use yet"
+  officer_channel_off: "Not needed for now"
   delegated_roles: "Delegated Leadership Roles"
   delegated_roles_help: "Roles that can triage tickets, manage events, and submit chest nominations ({r5} is always authorized)."
   color: "Alliance Identity Color"
