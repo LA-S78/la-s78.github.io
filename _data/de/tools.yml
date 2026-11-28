@@ -593,12 +593,12 @@ calendar:
   ev_close_title: Belohnungen geschlossen — {week}
   ev_close_desc: 'Truhen laufen am Mittwoch um 00:00 GT ab: Alles davor verteilen.'
 calendar_events:
-  reminder_hint: Im Alert-Kanal deiner Allianz gepostet.
-  reminder_hint_server: Im Alert-Kanal des NAP Discord und in den Allianzen, die zugestimmt haben, gepostet.
-  reminder_no_channel: 'Deine Allianz hat noch keinen Alert-Kanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
-  reminder_no_server_channel: Der NAP-Alert-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können Server-Erinnerungen nicht gepostet werden.
+  reminder_hint: Gepostet im Alarm-Kanal deiner Allianz.
+  reminder_hint_server: Gepostet im Alarm-Kanal des NAP Discord und in Allianzen, die zugestimmt haben.
+  reminder_no_channel: 'Deine Allianz hat noch keinen Alarm-Kanal: Führe /registerbot in deinem Discord aus, damit Erinnerungen gepostet werden können.'
+  reminder_no_server_channel: Der NAP-Alarm-Kanal ist noch nicht eingerichtet (NAP_ALERT_CHANNEL_ID), daher können keine Server-Erinnerungen gepostet werden.
   edit_heading: Event bearbeiten
-  scope_label: Wessen Events sollen verwaltet werden
+  scope_label: Wessen Events verwalten
   scope_server: Serverweite Events
   scope_alliance: "[{tag}] Events"
   save_changes: Änderungen speichern
@@ -607,55 +607,57 @@ calendar_events:
   create_operation: Operation erstellen
   kingdom_admin: KÖNIGREICH-ADMIN
   kingdom_desc: Server-Events verwalten
-  kingdom_heading: Königreichs-Operation erstellen ([GLOBAL])
+  kingdom_heading: Königreich-Operation erstellen ([GLOBAL])
   leadership: "[{tag}] FÜHRUNG"
   leadership_desc: "[{tag}] Events verwalten"
   alliance_heading: "[{tag}] Operation erstellen"
   preset: Event-Typ
   type_custom: Benutzerdefiniert
   type_custom_hint: Leeres Formular
-  duration_h: "{n}h"
+  duration_h: "{n} Std."
   title: Event-Titel
-  title_example: z. B. Nest-Verteidigungstraining oder Außenposten-Angriff
+  title_example: z. B. Bienenstock-Verteidigung oder Außenposten-Angriff
   date: Startdatum (JJJJ-MM-TT)
   time: Game Time (HH:MM UTC-2)
   time_hint: Server Game Time (wird auf 5-Minuten-Schritte gerundet)
   duration: Dauer (Stunden)
   frequency: Häufigkeit
-  once: Einmaliges Event (wiederholt sich nicht)
+  once: Einmaliges Event (Wiederholt sich nicht)
   every_2_days: Wiederholt sich alle 2 Tage
-  weekly: Wiederholt sich wöchentlich (gleicher Tag & gleiche Zeit)
+  weekly: Wiederholt sich wöchentlich (Gleicher Tag & Uhrzeit)
   alert_level: Discord-Erinnerung
   remind_when: Wann gepostet werden soll
-  remind_at_start: Wenn es beginnt
+  remind_at_start: Bei Start
   remind_minutes: "{n} Minuten vorher"
   remind_hour: 1 Stunde vorher
   remind_when_hint: Erinnerungen werden alle 5 Minuten geprüft, daher kann sie ein paar Minuten früher eintreffen.
   notify_off: Keine Erinnerung
-  notify_role: Rolle für Allianzerinnerungen pingen
+  notify_role: Alarm-Rolle der Allianz pingen
   notify_custom: Spezifische Rolle pingen
   notify_everyone: "@everyone pingen"
   notify_none: Ohne Ping posten
   role_id: Spezifische Rollen-ID
+  kw_every_week: Jede Woche des Königreichskrieg
+  kw_locked_note: 'Der Kampf beim Königreichskrieg folgt der Rotation: Tag, Uhrzeit und Länge sind festgelegt und können nicht gelöscht werden. Ändere die Beschreibung und die Discord-Erinnerung; diese gelten für jeden Kampf im Königreichskrieg.'
   role_pick: Zu pingende Rolle
-  role_pick_choose: Wähle eine Rolle…
-  role_pick_loading: Rollen des Servers werden geladen…
+  role_pick_choose: Rolle wählen…
+  role_pick_loading: Rollen des Servers laden…
   role_pick_unavailable: Die Rollen des Servers konnten nicht gelesen werden (ist der Bot auf dem Server?). Füge stattdessen die ID der Rolle ein.
-  role_pick_unknown: Eine Rolle, die nicht mehr auf dem Server vorhanden ist ({id})
-  role_pick_needed: Wähle die zu pingende Rolle aus.
+  role_pick_unknown: Eine Rolle, die nicht mehr auf dem Server ist ({id})
+  role_pick_needed: Wähle die zu pingende Rolle.
   role_id_hint: "(nur für „Spezifische Rolle pingen“)"
   role_id_title: Muss eine gültige 17-20-stellige Discord-Rollen-ID sein
   details: Anweisungen / Sammelpunkt
-  details_example: z. B. Versammlung bei Nest Alpha. R4 führen die Rallies. Voice-Chat aktiv.
+  details_example: z. B. Versammlung bei Hive Alpha. R4 leiten Rallies. Voice-Chat aktiv.
   publish: Im Kalender veröffentlichen
-  publishing: Wird veröffentlicht...
+  publishing: Veröffentlichen...
   bad_time: Game Time muss in 5-Minuten-Schritten eingestellt sein (:00, :05, :10, usw.)
-  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Alert-Ziel ein.
+  bad_role: Bitte gib eine gültige 17-20-stellige Discord-Rollen-ID für das benutzerdefinierte Alarmziel ein.
   save_failed: Event konnte nicht gespeichert werden
   published: Operation erfolgreich veröffentlicht!
   delete_heading: Dieses Event löschen?
-  delete_repeats: 'Es wiederholt sich ({repeat}): Jede Wiederholung wird entfernt, nicht nur diese eine.'
-  delete_final: Das kann nicht rückgängig gemacht werden.
+  delete_repeats: 'Es wiederholt sich ({repeat}): Jede Wiederholung wird entfernt, nicht nur diese.'
+  delete_final: Dies kann nicht rückgängig gemacht werden.
   delete_confirm: Löschen
   delete_failed: Event konnte nicht gelöscht werden
   removed: Operation entfernt.

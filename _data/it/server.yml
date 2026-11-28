@@ -161,12 +161,15 @@ api_proposals:
   no_changes: Nessuna modifica fornita.
   week_and_threat: La settimana di riferimento e il server minaccia sono obbligatori.
 api_events:
-  session_invalid: Il tuo link di accesso o del calendario è scaduto. Accedi di nuovo con Discord o riesegui /calendar su Discord.
+  kw_stewards_only: Solo gli Steward possono modificare la battaglia di Guerra tra Regni.
+  kw_no_delete: 'La battaglia di Guerra tra Regni segue la rotazione: può essere modificata, non eliminata.'
+  kw_saved: 'Battaglia di Guerra tra Regni salvata: ogni battaglia della settimana di Guerra tra Regni la utilizzerà.'
+  session_invalid: Il tuo accesso o link del calendario è scaduto. Accedi di nuovo con Discord o riesegui /calendar su Discord.
   not_leader: Solo R4 e R5 possono gestire gli eventi della propria alleanza (e gli Steward quelli a livello di server).
   required_fields: Titolo, Data e Game Time sono obbligatori.
   date_format: La data deve essere nel formato AAAA-MM-GG.
   time_format: Il Game Time deve essere nel formato HH:MM (da 00:00 a 23:59).
-  time_step: Il Game Time deve avere incrementi di 5 minuti (:00, :05, :10, :15, ecc.).
+  time_step: Il Game Time deve essere in incrementi di 5 minuti (:00, :05, :10, :15, ecc.).
   role_id_needed: Target Specific Role richiede un ID Ruolo Discord valido di 17-20 cifre.
   published: Operazione "{title}" pubblicata con successo.
   not_found: Evento non trovato o già eliminato.

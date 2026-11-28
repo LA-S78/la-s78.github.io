@@ -594,11 +594,11 @@ calendar:
   ev_close_desc: 'I forzieri scadono mercoledì alle 00:00 GT: distribuisci tutto prima di allora.'
 calendar_events:
   reminder_hint: Pubblicato nel canale di avviso della tua alleanza.
-  reminder_hint_server: Pubblicato nel canale di avviso del Discord NAP, e nelle alleanze che hanno dato il consenso.
+  reminder_hint_server: Pubblicato nel canale di avviso del NAP Discord e nelle alleanze che hanno aderito.
   reminder_no_channel: 'La tua alleanza non ha ancora un canale di avviso: esegui /registerbot nel tuo Discord affinché i promemoria possano essere pubblicati.'
   reminder_no_server_channel: Il canale di avviso NAP non è ancora stato configurato (NAP_ALERT_CHANNEL_ID), quindi i promemoria del server non possono essere pubblicati.
   edit_heading: Modifica evento
-  scope_label: Quali eventi gestire
+  scope_label: Gestione eventi di chi
   scope_server: Eventi dell'intero server
   scope_alliance: Eventi [{tag}]
   save_changes: Salva modifiche
@@ -606,7 +606,7 @@ calendar_events:
   session_active: Sessione autenticata attiva
   create_operation: Crea operazione
   kingdom_admin: AMMINISTRAZIONE REGNO
-  kingdom_desc: Gestione eventi server
+  kingdom_desc: Gestione eventi del server
   kingdom_heading: Crea operazione Regno ([GLOBAL])
   leadership: LEADERSHIP [{tag}]
   leadership_desc: Gestione eventi [{tag}]
@@ -615,8 +615,8 @@ calendar_events:
   type_custom: Personalizzato
   type_custom_hint: Modulo vuoto
   duration_h: "{n}h"
-  title: Titolo evento
-  title_example: es. Addestramento difesa alveare o Assalto avamposto
+  title: Titolo dell'evento
+  title_example: es. Esercitazione Difesa Alveare o Assalto all'Avamposto
   date: Data di inizio (AAAA-MM-GG)
   time: Game Time (HH:MM UTC-2)
   time_hint: Game Time del server (arrotondato a incrementi di 5 minuti)
@@ -632,32 +632,34 @@ calendar_events:
   remind_hour: 1 ora prima
   remind_when_hint: I promemoria vengono controllati ogni 5 minuti, quindi potrebbero arrivare con qualche minuto di anticipo.
   notify_off: Nessun promemoria
-  notify_role: Ping del ruolo di avviso dell'alleanza
-  notify_custom: Ping di un ruolo specifico
-  notify_everyone: Ping @everyone
+  notify_role: Ping al ruolo di avviso dell'alleanza
+  notify_custom: Ping a un ruolo specifico
+  notify_everyone: Ping a @everyone
   notify_none: Pubblica senza ping
   role_id: ID ruolo specifico
+  kw_every_week: Ogni settimana di Guerra tra Regni
+  kw_locked_note: 'La battaglia della Guerra tra Regni segue la rotazione: giorno, orario e durata sono impostati e non possono essere eliminati. Modifica la descrizione e il promemoria Discord; verranno applicati a ogni battaglia della Guerra tra Regni.'
   role_pick: Ruolo da pingare
   role_pick_choose: Scegli un ruolo…
-  role_pick_loading: Caricamento dei ruoli del server…
-  role_pick_unavailable: Impossibile leggere i ruoli del server (il bot è presente?). Incolla invece l'ID del ruolo.
+  role_pick_loading: Caricamento ruoli del server…
+  role_pick_unavailable: Impossibile leggere i ruoli del server (il bot è presente?). Incolla l'ID del ruolo.
   role_pick_unknown: Un ruolo non più presente nel server ({id})
   role_pick_needed: Scegli il ruolo da pingare.
-  role_id_hint: "(solo per “Ping di un ruolo specifico”)"
+  role_id_hint: "(solo per “Ping a un ruolo specifico”)"
   role_id_title: Deve essere un ID ruolo Discord valido di 17-20 cifre
   details: Istruzioni / Punto di ritrovo
-  details_example: es. Assemblea all'Alveare Alpha. R4 guidano i rally. Chat vocale attiva.
-  publish: Pubblica nel calendario
+  details_example: es. Raduno all'Alveare Alpha. R4 guidano i rally. Comunicazioni vocali attive.
+  publish: Pubblica sul calendario
   publishing: Pubblicazione in corso...
   bad_time: Il Game Time deve essere impostato con incrementi di 5 minuti (:00, :05, :10, ecc.)
   bad_role: Inserisci un ID ruolo Discord valido di 17-20 cifre per l'avviso personalizzato.
-  save_failed: Salvataggio evento fallito
+  save_failed: Salvataggio evento non riuscito
   published: Operazione pubblicata con successo!
   delete_heading: Eliminare questo evento?
-  delete_repeats: 'Si ripete ({repeat}): ogni ripetizione verrà rimossa, non solo questa.'
-  delete_final: Questa operazione è irreversibile.
+  delete_repeats: 'È un evento ricorrente ({repeat}): ogni ripetizione verrà rimossa, non solo questa.'
+  delete_final: L'operazione non può essere annullata.
   delete_confirm: Elimina
-  delete_failed: Eliminazione evento fallita
+  delete_failed: Eliminazione evento non riuscita
   removed: Operazione rimossa.
 kings_scheduler:
   title: Rotazione Campidoglio
